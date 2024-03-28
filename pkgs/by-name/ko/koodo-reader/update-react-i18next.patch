@@ -1,0 +1,58 @@
+diff --git a/package.json b/package.json
+index c71b04a1..a4b4b3ef 100644
+--- a/package.json
++++ b/package.json
+@@ -67,7 +67,7 @@
+     "react-device-detect": "^1.12.1",
+     "react-dom": "^17.0.2",
+     "react-dropzone": "^11.3.0",
+-    "react-i18next": "^11.8.15",
++    "react-i18next": "^13.2.2",
+     "react-lottie": "^1.2.3",
+     "react-redux": "^7.2.0",
+     "react-router-dom": "^5.2.0",
+diff --git a/yarn.lock b/yarn.lock
+index 881db5b2..2df4d362 100644
+--- a/yarn.lock
++++ b/yarn.lock
+@@ -1828,7 +1828,7 @@
+   resolved "https://registry.yarnpkg.com/@babel/regjsgen/-/regjsgen-0.8.0.tgz#f0ba69b075e1f05fb2825b7fad991e7adbb18310"
+   integrity sha512-x/rqGMdzj+fWZvCOYForTghzbtqPDZ5gPwaoNGHdgDfF2QA/XZbCBp4Moo5scrkAMPhB7z26XM/AaHuIJdgauA==
+ 
+-"@babel/runtime@^7.1.2", "@babel/runtime@^7.12.0", "@babel/runtime@^7.12.13", "@babel/runtime@^7.12.5", "@babel/runtime@^7.14.5", "@babel/runtime@^7.15.4", "@babel/runtime@^7.16.3", "@babel/runtime@^7.20.6", "@babel/runtime@^7.20.7", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.2":
++"@babel/runtime@^7.1.2", "@babel/runtime@^7.12.0", "@babel/runtime@^7.12.13", "@babel/runtime@^7.12.5", "@babel/runtime@^7.15.4", "@babel/runtime@^7.16.3", "@babel/runtime@^7.20.6", "@babel/runtime@^7.20.7", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.2":
+   version "7.21.0"
+   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.21.0.tgz#5b55c9d394e5fcf304909a8b00c07dc217b56673"
+   integrity sha512-xwII0//EObnq89Ji5AKYQaRYiW/nZ3llSv29d49IuxPhKbtJoLP+9QUUZ4nVragQVtaVGeZrpB+ZtG/Pdy/POw==
+@@ -1842,6 +1842,13 @@
+   dependencies:
+     regenerator-runtime "^0.14.0"
+ 
++"@babel/runtime@^7.22.5":
++  version "7.23.1"
++  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.23.1.tgz#72741dc4d413338a91dcb044a86f3c0bc402646d"
++  integrity sha512-hC2v6p8ZSI/W0HUzh3V8C5g+NwSKzKPtJwSpTjwl0o297GP9+ZLQSkdvHz46CM3LqyoXxq+5G9komY+eSqSO0g==
++  dependencies:
++    regenerator-runtime "^0.14.0"
++
+ "@babel/template@^7.18.10", "@babel/template@^7.20.7", "@babel/template@^7.3.3":
+   version "7.20.7"
+   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.20.7.tgz#a15090c2839a83b02aa996c0b4994005841fd5a8"
+@@ -10951,12 +10958,12 @@ react-i18next@*:
+     "@babel/runtime" "^7.20.6"
+     html-parse-stringify "^3.0.1"
+ 
+-react-i18next@^11.8.15:
+-  version "11.18.6"
+-  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-11.18.6.tgz#e159c2960c718c1314f1e8fcaa282d1c8b167887"
+-  integrity sha512-yHb2F9BiT0lqoQDt8loZ5gWP331GwctHz9tYQ8A2EIEUu+CcEdjBLQWli1USG3RdWQt3W+jqQLg/d4rrQR96LA==
++react-i18next@^13.2.2:
++  version "13.2.2"
++  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-13.2.2.tgz#b1e78ed66a54f4bc819616f68b98221e1b1a1936"
++  integrity sha512-+nFUkbRByFwnrfDcYqvzBuaeZb+nACHx+fAWN/pZMddWOCJH5hoc21+Sa/N/Lqi6ne6/9wC/qRGOoQhJa6IkEQ==
+   dependencies:
+-    "@babel/runtime" "^7.14.5"
++    "@babel/runtime" "^7.22.5"
+     html-parse-stringify "^3.0.1"
+ 
+ react-is@^16.12.0, react-is@^16.13.1, react-is@^16.6.0, react-is@^16.7.0:
