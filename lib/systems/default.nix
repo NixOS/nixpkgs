@@ -26,6 +26,7 @@ let
   platforms = import ./platforms.nix { inherit lib; };
   examples = import ./examples.nix { inherit lib; };
   architectures = import ./architectures.nix { inherit lib; };
+  supported = import ./supported.nix { inherit lib; };
 
   /*
     Elaborated systems contain functions, which means that they don't satisfy
@@ -50,7 +51,7 @@ let
 
      **Warning**: This attribute is considered experimental and is subject to change.
   */
-  flakeExposed = import ./flake-systems.nix { };
+  flakeExposed = import ./flake-systems.nix { inherit lib; };
 
   # Elaborate a `localSystem` or `crossSystem` so that it contains everything
   # necessary.
