@@ -479,6 +479,7 @@ in {
   libinput = handleTest ./libinput.nix {};
   libreddit = handleTest ./libreddit.nix {};
   librenms = handleTest ./librenms.nix {};
+  librenms-agent = handleTest ./librenms-agent.nix {};
   libresprite = handleTest ./libresprite.nix {};
   libreswan = handleTest ./libreswan.nix {};
   librewolf = handleTest ./firefox.nix { firefoxPackage = pkgs.librewolf; };
