@@ -26632,6 +26632,8 @@ with pkgs;
 
   timescaledb-tune = callPackage ../development/tools/database/timescaledb-tune { };
 
+  libpq = callPackage ../servers/sql/postgresql/libpq.nix { postgresql = postgresql_16; };
+
   inherit (import ../servers/sql/postgresql pkgs)
     postgresql_12
     postgresql_13
