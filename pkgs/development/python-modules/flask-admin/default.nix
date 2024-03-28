@@ -7,7 +7,7 @@
 , email-validator
 , enum34
 , fetchpatch
-, fetchPypi
+, fetchFromGitHub
 , flask
 , flask-babelex
 , flask-mongoengine
@@ -34,10 +34,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    pname = "Flask-Admin";
-    inherit version;
-    hash = "sha256-JMrir4MramEaAdfcNfQtJmwdbHWkJrhp2MskG3gjM2k=";
+  src = fetchFromGitHub {
+    owner = "flask-admin";
+    repo = "flask-admin";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-L8Q9uPpoen6ZvuF2bithCMSgc6X5khD1EqH2FJPspZc=";
   };
 
   patches = [
@@ -49,7 +50,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     flask
     wtforms
   ];
@@ -115,11 +116,11 @@ buildPythonPackage rec {
     "flask_admin"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Admin interface framework for Flask";
     homepage = "https://github.com/flask-admin/flask-admin/";
     changelog = "https://github.com/flask-admin/flask-admin/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ anthonyroussel ];
   };
 }
