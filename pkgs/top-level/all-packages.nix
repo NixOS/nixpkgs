@@ -7555,8 +7555,6 @@ with pkgs;
 
   dropbear = callPackage ../tools/networking/dropbear { };
 
-  dstep = callPackage ../tools/misc/dstep { };
-
   dsview = qt6Packages.callPackage ../applications/science/electronics/dsview { };
 
   dtach = callPackage ../tools/misc/dtach { };
