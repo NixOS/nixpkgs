@@ -4,7 +4,7 @@
 , makeWrapper
 , buildGoModule
 , fetchYarnDeps
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , pkg-config
 , nodejs
 , yarn
@@ -46,7 +46,7 @@ buildGoModule rec {
 
     pushd site
     yarn config --offline set yarn-offline-mirror ${offlineCache}
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
 
     # node-gyp tries to download always the headers and fails: https://github.com/NixOS/nixpkgs/issues/195404
     # playwright tries to download Chrome and fails
@@ -59,7 +59,7 @@ buildGoModule rec {
   '';
 
   nativeBuildInputs = [
-    fixup_yarn_lock
+    prefetch-yarn-deps
     installShellFiles
     makeWrapper
     nodePackages.node-pre-gyp
