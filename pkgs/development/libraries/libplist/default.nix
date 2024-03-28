@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libplist";
-  version = "2.3.0";
+  version = "2.4.0";
 
   outputs = [ "bin" "dev" "out" ] ++ lib.optional enablePython "py";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "libimobiledevice";
     repo = pname;
     rev = version;
-    hash = "sha256-fZfDSWVRg73dN+WF6LbgRSj8vtyeKeyjC8pWXFxUmBg=";
+    hash = "sha256-bH40HSp76w56tlxO5M1INAW4wRR7O27AY4H/CyEcp+Y=";
   };
 
   nativeBuildInputs = [
