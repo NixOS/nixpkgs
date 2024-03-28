@@ -79,6 +79,9 @@ in {
     (mkRemovedOptionModule [ "services" "mailman" "package" ] ''
       Didn't have an effect for several years.
     '')
+    (mkRemovedOptionModule [ "services" "mailman" "extraPythonPackages" ] ''
+      Didn't have an effect for several years.
+    '')
   ];
 
   options = {
@@ -270,12 +273,6 @@ in {
             Path to mount the mailman-web django application on.
           '';
         };
-      };
-
-      extraPythonPackages = mkOption {
-        description = lib.mdDoc "Packages to add to the python environment used by mailman and mailman-web";
-        type = types.listOf types.package;
-        default = [];
       };
 
       settings = mkOption {
