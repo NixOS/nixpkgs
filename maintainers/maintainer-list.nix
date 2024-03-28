@@ -13787,6 +13787,16 @@
     githubId = 56316606;
     name = "Amneesh Singh";
   };
+  naxdy = {
+    name = "Dominique Hummel";
+    email = "naxdy@naxdy.org";
+    matrix = "@naxdy:matrix.org";
+    github = "Naxdy";
+    githubId = 4532582;
+    keys = [{
+      fingerprint = "BDEA AB07 909D B96F 4106 85F1 CC15 0758 46BC E91B";
+    }];
+  };
   nazarewk = {
     name = "Krzysztof Nazarewski";
     matrix = "@nazarewk:matrix.org";
