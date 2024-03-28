@@ -32,14 +32,19 @@ in rec {
       platformGems = filterAttrs (_: platformMatches ruby) gemset;
       directlyMatchingGems = filterAttrs (_: groupMatches groups) platformGems;
 
-      expandDependencies = gems:
-        let
-          depNames = concatMap (gem: gem.dependencies or []) (attrValues gems);
-          deps = getAttrs depNames platformGems;
-        in
-          gems // deps;
+      withKeys = map (key: {
+        inherit key;
+        gem = platformGems.${key};
+      });
+
+      closure = builtins.genericClosure {
+        startSet = withKeys (lib.attrNames directlyMatchingGems);
+        operator = values: withKeys (values.gem.dependencies or []);
+      };
     in
-      converge expandDependencies directlyMatchingGems;
+      lib.listToAttrs (map (value:
+        lib.nameValuePair value.key value.gem
+      ) closure);
 
   platformMatches = {rubyEngine, version, ...}: attrs: (
   !(attrs ? platforms) ||
