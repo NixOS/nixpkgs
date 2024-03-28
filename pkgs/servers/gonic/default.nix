@@ -54,7 +54,7 @@ buildGoModule rec {
     homepage = "https://github.com/sentriz/gonic";
     description = "Music streaming server / subsonic server API implementation";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ autrimpo ];
     platforms = lib.platforms.linux;
     mainProgram = "gonic";
   };
