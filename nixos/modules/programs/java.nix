@@ -66,7 +66,7 @@ in
     environment.systemPackages = [ cfg.package ];
 
     environment.shellInit = ''
-      test -e ${cfg.package}/nix-support/setup-hook && source ${cfg.package}/nix-support/setup-hook
+      test -e ${cfg.package}/nix-support/setup-hook && . ${cfg.package}/nix-support/setup-hook
     '';
 
   };
