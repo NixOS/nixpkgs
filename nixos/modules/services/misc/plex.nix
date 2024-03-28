@@ -133,6 +133,23 @@ in
         KillSignal = "SIGQUIT";
         PIDFile = "${cfg.dataDir}/Plex Media Server/plexmediaserver.pid";
         Restart = "on-failure";
+
+        # Hardening
+        NoNewPrivileges = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        ProtectSystem = true;
+        ProtectHome = true;
+        ProtectControlGroups = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        RestrictAddressFamilies = ["AF_UNIX" "AF_INET" "AF_INET5" "AF_NETLINK"];
+        # This could be made to work if the namespaces needed were known
+        # RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        MemoryDenyWriteExecute = true;
+        LockPersonality = true;
       };
 
       environment = {
