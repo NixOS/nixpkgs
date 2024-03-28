@@ -6627,6 +6627,8 @@ with pkgs;
 
   buku = callPackage ../applications/misc/buku { };
 
+  buku-server = buku.override { withServer = true; };
+
   byzanz = callPackage ../applications/video/byzanz { };
 
   algolia-cli = callPackage ../development/tools/algolia-cli { };
