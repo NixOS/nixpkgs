@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , glibcLocales
 , importlib-metadata
+, packaging
 , logfury
 , pyfakefs
 , pytestCheckHook
@@ -19,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "1.32.0";
+  version = "1.33.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,7 +29,7 @@ buildPythonPackage rec {
     owner = "Backblaze";
     repo = "b2-sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xBLMvH51zbrSuBOtMxLeQJt7Wv31OcxBbD72EuLHzuU=";
+    hash = "sha256-eMFgsjEb0DMTLqG+8IZru1dEAuKZW4dEszrznZxR+mc=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +42,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    packaging
     logfury
     requests
     tqdm
