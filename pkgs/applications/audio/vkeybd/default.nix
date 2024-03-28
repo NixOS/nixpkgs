@@ -5,7 +5,10 @@ stdenv.mkDerivation  rec {
   version = "0.1.18d";
 
   src = fetchurl {
-    url = "ftp://ftp.suse.com/pub/people/tiwai/vkeybd/${pname}-${version}.tar.bz2";
+    urls = [
+      "ftp://ftp.suse.com/pub/people/tiwai/vkeybd/${pname}-${version}.tar.bz2"
+      "https://mirrors.lug.mtu.edu/gentoo/distfiles/e6/${pname}-${version}.tar.bz2"
+    ];
     sha256 = "0107b5j1gf7dwp7qb4w2snj4bqiyps53d66qzl2rwj4jfpakws5a";
   };
 
