@@ -32,7 +32,6 @@ python3.pkgs.buildPythonApplication rec {
     packaging
     pillow
     protobuf
-    pyogg
     pyqt5
     pyqt5-sip
     pyxdg
@@ -46,6 +45,7 @@ python3.pkgs.buildPythonApplication rec {
   pythonRemoveDeps = [
     "PyQt5-Qt5"
     "PyQt5-stubs"
+    "PyOgg" # PyOgg doesn't seem to be used in the sources.
   ];
 
   pythonRelaxDeps = true;
