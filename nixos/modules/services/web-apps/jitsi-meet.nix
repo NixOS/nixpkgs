@@ -189,6 +189,19 @@ in
     };
 
     secureDomain.enable = mkEnableOption (lib.mdDoc "Authenticated room creation");
+
+    updateMucs = mkOption {
+      type = with types; attrsOf anything;
+      default = { };
+      description = "This is a very hacky work around setting and only added because prosody muc is a list.";
+      example = {
+        "conference.jitsi.example.com".extraModules = [
+          "lobby_autostart"
+          "muc_mam"
+          "vcard_muc"
+        ];
+      };
+    };
   };
 
   config = mkIf cfg.enable {
@@ -205,7 +218,16 @@ in
         tls = mkDefault true;
         websocket = mkDefault true;
       };
-      muc = [
+      # the piece of code bellow looks at the domain name of the attrs in the list and updates the attrs if the domain name matches.
+      # this is done to allow adding/overriding settings in a convenient way
+      muc = lib.flatten (builtins.map (muc:
+        let
+          result = lib.mapAttrsToList (
+            n: v: if muc.domain == n then (lib.recursiveUpdate muc v) else null
+          ) cfg.updateMucs;
+        in
+        if result == [ null ] then muc else result
+      ) [
         {
           domain = "conference.${cfg.hostName}";
           name = "Jitsi Meet MUC";
@@ -249,7 +271,7 @@ in
             storage = "memory"
           '';
         }
-      ];
+      ]);
       extraModules = [
         "pubsub"
         "smacks"
