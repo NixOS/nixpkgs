@@ -46,13 +46,13 @@
 }@args:
 
 let
-  version = "3.1.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-Iv7VSnK8nZDpmIwIRPedSWlftABKuMOQ4MXDGpjuWrY=";
+    sha256 = "sha256-bvCXJIJOrIak+/aaUYoripT/+A8Dnl3uqhNEnbDknJE=";
   };
 
   ruby = ruby_3_2;
@@ -202,7 +202,7 @@ let
 
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = src + "/app/assets/javascripts/yarn.lock";
-      sha256 = "0sclrv3303dgg3r08dwhd1yvi3pvlnvnikn300vjsh6c71fnzhnj";
+      sha256 = "0vgrvj0jvgbg4s5ry3qh4pn4pa5km5yj4kmxj3wpg5qnbzcirkyj";
     };
 
     nativeBuildInputs = runtimeDeps ++ [
@@ -238,7 +238,7 @@ let
       # hook tries to call `../node_modules/.bin/patch-package`, which
       # hasn't been `patchShebangs`-ed yet. So instead we just use
       # `patch-package` from `nativeBuildInputs`.
-      ./asserts_patch-package_from_path.patch
+      ./assets_patch-package_from_path.patch
     ];
 
     # We have to set up an environment that is close enough to
@@ -253,7 +253,7 @@ let
       yarn config --offline set yarn-offline-mirror $yarnOfflineCache
 
       # Fixup "resolved"-entries in yarn.lock to match our offline cache
-      fixup-yarn-lock app/assets/javascripts/yarn.lock
+      fixup-yarn-lock yarn.lock
 
       export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
 

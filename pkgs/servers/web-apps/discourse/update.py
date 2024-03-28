@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i python3 -p bundix bundler nix-update nix-universal-prefetch python3 python3Packages.requests python3Packages.click python3Packages.click-log prefetch-yarn-deps
+#! nix-shell -i python3 -p bundix bundler nix-update nix-universal-prefetch "python3.withPackages (ps: with ps; [ requests click click-log packaging ])" prefetch-yarn-deps
 from __future__ import annotations
 
 import click
@@ -15,8 +15,7 @@ import json
 import requests
 import textwrap
 from functools import total_ordering
-from distutils.version import LooseVersion
-from itertools import zip_longest
+from packaging.version import Version
 from pathlib import Path
 from typing import Union, Iterable
 
@@ -47,33 +46,16 @@ class DiscourseVersion:
         else:
             self.tag = 'v' + version
             self.version = version
-        self.split_version = LooseVersion(self.version).version
+
+        self._version = Version(self.version)
 
     def __eq__(self, other: DiscourseVersion):
         """Versions are equal when their individual parts are."""
-        return self.split_version == other.split_version
+        return self._version == other._version
 
     def __gt__(self, other: DiscourseVersion):
-        """Check if this version is greater than the other.
-
-        Goes through the parts of the version numbers from most to
-        least significant, only continuing on to the next if the
-        numbers are equal and no decision can be made. If one version
-        ends in 'betaX' and the other doesn't, all else being equal,
-        the one without 'betaX' is considered greater, since it's the
-        release version.
-
-        """
-        for (this_ver, other_ver) in zip_longest(self.split_version, other.split_version):
-            if this_ver == other_ver:
-                continue
-            if type(this_ver) is int and type(other_ver) is int:
-                return this_ver > other_ver
-            elif 'beta' in [this_ver, other_ver]:
-                # release version (None) is greater than beta
-                return this_ver is None
-        else:
-            return False
+        """Check if this version is greater than the other."""
+        return self._version > other._version
 
 
 class DiscourseRepo:
@@ -105,7 +87,7 @@ class DiscourseRepo:
         return self._latest_commit_sha
 
     def get_yarn_lock_hash(self, rev: str):
-        yarnLockText = self.get_file('app/assets/javascripts/yarn.lock', rev)
+        yarnLockText = self.get_file('yarn.lock', rev)
         with tempfile.NamedTemporaryFile(mode='w') as lockFile:
             lockFile.write(yarnLockText)
             return subprocess.check_output(['prefetch-yarn-deps', lockFile.name]).decode('utf-8').strip()
@@ -242,6 +224,8 @@ def update(rev):
         with open(rubyenv_dir / fn, 'w') as f:
             f.write(repo.get_file(fn, version.tag))
 
+    # work around https://github.com/nix-community/bundix/issues/8
+    os.environ["BUNDLE_FORCE_RUBY_PLATFORM"] = "true"
     subprocess.check_output(['bundle', 'lock'], cwd=rubyenv_dir)
     _remove_platforms(rubyenv_dir)
     subprocess.check_output(['bundix'], cwd=rubyenv_dir)
@@ -320,7 +304,7 @@ def update_plugins():
             compatibility_spec = repo.get_file('.discourse-compatibility', repo.latest_commit_sha)
             versions = [(DiscourseVersion(discourse_version), plugin_rev.strip(' '))
                         for [discourse_version, plugin_rev]
-                        in [line.split(':')
+                        in [line.lstrip("< ").split(':')
                             for line
                             in compatibility_spec.splitlines() if line != '']]
             discourse_version = DiscourseVersion(_get_current_package_version('discourse'))
