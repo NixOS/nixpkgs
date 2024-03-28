@@ -12961,8 +12961,8 @@
     name = "Nathan Moos";
   };
   moraxyc = {
-    name = "Moraxyc";
-    email = "i@moraxyc.com";
+    name = "Moraxyc Xu";
+    email = "nix@qaq.li";
     github = "Moraxyc";
     githubId = 69713071;
   };
