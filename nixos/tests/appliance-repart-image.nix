@@ -47,13 +47,19 @@ in
           contents =
             let
               efiArch = config.nixpkgs.hostPlatform.efiArch;
+              # We build the ESP contents in a separate derivation to have fixed creation timestamps,
+              # as they are mcopied by systemd-repart, which creates the parent directories with undeterministic
+              # timestamps if they don't exist.
+              espContents = pkgs.runCommand "esp-contents" { } ''
+                mkdir -p $out/EFI/BOOT
+                mkdir -p $out/EFI/Linux
+
+                cp ${pkgs.systemd}/lib/systemd/boot/efi/systemd-boot${efiArch}.efi $out/EFI/BOOT/BOOT${lib.toUpper efiArch}.EFI
+                cp ${config.system.build.uki}/${config.system.boot.loader.ukiFile} $out/EFI/Linux/${config.system.boot.loader.ukiFile}
+              '';
             in
             {
-              "/EFI/BOOT/BOOT${lib.toUpper efiArch}.EFI".source =
-                "${pkgs.systemd}/lib/systemd/boot/efi/systemd-boot${efiArch}.efi";
-
-              "/EFI/Linux/${config.system.boot.loader.ukiFile}".source =
-                "${config.system.build.uki}/${config.system.boot.loader.ukiFile}";
+              "/".source = espContents;
             };
           repartConfig = {
             Type = "esp";

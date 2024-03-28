@@ -100,12 +100,17 @@ in
       name = "image";
       partitions = {
         "esp" = {
-          contents = {
-            "/EFI/BOOT/BOOT${lib.toUpper efiArch}.EFI".source =
-              "${pkgs.systemd}/lib/systemd/boot/efi/systemd-boot${efiArch}.efi";
+          contents = let
+            espContents = pkgs.runCommand "esp-contents" { } ''
+              mkdir -p $out/EFI/BOOT
+              mkdir -p $out/EFI/Linux
 
-            "/EFI/Linux/${config.system.boot.loader.ukiFile}".source =
-              "${config.system.build.uki}/${config.system.boot.loader.ukiFile}";
+              cp ${pkgs.systemd}/lib/systemd/boot/efi/systemd-boot${efiArch}.efi $out/EFI/BOOT/BOOT${lib.toUpper efiArch}.EFI
+              cp ${config.system.build.uki}/${config.system.boot.loader.ukiFile} $out/EFI/Linux/${config.system.boot.loader.ukiFile}
+            '';
+          in
+          {
+            "/".source = espContents;
           };
           repartConfig = {
             Type = "esp";
