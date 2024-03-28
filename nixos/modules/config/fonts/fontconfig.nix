@@ -299,11 +299,7 @@ in
         antialias = mkOption {
           type = types.bool;
           default = true;
-          description = lib.mdDoc ''
-            Enable font antialiasing. At high resolution (> 200 DPI),
-            antialiasing has no visible effect; users of such displays may want
-            to disable this option.
-          '';
+          description = lib.mdDoc "Enable font antialiasing.";
         };
 
         localConf = mkOption {
@@ -365,9 +361,7 @@ in
             default = true;
             description = lib.mdDoc ''
               Enable font hinting. Hinting aligns glyphs to pixel boundaries to
-              improve rendering sharpness at low resolution. At high resolution
-              (> 200 dpi) hinting will do nothing (at best); users of such
-              displays may want to disable this option.
+              improve rendering sharpness.
             '';
           };
 
