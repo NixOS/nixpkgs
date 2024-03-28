@@ -53,6 +53,9 @@ argsStdenv@{ name ? "stdenv", preHook ? "", initialPath
 , # The implementation of `mkDerivation`, parameterized with the final stdenv so we can tie the knot.
   # This is convient to have as a parameter so the stdenv "adapters" work better
   mkDerivationFromStdenv ? stdenv: (import ./make-derivation.nix { inherit lib config; } stdenv).mkDerivation
+
+, # TODO: unify with the above
+  makeDerivationArgumentFromStdenv ? stdenv: (import ./make-derivation.nix { inherit lib config; } stdenv).makeDerivationArgument
 }:
 
 let
@@ -157,6 +160,8 @@ let
       inherit (hostPlatform) system;
 
       mkDerivation = mkDerivationFromStdenv stdenv;
+
+      makeDerivationArgument = makeDerivationArgumentFromStdenv stdenv;
 
       inherit fetchurlBoot;
 
