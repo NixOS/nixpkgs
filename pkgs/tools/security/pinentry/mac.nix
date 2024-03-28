@@ -43,8 +43,11 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-maintainer-mode" "--disable-ncurses" ];
 
   installPhase = ''
-    mkdir -p $out/Applications
+    mkdir -p $out/Applications $out/bin
     mv macosx/pinentry-mac.app $out/Applications
+
+    # Compatibility with `lib.getExe`
+    ln -s $out/Applications/pinentry-mac.app/Contents/MacOS/pinentry-mac $out/bin/pinentry-mac
   '';
 
   enableParallelBuilding = true;
@@ -85,6 +88,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     homepage = "https://github.com/GPGTools/pinentry-mac";
     platforms = lib.platforms.darwin;
-    mainProgram = passthru.binaryPath;
+    mainProgram = "pinentry-mac";
   };
 }
