@@ -12,7 +12,7 @@ in {
 
   nodes = {
     server = { ... }: {
-      services.cgit."localhost" = {
+      services.cgit = {
         enable = true;
         package = pkgs.cgit.overrideAttrs ({ postInstall, ... }: {
           postInstall = ''
@@ -20,16 +20,22 @@ in {
             cp ${robotsTxt} "$out/cgit/robots.txt"
           '';
         });
-        nginx.location = "/(c)git/";
-        repos = {
-          some-repo = {
-            path = "/srv/git/some-repo";
-            desc = "some-repo description";
+        virtualHosts."localhost".locations."/(c)git/" = {
+          repos = {
+            some-repo = {
+              path = "/srv/git/some-repo";
+              desc = "some-repo description";
+            };
+          };
+          locationConfig = {
+            basicAuth = {
+              git = "password";
+            };
           };
         };
       };
 
-      environment.systemPackages = [ pkgs.git ];
+      environment.systemPackages = [ pkgs.coreutils pkgs.git ];
     };
   };
 
@@ -40,15 +46,13 @@ in {
     server.wait_for_unit("network.target")
     server.wait_for_open_port(80)
 
-    server.succeed("curl -fsS http://localhost/%28c%29git/cgit.css")
+    server.succeed("curl -fsSu git:password http://localhost/cgit.css")
 
-    server.succeed("curl -fsS http://localhost/%28c%29git/robots.txt | diff -u - ${robotsTxt}")
+    server.succeed("curl -fsSu git:password http://localhost/robots.txt | diff -u - ${robotsTxt}")
 
     server.succeed(
-        "curl -fsS http://localhost/%28c%29git/ | grep -F 'some-repo description'"
+        "curl -fsSu git:password http://localhost/%28c%29git/ | grep -F 'some-repo description'"
     )
-
-    server.fail("curl -fsS http://localhost/robots.txt")
 
     server.succeed("${pkgs.writeShellScript "setup-cgit-test-repo" ''
       set -e
@@ -63,11 +67,13 @@ in {
     ''}")
 
     server.succeed(
-        "curl -fsS 'http://localhost/%28c%29git/some-repo/plain/date.txt?id=master' | diff -u reference/date.txt -"
+        "curl -fsSu git:password 'http://localhost/%28c%29git/some-repo/plain/date.txt?id=master' | diff -u reference/date.txt -"
     )
 
+    server.fail("GIT_ASKPASS=true git clone http://localhost/%28c%29git/some-repo")
+
     server.succeed(
-       "git clone http://localhost/%28c%29git/some-repo && diff -u reference/date.txt some-repo/date.txt"
+        "git clone http://git:password@localhost/%28c%29git/some-repo && diff -u reference/date.txt some-repo/date.txt"
     )
   '';
 })

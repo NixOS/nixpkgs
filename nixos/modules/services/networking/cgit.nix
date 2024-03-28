@@ -3,11 +3,9 @@
 with lib;
 
 let
-  cfgs = config.services.cgit;
+  cfg = config.services.cgit;
 
   settingType = with types; oneOf [ bool int str ];
-
-  genAttrs' = names: f: listToAttrs (map f names);
 
   regexEscape =
     let
@@ -21,15 +19,15 @@ let
     in
       replaceStrings special (map (c: "\\${c}") special);
 
-  stripLocation = cfg: removeSuffix "/" cfg.nginx.location;
+  stripLocation = removeSuffix "/";
 
-  regexLocation = cfg: regexEscape (stripLocation cfg);
+  regexLocation = loc: regexEscape (stripLocation loc);
 
-  mkFastcgiPass = cfg: ''
-    ${if cfg.nginx.location == "/" then ''
+  mkFastcgiPass = loc: ''
+    ${if loc == "/" then ''
       fastcgi_param PATH_INFO $uri;
     '' else ''
-      fastcgi_split_path_info ^(${regexLocation cfg})(/.+)$;
+      fastcgi_split_path_info ^(${regexLocation loc})(/.+)$;
       fastcgi_param PATH_INFO $fastcgi_path_info;
     ''
     }fastcgi_pass unix:${config.services.fcgiwrap.socketAddress};
@@ -44,15 +42,15 @@ let
       toString value
   }";
 
-  mkCgitrc = cfg: pkgs.writeText "cgitrc" ''
+  mkCgitrc = loc: locCfg: pkgs.writeText "cgitrc" ''
     # global settings
     ${concatStringsSep "\n" (
         mapAttrsToList
           cgitrcLine
-          ({ virtual-root = cfg.nginx.location; } // cfg.settings)
+          ({ virtual-root = loc; } // locCfg.settings)
       )
     }
-    ${optionalString (cfg.scanPath != null) (cgitrcLine "scan-path" cfg.scanPath)}
+    ${optionalString (locCfg.scanPath != null) (cgitrcLine "scan-path" locCfg.scanPath)}
 
     # repository settings
     ${concatStrings (
@@ -64,17 +62,17 @@ let
               )
             }
           '')
-          cfg.repos
+          locCfg.repos
       )
     }
 
     # extra config
-    ${cfg.extraConfig}
+    ${locCfg.extraConfig}
   '';
 
-  mkCgitReposDir = cfg:
-    if cfg.scanPath != null then
-      cfg.scanPath
+  mkCgitReposDir = locCfg:
+    if locCfg.scanPath != null then
+      locCfg.scanPath
     else
       pkgs.runCommand "cgit-repos" {
         preferLocalBuild = true;
@@ -87,119 +85,165 @@ let
               (name: value: ''
                 ln -s ${escapeShellArg value.path} "$out"/${escapeShellArg name}
               '')
-              cfg.repos
+              locCfg.repos
           )
         }
       '';
 
-in
-{
-  options = {
-    services.cgit = mkOption {
-      description = mdDoc "Configure cgit instances.";
-      default = {};
-      type = types.attrsOf (types.submodule ({ config, ... }: {
-        options = {
-          enable = mkEnableOption (mdDoc "cgit");
+  vhostOptions = {
+    options = {
+      package = mkPackageOption pkgs "cgit" {};
 
-          package = mkPackageOption pkgs "cgit" {};
-
-          nginx.virtualHost = mkOption {
-            description = mdDoc "VirtualHost to serve cgit on, defaults to the attribute name.";
-            type = types.str;
-            default = config._module.args.name;
-            example = "git.example.com";
-          };
-
-          nginx.location = mkOption {
-            description = mdDoc "Location to serve cgit under.";
-            type = types.str;
-            default = "/";
-            example = "/git/";
-          };
-
-          repos = mkOption {
-            description = mdDoc "cgit repository settings, see cgitrc(5)";
-            type = with types; attrsOf (attrsOf settingType);
-            default = {};
-            example = {
-              blah = {
-                path = "/var/lib/git/example";
-                desc = "An example repository";
-              };
+      locations = mkOption {
+        description = mdDoc "TODO";
+        type = with types; attrsOf (submodule locationOptions);
+        default = { };
+        example = literalExpression ''
+          {
+            "/git/" = {
+              scanPath = "/var/lib/git";
             };
-          };
-
-          scanPath = mkOption {
-            description = mdDoc "A path which will be scanned for repositories.";
-            type = types.nullOr types.path;
-            default = null;
-            example = "/var/lib/git";
-          };
-
-          settings = mkOption {
-            description = mdDoc "cgit configuration, see cgitrc(5)";
-            type = types.attrsOf settingType;
-            default = {};
-            example = literalExpression ''
-              {
-                enable-follow-links = true;
-                source-filter = "''${pkgs.cgit}/lib/cgit/filters/syntax-highlighting.py";
-              }
-            '';
-          };
-
-          extraConfig = mkOption {
-            description = mdDoc "These lines go to the end of cgitrc verbatim.";
-            type = types.lines;
-            default = "";
-          };
-        };
-      }));
+          }
+        '';
+      };
     };
   };
 
-  config = mkIf (any (cfg: cfg.enable) (attrValues cfgs)) {
-    assertions = mapAttrsToList (vhost: cfg: {
-      assertion = !cfg.enable || (cfg.scanPath == null) != (cfg.repos == {});
-      message = "Exactly one of services.cgit.${vhost}.scanPath or services.cgit.${vhost}.repos must be set.";
-    }) cfgs;
-
-    services.fcgiwrap.enable = true;
-
-    services.nginx.enable = true;
-
-    services.nginx.virtualHosts = mkMerge (mapAttrsToList (_: cfg: {
-      ${cfg.nginx.virtualHost} = {
-        locations = (
-          genAttrs'
-            [ "cgit.css" "cgit.png" "favicon.ico" "robots.txt" ]
-            (name: nameValuePair "= ${stripLocation cfg}/${name}" {
-              extraConfig = ''
-                alias ${cfg.package}/cgit/${name};
-              '';
-            })
-        ) // {
-          "~ ${regexLocation cfg}/.+/(info/refs|git-upload-pack)" = {
-            fastcgiParams = rec {
-              SCRIPT_FILENAME = "${pkgs.git}/libexec/git-core/git-http-backend";
-              GIT_HTTP_EXPORT_ALL = "1";
-              GIT_PROJECT_ROOT = mkCgitReposDir cfg;
-              HOME = GIT_PROJECT_ROOT;
-            };
-            extraConfig = mkFastcgiPass cfg;
-          };
-          "${stripLocation cfg}/" = {
-            fastcgiParams = {
-              SCRIPT_FILENAME = "${cfg.package}/cgit/cgit.cgi";
-              QUERY_STRING = "$args";
-              HTTP_HOST = "$server_name";
-              CGIT_CONFIG = mkCgitrc cfg;
-            };
-            extraConfig = mkFastcgiPass cfg;
+  locationOptions = {
+    options = {
+      repos = mkOption {
+        description = mdDoc "cgit repository settings, see cgitrc(5)";
+        type = with types; attrsOf (attrsOf settingType);
+        default = {};
+        example = {
+          blah = {
+            path = "/var/lib/git/example";
+            desc = "An example repository";
           };
         };
       };
-    }) cfgs);
+
+      scanPath = mkOption {
+        description = mdDoc "A path which will be scanned for repositories.";
+        type = types.nullOr types.path;
+        default = null;
+        example = "/var/lib/git";
+      };
+
+      settings = mkOption {
+        description = mdDoc "cgit configuration, see cgitrc(5)";
+        type = types.attrsOf settingType;
+        default = {};
+        example = literalExpression ''
+          {
+            enable-follow-links = true;
+            source-filter = "''${pkgs.cgit}/lib/cgit/filters/syntax-highlighting.py";
+          }
+        '';
+      };
+
+      extraConfig = mkOption {
+        description = mdDoc "These lines go to the end of cgitrc verbatim.";
+        type = types.lines;
+        default = "";
+      };
+
+      locationConfig = mkOption {
+        description = mdDoc "Additional declarative location config for nginx";
+        type = types.submodule (import ../web-servers/nginx/location-options.nix { inherit lib config; });
+        default = { };
+        example = literalExpression ''
+          {
+            basicAuth = {
+              user = "password";
+            };
+          }
+        '';
+      };
+    };
+  };
+
+in
+{
+  options = {
+    services.cgit = {
+      enable = mkEnableOption (mdDoc "cgit");
+
+      package = mkPackageOptionMD pkgs "cgit" {};
+
+      virtualHosts = mkOption {
+        description = mdDoc "TODO";
+        type = with types; attrsOf (submodule vhostOptions);
+        default = { };
+        example = literalExpression ''
+          {
+            "localhost" = {
+              locations."/git" = {
+                scanPath = "/var/lib/git";
+              };
+            };
+          }
+        '';
+      };
+    };
+  };
+
+  config = mkIf cfg.enable {
+    assertions = concatLists (
+      mapAttrsToList (vhost: vhostCfg:
+        mapAttrsToList (loc: locCfg: {
+          assertion = (locCfg.scanPath == null) != (locCfg.repos == {});
+          message = ''
+            Exactly one of services.cgit.virtualHosts.${vhost}.locations.${loc}.scanPath
+            or services.cgit.virtualHosts.${vhost}.locations.${loc}.repos must be set.
+          '';
+        }) vhostCfg.locations
+      ) cfg.virtualHosts
+    );
+
+    services.fcgiwrap.enable = true;
+
+    services.nginx = {
+      enable = true;
+      virtualHosts = mapAttrs (_: vhostCfg: {
+        locations = mkMerge (
+          optionals (vhostCfg.locations != { }) (
+            map (name: {
+              "= /${name}".extraConfig = ''
+                alias ${vhostCfg.package}/cgit/${name};
+                auth_basic off;
+              '';
+            }) [ "cgit.css" "cgit.png" "favicon.ico" "robots.txt" ]
+          ) ++ (
+            mapAttrsToList (loc: locCfg: {
+              "~ ${regexLocation loc}/.+/(info/refs|git-upload-pack)" = mkMerge [
+                locCfg.locationConfig
+                {
+                  fastcgiParams = rec {
+                    SCRIPT_FILENAME = "${pkgs.git}/libexec/git-core/git-http-backend";
+                    GIT_HTTP_EXPORT_ALL = "1";
+                    GIT_PROJECT_ROOT = mkCgitReposDir locCfg;
+                    HOME = GIT_PROJECT_ROOT;
+                  };
+                  extraConfig = mkFastcgiPass loc;
+                }
+              ];
+              "${stripLocation loc}/" = mkMerge [
+                locCfg.locationConfig
+                {
+                  fastcgiParams = {
+                    SCRIPT_FILENAME = "${cfg.package}/cgit/cgit.cgi";
+                    QUERY_STRING = "$args";
+                    HTTP_HOST = "$server_name";
+                    CGIT_CONFIG = mkCgitrc loc locCfg;
+                  };
+                  extraConfig = mkFastcgiPass loc;
+                }
+              ];
+            }) vhostCfg.locations
+          )
+        );
+      }) cfg.virtualHosts;
+    };
   };
 }
