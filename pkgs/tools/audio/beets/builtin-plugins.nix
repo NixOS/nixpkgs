@@ -136,4 +136,7 @@
   autobpm = {
     testPaths = [ ];
   };
+  listenbrainz = {
+    testPaths = [ ];
+  };
 }
