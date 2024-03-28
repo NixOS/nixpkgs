@@ -135,6 +135,7 @@
             else test;
           calledTest = lib.toFunction loadedTest pkgs;
         in
+          lib.warn "testers.nixosTest is deprecated. Use testers.runNixOSTest instead. See https://nixos.org/manual/nixpkgs/unstable/#tester-runNixOSTest"
           nixosTesting.simpleTest calledTest;
 
   hasPkgConfigModule =
