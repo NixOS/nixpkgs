@@ -1,0 +1,14 @@
+diff --git a/script/ethercatctl.in b/script/ethercatctl.in
+index 2da6e95b..9eda1dd5 100755
+--- a/script/ethercatctl.in
++++ b/script/ethercatctl.in
+@@ -41,7 +41,7 @@ ETHERCAT=@bindir@/ethercat
+
+ #------------------------------------------------------------------------------
+
+-ETHERCAT_CONFIG=@sysconfdir@/ethercat.conf
++ETHERCAT_CONFIG=/etc/ethercat/ethercat.conf
+
+ if [ ! -r ${ETHERCAT_CONFIG} ]; then
+     echo ${ETHERCAT_CONFIG} not existing;
+
