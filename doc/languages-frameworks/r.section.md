@@ -125,3 +125,19 @@ patches and special requirements. These overrides are specified in the
 `pkgs/development/r-modules/default.nix` file. As the `*-packages.nix`
 contents are automatically generated it should not be edited and broken
 builds should be addressed using overrides.
+
+## Verify that core packages build {#verify-that-core-packages-build}
+
+Once the package set has been updated, push to `nixpkgs/r-updates`.
+
+Hydra will attempt to build all the R packages in the `nixpkgs` branch
+[r-updates](https://github.com/NixOS/nixpkgs/tree/r-updates), and the results
+can be found at https://hydra.nixos.org/jobset/nixpkgs/r-updates
+
+Check that the core packages used by `generate-r-packages.R` (listed below) are
+building. Fix any core packages that are broken before submitting a PR to
+`master`. Other broken packages can be fixed on demand.
+
+- data.table
+- parallel
+- BiocManager
