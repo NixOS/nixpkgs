@@ -23,11 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-ai9JQ3gphY/IievBNdHiblIpc0IPS9wp7CVvBIRzG/4=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     lark
     oletools
   ];
