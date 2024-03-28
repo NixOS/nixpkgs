@@ -33,9 +33,9 @@ let
     ${cfg.extraConfig}
   '';
 
-  chronyFlags = 
+  chronyFlags =
     [ "-n" "-u" "chrony" "-f" "${configFile}" ]
-    ++ optional cfg.enableMemoryLocking "-m" 
+    ++ optional cfg.enableMemoryLocking "-m"
     ++ cfg.extraFlags;
 in
 {
