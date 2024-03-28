@@ -540,7 +540,7 @@ shows a typical sequence of commands for installing NixOS on an empty hard
 drive (here `/dev/sda`). [Example: NixOS Configuration](#ex-config) shows a
 corresponding configuration Nix expression.
 
-::: {#ex-partition-scheme-MBR .example}
+::: {.example #ex-partition-scheme-MBR}
 ### Example partition schemes for NixOS on `/dev/sda` (MBR)
 ```ShellSession
 # parted /dev/sda -- mklabel msdos
@@ -549,7 +549,7 @@ corresponding configuration Nix expression.
 ```
 :::
 
-::: {#ex-partition-scheme-UEFI .example}
+::: {.example #ex-partition-scheme-UEFI}
 ### Example partition schemes for NixOS on `/dev/sda` (UEFI)
 ```ShellSession
 # parted /dev/sda -- mklabel gpt
@@ -560,7 +560,7 @@ corresponding configuration Nix expression.
 ```
 :::
 
-::: {#ex-install-sequence .example}
+::: {.example #ex-install-sequence}
 ### Commands for Installing NixOS on `/dev/sda`
 
 With a partitioned disk.
@@ -580,7 +580,7 @@ With a partitioned disk.
 ```
 :::
 
-::: {#ex-config .example}
+::: {.example #ex-config}
 ### Example: NixOS Configuration
 ```ShellSession
 { config, pkgs, ... }: {
