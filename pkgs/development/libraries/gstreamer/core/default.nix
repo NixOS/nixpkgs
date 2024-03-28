@@ -67,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.isLinux [
     libcap
     libunwind
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
     elfutils
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
