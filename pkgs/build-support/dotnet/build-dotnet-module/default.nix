@@ -177,6 +177,8 @@ stdenvNoCC.mkDerivation (args // {
     "--prefix LD_LIBRARY_PATH : ${dotnet-sdk.icu}/lib"
   ];
 
+  __structuredAttrs = true;
+
   # Stripping breaks the executable
   dontStrip = args.dontStrip or true;
 
