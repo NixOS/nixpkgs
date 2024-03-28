@@ -464,6 +464,8 @@ with pkgs;
 
   cdecrypt = callPackage ../development/tools/cdecrypt { };
 
+  cerebro = callPackage ../applications/misc/cerebro { };
+
   certgraph = callPackage ../tools/security/certgraph { };
 
   certinfo = callPackage ../tools/security/certinfo { };
