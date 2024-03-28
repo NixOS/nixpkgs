@@ -15638,6 +15638,9 @@ with pkgs;
   flutter316 = flutterPackages.v3_16;
   flutter313 = flutterPackages.v3_13;
 
+  flutter-enginePackages = callPackage ../development/libraries/flutter-engine {};
+  flutter-engine = flutter-enginePackages.stable;
+
   fnm = callPackage ../development/tools/fnm {
     inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation Security;
   };
