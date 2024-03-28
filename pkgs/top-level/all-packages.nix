@@ -25185,6 +25185,8 @@ with pkgs;
 
   wlr-protocols = callPackage ../development/libraries/wlroots/protocols.nix { };
 
+  wslay = callPackage ../development/libraries/wslay { };
+
   wt = wt4;
   inherit (libsForQt5.callPackage ../development/libraries/wt { })
     wt4;
@@ -25849,6 +25851,8 @@ with pkgs;
   codeowners = callPackage ../development/tools/codeowners { };
 
   couchdb3 = callPackage ../servers/http/couchdb/3.nix { };
+
+  cyrus = callPackage ../servers/mail/cyrus { };
 
   dcnnt = python3Packages.callPackage ../servers/dcnnt { };
 
