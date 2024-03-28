@@ -8530,6 +8530,8 @@ self: super: with self; {
 
   ndtypes = callPackage ../development/python-modules/ndtypes { };
 
+  nebula3-python = callPackage ../development/python-modules/nebula3-python { };
+
   nengo = callPackage ../development/python-modules/nengo { };
 
   neo = callPackage ../development/python-modules/neo { };
