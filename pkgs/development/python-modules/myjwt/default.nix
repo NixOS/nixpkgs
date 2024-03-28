@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "cryptography"
+    "pyopenssl"
     "questionary"
   ];
 
