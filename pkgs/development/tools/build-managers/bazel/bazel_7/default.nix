@@ -213,7 +213,7 @@ stdenv.mkDerivation rec {
     #
     # See also ./bazel_darwin_sandbox.patch in bazel_5. That patch uses
     # NIX_BUILD_TOP env var to conditionnally disable sleep features inside the
-    # sandbox. Oddly, bazel_6 does not need that patch :-/.
+    # sandbox.
     #
     # If you want to investigate the sandbox profile path,
     # IORegisterForSystemPower can be allowed with
