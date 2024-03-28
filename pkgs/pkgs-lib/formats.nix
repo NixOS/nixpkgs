@@ -506,4 +506,56 @@ rec {
     '') {};
   };
 
+  envvars = {
+    export ? false
+  , listToStringSep ? ","
+  , listToStringFn ? lib.concatStringsSep listToStringSep
+  , boolToStringFn ? lib.boolToString
+  }: {
+    type = with lib.types; let
+      unescapedType = addCheck (attrsOf str) (attrs: (lib.attrNames attrs) == [ "_type" "value" ] && attrs._type == "unescaped");
+      valueType = nullOr (oneOf [
+        bool
+        float
+        int
+        path
+        str
+        unescapedType
+      ]);
+      valueType' = (either valueType (listOf valueType)) // {
+        description = "Environment variable";
+      };
+    in attrsOf valueType';
+
+    lib = {
+      mkUnescaped = value: {
+        _type = "unescaped";
+        inherit value;
+      };
+    };
+
+    generate = name: value: let
+      valueToString = v: let
+        innerListValues = replaceChar: v':
+          if lib.isAttrs v'
+            then v'.value
+          else lib.replaceStrings [ replaceChar ] [ "\\${replaceChar}" ] (
+            if lib.isBool v'
+              then boolToStringFn v'
+            else toString v');
+      in if lib.isList v
+        then if lib.any lib.isAttrs v
+          then ''"${listToStringFn (map (innerListValues "\"") v)}"''
+        else "'${listToStringFn (map (innerListValues "\'") v)}'"
+      else if lib.isAttrs v
+        then ''"${v.value}"''
+      else "'${if lib.isBool v then boolToStringFn v else toString v}'";
+    in pkgs.writeText name (lib.pipe value [
+      (lib.filterAttrs (_: v: v != null))
+      (lib.mapAttrsToList (n: v: "${n}=${valueToString v}"))
+      (xs: if export then (map (s: "export " + s)) xs else xs)
+      (map (s: s + "\n"))
+      lib.concatStrings
+    ]);
+  };
 }
