@@ -19735,6 +19735,8 @@ with pkgs;
 
   scc = callPackage ../development/tools/misc/scc { };
 
+  scram_3 = with python3Packages; toPythonApplication scram;
+
   scss-lint = callPackage ../development/tools/scss-lint { };
 
   segger-ozone = callPackage ../development/tools/misc/segger-ozone { };
