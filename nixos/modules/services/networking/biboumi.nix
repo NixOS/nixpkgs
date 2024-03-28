@@ -17,6 +17,13 @@ in
     services.biboumi = {
       enable = mkEnableOption (lib.mdDoc "the Biboumi XMPP gateway to IRC");
 
+      package = mkOption {
+        description = lib.mdDoc "The Biboumi package to use";
+        default = pkgs.biboumi;
+        defaultText = literalExpression "pkgs.biboumi";
+        type = types.package;
+      };
+
       settings = mkOption {
         description = lib.mdDoc ''
           See [biboumi 8.5](https://lab.louiz.org/louiz/biboumi/blob/8.5/doc/biboumi.1.rst)
@@ -105,8 +112,8 @@ in
           };
           options.policy_directory = mkOption {
             type = types.path;
-            default = "${pkgs.biboumi}/etc/biboumi";
-            defaultText = literalExpression ''"''${pkgs.biboumi}/etc/biboumi"'';
+            default = "${cfg.package}/etc/biboumi";
+            defaultText = literalExpression ''"''${services.biboumi.package}/etc/biboumi"'';
             description = lib.mdDoc ''
               A directory that should contain the policy files,
               used to customize Botan’s behaviour
@@ -189,7 +196,7 @@ in
           cat ${settingsFile} '${cfg.credentialsFile}' |
           install -m 644 /dev/stdin /run/biboumi/biboumi.cfg
         '')];
-        ExecStart = "${pkgs.biboumi}/bin/biboumi /run/biboumi/biboumi.cfg";
+        ExecStart = "${cfg.package}/bin/biboumi /run/biboumi/biboumi.cfg";
         ExecReload = "${pkgs.coreutils}/bin/kill -USR1 $MAINPID";
         # Firewalls needing opening for output connections can still do that
         # selectively for biboumi with:
