@@ -540,9 +540,8 @@ in
         locations = {
           "~ ^/w/(index|load|api|thumb|opensearch_desc|rest|img_auth)\\.php$".extraConfig = ''
             rewrite ^/w/(.*) /$1 break;
-            include ${config.services.nginx.package}/conf/fastcgi_params;
+            include ${config.services.nginx.package}/conf/fastcgi.conf;
             fastcgi_index index.php;
-            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
             fastcgi_pass unix:${config.services.phpfpm.pools.mediawiki.socket};
           '';
           "/w/images/".alias = withTrailingSlash cfg.uploadsDir;
@@ -573,7 +572,7 @@ in
 
           # Explicit access to the root website, redirect to main page (adapt as needed)
           "= /".extraConfig = ''
-            return 301 /wiki/Main_Page;
+            return 301 /wiki/;
           '';
 
           # Every other entry point will be disallowed.
