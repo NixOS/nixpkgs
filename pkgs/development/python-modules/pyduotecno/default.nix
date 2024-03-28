@@ -3,13 +3,12 @@
 , fetchFromGitHub
 , pythonOlder
 , setuptools
-, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pyduotecno";
-  version = "2024.1.2";
-  format = "pyproject";
+  version = "2024.3.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -17,12 +16,11 @@ buildPythonPackage rec {
     owner = "Cereal2nd";
     repo = "pyDuotecno";
     rev = "refs/tags/${version}";
-    hash = "sha256-lwtCTzZJn3bamZWbJoeiyxnzrIRZAi9JPjVgiVR0LG8=";
+    hash = "sha256-a5uS1Th/ENXovAX2TaNPbHlpLWiaAG4B6Gd53ryiukE=";
   };
 
   nativeBuildInputs = [
     setuptools
-    wheel
   ];
 
   # Module has no tests
