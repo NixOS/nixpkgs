@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , pkg-config
+, openssh
 , openssl
 , libbsd
 , libevent
@@ -38,7 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace configure --replace-fail 'xdarwin' 'xhomebrew'
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+  env.NIX_CFLAGS_COMPILE = toString ( [
+    "-DGOT_DIAL_PATH_SSH=\"${openssh}/bin/ssh\""
+    "-DGOT_TAG_PATH_SSH_KEYGEN=\"${openssh}/bin/ssh-keygen\""
+  ] ++ lib.optionals stdenv.isDarwin [
     # error: conflicting types for 'strmode'
     "-DHAVE_STRMODE=1"
     # Undefined symbols for architecture arm64: "_bsd_getopt"
