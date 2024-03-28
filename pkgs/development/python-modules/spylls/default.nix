@@ -4,23 +4,19 @@
 
 , pythonOlder
 
-, pythonRelaxDepsHook
-
 , poetry-core
-
-, pytest
 }:
 
 buildPythonPackage rec {
   pname = "spylls";
-  version = "0.1.5";
+  version = "0.1.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WjCIfbNE6MoRgPVQoRhEhQIAY6+TQZZ34v4ccTVT580=";
+    hash = "sha256-cEWJLcvTJNNoX2nFp2AGPnj7g5kTckzhgHfPCgyT8iA=";
   };
 
   postPatch = ''
@@ -31,15 +27,6 @@ buildPythonPackage rec {
 
   build-system = [
     poetry-core
-  ];
-
-  nativeBuildInputs = [
-    pytest # hack for fix error: `pytest not installed`
-    pythonRelaxDepsHook
-  ];
-
-  pythonRelaxDeps = [
-    "pytest"
   ];
 
   # no unit tests in source distribution...
