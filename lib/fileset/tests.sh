@@ -118,7 +118,7 @@ expectFailure() {
         die "$expr evaluated successfully to $result, but it was expected to fail"
     fi
     stderr=$(<"$tmp/stderr")
-    if [[ ! "$stderr" =~ $expectedErrorRegex ]]; then
+    if ! grep -E "$expectedErrorRegex" <<< $stderr; then
         die "$expr should have errored with this regex pattern:\n\n$expectedErrorRegex\n\nbut this was the actual error:\n\n$stderr"
     fi
 }
