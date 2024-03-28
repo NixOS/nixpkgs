@@ -241,7 +241,7 @@ in
         --pulseaudio=no \
         ${optionalString (cfg.pulseaudio) "--sound-source=pulse"} \
         --socket-dirs=/run/xpra \
-        --xvfb="xpra_Xdummy ${concatStringsSep " " dmcfg.xserverArgs}" \
+        --xvfb="${pkgs.xorg.xorgserver}/bin/Xorg ${concatStringsSep " " dmcfg.xserverArgs}" \
         ${optionalString (cfg.bindTcp != null) "--bind-tcp=${cfg.bindTcp}"} \
         --auth=${cfg.auth} \
         ${concatStringsSep " " cfg.extraOptions}
