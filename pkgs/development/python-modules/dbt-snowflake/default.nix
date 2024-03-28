@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "dbt-snowflake";
-  version = "1.7.2";
+  version = "1.7.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "dbt-labs";
     repo = "dbt-snowflake";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OyUBqSNHMedCDsY280O8VAmxeyeF5J0snk5o6XhE2V4=";
+    hash = "sha256-ksnLQdoXR8KVtYTFdlaWT8UYjAsLNyEVVap/QHtm+j8=";
   };
 
   build-system = [
