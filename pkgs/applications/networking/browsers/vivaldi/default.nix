@@ -9,6 +9,10 @@
 , libdrm, mesa
 , vulkan-loader
 , nss, nspr
+# Which gtk version to use. Vivaldi supports both gtk3 and gtk4.
+, gtk ? gtk3
+# Which qt version to use. Vivaldi supports both qt5 and qt6.
+, qt ? qt5
 , patchelf, makeWrapper
 , wayland, pipewire
 , isSnapshot ? false
@@ -51,8 +55,8 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE libxcb libxkbcommon libxshmfence
     libXi libXft libXcursor libXfixes libXScrnSaver libXcomposite libXdamage libXtst libXrandr
-    atk at-spi2-atk at-spi2-core alsa-lib dbus cups gtk3 gdk-pixbuf libexif ffmpeg systemd libva
-    qt5.qtbase
+    atk at-spi2-atk at-spi2-core alsa-lib dbus cups gtk gdk-pixbuf libexif ffmpeg systemd libva
+    qt.qtbase
     freetype fontconfig libXrender libuuid expat glib nss nspr libGL
     libxml2 pango cairo
     libdrm mesa vulkan-loader
@@ -76,7 +80,7 @@ in stdenv.mkDerivation rec {
         opt/${vivaldiName}/$f
     done
 
-    for f in libGLESv2.so libqt5_shim.so ; do
+    for f in libGLESv2.so libqt5_shim.so libqt6_shim.so ; do
       patchelf --set-rpath "${libPath}" opt/${vivaldiName}/$f
     done
   '' + lib.optionalString proprietaryCodecs ''
@@ -111,9 +115,10 @@ in stdenv.mkDerivation rec {
     wrapProgram "$out/bin/vivaldi" \
       --add-flags ${lib.escapeShellArg commandLineArgs} \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags --gtk-version=${lib.versions.major gtk.version} \
       --set-default FONTCONFIG_FILE "${fontconfig.out}/etc/fonts/fonts.conf" \
       --set-default FONTCONFIG_PATH "${fontconfig.out}/etc/fonts" \
-      --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/ \
+      --suffix XDG_DATA_DIRS : ${gtk}/share/gsettings-schemas/${gtk.name}/ \
       ${lib.optionalString enableWidevine "--suffix LD_LIBRARY_PATH : ${libPath}"}
   '' + lib.optionalString enableWidevine ''
     ln -sf ${widevine-cdm}/share/google/chrome/WidevineCdm $out/opt/${vivaldiName}/WidevineCdm
