@@ -114,6 +114,7 @@
 , "fx"
 , "ganache"
 , "gatsby-cli"
+, "gerrit-cli"
 , "get-graphql-schema"
 , "git-run"
 , "git-standup"
