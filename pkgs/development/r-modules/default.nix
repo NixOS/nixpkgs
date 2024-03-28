@@ -562,6 +562,7 @@ let
     jqr = [ pkgs.jq.lib ];
     kza = [ pkgs.pkg-config ];
     igraph = with pkgs; [ gmp libxml2.dev glpk ];
+    image_textlinedetector = with pkgs; [ pkg-config opencv ];
     lwgeom = with pkgs; [ pkg-config proj.dev sqlite.dev ];
     magick = [ pkgs.pkg-config ];
     mwaved = [ pkgs.pkg-config ];
