@@ -34,12 +34,12 @@ buildPythonPackage rec {
     "httpx"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
   ];
 
