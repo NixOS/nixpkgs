@@ -9,6 +9,8 @@ in {
   options.services.languagetool = {
     enable = mkEnableOption (mdDoc "the LanguageTool server");
 
+    package = mkPackageOption pkgs "LanguageTool server" { };
+
     port = mkOption {
       type = types.port;
       default = 8081;
@@ -66,7 +68,7 @@ in {
         SystemCallFilter = [ "@system-service" "~ @privileged" ];
         ProtectHome = "yes";
         ExecStart = ''
-          ${pkgs.languagetool}/bin/languagetool-http-server \
+          ${cfg.package}/bin/languagetool-http-server \
             --port ${toString cfg.port} \
             ${optionalString cfg.public "--public"} \
             ${optionalString (cfg.allowOrigin != null) "--allow-origin ${cfg.allowOrigin}"} \
