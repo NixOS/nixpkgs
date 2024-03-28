@@ -5413,6 +5413,8 @@ with pkgs;
 
   fx = callPackage ../development/tools/fx { };
 
+  tlclient = callPackage ../applications/networking/remote/tlclient { };
+
   tllist = callPackage ../development/libraries/tllist { };
 
   fcft = callPackage ../development/libraries/fcft { };
