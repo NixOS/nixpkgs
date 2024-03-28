@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation {
   pname = "sommelier";
-  version = "104.0";
+  version = "112.0";
 
   src = fetchzip rec {
     url = "https://chromium.googlesource.com/chromiumos/platform2/+archive/${passthru.rev}/vm_tools/sommelier.tar.gz";
-    passthru.rev = "af5434fd9903936a534e1316cbd22361e67949ec";
+    passthru.rev = "72325ef016c465c332896c86f01f0eec6616d31b";
     stripRoot = false;
-    sha256 = "LungQqHQorHIKpye2SDBLuMHPt45C1cPYcs9o5Hc3cw=";
+    sha256 = "aSyl1tcPUf+xt/Gy/WwjE+wsth+lih76se2EKWD4+cM=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
