@@ -20488,6 +20488,12 @@
     githubId = 10956211;
     name = "Valerio Besozzi";
   };
+  valentin-ricard = {
+    email = "me@valentin.red";
+    github = "valentin-ricard";
+    githubId = 91870700;
+    name = "Valentin Ricard";
+  };
   valeriangalliat = {
     email = "val@codejam.info";
     github = "valeriangalliat";
