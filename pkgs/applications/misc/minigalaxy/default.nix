@@ -6,6 +6,7 @@
 , glib-networking
 , gobject-introspection
 , gtk3
+, libnotify
 , python3
 , python3Packages
 , steam-run
@@ -16,13 +17,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "minigalaxy";
-  version = "1.2.2";
+  version = "1.2.6";
 
   src = fetchFromGitHub {
     owner = "sharkwouter";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-bpNtdMYBl2dJ4PQsxkhm/Y+3A0dD/Y2XC0VaUYyRhvM=";
+    sha256 = "sha256-uGB0P1yUB589Rzluszz/QnIc+rfqcX2Wrk7yMbJQ9Yg=";
   };
 
   checkPhase = ''
@@ -40,6 +41,7 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     glib-networking
     gtk3
+    libnotify
   ];
 
   nativeCheckInputs = with python3Packages; [
