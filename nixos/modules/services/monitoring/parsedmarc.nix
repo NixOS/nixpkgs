@@ -301,7 +301,7 @@ in
               description = ''
                 The addresses to send outgoing mail to.
               '';
-              apply = x: if x == [] then null else lib.concatStringsSep "," x;
+              apply = x: if x == [] || x == null then null else lib.concatStringsSep "," x;
             };
           };
 
@@ -446,7 +446,7 @@ in
     services.parsedmarc.settings = lib.mkMerge [
       (lib.mkIf cfg.provision.elasticsearch {
         elasticsearch = {
-          hosts = [ "localhost:9200" ];
+          hosts = [ "http://localhost:9200" ];
           ssl = false;
         };
       })
