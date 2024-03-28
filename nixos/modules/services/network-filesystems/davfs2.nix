@@ -4,13 +4,15 @@ with lib;
 
 let
   cfg = config.services.davfs2;
-  cfgFile = pkgs.writeText "davfs2.conf" ''
-    dav_user ${cfg.davUser}
-    dav_group ${cfg.davGroup}
-    ${cfg.extraConfig}
-  '';
+  format = pkgs.formats.toml { };
+  configFile = format.generate "davfs2.conf" cfg.settings;
 in
 {
+
+  imports = [
+    (mkRenamedOptionModule [ "services" "davfs2" "extraConfig" ] [ "services" "davfs2" "settings" ])
+  ];
+
   options.services.davfs2 = {
     enable = mkOption {
       type = types.bool;
@@ -39,23 +41,30 @@ in
       '';
     };
 
-    extraConfig = mkOption {
-      type = types.lines;
-      default = "";
-      example = ''
-        kernel_fs coda
-        proxy foo.bar:8080
-        use_locks 0
-      '';
+    settings = mkOption {
+      type = types.submodule {
+        freeformType = format.type;
+      };
+      default = {};
+      example = literalExpression '' {
+        kernel_fs = "coda";
+        proxy = "foo.bar:8080";
+        use_locks = 0;
+      } '';
       description = lib.mdDoc ''
-        Extra lines appended to the configuration of davfs2.
+        Extra settings appended to the configuration of davfs2.
       ''  ;
     };
   };
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.davfs2 ];
-    environment.etc."davfs2/davfs2.conf".source = cfgFile;
+    environment.etc."davfs2/davfs2.conf".source = configFile;
+
+    services.davfs2.settings = {
+      dav_user = cfg.davUser;
+      dav_group = cfg.davGroup;
+    };
 
     users.groups = optionalAttrs (cfg.davGroup == "davfs2") {
       davfs2.gid = config.ids.gids.davfs2;
