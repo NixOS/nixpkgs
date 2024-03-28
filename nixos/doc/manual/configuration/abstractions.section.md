@@ -30,6 +30,7 @@ let
     { adminAddr = "alice@example.org";
       forceSSL = true;
       enableACME = true;
+      enablePHP = true;
     };
 in
 {
@@ -67,6 +68,7 @@ but not `{ let commonConfig = ...; in ...; }` since attributes (as opposed to at
           adminAddr = "alice@example.org";
           forceSSL = true;
           enableACME = true;
+          enablePHP = true;
         };
     in
       { "example.org" = (makeVirtualHost "/webroot/example.org");
