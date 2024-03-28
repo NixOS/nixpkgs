@@ -53,6 +53,7 @@ in
     platforms = [ "x86_64-linux" ];
     mainProgram = "losslesscut";
   };
-}) // {
+}).overrideAttrs (finalAttrs: previousAttrs: {
   inherit pname version;
-}
+  name = "${finalAttrs.pname}-${finalAttrs.version}";
+})
