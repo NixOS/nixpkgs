@@ -9,8 +9,8 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
-    repo = pname;
-    rev = "v${version}";
+    repo = "subfinder";
+    rev = "refs/tags/v${version}";
     hash = "sha256-A9qSrgQB7AE+9S3SW1eXRGA65RfEzrjYR2XgU8e+zMk=";
   };
 
@@ -20,6 +20,11 @@ buildGoModule rec {
 
   subPackages = [
     "cmd/subfinder/"
+  ];
+
+  ldflags = [
+    "-w"
+    "-s"
   ];
 
   meta = with lib; {
