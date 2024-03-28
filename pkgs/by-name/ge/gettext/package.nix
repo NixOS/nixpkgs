@@ -4,6 +4,9 @@
 , libiconv
 , stdenv
 , xz
+
+# HACK, see #10874 (and 14664)
+, enableLibiconv ? (!stdenv.isLinux && !stdenv.hostPlatform.isCygwin)
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus cannot use
@@ -62,8 +65,7 @@ stdenv.mkDerivation (finalAttrs: ({
   buildInputs = lib.optionals (!stdenv.hostPlatform.isMinGW) [
     bash
   ]
-  ++ lib.optionals (!stdenv.isLinux && !stdenv.hostPlatform.isCygwin) [
-    # HACK, see #10874 (and 14664)
+  ++ lib.optionals enableLibiconv [
     libiconv
   ];
 
