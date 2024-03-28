@@ -59,11 +59,11 @@ buildGoModule rec {
   buildInputs = lib.optional pamSupport pam;
 
   patches = [
-    ./../gitea/static-root-path.patch
+    ./static-root-path.patch
   ];
 
   postPatch = ''
-    substituteInPlace modules/setting/setting.go --subst-var data
+    substituteInPlace modules/setting/server.go --subst-var data
   '';
 
   tags = lib.optional pamSupport "pam"
