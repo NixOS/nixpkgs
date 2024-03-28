@@ -80,10 +80,6 @@ buildPythonPackage rec {
     pytest-xdist
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
-  pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
-  ];
-
   preCheck = ''
     export PATH="$out/bin:$PATH"
   '';

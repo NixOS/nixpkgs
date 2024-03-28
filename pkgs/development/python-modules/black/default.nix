@@ -76,10 +76,6 @@ buildPythonPackage rec {
     parameterized
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
-  pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
-  ];
-
   preCheck = ''
     export PATH="$PATH:$out/bin"
 

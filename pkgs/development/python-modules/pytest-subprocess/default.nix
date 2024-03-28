@@ -43,10 +43,6 @@ buildPythonPackage rec {
     anyio
   ];
 
-  pytestFlagsArray = [
-    "-W ignore::DeprecationWarning"
-  ];
-
   meta = with lib; {
     description = "A plugin to fake subprocess for pytest";
     homepage = "https://github.com/aklajnert/pytest-subprocess";

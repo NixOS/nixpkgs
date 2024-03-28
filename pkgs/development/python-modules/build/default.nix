@@ -71,11 +71,6 @@ buildPythonPackage rec {
         wheel
       ];
 
-      pytestFlagsArray = [
-        "-W"
-        "ignore::DeprecationWarning"
-      ];
-
       __darwinAllowLocalNetworking = true;
 
       disabledTests = [

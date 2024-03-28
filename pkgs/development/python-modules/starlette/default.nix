@@ -64,7 +64,6 @@ buildPythonPackage rec {
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
     "-W" "ignore::trio.TrioDeprecationWarning"
   ];
 

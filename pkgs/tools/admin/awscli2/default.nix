@@ -128,10 +128,6 @@ with py.pkgs; buildPythonApplication rec {
     export HOME=$(mktemp -d)
   '';
 
-  pytestFlagsArray = [
-    "-Wignore::DeprecationWarning"
-  ];
-
   disabledTestPaths = [
     "tests/dependencies"
     "tests/unit/botocore"

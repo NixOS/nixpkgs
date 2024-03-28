@@ -98,11 +98,6 @@ buildPythonPackage rec {
     pandoc
   ];
 
-  pytestFlagsArray = [
-    # DeprecationWarning: 'jinja2.Markup' is deprecated and...
-    "-W ignore::DeprecationWarning"
-  ];
-
   disabledTests = [
     # AssertionError
     "test_basic_generation_works"
