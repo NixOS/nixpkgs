@@ -24,14 +24,14 @@ let
 
 in buildPythonApplication rec {
   pname = "pipenv";
-  version = "2023.2.4";
+  version = "2023.10.24";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "pipenv";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jZOBu4mWyu8U6CGqtYgfcCCDSa0pGqoZEFnXl5IO+JY=";
+    hash = "sha256-b1EqCrgGygdG08zzastgcYGnXDKoEYNvm5xjDLzlAXo=";
   };
 
   env.LC_ALL = "en_US.UTF-8";
@@ -47,7 +47,7 @@ in buildPythonApplication rec {
     # and to call setup.py.
     # It would use sys.executable, which in our case points to a python that
     # does not have the required dependencies.
-    substituteInPlace pipenv/core.py \
+    substituteInPlace pipenv/utils/virtualenv.py \
       --replace "sys.executable" "'${pythonEnv.interpreter}'"
   '';
 
