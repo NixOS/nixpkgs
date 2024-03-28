@@ -235,14 +235,44 @@ let
     callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch; });
   in {
 
-    compiler-rt-libc = callPackage ./compiler-rt {
+    compiler-rt-libc = callPackage ../common/compiler-rt {
+      src = fetch "compiler-rt" "1950rg294izdwkaasi7yjrmadc9mzdd5paf0q63jjcq2m3rdbj5l";
+      patches = [
+        ../common/compiler-rt/7-12-codesign.patch # Revert compiler-rt commit that makes codesign mandatory
+        ./compiler-rt/X86-support-extension.patch # Add support for i486 i586 i686 by reusing i386 config
+        ./compiler-rt/gnu-install-dirs.patch
+        # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
+        # extra `/`.
+        ./compiler-rt/normalize-var.patch
+        ../common/compiler-rt/darwin-plistbuddy-workaround.patch
+        ./compiler-rt/armv7l.patch
+        # Fix build on armv6l
+        ../common/compiler-rt/armv6-mcr-dmb.patch
+        ../common/compiler-rt/armv6-sync-ops-no-thumb.patch
+        ../common/compiler-rt/armv6-no-ldrexd-strexd.patch
+      ];
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
                else stdenv;
     };
 
-    compiler-rt-no-libc = callPackage ./compiler-rt {
+    compiler-rt-no-libc = callPackage ../common/compiler-rt {
+      src = fetch "compiler-rt" "1950rg294izdwkaasi7yjrmadc9mzdd5paf0q63jjcq2m3rdbj5l";
+      patches = [
+        ../common/compiler-rt/7-12-codesign.patch # Revert compiler-rt commit that makes codesign mandatory
+        ./compiler-rt/X86-support-extension.patch # Add support for i486 i586 i686 by reusing i386 config
+        ./compiler-rt/gnu-install-dirs.patch
+        # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
+        # extra `/`.
+        ./compiler-rt/normalize-var.patch
+        ../common/compiler-rt/darwin-plistbuddy-workaround.patch
+        ./compiler-rt/armv7l.patch
+        # Fix build on armv6l
+        ../common/compiler-rt/armv6-mcr-dmb.patch
+        ../common/compiler-rt/armv6-sync-ops-no-thumb.patch
+        ../common/compiler-rt/armv6-no-ldrexd-strexd.patch
+      ];
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRt
