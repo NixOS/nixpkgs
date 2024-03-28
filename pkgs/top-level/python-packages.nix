@@ -14234,6 +14234,8 @@ self: super: with self; {
 
   starlette = callPackage ../development/python-modules/starlette { };
 
+  starlette-context = callPackage ../development/python-modules/starlette-context { };
+
   starlette-wtf = callPackage ../development/python-modules/starlette-wtf { };
 
   starkbank-ecdsa = callPackage ../development/python-modules/starkbank-ecdsa { };
