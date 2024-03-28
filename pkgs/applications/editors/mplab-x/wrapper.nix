@@ -1,5 +1,7 @@
-{ lib, buildFHSEnv, execline, fuse-overlayfs, glibc, jdk8, mplab-x-unwrapped
-, rsync, systemdLibs, writeShellApplication }:
+{ lib, buildFHSEnv, execline, fuse-overlayfs, glibc, mplab-x-unwrapped, rsync
+, systemdLibs, writeShellApplication,
+
+microchip-xc16 }:
 
 let
   fhsEnv = buildFHSEnv {
@@ -9,7 +11,13 @@ let
 
   stage2 = writeShellApplication {
     name = "mplab_ide-wrapper";
-    runtimeInputs = [ execline fuse-overlayfs rsync ];
+    runtimeInputs = [
+      execline
+      fuse-overlayfs
+      rsync
+
+      microchip-xc16
+    ];
     text = ''
       # Make the rt directory, isolated from the host filesystem.
       rt="$XDG_RUNTIME_DIR/mplab-x"
@@ -28,23 +36,6 @@ let
       fuse-overlayfs -o lowerdir="$rt/overlay":/ "$rt/newroot"
       trap 'fusermount -zu "$rt/newroot"' EXIT
 
-      # Set up /dev in the new rootfs.
-      # mount -t tmpfs dev "$rt/newroot/dev"
-      # touch "$rt/newroot/dev"/{full,null,random,tty,urandom,zero}
-      # mkdir "$rt/newroot/dev/pts"
-      # ln -s /proc/self/fd   "$rt/newroot/dev/fd"
-      # ln -s pts/ptmx        "$rt/newroot/dev/ptmx"
-      # ln -s /proc/self/fd/0 "$rt/newroot/dev/stdin"
-      # ln -s /proc/self/fd/1 "$rt/newroot/dev/stdout"
-      # ln -s /proc/self/fd/2 "$rt/newroot/dev/stderr"
-      # mount -t devpts devpts     "$rt/newroot/dev/pts"
-      # mount --rbind /dev/full    "$rt/newroot/dev/full"
-      # mount --rbind /dev/null    "$rt/newroot/dev/null"
-      # mount --rbind /dev/random  "$rt/newroot/dev/random"
-      # mount --rbind /dev/tty     "$rt/newroot/dev/tty"
-      # mount --rbind /dev/urandom "$rt/newroot/dev/urandom"
-      # mount --rbind /dev/zero    "$rt/newroot/dev/zero"
-
       # Bind mount some subtrees we want to make mutable.
       mount --rbind /dev  "$rt/newroot/dev"
       mount --rbind /home "$rt/newroot/home"
@@ -56,8 +47,7 @@ let
       # Chroot into the new rootfs and launch the IDE.
       export LD_LIBRARY_PATH="/lib''${LD_LIBRARY_PATH:+:}''${LD_LIBRARY_PATH:-}"
       chroot "$rt/newroot" execline-cd "$(pwd)" \
-        ${mplab-x-unwrapped}/opt/microchip/mplabx/v${mplab-x-unwrapped.version}/mplab_platform/bin/mplab_ide \
-        # --jdkhome ${jdk8}
+        ${mplab-x-unwrapped}/opt/microchip/mplabx/v${mplab-x-unwrapped.version}/mplab_platform/bin/mplab_ide
     '';
 
     inherit (mplab-x-unwrapped) meta;
