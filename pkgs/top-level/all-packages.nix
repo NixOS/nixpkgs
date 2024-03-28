@@ -26852,6 +26852,8 @@ with pkgs;
 
   sambaFull = samba4Full;
 
+  scrypted = callPackage ../servers/scrypted { };
+
   sampler = callPackage ../applications/misc/sampler { };
 
   scalr-cli = callPackage ../tools/admin/scalr-cli { };
