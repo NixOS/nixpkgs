@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dracut";
-  version = "059";
+  version = "060";
 
   src = fetchFromGitHub {
     owner = "dracutdevs";
     repo = "dracut";
-    rev = version;
-    hash = "sha256-zSyC2SnSQkmS/mDpBXG2DtVVanRRI9COKQJqYZZCPJM=";
+    rev = "856e7acdb1462803c2517c8d64afb2e34c73c735";
+    hash = "sha256-tjKH3xJNKtH+y23hxMXbvV6E3yXe7XctH31GC3Fg3KU=";
   };
 
   strictDeps = true;
@@ -57,8 +57,6 @@ stdenv.mkDerivation rec {
       --replace 'dracutbasedir="$dracutsysrootdir"/usr/lib/dracut' 'dracutbasedir="$dracutsysrootdir"'"$out/lib/dracut"
     substituteInPlace lsinitrd.sh \
       --replace 'dracutbasedir=/usr/lib/dracut' "dracutbasedir=$out/lib/dracut"
-
-    echo 'DRACUT_VERSION=${version}' >dracut-version.sh
   '';
 
   postFixup = ''
