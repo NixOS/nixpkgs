@@ -1,34 +1,34 @@
 { lib
+, accelerate
+, aiohttp
 , buildPythonPackage
+, fastapi
 , fetchFromGitHub
-, pythonOlder
+, flask
 , numpy
+, pg8000
+, pillow
 , pydantic
+, pytestCheckHook
+, pythonOlder
 , redis
 , requests
-, aiohttp
+, sentence-transformers
+, setuptools
+, sqlalchemy
 , sqlitedict
 , tenacity
 , tiktoken
-, xxhash
-, # optional dependencies
-  accelerate
-, flask
-, sentence-transformers
 , torch
 , transformers
-, fastapi
 , uvicorn
-, pillow
-, pg8000
-, sqlalchemy
-, pytestCheckHook
+, xxhash
 }:
 
 buildPythonPackage rec {
   pname = "manifest-ml";
   version = "0.1.9";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -41,7 +41,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     numpy
     pydantic
     redis
@@ -51,7 +55,7 @@ buildPythonPackage rec {
     tenacity
     tiktoken
     xxhash
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ];
 
   passthru.optional-dependencies = {
     api = [
@@ -79,7 +83,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   preCheck = ''
     export HOME=$TMPDIR
