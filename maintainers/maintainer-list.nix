@@ -1425,6 +1425,12 @@
     githubId = 4194320;
     name = "Anton Schirg";
   };
+  aorith = {
+    email = "aomanu+nixpkgs@gmail.com";
+    github = "aorith";
+    githubId = 5411704;
+    name = "Manuel Sanchez Pinar";
+  };
   apeschar = {
     email = "albert@peschar.net";
     github = "apeschar";
