@@ -7066,6 +7066,8 @@ with pkgs;
 
   cc2538-bsl = callPackage ../tools/misc/cc2538-bsl { };
 
+  cd = callPackage ../development/libraries/cd { };
+
   code-browser-qt = libsForQt5.callPackage ../applications/editors/code-browser { withQt = true; };
   code-browser-gtk2 = callPackage ../applications/editors/code-browser { withGtk2 = true; };
   code-browser-gtk = callPackage ../applications/editors/code-browser { withGtk3 = true; };
@@ -21742,6 +21744,8 @@ with pkgs;
 
   ilmbase = callPackage ../development/libraries/ilmbase { };
 
+  im = callPackage ../development/libraries/im { };
+
   imgui = callPackage ../development/libraries/imgui { };
 
   imtui = callPackage ../development/libraries/imtui { };
@@ -21837,6 +21841,8 @@ with pkgs;
   };
 
   itk = itk_5;
+
+  iup = callPackage ../development/libraries/iup { };
 
   jama = callPackage ../development/libraries/jama { };
 
@@ -37719,6 +37725,8 @@ with pkgs;
   protonup-ng = with python3Packages; toPythonApplication protonup-ng;
 
   steam-rom-manager = callPackage ../tools/games/steam-rom-manager { };
+
+  sgdboop = callPackage ../tools/games/sgdboop { };
 
   sdlpop = callPackage ../games/sdlpop { };
 
