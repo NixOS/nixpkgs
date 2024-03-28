@@ -625,7 +625,7 @@ rec {
 
   mypy-boto3-s3outposts = buildMypyBoto3Package "s3outposts" "1.34.0" "sha256-xLuGP9Fe0S7zRimt1AKd9KOrytmNd/GTRg5OVi5Xpos=";
 
-  mypy-boto3-sagemaker = buildMypyBoto3Package "sagemaker" "1.34.64" "sha256-Sf1T1aqRMIEZmuA2KH5tzuhTDN8yfFID/+h0DCWxws0=";
+  mypy-boto3-sagemaker = buildMypyBoto3Package "sagemaker" "1.34.70" "sha256-WON2j0ZQ9x3qq1mOOzMvT8jJSuJipDHDp4IxsB88GCg=";
 
   mypy-boto3-sagemaker-a2i-runtime = buildMypyBoto3Package "sagemaker-a2i-runtime" "1.34.0" "sha256-jMZ3aWKQPhNec4A/02S1waQi6Mx9JVdENc3kblhsKjA=";
 
