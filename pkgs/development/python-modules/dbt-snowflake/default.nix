@@ -22,11 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-OyUBqSNHMedCDsY280O8VAmxeyeF5J0snk5o6XhE2V4=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dbt-core
     snowflake-connector-python
   ] ++ snowflake-connector-python.optional-dependencies.secure-local-storage;
