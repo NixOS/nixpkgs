@@ -5,6 +5,7 @@
 , alsa-lib
 , autoreconfHook
 , avahi
+, callPackage
 , dbus
 , faad2
 , fetchpatch
@@ -288,6 +289,14 @@ stdenv.mkDerivation (finalAttrs: {
   '' + optionalString withQt5 ''
     remove-references-to -t "${libsForQt5.qtbase.dev}" $out/lib/vlc/plugins/gui/libqt_plugin.so
   '';
+
+  passthru = {
+    tests = {
+      test-001-version = callPackage ./tests/001-version.nix {
+        vlc = finalAttrs.finalPackage;
+      };
+    };
+  };
 
   meta = {
     description = "Cross-platform media player and streaming server";
