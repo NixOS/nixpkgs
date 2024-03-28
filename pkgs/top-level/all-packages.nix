@@ -7565,6 +7565,9 @@ with pkgs;
 
   dub = callPackage ../development/tools/build-managers/dub { };
 
+  inherit (callPackage ../build-support/dlang/dub-support.nix { })
+    buildDubPackage dub-to-nix makeDubDep;
+
   duc = callPackage ../tools/misc/duc { };
 
   duff = callPackage ../tools/filesystems/duff {
@@ -19130,6 +19133,9 @@ with pkgs;
   indent = callPackage ../development/tools/misc/indent { };
 
   inotify-tools = callPackage ../development/tools/misc/inotify-tools { };
+
+  inherit (callPackages ../applications/misc/inochi2d { })
+    inochi-creator inochi-session;
 
   intel-gpu-tools = callPackage ../development/tools/misc/intel-gpu-tools { };
 
