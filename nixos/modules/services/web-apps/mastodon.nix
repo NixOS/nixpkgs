@@ -25,6 +25,7 @@ let
     DB_HOST = cfg.database.host;
     DB_NAME = cfg.database.name;
     LOCAL_DOMAIN = cfg.localDomain;
+    WEB_DOMAIN = cfg.webDomain;
     SMTP_SERVER = cfg.smtp.host;
     SMTP_PORT = toString(cfg.smtp.port);
     SMTP_FROM_ADDRESS = cfg.smtp.fromAddress;
@@ -326,9 +327,30 @@ in {
       };
 
       localDomain = lib.mkOption {
-        description = lib.mdDoc "The domain serving your Mastodon instance.";
+        description = lib.mdDoc ''
+          The domain serving your Mastodon instance. If webDomain is configured
+          to host the application on a subdomain then enable pretty
+          @username@example.com style usernames on your domain root is possible.
+          Study https://docs.joinmastodon.org/admin/config/ before configuring
+          as this value cannot be changed once other servers federate
+          with you.
+        '';
+        example = "example.org";
+        type = lib.types.str;
+      };
+
+      webDomain = lib.mkOption {
+        description = lib.mdDoc ''
+          The web domain serving your Mastodon instance. If different to
+          localDomain then a manual web-finger 301 redirect must be
+          configured. Study https://docs.joinmastodon.org/admin/config/ 
+          before configuring as this value cannot be changed once other
+          servers federate with you.
+        '';
         example = "social.example.org";
         type = lib.types.str;
+        default = cfg.localDomain;
+        defaultText = lib.literalExpression "localDomain";
       };
 
       secretKeyBaseFile = lib.mkOption {
@@ -826,7 +848,7 @@ in {
     services.nginx = lib.mkIf cfg.configureNginx {
       enable = true;
       recommendedProxySettings = true; # required for redirections to work
-      virtualHosts."${cfg.localDomain}" = {
+      virtualHosts."${cfg.webDomain}" = {
         root = "${cfg.package}/public/";
         # mastodon only supports https, but you can override this if you offload tls elsewhere.
         forceSSL = lib.mkDefault true;
