@@ -6,14 +6,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "protoc-gen-prost";
-  version = "0.2.3";
+  version = "0.3.1";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-QTt5mSUe41r2fxrgWj1l6fHC/utMVIgMi2ySsdGyl/Y=";
+    sha256 = "sha256-ma9sdt3/uq06BMELwsNadMkiEfstQhA4DAQEPdizZJM=";
   };
 
-  cargoSha256 = "sha256-ghXcyxG9zqUOFKGvUza29OgC3XiEtesqsAsfI/lFT08=";
+  cargoSha256 = "sha256-pJDrwX5uDIrycxtmbds8l4wadZE0RdgmNpMwVkUGJDs=";
 
   meta = with lib; {
     description = "Protocol Buffers compiler plugin powered by Prost";
