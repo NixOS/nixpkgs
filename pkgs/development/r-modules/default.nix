@@ -882,6 +882,7 @@ let
     "aroma_affymetrix"
     "aroma_cn"
     "aroma_core"
+    "connections"
     "csodata"
     "DiceView"
     "MSnID"
