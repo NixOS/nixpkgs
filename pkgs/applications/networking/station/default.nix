@@ -2,12 +2,12 @@
 
 let
   pname = "station";
-  version = "1.52.2";
+  version = "2.5.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "https://github.com/getstation/desktop-app-releases/releases/download/${version}/Station-${version}-x86_64.AppImage";
-    sha256 = "0lhiwvnf94is9klvzrqv2wri53gj8nms9lg2678bs4y58pvjxwid";
+    url = "https://github.com/getstation/desktop-app/releases/download/v${version}/Station-x86_64.AppImage";
+    hash = "sha256-cv25EXFxIHhZb6raKBNdLq1srWN4BZYIXQ9cGzLuTBw=";
   };
 
   appimageContents = appimageTools.extractType2 {
