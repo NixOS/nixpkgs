@@ -14,13 +14,8 @@ let
             inherit (info) sha256;
           };
 
-          configurePhase = ''
-            true
-          '';
-
-          buildPhase = ''
-            true
-          '';
+          dontConfigure = true;
+          dontBuild = true;
 
           installPhase = ''
             mkdir -p $out
