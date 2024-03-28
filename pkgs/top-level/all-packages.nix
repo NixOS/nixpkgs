@@ -30909,6 +30909,8 @@ with pkgs;
 
   gigalixir = callPackage ../tools/misc/gigalixir { };
 
+  gitops = callPackage ../applications/networking/cluster/gitops { };
+
   go-libp2p-daemon = callPackage ../servers/go-libp2p-daemon { };
 
   go-motion = callPackage ../development/tools/go-motion { };
