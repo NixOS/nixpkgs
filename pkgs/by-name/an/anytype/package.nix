@@ -2,17 +2,15 @@
 
 let
   pname = "anytype";
-  version = "0.35.25-beta";
+  version = "0.39.0";
   name = "Anytype-${version}";
-  nameExecutable = pname;
   src = fetchurl {
     url = "https://github.com/anyproto/anytype-ts/releases/download/v${version}/${name}.AppImage";
     name = "Anytype-${version}.AppImage";
-    sha256 = "sha256-55VT4t/SNl13Gdh7LG4SqLN9uo0cYDu0LnPFIuZ7Sm0=";
+    hash = "sha256-Sgrgwp8yZGMLq25tHuoQquNjHTEbRPmFqzpMHnjq7oI=";
   };
   appimageContents = appimageTools.extractType2 { inherit name src; };
-in
-appimageTools.wrapType2 {
+in appimageTools.wrapType2 {
   inherit name src;
 
   extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs)
@@ -26,15 +24,17 @@ appimageTools.wrapType2 {
     install -m 444 -D ${appimageContents}/anytype.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/anytype.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'
-    install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/0x0/apps/anytype.png \
-      $out/share/icons/hicolor/512x512/apps/anytype.png
+    for size in 16 32 64 128 256 512 1024; do
+      install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/''${size}x''${size}/apps/anytype.png \
+        $out/share/icons/hicolor/''${size}x''${size}/apps/anytype.png
+    done
   '';
 
   meta = with lib; {
     description = "P2P note-taking tool";
     homepage = "https://anytype.io/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ running-grass ];
     platforms = [ "x86_64-linux" ];
   };
 }

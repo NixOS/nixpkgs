@@ -30490,8 +30490,6 @@ with pkgs;
 
   anytone-emu = callPackage ../applications/radio/anytone-emu { };
 
-  anytype = callPackage ../applications/misc/anytype { };
-
   ao = libfive;
 
   apache-directory-studio = callPackage ../applications/networking/apache-directory-studio { };
