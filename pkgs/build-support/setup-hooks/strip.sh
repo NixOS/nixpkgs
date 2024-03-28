@@ -87,7 +87,7 @@ stripDirs() {
         # be stripped, so ignore specifically this code.
         [[ "$exit_code" = 123 || -z "$exit_code" ]] || (cat "$striperr" 1>&2 && exit 1)
 
-        rm "$striperr"
+        \rm "$striperr"
         # 'strip' does not normally preserve archive index in .a files.
         # This usually causes linking failures against static libs like:
         #   ld: ...-i686-w64-mingw32-stage-final-gcc-13.0.0-lib/i686-w64-mingw32/lib/libstdc++.dll.a:
