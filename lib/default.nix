@@ -45,6 +45,7 @@ let
     generators = callLibs ./generators.nix;
 
     # misc
+    ansi = callLibs ./ansi.nix;
     asserts = callLibs ./asserts.nix;
     debug = callLibs ./debug.nix;
     misc = callLibs ./deprecated.nix;
