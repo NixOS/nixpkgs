@@ -46,12 +46,12 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = true;
 
-  nativeBuildInputs = [
+  build-system = [
     pythonRelaxDepsHook
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asgiref
     certifi
     charset-normalizer
