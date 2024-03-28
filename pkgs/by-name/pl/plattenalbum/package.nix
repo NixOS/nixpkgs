@@ -1,25 +1,25 @@
 { lib, fetchFromGitHub
-, pkg-config, meson ,ninja
+, pkg-config, meson, ninja
 , python3Packages
-, gdk-pixbuf, glib, gobject-introspection, gtk3
+, gdk-pixbuf, glib, gobject-introspection, gtk4, libadwaita, desktop-file-utils
 , libnotify
 , wrapGAppsHook }:
 
 python3Packages.buildPythonApplication rec {
-  pname = "mpdevil";
-  version = "1.11.0";
+  pname = "plattenalbum";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "SoongNoonien";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-ooNZSsVtIeueqgj9hR9OZp08qm8gGokiq8IU3U/ZV5w=";
+    sha256 = "sha256-rxHtcKbvwoOteSD3gC0uEp+3GCUFpKWoicznELVilpY=";
   };
 
   format = "other";
 
   nativeBuildInputs = [
-    glib.dev gobject-introspection gtk3 pkg-config meson ninja wrapGAppsHook
+    glib.dev gobject-introspection gtk4 pkg-config meson ninja wrapGAppsHook desktop-file-utils libadwaita
   ];
 
   buildInputs = [
@@ -40,17 +40,17 @@ python3Packages.buildPythonApplication rec {
 
   # Prevent double wrapping.
   dontWrapGApps = true;
-  # Otherwise wrapGAppsHook do not pick up the dependencies correctly.
+  # Otherwise wrapGAppsHook does not pick up the dependencies correctly.
   strictDeps = false;
   # There aren't any checks.
   doCheck = false;
 
   meta = with lib; {
     description = "A simple music browser for MPD";
-    homepage = "https://github.com/SoongNoonien/mpdevil";
+    homepage = "https://github.com/SoongNoonien/plattenalbum";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ apfelkuchen6 ];
-    mainProgram = "mpdevil";
+    mainProgram = "plattenalbum";
   };
 }
