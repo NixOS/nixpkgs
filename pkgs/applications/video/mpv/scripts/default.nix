@@ -72,6 +72,7 @@ let
     mpv-cheatsheet = callPackage ./mpv-cheatsheet.nix { };
     mpv-playlistmanager = callPackage ./mpv-playlistmanager.nix { };
     mpv-webm = callPackage ./mpv-webm.nix { };
+    mpv-youtube-chat = callPackage ./mpv-youtube-chat.nix { };
     mpvacious = callPackage ./mpvacious.nix { };
     quack = callPackage ./quack.nix { };
     quality-menu = callPackage ./quality-menu.nix { };
