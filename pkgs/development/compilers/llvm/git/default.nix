@@ -325,7 +325,7 @@ in let
       stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
-    openmp = callPackage ./openmp {
+    openmp = callPackage ../common/openmp {
       inherit llvm_meta targetLlvm;
     };
   });
