@@ -35051,6 +35051,8 @@ with pkgs;
 
   tanka = callPackage ../applications/networking/cluster/tanka { };
 
+  tantivy-cli = callPackage ../applications/search/tantivy-cli { };
+
   teams = callPackage ../applications/networking/instant-messengers/teams { };
 
   teams-for-linux = callPackage ../applications/networking/instant-messengers/teams-for-linux {
