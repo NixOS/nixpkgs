@@ -4,6 +4,11 @@ with lib;
 
 {
   options.proxmoxLXC = {
+    enable = mkOption {
+      default = true;
+      type = types.bool;
+      description = lib.mdDoc "Whether to enable the Proxmox VE LXC module.";
+    };
     privileged = mkOption {
       type = types.bool;
       default = false;
@@ -35,7 +40,7 @@ with lib;
     let
       cfg = config.proxmoxLXC;
     in
-    {
+    mkIf cfg.enable {
       system.build.tarball = pkgs.callPackage ../../lib/make-system-tarball.nix {
         storeContents = [{
           object = config.system.build.toplevel;
