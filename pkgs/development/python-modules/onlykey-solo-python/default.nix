@@ -43,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/trustcrypto/onlykey-solo-python";
     description = "Python library for OnlyKey with Solo FIDO2";
+    mainProgram = "solo";
     maintainers = with maintainers; [ kalbasit ];
     license = licenses.asl20;
   };

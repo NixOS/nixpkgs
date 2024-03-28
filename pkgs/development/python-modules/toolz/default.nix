@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "toolz";
-  version = "0.12.0";
+  version = "0.12.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iMVwhhxEDuPy9gN8RlRhMij/QMk6bCXg66cNFygsYZQ=";
+    hash = "sha256-7Mo0JmSJPxd6E9rA5rQcvYrCWjWOXyFTFtQ+IQAiT00=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

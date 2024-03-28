@@ -17,6 +17,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "beautifulsoup4"
+    "dnspython"
     "tqdm"
   ];
 
@@ -42,6 +43,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool to scan subdomains";
+    mainProgram = "knockpy";
     homepage = "https://github.com/guelfoweb/knock";
     changelog = "https://github.com/guelfoweb/knock/releases/tag/${version}";
     license = with licenses; [ gpl3Only ];

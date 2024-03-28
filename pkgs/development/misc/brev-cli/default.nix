@@ -31,6 +31,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Connect your laptop to cloud computers";
+    mainProgram = "brev";
     homepage = "https://github.com/brevdev/brev-cli";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];

@@ -17,6 +17,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Thrift improved";
+    mainProgram = "frugal";
     homepage = "https://github.com/Workiva/frugal";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ diogox ];

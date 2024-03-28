@@ -101,6 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Unofficial Microsoft Teams client for Linux";
+    mainProgram = "teams-for-linux";
     homepage = "https://github.com/IsmaelMartinez/teams-for-linux";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ muscaln lilyinstarlight qjoly chvp ];

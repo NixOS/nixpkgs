@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   ];
   meta = with lib; {
     description = "Cli snake game that plays itself";
+    mainProgram = "sssnake";
     homepage = "https://github.com/angeljumbo/sssnake";
     license = with licenses; [mit];
     platforms = platforms.unix;

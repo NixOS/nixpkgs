@@ -2,10 +2,10 @@
 
 let
   pname = "buttercup-desktop";
-  version = "2.26.0";
+  version = "2.26.1";
   src = fetchurl {
     url = "https://github.com/buttercup/buttercup-desktop/releases/download/v${version}/Buttercup-linux-x86_64.AppImage";
-    sha256 = "sha256-fsHyHljHk2e/pxzz7jYv639ob0D6gTMA3U4OXxbvYz8=";
+    sha256 = "sha256-usyq9qf6bBJHKreGzKzMdZYNmpZGtkUQScHyk1nvFQI=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname src version; };
 
@@ -24,6 +24,7 @@ in appimageTools.wrapType2 {
 
   meta = with lib; {
     description = "Cross-Platform Passwords & Secrets Vault";
+    mainProgram = "buttercup-desktop";
     homepage = "https://buttercup.pw";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ wolfangaukang ];

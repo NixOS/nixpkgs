@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mbpoll";
-  version = "1.5";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "epsilonrt";
     repo = "mbpoll";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rHjLDgfKtpREemttWt0pr7VtBjwZCSplUR4OWNBVW0c=";
+    hash = "sha256-rO3j/p7MABlxcwRAZm26u7wgODGFTtetSDhPWPzTuEA=";
   };
 
   buildInputs = [ libmodbus ];

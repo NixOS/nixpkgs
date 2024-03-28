@@ -19,14 +19,14 @@
 buildPythonPackage rec {
   pname = "amaranth";
   format = "pyproject";
-  version = "0.4.3";
+  version = "0.4.4";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "amaranth-lang";
     repo = "amaranth";
     rev = "refs/tags/v${version}";
-    hash = "sha256-03uAaD4aEMxu/T1D8Hb7XcWvZZuaCK5HmdOD9bx+ZIc=";
+    hash = "sha256-XL5S7/Utfg83DLIBGBDWYoQnRZaFE11Wy+XXbimu3Q8=";
   };
 
   nativeBuildInputs = [
@@ -52,6 +52,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A modern hardware definition language and toolchain based on Python";
+    mainProgram = "amaranth-rpc";
     homepage = "https://amaranth-lang.org/docs/amaranth";
     license = licenses.bsd2;
     maintainers = with maintainers; [ emily thoughtpolice pbsds ];

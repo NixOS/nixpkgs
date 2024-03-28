@@ -36,9 +36,9 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [
     libiconv
-    darwin.apple_sdk.frameworks.AppKit
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
+    darwin.apple_sdk_11_0.frameworks.AppKit
+    darwin.apple_sdk_11_0.frameworks.Security
+    darwin.apple_sdk_11_0.frameworks.SystemConfiguration
   ];
 
   postInstall = ''

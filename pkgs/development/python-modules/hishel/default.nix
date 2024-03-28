@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "hishel";
-  version = "0.0.24";
+  version = "0.0.25";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,15 +26,15 @@ buildPythonPackage rec {
     owner = "karpetrosyan";
     repo = "hishel";
     rev = "refs/tags/${version}";
-    hash = "sha256-wup1rQ5MHjsBaTdfueP9y7QhutoO0xYeexZPDQpUEJk=";
+    hash = "sha256-vDzXrAGJUqG9+wOUWXeKLYraUrILJFAQXf60iCAHRPo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-fancy-pypi-readme
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
   ];
 
@@ -67,6 +67,12 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests require a running Redis instance
     "test_redis"
+  ];
+
+  disabledTestPaths = [
+    # ImportError: cannot import name 'mock_s3' from 'moto'
+    "tests/_async/test_storages.py"
+    "tests/_sync/test_storages.py"
   ];
 
   meta = with lib; {

@@ -18,6 +18,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A script to format mbox as HTML/XML";
+    mainProgram = "formbox";
     homepage = "https://trong.loang.net/~cnx/formbox";
     license = licenses.agpl3Plus;
     maintainers = [ maintainers.McSinyx ];

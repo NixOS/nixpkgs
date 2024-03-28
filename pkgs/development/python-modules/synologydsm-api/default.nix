@@ -56,6 +56,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python API for communication with Synology DSM";
+    mainProgram = "synologydsm-api";
     homepage = "https://github.com/hacf-fr/synologydsm-api";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

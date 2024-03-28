@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Library for color text mode, widget based user interfaces";
+    mainProgram = "whiptail";
     homepage = "https://pagure.io/newt";
     changelog = "https://pagure.io/newt/blob/master/f/CHANGES";
     license = licenses.lgpl2;

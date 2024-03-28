@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A simple entropy daemon";
+    mainProgram = "haveged";
     longDescription = ''
       The haveged project is an attempt to provide an easy-to-use, unpredictable
       random number generator based upon an adaptation of the HAVEGE algorithm.

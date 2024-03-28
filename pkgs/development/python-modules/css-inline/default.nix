@@ -9,6 +9,7 @@
 # native darwin dependencies
 , libiconv
 , Security
+, SystemConfiguration
 
 # tests
 , pytestCheckHook
@@ -52,6 +53,7 @@ buildPythonPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [
     libiconv
     Security
+    SystemConfiguration
   ];
 
   pythonImportsCheck = [
@@ -66,6 +68,9 @@ buildPythonPackage rec {
   disabledTests = [
     # fails to connect to local server
     "test_remote_stylesheet"
+  ] ++ lib.optionals (stdenv.isDarwin) [
+    # pyo3_runtime.PanicException: event loop thread panicked
+    "test_invalid_href"
   ];
 
   meta = with lib; {

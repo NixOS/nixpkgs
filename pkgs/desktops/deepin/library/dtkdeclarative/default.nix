@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A widget development toolkit based on QtQuick/QtQml";
+    mainProgram = "dtk-exhibition";
     homepage = "https://github.com/linuxdeepin/dtkdeclarative";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;

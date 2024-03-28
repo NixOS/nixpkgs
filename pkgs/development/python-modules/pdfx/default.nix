@@ -25,6 +25,7 @@ buildPythonPackage rec {
   meta = with lib; {
     inherit (src.meta) homepage;
     description = "Extract references (pdf, url, doi, arxiv) and metadata from a PDF";
+    mainProgram = "pdfx";
     license = licenses.asl20;
     maintainers = with maintainers; [ marsam ];
   };

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "coincurve";
-  version = "18.0.0";
+  version = "19.0.1";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "ofek";
     repo = "coincurve";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Z5g6ten8wNICoFu7+aZc6r8ET+RDmFeb93ONjsTzcbw=";
+    hash = "sha256-T60iKRrc8/t86nqf8/R4971SjOw586YNCWWBuLd9MjM=";
   };
 
   postPatch = ''

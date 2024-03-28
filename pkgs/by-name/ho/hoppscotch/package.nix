@@ -27,6 +27,7 @@ let
 
   meta = {
     description = "Open source API development ecosystem";
+    mainProgram = "hoppscotch";
     homepage = "https://hoppscotch.com";
     changelog = "https://github.com/hoppscotch/hoppscotch/releases/tag/${version}";
     platforms = [ "aarch64-darwin" "x86_64-darwin" "x86_64-linux" ];

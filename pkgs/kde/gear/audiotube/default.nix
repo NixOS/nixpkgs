@@ -50,4 +50,5 @@ in
     qtWrapperArgs = [
       "--prefix PYTHONPATH : ${ps.makePythonPath pythonDeps}"
     ];
+    meta.mainProgram = "audiotube";
   }

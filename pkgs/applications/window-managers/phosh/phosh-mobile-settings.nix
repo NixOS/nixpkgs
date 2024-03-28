@@ -20,12 +20,12 @@
 
 stdenv.mkDerivation rec {
   pname = "phosh-mobile-settings";
-  version = "0.36.0";
+  version = "0.37.0";
 
   src = fetchurl {
     # This tarball includes the meson wrapped subproject 'gmobile'.
     url = "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-rktrEBRjOUWGb0Qfcyr03dSxpU2XnC0xHb07x8qc9JU=";
+    hash = "sha256-HW3wM/lb8pvr+eDoeqa0iHXiKhBQ8ybBIy0wwHPsrOg=";
   };
 
   nativeBuildInputs = [
@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A settings app for mobile specific things";
+    mainProgram = "phosh-mobile-settings";
     homepage = "https://gitlab.gnome.org/World/Phosh/phosh-mobile-settings";
     changelog = "https://gitlab.gnome.org/World/Phosh/phosh-mobile-settings/-/blob/v${version}/debian/changelog";
     license = licenses.gpl3Plus;

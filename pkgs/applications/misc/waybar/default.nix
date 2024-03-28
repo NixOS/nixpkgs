@@ -2,6 +2,7 @@
 , stdenv
 , bash
 , fetchFromGitHub
+, fetchFromGitLab
 , SDL2
 , alsa-lib
 , catch2_3
@@ -51,6 +52,7 @@
 , mpdSupport ? true
 , mprisSupport ? stdenv.isLinux
 , nlSupport ? true
+, pipewireSupport ? true
 , pulseSupport ? true
 , rfkillSupport ? true
 , runTests ? true
@@ -68,24 +70,35 @@ let
   libcava.src = fetchFromGitHub {
     owner = "LukashonakV";
     repo = "cava";
-    rev = "0.9.1";
-    hash = "sha256-FnRJJV0poRmw+y4nt1X7Z0ipX86LRK1TJhNKHFk0rTw=";
+    rev = "0.10.1";
+    hash = "sha256-iIYKvpOWafPJB5XhDOSIW9Mb4I3A4pcgIIPQdQYEqUw=";
   };
+
+  wireplumber_0_4 = wireplumber.overrideAttrs (attrs: rec {
+    version = "0.4.17";
+    src = fetchFromGitLab {
+      domain = "gitlab.freedesktop.org";
+      owner = "pipewire";
+      repo = "wireplumber";
+      rev = version;
+      hash = "sha256-vhpQT67+849WV1SFthQdUeFnYe/okudTQJoL3y+wXwI=";
+    };
+  });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "waybar";
-  version = "0.9.24";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "Alexays";
     repo = "Waybar";
     rev = finalAttrs.version;
-    hash = "sha256-JhLKGzqZ8akWcyHTav2TGcGmXk9dy9Xj4+/oFCPeNU0=";
+    hash = "sha256-p1VRrKT2kTDy48gDXPMHlLbfcokAOFeTZXGzTeO1SAE=";
   };
 
   postUnpack = lib.optional cavaSupport ''
     pushd "$sourceRoot"
-    cp -R --no-preserve=mode,ownership ${libcava.src} subprojects/cava-0.9.1
+    cp -R --no-preserve=mode,ownership ${libcava.src} subprojects/cava-0.10.1
     patchShebangs .
     popd
   '';
@@ -122,7 +135,6 @@ stdenv.mkDerivation (finalAttrs: {
     fftw
     iniparser
     ncurses
-    pipewire
     portaudio
   ]
   ++ lib.optional evdevSupport libevdev
@@ -138,7 +150,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional traySupport libdbusmenu-gtk3
   ++ lib.optional udevSupport udev
   ++ lib.optional upowerSupport upower
-  ++ lib.optional wireplumberSupport wireplumber
+  ++ lib.optional wireplumberSupport wireplumber_0_4
+  ++ lib.optional (cavaSupport || pipewireSupport) pipewire
   ++ lib.optional (!stdenv.isLinux) libinotify-kqueue;
 
   nativeCheckInputs = [ catch2_3 ];
@@ -147,7 +160,6 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = (lib.mapAttrsToList lib.mesonEnable {
     "cava" = cavaSupport;
     "dbusmenu-gtk" = traySupport;
-    "gtk-layer-shell" = true;
     "jack" = jackSupport;
     "libinput" = inputSupport;
     "libnl" = nlSupport;
@@ -155,6 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
     "man-pages" = true;
     "mpd" = mpdSupport;
     "mpris" = mprisSupport;
+    "pipewire" = pipewireSupport;
     "pulseaudio" = pulseSupport;
     "rfkill" = rfkillSupport;
     "sndio" = sndioSupport;

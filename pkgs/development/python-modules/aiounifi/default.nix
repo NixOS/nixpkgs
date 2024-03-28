@@ -63,6 +63,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library for communicating with Unifi Controller API";
+    mainProgram = "aiounifi";
     homepage = "https://github.com/Kane610/aiounifi";
     changelog = "https://github.com/Kane610/aiounifi/releases/tag/v${version}";
     license = licenses.mit;

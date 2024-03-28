@@ -2,6 +2,7 @@
   mkKdeDerivation,
   qtsvg,
   qtwayland,
+  qtimageformats,
   pkg-config,
   cfitsio,
   exiv2,
@@ -19,6 +20,8 @@ mkKdeDerivation {
   extraBuildInputs = [
     qtsvg
     qtwayland
+    # adds support for webp and other image formats
+    qtimageformats
 
     cfitsio
     exiv2

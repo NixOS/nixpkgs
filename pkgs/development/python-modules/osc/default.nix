@@ -44,6 +44,7 @@ buildPythonPackage rec {
     broken = stdenv.isDarwin;
     homepage = "https://github.com/openSUSE/osc";
     description = "opensuse-commander with svn like handling";
+    mainProgram = "osc";
     maintainers = [ maintainers.peti ];
     license = licenses.gpl2;
   };

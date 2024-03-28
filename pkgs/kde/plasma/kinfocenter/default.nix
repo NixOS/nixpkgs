@@ -26,4 +26,5 @@ mkKdeDerivation {
   '';
 
   extraBuildInputs = [libusb1];
+  meta.mainProgram = "kinfocenter";
 }

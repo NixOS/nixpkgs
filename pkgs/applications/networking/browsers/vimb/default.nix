@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A Vim-like browser";
+    mainProgram = "vimb";
     longDescription = ''
       A fast and lightweight vim like web browser based on the webkit web
       browser engine and the GTK toolkit. Vimb is modal like the great vim

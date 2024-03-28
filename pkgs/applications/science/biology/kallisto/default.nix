@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Program for quantifying abundances of transcripts from RNA-Seq data";
+    mainProgram = "kallisto";
     homepage = "https://pachterlab.github.io/kallisto";
     license = licenses.bsd2;
     platforms = platforms.linux;

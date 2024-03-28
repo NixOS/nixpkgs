@@ -32,6 +32,7 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "A Parser for KiCad EESCHEMA netlists";
+    mainProgram = "kinparse";
     homepage = "https://github.com/xesscorp/kinparse";
     license = licenses.mit;
     maintainers = with maintainers; [ matthuszagh ];

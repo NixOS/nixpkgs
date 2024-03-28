@@ -73,12 +73,25 @@ in rec {
     optional (attr ? ${name} && (! isMacAddress attr.${name} && attr.${name} != "none"))
       "Systemd ${group} field `${name}` must be a valid MAC address or the special value `none`.";
 
-
+  isNumberOrRangeOf = check: v:
+    if isInt v
+    then check v
+    else let
+      parts = splitString "-" v;
+      lower = toIntBase10 (head parts);
+      upper = if tail parts != [] then toIntBase10 (head (tail parts)) else lower;
+    in
+      length parts <= 2 && lower <= upper && check lower && check upper;
   isPort = i: i >= 0 && i <= 65535;
+  isPortOrPortRange = isNumberOrRangeOf isPort;
 
   assertPort = name: group: attr:
     optional (attr ? ${name} && ! isPort attr.${name})
       "Error on the systemd ${group} field `${name}': ${attr.name} is not a valid port number.";
+
+  assertPortOrPortRange = name: group: attr:
+    optional (attr ? ${name} && ! isPortOrPortRange attr.${name})
+      "Error on the systemd ${group} field `${name}': ${attr.name} is not a valid port number or range of port numbers.";
 
   assertValueOneOf = name: values: group: attr:
     optional (attr ? ${name} && !elem attr.${name} values)

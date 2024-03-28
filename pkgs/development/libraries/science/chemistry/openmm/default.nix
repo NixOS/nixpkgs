@@ -100,6 +100,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Toolkit for molecular simulation using high performance GPU code";
+    mainProgram = "TestReferenceHarmonicBondForce";
     homepage = "https://openmm.org/";
     license = with licenses; [ gpl3Plus lgpl3Plus mit ];
     platforms = platforms.linux;

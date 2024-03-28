@@ -80,6 +80,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Code generator & library for Protobuf 3 and async gRPC";
+    mainProgram = "protoc-gen-python_betterproto";
     longDescription = ''
       This project aims to provide an improved experience when using Protobuf /
       gRPC in a modern Python environment by making use of modern language

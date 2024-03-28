@@ -116,6 +116,7 @@ let
 
     meta = with lib; {
       description = "The Interactive C++ Interpreter";
+      mainProgram = "cling";
       homepage = "https://root.cern/cling/";
       license = with licenses; [ lgpl21 ncsa ];
       maintainers = with maintainers; [ thomasjm ];

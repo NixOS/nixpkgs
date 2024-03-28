@@ -72,6 +72,7 @@ buildPythonPackage rec {
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "Oslo Concurrency library";
+    mainProgram = "lockutils-wrapper";
     homepage = "https://github.com/openstack/oslo.concurrency";
     license = licenses.asl20;
     maintainers = teams.openstack.members;

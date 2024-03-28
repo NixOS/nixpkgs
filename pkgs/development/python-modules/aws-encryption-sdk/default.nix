@@ -7,7 +7,6 @@
 , mock
 , pytest-mock
 , pytestCheckHook
-, pythonAtLeast
 , pythonOlder
 , setuptools
 , wrapt
@@ -15,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "aws-encryption-sdk";
-  version = "3.1.1";
+  version = "3.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jV+/AY/GjWscrL5N0Df9gFKWx3Nqn+RX62hNBT9/lWM=";
+    hash = "sha256-QwT8+M4qo/qYsaz/ejvzzQUowynAxDe1Xg9Fa79iNH4=";
   };
 
   nativeBuildInputs = [
@@ -42,15 +41,18 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   disabledTestPaths = [
     # Tests require networking
     "examples"
     "test/integration"
   ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.12") [
-    # AssertionError: Regex pattern did not match, https://github.com/aws/aws-encryption-sdk-python/issues/644
-    "test_abstracts"
+  pythonImportsCheck = [
+    "aws_encryption_sdk"
   ];
 
   meta = with lib; {

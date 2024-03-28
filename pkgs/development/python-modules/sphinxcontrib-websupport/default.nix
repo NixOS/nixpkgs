@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-websupport";
-  version = "1.2.6";
+  version = "1.2.7";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "sphinxcontrib_websupport";
     inherit version;
-    hash = "sha256-1ZK+jhEmG7vGRmjyWO/E/ULJOrYXQRFDtSRf4wxjPYw=";
+    hash = "sha256-4yKALr/V/nk2jv2GSuuHsGNWauYZEdzLJxTiikXtdWE=";
   };
 
   nativeBuildInputs = [

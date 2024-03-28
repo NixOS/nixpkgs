@@ -4,7 +4,7 @@
 , nix-update-script
 }:
 let
-  version = "0.0.1";
+  version = "0.0.3";
 in
 buildGoModule {
   inherit version;
@@ -14,7 +14,7 @@ buildGoModule {
     owner = "kubernetes-sigs";
     repo = "kubectl-validate";
     rev = "v${version}";
-    hash = "sha256-0lwN+3Cy7O9kX9dh8PjxmvdyKSZhBxcxy+b+ZtuDZaw=";
+    hash = "sha256-k2+2QIPjNw6C/Do1WhPN39VZhZX4PZ6ZsKDKGJ9E5QA=";
   };
 
   vendorHash = null;

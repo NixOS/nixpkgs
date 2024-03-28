@@ -204,6 +204,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     php-parallel-lint = callPackage ../development/php-packages/php-parallel-lint { };
 
+    phpinsights = callPackage ../development/php-packages/phpinsights { };
+
     phpmd = callPackage ../development/php-packages/phpmd { };
 
     phpspy = callPackage ../development/php-packages/phpspy { };
@@ -258,6 +260,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     imagick = callPackage ../development/php-packages/imagick { };
 
     inotify = callPackage ../development/php-packages/inotify { };
+
+    ioncube-loader = callPackage ../development/php-packages/ioncube-loader { };
 
     mailparse = callPackage ../development/php-packages/mailparse { };
 
@@ -411,7 +415,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         {
           name = "gettext";
           buildInputs = [ gettext ];
-          postPhpize = ''substituteInPlace configure --replace 'as_fn_error $? "Cannot locate header file libintl.h" "$LINENO" 5' ':' '';
+          postPhpize = ''substituteInPlace configure --replace-fail 'as_fn_error $? "Cannot locate header file libintl.h" "$LINENO" 5' ':' '';
           configureFlags = [ "--with-gettext=${gettext}" ];
         }
         {
@@ -663,7 +667,9 @@ lib.makeScope pkgs.newScope (self: with self; {
         {
           name = "xsl";
           buildInputs = [ libxslt libxml2 ];
+          internalDeps = [ php.extensions.dom ];
           doCheck = false;
+          env.NIX_CFLAGS_COMPILE = toString [ "-I../.." "-DHAVE_DOM" ];
           configureFlags = [ "--with-xsl=${libxslt.dev}" ];
         }
         { name = "zend_test"; }

@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Iconic fonts in PyQt and PySide applications";
+    mainProgram = "qta-browser";
     homepage = "https://github.com/spyder-ide/qtawesome";
     changelog = "https://github.com/spyder-ide/qtawesome/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

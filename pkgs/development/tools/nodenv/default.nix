@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Manage multiple NodeJS versions";
+    mainProgram = "nodenv";
     homepage = "https://github.com/nodenv/nodenv/";
     changelog = "https://github.com/nodenv/nodenv/releases/tag/v${version}";
     license = licenses.mit;

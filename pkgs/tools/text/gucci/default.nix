@@ -31,6 +31,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A simple CLI templating tool written in golang";
+    mainProgram = "gucci";
     homepage = "https://github.com/noqcks/gucci";
     license = licenses.mit;
     maintainers = with maintainers; [ braydenjw ];

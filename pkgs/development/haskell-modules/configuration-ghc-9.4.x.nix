@@ -59,10 +59,12 @@ in {
 
   hashable-time = doJailbreak super.hashable-time;
   libmpd = doJailbreak super.libmpd;
-  lens-family-th = doJailbreak super.lens-family-th;  # template-haskell <2.19
 
   # generically needs base-orphans for 9.4 only
   base-orphans = dontCheck (doDistribute super.base-orphans);
+  generically = addBuildDepends [
+    self.base-orphans
+  ] super.generically;
 
   # the dontHaddock is due to a GHC panic. might be this bug, not sure.
   # https://gitlab.haskell.org/ghc/ghc/-/issues/21619
@@ -90,45 +92,52 @@ in {
 
   ghc-tags = self.ghc-tags_1_6;
 
+  # A given major version of ghc-exactprint only supports one version of GHC.
+  ghc-exactprint = super.ghc-exactprint_1_6_1_3;
+
   # Too strict upper bound on template-haskell
   # https://github.com/mokus0/th-extras/issues/18
   th-extras = doJailbreak super.th-extras;
 
-  # requires newer versions to work with GHC 9.4
-  servant = doJailbreak super.servant;
-  servant-server = doJailbreak super.servant-server;
-  servant-auth = doJailbreak super.servant-auth;
-  servant-auth-swagger = doJailbreak super.servant-auth-swagger;
-  servant-swagger = doJailbreak super.servant-swagger;
-  servant-client-core = doJailbreak super.servant-client-core;
-  servant-client = doJailbreak super.servant-client;
   # https://github.com/kowainik/relude/issues/436
   relude = dontCheck super.relude;
+
+  # Broken because of unix >= 2.8 for GHC >= 9.6
+  darcs = unmarkBroken (doDistribute super.darcs);
 
   inherit
     (
       let
         hls_overlay = lself: lsuper: {
-          ghc-lib-parser = lself.ghc-lib-parser_9_6_3_20231121;
-          ghc-lib-parser-ex = doDistribute lself.ghc-lib-parser-ex_9_6_0_2;
           Cabal-syntax = lself.Cabal-syntax_3_10_2_0;
         };
       in
       lib.mapAttrs (_: pkg: doDistribute (pkg.overrideScope hls_overlay)) {
         haskell-language-server = allowInconsistentDependencies super.haskell-language-server;
-        fourmolu = self.fourmolu_0_14_0_0;
-        ormolu = self.generateOptparseApplicativeCompletions [ "ormolu" ] (enableSeparateBinOutput super.ormolu_0_7_2_0);
-        hlint = super.hlint_3_6_1;
+        fourmolu = super.fourmolu;
+        ormolu = super.ormolu;
+        hlint = super.hlint;
         stylish-haskell = super.stylish-haskell;
       }
     )
     haskell-language-server
-    # HLS from 2.3 needs at least formolu 0.14.
-    # This means we need to bump a lot of other tools, too, because they all us ghc-lib-parser
-    # We do this globally to prevent inconsistent formatting or lints between hls and the command line tools.
     fourmolu
     ormolu
     hlint
     stylish-haskell
   ;
+
+  # Packages which need compat library for GHC < 9.6
+  inherit
+    (lib.mapAttrs
+      (_: addBuildDepends [ self.foldable1-classes-compat ])
+      super)
+    indexed-traversable
+    OneTuple
+    these
+  ;
+  base-compat-batteries = addBuildDepends [
+    self.foldable1-classes-compat
+    self.OneTuple
+  ] super.base-compat-batteries;
 }

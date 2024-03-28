@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pioneer";
-  version = "20240203";
+  version = "20240314";
 
   src = fetchFromGitHub{
     owner = "pioneerspacesim";
     repo = "pioneer";
     rev = version;
-    hash = "sha256-Jqv013VM0177VqGYR7vSvdq+67ONM91RrjcdVXNLcHs=";
+    hash = "sha256-CUaiQPRufo8Ng70w5KWlLugySMaTaUuZno/ckyU1w2w=";
   };
 
   postPatch = ''

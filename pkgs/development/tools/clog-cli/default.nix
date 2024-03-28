@@ -20,5 +20,7 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.unix;
     maintainers = [lib.maintainers.nthorne];
     mainProgram = "clog";
+    # error: could not compile `rustc-serialize`
+    broken = true; # Added 2024-03-16
   };
 }

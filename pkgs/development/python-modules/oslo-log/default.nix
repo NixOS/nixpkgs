@@ -58,6 +58,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "oslo.log library";
+    mainProgram = "convert-json";
     homepage = "https://github.com/openstack/oslo.log";
     license = licenses.asl20;
     maintainers = teams.openstack.members;

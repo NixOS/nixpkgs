@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Toolkit for processing sequences in FASTA/Q formats";
+    mainProgram = "seqtk";
     license = licenses.mit;
     homepage = "https://github.com/lh3/seqtk";
     platforms = platforms.all;

@@ -52,6 +52,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   disabledTests = [
     # RuntimeError: a view of a leaf Variable that requires grad is being used in an in-place operation.
     "test_adjoint"

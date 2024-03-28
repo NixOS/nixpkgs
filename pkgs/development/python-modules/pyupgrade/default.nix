@@ -34,6 +34,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Tool to automatically upgrade syntax for newer versions of the language";
+    mainProgram = "pyupgrade";
     homepage = "https://github.com/asottile/pyupgrade";
     license = licenses.mit;
     maintainers = with maintainers; [ lovesegfault ];

@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A minimal POSIX shell";
+    mainProgram = "mrsh";
     homepage = "https://mrsh.sh";
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer ];

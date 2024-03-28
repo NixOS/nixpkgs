@@ -5,11 +5,11 @@
 
 clash-verge.overrideAttrs (old: rec {
   pname = "clash-verge-rev";
-  version = "1.5.7";
+  version = "1.5.10";
 
   src = fetchurl {
     url = "https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v${version}/clash-verge_${version}_amd64.deb";
-    hash = "sha256-w6qKS+uHWGrY1f4Db7rgM/1jECHz3k9vXWdxhDmDX1A=";
+    hash = "sha256-xv6xKAjpHL4eyFEcgiuHZQi3EDhYkzGHAKbcKm4rIGk=";
   };
 
   meta = old.meta // (with lib; {

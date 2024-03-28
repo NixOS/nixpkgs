@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Universal SQL Client";
+    mainProgram = "squirrel-sql";
     homepage = "http://squirrel-sql.sourceforge.net/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.lgpl21Plus;

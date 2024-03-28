@@ -13,31 +13,35 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-files";
-  version = "unstable-2024-01-12";
+  version = "unstable-2024-02-28";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = pname;
-    rev = "467414217903d96f71f5566d8359831000dfede1";
-    hash = "sha256-cfIlTHm1lnASjwHnrlLFJd01jT8D1P5XGLXYaJiF8pA=";
+    rev = "6123108f3ae3c7074264184952f0a53e49a981d5";
+    hash = "sha256-BeqpoLIZbR5Dg7OGYGQMFWBLdD96n4t7fX8Ju9/h5JU=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "accesskit-0.11.0" = "sha256-xVhe6adUb8VmwIKKjHxwCwOo5Y1p3Or3ylcJJdLDrrE=";
+      "accesskit-0.12.2" = "sha256-ksaYMGT/oug7isQY8/1WD97XDUsX2ShBdabUzxWffYw=";
       "atomicwrites-0.4.2" = "sha256-QZSuGPrJXh+svMeFWqAXoqZQxLq/WfIiamqvjJNVhxA=";
-      "cosmic-config-0.1.0" = "sha256-+kcul4iOillcWPK+aD3Z2rMfmVb+i2p5ckKRhc1gdDw=";
-      "cosmic-text-0.10.0" = "sha256-PHz5jUecK889E88Y20XUe2adTUO8ElnoV7IIcaohMUw=";
-      "glyphon-0.3.0" = "sha256-JGkNIfj1HjOF8kGxqJPNq/JO+NhZD6XrZ4KmkXEP6Xc=";
-      "sctk-adwaita-0.5.4" = "sha256-yK0F2w/0nxyKrSiHZbx7+aPNY2vlFs7s8nu/COp2KqQ=";
-      "softbuffer-0.3.3" = "sha256-eKYFVr6C1+X6ulidHIu9SP591rJxStxwL9uMiqnXx4k=";
-      "smithay-client-toolkit-0.16.1" = "sha256-z7EZThbh7YmKzAACv181zaEZmWxTrMkFRzP0nfsHK6c=";
+      "cosmic-config-0.1.0" = "sha256-eaG/HCwlKqSfEp6GEPeBS63j5WHq4qdYTNHqnW2zeeE=";
+      "cosmic-text-0.11.2" = "sha256-Y9i5stMYpx+iqn4y5DJm1O1+3UIGp0/fSsnNq3Zloug=";
+      "d3d12-0.19.0" = "sha256-usrxQXWLGJDjmIdw1LBXtBvX+CchZDvE8fHC0LjvhD4=";
+      "glyphon-0.5.0" = "sha256-j1HrbEpUBqazWqNfJhpyjWuxYAxkvbXzRKeSouUoPWg=";
+      "softbuffer-0.4.1" = "sha256-a0bUFz6O8CWRweNt/OxTvflnPYwO5nm6vsyc/WcXyNg=";
       "systemicons-0.7.0" = "sha256-zzAI+6mnpQOh+3mX7/sJ+w4a7uX27RduQ99PNxLNF78=";
       "taffy-0.3.11" = "sha256-SCx9GEIJjWdoNVyq+RZAGn0N71qraKZxf9ZWhvyzLaI=";
-      "winit-0.28.6" = "sha256-FhW6d2XnXCGJUMoT9EMQew9/OPXiehy/JraeCiVd76M=";
+      "winit-0.29.10" = "sha256-ScTII2AzK3SC8MVeASZ9jhVWsEaGrSQ2BnApTxgfxK4=";
     };
   };
+
+  # COSMIC applications now uses vergen for the About page
+  # Update the COMMIT_DATE to match when the commit was made
+  env.VERGEN_GIT_COMMIT_DATE = "2024-02-28";
+  env.VERGEN_GIT_SHA = src.rev;
 
   postPatch = ''
     substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"

@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "vharfbuzz";
-  version = "0.2.0";
+  version = "0.3.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uDX2fYqxV4wmAAIMfA3dBohWmq1N0VurSTEFOjSRpmY=";
+    hash = "sha256-bBKmVvLuc/CtQF+TSri8ngglnj4QCh77FV+JHPzsFAI=";
   };
 
   propagatedBuildInputs = [

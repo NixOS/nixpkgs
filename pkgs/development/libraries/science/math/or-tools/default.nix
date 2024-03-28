@@ -120,6 +120,7 @@ stdenv.mkDerivation rec {
     description = ''
       Google's software suite for combinatorial optimization.
     '';
+    mainProgram = "fzn-ortools";
     maintainers = with maintainers; [ andersk ];
     platforms = with platforms; linux ++ darwin;
   };

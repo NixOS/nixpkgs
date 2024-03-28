@@ -31,6 +31,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Twitch Chat Downloader";
+    mainProgram = "tcd";
     homepage = "https://github.com/TheDrHax/Twitch-Chat-Downloader";
     license = licenses.mit;
     maintainers = with maintainers; [ marsam ];

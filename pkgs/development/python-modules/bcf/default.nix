@@ -48,6 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/hardwario/bch-firmware-tool";
     description = "HARDWARIO Firmware Tool";
+    mainProgram = "bcf";
     platforms = platforms.linux;
     license = licenses.mit;
     maintainers = with maintainers; [ cynerd ];

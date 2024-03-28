@@ -41,6 +41,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Kubernetes runtime scanner";
+    mainProgram = "kubeclarity";
     longDescription = ''
       KubeClarity is a vulnerabilities scanning and CIS Docker benchmark tool that
       allows users to get an accurate and immediate risk assessment of their

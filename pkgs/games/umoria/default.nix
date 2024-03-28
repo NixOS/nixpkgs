@@ -64,6 +64,7 @@ gcc9Stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://umoria.org/";
     description = "The Dungeons of Moria - the original roguelike";
+    mainProgram = "umoria";
     longDescription = ''
       The Dungeons of Moria is a single player dungeon simulation originally written
       by Robert Alan Koeneke, with its first public release in 1983.

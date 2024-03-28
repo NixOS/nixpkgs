@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A fast and lightweight application for creating and extracting archives";
+    mainProgram = "deepin-compressor";
     homepage = "https://github.com/linuxdeepin/deepin-compressor";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

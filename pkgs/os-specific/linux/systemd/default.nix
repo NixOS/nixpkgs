@@ -866,7 +866,7 @@ stdenv.mkDerivation (finalAttrs: {
     # needed - and therefore `interfaceVersion` should be incremented.
     interfaceVersion = 2;
 
-    inherit withBootloader withCryptsetup withHostnamed withImportd withKmod
+    inherit withBootloader withCryptsetup withEfi withHostnamed withImportd withKmod
       withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
 
     tests = {

@@ -6,13 +6,13 @@
 
 buildFishPlugin rec {
   pname = "wakatime-fish";
-  version = "0.0.3";
+  version = "0.0.5";
 
   src = fetchFromGitHub {
     owner = "ik11235";
     repo = "wakatime.fish";
     rev = "v${version}";
-    hash = "sha256-t0b8jvkNU7agF0A8YkwQ57qGGqcYJF7l9eNr12j2ZQ0=";
+    hash = "sha256-BYDff4OP4Sg5I7p0GviZKSDulx468ePZigigyTdtkqM=";
   };
 
   preFixup = ''

@@ -1,41 +1,27 @@
-{ lib, libnotify, buildGoModule, fetchFromGitHub, fetchurl, pkg-config, iconColor ? "#84bd00" }:
+{ lib, libnotify, gpgme, buildGoModule, fetchFromGitHub, fetchurl, pkg-config }:
 
 buildGoModule rec {
   pname = "yubikey-touch-detector";
-  version = "1.10.1";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "maximbaz";
     repo = "yubikey-touch-detector";
     rev = version;
-    sha256 = "sha256-y/iDmxlhu2Q6Zas0jsv07HQPkNdMrOQaXWy/cuWvpMk=";
+    hash = "sha256-XpaCKNQpQD9dNj4EOGJ6PdjfSAxxG5dC8mIzYr7t/+I=";
   };
-  vendorHash = "sha256-OitI9Yp4/mRMrNH4yrWSL785+3mykPkvzarrc6ipOeg=";
-
-  iconSrc = fetchurl {
-    url = "https://github.com/Yubico/yubioath-flutter/raw/yubioath-desktop-5.0.0/images/touch.svg";
-    hash = "sha256-+jC9RKjl1uMBaNqLX5WXN+E4CuOcIEx5IGXWxgxzA/k=";
-  };
+  vendorHash = "sha256-mhmYTicj/ihGNzeCZd1ZijWPkvxQZjBxaC5dyAU1O7U=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libnotify ];
-
-  postPatch = ''
-    cp $iconSrc yubikey-touch-detector.svg
-    substituteInPlace yubikey-touch-detector.svg \
-      --replace '#284c61' ${lib.escapeShellArg iconColor}
-
-    substituteInPlace notifier/libnotify.go \
-      --replace \
-        'AppIcon: "yubikey-touch-detector"' \
-        "AppIcon: \"$out/share/icons/yubikey-touch-detector.svg\""
-  '';
+  buildInputs = [ libnotify gpgme ];
 
   postInstall = ''
-    install -Dm444 -t $out/share/doc/${pname} *.md
+    install -Dm444 -t $out/share/doc/${pname} *.{md,example}
 
-    install -Dm444 -t $out/share/icons yubikey-touch-detector.svg
+    install -Dm444 -t $out/share/licenses/${pname} LICENSE
+
+    install -Dm444 -t $out/share/icons/hicolor/128x128/apps yubikey-touch-detector.png
 
     install -Dm444 -t $out/lib/systemd/user *.{service,socket}
 

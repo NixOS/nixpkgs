@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Flash SWF decompiler and editor";
+    mainProgram = "ffdec";
     longDescription = ''
       Open-source Flash SWF decompiler and editor. Extract resources,
       convert SWF to FLA, edit ActionScript, replace images, sounds,

@@ -76,6 +76,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/bimmerconnected/bimmer_connected/releases/tag/${version}";
     description = "Library to read data from the BMW Connected Drive portal";
+    mainProgram = "bimmerconnected";
     homepage = "https://github.com/bimmerconnected/bimmer_connected";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda ];

@@ -8,6 +8,7 @@
 , cryptography
 , fetchFromGitHub
 , pycognito
+, pyjwt
 , pytest-aiohttp
 , pytest-timeout
 , pytestCheckHook
@@ -21,16 +22,16 @@
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "0.78.0";
+  version = "0.79.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "nabucasa";
-    repo = pname;
+    repo = "hass-nabucasa";
     rev = "refs/tags/${version}";
-    hash = "sha256-ZqBYmh+MA4ZuhnUQPn/C8d7CVPrwp6mirsWnoB/ZMFw=";
+    hash = "sha256-7VhafefF7imvnhdFo6K+18h5kmXvIatKerJ+Qn5zwdQ=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +51,7 @@ buildPythonPackage rec {
     ciso8601
     cryptography
     pycognito
+    pyjwt
     snitun
   ];
 

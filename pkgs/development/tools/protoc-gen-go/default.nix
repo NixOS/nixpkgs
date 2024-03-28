@@ -17,6 +17,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Go support for Google's protocol buffers";
+    mainProgram = "protoc-gen-go";
     homepage = "https://google.golang.org/protobuf";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jojosch ];

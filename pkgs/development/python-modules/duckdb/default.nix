@@ -14,7 +14,7 @@
 }:
 
 buildPythonPackage rec {
-  inherit (duckdb) patches pname src version;
+  inherit (duckdb) patches pname rev src version;
   pyproject = true;
 
   postPatch = (duckdb.postPatch or "") + ''
@@ -31,7 +31,10 @@ buildPythonPackage rec {
   env = {
     BUILD_HTTPFS = 1;
     DUCKDB_BUILD_UNITY = 1;
+    OVERRIDE_GIT_DESCRIBE="v${version}-0-g${rev}";
   };
+
+  dontPretendSetuptoolsSCMVersion = true;
 
   nativeBuildInputs = [
     pybind11

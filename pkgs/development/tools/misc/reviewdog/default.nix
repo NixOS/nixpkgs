@@ -21,6 +21,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Automated code review tool integrated with any code analysis tools regardless of programming language";
+    mainProgram = "reviewdog";
     homepage = "https://github.com/reviewdog/reviewdog";
     changelog = "https://github.com/reviewdog/reviewdog/blob/v${version}/CHANGELOG.md";
     maintainers = [ maintainers.marsam ];

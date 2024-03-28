@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Just Another Gibbs Sampler";
+    mainProgram = "jags";
     license = licenses.gpl2;
     homepage = "http://mcmc-jags.sourceforge.net";
     maintainers = [ maintainers.andres ];

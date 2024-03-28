@@ -1,6 +1,14 @@
-{ version, hash, extraPatches ? [] }:
-
 { lib, stdenv, buildPackages, removeReferencesTo, addOpenGLRunpath, pkg-config, perl, texinfo, yasm
+
+  # You can fetch any upstream version using this derivation by specifying version and hash
+  # NOTICE: Always use this argument to override the version. Do not use overrideAttrs.
+, version # ffmpeg ABI version. Also declare this if you're overriding the source.
+, hash ? "" # hash of the upstream source for the given ABI version
+, source ? fetchgit {
+    url = "https://git.ffmpeg.org/ffmpeg.git";
+    rev = "n${version}";
+    inherit hash;
+  }
 
 , ffmpegVariant ? "small" # Decides which dependencies are enabled by default
 
@@ -305,7 +313,7 @@
  */
 
 let
-  inherit (lib) optional optionals optionalString enableFeature versionAtLeast;
+  inherit (lib) optional optionals optionalString enableFeature versionOlder versionAtLeast;
 in
 
 
@@ -346,12 +354,7 @@ assert buildSwscale -> buildAvutil;
 stdenv.mkDerivation (finalAttrs: {
   pname = "ffmpeg" + (optionalString (ffmpegVariant != "small") "-${ffmpegVariant}");
   inherit version;
-
-  src = fetchgit {
-    url = "https://git.ffmpeg.org/ffmpeg.git";
-    rev = "n${finalAttrs.version}";
-    inherit hash;
-  };
+  src = source;
 
   postPatch = ''
     patchShebangs .
@@ -362,23 +365,40 @@ stdenv.mkDerivation (finalAttrs: {
       --replace /usr/local/lib/frei0r-1 ${frei0r}/lib/frei0r-1
   '';
 
-  patches = map (patch: fetchpatch patch) (extraPatches
-    ++ (lib.optional (lib.versionOlder version "6.1")
+  patches = map (patch: fetchpatch patch) ([ ]
+    ++ optionals (versionOlder version "5") [
+      {
+        name = "libsvtav1-1.5.0-compat-compressed_ten_bit_format.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/031f1561cd286596cdb374da32f8aa816ce3b135";
+        hash = "sha256-mSnmAkoNikDpxcN+A/hpB7mUbbtcMvm4tG6gZFuroe8=";
+      }
       {
         # Backport fix for binutils-2.41.
         name = "binutils-2.41.patch";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/effadce6c756247ea8bae32dc13bb3e6f464f0eb";
         hash = "sha256-vlBUMJ1bORQHRNpuzc5iXsTWwS/CN5BmGIA8g7H7mJE=";
       }
-    )
-    ++ (lib.optional (lib.versionAtLeast finalAttrs.version "6" && lib.versionOlder finalAttrs.version "6.1")
+      # The upstream patch isn’t for ffmpeg 4, but it will apply with a few tweaks.
+      # Fixes a crash when built with clang 16 due to UB in ff_seek_frame_binary.
+      {
+        name = "utils-fix_crash_in_ff_seek_frame_binary.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/ab792634197e364ca1bb194f9abe36836e42f12d";
+        hash = "sha256-UxZ4VneZpw+Q/UwkEUDNdb2nOx1QnMrZ40UagspNTxI=";
+        postFetch = ''
+          substituteInPlace "$out" \
+            --replace libavformat/seek.c libavformat/utils.c \
+            --replace 'const AVInputFormat *const ' 'const AVInputFormat *'
+        '';
+      }
+    ]
+    ++ (lib.optional (lib.versionAtLeast version "6" && lib.versionOlder version "6.1")
       { # this can be removed post 6.1
         name = "fix_aacps_tablegen";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/814178f92647be2411516bbb82f48532373d2554";
         hash = "sha256-FQV9/PiarPXCm45ldtCsxGHjlrriL8DKpn1LaKJ8owI=";
       }
     )
-    ++ (lib.optional (lib.versionAtLeast finalAttrs.version "6.1" && lib.versionOlder finalAttrs.version "6.2")
+    ++ (lib.optional (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2")
       { # this can be removed post 6.1
         name = "fix_build_failure_due_to_PropertyKey_EncoderID";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/cb049d377f54f6b747667a93e4b719380c3e9475";
@@ -439,7 +459,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature buildAvdevice "avdevice")
     (enableFeature buildAvfilter "avfilter")
     (enableFeature buildAvformat "avformat")
-  ] ++ optionals (lib.versionOlder finalAttrs.version "5") [
+  ] ++ optionals (lib.versionOlder version "5") [
     # Ffmpeg > 4 doesn't know about the flag anymore
     (enableFeature buildAvresample "avresample")
   ] ++ [
@@ -470,7 +490,7 @@ stdenv.mkDerivation (finalAttrs: {
      */
     (enableFeature withAlsa "alsa")
     (enableFeature withAom "libaom")
-  ] ++ optionals (versionAtLeast finalAttrs.version "6.1") [
+  ] ++ optionals (versionAtLeast version "6.1") [
     (enableFeature withAribcaption "libaribcaption")
   ] ++ [
     (enableFeature withAss "libass")
@@ -495,7 +515,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withGme "libgme")
     (enableFeature withGnutls "gnutls")
     (enableFeature withGsm "libgsm")
-  ] ++ optionals (versionAtLeast finalAttrs.version "6.1") [
+  ] ++ optionals (versionAtLeast version "6.1") [
     (enableFeature withHarfbuzz "libharfbuzz")
   ] ++ [
     (enableFeature withIconv "iconv")
@@ -518,7 +538,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withOpenjpeg "libopenjpeg")
     (enableFeature withOpenmpt "libopenmpt")
     (enableFeature withOpus "libopus")
-  ] ++ optionals (versionAtLeast finalAttrs.version "5.0") [
+  ] ++ optionals (versionAtLeast version "5.0") [
     (enableFeature withPlacebo "libplacebo")
   ] ++ [
     (enableFeature withPulse "libpulse")
@@ -526,7 +546,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withRtmp "librtmp")
     (enableFeature withSamba "libsmbclient")
     (enableFeature withSdl2 "sdl2")
-  ] ++ optionals (versionAtLeast finalAttrs.version "5.0") [
+  ] ++ optionals (versionAtLeast version "5.0") [
     (enableFeature withShaderc "libshaderc")
   ] ++ [
     (enableFeature withSoxr "libsoxr")
@@ -624,7 +644,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withModplug [ libmodplug ]
   ++ optionals withMp3lame [ lame ]
   ++ optionals withMysofa [ libmysofa ]
-  ++ optionals (withNvdec || withNvenc) [ (if (lib.versionAtLeast finalAttrs.version "6") then nv-codec-headers-12 else nv-codec-headers) ]
+  ++ optionals (withNvdec || withNvenc) [ (if (lib.versionAtLeast version "6") then nv-codec-headers-12 else nv-codec-headers) ]
   ++ optionals withOgg [ libogg ]
   ++ optionals withOpenal [ openal ]
   ++ optionals withOpencl [ ocl-icd opencl-headers ]
@@ -634,7 +654,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withOpenjpeg [ openjpeg ]
   ++ optionals withOpenmpt [ libopenmpt ]
   ++ optionals withOpus [ libopus ]
-  ++ optionals withPlacebo [ (if (lib.versionAtLeast finalAttrs.version "6.1") then libplacebo else libplacebo_5) vulkan-headers ]
+  ++ optionals withPlacebo [ (if (lib.versionAtLeast version "6.1") then libplacebo else libplacebo_5) vulkan-headers ]
   ++ optionals withPulse [ libpulseaudio ]
   ++ optionals withRav1e [ rav1e ]
   ++ optionals withRtmp [ rtmpdump ]
@@ -733,7 +753,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "A complete, cross-platform solution to record, convert and stream audio and video";
     homepage = "https://www.ffmpeg.org/";
-    changelog = "https://github.com/FFmpeg/FFmpeg/blob/n${finalAttrs.version}/Changelog";
+    changelog = "https://github.com/FFmpeg/FFmpeg/blob/n${version}/Changelog";
     longDescription = ''
       FFmpeg is the leading multimedia framework, able to decode, encode, transcode,
       mux, demux, stream, filter and play pretty much anything that humans and machines

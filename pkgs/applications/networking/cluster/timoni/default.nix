@@ -42,6 +42,7 @@ buildGo122Module rec {
     homepage = "https://timoni.sh";
     changelog = "https://github.com/stefanprodan/timoni/releases/tag/${src.rev}";
     description = "A package manager for Kubernetes, powered by CUE and inspired by Helm";
+    mainProgram = "timoni";
     license = licenses.asl20;
     maintainers = with maintainers; [ votava ];
   };

@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A cross-platform file change monitor with multiple backends";
+    mainProgram = "fswatch";
     homepage = "https://github.com/emcrisostomo/fswatch";
     license = licenses.gpl3Plus;
     platforms = platforms.all;

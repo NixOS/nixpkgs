@@ -46,7 +46,9 @@ python3Packages.buildPythonApplication rec {
     backoff
     more-itertools
     pexpect
-    pytestCheckHook
+
+    # backblaze-b2 requires pytest 7 to complete tests.
+    (pytestCheckHook.override { pytest = pytest_7; })
   ];
 
   preCheck = ''
@@ -91,6 +93,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Command-line tool for accessing the Backblaze B2 storage service";
+    mainProgram = "backblaze-b2";
     homepage = "https://github.com/Backblaze/B2_Command_Line_Tool";
     changelog = "https://github.com/Backblaze/B2_Command_Line_Tool/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

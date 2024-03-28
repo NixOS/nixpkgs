@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An easy to use calculator for ordinary users";
+    mainProgram = "deepin-calculator";
     homepage = "https://github.com/linuxdeepin/deepin-calculator";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

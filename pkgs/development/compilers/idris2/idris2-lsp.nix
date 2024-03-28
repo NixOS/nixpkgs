@@ -43,6 +43,7 @@ let
 
     meta = with lib; {
       description = "Language Server for Idris2";
+      mainProgram = "idris2-lsp";
       homepage = "https://github.com/idris-community/idris2-lsp";
       license = licenses.bsd3;
       maintainers = with maintainers; [ mattpolzin ];

@@ -19,6 +19,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Updog is a replacement for Python's SimpleHTTPServer";
+    mainProgram = "updog";
     homepage = "https://github.com/sc0tfree/updog";
     license = licenses.mit;
     maintainers = with maintainers; [ ethancedwards8 ];

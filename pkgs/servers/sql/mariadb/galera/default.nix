@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Galera 3 wsrep provider library";
+    mainProgram = "garbd";
     homepage = "https://galeracluster.com/";
     license = licenses.lgpl2Only;
     maintainers = with maintainers; [ izorkin ] ++ teams.helsinki-systems.members;

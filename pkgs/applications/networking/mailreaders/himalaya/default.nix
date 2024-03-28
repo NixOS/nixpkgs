@@ -52,6 +52,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "CLI to manage emails";
+    mainProgram = "himalaya";
     homepage = "https://pimalaya.org/himalaya/cli/latest/";
     changelog = "https://github.com/soywod/himalaya/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

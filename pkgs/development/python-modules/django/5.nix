@@ -42,14 +42,15 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Django";
+  pname = "django";
   version = "5.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "Django";
+    inherit version;
     hash = "sha256-X7N1gNz0omL5JYwfQ3OBmqzKkGQx9QXkaI4386mRld8=";
   };
 

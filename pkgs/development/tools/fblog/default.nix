@@ -15,6 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A small command-line JSON log viewer";
+    mainProgram = "fblog";
     homepage = "https://github.com/brocode/fblog";
     license = licenses.wtfpl;
     maintainers = with maintainers; [ figsoda ];

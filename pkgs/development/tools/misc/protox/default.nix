@@ -21,6 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A rust implementation of the protobuf compiler";
+    mainProgram = "protox";
     homepage = "https://github.com/andrewhickman/protox";
     changelog = "https://github.com/andrewhickman/protox/blob/${version}/CHANGELOG.md";
     license = with licenses; [ asl20 mit ];

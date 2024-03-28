@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "PulseAudio Preferences";
+    mainProgram = "paprefs";
 
     longDescription = ''
       PulseAudio Preferences (paprefs) is a simple GTK based configuration

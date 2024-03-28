@@ -52,6 +52,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "YAML template engine with Python expressions";
+    mainProgram = "yte";
     homepage = "https://github.com/koesterlab/yte";
     changelog = "https://github.com/yte-template-engine/yte/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];

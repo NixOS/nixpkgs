@@ -58,6 +58,18 @@
 final: prev:
 with prev;
 {
+  argparse = prev.argparse.overrideAttrs(oa: {
+
+    doCheck = true;
+    checkInputs = [ final.busted ];
+
+    checkPhase = ''
+      runHook preCheck
+      export LUA_PATH="src/?.lua;$LUA_PATH"
+      busted spec/
+      runHook postCheck
+    '';
+  });
   ##########################################3
   #### manual fixes for generated packages
   ##########################################3
@@ -640,6 +652,14 @@ with prev;
     preConfigure = ''
       make all
     '';
+  });
+
+  tiktoken_core = prev.tiktoken_core.overrideAttrs (oa: {
+    cargoDeps = rustPlatform.fetchCargoTarball {
+      src = oa.src;
+      hash = "sha256-YApsOGfAw34zp069lyGR6FGjxty1bE23+Tic07f8zI4=";
+    };
+    nativeBuildInputs = oa.nativeBuildInputs ++ [ cargo rustPlatform.cargoSetupHook ];
   });
 
   toml = prev.toml.overrideAttrs (oa: {

@@ -61,6 +61,8 @@ in
     systemd.services."autovt@${tty}".enable = false;
 
     systemd.services.greetd = {
+      aliases = [ "display-manager.service" ];
+
       unitConfig = {
         Wants = [
           "systemd-user-sessions.service"

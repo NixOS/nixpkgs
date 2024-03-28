@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/rrthomas/recode";
     description = "Converts files between various character sets and usages";
+    mainProgram = "recode";
     changelog = "https://github.com/rrthomas/recode/raw/v${version}/NEWS";
     platforms = lib.platforms.unix;
     license = with lib.licenses; [ lgpl3Plus gpl3Plus ];

@@ -13,7 +13,7 @@ let
     [ zlib glib libpng freetype xorg.libSM xorg.libICE xorg.libXrender openssl
       xorg.libXrandr xorg.libXfixes xorg.libXcursor xorg.libXinerama
       xorg.libxcb fontconfig xorg.libXext xorg.libX11 alsa-lib qtbase qtwebengine qtwebchannel qtsvg
-      qtwebsockets libpulseaudio quazip llvmPackages.libcxx llvmPackages.libcxxabi
+      qtwebsockets libpulseaudio quazip llvmPackages.libcxx
     ];
 
   desktopItem = makeDesktopItem {

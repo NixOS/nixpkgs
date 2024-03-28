@@ -1,15 +1,20 @@
 { lib, stdenv, fetchFromGitHub, cmake, aws-c-common, nix, openssl, Security }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aws-c-cal";
   version = "0.6.10";
 
   src = fetchFromGitHub {
     owner = "awslabs";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-rzJypIf0DrKI/2Wt5vFop34dL+KYTeCfWC0RflZpiMo=";
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-rzJypIf0DrKI/2Wt5vFop34dL+KYTeCfWC0RflZpiMo=";
   };
+
+  patches = [
+    # Fix openssl adaptor code for musl based static binaries.
+    ./aws-c-cal-musl-compat.patch
+  ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -32,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ orivej ];
   };
-}
+})

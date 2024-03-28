@@ -46,6 +46,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python IPMI Library";
+    mainProgram = "ipmitool.py";
     homepage = "https://github.com/kontron/python-ipmi";
     license = with licenses; [ lgpl2Plus ];
     maintainers = with maintainers; [ fab ];

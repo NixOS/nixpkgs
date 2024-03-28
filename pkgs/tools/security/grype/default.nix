@@ -109,6 +109,7 @@ buildGoModule rec {
     homepage = "https://github.com/anchore/grype";
     changelog = "https://github.com/anchore/grype/releases/tag/v${version}";
     description = "Vulnerability scanner for container images and filesystems";
+    mainProgram = "grype";
     longDescription = ''
       As a vulnerability scanner grype is able to scan the contents of a
       container image or filesystem to find known vulnerabilities.

@@ -53,7 +53,7 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.38.2";
+  version = "4.39.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -62,7 +62,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "transformers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/rt2XHN46NcFwlM9MOygVvpQkfPVu2eCNybYmSj711M=";
+    hash = "sha256-OzuiKzhgI9eRTPq3l7x4aw3fxvCe4080pK1RKzcC1RQ=";
   };
 
   propagatedBuildInputs = [
@@ -185,6 +185,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/huggingface/transformers";
     description = "Natural Language Processing for TensorFlow 2.0 and PyTorch";
+    mainProgram = "transformers-cli";
     changelog = "https://github.com/huggingface/transformers/releases/tag/v${version}";
     license = licenses.asl20;
     platforms = platforms.unix;

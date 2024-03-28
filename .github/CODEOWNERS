@@ -131,13 +131,13 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius @ma27
 /pkgs/development/interpreters/python/hooks                 @FRidh @jonringer
 
 # Haskell
-/doc/languages-frameworks/haskell.section.md  @cdepillabout @sternenseemann @maralorn @ncfavier
-/maintainers/scripts/haskell                  @cdepillabout @sternenseemann @maralorn @ncfavier
-/pkgs/development/compilers/ghc               @cdepillabout @sternenseemann @maralorn @ncfavier
-/pkgs/development/haskell-modules             @cdepillabout @sternenseemann @maralorn @ncfavier
-/pkgs/test/haskell                            @cdepillabout @sternenseemann @maralorn @ncfavier
-/pkgs/top-level/release-haskell.nix           @cdepillabout @sternenseemann @maralorn @ncfavier
-/pkgs/top-level/haskell-packages.nix          @cdepillabout @sternenseemann @maralorn @ncfavier
+/doc/languages-frameworks/haskell.section.md  @sternenseemann @maralorn @ncfavier
+/maintainers/scripts/haskell                  @sternenseemann @maralorn @ncfavier
+/pkgs/development/compilers/ghc               @sternenseemann @maralorn @ncfavier
+/pkgs/development/haskell-modules             @sternenseemann @maralorn @ncfavier
+/pkgs/test/haskell                            @sternenseemann @maralorn @ncfavier
+/pkgs/top-level/release-haskell.nix           @sternenseemann @maralorn @ncfavier
+/pkgs/top-level/haskell-packages.nix          @sternenseemann @maralorn @ncfavier
 
 # Perl
 /pkgs/development/interpreters/perl @stigtsp @zakame @dasJ
@@ -359,3 +359,8 @@ nixos/tests/zfs.nix                       @raitobezarius
 nixos/modules/services/continuous-integration/buildbot @Mic92 @zowoq
 nixos/tests/buildbot.nix                               @Mic92 @zowoq
 pkgs/development/tools/continuous-integration/buildbot @Mic92 @zowoq
+
+# Pretix
+pkgs/by-name/pr/pretix/ @mweinelt
+nixos/modules/services/web-apps/pretix.nix @mweinelt
+nixos/tests/web-apps/pretix.nix @mweinelt

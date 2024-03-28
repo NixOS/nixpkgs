@@ -74,8 +74,9 @@ and the aliases
 
 #### `buildPythonPackage` function {#buildpythonpackage-function}
 
-The `buildPythonPackage` function is implemented in
-`pkgs/development/interpreters/python/mk-python-derivation.nix`
+The `buildPythonPackage` function has its name binding in
+`pkgs/development/interpreters/python/python-packages-base.nix` and is
+implemented in `pkgs/development/interpreters/python/mk-python-derivation.nix`
 using setup hooks.
 
 The following is an example:
@@ -2014,6 +2015,10 @@ example of such a situation is when `py.test` is used.
 
 * Tests that attempt to access `$HOME` can be fixed by using the following
   work-around before running tests (e.g. `preCheck`): `export HOME=$(mktemp -d)`
+* Compiling with Cython causes tests to fail with a `ModuleNotLoadedError`.
+  This can be fixed with two changes in the derivation: 1) replacing `pytest` with
+  `pytestCheckHook` and 2) adding a `preCheck` containing `cd $out` to run
+  tests within the built output.
 
 ## Contributing {#contributing}
 

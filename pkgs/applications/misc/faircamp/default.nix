@@ -60,6 +60,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A self-hostable, statically generated bandcamp alternative";
+    mainProgram = "faircamp";
     longDescription = ''
       Faircamp takes a directory on your disk - your Catalog - and from it
       produces a fancy-looking (and technically simple and completely static)

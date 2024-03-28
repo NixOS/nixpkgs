@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "checkov";
-  version = "3.2.36";
+  version = "3.2.47";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "checkov";
     rev = "refs/tags/${version}";
-    hash = "sha256-Of09iIRON1YLdHjmRVxerTlvUff8I8G5m+Y3pRBfRnY=";
+    hash = "sha256-vwkTbHhgXaGeHrAkOM8gRDJ2VgbSmqt9Ia+qdOMxkko=";
   };
 
   patches = [
@@ -29,6 +29,7 @@ python3.pkgs.buildPythonApplication rec {
     "license-expression"
     "networkx"
     "openai"
+    "packageurl-python"
     "pycep-parser"
     "termcolor"
   ];
@@ -38,12 +39,12 @@ python3.pkgs.buildPythonApplication rec {
     "pycep-parser"
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     pythonRelaxDepsHook
     setuptools-scm
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     aiodns
     aiohttp
     aiomultiprocess

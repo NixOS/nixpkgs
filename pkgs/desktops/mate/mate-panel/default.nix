@@ -5,25 +5,31 @@
 , gettext
 , itstool
 , glib
+, gnome
+, gtk-layer-shell
+, gtk3
+, libmateweather
 , libwnck
 , librsvg
 , libxml2
 , dconf
-, gtk3
-, mate
+, mate-desktop
+, mate-menus
 , hicolor-icon-theme
+, wayland
 , gobject-introspection
 , wrapGAppsHook
+, marco
 , mateUpdateScript
 }:
 
 stdenv.mkDerivation rec {
   pname = "mate-panel";
-  version = "1.26.4";
+  version = "1.28.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "IHD51RVlfl3c2g2H73KXE9upy3sq0GIjvWdKIcxrPa8=";
+    sha256 = "s70EoJTQ61vX3DOA728MSdmp1SCXM9fM17RtBmogjLo=";
   };
 
   nativeBuildInputs = [
@@ -35,17 +41,28 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    glib
+    gtk-layer-shell
+    libmateweather
     libwnck
     librsvg
     libxml2
-    gtk3
     dconf
-    mate.libmateweather
-    mate.mate-desktop
-    mate.mate-menus
+    mate-desktop
+    mate-menus
     hicolor-icon-theme
+    wayland
   ];
+
+  propagatedBuildInputs = [
+    glib
+    gtk3
+    # See https://github.com/mate-desktop/mate-panel/issues/1402
+    # This is propagated for mate_panel_applet_settings_new and applet's wrapGAppsHook
+    gnome.dconf-editor
+  ];
+
+  # Needed for Wayland support.
+  configureFlags = [ "--with-in-process-applets=all" ];
 
   env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
@@ -57,7 +74,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(
       # Workspace switcher settings, works only when passed after gtk3 schemas in the wrapper for some reason
-      --prefix XDG_DATA_DIRS : "${glib.getSchemaDataDirPath mate.marco}"
+      --prefix XDG_DATA_DIRS : "${glib.getSchemaDataDirPath marco}"
     )
   '';
 

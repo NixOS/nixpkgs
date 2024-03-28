@@ -41,6 +41,11 @@ buildPythonPackage rec {
     numpy
   ];
 
+  pytestFlagsArray = [
+    # pytest.PytestRemovedIn8Warning: Passing None has been deprecated.
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   disabledTestPaths = [
     "tests/test_spec.py"
   ];
@@ -51,6 +56,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Tools for describing and manipulating demographic models";
+    mainProgram = "demes";
     homepage = "https://github.com/popsim-consortium/demes-python";
     license = licenses.isc;
     maintainers = with maintainers; [ alxsimon ];

@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "TUI Application launcher with Desktop Entry support.";
+    mainProgram = "sway-launcher-desktop";
     longDescription = ''
       This is a TUI-based launcher menu made with bash and the amazing fzf.
       Despite its name, it does not (read: no longer) depend on the Sway window manager

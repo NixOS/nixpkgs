@@ -4,13 +4,13 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "pithos";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo  = pname;
-    rev = version;
-    hash = "sha256-GPDbFlwiGT/B2paX33d3mUCV77q+fPM0LMaKFsQQjjQ=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-3j6IoMi30BQ8WHK4BxbsW+/3XZx7rBFd47EBENa2GiQ=";
   };
 
   format = "other";
@@ -34,6 +34,7 @@ pythonPackages.buildPythonApplication rec {
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "Pandora Internet Radio player for GNOME";
+    mainProgram = "pithos";
     homepage = "https://pithos.github.io/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ obadz ];

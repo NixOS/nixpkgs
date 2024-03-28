@@ -14,12 +14,12 @@
 }:
 stdenv.mkDerivation rec {
   pname = "vdr-softhddevice";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "ua0lnj";
     repo = "vdr-plugin-softhddevice";
-    sha256 = "sha256-d/Cl0sE4laDdjMhd3xTHcY4OT5tWWCFCvLsNF157+zw=";
+    sha256 = "sha256-y6b0nOf597uxS9zDh0NQOwLN81nk4U7lHK2CalyVi8s=";
     rev = "v${version}";
   };
 
