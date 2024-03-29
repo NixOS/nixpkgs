@@ -16648,6 +16648,8 @@ self: super: with self; {
 
   whenever = callPackage ../development/python-modules/whenever { };
 
+  whey = callPackage ../development/python-modules/whey { };
+
   whichcraft = callPackage ../development/python-modules/whichcraft { };
 
   whirlpool-sixth-sense = callPackage ../development/python-modules/whirlpool-sixth-sense { };
