@@ -816,7 +816,7 @@ with pkgs;
 
   enum4linux = callPackage ../tools/security/enum4linux { };
 
-  enum4linux-ng = python3Packages.callPackage ../tools/security/enum4linux-ng { };
+  enum4linux-ng = callPackage ../tools/security/enum4linux-ng { };
 
   enumerepo = callPackage ../tools/security/enumerepo {};
 
@@ -7835,7 +7835,10 @@ with pkgs;
 
   choose = callPackage ../tools/text/choose { };
 
-  d2 = callPackage ../tools/text/d2 { };
+  d2 = callPackage ../tools/text/d2 {
+    # Failed tests
+    buildGoModule = buildGo121Module;
+  };
 
   ddev = callPackage ../applications/virtualization/ddev { };
 
