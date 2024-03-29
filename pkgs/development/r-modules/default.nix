@@ -482,7 +482,6 @@ let
     affyio = [ pkgs.zlib.dev ];
     snpStats = [ pkgs.zlib.dev ];
     vcfppR = [ pkgs.curl.dev pkgs.bzip2 pkgs.zlib.dev pkgs.xz];
-    hdf5r = [ pkgs.hdf5.dev ];
     httpgd = with pkgs; [ cairo.dev ];
     SymTS = [ pkgs.gsl ];
     VBLPCM = [ pkgs.gsl ];
@@ -1150,6 +1149,10 @@ let
     devEMF = old.devEMF.overrideAttrs (attrs: {
       NIX_CFLAGS_LINK = "-L${pkgs.xorg.libXft.out}/lib -lXft";
       NIX_LDFLAGS = "-lX11";
+    });
+
+    hdf5r = old.hdf5r.overrideAttrs (attrs: {
+      buildInputs = attrs.buildInputs ++ [ new.Rhdf5lib.hdf5 ];
     });
 
     slfm = old.slfm.overrideAttrs (attrs: {
