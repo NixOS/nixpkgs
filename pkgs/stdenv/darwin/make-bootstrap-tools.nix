@@ -414,7 +414,8 @@ rec {
   };
 
   # The ultimate test: bootstrap a whole stdenv from the tools specified above and get a package set out of it
-  # eg: nix-build -A freshBootstrapTools.test-pkgs.stdenv
+  # TODO: uncomment once https://github.com/NixOS/nixpkgs/issues/222717 is resolved
+  /*
   test-pkgs = import test-pkgspath {
     # if the bootstrap tools are for another platform, we should be testing
     # that platform.
@@ -424,4 +425,5 @@ rec {
         args' = args // { inherit bootstrapFiles; };
       in (import (test-pkgspath + "/pkgs/stdenv/darwin") args');
   };
+  */
 }
