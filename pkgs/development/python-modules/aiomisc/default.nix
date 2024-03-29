@@ -25,7 +25,7 @@ buildPythonPackage rec {
   version = "17.5.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
