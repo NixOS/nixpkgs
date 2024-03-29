@@ -5267,6 +5267,10 @@ self: super: with self; {
 
   hetzner = callPackage ../development/python-modules/hetzner { };
 
+  hetznerHEAD = callPackage ../development/python-modules/hetzner {
+    head = true;
+  };
+
   heudiconv = callPackage ../development/python-modules/heudiconv { };
 
   hexbytes = callPackage ../development/python-modules/hexbytes { };
