@@ -193,7 +193,7 @@ rec {
 
   mypy-boto3-comprehendmedical = buildMypyBoto3Package "comprehendmedical" "1.34.0" "sha256-4KzL56xU474te8tW5xVZo6D5Pwe3GLRQbQfX8CXTz9g=";
 
-  mypy-boto3-compute-optimizer = buildMypyBoto3Package "compute-optimizer" "1.34.0" "sha256-k/4Ixaf9n4J8Y5ELjuMZ2dn7DgKftmwQZfdHhYDMc6w=";
+  mypy-boto3-compute-optimizer = buildMypyBoto3Package "compute-optimizer" "1.34.73" "sha256-WOPbzONtQ+hnVYwWCWC2Q/E1mqWNww0K2tbJhZxjAHo=";
 
   mypy-boto3-config = buildMypyBoto3Package "config" "1.34.45" "sha256-LN1CcIOj9cgzSNCvnUVwLRNPXlitHAlt+5jj6wu6i8E=";
 
