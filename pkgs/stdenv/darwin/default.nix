@@ -52,17 +52,10 @@ let
     inherit system;
 
     name = "bootstrap-tools";
-    builder = "${bootstrapFiles.unpack}/bin/bash";
+    builder = bootstrapFiles.sh; # Not a filename! Attribute 'sh' on bootstrapFiles
+    args = if localSystem.isAarch64 then [ ./unpack-bootstrap-tools-aarch64.sh ] else [ ./unpack-bootstrap-tools.sh ];
 
-    args = [
-      "${bootstrapFiles.unpack}/bootstrap-tools-unpack.sh"
-        bootstrapFiles.bootstrapTools
-    ];
-
-    PATH = lib.makeBinPath [
-      (placeholder "out")
-      bootstrapFiles.unpack
-    ];
+    inherit (bootstrapFiles) mkdir bzip2 cpio tarball;
 
     __impureHostDeps = commonImpureHostDeps;
   } // lib.optionalAttrs config.contentAddressedByDefault {
@@ -234,10 +227,20 @@ in
       ccWrapperStdenv = self.stdenv;
 
       bash = bootstrapTools;
+
       coreutils = bootstrapTools;
-      cpio = bootstrapTools;
       gnugrep = bootstrapTools;
-      pbzx = bootstrapTools;
+
+      # Either pbzx or Libsystem is required from bootstrap tools (one is used building the other).
+      pbzx = if localSystem.isAarch64 then bootstrapTools else super.pbzx;
+      cpio = self.stdenv.mkDerivation {
+        name = "bootstrap-stage0-cpio";
+        buildCommand = ''
+          mkdir -p $out/bin
+          ln -s ${bootstrapFiles.cpio} $out/bin/cpio
+        '';
+        passthru.isFromBootstrapFiles = true;
+      };
 
       darwin = super.darwin.overrideScope (selfDarwin: superDarwin: {
         # Prevent CF from being propagated to the initial stdenv. Packages that require it
