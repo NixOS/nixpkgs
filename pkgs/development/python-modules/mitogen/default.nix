@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "mitogen";
-  version = "0.3.4";
+  version = "0.3.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -14,8 +14,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mitogen-hq";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-tMpjmSqZffFGbo06W/FAut584F8eOPrcLKjj2bnB+Zo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-EDybx25eqJiMeoyB/lkuuofGTS8Q0ZjtB8HaKuGaKhk=";
   };
 
   # Tests require network access and Docker support
