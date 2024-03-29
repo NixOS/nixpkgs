@@ -17,7 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-fQ/IYjYZL7wUpxslCB6cSMVD19vB57Jw1i7/iK/SJFw=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
   ];
 
