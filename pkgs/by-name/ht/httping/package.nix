@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
       latency of the webserver + network. It supports IPv6.
     '';
     mainProgram = "httping";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.anthonyroussel ];
     platforms = lib.platforms.linux;
   };
 })
