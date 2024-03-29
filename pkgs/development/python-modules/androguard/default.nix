@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "androguard";
-  version = "4.1.0";
+  version = "3.4.0a1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-NJYiuAr/rfR24pAhQDysGWXH2bBuvTrJI1jkmrJS8+c=";
+    rev = "v${version}";
+    sha256 = "1aparxiq11y0hbvkayp92w684nyxyyx7mi0n1x6x51g5z6c58vmy";
   };
 
   nativeBuildInputs = [

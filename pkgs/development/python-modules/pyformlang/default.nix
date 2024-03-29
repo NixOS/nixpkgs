@@ -1,12 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools
-, wheel
 , networkx
 , numpy
 , pydot
 , pytestCheckHook
+, pythonOlder
+, setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -14,17 +15,19 @@ buildPythonPackage rec {
   version = "1.0.9";
   pyproject = true;
 
+  disabled = pythonOlder "3.7";
+
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-oCwYM4yQ1KYZpC7vVpeHSIDH2Q930JAuTDq9mds9zoc=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     networkx
     numpy
     pydot
@@ -39,7 +42,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A python framework for formal grammars";
+    description = "Framework for formal grammars";
     homepage = "https://github.com/Aunsiels/pyformlang";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];

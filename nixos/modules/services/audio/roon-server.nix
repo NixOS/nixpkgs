@@ -9,6 +9,7 @@ in {
   options = {
     services.roon-server = {
       enable = mkEnableOption (lib.mdDoc "Roon Server");
+      package = lib.mkPackageOption pkgs "roon-server" { };
       openFirewall = mkOption {
         type = types.bool;
         default = false;
@@ -43,7 +44,7 @@ in {
       environment.ROON_ID_DIR = "/var/lib/${name}";
 
       serviceConfig = {
-        ExecStart = "${pkgs.roon-server}/bin/RoonServer";
+        ExecStart = "${lib.getExe cfg.package}";
         LimitNOFILE = 8192;
         User = cfg.user;
         Group = cfg.group;

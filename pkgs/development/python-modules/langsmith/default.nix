@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.1.31";
+  version = "0.1.36";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-eQ2oP1I7uc9s9vrDqKCIqMGuh1+MjUpLFukp3Fg0RM0=";
+    hash = "sha256-YHYzC4c7VOPBiBgtJcN/hPccZMJBL5E8VsIAwErhWjg=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -33,12 +33,12 @@ buildPythonPackage rec {
     "orjson"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     orjson
     pydantic
     requests

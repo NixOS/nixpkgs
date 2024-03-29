@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "overmind";
-  version = "2.4.0";
+  version = "2.5.0";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -14,10 +14,10 @@ buildGoModule rec {
     owner = "DarthSim";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-cpsTytV1TbvdR7XUKkp4GPD1qyt1qnmY6qOsge01swE=";
+    sha256 = "sha256-/reRiSeYf8tnSUJICMDp7K7XZCYvTDFInPJ1xFuAqRs=";
   };
 
-  vendorHash = "sha256-ndgnFBGtVFc++h+EnA37aY9+zNsO5GDrTECA4TEWPN4=";
+  vendorHash = "sha256-6/S5Sf2vvCp2RpRqcJPVc9mvMuPVn4Kj9QpSIlu6YFU=";
 
   meta = with lib; {
     homepage = "https://github.com/DarthSim/overmind";

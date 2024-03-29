@@ -25,14 +25,14 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov=pyecoforest --cov-report=term-missing:skip-covered" ""
+      --replace-fail "--cov=pyecoforest --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
   ];
 

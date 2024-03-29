@@ -403,5 +403,8 @@ stdenv.mkDerivation rec {
     # `pkgsMusl`.
     platforms = builtins.attrNames ghcBinDists.${distSetName};
     maintainers = lib.teams.haskell.members;
+    # packages involving hsc2hs (clock) produce libraries our
+    # ld can't link against
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

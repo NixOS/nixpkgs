@@ -132,10 +132,10 @@ rec {
     # extraBuildInputs are dropped in cross.nix, but darwin still needs them
     extraBuildInputs = [ pkgs.buildPackages.darwin.CF ];
     mkDerivationFromStdenv = withOldMkDerivation old (stdenv: mkDerivationSuper: args:
-    (mkDerivationSuper args).overrideAttrs (finalAttrs: {
-      NIX_CFLAGS_LINK = toString (finalAttrs.NIX_CFLAGS_LINK or "")
+    (mkDerivationSuper args).overrideAttrs (prevAttrs: {
+      NIX_CFLAGS_LINK = toString (prevAttrs.NIX_CFLAGS_LINK or "")
         + lib.optionalString (stdenv.cc.isGNU or false) " -static-libgcc";
-      nativeBuildInputs = (finalAttrs.nativeBuildInputs or [])
+      nativeBuildInputs = (prevAttrs.nativeBuildInputs or [])
         ++ lib.optionals stdenv.hasCC [
           (pkgs.buildPackages.makeSetupHook {
             name = "darwin-portable-libSystem-hook";

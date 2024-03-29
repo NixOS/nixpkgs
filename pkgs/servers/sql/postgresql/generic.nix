@@ -106,7 +106,6 @@ let
       ++ lib.optionals zstdEnabled [ "--with-zstd" ]
       ++ lib.optionals gssSupport [ "--with-gssapi" ]
       ++ lib.optionals pythonSupport [ "--with-python" ]
-      ++ lib.optionals stdenv'.hostPlatform.isRiscV [ "--disable-spinlocks" ]
       ++ lib.optionals jitSupport [ "--with-llvm" ]
       ++ lib.optionals stdenv'.isLinux [ "--with-pam" ];
 

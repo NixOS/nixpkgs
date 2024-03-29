@@ -108,7 +108,7 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "Realtime collaborative markdown notes on all platforms";
-    license = lib.licenses.agpl3;
+    license = lib.licenses.agpl3Only;
     homepage = "https://hedgedoc.org";
     mainProgram = "hedgedoc";
     maintainers = with lib.maintainers; [ SuperSandro2000 ];

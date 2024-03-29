@@ -19,6 +19,6 @@ buildHomeAssistantComponent rec {
       "Smart TRV control integrates room-temp sensors, window/door sensors, weather forecasts, and ambient probes for efficient heating and calibration, enhancing energy savings and comfort.";
     homepage = "https://better-thermostat.org/";
     maintainers = with maintainers; [ mguentner ];
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
   };
 }

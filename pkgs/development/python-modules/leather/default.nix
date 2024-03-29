@@ -4,7 +4,7 @@
 , six
 , cssselect
 , lxml
-, nose
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -22,14 +22,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     cssselect
     lxml
-    nose
+    pytestCheckHook
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    nosetests
-    runHook postCheck
-  '';
 
   meta = with lib; {
     homepage = "http://leather.rtfd.io";

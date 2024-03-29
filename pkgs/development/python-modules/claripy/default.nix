@@ -1,19 +1,19 @@
 { lib
 , buildPythonPackage
-, setuptools
 , cachetools
 , decorator
 , fetchFromGitHub
-, future
 , pysmt
-, pythonOlder
 , pytestCheckHook
+, pythonOlder
+, pythonRelaxDepsHook
+, setuptools
 , z3-solver
 }:
 
 buildPythonPackage rec {
   pname = "claripy";
-  version = "9.2.84";
+  version = "9.2.96";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -22,20 +22,25 @@ buildPythonPackage rec {
     owner = "angr";
     repo = "claripy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wgCWMngda0gB+AEDFpRxQ2ots5YXE4bkBSxMtYJqLEo=";
+    hash = "sha256-rXJzJCyhsScFW1L/mVARciGDlOOBCFT69VBivjV6oig=";
   };
 
-  nativeBuildInputs = [
+  # z3 does not provide a dist-info, so python-runtime-deps-check will fail
+  pythonRemoveDeps = [
+    "z3-solver"
+  ];
+
+  build-system = [
+    pythonRelaxDepsHook
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cachetools
     decorator
-    future
     pysmt
     z3-solver
-  ];
+  ] ++ z3-solver.requiredPythonModules;
 
   nativeCheckInputs = [
     pytestCheckHook

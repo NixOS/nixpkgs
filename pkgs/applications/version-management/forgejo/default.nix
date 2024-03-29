@@ -39,17 +39,17 @@ let
 in
 buildGoModule rec {
   pname = "forgejo";
-  version = "1.21.7-0";
+  version = "1.21.8-0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "forgejo";
     repo = "forgejo";
     rev = "v${version}";
-    hash = "sha256-wYwQnZRIJSbwI+kOPedxnIdfhQ/wWxXpOpdfcFono6k=";
+    hash = "sha256-nufhGsibpPrGWpVg75Z6qdzlc1K+p36mMjlS2MtsuAI=";
   };
 
-  vendorHash = "sha256-Mptfd1WoUXNQkw7sa/GxIO7s5V5/9VmVBtvPCjMsa/4=";
+  vendorHash = "sha256-+1apPnqbIfp2Nu1ieI2DdHo4gndZObmcq/Td+ZtkILM=";
 
   subPackages = [ "." ];
 
@@ -59,11 +59,11 @@ buildGoModule rec {
   buildInputs = lib.optional pamSupport pam;
 
   patches = [
-    ./../gitea/static-root-path.patch
+    ./static-root-path.patch
   ];
 
   postPatch = ''
-    substituteInPlace modules/setting/setting.go --subst-var data
+    substituteInPlace modules/setting/server.go --subst-var data
   '';
 
   tags = lib.optional pamSupport "pam"

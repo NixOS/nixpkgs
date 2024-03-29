@@ -26,10 +26,16 @@ buildPythonPackage rec {
 
   patches = [
     # patch for fix tests
+    # https://github.com/mammothb/symspellpy/pull/151
     (fetchpatch {
       name = "fix-pkg-resources-deprecation-warning.patch";
-      url = "https://patch-diff.githubusercontent.com/raw/mammothb/symspellpy/pull/150.patch";
+      url = "https://github.com/mammothb/symspellpy/commit/b0298f4936f28a79612f5509612210868548793f.patch";
       hash = "sha256-mdUJMrcPv5zczIRP+8u5vicz2IE1AUN3YP0+zg3jqZg=";
+    })
+    (fetchpatch {
+      name = "fix-error-message-checking-py312.patch";
+      url = "https://github.com/mammothb/symspellpy/commit/f6f91e18316bed717036306c33d2ee82a922563a.patch";
+      hash = "sha256-a5KsESIEIzlbcEPq8sTB2+XkuT/vP81U8StZhaL0MbA=";
     })
   ];
 

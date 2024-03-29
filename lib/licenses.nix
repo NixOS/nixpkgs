@@ -392,6 +392,12 @@ in mkLicense lset) ({
     fullName = "Common Public Attribution License 1.0";
   };
 
+  commons-clause = {
+    fullName = "Commons Clause License";
+    url = "https://commonsclause.com/";
+    free = false;
+  };
+
   cpl10 = {
     spdxId = "CPL-1.0";
     fullName = "Common Public License 1.0";
@@ -1266,11 +1272,6 @@ in mkLicense lset) ({
   };
 } // {
   # TODO: remove legacy aliases
-  agpl3 = {
-    spdxId = "AGPL-3.0";
-    fullName = "GNU Affero General Public License v3.0";
-    deprecated = true;
-  };
   gpl2 = {
     spdxId = "GPL-2.0";
     fullName = "GNU General Public License v2.0";

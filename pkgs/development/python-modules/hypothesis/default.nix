@@ -79,6 +79,14 @@ buildPythonPackage rec {
     "tests/cover"
   ];
 
+  disabledTests = if (pythonOlder "3.10") then [
+    # not sure why these tests fail with only 3.9
+    # FileNotFoundError: [Errno 2] No such file or directory: 'git'
+    "test_observability"
+    "test_assume_has_status_reason"
+    "test_observability_captures_stateful_reprs"
+  ] else null;
+
   pythonImportsCheck = [
     "hypothesis"
   ];

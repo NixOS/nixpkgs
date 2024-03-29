@@ -1,4 +1,5 @@
 { lib
+, archinfo
 , buildPythonPackage
 , cffi
 , fetchFromGitHub
@@ -16,14 +17,14 @@
 
 let
   # The binaries are following the argr projects release cycle
-  version = "9.2.84";
+  version = "9.2.96";
 
   # Binary files from https://github.com/angr/binaries (only used for testing and only here)
   binaries = fetchFromGitHub {
     owner = "angr";
     repo = "binaries";
     rev = "refs/tags/v${version}";
-    hash = "sha256-sU9Rv2kTLYMpaalrkcOv6HlHt1u4oG482M+d7OSjJ3Y=";
+    hash = "sha256-eC9qQCrms4pSXYTrKJlfdejhl/kzUmmyfYhjlEPpgzA=";
   };
 
 in
@@ -38,14 +39,15 @@ buildPythonPackage rec {
     owner = "angr";
     repo = "cle";
     rev = "refs/tags/v${version}";
-    hash = "sha256-N0z5wgaeWkoPuhIUj7bj1kDKgZ7pWChm1uEU4MjXjqI=";
+    hash = "sha256-osClaoAzjf3mOng38disxxSFncbc/V7Uuc1HCTdX4SQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    archinfo
     cffi
     minidump
     pefile
