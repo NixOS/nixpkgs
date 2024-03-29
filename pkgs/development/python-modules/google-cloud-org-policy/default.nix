@@ -7,12 +7,13 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptool
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-org-policy";
   version = "1.11.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,7 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-3BJDTwbIDhscHDR8rcjLQP/JYZrktcW+tcK9WFyV2X8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     google-api-core
     proto-plus
     protobuf
