@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
+{ lib, stdenv, buildPackages, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
 , libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole, kmod, ubootTools
 , fetchpatch
 , rustc, rust-bindgen, rustPlatform
@@ -8,15 +8,12 @@ let
   lib_ = lib;
   stdenv_ = stdenv;
 
-  readConfig = configfile: import (runCommand "config.nix" {} ''
-    echo "{" > "$out"
-    while IFS='=' read key val; do
-      [ "x''${key#CONFIG_}" != "x$key" ] || continue
-      no_firstquote="''${val#\"}";
-      echo '  "'"$key"'" = "'"''${no_firstquote%\"}"'";' >> "$out"
-    done < "${configfile}"
-    echo "}" >> $out
-  '').outPath;
+  readConfig = configfile:
+    lib.strings.parseLinuxConfig {
+      # IFD could happen in `builtins.readFile`
+      configText = builtins.readFile configfile;
+      relaxed = true;
+    };
 in lib.makeOverridable ({
   # The kernel version
   version,
