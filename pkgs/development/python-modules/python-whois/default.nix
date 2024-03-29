@@ -4,20 +4,30 @@
 , future
 , nose
 , pytestCheckHook
+, pythonOlder
+, setuptools
 , simplejson
 }:
 
 buildPythonPackage rec {
   pname = "python-whois";
   version = "0.8.0";
-  format = "setuptools";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-3TNtNRfqzip2iUBtt7uWraPF50MnQjFRru4+ZCJfYiA=";
   };
 
-  propagatedBuildInputs = [ future ];
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
+    future
+  ];
 
   nativeCheckInputs = [
     nose
@@ -31,7 +41,9 @@ buildPythonPackage rec {
     "test_ipv4"
     "test_ipv6"
   ];
-  pythonImportsCheck = [ "whois" ];
+  pythonImportsCheck = [
+    "whois"
+  ];
 
   meta = with lib; {
     description = "Python module to produce parsed WHOIS data";
