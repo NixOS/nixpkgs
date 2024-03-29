@@ -1,9 +1,18 @@
-{ lib, fetchFromGitHub
-, pkg-config, meson, ninja
+{ lib
+, fetchFromGitHub
+, pkg-config
+, meson
+, ninja
 , python3Packages
-, gdk-pixbuf, glib, gobject-introspection, gtk4, libadwaita, desktop-file-utils
+, gdk-pixbuf
+, glib
+, gobject-introspection
+, gtk4
+, libadwaita
+, desktop-file-utils
 , libnotify
-, wrapGAppsHook }:
+, wrapGAppsHook
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "plattenalbum";
@@ -11,23 +20,38 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "SoongNoonien";
-    repo = pname;
+    repo = "plattenalbum";
     rev = "refs/tags/v${version}";
     sha256 = "sha256-rxHtcKbvwoOteSD3gC0uEp+3GCUFpKWoicznELVilpY=";
   };
 
-  format = "other";
+  pyproject = false;
 
   nativeBuildInputs = [
-    glib.dev gobject-introspection gtk4 pkg-config meson ninja wrapGAppsHook desktop-file-utils libadwaita
+    glib.dev
+    gobject-introspection
+    gtk4
+    pkg-config
+    meson
+    ninja
+    wrapGAppsHook
+    desktop-file-utils
+    libadwaita
   ];
 
   buildInputs = [
-    gdk-pixbuf glib libnotify
+    gdk-pixbuf
+    glib
+    libnotify
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    beautifulsoup4 distutils-extra mpd2 notify-py pygobject3 requests
+    beautifulsoup4
+    distutils-extra
+    mpd2
+    notify-py
+    pygobject3
+    requests
   ];
 
   postInstall = ''
