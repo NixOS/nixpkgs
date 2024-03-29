@@ -519,7 +519,7 @@ rec {
 
   mypy-boto3-nimble = buildMypyBoto3Package "nimble" "1.34.0" "sha256-i0E9kLunDRl+XzU3Ti3vxqHNa2oGHQQ9xDjCtNKi1Lw=";
 
-  mypy-boto3-oam = buildMypyBoto3Package "oam" "1.34.0" "sha256-/0ou6QtLQerkqJ+alocpYxUfe9jRHoOgQy9R6sxZAFo=";
+  mypy-boto3-oam = buildMypyBoto3Package "oam" "1.34.73" "sha256-MAnS/E6BKcaubeOdblitGzS7y7YUZr35M4679iJL6lE=";
 
   mypy-boto3-omics = buildMypyBoto3Package "omics" "1.34.7" "sha256-Mtb11Oe2j28u+MFaycvMMNiqi7ZdVDcKQV/X/7npze4=";
 
