@@ -4,6 +4,7 @@
 , installShellFiles
 , testers
 , cue
+, callPackage
 }:
 
 buildGoModule rec {
@@ -38,9 +39,14 @@ buildGoModule rec {
     $out/bin/cue eval - <<<'a: "all good"' > /dev/null
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = cue;
-    command = "cue version";
+  passthru = {
+    writeCueValidator = callPackage ./validator.nix { };
+    tests = {
+      version = testers.testVersion {
+        package = cue;
+        command = "cue version";
+      };
+    };
   };
 
   meta = with lib;  {
