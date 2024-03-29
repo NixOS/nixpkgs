@@ -67,10 +67,24 @@ self: super: {
 
 
   haskell-language-server = lib.pipe super.haskell-language-server [
-     (disableCabalFlag "fourmolu")
-     (disableCabalFlag "ormolu")
-     (disableCabalFlag "stylishHaskell")
-    ];
+    (disableCabalFlag "fourmolu")
+    (disableCabalFlag "ormolu")
+    (disableCabalFlag "stylishHaskell")
+    (overrideCabal (drv: {
+      # Disabling the build flags isn't enough: `Setup configure` still configures
+      # every component for building and complains about missing dependencies.
+      # Thus we have to mark the undesired components as non-buildable.
+      postPatch = drv.postPatch or "" + ''
+        for lib in hls-ormolu-plugin hls-fourmolu-plugin; do
+          sed -i "/^library $lib/a\  buildable: False" haskell-language-server.cabal
+        done
+      '';
+    }))
+    (d: d.override {
+      ormolu = null;
+      fourmolu = null;
+    })
+  ];
 
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
   hashable = addBuildDepends [ self.data-array-byte ] super.hashable;
