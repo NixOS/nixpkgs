@@ -2346,6 +2346,22 @@ let
         };
       };
 
+      jbockle.jbockle-format-files = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "jbockle-format-files";
+          publisher = "jbockle";
+          version = "3.4.0";
+          sha256 = "sha256-BHw+T2EPdQq/wOD5kzvSln5SBFTYUXip8QDjnAGBfFY=";
+        };
+        meta = {
+          description = "A VSCode extension to formats all files in the current workspace";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=jbockle.jbockle-format-files";
+          homepage = "https://github.com/jbockle/format-files";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.wackbyte ];
+        };
+      };
+
       jdinhlife.gruvbox = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "gruvbox";
