@@ -1418,6 +1418,10 @@ let
 
     flowClust = old.flowClust.override { platforms = lib.platforms.x86_64 ++ lib.platforms.x86; };
 
+    RcppCGAL = old.RcppCGAL.overrideAttrs (_: {
+      postPatch = "patchShebangs configure";
+    });
+
     httr2 = old.httr2.overrideAttrs (attrs: {
       preConfigure = "patchShebangs configure";
     });
