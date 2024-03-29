@@ -363,6 +363,7 @@ let
     jpeg = [ pkgs.libjpeg.dev ];
     jqr = [ pkgs.jq.dev ];
     KFKSDS = [ pkgs.gsl ];
+    KSgeneral = with pkgs; [ pkg-config ];
     kza = [ pkgs.fftw.dev ];
     leidenAlg = [ pkgs.gmp.dev ];
     Libra = [ pkgs.gsl ];
@@ -583,6 +584,7 @@ let
     CLVTools = [ pkgs.gsl ];
     excursions = [ pkgs.gsl ];
     JMcmprsk = [ pkgs.gsl ];
+    KSgeneral = [ pkgs.fftw.dev ];
     mashr = [ pkgs.gsl ];
     hadron = [ pkgs.gsl ];
     AMOUNTAIN = [ pkgs.gsl ];
