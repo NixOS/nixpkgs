@@ -434,6 +434,7 @@ package-maintainers:
     - nix-diff
   turion:
     - Agda
+    - cabal-gild
     - dunai
     - essence-of-live-coding
     - essence-of-live-coding-gloss
