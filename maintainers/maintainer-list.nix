@@ -8533,6 +8533,12 @@
       fingerprint = "F5B2 BE1B 9AAD 98FE 2916  5597 3665 FFF7 9D38 7BAA";
     }];
   };
+  imrying = {
+    email = "philiprying@gmail.com";
+    github = "imrying";
+    githubId = 36996706;
+    name = "Philip Rying";
+  };
   imuli = {
     email = "i@imu.li";
     github = "imuli";
