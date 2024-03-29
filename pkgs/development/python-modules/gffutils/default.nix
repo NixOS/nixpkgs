@@ -11,7 +11,7 @@ with python3.pkgs;
   buildPythonApplication rec {
     pname = "gffutils";
     version = "0.12.0";
-    #pyproject = true;
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "daler";
