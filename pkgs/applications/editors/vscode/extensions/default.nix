@@ -20,6 +20,7 @@
 , millet
 , craftos-pc
 , shfmt
+, tinymist
 , typst-lsp
 , typst-preview
 , autoPatchelfHook
@@ -3166,6 +3167,37 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      myriad-dreamin.tinymist = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "tinymist";
+          publisher = "myriad-dreamin";
+          # Please update the corresponding binary (tinymist) when updating
+          # this extension.
+          version = "0.11.1";
+          sha256 = "sha256-jyZBnT8UW94TVnZKZna1cJa/UIj+DwYwlAbU4pnaf04=";
+        };
+
+        nativeBuildInputs = [ jq moreutils ];
+
+        buildInputs = [
+          tinymist
+        ];
+
+        postInstall = ''
+          cd "$out/$installPrefix"
+          jq '.contributes.configuration.properties."tinymist.serverPath".default = "${lib.getExe tinymist}"' package.json | sponge package.json
+        '';
+
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/myriad-dreamin.tinymist/changelog";
+          description = "A VSCode extension for providing a language server for Typst";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=nvarner.typst-lsp";
+          homepage = "https://github.com/myriad-dreamin/tinymist";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.drupol ];
         };
       };
 
