@@ -470,7 +470,6 @@ let
     xml2 = [ pkgs.libxml2.dev ] ++ lib.optionals stdenv.isDarwin [ pkgs.perl ];
     XML = with pkgs; [ libtool libxml2.dev xmlsec libxslt ];
     affyPLM = [ pkgs.zlib.dev ];
-    bamsignals = [ pkgs.zlib.dev ];
     BitSeq = [ pkgs.zlib.dev ];
     DiffBind = [ pkgs.zlib ];
     ShortRead = [ pkgs.zlib.dev ];
@@ -602,6 +601,7 @@ let
     bio3d = with pkgs; [ zlib.dev ];
     arrangements = with pkgs; [ gmp.dev ];
     spp = with pkgs; [ zlib.dev ];
+    bamsignals = with pkgs; [ zlib.dev xz.dev bzip2 ];
     Rbowtie = with pkgs; [ zlib.dev ];
     gaston = with pkgs; [ zlib.dev ];
     csaw = with pkgs; [ zlib.dev curl ];
