@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mbusd";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "3cky";
     repo = "mbusd";
     rev = "v${version}";
-    hash = "sha256-vYYaJKcnREng+2UsDIZ28hvANkQCHVixQIxo82m7MQs=";
+    hash = "sha256-RQRSqlbPwBhw0SiNSP+euMVAwVBJo3lx0qB5gyWA+cM=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
