@@ -27,7 +27,6 @@ file_cmds = applePackage' "file_cmds" "321.40.3" "macos-11.0.1" "0p077lnbcy8266m
 hfs = applePackage' "hfs" "556.41.1" "macos-11.0.1" "0a0s6b12b0q07wslfifna0bj51dml9v098i4crr2m1vivnx4xj75" {};
 libclosure = applePackage' "libclosure" "78" "macos-11.0.1" "0vf9n0k3m8dbprv1bf45zqg0g43bidy2i5z1v9a826bsf8lv7am7" {};
 libdispatch = applePackage' "libdispatch" "1271.40.12" "macos-11.0.1" "1ck5srcjapg18vqb8wl08gacs7ndc6xr067qjn3ngx39q1jdcywz" {};
-libiconv = applePackage' "libiconv" "59" "macos-11.0.1" "0lwa4brdwm4lvrdnxylzsn1yph4m7csgri2zkc4xb4xiisz32pwp" {};
 libmalloc = applePackage' "libmalloc" "317.40.8" "macos-11.0.1" "sha256-Tdhb0mq3w4Hwvp3xHB79Vr22hCOQK6h28HCsd7jvITI=" {};
 libplatform = applePackage' "libplatform" "254.40.4" "macos-11.0.1" "1qf3ri0yd8b1xjln1j1gyx7ks6k3a2jhd63blyvfby75y9s7flky" {};
 libpthread = applePackage' "libpthread" "454.40.3" "macos-11.0.1" "0zljbw8mpb80n1if65hhi9lkgwbgjr8vc9wvf7q1nl3mzyl35f8p" {};
