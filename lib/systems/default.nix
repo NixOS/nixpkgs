@@ -27,7 +27,7 @@ let
   examples = import ./examples.nix { inherit lib; };
   architectures = import ./architectures.nix { inherit lib; };
 
-  /*
+  /**
     Elaborated systems contain functions, which means that they don't satisfy
     `==` for a lack of reflexivity.
 
@@ -45,10 +45,13 @@ let
     let removeFunctions = a: filterAttrs (_: v: !isFunction v) a;
     in a: b: removeFunctions a == removeFunctions b;
 
-  /* List of all Nix system doubles the nixpkgs flake will expose the package set
-     for. All systems listed here must be supported by nixpkgs as `localSystem`.
+  /**
+    List of all Nix system doubles the nixpkgs flake will expose the package set
+    for. All systems listed here must be supported by nixpkgs as `localSystem`.
 
-     **Warning**: This attribute is considered experimental and is subject to change.
+    :::{.warning}
+    This attribute is considered experimental and is subject to change.
+    :::
   */
   flakeExposed = import ./flake-systems.nix { };
 

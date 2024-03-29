@@ -1,8 +1,9 @@
-/* Library of low-level helper functions for nix expressions.
- *
- * Please implement (mostly) exhaustive unit tests
- * for new functions in `./tests.nix`.
- */
+/**
+  Library of low-level helper functions for nix expressions.
+
+  Please implement (mostly) exhaustive unit tests
+  for new functions in `./tests.nix`.
+*/
 let
 
   inherit (import ./fixed-points.nix { inherit lib; }) makeExtensible;
