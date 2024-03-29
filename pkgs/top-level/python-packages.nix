@@ -13628,6 +13628,8 @@ self: super: with self; {
 
   shippai = callPackage ../development/python-modules/shippai { };
 
+  shippinglabel = callPackage ../development/python-modules/shippinglabel { };
+
   shiv = callPackage ../development/python-modules/shiv { };
 
   shodan = callPackage ../development/python-modules/shodan { };
