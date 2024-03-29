@@ -3047,4 +3047,8 @@ self: super: {
   # https://github.com/isovector/type-errors/issues/9
   type-errors = dontCheck super.type-errors;
 
+  cabal-gild = super.cabal-gild.overrideScope (self: super: {
+    tasty = super.tasty_1_5;
+    tasty-quickcheck = super.tasty-quickcheck_0_10_3;
+  });
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
