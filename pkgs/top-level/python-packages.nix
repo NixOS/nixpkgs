@@ -5215,6 +5215,8 @@ self: super: with self; {
 
   handout = callPackage ../development/python-modules/handout { };
 
+  handy-archives = callPackage ../development/python-modules/handy-archives { };
+
   hap-python = callPackage ../development/python-modules/hap-python { };
 
   hass-nabucasa = callPackage ../development/python-modules/hass-nabucasa { };
