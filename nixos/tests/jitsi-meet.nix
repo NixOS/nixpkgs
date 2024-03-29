@@ -11,7 +11,16 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       services.jitsi-meet = {
         enable = true;
         hostName = "server";
+        updateMucs = { "conference.jitsi.example.com".extraModules = [
+            "lobby_autostart"
+            "muc_mam"
+            "vcard_muc"
+          ];
+        };
       };
+
+      services.prosody.extraPluginPaths = [ "${pkgs.jitsi-prosody-plugins}/lobby_autostart" ];
+
       services.jitsi-videobridge.openFirewall = true;
 
       networking.firewall.allowedTCPPorts = [ 80 443 ];
