@@ -614,6 +614,7 @@ let
     PopGenome = [ pkgs.zlib.dev ];
     QuasR = [ pkgs.zlib.dev ];
     Rbowtie2 = [ pkgs.zlib.dev ];
+    maftools = with pkgs; [ zlib.dev bzip2 xz.dev ];
     Rmmquant = [ pkgs.zlib.dev ];
     SICtools = with pkgs; [ zlib.dev ncurses.dev ];
     Signac = [ pkgs.zlib.dev ];
