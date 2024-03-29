@@ -352,5 +352,11 @@ in rec {
 
   inherit darwin-stubs;
 
+  objc4 = pkgs.darwin.libobjc;
+
+  sdkRoot = pkgs.callPackage ./sdkRoot.nix { sdkVersion = "10.12"; };
+
+  inherit (pkgs.darwin) Libsystem;
+
   inherit sdk;
 }

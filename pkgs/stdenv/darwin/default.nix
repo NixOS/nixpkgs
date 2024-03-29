@@ -135,9 +135,11 @@ let
         hostPlatform = localSystem;
         targetPlatform = localSystem;
 
-        inherit config extraNativeBuildInputs;
+        inherit config;
 
         extraBuildInputs = [ prevStage.darwin.CF ];
+        extraNativeBuildInputs = extraNativeBuildInputs
+          ++ [ prevStage.darwin.apple_sdk.sdkRoot ];
 
         preHook = lib.optionalString (!isBuiltByNixpkgsCompiler bash) ''
           # Don't patch #!/interpreter because it leads to retained
@@ -196,6 +198,7 @@ in
     cpio = null;
 
     darwin = {
+      apple_sdk.sdkRoot = null;
       binutils = null;
       binutils-unwrapped = null;
       cctools = null;
@@ -244,7 +247,7 @@ in
           version = "boot";
         };
 
-        binutils = (import ../../build-support/bintools-wrapper) {
+        binutils = super.wrapBintoolsWith {
           name = "bootstrap-stage0-binutils-wrapper";
 
           nativeTools = false;
@@ -435,6 +438,10 @@ in
       });
 
       darwin = super.darwin.overrideScope (selfDarwin: superDarwin: {
+        apple_sdk = superDarwin.apple_sdk // {
+          inherit (prevStage.darwin.apple_sdk) sdkRoot;
+        };
+
         # Use this stage’s CF to build configd. It’s required but can’t be included in the stdenv.
         configd = superDarwin.configd.overrideAttrs (old: {
           buildInputs = old.buildInputs or [ ] ++ [ self.darwin.CF ];
@@ -500,7 +507,7 @@ in
     assert lib.all isFromBootstrapFiles (with prevStage; [ coreutils gnugrep ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      autoconf automake bash binutils-unwrapped bison brotli cmake cpio curl cyrus_sasl db
+      autoconf automake bash binutils-unwrapped bison brotli cmake cpio cyrus_sasl db
       ed expat flex gettext gmp groff icu libedit libffi libiconv libidn2 libkrb5 libssh2
       libtool libunistring libxml2 m4 ncurses nghttp2 ninja openldap openssh openssl
       patchutils pbzx perl pkg-config.pkg-config python3 python3Minimal scons serf sqlite
@@ -527,7 +534,7 @@ in
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
         autoconf automake bash binutils binutils-unwrapped bison brotli cmake cmakeMinimal
-        coreutils cpio curl cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu
+        coreutils cpio cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu
         libedit libffi libiconv libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4
         ncurses nghttp2 ninja openldap openssh openssl patchutils pbzx perl pkg-config
         python3Minimal scons sed serf sharutils sqlite subversion texinfo unzip which xz
@@ -558,9 +565,13 @@ in
 
       darwin = super.darwin.overrideScope (_: superDarwin: {
         inherit (prevStage.darwin)
-          CF Libsystem binutils-unwrapped cctools cctools-port configd darwin-stubs dyld
+          CF sdkRoot Libsystem binutils-unwrapped cctools cctools-port configd darwin-stubs dyld
           launchd libclosure libdispatch libobjc locale objc4 postLinkSignHook
           print-reexports rewrite-tbd signingUtils sigtool;
+
+        apple_sdk = superDarwin.apple_sdk // {
+          inherit (prevStage.darwin.apple_sdk) sdkRoot;
+        };
       });
 
       llvmPackages = super.llvmPackages // (
@@ -599,7 +610,7 @@ in
     assert lib.all isFromBootstrapFiles (with prevStage; [ coreutils gnugrep ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      autoconf automake bash binutils-unwrapped bison brotli cmake cpio curl cyrus_sasl db
+      autoconf automake bash binutils-unwrapped bison brotli cmake cpio cyrus_sasl db
       ed expat flex gettext gmp groff icu libedit libffi libiconv libidn2 libkrb5 libssh2
       libtool libunistring libxml2 m4 ncurses nghttp2 ninja openldap openssh openssl
       patchutils pbzx perl pkg-config.pkg-config python3 python3Minimal scons serf sqlite
@@ -627,7 +638,7 @@ in
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
         autoconf automake bash binutils binutils-unwrapped bison brotli cmake cmakeMinimal
-        cpio curl cyrus_sasl db ed expat flex gettext gmp groff icu libedit libffi libiconv
+        cpio cyrus_sasl db ed expat flex gettext gmp groff icu libedit libffi libiconv
         libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4 ncurses nghttp2 ninja
         openldap openssh openssl patchutils pbzx perl pkg-config python3 python3Minimal
         scons sed serf sharutils sqlite subversion sysctl texinfo unzip which xz zlib zstd;
@@ -637,6 +648,10 @@ in
         inherit (prevStage.darwin)
           CF Libsystem configd darwin-stubs dyld launchd libclosure libdispatch libobjc
           locale objc4 postLinkSignHook print-reexports rewrite-tbd signingUtils sigtool;
+
+        apple_sdk = superDarwin.apple_sdk // {
+          inherit (prevStage.darwin.apple_sdk) sdkRoot;
+        };
 
         # Avoid building unnecessary Python dependencies due to building LLVM manpages.
         cctools-llvm = superDarwin.cctools-llvm.override { enableManpages = false; };
@@ -691,7 +706,7 @@ in
     ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      brotli curl libffi libiconv libidn2 libkrb5 libssh2 libunistring libxml2 ncurses
+      brotli libffi libiconv libidn2 libkrb5 libssh2 libunistring libxml2 ncurses
       nghttp2 openssl zlib zstd
     ]);
 
@@ -719,7 +734,7 @@ in
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
         autoconf automake binutils-unwrapped bison brotli cmake cmakeMinimal coreutils
-        cpio curl cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu libedit libffi
+        cpio cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu libedit libffi
         libiconv libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4 ncurses nghttp2
         ninja openbsm openldap openpam openssh openssl patchutils pbzx perl pkg-config
         python3 python3Minimal scons serf sqlite subversion sysctl texinfo unzip which xz
@@ -735,6 +750,10 @@ in
         inherit (prevStage.darwin)
           CF binutils-unwrapped cctools configd darwin-stubs launchd libobjc libtapi locale
           objc4 print-reexports rewrite-tbd signingUtils sigtool;
+
+        apple_sdk = superDarwin.apple_sdk // {
+          inherit (prevStage.darwin.apple_sdk) sdkRoot;
+        };
       });
 
       llvmPackages = super.llvmPackages // (
@@ -773,7 +792,7 @@ in
     '';
   })
 
-  # This stage rebuilds CF and compiler-rt.
+  # This stage rebuilds CF, compiler-rt, and the sdkRoot derivation.
   #
   # CF requires:
   # - aarch64-darwin: libobjc (due to being apple_sdk.frameworks.CoreFoundation instead of swift-corefoundation)
@@ -782,7 +801,7 @@ in
     # previous stage2-Libsystem stdenv:
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
       autoconf automake binutils-unwrapped bison brotli cmake cmakeMinimal coreutils
-      cpio curl cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu libedit libidn2
+      cpio cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu libedit libidn2
       libkrb5 libssh2 libtool libunistring m4 nghttp2 ninja openbsm openldap openpam openssh
       openssl patchutils pbzx perl pkg-config.pkg-config python3 python3Minimal scons serf
       sqlite subversion sysctl.provider texinfo unzip which xz zstd
@@ -818,7 +837,7 @@ in
 
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
-        autoconf automake bash bison brotli cmake cmakeMinimal coreutils cpio curl
+        autoconf automake bash bison brotli cmake cmakeMinimal coreutils cpio
         cyrus_sasl db ed expat flex gettext gmp gnugrep groff libedit libidn2 libkrb5
         libssh2 libtool libunistring m4 ncurses nghttp2 ninja openbsm openldap openpam
         openssh openssl patchutils pbzx perl pkg-config python3 python3Minimal scons serf
@@ -905,7 +924,7 @@ in
   (prevStage:
     # previous stage2-CF stdenv:
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      autoconf automake bison brotli cmake cmakeMinimal coreutils cpio curl cyrus_sasl
+      autoconf automake bison brotli cmake cmakeMinimal coreutils cpio cyrus_sasl
       db ed expat flex gettext gmp gnugrep groff libedit libidn2 libkrb5 libssh2 libtool
       libunistring m4 ncurses nghttp2 ninja openbsm openldap openpam openssh openssl
       patchutils pbzx perl pkg-config.pkg-config python3 python3Minimal scons serf sqlite
@@ -942,7 +961,7 @@ in
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
         autoconf automake bash binutils binutils-unwrapped bison brotli cmake cmakeMinimal
-        coreutils cpio curl cyrus_sasl db ed expat flex gettext gmp gnugrep groff libedit
+        coreutils cpio cyrus_sasl db ed expat flex gettext gmp gnugrep groff libedit
         libidn2 libkrb5 libssh2 libtool libunistring m4 nghttp2 ninja openbsm openldap
         openpam openssh openssl patchutils pbzx perl pkg-config python3 python3Minimal scons
         sed serf sharutils sqlite subversion sysctl texinfo unzip which xz zstd
@@ -958,6 +977,10 @@ in
           CF Libsystem binutils binutils-unwrapped cctools cctools-llvm cctools-port configd
           darwin-stubs dyld launchd libclosure libdispatch libobjc libtapi locale objc4
           postLinkSignHook print-reexports rewrite-tbd signingUtils sigtool;
+
+        apple_sdk = superDarwin.apple_sdk // {
+          inherit (prevStage.darwin.apple_sdk) sdkRoot;
+        };
       });
 
       llvmPackages = super.llvmPackages // (
@@ -985,7 +1008,7 @@ in
   (prevStage:
     # previous stage3 stdenv:
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      autoconf automake bison brotli cmake cmakeMinimal coreutils cpio curl cyrus_sasl
+      autoconf automake bison brotli cmake cmakeMinimal coreutils cpio cyrus_sasl
       db ed expat flex gettext gmp gnugrep groff libedit libidn2 libkrb5 libssh2 libtool
       libunistring m4 nghttp2 ninja openbsm openldap openpam openssh openssl patchutils pbzx
       perl pkg-config.pkg-config python3 python3Minimal scons serf sqlite subversion
@@ -1035,6 +1058,10 @@ in
         inherit (prevStage.darwin) dyld CF Libsystem darwin-stubs
           # CF dependencies - don’t rebuild them.
           libobjc objc4;
+
+        apple_sdk = superDarwin.apple_sdk // {
+          inherit (prevStage.darwin.apple_sdk) sdkRoot;
+        };
 
         signingUtils = superDarwin.signingUtils.override {
           inherit (selfDarwin) sigtool;
@@ -1153,7 +1180,7 @@ in
   (prevStage:
     # previous stage4 stdenv:
     assert lib.all isBuiltByNixpkgsCompiler (with prevStage; [
-      bash binutils-unwrapped brotli bzip2 cpio curl diffutils ed file findutils gawk
+      bash binutils-unwrapped brotli bzip2 cpio diffutils ed file findutils gawk
       gettext gmp gnugrep gnumake gnused gnutar gzip icu libffi libiconv libidn2 libkrb5
       libssh2 libunistring libxml2 libyaml ncurses nghttp2 openbsm openpam openssl patch
       pbzx pcre python3Minimal xar xz zlib zstd
@@ -1206,7 +1233,7 @@ in
 
       extraNativeBuildInputs = lib.optionals localSystem.isAarch64 [
         prevStage.updateAutotoolsGnuConfigScriptsHook
-      ];
+      ] ++ [ prevStage.darwin.apple_sdk.sdkRoot ];
 
       extraBuildInputs = [ prevStage.darwin.CF ];
 
@@ -1293,6 +1320,7 @@ in
         dyld
         libtapi
         locale
+        apple_sdk.sdkRoot
       ]
       ++ lib.optional useAppleSDKLibs [ objc4 ]
       ++ lib.optionals doSign [ postLinkSignHook sigtool signingUtils ]);
@@ -1302,14 +1330,18 @@ in
 
       overrides = self: super: {
         inherit (prevStage)
-          bash binutils brotli bzip2 coreutils cpio curl diffutils ed file findutils gawk
+          bash binutils brotli bzip2 coreutils cpio diffutils ed file findutils gawk
           gettext gmp gnugrep gnumake gnused gnutar gzip icu libffi libiconv libidn2 libssh2
           libunistring libxml2 libyaml ncurses nghttp2 openbsm openpam openssl patch pbzx
           pcre python3Minimal xar xz zlib zstd;
 
-        darwin = super.darwin.overrideScope (_: _: {
+        darwin = super.darwin.overrideScope (_: superDarwin: {
           inherit (prevStage.darwin)
             CF ICU Libsystem darwin-stubs dyld locale libobjc libtapi rewrite-tbd xnu;
+
+          apple_sdk = superDarwin.apple_sdk // {
+            inherit (prevStage.darwin.apple_sdk) sdkRoot;
+          };
         } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
           inherit (prevStage.darwin) binutils binutils-unwrapped cctools-llvm cctools-port;
         });
