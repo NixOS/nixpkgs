@@ -615,7 +615,6 @@ broken-packages:
   - cabal-file-th # failure in job https://hydra.nixos.org/build/233224650 at 2023-09-02
   - cabal-ghc-dynflags # failure in job https://hydra.nixos.org/build/233244580 at 2023-09-02
   - cabal-ghci # failure in job https://hydra.nixos.org/build/233239354 at 2023-09-02
-  - cabal-gild # failure in job https://hydra.nixos.org/build/252731019 at 2024-03-16
   - cabal-graphdeps # failure in job https://hydra.nixos.org/build/233221966 at 2023-09-02
   - cabalgraph # failure in job https://hydra.nixos.org/build/233241573 at 2023-09-02
   - cabal-helper # failure in job https://hydra.nixos.org/build/252732588 at 2024-03-16
