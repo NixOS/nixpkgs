@@ -3795,6 +3795,8 @@ self: super: with self; {
 
   enum-compat = callPackage ../development/python-modules/enum-compat { };
 
+  enum-tools = callPackage ../development/python-modules/enum-tools { };
+
   env-canada = callPackage ../development/python-modules/env-canada { };
 
   environmental-override = callPackage ../development/python-modules/environmental-override { };
