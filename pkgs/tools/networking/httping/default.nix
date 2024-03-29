@@ -6,18 +6,20 @@
   lib,
   libintl,
   ncurses,
+  nix-update-script,
   openssl,
   stdenv,
+  testers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "httping";
   version = "2.9";
 
   src = fetchFromGitHub {
     owner = "folkertvanheusden";
     repo = "HTTPing";
-    rev = "refs/tags/v${version}";
+    rev = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-aExTXXtW03UKMuMjTMx1k/MUpcRMh1PdSPkDGH+Od70=";
   };
 
@@ -47,6 +49,14 @@ stdenv.mkDerivation rec {
     "PREFIX="
   ];
 
+  passthru = {
+    tests.version = testers.testVersion {
+      command = "${lib.getExe finalAttrs.finalPackage} --version";
+      package = finalAttrs.finalPackage;
+    };
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     description = "ping with HTTP requests";
     homepage = "https://vanheusden.com/httping";
@@ -61,4 +71,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = platforms.linux ++ platforms.darwin;
   };
-}
+})
