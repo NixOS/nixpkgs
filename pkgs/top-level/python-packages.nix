@@ -9607,6 +9607,8 @@ self: super: with self; {
 
   pyproject-hooks = callPackage ../development/python-modules/pyproject-hooks { };
 
+  pyproject-parser = callPackage ../development/python-modules/pyproject-parser { };
+
   pypsrp = callPackage ../development/python-modules/pypsrp { };
 
   phpserialize = callPackage ../development/python-modules/phpserialize { };
