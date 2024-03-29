@@ -32,11 +32,11 @@ buildPythonPackage rec {
     hash = "sha256-/2WEaM9ZM9dbMA73XADOE2u5r3SfMAyjH8isOsXaJhE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     colorlog
     logging-journald
     setuptools
