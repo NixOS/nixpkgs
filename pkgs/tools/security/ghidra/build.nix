@@ -10,19 +10,18 @@
 , icoutils
 , xcbuild
 , protobuf
-, fetchurl
 }:
 
 let
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
-  version = "11.0";
+  version = "11.0.2";
 
   src = fetchFromGitHub {
     owner = "NationalSecurityAgency";
     repo = "Ghidra";
     rev = "Ghidra_${version}_build";
-    hash = "sha256-LVtDqgceZUrMriNy6+yK/ruBrTI8yx6hzTaPa1BTGlc=";
+    hash = "sha256-Q5nolgqBG2LFVoEeEtzEPTt/cAHubPlRIFt3SYX9z1Y=";
   };
 
   gradle = gradle_7;
@@ -92,7 +91,7 @@ HERE
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-KT+XXowCNaNfOiPzYLwbPMaF84omKFobHkkNqZ6oyUA=";
+    outputHash = "sha256-nKfJiGoZlDEpbCmYVKNZXz2PYIosCd4nPFdy3MfprHc=";
   };
 
 in stdenv.mkDerivation {
@@ -106,13 +105,6 @@ in stdenv.mkDerivation {
 
   patches = [
     ./0001-Use-protobuf-gradle-plugin.patch
-    # we use fetchurl since the fetchpatch normalization strips the whole diff
-    # https://github.com/NixOS/nixpkgs/issues/266556
-    (fetchurl {
-      name = "0002-remove-executable-bit.patch";
-      url = "https://github.com/NationalSecurityAgency/ghidra/commit/e2a945624b74e5d42dc85e9c1f992315dd154db1.diff";
-      sha256 = "07mjfl7hvag2akk65g4cknp330qlk07dgbmh20dyg9qxzmk91fyq";
-    })
   ];
 
   buildPhase = ''
@@ -123,8 +115,6 @@ in stdenv.mkDerivation {
     ln -s ${deps}/dependencies dependencies
 
     sed -i "s#mavenLocal()#mavenLocal(); maven { url '${deps}/maven' }#g" build.gradle
-
-    rm -v Ghidra/Debug/Debugger-rmi-trace/build.gradle.orig
 
     gradle --offline --no-daemon --info -Dorg.gradle.java.home=${openjdk17} buildGhidra
   '';
