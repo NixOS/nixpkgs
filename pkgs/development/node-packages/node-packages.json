@@ -90,6 +90,7 @@
 , "create-react-native-app"
 , "cspell"
 , "csslint"
+, "daisyui"
 , "dhcp"
 , "diagnostic-languageserver"
 , "diff2html-cli"
