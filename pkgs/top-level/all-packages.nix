@@ -3680,7 +3680,7 @@ with pkgs;
 
   cue = callPackage ../development/tools/cue { };
 
-  writeCueValidator = callPackage ../development/tools/cue/validator.nix { };
+  inherit (cue) writeCueValidator;
 
   cuelsp = callPackage ../development/tools/cuelsp { };
 
