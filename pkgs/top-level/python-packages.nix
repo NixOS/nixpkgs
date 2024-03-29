@@ -5496,6 +5496,8 @@ self: super: with self; {
 
   hydrawiser = callPackage ../development/python-modules/hydrawiser { };
 
+  hydrogram = callPackage ../development/python-modules/hydrogram { };
+
   hydrus-api = callPackage ../development/python-modules/hydrus-api { };
 
   hypchat = callPackage ../development/python-modules/hypchat { };
