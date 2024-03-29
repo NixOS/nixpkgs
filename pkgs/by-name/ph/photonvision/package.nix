@@ -10,16 +10,16 @@
 
 stdenv.mkDerivation rec {
   pname = "photonvision";
-  version = "2024.2.3";
+  version = "2024.3.1";
 
   src = {
     "x86_64-linux" = fetchurl {
       url = "https://github.com/PhotonVision/photonvision/releases/download/v${version}/photonvision-v${version}-linuxx64.jar";
-      hash = "sha256-45ae9sElAmN6++F9OGAvY/nUl/9UxvHtFxhetKVKfDc=";
+      hash = "sha256-t9drkGFA3IurZqWAkzEaONVJkp5JHMEFBBW50r+SD68=";
     };
     "aarch64-linux" = fetchurl {
       url = "https://github.com/PhotonVision/photonvision/releases/download/v${version}/photonvision-v${version}-linuxarm64.jar";
-      hash = "sha256-i/osKO+RAg2nFUPjBdkn3q0Id+uCSTiucfKFVVlEqgs=";
+      hash = "sha256-ninCVxse0x6lBA2NL3kwMeuHAeNzSa9rdP2dnmMNFgc=";
     };
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
