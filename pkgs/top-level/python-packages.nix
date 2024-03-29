@@ -3444,6 +3444,8 @@ self: super: with self; {
 
   dokuwiki = callPackage ../development/python-modules/dokuwiki { };
 
+  domdf-python-tools = callPackage ../development/python-modules/domdf-python-tools { };
+
   domeneshop = callPackage ../development/python-modules/domeneshop { };
 
   dominate = callPackage ../development/python-modules/dominate { };
