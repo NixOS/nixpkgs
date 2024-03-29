@@ -1,13 +1,13 @@
 { lib
+, aiohttp
 , buildPythonPackage
-, coverage
 , cryptography
 , fetchPypi
-, flake8
 , http-ece
 , mock
 , py-vapid
 , pytestCheckHook
+, pythonOlder
 , requests
 , setuptools
 , six
@@ -15,12 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pywebpush";
-  version = "1.14.1";
+  version = "2.0.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+I1+K/XofGFt+wS4yVwRkjjFEWWbAvc17nfMFoQoVe4=";
+    hash = "sha256-A8zD6XW2A3S3Y0xJVZVha+Ujvyx9oNl26E/amsjGMwE=";
   };
 
   build-system = [
@@ -28,6 +30,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    aiohttp
     cryptography
     http-ece
     py-vapid
@@ -36,8 +39,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    coverage
-    flake8
     mock
     pytestCheckHook
   ];
