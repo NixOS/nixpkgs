@@ -71,13 +71,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "2481";
+  version = "2568";
 
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "llama.cpp";
     rev = "refs/tags/b${finalAttrs.version}";
-    hash = "sha256-40GSZZEnjM9L9KVVKdSKtBoSRy996l98ORM4NeltsSM=";
+    hash = "sha256-yBlLChtzfAi2TAGUO1zdnpHCvi5YDCzjdflQgTWh98Y=";
   };
 
   postPatch = ''
@@ -107,7 +107,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (cmakeBool "BUILD_SHARED_LIBS" true)
     (cmakeBool "LLAMA_BLAS" blasSupport)
     (cmakeBool "LLAMA_CLBLAST" openclSupport)
-    (cmakeBool "LLAMA_CUBLAS" cudaSupport)
+    (cmakeBool "LLAMA_CUDA" cudaSupport)
     (cmakeBool "LLAMA_HIPBLAS" rocmSupport)
     (cmakeBool "LLAMA_METAL" metalSupport)
     (cmakeBool "LLAMA_MPI" mpiSupport)
@@ -131,7 +131,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
         # Should likely use `rocmPackages.clr.gpuTargets`.
         "-DAMDGPU_TARGETS=gfx803;gfx900;gfx906:xnack-;gfx908:xnack-;gfx90a:xnack+;gfx90a:xnack-;gfx940;gfx941;gfx942;gfx1010;gfx1012;gfx1030;gfx1100;gfx1101;gfx1102"
       ]
-      ++ optionals metalSupport [ (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1") ];
+      ++ optionals metalSupport [
+        (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")
+        (cmakeBool "LLAMA_METAL_EMBED_LIBRARY" true)
+      ];
 
   # upstream plans on adding targets at the cmakelevel, remove those
   # additional steps after that
