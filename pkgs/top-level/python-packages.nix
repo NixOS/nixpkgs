@@ -4689,6 +4689,8 @@ self: super: with self; {
 
   gevent-websocket = callPackage ../development/python-modules/gevent-websocket { };
 
+  gffutils = callPackage ../development/python-modules/gffutils { };
+
   gflags = callPackage ../development/python-modules/gflags { };
 
   gflanguages = callPackage ../development/python-modules/gflanguages { };
