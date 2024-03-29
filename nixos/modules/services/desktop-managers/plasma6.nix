@@ -286,6 +286,7 @@ in {
     };
 
     programs.kdeconnect.package = kdePackages.kdeconnect-kde;
+    programs.partition-manager.package = kdePackages.partitionmanager;
 
     # FIXME: ugly hack. See #292632 for details.
     system.userActivationScripts.rebuildSycoca = activationScript;
