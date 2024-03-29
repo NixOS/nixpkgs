@@ -4177,6 +4177,8 @@ self: super: with self; {
 
   flake8-blind-except = callPackage ../development/python-modules/flake8-blind-except { };
 
+  flake8-builtins = callPackage ../development/python-modules/flake8-builtins { };
+
   flake8-bugbear = callPackage ../development/python-modules/flake8-bugbear { };
 
   flake8 = callPackage ../development/python-modules/flake8 { };
