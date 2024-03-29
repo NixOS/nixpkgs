@@ -86,6 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "ROCBLAS_TENSILE_LIBRARY_DIR" "lib/rocblas")
     (lib.cmakeBool "BUILD_CLIENTS_TESTS" buildTests)
     (lib.cmakeBool "BUILD_CLIENTS_BENCHMARKS" buildBenchmarks)
+    # rocblas header files are not installed unless we set this
+    (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
   ] ++ lib.optionals buildTensile [
     (lib.cmakeBool "BUILD_WITH_PIP" false)
     (lib.cmakeFeature "Tensile_LOGIC" tensileLogic)
