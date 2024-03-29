@@ -713,6 +713,7 @@
   ./services/misc/homepage-dashboard.nix
   ./services/misc/ihaskell.nix
   ./services/misc/input-remapper.nix
+  ./services/misc/invidious-router.nix
   ./services/misc/irkerd.nix
   ./services/misc/jackett.nix
   ./services/misc/jellyfin.nix
