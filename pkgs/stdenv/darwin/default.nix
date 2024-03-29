@@ -500,7 +500,7 @@ in
     assert lib.all isFromBootstrapFiles (with prevStage; [ coreutils gnugrep ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      autoconf automake bash binutils-unwrapped bison brotli cmake cpio curl cyrus_sasl db
+      autoconf automake bash binutils-unwrapped bison brotli cmake cpio cyrus_sasl db
       ed expat flex gettext gmp groff icu libedit libffi libiconv libidn2 libkrb5 libssh2
       libtool libunistring libxml2 m4 ncurses nghttp2 ninja openldap openssh openssl
       patchutils pbzx perl pkg-config.pkg-config python3 python3Minimal scons serf sqlite
@@ -527,7 +527,7 @@ in
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
         autoconf automake bash binutils binutils-unwrapped bison brotli cmake cmakeMinimal
-        coreutils cpio curl cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu
+        coreutils cpio cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu
         libedit libffi libiconv libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4
         ncurses nghttp2 ninja openldap openssh openssl patchutils pbzx perl pkg-config
         python3Minimal scons sed serf sharutils sqlite subversion texinfo unzip which xz
@@ -599,7 +599,7 @@ in
     assert lib.all isFromBootstrapFiles (with prevStage; [ coreutils gnugrep ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      autoconf automake bash binutils-unwrapped bison brotli cmake cpio curl cyrus_sasl db
+      autoconf automake bash binutils-unwrapped bison brotli cmake cpio cyrus_sasl db
       ed expat flex gettext gmp groff icu libedit libffi libiconv libidn2 libkrb5 libssh2
       libtool libunistring libxml2 m4 ncurses nghttp2 ninja openldap openssh openssl
       patchutils pbzx perl pkg-config.pkg-config python3 python3Minimal scons serf sqlite
@@ -627,7 +627,7 @@ in
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
         autoconf automake bash binutils binutils-unwrapped bison brotli cmake cmakeMinimal
-        cpio curl cyrus_sasl db ed expat flex gettext gmp groff icu libedit libffi libiconv
+        cpio cyrus_sasl db ed expat flex gettext gmp groff icu libedit libffi libiconv
         libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4 ncurses nghttp2 ninja
         openldap openssh openssl patchutils pbzx perl pkg-config python3 python3Minimal
         scons sed serf sharutils sqlite subversion sysctl texinfo unzip which xz zlib zstd;
@@ -691,7 +691,7 @@ in
     ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      brotli curl libffi libiconv libidn2 libkrb5 libssh2 libunistring libxml2 ncurses
+      brotli libffi libiconv libidn2 libkrb5 libssh2 libunistring libxml2 ncurses
       nghttp2 openssl zlib zstd
     ]);
 
@@ -719,7 +719,7 @@ in
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
         autoconf automake binutils-unwrapped bison brotli cmake cmakeMinimal coreutils
-        cpio curl cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu libedit libffi
+        cpio cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu libedit libffi
         libiconv libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4 ncurses nghttp2
         ninja openbsm openldap openpam openssh openssl patchutils pbzx perl pkg-config
         python3 python3Minimal scons serf sqlite subversion sysctl texinfo unzip which xz
@@ -782,7 +782,7 @@ in
     # previous stage2-Libsystem stdenv:
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
       autoconf automake binutils-unwrapped bison brotli cmake cmakeMinimal coreutils
-      cpio curl cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu libedit libidn2
+      cpio cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu libedit libidn2
       libkrb5 libssh2 libtool libunistring m4 nghttp2 ninja openbsm openldap openpam openssh
       openssl patchutils pbzx perl pkg-config.pkg-config python3 python3Minimal scons serf
       sqlite subversion sysctl.provider texinfo unzip which xz zstd
@@ -818,7 +818,7 @@ in
 
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
-        autoconf automake bash bison brotli cmake cmakeMinimal coreutils cpio curl
+        autoconf automake bash bison brotli cmake cmakeMinimal coreutils cpio
         cyrus_sasl db ed expat flex gettext gmp gnugrep groff libedit libidn2 libkrb5
         libssh2 libtool libunistring m4 ncurses nghttp2 ninja openbsm openldap openpam
         openssh openssl patchutils pbzx perl pkg-config python3 python3Minimal scons serf
@@ -905,7 +905,7 @@ in
   (prevStage:
     # previous stage2-CF stdenv:
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      autoconf automake bison brotli cmake cmakeMinimal coreutils cpio curl cyrus_sasl
+      autoconf automake bison brotli cmake cmakeMinimal coreutils cpio cyrus_sasl
       db ed expat flex gettext gmp gnugrep groff libedit libidn2 libkrb5 libssh2 libtool
       libunistring m4 ncurses nghttp2 ninja openbsm openldap openpam openssh openssl
       patchutils pbzx perl pkg-config.pkg-config python3 python3Minimal scons serf sqlite
@@ -942,7 +942,7 @@ in
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
         autoconf automake bash binutils binutils-unwrapped bison brotli cmake cmakeMinimal
-        coreutils cpio curl cyrus_sasl db ed expat flex gettext gmp gnugrep groff libedit
+        coreutils cpio cyrus_sasl db ed expat flex gettext gmp gnugrep groff libedit
         libidn2 libkrb5 libssh2 libtool libunistring m4 nghttp2 ninja openbsm openldap
         openpam openssh openssl patchutils pbzx perl pkg-config python3 python3Minimal scons
         sed serf sharutils sqlite subversion sysctl texinfo unzip which xz zstd
@@ -985,7 +985,7 @@ in
   (prevStage:
     # previous stage3 stdenv:
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      autoconf automake bison brotli cmake cmakeMinimal coreutils cpio curl cyrus_sasl
+      autoconf automake bison brotli cmake cmakeMinimal coreutils cpio cyrus_sasl
       db ed expat flex gettext gmp gnugrep groff libedit libidn2 libkrb5 libssh2 libtool
       libunistring m4 nghttp2 ninja openbsm openldap openpam openssh openssl patchutils pbzx
       perl pkg-config.pkg-config python3 python3Minimal scons serf sqlite subversion
@@ -1153,7 +1153,7 @@ in
   (prevStage:
     # previous stage4 stdenv:
     assert lib.all isBuiltByNixpkgsCompiler (with prevStage; [
-      bash binutils-unwrapped brotli bzip2 cpio curl diffutils ed file findutils gawk
+      bash binutils-unwrapped brotli bzip2 cpio diffutils ed file findutils gawk
       gettext gmp gnugrep gnumake gnused gnutar gzip icu libffi libiconv libidn2 libkrb5
       libssh2 libunistring libxml2 libyaml ncurses nghttp2 openbsm openpam openssl patch
       pbzx pcre python3Minimal xar xz zlib zstd
@@ -1302,7 +1302,7 @@ in
 
       overrides = self: super: {
         inherit (prevStage)
-          bash binutils brotli bzip2 coreutils cpio curl diffutils ed file findutils gawk
+          bash binutils brotli bzip2 coreutils cpio diffutils ed file findutils gawk
           gettext gmp gnugrep gnumake gnused gnutar gzip icu libffi libiconv libidn2 libssh2
           libunistring libxml2 libyaml ncurses nghttp2 openbsm openpam openssl patch pbzx
           pcre python3Minimal xar xz zlib zstd;
