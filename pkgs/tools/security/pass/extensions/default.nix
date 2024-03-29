@@ -1,6 +1,8 @@
 { pkgs, ... }:
 
-with pkgs;
+let
+  inherit (pkgs) callPackage python3Packages;
+in
 
 {
   pass-audit = callPackage ./audit {
