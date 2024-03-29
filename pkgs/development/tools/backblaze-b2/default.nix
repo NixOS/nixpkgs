@@ -1,32 +1,30 @@
-{ lib, python3Packages, fetchPypi, installShellFiles, testers, backblaze-b2
+{ lib
+, python3Packages
+, fetchFromGitHub
+, installShellFiles
+, testers
+, backblaze-b2
 # executable is renamed to backblaze-b2 by default, to avoid collision with boost's 'b2'
 , execName ? "backblaze-b2"
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
-  version = "3.15.0";
-  format = "setuptools";
+  version = "3.17.0";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit version;
-    pname = "b2";
-    hash = "sha256-10c2zddALy7+CGxhjUC6tMLQcZ3WmLeRY1bNKWunAys=";
+  src = fetchFromGitHub {
+    owner = "Backblaze";
+    repo = "B2_Command_Line_Tool";
+    rev = "v${version}";
+    hash = "sha256-Xj7RNe6XM2atijhVasILWRdTzu6xuKBzMllM1z1mFLY=";
   };
-
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace 'phx-class-registry==4.0.5' 'phx-class-registry'
-    substituteInPlace requirements.txt \
-      --replace 'tabulate==0.8.10' 'tabulate'
-    substituteInPlace setup.py \
-      --replace 'setuptools_scm<6.0' 'setuptools_scm'
-  '';
 
   nativeBuildInputs = [
     installShellFiles
-    python3Packages.setuptools-scm
-  ];
+  ] ++ (with python3Packages; [
+    pdm-backend
+  ]);
 
   propagatedBuildInputs = with python3Packages; [
     argcomplete
@@ -46,31 +44,24 @@ python3Packages.buildPythonApplication rec {
     backoff
     more-itertools
     pexpect
-
-    # backblaze-b2 requires pytest 7 to complete tests.
-    (pytestCheckHook.override { pytest = pytest_7; })
+    pytestCheckHook
+    pytest-xdist
   ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
-  disabledTests = [
-    # require network
-    "test_files_headers"
-    "test_integration"
-
-    # fixed by https://github.com/Backblaze/B2_Command_Line_Tool/pull/915
-    "TestRmConsoleTool"
-  ];
-
   disabledTestPaths = [
     # requires network
     "test/integration/test_b2_command_line.py"
+    "test/integration/test_tqdm_closer.py"
 
     # it's hard to make it work on nix
     "test/integration/test_autocomplete.py"
-    "test/unit/console_tool"
+    "test/unit/test_console_tool.py"
+    # this one causes successive tests to fail
+    "test/unit/_cli/test_autocomplete_cache.py"
   ];
 
   postInstall = lib.optionalString (execName != "b2") ''
@@ -88,7 +79,9 @@ python3Packages.buildPythonApplication rec {
   }).overrideAttrs (old: {
     # workaround the error: Permission denied: '/homeless-shelter'
     # backblaze-b2 fails to create a 'b2' directory under the XDG config path
-    HOME = "$(mktemp -d)";
+    preHook = ''
+      export HOME=$(mktemp -d)
+    '';
   });
 
   meta = with lib; {
