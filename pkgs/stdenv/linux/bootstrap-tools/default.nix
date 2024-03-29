@@ -1,6 +1,7 @@
-{ system, bootstrapFiles, extraAttrs }:
+# no lib.id so we use (args: args) as a substitute
+{ system, bootstrapFiles, derivationArgTransform ? (args: args), extraAttrs }:
 
-derivation ({
+derivation (derivationArgTransform ({
   name = "bootstrap-tools";
 
   builder = bootstrapFiles.busybox;
@@ -16,4 +17,4 @@ derivation ({
   langCC = true;
   isGNU = true;
   hardeningUnsupportedFlags = [ "fortify3" "zerocallusedregs" "trivialautovarinit" ];
-} // extraAttrs)
+} // extraAttrs))

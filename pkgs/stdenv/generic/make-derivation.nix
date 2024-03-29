@@ -584,7 +584,7 @@ extendDerivation
      # This allows easy building and distributing of all derivations
      # needed to enter a nix-shell with
      #   nix-build shell.nix -A inputDerivation
-     inputDerivation = derivation (derivationArg // {
+     inputDerivation = derivation (stdenv.derivationArgTransform (derivationArg // {
        # Add a name in case the original drv didn't have one
        name = derivationArg.name or "inputDerivation";
        # This always only has one output
@@ -616,7 +616,7 @@ extendDerivation
        allowedRequisites = null;
        disallowedReferences = [ ];
        disallowedRequisites = [ ];
-     });
+     }));
 
      inherit passthru overrideAttrs;
      inherit meta;
@@ -625,7 +625,7 @@ extendDerivation
    # should be made available to Nix expressions using the
    # derivation (e.g., in assertions).
    passthru)
-  (derivation (derivationArg // optionalAttrs envIsExportable checkedEnv));
+  (derivation (stdenv.derivationArgTransform (derivationArg // optionalAttrs envIsExportable checkedEnv)));
 
 in
 {

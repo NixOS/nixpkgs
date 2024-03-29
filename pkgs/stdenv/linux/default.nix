@@ -139,8 +139,8 @@ let
 
 
   # Download and unpack the bootstrap tools (coreutils, GCC, Glibc, ...).
-  bootstrapTools = (import (if localSystem.libc == "musl" then ./bootstrap-tools-musl else ./bootstrap-tools) {
-    inherit system bootstrapFiles;
+  bootstrapToolsFun = derivationArgTransform: (import (if localSystem.libc == "musl" then ./bootstrap-tools-musl else ./bootstrap-tools) {
+    inherit system bootstrapFiles derivationArgTransform;
     extraAttrs = lib.optionalAttrs config.contentAddressedByDefault {
       __contentAddressed = true;
       outputHashAlgo = "sha256";
@@ -158,6 +158,8 @@ let
     { name, overrides ? (self: super: {}), extraNativeBuildInputs ? [] }:
 
     let
+
+      bootstrapTools = bootstrapToolsFun prevStage.stdenv.derivationArgTransform;
 
       thisStdenv = import ../generic {
         name = "${name}-stdenv-linux";
@@ -178,6 +180,8 @@ let
         fetchurlBoot = import ../../build-support/fetchurl/boot.nix {
           inherit system;
         };
+
+        derivationArgTransform = prevStage.stdenv.derivationArgTransform;
 
         cc = if prevStage.gcc-unwrapped == null
              then null
@@ -212,21 +216,33 @@ let
     };
 
 in
-  assert bootstrapTools.passthru.isFromBootstrapFiles or false;  # sanity check
 [
 
-  ({}: {
+  (prevStage: {
     __raw = true;
 
     gcc-unwrapped = null;
     binutils = null;
     coreutils = null;
     gnugrep = null;
+    # This fake stdenv exists solely to inject derivationArgTransform
+    # into succeeding stages. It does not get passed to cc-wrapper as
+    # buildPackages since this stage lacks a non-null gcc-unwrapped. If that
+    # ceases to be the case the conditional in stageFun must be modified.
+    stdenv = {
+      # allows us to inject a derivationArgTransform via a preceding stage
+      derivationArgTransform = prevStage.stdenv.derivationArgTransform or lib.id;
+    };
   })
 
   # Build a dummy stdenv with no GCC or working fetchurl.  This is
   # because we need a stdenv to build the GCC wrapper and fetchurl.
-  (prevStage: stageFun prevStage {
+  (prevStage:
+  let
+    bootstrapTools = bootstrapToolsFun prevStage.stdenv.derivationArgTransform;
+  in
+    assert bootstrapTools.passthru.isFromBootstrapFiles or false;  # sanity check
+    stageFun prevStage {
     name = "bootstrap-stage0";
 
     overrides = self: super: {
@@ -235,6 +251,8 @@ in
       # to refer to this stage directly, which violates the principle that each
       # stage should only access the stage that came before it.
       ccWrapperStdenv = self.stdenv;
+      # Do the same for bootstrap-tools
+      inherit bootstrapTools;
       # The Glibc include directory cannot have the same prefix as the
       # GCC include directory, since GCC gets confused otherwise (it
       # will search the Glibc headers before the GCC headers).  So
@@ -298,7 +316,7 @@ in
         enableGold = false;
       };
       inherit (prevStage)
-        ccWrapperStdenv
+        ccWrapperStdenv bootstrapTools
         gcc-unwrapped coreutils gnugrep binutils;
 
       ${localSystem.libc} = getLibc prevStage;
@@ -329,7 +347,7 @@ in
     stageFun prevStage {
       name = "bootstrap-stage-xgcc";
       overrides = final: prev: {
-        inherit (prevStage) ccWrapperStdenv coreutils gnugrep gettext bison texinfo zlib gnum4 perl patchelf;
+        inherit (prevStage) ccWrapperStdenv bootstrapTools coreutils gnugrep gettext bison texinfo zlib gnum4 perl patchelf;
         ${localSystem.libc} = getLibc prevStage;
         gmp      = prev.gmp.override { cxx = false; };
         gcc-unwrapped =
@@ -411,8 +429,8 @@ in
 
     overrides = self: super: {
       inherit (prevStage)
-        ccWrapperStdenv gettext
-        gcc-unwrapped coreutils gnugrep
+        ccWrapperStdenv bootstrapTools
+        gcc-unwrapped coreutils gnugrep gettext
         perl gnum4 bison texinfo which;
       dejagnu = super.dejagnu.overrideAttrs (a: { doCheck = false; } );
 
@@ -498,7 +516,7 @@ in
 
     overrides = self: super: rec {
       inherit (prevStage)
-        ccWrapperStdenv
+        ccWrapperStdenv bootstrapTools
         binutils coreutils gnugrep gettext
         perl patchelf linuxHeaders gnum4 bison libidn2 libunistring libxcrypt;
         # We build a special copy of libgmp which doesn't use libstdc++, because
@@ -542,7 +560,9 @@ in
       # because gcc (since JAR support) already depends on zlib, and
       # then if we already have a zlib we want to use that for the
       # other purposes (binutils and top-level pkgs) too.
-      inherit (prevStage) gettext gnum4 bison perl texinfo zlib linuxHeaders libidn2 libunistring;
+      inherit (prevStage)
+        bootstrapTools
+        gettext gnum4 bison perl texinfo zlib linuxHeaders libidn2 libunistring;
       ${localSystem.libc} = getLibc prevStage;
       binutils = super.binutils.override {
         # Don't use stdenv's shell but our own
@@ -589,6 +609,9 @@ in
   # binutils built.
   #
   (prevStage:
+  let
+    bootstrapTools = prevStage.bootstrapTools;
+  in
     # previous stage4 stdenv; see stage3 comment regarding gcc,
     # which applies here as well.
     assert isBuiltByNixpkgsCompiler prevStage.binutils-unwrapped;
@@ -622,7 +645,7 @@ in
 
       shell = cc.shell;
 
-      inherit (prevStage.stdenv) fetchurlBoot;
+      inherit (prevStage.stdenv) fetchurlBoot derivationArgTransform;
 
       extraAttrs = {
         inherit bootstrapTools;

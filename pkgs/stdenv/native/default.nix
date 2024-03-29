@@ -78,7 +78,7 @@ let
   # A function that builds a "native" stdenv (one that uses tools in
   # /usr etc.).
   makeStdenv =
-    { cc, fetchurl, extraPath ? [], overrides ? (self: super: { }), extraNativeBuildInputs ? [] }:
+    { cc, fetchurl, derivationArgTransform, extraPath ? [], overrides ? (self: super: { }), extraNativeBuildInputs ? [] }:
 
     import ../generic {
       buildPlatform = localSystem;
@@ -103,17 +103,19 @@ let
 
       fetchurlBoot = fetchurl;
 
-      inherit shell cc overrides config;
+      inherit shell cc overrides config derivationArgTransform;
     };
 
 in
 
 [
 
-  ({}: rec {
+  (prevStage: rec {
     __raw = true;
 
     stdenv = makeStdenv {
+      # allows us to inject a derivationArgTransform via a preceding stage
+      derivationArgTransform = prevStage.stdenv.derivationArgTransform or lib.id;
       cc = null;
       fetchurl = null;
     };
@@ -152,6 +154,7 @@ in
     inherit config overlays;
     stdenv = makeStdenv {
       inherit (prevStage) cc fetchurl;
+      inherit (prevStage.stdenv) derivationArgTransform;
       overrides = prev: final: { inherit (prevStage) fetchurl; };
     } // {
       inherit (prevStage) fetchurl;
@@ -163,7 +166,7 @@ in
   (prevStage: {
     inherit config overlays;
     stdenv = makeStdenv {
-      inherit (prevStage.stdenv) cc fetchurl;
+      inherit (prevStage.stdenv) cc fetchurl derivationArgTransform;
       extraPath = [ prevStage.xz ];
       overrides = self: super: { inherit (prevStage) fetchurl xz; };
       extraNativeBuildInputs = if localSystem.isLinux then [ prevStage.patchelf ] else [];
