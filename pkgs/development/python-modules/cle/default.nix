@@ -4,9 +4,9 @@
 , cffi
 , fetchFromGitHub
 , minidump
-, nose
 , pefile
 , pyelftools
+, pynose
 , pytestCheckHook
 , pythonOlder
 , pyvex
@@ -58,7 +58,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    nose
+    pynose
     pytestCheckHook
   ];
 
