@@ -46,7 +46,7 @@ If a particular lock file is present, it is a strong indication of which package
 It's better to try to use a Nix tool that understand the lock file.
 Using a different tool might give you hard to understand error because different packages have been installed.
 An example of problems that could arise can be found [here](https://github.com/NixOS/nixpkgs/pull/126629).
-Upstream use NPM, but this is an attempt to package it with `yarn2nix` (that uses yarn.lock).
+Upstream use npm, but this is an attempt to package it with `yarn2nix` (that uses yarn.lock).
 
 Using a different tool forces to commit a lock file to the repository.
 Those files are fairly large, so when packaging for nixpkgs, this approach does not scale well.
@@ -54,8 +54,8 @@ Those files are fairly large, so when packaging for nixpkgs, this approach does 
 Exceptions to this rule are:
 
 - When you encounter one of the bugs from a Nix tool. In each of the tool specific instructions, known problems will be detailed. If you have a problem with a particular tool, then it's best to try another tool, even if this means you will have to recreate a lock file and commit it to nixpkgs. In general `yarn2nix` has less known problems and so a simple search in nixpkgs will reveal many yarn.lock files committed.
-- Some lock files contain particular version of a package that has been pulled off NPM for some reason. In that case, you can recreate upstream lock (by removing the original and `npm install`, `yarn`, ...) and commit this to nixpkgs.
-- The only tool that supports workspaces (a feature of NPM that helps manage sub-directories with different package.json from a single top level package.json) is `yarn2nix`. If upstream has workspaces you should try `yarn2nix`.
+- Some lock files contain particular version of a package that has been pulled off npm for some reason. In that case, you can recreate upstream lock (by removing the original and `npm install`, `yarn`, ...) and commit this to nixpkgs.
+- The only tool that supports workspaces (a feature of npm that helps manage sub-directories with different package.json from a single top level package.json) is `yarn2nix`. If upstream has workspaces you should try `yarn2nix`.
 
 ### Try to use upstream package.json {#javascript-upstream-package-json}
 
@@ -97,12 +97,12 @@ Then when building the frontend you can just symlink the node_modules directory.
 
 ## Javascript packages inside nixpkgs {#javascript-packages-nixpkgs}
 
-The [pkgs/development/node-packages](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages) folder contains a generated collection of [NPM packages](https://npmjs.com/) that can be installed with the Nix package manager.
+The [pkgs/development/node-packages](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages) folder contains a generated collection of [npm packages](https://npmjs.com/) that can be installed with the Nix package manager.
 
 As a rule of thumb, the package set should only provide _end user_ software packages, such as command-line utilities.
-Libraries should only be added to the package set if there is a non-NPM package that requires it.
+Libraries should only be added to the package set if there is a non-npm package that requires it.
 
-When it is desired to use NPM libraries in a development project, use the `node2nix` generator directly on the `package.json` configuration file of the project.
+When it is desired to use npm libraries in a development project, use the `node2nix` generator directly on the `package.json` configuration file of the project.
 
 The package set provides support for the official stable Node.js versions.
 The latest stable LTS release in `nodePackages`, as well as the latest stable current release in `nodePackages_latest`.
@@ -127,7 +127,7 @@ For example, `dat` requires `node-gyp-build`, so we override its expression in [
 
 ### Adding and Updating Javascript packages in nixpkgs {#javascript-adding-or-updating-packages}
 
-To add a package from NPM to nixpkgs:
+To add a package from npm to nixpkgs:
 
 1. Modify [pkgs/development/node-packages/node-packages.json](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages/node-packages.json) to add, update or remove package entries to have it included in `nodePackages` and `nodePackages_latest`.
 2. Run the script:
@@ -154,7 +154,7 @@ To add a package from NPM to nixpkgs:
 
 For more information about the generation process, consult the [README.md](https://github.com/svanderburg/node2nix) file of the `node2nix` tool.
 
-To update NPM packages in nixpkgs, run the same `generate.sh` script:
+To update npm packages in nixpkgs, run the same `generate.sh` script:
 
 ```sh
 ./pkgs/development/node-packages/generate.sh
@@ -307,8 +307,8 @@ See `node2nix` [docs](https://github.com/svanderburg/node2nix) for more info.
 #### Pitfalls {#javascript-node2nix-pitfalls}
 
 - If upstream package.json does not have a "version" attribute, `node2nix` will crash. You will need to add it like shown in [the package.json section](#javascript-upstream-package-json).
-- `node2nix` has some [bugs](https://github.com/svanderburg/node2nix/issues/238) related to working with lock files from NPM distributed with `nodejs_16`.
-- `node2nix` does not like missing packages from NPM. If you see something like `Cannot resolve version: vue-loader-v16@undefined` then you might want to try another tool. The package might have been pulled off of NPM.
+- `node2nix` has some [bugs](https://github.com/svanderburg/node2nix/issues/238) related to working with lock files from npm distributed with `nodejs_16`.
+- `node2nix` does not like missing packages from npm. If you see something like `Cannot resolve version: vue-loader-v16@undefined` then you might want to try another tool. The package might have been pulled off of npm.
 
 ### yarn2nix {#javascript-yarn2nix}
 
