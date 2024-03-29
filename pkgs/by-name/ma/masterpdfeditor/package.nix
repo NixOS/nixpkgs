@@ -1,17 +1,35 @@
-{ stdenv, fetchurl, sane-backends, qtbase, qtsvg, nss, autoPatchelfHook, lib, wrapQtAppsHook }:
+{ stdenv
+, fetchurl
+, sane-backends
+, nss
+, autoPatchelfHook
+, lib
+, libsForQt5
+, pkcs11helper
+}:
 
 stdenv.mkDerivation rec {
   pname = "masterpdfeditor";
-  version = "5.9.35";
+  version = "5.9.82";
 
   src = fetchurl {
     url = "https://code-industry.net/public/master-pdf-editor-${version}-qt5.x86_64.tar.gz";
-    sha256 = "sha256-c5DYS0PQemZ8Sql2KjnuMspCLDJzU95rsbuIdoxWDM0=";
+    sha256 = "sha256-CbrhhQJ0iiXz8hUJEi+/xb2ZGbunuPuIIgmCRgJhNVU=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook wrapQtAppsHook ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    libsForQt5.wrapQtAppsHook
+  ];
 
-  buildInputs = [ nss qtbase qtsvg sane-backends stdenv.cc.cc ];
+  buildInputs = with libsForQt5; [
+    nss
+    qtbase
+    qtsvg
+    sane-backends
+    stdenv.cc.cc
+    pkcs11helper
+  ];
 
   dontStrip = true;
 
@@ -22,14 +40,14 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
 
     substituteInPlace masterpdfeditor5.desktop \
-      --replace 'Exec=/opt/master-pdf-editor-5' "Exec=$out/bin" \
-      --replace 'Path=/opt/master-pdf-editor-5' "Path=$out/bin" \
-      --replace 'Icon=/opt/master-pdf-editor-5' "Icon=$out/share/pixmaps"
+      --replace-fail 'Exec=/opt/master-pdf-editor-5' "Exec=$out/bin" \
+      --replace-fail 'Path=/opt/master-pdf-editor-5' "Path=$out/bin" \
+      --replace-fail 'Icon=/opt/master-pdf-editor-5' "Icon=$out/share/pixmaps"
 
     install -Dm644 -t $out/share/pixmaps      masterpdfeditor5.png
     install -Dm644 -t $out/share/applications masterpdfeditor5.desktop
     install -Dm755 -t $p                      masterpdfeditor5
-    install -Dm644 license.txt $out/share/$name/LICENSE
+    install -Dm644 license_en.txt $out/share/$name/LICENSE
     ln -s $p/masterpdfeditor5 $out/bin/masterpdfeditor5
     cp -v -r stamps templates lang fonts $p
 
@@ -43,5 +61,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfreeRedistributable;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ cmcdragonkai ];
+    mainProgram = "masterpdfeditor5";
   };
 }
