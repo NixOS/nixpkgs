@@ -18,11 +18,11 @@ python3.pkgs.buildPythonApplication rec {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeBuildInputs = [
+  build-system = [
     makeWrapper
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     aiohttp
     colorama
     elastic-transport
