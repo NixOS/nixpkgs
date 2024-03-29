@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-error-reporting";
-  version = "1.10.0";
+  version = "1.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OyfMbjxwtrYLrXrjCVS+DFjGdGGsMsfHBrGzg66crkU=";
+    hash = "sha256-+oeVT/ag00BEObbqzkC/EazEwnrWvRURnz3gnCBbn4k=";
   };
 
   nativeBuildInputs = [
