@@ -53,11 +53,11 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/folkertvanheusden/HTTPing/releases/tag/v${finalAttrs.version}";
     description = "Ping with HTTP requests";
     homepage = "https://vanheusden.com/httping";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     longDescription = ''
       Give httping an url, and it'll show you how long it takes to connect,
       send a request and retrieve the reply (only the headers). Be aware that
@@ -66,6 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     mainProgram = "httping";
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })
