@@ -11,6 +11,8 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tinymist";
+  # Please update the corresponding vscode extension when updating
+  # this derivation.
   version = "0.11.1";
 
   src = fetchFromGitHub {
