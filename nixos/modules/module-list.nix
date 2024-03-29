@@ -362,9 +362,6 @@
   ./services/audio/spotifyd.nix
   ./services/audio/squeezelite.nix
   ./services/audio/tts.nix
-  ./services/audio/wyoming/faster-whisper.nix
-  ./services/audio/wyoming/openwakeword.nix
-  ./services/audio/wyoming/piper.nix
   ./services/audio/ympd.nix
   ./services/backup/automysqlbackup.nix
   ./services/backup/bacula.nix
@@ -588,6 +585,9 @@
   ./services/home-automation/govee2mqtt.nix
   ./services/home-automation/home-assistant.nix
   ./services/home-automation/matter-server.nix
+  ./services/home-automation/wyoming/faster-whisper.nix
+  ./services/home-automation/wyoming/openwakeword.nix
+  ./services/home-automation/wyoming/piper.nix
   ./services/home-automation/wyoming/satellite.nix
   ./services/home-automation/zigbee2mqtt.nix
   ./services/home-automation/zwave-js.nix
