@@ -3042,6 +3042,8 @@ self: super: with self; {
 
   dissononce = callPackage ../development/python-modules/dissononce { };
 
+  dist-meta = callPackage ../development/python-modules/dist-meta { };
+
   distlib = callPackage ../development/python-modules/distlib { };
 
   distorm3 = callPackage ../development/python-modules/distorm3 { };
