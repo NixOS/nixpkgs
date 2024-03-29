@@ -17,11 +17,13 @@ The `config.exs` file can be further customized following the instructions on th
 ## Initializing the database {#module-services-pleroma-initialize-db}
 
 First, the Postgresql service must be enabled in the NixOS configuration
-```
-services.postgresql = {
-  enable = true;
-  package = pkgs.postgresql_13;
-};
+```nix
+{
+  services.postgresql = {
+    enable = true;
+    package = pkgs.postgresql_13;
+  };
+}
 ```
 and activated with the usual
 ```ShellSession
@@ -38,43 +40,45 @@ $ sudo -u postgres psql -f setup.psql
 In this section we will enable the Pleroma service only locally, so its configurations can be improved incrementally.
 
 This is an example of configuration, where [](#opt-services.pleroma.configs) option contains the content of the file `config.exs`, generated [in the first section](#module-services-pleroma-generate-config), but with the secrets (database password, endpoint secret key, salts, etc.) removed. Removing secrets is important, because otherwise they will be stored publicly in the Nix store.
-```
-services.pleroma = {
-  enable = true;
-  secretConfigFile = "/var/lib/pleroma/secrets.exs";
-  configs = [
-    ''
-    import Config
+```nix
+{
+  services.pleroma = {
+    enable = true;
+    secretConfigFile = "/var/lib/pleroma/secrets.exs";
+    configs = [
+      ''
+      import Config
 
-    config :pleroma, Pleroma.Web.Endpoint,
-      url: [host: "pleroma.example.net", scheme: "https", port: 443],
-      http: [ip: {127, 0, 0, 1}, port: 4000]
+      config :pleroma, Pleroma.Web.Endpoint,
+        url: [host: "pleroma.example.net", scheme: "https", port: 443],
+        http: [ip: {127, 0, 0, 1}, port: 4000]
 
-    config :pleroma, :instance,
-      name: "Test",
-      email: "admin@example.net",
-      notify_email: "admin@example.net",
-      limit: 5000,
-      registrations_open: true
+      config :pleroma, :instance,
+        name: "Test",
+        email: "admin@example.net",
+        notify_email: "admin@example.net",
+        limit: 5000,
+        registrations_open: true
 
-    config :pleroma, :media_proxy,
-      enabled: false,
-      redirect_on_failure: true
+      config :pleroma, :media_proxy,
+        enabled: false,
+        redirect_on_failure: true
 
-    config :pleroma, Pleroma.Repo,
-      adapter: Ecto.Adapters.Postgres,
-      username: "pleroma",
-      database: "pleroma",
-      hostname: "localhost"
+      config :pleroma, Pleroma.Repo,
+        adapter: Ecto.Adapters.Postgres,
+        username: "pleroma",
+        database: "pleroma",
+        hostname: "localhost"
 
-    # Configure web push notifications
-    config :web_push_encryption, :vapid_details,
-      subject: "mailto:admin@example.net"
+      # Configure web push notifications
+      config :web_push_encryption, :vapid_details,
+        subject: "mailto:admin@example.net"
 
-    # ... TO CONTINUE ...
-    ''
-  ];
-};
+      # ... TO CONTINUE ...
+      ''
+    ];
+  };
+}
 ```
 
 Secrets must be moved into a file pointed by [](#opt-services.pleroma.secretConfigFile), in our case `/var/lib/pleroma/secrets.exs`. This file can be created copying the previously generated `config.exs` file and then removing all the settings, except the secrets. This is an example
@@ -121,60 +125,62 @@ $ pleroma_ctl user new <nickname> <email>  --admin --moderator --password <passw
 
 In this configuration, Pleroma is listening only on the local port 4000. Nginx can be configured as a Reverse Proxy, for forwarding requests from public ports to the Pleroma service. This is an example of configuration, using
 [Let's Encrypt](https://letsencrypt.org/) for the TLS certificates
-```
-security.acme = {
-  email = "root@example.net";
-  acceptTerms = true;
-};
+```nix
+{
+  security.acme = {
+    email = "root@example.net";
+    acceptTerms = true;
+  };
 
-services.nginx = {
-  enable = true;
-  addSSL = true;
+  services.nginx = {
+    enable = true;
+    addSSL = true;
 
-  recommendedTlsSettings = true;
-  recommendedOptimisation = true;
-  recommendedGzipSettings = true;
+    recommendedTlsSettings = true;
+    recommendedOptimisation = true;
+    recommendedGzipSettings = true;
 
-  recommendedProxySettings = false;
-  # NOTE: if enabled, the NixOS proxy optimizations will override the Pleroma
-  # specific settings, and they will enter in conflict.
+    recommendedProxySettings = false;
+    # NOTE: if enabled, the NixOS proxy optimizations will override the Pleroma
+    # specific settings, and they will enter in conflict.
 
-  virtualHosts = {
-    "pleroma.example.net" = {
-      http2 = true;
-      enableACME = true;
-      forceSSL = true;
+    virtualHosts = {
+      "pleroma.example.net" = {
+        http2 = true;
+        enableACME = true;
+        forceSSL = true;
 
-      locations."/" = {
-        proxyPass = "http://127.0.0.1:4000";
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:4000";
 
-        extraConfig = ''
-          etag on;
-          gzip on;
+          extraConfig = ''
+            etag on;
+            gzip on;
 
-          add_header 'Access-Control-Allow-Origin' '*' always;
-          add_header 'Access-Control-Allow-Methods' 'POST, PUT, DELETE, GET, PATCH, OPTIONS' always;
-          add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type, Idempotency-Key' always;
-          add_header 'Access-Control-Expose-Headers' 'Link, X-RateLimit-Reset, X-RateLimit-Limit, X-RateLimit-Remaining, X-Request-Id' always;
-          if ($request_method = OPTIONS) {
-            return 204;
-          }
-          add_header X-XSS-Protection "1; mode=block";
-          add_header X-Permitted-Cross-Domain-Policies none;
-          add_header X-Frame-Options DENY;
-          add_header X-Content-Type-Options nosniff;
-          add_header Referrer-Policy same-origin;
-          add_header X-Download-Options noopen;
-          proxy_http_version 1.1;
-          proxy_set_header Upgrade $http_upgrade;
-          proxy_set_header Connection "upgrade";
-          proxy_set_header Host $host;
+            add_header 'Access-Control-Allow-Origin' '*' always;
+            add_header 'Access-Control-Allow-Methods' 'POST, PUT, DELETE, GET, PATCH, OPTIONS' always;
+            add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type, Idempotency-Key' always;
+            add_header 'Access-Control-Expose-Headers' 'Link, X-RateLimit-Reset, X-RateLimit-Limit, X-RateLimit-Remaining, X-Request-Id' always;
+            if ($request_method = OPTIONS) {
+              return 204;
+            }
+            add_header X-XSS-Protection "1; mode=block";
+            add_header X-Permitted-Cross-Domain-Policies none;
+            add_header X-Frame-Options DENY;
+            add_header X-Content-Type-Options nosniff;
+            add_header Referrer-Policy same-origin;
+            add_header X-Download-Options noopen;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+            proxy_set_header Host $host;
 
-          client_max_body_size 16m;
-          # NOTE: increase if users need to upload very big files
-        '';
+            client_max_body_size 16m;
+            # NOTE: increase if users need to upload very big files
+          '';
+        };
       };
     };
   };
-};
+}
 ```

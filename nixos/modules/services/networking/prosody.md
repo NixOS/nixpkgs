@@ -25,25 +25,27 @@ A good configuration to start with, including a
 [Multi User Chat (MUC)](https://xmpp.org/extensions/xep-0045.html)
 endpoint as well as a [HTTP File Upload](https://xmpp.org/extensions/xep-0363.html)
 endpoint will look like this:
-```
-services.prosody = {
-  enable = true;
-  admins = [ "root@example.org" ];
-  ssl.cert = "/var/lib/acme/example.org/fullchain.pem";
-  ssl.key = "/var/lib/acme/example.org/key.pem";
-  virtualHosts."example.org" = {
-      enabled = true;
-      domain = "example.org";
-      ssl.cert = "/var/lib/acme/example.org/fullchain.pem";
-      ssl.key = "/var/lib/acme/example.org/key.pem";
+```nix
+{
+  services.prosody = {
+    enable = true;
+    admins = [ "root@example.org" ];
+    ssl.cert = "/var/lib/acme/example.org/fullchain.pem";
+    ssl.key = "/var/lib/acme/example.org/key.pem";
+    virtualHosts."example.org" = {
+        enabled = true;
+        domain = "example.org";
+        ssl.cert = "/var/lib/acme/example.org/fullchain.pem";
+        ssl.key = "/var/lib/acme/example.org/key.pem";
+    };
+    muc = [ {
+        domain = "conference.example.org";
+    } ];
+    uploadHttp = {
+        domain = "upload.example.org";
+    };
   };
-  muc = [ {
-      domain = "conference.example.org";
-  } ];
-  uploadHttp = {
-      domain = "upload.example.org";
-  };
-};
+}
 ```
 
 ## Let's Encrypt Configuration {#module-services-prosody-letsencrypt}
@@ -57,16 +59,18 @@ certificate by leveraging the ACME
 
 Provided the setup detailed in the previous section, you'll need the following acme configuration to generate
 a TLS certificate for the three endponits:
-```
-security.acme = {
-  email = "root@example.org";
-  acceptTerms = true;
-  certs = {
-    "example.org" = {
-      webroot = "/var/www/example.org";
-      email = "root@example.org";
-      extraDomainNames = [ "conference.example.org" "upload.example.org" ];
+```nix
+{
+  security.acme = {
+    email = "root@example.org";
+    acceptTerms = true;
+    certs = {
+      "example.org" = {
+        webroot = "/var/www/example.org";
+        email = "root@example.org";
+        extraDomainNames = [ "conference.example.org" "upload.example.org" ];
+      };
     };
   };
-};
+}
 ```

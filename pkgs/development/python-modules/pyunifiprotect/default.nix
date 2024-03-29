@@ -13,6 +13,7 @@
 , orjson
 , packaging
 , pillow
+, platformdirs
 , poetry-core
 , py
 , pydantic
@@ -32,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "pyunifiprotect";
-  version = "5.0.2";
+  version = "5.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -41,22 +42,22 @@ buildPythonPackage rec {
     owner = "briis";
     repo = "pyunifiprotect";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bZjfpatw4lcOgMCqung/DMfRijxwtuIht6QusIYaCQ0=";
+    hash = "sha256-7D6/mIU3M4dfIa+lCgcc3APKVPCsZei+4Er+sxIxcHo=";
   };
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--strict-markers -ra -Wd --ignore=.* --no-cov-on-fail --cov=pyunifiprotect --cov-append --maxfail=10 -n=auto" ""
+      --replace-fail "--strict-markers -ra -Wd --ignore=.* --no-cov-on-fail --cov=pyunifiprotect --cov-append --maxfail=10 -n=auto" ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiofiles
     aiohttp
     aioshutil
@@ -64,6 +65,7 @@ buildPythonPackage rec {
     orjson
     packaging
     pillow
+    platformdirs
     pydantic
     pyjwt
     pytz

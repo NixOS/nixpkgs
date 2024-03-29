@@ -16,24 +16,28 @@ To use one or more CUDA packages in an expression, give the expression a `cudaPa
 , cudaSupport ? config.cudaSupport
 , cudaPackages ? { }
 , ...
-}:
+}: {}
 ```
 
 When using `callPackage`, you can choose to pass in a different variant, e.g.
 when a different version of the toolkit suffices
 ```nix
-mypkg = callPackage { cudaPackages = cudaPackages_11_5; }
+{
+  mypkg = callPackage { cudaPackages = cudaPackages_11_5; };
+}
 ```
 
 If another version of say `cudnn` or `cutensor` is needed, you can override the
 package set to make it the default. This guarantees you get a consistent package
 set.
 ```nix
-mypkg = let
-  cudaPackages = cudaPackages_11_5.overrideScope (final: prev: {
-    cudnn = prev.cudnn_8_3;
-  }});
-in callPackage { inherit cudaPackages; };
+{
+  mypkg = let
+    cudaPackages = cudaPackages_11_5.overrideScope (final: prev: {
+      cudnn = prev.cudnn_8_3;
+    });
+  in callPackage { inherit cudaPackages; };
+}
 ```
 
 The CUDA NVCC compiler requires flags to determine which hardware you

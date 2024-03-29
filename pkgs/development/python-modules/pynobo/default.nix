@@ -2,21 +2,26 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pynobo";
-  version = "1.7.0";
-  format = "setuptools";
+  version = "1.8.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "echoromeo";
-    repo = pname;
+    repo = "pynobo";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LJS4NJM+f+j53YzH8LradBDzHAsOprd4F7nH1cfC3B0=";
+    hash = "sha256-Hfyf7XGleDWTKKWNlItcBFuiS3UEwsYed7v5FPRdC0w=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   # Project has no tests
   doCheck = false;

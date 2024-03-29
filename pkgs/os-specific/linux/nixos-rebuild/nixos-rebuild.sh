@@ -756,7 +756,7 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
         "-E" "NIXOS_INSTALL_BOOTLOADER=$installBootloader"
         "--collect"
         "--no-ask-password"
-        "--pty"
+        "--pipe"
         "--quiet"
         "--same-dir"
         "--service-type=exec"

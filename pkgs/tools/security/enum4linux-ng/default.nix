@@ -1,36 +1,38 @@
 { lib
-, buildPythonApplication
 , fetchFromGitHub
-, impacket
-, ldap3
-, pyyaml
+, python3
 , samba
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "enum4linux-ng";
   version = "1.3.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cddmp";
-    repo = pname;
+    repo = "enum4linux-ng";
     rev = "refs/tags/v${version}";
     hash = "sha256-O3TZcCn2kRLrMjQPVg8F5Q2ri968xRbXrdnfytfMkYM=";
   };
 
-  propagatedBuildInputs = [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = [
+    samba
+  ] ++ (with python3.pkgs; [
     impacket
     ldap3
     pyyaml
-    samba
-  ];
+  ]);
 
   # It's only a script and not a Python module. Project has no tests
   doCheck = false;
 
   meta = with lib; {
     description = "Windows/Samba enumeration tool";
-    mainProgram = "enum4linux-ng";
     longDescription = ''
       enum4linux-ng.py is a rewrite of Mark Lowe's enum4linux.pl, a tool for
       enumerating information from Windows and Samba systems.
@@ -39,5 +41,6 @@ buildPythonApplication rec {
     changelog = "https://github.com/cddmp/enum4linux-ng/releases/tag/v${version}";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "enum4linux-ng";
   };
 }
