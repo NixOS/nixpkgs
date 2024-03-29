@@ -1,7 +1,7 @@
 {
+  cmake,
   fetchFromGitHub,
-  fetchpatch,
-  fftw ? null,
+  fftw,
   gettext,
   lib,
   libintl,
@@ -14,26 +14,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "httping";
-  version = "2.9";
+  version = "3.6";
 
   src = fetchFromGitHub {
     owner = "folkertvanheusden";
     repo = "HTTPing";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-aExTXXtW03UKMuMjTMx1k/MUpcRMh1PdSPkDGH+Od70=";
+    hash = "sha256-lDgQC3VzfcLqMOQSaRZ/znMamAAGYq/9C9bHgI4G7B8=";
   };
 
-  patches = [
-    # Pull upstream fix for missing <unistd.h>
-    #   https://github.com/folkertvanheusden/HTTPing/pull/8
-    (fetchpatch {
-      name = "add-unistd.patch";
-      url = "https://github.com/folkertvanheusden/HTTPing/commit/aad3c275686344fe9a235faeac4ee3832f3aa8d5.patch";
-      hash = "sha256-bz3AMQTSfSTwUyf9WbkAFWVmFo06ei+Qd55x+RRDREY=";
-    })
-  ];
-
   nativeBuildInputs = [
+    cmake
     gettext
   ];
 
@@ -44,10 +35,15 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ];
 
-  makeFlags = [
-    "DESTDIR=$(out)"
-    "PREFIX="
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
   ];
+
+  installPhase = ''
+    runHook preInstall
+    install -D httping $out/bin/httping
+    runHook postInstall
+  '';
 
   passthru = {
     tests.version = testers.testVersion {
@@ -58,7 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "ping with HTTP requests";
+    changelog = "https://github.com/folkertvanheusden/HTTPing/releases/tag/v${finalAttrs.version}";
+    description = "Ping with HTTP requests";
     homepage = "https://vanheusden.com/httping";
     license = licenses.agpl3Only;
     longDescription = ''
@@ -69,6 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     mainProgram = "httping";
     maintainers = [ ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux;
   };
 })
