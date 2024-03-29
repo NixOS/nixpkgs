@@ -38799,8 +38799,6 @@ with pkgs;
 
   ### SCIENCE/PROGRAMMING
 
-  dafny = callPackage ../applications/science/logic/dafny { };
-
   groove = callPackage ../applications/science/programming/groove { };
 
   plm = callPackage ../applications/science/programming/plm { };
