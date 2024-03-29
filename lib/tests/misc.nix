@@ -595,6 +595,32 @@ runTests {
     ( builtins.tryEval (toIntBase10 " foo00123 ") == { success = false; value = false; } )
   ];
 
+  testParseLinuxConfig = {
+    expr = strings.parseLinuxConfig {
+      configText = ''
+        # Kernel config
+        #
+
+        CONFIG_A=y
+        CONFIG_B=m
+        CONFIG_C="some text"
+        CONFIG_LONG_NAME=n
+        CONFIG_D is not set
+        KONFIG_E=y
+        # CONFIG_F=y
+        CONFIG_G=""
+      '';
+      relaxed = true;
+    };
+    expected = {
+      CONFIG_A = "y";
+      CONFIG_B = "m";
+      CONFIG_C = "some text";
+      CONFIG_LONG_NAME = "n";
+      CONFIG_G = "";
+    };
+  };
+
 # LISTS
 
   testFilter = {
