@@ -704,6 +704,7 @@ supported-platforms:
   bytepatch:                                    [ platforms.x86 ] # due to blake3
   cpuid:                                        [ platforms.x86 ] # needs to be i386 compatible (IA-32)
   crc32c:                                       [ platforms.x86 ] # uses x86 intrinsics
+  cpython:                                      [ platforms.x86 ] # c2hs errors on glibc headers
   d3d11binding:                                 [ platforms.windows ]
   DirectSound:                                  [ platforms.windows ]
   dx9base:                                      [ platforms.windows ]
