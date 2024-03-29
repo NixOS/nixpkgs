@@ -442,6 +442,7 @@ let
     seqminer = with pkgs; [ zlib.dev bzip2 ];
     sf = with pkgs; [ gdal proj geos libtiff curl ];
     strawr = with pkgs; [ curl.dev ];
+    string2path = [ pkgs.cargo ];
     terra = with pkgs; [ gdal proj geos ];
     apcf = with pkgs; [ geos ];
     SemiCompRisks = [ pkgs.gsl ];
