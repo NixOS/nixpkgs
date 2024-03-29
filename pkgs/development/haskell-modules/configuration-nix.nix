@@ -1283,14 +1283,22 @@ self: super: builtins.intersectAttrs super {
     __onlyPropagateKnownPkgConfigModules = true;
     }) super)
       gi-javascriptcore
-      webkit2gtk3-javascriptcore
-      gi-webkit2
       gi-webkit2webextension
       gi-gtk_4_0_8
       gi-gdk_4_0_7
       gi-gsk
       gi-adwaita
       ;
+
+    webkit2gtk3-javascriptcore = lib.pipe super.webkit2gtk3-javascriptcore [
+      (addBuildDepend pkgs.xorg.libXtst)
+      (overrideCabal { __onlyPropagateKnownPkgConfigModules = true; })
+    ];
+
+    gi-webkit2 = lib.pipe super.gi-webkit2 [
+      (addBuildDepend pkgs.xorg.libXtst)
+      (overrideCabal { __onlyPropagateKnownPkgConfigModules = true; })
+    ];
 
   # Makes the mpi-hs package respect the choice of mpi implementation in Nixpkgs.
   # Also adds required test dependencies for checks to pass
