@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pubnub";
-  version = "7.4.2";
+  version = "7.4.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = "python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fmRFxSVzKN2ynuXJlpZcuIt4XIe7XHU4HSzSN1kCi2g=";
+    hash = "sha256-t3lNotfT3C2hv5AGPWZpL3wN68m8HRcjsccUz8QcY5I=";
   };
 
   nativeBuildInputs = [
