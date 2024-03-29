@@ -306,6 +306,7 @@ let
   packagesWithRDepends = {
     FactoMineR = [ self.car ];
     pander = [ self.codetools ];
+    rmsb = [ self.rstantools ];
   };
 
   packagesWithNativeBuildInputs = {
