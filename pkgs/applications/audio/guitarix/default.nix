@@ -42,12 +42,12 @@ let
   inherit (lib) optional;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guitarix";
   version = "0.44.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/guitarix/guitarix2-${version}.tar.xz";
+    url = "mirror://sourceforge/guitarix/guitarix2-${finalAttrs.version}.tar.xz";
     sha256 = "d+g9dU9RrDjFQj847rVd5bPiYSjmC1EbAtLe/PNubBg=";
   };
 
@@ -145,4 +145,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ astsmtl goibhniu ];
     platforms = platforms.linux;
   };
-}
+})
