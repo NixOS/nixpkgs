@@ -23,6 +23,7 @@ let
     pulseSupport = false;
     sdlSupport = false;
     jackSupport = false;
+    pipewireSupport = false;
     gtkSupport = false;
     vncSupport = false;
     smartcardSupport = false;

@@ -1,14 +1,26 @@
 diff --git a/meson.build b/meson.build
-index 96de1a6ef9..908d841f6a 100644
+index c9c3217ba4..1a8de03f4e 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -420,8 +420,7 @@ zlib = dependency('zlib', required: true, kwargs: static_kwargs)
+@@ -986,7 +986,8 @@ zlib = dependency('zlib', required: true)
  libaio = not_found
  if not get_option('linux_aio').auto() or have_block
    libaio = cc.find_library('aio', has_headers: ['libaio.h'],
--                           required: get_option('linux_aio'),
--                           kwargs: static_kwargs)
-+                           required: get_option('linux_aio'))
+-                           required: get_option('linux_aio'))
++                           required: get_option('linux_aio'),
++                           dirs: [get_option('linux_aio_path')])
  endif
- linux_io_uring = not_found
- if not get_option('linux_io_uring').auto() or have_block
+ 
+ linux_io_uring_test = '''
+diff --git a/meson_options.txt b/meson_options.txt
+index 0a99a059ec..84d2449de9 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -186,6 +186,7 @@ option('libusb', type : 'feature', value : 'auto',
+        description: 'libusb support for USB passthrough')
+ option('linux_aio', type : 'feature', value : 'auto',
+        description: 'Linux AIO support')
++option('linux_aio_path', type: 'string', value: '', description: 'Path for libaio.a')
+ option('linux_io_uring', type : 'feature', value : 'auto',
+        description: 'Linux io_uring support')
+ option('lzfse', type : 'feature', value : 'auto',

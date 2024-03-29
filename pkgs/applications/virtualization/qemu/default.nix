@@ -143,7 +143,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch
 
-  # Remove for QEMU 8.1
+  ## FIXME: libaio does not provide a pkg-info file;
+  # and meson does not support static libraries lookup path using -L, relying on LIBRARY_PATH (https://github.com/mesonbuild/meson/issues/10172);
+  # and musl-gcc does not support LIBRARY_PATH overrides (https://www.openwall.com/lists/musl/2017/02/22/7);
+  # so we have to patch the meson.build to add the libaio path to the search path manually.
   ++ lib.optional stdenv.hostPlatform.isStatic ./aio-find-static-library.patch;
 
   postPatch = ''
@@ -195,9 +198,12 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional capstoneSupport "--enable-capstone"
     ++ lib.optional (!pluginsSupport) "--disable-plugins"
     ++ lib.optional (!enableBlobs) "--disable-install-blobs"
-
-    # FIXME: "multiple definition of `strtoll'" with libnbcompat
-    ++ lib.optional stdenv.hostPlatform.isStatic "--static --extra-ldflags=-Wl,--allow-multiple-definition";
+    ++ lib.optionals stdenv.hostPlatform.isStatic [
+      "--static"
+      # FIXME: "multiple definition of `strtoll'" with libnbcompat
+      "--extra-ldflags=-Wl,--allow-multiple-definition"
+      "-Dlinux_aio_path=${libaio}/lib"
+    ];
 
   dontWrapGApps = true;
 
