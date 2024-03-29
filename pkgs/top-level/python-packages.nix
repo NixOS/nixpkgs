@@ -2401,6 +2401,8 @@ self: super: with self; {
 
   cons = callPackage ../development/python-modules/cons { };
 
+  consolekit = callPackage ../development/python-modules/consolekit { };
+
   consonance = callPackage ../development/python-modules/consonance { };
 
   constantly = callPackage ../development/python-modules/constantly { };
