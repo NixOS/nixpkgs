@@ -1,22 +1,43 @@
-{ lib, stdenv, fetchFromGitHub, xcbuildHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation {
-  pname = "insert_dylib";
-  version = "unstable-2016-08-28";
+  pname = "insert-dylib";
+  version = "0-unstable-2016-08-28";
 
   src = fetchFromGitHub {
     owner = "Tyilo";
     repo = "insert_dylib";
     rev = "c8beef66a08688c2feeee2c9b6eaf1061c2e67a9";
-    sha256 = "0az38y06pvvy9jf2wnzdwp9mp98lj6nr0ldv0cs1df5p9x2qvbya";
+    hash = "sha256-yq+NRU+3uBY0A7tRkK2RFKVb0+XtWy6cTH7va4BH4ys=";
   };
 
-  nativeBuildInputs = [ xcbuildHook ];
+  buildPhase = ''
+    runHook preBuild
 
-  installPhase = ''
-    mkdir -p $out/bin
-    install -m755 Products/Release/insert_dylib $out/bin
+    mkdir -p Products/Release
+    $CC -o Products/Release/insert_dylib insert_dylib/main.c
+
+    runHook postBuild
   '';
 
-  meta.platforms = lib.platforms.darwin;
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm755 Products/Release/insert_dylib -t $out/bin
+
+    runHook postInstall
+  '';
+
+  meta = {
+    description = "Command line utility for inserting a dylib load command into a Mach-O binary";
+    homepage = "https://github.com/tyilo/insert_dylib";
+    license = lib.licenses.unfree; # no license specified
+    mainProgram = "insert_dylib";
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.darwin;
+  };
 }
