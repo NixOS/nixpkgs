@@ -5,11 +5,21 @@
 , gitUpdater
 , glibcLocales
 , python3
+, fetchPypi
 }:
 
 let
   pname = "xonsh";
   version = "0.15.1";
+  # workaround for https://github.com/xonsh/xonsh/issues/5241
+  prompt-toolkit-pinned = python3.pkgs.prompt-toolkit.overridePythonAttrs(old: rec{
+    version = "3.0.40";
+    src = fetchPypi {
+      pname = "prompt_toolkit";
+      inherit version;
+      hash = "sha256-o3HAa7HWbNSZ/s1wjlDAtq4ArLqYIrozxYbi8W0bc54=";
+    };
+  });
 in
 python3.pkgs.buildPythonApplication {
   inherit pname version;
@@ -31,7 +41,7 @@ python3.pkgs.buildPythonApplication {
 
   propagatedBuildInputs = with python3.pkgs; [
     ply
-    prompt-toolkit
+    prompt-toolkit-pinned
     pygments
   ];
 
