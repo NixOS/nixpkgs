@@ -13,28 +13,28 @@
 , setuptools
 }:
 let
-  version = "0.85.7";
-  gqlgen = import ./fix-gqlgen-trimpath.nix { inherit unzip; };
+  version = "0.85.9";
+  gqlgen = import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.42"; };
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "git.sr.ht";
     rev = version;
-    hash = "sha256-jkESrrVE+0O2g64zzPOpqhl8DpvmosQvuF0s6Xd+lbM=";
+    hash = "sha256-tmbBw6x3nqN9nRIR3xOXQ+L5EACXLQYLXQYK3lsOsAI=";
   };
 
   gitApi = buildGoModule ({
     inherit src version;
     pname = "gitsrht-api";
     modRoot = "api";
-    vendorHash = "sha256-yWVpldqwpEZmeI18tvdIgof8GgSFEP70c8T5XDkryn0=";
+    vendorHash = "sha256-4KwnUi6ILUagMDXzuBG9CRT2N8uyjvRM74TwJqIzicc=";
   } // gqlgen);
 
   gitDispatch = buildGoModule ({
     inherit src version;
     pname = "gitsrht-dispatch";
     modRoot = "gitsrht-dispatch";
-    vendorHash = "sha256-yWVpldqwpEZmeI18tvdIgof8GgSFEP70c8T5XDkryn0=";
+    vendorHash = "sha256-4KwnUi6ILUagMDXzuBG9CRT2N8uyjvRM74TwJqIzicc=";
 
     postPatch = ''
       substituteInPlace gitsrht-dispatch/main.go \
@@ -46,7 +46,7 @@ let
     inherit src version;
     pname = "gitsrht-keys";
     modRoot = "gitsrht-keys";
-    vendorHash = "sha256-yWVpldqwpEZmeI18tvdIgof8GgSFEP70c8T5XDkryn0=";
+    vendorHash = "sha256-4KwnUi6ILUagMDXzuBG9CRT2N8uyjvRM74TwJqIzicc=";
 
     postPatch = ''
       substituteInPlace gitsrht-keys/main.go \
@@ -58,7 +58,7 @@ let
     inherit src version;
     pname = "gitsrht-shell";
     modRoot = "gitsrht-shell";
-    vendorHash = "sha256-yWVpldqwpEZmeI18tvdIgof8GgSFEP70c8T5XDkryn0=";
+    vendorHash = "sha256-4KwnUi6ILUagMDXzuBG9CRT2N8uyjvRM74TwJqIzicc=";
 
     postPatch = ''
       substituteInPlace gitsrht-shell/main.go \
@@ -70,7 +70,7 @@ let
     inherit src version;
     pname = "gitsrht-update-hook";
     modRoot = "gitsrht-update-hook";
-    vendorHash = "sha256-yWVpldqwpEZmeI18tvdIgof8GgSFEP70c8T5XDkryn0=";
+    vendorHash = "sha256-4KwnUi6ILUagMDXzuBG9CRT2N8uyjvRM74TwJqIzicc=";
 
     postPatch = ''
       substituteInPlace gitsrht-update-hook/main.go \
