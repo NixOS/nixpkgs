@@ -7,8 +7,8 @@
 , removeReferencesTo
 , btop
 , testers
+, autoAddDriverRunpath
 , cudaSupport ? config.cudaSupport
-, cudaPackages
 , rocmSupport ? config.rocmSupport
 , rocmPackages
 }:
@@ -24,8 +24,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-kjSyIgLTObTOKMG5dk49XmWPXZpCWbLdpkmAsJcFliA=";
   };
 
-  nativeBuildInputs = [ cmake ] ++ lib.optionals cudaSupport [
-    cudaPackages.autoAddDriverRunpath
+  nativeBuildInputs = [
+    cmake
+  ] ++ lib.optionals cudaSupport [
+    autoAddDriverRunpath
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
