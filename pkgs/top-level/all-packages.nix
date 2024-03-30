@@ -14100,8 +14100,6 @@ with pkgs;
 
   typos = callPackage ../development/tools/typos { };
 
-  typst-live = callPackage ../tools/typesetting/typst-live { };
-
   tz = callPackage ../tools/misc/tz { };
 
   u9fs = callPackage ../servers/u9fs { };
@@ -30981,7 +30979,7 @@ with pkgs;
 
   faircamp = callPackage ../applications/misc/faircamp { };
 
-  famistudio = callPackage ../applications/audio/famistudio { };
+  famistudio = darwin.apple_sdk_11_0.callPackage ../applications/audio/famistudio { };
 
   fasttext = callPackage ../applications/science/machine-learning/fasttext { };
 

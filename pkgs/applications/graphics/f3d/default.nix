@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "f3d";
-  version = "2.3.0";
+  version = "2.3.1";
 
   outputs = [ "out" "man" ];
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "f3d-app";
     repo = "f3d";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pr2xuCy5yoUuj2cjkTh3Xwpg3g7zBspjErEi5luRD6Y=";
+    hash = "sha256-A6PD++wZZfVp/3hV7yefQPhxTpvpZHN0h0pRCxA6vkU=";
   };
 
   nativeBuildInputs = [
