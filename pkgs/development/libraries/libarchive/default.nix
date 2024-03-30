@@ -44,6 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/libarchive/libarchive/commit/3bd918d92f8c34ba12de9c6604d96f9e262a59fc.patch";
       hash = "sha256-RM3xFM6S2DkM5DJ0kAba8eLzEXuY5/7AaU06maHJ6rM=";
     })
+    (fetchpatch {
+      name = "revert-suspicious-commit-from-known-bad-actor.patch";
+      url = "https://github.com/libarchive/libarchive/commit/e37efc16c8665f405182dd77eb1bbb32376f5484.patch";
+      hash = "sha256-sjj0J7jkKr7+sRdww3awDOHsL8vlNs/cG5FVLSPIEWc=";
+      revert = true;
+    })
   ];
 
   outputs = [ "out" "lib" "dev" ];
