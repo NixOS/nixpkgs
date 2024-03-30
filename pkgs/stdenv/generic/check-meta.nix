@@ -318,6 +318,10 @@ let
       (listOf licenseType)
       licenseType
     ];
+    repository = union [
+      (listOf str)
+      str
+    ];
     sourceProvenance = listOf attrs;
     maintainers = listOf (attrsOf any); # TODO use the maintainer type from lib/tests/maintainer-module.nix
     priority = int;
