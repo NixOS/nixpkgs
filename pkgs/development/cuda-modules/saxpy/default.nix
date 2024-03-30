@@ -1,11 +1,11 @@
 {
+  autoAddDriverRunpath,
   cmake,
   cudaPackages,
   lib,
 }:
 let
   inherit (cudaPackages)
-    autoAddDriverRunpath
     backendStdenv
     cuda_cccl
     cuda_cudart
