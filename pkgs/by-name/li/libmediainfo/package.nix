@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libmediainfo";
-  version = "24.01";
+  version = "24.03";
 
   src = fetchurl {
     url = "https://mediaarea.net/download/source/libmediainfo/${version}/libmediainfo_${version}.tar.xz";
-    hash = "sha256-oC38Zon0hc7Ab6EqNBTDw6ooU7Td4YrqtLVKVsgxYlk=";
+    hash = "sha256-zCu0TkB8iQq1ZpNMVnY5GFBatYwUE0tT8NHanuokLI0=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
