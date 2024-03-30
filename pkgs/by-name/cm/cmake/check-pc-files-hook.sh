@@ -1,3 +1,6 @@
+# shellcheck shell=bash
+# shellcheck disable=SC2016,SC2154
+
 cmakePcfileCheckPhase() {
     while IFS= read -rd $'\0' file; do
         grepout=$(grep --line-number '}//nix/store' "$file" || true)
