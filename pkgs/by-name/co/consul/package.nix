@@ -57,6 +57,7 @@ buildGoModule rec {
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.bsl11;
     maintainers = with maintainers; [
+      adamcstephens
       pradeepchhetri
       vdemeester
       nh2
