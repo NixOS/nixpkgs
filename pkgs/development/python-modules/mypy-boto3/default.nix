@@ -381,7 +381,7 @@ rec {
 
   mypy-boto3-iottwinmaker = buildMypyBoto3Package "iottwinmaker" "1.34.0" "sha256-K5LEh8wdXvftxGstThSBN73K+1FUVlE40JxvjWv6GMA=";
 
-  mypy-boto3-iotwireless = buildMypyBoto3Package "iotwireless" "1.34.0" "sha256-g2Ab6AQ0fvmEuSqAHlvAPe3TYSz/Nai1U8srjT0QWHw=";
+  mypy-boto3-iotwireless = buildMypyBoto3Package "iotwireless" "1.34.74" "sha256-57ZO7LlQ9/itiynqSjXu7SJrNLNaFo5WCJBqSXEYeLs=";
 
   mypy-boto3-ivs = buildMypyBoto3Package "ivs" "1.34.45" "sha256-Ilrtk6ZF1p3GNuZrtiEiNXi3bHI3MYNr6bDpJ8sf4Fg=";
 
