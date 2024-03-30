@@ -2492,7 +2492,6 @@ default-package-overrides:
   - safe ==0.3.21
   - safe-coloured-text ==0.2.0.1
   - safe-coloured-text-gen ==0.0.0.2
-  - safe-coloured-text-layout ==0.0.0.0
   - safe-coloured-text-layout-gen ==0.0.0.0
   - safe-coloured-text-terminfo ==0.1.0.0
   - safecopy ==0.10.4.2
