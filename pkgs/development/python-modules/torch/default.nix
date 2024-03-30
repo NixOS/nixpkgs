@@ -1,5 +1,6 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, buildPythonPackage, python,
   config, cudaSupport ? config.cudaSupport, cudaPackages,
+  autoAddDriverRunpath,
   effectiveMagma ?
   if cudaSupport then magma-cuda-static
   else if rocmSupport then magma-hip
