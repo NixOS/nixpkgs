@@ -15,10 +15,12 @@
 , font-v
 , freetype-py
 , gflanguages
+, gfsubsets
 , git
 , glyphsets
 , lxml
 , installShellFiles
+, jinja2
 , munkres
 , opentypespec
 , ots-python
@@ -74,8 +76,10 @@ buildPythonPackage rec {
     font-v
     freetype-py
     gflanguages
+    gfsubsets
     glyphsets
     lxml
+    jinja2
     munkres
     ots-python
     opentypespec
