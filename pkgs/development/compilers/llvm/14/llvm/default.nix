@@ -10,6 +10,7 @@
 , libbfd
 , libpfm
 , libxml2
+, libedit
 , ncurses
 , version
 , release_version
@@ -78,7 +79,7 @@ in stdenv.mkDerivation (rec {
   nativeBuildInputs = [ cmake python ]
     ++ optionals enableManpages [ python3.pkgs.sphinx python3.pkgs.recommonmark ];
 
-  buildInputs = [ libxml2 libffi ]
+  buildInputs = [ libxml2 libffi libedit ]
     ++ optional enablePFM libpfm; # exegesis
 
   propagatedBuildInputs = [ ncurses zlib ];
@@ -193,6 +194,7 @@ in stdenv.mkDerivation (rec {
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_ENABLE_DUMP=ON"
+    "-DLLVM_ENABLE_LIBEDIT=FORCE_ON"
   ] ++ optionals stdenv.hostPlatform.isStatic [
     # Disables building of shared libs, -fPIC is still injected by cc-wrapper
     "-DLLVM_ENABLE_PIC=OFF"
