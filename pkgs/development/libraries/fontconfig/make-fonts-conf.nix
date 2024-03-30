@@ -1,9 +1,9 @@
 { runCommand, stdenv, lib, libxslt, fontconfig, dejavu_fonts }:
 
+let fontconfig_ = fontconfig; in
 {
+  fontconfig ? fontconfig_
   # an array of fonts, e.g. `[ pkgs.dejavu_fonts.minimal ]`
-
-  fontconfig ? fontconfig
 ,  fontDirectories
   , impureFontDirectories ? [
     # nix user profile
