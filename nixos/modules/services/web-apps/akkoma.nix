@@ -1125,6 +1125,6 @@ in {
     };
   };
 
-  meta.maintainers = with maintainers; [ mvs ];
+  meta.maintainers = with maintainers; [ mvs tcmal ];
   meta.doc = ./akkoma.md;
 }
