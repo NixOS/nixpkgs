@@ -170,7 +170,7 @@ in {
         breeze.qt5
         plasma-integration.qt5
         pkgs.plasma5Packages.kwayland-integration
-        pkgs.plasma5Packages.kio
+        (pkgs.plasma5Packages.kio.override { withKcms = false; })
         kio-extras-kf5
       ]
       # Optional hardware support features
