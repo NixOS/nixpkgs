@@ -22,6 +22,7 @@
 , expat
 , libdrm
 , libxkbcommon
+, pipewire
 , gtk3
 , pango
 , cairo
@@ -81,7 +82,7 @@ stdenv.mkDerivation rec {
         xorg.libxcb cups.lib dbus.lib expat libdrm
         xorg.libXcomposite xorg.libXdamage xorg.libXext
         xorg.libXfixes xorg.libXrandr libxkbcommon
-        gtk3 pango cairo gdk-pixbuf mesa
+        pipewire gtk3 pango cairo gdk-pixbuf mesa
         alsa-lib at-spi2-core xorg.libxshmfence systemd wayland
       ];
       naclHelper = lib.makeLibraryPath [
