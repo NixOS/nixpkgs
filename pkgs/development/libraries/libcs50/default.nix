@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, fixDarwinDylibNames }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcs50";
@@ -10,6 +10,8 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-A4CEU5wfwykVTDIsKZnQ8co+6RwBGYGZEZxRFzQTKBI=";
   };
+
+  nativeBuildInputs = lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
 
   installPhase = ''
     runHook preInstall
