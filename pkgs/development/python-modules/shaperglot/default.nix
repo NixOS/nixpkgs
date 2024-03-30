@@ -3,9 +3,11 @@
 , fetchFromGitHub
 , gflanguages
 , num2words
-, poetry-core
 , protobuf
 , pytestCheckHook
+, pyyaml
+, setuptools
+, setuptools-scm
 , strictyaml
 , termcolor
 , ufo2ft
@@ -31,6 +33,7 @@ buildPythonPackage rec {
     gflanguages
     num2words
     protobuf
+    pyyaml
     strictyaml
     termcolor
     ufo2ft
@@ -38,7 +41,8 @@ buildPythonPackage rec {
     youseedee
   ];
   nativeBuildInputs = [
-    poetry-core
+    setuptools
+    setuptools-scm
   ];
 
   doCheck = true;
