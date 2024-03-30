@@ -26854,6 +26854,8 @@ with pkgs;
 
   sampler = callPackage ../applications/misc/sampler { };
 
+  scalene = with python3Packages; toPythonApplication scalene;
+
   scalr-cli = callPackage ../tools/admin/scalr-cli { };
 
   scaphandre = callPackage ../servers/scaphandre { };
@@ -34162,8 +34164,6 @@ with pkgs;
   ponymix = callPackage ../applications/audio/ponymix { };
 
   pop-launcher = callPackage ../applications/misc/pop-launcher { };
-
-  pot = callPackage ../applications/misc/pot { };
 
   pothos = libsForQt5.callPackage ../applications/radio/pothos { };
 
