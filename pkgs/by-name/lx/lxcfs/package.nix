@@ -63,6 +63,11 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     incus-container-old-init = nixosTests.incus.container-old-init;
     incus-container-new-init = nixosTests.incus.container-new-init;
+  passthru = {
+    tests = {
+      incus-container-legacy-init = nixosTests.incus.container-legacy-init;
+      incus-container-systemd-init = nixosTests.incus.container-systemd-init;
+    };
   };
 
   meta = {
