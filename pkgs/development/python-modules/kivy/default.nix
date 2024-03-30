@@ -49,10 +49,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     kivy-garden
+    packaging
     pillow
     pygments
     requests
-    packaging
   ];
 
   KIVY_NO_CONFIG = 1;
