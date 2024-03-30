@@ -22252,6 +22252,22 @@ with pkgs;
 
   libfprint-tod = callPackage ../development/libraries/libfprint-tod { };
 
+  libfprint-tod_1_90 = libfprint-tod.overrideAttrs (_: rec {
+    version = "1.90.7+git20210222+tod1";
+    src = fetchFromGitLab {
+      domain = "gitlab.freedesktop.org";
+      owner = "3v1n0";
+      repo = "libfprint";
+      rev = "v${version}";
+      hash = "sha256-kli49SDVprDcRcHetsYTAeC5IpyXWYy/h+ymdIqPRzI=";
+    };
+    # udev_hwdb_dir is renamed to udev_rules_dir in the latest version, so this has to be set manually
+    mesonFlags = [
+      "-Ddrivers=all"
+      "-Dudev_hwdb_dir=${placeholder "out"}/lib/udev/hwdb.d"
+    ];
+  });
+
   libfprint-2-tod1-goodix = callPackage ../development/libraries/libfprint-2-tod1-goodix { };
 
   libfprint-2-tod1-goodix-550a = callPackage ../development/libraries/libfprint-2-tod1-goodix-550a { };
