@@ -33,6 +33,7 @@ stdenv.mkDerivation {
   '';
 
   passthru.driverPath = "/lib/libfprint-2/tod-1";
+  passthru.needsLibfprint_1_90 = true;  # It is unknown whether this driver works with the latest version of libprintf.
 
   meta = with lib; {
     description = "Goodix 550a driver module for libfprint-2-tod Touch OEM Driver (from Lenovo)";
