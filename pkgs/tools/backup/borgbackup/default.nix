@@ -32,14 +32,16 @@ python.pkgs.buildPythonApplication rec {
   postPatch = ''
     # sandbox does not support setuid/setgid/sticky bits
     substituteInPlace src/borg/testsuite/archiver.py \
-      --replace "0o4755" "0o0755"
+      --replace-fail "0o4755" "0o0755"
   '';
 
-  nativeBuildInputs = with python.pkgs; [
+  build-system = with python.pkgs; [
     cython
     setuptools-scm
     pkgconfig
+  ];
 
+  nativeBuildInputs = with python.pkgs; [
     # docs
     sphinxHook
     guzzle-sphinx-theme
@@ -60,7 +62,7 @@ python.pkgs.buildPythonApplication rec {
     acl
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  dependencies = with python.pkgs; [
     msgpack
     packaging
     (if stdenv.isLinux then pyfuse3 else llfuse)
