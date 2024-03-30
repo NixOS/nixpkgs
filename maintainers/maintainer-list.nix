@@ -5235,6 +5235,12 @@
     githubId = 6199462;
     name = "Dmytro Rets";
   };
+  dretyuiop = {
+    email = "chewch03@gmail.com";
+    github = "dretyuiop";
+    githubId = 81854406;
+    name = "Chew Cheng Hong";
+  };
   drewrisinger = {
     email = "drisinger+nixpkgs@gmail.com";
     github = "drewrisinger";
