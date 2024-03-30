@@ -1,4 +1,12 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, makeBinaryWrapper
+, runCommand
+, symlinkJoin
+, vale
+, valeStyles
+}:
 
 buildGoModule rec {
   pname = "vale";
@@ -26,8 +34,24 @@ buildGoModule rec {
   # Tests require network access
   doCheck = false;
 
+  passthru.withStyles = selector: symlinkJoin {
+    name = "vale-with-styles-${vale.version}";
+    paths = [ vale ] ++ selector valeStyles;
+    nativeBuildInputs = [ makeBinaryWrapper ];
+    postBuild = ''
+      wrapProgram "$out/bin/vale" \
+        --set VALE_STYLES_PATH "$out/share/vale/styles/"
+    '';
+  };
+
   meta = with lib; {
     description = "A syntax-aware linter for prose built with speed and extensibility in mind";
+    longDescription = ''
+      Vale in Nixpkgs offers the helper `.withStyles` allow you to install it
+      predefined styles:
+
+          vale.withStyles (s: [ s.alex s.google ])
+    '';
     homepage = "https://vale.sh/";
     changelog = "https://github.com/errata-ai/vale/releases/tag/v${version}";
     mainProgram = "vale";
