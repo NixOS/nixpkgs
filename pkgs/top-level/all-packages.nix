@@ -118,6 +118,12 @@ with pkgs;
       import ./pkg-config/defaultPkgConfigPackages.nix pkgs
     ) // { __attrsFailEvaluation = true; };
 
+  inherit (import ../build-support/package/make-package.nix { inherit callPackage config lib stdenv; })
+    layers
+    mkPackage
+    mkPackageWithDeps
+    ;
+
   ### Nixpkgs maintainer tools
 
   nix-generate-from-cpan = callPackage ../../maintainers/scripts/nix-generate-from-cpan.nix { };

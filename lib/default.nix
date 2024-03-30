@@ -77,7 +77,8 @@ let
       functionArgs setFunctionArgs isFunction toFunction mirrorFunctionArgs
       toHexString toBaseDigits inPureEvalMode;
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
-      composeManyExtensions makeExtensible makeExtensibleWithCustomName;
+      composeManyExtensions makeExtensible makeExtensibleWithCustomName
+      encapsulate;
     inherit (self.attrsets) attrByPath hasAttrByPath setAttrByPath
       getAttrFromPath attrVals attrValues getAttrs catAttrs filterAttrs
       filterAttrsRecursive foldlAttrs foldAttrs collect nameValuePair mapAttrs
