@@ -22629,8 +22629,6 @@ with pkgs;
 
   libmediaart = callPackage ../development/libraries/libmediaart { };
 
-  libmediainfo = callPackage ../development/libraries/libmediainfo { };
-
   libmhash = callPackage ../development/libraries/libmhash { };
 
   libmodbus = callPackage ../development/libraries/libmodbus { };
@@ -33017,10 +33015,6 @@ with pkgs;
   mediaelch = mediaelch-qt5;
   mediaelch-qt5 = libsForQt5.callPackage ../applications/misc/mediaelch { };
   mediaelch-qt6 = qt6Packages.callPackage ../applications/misc/mediaelch { };
-
-  mediainfo = callPackage ../applications/misc/mediainfo { };
-
-  mediainfo-gui = callPackage ../applications/misc/mediainfo-gui { };
 
   mediathekview = callPackage ../applications/video/mediathekview { jre = temurin-bin-20; };
 
