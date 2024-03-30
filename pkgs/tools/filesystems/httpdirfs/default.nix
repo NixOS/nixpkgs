@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, curl, expat, fuse, gumbo, libuuid }:
+{
+  curl,
+  expat,
+  fetchFromGitHub,
+  fuse,
+  gumbo,
+  lib,
+  libuuid,
+  pkg-config,
+  stdenv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "httpdirfs";
@@ -7,21 +17,28 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fangfufu";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     sha256 = "sha256-rdeBlAV3t/si9x488tirUGLZRYAxh13zdRIQe0OPd+A=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ curl expat fuse gumbo libuuid ];
+
+  buildInputs = [
+    curl
+    expat
+    fuse
+    gumbo
+    libuuid
+  ];
 
   makeFlags = [ "prefix=${placeholder "out"}" ];
 
-  meta = with lib; {
+  meta = {
     description = "A FUSE filesystem for HTTP directory listings";
     homepage = "https://github.com/fangfufu/httpdirfs";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ sbruder schnusch ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Only;
     mainProgram = "httpdirfs";
+    maintainers = with lib.maintainers; [ sbruder schnusch ];
+    platforms = lib.platforms.unix;
   };
 }
