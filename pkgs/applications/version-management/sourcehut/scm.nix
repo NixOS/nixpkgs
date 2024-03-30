@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "scmsrht";
-  version = "0.22.23";
+  version = "0.22.24";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "~sircmpwn";
     repo = "scm.sr.ht";
     rev = version;
-    hash = "sha256-058dOEYJDY3jtxH1VkV1CFq5CZTkauSnTWg57DCnNtw=";
+    hash = "sha256-9IgMmYzInfrten7z8bznlSFJlUjHf3k3z76lkP6tP50=";
   };
 
   nativeBuildInputs = [
