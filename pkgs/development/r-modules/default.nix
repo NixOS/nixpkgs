@@ -516,6 +516,7 @@ let
     RationalMatrix = [ pkgs.pkg-config pkgs.gmp.dev];
     RcppCWB = [ pkgs.pkg-config pkgs.pcre2 ];
     redux = [ pkgs.pkg-config ];
+    rswipl = with pkgs; [ cmake pkg-config ];
     rrd = [ pkgs.pkg-config ];
     Rbwa = [ pkgs.zlib.dev ];
     trackViewer = [ pkgs.zlib.dev ];
@@ -592,6 +593,7 @@ let
     AMOUNTAIN = [ pkgs.gsl ];
     Rsymphony = with pkgs; [ pkg-config doxygen graphviz subversion ];
     tcltk2 = with pkgs; [ tcl tk ];
+    rswipl = with pkgs; [ ncurses.dev libxcrypt zlib.dev ];
     tikzDevice = with pkgs; [ which texliveMedium ];
     gridGraphics = [ pkgs.which ];
     adimpro = with pkgs; [ which xorg.xdpyinfo ];
