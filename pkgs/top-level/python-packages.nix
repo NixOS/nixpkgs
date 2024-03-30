@@ -13460,6 +13460,8 @@ self: super: with self; {
 
   securetar = callPackage ../development/python-modules/securetar { };
 
+  securityreporter = callPackage ../development/python-modules/securityreporter { };
+
   sectools = callPackage ../development/python-modules/sectools { };
 
   seedir = callPackage ../development/python-modules/seedir { };
