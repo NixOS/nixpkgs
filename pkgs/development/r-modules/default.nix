@@ -467,6 +467,7 @@ let
     topicmodels = [ pkgs.gsl ];
     udunits2 = with pkgs; [ udunits expat ];
     units = [ pkgs.udunits ];
+    unigd = [ pkgs.pkg-config ];
     vdiffr = [ pkgs.libpng.dev ];
     V8 = [ pkgs.v8 ];
     XBRL = with pkgs; [ zlib libxml2.dev ];
@@ -684,6 +685,7 @@ let
     RcppAlgos = [ pkgs.gmp.dev ];
     RcppBigIntAlgos = [ pkgs.gmp.dev ];
     spaMM = [ pkgs.gsl ];
+    unigd = with pkgs; [ cairo.dev libpng.dev ];
     HilbertVisGUI = [ pkgs.gtkmm2.dev ];
     textshaping = with pkgs; [ harfbuzz.dev freetype.dev fribidi libpng ];
     DropletUtils = [ pkgs.zlib.dev ];
