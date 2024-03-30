@@ -6,6 +6,7 @@ let
   runtime_paths = lib.makeBinPath (with pkgsHostHost; [
     coreutils file findutils gawk gnugrep gnused jdk python3 which
   ]) + ":${platform-tools}/platform-tools";
+  lib_paths = lib.makeLibraryPath (with pkgs; [ libcxx ]);
 in
 deployAndroidPackage rec {
   inherit package os;
@@ -57,6 +58,14 @@ deployAndroidPackage rec {
     # wrap
     for progname in ndk-build; do
       wrapProgram "$(pwd)/$progname" --prefix PATH : "${runtime_paths}"
+    done
+    # wrab executables in toolchains
+    find $out/libexec/android-sdk/ndk/${package.revision}/toolchains -type d -name bin | while read bindir; do
+      find $bindir -maxdepth 1 -type f -executable | while read progname; do
+        wrapProgram "$progname"\
+          --prefix PATH : "${runtime_paths}"\
+          --prefix LD_LIBRARY_PATH : ${lib_paths}
+      done
     done
 
     # make some executables available in PATH
