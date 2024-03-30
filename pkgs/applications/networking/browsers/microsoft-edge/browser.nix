@@ -22,6 +22,7 @@
 , expat
 , libdrm
 , libxkbcommon
+, pipewire
 , gtk3
 , pango
 , cairo
@@ -80,7 +81,7 @@ stdenv.mkDerivation rec {
         glibc glib nss nspr atk at-spi2-atk xorg.libX11
         xorg.libxcb cups.lib dbus.lib expat libdrm
         xorg.libXcomposite xorg.libXdamage xorg.libXext
-        xorg.libXfixes xorg.libXrandr libxkbcommon
+        xorg.libXfixes xorg.libXrandr libxkbcommon pipewire
         gtk3 pango cairo gdk-pixbuf mesa
         alsa-lib at-spi2-core xorg.libxshmfence systemd wayland
       ];
