@@ -1,8 +1,10 @@
-{ substituteAll, lib
-, coreutils, getopt
+{ lib
+, substitute
+, coreutils
+, getopt
 }:
 
-substituteAll {
+substitute {
   name = "lsb_release";
 
   src = ./lsb_release.sh;
@@ -10,7 +12,11 @@ substituteAll {
   dir = "bin";
   isExecutable = true;
 
-  inherit coreutils getopt;
+  substitutions = [
+    "--subst-var-by" "coreutils" coreutils
+    "--subst-var-by" "getopt" getopt
+    "--subst-var" "shell"
+  ];
 
   meta = with lib; {
     description = "Prints certain LSB (Linux Standard Base) and Distribution information";
