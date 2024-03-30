@@ -29,7 +29,7 @@ appimageTools.wrapType2 rec {
 
   meta = with lib; {
     description = "Stream anime torrents, real-time with no waiting for downloads";
-    homepage = "https://github.com/ThaUnknown/miru#readme";
+    homepage = "https://miru.watch";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.d4ilyrun ];
     mainProgram = "miru";
