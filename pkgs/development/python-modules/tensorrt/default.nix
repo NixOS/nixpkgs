@@ -1,5 +1,6 @@
 { lib
 , python
+, autoAddDriverRunpath
 , buildPythonPackage
 , autoPatchelfHook
 , unzip
@@ -22,7 +23,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     unzip
     autoPatchelfHook
-    cudaPackages.autoAddDriverRunpath
+    autoAddDriverRunpath
   ];
 
   preUnpack = ''
