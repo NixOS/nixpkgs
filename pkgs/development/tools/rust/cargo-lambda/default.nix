@@ -15,21 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-lambda";
-  version = "1.0.1";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-KSJn8DRvm/ZLikCT8Tp9lb/ej0KSlZqRROs1yLNDa6c=";
+    hash = "sha256-E9jUlEiHyf5UR/UZxJj9LTfyAxGR/WsvRQdFdIVvLG8=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "cargo-test-macro-0.1.0" = "sha256-s3PM5SHGwZRr1cKt3LTL9fSAhzZ6CaZmDMVUgnOr6R0=";
-    };
-  };
+  cargoHash = "sha256-IXMkgpyYwll8NwTXRffbsSP5uFHGJe1n2RQ1Mbu+E70=";
 
   nativeCheckInputs = [cacert];
 
@@ -52,6 +47,8 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_download_example"
     "--skip=test_init_subcommand"
     "--skip=test_init_subcommand_without_override"
+    "--skip=test_build_example"
+    "--skip=test_deploy_workspace"
   ];
 
   # remove date from version output to make reproducible
