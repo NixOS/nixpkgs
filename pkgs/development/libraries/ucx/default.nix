@@ -1,6 +1,7 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, doxygen, numactl
 , rdma-core, libbfd, libiberty, perl, zlib, symlinkJoin, pkg-config
 , config
+, autoAddDriverRunpath
 , enableCuda ? config.cudaSupport
 , cudaPackages
 , enableRocm ? config.rocmSupport
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals enableCuda [
     cudaPackages.cuda_nvcc
-    cudaPackages.autoAddDriverRunpath
+    autoAddDriverRunpath
   ];
 
   buildInputs = [
