@@ -124,7 +124,10 @@ rec {
       patchShebangs ./install.sh
       ./install.sh --prefix=$out \
         --components=cargo
-
+    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      install_name_tool -change "/usr/lib/libcurl.4.dylib" \
+        "${curl.out}/lib/libcurl.4.dylib" "$out/bin/cargo"
+    '' + ''
       wrapProgram "$out/bin/cargo" \
         --suffix PATH : "${rustc}/bin"
     '';
