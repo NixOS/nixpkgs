@@ -10,7 +10,9 @@ let
     concatMapStrings
     concatMapStringsSep
     concatStrings
+    filter
     findFirst
+    head
     isDerivation
     length
     concatMap
@@ -29,6 +31,14 @@ let
     toList
     isList
     elem
+    ;
+
+  inherit (lib.meta)
+    availableOn
+  ;
+
+  inherit (lib.generators)
+    toPretty
   ;
 
   # If we're in hydra, we can dispense with the more verbose error
@@ -84,7 +94,7 @@ let
     # was `licenses: lib.lists.any (l: !l.free or true) licenses;`
     # which always evaluates to `!true` for strings.
     else if isString licenses then false
-    else lib.lists.any (l: !l.free or true) licenses;
+    else any (l: !l.free or true) licenses;
 
   hasUnfreeLicense = attrs: hasLicense attrs && isUnfree attrs.meta.license;
 
@@ -94,7 +104,7 @@ let
   isMarkedBroken = attrs: attrs.meta.broken or false;
 
   hasUnsupportedPlatform =
-    pkg: !(lib.meta.availableOn hostPlatform pkg);
+    pkg: !(availableOn hostPlatform pkg);
 
   isMarkedInsecure = attrs: (attrs.meta.knownVulnerabilities or []) != [];
 
@@ -364,7 +374,7 @@ let
         [ ]
       else
         [ "key 'meta.${k}' has invalid value; expected ${metaTypes.${k}.name}, got\n    ${
-          lib.generators.toPretty { indent = "    "; } v
+          toPretty { indent = "    "; } v
         }" ]
     else
       [ "key 'meta.${k}' is unrecognized; expected one of: \n  [${concatMapStringsSep ", " (x: "'${x}'") (attrNames metaTypes)}]" ];
@@ -414,7 +424,7 @@ let
     else if !allowBroken && attrs.meta.broken or false then
       { valid = "no"; reason = "broken"; errormsg = "is marked as broken"; }
     else if !allowUnsupportedSystem && hasUnsupportedPlatform attrs then
-      let toPretty = lib.generators.toPretty {
+      let toPretty = toPretty {
             allowPrettyValues = true;
             indent = "  ";
           };
@@ -436,6 +446,18 @@ let
     # -----
     else { valid = "yes"; });
 
+  getRepository = let
+    getSrcs = attrs:
+      if attrs ? src
+      then
+        [ attrs.src ]
+      else
+        filter (src: src ? meta.homepage) attrs.srcs;
+    getHomePages = map (src: src.meta.homepage);
+    unlist = list:
+      if length list == 1 then head list
+      else list;
+    in attrs: unlist (getHomePages (getSrcs attrs));
 
   # The meta attribute is passed in the resulting attribute set,
   # but it's not part of the actual derivation, i.e., it's not
@@ -455,22 +477,7 @@ let
       # this could be handled a lot easier if we nulled it instead
       # of having it be undefined, but that wouldn't match the
       # other attributes.
-      repository = let
-        getSrcs = attrs:
-          if attrs ? src
-          then
-            [ attrs.src ]
-          else
-            lib.filter (src: src ? meta.homepage) attrs.srcs;
-        getHomePages = srcs: map (src: src.meta.homepage) srcs;
-        unlist = list:
-          if lib.length list == 1
-          then
-            lib.elemAt list 0
-          else
-            list;
-      in
-        unlist (getHomePages (getSrcs attrs));
+      repository = getRepository attrs;
     } // {
       # `name` derivation attribute includes cross-compilation cruft,
       # is under assert, and is sanitized.
