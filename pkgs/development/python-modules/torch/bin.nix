@@ -1,5 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
+, autoAddDriverRunpath
 , fetchurl
 , python
 , pythonAtLeast
@@ -40,7 +41,7 @@ in buildPythonPackage {
   nativeBuildInputs = lib.optionals stdenv.isLinux [
     addOpenGLRunpath
     autoPatchelfHook
-    cudaPackages.autoAddDriverRunpath
+    autoAddDriverRunpath
   ];
 
   buildInputs = lib.optionals stdenv.isLinux (with cudaPackages; [
