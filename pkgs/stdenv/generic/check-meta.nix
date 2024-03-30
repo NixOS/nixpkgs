@@ -10,9 +10,7 @@ let
     concatMapStrings
     concatMapStringsSep
     concatStrings
-    filter
     findFirst
-    head
     isDerivation
     length
     concatMap
@@ -446,18 +444,6 @@ let
     # -----
     else { valid = "yes"; });
 
-  getRepository = let
-    getSrcs = attrs:
-      if attrs ? src
-      then
-        [ attrs.src ]
-      else
-        filter (src: src ? meta.homepage) attrs.srcs;
-    getHomePages = map (src: src.meta.homepage);
-    unlist = list:
-      if length list == 1 then head list
-      else list;
-    in attrs: unlist (getHomePages (getSrcs attrs));
 
   # The meta attribute is passed in the resulting attribute set,
   # but it's not part of the actual derivation, i.e., it's not
@@ -477,7 +463,22 @@ let
       # this could be handled a lot easier if we nulled it instead
       # of having it be undefined, but that wouldn't match the
       # other attributes.
-      repository = getRepository attrs;
+      repository = let
+        getSrcs = attrs:
+          if attrs ? src
+          then
+            [ attrs.src ]
+          else
+            lib.filter (src: src ? meta.homepage) attrs.srcs;
+        getHomePages = srcs: map (src: src.meta.homepage) srcs;
+        unlist = list:
+          if lib.length list == 1
+          then
+            lib.elemAt list 0
+          else
+            list;
+      in
+        unlist (getHomePages (getSrcs attrs));
     } // {
       # `name` derivation attribute includes cross-compilation cruft,
       # is under assert, and is sanitized.
