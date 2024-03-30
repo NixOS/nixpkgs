@@ -316,6 +316,9 @@ in rec {
         rev = "640d7ee1917fcd3b6a5271aa6cf4576bccc7c5fb";
         sha256 = "sha256-T52whJ7nZi8jerJaZtYInC2YDN0QM+9tUDqiNr6IsNY=";
       };
+
+      # overwrite all patches, since patches for newer version do not apply
+      patches = [ ./0001-Compile-transupp.c-as-part-of-the-library.patch ];
     };
   };
 
