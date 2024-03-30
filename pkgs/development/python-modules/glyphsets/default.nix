@@ -20,14 +20,6 @@ buildPythonPackage rec {
     hash = "sha256-lMRgchadgKyfFLw6ZF1sJAKBAK75zmw77L34MW9p7TI=";
   };
 
-  patches = [
-    # Upstream has a needlessly strict version range for setuptools_scm, our
-    # setuptools-scm is newer. We can't use pythonRelaxDepsHook for this
-    # because it's in setup_requires which means we'll fail the requirement
-    # before pythonRelaxDepsHook can run.
-    ./0001-relax-setuptools-scm-dep.patch
-  ];
-
   propagatedBuildInputs = [
     defcon
     fonttools
