@@ -703,6 +703,7 @@ supported-platforms:
   btrfs:                                        [ platforms.linux ] # depends on linux
   bytepatch:                                    [ platforms.x86 ] # due to blake3
   cpuid:                                        [ platforms.x86 ] # needs to be i386 compatible (IA-32)
+  cpython:                                      [ platforms.x86 ] # c2hs errors on glibc headers
   crc32c:                                       [ platforms.x86 ] # uses x86 intrinsics
   d3d11binding:                                 [ platforms.windows ]
   DirectSound:                                  [ platforms.windows ]
