@@ -1,24 +1,14 @@
 # expr and script based on our lsb_release
 { stdenv
 , lib
-, substituteAll
+, substitute
 , coreutils
 , getopt
 , modDirVersion ? ""
 }:
 
-substituteAll {
-  name = "uname";
-
-  src = ./deterministic-uname.sh;
-
-  dir = "bin";
-  isExecutable = true;
-
-  inherit coreutils getopt;
-
+let
   uSystem = if stdenv.buildPlatform.uname.system != null then stdenv.buildPlatform.uname.system else "unknown";
-  inherit (stdenv.buildPlatform.uname) processor;
 
   # uname -o
   # maybe add to lib/systems/default.nix uname attrset
@@ -35,7 +25,27 @@ substituteAll {
   # in os-specific/linux module packages
   # --replace '$(shell uname -r)' "${kernel.modDirVersion}" \
   # is a common thing to do.
-  modDirVersion = if modDirVersion != "" then modDirVersion else "unknown";
+  modDirVersion' = if modDirVersion != "" then modDirVersion else "unknown";
+
+in
+
+substitute {
+  name = "uname";
+
+  src = ./deterministic-uname.sh;
+
+  dir = "bin";
+  isExecutable = true;
+
+  substitutions = [
+    "--subst-var-by" "coreutils" coreutils
+    "--subst-var-by" "getopt" getopt
+    "--subst-var-by" "uSystem" uSystem
+    "--subst-var-by" "modDirVersion" modDirVersion'
+    "--subst-var-by" "operatingSystem" operatingSystem
+    "--subst-var-by" "processor" stdenv.buildPlatform.uname.processor
+    "--subst-var" "shell"
+  ];
 
   meta = with lib; {
     description = "Print certain system information (hardcoded with lib/system values)";
