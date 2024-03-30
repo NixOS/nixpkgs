@@ -19047,6 +19047,9 @@ with pkgs;
 
   inotify-tools = callPackage ../development/tools/misc/inotify-tools { };
 
+  inherit (callPackage ../applications/misc/inochi2d { })
+    inochi-creator inochi-session;
+
   intel-gpu-tools = callPackage ../development/tools/misc/intel-gpu-tools { };
 
   insomnia = callPackage ../development/web/insomnia { };
