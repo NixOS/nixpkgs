@@ -424,7 +424,7 @@ let
     else if !allowBroken && attrs.meta.broken or false then
       { valid = "no"; reason = "broken"; errormsg = "is marked as broken"; }
     else if !allowUnsupportedSystem && hasUnsupportedPlatform attrs then
-      let toPretty = toPretty {
+      let toPretty' = toPretty {
             allowPrettyValues = true;
             indent = "  ";
           };
@@ -432,8 +432,8 @@ let
            errormsg = ''
              is not available on the requested hostPlatform:
                hostPlatform.config = "${hostPlatform.config}"
-               package.meta.platforms = ${toPretty (attrs.meta.platforms or [])}
-               package.meta.badPlatforms = ${toPretty (attrs.meta.badPlatforms or [])}
+               package.meta.platforms = ${toPretty' (attrs.meta.platforms or [])}
+               package.meta.badPlatforms = ${toPretty' (attrs.meta.badPlatforms or [])}
             '';
          }
     else if !(hasAllowedInsecure attrs) then
