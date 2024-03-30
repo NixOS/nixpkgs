@@ -8,6 +8,10 @@ let
       url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${version}-Linux-amd64.tar.bz2";
       hash = "sha256-aoGzWuakwN/OL4+xUq8WEpd2c1rrNN/DkffI2vDVGjs=";
     };
+    aarch64-linux = fetchurl {
+      url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${version}-Linux-arm64.tar.bz2";
+      hash = "sha256-2e9lHB12jLTR8UYofLWL7gg0qb2IqFk6eND3T5VqAx0=";
+    };
     i686-linux = fetchurl {
       url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${version}-Linux-x86.tar.bz2";
       hash = "sha256-1JsFKuAAj/LtYvOUPFu0Hn+zvY3riW0YlJbLd4UnaKU=";
@@ -30,7 +34,7 @@ let
       '';
     };
 
-    buildInputs = [ innoextract ];
+    nativeBuildInputs = [ innoextract ];
   } ''
     innoextract --extract --exclude-temp "$src"
     mkdir $out
@@ -38,8 +42,9 @@ let
   '';
   systemDir = {
     x86_64-linux = "System64";
-    i686-linux = "System";
+    aarch64-linux = "SystemARM64";
     x86_64-darwin = "System";
+    i686-linux = "System";
   }.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 in stdenv.mkDerivation {
   name = "ut1999";
@@ -96,6 +101,11 @@ in stdenv.mkDerivation {
   '' + ''
     runHook postInstall
   '';
+
+  # .so files in the SystemARM64 directory are not loaded properly on aarch64-linux
+  appendRunpaths = lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+    "${placeholder "out"}/${systemDir}"
+  ];
 
   desktopItems = [
     (makeDesktopItem {
