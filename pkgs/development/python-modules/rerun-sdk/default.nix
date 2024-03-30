@@ -12,6 +12,7 @@
   typing-extensions,
   pytestCheckHook,
   python,
+  libiconv,
 }:
 
 buildPythonPackage {
@@ -25,6 +26,10 @@ buildPythonPackage {
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
+  ];
+
+  buildInputs = [
+    libiconv # No-op on Linux, necessary on Darwin.
   ];
 
   propagatedBuildInputs = [
