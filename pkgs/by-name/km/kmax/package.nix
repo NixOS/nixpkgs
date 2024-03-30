@@ -16,11 +16,11 @@ let
       hash = "sha256-9LAR+1MdT2YjsPAvmSIdiBTqUh5WYdJuREzLYHRMIMw=";
     };
 
-    nativeBuildInputs = with python3Packages; [
+    build-system = with python3Packages; [
       setuptools
     ];
 
-    propagatedBuildInputs = with python3Packages; [
+    dependencies = with python3Packages; [
       packaging
       regex
       requests
