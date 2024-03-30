@@ -465,6 +465,10 @@ let
       # Let's have a clean always accessible version here.
       name = attrs.name or "${attrs.pname}-${attrs.version}";
 
+      # `repository` shall default to an empty list
+
+      repository = attrs.repository or [];
+
       # If the packager hasn't specified `outputsToInstall`, choose a default,
       # which is the name of `p.bin or p.out or p` along with `p.man` when
       # present.
