@@ -4693,6 +4693,8 @@ self: super: with self; {
 
   gflanguages = callPackage ../development/python-modules/gflanguages { };
 
+  gfsubsets = callPackage ../development/python-modules/gfsubsets { };
+
   ghapi = callPackage ../development/python-modules/ghapi { };
 
   ghdiff = callPackage ../development/python-modules/ghdiff { };
