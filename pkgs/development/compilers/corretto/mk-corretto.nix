@@ -14,6 +14,8 @@
 , darwin
 , cups
 , iconv
+, libnet
+, libzip
 }:
 
 # Each Corretto version is based on a corresponding OpenJDK version. So
@@ -61,11 +63,24 @@ jdk.overrideAttrs (finalAttrs: oldAttrs: {
                         darwin.stubs.setfile
                         cups
                         darwin.libobjc
-                        darwin.apple_sdk.frameworks.Foundation
+                        libnet
+                        libzip
+
+                        darwin.apple_sdk.frameworks.Accelerate
+                        darwin.apple_sdk.frameworks.ApplicationServices
+                        darwin.apple_sdk.frameworks.AudioToolbox
+                        darwin.apple_sdk.frameworks.Carbon
                         darwin.apple_sdk.frameworks.Cocoa
-                        darwin.apple_sdk.frameworks.Kerberos
+                        darwin.apple_sdk.frameworks.CoreFoundation
+                        darwin.apple_sdk.frameworks.CoreServices
+                        darwin.apple_sdk.frameworks.ExceptionHandling
+                        darwin.apple_sdk.frameworks.Foundation
                         darwin.apple_sdk.frameworks.JavaRuntimeSupport
                         darwin.apple_sdk.frameworks.JavaVM
+                        darwin.apple_sdk.frameworks.Kerberos
+                        darwin.apple_sdk.frameworks.Security
+                        darwin.apple_sdk.frameworks.SystemConfiguration
+
                         iconv
                         xnu
                       ];
@@ -78,12 +93,12 @@ jdk.overrideAttrs (finalAttrs: oldAttrs: {
 
     # `/usr/bin/rsync` is invoked to copy the source tree. We don't have that.
     for file in $(find installers -name "build.gradle"); do
-      substituteInPlace $file --replace "workingDir '/usr/bin'" "workingDir '.'"
+      substituteInPlace $file --replace-fail "workingDir '/usr/bin'" "workingDir '.'"
     done
 
     # Remove the "sanity check" present in make/autoconf/basic.m4
     for file in $(find make/autoconf -name "basic.m4"); do
-      substituteInPlace $file --replace "if test ! -f \"\$SYSROOT/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h\"; then" "if false; then"
+      substituteInPlace $file --replace-fail "if test ! -f \"\$SYSROOT/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h\"; then" "if false; then"
     done
   '';
 
