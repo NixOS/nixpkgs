@@ -410,12 +410,30 @@ class ManpageConverter(BaseConverter[OptionsManpageRenderer]):
 class OptionsCommonMarkRenderer(OptionDocsRestrictions, CommonMarkRenderer):
     pass
 
+_id_translate_table = {
+    ord('*'): ord('_'),
+    ord('<'): ord('_'),
+    ord(' '): ord('_'),
+    ord('>'): ord('_'),
+    ord('['): ord('_'),
+    ord(']'): ord('_'),
+    ord(':'): ord('_'),
+    ord('"'): ord('_'),
+}
+def to_id(s: str) -> str:
+    return s.translate(_id_translate_table)
+
+
 class CommonMarkConverter(BaseConverter[OptionsCommonMarkRenderer]):
     __option_block_separator__ = ""
+    _render_anchors: bool
+    _anchor_prefix: str
 
-    def __init__(self, manpage_urls: Mapping[str, str], revision: str):
+    def __init__(self, manpage_urls: Mapping[str, str], revision: str, render_anchors: bool = False, anchor_prefix: str = "opt-"):
         super().__init__(revision)
         self._renderer = OptionsCommonMarkRenderer(manpage_urls)
+        self._render_anchors = render_anchors
+        self._anchor_prefix = anchor_prefix
 
     def _parallel_render_prepare(self) -> Any:
         return (self._renderer._manpage_urls, self._revision)
@@ -437,11 +455,15 @@ class CommonMarkConverter(BaseConverter[OptionsCommonMarkRenderer]):
     def _decl_def_footer(self) -> list[str]:
         return []
 
+    def make_id (self, loc: list[str]) -> str:
+        return '.'.join([to_id(x) for x in loc])
+
     def finalize(self) -> str:
         result = []
 
         for (name, opt) in self._sorted_options():
-            result.append(f"## {md_escape(name)}\n")
+            anchor_syntax = " {#" + self._anchor_prefix + self.make_id(opt.loc) + "}" if self._render_anchors else ""
+            result.append(f"## {md_escape(name)}{anchor_syntax}\n")
             result += opt.lines
             result.append("\n\n")
 
@@ -597,6 +619,8 @@ def _build_cli_manpage(p: argparse.ArgumentParser) -> None:
 def _build_cli_commonmark(p: argparse.ArgumentParser) -> None:
     p.add_argument('--manpage-urls', required=True)
     p.add_argument('--revision', required=True)
+    p.add_argument('--render-anchors', action=argparse.BooleanOptionalAction)
+    p.add_argument('--anchor-prefix', default="opt-")
     p.add_argument("infile")
     p.add_argument("outfile")
 
@@ -645,7 +669,12 @@ def _run_cli_manpage(args: argparse.Namespace) -> None:
 
 def _run_cli_commonmark(args: argparse.Namespace) -> None:
     with open(args.manpage_urls, 'r') as manpage_urls:
-        md = CommonMarkConverter(json.load(manpage_urls), revision = args.revision)
+        md = CommonMarkConverter(json.load(
+            manpage_urls),
+            revision = args.revision,
+            render_anchors = args.render_anchors,
+            anchor_prefix = args.anchor_prefix
+        )
 
         with open(args.infile, 'r') as f:
             md.add_options(json.load(f))

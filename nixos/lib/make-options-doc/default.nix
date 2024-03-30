@@ -46,6 +46,8 @@
 # deprecated since 23.11.
 # TODO remove in a while.
 , markdownByDefault ? true
+# Whether to enable anchors in `optionsMarkdown`
+, markdownAnchors ? true
 }:
 
 assert markdownByDefault && ! allowDocBook;
@@ -102,6 +104,21 @@ in rec {
     nixos-render-docs -j $NIX_BUILD_CORES options asciidoc \
       --manpage-urls ${pkgs.path + "/doc/manpage-urls.json"} \
       --revision ${lib.escapeShellArg revision} \
+      ${optionsJSON}/share/doc/nixos/options.json \
+      $out
+  '';
+
+  # CommonMark + requested extensions.
+  # anchors are enabled by default, but any new extensions should probably be disabled by default.
+  optionsMarkdown = pkgs.runCommand "options.md" {
+    nativeBuildInputs = [ pkgs.nixos-render-docs ];
+  } ''
+    nixos-render-docs -j $NIX_BUILD_CORES options commonmark \
+      --manpage-urls ${pkgs.path + "/doc/manpage-urls.json"} \
+      --revision ${lib.escapeShellArg revision}${
+        lib.optionalString markdownAnchors '' \
+          --render-anchors \
+          --anchor-prefix ${lib.escapeShellArg optionIdPrefix}''} \
       ${optionsJSON}/share/doc/nixos/options.json \
       $out
   '';
