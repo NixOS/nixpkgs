@@ -13,7 +13,6 @@ buildGoModule rec {
   version = "3.4.1";
 
   subPackages = [ "cmd/vale" ];
-  outputs = [ "out" "data" ];
 
   src = fetchFromGitHub {
     owner = "errata-ai";
@@ -23,11 +22,6 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-HMzFLSmO6sBDNU89UoIvHcPPd3ubpti2ii4sFMKUDmI=";
-
-  postInstall = ''
-    mkdir -p $data/share/vale
-    cp -r testdata/styles $data/share/vale
-  '';
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
