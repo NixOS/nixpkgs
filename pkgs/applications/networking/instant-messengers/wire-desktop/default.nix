@@ -26,7 +26,7 @@ let
   pname = "wire-desktop";
 
   version = let
-    x86_64-darwin = "3.32.4589";
+    x86_64-darwin = "3.35.4861";
   in {
     inherit x86_64-darwin;
     aarch64-darwin = x86_64-darwin;
@@ -34,7 +34,7 @@ let
   }.${system} or throwSystem;
 
   hash = let
-    x86_64-darwin = "sha256-PDAZCnkgzlausdtwycK+PHfp+zmL33VnX6RzCsgBTZ4=";
+    x86_64-darwin = "sha256-QPxslMEz1jOH2LceFOdCyVDtpya1SfJ8GWMIAIhie4U=";
   in {
     inherit x86_64-darwin;
     aarch64-darwin = x86_64-darwin;
