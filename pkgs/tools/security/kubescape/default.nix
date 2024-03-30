@@ -10,17 +10,17 @@
 
 buildGoModule rec {
   pname = "kubescape";
-  version = "3.0.7";
+  version = "3.0.8";
 
   src = fetchFromGitHub {
     owner = "kubescape";
     repo = "kubescape";
     rev = "refs/tags/v${version}";
-    hash = "sha256-eQIP03UOUykb68u/LnvWwAs1pqm71bUH+/la5y+3ewU=";
+    hash = "sha256-ZGDE9go8BmaXE1YFT/z5Nob90MhsKZ6oKrodDMu2npY=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-Jz7CorEPKpgfhjf/jc1/dOWJ6pwxwG68cp8rzpZGpFs=";
+  vendorHash = "sha256-qFJVoWzU9rqpYbb8gzdK33rq///zizxVkWhsNV8OXOM=";
 
   subPackages = [
     "."
@@ -76,7 +76,6 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool for testing if Kubernetes is deployed securely";
-    mainProgram = "kubescape";
     homepage = "https://github.com/kubescape/kubescape";
     changelog = "https://github.com/kubescape/kubescape/releases/tag/v${version}";
     longDescription = ''
@@ -92,6 +91,7 @@ buildGoModule rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ fab jk ];
+    mainProgram = "kubescape";
     broken = stdenv.isDarwin;
   };
 }
