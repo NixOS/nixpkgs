@@ -1,8 +1,14 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+  nix-update-script,
+}:
 
 buildGoModule rec {
   pname = "consul";
-  version = "1.18.0";
+  version = "1.18.1";
 
   # Note: Currently only release tags are supported, because they have the Consul UI
   # vendored. See
@@ -16,16 +22,17 @@ buildGoModule rec {
     owner = "hashicorp";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Xhh6Rrcv/FoBjzhWR59gQ/R4A3ynqWYS8djNe3CnGCE=";
+    hash = "sha256-r1xdz1rjvbvB93hRpvTNQwSqQLOJwqMhqCiXdIttY10=";
   };
-
-  passthru.tests.consul = nixosTests.consul;
 
   # This corresponds to paths with package main - normally unneeded but consul
   # has a split module structure in one repo
-  subPackages = ["." "connect/certgen"];
+  subPackages = [
+    "."
+    "connect/certgen"
+  ];
 
-  vendorHash = "sha256-pNFjLXjtgsK8fjCCmjYclZw1GM4BfyzkTuaRCRIMJ3c=";
+  vendorHash = "sha256-DcpEHJ88Ehz5m+ddMd44mYTz0agwYhoels5jWJzu1EM=";
 
   doCheck = false;
 
@@ -35,13 +42,26 @@ buildGoModule rec {
     "-X github.com/hashicorp/consul/version.VersionPrerelease="
   ];
 
+  passthru = {
+    tests = {
+      inherit (nixosTests) consul;
+    };
+
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     description = "Tool for service discovery, monitoring and configuration";
     changelog = "https://github.com/hashicorp/consul/releases/tag/v${version}";
     homepage = "https://www.consul.io/";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.bsl11;
-    maintainers = with maintainers; [ pradeepchhetri vdemeester nh2 techknowlogick];
+    maintainers = with maintainers; [
+      pradeepchhetri
+      vdemeester
+      nh2
+      techknowlogick
+    ];
     mainProgram = "consul";
   };
 }
