@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "reptor";
-  version = "0.13";
+  version = "0.16";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -41,17 +41,17 @@ buildPythonPackage rec {
     owner = "Syslifters";
     repo = "reptor";
     rev = "refs/tags/${version}";
-    hash = "sha256-7jFS3GCaPeGBBxB++XTtIYh+m0uXTm5NHuLeIen0KYc=";
+    hash = "sha256-xyk83XPITD1sAtuFcndTQg0otDMO89LK+B+9SD89kvo=";
   };
 
   pythonRelaxDeps = true;
 
-  nativeBuildInputs = [
+  build-system = [
     pythonRelaxDepsHook
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asgiref
     certifi
     charset-normalizer

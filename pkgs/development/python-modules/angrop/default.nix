@@ -11,22 +11,22 @@
 buildPythonPackage rec {
   pname = "angrop";
   version = "9.2.8";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "angr";
-    repo = pname;
+    repo = "angrop";
     rev = "refs/tags/v${version}";
     hash = "sha256-zmWdGbFzwLDP7MUqEprZcIgA7lAdCrafWYohAehJyh0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     angr
     progressbar
     tqdm

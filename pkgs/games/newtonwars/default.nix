@@ -1,14 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, freeglut, libGLU, libGL }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, freeglut
+, libGLU
+, libGL
+}:
 
 stdenv.mkDerivation {
   pname = "newtonwars";
-  version = "20150609";
+  version = "unstable-2023-04-08";
 
   src = fetchFromGitHub {
     owner = "Draradech";
     repo = "NewtonWars";
-    rev = "98bb99a1797fd0073e0fd25ef9218468d3a9f7cb";
-    sha256 = "0g63fwfcdxxlnqlagj1fb8ngm385gmv8f7p8b4r1z5cny2znxdvs";
+    rev = "a32ea49f8f1d2bdb8983c28d24735696ac987617";
+    hash = "sha256-qkvgQraYR+EXWUQkEvSOcbNFn2oRTjwj5U164tVto8M=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

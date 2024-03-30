@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "playwrightcapture";
-  version = "1.23.13";
+  version = "1.24.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "Lookyloo";
     repo = "PlaywrightCapture";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jNTVdGrUQaYHgTxz6zYTdxNQoXEfy/zshherC/gGmng=";
+    hash = "sha256-+2BxXgIC595FM3FDIbFjFpWIEkqQrDILWFjQkyN5nao=";
   };
 
   pythonRelaxDeps = [
@@ -39,12 +39,12 @@ buildPythonPackage rec {
     "tzdata"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
     dateparser
     playwright

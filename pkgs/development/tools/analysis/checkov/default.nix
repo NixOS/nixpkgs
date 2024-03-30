@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "checkov";
-  version = "3.2.45";
+  version = "3.2.49";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "checkov";
     rev = "refs/tags/${version}";
-    hash = "sha256-mVGfWBQEWKS5WsWQUi8NdsR1bX21MbUnNDijZ/l/ksY=";
+    hash = "sha256-lO1NMK+tIj/riNt5JVjqgQDAfDlApENi0waj5pfjubc=";
   };
 
   patches = [

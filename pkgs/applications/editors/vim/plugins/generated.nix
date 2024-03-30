@@ -16985,6 +16985,18 @@ final: prev:
     meta.homepage = "https://github.com/samodostal/image.nvim/";
   };
 
+  texpresso-vim = buildVimPlugin {
+    pname = "texpresso.vim";
+    version = "2024-03-08";
+    src = fetchFromGitHub {
+      owner = "let-def";
+      repo = "texpresso.vim";
+      rev = "04816dcdddc27e6c50fc2a4faff0ef1675a7ee8e";
+      sha256 = "08lzl0g1b287agscd345yg9cmxsj2vlbg83s1mgsa13qn81y6jga";
+    };
+    meta.homepage = "https://github.com/let-def/texpresso.vim/";
+  };
+
   tinykeymap = buildVimPlugin {
     pname = "tinykeymap";
     version = "2024-02-17";
@@ -17031,6 +17043,18 @@ final: prev:
       sha256 = "sha256-7ljjJ7UwN2U1xPCtsYbrKdnz6SGQGbM/HrxPTxNKlwo=";
     };
     meta.homepage = "https://github.com/lukas-reineke/virt-column.nvim/";
+  };
+
+  jupytext-nvim = buildVimPlugin {
+    pname = "jupytest-nvim";
+    version = "2024-01-24";
+    src = fetchFromGitHub {
+      owner = "GCBallesteros";
+      repo = "jupytext.nvim";
+      rev = "68fddf28119dbaddfaea6b71f3d6aa1e081afb93";
+      sha256 = "sha256-x5emW+qfUTUDR72B9QdDgVdrb8wGH9D7AdtRrQm80sI=";
+    };
+    meta.homepage = "https://github.com/GCBallesteros/jupytext.nvim/";
   };
 
 
