@@ -16,32 +16,23 @@
 , libclang
 , autoPatchelfHook
 , clang
-, fetchpatch
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "niri";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "niri";
     rev = "v${version}";
-    hash = "sha256-VTtXEfxc3OCdtdYiEdtftOQ7gDJNb679Yw8v1Lu3lhY=";
+    hash = "sha256-lkGIQIMWfg71UOkT/TST8O6hD0IfslENj6oFPevUGl4=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "revert-viewporter.patch";
-      url = "https://github.com/YaLTeR/niri/commit/40cec34aa4a7f99ab12b30cba1a0ee83a706a413.patch";
-      hash = "sha256-3fg8v0eotfjUQY6EVFEPK5BBIBrr6vQpXbjDcsw2E8Q=";
-    })
-  ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "smithay-0.3.0" = "sha256-sXdixfPLAUIIVK+PhqRuMZ7XKNJIGkWNlH8nBzXlxCU=";
+      "smithay-0.3.0" = "sha256-bWan2DCyMvEC8ZQPwM+XpuOGkOZ/RdDV+LmRCN8UAuc=";
     };
   };
 
