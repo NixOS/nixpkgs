@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "kivy";
     repo = "kivy";
     rev = version;
-    hash = "sha256-QJ490vjpEj/JSE9OzSvDpkCruaTFdlThUHIEAMm0BZ4";
+    hash = "sha256-QJ490vjpEj/JSE9OzSvDpkCruaTFdlThUHIEAMm0BZ4=";
   };
 
   nativeBuildInputs = [
