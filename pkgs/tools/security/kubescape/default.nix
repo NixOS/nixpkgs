@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
 , git
@@ -91,5 +92,6 @@ buildGoModule rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ fab jk ];
+    broken = stdenv.isDarwin;
   };
 }
