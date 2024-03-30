@@ -11,14 +11,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-A4CEU5wfwykVTDIsKZnQ8co+6RwBGYGZEZxRFzQTKBI=";
   };
 
+  patchPhase = ''
+    sed -i -e /ldconfig/d Makefile
+  '';
+
   nativeBuildInputs = lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
 
   installPhase = ''
     runHook preInstall
-    mkdir $out
-    cp -R build/lib $out/lib
-    cp -R build/include $out/include
+    make install DESTDIR="$out"
+  '' + lib.optionalString stdenv.isLinux ''
     ln -sf $out/lib/libcs50.so.11.0.2 $out/lib/libcs50.so.11
+  '' + ''
     runHook postInstall
   '';
 
@@ -26,5 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/cs50/libcs50";
     description = "CS50 Library for C";
     license = licenses.gpl3Only;
+    # At least tested on these but maybe this works on more?
+    platforms = lib.platforms.unix;
   };
 })
