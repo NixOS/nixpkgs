@@ -110,9 +110,9 @@
     ]
   },
   "groupfolders": {
-    "sha256": "0p3g19cmfjn1zql6cr3bv0cvfj078vh6ian024iwvc6ir8fmsni0",
-    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v15.3.5/groupfolders-v15.3.5.tar.gz",
-    "version": "15.3.5",
+    "sha256": "00pjva8hc36mnawvbpsi6lizzdhclp30z92vaz8j24xmhf21yvh9",
+    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v15.3.6/groupfolders-v15.3.6.tar.gz",
+    "version": "15.3.6",
     "description": "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported.",
     "homepage": "https://github.com/nextcloud/groupfolders",
     "licenses": [
@@ -150,8 +150,8 @@
     ]
   },
   "maps": {
-    "sha256": "049hrp79fj1bp9nk9isjrk427k238974x7gsj68jplxfrgq3sdkz",
-    "url": "https://github.com/nextcloud/maps/releases/download/v1.2.0-2-nightly/maps-1.2.0-2-nightly.tar.gz",
+    "sha256": "1gyxg5xp4mpdrw8630nqcf5yk8cs7a0kvfik2q01p05d533phc4d",
+    "url": "https://github.com/nextcloud/maps/releases/download/v1.2.0/maps-1.2.0.tar.gz",
     "version": "1.2.0",
     "description": "**The whole world fits inside your cloud!**\n\n- **🗺 Beautiful map:** Using [OpenStreetMap](https://www.openstreetmap.org) and [Leaflet](https://leafletjs.com), you can choose between standard map, satellite, topographical, dark mode or even watercolor! 🎨\n- **⭐ Favorites:** Save your favorite places, privately! Sync with [GNOME Maps](https://github.com/nextcloud/maps/issues/30) and mobile apps is planned.\n- **🧭 Routing:** Possible using either [OSRM](http://project-osrm.org), [GraphHopper](https://www.graphhopper.com) or [Mapbox](https://www.mapbox.com).\n- **🖼 Photos on the map:** No more boring slideshows, just show directly where you were!\n- **🙋 Contacts on the map:** See where your friends live and plan your next visit.\n- **📱 Devices:** Lost your phone? Check the map!\n- **〰 Tracks:** Load GPS tracks or past trips. Recording with [PhoneTrack](https://f-droid.org/en/packages/net.eneiluj.nextcloud.phonetrack/) or [OwnTracks](https://owntracks.org) is planned.",
     "homepage": "https://github.com/nextcloud/maps",
@@ -190,9 +190,9 @@
     ]
   },
   "notes": {
-    "sha256": "02893azzq507frb3x7h13ypx09yn9rx740hgfw7q1a2il2ixww5f",
-    "url": "https://github.com/nextcloud-releases/notes/releases/download/v4.9.2/notes.tar.gz",
-    "version": "4.9.2",
+    "sha256": "1ii3ii2062wklss3mxsfbvqi4hvi96a20i20lbwm6z2x6q7fqqi3",
+    "url": "https://github.com/nextcloud-releases/notes/releases/download/v4.9.4/notes-v4.9.4.tar.gz",
+    "version": "4.9.4",
     "description": "The Notes app is a distraction free notes taking app for [Nextcloud](https://www.nextcloud.com/). It provides categories for better organization and supports formatting using [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax. Notes are saved as files in your Nextcloud, so you can view and edit them with every Nextcloud client. Furthermore, a separate [REST API](https://github.com/nextcloud/notes/blob/master/docs/api/README.md) allows for an easy integration into third-party apps (currently, there are notes apps for [Android](https://github.com/nextcloud/notes-android), [iOS](https://github.com/nextcloud/notes-ios) and the [console](https://git.danielmoch.com/nncli/about) which allow convenient access to your Nextcloud notes). Further features include marking notes as favorites.",
     "homepage": "https://github.com/nextcloud/notes",
     "licenses": [

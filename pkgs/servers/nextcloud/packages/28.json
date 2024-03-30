@@ -60,9 +60,9 @@
     ]
   },
   "end_to_end_encryption": {
-    "sha256": "1h9is67lbnvgnv6n9p07si0qcp6hgymlq7f07z8s2ckf04p0nzad",
-    "url": "https://github.com/nextcloud-releases/end_to_end_encryption/releases/download/v1.14.4/end_to_end_encryption-v1.14.4.tar.gz",
-    "version": "1.14.4",
+    "sha256": "04b2hj96gpb4sf1w5r1sxa4fmxrk36vr3pia8i5w2pfi6fbhd9mc",
+    "url": "https://github.com/nextcloud-releases/end_to_end_encryption/releases/download/v1.14.5/end_to_end_encryption-v1.14.5.tar.gz",
+    "version": "1.14.5",
     "description": "Provides the necessary endpoint to enable end-to-end encryption.\n\n**Notice:** E2EE is currently not compatible to be used together with server-side encryption",
     "homepage": "https://github.com/nextcloud/end_to_end_encryption",
     "licenses": [
@@ -90,9 +90,9 @@
     ]
   },
   "groupfolders": {
-    "sha256": "00237wdfn7yj31mjpv6crnk0lrazy9iljfcpxjhy4g91d8sc3f5d",
-    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v16.0.4/groupfolders-v16.0.4.tar.gz",
-    "version": "16.0.4",
+    "sha256": "0cg81d75dg96zp09jy4yzg65v14wf99c2snnj304v4dia410c8a3",
+    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v16.0.5/groupfolders-v16.0.5.tar.gz",
+    "version": "16.0.5",
     "description": "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported.",
     "homepage": "https://github.com/nextcloud/groupfolders",
     "licenses": [
@@ -160,9 +160,9 @@
     ]
   },
   "notes": {
-    "sha256": "02893azzq507frb3x7h13ypx09yn9rx740hgfw7q1a2il2ixww5f",
-    "url": "https://github.com/nextcloud-releases/notes/releases/download/v4.9.2/notes.tar.gz",
-    "version": "4.9.2",
+    "sha256": "1ii3ii2062wklss3mxsfbvqi4hvi96a20i20lbwm6z2x6q7fqqi3",
+    "url": "https://github.com/nextcloud-releases/notes/releases/download/v4.9.4/notes-v4.9.4.tar.gz",
+    "version": "4.9.4",
     "description": "The Notes app is a distraction free notes taking app for [Nextcloud](https://www.nextcloud.com/). It provides categories for better organization and supports formatting using [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax. Notes are saved as files in your Nextcloud, so you can view and edit them with every Nextcloud client. Furthermore, a separate [REST API](https://github.com/nextcloud/notes/blob/master/docs/api/README.md) allows for an easy integration into third-party apps (currently, there are notes apps for [Android](https://github.com/nextcloud/notes-android), [iOS](https://github.com/nextcloud/notes-ios) and the [console](https://git.danielmoch.com/nncli/about) which allow convenient access to your Nextcloud notes). Further features include marking notes as favorites.",
     "homepage": "https://github.com/nextcloud/notes",
     "licenses": [
@@ -200,9 +200,9 @@
     ]
   },
   "polls": {
-    "sha256": "1a5fyx1wvgwm2mjqmg5kah3x2y77zw8ly1zvcx6m4x50s113rkbi",
-    "url": "https://github.com/nextcloud/polls/releases/download/v6.1.6/polls.tar.gz",
-    "version": "6.1.6",
+    "sha256": "0gym2sx9lx6nvyby9pj1xml4n9fa7q91rl1i33kb70fclv622ca3",
+    "url": "https://github.com/nextcloud/polls/releases/download/v7.0.0/polls.tar.gz",
+    "version": "7.0.0",
     "description": "A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "homepage": "https://github.com/nextcloud/polls",
     "licenses": [

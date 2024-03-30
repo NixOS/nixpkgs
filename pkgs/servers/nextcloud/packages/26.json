@@ -110,9 +110,9 @@
     ]
   },
   "groupfolders": {
-    "sha256": "19j2iqn3fjlzcswgbxwvxggzqc3aili8br4vjpr8dd9h1rzm453y",
-    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v14.0.7/groupfolders-v14.0.7.tar.gz",
-    "version": "14.0.7",
+    "sha256": "1icpj855ib6cx7b57njvhdkcwgd4jmndm3gwh8qgq0mvdlkqpmd0",
+    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v14.0.8/groupfolders-v14.0.8.tar.gz",
+    "version": "14.0.8",
     "description": "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported.",
     "homepage": "https://github.com/nextcloud/groupfolders",
     "licenses": [
@@ -190,9 +190,9 @@
     ]
   },
   "notes": {
-    "sha256": "02893azzq507frb3x7h13ypx09yn9rx740hgfw7q1a2il2ixww5f",
-    "url": "https://github.com/nextcloud-releases/notes/releases/download/v4.9.2/notes.tar.gz",
-    "version": "4.9.2",
+    "sha256": "1ii3ii2062wklss3mxsfbvqi4hvi96a20i20lbwm6z2x6q7fqqi3",
+    "url": "https://github.com/nextcloud-releases/notes/releases/download/v4.9.4/notes-v4.9.4.tar.gz",
+    "version": "4.9.4",
     "description": "The Notes app is a distraction free notes taking app for [Nextcloud](https://www.nextcloud.com/). It provides categories for better organization and supports formatting using [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax. Notes are saved as files in your Nextcloud, so you can view and edit them with every Nextcloud client. Furthermore, a separate [REST API](https://github.com/nextcloud/notes/blob/master/docs/api/README.md) allows for an easy integration into third-party apps (currently, there are notes apps for [Android](https://github.com/nextcloud/notes-android), [iOS](https://github.com/nextcloud/notes-ios) and the [console](https://git.danielmoch.com/nncli/about) which allow convenient access to your Nextcloud notes). Further features include marking notes as favorites.",
     "homepage": "https://github.com/nextcloud/notes",
     "licenses": [
