@@ -2835,6 +2835,10 @@ self: super: {
   co-log-polysemy = doJailbreak super.co-log-polysemy;
   co-log-polysemy-formatting = doJailbreak super.co-log-polysemy-formatting;
 
+  # calls ghc in tests
+  # https://github.com/brandonchinn178/tasty-autocollect/issues/54
+  tasty-autocollect = dontCheck super.tasty-autocollect;
+
   postgrest = lib.pipe super.postgrest [
     # 2023-12-20: New version needs extra dependencies
     (addBuildDepends [ self.extra self.fuzzyset_0_2_4 self.cache self.timeit ])
