@@ -1,20 +1,35 @@
 { lib, buildDotnetModule, fetchFromGitHub, dotnetCorePackages, SDL2, libsecret, glib, gnutls, aria2, steam, gst_all_1
 , copyDesktopItems, makeDesktopItem, makeWrapper
 , useSteamRun ? true
-, useGameMode ? false }:
+, useGameMode ? false
+, useRbPatchedLauncher ? false }:
 
 let
-  rev = "1.0.8";
+  goatcorp = {
+    version = "1.0.8";
+    owner = "goatcorp";
+    rev = goatcorp.version;
+    hash = "sha256-x4W5L4k+u0MYKDWJu82QcXARW0zjmqqwGiueR1IevMk=";
+  };
+
+  rankynbass = {
+    version = "1.0.8.1";
+    owner = "rankynbass";
+    rev = "rb-v1.0.8.1";
+    hash = "sha256-4bQUgghF6Kv8seLBdq4REREItIeRKYcP3qPQnJmkgsA=";
+  };
+
+  source = if useRbPatchedLauncher then rankynbass else goatcorp;
 in
   buildDotnetModule rec {
-    pname = "XIVLauncher";
-    version = rev;
+    pname = "XIVLauncher${lib.optionalString useRbPatchedLauncher "-RB"}";
+    version = source.version;
 
     src = fetchFromGitHub {
-      owner = "goatcorp";
+      owner = source.owner;
       repo = "XIVLauncher.Core";
-      inherit rev;
-      hash = "sha256-x4W5L4k+u0MYKDWJu82QcXARW0zjmqqwGiueR1IevMk=";
+      rev = source.rev;
+      hash = source.hash;
       fetchSubmodules = true;
     };
 
@@ -26,7 +41,7 @@ in
     nugetDeps = ./deps.nix; # File generated with `nix-build -A xivlauncher.passthru.fetch-deps`
 
     dotnetFlags = [
-      "-p:BuildHash=${rev}"
+      "-p:BuildHash=${source.rev}"
       "-p:PublishSingleFile=false"
     ];
 
@@ -66,7 +81,7 @@ in
         name = "xivlauncher";
         exec = "XIVLauncher.Core";
         icon = "xivlauncher";
-        desktopName = "XIVLauncher";
+        desktopName = "XIVLauncher${lib.optionalString useRbPatchedLauncher "-RB"}";
         comment = meta.description;
         categories = [ "Game" ];
         startupWMClass = "XIVLauncher.Core";
@@ -75,7 +90,7 @@ in
 
     meta = with lib; {
       description = "Custom launcher for FFXIV";
-      homepage = "https://github.com/goatcorp/XIVLauncher.Core";
+      homepage = "https://github.com/${source.owner}/XIVLauncher.Core";
       license = licenses.gpl3;
       maintainers = with maintainers; [ sersorrel witchof0x20 ];
       platforms = [ "x86_64-linux" ];
