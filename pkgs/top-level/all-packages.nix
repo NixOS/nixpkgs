@@ -4709,8 +4709,6 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  consul = callPackage ../servers/consul { };
-
   consul-alerts = callPackage ../servers/monitoring/consul-alerts { };
 
   consul-template = callPackage ../tools/system/consul-template { };
