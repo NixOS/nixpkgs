@@ -5816,7 +5816,6 @@ broken-packages:
   - tart # failure in job https://hydra.nixos.org/build/252723842 at 2024-03-16
   - taskell # depends on old version of brick
   - TaskMonad # failure in job https://hydra.nixos.org/build/233219257 at 2023-09-02
-  - tasty-autocollect # failure in job https://hydra.nixos.org/build/233256957 at 2023-09-02
   - tasty-auto # failure in job https://hydra.nixos.org/build/233220008 at 2023-09-02
   - tasty-checklist # failure in job https://hydra.nixos.org/build/252710481 at 2024-03-16
   - tasty-fail-fast # failure in job https://hydra.nixos.org/build/233200040 at 2023-09-02
