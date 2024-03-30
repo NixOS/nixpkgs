@@ -447,6 +447,7 @@ let
   commonMeta = { validity, attrs, pos ? null, references ? [ ] }:
     let
       outputs = attrs.outputs or [ "out" ];
+      hasOutput = out: builtins.elem out outputs;
     in
     optionalAttrs (attrs ? src.meta.homepage || attrs ? srcs && isList attrs.srcs && any (src: src ? meta.homepage) attrs.srcs) {
       # should point to an http-browsable source tree, if available.
@@ -487,10 +488,13 @@ let
       #   Services and users should specify outputs explicitly,
       #   unless they are comfortable with this default.
       outputsToInstall =
-        let
-          hasOutput = out: builtins.elem out outputs;
-        in
-        [ (findFirst hasOutput null ([ "bin" "out" ] ++ outputs)) ]
+        [
+          (
+            if hasOutput "bin" then "bin"
+            else if hasOutput "out" then "out"
+            else findFirst hasOutput null outputs
+          )
+        ]
         ++ optional (hasOutput "man") "man";
     }
     // attrs.meta or { }
