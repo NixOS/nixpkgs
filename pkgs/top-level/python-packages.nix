@@ -5844,7 +5844,6 @@ self: super: with self; {
 
   iso-639 = callPackage ../development/python-modules/iso-639 { };
 
-
   iso4217 = callPackage ../development/python-modules/iso4217 { };
 
   iso8601 = callPackage ../development/python-modules/iso8601 { };
@@ -16224,8 +16223,6 @@ self: super: with self; {
   unrpa = callPackage ../development/python-modules/unrpa { };
 
   unstructured = callPackage ../development/python-modules/unstructured { };
-
-  unstructured-client = callPackage ../development/python-modules/unstructured-client { };
 
   unstructured-api-tools = callPackage ../development/python-modules/unstructured-api-tools { };
 
