@@ -20,6 +20,7 @@
 , millet
 , craftos-pc
 , shfmt
+, tinymist
 , typst-lsp
 , typst-preview
 , autoPatchelfHook
@@ -2345,6 +2346,22 @@ let
         };
       };
 
+      jbockle.jbockle-format-files = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "jbockle-format-files";
+          publisher = "jbockle";
+          version = "3.4.0";
+          sha256 = "sha256-BHw+T2EPdQq/wOD5kzvSln5SBFTYUXip8QDjnAGBfFY=";
+        };
+        meta = {
+          description = "A VSCode extension to formats all files in the current workspace";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=jbockle.jbockle-format-files";
+          homepage = "https://github.com/jbockle/format-files";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.wackbyte ];
+        };
+      };
+
       jdinhlife.gruvbox = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "gruvbox";
@@ -3166,6 +3183,37 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      myriad-dreamin.tinymist = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "tinymist";
+          publisher = "myriad-dreamin";
+          # Please update the corresponding binary (tinymist) when updating
+          # this extension.
+          version = "0.11.1";
+          sha256 = "sha256-jyZBnT8UW94TVnZKZna1cJa/UIj+DwYwlAbU4pnaf04=";
+        };
+
+        nativeBuildInputs = [ jq moreutils ];
+
+        buildInputs = [
+          tinymist
+        ];
+
+        postInstall = ''
+          cd "$out/$installPrefix"
+          jq '.contributes.configuration.properties."tinymist.serverPath".default = "${lib.getExe tinymist}"' package.json | sponge package.json
+        '';
+
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/myriad-dreamin.tinymist/changelog";
+          description = "A VSCode extension for providing an integration solution for Typst";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=myriad-dreamin.tinymist";
+          homepage = "https://github.com/myriad-dreamin/tinymist";
+          license = lib.licenses.asl20;
+          maintainers = [ lib.maintainers.drupol ];
         };
       };
 

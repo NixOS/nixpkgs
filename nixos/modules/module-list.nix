@@ -331,6 +331,7 @@
   ./security/systemd-confinement.nix
   ./security/tpm2.nix
   ./security/wrappers/default.nix
+  ./services/admin/docuum.nix
   ./services/admin/meshcentral.nix
   ./services/admin/oxidized.nix
   ./services/admin/pgadmin.nix
@@ -362,9 +363,6 @@
   ./services/audio/spotifyd.nix
   ./services/audio/squeezelite.nix
   ./services/audio/tts.nix
-  ./services/audio/wyoming/faster-whisper.nix
-  ./services/audio/wyoming/openwakeword.nix
-  ./services/audio/wyoming/piper.nix
   ./services/audio/ympd.nix
   ./services/backup/automysqlbackup.nix
   ./services/backup/bacula.nix
@@ -587,8 +585,11 @@
   ./services/home-automation/evcc.nix
   ./services/home-automation/govee2mqtt.nix
   ./services/home-automation/home-assistant.nix
-  ./services/home-automation/homeassistant-satellite.nix
   ./services/home-automation/matter-server.nix
+  ./services/home-automation/wyoming/faster-whisper.nix
+  ./services/home-automation/wyoming/openwakeword.nix
+  ./services/home-automation/wyoming/piper.nix
+  ./services/home-automation/wyoming/satellite.nix
   ./services/home-automation/zigbee2mqtt.nix
   ./services/home-automation/zwave-js.nix
   ./services/logging/SystemdJournal2Gelf.nix
@@ -712,6 +713,7 @@
   ./services/misc/homepage-dashboard.nix
   ./services/misc/ihaskell.nix
   ./services/misc/input-remapper.nix
+  ./services/misc/invidious-router.nix
   ./services/misc/irkerd.nix
   ./services/misc/jackett.nix
   ./services/misc/jellyfin.nix

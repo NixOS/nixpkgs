@@ -188,7 +188,14 @@ in
       description = lib.mdDoc ''The port which the Excalidraw backend for Jitsi should listen to.'';
     };
 
-    secureDomain.enable = mkEnableOption (lib.mdDoc "Authenticated room creation");
+    secureDomain = {
+      enable = mkEnableOption (lib.mdDoc "Authenticated room creation");
+      authentication = mkOption {
+        type = types.str;
+        default = "internal_hashed";
+        description = lib.mdDoc ''The authentication type to be used by jitsi'';
+      };
+    };
   };
 
   config = mkIf cfg.enable {
@@ -309,7 +316,7 @@ in
         enabled = true;
         domain = cfg.hostName;
         extraConfig = ''
-          authentication = ${if cfg.secureDomain.enable then "\"internal_hashed\"" else "\"jitsi-anonymous\""}
+          authentication = ${if cfg.secureDomain.enable then "\"${cfg.secureDomain.authentication}\"" else "\"jitsi-anonymous\""}
           c2s_require_encryption = false
           admins = { "focus@auth.${cfg.hostName}" }
           smacks_max_unacked_stanzas = 5

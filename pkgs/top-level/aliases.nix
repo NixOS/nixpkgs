@@ -59,6 +59,7 @@ mapAliases ({
   AusweisApp2 = ausweisapp; # Added 2023-11-08
   a4term = a4; # Added 2023-10-06
   adtool = throw "'adtool' has been removed, as it was broken and unmaintained";
+  advcpmv = throw "'advcpmv' has been removed, as it is not being actively maintained and break recent coreutils."; # Added 2024-03-29
   aether = throw "aether has been removed from nixpkgs; upstream unmaintained, security issues"; # Added 2023-10-03
   airfield = throw "airfield has been removed due to being unmaintained"; # Added 2023-05-19
   alertmanager-bot = throw "alertmanager-bot is broken and has been archived by upstream"; # Added 2023-07-28
