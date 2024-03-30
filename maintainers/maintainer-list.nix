@@ -10717,6 +10717,12 @@
     github = "LongerHV";
     githubId = 46924944;
   };
+  lonyelon = {
+    email = "sergio@lony.xyz";
+    name = "Sergio Miguéns Iglesias";
+    github = "lonyelon";
+    githubId = 18664655;
+  };
   lopsided98 = {
     email = "benwolsieffer@gmail.com";
     github = "lopsided98";
