@@ -1,12 +1,16 @@
 # TODO: switch to stdenvNoCC
 { stdenv
+, stdenvNoCC
 , lib
 , writeText
 , testers
 , runCommand
+, runCommandWith
 , expect
 , curl
 , installShellFiles
+, callPackage
+, zlib
 }: type: args: stdenv.mkDerivation (finalAttrs: args // {
   doInstallCheck = true;
 
@@ -43,9 +47,11 @@
       mkDotnetTest =
         {
           name,
+          stdenv ? stdenvNoCC,
           template,
           usePackageSource ? false,
           build,
+          buildInputs ? [],
           # TODO: use correct runtimes instead of sdk
           runtime ? finalAttrs.finalPackage,
           runInputs ? [],
@@ -54,19 +60,20 @@
         }:
         let
           sdk = finalAttrs.finalPackage;
-          built = runCommand "dotnet-test-${name}" {
-            buildInputs = [ sdk ];
-            # make sure ICU works in a sandbox
-            propagatedSandboxProfile = toString sdk.__propagatedSandboxProfile + ''
-              (allow network-inbound (local ip))
-              (allow mach-lookup (global-name "com.apple.FSEvents"))
-            '';
+          built = runCommandWith  {
+            name = "dotnet-test-${name}";
+            inherit stdenv;
+            derivationArgs = {
+              buildInputs = [ sdk ] ++ buildInputs;
+              # make sure ICU works in a sandbox
+              propagatedSandboxProfile = toString sdk.__propagatedSandboxProfile;
+            };
           } (''
             HOME=$PWD/.home
             dotnet new nugetconfig
             dotnet nuget disable source nuget
           '' + lib.optionalString usePackageSource ''
-            dotnet nuget add source ${finalAttrs.finalPackage.packages}
+            dotnet nuget add source ${sdk.packages}
           '' + ''
             dotnet new ${template} -n test -o .
           '' + build);
@@ -96,6 +103,8 @@
         [[ "$output" =~ Hello,?\ World! ]] && touch "$out"
       '';
 
+      patchNupkgs = callPackage ./patch-nupkgs.nix {};
+
     in {
       version = testers.testVersion ({
         package = finalAttrs.finalPackage;
@@ -103,7 +112,7 @@
         command = "dotnet --info";
       });
     }
-    // lib.optionalAttrs (type == "sdk") {
+    // lib.optionalAttrs (type == "sdk") ({
       console = mkDotnetTest {
         name = "console";
         template = "console";
@@ -165,6 +174,21 @@
         '';
         runAllowNetworking = true;
       };
-    } // args.passthru.tests or {};
+    } // lib.optionalAttrs finalAttrs.finalPackage.hasILCompiler {
+      aot = mkDotnetTest {
+        name = "aot";
+        inherit stdenv;
+        template = "console";
+        usePackageSource = true;
+        buildInputs = [ patchNupkgs zlib ];
+        build = ''
+          dotnet restore -p:PublishAot=true
+          patch-nupkgs .home/.nuget/packages
+          dotnet publish -p:PublishAot=true -o $out/bin
+        '';
+        runtime = null;
+        run = checkConsoleOutput "$src/bin/test";
+      };
+    }) // args.passthru.tests or {};
   } // args.passthru or {};
 })
