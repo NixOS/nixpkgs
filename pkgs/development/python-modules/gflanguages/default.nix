@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "gflanguages";
-  version = "5.0.4";
+  version = "0.5.13";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AGXpg9EhwdhrcbdcHqz2v9TLaWH1F5gr0QhSuEN2GDA=";
+    hash = "sha256-LoppJHzX0dOpHnwMCyS1ACdIO4cqwb370ksvsXDFHzQ=";
   };
 
   # Relax the dependency on protobuf 3. Other packages in the Google Fonts
