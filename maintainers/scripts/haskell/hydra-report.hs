@@ -186,18 +186,17 @@ getBuildReports opt args = runReq defaultHttpConfig do
          maybe (liftIO $ fail "No Evaluation found") pure evalMay
       _ -> liftIO usage
    liftIO . putStrLn $ "Fetching evaluation " <> show id <> " from Hydra. This might take a few minutes..."
-   buildReports <- getEvalBuilds opt id
+   buildReports <- getEvalBuilds opt eval
    liftIO do
       fileName <- reportFileName
       putStrLn $ "Finished fetching all builds from Hydra, saving report as " <> fileName
       now <- getCurrentTime
       encodeFile fileName (eval, now, buildReports)
 
-getEvalBuilds :: HydraSlownessWorkaroundFlag -> Int -> Req (Seq Build)
-getEvalBuilds NoHydraSlownessWorkaround id =
+getEvalBuilds :: HydraSlownessWorkaroundFlag -> Eval -> Req (Seq Build)
+getEvalBuilds NoHydraSlownessWorkaround Eval{id} =
   hydraJSONQuery mempty ["eval", showT id, "builds"]
-getEvalBuilds HydraSlownessWorkaround id = do
-  Eval{builds} <- hydraJSONQuery mempty [ "eval", showT id ]
+getEvalBuilds HydraSlownessWorkaround Eval{builds} = do
   forM builds $ \buildId -> do
     liftIO $ putStrLn $ "Querying build " <> show buildId
     hydraJSONQuery mempty [ "build", showT buildId ]
