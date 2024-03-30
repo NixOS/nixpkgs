@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "wsgidav";
-  version = "4.3.1";
+  version = "4.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "mar10";
     repo = "wsgidav";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jgn4bculVIXfMx3Or3pKF478UOzCL8nhEeNvOeGyjPI=";
+    hash = "sha256-93+8h+vRLnspQ/lmdjKYpzSEJSKcqCkB4qRqTuKHNRA=";
   };
 
   build-system = [
