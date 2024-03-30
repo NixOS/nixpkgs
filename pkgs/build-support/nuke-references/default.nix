@@ -40,7 +40,8 @@ stdenvNoCC.mkDerivation {
   };
 
   meta.mainProgram = "nuke-refs";
-  meta.description = lib.mdDoc ''
+  meta.description = "Replaces all references to the Nix store in the specified files with a non-existent path";
+  meta.longDescription = ''
     The program `nuke-refs` created by this derivation replaces all
     references to the Nix store in the specified files by a non-existant
     path (/nix/store/eeee...).  This is useful for getting rid of
