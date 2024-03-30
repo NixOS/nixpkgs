@@ -3,8 +3,10 @@
 , fetchPypi
 , defcon
 , fonttools
+, gflanguages
 , glyphslib
 , pytestCheckHook
+, requests
 , setuptools
 , setuptools-scm
 , unicodedata2
@@ -23,7 +25,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     defcon
     fonttools
+    gflanguages
     glyphslib
+    requests
     setuptools
     unicodedata2
   ];
