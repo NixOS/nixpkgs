@@ -20,7 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-XArawQzC9J5ShtgCG02qf8RRxNTKJMn8aiclG+4CUKY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
@@ -47,9 +47,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Public Suffix List parser implementation";
-    mainProgram = "publicsuffixlist-download";
     homepage = "https://github.com/ko-zu/psl";
     license = licenses.mpl20;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "publicsuffixlist-download";
   };
 }
