@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fuse,
   gumbo,
+  help2man,
   lib,
   libuuid,
   nix-update-script,
@@ -14,16 +15,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "httpdirfs";
-  version = "1.2.3";
+  version = "1.2.5";
 
   src = fetchFromGitHub {
     owner = "fangfufu";
     repo = "httpdirfs";
     rev = "refs/tags/${finalAttrs.version}";
-    sha256 = "sha256-rdeBlAV3t/si9x488tirUGLZRYAxh13zdRIQe0OPd+A=";
+    sha256 = "sha256-PUYsT0VDEzerPqwrLJrET4kSsWsQhtnfmLepeaqtA+I=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  postPatch = lib.optional stdenv.isDarwin ''
+    substituteInPlace Makefile --replace-fail '-fanalyzer' '-Xanalyzer'
+  '';
+
+  nativeBuildInputs = [
+    help2man
+    pkg-config
+  ];
 
   buildInputs = [
     curl
@@ -34,6 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   makeFlags = [ "prefix=${placeholder "out"}" ];
+
+  postBuild = ''
+    make man
+  '';
 
   passthru = {
     # Disabled for Darwin because requires macFUSE installed outside NixOS
@@ -47,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://github.com/fangfufu/httpdirfs/releases/tag/${finalAttrs.version}";
     description = "A FUSE filesystem for HTTP directory listings";
     homepage = "https://github.com/fangfufu/httpdirfs";
     license = lib.licenses.gpl3Only;
