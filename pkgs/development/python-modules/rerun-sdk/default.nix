@@ -4,6 +4,7 @@
   rustPlatform,
   stdenv,
   attrs,
+  darwin,
   numpy,
   pillow,
   pyarrow,
@@ -30,6 +31,9 @@ buildPythonPackage {
 
   buildInputs = [
     libiconv # No-op on Linux, necessary on Darwin.
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk.frameworks.AppKit
+    darwin.apple_sdk.frameworks.CoreServices
   ];
 
   propagatedBuildInputs = [
