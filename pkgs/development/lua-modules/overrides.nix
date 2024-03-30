@@ -321,10 +321,13 @@ with prev;
   });
 
   luadbi-mysql = prev.luadbi-mysql.overrideAttrs (oa: {
-    luarocksConfig.variables = {
-      # Can't just be /include and /lib, unfortunately needs the trailing 'mysql'
-      MYSQL_INCDIR = "${libmysqlclient.dev}/include/mysql";
-      MYSQL_LIBDIR = "${libmysqlclient}/lib/mysql";
+
+    luarocksConfig = lib.recursiveUpdate oa.luarocksConfig {
+      variables = {
+        # Can't just be /include and /lib, unfortunately needs the trailing 'mysql'
+        MYSQL_INCDIR = "${libmysqlclient.dev}/include/mysql";
+        MYSQL_LIBDIR = "${libmysqlclient}/lib/mysql";
+      };
     };
     buildInputs = oa.buildInputs ++ [
       mariadb.client

@@ -10,9 +10,7 @@ let
     concatMapStrings
     concatMapStringsSep
     concatStrings
-    filter
     findFirst
-    head
     isDerivation
     length
     concatMap
@@ -306,10 +304,6 @@ let
       str
     ];
     downloadPage = str;
-    repository = union [
-      (listOf str)
-      str
-    ];
     changelog = union [
       (listOf str)
       str
@@ -446,18 +440,6 @@ let
     # -----
     else { valid = "yes"; });
 
-  getRepository = let
-    getSrcs = attrs:
-      if attrs ? src
-      then
-        [ attrs.src ]
-      else
-        filter (src: src ? meta.homepage) attrs.srcs;
-    getHomePages = map (src: src.meta.homepage);
-    unlist = list:
-      if length list == 1 then head list
-      else list;
-    in attrs: unlist (getHomePages (getSrcs attrs));
 
   # The meta attribute is passed in the resulting attribute set,
   # but it's not part of the actual derivation, i.e., it's not
@@ -471,14 +453,7 @@ let
       outputs = attrs.outputs or [ "out" ];
       hasOutput = out: builtins.elem out outputs;
     in
-    optionalAttrs (attrs ? src.meta.homepage || attrs ? srcs && isList attrs.srcs && any (src: src ? meta.homepage) attrs.srcs) {
-      # should point to an http-browsable source tree, if available.
-      # fetchers like fetchFromGitHub set it automatically.
-      # this could be handled a lot easier if we nulled it instead
-      # of having it be undefined, but that wouldn't match the
-      # other attributes.
-      repository = getRepository attrs;
-    } // {
+    {
       # `name` derivation attribute includes cross-compilation cruft,
       # is under assert, and is sanitized.
       # Let's have a clean always accessible version here.

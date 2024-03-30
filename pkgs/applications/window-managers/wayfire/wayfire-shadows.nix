@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayfire-shadows";
-  version = "unstable-2023-09-09";
+  version = "unstable-2024-03-28";
 
   src = fetchFromGitHub {
     owner = "timgott";
     repo = "wayfire-shadows";
-    rev = "de3239501fcafd1aa8bd01d703aa9469900004c5";
-    hash = "sha256-oVlSzpddPDk6pbyLFMhAkuRffkYpinP7jRspVmfLfyA=";
+    rev = "81699f6e4be65dcf3f7ad5155dfb4247b37b7997";
+    hash = "sha256-H9pqpHoeDfNBrtVLax57CUXVhU2XT+syAUZTYSJizxw=";
   };
 
   nativeBuildInputs = [
