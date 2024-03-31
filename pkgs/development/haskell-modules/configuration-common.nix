@@ -1098,15 +1098,19 @@ self: super: {
   }) newer;
 
   # * The standard libraries are compiled separately.
-  # * We need a patch from master to fix compilation with
-  #   updated dependencies (haskeline and megaparsec) which can be
+  # * We need a few patches from master to fix compilation with
+  #   updated dependencies which can be
   #   removed when the next idris release comes around.
-  idris = self.generateOptparseApplicativeCompletions [ "idris" ]
+  idris = lib.pipe super.idris [
+    dontCheck
+    doJailbreak
     (appendPatch (fetchpatch {
-      name = "idris-libffi-0.2.patch";
-      url = "https://github.com/idris-lang/Idris-dev/commit/6d6017f906c5aa95594dba0fd75e7a512f87883a.patch";
-      hash = "sha256-wyLjqCyLh5quHMOwLM5/XjlhylVC7UuahAM79D8+uls=";
-    }) (doJailbreak (dontCheck super.idris)));
+      name = "idris-bumps.patch";
+      url = "https://github.com/idris-lang/Idris-dev/compare/c99bc9e4af4ea32d2172f873152b76122ee4ee14...cf78f0fb337d50f4f0dba235b6bbe67030f1ff47.patch";
+      hash = "sha256-RCMIRHIAK1PCm4B7v+5gXNd2buHXIqyAxei4bU8+eCk=";
+    }))
+    (self.generateOptparseApplicativeCompletions [ "idris" ])
+  ];
 
   # Too strict bound on hspec
   # https://github.com/lspitzner/multistate/issues/9#issuecomment-1367853016

@@ -3012,7 +3012,6 @@ broken-packages:
   - identifiers # failure in job https://hydra.nixos.org/build/233251845 at 2023-09-02
   - idiii # failure in job https://hydra.nixos.org/build/233228586 at 2023-09-02
   - idna2008 # failure in job https://hydra.nixos.org/build/233206444 at 2023-09-02
-  - idris # failure in job https://hydra.nixos.org/build/253681757 at 2024-03-31
   - IDynamic # failure in job https://hydra.nixos.org/build/233196222 at 2023-09-02
   - ieee-utils # failure in job https://hydra.nixos.org/build/233224430 at 2023-09-02
   - iexcloud # failure in job https://hydra.nixos.org/build/233224874 at 2023-09-02
