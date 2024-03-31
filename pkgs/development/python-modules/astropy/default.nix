@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "astropy";
-  version = "6.0.0";
+  version = "6.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8"; # according to setup.cfg
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-A82AGlUwXaUjzY14DXY1n1clXc3Fn+C91x/VFU/Hd9k=";
+    hash = "sha256-ial13jVtBgjnTx9JNEL7Osu7eoW3OeB0RguwNAAUs5w=";
   };
 
   nativeBuildInputs = [
