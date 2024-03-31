@@ -1,8 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchPypi
-, fetchpatch
 , pythonOlder
 , pytestCheckHook
 , cmake
