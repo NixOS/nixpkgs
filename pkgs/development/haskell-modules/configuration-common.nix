@@ -3043,6 +3043,11 @@ self: super: {
     hash = "sha256-rCyY4rB/wLspeAbLw1jji5BykYFLnmTjLiUyNkiEXmw";
   }) (super.smtp-mail.override { connection = self.crypton-connection; });
 
+  # Currently the Haskell Sqlcipher bindings repository seems locked abandoned,
+  # https://github.com/figome/haskell-sqlcipher
+  # The patch provides enough fixes to make this compile again.
+  sqlcipher = appendPatch ./patches/sqlcipher-compilation-fixes.patch super.sqlcipher;
+
   # Use recent git version as the hackage version is outdated and not building on recent GHC versions
   haskell-to-elm = overrideSrc {
     version = "unstable-2023-12-02";

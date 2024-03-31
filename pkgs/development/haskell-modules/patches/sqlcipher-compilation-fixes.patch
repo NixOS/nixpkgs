@@ -1,0 +1,82 @@
+diff --git a/Database/SQL/Types.hs b/Database/SQL/Types.hs
+index aaf92e9..3efad72 100644
+--- a/Database/SQL/Types.hs
++++ b/Database/SQL/Types.hs
+@@ -479,7 +479,7 @@ ppSQLExpr e =
+       BinSQLExpr op e1 e2 -> ppSQLExpr e1 <+> text op <+> ppSQLExpr e2
+       PrefixSQLExpr op e1 -> text op <+> ppSQLExpr e1
+       PostfixSQLExpr op e1-> ppSQLExpr e1 <+> text op
+-      FunSQLExpr f es     -> text f <> parens (commaH ppSQLExpr es)
++      FunSQLExpr f es     -> text f Text.PrettyPrint.HughesPJ.<> parens (commaH ppSQLExpr es)
+       ConstSQLExpr c      -> text c
+       CaseSQLExpr cs el   -> text "CASE" <+> vcat (map ppWhen cs)
+                              <+> text "ELSE" <+> ppSQLExpr el <+> text "END"
+diff --git a/Setup.hs b/Setup.hs
+index aea4278..d2915bd 100644
+--- a/Setup.hs
++++ b/Setup.hs
+@@ -13,7 +13,10 @@ type PreSDistHook = (Args -> SDistFlags -> IO HookedBuildInfo)
+ 
+ 
+ updatePreSDistHook :: (PreSDistHook -> PreSDistHook) -> UserHooks -> UserHooks
+-updatePreSDistHook update hooks@UserHooks{ preSDist = old }  = hooks { preSDist = update old }
++updatePreSDistHook update hooks = hooks
++
++-- updatePreSDistHook :: (PreSDistHook -> PreSDistHook) -> UserHooks -> UserHooks
++-- updatePreSDistHook update hooks@UserHooks{ preSDist = old }  = hooks { preSDist = update old }
+ 
+ 
+ configureSQLCipher :: PreSDistHook -> PreSDistHook
+diff --git a/sqlcipher.cabal b/sqlcipher.cabal
+index 6689bab..4ab1464 100644
+--- a/sqlcipher.cabal
++++ b/sqlcipher.cabal
+@@ -1,12 +1,13 @@
++cabal-version:   3.6
+ Name:            sqlcipher
+-Version:         1.0.1.2
++Version:         1.0.1.3
+ Synopsis:        Haskell binding to sqlcipher
+ Description:
+     Haskell binding to sqlcipher <https://www.zetetic.net/sqlcipher/>.
+ 
+     This was forked from sqlite3 library from Galois, Inc. since sqlcipher share most of its API.
+     .
+-License:         BSD3
++License:         BSD-3-Clause
+ License-file:    LICENSE
+ Author:          figo GmbH
+ Maintainer:      figo GmbH <package+haskell@figo.io>
+@@ -15,7 +16,6 @@ Copyright:
+   Copyright (c) 2016, figo GmbH
+ Homepage:        http://github.com/figome/haskell-sqlcipher
+ Category:        Database
+-cabal-version: >= 1.23
+ build-type:      Custom
+ 
+ -- Cheating here, including the tests/ .cabal +
+@@ -56,7 +57,7 @@ library
+     Database.SQLCipher,
+     Database.SQLCipher.Base,
+     Database.SQLCipher.Types,
+-    Database.SQL
++    Database.SQL,
+     Database.SQL.Types
+ 
+ 
+diff --git a/sqlcipher/sqlite3.c b/sqlcipher/sqlite3.c
+index 3aee1fb..77a6e95 100644
+--- a/sqlcipher/sqlite3.c
++++ b/sqlcipher/sqlite3.c
+@@ -20448,7 +20448,11 @@ static const char* sqlcipher_openssl_get_cipher(void *ctx) {
+ }
+ 
+ static int sqlcipher_openssl_get_key_sz(void *ctx) {
++#if OPENSSL_VERSION_NUMBER < 0x20000000
+   return EVP_CIPHER_key_length(((openssl_ctx *)ctx)->evp_cipher);
++#else
++  return EVP_CIPHER_get_key_length(((openssl_ctx *)ctx)->evp_cipher);
++#endif
+ }
+ 
+ static int sqlcipher_openssl_get_iv_sz(void *ctx) {

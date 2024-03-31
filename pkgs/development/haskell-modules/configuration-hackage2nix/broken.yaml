@@ -5592,7 +5592,6 @@ broken-packages:
   - spy # failure in job https://hydra.nixos.org/build/233208095 at 2023-09-02
   - sqel # failure in job https://hydra.nixos.org/build/233256622 at 2023-09-02
   - sqids # failure in job https://hydra.nixos.org/build/233213849 at 2023-09-02
-  - sqlcipher # failure in job https://hydra.nixos.org/build/233259217 at 2023-09-02
   - sqlcli # failure in job https://hydra.nixos.org/build/252719841 at 2024-03-16
   - sqlite-easy # failure in job https://hydra.nixos.org/build/252728831 at 2024-03-16
   - sqlite # failure in job https://hydra.nixos.org/build/233215839 at 2023-09-02
