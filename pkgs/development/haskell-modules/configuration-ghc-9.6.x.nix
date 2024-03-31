@@ -1,7 +1,5 @@
 { pkgs, haskellLib }:
 
-with haskellLib;
-
 let
   inherit (pkgs) lib;
 
@@ -17,7 +15,18 @@ let
 
   # Workaround for a ghc-9.6 issue: https://gitlab.haskell.org/ghc/ghc/-/issues/23392
   disableParallelBuilding = overrideCabal (drv: { enableParallelBuilding = false; });
+
+  inherit (haskellLib)
+    appendConfigureFlag
+    appendPatch
+    appendPatches
+    doDistribute
+    dontCheck
+    doJailbreak
+    overrideCabal
+    ;
 in
+
 
 self: super: {
   llvmPackages = lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
