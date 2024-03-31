@@ -428,6 +428,9 @@ in
       # Disable tests because they use dejagnu, which fails to run.
       libffi = super.libffi.override { doCheck = false; };
 
+      # Use libconvReal to break an infinite recursion. It will be dropped in the next stage.
+      libiconv = super.libiconvReal;
+
       # Avoid pulling in a full python and its extra dependencies for the llvm/clang builds.
       libxml2 = super.libxml2.override { pythonSupport = false; };
 
@@ -539,7 +542,7 @@ in
       inherit (prevStage) ccWrapperStdenv
         autoconf automake bash binutils binutils-unwrapped bison brotli cmake cmakeMinimal
         coreutils cpio cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu
-        libedit libffi libiconv libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4
+        libedit libffi libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4
         ncurses nghttp2 ninja openldap openssh openssl patchutils pbzx perl pkg-config
         python3Minimal scons sed serf sharutils sqlite subversion texinfo unzip which xz
         zlib zstd;
