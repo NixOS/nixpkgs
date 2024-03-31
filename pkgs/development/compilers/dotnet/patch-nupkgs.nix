@@ -51,7 +51,7 @@ in writeShellScriptBin "patch-nupkgs" ''
           --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" \
           "$tmp" ||:
         patchelf \
-          --set-rpath "${binaryRPath}" \
+          --add-rpath "${binaryRPath}" \
           "$tmp" ||:
         mv "$tmp" "$p"
       fi
