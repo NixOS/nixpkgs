@@ -1,6 +1,7 @@
 { lib
 , gcc11Stdenv
 , fetchFromGitHub
+, autoAddDriverRunpath
 , catch2
 , cmake
 , cudaPackages_10_2
@@ -108,7 +109,7 @@ in gcc11Stdenv.mkDerivation rec {
     # autoAddDriverRunpath does not actually depend on or incur any dependency
     # of cudaPackages. It merely adds an impure, non-Nix PATH to the RPATHs of
     # executables that need to use cuda at runtime.
-    cudaPackages_12.autoAddDriverRunpath
+    autoAddDriverRunpath
 
     cmake
     git

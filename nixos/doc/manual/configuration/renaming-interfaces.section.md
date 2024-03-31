@@ -25,10 +25,12 @@ we assign the name `wan` to the interface with MAC address
 `52:54:00:12:01:01` using a netword link unit:
 
 ```nix
-systemd.network.links."10-wan" = {
-  matchConfig.PermanentMACAddress = "52:54:00:12:01:01";
-  linkConfig.Name = "wan";
-};
+{
+  systemd.network.links."10-wan" = {
+    matchConfig.PermanentMACAddress = "52:54:00:12:01:01";
+    linkConfig.Name = "wan";
+  };
+}
 ```
 
 Note that links are directly read by udev, *not networkd*, and will work
@@ -37,10 +39,12 @@ even if networkd is disabled.
 Alternatively, we can use a plain old udev rule:
 
 ```nix
-boot.initrd.services.udev.rules = ''
-  SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", \
-  ATTR{address}=="52:54:00:12:01:01", KERNEL=="eth*", NAME="wan"
-'';
+{
+  boot.initrd.services.udev.rules = ''
+    SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", \
+    ATTR{address}=="52:54:00:12:01:01", KERNEL=="eth*", NAME="wan"
+  '';
+}
 ```
 
 ::: {.warning}

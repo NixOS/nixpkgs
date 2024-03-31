@@ -543,6 +543,7 @@ in {
   mobilizon = handleTest ./mobilizon.nix {};
   mod_perl = handleTest ./mod_perl.nix {};
   molly-brown = handleTest ./molly-brown.nix {};
+  mollysocket = handleTest ./mollysocket.nix { };
   monado = handleTest ./monado.nix {};
   monetdb = handleTest ./monetdb.nix {};
   monica = handleTest ./web-apps/monica.nix {};
@@ -991,6 +992,7 @@ in {
   wireguard = handleTest ./wireguard {};
   without-nix = handleTest ./without-nix.nix {};
   wmderland = handleTest ./wmderland.nix {};
+  workout-tracker = handleTest ./workout-tracker.nix {};
   wpa_supplicant = handleTest ./wpa_supplicant.nix {};
   wordpress = handleTest ./wordpress.nix {};
   wrappers = handleTest ./wrappers.nix {};

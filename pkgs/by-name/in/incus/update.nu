@@ -10,12 +10,19 @@ def main [--lts = false, --regex: string] {
   let current_version = nix eval --raw -f default.nix $"($attr).version" | str trim
 
   if $latest_tag != $current_version {
+    print $"Updating: new ($latest_tag) != old ($current_version)"
     update-source-version $attr $latest_tag $"--file=($file)"
 
     let oldVendorHash = nix-instantiate . --eval --strict -A $"($attr).goModules.drvAttrs.outputHash" --json | from json
-    let vendorHash = do { nix-build -A $"($attr).goModules" } | complete | get stderr | lines | str trim | find --regex 'got:[[:space:]]*sha256' | split row ' ' | last
-    open $file | str replace $oldVendorHash $vendorHash | save --force $file
+    let checkBuild = do { nix-build -A $"($attr).goModules" } | complete
+    let vendorHash = $checkBuild.stderr | lines | str trim | find --regex 'got:[[:space:]]*sha256' | split row ' ' | last
 
+    if $vendorHash != null {
+      open $file | str replace $oldVendorHash $vendorHash | save --force $file
+    } else {
+      print $checkBuild.stderr
+      exit 1
+    }
   }
 
   {"lts?": $lts, before: $current_version, after: $latest_tag}

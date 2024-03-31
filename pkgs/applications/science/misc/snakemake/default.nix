@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "snakemake";
-  version = "8.4.12";
+  version = "8.10.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ehQIrTw1+klFW+Hu4WsWaCJ0YoN2hIqryqqaoNQb1us=";
+    hash = "sha256-SZf//Z1rLHyvW/f0U6kEBzV1NjDEDG1OcFl9/JR+i/g=";
     # https://github.com/python-versioneer/python-versioneer/issues/217
     postFetch = ''
       sed -i "$out"/snakemake/_version.py -e 's#git_refnames = ".*"#git_refnames = " (tag: v${version})"#'
@@ -48,6 +48,7 @@ python3.pkgs.buildPythonApplication rec {
     snakemake-interface-executor-plugins
     snakemake-interface-common
     snakemake-interface-storage-plugins
+    snakemake-interface-report-plugins
     stopit
     tabulate
     throttler

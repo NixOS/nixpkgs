@@ -10,9 +10,16 @@
 , useProprietaryAssets ? true
 }:
 
-with lib;
-
 let
+  inherit (lib)
+    and
+    licenses
+    maintainers
+    optional
+    optionalString
+    platforms
+    ;
+
   pname = "koboredux";
   version = "0.7.5.1";
 

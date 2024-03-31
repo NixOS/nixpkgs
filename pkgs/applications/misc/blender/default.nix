@@ -16,7 +16,6 @@
   cudaSupport ? config.cudaSupport,
   dbus,
   embree,
-  fetchpatch,
   fetchurl,
   fetchzip,
   ffmpeg,
@@ -68,7 +67,7 @@
   pkg-config,
   potrace,
   pugixml,
-  python310Packages, # must use instead of python3.pkgs, see https://github.com/NixOS/nixpkgs/issues/211340
+  python311Packages, # must use instead of python3.pkgs, see https://github.com/NixOS/nixpkgs/issues/211340
   rocmPackages, # comes with a significantly larger closure size
   runCommand,
   spaceNavSupport ? stdenv.isLinux,
@@ -82,7 +81,7 @@
 }:
 
 let
-  python3Packages = python310Packages;
+  python3Packages = python311Packages;
   python3 = python3Packages.python;
   pyPkgsOpenusd = python3Packages.openusd.override { withOsl = false; };
 
@@ -100,25 +99,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "4.0.2";
+  version = "4.1.0";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-qqDnKdp1kc+/RXcq92NFl32qp7EaCvNdmPkxPiRgd6M=";
+    hash = "sha256-3AAtguPDQMk4VcZoRzDQGAG2aaKbHMa3XuuZC6aecj8=";
   };
 
-  patches = [
-    ./draco.patch
-    (fetchpatch {
-      url = "https://projects.blender.org/blender/blender/commit/cf4365e555a759d5b3225bce77858374cb07faad.diff";
-      hash = "sha256-Nypd04yFSHYa7RBa8kNmoApqJrU4qpaOle3tkj44d4g=";
-    })
-    (fetchpatch {
-      # https://projects.blender.org/blender/blender/issues/117145
-      url = "https://projects.blender.org/blender/blender/commit/eb99895c972b6c713294f68a34798aa51d36034a.patch";
-      hash = "sha256-95nG5mW408lhKJ2BppgaUwBMMeXeGyBqho6mCfB53GI=";
-    })
-  ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
+  patches = [ ./draco.patch ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
 
   postPatch =
     (
@@ -247,7 +235,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals (!stdenv.isAarch64) [
       embree
-      openimagedenoise
+      (openimagedenoise.override { inherit cudaSupport; })
     ]
     ++ (
       if (!stdenv.isDarwin) then

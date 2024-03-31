@@ -76,11 +76,13 @@ Exceptions to this rule are:
   when you need to override a package.json. It's nice to use the one from the upstream source and do some explicit override. Here is an example:
 
   ```nix
-  patchedPackageJSON = final.runCommand "package.json" { } ''
-    ${jq}/bin/jq '.version = "0.4.0" |
-      .devDependencies."@jsdoc/cli" = "^0.2.5"
-      ${sonar-src}/package.json > $out
-  '';
+  {
+    patchedPackageJSON = final.runCommand "package.json" { } ''
+      ${jq}/bin/jq '.version = "0.4.0" |
+        .devDependencies."@jsdoc/cli" = "^0.2.5"
+        ${sonar-src}/package.json > $out
+    '';
+  }
   ```
 
   You will still need to commit the modified version of the lock files, but at least the overrides are explicit for everyone to see.
@@ -115,10 +117,12 @@ After you have identified the correct system, you need to override your package 
 For example, `dat` requires `node-gyp-build`, so we override its expression in [pkgs/development/node-packages/overrides.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages/overrides.nix):
 
 ```nix
+  {
     dat = prev.dat.override (oldAttrs: {
       buildInputs = [ final.node-gyp-build pkgs.libtool pkgs.autoconf pkgs.automake ];
       meta = oldAttrs.meta // { broken = since "12"; };
     });
+  }
 ```
 
 ### Adding and Updating Javascript packages in nixpkgs {#javascript-adding-or-updating-packages}
@@ -315,10 +319,12 @@ You will need at least a `yarn.lock` file. If upstream does not have one you nee
 If the downloaded files contain the `package.json` and `yarn.lock` files they can be used like this:
 
 ```nix
-offlineCache = fetchYarnDeps {
-  yarnLock = src + "/yarn.lock";
-  hash = "....";
-};
+{
+  offlineCache = fetchYarnDeps {
+    yarnLock = src + "/yarn.lock";
+    hash = "....";
+  };
+}
 ```
 
 #### mkYarnPackage {#javascript-yarn2nix-mkYarnPackage}
@@ -328,33 +334,41 @@ offlineCache = fetchYarnDeps {
 It's important to use the `--offline` flag. For example if you script is `"build": "something"` in `package.json` use:
 
 ```nix
-buildPhase = ''
-  export HOME=$(mktemp -d)
-  yarn --offline build
-'';
+{
+  buildPhase = ''
+    export HOME=$(mktemp -d)
+    yarn --offline build
+  '';
+}
 ```
 
 The `distPhase` is packing the package's dependencies in a tarball using `yarn pack`. You can disable it using:
 
 ```nix
-doDist = false;
+{
+  doDist = false;
+}
 ```
 
 The configure phase can sometimes fail because it makes many assumptions which may not always apply. One common override is:
 
 ```nix
-configurePhase = ''
-  ln -s $node_modules node_modules
-'';
+{
+  configurePhase = ''
+    ln -s $node_modules node_modules
+  '';
+}
 ```
 
 or if you need a writeable node_modules directory:
 
 ```nix
-configurePhase = ''
-  cp -r $node_modules node_modules
-  chmod +w node_modules
-'';
+{
+  configurePhase = ''
+    cp -r $node_modules node_modules
+    chmod +w node_modules
+  '';
+}
 ```
 
 #### mkYarnModules {#javascript-yarn2nix-mkYarnModules}
@@ -394,12 +408,14 @@ mkYarnPackage rec {
 - Having trouble with `node-gyp`? Try adding these lines to the `yarnPreBuild` steps:
 
   ```nix
-  yarnPreBuild = ''
-    mkdir -p $HOME/.node-gyp/${nodejs.version}
-    echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
-    ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
-    export npm_config_nodedir=${nodejs}
-  '';
+  {
+    yarnPreBuild = ''
+      mkdir -p $HOME/.node-gyp/${nodejs.version}
+      echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
+      ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
+      export npm_config_nodedir=${nodejs}
+    '';
+  }
   ```
 
   - The `echo 9` steps comes from this answer: <https://stackoverflow.com/a/49139496>

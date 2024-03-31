@@ -14,11 +14,13 @@ If the `moduleNames` argument is omitted, `hasPkgConfigModules` will use `meta.p
 # Check that `pkg-config` modules are exposed using default values
 
 ```nix
-passthru.tests.pkg-config = testers.hasPkgConfigModules {
-  package = finalAttrs.finalPackage;
-};
+{
+  passthru.tests.pkg-config = testers.hasPkgConfigModules {
+    package = finalAttrs.finalPackage;
+  };
 
-meta.pkgConfigModules = [ "libfoo" ];
+  meta.pkgConfigModules = [ "libfoo" ];
+}
 ```
 
 :::
@@ -28,10 +30,12 @@ meta.pkgConfigModules = [ "libfoo" ];
 # Check that `pkg-config` modules are exposed using explicit module names
 
 ```nix
-passthru.tests.pkg-config = testers.hasPkgConfigModules {
-  package = finalAttrs.finalPackage;
-  moduleNames = [ "libfoo" ];
-};
+{
+  passthru.tests.pkg-config = testers.hasPkgConfigModules {
+    package = finalAttrs.finalPackage;
+    moduleNames = [ "libfoo" ];
+  };
+}
 ```
 
 :::
@@ -55,7 +59,9 @@ The default argument to the command is `--version`, and the version to be checke
 This example will run the command `hello --version`, and then check that the version of the `hello` package is in the output of the command.
 
 ```nix
-passthru.tests.version = testers.testVersion { package = hello; };
+{
+  passthru.tests.version = testers.testVersion { package = hello; };
+}
 ```
 
 :::
@@ -70,13 +76,15 @@ This means that an output like "leetcode 0.4.21" would fail the tests, and an ou
 A common usage of the `version` attribute is to specify `version = "v${version}"`.
 
 ```nix
-version = "0.4.2";
+{
+  version = "0.4.2";
 
-passthru.tests.version = testers.testVersion {
-  package = leetcode-cli;
-  command = "leetcode -V";
-  version = "leetcode ${version}";
-};
+  passthru.tests.version = testers.testVersion {
+    package = leetcode-cli;
+    command = "leetcode -V";
+    version = "leetcode ${version}";
+  };
+}
 ```
 
 :::
@@ -116,7 +124,7 @@ runCommand "example" {
   grep -F 'failing though' $failed/testBuildFailure.log
   [[ 3 = $(cat $failed/testBuildFailure.exit) ]]
   touch $out
-'';
+''
 ```
 
 :::
@@ -193,12 +201,14 @@ once to get a derivation hash, and again to produce the final fixed output deriv
 # Prevent nix from reusing the output of a fetcher
 
 ```nix
-tests.fetchgit = testers.invalidateFetcherByDrvHash fetchgit {
-  name = "nix-source";
-  url = "https://github.com/NixOS/nix";
-  rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a";
-  hash = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
-};
+{
+  tests.fetchgit = testers.invalidateFetcherByDrvHash fetchgit {
+    name = "nix-source";
+    url = "https://github.com/NixOS/nix";
+    rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a";
+    hash = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
+  };
+}
 ```
 
 :::
