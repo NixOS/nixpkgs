@@ -2,7 +2,7 @@
 , stdenv
 , buildPythonPackage
 , cargo
-, libiconv
+, darwin
 , fetchFromGitHub
 , json-stream
 , json-stream-rs-tokenizer
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    libiconv
+    darwin.libiconv
   ];
 
   # Tests depend on json-stream, which depends on this package.

@@ -22726,7 +22726,7 @@ with pkgs;
 
   # GNU libc provides libiconv so systems with glibc don't need to
   # build libiconv separately. Additionally, Apple forked/repackaged
-  # libiconv, so build and use the upstream one with a compatible ABI,
+  # libiconv so we use that instead of the vanilla version on that OS,
   # and BSDs include libiconv in libc.
   #
   # We also provide `libiconvReal`, which will always be a standalone libiconv,
@@ -22737,7 +22737,7 @@ with pkgs;
         then libcCross
         else stdenv.cc.libc)
     else if stdenv.hostPlatform.isDarwin
-      then libiconvReal.override { enableDarwinABICompat = true; }
+      then darwin.libiconv
     else libiconvReal;
 
   libcIconv = libc: let
@@ -22754,7 +22754,7 @@ with pkgs;
     if lib.elem stdenv.hostPlatform.libc [ "glibc" "musl" ] then
       lib.getBin stdenv.cc.libc
     else if stdenv.hostPlatform.isDarwin then
-      lib.getBin libiconv
+      lib.getBin darwin.libiconv
     else
       lib.getBin libiconvReal;
 

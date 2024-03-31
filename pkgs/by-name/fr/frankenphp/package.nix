@@ -7,7 +7,6 @@
 , testers
 , frankenphp
 , darwin
-, libiconv
 , pkg-config
 , makeBinaryWrapper
 , runCommand
@@ -65,7 +64,7 @@ in buildGoModule rec {
   '' + lib.optionalString stdenv.isDarwin ''
     # replace hard-code homebrew path
     substituteInPlace ../frankenphp.go \
-      --replace "-L/opt/homebrew/opt/libiconv/lib" "-L${libiconv}/lib"
+      --replace "-L/opt/homebrew/opt/libiconv/lib" "-L${darwin.libiconv}/lib"
   '';
 
   preFixup = ''
