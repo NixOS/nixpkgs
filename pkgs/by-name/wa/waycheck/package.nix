@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waycheck";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "serebit";
     repo = "waycheck";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-kwkdTMA15oJHz9AXEkBGeuzYdEUpNuv/xnhzoKOHCE4=";
+    hash = "sha256-sDfIR+F2W59mh50jXoOrcNZ1nuckm3r7jN613BH4Eog=";
   };
 
   nativeBuildInputs = [
@@ -38,13 +38,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapGApps = true;
 
-  preFixup = ''
-    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  postPatch = ''
+    substituteInPlace scripts/mesonPostInstall.sh \
+      --replace-fail "#!/usr/bin/env sh" "#!${stdenv.shell}" \
+      --replace-fail "update-desktop-database -q" "update-desktop-database $out/share/applications"
   '';
 
-  preInstall = ''
-    substituteInPlace ../scripts/mesonPostInstall.sh \
-      --replace "update-desktop-database -q" "update-desktop-database $out/share/applications"
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   meta = {
