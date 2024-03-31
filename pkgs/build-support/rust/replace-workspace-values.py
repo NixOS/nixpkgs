@@ -4,7 +4,7 @@
 # Please run `mypy --strict`, `black`, and `isort --profile black` on this after editing, thanks!
 
 import sys
-from typing import Any
+from typing import Any, Literal, assert_type
 
 import tomli
 import tomli_w
@@ -19,53 +19,51 @@ def load_file(path: str) -> dict[str, Any]:
 # See `inner_dependency_inherit_with`:
 # https://github.com/rust-lang/cargo/blob/4de0094ac78743d2c8ff682489e35c8a7cafe8e4/src/cargo/util/toml/mod.rs#L982
 def replace_key(
-    workspace_manifest: dict[str, Any], table: dict[str, Any], section: str, key: str
+    workspace_manifest: dict[str, Any],
+    table: dict[str, Any],
+    section: Literal["package", "dependencies"],
+    key: str,
 ) -> bool:
-    if (
-        isinstance(table[key], dict)
-        and "workspace" in table[key]
-        and table[key]["workspace"] is True
-    ):
-        print("replacing " + key)
+    if not isinstance(table[key], dict) or table[key].get("workspace") is not True:
+        return False
+    print("replacing " + key)
 
-        local_dep = table[key]
-        del local_dep["workspace"]
+    local_dep = table[key]
+    del local_dep["workspace"]
 
-        workspace_dep = workspace_manifest[section][key]
+    workspace_dep: str | dict[str, Any] = workspace_manifest[section][key]
 
-        if section == "dependencies":
-            if isinstance(workspace_dep, str):
-                workspace_dep = {"version": workspace_dep}
-
-            final: dict[str, Any] = workspace_dep.copy()
-
-            merged_features = local_dep.pop("features", []) + workspace_dep.get("features", [])
-            if merged_features:
-                final["features"] = merged_features
-
-            local_default_features = local_dep.pop("default-features", None)
-            workspace_default_features = workspace_dep.get("default-features")
-
-            if not workspace_default_features and local_default_features:
-                final["default-features"] = True
-
-            optional = local_dep.pop("optional", False)
-            if optional:
-                final["optional"] = True
-
-            if "package" in local_dep:
-                final["package"] = local_dep.pop("package")
-
-            if local_dep:
-                raise Exception(f"Unhandled keys in inherited dependency {key}: {local_dep}")
-
-            table[key] = final
-        elif section == "package":
-            table[key] = workspace_dep
-
+    if section == "package":
+        table[key] = workspace_dep
         return True
 
-    return False
+    _ = assert_type(section, Literal["dependencies"])
+
+    if isinstance(workspace_dep, str):
+        workspace_dep = {"version": workspace_dep}
+
+    final: dict[str, Any] = workspace_dep.copy()
+
+    merged_features = local_dep.pop("features", []) + workspace_dep.get("features", [])
+    if merged_features:
+        final["features"] = merged_features
+
+    local_default_features = local_dep.pop("default-features", None)
+    workspace_default_features = workspace_dep.get("default-features")
+
+    if not workspace_default_features and local_default_features:
+        final["default-features"] = True
+
+    optional = local_dep.pop("optional", False)
+    if optional:
+        final["optional"] = True
+
+    if local_dep:
+        raise Exception(f"Unhandled keys in inherited dependency {key}: {local_dep}")
+
+    table[key] = final
+
+    return True
 
 
 def replace_dependencies(
@@ -74,9 +72,9 @@ def replace_dependencies(
     changed = False
 
     for key in ["dependencies", "dev-dependencies", "build-dependencies"]:
-        if key in root:
-            for k in root[key].keys():
-                changed |= replace_key(workspace_manifest, root[key], "dependencies", k)
+        deps = root.get(key, {})
+        for k in deps:
+            changed |= replace_key(workspace_manifest, deps, "dependencies", k)
 
     return changed
 
@@ -87,14 +85,15 @@ def main() -> None:
     if "workspace" not in top_cargo_toml:
         # If top_cargo_toml is not a workspace manifest, then this script was probably
         # ran on something that does not actually use workspace dependencies
-        print(f"{sys.argv[2]} is not a workspace manifest, doing nothing.")
-        return
+        raise Exception(f"{sys.argv[2]} is not a workspace manifest.")
 
     crate_manifest = load_file(sys.argv[1])
     workspace_manifest = top_cargo_toml["workspace"]
 
     if "workspace" in crate_manifest:
-        return
+        return print(
+            f"{sys.argv[1]} is a workspace manifest, skipping", file=sys.stderr
+        )
 
     changed = False
 
@@ -105,21 +104,15 @@ def main() -> None:
 
     changed |= replace_dependencies(workspace_manifest, crate_manifest)
 
-    if "target" in crate_manifest:
-        for key in crate_manifest["target"].keys():
-            changed |= replace_dependencies(
-                workspace_manifest, crate_manifest["target"][key]
-            )
+    for value in crate_manifest.get("target", {}).values():
+        changed |= replace_dependencies(workspace_manifest, value)
 
-    if (
-        "lints" in crate_manifest
-        and "workspace" in crate_manifest["lints"]
-        and crate_manifest["lints"]["workspace"] is True
-    ):
+    if crate_manifest.get("lints", {}).get("workspace") is True:
+        changed = True
         crate_manifest["lints"] = workspace_manifest["lints"]
 
     if not changed:
-        return
+        return print(f"{sys.argv[1]} is unchanged, skipping", file=sys.stderr)
 
     with open(sys.argv[1], "wb") as f:
         tomli_w.dump(crate_manifest, f)
