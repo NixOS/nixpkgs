@@ -13156,6 +13156,8 @@ self: super: with self; {
 
   roman = callPackage ../development/python-modules/roman { };
 
+  romy = callPackage ../development/python-modules/romy { };
+
   roombapy = callPackage ../development/python-modules/roombapy { };
 
   roonapi = callPackage ../development/python-modules/roonapi { };
