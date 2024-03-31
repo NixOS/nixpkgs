@@ -5,9 +5,9 @@
 , nix-update-script
 }:
 
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   pname = "yutto";
-  version = "2.0.0b36-unstable-2024-03-04";
+  version = "2.0.0-beta.37";
   format = "pyproject";
 
   disabled = python3Packages.pythonOlder "3.9";
@@ -15,8 +15,8 @@ python3Packages.buildPythonApplication {
   src = fetchFromGitHub {
     owner = "yutto-dev";
     repo = "yutto";
-    rev = "f2d34f9e2a2d45ed8ed6ae4c2bf91af248da27f0";
-    hash = "sha256-/zTQt+/sCjnQPt8YyKvRXpWVpN/yi2LrhpFH4FPbeOc=";
+    rev = "v${version}";
+    hash = "sha256-daRuFYfR3FjvhVsQM1FXI19iOH+bukh6WxfH5O+CFk4=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -38,7 +38,9 @@ python3Packages.buildPythonApplication {
 
   pythonImportsCheck = [ "yutto" ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version" "unstable" ];
+  };
 
   meta = with lib; {
     description = "A Bilibili downloader";
