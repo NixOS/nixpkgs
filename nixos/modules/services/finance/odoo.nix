@@ -9,7 +9,7 @@ in
 {
   options = {
     services.odoo = {
-      enable = mkEnableOption (lib.mdDoc "odoo");
+      enable = mkEnableOption (lib.mdDoc "odoo, a suite of web based open source business apps");
 
       package = mkPackageOption pkgs "odoo" { };
 
