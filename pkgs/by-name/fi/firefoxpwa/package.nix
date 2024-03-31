@@ -1,22 +1,28 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, makeWrapper
-, pkg-config
-, installShellFiles
-, firefox-unwrapped
-, openssl
-, stdenv
-, udev
-, libva
-, mesa
-, libnotify
-, xorg
-, cups
-, pciutils
-, libcanberra-gtk3
-, extraLibs ? [ ]
-, nixosTests
+{
+  extraLibs ? [ ],
+  fetchFromGitHub,
+  firefox-unwrapped,
+  installShellFiles,
+  lib,
+  libcanberra-gtk3,
+  makeWrapper,
+  nixosTests,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  stdenv,
+  # Firefox req'd libs
+  cups,
+  ffmpeg,
+  libglvnd,
+  libnotify,
+  libpulseaudio,
+  libva,
+  mesa,
+  pciutils,
+  pipewire,
+  udev,
+  xorg,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -55,7 +61,26 @@ rustPlatform.buildRustPackage rec {
   completions = "target/${stdenv.targetPlatform.config}/release/completions";
 
   gtk_modules = map (x: x + x.gtkModule) [ libcanberra-gtk3 ];
-  libs = let libs = lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils ] ++ gtk_modules ++ extraLibs; in lib.makeLibraryPath libs + ":" + lib.makeSearchPathOutput "lib" "lib64" libs;
+  libs =
+    let
+      libs =
+        lib.optionals stdenv.isLinux [
+          cups
+          ffmpeg
+          libglvnd
+          libnotify
+          libpulseaudio
+          libva
+          mesa
+          pciutils
+          pipewire
+          udev
+          xorg.libXScrnSaver
+        ]
+        ++ gtk_modules
+        ++ extraLibs;
+    in
+    lib.makeLibraryPath libs + ":" + lib.makeSearchPathOutput "lib" "lib64" libs;
 
   postInstall = ''
     # Runtime
