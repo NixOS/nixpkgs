@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/eradman/pg-safeupdate";
     changelog   = "https://github.com/eradman/pg-safeupdate/raw/${src.rev}/NEWS";
     platforms   = postgresql.meta.platforms;
+    maintainers = with maintainers; [ wolfgangwalther ];
     license     = licenses.postgresql;
     broken      = versionOlder postgresql.version "14";
   };
