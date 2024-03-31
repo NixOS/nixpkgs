@@ -1,0 +1,14 @@
+diff --git a/src/sycoca/vfolder_menu.cpp b/src/sycoca/vfolder_menu.cpp
+index 12313911..b364e44a 100644
+--- a/src/sycoca/vfolder_menu.cpp
++++ b/src/sycoca/vfolder_menu.cpp
+@@ -399,7 +399,8 @@ QString VFolderMenu::absoluteDir(const QString &_dir, const QString &baseDir, bo
+     }
+ 
+     if (!relative) {
+-        QString resolved = QDir(dir).canonicalPath();
++        // Nixpkgs: don't resolve symlinks here, or things get confused when the targets move around
++        QString resolved = QDir(dir).absolutePath();
+         if (!resolved.isEmpty()) {
+             dir = resolved;
+         }
