@@ -4,7 +4,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mlton";
-  version = "20210107";
+  version = "20210117";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then

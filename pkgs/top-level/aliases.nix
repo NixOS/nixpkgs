@@ -781,6 +781,7 @@ mapAliases ({
   minetestserver_5 = minetestserver; # Added 2023-12-11
   minizip2 = pkgs.minizip-ng; # Added 2022-12-28
   mirage-im = throw "'mirage-im' has been removed, as it was broken and unmaintained"; # Added 2023-11-26
+  mlton20210107 = throw "'mlton20210107' has been renamed to 'mlton20210117', correcting the version number"; # Added 2024-03-31
   mod_dnssd = apacheHttpdPackages.mod_dnssd; # Added 2014-11-07
   mod_fastcgi = apacheHttpdPackages.mod_fastcgi; # Added 2014-11-07
   mod_python = apacheHttpdPackages.mod_python; # Added 2014-11-07
