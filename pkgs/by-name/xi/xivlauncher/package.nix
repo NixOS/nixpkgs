@@ -21,7 +21,7 @@ let
   source = if useRbPatchedLauncher then rankynbass else goatcorp;
 in
   buildDotnetModule rec {
-    pname = "XIVLauncher${lib.optionalString useRbPatchedLauncher "-RB"}";
+    pname = "XIVLauncher${lib.optionalString useRbPatchedLauncher "-rb"}";
     version = source.version;
 
     src = fetchFromGitHub {
