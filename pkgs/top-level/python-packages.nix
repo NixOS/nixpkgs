@@ -14142,6 +14142,8 @@ self: super: with self; {
 
   sphinx-mdinclude = callPackage ../development/python-modules/sphinx-mdinclude { };
 
+  sphinx-rtd-dark-mode = callPackage ../development/python-modules/sphinx-rtd-dark-mode { };
+
   sphinx-rtd-theme = callPackage ../development/python-modules/sphinx-rtd-theme { };
 
   sphinx-serve = callPackage ../development/python-modules/sphinx-serve { };

@@ -411,12 +411,12 @@ let
         mktplcRef = {
           name = "astro-vscode";
           publisher = "astro-build";
-          version = "2.3.3";
-          sha256 = "sha256-A7+7lnCPAtSWUfHLNKbYqKuTxi2Nx05Qdh5HCkT1dnM=";
+          version = "2.8.3";
+          sha256 = "sha256-A6m31eZMlOHF0yr9MjXmsFyXgH8zmq6WLRd/w85hGw0=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/astro-build.astro-vscode/changelog";
-          description = "Astro language support for VSCode";
+          description = "Astro language support for VS Code";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=astro-build.astro-vscode";
           homepage = "https://github.com/withastro/language-tools";
           license = lib.licenses.mit;
@@ -2852,10 +2852,13 @@ let
         mktplcRef = {
           name = "vscode-docker";
           publisher = "ms-azuretools";
-          version = "1.24.0";
-          sha256 = "sha256-zZ34KQrRPqVbfGdpYACuLMiMj4ZIWSnJIPac1yXD87k=";
+          version = "1.29.0";
+          sha256 = "sha256-mVRsVsolXj31WhbWnt3Xml+NnIq7Q2uHhUUd1zgW42c=";
         };
         meta = {
+          description = "Docker Extension for Visual Studio Code";
+          homepage = "https://github.com/microsoft/vscode-docker";
+          changelog = "https://marketplace.visualstudio.com/items/ms-azuretools.vscode-docker/changelog";
           license = lib.licenses.mit;
         };
       };
@@ -2945,6 +2948,23 @@ let
           homepage = "https://github.com/microsoft/pylance-release";
           license = lib.licenses.unfree;
           maintainers = [ lib.maintainers.ericthemagician ];
+        };
+      };
+
+      ms-toolsai.datawrangler = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "datawrangler";
+          publisher = "ms-toolsai";
+          version = "0.29.6";
+          sha256 = "sha256-9MR2+hb9YdjIGDfUkdLW41HOxhjeS/San49C8QRZ/YY=";
+        };
+
+        meta = {
+          description = "Data viewing, cleaning and preparation for tabular datasets";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-toolsai.datawrangler";
+          homepage = "https://github.com/microsoft/vscode-data-wrangler";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.katanallama ];
         };
       };
 
@@ -4020,8 +4040,8 @@ let
         mktplcRef = {
           name = "svelte-vscode";
           publisher = "svelte";
-          version = "107.12.0";
-          sha256 = "036ri011fd0cf91iwv59j57m05mxliy27ms4di2y9jlk7jzmr4s2";
+          version = "108.3.3";
+          sha256 = "sha256-q7w8DPzBLpD+13v7RnyDdC3ocDKAihHBVt3pnwSTwio=";
         };
         meta = {
           changelog = "https://github.com/sveltejs/language-tools/releases";

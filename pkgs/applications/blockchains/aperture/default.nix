@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "aperture";
-  version = "0.2-beta";
+  version = "0.3-beta";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "aperture";
     rev = "v${version}";
-    hash = "sha256-l1fpjCAg+1PGNotKrjFLoYOMEzRNXC1mfdjRPfE0DsY=";
+    hash = "sha256-PsmaNJxWkXiFDA7IGhT+Kx1GUvv23c8L8Jz21/b48oo=";
   };
 
-  vendorHash = "sha256-tWFFmRSDUZXijAUTgR8k4EERHwIEBOyZZZ9BGXso/tU=";
+  vendorHash = "sha256-rrDLdE7c6ykhdqOfRpuxyRO4xqYp3LZvovAppzy1wVw=";
 
   subPackages = [ "cmd/aperture" ];
 
@@ -22,7 +22,7 @@ buildGoModule rec {
     description = "L402 (Lightning HTTP 402) Reverse Proxy";
     homepage = "https://github.com/lightninglabs/aperture";
     license = licenses.mit;
-    maintainers = with maintainers; [ sputn1ck ];
+    maintainers = with maintainers; [ sputn1ck HannahMR ];
     mainProgram = "aperture";
   };
 }
