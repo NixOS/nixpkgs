@@ -35250,8 +35250,6 @@ with pkgs;
 
   toipe = callPackage ../applications/misc/toipe { };
 
-  toxic = callPackage ../applications/networking/instant-messengers/toxic { };
-
   toxiproxy = callPackage ../development/tools/toxiproxy { };
 
   tqsl = callPackage ../applications/radio/tqsl { };
