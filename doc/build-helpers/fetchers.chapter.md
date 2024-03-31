@@ -164,13 +164,9 @@ Here are security considerations for this scenario:
 
 It uses {manpage}`curl(1)` internally, and allows its behaviour to be modified by specifying a few attributes in the argument to `fetchurl` (see the documentation for attributes `curlOpts`, `curlOptsList`, and `netrcPhase`).
 
-### File naming {#sec-pkgs-fetchers-fetchurl-file-naming}
-
-The name of the file within the Nix store is controlled by the hash given to `fetchurl`, and also the `name` (or `pname` and `version`) values.
-For more details, see [Store Path](https://nixos.org/manual/nix/stable/store/store-path) on the Nix manual.
+The resulting [store path](https://nixos.org/manual/nix/stable/store/store-path) is determined by the hash given to `fetchurl`, and also the `name` (or `pname` and `version`) values.
 
 If neither `name` nor `pname` and `version` are specified when calling `fetchurl`, it will default to using the [basename](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-baseNameOf) of `url` or the first element of `urls`.
-
 If `pname` and `version` are specified, `fetchurl` will use those values and will ignore `name`, even if it is also specified.
 
 ### Inputs {#sec-pkgs-fetchers-fetchurl-inputs}
@@ -265,13 +261,13 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
 `name` (String; _optional_)
 : The symbolic name of the downloaded file when saved in the Nix store.
-  See [](#sec-pkgs-fetchers-fetchurl-file-naming) for details on how the name of the file is decided.
+  See [the `fetchurl` overview](#sec-pkgs-fetchers-fetchurl) for details on how the name of the file is decided.
 
   _Default value:_ `""`.
 
 `pname` (String; _optional_)
 : A base name, which will be combined with `version` to form the symbolic name of the downloaded file when saved in the Nix store.
-  See [](#sec-pkgs-fetchers-fetchurl-file-naming) for details on how the name of the file is decided.
+  See [the `fetchurl` overview](#sec-pkgs-fetchers-fetchurl) for details on how the name of the file is decided.
 
   :::{.note}
   If `pname` is specified, you must also specify `version`, otherwise `fetchurl` will ignore the value of `pname`.
@@ -281,7 +277,7 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
 `version` (String; _optional_)
 : A version, which will be combined with `pname` to form the symbolic name of the downloaded file when saved in the Nix store.
-  See [](#sec-pkgs-fetchers-fetchurl-file-naming) for details on how the name of the file is decided.
+  See [the `fetchurl` overview](#sec-pkgs-fetchers-fetchurl) for details on how the name of the file is decided.
 
   _Default value:_ `""`.
 
@@ -456,7 +452,7 @@ $ cat /nix/store/n9asny31z32q7sdw6a8r1gllrsfy53kl-does-not-exist
 23.11
 ```
 
-However, note that the name of the file was derived from the first URL (this is further explained in [](#sec-pkgs-fetchers-fetchurl-file-naming)).
+However, note that the name of the file was derived from the first URL (this is further explained in [the `fetchurl` overview](#sec-pkgs-fetchers-fetchurl)).
 To ensure the result will have the same name regardless of which URLs are used, we can modify the package:
 
 ```nix
