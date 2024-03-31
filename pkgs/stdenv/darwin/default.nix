@@ -873,7 +873,7 @@ in
       llvmPackages = super.llvmPackages // (
         let
           tools = super.llvmPackages.tools.extend (_: _: {
-            inherit (prevStage.llvmPackages) clang-unwrapped clangNoCompilerRtWithLibc libclang libllvm llvm;
+            inherit (prevStage.llvmPackages) clang-unwrapped clangNoCompilerRtWithLibc libclang lld libllvm llvm;
             clang = prevStage.stdenv.cc;
           });
 
@@ -972,7 +972,7 @@ in
         sed serf sharutils sqlite subversion sysctl texinfo unzip which xz zstd
 
         # CF dependencies - don’t rebuild them.
-        icu libiconv libxml2 zlib;
+        icu libiconv libiconv-darwin libxml2 zlib;
 
       # Disable tests because they use dejagnu, which fails to run.
       libffi = super.libffi.override { doCheck = false; };
@@ -1057,7 +1057,7 @@ in
         icu
 
         # LLVM dependencies - don’t rebuild them.
-        libffi libiconv libxml2 ncurses zlib;
+        libffi libiconv libiconv-darwin libxml2 ncurses zlib;
 
       darwin = super.darwin.overrideScope (selfDarwin: superDarwin: {
         inherit (prevStage.darwin) dyld CF Libsystem darwin-stubs
@@ -1328,9 +1328,9 @@ in
       overrides = self: super: {
         inherit (prevStage)
           bash binutils brotli bzip2 coreutils cpio diffutils ed file findutils gawk
-          gettext gmp gnugrep gnumake gnused gnutar gzip icu libffi libiconv libidn2 libssh2
-          libunistring libxml2 libyaml ncurses nghttp2 openbsm openpam openssl patch pbzx
-          pcre python3Minimal xar xz zlib zstd;
+          gettext gmp gnugrep gnumake gnused gnutar gzip icu libffi libiconv libiconv-darwin
+          libidn2 libssh2 libunistring libxml2 libyaml ncurses nghttp2 openbsm openpam
+          openssl patch pbzx pcre python3Minimal xar xz zlib zstd;
 
         darwin = super.darwin.overrideScope (_: superDarwin: {
           inherit (prevStage.darwin)
