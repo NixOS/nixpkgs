@@ -10599,6 +10599,17 @@ with pkgs;
 
   xz = callPackage ../tools/compression/xz { };
 
+  xz-sourceEquivalence = testers.sourceEquivalence {
+    # No, this is not an exception to the header note.
+    # This is a test post-bootstrap, thus, it's not a problem.
+    gitSource = fetchgit {
+      url = "https://git.tukaani.org/xz.git";
+      rev = "v${xz.version}";
+      hash = "sha256-alrSXZ0KWVlti6crmdxf/qMdrvZsY5yigcV9j6GIZ6c=";
+    };
+    src = xz.src;
+  };
+
   lz4 = callPackage ../tools/compression/lz4 { };
 
   lzbench = callPackage ../tools/compression/lzbench { };

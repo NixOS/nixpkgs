@@ -147,4 +147,6 @@
   hasPkgConfigModules = callPackage ./hasPkgConfigModules/tester.nix { };
 
   testMetaPkgConfig = callPackage ./testMetaPkgConfig/tester.nix { };
+
+  sourceEquivalence = callPackage ./sourceEquivalence/tester.nix { };
 }

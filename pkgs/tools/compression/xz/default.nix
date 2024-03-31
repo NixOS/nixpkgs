@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl
+{ lib, stdenv, fetchurl, fetchgit
 , enableStatic ? stdenv.hostPlatform.isStatic
 , writeScript
 , testers
@@ -52,6 +52,16 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     tests.pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
+    };
+    tests.source-equivalence = testers.sourceEquivalence {
+      # No, this is not an exception to the header note.
+      # This is a test post-bootstrap, thus, it's not a problem.
+      gitSource = fetchgit {
+        url = "https://git.tukaani.org/xz.git";
+        rev = "v${finalAttrs.version}";
+        hash = lib.fakeHash;
+      };
+      src = finalAttrs.src;
     };
   };
 
