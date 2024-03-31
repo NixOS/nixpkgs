@@ -36,6 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Simple command-line CalDav client";
     homepage = "https://github.com/tobixen/calendar-cli";
     license = licenses.gpl3Plus;
+    mainProgram = "calendar-cli";
     maintainers = with maintainers; [ dotlambda ];
   };
 }
