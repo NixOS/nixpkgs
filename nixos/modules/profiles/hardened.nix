@@ -39,7 +39,7 @@ with lib;
   security.apparmor.killUnconfinedConfinables = mkDefault true;
 
   boot.kernelParams = [
-    # Don't merge slabs
+    # Don't merge slabs, increasing difficulty of heap exploitation
     "slab_nomerge"
 
     # Overwrite free'd pages
@@ -50,6 +50,19 @@ with lib;
 
     # Disable debugfs
     "debugfs=off"
+
+    # Disable vsyscall as it is both obsolete and enables an ROP attack vector
+    vsyscall=none
+
+    # Enable kernel stack offset randomization
+    randomize_kstack_offset=on
+
+    # enable iommu
+    iommu=force
+    intel_iommu=on
+    amd_iommu=force_isolation
+    iommu.passthrough=0
+    iommu.strict=1
   ];
 
   boot.blacklistedKernelModules = [
