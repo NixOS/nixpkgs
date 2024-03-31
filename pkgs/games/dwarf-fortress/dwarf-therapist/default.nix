@@ -6,21 +6,31 @@
 , cmake
 , texlive
 , ninja
+, isV50 ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "dwarf-therapist";
-  version = "41.2.2";
+
+  # 41.2.5 is the last version to support Dwarf Fortress 0.47.
+  version = if isV50 then "42.1.5" else "41.2.5";
 
   src = fetchFromGitHub {
     owner = "Dwarf-Therapist";
     repo = "Dwarf-Therapist";
     rev = "v${version}";
-    sha256 = "sha256-zsEG68ioSw64UfmqlTLO1i5sObg8C4zxvdPxdQGMhhU=";
+    hash = if isV50 then # latest
+      "sha256-aUakfUjnIZWNDhCkG3A6u7BaaCG8kPMV/Fu2S73CoDg="
+    else # 41.2.5
+      "sha256-xfYBtnO1n6OcliVt07GsQ9alDJIfWdVhtuyWwuvXSZs=";
   };
 
   nativeBuildInputs = [ texlive cmake ninja ];
   buildInputs = [ qtbase qtdeclarative ];
+
+  enableParallelBuilding = true;
+
+  cmakeFlags = [ "-GNinja" ];
 
   installPhase =
     if stdenv.isDarwin then ''
@@ -31,8 +41,8 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   meta = with lib; {
-    description = "Tool to manage dwarves in a running game of Dwarf Fortress";
     mainProgram = "dwarftherapist";
+    description = "Tool to manage dwarves in a running game of Dwarf Fortress";
     maintainers = with maintainers; [ abbradar bendlas numinit jonringer ];
     license = licenses.mit;
     platforms = platforms.x86;

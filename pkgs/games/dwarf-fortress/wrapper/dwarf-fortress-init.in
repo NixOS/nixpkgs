@@ -1,45 +1,113 @@
 #!@stdenv_shell@ -e
 shopt -s extglob
 
-[ -z "$DF_DIR" ] && export DF_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/df_linux"
 env_dir="@env@"
-exe="$env_dir/@exe@"
+
+if [ -n "$DF_DIR" ]; then
+  # Compatibility for users that were using DF_DIR, since the dfhack script clobbers this variable.
+  export NIXPKGS_DF_HOME="$DF_DIR"
+fi
+
+if [ -z "$NIXPKGS_DF_HOME" ]; then
+  export NIXPKGS_DF_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/df_linux"
+fi
+
+# Compatibility.
+export DF_DIR="$NIXPKGS_DF_HOME"
 
 update_path() {
   local path="$1"
 
-  @mkdir@ -p "$DF_DIR/$(dirname "$path")"
+  @mkdir@ -p "$NIXPKGS_DF_HOME/$(dirname "$path")"
+
   # If user has replaced these data directories, let them stay.
-  if [ ! -e "$DF_DIR/$path" ] || [ -L "$DF_DIR/$path" ]; then
-    @rm@ -f "$DF_DIR/$path"
-    @ln@ -s "$env_dir/$path" "$DF_DIR/$path"
+  if [ ! -e "$NIXPKGS_DF_HOME/$path" ] || [ -L "$NIXPKGS_DF_HOME/$path" ]; then
+    @rm@ -f "$NIXPKGS_DF_HOME/$path"
+    @ln@ -s "$env_dir/$path" "$NIXPKGS_DF_HOME/$path"
+  fi
+}
+
+cleanup_path() {
+  local path="$1"
+
+  # Let them stay if not a link.
+  if [ ! -e "$NIXPKGS_DF_HOME/$path" ] || [ -L "$NIXPKGS_DF_HOME/$path" ]; then
+    @rm@ -f "$NIXPKGS_DF_HOME/$path"
   fi
 }
 
 forcecopy_path() {
   local path="$1"
 
-  @mkdir@ -p "$DF_DIR/$(dirname "$path")"
-  @rm@ -rf "$DF_DIR/$path"
-  @cp@ -rL --no-preserve=all "$env_dir/$path" "$DF_DIR/$path"
+  @mkdir@ -p "$NIXPKGS_DF_HOME/$(dirname "$path")"
+  @rm@ -rf "$NIXPKGS_DF_HOME/$path"
+  @cp@ -rL --no-preserve=all "$env_dir/$path" "$NIXPKGS_DF_HOME/$path"
 }
 
-@mkdir@ -p "$DF_DIR"
+declare -A _NIXPKGS_DF_OPTS
+
+# Don't use fmod by default.
+_NIXPKGS_DF_OPTS[fmod]=0
+
+IFS=',' read -ra split_options <<< "$NIXPKGS_DF_OPTS"
+for option in "${split_options[@]}"; do
+  key="${option%=*}"
+  value="${option##*=}"
+  if [ -z "$value" ] || [ "$key" == "$value" ]; then
+    value=1
+  fi
+  _NIXPKGS_DF_OPTS["$key"]="$value"
+done
+
+@mkdir@ -p "$NIXPKGS_DF_HOME"
 
 @cat@ <<EOF >&2
-Using $DF_DIR as Dwarf Fortress overlay directory.
-If you do any changes in it, don't forget to clean it when updating the game version!
-We try to detect changes based on data directories being symbolic links -- keep this in mind.
-
+/------------------------------------------------------------------------------\\
+| Hello from the nixpkgs Dwarf Fortress wrapper!                               |
+|                                                                              |
+| Using the following Dwarf Fortress overlay directory as NIXPKGS_DF_HOME:     |
+| $(@printf@ '% -76s' "$NIXPKGS_DF_HOME") |
+|                                                                              |
+| If you make any changes in it, don't forget to clean it when updating the    |
+| game version! We detect changes if data directories are symbolic links.      |
+|                                                                              |
+| Even though we do our best on our own, this script may miss some. Submit a   |
+| pull request if there are any that become a problem.                         |
+|                                                                              |
+| We started with the following nixpkgs launch options as NIXPKGS_DF_OPTS:     |
+| $(@printf@ '% -76s' "$(IFS=',' echo "${_NIXPKGS_DF_OPTS[@]@K}")") |
+|                                                                              |
+| If you want to try fmod over SDL_mixer, set NIXPKGS_DF_OPTS=fmod.            |
+\\------------------------------------------------------------------------------/
 EOF
 
 cd "$env_dir"
-for i in data/init/* data/!(init|index|announcement) raw; do
-  update_path "$i"
+
+# All potential important files in DF 50 and below.
+for path in dwarfort *.so libs raw data/init/* data/!(init|index|announcement); do
+  force_delete=0
+  if [[ "$path" == libfmod*.so* ]] && [ "${_NIXPKGS_DF_OPTS[fmod]}" -eq 0 ]; then
+    force_delete=1
+  fi
+
+  if [ -e "$path" ] && [ "$force_delete" -eq 0 ]; then
+    update_path "$path"
+  else
+    cleanup_path "$path"
+  fi
 done
 
-forcecopy_path data/index
-# For some reason, it's needed to be writable...
-forcecopy_path data/announcement
-forcecopy_path data/help
-forcecopy_path data/dipscript
+# These need to be copied due to read only flags on older versions of DF.
+for path in index announcement help dipscript; do
+  if [ -e "data/$path" ]; then
+    forcecopy_path "data/$path"
+  else
+    @rm@ -f "$NIXPKGS_DF_HOME/$path" &>/dev/null
+  fi
+done
+
+# Handle library paths on Darwin.
+if [ "$(@uname@)" == Darwin ]; then
+  export DYLD_LIBRARY_PATH="$env_dir/libs"
+  export DYLD_FRAMEWORK_PATH="$env_dir/libs"
+fi

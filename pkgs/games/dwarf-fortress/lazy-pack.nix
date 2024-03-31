@@ -41,6 +41,8 @@ let
     then getAttr dfGame df-games
     else throw "Unknown Dwarf Fortress version: ${dfVersion}";
   dwarf-therapist = dwarf-fortress.dwarf-therapist;
+
+  mainProgram = if enableDFHack then "dfhack" else "dwarf-fortress";
 in
 buildEnv {
   name = "dwarf-fortress-full";
@@ -54,6 +56,7 @@ buildEnv {
   ++ optional enableLegendsBrowser legends-browser;
 
   meta = {
+    inherit mainProgram;
     description = "An opinionated wrapper for Dwarf Fortress";
     maintainers = with maintainers; [ Baughn numinit ];
     license = licenses.mit;
