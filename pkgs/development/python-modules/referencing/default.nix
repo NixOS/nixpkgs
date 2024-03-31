@@ -11,14 +11,13 @@
 , rpds-py
 }:
 
-
 let
   self = buildPythonPackage rec {
     pname = "referencing";
     version = "0.34.0";
-    format = "pyproject";
+    pyproject = true;
 
-    disabled = pythonOlder "3.7";
+    disabled = pythonOlder "3.8";
 
     src = fetchFromGitHub {
       owner = "python-jsonschema";
@@ -28,12 +27,12 @@ let
       hash = "sha256-Vx+WVgt09I04Z/sIYsLLtPCwuo5wW0Z2o2OTH2V17UY=";
     };
 
-    nativeBuildInputs = [
+    build-system = [
       hatch-vcs
       hatchling
     ];
 
-    propagatedBuildInputs = [
+    dependencies = [
       attrs
       rpds-py
     ];
@@ -44,7 +43,7 @@ let
       pytestCheckHook
     ];
 
-    # avoid infinite recursion with jsonschema
+    # Avoid infinite recursion with jsonschema
     doCheck = false;
 
     passthru.tests.referencing = self.overridePythonAttrs { doCheck = true; };
@@ -56,7 +55,7 @@ let
     meta = with lib; {
       description = "Cross-specification JSON referencing";
       homepage = "https://github.com/python-jsonschema/referencing";
-      changelog = "https://github.com/python-jsonschema/referencing/blob/${version}/CHANGELOG.rst";
+      changelog = "https://github.com/python-jsonschema/referencing/releases/tag/v${version}";
       license = licenses.mit;
       maintainers = with maintainers; [ fab ];
     };
