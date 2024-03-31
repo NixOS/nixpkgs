@@ -114,6 +114,11 @@ in let
       python3 = pkgs.python3;  # don't use python-boot
     });
 
+    bolt = callPackage ../common/bolt {
+      inherit llvm_meta;
+      additionalPatches = [ ./bolt/gnu-install-dirs.patch ./bolt/tablegen.patch ];
+    };
+
     # pick clang appropriate for package set we are targeting
     clang =
       /**/ if stdenv.targetPlatform.useLLVM or false then tools.clangUseLLVM
