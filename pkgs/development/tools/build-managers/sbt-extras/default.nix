@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, which, curl, makeWrapper, jdk, writeScript
-, common-updater-scripts, cacert, git, nixfmt, nix, jq, coreutils, gnused }:
+, common-updater-scripts, cacert, git, nixfmt-classic, nix, jq, coreutils, gnused }:
 
 stdenv.mkDerivation rec {
   pname = "sbt-extras";
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
          curl
          cacert
          git
-         nixfmt
+         nixfmt-classic
          nix
          jq
          coreutils

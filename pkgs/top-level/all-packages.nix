@@ -40119,7 +40119,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  nixfmt = haskellPackages.nixfmt.bin;
+  nixfmt-classic = haskellPackages.nixfmt.bin;
 
   nixpkgs-fmt = callPackage ../tools/nix/nixpkgs-fmt { };
 

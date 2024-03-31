@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, jre, writeScript, common-updater-scripts, git, nixfmt
+{ lib, stdenv, fetchurl, jre, writeScript, common-updater-scripts, git, nixfmt-classic
 , nix, coreutils, gnused, disableRemoteLogging ? true }:
 
 let
@@ -37,7 +37,7 @@ let
               git
               gnused
               nix
-              nixfmt
+              nixfmt-classic
             ]
           }
           oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"')"
