@@ -13156,6 +13156,8 @@ self: super: with self; {
 
   roman = callPackage ../development/python-modules/roman { };
 
+  romy = callPackage ../development/python-modules/romy { };
+
   roombapy = callPackage ../development/python-modules/roombapy { };
 
   roonapi = callPackage ../development/python-modules/roonapi { };
@@ -13467,6 +13469,8 @@ self: super: with self; {
   securesystemslib = callPackage ../development/python-modules/securesystemslib { };
 
   securetar = callPackage ../development/python-modules/securetar { };
+
+  securityreporter = callPackage ../development/python-modules/securityreporter { };
 
   sectools = callPackage ../development/python-modules/sectools { };
 

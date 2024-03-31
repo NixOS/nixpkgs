@@ -5,26 +5,29 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dep-scan";
-  version = "5.2.12";
+  version = "5.2.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "owasp-dep-scan";
     repo = "dep-scan";
     rev = "refs/tags/v${version}";
-    hash = "sha256-UoppQAokiWBcgTcSmwfoqrDKt/QHYd2NBR3CpNOqI4k=";
+    hash = "sha256-G8i/tGEDgjPnIP04nrbx4HseiaU6N1GJGSg78yhaqII=";
   };
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace " --cov-append --cov-report term --cov depscan" ""
+      --replace-fail " --cov-append --cov-report term --cov depscan" ""
+    # Already fixed by upstream
+    substituteInPlace pyproject.toml \
+      --replace-fail "==5.6.4" ">=5.6.4"
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     setuptools
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     appthreat-vulnerability-db
     cvss
     defusedxml
