@@ -45,6 +45,8 @@ buildNpmPackage rec {
   '';
 
   postBuild = ''
+    # Allow standalone program read HOSTNAME from env
+    patch -p1 .next/standalone/server.js -i ${./allow_env_hostname.patch}
     # Add a shebang to the server js file, then patch the shebang.
     sed -i '1s|^|#!/usr/bin/env node\n|' .next/standalone/server.js
     patchShebangs .next/standalone/server.js
