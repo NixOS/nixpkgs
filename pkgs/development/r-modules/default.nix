@@ -473,7 +473,7 @@ let
     XML = with pkgs; [ libtool libxml2.dev xmlsec libxslt ];
     affyPLM = [ pkgs.zlib.dev ];
     BitSeq = [ pkgs.zlib.dev ];
-    DiffBind = [ pkgs.zlib ];
+    DiffBind = with pkgs; [ zlib.dev xz.dev bzip2.dev ];
     ShortRead = [ pkgs.zlib.dev ];
     oligo = [ pkgs.zlib.dev ];
     gmapR = [ pkgs.zlib.dev ];
