@@ -109,9 +109,9 @@
       "update-channel": "RustRover EAP",
       "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}.tar.gz",
       "version": "2023.3 EAP",
-      "sha256": "51b6db1563d68326bd7c8defe1f6c04b428e1a592d06579edfeb0feb60c45077",
-      "url": "https://download.jetbrains.com/rustrover/RustRover-233.14015.155.tar.gz",
-      "build_number": "233.14015.155"
+      "sha256": "489ea17a55e39ddb11e2ba5d98d69dd8353e228ff4ba618a969f0fd2ff55d730",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-233.14475.74.tar.gz",
+      "build_number": "233.14475.74"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
