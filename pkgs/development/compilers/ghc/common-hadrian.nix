@@ -5,7 +5,7 @@
     if rev != null
     then "https://gitlab.haskell.org/ghc/ghc.git"
     else "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz"
-
+, postFetch ? null
 }:
 
 { lib
@@ -146,6 +146,8 @@
     inherit url sha256;
   } // lib.optionalAttrs (rev != null) {
     inherit rev;
+  } // lib.optionalAttrs (postFetch != null) {
+    inherit postFetch;
   })
 
   # GHC's build system hadrian built from the GHC-to-build's source tree
