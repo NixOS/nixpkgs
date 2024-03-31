@@ -25,10 +25,10 @@ in
     version = source.version;
 
     src = fetchFromGitHub {
-      owner = source.owner;
+      inherit (source) owner;
       repo = "XIVLauncher.Core";
-      rev = source.rev;
-      hash = source.hash;
+      inherit (source) rev;
+      inherit (source) hash;
       fetchSubmodules = true;
     };
 
