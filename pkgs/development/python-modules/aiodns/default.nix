@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "aiodns";
-  version = "3.1.1";
+  version = "3.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "saghul";
     repo = "aiodns";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-JZS53kICsrXDot3CKjG30AOjkYycKpMJvC9yS3c1v5Q=";
+    sha256 = "sha256-aXae9/x0HVp4KqydCf5/+p5PlSKUQ5cE3iVeD08rtf0=";
   };
 
   nativeBuildInputs = [
