@@ -411,12 +411,12 @@ let
         mktplcRef = {
           name = "astro-vscode";
           publisher = "astro-build";
-          version = "2.3.3";
-          sha256 = "sha256-A7+7lnCPAtSWUfHLNKbYqKuTxi2Nx05Qdh5HCkT1dnM=";
+          version = "2.8.3";
+          sha256 = "sha256-A6m31eZMlOHF0yr9MjXmsFyXgH8zmq6WLRd/w85hGw0=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/astro-build.astro-vscode/changelog";
-          description = "Astro language support for VSCode";
+          description = "Astro language support for VS Code";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=astro-build.astro-vscode";
           homepage = "https://github.com/withastro/language-tools";
           license = lib.licenses.mit;
