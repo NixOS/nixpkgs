@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "Reference CLI for Tox";
     mainProgram = "toxic";
     homepage = "https://github.com/TokTok/toxic";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ ehmry ];
     platforms = lib.platforms.linux;
   };
