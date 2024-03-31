@@ -1,8 +1,17 @@
 { pkgs, haskellLib }:
 
-with haskellLib;
-
 let
+  inherit (haskellLib)
+    addBuildDepend
+    addBuildDepends
+    appendConfigureFlags
+    doDistribute
+    doJailbreak
+    dontCheck
+    overrideCabal
+    unmarkBroken
+    ;
+
   inherit (pkgs.stdenv.hostPlatform) isDarwin;
   inherit (pkgs) lib;
 in
