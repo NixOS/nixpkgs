@@ -15,7 +15,7 @@
 let
   self = buildPythonPackage rec {
     pname = "referencing";
-    version = "0.33.0";
+    version = "0.34.0";
     format = "pyproject";
 
     disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ let
       repo = "referencing";
       rev = "refs/tags/v${version}";
       fetchSubmodules = true;
-      hash = "sha256-QP/F6UNiKHGNMhGphDJgEFZnpGU5izExcI/A9WJjA5Q=";
+      hash = "sha256-Vx+WVgt09I04Z/sIYsLLtPCwuo5wW0Z2o2OTH2V17UY=";
     };
 
     nativeBuildInputs = [
