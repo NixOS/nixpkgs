@@ -5,6 +5,7 @@
 , panflute
 , lxml
 , setuptools
+, nix-update-script
 }:
 
 buildPythonApplication rec {
@@ -22,6 +23,8 @@ buildPythonApplication rec {
   nativeBuildInputs = [
     setuptools
   ];
+
+  passthru.updateScript = nix-update-script {};
 
   propagatedBuildInputs = [ natsort panflute lxml ];
 
