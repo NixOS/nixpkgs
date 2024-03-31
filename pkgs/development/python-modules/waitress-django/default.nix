@@ -5,7 +5,11 @@ buildPythonPackage {
   version = "1.0.0";
   format = "setuptools";
 
-  src = ./.;
+  src = lib.fileset.toSource {
+    root = ./.;
+    fileset = lib.fileset.difference ./. ./default.nix;
+  };
+
   pythonPath = [ django waitress ];
   doCheck = false;
 
