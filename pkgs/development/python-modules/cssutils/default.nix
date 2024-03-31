@@ -1,32 +1,33 @@
 { lib
 , buildPythonPackage
+, pythonAtLeast
 , pythonOlder
-, fetchPypi
-, setuptools
+, fetchFromGitHub
 , setuptools-scm
 , cssselect
 , jaraco-test
 , lxml
 , mock
-, pytest7CheckHook
+, pytestCheckHook
 , importlib-resources
 }:
 
 buildPythonPackage rec {
   pname = "cssutils";
-  version = "2.9.0";
+  version = "2.10.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-iUd7PRfXkOl7n7Te9wh2cGEFV5Wq5vfIKuMulnyb5M0=";
+  src = fetchFromGitHub {
+    owner = "jaraco";
+    repo = "cssutils";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-FK+EHdfsuCnWmnfUH18gyMq6CBXICBbhJj3XrscLLOA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  build-system = [
     setuptools-scm
   ];
 
@@ -35,14 +36,13 @@ buildPythonPackage rec {
     jaraco-test
     lxml
     mock
-    pytest7CheckHook
+    pytestCheckHook
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
   ];
 
   disabledTests = [
     # access network
-    "test_parseUrl"
     "encutils"
     "website.logging"
   ];
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A CSS Cascading Style Sheets library for Python";
     homepage = "https://github.com/jaraco/cssutils";
-    changelog = "https://github.com/jaraco/cssutils/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/jaraco/cssutils/blob/${src.rev}/NEWS.rst";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ dotlambda ];
   };
