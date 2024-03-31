@@ -14,7 +14,6 @@ let
     cudaVersion
     flags
     libcublas
-    setupCudaHook
     ;
   inherit (lib) getDev getLib getOutput;
 in
@@ -22,7 +21,10 @@ backendStdenv.mkDerivation {
   pname = "saxpy";
   version = "unstable-2023-07-11";
 
-  src = ./.;
+  src = lib.fileset.toSource {
+    root = ./.;
+    fileset = lib.fileset.difference ./. ./default.nix;
+  };
 
   strictDeps = true;
 
