@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "msal";
-  version = "1.27.0";
+  version = "1.28.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MQlQPAOLprMHFSsOjTT5gRPy56eJhuKNC69bUwOv2lI=";
+    hash = "sha256-gLur40Vny3NO/S7BhpstmBlcknRVNp2Ad7PFQgiMXJ0=";
   };
 
   nativeBuildInputs = [
