@@ -6,7 +6,7 @@
 , Accelerate, ApplicationServices, AVFoundation, libcxx
 , withGstreamer ? true
 , gst_all_1
-, pillow, requests, pygments, packaging
+, packaging, pillow, pygments, requests
 }:
 
 buildPythonPackage rec {
