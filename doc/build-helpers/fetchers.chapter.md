@@ -23,14 +23,14 @@ The following table summarises the differences:
 | `builtins.fetch*` | evaluation time | store path | `/nix/store`, `~/.cache/nix` | `tarball-ttl` expires, cache miss in `~/.cache/nix`, output store object not in local store |
 | `pkgs.fetch*` | build time | derivation | `/nix/store`, substituters | output store object not available |
 
-:::{.note}
+:::{.tip}
 `pkgs.fetchFrom*` helpers retrieve _snapshots_ of version-controlled sources, as opposed to the entire version history, which is more efficient.
 :::
 
 ## Caveats {#chap-pkgs-fetchers-caveats}
 
-Because Nixpkgs fetchers are fixed-output derivations, an [output hash](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-outputHash) has to be specified.
-This hash refers to the derivation output, not the remote source itself!
+Because Nixpkgs fetchers are fixed-output derivations, an [output hash](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-outputHash) has to be specified, usually indirectly through a `hash` attribute.
+This hash refers to the derivation output, which can be different from the remote source itself!
 
 This has the following implications that you should be aware of:
 
@@ -40,13 +40,16 @@ This has the following implications that you should be aware of:
   Use one of the methods from [](#sec-pkgs-fetchers-updating-source-hashes).
   Otherwise, existing store objects that match the output hash will be re-used rather than fetching new content.
 
-A similar problem arises while testing changes to a fetcher's implementation.
-If the output of the derivation already exists in the Nix store, test failures can go undetected.
-The [`invalidateFetcherByDrvHash`](#tester-invalidateFetcherByDrvHash) function helps prevent reusing cached derivations.
+  :::{.note}
+  A similar problem arises while testing changes to a fetcher's implementation.
+  If the output of the derivation already exists in the Nix store, test failures can go undetected.
+  The [`invalidateFetcherByDrvHash`](#tester-invalidateFetcherByDrvHash) function helps prevent reusing cached derivations.
+  :::
 
 ## Updating source hashes {#sec-pkgs-fetchers-updating-source-hashes}
 
-There are several ways to obtain a remote source's hash.
+There are several ways to obtain the hash corresponding to a remote source.
+Unless you understand how the fetcher you're using calculates the hash from the downloaded contents, you should use [the fake hash method](#sec-pkgs-fetchers-updating-source-hashes-fakehash-method).
 
 1. Prefetch the source with [`nix-prefetch-<type> <URL>`](https://search.nixos.org/packages?buckets={%22package_attr_set%22%3A[%22No%20package%20set%22]%2C%22package_license_set%22%3A[]%2C%22package_maintainers_set%22%3A[]%2C%22package_platforms%22%3A[]}&query=nix-prefetch), where `<type>` is one of
 
@@ -67,7 +70,7 @@ There are several ways to obtain a remote source's hash.
 3. Upstream hash: use it when upstream provides `sha256` or `sha512`.
    Don't use it when upstream provides `md5`, compute `sha256` instead.
 
-   A little nuance is that `nix-prefetch-*` tools produce hashes encoded with the custom Nix `base32` variant, but upstream usually provides hexadecimal (`base16`) encoding.
+   A little nuance is that `nix-prefetch-*` tools produce hashes with the `nix32` encoding (a Nix-specific base32 adaptation), but upstream usually provides hexadecimal (`base16`) encoding.
    Fetchers understand both formats.
    Nixpkgs does not standardise on any one format.
 
@@ -76,25 +79,23 @@ There are several ways to obtain a remote source's hash.
 4. Extract the hash from a local source archive with `sha256sum`.
    Use `nix-prefetch-url file:///path/to/archive` if you want the custom Nix `base32` hash.
 
-5. Trust on first use: set the hash to one of
+5. []{#sec-pkgs-fetchers-updating-source-hashes-fakehash-method} In your package recipe, set the hash to one of
 
    - `""`
    - `lib.fakeHash`
    - `lib.fakeSha256`
    - `lib.fakeSha512`
 
-   in the package recipe, attempt to build, and extract the correct hash from error messages.
+   Once you attempt to build, error messages with the calculated hashes will show up, which you then replace in the recipe.
 
    :::{.warning}
    You must use one of these four fake hashes and not some arbitrarily-chosen hash.
-   See [][#sec-pkgs-fetchers-secure-hashes] for details.
+   See [](#sec-pkgs-fetchers-secure-hashes) for details.
    :::
-
-   This is last resort method when reconstructing source URL is non-trivial and `nix-prefetch-url -A` isn’t applicable.
 
 :::{.example #ex-fetchers-update-fod-hash}
 
-# Update source hash with "trust on first use"
+# Update source hash with the fake hash method
 
 Consider the following recipe that produces a plain file:
 
@@ -116,7 +117,8 @@ fetchurl {
 }
 ```
 
-**This will produce the same output as before!**.
+**This will produce the same output as before!**
+To determine the new hash, set it to an empty value (it's a fake hash, hence the name of the method):
 
 ```nix
 { fetchurl }:
@@ -130,7 +132,7 @@ When building the package, use the error message to determine the correct hash:
 
 ```shell
 $ nix-build
-...
+(some output removed for clarity)
 error: hash mismatch in fixed-output derivation '/nix/store/7yynn53jpc93l76z9zdjj4xdxgynawcw-version.drv':
          specified: sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
             got:    sha256-BZqI7r0MNP29yGH5+yW2tjU9OOpOCEvwWKrWCv5CQ0I=
@@ -140,18 +142,18 @@ error: build of '/nix/store/bqdjcw5ij5ymfbm41dq230chk9hdhqff-version.drv' failed
 
 ## Obtaining hashes securely {#sec-pkgs-fetchers-secure-hashes}
 
-Let's say Man-in-the-Middle (MITM) sits close to your network.
-Then instead of fetching source you can fetch malware, and instead of the actual source hash, you get the hash of malware.
+It's always a good idea to avoid Man-in-the-Middle (MITM) attacks when downloading source contents.
+Otherwise, you could unknowingly download malware instead of the intended source, and instead of the actual source hash, you'll end up using the hash of malware.
 Here are security considerations for this scenario:
 
 - `http://` URLs are not secure to prefetch hashes.
 
 - Upstream hashes should be obtained via a secure protocol.
 
-- `https://` URLs are secure when using `nix-prefetch-*` or for upstream hashes.
+- `https://` URLs give you more protections when using `nix-prefetch-*` or for upstream hashes.
 
-- `https://` URLs are secure relying on "trust on first use" *only if* you use one of the listed fake hashes.
-  If you use any other hash, `fetchurl` will pass `--insecure` to `curl` and may then degrade to HTTP in case of TLS certificate expiration.
+- `https://` URLs are secure when using the [fake hash method](#sec-pkgs-fetchers-updating-source-hashes-fakehash-method) *only if* you use one of the listed fake hashes.
+  If you use any other hash, the download will be exposed to MITM attacks even if you use HTTPS URLs.
 
 ## `fetchurl` and `fetchzip` {#fetchurl}
 
