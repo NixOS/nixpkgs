@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, undmg }:
+{ stdenv, lib, fetchurl, undmg, makeWrapper }:
 
 stdenv.mkDerivation (finalAttrs: {
   version = "3.4.1";
@@ -12,9 +12,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "GrandPerspective.app";
   buildInputs = [ undmg ];
+  nativeBuildInputs = [ makeWrapper ];
+  # Create a trampoline script in $out/bin/ because a symlink doesn’t work for
+  # this app.
   installPhase = ''
-    mkdir -p "$out/Applications/GrandPerspective.app";
-    cp -R . "$out/Applications/GrandPerspective.app";
+    mkdir -p "$out/Applications/GrandPerspective.app" "$out/bin"
+    cp -R . "$out/Applications/GrandPerspective.app"
+    makeWrapper "$out/Applications/GrandPerspective.app/Contents/MacOS/GrandPerspective" "$out/bin/grandperspective"
   '';
 
   meta = with lib; {
@@ -25,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
       space. It uses a so called tree map for visualisation. Each file is shown as a rectangle with an area proportional to
       the file's size. Files in the same folder appear together, but their placement is otherwise arbitrary.
     '';
+    mainProgram = "grandperspective";
     homepage = "https://grandperspectiv.sourceforge.net";
     license = licenses.gpl2Only;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

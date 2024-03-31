@@ -161,7 +161,7 @@ rec {
 
   mypy-boto3-codeartifact = buildMypyBoto3Package "codeartifact" "1.34.68" "sha256-Ey0cmx0OxN1/VXIyvn0EOBP9qYIuc/XyFVZniHLaNEY=";
 
-  mypy-boto3-codebuild = buildMypyBoto3Package "codebuild" "1.34.70" "sha256-lv69lhMKJHRnooVrmGinfDEi7eVEe7O12GNNo5uZQQc=";
+  mypy-boto3-codebuild = buildMypyBoto3Package "codebuild" "1.34.74" "sha256-A8SRNosqzXQab2J9gnYUWNkIdju8QqX44GJnFSNE4DQ=";
 
   mypy-boto3-codecatalyst = buildMypyBoto3Package "codecatalyst" "1.34.73" "sha256-jQ/DIoWXQWo1oVWi4Gn88cxr78QCs45EVtgfc6fZkFk=";
 
@@ -347,7 +347,7 @@ rec {
 
   mypy-boto3-inspector2 = buildMypyBoto3Package "inspector2" "1.34.29" "sha256-ZMdNVgKXQnEHyK4tV/XegvFX7xdk5A1AiSfpTKWCtcY=";
 
-  mypy-boto3-internetmonitor = buildMypyBoto3Package "internetmonitor" "1.34.48" "sha256-tJ5Hu8ojUahG1YbNHgwDjYWqbSPCZEUyYM/dOObmArg=";
+  mypy-boto3-internetmonitor = buildMypyBoto3Package "internetmonitor" "1.34.74" "sha256-VFIeJqQHHvbB+mLyzxHpZUvgGS5dJJen4AAJAMJTDqE=";
 
   mypy-boto3-iot = buildMypyBoto3Package "iot" "1.34.52" "sha256-YWGotOPKljY4B0JL1I+axk4MJZIk84rVxoZu9tzBGss=";
 
@@ -381,7 +381,7 @@ rec {
 
   mypy-boto3-iottwinmaker = buildMypyBoto3Package "iottwinmaker" "1.34.0" "sha256-K5LEh8wdXvftxGstThSBN73K+1FUVlE40JxvjWv6GMA=";
 
-  mypy-boto3-iotwireless = buildMypyBoto3Package "iotwireless" "1.34.0" "sha256-g2Ab6AQ0fvmEuSqAHlvAPe3TYSz/Nai1U8srjT0QWHw=";
+  mypy-boto3-iotwireless = buildMypyBoto3Package "iotwireless" "1.34.74" "sha256-57ZO7LlQ9/itiynqSjXu7SJrNLNaFo5WCJBqSXEYeLs=";
 
   mypy-boto3-ivs = buildMypyBoto3Package "ivs" "1.34.45" "sha256-Ilrtk6ZF1p3GNuZrtiEiNXi3bHI3MYNr6bDpJ8sf4Fg=";
 
@@ -459,7 +459,7 @@ rec {
 
   mypy-boto3-managedblockchain-query = buildMypyBoto3Package "managedblockchain-query" "1.34.67" "sha256-c2BoAKpgurKaNOTkl3cqc3X1CiaQVfQL5kvQV3/WLww=";
 
-  mypy-boto3-marketplace-catalog = buildMypyBoto3Package "marketplace-catalog" "1.34.41" "sha256-SZqNZO/36iGuf0jqNIZrbD1BOE7p6xMWhs5Y5VkUl8c=";
+  mypy-boto3-marketplace-catalog = buildMypyBoto3Package "marketplace-catalog" "1.34.74" "sha256-+ehJMgzEt0R0sV1IL4/eEEltEIcFDqr4GzeTraabW90=";
 
   mypy-boto3-marketplace-entitlement = buildMypyBoto3Package "marketplace-entitlement" "1.34.0" "sha256-yGaeDZLEmp/Nap++wI6GgQvVW3HxQFcM+ipk7RAuG4g=";
 
@@ -625,7 +625,7 @@ rec {
 
   mypy-boto3-s3outposts = buildMypyBoto3Package "s3outposts" "1.34.0" "sha256-xLuGP9Fe0S7zRimt1AKd9KOrytmNd/GTRg5OVi5Xpos=";
 
-  mypy-boto3-sagemaker = buildMypyBoto3Package "sagemaker" "1.34.70" "sha256-WON2j0ZQ9x3qq1mOOzMvT8jJSuJipDHDp4IxsB88GCg=";
+  mypy-boto3-sagemaker = buildMypyBoto3Package "sagemaker" "1.34.74" "sha256-gTSksOsEH4IRLqw+AZ/CNLO28Ir18oy7iP2h6a38rmE=";
 
   mypy-boto3-sagemaker-a2i-runtime = buildMypyBoto3Package "sagemaker-a2i-runtime" "1.34.0" "sha256-jMZ3aWKQPhNec4A/02S1waQi6Mx9JVdENc3kblhsKjA=";
 

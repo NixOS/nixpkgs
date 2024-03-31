@@ -6,13 +6,13 @@
   fetchFromGitHub,
   python3,
   which,
+  autoAddDriverRunpath,
   cudaPackages,
   # passthru.updateScript
   gitUpdater,
 }:
 let
   inherit (cudaPackages)
-    autoAddDriverRunpath
     backendStdenv
     cuda_cccl
     cuda_cudart

@@ -215,7 +215,11 @@ def _get_latest_version_pypi(attr_path, package, extension, current_version, tar
     url = "{}/{}/json".format(INDEX, package)
     json = _fetch_page(url)
 
-    versions = json["releases"].keys()
+    versions = {
+        version
+        for version, releases in json["releases"].items()
+        if not all(release["yanked"] for release in releases)
+    }
     version = _determine_latest_version(current_version, target, versions)
 
     try:

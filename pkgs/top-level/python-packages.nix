@@ -10299,6 +10299,8 @@ self: super: with self; {
 
   pulsectl-asyncio = callPackage ../development/python-modules/pulsectl-asyncio { };
 
+  pulsar = callPackage ../development/python-modules/pulsar { };
+
   pulsectl = callPackage ../development/python-modules/pulsectl { };
 
   pure-cdb = callPackage ../development/python-modules/pure-cdb { };
@@ -13843,6 +13845,8 @@ self: super: with self; {
   snakemake-interface-common = callPackage ../development/python-modules/snakemake-interface-common { };
 
   snakemake-interface-executor-plugins = callPackage ../development/python-modules/snakemake-interface-executor-plugins { };
+
+  snakemake-interface-report-plugins = callPackage ../development/python-modules/snakemake-interface-report-plugins { };
 
   snakemake-interface-storage-plugins = callPackage ../development/python-modules/snakemake-interface-storage-plugins { };
 
