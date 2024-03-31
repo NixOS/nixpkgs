@@ -2,20 +2,19 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
-, snakemake-interface-executor-plugins
 , snakemake-interface-common
 }:
 
 buildPythonPackage rec {
-  pname = "snakemake-executor-plugin-cluster-generic";
-  version = "1.0.9";
+  pname = "snakemake-interface-report-plugins";
+  version = "1.0.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-RHMefoJOZb6TjRsFCORLFdHtI5ZpTsV6CHrjHKMat9o=";
+    hash = "sha256-30x4avA3FrqZ4GoTl6Js5h3VG5LW7BNHOcNWxznXoT0=";
   };
 
   nativeBuildInputs = [
@@ -23,15 +22,14 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    snakemake-interface-executor-plugins
     snakemake-interface-common
   ];
 
-  pythonImportsCheck = [ "snakemake_executor_plugin_cluster_generic" ];
+  pythonImportsCheck = [ "snakemake_interface_report_plugins" ];
 
   meta = with lib; {
-    description = "Generic cluster executor for Snakemake";
-    homepage = "https://github.com/snakemake/snakemake-executor-plugin-cluster-generic";
+    description = "The interface for Snakemake report plugins";
+    homepage = "https://github.com/snakemake/snakemake-interface-report-plugins";
     license = licenses.mit;
     maintainers = with maintainers; [ veprbl ];
   };
