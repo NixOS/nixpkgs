@@ -32057,7 +32057,6 @@ with pkgs;
   super-productivity = callPackage ../applications/office/super-productivity { };
 
   inherit (callPackages ../development/libraries/wlroots {})
-    wlroots_0_15
     wlroots_0_16
     wlroots_0_17
     wlroots;
@@ -32087,10 +32086,6 @@ with pkgs;
   waylevel = callPackage ../tools/misc/waylevel { };
 
   wbg = callPackage ../applications/misc/wbg { };
-
-  hikari = callPackage ../applications/window-managers/hikari {
-    wlroots = wlroots_0_15;
-  };
 
   i3 = callPackage ../applications/window-managers/i3 {
     xcb-util-cursor = if stdenv.isDarwin then xcb-util-cursor-HEAD else xcb-util-cursor;
