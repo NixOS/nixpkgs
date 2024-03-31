@@ -4,7 +4,6 @@
 , pycares
 , pythonOlder
 , setuptools
-
 }:
 
 buildPythonPackage rec {
@@ -12,20 +11,20 @@ buildPythonPackage rec {
   version = "3.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "saghul";
     repo = "aiodns";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-aXae9/x0HVp4KqydCf5/+p5PlSKUQ5cE3iVeD08rtf0=";
+    hash = "sha256-aXae9/x0HVp4KqydCf5/+p5PlSKUQ5cE3iVeD08rtf0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pycares
   ];
 
