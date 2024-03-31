@@ -13,14 +13,14 @@
 let
   common = { name, npmBuildScript, installPhase }: buildNpmPackage rec {
     pname = name;
-    version = "2024.3.1";
+    version = "2024.3.2";
     nodejs = nodejs_18;
 
     src = fetchFromGitHub {
       owner = "bitwarden";
       repo = "directory-connector";
       rev = "v${version}";
-      hash = "sha256-NbyjL6x/Ij5waYlIDNKrg7fDT+co/EcdCW4ZBJ6KV34=";
+      hash = "sha256-CB5HrT+p63zANg1SEoynk6hPPW5DcC9Qfo2+QDy2iwc=";
     };
 
     postPatch = ''
