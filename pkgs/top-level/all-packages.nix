@@ -23131,8 +23131,6 @@ with pkgs;
 
   libtorrent-rasterbar = libtorrent-rasterbar-2_0_x;
 
-  libtoxcore = callPackage ../development/libraries/libtoxcore { };
-
   libtpms = callPackage ../tools/security/libtpms { };
 
   libtap = callPackage ../development/libraries/libtap { };
