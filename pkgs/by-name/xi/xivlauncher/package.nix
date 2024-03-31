@@ -1,7 +1,8 @@
 { lib, buildDotnetModule, fetchFromGitHub, dotnetCorePackages, SDL2, libsecret, glib, gnutls, aria2, steam, gst_all_1
 , copyDesktopItems, makeDesktopItem, makeWrapper
 , useSteamRun ? true
-, useRbPatchedLauncher ? false }:
+, useRbPatchedLauncher ? false
+}:
 
 let
   goatcorp = {
