@@ -23,9 +23,15 @@
 
 let
   inherit (pkgs) lib;
-in
 
-with haskellLib;
+  inherit (haskellLib)
+    doDistribute
+    dontCheck
+    dontHaddock
+    overrideCabal
+    triggerRebuild
+    ;
+in
 
 self: super: {
   # COMMON ARM OVERRIDES
