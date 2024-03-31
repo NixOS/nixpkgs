@@ -714,6 +714,7 @@ dont-distribute-packages:
  - boots-cloud
  - boots-web
  - borel
+ - botan-low
  - both
  - bound-gen
  - breakout
@@ -757,7 +758,6 @@ dont-distribute-packages:
  - cakyrespa
  - cal3d-examples
  - cal3d-opengl
- - calamity-commands
  - calc
  - calculator
  - caldims
@@ -897,12 +897,12 @@ dont-distribute-packages:
  - cmv
  - cnc-spec-compiler
  - co-feldspar
- - co-log-polysemy
  - cobot-io
  - codec
  - codec-libevent
  - codec-rpm
  - codemonitor
+ - codet-plugin
  - coformat
  - cognimeta-utils
  - coinbase-exchange
@@ -1136,7 +1136,6 @@ dont-distribute-packages:
  - dfinity-radix-tree
  - dhall-lex
  - dhall-secret
- - di-polysemy
  - dia-functions
  - diagrams-reflex
  - diagrams-wx
@@ -2119,7 +2118,14 @@ dont-distribute-packages:
  - hledger-api
  - hlrdb
  - hls
+ - hls-call-hierarchy-plugin
  - hls-exactprint-utils
+ - hls-gadt-plugin
+ - hls-refactor-plugin
+ - hls-rename-plugin
+ - hls-retrie-plugin
+ - hls-semantic-tokens-plugin
+ - hls-splice-plugin
  - hmark
  - hmatrix-sundials
  - hmeap
@@ -2325,8 +2331,6 @@ dont-distribute-packages:
  - improve
  - inch
  - incipit
- - incipit-core
- - incipit-core_0_6_0_0
  - incremental-computing
  - incremental-maps
  - increments
@@ -3084,11 +3088,8 @@ dont-distribute-packages:
  - persistable-record
  - persistable-types-HDBC-pg
  - persistent-audit
- - persistent-event-source
- - persistent-eventsource
  - persistent-hssqlppp
  - persistent-map
- - persistent-mtl
  - persistent-mysql-haskell
  - persistent-mysql-pure
  - persistent-protobuf
@@ -3150,16 +3151,13 @@ dont-distribute-packages:
  - polh-lexicon
  - poly-rec
  - polydata
- - polysemy
  - polysemy-RandomFu
  - polysemy-account
  - polysemy-account-api
- - polysemy-check
  - polysemy-chronos
  - polysemy-conc
  - polysemy-db
  - polysemy-extra
- - polysemy-fs
  - polysemy-fskvstore
  - polysemy-hasql
  - polysemy-hasql-test
@@ -3171,17 +3169,13 @@ dont-distribute-packages:
  - polysemy-methodology
  - polysemy-methodology-co-log
  - polysemy-methodology-composite
- - polysemy-mocks
  - polysemy-path
- - polysemy-plugin
  - polysemy-resume
  - polysemy-scoped-fs
  - polysemy-time
  - polysemy-uncontrolled
  - polysemy-video
  - polysemy-vinyl
- - polysemy-webserver
- - polysemy-zoo
  - polytypeable-utils
  - pomodoro
  - pontarius-mediaserver
@@ -3243,7 +3237,6 @@ dont-distribute-packages:
  - prolude
  - prometheus-proc
  - propane
- - propellor
  - proplang
  - prosidyc
  - proto-lens-descriptors
@@ -3252,6 +3245,7 @@ dont-distribute-packages:
  - protocol-buffers-descriptor
  - protocol-buffers-descriptor-fork
  - proton
+ - psc-ide
  - psql
  - publicsuffixlist
  - puffytools
@@ -3261,7 +3255,9 @@ dont-distribute-packages:
  - puppetresources
  - pure-cdb
  - pure-priority-queue-tests
+ - purenix
  - purescript-iso
+ - purescript-tsd-gen
  - pursuit-client
  - push-notify
  - push-notify-apn
@@ -3929,8 +3925,6 @@ dont-distribute-packages:
  - tbox
  - tccli
  - tdd-util
- - tdlib
- - tdlib-types
  - techlab
  - telegram-bot
  - telegram-raw-api
@@ -3950,6 +3944,7 @@ dont-distribute-packages:
  - th-alpha
  - th-context
  - th-instances
+ - th-letrec
  - th-typegraph
  - theoremquest-client
  - thimk
@@ -4289,7 +4284,6 @@ dont-distribute-packages:
  - wyvern
  - xcffib
  - xdcc
- - xdg-basedir-compliant
  - xhb-atom-cache
  - xhb-ewmh
  - xml-catalog
@@ -4380,6 +4374,7 @@ dont-distribute-packages:
  - yu-launch
  - yuuko
  - zasni-gerna
+ - zephyr
  - zephyr-copilot
  - zerobin
  - zeromq3-conduit
