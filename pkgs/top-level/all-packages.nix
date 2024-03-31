@@ -31076,8 +31076,6 @@ with pkgs;
 
   fvwm = fvwm2;
 
-  fvwm3 = callPackage ../applications/window-managers/fvwm/3.nix { };
-
   ganttproject-bin = callPackage ../applications/misc/ganttproject-bin {
     jre = openjdk17.override {
       enableJavaFX = true;
