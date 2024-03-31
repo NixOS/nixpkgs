@@ -1,4 +1,5 @@
 { callPackage
+, nixosTests
 , python3
 ,
 }:
@@ -91,6 +92,10 @@ python.pkgs.pythonPackages.buildPythonPackage {
     inherit frontend python;
 
     updateScript = ./update.sh;
+
+    tests = {
+      inherit (nixosTests) linkding;
+    };
   };
 
   meta =
