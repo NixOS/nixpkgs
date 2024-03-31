@@ -608,7 +608,7 @@ let
     bamsignals = with pkgs; [ zlib.dev xz.dev bzip2 ];
     Rbowtie = with pkgs; [ zlib.dev ];
     gaston = with pkgs; [ zlib.dev ];
-    csaw = with pkgs; [ zlib.dev curl ];
+    csaw = with pkgs; [ zlib.dev xz.dev bzip2.dev curl ];
     DirichletMultinomial = with pkgs; [ gsl ];
     DiffBind = with pkgs; [ zlib.dev ];
     CNEr = with pkgs; [ zlib ];
