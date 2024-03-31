@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "jc";
-  version = "1.25.0";
+  version = "1.25.2";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "kellyjonbrazil";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-viB/avMED5xllmkrF+WpsQbF/b7pyr3p3p+8vJk72+k=";
+    hash = "sha256-SDZ92m4TVH5/ldGkVZspzIrR0G1vHOv1OvAOSaWYkZ0=";
   };
 
   propagatedBuildInputs = [ ruamel-yaml xmltodict pygments ];

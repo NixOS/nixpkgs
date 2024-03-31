@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyamg";
-  version = "5.0.1";
-  format = "setuptools";
+  version = "5.1.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XwSKAXQzQ64NTIYjBgBzhs+5sURTxHrf2tJ363mkbVA=";
+    hash = "sha256-+Q+d55W04pWJ7dLrRG0R3bRmZ46+gj7TKfzzV1nqOQw=";
   };
 
   nativeBuildInputs = [
@@ -54,6 +54,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyamg/pyamg";
     changelog = "https://github.com/pyamg/pyamg/blob/v${version}/changelog.md";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ];
   };
 }

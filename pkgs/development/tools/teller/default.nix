@@ -63,6 +63,7 @@ buildGoModule {
   meta = with lib; {
     homepage = "https://github.com/tellerops/teller/";
     description = "Cloud native secrets management for developers";
+    mainProgram = "teller";
     license = licenses.asl20;
     maintainers = with maintainers; [ wahtique ];
   };

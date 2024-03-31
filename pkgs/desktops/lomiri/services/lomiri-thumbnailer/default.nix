@@ -87,6 +87,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/commit/657be3bd1aeb227edc04e26b597b2fe97b2dc51a.patch";
       hash = "sha256-XEvdWV3JJujG16+87iewYor0jFK7NTeE5459iT96SkU=";
     })
+    (fetchpatch {
+      name = "0008-fix-googletest-1-13.patch";
+      url = "https://salsa.debian.org/ubports-team/lomiri-thumbnailer/-/raw/debian/3.0.3-1/debian/patches/0001_fix_googletest_1_13.patch";
+      hash = "sha256-oBcdspQMhCxh4L/XotG9NRp/Ij2YzIjpC8xg/jdiptw=";
+    })
   ];
 
   postPatch = ''
@@ -200,6 +205,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "D-Bus service for out of process thumbnailing";
+    mainProgram = "lomiri-thumbnailer-admin";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/blob/${finalAttrs.version}/ChangeLog";
     license = with licenses; [ gpl3Only lgpl3Only ];

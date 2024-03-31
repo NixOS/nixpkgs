@@ -33,7 +33,7 @@ let
     sendversion=${boolToString cfg.sendVersion}
 
     ${optionalString (cfg.registerName != "") "registerName=${cfg.registerName}"}
-    ${optionalString (cfg.registerPassword == "") "registerPassword=${cfg.registerPassword}"}
+    ${optionalString (cfg.registerPassword != "") "registerPassword=${cfg.registerPassword}"}
     ${optionalString (cfg.registerUrl != "") "registerUrl=${cfg.registerUrl}"}
     ${optionalString (cfg.registerHostname != "") "registerHostname=${cfg.registerHostname}"}
 
@@ -326,6 +326,29 @@ in
         RuntimeDirectoryMode = "0700";
         User = "murmur";
         Group = "murmur";
+
+        # service hardening
+        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
+        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "full";
+        RestrictAddressFamilies = "~AF_PACKET AF_NETLINK";
+        RestrictNamespaces = true;
+        RestrictSUIDSGID = true;
+        RestrictRealtime = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = "@system-service";
       };
     };
 

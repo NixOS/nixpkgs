@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A C++ library that implements commandline flags processing";
+    mainProgram = "gflags_completions.sh";
     longDescription = ''
       The gflags package contains a C++ library that implements commandline flags processing.
       As such it's a replacement for getopt().

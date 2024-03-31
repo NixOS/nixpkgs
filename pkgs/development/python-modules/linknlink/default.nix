@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "linknlink";
-  version = "0.1.9";
+  version = "0.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "xuanxuan000";
     repo = "python-linknlink";
     rev = "refs/tags/${version}";
-    hash = "sha256-msKunZsAxA9xpCJmG4MVXuJDMEqrCeShvAqOw8zjSPM=";
+    hash = "sha256-MOZw+7oFHeH7Vaj6pylR7wqe3ZyHcsiG+n8jnRAQ8PA=";
   };
 
   nativeBuildInputs = [

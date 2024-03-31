@@ -20,5 +20,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/mikeryan/crackle";
     maintainers = with maintainers; [ moni ];
     license = licenses.bsd2;
+    mainProgram = "crackle";
   };
 }

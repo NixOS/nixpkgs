@@ -22,7 +22,7 @@
 }:
 
 let
-  apparmor-version = "3.1.6";
+  apparmor-version = "3.1.7";
 
   apparmor-meta = component: with lib; {
     homepage = "https://apparmor.net/";
@@ -36,7 +36,7 @@ let
     owner = "apparmor";
     repo = "apparmor";
     rev = "v${apparmor-version}";
-    hash = "sha256-VPgRmmQv+kgLduc6RTu9gotyjT6OImUXsPeatgG7m9E=";
+    hash = "sha256-AzY05bcpNYXix2GL4Rhc9d3RBA1pd2fwOa7yoiwc2nQ=";
   };
 
   aa-teardown = writeShellScript "aa-teardown" ''
@@ -56,7 +56,9 @@ let
       --replace "/usr/include/linux/capability.h" "${linuxHeaders}/include/linux/capability.h"
   '';
 
-  patches = lib.optionals stdenv.hostPlatform.isMusl [
+  patches = [
+    ./0001-aa-remove-unknown_empty-ruleset.patch
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
       url = "https://git.alpinelinux.org/aports/plain/testing/apparmor/0003-Added-missing-typedef-definitions-on-parser.patch?id=74b8427cc21f04e32030d047ae92caa618105b53";
       name = "0003-Added-missing-typedef-definitions-on-parser.patch";

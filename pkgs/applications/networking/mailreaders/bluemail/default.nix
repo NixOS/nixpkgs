@@ -3,6 +3,7 @@
 , fetchurl
 , dpkg
 , autoPatchelfHook
+, copyDesktopItems
 , pango
 , gtk3
 , alsa-lib
@@ -11,6 +12,7 @@
 , libdrm
 , mesa
 , libxshmfence
+, makeDesktopItem
 , makeWrapper
 , wrapGAppsHook
 , gcc-unwrapped
@@ -19,18 +21,32 @@
 
 stdenv.mkDerivation rec {
   pname = "bluemail";
-  version = "1.136.21-1884";
+  version = "1.140.8-1922";
 
   # Taking a snapshot of the DEB release because there are no tagged version releases.
   # For new versions, download the upstream release, extract it and check for the version string.
   # In case there's a new version, create a snapshot of it on https://archive.org before updating it here.
   src = fetchurl {
-    url = "https://archive.org/download/blue-mail-1.136.21-1884/BlueMail.deb";
-    hash = "sha256-L9mCUjsEcalVxzl80P3QzVclCKa75So2sBG7KjjBVIc=";
+    url = "https://web.archive.org/web/20240208120704/https://download.bluemail.me/BlueMail/deb/BlueMail.deb";
+    hash = "sha256-dnYOb3Q/9vSDssHGS2ywC/Q24Oq96/mvKF+eqd/4dVw=";
   };
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "bluemail";
+      icon = "bluemail";
+      exec = "bluemail";
+      desktopName = "BlueMail";
+      comment = meta.description;
+      genericName = "Email Reader";
+      mimeTypes = [ "x-scheme-handler/me.blueone.linux" "x-scheme-handler/mailto" ];
+      categories = [ "Office" ];
+    })
+  ];
 
   nativeBuildInputs = [
     autoPatchelfHook
+    copyDesktopItems
     makeWrapper
     dpkg
     wrapGAppsHook
@@ -55,9 +71,16 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv opt/BlueMail/* $out
     ln -s $out/bluemail $out/bin/bluemail
+
+    mkdir -p $out/share/icons
+    mv usr/share/icons/hicolor $out/share/icons/
+
+    runHook postInstall
   '';
 
   makeWrapperArgs = [

@@ -6,12 +6,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "shell_gpt";
-  version = "1.0.1";
-  format = "pyproject";
+  version = "1.4.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-/rBD2n5IZzSeC5dmVQRZY8UrzUOkAEVHp8KwIfV1hec=";
+    sha256 = "sha256-r/xQRqnLJhGZORjYUaYWKjqY4fQCW4WKkE+n8k0VMbA=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -27,6 +27,8 @@ python3.pkgs.buildPythonApplication rec {
     typer
     requests
     hatchling
+    openai
+    instructor
   ];
 
   pythonRelaxDeps = [ "requests" "rich" "distro" "typer" ];

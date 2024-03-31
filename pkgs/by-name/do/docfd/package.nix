@@ -1,8 +1,13 @@
-{ lib, ocamlPackages, fetchFromGitHub, python3, dune_3, makeWrapper, poppler_utils }:
+{ lib
+, ocamlPackages
+, fetchFromGitHub
+, python3
+, dune_3
+}:
 
 ocamlPackages.buildDunePackage rec {
   pname = "docfd";
-  version = "2.1.0";
+  version = "3.0.0";
 
   minimalOCamlVersion = "5.1";
 
@@ -10,30 +15,37 @@ ocamlPackages.buildDunePackage rec {
     owner = "darrenldl";
     repo = "docfd";
     rev = version;
-    hash = "sha256-1DobGm6nI14951KNKEE0D3AF1TFsWQUEhe4L1PdWBDw=";
+    hash = "sha256-pJ5LlOfC+9NRfY7ng9LAxEnjr+mtJmhRNTo9Im6Lkbo=";
   };
 
-  nativeBuildInputs = [ python3 dune_3 makeWrapper ];
-  buildInputs = [ poppler_utils ] ++
-    (with ocamlPackages; [ oseq spelll notty nottui lwd cmdliner domainslib digestif yojson eio_main containers-data timedesc ]);
-
-  postInstall = ''
-  # docfd needs pdftotext from popler_utils to allow pdf search
-  wrapProgram $out/bin/docfd --prefix PATH : "${lib.getBin poppler_utils}/bin/"
-  '';
+  nativeBuildInputs = [ python3 dune_3 ];
+  buildInputs = with ocamlPackages; [
+    cmdliner
+    containers-data
+    digestif
+    domainslib
+    eio_main
+    lwd
+    nottui
+    notty
+    ocolor
+    oseq
+    spelll
+    timedesc
+    yojson
+  ];
 
   meta = with lib; {
     description = "TUI multiline fuzzy document finder";
     longDescription = ''
-      Interactive grep, but word/token/phrase based rather than regex
-      and line based, so you can search across multiple lines (simlar to
-      Recoll but TUI).
-      Aims to provide a good UX via text editor and PDF viewer integration.
-      When opening a text file, Docfd opens file at first line of search
-      result. If PDF, then Docfd opens file at first page of the search
-      result and starts a text search of the most unique word of the matched
-      phrase within the same page.
-      Main intended use case: navigating directories of notes and PDFs.
+      Think interactive grep for both text and other document files, but
+      word/token based instead of regex and line based, so you can search
+      across lines easily. Aims to provide good UX via integration with
+      common text editors and other file viewers.
+      Optional dependencies:
+        fzf - for fuzzy file picker with "docfd ?".
+        poppler_utils - for pdf search.
+        pandoc - for .epub, .odt, .docx, .fb2, .ipynb, .html, & .htm files.
     '';
     homepage = "https://github.com/darrenldl/docfd";
     license = licenses.mit;

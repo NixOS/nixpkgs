@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "libbacktrace";
-  version = "unstable-2023-11-30";
+  version = "0-unstable-2024-03-02";
 
   src = fetchFromGitHub {
     owner = "ianlancetaylor";
     repo = "libbacktrace";
-    rev = "14818b7783eeb9a56c3f0fca78cefd3143f8c5f6";
-    sha256 = "DQZQsqzeQ/0v87bfqs6sXqS2M5Tunc1OydTWRSB3PCw=";
+    rev = "28824f2cc9069e3fdc39d3702acdf753e35c41b4";
+    sha256 = "1k1O1GT22hZAWPF8NYP0y4qe+e3pGfzT9Mz2TH+H/v4=";
   };
 
   patches = [

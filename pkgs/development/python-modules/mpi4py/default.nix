@@ -38,8 +38,6 @@ buildPythonPackage rec {
     # work as expected
   '';
 
-  setupPyBuildFlags = ["--mpicc=${mpi}/bin/mpicc"];
-
   nativeBuildInputs = [ mpi ];
 
   __darwinAllowLocalNetworking = true;

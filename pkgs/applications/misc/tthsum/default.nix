@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.ebzzry ];
     platforms = platforms.unix;
+    mainProgram = "tthsum";
   };
 }

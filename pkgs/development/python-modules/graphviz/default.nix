@@ -5,13 +5,13 @@
 , fetchFromGitHub
 , fetchpatch
 , substituteAll
-, graphviz
+, graphviz-nox
 , xdg-utils
 , makeFontsConf
 , freefont_ttf
 , setuptools
 , mock
-, pytest
+, pytest_7
 , pytest-mock
 , python
 }:
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   patches = [
     (substituteAll {
       src = ./paths.patch;
-      inherit graphviz;
+      graphviz = graphviz-nox;
       xdgutils = xdg-utils;
     })
     # https://github.com/xflr6/graphviz/issues/209
@@ -60,7 +60,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
-    pytest
+    pytest_7
     pytest-mock
   ];
 

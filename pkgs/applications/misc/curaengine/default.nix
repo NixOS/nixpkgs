@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar gebner ];
+    mainProgram = "CuraEngine";
   };
 }

@@ -25,6 +25,7 @@
 , libwebpSupport ? !stdenv.hostPlatform.isMinGW, libwebp
 , libheifSupport ? true, libheif
 , potrace
+, coreutils
 , curl
 , ApplicationServices
 , Foundation
@@ -49,13 +50,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.1-27";
+  version = "7.1.1-29";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     rev = finalAttrs.version;
-    hash = "sha256-jZ5mLqhNZw8V9D61Nv2gB+6Wo9KP+P3KouQ+u2OUL6I=";
+    hash = "sha256-W9WbHzmTa0dA9+mOxXu88qmN1mO9ORaH0Nj6r2s1Q+E=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
@@ -64,6 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   configureFlags = [
+    # specify delegates explicitly otherwise `convert` will invoke the build
+    # coreutils for filetypes it doesn't natively support.
+    "MVDelegate=${lib.getExe' coreutils "mv"}"
+    "RMDelegate=${lib.getExe' coreutils "rm"}"
     "--with-frozenpaths"
     (lib.withFeatureAs (arch != null) "gcc-arch" arch)
     (lib.withFeature librsvgSupport "rsvg")

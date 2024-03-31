@@ -26,9 +26,9 @@ buildPythonPackage rec {
     click
     dnspython
     falcon
-    flufl_bounce
-    flufl_i18n
-    flufl_lock
+    flufl-bounce
+    flufl-i18n
+    flufl-lock
     gunicorn
     lazr-config
     passlib

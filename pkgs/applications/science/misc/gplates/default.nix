@@ -67,6 +67,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Desktop software for the interactive visualisation of plate-tectonics";
+    mainProgram = "gplates";
     homepage = "https://www.gplates.org";
     license = licenses.gpl2Only;
     platforms = platforms.all;

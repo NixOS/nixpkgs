@@ -1,26 +1,40 @@
-{ aspell, audiofile
-, gsmakeDerivation
+{ lib
+, stdenv
+, aspell
+, audiofile
+, make
+, wrapGNUstepAppsHook
 , cups
 , fetchzip
 , fetchpatch
-, gmp, gnutls
-, libffi, binutils-unwrapped
-, libjpeg, libtiff, libpng, giflib
-, libxml2, libxslt, libiconv
-, libobjc, libgcrypt
+, gmp
+, gnutls
+, libffi
+, binutils-unwrapped
+, libjpeg
+, libtiff
+, libpng
+, giflib
+, libxml2
+, libxslt
+, libiconv
+, libobjc
+, libgcrypt
 , icu
-, pkg-config, portaudio
+, pkg-config
+, portaudio
 , libiberty
 }:
-gsmakeDerivation rec {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnustep-base";
   version = "1.29.0";
   src = fetchzip {
-    url = "ftp://ftp.gnustep.org/pub/gnustep/core/${pname}-${version}.tar.gz";
+    url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-base-${finalAttrs.version}.tar.gz";
     hash = "sha256-4fjdsLBsYEDxLOFrq17dKii2sLKvOaFCu0cw3qQtM5U=";
   };
   outputs = [ "out" "dev" "lib" ];
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config make wrapGNUstepAppsHook ];
   propagatedBuildInputs = [
     aspell audiofile
     cups
@@ -55,7 +69,11 @@ gsmakeDerivation rec {
   ];
 
   meta = {
+    changelog = "https://github.com/gnustep/libs-base/releases/tag/base-${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     description = "An implementation of AppKit and Foundation libraries of OPENSTEP and Cocoa";
-    changelog = "https://github.com/gnustep/libs-base/releases/tag/base-${builtins.replaceStrings [ "." ] [ "_" ] version}";
+    homepage = "https://gnustep.github.io/";
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ ashalkhakov matthewbauer dblsaiko ];
+    platforms = lib.platforms.linux;
   };
-}
+})

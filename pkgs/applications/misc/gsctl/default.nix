@@ -38,5 +38,6 @@ buildGoModule rec {
     homepage = "https://github.com/giantswarm/gsctl";
     license = licenses.asl20;
     maintainers = with maintainers; [ joesalisbury ];
+    mainProgram = "gsctl";
   };
 }

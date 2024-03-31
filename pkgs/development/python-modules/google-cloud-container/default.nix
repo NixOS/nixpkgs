@@ -14,21 +14,21 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-container";
-  version = "2.40.0";
+  version = "2.44.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4yTrV0OtvCmd9+5rNaTOJBAS/s52hyjwA7O1/lLyFtE=";
+    hash = "sha256-heNvRcepXqayn/impyP5h4L+eOJjGV1hMrZyg96aZKU=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     libcst
     proto-plus

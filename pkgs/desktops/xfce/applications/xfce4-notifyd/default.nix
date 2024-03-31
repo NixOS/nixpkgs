@@ -17,10 +17,10 @@
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-notifyd";
-  version = "0.9.3";
+  version = "0.9.4";
   odd-unstable = false;
 
-  sha256 = "sha256-kgTKJAUB/w/6vtNm2Ewb2v62t0kFK+T8e5Q3/nKwrMg=";
+  sha256 = "sha256-oDvP2xE/KvIKl7D5hAwROxhqpli7G/UNd51YCdT7Dv4=";
 
   buildInputs = [
     dbus
@@ -46,6 +46,7 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Simple notification daemon for Xfce";
+    mainProgram = "xfce4-notifyd-config";
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

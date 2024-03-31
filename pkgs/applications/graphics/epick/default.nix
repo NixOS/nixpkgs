@@ -57,5 +57,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/vv9k/epick/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "epick";
   };
 }

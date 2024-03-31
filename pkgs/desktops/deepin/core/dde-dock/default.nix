@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-dock";
-  version = "6.0.22";
+  version = "6.0.35";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-fhc2faiPH35ZKw6SCoGTz+6mgxabNpCFQeY2p68Ba5w=";
+    hash = "sha256-ATC/Ze6GyjT92eCgAt9g2FIQbXLVHUMuXuAslNnbkCE=";
   };
 
   postPatch = ''
@@ -81,6 +81,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Deepin desktop-environment - dock module";
+    mainProgram = "dde-dock";
     homepage = "https://github.com/linuxdeepin/dde-dock";
     platforms = platforms.linux;
     license = licenses.lgpl3Plus;

@@ -19,20 +19,21 @@ in
     let
       originalLuaDrv = lua.pkgs.${luaAttr};
 
-      luaDrv = (lua.pkgs.luaLib.overrideLuarocks originalLuaDrv (drv: {
+      luaDrv = originalLuaDrv.overrideAttrs (oa: {
+        version = attrs.version or oa.version;
+        rockspecVersion = oa.rockspecVersion;
+
         extraConfig = ''
           -- to create a flat hierarchy
           lua_modules_path = "lua"
         '';
-        })).overrideAttrs (drv: {
-        version = attrs.version;
-        rockspecVersion = drv.rockspecVersion;
       });
 
       finalDrv = toVimPlugin (luaDrv.overrideAttrs(oa: attrs // {
           nativeBuildInputs = oa.nativeBuildInputs or [] ++ [
             lua.pkgs.luarocksMoveDataFolder
           ];
+          version = "${originalLuaDrv.version}-unstable-${oa.version}";
         }));
     in
       finalDrv

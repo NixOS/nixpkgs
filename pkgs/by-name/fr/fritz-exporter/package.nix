@@ -5,20 +5,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "fritz-exporter";
-  version = "2.3.1";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pdreker";
     repo = "fritz_exporter";
     rev = "fritzexporter-v${version}";
-    hash = "sha256-Dv/2Og1OJV7canZ8Y5Pai5gPRUvcRDYmSGoD2pnAkSs=";
+    hash = "sha256-x5WCVDIKdreQCmVpiWbmVBNo42P5kSxX9dLMBKfZTWc=";
   };
-
-  patches = [
-    # https://github.com/pdreker/fritz_exporter/pull/282
-    ./console-script.patch
-  ];
 
   postPatch = ''
     # don't test coverage
@@ -31,6 +26,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     attrs
+    defusedxml
     fritzconnection
     prometheus-client
     pyyaml

@@ -13,14 +13,15 @@
 }:
 
 buildPythonPackage rec {
-  pname = "QtPy";
+  pname = "qtpy";
   version = "2.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "QtPy";
+    inherit version;
     hash = "sha256-2y1QgWeqYQZ4FWXI2lxvFIfeusujNRnO3DX6iZfUJNQ=";
   };
 
@@ -47,6 +48,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Abstraction layer for PyQt5/PyQt6/PySide2/PySide6";
+    mainProgram = "qtpy";
     homepage = "https://github.com/spyder-ide/qtpy";
     license = licenses.mit;
   };

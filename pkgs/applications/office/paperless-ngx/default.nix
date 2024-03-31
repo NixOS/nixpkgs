@@ -22,13 +22,13 @@
 }:
 
 let
-  version = "2.4.3";
+  version = "2.6.3";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uFaywZF1e1ELU6EcRxzMqGu3uiFK8MMfrTxb01Drd7k=";
+    hash = "sha256-M1CnB1adk02lJuFsm0zzjSx/l9hKHJMt1Wh2a5Xtdyg=";
   };
 
   python = python3;
@@ -53,7 +53,7 @@ let
       cd src-ui
     '';
 
-    npmDepsHash = "sha256-4PIslsmbcET/kKLZ/gijwEyBB9zgZR6vMU9h9enzScE=";
+    npmDepsHash = "sha256-qgCUfGVk698Ink23U7LxkGdFoNpOhCp240tbk+hU0dk=";
 
     nativeBuildInputs = [
       pkg-config
@@ -99,30 +99,13 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python.pkgs; [
-    amqp
-    anyio
-    asgiref
-    async-timeout
-    attrs
-    autobahn
-    automat
-    billiard
     bleach
-    celery
-    certifi
-    cffi
-    channels-redis
     channels
-    charset-normalizer
-    click
-    click-didyoumean
-    click-plugins
-    click-repl
-    coloredlogs
+    channels-redis
     concurrent-log-handler
-    constantly
-    cryptography
     dateparser
+    django
+    django-allauth
     django-auditlog
     django-celery-results
     django-compression-middleware
@@ -131,92 +114,41 @@ python.pkgs.buildPythonApplication rec {
     django-filter
     django-guardian
     django-multiselectfield
-    django
-    djangorestframework-guardian2
     djangorestframework
+    djangorestframework-guardian2
     drf-writable-nested
     filelock
     flower
     gotenberg-client
     gunicorn
-    h11
-    h2
-    hiredis
-    httptools
-    httpx
-    humanfriendly
-    humanize
-    hyperlink
-    idna
     imap-tools
-    img2pdf
-    incremental
-    inotify-simple
     inotifyrecursive
-    joblib
     langdetect
-    lxml
-    msgpack
     mysqlclient
     nltk
     ocrmypdf
-    packaging
     pathvalidate
     pdf2image
-    pikepdf
-    pillow
-    pluggy
-    portalocker
-    prompt-toolkit
     psycopg2
-    pyasn1-modules
-    pyasn1
-    pycparser
-    pyopenssl
     python-dateutil
     python-dotenv
+    python-gnupg
     python-ipware
     python-magic
-    python-gnupg
-    pytz
-    pyyaml
     pyzbar
     rapidfuzz
     redis
-    regex
-    reportlab
-    requests
     scikit-learn
-    scipy
     setproctitle
-    service-identity
-    sniffio
-    sqlparse
-    threadpoolctl
     tika-client
-    tornado
     tqdm
-    twisted
-    txaio
-    tzdata
-    tzlocal
-    urllib3
     uvicorn
-    uvloop
-    vine
     watchdog
-    watchfiles
-    wcwidth
-    webencodings
-    websockets
     whitenoise
     whoosh
-    zipp
-    zope-interface
     zxing-cpp
   ]
   ++ redis.optional-dependencies.hiredis
-  ++ twisted.optional-dependencies.tls
   ++ uvicorn.optional-dependencies.standard;
 
   postBuild = ''
@@ -261,7 +193,6 @@ python.pkgs.buildPythonApplication rec {
     pytest-rerunfailures
     pytest-xdist
     pytestCheckHook
-    reportlab
   ];
 
   pytestFlagsArray = [
@@ -279,7 +210,7 @@ python.pkgs.buildPythonApplication rec {
 
     # Disable unneeded code coverage test
     substituteInPlace src/setup.cfg \
-      --replace "--cov --cov-report=html --cov-report=xml" ""
+      --replace-fail "--cov --cov-report=html --cov-report=xml" ""
   '';
 
   disabledTests = [

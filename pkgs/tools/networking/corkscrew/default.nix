@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
     description = "A tool for tunneling SSH through HTTP proxies";
     license = lib.licenses.gpl2;
     platforms = platforms.unix;
+    mainProgram = "corkscrew";
   };
 }
 

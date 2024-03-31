@@ -10,11 +10,11 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "yarn";
-  version = "1.22.19";
+  version = "1.22.22";
 
   src = fetchzip {
     url = "https://github.com/yarnpkg/yarn/releases/download/v${finalAttrs.version}/yarn-v${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-12wUuWH+kkqxAgVYkyhIYVtexjv8DFP9kLpFLWg+h0o=";
+    sha256 = "sha256-kFa+kmnBerTB7fY/IvfAFy/4LWvrl9lrRHMOUdOZ+Wg=";
   };
 
   buildInputs = [ nodejs ];

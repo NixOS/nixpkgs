@@ -17,6 +17,9 @@ from dataclasses import dataclass
 
 # These values will be replaced with actual values during the package build
 EFI_SYS_MOUNT_POINT = "@efiSysMountPoint@"
+BOOT_MOUNT_POINT = "@bootMountPoint@"
+LOADER_CONF = f"{EFI_SYS_MOUNT_POINT}/loader/loader.conf"  # Always stored on the ESP
+NIXOS_DIR = "@nixosDir@"
 TIMEOUT = "@timeout@"
 EDITOR = "@editor@" == "1"
 CONSOLE_MODE = "@consoleMode@"
@@ -28,6 +31,7 @@ CONFIGURATION_LIMIT = int("@configurationLimit@")
 CAN_TOUCH_EFI_VARIABLES = "@canTouchEfiVariables@"
 GRACEFUL = "@graceful@"
 COPY_EXTRA_FILES = "@copyExtraFiles@"
+CHECK_MOUNTPOINTS = "@checkMountpoints@"
 
 @dataclass
 class BootSpec:
@@ -39,6 +43,7 @@ class BootSpec:
     system: str
     toplevel: str
     specialisations: Dict[str, "BootSpec"]
+    sortKey: str
     initrdSecrets: str | None = None
 
 
@@ -69,6 +74,7 @@ def system_dir(profile: str | None, generation: int, specialisation: str | None)
         return d
 
 BOOT_ENTRY = """title {title}
+sort-key {sort_key}
 version Generation {generation} {description}
 linux {kernel}
 initrd {initrd}
@@ -87,7 +93,7 @@ def generation_conf_filename(profile: str | None, generation: int, specialisatio
 
 
 def write_loader_conf(profile: str | None, generation: int, specialisation: str | None) -> None:
-    with open(f"{EFI_SYS_MOUNT_POINT}/loader/loader.conf.tmp", 'w') as f:
+    with open(f"{LOADER_CONF}.tmp", 'w') as f:
         if TIMEOUT != "":
             f.write(f"timeout {TIMEOUT}\n")
         f.write("default %s\n" % generation_conf_filename(profile, generation, specialisation))
@@ -96,7 +102,7 @@ def write_loader_conf(profile: str | None, generation: int, specialisation: str 
         f.write(f"console-mode {CONSOLE_MODE}\n")
         f.flush()
         os.fsync(f.fileno())
-    os.rename(f"{EFI_SYS_MOUNT_POINT}/loader/loader.conf.tmp", f"{EFI_SYS_MOUNT_POINT}/loader/loader.conf")
+    os.rename(f"{LOADER_CONF}.tmp", LOADER_CONF)
 
 
 def get_bootspec(profile: str | None, generation: int) -> BootSpec:
@@ -119,16 +125,22 @@ def get_bootspec(profile: str | None, generation: int) -> BootSpec:
 def bootspec_from_json(bootspec_json: Dict) -> BootSpec:
     specialisations = bootspec_json['org.nixos.specialisation.v1']
     specialisations = {k: bootspec_from_json(v) for k, v in specialisations.items()}
-    return BootSpec(**bootspec_json['org.nixos.bootspec.v1'], specialisations=specialisations)
+    systemdBootExtension = bootspec_json.get('org.nixos.systemd-boot', {})
+    sortKey = systemdBootExtension.get('sortKey', 'nixos')
+    return BootSpec(
+        **bootspec_json['org.nixos.bootspec.v1'],
+        specialisations=specialisations,
+        sortKey=sortKey
+    )
 
 
 def copy_from_file(file: str, dry_run: bool = False) -> str:
     store_file_path = os.path.realpath(file)
     suffix = os.path.basename(store_file_path)
     store_dir = os.path.basename(os.path.dirname(store_file_path))
-    efi_file_path = "/efi/nixos/%s-%s.efi" % (store_dir, suffix)
+    efi_file_path = f"{NIXOS_DIR}/{store_dir}-{suffix}.efi"
     if not dry_run:
-        copy_if_not_exists(store_file_path, f"{EFI_SYS_MOUNT_POINT}%s" % (efi_file_path))
+        copy_if_not_exists(store_file_path, f"{BOOT_MOUNT_POINT}{efi_file_path}")
     return efi_file_path
 
 def write_entry(profile: str | None, generation: int, specialisation: str | None,
@@ -145,7 +157,7 @@ def write_entry(profile: str | None, generation: int, specialisation: str | None
 
     try:
         if bootspec.initrdSecrets is not None:
-            subprocess.check_call([bootspec.initrdSecrets, f"{EFI_SYS_MOUNT_POINT}%s" % (initrd)])
+            subprocess.check_call([bootspec.initrdSecrets, f"{BOOT_MOUNT_POINT}%s" % (initrd)])
     except subprocess.CalledProcessError:
         if current:
             print("failed to create initrd secrets!", file=sys.stderr)
@@ -155,7 +167,7 @@ def write_entry(profile: str | None, generation: int, specialisation: str | None
                   f'for "{title} - Configuration {generation}", an older generation', file=sys.stderr)
             print("note: this is normal after having removed "
                   "or renamed a file in `boot.initrd.secrets`", file=sys.stderr)
-    entry_file = f"{EFI_SYS_MOUNT_POINT}/loader/entries/%s" % (
+    entry_file = f"{BOOT_MOUNT_POINT}/loader/entries/%s" % (
         generation_conf_filename(profile, generation, specialisation))
     tmp_path = "%s.tmp" % (entry_file)
     kernel_params = "init=%s " % bootspec.init
@@ -166,6 +178,7 @@ def write_entry(profile: str | None, generation: int, specialisation: str | None
 
     with open(tmp_path, 'w') as f:
         f.write(BOOT_ENTRY.format(title=title,
+                    sort_key=bootspec.sortKey,
                     generation=generation,
                     kernel=kernel,
                     initrd=initrd,
@@ -202,14 +215,14 @@ def get_generations(profile: str | None = None) -> list[SystemIdentifier]:
 
 
 def remove_old_entries(gens: list[SystemIdentifier]) -> None:
-    rex_profile = re.compile(r"^" + re.escape(EFI_SYS_MOUNT_POINT) + "/loader/entries/nixos-(.*)-generation-.*\.conf$")
-    rex_generation = re.compile(r"^" + re.escape(EFI_SYS_MOUNT_POINT) + "/loader/entries/nixos.*-generation-([0-9]+)(-specialisation-.*)?\.conf$")
+    rex_profile = re.compile(r"^" + re.escape(BOOT_MOUNT_POINT) + "/loader/entries/nixos-(.*)-generation-.*\.conf$")
+    rex_generation = re.compile(r"^" + re.escape(BOOT_MOUNT_POINT) + "/loader/entries/nixos.*-generation-([0-9]+)(-specialisation-.*)?\.conf$")
     known_paths = []
     for gen in gens:
         bootspec = get_bootspec(gen.profile, gen.generation)
         known_paths.append(copy_from_file(bootspec.kernel, True))
         known_paths.append(copy_from_file(bootspec.initrd, True))
-    for path in glob.iglob(f"{EFI_SYS_MOUNT_POINT}/loader/entries/nixos*-generation-[1-9]*.conf"):
+    for path in glob.iglob(f"{BOOT_MOUNT_POINT}/loader/entries/nixos*-generation-[1-9]*.conf"):
         if rex_profile.match(path):
             prof = rex_profile.sub(r"\1", path)
         else:
@@ -220,9 +233,16 @@ def remove_old_entries(gens: list[SystemIdentifier]) -> None:
             continue
         if not (prof, gen_number, None) in gens:
             os.unlink(path)
-    for path in glob.iglob(f"{EFI_SYS_MOUNT_POINT}/efi/nixos/*"):
+    for path in glob.iglob(f"{BOOT_MOUNT_POINT}/{NIXOS_DIR}/*"):
         if not path in known_paths and not os.path.isdir(path):
             os.unlink(path)
+
+
+def cleanup_esp() -> None:
+    for path in glob.iglob(f"{EFI_SYS_MOUNT_POINT}/loader/entries/nixos*"):
+        os.unlink(path)
+    if os.path.isdir(f"{EFI_SYS_MOUNT_POINT}/{NIXOS_DIR}"):
+        shutil.rmtree(f"{EFI_SYS_MOUNT_POINT}/{NIXOS_DIR}")
 
 
 def get_profiles() -> list[str]:
@@ -255,6 +275,9 @@ def install_bootloader(args: argparse.Namespace) -> None:
     # flags to pass to bootctl install/update
     bootctl_flags = []
 
+    if BOOT_MOUNT_POINT != EFI_SYS_MOUNT_POINT:
+        bootctl_flags.append(f"--boot-path={BOOT_MOUNT_POINT}")
+
     if CAN_TOUCH_EFI_VARIABLES != "1":
         bootctl_flags.append("--no-variables")
 
@@ -263,8 +286,8 @@ def install_bootloader(args: argparse.Namespace) -> None:
 
     if os.getenv("NIXOS_INSTALL_BOOTLOADER") == "1":
         # bootctl uses fopen() with modes "wxe" and fails if the file exists.
-        if os.path.exists(f"{EFI_SYS_MOUNT_POINT}/loader/loader.conf"):
-            os.unlink(f"{EFI_SYS_MOUNT_POINT}/loader/loader.conf")
+        if os.path.exists(LOADER_CONF):
+            os.unlink(LOADER_CONF)
 
         subprocess.check_call([f"{SYSTEMD}/bin/bootctl", f"--esp-path={EFI_SYS_MOUNT_POINT}"] + bootctl_flags + ["install"])
     else:
@@ -291,13 +314,15 @@ def install_bootloader(args: argparse.Namespace) -> None:
             print("updating systemd-boot from %s to %s" % (installed_version, available_version))
             subprocess.check_call([f"{SYSTEMD}/bin/bootctl", f"--esp-path={EFI_SYS_MOUNT_POINT}"] + bootctl_flags + ["update"])
 
-    os.makedirs(f"{EFI_SYS_MOUNT_POINT}/efi/nixos", exist_ok=True)
-    os.makedirs(f"{EFI_SYS_MOUNT_POINT}/loader/entries", exist_ok=True)
+    os.makedirs(f"{BOOT_MOUNT_POINT}/{NIXOS_DIR}", exist_ok=True)
+    os.makedirs(f"{BOOT_MOUNT_POINT}/loader/entries", exist_ok=True)
 
     gens = get_generations()
     for profile in get_profiles():
         gens += get_generations(profile)
+
     remove_old_entries(gens)
+
     for gen in gens:
         try:
             bootspec = get_bootspec(gen.profile, gen.generation)
@@ -315,9 +340,15 @@ def install_bootloader(args: argparse.Namespace) -> None:
             else:
                 raise e
 
-    for root, _, files in os.walk(f"{EFI_SYS_MOUNT_POINT}/efi/nixos/.extra-files", topdown=False):
-        relative_root = root.removeprefix(f"{EFI_SYS_MOUNT_POINT}/efi/nixos/.extra-files").removeprefix("/")
-        actual_root = os.path.join(f"{EFI_SYS_MOUNT_POINT}", relative_root)
+    if BOOT_MOUNT_POINT != EFI_SYS_MOUNT_POINT:
+        # Cleanup any entries in ESP if xbootldrMountPoint is set.
+        # If the user later unsets xbootldrMountPoint, entries in XBOOTLDR will not be cleaned up
+        # automatically, as we don't have information about the mount point anymore.
+        cleanup_esp()
+
+    for root, _, files in os.walk(f"{BOOT_MOUNT_POINT}/{NIXOS_DIR}/.extra-files", topdown=False):
+        relative_root = root.removeprefix(f"{BOOT_MOUNT_POINT}/{NIXOS_DIR}/.extra-files").removeprefix("/")
+        actual_root = os.path.join(f"{BOOT_MOUNT_POINT}", relative_root)
 
         for file in files:
             actual_file = os.path.join(actual_root, file)
@@ -330,7 +361,7 @@ def install_bootloader(args: argparse.Namespace) -> None:
             os.rmdir(actual_root)
         os.rmdir(root)
 
-    os.makedirs(f"{EFI_SYS_MOUNT_POINT}/efi/nixos/.extra-files", exist_ok=True)
+    os.makedirs(f"{BOOT_MOUNT_POINT}/{NIXOS_DIR}/.extra-files", exist_ok=True)
 
     subprocess.check_call(COPY_EXTRA_FILES)
 
@@ -340,6 +371,8 @@ def main() -> None:
     parser.add_argument('default_config', metavar='DEFAULT-CONFIG', help=f"The default {DISTRO_NAME} config to boot")
     args = parser.parse_args()
 
+    subprocess.check_call(CHECK_MOUNTPOINTS)
+
     try:
         install_bootloader(args)
     finally:
@@ -347,9 +380,14 @@ def main() -> None:
         # it can leave the system in an unbootable state, when a crash/outage
         # happens shortly after an update. To decrease the likelihood of this
         # event sync the efi filesystem after each update.
-        rc = libc.syncfs(os.open(f"{EFI_SYS_MOUNT_POINT}", os.O_RDONLY))
+        rc = libc.syncfs(os.open(f"{BOOT_MOUNT_POINT}", os.O_RDONLY))
         if rc != 0:
-            print(f"could not sync {EFI_SYS_MOUNT_POINT}: {os.strerror(rc)}", file=sys.stderr)
+            print(f"could not sync {BOOT_MOUNT_POINT}: {os.strerror(rc)}", file=sys.stderr)
+
+        if BOOT_MOUNT_POINT != EFI_SYS_MOUNT_POINT:
+            rc = libc.syncfs(os.open(EFI_SYS_MOUNT_POINT, os.O_RDONLY))
+            if rc != 0:
+                print(f"could not sync {EFI_SYS_MOUNT_POINT}: {os.strerror(rc)}", file=sys.stderr)
 
 
 if __name__ == '__main__':

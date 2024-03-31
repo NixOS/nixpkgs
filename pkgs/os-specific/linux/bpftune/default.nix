@@ -70,6 +70,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "BPF-based auto-tuning of Linux system parameters";
+    mainProgram = "bpftune";
     homepage = "https://github.com/oracle-samples/bpftune";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ nickcao ];

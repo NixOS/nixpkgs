@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "preserves-tools";
-  version = "4.992.2";
+  version = "4.994.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-1IX6jTAH6qWE8X7YtIka5Z4y70obiVotOXzRnu+Z6a0=";
+    hash = "sha256-+I2uxdAe4SHg8ZLRvkIUr862FH6GvCwnyhxcCPD3JBA=";
   };
 
-  cargoHash = "sha256-D/ZCKRqZtPoCJ9t+5+q1Zm79z3K6Rew4eyuyDiGVGUs=";
+  cargoHash = "sha256-09uxXD9EZzzk42tBYbuqaLRFyGmOUuvC7G0XMDjsK6E=";
 
   meta = {
     description =

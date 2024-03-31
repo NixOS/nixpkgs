@@ -10,6 +10,15 @@ let
   format = pkgs.formats.yaml {};
 
   nameToId = netName: "nebula-${netName}";
+
+  resolveFinalPort = netCfg:
+    if netCfg.listen.port == null then
+      if (netCfg.isLighthouse || netCfg.isRelay) then
+        4242
+      else
+        0
+    else
+      netCfg.listen.port;
 in
 {
   # Interface
@@ -95,8 +104,15 @@ in
             };
 
             listen.port = mkOption {
-              type = types.port;
-              default = 4242;
+              type = types.nullOr types.port;
+              default = null;
+              defaultText = lib.literalExpression ''
+                if (config.services.nebula.networks.''${name}.isLighthouse ||
+                    config.services.nebula.networks.''${name}.isRelay) then
+                  4242
+                else
+                  0;
+              '';
               description = lib.mdDoc "Port number to listen on.";
             };
 
@@ -174,7 +190,7 @@ in
           };
           listen = {
             host = netCfg.listen.host;
-            port = netCfg.listen.port;
+            port = resolveFinalPort netCfg;
           };
           tun = {
             disabled = netCfg.tun.disable;
@@ -185,7 +201,15 @@ in
             outbound = netCfg.firewall.outbound;
           };
         } netCfg.settings;
-        configFile = format.generate "nebula-config-${netName}.yml" settings;
+        configFile = format.generate "nebula-config-${netName}.yml" (
+          warnIf
+            ((settings.lighthouse.am_lighthouse || settings.relay.am_relay) && settings.listen.port == 0)
+            ''
+              Nebula network '${netName}' is configured as a lighthouse or relay, and its port is ${builtins.toString settings.listen.port}.
+              You will likely experience connectivity issues: https://nebula.defined.net/docs/config/listen/#listenport
+            ''
+            settings
+          );
         in
         {
           # Create the systemd service for Nebula.
@@ -229,7 +253,7 @@ in
 
     # Open the chosen ports for UDP.
     networking.firewall.allowedUDPPorts =
-      unique (mapAttrsToList (netName: netCfg: netCfg.listen.port) enabledNetworks);
+      unique (filter (port: port > 0) (mapAttrsToList (netName: netCfg: resolveFinalPort netCfg) enabledNetworks));
 
     # Create the service users and groups.
     users.users = mkMerge (mapAttrsToList (netName: netCfg:

@@ -3,21 +3,27 @@
 , makeDesktopItem
 , makeWrapper
 , maven
+, jdk17
 , jre
 , xorg
 , gitUpdater
 , libGL
 }:
 
-maven.buildMavenPackage rec {
+let
+  mavenJdk17 = maven.override {
+    jdk = jdk17;
+  };
+in
+mavenJdk17.buildMavenPackage rec {
   pname = "runelite";
-  version = "2.6.12";
+  version = "2.6.13";
 
   src = fetchFromGitHub {
     owner = "runelite";
     repo = "launcher";
     rev = version;
-    hash = "sha256-lovDkEvzclZCBu/Ha8h0j595NZ4ejefEOX7lNmzb8I8=";
+    hash = "sha256-KE0UMtm1rypyV5FIxxiJeoP/IeSEzpzqfUyQ9UnxA0o=";
   };
   mvnHash = "sha256-bsJlsIXIIVzZyVgEF/SN+GgpZt6v0u800arO1c5QYHk=";
 

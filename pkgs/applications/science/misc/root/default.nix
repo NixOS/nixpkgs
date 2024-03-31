@@ -2,6 +2,7 @@
 , lib
 , callPackage
 , fetchurl
+, fetchpatch
 , makeWrapper
 , cmake
 , coreutils
@@ -109,6 +110,17 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./sw_vers.patch
+
+    # compatibility with recent XRootD
+    # https://github.com/root-project/root/pull/13752
+    (fetchpatch {
+      url = "https://github.com/root-project/root/commit/3d3cda6c520791282298782189cdb8ca07ace4b9.diff";
+      hash = "sha256-O3aXzrOEQiPjZgbAj9TL6Wt/adN1kKFwjooeaFRyT4I=";
+    })
+    (fetchpatch {
+      url = "https://github.com/root-project/root/commit/6e7798e62dbed1ffa8b91a180fa5a080b7c04ba3.diff";
+      hash = "sha256-47/J631DBnVlvM1Pm9iicKXDKAqN8v9hjAstQuHmH8Q=";
+    })
   ];
 
   preConfigure = ''
@@ -202,13 +214,10 @@ stdenv.mkDerivation rec {
   # suppress warnings from compilation of the vendored clang to avoid running into log limits on the Hydra
   NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [ "-Wno-shadow" "-Wno-maybe-uninitialized" ];
 
-  # Workaround the xrootd runpath bug #169677 by prefixing [DY]LD_LIBRARY_PATH with ${lib.makeLibraryPath xrootd}.
-  # TODO: Remove the [DY]LDLIBRARY_PATH prefix for xrootd when #200830 get merged.
   postInstall = ''
     for prog in rootbrowse rootcp rooteventselector rootls rootmkdir rootmv rootprint rootrm rootslimtree; do
       wrapProgram "$out/bin/$prog" \
-        --set PYTHONPATH "$out/lib" \
-        --set ${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH "$out/lib:${lib.makeLibraryPath [ xrootd ]}"
+        --set PYTHONPATH "$out/lib"
     done
 
     # Make ldd and sed available to the ROOT executable by prefixing PATH.
@@ -217,8 +226,7 @@ stdenv.mkDerivation rec {
         gnused # sed
         stdenv.cc # c++ ld etc.
         stdenv.cc.libc # ldd
-      ]}" \
-      --prefix ${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH : "${lib.makeLibraryPath [ xrootd ]}"
+      ]}"
 
     # Patch thisroot.{sh,csh,fish}
 

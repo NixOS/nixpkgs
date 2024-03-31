@@ -132,6 +132,28 @@ in
             default = "WriteReplica";
             type = lib.types.enum [ "WriteReplica" "WriteReplicaNoUI" "ReadOnlyReplica" ];
           };
+          online_backup = {
+            path = lib.mkOption {
+              description = lib.mdDoc "Path to the output directory for backups.";
+              type = lib.types.path;
+              default = "/var/lib/kanidm/backups";
+            };
+            schedule = lib.mkOption {
+              description = lib.mdDoc "The schedule for backups in cron format.";
+              type = lib.types.str;
+              default = "00 22 * * *";
+            };
+            versions = lib.mkOption {
+              description = lib.mdDoc ''
+                Number of backups to keep.
+
+                The default is set to `0`, in order to disable backups by default.
+              '';
+              type = lib.types.ints.unsigned;
+              default = 0;
+              example = 7;
+            };
+          };
         };
       };
       default = { };
@@ -233,6 +255,14 @@ in
 
     environment.systemPackages = lib.mkIf cfg.enableClient [ cfg.package ];
 
+    systemd.tmpfiles.settings."10-kanidm" = {
+      ${cfg.serverSettings.online_backup.path}.d = {
+        mode = "0700";
+        user = "kanidm";
+        group = "kanidm";
+      };
+    };
+
     systemd.services.kanidm = lib.mkIf cfg.enableServer {
       description = "kanidm identity management daemon";
       wantedBy = [ "multi-user.target" ];
@@ -253,6 +283,8 @@ in
           BindPaths = [
             # To create the socket
             "/run/kanidmd:/run/kanidmd"
+            # To store backups
+            cfg.serverSettings.online_backup.path
           ];
 
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];

@@ -84,6 +84,10 @@ buildBazelPackage rec {
 
   postPatch = ''
     rm .bazelversion
+
+    # Fix gcc-13 build failure by including missing include headers
+    sed -e '1i #include <cstdint>' -i \
+      tensorflow/lite/kernels/internal/spectrogram.cc
   '';
 
   preConfigure = ''

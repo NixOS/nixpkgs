@@ -65,6 +65,8 @@ Now that this is out of the way. To add a package to Nixpkgs:
    $ git add pkgs/by-name/so/some-package/package.nix
    ```
 
+   If the package is written in a language other than C, you should use [the corresponding language framework](https://nixos.org/manual/nixpkgs/stable/#chap-language-support).
+
    You can have a look at the existing Nix expressions under `pkgs/` to see how it’s done, some of which are also using the [category hierarchy](#category-hierarchy).
    Here are some good ones:
 
@@ -176,7 +178,7 @@ For example, the `libxml2` package builds both a library and some tools; but it�
 
   - **If it’s a _language server_:**
 
-    - `development/tools/language-servers` (e.g. `ccls` or `rnix-lsp`)
+    - `development/tools/language-servers` (e.g. `ccls` or `nil`)
 
   - **Else:**
 
@@ -346,7 +348,7 @@ There are a few naming guidelines:
 
 - The `pname` attribute _should_ be identical to the upstream package name.
 
-- The `pname` and the `version` attribute _must not_ contain uppercase letters — e.g., `"mplayer" instead of `"MPlayer"`.
+- The `pname` and the `version` attribute _must not_ contain uppercase letters — e.g., `"mplayer"` instead of `"MPlayer"`.
 
 - The `version` attribute _must_ start with a digit e.g., `"0.3.1rc2"`.
 
@@ -384,7 +386,13 @@ All versions of a package _must_ be included in `all-packages.nix` to make sure 
 * `meta.license` must be set and match the upstream license.
   * If there is no upstream license, `meta.license` should default to `lib.licenses.unfree`.
   * If in doubt, try to contact the upstream developers for clarification.
-* `meta.mainProgram` must be set when appropriate.
+* `meta.mainProgram` must be set to the name of the executable which facilitates the primary function or purpose of the package, if there is such an executable in `$bin/bin/` (or `$out/bin/`, if there is no `"bin"` output).
+  * Packages that only have a single executable in the applicable directory above should set `meta.mainProgram`. For example, the package `ripgrep` only has a single executable `rg` under `$out/bin/`, so `ripgrep.meta.mainProgram` is set to `"rg"`.
+  * Packages like `polkit_gnome` that have no executables in the applicable directory should not set `meta.mainProgram`.
+  * Packages like `e2fsprogs` that have multiple executables, none of which can be considered the main program, should not set `meta.mainProgram`.
+  * Packages which are not primarily used for a single executable do not need to set `meta.mainProgram`.
+  * Always prefer using a hardcoded string (don't use `pname`, for example).
+  * When in doubt, ask for reviewer input.
 * `meta.maintainers` must be set for new packages.
 
 See the Nixpkgs manual for more details on [standard meta-attributes](https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes).
@@ -409,32 +417,37 @@ In the file `pkgs/top-level/all-packages.nix` you can find fetch helpers, these 
 - Bad: Uses `git://` which won't be proxied.
 
   ```nix
-  src = fetchgit {
-    url = "git@github.com:NixOS/nix.git"
-    url = "git://github.com/NixOS/nix.git";
-    rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-    hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
+  {
+    src = fetchgit {
+      url = "git://github.com/NixOS/nix.git";
+      rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
+      hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
+    };
   }
   ```
 
 - Better: This is ok, but an archive fetch will still be faster.
 
   ```nix
-  src = fetchgit {
-    url = "https://github.com/NixOS/nix.git";
-    rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-    hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
+  {
+    src = fetchgit {
+      url = "https://github.com/NixOS/nix.git";
+      rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
+      hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
+    };
   }
   ```
 
 - Best: Fetches a snapshot archive and you get the rev you want.
 
   ```nix
-  src = fetchFromGitHub {
-    owner = "NixOS";
-    repo = "nix";
-    rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-    hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
+  {
+    src = fetchFromGitHub {
+      owner = "NixOS";
+      repo = "nix";
+      rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
+      hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
+    };
   }
   ```
 
@@ -499,13 +512,15 @@ Let's say Man-in-the-Middle (MITM) sits close to your network. Then instead of f
 Patches available online should be retrieved using `fetchpatch`.
 
 ```nix
-patches = [
-  (fetchpatch {
-    name = "fix-check-for-using-shared-freetype-lib.patch";
-    url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=8f5d285";
-    hash = "sha256-uRcxaCjd+WAuGrXOmGfFeu79cUILwkRdBu48mwcBE7g=";
-  })
-];
+{
+  patches = [
+    (fetchpatch {
+      name = "fix-check-for-using-shared-freetype-lib.patch";
+      url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=8f5d285";
+      hash = "sha256-uRcxaCjd+WAuGrXOmGfFeu79cUILwkRdBu48mwcBE7g=";
+    })
+  ];
+}
 ```
 
 Otherwise, you can add a `.patch` file to the `nixpkgs` repository. In the interest of keeping our maintenance burden to a minimum, only patches that are unique to `nixpkgs` should be added in this way.
@@ -513,7 +528,9 @@ Otherwise, you can add a `.patch` file to the `nixpkgs` repository. In the inter
 If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch`. Check [the `fetchpatch` reference](https://nixos.org/manual/nixpkgs/unstable/#fetchpatch) for details.
 
 ```nix
-patches = [ ./0001-changes.patch ];
+{
+  patches = [ ./0001-changes.patch ];
+}
 ```
 
 If you do need to do create this sort of patch file, one way to do so is with git:
@@ -557,8 +574,10 @@ We use jbidwatcher as an example for a discontinued project here.
 
     For example in this case:
 
-    ```
-    jbidwatcher = throw "jbidwatcher was discontinued in march 2021"; # added 2021-03-15
+    ```nix
+    {
+      jbidwatcher = throw "jbidwatcher was discontinued in march 2021"; # added 2021-03-15
+    }
     ```
 
     The throw message should explain in short why the package was removed for users that still have it installed.
@@ -610,10 +629,10 @@ Here in the nixpkgs manual we describe mostly _package tests_; for _module tests
 For very simple tests, they can be written inline:
 
 ```nix
-{ …, yq-go }:
+{ /* ... , */ yq-go }:
 
 buildGoModule rec {
-  …
+  # …
 
   passthru.tests = {
     simple = runCommand "${pname}-test" {} ''
@@ -635,13 +654,13 @@ Add the tests in `passthru.tests` to the package definition like this:
 { stdenv, lib, fetchurl, callPackage }:
 
 stdenv.mkDerivation {
-  …
+  # …
 
   passthru.tests = {
     simple-execution = callPackage ./tests.nix { };
   };
 
-  meta = { … };
+  meta = { /* … */ };
 }
 ```
 
@@ -699,13 +718,13 @@ For example, assuming we're packaging `nginx`, we can link its module test via `
 { stdenv, lib, nixosTests }:
 
 stdenv.mkDerivation {
-  ...
+  # ...
 
   passthru.tests = {
     nginx = nixosTests.nginx;
   };
 
-  ...
+  # ...
 }
 ```
 

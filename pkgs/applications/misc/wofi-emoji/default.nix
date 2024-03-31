@@ -50,5 +50,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.ymarkus ];
     platforms = platforms.all;
+    mainProgram = "wofi-emoji";
   };
 }

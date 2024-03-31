@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "sagemaker";
-  version = "2.207.1";
+  version = "2.213.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "sagemaker-python-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nSFBx2s6vy5Ug2tBiPqNu4Q29LGW2LijoDKlC6m4CL4=";
+    hash = "sha256-3V4boilVpqvwRBBuZv/AKEks+BH9PFnigfq6Z5kFhqQ=";
   };
 
   nativeBuildInputs = [

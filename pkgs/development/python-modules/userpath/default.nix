@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "userpath";
-  version = "1.9.1";
-  format = "pyproject";
+  version = "1.9.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zoF2co2YyRS2QBeBvzsj/M2WjRZHU5yHiMcBA3XgJ5Y=";
+    hash = "sha256-bFIojasGklfMgxhG0V1IEzUiRV1Gd+5pqXgfEdvv2BU=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +35,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Cross-platform tool for adding locations to the user PATH";
+    mainProgram = "userpath";
     homepage = "https://github.com/ofek/userpath";
     changelog = "https://github.com/ofek/userpath/releases/tag/v${version}";
     license = with licenses; [ asl20 mit ];

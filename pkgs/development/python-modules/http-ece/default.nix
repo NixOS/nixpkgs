@@ -1,20 +1,30 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder
-, coverage, flake8, mock, nose, importlib-metadata
-, cryptography }:
+{ lib
+, buildPythonPackage
+, cryptography
+, fetchPypi
+, mock
+, pynose
+}:
 
 buildPythonPackage rec {
-  pname = "http_ece";
+  pname = "http-ece";
   version = "1.2.0";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "http_ece";
+    inherit version;
     sha256 = "sha256-tZIPjvuOG1+wJXE+Ozb9pUM2JiAQY0sm3B+Y+F0es94=";
   };
 
-  propagatedBuildInputs = [ cryptography ]
-    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail '"nose",' "" \
+      --replace-fail '"coverage",' ""
+  '';
 
-  nativeCheckInputs = [ coverage flake8 mock nose ];
+  propagatedBuildInputs = [ cryptography ];
+
+  nativeCheckInputs = [ mock pynose ];
 
   meta = with lib; {
     description = "Encipher HTTP Messages";

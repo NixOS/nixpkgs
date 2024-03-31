@@ -45,6 +45,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool to obtain GraphQL API schemas";
+    mainProgram = "clairvoyance";
     homepage = "https://github.com/nikitastupin/clairvoyance";
     changelog = "https://github.com/nikitastupin/clairvoyance/releases/tag/v${version}";
     license = with licenses; [ asl20 ];

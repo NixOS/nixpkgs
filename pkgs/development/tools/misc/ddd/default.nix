@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.gnu.org/software/ddd";
     description = "Graphical front-end for command-line debuggers";
+    mainProgram = "ddd";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ emilytrau ];

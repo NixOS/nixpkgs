@@ -14,5 +14,6 @@ bundlerApp rec {
     license = [ licenses.unfreeRedistributable ];
     platforms = ruby.meta.platforms;
     maintainers = [ maintainers.marsam ];
+    mainProgram = "brakeman";
   };
 }

@@ -300,7 +300,7 @@ in
             let
               unwrapped = writeShellScriptBin "apptainer-cuda-saxpy"
                 ''
-                  ${lib.getExe finalAttrs.finalPackage} exec --nv $@ ${finalAttrs.passthru.tests.image-saxpy} saxpy
+                  ${lib.getExe finalAttrs.finalPackage} exec --nv $@ ${finalAttrs.passthru.gpuChecks.image-saxpy} saxpy
                 '';
             in
             runCommand "run-apptainer-cuda-saxpy"

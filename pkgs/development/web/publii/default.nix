@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "publii";
-  version = "0.44.4";
+  version = "0.45.2";
 
   src = fetchurl {
     url = "https://getpublii.com/download/Publii-${version}.deb";
-    hash = "sha256-Qk7Ix8VLfrgT4VbSIQFwB5oVfjgeSi8nttQWovptliw=";
+    hash = "sha256-NGS5ovaJ6XskCimN48mqvUdoA+N9eDlIpazV0GDEs3E=";
   };
 
   dontConfigure = true;
@@ -88,6 +88,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Static Site CMS with GUI to build privacy-focused SEO-friendly website.";
+    mainProgram = "Publii";
     longDescription = ''
       Creating a website doesn't have to be complicated or expensive. With Publii, the most
       intuitive static site CMS, you can create a beautiful, safe, and privacy-friendly website

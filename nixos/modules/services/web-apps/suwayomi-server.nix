@@ -3,6 +3,8 @@
 let
   cfg = config.services.suwayomi-server;
   inherit (lib) mkOption mdDoc mkEnableOption mkIf types;
+
+  format = pkgs.formats.hocon { };
 in
 {
   options = {
@@ -48,19 +50,7 @@ in
 
       settings = mkOption {
         type = types.submodule {
-          freeformType =
-            let
-              recursiveAttrsType = with types; attrsOf (nullOr (oneOf [
-                str
-                path
-                int
-                float
-                bool
-                (listOf str)
-                (recursiveAttrsType // { description = "instances of this type recursively"; })
-              ]));
-            in
-            recursiveAttrsType;
+          freeformType = format.type;
           options = {
             server = {
               ip = mkOption {
@@ -109,6 +99,17 @@ in
                 default = false;
                 description = mdDoc ''
                   Download chapters as `.cbz` files.
+                '';
+              };
+
+              extensionRepos = mkOption {
+                type = types.listOf types.str;
+                default = [];
+                example = [
+                  "https://raw.githubusercontent.com/MY_ACCOUNT/MY_REPO/repo/index.min.json"
+                ];
+                description = mdDoc ''
+                  URL of repositories from which the extensions can be installed.
                 '';
               };
 
@@ -180,38 +181,7 @@ in
 
     systemd.services.suwayomi-server =
       let
-        flattenConfig = prefix: config:
-          lib.foldl'
-            lib.mergeAttrs
-            { }
-            (lib.attrValues
-              (lib.mapAttrs
-                (k: v:
-                  if !(lib.isAttrs v)
-                  then { "${prefix}${k}" = v; }
-                  else flattenConfig "${prefix}${k}." v
-                )
-                config
-              )
-            );
-
-        #  HOCON is a JSON superset that suwayomi-server use for configuration
-        toHOCON = attr:
-          let
-            attrType = builtins.typeOf attr;
-          in
-          if builtins.elem attrType [ "string" "path" "int" "float" ]
-          then ''"${toString attr}"''
-          else if attrType == "bool"
-          then lib.boolToString attr
-          else if attrType == "list"
-          then "[\n${lib.concatMapStringsSep ",\n" toHOCON attr}\n]"
-          else # attrs, lambda, null
-            throw ''
-              [suwayomi-server]: invalid config value type '${attrType}'.
-            '';
-
-        configFile = pkgs.writeText "server.conf" (lib.pipe cfg.settings [
+        configFile = format.generate "server.conf" (lib.pipe cfg.settings [
           (settings: lib.recursiveUpdate settings {
             server.basicAuthPasswordFile = null;
             server.basicAuthPassword =
@@ -219,12 +189,8 @@ in
               then "$TACHIDESK_SERVER_BASIC_AUTH_PASSWORD"
               else null;
           })
-          (flattenConfig "")
-          (lib.filterAttrs (_: x: x != null))
-          (lib.mapAttrsToList (name: value: ''${name} = ${toHOCON value}''))
-          lib.concatLines
+          (lib.filterAttrsRecursive (_: x: x != null))
         ]);
-
       in
       {
         description = "A free and open source manga reader server that runs extensions built for Tachiyomi.";

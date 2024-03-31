@@ -201,6 +201,8 @@ def print_updates(channels_old, channels_new):
 channels = {}
 last_channels = load_as_json(PIN_PATH)
 
+src_hash_cache = {}
+
 
 print(f'GET {RELEASES_URL}', file=sys.stderr)
 with urlopen(RELEASES_URL) as resp:
@@ -240,13 +242,27 @@ with urlopen(RELEASES_URL) as resp:
             google_chrome_suffix = channel_name
 
         try:
-            channel['hash'] = prefetch_src_sri_hash(
-                channel_name_to_attr_name(channel_name),
-                release["version"]
-            )
+            version = release["version"]
+            existing_releases = dict(map(lambda channel: (channel[1]['version'], channel[1]['hash']), last_channels.items()))
+
+            if version in src_hash_cache:
+                print(f'Already got hash {src_hash_cache[version]} for {version}, skipping FOD prefetch for {channel_name_to_attr_name(channel_name)}')
+
+                channel["hash"] = src_hash_cache[version]
+            elif version in existing_releases:
+                print(f'Already got hash {existing_releases[version]} for {version} (from upstream-info.nix), skipping FOD prefetch for {channel_name_to_attr_name(channel_name)}')
+
+                channel["hash"] = existing_releases[version]
+            else:
+                channel["hash"] = prefetch_src_sri_hash(
+                    channel_name_to_attr_name(channel_name),
+                    version
+                )
+                src_hash_cache[version] = channel["hash"]
+
             channel['hash_deb_amd64'] = nix_prefetch_url(
                 f'{DEB_URL}/google-chrome-{google_chrome_suffix}/' +
-                f'google-chrome-{google_chrome_suffix}_{release["version"]}-1_amd64.deb')
+                f'google-chrome-{google_chrome_suffix}_{version}-1_amd64.deb')
         except subprocess.CalledProcessError:
             # This release isn't actually available yet.  Continue to
             # the next one.

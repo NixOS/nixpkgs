@@ -1,5 +1,5 @@
 diff --git a/distrobuilder/lxc.generator b/distrobuilder/lxc.generator
-index 0ad81d1..69dbfe7 100644
+index 0ad81d1..21ddb39 100644
 --- a/distrobuilder/lxc.generator
 +++ b/distrobuilder/lxc.generator
 @@ -25,16 +25,6 @@ is_incus_vm() {
@@ -73,9 +73,22 @@ index 0ad81d1..69dbfe7 100644
  
  	mkdir -p /run/systemd/system/systemd-udev-trigger.service.d
  	cat <<-EOF > /run/systemd/system/systemd-udev-trigger.service.d/zzz-lxc-override.conf
-@@ -145,24 +97,12 @@ EOF
+@@ -132,37 +84,13 @@ ExecStart=-${cmd} trigger --type=devices --action=add
+ EOF
  }
  
+-# fix_systemd_sysctl overrides the systemd-sysctl.service to use "ExecStart=-" instead of "ExecStart=".
+-fix_systemd_sysctl() {
+-	cmd=/usr/lib/systemd/systemd-sysctl
+-	! [ -e "${cmd}" ] && cmd=/lib/systemd/systemd-sysctl
+-	mkdir -p /run/systemd/system/systemd-sysctl.service.d
+-	cat <<-EOF > /run/systemd/system/systemd-sysctl.service.d/zzz-lxc-override.conf
+-[Service]
+-ExecStart=
+-ExecStart=-${cmd}
+-EOF
+-}
+-
  ## Main logic
 -# Nothing to do in Incus VM but deployed in case it is later converted to a container
 -is_incus_vm || is_lxd_vm && exit 0
@@ -99,7 +112,15 @@ index 0ad81d1..69dbfe7 100644
  
  # Determine distro name and release
  ID=""
-@@ -222,11 +162,6 @@ ACTION=="add|change|move", ENV{ID_NET_DRIVER}=="veth", ENV{INTERFACE}=="eth[0-9]
+@@ -192,7 +120,6 @@ fi
+ 
+ # Ignore failures on some units.
+ fix_systemd_udev_trigger
+-fix_systemd_sysctl
+ 
+ # Mask some units.
+ fix_systemd_mask dev-hugepages.mount
+@@ -222,11 +149,6 @@ ACTION=="add|change|move", ENV{ID_NET_DRIVER}=="veth", ENV{INTERFACE}=="eth[0-9]
  EOF
  fi
  

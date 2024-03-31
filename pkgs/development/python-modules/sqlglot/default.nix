@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "sqlglot";
-  version = "20.9.0";
+  version = "21.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     repo = "sqlglot";
     owner = "tobymao";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4czhmAJUDRj0x8dCmIXg5BQ1Uvie5vx+UtWdSSY5mnM=";
+    hash = "sha256-xMKDkhotVBkLzn+f9RMGCPfWTF4Rz9a193nSJv5z+iA=";
   };
 
   nativeBuildInputs = [

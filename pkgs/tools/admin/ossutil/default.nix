@@ -22,5 +22,6 @@ buildGoModule rec {
     changelog = "https://github.com/aliyun/ossutil/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ jpetrucciani ];
+    mainProgram = "ossutil";
   };
 }

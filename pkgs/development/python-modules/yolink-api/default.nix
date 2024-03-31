@@ -11,23 +11,23 @@
 
 buildPythonPackage rec {
   pname = "yolink-api";
-  version = "0.3.7";
-  format = "pyproject";
+  version = "0.4.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "YoSmart-Inc";
-    repo = pname;
+    repo = "yolink-api";
     rev = "refs/tags/v${version}";
-    hash = "sha256-P9Hu3JhoFDwKylTAZmXYX2AI2CPf/GbYhJCU4wX/aWY=";
+    hash = "sha256-YDfwF9ldL43yrhz1TibTatkZIccYTpNODdjqBkzeh1s=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     aiomqtt
     pydantic

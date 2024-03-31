@@ -134,8 +134,8 @@ rec {
   };
 
   wlroots_0_17 = generic {
-    version = "0.17.1";
-    hash = "sha256-Z0gWM7AQqJOSr2maUtjdgk/MF6pyeyFMMTaivgt+RMI=";
+    version = "0.17.2";
+    hash = "sha256-Of9qykyVnBURc5A2pvCMm7sLbnuuG7OPWLxodQLN2Xg=";
     extraBuildInputs = [
       ffmpeg
       hwdata

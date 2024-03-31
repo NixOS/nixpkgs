@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Columnar tick database and time-series language";
+    mainProgram = "kerf";
     longDescription = ''
       Kerf is a columnar tick database and small programming
       language that is a superset of JSON and SQL. It can be

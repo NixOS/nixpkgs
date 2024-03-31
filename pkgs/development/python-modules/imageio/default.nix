@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.33.1";
+  version = "2.34.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "imageio";
     repo = "imageio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1Q1KKQmla/iHb5KbJZZmkpBT2j9uIwy8YDAJ7qDDC4Q=";
+    hash = "sha256-+I5KmKSLi8ARbDH06em71LWhmqziAaDfaBp4hU67/jg=";
   };
 
   patches = lib.optionals (!stdenv.isDarwin) [

@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.aristid ];
     platforms = platforms.all;
+    mainProgram = "jpegoptim";
   };
 }

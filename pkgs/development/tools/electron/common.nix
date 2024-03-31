@@ -22,6 +22,8 @@ let
     opts = removeAttrs dep ["fetcher"];
   in pkgs.${dep.fetcher} opts;
 
+  fetchedDeps = lib.mapAttrs (name: fetchdep) info.deps;
+
 in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
   packageName = "electron";
   inherit (info) version;
@@ -31,21 +33,24 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
   buildInputs = base.buildInputs ++ [ libnotify ];
 
   electronOfflineCache = fetchYarnDeps {
-    yarnLock = (fetchdep info.deps."src/electron") + "/yarn.lock";
+    yarnLock = fetchedDeps."src/electron" + "/yarn.lock";
     sha256 = info.electron_yarn_hash;
   };
-  npmDeps = fetchNpmDeps {
-    src = fetchdep info.deps."src";
-    sourceRoot = "source/third_party/node";
+  npmDeps = fetchNpmDeps rec {
+    src = fetchedDeps."src";
+    # Assume that the fetcher always unpack the source,
+    # based on update.py
+    sourceRoot = "${src.name}/third_party/node";
     hash = info.chromium_npm_hash;
   };
 
   src = null;
 
-  patches = base.patches ++ lib.optional (lib.versionOlder info.version "27")
+  patches = base.patches ++ lib.optional (lib.versionAtLeast info.version "29")
     (substituteAll {
-      name = "version.patch";
-      src = ./version.patch;
+      # disable a component that requires CIPD blobs
+      name = "disable-screen-ai.patch";
+      src = ./disable-screen-ai.patch;
       inherit (info) version;
     })
   ;
@@ -55,9 +60,9 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
   '' + (
     lib.concatStrings (lib.mapAttrsToList (path: dep: ''
       mkdir -p ${builtins.dirOf path}
-      cp -r ${fetchdep dep}/. ${path}
+      cp -r ${dep}/. ${path}
       chmod u+w -R ${path}
-    '') info.deps)
+    '') fetchedDeps)
   ) + ''
     sourceRoot=src
     runHook postUnpack
@@ -115,13 +120,14 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
       cd ..
       PATH=$PATH:${lib.makeBinPath (with pkgsBuildHost; [ jq git ])}
       config=src/electron/patches/config.json
-      for key in $(jq -r "keys[]" $config)
+      for entry in $(cat $config | jq -c ".[]")
       do
-        value=$(jq -r ".\"$key\"" $config)
-        for patch in $(cat $key/.patches)
+        patch_dir=$(echo $entry | jq -r ".patch_dir")
+        repo=$(echo $entry | jq -r ".repo")
+        for patch in $(cat $patch_dir/.patches)
         do
-          echo applying in $value: $patch
-          git apply -p1 --directory=$value --exclude='src/third_party/blink/web_tests/*' $key/$patch
+          echo applying in $repo: $patch
+          git apply -p1 --directory=$repo --exclude='src/third_party/blink/web_tests/*' $patch_dir/$patch
         done
       done
     )
@@ -148,7 +154,6 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
     v8_promise_internal_field_count = 1;
     v8_embedder_string = "-electron.0";
     v8_enable_snapshot_native_code_counters = false;
-    v8_scriptormodule_legacy_lifetime = true;
     v8_enable_javascript_promise_hooks = true;
     enable_cdm_host_verification = false;
     proprietary_codecs = true;
@@ -161,11 +166,18 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
     enable_cet_shadow_stack = false;
     is_cfi = false;
     use_qt = false;
-
-    enable_widevine = false;
     use_perfetto_client_library = false;
-    enable_check_raw_ptr_fields = false;
-  } // lib.optionalAttrs (lib.versionAtLeast info.version "27")  {
+    v8_builtins_profiling_log_file = "";
+    enable_dangling_raw_ptr_checks = false;
+  } // lib.optionalAttrs (lib.versionAtLeast info.version "28") {
+    dawn_use_built_dxc = false;
+    v8_enable_private_mapping_fork_optimization = true;
+  } // lib.optionalAttrs (lib.versionAtLeast info.version "29") {
+    v8_expose_public_symbols = true;
+  } // {
+
+    # other
+    enable_widevine = false;
     override_electron_version = info.version;
   };
 
@@ -181,11 +193,11 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
   requiredSystemFeatures = [ "big-parallel" ];
 
   passthru = {
-    inherit info;
+    inherit info fetchedDeps;
     headers = stdenv.mkDerivation rec {
       name = "node-v${info.node}-headers.tar.gz";
       nativeBuildInputs = [ python3 ];
-      src = fetchdep info.deps."src/third_party/electron_node";
+      src = fetchedDeps."src/third_party/electron_node";
       buildPhase = ''
         runHook preBuild
         make tar-headers

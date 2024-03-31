@@ -8,6 +8,7 @@
 , langsmith
 , packaging
 , pydantic
+, pythonRelaxDepsHook
 , pyyaml
 , requests
 , tenacity
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "0.1.16";
+  version = "0.1.36";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,11 +24,16 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "langchain_core";
     inherit version;
-    hash = "sha256-jLVG7tMYAJ7hqKOB0QgHTt3wOVrmHrJD2wDXbh4mXok=";
+    hash = "sha256-qiQyNwyj0qXW3RSoEKpkiL8vYi/3oKPcMPbg7Z1/X6g=";
   };
+
+  pythonRelaxDeps = [
+    "langsmith"
+  ];
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -41,7 +47,9 @@ buildPythonPackage rec {
     tenacity
   ];
 
-  pythonImportsCheck = [ "langchain_core" ];
+  pythonImportsCheck = [
+    "langchain_core"
+  ];
 
   # PyPI source does not have tests
   doCheck = false;

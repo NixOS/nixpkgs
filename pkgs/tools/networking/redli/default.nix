@@ -18,5 +18,6 @@ buildGoModule rec {
     homepage = "https://github.com/IBM-Cloud/redli";
     license = licenses.asl20;
     maintainers = with maintainers; [ tchekda ];
+    mainProgram = "redli";
   };
 }

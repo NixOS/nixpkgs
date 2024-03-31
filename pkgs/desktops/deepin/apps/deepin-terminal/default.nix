@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-terminal";
-  version = "6.0.9";
+  version = "6.0.12";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-QdODR4zmbMuzSVy6eJhwJHNPXkAn6oCLHq+YZEOmtIU=";
+    hash = "sha256-VAF6Dn9cGmipQhAKhEOLd7lJyYWySOJ+rehc9L8pfL0=";
   };
 
   cmakeFlags = [ "-DVERSION=${version}" ];
@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Terminal emulator with workspace, multiple windows, remote management, quake mode and other features";
+    mainProgram = "deepin-terminal";
     homepage = "https://github.com/linuxdeepin/deepin-terminal";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

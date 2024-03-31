@@ -16,8 +16,8 @@
 
 buildPythonPackage rec {
   pname = "pyoverkiz";
-  version = "1.13.4";
-  format = "pyproject";
+  version = "1.13.10";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -25,19 +25,19 @@ buildPythonPackage rec {
     owner = "iMicknl";
     repo = "python-overkiz-api";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VMf6WBWf33KEWJG8UtCDZCa20a8kmVd5UpLIcJgzDis=";
+    hash = "sha256-05S0tCfCXgvkheUBVDGX8my0c7SCi/ran2emjaGWd9s=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'pyhumps = "^3.0.2,!=3.7.3"' 'pyhumps = "^3.0.2"'
+      --replace-fail 'pyhumps = "^3.0.2,!=3.7.3"' 'pyhumps = "^3.0.2"'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     attrs
     backoff

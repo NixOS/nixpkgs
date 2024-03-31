@@ -19,5 +19,6 @@ stdenv.mkDerivation {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = [ maintainers.neeasade ];
+    mainProgram = "colort";
   };
 }

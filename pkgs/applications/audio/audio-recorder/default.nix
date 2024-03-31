@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Audio recorder for GNOME and Unity Desktops";
+    mainProgram = "audio-recorder";
     longDescription = ''
       This program allows you to record your favourite music or audio to a file.
       It can record audio from your system soundcard, microphones, browsers and

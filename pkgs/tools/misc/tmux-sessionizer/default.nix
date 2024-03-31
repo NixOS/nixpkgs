@@ -7,12 +7,14 @@
 , Security
 , testers
 , tmux-sessionizer
-}: let
+}:
+let
 
   name = "tmux-sessionizer";
-  version = "0.3.2";
+  version = "0.4.2";
 
-in rustPlatform.buildRustPackage {
+in
+rustPlatform.buildRustPackage {
   pname = name;
   inherit version;
 
@@ -20,14 +22,18 @@ in rustPlatform.buildRustPackage {
     owner = "jrmoulton";
     repo = name;
     rev = "v${version}";
-    hash = "sha256-8RQ67v2Cw681zikxYnq0Pb2ybh26w8mUbHKAC4TjYWA=";
+    hash = "sha256-n6DXqsq3TsNob/fEqeOwNTVLPAvCr7CDN9qtXAiOMWQ=";
   };
 
-  cargoHash = "sha256-ZOWoUBna8U0A/sYwXMf4Z7Vi+KqM7VinWhmtO8Q0HtU=";
+  cargoHash = "sha256-e2U6x7HFoFbZxtJvY/ZpgEWagIrdRxPVZw2rP5aDIqg=";
 
   passthru.tests.version = testers.testVersion {
     package = tmux-sessionizer;
+    version = version;
   };
+
+  # Needed to get openssl-sys to use pkg-config.
+  OPENSSL_NO_VENDOR = 1;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];

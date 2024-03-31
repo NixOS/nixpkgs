@@ -13,9 +13,96 @@ Alternatively, to run all `lib` tests:
 
   [nixpkgs]$ nix-build lib/tests/release.nix
 */
-with import ../default.nix;
 
 let
+  lib = import ../default.nix;
+
+  inherit (lib)
+    allUnique
+    and
+    attrNames
+    attrsets
+    attrsToList
+    bitAnd
+    bitOr
+    bitXor
+    boolToString
+    callPackagesWith
+    callPackageWith
+    cartesianProductOfSets
+    cli
+    composeExtensions
+    composeManyExtensions
+    concatLines
+    concatMapAttrs
+    concatMapStrings
+    concatStrings
+    concatStringsSep
+    const
+    escapeXML
+    evalModules
+    filter
+    fix
+    fold
+    foldAttrs
+    foldl
+    foldl'
+    foldlAttrs
+    foldr
+    functionArgs
+    generators
+    genList
+    getExe
+    getExe'
+    groupBy
+    groupBy'
+    hasAttrByPath
+    hasInfix
+    id
+    isStorePath
+    lazyDerivation
+    lists
+    listToAttrs
+    makeExtensible
+    makeOverridable
+    mapAttrs
+    matchAttrs
+    mergeAttrs
+    meta
+    mkOption
+    mod
+    nameValuePair
+    optionalDrvAttr
+    optionAttrSetToDocList
+    overrideExisting
+    packagesFromDirectoryRecursive
+    pipe
+    range
+    recursiveUpdateUntil
+    removePrefix
+    replicate
+    runTests
+    setFunctionArgs
+    showAttrPath
+    sort
+    sortOn
+    stringLength
+    strings
+    stringToCharacters
+    systems
+    tail
+    take
+    testAllTrue
+    toBaseDigits
+    toHexString
+    toInt
+    toIntBase10
+    toShellVars
+    types
+    updateManyAttrsByPath
+    versions
+    ;
+
   testingThrow = expr: {
     expr = (builtins.tryEval (builtins.seq expr "didn't throw"));
     expected = { success = false; value = false; };
@@ -54,6 +141,24 @@ runTests {
     expr = functionArgs (makeOverridable ({ a, b, c ? null }: {}) { a = 1; b = 2; }).override;
     expected = { a = false; b = false; c = true; };
   };
+
+  testCallPackageWithOverridePreservesArguments =
+    let
+      f = { a ? 0, b }: {};
+      f' = callPackageWith { a = 1; b = 2; } f {};
+    in {
+      expr = functionArgs f'.override;
+      expected = functionArgs f;
+    };
+
+  testCallPackagesWithOverridePreservesArguments =
+    let
+      f = { a ? 0, b }: { nested = {}; };
+      f' = callPackagesWith { a = 1; b = 2; } f {};
+    in {
+      expr = functionArgs f'.nested.override;
+      expected = functionArgs f;
+    };
 
 # TRIVIAL
 
@@ -1971,6 +2076,24 @@ runTests {
       name = "foo";
       x = 1;
     }).drvPath;
+  };
+
+  testLazyDerivationMultiOutputReturnsDerivationAttrs = let
+    derivation = {
+      type = "derivation";
+      outputs = ["out" "dev"];
+      dev = "test dev";
+      out = "test out";
+      outPath = "test outPath";
+      outputName = "out";
+      drvPath = "test drvPath";
+      name = "test name";
+      system = "test system";
+      meta.position = "/hi:23";
+    };
+  in {
+    expr = lazyDerivation { inherit derivation; outputs = ["out" "dev"]; passthru.meta.position = "/hi:23"; };
+    expected = derivation;
   };
 
   testTypeDescriptionInt = {

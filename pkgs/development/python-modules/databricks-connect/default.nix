@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "databricks-connect";
-  version = "11.3.6";
+  version = "11.3.26";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kAUBA9V1st5UxXihrXQjyk+1ahsum/VEcNfDK1he/Pc=";
+    hash = "sha256-YjUY4i8PtXc+fWcGjvnRbZkiINprKcS1K9HT5+86E8c=";
   };
 
   sourceRoot = ".";

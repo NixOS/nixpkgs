@@ -7,25 +7,29 @@
 , fetchFromGitHub
 , flask
 , flask-cors
+, awscli
 , moto
+, boto3
+, setuptools
 , pytest-asyncio
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , wrapt
 }:
 
 buildPythonPackage rec {
   pname = "aiobotocore";
-  version = "2.8.0";
-  format = "setuptools";
+  version = "2.12.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
-    repo = pname;
+    repo = "aiobotocore";
     rev = "refs/tags/${version}";
-    hash = "sha256-mVG3dCz9DnExteUFhvTGjZu81E0KbrObP3OX0w/OVzU=";
+    hash = "sha256-+CXKDk6crCPTVpVfcDWy+1UzS05oTu1RtIvDcVrEmFU=";
   };
 
   # Relax version constraints: aiobotocore works with newer botocore versions
@@ -34,12 +38,25 @@ buildPythonPackage rec {
     sed -i "s/'botocore>=.*'/'botocore'/" setup.py
   '';
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     aiohttp
     aioitertools
     botocore
     wrapt
   ];
+
+  passthru.optional-dependencies = {
+    awscli = [
+      awscli
+    ];
+    boto3 = [
+      boto3
+    ];
+  };
 
   nativeCheckInputs = [
     dill
@@ -80,6 +97,10 @@ buildPythonPackage rec {
     "test_required_config_not_set"
     "test_sso_cred_fetcher_raises_helpful_message_on_unauthorized_exception"
     "test_sso_credential_fetcher_can_fetch_credentials"
+  ] ++ lib.optionals (pythonAtLeast "3.12.") [
+    # AttributeError: 'called_with' is not a valid assertion. Use a spec for the mock if 'called_with' is meant to be an attribute.
+    "test_max_rate_updated_on_success_response"
+    "test_max_rate_cant_exceed_20_percent_max"
   ];
 
   __darwinAllowLocalNetworking = true;

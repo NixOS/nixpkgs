@@ -40,5 +40,6 @@ buildGoModule rec {
    description = "An interactive command line expense logger";
    license = licenses.mit;
    maintainers = [ maintainers.manojkarthick ];
+   mainProgram = "expenses";
   };
 }

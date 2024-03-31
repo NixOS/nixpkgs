@@ -21,16 +21,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ironbar";
-  version = "0.14.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "JakeStanger";
     repo = "ironbar";
     rev = "v${version}";
-    hash = "sha256-NRQAR412m14SHozYjJmlnb/TJyCroiWdqY0NLvCOQSE=";
+    hash = "sha256-y4w4i/IVe1+wjB2tsCPQH6c7XTl93u45Q0pXFi3TY1E=";
   };
 
-  cargoHash = "sha256-EzLcmOppzUtTg1dOdZcx2rweiELPXv2Mt/we7hMr4m4=";
+  cargoHash = "sha256-h5yNJM+NvX/Hi86iSegHWevPcPZeDmJ4y/qNr3G20Qg=";
 
   buildInputs = [
     gtk3

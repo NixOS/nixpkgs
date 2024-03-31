@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.and.org/ustr/";
     description = "Micro String API for C language";
+    mainProgram = "ustr-import";
     license = licenses.bsd2;
     maintainers = [ ];
     platforms = platforms.linux;

@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-app-services";
-  version = "1.0.23";
+  version = "1.0.25";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-INxbRDpG3MqPW6IMTqEagDCGo7vwxkR6D1+lcWdjO3w=";
+    hash = "sha256-/lHiSUOTD8nC0WDLAHAFzm1YC0WjSS5W5JNC0cjeVEo=";
   };
 
   postPatch = ''

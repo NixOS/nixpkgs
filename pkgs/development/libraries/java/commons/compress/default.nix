@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  version = "1.25.0";
+  version = "1.26.1";
   pname = "commons-compress";
 
   src = fetchurl {
     url    = "mirror://apache/commons/compress/binaries/${pname}-${version}-bin.tar.gz";
-    sha256 = "sha256-isxV/gTOjVQW3716cr8ZrlLnOn8YWWr6p1SHYlwhdvA=";
+    sha256 = "sha256-PVZ4hltIprOeT3UEH3+xJ+TcZLekHV7cuw16rMmx/Rk=";
   };
 
   installPhase = ''

@@ -1,15 +1,16 @@
 { lib
 , rustPlatform
 , fetchCrate
+, nix-update-script
 , nodejs
 , pkg-config
 , openssl
 , stdenv
 , curl
 , Security
-, version ? "0.2.89"
-, hash ? "sha256-IPxP68xtNSpwJjV2yNMeepAS0anzGl02hYlSTvPocz8="
-, cargoHash ? "sha256-pBeQaG6i65uJrJptZQLuIaCb/WCQMhba1Z1OhYqA8Zc="
+, version ? "0.2.91"
+, hash ? "sha256-f/RK6s12ItqKJWJlA2WtOXtwX4Y0qa8bq/JHlLTAS3c="
+, cargoHash ? "sha256-3vxVI0BhNz/9m59b+P2YEIrwGwlp7K3pyPKt4VqQuHE="
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -36,4 +37,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ rizary ];
     mainProgram = "wasm-bindgen";
   };
+
+  passthru.updateScript = nix-update-script { };
 }

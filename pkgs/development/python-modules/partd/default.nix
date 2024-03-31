@@ -1,14 +1,24 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, isPy27
+, fetchFromGitHub
+, fetchpatch2
+, pythonOlder
+
+# build-system
 , setuptools
-, pytest
+
+# dependencies
 , locket
+, toolz
+
+# optional-dependencies
+, blosc2
 , numpy
 , pandas
 , pyzmq
-, toolz
+
+# tests
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -16,25 +26,44 @@ buildPythonPackage rec {
   version = "1.4.1";
   pyproject = true;
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-VsJd1J5v6lcn5zEgPEZsbgkvMI2PACThmdAvaqIWf2c=";
+  src = fetchFromGitHub {
+    owner = "dask";
+    repo = "partd";
+    rev = "refs/tags/${version}";
+    hash = "sha256-EK+HNSPh2b7jwpc6jwH/n+6HDgHhRfBeaRuiDIWVG28=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # python 3.12 support; https://github.com/dask/partd/pull/70
+      url = "https://github.com/dask/partd/pull/70/commits/c96a034367cb9fee0a0900f758b802aeef8a8a41.patch";
+      hash = "sha256-QlSIrFQQQo9We/gf7WSgmWrxdt3rxXQcyvJnFm8R5cM=";
+    })
+  ];
 
   nativeBuildInputs = [
     setuptools
   ];
 
-  nativeCheckInputs = [ pytest ];
+  propagatedBuildInputs = [
+    locket
+    toolz
+  ];
 
-  propagatedBuildInputs = [ locket numpy pandas pyzmq toolz ];
+  passthru.optional-dependencies = {
+    complete = [
+      blosc2
+      numpy
+      pandas
+      pyzmq
+    ];
+  };
 
-  checkPhase = ''
-    rm partd/tests/test_zmq.py # requires network & fails
-    py.test -k "not test_serialize"
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = {
     description = "Appendable key-value storage";

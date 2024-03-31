@@ -99,20 +99,22 @@ trivial, so I'll also link to some real-world examples:
 - [shell.nix from abathur/tdverpy](https://github.com/abathur/tdverpy/blob/e1f956df3ed1c7097a5164e0c85b178772e277f5/shell.nix#L6-L13)
 
 ```nix
-resholvedScript = resholve.writeScript "name" {
-    inputs = [ file ];
-    interpreter = "${bash}/bin/bash";
-  } ''
-    echo "Hello"
-    file .
-  '';
-resholvedScriptBin = resholve.writeScriptBin "name" {
-    inputs = [ file ];
-    interpreter = "${bash}/bin/bash";
-  } ''
-    echo "Hello"
-    file .
-  '';
+{
+  resholvedScript = resholve.writeScript "name" {
+      inputs = [ file ];
+      interpreter = "${bash}/bin/bash";
+    } ''
+      echo "Hello"
+      file .
+    '';
+  resholvedScriptBin = resholve.writeScriptBin "name" {
+      inputs = [ file ];
+      interpreter = "${bash}/bin/bash";
+    } ''
+      echo "Hello"
+      file .
+    '';
+}
 ```
 
 
@@ -212,29 +214,31 @@ This will hopefully make more sense when you see it. Here are CLI examples
 from the manpage, and the Nix equivalents:
 
 ```nix
-# --fake 'f:setUp;tearDown builtin:setopt source:/etc/bashrc'
-fake = {
-  # fake accepts the initial of valid identifier types as a CLI convenience.
-  # Use full names in the Nix API.
-  function = [ "setUp" "tearDown" ];
-  builtin = [ "setopt" ];
-  source = [ "/etc/bashrc" ];
-};
+{
+  # --fake 'f:setUp;tearDown builtin:setopt source:/etc/bashrc'
+  fake = {
+    # fake accepts the initial of valid identifier types as a CLI convenience.
+    # Use full names in the Nix API.
+    function = [ "setUp" "tearDown" ];
+    builtin = [ "setopt" ];
+    source = [ "/etc/bashrc" ];
+  };
 
-# --fix 'aliases $GIT:gix /bin/bash'
-fix = {
-  # all single-word directives use `true` as value
-  aliases = true;
-  "$GIT" = [ "gix" ];
-  "/bin/bash";
-};
+  # --fix 'aliases $GIT:gix /bin/bash'
+  fix = {
+    # all single-word directives use `true` as value
+    aliases = true;
+    "$GIT" = [ "gix" ];
+    interpreter = "/bin/bash";
+  };
 
-# --keep 'source:$HOME /etc/bashrc ~/.bashrc'
-keep = {
-  source = [ "$HOME" ];
-  "/etc/bashrc" = true;
-  "~/.bashrc" = true;
-};
+  # --keep 'source:$HOME /etc/bashrc ~/.bashrc'
+  keep = {
+    source = [ "$HOME" ];
+    "/etc/bashrc" = true;
+    "~/.bashrc" = true;
+  };
+}
 ```
 
 
@@ -283,27 +287,29 @@ the main lever is the ability to substitute your own lore. This is how you'd
 do it piecemeal:
 
 ```nix
-# --execer 'cannot:${openssl.bin}/bin/openssl can:${openssl.bin}/bin/c_rehash'
-execer = [
-  /*
-    This is the same verdict binlore will
-    come up with. It's a no-op just to demo
-    how to fiddle lore via the Nix API.
-  */
-  "cannot:${openssl.bin}/bin/openssl"
-  # different verdict, but not used
-  "can:${openssl.bin}/bin/c_rehash"
-];
+{
+  # --execer 'cannot:${openssl.bin}/bin/openssl can:${openssl.bin}/bin/c_rehash'
+  execer = [
+    /*
+      This is the same verdict binlore will
+      come up with. It's a no-op just to demo
+      how to fiddle lore via the Nix API.
+    */
+    "cannot:${openssl.bin}/bin/openssl"
+    # different verdict, but not used
+    "can:${openssl.bin}/bin/c_rehash"
+  ];
 
-# --wrapper '${gnugrep}/bin/egrep:${gnugrep}/bin/grep'
-wrapper = [
-  /*
-    This is the same verdict binlore will
-    come up with. It's a no-op just to demo
-    how to fiddle lore via the Nix API.
-  */
-  "${gnugrep}/bin/egrep:${gnugrep}/bin/grep"
-];
+  # --wrapper '${gnugrep}/bin/egrep:${gnugrep}/bin/grep'
+  wrapper = [
+    /*
+      This is the same verdict binlore will
+      come up with. It's a no-op just to demo
+      how to fiddle lore via the Nix API.
+    */
+    "${gnugrep}/bin/egrep:${gnugrep}/bin/grep"
+  ];
+}
 ```
 
 

@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tool to manage dwarves in a running game of Dwarf Fortress";
+    mainProgram = "dwarftherapist";
     maintainers = with maintainers; [ abbradar bendlas numinit jonringer ];
     license = licenses.mit;
     platforms = platforms.x86;

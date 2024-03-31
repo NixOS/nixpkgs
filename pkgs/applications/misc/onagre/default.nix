@@ -36,5 +36,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = [ maintainers.jfvillablanca ];
     platforms = platforms.linux;
+    mainProgram = "onagre";
   };
 }

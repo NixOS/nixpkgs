@@ -43,13 +43,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "2.7.1";
+  version = "2.8.10";
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     rev = finalAttrs.version;
-    hash = "sha256-s0N3Rt3lLOCyaeXeNYu6hlGtNtGR+YC7Aj4/3SeVMpQ=";
+    hash = "sha256-MIrjfd1KudtU+4X65M+qdPtWUPWQXBlE13Myp1u8hPM=";
   };
 
   outputs = [ "out" "man" ];
@@ -95,11 +95,12 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXau
     xorg.libXdmcp
     xorg.libXext
-  ] ++ lib.optionals (x11Support && (!stdenv.isDarwin))  [
+  ] ++ lib.optionals (x11Support && (!stdenv.isDarwin)) [
     xfce.xfconf
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
     Apple80211
     AppKit
+    AVFoundation
     Cocoa
     CoreDisplay
     CoreVideo
@@ -128,11 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_XCB_RANDR" x11Support)
     (lib.cmakeBool "ENABLE_XFCONF" (x11Support && (!stdenv.isDarwin)))
     (lib.cmakeBool "ENABLE_XRANDR" x11Support)
-  ];
-
-  env.NIX_CFLAGS_COMPILE = toString [
-    # Needed with GCC 12
-    "-Wno-error=uninitialized"
   ];
 
   postInstall = ''

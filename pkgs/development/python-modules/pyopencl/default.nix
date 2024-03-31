@@ -27,21 +27,13 @@ let
     if stdenv.isDarwin then [ mesa_drivers.dev ] else [ ocl-icd ];
 in buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2023.1.4";
+  version = "2024.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IgF078qQDp1d5a7yqht3pvJVBQHekrA1qRATrq5NTF4=";
+    hash = "sha256-7NVy7pQK2L2hY5w6e+tog0/JqYrX6z9uAarE99nUusE=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-conditions-for-CL_UNORM_INT24-availability.patch";
-      url = "https://github.com/inducer/pyopencl/pull/706.patch";
-      hash = "sha256-31aiqYlhbEw3F2k/x3W2rbOX0A90cHwIlfXMivFucMA=";
-    })
-  ];
 
   nativeBuildInputs = [
     oldest-supported-numpy

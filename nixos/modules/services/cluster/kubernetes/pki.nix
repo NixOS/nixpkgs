@@ -174,7 +174,7 @@ in
       '')
       (optionalString cfg.genCfsslAPIToken ''
         if [ ! -f "${cfsslAPITokenPath}" ]; then
-          install -u cfssl -m 400 <(head -c ${toString (cfsslAPITokenLength / 2)} /dev/urandom | od -An -t x | tr -d ' ') "${cfsslAPITokenPath}"
+          install -o cfssl -m 400 <(head -c ${toString (cfsslAPITokenLength / 2)} /dev/urandom | od -An -t x | tr -d ' ') "${cfsslAPITokenPath}"
         fi
       '')]);
 
@@ -192,7 +192,8 @@ in
         mkdir -p "$(dirname "${certmgrAPITokenPath}")"
         if [ -f "${cfsslAPITokenPath}" ]; then
           ln -fs "${cfsslAPITokenPath}" "${certmgrAPITokenPath}"
-        else
+        elif [ ! -f "${certmgrAPITokenPath}" ]; then
+          # Don't remove the token if it already exists
           install -m 600 /dev/null "${certmgrAPITokenPath}"
         fi
       ''

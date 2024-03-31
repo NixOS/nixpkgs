@@ -95,6 +95,7 @@ magick,,,,,5.1,donovanglover
 markdown,,,,,,
 mediator_lua,,,,,,
 middleclass,,,,,,
+mimetypes,,,,,,
 mpack,,,,,,
 moonscript,https://github.com/leafo/moonscript.git,dev-1,,,,arobyn
 nlua,,,,,,teto
@@ -116,6 +117,7 @@ stdlib,,,,41.2.2,,vyp
 teal-language-server,,,http://luarocks.org/dev,,,
 telescope.nvim,,,,,5.1,
 telescope-manix,,,,,,
+tiktoken_core,,,,,,natsukium
 tl,,,,,,mephistophiles
 toml,,,,,,mrcjkb
 toml-edit,,,,,5.1,mrcjkb

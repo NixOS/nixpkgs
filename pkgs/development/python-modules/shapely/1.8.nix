@@ -15,14 +15,15 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Shapely";
+  pname = "shapely";
   version = "1.8.5";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "Shapely";
+    inherit version;
     hash = "sha256-6CttYOz7EkEgyI/hBqR4WWu+qxQhFtfn9ko2TayQKpI=";
   };
 

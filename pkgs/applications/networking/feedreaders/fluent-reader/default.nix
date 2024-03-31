@@ -27,6 +27,7 @@ in appimageTools.wrapType2 {
 
   meta = with lib; {
     description = "Modern desktop RSS reader built with Electron, React, and Fluent UI";
+    mainProgram = "fluent-reader";
     homepage = "https://hyliu.me/fluent-reader";
     license = licenses.bsd3;
     platforms = [ "x86_64-linux" ];

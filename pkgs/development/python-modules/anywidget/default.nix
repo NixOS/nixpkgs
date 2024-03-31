@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "anywidget";
-  version = "0.9.0";
+  version = "0.9.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fV8yMQ6WGZyyf5c41B0MSwHusVx090SzukqX/WqbqG0=";
+    hash = "sha256-Coae8oretZHhb1c9i5x0Sm1nVruN89kRZSEMyeLibbg=";
   };
 
   # We do not need the jupyterlab build dependency, because we do not need to

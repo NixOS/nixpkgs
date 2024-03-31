@@ -21,10 +21,15 @@
   }; }
 }:
 
-with import ./release-lib.nix {inherit supportedSystems nixpkgsArgs; };
-with lib;
-
 let
+  release-lib = import ./release-lib.nix {
+    inherit supportedSystems nixpkgsArgs;
+  };
+
+  inherit (release-lib) mapTestOn pkgs;
+
+  inherit (release-lib.lib) isDerivation mapAttrs optionals;
+
   packagePython = mapAttrs (name: value:
     let res = builtins.tryEval (
       if isDerivation value then
@@ -33,7 +38,7 @@ let
         packagePython value
       else
         []);
-    in lib.optionals res.success res.value
+    in optionals res.success res.value
     );
 
   jobs = {

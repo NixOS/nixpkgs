@@ -27,7 +27,7 @@ flutter.buildFlutterApplication rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}-cargo-deps";
     inherit src;
-    sourceRoot = "source/intiface-engine-flutter-bridge";
+    sourceRoot = "${src.name}/intiface-engine-flutter-bridge";
     hash = "sha256-0sCHa3rMaLYaUG3E3fmsLi0dSdb9vGyv7qNR3JQkXuU=";
   };
   cargoRoot = "intiface-engine-flutter-bridge";

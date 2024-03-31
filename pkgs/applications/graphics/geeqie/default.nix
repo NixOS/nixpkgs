@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Lightweight GTK based image viewer";
+    mainProgram = "geeqie";
 
     longDescription =
       ''

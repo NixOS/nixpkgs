@@ -29,6 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Utility for removing hinting data from TrueType and OpenType fonts";
+    mainProgram = "dehinter";
     homepage = "https://github.com/source-foundry/dehinter";
     license = licenses.asl20;
     maintainers = with maintainers; [ danc86 ];

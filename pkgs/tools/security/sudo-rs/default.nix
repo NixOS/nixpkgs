@@ -11,15 +11,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sudo-rs";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "memorysafety";
     repo = "sudo-rs";
     rev = "v${version}";
-    hash = "sha256-EQEdNDUXEMMiFZKuu9LR9ywjvKWyM5bWcRHHUB9+gp4=";
+    hash = "sha256-Fc9NgKo8Be8AqB1YcH/oH514f3pOjFtqNBIC+3xwagY=";
   };
-  cargoHash = "sha256-Zs9/A7u4yMLKY4cAUCnsqRHgkxI8R3w1JwkAd2lw0eo=";
+  cargoHash = "sha256-1XhdMHGZZOmSFuVW3Oa1Xwjy3dzkgJOE7h24Ly2F3ps=";
 
   nativeBuildInputs = [ installShellFiles pandoc ];
 

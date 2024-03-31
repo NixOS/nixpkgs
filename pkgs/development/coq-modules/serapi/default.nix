@@ -2,6 +2,7 @@
 
 let
   release = {
+    "8.19.0+0.19.0".sha256 = "sha256-M9d0ne2veTjf8/mFIDwtWdHi64JXjwCPWupnO2Ztd/Y=";
     "8.18.0+0.18.0".sha256 = "sha256-c+3yG9vcbek/uvQ27OOQGqqsIHU1VuQhQvNVOjfucbo=";
     "8.17.0+0.17.0".sha256 = "sha256-I81qvaXpJfXcbFw8vyzYLzlnhPg1QD0lTqAFXhoZ0rI=";
     "8.16.0+0.16.3".sha256 = "sha256-22Kawp8jAsgyBTppwN5vmN7zEaB1QfPs0qKxd6x/7Uc=";
@@ -20,6 +21,7 @@ in
 
   defaultVersion =  with versions;
     lib.switch coq.version [
+      { case = isEq "8.19"; out = "8.19.0+0.19.0"; }
       { case = isEq "8.18"; out = "8.18.0+0.18.0"; }
       { case = isEq "8.17"; out = "8.17.0+0.17.0"; }
       { case = isEq "8.16"; out = "8.16.0+0.16.3"; }

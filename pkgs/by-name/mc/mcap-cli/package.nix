@@ -1,6 +1,7 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nix-update-script
+}:
 let
-  version = "0.0.38";
+  version = "0.0.42";
 in
 buildGoModule {
 
@@ -12,7 +13,7 @@ buildGoModule {
     repo = "mcap";
     owner = "foxglove";
     rev = "releases/mcap-cli/v${version}";
-    hash = "sha256-mwKWf0kJ3uMx1cLUac+AqXgQ1Af3tLDOCTFKgq8FtHE=";
+    hash = "sha256-9fjzMUMWn5j8AJJq+tK+Hq0o8d3HpacitJZ5CfLiaLw=";
   };
 
   vendorHash = "sha256-Gl0zLBTWscKGtVOS6rPRL/r8KHYHpZwoUDbEyCL4Ijk=";
@@ -34,11 +35,16 @@ buildGoModule {
     "-skip=TestCat|TestInfo"
   ];
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     description = "MCAP CLI tool to inspect and fix MCAP files";
     homepage = "https://github.com/foxglove/mcap";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ squalus therishidesai ];
+    mainProgram = "mcap";
   };
 
 }

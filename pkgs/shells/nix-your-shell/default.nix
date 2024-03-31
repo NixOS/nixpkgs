@@ -5,16 +5,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "nix-your-shell";
-  version = "1.4.0";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "MercuryTechnologies";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-2fS91/qeZt4JwQQeA+26RTN6zdm8/HUxG8sJDobX0+0=";
+    hash = "sha256-pBryTpCFwOkK5astzpYzhj/fJ9QS7IiKUck/Y4gLZZw=";
   };
 
-  cargoHash = "sha256-e7gxNaKP0n+Zx0KaQEfNA3QsS5HZ2KIB6HJ22Ve8+EA=";
+  cargoHash = "sha256-6A7Lvys22dnFMKm1uRo2CCZk9LBRqHPBnmRPbvbDryI=";
 
   meta = with lib; {
     mainProgram = "nix-your-shell";

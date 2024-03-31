@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "git-lfs";
-  version = "3.4.1";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "git-lfs";
     repo = "git-lfs";
     rev = "v${version}";
-    hash = "sha256-XqxkNCC2yzUTVOi/1iDsnxtLkw4jfQuBh9UsjtZ1zVc=";
+    hash = "sha256-xSLXbAvIoY3c341qi89pTrjBZdXh/bPrweJD2O2gkjY=";
   };
 
-  vendorHash = "sha256-VmPeQYWOHFqFLHKcKH3WHz50yx7GMHVIDPzqiVwwjSg=";
+  vendorHash = "sha256-N8HB2qwBxjzfNucftHxmX2W9srCx62pjmkCWzwiCj/I=";
 
   nativeBuildInputs = [ asciidoctor installShellFiles ];
 

@@ -24,7 +24,7 @@ let
     atLeast32 = lib.versionAtLeast ver.majMin "3.2";
     # https://github.com/ruby/ruby/blob/v3_2_2/yjit.h#L21
     yjitSupported = atLeast32 && (stdenv.hostPlatform.isx86_64 || (!stdenv.hostPlatform.isWindows && stdenv.hostPlatform.isAarch64));
-    self = lib.makeOverridable (
+    rubyDrv = lib.makeOverridable (
       { stdenv, buildPackages, lib
       , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
       , rubygemsSupport ? true
@@ -58,7 +58,7 @@ let
         }
       , useBaseRuby ? stdenv.hostPlatform != stdenv.buildPlatform
       }:
-      stdenv.mkDerivation rec {
+      stdenv.mkDerivation ( finalAttrs: {
         pname = "ruby";
         inherit version;
 
@@ -123,8 +123,8 @@ let
         cargoRoot = opString yjitSupport "yjit";
 
         cargoDeps = if yjitSupport then rustPlatform.fetchCargoTarball {
-          inherit src;
-          sourceRoot = "${pname}-${version}/${cargoRoot}";
+          inherit (finalAttrs) src;
+          sourceRoot = "${finalAttrs.pname}-${version}/${finalAttrs.cargoRoot}";
           hash = cargoHash;
         } else null;
 
@@ -175,8 +175,8 @@ let
 
         preInstall = ''
           # Ruby installs gems here itself now.
-          mkdir -pv "$out/${passthru.gemPath}"
-          export GEM_HOME="$out/${passthru.gemPath}"
+          mkdir -pv "$out/${finalAttrs.passthru.gemPath}"
+          export GEM_HOME="$out/${finalAttrs.passthru.gemPath}"
         '';
 
         installFlags = lib.optional docSupport "install-doc";
@@ -202,19 +202,21 @@ let
 
           # Allow to override compiler. This is important for cross compiling as
           # we need to set a compiler that is different from the build one.
-          sed -i 's/CONFIG\["CC"\] = "\(.*\)"/CONFIG["CC"] = if ENV["CC"].nil? || ENV["CC"].empty? then "\1" else ENV["CC"] end/'  "$rbConfig"
+          sed -i "$rbConfig" \
+            -e 's/CONFIG\["CC"\] = "\(.*\)"/CONFIG["CC"] = if ENV["CC"].nil? || ENV["CC"].empty? then "\1" else ENV["CC"] end/' \
+            -e 's/CONFIG\["CXX"\] = "\(.*\)"/CONFIG["CXX"] = if ENV["CXX"].nil? || ENV["CXX"].empty? then "\1" else ENV["CXX"] end/'
 
           # Remove unnecessary external intermediate files created by gems
-          extMakefiles=$(find $out/${passthru.gemPath} -name Makefile)
+          extMakefiles=$(find $out/${finalAttrs.passthru.gemPath} -name Makefile)
           for makefile in $extMakefiles; do
             make -C "$(dirname "$makefile")" distclean
           done
-          find "$out/${passthru.gemPath}" \( -name gem_make.out -o -name mkmf.log \) -delete
+          find "$out/${finalAttrs.passthru.gemPath}" \( -name gem_make.out -o -name mkmf.log \) -delete
           # Bundler tries to create this directory
           mkdir -p $out/nix-support
           cat > $out/nix-support/setup-hook <<EOF
           addGemPath() {
-            addToSearchPath GEM_PATH \$1/${passthru.gemPath}
+            addToSearchPath GEM_PATH \$1/${finalAttrs.passthru.gemPath}
           }
           addRubyLibPath() {
             addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby
@@ -274,21 +276,20 @@ let
           gemPath = "lib/${rubyEngine}/gems/${ver.libDir}";
           devEnv = import ./dev.nix {
             inherit buildEnv bundler bundix;
-            ruby = self;
+            ruby = finalAttrs.finalPackage;
           };
 
           inherit rubygems;
           inherit (import ../../ruby-modules/with-packages {
             inherit lib stdenv makeBinaryWrapper buildRubyGem buildEnv;
             gemConfig = defaultGemConfig;
-            ruby = self;
+            ruby = finalAttrs.finalPackage;
           }) withPackages buildGems gems;
-
         } // lib.optionalAttrs useBaseRuby {
           inherit baseRuby;
         };
-      }
-    ) args; in self;
+      } )
+    ) args; in rubyDrv;
 
 in {
   mkRubyVersion = rubyVersion;

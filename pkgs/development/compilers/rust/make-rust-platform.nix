@@ -1,4 +1,4 @@
-{ lib, buildPackages, callPackage, cargo-auditable, stdenv, runCommand }@prev:
+{ lib, buildPackages, callPackage, callPackages, cargo-auditable, stdenv, runCommand }@prev:
 
 { rustc
 , cargo
@@ -34,7 +34,7 @@ rec {
   };
 
   # Hooks
-  inherit (callPackage ../../../build-support/rust/hooks {
+  inherit (callPackages ../../../build-support/rust/hooks {
     inherit stdenv cargo rustc;
   }) cargoBuildHook cargoCheckHook cargoInstallHook cargoNextestHook cargoSetupHook maturinBuildHook bindgenHook;
 }

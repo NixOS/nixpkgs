@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     license     = licenses.lgpl21Plus;
     maintainers = with maintainers; [ goibhniu lovek323 ];
     platforms   = platforms.unix;
+    mainProgram = "fluidsynth";
   };
 }

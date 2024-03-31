@@ -9,20 +9,36 @@
 , fetchpatch
 , makeBinaryWrapper
 , nixosTests
+, enableLocalIcons ? false
+, nix-update-script
 }:
+let
+  dashboardIcons = fetchFromGitHub {
+    owner = "walkxcode";
+    repo = "dashboard-icons";
+    rev = "a02a5999fe56948671721da8b0830cdd5b609ed7"; # Until 2024-02-25
+    hash = "sha256-s0Doh4j6CH66fZoQKMt4yc7aLStNFGMVoDp5dvs7+pk=";
+  };
 
+  installLocalIcons = ''
+    mkdir -p $out/share/homepage/public/icons
+    cp ${dashboardIcons}/png/* $out/share/homepage/public/icons
+    cp ${dashboardIcons}/svg/* $out/share/homepage/public/icons
+    cp ${dashboardIcons}/LICENSE $out/share/homepage/public/icons/
+  '';
+in
 buildNpmPackage rec {
   pname = "homepage-dashboard";
-  version = "0.8.7";
+  version = "0.8.10";
 
   src = fetchFromGitHub {
     owner = "gethomepage";
     repo = "homepage";
     rev = "v${version}";
-    hash = "sha256-H8BUyIsbn8UL6VuA2SEJXzJ77S/880rQIoNKFJNApqQ=";
+    hash = "sha256-mWUjBRepV7RjX4aPzRks/7NUbPyhaxSqarqnIM0NDQs=";
   };
 
-  npmDepsHash = "sha256-RC2Y4XZqO+mLEKQxq+j2ukZYi/uu9XIjYadxek9P+SM=";
+  npmDepsHash = "sha256-ZpH9rVe3bAhVbq7uTVDvaPpA6XRRKT/ySdytZMlemCE=";
 
   preBuild = ''
     mkdir -p config
@@ -49,31 +65,37 @@ buildNpmPackage rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out
-    cp -r .next/standalone $out/bin
-    cp -r public $out/bin/public
+    mkdir -p $out/{share,bin}
 
-    mkdir -p $out/bin/.next
-    cp -r .next/static $out/bin/.next/static
+    cp -r .next/standalone $out/share/homepage/
+    cp -r public $out/share/homepage/public
 
-    mv $out/bin/server.js $out/bin/homepage
-    chmod +x $out/bin/homepage
+    mkdir -p $out/share/homepage/.next
+    cp -r .next/static $out/share/homepage/.next/static
 
-    wrapProgram $out/bin/homepage \
+    chmod +x $out/share/homepage/server.js
+
+    makeWrapper $out/share/homepage/server.js $out/bin/homepage \
       --set-default PORT 3000 \
       --set-default HOMEPAGE_CONFIG_DIR /var/lib/homepage-dashboard
+
+    ${if enableLocalIcons then installLocalIcons else ""}
 
     runHook postInstall
   '';
 
   doDist = false;
 
-  passthru.tests = {
-    inherit (nixosTests) homepage-dashboard;
+  passthru = {
+    tests = {
+      inherit (nixosTests) homepage-dashboard;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
-    description = "A highly customisable dashboard with Docker and service API integrations.";
+    description = "A highly customisable dashboard with Docker and service API integrations";
+    changelog = "https://github.com/gethomepage/homepage/releases/tag/v${version}";
     mainProgram = "homepage";
     homepage = "https://gethomepage.dev";
     license = lib.licenses.gpl3;

@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = ''Open source port of the game "Tyrian"'';
+    mainProgram = "opentyrian";
     homepage = "https://github.com/opentyrian/opentyrian";
     # This does not account of Tyrian data.
     # license = lib.licenses.gpl2;

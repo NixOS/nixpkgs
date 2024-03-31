@@ -33,5 +33,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.asl20;
     maintainers = [ maintainers.arianvp ];
     platforms = platforms.linux;
+    mainProgram = "afterburn";
   };
 }

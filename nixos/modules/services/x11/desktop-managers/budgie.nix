@@ -39,7 +39,13 @@ let
     '';
     destination = "/share/gnome-background-properties/nixos.xml";
   };
+
+  budgie-control-center = pkgs.budgie.budgie-control-center.override {
+    enableSshSocket = config.services.openssh.startWhenNeeded;
+  };
 in {
+  meta.maintainers = lib.teams.budgie.members;
+
   options = {
     services.xserver.desktopManager.budgie = {
       enable = mkEnableOption (mdDoc "the Budgie desktop");
@@ -114,7 +120,7 @@ in {
       [
         # Budgie Desktop.
         budgie.budgie-backgrounds
-        budgie.budgie-control-center
+        budgie-control-center
         (budgie.budgie-desktop-with-plugins.override { plugins = cfg.extraPlugins; })
         budgie.budgie-desktop-view
         budgie.budgie-screensaver
@@ -140,7 +146,6 @@ in {
           mate.atril
           mate.engrampa
           mate.mate-calc
-          mate.mate-terminal
           mate.mate-system-monitor
           vlc
 
@@ -154,8 +159,11 @@ in {
         ] config.environment.budgie.excludePackages)
       ++ cfg.sessionPath;
 
+    # Both budgie-desktop-view and nemo defaults to this emulator.
+    programs.gnome-terminal.enable = mkDefault true;
+
     # Fonts.
-    fonts.packages = mkDefault [
+    fonts.packages = [
       pkgs.noto-fonts
       pkgs.hack-font
     ];
@@ -208,7 +216,6 @@ in {
     services.colord.enable = mkDefault true; # for BCC's Color panel.
     services.gnome.at-spi2-core.enable = mkDefault true; # for BCC's A11y panel.
     services.accounts-daemon.enable = mkDefault true; # for BCC's Users panel.
-    services.fprintd.enable = mkDefault true; # for BCC's Users panel.
     services.udisks2.enable = mkDefault true; # for BCC's Details panel.
 
     # For BCC's Online Accounts panel.
@@ -233,8 +240,8 @@ in {
     services.gvfs.enable = mkDefault true;
 
     # Register packages for DBus.
-    services.dbus.packages = with pkgs; [
-      budgie.budgie-control-center
+    services.dbus.packages = [
+      budgie-control-center
     ];
 
     # Register packages for udev.

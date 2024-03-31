@@ -12,6 +12,7 @@ import ../make-test-python.nix ({ pkgs, lib, ... } :
       incus.enable = true;
       incus.socketActivation = true;
     };
+    networking.nftables.enable = true;
   };
 
   testScript = ''

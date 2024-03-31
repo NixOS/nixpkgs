@@ -1,8 +1,6 @@
-{ skawarePackages }:
+{ skawarePackages, skalibs }:
 
-with skawarePackages;
-
-buildPackage {
+skawarePackages.buildPackage {
   pname = "s6-dns";
   version = "2.3.7.1";
   sha256 = "zwJYV07H1itlTgwq14r0x9Z6xMnLN/eBSA9ZflSzD20=";

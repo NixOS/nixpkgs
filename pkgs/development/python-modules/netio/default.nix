@@ -4,8 +4,8 @@
 , poetry-core
 , pyopenssl
 , pythonOlder
+, pythonRelaxDepsHook
 , requests
-, setuptools
 }:
 
 buildPythonPackage rec {
@@ -24,6 +24,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "pyopenssl"
   ];
 
   propagatedBuildInputs = [
@@ -40,6 +45,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module for interacting with NETIO devices";
+    mainProgram = "Netio";
     homepage = "https://github.com/netioproducts/PyNetio";
     changelog = "https://github.com/netioproducts/PyNetio/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

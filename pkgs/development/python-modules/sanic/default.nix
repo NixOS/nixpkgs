@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
+, pythonAtLeast
 
 # build-system
 , setuptools
@@ -37,7 +38,7 @@
 
 buildPythonPackage rec {
   pname = "sanic";
-  version = "23.6.0";
+  version = "23.12.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -46,17 +47,8 @@ buildPythonPackage rec {
     owner = "sanic-org";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ffw92mlYNV+ikb6299uw24EI1XPpl3Ju2st1Yt/YHKw=";
+    hash = "sha256-TizjibqoLNMX0m5oPyncKgFnltXOLZUIPSzVIeKU25w=";
   };
-
-  patches = [
-    # https://github.com/sanic-org/sanic/pull/2801
-    (fetchpatch {
-      name = "fix-test-one-cpu.patch";
-      url = "https://github.com/sanic-org/sanic/commit/a1df2a6de1c9c88a85d166e7e2636d26f7925852.patch";
-      hash = "sha256-vljGuoP/Q9HrP+/AOoI1iUpbDQ4/1Pn7AURP1dncI00=";
-    })
-  ];
 
   nativeBuildInputs = [
     setuptools
@@ -145,6 +137,9 @@ buildPythonPackage rec {
     "test_websocket_route_with_subprotocols"
     # Socket closes early
     "test_no_exceptions_when_cancel_pending_request"
+  ] ++ lib.optionals (pythonAtLeast "3.12") [
+    # AttributeError: 'has_calls' is not a valid assertion. Use a spec for the mock if 'has_calls' is meant to be an attribute.
+    "test_ws_frame_put_message_into_queue"
   ];
 
   disabledTestPaths = [
@@ -167,6 +162,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Web server and web framework";
+    mainProgram = "sanic";
     homepage = "https://github.com/sanic-org/sanic/";
     changelog = "https://github.com/sanic-org/sanic/releases/tag/v${version}";
     license = licenses.mit;

@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "async-upnp-client";
-  version = "0.38.1";
+  version = "0.38.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "StevenLooman";
     repo = "async_upnp_client";
     rev = "refs/tags/${version}";
-    hash = "sha256-tYGJwmzyVTry3KIMv1JjoBsE6kNw7FJb1nq1+39bEdU=";
+    hash = "sha256-gPA9u1BuMswfg5Nll8l6vrcTP2s3Zn9ESTbV+dOxlhA=";
   };
 
   nativeBuildInputs = [
@@ -85,6 +85,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Asyncio UPnP Client library for Python";
+    mainProgram = "upnp-client";
     homepage = "https://github.com/StevenLooman/async_upnp_client";
     changelog = "https://github.com/StevenLooman/async_upnp_client/blob/${version}/CHANGES.rst";
     license = licenses.asl20;

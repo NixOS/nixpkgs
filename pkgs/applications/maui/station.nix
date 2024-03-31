@@ -35,6 +35,7 @@ mkDerivation {
 
   meta = with lib; {
     description = "Convergent terminal emulator";
+    mainProgram = "station";
     homepage = "https://invent.kde.org/maui/station";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ onny ];

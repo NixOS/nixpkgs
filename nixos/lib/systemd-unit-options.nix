@@ -6,7 +6,7 @@ with lib;
 let
   checkService = checkUnitConfig "Service" [
     (assertValueOneOf "Type" [
-      "exec" "simple" "forking" "oneshot" "dbus" "notify" "idle"
+      "exec" "simple" "forking" "oneshot" "dbus" "notify" "notify-reload" "idle"
     ])
     (assertValueOneOf "Restart" [
       "no" "on-success" "on-failure" "on-abnormal" "on-abort" "always"
@@ -21,14 +21,8 @@ in rec {
       let
         defs' = filterOverrides defs;
       in
-        if isList (head defs').value
-        then concatMap (def:
-          if builtins.typeOf def.value == "list"
-          then def.value
-          else
-            throw "The definitions for systemd unit options should be either all lists, representing repeatable options, or all non-lists, but for the option ${showOption loc}, the definitions are a mix of list and non-list ${lib.options.showDefs defs'}"
-        ) defs'
-
+        if any (def: isList def.value) defs'
+        then concatMap (def: toList def.value) defs'
         else mergeEqualOption loc defs';
   };
 
@@ -71,6 +65,15 @@ in rec {
         Units that require (i.e. depend on and need to go down with) this unit.
         As discussed in the `wantedBy` option description this also creates
         `.requires` symlinks automatically.
+      '';
+    };
+
+    upheldBy = mkOption {
+      default = [];
+      type = types.listOf unitNameType;
+      description = lib.mdDoc ''
+        Keep this unit running as long as the listed units are running. This is a continuously
+        enforced version of wantedBy.
       '';
     };
 
@@ -144,6 +147,14 @@ in rec {
         type = types.listOf unitNameType;
         description = lib.mdDoc ''
           Start the specified units when this unit is started.
+        '';
+      };
+
+      upholds = mkOption {
+        default = [];
+        type = types.listOf unitNameType;
+        description = lib.mdDoc ''
+          Keeps the specified running while this unit is running. A continuous version of `wants`.
         '';
       };
 

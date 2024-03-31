@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "hid";
-  version = "1.0.5";
+  version = "1.0.6";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HpVOf3q5t8nfx421lQRpLBfbO3EklJK5drFSW5fbsOg=";
+    hash = "sha256-SNdk166XRroSO5bb9FeJPKgCaLd5HEsdLgUTEO64OGA=";
   };
 
   propagatedBuildInputs = [ hidapi ];

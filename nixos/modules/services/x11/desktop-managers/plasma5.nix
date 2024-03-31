@@ -336,6 +336,7 @@ in
         serif = [ "Noto Serif" ];
       };
 
+      programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-qt;
       programs.ssh.askPassword = mkDefault "${pkgs.plasma5Packages.ksshaskpass.out}/bin/ksshaskpass";
 
       # Enable helpful DBus services.
@@ -362,7 +363,7 @@ in
 
       security.pam.services.kde = { allowNullPassword = true; };
 
-      security.pam.services.login.enableKwallet = true;
+      security.pam.services.login.kwallet.enable = true;
 
       systemd.user.services = {
         plasma-early-setup = mkIf cfg.runUsingSystemd {
@@ -384,6 +385,7 @@ in
       system.userActivationScripts.plasmaSetup = activationScript;
 
       programs.firefox.nativeMessagingHosts.packages = [ pkgs.plasma5Packages.plasma-browser-integration ];
+      programs.chromium.enablePlasmaBrowserIntegration = true;
     })
 
     (mkIf (cfg.kwinrc != {}) {

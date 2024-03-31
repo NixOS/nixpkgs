@@ -4,14 +4,20 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab-widgets";
-  version = "3.0.9";
-  format = "setuptools";
+  version = "3.0.10";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "jupyterlab_widgets";
     inherit version;
-    hash = "sha256-YAWk6XTHvu6EBg/fujQaMhhJUEbeiuPsZIiOX+Gf20w=";
+    hash = "sha256-BPKsBJdnJ+T50PqRzcLxq4YPll5QTCnb1qZciCydBMA=";
   };
+
+  # jupyterlab is required to build from source but we use the pre-build package
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"jupyterlab~=4.0"' ""
+  '';
 
   nativeBuildInputs = [
     jupyter-packaging

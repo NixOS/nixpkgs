@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "types-beautifulsoup4";
-  version = "4.12.0.20240106";
+  version = "4.12.0.20240229";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mNYomFtxsUC9O8IqjLCrYDwvLQjyDTeSWWXrSiFzm+g=";
+    hash = "sha256-435M+hGwOwF3VzLlbSwBDLJO4Qd4Yne65rwPo+MFtoY=";
   };
 
   propagatedBuildInputs = [

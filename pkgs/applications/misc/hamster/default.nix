@@ -51,6 +51,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Time tracking application";
+    mainProgram = "hamster";
     homepage = "http://projecthamster.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.all;

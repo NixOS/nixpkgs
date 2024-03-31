@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/kalilinux/packages/redfang";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ moni ];
+    mainProgram = "fang";
   };
 }

@@ -56,6 +56,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Drawing functions for Demes demographic models";
+    mainProgram = "demesdraw";
     homepage = "https://github.com/grahamgower/demesdraw";
     license = licenses.isc;
     maintainers = with maintainers; [ alxsimon ];

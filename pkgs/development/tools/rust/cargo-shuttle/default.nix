@@ -10,18 +10,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-shuttle";
-  version = "0.34.1";
+  version = "0.39.0";
 
   src = fetchFromGitHub {
     owner = "shuttle-hq";
     repo = "shuttle";
     rev = "v${version}";
-    hash = "sha256-SAad1GS092a9LBzlnf1UMLGwKsNBOgWP0gjoW2M0SH4=";
+    hash = "sha256-U6C6pUl6Re3fYt5KlBItpErboYXctsotunsUpWmZxiY=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
+      "async-posthog-0.2.3" = "sha256-V0f9+UKZkqh80p7UjINEbAW9y8cKBmJTRjAJZV3no1M=";
       "hyper-reverse-proxy-0.5.2-dev" = "sha256-R1ZXGgWvwHWRHmKX823QLqM6ZJW+tzWUXigKkAyI5OE=";
       "tokiotest-httpserver-0.2.1" = "sha256-IPUaglIDwCUoczCCnX+R1IBqtc0s8b8toKEL8zN3/i8=";
     };
@@ -48,6 +49,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A cargo command for the shuttle platform";
+    mainProgram = "cargo-shuttle";
     homepage = "https://shuttle.rs";
     changelog = "https://github.com/shuttle-hq/shuttle/releases/tag/${src.rev}";
     license = licenses.asl20;

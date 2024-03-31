@@ -34,6 +34,18 @@ in
         description = "Directory to store downloads.";
       };
 
+      user = mkOption {
+        type = types.str;
+        default = "pyload";
+        description = "User under which pyLoad runs, and which owns the download directory.";
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = "pyload";
+        description = "Group under which pyLoad runs, and which owns the download directory.";
+      };
+
       credentialsFile = mkOption {
         type = with types; nullOr path;
         default = null;
@@ -52,7 +64,7 @@ in
 
   config = lib.mkIf cfg.enable {
     systemd.tmpfiles.settings.pyload = {
-      ${cfg.downloadDirectory}.d = { };
+      ${cfg.downloadDirectory}.d = { inherit (cfg) user group; };
     };
 
     systemd.services.pyload = {
@@ -80,9 +92,8 @@ in
           cfg.downloadDirectory
         ];
 
-        User = "pyload";
-        Group = "pyload";
-        DynamicUser = true;
+        User = cfg.user;
+        Group = cfg.group;
 
         EnvironmentFile = lib.optional (cfg.credentialsFile != null) cfg.credentialsFile;
 
@@ -143,5 +154,13 @@ in
         ];
       };
     };
+
+    users.users.pyload = lib.mkIf (cfg.user == "pyload") {
+      isSystemUser = true;
+      group = cfg.group;
+      home = stateDir;
+    };
+
+    users.groups.pyload = lib.mkIf (cfg.group == "pyload") { };
   };
 }

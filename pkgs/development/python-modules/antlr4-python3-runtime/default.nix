@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Runtime for ANTLR";
+    mainProgram = "pygrun";
     homepage = "https://www.antlr.org/";
     license = licenses.bsd3;
   };

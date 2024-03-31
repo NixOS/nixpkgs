@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xmousepasteblock";
-  version = "1.3";
+  version = "1.4";
   src = fetchFromGitHub {
     owner = "milaq";
     repo = "XMousePasteBlock";
-    hash = "sha256-0rpAbYUU0SoeQaVNStmIEuYyiWbRAdTN7Mvm0ySDnhU=";
+    hash = "sha256-uHlHGVnIro6X4kRp79ibtqMmiv2XQT+zgbQagUxdB0c=";
     rev = version;
   };
   makeFlags = [ "PREFIX=$(out)" "CC=${stdenv.cc.targetPrefix}cc" ];

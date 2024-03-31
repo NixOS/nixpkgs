@@ -7,16 +7,16 @@
 }:
 
 let
-  openShiftVersion = "4.14.8";
+  openShiftVersion = "4.14.12";
   okdVersion = "4.14.0-0.okd-scos-2024-01-10-151818";
-  microshiftVersion = "4.14.8";
+  microshiftVersion = "4.14.12";
   podmanVersion = "4.4.4";
   writeKey = "$(MODULEPATH)/pkg/crc/segment.WriteKey=cvpHsNcmGCJqVzf6YxrSnVlwFSAZaYtp";
-  gitCommit = "54a6f9a15155edb2bdb70128c7c535fc69841031";
-  gitHash = "sha256-tjrlh31J3fDiYm2+PUnVVRIxxQvJKQVLcYEnMekD4Us=";
+  gitCommit = "c43b172866bc039a2a23d6c88aeb398635dc16ef";
+  gitHash = "sha256-DVsXxgywPrrdxfmXh3JR8YpFkv1/Y2LvDZ9/2nVbclc=";
 in
 buildGoModule rec {
-  version = "2.32.0";
+  version = "2.33.0";
   pname = "crc";
 
   src = fetchFromGitHub {

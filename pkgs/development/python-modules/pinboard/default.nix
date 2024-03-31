@@ -17,6 +17,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python wrapper for Pinboard.in";
+    mainProgram = "pinboard";
     maintainers = with maintainers; [ djanatyn ];
     license = licenses.asl20;
     homepage = "https://github.com/lionheart/pinboard.py";

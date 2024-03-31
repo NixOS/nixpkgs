@@ -17,10 +17,10 @@
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-terminal";
-  version = "1.1.2";
+  version = "1.1.3";
   odd-unstable = false;
 
-  sha256 = "sha256-9RJmHYT9yYhtyzyTcg3nnD2hlCgENyi/3TNOGUto494=";
+  sha256 = "sha256-CUIQf22Lmb6MNPd2wk8LlHFNUhdIoC1gzVV6RDP2PfY=";
 
   nativeBuildInputs = [
     libxslt
@@ -44,5 +44,6 @@ mkXfceDerivation {
   meta = with lib; {
     description = "A modern terminal emulator";
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    mainProgram = "xfce4-terminal";
   };
 }

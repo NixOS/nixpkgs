@@ -14,14 +14,6 @@ stdenv.mkDerivation rec {
   };
 
   # MonitorControl.${version}.dmg is APFS formatted, unpack with 7zz
-  unpackCmd = ''
-    runHook preUnpack
-
-    7zz x $src
-
-    runHook postUnpack
-  '';
-
   nativeBuildInputs = [ _7zz ];
 
   sourceRoot = "MonitorControl.app";

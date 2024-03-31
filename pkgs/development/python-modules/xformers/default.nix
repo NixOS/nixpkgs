@@ -78,6 +78,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "xformers" ];
 
+  # Has broken 0.03 version:
+  # https://github.com/NixOS/nixpkgs/pull/285495#issuecomment-1920730720
+  passthru.skipBulkUpdate = true;
+
   dontUseCmakeConfigure = true;
 
   # see commented out missing packages

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals enableCuda [
     cudaPackages.cuda_nvcc
-    cudaPackages.autoAddOpenGLRunpathHook
+    cudaPackages.autoAddDriverRunpath
   ];
 
   buildInputs = [

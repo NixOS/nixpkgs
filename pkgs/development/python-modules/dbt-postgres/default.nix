@@ -1,21 +1,29 @@
 { lib
-, buildPythonPackage
 , agate
+, buildPythonPackage
 , dbt-core
 , psycopg2
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage {
   pname = "dbt-postgres";
-  format = "setuptools";
+  pyproject = true;
 
   inherit (dbt-core) version src;
+
+  disabled = pythonOlder "3.7";
 
   sourceRoot = "${dbt-core.src.name}/plugins/postgres";
 
   env.DBT_PSYCOPG2_NAME = "psycopg2";
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     agate
     dbt-core
     psycopg2

@@ -1,7 +1,7 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchPypi
 , pythonOlder
-, lib
 , setuptools
 , setuptools-scm
 , pytestCheckHook
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   version = "4.1.5";
   format = "pyproject";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -51,6 +51,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pythonImportsCheck = [
+    "typeguard"
+  ];
+
   disabledTestPaths = [
     # mypy tests aren't passing with latest mypy
     "tests/mypy"
@@ -68,6 +72,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "This library provides run-time type checking for functions defined with argument type annotations";
     homepage = "https://github.com/agronholm/typeguard";
+    changelog = "https://github.com/agronholm/typeguard/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

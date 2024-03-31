@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     description = "Ancillary tools for the D programming language compiler";
     homepage = "https://github.com/dlang/tools";
     license = lib.licenses.boost;
-    maintainers = with maintainers; [ ThomasMader jtbx ];
+    maintainers = with maintainers; [ jtbx ];
     platforms = lib.platforms.unix;
   };
 }

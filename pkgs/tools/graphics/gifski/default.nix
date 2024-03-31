@@ -7,20 +7,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gifski";
-  version = "1.13.1";
+  version = "1.14.4";
 
   src = fetchFromGitHub {
     owner = "ImageOptim";
     repo = "gifski";
-    # rev = version;
-    rev = "1.31.1"; # upstream tagged incorrectly
-    hash = "sha256-JzQReCX1AfFhbVbSPOIAKAVvNoddrWFHaJ1AxlsIPA0=";
+    rev = version;
+    hash = "sha256-Yhcz3pbEsSlpxQ1couFgQuaS8Eru7PLiGFNHcKmiFak=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "ffmpeg-sys-next-6.0.1" = "sha256-/KxW57lt9/qKqNUUZqJucsP0cKvZ1m/FdGCsZxBlxYc=";
+      "ffmpeg-sys-next-6.1.0" = "sha256-RB9sDQoP68Dzqk8tIuYlOX3dZcS64hKI5KpTGq/7xbM=";
     };
   };
 

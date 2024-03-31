@@ -270,6 +270,6 @@ in
 
   meta = {
     buildDocsInSandbox = false;
-    maintainers = with lib.maintainers; [ lom SuperSandro2000 ];
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

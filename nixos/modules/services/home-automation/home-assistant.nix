@@ -52,7 +52,7 @@ let
     hasAttrByPath (splitString "." component) cfg.config
     || useComponentPlatform component
     || useExplicitComponent component
-    || builtins.elem component cfg.extraComponents;
+    || builtins.elem component (cfg.extraComponents ++ cfg.defaultIntegrations);
 
   # Final list of components passed into the package to include required dependencies
   extraComponents = filter useComponent availableComponents;
@@ -101,6 +101,45 @@ in {
       default = "/var/lib/hass";
       type = types.path;
       description = lib.mdDoc "The config directory, where your {file}`configuration.yaml` is located.";
+    };
+
+    defaultIntegrations = mkOption {
+      type = types.listOf (types.enum availableComponents);
+      # https://github.com/home-assistant/core/blob/dev/homeassistant/bootstrap.py#L109
+      default = [
+        "application_credentials"
+        "frontend"
+        "hardware"
+        "logger"
+        "network"
+        "system_health"
+
+        # key features
+        "automation"
+        "person"
+        "scene"
+        "script"
+        "tag"
+        "zone"
+
+        # built-in helpers
+        "counter"
+        "input_boolean"
+        "input_button"
+        "input_datetime"
+        "input_number"
+        "input_select"
+        "input_text"
+        "schedule"
+        "timer"
+
+        # non-supervisor
+        "backup"
+      ];
+      readOnly = true;
+      description = ''
+        List of integrations set are always set up, unless in recovery mode.
+      '';
     };
 
     extraComponents = mkOption {
@@ -533,6 +572,7 @@ in {
           "inkbird"
           "improv_ble"
           "keymitt_ble"
+          "leaone-ble"
           "led_ble"
           "medcom_ble"
           "melnor"

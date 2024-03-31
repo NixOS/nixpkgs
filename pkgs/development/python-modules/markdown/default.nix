@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "markdown";
-  version = "3.5.1";
+  version = "3.5.2";
 
   disabled = pythonOlder "3.8";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Python-Markdown";
     repo = "markdown";
     rev = "refs/tags/${version}";
-    hash = "sha256-OeCr72N3ygYYJnI+bIXCt63tSLDFLKznYekTk1sYHZI=";
+    hash = "sha256-YLOLDiS93zpjJWzkWXcutjZw9iB/FfbjxQXjau2B+JQ=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/Python-Markdown/markdown/blob/${src.rev}/docs/changelog.md";
     description = "Python implementation of John Gruber's Markdown";
+    mainProgram = "markdown_py";
     homepage = "https://github.com/Python-Markdown/markdown";
     license = licenses.bsd3;
     maintainers = with maintainers; [ dotlambda ];

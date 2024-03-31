@@ -38,5 +38,6 @@ stdenv.mkDerivation {
     homepage = "https://sourceforge.net/projects/minidlna/";
     license = licenses.gpl2;
     platforms = platforms.linux;
+    mainProgram = "minidlnad";
   };
 }

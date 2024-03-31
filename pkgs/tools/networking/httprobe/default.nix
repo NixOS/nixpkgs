@@ -23,5 +23,6 @@ buildGoModule rec {
     homepage = "https://github.com/tomnomnom/httprobe";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "httprobe";
   };
 }

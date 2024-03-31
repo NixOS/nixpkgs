@@ -20,16 +20,17 @@
 , qtmultimedia
 , qtpositioning
 , qtsvg
+, zxing-cpp
 , qtwayland
 }:
 
 stdenv.mkDerivation rec {
   pname = "photoqt";
-  version = "4.2";
+  version = "4.3";
 
   src = fetchurl {
     url = "https://photoqt.org/pkgs/photoqt-${version}.tar.gz";
-    hash = "sha256-OUqsyvmv6ccJDzcWAeS1OOmK2eXOCEgGktz6GEUzoA8=";
+    hash = "sha256-B0ZubvWIEZFnD2v74bpPv+/wr7vaHS9QP4//9/afjzQ=";
   };
 
   nativeBuildInputs = [
@@ -55,20 +56,19 @@ stdenv.mkDerivation rec {
     qtmultimedia
     qtpositioning
     qtsvg
+    zxing-cpp
   ] ++ lib.optionals stdenv.isLinux [
     qtwayland
   ];
 
   cmakeFlags = [
-    "-DDEVIL=OFF"
-    "-DCHROMECAST=OFF"
-    "-DFREEIMAGE=OFF"
-    "-DIMAGEMAGICK=OFF"
+    (lib.cmakeBool "DEVIL" false)
+    (lib.cmakeBool "CHROMECAST" false)
+    (lib.cmakeBool "FREEIMAGE" false)
+    (lib.cmakeBool "IMAGEMAGICK" false)
   ];
 
-  preConfigure = ''
-    export MAGICK_LOCATION="${graphicsmagick}/include/GraphicsMagick"
-  '';
+  env.MAGICK_LOCATION = "${graphicsmagick}/include/GraphicsMagick";
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications

@@ -13,14 +13,14 @@
 
 buildPythonApplication rec {
   pname = "nixops";
-  version = "unstable-2023-12-17";
+  version = "unstable-2024-02-28";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "nixops";
-    rev = "053668e849bb369973cf265b7e8f38e66ef70138";
-    hash = "sha256-Kus1Ls1tT8fVGLX0NakRXmjuz5/J/tfqU4TLOkiZqvo=";
+    rev = "08feccb14074c5434f3e483d19a7f7d9bfcdb669";
+    hash = "sha256-yWeF5apQJdChjYVSOyH6LYjJYGa1RL68LRHrSgZ9l8U=";
   };
 
   postPatch = ''
@@ -50,7 +50,7 @@ buildPythonApplication rec {
   pythonImportsCheck = [ "nixops" ];
 
   passthru = {
-    tests.nixops = nixosTests.nixops.unstable;
+    tests.nixos = nixosTests.nixops.unstable;
     updateScript = unstableGitUpdater {};
   };
 
