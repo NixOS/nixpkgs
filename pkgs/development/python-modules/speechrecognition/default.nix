@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "speechrecognition";
-  version = "3.10.2";
+  version = "3.10.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Uberi";
     repo = "speech_recognition";
     rev = "refs/tags/${version}";
-    hash = "sha256-yMitfMfCGgfq4sgzPstxNYDkAQ4VCewT2jgumODvAnE=";
+    hash = "sha256-g2DE3u2nuJHqWA2X8S6zw5nUVS1yvSqO0VI3zKoIUgg=";
   };
 
   build-system = [
