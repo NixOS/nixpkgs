@@ -21,7 +21,7 @@ buildGoModule rec {
     description = "Org-mode parser and static site generator in go";
     homepage = "https://niklasfasching.github.io/go-org";
     license = licenses.mit;
-    maintainers = with maintainers; [ payas ];
+    maintainers = with maintainers; [ bhankas ];
     mainProgram = "go-org";
   };
 }
