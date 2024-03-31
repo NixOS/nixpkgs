@@ -7,7 +7,7 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "docfd";
-  version = "3.0.0";
+  version = "4.0.0";
 
   minimalOCamlVersion = "5.1";
 
@@ -15,7 +15,7 @@ ocamlPackages.buildDunePackage rec {
     owner = "darrenldl";
     repo = "docfd";
     rev = version;
-    hash = "sha256-pJ5LlOfC+9NRfY7ng9LAxEnjr+mtJmhRNTo9Im6Lkbo=";
+    hash = "sha256-fgwUXRZ6k5i3XLxXpjbrl0TJZMT+NkGXf7KNwRgi+q8=";
   };
 
   nativeBuildInputs = [ python3 dune_3 ];
