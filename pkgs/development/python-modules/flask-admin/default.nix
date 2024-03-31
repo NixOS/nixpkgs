@@ -7,7 +7,7 @@
 , email-validator
 , enum34
 , fetchpatch
-, fetchPypi
+, fetchFromGitHub
 , flask
 , flask-babelex
 , flask-mongoengine
@@ -34,10 +34,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    pname = "Flask-Admin";
-    inherit version;
-    hash = "sha256-JMrir4MramEaAdfcNfQtJmwdbHWkJrhp2MskG3gjM2k=";
+  src = fetchFromGitHub {
+    owner = "flask-admin";
+    repo = "flask-admin";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-L8Q9uPpoen6ZvuF2bithCMSgc6X5khD1EqH2FJPspZc=";
   };
 
   patches = [
