@@ -2,10 +2,11 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
+, poetry
 }:
 
 buildPythonPackage rec {
-  pname = "poetry-plugin-poeblix";
+  pname = "poeblix";
   version = "0.10.0";
   pyproject = true;
 
@@ -16,20 +17,22 @@ buildPythonPackage rec {
     hash = "sha256-TKadEOk9kM3ZYsQmE2ftzjHNGNKI17p0biMr+Nskigs=";
   };
 
-  postPatch = ''
-    sed -i '/poetry =/d' pyproject.toml
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  doCheck = false;
+  buildInputs = [
+    poetry
+  ];
+
   pythonImportsCheck = ["poeblix"];
+
+  # poeblix tests currently fail with Python 3.11: https://github.com/spoorn/poeblix/issues/22
+  doCheck = false;
 
   meta = with lib; {
     changelog = "https://github.com/spoorn/poeblix/releases/tag/${src.rev}";
-    description = "Poetry Plugin that adds various features that extend the poetry command such as building wheel files with locked dependencies, and validations of wheel/docker containers";
+    description = "Poetry plugin for building wheel files with locked dependencies and validating wheel/docker containers";
     license = licenses.mit;
     homepage = "https://github.com/spoorn/poeblix";
     maintainers = with maintainers; [ hennk ];
