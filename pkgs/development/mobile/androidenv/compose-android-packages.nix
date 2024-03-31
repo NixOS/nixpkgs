@@ -2,12 +2,12 @@
 , licenseAccepted ? false
 }:
 
-{ cmdLineToolsVersion ? "11.0"
+{ cmdLineToolsVersion ? "13.0"
 , toolsVersion ? "26.1.1"
-, platformToolsVersion ? "34.0.5"
+, platformToolsVersion ? "35.0.1"
 , buildToolsVersions ? [ "34.0.0" ]
 , includeEmulator ? false
-, emulatorVersion ? "34.1.9"
+, emulatorVersion ? "35.1.4"
 , platformVersions ? []
 , includeSources ? false
 , includeSystemImages ? false
@@ -15,7 +15,7 @@
 , abiVersions ? [ "armeabi-v7a" "arm64-v8a" ]
 , cmakeVersions ? [ ]
 , includeNDK ? false
-, ndkVersion ? "26.1.10909125"
+, ndkVersion ? "26.3.11579264"
 , ndkVersions ? [ndkVersion]
 , useGoogleAPIs ? false
 , useGoogleTVAddOns ? false
