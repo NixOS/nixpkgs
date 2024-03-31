@@ -10087,6 +10087,8 @@ self: super: with self; {
 
   polygon3 = callPackage ../development/python-modules/polygon3 { };
 
+  polyswarm-api = callPackage ../development/python-modules/polyswarm-api { };
+
   pomegranate = callPackage ../development/python-modules/pomegranate { };
 
   pontos = callPackage ../development/python-modules/pontos { };
