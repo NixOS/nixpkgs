@@ -54,15 +54,6 @@ buildPythonPackage rec {
     hash = "sha256-61EXlf+d5kJeUF41OEnGNLaOcSvFWUDFgarVvHQZYmw=";
   };
 
-  patches = [
-    # Mock HTTP requests in tests (note we still have to skip some below)
-    # https://github.com/googlefonts/fontbakery/pull/4124
-    (fetchpatch {
-      url = "https://github.com/fonttools/fontbakery/pull/4124.patch";
-      hash = "sha256-NXuC2+TtxpHYMdd0t+cF0FJ3lrh4exP5yxspEasKKd0=";
-    })
-  ];
-
   propagatedBuildInputs = [
     axisregistry
     babelfont
@@ -129,7 +120,14 @@ buildPythonPackage rec {
   '';
   disabledTests = [
     # These require network access:
+    "test_check_description_broken_links"
+    "test_check_description_family_update"
+    "test_check_metadata_designer_profiles"
+    "test_check_metadata_has_tags"
+    "test_check_metadata_includes_production_subsets"
+    "test_check_vertical_metrics"
     "test_check_vertical_metrics_regressions"
+    "test_check_cjk_vertical_metrics"
     "test_check_cjk_vertical_metrics_regressions"
     "test_check_fontbakery_version_live_apis"
   ];
