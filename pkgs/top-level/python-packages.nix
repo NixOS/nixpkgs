@@ -5150,12 +5150,7 @@ self: super: with self; {
 
   guppy3 = callPackage ../development/python-modules/guppy3 { };
 
-  gurobipy = if stdenv.hostPlatform.isDarwin then
-    callPackage ../development/python-modules/gurobipy/darwin.nix { }
-  else if stdenv.hostPlatform.system == "x86_64-linux" then
-    callPackage ../development/python-modules/gurobipy/linux.nix { }
-  else
-    throw "gurobipy not yet supported on ${stdenv.hostPlatform.system}";
+  gurobipy = callPackage ../development/python-modules/gurobipy { };
 
   guzzle-sphinx-theme = callPackage ../development/python-modules/guzzle-sphinx-theme { };
 
