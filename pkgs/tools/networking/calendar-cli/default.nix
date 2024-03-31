@@ -7,6 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "calendar-cli";
   version = "1.0.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tobixen";
@@ -15,7 +16,11 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-w35ySLnfxXZR/a7BrPLYqXs2kqkuYhh5PcgNxJqjDtE=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     icalendar
     caldav
     pytz
