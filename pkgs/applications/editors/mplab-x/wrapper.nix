@@ -1,12 +1,45 @@
-{ lib, buildFHSEnv, execline, fuse-overlayfs, glibc, mplab-x-unwrapped, rsync
-, systemdLibs, writeShellApplication,
+{ lib, alsa-lib, at-spi2-atk, buildFHSEnv, cairo, corefonts, cups, dbus
+, execline, fuse-overlayfs, expat, glib, glibc, gtk2, gtk3, libdrm, libxkbcommon
+, libusb1, libxslt, mesa, mplab-x-unwrapped, nspr, nss, pango, rsync
+, systemdLibs, writeShellApplication, xorg,
 
 microchip-xc16 }:
 
 let
   fhsEnv = buildFHSEnv {
     name = "mplab-x-fhs-env";
-    targetPkgs = pkgs: [ glibc systemdLibs ];
+    targetPkgs = pkgs: [
+      alsa-lib
+      at-spi2-atk
+      cairo
+      corefonts
+      cups
+      dbus
+      expat
+      glib
+      glibc
+      gtk2
+      gtk3
+      libdrm
+      libxkbcommon
+      libxslt
+      libusb1
+      mesa
+      nspr
+      nss
+      pango
+      systemdLibs
+      xorg.libX11
+      xorg.libXcomposite
+      xorg.libXdamage
+      xorg.libXext
+      xorg.libXfixes
+      xorg.libXi
+      xorg.libXrandr
+      xorg.libXrender
+      xorg.libXtst
+      xorg.libxcb
+    ];
   };
 
   stage2 = writeShellApplication {
