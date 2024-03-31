@@ -1872,7 +1872,6 @@ broken-packages:
   - funpat # failure in job https://hydra.nixos.org/build/233222123 at 2023-09-02
   - funspection # failure in job https://hydra.nixos.org/build/233227352 at 2023-09-02
   - fused-effects-exceptions # failure in job https://hydra.nixos.org/build/233203744 at 2023-09-02
-  - fused-effects # failure in job https://hydra.nixos.org/build/252724943 at 2024-03-16
   - fused-effects-mwc-random # failure in job https://hydra.nixos.org/build/233253228 at 2023-09-02
   - fused-effects-resumable # failure in job https://hydra.nixos.org/build/233242479 at 2023-09-02
   - fused-effects-th # failure in job https://hydra.nixos.org/build/233192186 at 2023-09-02
