@@ -816,7 +816,7 @@ with pkgs;
 
   enum4linux = callPackage ../tools/security/enum4linux { };
 
-  enum4linux-ng = python3Packages.callPackage ../tools/security/enum4linux-ng { };
+  enum4linux-ng = callPackage ../tools/security/enum4linux-ng { };
 
   enumerepo = callPackage ../tools/security/enumerepo {};
 
@@ -2738,6 +2738,7 @@ with pkgs;
     # Dependency twain requires an older version of http2, and we cannot mix
     # versions of transitive dependencies.
     http2 = final.http2_3_0_3;
+    warp = final.warp_3_3_30;
   });
 
   mame = libsForQt5.callPackage ../applications/emulators/mame { };
@@ -3678,9 +3679,7 @@ with pkgs;
 
   cudd = callPackage ../development/libraries/cudd { };
 
-  cue = callPackage ../development/tools/cue { };
-
-  writeCueValidator = callPackage ../development/tools/cue/validator.nix { };
+  inherit (cue) writeCueValidator;
 
   cuelsp = callPackage ../development/tools/cuelsp { };
 
@@ -4708,8 +4707,6 @@ with pkgs;
   compactor = callPackage ../applications/networking/compactor {
     protobuf = protobuf_21;
   };
-
-  consul = callPackage ../servers/consul { };
 
   consul-alerts = callPackage ../servers/monitoring/consul-alerts { };
 
@@ -7835,7 +7832,10 @@ with pkgs;
 
   choose = callPackage ../tools/text/choose { };
 
-  d2 = callPackage ../tools/text/d2 { };
+  d2 = callPackage ../tools/text/d2 {
+    # Failed tests
+    buildGoModule = buildGo121Module;
+  };
 
   ddev = callPackage ../applications/virtualization/ddev { };
 
@@ -8074,8 +8074,6 @@ with pkgs;
   fluent-reader = callPackage ../applications/networking/feedreaders/fluent-reader { };
 
   flux = callPackage ../development/compilers/flux { };
-
-  fido2luks = callPackage ../tools/security/fido2luks { };
 
   fierce = callPackage ../tools/security/fierce { };
 
@@ -8771,8 +8769,6 @@ with pkgs;
   gyb = callPackage ../tools/backup/gyb { };
 
   halftone = callPackage ../applications/graphics/halftone { };
-
-  halloy = callPackage ../applications/networking/irc/halloy { };
 
   harminv = callPackage ../development/libraries/science/chemistry/harminv { };
 
@@ -11378,8 +11374,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  onthespot = libsForQt5.callPackage ../applications/misc/onthespot { };
-
   opencorsairlink = callPackage ../tools/misc/opencorsairlink { };
 
   openfpgaloader = callPackage ../development/embedded/fpga/openfpgaloader { };
@@ -13128,7 +13122,7 @@ with pkgs;
 
   sipsak = callPackage ../tools/networking/sipsak { };
 
-  sipvicious = python3Packages.callPackage ../tools/security/sipvicious { };
+  sipvicious = callPackage ../tools/security/sipvicious { };
 
   siril = callPackage ../applications/science/astronomy/siril { };
 
@@ -14100,8 +14094,6 @@ with pkgs;
   typesense = callPackage ../servers/search/typesense { };
 
   typos = callPackage ../development/tools/typos { };
-
-  typst-live = callPackage ../tools/typesetting/typst-live { };
 
   tz = callPackage ../tools/misc/tz { };
 
@@ -16527,6 +16519,31 @@ with pkgs;
     targetLlvm = targetPackages.llvmPackages_17.llvm or llvmPackages_17.llvm;
   }));
 
+  inherit
+    (rec {
+      llvmPackages_18 = recurseIntoAttrs (callPackage ../development/compilers/llvm/18 ({
+        inherit (stdenvAdapters) overrideCC;
+        buildLlvmTools = buildPackages.llvmPackages_18.tools;
+        targetLlvmLibraries = targetPackages.llvmPackages_18.libraries or llvmPackages_18.libraries;
+        targetLlvm = targetPackages.llvmPackages_18.llvm or llvmPackages_18.llvm;
+      }));
+
+      clang_18 = llvmPackages_18.clang;
+      lld_18 = llvmPackages_18.lld;
+      lldb_18 = llvmPackages_18.lldb;
+      llvm_18 = llvmPackages_18.llvm;
+
+      clang-tools_18 = callPackage ../development/tools/clang-tools {
+        llvmPackages = llvmPackages_18;
+      };
+    })
+      llvmPackages_18
+      clang_18
+      lld_18
+      lldb_18
+      llvm_18
+      clang-tools_18;
+
   lorri = callPackage ../tools/misc/lorri {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
@@ -17147,8 +17164,6 @@ with pkgs;
   vcard = python3Packages.toPythonApplication python3Packages.vcard;
 
   inherit (callPackage ../development/compilers/vala { })
-    vala_0_48
-    vala_0_54
     vala_0_56
     vala;
 
@@ -20058,7 +20073,9 @@ with pkgs;
 
   vtable-dumper = callPackage ../development/tools/misc/vtable-dumper { };
 
-  wails = callPackage ../development/tools/wails { };
+  wails = callPackage ../development/tools/wails {
+    stdenv = gccStdenv;
+  };
 
   wasmer-pack = callPackage ../development/tools/misc/wasmer-pack { };
 
@@ -24109,18 +24126,28 @@ with pkgs;
 
   protobuf = protobuf_24;
 
-  protobuf_25 = callPackage ../development/libraries/protobuf/25.nix { };
-  protobuf_24 = callPackage ../development/libraries/protobuf/24.nix { };
-  protobuf_23 = callPackage ../development/libraries/protobuf/23.nix {
-    abseil-cpp = abseil-cpp_202301;
-  };
-  protobuf_21 = callPackage ../development/libraries/protobuf/21.nix {
-    abseil-cpp = abseil-cpp_202103;
-  };
-
-  protobuf3_20 = callPackage ../development/libraries/protobuf/3.20.nix {
-    abseil-cpp = abseil-cpp_202103;
-  };
+  inherit
+    ({
+      protobuf_26 = callPackage ../development/libraries/protobuf/26.nix { };
+      protobuf_25 = callPackage ../development/libraries/protobuf/25.nix { };
+      protobuf_24 = callPackage ../development/libraries/protobuf/24.nix { };
+      protobuf_23 = callPackage ../development/libraries/protobuf/23.nix {
+        abseil-cpp = abseil-cpp_202301;
+      };
+      protobuf_21 = callPackage ../development/libraries/protobuf/21.nix {
+        abseil-cpp = abseil-cpp_202103;
+      };
+      protobuf3_20 = callPackage ../development/libraries/protobuf/3.20.nix {
+        abseil-cpp = abseil-cpp_202103;
+      };
+    })
+    protobuf_26
+    protobuf_25
+    protobuf_24
+    protobuf_23
+    protobuf_21
+    protobuf3_20
+    ;
 
   protobufc = callPackage ../development/libraries/protobufc { };
 
@@ -25018,9 +25045,7 @@ with pkgs;
 
   vcg = callPackage ../development/libraries/vcg { };
 
-  vencord = callPackage ../misc/vencord { };
-
-  vencord-web-extension = callPackage ../misc/vencord { buildWebExtension = true; };
+  vencord-web-extension = callPackage ../by-name/ve/vencord/package.nix { buildWebExtension = true; };
 
   vid-stab = callPackage ../development/libraries/vid-stab {
     inherit (llvmPackages) openmp;
@@ -26818,6 +26843,8 @@ with pkgs;
   sambaFull = samba4Full;
 
   sampler = callPackage ../applications/misc/sampler { };
+
+  scalene = with python3Packages; toPythonApplication scalene;
 
   scalr-cli = callPackage ../tools/admin/scalr-cli { };
 
@@ -29808,8 +29835,6 @@ with pkgs;
 
   anilibria-winmaclinux = libsForQt5.callPackage ../applications/video/anilibria-winmaclinux { };
 
-  masterpdfeditor = libsForQt5.callPackage ../applications/misc/masterpdfeditor { };
-
   masterpdfeditor4 = libsForQt5.callPackage ../applications/misc/masterpdfeditor4 { };
 
   master_me = callPackage ../applications/audio/master_me {
@@ -30512,7 +30537,7 @@ with pkgs;
   daktilo = callPackage ../tools/misc/daktilo { };
 
   darcs = haskell.lib.compose.disableCabalFlag "library"
-    (haskell.lib.compose.justStaticExecutables haskell.packages.ghc94.darcs);
+    (haskell.lib.compose.justStaticExecutables haskellPackages.darcs);
 
   darkman = callPackage ../applications/misc/darkman { };
 
@@ -30949,7 +30974,7 @@ with pkgs;
 
   faircamp = callPackage ../applications/misc/faircamp { };
 
-  famistudio = callPackage ../applications/audio/famistudio { };
+  famistudio = darwin.apple_sdk_11_0.callPackage ../applications/audio/famistudio { };
 
   fasttext = callPackage ../applications/science/machine-learning/fasttext { };
 
@@ -34128,8 +34153,6 @@ with pkgs;
 
   pop-launcher = callPackage ../applications/misc/pop-launcher { };
 
-  pot = callPackage ../applications/misc/pot { };
-
   pothos = libsForQt5.callPackage ../applications/radio/pothos { };
 
   potrace = callPackage ../applications/graphics/potrace { };
@@ -34870,7 +34893,7 @@ with pkgs;
 
   stalonetray = callPackage ../applications/window-managers/stalonetray { };
 
-  inherit (ocaml-ng.ocamlPackages_4_12) stog;
+  inherit (ocaml-ng.ocamlPackages) stog;
 
   stp = callPackage ../applications/science/logic/stp { };
 
@@ -35745,7 +35768,7 @@ with pkgs;
   weave-gitops = callPackage ../applications/networking/cluster/weave-gitops { };
 
   wayfire = callPackage ../applications/window-managers/wayfire/default.nix {
-    wlroots = wlroots_0_16;
+    wlroots = wlroots_0_17;
   };
   wf-config = callPackage ../applications/window-managers/wayfire/wf-config.nix { };
 
@@ -37156,9 +37179,7 @@ with pkgs;
 
   hase = callPackage ../games/hase { };
 
-  hedgewars = libsForQt5.callPackage ../games/hedgewars {
-    inherit (haskellPackages) ghcWithPackages;
-  };
+  hedgewars = libsForQt5.callPackage ../games/hedgewars { };
 
   hikounomizu = callPackage ../games/hikounomizu { };
 

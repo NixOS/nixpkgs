@@ -174,11 +174,37 @@ in
         # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1443
         pkgs.pantheon.mutter
       ];
-      systemd.packages = [
-        pkgs.pantheon.gnome-settings-daemon
+      systemd.packages = with pkgs; [
+        gnome.gnome-session
+        pantheon.gala
+        pantheon.gnome-settings-daemon
+        pantheon.elementary-session-settings
       ];
       programs.dconf.enable = true;
       networking.networkmanager.enable = mkDefault true;
+
+      systemd.user.targets."gnome-session-x11-services".wants = [
+        "org.gnome.SettingsDaemon.XSettings.service"
+      ];
+      systemd.user.targets."gnome-session-x11-services-ready".wants = [
+        "org.gnome.SettingsDaemon.XSettings.service"
+      ];
+
+      # https://github.com/elementary/gala/issues/1826#issuecomment-1890461298
+      systemd.user.services."io.elementary.gala.daemon@" = {
+        unitConfig = {
+          Description = "Gala Daemon";
+          BindsTo = "io.elementary.gala@.service";
+          After = "io.elementary.gala@.service";
+        };
+
+        serviceConfig = {
+          Type = "dbus";
+          BusName = "org.pantheon.gala.daemon";
+          ExecStart = "${pkgs.pantheon.gala}/bin/gala-daemon";
+          Slice = "session.slice";
+        };
+      };
 
       # Global environment
       environment.systemPackages = (with pkgs.pantheon; [

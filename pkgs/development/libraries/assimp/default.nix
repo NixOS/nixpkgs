@@ -26,8 +26,6 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = toString ([
     # Needed with GCC 12
     "-Wno-error=array-bounds"
-  ] ++ lib.optionals stdenv.hostPlatform.isRiscV [
-    "-Wno-error=free-nonheap-object"
   ]);
 
   meta = with lib; {

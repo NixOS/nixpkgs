@@ -4193,7 +4193,8 @@
       rokuecp
     ];
     "romy" = ps: with ps; [
-    ]; # missing inputs: romy
+      romy
+    ];
     "roomba" = ps: with ps; [
       roombapy
     ];
@@ -6424,6 +6425,7 @@
     "rmvtransport"
     "roborock"
     "roku"
+    "romy"
     "roomba"
     "roon"
     "rpi_power"

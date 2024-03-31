@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "tox";
-  version = "4.14.1";
+  version = "4.14.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "tox";
     rev = "refs/tags/${version}";
-    hash = "sha256-b+HOv0xMIE3k0u39YAAyVbiJPnOAamATZeZYTBUyAZM=";
+    hash = "sha256-+ed47GK76Wn8PwXsd0qo1xYWJTcZ5wNXnFEEQEZ7CMM=";
   };
 
   postPatch = ''

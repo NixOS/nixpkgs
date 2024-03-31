@@ -102,84 +102,6 @@ self: super: builtins.intersectAttrs super {
   # Tests access homeless-shelter.
   hie-bios = dontCheck super.hie-bios;
 
-  # PLUGINS WITH ENABLED TESTS
-  # haskell-language-server plugins all use the same test harness so we give them what they want in this loop.
-  # Every hls plugin should either be in the test disabled list below, or up here in the list fixing it’s tests.
-  inherit (pkgs.lib.mapAttrs
-      (_: overrideCabal (drv: {
-        testToolDepends = (drv.testToolDepends or [ ]) ++ [ pkgs.git ];
-        preCheck = ''
-          export HOME=$TMPDIR/home
-        '' + (drv.preCheck or "");
-      }))
-      super)
-    hls-brittany-plugin
-    hls-floskell-plugin
-    hls-fourmolu-plugin
-    hls-overloaded-record-dot-plugin
-  ;
-
-  # PLUGINS WITH DISABLED TESTS
-  # 2023-04-01: TODO: We should reenable all these tests to figure if they are still broken.
-  inherit (pkgs.lib.mapAttrs (_: dontCheck) super)
-    # Tests require ghcide-test-utils which is broken
-    hls-semantic-tokens-plugin
-
-    # Tests have file permissions expections that don’t work with the nix store.
-    hls-gadt-plugin
-
-    # https://github.com/haskell/haskell-language-server/pull/3431
-    hls-cabal-plugin
-    hls-cabal-fmt-plugin
-    hls-code-range-plugin
-    hls-explicit-record-fields-plugin
-
-    # Flaky tests
-    hls-explicit-fixity-plugin
-    hls-hlint-plugin
-    hls-pragmas-plugin
-    hls-class-plugin
-    hls-rename-plugin
-    hls-alternate-number-format-plugin
-    hls-qualify-imported-names-plugin
-    hls-haddock-comments-plugin
-    hls-tactics-plugin
-    hls-call-hierarchy-plugin
-    hls-selection-range-plugin
-    hls-ormolu-plugin
-
-    # 2021-05-08: Tests fail: https://github.com/haskell/haskell-language-server/issues/1809
-    hls-eval-plugin
-
-    # 2021-06-20: Tests fail: https://github.com/haskell/haskell-language-server/issues/1949
-    hls-refine-imports-plugin
-
-    # 2021-11-20: https://github.com/haskell/haskell-language-server/pull/2373
-    hls-explicit-imports-plugin
-
-    # 2021-11-20: https://github.com/haskell/haskell-language-server/pull/2374
-    hls-module-name-plugin
-
-    # 2022-09-19: https://github.com/haskell/haskell-language-server/issues/3200
-    hls-refactor-plugin
-
-    # 2021-09-14: Tests are flaky.
-    hls-splice-plugin
-
-    # 2021-09-18: https://github.com/haskell/haskell-language-server/issues/2205
-    hls-stylish-haskell-plugin
-
-    # Necesssary .txt files are not included in sdist.
-    # https://github.com/haskell/haskell-language-server/pull/2887
-    hls-change-type-signature-plugin
-
-    # 2023-04-03: https://github.com/haskell/haskell-language-server/issues/3549
-    hls-retrie-plugin
-
-    # 2024-01-25: Golden files are missing
-    hls-stan-plugin
-  ;
-
   ###########################################
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
@@ -432,6 +354,7 @@ self: super: builtins.intersectAttrs super {
 
   # The curl executable is required for withApplication tests.
   warp = addTestToolDepend pkgs.curl super.warp;
+  warp_3_3_30 = addTestToolDepend pkgs.curl super.warp_3_3_30;
 
   # Test suite requires running a database server. Testing is done upstream.
   hasql = dontCheck super.hasql;
@@ -1223,9 +1146,11 @@ self: super: builtins.intersectAttrs super {
     {
       fourmolu = fourmoluTestFix super.fourmolu;
       fourmolu_0_14_1_0 = fourmoluTestFix super.fourmolu_0_14_1_0;
+      fourmolu_0_15_0_0 = fourmoluTestFix super.fourmolu_0_15_0_0;
     })
     fourmolu
     fourmolu_0_14_1_0
+    fourmolu_0_15_0_0
     ;
 
   # Test suite needs to execute 'disco' binary
@@ -1358,14 +1283,22 @@ self: super: builtins.intersectAttrs super {
     __onlyPropagateKnownPkgConfigModules = true;
     }) super)
       gi-javascriptcore
-      webkit2gtk3-javascriptcore
-      gi-webkit2
       gi-webkit2webextension
       gi-gtk_4_0_8
       gi-gdk_4_0_7
       gi-gsk
       gi-adwaita
       ;
+
+    webkit2gtk3-javascriptcore = lib.pipe super.webkit2gtk3-javascriptcore [
+      (addBuildDepend pkgs.xorg.libXtst)
+      (overrideCabal { __onlyPropagateKnownPkgConfigModules = true; })
+    ];
+
+    gi-webkit2 = lib.pipe super.gi-webkit2 [
+      (addBuildDepend pkgs.xorg.libXtst)
+      (overrideCabal { __onlyPropagateKnownPkgConfigModules = true; })
+    ];
 
   # Makes the mpi-hs package respect the choice of mpi implementation in Nixpkgs.
   # Also adds required test dependencies for checks to pass
@@ -1394,4 +1327,8 @@ self: super: builtins.intersectAttrs super {
     libraryPkgconfigDepends = drv.librarySystemDepends;
     librarySystemDepends = [];
   }) super.postgresql-libpq;
+
+  # Test failure is related to a GHC implementation detail of primitives and doesn't
+  # cause actual problems in dependent packages, see https://github.com/lehins/pvar/issues/4
+  pvar = dontCheck super.pvar;
 }

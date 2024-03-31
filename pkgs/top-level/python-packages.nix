@@ -785,6 +785,8 @@ self: super: with self; {
 
   asgi-csrf = callPackage ../development/python-modules/asgi-csrf { };
 
+  asgi-lifespan = callPackage ../development/python-modules/asgi-lifespan { };
+
   asgi-logger = callPackage ../development/python-modules/asgi-logger { };
 
   asgineer = callPackage ../development/python-modules/asgineer { };
@@ -1391,6 +1393,8 @@ self: super: with self; {
   basemap = callPackage ../development/python-modules/basemap { };
 
   basemap-data = callPackage ../development/python-modules/basemap-data { };
+
+  bases = callPackage ../development/python-modules/bases { };
 
   bash-kernel = callPackage ../development/python-modules/bash-kernel { };
 
@@ -6773,13 +6777,27 @@ self: super: with self; {
 
   llama-index-embeddings-google = callPackage ../development/python-modules/llama-index-embeddings-google { };
 
+  llama-index-embeddings-huggingface = callPackage ../development/python-modules/llama-index-embeddings-huggingface { };
+
+  llama-index-embeddings-ollama = callPackage ../development/python-modules/llama-index-embeddings-ollama { };
+
   llama-index-embeddings-openai = callPackage ../development/python-modules/llama-index-embeddings-openai { };
+
+  llama-index-graph-stores-nebula = callPackage ../development/python-modules/llama-index-graph-stores-nebula { };
+
+  llama-index-graph-stores-neo4j = callPackage ../development/python-modules/llama-index-graph-stores-neo4j { };
+
+  llama-index-graph-stores-neptune = callPackage ../development/python-modules/llama-index-graph-stores-neptune { };
 
   llama-index-indices-managed-llama-cloud = callPackage ../development/python-modules/llama-index-indices-managed-llama-cloud { };
 
   llama-index-legacy = callPackage ../development/python-modules/llama-index-legacy { };
 
+  llama-index-llms-ollama = callPackage ../development/python-modules/llama-index-llms-ollama { };
+
   llama-index-llms-openai = callPackage ../development/python-modules/llama-index-llms-openai { };
+
+  llama-index-llms-openai-like = callPackage ../development/python-modules/llama-index-llms-openai-like { };
 
   llama-index-multi-modal-llms-openai = callPackage ../development/python-modules/llama-index-multi-modal-llms-openai { };
 
@@ -6804,6 +6822,12 @@ self: super: with self; {
   llama-index-readers-weather = callPackage ../development/python-modules/llama-index-readers-weather { };
 
   llama-index-vector-stores-chroma = callPackage ../development/python-modules/llama-index-vector-stores-chroma { };
+
+  llama-index-vector-stores-google = callPackage ../development/python-modules/llama-index-vector-stores-google { };
+
+  llama-index-vector-stores-postgres = callPackage ../development/python-modules/llama-index-vector-stores-postgres { };
+
+  llama-index-vector-stores-qdrant = callPackage ../development/python-modules/llama-index-vector-stores-qdrant { };
 
   llama-parse = callPackage ../development/python-modules/llama-parse { };
 
@@ -8513,6 +8537,8 @@ self: super: with self; {
 
   ndtypes = callPackage ../development/python-modules/ndtypes { };
 
+  nebula3-python = callPackage ../development/python-modules/nebula3-python { };
+
   nengo = callPackage ../development/python-modules/nengo { };
 
   neo = callPackage ../development/python-modules/neo { };
@@ -9835,6 +9861,8 @@ self: super: with self; {
 
   pysiaalarm = callPackage ../development/python-modules/pysiaalarm { };
 
+  pysilero-vad = callPackage ../development/python-modules/pysilero-vad { };
+
   pysimplesoap = callPackage ../development/python-modules/pysimplesoap { };
 
   pyskyqhub = callPackage ../development/python-modules/pyskyqhub { };
@@ -10277,6 +10305,8 @@ self: super: with self; {
   pulsar-client = callPackage ../development/python-modules/pulsar-client { };
 
   pulsectl-asyncio = callPackage ../development/python-modules/pulsectl-asyncio { };
+
+  pulsar = callPackage ../development/python-modules/pulsar { };
 
   pulsectl = callPackage ../development/python-modules/pulsectl { };
 
@@ -11492,6 +11522,8 @@ self: super: with self; {
   pyregion = callPackage ../development/python-modules/pyregion { };
 
   pyric = callPackage ../development/python-modules/pyric { };
+
+  pyring-buffer = callPackage ../development/python-modules/pyring-buffer { };
 
   pyrisco = callPackage ../development/python-modules/pyrisco { };
 
@@ -13131,6 +13163,8 @@ self: super: with self; {
 
   roman = callPackage ../development/python-modules/roman { };
 
+  romy = callPackage ../development/python-modules/romy { };
+
   roombapy = callPackage ../development/python-modules/roombapy { };
 
   roonapi = callPackage ../development/python-modules/roonapi { };
@@ -13313,6 +13347,8 @@ self: super: with self; {
 
   sasmodels = callPackage ../development/python-modules/sasmodels { };
 
+  scalene = callPackage ../development/python-modules/scalene { };
+
   scales = callPackage ../development/python-modules/scales { };
 
   scancode-toolkit = callPackage ../development/python-modules/scancode-toolkit { };
@@ -13440,6 +13476,8 @@ self: super: with self; {
   securesystemslib = callPackage ../development/python-modules/securesystemslib { };
 
   securetar = callPackage ../development/python-modules/securetar { };
+
+  securityreporter = callPackage ../development/python-modules/securityreporter { };
 
   sectools = callPackage ../development/python-modules/sectools { };
 
@@ -13818,6 +13856,8 @@ self: super: with self; {
   snakemake-interface-common = callPackage ../development/python-modules/snakemake-interface-common { };
 
   snakemake-interface-executor-plugins = callPackage ../development/python-modules/snakemake-interface-executor-plugins { };
+
+  snakemake-interface-report-plugins = callPackage ../development/python-modules/snakemake-interface-report-plugins { };
 
   snakemake-interface-storage-plugins = callPackage ../development/python-modules/snakemake-interface-storage-plugins { };
 
@@ -14211,6 +14251,8 @@ self: super: with self; {
 
   sseclient-py = callPackage ../development/python-modules/sseclient-py { };
 
+  sse-starlette = callPackage ../development/python-modules/sse-starlette { };
+
   sshfs = callPackage ../development/python-modules/sshfs { };
 
   sshpubkeys = callPackage ../development/python-modules/sshpubkeys { };
@@ -14226,6 +14268,8 @@ self: super: with self; {
   stanza = callPackage ../development/python-modules/stanza { };
 
   starlette = callPackage ../development/python-modules/starlette { };
+
+  starlette-context = callPackage ../development/python-modules/starlette-context { };
 
   starlette-wtf = callPackage ../development/python-modules/starlette-wtf { };
 

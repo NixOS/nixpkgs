@@ -20,6 +20,7 @@
 , millet
 , craftos-pc
 , shfmt
+, tinymist
 , typst-lsp
 , typst-preview
 , autoPatchelfHook
@@ -410,12 +411,12 @@ let
         mktplcRef = {
           name = "astro-vscode";
           publisher = "astro-build";
-          version = "2.3.3";
-          sha256 = "sha256-A7+7lnCPAtSWUfHLNKbYqKuTxi2Nx05Qdh5HCkT1dnM=";
+          version = "2.8.3";
+          sha256 = "sha256-A6m31eZMlOHF0yr9MjXmsFyXgH8zmq6WLRd/w85hGw0=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/astro-build.astro-vscode/changelog";
-          description = "Astro language support for VSCode";
+          description = "Astro language support for VS Code";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=astro-build.astro-vscode";
           homepage = "https://github.com/withastro/language-tools";
           license = lib.licenses.mit;
@@ -2345,6 +2346,22 @@ let
         };
       };
 
+      jbockle.jbockle-format-files = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "jbockle-format-files";
+          publisher = "jbockle";
+          version = "3.4.0";
+          sha256 = "sha256-BHw+T2EPdQq/wOD5kzvSln5SBFTYUXip8QDjnAGBfFY=";
+        };
+        meta = {
+          description = "A VSCode extension to formats all files in the current workspace";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=jbockle.jbockle-format-files";
+          homepage = "https://github.com/jbockle/format-files";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.wackbyte ];
+        };
+      };
+
       jdinhlife.gruvbox = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "gruvbox";
@@ -3169,6 +3186,37 @@ let
         };
       };
 
+      myriad-dreamin.tinymist = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "tinymist";
+          publisher = "myriad-dreamin";
+          # Please update the corresponding binary (tinymist) when updating
+          # this extension.
+          version = "0.11.1";
+          sha256 = "sha256-jyZBnT8UW94TVnZKZna1cJa/UIj+DwYwlAbU4pnaf04=";
+        };
+
+        nativeBuildInputs = [ jq moreutils ];
+
+        buildInputs = [
+          tinymist
+        ];
+
+        postInstall = ''
+          cd "$out/$installPrefix"
+          jq '.contributes.configuration.properties."tinymist.serverPath".default = "${lib.getExe tinymist}"' package.json | sponge package.json
+        '';
+
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/myriad-dreamin.tinymist/changelog";
+          description = "A VSCode extension for providing an integration solution for Typst";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=myriad-dreamin.tinymist";
+          homepage = "https://github.com/myriad-dreamin/tinymist";
+          license = lib.licenses.asl20;
+          maintainers = [ lib.maintainers.drupol ];
+        };
+      };
+
       naumovs.color-highlight = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "color-highlight";
@@ -3972,8 +4020,8 @@ let
         mktplcRef = {
           name = "svelte-vscode";
           publisher = "svelte";
-          version = "107.12.0";
-          sha256 = "036ri011fd0cf91iwv59j57m05mxliy27ms4di2y9jlk7jzmr4s2";
+          version = "108.3.3";
+          sha256 = "sha256-q7w8DPzBLpD+13v7RnyDdC3ocDKAihHBVt3pnwSTwio=";
         };
         meta = {
           changelog = "https://github.com/sveltejs/language-tools/releases";

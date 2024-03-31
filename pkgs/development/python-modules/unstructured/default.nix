@@ -70,7 +70,7 @@
 , grpcio
 }:
 let
-  version = "0.12.6";
+  version = "0.13";
   csv = [ pandas ];
   tsv = csv;
   doc = [ python-docx ];
@@ -157,7 +157,7 @@ buildPythonPackage {
     owner = "Unstructured-IO";
     repo = "unstructured";
     rev = "refs/tags/${version}";
-    hash = "sha256-K2ilPDkxXICb66rOgz18AZ92u5VBgRh6bLiDVEgleDU=";
+    hash = "sha256-zRQOFYAh4QpDNlSPi1h70eOmw/8aTa6yAKBSgTuIhME=";
   };
 
   propagatedBuildInputs = [

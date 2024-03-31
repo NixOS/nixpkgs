@@ -12,7 +12,7 @@ unit which runs the chat client in a detached
 session.
 
 This can be done by enabling the `weechat` service:
-```
+```nix
 { ... }:
 
 {
@@ -30,7 +30,7 @@ allow your another user to attach to this session, the
 `screenrc` needs to be tweaked by adding
 [multiuser](https://www.gnu.org/software/screen/manual/html_node/Multiuser.html#Multiuser)
 support:
-```
+```nix
 {
   programs.screen.screenrc = ''
     multiuser on
