@@ -3,17 +3,13 @@
 # We cannot use INSTALL.pl but it’s not that bad:install the dependencies and copies the .pm files should be ok
 {
   lib,
+  htslib,
   perlPackages,
-  pkgs,
   stdenv,
   fetchFromGitHub,
   fetchzip,
-  git,
   perl,
-  unzip,
   makeWrapper,
-  which,
-  zlib,
 }:
 
 let
@@ -70,8 +66,8 @@ let
   ensembl-funcgen = ensemblGit "ensembl-funcgen" "sha256-a9hxLBoXJsF5JWuRdpyOac1u033M8ivEjEQecuncghs=";
 in
 perlPackages.buildPerlModule rec {
+  inherit version;
   pname = "ensembl-vep";
-  version = "110";
   buildInputs =
     (with perlPackages; [
       ArchiveZip
@@ -91,12 +87,12 @@ perlPackages.buildPerlModule rec {
       ensembl-io
       ensembl-variation
     ];
-  propagatedBuildInputs = [ pkgs.htslib ];
+  propagatedBuildInputs = [ htslib ];
   src = fetchFromGitHub {
     owner = "Ensembl";
     repo = pname;
-    rev = "release/110.0";
-    sha256 = "sha256-H0F6C+pq+w92uQ0+E3GR2MpOmC41qa+40ORHIsqtvfI=";
+    rev = "release/${version}";
+    sha256 = "sha256-6lRdWV2ispl+mpBhkZez/d9PxOw1fkNUWeG8mUIqBJc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
