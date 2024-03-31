@@ -265,6 +265,10 @@ with pkgs;
     python3Packages = python310Packages;
   };
 
+  hydra-check = callPackage ../by-name/hy/hydra-check/package.nix {
+    python3Packages = python310Packages;
+  };
+
   aocd = with python3Packages; toPythonApplication aocd;
 
   aesfix = callPackage ../tools/security/aesfix { };
@@ -21625,8 +21629,6 @@ with pkgs;
   hydra-cli = callPackage ../development/tools/misc/hydra-cli { };
 
   hydraAntLogger = callPackage ../development/libraries/java/hydra-ant-logger { };
-
-  hydra-check = with python3.pkgs; toPythonApplication hydra-check;
 
   hyena = callPackage ../development/libraries/hyena { };
 
