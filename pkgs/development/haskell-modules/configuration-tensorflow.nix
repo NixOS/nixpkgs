@@ -1,6 +1,8 @@
 { pkgs, haskellLib }:
 
-with haskellLib;
+let
+  inherit (haskellLib) doJailbreak overrideCabal;
+in
 
 self: super:
 let
