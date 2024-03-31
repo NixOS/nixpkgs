@@ -46,15 +46,11 @@ let
 
   # The latest Dwarf Fortress version. Maintainers: when a new version comes
   # out, ensure that (unfuck|dfhack|twbt) are all up to date before changing
-  # this.
-  latestVersion = "0.47.05";
+  # this. Note that unfuck and twbt are not required for v50.
+  latestVersion = "50.12";
 
   # Converts a version to a package name.
   versionToName = version: "dwarf-fortress_${replaceStrings ["."] ["_"] version}";
-
-  dwarf-therapist-original = libsForQt5.callPackage ./dwarf-therapist {
-    texlive = texliveBasic.withPackages (ps: with ps; [ float caption wrapfig adjmulticol sidecap preprint enumitem ]);
-  };
 
   # A map of names to each Dwarf Fortress package we know about.
   df-games = listToAttrs (map
@@ -62,15 +58,16 @@ let
       name = versionToName dfVersion;
       value =
         let
-          # I can't believe this syntax works. Spikes of Nix code indeed...
+          isV50 = lib.versionAtLeast dfVersion "50.0";
+
+          dwarf-fortress-unfuck = if isV50 then null else callPackage ./unfuck.nix { inherit dfVersion; };
+
           dwarf-fortress = callPackage ./game.nix {
             inherit dfVersion;
             inherit dwarf-fortress-unfuck;
           };
 
-          dwarf-fortress-unfuck = callPackage ./unfuck.nix { inherit dfVersion; };
-
-          twbt = callPackage ./twbt { inherit dfVersion; };
+          twbt = if isV50 then null else callPackage ./twbt { inherit dfVersion; };
 
           dfhack = callPackage ./dfhack {
             inherit (perlPackages) XMLLibXML XMLLibXSLT;
@@ -80,7 +77,10 @@ let
 
           dwarf-therapist = libsForQt5.callPackage ./dwarf-therapist/wrapper.nix {
             inherit dwarf-fortress;
-            dwarf-therapist = dwarf-therapist-original;
+            dwarf-therapist = libsForQt5.callPackage ./dwarf-therapist {
+              texlive = texliveBasic.withPackages (ps: with ps; [ float caption wrapfig adjmulticol sidecap preprint enumitem ]);
+              inherit isV50;
+            };
           };
         in
         callPackage ./wrapper {
@@ -97,7 +97,6 @@ let
 
     # Aliases for the latest Dwarf Fortress and the selected Therapist install
     dwarf-fortress = getAttr (versionToName latestVersion) df-games;
-    inherit dwarf-therapist-original;
     dwarf-therapist = dwarf-fortress.dwarf-therapist;
     dwarf-fortress-original = dwarf-fortress.dwarf-fortress;
 
