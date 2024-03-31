@@ -66,5 +66,6 @@ stdenv.mkDerivation rec {
     changelog = "https://raw.githubusercontent.com/giuspen/cherrytree/${version}/changelog.txt";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];
+    platforms = platforms.unix;
   };
 }
