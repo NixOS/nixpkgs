@@ -77,6 +77,9 @@ rec {
           updateInstallName "$lib"
         done
 
+        # as is a wrapper around clang. need to replace the nuked store paths
+        sed -i 's|/.*/bin/|'"$out"'/bin/|' $out/bin/as
+
         # Provide a gunzip script.
         cat > $out/bin/gunzip <<EOF
         #!$out/bin/sh
@@ -339,19 +342,26 @@ rec {
 
     # Create a pure environment where we use just what's in the bootstrap tools.
     buildCommand = ''
+      mkdir -p $out/bin
 
-      ls -l
-      mkdir $out
-      mkdir $out/bin
-      sed --version
-      find --version
-      diff --version
-      patch --version
-      make --version
-      awk --version
-      grep --version
-      clang --version
-      xz --version
+      for exe in $tools/bin/*; do
+        [[ $exe =~ bunzip2|codesign.*|false|install_name_tool|ld|lipo|pbzx|ranlib|rewrite-tbd|sigtool ]] && continue
+        $exe --version > /dev/null || { echo $exe failed >&2; exit 1; }
+      done
+
+      # run all exes that don't take a --version flag
+      bunzip2 -h
+      codesign --help
+      codesign_allocate -i $tools/bin/true -r -o true
+      false || (($? == 1))
+      install_name_tool -id true true
+      ld -v
+      lipo -info true
+      pbzx -v
+      # ranlib gets tested bulding hello
+      rewrite-tbd </dev/null
+      sigtool -h
+      rm true
 
       # The grep will return a nonzero exit code if there is no match, and we want to assert that we have
       # an SSL-capable curl
