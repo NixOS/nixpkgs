@@ -61,6 +61,9 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  postInstall = ''chmod -R u-s,g-s "$out"'';
+  postBuild = "set -x";
+
   passthru = {
     tests = {
       incus-legacy-init = nixosTests.incus.container-legacy-init;
