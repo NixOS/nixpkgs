@@ -16424,6 +16424,12 @@
     githubId = 25647735;
     name = "Victor Freire";
   };
+  ravenz46 = {
+    email = "goldraven0406@gmail.com";
+    github = "RAVENz46";
+    githubId = 86608952;
+    name = "RAVENz46";
+  };
   rawkode = {
     email = "david.andrew.mckay@gmail.com";
     github = "rawkode";
