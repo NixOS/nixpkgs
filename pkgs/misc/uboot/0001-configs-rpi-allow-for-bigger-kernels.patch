@@ -2,22 +2,6 @@ diff --git a/board/raspberrypi/rpi/rpi.env b/board/raspberrypi/rpi/rpi.env
 index 30228285ed..0327ef74fa 100644
 --- a/board/raspberrypi/rpi/rpi.env
 +++ b/board/raspberrypi/rpi/rpi.env
-@@ -55,11 +55,11 @@ dfu_alt_info+=zImage fat 0 1
-  * more than ~700M away from the start of the kernel image but this number can
-  * be larger OR smaller depending on e.g. the 'vmalloc=xxxM' command line
-  * parameter given to the kernel. So reserving memory from low to high
-- * satisfies this constraint again. Reserving 1M at 0x02600000-0x02700000 for
-- * the DTB leaves rest of the free RAM to the initrd starting at 0x02700000.
-+ * satisfies this constraint again. Reserving 1M at 0x04700000-0x04800000 for
-+ * the DTB leaves rest of the free RAM to the initrd starting at 0x04800000.
-  * Even with the smallest possible CPU-GPU memory split of the CPU getting
-- * only 64M, the remaining 25M starting at 0x02700000 should allow quite
-- * large initrds before they start colliding with U-Boot.
-+ * only 64M, the remaining 8M starting at 0x04800000 should allow reasonably
-+ * sized initrds before they start colliding with U-Boot.
-  */
- #ifdef CONFIG_ARM64
- fdt_high=ffffffffffffffff
 @@ -69,9 +69,9 @@ fdt_high=ffffffff
  initrd_high=ffffffff
  #endif
@@ -26,10 +10,10 @@ index 30228285ed..0327ef74fa 100644
 -pxefile_addr_r=0x02500000
 -fdt_addr_r=0x02600000
 -ramdisk_addr_r=0x02700000
-+scriptaddr=0x04500000
-+pxefile_addr_r=0x04600000
-+fdt_addr_r=0x04700000
-+ramdisk_addr_r=0x04800000
++scriptaddr=0x05500000
++pxefile_addr_r=0x05600000
++fdt_addr_r=0x05700000
++ramdisk_addr_r=0x05800000
  
  boot_targets=mmc usb pxe dhcp
 
