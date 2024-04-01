@@ -82,5 +82,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/deepmind/distrax";
     license = licenses.asl20;
     maintainers = with maintainers; [ onny ];
+    # Several tests fail with:
+    # AssertionError: [Chex] Assertion assert_type failed: Error in type compatibility check
+    broken = true;
   };
 }
