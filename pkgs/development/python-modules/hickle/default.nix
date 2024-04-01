@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "hickle";
-  version = "5.0.2";
+  version = "5.0.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2+7OF/a89jK/zLhbk/Q2A+zsKnfRbq3YMKGycEWsLEQ=";
+    hash = "sha256-An5RzK0nnRaBI6JEUl5shLrA22RgWzEbC9NJiRvgxT4=";
   };
 
   postPatch = ''
