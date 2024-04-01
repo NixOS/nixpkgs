@@ -60,7 +60,7 @@ let
     '';
 
     # Dependencies of anki
-    targetPkgs = pkgs: (with pkgs; [ xorg.libxkbfile xcb-util-cursor-HEAD krb5 ]);
+    targetPkgs = pkgs: (with pkgs; [ xorg.libxkbfile xcb-util-cursor-HEAD krb5 zstd ]);
 
     runScript = writeShellScript "anki-wrapper.sh" ''
       exec ${unpacked}/bin/anki ${ lib.strings.escapeShellArgs commandLineArgs } "$@"
