@@ -3042,13 +3042,6 @@ self: super: {
     #   repa-query, repa-scalar, repa-store, repa-stream
   ;
 
-  # https://github.com/jhickner/smtp-mail/pull/41 Use crypton-connection instead of connection
-  smtp-mail = appendPatch (pkgs.fetchpatch {
-    name = "smtp-mail-crypton-connection.patch";
-    url = "https://github.com/jhickner/smtp-mail/commit/4c724c80814ab1da7c37256a6c10e04c88b9af95.patch";
-    hash = "sha256-rCyY4rB/wLspeAbLw1jji5BykYFLnmTjLiUyNkiEXmw";
-  }) (super.smtp-mail.override { connection = self.crypton-connection; });
-
   # Use recent git version as the hackage version is outdated and not building on recent GHC versions
   haskell-to-elm = overrideSrc {
     version = "unstable-2023-12-02";
