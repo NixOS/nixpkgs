@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     outputHashes = {
       "ecolor-0.21.0" = "sha256-m7eHX6flwO21umtx3dnIuVUnNsEs3ZCyOk5Vvp/lVfI=";
       "notify-rust-4.6.0" = "sha256-jhCgisA9f6AI9e9JQUYRtEt47gQnDv5WsdRKFoKvHJs=";
-      "supergfxctl-5.1.2" = "sha256-HJGyjFeN3bq+ArCGfFHAMnjW76wSnNyxPWR0ELcyjLg=";
+      "supergfxctl-5.1.2" = "sha256-WDbUgvWExk5cs2cpjo88CiROdEbc01o2DELhRi9gju4=";
     };
   };
 
