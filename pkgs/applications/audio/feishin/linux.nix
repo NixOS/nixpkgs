@@ -4,7 +4,7 @@
 , fetchurl
 , mpv
 , graphicsmagick
-, electron_24
+, electron_26
 , makeDesktopItem
 , makeWrapper
 , pname

@@ -4,7 +4,7 @@
 , fetchurl
 , unzip
 , mpv
-, electron_24
+, electron_26
 , makeDesktopItem
 , makeWrapper
 , pname
