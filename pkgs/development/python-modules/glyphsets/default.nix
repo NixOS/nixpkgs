@@ -15,14 +15,14 @@
 buildPythonPackage rec {
   pname = "glyphsets";
   version = "0.6.14";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-lMRgchadgKyfFLw6ZF1sJAKBAK75zmw77L34MW9p7TI=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     defcon
     fonttools
     gflanguages
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     setuptools
     unicodedata2
   ];
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
   ];
 
