@@ -4,35 +4,34 @@
 }:
 
 let
-  # Compare with https://github.com/draios/sysdig/blob/0.35.1/cmake/modules/falcosecurity-libs.cmake
-  libsRev = "0.14.2";
-  libsHash = "sha256-sWrniRB/vQd1BZnsiz+wLHugrF3LhuAr9e9gDMavLoo=";
+  # Compare with https://github.com/draios/sysdig/blob/0.36.0/cmake/modules/falcosecurity-libs.cmake
+  libsRev = "0.15.1";
+  libsHash = "sha256-CsKa5ybRj7Mjb71xNwd8FtDprOMfpJMrm3mvkeqZE3o=";
 
-  # Compare with https://github.com/falcosecurity/libs/blob/0.14.2/cmake/modules/valijson.cmake
+  # Compare with https://github.com/falcosecurity/libs/blob/0.15.1/cmake/modules/valijson.cmake
   valijson = fetchFromGitHub {
     owner = "tristanpenman";
     repo = "valijson";
-    rev = "v0.6";
-    hash = "sha256-ZD19Q2MxMQd3yEKbY90GFCrerie5/jzgO8do4JQDoKM=";
+    rev = "v1.0.2";
+    hash = "sha256-wvFdjsDtKH7CpbEpQjzWtLC4RVOU9+D2rSK0Xo1cJqo=";
   };
 
-  # https://github.com/draios/sysdig/blob/0.35.1/cmake/modules/driver.cmake
+  # https://github.com/draios/sysdig/blob/0.36.0/cmake/modules/driver.cmake
   driver = fetchFromGitHub {
     owner = "falcosecurity";
     repo = "libs";
     rev = "7.0.0+driver";
     hash = "sha256-kXqvfM7HbGh2wEGaO4KBkFDW+m5gpOShJZKJLu9McKk=";
   };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "sysdig";
-  version = "0.35.3";
+  version = "0.36.0";
 
   src = fetchFromGitHub {
     owner = "draios";
     repo = "sysdig";
     rev = version;
-    hash = "sha256-wvCnWzQbkkM8qEG93li22P67WX1bGX9orTk+2vsBHZY=";
+    hash = "sha256-EQnmtxByTsSawQPFmTe2pBMcv5rFaNtST+2KXZSFuoo=";
   };
 
   nativeBuildInputs = [ cmake perl installShellFiles pkg-config ];
@@ -72,6 +71,13 @@ stdenv.mkDerivation rec {
 
     cp -r ${driver} driver-src
     chmod -R +w driver-src
+
+    # Hacky but needed until https://github.com/draios/sysdig/issues/2077 is resolved for kernel >= 6.8 as strlcpy got removed and build fails
+    ${lib.optionalString
+    (kernel != null && lib.versionAtLeast kernel.version "6.8") ''
+      substituteInPlace libs/driver/ppm_events.c driver-src/driver/ppm_events.c --replace-fail "strlcpy" "strscpy"
+    ''}
+
     cmakeFlagsArray+=(
       "-DFALCOSECURITY_LIBS_SOURCE_DIR=$(pwd)/libs"
       "-DDRIVER_SOURCE_DIR=$(pwd)/driver-src/driver"
@@ -139,7 +145,7 @@ stdenv.mkDerivation rec {
     license = with licenses; [ asl20 gpl2 mit ];
     maintainers = [maintainers.raskin];
     platforms = ["x86_64-linux"] ++ platforms.darwin;
-    broken = kernel != null && versionOlder kernel.version "4.14";
+    broken = kernel != null && ((versionOlder kernel.version "4.14") || (kernel.isHardened && lib.lists.findSingle (x: x == kernel.version) false true [ "4.19" "5.4" "lqx" ]));
     homepage = "https://sysdig.com/opensource/";
     downloadPage = "https://github.com/draios/sysdig/releases";
   };
