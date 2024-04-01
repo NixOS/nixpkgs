@@ -31,7 +31,6 @@ let
     ;
 
   inherit (lib)
-    mdDoc
     mkDefault
     mkDerivedConfig
     mkEnableOption
@@ -81,11 +80,11 @@ rec {
 
   initrdContents = attrsOf (submodule ({ config, options, name, ... }: {
     options = {
-      enable = mkEnableOption (mdDoc "copying of this file and symlinking it") // { default = true; };
+      enable = (mkEnableOption "copying of this file and symlinking it") // { default = true; };
 
       target = mkOption {
         type = path;
-        description = mdDoc ''
+        description = ''
           Path of the symlink.
         '';
         default = name;
@@ -94,12 +93,12 @@ rec {
       text = mkOption {
         default = null;
         type = nullOr lines;
-        description = mdDoc "Text of the file.";
+        description = "Text of the file.";
       };
 
       source = mkOption {
         type = path;
-        description = mdDoc "Path of the source file.";
+        description = "Path of the source file.";
       };
     };
 
