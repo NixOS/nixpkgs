@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     owner = "asus-linux";
     repo = "asusctl";
     rev = version;
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-H8x3nfOFRv9DkbDkFw+LO1tdHiVyU3SzetqED4twPSk=";
   };
 
   cargoHash = "";
