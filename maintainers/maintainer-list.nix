@@ -11326,6 +11326,12 @@
     githubId = 591860;
     name = "Lionello Lunesu";
   };
+  liperium = {
+    email = "mattysgervais@gmail.com";
+    github = "liperium";
+    githubId = 48138387;
+    name = "Mattys Gervais";
+  };
   litchipi = {
     email = "litchi.pi@proton.me";
     github = "litchipi";
