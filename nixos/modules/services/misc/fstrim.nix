@@ -16,7 +16,7 @@ in {
       interval = mkOption {
         type = types.str;
         default = "weekly";
-        description = lib.mdDoc ''
+        description = ''
           How often we run fstrim. For most desktop and server systems
           a sufficient trimming frequency is once a week.
 

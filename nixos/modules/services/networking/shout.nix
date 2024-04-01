@@ -28,7 +28,7 @@ in {
     private = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Make your shout instance private. You will need to configure user
         accounts by adding entries in {file}`${shoutHome}/users`.
       '';
@@ -37,19 +37,19 @@ in {
     listenAddress = mkOption {
       type = types.str;
       default = "0.0.0.0";
-      description = lib.mdDoc "IP interface to listen on for http connections.";
+      description = "IP interface to listen on for http connections.";
     };
 
     port = mkOption {
       type = types.port;
       default = 9000;
-      description = lib.mdDoc "TCP port to listen on for http connections.";
+      description = "TCP port to listen on for http connections.";
     };
 
     configFile = mkOption {
       type = types.nullOr types.lines;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Contents of Shout's {file}`config.js` file.
 
         Used for backward compatibility, recommended way is now to use
@@ -70,7 +70,7 @@ in {
           port = 6697;
         };
       };
-      description = lib.mdDoc ''
+      description = ''
         Shout {file}`config.js` contents as attribute set (will be
         converted to JSON to generate the configuration file).
 

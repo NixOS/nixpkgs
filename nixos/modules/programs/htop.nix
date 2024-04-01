@@ -29,7 +29,7 @@ in
         hide_kernel_threads = true;
         hide_userland_threads = true;
       };
-      description = lib.mdDoc ''
+      description = ''
         Extra global default configuration for htop
         which is read on first startup only.
         Htop subsequently uses ~/.config/htop/htoprc

@@ -17,7 +17,7 @@ in
           defscrollback 10000
           startup_message off
         '';
-        description = lib.mdDoc "The contents of {file}`/etc/screenrc` file";
+        description = "The contents of {file}`/etc/screenrc` file";
       };
     };
   };

@@ -16,7 +16,7 @@ in
       nanorc = lib.mkOption {
         type = lib.types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           The system-wide nano configuration.
           See {manpage}`nanorc(5)`.
         '';
@@ -30,7 +30,7 @@ in
       syntaxHighlight = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = lib.mdDoc "Whether to enable syntax highlight for various languages.";
+        description = "Whether to enable syntax highlight for various languages.";
       };
     };
   };

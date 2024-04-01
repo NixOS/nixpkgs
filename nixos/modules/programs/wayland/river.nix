@@ -33,7 +33,7 @@ in {
           termite rofi light
         ]
       '';
-      description = lib.mdDoc ''
+      description = ''
         Extra packages to be installed system wide. See
         [Common X11 apps used on i3 with Wayland alternatives](https://github.com/swaywm/sway/wiki/i3-Migration-Guide#common-x11-apps-used-on-i3-with-wayland-alternatives)
         for a list of useful software.

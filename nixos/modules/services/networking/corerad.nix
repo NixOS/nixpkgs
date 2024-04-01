@@ -36,7 +36,7 @@ in {
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Configuration for CoreRAD, see <https://github.com/mdlayher/corerad/blob/main/internal/config/reference.toml>
         for supported values. Ignored if configFile is set.
       '';
@@ -45,7 +45,7 @@ in {
     configFile = mkOption {
       type = types.path;
       example = literalExpression ''"''${pkgs.corerad}/etc/corerad/corerad.toml"'';
-      description = lib.mdDoc "Path to CoreRAD TOML configuration file.";
+      description = "Path to CoreRAD TOML configuration file.";
     };
 
     package = mkPackageOption pkgs "corerad" { };

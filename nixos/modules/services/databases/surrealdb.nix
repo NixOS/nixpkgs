@@ -14,7 +14,7 @@ in {
 
       dbPath = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           The path that surrealdb will write data to. Use null for in-memory.
           Can be one of "memory", "file://:path", "tikv://:addr".
         '';
@@ -24,7 +24,7 @@ in {
 
       host = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           The host that surrealdb will connect to.
         '';
         default = "127.0.0.1";
@@ -33,7 +33,7 @@ in {
 
       port = mkOption {
         type = types.port;
-        description = lib.mdDoc ''
+        description = ''
           The port that surrealdb will connect to.
         '';
         default = 8000;
@@ -44,7 +44,7 @@ in {
         type = types.listOf types.str;
         default = [];
         example = [ "--allow-all" "--auth" "--user root" "--pass root" ];
-        description = lib.mdDoc ''
+        description = ''
           Specify a list of additional command line flags,
           which get escaped and are then passed to surrealdb.
         '';

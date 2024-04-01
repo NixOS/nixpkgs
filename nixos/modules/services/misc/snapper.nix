@@ -25,7 +25,7 @@ let
   configOptions = {
     SUBVOLUME = mkOption {
       type = types.path;
-      description = lib.mdDoc ''
+      description = ''
         Path of the subvolume or mount point.
         This path is a subvolume and has to contain a subvolume named
         .snapshots.
@@ -36,7 +36,7 @@ let
     FSTYPE = mkOption {
       type = types.enum [ "btrfs" ];
       default = "btrfs";
-      description = lib.mdDoc ''
+      description = ''
         Filesystem type. Only btrfs is stable and tested.
       '';
     };
@@ -44,7 +44,7 @@ let
     ALLOW_GROUPS = mkOption {
       type = types.listOf safeStr;
       default = [];
-      description = lib.mdDoc ''
+      description = ''
         List of groups allowed to operate with the config.
 
         Also see the PERMISSIONS section in man:snapper(8).
@@ -55,7 +55,7 @@ let
       type = types.listOf safeStr;
       default = [];
       example = [ "alice" ];
-      description = lib.mdDoc ''
+      description = ''
         List of users allowed to operate with the config. "root" is always
         implicitly included.
 
@@ -66,7 +66,7 @@ let
     TIMELINE_CLEANUP = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Defines whether the timeline cleanup algorithm should be run for the config.
       '';
     };
@@ -74,7 +74,7 @@ let
     TIMELINE_CREATE = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Defines whether hourly snapshots should be created.
       '';
     };
@@ -87,7 +87,7 @@ in
     snapshotRootOnBoot = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to snapshot root on boot
       '';
     };
@@ -95,7 +95,7 @@ in
     snapshotInterval = mkOption {
       type = types.str;
       default = "hourly";
-      description = lib.mdDoc ''
+      description = ''
         Snapshot interval.
 
         The format is described in
@@ -106,7 +106,7 @@ in
     cleanupInterval = mkOption {
       type = types.str;
       default = "1d";
-      description = lib.mdDoc ''
+      description = ''
         Cleanup interval.
 
         The format is described in
@@ -117,7 +117,7 @@ in
     filters = mkOption {
       type = types.nullOr types.lines;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Global display difference filter. See man:snapper(8) for more details.
       '';
     };
@@ -135,7 +135,7 @@ in
         }
       '';
 
-      description = lib.mdDoc ''
+      description = ''
         Subvolume configuration. Any option mentioned in man:snapper-configs(5)
         is valid here, even if NixOS doesn't document it.
       '';

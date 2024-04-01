@@ -12,7 +12,7 @@ in {
       enable = mkEnableOption "auto-cpufreq daemon";
 
       settings = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Configuration for `auto-cpufreq`.
 
           The available options can be found in [the example configuration file](https://github.com/AdnanHodzic/auto-cpufreq/blob/v${pkgs.auto-cpufreq.version}/auto-cpufreq.conf-example).

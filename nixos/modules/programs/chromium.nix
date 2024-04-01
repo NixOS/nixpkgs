@@ -27,7 +27,7 @@ in
 
       extensions = mkOption {
         type = with types; nullOr (listOf str);
-        description = lib.mdDoc ''
+        description = ''
           List of chromium extensions to install.
           For list of plugins ids see id in url of extensions on
           [chrome web store](https://chrome.google.com/webstore/category/extensions)
@@ -50,35 +50,35 @@ in
 
       homepageLocation = mkOption {
         type = types.nullOr types.str;
-        description = lib.mdDoc "Chromium default homepage";
+        description = "Chromium default homepage";
         default = null;
         example = "https://nixos.org";
       };
 
       defaultSearchProviderEnabled = mkOption {
         type = types.nullOr types.bool;
-        description = lib.mdDoc "Enable the default search provider.";
+        description = "Enable the default search provider.";
         default = null;
         example = true;
       };
 
       defaultSearchProviderSearchURL = mkOption {
         type = types.nullOr types.str;
-        description = lib.mdDoc "Chromium default search provider url.";
+        description = "Chromium default search provider url.";
         default = null;
         example = "https://encrypted.google.com/search?q={searchTerms}&{google:RLZ}{google:originalQueryForSuggestion}{google:assistedQueryStats}{google:searchFieldtrialParameter}{google:searchClient}{google:sourceId}{google:instantExtendedEnabledParameter}ie={inputEncoding}";
       };
 
       defaultSearchProviderSuggestURL = mkOption {
         type = types.nullOr types.str;
-        description = lib.mdDoc "Chromium default search provider url for suggestions.";
+        description = "Chromium default search provider url for suggestions.";
         default = null;
         example = "https://encrypted.google.com/complete/search?output=chrome&q={searchTerms}";
       };
 
       extraOpts = mkOption {
         type = types.attrs;
-        description = lib.mdDoc ''
+        description = ''
           Extra chromium policy options. A list of available policies
           can be found in the Chrome Enterprise documentation:
           <https://cloud.google.com/docs/chrome-enterprise/policies/>
@@ -101,7 +101,7 @@ in
 
       initialPrefs = mkOption {
         type = types.attrs;
-        description = lib.mdDoc ''
+        description = ''
           Initial preferences are used to configure the browser for the first run.
           Unlike {option}`programs.chromium.extraOpts`, initialPrefs can be changed by users in the browser settings.
           More information can be found in the Chromium documentation:

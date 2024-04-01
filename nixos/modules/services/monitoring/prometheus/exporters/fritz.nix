@@ -1,6 +1,6 @@
 { config, lib, pkgs, utils, ... }:
 let
-  inherit (lib) mkOption types mdDoc;
+  inherit (lib) mkOption types;
   cfg = config.services.prometheus.exporters.fritz;
   yaml = pkgs.formats.yaml { };
   configFile = yaml.generate "fritz-exporter.yaml" cfg.settings;
@@ -10,7 +10,7 @@ in
 
   extraOpts = {
     settings = mkOption {
-      description = mdDoc "Configuration settings for fritz-exporter.";
+      description = "Configuration settings for fritz-exporter.";
       type = types.submodule {
         freeformType = yaml.type;
 
@@ -32,7 +32,7 @@ in
           log_level = mkOption {
             type = types.enum [ "DEBUG" "INFO" "WARNING" "ERROR" "CRITICAL" ];
             default = "INFO";
-            description = mdDoc ''
+            description = ''
               Log level to use for the exporter.
             '';
           };
@@ -46,33 +46,33 @@ in
                 name = mkOption {
                   type = types.str;
                   default = "";
-                  description = mdDoc ''
+                  description = ''
                     Name to use for the device.
                   '';
                 };
                 hostname = mkOption {
                   type = types.str;
                   default = "fritz.box";
-                  description = mdDoc ''
+                  description = ''
                     Hostname under which the target device is reachable.
                   '';
                 };
                 username = mkOption {
                   type = types.str;
-                  description = mdDoc ''
+                  description = ''
                     Username to authenticate with the target device.
                   '';
                 };
                 password_file = mkOption {
                   type = types.path;
-                  description = mdDoc ''
+                  description = ''
                     Path to a file which contains the password to authenticate with the target device.
                     Needs to be readable by the user the exporter runs under.
                   '';
                 };
                 host_info = mkOption {
                   type = types.bool;
-                  description = mdDoc ''
+                  description = ''
                     Enable extended host info for this device. *Warning*: This will heavily increase scrape time.
                   '';
                   default = false;

@@ -24,7 +24,7 @@ in
       startWhenNeeded = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Only run the service when an actual supported device is plugged.
         '';
       };
@@ -32,7 +32,7 @@ in
       devices = mkOption {
         type = types.listOf types.str;
         default = [ "0a07" "c222" "c225" "c227" "c251" ];
-        description = lib.mdDoc ''
+        description = ''
           List of USB device ids supported by g15daemon.
 
           You most likely do not need to change this.
@@ -46,7 +46,7 @@ in
       enableGraphical = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Enable graphical support applications.";
+        description = "Enable graphical support applications.";
       };
     };
   };

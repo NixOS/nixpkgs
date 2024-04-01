@@ -1,7 +1,7 @@
 { options, config, pkgs, lib, ... }:
 
 let
-  inherit (lib) mkOption mdDoc types mkIf;
+  inherit (lib) mkOption types mkIf;
 
   opt = options.services.quicktun;
   cfg = config.services.quicktun;
@@ -10,7 +10,7 @@ in
   options = {
     services.quicktun = mkOption {
       default = { };
-      description = mdDoc ''
+      description = ''
         QuickTun tunnels.
 
         See <http://wiki.ucis.nl/QuickTun> for more information about available options.
@@ -23,14 +23,14 @@ in
             type = with types; coercedTo bool (b: if b then 1 else 0) (ints.between 0 1);
             default = false;
             example = true;
-            description = mdDoc "Whether to operate in tun (IP) or tap (Ethernet) mode.";
+            description = "Whether to operate in tun (IP) or tap (Ethernet) mode.";
           };
 
           remoteAddress = mkOption {
             type = types.str;
             default = "0.0.0.0";
             example = "tunnel.example.com";
-            description = mdDoc ''
+            description = ''
               IP address or hostname of the remote end (use `0.0.0.0` for a floating/dynamic remote endpoint).
             '';
           };
@@ -39,27 +39,27 @@ in
             type = with types; nullOr str;
             default = null;
             example = "0.0.0.0";
-            description = mdDoc "IP address or hostname of the local end.";
+            description = "IP address or hostname of the local end.";
           };
 
           localPort = mkOption {
             type = types.port;
             default = 2998;
-            description = mdDoc "Local UDP port.";
+            description = "Local UDP port.";
           };
 
           remotePort = mkOption {
             type = types.port;
             default = qtcfg.localPort;
             defaultText = lib.literalExpression "config.services.quicktun.<name>.localPort";
-            description = mdDoc " remote UDP port";
+            description = " remote UDP port";
           };
 
           remoteFloat = mkOption {
             type = with types; coercedTo bool (b: if b then 1 else 0) (ints.between 0 1);
             default = false;
             example = true;
-            description = mdDoc ''
+            description = ''
               Whether to allow the remote address and port to change when properly encrypted packets are received.
             '';
           };
@@ -67,13 +67,13 @@ in
           protocol = mkOption {
             type = types.enum [ "raw" "nacl0" "nacltai" "salty" ];
             default = "nacltai";
-            description = mdDoc "Which protocol to use.";
+            description = "Which protocol to use.";
           };
 
           privateKey = mkOption {
             type = with types; nullOr str;
             default = null;
-            description = mdDoc ''
+            description = ''
               Local secret key in hexadecimal form.
 
               ::: {.warning}
@@ -91,7 +91,7 @@ in
             # This is a hack to deprecate `privateKey` without using `mkChangedModuleOption`
             default = if qtcfg.privateKey == null then null else pkgs.writeText "quickttun-key-${name}" qtcfg.privateKey;
             defaultText = "null";
-            description = mdDoc ''
+            description = ''
               Path to file containing local secret key in binary or hexadecimal form.
 
               ::: {.note}
@@ -103,7 +103,7 @@ in
           publicKey = mkOption {
             type = with types; nullOr str;
             default = null;
-            description = mdDoc ''
+            description = ''
               Remote public key in hexadecimal form.
 
               ::: {.note}
@@ -115,7 +115,7 @@ in
           timeWindow = mkOption {
             type = types.ints.unsigned;
             default = 5;
-            description = mdDoc ''
+            description = ''
               Allowed time window for first received packet in seconds (positive number allows packets from history)
             '';
           };
@@ -123,7 +123,7 @@ in
           upScript = mkOption {
             type = with types; nullOr lines;
             default = null;
-            description = mdDoc ''
+            description = ''
               Run specified command or script after the tunnel device has been opened.
             '';
           };

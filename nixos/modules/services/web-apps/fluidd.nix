@@ -13,7 +13,7 @@ in
     hostName = mkOption {
       type = types.str;
       default = "localhost";
-      description = lib.mdDoc "Hostname to serve fluidd on";
+      description = "Hostname to serve fluidd on";
     };
 
     nginx = mkOption {
@@ -25,7 +25,7 @@ in
           serverAliases = [ "fluidd.''${config.networking.domain}" ];
         }
       '';
-      description = lib.mdDoc "Extra configuration for the nginx virtual host of fluidd.";
+      description = "Extra configuration for the nginx virtual host of fluidd.";
     };
   };
 

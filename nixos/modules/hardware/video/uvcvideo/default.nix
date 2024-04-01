@@ -22,7 +22,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable {command}`uvcvideo` dynamic controls.
 
           Note that enabling this brings the {command}`uvcdynctrl` tool
@@ -34,7 +34,7 @@ in
       packages = mkOption {
         type = types.listOf types.path;
         example = literalExpression "[ pkgs.tiscamera ]";
-        description = lib.mdDoc ''
+        description = ''
           List of packages containing {command}`uvcvideo` dynamic controls
           rules. All files found in
           {file}`«pkg»/share/uvcdynctrl/data`

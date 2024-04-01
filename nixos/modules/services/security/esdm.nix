@@ -29,7 +29,7 @@ in
     enableLinuxCompatServices = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Enable /dev/random, /dev/urandom and /proc/sys/kernel/random/* userspace wrapper.
       '';
     };

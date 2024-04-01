@@ -51,7 +51,7 @@ in
   options.services.pantalaimon-headless.instances = mkOption {
     default = { };
     type = types.attrsOf (types.submodule (import ./pantalaimon-options.nix));
-    description = lib.mdDoc ''
+    description = ''
       Declarative instance config.
 
       Note: to use pantalaimon interactively, e.g. for a Matrix client which does not

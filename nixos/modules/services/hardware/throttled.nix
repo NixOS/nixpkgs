@@ -12,7 +12,7 @@ in {
       extraConfig = mkOption {
         type = types.str;
         default = "";
-        description = lib.mdDoc "Alternative configuration";
+        description = "Alternative configuration";
       };
     };
   };

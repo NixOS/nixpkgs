@@ -10,7 +10,7 @@ in
       package = mkPackageOption pkgs "shadow" { };
 
       chfnRestrict = mkOption {
-        description = mdDoc ''
+        description = ''
           Use chfn SUID to allow non-root users to change their account GECOS information.
         '';
         type = nullOr str;
@@ -18,7 +18,7 @@ in
       };
 
       settings = mkOption {
-        description = mdDoc ''
+        description = ''
           Config options for the /etc/login.defs file, that defines
           the site-specific configuration for the shadow password suite.
           See login.defs(5) man page for available options.
@@ -36,68 +36,68 @@ in
               */
           options = {
             DEFAULT_HOME = mkOption {
-              description = mdDoc "Indicate if login is allowed if we can't cd to the home directory.";
+              description = "Indicate if login is allowed if we can't cd to the home directory.";
               default = "yes";
               type = enum [ "yes" "no" ];
             };
 
             ENCRYPT_METHOD = mkOption {
-              description = mdDoc "This defines the system default encryption algorithm for encrypting passwords.";
+              description = "This defines the system default encryption algorithm for encrypting passwords.";
               # The default crypt() method, keep in sync with the PAM default
               default = "YESCRYPT";
               type = enum [ "YESCRYPT" "SHA512" "SHA256" "MD5" "DES"];
             };
 
             SYS_UID_MIN = mkOption {
-              description = mdDoc "Range of user IDs used for the creation of system users by useradd or newusers.";
+              description = "Range of user IDs used for the creation of system users by useradd or newusers.";
               default = 400;
               type = int;
             };
 
             SYS_UID_MAX = mkOption {
-              description = mdDoc "Range of user IDs used for the creation of system users by useradd or newusers.";
+              description = "Range of user IDs used for the creation of system users by useradd or newusers.";
               default = 999;
               type = int;
             };
 
             UID_MIN = mkOption {
-              description = mdDoc "Range of user IDs used for the creation of regular users by useradd or newusers.";
+              description = "Range of user IDs used for the creation of regular users by useradd or newusers.";
               default = 1000;
               type = int;
             };
 
             UID_MAX = mkOption {
-              description = mdDoc "Range of user IDs used for the creation of regular users by useradd or newusers.";
+              description = "Range of user IDs used for the creation of regular users by useradd or newusers.";
               default = 29999;
               type = int;
             };
 
             SYS_GID_MIN = mkOption {
-              description = mdDoc "Range of group IDs used for the creation of system groups by useradd, groupadd, or newusers";
+              description = "Range of group IDs used for the creation of system groups by useradd, groupadd, or newusers";
               default = 400;
               type = int;
             };
 
             SYS_GID_MAX = mkOption {
-              description = mdDoc "Range of group IDs used for the creation of system groups by useradd, groupadd, or newusers";
+              description = "Range of group IDs used for the creation of system groups by useradd, groupadd, or newusers";
               default = 999;
               type = int;
             };
 
             GID_MIN = mkOption {
-              description = mdDoc "Range of group IDs used for the creation of regular groups by useradd, groupadd, or newusers.";
+              description = "Range of group IDs used for the creation of regular groups by useradd, groupadd, or newusers.";
               default = 1000;
               type = int;
             };
 
             GID_MAX = mkOption {
-              description = mdDoc "Range of group IDs used for the creation of regular groups by useradd, groupadd, or newusers.";
+              description = "Range of group IDs used for the creation of regular groups by useradd, groupadd, or newusers.";
               default = 29999;
               type = int;
             };
 
             TTYGROUP = mkOption {
-              description = mdDoc ''
+              description = ''
                 The terminal permissions: the login tty will be owned by the TTYGROUP group,
                 and the permissions will be set to TTYPERM'';
               default = "tty";
@@ -105,7 +105,7 @@ in
             };
 
             TTYPERM = mkOption {
-              description = mdDoc ''
+              description = ''
                 The terminal permissions: the login tty will be owned by the TTYGROUP group,
                 and the permissions will be set to TTYPERM'';
               default = "0620";
@@ -114,7 +114,7 @@ in
 
             # Ensure privacy for newly created home directories.
             UMASK = mkOption {
-              description = mdDoc "The file mode creation mask is initialized to this value.";
+              description = "The file mode creation mask is initialized to this value.";
               default = "077";
               type = str;
             };
@@ -125,7 +125,7 @@ in
     };
 
     users.defaultUserShell = mkOption {
-      description = mdDoc ''
+      description = ''
         This option defines the default shell assigned to user
         accounts. This can be either a full system path or a shell package.
 

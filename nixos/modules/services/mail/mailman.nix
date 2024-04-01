@@ -88,7 +88,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Enable Mailman on this host. Requires an active MTA on the host (e.g. Postfix).";
+        description = "Enable Mailman on this host. Requires an active MTA on the host (e.g. Postfix).";
       };
 
       ldap = {
@@ -96,21 +96,21 @@ in {
         serverUri = mkOption {
           type = types.str;
           example = "ldaps://ldap.host";
-          description = lib.mdDoc ''
+          description = ''
             LDAP host to connect against.
           '';
         };
         bindDn = mkOption {
           type = types.str;
           example = "cn=root,dc=nixos,dc=org";
-          description = lib.mdDoc ''
+          description = ''
             Service account to bind against.
           '';
         };
         bindPasswordFile = mkOption {
           type = types.str;
           example = "/run/secrets/ldap-bind";
-          description = lib.mdDoc ''
+          description = ''
             Path to the file containing the bind password of the service account
             defined by [](#opt-services.mailman.ldap.bindDn).
           '';
@@ -119,7 +119,7 @@ in {
           type = types.nullOr types.str;
           default = null;
           example = "cn=admin,ou=groups,dc=nixos,dc=org";
-          description = lib.mdDoc ''
+          description = ''
             Group where a user must be a member of to gain superuser rights.
           '';
         };
@@ -127,14 +127,14 @@ in {
           query = mkOption {
             type = types.str;
             example = "(&(objectClass=inetOrgPerson)(|(uid=%(user)s)(mail=%(user)s)))";
-            description = lib.mdDoc ''
+            description = ''
               Query to find a user in the LDAP database.
             '';
           };
           ou = mkOption {
             type = types.str;
             example = "ou=users,dc=nixos,dc=org";
-            description = lib.mdDoc ''
+            description = ''
               Organizational unit to look up a user.
             '';
           };
@@ -148,21 +148,21 @@ in {
             ];
             default = "posixGroup";
             apply = v: "${toUpper (substring 0 1 v)}${substring 1 (stringLength v) v}Type";
-            description = lib.mdDoc ''
+            description = ''
               Type of group to perform a group search against.
             '';
           };
           query = mkOption {
             type = types.str;
             example = "(objectClass=groupOfNames)";
-            description = lib.mdDoc ''
+            description = ''
               Query to find a group associated to a user in the LDAP database.
             '';
           };
           ou = mkOption {
             type = types.str;
             example = "ou=groups,dc=nixos,dc=org";
-            description = lib.mdDoc ''
+            description = ''
               Organizational unit to look up a group.
             '';
           };
@@ -171,28 +171,28 @@ in {
           username = mkOption {
             default = "uid";
             type = types.str;
-            description = lib.mdDoc ''
+            description = ''
               LDAP-attribute that corresponds to the `username`-attribute in mailman.
             '';
           };
           firstName = mkOption {
             default = "givenName";
             type = types.str;
-            description = lib.mdDoc ''
+            description = ''
               LDAP-attribute that corresponds to the `firstName`-attribute in mailman.
             '';
           };
           lastName = mkOption {
             default = "sn";
             type = types.str;
-            description = lib.mdDoc ''
+            description = ''
               LDAP-attribute that corresponds to the `lastName`-attribute in mailman.
             '';
           };
           email = mkOption {
             default = "mail";
             type = types.str;
-            description = lib.mdDoc ''
+            description = ''
               LDAP-attribute that corresponds to the `email`-attribute in mailman.
             '';
           };
@@ -203,7 +203,7 @@ in {
         type = types.bool;
         default = true;
         example = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable Postfix integration. Requires an active Postfix installation.
 
           If you want to use another MTA, set this option to false and configure
@@ -216,7 +216,7 @@ in {
       siteOwner = mkOption {
         type = types.str;
         example = "postmaster@example.org";
-        description = lib.mdDoc ''
+        description = ''
           Certain messages that must be delivered to a human, but which can't
           be delivered to a list owner (e.g. a bounce from a list owner), will
           be sent to this address. It should point to a human.
@@ -226,7 +226,7 @@ in {
       webHosts = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           The list of hostnames and/or IP addresses from which the Mailman Web
           UI will accept requests. By default, "localhost" and "127.0.0.1" are
           enabled. All additional names under which your web server accepts
@@ -238,7 +238,7 @@ in {
       webUser = mkOption {
         type = types.str;
         default = "mailman-web";
-        description = lib.mdDoc ''
+        description = ''
           User to run mailman-web as
         '';
       };
@@ -246,7 +246,7 @@ in {
       webSettings = mkOption {
         type = types.attrs;
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           Overrides for the default mailman-web Django settings.
         '';
       };
@@ -254,7 +254,7 @@ in {
       restApiPassFile = mkOption {
         default = null;
         type = types.nullOr types.str;
-        description = lib.mdDoc ''
+        description = ''
           Path to the file containing the value for `MAILMAN_REST_API_PASS`.
         '';
       };
@@ -266,20 +266,20 @@ in {
           default = "/";
           example = lib.literalExpression "/lists";
           type = types.str;
-          description = lib.mdDoc ''
+          description = ''
             Path to mount the mailman-web django application on.
           '';
         };
       };
 
       extraPythonPackages = mkOption {
-        description = lib.mdDoc "Packages to add to the python environment used by mailman and mailman-web";
+        description = "Packages to add to the python environment used by mailman and mailman-web";
         type = types.listOf types.package;
         default = [];
       };
 
       settings = mkOption {
-        description = lib.mdDoc "Settings for mailman.cfg";
+        description = "Settings for mailman.cfg";
         type = types.attrsOf (types.attrsOf types.str);
         default = {};
       };
@@ -290,7 +290,7 @@ in {
         baseUrl = mkOption {
           type = types.str;
           default = "http://localhost:18507/archives/";
-          description = lib.mdDoc ''
+          description = ''
             Where can Mailman connect to Hyperkitty's internal API, preferably on
             localhost?
           '';

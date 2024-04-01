@@ -19,7 +19,7 @@ in
         type = types.nullOr types.int;
         default = null;
         example = 100;
-        description = lib.mdDoc ''
+        description = ''
           Limit access to the ckb daemon to a particular group.
         '';
       };

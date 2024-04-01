@@ -21,7 +21,7 @@ in
           guacd-hostname = "localhost";
           guacd-port = 4822;
         };
-        description = lib.mdDoc ''
+        description = ''
           Configuration written to `guacamole.properties`.
 
           ::: {.note}
@@ -36,7 +36,7 @@ in
       enableWebserver = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Enable the Guacamole web application in a Tomcat webserver.
         '';
       };

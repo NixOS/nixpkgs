@@ -24,30 +24,30 @@ in
             type = types.str;
             default = "localhost";
             example = "mumble.example.com";
-            description = lib.mdDoc "Hostname of the mumble server to connect to.";
+            description = "Hostname of the mumble server to connect to.";
           };
 
           server.port = mkOption {
             type = types.port;
             default = 64738;
-            description = lib.mdDoc "Port of the mumble server to connect to.";
+            description = "Port of the mumble server to connect to.";
           };
 
           bot.username = mkOption {
             type = types.str;
             default = "botamusique";
-            description = lib.mdDoc "Name the bot should appear with.";
+            description = "Name the bot should appear with.";
           };
 
           bot.comment = mkOption {
             type = types.str;
             default = "Hi, I'm here to play radio, local music or youtube/soundcloud music. Have fun!";
-            description = lib.mdDoc "Comment displayed for the bot.";
+            description = "Comment displayed for the bot.";
           };
         };
       };
       default = {};
-      description = lib.mdDoc ''
+      description = ''
         Your {file}`configuration.ini` as a Nix attribute set. Look up
         possible options in the [configuration.example.ini](https://github.com/azlux/botamusique/blob/master/configuration.example.ini).
       '';

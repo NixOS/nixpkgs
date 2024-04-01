@@ -11,7 +11,7 @@ in {
     minimalPrompt = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc "Use minimal one-liner prompt.";
+      description = "Use minimal one-liner prompt.";
     };
   };
 

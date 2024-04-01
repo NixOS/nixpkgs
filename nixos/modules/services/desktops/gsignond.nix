@@ -20,7 +20,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable gSignOn daemon, a DBus service
           which performs user authentication on behalf of its clients.
         '';
@@ -29,7 +29,7 @@ in
       plugins = mkOption {
         type = types.listOf types.package;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           What plugins to use with the gSignOn daemon.
         '';
       };

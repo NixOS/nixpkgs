@@ -13,7 +13,7 @@ in
     extraSessionCommands = mkOption {
       default = "";
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Shell commands executed just before wmderland is started.
       '';
     };
@@ -38,7 +38,7 @@ in
           rxvt-unicode
         ]
       '';
-      description = lib.mdDoc ''
+      description = ''
         Extra packages to be installed system wide.
       '';
     };

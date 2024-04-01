@@ -14,7 +14,7 @@ in
     config = mkOption {
       type = types.lines;
       default = "";
-      description = lib.mdDoc "monitrc content";
+      description = "monitrc content";
     };
 
   };

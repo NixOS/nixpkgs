@@ -18,7 +18,7 @@ in  {
     strongswan.extraConfig = mkOption {
       type = types.str;
       default = "";
-      description = lib.mdDoc ''
+      description = ''
         Contents of the `strongswan.conf` file.
       '';
     };

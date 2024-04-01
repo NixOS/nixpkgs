@@ -33,12 +33,12 @@ let
       mountPoint = mkOption {
         example = "/mnt/usb";
         type = nonEmptyWithoutTrailingSlash;
-        description = lib.mdDoc "Location of the mounted file system.";
+        description = "Location of the mounted file system.";
       };
 
       stratis.poolUuid = lib.mkOption {
         type = types.uniq (types.nullOr types.str);
-        description = lib.mdDoc ''
+        description = ''
           UUID of the stratis pool that the fs is located in
         '';
         example = "04c68063-90a5-4235-b9dd-6180098a20d9";
@@ -49,20 +49,20 @@ let
         default = null;
         example = "/dev/sda";
         type = types.nullOr nonEmptyStr;
-        description = lib.mdDoc "Location of the device.";
+        description = "Location of the device.";
       };
 
       fsType = mkOption {
         default = "auto";
         example = "ext3";
         type = nonEmptyStr;
-        description = lib.mdDoc "Type of the file system.";
+        description = "Type of the file system.";
       };
 
       options = mkOption {
         default = [ "defaults" ];
         example = [ "data=journal" ];
-        description = lib.mdDoc "Options used to mount the file system.";
+        description = "Options used to mount the file system.";
         type = types.nonEmptyListOf nonEmptyStr;
       };
 
@@ -70,7 +70,7 @@ let
         default = [ ];
         example = [ "/persist" ];
         type = types.listOf nonEmptyWithoutTrailingSlash;
-        description = lib.mdDoc ''
+        description = ''
           List of paths that should be mounted before this one. This filesystem's
           {option}`device` and {option}`mountPoint` are always
           checked and do not need to be included explicitly. If a path is added
@@ -97,13 +97,13 @@ let
         default = null;
         example = "root-partition";
         type = types.nullOr nonEmptyStr;
-        description = lib.mdDoc "Label of the device (if any).";
+        description = "Label of the device (if any).";
       };
 
       autoFormat = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           If the device does not currently contain a filesystem (as
           determined by {command}`blkid`), then automatically
           format it with the filesystem type specified in
@@ -120,7 +120,7 @@ let
       autoResize = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           If set, the filesystem is grown to its maximum size before
           being mounted. (This is typically the size of the containing
           partition.) This is currently only supported for ext2/3/4
@@ -131,7 +131,7 @@ let
       noCheck = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc "Disable running fsck on this filesystem.";
+        description = "Disable running fsck on this filesystem.";
       };
 
     };
@@ -222,7 +222,7 @@ in
         }
       '';
       type = types.attrsOf (types.submodule [coreFileSystemOpts fileSystemOpts]);
-      description = lib.mdDoc ''
+      description = ''
         The file systems to be mounted.  It must include an entry for
         the root directory (`mountPoint = "/"`).  Each
         entry in the list is an attribute set with the following fields:
@@ -242,7 +242,7 @@ in
     system.fsPackages = mkOption {
       internal = true;
       default = [ ];
-      description = lib.mdDoc "Packages supplying file system mounters and checkers.";
+      description = "Packages supplying file system mounters and checkers.";
     };
 
     boot.supportedFilesystems = mkOption {
@@ -257,7 +257,7 @@ in
         (types.listOf types.str)
         (enabled: lib.listToAttrs (map (fs: lib.nameValuePair fs true) enabled))
         (types.attrsOf types.bool);
-      description = lib.mdDoc ''
+      description = ''
         Names of supported filesystem types, or an attribute set of file system types
         and their state. The set form may be used together with `lib.mkForce` to
         explicitly disable support for specific filesystems, e.g. to disable ZFS
@@ -269,7 +269,7 @@ in
       default = {};
       type = types.attrsOf (types.submodule coreFileSystemOpts);
       internal = true;
-      description = lib.mdDoc ''
+      description = ''
         Special filesystems that are mounted very early during boot.
       '';
     };
@@ -278,7 +278,7 @@ in
       default = "5%";
       example = "32m";
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         Size limit for the /dev tmpfs. Look at mount(8), tmpfs size option,
         for the accepted syntax.
       '';
@@ -288,7 +288,7 @@ in
       default = "50%";
       example = "256m";
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         Size limit for the /dev/shm tmpfs. Look at mount(8), tmpfs size option,
         for the accepted syntax.
       '';
@@ -298,7 +298,7 @@ in
       default = "25%";
       example = "256m";
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         Size limit for the /run tmpfs. Look at mount(8), tmpfs size option,
         for the accepted syntax.
       '';

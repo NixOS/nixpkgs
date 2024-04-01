@@ -13,7 +13,7 @@ in
 
     user = mkOption {
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         The user to run Handheld Daemon with.
       '';
     };

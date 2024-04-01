@@ -18,7 +18,7 @@ in
     default = false;
     example = true;
     type = types.bool;
-    description = lib.mdDoc ''
+    description = ''
       Whether to include sensor calibration files for facetimehd.
       This makes colors look much better but is experimental, see
       <https://github.com/patjak/facetimehd/wiki/Extracting-the-sensor-calibration-files>

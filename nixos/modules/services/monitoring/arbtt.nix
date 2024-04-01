@@ -15,7 +15,7 @@ in {
         type = types.str;
         default = "%h/.arbtt/capture.log";
         example = "/home/username/.arbtt-capture.log";
-        description = lib.mdDoc ''
+        description = ''
           The log file for captured samples.
         '';
       };
@@ -24,7 +24,7 @@ in {
         type = types.int;
         default = 60;
         example = 120;
-        description = lib.mdDoc ''
+        description = ''
           The sampling interval in seconds.
         '';
       };

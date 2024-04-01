@@ -43,7 +43,7 @@ in
           init.defaultBranch = "main";
           url."https://github.com/".insteadOf = [ "gh:" "github:" ];
         };
-        description = lib.mdDoc ''
+        description = ''
           Configuration to write to /etc/gitconfig. A list can also be
           specified to keep the configuration in order. For example, setting
           `config` to `[ { foo.x = 42; } { bar.y = 42; }]` will put the `foo`

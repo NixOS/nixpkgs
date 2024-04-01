@@ -11,14 +11,14 @@ in
       type = types.package;
       default = pkgs.tang;
       defaultText = literalExpression "pkgs.tang";
-      description = mdDoc "The tang package to use.";
+      description = "The tang package to use.";
     };
 
     listenStream = mkOption {
       type = with types; listOf str;
       default = [ "7654" ];
       example = [ "198.168.100.1:7654" "[2001:db8::1]:7654" "7654" ];
-      description = mdDoc ''
+      description = ''
         Addresses and/or ports on which tang should listen.
         For detailed syntax see ListenStream in {manpage}`systemd.socket(5)`.
       '';

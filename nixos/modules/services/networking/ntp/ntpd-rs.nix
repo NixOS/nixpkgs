@@ -15,7 +15,7 @@ in
     useNetworkingTimeServers = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Use source time servers from {var}`networking.timeServers` in config.
       '';
     };
@@ -25,7 +25,7 @@ in
         freeformType = format.type;
       };
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Settings to write to {file}`ntp.toml`
 
         See <https://docs.ntpd-rs.pendulum-project.org/man/ntp.toml.5>

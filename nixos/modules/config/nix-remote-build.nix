@@ -58,7 +58,7 @@ in
             hostName = mkOption {
               type = types.str;
               example = "nixbuilder.example.org";
-              description = lib.mdDoc ''
+              description = ''
                 The hostname of the build machine.
               '';
             };
@@ -66,7 +66,7 @@ in
               type = types.enum [ null "ssh" "ssh-ng" ];
               default = "ssh";
               example = "ssh-ng";
-              description = lib.mdDoc ''
+              description = ''
                 The protocol used for communicating with the build machine.
                 Use `ssh-ng` if your remote builder and your
                 local Nix version support that improved protocol.
@@ -79,7 +79,7 @@ in
               type = types.nullOr types.str;
               default = null;
               example = "x86_64-linux";
-              description = lib.mdDoc ''
+              description = ''
                 The system type the build machine can execute derivations on.
                 Either this attribute or {var}`systems` must be
                 present, where {var}`system` takes precedence if
@@ -90,7 +90,7 @@ in
               type = types.listOf types.str;
               default = [ ];
               example = [ "x86_64-linux" "aarch64-linux" ];
-              description = lib.mdDoc ''
+              description = ''
                 The system types the build machine can execute derivations on.
                 Either this attribute or {var}`system` must be
                 present, where {var}`system` takes precedence if
@@ -101,7 +101,7 @@ in
               type = types.nullOr types.str;
               default = null;
               example = "builder";
-              description = lib.mdDoc ''
+              description = ''
                 The username to log in as on the remote host. This user must be
                 able to log in and run nix commands non-interactively. It must
                 also be privileged to build derivations, so must be included in
@@ -112,7 +112,7 @@ in
               type = types.nullOr types.str;
               default = null;
               example = "/root/.ssh/id_buildhost_builduser";
-              description = lib.mdDoc ''
+              description = ''
                 The path to the SSH private key with which to authenticate on
                 the build machine. The private key must not have a passphrase.
                 If null, the building user (root on NixOS machines) must have an
@@ -125,7 +125,7 @@ in
             maxJobs = mkOption {
               type = types.int;
               default = 1;
-              description = lib.mdDoc ''
+              description = ''
                 The number of concurrent jobs the build machine supports. The
                 build machine will enforce its own limits, but this allows hydra
                 to schedule better since there is no work-stealing between build
@@ -135,7 +135,7 @@ in
             speedFactor = mkOption {
               type = types.int;
               default = 1;
-              description = lib.mdDoc ''
+              description = ''
                 The relative speed of this builder. This is an arbitrary integer
                 that indicates the speed of this builder, relative to other
                 builders. Higher is faster.
@@ -145,7 +145,7 @@ in
               type = types.listOf types.str;
               default = [ ];
               example = [ "big-parallel" ];
-              description = lib.mdDoc ''
+              description = ''
                 A list of features mandatory for this builder. The builder will
                 be ignored for derivations that don't require all features in
                 this list. All mandatory features are automatically included in
@@ -156,7 +156,7 @@ in
               type = types.listOf types.str;
               default = [ ];
               example = [ "kvm" "big-parallel" ];
-              description = lib.mdDoc ''
+              description = ''
                 A list of features supported by this builder. The builder will
                 be ignored for derivations that require features not in this
                 list.
@@ -165,7 +165,7 @@ in
             publicHostKey = mkOption {
               type = types.nullOr types.str;
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 The (base64-encoded) public host key of this builder. The field
                 is calculated via {command}`base64 -w0 /etc/ssh/ssh_host_type_key.pub`.
                 If null, SSH will use its regular known-hosts file when connecting.
@@ -174,7 +174,7 @@ in
           };
         });
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           This option lists the machines to be used if distributed builds are
           enabled (see {option}`nix.distributedBuilds`).
           Nix will perform derivations on those machines via SSH by copying the
@@ -186,7 +186,7 @@ in
       distributedBuilds = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to distribute builds to the machines listed in
           {option}`nix.buildMachines`.
         '';

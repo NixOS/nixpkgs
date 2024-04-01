@@ -12,7 +12,7 @@ in
       settings = lib.mkOption {
         type = lib.types.nullOr json.type;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           The content of /etc/supergfxd.conf.
           See https://gitlab.com/asus-linux/supergfxctl/#config-options-etcsupergfxdconf.
         '';

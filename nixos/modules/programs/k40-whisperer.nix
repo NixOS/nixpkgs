@@ -14,7 +14,7 @@ in
 
     group = mkOption {
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         Group assigned to the device when connected.
       '';
       default = "k40";

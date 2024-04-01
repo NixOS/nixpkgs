@@ -11,7 +11,7 @@ in
     bypassBootstrapWarning = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         bypass Nix warning about SCION PKI bootstrapping
       '';
     };

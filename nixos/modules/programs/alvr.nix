@@ -15,7 +15,7 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to open the default ports in the firewall for the ALVR server.
         '';
       };

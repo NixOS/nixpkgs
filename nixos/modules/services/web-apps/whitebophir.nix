@@ -14,13 +14,13 @@ in {
       listenAddress = mkOption {
         type = types.str;
         default = "0.0.0.0";
-        description = lib.mdDoc "Address to listen on (use 0.0.0.0 to allow access from any address).";
+        description = "Address to listen on (use 0.0.0.0 to allow access from any address).";
       };
 
       port = mkOption {
         type = types.port;
         default = 5001;
-        description = lib.mdDoc "Port to bind to.";
+        description = "Port to bind to.";
       };
     };
   };

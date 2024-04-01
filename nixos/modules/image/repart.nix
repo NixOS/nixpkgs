@@ -11,13 +11,13 @@ let
       storePaths = lib.mkOption {
         type = with lib.types; listOf path;
         default = [ ];
-        description = lib.mdDoc "The store paths to include in the partition.";
+        description = "The store paths to include in the partition.";
       };
 
       stripNixStorePrefix = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to strip `/nix/store/` from the store paths. This is useful
           when you want to build a partition that only contains store paths and
           is mounted under `/nix/store`.
@@ -29,7 +29,7 @@ let
           options = {
             source = lib.mkOption {
               type = types.path;
-              description = lib.mdDoc "Path of the source file.";
+              description = "Path of the source file.";
             };
           };
         });
@@ -42,7 +42,7 @@ let
             "/loader/entries/nixos.conf".source = systemdBootEntry;
           }
         '';
-        description = lib.mdDoc "The contents to end up in the filesystem image.";
+        description = "The contents to end up in the filesystem image.";
       };
 
       repartConfig = lib.mkOption {
@@ -52,7 +52,7 @@ let
           SizeMinBytes = "512M";
           SizeMaxBytes = "2G";
         };
-        description = lib.mdDoc ''
+        description = ''
           Specify the repart options for a partiton as a structural setting.
           See <https://www.freedesktop.org/software/systemd/man/repart.d.html>
           for all available options.
@@ -71,7 +71,7 @@ in
 
     name = lib.mkOption {
       type = lib.types.str;
-      description = lib.mdDoc ''
+      description = ''
         Name of the image.
 
         If this option is unset but config.system.image.id is set,
@@ -83,13 +83,13 @@ in
       type = lib.types.nullOr lib.types.str;
       default = config.system.image.version;
       defaultText = lib.literalExpression "config.system.image.version";
-      description = lib.mdDoc "Version of the image";
+      description = "Version of the image";
     };
 
     imageFileBasename = lib.mkOption {
       type = lib.types.str;
       readOnly = true;
-      description = lib.mdDoc ''
+      description = ''
         Basename of the image filename without any extension (e.g. `image_1`).
       '';
     };
@@ -97,7 +97,7 @@ in
     imageFile = lib.mkOption {
       type = lib.types.str;
       readOnly = true;
-      description = lib.mdDoc ''
+      description = ''
         Filename of the image including all extensions (e.g `image_1.raw` or
         `image_1.raw.zst`).
       '';
@@ -109,12 +109,12 @@ in
       algorithm = lib.mkOption {
         type = lib.types.enum [ "zstd" "xz" ];
         default = "zstd";
-        description = lib.mdDoc "Compression algorithm";
+        description = "Compression algorithm";
       };
 
       level = lib.mkOption {
         type = lib.types.int;
-        description = lib.mdDoc ''
+        description = ''
           Compression level. The available range depends on the used algorithm.
         '';
       };
@@ -124,7 +124,7 @@ in
       type = with lib.types; nullOr str;
       # Generated with `uuidgen`. Random but fixed to improve reproducibility.
       default = "0867da16-f251-457d-a9e8-c31f9a3c220b";
-      description = lib.mdDoc ''
+      description = ''
         A UUID to use as a seed. You can set this to `null` to explicitly
         randomize the partition UUIDs.
       '';
@@ -133,7 +133,7 @@ in
     split = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enables generation of split artifacts from partitions. If enabled, for
         each partition with SplitName= set, a separate output file containing
         just the contents of that partition is generated.
@@ -144,7 +144,7 @@ in
       type = with lib.types; nullOr int;
       default = 512;
       example = lib.literalExpression "4096";
-      description = lib.mdDoc ''
+      description = ''
         The sector size of the disk image produced by systemd-repart. This
         value must be a power of 2 between 512 and 4096.
       '';
@@ -182,7 +182,7 @@ in
           };
         };
       '';
-      description = lib.mdDoc ''
+      description = ''
         Specify partitions as a set of the names of the partitions with their
         configuration as the key.
       '';
@@ -196,7 +196,7 @@ in
           vfat = [ "-S 512" "-c" ];
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Specify extra options for created file systems. The specified options
         are converted to individual environment variables of the format
         `SYSTEMD_REPART_MKFS_OPTIONS_<FSTYPE>`.
@@ -215,7 +215,7 @@ in
       type = lib.types.attrs;
       internal = true;
       readOnly = true;
-      description = lib.mdDoc ''
+      description = ''
         Convenience option to access partitions with added closures.
       '';
     };

@@ -14,14 +14,14 @@ in
       defaultText = literalExpression ''"''${pkgs.i3lock}/bin/i3lock"'';
       example = literalExpression ''"''${pkgs.i3lock-fancy}/bin/i3lock-fancy"'';
       type = types.separatedString " ";
-      description = lib.mdDoc "Locker to be used with xsslock";
+      description = "Locker to be used with xsslock";
     };
 
     extraOptions = mkOption {
       default = [ ];
       example = [ "--ignore-sleep" ];
       type = types.listOf types.str;
-      description = lib.mdDoc ''
+      description = ''
         Additional command-line arguments to pass to
         {command}`xss-lock`.
       '';

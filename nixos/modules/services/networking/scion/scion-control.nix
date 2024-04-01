@@ -42,7 +42,7 @@ in
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         scion-control configuration. Refer to
         <https://docs.scion.org/en/latest/manuals/common.html>
         for details on supported values.

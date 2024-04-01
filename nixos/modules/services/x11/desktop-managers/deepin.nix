@@ -19,19 +19,19 @@ in
       extraGSettingsOverrides = mkOption {
         default = "";
         type = types.lines;
-        description = lib.mdDoc "Additional gsettings overrides.";
+        description = "Additional gsettings overrides.";
       };
       extraGSettingsOverridePackages = mkOption {
         default = [ ];
         type = types.listOf types.path;
-        description = lib.mdDoc "List of packages for which gsettings are overridden.";
+        description = "List of packages for which gsettings are overridden.";
       };
     };
 
     environment.deepin.excludePackages = mkOption {
       default = [ ];
       type = types.listOf types.package;
-      description = lib.mdDoc "List of default packages to exclude from the configuration";
+      description = "List of default packages to exclude from the configuration";
     };
 
   };

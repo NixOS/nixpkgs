@@ -11,7 +11,7 @@ in
       signKeyPath = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
-        description = lib.mdDoc "Path to the signing key that will be used for signing the cache";
+        description = "Path to the signing key that will be used for signing the cache";
       };
 
       package = lib.mkPackageOption pkgs "harmonia" { };
@@ -19,7 +19,7 @@ in
       settings = lib.mkOption {
         inherit (format) type;
         default = { };
-        description = lib.mdDoc ''
+        description = ''
           Settings to merge with the default configuration.
           For the list of the default configuration, see <https://github.com/nix-community/harmonia/tree/master#configuration>.
         '';

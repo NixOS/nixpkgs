@@ -24,7 +24,7 @@ in
 
       hostname = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Which hostname to set the vHost to that is proxying to sks.
         '';
       };
@@ -33,7 +33,7 @@ in
         default = builtins.head sksCfg.hkpAddress;
         defaultText = literalExpression "head config.${sksOpt.hkpAddress}";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Which IP address the sks-keyserver is listening on.
         '';
       };
@@ -42,7 +42,7 @@ in
         default = sksCfg.hkpPort;
         defaultText = literalExpression "config.${sksOpt.hkpPort}";
         type = types.int;
-        description = lib.mdDoc ''
+        description = ''
           Which port the sks-keyserver is listening on.
         '';
       };

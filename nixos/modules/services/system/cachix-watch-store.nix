@@ -13,19 +13,19 @@ in
 
     cacheName = mkOption {
       type = types.str;
-      description = lib.mdDoc "Cachix binary cache name";
+      description = "Cachix binary cache name";
     };
 
     cachixTokenFile = mkOption {
       type = types.path;
-      description = lib.mdDoc ''
+      description = ''
         Required file that needs to contain the cachix auth token.
       '';
     };
 
     signingKeyFile = mkOption {
       type = types.nullOr types.path;
-      description = lib.mdDoc ''
+      description = ''
         Optional file containing a self-managed signing key to sign uploaded store paths.
       '';
       default = null;
@@ -33,25 +33,25 @@ in
 
     compressionLevel = mkOption {
       type = types.nullOr types.int;
-      description = lib.mdDoc "The compression level for ZSTD compression (between 0 and 16)";
+      description = "The compression level for ZSTD compression (between 0 and 16)";
       default = null;
     };
 
     jobs = mkOption {
       type = types.nullOr types.int;
-      description = lib.mdDoc "Number of threads used for pushing store paths";
+      description = "Number of threads used for pushing store paths";
       default = null;
     };
 
     host = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = lib.mdDoc "Cachix host to connect to";
+      description = "Cachix host to connect to";
     };
 
     verbose = mkOption {
       type = types.bool;
-      description = lib.mdDoc "Enable verbose output";
+      description = "Enable verbose output";
       default = false;
     };
 

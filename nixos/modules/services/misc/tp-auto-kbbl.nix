@@ -16,7 +16,7 @@ in {
       arguments = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           List of arguments appended to `./tp-auto-kbbl --device [device] [arguments]`
         '';
       };
@@ -24,7 +24,7 @@ in {
       device = mkOption {
         type = types.str;
         default = "/dev/input/event0";
-        description = lib.mdDoc "Device watched for activities.";
+        description = "Device watched for activities.";
       };
 
     };

@@ -13,7 +13,7 @@ in
 
       stateDir = mkOption {
         type = types.path;
-        description = lib.mdDoc ''
+        description = ''
           The directory where config.txt and serversettings.json is saved.
           If left as the default value this directory will automatically be created before JMusicBot starts, otherwise the sysadmin is responsible for ensuring the directory exists with appropriate ownership and permissions.
           Untouched by the value of this option config.txt needs to be placed manually into this directory.

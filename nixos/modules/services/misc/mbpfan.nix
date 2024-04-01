@@ -16,18 +16,18 @@ in {
     verbose = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc "If true, sets the log level to verbose.";
+      description = "If true, sets the log level to verbose.";
     };
 
     aggressive = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc "If true, favors higher default fan speeds.";
+      description = "If true, favors higher default fan speeds.";
     };
 
     settings = mkOption {
       default = {};
-      description = lib.mdDoc "INI configuration for Mbpfan.";
+      description = "INI configuration for Mbpfan.";
       type = types.submodule {
         freeformType = settingsFormat.type;
 
@@ -35,24 +35,24 @@ in {
           type = types.int;
           default = (if cfg.aggressive then 55 else 63);
           defaultText = literalExpression "55";
-          description = lib.mdDoc "If temperature is below this, fans will run at minimum speed.";
+          description = "If temperature is below this, fans will run at minimum speed.";
         };
         options.general.high_temp = mkOption {
           type = types.int;
           default = (if cfg.aggressive then 58 else 66);
           defaultText = literalExpression "58";
-          description = lib.mdDoc "If temperature is above this, fan speed will gradually increase.";
+          description = "If temperature is above this, fan speed will gradually increase.";
         };
         options.general.max_temp = mkOption {
           type = types.int;
           default = (if cfg.aggressive then 78 else 86);
           defaultText = literalExpression "78";
-          description = lib.mdDoc "If temperature is above this, fans will run at maximum speed.";
+          description = "If temperature is above this, fans will run at maximum speed.";
         };
         options.general.polling_interval = mkOption {
           type = types.int;
           default = 1;
-          description = lib.mdDoc "The polling interval.";
+          description = "The polling interval.";
         };
       };
     };

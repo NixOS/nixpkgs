@@ -16,7 +16,7 @@ in
       defaultText = literalExpression ''pkgs.openvpn3.override {
         enableSystemdResolved = config.services.resolved.enable;
       }'';
-      description = lib.mdDoc ''
+      description = ''
         Which package to use for `openvpn3`.
       '';
     };

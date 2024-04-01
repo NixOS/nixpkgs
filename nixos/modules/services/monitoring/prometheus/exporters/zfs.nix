@@ -12,7 +12,7 @@ in
     telemetryPath = mkOption {
       type = types.str;
       default = "/metrics";
-      description = lib.mdDoc ''
+      description = ''
         Path under which to expose metrics.
       '';
     };
@@ -20,7 +20,7 @@ in
     pools = mkOption {
       type = with types; nullOr (listOf str);
       default = [ ];
-      description = lib.mdDoc ''
+      description = ''
         Name of the pool(s) to collect, repeat for multiple pools (default: all pools).
       '';
     };

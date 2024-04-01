@@ -18,7 +18,7 @@ in
         freeformType = settingsFormat.type;
       };
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Configuration for zram-generator,
         see https://github.com/systemd/zram-generator for documentation.
       '';

@@ -13,18 +13,18 @@ in
       port = mkOption {
         type = types.port;
         default = 8080;
-        description = lib.mdDoc "A port where leaps listens for incoming http requests";
+        description = "A port where leaps listens for incoming http requests";
       };
       address = mkOption {
         default = "";
         type = types.str;
         example = "127.0.0.1";
-        description = lib.mdDoc "Hostname or IP-address to listen to. By default it will listen on all interfaces.";
+        description = "Hostname or IP-address to listen to. By default it will listen on all interfaces.";
       };
       path = mkOption {
         default = "/";
         type = types.path;
-        description = lib.mdDoc "Subdirectory used for reverse proxy setups";
+        description = "Subdirectory used for reverse proxy setups";
       };
     };
   };

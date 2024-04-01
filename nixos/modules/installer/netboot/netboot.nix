@@ -15,7 +15,7 @@ with lib;
                 + lib.optionalString isAarch "-Xbcj arm"
                 + lib.optionalString (isPower && is32bit && isBigEndian) "-Xbcj powerpc"
                 + lib.optionalString (isSparc) "-Xbcj sparc";
-      description = lib.mdDoc ''
+      description = ''
         Compression settings to use for the squashfs nix store.
       '';
       example = "zstd -Xcompression-level 6";
@@ -24,7 +24,7 @@ with lib;
 
     netboot.storeContents = mkOption {
       example = literalExpression "[ pkgs.stdenv ]";
-      description = lib.mdDoc ''
+      description = ''
         This option lists additional derivations to be included in the
         Nix store in the generated netboot image.
       '';

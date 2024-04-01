@@ -18,7 +18,7 @@ in
     xdg.mime.enable = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to install files to support the
         [XDG Shared MIME-info specification](https://specifications.freedesktop.org/shared-mime-info-spec/shared-mime-info-spec-latest.html) and the
         [XDG MIME Applications specification](https://specifications.freedesktop.org/mime-apps-spec/mime-apps-spec-latest.html).
@@ -32,7 +32,7 @@ in
         "application/pdf" = "firefox.desktop";
         "text/xml" = [ "nvim.desktop" "codium.desktop" ];
       };
-      description = lib.mdDoc ''
+      description = ''
         Adds associations between mimetypes and applications. See the
         [
         specifications](https://specifications.freedesktop.org/mime-apps-spec/mime-apps-spec-latest.html#associations) for more information.
@@ -46,7 +46,7 @@ in
         "application/pdf" = "firefox.desktop";
         "image/png" = [ "sxiv.desktop" "gimp.desktop" ];
       };
-      description = lib.mdDoc ''
+      description = ''
         Sets the default applications for given mimetypes. See the
         [
         specifications](https://specifications.freedesktop.org/mime-apps-spec/mime-apps-spec-latest.html#default) for more information.
@@ -60,7 +60,7 @@ in
         "audio/mp3" = [ "mpv.desktop" "umpv.desktop" ];
         "inode/directory" = "codium.desktop";
       };
-      description = lib.mdDoc ''
+      description = ''
         Removes associations between mimetypes and applications. See the
         [
         specifications](https://specifications.freedesktop.org/mime-apps-spec/mime-apps-spec-latest.html#associations) for more information.

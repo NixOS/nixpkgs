@@ -35,7 +35,7 @@ in
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         scion-dispatcher configuration. Refer to
         <https://docs.scion.org/en/latest/manuals/common.html>
         for details on supported values.

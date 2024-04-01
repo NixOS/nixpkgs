@@ -14,7 +14,7 @@ in {
       default = pkgs.lvm2;
       internal = true;
       defaultText = literalExpression "pkgs.lvm2";
-      description = lib.mdDoc ''
+      description = ''
         This option allows you to override the LVM package that's used on the system
         (udev rules, tmpfiles, systemd services).
         Defaults to pkgs.lvm2, pkgs.lvm2_dmeventd if dmeventd or pkgs.lvm2_vdo if vdo is enabled.
@@ -26,7 +26,7 @@ in {
   };
 
   options.boot.initrd.services.lvm.enable = mkEnableOption "booting from LVM2 in the initrd" // {
-    description = lib.mdDoc ''
+    description = ''
       *This will only be used when systemd is used in stage 1.*
 
       Whether to enable booting from LVM2 in the initrd.

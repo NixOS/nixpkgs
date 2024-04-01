@@ -17,7 +17,7 @@ in
     group = mkOption {
       type = types.str;
       default = "i2c";
-      description = lib.mdDoc ''
+      description = ''
         Grant access to i2c devices (/dev/i2c-*) to users in this group.
       '';
     };

@@ -33,7 +33,7 @@ in
       defaultText = literalMD ''
         `config.${options.services.collectd.package}` configured for lighttpd
       '';
-      description = lib.mdDoc ''
+      description = ''
         Path to collection.cgi script from (collectd sources)/contrib/collection.cgi
         This option allows to use a customized version
       '';

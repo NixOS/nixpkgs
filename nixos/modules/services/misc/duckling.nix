@@ -12,7 +12,7 @@ in {
       port = mkOption {
         type = types.port;
         default = 8080;
-        description = lib.mdDoc ''
+        description = ''
           Port on which duckling will run.
         '';
       };

@@ -10,7 +10,7 @@ in
       type = lib.types.package;
       default = pkgs.argononed;
       defaultText = lib.literalExpression "pkgs.argononed";
-      description = lib.mdDoc ''
+      description = ''
         The package implementing the Argon One driver
       '';
     };

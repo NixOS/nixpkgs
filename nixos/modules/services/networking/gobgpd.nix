@@ -13,7 +13,7 @@ in {
     settings = mkOption {
       type = format.type;
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         GoBGP configuration. Refer to
         <https://github.com/osrg/gobgp#documentation>
         for details on supported values.

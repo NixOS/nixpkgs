@@ -17,7 +17,7 @@ in
       type = lib.types.listOf lib.types.package;
       default = [ ];
       example = lib.literalExpression "with pkgs; [ ayatana-indicator-messages ]";
-      description = lib.mdDoc ''
+      description = ''
         List of packages containing Ayatana Indicator services
         that should be brought up by the SystemD "ayatana-indicators" user target.
 

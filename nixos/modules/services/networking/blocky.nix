@@ -15,7 +15,7 @@ in
     settings = mkOption {
       type = format.type;
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Blocky configuration. Refer to
         <https://0xerr0r.github.io/blocky/configuration/>
         for details on supported values.

@@ -23,7 +23,7 @@ in
     '';
 
     settings = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Configuration for `xdg-desktop-portal-wlr`.
 
         See `xdg-desktop-portal-wlr(5)` for supported

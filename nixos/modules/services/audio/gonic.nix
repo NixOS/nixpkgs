@@ -28,7 +28,7 @@ in
           music-path = [ "/mnt/music" ];
           podcast-path = "/mnt/podcasts";
         };
-        description = lib.mdDoc ''
+        description = ''
           Configuration for Gonic, see <https://github.com/sentriz/gonic#configuration-options> for supported values.
         '';
       };

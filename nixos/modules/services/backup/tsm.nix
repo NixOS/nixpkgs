@@ -19,7 +19,7 @@ let
       type = nonEmptyStr;
       default = "backup";
       example = "incr";
-      description = lib.mdDoc ''
+      description = ''
         The actual command passed to the
         `dsmc` executable to start the backup.
       '';
@@ -27,7 +27,7 @@ let
     servername = mkOption {
       type = nonEmptyStr;
       example = "mainTsmServer";
-      description = lib.mdDoc ''
+      description = ''
         Create a systemd system service
         `tsm-backup.service` that starts
         a backup based on the given servername's stanza.
@@ -45,7 +45,7 @@ let
       type = nullOr nonEmptyStr;
       default = null;
       example = "12:00";
-      description = lib.mdDoc ''
+      description = ''
         The backup service will be invoked
         automatically at the given date/time,
         which must be in the format described in

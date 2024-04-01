@@ -11,7 +11,7 @@ in
     url = mkOption {
       type = types.str;
       example = "https://domain.tld";
-      description = lib.mdDoc ''
+      description = ''
         URL to the Nextcloud serverinfo page.
         Adding the path to the serverinfo API is optional, it defaults
         to `/ocs/v2.php/apps/serverinfo/api/v1/info`.
@@ -20,7 +20,7 @@ in
     username = mkOption {
       type = types.str;
       default = "nextcloud-exporter";
-      description = lib.mdDoc ''
+      description = ''
         Username for connecting to Nextcloud.
         Note that this account needs to have admin privileges in Nextcloud.
         Unused when using token authentication.
@@ -30,7 +30,7 @@ in
       type = types.nullOr types.path;
       default = null;
       example = "/path/to/password-file";
-      description = lib.mdDoc ''
+      description = ''
         File containing the password for connecting to Nextcloud.
         Make sure that this file is readable by the exporter user.
       '';
@@ -39,7 +39,7 @@ in
       type = types.nullOr types.path;
       default = null;
       example = "/path/to/token-file";
-      description = lib.mdDoc ''
+      description = ''
         File containing the token for connecting to Nextcloud.
         Make sure that this file is readable by the exporter user.
       '';
@@ -47,7 +47,7 @@ in
     timeout = mkOption {
       type = types.str;
       default = "5s";
-      description = lib.mdDoc ''
+      description = ''
         Timeout for getting server info document.
       '';
     };

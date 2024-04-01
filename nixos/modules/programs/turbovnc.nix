@@ -15,7 +15,7 @@ in
       ensureHeadlessSoftwareOpenGL = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to set up NixOS such that TurboVNC's built-in software OpenGL
           implementation works.
 

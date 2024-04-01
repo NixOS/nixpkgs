@@ -74,7 +74,7 @@ in {
           DATABASE_PATH="''${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
         }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Additional configuration options for fabricmanager.
         '';
       };
@@ -108,7 +108,7 @@ in {
         type = busIDType;
         default = "";
         example = "PCI:1:0:0";
-        description = lib.mdDoc ''
+        description = ''
           Bus ID of the NVIDIA GPU. You can find it using lspci; for example if lspci
           shows the NVIDIA GPU at "01:00.0", set this option to "PCI:1:0:0".
         '';
@@ -118,7 +118,7 @@ in {
         type = busIDType;
         default = "";
         example = "PCI:0:2:0";
-        description = lib.mdDoc ''
+        description = ''
           Bus ID of the Intel GPU. You can find it using lspci; for example if lspci
           shows the Intel GPU at "00:02.0", set this option to "PCI:0:2:0".
         '';
@@ -128,7 +128,7 @@ in {
         type = busIDType;
         default = "";
         example = "PCI:4:0:0";
-        description = lib.mdDoc ''
+        description = ''
           Bus ID of the AMD APU. You can find it using lspci; for example if lspci
           shows the AMD APU at "04:00.0", set this option to "PCI:4:0:0".
         '';
@@ -230,8 +230,8 @@ in {
         defaultText = lib.literalExpression ''
           config.boot.kernelPackages.nvidiaPackages."\$\{if cfg.datacenter.enable then "dc" else "stable"}"
         '';
-        example = lib.mdDoc "config.boot.kernelPackages.nvidiaPackages.legacy_470";
-        description = lib.mdDoc ''
+        example = "config.boot.kernelPackages.nvidiaPackages.legacy_470";
+        description = ''
           The NVIDIA driver package to use.
         '';
       };

@@ -16,7 +16,7 @@ in
       user = mkOption {
         type = types.str;
         default = "nginx";
-        description = lib.mdDoc ''
+        description = ''
           User account under which both the service and the web-application run.
         '';
       };
@@ -24,7 +24,7 @@ in
       group = mkOption {
         type = types.str;
         default = "nginx";
-        description = lib.mdDoc ''
+        description = ''
           Group under which the web-application run.
         '';
       };
@@ -32,7 +32,7 @@ in
       pool = mkOption {
         type = types.str;
         default = poolName;
-        description = lib.mdDoc ''
+        description = ''
           Name of existing phpfpm pool that is used to run web-application.
           If not specified a pool will be created automatically with
           default values.
@@ -42,7 +42,7 @@ in
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/rss-bridge";
-        description = lib.mdDoc ''
+        description = ''
           Location in which cache directory will be created.
           You can put `config.ini.php` in here.
         '';
@@ -51,7 +51,7 @@ in
       virtualHost = mkOption {
         type = types.nullOr types.str;
         default = "rss-bridge";
-        description = lib.mdDoc ''
+        description = ''
           Name of the nginx virtualhost to use and setup. If null, do not setup any virtualhost.
         '';
       };
@@ -66,7 +66,7 @@ in
             "Twitter"
           ]
         '';
-        description = lib.mdDoc ''
+        description = ''
           List of bridges to be whitelisted.
           If the list is empty, rss-bridge will use whitelist.default.txt.
           Use `[ "*" ]` to whitelist all.

@@ -31,15 +31,13 @@ in {
         };
         type = settingsFormat.type;
         default = { };
-        description = lib.mdDoc
-          "Configuration for ulogd. See {file}`/share/doc/ulogd/` in `pkgs.ulogd.doc`.";
+        description = "Configuration for ulogd. See {file}`/share/doc/ulogd/` in `pkgs.ulogd.doc`.";
       };
 
       logLevel = mkOption {
         type = types.enum [ 1 3 5 7 8 ];
         default = 5;
-        description = lib.mdDoc
-          "Log level (1 = debug, 3 = info, 5 = notice, 7 = error, 8 = fatal)";
+        description = "Log level (1 = debug, 3 = info, 5 = notice, 7 = error, 8 = fatal)";
       };
     };
   };

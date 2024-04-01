@@ -19,7 +19,7 @@ in
           (name: lib.nameValuePair name (lib.mkOption {
             inherit (settingsFormat) type;
             default = { };
-            description = lib.mdDoc ''
+            description = ''
               Configuration included in `${name}.toml`.
 
               See https://yazi-rs.github.io/docs/configuration/${name}/ for documentation.
@@ -28,7 +28,7 @@ in
           names);
       };
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Configuration included in `$YAZI_CONFIG_HOME`.
       '';
     };

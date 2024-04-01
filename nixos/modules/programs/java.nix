@@ -15,7 +15,7 @@ in
     programs.java = {
 
       enable = mkEnableOption "java" // {
-        description = lib.mdDoc ''
+        description = ''
           Install and setup the Java development kit.
 
           ::: {.note}

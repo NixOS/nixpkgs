@@ -12,7 +12,7 @@ in {
     configFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Path to configuration file.
       '';
     };
@@ -20,7 +20,7 @@ in {
     webConfigFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Path to configuration file that can enable TLS or authentication.
       '';
     };

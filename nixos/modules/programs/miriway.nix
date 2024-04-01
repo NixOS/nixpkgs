@@ -50,7 +50,7 @@ in {
         meta=Page_Down:@workspace-down
         ctrl-alt=BackSpace:@exit
       '';
-      description = lib.mdDoc ''
+      description = ''
         Miriway's config. This will be installed system-wide.
         The default will install the miriway package's barebones example config.
       '';

@@ -20,7 +20,7 @@ in
     enable = mkOption {
       type = bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         If enabled, NixOS will periodically update the database of
         files used by the {command}`locate` command.
       '';
@@ -34,7 +34,7 @@ in
       type = str;
       default = "02:15";
       example = "hourly";
-      description = lib.mdDoc ''
+      description = ''
         Update the locate database at this interval. Updates by
         default at 2:15 AM every day.
 
@@ -49,7 +49,7 @@ in
     extraFlags = mkOption {
       type = listOf str;
       default = [ ];
-      description = lib.mdDoc ''
+      description = ''
         Extra flags to pass to {command}`updatedb`.
       '';
     };
@@ -57,7 +57,7 @@ in
     output = mkOption {
       type = path;
       default = "/var/cache/locatedb";
-      description = lib.mdDoc ''
+      description = ''
         The database file to build.
       '';
     };
@@ -65,7 +65,7 @@ in
     localuser = mkOption {
       type = nullOr str;
       default = "nobody";
-      description = lib.mdDoc ''
+      description = ''
         The user to search non-network directories as, using
         {command}`su`.
       '';
@@ -153,7 +153,7 @@ in
         "vboxsf"
         "vperfctrfs"
       ];
-      description = lib.mdDoc ''
+      description = ''
         Which filesystem types to exclude from indexing
       '';
     };
@@ -170,7 +170,7 @@ in
         "/nix/store"
         "/nix/var/log/nix"
       ];
-      description = lib.mdDoc ''
+      description = ''
         Which paths to exclude from indexing
       '';
     };
@@ -182,7 +182,7 @@ in
         `[ ".bzr" ".cache" ".git" ".hg" ".svn" ]`, if
         supported by the locate implementation (i.e. mlocate or plocate).
       '';
-      description = lib.mdDoc ''
+      description = ''
         Directory components which should exclude paths containing them from indexing
       '';
     };
@@ -190,7 +190,7 @@ in
     pruneBindMounts = mkOption {
       type = bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether not to index bind mounts
       '';
     };

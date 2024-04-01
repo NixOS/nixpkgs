@@ -11,7 +11,7 @@
     indicator = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to use indicator instead of status icon.
         It is needed for Appindicator environments, like Enlightenment.
       '';

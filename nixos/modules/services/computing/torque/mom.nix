@@ -21,7 +21,7 @@ in
 
       serverNode = mkOption {
         type = types.str;
-        description = lib.mdDoc "Hostname running pbs server.";
+        description = "Hostname running pbs server.";
       };
 
     };

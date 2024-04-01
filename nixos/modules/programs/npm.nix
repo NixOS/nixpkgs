@@ -19,7 +19,7 @@ in
 
       npmrc = mkOption {
         type = lib.types.lines;
-        description = lib.mdDoc ''
+        description = ''
           The system-wide npm configuration.
           See <https://docs.npmjs.com/misc/config>.
         '';

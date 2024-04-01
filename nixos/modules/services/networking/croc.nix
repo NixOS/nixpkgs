@@ -10,12 +10,12 @@ in
     ports = lib.mkOption {
       type = with types; listOf port;
       default = [9009 9010 9011 9012 9013];
-      description = lib.mdDoc "Ports of the relay.";
+      description = "Ports of the relay.";
     };
     pass = lib.mkOption {
       type = with types; either path str;
       default = "pass123";
-      description = lib.mdDoc "Password or passwordfile for the relay.";
+      description = "Password or passwordfile for the relay.";
     };
     openFirewall = lib.mkEnableOption "opening of the peer port(s) in the firewall";
     debug = lib.mkEnableOption "debug logs";

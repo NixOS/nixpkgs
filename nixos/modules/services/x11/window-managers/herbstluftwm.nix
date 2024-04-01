@@ -16,7 +16,7 @@ in
       configFile = mkOption {
         default     = null;
         type        = with types; nullOr path;
-        description = lib.mdDoc ''
+        description = ''
           Path to the herbstluftwm configuration file.  If left at the
           default value, $XDG_CONFIG_HOME/herbstluftwm/autostart will
           be used.

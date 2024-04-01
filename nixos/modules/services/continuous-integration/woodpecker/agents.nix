@@ -23,14 +23,14 @@ let
             DOCKER_HOST = "unix:///run/podman/podman.sock";
           }
         '';
-        description = lib.mdDoc "woodpecker-agent config environment variables, for other options read the [documentation](https://woodpecker-ci.org/docs/administration/agent-config)";
+        description = "woodpecker-agent config environment variables, for other options read the [documentation](https://woodpecker-ci.org/docs/administration/agent-config)";
       };
 
       extraGroups = lib.mkOption {
         type = lib.types.listOf lib.types.str;
         default = [ ];
         example = [ "podman" ];
-        description = lib.mdDoc ''
+        description = ''
           Additional groups for the systemd service.
         '';
       };
@@ -39,7 +39,7 @@ let
         type = lib.types.listOf lib.types.package;
         default = [ ];
         example = [ "" ];
-        description = lib.mdDoc ''
+        description = ''
           Additional packages that should be added to the agent's `PATH`.
           Mostly useful for the `local` backend.
         '';
@@ -49,7 +49,7 @@ let
         type = lib.types.listOf lib.types.path;
         default = [ ];
         example = [ "/var/secrets/woodpecker-agent.env" ];
-        description = lib.mdDoc ''
+        description = ''
           File to load environment variables
           from. This is helpful for specifying secrets.
           Example content of environmentFile:
@@ -151,7 +151,7 @@ in
             };
           }
         '';
-        description = lib.mdDoc "woodpecker-agents configurations";
+        description = "woodpecker-agents configurations";
       };
     };
   };

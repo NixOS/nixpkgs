@@ -16,7 +16,7 @@ in
 
     installHook = mkOption {
       type = with types; path;
-      description = lib.mdDoc ''
+      description = ''
         The full path to a program of your choosing which performs the bootloader installation process.
 
         The program will be called with an argument pointing to the output of the system's toplevel.

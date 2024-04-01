@@ -32,7 +32,7 @@ in {
        type = lib.types.package;
        default = pkgs.onedrive;
        defaultText = lib.literalExpression "pkgs.onedrive";
-       description = lib.mdDoc ''
+       description = ''
          OneDrive package to use.
        '';
      };

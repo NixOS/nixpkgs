@@ -22,7 +22,7 @@ in
       enableMultiUser = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Whether to support multi-user mode by enabling the Disnix D-Bus service";
+        description = "Whether to support multi-user mode by enabling the Disnix D-Bus service";
       };
 
       useWebServiceInterface = mkEnableOption "the DisnixWebService interface running on Apache Tomcat";
@@ -34,7 +34,7 @@ in
       profiles = mkOption {
         type = types.listOf types.str;
         default = [ "default" ];
-        description = lib.mdDoc "Names of the Disnix profiles to expose in the system's PATH";
+        description = "Names of the Disnix profiles to expose in the system's PATH";
       };
     };
 

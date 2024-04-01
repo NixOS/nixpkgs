@@ -23,7 +23,7 @@ in {
         export FOO="foo"
         echo "loaded direnv!"
       '';
-      description = lib.mdDoc ''
+      description = ''
         Extra lines to append to the sourced direnvrc
       '';
     };
@@ -53,7 +53,7 @@ in {
         default = pkgs.nix-direnv.override { nix = config.nix.package; };
         defaultText = "pkgs.nix-direnv";
         type = lib.types.package;
-        description = lib.mdDoc ''
+        description = ''
           The nix-direnv package to use
         '';
       };

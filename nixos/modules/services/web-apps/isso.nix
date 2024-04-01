@@ -20,7 +20,7 @@ in {
       '';
 
       settings = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Configuration for `isso`.
 
           See [Isso Server Configuration](https://posativ.org/isso/docs/configuration/server/)

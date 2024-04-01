@@ -13,13 +13,13 @@ in
       httpPort = mkOption {
         type        = types.int;
         default     = 9981;
-        description = lib.mdDoc "Port to bind HTTP to.";
+        description = "Port to bind HTTP to.";
       };
 
       htspPort = mkOption {
         type        = types.int;
         default     = 9982;
-        description = lib.mdDoc "Port to bind HTSP to.";
+        description = "Port to bind HTSP to.";
       };
     };
   };

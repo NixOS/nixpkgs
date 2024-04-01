@@ -10,7 +10,7 @@ in
   extraOpts = {
     group = mkOption {
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         Group under which the postfix exporter shall be run.
         It should match the group that is allowed to access the
         `showq` socket in the `queue/public/` directory.
@@ -20,7 +20,7 @@ in
     telemetryPath = mkOption {
       type = types.str;
       default = "/metrics";
-      description = lib.mdDoc ''
+      description = ''
         Path under which to expose metrics.
       '';
     };
@@ -28,7 +28,7 @@ in
       type = types.path;
       default = "/var/log/postfix_exporter_input.log";
       example = "/var/log/mail.log";
-      description = lib.mdDoc ''
+      description = ''
         Path where Postfix writes log entries.
         This file will be truncated by this exporter!
       '';
@@ -37,7 +37,7 @@ in
       type = types.path;
       default = "/var/lib/postfix/queue/public/showq";
       example = "/var/spool/postfix/public/showq";
-      description = lib.mdDoc ''
+      description = ''
         Path where Postfix places its showq socket.
       '';
     };
@@ -45,21 +45,21 @@ in
       enable = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable reading metrics from the systemd journal instead of from a logfile
         '';
       };
       unit = mkOption {
         type = types.str;
         default = "postfix.service";
-        description = lib.mdDoc ''
+        description = ''
           Name of the postfix systemd unit.
         '';
       };
       slice = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Name of the postfix systemd slice.
           This overrides the {option}`systemd.unit`.
         '';
@@ -67,7 +67,7 @@ in
       journalPath = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Path to the systemd journal.
         '';
       };

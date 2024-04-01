@@ -11,7 +11,7 @@ in
       autoStart = lib.mkOption {
         default = false;
         type = lib.types.bool;
-        description = lib.mdDoc "Whether rog-control-center should be started automatically.";
+        description = "Whether rog-control-center should be started automatically.";
       };
     };
   };

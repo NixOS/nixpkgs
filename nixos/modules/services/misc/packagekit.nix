@@ -48,13 +48,13 @@ in
     settings = mkOption {
       type = iniFmt.type;
       default = { };
-      description = lib.mdDoc "Additional settings passed straight through to PackageKit.conf";
+      description = "Additional settings passed straight through to PackageKit.conf";
     };
 
     vendorSettings = mkOption {
       type = iniFmt.type;
       default = { };
-      description = lib.mdDoc "Additional settings passed straight through to Vendor.conf";
+      description = "Additional settings passed straight through to Vendor.conf";
     };
   };
 

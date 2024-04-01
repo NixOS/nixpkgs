@@ -69,7 +69,7 @@ in
       idmapd.settings = mkOption {
         type = format.type;
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           libnfsidmap configuration. Refer to
           <https://linux.die.net/man/5/idmapd.conf>
           for details.
@@ -88,7 +88,7 @@ in
       settings = mkOption {
         type = format.type;
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           General configuration for NFS daemons and tools.
           See nfs.conf(5) and related man pages for details.
         '';
@@ -101,7 +101,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra nfs-utils configuration.
         '';
       };

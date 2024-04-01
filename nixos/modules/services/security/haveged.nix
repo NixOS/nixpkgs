@@ -24,7 +24,7 @@ in
       refill_threshold = mkOption {
         type = types.int;
         default = 1024;
-        description = lib.mdDoc ''
+        description = ''
           The number of bits of available entropy beneath which
           haveged should refill the entropy pool.
         '';

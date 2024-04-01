@@ -22,7 +22,7 @@ in {
       user = mkOption {
         type = types.str;
         default = "opentsdb";
-        description = lib.mdDoc ''
+        description = ''
           User account under which OpenTSDB runs.
         '';
       };
@@ -30,7 +30,7 @@ in {
       group = mkOption {
         type = types.str;
         default = "opentsdb";
-        description = lib.mdDoc ''
+        description = ''
           Group account under which OpenTSDB runs.
         '';
       };
@@ -38,7 +38,7 @@ in {
       port = mkOption {
         type = types.port;
         default = 4242;
-        description = lib.mdDoc ''
+        description = ''
           Which port OpenTSDB listens on.
         '';
       };
@@ -49,7 +49,7 @@ in {
           tsd.core.auto_create_metrics = true
           tsd.http.request.enable_chunked  = true
         '';
-        description = lib.mdDoc ''
+        description = ''
           The contents of OpenTSDB's configuration file
         '';
       };

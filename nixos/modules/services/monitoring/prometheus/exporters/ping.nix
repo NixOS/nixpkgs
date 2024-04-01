@@ -23,7 +23,7 @@ in
       type = settingsFormat.type;
       default = {};
 
-      description = lib.mdDoc ''
+      description = ''
         Configuration for ping_exporter, see
         <https://github.com/czerwonk/ping_exporter>
         for supported values.

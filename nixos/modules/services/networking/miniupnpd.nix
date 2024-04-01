@@ -32,7 +32,7 @@ in
 
       externalInterface = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Name of the external interface.
         '';
       };
@@ -40,7 +40,7 @@ in
       internalIPs = mkOption {
         type = types.listOf types.str;
         example = [ "192.168.1.1/24" "enp1s0" ];
-        description = lib.mdDoc ''
+        description = ''
           The IP address ranges to listen on.
         '';
       };
@@ -50,7 +50,7 @@ in
       upnp = mkOption {
         default = true;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable UPNP support.
         '';
       };
@@ -58,7 +58,7 @@ in
       appendConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Configuration lines appended to the MiniUPnP config.
         '';
       };

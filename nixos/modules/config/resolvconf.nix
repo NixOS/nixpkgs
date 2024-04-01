@@ -51,7 +51,7 @@ in
         type = types.bool;
         default = !(config.environment.etc ? "resolv.conf");
         defaultText = literalExpression ''!(config.environment.etc ? "resolv.conf")'';
-        description = lib.mdDoc ''
+        description = ''
           Whether DNS configuration is managed by resolvconf.
         '';
       };
@@ -60,7 +60,7 @@ in
         type = types.package;
         default = pkgs.openresolv;
         defaultText = literalExpression "pkgs.openresolv";
-        description = lib.mdDoc ''
+        description = ''
           The package that provides the system-wide resolvconf command. Defaults to `openresolv`
           if this module is enabled. Otherwise, can be used by other modules (for example {option}`services.resolved`) to
           provide a compatibility layer.
@@ -72,7 +72,7 @@ in
       dnsSingleRequest = lib.mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Recent versions of glibc will issue both ipv4 (A) and ipv6 (AAAA)
           address queries at the same time, from the same port. Sometimes upstream
           routers will systemically drop the ipv4 queries. The symptom of this problem is
@@ -85,7 +85,7 @@ in
       dnsExtensionMechanism = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Enable the `edns0` option in {file}`resolv.conf`. With
           that option set, `glibc` supports use of the extension mechanisms for
           DNS (EDNS) specified in RFC 2671. The most popular user of that feature is DNSSEC,
@@ -97,7 +97,7 @@ in
         type = types.lines;
         default = "";
         example = "libc=NO";
-        description = lib.mdDoc ''
+        description = ''
           Extra configuration to append to {file}`resolvconf.conf`.
         '';
       };
@@ -106,7 +106,7 @@ in
         type = types.listOf types.str;
         default = [];
         example = [ "ndots:1" "rotate" ];
-        description = lib.mdDoc ''
+        description = ''
           Set the options in {file}`/etc/resolv.conf`.
         '';
       };
@@ -114,7 +114,7 @@ in
       useLocalResolver = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Use local DNS server for resolving.
         '';
       };

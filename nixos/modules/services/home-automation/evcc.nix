@@ -24,14 +24,14 @@ in
     extraArgs = mkOption {
       type = listOf str;
       default = [];
-      description = lib.mdDoc ''
+      description = ''
         Extra arguments to pass to the evcc executable.
       '';
     };
 
     settings = mkOption {
       type = format.type;
-      description = lib.mdDoc ''
+      description = ''
         evcc configuration as a Nix attribute set.
 
         Check for possible options in the sample [evcc.dist.yaml](https://github.com/andig/evcc/blob/${package.version}/evcc.dist.yaml].

@@ -20,7 +20,7 @@ in
       type = types.listOf types.int;
       default = [ ];
       example = [ 0 1 ];
-      description = lib.mdDoc ''
+      description = ''
         Enable NVIDIA GPU controls for a device by index.
         Sets the `Coolbits` Xorg option to enable all TuxClocker controls.
       '';
@@ -30,7 +30,7 @@ in
       type = types.bool;
       default = false;
       example = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to use components requiring unfree dependencies.
         Disabling this allows you to get everything from the binary cache.
       '';

@@ -19,7 +19,7 @@ in
       type = types.package;
       default = pkgs.clevis;
       defaultText = "pkgs.clevis";
-      description = lib.mdDoc "Clevis package";
+      description = "Clevis package";
     };
 
     boot.initrd.clevis.devices = mkOption {
@@ -27,7 +27,7 @@ in
       default = { };
       type = types.attrsOf (types.submodule ({
         options.secretFile = mkOption {
-          description = lib.mdDoc "Clevis JWE file used to decrypt the device at boot, in concert with the chosen pin (one of TPM2, Tang server, or SSS).";
+          description = "Clevis JWE file used to decrypt the device at boot, in concert with the chosen pin (one of TPM2, Tang server, or SSS).";
           type = types.path;
         };
       }));

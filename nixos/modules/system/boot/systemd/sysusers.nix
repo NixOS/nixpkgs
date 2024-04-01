@@ -68,7 +68,7 @@ in
 
     systemd.sysusers = {
       enable = lib.mkEnableOption "systemd-sysusers" // {
-        description = lib.mdDoc ''
+        description = ''
           If enabled, users are created with systemd-sysusers instead of with
           the custom `update-users-groups.pl` script.
 

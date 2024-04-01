@@ -13,7 +13,7 @@ in
     settings = mkOption {
       type = format.type;
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         config.yaml for evdevremapkeys
       '';
     };

@@ -33,7 +33,7 @@ in {
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         nginx-sso configuration
         ([documentation](https://github.com/Luzifer/nginx-sso/wiki/Main-Configuration))
         as a Nix attribute set.

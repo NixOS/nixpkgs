@@ -15,14 +15,14 @@ in
 
       group = mkOption {
         type = types.str;
-        description = lib.mdDoc "Group assigned to the user and the webroot directory.";
+        description = "Group assigned to the user and the webroot directory.";
         default = "nginx";
         example = "www-data";
       };
 
       settings = mkOption {
         type = format.type;
-        description = lib.mdDoc ''
+        description = ''
           Configuration for lxd-image-server.
 
           Example see <https://github.com/Avature/lxd-image-server/blob/master/config.toml>.
@@ -34,7 +34,7 @@ in
         enable = mkEnableOption "nginx";
         domain = mkOption {
           type = types.str;
-          description = lib.mdDoc "Domain to use for nginx virtual host.";
+          description = "Domain to use for nginx virtual host.";
           example = "images.example.org";
         };
       };

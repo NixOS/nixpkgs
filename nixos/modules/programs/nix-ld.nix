@@ -21,7 +21,7 @@ in
     package = lib.mkPackageOption pkgs "nix-ld" { };
     libraries = lib.mkOption {
       type = lib.types.listOf lib.types.package;
-      description = lib.mdDoc "Libraries that automatically become available to all programs. The default set includes common libraries.";
+      description = "Libraries that automatically become available to all programs. The default set includes common libraries.";
       default = [ ];
       defaultText = lib.literalExpression "baseLibraries derived from systemd and nix dependencies.";
     };

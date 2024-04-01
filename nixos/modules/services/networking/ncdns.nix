@@ -59,7 +59,7 @@ in
       address = mkOption {
         type = types.str;
         default = "[::1]";
-        description = lib.mdDoc ''
+        description = ''
           The IP address the ncdns resolver will bind to.  Leave this unchanged
           if you do not wish to directly expose the resolver.
         '';
@@ -68,7 +68,7 @@ in
       port = mkOption {
         type = types.port;
         default = 5333;
-        description = lib.mdDoc ''
+        description = ''
           The port the ncdns resolver will bind to.
         '';
       };
@@ -78,7 +78,7 @@ in
         default = config.networking.hostName;
         defaultText = literalExpression "config.networking.hostName";
         example = "example.com";
-        description = lib.mdDoc ''
+        description = ''
           The hostname of this ncdns instance, which defaults to the machine
           hostname. If specified, ncdns lists the hostname as an NS record at
           the zone apex:
@@ -96,7 +96,7 @@ in
         type = types.str;
         default = "";
         example = "root@example.com";
-        description = lib.mdDoc ''
+        description = ''
           An email address for the SOA record at the bit zone.
           If you are only using ncdns locally you can ignore this.
         '';
@@ -105,7 +105,7 @@ in
       identity.address = mkOption {
         type = types.str;
         default = "127.127.127.127";
-        description = lib.mdDoc ''
+        description = ''
           The IP address the hostname specified in
           {option}`services.ncdns.identity.hostname` should resolve to.
           If you are only using ncdns locally you can ignore this.
@@ -123,7 +123,7 @@ in
       dnssec.keys.public = mkOption {
         type = types.path;
         default = defaultFiles.public;
-        description = lib.mdDoc ''
+        description = ''
           Path to the file containing the KSK public key.
           The key can be generated using the `dnssec-keygen`
           command, provided by the package `bind` as follows:
@@ -136,7 +136,7 @@ in
       dnssec.keys.private = mkOption {
         type = types.path;
         default = defaultFiles.private;
-        description = lib.mdDoc ''
+        description = ''
           Path to the file containing the KSK private key.
         '';
       };
@@ -144,7 +144,7 @@ in
       dnssec.keys.zonePublic = mkOption {
         type = types.path;
         default = defaultFiles.zonePublic;
-        description = lib.mdDoc ''
+        description = ''
           Path to the file containing the ZSK public key.
           The key can be generated using the `dnssec-keygen`
           command, provided by the package `bind` as follows:
@@ -157,7 +157,7 @@ in
       dnssec.keys.zonePrivate = mkOption {
         type = types.path;
         default = defaultFiles.zonePrivate;
-        description = lib.mdDoc ''
+        description = ''
           Path to the file containing the ZSK private key.
         '';
       };
@@ -176,7 +176,7 @@ in
             certstore.nssdbdir = "../../home/alice/.pki/nssdb";
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           ncdns settings. Use this option to configure ncds
           settings not exposed in a NixOS option or to bypass one.
           See the example ncdns.conf file at <https://github.com/namecoin/ncdns/blob/master/_doc/ncdns.conf.example>
@@ -189,7 +189,7 @@ in
     services.pdns-recursor.resolveNamecoin = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Resolve `.bit` top-level domains using ncdns and namecoin.
       '';
     };

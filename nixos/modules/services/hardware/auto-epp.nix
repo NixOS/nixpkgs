@@ -20,7 +20,7 @@ in {
               epp_state_for_AC = mkOption {
                 type = types.str;
                 default = "balance_performance";
-                description = lib.mdDoc ''
+                description = ''
                   energy_performance_preference when on plugged in
 
                   ::: {.note}
@@ -33,7 +33,7 @@ in {
               epp_state_for_BAT = mkOption {
                 type = types.str;
                 default = "power";
-                description = lib.mdDoc ''
+                description = ''
                   `energy_performance_preference` when on battery
 
                   ::: {.note}
@@ -46,7 +46,7 @@ in {
           };
         };
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           Settings for the auto-epp application.
           See upstream example: <https://github.com/jothi-prasath/auto-epp/blob/master/sample-auto-epp.conf>
         '';

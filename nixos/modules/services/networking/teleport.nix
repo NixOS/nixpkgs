@@ -37,7 +37,7 @@ in
             auth_service.enabled = false;
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Contents of the `teleport.yaml` config file.
           The `--config` arguments will only be passed if this set is not empty.
 
@@ -65,13 +65,13 @@ in
         addr = mkOption {
           type = str;
           default = "127.0.0.1";
-          description = lib.mdDoc "Metrics and diagnostics address.";
+          description = "Metrics and diagnostics address.";
         };
 
         port = mkOption {
           type = port;
           default = 3000;
-          description = lib.mdDoc "Metrics and diagnostics port.";
+          description = "Metrics and diagnostics port.";
         };
       };
     };

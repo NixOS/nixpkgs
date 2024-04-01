@@ -14,7 +14,7 @@ in
     openFirewall = mkEnableOption "firewall passthrough for haste-server";
 
     settings = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Configuration for haste-server.
         For documentation see [project readme](https://github.com/toptal/haste-server#settings)
       '';

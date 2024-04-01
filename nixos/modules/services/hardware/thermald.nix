@@ -14,7 +14,7 @@ in
       debug = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable debug logging.
         '';
       };
@@ -22,13 +22,13 @@ in
      ignoreCpuidCheck = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether to ignore the cpuid check to allow running on unsupported platforms";
+        description = "Whether to ignore the cpuid check to allow running on unsupported platforms";
       };
 
       configFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc "the thermald manual configuration file.";
+        description = "the thermald manual configuration file.";
       };
 
       package = mkPackageOption pkgs "thermald" { };

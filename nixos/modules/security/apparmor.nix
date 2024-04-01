@@ -7,7 +7,7 @@ let
   inherit (lib) types;
   inherit (config.environment) etc;
   cfg = config.security.apparmor;
-  mkDisableOption = name: mkEnableOption (lib.mdDoc name) // {
+  mkDisableOption = name: mkEnableOption ( name) // {
     default = true;
     example = false;
   };
@@ -42,7 +42,7 @@ in
         if you want this service to do such killing
         by sending a `SIGTERM` to those running processes'';
       policies = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           AppArmor policies.
         '';
         type = types.attrsOf (types.submodule ({ name, config, ... }: {
@@ -50,7 +50,7 @@ in
             enable = mkDisableOption "loading of the profile into the kernel";
             enforce = mkDisableOption "enforcing of the policy or only complain in the logs";
             profile = mkOption {
-              description = lib.mdDoc "The policy of the profile.";
+              description = "The policy of the profile.";
               type = types.lines;
               apply = pkgs.writeText name;
             };
@@ -61,7 +61,7 @@ in
       includes = mkOption {
         type = types.attrsOf types.lines;
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           List of paths to be added to AppArmor's searched paths
           when resolving `include` directives.
         '';
@@ -70,7 +70,7 @@ in
       packages = mkOption {
         type = types.listOf types.package;
         default = [];
-        description = lib.mdDoc "List of packages to be added to AppArmor's include path";
+        description = "List of packages to be added to AppArmor's include path";
       };
       enableCache = mkEnableOption ''
         caching of AppArmor policies

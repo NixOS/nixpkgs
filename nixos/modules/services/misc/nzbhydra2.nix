@@ -12,14 +12,13 @@ in {
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/nzbhydra2";
-        description = lib.mdDoc "The directory where NZBHydra2 stores its data files.";
+        description = "The directory where NZBHydra2 stores its data files.";
       };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description =
-          lib.mdDoc "Open ports in the firewall for the NZBHydra2 web interface.";
+        description = "Open ports in the firewall for the NZBHydra2 web interface.";
       };
 
       package = mkPackageOption pkgs "nzbhydra2" { };

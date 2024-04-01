@@ -21,7 +21,7 @@ in
   options = with lib; {
     virtualisation.vmware.host = {
       enable = mkEnableOption "VMware" // {
-        description = lib.mdDoc ''
+        description = ''
           This enables VMware host virtualisation for running VMs.
 
           ::: {.important}
@@ -41,13 +41,13 @@ in
       extraPackages = mkOption {
         type = with types; listOf package;
         default = with pkgs; [ ];
-        description = lib.mdDoc "Extra packages to be used with VMware host.";
+        description = "Extra packages to be used with VMware host.";
         example = "with pkgs; [ ntfs3g ]";
       };
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc "Add extra config to /etc/vmware/config";
+        description = "Add extra config to /etc/vmware/config";
         example = ''
           # Allow unsupported device's OpenGL and Vulkan acceleration for guest vGPU
           mks.gl.allowUnsupportedDrivers = "TRUE"

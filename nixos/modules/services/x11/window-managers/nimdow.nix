@@ -12,7 +12,7 @@ in
       type = types.package;
       default = pkgs.nimdow;
       defaultText = "pkgs.nimdow";
-      description = lib.mdDoc "nimdow package to use";
+      description = "nimdow package to use";
     };
   };
 

@@ -24,7 +24,7 @@ in
           general.id = "br";
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         scion-router configuration. Refer to
         <https://docs.scion.org/en/latest/manuals/common.html>
         for details on supported values.

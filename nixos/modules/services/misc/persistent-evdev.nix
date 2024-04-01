@@ -16,7 +16,7 @@ in
     devices = lib.mkOption {
       default = {};
       type = with lib.types; attrsOf str;
-      description = lib.mdDoc ''
+      description = ''
         A set of virtual proxy device labels with backing physical device ids.
 
         Physical devices should already exist in {file}`/dev/input/by-id/`.

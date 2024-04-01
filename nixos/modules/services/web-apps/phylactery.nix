@@ -9,17 +9,17 @@ in {
     host = mkOption {
       type = types.str;
       default = "localhost";
-      description = lib.mdDoc "Listen host for Phylactery";
+      description = "Listen host for Phylactery";
     };
 
     port = mkOption {
       type = types.port;
-      description = lib.mdDoc "Listen port for Phylactery";
+      description = "Listen port for Phylactery";
     };
 
     library = mkOption {
       type = types.path;
-      description = lib.mdDoc "Path to CBZ library";
+      description = "Path to CBZ library";
     };
 
     package = mkPackageOption pkgs "phylactery" { };

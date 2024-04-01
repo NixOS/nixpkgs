@@ -12,7 +12,7 @@ in
     autoStart = mkOption {
       default = true;
       type = types.bool;
-      description = lib.mdDoc "Whether streamdeck-ui should be started automatically.";
+      description = "Whether streamdeck-ui should be started automatically.";
     };
 
     package = mkPackageOption pkgs "streamdeck-ui" {

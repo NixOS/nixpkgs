@@ -29,7 +29,7 @@ in
         pkgs.qtcurve
       ];
       '';
-      description = lib.mdDoc ''
+      description = ''
         Extra Qt styles that will be available to the
         `lxqt.xdg-desktop-portal-lxqt`.
       '';

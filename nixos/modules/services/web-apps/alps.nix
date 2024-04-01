@@ -11,7 +11,7 @@ in {
     port = mkOption {
       type = types.port;
       default = 1323;
-      description = lib.mdDoc ''
+      description = ''
         TCP port the service should listen on.
       '';
     };
@@ -19,7 +19,7 @@ in {
     bindIP = mkOption {
       default = "[::]";
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         The IP the service should listen on.
       '';
     };
@@ -27,7 +27,7 @@ in {
     theme = mkOption {
       type = types.enum [ "alps" "sourcehut" ];
       default = "sourcehut";
-      description = lib.mdDoc ''
+      description = ''
         The frontend's theme to use.
       '';
     };
@@ -36,7 +36,7 @@ in {
       port = mkOption {
         type = types.port;
         default = 993;
-        description = lib.mdDoc ''
+        description = ''
           The IMAPS server port.
         '';
       };
@@ -45,7 +45,7 @@ in {
         type = types.str;
         default = "[::1]";
         example = "mail.example.org";
-        description = lib.mdDoc ''
+        description = ''
           The IMAPS server address.
         '';
       };
@@ -55,7 +55,7 @@ in {
       port = mkOption {
         type = types.port;
         default = 465;
-        description = lib.mdDoc ''
+        description = ''
           The SMTPS server port.
         '';
       };
@@ -65,7 +65,7 @@ in {
         default = cfg.imaps.host;
         defaultText = "services.alps.imaps.host";
         example = "mail.example.org";
-        description = lib.mdDoc ''
+        description = ''
           The SMTPS server address.
         '';
       };

@@ -24,7 +24,7 @@ in
         type = types.package;
         default = fprintdPkg;
         defaultText = literalExpression "if config.services.fprintd.tod.enable then pkgs.fprintd-tod else pkgs.fprintd";
-        description = lib.mdDoc ''
+        description = ''
           fprintd package to use.
         '';
       };
@@ -36,7 +36,7 @@ in
         driver = mkOption {
           type = types.package;
           example = literalExpression "pkgs.libfprint-2-tod1-goodix";
-          description = lib.mdDoc ''
+          description = ''
             Touch OEM Drivers (TOD) package to use.
           '';
         };

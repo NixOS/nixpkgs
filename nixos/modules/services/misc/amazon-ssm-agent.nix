@@ -31,7 +31,7 @@ in {
 
     package = mkOption {
       type = types.path;
-      description = lib.mdDoc "The Amazon SSM agent package to use";
+      description = "The Amazon SSM agent package to use";
       default = pkgs.amazon-ssm-agent.override { overrideEtc = false; };
       defaultText = literalExpression "pkgs.amazon-ssm-agent.override { overrideEtc = false; }";
     };

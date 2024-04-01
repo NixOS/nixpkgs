@@ -28,37 +28,37 @@ in
           options = {
             id = mkOption {
               type = types.int;
-              description = lib.mdDoc "Project ID.";
+              description = "Project ID.";
             };
 
             fileSystem = mkOption {
               type = types.str;
-              description = lib.mdDoc "XFS filesystem hosting the xfs_quota project.";
+              description = "XFS filesystem hosting the xfs_quota project.";
               default = "/";
             };
 
             path = mkOption {
               type = types.str;
-              description = lib.mdDoc "Project directory.";
+              description = "Project directory.";
             };
 
             sizeSoftLimit = mkOption {
               type = types.nullOr types.str;
               default = null;
               example = "30g";
-              description = lib.mdDoc "Soft limit of the project size";
+              description = "Soft limit of the project size";
             };
 
             sizeHardLimit = mkOption {
               type = types.nullOr types.str;
               default = null;
               example = "50g";
-              description = lib.mdDoc "Hard limit of the project size.";
+              description = "Hard limit of the project size.";
             };
           };
         });
 
-        description = lib.mdDoc "Setup of xfs_quota projects. Make sure the filesystem is mounted with the pquota option.";
+        description = "Setup of xfs_quota projects. Make sure the filesystem is mounted with the pquota option.";
 
         example = {
           projname = {

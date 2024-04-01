@@ -11,36 +11,36 @@ in {
 
     grafana = {
       protocol = mkOption {
-        description = lib.mdDoc "Grafana protocol.";
+        description = "Grafana protocol.";
         default = "http";
         type = types.enum ["http" "https"];
       };
       addr = mkOption {
-        description = lib.mdDoc "Grafana address.";
+        description = "Grafana address.";
         default = "127.0.0.1";
         type = types.str;
       };
       port = mkOption {
-        description = lib.mdDoc "Grafana port.";
+        description = "Grafana port.";
         default = 3000;
         type = types.port;
       };
 
     };
     addr = mkOption {
-      description = lib.mdDoc "Listening address.";
+      description = "Listening address.";
       default = "127.0.0.1";
       type = types.str;
     };
 
     port = mkOption {
-      description = lib.mdDoc "Listening port.";
+      description = "Listening port.";
       default = 8686;
       type = types.port;
     };
 
     templateDir = mkOption {
-      description = lib.mdDoc "Optional template directory to use custom tex templates";
+      description = "Optional template directory to use custom tex templates";
       default = pkgs.grafana_reporter;
       defaultText = literalExpression "pkgs.grafana_reporter";
       type = types.either types.str types.path;

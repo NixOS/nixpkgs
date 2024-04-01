@@ -23,7 +23,7 @@ in
     package = mkPackageOption pkgs "zigbee2mqtt" { };
 
     dataDir = mkOption {
-      description = lib.mdDoc "Zigbee2mqtt data directory";
+      description = "Zigbee2mqtt data directory";
       default = "/var/lib/zigbee2mqtt";
       type = types.path;
     };
@@ -40,7 +40,7 @@ in
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Your {file}`configuration.yaml` as a Nix attribute set.
         Check the [documentation](https://www.zigbee2mqtt.io/information/configuration.html)
         for possible options.

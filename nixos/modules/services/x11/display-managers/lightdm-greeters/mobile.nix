@@ -9,8 +9,7 @@ in
 {
   options = {
     services.xserver.displayManager.lightdm.greeters.mobile = {
-      enable = mkEnableOption (lib.mdDoc
-        "lightdm-mobile-greeter as the lightdm greeter"
+      enable = mkEnableOption ( "lightdm-mobile-greeter as the lightdm greeter"
       );
     };
   };

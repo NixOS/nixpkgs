@@ -23,19 +23,19 @@ in
       user = mkOption {
         type = types.str;
         default = "sniproxy";
-        description = lib.mdDoc "User account under which sniproxy runs.";
+        description = "User account under which sniproxy runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "sniproxy";
-        description = lib.mdDoc "Group under which sniproxy runs.";
+        description = "Group under which sniproxy runs.";
       };
 
       config = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc "sniproxy.conf configuration excluding the daemon username and pid file.";
+        description = "sniproxy.conf configuration excluding the daemon username and pid file.";
         example = ''
           error_log {
             filename /var/log/sniproxy/error.log

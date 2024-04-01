@@ -25,14 +25,14 @@ in {
           type = lib.types.nullOr lib.types.str;
           default = null;
           example = "gns3";
-          description = lib.mdDoc ''Username used to access the GNS3 Server.'';
+          description = ''Username used to access the GNS3 Server.'';
         };
 
         passwordFile = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
           default = null;
           example = "/run/secrets/gns3-server-password";
-          description = lib.mdDoc ''
+          description = ''
             A file containing the password to access the GNS3 Server.
 
             ::: {.warning}
@@ -47,7 +47,7 @@ in {
         type = lib.types.submodule { freeformType = settingsFormat.type; };
         default = {};
         example = { host = "127.0.0.1"; port = 3080; };
-        description = lib.mdDoc ''
+        description = ''
           The global options in `config` file in ini format.
 
           Refer to <https://docs.gns3.com/docs/using-gns3/administration/gns3-server-configuration-file/>
@@ -59,7 +59,7 @@ in {
         file = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
           default = "/var/log/gns3/server.log";
-          description = lib.mdDoc ''Path of the file GNS3 Server should log to.'';
+          description = ''Path of the file GNS3 Server should log to.'';
         };
 
         debug = lib.mkEnableOption "debug logging";
@@ -72,7 +72,7 @@ in {
           type = lib.types.nullOr lib.types.path;
           default = null;
           example = "/var/lib/gns3/ssl/server.pem";
-          description = lib.mdDoc ''
+          description = ''
             Path to the SSL certificate file. This certificate will
             be offered to, and may be verified by, clients.
           '';
@@ -82,7 +82,7 @@ in {
           type = lib.types.nullOr lib.types.path;
           default = null;
           example = "/var/lib/gns3/ssl/server.key";
-          description = lib.mdDoc "Private key file for the certificate.";
+          description = "Private key file for the certificate.";
         };
       };
 

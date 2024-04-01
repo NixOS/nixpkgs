@@ -12,7 +12,7 @@ in
           type = types.listOf types.str;
           default = [ "--buttons=45" ];
           example = [ "--debug" ];
-          description = lib.mdDoc ''
+          description = ''
             Additional command-line arguments to pass to
             {command}`imwheel`.
           '';
@@ -33,7 +33,7 @@ in
               ''';
             }
           '';
-          description = lib.mdDoc ''
+          description = ''
             Window class translation rules.
             /etc/X11/imwheelrc is generated based on this config
             which means this config is global for all users.

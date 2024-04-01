@@ -14,7 +14,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable slimserver.
         '';
       };
@@ -24,7 +24,7 @@ in {
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/slimserver";
-        description = lib.mdDoc ''
+        description = ''
           The directory where slimserver stores its state, tag cache,
           playlists etc.
         '';

@@ -28,13 +28,13 @@ in
               WOODPECKER_GITEA_URL = "https://git.example.com";
             }
           '';
-        description = lib.mdDoc "woodpecker-server config environment variables, for other options read the [documentation](https://woodpecker-ci.org/docs/administration/server-config)";
+        description = "woodpecker-server config environment variables, for other options read the [documentation](https://woodpecker-ci.org/docs/administration/server-config)";
       };
       environmentFile = lib.mkOption {
         type = with lib.types; coercedTo path (f: [ f ]) (listOf path);
         default = [ ];
         example = [ "/root/woodpecker-server.env" ];
-        description = lib.mdDoc ''
+        description = ''
           File to load environment variables
           from. This is helpful for specifying secrets.
           Example content of environmentFile:

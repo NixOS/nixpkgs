@@ -20,7 +20,7 @@ in {
       type = with lib.types; attrsOf (oneOf [ str int bool ]);
       default = {};
       example = lib.literalExpression ''{ DefaultMemoryPressureDurationSec = "20s"; }'';
-      description = lib.mdDoc ''
+      description = ''
         Extra config options for `systemd-oomd`. See {command}`man oomd.conf`
         for available options.
       '';

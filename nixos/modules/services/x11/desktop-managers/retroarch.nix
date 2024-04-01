@@ -16,7 +16,7 @@ in {
       type = types.listOf types.str;
       default = [ ];
       example = [ "--verbose" "--host" ];
-      description = lib.mdDoc "Extra arguments to pass to RetroArch.";
+      description = "Extra arguments to pass to RetroArch.";
     };
   };
 

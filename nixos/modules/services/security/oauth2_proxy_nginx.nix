@@ -9,14 +9,14 @@ in
       type = types.str;
       default = config.services.oauth2_proxy.httpAddress;
       defaultText = literalExpression "config.services.oauth2_proxy.httpAddress";
-      description = lib.mdDoc ''
+      description = ''
         The address of the reverse proxy endpoint for oauth2_proxy
       '';
     };
 
     domain = mkOption {
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         The domain under which the oauth2_proxy will be accesible and the path of cookies are set to.
         This setting must be set to ensure back-redirects are working properly
         if oauth2-proxy is configured with {option}`services.oauth2_proxy.cookie.domain`
@@ -27,7 +27,7 @@ in
     virtualHosts = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = lib.mdDoc ''
+      description = ''
         A list of nginx virtual hosts to put behind the oauth2 proxy
       '';
     };

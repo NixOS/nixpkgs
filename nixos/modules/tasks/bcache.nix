@@ -6,7 +6,7 @@ in {
     example = false;
   };
   options.boot.initrd.services.bcache.enable = lib.mkEnableOption "bcache support in the initrd" // {
-    description = lib.mdDoc ''
+    description = ''
       *This will only be used when systemd is used in stage 1.*
 
       Whether to enable bcache support in the initrd.

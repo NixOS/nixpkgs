@@ -15,7 +15,7 @@ with lib;
       type = types.listOf types.str;
       default = [];
       example = [ "cirrusfb" "i2c_piix4" ];
-      description = lib.mdDoc ''
+      description = ''
         List of names of kernel modules that should not be loaded
         automatically by the hardware probing code.
       '';
@@ -27,7 +27,7 @@ with lib;
         ''
           options parport_pc io=0x378 irq=7 dma=1
         '';
-      description = lib.mdDoc ''
+      description = ''
         Any additional configuration to be appended to the generated
         {file}`modprobe.conf`.  This is typically used to
         specify module options.  See

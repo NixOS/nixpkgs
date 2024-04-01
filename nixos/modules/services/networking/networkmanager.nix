@@ -105,7 +105,7 @@ let
     type = types.either types.str (types.enum [ "permanent" "preserve" "random" "stable" "stable-ssid" ]);
     default = "preserve";
     example = "00:11:22:33:44:55";
-    description = lib.mdDoc ''
+    description = ''
       Set the MAC address of the interface.
 
       - `"XX:XX:XX:XX:XX:XX"`: MAC address of the interface
@@ -121,7 +121,7 @@ let
     type = types.either types.str (types.enum [ "permanent" "preserve" "random" "stable" ]);
     default = "preserve";
     example = "00:11:22:33:44:55";
-    description = lib.mdDoc ''
+    description = ''
       Set the MAC address of the interface.
 
       - `"XX:XX:XX:XX:XX:XX"`: MAC address of the interface
@@ -157,7 +157,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to use NetworkManager to obtain an IP address and other
           configuration for all network interfaces that are not manually
           configured. If enabled, a group `networkmanager`
@@ -173,7 +173,7 @@ in
           str
         ]));
         default = { };
-        description = lib.mdDoc ''
+        description = ''
           Configuration for the [connection] section of NetworkManager.conf.
           Refer to
           [
@@ -188,7 +188,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Configuration appended to the generated NetworkManager.conf.
           Refer to
           [
@@ -203,7 +203,7 @@ in
       unmanaged = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           List of interfaces that will not be managed by NetworkManager.
           Interface name can be specified here, but if you need more fidelity,
           refer to
@@ -234,7 +234,7 @@ in
           in
           types.listOf networkManagerPluginPackage;
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           List of NetworkManager plug-ins to enable.
           Some plug-ins are enabled by the NetworkManager module by default.
         '';
@@ -243,7 +243,7 @@ in
       dhcp = mkOption {
         type = types.enum [ "dhcpcd" "internal" ];
         default = "internal";
-        description = lib.mdDoc ''
+        description = ''
           Which program (or internal library) should be used for DHCP.
         '';
       };
@@ -251,7 +251,7 @@ in
       logLevel = mkOption {
         type = types.enum [ "OFF" "ERR" "WARN" "INFO" "DEBUG" "TRACE" ];
         default = "WARN";
-        description = lib.mdDoc ''
+        description = ''
           Set the default logging verbosity level.
         '';
       };
@@ -259,7 +259,7 @@ in
       appendNameservers = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           A list of name servers that should be appended
           to the ones configured in NetworkManager or received by DHCP.
         '';
@@ -268,7 +268,7 @@ in
       insertNameservers = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           A list of name servers that should be inserted before
           the ones configured in NetworkManager or received by DHCP.
         '';
@@ -282,7 +282,7 @@ in
         backend = mkOption {
           type = types.enum [ "wpa_supplicant" "iwd" ];
           default = "wpa_supplicant";
-          description = lib.mdDoc ''
+          description = ''
             Specify the Wi-Fi backend used for the device.
             Currently supported are {option}`wpa_supplicant` or {option}`iwd` (experimental).
           '';
@@ -291,7 +291,7 @@ in
         powersave = mkOption {
           type = types.nullOr types.bool;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             Whether to enable Wi-Fi power saving.
           '';
         };
@@ -299,7 +299,7 @@ in
         scanRandMacAddress = mkOption {
           type = types.bool;
           default = true;
-          description = lib.mdDoc ''
+          description = ''
             Whether to enable MAC address randomization of a Wi-Fi device
             during scanning.
           '';
@@ -309,7 +309,7 @@ in
       dns = mkOption {
         type = types.enum [ "default" "dnsmasq" "systemd-resolved" "none" ];
         default = "default";
-        description = lib.mdDoc ''
+        description = ''
           Set the DNS (`resolv.conf`) processing mode.
 
           A description of these modes can be found in the main section of
@@ -326,7 +326,7 @@ in
           options = {
             source = mkOption {
               type = types.path;
-              description = lib.mdDoc ''
+              description = ''
                 Path to the hook script.
               '';
             };
@@ -334,7 +334,7 @@ in
             type = mkOption {
               type = types.enum (attrNames dispatcherTypesSubdirMap);
               default = "basic";
-              description = lib.mdDoc ''
+              description = ''
                 Dispatcher hook type. Look up the hooks described at
                 [https://developer.gnome.org/NetworkManager/stable/NetworkManager.html](https://developer.gnome.org/NetworkManager/stable/NetworkManager.html)
                 and choose the type depending on the output folder.
@@ -358,7 +358,7 @@ in
             type = "basic";
           } ]
         '';
-        description = lib.mdDoc ''
+        description = ''
           A list of scripts which will be executed in response to network events.
         '';
       };
@@ -366,7 +366,7 @@ in
       enableStrongSwan = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable the StrongSwan plugin.
 
           If you enable this option the
@@ -381,17 +381,17 @@ in
           options = {
             id = mkOption {
               type = types.str;
-              description = lib.mdDoc "vid:pid of either the PCI or USB vendor and product ID";
+              description = "vid:pid of either the PCI or USB vendor and product ID";
             };
             path = mkOption {
               type = types.path;
-              description = lib.mdDoc "Path to the unlock script";
+              description = "Path to the unlock script";
             };
           };
         });
         default = [ ];
         example = literalExpression ''[{ id = "03f0:4e1d"; path = "''${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/03f0:4e1d"; }]'';
-        description = lib.mdDoc ''
+        description = ''
           List of FCC unlock scripts to enable on the system, behaving as described in
           https://modemmanager.org/docs/modemmanager/fcc-unlock/#integration-with-third-party-fcc-unlock-tools.
         '';
@@ -445,7 +445,7 @@ in
               };
             };
           };
-          description = lib.mdDoc ''
+          description = ''
             Declaratively define NetworkManager profiles. You can find information about the generated file format [here](https://networkmanager.dev/docs/api/latest/nm-settings-keyfile.html) and [here](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/configuring_and_managing_networking/assembly_networkmanager-connection-profiles-in-keyfile-format_configuring-and-managing-networking).
             You current profiles which are most likely stored in `/etc/NetworkManager/system-connections` and there is [a tool](https://github.com/janik-haag/nm2nix) to convert them to the needed nix code.
             If you add a new ad-hoc connection via a GUI or nmtui or anything similar it should just work together with the declarative ones.
@@ -459,7 +459,7 @@ in
           default = [];
           type = types.listOf types.path;
           example = [ "/run/secrets/network-manager.env" ];
-          description = lib.mdDoc ''
+          description = ''
             Files to load as environment file. Environment variables from this file
             will be substituted into the static configuration file using [envsubst](https://github.com/a8m/envsubst).
           '';

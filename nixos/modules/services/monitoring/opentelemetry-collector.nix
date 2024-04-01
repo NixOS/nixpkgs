@@ -16,7 +16,7 @@ in {
     settings = mkOption {
       type = settingsFormat.type;
       default = {};
-      description = lib.mdDoc ''
+      description = ''
         Specify the configuration for Opentelemetry Collector in Nix.
 
         See https://opentelemetry.io/docs/collector/configuration/ for available options.
@@ -26,7 +26,7 @@ in {
     configFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Specify a path to a configuration file that Opentelemetry Collector should use.
       '';
     };

@@ -15,18 +15,18 @@ in
           name = mkOption {
             type = str;
             example = "sleep";
-            description = lib.mdDoc "Name of the script.";
+            description = "Name of the script.";
           };
           script = mkOption {
             type = str;
             example = "sleep 5";
-            description = lib.mdDoc "Shell script to execute when metrics are requested.";
+            description = "Shell script to execute when metrics are requested.";
           };
           timeout = mkOption {
             type = nullOr int;
             default = null;
             example = 60;
-            description = lib.mdDoc "Optional timeout for the script in seconds.";
+            description = "Optional timeout for the script in seconds.";
           };
         };
       });
@@ -37,7 +37,7 @@ in
           ];
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         All settings expressed as an Nix attrset.
 
         Check the official documentation for the corresponding YAML

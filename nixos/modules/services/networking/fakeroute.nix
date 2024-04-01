@@ -25,7 +25,7 @@ in
           "198.116.142.34"
           "63.199.8.242"
         ];
-        description = lib.mdDoc ''
+        description = ''
          Fake route that will appear after the real
          one to any host running a traceroute.
         '';

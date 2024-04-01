@@ -29,7 +29,7 @@ in
               type = lib.types.nullOr lib.types.str;
               example = "https://ocsinventory.localhost:8080/ocsinventory";
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 The URI of the OCS Inventory server where to send the inventory file.
 
                 This option is ignored if {option}`services.ocsinventory-agent.settings.local` is set.
@@ -40,7 +40,7 @@ in
               type = lib.types.nullOr lib.types.path;
               example = "/var/lib/ocsinventory-agent/reports";
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 If specified, the OCS Inventory Agent will run in offline mode
                 and the resulting inventory file will be stored in the specified path.
               '';
@@ -49,7 +49,7 @@ in
             ca = lib.mkOption {
               type = lib.types.path;
               default = "/etc/ssl/certs/ca-certificates.crt";
-              description = lib.mdDoc ''
+              description = ''
                 Path to CA certificates file in PEM format, for server
                 SSL certificate validation.
               '';
@@ -59,7 +59,7 @@ in
               type = lib.types.nullOr lib.types.str;
               default = null;
               example = "01234567890123";
-              description = lib.mdDoc "Tag for the generated inventory.";
+              description = "Tag for the generated inventory.";
             };
 
             debug = lib.mkEnableOption "debug mode";
@@ -72,7 +72,7 @@ in
           server = "https://ocsinventory.localhost:8080/ocsinventory";
           tag = "01234567890123";
         };
-        description = lib.mdDoc ''
+        description = ''
           Configuration for /etc/ocsinventory-agent/ocsinventory-agent.cfg.
 
           Refer to
@@ -84,7 +84,7 @@ in
         type = lib.types.str;
         default = "daily";
         example = "06:00";
-        description = lib.mdDoc ''
+        description = ''
           How often we run the ocsinventory-agent service. Runs by default every daily.
 
           The format is described in

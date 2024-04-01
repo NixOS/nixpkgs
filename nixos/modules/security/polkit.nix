@@ -32,8 +32,7 @@ in
             if (subject.local) return "yes";
           });
         '';
-      description = lib.mdDoc
-        ''
+      description = ''
           Any polkit rules to be added to config (in JavaScript ;-). See:
           <https://www.freedesktop.org/software/polkit/docs/latest/polkit.8.html#polkit-rules>
         '';
@@ -43,8 +42,7 @@ in
       type = types.listOf types.str;
       default = [ "unix-group:wheel" ];
       example = [ "unix-user:alice" "unix-group:admin" ];
-      description = lib.mdDoc
-        ''
+      description = ''
           Specifies which users are considered “administrators”, for those
           actions that require the user to authenticate as an
           administrator (i.e. have an `auth_admin`

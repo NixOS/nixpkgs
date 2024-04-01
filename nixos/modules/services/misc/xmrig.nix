@@ -38,7 +38,7 @@ with lib;
             ]
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           XMRig configuration. Refer to
           <https://xmrig.com/docs/miner/config>
           for details on supported values.

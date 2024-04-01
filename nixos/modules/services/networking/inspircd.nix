@@ -19,7 +19,7 @@ in {
         default = pkgs.inspircd;
         defaultText = lib.literalExpression "pkgs.inspircd";
         example = lib.literalExpression "pkgs.inspircdMinimal";
-        description = lib.mdDoc ''
+        description = ''
           The InspIRCd package to use. This is mainly useful
           to specify an overridden version of the
           `pkgs.inspircd` dervivation, for
@@ -32,7 +32,7 @@ in {
 
       config = lib.mkOption {
         type = lib.types.lines;
-        description = lib.mdDoc ''
+        description = ''
           Verbatim `inspircd.conf` file.
           For a list of options, consult the
           [InspIRCd documentation](https://docs.inspircd.org/3/configuration/), the

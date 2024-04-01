@@ -24,7 +24,7 @@ in {
         readers="(authenticated)";
         port = 3456;
       };
-      description = lib.mdDoc ''
+      description = ''
         Parameters passed to `--listen` command.
         Refer to <https://tiddlywiki.com/#WebServer>
         for details on supported values.

@@ -20,7 +20,7 @@ in {
     apiKeyFile = mkOption {
       type = types.path;
       example = "/run/keys/mackerel-api-key";
-      description = lib.mdDoc ''
+      description = ''
         Path to file containing the Mackerel API key. The file should contain a
         single line of the following form:
 
@@ -29,7 +29,7 @@ in {
     };
 
     settings = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Options for mackerel-agent.conf.
 
         Documentation:
@@ -48,12 +48,12 @@ in {
         options.host_status = {
           on_start = mkOption {
             type = types.enum [ "working" "standby" "maintenance" "poweroff" ];
-            description = lib.mdDoc "Host status after agent startup.";
+            description = "Host status after agent startup.";
             default = "working";
           };
           on_stop = mkOption {
             type = types.enum [ "working" "standby" "maintenance" "poweroff" ];
-            description = lib.mdDoc "Host status after agent shutdown.";
+            description = "Host status after agent shutdown.";
             default = "poweroff";
           };
         };

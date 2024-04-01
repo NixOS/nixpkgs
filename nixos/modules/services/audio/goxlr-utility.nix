@@ -12,7 +12,7 @@ with lib;
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable goxlr-utility for controlling your TC-Helicon GoXLR or GoXLR Mini
         '';
       };
@@ -20,7 +20,7 @@ with lib;
       autoStart.xdg = mkOption {
         default = true;
         type = with types; bool;
-        description = lib.mdDoc ''
+        description = ''
           Start the daemon automatically using XDG autostart.
           Sets `xdg.autostart.enable = true` if not already enabled.
         '';

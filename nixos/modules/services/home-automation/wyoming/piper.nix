@@ -9,9 +9,7 @@ let
 
   inherit (lib)
     escapeShellArgs
-    mkOption
-    mdDoc
-    mkEnableOption
+    mkOption mkEnableOption
     mkPackageOption
     types
     ;
@@ -30,20 +28,20 @@ in
 
     servers = mkOption {
       default = {};
-      description = mdDoc ''
+      description = ''
         Attribute set of piper instances to spawn.
       '';
       type = types.attrsOf (types.submodule (
         { ... }: {
           options = {
-            enable = mkEnableOption (mdDoc "Wyoming Piper server");
+            enable = mkEnableOption ( "Wyoming Piper server");
 
             piper = mkPackageOption pkgs "piper-tts" { };
 
             voice = mkOption {
               type = str;
               example = "en-us-ryan-medium";
-              description = mdDoc ''
+              description = ''
                 Name of the voice model to use. See the following website for samples:
                 https://rhasspy.github.io/piper-samples/
               '';
@@ -52,7 +50,7 @@ in
             uri = mkOption {
               type = strMatching "^(tcp|unix)://.*$";
               example = "tcp://0.0.0.0:10200";
-              description = mdDoc ''
+              description = ''
                 URI to bind the wyoming server to.
               '';
             };
@@ -60,7 +58,7 @@ in
             speaker = mkOption {
               type = ints.unsigned;
               default = 0;
-              description = mdDoc ''
+              description = ''
                 ID of a specific speaker in a multi-speaker model.
               '';
               apply = toString;
@@ -69,7 +67,7 @@ in
             noiseScale = mkOption {
               type = float;
               default = 0.667;
-              description = mdDoc ''
+              description = ''
                 Generator noise value.
               '';
               apply = toString;
@@ -78,7 +76,7 @@ in
             noiseWidth = mkOption {
               type = float;
               default = 0.333;
-              description = mdDoc ''
+              description = ''
                 Phoneme width noise value.
               '';
               apply = toString;
@@ -87,7 +85,7 @@ in
             lengthScale = mkOption {
               type = float;
               default = 1.0;
-              description = mdDoc ''
+              description = ''
                 Phoneme length value.
               '';
               apply = toString;
@@ -96,7 +94,7 @@ in
             extraArgs = mkOption {
               type = listOf str;
               default = [ ];
-              description = mdDoc ''
+              description = ''
                 Extra arguments to pass to the server commandline.
               '';
               apply = escapeShellArgs;

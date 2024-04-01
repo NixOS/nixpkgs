@@ -21,7 +21,7 @@ in
       type = settingsFormat.type;
       default = {};
 
-      description = lib.mdDoc ''
+      description = ''
         Configuration for prometheus xmpp-alerts, see
         <https://github.com/jelmer/prometheus-xmpp-alerts/blob/master/xmpp-alerts.yml.example>
         for supported values.

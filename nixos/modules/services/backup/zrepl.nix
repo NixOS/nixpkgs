@@ -17,7 +17,7 @@ in
 
       settings = mkOption {
         default = { };
-        description = lib.mdDoc ''
+        description = ''
           Configuration for zrepl. See <https://zrepl.github.io/configuration.html>
           for more information.
         '';

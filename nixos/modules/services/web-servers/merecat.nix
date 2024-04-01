@@ -24,7 +24,7 @@ in {
     settings = mkOption {
       inherit (format) type;
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Merecat configuration. Refer to merecat(8) for details on supported values.
       '';
       example = {

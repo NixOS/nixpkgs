@@ -15,7 +15,7 @@ with lib;
     security.allowUserNamespaces = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to allow creation of user namespaces.
 
         The motivation for disabling user namespaces is the potential
@@ -34,7 +34,7 @@ with lib;
     security.unprivilegedUsernsClone = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         When disabled, unprivileged users will not be able to create new namespaces.
         By default unprivileged user namespaces are disabled.
         This option only works in a hardened profile.
@@ -44,7 +44,7 @@ with lib;
     security.protectKernelImage = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to prevent replacing the running kernel image.
       '';
     };
@@ -52,7 +52,7 @@ with lib;
     security.allowSimultaneousMultithreading = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to allow SMT/hyperthreading.  Disabling SMT means that only
         physical CPU cores will be usable at runtime, potentially at
         significant performance cost.
@@ -71,7 +71,7 @@ with lib;
     security.forcePageTableIsolation = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to force-enable the Page Table Isolation (PTI) Linux kernel
         feature even on CPU models that claim to be safe from Meltdown.
 
@@ -83,7 +83,7 @@ with lib;
     security.virtualisation.flushL1DataCache = mkOption {
       type = types.nullOr (types.enum [ "never" "cond" "always" ]);
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Whether the hypervisor should flush the L1 data cache before
         entering guests.
         See also [](#opt-security.allowSimultaneousMultithreading).

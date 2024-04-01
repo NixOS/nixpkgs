@@ -11,7 +11,7 @@ in {
 
     extraOptions = mkOption {
       type = types.separatedString " ";
-      description = lib.mdDoc ''
+      description = ''
         Configuration Arguments for opentracker
         See https://erdgeist.org/arts/software/opentracker/ for all params
       '';

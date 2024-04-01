@@ -21,7 +21,7 @@ in
           wayfire-plugins-extra
         ];
       '';
-      description = lib.mdDoc ''
+      description = ''
         Additional plugins to use with the wayfire window manager.
       '';
     };

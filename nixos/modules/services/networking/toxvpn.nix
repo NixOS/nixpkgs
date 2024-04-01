@@ -10,20 +10,20 @@ with lib;
       localip = mkOption {
         type        = types.str;
         default     = "10.123.123.1";
-        description = lib.mdDoc "your ip on the vpn";
+        description = "your ip on the vpn";
       };
 
       port = mkOption {
         type        = types.port;
         default     = 33445;
-        description = lib.mdDoc "udp port for toxcore, port-forward to help with connectivity if you run many nodes behind one NAT";
+        description = "udp port for toxcore, port-forward to help with connectivity if you run many nodes behind one NAT";
       };
 
       auto_add_peers = mkOption {
         type        = types.listOf types.str;
         default     = [];
         example     = [ "toxid1" "toxid2" ];
-        description = lib.mdDoc "peers to automatically connect to on startup";
+        description = "peers to automatically connect to on startup";
       };
     };
   };

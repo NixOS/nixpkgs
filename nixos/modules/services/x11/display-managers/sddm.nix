@@ -148,7 +148,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable sddm as the display manager.
         '';
       };
@@ -158,7 +158,7 @@ in
       enableHidpi = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable automatic HiDPI mode.
         '';
       };
@@ -172,7 +172,7 @@ in
             Session = "plasma.desktop";
           };
         };
-        description = lib.mdDoc ''
+        description = ''
           Extra settings merged in and overwriting defaults in sddm.conf.
         '';
       };
@@ -180,7 +180,7 @@ in
       theme = mkOption {
         type = types.str;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Greeter theme to use.
         '';
       };
@@ -189,7 +189,7 @@ in
         type = types.listOf types.package;
         default = [ ];
         defaultText = "[]";
-        description = lib.mdDoc ''
+        description = ''
           Extra Qt plugins / QML libraries to add to the environment.
         '';
       };
@@ -197,7 +197,7 @@ in
       autoNumlock = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable numlock at login.
         '';
       };
@@ -210,7 +210,7 @@ in
           xrandr --setprovideroutputsource modesetting NVIDIA-0
           xrandr --auto
         '';
-        description = lib.mdDoc ''
+        description = ''
           A script to execute when starting the display server. DEPRECATED, please
           use {option}`services.xserver.displayManager.setupCommands`.
         '';
@@ -219,7 +219,7 @@ in
       stopScript = mkOption {
         type = types.str;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           A script to execute when stopping the display server.
         '';
       };
@@ -229,7 +229,7 @@ in
         relogin = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             If true automatic login will kick in again on session exit (logout), otherwise it
             will only log in automatically when the display-manager is started.
           '';
@@ -238,7 +238,7 @@ in
         minimumUid = mkOption {
           type = types.ints.u16;
           default = 1000;
-          description = lib.mdDoc ''
+          description = ''
             Minimum user ID for auto-login user.
           '';
         };
@@ -249,7 +249,7 @@ in
         enable = mkEnableOption "experimental Wayland support";
 
         compositor = mkOption {
-          description = lib.mdDoc "The compositor to use: ${lib.concatStringsSep ", " (builtins.attrNames compositorCmds)}";
+          description = "The compositor to use: ${lib.concatStringsSep ", " (builtins.attrNames compositorCmds)}";
           type = types.enum (builtins.attrNames compositorCmds);
           default = "weston";
         };
@@ -258,7 +258,7 @@ in
           type = types.str;
           internal = true;
           default = compositorCmds.${cfg.wayland.compositor};
-          description = lib.mdDoc "Command used to start the selected compositor";
+          description = "Command used to start the selected compositor";
         };
       };
     };

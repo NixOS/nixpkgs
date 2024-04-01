@@ -44,7 +44,7 @@ in
 
       interfaceDefaults = mkOption {
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           A set describing default parameters for babeld interfaces.
           See {manpage}`babeld(8)` for options.
         '';
@@ -58,7 +58,7 @@ in
 
       interfaces = mkOption {
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           A set describing babeld interfaces.
           See {manpage}`babeld(8)` for options.
         '';
@@ -75,7 +75,7 @@ in
       extraConfig = mkOption {
         default = "";
         type = types.lines;
-        description = lib.mdDoc ''
+        description = ''
           Options that will be copied to babeld.conf.
           See {manpage}`babeld(8)` for details.
         '';

@@ -29,14 +29,14 @@ in
         up = mkOption {
           type = types.lines;
           default = "";
-          description = lib.mdDoc ''
+          description = ''
             Shell commands executed when the Virtual Network Adapter(s) is/are starting.
           '';
         };
         down = mkOption {
           type = types.lines;
           default = "";
-          description = lib.mdDoc ''
+          description = ''
             Shell commands executed when the Virtual Network Adapter(s) is/are shutting down.
           '';
         };
@@ -45,7 +45,7 @@ in
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/softether";
-        description = lib.mdDoc ''
+        description = ''
           Data directory for SoftEther VPN.
         '';
       };

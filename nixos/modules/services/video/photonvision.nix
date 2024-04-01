@@ -11,7 +11,7 @@ in
       package = lib.mkPackageOption pkgs "photonvision" {};
 
       openFirewall = lib.mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Whether to open the required ports in the firewall.
         '';
         default = false;

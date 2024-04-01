@@ -21,7 +21,7 @@ in
     extraArguments = mkOption {
       default = "";
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         Additional command line arguments to pass to Squeezelite.
       '';
     };

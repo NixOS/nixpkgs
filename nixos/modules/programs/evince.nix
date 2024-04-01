@@ -22,7 +22,7 @@ in {
     programs.evince = {
 
       enable = mkEnableOption
-        (lib.mdDoc "Evince, the GNOME document viewer");
+        ( "Evince, the GNOME document viewer");
 
       package = mkPackageOption pkgs "evince" { };
 

@@ -18,7 +18,7 @@ in
       type = types.bool;
       default = !config.services.xserver.enable;
       defaultText = "!config.services.xserver.enable";
-      description = lib.mdDoc "Whether to disable X11-related features.";
+      description = "Whether to disable X11-related features.";
     };
   };
 

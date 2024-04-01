@@ -34,7 +34,7 @@ in
         };
       };
 
-      description = lib.mdDoc ''
+      description = ''
         Options passed to iwd.
         See [here](https://iwd.wiki.kernel.org/networkconfigurationsettings) for supported options.
       '';
