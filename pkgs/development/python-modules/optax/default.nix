@@ -3,6 +3,7 @@
 , buildPythonPackage
 , chex
 , fetchFromGitHub
+, flit-core
 , jaxlib
 , numpy
 , callPackage
@@ -12,7 +13,7 @@
 buildPythonPackage rec {
   pname = "optax";
   version = "0.2.1";
-  format = "setuptools";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -26,6 +27,10 @@ buildPythonPackage rec {
   outputs = [
     "out"
     "testsout"
+  ];
+
+  nativeBuildInputs = [
+    flit-core
   ];
 
   buildInputs = [
