@@ -10,16 +10,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "typstyle";
-  version = "0.11.5";
+  version = "0.11.8";
 
   src = fetchFromGitHub {
     owner = "Enter-tainer";
     repo = "typstyle";
     rev = "v${version}";
-    hash = "sha256-jAsKktTgvmZ4NKr1QpJPYjI2HRSw8CPBfJTETVyiRhg=";
+    hash = "sha256-N3dGoLGq9UxTgupowPDE6t2xK6csAPEIcI8zZ1y3gvs=";
   };
 
-  cargoHash = "sha256-oLJWgF5byM3sY3Bs/wpSrBqjNg4sHDF3RIsWZBiguGI=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "typst-syntax-0.11.0" = "sha256-BezpRq5O89gLbpRtte539vlJ4G5yJ6VPJ8AaC7rQNc0=";
+    };
+  };
 
   nativeBuildInputs = [
     pkg-config
@@ -33,6 +38,11 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.CoreServices
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration
+  ];
+
+  # Disabling tests requiring network access
+  checkFlags = [
+    "--skip=e2e"
   ];
 
   meta = {

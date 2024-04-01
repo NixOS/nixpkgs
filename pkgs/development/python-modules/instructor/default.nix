@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "instructor";
-  version = "0.6.4";
+  version = "0.6.8";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Af52TGnkqY/t0cPkHoRfhFqa/tuOpQXAI/fFfMTcM4Y=";
+    hash = "sha256-4mHXPes1NdYu53XEN7gq626cKy9ju1M7U6n6akfbuVo=";
   };
 
   nativeBuildInputs = [
