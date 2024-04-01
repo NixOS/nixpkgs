@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
         url = "https://github.com/MLton/mlton/releases/download/on-${version}-release/${pname}-${version}-1.amd64-darwin-19.6.gmp-static.tgz";
         sha256 = "0xndr2awlxdqr81j6snl9zqjx8r6f5fy9x65j1w899kf2dh9zsjv";
       })
+    else if stdenv.hostPlatform.system == "aarch64-darwin" then
+      (fetchurl {
+        url = "https://projects.laas.fr/tina/software/mlton-${version}-1.arm64-darwin-21.6-gmp-static.tgz";
+        sha256 = "1s61ayk3yj2xw8ilqk3fhb03x5x1wcakkmbhhvcsfb2hdw2c932x";
+      })
     else
       throw "Architecture not supported";
 
