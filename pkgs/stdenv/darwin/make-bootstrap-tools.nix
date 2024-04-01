@@ -49,14 +49,6 @@ rec {
         scpSupport = false;
       });
 
-      gnutar_ = (gnutar.override { libintl = null; }).overrideAttrs (old: {
-        configureFlags = [
-          "--disable-nls"
-        ] ++ old.configureFlags or [];
-      });
-
-      xz_ = xz.override { enableStatic = true; };
-
       unpackScript = writeText "bootstrap-tools-unpack.sh" ''
         set -euo pipefail
 
@@ -102,7 +94,7 @@ rec {
 
     in
     ''
-      mkdir -p $out/bin $out/lib $out/lib/system $out/lib/darwin
+      mkdir -p $out/bin $out/lib $out/lib/darwin
 
       ${lib.optionalString stdenv.targetPlatform.isx86_64 ''
         # Copy libSystem's .o files for various low-level boot stuff.
@@ -192,15 +184,15 @@ rec {
 
       cp -d ${getLib darwin.libtapi}/lib/libtapi* $out/lib
 
-      # tools needed to unpack bootstrap archive. they should not contain any
-      # external references. we will process them like the other tools but
-      # perform some additional checks and will not pack them into the archive.
-      mkdir -p unpack/bin
-      cp ${getBin bash}/bin/bash unpack/bin
-      ln -s bash unpack/bin/sh
+      # tools needed to unpack bootstrap archive
+      mkdir -p unpack/bin unpack/lib
+      cp -d ${getBin bash}/bin/{bash,sh} unpack/bin
       cp ${getBin coreutils_}/bin/mkdir unpack/bin
-      cp ${getBin gnutar_}/bin/tar unpack/bin
-      cp ${getBin xz_}/bin/xz unpack/bin
+      cp ${getBin gnutar}/bin/tar unpack/bin
+      cp ${getBin xz}/bin/xz unpack/bin
+      cp -d ${getLib gettext}/lib/libintl*.dylib unpack/lib
+      cp -d ${getLib libiconv}/lib/lib*.dylib unpack/lib
+      cp -d ${getLib xz}/lib/liblzma*.dylib unpack/lib
       cp ${unpackScript} unpack/bootstrap-tools-unpack.sh
 
       #
@@ -245,44 +237,36 @@ rec {
         fi
       }
 
-      # check that linked library paths exist in $out/lib
+      # check that linked library paths exist in lib
       # must be run after rpathify is performed
       checkDeps() {
         local deps=$(${stdenv.cc.targetPrefix}otool -l "$1"| grep -o '@rpath/[^      ]*' || true)
         local lib
+        shopt -s extglob
         for lib in $deps; do
-          if [[ ! -e $out/''${lib/@rpath/lib} ]]; then
+          local root="''${1/\/@(lib|bin)\/*}"
+          if [[ ! -e $root/''${lib/@rpath/lib} ]]; then
             echo "error: $1 missing lib for $lib" >&2
             exit 1
           fi
         done
+        shopt -u extglob
       }
 
-      for i in $out/bin/* unpack/bin/* $out/lib{,/darwin}/*.dylib; do
+      for i in {unpack,$out}/bin/* {unpack,$out}/lib{,/darwin}/*.dylib; do
         if [[ ! -L $i ]] && isMachO "$i"; then
           rpathify "$i"
           checkDeps "$i"
         fi
       done
 
-      nuke-refs $out/bin/*
-      nuke-refs $out/lib/*
+      nuke-refs {unpack,$out}/bin/*
+      nuke-refs {unpack,$out}/lib/*
       nuke-refs $out/lib/darwin/*
-      nuke-refs $out/lib/system/*
-      nuke-refs unpack/bin/*
 
       mkdir $out/.pack
       mv $out/* $out/.pack
       mv $out/.pack $out/pack
-
-      # validate that tools contain no references into the archive
-      for tool in unpack/bin/*; do
-        deps=$(${stdenv.cc.targetPrefix}otool -l "$tool"| grep '@rpath/' || true)
-        if [[ -n "$deps" ]]; then
-          printf "error: $tool is not self contained\n$deps\n" >&2
-          exit 1
-        fi
-      done
 
       mkdir $out/on-server
       cp -r unpack $out
