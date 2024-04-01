@@ -117,9 +117,7 @@
 # deprecated since 23.11.
 # TODO remove in a while.
 , allowDocBook ? false
-# whether lib.mdDoc is required for descriptions to be read as markdown.
-# deprecated since 23.11.
-# TODO remove in a while.
+# TODO remove in a while (see https://github.com/NixOS/nixpkgs/issues/300735)
 , markdownByDefault ? true
 }:
 

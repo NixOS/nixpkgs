@@ -1,12 +1,12 @@
 { config, hostPkgs, lib, ... }:
 let
-  inherit (lib) types mkOption mdDoc;
+  inherit (lib) types mkOption;
 in
 {
   options = {
     passthru = mkOption {
       type = types.lazyAttrsOf types.raw;
-      description = mdDoc ''
+      description = ''
         Attributes to add to the returned derivations,
         which are not necessarily part of the build.
 
@@ -18,7 +18,7 @@ in
 
     rawTestDerivation = mkOption {
       type = types.package;
-      description = mdDoc ''
+      description = ''
         Unfiltered version of `test`, for troubleshooting the test framework and `testBuildFailure` in the test framework's test suite.
         This is not intended for general use. Use `test` instead.
       '';
@@ -28,7 +28,7 @@ in
     test = mkOption {
       type = types.package;
       # TODO: can the interactive driver be configured to access the network?
-      description = mdDoc ''
+      description = ''
         Derivation that runs the test as its "build" process.
 
         This implies that NixOS tests run isolated from the network, making them
