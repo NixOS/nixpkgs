@@ -1081,6 +1081,14 @@ let
       '';
     });
 
+    NGCHM = old.NGCHM.overrideAttrs (attrs: {
+      postPatch = ''
+          substituteInPlace "inst/base.config/conf.d/01-server-protocol-scl.R" \
+            --replace-fail \
+            "/bin/hostname" "${lib.getBin pkgs.hostname}/bin/hostname"
+      '';
+    });
+
     ModelMetrics = old.ModelMetrics.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + lib.optionalString stdenv.isDarwin " -fopenmp";
