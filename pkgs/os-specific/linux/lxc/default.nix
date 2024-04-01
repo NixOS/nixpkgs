@@ -61,8 +61,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  # https://github.com/NixOS/nixpkgs/issues/300635
   postInstall = ''chmod -R u-s,g-s "$out"'';
-  postBuild = "set -x";
 
   passthru = {
     tests = {
