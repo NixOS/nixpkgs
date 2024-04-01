@@ -453,6 +453,17 @@ EOF
         }
     }
 
+    # Preserve umask (fmask, dmask) settings for vfat filesystems.
+    # (The default is to mount these world-readable, but that's a security risk
+    # for the EFI System Partition.)
+    if ($fsType eq "vfat") {
+        for (@superOptions) {
+            if ($_ =~ /fmask|dmask/) {
+                push @extraOptions, $_;
+            }
+        }
+    }
+
     # is this a stratis fs?
     my $stableDevPath = findStableDevPath $device;
     my $stratisPool;
