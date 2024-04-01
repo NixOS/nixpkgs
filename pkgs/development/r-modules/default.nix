@@ -899,6 +899,7 @@ let
     "OmnipathR"
     "precommit"
     "PSCBS"
+    "iemisc"
     "repmis"
     "R_cache"
     "R_filesets"
