@@ -376,7 +376,7 @@ Use the following commands:
 
     ```ShellSession
     # mkdir -p /mnt/boot
-    # mount /dev/disk/by-label/boot /mnt/boot
+    # mount -o umask=077 /dev/disk/by-label/boot /mnt/boot
     ```
 
 3.  If your machine has a limited amount of memory, you may want to
@@ -572,7 +572,7 @@ With a partitioned disk.
 # mkfs.fat -F 32 -n boot /dev/sda3        # (for UEFI systems only)
 # mount /dev/disk/by-label/nixos /mnt
 # mkdir -p /mnt/boot                      # (for UEFI systems only)
-# mount /dev/disk/by-label/boot /mnt/boot # (for UEFI systems only)
+# mount -o umask=077 /dev/disk/by-label/boot /mnt/boot # (for UEFI systems only)
 # nixos-generate-config --root /mnt
 # nano /mnt/etc/nixos/configuration.nix
 # nixos-install
