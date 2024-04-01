@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     repo = "mbedtls";
     rev = "${pname}-${version}";
     inherit hash;
+    # mbedtls >= 3.6.0 uses git submodules
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ninja perl python3 ];
