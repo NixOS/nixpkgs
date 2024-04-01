@@ -63,6 +63,7 @@
 , graphene
 , wayland
 , wayland-protocols
+, fetchpatch
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -75,6 +76,15 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-UcMyS4qXX5luWsaTqzhWPElubxQubNM1e0lQ0lAzSHQ=";
   };
+
+  patches = [
+    # Workaround until v46.0 (merged) for https://gitlab.gnome.org/GNOME/mutter/-/issues/1627
+    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/3601
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/35335e65af75a58c8ca7f2bb3a325884155b34b1.patch";
+      hash = "sha256-PWQpGPdrVRyu2X/+QyFk0LfxIR3tm/UKgebeIOkZT1c=";
+    })
+  ];
 
   mesonFlags = [
     "-Degl_device=true"
