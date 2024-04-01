@@ -22,7 +22,8 @@ kernel.stdenv.mkDerivation {
     homepage = "https://github.com/Rust-for-Linux/rust-out-of-tree-module";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.blitz ];
-    platforms = lib.platforms.linux;
+    platforms = [ "x86_64-linux" ]
+      ++ lib.optional (kernel.kernelAtLeast "6.9") "aarch64-linux";
   };
 
 }
