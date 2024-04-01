@@ -276,8 +276,8 @@ in
       { assertion = pgsqlLocal -> cfg.database.user == cfg.database.name;
         message = "services.redmine.database.user and services.redmine.database.name must be the same when using a local postgresql database";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.type != "sqlite3" && cfg.database.socket != null;
-        message = "services.redmine.database.socket must be set if services.redmine.database.createLocally is set to true";
+      { assertion = (cfg.database.createLocally && cfg.database.type != "sqlite3") -> cfg.database.socket != null;
+        message = "services.redmine.database.socket must be set if services.redmine.database.createLocally is set to true and no sqlite database is used";
       }
       { assertion = cfg.database.createLocally -> cfg.database.host == "localhost";
         message = "services.redmine.database.host must be set to localhost if services.redmine.database.createLocally is set to true";
