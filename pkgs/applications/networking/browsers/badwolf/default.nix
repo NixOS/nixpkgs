@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     homepage = "https://hacktivis.me/projects/badwolf";
     license = with licenses; [ bsd3 cc-by-sa-40 ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ laalsaas ];
+    maintainers = with maintainers; [ laalsaas aleksana ];
   };
 }
