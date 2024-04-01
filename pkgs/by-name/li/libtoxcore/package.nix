@@ -56,5 +56,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://tox.chat";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ peterhoeg ehmry ];
+    platforms = lib.platforms.all;
   };
 }
