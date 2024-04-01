@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "toxic";
-  version = "0.11.3";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
-    owner  = "Tox";
+    owner  = "TokTok";
     repo   = "toxic";
     rev    = "v${version}";
-    sha256 = "sha256-BabRY9iu5ccEXo5POrWkWaIWAeQU4MVlMK8I+Iju6aQ=";
+    sha256 = "sha256-+nOjlQED2pbYwGV6IGeKK1pymBSrDVWCWKjZ42vib7E=";
   };
 
   makeFlags = [ "PREFIX=$(out)"];
@@ -23,11 +23,12 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [ pkg-config libconfig ];
 
-  meta = with lib; src.meta // {
+  meta = src.meta // {
     description = "Reference CLI for Tox";
     mainProgram = "toxic";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ehmry ];
-    platforms = platforms.linux;
+    homepage = "https://github.com/TokTok/toxic";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ ehmry ];
+    platforms = lib.platforms.linux;
   };
 }
