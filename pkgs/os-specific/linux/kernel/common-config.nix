@@ -122,6 +122,10 @@ let
       # Default SATA link power management to "medium with device initiated PM"
       # for some extra power savings.
       SATA_MOBILE_LPM_POLICY           = whenAtLeast "5.18" (freeform "3");
+
+      # GPIO power management
+      POWER_RESET_GPIO                 = option yes;
+      POWER_RESET_GPIO_RESTART         = option yes;
     } // optionalAttrs (stdenv.hostPlatform.isx86) {
       INTEL_IDLE                       = yes;
       INTEL_RAPL                       = whenAtLeast "5.3" module;
