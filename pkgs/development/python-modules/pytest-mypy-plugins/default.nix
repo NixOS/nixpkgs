@@ -29,7 +29,7 @@ buildPythonPackage rec {
     hash = "sha256-yme1g9Kj5guao0Lf8mbkNJRw6ipS2Wd4Io1cSlEBAGo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     pytest
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     decorator
     jinja2
     jsonschema
