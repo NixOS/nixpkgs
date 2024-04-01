@@ -12,7 +12,7 @@ in
   meta.doc = ./pict-rs.md;
 
   options.services.pict-rs = {
-    enable = lib.mkEnableOption (lib.mdDoc "pict-rs server");
+    enable = lib.mkEnableOption "pict-rs server";
 
     package = lib.mkPackageOption pkgs "pict-rs" { };
 

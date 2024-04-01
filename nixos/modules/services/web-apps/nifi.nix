@@ -25,7 +25,7 @@ let
 in {
   options = {
     services.nifi = {
-      enable = lib.mkEnableOption (lib.mdDoc "Apache NiFi");
+      enable = lib.mkEnableOption "Apache NiFi";
 
       package = lib.mkOption {
         type = lib.types.package;

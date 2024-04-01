@@ -19,7 +19,7 @@ in
   ###### interface
   options = {
     services.ofono = {
-      enable = mkEnableOption (lib.mdDoc "Ofono");
+      enable = mkEnableOption "Ofono";
 
       plugins = mkOption {
         type = types.listOf types.package;

@@ -8,7 +8,7 @@ let
 in {
   options = {
     services.auto-epp = {
-      enable = lib.mkEnableOption (lib.mdDoc "auto-epp for amd active pstate");
+      enable = lib.mkEnableOption "auto-epp for amd active pstate";
 
       package = lib.mkPackageOptionMD pkgs "auto-epp" {};
 

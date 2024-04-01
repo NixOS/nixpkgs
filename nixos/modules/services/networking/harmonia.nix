@@ -6,7 +6,7 @@ in
 {
   options = {
     services.harmonia = {
-      enable = lib.mkEnableOption (lib.mdDoc "Harmonia: Nix binary cache written in Rust");
+      enable = lib.mkEnableOption "Harmonia: Nix binary cache written in Rust";
 
       signKeyPath = lib.mkOption {
         type = lib.types.nullOr lib.types.path;

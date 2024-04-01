@@ -62,7 +62,7 @@ in
 {
   options = {
     services.tayga = {
-      enable = mkEnableOption (lib.mdDoc "Tayga");
+      enable = mkEnableOption "Tayga";
 
       package = mkPackageOption pkgs "tayga" { };
 

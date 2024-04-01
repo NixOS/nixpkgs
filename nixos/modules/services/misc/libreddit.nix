@@ -13,7 +13,7 @@ in
 {
   options = {
     services.libreddit = {
-      enable = mkEnableOption (lib.mdDoc "Private front-end for Reddit");
+      enable = mkEnableOption "Private front-end for Reddit";
 
       package = mkPackageOption pkgs "libreddit" { };
 

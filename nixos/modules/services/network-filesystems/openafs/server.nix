@@ -171,7 +171,7 @@ in {
         };
 
         backup = {
-          enable = mkEnableOption (lib.mdDoc ''
+          enable = mkEnableOption ''
             the backup server role. When using OpenAFS built-in buserver, use in conjunction with the
             `database` role to maintain the Backup
             Database. Normally only used in conjunction with tape storage
@@ -179,12 +179,12 @@ in {
 
             For a modern backup server, enable this role and see
             {option}`enableFabs`
-          '');
+          '';
 
-          enableFabs = mkEnableOption (lib.mdDoc ''
+          enableFabs = mkEnableOption ''
             FABS, the flexible AFS backup system. It stores volumes as dump files, relying on other
             pre-existing backup solutions for handling them.
-          '');
+          '';
 
           buserverArgs = mkOption {
             default = "";

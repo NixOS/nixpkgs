@@ -12,7 +12,7 @@ in
   ];
 
   options.services.youtrack = {
-    enable = lib.mkEnableOption (lib.mdDoc "YouTrack service");
+    enable = lib.mkEnableOption "YouTrack service";
 
     address = lib.mkOption {
       description = lib.mdDoc ''

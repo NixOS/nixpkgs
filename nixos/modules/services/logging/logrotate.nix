@@ -95,7 +95,7 @@ in
 
   options = {
     services.logrotate = {
-      enable = mkEnableOption (lib.mdDoc "the logrotate systemd service") // {
+      enable = mkEnableOption "the logrotate systemd service" // {
         default = foldr (n: a: a || n.enable) false (attrValues cfg.settings);
         defaultText = literalExpression "cfg.settings != {}";
       };
@@ -131,7 +131,7 @@ in
           freeformType = with types; attrsOf (nullOr (oneOf [ int bool str ]));
 
           options = {
-            enable = mkEnableOption (lib.mdDoc "setting individual kill switch") // {
+            enable = mkEnableOption "setting individual kill switch" // {
               default = true;
             };
 

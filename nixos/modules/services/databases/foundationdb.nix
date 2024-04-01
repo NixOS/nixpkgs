@@ -62,7 +62,7 @@ in
 {
   options.services.foundationdb = {
 
-    enable = mkEnableOption (lib.mdDoc "FoundationDB Server");
+    enable = mkEnableOption "FoundationDB Server";
 
     package = mkOption {
       type        = types.package;

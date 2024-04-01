@@ -25,7 +25,7 @@ in {
 
     services.spacecookie = {
 
-      enable = mkEnableOption (lib.mdDoc "spacecookie");
+      enable = mkEnableOption "spacecookie";
 
       package = mkPackageOption pkgs "spacecookie" {
         example = "haskellPackages.spacecookie";
@@ -83,7 +83,7 @@ in {
           };
 
           options.log = {
-            enable = mkEnableOption (lib.mdDoc "logging for spacecookie")
+            enable = mkEnableOption "logging for spacecookie"
               // { default = true; example = false; };
 
             hide-ips = mkOption {

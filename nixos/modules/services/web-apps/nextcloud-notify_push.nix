@@ -6,7 +6,7 @@ let
 in
 {
   options.services.nextcloud.notify_push = {
-    enable = lib.mkEnableOption (lib.mdDoc "Notify push");
+    enable = lib.mkEnableOption "Notify push";
 
     package = lib.mkOption {
       type = lib.types.package;

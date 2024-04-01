@@ -14,7 +14,7 @@ in {
   ];
 
   options.services.vikunja = with lib; {
-    enable = mkEnableOption (lib.mdDoc "vikunja service");
+    enable = mkEnableOption "vikunja service";
     package = mkPackageOption pkgs "vikunja" { };
     environmentFiles = mkOption {
       type = types.listOf types.path;

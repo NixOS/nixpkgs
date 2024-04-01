@@ -5,7 +5,7 @@ let
 in
 {
   options.services.kasmweb = {
-    enable = lib.mkEnableOption (lib.mdDoc "kasmweb");
+    enable = lib.mkEnableOption "kasmweb";
 
     networkSubnet = lib.mkOption {
       default = "172.20.0.0/16";

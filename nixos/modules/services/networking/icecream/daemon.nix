@@ -12,7 +12,7 @@ in {
 
     services.icecream.daemon = {
 
-     enable = mkEnableOption (lib.mdDoc "Icecream Daemon");
+     enable = mkEnableOption "Icecream Daemon";
 
       openFirewall = mkOption {
         type = types.bool;

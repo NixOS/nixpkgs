@@ -49,7 +49,7 @@ in
 {
   options = {
     services.cockroachdb = {
-      enable = mkEnableOption (lib.mdDoc "CockroachDB Server");
+      enable = mkEnableOption "CockroachDB Server";
 
       listen = addressOption "intra-cluster communication" 26257;
 

@@ -49,7 +49,7 @@ in
 {
   options = {
     services.smokeping = {
-      enable = mkEnableOption (lib.mdDoc "smokeping service");
+      enable = mkEnableOption "smokeping service";
 
       alertConfig = mkOption {
         type = types.lines;

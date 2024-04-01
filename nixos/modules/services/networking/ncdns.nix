@@ -50,11 +50,11 @@ in
 
     services.ncdns = {
 
-      enable = mkEnableOption (lib.mdDoc ''
+      enable = mkEnableOption ''
         ncdns, a Go daemon to bridge Namecoin to DNS.
         To resolve .bit domains set `services.namecoind.enable = true;`
         and an RPC username/password
-      '');
+      '';
 
       address = mkOption {
         type = types.str;
@@ -112,13 +112,13 @@ in
         '';
       };
 
-      dnssec.enable = mkEnableOption (lib.mdDoc ''
+      dnssec.enable = mkEnableOption ''
         DNSSEC support in ncdns. This will generate KSK and ZSK keypairs
         (unless provided via the options
         {option}`services.ncdns.dnssec.publicKey`,
         {option}`services.ncdns.dnssec.privateKey` etc.) and add a trust
         anchor to recursive resolvers
-      '');
+      '';
 
       dnssec.keys.public = mkOption {
         type = types.path;

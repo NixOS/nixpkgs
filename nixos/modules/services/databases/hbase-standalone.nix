@@ -41,10 +41,10 @@ in {
   options = {
     services.hbase-standalone = {
 
-      enable = mkEnableOption (lib.mdDoc ''
+      enable = mkEnableOption ''
         HBase master in standalone mode with embedded regionserver and zookeper.
         Do not use this configuration for production nor for evaluating HBase performance.
-      '');
+      '';
 
       package = mkPackageOption pkgs "hbase" { };
 

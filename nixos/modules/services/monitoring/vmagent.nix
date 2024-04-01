@@ -5,7 +5,7 @@ let
   settingsFormat = pkgs.formats.json { };
 in {
   options.services.vmagent = {
-    enable = mkEnableOption (lib.mdDoc "vmagent");
+    enable = mkEnableOption "vmagent";
 
     user = mkOption {
       default = "vmagent";

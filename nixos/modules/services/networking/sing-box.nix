@@ -11,7 +11,7 @@ in
 
   options = {
     services.sing-box = {
-      enable = lib.mkEnableOption (lib.mdDoc "sing-box universal proxy platform");
+      enable = lib.mkEnableOption "sing-box universal proxy platform";
 
       package = lib.mkPackageOption pkgs "sing-box" { };
 

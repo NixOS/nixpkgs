@@ -65,9 +65,9 @@ let
 in
 {
   options.services.kanidm = {
-    enableClient = lib.mkEnableOption (lib.mdDoc "the Kanidm client");
-    enableServer = lib.mkEnableOption (lib.mdDoc "the Kanidm server");
-    enablePam = lib.mkEnableOption (lib.mdDoc "the Kanidm PAM and NSS integration");
+    enableClient = lib.mkEnableOption "the Kanidm client";
+    enableServer = lib.mkEnableOption "the Kanidm server";
+    enablePam = lib.mkEnableOption "the Kanidm PAM and NSS integration";
 
     package = lib.mkPackageOption pkgs "kanidm" {};
 

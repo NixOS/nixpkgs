@@ -29,7 +29,7 @@ in
   options = {
 
     services.zabbixAgent = {
-      enable = mkEnableOption (lib.mdDoc "the Zabbix Agent");
+      enable = mkEnableOption "the Zabbix Agent";
 
       package = mkPackageOption pkgs [ "zabbix" "agent" ] { };
 

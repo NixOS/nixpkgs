@@ -1,6 +1,6 @@
 { lib, ... }:
 { options.services.nghttpx = {
-    enable = lib.mkEnableOption (lib.mdDoc "nghttpx");
+    enable = lib.mkEnableOption "nghttpx";
 
     frontends = lib.mkOption {
       type        = lib.types.listOf (lib.types.submodule (import ./frontend-submodule.nix));

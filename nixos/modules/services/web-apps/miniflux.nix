@@ -16,7 +16,7 @@ in
 {
   options = {
     services.miniflux = {
-      enable = mkEnableOption (lib.mdDoc "miniflux");
+      enable = mkEnableOption "miniflux";
 
       package = mkPackageOption pkgs "miniflux" { };
 

@@ -21,7 +21,7 @@ in
       type = str;
     };
 
-    enable = mkEnableOption (lib.mdDoc "Kubernetes proxy");
+    enable = mkEnableOption "Kubernetes proxy";
 
     extraOpts = mkOption {
       description = lib.mdDoc "Kubernetes proxy extra command line options.";

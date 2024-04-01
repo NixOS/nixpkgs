@@ -8,7 +8,7 @@ let
 in
 {
   options.services.litestream = {
-    enable = mkEnableOption (lib.mdDoc "litestream");
+    enable = mkEnableOption "litestream";
 
     package = mkPackageOption pkgs "litestream" { };
 

@@ -50,7 +50,7 @@ in {
   };
 
   options = {
-    virtualisation.lxd.agent.enable = lib.mkEnableOption (lib.mdDoc "Enable LXD agent");
+    virtualisation.lxd.agent.enable = lib.mkEnableOption "Enable LXD agent";
   };
 
   config = lib.mkIf cfg.enable {

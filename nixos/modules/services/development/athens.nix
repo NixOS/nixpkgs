@@ -157,7 +157,7 @@ in
   };
 
   options.services.athens = {
-    enable = mkEnableOption (lib.mdDoc "Go module datastore and proxy");
+    enable = mkEnableOption "Go module datastore and proxy";
 
     package = mkOption {
       default = pkgs.athens;

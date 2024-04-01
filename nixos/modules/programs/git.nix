@@ -9,7 +9,7 @@ in
 {
   options = {
     programs.git = {
-      enable = mkEnableOption (lib.mdDoc "git");
+      enable = mkEnableOption "git";
 
       package = mkPackageOption pkgs "git" {
         example = "gitFull";
@@ -59,7 +59,7 @@ in
       };
 
       lfs = {
-        enable = mkEnableOption (lib.mdDoc "git-lfs");
+        enable = mkEnableOption "git-lfs";
 
         package = mkPackageOption pkgs "git-lfs" { };
       };

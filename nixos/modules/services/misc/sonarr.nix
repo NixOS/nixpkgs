@@ -8,7 +8,7 @@ in
 {
   options = {
     services.sonarr = {
-      enable = mkEnableOption (lib.mdDoc "Sonarr");
+      enable = mkEnableOption "Sonarr";
 
       dataDir = mkOption {
         type = types.str;

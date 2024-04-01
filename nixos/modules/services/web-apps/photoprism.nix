@@ -26,7 +26,7 @@ in
 
   options.services.photoprism = {
 
-    enable = lib.mkEnableOption (lib.mdDoc "Photoprism web server");
+    enable = lib.mkEnableOption "Photoprism web server";
 
     passwordFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;

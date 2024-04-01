@@ -11,7 +11,7 @@ in {
 
   options = {
     services.sonic-server = {
-      enable = lib.mkEnableOption (lib.mdDoc "Sonic Search Index");
+      enable = lib.mkEnableOption "Sonic Search Index";
 
       package = lib.mkPackageOption pkgs "sonic-server" { };
 

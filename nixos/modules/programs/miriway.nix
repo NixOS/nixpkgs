@@ -4,12 +4,12 @@ let
   cfg = config.programs.miriway;
 in {
   options.programs.miriway = {
-    enable = lib.mkEnableOption (lib.mdDoc ''
+    enable = lib.mkEnableOption ''
       Miriway, a Mir based Wayland compositor. You can manually launch Miriway by
       executing "exec miriway" on a TTY, or launch it from a display manager. Copy
       /etc/xdg/xdg-miriway/miriway-shell.config to ~/.config/miriway-shell.config
       to modify the system-wide configuration on a per-user basis. See <https://github.com/Miriway/Miriway>,
-      and "miriway --help" for more information'');
+      and "miriway --help" for more information'';
 
     config = lib.mkOption {
       type = lib.types.lines;

@@ -52,7 +52,7 @@ in {
   options = {
     services.unbound = {
 
-      enable = mkEnableOption (lib.mdDoc "Unbound domain name server");
+      enable = mkEnableOption "Unbound domain name server";
 
       package = mkPackageOption pkgs "unbound-with-systemd" { };
 

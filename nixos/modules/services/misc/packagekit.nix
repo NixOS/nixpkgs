@@ -39,11 +39,11 @@ in
   ];
 
   options.services.packagekit = {
-    enable = mkEnableOption (lib.mdDoc ''
+    enable = mkEnableOption ''
       PackageKit, a cross-platform D-Bus abstraction layer for
       installing software. Software utilizing PackageKit can install
       software regardless of the package manager
-    '');
+    '';
 
     settings = mkOption {
       type = iniFmt.type;

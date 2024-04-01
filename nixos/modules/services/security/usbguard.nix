@@ -37,7 +37,7 @@ in
 
   options = {
     services.usbguard = {
-      enable = mkEnableOption (lib.mdDoc "USBGuard daemon");
+      enable = mkEnableOption "USBGuard daemon";
 
       package = mkPackageOption pkgs "usbguard" {
         extraDescription = ''
@@ -157,7 +157,7 @@ in
         '';
       };
 
-      dbus.enable = mkEnableOption (lib.mdDoc "USBGuard dbus daemon");
+      dbus.enable = mkEnableOption "USBGuard dbus daemon";
     };
   };
 

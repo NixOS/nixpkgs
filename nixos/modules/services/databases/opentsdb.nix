@@ -15,7 +15,7 @@ in {
 
     services.opentsdb = {
 
-      enable = mkEnableOption (lib.mdDoc "OpenTSDB");
+      enable = mkEnableOption "OpenTSDB";
 
       package = mkPackageOption pkgs "opentsdb" { };
 

@@ -30,7 +30,7 @@ in
 
   options = {
     services.tarsnap = {
-      enable = mkEnableOption (lib.mdDoc "periodic tarsnap backups");
+      enable = mkEnableOption "periodic tarsnap backups";
 
       package = mkPackageOption pkgs "tarsnap" { };
 

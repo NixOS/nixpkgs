@@ -6,7 +6,7 @@ let
   cfg = config.programs.sedutil;
 
 in {
-  options.programs.sedutil.enable = mkEnableOption (lib.mdDoc "sedutil");
+  options.programs.sedutil.enable = mkEnableOption "sedutil";
 
   config = mkIf cfg.enable {
     boot.kernelParams = [

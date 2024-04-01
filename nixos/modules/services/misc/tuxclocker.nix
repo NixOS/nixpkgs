@@ -7,14 +7,14 @@ let
 in
 {
   options.programs.tuxclocker = {
-    enable = mkEnableOption (lib.mdDoc ''
+    enable = mkEnableOption ''
       TuxClocker, a hardware control and monitoring program
-    '');
+    '';
 
-    enableAMD = mkEnableOption (lib.mdDoc ''
+    enableAMD = mkEnableOption ''
       AMD GPU controls.
       Sets the `amdgpu.ppfeaturemask` kernel parameter to 0xfffd7fff to enable all TuxClocker controls
-    '');
+    '';
 
     enabledNVIDIADevices = mkOption {
       type = types.listOf types.int;

@@ -9,7 +9,7 @@ in
 {
   options = {
     services.prowlarr = {
-      enable = mkEnableOption (lib.mdDoc "Prowlarr");
+      enable = mkEnableOption "Prowlarr";
 
       package = mkPackageOption pkgs "prowlarr" { };
 

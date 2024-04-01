@@ -138,7 +138,7 @@ let
 in
 {
   options.services.cloudflared = {
-    enable = mkEnableOption (lib.mdDoc "Cloudflare Tunnel client daemon (formerly Argo Tunnel)");
+    enable = mkEnableOption "Cloudflare Tunnel client daemon (formerly Argo Tunnel)";
 
     user = mkOption {
       type = types.str;

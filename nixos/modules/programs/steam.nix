@@ -24,7 +24,7 @@ let
     '').overrideAttrs (_: { passthru.providedSessions = [ "steam" ]; });
 in {
   options.programs.steam = {
-    enable = mkEnableOption (lib.mdDoc "steam");
+    enable = mkEnableOption "steam";
 
     package = mkOption {
       type = types.package;
@@ -137,10 +137,10 @@ in {
       };
     };
 
-    extest.enable = mkEnableOption (lib.mdDoc ''
+    extest.enable = mkEnableOption ''
       Load the extest library into Steam, to translate X11 input events to
       uinput events (e.g. for using Steam Input on Wayland)
-    '');
+    '';
   };
 
   config = mkIf cfg.enable {

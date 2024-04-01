@@ -13,7 +13,7 @@ in {
         default = {};
         type = types.submodule {
           options = {
-            enable = lib.mkEnableOption (lib.mdDoc "Lightouse Beacon node");
+            enable = lib.mkEnableOption "Lightouse Beacon node";
 
             dataDir = mkOption {
               type = types.str;
@@ -84,7 +84,7 @@ in {
             };
 
             http = {
-              enable = lib.mkEnableOption (lib.mdDoc "Beacon node http api");
+              enable = lib.mkEnableOption "Beacon node http api";
               port = mkOption {
                 type = types.port;
                 default = 5052;
@@ -103,7 +103,7 @@ in {
             };
 
             metrics = {
-              enable = lib.mkEnableOption (lib.mdDoc "Beacon node prometheus metrics");
+              enable = lib.mkEnableOption "Beacon node prometheus metrics";
               address = mkOption {
                 type = types.str;
                 default = "127.0.0.1";
@@ -161,7 +161,7 @@ in {
             };
 
             metrics = {
-              enable = lib.mkEnableOption (lib.mdDoc "Validator node prometheus metrics");
+              enable = lib.mkEnableOption "Validator node prometheus metrics";
               address = mkOption {
                 type = types.str;
                 default = "127.0.0.1";

@@ -49,12 +49,12 @@ in
 
     services.xrdp = {
 
-      enable = mkEnableOption (lib.mdDoc "xrdp, the Remote Desktop Protocol server");
+      enable = mkEnableOption "xrdp, the Remote Desktop Protocol server";
 
       package = mkPackageOptionMD pkgs "xrdp" { };
 
       audio = {
-        enable = mkEnableOption (lib.mdDoc "audio support for xrdp sessions. So far it only works with PulseAudio sessions on the server side. No PipeWire support yet");
+        enable = mkEnableOption "audio support for xrdp sessions. So far it only works with PulseAudio sessions on the server side. No PipeWire support yet";
         package = mkPackageOptionMD pkgs "pulseaudio-module-xrdp" {};
       };
 

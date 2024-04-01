@@ -80,7 +80,7 @@ let
 in {
   options = {
     services.dnsdist = {
-      enable = mkEnableOption (lib.mdDoc "dnsdist domain name server");
+      enable = mkEnableOption "dnsdist domain name server";
 
       listenAddress = mkOption {
         type = types.str;
@@ -94,7 +94,7 @@ in {
       };
 
       dnscrypt = {
-        enable = mkEnableOption (lib.mdDoc "a DNSCrypt endpoint to dnsdist");
+        enable = mkEnableOption "a DNSCrypt endpoint to dnsdist";
 
         listenAddress = mkOption {
           type = types.str;

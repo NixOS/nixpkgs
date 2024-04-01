@@ -8,7 +8,7 @@ in
   ##### interface
   options = {
     services.nomad = {
-      enable = mkEnableOption (lib.mdDoc "Nomad, a distributed, highly available, datacenter-aware scheduler");
+      enable = mkEnableOption "Nomad, a distributed, highly available, datacenter-aware scheduler";
 
       package = mkPackageOption pkgs "nomad" { };
 

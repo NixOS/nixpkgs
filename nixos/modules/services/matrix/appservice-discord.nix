@@ -13,7 +13,7 @@ let
 in {
   options = {
     services.matrix-appservice-discord = {
-      enable = mkEnableOption (lib.mdDoc "a bridge between Matrix and Discord");
+      enable = mkEnableOption "a bridge between Matrix and Discord";
 
       package = mkPackageOption pkgs "matrix-appservice-discord" { };
 

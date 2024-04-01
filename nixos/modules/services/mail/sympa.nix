@@ -80,7 +80,7 @@ in
   ###### interface
   options.services.sympa = with types; {
 
-    enable = mkEnableOption (lib.mdDoc "Sympa mailing list manager");
+    enable = mkEnableOption "Sympa mailing list manager";
 
     lang = mkOption {
       type = str;

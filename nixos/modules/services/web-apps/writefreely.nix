@@ -132,7 +132,7 @@ let
 in {
   options.services.writefreely = {
     enable =
-      lib.mkEnableOption (lib.mdDoc "Writefreely, build a digital writing community");
+      lib.mkEnableOption "Writefreely, build a digital writing community";
 
     package = lib.mkOption {
       type = lib.types.package;

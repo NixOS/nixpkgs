@@ -52,7 +52,7 @@ let
 
   serviceOptions = service:
     {
-      enable = mkEnableOption (lib.mdDoc "the FRR ${toUpper service} routing protocol");
+      enable = mkEnableOption "the FRR ${toUpper service} routing protocol";
 
       configFile = mkOption {
         type = types.nullOr types.path;

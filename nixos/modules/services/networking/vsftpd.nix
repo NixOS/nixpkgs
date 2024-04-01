@@ -150,7 +150,7 @@ in
 
     services.vsftpd = {
 
-      enable = mkEnableOption (lib.mdDoc "vsftpd");
+      enable = mkEnableOption "vsftpd";
 
       userlist = mkOption {
         default = [];

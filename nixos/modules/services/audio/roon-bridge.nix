@@ -8,7 +8,7 @@ let
 in {
   options = {
     services.roon-bridge = {
-      enable = mkEnableOption (lib.mdDoc "Roon Bridge");
+      enable = mkEnableOption "Roon Bridge";
       openFirewall = mkOption {
         type = types.bool;
         default = false;

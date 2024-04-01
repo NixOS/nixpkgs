@@ -23,7 +23,7 @@ in
   meta.buildDocsInSandbox = false;
 
   options.services.sslh = {
-    enable = mkEnableOption (lib.mdDoc "sslh, protocol demultiplexer");
+    enable = mkEnableOption "sslh, protocol demultiplexer";
 
     method = mkOption {
       type = types.enum [ "fork" "select" "ev" ];

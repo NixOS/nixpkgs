@@ -12,7 +12,7 @@ in
 
 {
   options.services.xserver.windowManager.i3 = {
-    enable = mkEnableOption (lib.mdDoc "i3 window manager");
+    enable = mkEnableOption "i3 window manager";
 
     configFile = mkOption {
       default     = null;

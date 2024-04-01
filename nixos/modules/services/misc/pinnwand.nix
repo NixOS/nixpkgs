@@ -10,7 +10,7 @@ let
 in
 {
   options.services.pinnwand = {
-    enable = mkEnableOption (lib.mdDoc "Pinnwand");
+    enable = mkEnableOption "Pinnwand";
 
     port = mkOption {
       type = types.port;

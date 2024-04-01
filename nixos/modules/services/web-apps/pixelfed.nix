@@ -38,7 +38,7 @@ let
 in {
   options.services = {
     pixelfed = {
-      enable = mkEnableOption (lib.mdDoc "a Pixelfed instance");
+      enable = mkEnableOption "a Pixelfed instance";
       package = mkPackageOption pkgs "pixelfed" { };
       phpPackage = mkPackageOption pkgs "php81" { };
 
@@ -118,18 +118,18 @@ in {
       };
 
       redis.createLocally = mkEnableOption
-        (lib.mdDoc "a local Redis database using UNIX socket authentication")
+        "a local Redis database using UNIX socket authentication"
         // {
           default = true;
         };
 
       database = {
         createLocally = mkEnableOption
-          (lib.mdDoc "a local database using UNIX socket authentication") // {
+          "a local database using UNIX socket authentication" // {
             default = true;
           };
         automaticMigrations = mkEnableOption
-          (lib.mdDoc "automatic migrations for database schema and data") // {
+          "automatic migrations for database schema and data" // {
             default = true;
           };
 

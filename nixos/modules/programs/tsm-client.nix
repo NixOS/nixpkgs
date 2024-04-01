@@ -54,7 +54,7 @@ let
         Target node name on the IBM TSM server.
       '';
     };
-    options.genPasswd = mkEnableOption (lib.mdDoc ''
+    options.genPasswd = mkEnableOption ''
       automatic client password generation.
       This option does *not* cause a line in
       {file}`dsm.sys` by itself, but generates a
@@ -65,7 +65,7 @@ let
       If this option is enabled and the server forces
       to renew the password (e.g. on first connection),
       a random password will be generated and stored
-    '');
+    '';
     options.passwordaccess = mkOption {
       type = enum [ "generate" "prompt" ];
       visible = false;
@@ -112,11 +112,11 @@ let
   };
 
   options.programs.tsmClient = {
-    enable = mkEnableOption (lib.mdDoc ''
+    enable = mkEnableOption ''
       IBM Storage Protect (Tivoli Storage Manager, TSM)
       client command line applications with a
       client system-options file "dsm.sys"
-    '');
+    '';
     servers = mkOption {
       type = attrsOf (submodule serverOptions);
       default = {};

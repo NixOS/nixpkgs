@@ -5,7 +5,7 @@ let
   configFile = configFormat.generate "meshcentral-config.json" cfg.settings;
 in with lib; {
   options.services.meshcentral = with types; {
-    enable = mkEnableOption (lib.mdDoc "MeshCentral computer management server");
+    enable = mkEnableOption "MeshCentral computer management server";
     package = mkPackageOption pkgs "meshcentral" { };
     settings = mkOption {
       description = lib.mdDoc ''

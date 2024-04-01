@@ -47,7 +47,7 @@ in
   meta.maintainers = with lib.maintainers; [ colinsane ];
   options = {
     services.trust-dns = with lib; {
-      enable = mkEnableOption (lib.mdDoc "trust-dns");
+      enable = mkEnableOption "trust-dns";
       package = mkPackageOption pkgs "trust-dns" {
         extraDescription = ''
           ::: {.note}

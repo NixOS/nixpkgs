@@ -77,7 +77,7 @@ in {
 
     # NixOS settings
 
-    enable = mkEnableOption (lib.mdDoc "PostgreSQL connection pooler");
+    enable = mkEnableOption "PostgreSQL connection pooler";
 
     package = mkPackageOption pkgs "pgbouncer" { };
 

@@ -9,7 +9,7 @@ in
 {
   options = {
     services.alice-lg = {
-      enable = mkEnableOption (lib.mdDoc "Alice Looking Glass");
+      enable = mkEnableOption "Alice Looking Glass";
 
       package = mkPackageOption pkgs "alice-lg" { };
 

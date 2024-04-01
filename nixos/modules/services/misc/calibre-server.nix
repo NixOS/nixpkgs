@@ -32,7 +32,7 @@ in
   options = {
     services.calibre-server = {
 
-      enable = mkEnableOption (lib.mdDoc "calibre-server");
+      enable = mkEnableOption "calibre-server";
       package = lib.mkPackageOption pkgs "calibre" { };
 
       libraries = mkOption {

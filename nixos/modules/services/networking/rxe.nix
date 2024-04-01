@@ -10,7 +10,7 @@ in {
 
   options = {
     networking.rxe = {
-      enable = mkEnableOption (lib.mdDoc "RDMA over converged ethernet");
+      enable = mkEnableOption "RDMA over converged ethernet";
       interfaces = mkOption {
         type = types.listOf types.str;
         default = [ ];

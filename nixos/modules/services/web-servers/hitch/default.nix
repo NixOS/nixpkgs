@@ -17,7 +17,7 @@ with lib;
 {
   options = {
     services.hitch = {
-      enable = mkEnableOption (lib.mdDoc "Hitch Server");
+      enable = mkEnableOption "Hitch Server";
 
       backend = mkOption {
         type = types.str;

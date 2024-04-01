@@ -23,7 +23,7 @@ let
 in
 {
   options.services.heisenbridge = {
-    enable = mkEnableOption (lib.mdDoc "the Matrix to IRC bridge");
+    enable = mkEnableOption "the Matrix to IRC bridge";
 
     package = mkPackageOption pkgs "heisenbridge" { };
 
@@ -91,7 +91,7 @@ in
       };
     };
 
-    identd.enable = mkEnableOption (lib.mdDoc "identd service support");
+    identd.enable = mkEnableOption "identd service support";
     identd.port = mkOption {
       type = types.port;
       description = lib.mdDoc "identd listen port";

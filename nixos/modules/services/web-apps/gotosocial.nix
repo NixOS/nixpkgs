@@ -30,7 +30,7 @@ in
   meta.maintainers = with lib.maintainers; [ misuzu blakesmith ];
 
   options.services.gotosocial = {
-    enable = lib.mkEnableOption (lib.mdDoc "ActivityPub social network server");
+    enable = lib.mkEnableOption "ActivityPub social network server";
 
     package = lib.mkPackageOption pkgs "gotosocial" { };
 

@@ -9,7 +9,7 @@ in
   };
 
   options.services.zram-generator = {
-    enable = lib.mkEnableOption (lib.mdDoc "Systemd unit generator for zram devices");
+    enable = lib.mkEnableOption "Systemd unit generator for zram devices";
 
     package = lib.mkPackageOption pkgs "zram-generator" { };
 

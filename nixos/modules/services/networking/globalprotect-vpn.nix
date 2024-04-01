@@ -14,7 +14,7 @@ in
 
 {
   options.services.globalprotect = {
-    enable = mkEnableOption (lib.mdDoc "globalprotect");
+    enable = mkEnableOption "globalprotect";
 
     settings = mkOption {
       description = lib.mdDoc ''

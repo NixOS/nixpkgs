@@ -404,7 +404,7 @@ in
 
     services.httpd = {
 
-      enable = mkEnableOption (lib.mdDoc "the Apache HTTP Server");
+      enable = mkEnableOption "the Apache HTTP Server";
 
       package = mkPackageOption pkgs "apacheHttpd" { };
 

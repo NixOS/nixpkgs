@@ -24,7 +24,7 @@ in
   ];
 
   options.services.esdm = {
-    enable = lib.mkEnableOption (lib.mdDoc "ESDM service configuration");
+    enable = lib.mkEnableOption "ESDM service configuration";
     package = lib.mkPackageOption pkgs "esdm" { };
     enableLinuxCompatServices = lib.mkOption {
       type = lib.types.bool;

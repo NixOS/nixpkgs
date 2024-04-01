@@ -16,7 +16,7 @@ let
   '';
 in {
   options.services.zeyple = {
-    enable = mkEnableOption (lib.mdDoc "Zeyple, an utility program to automatically encrypt outgoing emails with GPG");
+    enable = mkEnableOption "Zeyple, an utility program to automatically encrypt outgoing emails with GPG";
 
     user = mkOption {
       type = types.str;

@@ -8,7 +8,7 @@ let
   settingsFormat = pkgs.formats.yaml {};
 in {
   options.services.mimir = {
-    enable = mkEnableOption (lib.mdDoc "mimir");
+    enable = mkEnableOption "mimir";
 
     configuration = mkOption {
       type = (pkgs.formats.json {}).type;

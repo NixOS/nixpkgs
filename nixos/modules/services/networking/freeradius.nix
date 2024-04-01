@@ -33,7 +33,7 @@ let
   };
 
   freeradiusConfig = {
-    enable = mkEnableOption (lib.mdDoc "the freeradius server");
+    enable = mkEnableOption "the freeradius server";
 
     configDir = mkOption {
       type = types.path;

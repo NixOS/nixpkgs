@@ -18,7 +18,7 @@ in
 
   options = with types; {
     services.yggdrasil = {
-      enable = mkEnableOption (lib.mdDoc "the yggdrasil system service");
+      enable = mkEnableOption "the yggdrasil system service";
 
       settings = mkOption {
         type = format.type;
@@ -110,11 +110,11 @@ in
 
       package = mkPackageOption pkgs "yggdrasil" { };
 
-      persistentKeys = mkEnableOption (lib.mdDoc ''
+      persistentKeys = mkEnableOption ''
         persistent keys. If enabled then keys will be generated once and Yggdrasil
         will retain the same IPv6 address when the service is
         restarted. Keys are stored at ${keysPath}
-      '');
+      '';
 
       extraArgs = mkOption {
         type = listOf str;

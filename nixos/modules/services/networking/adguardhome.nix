@@ -31,7 +31,7 @@ in
     ];
 
   options.services.adguardhome = with types; {
-    enable = mkEnableOption (lib.mdDoc "AdGuard Home network-wide ad blocker");
+    enable = mkEnableOption "AdGuard Home network-wide ad blocker";
 
     openFirewall = mkOption {
       default = false;

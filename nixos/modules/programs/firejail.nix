@@ -40,7 +40,7 @@ let
 
 in {
   options.programs.firejail = {
-    enable = mkEnableOption (lib.mdDoc "firejail");
+    enable = mkEnableOption "firejail";
 
     wrappedBinaries = mkOption {
       type = types.attrsOf (types.either types.path (types.submodule {

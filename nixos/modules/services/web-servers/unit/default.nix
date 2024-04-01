@@ -10,7 +10,7 @@ let
 in {
   options = {
     services.unit = {
-      enable = mkEnableOption (lib.mdDoc "Unit App Server");
+      enable = mkEnableOption "Unit App Server";
       package = mkPackageOption pkgs "unit" { };
       user = mkOption {
         type = types.str;

@@ -22,7 +22,7 @@ in
 
     services.dwm-status = {
 
-      enable = mkEnableOption (lib.mdDoc "dwm-status user service");
+      enable = mkEnableOption "dwm-status user service";
 
       package = mkPackageOption pkgs "dwm-status" {
         example = "dwm-status.override { enableAlsaUtils = false; }";

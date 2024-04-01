@@ -6,7 +6,7 @@ in
 {
   options = {
     programs.rog-control-center = {
-      enable = lib.mkEnableOption (lib.mdDoc "the rog-control-center application");
+      enable = lib.mkEnableOption "the rog-control-center application";
 
       autoStart = lib.mkOption {
         default = false;

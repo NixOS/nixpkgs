@@ -6,7 +6,7 @@ let
   cfg = config.services.grocy;
 in {
   options.services.grocy = {
-    enable = mkEnableOption (lib.mdDoc "grocy");
+    enable = mkEnableOption "grocy";
 
     package = mkPackageOption pkgs "grocy" { };
 

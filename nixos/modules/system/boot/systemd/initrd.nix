@@ -117,7 +117,7 @@ let
 
 in {
   options.boot.initrd.systemd = {
-    enable = mkEnableOption (lib.mdDoc "systemd in initrd") // {
+    enable = mkEnableOption "systemd in initrd" // {
       description = lib.mdDoc ''
         Whether to enable systemd in initrd. The unit options such as
         {option}`boot.initrd.systemd.services` are the same as their

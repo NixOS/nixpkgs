@@ -19,7 +19,7 @@ in
 
     services.filebeat = {
 
-      enable = mkEnableOption (lib.mdDoc "filebeat");
+      enable = mkEnableOption "filebeat";
 
       package = mkPackageOption pkgs "filebeat" {
         example = "filebeat7";

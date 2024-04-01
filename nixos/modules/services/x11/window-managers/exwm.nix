@@ -18,7 +18,7 @@ in
 {
   options = {
     services.xserver.windowManager.exwm = {
-      enable = mkEnableOption (lib.mdDoc "exwm");
+      enable = mkEnableOption "exwm";
       loadScript = mkOption {
         default = "(require 'exwm)";
         type = types.lines;

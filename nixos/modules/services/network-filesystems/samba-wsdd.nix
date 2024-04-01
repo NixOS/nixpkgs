@@ -8,10 +8,10 @@ let
 in {
   options = {
     services.samba-wsdd = {
-      enable = mkEnableOption (lib.mdDoc ''
+      enable = mkEnableOption ''
         Web Services Dynamic Discovery host daemon. This enables (Samba) hosts, like your local NAS device,
         to be found by Web Service Discovery Clients like Windows.
-      '');
+      '';
       interface = mkOption {
         type = types.nullOr types.str;
         default = null;

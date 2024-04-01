@@ -15,7 +15,7 @@ in
 
   options = {
     services.sabnzbd = {
-      enable = mkEnableOption (lib.mdDoc "the sabnzbd server");
+      enable = mkEnableOption "the sabnzbd server";
 
       package = mkPackageOption pkgs "sabnzbd" { };
 

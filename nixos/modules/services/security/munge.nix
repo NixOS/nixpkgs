@@ -15,7 +15,7 @@ in
   options = {
 
     services.munge = {
-      enable = mkEnableOption (lib.mdDoc "munge service");
+      enable = mkEnableOption "munge service";
 
       password = mkOption {
         default = "/etc/munge/munge.key";

@@ -8,7 +8,7 @@ let
 in {
   options = {
     services.ulogd = {
-      enable = mkEnableOption (lib.mdDoc "ulogd");
+      enable = mkEnableOption "ulogd";
 
       settings = mkOption {
         example = {

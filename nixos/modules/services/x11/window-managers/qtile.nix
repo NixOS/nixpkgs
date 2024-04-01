@@ -9,7 +9,7 @@ in
 
 {
   options.services.xserver.windowManager.qtile = {
-    enable = mkEnableOption (lib.mdDoc "qtile");
+    enable = mkEnableOption "qtile";
 
     package = mkPackageOption pkgs "qtile-unwrapped" { };
 

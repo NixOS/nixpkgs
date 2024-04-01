@@ -13,7 +13,7 @@ in
 {
   options = {
     services.ananicy = {
-      enable = mkEnableOption (lib.mdDoc "Ananicy, an auto nice daemon");
+      enable = mkEnableOption "Ananicy, an auto nice daemon";
 
       package = mkPackageOption pkgs "ananicy" {
         example = "ananicy-cpp";

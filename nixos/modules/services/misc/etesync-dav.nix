@@ -7,7 +7,7 @@ let
 in
   {
     options.services.etesync-dav = {
-      enable = mkEnableOption (lib.mdDoc "etesync-dav");
+      enable = mkEnableOption "etesync-dav";
 
       host = mkOption {
         type = types.str;

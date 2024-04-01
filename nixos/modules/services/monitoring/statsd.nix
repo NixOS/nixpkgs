@@ -56,7 +56,7 @@ in
 
   options.services.statsd = {
 
-    enable = mkEnableOption (lib.mdDoc "statsd");
+    enable = mkEnableOption "statsd";
 
     listenAddress = mkOption {
       description = lib.mdDoc "Address that statsd listens on over UDP";

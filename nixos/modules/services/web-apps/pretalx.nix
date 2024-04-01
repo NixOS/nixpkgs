@@ -28,7 +28,7 @@ in
   };
 
   options.services.pretalx = {
-    enable = lib.mkEnableOption (lib.mdDoc "pretalx");
+    enable = lib.mkEnableOption "pretalx";
 
     package = lib.mkPackageOptionMD pkgs "pretalx" {};
 

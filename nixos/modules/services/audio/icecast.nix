@@ -44,7 +44,7 @@ in {
 
     services.icecast = {
 
-      enable = mkEnableOption (lib.mdDoc "Icecast server");
+      enable = mkEnableOption "Icecast server";
 
       hostname = mkOption {
         type = types.nullOr types.str;

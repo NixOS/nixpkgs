@@ -13,7 +13,7 @@ in
 {
   options.systemd.sysupdate = {
 
-    enable = lib.mkEnableOption (lib.mdDoc "systemd-sysupdate") // {
+    enable = lib.mkEnableOption "systemd-sysupdate" // {
       description = lib.mdDoc ''
         Atomically update the host OS, container images, portable service
         images or other sources.
@@ -38,7 +38,7 @@ in
     };
 
     reboot = {
-      enable = lib.mkEnableOption (lib.mdDoc "automatically rebooting after an update") // {
+      enable = lib.mkEnableOption "automatically rebooting after an update" // {
         description = lib.mdDoc ''
           Whether to automatically reboot after an update.
 

@@ -37,7 +37,7 @@ let
 in {
   options = {
     services.mxisd = {
-      enable = mkEnableOption (lib.mdDoc "matrix federated identity server");
+      enable = mkEnableOption "matrix federated identity server";
 
       package = mkPackageOption pkgs "ma1sd" { };
 

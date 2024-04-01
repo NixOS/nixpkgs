@@ -16,7 +16,7 @@ let
 in {
   options = {
     services.moonraker = {
-      enable = mkEnableOption (lib.mdDoc "Moonraker, an API web server for Klipper");
+      enable = mkEnableOption "Moonraker, an API web server for Klipper";
 
       package = mkPackageOption pkgs "moonraker" {
         nullable = true;

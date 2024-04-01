@@ -7,7 +7,7 @@ let
 in
 {
   options.services.chatgpt-retrieval-plugin = {
-    enable = mkEnableOption (lib.mdDoc "chatgpt-retrieval-plugin service");
+    enable = mkEnableOption "chatgpt-retrieval-plugin service";
 
     port = mkOption {
       type = types.port;

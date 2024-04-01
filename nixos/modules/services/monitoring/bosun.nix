@@ -22,7 +22,7 @@ in {
 
     services.bosun = {
 
-      enable = mkEnableOption (lib.mdDoc "bosun");
+      enable = mkEnableOption "bosun";
 
       package = mkPackageOption pkgs "bosun" { };
 

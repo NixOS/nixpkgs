@@ -15,7 +15,7 @@ in
   options = {
 
     services.xserver.desktopManager.deepin = {
-      enable = mkEnableOption (lib.mdDoc "Deepin desktop manager");
+      enable = mkEnableOption "Deepin desktop manager";
       extraGSettingsOverrides = mkOption {
         default = "";
         type = types.lines;

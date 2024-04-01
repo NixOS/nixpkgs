@@ -99,12 +99,12 @@ in
 
     services.kubo = {
 
-      enable = mkEnableOption (lib.mdDoc ''
+      enable = mkEnableOption ''
         the Interplanetary File System (WARNING: may cause severe network degradation).
         NOTE: after enabling this option and rebuilding your system, you need to log out
         and back in for the `IPFS_PATH` environment variable to be present in your shell.
         Until you do that, the CLI tools won't be able to talk to the daemon by default
-      '');
+      '';
 
       package = mkPackageOption pkgs "kubo" { };
 

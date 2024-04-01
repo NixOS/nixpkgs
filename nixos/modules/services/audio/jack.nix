@@ -16,9 +16,9 @@ in {
   options = {
     services.jack = {
       jackd = {
-        enable = mkEnableOption (lib.mdDoc ''
+        enable = mkEnableOption ''
           JACK Audio Connection Kit. You need to add yourself to the "jackaudio" group
-        '');
+        '';
 
         package = mkPackageOption pkgs "jack2" {
           example = "jack1";

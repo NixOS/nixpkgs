@@ -192,7 +192,7 @@ in
   options = {
     services.mediawiki = {
 
-      enable = mkEnableOption (lib.mdDoc "MediaWiki");
+      enable = mkEnableOption "MediaWiki";
 
       package = mkPackageOption pkgs "mediawiki" { };
 

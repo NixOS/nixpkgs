@@ -77,9 +77,9 @@ in {
       '';
     };
     nginx = {
-      enable = lib.mkEnableOption (lib.mdDoc ''
+      enable = lib.mkEnableOption ''
         Automatic nginx proxy configuration
-      '');
+      '';
       domain = lib.mkOption {
         type = lib.types.str;
         example = "invidious-router.example.com";

@@ -42,7 +42,7 @@ in {
 
   options = {
     services.prometheus.alertmanager = {
-      enable = mkEnableOption (lib.mdDoc "Prometheus Alertmanager");
+      enable = mkEnableOption "Prometheus Alertmanager";
 
       package = mkPackageOption pkgs "prometheus-alertmanager" { };
 

@@ -10,7 +10,7 @@ in
 {
   options = {
     services.nexus = {
-      enable = mkEnableOption (lib.mdDoc "Sonatype Nexus3 OSS service");
+      enable = mkEnableOption "Sonatype Nexus3 OSS service";
 
       package = lib.mkPackageOption pkgs "nexus" { };
 

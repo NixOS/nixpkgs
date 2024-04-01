@@ -5,9 +5,9 @@ let
 in {
   options.services.hledger-web = {
 
-    enable = mkEnableOption (lib.mdDoc "hledger-web service");
+    enable = mkEnableOption "hledger-web service";
 
-    serveApi = mkEnableOption (lib.mdDoc "serving only the JSON web API, without the web UI");
+    serveApi = mkEnableOption "serving only the JSON web API, without the web UI";
 
     host = mkOption {
       type = types.str;

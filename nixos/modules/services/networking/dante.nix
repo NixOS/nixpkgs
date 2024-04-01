@@ -19,7 +19,7 @@ in
 
   options = {
     services.dante = {
-      enable = mkEnableOption (lib.mdDoc "Dante SOCKS proxy");
+      enable = mkEnableOption "Dante SOCKS proxy";
 
       config = mkOption {
         type        = types.lines;

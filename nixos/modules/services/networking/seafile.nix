@@ -38,7 +38,7 @@ in
   ###### Interface
 
   options.services.seafile = {
-    enable = mkEnableOption (lib.mdDoc "Seafile server");
+    enable = mkEnableOption "Seafile server";
 
     ccnetSettings = mkOption {
       type = types.submodule {

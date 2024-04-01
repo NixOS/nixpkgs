@@ -5,7 +5,7 @@ let
 in
 {
   options.services.windmill = {
-    enable = lib.mkEnableOption (lib.mdDoc "windmill service");
+    enable = lib.mkEnableOption "windmill service";
 
     serverPort = lib.mkOption {
       type = lib.types.port;

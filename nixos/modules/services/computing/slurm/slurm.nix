@@ -76,7 +76,7 @@ in
       };
 
       dbdserver = {
-        enable = mkEnableOption (lib.mdDoc "SlurmDBD service");
+        enable = mkEnableOption "SlurmDBD service";
 
         dbdHost = mkOption {
           type = types.str;
@@ -117,7 +117,7 @@ in
       };
 
       client = {
-        enable = mkEnableOption (lib.mdDoc "slurm client daemon");
+        enable = mkEnableOption "slurm client daemon";
       };
 
       enableStools = mkOption {

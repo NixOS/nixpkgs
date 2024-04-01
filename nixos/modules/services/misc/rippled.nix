@@ -207,7 +207,7 @@ in
 
   options = {
     services.rippled = {
-      enable = mkEnableOption (lib.mdDoc "rippled");
+      enable = mkEnableOption "rippled";
 
       package = mkPackageOption pkgs "rippled" { };
 
@@ -370,7 +370,7 @@ in
       };
 
       statsd = {
-        enable = mkEnableOption (lib.mdDoc "statsd monitoring for rippled");
+        enable = mkEnableOption "statsd monitoring for rippled";
 
         address = mkOption {
           description = lib.mdDoc "The UDP address and port of the listening StatsD server.";

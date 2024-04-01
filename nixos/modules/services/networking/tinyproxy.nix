@@ -28,7 +28,7 @@ in
 
   options = {
     services.tinyproxy = {
-      enable = mkEnableOption (lib.mdDoc "Tinyproxy daemon");
+      enable = mkEnableOption "Tinyproxy daemon";
       package = mkPackageOption pkgs "tinyproxy" {};
       settings = mkOption {
         description = lib.mdDoc "Configuration for [tinyproxy](https://tinyproxy.github.io/).";

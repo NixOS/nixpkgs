@@ -18,7 +18,7 @@
 
 in {
   options.services.sogo = with types; {
-    enable = mkEnableOption (lib.mdDoc "SOGo groupware");
+    enable = mkEnableOption "SOGo groupware";
 
     vhostName = mkOption {
       description = lib.mdDoc "Name of the nginx vhost";

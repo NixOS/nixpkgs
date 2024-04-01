@@ -18,7 +18,7 @@ let
 
   instanceOpts = { name, ... }: {
     options = {
-      enable = mkEnableOption (lib.mdDoc "this v4l2-relayd instance");
+      enable = mkEnableOption "this v4l2-relayd instance";
 
       name = mkOption {
         type = types.str;

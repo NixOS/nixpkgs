@@ -7,11 +7,11 @@ let cfg = config.services.ombi;
 in {
   options = {
     services.ombi = {
-      enable = mkEnableOption (lib.mdDoc ''
+      enable = mkEnableOption ''
         Ombi.
         Optionally see <https://docs.ombi.app/info/reverse-proxy>
         on how to set up a reverse proxy
-      '');
+      '';
 
       dataDir = mkOption {
         type = types.str;

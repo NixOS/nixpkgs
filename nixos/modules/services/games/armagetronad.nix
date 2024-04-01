@@ -34,7 +34,7 @@ in
         default = { };
         type = types.attrsOf (types.submodule {
           options = {
-            enable = mkEnableOption (lib.mdDoc "armagetronad");
+            enable = mkEnableOption "armagetronad";
 
             package = lib.mkPackageOptionMD pkgs "armagetronad-dedicated" {
               example = ''

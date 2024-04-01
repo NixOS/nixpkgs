@@ -15,7 +15,7 @@ let
 in
 {
   options.services.scion.scion-router = {
-    enable = mkEnableOption (lib.mdDoc "the scion-router service");
+    enable = mkEnableOption "the scion-router service";
     settings = mkOption {
       default = { };
       type = toml.type;

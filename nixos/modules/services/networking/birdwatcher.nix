@@ -9,7 +9,7 @@ in
   options = {
     services.birdwatcher = {
       package = mkPackageOption pkgs "birdwatcher" { };
-      enable = mkEnableOption (lib.mdDoc "Birdwatcher");
+      enable = mkEnableOption "Birdwatcher";
       flags = mkOption {
         default = [ ];
         type = types.listOf types.str;

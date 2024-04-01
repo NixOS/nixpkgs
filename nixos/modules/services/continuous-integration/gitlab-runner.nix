@@ -151,7 +151,7 @@ let
   '';
 in {
   options.services.gitlab-runner = {
-    enable = mkEnableOption (lib.mdDoc "Gitlab Runner");
+    enable = mkEnableOption "Gitlab Runner";
     configFile = mkOption {
       type = types.nullOr types.path;
       default = null;

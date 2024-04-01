@@ -176,7 +176,7 @@ in
       default = "unix:///run/containerd/containerd.sock";
     };
 
-    enable = mkEnableOption (lib.mdDoc "Kubernetes kubelet");
+    enable = mkEnableOption "Kubernetes kubelet";
 
     extraOpts = mkOption {
       description = lib.mdDoc "Kubernetes kubelet extra command line options.";

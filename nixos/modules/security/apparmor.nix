@@ -24,7 +24,7 @@ in
 
   options = {
     security.apparmor = {
-      enable = mkEnableOption (lib.mdDoc ''
+      enable = mkEnableOption ''
         the AppArmor Mandatory Access Control system.
 
         If you're enabling this module on a running system,
@@ -40,7 +40,7 @@ in
 
         Enable [](#opt-security.apparmor.killUnconfinedConfinables)
         if you want this service to do such killing
-        by sending a `SIGTERM` to those running processes'');
+        by sending a `SIGTERM` to those running processes'';
       policies = mkOption {
         description = lib.mdDoc ''
           AppArmor policies.
@@ -72,14 +72,14 @@ in
         default = [];
         description = lib.mdDoc "List of packages to be added to AppArmor's include path";
       };
-      enableCache = mkEnableOption (lib.mdDoc ''
+      enableCache = mkEnableOption ''
         caching of AppArmor policies
         in `/var/cache/apparmor/`.
 
         Beware that AppArmor policies almost always contain Nix store paths,
         and thus produce at each change of these paths
-        a new cached version accumulating in the cache'');
-      killUnconfinedConfinables = mkEnableOption (lib.mdDoc ''
+        a new cached version accumulating in the cache'';
+      killUnconfinedConfinables = mkEnableOption ''
         killing of processes which have an AppArmor profile enabled
         (in [](#opt-security.apparmor.policies))
         but are not confined (because AppArmor can only confine new processes).
@@ -88,7 +88,7 @@ in
         not a `SIGKILL`.
 
         Beware that due to a current limitation of AppArmor,
-        only profiles with exact paths (and no name) can enable such kills'');
+        only profiles with exact paths (and no name) can enable such kills'';
     };
   };
 

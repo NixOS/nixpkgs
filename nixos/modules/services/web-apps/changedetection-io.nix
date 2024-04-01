@@ -7,7 +7,7 @@ let
 in
 {
   options.services.changedetection-io = {
-    enable = mkEnableOption (lib.mdDoc "changedetection-io");
+    enable = mkEnableOption "changedetection-io";
 
     user = mkOption {
       default = "changedetection-io";

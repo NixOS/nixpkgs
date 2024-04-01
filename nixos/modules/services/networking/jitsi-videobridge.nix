@@ -48,7 +48,7 @@ in
     )
   ];
   options.services.jitsi-videobridge = with types; {
-    enable = mkEnableOption (lib.mdDoc "Jitsi Videobridge, a WebRTC compatible video router");
+    enable = mkEnableOption "Jitsi Videobridge, a WebRTC compatible video router";
 
     config = mkOption {
       type = attrs;

@@ -32,7 +32,7 @@ with lib; let
   tlsEnabled = cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME;
 in {
   options.services.monica = {
-    enable = mkEnableOption (lib.mdDoc "monica");
+    enable = mkEnableOption "monica";
 
     user = mkOption {
       default = "monica";

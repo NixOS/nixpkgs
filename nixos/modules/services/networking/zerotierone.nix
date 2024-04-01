@@ -8,7 +8,7 @@ let
   localConfFilePath = "/var/lib/zerotier-one/local.conf";
 in
 {
-  options.services.zerotierone.enable = mkEnableOption (lib.mdDoc "ZeroTierOne");
+  options.services.zerotierone.enable = mkEnableOption "ZeroTierOne";
 
   options.services.zerotierone.joinNetworks = mkOption {
     default = [];

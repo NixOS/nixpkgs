@@ -1051,7 +1051,7 @@ in
       };
     };
 
-    security.pam.enableOTPW = mkEnableOption (lib.mdDoc "the OTPW (one-time password) PAM module");
+    security.pam.enableOTPW = mkEnableOption "the OTPW (one-time password) PAM module";
 
     security.pam.dp9ik = {
       enable = mkEnableOption (
@@ -1428,15 +1428,15 @@ in
       };
     };
 
-    security.pam.enableEcryptfs = mkEnableOption (lib.mdDoc "eCryptfs PAM module (mounting ecryptfs home directory on login)");
-    security.pam.enableFscrypt = mkEnableOption (lib.mdDoc ''
+    security.pam.enableEcryptfs = mkEnableOption "eCryptfs PAM module (mounting ecryptfs home directory on login)";
+    security.pam.enableFscrypt = mkEnableOption ''
       fscrypt to automatically unlock directories with the user's login password.
 
       This also enables a service at security.pam.services.fscrypt which is used by
       fscrypt to verify the user's password when setting up a new protector. If you
       use something other than pam_unix to verify user passwords, please remember to
       adjust this PAM service.
-    '');
+    '';
 
     users.motd = mkOption {
       default = null;

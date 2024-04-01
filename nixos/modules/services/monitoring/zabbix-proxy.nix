@@ -38,7 +38,7 @@ in
   options = {
 
     services.zabbixProxy = {
-      enable = mkEnableOption (lib.mdDoc "the Zabbix Proxy");
+      enable = mkEnableOption "the Zabbix Proxy";
 
       server = mkOption {
         type = types.str;

@@ -36,7 +36,7 @@ in
 
 {
   options.services.xonotic = {
-    enable = lib.mkEnableOption (lib.mdDoc "Xonotic dedicated server");
+    enable = lib.mkEnableOption "Xonotic dedicated server";
 
     package = lib.mkPackageOption pkgs "xonotic-dedicated" {};
 

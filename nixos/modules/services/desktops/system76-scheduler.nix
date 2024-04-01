@@ -91,7 +91,7 @@ let
 in {
   options = {
     services.system76-scheduler = {
-      enable = lib.mkEnableOption (lib.mdDoc "system76-scheduler");
+      enable = lib.mkEnableOption "system76-scheduler";
 
       package = mkOption {
         type = types.package;

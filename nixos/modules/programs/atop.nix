@@ -14,7 +14,7 @@ in
 
     programs.atop = rec {
 
-      enable = mkEnableOption (lib.mdDoc "Atop");
+      enable = mkEnableOption "Atop";
 
       package = mkPackageOption pkgs "atop" { };
 

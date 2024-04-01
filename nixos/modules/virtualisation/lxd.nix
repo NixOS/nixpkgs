@@ -137,7 +137,7 @@ in {
       };
 
       ui = {
-        enable = lib.mkEnableOption (lib.mdDoc "(experimental) LXD UI");
+        enable = lib.mkEnableOption "(experimental) LXD UI";
 
         package = lib.mkPackageOption pkgs [ "lxd-unwrapped" "ui" ] { };
       };

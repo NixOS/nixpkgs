@@ -121,7 +121,7 @@ in
                 The number of shares required to store a file.
               '';
             };
-            storage.enable = mkEnableOption (lib.mdDoc "storage service");
+            storage.enable = mkEnableOption "storage service";
             storage.reservedSpace = mkOption {
               default = "1G";
               type = types.str;
@@ -129,8 +129,8 @@ in
                 The amount of filesystem space to not use for storage.
               '';
             };
-            helper.enable = mkEnableOption (lib.mdDoc "helper service");
-            sftpd.enable = mkEnableOption (lib.mdDoc "SFTP service");
+            helper.enable = mkEnableOption "helper service";
+            sftpd.enable = mkEnableOption "SFTP service";
             sftpd.port = mkOption {
               default = null;
               type = types.nullOr types.int;

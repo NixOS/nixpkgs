@@ -20,7 +20,7 @@ let
     } cfg.settings);
 in {
   options.services.smartdns = {
-    enable = mkEnableOption (lib.mdDoc "SmartDNS DNS server");
+    enable = mkEnableOption "SmartDNS DNS server";
 
     bindPort = mkOption {
       type = types.port;

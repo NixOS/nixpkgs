@@ -228,13 +228,13 @@ in
   ];
 
   options.services.dovecot2 = {
-    enable = mkEnableOption (lib.mdDoc "the dovecot 2.x POP3/IMAP server");
+    enable = mkEnableOption "the dovecot 2.x POP3/IMAP server";
 
-    enablePop3 = mkEnableOption (lib.mdDoc "starting the POP3 listener (when Dovecot is enabled)");
+    enablePop3 = mkEnableOption "starting the POP3 listener (when Dovecot is enabled)";
 
-    enableImap = mkEnableOption (lib.mdDoc "starting the IMAP listener (when Dovecot is enabled)") // { default = true; };
+    enableImap = mkEnableOption "starting the IMAP listener (when Dovecot is enabled)" // { default = true; };
 
-    enableLmtp = mkEnableOption (lib.mdDoc "starting the LMTP listener (when Dovecot is enabled)");
+    enableLmtp = mkEnableOption "starting the LMTP listener (when Dovecot is enabled)";
 
     protocols = mkOption {
       type = types.listOf types.str;
@@ -326,9 +326,9 @@ in
       description = lib.mdDoc "Default group to store mail for virtual users.";
     };
 
-    createMailUser = mkEnableOption (lib.mdDoc ''automatically creating the user
+    createMailUser = mkEnableOption ''automatically creating the user
       given in {option}`services.dovecot.user` and the group
-      given in {option}`services.dovecot.group`.'') // { default = true; };
+      given in {option}`services.dovecot.group`.'' // { default = true; };
 
     modules = mkOption {
       type = types.listOf types.package;
@@ -359,11 +359,11 @@ in
       description = lib.mdDoc "Path to the server's private key.";
     };
 
-    enablePAM = mkEnableOption (lib.mdDoc "creating a own Dovecot PAM service and configure PAM user logins") // { default = true; };
+    enablePAM = mkEnableOption "creating a own Dovecot PAM service and configure PAM user logins" // { default = true; };
 
-    enableDHE = mkEnableOption (lib.mdDoc "ssl_dh and generation of primes for the key exchange") // { default = true; };
+    enableDHE = mkEnableOption "ssl_dh and generation of primes for the key exchange" // { default = true; };
 
-    showPAMFailure = mkEnableOption (lib.mdDoc "showing the PAM failure message on authentication error (useful for OTPW)");
+    showPAMFailure = mkEnableOption "showing the PAM failure message on authentication error (useful for OTPW)";
 
     mailboxes = mkOption {
       type = with types; coercedTo
@@ -379,7 +379,7 @@ in
       description = lib.mdDoc "Configure mailboxes and auto create or subscribe them.";
     };
 
-    enableQuota = mkEnableOption (lib.mdDoc "the dovecot quota service");
+    enableQuota = mkEnableOption "the dovecot quota service";
 
     quotaPort = mkOption {
       type = types.str;

@@ -14,7 +14,7 @@ in
 
   options.services.lemmy = {
 
-    enable = mkEnableOption (lib.mdDoc "lemmy a federated alternative to reddit in rust");
+    enable = mkEnableOption "lemmy a federated alternative to reddit in rust";
 
     server = {
       package = mkPackageOption pkgs "lemmy-server" {};
@@ -30,11 +30,11 @@ in
       };
     };
 
-    caddy.enable = mkEnableOption (lib.mdDoc "exposing lemmy with the caddy reverse proxy");
-    nginx.enable = mkEnableOption (lib.mdDoc "exposing lemmy with the nginx reverse proxy");
+    caddy.enable = mkEnableOption "exposing lemmy with the caddy reverse proxy";
+    nginx.enable = mkEnableOption "exposing lemmy with the nginx reverse proxy";
 
     database = {
-      createLocally = mkEnableOption (lib.mdDoc "creation of database on the instance");
+      createLocally = mkEnableOption "creation of database on the instance";
 
       uri = mkOption {
         type = with types; nullOr str;

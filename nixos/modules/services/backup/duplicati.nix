@@ -8,7 +8,7 @@ in
 {
   options = {
     services.duplicati = {
-      enable = mkEnableOption (lib.mdDoc "Duplicati");
+      enable = mkEnableOption "Duplicati";
 
       package = mkPackageOption pkgs "duplicati" { };
 

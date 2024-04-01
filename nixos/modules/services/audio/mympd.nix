@@ -7,7 +7,7 @@ in {
 
     services.mympd = {
 
-      enable = lib.mkEnableOption (lib.mdDoc "MyMPD server");
+      enable = lib.mkEnableOption "MyMPD server";
 
       package = lib.mkPackageOption pkgs "mympd" {};
 

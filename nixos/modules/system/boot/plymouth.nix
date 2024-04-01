@@ -61,7 +61,7 @@ in
 
     boot.plymouth = {
 
-      enable = mkEnableOption (lib.mdDoc "Plymouth boot splash screen");
+      enable = mkEnableOption "Plymouth boot splash screen";
 
       font = mkOption {
         default = "${pkgs.dejavu_fonts.minimal}/share/fonts/truetype/DejaVuSans.ttf";

@@ -6,7 +6,7 @@ let cfg = config.services.xserver.desktopManager.retroarch;
 
 in {
   options.services.xserver.desktopManager.retroarch = {
-    enable = mkEnableOption (lib.mdDoc "RetroArch");
+    enable = mkEnableOption "RetroArch";
 
     package = mkPackageOption pkgs "retroarch" {
       example = "retroarch-full";

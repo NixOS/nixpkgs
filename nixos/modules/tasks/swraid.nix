@@ -17,7 +17,7 @@ in {
 
 
   options.boot.swraid = {
-    enable = lib.mkEnableOption (lib.mdDoc "swraid support using mdadm") // {
+    enable = lib.mkEnableOption "swraid support using mdadm" // {
       description = lib.mdDoc ''
         Whether to enable support for Linux MD RAID arrays.
 

@@ -19,7 +19,7 @@ let
     ++ lib.optionals (cfg.authUsername != null) [ "-u" cfg.authUsername ];
 in {
   options.services.microsocks = {
-    enable = lib.mkEnableOption (lib.mdDoc "Tiny, portable SOCKS5 server with very moderate resource usage");
+    enable = lib.mkEnableOption "Tiny, portable SOCKS5 server with very moderate resource usage";
     user = lib.mkOption {
       default = "microsocks";
       description = lib.mdDoc "User microsocks runs as.";

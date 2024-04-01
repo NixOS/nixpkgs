@@ -18,11 +18,11 @@ in
 {
   options = {
     services.cinnamon = {
-      apps.enable = mkEnableOption (lib.mdDoc "Cinnamon default applications");
+      apps.enable = mkEnableOption "Cinnamon default applications";
     };
 
     services.xserver.desktopManager.cinnamon = {
-      enable = mkEnableOption (lib.mdDoc "the cinnamon desktop manager");
+      enable = mkEnableOption "the cinnamon desktop manager";
 
       sessionPath = mkOption {
         default = [];

@@ -12,7 +12,7 @@ in
 
   options = {
     services.beanstalkd = {
-      enable = mkEnableOption (lib.mdDoc "the Beanstalk work queue");
+      enable = mkEnableOption "the Beanstalk work queue";
 
       listen = {
         port = mkOption {

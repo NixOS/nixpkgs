@@ -68,7 +68,7 @@ in
   options = {
 
     hardware.sane.brscan4.enable =
-      mkEnableOption (lib.mdDoc "Brother's brscan4 scan backend") // {
+      mkEnableOption "Brother's brscan4 scan backend" // {
       description = lib.mdDoc ''
         When enabled, will automatically register the "brscan4" sane
         backend and bring configuration files to their expected location.

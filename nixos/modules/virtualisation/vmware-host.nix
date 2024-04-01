@@ -20,7 +20,7 @@ in
 {
   options = with lib; {
     virtualisation.vmware.host = {
-      enable = mkEnableOption (lib.mdDoc "VMware") // {
+      enable = mkEnableOption "VMware" // {
         description = lib.mdDoc ''
           This enables VMware host virtualisation for running VMs.
 

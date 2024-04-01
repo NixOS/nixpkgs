@@ -18,7 +18,7 @@ in
   ];
 
   options.services.zigbee2mqtt = {
-    enable = mkEnableOption (lib.mdDoc "zigbee2mqtt service");
+    enable = mkEnableOption "zigbee2mqtt service";
 
     package = mkPackageOption pkgs "zigbee2mqtt" { };
 

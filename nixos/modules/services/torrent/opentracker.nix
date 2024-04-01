@@ -5,7 +5,7 @@ let
   cfg = config.services.opentracker;
 in {
   options.services.opentracker = {
-    enable = mkEnableOption (lib.mdDoc "opentracker");
+    enable = mkEnableOption "opentracker";
 
     package = mkPackageOption pkgs "opentracker" { };
 

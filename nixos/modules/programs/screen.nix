@@ -7,7 +7,7 @@ in
 {
   options = {
     programs.screen = {
-      enable = lib.mkEnableOption (lib.mdDoc "screen, a basic terminal multiplexer");
+      enable = lib.mkEnableOption "screen, a basic terminal multiplexer";
 
       package = lib.mkPackageOptionMD pkgs "screen" { };
 

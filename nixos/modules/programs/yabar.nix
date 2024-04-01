@@ -41,7 +41,7 @@ let
 in
   {
     options.programs.yabar = {
-      enable = mkEnableOption (lib.mdDoc "yabar");
+      enable = mkEnableOption "yabar";
 
       package = mkOption {
         default = pkgs.yabar-unstable;

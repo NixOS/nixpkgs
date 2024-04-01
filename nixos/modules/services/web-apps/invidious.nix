@@ -237,7 +237,7 @@ let
 in
 {
   options.services.invidious = {
-    enable = lib.mkEnableOption (lib.mdDoc "Invidious");
+    enable = lib.mkEnableOption "Invidious";
 
     package = lib.mkPackageOption pkgs "invidious" { };
 

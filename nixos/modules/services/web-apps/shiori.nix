@@ -6,7 +6,7 @@ let
 in {
   options = {
     services.shiori = {
-      enable = mkEnableOption (lib.mdDoc "Shiori simple bookmarks manager");
+      enable = mkEnableOption "Shiori simple bookmarks manager";
 
       package = mkPackageOption pkgs "shiori" { };
 

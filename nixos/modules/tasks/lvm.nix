@@ -5,7 +5,7 @@ let
   cfg = config.services.lvm;
 in {
   options.services.lvm = {
-    enable = mkEnableOption (lib.mdDoc "lvm2") // {
+    enable = mkEnableOption "lvm2" // {
       default = true;
     };
 
@@ -20,12 +20,12 @@ in {
         Defaults to pkgs.lvm2, pkgs.lvm2_dmeventd if dmeventd or pkgs.lvm2_vdo if vdo is enabled.
       '';
     };
-    dmeventd.enable = mkEnableOption (lib.mdDoc "the LVM dmevent daemon");
-    boot.thin.enable = mkEnableOption (lib.mdDoc "support for booting from ThinLVs");
-    boot.vdo.enable = mkEnableOption (lib.mdDoc "support for booting from VDOLVs");
+    dmeventd.enable = mkEnableOption "the LVM dmevent daemon";
+    boot.thin.enable = mkEnableOption "support for booting from ThinLVs";
+    boot.vdo.enable = mkEnableOption "support for booting from VDOLVs";
   };
 
-  options.boot.initrd.services.lvm.enable = mkEnableOption (lib.mdDoc "booting from LVM2 in the initrd") // {
+  options.boot.initrd.services.lvm.enable = mkEnableOption "booting from LVM2 in the initrd" // {
     description = lib.mdDoc ''
       *This will only be used when systemd is used in stage 1.*
 

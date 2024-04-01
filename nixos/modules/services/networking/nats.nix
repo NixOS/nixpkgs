@@ -16,7 +16,7 @@ in {
 
   options = {
     services.nats = {
-      enable = mkEnableOption (lib.mdDoc "NATS messaging system");
+      enable = mkEnableOption "NATS messaging system";
 
       user = mkOption {
         type = types.str;
@@ -39,7 +39,7 @@ in {
         '';
       };
 
-      jetstream = mkEnableOption (lib.mdDoc "JetStream");
+      jetstream = mkEnableOption "JetStream";
 
       port = mkOption {
         default = 4222;

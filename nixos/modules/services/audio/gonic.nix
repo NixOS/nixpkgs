@@ -13,7 +13,7 @@ in
   options = {
     services.gonic = {
 
-      enable = mkEnableOption (lib.mdDoc "Gonic music server");
+      enable = mkEnableOption "Gonic music server";
 
       settings = mkOption rec {
         type = settingsFormat.type;

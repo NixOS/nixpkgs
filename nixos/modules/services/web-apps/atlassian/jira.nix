@@ -29,7 +29,7 @@ in
 {
   options = {
     services.jira = {
-      enable = mkEnableOption (lib.mdDoc "Atlassian JIRA service");
+      enable = mkEnableOption "Atlassian JIRA service";
 
       user = mkOption {
         type = types.str;
@@ -69,7 +69,7 @@ in
       };
 
       proxy = {
-        enable = mkEnableOption (lib.mdDoc "reverse proxy support");
+        enable = mkEnableOption "reverse proxy support";
 
         name = mkOption {
           type = types.str;
@@ -99,7 +99,7 @@ in
       };
 
       sso = {
-        enable = mkEnableOption (lib.mdDoc "SSO with Atlassian Crowd");
+        enable = mkEnableOption "SSO with Atlassian Crowd";
 
         crowd = mkOption {
           type = types.str;

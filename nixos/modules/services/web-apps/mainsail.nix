@@ -6,7 +6,7 @@ let
 in
 {
   options.services.mainsail = {
-    enable = mkEnableOption (lib.mdDoc "a modern and responsive user interface for Klipper");
+    enable = mkEnableOption "a modern and responsive user interface for Klipper";
 
     package = mkPackageOption pkgs "mainsail" { };
 

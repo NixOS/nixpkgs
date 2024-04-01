@@ -14,7 +14,7 @@ in
   };
 
   options.services.garage = {
-    enable = mkEnableOption (lib.mdDoc "Garage Object Storage (S3 compatible)");
+    enable = mkEnableOption "Garage Object Storage (S3 compatible)";
 
     extraEnvironment = mkOption {
       type = types.attrsOf types.str;

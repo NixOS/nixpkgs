@@ -22,7 +22,7 @@ let
 
   proxyOptions = {
     options = {
-      enable = mkEnableOption (lib.mdDoc "this proxy");
+      enable = mkEnableOption "this proxy";
 
       type = mkOption {
         type = types.enum [ "http" "socks4" "socks5" ];
@@ -49,7 +49,7 @@ in {
 
     programs.proxychains = {
 
-      enable = mkEnableOption (lib.mdDoc "installing proxychains configuration");
+      enable = mkEnableOption "installing proxychains configuration";
 
       package = mkPackageOption pkgs "proxychains" {
         example = "proxychains-ng";
@@ -90,7 +90,7 @@ in {
         description = lib.mdDoc "Proxy DNS requests - no leak for DNS data.";
       };
 
-      quietMode = mkEnableOption (lib.mdDoc "Quiet mode (no output from the library)");
+      quietMode = mkEnableOption "Quiet mode (no output from the library)";
 
       remoteDNSSubnet = mkOption {
         type = types.enum [ 10 127 224 ];

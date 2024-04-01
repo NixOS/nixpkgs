@@ -16,7 +16,7 @@ in
 
     services.solanum = {
 
-      enable = mkEnableOption (lib.mdDoc "Solanum IRC daemon");
+      enable = mkEnableOption "Solanum IRC daemon";
 
       config = mkOption {
         type = types.str;

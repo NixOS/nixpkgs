@@ -260,7 +260,7 @@ in {
   options = {
 
     services.xserver.libinput = {
-      enable = mkEnableOption (lib.mdDoc "libinput") // {
+      enable = mkEnableOption "libinput" // {
         default = config.services.xserver.enable;
         defaultText = lib.literalExpression "config.services.xserver.enable";
       };

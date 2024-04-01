@@ -4,11 +4,11 @@ let
 in
 {
   options.services.openiscsi = with types; {
-    enable = mkEnableOption (lib.mdDoc "the openiscsi iscsi daemon");
-    enableAutoLoginOut = mkEnableOption (lib.mdDoc ''
+    enable = mkEnableOption "the openiscsi iscsi daemon";
+    enableAutoLoginOut = mkEnableOption ''
       automatic login and logout of all automatic targets.
       You probably do not want this
-    '');
+    '';
     discoverPortal = mkOption {
       type = nullOr str;
       default = null;

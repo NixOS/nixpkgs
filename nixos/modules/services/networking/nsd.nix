@@ -262,7 +262,7 @@ let
         '';
       };
 
-      dnssec = mkEnableOption (lib.mdDoc "DNSSEC");
+      dnssec = mkEnableOption "DNSSEC";
 
       dnssecPolicy = {
         algorithm = mkOption {
@@ -478,9 +478,9 @@ in
   # options are ordered alphanumerically
   options.services.nsd = {
 
-    enable = mkEnableOption (lib.mdDoc "NSD authoritative DNS server");
+    enable = mkEnableOption "NSD authoritative DNS server";
 
-    bind8Stats = mkEnableOption (lib.mdDoc "BIND8 like statistics");
+    bind8Stats = mkEnableOption "BIND8 like statistics";
 
     dnssecInterval = mkOption {
       type = types.str;
@@ -616,7 +616,7 @@ in
       '';
     };
 
-    roundRobin = mkEnableOption (lib.mdDoc "round robin rotation of records");
+    roundRobin = mkEnableOption "round robin rotation of records";
 
     serverCount = mkOption {
       type = types.int;
@@ -735,7 +735,7 @@ in
 
     ratelimit = {
 
-      enable = mkEnableOption (lib.mdDoc "ratelimit capabilities");
+      enable = mkEnableOption "ratelimit capabilities";
 
       ipv4PrefixLength = mkOption {
         type = types.nullOr types.int;
@@ -796,7 +796,7 @@ in
 
     remoteControl = {
 
-      enable = mkEnableOption (lib.mdDoc "remote control via nsd-control");
+      enable = mkEnableOption "remote control via nsd-control";
 
       controlCertFile = mkOption {
         type = types.path;

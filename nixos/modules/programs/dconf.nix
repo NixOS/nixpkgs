@@ -161,7 +161,7 @@ in
 {
   options = {
     programs.dconf = {
-      enable = lib.mkEnableOption (lib.mdDoc "dconf");
+      enable = lib.mkEnableOption "dconf";
 
       profiles = lib.mkOption {
         type = with lib.types; attrsOf (oneOf [

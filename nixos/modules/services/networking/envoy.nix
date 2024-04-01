@@ -15,7 +15,7 @@ in
 
 {
   options.services.envoy = {
-    enable = mkEnableOption (lib.mdDoc "Envoy reverse proxy");
+    enable = mkEnableOption "Envoy reverse proxy";
 
     package = mkPackageOption pkgs "envoy" { };
 

@@ -24,7 +24,7 @@ let
 in {
 
   options.services.zookeeper = {
-    enable = mkEnableOption (lib.mdDoc "Zookeeper");
+    enable = mkEnableOption "Zookeeper";
 
     port = mkOption {
       description = lib.mdDoc "Zookeeper Client port.";

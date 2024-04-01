@@ -8,7 +8,7 @@ in
 {
   options = {
     services.antennas = {
-      enable = mkEnableOption (lib.mdDoc "Antennas");
+      enable = mkEnableOption "Antennas";
 
       tvheadendUrl = mkOption {
         type        = types.str;

@@ -11,7 +11,7 @@ let
   swanctlParams = import ./swanctl-params.nix lib;
 in  {
   options.services.strongswan-swanctl = {
-    enable = mkEnableOption (lib.mdDoc "strongswan-swanctl service");
+    enable = mkEnableOption "strongswan-swanctl service";
 
     package = mkPackageOption pkgs "strongswan" { };
 

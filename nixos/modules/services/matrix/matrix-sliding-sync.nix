@@ -9,7 +9,7 @@ in
   ];
 
   options.services.matrix-sliding-sync = {
-    enable = lib.mkEnableOption (lib.mdDoc "sliding sync");
+    enable = lib.mkEnableOption "sliding sync";
 
     package = lib.mkPackageOption pkgs "matrix-sliding-sync" { };
 

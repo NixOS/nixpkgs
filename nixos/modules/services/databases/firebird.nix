@@ -40,7 +40,7 @@ in
 
     services.firebird = {
 
-      enable = mkEnableOption (lib.mdDoc "the Firebird super server");
+      enable = mkEnableOption "the Firebird super server";
 
       package = mkPackageOption pkgs "firebird" {
         example = "firebird_3";

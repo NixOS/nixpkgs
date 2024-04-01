@@ -59,7 +59,7 @@ in
 
     users.ldap = {
 
-      enable = mkEnableOption (lib.mdDoc "authentication against an LDAP server");
+      enable = mkEnableOption "authentication against an LDAP server";
 
       loginPam = mkOption {
         type = types.bool;

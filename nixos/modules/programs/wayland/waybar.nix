@@ -7,7 +7,7 @@ let
 in
 {
   options.programs.waybar = {
-    enable = mkEnableOption (lib.mdDoc "waybar");
+    enable = mkEnableOption "waybar";
     package = mkPackageOption pkgs "waybar" { };
   };
 

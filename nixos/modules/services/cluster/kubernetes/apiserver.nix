@@ -99,7 +99,7 @@ in
       type = listOf str;
     };
 
-    enable = mkEnableOption (lib.mdDoc "Kubernetes apiserver");
+    enable = mkEnableOption "Kubernetes apiserver";
 
     enableAdmissionPlugins = mkOption {
       description = lib.mdDoc ''

@@ -40,7 +40,7 @@ let
 in {
   options = {
     services.quake3-server = {
-      enable = mkEnableOption (lib.mdDoc "Quake 3 dedicated server");
+      enable = mkEnableOption "Quake 3 dedicated server";
       package = lib.mkPackageOption pkgs "ioquake3" { };
 
       port = mkOption {

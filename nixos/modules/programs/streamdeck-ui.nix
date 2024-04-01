@@ -7,7 +7,7 @@ let
 in
 {
   options.programs.streamdeck-ui = {
-    enable = mkEnableOption (lib.mdDoc "streamdeck-ui");
+    enable = mkEnableOption "streamdeck-ui";
 
     autoStart = mkOption {
       default = true;

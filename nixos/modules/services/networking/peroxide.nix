@@ -9,7 +9,7 @@ let
 in
 {
   options.services.peroxide = {
-    enable = mkEnableOption (lib.mdDoc "peroxide");
+    enable = mkEnableOption "peroxide";
 
     package = mkPackageOption pkgs "peroxide" {
       default = [ "peroxide" ];

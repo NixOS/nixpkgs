@@ -297,7 +297,7 @@ in
   ];
 
   options.services.grafana = {
-    enable = mkEnableOption (lib.mdDoc "grafana");
+    enable = mkEnableOption "grafana";
 
     declarativePlugins = mkOption {
       type = with types; nullOr (listOf path);
@@ -1128,7 +1128,7 @@ in
     };
 
     provision = {
-      enable = mkEnableOption (lib.mdDoc "provision");
+      enable = mkEnableOption "provision";
 
       datasources = mkOption {
         description = lib.mdDoc ''

@@ -9,7 +9,7 @@ in
 {
   options.services.monit = {
 
-    enable = mkEnableOption (lib.mdDoc "Monit");
+    enable = mkEnableOption "Monit";
 
     config = mkOption {
       type = types.lines;

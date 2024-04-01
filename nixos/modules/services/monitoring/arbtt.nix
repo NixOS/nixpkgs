@@ -7,7 +7,7 @@ let
 in {
   options = {
     services.arbtt = {
-      enable = mkEnableOption (lib.mdDoc "Arbtt statistics capture service");
+      enable = mkEnableOption "Arbtt statistics capture service";
 
       package = mkPackageOption pkgs [ "haskellPackages" "arbtt" ] { };
 

@@ -34,11 +34,11 @@ let
 in
 {
   options.services.undervolt = {
-    enable = mkEnableOption (lib.mdDoc ''
+    enable = mkEnableOption ''
        Undervolting service for Intel CPUs.
 
        Warning: This service is not endorsed by Intel and may permanently damage your hardware. Use at your own risk!
-    '');
+    '';
 
     verbose = mkOption {
       type = types.bool;

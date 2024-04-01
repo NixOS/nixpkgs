@@ -28,7 +28,7 @@ in
 {
   options = {
     boot.initrd.systemd.repart = {
-      enable = lib.mkEnableOption (lib.mdDoc "systemd-repart") // {
+      enable = lib.mkEnableOption "systemd-repart" // {
         description = lib.mdDoc ''
           Grow and add partitions to a partition table at boot time in the initrd.
           systemd-repart only works with GPT partition tables.
@@ -53,7 +53,7 @@ in
     };
 
     systemd.repart = {
-      enable = lib.mkEnableOption (lib.mdDoc "systemd-repart") // {
+      enable = lib.mkEnableOption "systemd-repart" // {
         description = lib.mdDoc ''
           Grow and add partitions to a partition table.
           systemd-repart only works with GPT partition tables.

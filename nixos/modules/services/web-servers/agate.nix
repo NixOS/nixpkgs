@@ -8,7 +8,7 @@ in
 {
   options = {
     services.agate = {
-      enable = mkEnableOption (lib.mdDoc "Agate Server");
+      enable = mkEnableOption "Agate Server";
 
       package = mkPackageOption pkgs "agate" { };
 

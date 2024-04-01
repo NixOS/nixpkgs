@@ -47,7 +47,7 @@ in
 
     services.libreswan = {
 
-      enable = mkEnableOption (lib.mdDoc "Libreswan IPsec service");
+      enable = mkEnableOption "Libreswan IPsec service";
 
       configSetup = mkOption {
         type = types.lines;

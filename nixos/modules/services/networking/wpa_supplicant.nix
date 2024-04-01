@@ -172,7 +172,7 @@ let
 in {
   options = {
     networking.wireless = {
-      enable = mkEnableOption (lib.mdDoc "wpa_supplicant");
+      enable = mkEnableOption "wpa_supplicant";
 
       interfaces = mkOption {
         type = types.listOf types.str;
@@ -194,7 +194,7 @@ in {
         description = lib.mdDoc "Force a specific wpa_supplicant driver.";
       };
 
-      allowAuxiliaryImperativeNetworks = mkEnableOption (lib.mdDoc "support for imperative & declarative networks") // {
+      allowAuxiliaryImperativeNetworks = mkEnableOption "support for imperative & declarative networks" // {
         description = lib.mdDoc ''
           Whether to allow configuring networks "imperatively" (e.g. via
           `wpa_supplicant_gui`) and declaratively via

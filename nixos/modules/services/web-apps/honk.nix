@@ -21,7 +21,7 @@ in
 {
   options = {
     services.honk = {
-      enable = lib.mkEnableOption (lib.mdDoc "the Honk server");
+      enable = lib.mkEnableOption "the Honk server";
       package = lib.mkPackageOption pkgs "honk" { };
 
       host = lib.mkOption {

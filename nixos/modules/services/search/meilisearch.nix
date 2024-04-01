@@ -14,7 +14,7 @@ in
   ###### interface
 
   options.services.meilisearch = {
-    enable = mkEnableOption (lib.mdDoc "MeiliSearch - a RESTful search API");
+    enable = mkEnableOption "MeiliSearch - a RESTful search API";
 
     package = mkPackageOption pkgs "meilisearch" {
       extraDescription = ''

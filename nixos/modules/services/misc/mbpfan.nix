@@ -9,7 +9,7 @@ let
 
 in {
   options.services.mbpfan = {
-    enable = mkEnableOption (lib.mdDoc "mbpfan, fan controller daemon for Apple Macs and MacBooks");
+    enable = mkEnableOption "mbpfan, fan controller daemon for Apple Macs and MacBooks";
 
     package = mkPackageOption pkgs "mbpfan" { };
 

@@ -14,7 +14,7 @@ in
   ##### interface
   options = {
     services.klipper = {
-      enable = mkEnableOption (lib.mdDoc "Klipper, the 3D printer firmware");
+      enable = mkEnableOption "Klipper, the 3D printer firmware";
 
       package = mkPackageOption pkgs "klipper" { };
 
@@ -105,13 +105,13 @@ in
         type = with types; attrsOf
           (submodule {
             options = {
-              enable = mkEnableOption (lib.mdDoc ''
+              enable = mkEnableOption ''
                 building of firmware for manual flashing
-              '');
-              enableKlipperFlash = mkEnableOption (lib.mdDoc ''
+              '';
+              enableKlipperFlash = mkEnableOption ''
                 flashings scripts for firmware. This will add `klipper-flash-$mcu` scripts to your environment which can be called to flash the firmware.
                 Please check the configs at [klipper](https://github.com/Klipper3d/klipper/tree/master/config) whether your board supports flashing via `make flash`
-              '');
+              '';
               serial = mkOption {
                 type = types.nullOr path;
                 description = lib.mdDoc "Path to serial port this printer is connected to. Leave `null` to derive it from `service.klipper.settings`.";

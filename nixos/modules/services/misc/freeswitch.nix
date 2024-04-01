@@ -18,7 +18,7 @@ let
 in {
   options = {
     services.freeswitch = {
-      enable = mkEnableOption (lib.mdDoc "FreeSWITCH");
+      enable = mkEnableOption "FreeSWITCH";
       enableReload = mkOption {
         default = false;
         type = types.bool;

@@ -9,7 +9,7 @@ in {
 
   options = {
     services.tp-auto-kbbl = {
-      enable = mkEnableOption (lib.mdDoc "auto toggle keyboard back-lighting on Thinkpads (and maybe other laptops) for Linux");
+      enable = mkEnableOption "auto toggle keyboard back-lighting on Thinkpads (and maybe other laptops) for Linux";
 
       package = mkPackageOption pkgs "tp-auto-kbbl" { };
 

@@ -115,7 +115,7 @@ in
 
     services.bind = {
 
-      enable = mkEnableOption (lib.mdDoc "BIND domain name server");
+      enable = mkEnableOption "BIND domain name server";
 
 
       package = mkPackageOption pkgs "bind" { };

@@ -137,11 +137,11 @@ in
   options = {
 
     services.gnome = {
-      core-os-services.enable = mkEnableOption (lib.mdDoc "essential services for GNOME3");
-      core-shell.enable = mkEnableOption (lib.mdDoc "GNOME Shell services");
-      core-utilities.enable = mkEnableOption (lib.mdDoc "GNOME core utilities");
-      core-developer-tools.enable = mkEnableOption (lib.mdDoc "GNOME core developer tools");
-      games.enable = mkEnableOption (lib.mdDoc "GNOME games");
+      core-os-services.enable = mkEnableOption "essential services for GNOME3";
+      core-shell.enable = mkEnableOption "GNOME Shell services";
+      core-utilities.enable = mkEnableOption "GNOME core utilities";
+      core-developer-tools.enable = mkEnableOption "GNOME core developer tools";
+      games.enable = mkEnableOption "GNOME games";
     };
 
     services.xserver.desktopManager.gnome = {
@@ -188,10 +188,10 @@ in
         description = lib.mdDoc "List of packages for which gsettings are overridden.";
       };
 
-      debug = mkEnableOption (lib.mdDoc "gnome-session debug messages");
+      debug = mkEnableOption "gnome-session debug messages";
 
       flashback = {
-        enableMetacity = mkEnableOption (lib.mdDoc "the standard GNOME Flashback session with Metacity");
+        enableMetacity = mkEnableOption "the standard GNOME Flashback session with Metacity";
 
         customSessions = mkOption {
           type = types.listOf (types.submodule {

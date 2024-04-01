@@ -29,7 +29,7 @@ in
 
   options = {
     services.zammad = {
-      enable = mkEnableOption (lib.mdDoc "Zammad, a web-based, open source user support/ticketing solution");
+      enable = mkEnableOption "Zammad, a web-based, open source user support/ticketing solution";
 
       package = mkPackageOption pkgs "zammad" { };
 

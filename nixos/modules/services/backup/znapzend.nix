@@ -294,7 +294,7 @@ in
 {
   options = {
     services.znapzend = {
-      enable = mkEnableOption (lib.mdDoc "ZnapZend ZFS backup daemon");
+      enable = mkEnableOption "ZnapZend ZFS backup daemon";
 
       logLevel = mkOption {
         default = "debug";
@@ -358,17 +358,17 @@ in
         default = false;
       };
 
-      features.oracleMode = mkEnableOption (lib.mdDoc ''
+      features.oracleMode = mkEnableOption ''
         destroying snapshots one by one instead of using one long argument list.
         If source and destination are out of sync for a long time, you may have
         so many snapshots to destroy that the argument gets is too long and the
         command fails
-      '');
-      features.recvu = mkEnableOption (lib.mdDoc ''
+      '';
+      features.recvu = mkEnableOption ''
         recvu feature which uses `-u` on the receiving end to keep the destination
         filesystem unmounted
-      '');
-      features.compressed = mkEnableOption (lib.mdDoc ''
+      '';
+      features.compressed = mkEnableOption ''
         compressed feature which adds the options `-Lce` to
         the {command}`zfs send` command. When this is enabled, make
         sure that both the sending and receiving pool have the same relevant
@@ -378,8 +378,8 @@ in
         {manpage}`znapzend(1)`
         and {manpage}`zfs(8)`
         for more info
-      '');
-      features.sendRaw = mkEnableOption (lib.mdDoc ''
+      '';
+      features.sendRaw = mkEnableOption ''
         sendRaw feature which adds the options `-w` to the
         {command}`zfs send` command. For encrypted source datasets this
         instructs zfs not to decrypt before sending which results in a remote
@@ -387,23 +387,23 @@ in
         when the remote isn't fully trusted or not physically secure. This
         option must be used consistently, raw incrementals cannot be based on
         non-raw snapshots and vice versa
-      '');
-      features.skipIntermediates = mkEnableOption (lib.mdDoc ''
+      '';
+      features.skipIntermediates = mkEnableOption ''
         the skipIntermediates feature to send a single increment
         between latest common snapshot and the newly made one. It may skip
         several source snaps if the destination was offline for some time, and
         it should skip snapshots not managed by znapzend. Normally for online
         destinations, the new snapshot is sent as soon as it is created on the
         source, so there are no automatic increments to skip
-      '');
-      features.lowmemRecurse = mkEnableOption (lib.mdDoc ''
+      '';
+      features.lowmemRecurse = mkEnableOption ''
         use lowmemRecurse on systems where you have too many datasets, so a
         recursive listing of attributes to find backup plans exhausts the
         memory available to {command}`znapzend`: instead, go the slower
         way to first list all impacted dataset names, and then query their
         configs one by one
-      '');
-      features.zfsGetType = mkEnableOption (lib.mdDoc ''
+      '';
+      features.zfsGetType = mkEnableOption ''
         using zfsGetType if your {command}`zfs get` supports a
         `-t` argument for filtering by dataset type at all AND
         lists properties for snapshots by default when recursing, so that there
@@ -413,7 +413,7 @@ in
         differ by hundreds of times (depending on the amount of snapshots in
         that dataset tree... and a decent backup plan will ensure you have a lot
         of those), so you would benefit from requesting this feature
-      '');
+      '';
     };
   };
 

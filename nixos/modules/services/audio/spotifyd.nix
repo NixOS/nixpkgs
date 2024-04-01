@@ -17,7 +17,7 @@ in
 {
   options = {
     services.spotifyd = {
-      enable = mkEnableOption (lib.mdDoc "spotifyd, a Spotify playing daemon");
+      enable = mkEnableOption "spotifyd, a Spotify playing daemon";
 
       config = mkOption {
         default = "";

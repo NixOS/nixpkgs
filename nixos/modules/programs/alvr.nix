@@ -8,7 +8,7 @@ in
 {
   options = {
     programs.alvr = {
-      enable = mkEnableOption (lib.mdDoc "ALVR, the VR desktop streamer");
+      enable = mkEnableOption "ALVR, the VR desktop streamer";
 
       package = mkPackageOption pkgs "alvr" { };
 

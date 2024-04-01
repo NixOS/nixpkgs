@@ -32,7 +32,7 @@ in
   # interface
 
   options.services.limesurvey = {
-    enable = mkEnableOption (lib.mdDoc "Limesurvey web application");
+    enable = mkEnableOption "Limesurvey web application";
 
     encryptionKey = mkOption {
       type = types.str;

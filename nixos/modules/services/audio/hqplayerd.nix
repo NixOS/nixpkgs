@@ -12,7 +12,7 @@ in
 {
   options = {
     services.hqplayerd = {
-      enable = mkEnableOption (lib.mdDoc "HQPlayer Embedded");
+      enable = mkEnableOption "HQPlayer Embedded";
 
       auth = {
         username = mkOption {

@@ -25,7 +25,7 @@ in
 
   options = {
     services.dragonflydb = {
-      enable = mkEnableOption (lib.mdDoc "DragonflyDB");
+      enable = mkEnableOption "DragonflyDB";
 
       user = mkOption {
         type = types.str;

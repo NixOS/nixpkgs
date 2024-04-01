@@ -112,7 +112,7 @@ in
   # Interface
 
   options.services.sanoid = {
-    enable = mkEnableOption (lib.mdDoc "Sanoid ZFS snapshotting service");
+    enable = mkEnableOption "Sanoid ZFS snapshotting service";
 
     package = lib.mkPackageOption pkgs "sanoid" {};
 

@@ -48,7 +48,7 @@ in
 {
   # interface
   options.services.dolibarr = {
-    enable = mkEnableOption (lib.mdDoc "dolibarr");
+    enable = mkEnableOption "dolibarr";
 
     package = mkPackageOption pkgs "dolibarr" { };
 

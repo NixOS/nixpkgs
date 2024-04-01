@@ -7,9 +7,9 @@ let
 in
 {
   options.services.onlyoffice = {
-    enable = mkEnableOption (lib.mdDoc "OnlyOffice DocumentServer");
+    enable = mkEnableOption "OnlyOffice DocumentServer";
 
-    enableExampleServer = mkEnableOption (lib.mdDoc "OnlyOffice example server");
+    enableExampleServer = mkEnableOption "OnlyOffice example server";
 
     hostname = mkOption {
       type = types.str;

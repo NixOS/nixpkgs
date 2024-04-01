@@ -67,7 +67,7 @@ let
 in
 {
   options.services.davis = {
-    enable = lib.mkEnableOption (lib.mdDoc "Davis is a caldav and carddav server");
+    enable = lib.mkEnableOption "Davis is a caldav and carddav server";
 
     user = lib.mkOption {
       default = "davis";

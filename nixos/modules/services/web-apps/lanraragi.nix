@@ -8,7 +8,7 @@ in
 
   options.services = {
     lanraragi = {
-      enable = lib.mkEnableOption (lib.mdDoc "LANraragi");
+      enable = lib.mkEnableOption "LANraragi";
       package = lib.mkPackageOption pkgs "lanraragi" { };
 
       port = lib.mkOption {

@@ -7,7 +7,7 @@ let
 in {
   options = {
     services.code-server = {
-      enable = lib.mkEnableOption (lib.mdDoc "code-server");
+      enable = lib.mkEnableOption "code-server";
 
       package = lib.mkPackageOptionMD pkgs "code-server" {
         example = ''

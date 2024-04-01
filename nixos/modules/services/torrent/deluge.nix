@@ -37,7 +37,7 @@ in {
   options = {
     services = {
       deluge = {
-        enable = mkEnableOption (lib.mdDoc "Deluge daemon");
+        enable = mkEnableOption "Deluge daemon";
 
         openFilesLimit = mkOption {
           default = openFilesLimit;
@@ -151,7 +151,7 @@ in {
       };
 
       deluge.web = {
-        enable = mkEnableOption (lib.mdDoc "Deluge Web daemon");
+        enable = mkEnableOption "Deluge Web daemon";
 
         port = mkOption {
           type = types.port;

@@ -28,7 +28,7 @@ in
 {
   options = {
     services.miniupnpd = {
-      enable = mkEnableOption (lib.mdDoc "MiniUPnP daemon");
+      enable = mkEnableOption "MiniUPnP daemon";
 
       externalInterface = mkOption {
         type = types.str;
@@ -45,7 +45,7 @@ in
         '';
       };
 
-      natpmp = mkEnableOption (lib.mdDoc "NAT-PMP support");
+      natpmp = mkEnableOption "NAT-PMP support";
 
       upnp = mkOption {
         default = true;

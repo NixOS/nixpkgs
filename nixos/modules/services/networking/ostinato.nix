@@ -26,7 +26,7 @@ in
 
     services.ostinato = {
 
-      enable = mkEnableOption (lib.mdDoc "Ostinato agent-controller (Drone)");
+      enable = mkEnableOption "Ostinato agent-controller (Drone)";
 
       port = mkOption {
         type = types.port;

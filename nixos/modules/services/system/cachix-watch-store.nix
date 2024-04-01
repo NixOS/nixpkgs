@@ -9,7 +9,7 @@ in
   meta.maintainers = [ lib.maintainers.jfroche lib.maintainers.domenkozar ];
 
   options.services.cachix-watch-store = {
-    enable = mkEnableOption (lib.mdDoc "Cachix Watch Store: https://docs.cachix.org");
+    enable = mkEnableOption "Cachix Watch Store: https://docs.cachix.org";
 
     cacheName = mkOption {
       type = types.str;

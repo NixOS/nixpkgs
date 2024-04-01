@@ -21,7 +21,7 @@ let
 in {
   options = {
     services.prometheus.pushgateway = {
-      enable = mkEnableOption (lib.mdDoc "Prometheus Pushgateway");
+      enable = mkEnableOption "Prometheus Pushgateway";
 
       package = mkPackageOption pkgs "prometheus-pushgateway" { };
 

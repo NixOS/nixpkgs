@@ -18,7 +18,7 @@ in
 
 {
   options.virtualisation.virtualbox.host = {
-    enable = mkEnableOption (lib.mdDoc "VirtualBox") // {
+    enable = mkEnableOption "VirtualBox" // {
       description = lib.mdDoc ''
         Whether to enable VirtualBox.
 
@@ -29,7 +29,7 @@ in
       '';
     };
 
-    enableExtensionPack = mkEnableOption (lib.mdDoc "VirtualBox extension pack") // {
+    enableExtensionPack = mkEnableOption "VirtualBox extension pack" // {
       description = lib.mdDoc ''
         Whether to install the Oracle Extension Pack for VirtualBox.
 

@@ -8,7 +8,7 @@ let
 in {
   options = {
     services.coder = {
-      enable = mkEnableOption (lib.mdDoc "Coder service");
+      enable = mkEnableOption "Coder service";
 
       user = mkOption {
         type = types.str;

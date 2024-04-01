@@ -19,9 +19,9 @@ in
 
   options = {
     programs.chromium = {
-      enable = mkEnableOption (lib.mdDoc "{command}`chromium` policies");
+      enable = mkEnableOption "{command}`chromium` policies";
 
-      enablePlasmaBrowserIntegration = mkEnableOption (lib.mdDoc "Native Messaging Host for Plasma Browser Integration");
+      enablePlasmaBrowserIntegration = mkEnableOption "Native Messaging Host for Plasma Browser Integration";
 
       plasmaBrowserIntegrationPackage = mkPackageOption pkgs [ "plasma5Packages" "plasma-browser-integration" ] { };
 

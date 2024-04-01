@@ -8,7 +8,7 @@ in
 {
   options = {
     services.openvscode-server = {
-      enable = lib.mkEnableOption (lib.mdDoc "openvscode-server");
+      enable = lib.mkEnableOption "openvscode-server";
 
       package = lib.mkPackageOption pkgs "openvscode-server" { };
 

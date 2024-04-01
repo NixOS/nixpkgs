@@ -6,7 +6,7 @@ with lib;
   options = {
 
     hardware.sane.dsseries.enable =
-      mkEnableOption (lib.mdDoc "Brother DSSeries scan backend") // {
+      mkEnableOption "Brother DSSeries scan backend" // {
       description = lib.mdDoc ''
         When enabled, will automatically register the "dsseries" SANE backend.
 

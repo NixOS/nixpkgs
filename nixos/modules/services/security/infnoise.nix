@@ -7,7 +7,7 @@ let
 in {
   options = {
     services.infnoise = {
-      enable = mkEnableOption (lib.mdDoc "the Infinite Noise TRNG driver");
+      enable = mkEnableOption "the Infinite Noise TRNG driver";
 
       fillDevRandom = mkOption {
         description = lib.mdDoc ''

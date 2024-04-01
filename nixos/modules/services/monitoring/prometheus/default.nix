@@ -1575,7 +1575,7 @@ in
 
   options.services.prometheus = {
 
-    enable = mkEnableOption (lib.mdDoc "Prometheus monitoring daemon");
+    enable = mkEnableOption "Prometheus monitoring daemon";
 
     package = mkPackageOption pkgs "prometheus" { };
 
@@ -1625,7 +1625,7 @@ in
       '';
     };
 
-    enableAgentMode = mkEnableOption (lib.mdDoc "agent mode");
+    enableAgentMode = mkEnableOption "agent mode";
 
     configText = mkOption {
       type = types.nullOr types.lines;

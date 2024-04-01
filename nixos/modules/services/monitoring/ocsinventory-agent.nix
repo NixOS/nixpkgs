@@ -16,7 +16,7 @@ in
 
   options = {
     services.ocsinventory-agent = {
-      enable = lib.mkEnableOption (lib.mdDoc "OCS Inventory Agent");
+      enable = lib.mkEnableOption "OCS Inventory Agent";
 
       package = lib.mkPackageOption pkgs "ocsinventory-agent" { };
 
@@ -62,7 +62,7 @@ in
               description = lib.mdDoc "Tag for the generated inventory.";
             };
 
-            debug = lib.mkEnableOption (lib.mdDoc "debug mode");
+            debug = lib.mkEnableOption "debug mode";
           };
         };
         default = { };

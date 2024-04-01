@@ -19,7 +19,7 @@ let
 in
 {
   options.services.dex = {
-    enable = mkEnableOption (lib.mdDoc "the OpenID Connect and OAuth2 identity provider");
+    enable = mkEnableOption "the OpenID Connect and OAuth2 identity provider";
 
     environmentFile = mkOption {
       type = types.nullOr types.path;

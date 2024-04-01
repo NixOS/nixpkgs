@@ -11,7 +11,7 @@ in {
   options = {
     services.lirc = {
 
-      enable = mkEnableOption (lib.mdDoc "LIRC daemon");
+      enable = mkEnableOption "LIRC daemon";
 
       options = mkOption {
         type = types.lines;

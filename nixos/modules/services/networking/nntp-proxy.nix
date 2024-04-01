@@ -59,7 +59,7 @@ in
   options = {
 
     services.nntp-proxy = {
-      enable = mkEnableOption (lib.mdDoc "NNTP-Proxy");
+      enable = mkEnableOption "NNTP-Proxy";
 
       upstreamServer = mkOption {
         type = types.str;

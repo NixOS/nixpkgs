@@ -8,7 +8,7 @@ let
 in
 {
   options.services.centrifugo = {
-    enable = lib.mkEnableOption (lib.mdDoc "Centrifugo messaging server");
+    enable = lib.mkEnableOption "Centrifugo messaging server";
 
     package = lib.mkPackageOption pkgs "centrifugo" { };
 

@@ -4,7 +4,7 @@ with lib;
 
 {
   options.programs.droidcam = {
-    enable = mkEnableOption (lib.mdDoc "DroidCam client");
+    enable = mkEnableOption "DroidCam client";
   };
 
   config = lib.mkIf config.programs.droidcam.enable {

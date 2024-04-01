@@ -18,7 +18,7 @@ in
 
     services.pgpkeyserver-lite = {
 
-      enable = mkEnableOption (lib.mdDoc "pgpkeyserver-lite on a nginx vHost proxying to a gpg keyserver");
+      enable = mkEnableOption "pgpkeyserver-lite on a nginx vHost proxying to a gpg keyserver";
 
       package = mkPackageOption pkgs "pgpkeyserver-lite" { };
 

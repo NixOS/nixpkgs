@@ -7,7 +7,7 @@ let
   cfg = xcfg.desktopManager.cde;
 in {
   options.services.xserver.desktopManager.cde = {
-    enable = mkEnableOption (lib.mdDoc "Common Desktop Environment");
+    enable = mkEnableOption "Common Desktop Environment";
 
     extraPackages = mkOption {
       type = with types; listOf package;

@@ -123,7 +123,7 @@ let
 
     services.tt-rss = {
 
-      enable = mkEnableOption (lib.mdDoc "tt-rss");
+      enable = mkEnableOption "tt-rss";
 
       root = mkOption {
         type = types.path;

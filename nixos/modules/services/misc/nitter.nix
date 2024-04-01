@@ -52,7 +52,7 @@ in
 
   options = {
     services.nitter = {
-      enable = mkEnableOption (lib.mdDoc "Nitter");
+      enable = mkEnableOption "Nitter";
 
       package = mkPackageOption pkgs "nitter" { };
 
@@ -155,9 +155,9 @@ in
           description = lib.mdDoc "Use base64 encoding for proxied media URLs.";
         };
 
-        enableRSS = mkEnableOption (lib.mdDoc "RSS feeds") // { default = true; };
+        enableRSS = mkEnableOption "RSS feeds" // { default = true; };
 
-        enableDebug = mkEnableOption (lib.mdDoc "request logs and debug endpoints");
+        enableDebug = mkEnableOption "request logs and debug endpoints";
 
         proxy = mkOption {
           type = types.str;

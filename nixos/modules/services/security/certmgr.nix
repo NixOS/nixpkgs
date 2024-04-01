@@ -35,7 +35,7 @@ let
 in
 {
   options.services.certmgr = {
-    enable = mkEnableOption (lib.mdDoc "certmgr");
+    enable = mkEnableOption "certmgr";
 
     package = mkPackageOption pkgs "certmgr" { };
 

@@ -44,7 +44,7 @@ in
   meta.maintainers = with maintainers; [ nathan-gs ];
 
   options.services.ebusd = {
-    enable = mkEnableOption (lib.mdDoc "ebusd service");
+    enable = mkEnableOption "ebusd service";
 
     device = mkOption {
       type = types.str;

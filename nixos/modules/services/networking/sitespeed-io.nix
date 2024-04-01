@@ -5,7 +5,7 @@ let
 in
 {
   options.services.sitespeed-io = {
-    enable = lib.mkEnableOption (lib.mdDoc "Sitespeed.io");
+    enable = lib.mkEnableOption "Sitespeed.io";
 
     user = lib.mkOption {
       type = lib.types.str;

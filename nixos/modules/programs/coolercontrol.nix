@@ -10,7 +10,7 @@ in
 {
   ##### interface
   options = {
-    programs.coolercontrol.enable = lib.mkEnableOption (lib.mdDoc "CoolerControl GUI & its background services");
+    programs.coolercontrol.enable = lib.mkEnableOption "CoolerControl GUI & its background services";
   };
 
   ##### implementation

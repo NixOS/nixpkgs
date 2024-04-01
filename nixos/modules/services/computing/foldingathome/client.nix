@@ -18,7 +18,7 @@ in
     '')
   ];
   options.services.foldingathome = {
-    enable = mkEnableOption (lib.mdDoc "Folding@home client");
+    enable = mkEnableOption "Folding@home client";
 
     package = mkPackageOption pkgs "fahclient" { };
 

@@ -32,7 +32,7 @@ let
 in {
 
   options.services.apache-kafka = {
-    enable = mkEnableOption (lib.mdDoc "Apache Kafka event streaming broker");
+    enable = mkEnableOption "Apache Kafka event streaming broker";
 
     settings = mkOption {
       description = lib.mdDoc ''

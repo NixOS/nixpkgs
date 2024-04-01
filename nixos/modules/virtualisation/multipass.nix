@@ -10,9 +10,9 @@ in
 {
   options = {
     virtualisation.multipass = {
-      enable = lib.mkEnableOption (lib.mdDoc ''
+      enable = lib.mkEnableOption ''
         Multipass, a simple manager for virtualised Ubuntu instances.
-      '');
+      '';
 
       logLevel = lib.mkOption {
         type = lib.types.enum [ "error" "warning" "info" "debug" "trace" ];

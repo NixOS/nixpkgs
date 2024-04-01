@@ -9,7 +9,7 @@ in {
   options = {
     services.navidrome = {
 
-      enable = mkEnableOption (lib.mdDoc "Navidrome music server");
+      enable = mkEnableOption "Navidrome music server";
 
       package = mkPackageOption pkgs "navidrome" { };
 

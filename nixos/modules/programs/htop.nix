@@ -20,7 +20,7 @@ in
   options.programs.htop = {
     package = mkPackageOption pkgs "htop" { };
 
-    enable = mkEnableOption (lib.mdDoc "htop process monitor");
+    enable = mkEnableOption "htop process monitor";
 
     settings = mkOption {
       type = with types; attrsOf (oneOf [ str int bool (listOf (oneOf [ str int bool ])) ]);

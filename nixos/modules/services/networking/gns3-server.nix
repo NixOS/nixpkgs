@@ -14,12 +14,12 @@ in {
 
   options = {
     services.gns3-server = {
-      enable = lib.mkEnableOption (lib.mdDoc "GNS3 Server daemon");
+      enable = lib.mkEnableOption "GNS3 Server daemon";
 
       package = lib.mkPackageOptionMD pkgs "gns3-server" { };
 
       auth = {
-        enable = lib.mkEnableOption (lib.mdDoc "password based HTTP authentication to access the GNS3 Server");
+        enable = lib.mkEnableOption "password based HTTP authentication to access the GNS3 Server";
 
         user = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
@@ -62,11 +62,11 @@ in {
           description = lib.mdDoc ''Path of the file GNS3 Server should log to.'';
         };
 
-        debug = lib.mkEnableOption (lib.mdDoc "debug logging");
+        debug = lib.mkEnableOption "debug logging";
       };
 
       ssl = {
-        enable = lib.mkEnableOption (lib.mdDoc "SSL encryption");
+        enable = lib.mkEnableOption "SSL encryption";
 
         certFile = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
@@ -87,17 +87,17 @@ in {
       };
 
       dynamips = {
-        enable = lib.mkEnableOption (lib.mdDoc ''Whether to enable Dynamips support.'');
+        enable = lib.mkEnableOption ''Whether to enable Dynamips support.'';
         package = lib.mkPackageOptionMD pkgs "dynamips" { };
       };
 
       ubridge = {
-        enable = lib.mkEnableOption (lib.mdDoc ''Whether to enable uBridge support.'');
+        enable = lib.mkEnableOption ''Whether to enable uBridge support.'';
         package = lib.mkPackageOptionMD pkgs "ubridge" { };
       };
 
       vpcs = {
-        enable = lib.mkEnableOption (lib.mdDoc ''Whether to enable VPCS support.'');
+        enable = lib.mkEnableOption ''Whether to enable VPCS support.'';
         package = lib.mkPackageOptionMD pkgs "vpcs" { };
       };
     };

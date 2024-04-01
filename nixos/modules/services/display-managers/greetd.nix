@@ -8,7 +8,7 @@ let
 in
 {
   options.services.greetd = {
-    enable = mkEnableOption (lib.mdDoc "greetd");
+    enable = mkEnableOption "greetd";
 
     package = mkPackageOption pkgs [ "greetd" "greetd" ] { };
 

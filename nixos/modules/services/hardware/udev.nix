@@ -200,7 +200,7 @@ in
     };
 
     services.udev = {
-      enable = mkEnableOption (lib.mdDoc "udev") // {
+      enable = mkEnableOption "udev" // {
         default = true;
       };
 

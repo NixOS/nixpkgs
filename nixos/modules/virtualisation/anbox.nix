@@ -53,7 +53,7 @@ in
 
   options.virtualisation.anbox = {
 
-    enable = mkEnableOption (lib.mdDoc "Anbox");
+    enable = mkEnableOption "Anbox";
 
     image = mkOption {
       default = pkgs.anbox.image;

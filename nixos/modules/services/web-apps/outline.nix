@@ -16,7 +16,7 @@ in
   #   https://github.com/outline/outline/blob/v0.67.0/shared/types.ts
   # The order is kept the same here to make updating easier.
   options.services.outline = {
-    enable = lib.mkEnableOption (lib.mdDoc "outline");
+    enable = lib.mkEnableOption "outline";
 
     package = lib.mkOption {
       default = pkgs.outline;
@@ -543,7 +543,7 @@ in
       '';
     };
 
-    rateLimiter.enable = lib.mkEnableOption (lib.mdDoc "rate limiter for the application web server");
+    rateLimiter.enable = lib.mkEnableOption "rate limiter for the application web server";
     rateLimiter.requests = lib.mkOption {
       type = lib.types.int;
       default = 5000;

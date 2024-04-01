@@ -66,7 +66,7 @@ in
       };
 
       frontend = {
-        enable = mkEnableOption (lib.mdDoc "Bird Looking Glass Frontend Webserver");
+        enable = mkEnableOption "Bird Looking Glass Frontend Webserver";
 
         listenAddress = mkOption {
           type = types.str;
@@ -183,7 +183,7 @@ in
       };
 
       proxy = {
-        enable = mkEnableOption (lib.mdDoc "Bird Looking Glass Proxy");
+        enable = mkEnableOption "Bird Looking Glass Proxy";
 
         listenAddress = mkOption {
           type = types.str;

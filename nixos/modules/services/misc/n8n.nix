@@ -9,7 +9,7 @@ let
 in
 {
   options.services.n8n = {
-    enable = mkEnableOption (lib.mdDoc "n8n server");
+    enable = mkEnableOption "n8n server";
 
     openFirewall = mkOption {
       type = types.bool;

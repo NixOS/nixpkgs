@@ -5,7 +5,7 @@ let
 in
 {
   options.programs.nautilus-open-any-terminal = {
-    enable = lib.mkEnableOption (lib.mdDoc "nautilus-open-any-terminal");
+    enable = lib.mkEnableOption "nautilus-open-any-terminal";
 
     terminal = lib.mkOption {
       type = with lib.types; nullOr str;

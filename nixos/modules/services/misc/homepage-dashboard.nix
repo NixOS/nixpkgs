@@ -12,7 +12,7 @@ in
 {
   options = {
     services.homepage-dashboard = {
-      enable = lib.mkEnableOption (lib.mdDoc "Homepage Dashboard");
+      enable = lib.mkEnableOption "Homepage Dashboard";
 
       package = lib.mkPackageOption pkgs "homepage-dashboard" { };
 

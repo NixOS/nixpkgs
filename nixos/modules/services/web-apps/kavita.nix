@@ -15,7 +15,7 @@ in
   ];
 
   options.services.kavita = {
-    enable = lib.mkEnableOption (lib.mdDoc "Kavita reading server");
+    enable = lib.mkEnableOption "Kavita reading server";
 
     user = lib.mkOption {
       type = lib.types.str;

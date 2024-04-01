@@ -9,7 +9,7 @@ in
 
   options = {
     services.xandikos = {
-      enable = mkEnableOption (lib.mdDoc "Xandikos CalDAV and CardDAV server");
+      enable = mkEnableOption "Xandikos CalDAV and CardDAV server";
 
       package = mkPackageOption pkgs "xandikos" { };
 

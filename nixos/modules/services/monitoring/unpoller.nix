@@ -15,7 +15,7 @@ in {
   ];
 
   options.services.unpoller = {
-    enable = mkEnableOption (lib.mdDoc "unpoller");
+    enable = mkEnableOption "unpoller";
 
     poller = {
       debug = mkOption {

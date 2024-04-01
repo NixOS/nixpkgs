@@ -19,7 +19,7 @@ in
         description = lib.mdDoc "Enable the MATE desktop environment";
       };
 
-      debug = mkEnableOption (lib.mdDoc "mate-session debug messages");
+      debug = mkEnableOption "mate-session debug messages";
 
       extraPanelApplets = mkOption {
         default = [ ];
@@ -35,7 +35,7 @@ in
         description = lib.mdDoc "Extra extensions to add to caja.";
       };
 
-      enableWaylandSession = mkEnableOption (lib.mdDoc "MATE Wayland session");
+      enableWaylandSession = mkEnableOption "MATE Wayland session";
     };
 
     environment.mate.excludePackages = mkOption {

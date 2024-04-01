@@ -28,7 +28,7 @@ let
       cfg.settings));
 in {
   options.services.clight = {
-    enable = mkEnableOption (lib.mdDoc "clight");
+    enable = mkEnableOption "clight";
 
     temperature = {
       day = mkOption {

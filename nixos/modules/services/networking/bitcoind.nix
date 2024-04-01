@@ -34,7 +34,7 @@ let
   bitcoindOpts = { config, lib, name, ...}: {
     options = {
 
-      enable = mkEnableOption (lib.mdDoc "Bitcoin daemon");
+      enable = mkEnableOption "Bitcoin daemon";
 
       package = mkPackageOption pkgs "bitcoind" { };
 

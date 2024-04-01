@@ -12,7 +12,7 @@ in
   meta.doc = ./clevis.md;
 
   options = {
-    boot.initrd.clevis.enable = mkEnableOption (lib.mdDoc "Clevis in initrd");
+    boot.initrd.clevis.enable = mkEnableOption "Clevis in initrd";
 
 
     boot.initrd.clevis.package = mkOption {

@@ -41,7 +41,7 @@ in {
 
   options = {
     services.xserver.windowManager.xmonad = {
-      enable = mkEnableOption (lib.mdDoc "xmonad");
+      enable = mkEnableOption "xmonad";
 
       haskellPackages = mkOption {
         default = pkgs.haskellPackages;

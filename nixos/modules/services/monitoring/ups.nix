@@ -384,10 +384,10 @@ in
     # powerManagement.powerDownCommands
 
     power.ups = {
-      enable = mkEnableOption (lib.mdDoc ''
+      enable = mkEnableOption ''
         Enables support for Power Devices, such as Uninterruptible Power
         Supplies, Power Distribution Units and Solar Controllers.
-      '');
+      '';
 
       mode = mkOption {
         default = "standalone";

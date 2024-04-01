@@ -7,15 +7,15 @@ let
   settingsFmt = pkgs.formats.toml {};
 in {
   options.services.mackerel-agent = {
-    enable = mkEnableOption (lib.mdDoc "mackerel.io agent");
+    enable = mkEnableOption "mackerel.io agent";
 
     # the upstream package runs as root, but doesn't seem to be strictly
     # necessary for basic functionality
-    runAsRoot = mkEnableOption (lib.mdDoc "running as root");
+    runAsRoot = mkEnableOption "running as root";
 
-    autoRetirement = mkEnableOption (lib.mdDoc ''
+    autoRetirement = mkEnableOption ''
       retiring the host upon OS shutdown
-    '');
+    '';
 
     apiKeyFile = mkOption {
       type = types.path;
@@ -59,7 +59,7 @@ in {
         };
 
         options.diagnostic =
-          mkEnableOption (lib.mdDoc "collecting memory usage for the agent itself");
+          mkEnableOption "collecting memory usage for the agent itself";
       };
     };
   };

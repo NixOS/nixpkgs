@@ -11,7 +11,7 @@ in
   ];
 
   options.services.snapraid = with types; {
-    enable = mkEnableOption (lib.mdDoc "SnapRAID");
+    enable = mkEnableOption "SnapRAID";
     dataDisks = mkOption {
       default = { };
       example = {

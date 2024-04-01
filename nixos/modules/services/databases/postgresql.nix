@@ -49,9 +49,9 @@ in
 
     services.postgresql = {
 
-      enable = mkEnableOption (lib.mdDoc "PostgreSQL Server");
+      enable = mkEnableOption "PostgreSQL Server";
 
-      enableJIT = mkEnableOption (lib.mdDoc "JIT support");
+      enableJIT = mkEnableOption "JIT support";
 
       package = mkPackageOption pkgs "postgresql" {
         example = "postgresql_15";

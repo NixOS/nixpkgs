@@ -11,13 +11,13 @@ in {
 
   options = {
     services.isso = {
-      enable = mkEnableOption (lib.mdDoc ''
+      enable = mkEnableOption ''
         isso, a commenting server similar to Disqus.
 
         Note: The application's author suppose to run isso behind a reverse proxy.
         The embedded solution offered by NixOS is also only suitable for small installations
         below 20 requests per second
-      '');
+      '';
 
       settings = mkOption {
         description = lib.mdDoc ''

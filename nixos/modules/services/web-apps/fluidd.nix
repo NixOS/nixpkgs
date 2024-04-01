@@ -6,7 +6,7 @@ let
 in
 {
   options.services.fluidd = {
-    enable = mkEnableOption (lib.mdDoc "Fluidd, a Klipper web interface for managing your 3d printer");
+    enable = mkEnableOption "Fluidd, a Klipper web interface for managing your 3d printer";
 
     package = mkPackageOption pkgs "fluidd" { };
 

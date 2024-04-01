@@ -62,7 +62,7 @@ in
   ];
 
   options.services.keyd = {
-    enable = mkEnableOption (lib.mdDoc "keyd, a key remapping daemon");
+    enable = mkEnableOption "keyd, a key remapping daemon";
 
     keyboards = mkOption {
       type = types.attrsOf (types.submodule keyboardOptions);

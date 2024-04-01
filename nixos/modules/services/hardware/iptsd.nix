@@ -6,7 +6,7 @@ let
   configFile = format.generate "iptsd.conf" cfg.config;
 in {
   options.services.iptsd = {
-    enable = lib.mkEnableOption (lib.mdDoc "the userspace daemon for Intel Precise Touch & Stylus");
+    enable = lib.mkEnableOption "the userspace daemon for Intel Precise Touch & Stylus";
 
     config = lib.mkOption {
       default = { };

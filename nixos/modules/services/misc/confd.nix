@@ -17,7 +17,7 @@ let
 
 in {
   options.services.confd = {
-    enable = mkEnableOption (lib.mdDoc "confd service");
+    enable = mkEnableOption "confd service";
 
     backend = mkOption {
       description = lib.mdDoc "Confd config storage backend to use.";

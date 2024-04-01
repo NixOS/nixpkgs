@@ -10,7 +10,7 @@ let
   configFile = format.generate "wiki-js.yml" cfg.settings;
 in {
   options.services.wiki-js = {
-    enable = mkEnableOption (lib.mdDoc "wiki-js");
+    enable = mkEnableOption "wiki-js";
 
     environmentFile = mkOption {
       type = types.nullOr types.path;
@@ -85,7 +85,7 @@ in {
             '';
           };
 
-          offline = mkEnableOption (lib.mdDoc "offline mode") // {
+          offline = mkEnableOption "offline mode" // {
             description = lib.mdDoc ''
               Disable latest file updates and enable
               [sideloading](https://docs.requarks.io/install/sideload).

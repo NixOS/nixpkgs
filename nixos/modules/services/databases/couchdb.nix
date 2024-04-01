@@ -34,7 +34,7 @@ in {
 
     services.couchdb = {
 
-      enable = mkEnableOption (lib.mdDoc "CouchDB Server");
+      enable = mkEnableOption "CouchDB Server";
 
       package = mkPackageOption pkgs "couchdb3" { };
 

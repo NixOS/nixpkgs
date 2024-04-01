@@ -31,7 +31,7 @@ in
 {
   options.services.hadoop.yarn = {
     resourcemanager = {
-      enable = mkEnableOption (lib.mdDoc "Hadoop YARN ResourceManager");
+      enable = mkEnableOption "Hadoop YARN ResourceManager";
       inherit restartIfChanged extraFlags extraEnv;
 
       openFirewall = mkOption {
@@ -43,7 +43,7 @@ in
       };
     };
     nodemanager = {
-      enable = mkEnableOption (lib.mdDoc "Hadoop YARN NodeManager");
+      enable = mkEnableOption "Hadoop YARN NodeManager";
       inherit restartIfChanged extraFlags extraEnv;
 
       resource = {

@@ -8,7 +8,7 @@ let
 in
 {
   options.services.portunus = {
-    enable = mkEnableOption (lib.mdDoc "Portunus, a self-contained user/group management and authentication service for LDAP");
+    enable = mkEnableOption "Portunus, a self-contained user/group management and authentication service for LDAP";
 
     domain = mkOption {
       type = types.str;
@@ -65,13 +65,13 @@ in
     };
 
     dex = {
-      enable = mkEnableOption (lib.mdDoc ''
+      enable = mkEnableOption ''
         Dex ldap connector.
 
         To activate dex, first a search user must be created in the Portunus web ui
         and then the password must to be set as the `DEX_SEARCH_USER_PASSWORD` environment variable
         in the [](#opt-services.dex.environmentFile) setting.
-      '');
+      '';
 
       oidcClients = mkOption {
         type = types.listOf (types.submodule {

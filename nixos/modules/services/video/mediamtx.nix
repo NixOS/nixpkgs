@@ -9,7 +9,7 @@ in
 
   options = {
     services.mediamtx = {
-      enable = lib.mkEnableOption (lib.mdDoc "MediaMTX");
+      enable = lib.mkEnableOption "MediaMTX";
 
       package = lib.mkPackageOption pkgs "mediamtx" { };
 
@@ -39,9 +39,9 @@ in
         };
       };
 
-      allowVideoAccess = lib.mkEnableOption (lib.mdDoc ''
+      allowVideoAccess = lib.mkEnableOption ''
         access to video devices like cameras on the system
-      '');
+      '';
     };
   };
 

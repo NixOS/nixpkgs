@@ -8,7 +8,7 @@ let
 in
 {
   options.services.evdevremapkeys = {
-    enable = mkEnableOption (lib.mdDoc ''evdevremapkeys'');
+    enable = mkEnableOption ''evdevremapkeys'';
 
     settings = mkOption {
       type = format.type;

@@ -64,7 +64,7 @@ in
 {
   # interface
   options.services.moodle = {
-    enable = mkEnableOption (lib.mdDoc "Moodle web application");
+    enable = mkEnableOption "Moodle web application";
 
     package = mkPackageOption pkgs "moodle" { };
 

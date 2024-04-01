@@ -55,7 +55,7 @@ let
     else "/run/traefik/config.toml";
 in {
   options.services.traefik = {
-    enable = mkEnableOption (lib.mdDoc "Traefik web server");
+    enable = mkEnableOption "Traefik web server";
 
     staticConfigFile = mkOption {
       default = null;

@@ -17,7 +17,7 @@ let
 
 in {
   options.security.tpm2 = {
-    enable = lib.mkEnableOption (lib.mdDoc "Trusted Platform Module 2 support");
+    enable = lib.mkEnableOption "Trusted Platform Module 2 support";
 
     tssUser = lib.mkOption {
       description = lib.mdDoc ''
@@ -48,9 +48,9 @@ in {
     };
 
     abrmd = {
-      enable = lib.mkEnableOption (lib.mdDoc ''
+      enable = lib.mkEnableOption ''
         Trusted Platform 2 userspace resource manager daemon
-      '');
+      '';
 
       package = lib.mkOption {
         description = lib.mdDoc "tpm2-abrmd package to use";
@@ -61,10 +61,10 @@ in {
     };
 
     pkcs11 = {
-      enable = lib.mkEnableOption (lib.mdDoc ''
+      enable = lib.mkEnableOption ''
         TPM2 PKCS#11 tool and shared library in system path
         (`/run/current-system/sw/lib/libtpm2_pkcs11.so`)
-      '');
+      '';
 
       package = lib.mkOption {
         description = lib.mdDoc "tpm2-pkcs11 package to use";

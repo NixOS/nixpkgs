@@ -8,13 +8,13 @@ in {
   ];
 
   options.systemd.oomd = {
-    enable = lib.mkEnableOption (lib.mdDoc "the `systemd-oomd` OOM killer") // { default = true; };
+    enable = lib.mkEnableOption "the `systemd-oomd` OOM killer" // { default = true; };
 
     # Fedora enables the first and third option by default. See the 10-oomd-* files here:
     # https://src.fedoraproject.org/rpms/systemd/tree/806c95e1c70af18f81d499b24cd7acfa4c36ffd6
-    enableRootSlice = lib.mkEnableOption (lib.mdDoc "oomd on the root slice (`-.slice`)");
-    enableSystemSlice = lib.mkEnableOption (lib.mdDoc "oomd on the system slice (`system.slice`)");
-    enableUserSlices = lib.mkEnableOption (lib.mdDoc "oomd on all user slices (`user@.slice`) and all user owned slices");
+    enableRootSlice = lib.mkEnableOption "oomd on the root slice (`-.slice`)";
+    enableSystemSlice = lib.mkEnableOption "oomd on the system slice (`system.slice`)";
+    enableUserSlices = lib.mkEnableOption "oomd on all user slices (`user@.slice`) and all user owned slices";
 
     extraConfig = lib.mkOption {
       type = with lib.types; attrsOf (oneOf [ str int bool ]);

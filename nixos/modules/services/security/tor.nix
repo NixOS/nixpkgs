@@ -224,27 +224,27 @@ in
 
   options = {
     services.tor = {
-      enable = mkEnableOption (lib.mdDoc ''Tor daemon.
+      enable = mkEnableOption ''Tor daemon.
         By default, the daemon is run without
-        relay, exit, bridge or client connectivity'');
+        relay, exit, bridge or client connectivity'';
 
-      openFirewall = mkEnableOption (lib.mdDoc "opening of the relay port(s) in the firewall");
+      openFirewall = mkEnableOption "opening of the relay port(s) in the firewall";
 
       package = mkPackageOption pkgs "tor" { };
 
-      enableGeoIP = mkEnableOption (lib.mdDoc ''use of GeoIP databases.
+      enableGeoIP = mkEnableOption ''use of GeoIP databases.
         Disabling this will disable by-country statistics for bridges and relays
-        and some client and third-party software functionality'') // { default = true; };
+        and some client and third-party software functionality'' // { default = true; };
 
-      controlSocket.enable = mkEnableOption (lib.mdDoc ''control socket,
-        created in `${runDir}/control`'');
+      controlSocket.enable = mkEnableOption ''control socket,
+        created in `${runDir}/control`'';
 
       client = {
-        enable = mkEnableOption (lib.mdDoc ''the routing of application connections.
-          You might want to disable this if you plan running a dedicated Tor relay'');
+        enable = mkEnableOption ''the routing of application connections.
+          You might want to disable this if you plan running a dedicated Tor relay'';
 
-        transparentProxy.enable = mkEnableOption (lib.mdDoc "transparent proxy");
-        dns.enable = mkEnableOption (lib.mdDoc "DNS resolver");
+        transparentProxy.enable = mkEnableOption "transparent proxy";
+        dns.enable = mkEnableOption "DNS resolver";
 
         socksListenAddress = mkOption {
           type = optionSOCKSPort false;
@@ -283,7 +283,7 @@ in
       };
 
       relay = {
-        enable = mkEnableOption (lib.mdDoc "tor relaying") // {
+        enable = mkEnableOption "tor relaying" // {
           description = lib.mdDoc ''
             Whether to enable relaying of Tor traffic for others.
 

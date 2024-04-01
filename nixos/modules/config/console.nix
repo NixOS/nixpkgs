@@ -40,7 +40,7 @@ in
   ###### interface
 
   options.console  = {
-    enable = mkEnableOption (lib.mdDoc "virtual console") // {
+    enable = mkEnableOption "virtual console" // {
       default = true;
     };
 

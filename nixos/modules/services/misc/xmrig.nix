@@ -13,7 +13,7 @@ with lib;
 {
   options = {
     services.xmrig = {
-      enable = mkEnableOption (lib.mdDoc "XMRig Mining Software");
+      enable = mkEnableOption "XMRig Mining Software";
 
       package = mkPackageOption pkgs "xmrig" {
         example = "xmrig-mo";

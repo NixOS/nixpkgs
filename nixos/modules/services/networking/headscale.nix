@@ -15,7 +15,7 @@ with lib; let
 in {
   options = {
     services.headscale = {
-      enable = mkEnableOption (lib.mdDoc "headscale, Open Source coordination server for Tailscale");
+      enable = mkEnableOption "headscale, Open Source coordination server for Tailscale";
 
       package = mkPackageOption pkgs "headscale" { };
 

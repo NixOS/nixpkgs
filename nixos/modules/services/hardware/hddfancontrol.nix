@@ -8,7 +8,7 @@ in
 {
   options = {
 
-    services.hddfancontrol.enable = lib.mkEnableOption (lib.mdDoc "hddfancontrol daemon");
+    services.hddfancontrol.enable = lib.mkEnableOption "hddfancontrol daemon";
 
     services.hddfancontrol.disks = lib.mkOption {
       type = with types; listOf path;

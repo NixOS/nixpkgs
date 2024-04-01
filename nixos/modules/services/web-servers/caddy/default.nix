@@ -64,7 +64,7 @@ in
 
   # interface
   options.services.caddy = {
-    enable = mkEnableOption (lib.mdDoc "Caddy web server");
+    enable = mkEnableOption "Caddy web server";
 
     user = mkOption {
       default = "caddy";

@@ -8,7 +8,7 @@ in {
 
   options = {
     services.surrealdb = {
-      enable = mkEnableOption (lib.mdDoc "SurrealDB, a scalable, distributed, collaborative, document-graph database, for the realtime web");
+      enable = mkEnableOption "SurrealDB, a scalable, distributed, collaborative, document-graph database, for the realtime web";
 
       package = mkPackageOption pkgs "surrealdb" { };
 

@@ -11,7 +11,7 @@ in
 
   options = {
     services.zrepl = {
-      enable = mkEnableOption (lib.mdDoc "zrepl");
+      enable = mkEnableOption "zrepl";
 
       package = mkPackageOption pkgs "zrepl" { };
 

@@ -16,10 +16,10 @@ in {
 
     services.sks = {
 
-      enable = mkEnableOption (lib.mdDoc ''
+      enable = mkEnableOption ''
         SKS (synchronizing key server for OpenPGP) and start the database
         server. You need to create "''${dataDir}/dump/*.gpg" for the initial
-        import'');
+        import'';
 
       package = mkPackageOption pkgs "sks" { };
 

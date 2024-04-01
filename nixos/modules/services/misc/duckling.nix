@@ -7,7 +7,7 @@ let
 in {
   options = {
     services.duckling = {
-      enable = mkEnableOption (lib.mdDoc "duckling");
+      enable = mkEnableOption "duckling";
 
       port = mkOption {
         type = types.port;

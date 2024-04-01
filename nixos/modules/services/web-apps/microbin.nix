@@ -5,7 +5,7 @@ let
 in
 {
   options.services.microbin = {
-    enable = lib.mkEnableOption (lib.mdDoc "MicroBin is a super tiny, feature rich, configurable paste bin web application");
+    enable = lib.mkEnableOption "MicroBin is a super tiny, feature rich, configurable paste bin web application";
 
     package = lib.mkPackageOption pkgs "microbin" { };
 

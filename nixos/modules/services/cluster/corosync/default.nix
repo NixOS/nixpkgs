@@ -7,7 +7,7 @@ in
 {
   # interface
   options.services.corosync = {
-    enable = mkEnableOption (lib.mdDoc "corosync");
+    enable = mkEnableOption "corosync";
 
     package = mkPackageOption pkgs "corosync" { };
 

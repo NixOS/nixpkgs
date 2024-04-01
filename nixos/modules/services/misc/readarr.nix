@@ -8,7 +8,7 @@ in
 {
   options = {
     services.readarr = {
-      enable = mkEnableOption (lib.mdDoc "Readarr");
+      enable = mkEnableOption "Readarr";
 
       dataDir = mkOption {
         type = types.str;

@@ -27,7 +27,7 @@ in {
   options = {
 
     services.riemann = {
-      enable = mkEnableOption (lib.mdDoc "Riemann network monitoring daemon");
+      enable = mkEnableOption "Riemann network monitoring daemon";
 
       config = mkOption {
         type = types.lines;

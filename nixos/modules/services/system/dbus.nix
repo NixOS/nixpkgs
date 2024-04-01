@@ -22,7 +22,7 @@ in
   options = {
 
     boot.initrd.systemd.dbus = {
-      enable = mkEnableOption (lib.mdDoc "dbus in stage 1");
+      enable = mkEnableOption "dbus in stage 1";
     };
 
     services.dbus = {

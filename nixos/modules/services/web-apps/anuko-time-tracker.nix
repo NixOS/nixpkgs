@@ -56,7 +56,7 @@ let
 in
 {
   options.services.anuko-time-tracker = {
-    enable = lib.mkEnableOption (lib.mdDoc "Anuko Time Tracker");
+    enable = lib.mkEnableOption "Anuko Time Tracker";
 
     package = lib.mkPackageOption pkgs "anuko-time-tracker" {};
 

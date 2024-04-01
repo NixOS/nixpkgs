@@ -8,7 +8,7 @@ let
 in {
   options = {
     services.subsonic = {
-      enable = mkEnableOption (lib.mdDoc "Subsonic daemon");
+      enable = mkEnableOption "Subsonic daemon";
 
       home = mkOption {
         type = types.path;

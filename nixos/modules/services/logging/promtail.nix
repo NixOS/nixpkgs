@@ -12,7 +12,7 @@ let
   positionsFile = cfg.configuration.positions.filename;
 in {
   options.services.promtail = with types; {
-    enable = mkEnableOption (lib.mdDoc "the Promtail ingresser");
+    enable = mkEnableOption "the Promtail ingresser";
 
 
     configuration = mkOption {

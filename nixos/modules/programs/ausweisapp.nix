@@ -7,7 +7,7 @@ let
 in
 {
   options.programs.ausweisapp = {
-    enable = mkEnableOption (lib.mdDoc "AusweisApp");
+    enable = mkEnableOption "AusweisApp";
 
     openFirewall = mkOption {
       description = lib.mdDoc ''

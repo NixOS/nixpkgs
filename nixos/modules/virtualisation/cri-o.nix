@@ -19,7 +19,7 @@ in
   };
 
   options.virtualisation.cri-o = {
-    enable = mkEnableOption (lib.mdDoc "Container Runtime Interface for OCI (CRI-O)");
+    enable = mkEnableOption "Container Runtime Interface for OCI (CRI-O)";
 
     storageDriver = mkOption {
       type = types.enum [ "aufs" "btrfs" "devmapper" "overlay" "vfs" "zfs" ];

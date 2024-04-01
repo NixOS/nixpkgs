@@ -15,7 +15,7 @@ in {
 
   options = {
     services.bee = {
-      enable = mkEnableOption (lib.mdDoc "Ethereum Swarm Bee");
+      enable = mkEnableOption "Ethereum Swarm Bee";
 
       package = mkPackageOption pkgs "bee" {
         example = "bee-unstable";

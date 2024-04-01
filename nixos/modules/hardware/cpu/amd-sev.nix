@@ -5,7 +5,7 @@ let
   cfgSevGuest = config.hardware.cpu.amd.sevGuest;
 
   optionsFor = device: group: {
-    enable = mkEnableOption (lib.mdDoc "access to the AMD ${device} device");
+    enable = mkEnableOption "access to the AMD ${device} device";
     user = mkOption {
       description = lib.mdDoc "Owner to assign to the ${device} device.";
       type = types.str;

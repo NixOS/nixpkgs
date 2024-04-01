@@ -9,7 +9,7 @@ in
 {
   options = {
     services.guacamole-server = {
-      enable = lib.mkEnableOption (lib.mdDoc "Apache Guacamole Server (guacd)");
+      enable = lib.mkEnableOption "Apache Guacamole Server (guacd)";
       package = lib.mkPackageOption pkgs "guacamole-server" { };
 
       extraEnvironment = lib.mkOption {

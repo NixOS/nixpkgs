@@ -27,7 +27,7 @@ in {
   ];
 
   options.services.amazon-ssm-agent = {
-    enable = mkEnableOption (lib.mdDoc "Amazon SSM agent");
+    enable = mkEnableOption "Amazon SSM agent";
 
     package = mkOption {
       type = types.path;

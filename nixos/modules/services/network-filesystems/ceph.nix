@@ -71,7 +71,7 @@ in
   options.services.ceph = {
     # Ceph has a monolithic configuration file but different sections for
     # each daemon, a separate client section and a global section
-    enable = mkEnableOption (lib.mdDoc "Ceph global configuration");
+    enable = mkEnableOption "Ceph global configuration";
 
     global = {
       fsid = mkOption {
@@ -200,7 +200,7 @@ in
     };
 
     mgr = {
-      enable = mkEnableOption (lib.mdDoc "Ceph MGR daemon");
+      enable = mkEnableOption "Ceph MGR daemon";
       daemons = mkOption {
         type = with types; listOf str;
         default = [];
@@ -221,7 +221,7 @@ in
     };
 
     mon = {
-      enable = mkEnableOption (lib.mdDoc "Ceph MON daemon");
+      enable = mkEnableOption "Ceph MON daemon";
       daemons = mkOption {
         type = with types; listOf str;
         default = [];
@@ -242,7 +242,7 @@ in
     };
 
     osd = {
-      enable = mkEnableOption (lib.mdDoc "Ceph OSD daemon");
+      enable = mkEnableOption "Ceph OSD daemon";
       daemons = mkOption {
         type = with types; listOf str;
         default = [];
@@ -270,7 +270,7 @@ in
     };
 
     mds = {
-      enable = mkEnableOption (lib.mdDoc "Ceph MDS daemon");
+      enable = mkEnableOption "Ceph MDS daemon";
       daemons = mkOption {
         type = with types; listOf str;
         default = [];
@@ -291,7 +291,7 @@ in
     };
 
     rgw = {
-      enable = mkEnableOption (lib.mdDoc "Ceph RadosGW daemon");
+      enable = mkEnableOption "Ceph RadosGW daemon";
       package = mkPackageOption pkgs "ceph" { };
       daemons = mkOption {
         type = with types; listOf str;
@@ -307,7 +307,7 @@ in
     };
 
     client = {
-      enable = mkEnableOption (lib.mdDoc "Ceph client configuration");
+      enable = mkEnableOption "Ceph client configuration";
       extraConfig = mkOption {
         type = with types; attrsOf (attrsOf str);
         default = {};

@@ -8,7 +8,7 @@ with lib; let
   cfg = config.programs.river;
 in {
   options.programs.river = {
-    enable = mkEnableOption (lib.mdDoc "river, a dynamic tiling Wayland compositor");
+    enable = mkEnableOption "river, a dynamic tiling Wayland compositor";
 
     package = mkPackageOption pkgs "river" {
       nullable = true;

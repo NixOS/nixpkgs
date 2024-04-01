@@ -8,7 +8,7 @@ let
 in {
   options = {
     services.cadvisor = {
-      enable = mkEnableOption (lib.mdDoc "Cadvisor service");
+      enable = mkEnableOption "Cadvisor service";
 
       listenAddress = mkOption {
         default = "127.0.0.1";

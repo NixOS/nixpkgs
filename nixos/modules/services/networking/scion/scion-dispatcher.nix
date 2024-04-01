@@ -19,7 +19,7 @@ let
 in
 {
   options.services.scion.scion-dispatcher = {
-    enable = mkEnableOption (lib.mdDoc "the scion-dispatcher service");
+    enable = mkEnableOption "the scion-dispatcher service";
     settings = mkOption {
       default = { };
       type = toml.type;

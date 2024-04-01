@@ -29,7 +29,7 @@ in
 
     services.mongodb = {
 
-      enable = mkEnableOption (lib.mdDoc "the MongoDB server");
+      enable = mkEnableOption "the MongoDB server";
 
       package = mkPackageOption pkgs "mongodb" { };
 

@@ -6,7 +6,7 @@ let
 in
 {
   options.services.torrentstream = {
-    enable = lib.mkEnableOption (lib.mdDoc "TorrentStream daemon");
+    enable = lib.mkEnableOption "TorrentStream daemon";
     package = lib.mkPackageOption pkgs "torrentstream" { };
     port = lib.mkOption {
       type = lib.types.port;

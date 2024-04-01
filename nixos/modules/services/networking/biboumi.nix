@@ -15,7 +15,7 @@ in
 {
   options = {
     services.biboumi = {
-      enable = mkEnableOption (lib.mdDoc "the Biboumi XMPP gateway to IRC");
+      enable = mkEnableOption "the Biboumi XMPP gateway to IRC";
 
       settings = mkOption {
         description = lib.mdDoc ''
@@ -165,7 +165,7 @@ in
         example = "/run/keys/biboumi.cfg";
       };
 
-      openFirewall = mkEnableOption (lib.mdDoc "opening of the identd port in the firewall");
+      openFirewall = mkEnableOption "opening of the identd port in the firewall";
     };
   };
 

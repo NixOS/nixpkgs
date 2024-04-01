@@ -31,7 +31,7 @@ with lib; let
 in {
   options = {
     security.ipa = {
-      enable = mkEnableOption (lib.mdDoc "FreeIPA domain integration");
+      enable = mkEnableOption "FreeIPA domain integration";
 
       certificate = mkOption {
         type = types.package;

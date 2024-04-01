@@ -29,7 +29,7 @@ in {
   options = {
 
     services.wasabibackend = {
-      enable = mkEnableOption (lib.mdDoc "Wasabi backend service");
+      enable = mkEnableOption "Wasabi backend service";
 
       dataDir = mkOption {
         type = types.path;

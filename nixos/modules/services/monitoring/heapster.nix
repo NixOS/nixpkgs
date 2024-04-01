@@ -6,7 +6,7 @@ let
   cfg = config.services.heapster;
 in {
   options.services.heapster = {
-    enable = mkEnableOption (lib.mdDoc "Heapster monitoring");
+    enable = mkEnableOption "Heapster monitoring";
 
     source = mkOption {
       description = lib.mdDoc "Heapster metric source";

@@ -28,7 +28,7 @@ in
   options = {
     services.clamav = {
       daemon = {
-        enable = mkEnableOption (lib.mdDoc "ClamAV clamd daemon");
+        enable = mkEnableOption "ClamAV clamd daemon";
 
         settings = mkOption {
           type = with types; attrsOf (oneOf [ bool int str (listOf str) ]);
@@ -40,7 +40,7 @@ in
         };
       };
       updater = {
-        enable = mkEnableOption (lib.mdDoc "ClamAV freshclam updater");
+        enable = mkEnableOption "ClamAV freshclam updater";
 
         frequency = mkOption {
           type = types.int;
@@ -69,7 +69,7 @@ in
         };
       };
       fangfrisch = {
-        enable = mkEnableOption (lib.mdDoc "ClamAV fangfrisch updater");
+        enable = mkEnableOption "ClamAV fangfrisch updater";
 
         interval = mkOption {
           type = types.str;
@@ -100,7 +100,7 @@ in
       };
 
       scanner = {
-        enable = mkEnableOption (lib.mdDoc "ClamAV scanner");
+        enable = mkEnableOption "ClamAV scanner";
 
         interval = mkOption {
           type = types.str;

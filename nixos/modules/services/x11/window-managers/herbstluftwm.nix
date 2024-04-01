@@ -9,7 +9,7 @@ in
 {
   options = {
     services.xserver.windowManager.herbstluftwm = {
-      enable = mkEnableOption (lib.mdDoc "herbstluftwm");
+      enable = mkEnableOption "herbstluftwm";
 
       package = mkPackageOption pkgs "herbstluftwm" { };
 

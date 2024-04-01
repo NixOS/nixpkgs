@@ -17,7 +17,7 @@ in
 
     services.disnix = {
 
-      enable = mkEnableOption (lib.mdDoc "Disnix");
+      enable = mkEnableOption "Disnix";
 
       enableMultiUser = mkOption {
         type = types.bool;
@@ -25,11 +25,11 @@ in
         description = lib.mdDoc "Whether to support multi-user mode by enabling the Disnix D-Bus service";
       };
 
-      useWebServiceInterface = mkEnableOption (lib.mdDoc "the DisnixWebService interface running on Apache Tomcat");
+      useWebServiceInterface = mkEnableOption "the DisnixWebService interface running on Apache Tomcat";
 
       package = mkPackageOption pkgs "disnix" {};
 
-      enableProfilePath = mkEnableOption (lib.mdDoc "exposing the Disnix profiles in the system's PATH");
+      enableProfilePath = mkEnableOption "exposing the Disnix profiles in the system's PATH";
 
       profiles = mkOption {
         type = types.listOf types.str;

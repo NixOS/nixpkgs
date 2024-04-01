@@ -223,7 +223,7 @@ in {
   ];
 
   options.services.nextcloud = {
-    enable = mkEnableOption (lib.mdDoc "nextcloud");
+    enable = mkEnableOption "nextcloud";
 
     hostName = mkOption {
       type = types.str;
@@ -467,7 +467,7 @@ in {
       };
       objectstore = {
         s3 = {
-          enable = mkEnableOption (lib.mdDoc ''
+          enable = mkEnableOption ''
             S3 object storage as primary storage.
 
             This mounts a bucket on an Amazon S3 object storage or compatible
@@ -475,7 +475,7 @@ in {
 
             Further details about this feature can be found in the
             [upstream documentation](https://docs.nextcloud.com/server/22/admin_manual/configuration_files/primary_storage.html).
-          '');
+          '';
           bucket = mkOption {
             type = types.str;
             example = "nextcloud";
@@ -571,13 +571,13 @@ in {
       };
     };
 
-    enableImagemagick = mkEnableOption (lib.mdDoc ''
+    enableImagemagick = mkEnableOption ''
         the ImageMagick module for PHP.
         This is used by the theming app and for generating previews of certain images (e.g. SVG and HEIF).
         You may want to disable it for increased security. In that case, previews will still be available
         for some images (e.g. JPEG and PNG).
         See <https://github.com/nextcloud/server/issues/13099>.
-    '') // {
+    '' // {
       default = true;
     };
 
@@ -729,7 +729,7 @@ in {
               the `+49` prefix can be omitted for phone numbers.
             '';
           };
-          "profile.enabled" = mkEnableOption (lib.mdDoc "global profiles") // {
+          "profile.enabled" = mkEnableOption "global profiles" // {
             description = lib.mdDoc ''
               Makes user-profiles globally available under `nextcloud.tld/u/user.name`.
               Even though it's enabled by default in Nextcloud, it must be explicitly enabled

@@ -12,7 +12,7 @@ in
 {
   ###### interface
   options.services.kubernetes.flannel = {
-    enable = mkEnableOption (lib.mdDoc "flannel networking");
+    enable = mkEnableOption "flannel networking";
 
     openFirewallPorts = mkOption {
       description = lib.mdDoc ''

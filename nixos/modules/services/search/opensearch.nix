@@ -23,7 +23,7 @@ in
 {
 
   options.services.opensearch = {
-    enable = mkEnableOption (lib.mdDoc "OpenSearch");
+    enable = mkEnableOption "OpenSearch";
 
     package = lib.mkPackageOption pkgs "OpenSearch" {
       default = [ "opensearch" ];

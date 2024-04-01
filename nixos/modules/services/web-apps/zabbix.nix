@@ -40,7 +40,7 @@ in
 
   options.services = {
     zabbixWeb = {
-      enable = mkEnableOption (lib.mdDoc "the Zabbix web interface");
+      enable = mkEnableOption "the Zabbix web interface";
 
       package = mkPackageOption pkgs [ "zabbix" "web" ] { };
 

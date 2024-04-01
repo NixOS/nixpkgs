@@ -143,7 +143,7 @@ in
 
 {
   options.services.public-inbox = {
-    enable = mkEnableOption (lib.mdDoc "the public-inbox mail archiver");
+    enable = mkEnableOption "the public-inbox mail archiver";
     package = mkPackageOption pkgs "public-inbox" { };
     path = mkOption {
       type = with types; listOf package;
@@ -212,10 +212,10 @@ in
       }));
     };
     imap = {
-      enable = mkEnableOption (lib.mdDoc "the public-inbox IMAP server");
+      enable = mkEnableOption "the public-inbox IMAP server";
     } // publicInboxDaemonOptions "imap" 993;
     http = {
-      enable = mkEnableOption (lib.mdDoc "the public-inbox HTTP server");
+      enable = mkEnableOption "the public-inbox HTTP server";
       mounts = mkOption {
         type = with types; listOf str;
         default = [ "/" ];
@@ -241,16 +241,16 @@ in
       };
     };
     mda = {
-      enable = mkEnableOption (lib.mdDoc "the public-inbox Mail Delivery Agent");
+      enable = mkEnableOption "the public-inbox Mail Delivery Agent";
       args = mkOption {
         type = with types; listOf str;
         default = [];
         description = lib.mdDoc "Command-line arguments to pass to {manpage}`public-inbox-mda(1)`.";
       };
     };
-    postfix.enable = mkEnableOption (lib.mdDoc "the integration into Postfix");
+    postfix.enable = mkEnableOption "the integration into Postfix";
     nntp = {
-      enable = mkEnableOption (lib.mdDoc "the public-inbox NNTP server");
+      enable = mkEnableOption "the public-inbox NNTP server";
     } // publicInboxDaemonOptions "nntp" 563;
     spamAssassinRules = mkOption {
       type = with types; nullOr path;
@@ -348,7 +348,7 @@ in
         };
       };
     };
-    openFirewall = mkEnableOption (lib.mdDoc "opening the firewall when using a port option");
+    openFirewall = mkEnableOption "opening the firewall when using a port option";
   };
   config = mkIf cfg.enable {
     assertions = [

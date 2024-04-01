@@ -8,7 +8,7 @@ let
   confFile = format.generate "gobgpd.conf" cfg.settings;
 in {
   options.services.gobgpd = {
-    enable = mkEnableOption (lib.mdDoc "GoBGP Routing Daemon");
+    enable = mkEnableOption "GoBGP Routing Daemon";
 
     settings = mkOption {
       type = format.type;

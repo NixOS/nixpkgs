@@ -14,10 +14,10 @@ in
   ];
 
   options.services.keter = {
-    enable = lib.mkEnableOption (lib.mdDoc ''keter, a web app deployment manager.
+    enable = lib.mkEnableOption ''keter, a web app deployment manager.
 Note that this module only support loading of webapps:
 Keep an old app running and swap the ports when the new one is booted
-'');
+'';
 
     root = lib.mkOption {
       type = lib.types.str;

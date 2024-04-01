@@ -85,7 +85,7 @@ let
 in
 {
   options.services.oauth2_proxy = {
-    enable = mkEnableOption (lib.mdDoc "oauth2_proxy");
+    enable = mkEnableOption "oauth2_proxy";
 
     package = mkPackageOption pkgs "oauth2-proxy" { };
 

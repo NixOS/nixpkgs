@@ -5,7 +5,7 @@ in {
 
   options.services.owncast = {
 
-    enable = mkEnableOption (lib.mdDoc "owncast");
+    enable = mkEnableOption "owncast";
 
     dataDir = mkOption {
       type = types.str;

@@ -30,7 +30,7 @@ in
   {
     options = {
       services.selfoss = {
-        enable = mkEnableOption (lib.mdDoc "selfoss");
+        enable = mkEnableOption "selfoss";
 
         user = mkOption {
           type = types.str;

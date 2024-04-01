@@ -9,7 +9,7 @@ let
 in
 {
   options.programs.yazi = {
-    enable = lib.mkEnableOption (lib.mdDoc "yazi terminal file manager");
+    enable = lib.mkEnableOption "yazi terminal file manager";
 
     package = lib.mkPackageOption pkgs "yazi" { };
 

@@ -25,7 +25,7 @@ let
 
 in {
   options.services.radicale = {
-    enable = mkEnableOption (lib.mdDoc "Radicale CalDAV and CardDAV server");
+    enable = mkEnableOption "Radicale CalDAV and CardDAV server";
 
     package = mkOption {
       description = lib.mdDoc "Radicale package to use.";

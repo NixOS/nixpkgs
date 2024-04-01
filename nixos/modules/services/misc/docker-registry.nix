@@ -45,7 +45,7 @@ let
 
 in {
   options.services.dockerRegistry = {
-    enable = mkEnableOption (lib.mdDoc "Docker Registry");
+    enable = mkEnableOption "Docker Registry";
 
     package = mkPackageOption pkgs "docker-distribution" {
       example = "gitlab-container-registry";
@@ -84,7 +84,7 @@ in {
       description = lib.mdDoc "Enable delete for manifests and blobs.";
     };
 
-    enableRedisCache = mkEnableOption (lib.mdDoc "redis as blob cache");
+    enableRedisCache = mkEnableOption "redis as blob cache";
 
     redisUrl = mkOption {
       type = types.str;
@@ -106,7 +106,7 @@ in {
       type = types.attrs;
     };
 
-    enableGarbageCollect = mkEnableOption (lib.mdDoc "garbage collect");
+    enableGarbageCollect = mkEnableOption "garbage collect";
 
     garbageCollectDates = mkOption {
       default = "daily";

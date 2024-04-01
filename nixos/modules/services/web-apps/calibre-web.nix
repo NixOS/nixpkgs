@@ -8,7 +8,7 @@ in
 {
   options = {
     services.calibre-web = {
-      enable = mkEnableOption (lib.mdDoc "Calibre-Web");
+      enable = mkEnableOption "Calibre-Web";
 
       package = lib.mkPackageOption pkgs "calibre-web" { };
 
@@ -75,7 +75,7 @@ in
           '';
         };
 
-        enableKepubify = mkEnableOption (lib.mdDoc "kebup conversion support");
+        enableKepubify = mkEnableOption "kebup conversion support";
 
         enableBookUploading = mkOption {
           type = types.bool;

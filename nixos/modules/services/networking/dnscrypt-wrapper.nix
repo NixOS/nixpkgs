@@ -124,7 +124,7 @@ in {
   ###### interface
 
   options.services.dnscrypt-wrapper = {
-    enable = mkEnableOption (lib.mdDoc "DNSCrypt wrapper");
+    enable = mkEnableOption "DNSCrypt wrapper";
 
     address = mkOption {
       type = types.str;

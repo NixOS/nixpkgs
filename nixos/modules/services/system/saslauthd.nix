@@ -16,7 +16,7 @@ in
 
     services.saslauthd = {
 
-      enable = mkEnableOption (lib.mdDoc "saslauthd, the Cyrus SASL authentication daemon");
+      enable = mkEnableOption "saslauthd, the Cyrus SASL authentication daemon";
 
       package = mkPackageOption pkgs [ "cyrus_sasl" "bin" ] { };
 

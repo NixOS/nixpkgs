@@ -11,7 +11,7 @@ in {
 
   options = {
     services.erigon = {
-      enable = mkEnableOption (lib.mdDoc "Ethereum implementation on the efficiency frontier");
+      enable = mkEnableOption "Ethereum implementation on the efficiency frontier";
 
       package = mkPackageOption pkgs "erigon" { };
 

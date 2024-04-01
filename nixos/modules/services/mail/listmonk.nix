@@ -57,7 +57,7 @@ let
           freeformType = with types; attrsOf anything;
 
           options = {
-            enabled = mkEnableOption (lib.mdDoc "this SMTP server for listmonk");
+            enabled = mkEnableOption "this SMTP server for listmonk";
             host = mkOption {
               type = types.str;
               description = lib.mdDoc "Hostname for the SMTP server";
@@ -104,7 +104,7 @@ in {
   options = {
     services.listmonk = {
       enable = mkEnableOption
-        (lib.mdDoc "Listmonk, this module assumes a reverse proxy to be set");
+        "Listmonk, this module assumes a reverse proxy to be set";
       database = {
         createLocally = mkOption {
           type = types.bool;

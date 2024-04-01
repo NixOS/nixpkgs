@@ -8,7 +8,7 @@ let
   configYml = pkgs.writeText "nginx-sso.yml" (builtins.toJSON cfg.configuration);
 in {
   options.services.nginx.sso = {
-    enable = mkEnableOption (lib.mdDoc "nginx-sso service");
+    enable = mkEnableOption "nginx-sso service";
 
     package = mkPackageOption pkgs "nginx-sso" { };
 

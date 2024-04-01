@@ -5,7 +5,7 @@ let
   cfg = config.programs.mdevctl;
 in {
   options.programs.mdevctl = {
-    enable = mkEnableOption (lib.mdDoc "Mediated Device Management");
+    enable = mkEnableOption "Mediated Device Management";
   };
 
   config = mkIf cfg.enable {

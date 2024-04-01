@@ -17,7 +17,7 @@ with lib;
   options = {
     services.haproxy = {
 
-      enable = mkEnableOption (lib.mdDoc "HAProxy, the reliable, high performance TCP/HTTP load balancer.");
+      enable = mkEnableOption "HAProxy, the reliable, high performance TCP/HTTP load balancer.";
 
       package = mkPackageOption pkgs "haproxy" { };
 

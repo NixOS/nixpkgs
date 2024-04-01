@@ -89,7 +89,7 @@ in
 
     services.xtreemfs = {
 
-      enable = mkEnableOption (lib.mdDoc "XtreemFS");
+      enable = mkEnableOption "XtreemFS";
 
       homeDir = mkOption {
         type = types.path;
@@ -180,7 +180,7 @@ in
           '';
         };
         replication = {
-          enable = mkEnableOption (lib.mdDoc "XtreemFS DIR replication plugin");
+          enable = mkEnableOption "XtreemFS DIR replication plugin";
           extraConfig = mkOption {
             type = types.lines;
             example = ''
@@ -323,7 +323,7 @@ in
           '';
         };
         replication = {
-          enable = mkEnableOption (lib.mdDoc "XtreemFS MRC replication plugin");
+          enable = mkEnableOption "XtreemFS MRC replication plugin";
           extraConfig = mkOption {
             type = types.lines;
             example = ''

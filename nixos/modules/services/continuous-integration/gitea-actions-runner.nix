@@ -65,7 +65,7 @@ in
       '';
       type = attrsOf (submodule {
         options = {
-          enable = mkEnableOption (lib.mdDoc "Gitea Actions Runner instance");
+          enable = mkEnableOption "Gitea Actions Runner instance";
 
           name = mkOption {
             type = str;

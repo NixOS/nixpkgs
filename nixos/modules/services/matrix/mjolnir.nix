@@ -65,7 +65,7 @@ let
 in
 {
   options.services.mjolnir = {
-    enable = mkEnableOption (lib.mdDoc "Mjolnir, a moderation tool for Matrix");
+    enable = mkEnableOption "Mjolnir, a moderation tool for Matrix";
 
     homeserverUrl = mkOption {
       type = types.str;
@@ -95,10 +95,10 @@ in
       default = { };
       type = types.submodule {
         options = {
-          enable = mkEnableOption (lib.mdDoc ''
+          enable = mkEnableOption ''
             ignoring the accessToken. If true, accessToken is ignored and the username/password below will be
             used instead. The access token of the bot will be stored in the dataPath
-          '');
+          '';
 
           username = mkOption {
             type = types.str;

@@ -12,7 +12,7 @@ in {
   options = {
     services.monetdb = {
 
-      enable = mkEnableOption (lib.mdDoc "the MonetDB database server");
+      enable = mkEnableOption "the MonetDB database server";
 
       package = mkPackageOption pkgs "monetdb" { };
 

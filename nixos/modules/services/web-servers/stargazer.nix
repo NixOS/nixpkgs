@@ -34,7 +34,7 @@ let
 in
 {
   options.services.stargazer = {
-    enable = lib.mkEnableOption (lib.mdDoc "Stargazer Gemini server");
+    enable = lib.mkEnableOption "Stargazer Gemini server";
 
     listen = lib.mkOption {
       type = lib.types.listOf lib.types.str;

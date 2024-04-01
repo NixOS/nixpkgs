@@ -6,7 +6,7 @@ let
   cfg = config.services.infinoted;
 in {
   options.services.infinoted = {
-    enable = mkEnableOption (lib.mdDoc "infinoted");
+    enable = mkEnableOption "infinoted";
 
     package = mkPackageOption pkgs "libinfinity" { };
 

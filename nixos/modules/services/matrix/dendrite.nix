@@ -7,7 +7,7 @@ let
 in
 {
   options.services.dendrite = {
-    enable = lib.mkEnableOption (lib.mdDoc "matrix.org dendrite");
+    enable = lib.mkEnableOption "matrix.org dendrite";
     httpPort = lib.mkOption {
       type = lib.types.nullOr lib.types.port;
       default = 8008;
@@ -205,7 +205,7 @@ in
           };
         };
         options.sync_api.search = {
-          enable = lib.mkEnableOption (lib.mdDoc "Dendrite's full-text search engine");
+          enable = lib.mkEnableOption "Dendrite's full-text search engine";
           index_path = lib.mkOption {
             type = lib.types.str;
             default = "${workingDir}/searchindex";

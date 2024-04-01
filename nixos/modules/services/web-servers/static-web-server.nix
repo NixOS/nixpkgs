@@ -7,7 +7,7 @@ let
 in {
   options = {
     services.static-web-server = {
-      enable = lib.mkEnableOption (lib.mdDoc ''Static Web Server'');
+      enable = lib.mkEnableOption ''Static Web Server'';
       listen = lib.mkOption {
         default = "[::]:8787";
         type = lib.types.str;

@@ -17,7 +17,7 @@ let
 in
 {
   options.services.node-red = {
-    enable = mkEnableOption (lib.mdDoc "the Node-RED service");
+    enable = mkEnableOption "the Node-RED service";
 
     package = mkPackageOption pkgs [ "nodePackages" "node-red" ] { };
 

@@ -49,7 +49,7 @@ let
   };
 in {
   options.services.datadog-agent = {
-    enable = mkEnableOption (lib.mdDoc "Datadog-agent v7 monitoring service");
+    enable = mkEnableOption "Datadog-agent v7 monitoring service";
 
     package = mkPackageOption pkgs "datadog-agent" {
       extraDescription = ''

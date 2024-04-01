@@ -34,7 +34,7 @@ let
 in {
   options.services.snipe-it = {
 
-    enable = mkEnableOption (lib.mdDoc "snipe-it, a free open source IT asset/license management system");
+    enable = mkEnableOption "snipe-it, a free open source IT asset/license management system";
 
     user = mkOption {
       default = "snipeit";

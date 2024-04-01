@@ -6,7 +6,7 @@ let
   cfg = config.services.alps;
 in {
   options.services.alps = {
-    enable = mkEnableOption (lib.mdDoc "alps");
+    enable = mkEnableOption "alps";
 
     port = mkOption {
       type = types.port;

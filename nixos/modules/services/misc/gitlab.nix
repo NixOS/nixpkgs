@@ -657,7 +657,7 @@ in {
         };
       };
 
-      pages.enable = mkEnableOption (lib.mdDoc "the GitLab Pages service");
+      pages.enable = mkEnableOption "the GitLab Pages service";
 
       pages.settings = mkOption {
         example = literalExpression ''

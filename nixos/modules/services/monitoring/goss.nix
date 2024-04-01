@@ -14,7 +14,7 @@ in {
 
   options = {
     services.goss = {
-      enable = lib.mkEnableOption (lib.mdDoc "Goss daemon");
+      enable = lib.mkEnableOption "Goss daemon";
 
       package = lib.mkPackageOption pkgs "goss" { };
 

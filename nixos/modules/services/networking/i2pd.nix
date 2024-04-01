@@ -236,7 +236,7 @@ in
 
     services.i2pd = {
 
-      enable = mkEnableOption (lib.mdDoc "I2Pd daemon") // {
+      enable = mkEnableOption "I2Pd daemon" // {
         description = lib.mdDoc ''
           Enables I2Pd as a running service upon activation.
           Please read <https://i2pd.readthedocs.io/en/latest/> for further
@@ -258,7 +258,7 @@ in
         '';
       };
 
-      logCLFTime = mkEnableOption (lib.mdDoc "full CLF-formatted date and time to log");
+      logCLFTime = mkEnableOption "full CLF-formatted date and time to log";
 
       address = mkOption {
         type = with types; nullOr str;
@@ -327,13 +327,13 @@ in
       ntcp = mkEnableTrueOption "ntcp";
       ssu = mkEnableTrueOption "ssu";
 
-      notransit = mkEnableOption (lib.mdDoc "notransit") // {
+      notransit = mkEnableOption "notransit" // {
         description = lib.mdDoc ''
           Tells the router to not accept transit tunnels during startup.
         '';
       };
 
-      floodfill = mkEnableOption (lib.mdDoc "floodfill") // {
+      floodfill = mkEnableOption "floodfill" // {
         description = lib.mdDoc ''
           If the router is declared to be unreachable and needs introduction nodes.
         '';
@@ -365,10 +365,10 @@ in
       };
 
       enableIPv4 = mkEnableTrueOption "IPv4 connectivity";
-      enableIPv6 = mkEnableOption (lib.mdDoc "IPv6 connectivity");
+      enableIPv6 = mkEnableOption "IPv6 connectivity";
       nat = mkEnableTrueOption "NAT bypass";
 
-      upnp.enable = mkEnableOption (lib.mdDoc "UPnP service discovery");
+      upnp.enable = mkEnableOption "UPnP service discovery";
       upnp.name = mkOption {
         type = types.str;
         default = "I2Pd";
@@ -388,7 +388,7 @@ in
         '';
       };
 
-      reseed.verify = mkEnableOption (lib.mdDoc "SU3 signature verification");
+      reseed.verify = mkEnableOption "SU3 signature verification";
 
       reseed.file = mkOption {
         type = with types; nullOr str;
@@ -449,7 +449,7 @@ in
         '';
       };
 
-      trust.enable = mkEnableOption (lib.mdDoc "explicit trust options");
+      trust.enable = mkEnableOption "explicit trust options";
 
       trust.family = mkOption {
         type = with types; nullOr str;
@@ -467,7 +467,7 @@ in
         '';
       };
 
-      trust.hidden = mkEnableOption (lib.mdDoc "router concealment");
+      trust.hidden = mkEnableOption "router concealment";
 
       websocket = mkEndpointOpt "websockets" "127.0.0.1" 7666;
 
@@ -475,7 +475,7 @@ in
       exploratory.outbound = i2cpOpts "exploratory";
 
       ntcp2.enable = mkEnableTrueOption "NTCP2";
-      ntcp2.published = mkEnableOption (lib.mdDoc "NTCP2 publication");
+      ntcp2.published = mkEnableOption "NTCP2 publication";
       ntcp2.port = mkOption {
         type = types.port;
         default = 0;
@@ -532,7 +532,7 @@ in
         '';
       };
 
-      yggdrasil.enable = mkEnableOption (lib.mdDoc "Yggdrasil");
+      yggdrasil.enable = mkEnableOption "Yggdrasil";
 
       yggdrasil.address = mkOption {
         type = with types; nullOr str;
@@ -545,7 +545,7 @@ in
 
       proto.http = (mkEndpointOpt "http" "127.0.0.1" 7070) // {
 
-        auth = mkEnableOption (lib.mdDoc "webconsole authentication");
+        auth = mkEnableOption "webconsole authentication";
 
         user = mkOption {
           type = types.str;
@@ -590,7 +590,7 @@ in
       };
       proto.socksProxy = (mkKeyedEndpointOpt "socksproxy" "127.0.0.1" 4447 "socksproxy-keys.dat")
       // {
-        outproxyEnable = mkEnableOption (lib.mdDoc "SOCKS outproxy");
+        outproxyEnable = mkEnableOption "SOCKS outproxy";
         outproxy = mkOption {
           type = types.str;
           default = "127.0.0.1";

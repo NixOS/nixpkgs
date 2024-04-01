@@ -28,7 +28,7 @@ let
 in {
   options = {
     services.envfs = {
-      enable = lib.mkEnableOption (lib.mdDoc "Envfs filesystem") // {
+      enable = lib.mkEnableOption "Envfs filesystem" // {
         description = lib.mdDoc ''
           Fuse filesystem that returns symlinks to executables based on the PATH
           of the requesting process. This is useful to execute shebangs on NixOS

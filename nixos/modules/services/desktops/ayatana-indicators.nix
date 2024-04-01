@@ -9,9 +9,9 @@ let
 in
 {
   options.services.ayatana-indicators = {
-    enable = lib.mkEnableOption (lib.mdDoc ''
+    enable = lib.mkEnableOption ''
       Ayatana Indicators, a continuation of Canonical's Application Indicators
-    '');
+    '';
 
     packages = lib.mkOption {
       type = lib.types.listOf lib.types.package;

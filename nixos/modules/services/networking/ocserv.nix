@@ -10,7 +10,7 @@ in
 
 {
   options.services.ocserv = {
-    enable = mkEnableOption (lib.mdDoc "ocserv");
+    enable = mkEnableOption "ocserv";
 
     config = mkOption {
       type = types.lines;

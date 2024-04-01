@@ -11,7 +11,7 @@ in
   };
 
   options.services.grafana-agent = {
-    enable = mkEnableOption (lib.mdDoc "grafana-agent");
+    enable = mkEnableOption "grafana-agent";
 
     package = mkPackageOption pkgs "grafana-agent" { };
 

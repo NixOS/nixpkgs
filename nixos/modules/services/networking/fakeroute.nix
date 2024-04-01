@@ -14,7 +14,7 @@ in
 
     services.fakeroute = {
 
-      enable = lib.mkEnableOption (lib.mdDoc "the fakeroute service");
+      enable = lib.mkEnableOption "the fakeroute service";
 
       route = lib.mkOption {
         type = with lib.types; listOf str;

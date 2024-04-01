@@ -25,7 +25,7 @@ in
 
   options.services.dnsproxy = {
 
-    enable = mkEnableOption (lib.mdDoc "dnsproxy");
+    enable = mkEnableOption "dnsproxy";
 
     package = mkPackageOption pkgs "dnsproxy" { };
 

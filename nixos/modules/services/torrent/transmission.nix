@@ -24,7 +24,7 @@ in
   ];
   options = {
     services.transmission = {
-      enable = mkEnableOption (lib.mdDoc "transmission") // {
+      enable = mkEnableOption "transmission" // {
         description = lib.mdDoc ''
           Whether to enable the headless Transmission BitTorrent daemon.
 
@@ -235,11 +235,11 @@ in
         '';
       };
 
-      openPeerPorts = mkEnableOption (lib.mdDoc "opening of the peer port(s) in the firewall");
+      openPeerPorts = mkEnableOption "opening of the peer port(s) in the firewall";
 
-      openRPCPort = mkEnableOption (lib.mdDoc "opening of the RPC port in the firewall");
+      openRPCPort = mkEnableOption "opening of the RPC port in the firewall";
 
-      performanceNetParameters = mkEnableOption (lib.mdDoc "performance tweaks") // {
+      performanceNetParameters = mkEnableOption "performance tweaks" // {
         description = lib.mdDoc ''
           Whether to enable tweaking of kernel parameters
           to open many more connections at the same time.

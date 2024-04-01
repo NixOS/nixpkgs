@@ -93,7 +93,7 @@ in
 {
   options = {
     services.teeworlds = {
-      enable = mkEnableOption (lib.mdDoc "Teeworlds Server");
+      enable = mkEnableOption "Teeworlds Server";
 
       package = mkPackageOptionMD pkgs "teeworlds-server" { };
 

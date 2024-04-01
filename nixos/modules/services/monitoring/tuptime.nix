@@ -10,7 +10,7 @@ in {
 
   options.services.tuptime = {
 
-    enable = mkEnableOption (lib.mdDoc "the total uptime service");
+    enable = mkEnableOption "the total uptime service";
 
     timer = {
       enable = mkOption {

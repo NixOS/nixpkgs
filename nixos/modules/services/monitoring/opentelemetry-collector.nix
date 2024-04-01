@@ -9,7 +9,7 @@ let
   settingsFormat = pkgs.formats.yaml {};
 in {
   options.services.opentelemetry-collector = {
-    enable = mkEnableOption (lib.mdDoc "Opentelemetry Collector");
+    enable = mkEnableOption "Opentelemetry Collector";
 
     package = mkPackageOption pkgs "opentelemetry-collector" { };
 

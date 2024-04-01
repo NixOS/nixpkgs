@@ -8,7 +8,7 @@ let
 in {
   options = {
     services.roon-server = {
-      enable = mkEnableOption (lib.mdDoc "Roon Server");
+      enable = mkEnableOption "Roon Server";
       package = lib.mkPackageOption pkgs "roon-server" { };
       openFirewall = mkOption {
         type = types.bool;

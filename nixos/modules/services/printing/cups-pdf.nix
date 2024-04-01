@@ -80,12 +80,12 @@ let
 
   instanceConfig = { name, config, ... }: {
     options = {
-      enable = (lib.mkEnableOption (lib.mdDoc "this cups-pdf instance")) // { default = true; };
-      installPrinter = (lib.mkEnableOption (lib.mdDoc ''
+      enable = (lib.mkEnableOption "this cups-pdf instance") // { default = true; };
+      installPrinter = (lib.mkEnableOption ''
         a CUPS printer queue for this instance.
         The queue will be named after the instance and will use the {file}`CUPS-PDF_opt.ppd` ppd file.
         If this is disabled, you need to add the queue yourself to use the instance
-      '')) // { default = true; };
+      '') // { default = true; };
       confFileText = lib.mkOption {
         type = lib.types.lines;
         description = lib.mdDoc ''
@@ -142,11 +142,11 @@ in
 {
 
   options.services.printing.cups-pdf = {
-    enable = lib.mkEnableOption (lib.mdDoc ''
+    enable = lib.mkEnableOption ''
       the cups-pdf virtual pdf printer backend.
       By default, this will install a single printer `pdf`.
       but this can be changed/extended with {option}`services.printing.cups-pdf.instances`
-    '');
+    '';
     instances = lib.mkOption {
       type = lib.types.attrsOf (lib.types.submodule instanceConfig);
       default.pdf = {};

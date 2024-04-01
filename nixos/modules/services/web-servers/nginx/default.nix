@@ -477,7 +477,7 @@ in
 {
   options = {
     services.nginx = {
-      enable = mkEnableOption (lib.mdDoc "Nginx Web Server");
+      enable = mkEnableOption "Nginx Web Server";
 
       statusPage = mkOption {
         default = false;
@@ -894,7 +894,7 @@ in
       proxyCachePath = mkOption {
         type = types.attrsOf (types.submodule ({ ... }: {
           options = {
-            enable = mkEnableOption (lib.mdDoc "this proxy cache path entry");
+            enable = mkEnableOption "this proxy cache path entry";
 
             keysZoneName = mkOption {
               type = types.str;

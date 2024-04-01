@@ -356,7 +356,7 @@ in
             };
 
             service = {
-              DISABLE_REGISTRATION = mkEnableOption (lib.mdDoc "the registration lock") // {
+              DISABLE_REGISTRATION = mkEnableOption "the registration lock" // {
                 description = lib.mdDoc ''
                   By default any user can create an account on this `gitea` instance.
                   This can be disabled by using this option.
