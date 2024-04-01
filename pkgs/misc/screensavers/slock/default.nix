@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
       Simple X display locker. This is the simplest X screen locker.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ astsmtl ];
+    maintainers = with maintainers; [ astsmtl qusic ];
     platforms = platforms.linux;
   };
 })
