@@ -120,8 +120,8 @@ wrapped-full = runCommand unwrapped.name
     allowSubstitutes = false;
     inherit (unwrapped) meta;
   }
-  assert false; # FIXME: the http module won't work; see PR #286822
-  (''
+  (assert false; # FIXME: the http module won't work; see PR #286822
+  ''
     mkdir -p "$out"/bin
     makeWrapper '${unwrapped}/bin/kresd' "$out"/bin/kresd \
       --set LUA_PATH  "$LUA_PATH" \
