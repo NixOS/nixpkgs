@@ -52,7 +52,7 @@ stdenv.mkDerivation {
     cp -r resources $out/share/${pname}/
     cp -r locales $out/share/${pname}/
 
-    makeWrapper ${electron_24}/bin/electron $out/bin/${pname} \
+    makeWrapper ${electron_26}/bin/electron $out/bin/${pname} \
       --add-flags $out/share/${pname}/app.asar
     install -m 444 -D "${desktopItem}/share/applications/"* \
       -t $out/share/applications/
