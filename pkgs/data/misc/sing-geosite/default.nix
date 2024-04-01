@@ -38,6 +38,7 @@ buildGoModule {
   installPhase = ''
     runHook preInstall
     install -Dm644 geosite.db $out/share/sing-box/geosite.db
+    install -Dm644 rule-set/* -t $out/share/sing-box/rule-set
     runHook postInstall
   '';
 
