@@ -142,5 +142,6 @@ in stdenv'.mkDerivation (finalAttrs: {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ vandenoever doronbehar ];
     mainProgram = "mscore";
+    platforms = platforms.unix;
   };
 })
