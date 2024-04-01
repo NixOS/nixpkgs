@@ -491,11 +491,11 @@ let
         compilerNames.ghc981
         compilerNames.ghc982
       ] released;
-      Cabal_3_10_2_1 = lib.subtractLists [
+      Cabal_3_10_3_0 = lib.subtractLists [
         compilerNames.ghc981
         compilerNames.ghc982
       ] released;
-      Cabal-syntax_3_10_1_0 = lib.subtractLists [
+      Cabal-syntax_3_10_3_0 = lib.subtractLists [
         compilerNames.ghc981
         compilerNames.ghc982
       ] released;
