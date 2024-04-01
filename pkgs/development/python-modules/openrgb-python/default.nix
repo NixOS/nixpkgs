@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "openrgb-python";
-  version = "0.2.15";
+  version = "0.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rTfpqMM+IUd8rMmw/r15sICLoPHL6KLaRrmUjWTfUkA=";
+    hash = "sha256-2eeb2XHYvBaHkHHs9KxZKDGXtcLaT28c/aLC9pxrRmM=";
   };
 
   # Module has no tests
