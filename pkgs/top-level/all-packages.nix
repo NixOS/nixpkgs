@@ -29399,7 +29399,7 @@ with pkgs;
 
   shades-of-gray-theme = callPackage ../data/themes/shades-of-gray { };
 
-  sierra-breeze-enhanced = libsForQt5.callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced { };
+  sierra-breeze-enhanced = libsForQt5.callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced { useQt5 = true; };
 
   simp1e-cursors = callPackage ../data/icons/simp1e-cursors { };
 

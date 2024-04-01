@@ -105,6 +105,8 @@ makeScopeWithSplicing' {
   # is, to allow users to choose the right build if needed.
   sddm = callPackage ../applications/display-managers/sddm {};
 
+  sierra-breeze-enhanced = kdePackages.callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced { };
+
   signond = callPackage ../development/libraries/signond {};
 
   waylib = callPackage ../development/libraries/waylib { };
