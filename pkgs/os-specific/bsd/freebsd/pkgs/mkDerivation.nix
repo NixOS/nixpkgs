@@ -2,7 +2,7 @@
 , compatIfNeeded
 , runCommand, rsync
 , freebsd-lib
-, freebsdSrc
+, source
 , bsdSetupHook, freebsdSetupHook
 , makeMinimal
 , install, tsort, lorder, mandoc, groff
@@ -20,7 +20,7 @@ in stdenv'.mkDerivation (rec {
       set -x
       path="$out/$p"
       mkdir -p "$(dirname "$path")"
-      src_path="${freebsdSrc}/$p"
+      src_path="${source}/$p"
       if [[ -d "$src_path" ]]; then src_path+=/; fi
       rsync --chmod="+w" -r "$src_path" "$path"
       set +x
