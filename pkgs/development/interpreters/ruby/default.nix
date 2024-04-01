@@ -125,7 +125,7 @@ let
         cargoDeps = if yjitSupport then rustPlatform.fetchCargoTarball {
           inherit (finalAttrs) src;
           sourceRoot = "${finalAttrs.pname}-${version}/${finalAttrs.cargoRoot}";
-          hash = cargoHash;
+          hash = assert cargoHash != null; cargoHash;
         } else null;
 
         postUnpack = opString rubygemsSupport ''
