@@ -23,11 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-vc1NAbcQQxjpXnjZvTsnebzMc/LoMwBveDHBxBbhnEo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     async-timeout
     voluptuous
