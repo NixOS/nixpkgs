@@ -20,6 +20,7 @@
 , SDL2
 , sqlite
 , zlib
+, libiconv
 }:
 let
   version = "2.82.0";
@@ -67,6 +68,8 @@ stdenv.mkDerivation {
     SDL2
     sqlite
     zlib
+  ] ++ lib.optionals stdenv.isDarwin [
+    libiconv
   ];
 
   preBuild = ''
@@ -110,6 +113,6 @@ stdenv.mkDerivation {
     '';
     mainProgram = "etl";
     maintainers = with lib.maintainers; [ ashleyghooper drupol ];
-    platforms = lib.platforms.linux;
+    platforms =  lib.platforms.linux ++ lib.platforms.darwin;
   };
 }
