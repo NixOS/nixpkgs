@@ -19267,18 +19267,17 @@
     githubId = 870673;
     name = "Takuo Yonezawa";
   };
-  talleyrand34 = {
-    email = "talleyrand-34@tutanota.com";
-    github = "Talleyrand-34";
-    githubId = 119809076;
-    name = "Talleyrand Dantes";
-
-  };
   talkara = {
     email = "taito.horiuchi@relexsolutions.com";
     github = "talkara";
     githubId = 51232929;
     name = "Taito Horiuchi";
+  };
+  talleyrand34 = {
+    email = "talleyrand-34@tutanota.com";
+    github = "Talleyrand-34";
+    githubId = 119809076;
+    name = "Talleyrand Dantes";
   };
   talyz = {
     email = "kim.lindberger@gmail.com";
