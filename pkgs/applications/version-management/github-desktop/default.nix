@@ -81,10 +81,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "GUI for managing Git and GitHub.";
     homepage = "https://desktop.github.com/";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.mit;
+    mainProgram = "github-desktop";
     maintainers = with lib.maintainers; [ dan4ik605743 ];
     platforms = lib.platforms.linux;
-    mainProgram = "github-desktop";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })
