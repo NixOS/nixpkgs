@@ -93,4 +93,8 @@ in
     networking.firewall.allowedTCPPorts =
       lib.optional (cfg.enable && cfg.openFirewall) cfg.port;
   };
+
+  meta = {
+    maintainers = with lib.maintainers; [ talleyrand34 ];
+  };
 }
