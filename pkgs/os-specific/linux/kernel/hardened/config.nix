@@ -49,9 +49,6 @@ assert (versionAtLeast version "4.9");
   # restricts loading of line disciplines via TIOCSETD ioctl to CAP_SYS_MODULE
   CONFIG_LDISC_AUTOLOAD = option no;
 
-  # Randomize page allocator when page_alloc.shuffle=1
-  SHUFFLE_PAGE_ALLOCATOR = whenAtLeast "5.2" yes;
-
   # Wipe higher-level memory allocations on free() with page_poison=1
   PAGE_POISONING_NO_SANITY = whenOlder "5.11" yes;
   PAGE_POISONING_ZERO      = whenOlder "5.11" yes;
