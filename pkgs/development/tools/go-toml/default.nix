@@ -13,7 +13,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-4t/ft3XTfc7yrsFVMSfjdCur8QULho3NI2ym6gqjexI=";
 
-  excludedPackages = [ "cmd/gotoml-test-decoder" "cmd/tomltestgen" ];
+  excludedPackages = [
+    "cmd/gotoml-test-decoder"
+    "cmd/gotoml-test-encoder"
+    "cmd/tomltestgen"
+  ];
 
   ldflags = [ "-s" "-w" ];
 
