@@ -25,6 +25,25 @@ let
   containerName = "container";
   containerRoot = "/var/lib/machines/${containerName}";
 
+  containerTarball = pkgs.callPackage ../lib/make-system-tarball.nix {
+    storeContents = [
+      {
+        object = containerSystem;
+        symlink = "/nix/var/nix/profiles/system";
+      }
+    ];
+
+    contents = [
+      {
+        source = containerSystem + "/etc/os-release";
+        target = "/etc/os-release";
+      }
+      {
+        source = containerSystem + "/init";
+        target = "/sbin/init";
+      }
+    ];
+  };
 in
 {
   name = "systemd-machinectl";
@@ -40,7 +59,7 @@ in
     # auto-start container
     systemd.targets.machines.wants = [ "systemd-nspawn@${containerName}.service" ];
 
-    virtualisation.additionalPaths = [ containerSystem ];
+    virtualisation.additionalPaths = [ containerSystem containerTarball ];
 
     systemd.tmpfiles.rules = [
       "d /var/lib/machines/shared-decl 0755 root root - -"
@@ -144,5 +163,13 @@ in
     # Show to to delete the container
     machine.succeed("chattr -i ${containerRoot}/var/empty");
     machine.succeed("rm -rf ${containerRoot}");
+
+    # Test import tarball, start, stop and remove
+    machine.succeed("machinectl import-tar ${containerTarball}/tarball/*.tar* ${containerName}");
+    machine.succeed("machinectl start ${containerName}");
+    machine.wait_until_succeeds("systemctl -M ${containerName} is-active default.target");
+    machine.succeed("machinectl stop ${containerName}");
+    machine.wait_until_succeeds("test $(systemctl is-active systemd-nspawn@${containerName}) = inactive");
+    machine.succeed("machinectl remove ${containerName}");
   '';
 })
