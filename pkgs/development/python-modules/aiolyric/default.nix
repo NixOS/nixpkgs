@@ -4,12 +4,13 @@
 , fetchFromGitHub
 , pythonOlder
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "aiolyric";
   version = "2.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -20,7 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-FZhLjVrLzLv6CZz/ROlvbtBK9XnpO8pG48aSIoBxhCo=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     aiohttp
   ];
 
