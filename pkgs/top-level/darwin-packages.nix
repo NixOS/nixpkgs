@@ -195,7 +195,9 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     xcode_15 xcode_15_1
     xcode;
 
-  CoreSymbolication = callPackage ../os-specific/darwin/CoreSymbolication { };
+  CoreSymbolication = callPackage ../os-specific/darwin/CoreSymbolication {
+    inherit (apple_sdk) darwin-stubs;
+  };
 
   # TODO: Remove the CF hook if a solution to the crashes is not found.
   CF =
