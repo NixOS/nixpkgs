@@ -693,7 +693,6 @@ broken-packages:
   - cassava-records # failure in job https://hydra.nixos.org/build/233259049 at 2023-09-02
   - cassava-streams # failure in job https://hydra.nixos.org/build/233222669 at 2023-09-02
   - cassette # failure in job https://hydra.nixos.org/build/233201251 at 2023-09-02
-  - castagnoli # failure in job https://hydra.nixos.org/build/233213036 at 2023-09-02
   - castle # failure in job https://hydra.nixos.org/build/233204027 at 2023-09-02
   - catamorphism # failure in job https://hydra.nixos.org/build/233208488 at 2023-09-02
   - Catana # failure in job https://hydra.nixos.org/build/233196550 at 2023-09-02
