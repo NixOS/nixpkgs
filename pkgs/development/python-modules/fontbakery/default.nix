@@ -34,6 +34,7 @@
 , requests
 , requests-mock
 , rich
+, setuptools
 , setuptools-scm
 , shaperglot
 , stringbrewer
@@ -47,14 +48,15 @@
 buildPythonPackage rec {
   pname = "fontbakery";
   version = "0.11.2";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-61EXlf+d5kJeUF41OEnGNLaOcSvFWUDFgarVvHQZYmw=";
   };
 
-  propagatedBuildInputs = [
+  pyproject = true;
+
+  dependencies = [
     axisregistry
     babelfont
     beautifulsoup4
@@ -88,10 +90,13 @@ buildPythonPackage rec {
     vharfbuzz
     ufo2ft
   ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
   nativeBuildInputs = [
     installShellFiles
     pythonRelaxDepsHook
-    setuptools-scm
   ];
 
   pythonRelaxDeps = [
