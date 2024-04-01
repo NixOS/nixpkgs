@@ -52,16 +52,20 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   unpackPhase = ''
+    runHook preUnpack
     mkdir -p $TMP/${finalAttrs.pname} $out/{opt,bin}
     cp $src $TMP/${finalAttrs.pname}.deb
     ar vx ${finalAttrs.pname}.deb
     tar --no-overwrite-dir -xvf data.tar.xz -C $TMP/${finalAttrs.pname}/
+    runHook postUnpack
   '';
 
   installPhase = ''
+    runHook preInstall
     cp -R $TMP/${finalAttrs.pname}/usr/share $out/
     cp -R $TMP/${finalAttrs.pname}/usr/lib/${finalAttrs.pname}/* $out/opt/
     ln -sf $out/opt/${finalAttrs.pname} $out/bin/${finalAttrs.pname}
+    runHook postInstall
   '';
 
   preFixup = ''
