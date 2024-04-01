@@ -1,4 +1,4 @@
-{ stdenv
+{ stdenvNoCC
 , lib
 , fetchurl
 , autoPatchelfHook
@@ -19,7 +19,7 @@
 , openssl
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "github-desktop";
   version = "3.3.10";
   rcversion = "1";
