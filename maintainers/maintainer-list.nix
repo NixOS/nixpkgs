@@ -19488,6 +19488,12 @@
       fingerprint = "6866 981C 4992 4D64 D154  E1AC 19E5 A2D8 B1E4 3F19";
     }];
   };
+  t4sm5n = {
+    email = "t4sm5n@gmail.com";
+    github = "t4sm5n";
+    githubId = 28858039;
+    name = "Tuomas Mäkinen";
+  };
   tadeokondrak = {
     email = "me@tadeo.ca";
     github = "tadeokondrak";

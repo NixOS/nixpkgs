@@ -2352,6 +2352,23 @@ let
         };
       };
 
+      k--kato.intellij-idea-keybindings = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "intellij-idea-keybindings";
+          publisher = "k--kato";
+          version = "1.7.0";
+          hash = "sha256-mIcSZANZlj5iO2oLiJBUHn08rXVhu/9SKsRhlu/hcvI=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/k--kato.intellij-idea-keybindings/changelog";
+          description = "Visual Studio Code extension for IntelliJ IDEA keybindings";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=k--kato.intellij-idea-keybindings";
+          homepage = "https://github.com/kasecato/vscode-intellij-idea-keybindings";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.t4sm5n ];
+        };
+      };
+
       kahole.magit = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "magit";
