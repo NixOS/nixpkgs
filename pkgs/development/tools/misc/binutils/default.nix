@@ -173,7 +173,13 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE =
     if hostPlatform.isDarwin
     then "-Wno-string-plus-int -Wno-deprecated-declarations"
-    else "-static-libgcc";
+    else if stdenv.cc.isGNU
+    then "-static-libgcc"
+    else "";
+  # https://github.com/freebsd/freebsd-ports/blob/ea307f60573edaffb8152c7ab9ab668a4a8785c7/devel/binutils/Makefile#L44-L46
+  env.NIX_LDFLAGS = lib.optionalString
+    (stdenv.hostPlatform.isFreeBSD && stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "17")
+    "--undefined-version";
 
   hardeningDisable = [ "format" "pie" ];
 
@@ -217,6 +223,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ (if enableShared
       then [ "--enable-shared" "--disable-static" ]
       else [ "--disable-shared" "--enable-static" ])
+  ++ lib.optionals (hostPlatform == targetPlatform) [ "--datarootdir=$lib/share" ]
   ;
 
   # Fails

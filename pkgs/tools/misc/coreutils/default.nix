@@ -16,7 +16,7 @@
 , minimal ? true
 , withOpenssl ? !minimal, openssl
 , withPrefix ? false
-, singleBinary ? "symlinks" # you can also pass "shebangs" or false
+, singleBinary ? if stdenv.isFreeBSD then false else "symlinks" # you can also pass "shebangs" or false
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus cannot use
@@ -84,8 +84,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "info" ];
   separateDebugInfo = true;
 
+  # autoreconfHook is due to patch, normally only needed for cygwin
   nativeBuildInputs = [
-    # autoreconfHook is due to patch, normally only needed for cygwin
     autoreconfHook
     perl
     xz.bin

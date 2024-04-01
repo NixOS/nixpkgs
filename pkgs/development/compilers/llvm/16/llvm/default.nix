@@ -30,6 +30,7 @@
   # broken for the armv7l builder
   && !stdenv.hostPlatform.isAarch
 , enablePolly ? true
+, enableTerminfo ? true
 }:
 
 let
@@ -167,7 +168,7 @@ in
 
     # This test tries to call the intrinsics `@llvm.roundeven.f32` and
     # `@llvm.roundeven.f64` which seem to (incorrectly?) lower to `roundevenf`
-    # and `roundeven` on macOS.
+    # and `roundeven` on macOS and FreeBSD.
     #
     # However these functions are glibc specific so the test fails:
     #   - https://www.gnu.org/software/gnulib/manual/html_node/roundevenf.html
@@ -246,6 +247,14 @@ in
   '' + optionalString (stdenv.hostPlatform.system == "armv6l-linux") ''
     # Seems to require certain floating point hardware (NEON?)
     rm test/ExecutionEngine/frem.ll
+  '' + optionalString stdenv.isFreeBSD ''
+    # TODO: Why does this test fail on FreeBSD?
+    # It seems to reference /usr/local/lib/libfile.a, which is clearly a problem.
+    rm test/tools/llvm-libtool-darwin/L-and-l.test
+
+    # This test fails for the same reason it fails on MacOS, but the fix is
+    # not trivial to apply.
+    rm test/ExecutionEngine/Interpreter/intrinsics.ll
   '' + ''
     patchShebangs test/BugPoint/compile-custom.ll.py
   '';
@@ -317,9 +326,12 @@ in
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_ENABLE_DUMP=ON"
+  ] ++ optionals (!doCheck) [
+    "-DLLVM_INCLUDE_TESTS=OFF"
   ] ++ optionals stdenv.hostPlatform.isStatic [
     # Disables building of shared libs, -fPIC is still injected by cc-wrapper
     "-DLLVM_ENABLE_PIC=OFF"
+    "-DCMAKE_SKIP_INSTALL_RPATH=ON"
     "-DLLVM_BUILD_STATIC=ON"
     "-DLLVM_LINK_LLVM_DYLIB=off"
     # libxml2 needs to be disabled because the LLVM build system ignores its .la
@@ -368,6 +380,8 @@ in
         nativeInstallFlags
       ])
     )
+  ] ++ optionals (!enableTerminfo) [
+    "-DLLVM_ENABLE_TERMINFO=OFF"
   ];
 
   postInstall = ''

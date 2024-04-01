@@ -274,7 +274,7 @@ in stdenv.mkDerivation (finalAttrs: {
       # Platforms with host tools from
       # https://doc.rust-lang.org/nightly/rustc/platform-support.html
       "x86_64-darwin" "i686-darwin" "aarch64-darwin"
-      "i686-freebsd13" "x86_64-freebsd13"
+      "i686-freebsd" "x86_64-freebsd"
       "x86_64-solaris"
       "aarch64-linux" "armv6l-linux" "armv7l-linux" "i686-linux"
       "loongarch64-linux" "powerpc64-linux" "powerpc64le-linux"
