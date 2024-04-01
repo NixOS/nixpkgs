@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, makeWrapper
 , rustPlatform
 , nix-update-script
 , protobuf
@@ -33,6 +34,10 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/quickwit";
 
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
   buildInputs = [
     rust-jemalloc-sys
   ] ++ lib.optionals stdenv.isDarwin [ Security ];
@@ -52,6 +57,14 @@ rustPlatform.buildRustPackage rec {
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
+
+  # * Set default config file via `QW_CONFIG`, otherwise `quickwit run`
+  #   will fail to start. See https://github.com/NixOS/nixpkgs/issues/289000
+  postInstall = ''
+    mkdir -p $out/share/quickwit/config
+    cp ../config/quickwit.yaml $out/share/quickwit/config/quickwit.yaml
+    wrapProgram $out/bin/quickwit --set-default QW_CONFIG $out/share/quickwit/config/quickwit.yaml
+  '';
 
   passthru.updateScript = nix-update-script { };
 
