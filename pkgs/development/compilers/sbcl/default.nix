@@ -19,11 +19,6 @@
 
 let
   versionMap = {
-    # Only kept around for BCLM. Remove once unneeded there.
-    "2.1.9" = {
-      sha256 = "189gjqzdz10xh3ybiy4ch1r98bsmkcb4hpnrmggd4y2g5kqnyx4y";
-    };
-
     "2.4.2" = {
       sha256 = "sha256-/APLUtEqr+h1nmMoRQogG73fibFwcaToPznoC0Pd7w8=";
     };
@@ -102,11 +97,6 @@ stdenv.mkDerivation (self: rec {
     '';
     [ zstd ]
   );
-
-  patches = lib.optionals (lib.versionOlder self.version "2.4.2") [
-    # Fixed in 2.4.2
-    ./search-for-binaries-in-PATH.patch
-  ];
 
   # I don’t know why these are failing (on ofBorg), and I’d rather just disable
   # them and move forward with the succeeding tests than block testing
