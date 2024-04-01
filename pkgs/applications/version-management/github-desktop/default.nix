@@ -19,14 +19,16 @@
 , openssl
 }:
 
+let
+  rcversion = "1";
+  arch = "amd64";
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "github-desktop";
   version = "3.3.10";
-  rcversion = "1";
-  arch = "amd64";
 
   src = fetchurl {
-    url = "https://github.com/shiftkey/desktop/releases/download/release-${finalAttrs.version}-linux${finalAttrs.rcversion}/GitHubDesktop-linux-${finalAttrs.arch}-${finalAttrs.version}-linux${finalAttrs.rcversion}.deb";
+    url = "https://github.com/shiftkey/desktop/releases/download/release-${finalAttrs.version}-linux${rcversion}/GitHubDesktop-linux-${arch}-${finalAttrs.version}-linux${rcversion}.deb";
     hash = "sha256-zzq6p/DAQmgSw4KAUYqtrQKkIPksLzkUQjGzwO26WgQ=";
   };
 
@@ -53,18 +55,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   unpackPhase = ''
     runHook preUnpack
-    mkdir -p $TMP/${finalAttrs.pname} $out/{opt,bin}
-    cp $src $TMP/${finalAttrs.pname}.deb
-    ar vx ${finalAttrs.pname}.deb
-    tar --no-overwrite-dir -xvf data.tar.xz -C $TMP/${finalAttrs.pname}/
+    mkdir -p $TMP/github-desktop $out/{opt,bin}
+    cp $src $TMP/github-desktop.deb
+    ar vx github-desktop.deb
+    tar --no-overwrite-dir -xvf data.tar.xz -C $TMP/github-desktop/
     runHook postUnpack
   '';
 
   installPhase = ''
     runHook preInstall
-    cp -R $TMP/${finalAttrs.pname}/usr/share $out/
-    cp -R $TMP/${finalAttrs.pname}/usr/lib/${finalAttrs.pname}/* $out/opt/
-    ln -sf $out/opt/${finalAttrs.pname} $out/bin/${finalAttrs.pname}
+    cp -R $TMP/github-desktop/usr/share $out/
+    cp -R $TMP/github-desktop/usr/lib/github-desktop/* $out/opt/
+    ln -sf $out/opt/github-desktop $out/bin/github-desktop
     runHook postInstall
   '';
 
