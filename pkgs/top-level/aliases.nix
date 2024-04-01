@@ -1040,6 +1040,7 @@ mapAliases ({
   ### R ###
 
   radare2-cutter = cutter; # Added 2021-03-30
+  railway-travel = diebahn; # Added 2024-04-01
   rambox-pro = rambox; # Added 2022-12-12
   rarian = throw "rarian has been removed as unused"; # Added 2023-07-05
   rccl = throw "'rccl' has been replaced with 'rocmPackages.rccl'"; # Added 2023-10-08
