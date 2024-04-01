@@ -3,7 +3,10 @@
 , buildDotnetModule
 , dotnetCorePackages
 }:
-buildDotnetModule rec {
+let
+  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_6_0 sdk_7_0 sdk_8_0 ];
+
+in buildDotnetModule rec {
   pname = "dotnet-outdated";
   version = "4.6.0";
 
@@ -14,8 +17,8 @@ buildDotnetModule rec {
     hash = "sha256-U5qCM+Um8bRafrDpbI5TnSN1nQ8mQpZ5W8Jao2hdAPw=";
   };
 
-  dotnet-sdk = dotnetCorePackages.dotnet_8.sdk;
-  dotnet-runtime = dotnetCorePackages.dotnet_8.runtime;
+  inherit dotnet-sdk;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
   useDotnetFromEnv = true;
 
   nugetDeps = ./deps.nix;

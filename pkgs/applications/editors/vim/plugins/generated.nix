@@ -17069,5 +17069,17 @@ final: prev:
     meta.homepage = "https://github.com/backdround/improved-search.nvim/";
   };
 
+  qmk-nvim = buildVimPlugin {
+    pname = "qmk-nvim";
+    version = "2024-02-15";
+    src = fetchFromGitHub {
+      owner = "codethread";
+      repo = "qmk.nvim";
+      rev = "67c1a94b10f7266ac01b0a2431dade70693edba9";
+      sha256 = "sha256-YKp9/unDL52guKRHI50DSPV8nXyPqAHY9mEHUMHFhmc=";
+    };
+    meta.homepage = "https://github.com/codethread/qmk.nvim/";
+  };
+
 
 }

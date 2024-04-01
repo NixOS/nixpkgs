@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, undmg
+, _7zz
 , dpkg
 , autoPatchelfHook
 , wrapGAppsHook
@@ -23,24 +23,26 @@
 }:
 let
   pname = "yesplaymusic";
-  version = "0.4.7";
+  version = "0.4.8-2";
 
-  srcs = {
+  srcs = let
+    version' = lib.head (lib.splitString "-" version);
+  in {
     x86_64-linux = fetchurl {
-      url = "https://github.com/qier222/YesPlayMusic/releases/download/v${version}/yesplaymusic_${version}_amd64.deb";
-      hash = "sha256-nnnHE2OgIqoz3dC+G0219FVBhvnWivLW1BX6+NYo6Ng=";
+      url = "https://github.com/qier222/YesPlayMusic/releases/download/v${version}/yesplaymusic_${version'}_amd64.deb";
+      hash = "sha256-iTWi+tZGUQU7J1mcmMdlWXSKpYGy4mMAeq9CN9fhnZ8=";
     };
     aarch64-linux = fetchurl {
-      url = "https://github.com/qier222/YesPlayMusic/releases/download/v${version}/yesplaymusic_${version}_arm64.deb";
-      hash = "sha256-+rrhY5iDDt/nYs0Vz5/Ef0sgpsdBKMtb1aVfCZLgRgg=";
+      url = "https://github.com/qier222/YesPlayMusic/releases/download/v${version}/yesplaymusic_${version'}_arm64.deb";
+      hash = "sha256-PP0apybSORqleOBogldgIV1tYZqao8kZ474muAEDpd0";
     };
     x86_64-darwin = fetchurl {
-      url = "https://github.com/qier222/YesPlayMusic/releases/download/v${version}/YesPlayMusic-mac-${version}-x64.dmg";
-      hash = "sha256-z8CASZRWKlj1g3mhxTMMeR4klTvQ2ReSrL7Rt18qQbM=";
+      url = "https://github.com/qier222/YesPlayMusic/releases/download/v${version}/YesPlayMusic-mac-${version'}-x64.dmg";
+      hash = "sha256-UHnEdoXT/vArSRKXPlfDYUUUMDyF2mnDsmJEjACW2vo=";
     };
     aarch64-darwin = fetchurl {
-      url = "https://github.com/qier222/YesPlayMusic/releases/download/v${version}/YesPlayMusic-mac-${version}-arm64.dmg";
-      hash = "sha256-McYLczudKG4tRNIw/Ws4rht0n4tiKA2M99yKtJbdlY8=";
+      url = "https://github.com/qier222/YesPlayMusic/releases/download/v${version}/YesPlayMusic-mac-${version'}-arm64.dmg";
+      hash = "sha256-FaeumNmkPQYj9Ae2Xw/eKUuezR4bEdni8li+NRU9i1k=";
     };
   };
   src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -76,13 +78,19 @@ if stdenv.isDarwin
 then stdenv.mkDerivation {
   inherit pname version src meta;
 
-  nativeBuildInputs = [ undmg ];
+  nativeBuildInputs = [ _7zz makeWrapper ];
 
   sourceRoot = ".";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/Applications
     cp -r *.app $out/Applications
+
+    makeWrapper $out/Applications/YesPlayMusic.app/Contents/MacOS/YesPlayMusic $out/bin/yesplaymusic
+
+    runHook postInstall
   '';
 }
 else stdenv.mkDerivation {
