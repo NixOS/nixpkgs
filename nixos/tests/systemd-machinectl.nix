@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, ... }:
 let
 
-  container = {
+  container = { config, ... }: {
     # We re-use the NixOS container option ...
     boot.isContainer = true;
     # ... and revert unwanted defaults
@@ -15,6 +15,8 @@ let
     boot.loader.initScript.enable = true;
 
     imports = [ ../modules/profiles/minimal.nix ];
+
+    system.stateVersion = config.system.nixos.version;
   };
 
   containerSystem = (import ../lib/eval-config.nix {
