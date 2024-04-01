@@ -7,19 +7,21 @@ let
   apps = lib.makeBinPath [ openssh python' cron rsync sshfs-fuse encfs ];
 in stdenv.mkDerivation rec {
   pname = "backintime-common";
-  version = "1.3.3";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "bit-team";
     repo = "backintime";
     rev = "v${version}";
-    sha256 = "sha256-cKmzq155/dCl5wZA2SE3XjfCocHxTh4Wa2IdfzSfQHg=";
+    sha256 = "sha256-2q2Q4rnxXwVnfH1YEBwY35B2ctG9+qpOIAHqPOjjArg=";
   };
 
   nativeBuildInputs = [ makeWrapper gettext ];
   buildInputs = [ python' ];
 
   installFlags = [ "DEST=$(out)" ];
+
+  configureFlags = [ "--python=${lib.getExe python'}" ];
 
   preConfigure = ''
     cd common
