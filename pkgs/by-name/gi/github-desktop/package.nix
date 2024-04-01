@@ -20,17 +20,26 @@
 }:
 
 let
-  rcversion = "1";
-  arch = "amd64";
+  rcversion = "2";
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "github-desktop";
-  version = "3.3.10";
+  version = "3.3.12";
 
-  src = fetchurl {
-    url = "https://github.com/shiftkey/desktop/releases/download/release-${finalAttrs.version}-linux${rcversion}/GitHubDesktop-linux-${arch}-${finalAttrs.version}-linux${rcversion}.deb";
-    hash = "sha256-zzq6p/DAQmgSw4KAUYqtrQKkIPksLzkUQjGzwO26WgQ=";
-  };
+  src =
+    let
+      urls = {
+        "x86_64-linux" = {
+          url = "https://github.com/shiftkey/desktop/releases/download/release-${finalAttrs.version}-linux${rcversion}/GitHubDesktop-linux-amd64-${finalAttrs.version}-linux${rcversion}.deb";
+          hash = "sha256-iflKD7NPuZvhxviNW8xmtCOYgdRz1rXiG42ycWCjXiY=";
+        };
+        "aarch64-linux" = {
+          url = "https://github.com/shiftkey/desktop/releases/download/release-${finalAttrs.version}-linux${rcversion}/GitHubDesktop-linux-arm64-${finalAttrs.version}-linux${rcversion}.deb";
+          hash = "sha256-C9eCvuf/TwXQiYjZ88xSiyaqi8+cppmrLiSYTyQCkmg=";
+        };
+      };
+    in
+    fetchurl urls."${stdenvNoCC.hostPlatform.system}" or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
 
   nativeBuildInputs = [
     autoPatchelfHook
