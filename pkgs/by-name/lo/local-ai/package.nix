@@ -47,6 +47,12 @@
 , sonic
 , spdlog
 , fmt
+, espeak-ng
+, piper-tts
+
+  # tests
+, fetchzip
+, writeText
 }:
 let
   BUILD_TYPE =
@@ -148,6 +154,55 @@ let
     '';
   };
 
+  espeak-ng' = espeak-ng.overrideAttrs (self: {
+    name = "espeak-ng'";
+    inherit (go-piper) src;
+    sourceRoot = "source/espeak";
+    patches = [ ];
+    nativeBuildInputs = [ cmake ];
+    cmakeFlags = (self.cmakeFlags or [ ]) ++ [
+      # -DCMAKE_C_FLAGS="-D_FILE_OFFSET_BITS=64"
+      (lib.cmakeBool "BUILD_SHARED_LIBS" true)
+      (lib.cmakeBool "USE_ASYNC" false)
+      (lib.cmakeBool "USE_MBROLA" false)
+      (lib.cmakeBool "USE_LIBPCAUDIO" false)
+      (lib.cmakeBool "USE_KLATT" false)
+      (lib.cmakeBool "USE_SPEECHPLAYER" false)
+      (lib.cmakeBool "USE_LIBSONIC" false)
+      (lib.cmakeBool "CMAKE_POSITION_INDEPENDENT_CODE" true)
+    ];
+    preConfigure = null;
+    postInstall = null;
+  });
+
+  piper-phonemize = stdenv.mkDerivation {
+    name = "piper-phonemize";
+    inherit (go-piper) src;
+    sourceRoot = "source/piper-phonemize";
+    buildInputs = [ espeak-ng' onnxruntime ];
+    nativeBuildInputs = [ cmake pkg-config ];
+    cmakeFlags = [
+      (lib.cmakeFeature "ONNXRUNTIME_DIR" "${onnxruntime.dev}")
+      (lib.cmakeFeature "ESPEAK_NG_DIR" "${espeak-ng'}")
+    ];
+    passthru.espeak-ng = espeak-ng';
+  };
+
+  piper-tts' = (piper-tts.override { inherit piper-phonemize; }).overrideAttrs (self: {
+    name = "piper-tts'";
+    inherit (go-piper) src;
+    sourceRoot = "source/piper";
+    installPhase = null;
+    postInstall = ''
+      cp CMakeFiles/piper.dir/src/cpp/piper.cpp.o $out/piper.o
+      cd $out
+      mkdir bin lib
+      mv lib*so* lib/
+      mv piper piper_phonemize bin/
+      rm -rf cmake pkgconfig espeak-ng-data *.ort
+    '';
+  });
+
   go-piper = stdenv.mkDerivation {
     name = "go-piper";
     src = fetchFromGitHub {
@@ -157,25 +212,20 @@ let
       hash = "sha256-Yv9LQkWwGpYdOS0FvtP0vZ0tRyBAx27sdmziBR4U4n8=";
       fetchSubmodules = true;
     };
-    patchPhase = ''
+    postUnpack = ''
+      cp -r --no-preserve=mode ${piper-tts'}/* source
+    '';
+    postPatch = ''
       sed -i Makefile \
-        -e '/cd piper-phonemize/ s;cmake;cmake -DONNXRUNTIME_DIR=${onnxruntime.dev};' \
-        -e '/CXXFLAGS *= / s;$; -DSPDLOG_FMT_EXTERNAL=1;' \
-        -e '/cd piper\/build / s;cmake;cmake -DSPDLOG_DIR=${spdlog.src} -DFMT_DIR=${fmt};'
+        -e '/CXXFLAGS *= / s;$; -DSPDLOG_FMT_EXTERNAL=1;'
     '';
     buildFlags = [ "libpiper_binding.a" ];
-    dontUseCmakeConfigure = true;
-    nativeBuildInputs = [ cmake ];
-    buildInputs = [ sonic spdlog onnxruntime ];
+    buildInputs = [ piper-tts' espeak-ng' piper-phonemize sonic fmt spdlog onnxruntime ];
     installPhase = ''
       cp -r --no-preserve=mode $src $out
-      tar cf - *.a \
-        espeak/ei/lib \
-        piper/src/cpp \
-        piper-phonemize/pi/lib \
-        piper-phonemize/pi/include \
-        piper-phonemize/pi/share \
-        | tar xf - -C $out
+      mkdir -p $out/piper-phonemize/pi
+      cp -r --no-preserve=mode ${piper-phonemize}/share $out/piper-phonemize/pi
+      cp *.a $out
     '';
   };
 
@@ -418,6 +468,8 @@ let
       --prefix LD_LIBRARY_PATH : "${clblast}/lib:${ocl-icd}/lib" \
     '' + lib.optionalString with_openblas ''
       --prefix LD_LIBRARY_PATH : "${openblas}/lib" \
+    '' + lib.optionalString with_tts ''
+      --prefix LD_LIBRARY_PATH : "${piper-phonemize}/lib" \
     '' + ''
       --prefix PATH : "${ffmpeg}/bin"
     '';
@@ -425,7 +477,8 @@ let
     passthru.local-packages = {
       inherit
         go-tiny-dream go-rwkv go-bert go-llama-ggml gpt4all go-piper
-        llama-cpp-grpc whisper-cpp go-tiny-dream-ncnn;
+        llama-cpp-grpc whisper-cpp go-tiny-dream-ncnn espeak-ng' piper-phonemize
+        piper-tts';
     };
 
     passthru.features = {
@@ -448,13 +501,47 @@ let
           nodes.machine = {
             systemd.services.local-ai = {
               wantedBy = [ "multi-user.target" ];
-              serviceConfig.ExecStart = "${self}/bin/local-ai --localai-config-dir . --address :${port}";
+              serviceConfig.ExecStart = "${self}/bin/local-ai --debug --localai-config-dir . --address :${port}";
             };
           };
           testScript = ''
             machine.wait_for_open_port(${port})
             machine.succeed("curl -f http://localhost:${port}/readyz")
           '';
+        };
+    }
+    // lib.optionalAttrs with_tts {
+      # https://localai.io/features/text-to-audio/#piper
+      tts =
+        let
+          port = "8080";
+          voice-en-us = fetchzip {
+            url = "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-en-us-danny-low.tar.gz";
+            hash = "sha256-5wf+6H5HeQY0qgdqnAG1vSqtjIFM9lXH53OgouuPm0M=";
+            stripRoot = false;
+          };
+        in
+        testers.runNixOSTest {
+          name = pname + "-tts";
+          nodes.machine = {
+            systemd.services.local-ai = {
+              wantedBy = [ "multi-user.target" ];
+              serviceConfig.ExecStart = "${self}/bin/local-ai --debug --models-path ${voice-en-us} --localai-config-dir . --address :${port}";
+            };
+          };
+          testScript =
+            let
+              request = {
+                model = "en-us-danny-low.onnx";
+                backend = "piper";
+                input = "Hello";
+              };
+            in
+            ''
+              machine.wait_for_open_port(${port})
+              machine.succeed("curl -f http://localhost:${port}/readyz")
+              machine.succeed("curl -f http://localhost:${port}/tts --json @${writeText "request.json" (builtins.toJSON request)} --output out.wav")
+            '';
         };
     };
 
