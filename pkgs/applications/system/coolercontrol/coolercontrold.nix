@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage {
   inherit version src;
   sourceRoot = "${src.name}/coolercontrold";
 
-  cargoHash = "sha256-Ybqr36AkcPnGJeFcCqg/zuWcaooZ1gJPCi5IbgXmeJ0=";
+  cargoHash = "sha256-qXZ/LXbKkLvnEQibGyMvkkYhz2eEGUHsYxVF3EbCpFc=";
 
   # copy the frontend static resources to a directory for embedding
   postPatch = ''
