@@ -153,6 +153,11 @@ let
         doCheck = false;
       });
 
+      # https://cache.nixos.org/log/srr8kfhx8hzl60hxjpl2vkhbh3y4wmmn-python3.12-django-4.2.11.drv
+      django_4 = super.django_4.overridePythonAttrs {
+        doCheck = false;
+      };
+
       dsmr-parser = super.dsmr-parser.overridePythonAttrs (oldAttrs: rec {
         version = "1.3.1";
         src = fetchFromGitHub {
