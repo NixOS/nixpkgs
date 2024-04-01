@@ -128,7 +128,7 @@ in stdenv'.mkDerivation (finalAttrs: {
     mkdir -p "$out/Applications"
     mv "$out/mscore.app" "$out/Applications/mscore.app"
     mkdir -p $out/bin
-    ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore.
+    ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore
   '';
 
   # Don't run bundled upstreams tests, as they require a running X window system.
