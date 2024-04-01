@@ -20,7 +20,7 @@ buildPythonPackage rec {
   version = "3.1.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "typeddjango";
