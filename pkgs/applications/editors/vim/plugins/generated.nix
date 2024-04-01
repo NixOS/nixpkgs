@@ -17081,5 +17081,17 @@ final: prev:
     meta.homepage = "https://github.com/codethread/qmk.nvim/";
   };
 
+  vim-godot = buildVimPlugin {
+    pname = "vim-godot";
+    version = "2024-02-18";
+    src = fetchFromGitHub {
+      owner = "habamax";
+      repo = "vim-godot";
+      rev = "f9c0b36b299efcc4aa4cb119a2be36a83fe10388";
+      sha256 = "sha256-HKp3CQwAOs+7TL8MjWZ2EHLHMZ3Ss7AckAZ5eOjTDEg=";
+    };
+    meta.homepage = "https://github.com/habamax/vim-godot/";
+  };
+
 
 }
