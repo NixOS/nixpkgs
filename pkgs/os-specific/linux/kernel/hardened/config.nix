@@ -53,8 +53,7 @@ assert (versionAtLeast version "4.9");
   PAGE_POISONING_NO_SANITY = whenOlder "5.11" yes;
   PAGE_POISONING_ZERO      = whenOlder "5.11" yes;
 
-  # Enable init_on_alloc and init_on_free by default
-  INIT_ON_ALLOC_DEFAULT_ON = whenAtLeast "5.3" yes;
+  # Enable init_on_free by default
   INIT_ON_FREE_DEFAULT_ON  = whenAtLeast "5.3" yes;
 
   # Wipe all caller-used registers on exit from a function

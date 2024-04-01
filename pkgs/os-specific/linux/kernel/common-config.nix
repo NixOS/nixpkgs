@@ -723,6 +723,8 @@ let
       # Randomize page allocator when page_alloc.shuffle=1
       SHUFFLE_PAGE_ALLOCATOR = whenAtLeast "5.2" yes;
 
+      INIT_ON_ALLOC_DEFAULT_ON = whenAtLeast "5.3" yes;
+
       # Enable stack smashing protections in schedule()
       # See: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v4.8&id=0d9e26329b0c9263d4d9e0422d80a0e73268c52f
       SCHED_STACK_END_CHECK            = yes;
