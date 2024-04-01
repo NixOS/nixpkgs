@@ -4,7 +4,6 @@ let
   fpm = config.services.phpfpm.pools.castopod;
 
   user = "castopod";
-  stateDirectory = "/var/lib/castopod";
 
   # https://docs.castopod.org/getting-started/install.html#requirements
   phpPackage = pkgs.php.withExtensions ({ enabled, all }: with all; [
@@ -28,6 +27,15 @@ in
         default = pkgs.castopod;
         defaultText = lib.literalMD "pkgs.castopod";
         description = lib.mdDoc "Which Castopod package to use.";
+      };
+      dataDir = lib.mkOption {
+        type = lib.types.path;
+        default = "/var/lib/castopod";
+        description = lib.mdDoc ''
+          The path where castopod stores all data. This path must be in sync
+          with the castopod package (where it is hardcoded during the build in
+          accordance with its own `dataDir` argument).
+        '';
       };
       database = {
         createLocally = lib.mkOption {
@@ -59,6 +67,8 @@ in
           description = lib.mdDoc ''
             A file containing the password corresponding to
             [](#opt-services.castopod.database.user).
+
+            This file is loaded using systemd LoadCredentials.
           '';
         };
       };
@@ -85,6 +95,8 @@ in
           Environment file to inject e.g. secrets into the configuration.
           See [](https://code.castopod.org/adaures/castopod/-/blob/main/.env.example)
           for available environment variables.
+
+          This file is loaded using systemd LoadCredentials.
         '';
       };
       configureNginx = lib.mkOption {
@@ -111,6 +123,19 @@ in
           Options for Castopod's PHP pool. See the documentation on `php-fpm.conf` for details on configuration directives.
         '';
       };
+      maxUploadSize = lib.mkOption {
+        type = lib.types.str;
+        default = "512M";
+        description = lib.mdDoc ''
+          Maximum supported size for a file upload in. Maximum HTTP body
+          size is set to this value for nginx and PHP (because castopod doesn't
+          support chunked uploads yet:
+          https://code.castopod.org/adaures/castopod/-/issues/330).
+
+          Note, that practical upload size limit is smaller. For example, with
+          512 MiB setting - around 500 MiB is possible.
+        '';
+      };
     };
   };
 
@@ -120,13 +145,13 @@ in
         sslEnabled = with config.services.nginx.virtualHosts.${cfg.localDomain}; addSSL || forceSSL || onlySSL || enableACME || useACMEHost != null;
         baseURL = "http${lib.optionalString sslEnabled "s"}://${cfg.localDomain}";
       in
-      lib.mapAttrs (name: lib.mkDefault) {
+      lib.mapAttrs (_: lib.mkDefault) {
         "app.forceGlobalSecureRequests" = sslEnabled;
         "app.baseURL" = baseURL;
 
-        "media.baseURL" = "/";
+        "media.baseURL" = baseURL;
         "media.root" = "media";
-        "media.storage" = stateDirectory;
+        "media.storage" = cfg.dataDir;
 
         "admin.gateway" = "admin";
         "auth.gateway" = "auth";
@@ -142,13 +167,13 @@ in
     services.phpfpm.pools.castopod = {
       inherit user;
       group = config.services.nginx.group;
-      phpPackage = phpPackage;
+      inherit phpPackage;
       phpOptions = ''
-        # https://code.castopod.org/adaures/castopod/-/blob/main/docker/production/app/uploads.ini
+        # https://code.castopod.org/adaures/castopod/-/blob/develop/docker/production/common/uploads.template.ini
         file_uploads = On
         memory_limit = 512M
-        upload_max_filesize = 500M
-        post_max_size = 512M
+        upload_max_filesize = ${cfg.maxUploadSize}
+        post_max_size = ${cfg.maxUploadSize}
         max_execution_time = 300
         max_input_time = 300
       '';
@@ -165,45 +190,50 @@ in
       path = [ pkgs.openssl phpPackage ];
       script =
         let
-          envFile = "${stateDirectory}/.env";
+          envFile = "${cfg.dataDir}/.env";
           media = "${cfg.settings."media.storage"}/${cfg.settings."media.root"}";
         in
         ''
-          mkdir -p ${stateDirectory}/writable/{cache,logs,session,temp,uploads}
+          mkdir -p ${cfg.dataDir}/writable/{cache,logs,session,temp,uploads}
 
           if [ ! -d ${lib.escapeShellArg media} ]; then
             cp --no-preserve=mode,ownership -r ${cfg.package}/share/castopod/public/media ${lib.escapeShellArg media}
           fi
 
-          if [ ! -f ${stateDirectory}/salt ]; then
-            openssl rand -base64 33 > ${stateDirectory}/salt
+          if [ ! -f ${cfg.dataDir}/salt ]; then
+            openssl rand -base64 33 > ${cfg.dataDir}/salt
           fi
 
           cat <<'EOF' > ${envFile}
           ${lib.generators.toKeyValue { } cfg.settings}
           EOF
 
-          echo "analytics.salt=$(cat ${stateDirectory}/salt)" >> ${envFile}
+          echo "analytics.salt=$(cat ${cfg.dataDir}/salt)" >> ${envFile}
 
           ${if (cfg.database.passwordFile != null) then ''
-            echo "database.default.password=$(cat ${lib.escapeShellArg cfg.database.passwordFile})" >> ${envFile}
+            echo "database.default.password=$(cat "$CREDENTIALS_DIRECTORY/dbpasswordfile)" >> ${envFile}
           '' else ''
             echo "database.default.password=" >> ${envFile}
           ''}
 
           ${lib.optionalString (cfg.environmentFile != null) ''
-            cat ${lib.escapeShellArg cfg.environmentFile}) >> ${envFile}
+            cat "$CREDENTIALS_DIRECTORY/envfile" >> ${envFile}
           ''}
 
-          php spark castopod:database-update
+          php ${cfg.package}/share/castopod/spark castopod:database-update
         '';
       serviceConfig = {
         StateDirectory = "castopod";
+        LoadCredential = lib.optional (cfg.environmentFile != null)
+          "envfile:${cfg.environmentFile}"
+        ++ (lib.optional (cfg.database.passwordFile != null)
+          "dbpasswordfile:${cfg.database.passwordFile}");
         WorkingDirectory = "${cfg.package}/share/castopod";
         Type = "oneshot";
         RemainAfterExit = true;
         User = user;
         Group = config.services.nginx.group;
+        ReadWritePaths = cfg.dataDir;
       };
     };
 
@@ -212,9 +242,7 @@ in
       wantedBy = [ "multi-user.target" ];
       path = [ phpPackage ];
       script = ''
-        php public/index.php scheduled-activities
-        php public/index.php scheduled-websub-publish
-        php public/index.php scheduled-video-clips
+        php ${cfg.package}/share/castopod/spark tasks:run
       '';
       serviceConfig = {
         StateDirectory = "castopod";
@@ -222,6 +250,8 @@ in
         Type = "oneshot";
         User = user;
         Group = config.services.nginx.group;
+        ReadWritePaths = cfg.dataDir;
+        LogLevelMax = "notice"; # otherwise periodic tasks flood the journal
       };
     };
 
@@ -251,6 +281,7 @@ in
         extraConfig = ''
           try_files $uri $uri/ /index.php?$args;
           index index.php index.html;
+          client_max_body_size ${cfg.maxUploadSize};
         '';
 
         locations."^~ /${cfg.settings."media.root"}/" = {
@@ -278,7 +309,7 @@ in
       };
     };
 
-    users.users.${user} = lib.mapAttrs (name: lib.mkDefault) {
+    users.users.${user} = lib.mapAttrs (_: lib.mkDefault) {
       description = "Castopod user";
       isSystemUser = true;
       group = config.services.nginx.group;
