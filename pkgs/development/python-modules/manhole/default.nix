@@ -42,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/ionelmc/python-manhole";
     description = "Debugging manhole for Python applications";
+    mainProgram = "manhole-cli";
     license = licenses.bsd2;
     maintainers = with maintainers; [ ivan ];
   };

@@ -11,11 +11,12 @@
 , responses
 , setuptools
 , setuptools-scm
+, syrupy
 }:
 
 buildPythonPackage rec {
   pname = "tldextract";
-  version = "5.1.1";
+  version = "5.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "john-kurkowski";
     repo = "tldextract";
     rev = "refs/tags/${version}";
-    hash = "sha256-/VBbU8FuB8MEuX6MgGO44+gfqVjl1aHHDHncHY2Jo38=";
+    hash = "sha256-rieDDSCit9UcMpCMs2X3+cCS41Wbrp4WWVMzKj/jwEM=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +44,7 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     responses
+    syrupy
   ];
 
   pythonImportsCheck = [
@@ -59,5 +61,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/john-kurkowski/tldextract/blob/${version}/CHANGELOG.md";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "tldextract";
   };
 }

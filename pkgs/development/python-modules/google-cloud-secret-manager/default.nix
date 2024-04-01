@@ -13,21 +13,21 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-secret-manager";
-  version = "2.18.2";
+  version = "2.19.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oA1iEVpwCD6GsdRMp+vK4EGzakTMYupX3kAFcx+NPIg=";
+    hash = "sha256-u5GENYNaFOuUeF9NTZCHvc8bbeMGQy1+2qfWLn94DDA=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     grpc-google-iam-v1
     proto-plus

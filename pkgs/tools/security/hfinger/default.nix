@@ -36,6 +36,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Fingerprinting tool for HTTP requests";
+    mainProgram = "hfinger";
     homepage = "https://github.com/CERT-Polska/hfinger";
     changelog = "https://github.com/CERT-Polska/hfinger/releases/tag/v${version}";
     license = with licenses; [ gpl3Only ];

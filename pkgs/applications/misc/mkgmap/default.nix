@@ -1,11 +1,12 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , fetchsvn
-, substituteAll
 , jdk
 , jre
 , ant
 , makeWrapper
+, stripJavaArchivesHook
 , doCheck ? true
 , withExamples ? false
 }:
@@ -15,23 +16,29 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mkgmap";
-  version = "4917";
+  version = "4918";
 
   src = fetchsvn {
     url = "https://svn.mkgmap.org.uk/mkgmap/mkgmap/trunk";
     rev = version;
-    sha256 = "sha256-7VCEbsvcT7iaJ3MZz4CthJEE9FSJCowAO7PJ9UqmzPA=";
+    sha256 = "sha256-oQ/2KY6xA/kwAroHiPqcIJlcPsTTeStUu8WN/95ZUTw=";
   };
 
   patches = [
-    (substituteAll {
-      # Disable automatic download of dependencies
-      src = ./build.xml.patch;
-      inherit version;
-    })
+    # Disable automatic download of dependencies
+    ./build.xml.patch
+    ./ignore-impure-test.patch
   ];
 
   postPatch = with deps; ''
+    # Manually create version properties file for reproducibility
+    mkdir -p build/classes
+    cat > build/classes/mkgmap-version.properties << EOF
+      svn.version=${version}
+      build.timestamp=unknown
+    EOF
+
+    # Put pre-fetched dependencies into the right place
     mkdir -p lib/compile
     cp ${fastutil} lib/compile/${fastutil.name}
     cp ${osmpbf} lib/compile/${osmpbf.name}
@@ -51,38 +58,53 @@ stdenv.mkDerivation rec {
     '') testInputs}
   '';
 
-  nativeBuildInputs = [ jdk ant makeWrapper ];
+  nativeBuildInputs = [ jdk ant makeWrapper stripJavaArchivesHook ];
 
-  buildPhase = "ant";
+  buildPhase = ''
+    runHook preBuild
+    ant
+    runHook postBuild
+  '';
 
   inherit doCheck;
 
-  checkPhase = "ant test";
+  checkPhase = ''
+    runHook preCheck
+    ant test
+    runHook postCheck
+  '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm644 dist/mkgmap.jar -t $out/share/java/mkgmap
     install -Dm644 dist/doc/mkgmap.1 -t $out/share/man/man1
     cp -r dist/lib/ $out/share/java/mkgmap/
     makeWrapper ${jre}/bin/java $out/bin/mkgmap \
       --add-flags "-jar $out/share/java/mkgmap/mkgmap.jar"
-  '' + lib.optionalString withExamples ''
-    mkdir -p $out/share/mkgmap
-    cp -r dist/examples $out/share/mkgmap/
+
+    ${lib.optionalString withExamples ''
+      mkdir -p $out/share/mkgmap
+      cp -r dist/examples $out/share/mkgmap/
+    ''}
+
+    runHook postInstall
   '';
 
   passthru.updateScript = [ ./update.sh "mkgmap" meta.downloadPage ];
 
   meta = with lib; {
     description = "Create maps for Garmin GPS devices from OpenStreetMap (OSM) data";
-    homepage = "https://www.mkgmap.org.uk/";
     downloadPage = "https://www.mkgmap.org.uk/download/mkgmap.html";
-    sourceProvenance = with sourceTypes; [
-      fromSource
-      binaryBytecode  # deps
-    ];
+    homepage = "https://www.mkgmap.org.uk/";
     license = licenses.gpl2Only;
+    mainProgram = "mkgmap";
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.all;
-    mainProgram = "mkgmap";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode # deps
+    ];
   };
+
 }

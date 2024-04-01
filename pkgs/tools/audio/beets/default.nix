@@ -1,6 +1,7 @@
 { lib
 , callPackage
 , fetchFromGitHub
+, fetchPypi
 , fetchpatch
 , python3Packages
 }:
@@ -17,11 +18,25 @@
 **   alternatives = { enable = true; propagatedBuildInputs = [ beetsPackages.alternatives ]; };
 ** }; }
 */
-lib.makeExtensible (self: {
+let
+  legacyMediafilePython3Packages = python3Packages.override {
+    overrides = self: super: {
+      mediafile = super.mediafile.overridePythonAttrs (oldAttrs: rec {
+        version = "0.10.1";
+        format = "pyproject";
+        src = fetchPypi {
+          pname = "mediafile";
+          inherit version;
+          hash = "sha256-kpZCoX7lAjuQhiIc6AzcLFHQYCGokNRDOwvVvTLysp8=";
+        };
+      });
+    };
+  };
+in lib.makeExtensible (self: {
   beets = self.beets-stable;
 
   beets-stable = callPackage ./common.nix rec {
-    inherit python3Packages;
+    python3Packages = legacyMediafilePython3Packages;
     # NOTE: ./builtin-plugins.nix and ./common.nix can have some conditionals
     # be removed when stable version updates
     version = "1.6.0";

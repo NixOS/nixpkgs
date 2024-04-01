@@ -5,7 +5,6 @@
 , dbus
 , electron_28
 , fetchFromGitHub
-, fetchpatch2
 , glib
 , gnome
 , gtk3
@@ -30,28 +29,38 @@ let
   electron = electron_28;
 in buildNpmPackage rec {
   pname = "bitwarden-desktop";
-  version = "2024.2.0";
+  version = "2024.3.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-nCjcwe+7Riml/J0hAVv/t6/oHIDPhwFD5A3iQ/LNR5Y=";
+    hash = "sha256-XEZB95GnfSy/wtTWpF8KlUQwyephUZmSLtbOwbcvd7g=";
   };
 
   patches = [
-    (fetchpatch2 {
-      url = "https://github.com/bitwarden/clients/commit/746bf0a4745423b9e70c2c54dcf76a95ffb62e11.patch";
-      hash = "sha256-P9MTsiNbAb2kKo/PasIm9kGm0lQjuVUxAJ3Fh1DfpzY=";
-    })
+    ./electron-builder-package-lock.patch
   ];
+
+  # The nested package-lock.json from upstream is out-of-date, so copy the
+  # lock metadata from the root package-lock.json.
+  postPatch = ''
+    cat {,apps/desktop/src/}package-lock.json \
+      | ${lib.getExe jq} -s '
+        .[1].packages."".dependencies.argon2 = .[0].packages."".dependencies.argon2
+          | .[0].packages."" = .[1].packages.""
+          | .[1].packages = .[0].packages
+          | .[1]
+        ' \
+      | ${moreutils}/bin/sponge apps/desktop/src/package-lock.json
+  '';
 
   nodejs = nodejs_18;
 
   makeCacheWritable = true;
   npmFlags = [ "--legacy-peer-deps" ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-GJl9pVwFWEg9yku9IXLcu2XMJZz+ZoQOxCf1TrW715Y=";
+  npmDepsHash = "sha256-EpZXA+GkmHl5eqwIPTGHJZqrpr6k8gXneJG+GXumlkc=";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
@@ -67,7 +76,7 @@ in buildNpmPackage rec {
       patches;
     patchFlags = [ "-p4" ];
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-LjwtOmIJlwtOiy36Y0pP+jJEwfmCGTN4RhqgmD3Yj6E=";
+    hash = "sha256-qAqEFlUzT28fw6kLB8d7U8yXWevAU+q03zjN2xWsGyI=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 

@@ -71,6 +71,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool for testing if Kubernetes is deployed securely";
+    mainProgram = "kubescape";
     homepage = "https://github.com/kubescape/kubescape";
     changelog = "https://github.com/kubescape/kubescape/releases/tag/v${version}";
     longDescription = ''

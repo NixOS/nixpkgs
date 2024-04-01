@@ -1,4 +1,4 @@
-{ lib, stdenv, stdenvNoCC, lndir, runtimeShell, shellcheck-minimal }:
+{ lib, config, stdenv, stdenvNoCC, jq, lndir, runtimeShell, shellcheck-minimal }:
 
 let
   inherit (lib)
@@ -9,55 +9,24 @@ in
 
 rec {
 
-  /*
-    Run the shell command `buildCommand` to produce a store path named `name`.
-
-    The attributes in `env` are added to the environment prior to running the command.
-    Environment variables set by `stdenv.mkDerivation` take precedence.
-
-    By default `runCommand` runs in a stdenv with no compiler environment.
-    `runCommandCC` uses the default stdenv, `pkgs.stdenv`.
-
-    Example:
-
-    ```nix
-    runCommand "name" {envVariable = true;} ''echo hello > $out'';
-    ```
-
-    ```nix
-    runCommandCC "name" {} ''gcc -o myfile myfile.c; cp myfile $out'';
-    ```
-
-    The `*Local` variants force a derivation to be built locally,
-    it is not substituted.
-
-    This is intended for very cheap commands (<1s execution time).
-    It saves on the network roundrip and can speed up a build.
-
-    It is the same as adding the special fields
-
-    ```nix
-    {
-      preferLocalBuild = true;
-      allowSubstitutes = false;
-    }
-    ```
-
-    to a derivation’s attributes.
-  */
+  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
+  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-runCommand
   runCommand = name: env: runCommandWith {
     stdenv = stdenvNoCC;
     runLocal = false;
     inherit name;
     derivationArgs = env;
   };
+  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
+  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-runCommandLocal
   runCommandLocal = name: env: runCommandWith {
     stdenv = stdenvNoCC;
     runLocal = true;
     inherit name;
     derivationArgs = env;
   };
-
+  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
+  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-runCommandCC
   runCommandCC = name: env: runCommandWith {
     stdenv = stdenv;
     runLocal = false;
@@ -67,6 +36,7 @@ rec {
   # `runCommandCCLocal` left out on purpose.
   # We shouldn’t force the user to have a cc in scope.
 
+  # TODO: Move documentation for runCommandWith to the Nixpkgs manual
   /*
     Generalized version of the `runCommand`-variants
     which does customized behavior via a single
@@ -112,47 +82,18 @@ rec {
       // builtins.removeAttrs derivationArgs [ "passAsFile" ]);
 
 
-  /*
-    Writes a text file to the nix store.
-    The contents of text is added to the file in the store.
-
-    Example:
-
-
-    # Writes my-file to /nix/store/<store path>
-    writeTextFile {
-      name = "my-file";
-      text = ''
-        Contents of File
-      '';
-    }
-
-
-    See also the `writeText` helper function below.
-
-
-    # Writes executable my-file to /nix/store/<store path>/bin/my-file
-    writeTextFile {
-      name = "my-file";
-      text = ''
-        Contents of File
-      '';
-      executable = true;
-      destination = "/bin/my-file";
-    }
-
-
-   */
+  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
+  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeTextFile
   writeTextFile =
-    { name # the name of the derivation
+    { name
     , text
-    , executable ? false # run chmod +x ?
-    , destination ? ""   # relative path appended to $out eg "/bin/foo"
-    , checkPhase ? ""    # syntax checks, e.g. for scripts
+    , executable ? false
+    , destination ? ""
+    , checkPhase ? ""
     , meta ? { }
     , allowSubstitutes ? false
     , preferLocalBuild ? true
-    , derivationArgs ? { } # Extra arguments to pass to `stdenv.mkDerivation`
+    , derivationArgs ? { }
     }:
     let
       matches = builtins.match "/bin/([^/]+)" destination;
@@ -240,8 +181,9 @@ rec {
       meta.mainProgram = name;
     };
 
+  # TODO: move parameter documentation to the Nixpkgs manual
   # See doc/build-helpers/trivial-build-helpers.chapter.md
-  # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
+  # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeShellApplication
   writeShellApplication =
     {
       /*
@@ -357,6 +299,7 @@ rec {
     };
 
   # Create a C binary
+  # TODO: add to writers? pkgs/build-support/writers
   writeCBin = pname: code:
     runCommandCC pname
       {
@@ -377,7 +320,9 @@ rec {
         $CC -x c code.c -o "$n"
       '';
 
-
+  # TODO: deduplicate with documentation in doc/build-helpers/trivial-build-helpers.chapter.md
+  #       see also https://github.com/NixOS/nixpkgs/pull/249721
+  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-concatText
   /* concat a list of files to the nix store.
     The contents of files are added to the file in the store.
 
@@ -426,7 +371,9 @@ rec {
         eval "$checkPhase"
       '';
 
-
+  # TODO: deduplicate with documentation in doc/build-helpers/trivial-build-helpers.chapter.md
+  #       see also https://github.com/NixOS/nixpkgs/pull/249721
+  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-concatText
   /*
     Writes a text file to nix store with no optional parameters available.
 
@@ -440,6 +387,9 @@ rec {
   */
   concatText = name: files: concatTextFile { inherit name files; };
 
+  # TODO: deduplicate with documentation in doc/build-helpers/trivial-build-helpers.chapter.md
+  #       see also https://github.com/NixOS/nixpkgs/pull/249721
+  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-concatText
   /*
     Writes a text file to nix store with and mark it as executable.
 
@@ -452,6 +402,10 @@ rec {
 
 
   /*
+    TODO: Deduplicate this documentation.
+    More docs in doc/build-helpers/trivial-build-helpers.chapter.md
+    See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-symlinkJoin
+
     Create a forest of symlinks to the files in `paths`.
 
     This creates a single derivation that replicates the directory structure
@@ -528,6 +482,7 @@ rec {
         ${postBuild}
       '';
 
+  # TODO: move linkFarm docs to the Nixpkgs manual
   /*
     Quickly create a set of symlinks to derivations.
 
@@ -584,6 +539,7 @@ rec {
       ${lib.concatStrings linkCommands}
     '';
 
+  # TODO: move linkFarmFromDrvs docs to the Nixpkgs manual
   /*
     Easily create a linkFarm from a set of derivations.
 
@@ -609,6 +565,7 @@ rec {
     let mkEntryFromDrv = drv: { name = drv.name; path = drv; };
     in linkFarm name (map mkEntryFromDrv drvs);
 
+  # TODO: move onlyBin docs to the Nixpkgs manual
   /*
     Produce a derivation that links to the target derivation's `/bin`,
     and *only* `/bin`.
@@ -623,7 +580,8 @@ rec {
   '';
 
 
-  # docs in doc/builders/special/makesetuphook.section.md
+  # Docs in doc/builders/special/makesetuphook.section.md
+  # See https://nixos.org/manual/nixpkgs/unstable/#sec-pkgs.makeSetupHook
   makeSetupHook =
     { name ? lib.warn "calling makeSetupHook without passing a name is deprecated." "hook"
     , deps ? [ ]
@@ -665,27 +623,28 @@ rec {
       '');
 
 
-  # Write the references (i.e. the runtime dependencies in the Nix store) of `path` to a file.
+  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
+  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeReferencesToFile
+  # TODO: Convert to throw after Nixpkgs 24.05 branch-off.
+  writeReferencesToFile = (if config.allowAliases then lib.warn else throw)
+    "writeReferencesToFile is deprecated in favour of writeClosure"
+    (path: writeClosure [ path ]);
 
-  writeReferencesToFile = path: runCommand "runtime-deps"
+  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
+  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeClosure
+  writeClosure = paths: runCommand "runtime-deps"
     {
-      exportReferencesGraph = [ "graph" path ];
+      # Get the cleaner exportReferencesGraph interface
+      __structuredAttrs = true;
+      exportReferencesGraph.graph = paths;
+      nativeBuildInputs = [ jq ];
     }
     ''
-      touch $out
-      while read path; do
-        echo $path >> $out
-        read dummy
-        read nrRefs
-        for ((i = 0; i < nrRefs; i++)); do read ref; done
-      done < graph
+      jq -r ".graph | map(.path) | sort | .[]" "$NIX_ATTRS_JSON_FILE" > "$out"
     '';
 
-  /*
-    Write the set of references to a file, that is, their immediate dependencies.
-
-    This produces the equivalent of `nix-store -q --references`.
-   */
+  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
+  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeDirectReferencesToFile
   writeDirectReferencesToFile = path: runCommand "runtime-references"
     {
       exportReferencesGraph = [ "graph" path ];
@@ -710,7 +669,7 @@ rec {
       sort ./references >$out
     '';
 
-
+  # TODO: move writeStringReferencesToFile docs to the Nixpkgs manual
   /*
     Extract a string's references to derivations and paths (its
     context) and write them to a text file, removing the input string
@@ -793,21 +752,8 @@ rec {
       writeDirectReferencesToFile (writeText "string-file" string);
 
 
-  /* Print an error message if the file with the specified name and
-    hash doesn't exist in the Nix store. This function should only
-    be used by non-redistributable software with an unfree license
-    that we need to require the user to download manually. It produces
-    packages that cannot be built automatically.
-
-    Example:
-
-    requireFile {
-      name = "my-file";
-      url = "http://example.com/download/";
-      sha256 = "ffffffffffffffffffffffffffffffffffffffffffffffffffff";
-    }
-
-   */
+  # Docs in doc/build-helpers/fetchers.chapter.md
+  # See https://nixos.org/manual/nixpkgs/unstable/#requirefile
   requireFile =
     { name ? null
     , sha256 ? null
@@ -863,6 +809,7 @@ rec {
       };
 
 
+  # TODO: move copyPathToStore docs to the Nixpkgs manual
   /*
     Copy a path to the Nix store.
     Nix automatically copies files to the store before stringifying paths.
@@ -872,11 +819,13 @@ rec {
   copyPathToStore = builtins.filterSource (p: t: true);
 
 
+  # TODO: move copyPathsToStore docs to the Nixpkgs manual
   /*
     Copy a list of paths to the Nix store.
   */
   copyPathsToStore = builtins.map copyPathToStore;
 
+  # TODO: move applyPatches docs to the Nixpkgs manual
   /* Applies a list of patches to a source directory.
 
     Example:
@@ -922,6 +871,7 @@ rec {
       // (optionalAttrs (src?meta) { inherit (src) meta; })
       // (removeAttrs args [ "src" "name" "patches" "prePatch" "postPatch" ]));
 
+  # TODO: move docs to Nixpkgs manual
   /* An immutable file in the store with a length of 0 bytes. */
   emptyFile = runCommand "empty-file"
     {
@@ -931,6 +881,7 @@ rec {
       preferLocalBuild = true;
     } "touch $out";
 
+  # TODO: move docs to Nixpkgs manual
   /* An immutable empty directory in the store. */
   emptyDirectory = runCommand "empty-directory"
     {

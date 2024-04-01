@@ -53,6 +53,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library and CLI tools for interacting with buienradar";
+    mainProgram = "buienradar";
     homepage = "https://github.com/mjj4791/python-buienradar";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

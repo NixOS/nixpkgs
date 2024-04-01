@@ -49,6 +49,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Check MANIFEST.in in a Python source package for completeness";
+    mainProgram = "check-manifest";
     homepage = "https://github.com/mgedmin/check-manifest";
     changelog = "https://github.com/mgedmin/check-manifest/blob/${version}/CHANGES.rst";
     license = licenses.mit;

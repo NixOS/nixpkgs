@@ -12,7 +12,7 @@
 , libsndfile
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "soundtracker";
   version = "1.0.4";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     # Only the latest release is at the top level.
     # Nonetheless, only the name of the file seems to affect which file is
     # downloaded, so this path should be fine both for old and current releases.
-    url = "mirror://sourceforge/soundtracker/soundtracker-${version}.tar.xz";
+    url = "mirror://sourceforge/soundtracker/soundtracker-${finalAttrs.version}.tar.xz";
     hash = "sha256-kNt0BSRaEQY+oa1xbuZ1l6nCqXhcktVugxzcC3ZDaX0=";
   };
 
@@ -76,4 +76,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
   };
-}
+})

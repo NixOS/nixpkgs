@@ -27,7 +27,7 @@ let
     inherit src version;
 
     pname = "openrefine-npm";
-    sourceRoot = "source/main/webapp";
+    sourceRoot = "${src.name}/main/webapp";
 
     npmDepsHash = "sha256-8GhcL4tohQ5u2HeYN6JyTMMobUOqAL8ETCLiP1SoDSk=";
 

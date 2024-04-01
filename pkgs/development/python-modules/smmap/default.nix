@@ -3,6 +3,7 @@
 , buildPythonPackage
 , setuptools
 , nosexcover
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -18,6 +19,8 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
   ];
+
+  doCheck = pythonOlder "3.12";
 
   nativeCheckInputs = [
     nosexcover

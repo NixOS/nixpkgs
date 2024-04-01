@@ -13,9 +13,20 @@
 , df-hashes
 }:
 
-with lib;
-
 let
+  inherit (lib)
+    attrNames
+    elemAt
+    getAttr
+    getLib
+    hasAttr
+    licenses
+    maintainers
+    makeLibraryPath
+    optionalString
+    splitVersion
+    ;
+
   libpath = makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc dwarf-fortress-unfuck SDL ];
 
   # Map Dwarf Fortress platform names to Nixpkgs platform names.

@@ -12,7 +12,7 @@
 rustPlatform.buildRustPackage rec {
   pname = "nushell_plugin_formats";
   inherit (nushell) version src;
-  cargoHash = "sha256-lMxI+tw5B6Q/ZXW1ANl+Oi/x37ds2IEuOkdPIV1zXLA=";
+  cargoHash = "sha256-sEc+Oa2s8d3/9mye/9cHipjamPmLj6P38Jh24VrpfXM=";
 
   env = lib.optionalAttrs stdenv.cc.isClang {
     LIBCLANG_PATH = "${libclang.lib}/lib";
@@ -32,6 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A formats plugin for Nushell";
+    mainProgram = "nu_plugin_formats";
     homepage = "https://github.com/nushell/nushell/tree/${version}/crates/nu_plugin_formats";
     license = licenses.mpl20;
     maintainers = with maintainers; [ viraptor aidalgol ];

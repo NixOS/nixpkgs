@@ -9,4 +9,5 @@ mkKdeDerivation {
 
   extraNativeBuildInputs = [pkg-config];
   extraBuildInputs = [qtwayland wayland];
+  meta.mainProgram = "kde-geo-uri-handler";
 }

@@ -76,12 +76,13 @@ in {
 
       checkconf = mkOption {
         type = types.bool;
-        default = !cfg.settings ? include;
-        defaultText = "!config.services.unbound.settings ? include";
+        default = !cfg.settings ? include && !cfg.settings ? remote-control;
+        defaultText = "!services.unbound.settings ? include && !services.unbound.settings ? remote-control";
         description = lib.mdDoc ''
           Wether to check the resulting config file with unbound checkconf for syntax errors.
 
-          If settings.include is used, then this options is disabled, as the import can likely not be resolved at build time.
+          If settings.include is used, this options is disabled, as the import can likely not be accessed at build time.
+          If settings.remote-control is used, this option is disabled, too as the control-key-file, server-cert-file and server-key-file cannot be accessed at build time.
         '';
       };
 
@@ -229,8 +230,6 @@ in {
       resolvconf = {
         useLocalResolver = mkDefault true;
       };
-
-      networkmanager.dns = "unbound";
     };
 
     environment.etc."unbound/unbound.conf".source = confFile;

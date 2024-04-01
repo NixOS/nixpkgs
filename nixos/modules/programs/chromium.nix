@@ -98,6 +98,24 @@ in
           }
         '';
       };
+
+      initialPrefs = mkOption {
+        type = types.attrs;
+        description = lib.mdDoc ''
+          Initial preferences are used to configure the browser for the first run.
+          Unlike {option}`programs.chromium.extraOpts`, initialPrefs can be changed by users in the browser settings.
+          More information can be found in the Chromium documentation:
+          <https://www.chromium.org/administrators/configuring-other-preferences/>
+        '';
+        default = {};
+        example = literalExpression ''
+          {
+            "first_run_tabs" = [
+              "https://nixos.org/"
+            ];
+          }
+        '';
+      };
     };
   };
 
@@ -110,6 +128,7 @@ in
         { source = "${cfg.plasmaBrowserIntegrationPackage}/etc/chromium/native-messaging-hosts/org.kde.plasma.browser_integration.json"; };
       "chromium/policies/managed/default.json" = lib.mkIf (defaultProfile != {}) { text = builtins.toJSON defaultProfile; };
       "chromium/policies/managed/extra.json" = lib.mkIf (cfg.extraOpts != {}) { text = builtins.toJSON cfg.extraOpts; };
+      "chromium/initial_preferences" = lib.mkIf (cfg.initialPrefs != {}) { text = builtins.toJSON cfg.initialPrefs; };
       # for google-chrome https://www.chromium.org/administrators/linux-quick-start
       "opt/chrome/native-messaging-hosts/org.kde.plasma.browser_integration.json" = lib.mkIf cfg.enablePlasmaBrowserIntegration
         { source = "${cfg.plasmaBrowserIntegrationPackage}/etc/opt/chrome/native-messaging-hosts/org.kde.plasma.browser_integration.json"; };

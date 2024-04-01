@@ -110,6 +110,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Manipulate DNS records on various DNS providers in a standardized way";
+    mainProgram = "lexicon";
     homepage = "https://github.com/AnalogJ/lexicon";
     changelog = "https://github.com/AnalogJ/lexicon/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];

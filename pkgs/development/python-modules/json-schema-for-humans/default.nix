@@ -70,6 +70,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Quickly generate HTML documentation from a JSON schema";
+    mainProgram = "generate-schema-doc";
     homepage = "https://github.com/coveooss/json-schema-for-humans";
     changelog = "https://github.com/coveooss/json-schema-for-humans/releases/tag/v${version}";
     license = licenses.asl20;

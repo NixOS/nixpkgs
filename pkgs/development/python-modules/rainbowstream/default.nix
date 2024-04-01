@@ -74,6 +74,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Streaming command-line twitter client";
+    mainProgram = "rainbowstream";
     homepage = "https://github.com/orakaro/rainbowstream";
     license = licenses.mit;
     maintainers = with maintainers; [ thoughtpolice ];

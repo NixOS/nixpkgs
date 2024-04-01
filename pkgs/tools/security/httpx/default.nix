@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "httpx";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "httpx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-UYMaviHuRP47WSm8tsxjpsVrPgeQRUGTe7TxDAfhoGM=";
+    hash = "sha256-q8R3X1U2Dma0A9WRWIFPSRQHndNJFE2YdfMyPEM6dr8=";
   };
 
-  vendorHash = "sha256-tCwh+uEqXw4PZp11xRSFovXxNstulCMPfcEiVhTFuI4=";
+  vendorHash = "sha256-M7oxM0hMaOT78CxbSGyYk0nhGJC8dLWAlzi/b//EiHw=";
 
   subPackages = [
     "cmd/httpx"
@@ -30,6 +30,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Fast and multi-purpose HTTP toolkit";
+    mainProgram = "httpx";
     longDescription = ''
       httpx is a fast and multi-purpose HTTP toolkit allow to run multiple
       probers using retryablehttp library, it is designed to maintain the

@@ -15,21 +15,21 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-datacatalog";
-  version = "3.18.2";
+  version = "3.19.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-USo8ldUbfsArvjw5+MOubFDOlXkV4GPowHYVsRHBHrk=";
+    hash = "sha256-Oo0O94fw7dRwPn4nyRobX4W9vgTWFgkTLsdyaffVJpI=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     grpc-google-iam-v1
     libcst

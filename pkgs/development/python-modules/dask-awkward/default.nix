@@ -1,6 +1,7 @@
 { lib
 , awkward
 , buildPythonPackage
+, cachetools
 , dask
 , dask-histogram
 , distributed
@@ -19,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "dask-awkward";
-  version = "2024.2.0";
+  version = "2024.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +29,7 @@ buildPythonPackage rec {
     owner = "dask-contrib";
     repo = "dask-awkward";
     rev = "refs/tags/${version}";
-    hash = "sha256-oBGja1dt9UbHym0c5K/pAMXNErryr3u6IhDRuhwTvG0=";
+    hash = "sha256-Lkbp/XrDHOekMpT71pbxtuozgzU9iiGF2GJZ+tuV/yM=";
   };
 
   pythonRelaxDeps = [
@@ -43,6 +44,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     awkward
+    cachetools
     dask
     typing-extensions
   ];

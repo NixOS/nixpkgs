@@ -72,6 +72,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A free, post apocalyptic, zombie infested rogue-like";
+    mainProgram = "cataclysm-tiles";
     longDescription = ''
       Cataclysm: Dark Days Ahead is a roguelike set in a post-apocalyptic world.
       Surviving is difficult: you have been thrown, ill-equipped, into a

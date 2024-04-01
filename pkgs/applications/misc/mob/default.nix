@@ -35,6 +35,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool for smooth git handover";
+    mainProgram = "mob";
     homepage = "https://github.com/remotemobprogramming/mob";
     license = licenses.mit;
     maintainers = with maintainers; [ ericdallo ];

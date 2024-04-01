@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jasper";
-  version = "4.2.1";
+  version = "4.2.2";
 
   src = fetchFromGitHub {
     owner = "jasper-software";
     repo = "jasper";
     rev = "version-${finalAttrs.version}";
-    hash = "sha256-SE3zB+8zZuuT+W6QYTuQhM+dBgYuFzYK4a7QaquGB60=";
+    hash = "sha256-dcE9Cc+L/nLp/JCvYuGLRnkxL1i3dLIB9cSILWaZWn4=";
   };
 
   outputs = [ "out" "dev" "doc" "lib" "man" ];
@@ -75,12 +75,13 @@ stdenv.mkDerivation (finalAttrs: {
       was chosen primarily due to the availability of C development environments
       for most computing platforms when JasPer was first developed, circa 1999.
     '';
-    license = lib.licenses.mit;
+    license = with lib.licenses; [ mit ];
     mainProgram = "jasper";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
-
-    # The value of __STDC_VERSION__ cannot be automatically determined when cross-compiling.
+    # The value of __STDC_VERSION__ cannot be automatically determined when
+    # cross-compiling.
     broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 })
+# TODO: investigate opengl support

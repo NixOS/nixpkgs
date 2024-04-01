@@ -1,0 +1,27 @@
+From e0bd79c04c3647dd5abec5e60c031b1f2762a84c Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Wed, 10 Jan 2024 02:25:46 -0400
+Subject: [PATCH] fix-tmp-path
+
+---
+ build.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/build.sh b/build.sh
+index a1224e4369..555a88fc95 100755
+--- a/build.sh
++++ b/build.sh
+@@ -211,8 +211,8 @@ elif [ -d "$packagesArchiveDir" ]; then
+   if [ -f "${packagesPreviouslySourceBuiltDir}}PackageVersions.props" ]; then
+     packageVersionsPath=${packagesPreviouslySourceBuiltDir}PackageVersions.props
+   elif [ -f "$sourceBuiltArchive" ]; then
+-    tar -xzf "$sourceBuiltArchive" -C /tmp PackageVersions.props
+-    packageVersionsPath=/tmp/PackageVersions.props
++    tar -xzf "$sourceBuiltArchive" PackageVersions.props
++    packageVersionsPath=$PWD/PackageVersions.props
+   fi
+ fi
+ 
+-- 
+2.40.1
+

@@ -18,11 +18,11 @@ An example of how to build an image:
     partitions = {
       "esp" = {
         contents = {
-          ...
+          # ...
         };
         repartConfig = {
           Type = "esp";
-          ...
+          # ...
         };
       };
       "root" = {
@@ -30,7 +30,7 @@ An example of how to build an image:
         repartConfig = {
           Type = "root";
           Label = "nixos";
-          ...
+          # ...
         };
       };
     };
@@ -47,19 +47,21 @@ determined by the mount point, you have to set `stripNixStorePrefix = true;` so
 that the prefix is stripped from the paths before copying them into the image.
 
 ```nix
-fileSystems."/nix/store".device = "/dev/disk/by-partlabel/nix-store"
+{
+  fileSystems."/nix/store".device = "/dev/disk/by-partlabel/nix-store";
 
-image.repart.partitions = {
-  "store" = {
-    storePaths = [ config.system.build.toplevel ];
-    stripNixStorePrefix = true;
-    repartConfig = {
-      Type = "linux-generic";
-      Label = "nix-store";
-      ...
+  image.repart.partitions = {
+    "store" = {
+      storePaths = [ config.system.build.toplevel ];
+      stripNixStorePrefix = true;
+      repartConfig = {
+        Type = "linux-generic";
+        Label = "nix-store";
+        # ...
+      };
     };
   };
-};
+}
 ```
 
 ## Appliance Image {#sec-image-repart-appliance}

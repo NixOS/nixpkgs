@@ -6,4 +6,5 @@ mkKdeDerivation {
   pname = "kblackbox";
 
   extraBuildInputs = [qtsvg];
+  meta.mainProgram = "kblackbox";
 }

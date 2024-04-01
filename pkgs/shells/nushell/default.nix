@@ -24,7 +24,7 @@
 }:
 
 let
-  version = "0.90.1";
+  version = "0.91.0";
 in
 
 rustPlatform.buildRustPackage {
@@ -35,10 +35,10 @@ rustPlatform.buildRustPackage {
     owner = "nushell";
     repo = "nushell";
     rev = version;
-    hash = "sha256-MODd2BT2g6g5H6/1EG5OjIoYm18yBSvYTR83RuYDMec=";
+    hash = "sha256-X3D+JRvnk6HMKWJMTNR16Fmhu+gYd8Ip+7PZQoLIoEU=";
   };
 
-  cargoHash = "sha256-35KPY5t4aozHIcukmeS00g6tzZA9ZsS/44u9vpZ3oGQ=";
+  cargoHash = "sha256-Xj4P/qd4GvmhWGwGaPvY23cQwdjdf6cSb1xyRZLN0tQ=";
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optionals (withDefaultFeatures && stdenv.isLinux) [ python3 ]
@@ -73,7 +73,7 @@ rustPlatform.buildRustPackage {
     description = "A modern shell written in Rust";
     homepage = "https://www.nushell.sh/";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne johntitor marsam ];
+    maintainers = with maintainers; [ Br1ght0ne johntitor marsam joaquintrinanes ];
     mainProgram = "nu";
   };
 }

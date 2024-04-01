@@ -36,6 +36,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Refactoring and code transformation tool for Go";
+    mainProgram = "gopatch";
     homepage = "https://github.com/uber-go/gopatch";
     changelog = "https://github.com/uber-go/gopatch/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

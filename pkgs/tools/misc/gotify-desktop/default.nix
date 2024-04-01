@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gotify-desktop";
-  version = "1.3.4";
+  version = "1.3.6";
 
   src = fetchFromGitHub {
     owner = "desbma";
     repo = pname;
     rev = version;
-    sha256 = "sha256-TuqzwmKB48xcdzrAr7MvDA9JChobraESQZPKoy24mPE=";
+    sha256 = "sha256-epolESdf9+2lI+AJ8hMpVPakS1f8fYam+JniiPLIHCs=";
   };
 
-  cargoHash = "sha256-vg3al+eH9Q4D/T56jwWBlBT4IhuggiEVBl8WoZmUS2Y=";
+  cargoHash = "sha256-VJ/k6sfBCuokXGpfZ9zGQ7ucbHLweUSgBhlChwko69g=";
 
   nativeBuildInputs = [ pkg-config ];
 

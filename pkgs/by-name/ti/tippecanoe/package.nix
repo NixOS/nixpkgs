@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tippecanoe";
-  version = "2.47.0";
+  version = "2.52.0";
 
   src = fetchFromGitHub {
     owner = "felt";
     repo = "tippecanoe";
     rev = finalAttrs.version;
-    hash = "sha256-tkecrbrkwYJU0eZMzU+7rJGAn+S/vnh/rw5co0x1m5M=";
+    hash = "sha256-EXutd+uaMtvs+fWmDIIzuVC8Q+Eo439TEYiMfo+Inco=";
   };
 
   buildInputs = [ sqlite zlib ];

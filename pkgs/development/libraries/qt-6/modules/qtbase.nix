@@ -211,10 +211,7 @@ stdenv.mkDerivation rec {
 
   inherit patches;
 
-  # https://bugreports.qt.io/browse/QTBUG-97568
-  postPatch = ''
-    substituteInPlace src/corelib/CMakeLists.txt --replace-fail "/bin/ls" "${buildPackages.coreutils}/bin/ls"
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace cmake/QtPublicAppleHelpers.cmake --replace-fail "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
   '';
 
@@ -263,6 +260,10 @@ stdenv.mkDerivation rec {
     moveToOutput      "mkspecs/modules" "$dev"
     fixQtModulePaths  "$dev/mkspecs/modules"
     fixQtBuiltinPaths "$out" '*.pr?'
+  '' + lib.optionalString stdenv.isLinux ''
+
+    # FIXME: not sure why this isn't added automatically?
+    patchelf --add-rpath "${libmysqlclient}/lib/mariadb" $out/${qtPluginPrefix}/sqldrivers/libqsqlmysql.so
   '';
 
   dontStrip = debugSymbols;

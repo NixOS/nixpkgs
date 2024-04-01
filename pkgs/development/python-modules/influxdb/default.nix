@@ -4,7 +4,7 @@
 , fetchPypi
 , mock
 , msgpack
-, nose
+, pynose
 , pandas
 , pytestCheckHook
 , pytz
@@ -26,7 +26,12 @@ buildPythonPackage rec {
   postPatch = ''
     for f in influxdb/tests/dataframe_client_test.py influxdb/tests/influxdb08/dataframe_client_test.py; do
       substituteInPlace "$f" \
-        --replace "pandas.util.testing" "pandas.testing"
+        --replace-fail "pandas.util.testing" "pandas.testing"
+    done
+
+    for f in influxdb/tests/influxdb08/client_test.py influxdb/tests/client_test.py; do
+      substituteInPlace "$f" \
+        --replace-fail "assertRaisesRegexp" "assertRaisesRegex"
     done
   '';
 
@@ -44,7 +49,7 @@ buildPythonPackage rec {
     pytestCheckHook
     requests-mock
     mock
-    nose
+    pynose
     pandas
   ];
 
@@ -64,6 +69,8 @@ buildPythonPackage rec {
     "test_multiquery_into_dataframe_dropna"
     # FutureWarning: 'H' is deprecated and will be removed in a future version, please use 'h' instead.
     "test_write_points_from_dataframe_with_tag_escaped"
+    # AssertionError: 2 != 1 : <class 'influxdb.tests.helper_test.TestSeriesHelper.testWarnBulkSizeNoEffect.<locals>.WarnBulkSizeNoEffect'> call should have generated one warning.
+    "testWarnBulkSizeNoEffect"
   ];
 
   pythonImportsCheck = [ "influxdb" ];

@@ -33,14 +33,14 @@ let
   };
 in buildPythonPackage rec {
   pname = "nbconvert";
-  version = "7.16.0";
+  version = "7.16.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gT5lU3ljYkia5XLjm6G/+XhTYZL7UY4QgmsOjK3wPsg=";
+    hash = "sha256-gxDt1B4cQ5R+Ts8WYUxhRp68AkiY64CMzgmZhg/J+xY=";
   };
 
   # Add $out/share/jupyter to the list of paths that are used to search for

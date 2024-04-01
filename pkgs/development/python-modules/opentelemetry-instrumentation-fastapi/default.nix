@@ -19,15 +19,15 @@ buildPythonPackage {
   pname = "opentelemetry-instrumentation-fastapi";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   sourceRoot = "${opentelemetry-instrumentation.src.name}/instrumentation/opentelemetry-instrumentation-fastapi";
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     fastapi
     opentelemetry-api
     opentelemetry-instrumentation

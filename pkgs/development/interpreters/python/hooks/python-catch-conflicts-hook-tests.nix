@@ -78,6 +78,15 @@ in {
       ];
     };
 
+  # multi-output derivation with dependency on itself must not crash
+  cyclic-dependencies =
+    generatePythonPackage {
+      pname = "cyclic-dependencies";
+      preFixup = ''
+        propagatedBuildInputs+=("$out")
+      '';
+    };
+
   # Simplest test case that should trigger a conflict
   catches-simple-conflict = let
     # this build must fail due to conflicts

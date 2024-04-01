@@ -82,6 +82,9 @@ buildPythonPackage rec {
     # Tests make network requests
     "test_streaming_response"
     "test_copy_build_request"
+
+    # Test fails with pytest>=8
+    "test_basic_attribute_access_works"
   ];
 
   disabledTestPaths = [
@@ -91,6 +94,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python client library for the OpenAI API";
+    mainProgram = "openai";
     homepage = "https://github.com/openai/openai-python";
     changelog = "https://github.com/openai/openai-python/releases/tag/v${version}";
     license = licenses.mit;

@@ -203,6 +203,8 @@ in stdenv.mkDerivation (rec {
     ln -sv $PWD/lib $out
   '';
 
+  hardeningDisable = [ "trivialautovarinit" ];
+
   cmakeBuildType = if debugVersion then "Debug" else "Release";
 
   cmakeFlags = with stdenv; let

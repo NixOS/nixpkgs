@@ -1,11 +1,10 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkg-config, doxygen, libGL, glew
 , xorg, ffmpeg_4, libjpeg, libpng, libtiff, eigen
-, Carbon ? null, Cocoa ? null
+, Carbon, Cocoa
 }:
 
 stdenv.mkDerivation rec {
   pname = "pangolin";
-
   version = "0.9.1";
 
   src = fetchFromGitHub {

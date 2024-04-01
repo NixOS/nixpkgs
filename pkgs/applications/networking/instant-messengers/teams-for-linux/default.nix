@@ -9,6 +9,7 @@
 , fetchYarnDeps
 , prefetch-yarn-deps
 , electron
+, libnotify
 , libpulseaudio
 , pipewire
 , alsa-utils
@@ -19,18 +20,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "teams-for-linux";
-  version = "1.4.12";
+  version = "1.4.14";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-LrFF61D2b9+FWnVkb9MYxBJQxMtejuOmGTEtfSj1No4=";
+    hash = "sha256-qdox6C6ztWECwSqHZoZHMbqPFrokPK0u44NUG+SHmPk=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-Z2vnLr14F/Etuq9yWH7ygQwa54an7v99LbU3gPcEuII=";
+    hash = "sha256-++ZPsBH0qHCykexpY2aZukAc+Ak1wEzAUker8ZLxA9Q=";
   };
 
   nativeBuildInputs = [ yarn prefetch-yarn-deps nodejs copyDesktopItems makeWrapper ];
@@ -71,11 +72,11 @@ stdenv.mkDerivation (finalAttrs: {
     done
     popd
 
-    # Linux needs 'aplay' for notification sounds, 'libpulse' for meeting sound, and 'libpipewire' for screen sharing
+    # Linux needs 'aplay' for notification sounds, 'libpulse' for meeting sound, 'libpipewire' for screen sharing and 'libnotify' for notifications
     makeWrapper '${electron}/bin/electron' "$out/bin/teams-for-linux" \
       ${lib.optionalString stdenv.isLinux ''
         --prefix PATH : ${lib.makeBinPath [ alsa-utils which ]} \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio pipewire ]} \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio pipewire libnotify ]} \
       ''} \
       --add-flags "$out/share/teams-for-linux/app.asar" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
@@ -100,6 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Unofficial Microsoft Teams client for Linux";
+    mainProgram = "teams-for-linux";
     homepage = "https://github.com/IsmaelMartinez/teams-for-linux";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ muscaln lilyinstarlight qjoly chvp ];

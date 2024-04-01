@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Osmocom Media Gateway (MGW). speaks RTP and E1 as well as MGCP";
+    mainProgram = "osmo-mgw";
     homepage = "https://osmocom.org/projects/osmo-mgw";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ janik ];

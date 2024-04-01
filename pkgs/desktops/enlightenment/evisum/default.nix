@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "System and process monitor written with EFL";
+    mainProgram = "evisum";
     homepage = "https://www.enlightenment.org";
     license = with licenses; [ isc ];
     platforms = platforms.linux;

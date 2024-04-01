@@ -38,6 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "File identification library for Python";
+    mainProgram = "identify-cli";
     homepage = "https://github.com/chriskuehl/identify";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

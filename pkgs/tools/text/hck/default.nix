@@ -12,10 +12,10 @@ rustPlatform.buildRustPackage rec {
     owner = "sstadick";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-KPpvai7+El2JA97EXDCstZ66FeyVCe7w+ERDDNRZ/h8=";
+    hash = "sha256-KPpvai7+El2JA97EXDCstZ66FeyVCe7w+ERDDNRZ/h8=";
   };
 
-  cargoSha256 = "sha256-TpwUO0BL8kambnxAUE9+l6YYkNL1WzmkTYn1YxjufdY=";
+  cargoHash = "sha256-TpwUO0BL8kambnxAUE9+l6YYkNL1WzmkTYn1YxjufdY=";
 
   nativeBuildInputs = [ cmake ];
 
@@ -25,5 +25,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/sstadick/hck/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit /* or */ unlicense ];
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "hck";
   };
 }

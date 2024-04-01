@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/bderrly/braincurses";
     description = "A version of the classic game Mastermind";
+    mainProgram = "braincurses";
     license = licenses.gpl2;
     maintainers = with maintainers; [ dotlambda ];
     platforms = platforms.linux;

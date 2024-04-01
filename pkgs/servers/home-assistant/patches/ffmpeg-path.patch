@@ -1,8 +1,8 @@
 diff --git a/homeassistant/components/ffmpeg/__init__.py b/homeassistant/components/ffmpeg/__init__.py
-index a98766c78c..1c47bb1f80 100644
+index 4ab4ee32a0..0f04f037f6 100644
 --- a/homeassistant/components/ffmpeg/__init__.py
 +++ b/homeassistant/components/ffmpeg/__init__.py
-@@ -41,7 +41,7 @@ CONF_FFMPEG_BIN = "ffmpeg_bin"
+@@ -46,7 +46,7 @@ CONF_FFMPEG_BIN = "ffmpeg_bin"
  CONF_EXTRA_ARGUMENTS = "extra_arguments"
  CONF_OUTPUT = "output"
  
@@ -70,15 +70,15 @@ index 6eec115d6f..c55b4fb26c 100644
  
      hass.bus.async_fire(EVENT_HOMEASSISTANT_START)
 diff --git a/tests/components/ffmpeg/test_init.py b/tests/components/ffmpeg/test_init.py
-index 0c6ce300d0..ff74a5d7f7 100644
+index 452a818859..41ba776436 100644
 --- a/tests/components/ffmpeg/test_init.py
 +++ b/tests/components/ffmpeg/test_init.py
-@@ -91,7 +91,7 @@ class TestFFmpegSetup:
+@@ -81,7 +81,7 @@ def test_setup_component():
          with assert_setup_component(1):
-             setup_component(self.hass, ffmpeg.DOMAIN, {ffmpeg.DOMAIN: {}})
+             setup_component(hass, ffmpeg.DOMAIN, {ffmpeg.DOMAIN: {}})
  
--        assert self.hass.data[ffmpeg.DATA_FFMPEG].binary == "ffmpeg"
-+        assert self.hass.data[ffmpeg.DATA_FFMPEG].binary == "@ffmpeg@"
+-        assert hass.data[ffmpeg.DATA_FFMPEG].binary == "ffmpeg"
++        assert hass.data[ffmpeg.DATA_FFMPEG].binary == "@ffmpeg@"
+         hass.stop()
  
-     def test_setup_component_test_service(self):
-         """Set up ffmpeg component test services."""
+ 

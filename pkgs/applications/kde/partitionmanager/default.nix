@@ -1,5 +1,4 @@
 { mkDerivation
-, fetchurl
 , lib
 , extra-cmake-modules
 , kdoctools
@@ -79,6 +78,10 @@ mkDerivation {
       --prefix PATH : "${runtimeDeps}"
     )
   '';
+
+  passthru = {
+    inherit kpmcore;
+  };
 
   meta = with lib; {
     description = "KDE Partition Manager";

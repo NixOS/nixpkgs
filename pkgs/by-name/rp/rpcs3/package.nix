@@ -22,6 +22,7 @@
 , flatbuffers
 , llvm_16
 , cubeb
+, enableDiscordRpc ? false
 , faudioSupport ? true
 , faudio
 , SDL2
@@ -62,29 +63,31 @@ stdenv.mkDerivation {
   '';
 
   cmakeFlags = [
-    "-DUSE_SYSTEM_ZLIB=ON"
-    "-DUSE_SYSTEM_LIBUSB=ON"
-    "-DUSE_SYSTEM_LIBPNG=ON"
-    "-DUSE_SYSTEM_FFMPEG=ON"
-    "-DUSE_SYSTEM_CURL=ON"
-    "-DUSE_SYSTEM_WOLFSSL=ON"
-    "-DUSE_SYSTEM_FAUDIO=ON"
-    "-DUSE_SYSTEM_PUGIXML=ON"
-    "-DUSE_SYSTEM_FLATBUFFERS=ON"
-    "-DUSE_SYSTEM_SDL=ON"
-    "-DWITH_LLVM=ON"
-    "-DBUILD_LLVM=OFF"
-    "-DUSE_NATIVE_INSTRUCTIONS=OFF"
-    "-DUSE_FAUDIO=${if faudioSupport then "ON" else "OFF"}"
+    (lib.cmakeBool "USE_SYSTEM_ZLIB" true)
+    (lib.cmakeBool "USE_SYSTEM_LIBUSB" true)
+    (lib.cmakeBool "USE_SYSTEM_LIBPNG" true)
+    (lib.cmakeBool "USE_SYSTEM_FFMPEG" true)
+    (lib.cmakeBool "USE_SYSTEM_CURL" true)
+    (lib.cmakeBool "USE_SYSTEM_WOLFSSL" true)
+    (lib.cmakeBool "USE_SYSTEM_FAUDIO" true)
+    (lib.cmakeBool "USE_SYSTEM_PUGIXML" true)
+    (lib.cmakeBool "USE_SYSTEM_FLATBUFFERS" true)
+    (lib.cmakeBool "USE_SYSTEM_SDL" true)
+    (lib.cmakeBool "USE_SDL" true)
+    (lib.cmakeBool "WITH_LLVM" true)
+    (lib.cmakeBool "BUILD_LLVM" false)
+    (lib.cmakeBool "USE_NATIVE_INSTRUCTIONS" false)
+    (lib.cmakeBool "USE_DISCORD_RPC" enableDiscordRpc)
+    (lib.cmakeBool "USE_FAUDIO" faudioSupport)
   ];
 
   nativeBuildInputs = [ cmake pkg-config git wrapQtAppsHook ];
 
   buildInputs = [
     qtbase qtmultimedia openal glew vulkan-headers vulkan-loader libpng ffmpeg
-    libevdev zlib libusb1 curl wolfssl python3 pugixml flatbuffers llvm_16 libSM
+    libevdev zlib libusb1 curl wolfssl python3 pugixml SDL2 flatbuffers llvm_16 libSM
   ] ++ cubeb.passthru.backendLibs
-    ++ lib.optionals faudioSupport [ faudio SDL2 ]
+    ++ lib.optional faudioSupport faudio
     ++ lib.optionals waylandSupport [ wayland qtwayland ];
 
   postInstall = ''

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, kernel, installShellFiles, pkg-config
 , luajit, ncurses, perl, jsoncpp, openssl, curl, jq, gcc, elfutils, tbb, protobuf, grpc
-, yaml-cpp, nlohmann_json, re2, zstd, uthash, fetchpatch, fetchurl
+, yaml-cpp, nlohmann_json, re2, zstd, uthash
 }:
 
 let
@@ -26,13 +26,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sysdig";
-  version = "0.35.1";
+  version = "0.35.3";
 
   src = fetchFromGitHub {
     owner = "draios";
     repo = "sysdig";
     rev = version;
-    hash = "sha256-nSCkKwhdEduepyvcyWEKMQtQ6TfhF3GnTSreRVoarsw=";
+    hash = "sha256-wvCnWzQbkkM8qEG93li22P67WX1bGX9orTk+2vsBHZY=";
   };
 
   nativeBuildInputs = [ cmake perl installShellFiles pkg-config ];

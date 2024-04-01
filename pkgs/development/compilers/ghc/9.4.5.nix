@@ -107,7 +107,7 @@ let
     Stage1Only = ${if targetPlatform.system == hostPlatform.system then "NO" else "YES"}
     CrossCompilePrefix = ${targetPrefix}
   '' + lib.optionalString (!enableProfiledLibs) ''
-    GhcLibWays = "v dyn"
+    BUILD_PROF_LIBS = NO
   '' +
   # -fexternal-dynamic-refs apparently (because it's not clear from the documentation)
   # makes the GHC RTS able to load static libraries, which may be needed for TemplateHaskell.

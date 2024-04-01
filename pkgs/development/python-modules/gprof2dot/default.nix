@@ -40,6 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python script to convert the output from many profilers into a dot graph";
+    mainProgram = "gprof2dot";
     homepage = "https://github.com/jrfonseca/gprof2dot";
     changelog = "https://github.com/jrfonseca/gprof2dot/releases/tag/${version}";
     license = licenses.lgpl3Plus;

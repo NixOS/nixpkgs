@@ -57,6 +57,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Test framework for Python";
+    mainProgram = "ward";
     homepage = "https://github.com/darrenburns/ward";
     changelog = "https://github.com/darrenburns/ward/releases/tag/release%2F${version}";
     license = licenses.mit;

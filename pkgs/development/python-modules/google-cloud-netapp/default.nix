@@ -14,21 +14,21 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-netapp";
-  version = "0.3.6";
+  version = "0.3.9";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rWsR95I4lXf/xEJ/0HLhTR6V8g46NzmU/PmkAi797rM=";
+    hash = "sha256-Vohliy9W+fkY4YmSIvw6WiWVlLBk+Fo9CvZG/VKeU1o=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     google-auth
     proto-plus

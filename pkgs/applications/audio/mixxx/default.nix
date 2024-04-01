@@ -142,6 +142,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://mixxx.org";
     description = "Digital DJ mixing software";
+    mainProgram = "mixxx";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ goibhniu bfortz ];
     platforms = platforms.linux;

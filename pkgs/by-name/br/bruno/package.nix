@@ -14,24 +14,43 @@
 , cairo
 , pango
 , npm-lockfile-fix
+, overrideSDK
+, darwin
+, fetchpatch
 }:
 
-buildNpmPackage rec {
+let
+  # fix for: https://github.com/NixOS/nixpkgs/issues/272156
+  buildNpmPackage' =
+    buildNpmPackage.override {
+      stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+    };
+  # update package-lock to fix build errors. this will be resolved in the
+  # next patch version of Bruno at which point the patch can be removed entirely.
+  # upstream PR: https://github.com/usebruno/bruno/pull/1894
+  brunoLockfilePatch_1_12_2 = fetchpatch {
+    url = "https://github.com/usebruno/bruno/pull/1894/commits/e3bab23446623315ee674283285a86e210778fe7.patch";
+    hash = "sha256-8rYBvgu9ZLXjb9AFyk4yMBVjcyFPmlNi66YEaQGQaKw=";
+  };
+in
+buildNpmPackage' rec {
   pname = "bruno";
-  version = "1.6.1";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     rev = "v${version}";
-    hash = "sha256-Vf4UHN13eE9W4rekOEGAWIP3x79cVH3vI9sxuIscv8c=";
+    hash = "sha256-C/WeEloUGF0PEfeanm6lHe/MgpcF+g/ZY2tnqXFl9LA=";
 
     postFetch = ''
+      patch -d $out <${brunoLockfilePatch_1_12_2}
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-pfV9omdJiozJ9VotTImfM/DRsBPNGAEzmSdj3/C//4A=";
+  npmDepsHash = "sha256-Zt5cVB1S86iPYKOUj7FwyR97lwmnFz6sZ+S3Ms/b9+o=";
+  npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
     (writeShellScriptBin "phantomjs" "echo 2.1.1")
@@ -45,6 +64,8 @@ buildNpmPackage rec {
     pixman
     cairo
     pango
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.CoreText
   ];
 
   desktopItems = [
@@ -68,6 +89,7 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
   postBuild = ''
+    npm run build --workspace=packages/bruno-common
     npm run build --workspace=packages/bruno-graphql-docs
     npm run build --workspace=packages/bruno-app
     npm run build --workspace=packages/bruno-query

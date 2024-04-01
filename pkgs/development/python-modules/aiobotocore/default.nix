@@ -13,13 +13,14 @@
 , setuptools
 , pytest-asyncio
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , wrapt
 }:
 
 buildPythonPackage rec {
   pname = "aiobotocore";
-  version = "2.11.2";
+  version = "2.12.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +29,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "aiobotocore";
     rev = "refs/tags/${version}";
-    hash = "sha256-H9nsLPxjv3H5y6+5piBt6Pb+Wks4vwOitM+WQtyViPs=";
+    hash = "sha256-+CXKDk6crCPTVpVfcDWy+1UzS05oTu1RtIvDcVrEmFU=";
   };
 
   # Relax version constraints: aiobotocore works with newer botocore versions
@@ -96,6 +97,10 @@ buildPythonPackage rec {
     "test_required_config_not_set"
     "test_sso_cred_fetcher_raises_helpful_message_on_unauthorized_exception"
     "test_sso_credential_fetcher_can_fetch_credentials"
+  ] ++ lib.optionals (pythonAtLeast "3.12.") [
+    # AttributeError: 'called_with' is not a valid assertion. Use a spec for the mock if 'called_with' is meant to be an attribute.
+    "test_max_rate_updated_on_success_response"
+    "test_max_rate_cant_exceed_20_percent_max"
   ];
 
   __darwinAllowLocalNetworking = true;

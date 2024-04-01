@@ -12,12 +12,12 @@
 , gupnp_1_6
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "upnp-router-control";
   version = "0.3.4";
 
   src = fetchzip {
-    url = "https://launchpad.net/upnp-router-control/trunk/${version}/+download/upnp-router-control-${version}.tar.xz";
+    url = "https://launchpad.net/upnp-router-control/trunk/${finalAttrs.version}/+download/upnp-router-control-${finalAttrs.version}.tar.xz";
     hash = "sha256-28F/OB2fHemn7HLVFEDmefRA5AsEaQKy+Qbcv75z9w0=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     mainProgram = "upnp-router-control";
   };
-}
+})

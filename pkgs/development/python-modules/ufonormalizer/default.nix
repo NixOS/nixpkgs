@@ -17,6 +17,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Script to normalize the XML and other data inside of a UFO";
+    mainProgram = "ufonormalizer";
     homepage = "https://github.com/unified-font-object/ufoNormalizer";
     license = licenses.bsd3;
     maintainers = [ maintainers.sternenseemann ];

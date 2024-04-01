@@ -4,11 +4,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "XStatic-jQuery";
+  pname = "xstatic-jquery";
   version = "3.5.1.1";
 
   src = fetchPypi {
-    inherit version pname;
+    pname = "XStatic-jQuery";
+    inherit version;
     sha256 = "e0ae8f8ec5bbd28045ba4bca06767a38bd5fc27cf9b71f434589f59370dcd323";
   };
 

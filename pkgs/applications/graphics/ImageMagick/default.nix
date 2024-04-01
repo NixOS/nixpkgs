@@ -25,6 +25,7 @@
 , libwebpSupport ? !stdenv.hostPlatform.isMinGW, libwebp
 , libheifSupport ? true, libheif
 , potrace
+, coreutils
 , curl
 , ApplicationServices
 , Foundation
@@ -64,6 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   configureFlags = [
+    # specify delegates explicitly otherwise `convert` will invoke the build
+    # coreutils for filetypes it doesn't natively support.
+    "MVDelegate=${lib.getExe' coreutils "mv"}"
+    "RMDelegate=${lib.getExe' coreutils "rm"}"
     "--with-frozenpaths"
     (lib.withFeatureAs (arch != null) "gcc-arch" arch)
     (lib.withFeature librsvgSupport "rsvg")

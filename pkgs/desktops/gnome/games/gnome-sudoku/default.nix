@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Sudoku";
     description = "Test your logic skills in this number grid puzzle";
+    mainProgram = "gnome-sudoku";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

@@ -27,6 +27,7 @@ python3Packages.buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/philipl/evdevremapkeys";
     description = "Daemon to remap events on linux input devices";
+    mainProgram = "evdevremapkeys";
     license = licenses.mit;
     maintainers = [ maintainers.q3k ];
     platforms = platforms.linux;

@@ -11,12 +11,12 @@
 
 buildPythonApplication rec {
   pname = "zfs_replicate";
-  version = "3.2.9";
+  version = "3.2.11";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JMkZ4AexN++vPIPqzv9majdUkoAyos+Nm4Vlgeyx0Jg=";
+    hash = "sha256-8u65Ht7s2RqBYetKf/3erb6B2+/iZgnqHBogYa4J/rs=";
   };
 
   postPatch = ''
@@ -43,6 +43,7 @@ buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/alunduil/zfs-replicate";
     description = "ZFS Snapshot Replication";
+    mainProgram = "zfs-replicate";
     license = licenses.bsd2;
     maintainers = with maintainers; [ alunduil ];
   };

@@ -6,6 +6,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, pytest_7
 , pythonAtLeast
 , pythonOlder
 , pytest-aiohttp
@@ -49,7 +50,7 @@ buildPythonPackage rec {
     aiohttp-wsgi
     pytest-aiohttp
     pytest-asyncio
-    pytestCheckHook
+    (pytestCheckHook.override { pytest = pytest_7; })
   ];
 
   pytestFlagsArray = [

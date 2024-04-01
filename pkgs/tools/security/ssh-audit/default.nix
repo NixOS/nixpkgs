@@ -26,6 +26,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool for ssh server auditing";
+    mainProgram = "ssh-audit";
     homepage = "https://github.com/jtesta/ssh-audit";
     changelog = "https://github.com/jtesta/ssh-audit/releases/tag/v${version}";
     license = licenses.mit;

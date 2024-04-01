@@ -9,7 +9,7 @@
 , dpkg
 , writeScript
 , bash
-, strip-nondeterminism
+, stripJavaArchivesHook
 , tor
 , zip
 , xz
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     dpkg
     imagemagick
     makeWrapper
-    strip-nondeterminism
+    stripJavaArchivesHook
     xz
     zip
     findutils
@@ -89,7 +89,6 @@ stdenv.mkDerivation rec {
     tar --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cJf native/linux/x64/tor.tar.xz tor
     tor_jar_file=$(find ./opt/bisq/lib/app -name "tor-binary-linux64-*.jar")
     zip -r $tor_jar_file native
-    strip-nondeterminism ./opt/bisq/lib/app/*.jar
   '';
 
   installPhase = ''

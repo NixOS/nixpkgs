@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "lima";
-  version = "0.20.1";
+  version = "0.20.2";
 
   src = fetchFromGitHub {
     owner = "lima-vm";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-MeTFATaAGRSaUXmC1fv9/gMFWafvkteKVJS6MHaqt8A=";
+    sha256 = "sha256-xFiCGuCUJUnWN5DBfwjhBgntDfod4CWpXqJ3dbrDUSQ=";
   };
 
   vendorHash = "sha256-wd7YiEo4Gy2kHF7aCRoNGlbOQUxqQnKqP3znzMqS2PI=";

@@ -37,6 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Find Mullvad servers with the lowest latency at your location";
+    mainProgram = "mullvad-closest";
     homepage = "https://github.com/Ch00k/mullvad-closest";
     license = licenses.unlicense;
     maintainers = with maintainers; [ siraben ];

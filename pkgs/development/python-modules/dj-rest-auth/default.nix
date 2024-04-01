@@ -5,6 +5,7 @@
 , djangorestframework
 , djangorestframework-simplejwt
 , fetchFromGitHub
+, fetchpatch
 , python
 , pythonOlder
 , responses
@@ -25,6 +26,15 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-TqeNpxXn+v89fEiJ4AVNhp8blCfYQKFQfYmZ6/QlRbQ=";
   };
+
+  patches = [
+    # https://github.com/iMerica/dj-rest-auth/pull/597
+    (fetchpatch {
+      name = "disable-email-confirmation-ratelimit-in-tests-to-support-new-allauth.patch";
+      url = "https://github.com/iMerica/dj-rest-auth/commit/c8f19e18a93f4959da875f9c5cdd32f7d9363bba.patch";
+      hash = "sha256-Y/YBjV+c5Gw1wMR5r/4VnyV/ewUVG0z4pjY/MB4ca9Y=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \

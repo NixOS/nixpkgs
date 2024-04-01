@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "absl-py";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2WkCEcX8/vzdGkVHCsK1xazUUkHDr3Hu2WvFRBdGwNU=";
+    hash = "sha256-eCB5DvuzFnOc3otOGTVyQ/w2CKFSAkKIUT3ZaNfZWf8=";
   };
 
   nativeBuildInputs = [

@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , qtbase
 , qtsvg
+, qtwayland
 , qtwebengine
 , qtdeclarative
 , extra-cmake-modules
@@ -33,14 +34,14 @@ https://github.com/NixOS/nixpkgs/issues/199596#issuecomment-1310136382 */
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.4.13";
+  version = "1.5.0";
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-RysX2IAzhGz/L65nDEL2UQLXIjdkQRmMs7bqNQIR+eA=";
+    hash = "sha256-O8FLjse2gY8KNWGXpUeZ83cNk0ZuRAZJJ3Am33/ABVw=";
   };
 
   buildInputs = [
@@ -51,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     qtforkawesome
   ] ++ lib.optionals stdenv.isDarwin [ iconv ]
+    ++ lib.optionals stdenv.isLinux [ qtwayland ]
     ++ lib.optionals webviewSupport [ qtwebengine ]
     ++ lib.optionals jsSupport [ qtdeclarative ]
     ++ lib.optionals kioPluginSupport [ kio ]
@@ -76,8 +78,13 @@ stdenv.mkDerivation (finalAttrs: {
     export QT_QPA_PLATFORM=offscreen
     export QT_PLUGIN_PATH="${lib.getBin qtbase}/${qtbase.qtPluginPrefix}"
   '';
-  # don't test --help  on Darwin because output is .app
-  doInstallCheck = !stdenv.isDarwin;
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    # put the app bundle into the proper place /Applications instead of /bin
+    mkdir -p $out/Applications
+    mv $out/bin/syncthingtray.app $out/Applications
+    # Make binary available in PATH like on other platforms
+    ln -s $out/Applications/syncthingtray.app/Contents/MacOS/syncthingtray $out/bin/syncthingtray
+  '';
   installCheckPhase = ''
     $out/bin/syncthingtray --help | grep ${finalAttrs.version}
   '';

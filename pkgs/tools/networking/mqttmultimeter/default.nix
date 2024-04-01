@@ -1,8 +1,7 @@
 { lib
 , stdenv
 , dotnetCorePackages
-, dotnet-runtime_6
-, dotnet-runtime_7
+, dotnet-runtime_8
 , buildDotnetModule
 , fetchFromGitHub
 , autoPatchelfHook
@@ -16,37 +15,23 @@
 # NOTES:
 # 1. we need autoPatchelfHook for quite a number of things in $out/lib
 
-let
-  version = "1.7.0.211";
-
-  sdk =
-    if lib.versionAtLeast (lib.versions.majorMinor version) "1.7"
-    then dotnetCorePackages.sdk_7_0
-    else dotnetCorePackages.sdk_6_0;
-
-  runtime =
-    if lib.versionAtLeast (lib.versions.majorMinor version) "1.7"
-    then dotnet-runtime_7
-    else dotnet-runtime_6;
-
-in
 buildDotnetModule rec {
   pname = "mqttmultimeter";
-  inherit version;
+  version = "1.8.2.272";
 
   src = fetchFromGitHub {
     owner = "chkr1011";
     repo = "mqttMultimeter";
     rev = "v" + version;
-    hash = "sha256-/XQ5HD0dBfFn3ERlLwHknS9Fyd3YMpKHBXuvMwRXcQ8=";
+    hash = "sha256-vL9lmIhNLwuk1tmXLKV75xAhktpdNOb0Q4ZdvLur5hw=";
   };
 
   sourceRoot = "${src.name}/Source";
 
   projectFile = [ "mqttMultimeter.sln" ];
   nugetDeps = ./deps.nix;
-  dotnet-sdk = sdk;
-  dotnet-runtime = runtime;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnet-runtime_8;
   executables = [ "mqttMultimeter" ];
 
   nativeBuildInputs = [

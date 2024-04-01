@@ -18,7 +18,7 @@
 , Foundation
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-obfuscate";
   version = "0.0.9";
 
@@ -26,13 +26,13 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Obfuscate";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-aUhzact437V/bSsG2Ddu2mC03LbyXFg+hJiuGy5NQfQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit (finalAttrs) src;
+    name = "${finalAttrs.pname}-${finalAttrs.version}";
     hash = "sha256-HUQvdCmzjdmuJGDLtC/86yzbRimLzx+XbW29f+Ua48w=";
   };
 
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     mainProgram = "obfuscate";
     maintainers = with maintainers; [ fgaz ];
   };
-}
+})

@@ -45,19 +45,19 @@ stdenv.mkDerivation rec {
   #   in \
   #   rWrapper.override{ packages = [ xgb ]; }"
   pname = lib.optionalString rLibrary "r-" + pnameBase;
-  version = "2.0.1";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "dmlc";
     repo = pnameBase;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-tRx6kJwIoVSN701ppuyZpIFUQIFy4LBMFyirLtwApjA=";
+    hash = "sha256-LWco3A6zwdnAf8blU4qjW7PFEeZaTcJlVTwVrs7nwWM=";
   };
 
   nativeBuildInputs = [ cmake ]
     ++ lib.optionals stdenv.isDarwin [ llvmPackages.openmp ]
-    ++ lib.optionals cudaSupport [ cudaPackages.autoAddOpenGLRunpathHook ]
+    ++ lib.optionals cudaSupport [ cudaPackages.autoAddDriverRunpath ]
     ++ lib.optionals rLibrary [ R ];
 
   buildInputs = [ gtest ] ++ lib.optional cudaSupport cudaPackages.cudatoolkit
@@ -143,6 +143,7 @@ stdenv.mkDerivation rec {
       "Scalable, Portable and Distributed Gradient Boosting (GBDT, GBRT or GBM) Library";
     homepage = "https://github.com/dmlc/xgboost";
     license = licenses.asl20;
+    mainProgram = "xgboost";
     platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar nviets ];
   };

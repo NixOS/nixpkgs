@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, nose, mock }:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, pynose, mock }:
 
 buildPythonPackage rec {
   pname = "uvcclient";
@@ -12,8 +12,13 @@ buildPythonPackage rec {
     sha256 = "0k8aswrk1n08w6pi6dg0zdzsmk23cafihkrss9ywg3i85w7q43x2";
   };
 
+  postPatch = ''
+    substituteInPlace tests/test_camera.py \
+      --replace-fail "assertEquals" "assertEqual"
+  '';
+
   nativeCheckInputs = [
-    nose
+    pynose
     mock
   ];
 
@@ -23,6 +28,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Client for Ubiquiti's Unifi Camera NVR";
+    mainProgram = "uvc";
     homepage = "https://github.com/kk7ds/uvcclient";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hexa ];

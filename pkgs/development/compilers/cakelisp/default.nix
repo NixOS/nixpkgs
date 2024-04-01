@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchgit, fetchpatch, gcc, unstableGitUpdater }:
+{ lib, stdenv, fetchgit, gcc, unstableGitUpdater }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cakelisp";
   # using unstable as it's the only version that builds against gcc-13
-  version = "0.3.0-unstable-2023-12-18";
+  version = "0.3.0-unstable-2024-02-21";
 
   src = fetchgit {
     url = "https://macoy.me/code/macoy/cakelisp";
-    rev = "866fa2806d3206cc9dd398f0e86640db5be42bd6";
-    hash = "sha256-vwMZUNy+updwk69ahA/D9LhO68eV6wH0Prq+o/i1Q/A=";
+    rev = "75ce620b265bf83c6952c0093df2b9d4f7f32a54";
+    hash = "sha256-X+tWq2QQogy4d042pcVuldc80jcClYtV09Jr91rHJl4=";
   };
 
   buildInputs = [ gcc ];
@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=format";
+
   installPhase = ''
     runHook preInstall
     install -Dm755 bin/cakelisp -t $out/bin
@@ -42,6 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A performance-oriented Lisp-like language";
+    mainProgram = "cakelisp";
     homepage = "https://macoy.me/code/macoy/cakelisp";
     license = licenses.gpl3Plus;
     platforms = platforms.darwin ++ platforms.linux;

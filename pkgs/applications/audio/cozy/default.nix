@@ -8,7 +8,7 @@
 , gtk3
 , gst_all_1
 , gobject-introspection
-, libhandy
+, libadwaita
 , libdazzle
 , python3Packages
 , cairo
@@ -22,13 +22,13 @@ python3Packages.buildPythonApplication rec {
   format = "other"; # no setup.py
 
   pname = "cozy";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "geigi";
     repo = pname;
     rev = version;
-    hash = "sha256-cRqfLFLvje8lxUZ4S83UAFyYUX0vj1ZgLG0Y6gpCfmI=";
+    hash = "sha256-oMgdz2dny0u1XV13aHu5s8/pcAz8z/SAOf4hbCDsdjw";
   };
 
   nativeBuildInputs = [
@@ -44,8 +44,8 @@ python3Packages.buildPythonApplication rec {
     cairo
     gettext
     gnome.adwaita-icon-theme
+    libadwaita
     libdazzle
-    libhandy
     pantheon.granite
   ] ++ (with gst_all_1; [
     gstreamer

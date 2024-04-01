@@ -15,25 +15,27 @@
 , flex
 , fontconfig
 , freetype
+, ghostscript
 , glib
 , glm
 , gmp
 , harfbuzz
 , hidapi
 , lib3mf
-, libGL
 , libGLU
 , libICE
 , libSM
 , libsForQt5
 , libspnav
 , libzip
+, mesa
 , mpfr
 , python3
 , tbb_2021_8
 , wayland
 , wayland-protocols
 , wrapGAppsHook
+, xorg
 }:
 let
   # get cccl from source to avoid license issues
@@ -79,24 +81,25 @@ in
 # clang consume much less RAM than GCC
 clangStdenv.mkDerivation rec {
   pname = "openscad-unstable";
-  version = "2024-02-18";
+  version = "2024-03-10";
   src = fetchFromGitHub {
     owner = "openscad";
     repo = "openscad";
-    rev = "f5688998760d6b85d7b280300388448c162edc42";
-    hash = "sha256-rQnih7Am7NvlrTwIGAN4QbZCcziFm6YOOT27wmjcY8A=";
+    rev = "db167b1df31fbd8a2101cf3a13dac148b0c2165d";
+    hash = "sha256-i2ZGYsNfMLDi3wRd/lohs9BuO2KuQ/7kJIXGtV65OQU=";
     fetchSubmodules = true;
   };
+  patches = [ ./test.diff ];
   nativeBuildInputs = [
-    pkg-config
-    cmake
-    ninja
+    (python3.withPackages (ps: with ps; [ numpy pillow ]))
     bison
+    cmake
     flex
-    python3
     libsForQt5.qt5.wrapQtAppsHook
     llvmPackages.bintools
     wrapGAppsHook
+    ninja
+    pkg-config
   ];
   buildInputs = with libsForQt5; with qt5; [
     # manifold dependencies
@@ -112,6 +115,7 @@ clangStdenv.mkDerivation rec {
     eigen
     fontconfig
     freetype
+    ghostscript
     glib
     gmp
     harfbuzz
@@ -124,7 +128,15 @@ clangStdenv.mkDerivation rec {
     qtbase
     qtmultimedia
   ]
-  ++ lib.optionals clangStdenv.isLinux [ libICE libSM libGLU libGL wayland wayland-protocols qtwayland ]
+  ++ lib.optionals clangStdenv.isLinux [
+    xorg.libXdmcp
+    libICE
+    libSM
+    wayland
+    wayland-protocols
+    qtwayland
+    libGLU
+  ]
   ++ lib.optional clangStdenv.isDarwin qtmacextras
   ;
   cmakeFlags = [
@@ -133,11 +145,18 @@ clangStdenv.mkDerivation rec {
     "-DUSE_BUILTIN_OPENCSG=ON" # bundled latest opencsg
     "-DOPENSCAD_VERSION=\"${builtins.replaceStrings ["-"] ["."] version}\""
     "-DCMAKE_UNITY_BUILD=ON" # faster build
-    "-DENABLE_TESTS=OFF" # tests do not work for now
     # IPO
     "-DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld"
     "-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON"
   ];
+  doCheck = true;
+  checkPhase = ''
+    # for running mesa llvmpipe
+    export __EGL_VENDOR_LIBRARY_FILENAMES=${mesa.drivers}/share/glvnd/egl_vendor.d/50_mesa.json
+    export LIBGL_DRIVERS_PATH=${mesa.drivers}/lib:${mesa.drivers}/lib/dri
+    # some fontconfig issues cause pdf output to have wrong font
+    ctest -j$NIX_BUILD_CORES -E pdfexporttest.\*
+  '';
   meta = with lib; {
     description = "3D parametric model compiler (unstable)";
     longDescription = ''

@@ -13,12 +13,12 @@
 }:
 let
   pname = "polars";
-  version = "0.20.7";
+  version = "0.20.15";
   rootSource = fetchFromGitHub {
     owner = "pola-rs";
     repo = "polars";
     rev = "refs/tags/py-${version}";
-    hash = "sha256-R3by/e28HE+1xq+HQd9wYy/iK+fDM6/IfKuc563atX4=";
+    hash = "sha256-N/VIi0s5unYWqlR5Mpaq9cqXl2ccbzWPuOtE2UbmQw8=";
   };
   rust-jemalloc-sys' = rust-jemalloc-sys.override {
     jemalloc = jemalloc.override {
@@ -43,9 +43,6 @@ buildPythonPackage {
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
-    outputHashes = {
-      "jsonpath_lib-0.3.0" = "sha256-NKszYpDGG8VxfZSMbsTlzcMGFHBOUeFojNw4P2wM3qk=";
-    };
   };
 
   buildAndTestSubdir = "py-polars";
@@ -77,6 +74,7 @@ buildPythonPackage {
   ] ++ lib.optionals stdenv.isDarwin [
     libiconv
     darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   # nativeCheckInputs = [

@@ -27,6 +27,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Real-time HTTP Intrusion Detection";
+    mainProgram = "teler.app";
     longDescription = ''
       teler is an real-time intrusion detection and threat alert
       based on web log that runs in a terminal with resources that

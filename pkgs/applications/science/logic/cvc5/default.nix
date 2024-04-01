@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cvc5";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner  = "cvc5";
     repo   = "cvc5";
     rev    = "cvc5-${version}";
-    hash  = "sha256-TU2ZG6/9bXRPozvEVUiSWixImY38iavD3huhSU8DbCw=";
+    hash  = "sha256-v+3/2IUslQOySxFDYgTBWJIDnyjbU2RPdpfLcIkEtgQ=";
   };
 
   nativeBuildInputs = [ pkg-config cmake flex ];
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A high-performance theorem prover and SMT solver";
+    mainProgram = "cvc5";
     homepage    = "https://cvc5.github.io";
     license     = licenses.gpl3Only;
     platforms   = platforms.unix;

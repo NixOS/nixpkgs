@@ -50,6 +50,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "RISC-V Architectural Test Framework";
+    mainProgram = "riscof";
     homepage = "https://github.com/riscv-software-src/riscof";
     changelog = "https://github.com/riscv-software-src/riscof/blob/${version}/CHANGELOG.md";
     maintainers = with maintainers; [ genericnerdyusername ];

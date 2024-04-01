@@ -44,12 +44,18 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices Foundation ]);
 
+  env = lib.optionalAttrs stdenv.isx86_32 {
+    # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/issues/5
+    NIX_CFLAGS_COMPILE = "-msse2";
+  };
+
   meta = with lib; {
     homepage = "https://www.freedesktop.org/software/pulseaudio/webrtc-audio-processing";
     description = "A more Linux packaging friendly copy of the AudioProcessing module from the WebRTC project";
     license = licenses.bsd3;
-    # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/blob/master/webrtc/rtc_base/system/arch.h
-    # x86-32 disabled due to https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/issues/5
-    platforms = intersectLists platforms.unix (platforms.aarch64 ++ platforms.mips ++ platforms.riscv ++ platforms.x86_64);
+    platforms = platforms.unix;
+    # BE platforms are unsupported
+    # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/issues/31
+    badPlatforms = platforms.bigEndian;
   };
 }

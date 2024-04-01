@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "got";
-  version = "0.96";
+  version = "0.97";
 
   src = fetchurl {
     url = "https://gameoftrees.org/releases/portable/got-portable-${finalAttrs.version}.tar.gz";
-    hash = "sha256-/R7r6IJtgkuNQwoLxys/1HcXW+l3PVkjnPXphFpAFTs=";
+    hash = "sha256-4HpIlKRYUDoymCBH8GS8DDXaY0nYiVvotpBkwglOO3I=";
   };
 
   nativeBuildInputs = [ pkg-config bison ]
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     # The configure script assumes dependencies on Darwin are installed via
     # Homebrew or MacPorts and hardcodes assumptions about the paths of
     # dependencies which fails the nixpkgs configurePhase.
-    substituteInPlace configure --replace 'xdarwin' 'xhomebrew'
+    substituteInPlace configure --replace-fail 'xdarwin' 'xhomebrew'
   '';
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
@@ -49,11 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   installCheckPhase = ''
     runHook preInstallCheck
-    test "$($out/bin/got --version)" = "${finalAttrs.pname} ${finalAttrs.version}"
+    test "$($out/bin/got --version)" = "got ${finalAttrs.version}"
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://gameoftrees.org/releases/CHANGES";
     description = "A version control system which prioritizes ease of use and simplicity over flexibility";
     longDescription = ''
       Game of Trees (Got) is a version control system which prioritizes
@@ -65,9 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
       on the same repository.
     '';
     homepage = "https://gameoftrees.org";
-    changelog = "https://gameoftrees.org/releases/CHANGES";
-    license = licenses.isc;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ abbe afh ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ abbe afh ];
+    mainProgram = "got";
+    platforms = with lib.platforms; darwin ++ linux;
   };
 })

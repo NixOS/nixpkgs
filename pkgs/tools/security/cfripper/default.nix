@@ -12,14 +12,14 @@ let
   };
 in python.pkgs.buildPythonApplication rec {
   pname = "cfripper";
-  version = "1.15.5";
+  version = "1.15.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Skyscanner";
     repo = "cfripper";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kT6cWVeP2mKKef/fBfzZWnkJsWqJp2X9uIkndR+gwoY=";
+    hash = "sha256-h/NNTE5u1coyD4owiGjsK6SIuvDq1SQOPW4RM4yJtno=";
   };
 
   pythonRelaxDeps = [
@@ -65,6 +65,7 @@ in python.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool for analysing CloudFormation templates";
+    mainProgram = "cfripper";
     homepage = "https://github.com/Skyscanner/cfripper";
     changelog = "https://github.com/Skyscanner/cfripper/releases/tag/v${version}";
     license = with licenses; [ asl20 ];

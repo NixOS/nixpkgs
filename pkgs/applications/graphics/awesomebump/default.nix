@@ -14,7 +14,7 @@ let
   qtnproperty = mkDerivation {
     name = "qtnproperty";
     inherit src;
-    sourceRoot = "AwesomeBump/Sources/utils/QtnProperty";
+    sourceRoot = "${src.name}/Sources/utils/QtnProperty";
     patches = [ ./qtnproperty-parallel-building.patch ];
     buildInputs = [ qtscript qtbase qtdeclarative ];
     nativeBuildInputs = [ qmake flex bison ];

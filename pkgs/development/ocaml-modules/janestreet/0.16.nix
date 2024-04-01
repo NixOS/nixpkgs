@@ -146,7 +146,7 @@ with self;
     hash = "sha256-83YKxvVb/JwBnQG4R/R1Ztik9T/hO4cbiNTfFnErpG4=";
     meta.description = "Async wrappers for SSL";
     buildInputs = [ dune-configurator ];
-    propagatedBuildInputs = [ async ctypes openssl ];
+    propagatedBuildInputs = [ async ctypes ctypes-foreign openssl ];
   };
 
   async_unix = janePackage {

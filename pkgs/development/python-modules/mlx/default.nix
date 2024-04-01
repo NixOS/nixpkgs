@@ -29,13 +29,13 @@ let
 in
 buildPythonPackage rec {
   pname = "mlx";
-  version = "0.1.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "ml-explore";
     repo = "mlx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xNJPG8XGbC0fy6RGcn1cxCsejyHsgnV35PuP8F1I4R4=";
+    hash = "sha256-FihdI+3ACKMJfPT2POjTRdtkXs7x+KiQpdpo3RcczBE=";
   };
 
   pyproject = true;

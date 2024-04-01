@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "0.1.28";
+  version = "0.1.36";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "langchain_core";
     inherit version;
-    hash = "sha256-BOdhpRMgC25bWBhhOCGUV5nAe8U0kIfXaS5QgjEHydY=";
+    hash = "sha256-qiQyNwyj0qXW3RSoEKpkiL8vYi/3oKPcMPbg7Z1/X6g=";
   };
 
   pythonRelaxDeps = [

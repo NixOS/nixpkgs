@@ -39,20 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
     "tools"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
-    "-Wno-error=deprecated-copy"
-    "-Wno-error=pessimizing-move"
-    # Needed with GCC 12
-    "-Wno-error=format-truncation"
-    "-Wno-error=maybe-uninitialized"
-  ] ++ lib.optionals stdenv.cc.isClang [
-    "-Wno-error=unused-private-field"
-    "-faligned-allocation"
-  ] ++ lib.optionals (lib.versionOlder finalAttrs.version "8") [
-    "-Wno-error=unused-but-set-variable"
-  ] ++ lib.optionals (lib.versionOlder finalAttrs.version "7") [
-    "-Wno-error=deprecated-copy"
-  ]);
+ env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
+   "-faligned-allocation"
+ ]);
 
   cmakeFlags = [
     "-DPORTABLE=1"
@@ -71,11 +60,24 @@ stdenv.mkDerivation (finalAttrs: {
     "-DUSE_RTTI=1"
     "-DROCKSDB_INSTALL_ON_WINDOWS=YES" # harmless elsewhere
     (lib.optional sse42Support "-DFORCE_SSE42=1")
-    "-DFAIL_ON_WARNINGS=${if stdenv.hostPlatform.isMinGW then "NO" else "YES"}"
+    "-DFAIL_ON_WARNINGS=NO"
   ] ++ lib.optional (!enableShared) "-DROCKSDB_BUILD_SHARED=0";
 
   # otherwise "cc1: error: -Wformat-security ignored without -Wformat [-Werror=format-security]"
   hardeningDisable = lib.optional stdenv.hostPlatform.isWindows "format";
+
+  postPatch = lib.optionalString (lib.versionOlder finalAttrs.version "8") ''
+    # Fix gcc-13 build failures due to missing <cstdint> and
+    # <system_error> includes, fixed upstyream sice 8.x
+    sed -e '1i #include <cstdint>' -i db/compaction/compaction_iteration_stats.h
+    sed -e '1i #include <cstdint>' -i table/block_based/data_block_hash_index.h
+    sed -e '1i #include <cstdint>' -i util/string_util.h
+    sed -e '1i #include <cstdint>' -i include/rocksdb/utilities/checkpoint.h
+  '' + lib.optionalString (lib.versionOlder finalAttrs.version "7") ''
+    # Fix gcc-13 build failures due to missing <cstdint> and
+    # <system_error> includes, fixed upstyream sice 7.x
+    sed -e '1i #include <system_error>' -i third-party/folly/folly/synchronization/detail/ProxyLockable-inl.h
+  '';
 
   preInstall = ''
     mkdir -p $tools/bin

@@ -729,8 +729,8 @@ let
         (assertInt "FirewallMark")
         (assertRange "FirewallMark" 1 4294967295)
         (assertInt "Priority")
-        (assertPort "SourcePort")
-        (assertPort "DestinationPort")
+        (assertPortOrPortRange "SourcePort")
+        (assertPortOrPortRange "DestinationPort")
         (assertValueOneOf "InvertRule" boolValues)
         (assertValueOneOf "Family" ["ipv4" "ipv6" "both"])
         (assertInt "SuppressPrefixLength")
@@ -797,6 +797,7 @@ let
           "UseHostname"
           "Hostname"
           "UseDomains"
+          "UseGateway"
           "UseRoutes"
           "UseTimezone"
           "ClientIdentifier"
@@ -829,6 +830,7 @@ let
         (assertValueOneOf "SendHostname" boolValues)
         (assertValueOneOf "UseHostname" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
+        (assertValueOneOf "UseGateway" boolValues)
         (assertValueOneOf "UseRoutes" boolValues)
         (assertValueOneOf "UseTimezone" boolValues)
         (assertValueOneOf "ClientIdentifier" ["mac" "duid" "duid-only"])

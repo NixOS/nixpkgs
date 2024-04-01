@@ -1,4 +1,5 @@
 { lib
+, autoAddDriverRunpath
 , cmake
 , darwin
 , fetchFromGitHub
@@ -16,6 +17,8 @@
 , clblast
 
 , blasSupport ? builtins.all (x: !x) [ cudaSupport metalSupport openclSupport rocmSupport vulkanSupport ]
+, blas
+
 , pkg-config
 , metalSupport ? stdenv.isDarwin && stdenv.isAarch64 && !openclSupport
 , vulkanSupport ? false
@@ -69,13 +72,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "2294";
+  version = "2568";
 
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "llama.cpp";
     rev = "refs/tags/b${finalAttrs.version}";
-    hash = "sha256-uZi4Bj03PgfFV+jS5M+A1sMCWC/GMY5IyyrlR1b4Sh4=";
+    hash = "sha256-yBlLChtzfAi2TAGUO1zdnpHCvi5YDCzjdflQgTWh98Y=";
   };
 
   postPatch = ''
@@ -86,17 +89,15 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ninja pkg-config git ]
     ++ optionals cudaSupport [
     cudaPackages.cuda_nvcc
-
-    # TODO: Replace with autoAddDriverRunpath
-    # once https://github.com/NixOS/nixpkgs/pull/275241 has been merged
-    cudaPackages.autoAddOpenGLRunpathHook
+    autoAddDriverRunpath
   ];
 
   buildInputs = optionals effectiveStdenv.isDarwin darwinBuildInputs
     ++ optionals cudaSupport cudaBuildInputs
-    ++ optionals mpiSupport mpi
+    ++ optionals mpiSupport [ mpi ]
     ++ optionals openclSupport [ clblast ]
     ++ optionals rocmSupport rocmBuildInputs
+    ++ optionals blasSupport [ blas ]
     ++ optionals vulkanSupport vulkanBuildInputs;
 
   cmakeFlags = [
@@ -107,7 +108,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (cmakeBool "BUILD_SHARED_LIBS" true)
     (cmakeBool "LLAMA_BLAS" blasSupport)
     (cmakeBool "LLAMA_CLBLAST" openclSupport)
-    (cmakeBool "LLAMA_CUBLAS" cudaSupport)
+    (cmakeBool "LLAMA_CUDA" cudaSupport)
     (cmakeBool "LLAMA_HIPBLAS" rocmSupport)
     (cmakeBool "LLAMA_METAL" metalSupport)
     (cmakeBool "LLAMA_MPI" mpiSupport)
@@ -131,8 +132,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
         # Should likely use `rocmPackages.clr.gpuTargets`.
         "-DAMDGPU_TARGETS=gfx803;gfx900;gfx906:xnack-;gfx908:xnack-;gfx90a:xnack+;gfx90a:xnack-;gfx940;gfx941;gfx942;gfx1010;gfx1012;gfx1030;gfx1100;gfx1101;gfx1102"
       ]
-      ++ optionals metalSupport [ (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1") ]
-      ++ optionals blasSupport [ (cmakeFeature "LLAMA_BLAS_VENDOR" "OpenBLAS") ];
+      ++ optionals metalSupport [
+        (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")
+        (cmakeBool "LLAMA_METAL_EMBED_LIBRARY" true)
+      ];
 
   # upstream plans on adding targets at the cmakelevel, remove those
   # additional steps after that

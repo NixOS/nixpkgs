@@ -7,21 +7,21 @@
 , gtkmm3
 , libxml2
 , libgtop
-, libwnck
 , librsvg
 , polkit
 , systemd
 , wrapGAppsHook
+, mate-desktop
 , mateUpdateScript
 }:
 
 stdenv.mkDerivation rec {
   pname = "mate-system-monitor";
-  version = "1.26.3";
+  version = "1.28.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "WFthNBX3bucDt7XlK1WWKUKVB+A8kwVKSq3Pb5xlIkk=";
+    sha256 = "QtZj1rkPtTYevBP2VHmD1vHirHXcKuTxysbqYymWWiU=";
   };
 
   nativeBuildInputs = [
@@ -35,13 +35,16 @@ stdenv.mkDerivation rec {
     gtkmm3
     libxml2
     libgtop
-    libwnck
     librsvg
     polkit
     systemd
   ];
 
-  configureFlags = [ "--enable-systemd" ];
+  postPatch = ''
+    # This package does not provide mate-version.xml.
+    substituteInPlace src/sysinfo.cpp \
+      --replace-fail 'DATADIR "/mate-about/mate-version.xml"' '"${mate-desktop}/share/mate-about/mate-version.xml"'
+  '';
 
   enableParallelBuilding = true;
 
@@ -49,6 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "System monitor for the MATE desktop";
+    mainProgram = "mate-system-monitor";
     homepage = "https://mate-desktop.org";
     license = [ licenses.gpl2Plus ];
     platforms = platforms.unix;

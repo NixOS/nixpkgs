@@ -39,6 +39,11 @@ stdenv.mkDerivation rec {
             -i 'a/libselinux/*' --strip 1 <$TMPDIR/patch >"$out"
       '';
     })
+
+    (fetchurl {
+      url = "https://git.yoctoproject.org/meta-selinux/plain/recipes-security/selinux/libselinux/0003-libselinux-restore-drop-the-obsolete-LSF-transitiona.patch?id=62b9c816a5000dc01b28e78213bde26b58cbca9d";
+      sha256 = "sha256-RiEUibLVzfiRU6N/J187Cs1iPAih87gCZrlyRVI2abU=";
+    })
   ];
 
   nativeBuildInputs = [ pkg-config python3 ] ++ optionals enablePython [
@@ -53,7 +58,7 @@ stdenv.mkDerivation rec {
   # command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
   hardeningDisable = [ "fortify" ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error -D_FILE_OFFSET_BITS=64";
 
   makeFlags = [
     "PREFIX=$(out)"

@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "fm";
-  version = "unstable-2023-07-25";
+  version = "0-unstable-2024-01-03";
 
   src = fetchFromGitHub {
     owner = "euclio";
     repo = "fm";
-    rev = "a0830b5483a48a8b1e40982f20c28dcb5bfe4a6e";
-    hash = "sha256-uso7j+bf6PF5wiTzSJymSxNNfzqXVcJygkfGdzQl4xA=";
+    rev = "f1da116fe703a2c3d5bc9450703ecf1a1f1b4fda";
+    hash = "sha256-fCufqCy5H5Up6V15sOz8SJrixth7OQ7tc4yIymmfq1M=";
   };
 
-  cargoHash = "sha256-3IxpnDYbfLI1VAMgqIE4eSkiT9Z6HcC3K6MH6uqD9Ic=";
+  cargoHash = "sha256-E/mT+e17Qse4aPCY5Tuvih+ZMDnUqwvEBY0N70kciMs=";
 
   nativeBuildInputs = [
     pkg-config

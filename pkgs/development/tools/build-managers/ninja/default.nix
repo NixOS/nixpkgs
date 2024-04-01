@@ -93,6 +93,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Small build system with a focus on speed";
+    mainProgram = "ninja";
     longDescription = ''
       Ninja is a small build system with a focus on speed. It differs from
       other build systems in two major respects: it is designed to have its

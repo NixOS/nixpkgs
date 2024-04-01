@@ -51,6 +51,7 @@ buildPythonPackage rec {
   };
 
   pythonRelaxDeps = [
+    "smart-open"
     "typer"
   ];
 
@@ -129,6 +130,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Industrial-strength Natural Language Processing (NLP)";
+    mainProgram = "spacy";
     homepage = "https://github.com/explosion/spaCy";
     changelog = "https://github.com/explosion/spaCy/releases/tag/v${version}";
     license = licenses.mit;

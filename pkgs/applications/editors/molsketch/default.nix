@@ -1,5 +1,5 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchurl
 , cmake
 , pkg-config
@@ -10,13 +10,13 @@
 , desktop-file-utils
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "molsketch";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/molsketch/Molsketch-${version}-src.tar.gz";
-    hash = "sha256-Mpx4fHktxqBAkmdwqg2pXvEgvvGUQPbgqxKwXKjhJuQ=";
+    hash = "sha256-6wFvl3Aktv8RgEdI2ENsKallKlYy/f8Tsm5C0FB/igI=";
   };
 
   patches = [
@@ -54,5 +54,6 @@ mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.moni ];
     mainProgram = "molsketch";
+    platforms = platforms.unix;
   };
 }

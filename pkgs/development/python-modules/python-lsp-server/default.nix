@@ -35,7 +35,7 @@
 
 buildPythonPackage rec {
   pname = "python-lsp-server";
-  version = "1.10.0";
+  version = "1.10.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     owner = "python-lsp";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-dh33m7wgOwUETjdNqqDKZnpTgbrYCg9/XXC296tHm4w=";
+    hash = "sha256-tY+BE8DAajZKwlZ2D7uCr9LC7D61ULkhV8Z9EpRu6j0=";
   };
 
   postPatch = ''

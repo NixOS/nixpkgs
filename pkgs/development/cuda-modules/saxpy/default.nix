@@ -1,11 +1,11 @@
 {
+  autoAddDriverRunpath,
   cmake,
   cudaPackages,
   lib,
 }:
 let
   inherit (cudaPackages)
-    autoAddOpenGLRunpathHook
     backendStdenv
     cuda_cccl
     cuda_cudart
@@ -29,7 +29,7 @@ backendStdenv.mkDerivation {
   nativeBuildInputs =
     [
       cmake
-      autoAddOpenGLRunpathHook
+      autoAddDriverRunpath
     ]
     ++ lib.optionals (lib.versionOlder cudaVersion "11.4") [cudatoolkit]
     ++ lib.optionals (lib.versionAtLeast cudaVersion "11.4") [cuda_nvcc];

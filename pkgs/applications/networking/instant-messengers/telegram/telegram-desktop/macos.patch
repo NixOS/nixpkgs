@@ -54,7 +54,19 @@ diff --git a/Telegram/lib_webview/webview/platform/mac/webview_mac.mm b/Telegram
 index 738e574..80ff5f0 100644
 --- a/Telegram/lib_webview/webview/platform/mac/webview_mac.mm
 +++ b/Telegram/lib_webview/webview/platform/mac/webview_mac.mm
-@@ -254,10 +254,12 @@ void *Instance::winId() {
+@@ -314,9 +314,11 @@ Instance::Instance(Config config) {
+ 	_dataRequestHandler = std::move(config.dataRequestHandler);
+ 	[configuration setURLSchemeHandler:_handler forURLScheme:stdToNS(kDataUrlScheme)];
+ 	_webview = [[WKWebView alloc] initWithFrame:NSZeroRect configuration:configuration];
++#if 0
+ 	if (@available(macOS 13.3, *)) {
+ 		_webview.inspectable = config.debug ? YES : NO;
+ 	}
++#endif
+ 	[_manager addScriptMessageHandler:_handler name:@"external"];
+ 	[_webview setNavigationDelegate:_handler];
+ 	[_webview setUIDelegate:_handler];
+@@ -658,10 +660,12 @@ void *Instance::winId() {
  }
  
  void Instance::setOpaqueBg(QColor opaqueBg) {

@@ -19,6 +19,7 @@ python3Packages.buildPythonPackage rec {
   meta = with lib;{
     homepage = "https://rst2html5.readthedocs.io/en/latest/";
     description = "Converts ReSTructuredText to (X)HTML5";
+    mainProgram = "rst2html5";
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
   };

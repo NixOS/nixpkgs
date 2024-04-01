@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "yazi";
-  version = "0.2.3";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "sxyazi";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-2AiaJs6xY8hsB1DBxpPwdZtc8IZvsoCGWBOFVMf4dvk=";
+    hash = "sha256-c8fWWCOVBqQVdQch9BniCaJPrVEOCv35lLH8/hMIbvE=";
   };
 
-  cargoHash = "sha256-fRUmXv27sHYz8z0cc795JCPLHDQGgTV4wAWAtQ/pbg4=";
+  cargoHash = "sha256-VeDyO+KCD3Axse4iPIoRxIvoAn3L33e2ObBZFV/REeg=";
 
   env.YAZI_GEN_COMPLETIONS = true;
 
@@ -29,9 +29,9 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     installShellCompletion --cmd yazi \
-      --bash ./yazi-config/completions/yazi.bash \
-      --fish ./yazi-config/completions/yazi.fish \
-      --zsh  ./yazi-config/completions/_yazi
+      --bash ./yazi-boot/completions/yazi.bash \
+      --fish ./yazi-boot/completions/yazi.fish \
+      --zsh  ./yazi-boot/completions/_yazi
   '';
 
   passthru.updateScript = nix-update-script { };

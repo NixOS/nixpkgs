@@ -30,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "GNU SASL, Simple Authentication and Security Layer library";
+    mainProgram = "gsasl";
 
     longDescription =
       '' GNU SASL is a library that implements the IETF Simple

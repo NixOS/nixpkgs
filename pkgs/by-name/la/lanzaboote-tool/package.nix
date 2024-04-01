@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Fb5TeRTdvUlo/5Yi2d+FC8a6KoRLk2h1VE0/peMhWPs=";
   };
 
-  sourceRoot = "source/rust/tool";
+  sourceRoot = "${src.name}/rust/tool";
   cargoHash = "sha256-g4WzqfH6DZVUuNb0jV3MFdm3h7zy2bQ6d3agrXesWgc=";
 
   env.TEST_SYSTEMD = systemd;

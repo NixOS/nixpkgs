@@ -9,8 +9,8 @@
   flatpak-kcm = callPackage ./flatpak-kcm {};
   kactivitymanagerd = callPackage ./kactivitymanagerd {};
   kde-cli-tools = callPackage ./kde-cli-tools {};
-  kdecoration = callPackage ./kdecoration {};
   kde-gtk-config = callPackage ./kde-gtk-config {};
+  kdecoration = callPackage ./kdecoration {};
   kdeplasma-addons = callPackage ./kdeplasma-addons {};
   kgamma = callPackage ./kgamma {};
   kglobalacceld = callPackage ./kglobalacceld {};
@@ -34,7 +34,6 @@
   ocean-sound-theme = callPackage ./ocean-sound-theme {};
   oxygen = callPackage ./oxygen {};
   oxygen-sounds = callPackage ./oxygen-sounds {};
-  plasma5support = callPackage ./plasma5support {};
   plasma-activities = callPackage ./plasma-activities {};
   plasma-activities-stats = callPackage ./plasma-activities-stats {};
   plasma-browser-integration = callPackage ./plasma-browser-integration {};
@@ -53,6 +52,7 @@
   plasma-welcome = callPackage ./plasma-welcome {};
   plasma-workspace = callPackage ./plasma-workspace {};
   plasma-workspace-wallpapers = callPackage ./plasma-workspace-wallpapers {};
+  plasma5support = callPackage ./plasma5support {};
   plymouth-kcm = callPackage ./plymouth-kcm {};
   polkit-kde-agent-1 = callPackage ./polkit-kde-agent-1 {};
   powerdevil = callPackage ./powerdevil {};

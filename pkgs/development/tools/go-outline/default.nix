@@ -15,6 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Utility to extract JSON representation of declarations from a Go source file";
+    mainProgram = "go-outline";
     homepage = "https://github.com/ramya-rao-a/go-outline";
     maintainers = with maintainers; [ vdemeester ];
     license = licenses.mit;

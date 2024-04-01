@@ -55,7 +55,7 @@ in
 
 buildPythonPackage rec {
   pname = "python-matter-server";
-  version = "5.8.0";
+  version = "5.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -64,7 +64,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "python-matter-server";
     rev = "refs/tags/${version}";
-    hash = "sha256-bpXRay4JUujqdnscGldW732e8FTkcmfShbtwp2YJC60=";
+    hash = "sha256-O3AJ7vBjuwRGa4AMwWIdxn5m2F45rLCjCHeff18b/5E=";
   };
 
   patches = [
@@ -129,6 +129,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/home-assistant-libs/python-matter-server/releases/tag/${version}";
     description = "Python server to interact with Matter";
+    mainProgram = "matter-server";
     homepage = "https://github.com/home-assistant-libs/python-matter-server";
     license = licenses.asl20;
     maintainers = teams.home-assistant.members;

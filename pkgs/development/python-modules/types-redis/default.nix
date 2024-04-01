@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "types-redis";
-  version = "4.6.0.20240218";
+  version = "4.6.0.20240311";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UQPX5pDlx0yXShYTF7LVmsIwPPi+8kF1sEwqTDSGyzk=";
+    hash = "sha256-4Em73/DgofjnAbZGNoESkdIb/3m/HnhQhQpEBVIkqF8=";
   };
 
   propagatedBuildInputs = [

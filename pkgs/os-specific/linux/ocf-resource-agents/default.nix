@@ -71,7 +71,17 @@ in
 
 # This combines together OCF definitions from other derivations.
 # https://github.com/ClusterLabs/resource-agents/blob/master/doc/dev-guides/ra-dev-guide.asc
-runCommand "ocf-resource-agents" {} ''
+runCommand "ocf-resource-agents" {
+  # Fix derivation location so things like
+  #   $ nix edit -f. ocf-resource-agents
+  # just work.
+  pos = builtins.unsafeGetAttrPos "version" resource-agentsForOCF;
+
+  # Useful to build and undate inputs individually:
+  passthru.inputs = {
+    inherit resource-agentsForOCF drbdForOCF pacemakerForOCF;
+  };
+} ''
   mkdir -p $out/usr/lib/ocf
   ${lndir}/bin/lndir -silent "${resource-agentsForOCF}/lib/ocf/" $out/usr/lib/ocf
   ${lndir}/bin/lndir -silent "${drbdForOCF}/usr/lib/ocf/" $out/usr/lib/ocf

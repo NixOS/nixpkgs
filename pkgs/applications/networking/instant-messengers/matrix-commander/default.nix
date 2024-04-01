@@ -55,6 +55,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Simple but convenient CLI-based Matrix client app for sending and receiving";
+    mainProgram = "matrix-commander";
     homepage = "https://github.com/8go/matrix-commander";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

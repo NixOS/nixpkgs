@@ -36,6 +36,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool to get an overview of the list of URLs";
+    mainProgram = "goverview";
     homepage = "https://github.com/j3ssie/goverview";
     changelog = "https://github.com/j3ssie/goverview/releases/tag/v${version}";
     license = licenses.mit;

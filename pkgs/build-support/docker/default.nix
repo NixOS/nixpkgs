@@ -29,7 +29,7 @@
 , tarsum
 , util-linux
 , vmTools
-, writeReferencesToFile
+, writeClosure
 , writeScript
 , writeShellScriptBin
 , writeText
@@ -523,7 +523,7 @@ rec {
     runCommand "${baseNameOf name}.tar${compress.ext}"
       {
         inherit (stream) imageName;
-        passthru = { inherit (stream) imageTag; };
+        passthru = { inherit (stream) imageTag; inherit stream; };
         nativeBuildInputs = compress.nativeInputs;
       } "${stream} | ${compress.compress} > $out"
   );
@@ -630,14 +630,14 @@ rec {
           imageName = lib.toLower name;
           imageTag = lib.optionalString (tag != null) tag;
           inherit fromImage baseJson;
-          layerClosure = writeReferencesToFile layer;
+          layerClosure = writeClosure [ layer ];
           passthru.buildArgs = args;
           passthru.layer = layer;
           passthru.imageTag =
             if tag != null
             then tag
             else
-              lib.head (lib.strings.splitString "-" (baseNameOf result.outPath));
+              lib.head (lib.strings.splitString "-" (baseNameOf (builtins.unsafeDiscardStringContext result.outPath)));
         } ''
         ${lib.optionalString (tag == null) ''
           outName="$(basename "$out")"
@@ -1001,7 +1001,7 @@ rec {
               if tag != null
               then tag
               else
-                lib.head (lib.strings.splitString "-" (baseNameOf conf.outPath));
+                lib.head (lib.strings.splitString "-" (baseNameOf (builtins.unsafeDiscardStringContext conf.outPath)));
             paths = buildPackages.referencesByPopularity overallClosure;
             nativeBuildInputs = [ jq ];
           } ''
@@ -1200,6 +1200,7 @@ rec {
 
           # Root certificates for internet access
           SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+          NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
           # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1027-L1030
           # PATH = "/path-not-set";

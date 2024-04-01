@@ -1,6 +1,6 @@
 { lib
 , python3
-, fetchPypi
+, fetchurl
 , nixosTests
 }:
 
@@ -8,18 +8,19 @@ with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "HyperKitty";
-  version = "1.3.8";
+  version = "1.3.9";
+  pyproject = true;
+
   disabled = pythonOlder "3.10";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-j//Mrbos/g1BGenHRmOe5GvAza5nu/mchAgdLQu9h7g=";
+  src = fetchurl {
+    url = "https://gitlab.com/mailman/hyperkitty/-/releases/${version}/downloads/hyperkitty-${version}.tar.gz";
+    hash = "sha256-BfhCh4zZcfwoIfubW/+MUWXwh1yFOH/jpRdQdsj6lME=";
   };
 
-  postPatch = ''
-    # isort is a development dependency
-    sed -i '/isort/d' setup.py
-  '';
+  nativeBuildInputs = [
+    pdm-backend
+  ];
 
   propagatedBuildInputs = [
     django
@@ -39,9 +40,10 @@ buildPythonPackage rec {
   ];
 
   # Some of these are optional runtime dependencies that are not
-  # listed as dependencies in setup.py.  To use these, they should be
-  # dependencies of the Django Python environment, but not of
-  # HyperKitty so they're not included for people who don't need them.
+  # listed as dependencies in pyproject.toml.  To use these, they
+  # should be dependencies of the Django Python environment, but not
+  # of HyperKitty so they're not included for people who don't need
+  # them.
   nativeCheckInputs = [
     beautifulsoup4
     elastic-transport

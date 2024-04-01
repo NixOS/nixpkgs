@@ -79,6 +79,7 @@ clangStdenv.mkDerivation rec {
 
   meta = {
     description = "Jupyter kernel for the C++ programming language";
+    mainProgram = "xcpp";
     homepage = "https://github.com/jupyter-xeus/xeus-cling";
     maintainers = with lib.maintainers; [ thomasjm ];
     platforms = lib.platforms.unix;

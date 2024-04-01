@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "freeciv";
-  version = "3.0.10";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "freeciv";
     repo = "freeciv";
     rev = "R${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-f+VJYWsfsoGLs9Ypk5cJQgn86PhsJ/6ODDjlnp84Frg=";
+    hash = "sha256-8cMy0O5VxVi1ffvA/Gz4BnTB0WvJptMSgM7Zu992k5k=";
   };
 
   postPatch = ''
@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals qtClient [
       "--enable-client=qt"
+      "--with-qtver=qt5"
       "--with-qt5-includes=${qt5.qtbase.dev}/include"
     ] ++ lib.optionals gtkClient [ "--enable-client=gtk3.22" ]
     ++ lib.optional enableSqlite "--enable-fcdb=sqlite3"
@@ -82,5 +83,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ pierron ];
     platforms = platforms.unix;
     hydraPlatforms = platforms.linux; # sdl-config times out on darwin
+    broken = qtClient && stdenv.isDarwin; # Missing Qt5 development files
   };
 }

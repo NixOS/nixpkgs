@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, buildPythonApplication
 , colorama, decorator, psutil, pyte, six
-, go, mock, pytestCheckHook, pytest-mock
+, go, mock, pytestCheckHook, pytest-mock, pytest_7
 }:
 
 buildPythonApplication rec {
@@ -16,7 +16,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ colorama decorator psutil pyte six ];
 
-  nativeCheckInputs = [ go mock pytestCheckHook pytest-mock ];
+  nativeCheckInputs = [ go mock (pytestCheckHook.override { pytest = pytest_7; }) pytest-mock ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
     "test_settings_defaults"
@@ -39,6 +39,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/nvbn/thefuck";
     description = "Magnificent app which corrects your previous console command";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ marcusramberg ];
   };
 }

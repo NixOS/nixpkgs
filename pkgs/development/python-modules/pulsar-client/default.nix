@@ -108,7 +108,8 @@ in buildPythonPackage {
 
   format = "wheel";
 
-  src = Srcs."${pythonVersion}-${stdenv.hostPlatform.system}";
+  src = Srcs."${pythonVersion}-${stdenv.hostPlatform.system}"
+    or (throw "Unsupported '${pythonVersion}-${stdenv.hostPlatform.system}' target");
 
   meta = with lib; {
     description = "Client for pulsar";

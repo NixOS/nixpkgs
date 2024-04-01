@@ -28,6 +28,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A tool to observe Kubernetes resources in real time";
+    mainProgram = "kubespy";
     homepage = "https://github.com/pulumi/kubespy";
     license = licenses.asl20;
     maintainers = with maintainers; [ blaggacao ];

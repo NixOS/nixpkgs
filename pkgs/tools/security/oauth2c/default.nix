@@ -21,6 +21,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/cloudentity/oauth2c";
     description = "User-friendly OAuth2 CLI";
+    mainProgram = "oauth2c";
     longDescription = ''
       oauth2c is a command-line tool for interacting with OAuth 2.0
       authorization servers. Its goal is to make it easy to fetch access tokens

@@ -82,6 +82,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A codesigning tool for Python packages";
+    mainProgram = "sigstore";
     homepage = "https://github.com/sigstore/sigstore-python";
     changelog = "https://github.com/sigstore/sigstore-python/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;

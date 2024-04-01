@@ -8,12 +8,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pyDOE";
+  pname = "pydoe";
   version = "0.3.8";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "pyDOE";
+    inherit version;
     hash = "sha256-y9bxSuJtPJ9zYBMgX1PqEZGt1FZwM8Pud7fdNWVmxLY=";
     extension = "zip";
   };

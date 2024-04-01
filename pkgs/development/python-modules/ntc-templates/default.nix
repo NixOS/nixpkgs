@@ -4,14 +4,16 @@
 , pythonOlder
 , poetry-core
 , textfsm
+, invoke
 , pytestCheckHook
 , ruamel-yaml
+, toml
 , yamllint
 }:
 
 buildPythonPackage rec {
   pname = "ntc-templates";
-  version = "4.0.1";
+  version = "4.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +22,7 @@ buildPythonPackage rec {
     owner = "networktocode";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-tenztWqSjVVDJygBvJpdLFbKmz+TPKYu0UhscqJBhLc=";
+    hash = "sha256-8Lzh6ku2TUQFatqbOb5JIc/WkRPegx/gNnT53DErMuk=";
   };
 
   nativeBuildInputs = [
@@ -32,8 +34,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    invoke
     pytestCheckHook
     ruamel-yaml
+    toml
     yamllint
   ];
 

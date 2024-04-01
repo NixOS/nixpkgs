@@ -17,23 +17,23 @@
 
 buildPythonPackage rec {
   pname = "teslajsonpy";
-  version = "3.10.1";
-  format = "pyproject";
+  version = "3.10.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "zabuldon";
-    repo = pname;
+    repo = "teslajsonpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Eez8ktPhbWauFNsIuwoxMkGpI7hnYsBwStmU80IDFw4=";
+    hash = "sha256-M3/1J73C3gUqyZYsu10O6FnACKYVbGuMH+8Ns0s2Rwc=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     authcaptureproxy
     aiohttp
     backoff

@@ -16,7 +16,7 @@ buildDotnetModule rec {
     hash = "sha256-41zlzrQ+YGY2wEvq4Su/lp6lOmGW4u0F37ub2a3z+7o=";
   };
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   projectFile = "TorrentStream.sln";
   nugetDeps = ./deps.nix;

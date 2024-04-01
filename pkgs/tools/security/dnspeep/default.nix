@@ -23,6 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Spy on the DNS queries your computer is making";
+    mainProgram = "dnspeep";
     homepage = "https://github.com/jvns/dnspeep";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   inherit (linien-common) src version;
 
-  sourceRoot = "source/linien-client";
+  sourceRoot = "${src.name}/linien-client";
 
   preBuild = ''
     export HOME=$(mktemp -d)

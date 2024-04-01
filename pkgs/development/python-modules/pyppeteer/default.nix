@@ -89,6 +89,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Headless chrome/chromium automation library (unofficial port of puppeteer)";
+    mainProgram = "pyppeteer-install";
     homepage = "https://github.com/pyppeteer/pyppeteer";
     changelog = "https://github.com/pyppeteer/pyppeteer/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

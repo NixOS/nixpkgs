@@ -1,4 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, wrapGAppsHook, ant, jdk, jre, gtk2, glib, xorg, Cocoa }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeDesktopItem
+, makeWrapper
+, wrapGAppsHook
+, stripJavaArchivesHook
+, ant
+, jdk
+, jre
+, gtk2
+, glib
+, libXtst
+, Cocoa
+}:
 
 let
   _version = "2.10.4";
@@ -26,10 +40,6 @@ stdenv.mkDerivation rec {
   pname = "jameica";
   inherit version;
 
-  nativeBuildInputs = [ ant jdk wrapGAppsHook makeWrapper ];
-  buildInputs = lib.optionals stdenv.isLinux [ gtk2 glib xorg.libXtst ]
-    ++ lib.optional stdenv.isDarwin Cocoa;
-
   src = fetchFromGitHub {
     owner = "willuhn";
     repo = "jameica";
@@ -37,15 +47,23 @@ stdenv.mkDerivation rec {
     hash = "sha256-MSVSd5DyVL+dcfTDv1M99hxickPwT2Pt6QGNsu6DGZI=";
   };
 
+  nativeBuildInputs = [ ant jdk wrapGAppsHook makeWrapper stripJavaArchivesHook ];
+  buildInputs = lib.optionals stdenv.isLinux [ gtk2 glib libXtst ]
+    ++ lib.optional stdenv.isDarwin Cocoa;
+
   dontWrapGApps = true;
 
   # there is also a build.gradle, but it only seems to be used to vendor 3rd party libraries
   # and is not able to build the application itself
   buildPhase = ''
-    (cd build; ant -Dsystem.version=${version} init compile jar)
+    runHook preBuild
+    ant -f build -Dsystem.version=${version} init compile jar
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/libexec $out/lib $out/bin $out/share/{applications,jameica-${version},java}/
 
     # copy libraries except SWT
@@ -57,6 +75,8 @@ stdenv.mkDerivation rec {
     install -Dm644 plugin.xml $out/share/java/
     install -Dm644 build/jameica-icon.png $out/share/pixmaps/jameica.png
     cp ${desktopItem}/share/applications/* $out/share/applications/
+
+    runHook postInstall
   '';
 
   postFixup = ''

@@ -107,10 +107,11 @@ buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/f-droid/fdroidserver";
-    changelog = "https://github.com/f-droid/fdroidserver/blob/${version}/CHANGELOG.md";
+    homepage = "https://gitlab.com/fdroid/fdroidserver";
+    changelog = "https://gitlab.com/fdroid/fdroidserver/-/blob/${version}/CHANGELOG.md";
     description = "Server and tools for F-Droid, the Free Software repository system for Android";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ linsui jugendhacker ];
+    mainProgram = "fdroid";
   };
 }

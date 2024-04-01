@@ -40,6 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Interface for reading/modifying/creating .LAS LIDAR files";
+    mainProgram = "laspy";
     homepage = "https://github.com/laspy/laspy";
     changelog = "https://github.com/laspy/laspy/blob/${version}/CHANGELOG.md";
     license = licenses.bsd2;

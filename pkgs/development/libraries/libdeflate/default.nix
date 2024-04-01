@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit;
     homepage = "https://github.com/ebiggers/libdeflate";
     changelog = "https://github.com/ebiggers/libdeflate/blob/v${finalAttrs.version}/NEWS.md";
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
     maintainers = with maintainers; [ orivej kaction ];
     pkgConfigModules = [ "libdeflate" ];
   };

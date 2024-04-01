@@ -44,6 +44,11 @@ buildPythonPackage rec {
     pytz
   ];
 
+  pytestFlagsArray = [
+    # pytest.PytestRemovedIn8Warning: Support for nose tests is deprecated and will be removed in a future release.
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   meta = {
     description = "IPython HTML widgets for Jupyter";
     homepage = "https://github.com/jupyter-widgets/ipywidgets";

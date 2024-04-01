@@ -40,4 +40,4 @@ let
       '';
     });
 in
-builtins.mapAttrs (k: v: mkTest k v { }) tests
+builtins.mapAttrs (k: v: mkTest k v) tests

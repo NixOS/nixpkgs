@@ -1,4 +1,4 @@
-{ config, stdenv, fetchurl, fetchpatch, lib, acpica-tools, dev86, pam, libxslt, libxml2, wrapQtAppsHook
+{ config, stdenv, fetchurl, fetchpatch, callPackage, lib, acpica-tools, dev86, pam, libxslt, libxml2, wrapQtAppsHook
 , libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL2, libcap, libGL, libGLU
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus, libtpms, qtbase, qtx11extras
 , qttools, qtsvg, qtwayland, pkg-config, which, docbook_xsl, docbook_xml_dtd_43
@@ -17,8 +17,12 @@
 , headless ? false
 , enable32bitGuests ? true
 , enableWebService ? false
+, enableKvm ? false
 , extraConfigureFlags ? ""
 }:
+
+# See https://github.com/cyberus-technology/virtualbox-kvm/issues/12
+assert enableKvm -> !enableHardening;
 
 with lib;
 
@@ -27,6 +31,12 @@ let
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
   version = "7.0.14";
+
+  # The KVM build is not compatible to VirtualBox's kernel modules. So don't export
+  # modsrc at all.
+  withModsrc = !enableKvm;
+
+  virtualboxGuestAdditionsIso = callPackage guest-additions-iso/default.nix { };
 in stdenv.mkDerivation {
   pname = "virtualbox";
   inherit version;
@@ -36,7 +46,7 @@ in stdenv.mkDerivation {
     sha256 = "45860d834804a24a163c1bb264a6b1cb802a5bc7ce7e01128072f8d6a4617ca9";
   };
 
-  outputs = [ "out" "modsrc" ];
+  outputs = [ "out" ] ++ optional withModsrc "modsrc";
 
   nativeBuildInputs = [ pkg-config which docbook_xsl docbook_xml_dtd_43 yasm glslang ]
     ++ optional (!headless) wrapQtAppsHook;
@@ -103,7 +113,17 @@ in stdenv.mkDerivation {
   ++ optional (!headless && enableHardening) (substituteAll {
       src = ./qt-env-vars.patch;
       qtPluginPath = "${qtbase.bin}/${qtbase.qtPluginPrefix}:${qtsvg.bin}/${qtbase.qtPluginPrefix}:${qtwayland.bin}/${qtbase.qtPluginPrefix}";
-    })
+  })
+     # While the KVM patch should not break any other behavior if --with-kvm is not specified,
+     # we don't take any chances and only apply it if people actually want to use KVM support.
+  ++ optional enableKvm (fetchpatch
+    (let
+      patchVersion = "20240325";
+    in {
+      name = "virtualbox-${version}-kvm-dev-${patchVersion}.patch";
+      url = "https://github.com/cyberus-technology/virtualbox-kvm/releases/download/dev-${patchVersion}/kvm-backend-${version}-dev-${patchVersion}.patch";
+      hash = "sha256-D1ua8X5Iyw/I89PtskiGdnGr4NhdFtI93ThltiOcu8w=";
+    }))
   ++ [
     ./qt-dependency-paths.patch
     # https://github.com/NixOS/nixpkgs/issues/123851
@@ -165,6 +185,7 @@ in stdenv.mkDerivation {
       ${optionalString (!enable32bitGuests) "--disable-vmmraw"} \
       ${optionalString enableWebService "--enable-webservice"} \
       ${optionalString (open-watcom-bin != null) "--with-ow-dir=${open-watcom-bin}"} \
+      ${optionalString (enableKvm) "--with-kvm"} \
       ${extraConfigureFlags} \
       --disable-kmods
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib.dev}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
@@ -224,11 +245,13 @@ in stdenv.mkDerivation {
       ln -sv $libexec/nls "$out/share/virtualbox"
     ''}
 
-    cp -rv out/linux.*/${buildType}/bin/src "$modsrc"
+    ${optionalString withModsrc ''
+      cp -rv out/linux.*/${buildType}/bin/src "$modsrc"
+    ''}
 
     mkdir -p "$out/share/virtualbox"
     cp -rv src/VBox/Main/UnattendedTemplates "$out/share/virtualbox"
-    ln -s "${linuxPackages.virtualboxGuestAdditions.src}" "$out/share/virtualbox/VBoxGuestAdditions.iso"
+    ln -s "${virtualboxGuestAdditionsIso}/VBoxGuestAdditions_${version}.iso" "$out/share/virtualbox/VBoxGuestAdditions.iso"
   '';
 
   preFixup = optionalString (!headless) ''
@@ -241,7 +264,6 @@ in stdenv.mkDerivation {
   '';
 
   passthru = {
-    inherit version;       # for guest additions
     inherit extensionPack; # for inclusion in profile to prevent gc
     updateScript = ./update.sh;
   };
@@ -260,7 +282,7 @@ in stdenv.mkDerivation {
     ];
     license = licenses.gpl2;
     homepage = "https://www.virtualbox.org/";
-    maintainers = with maintainers; [ sander ];
+    maintainers = with maintainers; [ sander friedrichaltheide blitz ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "VirtualBox";
   };

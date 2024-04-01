@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "ain";
-  version = "1.3.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "jonaslu";
     repo = "ain";
     rev = "v${version}";
-    hash = "sha256-QBtnVtTGONbYToGhZ0L4CZ3o2hViEN1l94ZKJHVMd1w=";
+    hash = "sha256-JEavBPnF3WW6oCZ1OC8g1dZev4qC7bi74/q2nvXK3mo=";
   };
 
-  vendorHash = "sha256-eyB+0D0+4hHG4yKDj/m9QB+8YTyv+por8fTyu/WcZyg=";
+  vendorHash = "sha256-+72Y8SKvx7KBK5AIBWKlDqQYpHnZc9CNxCdo4yakPb0=";
 
   ldflags = [
     "-s"

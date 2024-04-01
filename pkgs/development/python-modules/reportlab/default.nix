@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, chardet
 , fetchPypi
 , freetype
 , pillow
@@ -13,15 +14,15 @@ let
   ft = freetype.overrideAttrs (oldArgs: { dontDisableStatic = true; });
 in buildPythonPackage rec {
   pname = "reportlab";
-  version = "4.0.7";
-  format = "pyproject";
+  version = "4.1.0";
+  pyproject = true;
 
   # See https://bitbucket.org/pypy/compatibility/wiki/reportlab%20toolkit
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lnx38A79kYzCMc+LbY9OR33Jc7XBZVfjvRjfrrWnAjQ=";
+    hash = "sha256-Opn69BJpEVnAaLP/AcFTB84v0s9rhgGZQ0h04AIECoQ=";
   };
 
   postPatch = ''
@@ -44,6 +45,7 @@ in buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    chardet
     pillow
   ];
 
@@ -61,7 +63,7 @@ in buildPythonPackage rec {
 
   meta = with lib; {
     description = "An Open Source Python library for generating PDFs and graphics";
-    homepage = "http://www.reportlab.com/";
+    homepage = "https://www.reportlab.com/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };

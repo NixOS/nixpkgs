@@ -78,18 +78,18 @@ index c019f30ff..ba7e40076 100755
    at_exit(&Vagrant::Bundler.instance.method(:deinit))
  
 diff --git a/lib/vagrant.rb b/lib/vagrant.rb
-index f3dcba0bc..d696bdff8 100644
+index f790039d3..97e67e3b8 100644
 --- a/lib/vagrant.rb
 +++ b/lib/vagrant.rb
-@@ -81,7 +81,7 @@ if ENV["VAGRANT_LOG"] && ENV["VAGRANT_LOG"] != ""
-     # See https://github.com/rest-client/rest-client/issues/34#issuecomment-290858
-     # for more information
-     class VagrantLogger < Log4r::Logger
--      def << msg
-+      def << (msg)
-         debug(msg.strip)
-       end
-     end
+@@ -59,7 +59,7 @@ require "vagrant/plugin/manager"
+ # See https://github.com/rest-client/rest-client/issues/34#issuecomment-290858
+ # for more information
+ class VagrantLogger < Log4r::Logger
+-  def << msg
++  def << (msg)
+     debug(msg.strip)
+   end
+ end
 diff --git a/lib/vagrant/bundler.rb b/lib/vagrant/bundler.rb
 index eb2caabb0..d75f54362 100644
 --- a/lib/vagrant/bundler.rb

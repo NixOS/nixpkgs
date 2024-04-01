@@ -23,7 +23,7 @@ let
       owner = "twisted";
       repo = "constantly";
       rev = "refs/tags/${version}";
-      hash = "sha256-HTj6zbrCrxvh0PeSkeCSOCloTrVGUX6+o57snrKf6PA=";
+      hash = "sha256-yXPHQP4B83PuRNvDBnRTx/MaPaQxCl1g5Xrle+N/d7I=";
     };
 
     nativeBuildInputs = [

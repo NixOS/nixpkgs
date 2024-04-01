@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Bayesian Inference of Phylogeny";
+    mainProgram = "mb";
     longDescription = ''
       Bayesian inference of phylogeny is based upon a
       quantity called the posterior probability distribution of trees, which is

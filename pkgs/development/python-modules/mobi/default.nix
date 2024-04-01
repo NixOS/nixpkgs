@@ -42,6 +42,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for unpacking unencrypted mobi files";
+    mainProgram = "mobiunpack";
     homepage = "https://github.com/iscc/mobi";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ];

@@ -41,15 +41,16 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Django";
-  version = "5.0.2";
+  pname = "django";
+  version = "5.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-tbsdEbJRil+RNyooLyRmL1j2Z0lmawooarBXAp9ygIA=";
+    pname = "Django";
+    inherit version;
+    hash = "sha256-X7N1gNz0omL5JYwfQ3OBmqzKkGQx9QXkaI4386mRld8=";
   };
 
   patches = [
@@ -61,6 +62,7 @@ buildPythonPackage rec {
     ./django_5_tests_pythonpath.patch
     # disable test that excpects timezone issues
     ./django_5_disable_failing_tests.patch
+
   ] ++ lib.optionals withGdal [
     (substituteAll {
       src = ./django_5_set_geos_gdal_lib.patch;

@@ -7,7 +7,6 @@
 , llvm
 , spirv-headers
 , spirv-tools
-, disable-warnings-if-gcc13
 }:
 
 let
@@ -16,7 +15,11 @@ let
 
   # ROCm, if actively updated will always be at the latest version
   branch =
-    if llvmMajor == "17" || isROCm then rec {
+    if llvmMajor == "18" then rec {
+      version = "18.1.0";
+      rev = "v${version}";
+      hash = "sha256-64guZiuO7VpaX01wNIjV7cnjEAe6ineMdY44S6sA33k=";
+    } else if llvmMajor == "17" || isROCm then rec {
       version = "17.0.0";
       rev = "v${version}";
       hash = "sha256-Rzm5Py9IPFtS9G7kME+uSwZ/0gPGW6MlL35ZWk4LfHM=";
@@ -38,7 +41,7 @@ let
       hash = "sha256-NoIoa20+2sH41rEnr8lsMhtfesrtdPINiXtUnxYVm8s=";
     } else throw "Incompatible LLVM version.";
 in
-disable-warnings-if-gcc13 (stdenv.mkDerivation {
+stdenv.mkDerivation {
   pname = "SPIRV-LLVM-Translator";
   inherit (branch) version;
 
@@ -48,7 +51,15 @@ disable-warnings-if-gcc13 (stdenv.mkDerivation {
     inherit (branch) rev hash;
   };
 
-  patches = lib.optionals (lib.versionAtLeast llvmMajor "15") [
+  patches = lib.optionals (llvmMajor == "18") [
+    # Fixes build after SPV_INTEL_maximum_registers breaking change
+    # TODO: remove on next spirv-headers release
+    (fetchpatch {
+      url = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator/commit/d970c9126c033ebcbb7187bc705eae2e54726b74.patch";
+      revert = true;
+      hash = "sha256-71sJuGqVjTcB549eIiCO0LoqAgxkdEHCoxh8Pd/Qzz8=";
+    })
+  ] ++ lib.optionals (lib.versionAtLeast llvmMajor "15" && lib.versionOlder llvmMajor "18") [
     # Fixes build after spirv-headers breaking change
     (fetchpatch {
       url = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator/commit/0166a0fb86dc6c0e8903436bbc3a89bc3273ebc0.patch";
@@ -102,8 +113,9 @@ disable-warnings-if-gcc13 (stdenv.mkDerivation {
   meta = with lib; {
     homepage    = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator";
     description = "A tool and a library for bi-directional translation between SPIR-V and LLVM IR";
+    mainProgram = "llvm-spirv";
     license     = licenses.ncsa;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ gloaming ];
   };
-})
+}

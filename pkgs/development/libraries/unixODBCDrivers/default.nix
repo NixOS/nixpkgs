@@ -64,14 +64,6 @@
     buildInputs = [ unixODBC openssl libiconv zlib ]
       ++ lib.optionals stdenv.isDarwin [ libkrb5 ];
 
-    # TODO: remove preConfigure on staging
-    preConfigure = if !stdenv.isDarwin then ''
-      # we don't want to build a .pkg
-      substituteInPlace CMakeLists.txt \
-        --replace "IF(APPLE)" "IF(0)" \
-        --replace "CMAKE_SYSTEM_NAME MATCHES AIX" "APPLE"
-    '' else null;
-
     cmakeFlags = [
       "-DWITH_EXTERNAL_ZLIB=ON"
       "-DODBC_LIB_DIR=${lib.getLib unixODBC}/lib"

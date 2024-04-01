@@ -1,4 +1,4 @@
-{ config, pkgs, lib, options, ... }:
+{ config, pkgs, lib, options, utils, ... }:
 
 let
   inherit (lib) concatStrings foldl foldl' genAttrs literalExpression maintainers
@@ -35,6 +35,7 @@ let
     "dovecot"
     "fastly"
     "flow"
+    "fritz"
     "fritzbox"
     "graphite"
     "idrac"
@@ -94,10 +95,10 @@ let
     "zfs"
   ]
     (name:
-      import (./. + "/exporters/${name}.nix") { inherit config lib pkgs options; }
+      import (./. + "/exporters/${name}.nix") { inherit config lib pkgs options utils; }
     )) // (mapAttrs
     (name: params:
-      import (./. + "/exporters/${params.name}.nix") { inherit config lib pkgs options; type = params.type ; })
+      import (./. + "/exporters/${params.name}.nix") { inherit config lib pkgs options utils; type = params.type ; })
     {
       exportarr-bazarr = {
         name = "exportarr";

@@ -10,6 +10,7 @@ import ../make-test-python.nix ({ pkgs, lib, ... }: {
       incus.enable = true;
       incus.ui.enable = true;
     };
+    networking.nftables.enable = true;
 
     environment.systemPackages =
       let

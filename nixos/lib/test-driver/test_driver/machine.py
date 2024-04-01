@@ -1250,6 +1250,5 @@ class Machine:
             check_return=False,
             check_output=False,
         )
-        self.wait_for_console_text(r"systemd\[1\]:.*Switching root\.")
         self.connected = False
         self.connect()

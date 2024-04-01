@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "twilio";
-  version = "9.0.0";
+  version = "9.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "twilio";
     repo = "twilio-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-5PhINmG1y+oAEpfxaB8ZFHfWlo0jRZnUKO5oUPcnFuM=";
+    hash = "sha256-xFl+Ucu7ve7She8zUaW5YdK0gE733NNadDka4NeJ8Tg=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +43,9 @@ buildPythonPackage rec {
     pytz
     requests
   ];
+
+  # aiounittest is not supported on 3.12
+  doCheck = pythonOlder "3.12";
 
   nativeCheckInputs = [
     aiounittest

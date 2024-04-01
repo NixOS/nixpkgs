@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mountpoint-s3";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "mountpoint-s3";
     rev = "v${version}";
-    hash = "sha256-V9d3rAb1rbso69RUMgwZdqfchgcDUlFU2LFjCk59uew=";
+    hash = "sha256-DsxcQ/FEVcrzPyv9LgssNut4XnbU3mPKbuBwQKLiRLA=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-9cdz1G4mKyg4TfsL+laoB6+6rqEgk8A3VkTjejETAKo=";
+  cargoHash = "sha256-UOQRdSQ/whlOTZL2vaNiIcKB+Zgpk8tbinWBRWPyllc=";
 
   # thread 'main' panicked at cargo-auditable/src/collect_audit_data.rs:77:9:
   # cargo metadata failure: error: none of the selected packages contains these features: libfuse3
@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     homepage = "https://github.com/awslabs/mountpoint-s3";
     description = "A simple, high-throughput file client for mounting an Amazon S3 bucket as a local file system.";
-    license = licenses.amazonsl;
+    license = licenses.asl20;
     maintainers = with maintainers; [ lblasc ];
     platforms = platforms.linux;
   };

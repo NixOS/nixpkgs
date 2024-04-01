@@ -5,14 +5,14 @@
 }:
 
 let
-  version = "2.56.0";
+  version = "2.58.0";
 
   src = fetchFromGitHub {
     name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    hash = "sha256-rlyBp0aVjmOCIb000PdvU7nJlC9vvk+nVmIEtMTKEG8=";
+    hash = "sha256-2KLjPzxtHeuH0/+Sge1wTmGimOiaTWr8EI+xkFBrPD0=";
   };
 
   # put packages that needs to be overridden in the py package scope

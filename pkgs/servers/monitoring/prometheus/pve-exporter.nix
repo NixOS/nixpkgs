@@ -32,6 +32,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Exposes information gathered from Proxmox VE cluster for use by the Prometheus monitoring system";
+    mainProgram = "pve_exporter";
     homepage = "https://github.com/prometheus-pve/prometheus-pve-exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ nukaduka ];

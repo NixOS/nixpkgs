@@ -81,7 +81,7 @@ in {
       include = mkDefault "/etc/mackerel-agent/conf.d/*.conf";
     };
 
-    # upstream service file in https://git.io/JUt4Q
+    # upstream service file in https://github.com/mackerelio/mackerel-agent/blob/master/packaging/rpm/src/mackerel-agent.service
     systemd.services.mackerel-agent = {
       description = "mackerel.io agent";
       wants = [ "network-online.target" ];

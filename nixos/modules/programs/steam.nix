@@ -43,6 +43,11 @@ in {
         }
       '';
       apply = steam: steam.override (prev: {
+        extraEnv = (lib.optionalAttrs (cfg.extraCompatPackages != [ ]) {
+          STEAM_EXTRA_COMPAT_TOOLS_PATHS = makeSearchPathOutput "steamcompattool" "" cfg.extraCompatPackages;
+        }) // (optionalAttrs cfg.extest.enable {
+          LD_PRELOAD = "${pkgs.pkgsi686Linux.extest}/lib/libextest.so";
+        }) // (prev.extraEnv or {});
         extraLibraries = pkgs: let
           prevLibs = if prev ? extraLibraries then prev.extraLibraries pkgs else [ ];
           additionalLibs = with config.hardware.opengl;
@@ -63,6 +68,23 @@ in {
 
         Use this option to customise the Steam package rather than adding your
         custom Steam to {option}`environment.systemPackages` yourself.
+      '';
+    };
+
+    extraCompatPackages = mkOption {
+      type = types.listOf types.package;
+      default = [ ];
+      example = literalExpression ''
+        with pkgs; [
+          proton-ge-bin
+        ]
+      '';
+      description = lib.mdDoc ''
+        Extra packages to be used as compatibility tools for Steam on Linux. Packages will be included
+        in the `STEAM_EXTRA_COMPAT_TOOLS_PATHS` environmental variable. For more information see
+        https://github.com/ValveSoftware/steam-for-linux/issues/6310.
+
+        These packages must be Steam compatibility tools that have a `steamcompattool` output.
       '';
     };
 
@@ -114,6 +136,11 @@ in {
         };
       };
     };
+
+    extest.enable = mkEnableOption (lib.mdDoc ''
+      Load the extest library into Steam, to translate X11 input events to
+      uinput events (e.g. for using Steam Input on Wayland)
+    '');
   };
 
   config = mkIf cfg.enable {
@@ -167,5 +194,5 @@ in {
     ];
   };
 
-  meta.maintainers = with maintainers; [ mkg20001 ];
+  meta.maintainers = teams.steam;
 }

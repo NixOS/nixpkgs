@@ -20,6 +20,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "Lexer for Go";
+    mainProgram = "nex";
     homepage = "https://github.com/blynn/nex";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ urandom ];

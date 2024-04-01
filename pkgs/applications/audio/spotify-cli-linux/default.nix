@@ -23,6 +23,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://pwittchen.github.io/spotify-cli-linux/";
     maintainers = [ maintainers.kmein ];
     description = "A command line interface to Spotify on Linux.";
+    mainProgram = "spotifycli";
     license = licenses.gpl3;
     platforms = platforms.linux;
   };

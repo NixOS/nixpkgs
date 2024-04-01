@@ -28,14 +28,14 @@ let
   php82-unit = php82.override phpConfig;
 
 in stdenv.mkDerivation rec {
-  version = "1.31.1";
+  version = "1.32.0";
   pname = "unit";
 
   src = fetchFromGitHub {
     owner = "nginx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-6hecOCEC2MeJJieOOamEf8ytpEVAGs5mB0H16lJDciU=";
+    sha256 = "sha256-u693Q6Gp8lFm3DX1q5i6W021bxD962NGBGDRxUtvGrk=";
   };
 
   nativeBuildInputs = [ which ];
@@ -76,6 +76,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "Dynamic web and application server, designed to run applications in multiple languages";
+    mainProgram = "unitd";
     homepage    = "https://unit.nginx.org/";
     license     = licenses.asl20;
     platforms   = platforms.linux;

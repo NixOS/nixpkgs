@@ -22,6 +22,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/kolypto/j2cli";
     description = "Jinja2 Command-Line Tool";
+    mainProgram = "j2";
     license = licenses.bsd2;
     longDescription = ''
       J2Cli is a command-line tool for templating in shell-scripts,

@@ -31,6 +31,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "The command line catalog tool for your offline data";
+    mainProgram = "catcli";
     homepage = "https://github.com/deadc0de6/catcli";
     changelog = "https://github.com/deadc0de6/catcli/releases/tag/v${version}";
     license = licenses.gpl3Only;
