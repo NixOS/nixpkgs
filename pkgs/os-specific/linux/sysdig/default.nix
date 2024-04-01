@@ -144,7 +144,7 @@ in stdenv.mkDerivation rec {
     license = with licenses; [ asl20 gpl2 mit ];
     maintainers = [ maintainers.raskin ];
     platforms = [ "x86_64-linux" ] ++ platforms.darwin;
-    broken = kernel != null && ((versionOlder kernel.version "4.14") || (kernel.isHardened && lib.lists.findSingle (x: x == kernel.version) false true [ "4.19" "5.4" "lqx" ]));
+    broken = kernel != null && ((versionOlder kernel.version "4.14") || kernel.isHardened || kernel.isZen);
     homepage = "https://sysdig.com/opensource/";
     downloadPage = "https://github.com/draios/sysdig/releases";
   };
