@@ -997,26 +997,26 @@ let
             sources = {
               "x86_64-linux" = {
                 arch = "linux-x64";
-                sha256 = "05kh6sf3jv3510q33chf8s5n1kfp9wcm7650va7mcrdkfr9g8ysq";
+                sha256 = "1y5g8ay9sfz7r21fhwb2wr28yng7w3f2l265ljnfkz8yv8qzqpgk";
               };
               "x86_64-darwin" = {
                 arch = "darwin-x64";
-                sha256 = "0242h9kq47qvs1xynr5x8dzxkc5pwgb6km0iqpyy9kydg8ng1vp3";
+                sha256 = "14v9p5k9c9s9hfb1ymmkp66kmm9pvnvvljzrrs9wmajss5mlglf5";
               };
               "aarch64-linux" = {
                 arch = "linux-arm64";
-                sha256 = "1qm3f2lh8mi3hnyp2bmx7j2lir6fmbbxkzh6b8zf579khhbapnaz";
+                sha256 = "1mngfy42crp8xs14s06rkyzv16ci12bq8y39miyy7wa3a343b0ii";
               };
               "aarch64-darwin" = {
                 arch = "darwin-arm64";
-                sha256 = "18w22z1c5qgkpw2zlwmi9gs9dx1pcm51f0r8my7ynnvgl6mp12sg";
+                sha256 = "1gd1kr91s52kc8ldzy78cbn6gix1b8cvd6jh4sfrhq7k8yyn7g1l";
               };
             };
           in
           {
             name = "continue";
             publisher = "Continue";
-            version = "0.8.12";
+            version = "0.8.22";
           } // sources.${stdenv.system};
         nativeBuildInputs = [
           autoPatchelfHook
