@@ -22,11 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-OPhmw7nCe0n7VLekXeB5PiLdBk2DPmLoQ1nZiGEwqis=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     requests
     tqdm
     websocket-client
