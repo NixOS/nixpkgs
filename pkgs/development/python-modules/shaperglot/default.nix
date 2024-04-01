@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   pyproject = true;
 
-  propagatedBuildInputs = [
+  dependencies = [
     gflanguages
     num2words
     protobuf
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     vharfbuzz
     youseedee
   ];
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
