@@ -52,7 +52,12 @@
 
   # tests
 , fetchzip
+, fetchurl
 , writeText
+, writeTextFile
+, symlinkJoin
+, linkFarmFromDrvs
+, jq
 }:
 let
   BUILD_TYPE =
@@ -520,13 +525,32 @@ let
             hash = "sha256-5wf+6H5HeQY0qgdqnAG1vSqtjIFM9lXH53OgouuPm0M=";
             stripRoot = false;
           };
+          ggml-tiny-en = fetchurl {
+            url = "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-tiny.en-q5_1.bin";
+            hash = "sha256-x3xXZvHO8JtrfUfyG1Rsvd1BV4hrO11tT3CekeZsfCs=";
+          };
+          whisper-en = {
+            name = "whisper-en";
+            backend = "whisper";
+            parameters.model = ggml-tiny-en.name;
+          };
+          models = symlinkJoin {
+            name = "models";
+            paths = [
+              voice-en-us
+              (linkFarmFromDrvs "whisper-en" [
+                (writeText "whisper-en.yaml" (builtins.toJSON whisper-en))
+                ggml-tiny-en
+              ])
+            ];
+          };
         in
         testers.runNixOSTest {
           name = pname + "-tts";
           nodes.machine = {
             systemd.services.local-ai = {
               wantedBy = [ "multi-user.target" ];
-              serviceConfig.ExecStart = "${self}/bin/local-ai --debug --models-path ${voice-en-us} --localai-config-dir . --address :${port}";
+              serviceConfig.ExecStart = "${self}/bin/local-ai --debug --models-path ${models} --localai-config-dir . --address :${port}";
             };
           };
           testScript =
@@ -534,13 +558,15 @@ let
               request = {
                 model = "en-us-danny-low.onnx";
                 backend = "piper";
-                input = "Hello";
+                input = "Hello, how are you?";
               };
             in
             ''
               machine.wait_for_open_port(${port})
               machine.succeed("curl -f http://localhost:${port}/readyz")
               machine.succeed("curl -f http://localhost:${port}/tts --json @${writeText "request.json" (builtins.toJSON request)} --output out.wav")
+              machine.succeed("curl -f http://localhost:${port}/v1/audio/transcriptions --header 'Content-Type: multipart/form-data' --form file=@out.wav --form model=${whisper-en.name} --output transcription.json")
+              machine.succeed("${jq}/bin/jq --exit-status 'debug | .segments | first.text == \"${request.input}\"' transcription.json")
             '';
         };
     };
