@@ -21,11 +21,11 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/ethersphere/bee.version=${version}"
-    "-X github.com/ethersphere/bee/pkg/api.Version=5.2.0"
-    "-X github.com/ethersphere/bee/pkg/api.DebugVersion=4.1.0"
-    "-X github.com/ethersphere/bee/pkg/p2p/libp2p.reachabilityOverridePublic=false"
-    "-X github.com/ethersphere/bee/pkg/postage/listener.batchFactorOverridePublic=5"
+    "-X github.com/ethersphere/bee/v2.version=${version}"
+    "-X github.com/ethersphere/bee/v2/pkg/api.Version=5.2.0"
+    "-X github.com/ethersphere/bee/v2/pkg/api.DebugVersion=4.1.1"
+    "-X github.com/ethersphere/bee/v2/pkg/p2p/libp2p.reachabilityOverridePublic=false"
+    "-X github.com/ethersphere/bee/v2/pkg/postage/listener.batchFactorOverridePublic=5"
   ];
 
   CGO_ENABLED = 0;
