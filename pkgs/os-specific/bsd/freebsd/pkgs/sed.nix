@@ -1,7 +1,7 @@
-{ mkDerivation, freebsdSrc }:
+{ mkDerivation, source }:
 
 mkDerivation {
   path = "usr.bin/sed";
-  TESTSRC = "${freebsdSrc}/contrib/netbsd-tests";
+  TESTSRC = "${source}/contrib/netbsd-tests";
   MK_TESTS = "no";
 }

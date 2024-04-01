@@ -7,15 +7,10 @@
 let
   inherit (buildPackages.buildPackages) rsync;
 
-  version = "13.1.0";
+  versions = builtins.fromJSON (builtins.readFile ./versions.json);
 
-  # `BuildPackages.fetchgit` avoids some probably splicing-caused infinite
-  # recursion.
-  freebsdSrc = buildPackages.fetchgit {
-    url = "https://git.FreeBSD.org/src.git";
-    rev = "release/${version}";
-    sha256 = "14nhk0kls83xfb64d5xy14vpi6k8laswjycjg80indq9pkcr2rlv";
-  };
+  version = "13.1.0";
+  branch = "release/${version}";
 
 in makeScopeWithSplicing' {
   otherSplices = generateSplicesForMkScope "freebsd";
@@ -23,7 +18,7 @@ in makeScopeWithSplicing' {
     callPackage = self.callPackage;
     directory = ./pkgs;
   } // {
-    inherit freebsdSrc;
+    sourceData = versions.${branch};
 
     ports = fetchzip {
       url = "https://cgit.freebsd.org/ports/snapshot/ports-dde3b2b456c3a4bdd217d0bf3684231cc3724a0a.tar.gz";
