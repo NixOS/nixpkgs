@@ -667,6 +667,9 @@ let
     };
 
     security = {
+      # Report BUG() conditions and kill the offending process.
+      BUG = yes;
+
       FORTIFY_SOURCE                   = option yes;
 
       # https://googleprojectzero.blogspot.com/2019/11/bad-binder-android-in-wild-exploit.html

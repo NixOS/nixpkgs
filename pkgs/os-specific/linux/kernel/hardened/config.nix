@@ -17,9 +17,6 @@ with (lib.kernel.whenHelpers version);
 assert (versionAtLeast version "4.9");
 
 {
-  # Report BUG() conditions and kill the offending process.
-  BUG = yes;
-
   # Mark LSM hooks read-only after init.  SECURITY_WRITABLE_HOOKS n
   # conflicts with SECURITY_SELINUX_DISABLE y; disabling the latter
   # implicitly marks LSM hooks read-only after init.
