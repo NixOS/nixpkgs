@@ -125,9 +125,9 @@
     "hash": "sha256-2dz0Ncoy1J8kG5EWyzWa2TrQ8KsgZ/bkG5VaeDTY4bo="
   },
   "kwin": {
-    "version": "6.0.3",
-    "url": "mirror://kde/stable/plasma/6.0.3/kwin-6.0.3.tar.xz",
-    "hash": "sha256-D0bnds1Qg3TFUsClpVpFvyj5zMyIcAiQCYVKETTXKnk="
+    "version": "6.0.3.1",
+    "url": "mirror://kde/stable/plasma/6.0.3/kwin-6.0.3.1.tar.xz",
+    "hash": "sha256-8VEIqZMga5YqPFg1uYigtJIsCpvJq4D69rNqM00yGzM="
   },
   "kwrited": {
     "version": "6.0.3",
@@ -215,9 +215,9 @@
     "hash": "sha256-W+t3hNEk2eoQjwCAQ6k8g3wHVz9byK/PkhbutGRK/Yo="
   },
   "plasma-mobile": {
-    "version": "6.0.3",
-    "url": "mirror://kde/stable/plasma/6.0.3/plasma-mobile-6.0.3.tar.xz",
-    "hash": "sha256-oHgh272xMZYdoTidGyR2xsdASVTU50mAw9+nUyF5+Xo="
+    "version": "6.0.3.1",
+    "url": "mirror://kde/stable/plasma/6.0.3/plasma-mobile-6.0.3.1.tar.xz",
+    "hash": "sha256-pIkzv+U5s3JOxKP4JwW54SF4MwhgNA1nd4riCmU224M="
   },
   "plasma-nano": {
     "version": "6.0.3",
