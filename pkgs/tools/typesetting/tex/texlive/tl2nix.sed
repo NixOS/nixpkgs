@@ -80,6 +80,22 @@ $a}
     D # restart cycle from the current line
   }
 
+  # extract font maps
+  /^execute add.*Map /{
+    # open a list
+    i\  fontMaps = [
+
+    # loop through following map lines
+    :next-map
+      s/^\n?execute add(.*Map .*)$/    "\1"/p # print map
+      s/^.*$//                              # clear pattern space
+      N; /^\nexecute add.*Map /b next-map
+
+    # close the string
+    i\  ];
+    D # restart cycle from the current line
+  }
+
   # detect presence of notable files
   /^docfiles /{
     s/^.*$//  # ignore the first line
@@ -129,9 +145,36 @@ $a}
   # extract postaction scripts (right now, at most one per package, so a string suffices)
   s/^postaction script file=(.*)$/  postactionScript = "\1";/p
 
-  # extract hyphenation patterns and formats
-  # (this may create duplicate lines, use uniq to remove them)
-  /^execute\sAddHyphen/i\  hasHyphens = true;
+  # extract hyphenation patterns
+  /^execute\sAddHyphen\s/{
+    # open a list
+    i\  hyphenPatterns = [
+
+    # create one attribute set per hyphenation pattern
+
+    # plain keys: name, lefthyphenmin, righthyphenmin, file, file_patterns, file_exceptions, comment
+    # optionally double quoted key: luaspecial, comment
+    # comma-separated lists: databases, synonyms
+    :next-hyphen
+      s/(^|\n)execute\sAddHyphen/    {/
+      s/\s+luaspecial="([^"]+)"/\n      luaspecial = "\1";/
+      s/\s+(name|lefthyphenmin|righthyphenmin|file|file_patterns|file_exceptions|luaspecial|comment)=([^ \t\n]*)/\n      \1 = "\2";/g
+      s/\s+(databases|synonyms)=([^ \t\n]+)/\n      \1 = [ "\2" ];/g
+      s/$/\n    }/
+
+      :split-hyphens
+        s/"([^,]+),([^"]+)" ]/"\1" "\2" ]/;
+        t split-hyphens   # repeat until there are no commas
+
+      p
+      s/^.*$// # clear pattern space
+      N
+      /^\nexecute\sAddHyphen\s/b next-hyphen
+
+    # close the list
+    i\  ];
+    D # restart cycle from the current line
+  }
 
   # extract format details
   /^execute\sAddFormat\s/{
