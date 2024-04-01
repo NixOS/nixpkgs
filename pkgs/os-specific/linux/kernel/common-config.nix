@@ -752,6 +752,10 @@ let
       # Mitigate straight line speculation at the cost of some file size
       SLS = whenBetween "5.17" "6.9" yes;
       MITIGATION_SLS = whenAtLeast "6.9" yes;
+
+      DEFAULT_MMAP_MIN_ADDR = freeform "65536";
+    } // optionalAttrs stdenv.hostPlatform.isAarch64 {
+      DEFAULT_MMAP_MIN_ADDR = freeform "32768";
     };
 
     microcode = {
