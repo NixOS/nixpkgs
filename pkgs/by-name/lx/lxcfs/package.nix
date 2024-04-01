@@ -7,6 +7,7 @@
   makeWrapper,
   meson,
   ninja,
+  nix-update-script,
   nixosTests,
   pkg-config,
   python3,
@@ -15,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxcfs";
-  version = "5.0.4";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxcfs";
-    rev = "lxcfs-${version}";
-    sha256 = "sha256-vusxbFV7cnQVBOOo7E+fSyaE63f5QiE2xZhYavc8jJU=";
+    rev = "v${version}";
+    sha256 = "sha256-Mx2ZTul3hUEL9SloYSOh+MGoc2QmZg88MTsfIOvaIZU=";
   };
 
   patches = [
@@ -34,7 +35,6 @@ stdenv.mkDerivation rec {
     # fix pidfd checks and include
     ./pidfd.patch
   ];
-
 
   nativeBuildInputs = [
     meson
@@ -60,9 +60,13 @@ stdenv.mkDerivation rec {
     patchelf --set-rpath "$(patchelf --print-rpath "$out/bin/lxcfs"):$out/lib" "$out/bin/lxcfs"
   '';
 
-  passthru.tests = {
-    incus-container-old-init = nixosTests.incus.container-old-init;
-    incus-container-new-init = nixosTests.incus.container-new-init;
+  passthru = {
+    tests = {
+      incus-container-legacy-init = nixosTests.incus.container-legacy-init;
+      incus-container-systemd-init = nixosTests.incus.container-systemd-init;
+    };
+
+    updateScript = nix-update-script { };
   };
 
   meta = {
