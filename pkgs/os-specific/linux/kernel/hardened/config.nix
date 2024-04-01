@@ -31,8 +31,6 @@ assert (versionAtLeast version "4.9");
   SECURITY_SELINUX_DISABLE = whenOlder "6.4" no; # On 6.4: error: unused option: SECURITY_SELINUX_DISABLE
   SECURITY_WRITABLE_HOOKS  = option no;
 
-  STRICT_KERNEL_RWX = yes;
-
   # Perform additional validation of commonly targeted structures.
   DEBUG_CREDENTIALS     = whenOlder "6.6" yes;
   DEBUG_NOTIFIERS       = yes;

@@ -674,6 +674,8 @@ let
 
       HARDENED_USERCOPY                = yes;
       RANDOMIZE_BASE                   = option yes;
+      STRICT_KERNEL_RWX                = yes;
+      STRICT_MODULE_RWX                = yes;
       STRICT_DEVMEM                    = mkDefault yes; # Filter access to /dev/mem
       IO_STRICT_DEVMEM                 = mkDefault yes;
       SECURITY_SELINUX_BOOTPARAM_VALUE = whenOlder "5.1" (freeform "0"); # Disable SELinux by default
