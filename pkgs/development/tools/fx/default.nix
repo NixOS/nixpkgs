@@ -1,17 +1,26 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "fx";
-  version = "32.0.0";
+  version = "34.0.0";
 
   src = fetchFromGitHub {
     owner = "antonmedv";
     repo = pname;
     rev = version;
-    hash = "sha256-AbMm/vXt/s/evTxB2oE/6qGbfNtNXVSiYj4n4261iNk=";
+    hash = "sha256-gVeeCJOqrEua5quID1n1928oHtP9gfIDe4erVn1y2Eo=";
   };
 
-  vendorHash = "sha256-fnWjeQo5370ofFRQRmUnqvj2vutcZcnKar+/sTS2mJw=";
+  nativeBuildInputs = [ installShellFiles ];
+
+  vendorHash = "sha256-otORAeD9+J6/10TDusEnFfRRxTb/52Zk7Ttaw46xnsU=/sTS1mJw=";
+
+  postInstall = ''
+    installShellCompletion --cmd fx \
+      --bash <($out/bin/fx --comp bash) \
+      --fish <($out/bin/fx --comp fish) \
+      --zsh <($out/bin/fx --comp zsh)
+  '';
 
   meta = with lib; {
     description = "Terminal JSON viewer";
