@@ -55,7 +55,6 @@ assert (versionAtLeast version "4.9");
   SHUFFLE_PAGE_ALLOCATOR = whenAtLeast "5.2" yes;
 
   # Wipe higher-level memory allocations on free() with page_poison=1
-  PAGE_POISONING           = yes;
   PAGE_POISONING_NO_SANITY = whenOlder "5.11" yes;
   PAGE_POISONING_ZERO      = whenOlder "5.11" yes;
 
@@ -113,9 +112,6 @@ assert (versionAtLeast version "4.9");
   CC_STACKPROTECTOR_REGULAR = lib.mkForce (whenOlder "4.18" no);
   CC_STACKPROTECTOR_STRONG  = whenOlder "4.18" yes;
 
-  # Detect out-of-bound reads/writes and use-after-free
-  KFENCE = whenAtLeast "5.12" yes;
-
   # CONFIG_DEVMEM=n causes these to not exist anymore.
   STRICT_DEVMEM    = option no;
   IO_STRICT_DEVMEM = option no;
@@ -126,8 +122,4 @@ assert (versionAtLeast version "4.9");
 
   # not needed for less than a decade old glibc versions
   LEGACY_VSYSCALL_NONE = yes;
-
-  # Straight-Line-Speculation
-  # https://lwn.net/Articles/877845/
-  SLS = option yes;
 }
