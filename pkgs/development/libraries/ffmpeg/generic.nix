@@ -34,6 +34,7 @@
 
   # Feature flags
 , withAlsa ? withHeadlessDeps && stdenv.isLinux # Alsa in/output supporT
+, withAmf ? withFullDeps # AMD Media Framework video encoding
 , withAom ? withFullDeps # AV1 reference encoder
 , withAribcaption ? withFullDeps && lib.versionAtLeast version "6.1" # ARIB STD-B24 Caption Decoder/Renderer
 , withAss ? withHeadlessDeps && stdenv.hostPlatform == stdenv.buildPlatform # (Advanced) SubStation Alpha subtitle rendering
@@ -198,6 +199,7 @@
  *  External libraries options
  */
 , alsa-lib
+, amf-headers
 , bzip2
 , celt
 , chromaprint
@@ -490,6 +492,7 @@ stdenv.mkDerivation (finalAttrs: {
      *  External libraries
      */
     (enableFeature withAlsa "alsa")
+    (enableFeature withAmf "amf")
     (enableFeature withAom "libaom")
   ] ++ optionals (versionAtLeast version "6.1") [
     (enableFeature withAribcaption "libaribcaption")
@@ -618,6 +621,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = []
   ++ optionals withAlsa [ alsa-lib ]
+  ++ optionals withAmf [ amf-headers ]
   ++ optionals withAom [ libaom ]
   ++ optionals withAribcaption [ libaribcaption ]
   ++ optionals withAss [ libass ]
