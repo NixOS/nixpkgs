@@ -3299,7 +3299,6 @@ broken-packages:
   - kind-integer # failure in job https://hydra.nixos.org/build/233250066 at 2023-09-02
   - kleene-list # failure in job https://hydra.nixos.org/build/233237651 at 2023-09-02
   - kmn-programming # failure in job https://hydra.nixos.org/build/233258328 at 2023-09-02
-  - kmonad # failure in job https://hydra.nixos.org/build/252717089 at 2024-03-16
   - kmp-dfa # failure in job https://hydra.nixos.org/build/233237266 at 2023-09-02
   - knots # failure in job https://hydra.nixos.org/build/233209153 at 2023-09-02
   - koellner-phonetic # failure in job https://hydra.nixos.org/build/233217750 at 2023-09-02
