@@ -5843,6 +5843,13 @@
     githubId = 418227;
     name = "Jean-Philippe Braun";
   };
+  eopb = {
+    email = "ethanboxx@gmail.com";
+    github = "eopb";
+    githubId = 8074468;
+    matrix = "@efun:matrix.org";
+    name = "Ethan Brierley";
+  };
   eownerdead = {
     name = "EOWNERDEAD";
     email = "eownerdead@disroot.org";
