@@ -1,7 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, kernel, installShellFiles, pkg-config
-, luajit, ncurses, perl, jsoncpp, openssl, curl, jq, gcc, elfutils, tbb, protobuf, grpc
-, yaml-cpp, nlohmann_json, re2, zstd, uthash
-}:
+, luajit, ncurses, perl, jsoncpp, openssl, curl, jq, gcc, elfutils, tbb
+, protobuf, grpc, yaml-cpp, nlohmann_json, re2, zstd, uthash }:
 
 let
   # Compare with https://github.com/draios/sysdig/blob/0.36.0/cmake/modules/falcosecurity-libs.cmake
@@ -57,12 +56,14 @@ in stdenv.mkDerivation rec {
   hardeningDisable = [ "pic" ];
 
   postUnpack = ''
-    cp -r ${fetchFromGitHub {
-      owner = "falcosecurity";
-      repo = "libs";
-      rev = libsRev;
-      hash = libsHash;
-    }} libs
+    cp -r ${
+      fetchFromGitHub {
+        owner = "falcosecurity";
+        repo = "libs";
+        rev = libsRev;
+        hash = libsHash;
+      }
+    } libs
     chmod -R +w libs
 
     substituteInPlace libs/userspace/libscap/libscap.pc.in libs/userspace/libsinsp/libsinsp.pc.in \
@@ -97,10 +98,10 @@ in stdenv.mkDerivation rec {
   ] ++ lib.optional (kernel == null) "-DBUILD_DRIVER=OFF";
 
   env.NIX_CFLAGS_COMPILE =
-   # needed since luajit-2.1.0-beta3
-   "-DluaL_reg=luaL_Reg -DluaL_getn(L,i)=((int)lua_objlen(L,i)) " +
-   # fix compiler warnings been treated as errors
-   "-Wno-error";
+    # needed since luajit-2.1.0-beta3
+    "-DluaL_reg=luaL_Reg -DluaL_getn(L,i)=((int)lua_objlen(L,i)) " +
+    # fix compiler warnings been treated as errors
+    "-Wno-error";
 
   preConfigure = ''
     if ! grep -q "${libsRev}" cmake/modules/falcosecurity-libs.cmake; then
@@ -113,38 +114,36 @@ in stdenv.mkDerivation rec {
     export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   '';
 
-  postInstall =
-    ''
-      # Fix the bash completion location
-      installShellCompletion --bash $out/etc/bash_completion.d/sysdig
-      rm $out/etc/bash_completion.d/sysdig
-      rmdir $out/etc/bash_completion.d
-      rmdir $out/etc
-    ''
-    + lib.optionalString (kernel != null) ''
-      make install_driver
-      kernel_dev=${kernel.dev}
-      kernel_dev=''${kernel_dev#${builtins.storeDir}/}
-      kernel_dev=''${kernel_dev%%-linux*dev*}
-      if test -f "$out/lib/modules/${kernel.modDirVersion}/extra/scap.ko"; then
-          sed -i "s#$kernel_dev#................................#g" $out/lib/modules/${kernel.modDirVersion}/extra/scap.ko
-      else
-          for i in $out/lib/modules/${kernel.modDirVersion}/{extra,updates}/scap.ko.xz; do
-            if test -f "$i"; then
-              xz -d $i
-              sed -i "s#$kernel_dev#................................#g" ''${i%.xz}
-              xz -9 ''${i%.xz}
-            fi
-          done
-      fi
-    '';
-
+  postInstall = ''
+    # Fix the bash completion location
+    installShellCompletion --bash $out/etc/bash_completion.d/sysdig
+    rm $out/etc/bash_completion.d/sysdig
+    rmdir $out/etc/bash_completion.d
+    rmdir $out/etc
+  '' + lib.optionalString (kernel != null) ''
+    make install_driver
+    kernel_dev=${kernel.dev}
+    kernel_dev=''${kernel_dev#${builtins.storeDir}/}
+    kernel_dev=''${kernel_dev%%-linux*dev*}
+    if test -f "$out/lib/modules/${kernel.modDirVersion}/extra/scap.ko"; then
+        sed -i "s#$kernel_dev#................................#g" $out/lib/modules/${kernel.modDirVersion}/extra/scap.ko
+    else
+        for i in $out/lib/modules/${kernel.modDirVersion}/{extra,updates}/scap.ko.xz; do
+          if test -f "$i"; then
+            xz -d $i
+            sed -i "s#$kernel_dev#................................#g" ''${i%.xz}
+            xz -9 ''${i%.xz}
+          fi
+        done
+    fi
+  '';
 
   meta = with lib; {
-    description = "A tracepoint-based system tracing tool for Linux (with clients for other OSes)";
+    description =
+      "A tracepoint-based system tracing tool for Linux (with clients for other OSes)";
     license = with licenses; [ asl20 gpl2 mit ];
-    maintainers = [maintainers.raskin];
-    platforms = ["x86_64-linux"] ++ platforms.darwin;
+    maintainers = [ maintainers.raskin ];
+    platforms = [ "x86_64-linux" ] ++ platforms.darwin;
     broken = kernel != null && ((versionOlder kernel.version "4.14") || (kernel.isHardened && lib.lists.findSingle (x: x == kernel.version) false true [ "4.19" "5.4" "lqx" ]));
     homepage = "https://sysdig.com/opensource/";
     downloadPage = "https://github.com/draios/sysdig/releases";
