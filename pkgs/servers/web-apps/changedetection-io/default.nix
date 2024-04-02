@@ -5,19 +5,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "changedetection-io";
-  version = "0.45.16";
+  version = "0.45.17";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dgtlmoon";
     repo = "changedetection.io";
     rev = version;
-    hash = "sha256-ln522U3XqZfhvLvMEzrqXV3SjhpgnrRk2MxQQRBL5VU=";
+    hash = "sha256-3LaNZourDjFjdSh5+hwc2l2DRMEI/rbfyksFD9uUebg=";
   };
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "apprise~=1.7.1" "apprise" \
+      --replace "apprise~=1.7.4" "apprise" \
       --replace "cryptography~=3.4" "cryptography" \
       --replace "dnspython~=2.4" "dnspython" \
       --replace "pytest ~=7.2" "" \
