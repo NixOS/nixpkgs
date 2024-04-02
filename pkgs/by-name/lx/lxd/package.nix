@@ -1,40 +1,41 @@
-{ lib
-, lxd-unwrapped
-, linkFarm
-, makeWrapper
-, stdenv
-, symlinkJoin
-, writeShellScriptBin
-, acl
-, apparmor-parser
-, apparmor-profiles
-, attr
-, bash
-, btrfs-progs
-, cdrkit
-, criu
-, dnsmasq
-, e2fsprogs
-, getent
-, gnutar
-, gptfdisk
-, gzip
-, iproute2
-, iptables
-, kmod
-, lvm2
-, minio
-, nftables
-, OVMF
-, qemu_kvm
-, qemu-utils
-, rsync
-, spice-gtk
-, squashfsTools
-, thin-provisioning-tools
-, util-linux
-, virtiofsd
-, xz
+{
+  lib,
+  lxd-unwrapped,
+  linkFarm,
+  makeWrapper,
+  stdenv,
+  symlinkJoin,
+  writeShellScriptBin,
+  acl,
+  apparmor-parser,
+  apparmor-profiles,
+  attr,
+  bash,
+  btrfs-progs,
+  cdrkit,
+  criu,
+  dnsmasq,
+  e2fsprogs,
+  getent,
+  gnutar,
+  gptfdisk,
+  gzip,
+  iproute2,
+  iptables,
+  kmod,
+  lvm2,
+  minio,
+  nftables,
+  OVMF,
+  qemu_kvm,
+  qemu-utils,
+  rsync,
+  spice-gtk,
+  squashfsTools,
+  thin-provisioning-tools,
+  util-linux,
+  virtiofsd,
+  xz,
 }:
 let
   binPath = lib.makeBinPath [
@@ -70,9 +71,7 @@ let
     '')
   ];
 
-  clientBinPath = [
-    spice-gtk
-  ];
+  clientBinPath = [ spice-gtk ];
 
   ovmf-2mb = OVMF.override {
     secureBoot = true;
@@ -89,16 +88,43 @@ let
   # mimic ovmf from https://github.com/canonical/lxd-pkg-snap/blob/3abebe1dfeb20f9b7729556960c7e9fe6ad5e17c/snapcraft.yaml#L378
   # also found in /snap/lxd/current/share/qemu/ on a snap install
   ovmf = linkFarm "lxd-ovmf" [
-    { name = "OVMF_CODE.2MB.fd"; path = "${ovmf-2mb.fd}/FV/${ovmf-prefix}_CODE.fd"; }
-    { name = "OVMF_CODE.4MB.fd"; path = "${ovmf-4mb.fd}/FV/${ovmf-prefix}_CODE.fd"; }
-    { name = "OVMF_CODE.fd"; path = "${ovmf-2mb.fd}/FV/${ovmf-prefix}_CODE.fd"; }
+    {
+      name = "OVMF_CODE.2MB.fd";
+      path = "${ovmf-2mb.fd}/FV/${ovmf-prefix}_CODE.fd";
+    }
+    {
+      name = "OVMF_CODE.4MB.fd";
+      path = "${ovmf-4mb.fd}/FV/${ovmf-prefix}_CODE.fd";
+    }
+    {
+      name = "OVMF_CODE.fd";
+      path = "${ovmf-2mb.fd}/FV/${ovmf-prefix}_CODE.fd";
+    }
 
-    { name = "OVMF_VARS.2MB.fd"; path = "${ovmf-2mb.fd}/FV/${ovmf-prefix}_VARS.fd"; }
-    { name = "OVMF_VARS.2MB.ms.fd"; path = "${ovmf-2mb.fd}/FV/${ovmf-prefix}_VARS.fd"; }
-    { name = "OVMF_VARS.4MB.fd"; path = "${ovmf-4mb.fd}/FV/${ovmf-prefix}_VARS.fd"; }
-    { name = "OVMF_VARS.4MB.ms.fd"; path = "${ovmf-4mb.fd}/FV/${ovmf-prefix}_VARS.fd"; }
-    { name = "OVMF_VARS.fd"; path = "${ovmf-2mb.fd}/FV/${ovmf-prefix}_VARS.fd"; }
-    { name = "OVMF_VARS.ms.fd"; path = "${ovmf-2mb.fd}/FV/${ovmf-prefix}_VARS.fd"; }
+    {
+      name = "OVMF_VARS.2MB.fd";
+      path = "${ovmf-2mb.fd}/FV/${ovmf-prefix}_VARS.fd";
+    }
+    {
+      name = "OVMF_VARS.2MB.ms.fd";
+      path = "${ovmf-2mb.fd}/FV/${ovmf-prefix}_VARS.fd";
+    }
+    {
+      name = "OVMF_VARS.4MB.fd";
+      path = "${ovmf-4mb.fd}/FV/${ovmf-prefix}_VARS.fd";
+    }
+    {
+      name = "OVMF_VARS.4MB.ms.fd";
+      path = "${ovmf-4mb.fd}/FV/${ovmf-prefix}_VARS.fd";
+    }
+    {
+      name = "OVMF_VARS.fd";
+      path = "${ovmf-2mb.fd}/FV/${ovmf-prefix}_VARS.fd";
+    }
+    {
+      name = "OVMF_VARS.ms.fd";
+      path = "${ovmf-2mb.fd}/FV/${ovmf-prefix}_VARS.fd";
+    }
   ];
 in
 symlinkJoin {

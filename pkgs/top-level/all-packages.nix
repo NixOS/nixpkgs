@@ -10576,8 +10576,6 @@ with pkgs;
 
   lxc = callPackage ../os-specific/linux/lxc {  };
 
-  lxd = callPackage ../tools/admin/lxd/wrapper.nix { };
-
   lxd-image-server = callPackage ../tools/virtualization/lxd-image-server { };
 
   lzfse = callPackage ../tools/compression/lzfse { };
