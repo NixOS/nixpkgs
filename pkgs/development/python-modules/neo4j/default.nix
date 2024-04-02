@@ -27,16 +27,16 @@ buildPythonPackage rec {
   postPatch = ''
     # The dynamic versioning adds a postfix (.dev0) to the version
     substituteInPlace pyproject.toml \
-      --replace '"tomlkit ~= 0.11.6"' '"tomlkit >= 0.11.6"' \
-      --replace 'dynamic = ["version", "readme"]' 'dynamic = ["readme"]' \
-      --replace '#readme = "README.rst"' 'version = "${version}"'
+      --replace-fail '"tomlkit ~= 0.11.6"' '"tomlkit >= 0.11.6"' \
+      --replace-fail 'dynamic = ["version", "readme"]' 'dynamic = ["readme"]' \
+      --replace-fail '#readme = "README.rst"' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pytz
     tomlkit
   ];
