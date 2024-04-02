@@ -9,7 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-QWcnrh8QgOpuMJDOo23QdoJvw2kVHjarc2VXupIZb58=";
   };
 
-  patches = [ ./no-self-references.patch ];
+  patches = [
+    ./no-self-references.patch
+    ./fix-hardcoded-mapdir.patch
+  ];
 
   makeFlags = [
     "NIXOS=1" "INSTALL=install" "BINDIR=$(out)/sbin"
