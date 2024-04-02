@@ -18060,6 +18060,8 @@ with pkgs;
     };
   }));
 
+  ansible-builder = with python3Packages; toPythonApplication ansible-builder;
+
   ansible-doctor = callPackage ../tools/admin/ansible/doctor.nix { };
 
   dbus-test-runner = callPackage ../development/tools/dbus-test-runner { };
