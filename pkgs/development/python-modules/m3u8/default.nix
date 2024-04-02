@@ -50,7 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python m3u8 parser";
     homepage = "https://github.com/globocom/m3u8";
-    changelog = "https://github.com/globocom/m3u8/releases/tag//${version}";
+    changelog = "https://github.com/globocom/m3u8/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ Scriptkiddi ];
   };
