@@ -17,6 +17,8 @@ in
 
     layersPackage = mkPackageOption pkgs "monado-vulkan-layers" {};
 
+    hardwarePackage = mkPackageOption pkgs "xr-hardware" {};
+
     defaultRuntime = mkOption {
       type = types.bool;
       description = ''
@@ -43,7 +45,7 @@ in
       source = lib.getExe' cfg.package "monado-service";
     };
 
-    services.udev.packages = with pkgs; [ xr-hardware ];
+    services.udev.packages = [ cfg.hardwarePackage ];
 
     systemd.user = {
       services.monado = {
