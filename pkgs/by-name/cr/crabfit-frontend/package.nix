@@ -1,5 +1,6 @@
 {
   lib,
+  nixosTests,
   stdenv,
   fetchFromGitHub,
   fetchYarnDeps,
@@ -105,6 +106,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     ln -s /var/cache/crabfit $out/standalone/.next/cache
   '';
+
+  passthru.tests = [ nixosTests.crabfit ];
 
   meta = {
     description = "Enter your availability to find a time that works for everyone";
