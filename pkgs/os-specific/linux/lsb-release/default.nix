@@ -2,6 +2,7 @@
 , substitute
 , coreutils
 , getopt
+, runtimeShell
 }:
 
 substitute {
@@ -15,7 +16,7 @@ substitute {
   substitutions = [
     "--subst-var-by" "coreutils" coreutils
     "--subst-var-by" "getopt" getopt
-    "--subst-var" "shell"
+    "--subst-var-by" "shell" runtimeShell
   ];
 
   meta = with lib; {
