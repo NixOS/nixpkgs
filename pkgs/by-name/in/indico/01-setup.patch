@@ -1,0 +1,13 @@
+diff --git a/setup.py b/setup.py
+index efbb4adabe..1cfb52ebb7 100644
+--- a/setup.py
++++ b/setup.py
+@@ -37,7 +37,7 @@ class BuildWithTranslations(build):
+             if not os.path.exists(po_file):
+                 continue
+             with open(os.devnull, 'w') as devnull:
+-                output = subprocess.check_output(['npx', 'react-jsx-i18n', 'compile', po_file], stderr=devnull)
++                output = subprocess.check_output(['@reactJsxI18n@', 'compile', po_file], stderr=devnull)
+             json.loads(output)  # just to be sure the JSON is valid
+             with open(json_file, 'wb') as f:
+                 f.write(output)
