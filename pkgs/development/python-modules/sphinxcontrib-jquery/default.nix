@@ -33,6 +33,8 @@ buildPythonPackage rec {
     })
   ];
 
+  doCheck = true;
+
   nativeBuildInputs = [
     flit-core
   ];
