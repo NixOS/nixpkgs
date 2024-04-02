@@ -5,12 +5,13 @@
 , pytestCheckHook
 , pythonAtLeast
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "xkcdpass";
   version = "1.19.9";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,6 +22,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
+  ];
+
+  build-system = [
+    setuptools
   ];
 
   nativeCheckInputs = [
@@ -43,9 +48,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Generate secure multiword passwords/passphrases, inspired by XKCD";
-    mainProgram = "xkcdpass";
     homepage = "https://github.com/redacted/XKCD-password-generator";
     license = licenses.bsd3;
     maintainers = with maintainers; [ peterhoeg ];
+    mainProgram = "xkcdpass";
   };
 }
