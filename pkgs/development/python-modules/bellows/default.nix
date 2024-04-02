@@ -1,4 +1,5 @@
 { lib
+, async-timeout
 , buildPythonPackage
 , click
 , click-log
@@ -30,21 +31,23 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '"setuptools-git-versioning<2"' "" \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail '"setuptools-git-versioning<2"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     click-log
     pure-pcapy3
     pyserial-asyncio
     voluptuous
     zigpy
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    async-timeout
   ];
 
   nativeCheckInputs = [
@@ -59,10 +62,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module to implement EZSP for EmberZNet devices";
-    mainProgram = "bellows";
     homepage = "https://github.com/zigpy/bellows";
     changelog = "https://github.com/zigpy/bellows/releases/tag/${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mvnetbiz ];
+    mainProgram = "bellows";
   };
 }
