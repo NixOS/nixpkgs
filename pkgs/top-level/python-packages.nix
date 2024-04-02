@@ -8937,6 +8937,8 @@ self: super: with self; {
 
   onetimepass = callPackage ../development/python-modules/onetimepass { };
 
+  onigurumacffi = callPackage ../development/python-modules/onigurumacffi { };
+
   onkyo-eiscp = callPackage ../development/python-modules/onkyo-eiscp { };
 
   online-judge-api-client = callPackage ../development/python-modules/online-judge-api-client { };
