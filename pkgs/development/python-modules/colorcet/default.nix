@@ -5,21 +5,28 @@
 , pyct
 , pytest-mpl
 , pytestCheckHook
+, setuptools
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "colorcet";
   version = "3.1.0";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-KSGzzYGiKIqvLWPbwM48JtzYgujDicxQXWiGv3qppOs=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     param
     pyct
+  ];
+
+  build-system = [
+    setuptools-scm
+    setuptools
   ];
 
   nativeCheckInputs = [
