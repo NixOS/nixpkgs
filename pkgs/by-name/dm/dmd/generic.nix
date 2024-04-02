@@ -146,18 +146,19 @@ stdenv.mkDerivation (finalAttrs: {
     export buildJobs=$NIX_BUILD_CORES
     [ -z "$enableParallelBuilding" ] && buildJobs=1
 
-    ${dmdBin}/rdmd dmd/compiler/src/build.d -j$buildJobs HOST_DMD=${dmdBin}/dmd $buildFlags
-    make -C dmd/druntime -f posix.mak DMD=${pathToDmd} $buildFlags -j$buildJobs
+    ${dmdBin}/rdmd dmd/compiler/src/build.d -j$buildJobs $buildFlags \
+      HOST_DMD=${dmdBin}/dmd
+    make -C dmd/druntime -j$buildJobs DMD=${pathToDmd} $buildFlags
     echo ${tzdata}/share/zoneinfo/ > TZDatabaseDirFile
-    echo ${lib.getLib curl}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} > LibcurlPathFile
-    make -C phobos -f posix.mak $buildFlags -j$buildJobs DMD=${pathToDmd} DFLAGS="-version=TZDatabaseDir -version=LibcurlPath -J$PWD"
+    echo ${lib.getLib curl}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} \
+      > LibcurlPathFile
+    make -C phobos -j$buildJobs $buildFlags \
+      DMD=${pathToDmd} DFLAGS="-version=TZDatabaseDir -version=LibcurlPath -J$PWD"
 
     runHook postBuild
   '';
 
   doCheck = true;
-
-  checkFlags = finalAttrs.buildFlags;
 
   # many tests are disabled because they are failing
 
@@ -169,11 +170,12 @@ stdenv.mkDerivation (finalAttrs: {
     export checkJobs=$NIX_BUILD_CORES
     [ -z "$enableParallelChecking" ] && checkJobs=1
 
-    NIX_ENFORCE_PURITY= \
-      make -C dmd/compiler/test $checkFlags CC=$CXX SHELL=$SHELL -j$checkJobs N=$checkJobs
+    CC=$CXX HOST_DMD=${pathToDmd} NIX_ENFORCE_PURITY= \
+      ${dmdBin}/rdmd dmd/compiler/test/run.d -j$checkJobs
 
     NIX_ENFORCE_PURITY= \
-      make -C phobos -f posix.mak unittest $checkFlags -j$checkJobs DFLAGS="-version=TZDatabaseDir -version=LibcurlPath -J$PWD"
+      make -C phobos unittest -j$checkJobs $checkFlags \
+        DFLAGS="-version=TZDatabaseDir -version=LibcurlPath -J$PWD"
 
     runHook postCheck
   '';
