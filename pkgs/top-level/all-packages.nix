@@ -1373,8 +1373,6 @@ with pkgs;
 
   subnetcalc = callPackage ../tools/networking/subnetcalc { };
 
-  substitute = callPackage ../build-support/substitute/substitute.nix { };
-
   substituteAll = callPackage ../build-support/substitute/substitute-all.nix { };
 
   substituteAllFiles = callPackage ../build-support/substitute-files/substitute-all-files.nix { };
