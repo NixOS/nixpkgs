@@ -4231,7 +4231,6 @@ broken-packages:
   - optimization # failure in job https://hydra.nixos.org/build/233191078 at 2023-09-02
   - optional # failure in job https://hydra.nixos.org/build/233241818 at 2023-09-02
   - options-time # failure in job https://hydra.nixos.org/build/233194289 at 2023-09-02
-  - optparse-applicative-cmdline-util # failure in job https://hydra.nixos.org/build/252739738 at 2024-03-16
   - optparse-applicative-simple # failure in job https://hydra.nixos.org/build/233236802 at 2023-09-02
   - optparse-declarative # failure in job https://hydra.nixos.org/build/252718969 at 2024-03-16
   - optparse-helper # failure in job https://hydra.nixos.org/build/233248522 at 2023-09-02
