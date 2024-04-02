@@ -31,11 +31,11 @@ buildPythonPackage rec {
     hash = "sha256-MyK5ICGNR3BEJtVhFM3A6azceU5HjSDep4tpuQ8D4Rs=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     aiohttp-retry
     pyjwt
