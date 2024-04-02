@@ -11,29 +11,29 @@
 
 buildPythonPackage rec {
   pname = "zha-quirks";
-  version = "0.0.112";
+  version = "0.0.113";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zha-device-handlers";
     rev = "refs/tags/${version}";
-    hash = "sha256-wI7mpX6oFV/RrxH/UP1X9Odago0CxJ5dhjKAsDS+Sq4=";
+    hash = "sha256-Th0JF7sauDhFIZH7BY4STgJZ2o+zqQmtUqNLNeaB6As=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace ', "setuptools-git-versioning<2"' "" \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail ', "setuptools-git-versioning<2"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     zigpy
   ];
