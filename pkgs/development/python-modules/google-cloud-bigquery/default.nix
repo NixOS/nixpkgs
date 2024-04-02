@@ -23,22 +23,27 @@
 , python-dateutil
 , pythonOlder
 , requests
+, setuptools
 , tqdm
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery";
-  version = "3.19.0";
-  format = "setuptools";
+  version = "3.20.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jjEdrkl2jhUB/NxekWv/S34WlHHlcHkZ9Kb3igKztaY=";
+    hash = "sha256-MYqjq6tfGQDuJPY7qL0Cuc2vqpQtc4tNwUpO8swtkl8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     grpcio
     google-api-core
     google-cloud-core

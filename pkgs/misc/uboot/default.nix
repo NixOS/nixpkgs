@@ -298,6 +298,14 @@ in {
     '';
   };
 
+  ubootNanoPCT6 = buildUBoot {
+    defconfig = "nanopc-t6-rk3588_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
+    ROCKCHIP_TPL = rkbin.TPL_RK3588;
+    filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" ];
+  };
+
   ubootNovena = buildUBoot {
     defconfig = "novena_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
@@ -529,6 +537,13 @@ in {
     defconfig = "rpi_0_w_defconfig";
     extraMeta.platforms = ["armv6l-linux"];
     filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootRock4CPlus = buildUBoot {
+    defconfig = "rock-4c-plus-rk3399_defconfig";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    BL31 = "${armTrustedFirmwareRK3399}/bl31.elf";
+    filesToInstall = [ "u-boot.itb" "idbloader.img" ];
   };
 
   ubootRock5ModelB = buildUBoot {
