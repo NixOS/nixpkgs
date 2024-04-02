@@ -138,7 +138,7 @@ buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://pdm-project.org";
     changelog = "https://github.com/pdm-project/pdm/releases/tag/${version}";
-    description = "A modern Python package manager with PEP 582 support";
+    description = "A modern Python package and dependency manager supporting the latest PEP standards";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
     mainProgram = "pdm";
