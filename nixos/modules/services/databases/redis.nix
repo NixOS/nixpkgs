@@ -312,10 +312,9 @@ in {
       '';
     }) enabledServers);
 
-    boot.kernel.sysctl = mkMerge [
-      { "vm.nr_hugepages" = "0"; }
-      ( mkIf cfg.vmOverCommit { "vm.overcommit_memory" = "1"; } )
-    ];
+    boot.kernel.sysctl = mkIf cfg.vmOverCommit {
+      "vm.overcommit_memory" = "1";
+    };
 
     networking.firewall.allowedTCPPorts = concatMap (conf:
       optional conf.openFirewall conf.port
