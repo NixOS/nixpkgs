@@ -18,6 +18,7 @@
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , pyyaml
 , requests
 , setuptools
@@ -39,7 +40,12 @@ buildPythonPackage rec {
     hash = "sha256-x6f5hhTdOPDVFiBvRhfrXq1wd5keYiuUshXnT0IkjX0=";
   };
 
+  pythonRelaxDeps = [
+    "aiohttp"
+  ];
+
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     setuptools
   ];
 
