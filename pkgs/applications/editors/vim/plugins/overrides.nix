@@ -404,6 +404,13 @@
     '';
   };
 
+  competitest-nvim = super.competitest-nvim.overrideAttrs {
+    dependencies = [ self.nui-nvim ];
+
+    doInstallCheck = true;
+    nvimRequireCheck = "competitest";
+  };
+
   compe-tabnine = super.compe-tabnine.overrideAttrs {
     buildInputs = [ tabnine ];
 
