@@ -1,22 +1,17 @@
-{ stdenv, lib, fetchurl }:
+{ stdenv, lib, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "libhugetlbfs";
-  version = "2.23";
+  version = "2.24";
 
   src = fetchurl {
     url = "https://github.com/libhugetlbfs/libhugetlbfs/releases/download/${version}/libhugetlbfs-${version}.tar.gz";
-    sha256 = "0ya4q001g111d3pqlzrf3yaifadl0ccirx5dndz1pih7x3qp41mp";
+    hash = "sha256-1QHfqRyOrREGlno9OCnyunOMP6wKZcs1jtKrOHDdxe8=";
   };
 
-  patches = [
-    (fetchurl {
-      url = "https://build.opensuse.org/public/source/openSUSE:Factory/libhugetlbfs/glibc-2.34-fix.patch?rev=50";
-      sha256 = "sha256-eRQa6M0ZdHMtwA5nnzDTWYv/x4AnRZhj+MpDiwyCvVM=";
-    })
-  ];
-
   outputs = [ "bin" "dev" "man" "doc" "lib" "out" ];
+
+  nativeBuildInputs = [ autoreconfHook ];
 
   postConfigure = ''
     patchShebangs ld.hugetlbfs
