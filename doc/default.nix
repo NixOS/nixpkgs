@@ -20,6 +20,7 @@ let
       { name = "path"; description = "path functions"; }
       { name = "filesystem"; description = "filesystem functions"; }
       { name = "fileset"; description = "file set functions"; }
+      { name = "network"; description = "networking functions"; }
       { name = "sources"; description = "source filtering functions"; }
       { name = "cli"; description = "command-line serialization functions"; }
       { name = "gvariant"; description = "GVariant formatted string serialization functions"; }
