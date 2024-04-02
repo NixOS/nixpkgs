@@ -1,6 +1,6 @@
 { version
-, dmdSha256
-, phobosSha256
+, dmdHash
+, phobosHash
 }:
 
 { stdenv
@@ -22,7 +22,7 @@
 , git
 , unzip
 , dmdBootstrap ? callPackage ./bootstrap.nix { }
-, dmd_bin ? "${dmdBootstrap}/bin"
+, dmdBin ? "${dmdBootstrap}/bin"
 }:
 
 let
@@ -45,7 +45,7 @@ let
   pathToDmd = "\${NIX_BUILD_TOP}/dmd/generated/${osname}/release/${bits}/dmd";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dmd";
   inherit version;
 
@@ -55,15 +55,15 @@ stdenv.mkDerivation rec {
     (fetchFromGitHub {
       owner = "dlang";
       repo = "dmd";
-      rev = "v${version}";
-      sha256 = dmdSha256;
+      rev = "v${finalAttrs.version}";
+      hash = dmdHash;
       name = "dmd";
     })
     (fetchFromGitHub {
       owner = "dlang";
       repo = "phobos";
-      rev = "v${version}";
-      sha256 = phobosSha256;
+      rev = "v${finalAttrs.version}";
+      hash = phobosHash;
       name = "phobos";
     })
   ];
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
       url = "https://github.com/dlang/dmd/commit/c4d33e5eb46c123761ac501e8c52f33850483a8a.patch";
       stripLen = 1;
       extraPrefix = "dmd/";
-      sha256 = "sha256-N21mAPfaTo+zGCip4njejasraV5IsWVqlGR5eOdFZZE=";
+      hash = "sha256-N21mAPfaTo+zGCip4njejasraV5IsWVqlGR5eOdFZZE=";
     })
   ];
 
@@ -102,18 +102,14 @@ stdenv.mkDerivation rec {
     #   https://issues.dlang.org/show_bug.cgi?id=23317
     rm dmd/compiler/test/runnable/cdvecfill.sh
     rm dmd/compiler/test/compilable/cdcmp.d
-  ''
-
-  + lib.optionalString (lib.versionAtLeast version "2.089.0" && lib.versionOlder version "2.092.2") ''
+  '' + lib.optionalString (lib.versionAtLeast version "2.089.0" && lib.versionOlder version "2.092.2") ''
     rm dmd/compiler/test/dshell/test6952.d
   '' + lib.optionalString (lib.versionAtLeast version "2.092.2") ''
-    substituteInPlace dmd/compiler/test/dshell/test6952.d --replace "/usr/bin/env bash" "${bash}/bin/bash"
-  ''
-
-  + lib.optionalString stdenv.isLinux ''
-    substituteInPlace phobos/std/socket.d --replace "assert(ih.addrList[0] == 0x7F_00_00_01);" ""
+    substituteInPlace dmd/compiler/test/dshell/test6952.d --replace-fail "/usr/bin/env bash" "${bash}/bin/bash"
+  '' + lib.optionalString stdenv.isLinux ''
+    substituteInPlace phobos/std/socket.d --replace-fail "assert(ih.addrList[0] == 0x7F_00_00_01);" ""
   '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace phobos/std/socket.d --replace "foreach (name; names)" "names = []; foreach (name; names)"
+    substituteInPlace phobos/std/socket.d --replace-fail "foreach (name; names)" "names = []; foreach (name; names)"
   '';
 
   nativeBuildInputs = [
@@ -148,11 +144,9 @@ stdenv.mkDerivation rec {
     runHook preBuild
 
     export buildJobs=$NIX_BUILD_CORES
-    if [ -z $enableParallelBuilding ]; then
-      buildJobs=1
-    fi
+    [ -z "$enableParallelBuilding" ] && buildJobs=1
 
-    ${dmd_bin}/rdmd dmd/compiler/src/build.d -j$buildJobs HOST_DMD=${dmd_bin}/dmd $buildFlags
+    ${dmdBin}/rdmd dmd/compiler/src/build.d -j$buildJobs HOST_DMD=${dmdBin}/dmd $buildFlags
     make -C dmd/druntime -f posix.mak DMD=${pathToDmd} $buildFlags -j$buildJobs
     echo ${tzdata}/share/zoneinfo/ > TZDatabaseDirFile
     echo ${lib.getLib curl}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} > LibcurlPathFile
@@ -163,9 +157,9 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkFlags = buildFlags;
+  checkFlags = finalAttrs.buildFlags;
 
-  # many tests are disbled because they are failing
+  # many tests are disabled because they are failing
 
   # NOTE: Purity check is disabled for checkPhase because it doesn't fare well
   # with the DMD linker. See https://github.com/NixOS/nixpkgs/issues/97420
@@ -173,9 +167,7 @@ stdenv.mkDerivation rec {
     runHook preCheck
 
     export checkJobs=$NIX_BUILD_CORES
-    if [ -z $enableParallelChecking ]; then
-      checkJobs=1
-    fi
+    [ -z "$enableParallelChecking" ] && checkJobs=1
 
     NIX_ENFORCE_PURITY= \
       make -C dmd/compiler/test $checkFlags CC=$CXX SHELL=$SHELL -j$checkJobs N=$checkJobs
@@ -200,7 +192,7 @@ stdenv.mkDerivation rec {
     cp phobos/generated/${osname}/release/${bits}/libphobos2.* $out/lib/
 
     wrapProgram $out/bin/dmd \
-      --prefix PATH ":" "${targetPackages.stdenv.cc}/bin" \
+      --prefix PATH : "${targetPackages.stdenv.cc}/bin" \
       --set-default CC "${targetPackages.stdenv.cc}/bin/cc"
 
     substitute ${dmdConfFile} "$out/bin/dmd.conf" --subst-var out
@@ -209,19 +201,19 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    find $out/bin -type f -exec ${removeReferencesTo}/bin/remove-references-to -t ${dmd_bin}/dmd '{}' +
+    find $out/bin -type f -exec ${removeReferencesTo}/bin/remove-references-to -t ${dmdBin}/dmd '{}' +
   '';
 
   disallowedReferences = [ dmdBootstrap ];
 
   meta = with lib; {
     description = "Official reference compiler for the D language";
-    mainProgram = "dmd";
     homepage = "https://dlang.org/";
     # Everything is now Boost licensed, even the backend.
     # https://github.com/dlang/dmd/pull/6680
     license = licenses.boost;
+    mainProgram = "dmd";
     maintainers = with maintainers; [ lionello dukc jtbx ];
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
   };
-}
+})
