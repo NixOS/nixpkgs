@@ -57,9 +57,9 @@ in {
       package = mkPackageOption pkgs "redis" { };
 
       vmOverCommit = mkEnableOption ''
-        setting of vm.overcommit_memory to 1
+        set `vm.overcommit_memory` sysctl to 1
         (Suggested for Background Saving: <https://redis.io/docs/get-started/faq/>)
-      '';
+      '' // { default = true; };
 
       servers = mkOption {
         type = with types; attrsOf (submodule ({ config, name, ... }: {
