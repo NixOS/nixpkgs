@@ -33,7 +33,7 @@ in {
         '';
       };
 
-      package = lib.mkPackageOption pkgs "lxd" { };
+      package = lib.mkPackageOption pkgs "lxd-lts" { };
 
       lxcPackage = lib.mkPackageOption pkgs "lxc" {
         extraDescription = ''

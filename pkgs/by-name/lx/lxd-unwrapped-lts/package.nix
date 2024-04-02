@@ -18,7 +18,8 @@
 }:
 
 buildGo122Module rec {
-  pname = "lxd-unwrapped";
+  pname = "lxd-unwrapped-lts";
+  # major/minor are used in updateScript to pin to LTS
   version = "5.21.0";
 
   src = fetchurl {
@@ -93,7 +94,7 @@ buildGo122Module rec {
   passthru.tests.lxd-to-incus = nixosTests.incus.lxd-to-incus;
   passthru.updateScript = gitUpdater {
     url = "https://github.com/canonical/lxd.git";
-    rev-prefix = "lxd-";
+    rev-prefix = "lxd-5.21";
   };
 
   meta = with lib; {

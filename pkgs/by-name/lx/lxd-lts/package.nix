@@ -1,6 +1,6 @@
 {
   lib,
-  lxd-unwrapped,
+  lxd-unwrapped-lts,
   linkFarm,
   makeWrapper,
   stdenv,
@@ -128,9 +128,9 @@ let
   ];
 in
 symlinkJoin {
-  name = "lxd-${lxd-unwrapped.version}";
+  name = "lxd-${lxd-unwrapped-lts.version}";
 
-  paths = [ lxd-unwrapped ];
+  paths = [ lxd-unwrapped-lts ];
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -141,8 +141,8 @@ symlinkJoin {
   '';
 
   passthru = {
-    inherit (lxd-unwrapped) tests ui;
+    inherit (lxd-unwrapped-lts) tests ui;
   };
 
-  inherit (lxd-unwrapped) meta pname version;
+  inherit (lxd-unwrapped-lts) meta pname version;
 }
