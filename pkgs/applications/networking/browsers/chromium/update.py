@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python -p python3 nix nixfmt nix-prefetch-git
+#! nix-shell -i python -p python3 nix nixfmt-classic nix-prefetch-git
 
 """This script automatically updates chromium, google-chrome, chromedriver, and ungoogled-chromium
 via upstream-info.nix."""

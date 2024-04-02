@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, makeWrapper, jre, gnugrep, coreutils, writeScript
-, common-updater-scripts, git, gnused, nix, nixfmt, majorVersion }:
+, common-updater-scripts, git, gnused, nix, nixfmt-classic, majorVersion }:
 
 let
   repo = "git@github.com:scala/scala.git";
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
           git
           gnused
           nix
-          nixfmt
+          nixfmt-classic
         ]
       }
       versionSelect='v${lib.versions.major version}.${lib.versions.minor version}.*'
