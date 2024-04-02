@@ -4,14 +4,15 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "volkszaehler";
   version = "0.5.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
@@ -20,7 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-7SB0x0BO9SMeMG1M/hH4fX7oDbtwPgCzyRrrUq1/WPo=";
   };
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  dependencies = [
     aiohttp
     async-timeout
   ];
