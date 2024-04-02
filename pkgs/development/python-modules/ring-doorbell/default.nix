@@ -29,11 +29,11 @@ buildPythonPackage rec {
     hash = "sha256-FUPXia4lCDJDbzEzuewa5ShiIm0EvOrDE8GGZxYWvhk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asyncclick
     oauthlib
     pytz
