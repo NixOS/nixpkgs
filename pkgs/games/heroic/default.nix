@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , fetchYarnDeps
 , yarn
 , prefetch-yarn-deps
@@ -18,18 +17,18 @@
 let appName = "heroic";
 in stdenv.mkDerivation rec {
   pname = "heroic-unwrapped";
-  version = "2.13.0";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
     rev = "v${version}";
-    hash = "sha256-02agp4EGT23QBKC8j1JIAkzVLRykFl55aH/wPF0bU/Y=";
+    hash = "sha256-EARNmvzOOE/AAQKqiXZhhCf2A/j9Cn2BRV9Yc0ezKfE=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-hd0wY1an12zY0E6VPjiD23Mn5ZDPvFvIdu6FGoc7nYY=";
+    hash = "sha256-3CYSw1Qy363eyhy3UyFgihSau+miNHwvKjhlq/kWxWQ=";
   };
 
   nativeBuildInputs = [
@@ -46,11 +45,6 @@ in stdenv.mkDerivation rec {
     ./remove-drm-support.patch
     # Make Heroic create Steam shortcuts (to non-steam games) with the correct path to heroic.
     ./fix-non-steam-shortcuts.patch
-    (fetchpatch {
-      name = "adtraction-fallback.patch";
-      url = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/pull/3575.patch";
-      hash = "sha256-XhYYLQf/oSX3uK+0KzfnAb49iaGwhl9W64Tg2Fqi8Gg=";
-    })
   ];
 
   postPatch = ''
