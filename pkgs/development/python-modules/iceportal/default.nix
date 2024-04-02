@@ -23,11 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-kpAUgGi2fAHzQYuZAaQW9wdrYjwbduRsoTwSuzcjJa8=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
   ];
 
