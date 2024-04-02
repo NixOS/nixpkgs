@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    # "Our soft policy for Postgres version compatibilty is to support Citus'
+    # "Our soft policy for Postgres version compatibility is to support Citus'
     # latest release with Postgres' 3 latest releases."
     # https://www.citusdata.com/updates/v12-0/#deprecated_features
     broken = versionOlder postgresql.version "14";
