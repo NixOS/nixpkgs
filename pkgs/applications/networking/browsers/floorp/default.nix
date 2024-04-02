@@ -7,7 +7,7 @@
 
 ((buildMozillaMach rec {
   pname = "floorp";
-  packageVersion = "11.10.5";
+  packageVersion = "11.11.2";
   applicationName = "Floorp";
   binaryName = "floorp";
   branding = "browser/branding/official";
@@ -15,14 +15,14 @@
   allowAddonSideload = true;
 
   # Must match the contents of `browser/config/version.txt` in the source tree
-  version = "115.8.0";
+  version = "115.10.0";
 
   src = fetchFromGitHub {
     owner = "Floorp-Projects";
     repo = "Floorp";
     fetchSubmodules = true;
     rev = "v${packageVersion}";
-    hash = "sha256-uKgN74xn0v86E/YfqbJNnMIR3gS+3dhdgLJ5VUerurQ=";
+    hash = "sha256-a9f4+t2w8aOOLNaKkr+FuY0ENa/Nkukg9pvJTiUMfWk=";
   };
 
   extraConfigureFlags = [
@@ -30,6 +30,8 @@
     "--with-app-basename=${applicationName}"
     "--with-unsigned-addon-scopes=app,system"
   ];
+
+  updateScript = ./update.sh;
 
   meta = {
     description = "A fork of Firefox, focused on keeping the Open, Private and Sustainable Web alive, built in Japan";
