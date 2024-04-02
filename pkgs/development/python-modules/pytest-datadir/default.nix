@@ -28,6 +28,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  doCheck = true;
+
   pythonImportsCheck = [ "pytest_datadir" ];
 
   meta = with lib; {
