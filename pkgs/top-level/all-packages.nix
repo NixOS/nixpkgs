@@ -28331,6 +28331,7 @@ with pkgs;
     ubootJetsonTK1
     ubootLibreTechCC
     ubootNanoPCT4
+    ubootNanoPCT6
     ubootNovena
     ubootOdroidC2
     ubootOdroidXU3
@@ -28358,6 +28359,7 @@ with pkgs;
     ubootRaspberryPi4_32bit
     ubootRaspberryPi4_64bit
     ubootRaspberryPiZero
+    ubootRock4CPlus
     ubootRock5ModelB
     ubootRock64
     ubootRock64v2
