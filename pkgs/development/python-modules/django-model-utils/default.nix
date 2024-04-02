@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "django-model-utils";
-  version = "4.4.0";
+  version = "4.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "jazzband";
     repo = "django-model-utils";
     rev = "refs/tags/${version}";
-    hash = "sha256-/9gLovZGUwdoz3o3LZBfQ7iWr95cpTWq2YqFKoQC9kY=";
+    hash = "sha256-ZEnDk4kCXyhLvq3CZTK/zP3IK6BsNRqbkfqKAuU6Mfk=";
   };
 
   nativeBuildInputs = [
