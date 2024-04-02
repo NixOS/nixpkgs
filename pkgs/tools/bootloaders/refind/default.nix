@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
       computers, such as all Intel-based Macs and recent (most 2011
       and later) PCs. rEFInd presents a boot menu showing all the EFI
       boot loaders on the EFI-accessible partitions, and optionally
-      BIOS-bootable partitions on Macs. EFI-compatbile OSes, including
+      BIOS-bootable partitions on Macs. EFI-compatible OSes, including
       Linux, provide boot loaders that rEFInd can detect and
       launch. rEFInd can launch Linux EFI boot loaders such as ELILO,
       GRUB Legacy, GRUB 2, and 3.3.0 and later kernels with EFI stub
