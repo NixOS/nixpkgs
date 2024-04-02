@@ -18,6 +18,7 @@
 , redis
 , setuptools
 , typing-extensions
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
@@ -54,6 +55,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -99,6 +101,10 @@ buildPythonPackage rec {
     pytest-lazy-fixture
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+
+  pythonRelaxDeps = [
+    "packaging"
+  ];
 
   pythonImportsCheck = [
     "limits"
