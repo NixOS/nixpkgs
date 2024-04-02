@@ -32,6 +32,9 @@ rustPlatform.buildRustPackage rec {
       --bash ./yazi-boot/completions/yazi.bash \
       --fish ./yazi-boot/completions/yazi.fish \
       --zsh  ./yazi-boot/completions/_yazi
+
+    install -Dm444 assets/yazi.desktop -t $out/share/applications
+    install -Dm444 assets/logo.png $out/share/pixmaps/yazi.png
   '';
 
   passthru.updateScript = nix-update-script { };
