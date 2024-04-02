@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "moodle-dl";
-  version = "2.2.2.4";
+  version = "2.3.2.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-76JU/uYJH7nVWCR+d8vvjYCCSMfe/8R9l756AmzZPHU=";
+    hash = "sha256-O+NRQwiYwYLlsscoEMyl9W4IHF0Ad7Hn9PWGgby7r0A=";
   };
 
   propagatedBuildInputs = with python3Packages; [
