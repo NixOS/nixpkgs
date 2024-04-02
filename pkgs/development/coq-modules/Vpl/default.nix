@@ -11,7 +11,10 @@ mkCoqDerivation {
 
   sourceRoot = "source/coq";
 
-  meta = coq.ocamlPackages.vpl-core.meta // {
+  meta = {
     description = "Coq interface to VPL abstract domain of convex polyhedra";
+    homepage = "https://amarechal.gitlab.io/home/projects/vpl/";
+    license = lib.licenses.lgpl3Only;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }
