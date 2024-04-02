@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    ./CVE-2023-52425.patch
     ./CVE-2024-28757.patch
   ];
 
