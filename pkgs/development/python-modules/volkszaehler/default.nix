@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "volkszaehler";
-  version = "0.4.0";
+  version = "0.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "home-assistant-ecosystem";
     repo = "python-volkszaehler";
     rev = "refs/tags/${version}";
-    hash = "sha256-jX0nwBsBYU383LG8f08FVI7Lo9gnyPSQ0fiEF8dQc/M=";
+    hash = "sha256-7SB0x0BO9SMeMG1M/hH4fX7oDbtwPgCzyRrrUq1/WPo=";
   };
 
   propagatedBuildInputs = [
