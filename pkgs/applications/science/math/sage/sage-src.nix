@@ -53,6 +53,13 @@ stdenv.mkDerivation rec {
     # algorithm soon, disable this test for now.
     # https://github.com/sagemath/sage/issues/34575
     ./patches/disable-slow-glpk-test.patch
+
+    # https://github.com/sagemath/sage/pull/37489, landed in 10.4.beta1
+    (fetchpatch {
+      name = "quaternionalgebra-random-failure.patch";
+      url = "https://github.com/sagemath/sage/commit/1c3f991b9d3c5778e409e5414c6cfcd456113f19.diff";
+      hash = "sha256-uCXchYx26DdxTjR1k2748KCEHPnekKS2fAM7SpyhNvM=";
+    })
   ];
 
   # Patches needed because of package updates. We could just pin the versions of
