@@ -4,6 +4,7 @@
 , substitute
 , coreutils
 , getopt
+, runtimeShell
 , modDirVersion ? ""
 }:
 
@@ -44,7 +45,7 @@ substitute {
     "--subst-var-by" "modDirVersion" modDirVersion'
     "--subst-var-by" "operatingSystem" operatingSystem
     "--subst-var-by" "processor" stdenv.buildPlatform.uname.processor
-    "--subst-var" "shell"
+    "--subst-var-by" "shell" runtimeShell
   ];
 
   meta = with lib; {
