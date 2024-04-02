@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtools";
-  version = "2.106.1";
+  version = "2.108.0";
 
   src = fetchFromGitHub {
     owner = "dlang";
     repo = "tools";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Y8jSwd6tldCnq3yEuO/xUYrSV+lp7tBPMiheMA06f0M=";
+    hash = "sha256-YEBUgJPG/+WN4MnQUNAVftZM0ULxZZzpHoOozXua46U=";
     name = "dtools";
   };
 
@@ -22,18 +22,13 @@ stdenv.mkDerivation (finalAttrs: {
     # Disable failing tests
     ./disabled-tests.diff
     # Fix LDC arm64 build
-    (fetchpatch {
-      # part of https://github.com/dlang/tools/pull/441
-      url = "https://github.com/dlang/tools/commit/6c6a042d1b08e3ec1790bd07a7f69424625ee866.patch";
-      hash = "sha256-x6EclTYN1Y5FG57KLhbBK0BZicSYcZoWO7MTVcP4T18=";
-    })
+    ./fix-ldc-arm64.diff
   ];
 
   nativeBuildInputs = [ ldc ];
   buildInputs = [ curl ];
 
   makeFlags = [
-    "-fposix.mak"
     "CC=${stdenv.cc}/bin/cc"
     "DMD=${ldc.out}/bin/ldmd2"
     "INSTALL_DIR=$(out)"
