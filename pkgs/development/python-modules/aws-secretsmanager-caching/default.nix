@@ -32,11 +32,11 @@ buildPythonPackage rec {
       --replace-fail "'pytest-runner'," ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     botocore
     setuptools  # Needs pkg_resources at runtime.
   ];
