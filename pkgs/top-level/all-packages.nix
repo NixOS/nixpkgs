@@ -164,10 +164,6 @@ with pkgs;
 
   ### BUILD SUPPORT
 
-  auditBlasHook = makeSetupHook
-    { name = "auto-blas-hook"; propagatedBuildInputs = [ blas lapack ]; }
-    ../build-support/setup-hooks/audit-blas.sh;
-
   autoreconfHook = callPackage (
     { makeSetupHook, autoconf, automake, gettext, libtool }:
     makeSetupHook {

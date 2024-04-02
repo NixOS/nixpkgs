@@ -88,6 +88,7 @@ mapAliases ({
   atom-beta = throw "'atom-beta' has been removed because discontinued and deprecated. Consider using 'pulsar', a maintained fork"; # Added 2023-10-01
   atomEnv = throw "'atomEnv' has been removed because 'atom' is discontinued and deprecated. Consider using 'pulsar', a maintained fork"; # Added 2023-10-01
   atomPackages = throw "'atomPackages' has been removed because 'atom' is discontinued and deprecated. Consider using 'pulsar', a maintained fork"; # Added 2023-10-01
+  auditBlasHook = throw "'auditBlasHook' has been removed since it never worked"; # Added 2024-04-02
   avldrums-lv2 = x42-avldrums; # Added 2020-03-29
   awesome-4-0 = awesome; # Added 2022-05-05
 
