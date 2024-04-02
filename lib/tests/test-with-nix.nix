@@ -68,6 +68,9 @@ pkgs.runCommand "nixpkgs-lib-tests-nix-${nix.version}" {
   echo "Running lib/fileset/tests.sh"
   TEST_LIB=$PWD/lib bash lib/fileset/tests.sh
 
+  echo "Running lib/network/tests.sh"
+  TEST_LIB=$PWD/lib bash lib/network/tests.sh
+
   echo "Running lib/tests/systems.nix"
   [[ $(nix-instantiate --eval --strict lib/tests/systems.nix | tee /dev/stderr) == '[ ]' ]];
 
