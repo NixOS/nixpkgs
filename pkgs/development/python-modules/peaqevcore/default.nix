@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sed -i "/extras_require/d" setup.py
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
