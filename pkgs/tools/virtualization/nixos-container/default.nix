@@ -2,6 +2,7 @@
 , perl
 , shadow
 , util-linux
+, runtimeShell
 , configurationDirectory ? "/etc/nixos-containers"
 , stateDirectory ? "/var/lib/nixos-containers"
 , nixosTests
@@ -19,7 +20,7 @@ substitute {
     "--subst-var-by" "stateDirectory" stateDirectory
     "--subst-var-by" "su" "${shadow.su}/bin/su"
     "--subst-var-by" "utillinux" util-linux
-    "--subst-var" "shell"
+    "--subst-var-by" "shell" runtimeShell
   ];
 
   passthru = {
