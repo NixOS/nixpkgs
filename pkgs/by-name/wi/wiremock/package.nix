@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "wiremock";
-  version = "3.4.2";
+  version = "3.5.2";
 
   src = fetchurl {
     url = "mirror://maven/org/wiremock/wiremock-standalone/${version}/wiremock-standalone-${version}.jar";
-    hash = "sha256-Btf7oQRmfQnHdl5DawF2xOczDrR/5Po/9NytgqTLkVQ=";
+    hash = "sha256-27DIcfP5R1Qiwl2fhvUQjFsE8pTHTv5MuFqHGa+whVY=";
   };
 
   dontUnpack = true;
