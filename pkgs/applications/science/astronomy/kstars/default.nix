@@ -37,13 +37,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kstars";
-  version = "3.6.9";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "KDE";
     repo = "kstars";
     rev = "stable-${finalAttrs.version}";
-    hash = "sha256-28RRW+ncMiQcBb/lybEKTeV08ZkF3IqLkeTHNW5nhls=";
+    hash = "sha256-Gd/HUpiw4+T35yn8bhlm95iMdXv9Bd/l3E08Rzov7UA=";
   };
 
   nativeBuildInputs = [
