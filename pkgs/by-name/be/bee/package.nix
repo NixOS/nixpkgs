@@ -5,27 +5,27 @@
 
 buildGoModule rec {
   pname = "bee";
-  version = "1.18.2";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "ethersphere";
     repo = "bee";
     rev = "v${version}";
-    sha256 = "sha256-LUOKF1073GmQWG2q4w0cTErSHw7ok5N6PQZ45xpjYx4=";
+    sha256 = "sha256-gZDmFufk/zBftQe7Ju4rDpZqw0hm2nf9YQg1Oa8540s=";
   };
 
-  vendorHash = "sha256-UdsF/otjXqS1NY3PkCimRiD93hGntHG3Xhw6avFtHog=";
+  vendorHash = "sha256-GpazHMQ8xZ6P7mADvsG3bXxDxEWnCJRIsBwDnL/McZA=";
 
   subPackages = [ "cmd/bee" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/ethersphere/bee.version=${version}"
-    "-X github.com/ethersphere/bee/pkg/api.Version=5.2.0"
-    "-X github.com/ethersphere/bee/pkg/api.DebugVersion=4.1.0"
-    "-X github.com/ethersphere/bee/pkg/p2p/libp2p.reachabilityOverridePublic=false"
-    "-X github.com/ethersphere/bee/pkg/postage/listener.batchFactorOverridePublic=5"
+    "-X github.com/ethersphere/bee/v2.version=${version}"
+    "-X github.com/ethersphere/bee/v2/pkg/api.Version=5.2.0"
+    "-X github.com/ethersphere/bee/v2/pkg/api.DebugVersion=4.1.1"
+    "-X github.com/ethersphere/bee/v2/pkg/p2p/libp2p.reachabilityOverridePublic=false"
+    "-X github.com/ethersphere/bee/v2/pkg/postage/listener.batchFactorOverridePublic=5"
   ];
 
   CGO_ENABLED = 0;

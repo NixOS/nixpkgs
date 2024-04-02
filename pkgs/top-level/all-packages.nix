@@ -6555,8 +6555,6 @@ with pkgs;
 
   beanstalkd = callPackage ../servers/beanstalkd { };
 
-  bee = callPackage ../applications/networking/bee/bee.nix { };
-
   beetsPackages = lib.recurseIntoAttrs (callPackage ../tools/audio/beets { });
   inherit (beetsPackages) beets beets-unstable;
 
@@ -12515,8 +12513,6 @@ with pkgs;
   readstat = callPackage ../applications/science/math/readstat { };
 
   redir = callPackage ../tools/networking/redir { };
-
-  redmine = callPackage ../applications/version-management/redmine { };
 
   redpanda-client = callPackage ../servers/redpanda { };
 
@@ -18578,8 +18574,6 @@ with pkgs;
   cloudflare-warp = callPackage ../tools/networking/cloudflare-warp { };
 
   cloudfoundry-cli = callPackage ../applications/networking/cluster/cloudfoundry-cli { };
-
-  clpm = callPackage ../development/tools/clpm { };
 
   coan = callPackage ../development/tools/analysis/coan { };
 
@@ -29094,8 +29088,6 @@ with pkgs;
   luna-icons = callPackage ../data/icons/luna-icons {
     inherit (plasma5Packages) breeze-icons;
   };
-
-  lxgw-neoxihei = callPackage ../data/fonts/lxgw-neoxihei { };
 
   lxgw-wenkai = callPackage ../data/fonts/lxgw-wenkai { };
 
