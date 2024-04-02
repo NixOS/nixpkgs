@@ -204,7 +204,7 @@ stdenv.mkDerivation rec {
       Just the build products, the libraries are passed via an env var in the wrapper, default.nix
     '';
     homepage = "https://www.kicad.org/";
-    license = lib.licenses.agpl3Plus;
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
   };
 }
