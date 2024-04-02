@@ -539,8 +539,8 @@ in
     buildInputs = [ libuv ];
 
     # Use system libuv instead of building local and statically linking
-    luarocksConfig.variables = {
-      WITH_SHARED_LIBUV = "ON";
+    luarocksConfig = lib.recursiveUpdate oa.luarocksConfig {
+      variables = { WITH_SHARED_LIBUV = "ON"; };
     };
 
     # we unset the LUA_PATH since the hook erases the interpreter defaults (To fix)
