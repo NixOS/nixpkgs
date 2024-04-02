@@ -8,16 +8,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "wayland-pipewire-idle-inhibit";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "rafaelrc7";
     repo = "wayland-pipewire-idle-inhibit";
     rev = "v${version}";
-    sha256 = "sha256-pHTIzcmvB66Jwbkl8LtoYVP8+mRiUwT3D29onLdx+gM=";
+    sha256 = "sha256-2akYbnQnJ0wb51S3bwrm3/EiZydxbwkfuSfsiTvtNz8=";
   };
 
-  cargoHash = "sha256-7RNYA0OqKV2p3pOTsehEQSvVHH/hoJA733S0u7x06Fc=";
+  cargoHash = "sha256-C4cispJN2OQRBQiW+H36B8ETNn1oukgdELRVk7V7BQU=";
 
   nativeBuildInputs = [
     pkg-config
