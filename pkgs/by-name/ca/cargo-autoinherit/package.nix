@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-autoinherit";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "mainmatter";
     repo = "cargo-autoinherit";
     rev = "v${version}";
-    hash = "sha256-TMRomAWxieM7CpoFISOR5J433CY9WnHbA/FlL2NMQDw=";
+    hash = "sha256-BuZDCd4SwSYg5eKV61L3RpPVmq5NZDAOc9zOz5QiSNI=";
   };
 
-  cargoHash = "sha256-8uJZ/ZHb2TnFJqgBsF1HBAWc+MNZoxaxXInp1T3Zd34=";
+  cargoHash = "sha256-9hhrVkC1xB2E/vatkiM4PIJyXq+0GDoqlgXZXc8WehU=";
 
   meta = with lib; {
     description = "Automatically DRY up your Rust dependencies";
