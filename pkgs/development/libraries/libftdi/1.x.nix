@@ -29,6 +29,11 @@ stdenv.mkDerivation rec {
     sha256 = "0vipg3y0kbbzjhxky6hfyxy42mpqhvwn1r010zr5givcfp8ghq26";
   };
 
+  patches = [
+    # Fix spurious build failures from bad target parallelisation
+    ./0001-libftdi1-Fix-doc-parallelism.patch
+  ];
+
   strictDeps = true;
 
   nativeBuildInputs = [ cmake pkg-config ]
