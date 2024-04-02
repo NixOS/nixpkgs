@@ -1,12 +1,15 @@
 { lib
 , aiohttp
-, aiosqlite
 , aioresponses
+, aiosqlite
+, async-timeout
+, attrs
 , buildPythonPackage
 , crccheck
 , cryptography
-, freezegun
 , fetchFromGitHub
+, freezegun
+, importlib-resources
 , jsonschema
 , pycryptodome
 , pyserial-asyncio
@@ -15,6 +18,7 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, typing-extensions
 , voluptuous
 }:
 
@@ -43,14 +47,20 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    attrs
     aiohttp
     aiosqlite
     crccheck
     cryptography
     jsonschema
     pyserial-asyncio
+    typing-extensions
     pycryptodome
     voluptuous
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    async-timeout
   ];
 
   nativeCheckInputs = [
