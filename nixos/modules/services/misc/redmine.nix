@@ -10,16 +10,22 @@ let
   format = pkgs.formats.yaml {};
   bundle = "${cfg.package}/share/redmine/bin/bundle";
 
-  databaseYml = pkgs.writeText "database.yml" ''
-    production:
-      adapter: ${cfg.database.type}
-      database: ${cfg.database.name}
-      host: ${if (cfg.database.type == "postgresql" && cfg.database.socket != null) then cfg.database.socket else cfg.database.host}
-      port: ${toString cfg.database.port}
-      username: ${cfg.database.user}
-      password: #dbpass#
-      ${optionalString (cfg.database.type == "mysql2" && cfg.database.socket != null) "socket: ${cfg.database.socket}"}
-  '';
+  databaseSettings = {
+    production = {
+      adapter = cfg.database.type;
+      database = if cfg.database.type == "sqlite3" then "${cfg.stateDir}/database.sqlite3" else cfg.database.name;
+    } // optionalAttrs (cfg.database.type != "sqlite3") {
+      host = if (cfg.database.type == "postgresql" && cfg.database.socket != null) then cfg.database.socket else cfg.database.host;
+      port = cfg.database.port;
+      username = cfg.database.user;
+    } // optionalAttrs (cfg.database.type != "sqlite3" && cfg.database.passwordFile != null) {
+      password = "#dbpass#";
+    } // optionalAttrs (cfg.database.type == "mysql2" && cfg.database.socket != null) {
+      socket = cfg.database.socket;
+    };
+  };
+
+  databaseYml = format.generate "database.yml" databaseSettings;
 
   configurationYml = format.generate "configuration.yml" cfg.settings;
   additionalEnvironment = pkgs.writeText "additional_environment.rb" cfg.extraEnv;
@@ -145,7 +151,7 @@ in
 
       database = {
         type = mkOption {
-          type = types.enum [ "mysql2" "postgresql" ];
+          type = types.enum [ "mysql2" "postgresql" "sqlite3" ];
           example = "postgresql";
           default = "mysql2";
           description = lib.mdDoc "Database engine to use.";
@@ -261,7 +267,7 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.database.passwordFile != null || cfg.database.socket != null;
+      { assertion = cfg.database.type != "sqlite3" -> cfg.database.passwordFile != null || cfg.database.socket != null;
         message = "one of services.redmine.database.socket or services.redmine.database.passwordFile must be set";
       }
       { assertion = cfg.database.createLocally -> cfg.database.user == cfg.user;
@@ -270,7 +276,7 @@ in
       { assertion = pgsqlLocal -> cfg.database.user == cfg.database.name;
         message = "services.redmine.database.user and services.redmine.database.name must be the same when using a local postgresql database";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.socket != null;
+      { assertion = cfg.database.createLocally -> cfg.database.type != "sqlite3" && cfg.database.socket != null;
         message = "services.redmine.database.socket must be set if services.redmine.database.createLocally is set to true";
       }
       { assertion = cfg.database.createLocally -> cfg.database.host == "localhost";
@@ -395,9 +401,13 @@ in
 
 
         # handle database.passwordFile & permissions
-        DBPASS=${optionalString (cfg.database.passwordFile != null) "$(head -n1 ${cfg.database.passwordFile})"}
         cp -f ${databaseYml} "${cfg.stateDir}/config/database.yml"
-        sed -e "s,#dbpass#,$DBPASS,g" -i "${cfg.stateDir}/config/database.yml"
+
+        ${optionalString ((cfg.database.type != "sqlite3") && (cfg.database.passwordFile != null)) ''
+          DBPASS="$(head -n1 ${cfg.database.passwordFile})"
+          sed -e "s,#dbpass#,$DBPASS,g" -i "${cfg.stateDir}/config/database.yml"
+        ''}
+
         chmod 440 "${cfg.stateDir}/config/database.yml"
 
 

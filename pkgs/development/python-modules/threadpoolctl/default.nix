@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "threadpoolctl";
-  version = "3.3.0";
+  version = "3.4.0";
 
   disabled = pythonOlder "3.6";
   format = "pyproject";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "joblib";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-mdOZcplqXrkKlL/SXipJg6A9Dh1lXGEHszBLGH/kxqs=";
+    hash = "sha256-nWaBhiFw76azx6dV4I18XodiUnHiLb0gNNhXks6iHIg=";
   };
 
   nativeBuildInputs = [

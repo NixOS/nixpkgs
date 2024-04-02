@@ -342,7 +342,6 @@
   ./services/amqp/rabbitmq.nix
   ./services/audio/alsa.nix
   ./services/audio/botamusique.nix
-  ./services/audio/castopod.nix
   ./services/audio/gmediarender.nix
   ./services/audio/gonic.nix
   ./services/audio/goxlr-utility.nix
@@ -1303,6 +1302,7 @@
   ./services/web-apps/bookstack.nix
   ./services/web-apps/c2fmzq-server.nix
   ./services/web-apps/calibre-web.nix
+  ./services/web-apps/castopod.nix
   ./services/web-apps/coder.nix
   ./services/web-apps/changedetection-io.nix
   ./services/web-apps/chatgpt-retrieval-plugin.nix
