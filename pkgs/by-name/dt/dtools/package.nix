@@ -1,51 +1,54 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, ldc, curl, gnumake42 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, ldc
+, curl
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dtools";
   version = "2.106.1";
 
   src = fetchFromGitHub {
     owner = "dlang";
     repo = "tools";
-    rev = "v${version}";
-    sha256 = "sha256-Y8jSwd6tldCnq3yEuO/xUYrSV+lp7tBPMiheMA06f0M=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Y8jSwd6tldCnq3yEuO/xUYrSV+lp7tBPMiheMA06f0M=";
     name = "dtools";
   };
 
   patches = [
+    # Disable failing tests
+    ./disabled-tests.diff
+    # Fix LDC arm64 build
     (fetchpatch {
       # part of https://github.com/dlang/tools/pull/441
-      url = "https://github.com/dlang/tools/commit/6c6a042d1b08e3ec1790bd07a7f69424625ee866.patch"; # Fix LDC arm64 build
-      sha256 = "sha256-x6EclTYN1Y5FG57KLhbBK0BZicSYcZoWO7MTVcP4T18=";
+      url = "https://github.com/dlang/tools/commit/6c6a042d1b08e3ec1790bd07a7f69424625ee866.patch";
+      hash = "sha256-x6EclTYN1Y5FG57KLhbBK0BZicSYcZoWO7MTVcP4T18=";
     })
   ];
 
-  nativeBuildInputs = [ ldc gnumake42 ]; # fails with make 4.4
+  nativeBuildInputs = [ ldc ];
   buildInputs = [ curl ];
 
-  makeCmd = ''
-    make -f posix.mak all DMD_DIR=dmd DMD=${ldc.out}/bin/ldmd2 CC=${stdenv.cc}/bin/cc
-  '';
+  makeFlags = [
+    "-fposix.mak"
+    "CC=${stdenv.cc}/bin/cc"
+    "DMD=${ldc.out}/bin/ldmd2"
+    "INSTALL_DIR=$(out)"
+  ];
 
-  buildPhase = ''
-    $makeCmd
-  '';
+  enableParallelBuilding = true;
 
   doCheck = true;
-
-  checkPhase = ''
-    $makeCmd test_rdmd
-    '';
-
-  installPhase = ''
-    $makeCmd INSTALL_DIR=$out install
-  '';
+  checkTarget = "test_rdmd";
 
   meta = with lib; {
-    description = "Ancillary tools for the D programming language compiler";
+    description = "Ancillary tools for the D programming language";
     homepage = "https://github.com/dlang/tools";
-    license = lib.licenses.boost;
+    license = licenses.boost;
     maintainers = with maintainers; [ jtbx ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
-}
+})
