@@ -107,7 +107,7 @@ in
     generate = name: value:
       let
         # TODO: remove in 24.11
-        # Backwards compatability for generators in the following locations:
+        # Backwards compatibility for generators in the following locations:
         #  - nixos/modules/services/networking/jibri/default.nix (__hocon_envvar)
         #  - nixos/modules/services/networking/jicofo.nix (__hocon_envvar, __hocon_unquoted_string)
         #  - nixos/modules/services/networking/jitsi-videobridge.nix (__hocon_envvar)
