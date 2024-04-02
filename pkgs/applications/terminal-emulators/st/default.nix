@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "st";
-  version = "0.9";
+  version = "0.9.1";
 
   src = fetchurl {
     url = "https://dl.suckless.org/st/st-${finalAttrs.version}.tar.gz";
-    hash = "sha256-82NZeZc06ueFvss3QGPwvoM88i+ItPFpzSUbmTJOCOc=";
+    hash = "sha256-FvQ7lDOt6dcNYIXDH5/Znyg16q3jEiECDyIUMDXfwNI=";
   };
 
   outputs = [ "out" "terminfo" ];
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://st.suckless.org/";
     description = "Simple Terminal for X from Suckless.org Community";
     license = licenses.mit;
-    maintainers = with maintainers; [ andsild ];
+    maintainers = with maintainers; [ andsild qusic ];
     platforms = platforms.unix;
     mainProgram = "st";
   };

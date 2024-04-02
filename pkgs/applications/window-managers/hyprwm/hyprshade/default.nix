@@ -24,6 +24,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ more-itertools click ];
 
+  postFixup = ''
+    wrapProgram $out/bin/hyprshade --set HYPRSHADE_SHADERS_DIR $out/share/hyprshade/shaders
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/loqusion/hyprshade";
     description = "Hyprland shade configuration tool";

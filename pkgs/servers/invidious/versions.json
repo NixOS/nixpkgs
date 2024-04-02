@@ -1,8 +1,8 @@
 {
   "invidious": {
-    "rev": "99a5e9cbc44daa4555f36b43bc4b7246aee454c9",
-    "hash": "sha256-ep/umuNxTvdPXtJgI3KNt0h5xc1O38wQz1+OsVYOzfE=",
-    "version": "0.20.1-unstable-2024-03-08"
+    "rev": "08390acd0c17875fddb84cabba54197a5b5740e4",
+    "hash": "sha256-75C/ImX/PYikVdSO4rZM/aYyEgx6pU90BHNeRFfcsDM=",
+    "version": "0.20.1-unstable-2024-03-31"
   },
   "videojs": {
     "hash": "sha256-jED3zsDkPN8i6GhBBJwnsHujbuwlHdsVpVqa1/pzSH4="
