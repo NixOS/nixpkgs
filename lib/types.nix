@@ -373,6 +373,14 @@ rec {
       merge = mergeEqualOption;
     };
 
+    hexStr = mkOptionType {
+      name = "hexStr";
+      description = "hexadecimal value represented as string";
+      descriptionClass = "noun";
+      check = x: str.check x && builtins.match "[0-9a-f]+" x != null;
+      merge = mergeEqualOption;
+    };
+
     number = either int float;
 
     numbers = let

@@ -202,6 +202,12 @@ merging is handled.
 
 :   A string. Multiple definitions are concatenated with a colon `":"`.
 
+`types.hexStr`
+
+:   A hexadecimal value represented as string. The type only allows lowercase
+    values. The type also does not allow for hex prefixes like `0x` or `#`.
+
+
 `types.strMatching`
 
 :   A string matching a specific regular expression. Multiple

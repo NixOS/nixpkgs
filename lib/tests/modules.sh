@@ -143,6 +143,11 @@ checkConfigError 'A definition for option .* is not of type.*positive integer.*.
 checkConfigOutput '^42$' config.value ./declare-int-between-value.nix ./define-value-int-positive.nix
 checkConfigError 'A definition for option .* is not of type.*between.*-21 and 43.*inclusive.*. Definition values:\n\s*- In .*: -23' config.value ./declare-int-between-value.nix ./define-value-int-negative.nix
 
+# Check hex string type
+# types.hexStr
+checkConfigOutput '^"64075c"$' config.value ./declare-hex-value.nix ./define-value-is-hex.nix
+checkConfigError 'A definition for option .* is not of type.*hexadecimal value represented as string.*. Definition values:\n\s*- In .*: "notAhex"' config.value ./declare-hex-value.nix ./define-value-not-hex.nix
+
 # Check either types
 # types.either
 checkConfigOutput '^42$' config.value ./declare-either.nix ./define-value-int-positive.nix
