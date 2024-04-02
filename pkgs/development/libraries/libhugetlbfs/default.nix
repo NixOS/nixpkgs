@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
   installTargets = [ "install" "install-docs" ];
 
   meta = with lib; {
+    homepage = "https://github.com/libhugetlbfs/libhugetlbfs";
+    changelog = "https://github.com/libhugetlbfs/libhugetlbfs/blob/${version}/NEWS";
     description = "library and utilities for Linux hugepages";
     maintainers = with maintainers; [ qyliss ];
     license = licenses.lgpl21Plus;
