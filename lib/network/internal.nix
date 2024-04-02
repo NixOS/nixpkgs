@@ -171,7 +171,7 @@ rec {
       # Example
 
       ```nix
-      _makeIPv4 "192.168.0.1/24"
+      _parse "192.168.0.1/24"
       => {
         address = "192.168.0.1";
         cidr = "192.168.0.1/24";
@@ -183,7 +183,7 @@ rec {
       # Type
 
       ```
-      _makeIPv4 :: String -> IPv4Address
+      _parse :: String -> IPv4Address
       ```
 
       # Arguments
@@ -191,7 +191,7 @@ rec {
       - [address] An IPv4 address.
       - [prefixLength] A prefix length.
     */
-    _makeIPv4 = address: prefixLength: {
+    _parse = address: prefixLength: {
       cidr = concatStringsSep "/" [
         address
         prefixLength
