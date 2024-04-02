@@ -1,5 +1,6 @@
 {
   lib,
+  nixosTests,
   rustPlatform,
   fetchFromGitHub,
   fetchpatch,
@@ -60,6 +61,8 @@ rustPlatform.buildRustPackage {
   buildFeatures = [ "${adaptor}-adaptor" ];
 
   PROTOC = "${protobuf}/bin/protoc";
+
+  passthru.tests = [ nixosTests.crabfit ];
 
   meta = {
     description = "Enter your availability to find a time that works for everyone";
