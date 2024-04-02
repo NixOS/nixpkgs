@@ -12,7 +12,7 @@ let
     toInt
     ;
 
-  inherit (builtins) toString;
+  inherit (builtins) all any toString;
 in
 rec {
   common = {
@@ -153,17 +153,34 @@ rec {
       if (builtins.length splitCidr) == 1 then
         "32"
       else if (builtins.length splitCidr) > 2 then
-        throw "lib.network.ipv4: Could not verify prefix length."
+        throw "lib.network.ipv4: Could not verify prefix length for CIDR ${cidr}."
       else
         let
           afterSlash = elemAt splitCidr 1;
         in
         if afterSlash == "" then
-          throw "lib.network.ipv4: Got a CIDR with no prefix length."
+          throw "lib.network.ipv4: CIDR ${cidr} has no prefix length."
         else if toInt afterSlash > 32 || toInt afterSlash < 0 then
-          throw "lib.network.ipv4: Got a CIDR with out of bounds prefix length, ${afterSlash}."
+          throw "lib.network.ipv4: CIDR ${cidr} has an out of bounds prefix length, ${afterSlash}."
         else
           afterSlash;
+
+    _verifyAddress =
+      cidr:
+      let
+        splitCidr = lib.splitString "/" cidr;
+        address = elemAt splitCidr 0;
+        splitAddress = lib.splitString "." address;
+        intOctets = map toInt splitAddress;
+      in
+      if (builtins.length splitAddress) != 4 then
+        throw "lib.network.ipv4: CIDR ${cidr} is not of the correct form."
+      else if any (x: x == "") splitAddress then
+        throw "lib.network.ipv4: CIDR ${cidr} has an empty octet."
+      else if !(all (x: x >= 0 && x <= 255)) intOctets then
+        throw "lib.network.ipv4: CIDR ${cidr} has an out of bounds octet."
+      else
+        address;
 
     /**
       Given an IP address and prefix length, creates an attribute set of network parameters.

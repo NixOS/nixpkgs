@@ -7,8 +7,7 @@ in
     fromCidrString =
       cidr:
       let
-        splitCidr = lib.splitString "/" cidr;
-        address = lib.elemAt splitCidr 0;
+        address = internal.ipv4._verifyAddress cidr;
         prefixLength = internal.ipv4._verifyPrefixLength cidr;
       in
       internal.ipv4._parse address prefixLength;
