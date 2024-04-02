@@ -1507,6 +1507,8 @@ self: super: with self; {
 
   bincopy = callPackage ../development/python-modules/bincopy { };
 
+  bindep = callPackage ../development/python-modules/bindep { };
+
   binho-host-adapter = callPackage ../development/python-modules/binho-host-adapter { };
 
   binwalk = callPackage ../development/python-modules/binwalk { };
