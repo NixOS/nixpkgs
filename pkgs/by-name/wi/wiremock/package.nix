@@ -4,11 +4,11 @@
   jre,
   lib,
   makeWrapper,
-  stdenv,
+  stdenvNoCC,
   testers,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "wiremock";
   version = "3.5.2";
 
