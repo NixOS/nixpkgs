@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "python-socketio";
-  version = "5.11.1";
+  version = "5.11.2";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "miguelgrinberg";
     repo = "python-socketio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-miIl/+3JtjtoQaS6Jy0M9lPQJQp3VlpvrO5Hqlrq5JM=";
+    hash = "sha256-t5QbuXjipLaf9GV+N5FLq45xJPK2/FUaM/0s8RNPTzo=";
   };
 
   nativeBuildInputs = [
