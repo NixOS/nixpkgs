@@ -1,22 +1,23 @@
-{ lib
-, hwdata
-, pkg-config
-, lxc
-, buildGoModule
-, fetchurl
-, acl
-, libcap
-, dqlite
-, raft-canonical
-, sqlite
-, udev
-, installShellFiles
-, nixosTests
-, gitUpdater
-, callPackage
+{
+  lib,
+  hwdata,
+  pkg-config,
+  lxc,
+  buildGo122Module,
+  fetchurl,
+  acl,
+  libcap,
+  dqlite,
+  raft-canonical,
+  sqlite,
+  udev,
+  installShellFiles,
+  nixosTests,
+  gitUpdater,
+  callPackage,
 }:
 
-buildGoModule rec {
+buildGo122Module rec {
   pname = "lxd-unwrapped";
   version = "5.21.0";
 
@@ -32,9 +33,17 @@ buildGoModule rec {
       --replace "/usr/share/misc/usb.ids" "${hwdata}/share/hwdata/usb.ids"
   '';
 
-  excludedPackages = [ "test" "lxd/db/generate" "lxd-agent" "lxd-migrate" ];
+  excludedPackages = [
+    "test"
+    "lxd/db/generate"
+    "lxd-agent"
+    "lxd-migrate"
+  ];
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
   buildInputs = [
     lxc
     acl
@@ -45,7 +54,10 @@ buildGoModule rec {
     udev.dev
   ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
   tags = [ "libsqlite3" ];
 
   preBuild = ''
@@ -59,13 +71,15 @@ buildGoModule rec {
   '';
 
   preCheck =
-    let skippedTests = [
-      "TestValidateConfig"
-      "TestConvertNetworkConfig"
-      "TestConvertStorageConfig"
-      "TestSnapshotCommon"
-      "TestContainerTestSuite"
-    ]; in
+    let
+      skippedTests = [
+        "TestValidateConfig"
+        "TestConvertNetworkConfig"
+        "TestConvertStorageConfig"
+        "TestSnapshotCommon"
+        "TestContainerTestSuite"
+      ];
+    in
     ''
       # Disable tests requiring local operations
       buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
@@ -86,7 +100,10 @@ buildGoModule rec {
     description = "Daemon based on liblxc offering a REST API to manage containers";
     homepage = "https://ubuntu.com/lxd";
     changelog = "https://github.com/canonical/lxd/releases/tag/lxd-${version}";
-    license = with licenses; [ asl20 agpl3Plus ];
+    license = with licenses; [
+      asl20
+      agpl3Plus
+    ];
     maintainers = teams.lxc.members;
     platforms = platforms.linux;
   };
