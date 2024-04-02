@@ -50,7 +50,23 @@ buildGoModule rec {
     # https://codeberg.org/forgejo/forgejo/pulls/2443
     # https://codeberg.org/forgejo/forgejo/commit/2fe5f6f73283c2f6935ded62440a1f15ded12dcd
     rev = "2fe5f6f73283c2f6935ded62440a1f15ded12dcd";
-    hash = "sha256-qk30Sixd4G9ivkpC1c9IAjCkSNU2ohzDPL9WSyQ6NIw=";
+    hash = "sha256-U80HfHDSOKN+MGOX9Tu85lgN+8KeEzjSjpZXVFGmLKQ=";
+    # Forgejo has multiple different version strings that need to be provided
+    # via ldflags.  main.ForgejoVersion for example is a combination of a
+    # hardcoded gitea compatibility version string (in the Makefile) and
+    # git describe and is easiest to get by invoking the Makefile.
+    # So we do that, store it the src FOD to then extend the ldflags array
+    # in preConfigure.
+    # The `echo -e >> Makefile` is temporary and already part of the next
+    # major release.  Furthermore, the ldflags will change next major release
+    # and need to be updated accordingly.
+    leaveDotGit = true;
+    postFetch = ''
+      cd "$out"
+      echo -e 'show-version-full:\n\t@echo ''${FORGEJO_VERSION}' >> Makefile
+      make show-version-full > FULL_VERSION
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+    '';
   };
 
   vendorHash = "sha256-HDKirjQI4KvHvzDCqKe9nHvQUv3VNRl5tkr0rO7gcAY=";
@@ -79,6 +95,10 @@ buildGoModule rec {
     "-X main.Version=${version}"
     "-X 'main.Tags=${lib.concatStringsSep " " tags}'"
   ];
+
+  preConfigure = ''
+    export ldflags+=" -X code.gitea.io/gitea/routers/api/forgejo/v1.ForgejoVersion=$(cat FULL_VERSION) -X main.ForgejoVersion=$(cat FULL_VERSION)"
+  '';
 
   preBuild = ''
     go run build/merge-forgejo-locales.go
