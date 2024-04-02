@@ -60,6 +60,10 @@ buildPythonApplication rec {
     "test_excute_simple"
   ];
 
+  # incompatible with moto 5
+  # https://github.com/ktrueda/parquet-tools/issues/54
+  doCheck = false;
+
   pythonImportsCheck = [
     "parquet_tools"
   ];
