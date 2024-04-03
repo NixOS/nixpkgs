@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "epub-thumbnailer";
-  version = "0-unstable-2024-03-16";
+  version = "0-unstable-2024-03-26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "marianosimone";
     repo = "epub-thumbnailer";
-    rev = "035c31e9269bcb30dcc20fed31b6dc54e9bfed63";
-    hash = "sha256-G/CeYmr+wgJidbavfvIuCbRLJGQzoxAnpo3t4YFJq0c=";
+    rev = "de4b5bf0fcd1817d560f180231f7bd22d330f1be";
+    hash = "sha256-r0t2enybUEminXOHjx6uH6LvQtmzTRPZm/gY3Vi2c64=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
