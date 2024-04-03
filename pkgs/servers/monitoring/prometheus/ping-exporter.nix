@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "ping-exporter";
-  version = "1.1.1";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "czerwonk";
     repo = "ping_exporter";
     rev = version;
-    hash = "sha256-3q9AFvtjCSQyqX+LV1MEFHJVPBHtG304zuPHJ12XteE=";
+    hash = "sha256-Jdo+6/e9gES8q4wTGRuy5HSj7VimOMZ9q3guKDcKJxg=";
   };
 
-  vendorHash = "sha256-v1WSx93MHVJZllp4MjTg4G9yqHD3CAiVReZ5Qu1Xv6E=";
+  vendorHash = "sha256-1oNbg6lu9xLJKeYOzK23HOTLJc3KWri7z4/2AZ7Hzms=";
 
   meta = with lib; {
     description = "Prometheus exporter for ICMP echo requests";
