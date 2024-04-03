@@ -563,6 +563,7 @@ let
     apsimx = [ pkgs.which ];
     cairoDevice = [ pkgs.pkg-config ];
     chebpol = [ pkgs.pkg-config ];
+    eds = [ pkgs.zlib.dev ];
     fftw = [ pkgs.pkg-config ];
     gdtools = [ pkgs.pkg-config ];
     archive = [ pkgs.libarchive];
