@@ -1,4 +1,5 @@
 { lib
+, fetchpatch
 , stdenv
 , fetchFromGitHub
 , rocmUpdateScript
@@ -30,6 +31,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-nWvq26qRPZ6Au1rc5cR74TKArcdUFg7O9djFi8SvMeM=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "arch-conversion-marco.patch";
+      url = "https://salsa.debian.org/rocm-team/rocprim/-/raw/70c8aaee3cf545d92685f4ed9bf8f41e3d4d570c/debian/patches/arch-conversion-macro.patch";
+      hash = "sha256-oXdmbCArOB5bKE8ozDFrSh4opbO+c4VI6PNhljeUSms=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
