@@ -2,11 +2,24 @@
 , fetchFromGitHub
 , stdenvNoCC
 , makeWrapper
+, gh
 , fzf
 , coreutils
+, gawk
+, gnused
+, withBat ? false
 , bat
 }:
-
+let
+  binPath = lib.makeBinPath ([
+    gh
+    fzf
+    coreutils
+    gawk
+    gnused
+  ]
+  ++ lib.optional withBat bat);
+in
 stdenvNoCC.mkDerivation rec {
   pname = "gh-f";
   version = "1.1.5";
@@ -27,7 +40,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   postFixup = ''
-    wrapProgram "$out/bin/gh-f" --prefix PATH : "${lib.makeBinPath [fzf bat coreutils]}"
+    wrapProgram "$out/bin/gh-f" --prefix PATH : "${binPath}"
   '';
 
   meta = with lib; {
