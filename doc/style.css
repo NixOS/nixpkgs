@@ -347,6 +347,22 @@ div.appendix div.example {
     margin-top: 1.5em;
 }
 
+div.book div.example details,
+div.appendix div.example details {
+    padding: 5px;
+}
+
+div.book div.example details[open],
+div.appendix div.example details[open] {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+}
+
+div.book div.example details>summary,
+div.appendix div.example details>summary {
+    cursor: pointer;
+}
+
 div.book br.example-break,
 div.appendix br.example-break {
     display: none;
