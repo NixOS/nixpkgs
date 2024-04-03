@@ -27,10 +27,10 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Pytest plugin that allows you to customize the order in which your tests are run";
     homepage = "https://github.com/pytest-dev/pytest-order";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.jacg ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ jacg Luflosi ];
   };
 }
