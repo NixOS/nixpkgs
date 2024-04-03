@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorHash = "sha256-VygRE6YviSSIYpMbTEPndR6WUmLAZDwgvuJcwBuizck=";
 
+  ldflags = [ "-X main.version=${version}" ];
+
   preCheck = ''
     # Fix `insecure algorithm SHA1-RSA` problem
     export GODEBUG=x509sha1=1;
