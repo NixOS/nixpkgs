@@ -2,11 +2,11 @@
 , buildGoModule
 , fetchFromGitea
 , testers
-, forgejo-actions-runner
+, forgejo-runner
 }:
 
 buildGoModule rec {
-  pname = "forgejo-actions-runner";
+  pname = "forgejo-runner";
   version = "3.3.0";
 
   src = fetchFromGitea {
@@ -28,7 +28,7 @@ buildGoModule rec {
   doCheck = false; # Test try to lookup code.forgejo.org.
 
   passthru.tests.version = testers.testVersion {
-    package = forgejo-actions-runner;
+    package = forgejo-runner;
     version = src.rev;
   };
 
