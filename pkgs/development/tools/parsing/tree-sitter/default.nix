@@ -9,6 +9,7 @@
 , Security
 , callPackage
 , linkFarm
+, substitute
 , CoreServices
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableStatic ? stdenv.hostPlatform.isStatic
@@ -116,6 +117,13 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs =
     [ which ]
     ++ lib.optionals webUISupport [ emscripten ];
+
+  patches = lib.optionals webUISupport [
+    (substitute {
+      src = ./fix-paths.patch;
+      substitutions = [ "--subst-var-by" "emcc" "${emscripten}/bin/emcc" ];
+    })
+  ];
 
   postPatch = lib.optionalString (!webUISupport) ''
     # remove web interface
