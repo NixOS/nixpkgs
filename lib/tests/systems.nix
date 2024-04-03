@@ -10,7 +10,7 @@ let
     expected = lib.sort lib.lessThan y;
   };
 
-  /**
+  /*
     Try to convert an elaborated system back to a simple string. If not possible,
     return null. So we have the property:
 

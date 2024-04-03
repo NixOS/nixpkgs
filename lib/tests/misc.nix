@@ -1,8 +1,12 @@
 /**
   Nix evaluation tests for various lib functions.
 
-  Since these tests are implemented with Nix evaluation, error checking is limited to what `builtins.tryEval` can detect, which is `throw`'s and `abort`'s, without error messages.
-  If you need to test error messages or more complex evaluations, see ./modules.sh, ./sources.sh or ./filesystem.sh as examples.
+  Since these tests are implemented with Nix evaluation,
+  error checking is limited to what `builtins.tryEval` can detect,
+  which is `throw`'s and `abort`'s, without error messages.
+
+  If you need to test error messages or more complex evaluations,
+  `lib/tests/modules.sh`, `lib/tests/sources.sh` or `lib/tests/filesystem.sh` as examples.
 
   To run these tests:
 
@@ -1267,9 +1271,7 @@ runTests {
     '';
   };
 
-  /**
-    right now only invocation check
-  */
+  # right now only invocation check
   testToJSONSimple =
     let val = {
       foobar = [ "baz" 1 2 3 ];
@@ -1280,9 +1282,7 @@ runTests {
       expected = builtins.toJSON val;
   };
 
-  /**
-    right now only invocation check
-  */
+  # right now only invocation check
   testToYAMLSimple =
     let val = {
       list = [ { one = 1; } { two = 2; } ];
