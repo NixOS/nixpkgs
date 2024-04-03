@@ -1,3 +1,4 @@
+
 # This file contains the Python packages set.
 # Each attribute is a Python library or a helper function.
 # Expressions for Python libraries are supposed to be in `pkgs/development/python-modules/<name>/default.nix`.
@@ -764,6 +765,8 @@ self: super: with self; {
   art = callPackage ../development/python-modules/art { };
 
   arviz = callPackage ../development/python-modules/arviz { };
+
+  arxiv-latex-cleaner = callPackage ../development/python-modules/arxiv-latex-cleaner { };
 
   arxiv2bib = callPackage ../development/python-modules/arxiv2bib { };
 
