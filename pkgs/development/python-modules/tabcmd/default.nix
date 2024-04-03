@@ -7,11 +7,12 @@
 , ftfy
 , mock
 , pyinstaller-versionfile
+, pytest-order
 , pytestCheckHook
 , python3
 , pythonOlder
-, requests
 , pythonRelaxDepsHook
+, requests
 , setuptools
 , setuptools-scm
 , tableauserverclient
@@ -34,6 +35,12 @@ buildPythonPackage rec {
     hash = "sha256-f9zoYeb4RzcCtgcCYYvvuCuFrjqpP3Fhv38bUWH24+g=";
   };
 
+  prePatch = ''
+    # Remove an unneeded dependency that can't be resolved
+    # https://github.com/tableau/tabcmd/pull/282
+    sed -i "/'argparse',/d" pyproject.toml
+  '';
+
   pythonRelaxDeps = [
     "tableauserverclient"
     "urllib3"
@@ -41,10 +48,13 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
+  ];
+
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     appdirs
     argparse
     doit
@@ -62,13 +72,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
+    pytest-order
     pytestCheckHook
   ];
-
-  # Remove an unneeded dependency that can't be resolved
-  prePatch = ''
-    sed -i "/'argparse',/d" pyproject.toml
-  '';
 
   # Create a "tabcmd" executable
   postInstall = ''
@@ -87,13 +93,16 @@ buildPythonPackage rec {
     chmod +x $out/bin/tabcmd
   '';
 
+  pythonImportsCheck = [
+    "tabcmd"
+  ];
 
   meta = with lib; {
-    description = "A command line client for working with Tableau Server.";
-    mainProgram = "tabcmd";
+    description = "A command line client for working with Tableau Server";
     homepage = "https://github.com/tableau/tabcmd";
     changelog = "https://github.com/tableau/tabcmd/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
+    mainProgram = "tabcmd";
   };
 }
