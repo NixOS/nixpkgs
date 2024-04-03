@@ -27,9 +27,9 @@ buildPythonPackage rec {
     hash = "sha256-fAchReqVhkVhT48UrTnBUQerHmgB7qxpey0xrgxIVDs=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     azure-identity
     microsoft-kiota-abstractions
     microsoft-kiota-authentication-azure
