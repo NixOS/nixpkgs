@@ -166,6 +166,16 @@ stdenv.mkDerivation rec {
     )
   '';
 
+  # needed to prevent collisions between the LICENSE.txt files of
+  # bambu-studio and orca-slicer.
+  postInstall = ''
+    mkdir -p $out/share/doc
+    mv $out/LICENSE.txt $out/share/doc/LICENSE.txt
+    if [ -f $out/README.md ]; then
+      mv $out/README.md $out/share/doc/README.md
+    fi
+  '';
+
   meta = with lib; {
     description = "PC Software for BambuLab's 3D printers";
     homepage = "https://github.com/bambulab/BambuStudio";
