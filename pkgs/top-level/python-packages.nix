@@ -327,6 +327,8 @@ self: super: with self; {
 
   aionotion = callPackage ../development/python-modules/aionotion { };
 
+  aionut = callPackage ../development/python-modules/aionut { };
+
   aiooncue = callPackage ../development/python-modules/aiooncue { };
 
   aioopenexchangerates = callPackage ../development/python-modules/aioopenexchangerates { };
