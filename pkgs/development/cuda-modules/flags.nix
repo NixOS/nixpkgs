@@ -7,7 +7,9 @@
   cudaForwardCompat ? (config.cudaForwardCompat or true),
   lib,
   cudaVersion,
-  hostPlatform,
+  # NOTE: We cannot refer to backendStdenv as flags exists outside the fixed-point;
+  # otherwise, we would use that to get the hostPlatform.
+  stdenv,
   # gpus :: List Gpu
   gpus,
 }:
@@ -19,6 +21,8 @@ let
     strings
     trivial
     ;
+
+  inherit (stdenv) hostPlatform;
 
   # Flags are determined based on your CUDA toolkit by default.  You may benefit
   # from improved performance, reduced file size, or greater hardware support by
