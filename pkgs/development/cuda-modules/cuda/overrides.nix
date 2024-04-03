@@ -166,13 +166,17 @@ filterAndCreateOverrides {
     };
 
   cuda_nvcc =
-    {
-      backendStdenv,
-      cuda_cudart,
-      lib,
-      setupCudaHook,
-    }:
+    { backendStdenv, setupCudaHook }:
     prevAttrs: {
+      # Merge "bin" and "dev" into "out" to avoid circular references
+      outputs = builtins.filter (
+        x:
+        !(builtins.elem x [
+          "dev"
+          "bin"
+        ])
+      ) prevAttrs.outputs;
+
       # Patch the nvcc.profile.
       # Syntax:
       # - `=` for assignment,
@@ -230,8 +234,7 @@ filterAndCreateOverrides {
       };
     };
 
-  cuda_nvprof =
-    { cuda_cupti }: prevAttrs: { buildInputs = prevAttrs.buildInputs ++ [ cuda_cupti.lib ]; };
+  cuda_nvprof = { cuda_cupti }: prevAttrs: { buildInputs = prevAttrs.buildInputs ++ [ cuda_cupti ]; };
 
   cuda_demo_suite =
     {
