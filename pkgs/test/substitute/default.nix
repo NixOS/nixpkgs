@@ -1,4 +1,4 @@
-{ substitute, testers, runCommand }:
+{ substitute, substituteAttrs, testers, runCommand }:
 let
   # Ofborg doesn't allow any traces on stderr,
   # so mock `lib` to not trace warnings,
@@ -92,5 +92,38 @@ in {
     '';
   };
 
+  substituteAttrsWithInitialAttrset = testers.testEqualContents {
+    assertion = "substituteAttrs-with-initialAttrs";
+    actual = substituteAttrs {
+      src = builtins.toFile "source" ''
+        Hello world!
+        @myVar@ @isAwesome@
+      '';
+      substitutions = [
+        "--replace-fail"
+        "Hello world!"
+        "Yo peter!"
+      ];
+    } { myVar = "My variable"; isAwesome = "is awesome!"; };
+    expected = builtins.toFile "expected" ''
+      Yo peter!
+      My variable is awesome!
+    '';
+  };
+
+  substituteAttrsWithPath = testers.testEqualContents {
+    assertion = "substituteAttrs-with-path";
+    actual = substituteAttrs ./source.txt {
+      free = "free";
+      "equal in" = "equal in";
+      brotherhood = "shared humanity";
+    };
+
+    expected = builtins.toFile "expected" ''
+      All human beings are born free and equal in dignity and rights.
+      They are endowed with @reason and conscience and should act towards
+      one another in a spirit of shared humanity.
+    '';
+  };
 
 }
