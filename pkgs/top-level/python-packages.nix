@@ -2939,6 +2939,8 @@ self: super: with self; {
 
   devtools = callPackage ../development/python-modules/devtools { };
 
+  dfdiskcache = callPackage ../development/python-modules/dfdiskcache { };
+
   diagrams = callPackage ../development/python-modules/diagrams { };
 
   diceware = callPackage ../development/python-modules/diceware { };
