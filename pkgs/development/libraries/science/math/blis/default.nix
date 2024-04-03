@@ -58,7 +58,7 @@ in stdenv.mkDerivation rec {
     description = "BLAS-compatible linear algebra library";
     homepage = "https://github.com/flame/blis";
     license = licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with maintainers; [ stephen-huan ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -164,10 +164,6 @@ with pkgs;
 
   ### BUILD SUPPORT
 
-  auditBlasHook = makeSetupHook
-    { name = "auto-blas-hook"; propagatedBuildInputs = [ blas lapack ]; }
-    ../build-support/setup-hooks/audit-blas.sh;
-
   autoreconfHook = callPackage (
     { makeSetupHook, autoconf, automake, gettext, libtool }:
     makeSetupHook {
@@ -17966,8 +17962,6 @@ with pkgs;
 
   infracost = callPackage ../tools/misc/infracost { };
 
-  jetbrains-toolbox = callPackage ../applications/misc/jetbrains-toolbox { };
-
   msp430GccSupport = callPackage ../development/misc/msp430/gcc-support.nix { };
 
   msp430Newlib      = callPackage ../development/misc/msp430/newlib.nix { };
@@ -18060,7 +18054,11 @@ with pkgs;
     };
   }));
 
+  ansible-builder = with python3Packages; toPythonApplication ansible-builder;
+
   ansible-doctor = callPackage ../tools/admin/ansible/doctor.nix { };
+
+  ansible-navigator = with python3Packages; toPythonApplication ansible-navigator;
 
   dbus-test-runner = callPackage ../development/tools/dbus-test-runner { };
 
@@ -29401,7 +29399,7 @@ with pkgs;
 
   shades-of-gray-theme = callPackage ../data/themes/shades-of-gray { };
 
-  sierra-breeze-enhanced = libsForQt5.callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced { };
+  sierra-breeze-enhanced = libsForQt5.callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced { useQt5 = true; };
 
   simp1e-cursors = callPackage ../data/icons/simp1e-cursors { };
 
@@ -40091,7 +40089,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  nixfmt = haskellPackages.nixfmt.bin;
+  nixfmt-classic = haskellPackages.nixfmt.bin;
 
   nixpkgs-fmt = callPackage ../tools/nix/nixpkgs-fmt { };
 
