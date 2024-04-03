@@ -17117,5 +17117,17 @@ final: prev:
     meta.homepage = "https://github.com/jhradilek/vim-snippets/";
   };
 
+  nvim-nio = buildVimPlugin {
+    pname = "nvim-nio";
+    version = "2024-04-02";
+    src = fetchFromGitHub {
+      owner = "nvim-neotest";
+      repo = "nvim-nio";
+      rev = "173f285eebb410199273fa178aa517fd2d7edd80";
+      sha256 = "sha256-bjYtZygrL05qB2dM7Q8lJor81VYO+u8/JWQqfZ19Wzk=";
+    };
+    meta.homepage = "https://github.com/nvim-neotest/nvim-nio/";
+  };
+
 
 }
