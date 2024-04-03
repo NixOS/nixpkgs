@@ -6,17 +6,17 @@
 guard=Sourcing
 reason=
 
-[[ -n ${cudaSetupHookOnce-} ]] && guard=Skipping && reason=" because the hook has been propagated more than once"
+[[ -n ${cudaSetupOnce-} ]] && guard=Skipping && reason=" because the hook has been propagated more than once"
 
 if (( "${NIX_DEBUG:-0}" >= 1 )) ; then
-    echo "$guard hostOffset=$hostOffset targetOffset=$targetOffset setup-cuda-hook$reason" >&2
+    echo "$guard hostOffset=$hostOffset targetOffset=$targetOffset setup-cuda$reason" >&2
 else
-    echo "$guard setup-cuda-hook$reason" >&2
+    echo "$guard setup-cuda$reason" >&2
 fi
 
 [[ "$guard" = Sourcing ]] || return 0
 
-declare -g cudaSetupHookOnce=1
+declare -g cudaSetupOnce=1
 declare -Ag cudaHostPathsSeen=()
 declare -Ag cudaOutputToPath=()
 
@@ -106,7 +106,7 @@ propagateCudaLibraries() {
 
     mkdir -p "${!cudaPropagateToOutput}/nix-support"
     # One'd expect this should be propagated-bulid-build-deps, but that doesn't seem to work
-    echo "@setupCudaHook@" >> "${!cudaPropagateToOutput}/nix-support/propagated-native-build-inputs"
+    echo "@setupCuda@" >> "${!cudaPropagateToOutput}/nix-support/propagated-native-build-inputs"
 
     local propagatedBuildInputs=( "${!cudaHostPathsSeen[@]}" )
     for output in $(getAllOutputNames) ; do

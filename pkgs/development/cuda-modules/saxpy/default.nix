@@ -15,7 +15,6 @@ let
     cudatoolkit
     flags
     libcublas
-    setupCudaHook
     ;
   inherit (lib) getDev getLib getOutput;
 in

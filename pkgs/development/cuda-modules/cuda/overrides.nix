@@ -170,7 +170,7 @@ filterAndCreateOverrides {
       backendStdenv,
       cuda_cudart,
       lib,
-      setupCudaHook,
+      setupCuda,
     }:
     prevAttrs: {
       # Patch the nvcc.profile.
@@ -214,7 +214,7 @@ filterAndCreateOverrides {
       # `propagatedNativeBuildInputs`, it stops being propagated to downstream packages during their build because
       # setup hooks in `propagatedNativeBuildInputs` are not designed to affect the runtime or build environment of
       # dependencies; they are only meant to affect the build environment of the package that directly includes them.
-      propagatedBuildInputs = (prevAttrs.propagatedBuildInputs or [ ]) ++ [ setupCudaHook ];
+      propagatedBuildInputs = (prevAttrs.propagatedBuildInputs or [ ]) ++ [ setupCuda ];
 
       postInstall =
         (prevAttrs.postInstall or "")

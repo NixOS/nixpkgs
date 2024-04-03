@@ -18,7 +18,7 @@ markForCUDAToolkit_ROOTGuard() {
     local reason=""
 
     # This hook is meant only to add a stub file to the nix-support directory of the package including it in its
-    # nativeBuildInputs, so that the setup hook propagated by cuda_nvcc, setup-cuda-hook, can detect it and add the
+    # nativeBuildInputs, so that the setup hook propagated by cuda_nvcc, setup-cuda, can detect it and add the
     # package to the CUDA toolkit root. Therefore, since it only modifies the package being built and will not be
     # propagated, it should only ever be included in nativeBuildInputs.
     if (( ${hostOffset:?} == -1 && ${targetOffset:?} == 0)); then
@@ -53,7 +53,7 @@ markForCUDAToolkit_ROOT() {
         return 0
     fi
 
-    # Always create the file, even if it's empty, since setup-cuda-hook relies on its existence.
+    # Always create the file, even if it's empty, since setup-cuda relies on its existence.
     # However, only populate it if strictDeps is not set.
     touch "$markerPath"
     if [[ -z "${strictDeps-}" ]]; then
