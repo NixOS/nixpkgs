@@ -32,7 +32,10 @@ let
       callPackage = self.newScope ({
         inherit (self) qtModule;
         inherit srcs python3;
-        stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+        stdenv =
+          if stdenv.isDarwin
+          then overrideSDK stdenv { darwinMinVersion = "11.0"; darwinSdkVersion = "11.0"; }
+          else stdenv;
       });
     in
     {
@@ -167,7 +170,7 @@ let
           ({ qtModule }: qtModule.override {
             stdenv =
               if stdenv.isDarwin
-              then overrideSDK stdenv { darwinMinVersion = "10.13"; darwinSdkVersion = "11.0"; }
+              then overrideSDK stdenv { darwinMinVersion = "11.0"; darwinSdkVersion = "11.0"; }
               else stdenv;
           })
           { };
