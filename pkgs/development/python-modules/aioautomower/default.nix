@@ -2,6 +2,7 @@
 , aiohttp
 , buildPythonPackage
 , fetchFromGitHub
+, freezegun
 , mashumaro
 , poetry-core
 , pyjwt
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aioautomower";
-  version = "2024.3.3";
+  version = "2024.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "Thomas55555";
     repo = "aioautomower";
     rev = "refs/tags/${version}";
-    hash = "sha256-ZJRc5nzp1P3X93PxGVB55VgN1HZ2kvn43LT2wYEPxSo=";
+    hash = "sha256-W6aZdvg+EZKv0pmIaPOBaJaWipq3AENTVAVon/lFuI4=";
   };
 
   postPatch = ''
@@ -44,6 +45,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    freezegun
     pytest-asyncio
     pytestCheckHook
     syrupy
