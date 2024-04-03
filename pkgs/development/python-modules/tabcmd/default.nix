@@ -1,26 +1,27 @@
-{ lib
-, appdirs
-, argparse
-, buildPythonPackage
-, doit
-, fetchPypi
-, ftfy
-, mock
-, pyinstaller-versionfile
-, pytest-order
-, pytestCheckHook
-, python3
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, setuptools
-, setuptools-scm
-, tableauserverclient
-, types-appdirs
-, types-mock
-, types-requests
-, types-setuptools
-, urllib3
+{
+  lib,
+  appdirs,
+  argparse,
+  buildPythonPackage,
+  doit,
+  fetchPypi,
+  ftfy,
+  mock,
+  pyinstaller-versionfile,
+  pytest-order,
+  pytestCheckHook,
+  python3,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  requests,
+  setuptools,
+  setuptools-scm,
+  tableauserverclient,
+  types-appdirs,
+  types-mock,
+  types-requests,
+  types-setuptools,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -46,13 +47,9 @@ buildPythonPackage rec {
     "urllib3"
   ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     appdirs
@@ -93,9 +90,7 @@ buildPythonPackage rec {
     chmod +x $out/bin/tabcmd
   '';
 
-  pythonImportsCheck = [
-    "tabcmd"
-  ];
+  pythonImportsCheck = [ "tabcmd" ];
 
   meta = with lib; {
     description = "A command line client for working with Tableau Server";
