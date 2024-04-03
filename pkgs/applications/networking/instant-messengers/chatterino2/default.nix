@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/Chatterino/chatterino2/blob/master/CHANGELOG.md";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ rexim ];
+    maintainers = with maintainers; [ rexim supa ];
   };
 }
