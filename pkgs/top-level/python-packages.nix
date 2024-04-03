@@ -4554,6 +4554,8 @@ self: super: with self; {
 
   fx2 = callPackage ../development/python-modules/fx2 { };
 
+  fyta-cli = callPackage ../development/python-modules/fyta-cli { };
+
   g2pkk = callPackage ../development/python-modules/g2pkk { };
 
   galario = toPythonModule (pkgs.galario.override {
