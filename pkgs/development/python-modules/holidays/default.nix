@@ -33,7 +33,7 @@ buildPythonPackage rec {
     hash = "sha256-RwM4RtFIUSaM/e4kiHOMg97lZ4VknB1pOqGRuIe2ns8=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
 
     # l10n
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     ./scripts/l10n/generate_mo_files.py
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     python-dateutil
   ];
 
