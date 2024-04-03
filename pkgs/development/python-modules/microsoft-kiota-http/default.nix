@@ -28,9 +28,9 @@ buildPythonPackage rec {
     hash = "sha256-I16WARk6YBr8KgE9MtHcA5VdsnLXBKcZOaqRL/eqwKE=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
     microsoft-kiota-abstractions
     opentelemetry-api
