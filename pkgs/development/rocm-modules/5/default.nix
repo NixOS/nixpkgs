@@ -320,7 +320,7 @@ in rec {
       };
 
       # overwrite all patches, since patches for newer version do not apply
-      patches = [ ./0001-Compile-transupp.c-as-part-of-the-library.patch ];
+      patches = [ ../6/0001-Compile-transupp.c-as-part-of-the-library.patch ];
     };
   };
 
