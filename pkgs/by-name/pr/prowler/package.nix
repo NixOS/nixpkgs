@@ -28,11 +28,14 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   nativeBuildInputs = with python3.pkgs; [
-    poetry-core
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    poetry-core
+  ];
+
+  dependencies = with python3.pkgs; [
     alive-progress
     awsipranges
     azure-identity
