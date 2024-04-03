@@ -18,6 +18,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "azure-mgmt-security"
+    "azure-storage-blob"
     "boto3"
     "botocore"
     "google-api-python-client"
