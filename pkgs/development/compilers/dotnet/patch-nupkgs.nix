@@ -44,7 +44,9 @@ in writeShellScriptBin "patch-nupkgs" ''
     echo "Patching package $x"
     pushd "$x"
     for p in $(find -type f); do
-      if [[ "$p" != *.nix-patched ]] && isELF "$p"; then
+      if [[ "$p" != *.nix-patched ]] \
+        && isELF "$p" \
+        && patchelf --print-interpreter "$p" &>/dev/null; then
         tmp="$p".$$.nix-patched
         # if this fails to copy then another process must have patched it
         cp --reflink=auto "$p" "$tmp" || continue
