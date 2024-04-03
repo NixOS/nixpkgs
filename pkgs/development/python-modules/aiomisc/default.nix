@@ -1,9 +1,8 @@
 {
   lib,
+  stdenv,
   aiocontextvars,
-  #, aiocarbon
   aiohttp,
-  #, aiohttp-asgi
   async-timeout,
   buildPythonPackage,
   colorlog,
@@ -15,9 +14,9 @@
   pytestCheckHook,
   pythonOlder,
   raven,
-  #, raven-aiohttp
+  rich,
   setproctitle,
-  setuptools,
+  typing-extensions,
   uvloop,
 }:
 
@@ -35,33 +34,29 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  dependencies = [
-    colorlog
-    logging-journald
-    setuptools
-  ];
+  dependencies =
+    [ colorlog ]
+    ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
+    ++ lib.optionals stdenv.isLinux [ logging-journald ];
 
   nativeCheckInputs = [
     aiocontextvars
     async-timeout
     fastapi
     pytestCheckHook
-    raven
     setproctitle
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   passthru.optional-dependencies = {
     aiohttp = [ aiohttp ];
-    #asgi = [
-    #  aiohttp-asgi
-    #];
+    #asgi = [ aiohttp-asgi ];
     cron = [ croniter ];
-    #carbon = [
-    #  aiocarbon
-    #];
-    #raven = [
-    #  raven-aiohttp
-    #];
+    #carbon = [ aiocarbon ];
+    raven = [
+      aiohttp
+      raven
+    ];
+    rich = [ rich ];
     uvloop = [ uvloop ];
   };
 
