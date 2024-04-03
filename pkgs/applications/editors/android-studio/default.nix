@@ -14,8 +14,8 @@ let
     sha256Hash = "sha256-ACZCdXKEnJy7DJTW+XGOoIvDRdzP47NytUEAqV//mbU=";
   };
   betaVersion = {
-    version = "2023.3.1.14"; # "Android Studio Jellyfish | 2023.3.1.1 Beta 1"
-    sha256Hash = "sha256-2p/WwH6yPAMwUSJ5NrWvJBZG395eS9UgApFr/CB1fUo=";
+    version = "2023.3.1.15"; # "Android Studio Jellyfish | 2023.3.1.1 Beta 2"
+    sha256Hash = "sha256-ImXHda8Xbayuk+OMZVtAFsGNnaqm2PvI3lko2gUpIeU=";
   };
   latestVersion = {
     version = "2023.3.2.2"; # "Android Studio Koala | 2023.3.2 Canary 2"
