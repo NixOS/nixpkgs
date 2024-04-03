@@ -134,13 +134,13 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
         (oldAttrs.postPatch or "")
         + ''
           substituteInPlace bin/nvcc.profile \
-            --replace \
+            --replace-fail \
               '$(TOP)/lib' \
               "''${!outputLib}/lib" \
-            --replace \
+            --replace-fail \
               '$(TOP)/$(_NVVM_BRANCH_)' \
               "''${!outputBin}/nvvm" \
-            --replace \
+            --replace-fail \
               '$(TOP)/$(_TARGET_DIR_)/include' \
               "''${!outputDev}/include"
 
