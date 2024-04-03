@@ -8,12 +8,13 @@
 , pyyaml
 , requests
 , schema
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "policy-sentry";
   version = "0.12.12";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -24,7 +25,11 @@ buildPythonPackage rec {
     hash = "sha256-1LYcUlGoSalbdo4tiNIYbdA04IHRTImhdWScpiCZk50=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     beautifulsoup4
     click
     requests
@@ -42,10 +47,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module for generating IAM least privilege policies";
-    mainProgram = "policy_sentry";
     homepage = "https://github.com/salesforce/policy_sentry";
     changelog = "https://github.com/salesforce/policy_sentry/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "policy_sentry";
   };
 }
