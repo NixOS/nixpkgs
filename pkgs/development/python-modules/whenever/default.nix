@@ -31,23 +31,25 @@ buildPythonPackage rec {
       --replace-fail '--benchmark-disable' '#--benchmark-disable'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     tzdata
   ] ++ lib.optionals (pythonOlder "3.9") [
     backports-zoneinfo
   ];
-
-  pythonImportsCheck = [ "whenever" ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mypy-plugins
     hypothesis
     freezegun
+  ];
+
+  pythonImportsCheck = [
+    "whenever"
   ];
 
   # early TDD, many tests are failing
