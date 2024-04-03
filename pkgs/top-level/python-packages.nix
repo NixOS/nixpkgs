@@ -7319,6 +7319,8 @@ self: super: with self; {
 
   microsoft-kiota-serialization-json = callPackage ../development/python-modules/microsoft-kiota-serialization-json { };
 
+  microsoft-kiota-serialization-multipart = callPackage ../development/python-modules/microsoft-kiota-serialization-multipart { };
+
   microsoft-kiota-serialization-text = callPackage ../development/python-modules/microsoft-kiota-serialization-text { };
 
   midiutil = callPackage ../development/python-modules/midiutil { };
