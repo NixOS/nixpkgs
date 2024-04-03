@@ -36,11 +36,11 @@ buildPythonPackage rec {
       --replace-fail '"vol",' ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiofiles
     aiohttp
     ciso8601
