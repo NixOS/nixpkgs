@@ -7,13 +7,13 @@ let
   };
 
 in stdenvNoCC.mkDerivation rec {
-  pname = "microchip-xc16-unwrapped";
-  version = "2.10";
+  pname = "microchip-xc32-unwrapped";
+  version = "4.35";
 
   src = fetchurl {
     url =
-      "https://ww1.microchip.com/downloads/aemDocuments/documents/DEV/ProductDocuments/SoftwareTools/xc16-v${version}-full-install-linux64-installer.run";
-    hash = "sha256-1k1ec5Hshi1N0Wk2G2aAtyX4lgQ1EhcJtF6xpK/hXcg=";
+      "https://ww1.microchip.com/downloads/aemDocuments/documents/DEV/ProductDocuments/SoftwareTools/xc32-v${version}-full-install-linux-x64-installer.run";
+    hash = "sha256-TYRPGJZMn9LEoLgvITGB++xBKHzf+2s/GLSNZu/+f9Y=";
   };
 
   nativeBuildInputs = [ bubblewrap rsync ];
@@ -53,7 +53,7 @@ in stdenvNoCC.mkDerivation rec {
     homepage =
       "https://www.microchip.com/en-us/tools-resources/develop/mplab-xc-compilers";
     description =
-      "Microchip's MPLAB XC16 C compiler toolchain for all 16-bit PIC microcontrollers (MCUs)";
+      "Microchip's MPLAB XC16 C compiler toolchain for all 32-bit PIC and SAM MCUs and MPUs featuring Arm® and MIPS® cores";
     license = licenses.unfree;
     maintainers = with maintainers; [ remexre nyadiia ];
     platforms = [ "x86_64-linux" ];

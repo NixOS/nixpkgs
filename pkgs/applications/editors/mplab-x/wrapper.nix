@@ -3,7 +3,11 @@
 , libusb1, libxslt, mesa, mplab-x-unwrapped, nspr, nss, pango, rsync
 , systemdLibs, writeShellApplication, xorg,
 
-microchip-xc16 }:
+# microchip-xc8,
+microchip-xc16,
+# microchip-xc32,
+# microchip-xc-dsc
+}:
 
 let
   fhsEnv = buildFHSEnv {
@@ -45,6 +49,12 @@ let
   stage2 = writeShellApplication {
     name = "mplab_ide-wrapper";
     runtimeInputs = [ execline fuse-overlayfs rsync ];
+      # mkdir "$rt/overlay/opt/microchip/xc8"
+      # ln -s ${microchip-xc8} "$rt/overlay/opt/microchip/xc8/v${microchip-xc8.version}"
+      # mkdir "$rt/overlay/opt/microchip/xc32"
+      # ln -s ${microchip-xc32} "$rt/overlay/opt/microchip/xc32/v${microchip-xc32.version}"
+      # mkdir "$rt/overlay/opt/microchip/xc-dsc"
+      # ln -s ${microchip-xc-dsc} "$rt/overlay/opt/microchip/xc-dsc/v${microchip-xc-dsc.version}"
     text = ''
       # Make the rt directory, isolated from the host filesystem.
       rt="$XDG_RUNTIME_DIR/mplab-x"
