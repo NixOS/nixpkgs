@@ -11,6 +11,7 @@ makeSetupHook {
     ccFullPath = "${cc}/bin/${cc.targetPrefix}c++";
     # Point NVCC at a compatible compiler
     ccRoot = "${cc}";
+    logFromSetupHook = ../utilities/log-from-setup-hook.sh;
     setupCuda = placeholder "out";
   };
 } ./setup-cuda.sh

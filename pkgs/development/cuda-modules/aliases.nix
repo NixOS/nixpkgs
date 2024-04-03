@@ -19,6 +19,6 @@ in
     mkRenamed "markForCudatoolkitRootHook" "cudaPackages.markForCudatoolkitRoot"
       final.markForCudatoolkitRoot; # Added 2024-04-19
   setupCudaHook =
-    mkRenamed "setupCudaHook" "setupCuda"
+    mkRenamed "setupCudaHook" "cudaPackages.setupCuda"
       final.setupCuda; # Added 2024-04-19
 }
