@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, openssl }:
 
 buildGoModule rec {
   pname = "prometheus-nats-exporter";
@@ -15,9 +15,20 @@ buildGoModule rec {
 
   ldflags = [ "-X main.version=${version}" ];
 
+  depsBuildBuild = [ openssl ];
+
   preCheck = ''
     # Fix `insecure algorithm SHA1-RSA` problem
     export GODEBUG=x509sha1=1;
+    # Test certs checked in to src github have a short expiry; about
+    # a month. Regenerate the certs (with the provided script) so we
+    # can still run the checkPhase.
+    (
+        set -euo pipefail -x
+        cd ./test/certs
+        rm -f -- ca.pem client.key client.pem server.key server.pem
+        bash -euo pipefail -x ./generate-certs.sh
+    )
   '';
 
   meta = with lib; {
