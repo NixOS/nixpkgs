@@ -6994,6 +6994,12 @@
       fingerprint = "58CE D4BE 6B10 149E DA80  A990 2F48 6356 A4CB 30F3";
     }];
   };
+  genevieve-me = {
+    name = "Genevieve Mendoza";
+    email = "me@genevievemendoza.com";
+    github = "genevieve-me";
+    githubId = 140119870;
+  };
   genofire = {
     name = "genofire";
     email = "geno+dev@fireorbit.de";
