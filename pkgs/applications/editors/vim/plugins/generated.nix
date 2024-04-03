@@ -2093,6 +2093,17 @@ final: prev:
     meta.homepage = "https://github.com/saadparwaiz1/cmp_luasnip/";
   };
 
+  cmp_yanky = buildVimPlugin {
+    pname = "cmp_yanky";
+    version = "2023-11-16";
+    src = fetchFromGitHub {
+      owner = "chrisgrieser";
+      repo = "cmp_yanky";
+      rev = "c3d089186ccead26eba01023502f3eeadd7a92d2";
+      sha256 = "sha256-jWNoKzY0x5GPFP7JsQi4nqgg1YFJV4DqxwJRqsg6KaQ=";
+    };
+  };
+
   cobalt2-nvim = buildVimPlugin {
     pname = "cobalt2.nvim";
     version = "2024-04-01";
