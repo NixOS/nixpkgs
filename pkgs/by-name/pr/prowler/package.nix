@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -60,9 +61,7 @@ python3.pkgs.buildPythonApplication rec {
     tabulate
   ];
 
-  pythonImportsCheck = [
-    "prowler"
-  ];
+  pythonImportsCheck = [ "prowler" ];
 
   meta = with lib; {
     description = "Security tool for AWS, Azure and GCP to perform Cloud Security best practices assessments";
