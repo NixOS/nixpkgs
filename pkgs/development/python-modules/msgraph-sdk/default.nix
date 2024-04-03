@@ -1,15 +1,16 @@
-{ lib
-, azure-identity
-, buildPythonPackage
-, fetchFromGitHub
-, microsoft-kiota-abstractions
-, microsoft-kiota-authentication-azure
-, microsoft-kiota-http
-, microsoft-kiota-serialization-json
-, microsoft-kiota-serialization-text
-, msgraph-core
-, pythonOlder
-, setuptools
+{
+  lib,
+  azure-identity,
+  buildPythonPackage,
+  fetchFromGitHub,
+  microsoft-kiota-abstractions,
+  microsoft-kiota-authentication-azure,
+  microsoft-kiota-http,
+  microsoft-kiota-serialization-json,
+  microsoft-kiota-serialization-text,
+  msgraph-core,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-fAchReqVhkVhT48UrTnBUQerHmgB7qxpey0xrgxIVDs=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     azure-identity
@@ -43,9 +42,7 @@ buildPythonPackage rec {
   # Module doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "msgraph"
-  ];
+  pythonImportsCheck = [ "msgraph" ];
 
   meta = with lib; {
     description = "Microsoft Graph SDK for Python";
