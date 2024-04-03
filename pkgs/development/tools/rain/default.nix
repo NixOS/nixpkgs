@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "rain";
-  version = "1.8.2";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "aws-cloudformation";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-QJAcIk+XPQF5iLlcK62t2htOVjne3K/74Am0pvLS1r8=";
+    sha256 = "sha256-l5Exm31pQlmYh9VizdrARFgtIxb48ALR1IYaNFfCMWk=";
   };
 
-  vendorHash = "sha256-+UJyPwb4/KPeXyrsGQvX2SfYWfTeoR93WGyTTBf3Ya8=";
+  vendorHash = "sha256-PjdM52qCR7zVjQDRWwGXcJwqLYUt9LTi9SX85A4z2SA=";
 
   subPackages = [ "cmd/rain" ];
 
