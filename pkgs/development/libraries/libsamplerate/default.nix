@@ -24,8 +24,6 @@ in stdenv.mkDerivation rec {
     # need headers from the Carbon.framework in /System/Library/Frameworks to
     # compile this on darwin -- not sure how to handle
     NIX_CFLAGS_COMPILE+=" -I${Carbon}/Library/Frameworks/Carbon.framework/Headers"
-
-    substituteInPlace examples/Makefile --replace "-fpascal-strings" ""
   '';
 
   meta = with lib; {
