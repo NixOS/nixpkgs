@@ -25,9 +25,9 @@ buildPythonPackage rec {
     hash = "sha256-igMqwoKArfQ37pzdjUICgXY795dfg/MX65iwTVe0sLM=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     microsoft-kiota-abstractions
     pendulum
   ];
