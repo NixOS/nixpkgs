@@ -9,7 +9,7 @@ reason=
 [[ -n ${cudaSetupHookOnce-} ]] && guard=Skipping && reason=" because the hook has been propagated more than once"
 
 if (( "${NIX_DEBUG:-0}" >= 1 )) ; then
-    echo "$guard hostOffset=$hostOffset targetOffset=$targetOffset setupCudaHook$reason" >&2
+    echo "$guard hostOffset=$hostOffset targetOffset=$targetOffset setup-cuda-hook$reason" >&2
 else
     echo "$guard setup-cuda-hook$reason" >&2
 fi
