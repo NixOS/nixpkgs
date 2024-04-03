@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "es-client";
-  version = "8.12.8";
+  version = "8.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "untergeek";
     repo = "es_client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qv06zb3hIK/TeOZwtMXrV+n8mYSA/UKiyHvRyKEvZkQ=";
+    hash = "sha256-y0TNa4i1guLFRvXU3sWAhWVj81QOTmfXf8yLPdDSZqU=";
   };
 
   pythonRelaxDeps = true;
