@@ -617,8 +617,8 @@ in
     assert lib.all isFromBootstrapFiles (with prevStage; [ coreutils gnugrep ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      autoconf automake bash binutils-unwrapped bison brotli cmake cpio cyrus_sasl db
-      ed expat flex gettext gmp groff icu libedit libffi libiconv libidn2 libkrb5 libssh2
+      atf autoconf automake bash binutils-unwrapped bison brotli cmake cpio cyrus_sasl db
+      ed expat flex gettext gmp groff icu kyua libedit libffi libiconv libidn2 libkrb5 libssh2
       libtool libunistring libxml2 m4 ncurses nghttp2 ninja openldap openssh openssl
       patchutils pbzx perl pkg-config.pkg-config python3 python3Minimal scons serf sqlite
       subversion sysctl.provider texinfo unzip which xz zlib zstd
@@ -644,8 +644,8 @@ in
 
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
-        autoconf automake bash binutils binutils-unwrapped bison brotli cmake cmakeMinimal
-        cpio cyrus_sasl db ed expat flex gettext gmp groff icu libedit libffi libiconv
+        atf autoconf automake bash binutils binutils-unwrapped bison brotli cmake cmakeMinimal
+        cpio cyrus_sasl db ed expat flex gettext gmp groff icu kyua libedit libffi libiconv
         libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4 ncurses nghttp2 ninja
         openldap openssh openssl patchutils pbzx perl pkg-config python3 python3Minimal
         scons sed serf sharutils sqlite subversion sysctl texinfo unzip which xz zlib zstd;
@@ -706,8 +706,8 @@ in
   (prevStage:
     # previous stage-xclang stdenv:
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      autoconf automake bash binutils-unwrapped bison cmake cmakeMinimal coreutils cpio
-      cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu libedit libtool m4 ninja
+      atf autoconf automake bash binutils-unwrapped bison cmake cmakeMinimal coreutils cpio
+      cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu kyua libedit libtool m4 ninja
       openbsm openldap openpam openssh patchutils pbzx perl pkg-config.pkg-config python3
       python3Minimal scons serf sqlite subversion sysctl.provider texinfo unzip which xz
     ]);
@@ -740,8 +740,8 @@ in
 
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
-        autoconf automake binutils-unwrapped bison brotli cmake cmakeMinimal coreutils
-        cpio cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu libedit libffi
+        atf autoconf automake binutils-unwrapped bison brotli cmake cmakeMinimal coreutils
+        cpio cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu kyua libedit libffi
         libiconv libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4 ncurses nghttp2
         ninja openbsm openldap openpam openssh openssl patchutils pbzx perl pkg-config
         python3 python3Minimal scons serf sqlite subversion sysctl texinfo unzip which xz
@@ -807,8 +807,8 @@ in
   (prevStage:
     # previous stage2-Libsystem stdenv:
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      autoconf automake binutils-unwrapped bison brotli cmake cmakeMinimal coreutils
-      cpio cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu libedit libidn2
+      atf autoconf automake binutils-unwrapped bison brotli cmake cmakeMinimal coreutils
+      cpio cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu kyua libedit libidn2
       libkrb5 libssh2 libtool libunistring m4 nghttp2 ninja openbsm openldap openpam openssh
       openssl patchutils pbzx perl pkg-config.pkg-config python3 python3Minimal scons serf
       sqlite subversion sysctl.provider texinfo unzip which xz zstd
@@ -844,8 +844,8 @@ in
 
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
-        autoconf automake bash bison brotli cmake cmakeMinimal coreutils cpio
-        cyrus_sasl db ed expat flex gettext gmp gnugrep groff libedit libidn2 libkrb5
+        atf autoconf automake bash bison brotli cmake cmakeMinimal coreutils cpio
+        cyrus_sasl db ed expat flex gettext gmp gnugrep groff kyua libedit libidn2 libkrb5
         libssh2 libtool libunistring m4 ncurses nghttp2 ninja openbsm openldap openpam
         openssh openssl patchutils pbzx perl pkg-config python3 python3Minimal scons serf
         sqlite subversion sysctl texinfo unzip which xz zstd;
