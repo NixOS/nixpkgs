@@ -24,11 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-kzOTYBcXAAEYoe/m/BjWNaQX4ljG17NxndevAt5KxjQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     boost
     numpy
     scipy
@@ -38,6 +38,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     unittestCheckHook
   ];
+
   preCheck = ''
     rm -r medpy/  # prevent importing from build directory at test time
     rm -r tests/graphcut_  # SIGILL at test time
