@@ -58,8 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [ python3 ];
   checkInputs = [ gtest ];
-  # two tests fail on darwin and 3 on aarch64-linux
-  doCheck = stdenv.hostPlatform.isLinux && (!stdenv.hostPlatform.isAarch64);
+  # two tests fail on darwin
+  doCheck = stdenv.hostPlatform.isLinux;
 
   meta = {
     description = "A SMT solver for fixed-size bit-vectors, floating-point arithmetic, arrays, and uninterpreted functions";
