@@ -15,14 +15,14 @@
 , pkg-config
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bitwuzla";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "bitwuzla";
     repo = "bitwuzla";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ZEdV4ml1LwrYwscgOcL2gLx/ijPYqRktXMQH/Njh8OI=";
   };
 
@@ -38,19 +38,25 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  mesonFlags = [ "-Ddefault_library=shared" ];
+  mesonFlags = [
+    # note: the default value for default_library fails to link dynamic dependencies
+    # but setting it to shared works even in pkgsStatic
+    "-Ddefault_library=shared"
+
+    (lib.strings.mesonEnable "testing" finalAttrs.doCheck)
+  ];
 
   nativeCheckInputs = [ python3 ];
   checkInputs = [ gtest ];
   # two tests fail on darwin and 3 on aarch64-linux
   doCheck = stdenv.hostPlatform.isLinux && (!stdenv.hostPlatform.isAarch64);
 
-  meta = with lib; {
+  meta = {
     description = "A SMT solver for fixed-size bit-vectors, floating-point arithmetic, arrays, and uninterpreted functions";
     mainProgram = "bitwuzla";
     homepage = "https://bitwuzla.github.io";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ symphorien ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ symphorien ];
   };
-}
+})
