@@ -38,7 +38,9 @@ in writeShellScriptBin "patch-nupkgs" ''
   }
   cd "$1"
   for x in *.${buildRid}/* *.${buildRid}.*/*; do
-    [[ -d "$x" ]] && [[ ! -f "$x"/.nix-patched ]] || continue
+    # .nupkg.metadata is written last, so we know the packages is complete
+    [[ -d "$x" ]] && [[ -f "$x"/.nupkg.metadata ]] \
+      && [[ ! -f "$x"/.nix-patched ]] || continue
     echo "Patching package $x"
     pushd "$x"
     for p in $(find -type f); do
