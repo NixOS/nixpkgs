@@ -178,6 +178,8 @@ in mkDerivation rec {
     "-DENABLE_TESTS=OFF"
     "-DCOMPILER_CACHE=disabled"
     "-DENABLE_EMBEDDED_COMPILER=ON"
+    # qatlib fails to compile: undefined symbol: __sync_val_compare_and_swap_16
+    "-DENABLE_QATLIB=OFF"
   ];
 
   env = {
