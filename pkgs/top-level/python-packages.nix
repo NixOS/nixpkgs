@@ -14276,6 +14276,8 @@ self: super: with self; {
 
   sqlite-utils = callPackage ../development/python-modules/sqlite-utils { };
 
+  sqliteschema = callPackage ../development/python-modules/sqliteschema { };
+
   sqlmap = callPackage ../development/python-modules/sqlmap { };
 
   sqlmodel = callPackage ../development/python-modules/sqlmodel { };
