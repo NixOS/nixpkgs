@@ -7092,6 +7092,8 @@ self: super: with self; {
 
   mandown = callPackage ../development/python-modules/mandown { };
 
+  manga-ocr = callPackage ../development/python-modules/manga-ocr { };
+
   manhole = callPackage ../development/python-modules/manhole { };
 
   manimpango = callPackage ../development/python-modules/manimpango {
