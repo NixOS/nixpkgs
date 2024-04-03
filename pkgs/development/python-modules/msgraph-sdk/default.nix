@@ -6,7 +6,9 @@
   microsoft-kiota-abstractions,
   microsoft-kiota-authentication-azure,
   microsoft-kiota-http,
+  microsoft-kiota-serialization-form,
   microsoft-kiota-serialization-json,
+  microsoft-kiota-serialization-multipart,
   microsoft-kiota-serialization-text,
   msgraph-core,
   pythonOlder,
@@ -15,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "msgraph-sdk";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +26,7 @@ buildPythonPackage rec {
     owner = "microsoftgraph";
     repo = "msgraph-sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fAchReqVhkVhT48UrTnBUQerHmgB7qxpey0xrgxIVDs=";
+    hash = "sha256-UaGdusPGWlF7gTzpCq9WrF/evdDSK5srrkH8/Vz9O8M=";
   };
 
   build-system = [ setuptools ];
@@ -34,7 +36,9 @@ buildPythonPackage rec {
     microsoft-kiota-abstractions
     microsoft-kiota-authentication-azure
     microsoft-kiota-http
+    microsoft-kiota-serialization-form
     microsoft-kiota-serialization-json
+    microsoft-kiota-serialization-multipart
     microsoft-kiota-serialization-text
     msgraph-core
   ];
