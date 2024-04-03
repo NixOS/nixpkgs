@@ -2,8 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
-, urllib3
 , types-urllib3
+, urllib3
 }:
 
 buildPythonPackage rec {
@@ -16,13 +16,13 @@ buildPythonPackage rec {
     hash = "sha256-4eDNC2VTNPOdn4craKExDw40Nkdoi/LO6TLsTCsE3lk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    urllib3
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     types-urllib3
+    urllib3
   ];
 
   # Module doesn't have tests
