@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, fetchpatch
 , lib
 , python3
 , meson
@@ -25,6 +26,15 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-ZEdV4ml1LwrYwscgOcL2gLx/ijPYqRktXMQH/Njh8OI=";
   };
+
+  patches = [
+    # fix parser on aarch64
+    # remove on next release
+    (fetchpatch {
+      url = "https://github.com/bitwuzla/bitwuzla/commit/4d914aa5ec34076c37749f0cf6dce976ea510386.patch";
+      hash = "sha256-gp+HEamOySjPXCC39tt5DIMdQqEew26a+M15sNdCmTM=";
+    })
+  ];
 
   strictDeps = true;
 
