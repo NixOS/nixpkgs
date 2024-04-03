@@ -112,14 +112,14 @@ in stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-auBedbd7rghlKav7A9V6l64J7VmtE9GizIdi5gWj+fs=";
     })
     (fetchpatch {
-      name = "Improve-hipamd-compat-check.patch";
-      url = "https://github.com/GZGavinZhao/clr/commit/f52172a0767f88bf386dc615a3354156d023bdb8.patch";
-      hash = "sha256-kbEeJsQgAxbNfBCPB2Jny4z526UAnIxHNQLGsD2iFvg=";
+      name = "extend-hip-isa-compatibility-check.patch";
+      url = "https://salsa.debian.org/rocm-team/rocm-hipamd/-/raw/d6d20142c37e1dff820950b16ff8f0523241d935/debian/patches/0026-extend-hip-isa-compatibility-check.patch";
+      hash = "sha256-eG0ALZZQLRzD7zJueJFhi2emontmYy6xx8Rsm346nQI=";
     })
     (fetchpatch {
       name = "improve-rocclr-isa-compatibility-check.patch";
-      url = "https://github.com/GZGavinZhao/clr/commit/2783c57b0f225ad8bc553e2d244837d57d8375bc.patch";
-      hash = "sha256-uQMex3gT/LqgQeMETbldpVODWorGLD/YMgjdwHlhd+M=";
+      url = "https://salsa.debian.org/rocm-team/rocm-hipamd/-/raw/d6d20142c37e1dff820950b16ff8f0523241d935/debian/patches/0025-improve-rocclr-isa-compatibility-check.patch";
+      hash = "sha256-8eowuRiOAdd9ucKv4Eg9FPU7c6367H3eP3fRAGfXc6Y=";
     })
   ];
 
