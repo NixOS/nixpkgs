@@ -30,6 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/fdev31/wlr-layout-ui/";
     changelog = "https://github.com/fdev31/wlr-layout-ui/releases/tag/${src.rev}";
     maintainers = with maintainers; [ bnlrnz ];
-    mainProgram = "wlr-layout-ui";
+    license = lib.license.unfree;
+    mainProgram = "wlrlui";
   };
 }
