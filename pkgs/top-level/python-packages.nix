@@ -13762,6 +13762,8 @@ self: super: with self; {
 
   simplesat = callPackage ../development/python-modules/simplesat { };
 
+  simplesqlite = callPackage ../development/python-modules/simplesqlite { };
+
   simple-dftd3 = callPackage ../development/libraries/science/chemistry/simple-dftd3/python.nix {
     inherit (pkgs) simple-dftd3;
   };
