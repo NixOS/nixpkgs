@@ -17100,6 +17100,8 @@ self: super: with self; {
 
   zfec = callPackage ../development/python-modules/zfec { };
 
+  zha = callPackage ../development/python-modules/zha { };
+
   zha-quirks = callPackage ../development/python-modules/zha-quirks { };
 
   ziafont = callPackage ../development/python-modules/ziafont { };
