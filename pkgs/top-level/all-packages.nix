@@ -17590,8 +17590,6 @@ with pkgs;
   php81Extensions = recurseIntoAttrs php81.extensions;
   php81Packages = recurseIntoAttrs php81.packages;
 
-  phpactor = callPackage ../development/tools/phpactor { };
-
   picoc = callPackage ../development/interpreters/picoc { };
 
   picolisp = callPackage ../development/interpreters/picolisp { };
