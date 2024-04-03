@@ -1,45 +1,55 @@
 { stdenv
 , lib
-, fetchurl
+, fetchzip
 , dpkg
 , makeWrapper
+, callPackage
 , addOpenGLRunpath
 , electron
-, withTetrioPlus ? false # For backwards compatibility. At the time of writing, the latest released tetrio plus version is not compatible with tetrio desktop.
-, tetrio-plus ? false # For backwards compatibility. At the time of writing, the latest released tetrio plus version is not compatible with tetrio desktop.
+, withTetrioPlus ? true
+, tetrio-plus ? null
 }:
-
-lib.warnIf (withTetrioPlus != false) "withTetrioPlus: Currently unsupported with tetrio-desktop 9.0.0. Please remove this attribute."
-lib.warnIf (tetrio-plus != false) "tetrio-plus: Currently unsupported with tetrio-desktop 9.0.0. Please remove this attribute."
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tetrio-desktop";
   version = "9.0.0";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://tetr.io/about/desktop/builds/${lib.versions.major finalAttrs.version}/TETR.IO%20Setup.deb";
-    hash = "sha256-UriLwMB8D+/T32H4rPbkJAy/F/FFhNpd++0AR1lwEfs=";
+    hash = "sha256-TgegFy+sHjv0ILaiLO1ghyUhKXoj8v43ACJOJhKyI0c=";
+    nativeBuildInputs = [ dpkg ];
   };
 
   nativeBuildInputs = [
-    dpkg
     makeWrapper
   ];
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    let
+      tetrio-plus' =
+        if tetrio-plus == null
+        then callPackage ./tetrio-plus.nix { tetrio-src = finalAttrs.src; }
+        else tetrio-plus;
 
-    mkdir -p $out
-    cp -r usr/share/ $out
+      asarPath =
+        if withTetrioPlus
+        then "${tetrio-plus'}/app.asar"
+        else "opt/TETR.IO/resources/app.asar";
+    in
+    ''
+      runHook preInstall
 
-    mkdir -p $out/share/TETR.IO/
-    cp opt/TETR.IO/resources/app.asar $out/share/TETR.IO/app.asar
+      mkdir -p $out
+      cp -r usr/share/ $out
 
-    substituteInPlace $out/share/applications/TETR.IO.desktop \
-      --replace-fail "Exec=/opt/TETR.IO/TETR.IO" "Exec=$out/bin/tetrio"
+      mkdir -p $out/share/TETR.IO/
+      cp ${asarPath} $out/share/TETR.IO/app.asar
 
-    runHook postInstall
-  '';
+      substituteInPlace $out/share/applications/TETR.IO.desktop \
+        --replace-fail "Exec=/opt/TETR.IO/TETR.IO" "Exec=$out/bin/tetrio"
+
+      runHook postInstall
+    '';
 
   postFixup = ''
     makeShellWrapper '${lib.getExe electron}' $out/bin/tetrio \
