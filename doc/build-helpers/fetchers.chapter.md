@@ -13,8 +13,8 @@ Nixpkgs provides its own fetchers, which work differently:
 - Built-in fetchers do not use [substituters](https://nixos.org/manual/nix/stable/command-ref/conf-file#conf-substituters).
   Derivations produced by Nixpkgs fetchers will use any configured binary cache transparently.
 
-This significantly reduces the time needed to evaluate code in Nixpkgs, and allows [Hydra](https://nixos.org/hydra) to retain and re-distribute sources used by Nixpkgs in the [public binary cache](https://cache.nixos.org).
-For these reasons, the Nix built-in fetchers are not allowed in Nixpkgs code.
+This significantly reduces the time needed to evaluate Nixpkgs, and allows [Hydra](https://nixos.org/hydra) to retain and re-distribute sources used by Nixpkgs in the [public binary cache](https://cache.nixos.org).
+For these reasons, Nix's built-in fetchers are not allowed in Nixpkgs.
 
 The following table summarises the differences:
 
@@ -86,7 +86,7 @@ Unless you understand how the fetcher you're using calculates the hash from the 
    - `lib.fakeSha256`
    - `lib.fakeSha512`
 
-   Once you attempt to build, error messages with the calculated hashes will show up, which you then replace in the recipe.
+   Attempt to build, extract the calculated hashes from error messages, and put them into the recipe.
 
    :::{.warning}
    You must use one of these four fake hashes and not some arbitrarily-chosen hash.
@@ -118,7 +118,7 @@ fetchurl {
 ```
 
 **This will produce the same output as before!**
-To determine the new hash, set it to an empty value (it's a fake hash, hence the name of the method):
+Set the hash to an empty string:
 
 ```nix
 { fetchurl }:
