@@ -1,5 +1,4 @@
-{ rocblas
-, lib
+{ lib
 , stdenv
 , fetchFromGitHub
 , fetchpatch
@@ -56,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     rocm-cmake
     clr
+  ] ++ lib.optionals buildTensile [
     tensile
   ];
 
