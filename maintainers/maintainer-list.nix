@@ -19061,6 +19061,12 @@
     githubId = 1939855;
     name = "Kimmo Suominen";
   };
+  supa = {
+    email = "supa.codes@gmail.com";
+    github = "0Supa";
+    githubId = 36031171;
+    name = "Supa";
+  };
   superbo = {
     email = "supernbo@gmail.com";
     github = "SuperBo";
