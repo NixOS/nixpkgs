@@ -36,7 +36,7 @@ self: super: {
         {
           # Needs to be downgraded compared to Stackage LTS 21
           resolv = cself.resolv_0_1_2_0;
-        } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.6") {
+        } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.10") {
           Cabal = cself.Cabal_3_10_3_0;
           Cabal-syntax = cself.Cabal-syntax_3_10_3_0;
         } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.4") {
