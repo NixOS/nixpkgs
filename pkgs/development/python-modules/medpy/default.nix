@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "medpy";
-  version = "0.5.0rc1";
+  version = "0.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "loli";
     repo = "medpy";
     rev = "refs/tags/${version}";
-    hash = "sha256-W62LjstH42OzNG+vMkuApUWczTNugJGKuuoeeS5ok4U=";
+    hash = "sha256-kzOTYBcXAAEYoe/m/BjWNaQX4ljG17NxndevAt5KxjQ=";
   };
 
   nativeBuildInputs = [
