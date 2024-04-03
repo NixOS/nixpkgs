@@ -24,6 +24,7 @@
 , makeWrapper
 , python3
 , xmlstarlet
+, nodejs
 , callPackage
 
 , dotnetSdk
@@ -90,6 +91,9 @@ in stdenv.mkDerivation rec {
     python3
     xmlstarlet
   ]
+  ++ lib.optionals (lib.versionAtLeast version "9") [
+    nodejs
+  ]
   ++ lib.optionals isDarwin [
     getconf
   ];
@@ -108,7 +112,7 @@ in stdenv.mkDerivation rec {
     lttng-ust_2_12
   ]
   ++ lib.optionals isDarwin (with apple_sdk.frameworks; [
-    xcbuild.xcrun
+    xcbuild
     swift
     (libkrb5.overrideAttrs (old: {
       # the propagated build inputs break swift compilation
@@ -121,7 +125,8 @@ in stdenv.mkDerivation rec {
     CoreFoundation
     CryptoKit
     System
-  ]);
+  ]
+  ++ lib.optional (lib.versionAtLeast version "9") GSS);
 
   # This is required to fix the error:
   # > CSSM_ModuleLoad(): One or more parameters passed to a function were not valid.
@@ -138,11 +143,15 @@ in stdenv.mkDerivation rec {
                        (global-name "com.apple.system.opendirectoryd.membership"))
   '';
 
-  patches = [
+  patches = lib.optionals (lib.versionOlder version "9") [
     ./fix-aspnetcore-portable-build.patch
-    ./fix-tmp-path.patch
   ]
   ++ lib.optionals isDarwin [
+    # stop passing -sdk without a path
+    # stop using xcrun
+    # add -module-cache-path to fix swift errors, see sandboxProfile
+    # <unknown>:0: error: unable to open output file '/var/folders/[...]/C/clang/ModuleCache/[...]/SwiftShims-[...].pcm': 'Operation not permitted'
+    # <unknown>:0: error: could not build Objective-C module 'SwiftShims'
     ./stop-passing-bare-sdk-arg-to-swiftc.patch
   ];
 
@@ -196,6 +205,36 @@ in stdenv.mkDerivation rec {
       -s \$prev -t elem -n KeepNativeSymbols -v false \
       src/runtime/Directory.Build.props
   ''
+  + lib.optionalString (lib.versionAtLeast version "9") ''
+    # repro.csproj fails to restore due to missing freebsd packages
+    xmlstarlet ed \
+      --inplace \
+      -s //Project -t elem -n PropertyGroup \
+      -s \$prev -t elem -n RuntimeIdentifiers -v ${targetRid} \
+      src/runtime/src/coreclr/tools/aot/ILCompiler/repro/repro.csproj
+
+    # https://github.com/dotnet/runtime/pull/98559#issuecomment-1965338627
+    xmlstarlet ed \
+      --inplace \
+      -s //Project -t elem -n PropertyGroup \
+      -s \$prev -t elem -n NoWarn -v '$(NoWarn);CS9216' \
+      src/runtime/Directory.Build.props
+
+    # patch packages installed from npm cache
+    xmlstarlet ed \
+      --inplace \
+      -s //Project -t elem -n Import \
+      -i \$prev -t attr -n Project -v "${./patch-npm-packages.proj}" \
+      src/aspnetcore/eng/SourceBuild.props
+  ''
+  + lib.optionalString (lib.versionAtLeast version "9") ''
+    # https://github.com/dotnet/source-build/issues/3131#issuecomment-2030215805
+    substituteInPlace \
+      src/aspnetcore/eng/Dependencies.props \
+      --replace-fail \
+      "'\$(DotNetBuildSourceOnly)' == 'true'" \
+      "'\$(DotNetBuildSourceOnly)' == 'true' and \$(PortableBuild) == 'false'"
+  ''
   + lib.optionalString isLinux ''
     substituteInPlace \
       src/runtime/src/native/libs/System.Security.Cryptography.Native/opensslshim.c \
@@ -218,7 +257,7 @@ in stdenv.mkDerivation rec {
       --replace-warn 'libicuucName[64]' 'libicuucName[256]' \
       --replace-warn 'libicui18nName[64]' 'libicui18nName[256]'
   ''
-  + lib.optionalString isDarwin ''
+  + lib.optionalString isDarwin (''
     substituteInPlace \
       src/runtime/src/mono/CMakeLists.txt \
       src/runtime/src/native/libs/System.Globalization.Native/CMakeLists.txt \
@@ -229,6 +268,25 @@ in stdenv.mkDerivation rec {
       src/sdk/src/Tasks/Microsoft.NET.Build.Tasks/targets/Microsoft.NET.Sdk.targets \
       --replace-fail '/usr/bin/codesign' '${sigtool}/bin/codesign'
 
+    # fix: strip: error: unknown argument '-n'
+    substituteInPlace \
+      src/runtime/eng/native/functions.cmake \
+      --replace-fail ' -no_code_signature_warning' ""
+
+    # [...]/installer.singlerid.targets(434,5): error MSB3073: The command "pkgbuild [...]" exited with code 127
+    xmlstarlet ed \
+      --inplace \
+      -s //Project -t elem -n PropertyGroup \
+      -s \$prev -t elem -n SkipInstallerBuild -v true \
+      src/runtime/Directory.Build.props
+  ''
+  + lib.optionalString (lib.versionAtLeast version "9") ''
+    # fix: strip: error: unknown argument '-n'
+    substituteInPlace \
+      src/runtime/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.targets \
+      --replace-fail ' -no_code_signature_warning' ""
+  ''
+  + lib.optionalString (lib.versionOlder version "9") ''
     # [...]/build.proj(123,5): error : Did not find PDBs for the following SDK files:
     # [...]/build.proj(123,5): error : sdk/8.0.102/System.Resources.Extensions.dll
     # [...]/build.proj(123,5): error : sdk/8.0.102/System.CodeDom.dll
@@ -236,27 +294,8 @@ in stdenv.mkDerivation rec {
     # [...]/build.proj(123,5): error : sdk/8.0.102/FSharp/System.CodeDom.dll
     substituteInPlace \
       build.proj \
-      --replace-warn 'FailOnMissingPDBs="true"' 'FailOnMissingPDBs="false"'
-
-    # [...]/installer.singlerid.targets(434,5): error MSB3073: The command "pkgbuild [...]" exited with code 127
-    xmlstarlet ed \
-      --inplace \
-      -s //Project -t elem -n PropertyGroup \
-      -s \$prev -t elem -n InnerBuildArgs -v '$(InnerBuildArgs) /p:SkipInstallerBuild=true' \
-      src/runtime/eng/SourceBuild.props
-
-    # fixes swift errors, see sandboxProfile
-    # <unknown>:0: error: unable to open output file '/var/folders/[...]/C/clang/ModuleCache/[...]/SwiftShims-[...].pcm': 'Operation not permitted'
-    # <unknown>:0: error: could not build Objective-C module 'SwiftShims'
-    substituteInPlace \
-      src/runtime/src/native/libs/System.Security.Cryptography.Native.Apple/CMakeLists.txt \
-      --replace-fail 'xcrun swiftc' 'xcrun swiftc -module-cache-path "$ENV{HOME}/.cache/module-cache"'
-
-    # fix: strip: error: unknown argument '-n'
-    substituteInPlace \
-      src/runtime/eng/native/functions.cmake \
-      --replace-fail ' -no_code_signature_warning' ""
-  '';
+      --replace-fail 'FailOnMissingPDBs="true"' 'FailOnMissingPDBs="false"'
+  '');
 
   prepFlags = [
     "--no-artifacts"
@@ -276,6 +315,11 @@ in stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
+  postConfigure = lib.optionalString (lib.versionAtLeast version "9") ''
+    # see patch-npm-packages.proj
+    typeset -f isScript patchShebangs > src/aspnetcore/patch-shebangs.sh
+  '';
+
   dontUseCmakeConfigure = true;
 
   # https://github.com/NixOS/nixpkgs/issues/38991
@@ -287,6 +331,11 @@ in stdenv.mkDerivation rec {
     "--with-packages" dotnetSdk.artifacts
     "--clean-while-building"
     "--release-manifest" releaseManifestFile
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "9") [
+    "--source-build"
+  ]
+  ++ [
     "--"
     "-p:PortableBuild=true"
   ] ++ lib.optional (targetRid != buildRid) "-p:TargetRid=${targetRid}";
@@ -300,20 +349,25 @@ in stdenv.mkDerivation rec {
 
     # CLR_CC/CXX need to be set to stop the build system from using clang-11,
     # which is unwrapped
+    # dotnet needs to be in PATH to fix:
+    # src/sdk/eng/restore-toolset.sh: line 114: /nix/store/[...]-dotnet-sdk-9.0.100-preview.2.24157.14//.version: Read-only file system
     version= \
     CLR_CC=$(command -v clang) \
     CLR_CXX=$(command -v clang++) \
+    PATH=$PWD/.dotnet:$PATH \
       ./build.sh $buildFlags
 
     runHook postBuild
   '';
 
-  installPhase = ''
+  installPhase = let
+    assets = if (lib.versionAtLeast version "9") then "assets" else targetArch;
+  in ''
     runHook preInstall
 
     mkdir "$out"
 
-    pushd "artifacts/${targetArch}/Release"
+    pushd "artifacts/${assets}/Release"
     for archive in *.tar.gz; do
       target=$out/''${archive%.tar.gz}
       mkdir "$target"

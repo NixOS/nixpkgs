@@ -63,6 +63,15 @@ let
       [[ ! -v prebuiltPackages ]] || ln -sf "$prebuiltPackages"/* prereqs/packages/prebuilt/
     '';
 
+    buildFlags =
+      old.buildFlags
+      ++ lib.optionals (lib.versionAtLeast old.version "9") [
+        # We need to set this as long as we have something in deps.nix. Currently
+        # that's the portable ilasm/ildasm which aren't in the centos sourcebuilt
+        # artifacts.
+        "-p:SkipErrorOnPrebuilts=true"
+      ];
+
     passthru = old.passthru or {} // { fetch-deps =
       let
         inherit (vmr) targetRid updateScript;
