@@ -1,0 +1,34 @@
+diff --git a/cmake/third_party.cmake b/cmake/third_party.cmake
+index 7c086f780a..f6c7aded8b 100755
+--- a/cmake/third_party.cmake
++++ b/cmake/third_party.cmake
+@@ -339,7 +339,6 @@ list(
+   extern_warprnnt
+   extern_threadpool
+   extern_utf8proc)
+-include(external/lapack) # download, build, install lapack
+ 
+ list(APPEND third_party_deps extern_eigen3 extern_gflags extern_glog
+      extern_xxhash)
+@@ -350,8 +349,7 @@ list(
+   extern_dlpack
+   extern_warpctc
+   extern_warprnnt
+-  extern_threadpool
+-  extern_lapack)
++  extern_threadpool)
+ 
+ include(cblas) # find first, then download, build, install openblas
+ 
+diff --git a/paddle/phi/CMakeLists.txt b/paddle/phi/CMakeLists.txt
+index 64c18b2b60..8d80171606 100644
+--- a/paddle/phi/CMakeLists.txt
++++ b/paddle/phi/CMakeLists.txt
+@@ -193,7 +193,6 @@ if(MKL_FOUND AND WITH_ONEMKL)
+   target_include_directories(phi PRIVATE ${MKL_INCLUDE})
+ endif()
+ 
+-add_dependencies(phi extern_lapack)
+ if(WITH_CUTLASS)
+   add_dependencies(phi cutlass_codegen)
+   add_definitions("-DPADDLE_WITH_MEMORY_EFFICIENT_ATTENTION"

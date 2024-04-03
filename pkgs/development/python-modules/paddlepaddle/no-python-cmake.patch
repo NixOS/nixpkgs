@@ -1,0 +1,38 @@
+diff --git a/setup.py b/setup.py
+index 87fd3c65f4..f37ad98cda 100644
+--- a/setup.py
++++ b/setup.py
+@@ -301,21 +301,7 @@ class InstallLib(install_lib):
+ 
+ 
+ def git_commit():
+-    try:
+-        cmd = ['git', 'rev-parse', 'HEAD']
+-        git_commit = (
+-            subprocess.Popen(
+-                cmd,
+-                stdout=subprocess.PIPE,
+-                cwd=env_dict.get("PADDLE_SOURCE_DIR"),
+-            )
+-            .communicate()[0]
+-            .strip()
+-        )
+-    except:
+-        git_commit = 'Unknown'
+-    git_commit = git_commit.decode('utf-8')
+-    return str(git_commit)
++    return "Unknown"
+ 
+ 
+ def _get_version_detail(idx):
+@@ -1667,10 +1653,6 @@ def main():
+ 
+     # check build dependency
+     check_build_dependency()
+-    check_submodules()
+-    # Execute the build process,cmake and make
+-    if cmake_and_build:
+-        build_steps()
+ 
+     if os.getenv("WITH_PYTHON") == "OFF":
+         print("only compile, not package")
