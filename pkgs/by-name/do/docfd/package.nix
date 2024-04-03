@@ -3,13 +3,16 @@
 , fetchFromGitHub
 , python3
 , dune_3
+, makeWrapper
+, pandoc
+, poppler_utils
 , testers
 , docfd
 }:
 
 ocamlPackages.buildDunePackage rec {
   pname = "docfd";
-  version = "3.0.0";
+  version = "4.0.0";
 
   minimalOCamlVersion = "5.1";
 
@@ -17,10 +20,10 @@ ocamlPackages.buildDunePackage rec {
     owner = "darrenldl";
     repo = "docfd";
     rev = version;
-    hash = "sha256-pJ5LlOfC+9NRfY7ng9LAxEnjr+mtJmhRNTo9Im6Lkbo=";
+    hash = "sha256-fgwUXRZ6k5i3XLxXpjbrl0TJZMT+NkGXf7KNwRgi+q8=";
   };
 
-  nativeBuildInputs = [ python3 dune_3 ];
+  nativeBuildInputs = [ python3 dune_3 makeWrapper ];
   buildInputs = with ocamlPackages; [
     cmdliner
     containers-data
@@ -37,6 +40,10 @@ ocamlPackages.buildDunePackage rec {
     yojson
   ];
 
+  postInstall = ''
+    wrapProgram $out/bin/docfd --prefix PATH : "${lib.makeBinPath [ pandoc poppler_utils ]}"
+  '';
+
   passthru.tests.version = testers.testVersion {
     package = docfd;
   };
@@ -44,14 +51,10 @@ ocamlPackages.buildDunePackage rec {
   meta = with lib; {
     description = "TUI multiline fuzzy document finder";
     longDescription = ''
-      Think interactive grep for both text and other document files, but
-      word/token based instead of regex and line based, so you can search
-      across lines easily. Aims to provide good UX via integration with
-      common text editors and other file viewers.
-      Optional dependencies:
-        fzf - for fuzzy file picker with "docfd ?".
-        poppler_utils - for pdf search.
-        pandoc - for .epub, .odt, .docx, .fb2, .ipynb, .html, & .htm files.
+      Think interactive grep for text and other document files.
+      Word/token based instead of regex and line based, so you
+      can search across lines easily. Aims to provide good UX via
+      integration with common text editors and other file viewers.
     '';
     homepage = "https://github.com/darrenldl/docfd";
     license = licenses.mit;
