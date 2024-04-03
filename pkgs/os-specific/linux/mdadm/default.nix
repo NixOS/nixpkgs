@@ -9,7 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-QWcnrh8QgOpuMJDOo23QdoJvw2kVHjarc2VXupIZb58=";
   };
 
-  patches = [ ./no-self-references.patch ];
+  patches = [
+    ./no-self-references.patch
+    ./fix-hardcoded-mapdir.patch
+  ];
 
   makeFlags = [
     "NIXOS=1" "INSTALL=install" "BINDIR=$(out)/sbin"
@@ -46,7 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Programs for managing RAID arrays under Linux";
-    homepage = "http://neil.brown.name/blog/mdadm";
+    homepage = "https://git.kernel.org/pub/scm/utils/mdadm/mdadm.git";
     license = licenses.gpl2;
     mainProgram = "mdadm";
     maintainers = with maintainers; [ ekleog ];
