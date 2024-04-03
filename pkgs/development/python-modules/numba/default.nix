@@ -73,8 +73,8 @@ in buildPythonPackage rec {
     cudaPackages.cuda_nvcc
   ];
 
-  buildInputs = with cudaPackages; [
-    cuda_cudart
+  buildInputs = lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
   ];
 
   propagatedBuildInputs = [
