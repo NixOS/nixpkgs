@@ -24,8 +24,8 @@ extendcudaHostPathsSeen() {
     (( "${NIX_DEBUG:-0}" >= 1 )) && echo "extendcudaHostPathsSeen $1" >&2
 
     local markerPath="$1/nix-support/include-in-cudatoolkit-root"
-    [[ ! -f "${markerPath}" ]] && return
-    [[ -v cudaHostPathsSeen[$1] ]] && return
+    [[ ! -f "${markerPath}" ]] && return 0
+    [[ -v cudaHostPathsSeen[$1] ]] && return 0
 
     cudaHostPathsSeen["$1"]=1
 
@@ -33,7 +33,7 @@ extendcudaHostPathsSeen() {
     local cudaOutputName
     read -r cudaOutputName < "$markerPath"
 
-    [[ -z "$cudaOutputName" ]] && return
+    [[ -z "$cudaOutputName" ]] && return 0
 
     local oldPath="${cudaOutputToPath[$cudaOutputName]-}"
     [[ -n "$oldPath" ]] && echo "extendcudaHostPathsSeen: warning: overwriting $cudaOutputName from $oldPath to $1" >&2
@@ -59,7 +59,7 @@ setupCUDAToolkitCompilers() {
     echo Executing setupCUDAToolkitCompilers >&2
 
     if [[ -n "${dontSetupCUDAToolkitCompilers-}" ]] ; then
-        return
+        return 0
     fi
 
     # Point NVCC at a compatible compiler
@@ -99,7 +99,7 @@ preConfigureHooks+=(setupCUDAToolkitCompilers)
 propagateCudaLibraries() {
     (( "${NIX_DEBUG:-0}" >= 1 )) && echo "propagateCudaLibraries: cudaPropagateToOutput=$cudaPropagateToOutput cudaHostPathsSeen=${!cudaHostPathsSeen[*]}" >&2
 
-    [[ -z "${cudaPropagateToOutput-}" ]] && return
+    [[ -z "${cudaPropagateToOutput-}" ]] && return 0
 
     mkdir -p "${!cudaPropagateToOutput}/nix-support"
     # One'd expect this should be propagated-bulid-build-deps, but that doesn't seem to work
