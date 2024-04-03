@@ -22,6 +22,7 @@
     "solana-log-analyzer"
     "solana-net-shaper"
     "solana-validator"
+    "solana-test-validator"
 ] ++ [
     # XXX: Ensure `solana-genesis` is built LAST!
     # See https://github.com/solana-labs/solana/issues/5826
@@ -29,8 +30,8 @@
   ]
 }:
 let
-  version = "1.16.27";
-  sha256 = "sha256-xd0FCSlpPJDVWOlt9rIlnSbjksmvlXJWHkvlZONd2dM=";
+  version = "1.17.28";
+  sha256 = "y79zsUfYsX377ofsFSg9a2il99uJsA+qdCu3J+EU5nQ=";
 
   inherit (darwin.apple_sdk_11_0) Libsystem;
   inherit (darwin.apple_sdk_11_0.frameworks) System IOKit AppKit Security;
@@ -51,15 +52,9 @@ rustPlatform.buildRustPackage rec {
 
     outputHashes = {
       "crossbeam-epoch-0.9.5" = "sha256-Jf0RarsgJiXiZ+ddy0vp4jQ59J9m0k3sgXhWhCdhgws=";
-      "ntapi-0.3.7" = "sha256-G6ZCsa3GWiI/FeGKiK9TWkmTxen7nwpXvm5FtjNtjWU=";
+      "tokio-1.29.1" = "sha256-Z/kewMCqkPVTXdoBcSaFKG5GSQAdkdpj3mAzLLCjjGk=";
     };
   };
-
-  patches = [
-    # Fix: https://github.com/solana-labs/solana/issues/34203
-    # From https://github.com/Homebrew/homebrew-core/pull/156930/files#diff-f27c55b86df31cd4935c956efee1be743eae0958e3850f3f9891d51bfea50b1cR76
-    ./account-info.patch
-  ];
 
   strictDeps = true;
   cargoBuildFlags = builtins.map (n: "--bin=${n}") solanaPkgs;
