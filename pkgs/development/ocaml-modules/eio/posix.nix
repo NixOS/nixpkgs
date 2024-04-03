@@ -1,4 +1,6 @@
-{ buildDunePackage
+{ lib
+, stdenv
+, buildDunePackage
 , dune-configurator
 , eio
 , fmt
@@ -24,4 +26,6 @@ buildDunePackage {
     logs
     iomux
   ];
+
+  hardeningDisable = lib.optional stdenv.isDarwin "strictoverflow";
 }
