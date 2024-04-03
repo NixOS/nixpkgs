@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, chameleon
-, click
-, fetchFromGitHub
-, polib
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  chameleon,
+  click,
+  fetchFromGitHub,
+  polib,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-kr64L/DtEWZu9z2p90QJHnb/6LygwZgxE+rARbo0NYI=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     chameleon
@@ -33,13 +32,9 @@ buildPythonPackage rec {
     polib
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "lingva"
-  ];
+  pythonImportsCheck = [ "lingva" ];
 
   meta = with lib; {
     description = "Module with tools to extract translatable texts from your code";
