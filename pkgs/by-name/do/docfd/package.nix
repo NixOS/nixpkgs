@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , python3
 , dune_3
+, testers
+, docfd
 }:
 
 ocamlPackages.buildDunePackage rec {
@@ -34,6 +36,10 @@ ocamlPackages.buildDunePackage rec {
     timedesc
     yojson
   ];
+
+  passthru.tests.version = testers.testVersion {
+    package = docfd;
+  };
 
   meta = with lib; {
     description = "TUI multiline fuzzy document finder";
