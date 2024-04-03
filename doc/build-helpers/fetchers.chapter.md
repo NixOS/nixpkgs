@@ -25,6 +25,7 @@ The following table summarises the differences:
 
 :::{.tip}
 `pkgs.fetchFrom*` helpers retrieve _snapshots_ of version-controlled sources, as opposed to the entire version history, which is more efficient.
+`pkgs.fetchgit` by default also has the same behaviour, but can be changed through specific attributes given to it.
 :::
 
 ## Caveats {#chap-pkgs-fetchers-caveats}
@@ -51,35 +52,7 @@ This has the following implications that you should be aware of:
 There are several ways to obtain the hash corresponding to a remote source.
 Unless you understand how the fetcher you're using calculates the hash from the downloaded contents, you should use [the fake hash method](#sec-pkgs-fetchers-updating-source-hashes-fakehash-method).
 
-1. Prefetch the source with [`nix-prefetch-<type> <URL>`](https://search.nixos.org/packages?buckets={%22package_attr_set%22%3A[%22No%20package%20set%22]%2C%22package_license_set%22%3A[]%2C%22package_maintainers_set%22%3A[]%2C%22package_platforms%22%3A[]}&query=nix-prefetch), where `<type>` is one of
-
-   - `url`
-   - `git`
-   - `hg`
-   - `cvs`
-   - `bzr`
-   - `svn`
-
-  The hash is printed to stdout.
-
-2. Prefetch by package source (with `nix-prefetch-url '<nixpkgs>' -A <package>.src`, where `<package>` is package attribute name).
-   The hash is printed to stdout.
-
-   This works well when you've upgraded the existing package version and want to find out new hash, but is useless if the package can't be accessed by attribute or the package has multiple sources (`.srcs`, architecture-dependent sources, etc).
-
-3. Upstream hash: use it when upstream provides `sha256` or `sha512`.
-   Don't use it when upstream provides `md5`, compute `sha256` instead.
-
-   A little nuance is that `nix-prefetch-*` tools produce hashes with the `nix32` encoding (a Nix-specific base32 adaptation), but upstream usually provides hexadecimal (`base16`) encoding.
-   Fetchers understand both formats.
-   Nixpkgs does not standardise on any one format.
-
-   You can convert between hash formats with [`nix-hash`](https://nixos.org/manual/nix/stable/command-ref/nix-hash).
-
-4. Extract the hash from a local source archive with `sha256sum`.
-   Use `nix-prefetch-url file:///path/to/archive` if you want the custom Nix `base32` hash.
-
-5. []{#sec-pkgs-fetchers-updating-source-hashes-fakehash-method} In your package recipe, set the hash to one of
+1. []{#sec-pkgs-fetchers-updating-source-hashes-fakehash-method} The fake hash method: In your package recipe, set the hash to one of
 
    - `""`
    - `lib.fakeHash`
@@ -93,52 +66,79 @@ Unless you understand how the fetcher you're using calculates the hash from the 
    See [](#sec-pkgs-fetchers-secure-hashes) for details.
    :::
 
-:::{.example #ex-fetchers-update-fod-hash}
+   :::{.example #ex-fetchers-update-fod-hash}
+   # Update source hash with the fake hash method
 
-# Update source hash with the fake hash method
+   Consider the following recipe that produces a plain file:
 
-Consider the following recipe that produces a plain file:
+   ```nix
+   { fetchurl }:
+   fetchurl {
+     url = "https://raw.githubusercontent.com/NixOS/nixpkgs/23.05/.version";
+     hash = "sha256-ZHl1emidXVojm83LCVrwULpwIzKE/mYwfztVkvpruOM=";
+   }
+   ```
 
-```nix
-{ fetchurl }:
-fetchurl {
-  url = "https://raw.githubusercontent.com/NixOS/nixpkgs/23.05/.version";
-  hash = "sha256-ZHl1emidXVojm83LCVrwULpwIzKE/mYwfztVkvpruOM=";
-}
-```
+   A common mistake is to update a fetcher parameter, such as `url`, without updating the hash:
 
-A common mistake is to update a fetcher parameter, such as `url`, without updating the hash:
+   ```nix
+   { fetchurl }:
+   fetchurl {
+     url = "https://raw.githubusercontent.com/NixOS/nixpkgs/23.11/.version";
+     hash = "sha256-ZHl1emidXVojm83LCVrwULpwIzKE/mYwfztVkvpruOM=";
+   }
+   ```
 
-```nix
-{ fetchurl }:
-fetchurl {
-  url = "https://raw.githubusercontent.com/NixOS/nixpkgs/23.11/.version";
-  hash = "sha256-ZHl1emidXVojm83LCVrwULpwIzKE/mYwfztVkvpruOM=";
-}
-```
+   **This will produce the same output as before!**
+   Set the hash to an empty string:
 
-**This will produce the same output as before!**
-Set the hash to an empty string:
+   ```nix
+   { fetchurl }:
+   fetchurl {
+     url = "https://raw.githubusercontent.com/NixOS/nixpkgs/23.11/.version";
+     hash = "";
+   }
+   ```
 
-```nix
-{ fetchurl }:
-fetchurl {
-  url = "https://raw.githubusercontent.com/NixOS/nixpkgs/23.11/.version";
-  hash = "";
-}
-```
+   When building the package, use the error message to determine the correct hash:
 
-When building the package, use the error message to determine the correct hash:
+   ```shell
+   $ nix-build
+   (some output removed for clarity)
+   error: hash mismatch in fixed-output derivation '/nix/store/7yynn53jpc93l76z9zdjj4xdxgynawcw-version.drv':
+           specified: sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+               got:    sha256-BZqI7r0MNP29yGH5+yW2tjU9OOpOCEvwWKrWCv5CQ0I=
+   error: build of '/nix/store/bqdjcw5ij5ymfbm41dq230chk9hdhqff-version.drv' failed
+   ```
+   :::
 
-```shell
-$ nix-build
-(some output removed for clarity)
-error: hash mismatch in fixed-output derivation '/nix/store/7yynn53jpc93l76z9zdjj4xdxgynawcw-version.drv':
-         specified: sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
-            got:    sha256-BZqI7r0MNP29yGH5+yW2tjU9OOpOCEvwWKrWCv5CQ0I=
-error: build of '/nix/store/bqdjcw5ij5ymfbm41dq230chk9hdhqff-version.drv' failed
-```
-:::
+2. Prefetch the source with [`nix-prefetch-<type> <URL>`](https://search.nixos.org/packages?buckets={%22package_attr_set%22%3A[%22No%20package%20set%22]%2C%22package_license_set%22%3A[]%2C%22package_maintainers_set%22%3A[]%2C%22package_platforms%22%3A[]}&query=nix-prefetch), where `<type>` is one of
+
+   - `url`
+   - `git`
+   - `hg`
+   - `cvs`
+   - `bzr`
+   - `svn`
+
+   The hash is printed to stdout.
+
+3. Prefetch by package source (with `nix-prefetch-url '<nixpkgs>' -A <package>.src`, where `<package>` is package attribute name).
+   The hash is printed to stdout.
+
+   This works well when you've upgraded the existing package version and want to find out new hash, but is useless if the package can't be accessed by attribute or the package has multiple sources (`.srcs`, architecture-dependent sources, etc).
+
+4. Upstream hash: use it when upstream provides `sha256` or `sha512`.
+   Don't use it when upstream provides `md5`, compute `sha256` instead.
+
+   A little nuance is that `nix-prefetch-*` tools produce hashes with the `nix32` encoding (a Nix-specific base32 adaptation), but upstream usually provides hexadecimal (`base16`) encoding.
+   Fetchers understand both formats.
+   Nixpkgs does not standardise on any one format.
+
+   You can convert between hash formats with [`nix-hash`](https://nixos.org/manual/nix/stable/command-ref/nix-hash).
+
+5. Extract the hash from a local source archive with `sha256sum`.
+   Use `nix-prefetch-url file:///path/to/archive` if you want the custom Nix `base32` hash.
 
 ## Obtaining hashes securely {#sec-pkgs-fetchers-secure-hashes}
 
@@ -154,6 +154,8 @@ Here are security considerations for this scenario:
 
 - `https://` URLs are secure when using the [fake hash method](#sec-pkgs-fetchers-updating-source-hashes-fakehash-method) *only if* you use one of the listed fake hashes.
   If you use any other hash, the download will be exposed to MITM attacks even if you use HTTPS URLs.
+
+  In more concrete terms, if you use any other hash, the [`--insecure` flag](https://curl.se/docs/manpage.html#-k) will be passed to the underlying call to `curl` when downloading content.
 
 ## `fetchurl` and `fetchzip` {#fetchurl}
 

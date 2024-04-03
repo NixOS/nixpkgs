@@ -406,8 +406,8 @@ Always fetch source files using [Nixpkgs fetchers](https://nixos.org/manual/nixp
 Use reproducible sources with a high degree of availability.
 Prefer protocols that support proxies.
 
-Currently only [`fetchurl`](https://nixos.org/manual/nixpkgs/unstable/#fetchurl) has mirroring support.
-A list of schemes for `mirror://` URLs can be found in [`pkgs/build-support/fetchurl/mirrors.nix`](build-support/fetchurl/mirrors.nix).
+A list of schemes for `mirror://` URLs can be found in [`pkgs/build-support/fetchurl/mirrors.nix`](build-support/fetchurl/mirrors.nix), and is supported by [`fetchurl`](https://nixos.org/manual/nixpkgs/unstable/#fetchurl).
+Other fetchers which end up relying on `fetchurl` may also support mirroring.
 
 The preferred source hash type is `sha256`.
 
