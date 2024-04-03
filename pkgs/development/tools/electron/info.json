@@ -3,10 +3,10 @@
         "deps": {
             "src/electron": {
                 "fetcher": "fetchFromGitHub",
-                "hash": "sha256-jvrXVi/l7KBIoHYoWhFq4Kd3nZQ9XGoKjXAHdAj3yxM=",
+                "hash": "sha256-fu2/PUgZZR8OWtD04X31RaLHkhF5QeHvtdg1UX3SoBw=",
                 "owner": "electron",
                 "repo": "electron",
-                "rev": "v28.2.6"
+                "rev": "v28.2.10"
             },
             "src": {
                 "fetcher": "fetchFromGitiles",
@@ -873,7 +873,7 @@
                 "rev": "78d3966b3c331292ea29ec38661b25df0a245948"
             }
         },
-        "version": "28.2.6",
+        "version": "28.2.10",
         "modules": "119",
         "chrome": "120.0.6099.291",
         "node": "18.18.2",
@@ -888,8 +888,8 @@
                 }
             }
         },
-        "electron_yarn_hash": "117vxam1044yy2akwjfhvb5dpfnv667pwbg92ac43551xfn0slcg",
-        "chromium_npm_hash": "sha256-zexxXAAJDnhMmh7HfBO1V1z1Yds06C3gSpXacsbjUb4="
+        "chromium_npm_hash": "sha256-zexxXAAJDnhMmh7HfBO1V1z1Yds06C3gSpXacsbjUb4=",
+        "electron_yarn_hash": "117vxam1044yy2akwjfhvb5dpfnv667pwbg92ac43551xfn0slcg"
     },
     "27": {
         "deps": {
