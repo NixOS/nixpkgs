@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, microsoft-kiota-abstractions
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  microsoft-kiota-abstractions,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
-  pname = "kiota-serialization-text";
+  pname = "microsoft-kiota-serialization-text";
   version = "1.0.0";
   pyproject = true;
 
@@ -24,11 +25,9 @@ buildPythonPackage rec {
     hash = "sha256-jPuRfvqO4n5/PjSOS5NMCawaYRhXmrZtfg6LgYFCv7o=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     microsoft-kiota-abstractions
     python-dateutil
   ];
@@ -39,9 +38,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "kiota_serialization_text"
-  ];
+  pythonImportsCheck = [ "kiota_serialization_text" ];
 
   meta = with lib; {
     description = "Text serialization implementation for Kiota generated clients in Python";

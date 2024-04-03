@@ -3,53 +3,47 @@
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
-  httpx,
   microsoft-kiota-abstractions,
-  opentelemetry-api,
-  opentelemetry-sdk,
   pytest-asyncio,
+  pendulum,
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
-  urllib3,
 }:
 
 buildPythonPackage rec {
-  pname = "microsoft-kiota-http";
-  version = "1.3.1";
+  pname = "microsoft-kiota-serialization-form";
+  version = "0.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "microsoft";
-    repo = "kiota-http-python";
+    repo = "kiota-serialization-form-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-I16WARk6YBr8KgE9MtHcA5VdsnLXBKcZOaqRL/eqwKE=";
+    hash = "sha256-ecFspbCaSkRoQTTeyZdqGpWSKiQJS6viDgBVNDHPo4g=";
   };
 
   build-system = [ flit-core ];
 
   dependencies = [
-    httpx
     microsoft-kiota-abstractions
-    opentelemetry-api
-    opentelemetry-sdk
-  ] ++ httpx.optional-dependencies.http2;
+    pendulum
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytest-mock
     pytestCheckHook
-    urllib3
   ];
 
-  pythonImportsCheck = [ "kiota_http" ];
+  pythonImportsCheck = [ "kiota_serialization_form" ];
 
   meta = with lib; {
-    description = "HTTP request adapter implementation for Kiota clients for Python";
-    homepage = "https://github.com/microsoft/kiota-http-python";
-    changelog = "https://github.com/microsoft/kiota-http-python/blob/${version}/CHANGELOG.md";
+    description = "Form serialization implementation for Kiota clients in Python";
+    homepage = "https://github.com/microsoft/kiota-serialization-form-python";
+    changelog = "https://github.com/microsoft/kiota-serialization-form-python/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
