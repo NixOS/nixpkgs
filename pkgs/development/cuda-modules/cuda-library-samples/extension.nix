@@ -1,5 +1,12 @@
-{ hostPlatform, lib }:
+{
+  lib,
+  # NOTE: We would use backendStdenv to get the hostPlatform, but it's not available in the callPackage context
+  # we're using to call this file.
+  stdenv,
+}:
 let
+  inherit (stdenv) hostPlatform;
+
   # Samples are built around the CUDA Toolkit, which is not available for
   # aarch64. Check for both CUDA version and platform.
   platformIsSupported = hostPlatform.isx86_64 && hostPlatform.isLinux;

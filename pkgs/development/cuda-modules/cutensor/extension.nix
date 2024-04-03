@@ -15,9 +15,11 @@
 {
   cudaVersion,
   flags,
-  hostPlatform,
   lib,
   mkVersionedPackageName,
+  # NOTE: We would use backendStdenv to get the hostPlatform, but it's not available in the callPackage context
+  # we're using to call this file.
+  stdenv,
 }:
 let
   inherit (lib)
@@ -28,6 +30,8 @@ let
     strings
     trivial
     ;
+
+  inherit (stdenv) hostPlatform;
 
   redistName = "cutensor";
   pname = "libcutensor";
