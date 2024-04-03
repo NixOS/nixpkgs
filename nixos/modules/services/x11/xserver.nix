@@ -111,7 +111,7 @@ let
     }
       ''
         echo 'Section "Files"' >> $out
-        echo $fontpath >> $out
+        echo "$fontpath" >> $out
 
         for i in ${toString fontsForXServer}; do
           if test "''${i:0:''${#NIX_STORE}}" == "$NIX_STORE"; then
@@ -121,11 +121,9 @@ let
           fi
         done
 
-        for i in $(find ${toString cfg.modules} -type d | sort); do
-          if test $(echo $i/*.so* | wc -w) -ne 0; then
-            echo "  ModulePath \"$i\"" >> $out
-          fi
-        done
+        ${concatMapStrings (m: ''
+        echo "  ModulePath \"${m}/lib/xorg/modules\"" >> "$out"
+        '') cfg.modules}
 
         echo '${cfg.filesSection}' >> $out
         echo 'EndSection' >> $out

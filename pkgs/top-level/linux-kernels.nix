@@ -214,8 +214,6 @@ in {
         kernelPatches = [
           kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
-          kernelPatches.rust_1_75
-          kernelPatches.rust_1_76
         ];
       };
       latest = packageAliases.linux_latest.kernel;
@@ -542,9 +540,7 @@ in {
       virtualbox = pkgs.virtualboxHardened;
     };
 
-    virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions {
-      virtualbox = pkgs.virtualboxHardened;
-    };
+    virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions { };
 
     vm-tools = callPackage ../os-specific/linux/vm-tools { };
 

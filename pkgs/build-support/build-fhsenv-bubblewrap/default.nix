@@ -31,10 +31,20 @@
 
 assert (pname != null || version != null) -> (name == null && pname != null); # You must declare either a name or pname + version (preferred).
 
-with builtins;
 let
+  inherit (lib)
+    concatLines
+    concatStringsSep
+    escapeShellArgs
+    filter
+    optionalString
+    splitString
+    ;
+
+  inherit (lib.attrsets) removeAttrs;
+
   pname = if args ? name && args.name != null then args.name else args.pname;
-  versionStr = lib.optionalString (version != null) ("-" + version);
+  versionStr = optionalString (version != null) ("-" + version);
   name = pname + versionStr;
 
   buildFHSEnv = callPackage ./buildFHSEnv.nix { };
@@ -116,10 +126,10 @@ let
     exec ${run} "$@"
   '';
 
-  indentLines = str: lib.concatLines (map (s: "  " + s) (filter (s: s != "") (lib.splitString "\n" str)));
+  indentLines = str: concatLines (map (s: "  " + s) (filter (s: s != "") (splitString "\n" str)));
   bwrapCmd = { initArgs ? "" }: ''
     ${extraPreBwrapCmds}
-    ignored=(/nix /dev /proc /etc ${lib.optionalString privateTmp "/tmp"})
+    ignored=(/nix /dev /proc /etc ${optionalString privateTmp "/tmp"})
     ro_mounts=()
     symlinks=()
     etc_ignored=()
@@ -164,7 +174,7 @@ let
     fi
 
     # link selected etc entries from the actual root
-    for i in ${lib.escapeShellArgs etcBindEntries}; do
+    for i in ${escapeShellArgs etcBindEntries}; do
       if [[ "''${etc_ignored[@]}" =~ "$i" ]]; then
         continue
       fi
@@ -195,7 +205,7 @@ let
       x11_args+=(--ro-bind-try "$local_socket" "$local_socket")
     fi
 
-    ${lib.optionalString privateTmp ''
+    ${optionalString privateTmp ''
     # sddm places XAUTHORITY in /tmp
     if [[ "$XAUTHORITY" == /tmp/* ]]; then
       x11_args+=(--ro-bind-try "$XAUTHORITY" "$XAUTHORITY")
@@ -220,15 +230,15 @@ let
       --dev-bind /dev /dev
       --proc /proc
       --chdir "$(pwd)"
-      ${lib.optionalString unshareUser "--unshare-user"}
-      ${lib.optionalString unshareIpc "--unshare-ipc"}
-      ${lib.optionalString unsharePid "--unshare-pid"}
-      ${lib.optionalString unshareNet "--unshare-net"}
-      ${lib.optionalString unshareUts "--unshare-uts"}
-      ${lib.optionalString unshareCgroup "--unshare-cgroup"}
-      ${lib.optionalString dieWithParent "--die-with-parent"}
+      ${optionalString unshareUser "--unshare-user"}
+      ${optionalString unshareIpc "--unshare-ipc"}
+      ${optionalString unsharePid "--unshare-pid"}
+      ${optionalString unshareNet "--unshare-net"}
+      ${optionalString unshareUts "--unshare-uts"}
+      ${optionalString unshareCgroup "--unshare-cgroup"}
+      ${optionalString dieWithParent "--die-with-parent"}
       --ro-bind /nix /nix
-      ${lib.optionalString privateTmp "--tmpfs /tmp"}
+      ${optionalString privateTmp "--tmpfs /tmp"}
       # Our glibc will look for the cache in its own path in `/nix/store`.
       # As such, we need a cache to exist there, because pressure-vessel
       # depends on the existence of an ld cache. However, adding one
@@ -242,7 +252,7 @@ let
       --symlink /etc/ld.so.cache ${glibc}/etc/ld.so.cache \
       --ro-bind ${glibc}/etc/rpc ${glibc}/etc/rpc \
       --remount-ro ${glibc}/etc \
-  '' + lib.optionalString (stdenv.isx86_64 && stdenv.isLinux) (indentLines ''
+  '' + optionalString (stdenv.isx86_64 && stdenv.isLinux) (indentLines ''
       --tmpfs ${pkgsi686Linux.glibc}/etc \
       --symlink /etc/ld.so.conf ${pkgsi686Linux.glibc}/etc/ld.so.conf \
       --symlink /etc/ld.so.cache ${pkgsi686Linux.glibc}/etc/ld.so.cache \

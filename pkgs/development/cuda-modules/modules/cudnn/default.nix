@@ -1,4 +1,4 @@
-{options, ...}:
+{ options, ... }:
 {
   options.cudnn.releases = options.generic.releases;
   # TODO(@connorbaker): Figure out how to add additional options to the

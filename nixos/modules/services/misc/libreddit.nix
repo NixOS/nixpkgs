@@ -47,7 +47,7 @@ in
         after = [ "network.target" ];
         serviceConfig = {
           DynamicUser = true;
-          ExecStart = "${cfg.package}/bin/libreddit ${args}";
+          ExecStart = "${lib.getExe cfg.package} ${args}";
           AmbientCapabilities = lib.mkIf (cfg.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
           Restart = "on-failure";
           RestartSec = "2s";

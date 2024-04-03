@@ -31,10 +31,8 @@ buildGoModule {
   subPackages = [ "cmd/incus" ];
 
   postInstall = ''
-    # use custom bash completion as it has extra logic for e.g. instance names
-    installShellCompletion --bash --name incus ./scripts/bash/incus
-
     installShellCompletion --cmd incus \
+      --bash <($out/bin/incus completion bash) \
       --fish <($out/bin/incus completion fish) \
       --zsh <($out/bin/incus completion zsh)
   '';

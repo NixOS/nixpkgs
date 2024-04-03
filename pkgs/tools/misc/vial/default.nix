@@ -27,7 +27,7 @@ appimageTools.wrapType2 {
     description = "An Open-source GUI and QMK fork for configuring your keyboard in real time";
     homepage = "https://get.vial.today";
     license = lib.licenses.gpl2Plus;
-    mainProgram = "vial";
+    mainProgram = "Vial";
     maintainers = with lib.maintainers; [ kranzes ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

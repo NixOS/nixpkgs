@@ -70,6 +70,9 @@ buildPythonPackage rec {
     overrides
   ];
 
+  # https://github.com/NixOS/nixpkgs/issues/299427
+  stripExclude = lib.optionals stdenv.isDarwin [ "favicon.ico" ];
+
   nativeCheckInputs = [
     ipykernel
     pytestCheckHook

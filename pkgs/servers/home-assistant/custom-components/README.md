@@ -37,7 +37,7 @@ buildHomeAssistantComponent {
 
   meta = with lib; {
     # changelog, description, homepage, license, maintainers
-  }
+  };
 }
 ```
 

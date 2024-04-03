@@ -23,7 +23,7 @@ synapse server for the `example.org` domain, served from
 the host `myhostname.example.org`. For more information,
 please refer to the
 [installation instructions of Synapse](https://element-hq.github.io/synapse/latest/setup/installation.html) .
-```
+```nix
 { pkgs, lib, config, ... }:
 let
   fqdn = "${config.networking.hostName}.${config.networking.domain}";
@@ -158,7 +158,7 @@ in an additional file like this:
     by `matrix-synapse`.
   - Include the file like this in your configuration:
 
-    ```
+    ```nix
     {
       services.matrix-synapse.extraConfigFiles = [
         "/run/secrets/matrix-shared-secret"
@@ -190,7 +190,7 @@ fill in the required connection details automatically when you enter your
 Matrix Identifier. See
 [Try Matrix Now!](https://matrix.org/docs/projects/try-matrix-now.html)
 for a list of existing clients and their supported featureset.
-```
+```nix
 {
   services.nginx.virtualHosts."element.${fqdn}" = {
     enableACME = true;

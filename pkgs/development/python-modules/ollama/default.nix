@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "ollama";
-  version = "0.1.7";
+  version = "0.1.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "ollama";
     repo = "ollama-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xNH9kAjSdVXrCI7zkyR7tYxJ/NG8/08ykkDZQJI8Za4=";
+    hash = "sha256-hMNoWalUL+5FzmV5ICj7Zl6cTWzE6xGWfTf5++c36+E=";
   };
 
   postPatch = ''
@@ -34,12 +34,12 @@ buildPythonPackage rec {
     "httpx"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
   ];
 

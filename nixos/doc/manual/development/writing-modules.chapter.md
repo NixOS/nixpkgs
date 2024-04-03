@@ -28,7 +28,7 @@ NixOS modules:
 ```nix
 { config, pkgs, ... }:
 
-{ option definitions
+{ # option definitions
 }
 ```
 
@@ -43,15 +43,15 @@ is shown in [Example: Structure of NixOS Modules](#ex-module-syntax).
 
 {
   imports =
-    [ paths of other modules
+    [ # paths of other modules
     ];
 
   options = {
-    option declarations
+    # option declarations
   };
 
   config = {
-    option definitions
+    # option definitions
   };
 }
 ```

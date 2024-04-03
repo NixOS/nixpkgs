@@ -8,23 +8,15 @@ release () {
   local content="$1"
   local version="$2"
 
-  jq -r '.releases[] | select(.sdks[] | ."version" == "'"$version"'")' <<< "$content"
+  jq -r '.releases[] | select(."release-version" == "'"$version"'")' <<< "$content"
 }
 
 release_files () {
   local release="$1"
-  local type="$2"
+  local expr="$2"
 
-  jq -r '[."'"$type"'".files[] | select(.name | test("^.*.tar.gz$"))]' <<< "$release"
+  jq -r '[('"$expr"').files[] | select(.name | test("^.*.tar.gz$"))]' <<< "$release"
 }
-
-sdk_files () {
-  local release="$1"
-  local version="$2"
-
-  jq -r '[.sdks[] | select(.version == "'"$version"'") | .files[] | select(.name | test("^.*.tar.gz$"))]' <<< "$release"
-}
-
 
 release_platform_attr () {
   local release_files="$1"
@@ -328,7 +320,7 @@ Examples:
     # If so, generate file for the specific version.
     # If only x.y version was provided, get the latest patch
     # version of the given x.y version.
-    if [[ "$sem_version" =~ ^[0-9]{1,}\.[0-9]{1,}\.[0-9]{1,}$ ]]; then
+    if [[ "$sem_version" =~ ^[0-9]{1,}\.[0-9]{1,}\.[0-9]{1,} ]]; then
         patch_specified=true
     elif [[ ! "$sem_version" =~ ^[0-9]{1,}\.[0-9]{1,}$ ]]; then
         continue
@@ -338,42 +330,40 @@ Examples:
     # Then get the json file and parse it to find the latest patch release.
     major_minor=$(sed 's/^\([0-9]*\.[0-9]*\).*$/\1/' <<< "$sem_version")
     content=$(curl -sL https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/"$major_minor"/releases.json)
-    major_minor_patch=$([ "$patch_specified" == true ] && echo "$sem_version" || jq -r '."latest-sdk"' <<< "$content")
+    major_minor_patch=$([ "$patch_specified" == true ] && echo "$sem_version" || jq -r '."latest-release"' <<< "$content")
     major_minor_underscore=${major_minor/./_}
 
-    sdk_version=$major_minor_patch
-    release_content=$(release "$content" "$sdk_version")
+    release_content=$(release "$content" "$major_minor_patch")
     aspnetcore_version=$(jq -r '."aspnetcore-runtime".version' <<< "$release_content")
     runtime_version=$(jq -r '.runtime.version' <<< "$release_content")
+    mapfile -t sdk_versions < <(jq -r '.sdks[] | .version' <<< "$release_content" | sort -rn)
 
     # If patch was not specified, check if the package is already the latest version
     # If it is, exit early
     if [ "$patch_specified" == false ] && [ -f "./versions/${sem_version}.nix" ]; then
         current_version=$(nix-instantiate --eval -E "(import ./versions/${sem_version}.nix { \
             buildAspNetCore = { ... }: {}; \
+            buildNetSdk = { ... }: {}; \
             buildNetRuntime = { ... }: {}; \
-            buildNetSdk = { version, ... }: version; \
-            }).sdk_${major_minor_underscore}" | jq -r)
+            }).release_${major_minor_underscore}" | jq -r)
 
-        if [[ "$current_version" == "$sdk_version" ]]; then
+        if [[ "$current_version" == "$major_minor_patch" ]]; then
             echo "Nothing to update."
-            exit
+            continue
         fi
     fi
 
-    aspnetcore_files="$(release_files "$release_content" "aspnetcore-runtime")"
-    runtime_files="$(release_files "$release_content" "runtime")"
-    sdk_files="$(sdk_files "$release_content" "$sdk_version")"
+    aspnetcore_files="$(release_files "$release_content" .\"aspnetcore-runtime\")"
+    runtime_files="$(release_files "$release_content" .runtime)"
 
     channel_version=$(jq -r '."channel-version"' <<< "$content")
     support_phase=$(jq -r '."support-phase"' <<< "$content")
 
     aspnetcore_sources="$(platform_sources "$aspnetcore_files")"
     runtime_sources="$(platform_sources "$runtime_files")"
-    sdk_sources="$(platform_sources "$sdk_files")"
 
-    aspnetcore_packages="$(aspnetcore_packages "${aspnetcore_version}")"
     sdk_packages="$(sdk_packages "${runtime_version}")"
+    aspnetcore_packages="$(aspnetcore_packages "${aspnetcore_version}")"
 
     result=$(mktemp)
     trap "rm -f $result" TERM INT EXIT
@@ -381,7 +371,15 @@ Examples:
     echo "{ buildAspNetCore, buildNetRuntime, buildNetSdk }:
 
 # v$channel_version ($support_phase)
-{
+
+let
+  packages = { fetchNuGet }: [
+$aspnetcore_packages
+$sdk_packages
+  ];
+in rec {
+  release_$major_minor_underscore = \"$major_minor_patch\";
+
   aspnetcore_$major_minor_underscore = buildAspNetCore {
     version = \"${aspnetcore_version}\";
     $aspnetcore_sources
@@ -390,17 +388,33 @@ Examples:
   runtime_$major_minor_underscore = buildNetRuntime {
     version = \"${runtime_version}\";
     $runtime_sources
-  };
+  };" > "${result}"
 
-  sdk_$major_minor_underscore = buildNetSdk {
+    declare -A feature_bands
+    unset latest_sdk
+
+    for sdk_version in "${sdk_versions[@]}"; do
+      sdk_base_version=${sdk_version%-*}
+      feature_band=${sdk_base_version:0:-2}xx
+      # sometimes one release has e.g. both 8.0.202 and 8.0.203
+      [[ ! ${feature_bands[$feature_band]+true} ]] || continue
+      feature_bands[$feature_band]=$sdk_version
+      sdk_files="$(release_files "$release_content" ".sdks[] | select(.version == \"$sdk_version\")")"
+      sdk_sources="$(platform_sources "$sdk_files")"
+      sdk_attrname=sdk_${feature_band//./_}
+      [[ -v latest_sdk ]] || latest_sdk=$sdk_attrname
+
+      echo "
+  $sdk_attrname = buildNetSdk {
     version = \"${sdk_version}\";
     $sdk_sources
-    packages = { fetchNuGet }: [
-$aspnetcore_packages
-$sdk_packages
-    ];
-  };
-}" > "${result}"
+    inherit packages;
+  };" >> "${result}"
+    done
+
+    echo "
+  sdk_$major_minor_underscore = $latest_sdk;
+}" >> "${result}"
 
     cp "${result}" "./versions/${sem_version}.nix"
     echo "Generated ./versions/${sem_version}.nix"

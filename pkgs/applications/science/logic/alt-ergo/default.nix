@@ -2,11 +2,11 @@
 
 let
   pname = "alt-ergo";
-  version = "2.5.2";
+  version = "2.5.3";
 
   src = fetchurl {
     url = "https://github.com/OCamlPro/alt-ergo/releases/download/v${version}/alt-ergo-${version}.tbz";
-    hash = "sha256-9GDBcBH49sheO5AjmDsznMEbw0JSrnSOcIIRN40/aJU=";
+    hash = "sha256-tmWLZBLfdmfYlCQq+zcUneeueDAE6AJeZMy8kfNCC04=";
   };
 in
 

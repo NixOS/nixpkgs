@@ -78,6 +78,7 @@ import Network.HTTP.Req (
  )
 import System.Directory (XdgDirectory (XdgCache), getXdgDirectory)
 import System.Environment (getArgs)
+import System.Exit (die)
 import System.Process (readProcess)
 import Prelude hiding (id)
 import Data.List (sortOn)
@@ -155,17 +156,20 @@ data Build = Build
 data HydraSlownessWorkaroundFlag = HydraSlownessWorkaround | NoHydraSlownessWorkaround
 data RequestLogsFlag = RequestLogs | NoRequestLogs
 
+usage :: IO a
+usage = die "Usage: get-report [--slow] [EVAL-ID] | ping-maintainers | mark-broken-list [--no-request-logs] | eval-info"
+
 main :: IO ()
 main = do
    args <- getArgs
    case args of
-      ["get-report", "--slow"] -> getBuildReports HydraSlownessWorkaround
-      ["get-report"] -> getBuildReports NoHydraSlownessWorkaround
+      "get-report":"--slow":id -> getBuildReports HydraSlownessWorkaround id
+      "get-report":id -> getBuildReports NoHydraSlownessWorkaround id
       ["ping-maintainers"] -> printMaintainerPing
       ["mark-broken-list", "--no-request-logs"] -> printMarkBrokenList NoRequestLogs
       ["mark-broken-list"] -> printMarkBrokenList RequestLogs
       ["eval-info"] -> printEvalInfo
-      _ -> putStrLn "Usage: get-report [--slow] | ping-maintainers | mark-broken-list [--no-request-logs] | eval-info"
+      _ -> usage
 
 reportFileName :: IO FilePath
 reportFileName = getXdgDirectory XdgCache "haskell-updates-build-report.json"
@@ -173,23 +177,26 @@ reportFileName = getXdgDirectory XdgCache "haskell-updates-build-report.json"
 showT :: Show a => a -> Text
 showT = Text.pack . show
 
-getBuildReports :: HydraSlownessWorkaroundFlag -> IO ()
-getBuildReports opt = runReq defaultHttpConfig do
-   evalMay <- Seq.lookup 0 . evals <$> hydraJSONQuery mempty ["jobset", "nixpkgs", "haskell-updates", "evals"]
-   eval@Eval{id} <- maybe (liftIO $ fail "No Evaluation found") pure evalMay
+getBuildReports :: HydraSlownessWorkaroundFlag -> [String] -> IO ()
+getBuildReports opt args = runReq defaultHttpConfig do
+   eval@Eval{id} <- case args of
+      [id] -> hydraJSONQuery mempty ["eval", Text.pack id]
+      [] -> do
+         evalMay <- Seq.lookup 0 . evals <$> hydraJSONQuery mempty ["jobset", "nixpkgs", "haskell-updates", "evals"]
+         maybe (liftIO $ fail "No Evaluation found") pure evalMay
+      _ -> liftIO usage
    liftIO . putStrLn $ "Fetching evaluation " <> show id <> " from Hydra. This might take a few minutes..."
-   buildReports <- getEvalBuilds opt id
+   buildReports <- getEvalBuilds opt eval
    liftIO do
       fileName <- reportFileName
       putStrLn $ "Finished fetching all builds from Hydra, saving report as " <> fileName
       now <- getCurrentTime
       encodeFile fileName (eval, now, buildReports)
 
-getEvalBuilds :: HydraSlownessWorkaroundFlag -> Int -> Req (Seq Build)
-getEvalBuilds NoHydraSlownessWorkaround id =
+getEvalBuilds :: HydraSlownessWorkaroundFlag -> Eval -> Req (Seq Build)
+getEvalBuilds NoHydraSlownessWorkaround Eval{id} =
   hydraJSONQuery mempty ["eval", showT id, "builds"]
-getEvalBuilds HydraSlownessWorkaround id = do
-  Eval{builds} <- hydraJSONQuery mempty [ "eval", showT id ]
+getEvalBuilds HydraSlownessWorkaround Eval{builds} = do
   forM builds $ \buildId -> do
     liftIO $ putStrLn $ "Querying build " <> show buildId
     hydraJSONQuery mempty [ "build", showT buildId ]

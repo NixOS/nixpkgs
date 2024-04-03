@@ -27,30 +27,30 @@
 
 stdenv.mkDerivation rec {
   pname = "stratisd";
-  version = "3.6.5";
+  version = "3.6.6";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = pname;
     rev = "refs/tags/stratisd-v${version}";
-    hash = "sha256-qgf5Q2MAY8PAYlplvTX+YjYfDFLfddpyIG4S/IIYbsU=";
+    hash = "sha256-zksMYPvbFKKYaLqdZql56D5rG+IBDMBJTTQK1RMyj4Q=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit pname version src;
-    hash = "sha256-Bu87uHEcMKB+TX8gWHD1vRazOkqJSZKQcsPiaKXrGFE=";
+    hash = "sha256-red7cjNwZrhQzfvh6Lev5CPWj8QihuVr7fIiHo9D3Jg=";
   };
 
   postPatch = ''
     substituteInPlace udev/61-stratisd.rules \
-      --replace stratis-base32-decode "$out/lib/udev/stratis-base32-decode" \
-      --replace stratis-str-cmp       "$out/lib/udev/stratis-str-cmp"
+      --replace-fail stratis-base32-decode "$out/lib/udev/stratis-base32-decode" \
+      --replace-fail stratis-str-cmp       "$out/lib/udev/stratis-str-cmp"
 
     substituteInPlace systemd/stratis-fstab-setup \
-      --replace stratis-min           "$out/bin/stratis-min" \
-      --replace systemd-ask-password  "${systemd}/bin/systemd-ask-password" \
-      --replace sleep                 "${coreutils}/bin/sleep" \
-      --replace udevadm               "${systemd}/bin/udevadm"
+      --replace-fail stratis-min           "$out/bin/stratis-min" \
+      --replace-fail systemd-ask-password  "${systemd}/bin/systemd-ask-password" \
+      --replace-fail sleep                 "${coreutils}/bin/sleep" \
+      --replace-fail udevadm               "${systemd}/bin/udevadm"
   '';
 
   nativeBuildInputs = [
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$initrd/lib/systemd/system"
     substitute "$out/lib/dracut/modules.d/90stratis/stratisd-min.service" \
       "$initrd/lib/systemd/system/stratisd-min.service" \
-      --replace mkdir "${coreutils}/bin/mkdir"
+      --replace-fail mkdir "${coreutils}/bin/mkdir"
     mkdir -p "$initrd/lib/udev/rules.d"
     cp udev/61-stratisd.rules "$initrd/lib/udev/rules.d"
     rm -r "$out/lib/dracut"

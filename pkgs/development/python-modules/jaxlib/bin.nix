@@ -5,6 +5,7 @@
 # See `python3Packages.jax.passthru` for CUDA tests.
 
 { absl-py
+, autoAddDriverRunpath
 , autoPatchelfHook
 , buildPythonPackage
 , config
@@ -23,7 +24,7 @@
 }:
 
 let
-  inherit (cudaPackagesGoogle) autoAddDriverRunpath cudaVersion;
+  inherit (cudaPackagesGoogle) cudaVersion;
 
   version = "0.4.24";
 

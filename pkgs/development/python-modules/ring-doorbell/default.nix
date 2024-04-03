@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "ring-doorbell";
-  version = "0.8.8";
+  version = "0.8.9";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,14 +26,14 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "ring_doorbell";
     inherit version;
-    hash = "sha256-Rz12Qpawi4/u14ywJGt9Yw7IqjYP4bg6zNr9oN3iQxQ=";
+    hash = "sha256-FUPXia4lCDJDbzEzuewa5ShiIm0EvOrDE8GGZxYWvhk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asyncclick
     oauthlib
     pytz

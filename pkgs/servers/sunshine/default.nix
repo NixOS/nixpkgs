@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , autoPatchelfHook
+, autoAddDriverRunpath
 , makeWrapper
 , buildNpmPackage
 , cmake
@@ -84,10 +85,11 @@ stdenv'.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    autoPatchelfHook
     makeWrapper
+    # Avoid fighting upstream's usage of vendored ffmpeg libraries
+    autoPatchelfHook
   ] ++ lib.optionals cudaSupport [
-    cudaPackages.autoAddDriverRunpath
+    autoAddDriverRunpath
   ];
 
   buildInputs = [

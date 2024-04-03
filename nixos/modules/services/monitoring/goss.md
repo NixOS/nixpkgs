@@ -7,7 +7,7 @@ for validating a server's configuration.
 
 A minimal configuration looks like this:
 
-```
+```nix
 {
   services.goss = {
     enable = true;

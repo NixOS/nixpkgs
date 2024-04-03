@@ -3,11 +3,10 @@
 
 set -x -eu -o pipefail
 
-ETCD_VERSION_MAJOR_MINOR=`basename "$PWD"`
-
+ETCD_PATH="$(dirname "$0")"
+ETCD_VERSION_MAJOR_MINOR="$(basename $ETCD_PATH)"
 ETCD_PKG_NAME=etcd_$(echo $ETCD_VERSION_MAJOR_MINOR | sed 's/[.]/_/g')
 NIXPKGS_PATH="$(git rev-parse --show-toplevel)"
-ETCD_PATH="$(dirname "$0")"
 
 OLD_VERSION="$(nix-instantiate --eval -E "with import $NIXPKGS_PATH {}; \
     $ETCD_PKG_NAME.version or (builtins.parseDrvName $ETCD_PKG_NAME.name).version" | tr -d '"')"

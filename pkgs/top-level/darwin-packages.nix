@@ -18,12 +18,14 @@ let
   fetchurlBoot = import ../build-support/fetchurl/boot.nix {
     inherit (stdenv) system;
   };
+
+  aliases = self: super: lib.optionalAttrs config.allowAliases (import ../top-level/darwin-aliases.nix lib self super pkgs);
 in
 
 makeScopeWithSplicing' {
   otherSplices = generateSplicesForMkScope "darwin";
   extra = spliced: spliced.apple_sdk.frameworks;
-  f = (self: let
+  f = lib.extends aliases (self: let
   inherit (self) mkDerivation callPackage;
 
   # Must use pkgs.callPackage to avoid infinite recursion.
@@ -193,7 +195,9 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     xcode_15 xcode_15_1
     xcode;
 
-  CoreSymbolication = callPackage ../os-specific/darwin/CoreSymbolication { };
+  CoreSymbolication = callPackage ../os-specific/darwin/CoreSymbolication {
+    inherit (apple_sdk) darwin-stubs;
+  };
 
   # TODO: Remove the CF hook if a solution to the crashes is not found.
   CF =
@@ -258,7 +262,5 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     modules = [ { nixpkgs.hostPlatform = "x86_64-linux"; } ];
   };
 
-} // lib.optionalAttrs config.allowAliases {
-  builder = throw "'darwin.builder' has been changed and renamed to 'darwin.linux-builder'. The default ssh port is now 31022. Please update your configuration or override the port back to 22. See https://nixos.org/manual/nixpkgs/unstable/#sec-darwin-builder"; # added 2023-07-06
 });
 }

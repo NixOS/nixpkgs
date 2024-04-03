@@ -1,22 +1,21 @@
 diff --git a/matter_server/server/const.py b/matter_server/server/const.py
-index 2a6140b..275353a 100644
+index 8cca3cf..43f02f5 100644
 --- a/matter_server/server/const.py
 +++ b/matter_server/server/const.py
-@@ -15,7 +15,8 @@ DATA_MODEL_SCHEMA_VERSION = 6
- # and always uses the development subfolder
- # regardless of anything you pass into instantiating the controller
- # revisit this once matter 1.1 is released
--PAA_ROOT_CERTS_DIR: Final[pathlib.Path] = (
-+PAA_ROOT_CERTS_DIR: Final[pathlib.Path] = pathlib.Path("@paacerts@")
+@@ -14,6 +14,8 @@ DATA_MODEL_SCHEMA_VERSION = 6
+ # Keep default location inherited from early version of the Python
+ # bindings.
+ DEFAULT_PAA_ROOT_CERTS_DIR: Final[pathlib.Path] = (
++    pathlib.Path("@paacerts@"))
 +(
      pathlib.Path(__file__)
      .parent.resolve()
      .parent.resolve()
 diff --git a/matter_server/server/helpers/paa_certificates.py b/matter_server/server/helpers/paa_certificates.py
-index d186be1..d2cef54 100644
+index e530838..fdd6025 100644
 --- a/matter_server/server/helpers/paa_certificates.py
 +++ b/matter_server/server/helpers/paa_certificates.py
-@@ -62,6 +62,8 @@ async def fetch_dcl_certificates(
+@@ -64,6 +64,8 @@ async def fetch_dcl_certificates(
      fetch_production_certificates: bool = True,
  ) -> int:
      """Fetch DCL PAA Certificates."""
@@ -25,16 +24,16 @@ index d186be1..d2cef54 100644
      LOGGER.info("Fetching the latest PAA root certificates from DCL.")
      fetch_count: int = 0
      base_urls = set()
-@@ -121,6 +123,8 @@ async def fetch_dcl_certificates(
+@@ -124,6 +126,8 @@ async def fetch_dcl_certificates(
  
- async def fetch_git_certificates() -> int:
+ async def fetch_git_certificates(paa_root_cert_dir: Path) -> int:
      """Fetch Git PAA Certificates."""
 +    return 0
 +
      fetch_count = 0
      LOGGER.info("Fetching the latest PAA root certificates from Git.")
  
-@@ -162,6 +166,8 @@ async def fetch_certificates(
+@@ -159,6 +163,8 @@ async def fetch_certificates(
      fetch_production_certificates: bool = True,
  ) -> int:
      """Fetch PAA Certificates."""
@@ -42,4 +41,4 @@ index d186be1..d2cef54 100644
 +
      loop = asyncio.get_running_loop()
  
-     if not PAA_ROOT_CERTS_DIR.is_dir():
+     if not paa_root_cert_dir.is_dir():

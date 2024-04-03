@@ -52,7 +52,9 @@ let
   # - Package: ../modules/${pname}/releases/package.nix
 
   # FIXME: do this at the module system level
-  propagatePlatforms = lib.mapAttrs (redistArch: packages: map (p: { inherit redistArch; } // p) packages);
+  propagatePlatforms = lib.mapAttrs (
+    redistArch: packages: map (p: { inherit redistArch; } // p) packages
+  );
 
   # All releases across all platforms
   # See ../modules/${pname}/releases/releases.nix
@@ -61,7 +63,7 @@ let
   # Compute versioned attribute name to be used in this package set
   # Patch version changes should not break the build, so we only use major and minor
   # computeName :: Package -> String
-  computeName = {version, ...}: mkVersionedPackageName pname version;
+  computeName = { version, ... }: mkVersionedPackageName pname version;
 
   # Check whether a package supports our CUDA version and platform.
   # isSupported :: Package -> Bool
@@ -81,16 +83,15 @@ let
 
   # All the supported packages we can build for our platform.
   # perSystemReleases :: List Package
-  allReleases = lib.pipe releaseSets
-    [
-      (lib.attrValues)
-      (lists.flatten)
-      (lib.groupBy (p: lib.versions.majorMinor p.version))
-      (lib.mapAttrs (_: builtins.sort preferable))
-      (lib.mapAttrs (_: lib.take 1))
-      (lib.attrValues)
-      (lib.concatMap lib.trivial.id)
-    ];
+  allReleases = lib.pipe releaseSets [
+    (lib.attrValues)
+    (lists.flatten)
+    (lib.groupBy (p: lib.versions.majorMinor p.version))
+    (lib.mapAttrs (_: builtins.sort preferable))
+    (lib.mapAttrs (_: lib.take 1))
+    (lib.attrValues)
+    (lib.concatMap lib.trivial.id)
+  ];
 
   newest = builtins.head (builtins.sort preferable allReleases);
 
@@ -115,7 +116,10 @@ let
       buildPackage =
         package:
         let
-          shims = final.callPackage shimsFn {inherit package; inherit (package) redistArch; };
+          shims = final.callPackage shimsFn {
+            inherit package;
+            inherit (package) redistArch;
+          };
           name = computeName package;
           drv = final.callPackage ./manifest.nix {
             inherit pname;
@@ -129,7 +133,9 @@ let
       # versionedDerivations :: AttrSet Derivation
       versionedDerivations = builtins.listToAttrs (lists.map buildPackage allReleases);
 
-      defaultDerivation = { ${pname} = (buildPackage newest).value; };
+      defaultDerivation = {
+        ${pname} = (buildPackage newest).value;
+      };
     in
     versionedDerivations // defaultDerivation;
 in

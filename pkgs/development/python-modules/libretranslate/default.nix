@@ -1,7 +1,9 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonRelaxDepsHook
 , pytestCheckHook
+, hatchling
 , argostranslate
 , flask
 , flask-swagger
@@ -11,6 +13,8 @@
 , flask-session
 , waitress
 , expiringdict
+, langdetect
+, lexilang
 , ltpycld2
 , morfessor
 , appdirs
@@ -27,8 +31,7 @@
 buildPythonPackage rec {
   pname = "libretranslate";
   version = "1.5.6";
-
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LibreTranslate";
@@ -37,7 +40,14 @@ buildPythonPackage rec {
     hash = "sha256-43VnxgtapMRKyXxqsvBgSMUxvpbLI+iOfW3FA0/POpE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    hatchling
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = true;
+
+  dependencies = [
     argostranslate
     flask
     flask-swagger
@@ -47,6 +57,8 @@ buildPythonPackage rec {
     flask-session
     waitress
     expiringdict
+    langdetect
+    lexilang
     ltpycld2
     morfessor
     appdirs
@@ -58,14 +70,6 @@ buildPythonPackage rec {
     prometheus-client
     polib
   ];
-
-  postPatch = ''
-    substituteInPlace requirements.txt  \
-      --replace "==" ">="
-
-    substituteInPlace setup.py  \
-      --replace "'pytest-runner'" ""
-  '';
 
   postInstall = ''
     # expose static files to be able to serve them via web-server

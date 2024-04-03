@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, gfortran, cmake }:
+{ stdenv, lib, fetchFromGitHub, gfortran, meson, ninja, mesonEmulatorHook }:
 
 stdenv.mkDerivation rec {
   pname = "test-drive";
@@ -11,21 +11,18 @@ stdenv.mkDerivation rec {
     hash = "sha256-ObAnHFP1Hp0knf/jtGHynVF0CCqK47eqetePx4NLmlM=";
   };
 
-  postPatch = ''
-    substituteInPlace config/template.pc \
-      --replace 'libdir=''${prefix}/@CMAKE_INSTALL_LIBDIR@' "libdir=@CMAKE_INSTALL_LIBDIR@" \
-      --replace 'includedir=''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@' "includedir=@CMAKE_INSTALL_INCLUDEDIR@"
-  '';
-
   nativeBuildInputs = [
     gfortran
-    cmake
+    meson
+    ninja
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   meta = with lib; {
     description = "Procedural Fortran testing framework";
     homepage = "https://github.com/fortran-lang/test-drive";
-    license = with licenses; [ asl20 mit ] ;
+    license = with licenses; [ asl20 mit ];
     platforms = platforms.linux;
     maintainers = [ maintainers.sheepforce ];
   };

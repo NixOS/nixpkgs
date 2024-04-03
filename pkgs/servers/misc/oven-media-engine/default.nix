@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "oven-media-engine";
-  version = "0.15.14";
+  version = "0.16.5";
 
   src = fetchFromGitHub {
     owner = "AirenSoft";
     repo = "OvenMediaEngine";
     rev = "v${version}";
-    sha256 = "sha256-pLLnk0FXJ6gb0WSdWGEzJSEbKdOpjdWECIRzrHvi8HQ=";
+    sha256 = "sha256-hkLIJ3vGpnywcOw+bfEsQESGFe1FUcCVJlMlVgGsrNs=";
   };
 
   sourceRoot = "${src.name}/src";
@@ -40,10 +40,6 @@ stdenv.mkDerivation rec {
     patchShebangs core/colorgcc
     patchShebangs projects/main/update_git_info.sh
 
-    sed -i -e 's/const AVOutputFormat /AVOutputFormat /g' \
-      projects/modules/mpegts/mpegts_writer.cpp \
-      projects/modules/file/file_writer.cpp \
-      projects/modules/rtmp/rtmp_writer.cpp
     sed -i -e '/^CC =/d' -e '/^CXX =/d' -e '/^AR =/d' projects/third_party/pugixml-1.9/scripts/pugixml.make
   '';
 

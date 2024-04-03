@@ -219,9 +219,11 @@ After running the updater, if nvim-treesitter received an update, also run [`nvi
 Some plugins require overrides in order to function properly. Overrides are placed in [overrides.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vim/plugins/overrides.nix). Overrides are most often required when a plugin requires some dependencies, or extra steps are required during the build process. For example `deoplete-fish` requires both `deoplete-nvim` and `vim-fish`, and so the following override was added:
 
 ```nix
-deoplete-fish = super.deoplete-fish.overrideAttrs(old: {
-  dependencies = with super; [ deoplete-nvim vim-fish ];
-});
+{
+  deoplete-fish = super.deoplete-fish.overrideAttrs(old: {
+    dependencies = with super; [ deoplete-nvim vim-fish ];
+  });
+}
 ```
 
 Sometimes plugins require an override that must be changed when the plugin is updated. This can cause issues when Vim plugins are auto-updated but the associated override isn't updated. For these plugins, the override should be written so that it specifies all information required to install the plugin, and running `./update.py` doesn't change the derivation for the plugin. Manually updating the override is required to update these types of plugins. An example of such a plugin is `LanguageClient-neovim`.
@@ -264,8 +266,10 @@ pwntester/octo.nvim,,
 You can then reference the generated vim plugins via:
 
 ```nix
-myVimPlugins = pkgs.vimPlugins.extend (
-  (pkgs.callPackage ./generated.nix {})
-);
+{
+  myVimPlugins = pkgs.vimPlugins.extend (
+    (pkgs.callPackage ./generated.nix {})
+  );
+}
 ```
 

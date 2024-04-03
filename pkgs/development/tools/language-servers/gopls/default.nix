@@ -14,6 +14,9 @@ buildGoModule rec {
   modRoot = "gopls";
   vendorHash = "sha256-q7vWiXJAX4u8B4RyFc7kg1BvMCPaTBFOVkWXeE78Emo=";
 
+  # https://github.com/golang/tools/blob/9ed98faa/gopls/main.go#L27-L30
+  ldflags = [ "-X main.version=v${version}" ];
+
   doCheck = false;
 
   # Only build gopls, and not the integration tests or documentation generator.

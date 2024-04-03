@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , rustPlatform
 , installShellFiles
 , darwin
@@ -11,16 +12,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lsd";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "lsd-rs";
     repo = "lsd";
     rev = "v${version}";
-    hash = "sha256-pPCcKEmB1/BS6Q2j1fytwpZa/5KXIJu0ip0Zq97m6uw=";
+    hash = "sha256-ZMaI0Q/xmYJHWvU4Tha+XVV55zKLukrqkROfBzu/JsQ=";
   };
 
-  cargoHash = "sha256-E0ui9cmuSqUMTkKvNNuEPOVd/gs4O2oW0aPxlyI9qoA=";
+  cargoPatches = [
+    # fix cargo lock file
+    (fetchpatch {
+      url = "https://github.com/lsd-rs/lsd/pull/1021/commits/7593fd7ea0985e273c82b6e80e66a801772024de.patch";
+      hash = "sha256-ykKLVSM6FbL4Jt5Zk7LuPKcYw/wrpiwU8vhuGz8Pbi0=";
+    })
+  ];
+
+  cargoHash = "sha256-TDHHY5F4lVrKd7r0QfrfUV2xzT6HMA/PtOIStMryaBA=";
 
   nativeBuildInputs = [ installShellFiles pandoc ];
 

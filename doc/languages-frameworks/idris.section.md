@@ -134,9 +134,9 @@ For example you could set
 
 ```nix
 build-idris-package {
-  idrisBuildOptions = [ "--log" "1" "--verbose" ]
+  idrisBuildOptions = [ "--log" "1" "--verbose" ];
 
-  ...
+  # ...
 }
 ```
 

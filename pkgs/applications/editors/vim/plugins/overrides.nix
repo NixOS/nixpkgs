@@ -670,6 +670,9 @@
 
   hardhat-nvim = super.hardhat-nvim.overrideAttrs {
     dependencies = with self; [ overseer-nvim plenary-nvim ];
+
+    doInstallCheck = true;
+    nvimRequireCheck = "hardhat";
   };
 
   harpoon = super.harpoon.overrideAttrs {
@@ -1014,7 +1017,7 @@
         inherit (old) version src;
         sourceRoot = "${old.src.name}/spectre_oxi";
 
-        cargoHash = "sha256-VDnrJ2EJ8LDykqxYKD1VR8BkDqzzifazJzL/0UsmSCk=";
+        cargoHash = "sha256-tWJyVBYYQWr3ofYnbvfQZdzPQ9o//7XEbdjN5b2frPo=";
 
 
         preCheck = ''

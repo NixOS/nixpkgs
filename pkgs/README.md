@@ -94,11 +94,7 @@ Now that this is out of the way. To add a package to Nixpkgs:
 
    - All other [`meta`](https://nixos.org/manual/nixpkgs/stable/#chap-meta) attributes are optional, but it’s still a good idea to provide at least the `description`, `homepage` and [`license`](https://nixos.org/manual/nixpkgs/stable/#sec-meta-license).
 
-   - You can use `nix-prefetch-url url` to get the SHA-256 hash of source distributions. There are similar commands as `nix-prefetch-git` and `nix-prefetch-hg` available in `nix-prefetch-scripts` package.
-
-   - A list of schemes for `mirror://` URLs can be found in [`pkgs/build-support/fetchurl/mirrors.nix`](build-support/fetchurl/mirrors.nix).
-
-   The exact syntax and semantics of the Nix expression language, including the built-in function, are [described in the Nix manual](https://nixos.org/manual/nix/stable/language/).
+   - The exact syntax and semantics of the Nix expression language, including the built-in functions, are [Nix language reference](https://nixos.org/manual/nix/stable/language/).
 
 5. To test whether the package builds, run the following command from the root of the nixpkgs source tree:
 
@@ -397,7 +393,7 @@ All versions of a package _must_ be included in `all-packages.nix` to make sure 
 
 See the Nixpkgs manual for more details on [standard meta-attributes](https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes).
 
-### Import From Derivation
+## Import From Derivation
 
 [Import From Derivation](https://nixos.org/manual/nix/unstable/language/import-from-derivation) (IFD) is disallowed in Nixpkgs for performance reasons:
 [Hydra](https://github.com/NixOS/hydra) evaluates the entire package set, and sequential builds during evaluation would increase evaluation times to become impractical.
@@ -406,113 +402,75 @@ Import From Derivation can be worked around in some cases by committing generate
 
 ## Sources
 
-### Fetching Sources
+Always fetch source files using [Nixpkgs fetchers](https://nixos.org/manual/nixpkgs/unstable/#chap-pkgs-fetchers).
+Use reproducible sources with a high degree of availability.
+Prefer protocols that support proxies.
 
-There are multiple ways to fetch a package source in nixpkgs. The general guideline is that you should package reproducible sources with a high degree of availability. Right now there is only one fetcher which has mirroring support and that is `fetchurl`. Note that you should also prefer protocols which have a corresponding proxy environment variable.
+A list of schemes for `mirror://` URLs can be found in [`pkgs/build-support/fetchurl/mirrors.nix`](build-support/fetchurl/mirrors.nix), and is supported by [`fetchurl`](https://nixos.org/manual/nixpkgs/unstable/#fetchurl).
+Other fetchers which end up relying on `fetchurl` may also support mirroring.
 
-You can find many source fetch helpers in `pkgs/build-support/fetch*`.
+The preferred source hash type is `sha256`.
 
-In the file `pkgs/top-level/all-packages.nix` you can find fetch helpers, these have names on the form `fetchFrom*`. The intention of these are to provide snapshot fetches but using the same api as some of the version controlled fetchers from `pkgs/build-support/`. As an example going from bad to good:
+Examples going from bad to best practices:
 
 - Bad: Uses `git://` which won't be proxied.
 
   ```nix
-  src = fetchgit {
-    url = "git://github.com/NixOS/nix.git";
-    rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-    hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
+  {
+    src = fetchgit {
+      url = "git://github.com/NixOS/nix.git";
+      rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
+      hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
+    };
   }
   ```
 
 - Better: This is ok, but an archive fetch will still be faster.
 
   ```nix
-  src = fetchgit {
-    url = "https://github.com/NixOS/nix.git";
-    rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-    hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
+  {
+    src = fetchgit {
+      url = "https://github.com/NixOS/nix.git";
+      rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
+      hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
+    };
   }
   ```
 
-- Best: Fetches a snapshot archive and you get the rev you want.
+- Best: Fetches a snapshot archive for the given revision.
 
   ```nix
-  src = fetchFromGitHub {
-    owner = "NixOS";
-    repo = "nix";
-    rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-    hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
+  {
+    src = fetchFromGitHub {
+      owner = "NixOS";
+      repo = "nix";
+      rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
+      hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
+    };
   }
   ```
 
-When fetching from GitHub, commits must always be referenced by their full commit hash. This is because GitHub shares commit hashes among all forks and returns `404 Not Found` when a short commit hash is ambiguous. It already happens for some short, 6-character commit hashes in `nixpkgs`.
-It is a practical vector for a denial-of-service attack by pushing large amounts of auto generated commits into forks and was already [demonstrated against GitHub Actions Beta](https://blog.teddykatz.com/2019/11/12/github-actions-dos.html).
+> [!Note]
+> When fetching from GitHub, always reference revisions by their full commit hash.
+> GitHub shares commit hashes among all forks and returns `404 Not Found` when a short commit hash is ambiguous.
+> It already happened in Nixpkgs for short, 6-character commit hashes.
+>
+> Pushing large amounts of auto generated commits into forks is a practical vector for a denial-of-service attack, and was already [demonstrated against GitHub Actions Beta](https://blog.teddykatz.com/2019/11/12/github-actions-dos.html).
 
-Find the value to put as `hash` by running `nix-shell -p nix-prefetch-github --run "nix-prefetch-github --rev 1f795f9f44607cc5bec70d1300150bfefcef2aae NixOS nix"`.
-
-#### Obtaining source hash
-
-Preferred source hash type is sha256. There are several ways to get it.
-
-1. Prefetch URL (with `nix-prefetch-XXX URL`, where `XXX` is one of `url`, `git`, `hg`, `cvs`, `bzr`, `svn`). Hash is printed to stdout.
-
-2. Prefetch by package source (with `nix-prefetch-url '<nixpkgs>' -A PACKAGE.src`, where `PACKAGE` is package attribute name). Hash is printed to stdout.
-
-    This works well when you've upgraded existing package version and want to find out new hash, but is useless if package can't be accessed by attribute or package has multiple sources (`.srcs`, architecture-dependent sources, etc).
-
-3. Upstream provided hash: use it when upstream provides `sha256` or `sha512` (when upstream provides `md5`, don't use it, compute `sha256` instead).
-
-    A little nuance is that `nix-prefetch-*` tools produce hash encoded with `base32`, but upstream usually provides hexadecimal (`base16`) encoding. Fetchers understand both formats. Nixpkgs does not standardize on any one format.
-
-    You can convert between formats with nix-hash, for example:
-
-    ```ShellSession
-    $ nix-hash --type sha256 --to-base32 HASH
-    ```
-
-4. Extracting hash from local source tarball can be done with `sha256sum`. Use `nix-prefetch-url file:///path/to/tarball` if you want base32 hash.
-
-5. Fake hash: set the hash to one of
-
-   - `""`
-   - `lib.fakeHash`
-   - `lib.fakeSha256`
-   - `lib.fakeSha512`
-
-   in the package expression, attempt build and extract correct hash from error messages.
-
-   > [!Warning]
-   > You must use one of these four fake hashes and not some arbitrarily-chosen hash.
-   > See [here][secure-hashes]
-
-   This is last resort method when reconstructing source URL is non-trivial and `nix-prefetch-url -A` isn’t applicable (for example, [one of `kodi` dependencies](https://github.com/NixOS/nixpkgs/blob/d2ab091dd308b99e4912b805a5eb088dd536adb9/pkgs/applications/video/kodi/default.nix#L73)). The easiest way then would be replace hash with a fake one and rebuild. Nix build will fail and error message will contain desired hash.
-
-
-#### Obtaining hashes securely
-[secure-hashes]: #obtaining-hashes-securely
-
-Let's say Man-in-the-Middle (MITM) sits close to your network. Then instead of fetching source you can fetch malware, and instead of source hash you get hash of malware. Here are security considerations for this scenario:
-
-- `http://` URLs are not secure to prefetch hash from;
-
-- hashes from upstream (in method 3) should be obtained via secure protocol;
-
-- `https://` URLs are secure in methods 1, 2, 3;
-
-- `https://` URLs are secure in method 5 *only if* you use one of the listed fake hashes. If you use any other hash, `fetchurl` will pass `--insecure` to `curl` and may then degrade to HTTP in case of TLS certificate expiration.
-
-### Patches
+## Patches
 
 Patches available online should be retrieved using `fetchpatch`.
 
 ```nix
-patches = [
-  (fetchpatch {
-    name = "fix-check-for-using-shared-freetype-lib.patch";
-    url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=8f5d285";
-    hash = "sha256-uRcxaCjd+WAuGrXOmGfFeu79cUILwkRdBu48mwcBE7g=";
-  })
-];
+{
+  patches = [
+    (fetchpatch {
+      name = "fix-check-for-using-shared-freetype-lib.patch";
+      url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=8f5d285";
+      hash = "sha256-uRcxaCjd+WAuGrXOmGfFeu79cUILwkRdBu48mwcBE7g=";
+    })
+  ];
+}
 ```
 
 Otherwise, you can add a `.patch` file to the `nixpkgs` repository. In the interest of keeping our maintenance burden to a minimum, only patches that are unique to `nixpkgs` should be added in this way.
@@ -520,7 +478,9 @@ Otherwise, you can add a `.patch` file to the `nixpkgs` repository. In the inter
 If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch`. Check [the `fetchpatch` reference](https://nixos.org/manual/nixpkgs/unstable/#fetchpatch) for details.
 
 ```nix
-patches = [ ./0001-changes.patch ];
+{
+  patches = [ ./0001-changes.patch ];
+}
 ```
 
 If you do need to do create this sort of patch file, one way to do so is with git:
@@ -564,8 +524,10 @@ We use jbidwatcher as an example for a discontinued project here.
 
     For example in this case:
 
-    ```
-    jbidwatcher = throw "jbidwatcher was discontinued in march 2021"; # added 2021-03-15
+    ```nix
+    {
+      jbidwatcher = throw "jbidwatcher was discontinued in march 2021"; # added 2021-03-15
+    }
     ```
 
     The throw message should explain in short why the package was removed for users that still have it installed.
@@ -617,10 +579,10 @@ Here in the nixpkgs manual we describe mostly _package tests_; for _module tests
 For very simple tests, they can be written inline:
 
 ```nix
-{ …, yq-go }:
+{ /* ... , */ yq-go }:
 
 buildGoModule rec {
-  …
+  # …
 
   passthru.tests = {
     simple = runCommand "${pname}-test" {} ''
@@ -642,13 +604,13 @@ Add the tests in `passthru.tests` to the package definition like this:
 { stdenv, lib, fetchurl, callPackage }:
 
 stdenv.mkDerivation {
-  …
+  # …
 
   passthru.tests = {
     simple-execution = callPackage ./tests.nix { };
   };
 
-  meta = { … };
+  meta = { /* … */ };
 }
 ```
 
@@ -706,13 +668,13 @@ For example, assuming we're packaging `nginx`, we can link its module test via `
 { stdenv, lib, nixosTests }:
 
 stdenv.mkDerivation {
-  ...
+  # ...
 
   passthru.tests = {
     nginx = nixosTests.nginx;
   };
 
-  ...
+  # ...
 }
 ```
 

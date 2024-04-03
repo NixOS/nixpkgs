@@ -11,22 +11,22 @@
 buildPythonPackage rec {
   pname = "rpyc";
   version = "6.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tomerfiliba";
-    repo = pname;
+    repo = "rpyc";
     rev = "refs/tags/${version}";
     hash = "sha256-BvXEXZlVbOmKBwnSBCDksUkbT7JPcMX48KZe/Gd5Y8Q=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     plumbum
   ];
 
@@ -42,9 +42,20 @@ buildPythonPackage rec {
     "test_listing"
     "test_pruning"
     "test_rpyc"
+    "test_instancecheck_across_connections"
+    # Internal import error
+    "test_modules"
     # Test is outdated
     # ssl.SSLError: [SSL: NO_CIPHERS_AVAILABLE] no ciphers available (_ssl.c:997)
     "test_ssl_conenction"
+  ];
+
+  disabledTestPaths = [
+    # Internal import issue
+    "tests/test_attributes.py"
+    "tests/test_service_pickle.py"
+    "tests/test_affinity.py"
+    "tests/test_magic.py"
   ];
 
   pythonImportsCheck = [

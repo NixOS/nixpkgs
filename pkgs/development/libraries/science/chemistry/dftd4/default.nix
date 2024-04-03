@@ -1,8 +1,11 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, cmake
 , gfortran
+, meson
+, ninja
+, pkg-config
+, python3
 , blas
 , lapack
 , mctc-lib
@@ -23,23 +26,20 @@ stdenv.mkDerivation rec {
     hash = "sha256-VIV9953hx0MZupOARdH+P1h7JtZeJmTlqtO8si+lwdU=";
   };
 
-  nativeBuildInputs = [ cmake gfortran ];
+  nativeBuildInputs = [ gfortran meson ninja pkg-config python3 ];
 
   buildInputs = [ blas lapack mctc-lib mstore multicharge ];
 
   outputs = [ "out" "dev" ];
 
-  # Fix the Pkg-Config files for doubled store paths
+  doCheck = true;
+
   postPatch = ''
-    substituteInPlace config/template.pc \
-      --replace "\''${prefix}/" ""
+    patchShebangs --build \
+      config/install-mod.py \
+      app/tester.py
   '';
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
-  ];
-
-  doCheck = true;
   preCheck = ''
     export OMP_NUM_THREADS=2
   '';

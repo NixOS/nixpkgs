@@ -7,9 +7,16 @@
 , zenity
 }:
 
-with lib;
-
 let
+  inherit (lib)
+    licenses
+    maintainers
+    makeBinPath
+    makeLibraryPath
+    optional
+    platforms
+    ;
+
   path = makeBinPath ([ mono python3 ] ++ optional (zenity != null) zenity);
   rpath = makeLibraryPath [ lua freetype openal SDL2 ];
   mkdirp = makeSetupHook {

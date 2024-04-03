@@ -33,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "dbt-core";
-  version = "1.7.10";
+  version = "1.7.11";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -42,15 +42,10 @@ buildPythonPackage rec {
     owner = "dbt-labs";
     repo = "dbt-core";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0cKzQjAnj0JMrHyA/gOgYceM6g1URJFgQtp90m09Nkw=";
+    hash = "sha256-r51aki1fuHfp6gWkzOMA92xFeM0MXFPrNq77aKTYYWA=";
   };
 
   sourceRoot = "${src.name}/core";
-
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools
-  ];
 
   pythonRelaxDeps = [
     "agate"
@@ -58,10 +53,16 @@ buildPythonPackage rec {
     "mashumaro"
     "networkx"
     "logbook"
+    "pathspec"
     "urllib3"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    pythonRelaxDepsHook
+    setuptools
+  ];
+
+  dependencies = [
     agate
     cffi
     click

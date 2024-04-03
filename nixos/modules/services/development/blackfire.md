@@ -7,7 +7,7 @@
 [Blackfire](https://blackfire.io) is a proprietary tool for profiling applications. There are several languages supported by the product but currently only PHP support is packaged in Nixpkgs. The back-end consists of a module that is loaded into the language runtime (called *probe*) and a service (*agent*) that the probe connects to and that sends the profiles to the server.
 
 To use it, you will need to enable the agent and the probe on your server. The exact method will depend on the way you use PHP but here is an example of NixOS configuration for PHP-FPM:
-```
+```nix
 let
   php = pkgs.php.withExtensions ({ enabled, all }: enabled ++ (with all; [
     blackfire

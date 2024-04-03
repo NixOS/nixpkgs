@@ -17,27 +17,27 @@ let
     x86_64-linux = {
       arch = "linux-x64";
       libc = "glibc";
-      hash = "sha256-I1ceMi7h6flvKBmMIU1qjAU1S6z5MzguHDul3g1zMKw=";
+      hash = "sha256-C5N6VgFtXPLLjZt0ZdRTX095njRIT+12ONuUaBBj7fQ=";
     };
     aarch64-linux = {
       arch = "linux-arm64";
       libc = "glibc";
-      hash = "sha256-q8BR7kILYV8i8ozDkpcuKarf4s1TgRqOrUeLqjdWEQ0=";
+      hash = "sha256-TerDujO+IkSRnHYlSbAKSP9IS7AT7XnQJsZ8D8pCoGc=";
     };
     x86_64-darwin = {
       arch = "darwin-x64";
       libc = "unknown";
-      hash = "sha256-ONnXtRxcYFuFz+rmVTg+yEKe6J/vfKahX2i6k8dQStg=";
+      hash = "sha256-gphOONWujbeCCr6dkmMRJP94Dhp1Jvp2yt+g7n1HTv0=";
     };
     aarch64-darwin = {
       arch = "darwin-arm64";
       libc = "unknown";
-      hash = "sha256-VesAcT/IF2cvJVncJoqZcAvFxw32SN70C60GLU2kmVI=";
+      hash = "sha256-JMnELVUxoU1C57Tzue3Sg6OfDFAjfCnzgDit0BWzmlo=";
     };
   };
   bcryptAttrs = bcryptHostPlatformAttrs."${stdenv.hostPlatform.system}" or
     (throw "Unsupported architecture: ${stdenv.hostPlatform.system}");
-  bcryptVersion = "5.1.0";
+  bcryptVersion = "5.1.1";
   bcryptLib = fetchurl {
     url = "https://github.com/kelektiv/node.bcrypt.js/releases/download/v${bcryptVersion}/bcrypt_lib-v${bcryptVersion}-napi-v3-${bcryptAttrs.arch}-${bcryptAttrs.libc}.tar.gz";
     inherit (bcryptAttrs) hash;
@@ -45,51 +45,61 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "peertube";
-  version = "5.2.1";
+  version = "6.0.3";
 
   src = fetchFromGitHub {
     owner = "Chocobozzz";
     repo = "PeerTube";
     rev = "v${version}";
-    hash = "sha256-8JzU0JVb+JQCNiro8hPHBwkofNTUy90YkSCzTOoB+/A=";
+    hash = "sha256-Pskxfi+qqVk75hu22niLNFsToCJks1k8w8mTnXjr6jg=";
   };
 
   yarnOfflineCacheServer = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-pzXH6hdDf8O6Kr12Xw0jRcnPRD2TrDGdiEfxVr3KmwY=";
-  };
-
-  yarnOfflineCacheTools = fetchYarnDeps {
-    yarnLock = "${src}/server/tools/yarn.lock";
-    hash = "sha256-maPR8OCiuNlle0JQIkZSgAqW+BrSxPwVm6CkxIrIg5k=";
+    hash = "sha256-RJX92EgEIXWB1wNFRl8FvseOqBT+7m6gs+pMyoodruk=";
   };
 
   yarnOfflineCacheClient = fetchYarnDeps {
     yarnLock = "${src}/client/yarn.lock";
-    hash = "sha256-Ejzk/VEx7YtJpsrkHcXAZnJ+yRx1VhBJGpqquHYULNU=";
+    hash = "sha256-vr9xn5NXwiUS59Kgl8olCtkMgxnI1TKQzibKbb8RNXA=";
   };
 
-  nativeBuildInputs = [ brotli prefetch-yarn-deps jq nodejs which yarn ];
+  yarnOfflineCacheAppsCli = fetchYarnDeps {
+    yarnLock = "${src}/apps/peertube-cli/yarn.lock";
+    hash = "sha256-xsB71bnaPn/9/f1KHyU3TTwx+Q+1dLjWmNK2aVJgoRY=";
+  };
+
+  yarnOfflineCacheAppsRunner = fetchYarnDeps {
+    yarnLock = "${src}/apps/peertube-runner/yarn.lock";
+    hash = "sha256-9w3aLuiLs7SU00YwuE0ixfiD77gCakXT4YeRpfsgGz0=";
+  };
+
+  outputs = [ "out" "cli" "runner" ];
+
+  nativeBuildInputs = [ brotli prefetch-yarn-deps jq which yarn ];
+
+  buildInputs = [ nodejs ];
 
   buildPhase = ''
     # Build node modules
     export HOME=$PWD
     fixup-yarn-lock ~/yarn.lock
-    fixup-yarn-lock ~/server/tools/yarn.lock
     fixup-yarn-lock ~/client/yarn.lock
+    fixup-yarn-lock ~/apps/peertube-cli/yarn.lock
+    fixup-yarn-lock ~/apps/peertube-runner/yarn.lock
     yarn config --offline set yarn-offline-mirror $yarnOfflineCacheServer
-    yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
-    cd ~/server/tools
-    yarn config --offline set yarn-offline-mirror $yarnOfflineCacheTools
     yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
     cd ~/client
     yarn config --offline set yarn-offline-mirror $yarnOfflineCacheClient
     yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
+    cd ~/apps/peertube-cli
+    yarn config --offline set yarn-offline-mirror $yarnOfflineCacheAppsCli
+    yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
+    cd ~/apps/peertube-runner
+    yarn config --offline set yarn-offline-mirror $yarnOfflineCacheAppsRunner
+    yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
 
-    patchShebangs ~/node_modules
-    patchShebangs ~/server/tools/node_modules
-    patchShebangs ~/client/node_modules
-    patchShebangs ~/scripts
+    patchShebangs ~/{node_modules,client/node_modules,/apps/peertube-cli/node_modules,apps/peertube-runner/node_modules,scripts}
 
     # Fix bcrypt node module
     cd ~/node_modules/bcrypt
@@ -103,28 +113,52 @@ stdenv.mkDerivation rec {
     cd ~
 
     # Build PeerTube server
-    npm run tsc -- --build ./tsconfig.json
-    npm run resolve-tspaths:server
-    cp -r "./server/static" "./server/assets" "./dist/server"
-    cp -r "./server/lib/emails" "./dist/server/lib"
-
-    # Build PeerTube tools
-    cp -r "./server/tools/node_modules" "./dist/server/tools"
-    npm run tsc -- --build ./server/tools/tsconfig.json
-    npm run resolve-tspaths:server
+    npm run build:server
 
     # Build PeerTube client
     npm run build:client
+
+    # Build PeerTube cli
+    npm run build:peertube-cli
+    patchShebangs ~/apps/peertube-cli/dist/peertube.js
+
+    # Build PeerTube runner
+    npm run build:peertube-runner
+    patchShebangs ~/apps/peertube-runner/dist/peertube-runner.js
+
+    # Clean up declaration files
+    find ~/dist/ \
+      ~/packages/core-utils/dist/ \
+      ~/packages/ffmpeg/dist/ \
+      ~/packages/models/dist/ \
+      ~/packages/node-utils/dist/ \
+      ~/packages/server-commands/dist/ \
+      ~/packages/typescript-utils/dist/ \
+      \( -name '*.d.ts' -o -name '*.d.ts.map' \) -type f -delete
   '';
 
   installPhase = ''
     mkdir -p $out/dist
     mv ~/dist $out
     mv ~/node_modules $out/node_modules
-    mv ~/server/tools/node_modules $out/dist/server/tools/node_modules
     mkdir $out/client
     mv ~/client/{dist,node_modules,package.json,yarn.lock} $out/client
-    mv ~/{config,scripts,support,CREDITS.md,FAQ.md,LICENSE,README.md,package.json,tsconfig.json,yarn.lock} $out
+    mkdir -p $out/packages/{core-utils,ffmpeg,models,node-utils,server-commands,typescript-utils}
+    mv ~/packages/core-utils/{dist,package.json} $out/packages/core-utils
+    mv ~/packages/ffmpeg/{dist,package.json} $out/packages/ffmpeg
+    mv ~/packages/models/{dist,package.json} $out/packages/models
+    mv ~/packages/node-utils/{dist,package.json} $out/packages/node-utils
+    mv ~/packages/server-commands/{dist,package.json} $out/packages/server-commands
+    mv ~/packages/typescript-utils/{dist,package.json} $out/packages/typescript-utils
+    mv ~/{config,support,CREDITS.md,FAQ.md,LICENSE,README.md,package.json,yarn.lock} $out
+
+    mkdir -p $cli/bin
+    mv ~/apps/peertube-cli/{dist,node_modules,package.json,yarn.lock} $cli
+    ln -s $cli/dist/peertube.js $cli/bin/peertube-cli
+
+    mkdir -p $runner/bin
+    mv ~/apps/peertube-runner/{dist,node_modules,package.json,yarn.lock} $runner
+    ln -s $runner/dist/peertube-runner.js $runner/bin/peertube-runner
 
     # Create static gzip and brotli files
     find $out/client/dist -type f -regextype posix-extended -iregex '.*\.(css|eot|html|js|json|svg|webmanifest|xlf)' | while read file; do

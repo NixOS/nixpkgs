@@ -3,11 +3,11 @@ import pytest
 
 from markdown_it.token import Token
 
-class Converter(nrd.md.Converter[nrd.docbook.DocBookRenderer]):
+class Converter(nrd.md.Converter[nrd.html.HTMLRenderer]):
     # actual renderer doesn't matter, we're just parsing.
     def __init__(self, manpage_urls: dict[str, str]) -> None:
         super().__init__()
-        self._renderer = nrd.docbook.DocBookRenderer(manpage_urls)
+        self._renderer = nrd.html.HTMLRenderer(manpage_urls, {})
 
 def test_attr_span_parsing() -> None:
     c = Converter({})

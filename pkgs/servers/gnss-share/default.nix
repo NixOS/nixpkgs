@@ -1,12 +1,12 @@
 { buildGoModule, fetchFromGitLab, lib }:
 buildGoModule rec {
   pname = "gnss-share";
-  version = "0.8.0";
+  version = "0.8.1";
   src = fetchFromGitLab {
     owner = "postmarketOS";
     repo = "gnss-share";
     rev = version;
-    hash = "sha256-XNKX7eIv3wKNWbVsa6w/ODDRiiBArpGNY0T/sHC5ItY=";
+    hash = "sha256-4X1oiQWn2oZPw/14hNyZ0a6FEwoykotBisY6lk6lj2k=";
   };
   vendorHash = "sha256-dmE6hfKUqEr7BMNi/HMUOk4jDB0dPXEMkWQyWj6XpY4=";
   meta = with lib; {

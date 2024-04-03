@@ -89,6 +89,10 @@ in {
           dbFile = pkgs.writeText "dbsecret" "we2quaeZ";
           jwsFile = pkgs.runCommand "oidcKeyBase" {} "${pkgs.openssl}/bin/openssl genrsa 2048 > $out";
         };
+
+        # reduce memory usage
+        sidekiq.concurrency = 1;
+        puma.workers = 2;
       };
     };
   };

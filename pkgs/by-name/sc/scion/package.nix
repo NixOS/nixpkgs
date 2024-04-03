@@ -2,6 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , fetchpatch2
+, nixosTests
 }:
 let
   version = "0.10.0";
@@ -42,6 +43,16 @@ buildGoModule {
     ${skipTest 1 "TestOpensslCompatible" "scion-pki/trcs/sign_test.go"}
   '';
 
+  postInstall = ''
+    set +e
+    mv $out/bin/gateway $out/bin/scion-ip-gateway
+    mv $out/bin/dispatcher $out/bin/scion-dispatcher
+    mv $out/bin/router $out/bin/scion-router
+    mv $out/bin/control $out/bin/scion-control
+    mv $out/bin/daemon $out/bin/scion-daemon
+    set -e
+  '';
+
   doCheck = true;
 
   patches = [
@@ -50,6 +61,10 @@ buildGoModule {
       hash = "sha256-mMGJMPB6T7KeDXjEXffdrhzyKwaFmhuisK6PjHOJIdU=";
     })
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) scion-freestanding-deployment;
+  };
 
   meta = with lib; {
     description = "A future Internet architecture utilizing path-aware networking";
