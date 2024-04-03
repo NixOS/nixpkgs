@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, kernel, perl, kmod, libelf }:
+{ lib, stdenv, fetchurl, kernel, perl, kmod, elfutils }:
 let
   version = "1.63";
 in
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     sha256 = "1v6b66jhisl110jfl00hm43lmnrav32vs39d85gcbxrjqnmcx08g";
   };
 
-  buildInputs = [ perl libelf ];
+  buildInputs = [ perl elfutils ];
 
   meta = {
     description = "Ndis driver wrapper for the Linux kernel";
