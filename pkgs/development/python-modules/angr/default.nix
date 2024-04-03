@@ -36,7 +36,7 @@
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.2.96";
+  version = "9.2.97";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     owner = "angr";
     repo = "angr";
     rev = "refs/tags/v${version}";
-    hash = "sha256-eyXjmU/K8zv5nxrt+oKkyxS00tHOYrkbTc2X9esTSSA=";
+    hash = "sha256-eJkxflAQFI/sEL4JMlMe+kClnaVSxtoOrPg8HQpH78g=";
   };
 
   pythonRelaxDeps = [
@@ -86,6 +86,12 @@ buildPythonPackage rec {
     unicorn
     unique-log-filter
   ];
+
+  passthru.optional-dependencies = {
+    AngrDB = [
+      sqlalchemy
+    ];
+  };
 
   setupPyBuildFlags = lib.optionals stdenv.isLinux [
     "--plat-name"

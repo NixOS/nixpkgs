@@ -1237,12 +1237,6 @@
     githubId = 29887;
     name = "Andrew Smith";
   };
-  andsild = {
-    email = "andsild@gmail.com";
-    github = "andsild";
-    githubId = 3808928;
-    name = "Anders Sildnes";
-  };
   andys8 = {
     github = "andys8";
     githubId = 13085980;
