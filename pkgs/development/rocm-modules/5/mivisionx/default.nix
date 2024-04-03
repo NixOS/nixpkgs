@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    ./0001-set-__STDC_CONSTANT_MACROS-to-make-rocAL-compile.patch
+    ../../6/mivisionx/0001-set-__STDC_CONSTANT_MACROS-to-make-rocAL-compile.patch
   ];
 
   nativeBuildInputs = [
