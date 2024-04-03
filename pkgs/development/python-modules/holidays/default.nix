@@ -8,7 +8,7 @@
 
 # l10n
 , polib
-, lingua
+, lingva
 , chameleon
 
 # dependencies
@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "holidays";
-  version = "0.44";
+  version = "0.46";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,14 +30,14 @@ buildPythonPackage rec {
     owner = "vacanza";
     repo = "python-holidays";
     rev = "refs/tags/v${version}";
-    hash = "sha256-RwM4RtFIUSaM/e4kiHOMg97lZ4VknB1pOqGRuIe2ns8=";
+    hash = "sha256-v0tufmOtxUP5pTsNNJJ9fevCPnsa68e0mdDtKGXEgVs=";
   };
 
   build-system = [
     setuptools
 
     # l10n
-    lingua
+    lingva
     chameleon
     polib
   ];
