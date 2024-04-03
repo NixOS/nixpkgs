@@ -5,8 +5,7 @@
 }:
 
 telegram-desktop.overrideAttrs (old: rec {
-
-  pname = "64Gram";
+  pname = "64gram";
   version = "1.1.15";
 
   src = fetchFromGitHub {
