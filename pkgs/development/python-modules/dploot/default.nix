@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, impacket
-, lxml
-, poetry-core
-, pyasn1
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  impacket,
+  lxml,
+  poetry-core,
+  pyasn1,
+  pythonOlder,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -28,13 +29,9 @@ buildPythonPackage rec {
     "pyasn1"
   ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     impacket
@@ -43,9 +40,7 @@ buildPythonPackage rec {
     lxml
   ];
 
-  pythonImportsCheck = [
-    "dploot"
-  ];
+  pythonImportsCheck = [ "dploot" ];
 
   # No tests
   doCheck = false;
