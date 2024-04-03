@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, setuptools
-, mock
-, netaddr
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  setuptools,
+  mock,
+  netaddr,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "arista-eosplus";
     repo = "pyeapi";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-GZBoCoAqij54rZezRDF/ihJDQ5T6FFyDSRXGV3//avQ=";
+    hash = "sha256-GZBoCoAqij54rZezRDF/ihJDQ5T6FFyDSRXGV3//avQ=";
   };
 
   patches = [
@@ -32,26 +33,18 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    netaddr
-  ];
+  dependencies = [ netaddr ];
 
   nativeCheckInputs = [
     mock
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "test/unit"
-  ];
+  pytestFlagsArray = [ "test/unit" ];
 
-  pythonImportsCheck = [
-    "pyeapi"
-  ];
+  pythonImportsCheck = [ "pyeapi" ];
 
   meta = with lib; {
     description = "Client for Arista eAPI";
