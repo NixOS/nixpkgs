@@ -27,19 +27,22 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=aioopenexchangerates --cov-report=term-missing:skip-covered" ""
+      --replace-fail " --cov=aioopenexchangerates --cov-report=term-missing:skip-covered" ""
   '';
-
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
 
   pythonRelaxDeps = [
     "pydantic"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    poetry-core
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  dependencies = [
     aiohttp
     pydantic
   ];
