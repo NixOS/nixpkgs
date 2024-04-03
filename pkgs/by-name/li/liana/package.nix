@@ -32,19 +32,19 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "liana";
-  version = "4.0";
+  version = "5.0";
 
   src = fetchFromGitHub {
     owner = "wizardsardine";
-    repo = pname;
+    repo = "liana";
     rev = "v${version}";
-    hash = "sha256-aeNbPtzS8QhZ+d/HC9/Nx1GvIWsCrjUrMqghIspt2+o=";
+    hash = "sha256-RkZ2HSN7IjwN3tD0UhpMeQeqkb+Y79kSWnjJZ5KPbQk=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "liana-4.0.0" = "sha256-GT5/HlFU+Cf/Q5aQoT6ldZ+f+7I+S3wpUbq3JAhJjz8=";
+      "liana-5.0.0" = "sha256-wePqsVpMBRP2eJZd8W05CaeesqY5g/rnr4OonmRzeeM=";
       "iced_futures-0.6.0" = "sha256-ejkAxU6DwiX1/119eA0GRapSmz7dqwx9M0uMwyDHATQ=";
     };
   };
