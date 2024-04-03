@@ -6737,6 +6737,8 @@ self: super: with self; {
 
   lingua = callPackage ../development/python-modules/lingua { };
 
+  lingva = callPackage ../development/python-modules/lingva { };
+
   linien-client = callPackage ../development/python-modules/linien-client { };
 
   linien-common = callPackage ../development/python-modules/linien-common { };
