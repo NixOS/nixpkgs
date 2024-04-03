@@ -1,16 +1,17 @@
-{ lib
-, aiohttp
-, azure-core
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, microsoft-kiota-abstractions
-, opentelemetry-api
-, opentelemetry-sdk
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  azure-core,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  microsoft-kiota-abstractions,
+  opentelemetry-api,
+  opentelemetry-sdk,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-RA0BbIwDs3cXiH4tQsvCGUO1OAg+DWjEeWd7MEVIC8E=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -45,9 +44,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "kiota_authentication_azure"
-  ];
+  pythonImportsCheck = [ "kiota_authentication_azure" ];
 
   meta = with lib; {
     description = "Kiota Azure authentication provider";
