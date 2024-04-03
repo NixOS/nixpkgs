@@ -2976,6 +2976,7 @@ let
         "systemd-networkd.service"
         "systemd-networkd.socket"
         "systemd-network-generator.service"
+        "systemd-resolved.service"
         "network-online.target"
         "network-pre.target"
         "network.target"
@@ -2985,7 +2986,9 @@ let
         "remote-fs.target"
       ];
       systemd.users.systemd-network = {};
+      systemd.users.systemd-resolve = {};
       systemd.groups.systemd-network = {};
+      systemd.groups.systemd-resolve = {};
 
       systemd.contents."/etc/systemd/networkd.conf" = renderConfig cfg.config;
 
@@ -2995,6 +2998,10 @@ let
       systemd.sockets.systemd-networkd = {
         wantedBy = [ "initrd.target" ];
       };
+      systemd.services.systemd-resolved = {
+        wantedBy = ["initrd.target"];
+        serviceConfig.ExecStartPre = "-+/bin/ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf";
+      };
 
       systemd.services.systemd-network-generator.wantedBy = [ "sysinit.target" ];
 
@@ -3002,6 +3009,7 @@ let
         "${config.boot.initrd.systemd.package}/lib/systemd/systemd-networkd"
         "${config.boot.initrd.systemd.package}/lib/systemd/systemd-networkd-wait-online"
         "${config.boot.initrd.systemd.package}/lib/systemd/systemd-network-generator"
+        "${config.boot.initrd.systemd.package}/lib/systemd/systemd-resolved"
       ];
       kernelModules = [ "af_packet" ];
 
