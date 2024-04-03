@@ -127,6 +127,8 @@ self: super: with self; {
 
   aggdraw = callPackage ../development/python-modules/aggdraw { };
 
+  aifs = callPackage ../development/python-modules/aifs { };
+
   aigpy = callPackage ../development/python-modules/aigpy { };
 
   aio-geojson-client = callPackage ../development/python-modules/aio-geojson-client { };
@@ -6088,6 +6090,8 @@ self: super: with self; {
 
   jsonpath-ng = callPackage ../development/python-modules/jsonpath-ng { };
 
+  jsonpath-python = callPackage ../development/python-modules/jsonpath-python { };
+
   jsonpickle = callPackage ../development/python-modules/jsonpickle { };
 
   jsonpointer = callPackage ../development/python-modules/jsonpointer { };
@@ -9940,6 +9944,8 @@ self: super: with self; {
   python-ipware = callPackage ../development/python-modules/python-ipware { };
 
   python-ironicclient = callPackage ../development/python-modules/python-ironicclient { };
+
+  python-iso639 = callPackage ../development/python-modules/python-iso639 { };
 
   python-izone = callPackage ../development/python-modules/python-izone { };
 
@@ -16260,6 +16266,8 @@ self: super: with self; {
   unstructured = callPackage ../development/python-modules/unstructured { };
 
   unstructured-api-tools = callPackage ../development/python-modules/unstructured-api-tools { };
+
+  unstructured-client = callPackage ../development/python-modules/unstructured-client { };
 
   unstructured-inference = callPackage ../development/python-modules/unstructured-inference { };
 

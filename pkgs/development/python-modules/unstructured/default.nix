@@ -4,24 +4,38 @@
 # propagated build inputs
 , chardet
 , filetype
+, python-magic
 , lxml
-, msg-parser
 , nltk
-, openpyxl
+, tabulate
+, requests
+, beautifulsoup4
+, emoji
+, dataclasses-json
+, python-iso639
+, langdetect
+, numpy
+, rapidfuzz
+, backoff
+, typing-extensions
+, unstructured-client
+, wrapt
+# optional-dependencies
 , pandas
+, python-docx
+, pypandoc
+, markdown
+, msg-parser
+, onnx
 , pdf2image
 , pdfminer-six
-, pillow
-, pypandoc
-, python-docx
+, pikepdf
+, pillow-heif
+, pypdf
 , python-pptx
-, python-magic
-, markdown
-, requests
-, tabulate
+, openpyxl
 , xlrd
-# optional-dependencies
-, langdetect
+, networkx
 , sacremoses
 , sentencepiece
 , torch
@@ -57,28 +71,81 @@
 }:
 let
   version = "0.13.0";
+  csv = [ pandas ];
+  tsv = csv;
+  doc = [ python-docx ];
+  docx = doc;
+  epub = [ pypandoc ];
+  md = [ markdown ];
+  msg = [ msg-parser ];
+  odt = [ python-docx pypandoc ];
+  # paddleocr = [ unstructured.paddleocr ];
+  org = [ pypandoc ];
+  rtf = org;
+  rst = org;
+  image = [
+    onnx
+    pdf2image
+    pdfminer-six
+    pikepdf
+    pillow-heif
+    pypdf
+    unstructured-inference
+    # unstructured.pytessseract
+  ];
+  pdf = image;
+  pptx = [ python-pptx ];
+  ppt = pptx;
+  xlsx = [ openpyxl pandas xlrd networkx ];
+  all-docs = [ csv docx epub image md msg odt org pdf pptx xlsx ];
   optional-dependencies = {
-    huggingflace = [
+    inherit csv doc docx epub image md msg odt org pdf ppt pptx rtf rst tsv xlsx all-docs;
+    # data ingest
+    # airtable = []
+    # astra = []
+    azure = [ adlfs fsspec ];
+    # azure-cognitive-search = []
+    # biomed = []
+    # box = []
+    # chroma = []
+    # clarifai = []
+    confluence = [ atlassian-python-api ];
+    # delta-table = []
+    discord = [ ]; # discord-py
+    dropbox = []; # dropboxdrivefs fsspec
+    elasticsearch = [ elasticsearch8 jq ];
+    gcs = []; # gcsfs fsspec
+    github = [ pygithub ];
+    gitlab = [ python-gitlab ];
+    google-drive = [ google-api-python-client ];
+    # hubspot = []
+    # jira = []
+    # mongodb = []
+    # notion = []
+    # onedrive = []
+    # opensearch = []
+    # outlook = []
+    # pinecone = []
+    # postgres = []
+    # qdrant = []
+    reddit = [ praw ];
+    s3 = [ s3fs fsspec ];
+    # sharepoint = []
+    # salesforce = []
+    # sftp = []
+    slack = [ slack-sdk ];
+    wikipedia = [ wikipedia ];
+    # weaviate = []
+
+    # all legacy requirements
+    huggingface = [
       langdetect
       sacremoses
       sentencepiece
       torch
       transformers
     ];
-    local-inference = [ unstructured-inference ];
-    s3 = [ s3fs fsspec ];
-    azure = [ adlfs fsspec ];
-    discord = [ ]; # discord-py
-    github = [ pygithub ];
-    gitlab = [ python-gitlab ];
-    reddit = [ praw ];
-    slack = [ slack-sdk ];
-    wikipedia = [ wikipedia ];
-    google-drive = [ google-api-python-client ];
-    gcs = []; # gcsfs fsspec
-    elasticsearch = [ elasticsearch8 jq ];
-    dropbox = []; # dropboxdrivefs fsspec
-    confluence = [ atlassian-python-api ];
+    local-inference = all-docs;
   };
 in
 buildPythonPackage {
@@ -96,22 +163,22 @@ buildPythonPackage {
   propagatedBuildInputs = [
     chardet
     filetype
-    lxml
-    msg-parser
-    nltk
-    openpyxl
-    pandas
-    pdf2image
-    pdfminer-six
-    pillow
-    pypandoc
-    python-docx
-    python-pptx
     python-magic
-    markdown
-    requests
+    lxml
+    nltk
     tabulate
-    xlrd
+    requests
+    beautifulsoup4
+    emoji
+    dataclasses-json
+    python-iso639
+    langdetect
+    numpy
+    rapidfuzz
+    backoff
+    typing-extensions
+    unstructured-client
+    wrapt
   ];
 
   pythonImportsCheck = [ "unstructured" ];
