@@ -101,6 +101,11 @@ in
 
       users.groups.messagebus.gid = config.ids.gids.messagebus;
 
+      # Install dbus for dbus tools even when using dbus-broker
+      environment.systemPackages = [
+        pkgs.dbus
+      ];
+
       # You still need the dbus reference implementation installed to use dbus-broker
       systemd.packages = [
         pkgs.dbus
@@ -132,10 +137,6 @@ in
     })
 
     (mkIf (cfg.implementation == "dbus") {
-      environment.systemPackages = [
-        pkgs.dbus
-      ];
-
       security.wrappers.dbus-daemon-launch-helper = {
         source = "${pkgs.dbus}/libexec/dbus-daemon-launch-helper";
         owner = "root";
