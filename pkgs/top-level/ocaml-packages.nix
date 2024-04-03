@@ -1233,6 +1233,8 @@ let
 
     ocaml-lsp = callPackage ../development/ocaml-modules/ocaml-lsp { };
 
+    ocaml-lua = callPackage ../development/ocaml-modules/ocaml-lua { };
+
     ocaml_lwt = lwt;
 
     ocaml-migrate-parsetree = ocaml-migrate-parsetree-1-8;
