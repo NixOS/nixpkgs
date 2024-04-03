@@ -9,12 +9,12 @@
 
 buildGoModule rec {
   pname = "shopware-cli";
-  version = "0.4.30";
+  version = "0.4.33";
   src = fetchFromGitHub {
     repo = "shopware-cli";
     owner = "FriendsOfShopware";
     rev = version;
-    hash = "sha256-QfeQ73nTvLavUIpHlTBTkY1GGqZCednlXRBigwPCt48=";
+    hash = "sha256-BwoCp92tE/fsYIgez/BcU4f23IU5lMQ6jQKOCZ/oTEk=";
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
