@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://st.suckless.org/";
     description = "Simple Terminal for X from Suckless.org Community";
     license = licenses.mit;
-    maintainers = with maintainers; [ andsild qusic ];
+    maintainers = with maintainers; [ qusic ];
     platforms = platforms.unix;
     mainProgram = "st";
   };
