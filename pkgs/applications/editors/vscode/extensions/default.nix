@@ -2116,6 +2116,22 @@ let
         };
       };
 
+      hbenl.vscode-test-explorer = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-test-explorer";
+          publisher = "hbenl";
+          version = "2.21.1";
+          sha256 = "sha256-fHyePd8fYPt7zPHBGiVmd8fRx+IM3/cSBCyiI/C0VAg=";
+        };
+        meta = {
+          changelog = "https://github.com/hbenl/vscode-test-explorer/blob/master/CHANGELOG.md";
+          description = "A Visual Studio Code extension that runs your tests in the sidebar";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=hbenl.vscode-test-explorer";
+          homepage = "https://github.com/hbenl/vscode-test-explorer";
+          license = lib.licenses.mit;
+        };
+      };
+
       hediet.vscode-drawio = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-drawio";
