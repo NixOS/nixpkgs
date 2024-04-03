@@ -31,7 +31,10 @@ extendcudaHostPathsSeen() {
 
     # E.g. cuda_cudart-lib
     local cudaOutputName
-    read -r cudaOutputName < "$markerPath"
+    # Fail gracefully if the file is empty.
+    # One reason the file may be empty: the package was built with strictDeps set, but the current build does not have
+    # strictDeps set.
+    read -r cudaOutputName < "$markerPath" || return 0
 
     [[ -z "$cudaOutputName" ]] && return 0
 
