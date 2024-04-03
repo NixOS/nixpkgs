@@ -75,5 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
+    hydraPlatforms = platforms.linux; # sdl-config times out on darwin
   };
 })
