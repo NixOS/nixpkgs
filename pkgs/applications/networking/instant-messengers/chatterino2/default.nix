@@ -1,4 +1,4 @@
-{ stdenv, lib, cmake, pkg-config, fetchFromGitHub, qtbase, qtsvg, qtmultimedia, qtimageformats, qttools, boost, openssl, wrapQtAppsHook, libsecret }:
+{ stdenv, lib, cmake, pkg-config, fetchFromGitHub, qt6, boost, openssl, libsecret }:
 
 stdenv.mkDerivation rec {
   pname = "chatterino2";
@@ -10,8 +10,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-CQviw5Fw6v5EwjCldAQoJfAIZMWKBfBzUIQZEgW34k0=";
     fetchSubmodules = true;
   };
-  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
-  buildInputs = [ qtbase qtsvg qtmultimedia qtimageformats qttools boost openssl libsecret ];
+  nativeBuildInputs = [ cmake pkg-config qt6.wrapQtAppsHook ];
+  buildInputs = [ qt6.qtbase qt6.qtsvg qt6.qtimageformats qt6.qttools qt6.qt5compat boost openssl libsecret ];
+  cmakeFlags = [ "-DBUILD_WITH_QT6=ON" ];
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p "$out/Applications"
     mv bin/chatterino.app "$out/Applications/"
