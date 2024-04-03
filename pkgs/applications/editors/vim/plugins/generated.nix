@@ -2102,6 +2102,7 @@ final: prev:
       rev = "c3d089186ccead26eba01023502f3eeadd7a92d2";
       sha256 = "sha256-jWNoKzY0x5GPFP7JsQi4nqgg1YFJV4DqxwJRqsg6KaQ=";
     };
+    meta.homepage = "https://github.com/chrisgrieser/cmp_yanky";
   };
 
   cobalt2-nvim = buildVimPlugin {
