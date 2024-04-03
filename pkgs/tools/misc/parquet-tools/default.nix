@@ -18,6 +18,12 @@ buildPythonApplication rec {
     hash = "sha256-2jIwDsxB+g37zV9hLc2VNC5YuZXTpTmr2aQ72AeHYJo=";
   };
 
+  patches = [
+    # support Moto 5.x
+    # https://github.com/ktrueda/parquet-tools/pull/55
+    ./moto5.patch
+  ];
+
   postPatch = ''
     substituteInPlace tests/test_inspect.py \
       --replace "parquet-cpp-arrow version 5.0.0" "parquet-cpp-arrow version ${pyarrow.version}" \
