@@ -2693,6 +2693,12 @@
     github = "bmwalters";
     githubId = 4380777;
   };
+  bnlrnz = {
+    name = "Ben Lorenz";
+    email = "bnlrnz@gmail.com";
+    github = "bnlrnz";
+    githubID = 11310385;
+  };
   bobakker = {
     email = "bobakk3r@gmail.com";
     github = "bobakker";
