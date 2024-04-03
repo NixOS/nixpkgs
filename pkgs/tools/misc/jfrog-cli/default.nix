@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, nix-update-script
 }:
 
 buildGoModule rec {
@@ -23,6 +24,8 @@ buildGoModule rec {
 
   # Some of the tests require a writable $HOME
   preCheck = "export HOME=$TMPDIR";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/jfrog/jfrog-cli";
