@@ -117,6 +117,9 @@ stdenv.mkDerivation (finalAttrs: {
     ./remove-node-download.patch
   ];
 
+  # Disable NAPI_EXPERIMENTAL to allow to build with Node.js≥18.20.0.
+  env.NIX_CFLAGS_COMPILE = "-DNODE_API_EXPERIMENTAL_NOGC_ENV_OPT_OUT";
+
   postPatch = ''
     export HOME=$PWD
 
