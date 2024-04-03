@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, ncurses, texinfo, writeScript
-, common-updater-scripts, git, nix, nixfmt, coreutils, gnused, callPackage
+, common-updater-scripts, git, nix, nixfmt-classic, coreutils, gnused, callPackage
 , file ? null, gettext ? null, enableNls ? true, enableTiny ? false }:
 
 assert enableNls -> (gettext != null);
@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
         lib.makeBinPath [
           common-updater-scripts
           git
-          nixfmt
+          nixfmt-classic
           nix
           coreutils
           gnused
