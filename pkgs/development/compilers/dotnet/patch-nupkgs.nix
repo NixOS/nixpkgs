@@ -54,6 +54,14 @@ in writeShellScriptBin "patch-nupkgs" ''
         patchelf \
           --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" \
           "$tmp" ||:
+        # This makes sure that if the binary requires some specific runtime dependencies, it can find it.
+        # This fixes dotnet-built binaries like crossgen2
+        patchelf \
+          --add-needed libicui18n.so \
+          --add-needed libicuuc.so \
+          --add-needed libz.so \
+          --add-needed libssl.so \
+          "$tmp"
         patchelf \
           --add-rpath "${binaryRPath}" \
           "$tmp" ||:
