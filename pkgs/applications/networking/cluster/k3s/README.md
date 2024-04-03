@@ -71,3 +71,44 @@ In order to resolve this issue, we propose backporting not just new patch releas
 
 In the above example, where NixOS 23.05 included k3s 1.26, and 23.11 included k3s 1.28, that means we would backport 1.27 to the NixOS 23.05 release, and backport all patches for 1.26 and 1.27.
 This would allow someone to upgrade between those NixOS releases in a supported configuration.
+
+
+## K3s upkeep for nixpkgs maintainers
+
+* A `nixos-stable` release triggers the need of re-setting K3s versions in `nixos-unstable` branch to a single K3s version. After every `nixos-stable` release, K3s maintainers should remove all K3s versions in `nixos-unstable` branch but the latest. While `nixos-stable` keeps the multiple K3s versions necessary for a smooth upgrade to `nixos-unstable`.
+
+* Whenever adding a new major/minor K3s version to nixpkgs:
+  - update `k3s` alias to the latest version.
+  - add a NixOS release note scheduling the removal of all K3s packages but the latest
+  - include migration information from both Kubernetes and K3s projects
+
+* For version patch upgrades, use the K3s update script.
+
+  To execute the update script, from nixpkgs git repository, run:
+
+  > ./pkgs/applications/networking/cluster/k3s/update-script.sh "29"
+
+  "29" being the target minor version to be updated.
+
+  On failure, the update script should be fixed. On failing to fix, open an issue reporting the update script breakage.
+
+  RyanTM bot can automatically do patch upgrades. Update logs are available at: https://r.ryantm.com/log/k3s_1_29/
+
+* When reviewing upgrades, check:
+
+  - At top-level, every K3s version should have the Go compiler pinned according to `go.mod` file.
+
+    Notice the update script does not automatically pin the Go version.
+
+  - K3s passthru.tests (Currently: single-node, multi-node, etcd) works for all architectures (linux-x86_64, aarch64-linux).
+
+    For GitHub CI, [OfBorg](https://github.com/NixOS/ofborg) can be used to test all platforms.
+
+    To test locally, at nixpkgs repository, run:
+    > nix build .#k3s_1_29.passthru.tests.{etcd,single-node,multi-node}
+
+    Replace "29" according to the version that you are testing.
+
+  - Read the nix build logs to check for anything unusual. (Obvious but underrated.)
+
+* Thank you for reading the documentation and your continued contribution.

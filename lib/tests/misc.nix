@@ -64,6 +64,7 @@ let
     lists
     listToAttrs
     makeExtensible
+    makeIncludePath
     makeOverridable
     mapAttrs
     matchAttrs
@@ -294,6 +295,35 @@ runTests {
   testConcatLines = {
     expr = concatLines ["a" "b" "c"];
     expected = "a\nb\nc\n";
+  };
+
+  testMakeIncludePathWithPkgs = {
+    expr = (makeIncludePath [
+      # makeIncludePath preferably selects the "dev" output
+      { dev.outPath = "/dev"; out.outPath = "/out"; outPath = "/default"; }
+      # "out" is used if "dev" is not found
+      { out.outPath = "/out"; outPath = "/default"; }
+      # And it returns the derivation directly if there's no "out" either
+      { outPath = "/default"; }
+      # Same if the output is specified explicitly, even if there's a "dev"
+      { dev.outPath = "/dev"; outPath = "/default"; outputSpecified = true; }
+    ]);
+    expected = "/dev/include:/out/include:/default/include:/default/include";
+  };
+
+  testMakeIncludePathWithEmptyList = {
+    expr = (makeIncludePath [ ]);
+    expected = "";
+  };
+
+  testMakeIncludePathWithOneString = {
+    expr = (makeIncludePath [ "/usr" ]);
+    expected = "/usr/include";
+  };
+
+  testMakeIncludePathWithManyString = {
+    expr = (makeIncludePath [ "/usr" "/usr/local" ]);
+    expected = "/usr/include:/usr/local/include";
   };
 
   testReplicateString = {

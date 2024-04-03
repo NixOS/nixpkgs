@@ -17,7 +17,7 @@ let
     ;
 in
 finalAttrs: prevAttrs: {
-  src = fetchurl {inherit (package) url hash;};
+  src = fetchurl { inherit (package) url hash; };
 
   # Useful for inspecting why something went wrong.
   brokenConditions =
@@ -34,9 +34,9 @@ finalAttrs: prevAttrs: {
 
   buildInputs =
     prevAttrs.buildInputs
-    ++ [zlib]
-    ++ lists.optionals finalAttrs.passthru.useCudatoolkitRunfile [final.cudatoolkit]
-    ++ lists.optionals (!finalAttrs.passthru.useCudatoolkitRunfile) [final.libcublas.lib];
+    ++ [ zlib ]
+    ++ lists.optionals finalAttrs.passthru.useCudatoolkitRunfile [ final.cudatoolkit ]
+    ++ lists.optionals (!finalAttrs.passthru.useCudatoolkitRunfile) [ final.libcublas.lib ];
 
   # Tell autoPatchelf about runtime dependencies.
   # NOTE: Versions from CUDNN releases have four components.
@@ -51,13 +51,11 @@ finalAttrs: prevAttrs: {
     homepage = "https://developer.nvidia.com/cudnn";
     maintainers =
       prevAttrs.meta.maintainers
-      ++ (
-        with maintainers; [
-          mdaiter
-          samuela
-          connorbaker
-        ]
-      );
+      ++ (with maintainers; [
+        mdaiter
+        samuela
+        connorbaker
+      ]);
     license = {
       shortName = "cuDNN EULA";
       fullName = "NVIDIA cuDNN Software License Agreement (EULA)";
