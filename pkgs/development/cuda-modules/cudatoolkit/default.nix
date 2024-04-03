@@ -20,7 +20,7 @@
   libkrb5,
   krb5,
   makeWrapper,
-  markForCudatoolkitRootHook,
+  markForCudatoolkitRoot,
   ncurses5,
   numactl,
   nss,
@@ -77,7 +77,7 @@ backendStdenv.mkDerivation rec {
       addOpenGLRunpath
       autoPatchelfHook
       autoAddDriverRunpath
-      markForCudatoolkitRootHook
+      markForCudatoolkitRoot
     ]
     ++ lib.optionals (lib.versionOlder version "11") [ libsForQt5.wrapQtAppsHook ]
     ++ lib.optionals (lib.versionAtLeast version "11.8") [ qt6Packages.wrapQtAppsHook ];

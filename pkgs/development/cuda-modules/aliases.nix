@@ -15,4 +15,7 @@ in
   autoAddOpenGLRunpathHook =
     mkRenamed "autoAddOpenGLRunpathHook" "pkgs.autoAddDriverRunpath"
       final.pkgs.autoAddDriverRunpath; # Added 2024-03-30
+  markForCudatoolkitRootHook =
+    mkRenamed "markForCudatoolkitRootHook" "cudaPackages.markForCudatoolkitRoot"
+      final.markForCudatoolkitRoot; # Added 2024-04-19
 }

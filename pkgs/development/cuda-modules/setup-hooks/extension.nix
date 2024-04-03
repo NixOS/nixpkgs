@@ -1,5 +1,5 @@
 final: _: {
   autoAddCudaCompatRunpath = final.callPackage ./auto-add-cuda-compat-runpath { };
-  markForCudatoolkitRootHook = final.callPackage ./mark-for-cudatoolkit-root-hook { };
+  markForCudatoolkitRoot = final.callPackage ./mark-for-cudatoolkit-root { };
   setupCudaHook = final.callPackage ./setup-cuda-hook { };
 }
