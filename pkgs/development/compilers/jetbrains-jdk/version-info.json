@@ -1,0 +1,10 @@
+{
+    "ideaVersion": "2023.2.3",
+    "javaVersion": "17.0.8",
+    "javaBuild": "7",
+    "build": "1000.8",
+    "openjdkTag": "jbr-17.0.7+7",
+    "rev": "jb17.0.8-b1000.8",
+    "hash": "sha256-PXS8wRF37D9vzeC4CvmB3szFMbt+NRqhQqtPZcbeAO8=",
+    "SOURCE_DATE_EPOCH": 1691119859
+}
