@@ -307,16 +307,15 @@ If some values are instances of more than one of the types, it is not possible t
 
 ## Sum types {#sec-option-types-sums}
 
-A sum type can be thought of, conceptually, as a *`types.enum`* where each valid item is paired with a type, through some value syntax.
+A sum type can be thought of, conceptually, as a *`types.enum`* where each valid item is paired with at least a type, through some value syntax.
 Nix does not have a built-in syntax for this pairing of a label and a type or value, so sum types may be represented in multiple ways.
 
-If the built-in Nix value types provide enough distinction, you simplify your syntax with a [union type](#sec-option-types-unions) instead.
+If the you're interested in can be distinguished without a label, you may simplify your value syntax with a [union type](#sec-option-types-unions) instead.
 
-`types.attrTag` *`{ attr1 = t1; attr2 = t2; ... }`*
+`types.attrTag` *`{ attr1 = option1; attr2 = option2; ... }`*
 
 :   An attribute set containing one attribute, whose name must be picked from
-    the attribute set (`attr1`, etc) and whose value must be of the accompanying
-    type.
+    the attribute set (`attr1`, etc) and whose value consists of definitions that are valid for the corresponding option (`option1`, etc).
 
     This type appears in the documentation as _attribute-tagged union_.
 
