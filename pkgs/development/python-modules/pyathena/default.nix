@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pyathena";
-  version = "3.5.1";
+  version = "3.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9T5qm3Vmg6eZQtdxaLnj4+d5SAglJo2wKo+8y25gQik=";
+    hash = "sha256-2jf7mw/cTS5xW3GLZYk60uULUIIlk01on4942Ow2rwY=";
   };
 
   nativeBuildInputs = [
