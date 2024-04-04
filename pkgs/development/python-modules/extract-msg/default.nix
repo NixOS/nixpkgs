@@ -1,22 +1,23 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, compressed-rtf
-, ebcdic
-, fetchFromGitHub
-, olefile
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, red-black-tree-mod
-, rtfde
-, setuptools
-, tzlocal
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  compressed-rtf,
+  ebcdic,
+  fetchFromGitHub,
+  olefile,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  red-black-tree-mod,
+  rtfde,
+  setuptools,
+  tzlocal,
 }:
 
 buildPythonPackage rec {
   pname = "extract-msg";
-  version = "0.48.4";
+  version = "0.48.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     owner = "TeamMsgExtractor";
     repo = "msg-extractor";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xX25RVtkUFn+j9rALOHQOTRzqJXiEMn7i9pxCJ8so4U=";
+    hash = "sha256-GBX6VRXXja18azyiJZJ3niKPhAKZxDR8kcFbiC2XgeU=";
   };
 
   pythonRelaxDeps = [
@@ -48,17 +49,11 @@ buildPythonPackage rec {
     tzlocal
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "extract_msg"
-  ];
+  pythonImportsCheck = [ "extract_msg" ];
 
-  pytestFlagsArray = [
-    "extract_msg_tests/*.py"
-  ];
+  pytestFlagsArray = [ "extract_msg_tests/*.py" ];
 
   meta = with lib; {
     description = "Extracts emails and attachments saved in Microsoft Outlook's .msg files";
