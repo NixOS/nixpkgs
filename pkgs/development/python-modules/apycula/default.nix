@@ -1,19 +1,20 @@
 { lib
 , buildPythonPackage
-, pythonOlder
+, crc
+, crcmod
 , fetchPypi
-, setuptools-scm
 , numpy
+, openpyxl
 , pandas
 , pillow
-, crcmod
-, openpyxl
+, pythonOlder
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "apycula";
   version = "0.12";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -23,16 +24,17 @@ buildPythonPackage rec {
     hash = "sha256-aF/JVm4d6c631y+RdsCk3pAVSroRBY+lW2wBRvgcQH8=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    crc
+    crcmod
     numpy
+    openpyxl
     pandas
     pillow
-    crcmod
-    openpyxl
   ];
 
   # tests require a physical FPGA
