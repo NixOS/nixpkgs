@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "llamaindex-py-client";
-  version = "0.1.15";
+  version = "0.1.16";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llamaindex_py_client";
     inherit version;
-    hash = "sha256-x84mhVupdhU7tAFXw8GUIjxrdReZNbmI3UvWo/6Dqss=";
+    hash = "sha256-6Zu8CFXmyqp166IZzbPPbJQ66U+hXMu2ijoI1FL9Y4A=";
   };
 
   nativeBuildInputs = [
