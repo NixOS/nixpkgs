@@ -9,12 +9,13 @@
 , scipy
 , pandas
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "hickle";
   version = "5.0.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
@@ -25,10 +26,14 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace tox.ini \
-      --replace "--cov=./hickle" ""
+      --replace-fail "--cov=./hickle" ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     dill
     h5py
     numpy
