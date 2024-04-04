@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "romy";
-  version = "0.0.9";
+  version = "0.0.10";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "xeniter";
     repo = "romy";
     rev = "refs/tags/${version}";
-    hash = "sha256-r7g8DE8eBFHkMHzGfNlYi+XxrRIvH8IDxGOSEiJKKqM=";
+    hash = "sha256-pQI+/1xt1YE+L5CHsurkBr2dKMGR/dV5vrGHYM8wNGs=";
   };
 
   build-system = [
