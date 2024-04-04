@@ -1,7 +1,8 @@
-{ lib, config, ... }:
+{ lib, config, options, ... }:
 let
   inherit (lib) mkOption types;
   forceDeep = x: builtins.deepSeq x x;
+  mergedSubOption = (options.merged.type.getSubOptions options.merged.loc).extensible."merged.<name>";
 in
 {
   options = {
@@ -98,7 +99,7 @@ in
     merged.positive.yay = 100;
     merged.extensi-foo.extensible = "foo";
     merged.extensi-bar.extensible = "bar";
-    okChecks =
+    okChecks = builtins.addErrorContext "while evaluating the assertions" (
       assert config.intStrings.hello == { right = "hello world"; };
       assert config.intStrings.numberOne == { left = 1; };
       assert config.merged.negative == { nay = false; };
@@ -115,7 +116,20 @@ in
       assert config.docs."submodules.<name>.qux".visible == true;
       # Not available (yet?)
       # assert config.docs."submodules.<name>.qux".declarationsWithPositions == [ ... ];
+      assert options.submodules.declarations == [ __curPos.file ];
+      assert lib.length options.submodules.declarationPositions == 1;
+      assert (lib.head options.submodules.declarationPositions).file == __curPos.file;
+      assert options.merged.declarations == [ __curPos.file __curPos.file ];
+      assert lib.length options.merged.declarationPositions == 2;
+      assert (lib.elemAt options.merged.declarationPositions 0).file == __curPos.file;
+      assert (lib.elemAt options.merged.declarationPositions 1).file == __curPos.file;
+      assert (lib.elemAt options.merged.declarationPositions 0).line != (lib.elemAt options.merged.declarationPositions 1).line;
+      assert mergedSubOption.declarations == [ __curPos.file __curPos.file ];
+      assert lib.length mergedSubOption.declarationPositions == 2;
+      assert (lib.elemAt mergedSubOption.declarationPositions 0).file == __curPos.file;
+      assert (lib.elemAt mergedSubOption.declarationPositions 1).file == __curPos.file;
+      assert (lib.elemAt mergedSubOption.declarationPositions 0).line != (lib.elemAt mergedSubOption.declarationPositions 1).line;
       assert lib.length config.docs."merged.<name>.extensible".declarations == 2;
-      true;
+      true);
   };
 }
