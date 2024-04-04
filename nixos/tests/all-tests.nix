@@ -916,6 +916,7 @@ in {
   tang = handleTest ./tang.nix {};
   taskserver = handleTest ./taskserver.nix {};
   tayga = handleTest ./tayga.nix {};
+  technitium-dns-server = handleTest ./technitium-dns-server.nix {};
   teeworlds = handleTest ./teeworlds.nix {};
   telegraf = handleTest ./telegraf.nix {};
   teleport = handleTest ./teleport.nix {};
