@@ -744,6 +744,9 @@ let
           t' = opt.options.type;
           mergedType = t.typeMerge t'.functor;
           typesMergeable = mergedType != null;
+          applySet = if (bothHave "apply")
+                        then { apply = value: opt.options.apply (res.apply value); }
+                        else {};
           typeSet = if (bothHave "type") && typesMergeable
                        then { type = mergedType; }
                        else {};
@@ -752,7 +755,6 @@ let
       if bothHave "default" ||
          bothHave "example" ||
          bothHave "description" ||
-         bothHave "apply" ||
          (bothHave "type" && (! typesMergeable))
       then
         throw "The option `${showOption loc}' in `${opt._file}' is already declared in ${showFiles res.declarations}."
@@ -772,7 +774,7 @@ let
                 then [opt.pos]
                 else [{ file = opt._file; line = null; column = null; }]);
             options = submodules;
-          } // typeSet
+          } // applySet // typeSet
     ) { inherit loc; declarations = []; declarationPositions = []; options = []; } opts;
 
   /* Merge all the definitions of an option to produce the final
