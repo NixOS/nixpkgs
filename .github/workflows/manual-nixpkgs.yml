@@ -27,6 +27,6 @@ jobs:
         with:
           # This cache is for the nixpkgs repo checks and should not be trusted or used elsewhere.
           name: nixpkgs-ci
-          signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       - name: Building Nixpkgs manual
         run: NIX_PATH=nixpkgs=$(pwd) nix-build --option restrict-eval true pkgs/top-level/release.nix -A manual -A manual.tests
