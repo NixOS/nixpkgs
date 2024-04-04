@@ -35,7 +35,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "A runner for Forgejo based on act";
     homepage = "https://code.forgejo.org/forgejo/runner";
-    changelog = "https://gitea.com/gitea/act_runner/releases/tag/${src.rev}";
+    changelog = "https://code.forgejo.org/forgejo/runner/src/tag/${src.rev}/RELEASE-NOTES.md";
     license = licenses.mit;
     maintainers = with maintainers; [ kranzes emilylange ];
     mainProgram = "act_runner";
