@@ -1,17 +1,18 @@
-{ lib
-, anyio
-, buildPythonPackage
-, fetchPypi
-, jsonpatch
-, langsmith
-, packaging
-, poetry-core
-, pydantic
-, pythonOlder
-, pythonRelaxDepsHook
-, pyyaml
-, requests
-, tenacity
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  fetchPypi,
+  jsonpatch,
+  langsmith,
+  packaging,
+  poetry-core,
+  pydantic,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  pyyaml,
+  requests,
+  tenacity,
 }:
 
 buildPythonPackage rec {
@@ -32,13 +33,9 @@ buildPythonPackage rec {
     "packaging"
   ];
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     anyio
@@ -51,9 +48,7 @@ buildPythonPackage rec {
     tenacity
   ];
 
-  pythonImportsCheck = [
-    "langchain_core"
-  ];
+  pythonImportsCheck = [ "langchain_core" ];
 
   # PyPI source does not have tests
   doCheck = false;
