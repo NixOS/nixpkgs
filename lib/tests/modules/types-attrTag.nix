@@ -59,6 +59,7 @@ in
           };
           qux = mkOption {
             type = types.str;
+            description = "A qux for when you don't want a foo";
           };
         }
       );
@@ -106,6 +107,14 @@ in
       assert config.merged.extensi-bar == { extensible = "bar"; };
       assert config.docs."submodules.<name>.foo.bar".type == "signed integer";
       assert config.docs."submodules.<name>.qux".type == "string";
+      assert config.docs."submodules.<name>.qux".declarations == [ __curPos.file ];
+      assert config.docs."submodules.<name>.qux".loc == [ "submodules" "<name>" "qux" ];
+      assert config.docs."submodules.<name>.qux".name == "submodules.<name>.qux";
+      assert config.docs."submodules.<name>.qux".description == "A qux for when you don't want a foo";
+      assert config.docs."submodules.<name>.qux".readOnly == false;
+      assert config.docs."submodules.<name>.qux".visible == true;
+      # Not available (yet?)
+      # assert config.docs."submodules.<name>.qux".declarationsWithPositions == [ ... ];
       assert lib.length config.docs."merged.<name>.extensible".declarations == 2;
       true;
   };
