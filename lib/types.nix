@@ -328,15 +328,24 @@ rec {
           "signedInt${toString bit}" "${toString bit} bit signed integer";
 
       in {
-        /* An int with a fixed range.
-        *
-        * Example:
-        *   (ints.between 0 100).check (-1)
-        *   => false
-        *   (ints.between 0 100).check (101)
-        *   => false
-        *   (ints.between 0 0).check 0
-        *   => true
+        # TODO: Deduplicate with docs in nixos/doc/manual/development/option-types.section.md
+        /**
+          An int with a fixed range.
+
+          # Example
+          :::{.example}
+          ## `lib.types.ints.between` usage example
+
+          ```nix
+          (ints.between 0 100).check (-1)
+          => false
+          (ints.between 0 100).check (101)
+          => false
+          (ints.between 0 0).check 0
+          => true
+          ```
+
+          :::
         */
         inherit between;
 
