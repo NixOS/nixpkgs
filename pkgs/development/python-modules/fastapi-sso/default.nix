@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, email-validator
-, fastapi
-, fetchFromGitHub
-, httpx
-, oauthlib
-, poetry-core
-, pydantic
-, pylint
-, pytest-asyncio
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  email-validator,
+  fastapi,
+  fetchFromGitHub,
+  httpx,
+  oauthlib,
+  poetry-core,
+  pydantic,
+  pylint,
+  pytest-asyncio,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     sed -i "/--cov/d" pyproject.toml
   '';
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     fastapi
@@ -51,9 +50,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "fastapi_sso"
-  ];
+  pythonImportsCheck = [ "fastapi_sso" ];
 
   meta = with lib; {
     description = "FastAPI plugin to enable SSO to most common providers (such as Facebook login, Google login and login via Microsoft Office 365 Account";
