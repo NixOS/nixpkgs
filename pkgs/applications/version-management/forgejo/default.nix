@@ -24,7 +24,7 @@ let
     pname = "forgejo-frontend";
     inherit (forgejo) src version;
 
-    npmDepsHash = "sha256-I7eq9PB2Od7aaji+VrZj05VVCsGtCiXEMy88xrA8Ktg=";
+    npmDepsHash = "sha256-uMPy4cqMDNZTpF+pk7YibXEJO1zxVfwlCeFzGgJBiU0=";
 
     patches = [
       ./package-json-npm-build-frontend.patch
@@ -39,14 +39,14 @@ let
 in
 buildGoModule rec {
   pname = "forgejo";
-  version = "1.21.8-0";
+  version = "1.21.10-0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "forgejo";
     repo = "forgejo";
     rev = "v${version}";
-    hash = "sha256-eIxITMvb1q4L2lejbmuPPQ8XG5YYjTo+9RosPEJgZ3g=";
+    hash = "sha256-uCRAT9RiU9S+tP9alNshSQwbUgLmU9wE5HIQ4FPmXVE=";
     # Forgejo has multiple different version strings that need to be provided
     # via ldflags.  main.ForgejoVersion for example is a combination of a
     # hardcoded gitea compatibility version string (in the Makefile) and
@@ -65,7 +65,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-+1apPnqbIfp2Nu1ieI2DdHo4gndZObmcq/Td+ZtkILM=";
+  vendorHash = "sha256-pgUSmM2CxYO8DralWoeR2groQxpxo9WtRcToYeaHXGk=";
 
   subPackages = [ "." ];
 
