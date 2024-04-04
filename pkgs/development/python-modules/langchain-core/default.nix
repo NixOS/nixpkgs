@@ -1,13 +1,13 @@
 { lib
+, anyio
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
-, poetry-core
-, anyio
 , jsonpatch
 , langsmith
 , packaging
+, poetry-core
 , pydantic
+, pythonOlder
 , pythonRelaxDepsHook
 , pyyaml
 , requests
@@ -29,14 +29,18 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "langsmith"
+    "packaging"
+  ];
+
+  build-system = [
+    poetry-core
   ];
 
   nativeBuildInputs = [
-    poetry-core
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     anyio
     jsonpatch
     langsmith
