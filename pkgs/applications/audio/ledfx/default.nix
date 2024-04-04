@@ -1,6 +1,7 @@
-{ lib
-, fetchPypi
-, python3
+{
+  lib,
+  fetchPypi,
+  python3,
 }:
 
 python3.pkgs.buildPythonPackage rec {
@@ -25,9 +26,7 @@ python3.pkgs.buildPythonPackage rec {
     poetry-core
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
 
   dependencies = with python3.pkgs; [
     aiohttp
