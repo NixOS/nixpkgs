@@ -620,16 +620,15 @@ rec {
       nestedTypes.elemType = elemType;
     };
 
-    attrTag = tags: attrTagWith { inherit tags; };
-
-    attrTagWith = args@{ tags }:
+    attrTag = tags:
+      let tags_ = tags; in
       let
         tags =
           mapAttrs
             (n: opt:
-              builtins.addErrorContext "while checking that attrTag tag ${lib.strings.escapeNixIdentifier n} is an option with a type${inAttrPosSuffix args.tags n}" (
+              builtins.addErrorContext "while checking that attrTag tag ${lib.strings.escapeNixIdentifier n} is an option with a type${inAttrPosSuffix tags_ n}" (
                 throwIf (opt._type or null != "option")
-                  "In attrTag/attrTagWith, each tag value must be an option, but tag ${lib.strings.escapeNixIdentifier n} ${
+                  "In attrTag, each tag value must be an option, but tag ${lib.strings.escapeNixIdentifier n} ${
                     if opt?_type then
                       if opt._type == "option-type"
                       then "was a bare type, not wrapped in mkOption."
@@ -637,16 +636,16 @@ rec {
                     else "was not."}"
                 opt // {
                   declarations = opt.declarations or (
-                    let pos = builtins.unsafeGetAttrPos n args.tags;
+                    let pos = builtins.unsafeGetAttrPos n tags_;
                     in if pos == null then [] else [ pos.file ]
                   );
                   declarationPositions = opt.declarationPositions or (
-                    let pos = builtins.unsafeGetAttrPos n args.tags;
+                    let pos = builtins.unsafeGetAttrPos n tags_;
                     in if pos == null then [] else [ pos ]
                   );
                 }
               ))
-            args.tags;
+            tags_;
         choicesStr = concatMapStringsSep ", " lib.strings.escapeNixIdentifier (attrNames tags);
       in
       mkOptionType {
@@ -663,7 +662,15 @@ rec {
                 };
             })
             tags;
-        substSubModules = m: attrTagWith { tags = mapAttrs (n: opt: opt // { type = (opt.type or types.unspecified).substSubModules m; }) tags; };
+        substSubModules = m:
+          attrTag
+            (mapAttrs
+              (n: opt:
+                opt // {
+                  type = (opt.type or types.unspecified).substSubModules m;
+                }
+              )
+              tags);
         check = v: isAttrs v && length (attrNames v) == 1 && tags?${head (attrNames v)};
         merge = loc: defs:
           let
@@ -687,7 +694,8 @@ rec {
               }
             else throw "The option `${showOption loc}` is defined as ${lib.strings.escapeNixIdentifier choice}, but ${lib.strings.escapeNixIdentifier choice} is not among the valid choices (${choicesStr}). Value ${choice} was defined in ${showFiles (getFiles defs)}.";
         nestedTypes = tags;
-        functor = (defaultFunctor "attrTagWith") // {
+        functor = defaultFunctor "attrTag" // {
+          type = { tags, ... }: types.attrTag tags;
           payload = { inherit tags; };
           binOp =
             let
