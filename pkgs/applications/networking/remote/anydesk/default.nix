@@ -18,14 +18,14 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "anydesk";
-  version = "6.3.0";
+  version = "6.3.1";
 
   src = fetchurl {
     urls = [
       "https://download.anydesk.com/linux/${pname}-${version}-amd64.tar.gz"
       "https://download.anydesk.com/linux/generic-linux/${pname}-${version}-amd64.tar.gz"
     ];
-    hash = "sha256-seMzfTXOGa+TljgpmIsgFOis+79r0bWt+4vH3Nb+5FI=";
+    hash = "sha256-qVksva6+EfAQiOexP8NlDSCR5Ab2WGsuCG4BD87rlag=";
   };
 
   passthru = {
