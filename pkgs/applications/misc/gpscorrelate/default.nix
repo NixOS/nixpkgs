@@ -1,24 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, exiv2, libxml2, gtk3
-, libxslt, docbook_xsl, docbook_xml_dtd_42, desktop-file-utils, wrapGAppsHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, exiv2
+, libxml2
+, gtk3
+, libxslt
+, docbook_xsl
+, docbook_xml_dtd_42
+, desktop-file-utils
+, wrapGAppsHook
+, desktopToDarwinBundle
+}:
 
 stdenv.mkDerivation rec {
   pname = "gpscorrelate";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "dfandrich";
-    repo = pname;
+    repo = "gpscorrelate";
     rev = version;
-    sha256 = "1wkpb0nqnm0ik46hp2sibf96h2gxi6n951zm8c72scgmh4ciq4fl";
+    sha256 = "sha256-1t9XUY12hVaUNOg785dMJCiaMMCI2XCcif1DkKYXOoo=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "gpscorrelate-2.0-exiv2-0.28.patch";
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sci-geosciences/gpscorrelate/files/gpscorrelate-2.0-exiv2-0.28.patch?id=002882203ad6a2b08ce035a18b95844a9f4b85d0";
-      hash = "sha256-/5czvSh2siPmohXWHQEg6VWCUQnZxEm2livLsEOAa6c=";
-    })
-  ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -27,7 +31,7 @@ stdenv.mkDerivation rec {
     libxslt
     pkg-config
     wrapGAppsHook
-  ];
+  ] ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
     exiv2
