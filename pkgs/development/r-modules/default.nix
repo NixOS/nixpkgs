@@ -911,6 +911,7 @@ let
     "R_rsp"
     "salso"
     "scholar"
+    "SpatialDecon"
     "stepR"
     "styler"
     "teal_code"
