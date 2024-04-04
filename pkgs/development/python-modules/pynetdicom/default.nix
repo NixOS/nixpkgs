@@ -8,19 +8,20 @@
 , pytestCheckHook
 , sqlalchemy
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pynetdicom";
   version = "2.0.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pydicom";
-    repo = pname;
-    rev = "v${version}";
+    repo = "pynetdicom";
+    rev = "refs/tags/v${version}";
     hash = "sha256-/JWQUtFBW4uqCbs/nUxj1pRBfTCXV4wcqTkqvzpdFrM=";
   };
 
@@ -30,6 +31,10 @@ buildPythonPackage rec {
       url = "https://github.com/pydicom/pynetdicom/pull/754/commits/2126bd932d6dfb3f07045eb9400acb7eaa1b3069.patch";
       hash = "sha256-t6Lg0sTZSWIE5q5pkBvEoHDQ+cklDn8SgNBcFk1myp4=";
      })
+  ];
+
+  nativeBuildInputs = [
+    setuptools
   ];
 
   propagatedBuildInputs = [
@@ -78,9 +83,15 @@ buildPythonPackage rec {
     "pynetdicom"
   ];
 
+  pytestFlagsArray = [
+    "-W"
+    "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   meta = with lib; {
     description = "Python implementation of the DICOM networking protocol";
     homepage = "https://github.com/pydicom/pynetdicom";
+    changelog = "https://github.com/pydicom/pynetdicom/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
     # Tests are not passing on Darwin/Aarch64, thus it's assumed that it doesn't work
