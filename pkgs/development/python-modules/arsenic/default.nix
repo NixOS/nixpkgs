@@ -5,6 +5,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
+  packaging,
   poetry-core,
   pythonRelaxDepsHook,
   pythonOlder,
@@ -32,6 +33,12 @@ buildPythonPackage rec {
       url = "https://github.com/HENNGE/arsenic/commit/ca82894a5f1e832ab9283a245258b334bdd48855.patch";
       hash = "sha256-ECCUaJF4MRmFOKH1C6HowJ+zmbEPPiS7h9DlKw5otZc=";
     })
+    # Replace distutils with packaging, https://github.com/HENNGE/arsenic/pull/166
+    (fetchpatch {
+      name = "replace-distutils.patch";
+      url = "https://github.com/HENNGE/arsenic/commit/440faed7d2a8fbd635a135c007051ea494e72873.patch";
+      hash = "sha256-QbOH6EdFKZxm1VaXRiTbJ3zIzEKVet9GUQDaJnmSNQw=";
+    })
   ];
 
   pythonRelaxDeps = [ "structlog" ];
@@ -43,6 +50,7 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     attrs
+    packaging
     structlog
   ];
 
