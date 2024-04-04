@@ -74,7 +74,7 @@ in {
     systemd.services.mbpfan = {
       description = "A fan manager daemon for MacBook Pro";
       wantedBy = [ "sysinit.target" ];
-      after = [ "syslog.target" "sysinit.target" ];
+      after = [ "sysinit.target" ];
       restartTriggers = [ config.environment.etc."mbpfan.conf".source ];
 
       serviceConfig = {
