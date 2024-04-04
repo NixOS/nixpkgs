@@ -20,7 +20,7 @@ python3Packages.buildPythonPackage rec {
   meta = with lib; {
     description = "Stem is a Python controller library for Tor";
     homepage = "https://stem.torproject.org/";
-    license = with licenses.gpl3Only;
+    license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ tochiaha ];
     mainProgram = "tor-prompt";
   };
