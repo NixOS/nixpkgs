@@ -1,0 +1,22 @@
+diff --git a/UI/UI.csproj b/UI/UI.csproj
+index 1f37f10..252a0a7 100644
+--- a/UI/UI.csproj
++++ b/UI/UI.csproj
+@@ -91,12 +91,12 @@
+ 		</RestoreSources>
+ 	</PropertyGroup>
+   <ItemGroup>
+-    <PackageReference Include="Avalonia" Version="11.0.999-cibuild0045373-beta" />
++    <PackageReference Include="Avalonia" Version="11.0.10" />
+     <PackageReference Include="Avalonia.AvaloniaEdit" Version="11.0.6" />
+-    <PackageReference Include="Avalonia.Desktop" Version="11.0.999-cibuild0045373-beta" />
+-    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.999-cibuild0045373-beta" />
+-    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.999-cibuild0045373-beta" />
+-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.999-cibuild0045373-beta" />
++    <PackageReference Include="Avalonia.Desktop" Version="11.0.10" />
++    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.10" />
++    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.10" />
++    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.10" />
+     <PackageReference Include="Dock.Avalonia" Version="11.0.0.7" />
+     <PackageReference Include="Dock.Model.Mvvm" Version="11.0.0.7" />
+     <PackageReference Include="Dotnet.Bundle" Version="*" />
