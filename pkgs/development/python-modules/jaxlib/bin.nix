@@ -20,17 +20,17 @@
 , stdenv
   # Options:
 , cudaSupport ? config.cudaSupport
-, cudaPackagesGoogle
+, cudaPackages
 }:
 
 let
-  inherit (cudaPackagesGoogle) cudaVersion;
+  inherit (cudaPackages) cudaVersion;
 
   version = "0.4.28";
 
   inherit (python) pythonVersion;
 
-  cudaLibPath = lib.makeLibraryPath (with cudaPackagesGoogle; [
+  cudaLibPath = lib.makeLibraryPath (with cudaPackages; [
     cuda_cudart.lib # libcudart.so
     cuda_cupti.lib # libcupti.so
     cudnn.lib # libcudnn.so
@@ -197,7 +197,7 @@ buildPythonPackage {
   # for more info.
   postInstall = lib.optional cudaSupport ''
     mkdir -p $out/${python.sitePackages}/jaxlib/cuda/bin
-    ln -s ${lib.getExe' cudaPackagesGoogle.cuda_nvcc "ptxas"} $out/${python.sitePackages}/jaxlib/cuda/bin/ptxas
+    ln -s ${lib.getExe' cudaPackages.cuda_nvcc "ptxas"} $out/${python.sitePackages}/jaxlib/cuda/bin/ptxas
   '';
 
   inherit (jaxlib-build) pythonImportsCheck;
@@ -211,7 +211,7 @@ buildPythonPackage {
     platforms = [ "aarch64-darwin" "x86_64-linux" "x86_64-darwin" ];
     broken =
       !(cudaSupport -> lib.versionAtLeast cudaVersion "11.1")
-      || !(cudaSupport -> lib.versionAtLeast cudaPackagesGoogle.cudnn.version "8.2")
+      || !(cudaSupport -> lib.versionAtLeast cudaPackages.cudnn.version "8.2")
       || !(cudaSupport -> stdenv.isLinux)
       || !(cudaSupport -> (gpuSrcs ? "cuda${cudaVersion}-${pythonVersion}"))
       # Fails at pythonImportsCheckPhase:
