@@ -276,12 +276,6 @@ rec {
     };
   };
 
-  dist = runCommand "stdenv-bootstrap-tools" {} ''
-    mkdir -p $out/nix-support
-    echo "file tarball ${build}/on-server/*.tar.xz" >> $out/nix-support/hydra-build-products
-    echo "file unpack ${build}/on-server/unpack.* " >> $out/nix-support/hydra-build-products
-  '';
-
   bootstrapFiles = {
     bootstrapTools = "${build}/on-server/bootstrap-tools.tar.xz";
     unpack = runCommand "unpack" { allowedReferences = []; } ''
