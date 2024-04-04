@@ -18,7 +18,8 @@ for i in \
     "x86_64-linux Archi-Linux64-$latestVersion.tgz"
 do
     set -- $i
-    hash=$(nix-prefetch-url https://www.archimatetool.com/downloads/archi/$latestVersion/$2)
+    prefetch=$(nix-prefetch-url https://www.archimatetool.com/downloads/archi/$latestVersion/$2)
+    hash=$(nix-hash --type sha256 --to-sri $prefetch)
 
     update-source-version archi 0 "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" --system=$1
     update-source-version archi $latestVersion $hash --system=$1
