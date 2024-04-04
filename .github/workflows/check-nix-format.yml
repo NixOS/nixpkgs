@@ -23,8 +23,11 @@ jobs:
         with:
           # explicitly enable sandbox
           extra_nix_config: sandbox = true
+          # fix a commit from nixpkgs-unstable to avoid e.g. building nixfmt
+          # from staging
+          nix_path: nixpkgs=https://github.com/NixOS/nixpkgs/archive/4b455dc2048f73a79eb3713f342369ff58f93e0b.tar.gz
       - name: Install nixfmt
-        run: nix-env -f default.nix -iAP nixfmt-rfc-style
+        run: "nix-env -f '<nixpkgs>' -iAP nixfmt-rfc-style"
       - name: Check that Nix files are formatted according to the RFC style
         # Each environment variable beginning with NIX_FMT_PATHS_ is a list of
         # paths to check with nixfmt.

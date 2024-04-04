@@ -315,10 +315,10 @@ in
       services.davis.config =
         {
           APP_ENV = "prod";
-          CACHE_DIR = "${cfg.dataDir}/var/cache";
+          APP_CACHE_DIR = "${cfg.dataDir}/var/cache";
           # note: we do not need the log dir (we log to stdout/journald), by davis/symfony will try to create it, and the default value is one in the nix-store
           #       so we set it to a path under dataDir to avoid something like: Unable to create the "logs" directory (/nix/store/5cfskz0ybbx37s1161gjn5klwb5si1zg-davis-4.4.1/var/log).
-          LOG_DIR = "${cfg.dataDir}/var/log";
+          APP_LOG_DIR = "${cfg.dataDir}/var/log";
           LOG_FILE_PATH = "/dev/stdout";
           DATABASE_DRIVER = db.driver;
           INVITE_FROM_ADDRESS = mail.inviteFromAddress;
@@ -340,9 +340,9 @@ in
                 else if
                   pgsqlLocal
                 # note: davis expects a non-standard postgres uri (due to the underlying doctrine library)
-                # specifically the charset query parameter, and the dummy hostname which is overriden by the host query parameter
+                # specifically the dummy hostname which is overriden by the host query parameter
                 then
-                  "postgres://${user}@localhost/${db.name}?host=/run/postgresql&charset=UTF-8"
+                  "postgres://${user}@localhost/${db.name}?host=/run/postgresql"
                 else if mysqlLocal then
                   "mysql://${user}@localhost/${db.name}?socket=/run/mysqld/mysqld.sock"
                 else
@@ -378,8 +378,8 @@ in
         '';
         phpEnv = {
           ENV_DIR = "${cfg.dataDir}";
-          CACHE_DIR = "${cfg.dataDir}/var/cache";
-          #LOG_DIR = "${cfg.dataDir}/var/log";
+          APP_CACHE_DIR = "${cfg.dataDir}/var/cache";
+          APP_LOG_DIR = "${cfg.dataDir}/var/log";
         };
         settings =
           {
@@ -447,8 +447,8 @@ in
           RemainAfterExit = true;
           Environment = [
             "ENV_DIR=${cfg.dataDir}"
-            "CACHE_DIR=${cfg.dataDir}/var/cache"
-            "LOG_DIR=${cfg.dataDir}/var/log"
+            "APP_CACHE_DIR=${cfg.dataDir}/var/cache"
+            "APP_LOG_DIR=${cfg.dataDir}/var/log"
           ];
           EnvironmentFile = "${cfg.dataDir}/.env.local";
         };

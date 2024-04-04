@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, impacket
-, lxml
-, poetry-core
-, pyasn1
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  impacket,
+  lxml,
+  poetry-core,
+  pyasn1,
+  pythonOlder,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "dploot";
-  version = "2.7.0";
+  version = "2.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-76+cTukQOXE8tjaBrWVJY56+zVO5yqB5BT9q7+TBpnA=";
+    hash = "sha256-vNL5xrZkfYO11i8ERqD9637vrMb3Gkmo3RjvQ1ONXbY=";
   };
 
   pythonRelaxDeps = [
@@ -28,13 +29,9 @@ buildPythonPackage rec {
     "pyasn1"
   ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     impacket
@@ -43,9 +40,7 @@ buildPythonPackage rec {
     lxml
   ];
 
-  pythonImportsCheck = [
-    "dploot"
-  ];
+  pythonImportsCheck = [ "dploot" ];
 
   # No tests
   doCheck = false;
