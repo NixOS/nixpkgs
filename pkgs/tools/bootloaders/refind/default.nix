@@ -5,6 +5,7 @@
 , nixosTests
 , efibootmgr
 , openssl
+, withSbsigntool ? false # currently, cross compiling sbsigntool is broken, so default to false
 , sbsigntool
 , makeWrapper
 }:
@@ -112,7 +113,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/refind-install \
-      --prefix PATH : ${lib.makeBinPath [ efibootmgr openssl sbsigntool ]}
+      --prefix PATH : ${lib.makeBinPath ( [ efibootmgr openssl ] ++ lib.optional withSbsigntool sbsigntool )}
     wrapProgram $out/bin/refind-mvrefind \
       --prefix PATH : ${lib.makeBinPath [ efibootmgr ]}
   '';
