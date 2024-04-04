@@ -23,9 +23,6 @@
   curl,
   openssl_1_1,
   bzip2,
-  bash,
-  unzip,
-  zip,
   sqlite,
 }:
 
@@ -82,29 +79,9 @@ let
     ];
 
     nativeBuildInputs = [
-      zip
-      unzip
       makeWrapper
       wrapGAppsHook
     ];
-
-    # make exec.py in Default.sublime-package use own bash with an LD_PRELOAD instead of "/bin/bash"
-    patchPhase = ''
-      runHook prePatch
-
-      # TODO: Should not be necessary even in 3
-      mkdir Default.sublime-package-fix
-      ( cd Default.sublime-package-fix
-        unzip -q ../Packages/Default.sublime-package
-        substituteInPlace "exec.py" --replace \
-          "[\"/bin/bash\"" \
-          "[\"$out/sublime_bash\""
-        zip -q ../Packages/Default.sublime-package **/*
-      )
-      rm -r Default.sublime-package-fix
-
-      runHook postPatch
-    '';
 
     buildPhase = ''
       runHook preBuild
@@ -131,10 +108,6 @@ let
 
       mkdir -p $out
       cp -r * $out/
-
-      # We can't just call /usr/bin/env bash because a relocation error occurs
-      # when trying to run a build from within Sublime Text
-      ln -s ${bash}/bin/bash $out/sublime_bash
 
       runHook postInstall
     '';
