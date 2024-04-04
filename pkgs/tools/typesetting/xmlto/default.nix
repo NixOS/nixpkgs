@@ -16,15 +16,16 @@
   libxslt,
   makeWrapper,
   stdenv,
+  testers,
   w3m,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xmlto";
   version = "0.0.28";
 
   src = fetchurl {
-    url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.bz2";
+    url = "https://releases.pagure.org/xmlto/xmlto-${finalAttrs.version}.tar.bz2";
     hash = "sha256-ETDfOnlX659vDSnkqhx1cyp9+21jm+AThZtcfsVCEnY=";
   };
 
@@ -81,6 +82,11 @@ stdenv.mkDerivation rec {
        --prefix PATH : "${lib.makeBinPath [ libxslt libxml2 getopt w3m ]}"
   '';
 
+  passthru.tests.version = testers.testVersion {
+    command = "${lib.getExe finalAttrs.finalPackage} --version";
+    package = finalAttrs.finalPackage;
+  };
+
   meta = {
     changelog = "https://pagure.io/xmlto/blob/master/f/ChangeLog";
     description = "Front-end to an XSL toolchain";
@@ -96,4 +102,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})
