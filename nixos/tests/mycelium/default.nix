@@ -1,6 +1,6 @@
 import ../make-test-python.nix ({ lib, ... }: let
-  peer1-ip = "531:c350:28c1:dfde:ea6d:77d1:a60b:7209";
-  peer2-ip = "49f:3942:3a55:d100:4c78:c558:c4f:695b";
+  peer1-ip = "538:f40f:1c51:9bd9:9569:d3f6:d0a1:b2df";
+  peer2-ip = "5b6:6776:fee0:c1f3:db00:b6a8:d013:d38f";
 in
   {
     name = "mycelium";
