@@ -1,11 +1,16 @@
 {
   bash,
+  coreutils,
   docbook_xml_dtd_45,
   docbook_xsl,
+  docbook-xsl-ns,
   fetchpatch,
   fetchurl,
+  findutils,
   flex,
   getopt,
+  gnugrep,
+  gnused,
   lib,
   libxml2,
   libxslt,
@@ -41,11 +46,18 @@ stdenv.mkDerivation rec {
     patchShebangs xmlif/test/run-test
 
     substituteInPlace "xmlto.in" \
-      --replace "/bin/bash" "${bash}/bin/bash"
-    substituteInPlace "xmlto.in" \
-      --replace "/usr/bin/locale" "$(type -P locale)"
-    substituteInPlace "xmlto.in" \
-      --replace "mktemp" "$(type -P mktemp)"
+      --replace-fail "@BASH@" "${bash}/bin/bash" \
+      --replace-fail "@FIND@" "${findutils}/bin/find" \
+      --replace-fail "@GETOPT@" "${getopt}/bin/getopt" \
+      --replace-fail "@GREP@" "${gnugrep}/bin/grep" \
+      --replace-fail "@MKTEMP@" "$(type -P mktemp)" \
+      --replace-fail "@SED@" "${gnused}/bin/sed" \
+      --replace-fail "@TAIL@" "${coreutils}/bin/tail"
+
+    for f in format/docbook/* xmlto.in; do
+      substituteInPlace $f \
+        --replace-fail "http://docbook.sourceforge.net/release/xsl/current" "${docbook-xsl-ns}/xml/xsl/docbook"
+    done
   '';
 
   # `libxml2' provides `xmllint', needed at build-time and run-time.
