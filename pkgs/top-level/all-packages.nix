@@ -1577,9 +1577,7 @@ with pkgs;
 
   aefs = callPackage ../tools/filesystems/aefs { };
 
-  aegisub = callPackage ../applications/video/aegisub ({
-    wxGTK = wxGTK32;
-  } // (config.aegisub or {}));
+  aegisub = callPackage ../applications/video/aegisub { };
 
   aerc = callPackage ../applications/networking/mailreaders/aerc { };
 

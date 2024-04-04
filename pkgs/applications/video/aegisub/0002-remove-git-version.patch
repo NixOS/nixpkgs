@@ -1,0 +1,17 @@
+diff --git a/tools/version.sh b/tools/version.sh
+index 8df33e175..f4adc8b9e 100755
+--- a/tools/version.sh
++++ b/tools/version.sh
+@@ -9,11 +9,7 @@ if ! test -d "${srcdir}/.git"; then
+       set -- $line
+       export $2=$(echo $3 | sed 's/"//g')
+     done < "${version_h_path}"
+-    if test x$BUILD_GIT_VERSION_NUMBER != x -a x$BUILD_GIT_VERSION_STRING != x; then
+-      exit 0
+-    else
+-      echo "invalid git_version.h"
+-      exit 2
++    exit 0
+     fi
+   else
+     echo "git repo not found and no cached git_version.h"
