@@ -1,14 +1,14 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
 , docutils
 , fetchFromGitHub
 , importlib-metadata
-, poetry-core
+, setuptools
+, setuptools-scm
 , pydantic
 , pytestCheckHook
 , pythonOlder
-, pythonRelaxDepsHook
 , rstcheck-core
 , typer
 , types-docutils
@@ -17,32 +17,27 @@
 
 buildPythonPackage rec {
   pname = "rstcheck";
-  version = "6.1.2";
-  format = "pyproject";
+  version = "6.2.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rstcheck";
-    repo = pname;
+    repo = "rstcheck";
     rev = "refs/tags/v${version}";
-    hash = "sha256-UMByfnnP1va3v1IgyQL0f3kC+W6HoiWScb7U2FAvWkU=";
+    hash = "sha256-S04l+x/rIc/XSvq2lSKCQp6KK5mmKI2mOgPgJ3WKe5M=";
   };
 
-  pythonRelaxDeps = [
-    "typer"
-  ];
-
   nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
+    setuptools
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
     docutils
     rstcheck-core
     types-docutils
-    typing-extensions
     pydantic
     typer
   ] ++ lib.optionals (pythonOlder "3.8") [
@@ -71,10 +66,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Checks syntax of reStructuredText and code blocks nested within it";
-    mainProgram = "rstcheck";
     homepage = "https://github.com/myint/rstcheck";
     changelog = "https://github.com/rstcheck/rstcheck/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ staccato ];
+    mainProgram = "rstcheck";
   };
 }
