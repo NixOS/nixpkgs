@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-agent-openai";
-  version = "0.2.1";
+  version = "0.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_agent_openai";
     inherit version;
-    hash = "sha256-ydCixD0vdSuA99PdflbhEsSd3b0Gl0lzFTz9uTdLYrQ=";
+    hash = "sha256-EgY92TLHQBV5b5c5hsxS14P1H9o45OrXKlbQ/RlZJe4=";
   };
 
   pythonRelaxDeps = [
