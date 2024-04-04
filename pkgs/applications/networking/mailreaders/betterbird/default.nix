@@ -12,13 +12,13 @@
 let
   thunderbird-unwrapped = thunderbirdPackages.thunderbird-115;
 
-  version = "115.6.0";
+  version = "115.9.0";
   majVer = lib.versions.major version;
 
   betterbird-patches = fetchFromGitHub {
     owner = "Betterbird";
     repo = "thunderbird-patches";
-    rev = "${version}-bb21-correct-series-take2";
+    rev = "${version}-bb26-build2";
     postFetch = ''
       echo "Retrieving external patches"
 
@@ -36,7 +36,7 @@ let
       . ./external.sh
       rm external.sh
     '';
-    hash = "sha256-YERSRyLfFTexvAYmP9qG6joQkK5fSIvU4pNLhCyIbOY=";
+    hash = "sha256-0RlI30zxiueeXdLEXPZevc8QyKr667juHk0bTcqBB1w=";
   };
 in ((buildMozillaMach {
   pname = "betterbird";
@@ -50,7 +50,7 @@ in ((buildMozillaMach {
   src = fetchurl {
     # https://download.cdn.mozilla.net/pub/thunderbird/releases/
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    hash = "sha256-Oxz5drDQ9IJVpgP4/+jiQ5Ds1b0oX8TRD+SOG6JRN0Q=";
+    hash = "sha256-Kut3ynA43289MG+cPSpOphWvDtzw9ykCFcpfMMEpDlc=";
   };
 
   extraPostPatch = thunderbird-unwrapped.extraPostPatch or "" + /* bash */ ''
@@ -65,8 +65,8 @@ in ((buildMozillaMach {
     cd $patches
     # fix FHS paths to libdbusmenu
     substituteInPlace 12-feature-linux-systray.patch \
-      --replace "/usr/include/libdbusmenu-glib-0.4/" "${lib.getDev libdbusmenu-gtk3}/include/libdbusmenu-glib-0.4/" \
-      --replace "/usr/include/libdbusmenu-gtk3-0.4/" "${lib.getDev libdbusmenu-gtk3}/include/libdbusmenu-gtk3-0.4/"
+      --replace-fail "/usr/include/libdbusmenu-glib-0.4/" "${lib.getDev libdbusmenu-gtk3}/include/libdbusmenu-glib-0.4/" \
+      --replace-fail "/usr/include/libdbusmenu-gtk3-0.4/" "${lib.getDev libdbusmenu-gtk3}/include/libdbusmenu-gtk3-0.4/"
     cd -
 
     chmod -R +w dom/base/test/gtest/
@@ -75,6 +75,11 @@ in ((buildMozillaMach {
       patch="''${patch%%#*}"
       patch="''${patch% }"
       if [[ $patch == "" ]]; then
+        continue
+      fi
+
+      # requires vendored icu, fails to link with our icu
+      if [[ $patch == 14-feature-regexp-searchterm.patch || $patch == 14-feature-regexp-searchterm-m-c.patch ]]; then
         continue
       fi
 

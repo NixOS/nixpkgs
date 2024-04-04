@@ -1,4 +1,5 @@
 { lib
+, autoAddDriverRunpath
 , cmake
 , darwin
 , fetchFromGitHub
@@ -88,7 +89,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ninja pkg-config git ]
     ++ optionals cudaSupport [
     cudaPackages.cuda_nvcc
-    cudaPackages.autoAddDriverRunpath
+    autoAddDriverRunpath
   ];
 
   buildInputs = optionals effectiveStdenv.isDarwin darwinBuildInputs

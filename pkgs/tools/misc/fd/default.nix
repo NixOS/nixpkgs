@@ -20,6 +20,9 @@ rustPlatform.buildRustPackage rec {
   # skip flaky test
   checkFlags = [
     "--skip=test_owner_current_group"
+    # Fails if the filesystem performs UTF-8 validation (such as ZFS with utf8only=on)
+    "--skip=test_exec_invalid_utf8"
+    "--skip=test_invalid_utf8"
   ];
 
   postInstall = ''

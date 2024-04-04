@@ -4,7 +4,7 @@
 }:
 
 let
-  inherit (pkgs.lib) const filterAttrs mapAttrs;
+  inherit (pkgs.lib) const filterAttrs mapAttrs meta;
 
   kernelRustTest = kernelPackages: import ./make-test-python.nix ({ lib, ... }: {
     name = "kernel-rust";
@@ -38,6 +38,8 @@ let
       inherit (builtins.tryEval (
         x.rust-out-of-tree-module or null != null
       )) success value;
-    in success && value))
+      available =
+        meta.availableOn pkgs.stdenv.hostPlatform x.rust-out-of-tree-module;
+    in success && value && available))
     pkgs.linuxKernel.vanillaPackages;
 in mapAttrs (const kernelRustTest) kernels

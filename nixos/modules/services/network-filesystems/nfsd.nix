@@ -113,25 +113,6 @@ in
 
   config = mkIf cfg.enable {
 
-    services.nfs.extraConfig = ''
-      [nfsd]
-      threads=${toString cfg.nproc}
-      ${optionalString (cfg.hostName != null) "host=${cfg.hostName}"}
-      ${cfg.extraNfsdConfig}
-
-      [mountd]
-      ${optionalString (cfg.mountdPort != null) "port=${toString cfg.mountdPort}"}
-
-      [statd]
-      ${optionalString (cfg.statdPort != null) "port=${toString cfg.statdPort}"}
-
-      [lockd]
-      ${optionalString (cfg.lockdPort != null) ''
-        port=${toString cfg.lockdPort}
-        udp-port=${toString cfg.lockdPort}
-      ''}
-    '';
-
     services.rpcbind.enable = true;
 
     boot.supportedFilesystems = [ "nfs" ]; # needed for statd and idmapd

@@ -143,5 +143,16 @@ let
       });
       xcbuild = xcodebuild;
     }));
+
+    darwin-stubs = stdenvNoCC.mkDerivation {
+      pname = "darwin-stubs";
+      inherit (MacOSX-SDK) version;
+
+      buildCommand = ''
+        mkdir -p "$out"
+        ln -s ${MacOSX-SDK}/System "$out/System"
+        ln -s ${MacOSX-SDK}/usr "$out/usr"
+      '';
+    };
   };
 in packages

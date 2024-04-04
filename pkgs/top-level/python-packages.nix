@@ -585,11 +585,15 @@ self: super: with self; {
 
   ansible = callPackage ../development/python-modules/ansible { };
 
+  ansible-builder = callPackage ../development/python-modules/ansible-builder { };
+
   ansible-compat = callPackage ../development/python-modules/ansible-compat { };
 
   ansible-core = callPackage ../development/python-modules/ansible/core.nix { };
 
   ansible-kernel = callPackage ../development/python-modules/ansible-kernel { };
+
+  ansible-navigator = callPackage ../development/python-modules/ansible-navigator { };
 
   ansible-pylibssh = callPackage ../development/python-modules/ansible-pylibssh { };
 
@@ -1506,6 +1510,8 @@ self: super: with self; {
   binaryornot = callPackage ../development/python-modules/binaryornot { };
 
   bincopy = callPackage ../development/python-modules/bincopy { };
+
+  bindep = callPackage ../development/python-modules/bindep { };
 
   binho-host-adapter = callPackage ../development/python-modules/binho-host-adapter { };
 
@@ -2462,6 +2468,18 @@ self: super: with self; {
   cpufeature = callPackage ../development/python-modules/cpufeature { };
 
   cpyparsing = callPackage ../development/python-modules/cpyparsing { };
+
+  craft-application-1 = callPackage ../development/python-modules/craft-application-1 { };
+
+  craft-archives = callPackage ../development/python-modules/craft-archives { };
+
+  craft-cli = callPackage ../development/python-modules/craft-cli { };
+
+  craft-grammar = callPackage ../development/python-modules/craft-grammar { };
+
+  craft-parts = callPackage ../development/python-modules/craft-parts { };
+
+  craft-providers = callPackage ../development/python-modules/craft-providers { };
 
   cram = callPackage ../development/python-modules/cram { };
 
@@ -4637,6 +4655,8 @@ self: super: with self; {
 
   geocachingapi = callPackage ../development/python-modules/geocachingapi { };
 
+  geocoder = callPackage ../development/python-modules/geocoder { };
+
   geographiclib = callPackage ../development/python-modules/geographiclib { };
 
   geoip2 = callPackage ../development/python-modules/geoip2 { };
@@ -5140,12 +5160,7 @@ self: super: with self; {
 
   guppy3 = callPackage ../development/python-modules/guppy3 { };
 
-  gurobipy = if stdenv.hostPlatform.isDarwin then
-    callPackage ../development/python-modules/gurobipy/darwin.nix { }
-  else if stdenv.hostPlatform.system == "x86_64-linux" then
-    callPackage ../development/python-modules/gurobipy/linux.nix { }
-  else
-    throw "gurobipy not yet supported on ${stdenv.hostPlatform.system}";
+  gurobipy = callPackage ../development/python-modules/gurobipy { };
 
   guzzle-sphinx-theme = callPackage ../development/python-modules/guzzle-sphinx-theme { };
 
@@ -5631,6 +5646,8 @@ self: super: with self; {
   imbalanced-learn = callPackage ../development/python-modules/imbalanced-learn { };
 
   img2pdf = callPackage ../development/python-modules/img2pdf { };
+
+  imgcat = callPackage ../development/python-modules/imgcat { };
 
   imgdiff = callPackage ../development/python-modules/imgdiff { };
 
@@ -6726,6 +6743,8 @@ self: super: with self; {
 
   lingua = callPackage ../development/python-modules/lingua { };
 
+  lingva = callPackage ../development/python-modules/lingva { };
+
   linien-client = callPackage ../development/python-modules/linien-client { };
 
   linien-common = callPackage ../development/python-modules/linien-common { };
@@ -7037,6 +7056,8 @@ self: super: with self; {
     inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
   };
 
+  manim-slides = callPackage ../development/python-modules/manim-slides { };
+
   manifest-ml = callPackage ../development/python-modules/manifest-ml { };
 
   manifestoo = callPackage ../development/python-modules/manifestoo { };
@@ -7298,7 +7319,11 @@ self: super: with self; {
 
   microsoft-kiota-http = callPackage ../development/python-modules/microsoft-kiota-http { };
 
+  microsoft-kiota-serialization-form = callPackage ../development/python-modules/microsoft-kiota-serialization-form { };
+
   microsoft-kiota-serialization-json = callPackage ../development/python-modules/microsoft-kiota-serialization-json { };
+
+  microsoft-kiota-serialization-multipart = callPackage ../development/python-modules/microsoft-kiota-serialization-multipart { };
 
   microsoft-kiota-serialization-text = callPackage ../development/python-modules/microsoft-kiota-serialization-text { };
 
@@ -8930,6 +8955,8 @@ self: super: with self; {
 
   onetimepass = callPackage ../development/python-modules/onetimepass { };
 
+  onigurumacffi = callPackage ../development/python-modules/onigurumacffi { };
+
   onkyo-eiscp = callPackage ../development/python-modules/onkyo-eiscp { };
 
   online-judge-api-client = callPackage ../development/python-modules/online-judge-api-client { };
@@ -9539,6 +9566,8 @@ self: super: with self; {
 
   msgraph-core = callPackage ../development/python-modules/msgraph-core { };
 
+  msgraph-sdk = callPackage ../development/python-modules/msgraph-sdk { };
+
   multipart = callPackage ../development/python-modules/multipart { };
 
   netmap = callPackage ../development/python-modules/netmap { };
@@ -10067,6 +10096,8 @@ self: super: with self; {
   polyline = callPackage ../development/python-modules/polyline { };
 
   polygon3 = callPackage ../development/python-modules/polygon3 { };
+
+  polyswarm-api = callPackage ../development/python-modules/polyswarm-api { };
 
   pomegranate = callPackage ../development/python-modules/pomegranate { };
 
@@ -10636,6 +10667,8 @@ self: super: with self; {
   pydantic-scim = callPackage ../development/python-modules/pydantic-scim { };
 
   pydantic-settings = callPackage ../development/python-modules/pydantic-settings { };
+
+  pydantic-yaml-0 = callPackage ../development/python-modules/pydantic-yaml-0 { };
 
   pydash = callPackage ../development/python-modules/pydash { };
 
@@ -13862,6 +13895,8 @@ self: super: with self; {
 
   snakeviz = callPackage ../development/python-modules/snakeviz { };
 
+  snap-helpers = callPackage ../development/python-modules/snap-helpers { };
+
   snapcast = callPackage ../development/python-modules/snapcast { };
 
   snapshottest = callPackage ../development/python-modules/snapshottest { };
@@ -13985,6 +14020,10 @@ self: super: with self; {
   sparse = callPackage ../development/python-modules/sparse { };
 
   spatial-image = callPackage ../development/python-modules/spatial-image { };
+
+  spdx = callPackage ../development/python-modules/spdx { };
+
+  spdx-lookup = callPackage ../development/python-modules/spdx-lookup { };
 
   spdx-tools = callPackage ../development/python-modules/spdx-tools { };
 
@@ -14145,6 +14184,8 @@ self: super: with self; {
   sphinx-material = callPackage ../development/python-modules/sphinx-material { };
 
   sphinx-mdinclude = callPackage ../development/python-modules/sphinx-mdinclude { };
+
+  sphinx-rtd-dark-mode = callPackage ../development/python-modules/sphinx-rtd-dark-mode { };
 
   sphinx-rtd-theme = callPackage ../development/python-modules/sphinx-rtd-theme { };
 

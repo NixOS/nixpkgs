@@ -25,16 +25,16 @@
 
 buildPythonPackage rec {
   pname = "flax";
-  version = "0.8.1";
+  version = "0.8.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flax";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3UzMSJoKw+V1WLBJ+Zf7aF7CDNBsvWnRUfNgb3K4v1A=";
+    hash = "sha256-UABgJGe1grUSkwOJpjeIoFqhXsqG//HlC1YyYPxXV+g=";
   };
 
   nativeBuildInputs = [
@@ -87,6 +87,7 @@ buildPythonPackage rec {
     # `tensorflow_datasets`, `vocabulary`) so the benefits of trying to run them
     # would be limited anyway.
     "examples/*"
+    "flax/experimental/nnx/examples/*"
     # See https://github.com/google/flax/issues/3232.
     "tests/jax_utils_test.py"
     # Requires tree

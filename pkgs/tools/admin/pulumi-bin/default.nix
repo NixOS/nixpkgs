@@ -4,13 +4,13 @@ let
   data = import ./data.nix {};
 in stdenv.mkDerivation {
   pname = "pulumi";
-  version = data.version;
+  inherit (data) version;
 
   postUnpack = ''
     mv pulumi-* pulumi
   '';
 
-  srcs = map (x: fetchurl x) data.pulumiPkgs.${stdenv.hostPlatform.system};
+  srcs = map fetchurl data.pulumiPkgs.${stdenv.hostPlatform.system};
 
   installPhase = ''
     install -D -t $out/bin/ *

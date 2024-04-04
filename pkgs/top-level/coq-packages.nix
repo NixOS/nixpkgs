@@ -122,7 +122,10 @@ let
       tlc = callPackage ../development/coq-modules/tlc {};
       topology = callPackage ../development/coq-modules/topology {};
       trakt = callPackage ../development/coq-modules/trakt {};
-      vcfloat = callPackage ../development/coq-modules/vcfloat {};
+      vcfloat = callPackage ../development/coq-modules/vcfloat (lib.optionalAttrs
+        (lib.versions.range "8.16" "8.18" self.coq.version) {
+          interval = self.interval.override { version = "4.9.0"; };
+        });
       Velisarios = callPackage ../development/coq-modules/Velisarios {};
       Verdi = callPackage ../development/coq-modules/Verdi {};
       Vpl = callPackage ../development/coq-modules/Vpl {};

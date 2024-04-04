@@ -256,6 +256,12 @@
     githubId = 381298;
     name = "9R";
   };
+  A1ca7raz = {
+    email = "aya@wtm.moe";
+    github = "A1ca7raz";
+    githubId = 7345998;
+    name = "A1ca7raz";
+  };
   a1russell = {
     email = "adamlr6+pub@gmail.com";
     github = "a1russell";
@@ -1231,12 +1237,6 @@
     githubId = 29887;
     name = "Andrew Smith";
   };
-  andsild = {
-    email = "andsild@gmail.com";
-    github = "andsild";
-    githubId = 3808928;
-    name = "Anders Sildnes";
-  };
   andys8 = {
     github = "andys8";
     githubId = 13085980;
@@ -1783,6 +1783,13 @@
     keys = [{
       fingerprint = "C919 E69E A7C0 E147 9E0F  C26E 1EDA D0C6 70BD 062D";
     }];
+  };
+  assistant = {
+    email = "assistant.moetron@gmail.com";
+    github = "Assistant";
+    githubId = 2748721;
+    matrix = "@assistant:pygmalion.chat";
+    name = "Assistant Moetron";
   };
   astavie = {
     email = "astavie@pm.me";
@@ -3685,6 +3692,13 @@
     github = "clkamp";
     githubId = 46303707;
     name = "Christian Lütke-Stetzkamp";
+  };
+  clot27 = {
+    name = "Clot";
+    email = "adityayadav11082@protonmail.com";
+    github = "clot27";
+    githubId = 69784758;
+    matrix = "@clot27:matrix.org";
   };
   clr-cera = {
     email = "clrcera05@gmail.com";
@@ -5843,6 +5857,13 @@
     githubId = 418227;
     name = "Jean-Philippe Braun";
   };
+  eopb = {
+    email = "ethanboxx@gmail.com";
+    github = "eopb";
+    githubId = 8074468;
+    matrix = "@efun:matrix.org";
+    name = "Ethan Brierley";
+  };
   eownerdead = {
     name = "EOWNERDEAD";
     email = "eownerdead@disroot.org";
@@ -7646,6 +7667,12 @@
     github = "HanEmile";
     githubId = 22756350;
     name = "Emile Hansmaennel";
+  };
+  HannahMR = {
+    name = "Hannah Rosenberg";
+    email = "hannah@velascommerce.com";
+    github = "HannahMR";
+    githubId = 9088467;
   };
   hansjoergschurr = {
     email = "commits@schurr.at";
@@ -10106,6 +10133,11 @@
     github = "kashw2";
     githubId = 15855440;
     name = "Keanu Ashwell";
+  };
+  katanallama = {
+    github = "katanallama";
+    githubId = 70604257;
+    name = "katanallama";
   };
   katexochen = {
     github = "katexochen";
@@ -15756,6 +15788,12 @@
     githubId = 4201956;
     name = "pongo1231";
   };
+  poptart = {
+    email = "poptart@hosakacorp.net";
+    github = "terrorbyte";
+    githubId = 1601039;
+    name = "Cale Black";
+  };
   portothree = {
     name = "Gustavo Porto";
     email = "gus@p8s.co";
@@ -16172,6 +16210,12 @@
     githubId = 39039420;
     name = "Quinn Dougherty";
   };
+  qusic = {
+    email = "qusicx@gmail.com";
+    github = "Qusic";
+    githubId = 2141853;
+    name = "Bang Lee";
+  };
   qyliss = {
     email = "hi@alyssa.is";
     github = "alyssais";
@@ -16373,6 +16417,12 @@
     github = "ratsclub";
     githubId = 25647735;
     name = "Victor Freire";
+  };
+  ravenz46 = {
+    email = "goldraven0406@gmail.com";
+    github = "RAVENz46";
+    githubId = 86608952;
+    name = "RAVENz46";
   };
   rawkode = {
     email = "david.andrew.mckay@gmail.com";
@@ -18538,6 +18588,12 @@
     githubId = 20756843;
     name = "Sofi";
   };
+  soyouzpanda = {
+    name = "soyouzpanda";
+    email = "soyouzpanda@soyouzpanda.fr";
+    github = "soyouzpanda";
+    githubId = 23421201;
+  };
   soywod = {
     name = "Clément DOUIN";
     email = "clement.douin@posteo.net";
@@ -18807,6 +18863,15 @@
     github = "stephank";
     githubId = 89950;
     name = "Stéphan Kochen";
+  };
+  stephen-huan = {
+    name = "Stephen Huan";
+    email = "stephen.huan@cgdct.moe";
+    github = "stephen-huan";
+    githubId = 20411956;
+    keys = [{
+      fingerprint = "EA6E 2794 8C7D BF5D 0DF0  85A1 0FBC 2E3B A99D D60E";
+    }];
   };
   stephenmw = {
     email = "stephen@q5comm.com";
@@ -21298,6 +21363,15 @@
     github = "WolfangAukang";
     githubId = 8378365;
     name = "P. R. d. O.";
+  };
+  wolfgangwalther = {
+    name = "Wolfgang Walther";
+    email = "walther@technowledgy.de";
+    github = "wolfgangwalther";
+    githubId = 9132420;
+    keys = [{
+      fingerprint = "F943 A0BC 720C 5BEF 73CD E02D B398 93FA 5F65 CAE1";
+    }];
   };
   womfoo = {
     email = "kranium@gikos.net";
