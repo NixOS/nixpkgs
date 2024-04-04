@@ -1,48 +1,46 @@
 { lib
 , buildPythonPackage
+, fastembed
 , fetchFromGitHub
 , grpcio
 , grpcio-tools
 , httpx
 , numpy
-, pytestCheckHook
 , poetry-core
+, portalocker
 , pydantic
+, pytest-asyncio
+, pytestCheckHook
 , pythonOlder
 , urllib3
-, portalocker
-, fastembed
-# check inputs
-, pytest-asyncio
 }:
 
 buildPythonPackage rec {
   pname = "qdrant-client";
   version = "1.8.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "qdrant";
-    repo = pname;
+    repo = "qdrant-client";
     rev = "refs/tags/v${version}";
     hash = "sha256-skPBKSqtwMfm5Tvvhg0pSOsnrf0tfvsUgwxjnUbj3NA=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
-    numpy
-    httpx
+  dependencies = [
     grpcio
-    # typing-extensions
     grpcio-tools
+    httpx
+    numpy
+    portalocker
     pydantic
     urllib3
-    portalocker
   ] ++ httpx.optional-dependencies.http2;
 
   pythonImportsCheck = [
@@ -54,7 +52,7 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  # tests require network access
+  # Tests require network access
   doCheck = false;
 
   passthru.optional-dependencies = {
