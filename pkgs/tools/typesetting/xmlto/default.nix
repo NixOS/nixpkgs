@@ -1,13 +1,26 @@
-{ fetchurl, fetchpatch, lib, stdenv, libxml2, libxslt
-, docbook_xml_dtd_45, docbook_xsl, flex, w3m
-, bash, getopt, makeWrapper }:
+{
+  bash,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  fetchpatch,
+  fetchurl,
+  flex,
+  getopt,
+  lib,
+  libxml2,
+  libxslt,
+  makeWrapper,
+  stdenv,
+  w3m,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xmlto";
   version = "0.0.28";
+
   src = fetchurl {
     url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "0xhj8b2pwp4vhl9y16v3dpxpsakkflfamr191mprzsspg4xdyc0i";
+    hash = "sha256-ETDfOnlX659vDSnkqhx1cyp9+21jm+AThZtcfsVCEnY=";
   };
 
   # Note: These patches modify `xmlif/xmlif.l`, which requires `flex` to be rerun.
@@ -37,8 +50,18 @@ stdenv.mkDerivation rec {
 
   # `libxml2' provides `xmllint', needed at build-time and run-time.
   # `libxslt' provides `xsltproc', used by `xmlto' at run-time.
-  nativeBuildInputs = [ makeWrapper flex getopt ];
-  buildInputs = [ libxml2 libxslt docbook_xml_dtd_45 docbook_xsl ];
+  nativeBuildInputs = [
+    makeWrapper
+    flex
+    getopt
+  ];
+
+  buildInputs = [
+    docbook_xml_dtd_45
+    docbook_xsl
+    libxml2
+    libxslt
+  ];
 
   postInstall = ''
     # `w3m' is needed for HTML to text conversions.
@@ -47,17 +70,18 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
+    changelog = "https://pagure.io/xmlto/blob/master/f/ChangeLog";
     description = "Front-end to an XSL toolchain";
-
+    homepage = "https://pagure.io/xmlto/";
+    license = lib.licenses.gpl2Plus;
     longDescription = ''
       xmlto is a front-end to an XSL toolchain.  It chooses an
       appropriate stylesheet for the conversion you want and applies
       it using an external XSL-T processor.  It also performs any
       necessary post-processing.
     '';
-
-    license = lib.licenses.gpl2Plus;
-    homepage = "https://pagure.io/xmlto/";
+    mainProgram = "xmlto";
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }
