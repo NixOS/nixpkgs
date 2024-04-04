@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "llhttp";
-  version = "9.2.0";
+  version = "9.2.1";
 
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "llhttp";
     rev = "release/v${finalAttrs.version}";
-    hash = "sha256-DX/CuTyvc2OfAVWvlJr6wVHwSuqWmqQt34vM1FEazwE=";
+    hash = "sha256-cnEp7Ds32bqu3jeUU/rqJOr/VW3KNmJU4pmNNaTpXRs=";
   };
 
   outputs = [ "out" "dev" ];
@@ -23,6 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.hasPkgConfigModules {
     package = finalAttrs.finalPackage;
+    moduleNames = [ "libllhttp" ];
   };
 
   meta = with lib; {
@@ -30,7 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://llhttp.org/";
     changelog = "https://github.com/nodejs/llhttp/releases/tag/release/v${finalAttrs.version}";
     license = licenses.mit;
-    pkgConfigModules = [ "libllhttp" ];
     maintainers = [ maintainers.marsam ];
     platforms = platforms.all;
   };
