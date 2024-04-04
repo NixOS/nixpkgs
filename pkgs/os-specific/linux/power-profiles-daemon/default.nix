@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, bash-completion
 , pkg-config
 , meson
 , mesonEmulatorHook
@@ -25,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "power-profiles-daemon";
-  version = "0.20";
+  version = "0.21";
 
   outputs = [ "out" "devdoc" ];
 
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
     owner = "upower";
     repo = "power-profiles-daemon";
     rev = version;
-    sha256 = "sha256-8wSRPR/1ELcsZ9K3LvSNlPcJvxRhb/LRjTIxKtdQlCA=";
+    sha256 = "sha256-5JbMbz38SeNEkVKFjJLxeUHiOrx+QCaK/vXgRPbzwzY=";
   };
 
   nativeBuildInputs = [
@@ -53,12 +54,15 @@ stdenv.mkDerivation rec {
       pygobject3
       dbus-python
       python-dbusmock
+      argparse-manpage
+      shtab
     ]))
   ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
   ];
 
   buildInputs = [
+    bash-completion
     libgudev
     systemd
     upower
@@ -84,6 +88,8 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "-Dgtk_doc=true"
+    "-Dpylint=disabled"
+    "-Dzshcomp=${placeholder "out"}/share/zsh/site-functions"
     "-Dtests=${lib.boolToString (stdenv.buildPlatform.canExecute stdenv.hostPlatform)}"
   ];
 
@@ -112,6 +118,6 @@ stdenv.mkDerivation rec {
     mainProgram = "powerprofilesctl";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mvnetbiz ];
+    maintainers = with maintainers; [ mvnetbiz picnoir ];
   };
 }
