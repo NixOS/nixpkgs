@@ -29,7 +29,6 @@
 , ujson
 , websockets
 , whatthepatch
-, wheel
 , yapf
 }:
 
@@ -42,15 +41,15 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "python-lsp";
-    repo = pname;
+    repo = "python-lsp-server";
     rev = "refs/tags/v${version}";
     hash = "sha256-0DFcnGlyDOK0Lxpr++xV6klhFF9b1fihH5FY/tblr+E=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov-report html --cov-report term --junitxml=pytest.xml" "" \
-      --replace "--cov pylsp --cov test" ""
+      --replace-fail "--cov-report html --cov-report term --junitxml=pytest.xml" "" \
+      --replace-fail "--cov pylsp --cov test" ""
   '';
 
   pythonRelaxDeps = [
@@ -63,12 +62,14 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools-scm
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools-scm
+  ];
+
+  dependencies = [
     docstring-to-markdown
     jedi
     pluggy
