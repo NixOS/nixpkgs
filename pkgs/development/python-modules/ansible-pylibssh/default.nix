@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, cython_3
-, expandvars
-, fetchPypi
-, libssh
-, pythonOlder
-, setuptools
-, setuptools-scm
-, toml
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  cython_3,
+  expandvars,
+  fetchPypi,
+  libssh,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  toml,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -37,13 +38,9 @@ buildPythonPackage rec {
     wheel
   ];
 
-  dependencies = [
-    libssh
-  ];
+  dependencies = [ libssh ];
 
-  pythonImportsCheck = [
-    "pylibsshext"
-  ];
+  pythonImportsCheck = [ "pylibsshext" ];
 
   meta = with lib; {
     description = "Python bindings to client functionality of libssh specific to Ansible use case";
