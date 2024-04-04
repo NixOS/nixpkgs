@@ -1,18 +1,17 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, docutils
-, fetchFromGitHub
-, importlib-metadata
-, setuptools
-, setuptools-scm
-, pydantic
-, pytestCheckHook
-, pythonOlder
-, rstcheck-core
-, typer
-, types-docutils
-, typing-extensions
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  docutils,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pydantic,
+  pytestCheckHook,
+  pythonOlder,
+  rstcheck-core,
+  typer,
+  types-docutils,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +19,7 @@ buildPythonPackage rec {
   version = "6.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "rstcheck";
@@ -29,25 +28,20 @@ buildPythonPackage rec {
     hash = "sha256-S04l+x/rIc/XSvq2lSKCQp6KK5mmKI2mOgPgJ3WKe5M=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     docutils
     rstcheck-core
     types-docutils
     pydantic
     typer
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-    importlib-metadata
   ] ++ typer.optional-dependencies.all;
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
     # Disabled until https://github.com/rstcheck/rstcheck-core/issues/19 is resolved.
@@ -55,9 +49,7 @@ buildPythonPackage rec {
     "test_file_1_is_bad_without_config_macos"
   ];
 
-  pythonImportsCheck = [
-    "rstcheck"
-  ];
+  pythonImportsCheck = [ "rstcheck" ];
 
   preCheck = ''
     # The tests need to find and call the rstcheck executable
