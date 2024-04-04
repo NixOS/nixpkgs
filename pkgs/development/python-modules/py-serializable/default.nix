@@ -23,11 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-oVjb7/9RWvQd5L6xQBrspfblPzMaRvnZHDuojTuq+zE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     defusedxml
   ];
 
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Pythonic library to aid with serialisation and deserialisation to/from JSON and XML";
+    description = "Library to aid with serialisation and deserialisation to/from JSON and XML";
     homepage = "https://github.com/madpah/serializable";
     changelog = "https://github.com/madpah/serializable/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
