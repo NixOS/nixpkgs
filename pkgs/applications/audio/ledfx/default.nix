@@ -20,13 +20,16 @@ python3.pkgs.buildPythonPackage rec {
     "rpi-ws281x"
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     cython
     poetry-core
+  ];
+
+  nativeBuildInputs = with python3.pkgs; [
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     aiohttp
     aiohttp-cors
     aubio
