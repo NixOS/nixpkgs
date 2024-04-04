@@ -13,11 +13,11 @@ python3.pkgs.buildPythonPackage rec {
     hash = "sha256-MJmYyF+rAo8vywGizNyIbbCvxDmCYueVoC6pxNDzKuk=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     beautifulsoup4
     docutils
     genshi
