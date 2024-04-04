@@ -23,7 +23,7 @@ in
           SSH_AUTH_SOCK to point at yubikey-agent.
 
           Note that yubikey-agent will use whatever pinentry is
-          specified in programs.gnupg.agent.pinentryFlavor.
+          specified in programs.gnupg.agent.pinentryPackage.
         '';
       };
 
