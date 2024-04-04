@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "ghq";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "x-motemen";
     repo = "ghq";
     rev = "v${version}";
-    sha256 = "sha256-l+Ycts7PSKR72GsHJ1zWqpyd0BMMib/GTUv+B0x6d8M=";
+    sha256 = "sha256-gSMSn7YuhV/m5po+nu9Z/bxSRKg7/fXbF1stm7JQqZI=";
   };
 
-  vendorHash = "sha256-6ZDvU3RQ/1M4DZMFOaQsEuodldB8k+2thXNhvZlVQEg=";
+  vendorHash = "sha256-M9B19rSEMnmT4wfOVnSAK06UPR/xrs0252lX3B9ebF8=";
 
   doCheck = false;
 
