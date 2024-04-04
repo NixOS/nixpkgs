@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "subxt";
-  version = "0.35.0";
+  version = "0.35.1";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "subxt";
     rev = "v${version}";
-    hash = "sha256-zNgk8muBxKA3YLP42EIuGSZOyUKRNTvzDvLks3IGHZk=";
+    hash = "sha256-hv31E0e2ANArrK5VNHwKiEfDvaJojTjBA65oskziLUI=";
   };
 
-  cargoHash = "sha256-2aekzHVmAVWfJH7dQOlyiR6r3NESsu5W7B6osAOBUWY=";
+  cargoHash = "sha256-V7oAvD8M+1CGnXYzj4qeb+skkVROdXr0S5l5mZyLnfA=";
 
   # Only build the command line client
   cargoBuildFlags = [ "--bin" "subxt" ];
