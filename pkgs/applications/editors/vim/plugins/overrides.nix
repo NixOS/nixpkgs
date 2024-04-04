@@ -997,6 +997,13 @@
     dependencies = with self; [ nvim-dap ];
   };
 
+  nvim-dap-ui = super.nvim-dap-ui.overrideAttrs {
+    dependencies = with self; [ nvim-dap nvim-nio ];
+
+    doInstallCheck = true;
+    nvimRequireCheck = "dapui";
+  };
+
   nvim-lsputils = super.nvim-lsputils.overrideAttrs {
     dependencies = with self; [ popfix ];
   };
