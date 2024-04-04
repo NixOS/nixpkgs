@@ -141,7 +141,10 @@ rec {
     extraBuildInputs = [ libgcc libr stdenv.cc.cc ];
   };
 
-  gateway = mkJetBrainsProduct { pname = "gateway"; };
+  gateway = mkJetBrainsProduct {
+    pname = "gateway";
+    extraBuildInputs = [ libgcc ];
+  };
 
   goland = (mkJetBrainsProduct {
     pname = "goland";
