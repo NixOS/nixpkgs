@@ -106,6 +106,7 @@ let
     types
     updateManyAttrsByPath
     versions
+    xor
     ;
 
   testingThrow = expr: {
@@ -212,6 +213,21 @@ runTests {
   testAnd = {
     expr = and true false;
     expected = false;
+  };
+
+  testXor = {
+    expr = [
+      (xor true false)
+      (xor true true)
+      (xor false false)
+      (xor false true)
+    ];
+    expected = [
+      true
+      false
+      false
+      true
+    ];
   };
 
   testFix = {

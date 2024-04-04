@@ -871,7 +871,6 @@ in {
           }
           {
             assertion = let
-              xor = a: b: a && !b || b && !a;
               isEffectivelySystemUser = user.isSystemUser || (user.uid != null && user.uid < 1000);
             in xor isEffectivelySystemUser user.isNormalUser;
             message = ''

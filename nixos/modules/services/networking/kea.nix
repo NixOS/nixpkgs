@@ -9,7 +9,6 @@ with lib;
 let
   cfg = config.services.kea;
 
-  xor = x: y: (!x && y) || (x && !y);
   format = pkgs.formats.json {};
 
   chooseNotNull = x: y: if x != null then x else y;
