@@ -1,53 +1,52 @@
-{ lib
-, bash
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, poetry-core
-, aiohttp
-, async-timeout
-, dataclasses-json
-, jsonpatch
-, langsmith
-, langchain-core
-, langchain-community
-, langchain-text-splitters
-, numpy
-, pydantic
-, pyyaml
-, requests
-, sqlalchemy
-, tenacity
-  # optional dependencies
-, azure-core
-, azure-cosmos
-, azure-identity
-, chardet
-, clarifai
-, cohere
-, esprima
-, huggingface-hub
-, lark
-, manifest-ml
-, nlpcloud
-, openai
-, qdrant-client
-, sentence-transformers
-, tiktoken
-, torch
-, transformers
-, typer
-  # test dependencies
-, freezegun
-, pandas
-, pytest-asyncio
-, pytest-mock
-, pytest-socket
-, pytestCheckHook
-, requests-mock
-, responses
-, syrupy
-, toml
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  azure-core,
+  azure-cosmos,
+  azure-identity,
+  bash,
+  buildPythonPackage,
+  chardet,
+  clarifai,
+  cohere,
+  dataclasses-json,
+  esprima,
+  fetchFromGitHub,
+  freezegun,
+  huggingface-hub,
+  jsonpatch,
+  langchain-community,
+  langchain-core,
+  langchain-text-splitters,
+  langsmith,
+  lark,
+  manifest-ml,
+  nlpcloud,
+  numpy,
+  openai,
+  pandas,
+  poetry-core,
+  pydantic,
+  pytest-asyncio,
+  pytest-mock,
+  pytest-socket,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  qdrant-client,
+  requests-mock,
+  requests,
+  responses,
+  sentence-transformers,
+  sqlalchemy,
+  syrupy,
+  tenacity,
+  tiktoken,
+  toml,
+  torch,
+  transformers,
+  typer,
 }:
 
 buildPythonPackage rec {
@@ -66,13 +65,9 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/libs/langchain";
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  buildInputs = [
-    bash
-  ];
+  buildInputs = [ bash ];
 
   dependencies = [
     aiohttp
@@ -88,9 +83,7 @@ buildPythonPackage rec {
     requests
     sqlalchemy
     tenacity
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   passthru.optional-dependencies = {
     llms = [
@@ -104,31 +97,19 @@ buildPythonPackage rec {
       torch
       transformers
     ];
-    qdrant = [
-      qdrant-client
-    ];
+    qdrant = [ qdrant-client ];
     openai = [
       openai
       tiktoken
     ];
-    text_helpers = [
-      chardet
-    ];
-    clarifai = [
-      clarifai
-    ];
-    cohere = [
-      cohere
-    ];
+    text_helpers = [ chardet ];
+    clarifai = [ clarifai ];
+    cohere = [ cohere ];
     docarray = [
       # docarray
     ];
-    embeddings = [
-      sentence-transformers
-    ];
-    javascript = [
-      esprima
-    ];
+    embeddings = [ sentence-transformers ];
+    javascript = [ esprima ];
     azure = [
       azure-identity
       azure-cosmos
@@ -140,11 +121,8 @@ buildPythonPackage rec {
       # azure-search-documents
       # azure-ai-textanalytics
     ];
-    all = [
-    ];
-    cli = [
-      typer
-    ];
+    all = [ ];
+    cli = [ typer ];
   };
 
   nativeCheckInputs = [
@@ -182,9 +160,7 @@ buildPythonPackage rec {
     "test_generic_fake_chat_model"
   ];
 
-  pythonImportsCheck = [
-    "langchain"
-  ];
+  pythonImportsCheck = [ "langchain" ];
 
   meta = with lib; {
     description = "Building applications with LLMs through composability";
