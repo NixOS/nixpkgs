@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     hidapi
     qt6.qtbase
     qt6.qtwebsockets
+    qt6.qtwayland
   ];
 
   dontUseCmakeConfigure = true;
