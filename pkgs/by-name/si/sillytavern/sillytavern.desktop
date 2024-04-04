@@ -5,5 +5,5 @@ Name=SillyTavern
 Exec=sillytavern
 Terminal=true
 Hidden=false
-Categories=Education
+Categories=Network;Chat
 Comment="LLM Frontend for Power Users"
