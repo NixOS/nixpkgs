@@ -1,5 +1,5 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
 , docutils
 , fetchFromGitHub
@@ -12,12 +12,11 @@
 , setuptools
 , setuptools-scm
 , typing-extensions
-, wheel
 }:
 
 buildPythonPackage rec {
   pname = "rstcheck-core";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,20 +25,19 @@ buildPythonPackage rec {
     owner = "rstcheck";
     repo = "rstcheck-core";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cKJNktIB4vXt1MPRgYrJQ0aksmrVu7Y2uTyUjdx5YdA=";
+    hash = "sha256-PiQMk0lIv24S6qXMYIQR+SkSji+WA30ivWs2uPQwf2A=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
   env = {
     NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-strict-prototypes";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     docutils
     pydantic
   ] ++ lib.optionals (pythonOlder "3.9") [
