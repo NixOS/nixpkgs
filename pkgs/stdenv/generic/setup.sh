@@ -272,6 +272,34 @@ appendToVar() {
     fi
 }
 
+# Add flag to a given variable if the variable does not yet contain the flag.
+# The variable to add to can be either an array or a string.
+# Usage: addFlagTo NIX_CFLAGS_COMPILE "-Wblabla"
+#        addFlagTo NIX_CFLAGS_COMPILE "-isystem foobar"
+#        addFlagTo NIX_CFLAGS_COMPILE "--foo=\"bar baz\""
+addFlagTo() {
+    local varname="$1"
+    # Use a different name as in appendToVar to avoid a name clash
+    local -n _nameref="$1"
+
+        # check if variable already exist and if it does then do extra checks
+    if declare -p "$1" 2> /dev/null | grep -q '^'; then
+        type="$(declare -p "$1")"
+        if [[ "$type" =~ "declare -A" ]]; then
+            echo "addFlagTo(): ERROR: trying to use addFlagTo on an associative array." >&2
+            return 1
+        fi
+    fi
+
+    shift
+
+    if [[ "${_nameref[*]}" != *"${*}"* ]]; then
+        appendToVar "${varname}" "${@}"
+    else
+        echo "${_nameref}"
+    fi
+}
+
 # Accumulate into `flagsArray` the flags from the named variables.
 #
 # If __structuredAttrs, the variables are all treated as arrays

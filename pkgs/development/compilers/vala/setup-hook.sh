@@ -11,7 +11,7 @@ disable_incompabile_pointer_conversion_warning() {
     # Work around incompatible function pointer conversion errors with clang 16
     # by setting ``-Wno-incompatible-function-pointer-types` in an env hook.
     # See https://gitlab.gnome.org/GNOME/vala/-/issues/1413.
-    NIX_CFLAGS_COMPILE+=" -Wno-incompatible-function-pointer-types"
+    addFlagTo NIX_CFLAGS_COMPILE "-Wno-incompatible-function-pointer-types"
 }
 
 addEnvHooks "$hostOffset" disable_incompabile_pointer_conversion_warning
