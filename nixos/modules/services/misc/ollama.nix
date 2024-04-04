@@ -57,11 +57,11 @@ in
       description = "Server for local large language models";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      environment = cfg.environmentVariables // {
+      environment = {
         HOME = "%S/ollama";
         OLLAMA_MODELS = "%S/ollama/models";
         OLLAMA_HOST = cfg.listenAddress;
-      };
+      } // cfg.environmentVariables;
       serviceConfig = {
         ExecStart = "${lib.getExe ollamaPackage} serve";
         WorkingDirectory = "%S/ollama";
