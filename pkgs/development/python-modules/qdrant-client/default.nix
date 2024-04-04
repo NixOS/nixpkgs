@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fastembed
-, fetchFromGitHub
-, grpcio
-, grpcio-tools
-, httpx
-, numpy
-, poetry-core
-, portalocker
-, pydantic
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fastembed,
+  fetchFromGitHub,
+  grpcio,
+  grpcio-tools,
+  httpx,
+  numpy,
+  poetry-core,
+  portalocker,
+  pydantic,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
     hash = "sha256-skPBKSqtwMfm5Tvvhg0pSOsnrf0tfvsUgwxjnUbj3NA=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     grpcio
@@ -43,9 +42,7 @@ buildPythonPackage rec {
     urllib3
   ] ++ httpx.optional-dependencies.http2;
 
-  pythonImportsCheck = [
-    "qdrant_client"
-  ];
+  pythonImportsCheck = [ "qdrant_client" ];
 
   nativeCheckInputs = [
     pytestCheckHook
