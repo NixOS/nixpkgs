@@ -158,7 +158,12 @@ stdenv.mkDerivation (rec {
     )
     + ''
       mkdir -p "$out/share/applications"
-      substitute "''$${primaryBinary}/${primaryBinary}.desktop" "$out/share/applications/${primaryBinary}.desktop" --replace "/opt/${primaryBinary}/${primaryBinary}" "${primaryBinary}"
+
+      substitute \
+        "''$${primaryBinary}/${primaryBinary}.desktop" \
+        "$out/share/applications/${primaryBinary}.desktop" \
+        --replace-fail "/opt/${primaryBinary}/${primaryBinary}" "${primaryBinary}"
+
       for directory in ''$${primaryBinary}/Icon/*; do
         size=$(basename $directory)
         mkdir -p "$out/share/icons/hicolor/$size/apps"
