@@ -328,6 +328,7 @@ rec {
           "signedInt${toString bit}" "${toString bit} bit signed integer";
 
       in {
+        # TODO: Deduplicate with docs in nixos/doc/manual/development/option-types.section.md
         /**
           An int with a fixed range.
 
