@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, poetry-core
-, pythonOlder
-, aiohttp
-, dataclasses-json
-, langchain-core
-, langsmith
-, numpy
-, pyyaml
-, requests
-, sqlalchemy
-, tenacity
-, typer
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+  pythonOlder,
+  aiohttp,
+  dataclasses-json,
+  langchain-core,
+  langsmith,
+  numpy,
+  pyyaml,
+  requests,
+  sqlalchemy,
+  tenacity,
+  typer,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     hash = "sha256-2IEH+vqf4sVzPaljDGjZ7lHNM7HIiklQ56LZo49+eqM=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -45,9 +44,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    cli = [
-      typer
-    ];
+    cli = [ typer ];
   };
 
   pythonImportsCheck = [ "langchain_community" ];
