@@ -23,6 +23,11 @@ stdenv.mkDerivation rec {
     sha256 = "1gnwihpfz4x18rwd6cbrdggmfqjzwsdfh1gpmc0ph21c4gq2097g";
   };
 
+  patches = [
+    ./CVE-2023-52425.patch
+    ./CVE-2024-28757.patch
+  ];
+
   strictDeps = true;
 
   outputs = [ "out" "dev" ]; # TODO: fix referrers
