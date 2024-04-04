@@ -535,6 +535,7 @@ rec {
       name = "riscv-multiplatform";
       target = "Image";
       autoModules = true;
+      preferBuiltin = true;
       baseConfig = "defconfig";
       DTB = true;
       extraConfig = ''
