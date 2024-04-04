@@ -20382,7 +20382,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
 
-  box2d = callPackage ../development/libraries/box2d { };
+  box2d = callPackage ../development/libraries/box2d {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa Kernel OpenGL;
+  };
 
   boxfort = callPackage ../development/libraries/boxfort { };
 
