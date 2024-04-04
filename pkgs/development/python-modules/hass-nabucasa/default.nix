@@ -1,23 +1,24 @@
-{ lib
-, acme
-, aiohttp
-, atomicwrites-homeassistant
-, attrs
-, buildPythonPackage
-, ciso8601
-, cryptography
-, fetchFromGitHub
-, pycognito
-, pyjwt
-, pytest-aiohttp
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, setuptools
-, snitun
-, syrupy
-, xmltodict
+{
+  lib,
+  acme,
+  aiohttp,
+  atomicwrites-homeassistant,
+  attrs,
+  buildPythonPackage,
+  ciso8601,
+  cryptography,
+  fetchFromGitHub,
+  pycognito,
+  pyjwt,
+  pytest-aiohttp,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  setuptools,
+  snitun,
+  syrupy,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
@@ -34,17 +35,11 @@ buildPythonPackage rec {
     hash = "sha256-8KxnS6LTK077/hr81JOiOj8GaNWBXO8XlvpYBm/sZbI=";
   };
 
-  pythonRelaxDeps = [
-    "acme"
-  ];
+  pythonRelaxDeps = [ "acme" ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     acme
@@ -66,9 +61,7 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  pythonImportsCheck = [
-    "hass_nabucasa"
-  ];
+  pythonImportsCheck = [ "hass_nabucasa" ];
 
   meta = with lib; {
     description = "Python module for the Home Assistant cloud integration";
