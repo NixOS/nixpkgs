@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, git
-, installShellFiles
-, openssl
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  git,
+  installShellFiles,
+  openssl,
 }:
 
 buildGoModule rec {
@@ -31,18 +32,14 @@ buildGoModule rec {
 
   vendorHash = "sha256-C1xM0OcEsplWOe0SGL6SCAvFq7M5LcekYyQTjP9EZB4=";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   nativeCheckInputs = [
     git
     openssl
   ];
 
-  subPackages = [
-    "cmd/grype"
-  ];
+  subPackages = [ "cmd/grype" ];
 
   excludedPackages = "test/integration";
 
@@ -115,6 +112,10 @@ buildGoModule rec {
       container image or filesystem to find known vulnerabilities.
     '';
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab jk kashw2 ];
+    maintainers = with maintainers; [
+      fab
+      jk
+      kashw2
+    ];
   };
 }
