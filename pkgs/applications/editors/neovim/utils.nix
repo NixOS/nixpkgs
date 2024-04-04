@@ -78,7 +78,10 @@ let
         ++ (extraPython3Packages ps)
         ++ (lib.concatMap (f: f ps) pluginPython3Packages));
 
-      luaEnv = neovim-unwrapped.lua.withPackages(extraLuaPackages);
+      pluginLuaPackages = getDeps "luaDependencies" requiredPlugins;
+      luaEnv = neovim-unwrapped.lua.withPackages(ps:
+        (extraLuaPackages ps)
+        ++ (lib.concatMap (f: f ps) pluginLuaPackages));
 
       # as expected by packdir
       packpathDirs.myNeovimPackages = myVimPackage;
