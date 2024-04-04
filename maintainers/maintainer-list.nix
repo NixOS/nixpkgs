@@ -14435,6 +14435,12 @@
     githubId = 42322511;
     name = "Patryk Kwiatek";
   };
+  nokazn = {
+    email = "me@nokazn.me";
+    github = "nokazn";
+    githubId = 41154684;
+    name = "nokazn";
+  };
   nomeata = {
     email = "mail@joachim-breitner.de";
     github = "nomeata";
