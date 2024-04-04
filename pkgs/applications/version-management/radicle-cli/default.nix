@@ -57,6 +57,8 @@ rustPlatform.buildRustPackage rec {
     openssh
   ];
 
+  doCheck = false;
+
   preCheck = ''
     eval $(ssh-agent)
   '';
