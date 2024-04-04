@@ -107,6 +107,7 @@ nlua,,,,,,teto
 nui.nvim,,,,,,mrcjkb
 nvim-cmp,https://github.com/hrsh7th/nvim-cmp,,,,,
 nvim-nio,,,,,,mrcjkb
+pathlib.nvim,,,,,,
 penlight,https://github.com/lunarmodules/Penlight.git,,,,,alerque
 plenary.nvim,https://github.com/nvim-lua/plenary.nvim.git,,,,5.1,
 rapidjson,https://github.com/xpol/lua-rapidjson.git,,,,,

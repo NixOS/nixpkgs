@@ -3028,6 +3028,29 @@ buildLuarocksPackage {
   };
 }) {};
 
+pathlib-nvim = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, lua, luaOlder, nvim-nio }:
+buildLuarocksPackage {
+  pname = "pathlib.nvim";
+  version = "2.2.0-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/pathlib.nvim-2.2.0-1.rockspec";
+    sha256 = "0zj3psdq06822y8vl117z3y7zlc6jxwqppbv9irgwzr60wdz517n";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/pysan3/pathlib.nvim/archive/v2.2.0.zip";
+    sha256 = "1nyl3y0z2rrr35dyk2ypv8xjx43zamqxlpdq468iyyhfvkplz9yw";
+  };
+
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua nvim-nio ];
+
+  meta = {
+    homepage = "https://pysan3.github.io/pathlib.nvim/";
+    description = "OS Independent, ultimate solution to path handling in neovim.";
+    license.fullName = "MPL-2.0";
+  };
+}) {};
+
 penlight = callPackage({ buildLuarocksPackage, fetchgit, lua, luaOlder, luafilesystem }:
 buildLuarocksPackage {
   pname = "penlight";
