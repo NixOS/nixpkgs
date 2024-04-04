@@ -1,73 +1,70 @@
 { lib
-, fetchFromGitHub
+, fetchurl
 , installShellFiles
-, makeWrapper
-, buildGoModule
-, fetchYarnDeps
-, fixup_yarn_lock
-, pkg-config
-, nodejs
-, yarn
-, nodePackages
-, python3
+, makeBinaryWrapper
 , terraform
+, stdenvNoCC
+, unzip
 }:
 
-buildGoModule rec {
+let
+  inherit (stdenvNoCC.hostPlatform) system;
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "coder";
-  version = "0.17.1";
+  version = "2.9.1";
 
-  src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-FHBaefwSGZXwn1jdU7zK8WhwjarknvyeUJTlhmk/hPM=";
+  src = fetchurl {
+    hash = {
+      x86_64-linux = "sha256-r4+u/s/dOn2GhyhEROu8i03QY3VA/bIyO/Yj7KSqicY=";
+      x86_64-darwin = "sha256-uShCmMvb5OcinqP0CmrlP9QAJkjfG3g1QuHE4JRDOjE=";
+      aarch64-linux = "sha256-tvpzfJ95YYfCY5V4iayjAmY5PDw+1uHUhY5F3pv/2Uk=";
+      aarch64-darwin = "sha256-sP9HnB2DzAU9IvL3+QPmIFLvRkGkoxSoa68uXGQrNkw=";
+    }.${system};
+
+    url =
+      let
+        systemName = {
+          x86_64-linux = "linux_amd64";
+          aarch64-linux = "linux_arm64";
+          x86_64-darwin = "darwin_amd64";
+          aarch64-darwin = "darwin_arm64";
+        }.${system};
+
+        ext = {
+          x86_64-linux = "tar.gz";
+          aarch64-linux = "tar.gz";
+          x86_64-darwin = "zip";
+          aarch64-darwin = "zip";
+        }.${system};
+      in
+      "https://github.com/coder/coder/releases/download/v${finalAttrs.version}/coder_${finalAttrs.version}_${systemName}.${ext}";
   };
-
-  offlineCache = fetchYarnDeps {
-    yarnLock = src + "/site/yarn.lock";
-    hash = "sha256-nRmEXR9fjDxvpbnT+qpGeM0Cc/qW/kN53sKOXwZiBXY=";
-  };
-
-  vendorHash = "sha256-+AvmJkZCFovE2+5Lg98tUvA7f2kBHUMzhl5IyrEGuy8=";
-
-  tags = [ "embed" ];
-
-  ldflags = [
-    "-s"
-    "-w"
-    "-X github.com/coder/coder/buildinfo.tag=${version}"
-  ];
-
-  subPackages = [ "cmd/..." ];
-
-  preBuild = ''
-    export HOME=$TEMPDIR
-
-    pushd site
-    yarn config --offline set yarn-offline-mirror ${offlineCache}
-    fixup_yarn_lock yarn.lock
-
-    # node-gyp tries to download always the headers and fails: https://github.com/NixOS/nixpkgs/issues/195404
-    # playwright tries to download Chrome and fails
-    yarn remove --offline jest-canvas-mock canvas @playwright/test playwright
-
-    export PATH=$PATH:$(pwd)/node_modules/.bin
-    NODE_ENV=production node node_modules/.bin/vite build
-
-    popd
-  '';
 
   nativeBuildInputs = [
-    fixup_yarn_lock
     installShellFiles
-    makeWrapper
-    nodePackages.node-pre-gyp
-    nodejs
-    pkg-config
-    python3
-    yarn
+    makeBinaryWrapper
+    unzip
   ];
+
+  unpackPhase = ''
+    runHook preUnpack
+
+    case $src in
+        *.tar.gz) tar -xz -f "$src" ;;
+        *.zip)    unzip      "$src" ;;
+    esac
+
+    runHook postUnpack
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    install -D -m755 coder $out/bin/coder
+
+    runHook postInstall
+  '';
 
   postInstall = ''
     installShellCompletion --cmd coder \
@@ -75,16 +72,18 @@ buildGoModule rec {
       --fish <($out/bin/coder completion fish) \
       --zsh <($out/bin/coder completion zsh)
 
-    wrapProgram $out/bin/coder --prefix PATH : ${lib.makeBinPath [ terraform ]}
+    wrapProgram $out/bin/coder \
+      --prefix PATH : ${lib.makeBinPath [ terraform ]}
   '';
 
   # integration tests require network access
   doCheck = false;
 
   meta = {
-    description = "Provision software development environments via Terraform on Linux, macOS, Windows, X86, ARM, and of course, Kubernetes";
+    description = "Provision remote development environments via Terraform";
     homepage = "https://coder.com";
     license = lib.licenses.agpl3Only;
-    maintainers = [ lib.maintainers.ghuntley lib.maintainers.urandom ];
+    mainProgram = "coder";
+    maintainers = with lib.maintainers; [ ghuntley urandom ];
   };
-}
+})
