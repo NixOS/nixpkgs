@@ -1,19 +1,53 @@
-{ buildVersion, aarch64sha256, x64sha256, dev ? false }:
+{
+  buildVersion,
+  dev ? false,
+  aarch64sha256,
+  x64sha256,
+}:
 
-{ fetchurl, stdenv, lib, xorg, glib, libglvnd, glibcLocales, gtk3, cairo, pango, makeWrapper, wrapGAppsHook
-, writeShellScript, common-updater-scripts, curl
-, openssl_1_1, bzip2, bash, unzip, zip
-, sqlite
+{
+  fetchurl,
+  stdenv,
+  lib,
+  xorg,
+  glib,
+  libglvnd,
+  glibcLocales,
+  gtk3,
+  cairo,
+  pango,
+  makeWrapper,
+  wrapGAppsHook,
+  writeShellScript,
+  common-updater-scripts,
+  curl,
+  openssl_1_1,
+  bzip2,
+  bash,
+  unzip,
+  zip,
+  sqlite,
 }:
 
 let
   pnameBase = "sublimetext4";
   packageAttribute = "sublime4${lib.optionalString dev "-dev"}";
-  binaries = [ "sublime_text" "plugin_host-3.3" "plugin_host-3.8" crashHandlerBinary ];
+  binaries = [
+    "sublime_text"
+    "plugin_host-3.3"
+    "plugin_host-3.8"
+    crashHandlerBinary
+  ];
   primaryBinary = "sublime_text";
-  primaryBinaryAliases = [ "subl" "sublime" "sublime4" ];
-  crashHandlerBinary = if lib.versionAtLeast buildVersion "4153" then "crash_handler" else "crash_reporter";
-  downloadUrl = arch: "https://download.sublimetext.com/sublime_text_build_${buildVersion}_${arch}.tar.xz";
+  primaryBinaryAliases = [
+    "subl"
+    "sublime"
+    "sublime4"
+  ];
+  crashHandlerBinary =
+    if lib.versionAtLeast buildVersion "4153" then "crash_handler" else "crash_reporter";
+  downloadUrl =
+    arch: "https://download.sublimetext.com/sublime_text_build_${buildVersion}_${arch}.tar.xz";
   versionUrl = "https://download.sublimetext.com/latest/${if dev then "dev" else "stable"}";
   versionFile = builtins.toString ./packages.nix;
 
@@ -30,7 +64,8 @@ let
   ] ++ lib.optionals (lib.versionAtLeast buildVersion "4145") [
     sqlite
   ];
-in let
+in
+let
   binaryPackage = stdenv.mkDerivation rec {
     pname = "${pnameBase}-bin";
     version = buildVersion;
@@ -39,8 +74,19 @@ in let
 
     dontStrip = true;
     dontPatchELF = true;
-    buildInputs = [ glib gtk3 ]; # for GSETTINGS_SCHEMAS_PATH
-    nativeBuildInputs = [ zip unzip makeWrapper wrapGAppsHook ];
+
+    buildInputs = [
+      glib
+      # for GSETTINGS_SCHEMAS_PATH
+      gtk3
+    ];
+
+    nativeBuildInputs = [
+      zip
+      unzip
+      makeWrapper
+      wrapGAppsHook
+    ];
 
     # make exec.py in Default.sublime-package use own bash with an LD_PRELOAD instead of "/bin/bash"
     patchPhase = ''
@@ -63,7 +109,7 @@ in let
     buildPhase = ''
       runHook preBuild
 
-      for binary in ${ builtins.concatStringsSep " " binaries }; do
+      for binary in ${builtins.concatStringsSep " " binaries}; do
         patchelf \
           --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath ${lib.makeLibraryPath neededLibraries}:${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"} \
@@ -116,7 +162,8 @@ in let
       };
     };
   };
-in stdenv.mkDerivation (rec {
+in
+stdenv.mkDerivation (rec {
   pname = pnameBase;
   version = buildVersion;
 
@@ -124,27 +171,39 @@ in stdenv.mkDerivation (rec {
 
   ${primaryBinary} = binaryPackage;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+  ];
 
-  installPhase = ''
-    mkdir -p "$out/bin"
-    makeWrapper "''$${primaryBinary}/${primaryBinary}" "$out/bin/${primaryBinary}"
-  '' + builtins.concatStringsSep "" (map (binaryAlias: "ln -s $out/bin/${primaryBinary} $out/bin/${binaryAlias}\n") primaryBinaryAliases) + ''
-    mkdir -p "$out/share/applications"
-    substitute "''$${primaryBinary}/${primaryBinary}.desktop" "$out/share/applications/${primaryBinary}.desktop" --replace "/opt/${primaryBinary}/${primaryBinary}" "${primaryBinary}"
-    for directory in ''$${primaryBinary}/Icon/*; do
-      size=$(basename $directory)
-      mkdir -p "$out/share/icons/hicolor/$size/apps"
-      ln -s ''$${primaryBinary}/Icon/$size/* $out/share/icons/hicolor/$size/apps
-    done
-  '';
+  installPhase =
+    ''
+      mkdir -p "$out/bin"
+      makeWrapper "''$${primaryBinary}/${primaryBinary}" "$out/bin/${primaryBinary}"
+    ''
+    + builtins.concatStringsSep "" (
+      map (binaryAlias: "ln -s $out/bin/${primaryBinary} $out/bin/${binaryAlias}\n") primaryBinaryAliases
+    )
+    + ''
+      mkdir -p "$out/share/applications"
+      substitute "''$${primaryBinary}/${primaryBinary}.desktop" "$out/share/applications/${primaryBinary}.desktop" --replace "/opt/${primaryBinary}/${primaryBinary}" "${primaryBinary}"
+      for directory in ''$${primaryBinary}/Icon/*; do
+        size=$(basename $directory)
+        mkdir -p "$out/share/icons/hicolor/$size/apps"
+        ln -s ''$${primaryBinary}/Icon/$size/* $out/share/icons/hicolor/$size/apps
+      done
+    '';
 
   passthru = {
     updateScript =
       let
         script = writeShellScript "${packageAttribute}-update-script" ''
           set -o errexit
-          PATH=${lib.makeBinPath [ common-updater-scripts curl ]}
+          PATH=${
+            lib.makeBinPath [
+              common-updater-scripts
+              curl
+            ]
+          }
 
           versionFile=$1
           latestVersion=$(curl -s "${versionUrl}")
@@ -161,15 +220,27 @@ in stdenv.mkDerivation (rec {
               update-source-version "${packageAttribute}.${primaryBinary}" "$latestVersion" --file="$versionFile" --version-key=buildVersion --source-key="sources.$platform"
           done
         '';
-      in [ script versionFile ];
+      in
+      [
+        script
+        versionFile
+      ];
   };
 
   meta = with lib; {
     description = "Sophisticated text editor for code, markup and prose";
     homepage = "https://www.sublimetext.com/";
-    maintainers = with maintainers; [ jtojnar wmertens demin-dmitriy zimbatm ];
+    maintainers = with maintainers; [
+      jtojnar
+      wmertens
+      demin-dmitriy
+      zimbatm
+    ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    platforms = [ "aarch64-linux" "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
   };
 })
