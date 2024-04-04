@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pydicom
-, pyfakefs
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, sqlalchemy
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pydicom,
+  pyfakefs,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  sqlalchemy,
 }:
 
 buildPythonPackage rec {
@@ -30,16 +31,12 @@ buildPythonPackage rec {
       name = "fix-python-3.11-test-attribute-errors";
       url = "https://github.com/pydicom/pynetdicom/pull/754/commits/2126bd932d6dfb3f07045eb9400acb7eaa1b3069.patch";
       hash = "sha256-t6Lg0sTZSWIE5q5pkBvEoHDQ+cklDn8SgNBcFk1myp4=";
-     })
+    })
   ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    pydicom
-  ];
+  dependencies = [ pydicom ];
 
   nativeCheckInputs = [
     pyfakefs
@@ -79,9 +76,7 @@ buildPythonPackage rec {
     "pynetdicom/apps/tests/"
   ];
 
-  pythonImportsCheck = [
-    "pynetdicom"
-  ];
+  pythonImportsCheck = [ "pynetdicom" ];
 
   pytestFlagsArray = [
     "-W"
