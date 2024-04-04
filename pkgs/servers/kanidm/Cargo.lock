@@ -3192,6 +3192,7 @@ dependencies = [
  "hex",
  "idlset",
  "image 0.24.8",
+ "itertools 0.12.1",
  "kanidm_build_profiles",
  "kanidm_lib_crypto",
  "kanidm_proto",

@@ -10,23 +10,23 @@
 
 buildPythonPackage rec {
   pname = "oracledb";
-  version = "2.1.0";
+  version = "2.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HJpEjJhD2zPxC3d9aSD7k5XqsLD9wX8WIPrHw+7NtXo=";
+    hash = "sha256-4ugXz6bf82xxMXNvNOKq7HXXJv040ZENgxgGGieCKPo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cython_3
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cryptography
   ];
 

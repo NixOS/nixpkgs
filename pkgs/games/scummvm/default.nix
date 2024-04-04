@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "scummvm";
-  version = "2.8.0";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "scummvm";
     repo = "scummvm";
     rev = "v${version}";
-    hash = "sha256-W8VZuRVpq0WwaCLH0ODcFmqbE7eKLK6nuyB7qrfqkiY=";
+    hash = "sha256-8/q16MwHhbbmUxiwJOHkjNxrnBB4grMa7qw/n3KLvRc=";
   };
 
   nativeBuildInputs = [ nasm ];

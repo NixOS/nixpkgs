@@ -41,12 +41,9 @@
 , monorepoSrc ? null
 }:
 
-assert let
-  int = a: if a then 1 else 0;
-  xor = a: b: ((builtins.bitXor (int a) (int b)) == 1);
-in
+assert
   lib.assertMsg
-    (xor
+    (lib.xor
       (gitRelease != null)
       (officialRelease != null))
     ("must specify `gitRelease` or `officialRelease`" +
@@ -213,6 +210,7 @@ in let
           (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false)
           "-lunwind"
         ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
+      nixSupport.cc-ldflags = lib.optionals (!stdenv.targetPlatform.isWasm) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
     };
 
     clangNoLibcxx = wrapCCWith rec {

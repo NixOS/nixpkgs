@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , autoPatchelfHook
+, autoAddDriverRunpath
 , makeWrapper
 , buildNpmPackage
 , cmake
@@ -84,10 +85,11 @@ stdenv'.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    autoPatchelfHook
     makeWrapper
+    # Avoid fighting upstream's usage of vendored ffmpeg libraries
+    autoPatchelfHook
   ] ++ lib.optionals cudaSupport [
-    cudaPackages.autoAddDriverRunpath
+    autoAddDriverRunpath
   ];
 
   buildInputs = [
@@ -160,6 +162,10 @@ stdenv'.mkDerivation rec {
       --subst-var-by PROJECT_NAME 'Sunshine' \
       --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
       --replace-fail '/usr/bin/env systemctl start --u sunshine' 'sunshine'
+
+    substituteInPlace packaging/linux/sunshine.service.in \
+      --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
+      --subst-var-by SUNSHINE_EXECUTABLE_PATH $out/bin/sunshine
   '';
 
   preBuild = ''

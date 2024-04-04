@@ -1,11 +1,9 @@
 # Checks pkgs/by-name (see pkgs/by-name/README.md)
-# using the nixpkgs-check-by-name tool (see pkgs/test/nixpkgs-check-by-name)
+# using the nixpkgs-check-by-name tool (see https://github.com/NixOS/nixpkgs-check-by-name)
 #
-# When you make changes to this workflow, also update pkgs/test/nixpkgs-check-by-name/scripts/run-local.sh adequately
+# When you make changes to this workflow, also update pkgs/test/check-by-name/run-local.sh adequately
 name: Check pkgs/by-name
 
-# The tool is pinned to a pre-built version on Hydra,
-# see pkgs/test/nixpkgs-check-by-name/scripts/README.md
 on:
   # Using pull_request_target instead of pull_request avoids having to approve first time contributors
   pull_request_target:
@@ -24,8 +22,7 @@ permissions:
 
 jobs:
   check:
-    # This is x86_64-linux, for which the tool is always prebuilt on the nixos-* channels,
-    # as specified in nixos/release-combined.nix
+    # This needs to be x86_64-linux, because we depend on the tooling being pre-built in the GitHub releases
     runs-on: ubuntu-latest
     # This should take 1 minute at most, but let's be generous.
     # The default of 6 hours is definitely too long
@@ -100,11 +97,14 @@ jobs:
           echo "base=$base" >> "$GITHUB_ENV"
       - uses: cachix/install-nix-action@8887e596b4ee1134dae06b98d573bd674693f47c # v26
       - name: Fetching the pinned tool
-        # Update the pinned version using pkgs/test/nixpkgs-check-by-name/scripts/update-pinned-tool.sh
+        # Update the pinned version using pkgs/test/check-by-name/update-pinned-tool.sh
         run: |
-          # Get the direct /nix/store path from the pin to avoid having to evaluate Nixpkgs
-          toolPath=$(jq -r '."ci-path"' pkgs/test/nixpkgs-check-by-name/scripts/pinned-tool.json)
-          # This asks the substituter for the path, which should be there because Hydra will have pre-built and pushed it
+          # The pinned version of the tooling to use
+          toolVersion=$(<pkgs/test/check-by-name/pinned-version.txt)
+          # Fetch the x86_64-linux-specific release artifact containing the Gzipped NAR of the pre-built tool
+          toolPath=$(curl -sSfL https://github.com/NixOS/nixpkgs-check-by-name/releases/download/"$toolVersion"/x86_64-linux.nar.gz \
+            | gzip -cd | nix-store --import | tail -1)
+          # Adds a result symlink as a GC root
           nix-store --realise "$toolPath" --add-root result
       - name: Running nixpkgs-check-by-name
         run: |

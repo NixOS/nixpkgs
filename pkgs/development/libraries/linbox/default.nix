@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , givaro
 , pkg-config
@@ -22,6 +23,13 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-mW84a98KPLqcHMjX3LIYTmVe0ngUdz6RJLpoDaAqKU8=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/linbox-team/linbox/commit/4be26e9ef0eaf36a9909e5008940e8bf7dc625b6.patch";
+      sha256 = "PX0Tik7blXOV2vHUq92xMxaADkNoNGiax4qrjQyGK6U=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook

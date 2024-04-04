@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pylacus";
-  version = "1.8.2";
+  version = "1.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "ail-project";
     repo = "PyLacus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wXdQe/4Xw/D0MRFqNfSKimJ99aCE7M7k1neT/+t7ixY=";
+    hash = "sha256-ytO9wtCkiC6CLWLkmSV/R+Rnx/W4Jv2dsgykZ2GB13U=";
   };
 
   build-system = [

@@ -1,58 +1,107 @@
-{ lib
-, stdenv
-, fetchzip
-, autoPatchelfHook
-, dotnet-runtime
+{ stdenv
+, lib
+, buildDotnetModule
+, callPackage
+, fetchFromGitHub
 , ffmpeg
-, libglvnd
+, glfw
+, libogg
+, libvorbis
 , makeWrapper
 , openal
+, portaudio
+, rtmidi
 }:
 
-stdenv.mkDerivation rec {
+let
+  csprojName = if stdenv.hostPlatform.isLinux then
+    "FamiStudio.Linux"
+  else if stdenv.hostPlatform.isDarwin then
+    "FamiStudio.Mac"
+  else throw "Don't know how to build FamiStudio for ${stdenv.hostPlatform.system}";
+in
+buildDotnetModule rec {
   pname = "famistudio";
   version = "4.1.3";
 
-  src = fetchzip {
-    url = "https://github.com/BleuBleu/FamiStudio/releases/download/${version}/FamiStudio${lib.strings.concatStrings (lib.splitVersion version)}-LinuxAMD64.zip";
-    stripRoot = false;
-    hash = "sha256-eAdv0oObczbs8QLGYbxCrdFk/gN5DOCJ1dp/tg8JWIc=";
+  src = fetchFromGitHub {
+    owner = "BleuBleu";
+    repo = "FamiStudio";
+    rev = "refs/tags/${version}";
+    hash = "sha256-bryxhminkrTVe5qhGeMStZp3NTHBREXrsUlyQkfPkao=";
   };
 
-  strictDeps = true;
+  postPatch = let
+    libname = library: "${library}${stdenv.hostPlatform.extensions.sharedLibrary}";
+    buildNativeWrapper = args: callPackage ./build-native-wrapper.nix (args // {
+      inherit version src;
+      sourceRoot = "${src.name}/ThirdParty/${args.depname}";
+    });
+    nativeWrapperToReplaceFormat = args: let
+      libPrefix = lib.optionalString stdenv.hostPlatform.isLinux "lib";
+    in {
+      package = buildNativeWrapper args;
+      expectedName = "${libPrefix}${args.depname}";
+      ourName = "${libPrefix}${args.depname}";
+    };
+    librariesToReplace = [
+      # Unmodified native libraries that we can fully substitute
+      { package = glfw; expectedName = "libglfw"; ourName = "libglfw"; }
+      { package = rtmidi; expectedName = "librtmidi"; ourName = "librtmidi"; }
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+      { package = openal; expectedName = "libopenal32"; ourName = "libopenal"; }
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      { package = portaudio; expectedName = "libportaudio.2"; ourName = "libportaudio.2"; }
+    ] ++ [
+      # Native libraries, with extra code for the C# wrapping
+      (nativeWrapperToReplaceFormat { depname = "GifDec"; })
+      (nativeWrapperToReplaceFormat { depname = "NesSndEmu"; })
+      (nativeWrapperToReplaceFormat { depname = "NotSoFatso"; extraPostPatch = ''
+        # C++17 does not allow register storage class specifier
+        substituteInPlace build.sh \
+          --replace-fail "$CXX" "$CXX -std=c++14"
+      ''; })
+      (nativeWrapperToReplaceFormat { depname = "ShineMp3"; })
+      (nativeWrapperToReplaceFormat { depname = "Stb"; })
+      (nativeWrapperToReplaceFormat { depname = "Vorbis"; buildInputs = [ libogg libvorbis ]; })
+    ];
+    libraryReplaceArgs = lib.strings.concatMapStringsSep " "
+      (library: "--replace-fail '${libname library.expectedName}' '${lib.getLib library.package}/lib/${libname library.ourName}'")
+      librariesToReplace;
+  in ''
+    # Don't use any prebuilt libraries
+    rm FamiStudio/*.{dll,dylib,so*}
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    makeWrapper
-  ];
+    # Replace copying of vendored prebuilt native libraries with copying of our native libraries
+    substituteInPlace ${projectFile} ${libraryReplaceArgs}
 
-  buildInputs = [
-    dotnet-runtime
-    ffmpeg
-    libglvnd
-    openal
-  ];
+    # Un-hardcode target platform if set
+    sed -i -e '/PlatformTarget/d' ${projectFile}
 
-  dontConfigure = true;
-  dontBuild = true;
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/{bin,lib/famistudio}
-    mv * $out/lib/famistudio
-
-    makeWrapper ${lib.getExe dotnet-runtime} $out/bin/famistudio \
-      --add-flags $out/lib/famistudio/FamiStudio.dll \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libglvnd ]} \
-      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
-
-    # Bundled openal lib freezes the application
-    rm $out/lib/famistudio/libopenal32.so
-    ln -s ${openal}/lib/libopenal.so $out/lib/famistudio/libopenal32.so
-
-    runHook postInstall
+    # Don't require a special name to be preserved, our OpenAL isn't 32-bit
+    substituteInPlace FamiStudio/Source/AudioStreams/OpenALStream.cs \
+      --replace-fail 'libopenal32' 'libopenal'
   '';
+
+  projectFile = "FamiStudio/${csprojName}.csproj";
+  nugetDeps = ./deps.nix;
+
+  executables = [ "FamiStudio" ];
+
+  postInstall = ''
+    mkdir -p $out/share/famistudio
+    for datdir in Setup/Demo\ {Instruments,Songs}; do
+      cp -R "$datdir" $out/share/famistudio/
+    done
+  '';
+
+  postFixup = ''
+    # FFMpeg looked up from PATH
+    wrapProgram $out/bin/FamiStudio \
+      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
+  '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     homepage = "https://famistudio.org/";
@@ -62,10 +111,8 @@ stdenv.mkDerivation rec {
       or Famicom. It is targeted at both chiptune artists and NES homebrewers.
     '';
     license = licenses.mit;
-    # Maybe possible to build from source but I'm not too familiar with C# packaging
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ OPNA2608 ];
-    platforms = [ "x86_64-linux" ];
-    mainProgram = "famistudio";
+    platforms = platforms.unix;
+    mainProgram = "FamiStudio";
   };
 }

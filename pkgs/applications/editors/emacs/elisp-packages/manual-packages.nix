@@ -85,6 +85,8 @@ in
 
   sv-kalender = callPackage ./manual-packages/sv-kalender { };
 
+  texpresso = callPackage ./manual-packages/texpresso { inherit (pkgs) texpresso; };
+
   tree-sitter-langs = callPackage ./manual-packages/tree-sitter-langs { final = self; };
 
   treesit-grammars = callPackage ./manual-packages/treesit-grammars { };

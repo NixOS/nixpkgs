@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "1lab";
-  version = "unstable-2023-12-04";
+  version = "unstable-2024-03-07";
 
   src = fetchFromGitHub {
     owner = "plt-amy";
     repo = pname;
-    rev = "47c2a96220b4d14419e5ddb973bc1fa06933e723";
-    hash = "sha256-0U6s6sXdynk2IWRBDXBJCf7Gc+gE8AhR1PXZl0DS4yU=";
+    rev = "d698f21793c4815082c94d174b9eafae912abb1a";
+    hash = "sha256-v8avF9zNNz32kLuAacPdEVeUI9rjn6JCiWPzkXfzBS0=";
   };
 
   postPatch = ''
@@ -17,12 +17,20 @@ mkDerivation rec {
 
     # Remove verbosity options as they make Agda take longer and use more memory.
     shopt -s globstar extglob
-    sed -Ei '/OPTIONS/s/ -v ?[^ #]+//g' src/**/*.@(agda|lagda.md)
+    files=(src/**/*.@(agda|lagda.md))
+    sed -Ei '/OPTIONS/s/ -v ?[^ #]+//g' "''${files[@]}"
+
+    # Generate all-pages manually instead of building the build script.
+    mkdir -p _build
+    for f in "''${files[@]}"; do
+      f=''${f#src/} f=''${f%%.*} f=''${f//\//.}
+      echo "open import $f"
+    done > _build/all-pages.agda
   '';
 
   libraryName = "1lab";
   libraryFile = "1lab.agda-lib";
-  everythingFile = "src/index.lagda.md";
+  everythingFile = "_build/all-pages.agda";
 
   meta = with lib; {
     description =

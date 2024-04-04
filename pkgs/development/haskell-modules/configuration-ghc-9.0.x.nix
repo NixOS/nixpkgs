@@ -65,6 +65,9 @@ self: super: {
     self.base-orphans
   ] super.hashable;
 
+  # Too strict lower bounds on base
+  primitive-addr = doJailbreak super.primitive-addr;
+
   hashable-time = doJailbreak super.hashable-time;
   tuple = addBuildDepend self.base-orphans super.tuple;
   vector-th-unbox = doJailbreak super.vector-th-unbox;

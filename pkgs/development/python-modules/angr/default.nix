@@ -20,19 +20,23 @@
 , protobuf
 , psutil
 , pycparser
+, pyformlang
 , pythonOlder
+, pythonRelaxDepsHook
 , pyvex
 , rich
 , rpyc
+, setuptools
 , sortedcontainers
 , sqlalchemy
 , sympy
 , unicorn
+, unique-log-filter
 }:
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.2.84";
+  version = "9.2.97";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -41,10 +45,19 @@ buildPythonPackage rec {
     owner = "angr";
     repo = "angr";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qav9SUvQtcEad9lvgyrMhOcFhPAhzU/9s7ekTfohqRc=";
+    hash = "sha256-eJkxflAQFI/sEL4JMlMe+kClnaVSxtoOrPg8HQpH78g=";
   };
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "capstone"
+  ];
+
+  build-system = [
+    pythonRelaxDepsHook
+    setuptools
+  ];
+
+  dependencies = [
     ailment
     archinfo
     cachetools
@@ -63,6 +76,7 @@ buildPythonPackage rec {
     protobuf
     psutil
     pycparser
+    pyformlang
     pyvex
     rich
     rpyc
@@ -70,7 +84,14 @@ buildPythonPackage rec {
     sqlalchemy
     sympy
     unicorn
+    unique-log-filter
   ];
+
+  passthru.optional-dependencies = {
+    AngrDB = [
+      sqlalchemy
+    ];
+  };
 
   setupPyBuildFlags = lib.optionals stdenv.isLinux [
     "--plat-name"

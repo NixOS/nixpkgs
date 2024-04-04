@@ -559,11 +559,16 @@ if [ "$action" = repl ]; then
         blue="$(echo -e '\033[34;1m')"
         attention="$(echo -e '\033[35;1m')"
         reset="$(echo -e '\033[0m')"
+        if [[ -e $flake ]]; then
+            flakePath=$(realpath "$flake")
+        else
+            flakePath=$flake
+        fi
         # This nix repl invocation is impure, because usually the flakeref is.
         # For a solution that preserves the motd and custom scope, we need
         # something like https://github.com/NixOS/nix/issues/8679.
         exec nix repl --impure --expr "
-          let flake = builtins.getFlake ''$flake'';
+          let flake = builtins.getFlake ''$flakePath'';
               configuration = flake.$flakeAttr;
               motd = ''
                 $d{$q\n$q}
@@ -756,7 +761,7 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
         "-E" "NIXOS_INSTALL_BOOTLOADER=$installBootloader"
         "--collect"
         "--no-ask-password"
-        "--pty"
+        "--pipe"
         "--quiet"
         "--same-dir"
         "--service-type=exec"

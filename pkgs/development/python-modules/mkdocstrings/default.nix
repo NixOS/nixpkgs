@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocstrings";
-  version = "0.24.1";
+  version = "0.24.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,19 +25,19 @@ buildPythonPackage rec {
     owner = "mkdocstrings";
     repo = "mkdocstrings";
     rev = "refs/tags/${version}";
-    hash = "sha256-6Th/HckxcCIupQWQglK+4ReXB6sdIDE8/nWgP42iqIQ=";
+    hash = "sha256-RlEr9NA6GV/XXjGvX/Yipu6FQAi7HuE9SvIH/snQJRM=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     pdm-backend
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jinja2
     markdown
     markupsafe

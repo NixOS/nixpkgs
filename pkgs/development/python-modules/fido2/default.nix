@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "fido2";
-  version = "1.1.2";
+  version = "1.1.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YRDZExBvdhmSAbMtJisoV1YsxGuh0LnFH7zjDck2xXM=";
+    hash = "sha256-JhAPIm0SztYhymGYUozhft9nt430KHruEoX+481aqfw=";
   };
 
   nativeBuildInputs = [

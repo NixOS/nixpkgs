@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dk";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchFromBitbucket {
     owner = "natemaia";
     repo = "dk";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-wuEsfzy4L40tL/Lb5R1jMFa8UAvAqkI3iEd//D7lxGY=";
+    hash = "sha256-bUt4Se4Gu7CZEdv1/VpU92ncq2MBKXG7T4Wpa/2rocI=";
   };
 
   buildInputs = [

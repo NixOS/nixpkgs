@@ -1,2 +1,0 @@
-pkgs/by-name/aa/aa: File package.nix at line 2 contains the nix search path expression "<nixpkgs>" which may point outside the directory of that package.
-This PR introduces the problems listed above. Please fix them before merging, otherwise the base branch would break.

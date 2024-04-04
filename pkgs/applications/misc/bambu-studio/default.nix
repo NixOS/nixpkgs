@@ -58,13 +58,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bambu-studio";
-  version = "01.08.04.51";
+  version = "01.09.00.60";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
     rev = "v${version}";
-    hash = "sha256-rqD1+3Q4ZUBgS57iCItuLX6ZMP7VQuedaJmgKB1szgs=";
+    hash = "sha256-LJK+hGhBXCewbNIBA8CeE01vMQ/n1mO+bervN/y45P0=";
   };
 
   nativeBuildInputs = [
@@ -164,6 +164,16 @@ stdenv.mkDerivation rec {
       # The upstream setup links in glew statically
       --prefix LD_PRELOAD : "${glew.out}/lib/libGLEW.so"
     )
+  '';
+
+  # needed to prevent collisions between the LICENSE.txt files of
+  # bambu-studio and orca-slicer.
+  postInstall = ''
+    mkdir -p $out/share/doc
+    mv $out/LICENSE.txt $out/share/doc/LICENSE.txt
+    if [ -f $out/README.md ]; then
+      mv $out/README.md $out/share/doc/README.md
+    fi
   '';
 
   meta = with lib; {

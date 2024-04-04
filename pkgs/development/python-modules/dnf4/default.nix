@@ -16,7 +16,7 @@ in
 
 buildPythonPackage rec {
   pname = "dnf4";
-  version = "4.19.0";
+  version = "4.19.2";
   format = "other";
 
   outputs = [ "out" "man" "py" ];
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "rpm-software-management";
     repo = "dnf";
     rev = version;
-    hash = "sha256-LY2D3A3la58/8V2zKqPZWbR5iAMkrsG36gP8EvwANaA=";
+    hash = "sha256-2voBauWXPoHWBt58vZfgpO1oWBDDZ+DvWN6jb5qOzFg=";
   };
 
   patches = [
@@ -79,7 +79,8 @@ buildPythonPackage rec {
     ln -s dnf-${pyMajor} $out/bin/yum
 
     mkdir -p $out/share/bash-completion/completions
-    mv $out/etc/bash_completion.d/dnf $out/share/bash-completion/completions/dnf
+    mv $out/etc/bash_completion.d/dnf-3 $out/share/bash-completion/completions/dnf4
+    ln -s $out/share/bash-completion/completions/dnf4 $out/share/bash-completion/completions/dnf
     rm -r $out/etc/bash_completion.d
   '';
 

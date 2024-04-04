@@ -8,23 +8,23 @@
 
 buildPythonPackage rec {
   pname = "ailment";
-  version = "9.2.84";
+  version = "9.2.97";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "angr";
-    repo = pname;
+    repo = "ailment";
     rev = "refs/tags/v${version}";
-    hash = "sha256-I4lZrp4coJOBB8gREmeQsCiNhMC0MqhYxd5BmYXq9BA=";
+    hash = "sha256-R6OBc7qK4zP0t8m26V17he8Oy39eSK8/Dm84ScnBy3s=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pyvex
   ];
 

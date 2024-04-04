@@ -95,7 +95,7 @@ import ../make-test-python.nix (
       machine.wait_for_unit("incus.service")
 
       with machine.nested("run migration"):
-          machine.succeed("lxd-to-incus --yes")
+          machine.succeed("${pkgs.incus}/bin/lxd-to-incus --yes")
 
       with machine.nested("verify resources migrated to incus"):
           machine.succeed("incus config show container")

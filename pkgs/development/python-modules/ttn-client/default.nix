@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "ttn-client";
-  version = "0.0.3";
+  version = "0.0.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "angelnu";
     repo = "thethingsnetwork_python_client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oHGv9huk400nPl4ytV8uxzK7eENpoBHt8uFjD2Ck67w=";
+    hash = "sha256-ZLSMxFyzfPtz51fsY2wgucHzcAnSrL7VPOuW7DXTNbQ=";
   };
 
   nativeBuildInputs = [

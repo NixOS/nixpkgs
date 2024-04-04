@@ -2,28 +2,22 @@
 , stdenv
 , fetchFromGitLab
 , writeText
-, cmake
-, cjson
-, doxygen
-, glslang
-, pkg-config
-, python3
-, SDL2
 , bluez
+, cjson
+, cmake
 , dbus
+, doxygen
 , eigen
 , elfutils
 , ffmpeg
+, glslang
 , gst-plugins-base
 , gstreamer
 , hidapi
-, libGL
-, libXau
-, libXdmcp
-, libXrandr
-, libXext
 , libbsd
+, libdrm
 , libffi
+, libGL
 , libjpeg
 , librealsense
 , libsurvive
@@ -32,13 +26,20 @@
 , libuv
 , libuvc
 , libv4l
+, libXau
 , libxcb
+, libXdmcp
+, libXext
+, libXrandr
 , onnxruntime
 , opencv4
 , openhmd
 , openvr
 , orc
 , pcre2
+, pkg-config
+, python3
+, SDL2
 , shaderc
 , udev
 , vulkan-headers
@@ -46,7 +47,6 @@
 , wayland
 , wayland-protocols
 , wayland-scanner
-, libdrm
 , zlib
 , zstd
 , nixosTests
@@ -83,7 +83,6 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    SDL2
     bluez
     cjson
     dbus
@@ -93,13 +92,11 @@ stdenv.mkDerivation {
     gst-plugins-base
     gstreamer
     hidapi
-    libGL
-    libXau
-    libXdmcp
-    libXrandr
     libbsd
-    libjpeg
+    libdrm
     libffi
+    libGL
+    libjpeg
     librealsense
     libsurvive
     libunwind
@@ -107,21 +104,25 @@ stdenv.mkDerivation {
     libuv
     libuvc
     libv4l
+    libXau
     libxcb
+    libXdmcp
+    libXext
+    libXrandr
     onnxruntime
     opencv4
     openhmd
     openvr
     orc
     pcre2
+    SDL2
     shaderc
     udev
     vulkan-headers
     vulkan-loader
     wayland
-    wayland-scanner
     wayland-protocols
-    libdrm
+    wayland-scanner
     zlib
     zstd
   ];

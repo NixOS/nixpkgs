@@ -91,8 +91,12 @@ in buildRubyGem rec {
     mkdir -p "$out/vagrant-plugins/plugins.d"
     echo '{}' > "$out/vagrant-plugins/plugins.json"
 
+    # install bash completion
     mkdir -p $out/share/bash-completion/completions/
     cp -av contrib/bash/completion.sh $out/share/bash-completion/completions/vagrant
+    # install zsh completion
+    mkdir -p $out/share/zsh/site-functions/
+    cp -av contrib/zsh/_vagrant $out/share/zsh/site-functions/
   '' +
   lib.optionalString withLibvirt ''
     substitute ${./vagrant-libvirt.json.in} $out/vagrant-plugins/plugins.d/vagrant-libvirt.json \

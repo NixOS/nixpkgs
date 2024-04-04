@@ -1,33 +1,29 @@
 { stdenv, lib, fetchFromGitea, qmake, qttools, qtbase, qtserialport
-, qtconnectivity, qtcharts, wrapQtAppsHook }:
+, qtconnectivity, qtcharts, wrapQtAppsHook, fetchpatch }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ubpm";
-  version = "1.7.3";
+  version = "1.10.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "LazyT";
     repo = "ubpm";
     rev = finalAttrs.version;
-    hash = "sha256-6lvDSU0ssfs71xrac6R6qlmE0QyVcAMTUf0xmJPVzhY=";
+    hash = "sha256-BUUn1WyLT7nm4I+2SpO1ZtIf8isGDy8Za15SiO7sXL8=";
   };
 
-  postPatch = ''
-    substituteInPlace sources/mainapp/mainapp.pro \
-      --replace 'INSTALLDIR = /tmp/ubpm.AppDir' "INSTALLDIR = $out" \
-      --replace '/usr/bin' '/bin' \
-      --replace 'INSTALLS += target translations themes devices help lin' 'INSTALLS += target translations themes devices help'
-  '';
+  patches = [
+    # fixes qmake for nix
+    (fetchpatch {
+      url =
+        "https://codeberg.org/LazyT/ubpm/commit/f18841d6473cab9aa2a9d4c02392b8e103245ef6.diff";
+      hash = "sha256-lgXWu8PUUCt66btj6hVgOFXz3U1BJM3ataSo1MpHkfU=";
+    })
+  ];
 
   preConfigure = ''
     cd ./sources/
-  '';
-
-  postInstall = ''
-    install -Dm644 ../package/lin/ubpm.desktop -t $out/share/applications/
-    install -Dm644 ../package/lin/de.lazyt.ubpm.appdata.xml -t $out/share/metainfo/
-    install -Dm644 ../sources/mainapp/res/ico/app.png $out/share/icons/hicolor/256x256/apps/ubpm.png
   '';
 
   postFixup = ''
@@ -47,5 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "ubpm";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ kurnevsky ];
+    broken = stdenv.isDarwin;
   };
 })

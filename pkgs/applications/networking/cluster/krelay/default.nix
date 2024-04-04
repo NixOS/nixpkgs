@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "krelay";
-  version = "0.0.8";
+  version = "0.0.9";
 
   src = fetchFromGitHub {
     owner = "knight42";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-KR5lBLgzv9yjL3JvCjg8dxXWmPgagnnKxYtrPunAyXY=";
+    hash = "sha256-8UMbSsZzk9GPQR+d8ybqRQa1ouL6h8nzk/O7j0jJyk4=";
   };
 
   vendorHash = "sha256-vaWdJyPOLsrLrhipBvUCOHo/TjnJz4Qpvj3lvUPHomU=";

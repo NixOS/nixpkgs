@@ -1,6 +1,10 @@
 { lib, fetchFromGitHub, ocamlPackages }:
 
-with ocamlPackages; buildDunePackage rec {
+let
+  inherit (ocamlPackages) buildDunePackage lablgtk3-sourceview3 ocp-index;
+in
+
+buildDunePackage rec {
   pname = "ocaml-top";
   version = "1.2.0";
 

@@ -51,6 +51,7 @@ buildPythonPackage rec {
   };
 
   pythonRelaxDeps = [
+    "smart-open"
     "typer"
   ];
 

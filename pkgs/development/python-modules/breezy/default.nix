@@ -13,6 +13,7 @@
 , merge3
 , patiencediff
 , pyyaml
+, tzlocal
 , urllib3
 , breezy
 , launchpadlib
@@ -28,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "breezy";
-  version = "3.3.5";
+  version = "3.3.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -37,7 +38,7 @@ buildPythonPackage rec {
     owner = "breezy-team";
     repo = "breezy";
     rev = "brz-${version}";
-    hash = "sha256-z8NKb8gFgA6dufM12jnZIZ6b1ZMZRzFA3w7t7gECEts=";
+    hash = "sha256-NSfMUyx6a/vb1vTNn/fFfNktrFdB2N940m0TR6EhB9k=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
@@ -67,6 +68,7 @@ buildPythonPackage rec {
     merge3
     patiencediff
     pyyaml
+    tzlocal
     urllib3
   ] ++ passthru.optional-dependencies.launchpad
     ++ passthru.optional-dependencies.fastimport

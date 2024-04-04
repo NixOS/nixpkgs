@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "trayscale";
-  version = "0.10.4";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "DeedleFake";
     repo = "trayscale";
     rev = "v${version}";
-    hash = "sha256-/31QKCyMeEdpP59B+iXS5hL9W5sWz7R/I2nxBtj+0s4=";
+    hash = "sha256-qSrt94hEJosdvs2N6rbcJLpjqvMPkY20dIKV3jtjFlg=";
   };
 
-  vendorHash = "sha256-xYBiO6Zm32Do19I/cm4T6fubXY++Bhkn+RNAmKzM5cY=";
+  vendorHash = "sha256-eIakjEYfVp2wfXu0oqBmd5hJZTp0xgYKNNbtpRBnT2w=";
 
   subPackages = [ "cmd/trayscale" ];
 

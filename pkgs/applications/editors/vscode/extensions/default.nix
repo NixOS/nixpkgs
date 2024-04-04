@@ -20,6 +20,7 @@
 , millet
 , craftos-pc
 , shfmt
+, tinymist
 , typst-lsp
 , typst-preview
 , autoPatchelfHook
@@ -410,12 +411,12 @@ let
         mktplcRef = {
           name = "astro-vscode";
           publisher = "astro-build";
-          version = "2.3.3";
-          sha256 = "sha256-A7+7lnCPAtSWUfHLNKbYqKuTxi2Nx05Qdh5HCkT1dnM=";
+          version = "2.8.3";
+          sha256 = "sha256-A6m31eZMlOHF0yr9MjXmsFyXgH8zmq6WLRd/w85hGw0=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/astro-build.astro-vscode/changelog";
-          description = "Astro language support for VSCode";
+          description = "Astro language support for VS Code";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=astro-build.astro-vscode";
           homepage = "https://github.com/withastro/language-tools";
           license = lib.licenses.mit;
@@ -689,8 +690,8 @@ let
         mktplcRef = {
           name = "vscode-intelephense-client";
           publisher = "bmewburn";
-          version = "1.10.2";
-          sha256 = "sha256-he/aPcsxfqYWI/RJ51d5V0reaTPTATci34xPm93qxGs=";
+          version = "1.10.4";
+          sha256 = "sha256-bD7AL4x0yL5S+MzQXMBrSZs1pVclfvsTfUbImP1oQok=";
         };
         meta = {
           description = "PHP code intelligence for Visual Studio Code";
@@ -996,26 +997,26 @@ let
             sources = {
               "x86_64-linux" = {
                 arch = "linux-x64";
-                sha256 = "05kh6sf3jv3510q33chf8s5n1kfp9wcm7650va7mcrdkfr9g8ysq";
+                sha256 = "1y5g8ay9sfz7r21fhwb2wr28yng7w3f2l265ljnfkz8yv8qzqpgk";
               };
               "x86_64-darwin" = {
                 arch = "darwin-x64";
-                sha256 = "0242h9kq47qvs1xynr5x8dzxkc5pwgb6km0iqpyy9kydg8ng1vp3";
+                sha256 = "14v9p5k9c9s9hfb1ymmkp66kmm9pvnvvljzrrs9wmajss5mlglf5";
               };
               "aarch64-linux" = {
                 arch = "linux-arm64";
-                sha256 = "1qm3f2lh8mi3hnyp2bmx7j2lir6fmbbxkzh6b8zf579khhbapnaz";
+                sha256 = "1mngfy42crp8xs14s06rkyzv16ci12bq8y39miyy7wa3a343b0ii";
               };
               "aarch64-darwin" = {
                 arch = "darwin-arm64";
-                sha256 = "18w22z1c5qgkpw2zlwmi9gs9dx1pcm51f0r8my7ynnvgl6mp12sg";
+                sha256 = "1gd1kr91s52kc8ldzy78cbn6gix1b8cvd6jh4sfrhq7k8yyn7g1l";
               };
             };
           in
           {
             name = "continue";
             publisher = "Continue";
-            version = "0.8.12";
+            version = "0.8.22";
           } // sources.${stdenv.system};
         nativeBuildInputs = [
           autoPatchelfHook
@@ -2115,6 +2116,22 @@ let
         };
       };
 
+      hbenl.vscode-test-explorer = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-test-explorer";
+          publisher = "hbenl";
+          version = "2.21.1";
+          sha256 = "sha256-fHyePd8fYPt7zPHBGiVmd8fRx+IM3/cSBCyiI/C0VAg=";
+        };
+        meta = {
+          changelog = "https://github.com/hbenl/vscode-test-explorer/blob/master/CHANGELOG.md";
+          description = "A Visual Studio Code extension that runs your tests in the sidebar";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=hbenl.vscode-test-explorer";
+          homepage = "https://github.com/hbenl/vscode-test-explorer";
+          license = lib.licenses.mit;
+        };
+      };
+
       hediet.vscode-drawio = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-drawio";
@@ -2345,15 +2362,32 @@ let
         };
       };
 
+      jbockle.jbockle-format-files = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "jbockle-format-files";
+          publisher = "jbockle";
+          version = "3.4.0";
+          sha256 = "sha256-BHw+T2EPdQq/wOD5kzvSln5SBFTYUXip8QDjnAGBfFY=";
+        };
+        meta = {
+          description = "A VSCode extension to formats all files in the current workspace";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=jbockle.jbockle-format-files";
+          homepage = "https://github.com/jbockle/format-files";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.wackbyte ];
+        };
+      };
+
       jdinhlife.gruvbox = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "gruvbox";
           publisher = "jdinhlife";
-          version = "1.8.0";
-          sha256 = "sha256-P4FbbcRcKWbnC86TSnzQaGn2gHWkDM9I4hj4GiHNPS4=";
+          version = "1.18.0";
+          sha256 = "sha256-4sGGVJYgQiOJzcnsT/YMdJdk0mTi7qcAcRHLnYghPh4=";
         };
         meta = {
-          description = "Gruvbox Theme";
+          changelog = "https://marketplace.visualstudio.com/items/jdinhlife.gruvbox/changelog";
+          description = "A port of Gruvbox theme to VS Code editor";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=jdinhlife.gruvbox";
           homepage = "https://github.com/jdinhify/vscode-theme-gruvbox";
           license = lib.licenses.mit;
@@ -2834,10 +2868,13 @@ let
         mktplcRef = {
           name = "vscode-docker";
           publisher = "ms-azuretools";
-          version = "1.24.0";
-          sha256 = "sha256-zZ34KQrRPqVbfGdpYACuLMiMj4ZIWSnJIPac1yXD87k=";
+          version = "1.29.0";
+          sha256 = "sha256-mVRsVsolXj31WhbWnt3Xml+NnIq7Q2uHhUUd1zgW42c=";
         };
         meta = {
+          description = "Docker Extension for Visual Studio Code";
+          homepage = "https://github.com/microsoft/vscode-docker";
+          changelog = "https://marketplace.visualstudio.com/items/ms-azuretools.vscode-docker/changelog";
           license = lib.licenses.mit;
         };
       };
@@ -2927,6 +2964,23 @@ let
           homepage = "https://github.com/microsoft/pylance-release";
           license = lib.licenses.unfree;
           maintainers = [ lib.maintainers.ericthemagician ];
+        };
+      };
+
+      ms-toolsai.datawrangler = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "datawrangler";
+          publisher = "ms-toolsai";
+          version = "0.29.6";
+          sha256 = "sha256-9MR2+hb9YdjIGDfUkdLW41HOxhjeS/San49C8QRZ/YY=";
+        };
+
+        meta = {
+          description = "Data viewing, cleaning and preparation for tabular datasets";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-toolsai.datawrangler";
+          homepage = "https://github.com/microsoft/vscode-data-wrangler";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.katanallama ];
         };
       };
 
@@ -3075,6 +3129,21 @@ let
         };
       };
 
+      ms-vscode.test-adapter-converter = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "test-adapter-converter";
+          publisher = "ms-vscode";
+          version = "0.1.9";
+          sha256 = "sha256-M53jhAVawk2yCeSrLkWrUit3xbDc0zgCK2snbK+BaSs=";
+        };
+        meta = {
+          description = "A Visual Studio Code extension that converts from the Test Explorer UI API into native VS Code testing";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode.test-adapter-converter";
+          homepage = "https://github.com/microsoft/vscode-test-adapter-converter";
+          license = lib.licenses.mit;
+        };
+      };
+
       ms-vscode.theme-tomorrowkit = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "Theme-TomorrowKit";
@@ -3165,6 +3234,37 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      myriad-dreamin.tinymist = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "tinymist";
+          publisher = "myriad-dreamin";
+          # Please update the corresponding binary (tinymist) when updating
+          # this extension.
+          version = "0.11.1";
+          sha256 = "sha256-jyZBnT8UW94TVnZKZna1cJa/UIj+DwYwlAbU4pnaf04=";
+        };
+
+        nativeBuildInputs = [ jq moreutils ];
+
+        buildInputs = [
+          tinymist
+        ];
+
+        postInstall = ''
+          cd "$out/$installPrefix"
+          jq '.contributes.configuration.properties."tinymist.serverPath".default = "${lib.getExe tinymist}"' package.json | sponge package.json
+        '';
+
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/myriad-dreamin.tinymist/changelog";
+          description = "A VSCode extension for providing an integration solution for Typst";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=myriad-dreamin.tinymist";
+          homepage = "https://github.com/myriad-dreamin/tinymist";
+          license = lib.licenses.asl20;
+          maintainers = [ lib.maintainers.drupol ];
         };
       };
 
@@ -3971,8 +4071,8 @@ let
         mktplcRef = {
           name = "svelte-vscode";
           publisher = "svelte";
-          version = "107.12.0";
-          sha256 = "036ri011fd0cf91iwv59j57m05mxliy27ms4di2y9jlk7jzmr4s2";
+          version = "108.3.3";
+          sha256 = "sha256-q7w8DPzBLpD+13v7RnyDdC3ocDKAihHBVt3pnwSTwio=";
         };
         meta = {
           changelog = "https://github.com/sveltejs/language-tools/releases";
@@ -4160,8 +4260,8 @@ let
         mktplcRef = {
           name = "shellcheck";
           publisher = "timonwong";
-          version = "0.26.3";
-          sha256 = "GlyOLc2VrRnA50MkaG83qa0yLUyJYwueqEO+ZeAStYs=";
+          version = "0.37.0";
+          sha256 = "1d0blynn6c2hz4y9fk7b5wsa3x168gxyycr5d05zqp0rx520m5wc";
         };
         nativeBuildInputs = [ jq moreutils ];
         postInstall = ''
@@ -4169,7 +4269,11 @@ let
           jq '.contributes.configuration.properties."shellcheck.executablePath".default = "${shellcheck}/bin/shellcheck"' package.json | sponge package.json
         '';
         meta = {
+          description = "Integrates ShellCheck into VS Code, a linter for Shell scripts";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=timonwong.shellcheck";
+          homepage = "https://github.com/vscode-shellcheck/vscode-shellcheck";
           license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.raroh73 ];
         };
       };
 

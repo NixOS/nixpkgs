@@ -19,6 +19,7 @@ let
       "java.xml"
       "java.desktop"
       "java.management"
+      "java.naming"
     ];
     jdk = jdk_headless;
   };

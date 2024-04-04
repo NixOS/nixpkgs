@@ -99,6 +99,7 @@ buildPythonPackage rec {
     "test_downloader_getter"
     "test_general"
     "test_get_config_dirs"
+    "test_get_configuration"
     "test_get_data"
     "test_valid_dblp_key"
     "test_validate_arxivid"

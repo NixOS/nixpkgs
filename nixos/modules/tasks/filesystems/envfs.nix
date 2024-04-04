@@ -7,6 +7,7 @@ let
       device = "none";
       fsType = "envfs";
       options = [
+        "bind-mount=/bin"
         "fallback-path=${pkgs.runCommand "fallback-path" {} (''
           mkdir -p $out
           ln -s ${config.environment.usrbinenv} $out/env
@@ -15,6 +16,9 @@ let
         "nofail"
       ];
     };
+    # We need to bind-mount /bin to /usr/bin, because otherwise upgrading
+    # from envfs < 1.0.5 will cause having the old envs with no /bin bind mount.
+    # Systemd is smart enough to not mount /bin if it's already mounted.
     "/bin" = {
       device = "/usr/bin";
       fsType = "none";

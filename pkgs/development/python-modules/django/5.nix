@@ -2,7 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, fetchpatch2
+, pythonAtLeast
 , pythonOlder
 , substituteAll
 
@@ -64,11 +64,6 @@ buildPythonPackage rec {
     # disable test that excpects timezone issues
     ./django_5_disable_failing_tests.patch
 
-    (fetchpatch2 {
-      # fix test on 3.12; https://github.com/django/django/pull/17843
-      url = "https://github.com/django/django/commit/bc8471f0aac8f0c215b9471b594d159783bac19b.patch";
-      hash = "sha256-g1T9b73rmQ0uk1lB+iQy1XwK3Qin3mf5wpRsyYISJaw=";
-    })
   ] ++ lib.optionals withGdal [
     (substituteAll {
       src = ./django_5_set_geos_gdal_lib.patch;
@@ -81,6 +76,11 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace tests/utils_tests/test_autoreload.py \
       --replace "/usr/bin/python" "${python.interpreter}"
+  '' + lib.optionalString (pythonAtLeast "3.12" && stdenv.hostPlatform.system == "aarch64-linux") ''
+    # Test regression after xz was reverted from 5.6.0 to 5.4.6
+    # https://hydra.nixos.org/build/254532197
+    substituteInPlace tests/view_tests/tests/test_debug.py \
+      --replace-fail "test_files" "dont_test_files"
   '';
 
   nativeBuildInputs = [

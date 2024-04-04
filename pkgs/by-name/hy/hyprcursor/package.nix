@@ -11,13 +11,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprcursor";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprcursor";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-m5I69a5t+xXxNMQrFuzKgPR6nrFiWDEDnEqlVwTy4C4=";
+    hash = "sha256-e6+fu30inlTIdflotS6l7qYusslKMNkhZVNLn9ZSogg=";
   };
 
   nativeBuildInputs = [

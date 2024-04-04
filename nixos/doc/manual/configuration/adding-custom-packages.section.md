@@ -23,7 +23,9 @@ Then you write and test the package as described in the Nixpkgs manual.
 Finally, you add it to [](#opt-environment.systemPackages), e.g.
 
 ```nix
-environment.systemPackages = [ pkgs.my-package ];
+{
+  environment.systemPackages = [ pkgs.my-package ];
+}
 ```
 
 and you run `nixos-rebuild`, specifying your own Nixpkgs tree:
@@ -38,24 +40,28 @@ tree. For instance, here is how you specify a build of the
 `configuration.nix`:
 
 ```nix
-environment.systemPackages =
-  let
-    my-hello = with pkgs; stdenv.mkDerivation rec {
-      name = "hello-2.8";
-      src = fetchurl {
-        url = "mirror://gnu/hello/${name}.tar.gz";
-        hash = "sha256-5rd/gffPfa761Kn1tl3myunD8TuM+66oy1O7XqVGDXM=";
+{
+  environment.systemPackages =
+    let
+      my-hello = with pkgs; stdenv.mkDerivation rec {
+        name = "hello-2.8";
+        src = fetchurl {
+          url = "mirror://gnu/hello/${name}.tar.gz";
+          hash = "sha256-5rd/gffPfa761Kn1tl3myunD8TuM+66oy1O7XqVGDXM=";
+        };
       };
-    };
-  in
-  [ my-hello ];
+    in
+    [ my-hello ];
+}
 ```
 
 Of course, you can also move the definition of `my-hello` into a
 separate Nix expression, e.g.
 
 ```nix
-environment.systemPackages = [ (import ./my-hello.nix) ];
+{
+  environment.systemPackages = [ (import ./my-hello.nix) ];
+}
 ```
 
 where `my-hello.nix` contains:
@@ -88,7 +94,9 @@ section](#module-services-flatpak). AppImages will not run "as-is" on NixOS.
 First you need to install `appimage-run`: add to `/etc/nixos/configuration.nix`
 
 ```nix
-environment.systemPackages = [ pkgs.appimage-run ];
+{
+  environment.systemPackages = [ pkgs.appimage-run ];
+}
 ```
 
 Then instead of running the AppImage "as-is", run `appimage-run foo.appimage`.

@@ -2,9 +2,11 @@
 , lib
 , fetchFromGitHub
 , gfortran
+, meson
+, ninja
 , pkg-config
+, python3
 , json-fortran
-, cmake
 }:
 
 stdenv.mkDerivation rec {
@@ -18,23 +20,17 @@ stdenv.mkDerivation rec {
     hash = "sha256-AXjg/ZsitdDf9fNoGVmVal1iZ4/sxjJb7A9W4yye/rg=";
   };
 
-  nativeBuildInputs = [ gfortran pkg-config cmake ];
+  nativeBuildInputs = [ gfortran meson ninja pkg-config python3 ];
 
   buildInputs = [ json-fortran ];
 
   outputs = [ "out" "dev" ];
 
-  # Fix the Pkg-Config files for doubled store paths
-  postPatch = ''
-    substituteInPlace config/template.pc \
-      --replace "\''${prefix}/" ""
-  '';
-
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
-  ];
-
   doCheck = true;
+
+  postPatch = ''
+    patchShebangs --build config/install-mod.py
+  '';
 
   meta = with lib; {
     description = "Modular computation tool chain library";

@@ -200,6 +200,24 @@ in {
   and = x: y: x && y;
 
   /**
+    boolean “exclusive or”
+
+
+    # Inputs
+
+    `x`
+
+    : 1\. Function argument
+
+    `y`
+
+    : 2\. Function argument
+  */
+  # We explicitly invert the arguments purely as a type assertion.
+  # This is invariant under XOR, so it does not affect the result.
+  xor = x: y: (!x) != (!y);
+
+  /**
     bitwise “not”
   */
   bitNot = builtins.sub (-1);

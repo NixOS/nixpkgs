@@ -1,26 +1,34 @@
 { lib
-, fetchFromGitHub
 , buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, poetry-core
 , deprecation
 , docker
-, wrapt }:
+, wrapt
+}:
 
 buildPythonPackage rec {
   pname = "testcontainers";
-  version = "4.0.0";
+  version = "4.3.1";
+  disabled = pythonOlder "3.9";
 
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "testcontainers";
     repo = "testcontainers-python";
     rev = "refs/tags/testcontainers-v${version}";
-    hash = "sha256-cVVP9nGRTLC09KHalQDz7KOszjuFVVpMlee4btPNgd4=";
+    hash = "sha256-pS5YEcHDHpTIWLD4vMPWL4r86DOI+47jN7cTwhDeXHE=";
   };
 
   postPatch = ''
     echo "${version}" > VERSION
   '';
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   buildInputs = [
     deprecation

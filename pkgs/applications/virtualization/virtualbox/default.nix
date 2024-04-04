@@ -1,4 +1,4 @@
-{ config, stdenv, fetchurl, fetchpatch, lib, acpica-tools, dev86, pam, libxslt, libxml2, wrapQtAppsHook
+{ config, stdenv, fetchurl, fetchpatch, callPackage, lib, acpica-tools, dev86, pam, libxslt, libxml2, wrapQtAppsHook
 , libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL2, libcap, libGL, libGLU
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus, libtpms, qtbase, qtx11extras
 , qttools, qtsvg, qtwayland, pkg-config, which, docbook_xsl, docbook_xml_dtd_43
@@ -35,6 +35,8 @@ let
   # The KVM build is not compatible to VirtualBox's kernel modules. So don't export
   # modsrc at all.
   withModsrc = !enableKvm;
+
+  virtualboxGuestAdditionsIso = callPackage guest-additions-iso/default.nix { };
 in stdenv.mkDerivation {
   pname = "virtualbox";
   inherit version;
@@ -116,11 +118,11 @@ in stdenv.mkDerivation {
      # we don't take any chances and only apply it if people actually want to use KVM support.
   ++ optional enableKvm (fetchpatch
     (let
-      patchVersion = "20240226";
+      patchVersion = "20240325";
     in {
       name = "virtualbox-${version}-kvm-dev-${patchVersion}.patch";
-      url = "https://github.com/cyberus-technology/virtualbox-kvm/releases/download/dev-${patchVersion}/virtualbox-${version}-kvm-dev-${patchVersion}.patch";
-      hash = "sha256-3YT1ZN/TwoNWNb2eqOcPF8GTrVGfOPaPb8vpGoPNISY=";
+      url = "https://github.com/cyberus-technology/virtualbox-kvm/releases/download/dev-${patchVersion}/kvm-backend-${version}-dev-${patchVersion}.patch";
+      hash = "sha256-D1ua8X5Iyw/I89PtskiGdnGr4NhdFtI93ThltiOcu8w=";
     }))
   ++ [
     ./qt-dependency-paths.patch
@@ -249,7 +251,7 @@ in stdenv.mkDerivation {
 
     mkdir -p "$out/share/virtualbox"
     cp -rv src/VBox/Main/UnattendedTemplates "$out/share/virtualbox"
-    ln -s "${linuxPackages.virtualboxGuestAdditions.src}" "$out/share/virtualbox/VBoxGuestAdditions.iso"
+    ln -s "${virtualboxGuestAdditionsIso}/VBoxGuestAdditions_${version}.iso" "$out/share/virtualbox/VBoxGuestAdditions.iso"
   '';
 
   preFixup = optionalString (!headless) ''
@@ -262,7 +264,6 @@ in stdenv.mkDerivation {
   '';
 
   passthru = {
-    inherit version;       # for guest additions
     inherit extensionPack; # for inclusion in profile to prevent gc
     updateScript = ./update.sh;
   };
@@ -281,7 +282,7 @@ in stdenv.mkDerivation {
     ];
     license = licenses.gpl2;
     homepage = "https://www.virtualbox.org/";
-    maintainers = with maintainers; [ sander friedrichaltheide ];
+    maintainers = with maintainers; [ sander friedrichaltheide blitz ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "VirtualBox";
   };

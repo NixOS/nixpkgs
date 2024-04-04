@@ -14,15 +14,15 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "koreader";
-  version = "2023.04";
+  version = "2024.03.1";
 
 
   src = if stdenv.isAarch64 then fetchurl {
     url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-arm64.deb";
-    sha256 = "sha256-uuspjno0750hQMIB5HEhbV63wCna2izKOHEGIg/X0bU=";
+    hash = "sha256-9Bu+mWfJuPaH5nV71JMrcGipiZWfcf19KfVauCW92+I=";
   } else fetchurl {
     url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-amd64.deb";
-    sha256 = "sha256-tRUeRB1+UcWT49dchN0YDvd0L5n1YRdtMSFc8yy6m5o=";
+    hash = "sha256-EZ3iqp0A2BZwI343nvvp71RGQx6FPesUBy4Lha4Yz4U=";
   };
 
   src_repo = fetchFromGitHub {
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "koreader";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-c3j6hs0W0H2jDg6JVfU6ov7r7kucbqrQqf9PAvYBcJ0=";
+    sha256 = "sha256-gHn1xqBc7M9wkek1Ja1gry8TKIuUxQP8T45x3z2S4uc=";
   };
 
   sourceRoot = ".";

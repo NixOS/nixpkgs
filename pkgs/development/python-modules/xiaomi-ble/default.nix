@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "xiaomi-ble";
-  version = "0.27.1";
+  version = "0.28.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "xiaomi-ble";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/LOq35YrGacXXP1Izl9xoF5rrCQGONPGj/u2zGOqbt0=";
+    hash = "sha256-Va/fzGDjBR/h1lUN47AixZnDYzEPNXQKTVXILKayhBc=";
   };
 
   postPatch = ''
@@ -34,7 +34,7 @@ buildPythonPackage rec {
       --replace-fail " --cov=xiaomi_ble --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
     pythonRelaxDepsHook
   ];
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     "pycryptodomex"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bleak
     bleak-retry-connector
     bluetooth-data-tools

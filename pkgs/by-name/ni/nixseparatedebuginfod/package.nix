@@ -3,6 +3,7 @@
 , rustPlatform
 , libarchive
 , openssl
+, rust-jemalloc-sys
 , sqlite
 , pkg-config
 , nixosTests
@@ -27,6 +28,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libarchive
     openssl
+    rust-jemalloc-sys
     sqlite
   ];
 

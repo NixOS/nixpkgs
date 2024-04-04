@@ -201,6 +201,14 @@ let
     '';
   };
 
+  cephes = build-with-compile-into-pwd {
+    inherit (super.cephes) pname version src lispLibs;
+    patches = [ ./patches/cephes-make.patch ];
+    postConfigure = ''
+      substituteAllInPlace cephes.asd
+    '';
+  };
+
   clx-truetype = build-asdf-system {
     pname = "clx-truetype";
     version = "20160825-git";

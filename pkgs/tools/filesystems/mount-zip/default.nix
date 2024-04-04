@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mount-zip";
-  version = "1.0.12";
+  version = "1.0.13";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "mount-zip";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bsuGEgCrU7Gxd9oAiI39AYT9aiXufrI9CniTCfa6LCY=";
+    hash = "sha256-/iPq/v7ap5livYR5tA90JiaGxQfR9VG+FONECeCFdOQ=";
   };
 
   nativeBuildInputs = [ boost gcc icu pandoc pkg-config ];

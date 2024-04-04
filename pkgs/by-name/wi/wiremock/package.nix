@@ -1,12 +1,20 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper, gitUpdater }:
+{
+  fetchurl,
+  gitUpdater,
+  jre,
+  lib,
+  makeWrapper,
+  stdenvNoCC,
+  testers,
+}:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "wiremock";
-  version = "3.4.2";
+  version = "3.5.2";
 
   src = fetchurl {
-    url = "mirror://maven/org/wiremock/wiremock-standalone/${version}/wiremock-standalone-${version}.jar";
-    hash = "sha256-Btf7oQRmfQnHdl5DawF2xOczDrR/5Po/9NytgqTLkVQ=";
+    url = "mirror://maven/org/wiremock/wiremock-standalone/${finalAttrs.version}/wiremock-standalone-${finalAttrs.version}.jar";
+    hash = "sha256-27DIcfP5R1Qiwl2fhvUQjFsE8pTHTv5MuFqHGa+whVY=";
   };
 
   dontUnpack = true;
@@ -15,25 +23,31 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p "$out"/{share/wiremock,bin}
-    cp ${src} "$out/share/wiremock/wiremock.jar"
+    cp ${finalAttrs.src} "$out/share/wiremock/wiremock.jar"
 
-    makeWrapper ${jre}/bin/java $out/bin/${pname} \
+    makeWrapper ${jre}/bin/java $out/bin/${finalAttrs.meta.mainProgram} \
       --add-flags "-jar $out/share/wiremock/wiremock.jar"
   '';
 
-  passthru.updateScript = gitUpdater {
-    url = "https://github.com/wiremock/wiremock.git";
-    ignoredVersions = "(alpha|beta|rc).*";
+  passthru = {
+    tests.version = testers.testVersion {
+      command = "${lib.getExe finalAttrs.finalPackage} --version";
+      package = finalAttrs.finalPackage;
+    };
+    updateScript = gitUpdater {
+      url = "https://github.com/wiremock/wiremock.git";
+      ignoredVersions = "(alpha|beta|rc).*";
+    };
   };
 
   meta = {
     description = "A flexible tool for building mock APIs";
     homepage = "https://wiremock.org/";
-    changelog = "https://github.com/wiremock/wiremock/releases/tag/${version}";
+    changelog = "https://github.com/wiremock/wiremock/releases/tag/${finalAttrs.version}";
     maintainers = with lib.maintainers; [ bobvanderlinden anthonyroussel ];
     mainProgram = "wiremock";
     platforms = jre.meta.platforms;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
   };
-}
+})

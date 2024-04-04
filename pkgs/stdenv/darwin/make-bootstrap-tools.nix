@@ -49,14 +49,6 @@ rec {
         scpSupport = false;
       });
 
-      gnutar_ = (gnutar.override { libintl = null; }).overrideAttrs (old: {
-        configureFlags = [
-          "--disable-nls"
-        ] ++ old.configureFlags or [];
-      });
-
-      xz_ = xz.override { enableStatic = true; };
-
       unpackScript = writeText "bootstrap-tools-unpack.sh" ''
         set -euo pipefail
 
@@ -76,6 +68,9 @@ rec {
         find $out/lib -type f -name '*.dylib' -print0 | while IFS= read -r -d $'\0' lib; do
           updateInstallName "$lib"
         done
+
+        # as is a wrapper around clang. need to replace the nuked store paths
+        sed -i 's|/.*/bin/|'"$out"'/bin/|' $out/bin/as
 
         # Provide a gunzip script.
         cat > $out/bin/gunzip <<EOF
@@ -99,7 +94,7 @@ rec {
 
     in
     ''
-      mkdir -p $out/bin $out/lib $out/lib/system $out/lib/darwin
+      mkdir -p $out/bin $out/lib $out/lib/darwin
 
       ${lib.optionalString stdenv.targetPlatform.isx86_64 ''
         # Copy libSystem's .o files for various low-level boot stuff.
@@ -115,40 +110,48 @@ rec {
       cp -rL ${getDev gnugrep.pcre2}/include/* $out/include
       mv $out/include $out/include-Libsystem
 
+      # Copy binutils.
+      for i in as ld ar ranlib nm strip otool install_name_tool lipo codesign_allocate; do
+        cp ${getBin cctools_}/bin/$i $out/bin
+      done
+
       # Copy coreutils, bash, etc.
       cp ${getBin coreutils_}/bin/* $out/bin
       (cd $out/bin && rm vdir dir sha*sum pinky factor pathchk runcon shuf who whoami shred users)
 
-      cp ${getBin bash}/bin/bash $out/bin
-      ln -s bash $out/bin/sh
-      cp ${getBin findutils}/bin/find $out/bin
-      cp ${getBin findutils}/bin/xargs $out/bin
+      cp -d ${getBin bash}/bin/{ba,}sh $out/bin
       cp -d ${getBin diffutils}/bin/* $out/bin
-      cp -d ${getBin gnused}/bin/* $out/bin
+      cp ${getBin findutils}/bin/{find,xargs} $out/bin
+      cp -d ${getBin gawk}/bin/{g,}awk $out/bin
       cp -d ${getBin gnugrep}/bin/grep $out/bin
-      cp ${getBin gawk}/bin/gawk $out/bin
-      cp -d ${getBin gawk}/bin/awk $out/bin
+      cp -d ${getBin gnumake}/bin/* $out/bin
+      cp -d ${getBin gnused}/bin/* $out/bin
+      cp -d ${getBin patch}/bin/* $out/bin
+
+      cp -d ${getLib gettext}/lib/libintl*.dylib $out/lib
+      cp -d ${getLib gnugrep.pcre2}/lib/libpcre2*.dylib $out/lib
+      cp -d ${getLib libiconv}/lib/lib*.dylib $out/lib
+      cp -d ${getLib libxml2}/lib/libxml2*.dylib $out/lib
+      cp -d ${getLib ncurses}/lib/libncurses*.dylib $out/lib
+
+      # copy package extraction tools
+      cp -d ${getBin bzip2}/bin/b{,un}zip2 $out/bin
+      cp ${getBin cpio}/bin/cpio $out/bin
       cp ${getBin gnutar}/bin/tar $out/bin
       cp ${getBin gzip}/bin/.gzip-wrapped $out/bin/gzip
-      cp ${getBin bzip2}/bin/bzip2 $out/bin
-      ln -s bzip2 $out/bin/bunzip2
-      cp -d ${getBin gnumake}/bin/* $out/bin
-      cp -d ${getBin patch}/bin/* $out/bin
-      cp -d ${getBin xz}/bin/xz $out/bin
-      cp ${getBin cpio}/bin/cpio $out/bin
+      cp ${getBin pbzx}/bin/pbzx $out/bin
+      cp ${getBin xz}/bin/xz $out/bin
+      cp -d ${getLib bzip2}/lib/libbz2*.dylib $out/lib
+      cp -d ${getLib gmpxx}/lib/libgmp*.dylib $out/lib
+      cp -d ${getLib xar}/lib/libxar*.dylib $out/lib
+      cp -d ${getLib xz}/lib/liblzma*.dylib $out/lib
+      cp -d ${getLib zlib}/lib/libz*.dylib $out/lib
 
       # This used to be in-nixpkgs, but now is in the bundle
       # because I can't be bothered to make it partially static
       cp ${getBin curl_}/bin/curl $out/bin
       cp -d ${getLib curl_}/lib/libcurl*.dylib $out/lib
       cp -d ${getLib openssl}/lib/*.dylib $out/lib
-
-      cp -d ${getLib gnugrep.pcre2}/lib/libpcre2*.dylib $out/lib
-      cp -d ${getLib libiconv}/lib/lib*.dylib $out/lib
-      cp -d ${getLib gettext}/lib/libintl*.dylib $out/lib
-      chmod +x $out/lib/libintl*.dylib
-      cp -d ${getLib ncurses}/lib/libncurses*.dylib $out/lib
-      cp -d ${getLib libxml2}/lib/libxml2*.dylib $out/lib
 
       # Copy what we need of clang
       cp -d ${getBin llvmPackages.clang-unwrapped}/bin/clang{,++,-cl,-cpp,-[0-9]*} $out/bin
@@ -163,41 +166,26 @@ rec {
       cp -d ${getLib libffi}/lib/libffi*.dylib $out/lib
 
       mkdir $out/include
-      cp -rd ${getDev llvmPackages.libcxx}/include/c++     $out/include
+      cp -rd ${getDev llvmPackages.libcxx}/include/c++ $out/include
 
       # copy .tbd assembly utils
-      cp -d ${getBin pkgs.darwin.rewrite-tbd}/bin/rewrite-tbd $out/bin
-      cp -d ${getLib pkgs.libyaml}/lib/libyaml*.dylib $out/lib
-
-      # copy package extraction tools
-      cp -d ${getBin pkgs.pbzx}/bin/pbzx $out/bin
-      cp -d ${getLib pkgs.xar}/lib/libxar*.dylib $out/lib
-      cp -d ${getLib pkgs.bzip2}/lib/libbz2*.dylib $out/lib
+      cp ${getBin darwin.rewrite-tbd}/bin/rewrite-tbd $out/bin
+      cp -d ${getLib libyaml}/lib/libyaml*.dylib $out/lib
 
       # copy sigtool
-      cp -d ${getBin pkgs.darwin.sigtool}/bin/sigtool $out/bin
-      cp -d ${getBin pkgs.darwin.sigtool}/bin/codesign $out/bin
+      cp -d ${getBin darwin.sigtool}/bin/{codesign,sigtool} $out/bin
 
-      cp -d ${getLib zlib}/lib/libz.*       $out/lib
-      cp -d ${getLib gmpxx}/lib/libgmp*.*   $out/lib
-      cp -d ${getLib xz}/lib/liblzma*.*     $out/lib
+      cp -d ${getLib darwin.libtapi}/lib/libtapi*.dylib $out/lib
 
-      # Copy binutils.
-      for i in as ld ar ranlib nm strip otool install_name_tool lipo codesign_allocate; do
-        cp ${getBin cctools_}/bin/$i $out/bin
-      done
-
-      cp -d ${getLib darwin.libtapi}/lib/libtapi* $out/lib
-
-      # tools needed to unpack bootstrap archive. they should not contain any
-      # external references. we will process them like the other tools but
-      # perform some additional checks and will not pack them into the archive.
-      mkdir -p unpack/bin
-      cp ${getBin bash}/bin/bash unpack/bin
-      ln -s bash unpack/bin/sh
+      # tools needed to unpack bootstrap archive
+      mkdir -p unpack/bin unpack/lib
+      cp -d ${getBin bash}/bin/{bash,sh} unpack/bin
       cp ${getBin coreutils_}/bin/mkdir unpack/bin
-      cp ${getBin gnutar_}/bin/tar unpack/bin
-      cp ${getBin xz_}/bin/xz unpack/bin
+      cp ${getBin gnutar}/bin/tar unpack/bin
+      cp ${getBin xz}/bin/xz unpack/bin
+      cp -d ${getLib gettext}/lib/libintl*.dylib unpack/lib
+      cp -d ${getLib libiconv}/lib/lib*.dylib unpack/lib
+      cp -d ${getLib xz}/lib/liblzma*.dylib unpack/lib
       cp ${unpackScript} unpack/bootstrap-tools-unpack.sh
 
       #
@@ -242,44 +230,36 @@ rec {
         fi
       }
 
-      # check that linked library paths exist in $out/lib
+      # check that linked library paths exist in lib
       # must be run after rpathify is performed
       checkDeps() {
         local deps=$(${stdenv.cc.targetPrefix}otool -l "$1"| grep -o '@rpath/[^      ]*' || true)
         local lib
+        shopt -s extglob
         for lib in $deps; do
-          if [[ ! -e $out/''${lib/@rpath/lib} ]]; then
+          local root="''${1/\/@(lib|bin)\/*}"
+          if [[ ! -e $root/''${lib/@rpath/lib} ]]; then
             echo "error: $1 missing lib for $lib" >&2
             exit 1
           fi
         done
+        shopt -u extglob
       }
 
-      for i in $out/bin/* unpack/bin/* $out/lib{,/darwin}/*.dylib; do
+      for i in {unpack,$out}/bin/* {unpack,$out}/lib{,/darwin}/*.dylib; do
         if [[ ! -L $i ]] && isMachO "$i"; then
           rpathify "$i"
           checkDeps "$i"
         fi
       done
 
-      nuke-refs $out/bin/*
-      nuke-refs $out/lib/*
+      nuke-refs {unpack,$out}/bin/*
+      nuke-refs {unpack,$out}/lib/*
       nuke-refs $out/lib/darwin/*
-      nuke-refs $out/lib/system/*
-      nuke-refs unpack/bin/*
 
       mkdir $out/.pack
       mv $out/* $out/.pack
       mv $out/.pack $out/pack
-
-      # validate that tools contain no references into the archive
-      for tool in unpack/bin/*; do
-        deps=$(${stdenv.cc.targetPrefix}otool -l "$tool"| grep '@rpath/' || true)
-        if [[ -n "$deps" ]]; then
-          printf "error: $tool is not self contained\n$deps\n" >&2
-          exit 1
-        fi
-      done
 
       mkdir $out/on-server
       cp -r unpack $out
@@ -339,19 +319,26 @@ rec {
 
     # Create a pure environment where we use just what's in the bootstrap tools.
     buildCommand = ''
+      mkdir -p $out/bin
 
-      ls -l
-      mkdir $out
-      mkdir $out/bin
-      sed --version
-      find --version
-      diff --version
-      patch --version
-      make --version
-      awk --version
-      grep --version
-      clang --version
-      xz --version
+      for exe in $tools/bin/*; do
+        [[ $exe =~ bunzip2|codesign.*|false|install_name_tool|ld|lipo|pbzx|ranlib|rewrite-tbd|sigtool ]] && continue
+        $exe --version > /dev/null || { echo $exe failed >&2; exit 1; }
+      done
+
+      # run all exes that don't take a --version flag
+      bunzip2 -h
+      codesign --help
+      codesign_allocate -i $tools/bin/true -r -o true
+      false || (($? == 1))
+      install_name_tool -id true true
+      ld -v
+      lipo -info true
+      pbzx -v
+      # ranlib gets tested bulding hello
+      rewrite-tbd </dev/null
+      sigtool -h
+      rm true
 
       # The grep will return a nonzero exit code if there is no match, and we want to assert that we have
       # an SSL-capable curl

@@ -72,7 +72,7 @@ let
     export XDG_DATA_DIRS=@out@/share:$XDG_DATA_DIRS
 
     # Start pantheon session. Keep in sync with upstream
-    exec ${gnome-session}/bin/gnome-session --builtin --session=pantheon "$@"
+    exec ${gnome-session}/bin/gnome-session --session=pantheon "$@"
   '';
 
   # Absolute path patched version of the upstream xsession

@@ -1,0 +1,38 @@
+diff --git a/src/window.py b/src/window.py
+index adc6d6d..1cb6bec 100644
+--- a/src/window.py
++++ b/src/window.py
+@@ -34,6 +34,15 @@ import unicodedata
+ import emoji
+ import os
+ 
++def get_data_dir():
++    xdg_data_home = os.environ.get('XDG_DATA_HOME')
++    if xdg_data_home and xdg_data_home.strip():
++        data_dir = os.path.join(xdg_data_home, 'ascii-draw', 'data')
++    else:
++        home = os.path.expanduser("~")
++        data_dir = os.path.join(home, '.local', 'share', 'ascii-draw', 'data')
++    return data_dir
++
+ @Gtk.Template(resource_path='/io/github/nokse22/asciidraw/ui/window.ui')
+ class AsciiDrawWindow(Adw.ApplicationWindow):
+     __gtype_name__ = 'AsciiDrawWindow'
+@@ -266,7 +275,7 @@ class AsciiDrawWindow(Adw.ApplicationWindow):
+ 
+         self.palettes = []
+ 
+-        directory_path = "/var/data/palettes"
++        directory_path = f"{get_data_dir()}/palettes"
+         os.makedirs(directory_path, exist_ok=True)
+ 
+         for filename in os.listdir(directory_path):
+@@ -316,7 +325,7 @@ class AsciiDrawWindow(Adw.ApplicationWindow):
+             self.char_carousel_go_next.set_sensitive(True)
+ 
+     def save_new_palette(self, palette):
+-        with open(f"/var/data/palettes/{palette.name}.txt", 'w') as file:
++        with open(f"{get_data_dir()}/palettes/{palette.name}.txt", 'w') as file:
+             file.write(palette.chars)
+ 
+     @Gtk.Template.Callback("char_pages_go_back")

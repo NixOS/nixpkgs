@@ -52,6 +52,8 @@ rustPlatform.buildRustPackage rec {
     "--skip=pager_more"
     "--skip=pager_most"
     "--skip=pager_overwrite"
+    # Fails if the filesystem performs UTF-8 validation (such as ZFS with utf8only=on)
+    "--skip=file_with_invalid_utf8_filename"
   ];
 
   doInstallCheck = true;

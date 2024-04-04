@@ -1,6 +1,17 @@
 { lib, fetchFromGitHub, ocamlPackages }:
 
-with ocamlPackages;
+let
+  inherit (ocamlPackages)
+    buildDunePackage
+    cmdliner
+    github
+    github-unix
+    lwt_ssl
+    opam-core
+    opam-format
+    opam-state
+    ;
+in
 
 buildDunePackage rec {
   pname = "opam-publish";

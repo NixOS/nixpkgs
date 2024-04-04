@@ -44,10 +44,11 @@ buildPythonPackage rec {
     substituteInPlace scapy/data.py --replace "/opt/wireshark" "${wireshark}"
   '';
 
+  buildInputs = lib.optional withVoipSupport sox;
+
   propagatedBuildInputs = [ pycrypto ecdsa ]
     ++ lib.optionals withOptionalDeps [ tcpdump ipython ]
     ++ lib.optional withCryptography cryptography
-    ++ lib.optional withVoipSupport sox
     ++ lib.optional withPlottingSupport matplotlib
     ++ lib.optionals withGraphicsSupport [ pyx texliveBasic graphviz imagemagick ];
 

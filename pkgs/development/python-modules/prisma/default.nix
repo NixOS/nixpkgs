@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "prisma";
-  version = "0.13.0";
+  version = "0.13.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "RobertCraigie";
     repo = "prisma-client-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-j9HJZTt4VTq29Q+nynYmRWKx02GVdyA+iZzxZwspXn8=";
+    hash = "sha256-7pibexiFsyrwC6rVv0CGHRbQU4G3rOXVhQW/7c/vKJA=";
   };
 
   build-system = [

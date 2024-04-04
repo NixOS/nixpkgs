@@ -13,12 +13,9 @@
 , doxygen
 , graphviz
 , latex2html
-# upstream generates docs with texinfo 4. later versions of texinfo
-# use letters instead of numbers for post-appendix chapters, and we
-# want it to match the upstream format because sage depends on it.
-, texinfo4
+, texinfo
 , texliveSmall
-, enableDocs ? true
+, enableDocs ? !stdenv.isDarwin
 , enableGfanlib ? true
 }:
 
@@ -85,7 +82,7 @@ stdenv.mkDerivation rec {
     doxygen
     graphviz
     latex2html
-    texinfo4
+    texinfo
     texliveSmall
   ] ++ lib.optionals stdenv.isDarwin [ getconf ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];

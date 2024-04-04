@@ -2,11 +2,11 @@
 , qmake, GLUT, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.2";
+  version = "1.6.0";
   pname = "opencsg";
   src = fetchurl {
     url = "http://www.opencsg.org/OpenCSG-${version}.tar.gz";
-    sha256 = "1ysazynm759gnw1rdhn9xw9nixnzrlzrc462340a6iif79fyqlnr";
+    hash = "sha256-v4+4Dj4M4R2H3XjdFaDehy27iXLYf1+Jz/xGHvrUe+g=";
   };
 
   nativeBuildInputs = [ qmake ]
@@ -18,15 +18,13 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  patches = [ ./fix-pro-files.patch ];
-
   preConfigure = ''
     rm example/Makefile src/Makefile
     qmakeFlags=("''${qmakeFlags[@]}" "INSTALLDIR=$out")
   '';
 
   postInstall = ''
-    install -D license.txt "$out/share/doc/opencsg/license.txt"
+    install -D copying.txt "$out/share/doc/opencsg/copying.txt"
   '' + lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     mv $out/bin/*.app $out/Applications
@@ -49,7 +47,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.opencsg.org/";
     platforms = platforms.unix;
     maintainers = [ maintainers.raskin ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
   };
 }
 

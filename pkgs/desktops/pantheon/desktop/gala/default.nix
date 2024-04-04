@@ -70,6 +70,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x build-aux/meson/post_install.py
     patchShebangs build-aux/meson/post_install.py
+
+    # https://github.com/elementary/gala/issues/1826#issuecomment-1890461298
+    sed '2i Wants=io.elementary.gala.daemon@.service' -i 'data/gala@x11.service.in'
   '';
 
   passthru = {

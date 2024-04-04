@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fastnetmon-advanced";
-  version = "2.0.362";
+  version = "2.0.363";
 
   src = fetchurl {
     url = "https://repo.fastnetmon.com/fastnetmon_ubuntu_jammy/pool/fastnetmon/f/fastnetmon/fastnetmon_${version}_amd64.deb";
-    hash = "sha256-9RKZyFntv2LsVZbN4sgb3C35kkDvM6kN7WpqdwwxnsE=";
+    hash = "sha256-2AKUNPQ7OzuYOolJHwTnWHzB4Qpwun/77+dFCN/cE98=";
   };
 
   nativeBuildInputs = [

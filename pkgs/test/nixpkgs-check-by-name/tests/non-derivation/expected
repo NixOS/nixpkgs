@@ -1,2 +1,0 @@
-pkgs.nonDerivation: This attribute defined by pkgs/by-name/no/nonDerivation/package.nix is not a derivation
-This PR introduces the problems listed above. Please fix them before merging, otherwise the base branch would break.

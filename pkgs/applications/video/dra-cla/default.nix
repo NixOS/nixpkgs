@@ -8,18 +8,19 @@
 , mpv
 , aria2
 , ffmpeg
+, fzf
 , openssl
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "dra-cla";
-  version = "unstable-2023-10-10";
+  version = "unstable-2024-02-07";
 
   src = fetchFromGitHub {
     owner = "CoolnsX";
     repo = "dra-cla";
-    rev = "12e9557fb8dfdff7350e0102a625170bb69acf01";
-    hash = "sha256-cGY/FRV2BAS4fzJqIfD7FlIPIS0fCIIBenQYjB2dEsc=";
+    rev = "cf8a90c0c68338404e8a1434af0a6e65fc5d0a08";
+    hash = "sha256-3cz1VeDM0NHdYMiCDVnIq6Y/7rFSijhNrnxC36Yixxc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -30,7 +31,7 @@ stdenvNoCC.mkDerivation {
     install -Dm755 dra-cla $out/bin/dra-cla
 
     wrapProgram $out/bin/dra-cla \
-      --prefix PATH : ${lib.makeBinPath [ gnugrep gnused curl mpv aria2 ffmpeg openssl ]}
+      --prefix PATH : ${lib.makeBinPath [ gnugrep gnused curl mpv aria2 ffmpeg fzf openssl ]}
 
     runHook postInstall
   '';

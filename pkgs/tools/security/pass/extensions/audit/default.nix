@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
     owner = "roddhjav";
     repo = "pass-audit";
     rev = "v${version}";
-    sha256 = "sha256-xigP8LxRXITLF3X21zhWx6ooFNSTKGv46yFSt1dd4vs=";
+    hash = "sha256-xigP8LxRXITLF3X21zhWx6ooFNSTKGv46yFSt1dd4vs=";
   };
 
   patches = [
@@ -21,9 +21,9 @@ in stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace audit.bash \
-      --replace 'python3' "${pythonEnv}/bin/python3"
+      --replace-fail 'python3' "${pythonEnv.interpreter}"
     substituteInPlace Makefile \
-      --replace "install --root" "install --prefix ''' --root"
+      --replace-fail "install --root" "install --prefix ''' --root"
   '';
 
   outputs = [ "out" "man" ];
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
   doCheck = !stdenv.isDarwin;
   nativeCheckInputs = [ pythonPackages.green pass gnupg ];
   checkPhase = ''
-    ${pythonEnv}/bin/python3 setup.py green -q
+    ${pythonEnv.interpreter} -m green -q
   '';
 
   installFlags = [ "DESTDIR=${placeholder "out"}" "PREFIX=" ];
