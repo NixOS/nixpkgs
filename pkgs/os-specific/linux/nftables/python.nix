@@ -9,11 +9,9 @@ buildPythonPackage {
   inherit (nftables) version src;
   pyproject = true;
 
-  patches = [ ./fix-py-libnftables.patch ];
-
   postPatch = ''
     substituteInPlace "py/src/nftables.py" \
-      --subst-var-by "out" "${nftables}"
+      --replace-fail "libnftables.so.1" "${nftables}/lib/libnftables.so.1"
   '';
 
   setSourceRoot = "sourceRoot=$(echo */py)";
