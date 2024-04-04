@@ -969,6 +969,7 @@ let
     "DuoClustering2018"
     "FieldEffectCrc"
     "GenomicDistributionsData"
+    "hpar"
     "HDCytoData"
     "HMP16SData"
     "PANTHER_db"
