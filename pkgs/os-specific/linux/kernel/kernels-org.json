@@ -32,11 +32,11 @@
         "hash": "sha256:1xgni9daid8c01f29xnxvrzja4sw0b1d5hhdxcw96cg8v9wzi7iy"
     },
     "6.7": {
-        "version": "6.7.12",
-        "hash": "sha256:113rf3jqfpf3wcv637zbq5ww2hpaaf23y6dsmkds01l8jkipjabc"
+        "version": "6.7.4",
+        "hash": "sha256:036nk3h7vqzd7gnxan2173kpss5qm2pci1lvd58gh90azigrz3gn"
     },
     "6.8": {
-        "version": "6.8.3",
-        "hash": "sha256:11n9jsjg1wgffchpl6frk26pk4jx2m9m0w8cmizrmvhla1nvaznv"
+        "version": "6.8.4",
+        "hash": "sha256:0qwywy89an1w0yvs5957kqyv74mwgxady521w2lmyq00zjaw9pnm"
     }
 }
