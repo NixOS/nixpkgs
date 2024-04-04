@@ -7,7 +7,7 @@
 , pkg-config
 , qt6
 , openjpeg
-, tbb_2021_8
+, tbb_2021_11
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtspeech
     lcms
     openjpeg
-    tbb_2021_8
+    tbb_2021_11
   ];
 
   cmakeFlags = [
