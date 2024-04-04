@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -21,17 +22,13 @@ buildPythonPackage rec {
     sed -i "/extras_require/d" setup.py
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   # Tests are not shipped and source is not tagged
   # https://github.com/elden1337/peaqev-core/issues/4
   doCheck = false;
 
-  pythonImportsCheck = [
-    "peaqevcore"
-  ];
+  pythonImportsCheck = [ "peaqevcore" ];
 
   meta = with lib; {
     description = "Library for interacting with Peaqev car charging";
