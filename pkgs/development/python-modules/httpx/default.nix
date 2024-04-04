@@ -93,7 +93,6 @@ buildPythonPackage rec {
   '';
 
   pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
     "-W" "ignore::trio.TrioDeprecationWarning"
   ];
 

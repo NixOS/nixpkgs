@@ -105,9 +105,6 @@ python3.pkgs.buildPythonApplication rec {
 
   pytestFlagsArray = [
     "tests"
-    # Disable warnings
-    "-W"
-    "ignore::DeprecationWarning"
   ];
 
   disabledTestPaths = [

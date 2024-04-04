@@ -50,10 +50,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
-  ];
-
   env = {
     JUPYTER_PLATFORM_DIRS = 1;
   };

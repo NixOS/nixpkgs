@@ -94,12 +94,6 @@ buildPythonPackage rec {
   ] ++ passthru.optional-dependencies.all
   ++ python-jose.optional-dependencies.cryptography;
 
-  pytestFlagsArray = [
-    # ignoring deprecation warnings to avoid test failure from
-    # tests/test_tutorial/test_testing/test_tutorial001.py
-    "-W ignore::DeprecationWarning"
-  ];
-
   disabledTestPaths = [
     # Don't test docs and examples
     "docs_src"

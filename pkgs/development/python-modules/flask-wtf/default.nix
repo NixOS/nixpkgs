@@ -43,10 +43,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
-  ];
-
   meta = with lib; {
     description = "Simple integration of Flask and WTForms.";
     license = licenses.bsd3;

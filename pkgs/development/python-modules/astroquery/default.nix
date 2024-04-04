@@ -53,11 +53,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    # DeprecationWarning: 'cgi' is deprecated and slated for removal in Python 3.13
-    "-W" "ignore::DeprecationWarning"
-  ];
-
   # Tests must be run in the build directory. The tests create files
   # in $HOME/.astropy so we need to set HOME to $TMPDIR.
   preCheck = ''

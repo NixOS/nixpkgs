@@ -77,7 +77,6 @@ buildPythonPackage rec {
   # anyhow.
   pytestFlagsArray = [
     "--numprocesses=4"
-    "-W ignore::DeprecationWarning"
     "tests/"
   ];
 

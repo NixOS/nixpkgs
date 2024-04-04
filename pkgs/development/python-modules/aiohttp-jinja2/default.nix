@@ -35,11 +35,6 @@ buildPythonPackage rec {
       --replace " --cov=aiohttp_jinja2 --cov-report xml --cov-report html --cov-report term" ""
   '';
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-  ];
-
   pythonImportsCheck = [
     "aiohttp_jinja2"
   ];
