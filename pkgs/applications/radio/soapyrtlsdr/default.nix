@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, rtl-sdr
+, rtl-sdr-osmocom
 , soapysdr
 , libobjc
 , IOKit
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ rtl-sdr soapysdr ]
+  buildInputs = [ rtl-sdr-osmocom soapysdr ]
     ++ lib.optionals stdenv.isDarwin [ libobjc IOKit Security ];
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
