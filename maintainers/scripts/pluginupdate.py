@@ -1,7 +1,7 @@
 # python library used to update plugins:
 # - pkgs/applications/editors/vim/plugins/update.py
 # - pkgs/applications/editors/kakoune/plugins/update.py
-# - maintainers/scripts/update-luarocks-packages
+# - pkgs/development/lua-modules/updater/updater.py
 
 # format:
 # $ nix run nixpkgs#black maintainers/scripts/pluginupdate.py
