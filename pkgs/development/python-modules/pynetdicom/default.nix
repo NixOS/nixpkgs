@@ -6,9 +6,9 @@
 , pydicom
 , pyfakefs
 , pytestCheckHook
-, sqlalchemy
 , pythonOlder
 , setuptools
+, sqlalchemy
 }:
 
 buildPythonPackage rec {
@@ -33,11 +33,11 @@ buildPythonPackage rec {
      })
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pydicom
   ];
 
