@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "0.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
@@ -23,11 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-k/F4q1+bO6p/PW8iEiiCX6yXKbS8SHXVR8mEGezOrRE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
   ];
 
