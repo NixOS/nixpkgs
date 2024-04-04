@@ -160,7 +160,7 @@ Here are security considerations for this scenario:
 []{#fetchurl}
 ## `fetchurl` {#sec-pkgs-fetchers-fetchurl}
 
-`fetchurl` returns a derivation which downloads content from a given URL and stores the unaltered contents within the Nix store.
+`fetchurl` returns a [fixed-output derivation](https://nixos.org/manual/nix/stable/glossary.html#gloss-fixed-output-derivation) which downloads content from a given URL and stores the unaltered contents within the Nix store.
 
 It uses {manpage}`curl(1)` internally, and allows its behaviour to be modified by specifying a few attributes in the argument to `fetchurl` (see the documentation for attributes `curlOpts`, `curlOptsList`, and `netrcPhase`).
 
@@ -171,7 +171,7 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
 ### Inputs {#sec-pkgs-fetchers-fetchurl-inputs}
 
-`fetchurl` expects a single argument with the following attributes:
+`fetchurl` requires an attribute set with the following attributes:
 
 `url` (String; _optional_)
 : The URL to download from.
@@ -179,6 +179,8 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
   :::{.note}
   Either `url` or `urls` must be specified, but not both.
   :::
+
+  All URLs of the format [specified here](https://curl.se/docs/url-syntax.html#rfc-3986-plus) are supported.
 
   _Default value:_ `""`.
 
