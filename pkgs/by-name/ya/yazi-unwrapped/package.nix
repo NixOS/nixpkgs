@@ -7,6 +7,7 @@
 , Foundation
 
 , nix-update-script
+, imagemagick
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,7 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   env.YAZI_GEN_COMPLETIONS = true;
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles imagemagick ];
   buildInputs = lib.optionals stdenv.isDarwin [ Foundation ];
 
   postInstall = ''
@@ -32,6 +33,15 @@ rustPlatform.buildRustPackage rec {
       --bash ./yazi-boot/completions/yazi.bash \
       --fish ./yazi-boot/completions/yazi.fish \
       --zsh  ./yazi-boot/completions/_yazi
+
+    # Resize logo
+    for RES in 16 24 32 48 64 128 256; do
+      mkdir -p $out/share/icons/hicolor/"$RES"x"$RES"/apps
+      convert assets/logo.png -resize "$RES"x"$RES" $out/share/icons/hicolor/"$RES"x"$RES"/apps/yazi.png
+    done
+
+    mkdir -p $out/share/applications
+    install -m644 assets/yazi.desktop $out/share/applications/
   '';
 
   passthru.updateScript = nix-update-script { };
