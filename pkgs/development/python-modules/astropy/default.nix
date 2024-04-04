@@ -12,6 +12,7 @@
 , wheel
 # testing
 , pytestCheckHook
+, stdenv
 , pytest-xdist
 , pytest-astropy
 
@@ -83,6 +84,8 @@ buildPythonPackage rec {
     "test_sidereal_lon_independent"
     "test_timedelta_full_precision_arithmetic"
     "test_datetime_to_timedelta"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_sidereal_lat_independent"
   ];
 
   meta = {
