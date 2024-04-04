@@ -707,7 +707,7 @@ rec {
                     // {
                       # mergeOptionDecls is not idempotent in these attrs:
                       declarations = a.tags.${tagName}.declarations ++ bOpt.declarations;
-                      declarationPositions = a.tags.${tagName}.declarations ++ bOpt.declarations;
+                      declarationPositions = a.tags.${tagName}.declarationPositions ++ bOpt.declarationPositions;
                     }
                   )
                   (builtins.intersectAttrs a.tags b.tags);
