@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchPypi
+{
+  lib,
+  python3,
+  fetchPypi,
 }:
 
 python3.pkgs.buildPythonPackage rec {
@@ -13,9 +14,7 @@ python3.pkgs.buildPythonPackage rec {
     hash = "sha256-MJmYyF+rAo8vywGizNyIbbCvxDmCYueVoC6pxNDzKuk=";
   };
 
-  build-system = with python3.pkgs; [
-    poetry-core
-  ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
   dependencies = with python3.pkgs; [
     beautifulsoup4
@@ -27,11 +26,9 @@ python3.pkgs.buildPythonPackage rec {
   # Tests are not shipped as PyPI releases
   doCheck = false;
 
-  pythonImportsCheck = [
-    "rst2html5"
-  ];
+  pythonImportsCheck = [ "rst2html5" ];
 
-  meta = with lib;{
+  meta = with lib; {
     description = "Converts ReSTructuredText to (X)HTML5";
     homepage = "https://rst2html5.readthedocs.io/";
     license = licenses.mit;
