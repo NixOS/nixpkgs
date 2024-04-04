@@ -671,6 +671,11 @@ in
       optional (cfg.database.password != "") "config.services.gitea.database.password will be stored as plaintext in the Nix store. Use database.passwordFile instead." ++
       optional (cfg.extraConfig != null) ''
         services.gitea.`extraConfig` is deprecated, please use services.gitea.`settings`.
+      '' ++
+      optional (lib.getName cfg.package == "forgejo") ''
+        Running forgejo via services.gitea.package is no longer supported.
+        Please use services.forgejo instead.
+        See https://nixos.org/manual/nixos/unstable/#module-forgejo for migration instructions.
       '';
 
     # Create database passwordFile default when password is configured.
