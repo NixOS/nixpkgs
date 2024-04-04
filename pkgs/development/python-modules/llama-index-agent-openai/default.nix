@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, llama-index-core
-, llama-index-llms-openai
-, poetry-core
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  llama-index-core,
+  llama-index-llms-openai,
+  poetry-core,
+  pythonOlder,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-EgY92TLHQBV5b5c5hsxS14P1H9o45OrXKlbQ/RlZJe4=";
   };
 
-  pythonRelaxDeps = [
-    "llama-index-llms-openai"
-  ];
+  pythonRelaxDeps = [ "llama-index-llms-openai" ];
 
   build-system = [
     poetry-core
@@ -35,9 +34,7 @@ buildPythonPackage rec {
     llama-index-llms-openai
   ];
 
-  pythonImportsCheck = [
-    "llama_index.agent.openai"
-  ];
+  pythonImportsCheck = [ "llama_index.agent.openai" ];
 
   meta = with lib; {
     description = "LlamaIndex Agent Integration for OpenAI";
