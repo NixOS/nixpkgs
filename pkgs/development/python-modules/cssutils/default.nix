@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "cssutils";
-  version = "2.10.1";
+  version = "2.10.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "jaraco";
     repo = "cssutils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FK+EHdfsuCnWmnfUH18gyMq6CBXICBbhJj3XrscLLOA=";
+    hash = "sha256-1sAn6pFwWsnYS1eHQmyDNGTo6kdhL1vJBwUptADvHyo=";
   };
 
   build-system = [

@@ -157,7 +157,7 @@ rec {
 
   mypy-boto3-cloudtrail-data = buildMypyBoto3Package "cloudtrail-data" "1.34.0" "sha256-ACiJrI+VTHr06i8PKgDY/K8houFUZQNS1lluouadCTQ=";
 
-  mypy-boto3-cloudwatch = buildMypyBoto3Package "cloudwatch" "1.34.40" "sha256-M/C3Rzie5dcv6TGVl7ilI5WiT1uYFrCGL+7Fga+xSLw=";
+  mypy-boto3-cloudwatch = buildMypyBoto3Package "cloudwatch" "1.34.75" "sha256-Q0Qz809o6FcN5OVotLLF3fgebt+2mbFnhfBCKTZO0aU=";
 
   mypy-boto3-codeartifact = buildMypyBoto3Package "codeartifact" "1.34.68" "sha256-Ey0cmx0OxN1/VXIyvn0EOBP9qYIuc/XyFVZniHLaNEY=";
 
@@ -277,7 +277,7 @@ rec {
 
   mypy-boto3-elbv2 = buildMypyBoto3Package "elbv2" "1.34.63" "sha256-snXMLMHLEpJjfX1GJp6FfYgIjkS8vkbf/hESBdhxIfk=";
 
-  mypy-boto3-emr = buildMypyBoto3Package "emr" "1.34.44" "sha256-zM1VpAaBSxqdZiSrNiaAKfvliNRXMLEmvFvXcFmkZO0=";
+  mypy-boto3-emr = buildMypyBoto3Package "emr" "1.34.75" "sha256-Irxd4i5b1bbZuWBhXfLOuvoS1X5SoZH8GsgbQyy3UrY=";
 
   mypy-boto3-emr-containers = buildMypyBoto3Package "emr-containers" "1.34.70" "sha256-uZADsQWfrkoVrQZosfqogcKERWsykIqdk+tJpgmcai4=";
 
@@ -435,7 +435,7 @@ rec {
 
   mypy-boto3-license-manager-user-subscriptions = buildMypyBoto3Package "license-manager-user-subscriptions" "1.34.0" "sha256-PR+u+i5zSHFTN6+GuOcWBcON1E2SNABbPavByXz3unE=";
 
-  mypy-boto3-lightsail = buildMypyBoto3Package "lightsail" "1.34.41" "sha256-Y7Zg/eorUegxh+Br+ULbedzGskkHKR2opnEEDpfBVk0=";
+  mypy-boto3-lightsail = buildMypyBoto3Package "lightsail" "1.34.75" "sha256-ICBUixptVS5sWBHgYms9GgrY2XQblTZkq3Qr614qZMc=";
 
   mypy-boto3-location = buildMypyBoto3Package "location" "1.34.18" "sha256-rsjIGenXgdEdgxvilA3IKJkYkpDDQNDfjDQRoj/mxSU=";
 

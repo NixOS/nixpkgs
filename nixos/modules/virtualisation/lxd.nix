@@ -33,7 +33,7 @@ in {
         '';
       };
 
-      package = lib.mkPackageOption pkgs "lxd" { };
+      package = lib.mkPackageOption pkgs "lxd-lts" { };
 
       lxcPackage = lib.mkPackageOption pkgs "lxc" {
         extraDescription = ''
@@ -139,7 +139,7 @@ in {
       ui = {
         enable = lib.mkEnableOption (lib.mdDoc "(experimental) LXD UI");
 
-        package = lib.mkPackageOption pkgs [ "lxd-unwrapped" "ui" ] { };
+        package = lib.mkPackageOption pkgs [ "lxd-ui" ] { };
       };
     };
   };

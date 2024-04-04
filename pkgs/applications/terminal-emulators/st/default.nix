@@ -12,6 +12,8 @@
 , patches ? [ ]
 , extraLibs ? [ ]
 , nixosTests
+# update script dependencies
+, gitUpdater
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -60,13 +62,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  passthru.tests.test = nixosTests.terminal-emulators.st;
+  passthru = {
+    tests.test = nixosTests.terminal-emulators.st;
+    updateScript = gitUpdater {
+      url = "git://git.suckless.org/st";
+    };
+  };
 
   meta = with lib; {
     homepage = "https://st.suckless.org/";
     description = "Simple Terminal for X from Suckless.org Community";
     license = licenses.mit;
-    maintainers = with maintainers; [ andsild qusic ];
+    maintainers = with maintainers; [ qusic ];
     platforms = platforms.unix;
     mainProgram = "st";
   };

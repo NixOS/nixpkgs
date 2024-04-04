@@ -29,8 +29,8 @@ let
   version = {
     "3.7" = "0.1.5";
     "3.8" = "0.2.3";
-    "3.9" = "0.2.4";
-    "3.10" = "0.2.4";
+    "3.9" = "0.2.5";
+    "3.10" = "0.2.5";
   }.${gnuradio.versionAttr.major};
   src = fetchgit {
     url = "https://gitea.osmocom.org/sdr/gr-osmosdr";
@@ -38,8 +38,8 @@ let
     sha256 = {
       "3.7" = "0bf9bnc1c3c4yqqqgmg3nhygj6rcfmyk6pybi27f7461d2cw1drv";
       "3.8" = "sha256-ZfI8MshhZOdJ1U5FlnZKXsg2Rsvb6oKg943ZVYd/IWo=";
-      "3.9" = "sha256-d0hbiJ44lEu8V4XX7JpZVSTQwwykwKPUfiqetRBI6uI=";
-      "3.10" = "sha256-d0hbiJ44lEu8V4XX7JpZVSTQwwykwKPUfiqetRBI6uI=";
+      "3.9" = "sha256-pYPDkSnBzccZ/Tbs5x3bwk34FQewkG42y/vlaVkr2YE=";
+      "3.10" = "sha256-pYPDkSnBzccZ/Tbs5x3bwk34FQewkG42y/vlaVkr2YE=";
     }.${gnuradio.versionAttr.major};
   };
 in mkDerivation {
