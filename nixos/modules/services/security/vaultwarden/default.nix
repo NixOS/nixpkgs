@@ -27,7 +27,13 @@ let
       configEnv = lib.concatMapAttrs (name: value: lib.optionalAttrs (value != null) {
         ${nameToEnvVar name} = if lib.isBool value then lib.boolToString value else toString value;
       }) cfg.config;
-    in { DATA_FOLDER = dataDir; } // lib.optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
+    in {
+      DATA_FOLDER = (
+        if lib.versionAtLeast config.system.stateVersion "24.05"
+        then "/var/lib/vaultwarden"
+        else "/var/lib/bitwarden_rs"
+      );
+      } // lib.optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
       WEB_VAULT_FOLDER = "${cfg.webVaultPackage}/share/vaultwarden/vault";
     } // configEnv;
 
@@ -207,16 +213,12 @@ in {
         ProtectKernelTunables = true;
         ProtectProc = "noaccess";
         ProtectSystem = "strict";
-        RemoveIPC = true;
-        RestrictAddressFamilies = [
-          "AF_INET"
-          "AF_INET6"
-          "AF_UNIX"
-        ];
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        inherit StateDirectory;
+        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
+        StateDirectory = (
+          if lib.versionAtLeast config.system.stateVersion "24.05"
+          then "vaultwarden"
+          else "bitwarden_rs"
+        );
         StateDirectoryMode = "0700";
         RemoveIPC = true;
         NoNewPrivileges = true;
