@@ -4,7 +4,7 @@
 }:
 
 python3.pkgs.buildPythonApplication rec {
-  pname = "tuifi-manager";
+  pname = "tuifimanager";
   version = "3.3.5";
   format = "pyproject";
 
