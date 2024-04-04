@@ -1,35 +1,36 @@
-{ lib
-, stdenv
-, autopep8
-, buildPythonPackage
-, docstring-to-markdown
-, fetchFromGitHub
-, flake8
-, flaky
-, importlib-metadata
-, jedi
-, matplotlib
-, mccabe
-, numpy
-, pandas
-, pluggy
-, pycodestyle
-, pydocstyle
-, pyflakes
-, pylint
-, pyqt5
-, pytestCheckHook
-, python-lsp-jsonrpc
-, pythonOlder
-, pythonRelaxDepsHook
-, rope
-, setuptools
-, setuptools-scm
-, toml
-, ujson
-, websockets
-, whatthepatch
-, yapf
+{
+  lib,
+  stdenv,
+  autopep8,
+  buildPythonPackage,
+  docstring-to-markdown,
+  fetchFromGitHub,
+  flake8,
+  flaky,
+  importlib-metadata,
+  jedi,
+  matplotlib,
+  mccabe,
+  numpy,
+  pandas,
+  pluggy,
+  pycodestyle,
+  pydocstyle,
+  pyflakes,
+  pylint,
+  pyqt5,
+  pytestCheckHook,
+  python-lsp-jsonrpc,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  rope,
+  setuptools,
+  setuptools-scm,
+  toml,
+  ujson,
+  websockets,
+  whatthepatch,
+  yapf,
 }:
 
 buildPythonPackage rec {
@@ -61,13 +62,9 @@ buildPythonPackage rec {
     "pyflakes"
   ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  build-system = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
   dependencies = [
     docstring-to-markdown
@@ -76,9 +73,7 @@ buildPythonPackage rec {
     python-lsp-jsonrpc
     setuptools # `pkg_resources`imported in pylsp/config/config.py
     ujson
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   passthru.optional-dependencies = {
     all = [
@@ -94,62 +89,46 @@ buildPythonPackage rec {
       whatthepatch
       yapf
     ];
-    autopep8 = [
-      autopep8
-    ];
-    flake8 = [
-      flake8
-    ];
-    mccabe = [
-      mccabe
-    ];
-    pycodestyle = [
-      pycodestyle
-    ];
-    pydocstyle = [
-      pydocstyle
-    ];
-    pyflakes = [
-      pyflakes
-    ];
-    pylint = [
-      pylint
-    ];
-    rope = [
-      rope
-    ];
+    autopep8 = [ autopep8 ];
+    flake8 = [ flake8 ];
+    mccabe = [ mccabe ];
+    pycodestyle = [ pycodestyle ];
+    pydocstyle = [ pydocstyle ];
+    pyflakes = [ pyflakes ];
+    pylint = [ pylint ];
+    rope = [ rope ];
     yapf = [
       whatthepatch
       yapf
     ];
-    websockets = [
-      websockets
-    ];
+    websockets = [ websockets ];
   };
 
-  nativeCheckInputs = [
-    flaky
-    matplotlib
-    numpy
-    pandas
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.all
-  # pyqt5 is broken on aarch64-darwin
-  ++ lib.optionals (!stdenv.isDarwin || !stdenv.isAarch64) [
-    pyqt5
-  ];
-
-  disabledTests = [
-    # Don't run lint tests
-    "test_pydocstyle"
-    # https://github.com/python-lsp/python-lsp-server/issues/243
-    "test_numpy_completions"
-    "test_workspace_loads_pycodestyle_config"
-    "test_autoimport_code_actions_and_completions_for_notebook_document"
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  nativeCheckInputs =
+    [
+      flaky
+      matplotlib
+      numpy
+      pandas
+      pytestCheckHook
+    ]
+    ++ passthru.optional-dependencies.all
     # pyqt5 is broken on aarch64-darwin
-    "test_pyqt_completion"
-  ];
+    ++ lib.optionals (!stdenv.isDarwin || !stdenv.isAarch64) [ pyqt5 ];
+
+  disabledTests =
+    [
+      # Don't run lint tests
+      "test_pydocstyle"
+      # https://github.com/python-lsp/python-lsp-server/issues/243
+      "test_numpy_completions"
+      "test_workspace_loads_pycodestyle_config"
+      "test_autoimport_code_actions_and_completions_for_notebook_document"
+    ]
+    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+      # pyqt5 is broken on aarch64-darwin
+      "test_pyqt_completion"
+    ];
 
   preCheck = ''
     export HOME=$(mktemp -d);
