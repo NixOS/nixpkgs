@@ -1,20 +1,15 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-
-# build-system
-, setuptools
-
-# dependencies
-, captcha
-, flask
-, markupsafe
-
-# tests
-, flask-session
-, flask-sqlalchemy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  captcha,
+  fetchFromGitHub,
+  flask,
+  flask-session,
+  flask-sqlalchemy,
+  markupsafe,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-hf6ifTrsWvgvUHFAPdS8ns8aKN02zquLGCq5ouQF0ck=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     captcha
@@ -47,9 +40,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "flask_session_captcha"
-  ];
+  pythonImportsCheck = [ "flask_session_captcha" ];
 
   meta = with lib; {
     description = "A captcha implemention for flask";
