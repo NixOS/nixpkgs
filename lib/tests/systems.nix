@@ -19,13 +19,6 @@ let
 
     NOTE: This property is not guaranteed when `sys` was elaborated by a different
           version of Nixpkgs.
-
-
-    # Inputs
-
-    `sys`
-
-    : 1\. Function argument
   */
   toLosslessStringMaybe = sys:
     if lib.isString sys then sys
