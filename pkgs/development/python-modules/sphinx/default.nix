@@ -100,6 +100,7 @@ buildPythonPackage rec {
     "test_check_link_response_only"
     "test_anchors_ignored_for_url"
     "test_autodoc_default_options"
+    "test_too_many_requests_retry_after_int_delay"
     # racy with pytest-xdist
     "test_domain_cpp_build_semicolon"
     "test_class_alias"
