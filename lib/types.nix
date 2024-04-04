@@ -662,15 +662,6 @@ rec {
                 };
             })
             tags;
-        substSubModules = m:
-          attrTag
-            (mapAttrs
-              (n: opt:
-                opt // {
-                  type = (opt.type or types.unspecified).substSubModules m;
-                }
-              )
-              tags);
         check = v: isAttrs v && length (attrNames v) == 1 && tags?${head (attrNames v)};
         merge = loc: defs:
           let
