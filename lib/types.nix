@@ -667,7 +667,6 @@ rec {
               "${lib.showOption prefix}" =
                 tagOption // {
                   loc = prefix ++ [ tagName ];
-                  definitions = [];
                 };
             })
             tags;
