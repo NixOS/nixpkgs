@@ -5,7 +5,6 @@
 , fetchFromGitHub
 , fetchpatch
 , poetry-core
-, pytestCheckHook
 , pythonRelaxDepsHook
 , pythonOlder
 , structlog
@@ -14,13 +13,13 @@
 buildPythonPackage rec {
   pname = "arsenic";
   version = "21.8";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "HENNGE";
-    repo = pname;
+    repo = "arsenic";
     rev = "refs/tags/${version}";
     hash = "sha256-fsLo22PR9WdX2FazPgr8B8dFq6EM1LLTpRFGEm/ymCE=";
   };
@@ -39,21 +38,20 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    poetry-core
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    poetry-core
+  ];
+
+  dependencies = [
     aiohttp
     attrs
     structlog
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  # Depends on asyncio_extras which is not longer maintained
+  # Test depends on asyncio_extras which is not longer maintained
   doCheck = false;
 
   pythonImportsCheck = [
