@@ -17093,7 +17093,8 @@ with pkgs;
   swiPrologWithGui = swiProlog.override { withGui = true; };
 
   tbb_2020_3 = callPackage ../development/libraries/tbb/2020_3.nix { };
-  tbb_2021_8 = callPackage ../development/libraries/tbb { };
+  tbb_2021_8 = callPackage ../development/libraries/tbb/2021_8.nix { };
+  tbb_2021_11 = callPackage ../development/libraries/tbb { };
   # many packages still fail with latest version
   tbb = tbb_2020_3;
 
