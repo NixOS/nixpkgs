@@ -21,13 +21,13 @@ with lib;
 
 python3Packages.buildPythonApplication rec {
   pname = "tryton";
-  version = "7.0.7";
+  version = "7.0.8";
 
   disabled = !python3Packages.isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-NODeDEgmf/nSKrM+RxAUsUwsbVQT7OSDrTOGVBwOzpw=";
+    sha256 = "sha256-e3WNDB6P7kapAfzlvbJ1/6LcyH7Fl6GKCK/hri460pQ=";
   };
 
   nativeBuildInputs = [
