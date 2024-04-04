@@ -34,16 +34,19 @@ buildPythonPackage rec {
     hash = "sha256-8KxnS6LTK077/hr81JOiOj8GaNWBXO8XlvpYBm/sZbI=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    pythonRelaxDepsHook
-  ];
-
   pythonRelaxDeps = [
     "acme"
   ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     acme
     aiohttp
     atomicwrites-homeassistant
@@ -68,8 +71,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/NabuCasa/hass-nabucasa";
     description = "Python module for the Home Assistant cloud integration";
+    homepage = "https://github.com/NabuCasa/hass-nabucasa";
     changelog = "https://github.com/NabuCasa/hass-nabucasa/releases/tag/${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ Scriptkiddi ];
