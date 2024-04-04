@@ -37,7 +37,7 @@ buildGoModule rec {
     homepage = "https://code.forgejo.org/forgejo/runner";
     changelog = "https://gitea.com/gitea/act_runner/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ kranzes ];
+    maintainers = with maintainers; [ kranzes emilylange ];
     mainProgram = "act_runner";
   };
 }
