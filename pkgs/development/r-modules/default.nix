@@ -986,6 +986,7 @@ let
     "muscData"
     "org_Mxanthus_db"
     "scpdata"
+    "signatureSearch"
     "nullrangesData"
   ];
 
