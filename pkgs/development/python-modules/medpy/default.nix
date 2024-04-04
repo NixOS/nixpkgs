@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "medpy";
-  version = "0.5.0rc1";
+  version = "0.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -21,14 +21,14 @@ buildPythonPackage rec {
     owner = "loli";
     repo = "medpy";
     rev = "refs/tags/${version}";
-    hash = "sha256-W62LjstH42OzNG+vMkuApUWczTNugJGKuuoeeS5ok4U=";
+    hash = "sha256-kzOTYBcXAAEYoe/m/BjWNaQX4ljG17NxndevAt5KxjQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     boost
     numpy
     scipy
@@ -38,6 +38,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     unittestCheckHook
   ];
+
   preCheck = ''
     rm -r medpy/  # prevent importing from build directory at test time
     rm -r tests/graphcut_  # SIGILL at test time
