@@ -37,7 +37,7 @@ let
 
   mods = args.mods or [ ];
 
-  helpMsg = ''
+  helpMsg = version: ''
 
     ===FETCH FAILED===
     Please ensure you have set the username and token with config.nix, or
@@ -62,8 +62,8 @@ let
     download the release through https://factorio.com/download , then add it to
     the store using e.g.:
 
-      releaseType=alpha
-      version=0.17.74
+      releaseType=${releaseType}
+      version=${version}
       nix-prefetch-url file://\''$HOME/Downloads/factorio_\''${releaseType}_x64_\''${version}.tar.xz --name factorio_\''${releaseType}_x64-\''${version}.tar.xz
 
     Note the ultimate "_" is replaced with "-" in the --name arg!
@@ -129,7 +129,7 @@ let
               '';
             failureHook = ''
               cat <<EOF
-              ${helpMsg}
+              ${helpMsg version}
               EOF
             '';
           }));
