@@ -163,9 +163,9 @@ in
                 };
 
                 options = mkOption {
-                  type = with types; listOf (enum [ "NOPASSWD" "PASSWD" "NOEXEC" "EXEC" "SETENV" "NOSETENV" "LOG_INPUT" "NOLOG_INPUT" "LOG_OUTPUT" "NOLOG_OUTPUT" ]);
+                  type = with types; listOf (enum [ "NOPASSWD" "PASSWD" "NOEXEC" "EXEC" "SETENV" "NOSETENV" "LOG_INPUT" "NOLOG_INPUT" "LOG_OUTPUT" "NOLOG_OUTPUT" "MAIL" "NOMAIL" "FOLLOW" "NOFLLOW" "INTERCEPT" "NOINTERCEPT"]);
                   description = mdDoc ''
-                    Options for running the command. Refer to the [sudo manual](https://www.sudo.ws/man/1.7.10/sudoers.man.html).
+                    Options for running the command. Refer to the [sudo manual](https://www.sudo.ws/docs/man/1.9.15/sudoers.man/#Tag_Spec).
                   '';
                   default = [];
                 };
