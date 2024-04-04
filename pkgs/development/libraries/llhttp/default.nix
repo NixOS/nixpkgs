@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, testers }:
+{ lib, stdenv, fetchFromGitHub, cmake, testers, python3 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "llhttp";
@@ -21,9 +21,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_STATIC_LIBS=ON"
   ];
 
-  passthru.tests.pkg-config = testers.hasPkgConfigModules {
-    package = finalAttrs.finalPackage;
-    moduleNames = [ "libllhttp" ];
+  passthru.tests = {
+    inherit (python3.pkgs) aiohttp;
+
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      moduleNames = [ "libllhttp" ];
+    };
   };
 
   meta = with lib; {
