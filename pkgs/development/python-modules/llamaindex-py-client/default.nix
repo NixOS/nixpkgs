@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, httpx
-, poetry-core
-, pydantic
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  httpx,
+  poetry-core,
+  pydantic,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-6Zu8CFXmyqp166IZzbPPbJQ66U+hXMu2ijoI1FL9Y4A=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     httpx
@@ -32,9 +31,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "llama_index_client"
-  ];
+  pythonImportsCheck = [ "llama_index_client" ];
 
   meta = with lib; {
     description = "Client for LlamaIndex";
