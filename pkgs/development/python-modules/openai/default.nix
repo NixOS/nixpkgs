@@ -1,28 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, hatchling
-, hatch-fancy-pypi-readme
-# propagated
-, httpx
-, pydantic
-, typing-extensions
-, anyio
-, distro
-, sniffio
-, cached-property
-, tqdm
-# optional
-, numpy
-, pandas
-, pandas-stubs
-# tests
-, pytestCheckHook
-, pytest-asyncio
-, pytest-mock
-, respx
-, dirty-equals
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  cached-property,
+  dirty-equals,
+  distro,
+  fetchFromGitHub,
+  hatch-fancy-pypi-readme,
+  hatchling,
+  httpx,
+  numpy,
+  pandas,
+  pandas-stubs,
+  pydantic,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  respx,
+  sniffio,
+  tqdm,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -52,9 +50,7 @@ buildPythonPackage rec {
     distro
     sniffio
     tqdm
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    cached-property
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ cached-property ];
 
   passthru.optional-dependencies = {
     datalib = [
@@ -64,9 +60,7 @@ buildPythonPackage rec {
     ];
   };
 
-  pythonImportsCheck = [
-    "openai"
-  ];
+  pythonImportsCheck = [ "openai" ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -77,7 +71,8 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   disabledTests = [
