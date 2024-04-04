@@ -6,17 +6,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "prowler";
-  version = "3.13.0";
+  version = "3.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "prowler-cloud";
     repo = "prowler";
     rev = "refs/tags/${version}";
-    hash = "sha256-19B6b+xR+f7dIu/6eINsxs7UxuV96QdsNncodC8/N3Q=";
+    hash = "sha256-hQVrKhBgucuZQ2CZKG6VJMsHUGkWNch9em2dRCbEA+A=";
   };
 
   pythonRelaxDeps = [
+    "azure-mgmt-compute"
+    "azure-mgmt-network"
     "azure-mgmt-security"
     "azure-storage-blob"
     "boto3"
@@ -24,8 +26,8 @@ python3.pkgs.buildPythonApplication rec {
     "google-api-python-client"
     "jsonschema"
     "pydantic"
-    "slack-sdk"
     "pydantic"
+    "slack-sdk"
   ];
 
   nativeBuildInputs = with python3.pkgs; [
@@ -42,7 +44,9 @@ python3.pkgs.buildPythonApplication rec {
     azure-identity
     azure-mgmt-applicationinsights
     azure-mgmt-authorization
+    azure-mgmt-compute
     azure-mgmt-cosmosdb
+    azure-mgmt-network
     azure-mgmt-rdbms
     azure-mgmt-security
     azure-mgmt-sql
