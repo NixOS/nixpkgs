@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, poetry-core
-, pythonOlder
-, aiohttp
-, dataclasses-json
-, langchain-core
-, langsmith
-, numpy
-, pyyaml
-, requests
-, sqlalchemy
-, tenacity
-, typer
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+  pythonOlder,
+  aiohttp,
+  dataclasses-json,
+  langchain-core,
+  langsmith,
+  numpy,
+  pyyaml,
+  requests,
+  sqlalchemy,
+  tenacity,
+  typer,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.0.29";
+  version = "0.0.31";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,14 +26,12 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "langchain_community";
     inherit version;
-    hash = "sha256-2IEH+vqf4sVzPaljDGjZ7lHNM7HIiklQ56LZo49+eqM=";
+    hash = "sha256-mpcLwrtZu0wgS2ltjGLCU09t2zEAUAXMG31/k05Ypfw=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     dataclasses-json
     langchain-core
@@ -45,9 +44,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    cli = [
-      typer
-    ];
+    cli = [ typer ];
   };
 
   pythonImportsCheck = [ "langchain_community" ];
