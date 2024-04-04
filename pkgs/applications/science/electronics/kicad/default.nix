@@ -205,9 +205,9 @@ stdenv.mkDerivation rec {
     "--prefix GIO_EXTRA_MODULES : ${dconf}/lib/gio/modules"
     # required to open a bug report link in firefox-wayland
     "--set-default MOZ_DBUS_REMOTE 1"
-    "--set-default KICAD7_FOOTPRINT_DIR ${footprints}/share/kicad/footprints"
-    "--set-default KICAD7_SYMBOL_DIR ${symbols}/share/kicad/symbols"
-    "--set-default KICAD7_TEMPLATE_DIR ${template_dir}"
+    "--set-default KICAD8_FOOTPRINT_DIR ${footprints}/share/kicad/footprints"
+    "--set-default KICAD8_SYMBOL_DIR ${symbols}/share/kicad/symbols"
+    "--set-default KICAD8_TEMPLATE_DIR ${template_dir}"
   ]
   ++ optionals (addons != [ ]) (
     let stockDataPath = symlinkJoin {
@@ -218,11 +218,11 @@ stdenv.mkDerivation rec {
       ];
     };
     in
-    [ "--set-default NIX_KICAD7_STOCK_DATA_PATH ${stockDataPath}" ]
+    [ "--set-default NIX_KICAD8_STOCK_DATA_PATH ${stockDataPath}" ]
   )
   ++ optionals (with3d)
   [
-    "--set-default KICAD7_3DMODEL_DIR ${packages3d}/share/kicad/3dmodels"
+    "--set-default KICAD8_3DMODEL_DIR ${packages3d}/share/kicad/3dmodels"
   ]
   ++ optionals (withNgspice) [ "--prefix LD_LIBRARY_PATH : ${libngspice}/lib" ]
 

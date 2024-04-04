@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "terraform-ls";
-  version = "0.32.7";
+  version = "0.32.8";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-gH0wJRf64XloBfnvtNdZlONESjxG5mS5Ok9HTX1PJUA=";
+    hash = "sha256-ZXtzQEi5aLiYa4KjH3DkFPFi6EEEjxof6Y+8cRJkSCM=";
   };
 
-  vendorHash = "sha256-YvzUdcCjkCApufLk5CZv6L/mIlOuo9qEBoxHOxv2Ljc=";
+  vendorHash = "sha256-DGomEJ0IGs8uOrn50N+R3tRZJvw7iyHlPVpH3CVvjsU=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -28,6 +28,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Terraform Language Server (official)";
+    mainProgram = "terraform-ls";
     homepage = "https://github.com/hashicorp/terraform-ls";
     changelog = "https://github.com/hashicorp/terraform-ls/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;

@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildPythonPackage
+, fetchpatch
 
 # build-system
 , cysignals
@@ -29,6 +30,17 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-M3ZnDL0Ui3UAa5Jn/Wr5pAHhghP7EAaQD/sx5QZ58ZQ=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/fplll/fpylll/commit/fc432b21fa7e4b9891f5b761b3539989eb958f2b.diff";
+      hash = "sha256-+UidQ5xnlmjeVeVvR4J2zDzAuXP5LUPXCh4RP4o9oGA=";
+    })
+    (fetchpatch {
+      url = "https://github.com/fplll/fpylll/commit/cece9c9b182dc3ac2c9121549cb427ccf4c4a9fe.diff";
+      hash = "sha256-epJb8gorQ7gEEylZ2yZFdM9+EZ4ys9mUUUPiJ2D0VOM=";
+    })
+  ];
 
   nativeBuildInputs = [
     cython_3

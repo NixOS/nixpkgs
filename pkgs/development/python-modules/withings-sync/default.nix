@@ -40,6 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Synchronisation of Withings weight";
+    mainProgram = "withings-sync";
     homepage = "https://github.com/jaroslawhartman/withings-sync";
     changelog = "https://github.com/jaroslawhartman/withings-sync/releases/tag/v${version}";
     license = licenses.mit;

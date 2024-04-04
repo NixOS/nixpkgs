@@ -87,7 +87,7 @@ rustPlatform.buildRustPackage rec {
     description = "A modular decentralised peer-to-peer packet router and associated tools";
     homepage = "https://git.irde.st/we/irdest";
     platforms = platforms.unix;
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ spacekookie yuka ];
   };
 }

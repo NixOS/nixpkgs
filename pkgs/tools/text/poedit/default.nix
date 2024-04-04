@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Cross-platform gettext catalogs (.po files) editor";
+    mainProgram = "poedit";
     homepage = "https://www.poedit.net/";
     license = licenses.mit;
     platforms = platforms.unix;

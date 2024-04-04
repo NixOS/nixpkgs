@@ -24,6 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Adds zero-cost stack overflow protection to your embedded programs";
+    mainProgram = "flip-link";
     homepage = "https://github.com/knurling-rs/flip-link";
     changelog = "https://github.com/knurling-rs/flip-link/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];

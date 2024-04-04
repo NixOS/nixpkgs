@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kalker";
-  version = "2.0.4";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "PaddiM8";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-8tJi4PRGhNCndiMRdZUvCSdx/+p9OhJyJ3AbD+PucSo=";
+    hash = "sha256-oBdo/FQZsJnUwhGrBuRWKZIvw2lZab9N/rv/muofs04=";
   };
 
-  cargoHash = "sha256-rGy4tkjjPiV2lpdOtfqjsXgBgi/x+45K4KeUDhyfQoA=";
+  cargoHash = "sha256-v4biE3J1a3qxiqJrSTFxyZhOJpoCnh2lZFBjy4O3XiE=";
 
   buildInputs = [ gmp mpfr libmpc ];
 

@@ -38,6 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Distributed and parallel Python";
+    mainProgram = "ppserver";
     homepage = "https://ppft.readthedocs.io/";
     changelog = "https://github.com/uqfoundation/ppft/releases/tag/${version}";
     license = licenses.bsd3;

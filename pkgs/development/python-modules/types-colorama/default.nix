@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "types-colorama";
-  version = "0.4.15.20240310";
+  version = "0.4.15.20240311";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fr/clzbTk8+7G/5g1Q4kbnAggxC2WaZS8eV35YDWvs8=";
+    hash = "sha256-oo5/mNF9KxT7lWXTI4jkGfQQj1V6fZOaZjGZabK5nHo=";
   };
 
   nativeBuildInputs = [

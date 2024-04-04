@@ -37,6 +37,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Lightweight RESTful Geospatial Feature Server for PostGIS in Go";
+    mainProgram = "pg_featureserv";
     homepage = "https://github.com/CrunchyData/pg_featureserv";
     license = licenses.asl20;
     maintainers = teams.geospatial.members;

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "opower";
-  version = "0.4.0";
+  version = "0.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,14 +21,14 @@ buildPythonPackage rec {
     owner = "tronikos";
     repo = "opower";
     rev = "refs/tags/v${version}";
-    hash = "sha256-O+yIxEFqD6hel1H9aUnSz/wJoEhVrg6DDZptNcJVkSw=";
+    hash = "sha256-mQE3WypB//OPilx4vA8b8V+eO0MJ/cSa3wILLW+Jk4Y=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     arrow
     pyotp

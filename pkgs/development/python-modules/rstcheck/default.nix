@@ -71,6 +71,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Checks syntax of reStructuredText and code blocks nested within it";
+    mainProgram = "rstcheck";
     homepage = "https://github.com/myint/rstcheck";
     changelog = "https://github.com/rstcheck/rstcheck/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

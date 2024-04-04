@@ -22,6 +22,7 @@ let
 
   meta = with lib; {
     description = "A modern performant fuzzy picker for Vim and NeoVim";
+    mainProgram = "maple";
     homepage = "https://github.com/liuchengxu/vim-clap";
     changelog = "https://github.com/liuchengxu/vim-clap/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

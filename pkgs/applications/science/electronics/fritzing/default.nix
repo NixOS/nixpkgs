@@ -54,28 +54,29 @@ stdenv.mkDerivation {
     qtbase
     qtsvg
     qtserialport
-    qtwayland
     qt5compat
     boost
     libgit2
     quazip
     libngspice
     clipper
+  ] ++ lib.optionals stdenv.isLinux [
+    qtwayland
   ];
 
   postPatch = ''
     # Use packaged quazip, libgit and ngspice
     sed -i "/pri\/quazipdetect.pri/d" phoenix.pro
     sed -i "/pri\/spicedetect.pri/d" phoenix.pro
-    substituteInPlace phoenix.pro \
-      --replace 'LIBGIT_STATIC = true' 'LIBGIT_STATIC = false'
+    substituteInPlace pri/libgit2detect.pri \
+      --replace-fail 'LIBGIT_STATIC = true' 'LIBGIT_STATIC = false'
 
     #TODO: Do not hardcode SHA.
     substituteInPlace src/fapplication.cpp \
-      --replace 'PartsChecker::getSha(dir.absolutePath());' '"${partsSha}";'
+      --replace-fail 'PartsChecker::getSha(dir.absolutePath());' '"${partsSha}";'
 
     substituteInPlace phoenix.pro \
-      --replace "6.5.10" "${qtbase.version}"
+      --replace-fail "6.5.10" "${qtbase.version}"
 
     mkdir parts
     cp -a ${parts}/* parts/
@@ -92,6 +93,13 @@ stdenv.mkDerivation {
     "phoenix.pro"
   ];
 
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mkdir $out/Applications
+    mv $out/bin/Fritzing.app $out/Applications/Fritzing.app
+    cp FritzingInfo.plist $out/Applications/Fritzing.app/Contents/Info.plist
+    makeWrapper $out/Applications/Fritzing.app/Contents/MacOS/Fritzing $out/bin/Fritzing
+  '';
+
   postFixup = ''
     # generate the parts.db file
     QT_QPA_PLATFORM=offscreen "$out/bin/Fritzing" \
@@ -105,7 +113,7 @@ stdenv.mkDerivation {
     homepage = "https://fritzing.org/";
     license = with licenses; [ gpl3 cc-by-sa-30 ];
     maintainers = with maintainers; [ robberer muscaln ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     mainProgram = "Fritzing";
   };
 }

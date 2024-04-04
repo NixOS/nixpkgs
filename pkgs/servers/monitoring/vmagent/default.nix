@@ -19,6 +19,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/VictoriaMetrics/VictoriaMetrics/tree/master/app/vmagent";
     description = "VictoriaMetrics metrics scraper";
+    mainProgram = "vmagent";
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ nullx76 ];

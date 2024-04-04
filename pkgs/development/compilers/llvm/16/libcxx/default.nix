@@ -1,115 +1,114 @@
 { lib, stdenv, llvm_meta
 , monorepoSrc, runCommand, fetchpatch
-, cmake, ninja, python3, fixDarwinDylibNames, version
-, cxxabi ? if stdenv.hostPlatform.isFreeBSD then libcxxrt else libcxxabi
-, libcxxabi, libcxxrt, libunwind
+, cmake, lndir, ninja, python3, fixDarwinDylibNames, version
+, cxxabi ? if stdenv.hostPlatform.isFreeBSD then libcxxrt else null
+, libcxxrt, libunwind
 , enableShared ? !stdenv.hostPlatform.isStatic
-
-# If headersOnly is true, the resulting package would only include the headers.
-# Use this to break the circular dependency between libcxx and libcxxabi.
-#
-# Some context:
-# https://reviews.llvm.org/rG1687f2bbe2e2aaa092f942d4a97d41fad43eedfb
-, headersOnly ? false
 }:
 
+# external cxxabi is not supported on Darwin as the build will not link libcxx
+# properly and not re-export the cxxabi symbols into libcxx
+# https://github.com/NixOS/nixpkgs/issues/166205
+# https://github.com/NixOS/nixpkgs/issues/269548
+assert cxxabi == null || !stdenv.hostPlatform.isDarwin;
 let
   basename = "libcxx";
+  cxxabiName = "lib${if cxxabi == null then "cxxabi" else cxxabi.libName}";
+  runtimes = [ "libcxx" ] ++ lib.optional (cxxabi == null) "libcxxabi";
+
+  # Note: useLLVM is likely false for Darwin but true under pkgsLLVM
+  useLLVM = stdenv.hostPlatform.useLLVM or false;
+
+  cxxabiCMakeFlags = lib.optionals (useLLVM && !stdenv.hostPlatform.isWasm) [
+    "-DLIBCXXABI_USE_COMPILER_RT=ON"
+    "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"
+  ] ++ lib.optionals stdenv.hostPlatform.isWasm [
+    "-DLIBCXXABI_ENABLE_THREADS=OFF"
+    "-DLIBCXXABI_ENABLE_EXCEPTIONS=OFF"
+  ] ++ lib.optionals (!enableShared) [
+    "-DLIBCXXABI_ENABLE_SHARED=OFF"
+  ];
+
+  cxxCMakeFlags = [
+    "-DLIBCXX_CXX_ABI=${cxxabiName}"
+  ] ++ lib.optionals (cxxabi != null) [
+    "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${lib.getDev cxxabi}/include"
+  ] ++ lib.optionals (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) [
+    "-DLIBCXX_HAS_MUSL_LIBC=1"
+  ] ++ lib.optionals useLLVM [
+    "-DLIBCXX_USE_COMPILER_RT=ON"
+    # There's precedent for this in llvm-project/libcxx/cmake/caches.
+    # In a monorepo build you might do the following in the libcxxabi build:
+    #   -DLLVM_ENABLE_PROJECTS=libcxxabi;libunwinder
+    #   -DLIBCXXABI_STATICALLY_LINK_UNWINDER_IN_STATIC_LIBRARY=On
+    # libcxx appears to require unwind and doesn't pull it in via other means.
+    "-DLIBCXX_ADDITIONAL_LIBRARIES=unwind"
+  ] ++ lib.optionals stdenv.hostPlatform.isWasm [
+    "-DLIBCXX_ENABLE_THREADS=OFF"
+    "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
+    "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
+  ] ++ lib.optionals (!enableShared) [
+    "-DLIBCXX_ENABLE_SHARED=OFF"
+  ];
+
+  cmakeFlags = [
+    "-DLLVM_ENABLE_RUNTIMES=${lib.concatStringsSep ";" runtimes}"
+  ] ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isWasm) [
+    # libcxxabi's CMake looks as though it treats -nostdlib++ as implying -nostdlib,
+    # but that does not appear to be the case for example when building
+    # pkgsLLVM.libcxxabi (which uses clangNoCompilerRtWithLibc).
+    "-DCMAKE_EXE_LINKER_FLAGS=-nostdlib"
+    "-DCMAKE_SHARED_LINKER_FLAGS=-nostdlib"
+  ] ++ lib.optionals stdenv.hostPlatform.isWasm [
+    "-DCMAKE_C_COMPILER_WORKS=ON"
+    "-DCMAKE_CXX_COMPILER_WORKS=ON"
+    "-DUNIX=ON" # Required otherwise libc++ fails to detect the correct linker
+  ] ++ cxxCMakeFlags
+    ++ lib.optionals (cxxabi == null) cxxabiCMakeFlags;
+
 in
 
-assert stdenv.isDarwin -> cxxabi.libName == "c++abi";
-
 stdenv.mkDerivation rec {
-  pname = basename + lib.optionalString headersOnly "-headers";
-  inherit version;
+  pname = basename;
+  inherit version cmakeFlags;
 
-  src = runCommand "${pname}-src-${version}" {} ''
-    mkdir -p "$out"
-    cp -r ${monorepoSrc}/cmake "$out"
-    cp -r ${monorepoSrc}/${basename} "$out"
-    mkdir -p "$out/libcxxabi"
-    cp -r ${monorepoSrc}/libcxxabi/include "$out/libcxxabi"
+  src = runCommand "${pname}-src-${version}" {} (''
     mkdir -p "$out/llvm"
+    cp -r ${monorepoSrc}/cmake "$out"
+    cp -r ${monorepoSrc}/libcxx "$out"
     cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
     cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
     cp -r ${monorepoSrc}/third-party "$out"
     cp -r ${monorepoSrc}/runtimes "$out"
-  '';
+  '' + lib.optionalString (cxxabi == null) ''
+    cp -r ${monorepoSrc}/libcxxabi "$out"
+  '');
 
   sourceRoot = "${src.name}/runtimes";
 
-  outputs = [ "out" ] ++ lib.optional (!headersOnly) "dev";
-
-  prePatch = ''
-    cd ../${basename}
-    chmod -R u+w .
-  '';
-
-  patches = [
-    ./gnu-install-dirs.patch
-    # fix for https://github.com/NixOS/nixpkgs/issues/269548
-    # https://github.com/llvm/llvm-project/pull/77218
-    (fetchpatch {
-      name = "darwin-system-libcxxabi-link-flags.patch";
-      url = "https://github.com/llvm/llvm-project/commit/c5b89b29ee6e3c444a355fd1cf733ce7ab2e316a.patch";
-      hash = "sha256-LNoPg1KCoP8RWxU/AzHR52f4Dww24I9BGQJedMhFxyQ=";
-      relative = "libcxx";
-    })
-  ];
-
-  postPatch = ''
-    cd ../runtimes
-  '';
+  outputs = [ "out" "dev" ];
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isMusl ''
     patchShebangs utils/cat_files.py
   '';
 
   nativeBuildInputs = [ cmake ninja python3 ]
-    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames
+    ++ lib.optional (cxxabi != null) lndir;
 
-  buildInputs =
-    lib.optionals (!headersOnly) [ cxxabi ]
-    ++ lib.optionals (stdenv.hostPlatform.useLLVM or false && !stdenv.hostPlatform.isWasm) [ libunwind ];
+  buildInputs = [ cxxabi ]
+    ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isWasm) [ libunwind ];
 
-  cmakeFlags = let
-    # See: https://libcxx.llvm.org/BuildingLibcxx.html#cmdoption-arg-libcxx-cxx-abi-string
-    libcxx_cxx_abi_opt = {
-      "c++abi" = "system-libcxxabi";
-      "cxxrt" = "libcxxrt";
-    }.${cxxabi.libName} or (throw "unknown cxxabi: ${cxxabi.libName} (${cxxabi.pname})");
-  in [
-    "-DLLVM_ENABLE_RUNTIMES=libcxx"
-    "-DLIBCXX_CXX_ABI=${if headersOnly then "none" else libcxx_cxx_abi_opt}"
-  ] ++ lib.optional (!headersOnly && cxxabi.libName == "c++abi") "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${cxxabi.dev}/include/c++/v1"
-    ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
-    ++ lib.optionals (stdenv.hostPlatform.useLLVM or false) [
-      "-DLIBCXX_USE_COMPILER_RT=ON"
-      # There's precedent for this in llvm-project/libcxx/cmake/caches.
-      # In a monorepo build you might do the following in the libcxxabi build:
-      #   -DLLVM_ENABLE_PROJECTS=libcxxabi;libunwinder
-      #   -DLIBCXXABI_STATICALLY_LINK_UNWINDER_IN_STATIC_LIBRARY=On
-      # libcxx appears to require unwind and doesn't pull it in via other means.
-      "-DLIBCXX_ADDITIONAL_LIBRARIES=unwind"
-    ] ++ lib.optionals stdenv.hostPlatform.isWasm [
-      "-DLIBCXX_ENABLE_THREADS=OFF"
-      "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
-      "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
-      "-DUNIX=ON" # Required otherwise libc++ fails to detect the correct linker
-    ] ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF"
-    # If we're only building the headers we don't actually *need* a functioning
-    # C/C++ compiler:
-    ++ lib.optionals (headersOnly) [
-      "-DCMAKE_C_COMPILER_WORKS=ON"
-      "-DCMAKE_CXX_COMPILER_WORKS=ON"
-    ];
-
-  ninjaFlags = lib.optional headersOnly "generate-cxx-headers";
-  installTargets = lib.optional headersOnly "install-cxx-headers";
+  # libc++.so is a linker script which expands to multiple libraries,
+  # libc++.so.1 and libc++abi.so or the external cxxabi. ld-wrapper doesn't
+  # support linker scripts so the external cxxabi needs to be symlinked in
+  postInstall = lib.optionalString (cxxabi != null) ''
+    lndir ${lib.getDev cxxabi}/include ''${!outputDev}/include/c++/v1
+    lndir ${lib.getLib cxxabi}/lib ''${!outputLib}/lib
+  '';
 
   passthru = {
     isLLVM = true;
-    inherit cxxabi;
   };
 
   meta = llvm_meta // {

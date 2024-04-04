@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "City simulation game";
+    mainProgram = "xlincity";
     license = licenses.gpl2Plus;
     homepage = "https://sourceforge.net/projects/lincity";
     maintainers = with maintainers; [ ];

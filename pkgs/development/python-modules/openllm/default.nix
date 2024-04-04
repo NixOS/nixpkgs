@@ -51,7 +51,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-  sourceRoot = "source/openllm-python";
+  sourceRoot = "${src.name}/openllm-python";
 
   nativeBuildInputs = [
     pythonRelaxDepsHook

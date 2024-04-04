@@ -9,6 +9,8 @@
 , testers
 , cudaSupport ? config.cudaSupport
 , cudaPackages
+, rocmSupport ? config.rocmSupport
+, rocmPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ] ++ lib.optionals cudaSupport [
-    cudaPackages.autoAddOpenGLRunpathHook
+    cudaPackages.autoAddDriverRunpath
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
@@ -35,6 +37,11 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/bin/btop)
+  '';
+
+  postPhases = lib.optionals rocmSupport [ "postPatchelf" ];
+  postPatchelf = lib.optionalString rocmSupport ''
+    patchelf --add-rpath ${lib.getLib rocmPackages.rocm-smi}/lib $out/bin/btop
   '';
 
   passthru.tests.version = testers.testVersion {

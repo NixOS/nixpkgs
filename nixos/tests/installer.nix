@@ -82,6 +82,7 @@ let
   testScriptFun = { bootLoader, createPartitions, grubDevice, grubUseEfi, grubIdentifier
                   , postInstallCommands, preBootCommands, postBootCommands, extraConfig
                   , testSpecialisationConfig, testFlakeSwitch, clevisTest, clevisFallbackTest
+                  , disableFileSystems
                   }:
     let
       qemu-common = import ../lib/qemu-common.nix { inherit (pkgs) lib pkgs; };
@@ -163,7 +164,7 @@ let
       ${createPartitions}
 
       with subtest("Create the NixOS configuration"):
-          machine.succeed("nixos-generate-config --root /mnt")
+          machine.succeed("nixos-generate-config ${optionalString disableFileSystems "--no-filesystems"} --root /mnt")
           machine.succeed("cat /mnt/etc/nixos/hardware-configuration.nix >&2")
           machine.copy_from_host(
               "${ makeConfig {
@@ -433,6 +434,7 @@ let
     , testFlakeSwitch ? false
     , clevisTest ? false
     , clevisFallbackTest ? false
+    , disableFileSystems ? false
     }:
     makeTest {
       inherit enableOCR;
@@ -541,7 +543,8 @@ let
       testScript = testScriptFun {
         inherit bootLoader createPartitions postInstallCommands preBootCommands postBootCommands
                 grubDevice grubIdentifier grubUseEfi extraConfig
-                testSpecialisationConfig testFlakeSwitch clevisTest clevisFallbackTest;
+                testSpecialisationConfig testFlakeSwitch clevisTest clevisFallbackTest
+                disableFileSystems;
       };
     };
 
@@ -1413,5 +1416,40 @@ in {
         ];
       };
     };
+  };
+
+  gptAutoRoot = let
+    rootPartType = {
+      ia32 = "44479540-F297-41B2-9AF7-D131D5F0458A";
+      x64 = "4F68BCE3-E8CD-4DB1-96E7-FBCAF984B709";
+      arm = "69DAD710-2CE4-4E3C-B16C-21A1D49ABED3";
+      aa64 = "B921B045-1DF0-41C3-AF44-4C6F280D3FAE";
+    }.${pkgs.stdenv.hostPlatform.efiArch};
+  in makeInstallerTest "gptAutoRoot" {
+    disableFileSystems = true;
+    createPartitions = ''
+      machine.succeed(
+        "sgdisk --zap-all /dev/vda",
+        "sgdisk --new=1:0:+100M --typecode=0:ef00 /dev/vda", # /boot
+        "sgdisk --new=2:0:+1G --typecode=0:8200 /dev/vda", # swap
+        "sgdisk --new=3:0:+5G --typecode=0:${rootPartType} /dev/vda", # /
+        "udevadm settle",
+
+        "mkfs.vfat /dev/vda1",
+        "mkswap /dev/vda2 -L swap",
+        "swapon -L swap",
+        "mkfs.ext4 -L root /dev/vda3",
+        "udevadm settle",
+
+        "mount /dev/vda3 /mnt",
+        "mkdir -p /mnt/boot",
+        "mount /dev/vda1 /mnt/boot"
+      )
+    '';
+    bootLoader = "systemd-boot";
+    extraConfig = ''
+      boot.initrd.systemd.root = "gpt-auto";
+      boot.initrd.supportedFilesystems = ["ext4"];
+    '';
   };
 }

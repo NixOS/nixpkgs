@@ -29,6 +29,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Interactive wrapper for jq";
+    mainProgram = "ijq";
     homepage = "https://git.sr.ht/~gpanders/ijq";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ justinas SuperSandro2000 ];

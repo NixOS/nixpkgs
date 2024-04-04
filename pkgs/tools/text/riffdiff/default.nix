@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "riffdiff";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "walles";
     repo = "riff";
     rev = version;
-    hash = "sha256-lS7+sLA/6ZxieodvSPuEzawxQb2vWdNCkGy1RTbg4dY=";
+    hash = "sha256-ASIB7+ZyvMsaRdvJcWT/sR0JLyt4v/gytAIi8Yajlzg=";
   };
 
-  cargoHash = "sha256-hGy0B2uLT37wKOvC4/wc8i+v1vEQ3bzrgm/yqRCAx3s=";
+  cargoHash = "sha256-NGTWBlg5xvodK02RtFuCe7KsFm4z2aEpbcx3UqH9G/o=";
 
   meta = with lib; {
     description = "A diff filter highlighting which line parts have changed";

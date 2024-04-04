@@ -4,6 +4,7 @@
 , hatch-jupyter-builder
 , hatchling
 , async-lru
+, httpx
 , packaging
 , tornado
 , ipykernel
@@ -19,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab";
-  version = "4.0.12";
+  version = "4.1.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ll2S76gqU47XDMs5aNmqu6eIhA2oguE9ewYXgM3tw7c=";
+    hash = "sha256-ya11KQyxC/r/NiS/P7uFIxm0zOTEVmE/jruqmNA1JNs=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +37,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     async-lru
+    httpx
     packaging
     tornado
     ipykernel

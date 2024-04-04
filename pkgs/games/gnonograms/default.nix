@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Nonograms puzzle game";
+    mainProgram = "com.github.jeremypw.gnonograms";
     longDescription = ''
       An implementation of the Japanese logic puzzle "Nonograms" written in
       Vala, allowing the user to:

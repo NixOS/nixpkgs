@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An advanced SAT Solver";
+    mainProgram = "cryptominisat5";
     homepage = "https://github.com/msoos/cryptominisat";
     license = licenses.mit;
     maintainers = with maintainers; [ mic92 ];

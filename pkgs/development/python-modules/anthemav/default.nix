@@ -38,6 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python asyncio module to interface with Anthem AVM and MRX receivers";
+    mainProgram = "anthemav_monitor";
     homepage = "https://github.com/nugget/python-anthemav";
     changelog = "https://github.com/nugget/python-anthemav/releases/tag/v${version}";
     license = licenses.mit;

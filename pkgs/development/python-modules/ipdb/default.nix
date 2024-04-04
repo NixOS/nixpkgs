@@ -46,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/gotcha/ipdb";
     description = "IPython-enabled pdb";
+    mainProgram = "ipdb3";
     license = licenses.bsd0;
     maintainers = [ ];
   };

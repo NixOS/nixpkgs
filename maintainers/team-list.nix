@@ -96,6 +96,15 @@ with lib.maintainers; {
     shortName = "Blockchains";
   };
 
+  budgie = {
+    members = [
+      bobby285271
+      federicoschonborn
+    ];
+    scope = "Maintain Budgie desktop environment";
+    shortName = "Budgie";
+  };
+
   buildbot = {
     members = [
       lopsided98
@@ -303,6 +312,8 @@ with lib.maintainers; {
       dpausp
       frlan
       leona
+      osnyx
+      ma27
     ];
     scope = "Team for Flying Circus employees who collectively maintain packages.";
     shortName = "Flying Circus employees";
@@ -548,7 +559,7 @@ with lib.maintainers; {
       ericson2314
       lovek323
       qyliss
-      raitobezarius
+      RossComputerGuy
       rrbutani
       sternenseemann
     ];
@@ -869,6 +880,7 @@ with lib.maintainers; {
     members = [
       Madouura
       Flakebi
+      mschwaig
     ];
     githubTeams = [
       "rocm-maintainers"

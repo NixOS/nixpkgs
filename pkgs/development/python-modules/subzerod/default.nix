@@ -30,6 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module to help with the enumeration of subdomains";
+    mainProgram = "subzerod";
     homepage = "https://github.com/sanderfoobar/subzerod";
     license = with licenses; [ wtfpl ];
     maintainers = with maintainers; [ fab ];

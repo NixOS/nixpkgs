@@ -149,6 +149,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Package and build manager for D applications and libraries";
+    mainProgram = "dub";
     homepage = "https://code.dlang.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ jtbx ];

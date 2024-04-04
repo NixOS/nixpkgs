@@ -45,6 +45,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python API and CLI for the ikea IDÅSEN desk";
+    mainProgram = "idasen";
     homepage = "https://github.com/newAM/idasen";
     changelog = "https://github.com/newAM/idasen/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "The GTK Libretro frontend framework";
+    mainProgram = "retro-demo";
     longDescription = ''
       Libretro is a plugin format design to implement video game
       console emulators, video games and similar multimedia

@@ -15,6 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Export network flows from kafka to Prometheus";
+    mainProgram = "flow-exporter";
     homepage = "https://github.com/neptune-networks/flow-exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ kloenk ];

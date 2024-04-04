@@ -95,6 +95,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Lua execution engine";
+    mainProgram = "emilua";
     homepage = "https://emilua.org/";
     license = licenses.boost;
     maintainers = with maintainers; [ manipuladordedados ];

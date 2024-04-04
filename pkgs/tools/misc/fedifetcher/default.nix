@@ -2,14 +2,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "fedifetcher";
-  version = "7.0.3";
+  version = "7.0.4";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "nanos";
     repo = "FediFetcher";
-    rev = "v${version}";
-    hash = "sha256-ADf6ZVqO9v6GQbNWi3NDX5bNmFDX5LMJfM6ePEWwbrQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-19ZpOpvDj2/qMufH2qPPAj8hRPlViSuC64WqJp6+xSk=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

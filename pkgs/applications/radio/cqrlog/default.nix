@@ -95,6 +95,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Linux logging program for amateur radio operators";
+    mainProgram = "cqrlog";
     homepage = "https://www.cqrlog.com/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ shamilton ];

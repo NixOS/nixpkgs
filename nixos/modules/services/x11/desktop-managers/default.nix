@@ -18,7 +18,7 @@ in
   # determines the default: later modules (if enabled) are preferred.
   # E.g., if Plasma 5 is enabled, it supersedes xterm.
   imports = [
-    ./none.nix ./xterm.nix ./phosh.nix ./xfce.nix ./plasma5.nix ./plasma6.nix ./lumina.nix
+    ./none.nix ./xterm.nix ./phosh.nix ./xfce.nix ./plasma5.nix ../../desktop-managers/plasma6.nix ./lumina.nix
     ./lxqt.nix ./enlightenment.nix ./gnome.nix ./retroarch.nix ./kodi.nix
     ./mate.nix ./pantheon.nix ./surf-display.nix ./cde.nix
     ./cinnamon.nix ./budgie.nix ./deepin.nix

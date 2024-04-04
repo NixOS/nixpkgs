@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A high-performance theorem prover and SMT solver";
+    mainProgram = "cvc5";
     homepage    = "https://cvc5.github.io";
     license     = licenses.gpl3Only;
     platforms   = platforms.unix;

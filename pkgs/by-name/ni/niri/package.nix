@@ -20,19 +20,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "niri";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "niri";
     rev = "v${version}";
-    hash = "sha256-VTtXEfxc3OCdtdYiEdtftOQ7gDJNb679Yw8v1Lu3lhY=";
+    hash = "sha256-lkGIQIMWfg71UOkT/TST8O6hD0IfslENj6oFPevUGl4=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "smithay-0.3.0" = "sha256-sXdixfPLAUIIVK+PhqRuMZ7XKNJIGkWNlH8nBzXlxCU=";
+      "smithay-0.3.0" = "sha256-bWan2DCyMvEC8ZQPwM+XpuOGkOZ/RdDV+LmRCN8UAuc=";
     };
   };
 
@@ -83,7 +83,7 @@ rustPlatform.buildRustPackage rec {
     description = "A scrollable-tiling Wayland compositor";
     homepage = "https://github.com/YaLTeR/niri";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ iogamaster foo-dogsquared ];
+    maintainers = with maintainers; [ iogamaster foo-dogsquared sodiboo ];
     mainProgram = "niri";
     platforms = platforms.linux;
   };

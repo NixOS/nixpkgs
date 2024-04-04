@@ -1,6 +1,6 @@
 { lib, stdenv, llvm_meta, version
 , monorepoSrc, runCommand
-, cmake, python3, xcbuild, libllvm, linuxHeaders, libcxxabi, libxcrypt
+, cmake, python3, xcbuild, libllvm, linuxHeaders, libxcrypt
 , doFakeLibgcc ? stdenv.hostPlatform.isFreeBSD
 }:
 
@@ -30,8 +30,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake python3 libllvm.dev ]
     ++ lib.optional stdenv.isDarwin xcbuild.xcrun;
   buildInputs =
-    lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders
-    ++ lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
+    lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders;
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
@@ -128,6 +127,7 @@ stdenv.mkDerivation {
   meta = llvm_meta // {
     homepage = "https://compiler-rt.llvm.org/";
     description = "Compiler runtime libraries";
+    mainProgram = "hwasan_symbolize";
     longDescription = ''
       The compiler-rt project provides highly tuned implementations of the
       low-level code generator support routines like "__fixunsdfdi" and other

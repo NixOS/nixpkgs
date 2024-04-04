@@ -196,6 +196,16 @@ in {
       ];
     };
 
+    linux_6_8 = callPackage ../os-specific/linux/kernel/mainline.nix {
+      branch = "6.8";
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+        kernelPatches.rust_1_75
+        kernelPatches.rust_1_76
+      ];
+    };
+
     linux_testing = let
       testing = callPackage ../os-specific/linux/kernel/mainline.nix {
         # A special branch that tracks the kernel under the release process
@@ -204,8 +214,6 @@ in {
         kernelPatches = [
           kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
-          kernelPatches.rust_1_75
-          kernelPatches.rust_1_76
         ];
       };
       latest = packageAliases.linux_latest.kernel;
@@ -299,6 +307,7 @@ in {
     inherit (pkgs) odp-dpdk pktgen; # added 2018-05
     inherit (pkgs) bcc bpftrace; # added 2021-12
     inherit (pkgs) oci-seccomp-bpf-hook; # added 2022-11
+    inherit (pkgs) dpdk; # added 2024-03
 
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
@@ -334,8 +343,6 @@ in {
     digimend = callPackage ../os-specific/linux/digimend { };
 
     dpdk-kmods = callPackage ../os-specific/linux/dpdk-kmods { };
-
-    dpdk = pkgs.dpdk.override { inherit kernel; };
 
     exfat-nofuse = if lib.versionOlder kernel.version "5.8" then callPackage ../os-specific/linux/exfat { } else null;
 
@@ -533,9 +540,7 @@ in {
       virtualbox = pkgs.virtualboxHardened;
     };
 
-    virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions {
-      virtualbox = pkgs.virtualboxHardened;
-    };
+    virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions { };
 
     vm-tools = callPackage ../os-specific/linux/vm-tools { };
 
@@ -596,6 +601,7 @@ in {
     linux_6_1 = recurseIntoAttrs (packagesFor kernels.linux_6_1);
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
     linux_6_7 = recurseIntoAttrs (packagesFor kernels.linux_6_7);
+    linux_6_8 = recurseIntoAttrs (packagesFor kernels.linux_6_8);
     __attrsFailEvaluation = true;
   } // lib.optionalAttrs config.allowAliases {
     linux_4_9 = throw "linux 4.9 was removed because it will reach its end of life within 22.11"; # Added 2022-11-08
@@ -662,7 +668,7 @@ in {
   packageAliases = {
     linux_default = packages.linux_6_6;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_6_7;
+    linux_latest = packages.linux_6_8;
     linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
     linux_rt_default = packages.linux_rt_5_4;
     linux_rt_latest = packages.linux_rt_6_6;
@@ -702,6 +708,5 @@ in {
     '';
   };
 
-  buildLinux = attrs: callPackage ../os-specific/linux/kernel/generic.nix attrs;
-
+  buildLinux = callPackage ../os-specific/linux/kernel/generic.nix {};
 }

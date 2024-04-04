@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A metroidvania game using only vectorial graphic";
+    mainProgram = "azimuth";
     longDescription = ''
       Azimuth is a metroidvania game, and something of an homage to the previous
       greats of the genre (Super Metroid in particular). You will need to pilot

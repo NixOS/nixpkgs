@@ -54,6 +54,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library for ReqIF format";
+    mainProgram = "reqif";
     homepage = "https://github.com/strictdoc-project/reqif";
     changelog = "https://github.com/strictdoc-project/reqif/releases/tag/${version}";
     license = licenses.asl20;

@@ -69,6 +69,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "A commenting server similar to Disqus";
+    mainProgram = "isso";
     homepage = "https://posativ.org/isso/";
     license = licenses.mit;
     maintainers = with maintainers; [ fgaz ];

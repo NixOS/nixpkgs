@@ -41,6 +41,7 @@ in python3.pkgs.buildPythonApplication {
   meta = {
     homepage = "https://github.com/pirxthepilot/wtfis";
     description = "Passive hostname, domain and IP lookup tool for non-robots";
+    mainProgram = "wtfis";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.AndersonTorres ];
   };

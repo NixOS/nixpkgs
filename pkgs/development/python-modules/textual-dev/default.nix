@@ -51,6 +51,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Development tools for Textual";
+    mainProgram = "textual";
     homepage = "https://github.com/Textualize/textual-dev";
     license = licenses.mit;
     maintainers = with maintainers; [ yannip ];

@@ -27,6 +27,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib ; {
     description = "Management of analyses and data in DNA metabarcoding";
+    mainProgram = "obi";
     homepage = "https://git.metabarcoding.org/obitools/obitools3";
     license = licenses.cecill20;
     maintainers = [ maintainers.bzizou ];

@@ -3,12 +3,12 @@
 
 buildGraalvmNativeImage rec {
   pname = "clj-kondo";
-  version = "2024.02.12";
+  version = "2024.03.13";
 
   src = fetchurl {
     url =
       "https://github.com/clj-kondo/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "sha256-up98q1/GWP9wZP95lHNE1z2xhzGzb8ZyTeuhP7a+qHw=";
+    sha256 = "sha256-4V0YtGRbSzebxGYkoyCJEA4e1vtYWNbIHyXOlTfvGTU=";
   };
 
   graalvmDrv = graalvmCEPackages.graalvm-ce;

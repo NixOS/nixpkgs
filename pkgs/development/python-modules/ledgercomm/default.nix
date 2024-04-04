@@ -26,6 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library to send and receive APDU through HID or TCP socket. It can be used with a Ledger Nano S/X or with the Speculos emulator.";
+    mainProgram = "ledgercomm-send";
     homepage = "https://github.com/LedgerHQ/ledgercomm";
     license = licenses.mit;
   };

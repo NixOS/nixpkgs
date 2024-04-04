@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "3.0.3";
+  version = "3.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "pylint-dev";
     repo = "pylint";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JwSzit4oDxAqrQFlvTNF7lrirhaHbJ15MRKbl7c7bEg=";
+    hash = "sha256-JHtMaZNwl+yLwEDD4Nl0vOt9NQ9DO7iIy5LR/9ta1Pw=";
   };
 
   nativeBuildInputs = [
@@ -96,6 +96,8 @@ buildPythonPackage rec {
     "test_save_and_load_not_a_linter_stats"
     # Truncated string expectation mismatch
     "test_truncated_compare"
+    # Probably related to pytest versions, see pylint-dev/pylint#9477 and pylint-dev/pylint#9483
+    "test_functional"
     # AssertionError: assert [('specializa..., 'Ancestor')] == [('aggregatio..., 'Ancestor')]
     "test_functional_relation_extraction"
   ] ++ lib.optionals stdenv.isDarwin [

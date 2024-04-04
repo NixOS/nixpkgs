@@ -42,6 +42,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Natural Language Processing ToolKit";
+    mainProgram = "nltk";
     homepage = "http://nltk.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ lheckemann ];

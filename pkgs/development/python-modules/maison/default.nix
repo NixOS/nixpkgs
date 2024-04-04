@@ -49,6 +49,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library to read settings from config files";
+    mainProgram = "maison";
     homepage = "https://github.com/dbatten5/maison";
     changelog = "https://github.com/dbatten5/maison/releases/tag/v${version}";
     license = licenses.mit;

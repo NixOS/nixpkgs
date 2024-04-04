@@ -100,7 +100,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     # Test Wayland
     # We let Miriway start the first terminal, as we might get stuck if it's not ready to process the first keybind
     # machine.send_key("ctrl-alt-t")
-    machine.wait_for_text("alice@machine")
+    machine.wait_for_text(r"(alice|machine)")
     machine.send_chars("test-wayland\n")
     machine.wait_for_file("/tmp/test-wayland-exit-ok")
     machine.copy_from_vm("/tmp/test-wayland.out")
@@ -112,7 +112,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
     # Test XWayland
     machine.send_key("ctrl-alt-a")
-    machine.wait_for_text("alice@machine")
+    machine.wait_for_text(r"(alice|machine)")
     machine.send_chars("test-x11\n")
     machine.wait_for_file("/tmp/test-x11-exit-ok")
     machine.copy_from_vm("/tmp/test-x11.out")

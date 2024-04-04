@@ -134,7 +134,6 @@ in let
       cc = tools.clang-unwrapped;
       libcxx = targetLlvmLibraries.libcxx;
       extraPackages = [
-        libcxx.cxxabi
         targetLlvmLibraries.compiler-rt
       ];
       extraBuildCommands = mkExtraBuildCommands cc;
@@ -200,7 +199,6 @@ in let
       libcxx = targetLlvmLibraries.libcxx;
       bintools = bintools';
       extraPackages = [
-        libcxx.cxxabi
         targetLlvmLibraries.compiler-rt
       ] ++ lib.optionals (!stdenv.targetPlatform.isWasm) [
         targetLlvmLibraries.libunwind
@@ -296,23 +294,7 @@ in let
 
     libcxx = callPackage ./libcxx {
       inherit llvm_meta;
-      stdenv = if stdenv.hostPlatform.useLLVM or false
-               then overrideCC stdenv buildLlvmTools.clangNoLibcxx
-               else stdenv;
-    };
-
-    libcxxabi = let
-      stdenv_ = if stdenv.hostPlatform.useLLVM or false
-               then overrideCC stdenv buildLlvmTools.clangNoLibcxx
-               else stdenv;
-      cxx-headers = callPackage ./libcxx {
-        inherit llvm_meta;
-        stdenv = stdenv_;
-        headersOnly = true;
-      };
-    in callPackage ./libcxxabi {
-      stdenv = stdenv_;
-      inherit llvm_meta cxx-headers;
+      stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
     libunwind = callPackage ./libunwind {

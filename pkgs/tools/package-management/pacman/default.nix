@@ -127,7 +127,7 @@ stdenv.mkDerivation (final: {
   meta = with lib; {
     description = "A simple library-based package manager";
     homepage = "https://archlinux.org/pacman/";
-    changelog = "https://gitlab.archlinux.org/pacman/pacman/-/raw/v${version}/NEWS";
+    changelog = "https://gitlab.archlinux.org/pacman/pacman/-/raw/v${final.version}/NEWS";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     mainProgram = "pacman";

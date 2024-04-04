@@ -5,6 +5,7 @@
 , jdk
 , jre
 , makeWrapper
+, stripJavaArchivesHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,16 +17,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-b7Av17wu6Ar/npKOiwYqzlvBFSIuXTpqTacM1sxtBvc=";
   };
 
-  postPatch = ''
-    # Fix jar timestamps for reproducibility
-    substituteInPlace fop/build.xml \
-        --replace-fail '<jar ' '<jar modificationtime="0" '
-  '';
-
   nativeBuildInputs = [
     ant
     jdk
     makeWrapper
+    stripJavaArchivesHook
   ];
 
   # Note: not sure if this is needed anymore

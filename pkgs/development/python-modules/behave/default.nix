@@ -47,6 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/behave/behave";
     description = "behaviour-driven development, Python style";
+    mainProgram = "behave";
     license = licenses.bsd2;
     maintainers = with maintainers; [ alunduil maxxk ];
   };

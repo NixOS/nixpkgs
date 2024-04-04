@@ -7,4 +7,5 @@ mkKdeDerivation {
     # FIXME(later): upstream
     ./qdiriterator-follow-symlinks.patch
   ];
+  meta.mainProgram = "kbuildsycoca6";
 }

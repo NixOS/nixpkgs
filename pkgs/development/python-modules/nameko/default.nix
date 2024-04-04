@@ -63,6 +63,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A microservices framework that lets service developers concentrate on application logic and encourages testability";
+    mainProgram = "nameko";
     homepage = "https://www.nameko.io/";
     changelog = "https://github.com/nameko/nameko/releases/tag/v${version}";
     license = licenses.asl20;

@@ -14,7 +14,6 @@ let
     expose_php = "Off";
     error_reporting = "E_ALL & ~E_DEPRECATED & ~E_STRICT";
     display_errors = "stderr";
-    "opcache.enable_cli" = "1";
     "opcache.interned_strings_buffer" = "8";
     "opcache.max_accelerated_files" = "10000";
     "opcache.memory_consumption" = "128";

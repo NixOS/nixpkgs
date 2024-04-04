@@ -14,8 +14,10 @@ let
     concatStringsSep
     boolToString
     escape
+    filterAttrs
     floatToString
     getVersion
+    hasPrefix
     isBool
     isDerivation
     isFloat
@@ -95,14 +97,19 @@ let
 
       mkKeyValuePairs = attrs: concatStringsSep "\n" (mapAttrsToList mkKeyValue attrs);
 
+      isExtra = key: hasPrefix "extra-" key;
+
     in
     pkgs.writeTextFile {
       name = "nix.conf";
+      # workaround for https://github.com/NixOS/nix/issues/9487
+      # extra-* settings must come after their non-extra counterpart
       text = ''
         # WARNING: this file is generated from the nix.* options in
         # your NixOS configuration, typically
         # /etc/nixos/configuration.nix.  Do not edit it!
-        ${mkKeyValuePairs cfg.settings}
+        ${mkKeyValuePairs (filterAttrs (key: value: !(isExtra key)) cfg.settings)}
+        ${mkKeyValuePairs (filterAttrs (key: value: isExtra key) cfg.settings)}
         ${cfg.extraOptions}
       '';
       checkPhase = lib.optionalString cfg.checkConfig (
@@ -345,7 +352,7 @@ in
             show-trace = true;
 
             system-features = [ "big-parallel" "kvm" "recursive-nix" ];
-            sandbox-paths = { "/bin/sh" = "''${pkgs.busybox-sandbox-shell.out}/bin/busybox"; };
+            sandbox-paths = [ "/bin/sh=''${pkgs.busybox-sandbox-shell.out}/bin/busybox" ];
           }
         '';
         description = lib.mdDoc ''

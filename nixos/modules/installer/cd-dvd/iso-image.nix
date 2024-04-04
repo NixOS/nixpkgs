@@ -811,12 +811,6 @@ in
       optional config.isoImage.includeSystemBuildDependencies
         config.system.build.toplevel.drvPath;
 
-    # Create the squashfs image that contains the Nix store.
-    system.build.squashfsStore = pkgs.callPackage ../../../lib/make-squashfs.nix {
-      storeContents = config.isoImage.storeContents;
-      comp = config.isoImage.squashfsCompression;
-    };
-
     # Individual files to be included on the CD, outside of the Nix
     # store on the CD.
     isoImage.contents =
@@ -826,9 +820,6 @@ in
         }
         { source = config.system.build.initialRamdisk + "/" + config.system.boot.loader.initrdFile;
           target = "/boot/" + config.system.boot.loader.initrdFile;
-        }
-        { source = config.system.build.squashfsStore;
-          target = "/nix-store.squashfs";
         }
         { source = pkgs.writeText "version" config.system.nixos.label;
           target = "/version.txt";
@@ -878,6 +869,8 @@ in
       bootable = config.isoImage.makeBiosBootable;
       bootImage = "/isolinux/isolinux.bin";
       syslinux = if config.isoImage.makeBiosBootable then pkgs.syslinux else null;
+      squashfsContents = config.isoImage.storeContents;
+      squashfsCompression = config.isoImage.squashfsCompression;
     } // optionalAttrs (config.isoImage.makeUsbBootable && config.isoImage.makeBiosBootable) {
       usbBootable = true;
       isohybridMbrImage = "${pkgs.syslinux}/share/syslinux/isohdpfx.bin";

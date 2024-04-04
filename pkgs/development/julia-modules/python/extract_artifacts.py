@@ -79,6 +79,10 @@ def get_archive_derivation(uuid, artifact_name, url, sha256):
           url = "{url}";
           sha256 = "{sha256}";
         }};
+        preUnpack = ''
+          mkdir unpacked
+          cd unpacked
+        '';
         sourceRoot = ".";
         dontConfigure = true;
         dontBuild = true;

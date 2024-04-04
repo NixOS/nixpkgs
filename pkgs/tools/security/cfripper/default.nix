@@ -65,6 +65,7 @@ in python.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool for analysing CloudFormation templates";
+    mainProgram = "cfripper";
     homepage = "https://github.com/Skyscanner/cfripper";
     changelog = "https://github.com/Skyscanner/cfripper/releases/tag/v${version}";
     license = with licenses; [ asl20 ];

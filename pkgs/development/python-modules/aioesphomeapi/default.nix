@@ -25,24 +25,24 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "23.0.0";
+  version = "23.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "esphome";
-    repo = pname;
+    repo = "aioesphomeapi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iYaRA1Jj9Ew/s/LyS6U+NZ3TsAlXdDq0DAaudgFV5/o=";
+    hash = "sha256-GFQ87Ic0xHXs8ZgmzH7kOFbDSNmtj0hx+YHKnrz/sG0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     cython_3
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohappyeyeballs
     async-interrupt
     chacha20poly1305-reuseable

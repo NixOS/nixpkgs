@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
     meta = with lib; {
       description = "A simple, but powerful ReplayGain 2.0 tagging utility";
+      mainProgram = "rsgain";
       homepage = "https://github.com/complexlogic/rsgain";
       changelog = "https://github.com/complexlogic/rsgain/blob/v${version}/CHANGELOG";
       license = licenses.bsd2;

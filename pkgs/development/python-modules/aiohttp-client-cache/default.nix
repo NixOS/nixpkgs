@@ -1,6 +1,14 @@
-{ lib, fetchPypi, python3, ...}:
+{ lib
+, fetchPypi
+, buildPythonPackage
+, poetry-core
+, aiohttp
+, attrs
+, itsdangerous
+, url-normalize
+}:
 
-python3.pkgs.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "aiohttp_client_cache";
   version = "0.11.0";
   pyproject = true;
@@ -8,10 +16,10 @@ python3.pkgs.buildPythonPackage rec {
     inherit pname version;
     sha256 = "sha256-B2b/9O2gVJjHUlN0pYeBDcwsy3slaAnd5SroeQqEU+s=";
   };
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = [
     poetry-core
   ];
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     aiohttp
     attrs
     itsdangerous

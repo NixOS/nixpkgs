@@ -13,4 +13,5 @@ mkKdeDerivation {
 
   extraBuildInputs = [qtdeclarative qttools];
   extraPropagatedBuildInputs = [kcmutils];
+  meta.mainProgram = "knewstuff-dialog6";
 }

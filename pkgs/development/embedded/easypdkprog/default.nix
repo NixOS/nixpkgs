@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Read, write and execute programs on PADAUK microcontroller";
+    mainProgram = "easypdkprog";
     homepage = "https://github.com/free-pdk/easy-pdk-programmer-software";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ david-sawatzke ];

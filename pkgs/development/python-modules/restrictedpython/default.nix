@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "restrictedpython";
-  version = "7.0";
+  version = "7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "RestrictedPython";
     inherit version;
-    hash = "sha256-U3BK+7w1D9yPskVEE2e+Zxyfg4CGkgGy6EUudPzj2xQ=";
+    hash = "sha256-h1rrUcE51440zvhgXcZTCbRJFoBg3QhVGh/p7bR8uaU=";
   };
 
   nativeBuildInputs = [

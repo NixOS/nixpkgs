@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "The Betaflight flight control system configuration tool";
+    mainProgram = "betaflight-configurator";
     longDescription = ''
       A crossplatform configuration tool for the Betaflight flight control system.
       Various types of aircraft are supported by the tool and by Betaflight, e.g.

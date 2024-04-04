@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , wrapQtAppsHook
@@ -71,6 +72,12 @@ stdenv.mkDerivation rec {
   patches = [
     # Remove when merged https://github.com/dolphin-emu/dolphin/pull/12070
     ./find-minizip-ng.patch
+
+    # fix buidl w/ glibc-2.39
+    (fetchpatch {
+      url = "https://github.com/dolphin-emu/dolphin/commit/3da2e15e6b95f02f66df461e87c8b896e450fdab.patch";
+      hash = "sha256-+8yGF412wQUYbyEuYWd41pgOgEbhCaezexxcI5CNehc=";
+    })
   ];
 
   strictDeps = true;

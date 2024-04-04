@@ -39,11 +39,21 @@ let
         is_virtualenv = "False";
       };
     } // lib.optionalAttrs (!python.isPyPy) {
-      # Use virtualenv from a Nix env.
-      nixenv-virtualenv = rec {
-        env = runCommand "${python.name}-virtualenv" {} ''
-          ${pythonVirtualEnv.interpreter} -m virtualenv venv
-          mv venv $out
+      # Use virtualenv with symlinks from a Nix env.
+      nixenv-virtualenv-links = rec {
+        env = runCommand "${python.name}-virtualenv-links" {} ''
+          ${pythonVirtualEnv.interpreter} -m virtualenv --system-site-packages --symlinks --no-seed $out
+        '';
+        interpreter = "${env}/bin/${python.executable}";
+        is_venv = "False";
+        is_nixenv = "True";
+        is_virtualenv = "True";
+      };
+    } // lib.optionalAttrs (!python.isPyPy) {
+      # Use virtualenv with copies from a Nix env.
+      nixenv-virtualenv-copies = rec {
+        env = runCommand "${python.name}-virtualenv-copies" {} ''
+          ${pythonVirtualEnv.interpreter} -m virtualenv --system-site-packages --copies --no-seed $out
         '';
         interpreter = "${env}/bin/${python.executable}";
         is_venv = "False";
@@ -59,27 +69,48 @@ let
         is_nixenv = "True";
         is_virtualenv = "False";
       };
-    } // lib.optionalAttrs (python.isPy3k && (!python.isPyPy)) {
-      # Venv built using plain Python
+    } // lib.optionalAttrs (python.pythonAtLeast "3.8" && (!python.isPyPy)) {
+      # Venv built using links to plain Python
       # Python 2 does not support venv
       # TODO: PyPy executable name is incorrect, it should be pypy-c or pypy-3c instead of pypy and pypy3.
-      plain-venv = rec {
-        env = runCommand "${python.name}-venv" {} ''
-          ${python.interpreter} -m venv $out
+      plain-venv-links = rec {
+        env = runCommand "${python.name}-venv-links" {} ''
+          ${python.interpreter} -m venv --system-site-packages --symlinks --without-pip $out
         '';
         interpreter = "${env}/bin/${python.executable}";
         is_venv = "True";
         is_nixenv = "False";
         is_virtualenv = "False";
       };
-
+    } // lib.optionalAttrs (python.pythonAtLeast "3.8" && (!python.isPyPy)) {
+      # Venv built using copies from plain Python
+      # Python 2 does not support venv
+      # TODO: PyPy executable name is incorrect, it should be pypy-c or pypy-3c instead of pypy and pypy3.
+      plain-venv-copies = rec {
+        env = runCommand "${python.name}-venv-copies" {} ''
+          ${python.interpreter} -m venv --system-site-packages --copies --without-pip $out
+        '';
+        interpreter = "${env}/bin/${python.executable}";
+        is_venv = "True";
+        is_nixenv = "False";
+        is_virtualenv = "False";
+      };
     } // lib.optionalAttrs (python.pythonAtLeast "3.8") {
       # Venv built using Python Nix environment (python.buildEnv)
-      # TODO: Cannot create venv from a  nix env
-      # Error: Command '['/nix/store/ddc8nqx73pda86ibvhzdmvdsqmwnbjf7-python3-3.7.6-venv/bin/python3.7', '-Im', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.
-      nixenv-venv = rec {
-        env = runCommand "${python.name}-venv" {} ''
-          ${pythonEnv.interpreter} -m venv $out
+      nixenv-venv-links = rec {
+        env = runCommand "${python.name}-venv-links" {} ''
+          ${pythonEnv.interpreter} -m venv --system-site-packages --symlinks --without-pip $out
+        '';
+        interpreter = "${env}/bin/${pythonEnv.executable}";
+        is_venv = "True";
+        is_nixenv = "True";
+        is_virtualenv = "False";
+      };
+    } // lib.optionalAttrs (python.pythonAtLeast "3.8") {
+      # Venv built using Python Nix environment (python.buildEnv)
+      nixenv-venv-copies = rec {
+        env = runCommand "${python.name}-venv-copies" {} ''
+          ${pythonEnv.interpreter} -m venv --system-site-packages --copies --without-pip $out
         '';
         interpreter = "${env}/bin/${pythonEnv.executable}";
         is_venv = "True";
@@ -91,11 +122,33 @@ let
     testfun = name: attrs: runCommand "${python.name}-tests-${name}" ({
       inherit (python) pythonVersion;
     } // attrs) ''
+      mkdir $out
+
+      # set up the test files
       cp -r ${./tests/test_environments} tests
       chmod -R +w tests
       substituteAllInPlace tests/test_python.py
-      ${attrs.interpreter} -m unittest discover --verbose tests #/test_python.py
-      mkdir $out
+
+      # run the tests by invoking the interpreter via full path
+      echo "absolute path: ${attrs.interpreter}"
+      ${attrs.interpreter} -m unittest discover --verbose tests 2>&1 | tee "$out/full.txt"
+
+      # run the tests by invoking the interpreter via $PATH
+      export PATH="$(dirname ${attrs.interpreter}):$PATH"
+      echo "PATH: $(basename ${attrs.interpreter})"
+      "$(basename ${attrs.interpreter})" -m unittest discover --verbose tests 2>&1 | tee "$out/path.txt"
+
+      # make sure we get the right path when invoking through a result link
+      ln -s "${attrs.env}" result
+      relative="result/bin/$(basename ${attrs.interpreter})"
+      expected="$PWD/$relative"
+      actual="$(./$relative -c "import sys; print(sys.executable)" | tee "$out/result.txt")"
+      if [ "$actual" != "$expected" ]; then
+        echo "expected $expected, got $actual"
+        exit 1
+      fi
+
+      # if we got this far, the tests passed
       touch $out/success
     '';
 

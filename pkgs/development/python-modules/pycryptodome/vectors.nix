@@ -1,18 +1,23 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pycryptodome-test-vectors";
-  version = "1.0.10";
-  format = "setuptools";
+  version = "1.0.14";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oqgHWAw0Xrc22eAuY6+Q/H90tL9Acz6V0EJp060hH2Q=";
+    hash = "sha256-1De0SjXcr8BibDVhv7G1BqG3x0RcxfudNuI3QWG8mjc=";
     extension = "zip";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   # Module has no tests
   doCheck = false;

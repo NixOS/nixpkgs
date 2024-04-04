@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "strace";
-  version = "6.7";
+  version = "6.8";
 
   src = fetchurl {
     url = "https://strace.io/files/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-IJAgHho/8yhG9P5CHBFjsV9EC7OOMTVdCfgtOUmSKvc=";
+    sha256 = "sha256-umlQqWgkzfk6WE+gTwpzOJbSprxfCtn/5QXZtB6XAUk=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];

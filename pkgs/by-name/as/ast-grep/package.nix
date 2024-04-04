@@ -7,21 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ast-grep";
-  version = "0.19.3";
+  version = "0.20.2";
 
   src = fetchFromGitHub {
     owner = "ast-grep";
     repo = "ast-grep";
     rev = version;
-    hash = "sha256-nqKDBRH2/YsSmirxJ84BgUTLfgPzZ/EQxqy6Fa7Mfxs=";
+    hash = "sha256-hq5C6VMnkJ/Y75y7i5ipTUE7s5HsLnmomyFZJlQp/5Y=";
   };
 
-  cargoHash = "sha256-48ZVbRJkpMO+kJE5Kz96McjXhMtu4TzzjfyYdggNWkQ=";
-
-  # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  };
+  cargoHash = "sha256-klQa8LB473tB3slDfA7p3SSzXBnzhCRZWeIeHskm71c=";
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -36,7 +36,7 @@ buildPythonPackage rec {
     hash = "sha256-kRR715Vnt9ZAmxuWvtH0z093crH0JFrEKPtbjO3QMRc=";
   };
 
-  sourceRoot = "source/openllm-core";
+  sourceRoot = "${src.name}/openllm-core";
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
@@ -44,8 +44,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "hatch-vcs==0.3.0" "hatch-vcs" \
-      --replace "hatchling==1.18.0" "hatchling"
+      --replace-fail "hatch-vcs==0.3.0" "hatch-vcs" \
+      --replace-fail "hatchling==1.18.0" "hatchling" \
+      --replace-fail "hatch-fancy-pypi-readme==23.1.0" "hatch-fancy-pypi-readme"
   '';
 
   pythonRelaxDeps = [
@@ -89,7 +90,7 @@ buildPythonPackage rec {
     full = with optional-dependencies; (
       vllm
       # use absolute path to disambiguate with derivbation argument
-      ++ passthru.optional-dependencies.bentoml
+      ++ optional-dependencies.bentoml
       ++ fine-tune );
   };
 

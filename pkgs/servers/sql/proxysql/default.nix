@@ -166,6 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "High-performance MySQL proxy";
+    mainProgram = "proxysql";
     homepage = "https://proxysql.com/";
     license = with licenses; [ gpl3Only ];
     maintainers = teams.helsinki-systems.members;

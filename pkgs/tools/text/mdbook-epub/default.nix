@@ -34,6 +34,7 @@ in rustPlatform.buildRustPackage {
 
   meta = with lib; {
     description = "mdbook backend for generating an e-book in the EPUB format";
+    mainProgram = "mdbook-epub";
     homepage = "https://michael-f-bryan.github.io/mdbook-epub";
     license = licenses.mpl20;
     maintainers = with maintainers; [ yuu ];

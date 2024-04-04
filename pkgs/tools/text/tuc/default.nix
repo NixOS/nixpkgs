@@ -14,6 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "When cut doesn't cut it";
+    mainProgram = "tuc";
     homepage = "https://github.com/riquito/tuc";
     license = licenses.gpl3;
     maintainers = with maintainers; [ dit7ya ];

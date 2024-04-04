@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Free, easy, personal accounting for everyone";
+    mainProgram = "homebank";
     homepage = "https://www.gethomebank.org";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pSub frlan ];

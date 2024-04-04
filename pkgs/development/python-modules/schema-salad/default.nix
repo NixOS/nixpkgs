@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "schema-salad";
-  version = "8.5.20240102191336.dev7+g8e95468";
+  version = "8.5.20240311110950";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "schema_salad";
-    rev = "8e954684b08d222d54b7eff680eaa4d4e65920a9";
-    hash = "sha256-VoFFKe6XHDytj5UlmsN14RevKcgpl+DSDMGDVS2Ols4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-bjeVgV9ovIVvGvSay24vKkzSXBbzgV05BkO5DojTX3o=";
   };
 
   nativeBuildInputs = [

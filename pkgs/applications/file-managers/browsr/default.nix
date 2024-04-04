@@ -83,6 +83,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "A file explorer in your terminal";
+    mainProgram = "browsr";
     homepage = "https://juftin.com/browsr";
     changelog = "https://github.com/juftin/browsr/releases/tag/${src.rev}";
     license = licenses.mit;

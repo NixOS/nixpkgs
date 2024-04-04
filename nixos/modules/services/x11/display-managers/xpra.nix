@@ -251,7 +251,6 @@ in
 
     environment.systemPackages = [pkgs.xpra];
 
-    virtualisation.virtualbox.guest.x11 = false;
     hardware.pulseaudio.enable = mkDefault cfg.pulseaudio;
     hardware.pulseaudio.systemWide = mkDefault cfg.pulseaudio;
   };

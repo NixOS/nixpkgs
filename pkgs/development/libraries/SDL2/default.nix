@@ -58,13 +58,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2";
-  version = "2.30.0";
+  version = "2.30.1";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-uKL9/T6vCEqMqmD3Q3rCMtKPRJZ4fRYVUr+4628/Ajg=";
+    hash = "sha256-nwmmyJK1/5Mu7l1YCk4PsasJIrx3jdiM5f/Cu3n0paA=";
   };
   dontDisableStatic = if withStatic then 1 else 0;
   outputs = [ "out" "dev" ];
@@ -180,6 +180,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "A cross-platform multimedia library";
+    mainProgram = "sdl2-config";
     homepage = "http://www.libsdl.org/";
     changelog = "https://github.com/libsdl-org/SDL/releases/tag/release-${version}";
     license = licenses.zlib;

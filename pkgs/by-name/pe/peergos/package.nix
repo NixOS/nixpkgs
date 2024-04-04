@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A p2p, secure file storage, social network and application protocol";
+    mainProgram = "peergos";
     homepage = "https://peergos.org/";
     # peergos have agpt3 license, peergos-web-ui have gpl3, both are used
     license = [ licenses.agpl3Only licenses.gpl3Only ];

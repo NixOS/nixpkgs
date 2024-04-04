@@ -30,6 +30,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    # pytest.PytestRemovedIn8Warning: Support for nose tests is deprecated and will be removed in a future release.
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   disabledTests = [
     # Disable tests which require QEMU to run
     "test_login"

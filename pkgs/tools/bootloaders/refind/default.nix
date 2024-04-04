@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, fetchpatch, gnu-efi, nixosTests }:
+{ lib
+, stdenv
+, fetchurl
+, gnu-efi
+, nixosTests
+, efibootmgr
+, openssl
+, sbsigntool
+, makeWrapper
+}:
 
 let
   archids = {
@@ -17,7 +26,7 @@ stdenv.mkDerivation rec {
   version = "0.14.0.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/refind/${version}/${pname}-src-${version}.tar.gz";
+    url = "mirror://sourceforge/project/refind/${version}/refind-src-${version}.tar.gz";
     hash = "sha256-JqDFXf01ZUmeH4LY/ldGTb7xnKiGzm0BqBUii478iw8=";
   };
 
@@ -26,6 +35,7 @@ stdenv.mkDerivation rec {
     ./0001-toolchain.patch
   ];
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ gnu-efi ];
 
   hardeningDisable = [ "stackprotector" ];
@@ -95,16 +105,16 @@ stdenv.mkDerivation rec {
     install -D -m0644 keys/* $out/share/refind/keys/
 
     # Fix variable definition of 'RefindDir' which is used to locate ressource files.
-    sed -i "s,\bRefindDir=.*,RefindDir=$out/share/refind,g" $out/bin/refind-install
-
-    # Patch uses of `which`.  We could patch in calls to efibootmgr,
-    # openssl, convert, and openssl, but that would greatly enlarge
-    # refind's closure (from ca 28MB to over 400MB).
-    sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-install
-    sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-mvrefind
-    sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-mkfont
+    sed -i "s,\bRefindDir=\"\$This.*,RefindDir=$out/share/refind,g" $out/bin/refind-install
 
     runHook postInstall
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/refind-install \
+      --prefix PATH : ${lib.makeBinPath [ efibootmgr openssl sbsigntool ]}
+    wrapProgram $out/bin/refind-mvrefind \
+      --prefix PATH : ${lib.makeBinPath [ efibootmgr ]}
   '';
 
   passthru.tests = {
@@ -129,7 +139,7 @@ stdenv.mkDerivation rec {
       Linux kernels that provide EFI stub support.
     '';
     homepage = "http://refind.sourceforge.net/";
-    maintainers = with maintainers; [ AndersonTorres samueldr ];
+    maintainers = with maintainers; [ AndersonTorres samueldr chewblacka ];
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
     license = licenses.gpl3Plus;
   };

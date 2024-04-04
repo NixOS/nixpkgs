@@ -51,14 +51,6 @@ in
           setuid = false;
           setgid = true;
         };
-
-        "1Password-KeyringHelper" = {
-          source = "${package}/share/1password/1Password-KeyringHelper";
-          owner = "root";
-          group = "onepassword";
-          setuid = true;
-          setgid = true;
-        };
       };
 
     };

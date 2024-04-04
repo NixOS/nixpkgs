@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "gitlab-ci-local";
-  version = "4.46.1";
+  version = "4.47.0";
 
   src = fetchFromGitHub {
     owner = "firecow";
     repo = "gitlab-ci-local";
     rev = version;
-    hash = "sha256-0NUmsbuzs004w9ETj4e4nO+sDvYHQh9SwJoRc3+r+j8=";
+    hash = "sha256-AMqifAdC4aPra/KfM0Z8L1mF6+lA0dv9tt/cXSd3Ov4=";
   };
 
-  npmDepsHash = "sha256-zCBNUKmLluVCDoPHuKy9KMKCGL8FqopFhKq7QCAUe4U=";
+  npmDepsHash = "sha256-GVqGA4aMfA08j/+fy+DA6udi52lmfDeAkE59d9CMAqg=";
 
   postPatch = ''
     # remove cleanup which runs git commands
@@ -27,6 +27,7 @@ buildNpmPackage rec {
 
   meta = with lib;{
     description = "Run gitlab pipelines locally as shell executor or docker executor";
+    mainProgram = "gitlab-ci-local";
     longDescription = ''
       Tired of pushing to test your .gitlab-ci.yml?
       Run gitlab pipelines locally as shell executor or docker executor.

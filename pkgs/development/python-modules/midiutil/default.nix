@@ -1,11 +1,12 @@
 { lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
-  pname = "MIDIUtil";
+  pname = "midiutil";
   version = "1.2.1";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "MIDIUtil";
+    inherit version;
     sha256 = "02m9sqv36zrzgz5zg2w9qmz8snzlm27yg3ways2hgipgs4xriykr";
   };
 

@@ -5,6 +5,7 @@
 , pytest
 , setuptools-scm
 , pytestCheckHook
+, pytest_7
 , pythonOlder
 }:
 
@@ -35,7 +36,8 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    # https://github.com/joseph-roitman/pytest-snapshot/issues/71
+    (pytestCheckHook.override { pytest = pytest_7; })
   ];
 
   pythonImportsCheck = [

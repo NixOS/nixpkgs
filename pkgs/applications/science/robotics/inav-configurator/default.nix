@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "The iNav flight control system configuration tool";
+    mainProgram = "inav-configurator";
     longDescription = ''
       A crossplatform configuration tool for the iNav flight control system.
       Various types of aircraft are supported by the tool and by iNav, e.g.

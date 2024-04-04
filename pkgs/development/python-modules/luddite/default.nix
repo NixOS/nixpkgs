@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "luddite";
-  version = "1.0.3";
+  version = "1.0.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jumptrading";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-JXIM7/5LO95oabM16GwAt3v3a8uldGpGXDWmVic8Ins=";
+    hash = "sha256-iJ3h1XRBzLd4cBKFPNOlIV5Z5XJ/miscfIdkpPIpbJ8=";
   };
 
   postPatch = ''
@@ -44,6 +44,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Checks for out-of-date package versions";
+    mainProgram = "luddite";
     homepage = "https://github.com/jumptrading/luddite";
     license = licenses.asl20;
     maintainers = with maintainers; [ emilytrau ];

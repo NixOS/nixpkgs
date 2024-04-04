@@ -21,6 +21,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://www.github.com/hashicorp/nomad-driver-podman";
     description = "Podman task driver for Nomad";
+    mainProgram = "nomad-driver-podman";
     platforms = platforms.linux;
     license = licenses.mpl20;
     maintainers = with maintainers; [ cpcloud ];

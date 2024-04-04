@@ -1,24 +1,30 @@
 { buildPythonPackage
 , lib
 , fetchPypi
+, setuptools
+, setuptools-scm
 , glibcLocales
 , isPy3k
-, pythonOlder
 , pytestCheckHook
 , curio
 }:
 
 buildPythonPackage rec {
   pname = "sniffio";
-  version = "1.3.0";
-  format = "setuptools";
+  version = "1.3.1";
+  pyproject = true;
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5gMFxeXTFPU4klm38iqqM9j33uSXYxGSNK83VcVbkQE=";
+    hash = "sha256-9DJO3GcKD0l1CoG4lfNcOtuEPMpG8FMPefwbq7I3idw=";
   };
 
-  disabled = !isPy3k;
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   buildInputs = [
     glibcLocales

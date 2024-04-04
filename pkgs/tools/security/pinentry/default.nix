@@ -112,9 +112,10 @@ let
 in
 {
   pinentry-curses = buildPinentry "curses" [ "curses" "tty" ];
-  pinentry-gtk2 = buildPinentry "gtk2" [ "gtk2" "curses" "tty" ];
-  pinentry-gnome3 = buildPinentry "gnome3" [ "gnome3" "curses" "tty" ];
-  pinentry-qt = buildPinentry "qt" [ "qt" "curses" "tty" ];
   pinentry-emacs = buildPinentry "emacs" [ "emacs" "curses" "tty" ];
+  pinentry-gnome3 = buildPinentry "gnome3" [ "gnome3" "curses" "tty" ];
+  pinentry-gtk2 = buildPinentry "gtk2" [ "gtk2" "curses" "tty" ];
+  pinentry-qt = buildPinentry "qt" [ "qt" "curses" "tty" ];
+  pinentry-tty = buildPinentry "tty" [ "tty" ];
   pinentry-all = buildPinentry "all" [ "curses" "tty" "gtk2" "gnome3" "qt" "emacs" ];
 }

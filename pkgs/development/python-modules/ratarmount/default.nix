@@ -30,6 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Mounts archives as read-only file systems by way of indexing";
+    mainProgram = "ratarmount";
     homepage = "https://github.com/mxmlnkn/ratarmount";
     license = licenses.mit;
     maintainers = with lib.maintainers; [ mxmlnkn ];

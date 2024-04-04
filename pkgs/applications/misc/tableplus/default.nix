@@ -1,20 +1,20 @@
 { lib
 , fetchurl
-, undmg
+, _7zz
 , stdenv
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tableplus";
-  version = "504";
+  version = "538";
   src = fetchurl {
     url = "https://download.tableplus.com/macos/${finalAttrs.version}/TablePlus.dmg";
-    hash = "sha256-YFUquv71QFEnlmh93+HsFN6XtgoUx6CMOVqfdWAIWfo=";
+    hash = "sha256-db3dvjEzkqWrEO+lXyImk0cVBkh8MnCwHOYKIg+kRC4=";
   };
 
   sourceRoot = "TablePlus.app";
 
-  nativeBuildInputs = [ undmg ];
+  nativeBuildInputs = [ _7zz ];
 
   installPhase = ''
     runHook preInstall

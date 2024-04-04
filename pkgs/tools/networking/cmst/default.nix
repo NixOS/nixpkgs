@@ -27,6 +27,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "QT GUI for Connman with system tray icon";
+    mainProgram = "cmst";
     homepage = "https://github.com/andrew-bibb/cmst";
     maintainers = with maintainers; [ matejc romildo ];
     platforms = platforms.linux;

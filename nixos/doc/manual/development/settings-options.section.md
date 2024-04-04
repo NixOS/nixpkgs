@@ -248,28 +248,30 @@ up in the manual.
 ::: {#ex-settings-typed-attrs .example}
 ### Declaring a type-checked `settings` attribute
 ```nix
-settings = lib.mkOption {
-  type = lib.types.submodule {
+{
+  settings = lib.mkOption {
+    type = lib.types.submodule {
 
-    freeformType = settingsFormat.type;
+      freeformType = settingsFormat.type;
 
-    # Declare an option for the port such that the type is checked and this option
-    # is shown in the manual.
-    options.port = lib.mkOption {
-      type = lib.types.port;
-      default = 8080;
-      description = ''
-        Which port this service should listen on.
-      '';
+      # Declare an option for the port such that the type is checked and this option
+      # is shown in the manual.
+      options.port = lib.mkOption {
+        type = lib.types.port;
+        default = 8080;
+        description = ''
+          Which port this service should listen on.
+        '';
+      };
+
     };
-
+    default = {};
+    description = ''
+      Configuration for Foo, see
+      <link xlink:href="https://example.com/docs/foo"/>
+      for supported values.
+    '';
   };
-  default = {};
-  description = ''
-    Configuration for Foo, see
-    <link xlink:href="https://example.com/docs/foo"/>
-    for supported values.
-  '';
-};
+}
 ```
 :::

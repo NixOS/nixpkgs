@@ -48,6 +48,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module to manage proxies in a local database";
+    mainProgram = "proxy-db";
     homepage = "https://github.com/Nekmo/proxy-db/";
     changelog = "https://github.com/Nekmo/proxy-db/blob/v${version}/HISTORY.rst";
     license = licenses.asl20;

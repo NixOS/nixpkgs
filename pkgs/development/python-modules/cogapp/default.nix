@@ -1,14 +1,22 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+}:
 
 buildPythonPackage rec {
   pname = "cogapp";
-  version = "3.3.0";
-  format = "setuptools";
+  version = "3.4.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1be95183f70282422d594fa42426be6923070a4bd8335621f6347f3aeee81db0";
+    sha256 = "sha256-qAbV254xihotP86YgAgXkWjn2xPl5VsZt5dj+budKYI=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   # there are no tests
   doCheck = false;

@@ -83,6 +83,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A GObject-based plugins engine";
+    mainProgram = "peas-demo";
     homepage = "https://wiki.gnome.org/Projects/Libpeas";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

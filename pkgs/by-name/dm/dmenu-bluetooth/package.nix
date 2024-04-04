@@ -35,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "A script that generates a dmenu menu that uses bluetoothctl to connect to bluetooth devices and display status info";
+    mainProgram = "dmenu-bluetooth";
     homepage = "https://github.com/Layerex/dmenu-bluetooth";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ ludovicopiero ];

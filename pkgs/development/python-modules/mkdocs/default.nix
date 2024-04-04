@@ -88,6 +88,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/mkdocs/mkdocs/releases/tag/${version}";
     description = "Project documentation with Markdown / static website generator";
+    mainProgram = "mkdocs";
     downloadPage = "https://github.com/mkdocs/mkdocs";
     longDescription = ''
       MkDocs is a fast, simple and downright gorgeous static site generator that's

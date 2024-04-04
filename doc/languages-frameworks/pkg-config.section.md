@@ -12,18 +12,18 @@ Additionally, the [`validatePkgConfig` setup hook](https://nixos.org/manual/nixp
 
 A good example of all these things is zlib:
 
-```
+```nix
 { pkg-config, testers, ... }:
 
 stdenv.mkDerivation (finalAttrs: {
-  ...
+  /* ... */
 
   nativeBuildInputs = [ pkg-config validatePkgConfig ];
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = {
-    ...
+    /* ... */
     pkgConfigModules = [ "zlib" ];
   };
 })

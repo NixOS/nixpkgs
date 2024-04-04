@@ -62,6 +62,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library and command line tool for extracting indicators of compromise (IOCs)";
+    mainProgram = "iocsearcher";
     homepage = "https://github.com/malicialab/iocsearcher";
     changelog = "https://github.com/malicialab/iocsearcher/releases/tag/v${version}";
     license = licenses.mit;

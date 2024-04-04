@@ -14,7 +14,7 @@ buildNpmPackage rec {
     hash = "sha256-DPGigs6DifTRa7VQVHgizZ3BUy3FPX3YhZi++yoBFBA=";
   };
 
-  sourceRoot = "source/tools/syn2mas";
+  sourceRoot = "${src.name}/tools/syn2mas";
 
   npmDepsHash = "sha256-HvBFuRyP1APg5V+yhvlODAJ02MEkdpuLfNjWB/UT2vg=";
 

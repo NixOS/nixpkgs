@@ -32,6 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A statically typed language for the Erlang VM";
+    mainProgram = "gleam";
     homepage = "https://gleam.run/";
     license = licenses.asl20;
     maintainers = teams.beam.members;

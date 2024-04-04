@@ -104,18 +104,20 @@ pull from:
   repo.json to the Nix store based on the given repository XMLs.
 
 ```nix
-repoXmls = {
-  packages = [ ./xml/repository2-1.xml ];
-  images = [
-    ./xml/android-sys-img2-1.xml
-    ./xml/android-tv-sys-img2-1.xml
-    ./xml/android-wear-sys-img2-1.xml
-    ./xml/android-wear-cn-sys-img2-1.xml
-    ./xml/google_apis-sys-img2-1.xml
-    ./xml/google_apis_playstore-sys-img2-1.xml
-  ];
-  addons = [ ./xml/addon2-1.xml ];
-};
+{
+  repoXmls = {
+    packages = [ ./xml/repository2-1.xml ];
+    images = [
+      ./xml/android-sys-img2-1.xml
+      ./xml/android-tv-sys-img2-1.xml
+      ./xml/android-wear-sys-img2-1.xml
+      ./xml/android-wear-cn-sys-img2-1.xml
+      ./xml/google_apis-sys-img2-1.xml
+      ./xml/google_apis_playstore-sys-img2-1.xml
+    ];
+    addons = [ ./xml/addon2-1.xml ];
+  };
+}
 ```
 
 When building the above expression with:

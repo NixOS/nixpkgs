@@ -17,6 +17,9 @@ The main package set contains aliases to these package sets, e.g.
 `luaPackages` refers to `lua5_1.pkgs` and `lua52Packages` to
 `lua5_2.pkgs`.
 
+Note that nixpkgs patches the non-luajit interpreters to avoid referring to
+`/usr` and have `;;` (a [placeholder](https://www.lua.org/manual/5.1/manual.html#pdf-package.path) replaced with the default LUA_PATH) work correctly.
+
 ### Installing Lua and packages {#installing-lua-and-packages}
 
 #### Lua environment defined in separate `.nix` file {#lua-environment-defined-in-separate-.nix-file}
@@ -87,6 +90,7 @@ final: prev:
         pname = "luarocks-nix";
         src = /home/my_luarocks/repository;
       });
+    };
   };
 
   luaPackages = lua.pkgs;
@@ -154,7 +158,9 @@ You can develop your package as you usually would, just don't forget to wrap it
 within a `toLuaModule` call, for instance
 
 ```nix
-mynewlib = toLuaModule ( stdenv.mkDerivation { ... });
+{
+  mynewlib = toLuaModule ( stdenv.mkDerivation { /* ... */ });
+}
 ```
 
 There is also the `buildLuaPackage` function that can be used when lua modules
@@ -182,24 +188,26 @@ Each interpreter has the following attributes:
 The `buildLuarocksPackage` function is implemented in `pkgs/development/interpreters/lua-5/build-luarocks-package.nix`
 The following is an example:
 ```nix
-luaposix = buildLuarocksPackage {
-  pname = "luaposix";
-  version = "34.0.4-1";
+{
+  luaposix = buildLuarocksPackage {
+    pname = "luaposix";
+    version = "34.0.4-1";
 
-  src = fetchurl {
-    url    = "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/luaposix-34.0.4-1.src.rock";
-    hash = "sha256-4mLJG8n4m6y4Fqd0meUDfsOb9RHSR0qa/KD5KCwrNXs=";
-  };
-  disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
-  propagatedBuildInputs = [ bit32 lua std_normalize ];
+    src = fetchurl {
+      url    = "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/luaposix-34.0.4-1.src.rock";
+      hash = "sha256-4mLJG8n4m6y4Fqd0meUDfsOb9RHSR0qa/KD5KCwrNXs=";
+    };
+    disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
+    propagatedBuildInputs = [ bit32 lua std_normalize ];
 
-  meta = {
-    homepage = "https://github.com/luaposix/luaposix/";
-    description = "Lua bindings for POSIX";
-    maintainers = with lib.maintainers; [ vyp lblasc ];
-    license.fullName = "MIT/X11";
+    meta = {
+      homepage = "https://github.com/luaposix/luaposix/";
+      description = "Lua bindings for POSIX";
+      maintainers = with lib.maintainers; [ vyp lblasc ];
+      license.fullName = "MIT/X11";
+    };
   };
-};
+}
 ```
 
 The `buildLuarocksPackage` delegates most tasks to luarocks:

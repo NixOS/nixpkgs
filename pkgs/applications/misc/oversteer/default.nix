@@ -70,6 +70,7 @@ in stdenv.mkDerivation {
     homepage = "https://github.com/berarma/oversteer";
     changelog = "https://github.com/berarma/oversteer/releases/tag/${version}";
     description = "Steering Wheel Manager for Linux";
+    mainProgram = "oversteer";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.srounce ];
     platforms = platforms.unix;

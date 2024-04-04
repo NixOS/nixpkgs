@@ -39,6 +39,8 @@
 
 , ldflags ? [ ]
 
+, GOFLAGS ? [ ]
+
 # needed for buildFlags{,Array} warning
 , buildFlags ? ""
 , buildFlagsArray ? ""
@@ -89,12 +91,12 @@ let
 
     GO111MODULE = "off";
     GOTOOLCHAIN = "local";
-    GOFLAGS = lib.optionals (!allowGoReference) [ "-trimpath" ];
+    GOFLAGS = GOFLAGS ++ lib.optional (!allowGoReference)  "-trimpath" ;
 
     GOARM = toString (lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
 
     # If not set to an explicit value, set the buildid empty for reproducibility.
-    ldflags = ldflags ++ lib.optionals (!lib.any (lib.hasPrefix "-buildid=") ldflags) [ "-buildid=" ];
+    ldflags = ldflags ++ lib.optional (!lib.any (lib.hasPrefix "-buildid=") ldflags) "-buildid=";
 
     configurePhase = args.configurePhase or (''
       runHook preConfigure
@@ -286,4 +288,5 @@ in
 lib.warnIf (buildFlags != "" || buildFlagsArray != "")
   "Use the `ldflags` and/or `tags` attributes instead of `buildFlags`/`buildFlagsArray`"
 lib.warnIf (builtins.elem "-buildid=" ldflags) "`-buildid=` is set by default as ldflag by buildGoModule"
+lib.warnIf (builtins.elem "-trimpath" GOFLAGS) "`-trimpath` is added by default to GOFLAGS by buildGoModule when allowGoReference isn't set to true"
   package

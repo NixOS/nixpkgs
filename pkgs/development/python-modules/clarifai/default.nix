@@ -17,13 +17,14 @@
 , rich
 , schema
 , setuptools
+, tabulate
 , tqdm
 , tritonclient
 }:
 
 buildPythonPackage rec {
   pname = "clarifai";
-  version = "10.1.0";
+  version = "10.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,7 +33,7 @@ buildPythonPackage rec {
     owner = "Clarifai";
     repo = "clarifai-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-/2PIsSsYr/R7DuTX/ndBAOX7C3IaFqPw16ZAX8E1Vk8=";
+    hash = "sha256-jI85xMApeEd0Hl6h4Am5qxWoSSTWHsmb7FxUjJPmBQM=";
   };
 
   pythonRelaxDeps = [
@@ -43,12 +44,12 @@ buildPythonPackage rec {
     "opencv-python"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     pythonRelaxDepsHook
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     clarifai-grpc
     inquirerpy
     llama-index-core
@@ -60,6 +61,7 @@ buildPythonPackage rec {
     pyyaml
     rich
     schema
+    tabulate
     tqdm
     tritonclient
   ];
@@ -87,6 +89,7 @@ buildPythonPackage rec {
     # Tests require network access and API key
     "tests/test_app.py"
     "tests/test_data_upload.py"
+    "tests/test_eval.py"
     "tests/test_model_predict.py"
     "tests/test_model_train.py"
     "tests/test_search.py"
@@ -106,5 +109,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Clarifai/clarifai-python/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ natsukium ];
+    mainProgram = "clarifai";
   };
 }

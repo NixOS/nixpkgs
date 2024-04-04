@@ -1,21 +1,45 @@
-{ lib, stdenv, fetchzip, cmake, tbb, python3, ispc }:
+{
+  cmake,
+  config,
+  cudaPackages,
+  cudaSupport ? config.cudaSupport,
+  fetchzip,
+  ispc,
+  lib,
+  python3,
+  stdenv,
+  tbb,
+}:
 
 stdenv.mkDerivation rec {
   pname = "openimagedenoise";
-  version = "1.4.3";
+  version = "2.2.2";
 
   # The release tarballs include pretrained weights, which would otherwise need to be fetched with git-lfs
   src = fetchzip {
     url = "https://github.com/OpenImageDenoise/oidn/releases/download/v${version}/oidn-${version}.src.tar.gz";
-    sha256 = "sha256-i73w/Vkr5TPLB1ulPbPU4OVGwdNlky1brfarueD7akE=";
+    sha256 = "sha256-ZIrs4oEb+PzdMh2x2BUFXKyu/HBlFb3CJX24ciEHy3Q=";
   };
 
-  nativeBuildInputs = [ cmake python3 ispc ];
-  buildInputs = [ tbb ];
+  patches = lib.optional cudaSupport ./cuda.patch;
+
+  nativeBuildInputs = [
+    cmake
+    python3
+    ispc
+  ] ++ lib.optional cudaSupport cudaPackages.cuda_nvcc;
+
+  buildInputs =
+    [ tbb ]
+    ++ lib.optionals cudaSupport [
+      cudaPackages.cuda_cudart
+      cudaPackages.cuda_cccl
+    ];
 
   cmakeFlags = [
-    "-DTBB_ROOT=${tbb}"
-    "-DTBB_INCLUDE_DIR=${tbb.dev}/include"
+    (lib.cmakeBool "OIDN_DEVICE_CUDA" cudaSupport)
+    (lib.cmakeFeature "TBB_INCLUDE_DIR" "${tbb.dev}/include")
+    (lib.cmakeFeature "TBB_ROOT" "${tbb}")
   ];
 
   meta = with lib; {

@@ -1,18 +1,19 @@
 { lib, stdenv, fetchFromGitHub
 , pkg-config, cmake, xxd
 , openssl, libwebsockets, json_c, libuv, zlib
+, nixosTests
 }:
 
 with builtins;
 
 stdenv.mkDerivation rec {
   pname = "ttyd";
-  version = "1.7.4";
+  version = "1.7.5";
   src = fetchFromGitHub {
     owner = "tsl0922";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-BNvJkDOSlcNXt5W9/3/4I+MhQYn0W37zrJRYpAoZWaA=";
+    sha256 = "sha256-ci6PLrFQa/aX48kjAqQfCtOOhS06ikfEtYoCgmGhGdU=";
   };
 
   nativeBuildInputs = [ pkg-config cmake xxd ];

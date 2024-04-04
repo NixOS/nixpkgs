@@ -31,6 +31,12 @@ buildPythonPackage rec {
     hash = "sha256-8adgwLAMG6m0lFwWzpJXfzk/tR0YTzUbdoW6boUCCY4=";
   };
 
+  patches = [
+    # this fixes the webserver (nbdiff-web) when jupyter-server >=2.13 is used
+    # see https://github.com/jupyter/nbdime/issues/749
+    ./749.patch
+  ];
+
   nativeBuildInputs = [
     hatch-jupyter-builder
     hatchling

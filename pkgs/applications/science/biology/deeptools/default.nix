@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "deeptools";
-  version = "3.5.4";
+  version = "3.5.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deeptools";
     repo = "deepTools";
-    rev = version;
-    hash = "sha256-A8YdlMptmJyxWW0EYLjXFIWjIO/mttEC7VYdlCe9MaI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-2kSlL7Y5f/FjVtStnmz+GlTw2oymrtxOCaXlqgbQ7FU=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

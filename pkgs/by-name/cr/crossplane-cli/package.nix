@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "crossplane-cli";
-  version = "1.15.0";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "crossplane";
     repo = "crossplane";
     rev = "v${version}";
-    hash = "sha256-VwnKTeCfCgKlgh+6QO2J4r1ImAq0zlxFFdhTtC95bs0=";
+    hash = "sha256-MuPJjVM8Nxm9PLTE3+7KGwmvXJTLfNj5RCh+/kHR0GM=";
   };
 
   vendorHash = "sha256-+e3NuSCvUgZANDB9LsvlQn3h9+L1NeQeURKDZd21reo=";

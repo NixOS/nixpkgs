@@ -30,6 +30,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Fast and multi-purpose HTTP toolkit";
+    mainProgram = "httpx";
     longDescription = ''
       httpx is a fast and multi-purpose HTTP toolkit allow to run multiple
       probers using retryablehttp library, it is designed to maintain the

@@ -1,5 +1,6 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, buildPythonPackage, python,
   config, cudaSupport ? config.cudaSupport, cudaPackages,
+  autoAddDriverRunpath,
   effectiveMagma ?
   if cudaSupport then magma-cuda-static
   else if rocmSupport then magma-hip
@@ -52,13 +53,15 @@
 
   # ROCm dependencies
   rocmSupport ? config.rocmSupport,
-  rocmPackages,
+  rocmPackages_5,
   gpuTargets ? [ ]
 }:
 
 let
   inherit (lib) attrsets lists strings trivial;
   inherit (cudaPackages) cudaFlags cudnn nccl;
+
+  rocmPackages = rocmPackages_5;
 
   setBool = v: if v then "1" else "0";
 
@@ -338,7 +341,7 @@ in buildPythonPackage rec {
     pythonRelaxDepsHook
     removeReferencesTo
   ] ++ lib.optionals cudaSupport (with cudaPackages; [
-    autoAddOpenGLRunpathHook
+    autoAddDriverRunpath
     cuda_nvcc
   ])
   ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];

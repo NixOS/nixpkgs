@@ -3,19 +3,24 @@
 , fetchPypi
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "packageurl-python";
-  version = "0.13.4";
-  format = "setuptools";
+  version = "0.15.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-brXplQCcxzOHCV4LUHq2XfUTV9Jd3F/OPTVFrW3Lvug=";
+    hash = "sha256-8hmyzmNIGFonvWpy5v3J+YTmyfoVfv+ny5PjQcSc3MI=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

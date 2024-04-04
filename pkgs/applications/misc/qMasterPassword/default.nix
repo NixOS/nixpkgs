@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Stateless Master Password Manager";
+    mainProgram = "qMasterPassword";
     longDescription = ''
       Access all your passwords using only a single master password. But in
       contrast to other managers it does not store any passwords: Unique

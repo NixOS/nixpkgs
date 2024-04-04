@@ -41,6 +41,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A key and secret workflow (validation, invalidation, etc.) tool";
+    mainProgram = "keyscope";
     homepage = "https://github.com/spectralops/keyscope";
     changelog = "https://github.com/spectralops/keyscope/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;

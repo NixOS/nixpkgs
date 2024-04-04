@@ -31,6 +31,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A lightweight Cargo subcommand to build code for the wasm32-wasi target";
+    mainProgram = "cargo-wasi";
     homepage = "https://bytecodealliance.github.io/cargo-wasi";
     license = licenses.asl20;
     maintainers = with maintainers; [ lucperkins ];

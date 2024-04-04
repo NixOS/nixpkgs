@@ -42,6 +42,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "A database connectivity and creation framework for various database vendors";
+    mainProgram = "kdb3_sqlite3_dump";
     license = licenses.lgpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ zraexy ];

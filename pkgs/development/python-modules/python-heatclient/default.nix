@@ -65,6 +65,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for Heat built on the Heat orchestration API";
+    mainProgram = "heat";
     homepage = "https://github.com/openstack/python-heatclient";
     license = licenses.asl20;
     maintainers = teams.openstack.members;

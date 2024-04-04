@@ -99,6 +99,7 @@ buildPythonPackage rec {
     "test_downloader_getter"
     "test_general"
     "test_get_config_dirs"
+    "test_get_configuration"
     "test_get_data"
     "test_valid_dblp_key"
     "test_validate_arxivid"
@@ -113,6 +114,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Powerful command-line document and bibliography manager";
+    mainProgram = "papis";
     homepage = "https://papis.readthedocs.io/";
     changelog = "https://github.com/papis/papis/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Only;

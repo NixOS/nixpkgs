@@ -32,6 +32,7 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "Docstring coverage analysis and rating for Python";
+    mainProgram = "docstr-coverage";
     homepage = "https://github.com/HunterMcGushion/docstr_coverage";
     changelog = "https://github.com/HunterMcGushion/docstr_coverage/blob/master/CHANGELOG.md";
     license = licenses.mit;

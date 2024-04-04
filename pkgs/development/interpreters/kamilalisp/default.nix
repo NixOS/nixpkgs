@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/kspalaiologos/kamilalisp";
     description = "A functional, flexible, and concise Lisp";
+    mainProgram = "kamilalisp";
     license = lib.licenses.gpl3Plus;
     inherit (jre.meta) platforms;
     maintainers = with lib.maintainers; [ cafkafk ];

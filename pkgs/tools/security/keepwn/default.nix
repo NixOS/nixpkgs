@@ -43,6 +43,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool to automate KeePass discovery and secret extraction";
+    mainProgram = "keepwn";
     homepage = "https://github.com/Orange-Cyberdefense/KeePwn";
     changelog = "https://github.com/Orange-Cyberdefense/KeePwn/releases/tag/${version}";
     license = licenses.gpl3Only;

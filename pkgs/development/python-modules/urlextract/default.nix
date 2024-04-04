@@ -54,6 +54,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Collects and extracts URLs from given text";
+    mainProgram = "urlextract";
     homepage = "https://github.com/lipoja/URLExtract";
     changelog = "https://github.com/lipoja/URLExtract/releases/tag/v${version}";
     license = licenses.mit;

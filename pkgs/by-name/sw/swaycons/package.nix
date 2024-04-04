@@ -18,6 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Window Icons in Sway with Nerd Fonts!";
+    mainProgram = "swaycons";
     homepage = "https://github.com/ActuallyAllie/swaycons";
     license = licenses.asl20;
     platforms = platforms.linux;

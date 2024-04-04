@@ -8,6 +8,7 @@
 , buildbot
 , pythonOlder
 , python
+, pythonRelaxDepsHook
 , twisted
 , jinja2
 , msgpack
@@ -80,6 +81,14 @@ buildPythonApplication rec {
     inherit pname version;
     hash = "sha256-ruYW1sVoGvFMi+NS+xiNsn0Iq2RmKlax4bxHgYrj6ZY=";
   };
+
+  build-system = [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "twisted"
+  ];
 
   propagatedBuildInputs = [
     # core

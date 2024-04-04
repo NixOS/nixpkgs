@@ -25,6 +25,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Approximate grep for fast fuzzy string searching";
+    mainProgram = "agrep";
     homepage = "https://www.tgries.de/agrep/";
     license = licenses.isc;
     platforms = with platforms; linux ++ darwin;

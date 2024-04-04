@@ -38,6 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module for the CaRT Neutering format";
+    mainProgram = "cart";
     homepage = "https://github.com/CybercentreCanada/cart";
     changelog = "https://github.com/CybercentreCanada/cart/releases/tag/v${version}";
     license = with licenses; [ mit ];

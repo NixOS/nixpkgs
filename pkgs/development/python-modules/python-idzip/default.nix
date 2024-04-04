@@ -61,6 +61,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Seekable, gzip compatible, compression format";
+    mainProgram = "idzip";
     homepage = "https://github.com/bauman/python-idzip";
     changelog = "https://github.com/bauman/python-idzip/releases/tag/${version}";
     license = licenses.mit;

@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Efficient, large scale, parallel remote execution of commands";
+    mainProgram = "taktuk";
     longDescription = ''
       TakTuk allows one to execute commands in parallel on a potentially large set
       of remote nodes (using ssh to connect to each node). It is typically used

@@ -9,6 +9,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A Computer algebra package for Lie group computations";
+    mainProgram = "lie";
     homepage = "http://wwwmathlabo.univ-poitiers.fr/~maavl/LiE/";
     license = lib.licenses.lgpl3; # see the website
 

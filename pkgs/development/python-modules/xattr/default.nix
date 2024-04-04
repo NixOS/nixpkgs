@@ -41,6 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python wrapper for extended filesystem attributes";
+    mainProgram = "xattr";
     homepage = "https://github.com/xattr/xattr";
     changelog = "https://github.com/xattr/xattr/blob/v${version}/CHANGES.txt";
     license = licenses.mit;

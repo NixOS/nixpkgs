@@ -98,6 +98,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Go engine modeled after AlphaGo Zero";
+    mainProgram = "katago";
     homepage    = "https://github.com/lightvector/katago";
     license     = licenses.mit;
     maintainers = [ maintainers.omnipotententity ];

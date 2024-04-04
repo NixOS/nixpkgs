@@ -25,6 +25,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Data fitting with bayesian uncertainty analysis";
+    mainProgram = "bumps";
     homepage = "https://bumps.readthedocs.io/";
     changelog = "https://github.com/bumps/bumps/releases/tag/v${version}";
     license = licenses.publicDomain;

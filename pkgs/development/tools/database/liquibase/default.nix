@@ -87,6 +87,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Version Control for your database";
+    mainProgram = "liquibase";
     homepage = "https://www.liquibase.org/";
     changelog = "https://raw.githubusercontent.com/liquibase/liquibase/v${version}/changelog.txt";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];

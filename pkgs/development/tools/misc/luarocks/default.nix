@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "luarocks";
-  version = "3.9.2";
+  version = "3.11.0";
 
   src = fetchFromGitHub {
     owner = "luarocks";
     repo = "luarocks";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-D5jH7QuPayDNskIhiPeqKzI9m33MjRjQ8ReghFIUlPo=";
+    hash = "sha256-mSwwBuLWoMT38iYaV/BTdDmmBz4heTRJzxBHC0Vrvc4=";
   };
 
   patches = [

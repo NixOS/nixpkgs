@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A PGP packet visualizer";
+    mainProgram = "pgpdump";
     longDescription = ''
       pgpdump is a PGP packet visualizer which displays the packet format of
       OpenPGP (RFC 4880) and PGP version 2 (RFC 1991).

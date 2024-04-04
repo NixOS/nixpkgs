@@ -15,6 +15,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "A linter for prose";
+    mainProgram = "proselint";
     homepage = "http://proselint.com";
     license = licenses.bsd3;
     maintainers = with maintainers; [ alibabzo ];

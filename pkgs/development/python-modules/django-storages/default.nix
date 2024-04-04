@@ -80,6 +80,11 @@ buildPythonPackage rec {
     "test_storage_save_gzip"
   ];
 
+  disabledTestPaths = [
+    # ImportError: cannot import name 'mock_s3' from 'moto'
+    "tests/test_s3.py"
+  ];
+
   meta = with lib; {
     description = "Collection of custom storage backends for Django";
     changelog = "https://github.com/jschneier/django-storages/blob/${version}/CHANGELOG.rst";

@@ -5,9 +5,6 @@
 , ninja
 , pkg-config
 , wayfire
-, wf-config
-, wayland
-, pango
 , eudev
 , libinput
 , libxkbcommon
@@ -40,9 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     wayfire
-    wf-config
-    wayland
-    pango
     eudev
     libinput
     libxkbcommon

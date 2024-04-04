@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tool for writing an ISO file to multiple USB devices at once";
+    mainProgram = "gnome-multi-writer";
     homepage = "https://wiki.gnome.org/Apps/MultiWriter";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;

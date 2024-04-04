@@ -11,13 +11,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.4.15";
+  version = "0.4.17";
   format = "setuptools";
   pname = "vmprof";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a2d872a40196404386d1e0d960e97b37c86c3f72a4f9d5a2b5f9ca1adaff5b62";
+    sha256 = "sha256-ACYj7Lb/QT6deG0uuiPCj850QXhaw4XuQX6aZu8OM2U=";
   };
 
   buildInputs = [ libunwind ];
@@ -53,6 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "A vmprof client";
+    mainProgram = "vmprofshow";
     license = licenses.mit;
     homepage = "https://vmprof.readthedocs.org/";
   };

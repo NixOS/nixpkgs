@@ -24,6 +24,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Open source norminette to apply 42's norme to C files";
+    mainProgram = "norminette";
     homepage = "https://github.com/42School/norminette";
     license = licenses.mit;
     maintainers = with maintainers; [ wegank ];

@@ -91,6 +91,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Control panel of Deepin Desktop Environment";
+    mainProgram = "dde-control-center";
     homepage = "https://github.com/linuxdeepin/dde-control-center";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

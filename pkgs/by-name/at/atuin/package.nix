@@ -10,20 +10,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "atuin";
-  version = "18.0.2";
+  version = "18.1.0";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "atuin";
     rev = "v${version}";
-    hash = "sha256-1ZNp6e2ZjVRU0w9m8YDWOHApu8vRYlcg6MJw03ZV49M=";
+    hash = "sha256-ddj8vHFTRBzeueSvY9kS1ZIcAID8k3MXrQkUVt04rQg=";
   };
 
   # TODO: unify this to one hash because updater do not support this
   cargoHash =
     if stdenv.isLinux
-    then "sha256-1yGv6Tmp7QhxIu3GNyRzK1i9Ghcil30+e8gTvyeKiZs="
-    else "sha256-+QdtQuXTk7Aw7xwelVDp/0T7FAYOnhDqSjazGemzSLw=";
+    then "sha256-LKHBXm9ZThX96JjxJb8d7cRdhWL1t/3aG3Qq1TYBC74="
+    else "sha256-RSkC062XB5zy3lmI0OQhJfJ6FqFWXhpMPNIIqbrrlso=";
 
   # atuin's default features include 'check-updates', which do not make sense
   # for distribution builds. List all other default features.
@@ -36,9 +36,9 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [
     libiconv
-    darwin.apple_sdk.frameworks.AppKit
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
+    darwin.apple_sdk_11_0.frameworks.AppKit
+    darwin.apple_sdk_11_0.frameworks.Security
+    darwin.apple_sdk_11_0.frameworks.SystemConfiguration
   ];
 
   postInstall = ''

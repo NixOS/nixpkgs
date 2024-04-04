@@ -18,7 +18,6 @@ let
   dotnet_6_0 = import ./versions/6.0.nix buildAttrs;
   dotnet_7_0 = import ./versions/7.0.nix buildAttrs;
   dotnet_8_0 = import ./versions/8.0.nix buildAttrs;
-  dotnet_8_0_102 = import ./versions/8.0.102.nix buildAttrs;
   dotnet_9_0 = import ./versions/9.0.nix buildAttrs;
 
   runtimeIdentifierMap = {
@@ -38,7 +37,7 @@ in
 
   combinePackages = attrs: callPackage (import ./combine-packages.nix attrs) {};
 
-  dotnet_8 = recurseIntoAttrs (callPackage ./8 { bootstrapSdk = dotnet_8_0_102.sdk_8_0; });
+  dotnet_8 = recurseIntoAttrs (callPackage ./8 { bootstrapSdk = dotnet_8_0.sdk_8_0_1xx; });
   dotnet_9 = recurseIntoAttrs (callPackage ./9 {});
 } // lib.optionalAttrs config.allowAliases {
   # EOL

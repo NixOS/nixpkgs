@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , pythonRelaxDepsHook
 
 # build-system
@@ -26,21 +25,13 @@
 
 buildPythonPackage rec {
   pname = "httpbin";
-  version = "0.10.1";
+  version = "0.10.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-e4WWvrDnWntlPDnR888mPW1cR20p4d9ve7K3C/nwaj0=";
+    hash = "sha256-YyFIaYJhyGhOotK2JM3qhFtAKx/pFzbonfiGQIxjF6k=";
   };
-
-  patches = [
-    (fetchpatch {
-      # backport flask 3.0 support; drop after 0.10.1
-      url = "https://github.com/psf/httpbin/commit/c1d9e33049263fed3cb27806a97f094acc350905.patch";
-      hash = "sha256-SYJgQN3ERDgLIaBc4eqDfey+EX4z6CSxLoAA7j+16xI=";
-    })
-  ];
 
   nativeBuildInputs = [
     setuptools

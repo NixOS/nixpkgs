@@ -17,6 +17,7 @@ mkDerivation {
 
   meta = {
     description = "A convergent Kirigami TV guide";
+    mainProgram = "telly-skout";
     homepage = "https://apps.kde.org/telly-skout/";
     license = lib.licenses.gpl2Plus;
     maintainers = [];

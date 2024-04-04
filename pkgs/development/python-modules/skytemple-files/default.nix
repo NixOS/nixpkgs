@@ -85,6 +85,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/SkyTemple/skytemple-files";
     description = "Python library to edit the ROM of Pokémon Mystery Dungeon Explorers of Sky";
+    mainProgram = "skytemple_export_maps";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ xfix marius851000 ];
     broken = stdenv.isDarwin; # pyobjc is missing

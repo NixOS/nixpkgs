@@ -1,18 +1,23 @@
 { config, lib, pkgs, ... }:
 
-with lib;
 let
   xcfg = config.services.xserver;
   dmcfg = xcfg.displayManager;
   cfg = dmcfg.sddm;
   xEnv = config.systemd.services.display-manager.environment;
 
-  sddm = cfg.package.override(old: {
+  sddm = cfg.package.override (old: {
     withWayland = cfg.wayland.enable;
-    extraPackages = old.extraPackages or [] ++ cfg.extraPackages;
+    extraPackages = old.extraPackages or [ ] ++ cfg.extraPackages;
   });
 
   iniFmt = pkgs.formats.ini { };
+
+  inherit (lib)
+    concatMapStrings concatStringsSep getExe
+    attrNames getAttr optionalAttrs optionalString
+    mkRemovedOptionModule mkRenamedOptionModule mkIf mkEnableOption mkOption mkPackageOption types
+    ;
 
   xserverWrapper = pkgs.writeShellScript "xserver-wrapper" ''
     ${concatMapStrings (n: "export ${n}=\"${getAttr n xEnv}\"\n") (attrNames xEnv)}
@@ -38,12 +43,21 @@ let
       DefaultSession = optionalString (dmcfg.defaultSession != null) "${dmcfg.defaultSession}.desktop";
 
       DisplayServer = if cfg.wayland.enable then "wayland" else "x11";
+    } // optionalAttrs (cfg.wayland.compositor == "kwin") {
+      GreeterEnvironment = concatStringsSep " " [
+        "LANG=C.UTF-8"
+        "QT_WAYLAND_SHELL_INTEGRATION=layer-shell"
+      ];
+      InputMethod = ""; # needed if we are using --inputmethod with kwin
     };
 
     Theme = {
       Current = cfg.theme;
       ThemeDir = "/run/current-system/sw/share/sddm/themes";
       FacesDir = "/run/current-system/sw/share/sddm/faces";
+    } // optionalAttrs (cfg.theme == "breeze") {
+      CursorTheme = "breeze_cursors";
+      CursorSize = 24;
     };
 
     Users = {
@@ -69,7 +83,7 @@ let
       SessionDir = "${dmcfg.sessionData.desktops}/share/wayland-sessions";
       CompositorCommand = lib.optionalString cfg.wayland.enable cfg.wayland.compositorCommand;
     };
-  } // lib.optionalAttrs dmcfg.autoLogin.enable {
+  } // optionalAttrs dmcfg.autoLogin.enable {
     Autologin = {
       User = dmcfg.autoLogin.user;
       Session = autoLoginSessionName;
@@ -82,6 +96,34 @@ let
 
   autoLoginSessionName =
     "${dmcfg.sessionData.autologinSession}.desktop";
+
+  compositorCmds = {
+    kwin = concatStringsSep " " [
+      "${lib.getBin pkgs.kdePackages.kwin}/bin/kwin_wayland"
+      "--no-global-shortcuts"
+      "--no-kactivities"
+      "--no-lockscreen"
+      "--locale1"
+    ];
+    # This is basically the upstream default, but with Weston referenced by full path
+    # and the configuration generated from NixOS options.
+    weston =
+      let
+        westonIni = (pkgs.formats.ini { }).generate "weston.ini" {
+          libinput = {
+            enable-tap = xcfg.libinput.mouse.tapping;
+            left-handed = xcfg.libinput.mouse.leftHanded;
+          };
+          keyboard = {
+            keymap_model = xcfg.xkb.model;
+            keymap_layout = xcfg.xkb.layout;
+            keymap_variant = xcfg.xkb.variant;
+            keymap_options = xcfg.xkb.options;
+          };
+        };
+      in
+      "${getExe pkgs.weston} --shell=kiosk -c ${westonIni}";
+  };
 
 in
 {
@@ -111,7 +153,7 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs [ "plasma5Packages" "sddm" ] {};
+      package = mkPackageOption pkgs [ "plasma5Packages" "sddm" ] { };
 
       enableHidpi = mkOption {
         type = types.bool;
@@ -145,7 +187,7 @@ in
 
       extraPackages = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         defaultText = "[]";
         description = lib.mdDoc ''
           Extra Qt plugins / QML libraries to add to the environment.
@@ -206,24 +248,16 @@ in
       wayland = {
         enable = mkEnableOption "experimental Wayland support";
 
+        compositor = mkOption {
+          description = lib.mdDoc "The compositor to use: ${lib.concatStringsSep ", " (builtins.attrNames compositorCmds)}";
+          type = types.enum (builtins.attrNames compositorCmds);
+          default = "weston";
+        };
+
         compositorCommand = mkOption {
           type = types.str;
           internal = true;
-
-          # This is basically the upstream default, but with Weston referenced by full path
-          # and the configuration generated from NixOS options.
-          default = let westonIni = (pkgs.formats.ini {}).generate "weston.ini" {
-              libinput = {
-                enable-tap = xcfg.libinput.mouse.tapping;
-                left-handed = xcfg.libinput.mouse.leftHanded;
-              };
-              keyboard = {
-                keymap_model = xcfg.xkb.model;
-                keymap_layout = xcfg.xkb.layout;
-                keymap_variant = xcfg.xkb.variant;
-                keymap_options = xcfg.xkb.options;
-              };
-            }; in "${pkgs.weston}/bin/weston --shell=kiosk -c ${westonIni}";
+          default = compositorCmds.${cfg.wayland.compositor};
           description = lib.mdDoc "Command used to start the selected compositor";
         };
       };
@@ -246,8 +280,6 @@ in
         '';
       }
     ];
-
-    services.xserver.displayManager.job.execCmd = "exec /run/current-system/sw/bin/sddm";
 
     security.pam.services = {
       sddm.text = ''
@@ -293,30 +325,41 @@ in
       uid = config.ids.uids.sddm;
     };
 
-    environment.etc."sddm.conf".source = cfgFile;
-    environment.pathsToLink = [
-      "/share/sddm"
-    ];
+    environment = {
+      etc."sddm.conf".source = cfgFile;
+      pathsToLink = [
+        "/share/sddm"
+      ];
+      systemPackages = [ sddm ];
+    };
 
     users.groups.sddm.gid = config.ids.gids.sddm;
 
-    environment.systemPackages = [ sddm ];
-    services.dbus.packages = [ sddm ];
-    systemd.tmpfiles.packages = [ sddm ];
+    services = {
+      dbus.packages = [ sddm ];
+      xserver = {
+        displayManager.job.execCmd = "exec /run/current-system/sw/bin/sddm";
+        # To enable user switching, allow sddm to allocate TTYs/displays dynamically.
+        tty = null;
+        display = null;
+      };
+    };
 
-    # We're not using the upstream unit, so copy these: https://github.com/sddm/sddm/blob/develop/services/sddm.service.in
-    systemd.services.display-manager.after = [
-      "systemd-user-sessions.service"
-      "getty@tty7.service"
-      "plymouth-quit.service"
-      "systemd-logind.service"
-    ];
-    systemd.services.display-manager.conflicts = [
-      "getty@tty7.service"
-    ];
+    systemd = {
+      tmpfiles.packages = [ sddm ];
 
-    # To enable user switching, allow sddm to allocate TTYs/displays dynamically.
-    services.xserver.tty = null;
-    services.xserver.display = null;
+      # We're not using the upstream unit, so copy these: https://github.com/sddm/sddm/blob/develop/services/sddm.service.in
+      services.display-manager = {
+        after = [
+          "systemd-user-sessions.service"
+          "getty@tty7.service"
+          "plymouth-quit.service"
+          "systemd-logind.service"
+        ];
+        conflicts = [
+          "getty@tty7.service"
+        ];
+      };
+    };
   };
 }

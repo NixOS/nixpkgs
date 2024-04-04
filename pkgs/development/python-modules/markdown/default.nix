@@ -38,6 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/Python-Markdown/markdown/blob/${src.rev}/docs/changelog.md";
     description = "Python implementation of John Gruber's Markdown";
+    mainProgram = "markdown_py";
     homepage = "https://github.com/Python-Markdown/markdown";
     license = licenses.bsd3;
     maintainers = with maintainers; [ dotlambda ];

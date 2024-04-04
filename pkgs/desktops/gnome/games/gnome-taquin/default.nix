@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Taquin";
     description = "Move tiles so that they reach their places";
+    mainProgram = "gnome-taquin";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

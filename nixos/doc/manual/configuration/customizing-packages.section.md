@@ -16,18 +16,20 @@ Examples include:
 
 You can use them like this:
 ```nix
-environment.systemPackages = with pkgs; [
-  sl
-  (pass.withExtensions (subpkgs: with subpkgs; [
-    pass-audit
-    pass-otp
-    pass-genphrase
-  ]))
-  (python3.withPackages (subpkgs: with subpkgs; [
-      requests
-  ]))
-  cowsay
-];
+{
+  environment.systemPackages = with pkgs; [
+    sl
+    (pass.withExtensions (subpkgs: with subpkgs; [
+      pass-audit
+      pass-otp
+      pass-genphrase
+    ]))
+    (python3.withPackages (subpkgs: with subpkgs; [
+        requests
+    ]))
+    cowsay
+  ];
+}
 ```
 :::
 
@@ -38,7 +40,9 @@ dependency on GTK 2. If you want to build it against GTK 3, you can
 specify that as follows:
 
 ```nix
-environment.systemPackages = [ (pkgs.emacs.override { gtk = pkgs.gtk3; }) ];
+{
+  environment.systemPackages = [ (pkgs.emacs.override { gtk = pkgs.gtk3; }) ];
+}
 ```
 
 The function `override` performs the call to the Nix function that
@@ -58,12 +62,14 @@ of the package, such as the source code. For instance, if you want to
 override the source code of Emacs, you can say:
 
 ```nix
-environment.systemPackages = [
-  (pkgs.emacs.overrideAttrs (oldAttrs: {
-    name = "emacs-25.0-pre";
-    src = /path/to/my/emacs/tree;
-  }))
-];
+{
+  environment.systemPackages = [
+    (pkgs.emacs.overrideAttrs (oldAttrs: {
+      name = "emacs-25.0-pre";
+      src = /path/to/my/emacs/tree;
+    }))
+  ];
+}
 ```
 
 Here, `overrideAttrs` takes the Nix derivation specified by `pkgs.emacs`
@@ -80,9 +86,11 @@ two instances of the package. If you want to have everything depend on
 your customised instance, you can apply a *global* override as follows:
 
 ```nix
-nixpkgs.config.packageOverrides = pkgs:
-  { emacs = pkgs.emacs.override { gtk = pkgs.gtk3; };
-  };
+{
+  nixpkgs.config.packageOverrides = pkgs:
+    { emacs = pkgs.emacs.override { gtk = pkgs.gtk3; };
+    };
+}
 ```
 
 The effect of this definition is essentially equivalent to modifying the

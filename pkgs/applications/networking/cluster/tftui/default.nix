@@ -1,37 +1,38 @@
 { lib
-, buildPythonApplication
-, fetchPypi
+, fetchFromGitHub
 , makeWrapper
-, poetry-core
-, posthog
-, pyperclip
-, requests
-, rich
-, textual
+, python3
 , enableUsageTracking ? false
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "tftui";
-  version = "0.12.4";
+  version = "0.12.6";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-E4Y0qA7SooMlHh+oSFUl1hfblpirr/Jdb1C2fqU43t0=";
+  src = fetchFromGitHub {
+    owner = "idoavrah";
+    repo = "terraform-tui";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-vK1qKf8+RxwHUpuEQ97PcwGvObNVpd88kAb3DFRoRG0=";
   };
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "textual"
+  ];
+
+  nativeBuildInputs = with python3.pkgs; [
+    makeWrapper
+    poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
     posthog
     pyperclip
     requests
     rich
     textual
-  ];
-
-  nativeBuildInputs = [
-    makeWrapper
-    poetry-core
   ];
 
   pythonImportsCheck = [
@@ -46,7 +47,7 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "Textual UI to view and interact with Terraform state";
     homepage = "https://github.com/idoavrah/terraform-tui";
-    changelog = "https://github.com/idoavrah/terraform-tui/releases";
+    changelog = "https://github.com/idoavrah/terraform-tui/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; teams.bitnomial.members;
     mainProgram = "tftui";

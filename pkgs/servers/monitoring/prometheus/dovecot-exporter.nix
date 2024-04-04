@@ -20,6 +20,7 @@ buildGoPackage rec {
   meta = with lib; {
     inherit (src.meta) homepage;
     description = "Prometheus metrics exporter for Dovecot";
+    mainProgram = "dovecot_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ willibutz globin ];
   };

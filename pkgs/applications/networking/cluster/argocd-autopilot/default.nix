@@ -46,6 +46,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "ArgoCD Autopilot";
+    mainProgram = "argocd-autopilot";
     downloadPage = "https://github.com/argoproj-labs/argocd-autopilot";
     homepage = "https://argocd-autopilot.readthedocs.io/en/stable/";
     license = licenses.asl20;

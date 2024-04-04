@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://wiredtiger.com/";
     description = "";
+    mainProgram = "wt";
     license = licenses.gpl2;
     platforms = intersectLists platforms.unix platforms.x86_64;
   };

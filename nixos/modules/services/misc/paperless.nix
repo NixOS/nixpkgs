@@ -27,6 +27,8 @@ let
       name = "paperless_ngx_nltk_data";
       paths = pkg.nltkData;
     };
+  } // optionalAttrs (cfg.openMPThreadingWorkaround) {
+    OMP_NUM_THREADS = "1";
   } // (lib.mapAttrs (_: s:
     if (lib.isAttrs s || lib.isList s) then builtins.toJSON s
     else if lib.isBool s then lib.boolToString s
@@ -199,6 +201,20 @@ in
     };
 
     package = mkPackageOption pkgs "paperless-ngx" { };
+
+    openMPThreadingWorkaround = mkEnableOption ''
+      a workaround for document classifier timeouts.
+
+      Paperless uses OpenBLAS via scikit-learn for document classification.
+
+      The default is to use threading for OpenMP but this would cause the
+      document classifier to spin on one core seemingly indefinitely if there
+      are large amounts of classes per classification; causing it to
+      effectively never complete due to running into timeouts.
+
+      This sets `OMP_NUM_THREADS` to `1` in order to mitigate the issue. See
+      https://github.com/NixOS/nixpkgs/issues/240591 for more information.
+    '' // mkOption { default = true; };
   };
 
   config = mkIf cfg.enable {

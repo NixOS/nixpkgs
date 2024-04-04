@@ -26,6 +26,7 @@ buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/alpernebbi/git-annex-metadata-gui";
     description = "Graphical interface for git-annex metadata commands";
+    mainProgram = "git-annex-metadata-gui";
     maintainers = with maintainers; [ dotlambda ];
     license = licenses.gpl3Plus;
     platforms = with platforms; linux;

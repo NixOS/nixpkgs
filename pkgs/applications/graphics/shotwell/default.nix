@@ -96,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Popular photo organizer for the GNOME desktop";
+    mainProgram = "shotwell";
     homepage = "https://wiki.gnome.org/Apps/Shotwell";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [];

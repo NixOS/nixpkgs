@@ -217,7 +217,6 @@ in
           sed -e "s,#secretkey#,$KEY,g" \
               -e "s,#dbpass#,$DBPASS,g" \
               -i ${runConfig}
-          chmod 440 ${runConfig} ${secretKey}
         ''}
 
         mkdir -p ${cfg.repositoryRoot}
@@ -239,6 +238,7 @@ in
         WorkingDirectory = cfg.stateDir;
         ExecStart = "${pkgs.gogs}/bin/gogs web";
         Restart = "always";
+        UMask = "0027";
       };
 
       environment = {

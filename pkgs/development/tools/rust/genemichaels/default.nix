@@ -15,6 +15,7 @@ rustPlatform.buildRustPackage rec {
   };
   meta = {
     description = "Even formats macros";
+    mainProgram = "genemichaels";
     homepage = "https://github.com/andrewbaxter/genemichaels";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.anselmschueler ];

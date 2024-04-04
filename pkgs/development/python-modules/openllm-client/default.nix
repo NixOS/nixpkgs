@@ -21,12 +21,13 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-  sourceRoot = "source/openllm-client";
+  sourceRoot = "${src.name}/openllm-client";
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "hatchling==1.18.0" "hatchling" \
-      --replace-fail "hatch-vcs==0.3.0" "hatch-vcs"
+      --replace-fail "hatch-vcs==0.3.0" "hatch-vcs" \
+      --replace-fail "hatch-fancy-pypi-readme==23.1.0" "hatch-fancy-pypi-readme"
   '';
 
   build-system = [

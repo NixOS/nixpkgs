@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "app-model";
-  version = "0.2.4";
+  version = "0.2.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "pyapp-kit";
     repo = "app-model";
     rev = "refs/tags/v${version}";
-    hash = "sha256-idie99ditHJG/6rv97LDaF71iTjjgJyhLiTrbkQmbts=";
+    hash = "sha256-EMlxY9Xna9e3kWJ7X8oRuLHEmivwVFcEXRDvZfN2rNY=";
   };
 
   nativeBuildInputs = [

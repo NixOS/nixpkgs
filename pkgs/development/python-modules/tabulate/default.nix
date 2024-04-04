@@ -35,6 +35,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Pretty-print tabular data";
+    mainProgram = "tabulate";
     homepage = "https://github.com/astanin/python-tabulate";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fridh ];

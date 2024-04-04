@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "ipyparallel";
-  version = "8.6.1";
-  format = "pyproject";
+  version = "8.7.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-o5ql75VgFwvw6a/typ/wReG5wYMsSTAzd+3Mkc6p+3c=";
+    hash = "sha256-QDwJca5Wwrajn/6PNfMcf9FwzhJ5JGKUWc3X96C058M=";
   };
 
   # We do not need the jupyterlab build dependency, because we do not need to
@@ -33,14 +33,14 @@ buildPythonPackage rec {
   #
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '"jupyterlab>=3.0.0,==3.*",' ""
+      --replace '"jupyterlab==4.*",' ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     decorator
     entrypoints
     ipykernel
@@ -64,6 +64,7 @@ buildPythonPackage rec {
   meta = with lib;{
     description = "Interactive Parallel Computing with IPython";
     homepage = "https://ipyparallel.readthedocs.io/";
+    changelog = "https://github.com/ipython/ipyparallel/blob/${version}/docs/source/changelog.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fridh ];
   };

@@ -19,6 +19,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     maintainers = [ maintainers.eelco ];
     description = "A utility for Nixpkgs contributors to check Nixpkgs for common errors";
+    mainProgram = "nixpkgs-lint";
     platforms = platforms.unix;
   };
 }

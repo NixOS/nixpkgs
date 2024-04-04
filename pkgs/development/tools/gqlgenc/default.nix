@@ -17,6 +17,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Go tool for building GraphQL client with gqlgen";
+    mainProgram = "gqlgenc";
     homepage = "https://github.com/Yamashou/gqlgenc";
     license = licenses.mit;
     maintainers = with maintainers; [ milran ];

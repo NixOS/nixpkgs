@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "jupyter-lsp";
-  version = "2.2.3";
+  version = "2.2.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-M9vLxd8kI3/1yLaWsE/0aJ/NMWy41JV9Yg/lUE19LD8=";
+    hash = "sha256-XlADMUk0QGU0jmiGCPPG1lTvBtmFa2dlW9e2usnuLVk=";
   };
 
   nativeBuildInputs = [

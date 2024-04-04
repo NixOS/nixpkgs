@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Ethernet NIC Queue stats viewer";
+    mainProgram = "ethq";
     homepage = "https://github.com/isc-projects/ethq";
     license = licenses.mpl20;
     platforms = platforms.linux;

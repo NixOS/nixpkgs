@@ -9,4 +9,5 @@ mkKdeDerivation {
 
   extraBuildInputs = [qtdeclarative];
   extraNativeBuildInputs = [qttools perl];
+  meta.mainProgram = "ksyntaxhighlighter6";
 }

@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.com/sagemath/lcalc";
     description = "A program for calculating with L-functions";
+    mainProgram = "lcalc";
     license = with licenses; [ gpl2 ];
     maintainers = teams.sage.members;
     platforms = platforms.all;

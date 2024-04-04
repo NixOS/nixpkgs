@@ -51,6 +51,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Authenticate and interact with Xiaomi devices over BLE";
+    mainProgram = "miauth";
     homepage = "https://github.com/dnandha/miauth";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];

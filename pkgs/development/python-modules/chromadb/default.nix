@@ -154,6 +154,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "The AI-native open-source embedding database";
+    mainProgram = "chroma";
     homepage = "https://github.com/chroma-core/chroma";
     changelog = "https://github.com/chroma-core/chroma/releases/tag/${version}";
     license = licenses.asl20;

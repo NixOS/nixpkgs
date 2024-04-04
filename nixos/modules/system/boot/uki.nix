@@ -7,8 +7,6 @@ let
   inherit (pkgs.stdenv.hostPlatform) efiArch;
 
   format = pkgs.formats.ini { };
-  ukifyConfig = format.generate "ukify.conf" cfg.settings;
-
 in
 
 {
@@ -48,6 +46,15 @@ in
           contains and how it is built.
         '';
       };
+
+      configFile = lib.mkOption {
+        type = lib.types.path;
+        description = lib.mdDoc ''
+          The configuration file passed to {manpage}`ukify(1)` to create the UKI.
+
+          By default this configuration file is created from {option}`boot.uki.settings`.
+        '';
+      };
     };
 
     system.boot.loader.ukiFile = lib.mkOption {
@@ -75,8 +82,12 @@ in
         OSRelease = lib.mkOptionDefault "@${config.system.build.etc}/etc/os-release";
         # This is needed for cross compiling.
         EFIArch = lib.mkOptionDefault efiArch;
+      } // lib.optionalAttrs (config.hardware.deviceTree.enable && config.hardware.deviceTree.name != null) {
+        DeviceTree = lib.mkOptionDefault "${config.hardware.deviceTree.package}/${config.hardware.deviceTree.name}";
       };
     };
+
+    boot.uki.configFile = lib.mkOptionDefault (format.generate "ukify.conf" cfg.settings);
 
     system.boot.loader.ukiFile =
       let
@@ -90,7 +101,7 @@ in
     system.build.uki = pkgs.runCommand config.system.boot.loader.ukiFile { } ''
       mkdir -p $out
       ${pkgs.buildPackages.systemdUkify}/lib/systemd/ukify build \
-        --config=${ukifyConfig} \
+        --config=${cfg.configFile} \
         --output="$out/${config.system.boot.loader.ukiFile}"
     '';
 

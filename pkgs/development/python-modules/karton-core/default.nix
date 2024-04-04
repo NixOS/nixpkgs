@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "karton-core";
-  version = "5.3.3";
+  version = "5.3.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,14 +20,14 @@ buildPythonPackage rec {
     owner = "CERT-Polska";
     repo = "karton";
     rev = "refs/tags/v${version}";
-    hash = "sha256-RVHhMKoQAqsddziK/vWGynSL9mxMuccNEGzoJTx8KAA=";
+    hash = "sha256-q12S80GZFyh7zU6iMeCkyIesMK8qXtZ1B69w8H5LpOU=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     boto3
     orjson
     redis

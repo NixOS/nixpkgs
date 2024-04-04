@@ -5,6 +5,7 @@
 , fetchFromGitHub
 , pytest-mock
 , pytestCheckHook
+, pytest_7
 , python-dotenv
 , pythonAtLeast
 , pythonOlder
@@ -51,7 +52,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-mock
-    pytestCheckHook
+    (pytestCheckHook.override { pytest = pytest_7; })
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   pytestFlagsArray = [

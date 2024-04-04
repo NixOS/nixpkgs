@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "zc-lockfile";
-  version = "3.0";
+  version = "3.0.post1";
 
   src = fetchPypi {
     pname = "zc.lockfile";
     inherit version;
-    hash = "sha256-5Y/9ndYsbUMuhoK/oZbJDKw+XB4/JNrjuJ1ggihV14g=";
+    hash = "sha256-rbLubZ5qIzPJEXjcssm5aldEx47bdxLceEp9dWSOgew=";
   };
 
   buildInputs = [ mock ];

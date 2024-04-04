@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/Arkq/alock";
     description = "Simple screen lock application for X server";
+    mainProgram = "alock";
     longDescription = ''
       alock locks the X server until the user enters a password
       via the keyboard. If the authentication was successful

@@ -9,11 +9,12 @@
     "preview": "vite preview",
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "link:local": "yarn link @myriaddreamin/typst.ts @myriaddreamin/typst-ts-renderer"
+    "link:local": "yarn link @myriaddreamin/typst.ts @myriaddreamin/typst-ts-renderer",
+    "unlink:local": "yarn unlink @myriaddreamin/typst.ts @myriaddreamin/typst-ts-renderer"
   },
   "dependencies": {
-    "@myriaddreamin/typst-ts-renderer": "0.4.2-rc6",
-    "@myriaddreamin/typst.ts": "0.4.2-rc6",
+    "@myriaddreamin/typst-ts-renderer": "0.4.2-rc9",
+    "@myriaddreamin/typst.ts": "0.4.2-rc9",
     "typst-dom": "file:../typst-dom",
     "rxjs": "^7.8.1"
   },

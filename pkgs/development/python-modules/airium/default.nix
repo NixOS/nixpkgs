@@ -35,6 +35,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Bidirectional HTML-python translator";
+    mainProgram = "airium";
     homepage = "https://gitlab.com/kamichal/airium";
     license = licenses.mit;
     maintainers = with maintainers; [ hulr ];

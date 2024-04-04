@@ -41,6 +41,7 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/babashka/bbin";
     description = "Install any Babashka script or project with one command";
+    mainProgram = "bbin";
     license = licenses.mit;
     inherit (babashka-unwrapped.meta) platforms;
     maintainers = with maintainers; [ sohalt ];

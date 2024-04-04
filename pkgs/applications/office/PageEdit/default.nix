@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "ePub XHTML Visual Editor";
+    mainProgram = "pageedit";
     homepage = "https://sigil-ebook.com/pageedit/";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.pasqui23 ];

@@ -6,6 +6,7 @@
 , ipython
 , keyring
 , packaging
+, pillow
 , pyjwt
 , pytestCheckHook
 , pythonOlder
@@ -21,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "jira";
-  version = "3.5.2";
+  version = "3.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     owner = "pycontribs";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-9hzKN57OHi2be9C2mtHZU1KcpbcKxiiYDj9Vw7MxTK4=";
+    hash = "sha256-zE0fceCnyv0qKak8sRCXPCauC0KeOmczY/ZkVoHNcS8=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +45,7 @@ buildPythonPackage rec {
     requests
     requests-oauthlib
     requests-toolbelt
+    pillow
     typing-extensions
   ];
 

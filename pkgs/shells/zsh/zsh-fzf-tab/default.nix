@@ -4,13 +4,13 @@ let
   INSTALL_PATH="${placeholder "out"}/share/fzf-tab";
 in stdenv.mkDerivation rec {
   pname = "zsh-fzf-tab";
-  version = "1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "Aloxaf";
     repo = "fzf-tab";
     rev = "v${version}";
-    hash = "sha256-o3R9dh9t8w/SVO3IUeJqP8kkQxwnRjNX8oZ4wSZxBYo=";
+    hash = "sha256-0/YOL1/G2SWncbLNaclSYUz7VyfWu+OB8TYJYm4NYkM=";
   };
 
   strictDeps = true;
@@ -31,8 +31,8 @@ in stdenv.mkDerivation rec {
     pushd modules
 
     tar -xf ${zsh.src}
-    ln -s $(pwd)/src/fzftab.c zsh-${zsh.version}/Src/Modules/
-    ln -s $(pwd)/src/fzftab.mdd zsh-${zsh.version}/Src/Modules/
+    ln -s $(pwd)/Src/fzftab.c zsh-${zsh.version}/Src/Modules/
+    ln -s $(pwd)/Src/fzftab.mdd zsh-${zsh.version}/Src/Modules/
 
     pushd zsh-${zsh.version}
 

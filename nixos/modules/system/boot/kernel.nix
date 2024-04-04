@@ -233,7 +233,9 @@ in
         symlinks because modprobe only supports one directory.
       '';
       # Convert the list of path to only one path.
-      apply = pkgs.aggregateModules;
+      apply = let
+        kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
+      in modules: (pkgs.aggregateModules modules).override { name = kernel-name + "-modules"; };
     };
 
     system.requiredKernelConfig = mkOption {
@@ -299,6 +301,7 @@ in
             "usbhid"
             "hid_generic" "hid_lenovo" "hid_apple" "hid_roccat"
             "hid_logitech_hidpp" "hid_logitech_dj" "hid_microsoft" "hid_cherry"
+            "hid_corsair"
 
           ] ++ optionals pkgs.stdenv.hostPlatform.isx86 [
             # Misc. x86 keyboard stuff.

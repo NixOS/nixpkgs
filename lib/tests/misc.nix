@@ -13,9 +13,97 @@ Alternatively, to run all `lib` tests:
 
   [nixpkgs]$ nix-build lib/tests/release.nix
 */
-with import ../default.nix;
 
 let
+  lib = import ../default.nix;
+
+  inherit (lib)
+    allUnique
+    and
+    attrNames
+    attrsets
+    attrsToList
+    bitAnd
+    bitOr
+    bitXor
+    boolToString
+    callPackagesWith
+    callPackageWith
+    cartesianProductOfSets
+    cli
+    composeExtensions
+    composeManyExtensions
+    concatLines
+    concatMapAttrs
+    concatMapStrings
+    concatStrings
+    concatStringsSep
+    const
+    escapeXML
+    evalModules
+    filter
+    fix
+    fold
+    foldAttrs
+    foldl
+    foldl'
+    foldlAttrs
+    foldr
+    functionArgs
+    generators
+    genList
+    getExe
+    getExe'
+    groupBy
+    groupBy'
+    hasAttrByPath
+    hasInfix
+    id
+    isStorePath
+    lazyDerivation
+    lists
+    listToAttrs
+    makeExtensible
+    makeIncludePath
+    makeOverridable
+    mapAttrs
+    matchAttrs
+    mergeAttrs
+    meta
+    mkOption
+    mod
+    nameValuePair
+    optionalDrvAttr
+    optionAttrSetToDocList
+    overrideExisting
+    packagesFromDirectoryRecursive
+    pipe
+    range
+    recursiveUpdateUntil
+    removePrefix
+    replicate
+    runTests
+    setFunctionArgs
+    showAttrPath
+    sort
+    sortOn
+    stringLength
+    strings
+    stringToCharacters
+    systems
+    tail
+    take
+    testAllTrue
+    toBaseDigits
+    toHexString
+    toInt
+    toIntBase10
+    toShellVars
+    types
+    updateManyAttrsByPath
+    versions
+    ;
+
   testingThrow = expr: {
     expr = (builtins.tryEval (builtins.seq expr "didn't throw"));
     expected = { success = false; value = false; };
@@ -207,6 +295,35 @@ runTests {
   testConcatLines = {
     expr = concatLines ["a" "b" "c"];
     expected = "a\nb\nc\n";
+  };
+
+  testMakeIncludePathWithPkgs = {
+    expr = (makeIncludePath [
+      # makeIncludePath preferably selects the "dev" output
+      { dev.outPath = "/dev"; out.outPath = "/out"; outPath = "/default"; }
+      # "out" is used if "dev" is not found
+      { out.outPath = "/out"; outPath = "/default"; }
+      # And it returns the derivation directly if there's no "out" either
+      { outPath = "/default"; }
+      # Same if the output is specified explicitly, even if there's a "dev"
+      { dev.outPath = "/dev"; outPath = "/default"; outputSpecified = true; }
+    ]);
+    expected = "/dev/include:/out/include:/default/include:/default/include";
+  };
+
+  testMakeIncludePathWithEmptyList = {
+    expr = (makeIncludePath [ ]);
+    expected = "";
+  };
+
+  testMakeIncludePathWithOneString = {
+    expr = (makeIncludePath [ "/usr" ]);
+    expected = "/usr/include";
+  };
+
+  testMakeIncludePathWithManyString = {
+    expr = (makeIncludePath [ "/usr" "/usr/local" ]);
+    expected = "/usr/include:/usr/local/include";
   };
 
   testReplicateString = {

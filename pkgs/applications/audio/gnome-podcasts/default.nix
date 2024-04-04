@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Listen to your favorite podcasts";
+    mainProgram = "gnome-podcasts";
     homepage = "https://wiki.gnome.org/Apps/Podcasts";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;

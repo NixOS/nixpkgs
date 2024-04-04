@@ -19,6 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "mdbook preprocessor to run arbitrary commands";
+    mainProgram = "mdbook-cmdrun";
     homepage = "https://github.com/FauconFan/mdbook-cmdrun";
     license = licenses.mit;
     maintainers = with maintainers; [ pinpox ];

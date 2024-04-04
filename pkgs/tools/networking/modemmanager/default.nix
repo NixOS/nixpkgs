@@ -19,6 +19,7 @@
 , vala
 , gobject-introspection
 , dbus
+, bash
 }:
 
 stdenv.mkDerivation rec {
@@ -38,6 +39,8 @@ stdenv.mkDerivation rec {
     # But these are just placeholders so we do not need to install them at all.
     ./no-dummy-dirs-in-sysconfdir.patch
   ];
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     meson
@@ -61,6 +64,7 @@ stdenv.mkDerivation rec {
     systemd
     bash-completion
     dbus
+    bash # shebangs in share/ModemManager/fcc-unlock.available.d/
   ];
 
   nativeInstallCheckInputs = [

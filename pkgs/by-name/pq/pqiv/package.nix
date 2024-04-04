@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pqiv";
-  version = "2.13";
+  version = "2.13.1";
 
   src = fetchFromGitHub {
     owner = "phillipberndt";
     repo = "pqiv";
     rev = finalAttrs.version;
-    hash = "sha256-Jlc6sd9lRWUC1/2GZnJ0EmVRHxCXP8dTZNZEhJBS7oQ=";
+    hash = "sha256-Op+N4zzq7MazjFvx5VisjsRXbIqLtWPv4hdVjmS7lPY=";
   };
 
   nativeBuildInputs = [ pkg-config ];

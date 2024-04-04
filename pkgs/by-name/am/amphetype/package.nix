@@ -38,6 +38,7 @@ in python3Packages.buildPythonApplication {
 
   meta = with lib; {
     inherit description;
+    mainProgram = "amphetype";
     homepage = "https://gitlab.com/franksh/amphetype";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ rycee ];

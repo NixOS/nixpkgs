@@ -54,6 +54,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A GUI for Cargo";
+    mainProgram = "cargo-ui";
     homepage = "https://github.com/slint-ui/cargo-ui";
     changelog = "https://github.com/slint-ui/cargo-ui/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit asl20 gpl3Only ];

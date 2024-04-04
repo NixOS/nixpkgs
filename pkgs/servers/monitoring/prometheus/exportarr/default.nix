@@ -32,6 +32,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "AIO Prometheus Exporter for Sonarr, Radarr or Lidarr";
+    mainProgram = "exportarr";
     homepage = "https://github.com/onedr0p/exportarr";
     changelog = "https://github.com/onedr0p/exportarr/releases/tag/${src.rev}";
     license = licenses.mit;

@@ -79,6 +79,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Native Spotify client for the GNOME desktop";
+    mainProgram = "spot";
     homepage = "https://github.com/xou816/spot";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

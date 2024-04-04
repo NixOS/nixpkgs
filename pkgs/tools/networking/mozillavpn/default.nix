@@ -16,6 +16,7 @@
 , qtnetworkauth
 , qtsvg
 , qttools
+, qtwayland
 , qtwebsockets
 , rustPlatform
 , rustc
@@ -74,6 +75,7 @@ stdenv.mkDerivation {
     qtbase
     qtnetworkauth
     qtsvg
+    qtwayland
     qtwebsockets
   ];
   nativeBuildInputs = [
@@ -147,6 +149,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Client for the Mozilla VPN service";
+    mainProgram = "mozillavpn";
     homepage = "https://vpn.mozilla.org/";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ andersk ];

@@ -1,28 +1,43 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , llama-index-core
 , poetry-core
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-embeddings-openai";
-
-  inherit (llama-index-core) version src meta;
-
+  version = "0.1.7";
   pyproject = true;
 
-  sourceRoot = "${src.name}/llama-index-integrations/embeddings/${pname}";
+  disabled = pythonOlder "3.8";
 
-  nativeBuildInputs = [
+  src = fetchPypi {
+    pname = "llama_index_embeddings_openai";
+    inherit version;
+    hash = "sha256-xxzJggaAxM7fyYRdyHuU9oUdHMzh5Ib8kSmPj6jZ8n0=";
+  };
+
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     llama-index-core
   ];
+
+  # Tests are only available in the mono repo
+  doCheck = false;
 
   pythonImportsCheck = [
     "llama_index.embeddings.openai"
   ];
+
+  meta = with lib; {
+    description = "LlamaIndex Embeddings Integration for OpenAI";
+    homepage = "https://github.com/run-llama/llama_index/tree/main/llama-index-integrations/readers/llama-index-readers-s3";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+  };
 }

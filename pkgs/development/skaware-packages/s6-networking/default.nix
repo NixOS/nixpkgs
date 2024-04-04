@@ -1,11 +1,10 @@
-{ lib, skawarePackages
+{ lib, skawarePackages, skalibs, execline, s6, s6-dns
 
 # Whether to build the TLS/SSL tools and what library to use
 # acceptable values: "bearssl", "libressl", false
 , sslSupport ? "bearssl" , libressl, bearssl
 }:
 
-with skawarePackages;
 let
   sslSupportEnabled = sslSupport != false;
   sslLibs = {
@@ -17,10 +16,18 @@ in
 assert sslSupportEnabled -> sslLibs ? ${sslSupport};
 
 
-buildPackage {
+skawarePackages.buildPackage {
   pname = "s6-networking";
   version = "2.7.0.2";
   sha256 = "wzxvGyvhb4miGvlGz9BiQqEvmBhMiYt1XdskM4ZxzrE=";
+
+  manpages = skawarePackages.buildManPages {
+    pname = "s6-networking-man-pages";
+    version = "2.5.1.3.3";
+    sha256 = "02ba5jyfpbib402mfl42pbbdxyjy2vhpiz1b2qdg4ax58yr4jzqk";
+    description = "Port of the documentation for the s6-networking suite to mdoc";
+    maintainers = [ lib.maintainers.sternenseemann ];
+  };
 
   description = "A suite of small networking utilities for Unix systems";
 

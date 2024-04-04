@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Experimental pxtone editor where you can collaborate with friends";
+    mainProgram = "ptcollab";
     homepage = "https://yuxshao.github.io/ptcollab/";
     changelog = "https://github.com/yuxshao/ptcollab/releases/tag/v${finalAttrs.version}";
     license = licenses.mit;

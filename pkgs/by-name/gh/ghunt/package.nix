@@ -49,6 +49,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Offensive Google framework";
+    mainProgram = "ghunt";
     homepage = "https://github.com/mxrch/ghunt";
     changelog = "https://github.com/mxrch/GHunt/releases/tag/v${version}";
     license = licenses.agpl3Only;

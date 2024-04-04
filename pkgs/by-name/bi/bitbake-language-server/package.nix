@@ -30,6 +30,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Language server for bitbake";
+    mainProgram = "bitbake-language-server";
     homepage = "https://github.com/Freed-Wu/bitbake-language-server";
     changelog = "https://github.com/Freed-Wu/bitbake-language-server/releases/tag/v${version}";
     license = licenses.gpl3;

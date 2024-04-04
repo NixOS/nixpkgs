@@ -41,6 +41,7 @@ buildGoModule rec {
     homepage = "https://github.com/life4/enc";
     changelog = "https://github.com/life4/enc/releases/tag/v${version}";
     description = "A modern and friendly alternative to GnuPG";
+    mainProgram = "enc";
     longDescription = ''
       Enc is a CLI tool for encryption, a modern and friendly alternative to GnuPG.
       It is easy to use, secure by default and can encrypt and decrypt files using password or encryption keys,

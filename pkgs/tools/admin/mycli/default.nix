@@ -57,6 +57,7 @@ buildPythonApplication rec {
   meta = with lib; {
     inherit version;
     description = "Command-line interface for MySQL";
+    mainProgram = "mycli";
     longDescription = ''
       Rich command-line interface for MySQL with auto-completion and
       syntax highlighting.

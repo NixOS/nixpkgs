@@ -60,6 +60,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "A collection of more than 1000 solitaire card games";
+    mainProgram = "pysol.py";
     homepage = "https://pysolfc.sourceforge.io";
     license = licenses.gpl3;
     maintainers = with maintainers; [ kierdavis ];

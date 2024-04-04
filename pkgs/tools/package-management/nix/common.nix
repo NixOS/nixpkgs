@@ -20,6 +20,7 @@ let
   # Major.minor versions unaffected by CVE-2024-27297
   unaffectedByFodSandboxEscape = [
     "2.3"
+    "2.16"
     "2.18"
     "2.19"
     "2.20"
@@ -42,6 +43,7 @@ in
 , docbook5
 , editline
 , flex
+, git
 , gnutar
 , gtest
 , gzip
@@ -54,6 +56,7 @@ in
 , libxml2
 , libxslt
 , lowdown
+, man
 , mdbook
 , mdbook-linkcheck
 , nlohmann_json
@@ -140,6 +143,11 @@ self = stdenv.mkDerivation {
     libseccomp
   ] ++ lib.optionals withAWS [
     aws-sdk-cpp
+  ];
+
+  installCheckInputs = lib.optionals atLeast221 [
+    git
+    man
   ];
 
   propagatedBuildInputs = [

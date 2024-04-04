@@ -12,8 +12,10 @@
 , rustc
 , rustPlatform
 , rust-bindgen
+, nixosTests
+}:
 
-, # The kernel source tarball.
+lib.makeOverridable ({ # The kernel source tarball.
   src
 
 , # The kernel version.
@@ -66,7 +68,6 @@
 , preferBuiltin ? stdenv.hostPlatform.linux-kernel.preferBuiltin or false
 , kernelArch ? stdenv.hostPlatform.linuxArch
 , kernelTests ? []
-, nixosTests
 , ...
 }@args:
 
@@ -239,4 +240,4 @@ kernel.overrideAttrs (finalAttrs: previousAttrs: {
     in [ (nixosTests.kernel-generic.passthru.testsForKernel overridableKernel) ] ++ kernelTests;
   };
 
-})
+}))

@@ -2,7 +2,7 @@
 let
   inherit (lib) maintainers;
   inherit (lib.meta) getExe;
-  inherit (lib.modules) mkIf;
+  inherit (lib.modules) mkIf mkMerge;
   inherit (lib.options) literalExpression mkEnableOption mkOption mkPackageOption;
   inherit (lib.types) bool enum nullOr port str submodule;
 
@@ -156,43 +156,47 @@ in
     };
   };
 
-  config = mkIf (cfg.enable || cfg.collector.enable) {
-    services.influxdb2.enable = cfg.influxdb.enable;
+  config = mkMerge [
+    (mkIf cfg.enable {
+      services.influxdb2.enable = cfg.influxdb.enable;
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.settings.web.listen.port ];
-    };
+      networking.firewall = mkIf cfg.openFirewall {
+        allowedTCPPorts = [ cfg.settings.web.listen.port ];
+      };
 
-    services.smartd = mkIf cfg.collector.enable {
-      enable = true;
-      extraOptions = [
-        "-A /var/log/smartd/"
-        "--interval=600"
-      ];
-    };
-
-    systemd = {
-      services = {
-        scrutiny = mkIf cfg.enable {
-          description = "Hard Drive S.M.A.R.T Monitoring, Historical Trends & Real World Failure Thresholds";
-          wantedBy = [ "multi-user.target" ];
-          after = [ "network.target" ];
-          environment = {
-            SCRUTINY_VERSION = "1";
-            SCRUTINY_WEB_DATABASE_LOCATION = "/var/lib/scrutiny/scrutiny.db";
-            SCRUTINY_WEB_SRC_FRONTEND_PATH = "${cfg.package}/share/scrutiny";
-          };
-          serviceConfig = {
-            DynamicUser = true;
-            ExecStart = "${getExe cfg.package} start --config ${settingsFormat.generate "scrutiny.yaml" cfg.settings}";
-            Restart = "always";
-            StateDirectory = "scrutiny";
-            StateDirectoryMode = "0750";
-          };
+      systemd.services.scrutiny = {
+        description = "Hard Drive S.M.A.R.T Monitoring, Historical Trends & Real World Failure Thresholds";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ] ++ lib.optional cfg.influxdb.enable "influxdb2.service";
+        wants = lib.optional cfg.influxdb.enable "influxdb2.service";
+        environment = {
+          SCRUTINY_VERSION = "1";
+          SCRUTINY_WEB_DATABASE_LOCATION = "/var/lib/scrutiny/scrutiny.db";
+          SCRUTINY_WEB_SRC_FRONTEND_PATH = "${cfg.package}/share/scrutiny";
         };
+        serviceConfig = {
+          DynamicUser = true;
+          ExecStart = "${getExe cfg.package} start --config ${settingsFormat.generate "scrutiny.yaml" cfg.settings}";
+          Restart = "always";
+          StateDirectory = "scrutiny";
+          StateDirectoryMode = "0750";
+        };
+      };
+    })
+    (mkIf cfg.collector.enable {
+      services.smartd = {
+        enable = true;
+        extraOptions = [
+          "-A /var/log/smartd/"
+          "--interval=600"
+        ];
+      };
 
-        scrutiny-collector = mkIf cfg.collector.enable {
+      systemd = {
+        services.scrutiny-collector = {
           description = "Scrutiny Collector Service";
+          after = lib.optional cfg.enable "scrutiny.service";
+          wants = lib.optional cfg.enable "scrutiny.service";
           environment = {
             COLLECTOR_VERSION = "1";
             COLLECTOR_API_ENDPOINT = cfg.collector.settings.api.endpoint;
@@ -201,20 +205,13 @@ in
             Type = "oneshot";
             ExecStart = "${getExe cfg.collector.package} run --config ${settingsFormat.generate "scrutiny-collector.yaml" cfg.collector.settings}";
           };
+          startAt = cfg.collector.schedule;
         };
-      };
 
-      timers = mkIf cfg.collector.enable {
-        scrutiny-collector = {
-          timerConfig = {
-            OnCalendar = cfg.collector.schedule;
-            Persistent = true;
-            Unit = "scrutiny-collector.service";
-          };
-        };
+        timers.scrutiny-collector.timerConfig.Persistent = true;
       };
-    };
-  };
+    })
+  ];
 
   meta.maintainers = [ maintainers.jnsgruk ];
 }

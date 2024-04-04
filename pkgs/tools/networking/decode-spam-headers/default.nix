@@ -37,6 +37,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/mgeeky/decode-spam-headers/";
     description = "A script that helps you understand why your E-Mail ended up in Spam";
+    mainProgram = "decode-spam-headers";
     longDescription = ''
       Whether you are trying to understand why a specific e-mail ended up in
       SPAM/Junk for your daily Administrative duties or for your Red-Team

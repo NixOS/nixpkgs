@@ -31,6 +31,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A code coverage tool for Rust projects";
+    mainProgram = "cargo-tarpaulin";
     homepage = "https://github.com/xd009642/tarpaulin";
     changelog = "https://github.com/xd009642/tarpaulin/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ mit /* or */ asl20 ];

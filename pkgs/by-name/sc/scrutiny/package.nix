@@ -3,16 +3,17 @@
 , fetchFromGitHub
 , nixosTests
 , lib
+, nix-update-script
 }:
 let
   pname = "scrutiny";
-  version = "0.7.3";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "AnalogJ";
     repo = "scrutiny";
     rev = "refs/tags/v${version}";
-    hash = "sha256-S7GW8z6EWB+5vntKew0+EDVqhun+Ae2//15dSIlfoSs=";
+    hash = "sha256-ysjE2nn1WwhEiFIvJ5cRCJQf9mECTgiGUyenwf3mKTA=";
   };
 
   frontend = buildNpmPackage {
@@ -35,6 +36,8 @@ let
       cp -r dist/* $out
       runHook postInstall
     '';
+
+    passthru.updatescript = nix-update-script { };
   };
 in
 buildGoModule rec {
@@ -56,6 +59,7 @@ buildGoModule rec {
   '';
 
   passthru.tests.scrutiny = nixosTests.scrutiny;
+  passthru.updatescript = nix-update-script { };
 
   meta = {
     description = "Hard Drive S.M.A.R.T Monitoring, Historical Trends & Real World Failure Thresholds.";

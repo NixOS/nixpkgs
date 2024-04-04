@@ -39,15 +39,17 @@ let
     ];
 
     postFixup = ''
-      mkdir -p $out/share
+      mkdir -p $out/share/{adapter,formatters}
       # codelldb expects libcodelldb.so to be in the same
       # directory as the executable, and can't find it in $out/lib.
       # To make codelldb executable as a standalone,
       # we put all files in $out/share, and then wrap the binary in $out/bin.
-      mv $out/bin/* $out/share
-      cp $out/lib/* $out/share
-      ln -s ${lldb.lib} $out/lldb
-      makeWrapper $out/share/codelldb $out/bin/codelldb \
+      mv $out/bin/* $out/share/adapter
+      cp $out/lib/* $out/share/adapter
+      cp -r adapter/scripts $out/share/adapter
+      cp -t $out/share/formatters formatters/*.py
+      ln -s ${lldb.lib} $out/share/lldb
+      makeWrapper $out/share/adapter/codelldb $out/bin/codelldb \
         --set-default LLDB_DEBUGSERVER_PATH "${lldb.out}/bin/lldb-server"
     '';
 
@@ -125,12 +127,9 @@ in stdenv.mkDerivation {
 
     mkdir -p $ext/{adapter,formatters}
     mv -t $ext vsix-extracted/extension/*
-    cp -t $ext/adapter ${adapter}/share/*
-    cp -r ../adapter/scripts $ext/adapter
+    cp -t $ext/ -r ${adapter}/share/*
     wrapProgram $ext/adapter/codelldb \
       --set-default LLDB_DEBUGSERVER_PATH "${lldb.out}/bin/lldb-server"
-    cp -t $ext/formatters ../formatters/*.py
-    ln -s ${lldb.lib} $ext/lldb
     # Mark that all components are installed.
     touch $ext/platform.ok
 

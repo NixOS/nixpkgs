@@ -101,6 +101,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Template tool for putting up the scaffold of a Python project";
+    mainProgram = "putup";
     homepage = "https://pypi.org/project/PyScaffold/";
     license = licenses.mit;
     maintainers = with maintainers; [ matthewcroughan ];

@@ -93,6 +93,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/Toblerity/Fiona/blob/${src.rev}/CHANGES.txt";
     description = "OGR's neat, nimble, no-nonsense API for Python";
+    mainProgram = "fio";
     homepage = "https://fiona.readthedocs.io/";
     license = licenses.bsd3;
     maintainers = teams.geospatial.members;

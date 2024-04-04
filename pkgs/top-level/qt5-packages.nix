@@ -251,7 +251,9 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   qtstyleplugins = callPackage ../development/libraries/qtstyleplugins { };
 
-  qtstyleplugin-kvantum = callPackage ../development/libraries/qtstyleplugin-kvantum { };
+  qtstyleplugin-kvantum = callPackage ../development/libraries/qtstyleplugin-kvantum {
+    qt6Kvantum = pkgs.qt6Packages.qtstyleplugin-kvantum;
+  };
 
   quazip = callPackage ../development/libraries/quazip { };
 
@@ -268,6 +270,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
   qzxing = callPackage ../development/libraries/qzxing { };
 
   rlottie-qml = callPackage ../development/libraries/rlottie-qml { };
+
+  sierra-breeze-enhanced = callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced { useQt5 = true; };
 
   soqt = callPackage ../development/libraries/soqt { };
 

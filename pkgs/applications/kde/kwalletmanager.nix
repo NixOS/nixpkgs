@@ -17,6 +17,7 @@ mkDerivation {
     homepage = "https://apps.kde.org/kwalletmanager5/";
 
     description = "KDE wallet management tool";
+    mainProgram = "kwalletmanager5";
     license = with lib.licenses; [ gpl2 ];
     maintainers = with lib.maintainers; [ fridh ];
   };

@@ -36,6 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module to communicate with Telldus Live";
+    mainProgram = "tellduslive";
     homepage = "https://github.com/molobrakos/tellduslive";
     license = with licenses; [ unlicense ];
     maintainers = with maintainers; [ fab ];

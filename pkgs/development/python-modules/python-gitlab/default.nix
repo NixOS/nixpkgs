@@ -52,6 +52,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Interact with GitLab API";
+    mainProgram = "gitlab";
     homepage = "https://github.com/python-gitlab/python-gitlab";
     changelog = "https://github.com/python-gitlab/python-gitlab/blob/v${version}/CHANGELOG.md";
     license = licenses.lgpl3Only;

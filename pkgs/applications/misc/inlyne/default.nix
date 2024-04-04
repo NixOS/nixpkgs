@@ -6,6 +6,8 @@
 , pkg-config
 , fontconfig
 , xorg
+, libxkbcommon
+, wayland
 , libGL
 , openssl
 , darwin
@@ -13,16 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "inlyne";
-  version = "0.3.2";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "trimental";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-DSi6iS1ySdvGf6FxZpsDOAFpAKx/APcZjxA3Qy0gQBU=";
+    hash = "sha256-kZQREYnauR8xusyX6enBPUKHSe39aBLlrZjKEjJlfx0=";
   };
 
-  cargoHash = "sha256-UzegSJGAOBUDN8WluN7fLWS7NfHhm9YY0Zuq6DCIqHo=";
+  cargoHash = "sha256-2mQFr2nLJ/iBLpdOUmerY6F2C8Kt+/vMEjS6THpmJic=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -36,6 +38,8 @@ rustPlatform.buildRustPackage rec {
     xorg.libXi
     xorg.libXrandr
     xorg.libxcb
+    wayland
+    libxkbcommon
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk_11_0.frameworks.AppKit

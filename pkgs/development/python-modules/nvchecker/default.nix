@@ -14,6 +14,9 @@
 , structlog
 , tomli
 , tornado
+, awesomeversion
+, packaging
+, lxml
 }:
 
 buildPythonPackage rec {
@@ -70,6 +73,13 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     "-m 'not needs_net'"
   ];
+
+  optional-dependencies = {
+    # vercmp = [ pyalpm ];
+    awesomeversion = [ awesomeversion ];
+    pypi = [ packaging ];
+    htmlparser = [ lxml ];
+  };
 
   meta = with lib; {
     description = "New version checker for software";

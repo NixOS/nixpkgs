@@ -56,6 +56,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Graph plotting app for GNOME";
+    mainProgram = "plots";
     longDescription = ''
       Plots is a graph plotting app for GNOME.
       Plots makes it easy to visualise mathematical formulae.

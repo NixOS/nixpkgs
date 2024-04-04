@@ -44,6 +44,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Create standard barcodes with Python";
+    mainProgram = "python-barcode";
     homepage = "https://github.com/WhyNotHugo/python-barcode";
     changelog = "https://github.com/WhyNotHugo/python-barcode/blob/v${version}/docs/changelog.rst";
     license = licenses.mit;

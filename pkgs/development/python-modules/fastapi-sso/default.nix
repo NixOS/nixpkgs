@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "fastapi-sso";
-  version = "0.12.1";
+  version = "0.13.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,18 +25,18 @@ buildPythonPackage rec {
     owner = "tomasvotava";
     repo = "fastapi-sso";
     rev = "refs/tags/${version}";
-    hash = "sha256-/Mt0pmZYsWp/n9YHCy/bFKUPzmoRFB0cHKCNxEfxMLs=";
+    hash = "sha256-gblxjunXNerbC+7IYkGrO/PJak0MCoxdmWfo7iVeV7g=";
   };
 
   postPatch = ''
     sed -i "/--cov/d" pyproject.toml
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     fastapi
     httpx
     oauthlib

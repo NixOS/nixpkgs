@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fast light-weight MQTT broker/server";
+    mainProgram = "flashmq";
     homepage = "https://www.flashmq.org/";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ sikmir ];

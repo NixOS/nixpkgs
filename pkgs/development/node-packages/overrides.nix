@@ -112,7 +112,7 @@ final: prev: {
     meta = oldAttrs.meta // { license = lib.licenses.unfree; };
   });
 
-  joplin = prev.joplin.override {
+  joplin = prev.joplin.override (oldAttrs:{
     nativeBuildInputs = [
       pkgs.pkg-config
     ] ++ lib.optionals stdenv.isDarwin [
@@ -134,7 +134,21 @@ final: prev: {
       darwin.apple_sdk.frameworks.AppKit
       darwin.apple_sdk.frameworks.Security
     ];
-  };
+
+    # add newer node-addon-api to build sharp
+    # https://github.com/lovell/sharp/issues/3920
+    dependencies = [
+      {
+        name = "node-addon-api";
+        packageName = "node-addon-api";
+        version = "7.1.0";
+        src = fetchurl {
+          url = "https://registry.npmjs.org/node-addon-api/-/node-addon-api-7.1.0.tgz";
+          sha512 = "mNcltoe1R8o7STTegSOHdnJNN7s5EUvhoS7ShnTHDyOSd+8H+UdWODq6qSv67PjC8Zc5JRT8+oLAMCr0SIXw7g==";
+        };
+      }
+    ] ++ oldAttrs.dependencies;
+  });
 
   jsonplaceholder = prev.jsonplaceholder.override {
     buildInputs = [ nodejs ];
@@ -424,44 +438,45 @@ final: prev: {
 
   wrangler = prev.wrangler.override (oldAttrs:
     let
+      workerdVersion = (lib.findFirst (dep: dep.name == "workerd") null oldAttrs.dependencies).version;
       linuxWorkerd = {
         name = "_at_cloudflare_slash_workerd-linux-64";
         packageName = "@cloudflare/workerd-linux-64";
         # Should be same version as workerd
-        version = "1.20240129.0";
+        version = workerdVersion;
         src = fetchurl {
-          url = "https://registry.npmjs.org/@cloudflare/workerd-linux-64/-/workerd-linux-64-1.20240129.0.tgz";
-          sha512 = "sFV1uobHgDI+6CKBS/ZshQvOvajgwl6BtiYaH4PSFSpvXTmRx+A9bcug+6BnD+V4WgwxTiEO2iR97E1XuwDAVw==";
+          url = "https://registry.npmjs.org/@cloudflare/workerd-linux-64/-/workerd-linux-64-${workerdVersion}.tgz";
+          sha512 = "G1BEzbw9TFIeMvc425F145IetC7fuH4KOkGhseLq9y/mt5PfDWkghwmXSK+q0BiMwm0XAobtzVlHcEr2u4WlRQ==";
         };
       };
       linuxWorkerdArm = {
         name = "_at_cloudflare_slash_workerd-linux-arm64";
         packageName = "@cloudflare/workerd-linux-arm64";
         # Should be same version as workerd
-        version = "1.20240129.0";
+        version = workerdVersion;
         src = fetchurl {
-          url = "https://registry.npmjs.org/@cloudflare/workerd-linux-arm64/-/workerd-linux-arm64-1.20240129.0.tgz";
-          sha512 = "O7q7htHaFRp8PgTqNJx1/fYc3+LnvAo6kWWB9a14C5OWak6AAZk42PNpKPx+DXTmGvI+8S1+futBGUeJ8NPDXg==";
+          url = "https://registry.npmjs.org/@cloudflare/workerd-linux-arm64/-/workerd-linux-arm64-${workerdVersion}.tgz";
+          sha512 = "LLk/d/y77TRu6QOG3CJUI2cD3Ff2lSg0ts6G83bsm9ZK+WKObWFFSPBy9l81m3EnlKFh7RZCzxN4J10kuDaO8w==";
         };
       };
       darwinWorkerd = {
         name = "_at_cloudflare_slash_workerd-darwin-64";
         packageName = "@cloudflare/workerd-darwin-64";
         # Should be same version as workerd
-        version = "1.20240129.0";
+        version = workerdVersion;
         src = fetchurl {
-          url = "https://registry.npmjs.org/@cloudflare/workerd-darwin-64/-/workerd-darwin-64-1.20240129.0.tgz";
-          sha512 = "DfVVB5IsQLVcWPJwV019vY3nEtU88c2Qu2ST5SQxqcGivZ52imagLRK0RHCIP8PK4piSiq90qUC6ybppUsw8eg==";
+          url = "https://registry.npmjs.org/@cloudflare/workerd-darwin-64/-/workerd-darwin-64-${workerdVersion}.tgz";
+          sha512 = "rfHlvsWzkqEEQNvm14AOE/BYHYzB9wxQHCaZZEgwOuTl5KpDcs9La0N0LaDTR78ESumIWOcifVmko2VTrZb7TQ==";
         };
       };
       darwinWorkerdArm = {
         name = "_at_cloudflare_slash_workerd-darwin-arm64";
         packageName = "@cloudflare/workerd-darwin-arm64";
         # Should be same version as workerd
-        version = "1.20240129.0";
+        version = workerdVersion;
         src = fetchurl {
-          url = "https://registry.npmjs.org/@cloudflare/workerd-darwin-arm64/-/workerd-darwin-arm64-1.20240129.0.tgz";
-          sha512 = "t0q8ABkmumG1zRM/MZ/vIv/Ysx0vTAXnQAPy/JW5aeQi/tqrypXkO9/NhPc0jbF/g/hIPrWEqpDgEp3CB7Da7Q==";
+          url = "https://registry.npmjs.org/@cloudflare/workerd-darwin-arm64/-/workerd-darwin-arm64-${workerdVersion}.tgz";
+          sha512 = "IXGOxHsPdRYfAzcY6IroI1PDvx3hhXf18qFCloHp8Iw5bzLgq/PTjcp10Z/2xedZ2hVlfpHy1eEptsTmi9YeNw==";
         };
       };
 

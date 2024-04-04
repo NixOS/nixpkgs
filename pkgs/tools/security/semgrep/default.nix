@@ -27,14 +27,6 @@ buildPythonApplication rec {
     hash = common.srcHash;
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-test_dump_engine-test-for-nix-store-path.patch";
-      url = "https://github.com/semgrep/semgrep/commit/c7553c1a61251146773617f80a2d360e6b6ab3f9.patch";
-      hash = "sha256-A3QdL0DDh/pbDpRIBACUie7PEvC17iG4t6qTnmPIwA4=";
-    })
-  ];
-
   # prepare a subset of the submodules as we only need a handful
   # and there are many many submodules total
   postPatch = (lib.concatStringsSep "\n" (lib.mapAttrsToList
@@ -94,6 +86,12 @@ buildPythonApplication rec {
     types-freezegun
   ]);
 
+  disabledTestPaths = [
+    "tests/default/e2e"
+    "tests/default/e2e-pro"
+    "tests/default/e2e-pysemgrep"
+  ];
+
   disabledTests = [
     # requires networking
     "test_send"
@@ -117,14 +115,6 @@ buildPythonApplication rec {
     # replace old semgrep with wrapped one
     rm ./bin/semgrep
     ln -s $out/bin/semgrep ./bin/semgrep
-
-    # disabledTestPaths doesn't manage to avoid the e2e tests
-    # remove them from pyproject.toml
-    # and remove need for pytest-split
-    substituteInPlace pyproject.toml \
-      --replace '"tests/e2e",' "" \
-      --replace '"tests/e2e-pro",' "" \
-      --replace 'addopts = "--splitting-algorithm=least_duration"' ""
   '';
 
   postCheck = ''

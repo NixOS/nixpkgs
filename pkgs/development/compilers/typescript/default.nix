@@ -2,20 +2,20 @@
 
 buildNpmPackage rec {
   pname = "typescript";
-  version = "5.4.2";
+  version = "5.4.3";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "TypeScript";
     rev = "v${version}";
-    hash = "sha256-/iB9TEgXqiIsGSRrcADAv8UCjoOdmcyVFGj8EBccQl0=";
+    hash = "sha256-yB87R6LyuTbSbQOcRi+QOhrnUy+ra76PiCzsEvPx3ds=";
   };
 
   patches = [
     ./disable-dprint-dstBundler.patch
   ];
 
-  npmDepsHash = "sha256-UDyPWbr3FcPRHOtkVTIKXQwN5k02qlhRMbgylkWTrQI=";
+  npmDepsHash = "sha256-XlXDof0yFxEpNCZN+4ZY2BVgpbAkwdAUJcTRxIXi8eQ=";
 
   passthru.tests = {
     version = testers.testVersion {

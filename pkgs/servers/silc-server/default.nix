@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://silcnet.org/";
     description = "Secure Internet Live Conferencing server";
+    mainProgram = "silcd";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [viric];
     platforms = with lib.platforms; linux;

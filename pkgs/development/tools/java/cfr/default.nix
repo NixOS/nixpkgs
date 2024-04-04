@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Another java decompiler";
+    mainProgram = "cfr";
     longDescription = ''
       CFR will decompile modern Java features - Java 8 lambdas (pre and post
       Java beta 103 changes), Java 7 String switches etc, but is written

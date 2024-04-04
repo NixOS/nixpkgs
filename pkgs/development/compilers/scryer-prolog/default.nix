@@ -30,6 +30,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "A modern Prolog implementation written mostly in Rust";
+    mainProgram = "scryer-prolog";
     homepage = "https://github.com/mthom/scryer-prolog";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ malbarbo wkral ];

@@ -6,7 +6,7 @@
 , jre
 , makeWrapper
 , copyDesktopItems
-, canonicalize-jars-hook
+, stripJavaArchivesHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     jdk
     makeWrapper
     copyDesktopItems
-    canonicalize-jars-hook
+    stripJavaArchivesHook
   ];
 
   buildPhase = ''

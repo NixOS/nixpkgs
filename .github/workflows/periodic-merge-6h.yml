@@ -39,7 +39,7 @@ jobs:
             into: staging
     name: ${{ matrix.pairs.from }} → ${{ matrix.pairs.into }}
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
 
       - name: ${{ matrix.pairs.from }} → ${{ matrix.pairs.into }}
         uses: devmasx/merge-branch@854d3ac71ed1e9deb668e0074781b81fdd6e771f # 1.4.0

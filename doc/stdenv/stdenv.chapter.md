@@ -36,7 +36,7 @@ Many packages have dependencies that are not provided in the standard environmen
 stdenv.mkDerivation {
   pname = "libfoo";
   version = "1.2.3";
-  ...
+  # ...
   buildInputs = [libbar perl ncurses];
 }
 ```
@@ -49,7 +49,7 @@ Often it is necessary to override or modify some aspect of the build. To make th
 stdenv.mkDerivation {
   pname = "fnord";
   version = "4.5";
-  ...
+  # ...
   buildPhase = ''
     gcc foo.c -o foo
   '';
@@ -70,7 +70,7 @@ While the standard environment provides a generic builder, you can still supply 
 stdenv.mkDerivation {
   pname = "libfoo";
   version = "1.2.3";
-  ...
+  # ...
   builder = ./builder.sh;
 }
 ```
@@ -449,11 +449,13 @@ Unless set to `false`, some build systems with good support for parallel buildin
 This is an attribute set which can be filled with arbitrary values. For example:
 
 ```nix
-passthru = {
-  foo = "bar";
-  baz = {
-    value1 = 4;
-    value2 = 5;
+{
+  passthru = {
+    foo = "bar";
+    baz = {
+      value1 = 4;
+      value2 = 5;
+    };
   };
 }
 ```
@@ -467,27 +469,33 @@ A script to be run by `maintainers/scripts/update.nix` when the package is match
 - []{#var-passthru-updateScript-command} an executable file, either on the file system:
 
   ```nix
-  passthru.updateScript = ./update.sh;
+  {
+    passthru.updateScript = ./update.sh;
+  }
   ```
 
   or inside the expression itself:
 
   ```nix
-  passthru.updateScript = writeScript "update-zoom-us" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl pcre2 common-updater-scripts
+  {
+    passthru.updateScript = writeScript "update-zoom-us" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
-    set -eu -o pipefail
+      set -eu -o pipefail
 
-    version="$(curl -sI https://zoom.us/client/latest/zoom_x86_64.tar.xz | grep -Fi 'Location:' | pcre2grep -o1 '/(([0-9]\.?)+)/')"
-    update-source-version zoom-us "$version"
-  '';
+      version="$(curl -sI https://zoom.us/client/latest/zoom_x86_64.tar.xz | grep -Fi 'Location:' | pcre2grep -o1 '/(([0-9]\.?)+)/')"
+      update-source-version zoom-us "$version"
+    '';
+  }
   ```
 
 - a list, a script followed by arguments to be passed to it:
 
   ```nix
-  passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ];
+  {
+    passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ];
+  }
   ```
 
 - an attribute set containing:
@@ -496,18 +504,22 @@ A script to be run by `maintainers/scripts/update.nix` when the package is match
   - [`supportedFeatures`]{#var-passthru-updateScript-set-supportedFeatures} (optional) – a list of the [extra features](#var-passthru-updateScript-supported-features) the script supports.
 
   ```nix
-  passthru.updateScript = {
-    command = [ ../../update.sh pname ];
-    attrPath = pname;
-    supportedFeatures = [ … ];
-  };
+  {
+    passthru.updateScript = {
+      command = [ ../../update.sh pname ];
+      attrPath = pname;
+      supportedFeatures = [ /* ... */ ];
+    };
+  }
   ```
 
 ::: {.tip}
 A common pattern is to use the [`nix-update-script`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/common-updater/nix-update.nix) attribute provided in Nixpkgs, which runs [`nix-update`](https://github.com/Mic92/nix-update):
 
 ```nix
-passthru.updateScript = nix-update-script { };
+{
+  passthru.updateScript = nix-update-script { };
+}
 ```
 
 For simple packages, this is often enough, and will ensure that the package is updated automatically by [`nixpkgs-update`](https://ryantm.github.io/nixpkgs-update) when a new version is released. The [update bot](https://nix-community.org/update-bot) runs periodically to attempt to automatically update packages, and will run `passthru.updateScript` if set. While not strictly necessary if the project is listed on [Repology](https://repology.org), using `nix-update-script` allows the package to update via many more sources (e.g. GitHub releases).
@@ -846,7 +858,9 @@ The file name of the Makefile.
 A list of strings passed as additional flags to `make`. These flags are also used by the default install and check phase. For setting make flags specific to the build phase, use `buildFlags` (see below).
 
 ```nix
-makeFlags = [ "PREFIX=$(out)" ];
+{
+  makeFlags = [ "PREFIX=$(out)" ];
+}
 ```
 
 ::: {.note}
@@ -858,9 +872,11 @@ The flags are quoted in bash, but environment variables can be specified by usin
 A shell array containing additional arguments passed to `make`. You must use this instead of `makeFlags` if the arguments contain spaces, e.g.
 
 ```nix
-preBuild = ''
-  makeFlagsArray+=(CFLAGS="-O0 -g" LDFLAGS="-lfoo -lbar")
-'';
+{
+  preBuild = ''
+    makeFlagsArray+=(CFLAGS="-O0 -g" LDFLAGS="-lfoo -lbar")
+  '';
+}
 ```
 
 Note that shell arrays cannot be passed through environment variables, so you cannot set `makeFlagsArray` in a derivation attribute (because those are passed through environment variables): you have to define them in shell code.
@@ -892,7 +908,9 @@ The check phase checks whether the package was built correctly by running its te
 Controls whether the check phase is executed. By default it is skipped, but if `doCheck` is set to true, the check phase is usually executed. Thus you should set
 
 ```nix
-doCheck = true;
+{
+  doCheck = true;
+}
 ```
 
 in the derivation to enable checks. The exception is cross compilation. Cross compiled builds never run tests, no matter how `doCheck` is set, as the newly-built program won’t run on the platform used to build it.
@@ -945,7 +963,9 @@ See the [build phase](#var-stdenv-makeFlags) for details.
 The make targets that perform the installation. Defaults to `install`. Example:
 
 ```nix
-installTargets = "install-bin install-doc";
+{
+  installTargets = "install-bin install-doc";
+}
 ```
 
 ##### `installFlags` / `installFlagsArray` {#var-stdenv-installFlags}
@@ -1024,7 +1044,7 @@ This example prevents all `*.rlib` files from being stripped:
 ```nix
 stdenv.mkDerivation {
   # ...
-  stripExclude = [ "*.rlib" ]
+  stripExclude = [ "*.rlib" ];
 }
 ```
 
@@ -1033,7 +1053,7 @@ This example prevents files within certain paths from being stripped:
 ```nix
 stdenv.mkDerivation {
   # ...
-  stripExclude = [ "lib/modules/*/build/* ]
+  stripExclude = [ "lib/modules/*/build/*" ];
 }
 ```
 
@@ -1134,7 +1154,9 @@ It is often better to add tests that are not part of the source distribution to 
 Controls whether the installCheck phase is executed. By default it is skipped, but if `doInstallCheck` is set to true, the installCheck phase is usually executed. Thus you should set
 
 ```nix
-doInstallCheck = true;
+{
+  doInstallCheck = true;
+}
 ```
 
 in the derivation to enable install checks. The exception is cross compilation. Cross compiled builds never run tests, no matter how `doInstallCheck` is set, as the newly-built program won’t run on the platform used to build it.
@@ -1244,9 +1266,11 @@ To use this, add `removeReferencesTo` to `nativeBuildInputs`.
 As `remove-references-to` is an actual executable and not a shell function, it can be used with `find`.
 Example removing all references to the compiler in the output:
 ```nix
-postInstall = ''
-  find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
-'';
+{
+  postInstall = ''
+    find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
+  '';
+}
 ```
 
 ### `substitute` \<infile\> \<outfile\> \<subs\> {#fun-substitute}

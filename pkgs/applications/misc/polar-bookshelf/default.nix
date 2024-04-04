@@ -122,6 +122,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://getpolarized.io/";
     description = "Personal knowledge repository for PDF and web content supporting incremental reading and document annotation";
+    mainProgram = "polar-desktop-app";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;

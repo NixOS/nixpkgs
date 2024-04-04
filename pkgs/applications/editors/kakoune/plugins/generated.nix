@@ -133,6 +133,7 @@ packages = ( self:
       sha256 = "1i3id7xw0j4z1a14mscr68ckpgvcwsjpl86lr864wy7w7qcmblx6";
     };
     meta.homepage = "https://github.com/listentolist/kakoune-rainbow/";
+    meta.mainProgram = "kak-rainbow.scm";
   };
 
   kakoune-registers = buildKakounePluginFrom2Nix {

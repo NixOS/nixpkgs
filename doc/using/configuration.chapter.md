@@ -176,7 +176,7 @@ You can define a function called `packageOverrides` in your local `~/.config/nix
 ```nix
 {
   packageOverrides = pkgs: rec {
-    foo = pkgs.foo.override { ... };
+    foo = pkgs.foo.override { /* ... */ };
   };
 }
 ```

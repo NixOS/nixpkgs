@@ -162,7 +162,7 @@ let
     pkg;
 
 in lib.makeExtensible (self: ({
-  nix_2_3 = (common {
+  nix_2_3 = ((common {
     version = "2.3.17";
     hash = "sha256-EK0pgHDekJFqr0oMj+8ANIjq96WPjICe2s0m4xkUdH4=";
     patches = [
@@ -170,7 +170,11 @@ in lib.makeExtensible (self: ({
       ./patches/2_3/CVE-2024-27297.patch
     ];
     maintainers = with lib.maintainers; [ flokli raitobezarius ];
-  }).override { boehmgc = boehmgc-nix_2_3; };
+  }).override { boehmgc = boehmgc-nix_2_3; }).overrideAttrs {
+    # https://github.com/NixOS/nix/issues/10222
+    # spurious test/add.sh failures
+    enableParallelChecking = false;
+  };
 
   nix_2_10 = common {
     version = "2.10.3";
@@ -226,11 +230,8 @@ in lib.makeExtensible (self: ({
   };
 
   nix_2_16 = common {
-    version = "2.16.2";
-    hash = "sha256-VXIYCDkvAWeMoU0W2ZI0TeOszCZA1o8trz6YCPFD5ac=";
-    patches = [
-      patch-rapidcheck-shared
-    ];
+    version = "2.16.3";
+    hash = "sha256-/tnjRCk+VaWPThzdn3C0zU1AMON+7AFsHgTTzErFxV4=";
   };
 
   nix_2_17 = common {
@@ -242,12 +243,8 @@ in lib.makeExtensible (self: ({
   };
 
   nix_2_18 = common {
-    version = "2.18.1";
-    hash = "sha256-WNmifcTsN9aG1ONkv+l2BC4sHZZxtNKy0keqBHXXQ7w=";
-    patches = [
-      patch-rapidcheck-shared
-      ./patches/2_18/CVE-2024-27297.patch
-    ];
+    version = "2.18.2";
+    hash = "sha256-8gNJlBlv2bnffRg0CejiBXc6U/S6YeCLAdHrYvTPyoY=";
   };
 
   nix_2_19 = common {
@@ -261,6 +258,11 @@ in lib.makeExtensible (self: ({
   nix_2_20 = common {
     version = "2.20.5";
     hash = "sha256-bfFe38BkoQws7om4gBtBWoNTLkt9piMXdLLoHYl+vBQ=";
+  };
+
+  nix_2_21 = common {
+    version = "2.21.1";
+    hash = "sha256-iRtvOcJbohyhav+deEajI/Ln/LU/6WqSfLyXDQaNEro=";
   };
 
   # The minimum Nix version supported by Nixpkgs
@@ -282,7 +284,7 @@ in lib.makeExtensible (self: ({
 
   stable = addFallbackPathsCheck self.nix_2_18;
 
-  unstable = self.nix_2_20;
+  unstable = self.nix_2_21;
 } // lib.optionalAttrs config.allowAliases {
   nix_2_4 = throw "nixVersions.nix_2_4 has been removed";
 

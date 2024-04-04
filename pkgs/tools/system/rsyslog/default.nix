@@ -185,6 +185,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.rsyslog.com/";
     description = "Enhanced syslog implementation";
+    mainProgram = "rsyslogd";
     changelog = "https://raw.githubusercontent.com/rsyslog/rsyslog/v${version}/ChangeLog";
     license = licenses.gpl3Only;
     platforms = platforms.linux;

@@ -8,7 +8,6 @@
 , CFNetwork
 , cmake
 , CoreFoundation
-, libcxxabi
 , openssl
 , Security
 , pytestCheckHook
@@ -82,10 +81,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     certifi
-  ];
-
-  LDFLAGS = lib.optionals stdenv.isDarwin [
-    "-L${lib.getLib libcxxabi}/lib"
   ];
 
   dontUseCmakeConfigure = true;
