@@ -1,19 +1,20 @@
-{ lib
-, asyncclick
-, buildPythonPackage
-, fetchPypi
-, firebase-messaging
-, oauthlib
-, poetry-core
-, pytest-asyncio
-, pytest-mock
-, pytest-socket
-, pytestCheckHook
-, pythonOlder
-, pytz
-, requests
-, requests-mock
-, requests-oauthlib
+{
+  lib,
+  asyncclick,
+  buildPythonPackage,
+  fetchPypi,
+  firebase-messaging,
+  oauthlib,
+  poetry-core,
+  pytest-asyncio,
+  pytest-mock,
+  pytest-socket,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  requests,
+  requests-mock,
+  requests-oauthlib,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
     hash = "sha256-MKN38SqSn97SF9Y7IzNO6PHsbExjRNXph0Pp1mTNjVI=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     asyncclick
@@ -42,9 +41,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    listen = [
-      firebase-messaging
-    ];
+    listen = [ firebase-messaging ];
   };
 
   nativeCheckInputs = [
@@ -55,16 +52,14 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  pythonImportsCheck = [
-    "ring_doorbell"
-  ];
+  pythonImportsCheck = [ "ring_doorbell" ];
 
   meta = with lib; {
-    description = "Python library to communicate with Ring Door Bell";
-    mainProgram = "ring-doorbell";
+    description = "Library to communicate with Ring Door Bell";
     homepage = "https://github.com/tchellomello/python-ring-doorbell";
     changelog = "https://github.com/tchellomello/python-ring-doorbell/releases/tag/${version}";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ graham33 ];
+    mainProgram = "ring-doorbell";
   };
 }
