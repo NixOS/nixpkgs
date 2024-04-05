@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, poetry-core
-, anyio
-, jsonpatch
-, langsmith
-, packaging
-, pydantic
-, pythonRelaxDepsHook
-, pyyaml
-, requests
-, tenacity
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  fetchPypi,
+  jsonpatch,
+  langsmith,
+  packaging,
+  poetry-core,
+  pydantic,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  pyyaml,
+  requests,
+  tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "0.1.36";
+  version = "0.1.40";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "langchain_core";
     inherit version;
-    hash = "sha256-qiQyNwyj0qXW3RSoEKpkiL8vYi/3oKPcMPbg7Z1/X6g=";
+    hash = "sha256-NMBvwObTU0tzjGP4VANEa0vnEWFmW34JH5uxnJFOwQA=";
   };
 
   pythonRelaxDeps = [
@@ -32,12 +33,11 @@ buildPythonPackage rec {
     "packaging"
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  dependencies = [
     anyio
     jsonpatch
     langsmith
@@ -48,9 +48,7 @@ buildPythonPackage rec {
     tenacity
   ];
 
-  pythonImportsCheck = [
-    "langchain_core"
-  ];
+  pythonImportsCheck = [ "langchain_core" ];
 
   # PyPI source does not have tests
   doCheck = false;
