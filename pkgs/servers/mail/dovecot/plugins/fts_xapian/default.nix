@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "grosjo";
     repo = "fts-xapian";
     rev = version;
-    sha256 = "sha256-Gzr0365lY9wAvmXeVungD2z44WHC+AI0a1xLWy3mCK4=";
+    hash = "sha256-Yd14kla33qAx4Hy0ZdE08javvki3t+hCEc3OTO6YfkQ=";
   };
 
   buildInputs = [ xapian icu sqlite ];
