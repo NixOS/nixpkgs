@@ -15,6 +15,8 @@ let
     isList
     isString
     isStorePath
+    functionArgs
+    setFunctionArgs
     toDerivation
     toList
     ;
@@ -36,6 +38,7 @@ let
     filterAttrs
     hasAttr
     mapAttrs
+    mapAttrsToList
     optionalAttrs
     zipAttrsWith
     ;
@@ -256,12 +259,26 @@ rec {
               else (listOf anything).merge;
             # This is the type of packages, only accept a single definition
             stringCoercibleSet = mergeOneOption;
-            lambda = loc: defs: arg: anything.merge
-              (loc ++ [ "<function body>" ])
-              (map (def: {
-                file = def.file;
-                value = def.value arg;
-              }) defs);
+            lambda = loc: defs:
+              let
+                args = lib.attrsets.zipAttrsWith
+                  (name:
+                    # All params must have a default for the combination
+                    # to have one. AND on a list is `all id`.
+                    lib.all (b: b))
+                  (map
+                    (def: functionArgs def.value)
+                    defs);
+                mergedFun = arg: anything.merge
+                  (loc ++ [ "<function body>" ])
+                  (map (def: {
+                    file = def.file;
+                    value = def.value arg;
+                  }) defs);
+              in
+                if args == {}
+                then mergedFun
+                else setFunctionArgs mergedFun args;
             # Otherwise fall back to only allowing all equal definitions
           }.${commonType} or mergeEqualOption;
         in mergeFunction loc defs;
