@@ -27,15 +27,15 @@ buildPythonPackage rec {
   prePatch = ''
     # Don't run coverage, or depend on typer for no reason.
     substituteInPlace pyproject.toml \
-      --replace " --cov=aiolifx_themes --cov-report=term-missing:skip-covered" "" \
-      --replace "typer = " "# unused: typer = "
+      --replace-fail " --cov=aiolifx_themes --cov-report=term-missing:skip-covered" "" \
+      --replace-fail "typer = " "# unused: typer = "
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiolifx
   ];
 
