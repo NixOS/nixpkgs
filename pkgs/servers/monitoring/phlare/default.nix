@@ -12,7 +12,7 @@ buildGoModule rec {
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-y8IWS5OQkDYRTt5xOzzbjb1ya6AiFtvAc0YNH99KZBA=";
+  vendorHash = "sha256-l7+iDT9GAP9BX+xKvnx57iVF8wCM1YyHwq6dD9PbTDI=";
 
   ldflags = let
     prefix = "github.com/grafana/phlare/pkg/util/build";
