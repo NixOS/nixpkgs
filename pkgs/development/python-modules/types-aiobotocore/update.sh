@@ -1,11 +1,11 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p nix-update
+#!nix-shell -i bash -p nix-update nixpkgs-fmt
 
 set -eu -o pipefail
 
 source_file=pkgs/development/python-modules/types-aiobotocore-packages/default.nix
 
-version="2.12.1"
+version="2.12.2"
 
 nix-update python311Packages.types-aiobotocore --commit --build
 
