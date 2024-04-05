@@ -40,6 +40,7 @@ in
             "--"
             cfg.lockerCommand
         ]);
+      serviceConfig.Restart = "always";
     };
   };
 }
