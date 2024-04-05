@@ -159,6 +159,7 @@ let
               # Ensure that X11/GTK are in order.
               jobs.firefox-unwrapped.x86_64-linux
               jobs.cachix.x86_64-linux
+              jobs.devenv.x86_64-linux
 
               /*
               TODO: re-add tests; context: https://github.com/NixOS/nixpkgs/commit/36587a587ab191eddd868179d63c82cdd5dee21b
@@ -182,6 +183,7 @@ let
               jobs.stdenv.x86_64-darwin
               jobs.cargo.x86_64-darwin
               jobs.cachix.x86_64-darwin
+              jobs.devenv.x86_64-darwin
               jobs.go.x86_64-darwin
               jobs.python3.x86_64-darwin
               jobs.nixpkgs-review.x86_64-darwin
@@ -209,6 +211,7 @@ let
               jobs.stdenv.aarch64-darwin
               jobs.cargo.aarch64-darwin
               jobs.cachix.aarch64-darwin
+              jobs.devenv.aarch64-darwin
               jobs.go.aarch64-darwin
               jobs.python3.aarch64-darwin
               jobs.nixpkgs-review.aarch64-darwin
