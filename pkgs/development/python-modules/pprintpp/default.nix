@@ -2,16 +2,18 @@
 , buildPythonPackage
 , fetchpatch
 , fetchPypi
-, nose
 , parameterized
+, pytestCheckHook
+, pynose
 , python
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pprintpp";
   version = "0.4.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -34,25 +36,37 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeCheckInputs = [
-    nose
-    parameterized
+  build-system = [
+    setuptools
   ];
 
-  checkPhase = ''
-    ${python.interpreter} test.py
-  '';
+  nativeCheckInputs = [
+    parameterized
+    pynose
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "pprintpp"
   ];
 
+  pytestFlagsArray = [
+    "test.py"
+  ];
+
+  disabledTests = [
+    # AttributeError: 'EncodedFile' object has no attribute 'getvalue'
+    "test_pp"
+    "test_pp_pprint"
+    "test_fmt"
+  ];
+
   meta = with lib; {
     description = "A drop-in replacement for pprint that's actually pretty";
-    mainProgram = "pypprint";
     homepage = "https://github.com/wolever/pprintpp";
     changelog = "https://github.com/wolever/pprintpp/blob/${version}/CHANGELOG.txt";
     license = licenses.bsd2;
     maintainers = with maintainers; [ jakewaksbaum ];
+    mainProgram = "pypprint";
   };
 }
