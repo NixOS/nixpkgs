@@ -2,6 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
+, pythonAtLeast
+, pythonOlder
 , setuptools
 }:
 
@@ -9,6 +11,8 @@ buildPythonPackage rec {
   pname = "gorilla";
   version = "0.4.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,6 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "gorilla"
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    "test_find_patches_2"
   ];
 
   meta = with lib; {
