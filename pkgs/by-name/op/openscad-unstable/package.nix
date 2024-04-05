@@ -31,7 +31,7 @@
 , mesa
 , mpfr
 , python3
-, tbb_2021_8
+, tbb_2021_11
 , wayland
 , wayland-protocols
 , wrapGAppsHook
@@ -51,7 +51,7 @@ let
       hash = "sha256-f11CNfa8jF9VbzvOoX1vT8zGIJL9cZ/VBpiklUn0YdU=";
     };
     nativeBuildInputs = [ cmake pkg-config ];
-    buildInputs = [ tbb_2021_8 ];
+    buildInputs = [ tbb_2021_11 ];
     cmakeFlags = [
       # only enable what we need
       "-DCCCL_ENABLE_CUB=OFF"
@@ -105,7 +105,7 @@ clangStdenv.mkDerivation rec {
     # manifold dependencies
     clipper2
     glm
-    tbb_2021_8
+    tbb_2021_11
     nvidia-cccl
 
     boost
