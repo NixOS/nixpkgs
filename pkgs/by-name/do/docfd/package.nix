@@ -1,5 +1,7 @@
 { lib
 , ocamlPackages
+, stdenv
+, overrideSDK
 , fetchFromGitHub
 , python3
 , dune_3
@@ -10,7 +12,13 @@
 , docfd
 }:
 
-ocamlPackages.buildDunePackage rec {
+let
+  # Needed for x86_64-darwin
+  buildDunePackage' = ocamlPackages.buildDunePackage.override {
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  };
+in
+buildDunePackage' rec {
   pname = "docfd";
   version = "4.0.0";
 
