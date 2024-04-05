@@ -9965,6 +9965,8 @@ self: super: with self; {
     inherit (pkgs) memcached;
   };
 
+  python-motionmount = callPackage ../development/python-modules/python-motionmount { };
+
   python-otbr-api = callPackage ../development/python-modules/python-otbr-api { };
 
   python-openems = callPackage ../development/python-modules/python-openems { };
