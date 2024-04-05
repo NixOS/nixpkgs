@@ -22,11 +22,11 @@ let
         inherit pname version hash;
       };
 
-      nativeBuildInputs = [
+      build-system = [
         setuptools
       ];
 
-      propagatedBuildInputs = [
+      dependencies = [
         aiobotocore
         botocore
       ] ++ lib.optionals (pythonOlder "3.12") [
