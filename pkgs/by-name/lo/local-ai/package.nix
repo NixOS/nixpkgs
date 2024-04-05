@@ -479,6 +479,10 @@ let
       --prefix PATH : "${ffmpeg}/bin"
     '';
 
+    shellHook = ''
+      export GRPC_BACKENDS=${llama-cpp-grpc}
+    '';
+
     passthru.local-packages = {
       inherit
         go-tiny-dream go-rwkv go-bert go-llama-ggml gpt4all go-piper
