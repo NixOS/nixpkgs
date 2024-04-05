@@ -1,12 +1,13 @@
-{ lib
-, authlib
-, bleak
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, pythonOlder
-, setuptools
-, websockets
+{
+  lib,
+  authlib,
+  bleak,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  pythonOlder,
+  setuptools,
+  websockets,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-0+UDSg57E/VvAU9pDZJ4LZYRY5TUlCgdPwVh5Nhohl4=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     authlib
@@ -37,9 +36,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "lmcloud"
-  ];
+  pythonImportsCheck = [ "lmcloud" ];
 
   meta = with lib; {
     description = "Library to interface with La Marzocco's cloud";
