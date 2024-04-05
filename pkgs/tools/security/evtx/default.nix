@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -9,7 +10,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "omerbenamram";
-    repo = pname;
+    repo = "evtx";
     rev = "refs/tags/v${version}";
     hash = "sha256-uuoHDIZ76BfRSb1XXHDwsSQ3ium22FPv1fjrB35liXw=";
   };
@@ -23,10 +24,13 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Parser for the Windows XML Event Log (EVTX) format";
-    mainProgram = "evtx_dump";
     homepage = "https://github.com/omerbenamram/evtx";
     changelog = "https://github.com/omerbenamram/evtx/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "evtx_dump";
   };
 }
