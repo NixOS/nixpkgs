@@ -50,12 +50,15 @@ buildPythonPackage rec {
     "pydantic"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
+  ];
+
+  nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     httpx
     iso8601
