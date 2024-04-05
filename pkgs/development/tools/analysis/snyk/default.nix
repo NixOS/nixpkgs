@@ -8,13 +8,13 @@
 
 buildNpmPackage rec {
   pname = "snyk";
-  version = "1.1286.3";
+  version = "1.1287.0";
 
   src = fetchFromGitHub {
     owner = "snyk";
     repo = "cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3Cr4/rXbGyP3rU/e824RraiN+Tqm4l3x8m8blR9d5Fc=";
+    hash = "sha256-d5MafGgxtecBzAkFxx+vi1a4ZQiVDJaISld7mQlNGFE=";
   };
 
   npmDepsHash = "sha256-t+lYPVN/7mQak6A0VJUxnIj34iHB47nbcCV/dsO1/2E=";
