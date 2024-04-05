@@ -287,10 +287,10 @@
         "src": {
             "owner": "libretro",
             "repo": "fbneo",
-            "rev": "fa70abd34f49d8c461165b65a4ad436a4245eb51",
-            "hash": "sha256-BaV+BY7jTw/6M4XmAAVSRQ9viftyaPZmG17TFgSFqOg="
+            "rev": "537b5b8dcc358370f2349109004233fbeab46cfe",
+            "hash": "sha256-zBOF1RV2dx5zraREZm/W//8DwrRMDc/j8sx+CwTyKz0="
         },
-        "version": "unstable-2024-03-27"
+        "version": "unstable-2024-04-02"
     },
     "fceumm": {
         "fetcher": "fetchFromGitHub",
