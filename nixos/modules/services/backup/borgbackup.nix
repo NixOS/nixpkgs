@@ -147,6 +147,9 @@ let
     let
       settings = { inherit (cfg) user group; };
     in lib.nameValuePair "borgbackup-job-${name}" ({
+      # Create parent dirs separately, to ensure correct ownership.
+      "${config.users.users."${cfg.user}".home}/.config".d = settings;
+      "${config.users.users."${cfg.user}".home}/.cache".d = settings;
       "${config.users.users."${cfg.user}".home}/.config/borg".d = settings;
       "${config.users.users."${cfg.user}".home}/.cache/borg".d = settings;
     } // optionalAttrs (isLocalPath cfg.repo && !cfg.removableDevice) {
