@@ -15,7 +15,7 @@ let
       sha256 = "sha256-EuWGbn6qggi8/9Rci8iaXfuVKE+QXb1BHEYDvotR/q4=";
     };
   };
-  src = srcs.${stdenv.hostPlatform.system};
+  src = srcs.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
 
   contents = appimageTools.extract { inherit name src; };
 

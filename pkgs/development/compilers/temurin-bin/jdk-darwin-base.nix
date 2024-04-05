@@ -24,7 +24,7 @@ let
       sourcePerArch.${cpuName}.version or (throw "unsupported CPU ${cpuName}");
 
     src = fetchurl {
-      inherit (sourcePerArch.${cpuName}) url sha256;
+      inherit (sourcePerArch.${cpuName} or (throw "unsupported system ${stdenv.hostPlatform.system}")) url sha256;
     };
 
     # See: https://github.com/NixOS/patchelf/issues/10
