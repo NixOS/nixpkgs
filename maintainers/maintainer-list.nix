@@ -7255,6 +7255,12 @@
     githubId = 5549373;
     name = "Jochen Kiemes";
   };
+  giodamelio = {
+    name = "Giovanni d'Amelio";
+    email = "gio@damelio.net";
+    github = "giodamelio";
+    githubId = 441646;
+  };
   giogadi = {
     email = "lgtorres42@gmail.com";
     github = "giogadi";
