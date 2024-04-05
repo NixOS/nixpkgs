@@ -3,7 +3,7 @@
 , python3Packages
 , gobject-introspection
 , libadwaita
-, wrapGAppsHook
+, wrapGAppsHook4
 , meson
 , ninja
 , desktop-file-utils
@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook4
     desktop-file-utils
     meson
     ninja
