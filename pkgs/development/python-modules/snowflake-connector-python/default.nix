@@ -1,31 +1,32 @@
-{ lib
-, asn1crypto
-, buildPythonPackage
-, certifi
-, cffi
-, charset-normalizer
-, cython
-, fetchPypi
-, filelock
-, idna
-, keyring
-, oscrypto
-, packaging
-, pandas
-, platformdirs
-, pyarrow
-, pycryptodomex
-, pyjwt
-, pyopenssl
-, pythonOlder
-, pythonRelaxDepsHook
-, pytz
-, requests
-, setuptools
-, sortedcontainers
-, tomlkit
-, typing-extensions
-, wheel
+{
+  lib,
+  asn1crypto,
+  buildPythonPackage,
+  certifi,
+  cffi,
+  charset-normalizer,
+  cython,
+  fetchPypi,
+  filelock,
+  idna,
+  keyring,
+  oscrypto,
+  packaging,
+  pandas,
+  platformdirs,
+  pyarrow,
+  pycryptodomex,
+  pyjwt,
+  pyopenssl,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  pytz,
+  requests,
+  setuptools,
+  sortedcontainers,
+  tomlkit,
+  typing-extensions,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -46,9 +47,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     asn1crypto
@@ -71,7 +70,10 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    pandas = [ pandas pyarrow ];
+    pandas = [
+      pandas
+      pyarrow
+    ];
     secure-local-storage = [ keyring ];
   };
 
