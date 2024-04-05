@@ -1922,6 +1922,8 @@ with pkgs;
 
   kubevirt = callPackage ../tools/virtualization/kubevirt { };
 
+  lastversion = with python3Packages; toPythonApplication lastversion;
+
   lektor = callPackage ../tools/misc/lektor { };
 
   licenseclassifier = callPackage ../development/tools/misc/licenseclassifier { };
