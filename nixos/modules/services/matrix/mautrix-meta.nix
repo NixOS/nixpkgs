@@ -302,7 +302,7 @@ in {
   };
 
   config = lib.mkMerge [
-    (lib.mkIf (enabledInstances != []) {
+    (lib.mkIf (enabledInstances != {}) {
       assertions = lib.mkMerge (lib.attrValues (lib.mapAttrs (name: cfg: [
         {
           assertion = cfg.settings.homeserver.domain != "" && cfg.settings.homeserver.address != "";
