@@ -19,7 +19,7 @@ buildGoModule rec {
   meta = {
     description = "Admin tool to view and inspect multiple x509 Certificates";
     homepage = "https://github.com/mgit-at/cert-viewer";
-    license = lib.licenses.apsl20;
+    license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.mkg20001 ];
     mainProgram = "cert-viewer";
   };
