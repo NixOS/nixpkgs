@@ -5099,6 +5099,8 @@ with pkgs;
 
   dsvpn = callPackage ../applications/networking/dsvpn { };
 
+  dtail = callPackage ../tools/system/dtail { };
+
   dtools = callPackage ../development/tools/dtools { };
 
   dwt1-shell-color-scripts = callPackage ../tools/misc/dwt1-shell-color-scripts { };
