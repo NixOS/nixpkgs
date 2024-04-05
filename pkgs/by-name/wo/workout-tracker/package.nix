@@ -3,18 +3,17 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
-  ...
 }:
 
 buildGoModule rec {
   pname = "workout-tracker";
-  version = "0.10.5";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "jovandeginste";
     repo = "workout-tracker";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ekGaNHysY0lXbB5w6AycnLR9/4dqUp0busCcPPvzSVI=";
+    hash = "sha256-gImAlEDtC+6dn+C6bkZ3wKzSYFf+iDUp5QixP0HMaso=";
   };
 
   vendorHash = null;
