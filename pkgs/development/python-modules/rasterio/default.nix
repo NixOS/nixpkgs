@@ -104,6 +104,9 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "-m 'not network'"
+
+    # pytest.PytestRemovedIn8Warning: Passing None has been deprecated.
+    "-W ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   disabledTests = [
