@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
-, wheel
 , botocore-stubs
 , typing-extensions
 , types-aiobotocore-accessanalyzer
@@ -372,12 +371,11 @@ buildPythonPackage rec {
     hash = "sha256-pdPYBcAaqGnDwvgttfEUZv3GfUxebpqwTtVwk9p120c=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     botocore-stubs
     typing-extensions
   ];
