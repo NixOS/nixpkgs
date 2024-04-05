@@ -1073,6 +1073,8 @@ self: super: builtins.intersectAttrs super {
     # very useful.
     # Flag added in Agda 2.6.4.1, was always enabled before
     (enableCabalFlag "debug")
+    # Split outputs to reduce closure size
+    enableSeparateBinOutput
   ];
 
   # ats-format uses cli-setup in Setup.hs which is quite happy to write
