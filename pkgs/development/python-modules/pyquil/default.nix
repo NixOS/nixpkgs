@@ -45,6 +45,8 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "lark"
     "networkx"
+    "packaging"
+    "qcs-sdk-python"
   ];
 
   build-system = [
