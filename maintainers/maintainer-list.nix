@@ -6975,6 +6975,15 @@
     githubId = 1313787;
     name = "Gabriella Gonzalez";
   };
+  gabyx = {
+    email = "gnuetzi@gmail.com";
+    github = "gabyx";
+    githubId = 647437;
+    name = "Gabriel Nützi";
+    keys = [{
+      fingerprint = "90AE CCB9 7AD3 4CE4 3AED  9402 E969 172A B075 7EB8";
+    }];
+  };
   gador = {
     email = "florian.brandes@posteo.de";
     github = "gador";
