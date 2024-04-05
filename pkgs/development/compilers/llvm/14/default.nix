@@ -139,7 +139,11 @@ in let
       extraBuildCommands = mkExtraBuildCommands cc;
     };
 
-    lld = callPackage ./lld {
+    lld = callPackage ../common/lld {
+      patches = [
+        ./lld/gnu-install-dirs.patch
+        ./lld/fix-root-src-dir.patch
+      ];
       inherit llvm_meta;
     };
 
