@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchurl, libX11, libXinerama, libXft, zlib, patches ? null }:
+{ lib, stdenv, fetchurl, libX11, libXinerama, libXft, zlib, patches ? null
+# update script dependencies
+, gitUpdater
+}:
 
 stdenv.mkDerivation rec {
   pname = "dmenu";
@@ -24,11 +27,15 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "CC:=$(CC)" ];
 
+  passthru.updateScript = gitUpdater {
+    url = "git://git.suckless.org/dmenu";
+  };
+
   meta = with lib; {
     description = "A generic, highly customizable, and efficient menu for the X Window System";
     homepage = "https://tools.suckless.org/dmenu";
     license = licenses.mit;
-    maintainers = with maintainers; [ pSub globin ];
+    maintainers = with maintainers; [ pSub globin qusic ];
     platforms = platforms.all;
     mainProgram = "dmenu";
   };
