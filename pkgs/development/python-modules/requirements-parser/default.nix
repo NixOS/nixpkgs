@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "requirements-parser";
-  version = "0.7.0";
+  version = "0.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "madpah";
     repo = "requirements-parser";
     rev = "refs/tags/v${version}";
-    hash = "sha256-P1uMpg9uoPp18KwdBHkvpMGV8eKhTEsDCKwz2JsTOug=";
+    hash = "sha256-ZkyfK2s6wmKX/AJsOXlAHOpJ2/zZO0zipdM3j2BrrWo=";
   };
 
   build-system = [
