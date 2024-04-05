@@ -13,6 +13,7 @@
 , pythonOlder
 , pyyaml
 , rich
+, setuptools
 , termcolor
 , torch
 , yapf
@@ -32,7 +33,11 @@ buildPythonPackage rec {
     hash = "sha256-fKtPDdeKB3vX2mD+Tsicq8KOkPDSACzKK1XLyugdPQ4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     addict
     matplotlib
     numpy
@@ -47,9 +52,9 @@ buildPythonPackage rec {
     coverage
     lmdb
     mlflow
-    torch
     parameterized
     pytestCheckHook
+    torch
   ];
 
   preCheck = ''
@@ -87,7 +92,6 @@ buildPythonPackage rec {
     "test_lazy_import"
     # AssertionError
     "test_lazy_module"
-
     # Require unpackaged aim
     "test_experiment"
     "test_add_config"
@@ -95,6 +99,11 @@ buildPythonPackage rec {
     "test_add_scalar"
     "test_add_scalars"
     "test_close"
+  ];
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   meta = with lib; {
