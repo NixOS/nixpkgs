@@ -1,11 +1,11 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl jq nix-update xmlstarlet
+#!nix-shell -i bash -p curl jq nixpkgs-fmt nix-update xmlstarlet
 
 set -eu -o pipefail
 
 source_file=pkgs/development/python-modules/mypy-boto3/default.nix
 
-nix-update python311Packages.botocore-stubs --commit --build
+nix-update python312Packages.botocore-stubs --commit --build
 
 packages=(
   mypy-boto3-accessanalyzer
@@ -385,7 +385,7 @@ for package in "${packages[@]}"; do
 
     nixpkgs-fmt ${source_file}
 
-    git commit ${source_file} -m "python311Packages.${package}: ${old_version} -> ${version}"
+    git commit ${source_file} -m "python312Packages.${package}: ${old_version} -> ${version}"
   fi
 
 done
