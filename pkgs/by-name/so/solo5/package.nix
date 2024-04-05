@@ -2,7 +2,7 @@
 , pkg-config, qemu, syslinux, util-linux }:
 
 let
-  version = "0.8.0";
+  version = "0.8.1";
   # list of all theoretically available targets
   targets = [
     "genode"
@@ -21,7 +21,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/Solo5/solo5/releases/download/v${version}/solo5-v${version}.tar.gz";
-    sha256 = "sha256-t80VOZ8Tr1Dq+mJfRPVLGqYprCaqegcQtDqdoHaSXW0=";
+    sha256 = "sha256-J1xcL/AdcLQ7Ph3TFwEaS9l4cWjDQsTaXTdBDcT7p6E=";
   };
 
   hardeningEnable = [ "pie" ];
@@ -63,13 +63,13 @@ in stdenv.mkDerivation {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Sandboxed execution environment";
     homepage = "https://github.com/solo5/solo5";
-    license = licenses.isc;
-    maintainers = [ maintainers.ehmry ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ ehmry ];
     platforms = builtins.map ({arch, os}: "${arch}-${os}")
-      (cartesianProductOfSets {
+      (lib.cartesianProductOfSets {
         arch = [ "aarch64" "x86_64" ];
         os = [ "freebsd" "genode" "linux" "openbsd" ];
       });
