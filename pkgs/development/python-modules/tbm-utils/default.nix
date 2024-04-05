@@ -1,12 +1,14 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
+, attrs
 , buildPythonPackage
 , fetchFromGitHub
-, attrs
+, fetchpatch
 , pendulum
 , poetry-core
 , pprintpp
 , pytestCheckHook
+, pythonOlder
 , pythonRelaxDepsHook
 , wrapt
 }:
@@ -14,23 +16,46 @@
 buildPythonPackage rec {
   pname = "tbm-utils";
   version = "2.6.0";
-  format = "pyproject";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "thebigmunch";
-    repo = pname;
+    repo = "tbm-utils";
     rev = "refs/tags/${version}";
     hash = "sha256-AEKawsAxDSDNkIaXEFFgdEBOY2PpASDrhlDrsnM5eyA=";
   };
 
+  patches = [
+    # Migrate to pendulum > 3, https://github.com/thebigmunch/tbm-utils/pull/3
+    (fetchpatch {
+      name = "support-pendulum-3.patch";
+      url = "https://github.com/thebigmunch/tbm-utils/commit/473534fae2d9a8dea9100cead6c54cab3f5cd0cd.patch";
+      hash = "sha256-3T0KhSmO9r1vM67FWEnTZMQV4b5jS2xtPHI0t9NnCmI=";
+    })
+    (fetchpatch {
+      name = "update-testsupport-pendulum-3.patch";
+      url = "https://github.com/thebigmunch/tbm-utils/commit/a0331d0c15f11cd26bfbb42eebd17296167161ed.patch";
+      hash = "sha256-KG6yfnnBltavbNvIBTdbK+CPXwZTLYl14925RY2a8vs=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'poetry>=1.0.0' 'poetry-core' \
-      --replace 'poetry.masonry.api' 'poetry.core.masonry.api'
+      --replace-fail 'poetry>=1.0.0' 'poetry-core' \
+      --replace-fail 'poetry.masonry.api' 'poetry.core.masonry.api'
   '';
 
-  nativeBuildInputs = [
+  pythonRelaxDeps = [
+    "attrs"
+  ];
+
+  build-system = [
     poetry-core
+  ];
+
+  nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
 
@@ -39,10 +64,6 @@ buildPythonPackage rec {
     pendulum
     pprintpp
     wrapt
-  ];
-
-  pythonRelaxDeps = [
-    "attrs"
   ];
 
   nativeCheckInputs = [
@@ -67,10 +88,11 @@ buildPythonPackage rec {
     "tbm_utils"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "A commonly-used set of utilities";
     homepage = "https://github.com/thebigmunch/tbm-utils";
     changelog = "https://github.com/thebigmunch/tbm-utils/blob/${version}/CHANGELOG.md";
-    license = [ lib.licenses.mit ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }
