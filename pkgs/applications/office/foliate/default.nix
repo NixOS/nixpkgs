@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
     description = "A simple and modern GTK eBook reader";
     mainProgram = "foliate";
     homepage = "https://johnfactotum.github.io/foliate";
+    changelog = "https://github.com/johnfactotum/foliate/releases/tag/${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ onny ];
   };
