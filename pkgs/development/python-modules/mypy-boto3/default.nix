@@ -251,7 +251,7 @@ rec {
 
   mypy-boto3-ebs = buildMypyBoto3Package "ebs" "1.34.0" "sha256-xIrrXOayZed+Jcn4CFXXNgKz/G+RdiuwA04wq+Ry/fs=";
 
-  mypy-boto3-ec2 = buildMypyBoto3Package "ec2" "1.34.73" "sha256-/vEtJCIUBHeOX0ttyOID2/Ds2VCm6/eGEqRXE/ynrr4=";
+  mypy-boto3-ec2 = buildMypyBoto3Package "ec2" "1.34.78" "sha256-vfKasmXtPV8AlNmwyNNA6tnmtgn1w7m2eQYB6GYfikg=";
 
   mypy-boto3-ec2-instance-connect = buildMypyBoto3Package "ec2-instance-connect" "1.34.63" "sha256-kExmGXEJ5jrvOewmWx7AjVb3boD5GU0cEUp/2PQhzlw=";
 
