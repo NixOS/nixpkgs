@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, parameterized
-, pytestCheckHook
-, pynose
-, python
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  parameterized,
+  pytestCheckHook,
+  pynose,
+  python,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     parameterized
@@ -46,13 +45,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pprintpp"
-  ];
+  pythonImportsCheck = [ "pprintpp" ];
 
-  pytestFlagsArray = [
-    "test.py"
-  ];
+  pytestFlagsArray = [ "test.py" ];
 
   disabledTests = [
     # AttributeError: 'EncodedFile' object has no attribute 'getvalue'
