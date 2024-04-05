@@ -50,7 +50,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
             machine.wait_until_succeeds(f"pgrep -f {i}")
         for i in ["gala", "io.elementary.wingpanel", "plank"]:
             machine.wait_for_window(i)
-        for i in ["io.elementary.gala.daemon@x11.service", "bamfdaemon.service", "io.elementary.files.xdg-desktop-portal.service"]:
+        for i in ["bamfdaemon.service", "io.elementary.files.xdg-desktop-portal.service"]:
             machine.wait_for_unit(i, "${user.name}")
 
     with subtest("Check if various environment variables are set"):
