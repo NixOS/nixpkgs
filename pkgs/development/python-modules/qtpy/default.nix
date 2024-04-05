@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "qtpy";
-  version = "2.4.0";
+  version = "2.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "QtPy";
     inherit version;
-    hash = "sha256-2y1QgWeqYQZ4FWXI2lxvFIfeusujNRnO3DX6iZfUJNQ=";
+    hash = "sha256-paFf/VGVUKE2G9xW/8B/2lamr3KS8Xx7OV1Ag69jKYc=";
   };
 
   propagatedBuildInputs = [
