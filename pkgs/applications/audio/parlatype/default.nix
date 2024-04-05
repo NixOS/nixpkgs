@@ -15,7 +15,7 @@
 , ninja
 , pkg-config
 , python3
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -56,6 +56,8 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    substituteInPlace data/meson_post_install.py \
+      --replace-fail 'gtk-update-icon-cache' 'gtk4-update-icon-cache'
     patchShebangs data/meson_post_install.py
     patchShebangs libparlatype/tests/data/generate_config_data
   '';
