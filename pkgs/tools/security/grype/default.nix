@@ -1,20 +1,21 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, git
-, installShellFiles
-, openssl
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  git,
+  installShellFiles,
+  openssl,
 }:
 
 buildGoModule rec {
   pname = "grype";
-  version = "0.74.7";
+  version = "0.75.0";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "grype";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mP9Yjg5AVMIMvlOI+5AaCYzlw7h2K9WCFLY9ZwXmZk0=";
+    hash = "sha256-FOKSJ9u1+johBRL37I/sYo+BH9Na3vzxRTr6PqiLWrs=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -29,20 +30,16 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-X+E2g/FoDgjKq8XcPeEA/XbRJV8JkhY5AHPnw26hRnM=";
+  vendorHash = "sha256-C1xM0OcEsplWOe0SGL6SCAvFq7M5LcekYyQTjP9EZB4=";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   nativeCheckInputs = [
     git
     openssl
   ];
 
-  subPackages = [
-    "cmd/grype"
-  ];
+  subPackages = [ "cmd/grype" ];
 
   excludedPackages = "test/integration";
 
@@ -115,6 +112,10 @@ buildGoModule rec {
       container image or filesystem to find known vulnerabilities.
     '';
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab jk kashw2 ];
+    maintainers = with maintainers; [
+      fab
+      jk
+      kashw2
+    ];
   };
 }

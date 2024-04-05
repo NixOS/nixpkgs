@@ -143,6 +143,7 @@
   ./programs/adb.nix
   ./programs/alvr.nix
   ./programs/appgate-sdp.nix
+  ./programs/appimage.nix
   ./programs/atop.nix
   ./programs/ausweisapp.nix
   ./programs/autojump.nix
@@ -651,6 +652,7 @@
   ./services/matrix/hebbot.nix
   ./services/matrix/maubot.nix
   ./services/matrix/mautrix-facebook.nix
+  ./services/matrix/mautrix-meta.nix
   ./services/matrix/mautrix-telegram.nix
   ./services/matrix/mautrix-whatsapp.nix
   ./services/matrix/mjolnir.nix
@@ -1155,6 +1157,7 @@
   ./services/networking/tayga.nix
   ./services/networking/tcpcrypt.nix
   ./services/networking/teamspeak3.nix
+  ./services/networking/technitium-dns-server.nix
   ./services/networking/teleport.nix
   ./services/networking/tetrd.nix
   ./services/networking/tftpd.nix

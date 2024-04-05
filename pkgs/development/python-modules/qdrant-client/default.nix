@@ -1,60 +1,55 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, grpcio
-, grpcio-tools
-, httpx
-, numpy
-, pytestCheckHook
-, poetry-core
-, pydantic
-, pythonOlder
-, urllib3
-, portalocker
-, fastembed
-# check inputs
-, pytest-asyncio
+{
+  lib,
+  buildPythonPackage,
+  fastembed,
+  fetchFromGitHub,
+  grpcio,
+  grpcio-tools,
+  httpx,
+  numpy,
+  poetry-core,
+  portalocker,
+  pydantic,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "qdrant-client";
-  version = "1.8.0";
-  format = "pyproject";
+  version = "1.8.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "qdrant";
-    repo = pname;
+    repo = "qdrant-client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Q+Iyjru4viAxJLDQdbNtsYctnXj8N4glItt44D9HPd8=";
+    hash = "sha256-skPBKSqtwMfm5Tvvhg0pSOsnrf0tfvsUgwxjnUbj3NA=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    numpy
-    httpx
+  dependencies = [
     grpcio
-    # typing-extensions
     grpcio-tools
+    httpx
+    numpy
+    portalocker
     pydantic
     urllib3
-    portalocker
   ] ++ httpx.optional-dependencies.http2;
 
-  pythonImportsCheck = [
-    "qdrant_client"
-  ];
+  pythonImportsCheck = [ "qdrant_client" ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
   ];
 
-  # tests require network access
+  # Tests require network access
   doCheck = false;
 
   passthru.optional-dependencies = {

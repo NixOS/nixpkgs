@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -19,16 +20,12 @@ buildPythonPackage rec {
     hash = "sha256-n1Ps0CybeLeDR5E4UnqmSkbFe0SXyplomEGDchAweSY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   # avoid circular dependency with xmlschema which directly depends on this
   doCheck = false;
 
-  pythonImportsCheck = [
-    "elementpath"
-  ];
+  pythonImportsCheck = [ "elementpath" ];
 
   meta = with lib; {
     description = "XPath 1.0/2.0 parsers and selectors for ElementTree and lxml";
