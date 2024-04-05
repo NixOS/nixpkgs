@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "protego";
-  version = "0.3.0";
+  version = "0.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "Protego";
-    hash = "sha256-BCKL/95Ma8ujHPZSm6LP1uG3CAj9wdLLQwG+ayjWxWg=";
+    hash = "sha256-6UQw0NJcu/I5vISdhsXlRPveUx/Mz6BZlTx9o0ShcSw=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
