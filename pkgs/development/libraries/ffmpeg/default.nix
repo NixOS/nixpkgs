@@ -33,6 +33,11 @@ let
     version = "6.1.1";
     hash = "sha256-Q0c95hbCVUHQWPoh5uC8uzMylmB4BnWg+VhXEgSouzo=";
   };
+
+  v7 = {
+    version = "7.0";
+    hash = "sha256-RdDfv+0y90XpgjIRvTjsemKyGunzDbsh4j4WiE9rfyM=";
+  };
 in
 
 rec {
@@ -47,6 +52,10 @@ rec {
   ffmpeg_6 = mkFFmpeg v6 "small";
   ffmpeg_6-headless = mkFFmpeg v6 "headless";
   ffmpeg_6-full = mkFFmpeg v6 "full";
+
+  ffmpeg_7 = mkFFmpeg v7 "small";
+  ffmpeg_7-headless = mkFFmpeg v7 "headless";
+  ffmpeg_7-full = mkFFmpeg v7 "full";
 
   # Please make sure this is updated to the latest version on the next major
   # update to ffmpeg
