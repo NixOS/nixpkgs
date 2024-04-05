@@ -1221,6 +1221,7 @@ with self;
     hash = "sha256-pmEKi24+22T76SzI3RpBmQF7ZrQwlngrpFYLoBdLwe0=";
     meta.description = "OCaml bindings for the Neovim API";
     propagatedBuildInputs = [ angstrom-async async_extra expect_test_helpers_async faraday jsonaf man_in_the_middle_debugger semantic_version ];
+    patches = [ ./vcaml.patch ];
   };
 
   virtual_dom = janePackage {
