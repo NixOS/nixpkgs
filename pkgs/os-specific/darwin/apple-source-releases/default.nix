@@ -187,7 +187,7 @@ let
   } // (if builtins.isFunction attrs then attrs finalAttrs else attrs) // {
     meta = (with lib; {
       platforms = platforms.darwin;
-      license = licenses.apsl20;
+      license = licenses.apple-psl20;
     }) // (attrs.meta or {});
   });
 
