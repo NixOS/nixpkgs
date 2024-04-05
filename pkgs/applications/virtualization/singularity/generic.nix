@@ -272,8 +272,8 @@ in
     maintainers = with maintainers; [ jbedo ShamrockLee ];
     mainProgram = projectName;
   } // extraMeta;
-}).overrideAttrs (finalAttrs: prevAttrs: {
-  passthru = prevAttrs.passthru or { } // {
+}).overrideAttrs (finalAttrs: previousAttrs: {
+  passthru = previousAttrs.passthru or { } // {
     tests = {
       image-hello-cowsay = singularity-tools.buildImage {
         name = "hello-cowsay";
@@ -314,5 +314,9 @@ in
               '')
           { };
     };
+  };
+  meta = previousAttrs.meta or { } // {
+    # Try to automate updating
+    inherit (finalAttrs.src.meta) position;
   };
 })
