@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     "PGSQL_INC=${postgresql}/include"
     "PGSQL_LIB=${postgresql.lib}/lib/libpq.dylib"
     "XML_INC=${libxml2.dev}/include/libxml2"
+    "XML_LIB=${libxml2.out}/lib/libxml2.dylib"
   ];
 
   # todo: libpq would suffice here. Unfortunately this won't work, if one uses only postgresql.lib here.
