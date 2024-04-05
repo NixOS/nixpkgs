@@ -108,7 +108,7 @@
       };
 
       web = mkDotnetTest {
-        name = "publish";
+        name = "web";
         template = "web";
         build = "dotnet publish -o $out";
         runInputs = [ expect curl ];
