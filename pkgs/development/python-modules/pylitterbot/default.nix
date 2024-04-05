@@ -1,16 +1,17 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, poetry-dynamic-versioning
-, pyjwt
-, pytest-aiohttp
-, pytest-freezegun
-, pytestCheckHook
-, pythonOlder
-, deepdiff
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  poetry-dynamic-versioning,
+  pyjwt,
+  pytest-aiohttp,
+  pytest-freezegun,
+  pytestCheckHook,
+  pythonOlder,
+  deepdiff,
 }:
 
 buildPythonPackage rec {
@@ -45,9 +46,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pylitterbot"
-  ];
+  pythonImportsCheck = [ "pylitterbot" ];
 
   meta = with lib; {
     description = "Modulefor controlling a Litter-Robot";
