@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-vkcapture";
-  version = "1.4.7";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "nowrep";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/EbavDDeFQys9zu3FAgsAeVVbs1Rrv8YR4949XCHc6s=";
+    hash = "sha256-hYPQ1N4k4eb+bvGWZqaQJ/C8C5Lh8ooZ03raGF5ORgE=";
   };
 
   cmakeFlags = lib.optionals stdenv.isi686 [
