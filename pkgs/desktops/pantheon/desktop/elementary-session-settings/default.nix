@@ -91,7 +91,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "elementary-session-settings";
-  version = "6.0.0-unstable-2023-09-05";
+  version = "6.0.0-unstable-2024-03-29";
 
   src = fetchFromGitHub {
     owner = "elementary";
@@ -99,8 +99,8 @@ stdenv.mkDerivation rec {
     # For systemd managed gnome-session support.
     # https://github.com/NixOS/nixpkgs/issues/228946
     # nixpkgs-update: no auto update
-    rev = "3476c89bbb66564a72c6495ac0c61f8f9ed7a3ec";
-    sha256 = "sha256-Z1qW6m0XDkB92ZZVKx98JOMXiBDbGpQ0cAXgWdqK27c=";
+    rev = "53bf57e5b32936befc3003a0f99c5b3a69349c76";
+    sha256 = "sha256-TX9V6gZiuPEKSHQoSD4+5QptuqEvuErCJ8OF2KFRf9k=";
   };
 
   nativeBuildInputs = [
