@@ -2044,7 +2044,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/julialang.language-julia/changelog";
-          description = "Julia extension for Visual Studio Code";
+          description = "A Visual Studio Code extension for Julia programming language";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=julialang.language-julia";
           homepage = "https://github.com/julia-vscode/julia-vscode";
           license = lib.licenses.mit;
