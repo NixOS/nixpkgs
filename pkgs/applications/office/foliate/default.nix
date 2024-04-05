@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "johnfactotum";
-    repo = pname;
+    repo = "foliate";
     rev = "refs/tags/${version}";
     hash = "sha256-uKxybt8ZZuk2tWSJLKC7Tgw78EfMMgI99VExfgOdHwA=";
     fetchSubmodules = true;
@@ -51,10 +51,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A simple and modern GTK eBook reader";
-    mainProgram = "foliate";
     homepage = "https://johnfactotum.github.io/foliate";
     changelog = "https://github.com/johnfactotum/foliate/releases/tag/${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ onny ];
+    mainProgram = "foliate";
   };
 }
