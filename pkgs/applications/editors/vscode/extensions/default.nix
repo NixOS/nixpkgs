@@ -3129,6 +3129,21 @@ let
         };
       };
 
+      ms-vscode.test-adapter-converter = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "test-adapter-converter";
+          publisher = "ms-vscode";
+          version = "0.1.9";
+          sha256 = "sha256-M53jhAVawk2yCeSrLkWrUit3xbDc0zgCK2snbK+BaSs=";
+        };
+        meta = {
+          description = "A Visual Studio Code extension that converts from the Test Explorer UI API into native VS Code testing";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode.test-adapter-converter";
+          homepage = "https://github.com/microsoft/vscode-test-adapter-converter";
+          license = lib.licenses.mit;
+        };
+      };
+
       ms-vscode.theme-tomorrowkit = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "Theme-TomorrowKit";
@@ -4245,8 +4260,8 @@ let
         mktplcRef = {
           name = "shellcheck";
           publisher = "timonwong";
-          version = "0.26.3";
-          sha256 = "GlyOLc2VrRnA50MkaG83qa0yLUyJYwueqEO+ZeAStYs=";
+          version = "0.37.0";
+          sha256 = "1d0blynn6c2hz4y9fk7b5wsa3x168gxyycr5d05zqp0rx520m5wc";
         };
         nativeBuildInputs = [ jq moreutils ];
         postInstall = ''
@@ -4254,7 +4269,11 @@ let
           jq '.contributes.configuration.properties."shellcheck.executablePath".default = "${shellcheck}/bin/shellcheck"' package.json | sponge package.json
         '';
         meta = {
+          description = "Integrates ShellCheck into VS Code, a linter for Shell scripts";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=timonwong.shellcheck";
+          homepage = "https://github.com/vscode-shellcheck/vscode-shellcheck";
           license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.raroh73 ];
         };
       };
 

@@ -1,17 +1,21 @@
-/*
-Nix evaluation tests for various lib functions.
+/**
+  Nix evaluation tests for various lib functions.
 
-Since these tests are implemented with Nix evaluation, error checking is limited to what `builtins.tryEval` can detect, which is `throw`'s and `abort`'s, without error messages.
-If you need to test error messages or more complex evaluations, see ./modules.sh, ./sources.sh or ./filesystem.sh as examples.
+  Since these tests are implemented with Nix evaluation,
+  error checking is limited to what `builtins.tryEval` can detect,
+  which is `throw`'s and `abort`'s, without error messages.
 
-To run these tests:
+  If you need to test error messages or more complex evaluations, see
+  `lib/tests/modules.sh`, `lib/tests/sources.sh` or `lib/tests/filesystem.sh` as examples.
 
-  [nixpkgs]$ nix-instantiate --eval --strict lib/tests/misc.nix
+  To run these tests:
 
-If the resulting list is empty, all tests passed.
-Alternatively, to run all `lib` tests:
+    [nixpkgs]$ nix-instantiate --eval --strict lib/tests/misc.nix
 
-  [nixpkgs]$ nix-build lib/tests/release.nix
+  If the resulting list is empty, all tests passed.
+  Alternatively, to run all `lib` tests:
+
+    [nixpkgs]$ nix-build lib/tests/release.nix
 */
 
 let
@@ -102,6 +106,7 @@ let
     types
     updateManyAttrsByPath
     versions
+    xor
     ;
 
   testingThrow = expr: {
@@ -199,15 +204,30 @@ runTests {
   };
 
   /*
-  testOr = {
-    expr = or true false;
-    expected = true;
-  };
+    testOr = {
+      expr = or true false;
+      expected = true;
+    };
   */
 
   testAnd = {
     expr = and true false;
     expected = false;
+  };
+
+  testXor = {
+    expr = [
+      (xor true false)
+      (xor true true)
+      (xor false false)
+      (xor false true)
+    ];
+    expected = [
+      true
+      false
+      false
+      true
+    ];
   };
 
   testFix = {
@@ -1297,7 +1317,7 @@ runTests {
     '';
   };
 
-  /* right now only invocation check */
+  # right now only invocation check
   testToJSONSimple =
     let val = {
       foobar = [ "baz" 1 2 3 ];
@@ -1308,7 +1328,7 @@ runTests {
       expected = builtins.toJSON val;
   };
 
-  /* right now only invocation check */
+  # right now only invocation check
   testToYAMLSimple =
     let val = {
       list = [ { one = 1; } { two = 2; } ];

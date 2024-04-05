@@ -962,7 +962,7 @@
   };
 
   neotest = super.neotest.overrideAttrs {
-    dependencies = with self; [ plenary-nvim ];
+    dependencies = with self; [ nvim-nio plenary-nvim ];
   };
 
   neotest-gradle = super.neotest-gradle.overrideAttrs {

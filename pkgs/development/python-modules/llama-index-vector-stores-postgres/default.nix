@@ -1,18 +1,19 @@
-{ lib
-, asyncpg
-, buildPythonPackage
-, fetchPypi
-, llama-index-core
-, pgvector
-, poetry-core
-, psycopg2
-, pythonRelaxDepsHook
-, pythonOlder
+{
+  lib,
+  asyncpg,
+  buildPythonPackage,
+  fetchPypi,
+  llama-index-core,
+  pgvector,
+  poetry-core,
+  psycopg2,
+  pythonRelaxDepsHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-vector-stores-postgres";
-  version = "0.1.4.post1";
+  version = "0.1.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,12 +21,10 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_vector_stores_postgres";
     inherit version;
-    hash = "sha256-E75oSh9MH8aX00y//jhNbehqYdIm5HfEjb5Swn7J/cQ=";
+    hash = "sha256-9jE+1Gbx2y/CSqkpSfuYqgyX49yZwhwmJbiG/EHwTLw=";
   };
 
-  pythonRemoveDeps = [
-    "psycopg2-binary"
-  ];
+  pythonRemoveDeps = [ "psycopg2-binary" ];
 
   build-system = [
     poetry-core
@@ -39,9 +38,7 @@ buildPythonPackage rec {
     psycopg2
   ];
 
-  pythonImportsCheck = [
-    "llama_index.vector_stores.postgres"
-  ];
+  pythonImportsCheck = [ "llama_index.vector_stores.postgres" ];
 
   meta = with lib; {
     description = "LlamaIndex Vector Store Integration for Postgres";

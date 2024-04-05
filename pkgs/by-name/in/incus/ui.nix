@@ -11,25 +11,25 @@
 
 stdenv.mkDerivation rec {
   pname = "incus-ui";
-  version = "0.6";
+  version = "0.7";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "lxd-ui";
     rev = "refs/tags/${version}";
-    hash = "sha256-3Ts6lKyzpMDVATCKD1fFIGTskWzWpQUT9S8cPFnlEOs=";
+    hash = "sha256-DJLkXZpParmEYHbTpl6KFC9l9y5DqzUTrC0pb2dJXI4=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-0pyxwMGGqogEe1w3sail8NUDHtxLQZU9Wg8E6rQNy4o=";
+    hash = "sha256-ckTWE/czzvxbGOF8fsJ3W1sal7+NaHquoSjZSPjkGj4=";
   };
 
   zabbly = fetchFromGitHub {
     owner = "zabbly";
     repo = "incus";
-    rev = "3eabc1960e99e7e515916e3ea7068a412a8c420b";
-    hash = "sha256-Kw53Qjurc6WPswB38v6wuRhuuGE34uYxNoAKH4UmTBE=";
+    rev = "c83023587eb0e3b01c99ba26e63f757ac15c6f9c";
+    hash = "sha256-cWKp4ALrae6nEBLvWcOM1T+Aca7eHLwsRguH9aSb10Y=";
   };
 
   patchPhase = ''
