@@ -80,6 +80,11 @@ class Logger:
             pass
 
     @contextmanager
+    def subtest(self, name: str, attributes: Dict[str, str] = {}) -> Iterator[None]:
+        with self.nested("subtest: " + name, attributes):
+            yield
+
+    @contextmanager
     def nested(self, message: str, attributes: Dict[str, str] = {}) -> Iterator[None]:
         self._eprint(
             self.maybe_prefix(
