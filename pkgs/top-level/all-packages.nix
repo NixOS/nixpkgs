@@ -4372,6 +4372,10 @@ with pkgs;
     inherit (config) cudaSupport;
   };
 
+  local-ai = callPackage ../by-name/lo/local-ai/package.nix {
+    with_cublas = config.cudaSupport;
+  };
+
   tensorflow-lite = callPackage ../development/libraries/science/math/tensorflow-lite { };
 
   tiny-cuda-nn = callPackage ../development/libraries/science/math/tiny-cuda-nn { };
