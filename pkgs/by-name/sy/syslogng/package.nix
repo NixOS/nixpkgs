@@ -20,6 +20,7 @@
 , protobufc
 , pcre
 , paho-mqtt-c
+, python3Packages
 , libnet
 , json_c
 , libuuid
@@ -69,7 +70,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-B9s7mprPpS4xc7mfJbsDaq2hB1rjYmuOnOnpu+NnMRs=";
     fetchSubmodules = true;
   };
-  nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config which bison flex libxslt perl gperf ];
+  nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config which bison flex libxslt perl gperf python3Packages.setuptools ];
 
   buildInputs = [
     libcap
