@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyads";
-  version = "3.3.9";
+  version = "3.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stlehmann";
     repo = pname;
-    rev = version;
-    hash = "sha256-eNouFJQDgp56fgkA7wZKfosKWOKU6OvXRjFwjCMvZqI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-HJ/dlRuwFSY5j/mAp6rLMlTV59GFwrTV27n73TWlCUo=";
   };
 
   buildInputs = [
