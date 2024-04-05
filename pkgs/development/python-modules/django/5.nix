@@ -43,7 +43,7 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "5.0.3";
+  version = "5.0.4";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Django";
     inherit version;
-    hash = "sha256-X7N1gNz0omL5JYwfQ3OBmqzKkGQx9QXkaI4386mRld8=";
+    hash = "sha256-S9AajIMLt3qKOw59iyW4h+U2rReoG6Lc5UdhNcczEr0=";
   };
 
   patches = [
