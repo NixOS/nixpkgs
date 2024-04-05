@@ -19,7 +19,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/policy" ];
   # disable go workspaces
-  GOWORK = "off";
+  env.GOWORK = "off";
 
   doCheck = false;
 

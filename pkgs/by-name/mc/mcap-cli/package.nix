@@ -20,7 +20,7 @@ buildGoModule {
 
   modRoot = "go/cli/mcap";
 
-  GOWORK="off";
+  env.GOWORK="off";
 
   # copy the local versions of the workspace modules
   postConfigure = ''
