@@ -43,13 +43,13 @@
 
   mariadb = stdenv.mkDerivation rec {
     pname = "mariadb-connector-odbc";
-    version = "3.1.14";
+    version = "3.1.20";
 
     src = fetchFromGitHub {
       owner = "mariadb-corporation";
       repo = "mariadb-connector-odbc";
       rev = version;
-      sha256 = "0wvy6m9qfvjii3kanf2d1rhfaww32kg0d7m57643f79qb05gd6vg";
+      hash = "sha256-l+HlS7/A0shwsEXYKDhi+QCmwHaMTeKrtcvo9yYpYws=";
       # this driver only seems to build correctly when built against the mariadb-connect-c subrepo
       # (see https://github.com/NixOS/nixpkgs/issues/73258)
       fetchSubmodules = true;
@@ -64,13 +64,6 @@
     buildInputs = [ unixODBC openssl libiconv zlib ]
       ++ lib.optionals stdenv.isDarwin [ libkrb5 ];
 
-    preConfigure = ''
-      # we don't want to build a .pkg
-      substituteInPlace CMakeLists.txt \
-        --replace "IF(APPLE)" "IF(0)" \
-        --replace "CMAKE_SYSTEM_NAME MATCHES AIX" "APPLE"
-    '';
-
     cmakeFlags = [
       "-DWITH_EXTERNAL_ZLIB=ON"
       "-DODBC_LIB_DIR=${lib.getLib unixODBC}/lib"
@@ -79,6 +72,10 @@
       # on darwin this defaults to ON but we want to build against unixODBC
       "-DWITH_IODBC=OFF"
     ];
+
+    buildFlags = if stdenv.isDarwin then [ "maodbc" ] else null;
+
+    installTargets = if stdenv.isDarwin then [ "install/fast" ] else null;
 
     # see the top of the file for an explanation
     passthru = {

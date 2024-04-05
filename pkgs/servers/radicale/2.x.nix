@@ -37,6 +37,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://radicale.org/v2.html";
     description = "CalDAV CardDAV server";
+    mainProgram = "radicale";
     longDescription = ''
       The Radicale Project is a complete CalDAV (calendar) and CardDAV
       (contact) server solution. Calendars and address books are available for

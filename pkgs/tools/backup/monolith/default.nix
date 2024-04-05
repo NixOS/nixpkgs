@@ -29,6 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Bundle any web page into a single HTML file";
+    mainProgram = "monolith";
     homepage = "https://github.com/Y2Z/monolith";
     license = licenses.unlicense;
     maintainers = with maintainers; [ Br1ght0ne ];

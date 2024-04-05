@@ -208,6 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Utilities to configure the GNOME desktop";
+    mainProgram = "gnome-control-center";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

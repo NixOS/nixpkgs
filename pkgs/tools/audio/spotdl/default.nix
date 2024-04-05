@@ -91,6 +91,7 @@ in python.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Download your Spotify playlists and songs along with album art and metadata";
+    mainProgram = "spotdl";
     homepage = "https://github.com/spotDL/spotify-downloader";
     changelog = "https://github.com/spotDL/spotify-downloader/releases/tag/v${version}";
     license = licenses.mit;

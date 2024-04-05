@@ -255,7 +255,7 @@ in
               ln -fs ${ipc-config} config/IPC.config
             ''}
 
-            ${lib.optionalString (cfg.ipcSettings != {}) ''
+            ${lib.optionalString (cfg.bots != {}) ''
               ln -fs ${createBotsScript}/* config/
             ''}
 
@@ -270,6 +270,6 @@ in
 
   meta = {
     buildDocsInSandbox = false;
-    maintainers = with lib.maintainers; [ lom SuperSandro2000 ];
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

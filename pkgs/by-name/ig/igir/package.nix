@@ -10,16 +10,16 @@
 
 buildNpmPackage rec {
   pname = "igir";
-  version = "2.2.1";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "emmercm";
     repo = "igir";
     rev = "v${version}";
-    hash = "sha256-MlLnnwlqFkzSZi+6OGS/ZPYRPjV7CY/piFvilwhhR9A=";
+    hash = "sha256-yW2lInIUfexFvIeiadM2A9qXmWOVClh1pVXS93pbH8I=";
   };
 
-  npmDepsHash = "sha256-yVo2ZKu2lEOYG12Gk5GQXamprkP5jEyKlSTZdPjNWQM=";
+  npmDepsHash = "sha256-5Xp3vRW0tZXEN0n1IqrnPXYnMM+25diSKrG1ba/ZWns=";
 
   # I have no clue why I have to do this
   postPatch = ''
@@ -36,6 +36,7 @@ buildNpmPackage rec {
 
   meta = with lib; {
     description = "A video game ROM collection manager to help filter, sort, patch, archive, and report on collections on any OS";
+    mainProgram = "igir";
     homepage = "https://igir.io";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ TheBrainScrambler ];

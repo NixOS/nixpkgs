@@ -9,12 +9,12 @@
 , wrapGAppsHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sfxr";
   version = "1.2.1";
 
   src = fetchurl {
-    url = "http://www.drpetter.se/files/sfxr-sdl-${version}.tar.gz";
+    url = "http://www.drpetter.se/files/sfxr-sdl-${finalAttrs.version}.tar.gz";
     sha256 = "0dfqgid6wzzyyhc0ha94prxax59wx79hqr25r6if6by9cj4vx4ya";
   };
 
@@ -58,9 +58,9 @@ stdenv.mkDerivation rec {
     broken = stdenv.isDarwin;
     homepage = "http://www.drpetter.se/project_sfxr.html";
     description = "A videogame sound effect generator";
+    mainProgram = "sfxr";
     license = licenses.mit;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.unix;
   };
-}
-
+})

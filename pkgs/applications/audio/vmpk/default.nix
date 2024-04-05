@@ -23,6 +23,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Virtual MIDI Piano Keyboard";
+    mainProgram = "vmpk";
     homepage = "http://vmpk.sourceforge.net/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ orivej ];

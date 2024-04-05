@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "identify";
-  version = "2.5.34";
+  version = "2.5.35";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "pre-commit";
     repo = "identify";
     rev = "refs/tags/v${version}";
-    hash = "sha256-q1RVFdDFUkKGaKpcbasXHks+OZhVRZUy3ufuruBZiPA=";
+    hash = "sha256-kUBAq9ttIdTLApJ0yW8Yk/NIXpmllApQGpR24wm0PHA=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "File identification library for Python";
+    mainProgram = "identify-cli";
     homepage = "https://github.com/chriskuehl/identify";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

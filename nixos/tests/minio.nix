@@ -43,17 +43,17 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
         # Minio requires at least 1GiB of free disk space to run.
         virtualisation.diskSize = 4 * 1024;
+
+        # Minio pre allocates 2GiB or memory, reserve some more
+        virtualisation.memorySize = 4096;
       };
     };
 
     testScript = ''
-      import time
 
       start_all()
       # simulate manually editing root credentials file
       machine.wait_for_unit("multi-user.target")
-      machine.copy_from_host("${credsPartial}", "${rootCredentialsFile}")
-      time.sleep(3)
       machine.copy_from_host("${credsFull}", "${rootCredentialsFile}")
 
       machine.wait_for_unit("minio.service")

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "oras";
-  version = "0.1.27";
+  version = "0.1.28";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "oras-project";
     repo = "oras-py";
     rev = "refs/tags/${version}";
-    hash = "sha256-T2zuflew91UsEjhPKPjNxPBN+C//S1vWvXKVT602EVI=";
+    hash = "sha256-yka4TypKqGczW+NugmCGa8PgtaSJeaQ4sPphPsIPLow=";
   };
 
   nativeBuildInputs = [

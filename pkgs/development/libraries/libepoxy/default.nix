@@ -11,13 +11,14 @@
 , Carbon
 , OpenGL
 , x11Support ? !stdenv.isDarwin
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libepoxy";
   version = "1.5.10";
 
-  src = fetchFromGitHub {
+  src = with finalAttrs; fetchFromGitHub {
     owner = "anholt";
     repo = pname;
     rev = version;
@@ -58,13 +59,19 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Degl=${if (x11Support && !stdenv.isDarwin) then "yes" else "no"}"
     "-Dglx=${if x11Support then "yes" else "no"}"
-    "-Dtests=${lib.boolToString doCheck}"
+    "-Dtests=${lib.boolToString finalAttrs.doCheck}"
     "-Dx11=${lib.boolToString x11Support}"
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (x11Support && !stdenv.isDarwin) ''-DLIBGL_PATH="${lib.getLib libGL}/lib"'';
 
   doCheck = true;
+
+  passthru.tests = {
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = with lib; {
     description = "A library for handling OpenGL function pointer management";
@@ -74,4 +81,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     pkgConfigModules = [ "epoxy" ];
   };
-}
+})

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "traitlets";
-  version = "5.14.0";
+  version = "5.14.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/NqorEnATfoO0+4zhO9t/bXW83QVAr4kcnlAdnkpZ3I=";
+    hash = "sha256-hYUQWzcaBLgxakPVzinAmFdcLkd4ULYrhIuWTxREUn4=";
   };
 
   nativeBuildInputs = [

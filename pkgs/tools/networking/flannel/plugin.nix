@@ -35,6 +35,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "flannel CNI plugin";
+    mainProgram = "flannel";
     homepage = "https://github.com/flannel-io/cni-plugin/";
     license = licenses.asl20;
     platforms = platforms.linux;

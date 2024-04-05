@@ -17,6 +17,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A minimalist re-implementation of the Fusée Gelée exploit";
+    mainProgram = "fusee-nano";
     homepage = "https://github.com/DavidBuchanan314/fusee-nano";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;

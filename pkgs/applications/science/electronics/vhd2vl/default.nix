@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "VHDL to Verilog converter";
+    mainProgram = "vhd2vl";
     homepage = "https://github.com/ldoolitt/vhd2vl";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ matthuszagh ];

@@ -43,6 +43,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Signal Messenger client for terminal";
+    mainProgram = "gurk";
     homepage = "https://github.com/boxdot/gurk-rs";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ devhell ];

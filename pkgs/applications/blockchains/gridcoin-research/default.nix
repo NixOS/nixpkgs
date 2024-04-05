@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gridcoin-research";
-  version = "5.4.5.0";
+  version = "5.4.7.0";
 
   src = fetchFromGitHub {
     owner = "gridcoin-community";
     repo = "Gridcoin-Research";
     rev = "${version}";
-    sha256 = "1a174m7821c7d3yh9lyh0r3ds6qn06x16aa1qxcbrqyxxc127yky";
+    sha256 = "sha256-wdXah7QnWohGAtC98exPSkhg5F3BaBOiFs6bklFxD7E=";
   };
 
   nativeBuildInputs = [

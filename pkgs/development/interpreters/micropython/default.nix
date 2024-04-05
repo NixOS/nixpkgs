@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "micropython";
-  version = "1.22.1";
+  version = "1.22.2";
 
   src = fetchFromGitHub {
     owner = "micropython";
     repo = "micropython";
     rev = "v${version}";
-    sha256 = "sha256-NU/C0rxiA/DTbUXZG/RTsq7tGgxtLUUilMhsc8DPA7g=";
+    sha256 = "sha256-sdok17HvKub/sI+8cAIIDaLD/3mu8yXXqrTOej8/UfU=";
     fetchSubmodules = true;
   };
 

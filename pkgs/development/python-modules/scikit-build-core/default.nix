@@ -22,13 +22,13 @@
 
 buildPythonPackage rec {
   pname = "scikit-build-core";
-  version = "0.7.0";
+  version = "0.8.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "scikit_build_core";
     inherit version;
-    hash = "sha256-hffyRpxWjGzjWrL6Uv4tJqBODeUH06JMGrtyg3Vlf9M=";
+    hash = "sha256-UOwkuVaMmqbicjPe6yl4kyvHmFYhKzBXXL+kBJZVxDY=";
   };
 
   postPatch = lib.optionalString (pythonOlder "3.11") ''

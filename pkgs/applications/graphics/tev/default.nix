@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A high dynamic range (HDR) image comparison tool";
+    mainProgram = "tev";
     longDescription = ''
       A high dynamic range (HDR) image comparison tool for graphics people. tev
       allows viewing images through various tonemapping operators and inspecting

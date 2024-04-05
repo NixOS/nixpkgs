@@ -36,6 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/hardwario/bch-control-tool";
     description = "HARDWARIO Hub Control Tool";
+    mainProgram = "bch";
     platforms = platforms.linux;
     license = licenses.mit;
     maintainers = with maintainers; [ cynerd ];

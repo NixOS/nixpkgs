@@ -374,19 +374,21 @@ if you want to allow users to leave it undefined.
 ::: {#ex-submodule-direct .example}
 ### Directly defined submodule
 ```nix
-options.mod = mkOption {
-  description = "submodule example";
-  type = with types; submodule {
-    options = {
-      foo = mkOption {
-        type = int;
-      };
-      bar = mkOption {
-        type = str;
+{
+  options.mod = mkOption {
+    description = "submodule example";
+    type = with types; submodule {
+      options = {
+        foo = mkOption {
+          type = int;
+        };
+        bar = mkOption {
+          type = str;
+        };
       };
     };
   };
-};
+}
 ```
 :::
 
@@ -405,10 +407,12 @@ let
     };
   };
 in
-options.mod = mkOption {
-  description = "submodule example";
-  type = with types; submodule modOptions;
-};
+{
+  options.mod = mkOption {
+    description = "submodule example";
+    type = with types; submodule modOptions;
+  };
+}
 ```
 :::
 
@@ -421,29 +425,33 @@ multiple definitions of the submodule option set
 ::: {#ex-submodule-listof-declaration .example}
 ### Declaration of a list of submodules
 ```nix
-options.mod = mkOption {
-  description = "submodule example";
-  type = with types; listOf (submodule {
-    options = {
-      foo = mkOption {
-        type = int;
+{
+  options.mod = mkOption {
+    description = "submodule example";
+    type = with types; listOf (submodule {
+      options = {
+        foo = mkOption {
+          type = int;
+        };
+        bar = mkOption {
+          type = str;
+        };
       };
-      bar = mkOption {
-        type = str;
-      };
-    };
-  });
-};
+    });
+  };
+}
 ```
 :::
 
 ::: {#ex-submodule-listof-definition .example}
 ### Definition of a list of submodules
 ```nix
-config.mod = [
-  { foo = 1; bar = "one"; }
-  { foo = 2; bar = "two"; }
-];
+{
+  config.mod = [
+    { foo = 1; bar = "one"; }
+    { foo = 2; bar = "two"; }
+  ];
+}
 ```
 :::
 
@@ -455,27 +463,31 @@ multiple named definitions of the submodule option set
 ::: {#ex-submodule-attrsof-declaration .example}
 ### Declaration of attribute sets of submodules
 ```nix
-options.mod = mkOption {
-  description = "submodule example";
-  type = with types; attrsOf (submodule {
-    options = {
-      foo = mkOption {
-        type = int;
+{
+  options.mod = mkOption {
+    description = "submodule example";
+    type = with types; attrsOf (submodule {
+      options = {
+        foo = mkOption {
+          type = int;
+        };
+        bar = mkOption {
+          type = str;
+        };
       };
-      bar = mkOption {
-        type = str;
-      };
-    };
-  });
-};
+    });
+  };
+}
 ```
 :::
 
 ::: {#ex-submodule-attrsof-definition .example}
 ### Definition of attribute sets of submodules
 ```nix
-config.mod.one = { foo = 1; bar = "one"; };
-config.mod.two = { foo = 2; bar = "two"; };
+{
+  config.mod.one = { foo = 1; bar = "one"; };
+  config.mod.two = { foo = 2; bar = "two"; };
+}
 ```
 :::
 
@@ -495,10 +507,12 @@ Types are mainly characterized by their `check` and `merge` functions.
     ### Adding a type check
 
     ```nix
-    byte = mkOption {
-      description = "An integer between 0 and 255.";
-      type = types.addCheck types.int (x: x >= 0 && x <= 255);
-    };
+    {
+      byte = mkOption {
+        description = "An integer between 0 and 255.";
+        type = types.addCheck types.int (x: x >= 0 && x <= 255);
+      };
+    }
     ```
     :::
 
@@ -506,12 +520,14 @@ Types are mainly characterized by their `check` and `merge` functions.
     ### Overriding a type check
 
     ```nix
-    nixThings = mkOption {
-      description = "words that start with 'nix'";
-      type = types.str // {
-        check = (x: lib.hasPrefix "nix" x)
+    {
+      nixThings = mkOption {
+        description = "words that start with 'nix'";
+        type = types.str // {
+          check = (x: lib.hasPrefix "nix" x);
+        };
       };
-    };
+    }
     ```
     :::
 

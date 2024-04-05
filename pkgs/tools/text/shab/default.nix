@@ -41,6 +41,7 @@ let
 
     meta = with lib; {
       description = "The bash templating language";
+      mainProgram = "shab";
       homepage = "https://github.com/zimbatm/shab";
       license = licenses.unlicense;
       maintainers = with maintainers; [ zimbatm ];

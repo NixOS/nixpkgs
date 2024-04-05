@@ -20,6 +20,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Calculate root-mean-square deviation (RMSD) between two sets of cartesian coordinates";
+    mainProgram = "calculate_rmsd";
     homepage = "https://github.com/charnley/rmsd";
     license = licenses.bsd2;
     platforms = platforms.linux;

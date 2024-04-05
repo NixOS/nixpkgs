@@ -47,6 +47,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "LLMNR, NBT-NS and MDNS poisoner, with built-in HTTP/SMB/MSSQL/FTP/LDAP rogue authentication server";
+    mainProgram = "responder";
     homepage = "https://github.com/lgandx/Responder";
     changelog = "https://github.com/lgandx/Responder/blob/master/CHANGELOG.md";
     license = licenses.gpl3Only;

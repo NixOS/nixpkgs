@@ -15,6 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "OPA Rego language server";
+    mainProgram = "regols";
     homepage = "https://github.com/kitagry/regols";
     license = licenses.mit;
     maintainers = with maintainers; [ alias-dev ];

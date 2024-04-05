@@ -32,13 +32,13 @@ let
   ];
 in stdenv.mkDerivation (finalAttrs: {
   pname = "gjs";
-  version = "1.78.3";
+  version = "1.78.4";
 
   outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor finalAttrs.version}/gjs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-QtUDZMql15LHZzT+W7zEudu0iBnaIKQGAGHouVJhNKQ=";
+    hash = "sha256-mux6uHLCBQQEkHrpTwrnq+yKVL2ciU3bXC0PUekyuaE=";
   };
 
   patches = [

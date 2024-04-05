@@ -20,13 +20,13 @@
 
 buildPythonPackage rec {
   pname = "oslo-db";
-  version = "14.1.0";
+  version = "15.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "oslo.db";
     inherit version;
-    hash = "sha256-UFilywqwhXaGnle8K5VNdZqMvhklkTMdHPMDMvz62h8=";
+    hash = "sha256-6QJDUgX1xQtw7mNYY8i06lS9Hr4ABpXAZeMN1C2Xb/o=";
   };
 
   nativeBuildInputs = [

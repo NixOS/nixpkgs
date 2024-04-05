@@ -146,7 +146,7 @@ with self;
     hash = "sha256-83YKxvVb/JwBnQG4R/R1Ztik9T/hO4cbiNTfFnErpG4=";
     meta.description = "Async wrappers for SSL";
     buildInputs = [ dune-configurator ];
-    propagatedBuildInputs = [ async ctypes openssl ];
+    propagatedBuildInputs = [ async ctypes ctypes-foreign openssl ];
   };
 
   async_unix = janePackage {
@@ -283,8 +283,8 @@ with self;
 
   core = janePackage {
     pname = "core";
-    version = "0.16.1";
-    hash = "sha256-cKJi67VLIsbLEgIZyFiVz00z/QEvJhNBb8+M+bR4iHU=";
+    version = "0.16.2";
+    hash = "sha256-cyOU++XJJkU2YMHfn8saFOxLoQSFhF7kARJi/9unbFQ=";
     meta.description = "Industrial strength alternative to OCaml's standard library";
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [ base base_bigstring base_quickcheck ppx_jane time_now ];

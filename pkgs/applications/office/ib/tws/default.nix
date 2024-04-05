@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
     sha256 = "1a2jiwwnr5g3xfba1a89c257bdbnq4zglri8hz021vk7f6s4rlrf";
   };
 
-  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
-
   buildInputs = [ jdk ];
 
   buildPhase = ''

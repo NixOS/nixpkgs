@@ -74,20 +74,13 @@
  )
  
  system_conf = configuration_data()
-@@ -136,12 +136,12 @@ custom_target('system.pa',
+@@ -136,6 +136,6 @@ custom_target('system.pa',
    command : [m4, '@INPUT@'],
    build_by_default : true,
    install : true,
 -  install_dir : pulsesysconfdir,
 +  install_dir : pulsesysconfdir_install,
  )
- 
- if dbus_dep.found()
-   install_data('pulseaudio-system.conf',
--    install_dir : join_paths(sysconfdir, 'dbus-1', 'system.d')
-+    install_dir : join_paths(sysconfdir_install, 'dbus-1', 'system.d')
-   )
- endif
  
 --- a/src/pulse/meson.build
 +++ b/src/pulse/meson.build

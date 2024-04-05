@@ -9,8 +9,8 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
   mktplcRef = {
     name = "context-mapper-vscode-extension";
     publisher = "contextmapper";
-    version = "6.7.0";
-    sha256 = "sha256-vlDVqn1Je0eo5Nf2gyotSvhIa07tWCINe79RZSyMzcA=";
+    version = "6.11.0";
+    sha256 = "sha256-TvApcBBI+Egu7t4tJuEYTs6mhvABOY2eXVb57O4gWfs=";
   };
 
   nativeBuildInputs = [

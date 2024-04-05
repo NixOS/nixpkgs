@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/AsamK/signal-cli";
     description = "Command-line and dbus interface for communicating with the Signal messaging service";
+    mainProgram = "signal-cli";
     changelog = "https://github.com/AsamK/signal-cli/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ivan ];

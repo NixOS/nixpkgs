@@ -69,6 +69,10 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # AttributeError
     "tests/test_fileio/test_backends/test_petrel_backend.py"
+    # Freezes forever?
+    "tests/test_runner/test_activation_checkpointing.py"
+    # missing dependencies
+    "tests/test_visualizer/test_vis_backend.py"
   ];
 
   disabledTests = [

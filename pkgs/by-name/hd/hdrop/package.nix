@@ -9,17 +9,18 @@
 , libnotify
 , withHyprland ? true
 , hyprland
+, gawk
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "hdrop";
-  version = "0.4.4";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "Schweber";
     repo = "hdrop";
     rev = "v${version}";
-    hash = "sha256-eLOu7xmFphTxCtyyXdM9VkNcUpefefuZMAQtOV4FVtU=";
+    hash = "sha256-iginpMlgANSPWgFxNC2TYMjf2NKSSzzrjIN8lIsAvX8=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +37,7 @@ stdenvNoCC.mkDerivation rec {
         util-linux
         jq
         libnotify
+        gawk
       ]
       ++ lib.optional withHyprland hyprland)}"
   '';
@@ -44,7 +46,7 @@ stdenvNoCC.mkDerivation rec {
     description = "Emulate 'tdrop' in Hyprland (run, show and hide specific programs per keybind)";
     homepage = "https://github.com/Schweber/hdrop";
     changelog = "https://github.com/Schweber/hdrop/releases/tag/v${version}";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ Schweber ];
     mainProgram = "hdrop";

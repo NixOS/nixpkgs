@@ -1,11 +1,12 @@
 { lib, fetchPypi, python, buildPythonPackage, nose, future, coverage }:
 
 buildPythonPackage rec {
-  pname = "PyZufall";
+  pname = "pyzufall";
   version = "0.13.2";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "PyZufall";
+    inherit version;
     sha256 = "1jffhi20m82fdf78bjhncbdxkfzcskrlipxlrqq9741xdvrn14b5";
   };
 

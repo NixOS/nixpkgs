@@ -21,6 +21,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A tool to flash firmware to mechanical keyboards";
+    mainProgram = "wally-cli";
     homepage = "https://ergodox-ez.com/pages/wally-planck";
     platforms = with platforms; linux ++ darwin;
     license = licenses.mit;

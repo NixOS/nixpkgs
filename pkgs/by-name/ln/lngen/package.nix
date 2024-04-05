@@ -20,4 +20,5 @@ haskellPackages.mkDerivation {
   description = "Tool for generating Locally Nameless definitions and proofs in Coq, working together with Ott";
   maintainers = with lib.maintainers; [ chen ];
   license = lib.licenses.mit;
+  mainProgram = "lngen";
 }

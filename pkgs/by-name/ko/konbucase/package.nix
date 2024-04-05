@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "konbucase";
-  version = "4.1.1";
+  version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = "ryonakano";
     repo = "konbucase";
     rev = finalAttrs.version;
-    hash = "sha256-g3EDa9EXymi6c8dRHFZYGEAT7k8M2TXUAzZVKTnLzyk=";
+    hash = "sha256-md7drxg1JuW6TRJauKOk4Aqjx/V1RVZ+POa5v6DtKwk=";
     fetchSubmodules = true;
   };
 

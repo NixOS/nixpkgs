@@ -16,13 +16,13 @@
 
 buildPythonApplication rec {
   pname = "protontricks";
-  version = "1.11.0";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "Matoking";
     repo = pname;
     rev = version;
-    sha256 = "sha256-5FpcIaQodvNjdqUfD9hvXlrdhszr98j0zm3MCCpZFoc=";
+    sha256 = "sha256-a40IAFrzQ0mogMoXKb+Lp0fPc1glYophqtftigk3nAc=";
   };
 
   patches = [

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "django-crispy-bootstrap5";
-  version = "2023.10";
+  version = "2024.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "django-crispy-forms";
     repo = "crispy-bootstrap5";
     rev = "refs/tags/${version}";
-    hash = "sha256-AUMlLj3GmI+0vYw56Dw2+iF5s1l6GF+zV7PRD889ldg=";
+    hash = "sha256-ehcDwy53pZCqouvUm6qJG2FJzlFZaygTZxNYPOqH1q0=";
   };
 
   propagatedBuildInputs = [

@@ -27,6 +27,7 @@
 , LocalAuthentication
 
 , withKeePassBrowser ? true
+, withKeePassBrowserPasskeys ? true
 , withKeePassFDOSecrets ? true
 , withKeePassKeeShare ? true
 , withKeePassNetworking ? true
@@ -40,13 +41,13 @@
 
 stdenv.mkDerivation rec {
   pname = "keepassxc";
-  version = "2.7.6";
+  version = "2.7.7";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
     rev = version;
-    hash = "sha256-xgrkMz7BCBxjfxHsAz/CFLv1d175LnrAJIOZMM3GmU0=";
+    hash = "sha256-HjDzb1H3eMSraKbfHgg9S+w4TXNt40lQkDz+EChb5Ks=";
   };
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [
@@ -70,6 +71,7 @@ stdenv.mkDerivation rec {
   ++ (lib.optional (withKeePassFDOSecrets && stdenv.isLinux) "-DWITH_XC_FDOSECRETS=ON")
   ++ (lib.optional (withKeePassYubiKey && stdenv.isLinux) "-DWITH_XC_YUBIKEY=ON")
   ++ (lib.optional withKeePassBrowser "-DWITH_XC_BROWSER=ON")
+  ++ (lib.optional withKeePassBrowserPasskeys "-DWITH_XC_BROWSER_PASSKEYS=ON")
   ++ (lib.optional withKeePassKeeShare "-DWITH_XC_KEESHARE=ON")
   ++ (lib.optional withKeePassNetworking "-DWITH_XC_NETWORKING=ON")
   ++ (lib.optional withKeePassSSHAgent "-DWITH_XC_SSHAGENT=ON");

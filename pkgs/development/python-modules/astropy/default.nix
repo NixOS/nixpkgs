@@ -12,6 +12,7 @@
 , wheel
 # testing
 , pytestCheckHook
+, stdenv
 , pytest-xdist
 , pytest-astropy
 
@@ -25,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "astropy";
-  version = "6.0.0";
+  version = "6.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8"; # according to setup.cfg
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-A82AGlUwXaUjzY14DXY1n1clXc3Fn+C91x/VFU/Hd9k=";
+    hash = "sha256-ial13jVtBgjnTx9JNEL7Osu7eoW3OeB0RguwNAAUs5w=";
   };
 
   nativeBuildInputs = [
@@ -72,6 +73,19 @@ buildPythonPackage rec {
     # May fail due to parallelism, see:
     # https://github.com/astropy/astropy/issues/15441
     "TestUnifiedOutputRegistry"
+
+    # fail due to pytest>=8
+    # https://github.com/astropy/astropy/issues/15960#issuecomment-1913654471
+    "test_distortion_header"
+
+    # flaky
+    "test_timedelta_conversion"
+    # More flaky tests, see: https://github.com/NixOS/nixpkgs/issues/294392
+    "test_sidereal_lon_independent"
+    "test_timedelta_full_precision_arithmetic"
+    "test_datetime_to_timedelta"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_sidereal_lat_independent"
   ];
 
   meta = {

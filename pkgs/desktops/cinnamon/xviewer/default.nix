@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A generic image viewer from Linux Mint";
+    mainProgram = "xviewer";
     homepage = "https://github.com/linuxmint/xviewer";
     license = licenses.gpl2Only;
     platforms = platforms.linux;

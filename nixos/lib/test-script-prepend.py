@@ -26,6 +26,17 @@ class PollingConditionProtocol(Protocol):
         raise Exception("This is just type information for the Nix test driver")
 
 
+class CreateMachineProtocol(Protocol):
+    def __call__(
+        self,
+        start_command: str | dict,
+        *,
+        name: Optional[str] = None,
+        keep_vm_state: bool = False,
+    ) -> Machine:
+        raise Exception("This is just type information for the Nix test driver")
+
+
 start_all: Callable[[], None]
 subtest: Callable[[str], ContextManager[None]]
 retry: RetryProtocol
@@ -34,7 +45,7 @@ machines: List[Machine]
 vlans: List[VLan]
 driver: Driver
 log: Logger
-create_machine: Callable[[Dict[str, Any]], Machine]
+create_machine: CreateMachineProtocol
 run_tests: Callable[[], None]
 join_all: Callable[[], None]
 serial_stdout_off: Callable[[], None]

@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "tool for expediting bazel build workflows";
+    mainProgram = "rebazel";
     homepage = "https://github.com/meetup/rebazel";
     license = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];

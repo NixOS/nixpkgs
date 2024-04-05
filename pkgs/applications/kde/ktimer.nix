@@ -5,6 +5,7 @@ mkDerivation {
   meta = with lib; {
     homepage = "https://kde.org/applications/en/utilities/org.kde.ktimer";
     description = "A little tool to execute programs after some time";
+    mainProgram = "ktimer";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "dissect-etl";
-  version = "3.7";
-  format = "pyproject";
+  version = "3.8";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.etl";
     rev = "refs/tags/${version}";
-    hash = "sha256-z6P7XpA+j9JIJJsp/Z4uewFw9OAPSZV+57eJu7rd17I=";
+    hash = "sha256-yGpDZAaw11Sr5OPWxbY/NpZAV3jJUIgtTgDykCvYDtM=";
   };
 
   nativeBuildInputs = [

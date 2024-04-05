@@ -11,21 +11,21 @@
 
 buildPythonPackage rec {
   pname = "shtab";
-  version = "1.6.5";
-  format = "pyproject";
+  version = "1.7.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "iterative";
-    repo = pname;
+    repo = "shtab";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jplcKVXWogSrYRGch0qypWGNzO9HErR5B9S1iT4eFcM=";
+    hash = "sha256-8bAwLSdJCzFw5Vf9CKBrH5zOoojeXds7aIRncl+sLBI=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=shtab --cov-report=term-missing --cov-report=xml" ""
+      --replace-fail " --cov=shtab --cov-report=term-missing --cov-report=xml" ""
   '';
 
   nativeBuildInputs = [
@@ -45,6 +45,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module for shell tab completion of Python CLI applications";
+    mainProgram = "shtab";
     homepage = "https://docs.iterative.ai/shtab/";
     changelog = "https://github.com/iterative/shtab/releases/tag/v${version}";
     license = licenses.asl20;

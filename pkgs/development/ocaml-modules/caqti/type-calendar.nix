@@ -4,8 +4,6 @@ buildDunePackage {
   pname = "caqti-type-calendar";
   inherit (caqti) src version;
 
-  duneVersion = "3";
-
   propagatedBuildInputs = [ calendar caqti ];
 
   meta = caqti.meta // {

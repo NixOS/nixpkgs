@@ -30,6 +30,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "YAML templating tool that allows configuration of complex software via reusable templates with user-provided values";
+    mainProgram = "ytt";
     homepage = "https://get-ytt.io";
     license = licenses.asl20;
     maintainers = with maintainers; [ brodes techknowlogick ];

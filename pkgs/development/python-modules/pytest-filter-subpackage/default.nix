@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-filter-subpackage";
-  version = "0.1.2";
+  version = "0.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-H66jZxeAPlJFiNbBCdJtINOzRCLo1qloEnWJd9ygF4I=";
+    hash = "sha256-P0aPGzZRgSiGm5Xeq2YbpF7WKThUMp/vFNpMjKx4r1Y=";
   };
 
   nativeBuildInputs = [

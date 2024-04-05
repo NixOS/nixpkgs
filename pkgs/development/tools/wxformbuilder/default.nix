@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wxformbuilder";
-  version = "4.0.0";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "wxFormBuilder";
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
         --replace "\$Format:%(describe)\$" "$(git -C $out rev-parse --short HEAD)"
       rm -rf $out/.git
     '';
-    hash = "sha256-Lqta+u9WVwUREsR7aH+2DJn0oM5QwlwRSBImuwNkmS4=";
+    hash = "sha256-Ob+6MAf2iQGd3lgeN+dLfscpmYYrzD3dsN+2ZmvJog0=";
   };
 
   postPatch = ''

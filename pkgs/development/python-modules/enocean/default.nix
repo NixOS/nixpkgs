@@ -4,7 +4,7 @@
 , beautifulsoup4
 , enum-compat
 , pyserial
-, nose
+, pynose
 }:
 
 buildPythonPackage rec {
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    nose
+    pynose
   ];
 
   checkPhase = ''
@@ -45,6 +45,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "EnOcean serial protocol implementation";
+    mainProgram = "enocean_example.py";
     homepage = "https://github.com/kipe/enocean";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

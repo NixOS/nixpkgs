@@ -5,7 +5,7 @@
 , ffmpeg
 , discord-rpc
 , libedit
-, libelf
+, elfutils
 , libepoxy
 , libsForQt5
 , libzip
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     ffmpeg
     libedit
-    libelf
+    elfutils
     libepoxy
     libzip
     lua

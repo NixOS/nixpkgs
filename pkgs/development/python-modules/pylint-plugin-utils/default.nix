@@ -39,9 +39,6 @@ buildPythonPackage rec {
     "pylint_plugin_utils"
   ];
 
-  # https://github.com/PyCQA/pylint-plugin-utils/issues/26
-  doCheck = false;
-
   meta = with lib; {
     description = "Utilities and helpers for writing Pylint plugins";
     homepage = "https://github.com/PyCQA/pylint-plugin-utils";

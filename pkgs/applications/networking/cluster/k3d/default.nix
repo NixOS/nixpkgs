@@ -61,6 +61,7 @@ buildGoModule rec {
     homepage = "https://github.com/k3d-io/k3d/";
     changelog = "https://github.com/k3d-io/k3d/blob/v${version}/CHANGELOG.md";
     description = "A helper to run k3s (Lightweight Kubernetes. 5 less than k8s) in a docker container";
+    mainProgram = "k3d";
     longDescription = ''
       k3s is the lightweight Kubernetes distribution by Rancher: rancher/k3s
 

@@ -49,6 +49,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python CLI utility for creating credentials for accessing S3 buckets";
+    mainProgram = "s3-credentials";
     homepage = "https://github.com/simonw/s3-credentials";
     license = licenses.asl20;
     maintainers = with maintainers; [ techknowlogick ];

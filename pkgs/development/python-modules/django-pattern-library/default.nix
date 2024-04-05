@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "django-pattern-library";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "torchbox";
     repo = "django-pattern-library";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9uuLYwG0/NYGouncuaN8S+3CBABSxSOkcrP59p5v84U=";
+    hash = "sha256-hrdJYVioY6y9D29DuKPMZjdWj92GcbHXANWiEHadimI=";
   };
 
   nativeBuildInputs = [

@@ -1,27 +1,33 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pytestCheckHook, setuptools-scm }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, setuptools
+, setuptools-scm
+}:
 
 buildPythonPackage rec {
   pname = "configparser";
-  version = "6.0.0";
-  format = "pyproject";
+  version = "6.0.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-7JFKseVsZy3h9cNIOWTmj3GzTkV5BLe3bga5Iq7AZ6g=";
+  src = fetchFromGitHub {
+    owner = "jaraco";
+    repo = "configparser";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-r+poK+knBQi48Z1VrNFqUt9Qm9iGERAOTFa4bKfXi0g=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   preConfigure = ''
     export LC_ALL=${if stdenv.isDarwin then "en_US" else "C"}.UTF-8
-  '';
-
-  preCheck = ''
-    # avoid FileNotFoundError
-    # FileNotFoundError: [Errno 2] No such file or directory: 'cfgparser.3'
-    cd tests
   '';
 
   meta = with lib; {

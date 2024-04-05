@@ -18,6 +18,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  doInstallCheck = true;
+
+  # Give hello some install checks for testing purpose.
+  postInstallCheck = ''
+    stat "''${!outputBin}/bin/${finalAttrs.meta.mainProgram}"
+  '';
+
   passthru.tests = {
     version = testers.testVersion { package = hello; };
 

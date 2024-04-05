@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Kernel-based automounter";
+    mainProgram = "automount";
     homepage = "https://www.kernel.org/pub/linux/daemons/autofs/";
     license = lib.licenses.gpl2Plus;
     executables = [ "automount" ];

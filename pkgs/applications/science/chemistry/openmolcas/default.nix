@@ -41,16 +41,15 @@ let
   };
 
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "openmolcas";
-  version = "23.10";
+  version = "24.02";
 
   src = fetchFromGitLab {
     owner = "Molcas";
     repo = "OpenMolcas";
-    # The tag keeps moving, fix a hash instead
-    rev = "c74317e68572d1da82fdce4210b005c2c1b1de53"; # 2023-09-25
-    hash = "sha256-wBrASZ6YFsWsu/TreEZ6Q+VxNQwCwMpyPC8AOqmNxos=";
+    rev = "v${version}";
+    hash = "sha256-4Ek0cnaRfLEbj1Nj31rRp9b2sois4rIFTcpOUq9h2mw=";
   };
 
   patches = [
@@ -59,9 +58,6 @@ stdenv.mkDerivation {
 
     # Required for a local QCMaquis build
     ./qcmaquis.patch
-
-    # PyParsing >= 3.11 compatibility, can be removed on next release
-    ./pyparsing.patch
   ];
 
   postPatch = ''

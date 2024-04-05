@@ -41,6 +41,7 @@ buildPythonApplication rec {
     homepage = "https://github.com/dlenski/vpn-slice";
     description =
       "vpnc-script replacement for easy and secure split-tunnel VPN setup";
+    mainProgram = "vpn-slice";
     license = licenses.gpl3;
     maintainers = with maintainers; [ liketechnik ];
   };

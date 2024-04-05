@@ -30,6 +30,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A build system for microservices";
+    mainProgram = "bob";
     homepage = "https://bob.build";
     license = licenses.asl20;
     maintainers = with maintainers; [ zuzuleinen ];

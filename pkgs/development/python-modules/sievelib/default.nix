@@ -3,20 +3,23 @@
 , fetchPypi
 , mock
 , pytestCheckHook
+, pythonOlder
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "sievelib";
-  version = "1.2.1";
+  version = "1.3.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7cubQWqYWjzFt9f01+wBPjcuv5DmTJ2eAOIDEpmvOP0=";
+    hash = "sha256-MxPX8fP4Mkq2qOISnknXbuCN8NQ+L1UOaBuPEuP0TNE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
   ];
 
@@ -30,7 +33,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Client-side Sieve and Managesieve library written in Python";
+    description = "Client-side Sieve and Managesieve library";
     longDescription = ''
       A library written in Python that implements RFC 5228 (Sieve: An Email
       Filtering Language) and RFC 5804 (ManageSieve: A Protocol for
@@ -43,6 +46,7 @@ buildPythonPackage rec {
        * Imap4flags (RFC 5232)
     '';
     homepage = "https://github.com/tonioo/sievelib";
+    changelog = "https://github.com/tonioo/sievelib/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ leenaars ];
   };

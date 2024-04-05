@@ -10,16 +10,16 @@
 
 buildPythonPackage rec {
   pname = "html-sanitizer";
-  version = "2.3";
-  format = "pyproject";
+  version = "2.3.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "matthiask";
-    repo = pname;
+    repo = "html-sanitizer";
     rev = "refs/tags/${version}";
-    hash = "sha256-lQ8E3hdHX0YR3HJUTz1pVBegLo4lhvyiylLVFMDY1+s=";
+    hash = "sha256-NWJLD70783Ie6efyCvGopxMIlP3rLz0uM/D1rLQwBXE=";
   };
 
   nativeBuildInputs = [

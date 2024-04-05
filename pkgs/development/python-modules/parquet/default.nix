@@ -37,6 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python implementation of the parquet columnar file format";
+    mainProgram = "parquet";
     homepage = "https://github.com/jcrobak/parquet-python";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fab ];

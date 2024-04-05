@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/kwohlfahrt/unstick";
     description = "Silently eats chmod commands forbidden by Nix";
+    mainProgram = "unstick";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ kwohlfahrt ];

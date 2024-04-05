@@ -42,6 +42,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/lxqt/qps";
     description = "Qt based process manager";
+    mainProgram = "qps";
     license = licenses.gpl2Plus;
     platforms = with platforms; linux; # does not build on darwin
     maintainers = teams.lxqt.members;

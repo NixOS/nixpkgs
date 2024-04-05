@@ -7,4 +7,5 @@
   (fetchNuGet { pname = "Crc32.NET"; version = "1.2.0"; sha256 = "0qaj3192k1vfji87zf50rhydn5mrzyzybrs2k4v7ap29k8i0vi5h"; })
   (fetchNuGet { pname = "Microsoft.NETCore.Platforms"; version = "1.1.0"; sha256 = "08vh1r12g6ykjygq5d3vq09zylgb84l63k49jc4v8faw9g93iqqm"; })
   (fetchNuGet { pname = "NETStandard.Library"; version = "2.0.0"; sha256 = "1bc4ba8ahgk15m8k4nd7x406nhi0kwqzbgjk2dmw52ss553xz7iy"; })
+  (fetchNuGet { pname = "Newtonsoft.Json"; version = "13.0.3"; sha256 = "0xrwysmrn4midrjal8g2hr1bbg38iyisl0svamb11arqws4w2bw7"; })
 ]

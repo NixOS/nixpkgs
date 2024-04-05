@@ -34,6 +34,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Cross platform AArch32/x86/x86-64 debugger";
+    mainProgram = "edb";
     homepage = "https://github.com/eteran/edb-debugger";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ lihop maxxk ];

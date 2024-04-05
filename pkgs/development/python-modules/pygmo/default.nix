@@ -18,13 +18,13 @@
 
 toPythonModule (stdenv.mkDerivation rec {
   pname = "pygmo";
-  version = "2.19.5";
+  version = "2.19.6";
 
   src = fetchFromGitHub {
     owner = "esa";
     repo = "pygmo2";
     rev = "refs/tags/v${version}";
-    hash = "sha256-szQyw5kYfrQEeXRQzjQ0hzULuzTfmGod6ZxG9PDRj5M=";
+    hash = "sha256-umXK8LGJJ6Xj6UbJ5k/DM/nYayjl+jBXtjar5/dWqFM=";
   };
 
   cmakeFlags = [

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "paste";
-  version = "3.7.1";
+  version = "3.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "cdent";
     repo = "paste";
     rev = "refs/tags/${version}";
-    hash = "sha256-xp8FU4MR79/leBSJvSk8J2GdWW32AW2I5i3Y6DsRPLw=";
+    hash = "sha256-T9VG91Y8hap1nt3FkuCGsv8nglWNlRajvsvljXexH3Y=";
   };
 
   postPatch = ''

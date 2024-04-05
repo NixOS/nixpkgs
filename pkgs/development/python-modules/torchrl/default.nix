@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "torchrl";
-  version = "0.3.0";
+  version = "0.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "pytorch";
     repo = "rl";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ngl/gbNm+62W6UFNo8GOhSaIuK9FERDxGBCr++7B4gw=";
+    hash = "sha256-lETW996IKPUGgZpe+cyzrXvVmDSwj5G4XFreFmGxReQ=";
   };
 
   nativeBuildInputs = [
@@ -134,6 +134,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A modular, primitive-first, python-first PyTorch library for Reinforcement Learning";
     homepage = "https://github.com/pytorch/rl";
+    changelog = "https://github.com/pytorch/rl/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ GaetanLepage ];
   };

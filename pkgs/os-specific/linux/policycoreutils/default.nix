@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "policycoreutils";
-  version = "3.3";
+  version = "3.6";
   inherit (libsepol) se_url;
 
   src = fetchurl {
     url = "${se_url}/${version}/policycoreutils-${version}.tar.gz";
-    sha256 = "0y0hl32b2ks7r0fhbx3k2j1gqqms5aplyasjs3fz50caxl6096a1";
+    hash = "sha256-p2rEMepAo1qDFkzpAHkJwcbBL9EFZif2IhROSnBcCiw=";
   };
 
   postPatch = ''
@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
     substituteInPlace po/Makefile \
        --replace /usr/bin/install install --replace /usr/share /share
     substituteInPlace newrole/Makefile --replace /usr/share /share
-
-    sed -i -e '39i#include <crypt.h>' run_init/run_init.c
   '';
 
   nativeBuildInputs = [ gettext ];

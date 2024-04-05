@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "libarchive-c";
-  version = "5.0";
+  version = "5.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Changaco";
     repo = "python-${pname}";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-8e3Tnek5q5NJneSVIrbFNTQPjHZ7Ieb14uiKjQwufTE=";
+    sha256 = "sha256-CO9llPIbVTuE74AeohrMAu5ICkuT/MorRlYEEFne6Uk=";
   };
 
   LC_ALL="en_US.UTF-8";

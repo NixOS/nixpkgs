@@ -13,21 +13,21 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-securitycenter";
-  version = "1.26.1";
+  version = "1.30.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oZWY7n/8638/WkIG9s/9LN4NKWSfhnrQp+9Pydq103E=";
+    hash = "sha256-Tq+Uicfk1SqvisYEdBfREngICvWP8NyFJy4hJp9qD8Y=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     grpc-google-iam-v1
     google-api-core
     proto-plus

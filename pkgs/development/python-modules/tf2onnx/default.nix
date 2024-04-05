@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "tf2onnx";
-  version = "1.15.1";
+  version = "1.16.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "onnx";
     repo = "tensorflow-onnx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-HqzcoPPX9+NOj0uFfOSVI2MNCkxq1NmLqXflwdi5RF0=";
+    hash = "sha256-qtRzckw/KHWm3gjFwF+cPuBhGbfktjhYIwImwHn2CFk=";
   };
 
   nativeBuildInputs = [

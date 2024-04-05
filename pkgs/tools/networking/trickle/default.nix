@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     homepage = "https://monkey.org/~marius/pages/?page=trickle";
     platforms = lib.platforms.linux;
+    mainProgram = "trickle";
   };
 }

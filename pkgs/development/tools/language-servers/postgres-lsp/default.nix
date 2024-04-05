@@ -6,17 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "postgres-lsp";
-  version = "unstable-2024-01-11";
+  version = "0-unstable-2024-03-24";
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "postgres_lsp";
-    rev = "bbc24cc541cd1619997193ed81ad887252c7e467";
-    hash = "sha256-llVsHSEUDRsqjSTGr3hGUK6jYlKPX60rpjngBk1TG2Y=";
+    rev = "43ca9b675cb152ca7f38cfa6aff6dd2131dfa9a2";
+    hash = "sha256-n7Qbt9fGzC0CcleAtTWDInPz4oaPjI+pvIPrR5EYJ9U=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-Npx/sSbMr4PKnNPslvjpOyKH0bpQLzW6cLNW+7H/TQ0=";
+  cargoHash = "sha256-UEcHlkbYMA6xETMryWXsDHyAZYtLncRJn2jA6tvw7gQ=";
 
   nativeBuildInputs = [
     protobuf

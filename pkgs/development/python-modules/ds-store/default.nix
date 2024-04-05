@@ -40,6 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/al45tair/ds_store";
     description = "Manipulate Finder .DS_Store files from Python";
+    mainProgram = "ds_store";
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];
   };

@@ -41,6 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python Library to access AVM FRITZ!Box homeautomation";
+    mainProgram = "fritzhome";
     homepage = "https://github.com/hthiery/python-fritzhome";
     changelog = "https://github.com/hthiery/python-fritzhome/releases/tag/${version}";
     license = licenses.mit;

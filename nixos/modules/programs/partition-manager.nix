@@ -1,19 +1,21 @@
 { config, lib, pkgs, ... }:
 
-with lib;
+let
+  cfg = config.programs.partition-manager;
+in {
+  meta.maintainers = [ lib.maintainers.oxalica ];
 
-{
-  meta.maintainers = [ maintainers.oxalica ];
-
-  ###### interface
   options = {
-    programs.partition-manager.enable = mkEnableOption (lib.mdDoc "KDE Partition Manager");
+    programs.partition-manager = {
+      enable = lib.mkEnableOption (lib.mdDoc "KDE Partition Manager");
+
+      package = lib.mkPackageOption pkgs [ "libsForQt5" "partitionmanager" ] { };
+    };
   };
 
-  ###### implementation
-  config = mkIf config.programs.partition-manager.enable {
-    services.dbus.packages = [ pkgs.libsForQt5.kpmcore ];
+  config = lib.mkIf config.programs.partition-manager.enable {
+    services.dbus.packages = [ cfg.package.kpmcore ];
     # `kpmcore` need to be installed to pull in polkit actions.
-    environment.systemPackages = [ pkgs.libsForQt5.kpmcore pkgs.libsForQt5.partitionmanager ];
+    environment.systemPackages = [ cfg.package.kpmcore cfg.package ];
   };
 }

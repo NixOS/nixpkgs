@@ -14,12 +14,13 @@
 , requests
 , requests-ntlm
 , unicrypto
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "certipy-ad";
   version = "4.8.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -36,6 +37,10 @@ buildPythonPackage rec {
       --replace "pyasn1==0.4.8" "pyasn1"
   '';
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     asn1crypto
     cryptography
@@ -48,6 +53,7 @@ buildPythonPackage rec {
     pyopenssl
     requests
     requests-ntlm
+    setuptools
     unicrypto
   ];
 
@@ -60,6 +66,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library and CLI tool to enumerate and abuse misconfigurations in Active Directory Certificate Services";
+    mainProgram = "certipy";
     homepage = "https://github.com/ly4k/Certipy";
     changelog = "https://github.com/ly4k/Certipy/releases/tag/${version}";
     license = with licenses; [ mit ];

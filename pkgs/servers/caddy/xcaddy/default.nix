@@ -29,6 +29,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/caddyserver/xcaddy";
     description = "Build Caddy with plugins";
+    mainProgram = "xcaddy";
     license = licenses.asl20;
     maintainers = with maintainers; [ tjni emilylange ];
   };

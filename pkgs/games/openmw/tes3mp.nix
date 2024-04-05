@@ -7,14 +7,13 @@
 , luajit
 , makeWrapper
 , symlinkJoin
-, disable-warnings-if-gcc13
 }:
 
 # revisions are taken from https://github.com/GrimKriegor/TES3MP-deploy
 
 let
   # raknet could also be split into dev and lib outputs
-  raknet = disable-warnings-if-gcc13 (stdenv.mkDerivation {
+  raknet = stdenv.mkDerivation {
     pname = "raknet";
     version = "unstable-2020-01-19";
 
@@ -46,7 +45,7 @@ let
     installPhase = ''
       install -Dm555 lib/libRakNetLibStatic.a $out/lib/libRakNetLibStatic.a
     '';
-  });
+  };
 
   coreScripts = stdenv.mkDerivation {
     pname = "corescripts";

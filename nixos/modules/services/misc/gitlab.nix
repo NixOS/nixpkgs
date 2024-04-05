@@ -901,6 +901,16 @@ in {
         '';
       };
 
+      sidekiq.concurrency = mkOption {
+        type = with types; nullOr int;
+        default = null;
+        description = lib.mdDoc ''
+          How many processor threads to use for processing sidekiq background job queues. When null, the GitLab default is used.
+
+          See <https://docs.gitlab.com/ee/administration/sidekiq/extra_sidekiq_processes.html#manage-thread-counts-explicitly> for details.
+        '';
+      };
+
       sidekiq.memoryKiller.enable = mkOption {
         type = types.bool;
         default = true;
@@ -1439,6 +1449,8 @@ in {
         nodejs
         gnupg
 
+        "${cfg.packages.gitlab}/share/gitlab/vendor/gems/sidekiq-${cfg.packages.gitlab.rubyEnv.gems.sidekiq.version}"
+
         # Needed for GitLab project imports
         gnutar
         gzip
@@ -1452,7 +1464,17 @@ in {
         TimeoutSec = "infinity";
         Restart = "always";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
-        ExecStart="${cfg.packages.gitlab.rubyEnv}/bin/sidekiq -C \"${cfg.packages.gitlab}/share/gitlab/config/sidekiq_queues.yml\" -e production";
+        ExecStart = utils.escapeSystemdExecArgs (
+          [
+            "${cfg.packages.gitlab}/share/gitlab/bin/sidekiq-cluster"
+            "*" # all queue groups
+          ] ++ lib.optionals (cfg.sidekiq.concurrency != null) [
+            "--concurrency" (toString cfg.sidekiq.concurrency)
+          ] ++ [
+            "--environment" "production"
+            "--require" "."
+          ]
+        );
       };
     };
 
@@ -1550,7 +1572,7 @@ in {
         gnutar
         gzip
         openssh
-        gitlab-workhorse
+        cfg.packages.gitlab-workhorse
       ];
       serviceConfig = {
         Type = "simple";
@@ -1571,7 +1593,9 @@ in {
           rm "${cfg.statePath}/config/gitlab-workhorse.json"
         '';
         ExecStart =
-          "${cfg.packages.gitlab-workhorse}/bin/workhorse "
+          "${cfg.packages.gitlab-workhorse}/bin/${
+              optionalString (lib.versionAtLeast (lib.getVersion cfg.packages.gitlab-workhorse) "16.10") "gitlab-"
+            }workhorse "
           + "-listenUmask 0 "
           + "-listenNetwork unix "
           + "-listenAddr /run/gitlab/gitlab-workhorse.socket "

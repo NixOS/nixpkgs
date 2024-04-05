@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "niaclass";
-  version = "0.1.4";
+  version = "0.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "lukapecnik";
     repo = "NiaClass";
     rev = "refs/tags/${version}";
-    hash = "sha256-md1e/cOIOQKoB760E5hjzjCsC5tS1CzgqAPTeVtrmuo=";
+    hash = "sha256-C3EF18lzheE+dXHJA6WJNFECAH4HfPiCDo7QxtHvOLI=";
   };
 
   pythonRelaxDeps = [

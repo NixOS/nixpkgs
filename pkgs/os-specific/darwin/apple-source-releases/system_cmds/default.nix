@@ -1,114 +1,161 @@
-{ stdenv, appleDerivation, lib
-, libutil, Librpcsvc, apple_sdk, pam, CF, openbsm }:
+{
+  lib,
+  stdenv,
+  stdenvNoCC,
+  appleDerivation,
+  fetchFromGitHub,
+  runCommand,
+  gawk,
+  meson,
+  ninja,
+  pkg-config,
+  libdispatch,
+  libmalloc,
+  libplatform,
+  Librpcsvc,
+  libutil,
+  ncurses,
+  openbsm,
+  pam,
+  xnu,
+  CoreFoundation,
+  CoreSymbolication,
+  DirectoryService,
+  IOKit,
+  Kernel,
+  Libc,
+  OpenDirectory,
+  WebKit,
+}:
 
-appleDerivation {
-  # xcbuild fails with:
-  # /nix/store/fc0rz62dh8vr648qi7hnqyik6zi5sqx8-xcbuild-wrapper/nix-support/setup-hook: line 1:  9083 Segmentation fault: 11  xcodebuild OTHER_CFLAGS="$NIX_CFLAGS_COMPILE" OTHER_CPLUSPLUSFLAGS="$NIX_CFLAGS_COMPILE" OTHER_LDFLAGS="$NIX_LDFLAGS" build
-  # see issue facebook/xcbuild#188
-  # buildInputs = [ xcbuild ];
+let
+  OpenDirectoryPrivate = stdenvNoCC.mkDerivation (finalAttrs: {
+    name = "apple-private-framework-OpenDirectory";
+    version = "146";
 
-  buildInputs = [ libutil Librpcsvc apple_sdk.frameworks.OpenDirectory pam CF
-                  apple_sdk.frameworks.IOKit openbsm ];
-  # env.NIX_CFLAGS_COMPILE = lib.optionalString hostPlatform.isi686 "-D__i386__"
-  #                    + lib.optionalString hostPlatform.isx86_64 "-D__x86_64__"
-  #                    + lib.optionalString hostPlatform.isAarch32 "-D__arm__";
-  env.NIX_CFLAGS_COMPILE = toString ([ "-DDAEMON_UID=1"
-                         "-DDAEMON_GID=1"
-                         "-DDEFAULT_AT_QUEUE='a'"
-                         "-DDEFAULT_BATCH_QUEUE='b'"
-                         "-DPERM_PATH=\"/usr/lib/cron/\""
-                         "-DOPEN_DIRECTORY"
-                         "-DNO_DIRECT_RPC"
-                         "-DAPPLE_GETCONF_UNDERSCORE"
-                         "-DAPPLE_GETCONF_SPEC"
-                         "-DUSE_PAM"
-                         "-DUSE_BSM_AUDIT"
-                         "-D_PW_NAME_LEN=MAXLOGNAME"
-                         "-D_PW_YPTOKEN=\"__YP!\""
-                         "-DAHZV1=64 "
-                         "-DAU_SESSION_FLAG_HAS_TTY=0x4000"
-                         "-DAU_SESSION_FLAG_HAS_AUTHENTICATED=0x4000"
-                       ] ++ lib.optional (!stdenv.isLinux) " -D__FreeBSD__ ");
+    src = fetchFromGitHub {
+      owner = "apple-oss-distributions";
+      repo = "OpenDirectory";
+      rev = "OpenDirectory-${finalAttrs.version}";
+      hash = "sha256-6fSl8PasCZSBfe0ftaePcBuSEO3syb6kK+mfDI6iR7A=";
+    };
 
-  patches = [
-    # Fix implicit declarations that cause builds to fail when built with clang 16.
-    ./fix-implicit-declarations.patch
+    dontConfigure = true;
+    dontBuild = true;
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p "$out/include/CFOpenDirectory" "$out/include/OpenDirectory"
+      install -t "$out/include/CFOpenDirectory" \
+        Core/CFOpenDirectoryPriv.h \
+        Core/CFODTrigger.h
+      touch "$out/include/CFOpenDirectory/CFOpenDirectoryConstantsPriv.h"
+      install -t "$out/include/OpenDirectory" \
+        Framework/OpenDirectoryPriv.h \
+        Framework/NSOpenDirectoryPriv.h
+
+      runHook postInstall
+    '';
+  });
+
+  libmallocPrivate = stdenvNoCC.mkDerivation {
+    pname = "libmalloc-private";
+    version = lib.getVersion libmalloc;
+
+    inherit (libmalloc) src;
+
+    dontConfigure = true;
+    dontBuild = true;
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p "$out/include"
+      cp -r private/*.h "$out/include"
+
+      runHook postInstall
+    '';
+  };
+
+  # Private xnu headers that are part of the source tree but not in the xnu derivation.
+  xnuPrivate = stdenvNoCC.mkDerivation {
+    pname = "xnu-private";
+    version = lib.getVersion xnu;
+
+    inherit (xnu) src;
+
+    dontConfigure = true;
+    dontBuild = true;
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p "$out/include"
+      cp libsyscall/wrappers/spawn/spawn_private.h "$out/include"
+
+      runHook postInstall
+    '';
+  };
+in
+appleDerivation (finalAttrs: {
+  nativeBuildInputs = [
+    gawk
+    meson
+    ninja
+    pkg-config
+  ];
+
+  buildInputs = [
+    libdispatch
+    libplatform
+    Librpcsvc
+    libutil
+    ncurses
+    openbsm
+    pam
+    xnu
+    CoreFoundation
+    CoreSymbolication
+    DirectoryService
+    IOKit
+    Kernel
+    OpenDirectory
   ];
 
   postPatch = ''
-    substituteInPlace login.tproj/login.c \
-      --replace bsm/audit_session.h bsm/audit.h
-    substituteInPlace login.tproj/login_audit.c \
-      --replace bsm/audit_session.h bsm/audit.h
-  '' + lib.optionalString stdenv.isAarch64 ''
-    substituteInPlace sysctl.tproj/sysctl.c \
-      --replace "GPROF_STATE" "0"
-    substituteInPlace login.tproj/login.c \
-      --replace "defined(__arm__)" "defined(__arm__) || defined(__arm64__)"
+    # Replace hard-coded, impure system paths with the output path in the store.
+    sed -e "s|PATH=[^;]*|PATH='$out/bin'|" -i "pagesize/pagesize.sh"
   '';
 
-  buildPhase = ''
-    for dir in *.tproj; do
-      name=$(basename $dir)
-      name=''${name%.tproj}
-
-      CFLAGS=""
-      case $name in
-           arch) CFLAGS="-framework CoreFoundation";;
-           atrun) CFLAGS="-Iat.tproj";;
-           chkpasswd)
-             CFLAGS="-framework OpenDirectory -framework CoreFoundation -lpam";;
-           getconf)
-               for f in getconf.tproj/*.gperf; do
-                   cfile=''${f%.gperf}.c
-                   LC_ALL=C awk -f getconf.tproj/fake-gperf.awk $f > $cfile
-               done
-           ;;
-           iostat) CFLAGS="-framework IOKit -framework CoreFoundation";;
-           login) CFLAGS="-lbsm -lpam";;
-           nvram) CFLAGS="-framework CoreFoundation -framework IOKit";;
-           sadc) CFLAGS="-framework IOKit -framework CoreFoundation";;
-           sar) CFLAGS="-Isadc.tproj";;
-      esac
-
-      echo "Building $name"
-
-      case $name in
-
-           # These are all broken currently.
-           arch) continue;;
-           chpass) continue;;
-           dirhelper) continue;;
-           dynamic_pager) continue;;
-           fs_usage) continue;;
-           latency) continue;;
-           pagesize) continue;;
-           passwd) continue;;
-           reboot) continue;;
-           sc_usage) continue;;
-           shutdown) continue;;
-           trace) continue;;
-
-           *) cc $dir/*.c -I''${dir} $CFLAGS -o $name ;;
-      esac
-    done
+  # A vendored meson.build is used instead of the upstream Xcode project.
+  # This is done for a few reasons:
+  # - The upstream project causes `xcbuild` to crash.
+  #   See: https://github.com/facebookarchive/xcbuild/issues/188;
+  # - Achieving the same flexibility regarding SDK version would require modifying the
+  #   Xcode project, but modifying Xcode projects without using Xcode is painful; and
+  # - Using Meson allows the derivation to leverage the robust Meson support in nixpkgs,
+  #   and it allows it to use Meson features to simplify the build (e.g., generators).
+  preConfigure = ''
+    substitute '${./meson.build}' meson.build \
+      --subst-var-by kernel '${Kernel}' \
+      --subst-var-by libc_private '${Libc}' \
+      --subst-var-by libmalloc_private '${libmallocPrivate}' \
+      --subst-var-by opendirectory '${OpenDirectory}' \
+      --subst-var-by opendirectory_private '${OpenDirectoryPrivate}' \
+      --subst-var-by xnu '${xnu}' \
+      --subst-var-by xnu_private '${xnuPrivate}' \
+      --subst-var-by version '${finalAttrs.version}'
+    cp '${./meson.options}' meson.options
   '';
 
-  installPhase = ''
-    for dir in *.tproj; do
-      name=$(basename $dir)
-      name=''${name%.tproj}
-      [ -x $name ] && install -D $name $out/bin/$name
-      for n in 1 2 3 4 5 6 7 8 9; do
-        for f in $dir/*.$n; do
-          install -D $f $out/share/man/man$n/$(basename $f)
-        done
-      done
-    done
-  '';
+  mesonFlags = [ (lib.mesonOption "sdk_version" stdenv.hostPlatform.darwinSdkVersion) ];
 
   meta = {
     platforms = lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ shlevy matthewbauer ];
+    maintainers = with lib.maintainers; [
+      shlevy
+      matthewbauer
+    ];
   };
-}
+})

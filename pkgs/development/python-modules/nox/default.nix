@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "nox";
-  version = "2023.04.22";
+  version = "2024.03.02";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "wntrblm";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-WuyNp3jxIktI72zbk+1CK8xflTKrYE5evn/gVdMx+cQ=";
+    hash = "sha256-P86Jy/5MQnuWHelJFQ4kUCFg86Dwzx0Sm/sRonf0pZk=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     jinja2
     tox
     pytestCheckHook
@@ -50,6 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "nox"
+  ];
+
+  disabledTests = [
+    # our conda is not available on 3.11
+    "test__create_venv_options"
   ];
 
   disabledTestPaths = [

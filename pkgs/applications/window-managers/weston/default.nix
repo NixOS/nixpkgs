@@ -26,6 +26,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-Uv8dSqI5Si5BbIWjOLYnzpf6cdQ+t2L9Sq8UXTb8eVo=";
   };
 
+  postPatch = ''
+    # raise neatvnc version bound to 0.8.0
+    # https://gitlab.freedesktop.org/wayland/weston/-/issues/890
+    substituteInPlace libweston/backend-vnc/meson.build \
+      --replace-fail "'neatvnc', version: ['>= 0.7.0', '< 0.8.0']" "'neatvnc', version: ['>= 0.7.0', '<= 0.8.0']"
+  '';
+
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ meson ninja pkg-config python3 wayland-scanner ];
   buildInputs = [

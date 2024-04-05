@@ -1,24 +1,32 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonRelaxDepsHook
+
+# build-system
+, setuptools
+
+# dependencies
+, calmjs
+, django-appconf
+, jinja2
 , rcssmin
 , rjsmin
-, django-appconf
+
+# tests
 , beautifulsoup4
 , brotli
-, pytestCheckHook
-, django-sekizai
-, pytest-django
 , csscompressor
-, calmjs
-, jinja2
-, python
+, django-sekizai
+, pytestCheckHook
+, pytest-django
+
 }:
 
 buildPythonPackage rec {
   pname = "django-compressor";
   version = "4.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "django_compressor";
@@ -26,7 +34,17 @@ buildPythonPackage rec {
     hash = "sha256-GwrMnPup9pvDjnxB2psNcKILyVWHtkP/75YJz0YGT2c=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "rcssmin"
+    "rjsmin"
+  ];
+
+  dependencies = [
     beautifulsoup4
     calmjs
     django-appconf
@@ -35,7 +53,9 @@ buildPythonPackage rec {
     rjsmin
   ];
 
-  checkInputs = [
+  env.DJANGO_SETTINGS_MODULE = "compressor.test_settings";
+
+  nativeCheckInputs = [
     beautifulsoup4
     brotli
     csscompressor
@@ -52,8 +72,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "compressor" ];
-
-  DJANGO_SETTINGS_MODULE = "compressor.test_settings";
 
   meta = with lib; {
     description = "Compresses linked and inline JavaScript or CSS into single cached files";

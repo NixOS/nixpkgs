@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "C++ tool for generating lexical scanners";
+    mainProgram = "flexc++";
     longDescription = ''
       Flexc++ was designed after `flex'. Flexc++ offers a cleaner class design
       and requires simpler specification files than offered by flex's C++

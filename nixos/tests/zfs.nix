@@ -7,14 +7,14 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 
 let
 
-  makeZfsTest = name:
+  makeZfsTest =
     { kernelPackages
     , enableSystemdStage1 ? false
     , zfsPackage
     , extraTest ? ""
     }:
     makeTest {
-      name = "zfs-" + name;
+      name = zfsPackage.kernelModuleAttribute;
       meta = with pkgs.lib.maintainers; {
         maintainers = [ elvishjerricco ];
       };
@@ -192,23 +192,23 @@ let
 in {
 
   # maintainer: @raitobezarius
-  series_2_1 = makeZfsTest "2.1-series" {
+  series_2_1 = makeZfsTest {
     zfsPackage = pkgs.zfs_2_1;
     kernelPackages = pkgs.linuxPackages;
   };
 
-  stable = makeZfsTest "stable" {
-    zfsPackage = pkgs.zfsStable;
+  series_2_2 = makeZfsTest {
+    zfsPackage = pkgs.zfs_2_2;
     kernelPackages = pkgs.linuxPackages;
   };
 
-  unstable = makeZfsTest "unstable" rec {
-    zfsPackage = pkgs.zfsUnstable;
+  unstable = makeZfsTest rec {
+    zfsPackage = pkgs.zfs_unstable;
     kernelPackages = zfsPackage.latestCompatibleLinuxPackages;
   };
 
-  unstableWithSystemdStage1 = makeZfsTest "unstable" rec {
-    zfsPackage = pkgs.zfsUnstable;
+  unstableWithSystemdStage1 = makeZfsTest rec {
+    zfsPackage = pkgs.zfs_unstable;
     kernelPackages = zfsPackage.latestCompatibleLinuxPackages;
     enableSystemdStage1 = true;
   };

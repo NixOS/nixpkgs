@@ -52,6 +52,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Exploit Development and Reverse Engineering with GDB Made Easy";
+    mainProgram = "pwndbg";
     homepage = "https://github.com/pwndbg/pwndbg";
     license = licenses.mit;
     platforms = platforms.all;

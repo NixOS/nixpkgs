@@ -19,6 +19,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://rsc.io/2fa";
     description = "Two-factor authentication on the command line";
+    mainProgram = "2fa";
     license = licenses.bsd3;
     maintainers = with maintainers; [ rvolosatovs ];
   };

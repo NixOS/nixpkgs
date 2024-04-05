@@ -31,6 +31,7 @@ appimageTools.wrapType2 {
 
   meta = with lib; {
     description = "The next-generation genome browser";
+    mainProgram = "jbrowse-desktop";
     homepage = "https://jbrowse.org/jb2/";
     license = licenses.asl20;
     maintainers = with maintainers; [ benwbooth ];

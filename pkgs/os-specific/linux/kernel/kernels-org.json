@@ -1,38 +1,34 @@
 {
     "testing": {
-        "version": "6.8-rc4",
-        "hash": "sha256:0nn36b2cx04p2210xm0msa8c1jl96vp0nf0bq3w8xhrl95yzj99z"
-    },
-    "6.5": {
-        "version": "6.5.13",
-        "hash": "sha256:1dfbbydmayfj9npx3z0g38p574pmcx3qgs49dv0npigl48wd9yvq"
+        "version": "6.9-rc2",
+        "hash": "sha256:14yjrkd63qsd2hip53x146fsd42d261pxdh85fprcvsrg656c6gp"
     },
     "6.1": {
-        "version": "6.1.78",
-        "hash": "sha256:12fn23m2xwdlv6gr1s8872lk8mvigqkblvlhr54nh8rik2b6n835"
+        "version": "6.1.84",
+        "hash": "sha256:0ykhl4i6yhryzgjkdbdz4pd3b1ghv84h6mpn7bdx0ra7w7mx55xg"
     },
     "5.15": {
-        "version": "5.15.148",
-        "hash": "sha256:1n75lrck581mppx84cds1a1l5vj05cdkp8ahpry7dx6rgz4pb1f4"
+        "version": "5.15.153",
+        "hash": "sha256:1g44gjcwcdq5552vwinljqwiy90bxax72jjvdasp71x88khv3pfp"
     },
     "5.10": {
-        "version": "5.10.209",
-        "hash": "sha256:1mc8rssk5aypgb58jz6i2bbflfr6qh1kgqpam0k8fqvwcjnjzqj4"
+        "version": "5.10.214",
+        "hash": "sha256:0n7m82hw2rkw5mhdqw0vvmq7kq0s43jalr53sbv09wl17vai9w20"
     },
     "5.4": {
-        "version": "5.4.268",
-        "hash": "sha256:081695lgkdwlrp6gpp6pyflgh76zax1w52shys4s9zjnrfkarj5g"
+        "version": "5.4.273",
+        "hash": "sha256:0hs7af3mcnk5mmp3c5vjl187nva2kzsdx487nd12a8m7zb9wz84b"
     },
     "4.19": {
-        "version": "4.19.306",
-        "hash": "sha256:06dy270xw4frnrc9p2qjh8chgp02fr5ll5g2b0lx9xqzlq7y86xr"
+        "version": "4.19.311",
+        "hash": "sha256:10dww3cyazcf3wjzh8igpa0frb8gvl6amnksh42zfkji4mskh2r6"
     },
     "6.6": {
-        "version": "6.6.17",
-        "hash": "sha256:0si20m9ckir826jg40bh7sh4kwlp610rnc3gwsgs4nm7dfcm0xpf"
+        "version": "6.6.25",
+        "hash": "sha256:0i0zvqlj02rm6wpbidji0rn9559vrpfc1b8gbfjk70lhhyz11llr"
     },
-    "6.7": {
-        "version": "6.7.5",
-        "hash": "sha256:1zrralagnv9yr8qdg7lc05735691dbh92mgwfyxrq5xqc504dxi9"
+    "6.8": {
+        "version": "6.8.4",
+        "hash": "sha256:0qwywy89an1w0yvs5957kqyv74mwgxady521w2lmyq00zjaw9pnm"
     }
 }

@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "C implementation of the Varlink protocol and command line tool";
+    mainProgram = "varlink";
     homepage = "https://github.com/varlink/libvarlink";
     license = licenses.asl20;
     maintainers = with maintainers; [ artturin ];

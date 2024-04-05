@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pkg-config
 , glib
+, glib-networking
 , gettext
 , cinnamon-desktop
 , gtk3
@@ -47,6 +48,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3
     glib
+    glib-networking
     cinnamon-desktop
     libnotify
     cinnamon-menus
@@ -97,6 +99,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-control-center";
     description = "A collection of configuration plugins used in cinnamon-settings";
+    mainProgram = "cinnamon-control-center";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;

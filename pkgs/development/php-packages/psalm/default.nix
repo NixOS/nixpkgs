@@ -1,19 +1,23 @@
-{ lib, fetchgit, php }:
+{ lib
+, fetchFromGitHub
+, php
+}:
 
 php.buildComposerProject (finalAttrs: {
   pname = "psalm";
-  version = "5.15.0";
+  version = "5.22.2";
 
-  src = fetchgit {
-    url = "https://github.com/vimeo/psalm.git";
+  src = fetchFromGitHub {
+    owner = "vimeo";
+    repo = "psalm";
     rev = finalAttrs.version;
-    hash = "sha256-rRExT82+IwgVo7pL3rrTjW/qj/MJf4m4L3PywaeSHYU=";
+    hash = "sha256-M8Ds3PQGphK8lQciWNdxWkMN35q8vdaNTWTrP1WXTeg=";
   };
 
-  # TODO: Open a PR against https://github.com/vimeo/psalm
   # Missing `composer.lock` from the repository.
+  # Issue open at https://github.com/vimeo/psalm/issues/10446
   composerLock = ./composer.lock;
-  vendorHash = "sha256-Vho1ri/Qm2SYeXB9ZoXvH1vB/eSBwHnAT/pI4jjUYhU=";
+  vendorHash = "sha256-AgvAaHcCYosS3yRrp9EFdqTjg6NzQRCr8ELSza9DvZ8=";
 
   meta = {
     changelog = "https://github.com/vimeo/psalm/releases/tag/${finalAttrs.version}";

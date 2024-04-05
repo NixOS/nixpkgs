@@ -3,12 +3,13 @@
 , buildPythonPackage
 , pythonOlder
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "eth-typing";
-  version = "3.2.0";
-  format = "setuptools";
+  version = "4.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -16,8 +17,12 @@ buildPythonPackage rec {
     owner = "ethereum";
     repo = "eth-typing";
     rev = "refs/tags/v${version}";
-    hash = "sha256-klN38pIQ9ZOFV7dzXNvylPGfifR8pXRLTJ3VE579AY0=";
+    hash = "sha256-JT/2bCPYFSRNt3V7QnHSAJR7HrZ1JpRKdU7gQpoYIn0=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

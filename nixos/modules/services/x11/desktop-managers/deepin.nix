@@ -66,6 +66,7 @@ in
       services.upower.enable = mkDefault config.powerManagement.enable;
       networking.networkmanager.enable = mkDefault true;
       programs.dconf.enable = mkDefault true;
+      programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-qt;
 
       fonts.packages = with pkgs; [ noto-fonts ];
       xdg.mime.enable = true;
@@ -173,19 +174,20 @@ in
           ];
           optionalPackages = [
             onboard # dde-dock plugin
-            deepin-camera
             deepin-calculator
             deepin-compressor
             deepin-editor
             deepin-picker
             deepin-draw
-            deepin-album
-            deepin-image-viewer
             deepin-music
             deepin-movie-reborn
             deepin-system-monitor
-            deepin-screen-recorder
             deepin-shortcut-viewer
+            # freeimage has knownVulnerabilties, don't install packages using freeiamge by default
+            # deepin-album
+            # deepin-camera
+            # deepin-image-viewer
+            # deepin-screen-recorder
           ];
         in
         requiredPackages

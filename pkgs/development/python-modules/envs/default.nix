@@ -51,6 +51,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Easy access to environment variables from Python";
+    mainProgram = "envs";
     homepage = "https://github.com/capless/envs";
     license = licenses.asl20;
     maintainers = with maintainers; [ peterhoeg ];

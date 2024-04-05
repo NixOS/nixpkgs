@@ -51,6 +51,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Jupyter Qt console";
+    mainProgram = "jupyter-qtconsole";
     homepage = "https://qtconsole.readthedocs.io/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fridh ];

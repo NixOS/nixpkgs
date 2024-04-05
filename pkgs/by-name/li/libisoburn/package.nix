@@ -1,12 +1,16 @@
 { lib
-, stdenv
-, fetchFromGitea
 , acl
 , attr
 , autoreconfHook
+, bzip2
+, fetchFromGitea
 , libburn
+, libcdio
+, libiconv
 , libisofs
 , pkg-config
+, readline
+, stdenv
 , zlib
 }:
 
@@ -28,13 +32,19 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    attr
+    bzip2
+    libcdio
+    libiconv
+    readline
     zlib
     libburn
     libisofs
+  ] ++ lib.optionals stdenv.isLinux [
+    acl
+    attr
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = lib.optionals stdenv.isLinux [
     acl
   ];
 

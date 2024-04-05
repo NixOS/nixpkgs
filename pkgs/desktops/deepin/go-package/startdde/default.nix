@@ -19,29 +19,25 @@
 
 buildGoModule rec {
   pname = "startdde";
-  version = "6.0.10";
+  version = "6.0.13";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-B2B8QlA1Ps/ybVzionngtwDwTLd7H02RKJwcXymGlJM=";
+    hash = "sha256-sftPQq4cSyCTuvVtvjT8YJDLQOpSbmnXEVzFwFFaU4U=";
   };
 
-  patches = [
-    ./0001-avoid-use-hardcode-path.patch
-  ];
-
-  vendorHash = "sha256-5BEOazAygYL1N+CaGAbUwdpHZ1EiHr6yNW27/bXNdZg=";
+  vendorHash = "sha256-Y81p3yPQayXbvyUI7N6PvFDO3hSU3SL0AuUKxvZkZNE=";
 
   postPatch = ''
-    substituteInPlace display/manager.go session.go \
+    substituteInPlace display/manager.go \
       --replace "/bin/bash" "${runtimeShell}"
 
     substituteInPlace misc/systemd_task/dde-display-task-refresh-brightness.service \
        --replace "/usr/bin/dbus-send" "${dbus}/bin/dbus-send"
 
-    substituteInPlace display/manager.go utils.go session.go \
+    substituteInPlace display/manager.go \
       --replace "/usr/lib/deepin-daemon" "/run/current-system/sw/lib/deepin-daemon"
 
     substituteInPlace misc/lightdm.conf --replace "/usr" "$out"

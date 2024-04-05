@@ -68,6 +68,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Comic book reader and image viewer";
+    mainProgram = "mcomix";
     longDescription = ''
       User-friendly, customizable image viewer, specifically designed to handle
       comic books and manga supporting a variety of container formats

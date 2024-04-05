@@ -27,6 +27,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://py65.readthedocs.io/";
     description = "Emulate 6502-based microcomputer systems in Python";
+    mainProgram = "py65mon";
     longDescription = ''
       Py65 includes a program called Py65Mon that functions as a machine
       language monitor. This kind of program is sometimes also called a

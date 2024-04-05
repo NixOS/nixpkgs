@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "DTS Coherent Acoustics decoder with support for HD extensions";
+    mainProgram = "dcadec";
     maintainers = with maintainers; [ edwtjo ];
     homepage = "https://github.com/foo86/dcadec";
     license = licenses.lgpl21;

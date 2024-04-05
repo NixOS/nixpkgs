@@ -6,7 +6,7 @@ mkCoqDerivation {
   owner = "HoTT";
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
-    { case = range "8.14" "8.18"; out = coq.coq-version; }
+    { case = range "8.14" "8.19"; out = coq.coq-version; }
   ] null;
   releaseRev = v: "V${v}";
   release."8.14".sha256 = "sha256-7kXk2pmYsTNodHA+Qts3BoMsewvzmCbYvxw9Sgwyvq0=";
@@ -14,6 +14,7 @@ mkCoqDerivation {
   release."8.16".sha256 = "sha256-xcEbz4ZQ+U7mb0SEJopaczfoRc2GSgF2BGzUSWI0/HY=";
   release."8.17".sha256 = "sha256-GjTUpzL9UzJm4C2ilCaYEufLG3hcj7rJPc5Op+OMal8=";
   release."8.18".sha256 = "sha256-URoUoQOsG0432wg9i6pTRomWQZ+ewutq2+V29TBrVzc=";
+  release."8.19".sha256 = "sha256-igG3mhR6uPXV+SCtPH9PBw/eAtTFFry6HPT5ypWj3tQ=";
 
   # versions of HoTT for Coq 8.17 and onwards will use dune
   # opam-name = if lib.versions.isLe "8.17" coq.coq-version then "coq-hott" else null;

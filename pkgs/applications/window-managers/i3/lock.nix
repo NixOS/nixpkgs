@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "i3lock";
-  version = "2.14.1";
+  version = "2.15";
 
   src = fetchFromGitHub {
     owner = "i3";
     repo = "i3lock";
     rev = version;
-    sha256 = "sha256-cC908c47fkU6msLqZSxpEbKxO1/PatH81QeuCzBSZGw=";
+    sha256 = "sha256-OyV6GSLnNV3GUqrfs3OBnIaBvicH2PXgeY4acOk5dR4=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];

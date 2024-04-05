@@ -90,6 +90,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://research.microsoft.com/en-us/um/people/lamport/tla/toolbox.html";
     description = "IDE for the TLA+ tools";
+    mainProgram = "tla-toolbox";
     longDescription = ''
       Integrated development environment for the TLA+ tools, based on Eclipse. You can use it
       to create and edit your specs, run the PlusCal translator, view the pretty-printed

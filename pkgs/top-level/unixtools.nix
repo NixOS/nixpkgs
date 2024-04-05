@@ -10,9 +10,14 @@
 # instance, if your program needs to use "ps", just list it as a build
 # input, not "procps" which requires Linux.
 
-with lib;
-
 let
+  inherit (lib)
+    getBin
+    getOutput
+    mapAttrs
+    platforms
+    ;
+
   version = "1003.1-2008";
 
   singleBinary = cmd: providers: let
@@ -23,7 +28,7 @@ let
       meta = {
         mainProgram = cmd;
         priority = 10;
-        platforms = lib.platforms.${stdenv.hostPlatform.parsed.kernel.name} or lib.platforms.all;
+        platforms = platforms.${stdenv.hostPlatform.parsed.kernel.name} or platforms.all;
       };
       passthru = { inherit provider; };
       preferLocalBuild = true;
@@ -187,7 +192,7 @@ let
 
   # Compatibility derivations
   # Provided for old usage of these commands.
-  compat = with bins; lib.mapAttrs makeCompat {
+  compat = with bins; mapAttrs makeCompat {
     procps = [ ps sysctl top watch ];
     util-linux = [ fsck fdisk getopt hexdump mount
                   script umount whereis write col column ];

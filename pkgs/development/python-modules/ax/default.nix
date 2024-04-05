@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "ax";
-  version = "0.3.6";
+  version = "0.3.7";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = pname;
-    rev = version;
-    hash = "sha256-5f2VpOFDRz6YzxvxFYWMu8hljkMVbBsyULYVreUxYRU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-UOX8Q7F5c9J1KSfQUy8aoL5CNb9YmEI4X7Fd5B16UqQ=";
   };
 
   nativeBuildInputs = [

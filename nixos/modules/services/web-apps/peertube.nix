@@ -61,18 +61,16 @@ let
     eval -- "\$@"
   '';
 
-  peertubeCli = pkgs.writeShellScriptBin "peertube" ''
-    node ~/dist/server/tools/peertube.js $@
+  nginxCommonHeaders = lib.optionalString config.services.nginx.virtualHosts.${cfg.localDomain}.forceSSL ''
+    add_header Strict-Transport-Security 'max-age=31536000';
+  '' + lib.optionalString (config.services.nginx.virtualHosts.${cfg.localDomain}.quic && config.services.nginx.virtualHosts.${cfg.localDomain}.http3) ''
+    add_header Alt-Svc 'h3=":$server_port"; ma=604800';
   '';
 
-  nginxCommonHeaders = lib.optionalString cfg.enableWebHttps ''
-    add_header Strict-Transport-Security      'max-age=63072000; includeSubDomains';
-  '' + lib.optionalString config.services.nginx.virtualHosts.${cfg.localDomain}.http3 ''
-    add_header Alt-Svc                        'h3=":443"; ma=86400';
-  '' + ''
-    add_header Access-Control-Allow-Origin    '*';
-    add_header Access-Control-Allow-Methods   'GET, OPTIONS';
-    add_header Access-Control-Allow-Headers   'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
+  nginxCommonHeadersExtra = ''
+    add_header Access-Control-Allow-Origin '*';
+    add_header Access-Control-Allow-Methods 'GET, OPTIONS';
+    add_header Access-Control-Allow-Headers 'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
   '';
 
 in {
@@ -330,6 +328,8 @@ in {
       }
     ];
 
+    environment.systemPackages = [ cfg.package.cli ];
+
     services.peertube.settings = lib.mkMerge [
       {
         listen = {
@@ -355,12 +355,13 @@ in {
           tmp_persistent = lib.mkDefault "/var/lib/peertube/storage/tmp_persistent/";
           bin = lib.mkDefault "/var/lib/peertube/storage/bin/";
           avatars = lib.mkDefault "/var/lib/peertube/storage/avatars/";
-          videos = lib.mkDefault "/var/lib/peertube/storage/videos/";
+          web_videos = lib.mkDefault "/var/lib/peertube/storage/web-videos/";
           streaming_playlists = lib.mkDefault "/var/lib/peertube/storage/streaming-playlists/";
           redundancy = lib.mkDefault "/var/lib/peertube/storage/redundancy/";
           logs = lib.mkDefault "/var/lib/peertube/storage/logs/";
           previews = lib.mkDefault "/var/lib/peertube/storage/previews/";
           thumbnails = lib.mkDefault "/var/lib/peertube/storage/thumbnails/";
+          storyboards = lib.mkDefault "/var/lib/peertube/storage/storyboards/";
           torrents = lib.mkDefault "/var/lib/peertube/storage/torrents/";
           captions = lib.mkDefault "/var/lib/peertube/storage/captions/";
           cache = lib.mkDefault "/var/lib/peertube/storage/cache/";
@@ -428,7 +429,7 @@ in {
 
       environment = env;
 
-      path = with pkgs; [ bashInteractive ffmpeg nodejs_18 openssl yarn python3 ];
+      path = with pkgs; [ nodejs_18 yarn ffmpeg-headless openssl ];
 
       script = ''
         #!/bin/sh
@@ -456,7 +457,7 @@ in {
         ln -sf ${cfg.package}/config/default.yaml /var/lib/peertube/config/default.yaml
         ln -sf ${cfg.package}/client/dist -T /var/lib/peertube/www/client
         ln -sf ${cfg.settings.storage.client_overrides} -T /var/lib/peertube/www/client-overrides
-        npm start
+        node dist/server
       '';
       serviceConfig = {
         Type = "simple";
@@ -488,6 +489,9 @@ in {
 
     services.nginx = lib.mkIf cfg.configureNginx {
       enable = true;
+      upstreams."peertube".servers = {
+        "127.0.0.1:${toString cfg.listenHttp}".fail_timeout = "0";
+      };
       virtualHosts."${cfg.localDomain}" = {
         root = "/var/lib/peertube/www";
 
@@ -497,14 +501,14 @@ in {
           priority = 1110;
         };
 
-        locations."= /api/v1/videos/upload-resumable" = {
+        locations."~ ^/api/v1/videos/(upload-resumable|([^/]+/source/replace-resumable))$" = {
           tryFiles = "/dev/null @api";
           priority = 1120;
 
           extraConfig = ''
-            client_max_body_size                        0;
-            proxy_request_buffering                     off;
-          '';
+            client_max_body_size 0;
+            proxy_request_buffering off;
+          '' + nginxCommonHeaders;
         };
 
         locations."~ ^/api/v1/videos/(upload|([^/]+/studio/edit))$" = {
@@ -513,13 +517,11 @@ in {
           priority = 1130;
 
           extraConfig = ''
-            client_max_body_size                        12G;
-            add_header X-File-Maximum-Size              8G always;
-          '' + lib.optionalString cfg.enableWebHttps ''
-            add_header Strict-Transport-Security        'max-age=63072000; includeSubDomains';
-          '' + lib.optionalString config.services.nginx.virtualHosts.${cfg.localDomain}.http3 ''
-            add_header Alt-Svc                          'h3=":443"; ma=86400';
-          '';
+            limit_except POST HEAD { deny all; }
+
+            client_max_body_size 12G;
+            add_header X-File-Maximum-Size 8G always;
+          '' + nginxCommonHeaders;
         };
 
         locations."~ ^/api/v1/runners/jobs/[^/]+/(update|success)$" = {
@@ -528,13 +530,9 @@ in {
           priority = 1135;
 
           extraConfig = ''
-            client_max_body_size                        12G;
-            add_header X-File-Maximum-Size              8G always;
-          '' + lib.optionalString cfg.enableWebHttps ''
-            add_header Strict-Transport-Security        'max-age=63072000; includeSubDomains';
-          '' + lib.optionalString config.services.nginx.virtualHosts.${cfg.localDomain}.http3 ''
-            add_header Alt-Svc                          'h3=":443"; ma=86400';
-          '';
+            client_max_body_size 12G;
+            add_header X-File-Maximum-Size 8G always;
+          '' + nginxCommonHeaders;
         };
 
         locations."~ ^/api/v1/(videos|video-playlists|video-channels|users/me)" = {
@@ -542,32 +540,28 @@ in {
           priority = 1140;
 
           extraConfig = ''
-            client_max_body_size                        6M;
-            add_header X-File-Maximum-Size              4M always;
-          '' + lib.optionalString cfg.enableWebHttps ''
-            add_header Strict-Transport-Security        'max-age=63072000; includeSubDomains';
-          '' + lib.optionalString config.services.nginx.virtualHosts.${cfg.localDomain}.http3 ''
-            add_header Alt-Svc                          'h3=":443"; ma=86400';
-          '';
+            client_max_body_size 6M;
+            add_header X-File-Maximum-Size 4M always;
+          '' + nginxCommonHeaders;
         };
 
         locations."@api" = {
-          proxyPass = "http://127.0.0.1:${toString cfg.listenHttp}";
+          proxyPass = "http://peertube";
           priority = 1150;
 
           extraConfig = ''
-            proxy_set_header X-Forwarded-For            $proxy_add_x_forwarded_for;
-            proxy_set_header Host                       $host;
-            proxy_set_header X-Real-IP                  $remote_addr;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-            proxy_connect_timeout                       10m;
+            proxy_connect_timeout 10m;
 
-            proxy_send_timeout                          10m;
-            proxy_read_timeout                          10m;
+            proxy_send_timeout 10m;
+            proxy_read_timeout 10m;
 
-            client_max_body_size                        100k;
-            send_timeout                                10m;
-          '';
+            client_max_body_size 100k;
+            send_timeout 10m;
+          ''+ nginxCommonHeaders;
         };
 
         # Websocket
@@ -581,7 +575,7 @@ in {
           priority = 1220;
 
           extraConfig = ''
-            proxy_read_timeout                          15m;
+            proxy_read_timeout 15m;
           '';
         };
 
@@ -591,84 +585,82 @@ in {
         };
 
         locations."@api_websocket" = {
-          proxyPass = "http://127.0.0.1:${toString cfg.listenHttp}";
+          proxyPass = "http://peertube";
           priority = 1240;
 
           extraConfig = ''
-            proxy_set_header X-Forwarded-For            $proxy_add_x_forwarded_for;
-            proxy_set_header Host                       $host;
-            proxy_set_header X-Real-IP                  $remote_addr;
-            proxy_set_header Upgrade                    $http_upgrade;
-            proxy_set_header Connection                 'upgrade';
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-            proxy_http_version                          1.1;
-          '';
+          '' + nginxCommonHeaders;
         };
 
         # Bypass PeerTube for performance reasons.
         locations."~ ^/client/(assets/images/(icons/icon-36x36\.png|icons/icon-48x48\.png|icons/icon-72x72\.png|icons/icon-96x96\.png|icons/icon-144x144\.png|icons/icon-192x192\.png|icons/icon-512x512\.png|logo\.svg|favicon\.png|default-playlist\.jpg|default-avatar-account\.png|default-avatar-account-48x48\.png|default-avatar-video-channel\.png|default-avatar-video-channel-48x48\.png))$" = {
           tryFiles = "/client-overrides/$1 /client/$1 $1";
           priority = 1310;
+
+          extraConfig = nginxCommonHeaders;
         };
 
         locations."~ ^/client/(.*\.(js|css|png|svg|woff2|otf|ttf|woff|eot))$" = {
           alias = "${cfg.package}/client/dist/$1";
           priority = 1320;
           extraConfig = ''
-            add_header Cache-Control                    'public, max-age=604800, immutable';
-          '' + lib.optionalString cfg.enableWebHttps ''
-            add_header Strict-Transport-Security        'max-age=63072000; includeSubDomains';
-          '' + lib.optionalString config.services.nginx.virtualHosts.${cfg.localDomain}.http3 ''
-            add_header Alt-Svc                          'h3=":443"; ma=86400';
-          '';
+            add_header Cache-Control 'public, max-age=604800, immutable';
+          '' + nginxCommonHeaders;
         };
 
         locations."^~ /download/" = {
-          proxyPass = "http://127.0.0.1:${toString cfg.listenHttp}";
+          proxyPass = "http://peertube";
           priority = 1410;
           extraConfig = ''
-            proxy_set_header X-Forwarded-For            $proxy_add_x_forwarded_for;
-            proxy_set_header Host                       $host;
-            proxy_set_header X-Real-IP                  $remote_addr;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-            proxy_limit_rate                            5M;
-          '';
+            proxy_limit_rate 5M;
+          '' + nginxCommonHeaders;
         };
 
-        locations."^~ /static/streaming-playlists/private/" = {
-          proxyPass = "http://127.0.0.1:${toString cfg.listenHttp}";
+        locations."^~ /static/streaming-playlists/hls/private/" = {
+          proxyPass = "http://peertube";
           priority = 1420;
           extraConfig = ''
-            proxy_set_header X-Forwarded-For            $proxy_add_x_forwarded_for;
-            proxy_set_header Host                       $host;
-            proxy_set_header X-Real-IP                  $remote_addr;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-            proxy_limit_rate                            5M;
-          '';
+            proxy_limit_rate 5M;
+          '' + nginxCommonHeaders;
         };
 
         locations."^~ /static/web-videos/private/" = {
-          proxyPass = "http://127.0.0.1:${toString cfg.listenHttp}";
+          proxyPass = "http://peertube";
           priority = 1430;
           extraConfig = ''
-            proxy_set_header X-Forwarded-For            $proxy_add_x_forwarded_for;
-            proxy_set_header Host                       $host;
-            proxy_set_header X-Real-IP                  $remote_addr;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-            proxy_limit_rate                            5M;
-          '';
+            proxy_limit_rate 5M;
+          '' + nginxCommonHeaders;
         };
 
         locations."^~ /static/webseed/private/" = {
-          proxyPass = "http://127.0.0.1:${toString cfg.listenHttp}";
+          proxyPass = "http://peertube";
           priority = 1440;
           extraConfig = ''
-            proxy_set_header X-Forwarded-For            $proxy_add_x_forwarded_for;
-            proxy_set_header Host                       $host;
-            proxy_set_header X-Real-IP                  $remote_addr;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-            proxy_limit_rate                            5M;
-          '';
+            proxy_limit_rate 5M;
+          '' + nginxCommonHeaders;
         };
 
         locations."^~ /static/redundancy/" = {
@@ -676,33 +668,35 @@ in {
           root = cfg.settings.storage.redundancy;
           priority = 1450;
           extraConfig = ''
-            set $peertube_limit_rate                    800k;
+            set $peertube_limit_rate 800k;
 
             if ($request_uri ~ -fragmented.mp4$) {
-              set $peertube_limit_rate                  5M;
+              set $peertube_limit_rate 5M;
             }
 
             if ($request_method = 'OPTIONS') {
               ${nginxCommonHeaders}
-              add_header Access-Control-Max-Age         1728000;
-              add_header Content-Type                   'text/plain charset=UTF-8';
-              add_header Content-Length                 0;
-              return                                    204;
+              ${nginxCommonHeadersExtra}
+              add_header Access-Control-Max-Age 1728000;
+              add_header Content-Type 'text/plain charset=UTF-8';
+              add_header Content-Length 0;
+              return 204;
             }
             if ($request_method = 'GET') {
               ${nginxCommonHeaders}
+              ${nginxCommonHeadersExtra}
 
-              access_log                                off;
+              access_log off;
             }
 
-            aio                                         threads;
-            sendfile                                    on;
-            sendfile_max_chunk                          1M;
+            aio threads;
+            sendfile on;
+            sendfile_max_chunk 1M;
 
-            limit_rate                                  $peertube_limit_rate;
-            limit_rate_after                            5M;
+            limit_rate $peertube_limit_rate;
+            limit_rate_after 5M;
 
-            rewrite ^/static/redundancy/(.*)$           /$1 break;
+            rewrite ^/static/redundancy/(.*)$ /$1 break;
           '';
         };
 
@@ -711,109 +705,111 @@ in {
           root = cfg.settings.storage.streaming_playlists;
           priority = 1460;
           extraConfig = ''
-            set $peertube_limit_rate                    800k;
+            set $peertube_limit_rate 800k;
 
             if ($request_uri ~ -fragmented.mp4$) {
-              set $peertube_limit_rate                  5M;
+              set $peertube_limit_rate 5M;
             }
 
             if ($request_method = 'OPTIONS') {
               ${nginxCommonHeaders}
-              add_header Access-Control-Max-Age         1728000;
-              add_header Content-Type                   'text/plain charset=UTF-8';
-              add_header Content-Length                 0;
-              return                                    204;
+              ${nginxCommonHeadersExtra}
+              add_header Access-Control-Max-Age 1728000;
+              add_header Content-Type 'text/plain charset=UTF-8';
+              add_header Content-Length 0;
+              return 204;
             }
             if ($request_method = 'GET') {
               ${nginxCommonHeaders}
+              ${nginxCommonHeadersExtra}
 
-              access_log                                off;
+              access_log off;
             }
 
-            aio                                         threads;
-            sendfile                                    on;
-            sendfile_max_chunk                          1M;
+            aio threads;
+            sendfile on;
+            sendfile_max_chunk 1M;
 
-            limit_rate                                  $peertube_limit_rate;
-            limit_rate_after                            5M;
+            limit_rate $peertube_limit_rate;
+            limit_rate_after 5M;
 
-            rewrite ^/static/streaming-playlists/(.*)$  /$1 break;
+            rewrite ^/static/streaming-playlists/(.*)$ /$1 break;
           '';
         };
 
         locations."^~ /static/web-videos/" = {
           tryFiles = "$uri @api";
-          root = cfg.settings.storage.streaming_playlists;
+          root = cfg.settings.storage.web_videos;
           priority = 1470;
           extraConfig = ''
-            set $peertube_limit_rate                    800k;
+            set $peertube_limit_rate 800k;
 
             if ($request_uri ~ -fragmented.mp4$) {
-              set $peertube_limit_rate                  5M;
+              set $peertube_limit_rate 5M;
             }
 
             if ($request_method = 'OPTIONS') {
               ${nginxCommonHeaders}
-              add_header Access-Control-Max-Age         1728000;
-              add_header Content-Type                   'text/plain charset=UTF-8';
-              add_header Content-Length                 0;
-              return                                    204;
+              ${nginxCommonHeadersExtra}
+              add_header Access-Control-Max-Age 1728000;
+              add_header Content-Type 'text/plain charset=UTF-8';
+              add_header Content-Length 0;
+              return 204;
             }
             if ($request_method = 'GET') {
               ${nginxCommonHeaders}
+              ${nginxCommonHeadersExtra}
 
-              access_log                                off;
+              access_log off;
             }
 
-            aio                                         threads;
-            sendfile                                    on;
-            sendfile_max_chunk                          1M;
+            aio threads;
+            sendfile on;
+            sendfile_max_chunk 1M;
 
-            limit_rate                                  $peertube_limit_rate;
-            limit_rate_after                            5M;
+            limit_rate $peertube_limit_rate;
+            limit_rate_after 5M;
 
-            rewrite ^/static/streaming-playlists/(.*)$  /$1 break;
+            rewrite ^/static/web-videos/(.*)$ /$1 break;
           '';
         };
 
         locations."^~ /static/webseed/" = {
           tryFiles = "$uri @api";
-          root = cfg.settings.storage.videos;
+          root = cfg.settings.storage.web_videos;
           priority = 1480;
           extraConfig = ''
-            set $peertube_limit_rate                    800k;
+            set $peertube_limit_rate 800k;
 
             if ($request_uri ~ -fragmented.mp4$) {
-              set $peertube_limit_rate                  5M;
+              set $peertube_limit_rate 5M;
             }
 
             if ($request_method = 'OPTIONS') {
               ${nginxCommonHeaders}
-              add_header Access-Control-Max-Age         1728000;
-              add_header Content-Type                   'text/plain charset=UTF-8';
-              add_header Content-Length                 0;
-              return                                    204;
+              ${nginxCommonHeadersExtra}
+              add_header Access-Control-Max-Age 1728000;
+              add_header Content-Type 'text/plain charset=UTF-8';
+              add_header Content-Length 0;
+              return 204;
             }
             if ($request_method = 'GET') {
               ${nginxCommonHeaders}
+              ${nginxCommonHeadersExtra}
 
-              access_log                                off;
+              access_log off;
             }
 
-            aio                                         threads;
-            sendfile                                    on;
-            sendfile_max_chunk                          1M;
+            aio threads;
+            sendfile on;
+            sendfile_max_chunk 1M;
 
-            limit_rate                                  $peertube_limit_rate;
-            limit_rate_after                            5M;
+            limit_rate $peertube_limit_rate;
+            limit_rate_after 5M;
 
-            rewrite ^/static/webseed/(.*)$              /$1 break;
+            rewrite ^/static/webseed/(.*)$ /web-videos/$1 break;
           '';
         };
-
-        extraConfig = lib.optionalString cfg.enableWebHttps ''
-          add_header Strict-Transport-Security          'max-age=63072000; includeSubDomains';
-        '';
       };
     };
 
@@ -848,7 +844,7 @@ in {
           home = cfg.package;
         };
       })
-      (lib.attrsets.setAttrByPath [ cfg.user "packages" ] [ cfg.package peertubeEnv peertubeCli pkgs.ffmpeg pkgs.nodejs_18 pkgs.yarn ])
+      (lib.attrsets.setAttrByPath [ cfg.user "packages" ] [ peertubeEnv pkgs.nodejs_18 pkgs.yarn pkgs.ffmpeg-headless ])
       (lib.mkIf cfg.redis.enableUnixSocket {${config.services.peertube.user}.extraGroups = [ "redis-peertube" ];})
     ];
 

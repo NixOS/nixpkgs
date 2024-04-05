@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
+  hardeningDisable = [ "trivialautovarinit" ];
+
   cmakeFlags = [
     "-DCATCH_DEVELOPMENT_BUILD=ON"
     "-DCATCH_BUILD_TESTING=${if doCheck then "ON" else "OFF"}"

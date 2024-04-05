@@ -87,6 +87,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Twitter client for the console";
+    mainProgram = "turses";
     homepage = "https://github.com/louipc/turses";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ];

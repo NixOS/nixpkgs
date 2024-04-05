@@ -44,6 +44,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A backend for mdBook written in Rust for generating PDF";
+    mainProgram = "mdbook-pdf";
     homepage = "https://github.com/HollowMan6/mdbook-pdf";
     changelog = "https://github.com/HollowMan6/mdbook-pdf/releases/tag/v${version}";
     license = licenses.gpl3Plus;

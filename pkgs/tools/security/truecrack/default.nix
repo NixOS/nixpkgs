@@ -41,6 +41,7 @@ gccStdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A brute-force password cracker for TrueCrypt volumes, optimized for Nvidia Cuda technology";
+    mainProgram = "truecrack";
     homepage = "https://gitlab.com/kalilinux/packages/truecrack";
     broken = cudaSupport;
     license = licenses.gpl3Plus;

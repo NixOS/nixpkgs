@@ -9,21 +9,23 @@
 , testers
 , cudaSupport ? config.cudaSupport
 , cudaPackages
+, rocmSupport ? config.rocmSupport
+, rocmPackages
 }:
 
 stdenv.mkDerivation rec {
   pname = "btop";
-  version = "1.3.0";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "aristocratos";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-QQM2/LO/EHovhj+S+4x3ro/aOVrtuxteVVvYAd6feTk=";
+    hash = "sha256-kjSyIgLTObTOKMG5dk49XmWPXZpCWbLdpkmAsJcFliA=";
   };
 
   nativeBuildInputs = [ cmake ] ++ lib.optionals cudaSupport [
-    cudaPackages.autoAddOpenGLRunpathHook
+    cudaPackages.autoAddDriverRunpath
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
@@ -35,6 +37,11 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/bin/btop)
+  '';
+
+  postPhases = lib.optionals rocmSupport [ "postPatchelf" ];
+  postPatchelf = lib.optionalString rocmSupport ''
+    patchelf --add-rpath ${lib.getLib rocmPackages.rocm-smi}/lib $out/bin/btop
   '';
 
   passthru.tests.version = testers.testVersion {

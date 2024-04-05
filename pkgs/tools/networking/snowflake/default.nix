@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "snowflake";
-  version = "2.9.0";
+  version = "2.9.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
@@ -10,10 +10,10 @@ buildGoModule rec {
     owner = "anti-censorship/pluggable-transports";
     repo = "snowflake";
     rev = "v${version}";
-    sha256 = "sha256-h8T8kc7idZcfepVjhpX+0RIypFDp2nMt3ZZ61YmeLQk=";
+    sha256 = "sha256-QyTyFz4NIuUV7g5f6qV/ujfHYZDnnZmjeBinvcWlo0U=";
   };
 
-  vendorHash = "sha256-TSB0UDVD9ijOFgOmIh7ppnKJn/VWzejeDcb1+30+Mnc=";
+  vendorHash = "sha256-Qn8JFzrLCUrr6WGvVmaSYC7ooiMGl8iPMXkRvALho1A=";
 
   meta = with lib; {
     description = "System to defeat internet censorship";

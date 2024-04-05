@@ -55,6 +55,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Command-line tool for Home Assistant";
+    mainProgram = "hass-cli";
     homepage = "https://github.com/home-assistant-ecosystem/home-assistant-cli";
     changelog = "https://github.com/home-assistant-ecosystem/home-assistant-cli/releases/tag/${version}";
     license = licenses.asl20;

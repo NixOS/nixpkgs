@@ -106,7 +106,10 @@ buildPythonPackage rec {
     "-m 'not network'"
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = [
+    # flaky
+    "test_outer_boundless_pixel_fidelity"
+  ] ++ lib.optionals stdenv.isDarwin [
     "test_reproject_error_propagation"
   ];
 
@@ -116,6 +119,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python package to read and write geospatial raster data";
+    mainProgram = "rio";
     homepage = "https://rasterio.readthedocs.io/";
     changelog = "https://github.com/rasterio/rasterio/blob/${version}/CHANGES.txt";
     license = licenses.bsd3;

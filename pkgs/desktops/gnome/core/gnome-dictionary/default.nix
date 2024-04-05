@@ -78,6 +78,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Dictionary";
     description = "Dictionary is the GNOME application to look up definitions";
+    mainProgram = "gnome-dictionary";
     maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.unix;

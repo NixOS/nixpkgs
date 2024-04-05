@@ -7,7 +7,7 @@
 , allRecommendedMods ? true
 , allOptionalMods ? false
 }:
-with lib;
+
 let
   modDrv = factorio-utils.modDrv { inherit allRecommendedMods allOptionalMods; };
 in

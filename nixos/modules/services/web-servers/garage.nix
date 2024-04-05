@@ -75,7 +75,19 @@ in
       source = configFile;
     };
 
-    environment.systemPackages = [ cfg.package ]; # For administration
+    # For administration
+    environment.systemPackages = [
+      (pkgs.writeScriptBin "garage" ''
+        # make it so all future variables set are automatically exported as environment variables
+        set -a
+
+        # source the set environmentFile (since systemd EnvironmentFile is supposed to be a minor subset of posix sh parsing) (with shell arg escaping to avoid quoting issues)
+        [ -f ${lib.escapeShellArg cfg.environmentFile} ] && . ${lib.escapeShellArg cfg.environmentFile}
+
+        # exec the program with quoted args (also with shell arg escaping for the program path to avoid quoting issues there)
+        exec ${lib.escapeShellArg (lib.getExe cfg.package)} "$@"
+      '')
+    ];
 
     systemd.services.garage = {
       description = "Garage Object Storage (S3 compatible)";

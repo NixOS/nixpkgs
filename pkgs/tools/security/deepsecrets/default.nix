@@ -42,6 +42,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Secrets scanner that understands code";
+    mainProgram = "deepsecrets";
     homepage = "https://github.com/avito-tech/deepsecrets";
     changelog = "https://github.com/avito-tech/deepsecrets/releases/tag/v${version}";
     license = licenses.mit;

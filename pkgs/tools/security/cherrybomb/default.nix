@@ -22,6 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A CLI tool that helps you avoid undefined user behavior by validating your API specifications";
+    mainProgram = "cherrybomb";
     homepage = "https://github.com/blst-security/cherrybomb";
     changelog = "https://github.com/blst-security/cherrybomb/releases/tag/v${version}";
     license = licenses.asl20;

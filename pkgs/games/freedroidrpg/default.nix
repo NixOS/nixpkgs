@@ -31,6 +31,7 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Isometric 3D RPG similar to game Diablo";
+    mainProgram = "freedroidRPG";
 
     longDescription = ''
       <para>

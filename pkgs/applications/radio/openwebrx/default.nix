@@ -94,6 +94,7 @@ buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/jketterl/openwebrx";
     description = "A simple DSP library and command-line tool for Software Defined Radio";
+    mainProgram = "openwebrx";
     license = licenses.gpl3Only;
     maintainers = teams.c3d2.members;
   };

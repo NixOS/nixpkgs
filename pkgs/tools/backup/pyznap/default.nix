@@ -23,6 +23,7 @@ buildPythonApplication rec {
   meta = {
     homepage = "https://github.com/yboetz/pyznap";
     description = "ZFS snapshot tool written in python";
+    mainProgram = "pyznap";
     license = with lib.licenses; [ gpl3 ];
     maintainers = with lib.maintainers; [ rbrewer ];
   };

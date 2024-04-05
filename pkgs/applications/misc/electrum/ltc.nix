@@ -127,6 +127,7 @@ python3.pkgs.buildPythonApplication {
 
   meta = with lib; {
     description = "Lightweight Litecoin Client";
+    mainProgram = "electrum-ltc";
     longDescription = ''
       Electrum-LTC is a simple, but powerful Litecoin wallet. A unique secret
       phrase (or “seed”) leaves intruders stranded and your peace of mind

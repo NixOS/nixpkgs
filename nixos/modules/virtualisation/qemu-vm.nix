@@ -186,7 +186,7 @@ let
         NIX_EFI_VARS=$(readlink -f "''${NIX_EFI_VARS:-${config.system.name}-efi-vars.fd}")
         # VM needs writable EFI vars
         if ! test -e "$NIX_EFI_VARS"; then
-        ${if cfg.useBootLoader then
+        ${if cfg.efi.keepVariables then
             # We still need the EFI var from the make-disk-image derivation
             # because our "switch-to-configuration" process might
             # write into it and we want to keep this data.
@@ -905,6 +905,13 @@ in
             Defaults to OVMF.
           '';
       };
+
+      keepVariables = mkOption {
+        type = types.bool;
+        default = cfg.useBootLoader;
+        defaultText = literalExpression "cfg.useBootLoader";
+        description = "Whether to keep EFI variable values from the generated system image";
+      };
     };
 
     virtualisation.tpm = {
@@ -1182,6 +1189,10 @@ in
         "-chardev socket,id=chrtpm,path=\"$NIX_SWTPM_DIR\"/socket"
         "-tpmdev emulator,id=tpm_dev_0,chardev=chrtpm"
         "-device ${cfg.tpm.deviceModel},tpmdev=tpm_dev_0"
+      ])
+      (mkIf (pkgs.stdenv.hostPlatform.isx86 && cfg.efi.OVMF.systemManagementModeRequired) [
+        "-machine" "q35,smm=on"
+        "-global" "driver=cfi.pflash01,property=secure,value=on"
       ])
     ];
 

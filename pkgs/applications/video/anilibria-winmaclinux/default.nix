@@ -16,16 +16,16 @@
 
 mkDerivation rec {
   pname = "anilibria-winmaclinux";
-  version = "1.2.14";
+  version = "1.2.15";
 
   src = fetchFromGitHub {
     owner = "anilibria";
     repo = "anilibria-winmaclinux";
-    rev = "d941607f078c72fca104ee1e7916cc0ddcc0acf5";
-    sha256 = "sha256-G4KlYAjOT1UV29vcX7Q8dMTj0BX0rsJcLtK2MQag5nU=";
+    rev = version;
+    sha256 = "sha256-pfM3o4H3XJ4ZE0FXVR1k8pc7lr7SOQjKEMWuG9YkvvI=";
   };
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   qmakeFlags = [ "PREFIX=${placeholder "out"}" "CONFIG+=unixvlc" ];
 

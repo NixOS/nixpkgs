@@ -50,6 +50,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Transparent proxy server that works as a poor man's VPN";
+    mainProgram = "sshuttle";
     longDescription = ''
       Forward connections over SSH, without requiring administrator access to the
       target network (though it does require Python 2.7, Python 3.5 or later at both ends).

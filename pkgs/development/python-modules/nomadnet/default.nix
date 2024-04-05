@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "nomadnet";
-  version = "0.4.6";
+  version = "0.4.8";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "markqvist";
     repo = "NomadNet";
     rev = "refs/tags/${version}";
-    hash = "sha256-23TIBSWOYgo7xEilB4raNMbEWIyPFHAh9jsVzh40S8I=";
+    hash = "sha256-a8fLfTJePf+pejDTqYNXCZda24LaNtOwxwEmEMAnB0I=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +43,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Off-grid, resilient mesh communication";
+    mainProgram = "nomadnet";
     homepage = "https://github.com/markqvist/NomadNet";
     changelog = "https://github.com/markqvist/NomadNet/releases/tag/${version}";
     license = licenses.gpl3Only;

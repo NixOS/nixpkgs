@@ -1,12 +1,15 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, electron_22
+, electron_29
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
 }:
 
+let
+  electron = electron_29;
+in
 stdenv.mkDerivation rec {
   pname = "passky-desktop";
   version = "8.1.1";
@@ -18,7 +21,10 @@ stdenv.mkDerivation rec {
     sha256 = "1ma8s1bngjdzclcc4m5pcmavk38sidaskmz7dgfnv84y35si18dr";
   };
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -35,7 +41,7 @@ stdenv.mkDerivation rec {
     done
 
     mkdir "$out/share/applications"
-    makeWrapper ${electron_22}/bin/electron "$out/bin/passky" \
+    makeWrapper ${electron}/bin/electron "$out/bin/passky" \
       --add-flags "$out/share/passky/electron/" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 
@@ -45,12 +51,13 @@ stdenv.mkDerivation rec {
   desktopItems = [
     (
       makeDesktopItem {
-        name = "Passky";
+        name = "passky";
         type = "Application";
-        desktopName = "passky";
+        desktopName = "Passky";
         comment = "Simple, modern, open source and secure password manager.";
         icon = "passky";
         exec = "passky %U";
+        terminal = false;
         categories = [ "Utility" ];
         startupWMClass = "Passky";
       }

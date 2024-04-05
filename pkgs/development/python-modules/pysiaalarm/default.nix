@@ -8,6 +8,7 @@
 , pytest-asyncio
 , pytest-cases
 , pytestCheckHook
+, pytest_7
 , pytz
 }:
 
@@ -43,7 +44,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytest-cases
-    pytestCheckHook
+    (pytestCheckHook.override { pytest = pytest_7; })
   ];
 
   pythonImportsCheck = [

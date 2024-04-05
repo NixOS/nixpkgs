@@ -20,6 +20,7 @@
 , pythonOlder
 , sanic
 , sanic-testing
+, setuptools
 , starlette
 , structlog
 , tornado
@@ -30,8 +31,8 @@
 
 buildPythonPackage rec {
   pname = "elastic-apm";
-  version = "6.20.0";
-  format = "setuptools";
+  version = "6.21.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -39,8 +40,12 @@ buildPythonPackage rec {
     owner = "elastic";
     repo = "apm-agent-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nj035nZTUkVCiGZz+JTibv7LZ9Bws5DwYvqrLrwjQkc=";
+    hash = "sha256-Ejix31cMyHOc/IGe4bRp/Nchm9Ps1cRYE8jIaIYlJjs=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp

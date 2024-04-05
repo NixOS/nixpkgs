@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , git
 , libiconv
 , ncurses
@@ -23,6 +24,19 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ev56NzrEF7xm3WmR2a0pHPs69Lvmb4He7+kIBYiJjKY=";
   };
 
+  patches = [
+    # Fix tests with Git 2.44.0+
+    (fetchpatch {
+      url = "https://github.com/arxanas/git-branchless/pull/1245.patch";
+      hash = "sha256-gBm0A478Uhg9IQVLQppvIeTa8s1yHUMddxiUbpHUvGw=";
+    })
+    # Fix tests with Git 2.44.0+
+    (fetchpatch {
+      url = "https://github.com/arxanas/git-branchless/pull/1161.patch";
+      hash = "sha256-KHobEIXhlDar8CvIVUi4I695jcJZXgGRhU86b99x86Y=";
+    })
+  ];
+
   cargoHash = "sha256-Ppw5TN/6zMNxFAx90Q9hQ7RdGxV+TT8UlOm68ldK8oc=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -36,6 +50,10 @@ rustPlatform.buildRustPackage rec {
     SystemConfiguration
     libiconv
   ];
+
+  postInstall = ''
+    $out/bin/git-branchless install-man-pages $out/share/man
+  '';
 
   preCheck = ''
     export TEST_GIT=${git}/bin/git

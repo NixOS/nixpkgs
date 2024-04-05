@@ -27,6 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Tool for working with a stack of patches";
+    mainProgram = "gps";
     homepage = "https://git-ps.sh/";
     license = licenses.mit;
     maintainers = with maintainers; [ alizter ];

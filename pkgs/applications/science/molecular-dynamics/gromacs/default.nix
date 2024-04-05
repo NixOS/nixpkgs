@@ -19,6 +19,10 @@
 , cpuAcceleration ? null
 }:
 
+
+# CUDA is only implemented for single precission
+assert enableCuda -> singlePrec;
+
 let
   inherit (cudaPackages.cudaFlags) cudaCapabilities dropDot;
 
@@ -41,8 +45,8 @@ let
       }
     else
       {
-        version = "2024";
-        hash = "sha256-BNIm1SBmqLw6QuANYhPec3tOwpLiZwMGWST/AZVoAeI=";
+        version = "2024.1";
+        hash = "sha256-k32PEqNv/78q963XGtu1qlxVN4ktRsmnavvsqxqgqsc=";
       };
 
 in stdenv.mkDerivation rec {
@@ -75,6 +79,7 @@ in stdenv.mkDerivation rec {
     lapack
   ] ++ lib.optional enableMpi mpi
   ++ lib.optionals enableCuda [
+    cudaPackages.cuda_cccl
     cudaPackages.cuda_cudart
     cudaPackages.libcufft
     cudaPackages.cuda_profiler_api

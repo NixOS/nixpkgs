@@ -80,7 +80,7 @@ in
       };
 
       implicitPolicyTarget = mkOption {
-        type = policy;
+        type = types.enum [ "allow" "block" "reject" ];
         default = "block";
         description = lib.mdDoc ''
           How to treat USB devices that don't match any rule in the policy.
@@ -110,7 +110,7 @@ in
       };
 
       insertedDevicePolicy = mkOption {
-        type = policy;
+        type = types.enum [ "block" "reject" "apply-policy" ];
         default = "apply-policy";
         description = lib.mdDoc ''
           How to treat USB devices that are already connected after the daemon

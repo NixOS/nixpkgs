@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
+, substituteAll
+, addDriverRunpath
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,6 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
       "-DENABLE_X11=ON"
       "-DINSTALL_EXAMPLE_CODE=OFF"
       "-DBUILD_TOOLS=OFF"
+  ];
+
+  patches = [
+    (substituteAll {
+      src = ./opengl-driver-lib.patch;
+      inherit (addDriverRunpath) driverLink;
+    })
   ];
 
   meta = with lib; {

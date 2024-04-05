@@ -18,6 +18,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Generate Go tests from your source code";
+    mainProgram = "gotests";
     homepage = "https://github.com/cweill/gotests";
     maintainers = with maintainers; [ vdemeester ];
     license = licenses.asl20;

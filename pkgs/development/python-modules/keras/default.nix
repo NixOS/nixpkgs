@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "keras";
-  version = "3.0.0";
+  version = "3.0.5";
   format = "wheel";
 
   src = fetchPypi {
     inherit format pname version;
-    hash = "sha256-/z8++iqlzBNLHYuFaTqrMlWLHZyGBjChP1iTTm0ckI0=";
+    hash = "sha256-SgIvLpfqWj2xLtgJ/8t84e+NNP6urFIxXshVPe0tz5c=";
     python = "py3";
     dist = "py3";
   };

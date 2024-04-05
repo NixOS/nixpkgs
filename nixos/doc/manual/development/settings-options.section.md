@@ -73,6 +73,34 @@ have a predefined type and string generator already declared under
 
     It returns a set with INI-specific attributes `type` and `generate`
     as specified [below](#pkgs-formats-result).
+    The type of the input is an *attrset* of sections; key-value pairs where
+    the key is the section name and the value is the corresponding content
+    which is also an *attrset* of key-value pairs for the actual key-value
+    mappings of the INI format.
+    The values of the INI atoms are subject to the above parameters (e.g. lists
+    may be transformed into multiple key-value pairs depending on
+    `listToValue`).
+
+`pkgs.formats.iniWithGlobalSection` { *`listsAsDuplicateKeys`* ? false, *`listToValue`* ? null, \.\.\. }
+
+:   A function taking an attribute set with values
+
+    `listsAsDuplicateKeys`
+
+    :   A boolean for controlling whether list values can be used to
+        represent duplicate INI keys
+
+    `listToValue`
+
+    :   A function for turning a list of values into a single value.
+
+    It returns a set with INI-specific attributes `type` and `generate`
+    as specified [below](#pkgs-formats-result).
+    The type of the input is an *attrset* of the structure
+    `{ sections = {}; globalSection = {}; }` where *sections* are several
+    sections as with *pkgs.formats.ini* and *globalSection* being just a single
+    attrset of key-value pairs for a single section, the global section which
+    preceedes the section definitions.
 
 `pkgs.formats.toml` { }
 
@@ -220,28 +248,30 @@ up in the manual.
 ::: {#ex-settings-typed-attrs .example}
 ### Declaring a type-checked `settings` attribute
 ```nix
-settings = lib.mkOption {
-  type = lib.types.submodule {
+{
+  settings = lib.mkOption {
+    type = lib.types.submodule {
 
-    freeformType = settingsFormat.type;
+      freeformType = settingsFormat.type;
 
-    # Declare an option for the port such that the type is checked and this option
-    # is shown in the manual.
-    options.port = lib.mkOption {
-      type = lib.types.port;
-      default = 8080;
-      description = ''
-        Which port this service should listen on.
-      '';
+      # Declare an option for the port such that the type is checked and this option
+      # is shown in the manual.
+      options.port = lib.mkOption {
+        type = lib.types.port;
+        default = 8080;
+        description = ''
+          Which port this service should listen on.
+        '';
+      };
+
     };
-
+    default = {};
+    description = ''
+      Configuration for Foo, see
+      <link xlink:href="https://example.com/docs/foo"/>
+      for supported values.
+    '';
   };
-  default = {};
-  description = ''
-    Configuration for Foo, see
-    <link xlink:href="https://example.com/docs/foo"/>
-    for supported values.
-  '';
-};
+}
 ```
 :::

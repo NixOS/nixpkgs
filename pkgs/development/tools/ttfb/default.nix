@@ -26,6 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "CLI-Tool to measure the TTFB (time to first byte) of HTTP(S) requests";
+    mainProgram = "ttfb";
     longDescription = ''
       ttfb measure the TTFB (time to first byte) of HTTP(S) requests. This includes data
       of intermediate steps, such as the relative and absolute timings of DNS lookup, TCP

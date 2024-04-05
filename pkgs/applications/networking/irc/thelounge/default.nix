@@ -4,7 +4,7 @@
 , fetchYarnDeps
 , nodejs
 , yarn
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , python3
 , npmHooks
 , darwin
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-MM6SgVT7Pjdu96A4eWRucEzT7uNPxBqUDgHKl8mH2C0=";
   };
 
-  nativeBuildInputs = [ nodejs yarn fixup_yarn_lock python3 npmHooks.npmInstallHook ] ++ lib.optional stdenv.isDarwin darwin.cctools;
+  nativeBuildInputs = [ nodejs yarn prefetch-yarn-deps python3 npmHooks.npmInstallHook ] ++ lib.optional stdenv.isDarwin darwin.cctools;
   buildInputs = [ sqlite ];
 
   configurePhase = ''
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     export HOME="$PWD"
 
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn config --offline set yarn-offline-mirror ${finalAttrs.offlineCache}
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules

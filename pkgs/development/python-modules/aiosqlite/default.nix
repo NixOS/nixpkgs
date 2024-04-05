@@ -4,11 +4,12 @@
 , flit-core
 , pytestCheckHook
 , pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "aiosqlite";
-  version = "0.19.0";
+  version = "0.20.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -17,11 +18,15 @@ buildPythonPackage rec {
     owner = "omnilib";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-dm7uqG59FP40hcQt+R7qfQiD8P42AYZ2WcH1RoEC5wQ=";
+    hash = "sha256-JQ9iNxK7FvBhPyr825d+8P5ZYFztDIX3gOwp4FPfyU4=";
   };
 
   nativeBuildInputs = [
     flit-core
+  ];
+
+  propagatedBuildInputs = [
+    typing-extensions
   ];
 
   nativeCheckInputs = [

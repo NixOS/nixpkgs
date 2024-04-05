@@ -80,6 +80,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library for communicating with Trezor Hardware Wallet";
+    mainProgram = "trezorctl";
     homepage = "https://github.com/trezor/trezor-firmware/tree/master/python";
     license = licenses.gpl3;
     maintainers = with maintainers; [ np prusnak mmahut ];

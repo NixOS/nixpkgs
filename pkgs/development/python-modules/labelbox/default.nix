@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "labelbox";
-  version = "3.58.1";
+  version = "3.65";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Labelbox";
     repo = "labelbox-python";
-    rev = "refs/tags/v.${version}";
-    hash = "sha256-H6fn+TpfYbu/warhr9XcQjfxSThIjBp9XwelA5ZvTBE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-i0hbVxGrb2C/bMcVPNzaPBxhKm+5r3o1GlToZvIS35k=";
   };
 
   postPatch = ''
@@ -99,7 +99,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/Labelbox/labelbox-python/blob/v.${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ rakesh4g ];
-    # https://github.com/Labelbox/labelbox-python/issues/1246
-    broken = versionAtLeast pydantic.version "2";
   };
 }

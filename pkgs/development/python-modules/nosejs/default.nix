@@ -5,11 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "NoseJS";
+  pname = "nosejs";
   version = "0.9.4";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "NoseJS";
+    inherit version;
     sha256 = "0qrhkd3sga56qf6k0sqyhwfcladwi05gl6aqmr0xriiq1sgva5dy";
   };
 

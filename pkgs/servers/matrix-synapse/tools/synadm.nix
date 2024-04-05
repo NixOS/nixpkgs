@@ -34,6 +34,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Command line admin tool for Synapse";
+    mainProgram = "synadm";
     longDescription = ''
       A CLI tool to help admins of Matrix Synapse homeservers
       conveniently issue commands available via its admin API's

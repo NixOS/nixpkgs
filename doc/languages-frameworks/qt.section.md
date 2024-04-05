@@ -12,7 +12,7 @@ an extra indirection.
 ## Nix expression for a Qt package (default.nix) {#qt-default-nix}
 
 ```nix
-{ stdenv, lib, qt6, wrapQtAppsHook }:
+{ stdenv, qt6 }:
 
 stdenv.mkDerivation {
   pname = "myapp";
@@ -23,10 +23,12 @@ stdenv.mkDerivation {
 }
 ```
 
+The same goes for Qt 5 where libraries and tools are under `libsForQt5`.
+
 Any Qt package should include `wrapQtAppsHook` in `nativeBuildInputs`, or explicitly set `dontWrapQtApps` to bypass generating the wrappers.
 
 ::: {.note}
-Graphical Linux applications should also include `qtwayland` in `buildInputs`, to ensure the Wayland platform plugin is available.
+Qt 6 graphical applications should also include `qtwayland` in `buildInputs` on Linux (but not on platforms e.g. Darwin, where `qtwayland` is not available), to ensure the Wayland platform plugin is available.
 
 This may become default in the future, see [NixOS/nixpkgs#269674](https://github.com/NixOS/nixpkgs/pull/269674).
 :::

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "lmcloud";
-  version = "0.4.35";
+  version = "1.1.5";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -20,14 +20,14 @@ buildPythonPackage rec {
     owner = "zweckj";
     repo = "lmcloud";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TUve21yamtEmEceK/V1w7IZjnMgKConMfSY/GlqFpp8=";
+    hash = "sha256-7w/7A66JDMu2Qn0V8GeUuBhDApTN/9SAriEUGJdKVEM=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     authlib
     bleak
     httpx

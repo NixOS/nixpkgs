@@ -48,6 +48,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Count lines of code for hundreds of languages using pygments";
+    mainProgram = "pygount";
     homepage = "https://github.com/roskakori/pygount";
     changelog = "https://github.com/roskakori/pygount/blob/${src.rev}/CHANGES.md";
     license = with licenses; [ bsd3 ];

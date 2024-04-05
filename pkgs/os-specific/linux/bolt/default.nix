@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "bolt";
-  version = "0.9.6";
+  version = "0.9.7";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "bolt";
     repo = "bolt";
     rev = version;
-    sha256 = "sha256-sJBY/pXUX5InLynsvAmapW54UF/WGn9eDlluWXjhubQ=";
+    sha256 = "sha256-6m4Yrev9W5WV4/pptc8tJ4hc6QSC+eJ7BSt2mx33s9U=";
   };
 
   patches = [
@@ -93,6 +93,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Thunderbolt 3 device management daemon";
+    mainProgram = "boltctl";
     homepage = "https://gitlab.freedesktop.org/bolt/bolt";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ callahad ];

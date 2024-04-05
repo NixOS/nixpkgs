@@ -90,6 +90,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for interacting with WebDAV";
+    mainProgram = "dav";
     homepage = "https://skshetry.github.io/webdav4/";
     changelog = "https://github.com/skshetry/webdav4/releases/tag/v${version}";
     license = with licenses; [ mit ];

@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GNU Common Lisp compiler working via GCC";
+    mainProgram = "gcl";
     maintainers = lib.teams.lisp.members;
     license = licenses.gpl2;
     platforms = platforms.linux;

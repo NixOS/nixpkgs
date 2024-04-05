@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, flet-client-flutter
 , poetry-core
 , pythonRelaxDepsHook
 , flet-core
@@ -10,14 +10,18 @@
 
 buildPythonPackage rec {
   pname = "flet-runtime";
-  version = "0.19.0";
+  inherit (flet-client-flutter) version src;
+
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "flet_runtime";
-    inherit version;
-    hash = "sha256-no2oDGZG1svrOZLNAao279qeHwyk5SGibDG4UqpriiU=";
-  };
+  sourceRoot = "${src.name}/sdk/python/packages/flet-runtime";
+
+  postPatch = ''
+    substitute ${./_setup_runtime.py} src/flet_runtime/_setup_runtime.py \
+      --replace @flet-client-flutter@ ${flet-client-flutter}
+
+    echo -e "import flet_runtime._setup_runtime\n$(cat src/flet_runtime/__init__.py)" > src/flet_runtime/__init__.py
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -43,6 +47,6 @@ buildPythonPackage rec {
     description = "A base package for Flet desktop and Flet mobile";
     homepage = "https://flet.dev/";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.wegank ];
+    maintainers = with lib.maintainers; [ lucasew ];
   };
 }

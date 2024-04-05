@@ -41,6 +41,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/lxqt/qterminal";
     description = "A lightweight Qt-based terminal emulator";
+    mainProgram = "qterminal";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
     maintainers = with maintainers; teams.lxqt.members;

@@ -2,7 +2,10 @@
 , buildPythonPackage
 , fetchFromGitHub
 
-# runtime
+# build-system
+, setuptools
+
+# dependencies
 , portpicker
 , pyserial
 , pyyaml
@@ -17,17 +20,21 @@
 
 buildPythonPackage rec {
   pname = "mobly";
-  version = "1.12.2";
-  format = "setuptools";
+  version = "1.12.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "mobly";
     rev = "refs/tags/${version}";
-    hash = "sha256-leUOC8AQwbuPNphDg4bIFWW+9tTnYvM3/ejHgZDMR44=";
+    hash = "sha256-hhI1jrHJk4wo49MK8J4VTS2dGmHG2kwzgZeSWBXdXkA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     portpicker
     pyserial
     pyyaml

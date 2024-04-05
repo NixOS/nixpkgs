@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Cryptographic protocol verifier in the computational model";
+    mainProgram = "cryptoverif";
     homepage    = "https://prosecco.gforge.inria.fr/personal/bblanche/cryptoverif/";
     license     = lib.licenses.cecill-b;
     platforms   = lib.platforms.unix;

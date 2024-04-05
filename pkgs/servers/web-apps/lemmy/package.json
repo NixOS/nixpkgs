@@ -3,7 +3,7 @@
   "description": "An isomorphic UI for lemmy",
   "version": "0.19.3",
   "author": "Dessalines <tyhou13@gmx.com>",
-  "license": "AGPL-3.0",
+  "license": "AGPL-3.0-only",
   "scripts": {
     "analyze": "webpack --mode=none",
     "build:dev": "webpack --env COMMIT_HASH=$(git rev-parse --short HEAD) --mode=development",

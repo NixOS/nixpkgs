@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchFromGitLab, fetchFromGitHub, fetchpatch, writeText
+{ lib, stdenv, fetchFromGitLab, fetchFromGitHub, writeText
 # docs deps
 , libxslt, docbook_xml_dtd_412, docbook_xml_dtd_43, docbook_xsl, xmlto
 # runtime deps
-, resholve, bash, coreutils, dbus, file, gawk, glib, gnugrep, gnused, jq, lockfileProgs, nettools, procmail, procps, xdg-user-dirs
+, resholve, bash, coreutils, dbus, file, gawk, glib, gnugrep, gnused, jq, nettools, procmail, procps, which, xdg-user-dirs
 , perl, perlPackages
 , mimiSupport ? false
 , withXdgOpenUsePortalPatch ? true }:
@@ -29,7 +29,7 @@ let
 
   # This is still required to work around the eval trickery some scripts do
   commonPrologue = "${writeText "xdg-utils-prologue" ''
-    export PATH=$PATH:${coreutils}/bin
+    export PATH=$PATH:${lib.makeBinPath [ coreutils ]}
   ''}";
 
   solutions = [
@@ -120,7 +120,10 @@ let
         "$KDE_SESSION_VERSION" = true;
         "$KTRADER" = true;
       };
-      prologue = commonPrologue;
+      prologue = "${writeText "xdg-mime-prologue" ''
+        export PERL5LIB=${with perlPackages; makePerlPath [ FileMimeInfo ]}
+        export PATH=$PATH:${lib.makeBinPath [ coreutils perlPackages.FileMimeInfo ]}
+      ''}";
     }
 
     {
@@ -162,7 +165,7 @@ let
     {
       scripts = [ "bin/xdg-screensaver" ];
       interpreter = "${bash}/bin/bash";
-      inputs = commonDeps ++ [ lockfileProgs nettools perl procmail procps ];
+      inputs = commonDeps ++ [ nettools perl procmail procps ];
       # These are desktop-specific, so we don't want xdg-utils to be able to
       # call them when in a different setup.
       fake.external = commonFakes ++ [
@@ -209,41 +212,46 @@ let
         "$handler" = true;
       };
     }
+
+    {
+      scripts = [ "bin/xdg-terminal" ];
+      interpreter = "${bash}/bin/bash";
+      inputs = commonDeps ++ [ bash glib.bin which ];
+      fake.external = commonFakes ++ [
+        "gconftool-2"    # GNOME
+        "exo-open"       # XFCE
+        "lxterminal"     # LXQT
+        "qterminal"      # LXQT
+        "terminology"    # Englightenment
+      ];
+      keep = {
+        "$command" = true;
+        "$kreadconfig" = true;
+        "$terminal_exec" = true;
+      };
+      prologue = commonPrologue;
+    }
   ];
 in
 
 stdenv.mkDerivation rec {
   pname = "xdg-utils";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "xdg";
     repo = "xdg-utils";
     rev = "v${version}";
-    hash = "sha256-rjNIO4B9jHsBmPaugWTMqTGNpjiw0MTEmf9/ds2Mud4=";
+    hash = "sha256-58ElbrVlk+13DUODSEHBPcDDt9H+Kuee8Rz9CIcoy0I=";
   };
 
-  patches = [
-    # Backport typo fix
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/xdg/xdg-utils/-/commit/af2fe0d1dcbcd982d84ddf2bbd174afe90976ed9.patch";
-      hash = "sha256-HhQk06wWkyWjSxjXet+sADKf1irswKxDA8WuOknZKRs=";
-    })
-    # Backport docs rendering fixes
-    # See: https://gitlab.freedesktop.org/xdg/xdg-utils/-/merge_requests/106
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/xdg/xdg-utils/-/commit/403a720ad18920030418a7c3d1f2caba9ce3892d.patch";
-      hash = "sha256-XxFUeyXENHCy+wplIJ5OzoU5oyA4v1bz/9qMXp1ZwsE=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/xdg/xdg-utils/-/commit/a137f2ba87620402aca21b14fb1d79517782dd29.patch";
-      hash = "sha256-XFUAWn4uOyzgLdvupBxsO7wm6VDSzYj1SGZEM+9ouec=";
-    })
-  ] ++ lib.optionals withXdgOpenUsePortalPatch [
+  patches = lib.optionals withXdgOpenUsePortalPatch [
     # Allow forcing the use of XDG portals using NIXOS_XDG_OPEN_USE_PORTAL environment variable.
     # Upstream PR: https://github.com/freedesktop/xdg-utils/pull/12
     ./allow-forcing-portal-use.patch
+    #  Enable build of xdg-terminal
+    ./enable-xdg-terminal.patch
   ];
 
   # just needed when built from git

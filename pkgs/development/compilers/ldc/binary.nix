@@ -37,7 +37,7 @@ in stdenv.mkDerivation {
     homepage = "https://github.com/ldc-developers/ldc";
     # from https://github.com/ldc-developers/ldc/blob/master/LICENSE
     license = with licenses; [ bsd3 boost mit ncsa gpl2Plus ];
-    maintainers = with maintainers; [ ThomasMader lionello ];
+    maintainers = with maintainers; [ lionello ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
   };
 }

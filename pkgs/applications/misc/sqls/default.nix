@@ -20,6 +20,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/sqls-server/sqls";
     description = "SQL language server written in Go";
+    mainProgram = "sqls";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
   };

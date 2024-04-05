@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.gnu.org/software/indent/";
     description = "A source code reformatter";
+    mainProgram = "indent";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.mmahut ];
     platforms = lib.platforms.unix;

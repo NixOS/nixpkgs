@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "puremagic";
-  version = "1.20";
+  version = "1.21";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "cdgriffith";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Iyf/Vf1uqdtHlaP9Petpp88aIGCGmHu//cH6bindL6c=";
+    hash = "sha256-ObJp3+gk1tf1+9wBpvzs0wwP7ptDlfGwX9b4wlCb1RI=";
   };
 
   nativeCheckInputs = [

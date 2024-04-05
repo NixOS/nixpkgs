@@ -19,6 +19,7 @@ in rustPlatform.buildRustPackage {
 
   meta = with lib; {
     description = "A systemd unit switcher for Home Manager";
+    mainProgram = "sd-switch";
     homepage = "https://gitlab.com/rycee/sd-switch";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ rycee ];

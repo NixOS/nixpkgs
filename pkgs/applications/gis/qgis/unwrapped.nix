@@ -52,6 +52,7 @@ let
     packageOverrides = self: super: {
       pyqt5 = super.pyqt5.override {
         withLocation = true;
+        withSerialPort = true;
       };
     };
   };
@@ -77,14 +78,14 @@ let
     urllib3
   ];
 in mkDerivation rec {
-  version = "3.34.3";
+  version = "3.36.1";
   pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-uf4qUalY6LxPykgUt/atHBTu+A6ITrcnfez/jwVMLvA=";
+    hash = "sha256-/0wVPcQoliJFgY8Kn506gUHfY+kDTdLgzbp/0KLSAkI=";
   };
 
   passthru = {
@@ -97,9 +98,9 @@ in mkDerivation rec {
     wrapGAppsHook
     wrapQtAppsHook
 
+    bison
     cmake
     flex
-    bison
     ninja
   ];
 

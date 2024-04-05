@@ -69,6 +69,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A Cargo subcommand to help you work with AWS Lambda";
+    mainProgram = "cargo-lambda";
     homepage = "https://cargo-lambda.info";
     license = licenses.mit;
     maintainers = with maintainers; [ taylor1791 calavera ];

@@ -238,7 +238,9 @@ in
       # this should not run because /etc is mounted via a systemd mount unit
       # instead. To a large extent this mimics what composefs does. Because
       # it's relatively simple, however, we avoid the composefs dependency.
-      if [[ ! $IN_NIXOS_SYSTEMD_STAGE1 ]]; then
+      # Since this script is not idempotent, it should not run when etc hasn't
+      # changed.
+      if [[ ! $IN_NIXOS_SYSTEMD_STAGE1 ]] && [[ "${config.system.build.etc}/etc" != "$(readlink -f /run/current-system/etc)" ]]; then
         echo "remounting /etc..."
 
         tmpMetadataMount=$(mktemp --directory)

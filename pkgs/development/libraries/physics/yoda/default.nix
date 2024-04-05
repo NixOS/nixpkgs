@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "yoda";
-  version = "1.9.9";
+  version = "1.9.10";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/yoda/YODA-${version}.tar.bz2";
-    hash = "sha256-68rVU2mhztzuOi3gWUB8hRZSukRJURP1wJ2MLlf1Fqo=";
+    hash = "sha256-CnCO6dcElF0zh8xDexX/3fOCxw/lurOe0r2/g8LCjG8=";
   };
 
   nativeBuildInputs = with python.pkgs; [

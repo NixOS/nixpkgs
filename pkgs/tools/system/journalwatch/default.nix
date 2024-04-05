@@ -32,6 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A tool to find error messages in the systemd journal";
+    mainProgram = "journalwatch";
     homepage = "https://github.com/The-Compiler/journalwatch";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ florianjacob ];

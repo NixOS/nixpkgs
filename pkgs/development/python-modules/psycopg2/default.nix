@@ -5,6 +5,7 @@
 , isPyPy
 , fetchPypi
 , postgresql
+, postgresqlTestHook
 , openssl
 , sphinxHook
 , sphinx-better-theme
@@ -48,8 +49,17 @@ buildPythonPackage rec {
 
   sphinxRoot = "doc/src";
 
-  # Requires setting up a PostgreSQL database
+  # test suite breaks at some point with:
+  #   current transaction is aborted, commands ignored until end of transaction block
   doCheck = false;
+
+  nativeCheckInputs = [
+    postgresqlTestHook
+  ];
+
+  env = {
+    PGDATABASE = "psycopg2_test";
+  };
 
   pythonImportsCheck = [
     "psycopg2"

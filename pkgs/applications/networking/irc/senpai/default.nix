@@ -35,6 +35,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Your everyday IRC student";
+    mainProgram = "senpai";
     homepage = "https://sr.ht/~taiite/senpai/";
     changelog = "https://git.sr.ht/~delthas/senpai/refs/v${version}";
     license = licenses.isc;

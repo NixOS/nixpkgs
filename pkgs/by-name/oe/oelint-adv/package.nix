@@ -6,13 +6,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "oelint-adv";
-  version = "4.3.0";
+  version = "4.4.5";
   format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "oelint_adv";
-    hash = "sha256-G2wBy1nx05WiAtnNXp7Kvio4dA3rYJRVfdKm3a2ZF/g=";
+    hash = "sha256-NRTfWHtItwjZi3O26MzH8GtetCkj7egZa3OArs+Q2SY=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -32,6 +32,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Advanced bitbake-recipe linter";
+    mainProgram = "oelint-adv";
     homepage = "https://github.com/priv-kweihmann/oelint-adv";
     changelog = "https://github.com/priv-kweihmann/oelint-adv/releases/tag/v${version}";
     license = licenses.bsd2;

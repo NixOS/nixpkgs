@@ -22,7 +22,8 @@ buildGoModule rec {
 
   patches = [
     # Bump sha1cd package, otherwise i686-linux fails to build.
-    ./bump-sha1cd.patch
+    # Also bump github.com/swaggo/swag for PR 257790.
+    ./deps.patch
 
     # Seems to be an anti-feature. Startup is the only place where user/group is
     # hardcoded and checked.
@@ -57,7 +58,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper go-swag ];
 
-  vendorHash = "sha256-402ND99FpU+zNV1e5Th1+aZKok49cIEdpPPLLfNyL3E=";
+  vendorHash = "sha256-itiWROoIhnMbG9evH6X7kjClC4VdpX983d/SCwr4HbY=";
   proxyVendor = true;
 
   # Generate code for Swagger documentation endpoints (see web/swagger/docs.go).

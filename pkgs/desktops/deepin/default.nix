@@ -1,4 +1,4 @@
-{ lib, pkgs, config, libsForQt5 }:
+{ lib, pkgs, config, libsForQt5, qt6Packages }:
 let
   packages = self:
   let
@@ -28,7 +28,7 @@ let
     deepin-kwin = callPackage ./core/deepin-kwin { };
     dde-appearance = callPackage ./core/dde-appearance { };
     dde-app-services = callPackage ./core/dde-app-services { };
-    dde-application-manager = callPackage ./core/dde-application-manager { };
+    dde-application-manager = qt6Packages.callPackage ./core/dde-application-manager { };
     dde-control-center = callPackage ./core/dde-control-center { };
     dde-calendar = callPackage ./core/dde-calendar { };
     dde-clipboard = callPackage ./core/dde-clipboard { };

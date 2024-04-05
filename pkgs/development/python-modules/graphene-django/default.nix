@@ -61,6 +61,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    # pytest.PytestRemovedIn8Warning: Passing None has been deprecated.
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   disabledTests = lib.optionals (pythonAtLeast "3.11") [
     # Python 3.11 support, https://github.com/graphql-python/graphene-django/pull/1365
     "test_django_objecttype_convert_choices_enum_naming_collisions"

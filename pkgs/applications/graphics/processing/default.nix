@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, ant, unzip, makeWrapper, jdk, jogl, rsync, ffmpeg, batik, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, ant, unzip, makeWrapper, jdk, jogl, rsync, ffmpeg, batik, wrapGAppsHook, libGL }:
 let
   buildNumber = "1293";
   vaqua = fetchurl {
@@ -58,6 +58,8 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   buildPhase = ''
+    runHook preBuild
+
     echo "tarring jdk"
     tar --checkpoint=10000 -czf build/linux/jdk-17.0.8-${arch}.tgz ${jdk}
     cp ${ant}/lib/ant/lib/{ant.jar,ant-launcher.jar} app/lib/
@@ -78,9 +80,13 @@ stdenv.mkDerivation rec {
     cd build
     ant build
     cd ..
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/
     mkdir -p $out/share/applications/
     cp -dp build/linux/${pname}.desktop $out/share/applications/
@@ -89,10 +95,14 @@ stdenv.mkDerivation rec {
     ln -s ${jdk} $out/share/${pname}/java
     makeWrapper $out/share/${pname}/processing $out/bin/processing \
       ''${gappsWrapperArgs[@]} \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
       --prefix _JAVA_OPTIONS " " -Dawt.useSystemAAFontSettings=lcd
     makeWrapper $out/share/${pname}/processing-java $out/bin/processing-java \
       ''${gappsWrapperArgs[@]} \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
       --prefix _JAVA_OPTIONS " " -Dawt.useSystemAAFontSettings=lcd
+
+    runHook postInstall
   '';
 
   meta = with lib; {

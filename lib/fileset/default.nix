@@ -23,6 +23,10 @@
 
     Add files in file sets to the store to use as derivation sources.
 
+  - [`lib.fileset.toList`](#function-library-lib.fileset.toList):
+
+    The list of files contained in a file set.
+
   Combinators:
   - [`lib.fileset.union`](#function-library-lib.fileset.union)/[`lib.fileset.unions`](#function-library-lib.fileset.unions):
 
@@ -102,6 +106,7 @@ let
     _coerceMany
     _toSourceFilter
     _fromSourceFilter
+    _toList
     _unionMany
     _fileFilter
     _printFileset
@@ -411,6 +416,38 @@ in {
         src = root;
         filter = sourceFilter;
       };
+
+
+  /*
+    The list of file paths contained in the given file set.
+
+    :::{.note}
+    This function is strict in the entire file set.
+    This is in contrast with combinators [`lib.fileset.union`](#function-library-lib.fileset.union),
+    [`lib.fileset.intersection`](#function-library-lib.fileset.intersection) and [`lib.fileset.difference`](#function-library-lib.fileset.difference).
+
+    Thus it is recommended to call `toList` on file sets created using the combinators,
+    instead of doing list processing on the result of `toList`.
+    :::
+
+    The resulting list of files can be turned back into a file set using [`lib.fileset.unions`](#function-library-lib.fileset.unions).
+
+    Type:
+      toList :: FileSet -> [ Path ]
+
+    Example:
+      toList ./.
+      [ ./README.md ./Makefile ./src/main.c ./src/main.h ]
+
+      toList (difference ./. ./src)
+      [ ./README.md ./Makefile ]
+  */
+  toList =
+    # The file set whose file paths to return.
+    # This argument can also be a path,
+    # which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+    fileset:
+    _toList (_coerce "lib.fileset.toList: Argument" fileset);
 
   /*
     The file set containing all files that are in either of two given file sets.

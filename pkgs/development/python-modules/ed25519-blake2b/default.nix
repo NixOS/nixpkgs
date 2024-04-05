@@ -27,6 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Ed25519 public-key signatures (BLAKE2b fork)";
+    mainProgram = "edsig";
     homepage = "https://github.com/Matoking/python-ed25519-blake2b";
     changelog = "https://github.com/Matoking/python-ed25519-blake2b/releases/tag/${version}";
     license = licenses.mit;

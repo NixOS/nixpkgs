@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A simple and modern sound recorder";
+    mainProgram = "gnome-sound-recorder";
     homepage = "https://wiki.gnome.org/Apps/SoundRecorder";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
