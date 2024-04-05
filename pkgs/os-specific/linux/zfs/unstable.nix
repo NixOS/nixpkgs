@@ -20,9 +20,7 @@ callPackage ./generic.nix args {
     then kernel.kernelOlder "6.7"
     else kernel.kernelOlder "6.2";
 
-  latestCompatibleLinuxPackages = if stdenv'.isx86_64 || removeLinuxDRM
-    then linuxKernel.packages.linux_6_6
-    else linuxKernel.packages.linux_6_1;
+  latestCompatibleLinuxPackages = linuxKernel.packages.linux_6_6;
 
   # this package should point to a version / git revision compatible with the latest kernel release
   # IMPORTANT: Always use a tagged release candidate or commits from the

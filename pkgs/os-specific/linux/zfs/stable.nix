@@ -20,9 +20,7 @@ callPackage ./generic.nix args {
     then kernel.kernelOlder "6.8"
     else kernel.kernelOlder "6.2";
 
-  latestCompatibleLinuxPackages = if stdenv'.isx86_64 || removeLinuxDRM
-    then linuxKernel.packages.linux_6_7
-    else linuxKernel.packages.linux_6_1;
+  latestCompatibleLinuxPackages = linuxKernel.packages.linux_6_6;
 
   # this package should point to the latest release.
   version = "2.2.3";
