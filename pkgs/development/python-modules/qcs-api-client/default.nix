@@ -1,23 +1,24 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, httpx
-, iso8601
-, poetry-core
-, pydantic
-, pyjwt
-, pytest-asyncio
-, pytestCheckHook
-, python-dateutil
-, pythonAtLeast
-, pythonOlder
-, pythonRelaxDepsHook
-, respx
-, retrying
-, rfc3339
-, toml
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  httpx,
+  iso8601,
+  poetry-core,
+  pydantic,
+  pyjwt,
+  pytest-asyncio,
+  pytestCheckHook,
+  python-dateutil,
+  pythonAtLeast,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  respx,
+  retrying,
+  rfc3339,
+  toml,
 }:
 
 buildPythonPackage rec {
@@ -50,13 +51,9 @@ buildPythonPackage rec {
     "pydantic"
   ];
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     attrs
@@ -79,9 +76,7 @@ buildPythonPackage rec {
   # Tests are failing on Python 3.11, Fatal Python error: Aborted
   doCheck = !(pythonAtLeast "3.11");
 
-  pythonImportsCheck = [
-    "qcs_api_client"
-  ];
+  pythonImportsCheck = [ "qcs_api_client" ];
 
   meta = with lib; {
     description = "Python library for accessing the Rigetti QCS API";
