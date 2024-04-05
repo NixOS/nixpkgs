@@ -37496,8 +37496,6 @@ with pkgs;
 
   pysolfc = python3Packages.callPackage ../games/pysolfc { };
 
-  qpakman = callPackage ../by-name/qp/qpakman/package.nix { };
-  
   qq = callPackage ../applications/networking/instant-messengers/qq { };
 
   qqwing = callPackage ../games/qqwing { };
