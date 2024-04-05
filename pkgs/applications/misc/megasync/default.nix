@@ -25,6 +25,7 @@
 , swig
 , unzip
 , wget
+, enableExtNautilus ? true, gnome
 }:
 mkDerivation rec {
   pname = "megasync";
@@ -64,7 +65,7 @@ mkDerivation rec {
     qtx11extras
     sqlite
     wget
-  ];
+  ] ++ lib.optional enableExtNautilus gnome.nautilus;
 
   patches = [
     # Distro and version targets attempt to use lsb_release which is broken
@@ -79,6 +80,18 @@ mkDerivation rec {
     for file in $(find src/ -type f \( -iname configure -o -iname \*.sh \) ); do
       substituteInPlace "$file" --replace "/bin/bash" "${stdenv.shell}"
     done
+    SED_COMMANDS=()
+    SED_COMMANDS+=('/MEGAShellExtThunar/s/^/# /')
+    SED_COMMANDS+=('/MEGAShellExtDolphin/s/^/# /')
+    SED_COMMANDS+=('/MEGAShellExtNemo/s/^/# /')
+    ${lib.optionalString (!enableExtNautilus) ''SED_COMMANDS+=('/MEGAShellExtNautilus/s/^/# /')''}
+    for cmd in "''${SED_COMMANDS[@]}"; do
+      sed -i "''$cmd" src/MEGA.pro
+    done
+    ${lib.optionalString enableExtNautilus ''
+      substituteInPlace src/MEGAShellExtNautilus/MEGAShellExtNautilus.pro \
+        --replace \$\$\{EXTENSIONS_PATH\} /lib/nautilus/extensions-4
+    ''}
   '';
 
   dontUseQmakeConfigure = true;
@@ -110,8 +123,14 @@ mkDerivation rec {
     cd ../..
   '';
 
+
   preBuild = ''
-    qmake CONFIG+="release" MEGA.pro
+    qmake CONFIG+="with_ext" MEGA.pro
+    ${lib.optionalString enableExtNautilus ''
+      pushd MEGAShellExtNautilus
+        DESKTOP_DESTDIR="$out" qmake PREFIX="$out" -o Makefile MEGAShellExtNautilus.pro
+      popd
+    ''}
     pushd MEGASync
       lrelease MEGASync.pro
       DESKTOP_DESTDIR="$out" qmake PREFIX="$out" -o Makefile MEGASync.pro CONFIG+=release
