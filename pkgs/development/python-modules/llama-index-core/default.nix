@@ -1,31 +1,32 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, dataclasses-json
-, deprecated
-, dirtyjson
-, fetchFromGitHub
-, fsspec
-, llamaindex-py-client
-, nest-asyncio
-, networkx
-, nltk
-, numpy
-, openai
-, pandas
-, pillow
-, poetry-core
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, tree-sitter
-, sqlalchemy
-, tenacity
-, tiktoken
-, typing-inspect
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  dataclasses-json,
+  deprecated,
+  dirtyjson,
+  fetchFromGitHub,
+  fsspec,
+  llamaindex-py-client,
+  nest-asyncio,
+  networkx,
+  nltk,
+  numpy,
+  openai,
+  pandas,
+  pillow,
+  poetry-core,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  tree-sitter,
+  sqlalchemy,
+  tenacity,
+  tiktoken,
+  typing-inspect,
 }:
 
 buildPythonPackage rec {
@@ -44,9 +45,7 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/${pname}";
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -77,9 +76,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "llama_index"
-  ];
+  pythonImportsCheck = [ "llama_index" ];
 
   disabledTestPaths = [
     # Tests require network access
