@@ -1,15 +1,13 @@
-{ lib
-, fetchFromGitHub
-, git
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  git,
+  python3,
 }:
- let
-  python = python3.override {
-    packageOverrides = self: super: {
-      pydantic = super.pydantic_1;
-    };
-  };
-in python.pkgs.buildPythonApplication rec {
+let
+  python = python3.override { packageOverrides = self: super: { pydantic = super.pydantic_1; }; };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "dbx";
   version = "0.8.18";
   pyproject = true;
@@ -28,67 +26,58 @@ in python.pkgs.buildPythonApplication rec {
     "typer"
   ];
 
-  pythonRemoveDeps = [
-    "mlflow-skinny"
-  ];
+  pythonRemoveDeps = [ "mlflow-skinny" ];
 
-  build-system = with python.pkgs; [
-    setuptools
-  ];
+  build-system = with python.pkgs; [ setuptools ];
 
-  nativeBuildInputs = with python.pkgs; [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = with python.pkgs; [ pythonRelaxDepsHook ];
 
-  propagatedBuildInputs = with python.pkgs; [
-    aiohttp
-    click
-    cookiecutter
-    cryptography
-    databricks-cli
-    jinja2
-    mlflow
-    pathspec
-    pydantic
-    pyyaml
-    requests
-    retry
-    rich
-    tenacity
-    typer
-    watchdog
-  ] ++ typer.optional-dependencies.all;
+  propagatedBuildInputs =
+    with python.pkgs;
+    [
+      aiohttp
+      click
+      cookiecutter
+      cryptography
+      databricks-cli
+      jinja2
+      mlflow
+      pathspec
+      pydantic
+      pyyaml
+      requests
+      retry
+      rich
+      tenacity
+      typer
+      watchdog
+    ]
+    ++ typer.optional-dependencies.all;
 
   passthru.optional-dependencies = with python3.pkgs; {
-    aws = [
-      boto3
-    ];
+    aws = [ boto3 ];
     azure = [
       azure-storage-blob
       azure-identity
     ];
-    gcp = [
-      google-cloud-storage
-    ];
+    gcp = [ google-cloud-storage ];
   };
 
-  nativeCheckInputs = [
-    git
-  ] ++ (with python3.pkgs; [
-    pytest-asyncio
-    pytest-mock
-    pytest-timeout
-    pytestCheckHook
-  ]);
+  nativeCheckInputs =
+    [ git ]
+    ++ (with python3.pkgs; [
+      pytest-asyncio
+      pytest-mock
+      pytest-timeout
+      pytestCheckHook
+    ]);
 
   preCheck = ''
     export HOME=$(mktemp -d)
     export PATH="$PATH:$out/bin"
   '';
 
-  pytestFlagsArray = [
-    "tests/unit"
-  ];
+  pytestFlagsArray = [ "tests/unit" ];
 
   disabledTests = [
     # Fails because of dbfs CLI wrong call
@@ -117,9 +106,7 @@ in python.pkgs.buildPythonApplication rec {
     "tests/unit/utils/test_common.py"
   ];
 
-  pythonImportsCheck = [
-    "dbx"
-  ];
+  pythonImportsCheck = [ "dbx" ];
 
   meta = with lib; {
     description = "CLI tool for advanced Databricks jobs management";
