@@ -1,16 +1,17 @@
-{ lib
-, attrs
-, bidict
-, bitstruct
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, more-itertools
-, poetry-core
-, pprintpp
-, pythonOlder
-, pythonRelaxDepsHook
-, tbm-utils
+{
+  lib,
+  attrs,
+  bidict,
+  bitstruct,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  more-itertools,
+  poetry-core,
+  pprintpp,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  tbm-utils,
 }:
 
 buildPythonPackage rec {
@@ -41,13 +42,9 @@ buildPythonPackage rec {
     "more-itertools"
   ];
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     attrs
@@ -61,9 +58,7 @@ buildPythonPackage rec {
   # Tests require ward which is not ready to be used
   doCheck = false;
 
-  pythonImportsCheck = [
-    "audio_metadata"
-  ];
+  pythonImportsCheck = [ "audio_metadata" ];
 
   meta = with lib; {
     description = "Library for handling the metadata from audio files";
