@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   pname = "rar";
   inherit version;
 
-  src = fetchurl (srcs.${stdenv.hostPlatform.system});
+  src = fetchurl (srcs.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}"));
 
   dontBuild = true;
 
