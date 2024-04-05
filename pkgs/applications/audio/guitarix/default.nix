@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , avahi
 , bluez
 , boost
@@ -45,10 +45,15 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "guitarix";
   version = "0.46.0";
 
-  src = fetchurl {
-    url = "https://github.com/brummer10/guitarix/releases/download/V${finalAttrs.version}/guitarix2-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-xmC+s/Fs3EVdmebwdM1uorHxDB38SA6EIQRhY33JjEQ=";
+  src = fetchFromGitHub {
+    owner = "brummer10";
+    repo = "guitarix";
+    rev = "V${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-AftC6fQEDzG/3C/83YbK/++bRgP7vPD0E2X6KEWpowc=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/trunk";
 
   nativeBuildInputs = [
     gettext
