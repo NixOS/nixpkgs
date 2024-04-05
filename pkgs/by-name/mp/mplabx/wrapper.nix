@@ -1,12 +1,35 @@
-{ lib, alsa-lib, at-spi2-atk, buildFHSEnv, cairo, corefonts, cups, dbus
-, execline, fuse-overlayfs, expat, glib, glibc, gtk2, gtk3, libdrm, libxkbcommon
-, libusb1, libxslt, mesa, mplab-x-unwrapped, nspr, nss, pango, rsync
-, systemdLibs, writeShellApplication, xorg,
-
-# microchip-xc8,
-microchip-xc16,
-# microchip-xc32,
-# microchip-xc-dsc
+{ lib
+, alsa-lib
+, at-spi2-atk
+, buildFHSEnv
+, cairo
+, corefonts
+, cups
+, dbus
+, execline
+, fuse-overlayfs
+, expat
+, glib
+, glibc
+, gtk2
+, gtk3
+, libdrm
+, libxkbcommon
+, libusb1
+, libxslt
+, mesa
+, mplab-x-unwrapped
+, nspr
+, nss
+, pango
+, rsync
+, systemdLibs
+, writeShellApplication
+, xorg
+, microchip-xc8
+, microchip-xc16
+# , microchip-xc32
+# , microchip-xc-dsc
 }:
 
 let
@@ -49,12 +72,10 @@ let
   stage2 = writeShellApplication {
     name = "mplab_ide-wrapper";
     runtimeInputs = [ execline fuse-overlayfs rsync ];
-      # mkdir "$rt/overlay/opt/microchip/xc8"
-      # ln -s ${microchip-xc8} "$rt/overlay/opt/microchip/xc8/v${microchip-xc8.version}"
-      # mkdir "$rt/overlay/opt/microchip/xc32"
-      # ln -s ${microchip-xc32} "$rt/overlay/opt/microchip/xc32/v${microchip-xc32.version}"
-      # mkdir "$rt/overlay/opt/microchip/xc-dsc"
-      # ln -s ${microchip-xc-dsc} "$rt/overlay/opt/microchip/xc-dsc/v${microchip-xc-dsc.version}"
+    # mkdir "$rt/overlay/opt/microchip/xc32"
+    # ln -s ${microchip-xc32} "$rt/overlay/opt/microchip/xc32/v${microchip-xc32.version}"
+    # mkdir "$rt/overlay/opt/microchip/xc-dsc"
+    # ln -s ${microchip-xc-dsc} "$rt/overlay/opt/microchip/xc-dsc/v${microchip-xc-dsc.version}"
     text = ''
       # Make the rt directory, isolated from the host filesystem.
       rt="$XDG_RUNTIME_DIR/mplab-x"
@@ -70,6 +91,8 @@ let
         ln -s "$f" "$rt/overlay/opt/microchip/"
       done
 
+      mkdir "$rt/overlay/opt/microchip/xc8"
+      ln -s ${microchip-xc8} "$rt/overlay/opt/microchip/xc8/v${microchip-xc8.version}"
       mkdir "$rt/overlay/opt/microchip/xc16"
       ln -s ${microchip-xc16} "$rt/overlay/opt/microchip/xc16/v${microchip-xc16.version}"
 
@@ -95,7 +118,8 @@ let
     inherit (mplab-x-unwrapped) meta;
   };
 
-in writeShellApplication {
+in
+writeShellApplication {
   name = "mplab_ide";
   text = ''
     unshare -mUr -- ${lib.getExe stage2} "$@"

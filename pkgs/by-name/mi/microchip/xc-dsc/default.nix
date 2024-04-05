@@ -6,15 +6,14 @@ let
     targetPkgs = pkgs: [ fakeroot glibc ];
   };
 
-in
-stdenvNoCC.mkDerivation rec {
-  pname = "microchip-xc8-unwrapped";
-  version = "2.46";
+in stdenvNoCC.mkDerivation rec {
+  pname = "microchip-xc-dsc-unwrapped";
+  version = "3.00";
 
   src = fetchurl {
     url =
-      "https://ww1.microchip.com/downloads/aemDocuments/documents/DEV/ProductDocuments/SoftwareTools/xc8-v${version}-full-install-linux-x64-installer.run";
-    hash = "sha256-FlWPjPEKpq+Nla3ucC4+VwWIEM+0Tsdf1LveAYV2CSs=";
+      "https://ww1.microchip.com/downloads/aemDocuments/documents/DEV/ProductDocuments/SoftwareTools/xc-dsc-v${version}-full-install-linux64-installer.run";
+    hash = "sha256-129EUXfFQP2p3bdoRLIlZQqg+Dy5ZJLBjHcLbxsw4bw=";
   };
 
   nativeBuildInputs = [ bubblewrap rsync ];
@@ -41,7 +40,6 @@ stdenvNoCC.mkDerivation rec {
       --ro-bind installer.run /installer \
       --setenv HOME /tmp/home \
       -- /bin/fakeroot /installer \
-      --debuglevel 4 \
       --LicenseType FreeMode \
       --mode unattended \
       --netservername localhost \
@@ -55,7 +53,7 @@ stdenvNoCC.mkDerivation rec {
     homepage =
       "https://www.microchip.com/en-us/tools-resources/develop/mplab-xc-compilers";
     description =
-      "Microchip's MPLAB XC8 C compiler toolchain for all 8-bit PIC® and AVR® microcontrollers (MCUs).";
+      "Microchip's MPLAB XC16 C compiler toolchain for all dsPIC DSCs";
     license = licenses.unfree;
     maintainers = with maintainers; [ remexre nyadiia ];
     platforms = [ "x86_64-linux" ];

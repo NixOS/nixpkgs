@@ -6,7 +6,8 @@ let
     targetPkgs = pkgs: [ fakeroot glibc ];
   };
 
-in stdenvNoCC.mkDerivation rec {
+in
+stdenvNoCC.mkDerivation rec {
   pname = "mplab-x-unwrapped";
   version = "6.15";
 

@@ -33636,10 +33636,13 @@ with pkgs;
 
   memento = libsForQt5.callPackage ../applications/video/memento { };
 
-  microchip-xc8 = callPackage ../development/compilers/microchip/xc8 { };
-  microchip-xc16 = callPackage ../development/compilers/microchip/xc16 { };
-  microchip-xc32 = callPackage ../development/compilers/microchip/xc32 { };
-  microchip-xc-dsc = callPackage ../development/compilers/microchip/xc-dsc { };
+  microchip-xc8 = callPackage ../by-name/mi/microchip/xc8 { };
+
+  microchip-xc16 = callPackage ../by-name/mi/microchip/xc16 { };
+
+  microchip-xc32 = callPackage ../by-name/mi/microchip/xc32 { };
+
+  microchip-xc-dsc = callPackage ../by-name/mi/microchip/xc-dsc { };
 
   mm = callPackage ../applications/networking/instant-messengers/mm { };
 
@@ -33647,9 +33650,9 @@ with pkgs;
 
   mpc-qt = qt6Packages.callPackage ../applications/video/mpc-qt { };
 
-  mplab-x = callPackage ../applications/editors/mplab-x/wrapper.nix { };
+  mplab-x = callPackage ../by-name/mp/wrapper.nix { };
 
-  mplab-x-unwrapped = callPackage ../applications/editors/mplab-x { };
+  mplab-x-unwrapped = callPackage ../by-name/mp/mplab-x { };
 
   mplayer = callPackage ../applications/video/mplayer ({
     libdvdnav = libdvdnav_4_2_1;
