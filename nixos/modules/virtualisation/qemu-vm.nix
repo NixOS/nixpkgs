@@ -186,7 +186,7 @@ let
         NIX_EFI_VARS=$(readlink -f "''${NIX_EFI_VARS:-${config.system.name}-efi-vars.fd}")
         # VM needs writable EFI vars
         if ! test -e "$NIX_EFI_VARS"; then
-        ${if cfg.useBootLoader then
+        ${if cfg.efi.keepVariables then
             # We still need the EFI var from the make-disk-image derivation
             # because our "switch-to-configuration" process might
             # write into it and we want to keep this data.
@@ -904,6 +904,13 @@ in
             Platform-specific flash binary for EFI variables, implementation-dependent to the EFI firmware.
             Defaults to OVMF.
           '';
+      };
+
+      keepVariables = mkOption {
+        type = types.bool;
+        default = cfg.useBootLoader;
+        defaultText = literalExpression "cfg.useBootLoader";
+        description = "Whether to keep EFI variable values from the generated system image";
       };
     };
 
