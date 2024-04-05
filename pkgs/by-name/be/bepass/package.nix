@@ -23,7 +23,7 @@ buildGoModule rec{
     hash = "sha256-ruOhPWNs1WWM3r6X+6ch0HoDCu/a+IkBQiCr0Wh6yS8=";
   };
 
-  vendorHash = "sha256-SiggDy6vc19yIw15g45yjl8gscE91zUoR6woECbAtR0=";
+  vendorHash = "sha256-Juie/Hq3i6rvAK19x6ah3SCQJL0uCrmV9gvzHih3crY=";
 
   subPackages = [
     "cmd/cli"
