@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, libftdi1
-, libusb1
-, pythonOlder
-, poetry-core
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  libftdi1,
+  libusb1,
+  pythonOlder,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-haaqtDj3ZTQoQ6otWbso+7DTCEemIfuYAJhRhZkPAa8=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     libftdi1
@@ -34,9 +33,7 @@ buildPythonPackage rec {
       --replace-fail 'self._load_library("libftdi")' 'cdll.LoadLibrary("${libftdi1.out}/lib/libftdi1.so")'
   '';
 
-  pythonImportsCheck = [
-    "pylibftdi"
-  ];
+  pythonImportsCheck = [ "pylibftdi" ];
 
   meta = with lib; {
     description = "Wrapper to Intra2net's libftdi driver for FTDI's USB devices";
