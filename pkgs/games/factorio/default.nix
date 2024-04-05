@@ -16,6 +16,7 @@
 , makeDesktopItem
 , makeWrapper
 , releaseType
+, requireFile
 , stdenv
 , wayland
 
@@ -60,7 +61,7 @@ let
 
     Alternatively, instead of providing the username+token, you may manually
     download the release through https://factorio.com/download , then add it to
-    the store using e.g.:
+    the Nix store using e.g.:
 
       releaseType=${releaseType}
       version=${version}
@@ -105,34 +106,28 @@ let
       if !needsAuth then
         fetchurl { inherit name url sha256; }
       else
-        (lib.overrideDerivation
-          (fetchurl {
-            inherit name url sha256;
-            curlOptsList = [
-              "--get"
-              "--data-urlencode"
-              "username@username"
-              "--data-urlencode"
-              "token@token"
-            ];
-          })
-          (_: {
-            # This preHook hides the credentials from /proc
-            preHook =
-              if username != "" && token != "" then ''
-                echo -n "${username}" >username
-                echo -n "${token}"    >token
-              '' else ''
-                # Deliberately failing since username/token was not provided, so we can't fetch.
-                # We can't use builtins.throw since we want the result to be used if the tar is in the store already.
-                exit 1
+        (if username != "" && token != "" then
+          (lib.overrideDerivation
+            (fetchurl {
+              inherit name url sha256;
+              curlOptsList = [
+                "--get"
+                "--data-urlencode"
+                "username@username"
+                "--data-urlencode"
+                "token@token"
+              ];
+            })
+            (_: {
+              # This preHook hides the credentials from /proc
+              preHook = ''
+                  echo -n "${username}" >username
+                  echo -n "${token}"    >token
               '';
-            failureHook = ''
-              cat <<EOF
-              ${helpMsg version}
-              EOF
-            '';
-          }));
+            })) else requireFile {
+              inherit name sha256;
+              message = helpMsg version;
+            });
   };
 
   configBaseCfg = ''
