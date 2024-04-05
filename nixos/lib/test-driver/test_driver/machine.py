@@ -165,8 +165,6 @@ class StartCommand:
         )
         if not allow_reboot:
             qemu_opts += " -no-reboot"
-        # TODO: qemu script already catpures this env variable, legacy?
-        qemu_opts += " " + os.environ.get("QEMU_OPTS", "")
 
         return (
             f"{self._cmd}"
