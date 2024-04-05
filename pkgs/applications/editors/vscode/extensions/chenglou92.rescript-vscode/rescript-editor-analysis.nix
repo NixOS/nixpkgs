@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     owner = "rescript-lang";
     repo = "rescript-vscode";
     rev = version;
-    sha256 = "sha256-+Ht8qWwxtFWHFMiV/aoZIs2S3SxkOWgdwSKN+akp/LU=";
+    hash = "sha256-+Ht8qWwxtFWHFMiV/aoZIs2S3SxkOWgdwSKN+akp/LU=";
   };
 
   nativeBuildInputs = [ ocaml dune_3 ocamlPackages.cppo ];
