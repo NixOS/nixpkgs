@@ -513,6 +513,7 @@ let
           virtualisation.useBootLoader = true;
           virtualisation.useEFIBoot = isEfi;
           virtualisation.useDefaultFilesystems = false;
+          virtualisation.efi.keepVariables = false;
 
           virtualisation.fileSystems."/" = {
             device = "/dev/disk/by-label/this-is-not-real-and-will-never-be-used";
