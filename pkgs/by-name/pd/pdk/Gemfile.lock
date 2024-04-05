@@ -58,7 +58,7 @@ GEM
     wisper (2.0.1)
 
 PLATFORMS
-  x86_64-linux
+  ruby
 
 DEPENDENCIES
   pdk (= 3.0.1)

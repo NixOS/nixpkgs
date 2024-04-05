@@ -1,10 +1,10 @@
 final: _: {
-  # Helper hook used in both autoAddCudaCompatRunpath and
-  # autoAddDriverRunpath that applies a generic patching action to all elf
-  # files with a dynamic linking section.
-  autoFixElfFiles = final.callPackage (
-    { makeSetupHook }: makeSetupHook { name = "auto-fix-elf-files"; } ./auto-fix-elf-files.sh
-  ) { };
+  # TODO:
+  # - Move to cuda-modules/aliases.nix once
+  #   https://github.com/NixOS/nixpkgs/issues/141803 is ready.
+  # - Consider removing after 24.11.
+  inherit (final.pkgs) autoAddDriverRunpath autoFixElfFiles;
+  autoAddOpenGLRunpathHook = final.autoAddDriverRunpath;
 
   # Internal hook, used by cudatoolkit and cuda redist packages
   # to accommodate automatic CUDAToolkit_ROOT construction
@@ -31,24 +31,6 @@ final: _: {
       } ./setup-cuda-hook.sh
     ) { }
   );
-
-  autoAddDriverRunpath = final.callPackage (
-    {
-      addDriverRunpath,
-      autoFixElfFiles,
-      makeSetupHook,
-    }:
-    makeSetupHook {
-      name = "auto-add-opengl-runpath-hook";
-      propagatedBuildInputs = [
-        addDriverRunpath
-        autoFixElfFiles
-      ];
-    } ./auto-add-driver-runpath-hook.sh
-  ) { };
-
-  # Deprecated: an alias kept for compatibility. Consider removing after 24.11
-  autoAddOpenGLRunpathHook = final.autoAddDriverRunpath;
 
   # autoAddCudaCompatRunpath hook must be added AFTER `setupCudaHook`. Both
   # hooks prepend a path with `libcuda.so` to the `DT_RUNPATH` section of

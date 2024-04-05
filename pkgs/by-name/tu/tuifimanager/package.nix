@@ -4,7 +4,7 @@
 }:
 
 python3.pkgs.buildPythonApplication rec {
-  pname = "tuifi-manager";
+  pname = "tuifimanager";
   version = "3.3.5";
   format = "pyproject";
 
@@ -41,7 +41,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/GiorgosXou/TUIFIManager";
     changelog = "https://github.com/GiorgosXou/TUIFIManager/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ michaelBelsanti ];
+    maintainers = with maintainers; [ michaelBelsanti sigmanificient ];
     mainProgram = "tuifi";
   };
 }
