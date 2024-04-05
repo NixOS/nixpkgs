@@ -5,7 +5,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     name = "plantuml";
     publisher = "jebbs";
     version = "2.17.4";
-    sha256 = "sha256-fnz6ubB73i7rJcv+paYyNV1r4cReuyFPjgPM0HO40ug=";
+    hash = "sha256-fnz6ubB73i7rJcv+paYyNV1r4cReuyFPjgPM0HO40ug=";
   };
   nativeBuildInputs = [ jq moreutils ];
   postInstall = ''

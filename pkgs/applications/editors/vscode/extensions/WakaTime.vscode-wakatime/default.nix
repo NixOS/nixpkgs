@@ -9,7 +9,7 @@ in
       name = "vscode-wakatime";
       publisher = "WakaTime";
       version = "18.0.5";
-      sha256 = "sha256-vWqGxMbxKqd4UgKK0sOKadMTDf6Y3TQxfWsc93MHjFs=";
+      hash = "sha256-vWqGxMbxKqd4UgKK0sOKadMTDf6Y3TQxfWsc93MHjFs=";
     };
 
     meta = {
