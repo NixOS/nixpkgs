@@ -15,7 +15,7 @@ buildGoModule rec {
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-qK+x6ciAebwIWHRjRpNXCAqsfnmEx37evS4+7kwcFIs=";
+  vendorHash = "sha256-4U6zIxK8K+MGxRboTtsKntDMp8/cQWPqXQ3l03AEtBs=";
 
   proxyVendor = true;
 
