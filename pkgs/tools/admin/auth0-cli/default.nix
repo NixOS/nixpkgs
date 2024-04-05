@@ -10,16 +10,17 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "auth0";
     repo = "auth0-cli";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-j7HT57/4rrrVkx9Zz+XuWD6UL0spdej+U5gWtFo1FSI=";
   };
 
   vendorHash = "sha256-bWAneCRsQbPRxEM/3jr1/Lov6NV67MRycOgrlj3bKF8=";
 
   ldflags = [
-    "-s" "-w"
-    "-X github.com/auth0/auth0-cli/internal/buildinfo.Version=v${version}"
-    "-X github.com/auth0/auth0-cli/internal/buildinfo.Revision=0000000"
+    "-s"
+    "-w"
+    "-X=github.com/auth0/auth0-cli/internal/buildinfo.Version=v${version}"
+    "-X=github.com/auth0/auth0-cli/internal/buildinfo.Revision=0000000"
   ];
 
   preCheck = ''
