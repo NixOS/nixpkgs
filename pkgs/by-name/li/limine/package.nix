@@ -48,7 +48,13 @@ stdenv.mkDerivation {
     homepage = "https://limine-bootloader.org/";
     description = "Limine Bootloader";
     # Caution. Some submodules have different licenses.
-    license = licenses.bsd2;
+    license = [
+      licenses.bsd2 # limine, flanterm
+      licenses.bsd0 # freestanding-toolchain, freestanding-headers
+      licenses.asl20 # cc-runtime
+      licenses.mit # limine-efi, stb
+      licenses.zlib # tinf
+    ];
     # The platforms on that the Liminine binary and helper tools can run, not
     # necessarily the platforms for that bootable images can be created.
     platforms = platforms.unix;
