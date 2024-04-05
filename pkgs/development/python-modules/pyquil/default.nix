@@ -47,12 +47,15 @@ buildPythonPackage rec {
     "networkx"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
+  ];
+
+  nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     deprecated
     lark
     matplotlib-inline
