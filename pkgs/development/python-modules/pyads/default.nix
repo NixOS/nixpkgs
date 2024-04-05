@@ -4,21 +4,26 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pyads";
   version = "3.4.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "stlehmann";
-    repo = pname;
+    repo = "pyads";
     rev = "refs/tags/${version}";
     hash = "sha256-HJ/dlRuwFSY5j/mAp6rLMlTV59GFwrTV27n73TWlCUo=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   buildInputs = [
     adslib
@@ -26,7 +31,7 @@ buildPythonPackage rec {
 
   patchPhase = ''
     substituteInPlace pyads/pyads_ex.py \
-      --replace "ctypes.CDLL(adslib)" "ctypes.CDLL(\"${adslib}/lib/adslib.so\")"
+      --replace-fail "ctypes.CDLL(adslib)" "ctypes.CDLL(\"${adslib}/lib/adslib.so\")"
   '';
 
   nativeCheckInputs = [
@@ -40,6 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python wrapper for TwinCAT ADS library";
     homepage = "https://github.com/MrLeeh/pyads";
+    changelog = "https://github.com/stlehmann/pyads/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ jamiemagee ];
   };
