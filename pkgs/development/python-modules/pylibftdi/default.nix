@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pylibftdi";
-  version = "0.21.0";
+  version = "0.22.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-634vUFKFJUf0xsRgIqFmX510U0OWORcereVv3ICliDI=";
+    hash = "sha256-haaqtDj3ZTQoQ6otWbso+7DTCEemIfuYAJhRhZkPAa8=";
   };
 
   propagatedBuildInputs = [
