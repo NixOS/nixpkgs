@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "s3-credentials";
-  version = "0.15";
+  version = "0.16.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "simonw";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-YSsm5SMfDRqJ53XnBjMgaWWHjA6IXnmEBvxme4uiOPw=";
+    hash = "sha256-TuGrKSfnn0CSMpRxdCM6C446z+y9d2ZLB7+wSCxSqP4=";
   };
 
   propagatedBuildInputs = [
