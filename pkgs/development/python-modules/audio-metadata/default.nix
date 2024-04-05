@@ -16,13 +16,13 @@
 buildPythonPackage rec {
   pname = "audio-metadata";
   version = "0.11.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "thebigmunch";
-    repo = pname;
+    repo = "audio-metadata";
     rev = "refs/tags/${version}";
     hash = "sha256-5ZX4HwbuB9ZmFfHuxaMCrn3R7/znuDsoyqqLql2Nizg=";
   };
@@ -41,12 +41,15 @@ buildPythonPackage rec {
     "more-itertools"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
+  ];
+
+  nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     bidict
     bitstruct
@@ -63,8 +66,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    description = "Library for handling the metadata from audio files";
     homepage = "https://github.com/thebigmunch/audio-metadata";
-    description = "A library for reading and, in the future, writing metadata from audio files";
     changelog = "https://github.com/thebigmunch/audio-metadata/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];
