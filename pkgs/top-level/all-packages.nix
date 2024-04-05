@@ -28182,8 +28182,6 @@ with pkgs;
 
   smimesign = callPackage ../os-specific/darwin/smimesign { };
 
-  solo5 = callPackage ../os-specific/solo5 { };
-
   statik = callPackage ../development/tools/statik { };
 
   statifier = callPackage ../os-specific/linux/statifier { };
