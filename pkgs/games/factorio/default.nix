@@ -263,8 +263,15 @@ let
     };
     alpha = demo // {
 
+      outputs = [ "out" "devdoc" ];
       installPhase = demo.installPhase + ''
-        cp -a doc-html $out/share/factorio
+        mkdir -p $devdoc/share/doc
+        cp -a doc-html $devdoc/share/doc/factorio
+      '';
+
+      postFixup = ''
+        # postInstall itself is insufficient _multioutDocs hook in preFixup moves this to $doc output instead.
+        moveToOutput "share/doc" "$devdoc"
       '';
     };
   };
