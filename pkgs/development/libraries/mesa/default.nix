@@ -81,8 +81,8 @@
 # nix build .#mesa .#pkgsi686Linux.mesa .#pkgsCross.aarch64-multiplatform.mesa .#pkgsMusl.mesa
 
 let
-  version = "24.0.3";
-  hash = "sha256-d67JoqN7fTWW6hZAs8xT0LXZs7Uqvtid4H43F+kb/b4=";
+  version = "24.0.4";
+  hash = "sha256-kP69MKCYy82X/2Lsw9z1yT129/oxTelEz86BlRunRfA=";
 
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
@@ -141,11 +141,6 @@ self = stdenv.mkDerivation {
 
   patches = [
     ./opencl.patch
-
-    # Backport crash fix for Radeon (legacy) kernel driver
-    # see https://gitlab.freedesktop.org/mesa/mesa/-/issues/10613
-    # FIXME: remove when merged upstream
-    ./backport-radeon-crash-fix.patch
   ];
 
   postPatch = ''
