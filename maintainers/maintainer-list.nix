@@ -10873,6 +10873,12 @@
     }];
     name = "Yaroslav Bolyukin";
   };
+  lachrymal = {
+    email = "lachrymalfutura@gmail.com";
+    name = "lachrymaL";
+    github = "lachrymaLF";
+    githubId = 13716477;
+  };
   lafrenierejm = {
     email = "joseph@lafreniere.xyz";
     github = "lafrenierejm";
@@ -14329,6 +14335,12 @@
     github = "nmattia";
     githubId = 6930756;
     name = "Nicolas Mattia";
+  };
+  noaccos = {
+    name = "Francesco Noacco";
+    email = "francesco.noacco2000@gmail.com";
+    github = "noaccOS";
+    githubId = 24324352;
   };
   nobbz = {
     name = "Norbert Melzer";
