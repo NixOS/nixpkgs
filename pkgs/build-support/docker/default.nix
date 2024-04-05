@@ -949,6 +949,7 @@ rec {
           ];
           postBuild = ''
             mv $out old_out
+            mkdir -m 1777 old_out/tmp
             (cd old_out; eval "$extraCommands" )
 
             mkdir $out
