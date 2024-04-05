@@ -13,7 +13,7 @@
 , libiconv
 , libstaden-read
 , pkg-config
-, tbb_2021_8
+, tbb_2021_11
 , xz
 , zlib
 }:
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     jemalloc
     libgff
     libstaden-read
-    tbb_2021_8
+    tbb_2021_11
     xz
     zlib
   ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
