@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 let
   cfg = config.services.nzbget;
-  pkg = pkgs.nzbget;
+  pkg = cfg.package;
   stateDir = "/var/lib/nzbget";
   configFile = "${stateDir}/nzbget.conf";
   configOpts = lib.concatStringsSep " " (lib.mapAttrsToList (name: value: "-o ${name}=${lib.escapeShellArg (toStr value)}") cfg.settings);
@@ -48,6 +48,8 @@ in
           MainDir = "/data";
         };
       };
+
+      package = mkPackageOption pkgs "nzbget" { };
     };
   };
 
