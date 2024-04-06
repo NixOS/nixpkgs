@@ -191,6 +191,7 @@ effectiveStdenv.mkDerivation rec {
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${cutlass}")
     (lib.cmakeFeature "onnxruntime_CUDNN_HOME" "${cudaPackages.cudnn}")
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
+    (lib.cmakeFeature "onnxruntime_NVCC_THREADS" "1")
   ];
 
   env = lib.optionalAttrs effectiveStdenv.cc.isClang {
