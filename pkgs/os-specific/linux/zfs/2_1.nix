@@ -21,9 +21,7 @@ callPackage ./generic.nix args {
     then kernel.kernelOlder "6.6"
     else kernel.kernelOlder "6.2";
 
-  latestCompatibleLinuxPackages = if stdenv'.isx86_64 || removeLinuxDRM
-    then linuxKernel.packages.linux_6_5
-    else linuxKernel.packages.linux_6_1;
+  latestCompatibleLinuxPackages = linuxKernel.packages.linux_6_6;
 
   # This is a fixed version to the 2.1.x series, move only
   # if the 2.1.x series moves.
