@@ -3212,7 +3212,8 @@
       motioneye-client
     ];
     "motionmount" = ps: with ps; [
-    ]; # missing inputs: python-MotionMount
+      python-motionmount
+    ];
     "mpd" = ps: with ps; [
       mpd2
     ];
@@ -6282,6 +6283,7 @@
     "mopeka"
     "motion_blinds"
     "motioneye"
+    "motionmount"
     "mqtt"
     "mqtt_eventstream"
     "mqtt_json"
