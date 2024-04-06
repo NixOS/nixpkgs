@@ -1,7 +1,7 @@
 { lib, buildFHSEnv, callPackage, makeDesktopItem, writeScript, runtimeShell
-, runCommand, quartus-prime-lite
+, runCommand, unstick, quartus-prime-lite
 , supportedDevices ? [ "Arria II" "Cyclone V" "Cyclone IV" "Cyclone 10 LP" "MAX II/V" "MAX 10 FPGA" ]
-, unwrapped ? callPackage ./quartus.nix { inherit supportedDevices; }
+, unwrapped ? callPackage ./quartus.nix { inherit unstick supportedDevices withQuesta; }
 }:
 
 let
