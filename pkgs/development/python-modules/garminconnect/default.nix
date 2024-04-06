@@ -22,11 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-mjFDM59fF9HpkO0a8fVW+dXYmjFxu7gn+rOrnTgN39s=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     pdm-backend
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     garth
     requests
     withings-sync
