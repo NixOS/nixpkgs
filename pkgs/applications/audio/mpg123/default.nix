@@ -15,17 +15,18 @@
 , jack
 , withConplay ? !stdenv.hostPlatform.isWindows
 , perl
+, writeScript
 }:
 
 assert withConplay -> !libOnly;
 
 stdenv.mkDerivation rec {
   pname = "${lib.optionalString libOnly "lib"}mpg123";
-  version = "1.32.5";
+  version = "1.32.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/mpg123/mpg123-${version}.tar.bz2";
-    hash = "sha256-r5CM32zbZUS5e8cGp5n3mJTmlGivWIG/RUoOu5Fx7WM=";
+    hash = "sha256-zN0dCrwx1z2LQ1/GWMeQSdCpBbMGabakKgOtFp3GCeY=";
   };
 
   outputs = [ "out" "dev" "man" ] ++ lib.optional withConplay "conplay";
@@ -68,6 +69,20 @@ stdenv.mkDerivation rec {
     wrapProgram $conplay/bin/conplay \
       --prefix PATH : $out/bin
   '';
+
+  passthru = {
+    updateScript = writeScript "update-mpg123" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre common-updater-scripts
+
+      set -eu -o pipefail
+
+      # Expect the text in format of '<a href="download/mpg123-1.32.6.tar.bz2">'
+      new_version="$(curl -s https://mpg123.org/download.shtml |
+          pcregrep -o1 '<a href="download/mpg123-([0-9.]+).tar.bz2">')"
+      update-source-version ${pname} "$new_version"
+    '';
+  };
 
   meta = with lib; {
     description = "Fast console MPEG Audio Player and decoder library";
