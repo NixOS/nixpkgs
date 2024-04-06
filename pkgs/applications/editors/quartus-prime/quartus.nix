@@ -1,4 +1,5 @@
 { stdenv, lib, unstick, fetchurl
+, withQuesta ? true
 , supportedDevices ? [ "Arria II" "Cyclone V" "Cyclone IV" "Cyclone 10 LP" "MAX II/V" "MAX 10 FPGA" ]
 }:
 
@@ -41,26 +42,25 @@ let
     url = "https://downloads.intel.com/akdlm/software/acdsinst/${lib.versions.majorMinor version}std/${lib.elemAt (lib.splitVersion version) 4}/ib_installers/${name}";
   };
 
+  installers = map download ([{
+    name = "QuartusLiteSetup-${version}-linux.run";
+    sha256 = "1mg4db56rg407kdsvpzys96z59bls8djyddfzxi6bdikcklxz98h";
+  }] ++ lib.optional withQuesta {
+    name = "QuestaSetup-${version}-linux.run";
+    sha256 = "0f9lyphk4vf4ijif3kb4iqf18jl357z9h8g16kwnzaqwfngh2ixk";
+  });
+  components = map (id: download {
+    name = "${id}-${version}.qdz";
+    sha256 = lib.getAttr id componentHashes;
+  }) (lib.attrValues supportedDeviceIds);
+
 in stdenv.mkDerivation rec {
   inherit version;
   pname = "quartus-prime-lite-unwrapped";
 
-  src = map download ([{
-    name = "QuartusLiteSetup-${version}-linux.run";
-    sha256 = "1mg4db56rg407kdsvpzys96z59bls8djyddfzxi6bdikcklxz98h";
-  } {
-    name = "QuestaSetup-${version}-linux.run";
-    sha256 = "0f9lyphk4vf4ijif3kb4iqf18jl357z9h8g16kwnzaqwfngh2ixk";
-  }] ++ (map (id: {
-    name = "${id}-${version}.qdz";
-    sha256 = lib.getAttr id componentHashes;
-  }) (lib.attrValues supportedDeviceIds)));
-
   nativeBuildInputs = [ unstick ];
 
   buildCommand = let
-    installers = lib.sublist 0 2 src;
-    components = lib.sublist 2 ((lib.length src) - 2) src;
     copyInstaller = installer: ''
         # `$(cat $NIX_CC/nix-support/dynamic-linker) $src[0]` often segfaults, so cp + patchelf
         cp ${installer} $TEMP/${installer.name}
@@ -68,13 +68,13 @@ in stdenv.mkDerivation rec {
         patchelf --interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $TEMP/${installer.name}
       '';
     copyComponent = component: "cp ${component} $TEMP/${component.name}";
-    # leaves enabled: quartus, questa_fse, devinfo
+    # leaves enabled: quartus, devinfo
     disabledComponents = [
       "quartus_help"
       "quartus_update"
-      # not questa_fse
       "questa_fe"
-    ] ++ (lib.attrValues unsupportedDeviceIds);
+    ] ++ (lib.optional (!withQuesta) "questa_fse")
+      ++ (lib.attrValues unsupportedDeviceIds);
   in ''
       echo "setting up installer..."
       ${lib.concatMapStringsSep "\n" copyInstaller installers}
