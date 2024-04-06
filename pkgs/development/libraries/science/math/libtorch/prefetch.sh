@@ -6,7 +6,7 @@ set -eou pipefail
 version=$1
 
 bucket="https://download.pytorch.org/libtorch"
-CUDA_VERSION=cu116
+CUDA_VERSION=cu118
 
 url_and_key_list=(
   "x86_64-darwin-cpu $bucket/cpu/libtorch-macos-${version}.zip libtorch-macos-${version}.zip"
