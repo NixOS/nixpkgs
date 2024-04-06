@@ -6,17 +6,18 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "prowler";
-  version = "3.14.0";
+  version = "3.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "prowler-cloud";
     repo = "prowler";
     rev = "refs/tags/${version}";
-    hash = "sha256-hQVrKhBgucuZQ2CZKG6VJMsHUGkWNch9em2dRCbEA+A=";
+    hash = "sha256-7aWWaGdHTveFwXsFNj4+tjX5g83/nD77jLAOrDOw8JE=";
   };
 
   pythonRelaxDeps = [
+    "azure-keyvault-keys"
     "azure-mgmt-compute"
     "azure-mgmt-network"
     "azure-mgmt-security"
@@ -42,16 +43,22 @@ python3.pkgs.buildPythonApplication rec {
     alive-progress
     awsipranges
     azure-identity
+    azure-keyvault-keys
     azure-mgmt-applicationinsights
     azure-mgmt-authorization
     azure-mgmt-compute
+    azure-mgmt-containerservice
     azure-mgmt-cosmosdb
+    azure-mgmt-keyvault
+    azure-mgmt-monitor
     azure-mgmt-network
     azure-mgmt-rdbms
+    azure-mgmt-resource
     azure-mgmt-security
     azure-mgmt-sql
     azure-mgmt-storage
     azure-mgmt-subscription
+    azure-mgmt-web
     azure-storage-blob
     boto3
     botocore
