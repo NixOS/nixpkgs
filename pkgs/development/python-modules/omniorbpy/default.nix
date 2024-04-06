@@ -17,15 +17,14 @@ buildPythonPackage rec {
     hash = "sha256-y1cX1BKhAbr0MPWYysfWkjGITa5DctjirfPd7rxffrs=";
   };
 
-  outputs = [ "out" "dev" ];
-
-  nativeBuildInputs = [
-    pkg-config
+  outputs = [
+    "out"
+    "dev"
   ];
 
-  propagatedBuildInputs = [
-    omniorb
-  ];
+  nativeBuildInputs = [ pkg-config ];
+
+  propagatedBuildInputs = [ omniorb ];
 
   configureFlags = [
     "--with-omniorb=${omniorb}"
@@ -49,7 +48,10 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python backend for omniorb";
     homepage = "http://omniorb.sourceforge.net";
-    license = with licenses; [ gpl2Plus lgpl21Plus ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl21Plus
+    ];
     maintainers = with maintainers; [ nim65s ];
     platforms = platforms.unix;
   };
