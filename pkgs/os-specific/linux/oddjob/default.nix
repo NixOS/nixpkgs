@@ -1,14 +1,15 @@
-{ lib
-, fetchpatch
-, fetchurl
-, stdenv
-, autoreconfHook
-, dbus
-, libxml2
-, nixosTests
-, pam
-, pkg-config
-, systemd
+{
+  autoreconfHook,
+  dbus,
+  fetchpatch,
+  fetchurl,
+  lib,
+  libxml2,
+  nixosTests,
+  pam,
+  pkg-config,
+  stdenv,
+  systemd,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,8 +17,8 @@ stdenv.mkDerivation rec {
   version = "0.34.7";
 
   src = fetchurl {
-     url = "https://pagure.io/oddjob/archive/${pname}-${version}/oddjob-${pname}-${version}.tar.gz";
-     hash = "sha256-SUOsMH55HtEsk5rX0CXK0apDObTj738FGOaL5xZRnIM=";
+    url = "https://pagure.io/oddjob/archive/${pname}-${version}/oddjob-${pname}-${version}.tar.gz";
+    hash = "sha256-SUOsMH55HtEsk5rX0CXK0apDObTj738FGOaL5xZRnIM=";
   };
 
   patches = [
@@ -33,9 +34,9 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =[
-    libxml2
+  buildInputs = [
     dbus
+    libxml2
     pam
     systemd
   ];
@@ -60,12 +61,12 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) oddjobd;
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://pagure.io/oddjob/blob/oddjob-${version}/f/ChangeLog";
     description = "Odd Job Daemon";
     homepage = "https://pagure.io/oddjob";
-    changelog = "https://pagure.io/oddjob/blob/oddjob-${version}/f/ChangeLog";
-    license = licenses.bsd0;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ SohamG ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ SohamG ];
+    platforms = lib.platforms.linux;
   };
 }
