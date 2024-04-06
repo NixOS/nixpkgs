@@ -592,6 +592,7 @@ in python.pkgs.buildPythonApplication rec {
     certifi
     ciso8601
     cryptography
+    fnv-hash-fast
     hass-nabucasa
     httpx
     home-assistant-bluetooth
@@ -600,12 +601,15 @@ in python.pkgs.buildPythonApplication rec {
     lru-dict
     orjson
     packaging
+    pillow
     pip
+    psutil-home-assistant
     pyopenssl
     pyjwt
     python-slugify
     pyyaml
     requests
+    sqlalchemy
     typing-extensions
     ulid-transform
     urllib3
