@@ -63,9 +63,9 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/bitwarden/sdk/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/bitwarden/sdk/blob/${src.rev}/crates/bws/CHANGELOG.md";
     description = "Bitwarden Secrets Manager CLI";
-    homepage = "https://github.com/bitwarden/sdk";
+    homepage = "https://bitwarden.com/help/secrets-manager-cli/";
     license = lib.licenses.unfree; # BITWARDEN SOFTWARE DEVELOPMENT KIT LICENSE AGREEMENT
     mainProgram = "bws";
     maintainers = with lib.maintainers; [ dit7ya ];
