@@ -76,14 +76,24 @@ in stdenv.mkDerivation rec {
       "questa_fe"
     ] ++ (lib.attrValues unsupportedDeviceIds);
   in ''
+      echo "setting up installer..."
       ${lib.concatMapStringsSep "\n" copyInstaller installers}
       ${lib.concatMapStringsSep "\n" copyComponent components}
 
+      echo "executing installer..."
+      # "Could not load seccomp program: Invalid argument" might occur if unstick
+      # itself is compiled for x86_64 instead of the non-x86 host. In that case,
+      # override the input.
       unstick $TEMP/${(builtins.head installers).name} \
         --disable-components ${lib.concatStringsSep "," disabledComponents} \
         --mode unattended --installdir $out --accept_eula 1
 
+      echo "cleaning up..."
       rm -r $out/uninstall $out/logs
+
+      # replace /proc pentium check with a true statement. this allows usage under emulation.
+      substituteInPlace $out/quartus/adm/qenv.sh \
+        --replace-fail 'grep sse /proc/cpuinfo > /dev/null 2>&1' ':'
     '';
 
   meta = with lib; {
