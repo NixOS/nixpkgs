@@ -74,6 +74,7 @@ let
     "publisher"
     "version"
     "sha256"
+    "hash"
     "arch"
   ];
 

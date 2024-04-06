@@ -6,23 +6,26 @@
 , expat
 , pkg-config
 , check
+, zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "libstrophe";
-  version = "0.12.3";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "strophe";
     repo = pname;
     rev = version;
-    sha256 = "EDgdKJ7wqUoThy0t1r39p2lbn64uvTDoIqNCzhpWnZ8=";
+    hash = "sha256-JMuvWspgXs+1dVWoo6kJVaf6cVvYj8lhyyu4ZILKeOg=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ openssl expat libtool check ];
+  buildInputs = [ openssl expat libtool check zlib ];
 
   dontDisableStatic = true;
+
+  strictDeps = true;
 
   doCheck = true;
 

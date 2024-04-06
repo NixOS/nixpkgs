@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "glad2";
-  version = "2.0.5";
+  version = "2.0.6";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ugdXtqo6IEtjeHOxPQubQIZa4ZbfcpD8bAHYGOWK+Bw=";
+    hash = "sha256-CGFa7TIZ6hx3WEvVlh2CO6sib4rDgx0JrfZcb6h3+Ow=";
   };
 
   propagatedBuildInputs = [
