@@ -13,14 +13,15 @@
 , cmocka
 , wafHook
 , libxcrypt
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ldb";
   version = "2.9.0";
 
   src = fetchurl {
-    url = "mirror://samba/ldb/${pname}-${version}.tar.gz";
+    url = "mirror://samba/ldb/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     hash = "sha256-EFqv9xrYgaf661gv1BauKCIbb94zj/+CgoBlBiwlB6U=";
   };
 
@@ -70,11 +71,16 @@ stdenv.mkDerivation rec {
 
   stripDebugList = [ "bin" "lib" "modules" ];
 
+  passthru.tests.pkg-config = testers.hasPkgConfigModules {
+    package = finalAttrs.finalPackage;
+  };
+
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "A LDAP-like embedded database";
     homepage = "https://ldb.samba.org/";
     license = licenses.lgpl3Plus;
+    pkgConfigModules = [ "ldb" ];
     platforms = platforms.all;
   };
-}
+})
