@@ -1,6 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, testers
+, nixosTests
 , jetbrains
 , openjdk17
 , openjdk17-bootstrap
@@ -150,5 +152,13 @@ openjdk17.overrideAttrs (oldAttrs: rec {
   passthru = oldAttrs.passthru // {
     home = "${jetbrains.jdk}/lib/openjdk";
     updateScript = [ ./update.py jetbrains.idea-ultimate.src jetbrains.idea-ultimate.version ];
+    tests = {
+      version = testers.testVersion {
+        package = jetbrains.jdk;
+        command = "java --version";
+        version = javaVersion;
+      };
+      jcef = nixosTests.jetbrains-jdk;
+    };
   };
 })
