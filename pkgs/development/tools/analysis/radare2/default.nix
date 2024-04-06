@@ -47,13 +47,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "radare2";
-  version = "5.8.8";
+  version = "5.9.0";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     rev = "refs/tags/${version}";
-    hash = "sha256-JGNV5xSyrjcO2ZgOjzDqzfZyALPSCyA3DZx/D8ffmKA=";
+    hash = "sha256-h2IYOGr+yCgCJR1gB4jibcUt1A+8IuNVoTUcJ83lKHw=";
   };
 
   preBuild = ''
