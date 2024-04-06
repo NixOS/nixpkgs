@@ -1,19 +1,22 @@
-{ lib, stdenv, nixosTests, fetchFromGitHub, rustPlatform, libiconv, Security }:
+{ lib, stdenv, nixosTests, fetchFromGitHub, rustPlatform, libiconv, Security, openssl, pkg-config, nix-update-script }:
 
 rustPlatform.buildRustPackage rec {
   pname = "agate";
-  version = "3.3.4";
+  version = "3.3.7";
 
   src = fetchFromGitHub {
     owner = "mbrubeck";
     repo = "agate";
     rev = "v${version}";
-    hash = "sha256-7z3iAA+Q3k5jEO9ZhA06h7/17gE0FWPqDOGK/XENRWg=";
+    hash = "sha256-pNfTgkl59NTRDH+w23P49MUWzIXh5ElnJitMEYfsBnc=";
   };
 
-  cargoHash = "sha256-iTopJnuH2extGnaJXL+RPUwcvj2e+k5A4BT33v+sFiA=";
+  cargoHash = "sha256-RuSvweZhPWS2C2lwncxWAW2XLQN6+bAslv3p4IwQ2BA=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -25,7 +28,10 @@ rustPlatform.buildRustPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.tests = { inherit (nixosTests) agate; };
+  passthru = {
+    tests = { inherit (nixosTests) agate; };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/mbrubeck/agate";
