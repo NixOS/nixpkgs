@@ -51,9 +51,7 @@ buildPythonPackage rec {
     "-Dpython=${python.pythonOnBuildForHost.interpreter}"
   ];
 
-  # Reenable pending upstream fix in pygobject
-  # https://gitlab.gnome.org/GNOME/pygobject/-/issues/624
-  doCheck = false;
+  doCheck = true;
 
   # TODO: Meson setup hook does not like buildPythonPackage
   # https://github.com/NixOS/nixpkgs/issues/47390
