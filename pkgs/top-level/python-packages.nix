@@ -9739,6 +9739,8 @@ self: super: with self; {
 
   pip-requirements-parser = callPackage ../development/python-modules/pip-requirements-parser { };
 
+  pip-system-certs = callPackage ../development/python-modules/pip-system-certs { };
+
   pipx = callPackage ../development/python-modules/pipx { };
 
   pivy = callPackage ../development/python-modules/pivy {
