@@ -14,6 +14,7 @@
 , util-linux
 , wrapQtAppsHook
 , enableSnapper ? true
+, nix-update-script
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -77,6 +78,8 @@ stdenv.mkDerivation (finalAttrs: {
     [
       "--prefix PATH : ${runtimeDeps}"
     ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "A GUI management tool to make managing a Btrfs filesystem easier";
