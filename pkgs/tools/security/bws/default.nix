@@ -29,13 +29,15 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [
-    perl
     pkg-config
+  ] ++ lib.optionals stdenv.isLinux [
+    perl
   ];
 
   buildInputs =
     [
       oniguruma
+    ] ++ lib.optionals stdenv.isLinux [
       openssl
     ]
     ++ lib.optionals stdenv.isDarwin [
