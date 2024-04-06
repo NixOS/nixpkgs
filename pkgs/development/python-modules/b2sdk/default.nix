@@ -4,15 +4,15 @@
 , fetchFromGitHub
 , glibcLocales
 , importlib-metadata
-, packaging
 , logfury
+, packaging
+, pdm-backend
 , pyfakefs
-, pytestCheckHook
 , pytest-lazy-fixture
 , pytest-mock
+, pytestCheckHook
 , pythonOlder
 , pythonRelaxDepsHook
-, pdm-backend
 , requests
 , tqdm
 , typing-extensions
@@ -32,8 +32,11 @@ buildPythonPackage rec {
     hash = "sha256-0/UC4O19oO8SpboiPIhvkWBA8XHpc279fl377MooK54=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     pdm-backend
+  ];
+
+  nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
 
@@ -41,11 +44,10 @@ buildPythonPackage rec {
     "setuptools"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     packaging
     logfury
     requests
-    tqdm
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ] ++ lib.optionals (pythonOlder "3.12") [
@@ -53,10 +55,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pyfakefs
     pytest-lazy-fixture
     pytest-mock
-    pyfakefs
+    pytestCheckHook
+    tqdm
   ] ++ lib.optionals stdenv.isLinux [
     glibcLocales
   ];
