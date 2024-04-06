@@ -1,20 +1,23 @@
 {
   lib,
-  stdenv,
+  buildPythonPackage,
   fetchurl,
   omniorb,
   pkg-config,
   python3,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+buildPythonPackage rec {
   pname = "omniorbpy";
   version = "4.3.2";
+  pyproject = false;
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/omniorb/omniORBpy-${finalAttrs.version}.tar.bz2";
+    url = "http://downloads.sourceforge.net/omniorb/omniORBpy-${version}.tar.bz2";
     hash = "sha256-y1cX1BKhAbr0MPWYysfWkjGITa5DctjirfPd7rxffrs=";
   };
+
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
     pkg-config
@@ -37,12 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Ensure both python & cxx backends are available
-  doInstallCheck = true;
-  postInstallCheck = ''
-    export PYTHONPATH=$out/${python3.sitePackages}:${omniorb}/${python3.sitePackages}:$PYTHONPATH
-    ${lib.getExe python3} -c "import omniidl_be.cxx; import omniidl_be.python"
-  '';
-
+  pythonImportsCheck = [
+    "omniidl_be.cxx"
+    "omniidl_be.python"
+    "omniORB"
+  ];
 
   meta = with lib; {
     description = "Python backend for omniorb";
@@ -51,4 +53,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ nim65s ];
     platforms = platforms.unix;
   };
-})
+}
