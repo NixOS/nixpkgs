@@ -2,6 +2,7 @@
 , stdenv
 , buildPackages
 , fetchurl
+, gitUpdater
 , linuxHeaders
 , libiconvReal
 , extraConfig ? ""
@@ -112,6 +113,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Derivations may check for the existance of this attribute, to know what to
     # link to.
     libiconv = libiconvReal;
+
+    updateScript = gitUpdater {
+      url = "https://git.uclibc-ng.org/git/uclibc-ng.git";
+      rev-prefix = "v";
+    };
   };
 
   meta = {
