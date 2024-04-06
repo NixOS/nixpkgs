@@ -170,7 +170,7 @@ in
       # thing, but for VM tests it should provide a bit more
       # determinism (e.g. if the VM runs at lower speed, then
       # timeouts in the VM should also be delayed).
-      "clock=acpi_pm"
+      "clocksource=acpi_pm"
     ];
 
     # `xwininfo' is used by the test driver to query open windows.

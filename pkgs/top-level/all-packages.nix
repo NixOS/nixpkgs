@@ -17388,7 +17388,7 @@ with pkgs;
   erlang_nox = beam_nox.interpreters.erlang;
 
   inherit (beam.packages.erlang)
-    erlang-ls erlfmt elvis-erlang
+    ex_doc erlang-ls erlfmt elvis-erlang
     rebar rebar3 rebar3WithPlugins
     fetchHex
     lfe lfe_2_1;
@@ -23064,8 +23064,6 @@ with pkgs;
 
   libstroke = callPackage ../development/libraries/libstroke { };
 
-  libstrophe = callPackage ../development/libraries/libstrophe { };
-
   libspatialaudio = callPackage ../development/libraries/libspatialaudio { };
 
   libspatialindex = callPackage ../development/libraries/libspatialindex { };
@@ -26164,8 +26162,6 @@ with pkgs;
   matterbridge = callPackage ../servers/matterbridge { };
 
   mattermost-desktop = callPackage ../applications/networking/instant-messengers/mattermost-desktop { };
-
-  mbusd = callPackage ../servers/mbusd { };
 
   memcached = callPackage ../servers/memcached { };
 
@@ -30885,7 +30881,7 @@ with pkgs;
 
   gspeech = callPackage ../applications/audio/gspeech { };
 
-  haruna = libsForQt5.callPackage ../applications/video/haruna { };
+  haruna = kdePackages.callPackage ../applications/video/haruna { };
 
   hdrmerge = libsForQt5.callPackage ../applications/graphics/hdrmerge { };
 
@@ -33946,8 +33942,6 @@ with pkgs;
   paraview = libsForQt5.callPackage ../applications/graphics/paraview { };
 
   parlatype = callPackage ../applications/audio/parlatype { };
-
-  packet = callPackage ../development/tools/packet { };
 
   packet-sd = callPackage ../development/tools/packet-sd { };
 
@@ -40938,7 +40932,7 @@ with pkgs;
   };
 
 
-  discord-screenaudio = qt6.callPackage ../applications/networking/instant-messengers/discord-screenaudio { };
+  discord-screenaudio = qt6Packages.callPackage ../applications/networking/instant-messengers/discord-screenaudio { };
 
   discordo = callPackage ../applications/networking/discordo/default.nix { };
 
