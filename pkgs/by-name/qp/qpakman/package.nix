@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "fhomolka";
     repo = "qpakman";
     rev = "5a76df23c11f4da619448c60a1a2ba35c316ec2b";
-    sha256 = "sha256-DzP1PTzXRn8mKnPzMpxXnN9ZvFPMWWuVedll+FjFcj4=";
+    hash = "sha256-DzP1PTzXRn8mKnPzMpxXnN9ZvFPMWWuVedll+FjFcj4=";
   };
 
   nativeBuildInputs = [
