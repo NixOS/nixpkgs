@@ -22,11 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-j53d2Ki9xVWGHWkAu1wkjYE56Xq7kfMmqQrQiKrBg2I=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bleak
     requests
   ];
@@ -46,9 +46,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module to interact with Aranet4 devices";
-    mainProgram = "aranetctl";
     homepage = "https://github.com/Anrijs/Aranet4-Python";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "aranetctl";
   };
 }
