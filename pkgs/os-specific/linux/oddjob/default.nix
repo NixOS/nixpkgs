@@ -1,4 +1,5 @@
 { lib
+, fetchpatch
 , fetchurl
 , stdenv
 , autoreconfHook
@@ -19,6 +20,14 @@ stdenv.mkDerivation rec {
      hash = "sha256-SUOsMH55HtEsk5rX0CXK0apDObTj738FGOaL5xZRnIM=";
   };
 
+  patches = [
+    # Define SystemD service location using `with-systemdsystemunitdir` configure flag
+    (fetchpatch {
+      url = "https://pagure.io/oddjob/c/f63287a35107385dcb6e04a4c742077c9d1eab86.patch";
+      hash = "sha256-2mmw4pJhrIk4/47FM8zKH0dTQJWnntHPNmq8VAUWqJI=";
+    })
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
@@ -31,18 +40,12 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  postPatch = ''
-    substituteInPlace configure.ac \
-      --replace 'SYSTEMDSYSTEMUNITDIR=`pkg-config --variable=systemdsystemunitdir systemd 2> /dev/null`' "SYSTEMDSYSTEMUNITDIR=${placeholder "out"}" \
-      --replace 'SYSTEMDSYSTEMUNITDIR=`pkg-config --variable=systemdsystemunitdir systemd`' "SYSTEMDSYSTEMUNITDIR=${placeholder "out"}"
-  '';
-
   configureFlags = [
     "--prefix=${placeholder "out"}"
     "--sysconfdir=${placeholder "out"}/etc"
     "--with-selinux-acls=no"
     "--with-selinux-labels=no"
-    "--disable-systemd"
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
   ];
 
   postConfigure = ''
