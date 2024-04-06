@@ -30,14 +30,16 @@
 
 buildPythonPackage rec {
   pname = "skytemple-files";
-  version = "1.6.3";
+  version = "1.6.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    hash = "sha256-OkokbVD8j+Sgypj25demzSZdiAEf8TJrnl0QRIM2HsI=";
+    hash = "sha256-y6VHRfwQNoehp06BoZXuprYtsiGgoNL4rztJw40P4FI=";
+    # Most patches are in submodules
+    fetchSubmodules = true;
   };
 
   postPatch = ''
