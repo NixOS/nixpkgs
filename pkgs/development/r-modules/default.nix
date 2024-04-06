@@ -649,7 +649,7 @@ let
     rhdf5filters = with pkgs; [ zlib.dev bzip2.dev ];
     symengine = with pkgs; [ mpfr symengine flint ];
     rtk = [ pkgs.zlib.dev ];
-    scPipe = [ pkgs.zlib.dev ];
+    scPipe = with pkgs; [ bzip2.dev xz.dev zlib.dev ];
     seqTools = [ pkgs.zlib.dev ];
     seqbias = [ pkgs.zlib.dev ];
     sparkwarc = [ pkgs.zlib.dev ];
