@@ -691,9 +691,9 @@ in {
     with subtest("continuing from an aborted switch"):
         # An aborted switch will write into a file what it tried to start
         # and a second switch should continue from this
-        machine.succeed("echo dbus.service > /run/nixos/start-list")
+        machine.succeed("echo dbus-broker.service > /run/nixos/start-list")
         out = switch_to_specialisation("${machine}", "modifiedSystemConf")
-        assert_contains(out, "starting the following units: dbus.service\n")
+        assert_contains(out, "starting the following units: dbus-broker.service\n")
 
     with subtest("fstab mounts"):
         switch_to_specialisation("${machine}", "")
@@ -732,7 +732,7 @@ in {
         out = switch_to_specialisation("${machine}", "")
         assert_contains(out, "stopping the following units: test.mount\n")
         assert_lacks(out, "NOT restarting the following changed units:")
-        assert_contains(out, "reloading the following units: dbus.service\n")
+        assert_contains(out, "reloading the following units: dbus-broker.service\n")
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
@@ -740,7 +740,7 @@ in {
         out = switch_to_specialisation("${machine}", "storeMountModified")
         assert_lacks(out, "stopping the following units:")
         assert_contains(out, "NOT restarting the following changed units: -.mount")
-        assert_contains(out, "reloading the following units: dbus.service\n")
+        assert_contains(out, "reloading the following units: dbus-broker.service\n")
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
@@ -751,7 +751,7 @@ in {
         out = switch_to_specialisation("${machine}", "swap")
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
-        assert_contains(out, "reloading the following units: dbus.service\n")
+        assert_contains(out, "reloading the following units: dbus-broker.service\n")
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_contains(out, "the following new units were started: swapfile.swap")
@@ -760,7 +760,7 @@ in {
         assert_contains(out, "stopping swap device: /swapfile")
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
-        assert_contains(out, "reloading the following units: dbus.service\n")
+        assert_contains(out, "reloading the following units: dbus-broker.service\n")
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
@@ -781,7 +781,7 @@ in {
         assert_lacks(out, "installing dummy bootloader")  # test does not install a bootloader
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
-        assert_contains(out, "reloading the following units: dbus.service\n")  # huh
+        assert_contains(out, "reloading the following units: dbus-broker.service\n")  # huh
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_contains(out, "the following new units were started: test.service\n")
@@ -858,7 +858,7 @@ in {
         assert_lacks(out, "installing dummy bootloader")  # test does not install a bootloader
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
-        assert_contains(out, "reloading the following units: dbus.service\n")  # huh
+        assert_contains(out, "reloading the following units: dbus-broker.service\n")  # huh
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_contains(out, "the following new units were started: test.service\n")
