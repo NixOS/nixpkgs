@@ -480,7 +480,6 @@ in
     };
   });
 
-
   plenary-nvim = prev.plenary-nvim.overrideAttrs (oa: {
     postPatch = ''
       sed -Ei lua/plenary/curl.lua \
@@ -583,6 +582,15 @@ in
       USE_SYSTEM_LUA = "yes";
       USE_SYSTEM_MPACK = "yes";
     };
+  });
+
+  nlua = prev.nlua.overrideAttrs(oa: {
+
+    # patchShebang removes the nvim in nlua's shebang so we hardcode one
+    postFixup = ''
+      sed -i -e "1 s|.*|#\!${coreutils}/bin/env -S ${neovim-unwrapped}/bin/nvim -l|" "$out/bin/nlua"
+      '';
+    dontPatchShebangs = true;
   });
 
   rapidjson = prev.rapidjson.overrideAttrs (oa: {
