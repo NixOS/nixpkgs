@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, installShellFiles
 , pkg-config
 , oniguruma
 , openssl
@@ -29,6 +30,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [
+    installShellFiles
     pkg-config
   ] ++ lib.optionals stdenv.isLinux [
     perl
@@ -50,6 +52,13 @@ rustPlatform.buildRustPackage rec {
   };
 
   buildAndTestSubdir = "crates/bws";
+
+  postInstall = ''
+    installShellCompletion --cmd bws \
+      --bash <($out/bin/bws completions bash) \
+      --fish <($out/bin/bws completions fish) \
+      --zsh <($out/bin/bws completions zsh)
+  '';
 
   meta = {
     changelog = "https://github.com/bitwarden/sdk/blob/${src.rev}/CHANGELOG.md";
