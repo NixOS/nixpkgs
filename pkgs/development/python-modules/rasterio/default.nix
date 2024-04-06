@@ -54,6 +54,12 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    # remove useless import statement requiring distutils to be present at the runtime
+    substituteInPlace rasterio/rio/calc.py \
+      --replace-fail "from distutils.version import LooseVersion" ""
+    '';
+
   nativeBuildInputs = [
     cython_3
     gdal
@@ -71,7 +77,6 @@ buildPythonPackage rec {
     click-plugins
     cligj
     numpy
-    setuptools
     snuggs
   ];
 
@@ -96,6 +101,11 @@ buildPythonPackage rec {
     shapely
   ];
 
+  # rio has runtime dependency on setuptools
+  setuptoolsPythonPath = [ setuptools ];
+  postInstall = ''
+    wrapPythonProgramsIn "$out/bin" "$out $setuptoolsPythonPath"
+  '';
   doCheck = true;
 
   preCheck = ''
