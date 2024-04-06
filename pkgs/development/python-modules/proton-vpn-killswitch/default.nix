@@ -6,16 +6,16 @@
 , pytestCheckHook
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "proton-vpn-killswitch";
-  version = "0.2.0-unstable-2023-09-05";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-killswitch";
-    rev = "6e84588ea6ae0946141d4b44b2cf5df8465d5eba";
-    hash = "sha256-eFwWN8E+nIDpbut8tkWqXucLhzm7HaLAMBIbAq/X2eo=";
+    rev = "v${version}";
+    hash = "sha256-XZqjAhxgIiATJd3JcW2WWUMC1b6+cfZRhXlIPyMUFH8=";
   };
 
   nativeBuildInputs = [
