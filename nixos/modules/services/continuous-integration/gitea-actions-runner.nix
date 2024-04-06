@@ -236,7 +236,8 @@ in
                   --instance ${escapeShellArg instance.url} \
                   --token "$TOKEN" \
                   --name ${escapeShellArg instance.name} \
-                  --labels ${escapeShellArg (concatStringsSep "," instance.labels)}
+                  --labels ${escapeShellArg (concatStringsSep "," instance.labels)} \
+                  --config ${configFile}
 
                 # and write back the configured labels
                 echo "$LABELS_WANTED" > "$LABELS_FILE"

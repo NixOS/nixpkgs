@@ -585,11 +585,15 @@ self: super: with self; {
 
   ansible = callPackage ../development/python-modules/ansible { };
 
+  ansible-builder = callPackage ../development/python-modules/ansible-builder { };
+
   ansible-compat = callPackage ../development/python-modules/ansible-compat { };
 
   ansible-core = callPackage ../development/python-modules/ansible/core.nix { };
 
   ansible-kernel = callPackage ../development/python-modules/ansible-kernel { };
+
+  ansible-navigator = callPackage ../development/python-modules/ansible-navigator { };
 
   ansible-pylibssh = callPackage ../development/python-modules/ansible-pylibssh { };
 
@@ -1506,6 +1510,8 @@ self: super: with self; {
   binaryornot = callPackage ../development/python-modules/binaryornot { };
 
   bincopy = callPackage ../development/python-modules/bincopy { };
+
+  bindep = callPackage ../development/python-modules/bindep { };
 
   binho-host-adapter = callPackage ../development/python-modules/binho-host-adapter { };
 
@@ -4647,6 +4653,8 @@ self: super: with self; {
 
   geocachingapi = callPackage ../development/python-modules/geocachingapi { };
 
+  geocoder = callPackage ../development/python-modules/geocoder { };
+
   geographiclib = callPackage ../development/python-modules/geographiclib { };
 
   geoip2 = callPackage ../development/python-modules/geoip2 { };
@@ -4700,6 +4708,12 @@ self: super: with self; {
   gevent-socketio = callPackage ../development/python-modules/gevent-socketio { };
 
   gevent-websocket = callPackage ../development/python-modules/gevent-websocket { };
+
+  gfal2-python = callPackage ../development/python-modules/gfal2-python { };
+
+  gfal2-util = callPackage ../development/python-modules/gfal2-util {
+    inherit (pkgs) xrootd;
+  };
 
   gflags = callPackage ../development/python-modules/gflags { };
 
@@ -5636,6 +5650,8 @@ self: super: with self; {
   imbalanced-learn = callPackage ../development/python-modules/imbalanced-learn { };
 
   img2pdf = callPackage ../development/python-modules/img2pdf { };
+
+  imgcat = callPackage ../development/python-modules/imgcat { };
 
   imgdiff = callPackage ../development/python-modules/imgdiff { };
 
@@ -6731,6 +6747,8 @@ self: super: with self; {
 
   lingua = callPackage ../development/python-modules/lingua { };
 
+  lingva = callPackage ../development/python-modules/lingva { };
+
   linien-client = callPackage ../development/python-modules/linien-client { };
 
   linien-common = callPackage ../development/python-modules/linien-common { };
@@ -7042,6 +7060,8 @@ self: super: with self; {
     inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
   };
 
+  manim-slides = callPackage ../development/python-modules/manim-slides { };
+
   manifest-ml = callPackage ../development/python-modules/manifest-ml { };
 
   manifestoo = callPackage ../development/python-modules/manifestoo { };
@@ -7303,7 +7323,11 @@ self: super: with self; {
 
   microsoft-kiota-http = callPackage ../development/python-modules/microsoft-kiota-http { };
 
+  microsoft-kiota-serialization-form = callPackage ../development/python-modules/microsoft-kiota-serialization-form { };
+
   microsoft-kiota-serialization-json = callPackage ../development/python-modules/microsoft-kiota-serialization-json { };
+
+  microsoft-kiota-serialization-multipart = callPackage ../development/python-modules/microsoft-kiota-serialization-multipart { };
 
   microsoft-kiota-serialization-text = callPackage ../development/python-modules/microsoft-kiota-serialization-text { };
 
@@ -8935,6 +8959,8 @@ self: super: with self; {
 
   onetimepass = callPackage ../development/python-modules/onetimepass { };
 
+  onigurumacffi = callPackage ../development/python-modules/onigurumacffi { };
+
   onkyo-eiscp = callPackage ../development/python-modules/onkyo-eiscp { };
 
   online-judge-api-client = callPackage ../development/python-modules/online-judge-api-client { };
@@ -9544,6 +9570,8 @@ self: super: with self; {
 
   msgraph-core = callPackage ../development/python-modules/msgraph-core { };
 
+  msgraph-sdk = callPackage ../development/python-modules/msgraph-sdk { };
+
   multipart = callPackage ../development/python-modules/multipart { };
 
   netmap = callPackage ../development/python-modules/netmap { };
@@ -10072,6 +10100,8 @@ self: super: with self; {
   polyline = callPackage ../development/python-modules/polyline { };
 
   polygon3 = callPackage ../development/python-modules/polygon3 { };
+
+  polyswarm-api = callPackage ../development/python-modules/polyswarm-api { };
 
   pomegranate = callPackage ../development/python-modules/pomegranate { };
 

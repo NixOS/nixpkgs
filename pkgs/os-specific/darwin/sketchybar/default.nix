@@ -11,6 +11,7 @@
 , MediaRemote
 , SkyLight
 , testers
+, nix-update-script
 }:
 
 let
@@ -56,9 +57,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    version = "sketchybar-v${finalAttrs.version}";
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      version = "sketchybar-v${finalAttrs.version}";
+    };
+
+    updateScript = nix-update-script { };
   };
 
   meta = {

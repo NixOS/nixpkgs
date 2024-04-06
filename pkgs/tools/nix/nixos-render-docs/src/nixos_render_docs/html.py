@@ -219,13 +219,13 @@ class HTMLRenderer(Renderer):
     def example_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         if id := cast(str, token.attrs.get('id', '')):
             id = f'id="{escape(id, True)}"' if id else ''
-        return f'<div class="example"><span {id} ></span>'
+        return f'<div class="example"><span {id} ></span><details>'
     def example_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        return '</div></div><br class="example-break" />'
+        return '</div></details></div><br class="example-break" />'
     def example_title_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        return '<p class="title"><strong>'
+        return '<summary><span class="title"><strong>'
     def example_title_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        return '</strong></p><div class="example-contents">'
+        return '</strong></span></summary><div class="example-contents">'
     def image(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         src = self._pull_image(cast(str, token.attrs['src']))
         alt = f'alt="{escape(token.content, True)}"' if token.content else ""

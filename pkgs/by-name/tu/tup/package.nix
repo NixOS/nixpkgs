@@ -1,32 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, fuse3, macfuse-stubs, pkg-config, sqlite, pcre }:
+{ lib, stdenv, fetchFromGitHub, fuse3, macfuse-stubs, pkg-config, sqlite, pcre2 }:
 
 let
   fuse = if stdenv.isDarwin then macfuse-stubs else fuse3;
 in stdenv.mkDerivation rec {
   pname = "tup";
-  version = "0.7.11";
+  version = "0.8";
   outputs = [ "bin" "man" "out" ];
 
   src = fetchFromGitHub {
     owner = "gittup";
     repo = "tup";
     rev = "v${version}";
-    hash = "sha256-Q2Y5ErcfhLChi9Wezn8+7eNXYX2UXW1fBOqEclmgzOo=";
+    hash = "sha256-biVR932wHiUG56mvXoKWFzrzpkclbW9RWM4vY1+OMZ0=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ fuse pcre sqlite ];
+  buildInputs = [ fuse pcre2 sqlite ];
 
   patches = [ ./fusermount-setuid.patch ];
 
   configurePhase = ''
     substituteInPlace  src/tup/link.sh --replace '`git describe' '`echo ${version}'
-
-    for f in Tupfile Tuprules.tup src/tup/server/Tupfile build.sh; do
-      substituteInPlace "$f" \
-        --replace "pkg-config"  "${stdenv.cc.targetPrefix}pkg-config" \
-        --replace "pcre-config" "${stdenv.cc.targetPrefix}pkg-config libpcre"
-    done
 
     cat << EOF > tup.config
     CONFIG_CC=${stdenv.cc.targetPrefix}cc

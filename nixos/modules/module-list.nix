@@ -143,6 +143,7 @@
   ./programs/adb.nix
   ./programs/alvr.nix
   ./programs/appgate-sdp.nix
+  ./programs/appimage.nix
   ./programs/atop.nix
   ./programs/ausweisapp.nix
   ./programs/autojump.nix
@@ -342,7 +343,6 @@
   ./services/amqp/rabbitmq.nix
   ./services/audio/alsa.nix
   ./services/audio/botamusique.nix
-  ./services/audio/castopod.nix
   ./services/audio/gmediarender.nix
   ./services/audio/gonic.nix
   ./services/audio/goxlr-utility.nix
@@ -652,6 +652,7 @@
   ./services/matrix/hebbot.nix
   ./services/matrix/maubot.nix
   ./services/matrix/mautrix-facebook.nix
+  ./services/matrix/mautrix-meta.nix
   ./services/matrix/mautrix-telegram.nix
   ./services/matrix/mautrix-whatsapp.nix
   ./services/matrix/mjolnir.nix
@@ -799,6 +800,7 @@
   ./services/misc/transfer-sh.nix
   ./services/misc/tzupdate.nix
   ./services/misc/uhub.nix
+  ./services/misc/wastebin.nix
   ./services/misc/weechat.nix
   ./services/misc/workout-tracker.nix
   ./services/misc/xmr-stak.nix
@@ -1155,6 +1157,7 @@
   ./services/networking/tayga.nix
   ./services/networking/tcpcrypt.nix
   ./services/networking/teamspeak3.nix
+  ./services/networking/technitium-dns-server.nix
   ./services/networking/teleport.nix
   ./services/networking/tetrd.nix
   ./services/networking/tftpd.nix
@@ -1302,12 +1305,14 @@
   ./services/web-apps/bookstack.nix
   ./services/web-apps/c2fmzq-server.nix
   ./services/web-apps/calibre-web.nix
+  ./services/web-apps/castopod.nix
   ./services/web-apps/coder.nix
   ./services/web-apps/changedetection-io.nix
   ./services/web-apps/chatgpt-retrieval-plugin.nix
   ./services/web-apps/cloudlog.nix
   ./services/web-apps/code-server.nix
   ./services/web-apps/convos.nix
+  ./services/web-apps/davis.nix
   ./services/web-apps/dex.nix
   ./services/web-apps/discourse.nix
   ./services/web-apps/documize.nix
@@ -1360,6 +1365,7 @@
   ./services/web-apps/nexus.nix
   ./services/web-apps/nifi.nix
   ./services/web-apps/node-red.nix
+  ./services/web-apps/ocis.nix
   ./services/web-apps/onlyoffice.nix
   ./services/web-apps/openvscode-server.nix
   ./services/web-apps/mobilizon.nix
@@ -1383,6 +1389,7 @@
   ./services/web-apps/rss-bridge.nix
   ./services/web-apps/selfoss.nix
   ./services/web-apps/shiori.nix
+  ./services/web-apps/silverbullet.nix
   ./services/web-apps/slskd.nix
   ./services/web-apps/snipe-it.nix
   ./services/web-apps/sogo.nix

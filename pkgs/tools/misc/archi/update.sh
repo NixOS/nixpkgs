@@ -12,9 +12,9 @@ if [[ "$latestVersion" == "$currentVersion" ]]; then
     exit 0
 fi
 
-hash_aarch64_darwin=$(nix-prefetch-url https://www.archimatetool.com/downloads/archi_5.php?/$latestVersion/Archi-Mac-Silicon-$latestVersion.dmg)
-hash_x86_64_darwin=$(nix-prefetch-url https://www.archimatetool.com/downloads/archi_5.php?/$latestVersion/Archi-Mac-$latestVersion.dmg)
-hash_x86_64_linux=$(nix-prefetch-url https://www.archimatetool.com/downloads/archi_5.php?/$latestVersion/Archi-Linux64-$latestVersion.tgz)
+hash_aarch64_darwin=$(nix-prefetch-url https://www.archimatetool.com/downloads/archi/$latestVersion/Archi-Mac-Silicon-$latestVersion.dmg)
+hash_x86_64_darwin=$(nix-prefetch-url https://www.archimatetool.com/downloads/archi/$latestVersion/Archi-Mac-$latestVersion.dmg)
+hash_x86_64_linux=$(nix-prefetch-url https://www.archimatetool.com/downloads/archi/$latestVersion/Archi-Linux64-$latestVersion.tgz)
 
 update-source-version archi 0 "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" --system=aarch64-darwin
 update-source-version archi $latestVersion $hash_aarch64_darwin --system=aarch64-darwin

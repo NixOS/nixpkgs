@@ -190,22 +190,6 @@ in
         "org.gnome.SettingsDaemon.XSettings.service"
       ];
 
-      # https://github.com/elementary/gala/issues/1826#issuecomment-1890461298
-      systemd.user.services."io.elementary.gala.daemon@" = {
-        unitConfig = {
-          Description = "Gala Daemon";
-          BindsTo = "io.elementary.gala@.service";
-          After = "io.elementary.gala@.service";
-        };
-
-        serviceConfig = {
-          Type = "dbus";
-          BusName = "org.pantheon.gala.daemon";
-          ExecStart = "${pkgs.pantheon.gala}/bin/gala-daemon";
-          Slice = "session.slice";
-        };
-      };
-
       # Global environment
       environment.systemPackages = (with pkgs.pantheon; [
         elementary-session-settings

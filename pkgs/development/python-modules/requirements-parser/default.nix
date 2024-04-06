@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, types-setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  types-setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "requirements-parser";
-  version = "0.7.0";
+  version = "0.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,25 +20,19 @@ buildPythonPackage rec {
     owner = "madpah";
     repo = "requirements-parser";
     rev = "refs/tags/v${version}";
-    hash = "sha256-P1uMpg9uoPp18KwdBHkvpMGV8eKhTEsDCKwz2JsTOug=";
+    hash = "sha256-ZkyfK2s6wmKX/AJsOXlAHOpJ2/zZO0zipdM3j2BrrWo=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     setuptools
     types-setuptools
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "requirements"
-  ];
+  pythonImportsCheck = [ "requirements" ];
 
   meta = with lib; {
     description = "Pip requirements file parser";

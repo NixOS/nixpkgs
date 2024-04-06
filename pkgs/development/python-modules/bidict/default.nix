@@ -36,12 +36,11 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  pytestFlagsArray = [
-    # Pass -c /dev/null so that pytest does not use the bundled pytest.ini, which adds
-    # options to run additional integration tests that are overkill for our purposes.
-    "-c"
-    "/dev/null"
-  ];
+  # Remove the bundled pytest.ini, which adds options to run additional integration
+  # tests that are overkill for our purposes.
+  preCheck = ''
+    rm pytest.ini
+  '';
 
   pythonImportsCheck = [ "bidict" ];
 

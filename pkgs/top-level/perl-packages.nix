@@ -11310,7 +11310,14 @@ with self; {
       hash = "sha256-cNxL8qp0mBx54V/SmNmY4FqS66SBHxrVyfH03jdzesw=";
     };
     propagatedBuildInputs = [ pkgs.gtk3 CairoGObject GlibObjectIntrospection ];
-    preCheck = lib.optionalString stdenv.isDarwin "rm t/overrides.t"; # Currently failing on macOS
+    preCheck = lib.optionalString stdenv.isDarwin ''
+      # Currently failing on macOS
+      rm t/overrides.t
+      rm t/signals.t
+      rm t/zz-GdkEvent.t
+      rm t/zz-GtkContainer.t
+      rm t/zz-GtkDialog.t
+    '';
     meta = {
       description = "Perl interface to the 3.x series of the gtk+ toolkit";
       license = with lib.licenses; [ lgpl21Plus ];

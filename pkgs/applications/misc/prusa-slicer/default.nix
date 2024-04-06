@@ -27,7 +27,7 @@
 , openvdb
 , pcre
 , qhull
-, tbb_2021_8
+, tbb_2021_11
 , wxGTK32
 , xorg
 , libbgcode
@@ -61,17 +61,17 @@ let
       hash = "sha256-WNdAYu66ggpSYJ8Kt57yEA4mSTv+Rvzj9Rm1q765HpY=";
     };
   });
-  openvdb_tbb_2021_8 = openvdb.override { tbb = tbb_2021_8; };
+  openvdb_tbb_2021_8 = openvdb.override { tbb = tbb_2021_11; };
   wxGTK-override' = if wxGTK-override == null then wxGTK-prusa else wxGTK-override;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prusa-slicer";
-  version = "2.7.2";
+  version = "2.7.3";
 
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "PrusaSlicer";
-    hash = "sha256-IZRw6qEe4hM/Sfhx0je11vaMHeuW/e4ZP5zMTuptb2k=";
+    hash = "sha256-pV9KQlZoCQZWi12VUKntKzFUuZgGpDoh1aNMoAHTbZI=";
     rev = "version_${finalAttrs.version}";
   };
 
@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     openvdb_tbb_2021_8
     pcre
     qhull
-    tbb_2021_8
+    tbb_2021_11
     wxGTK-override'
     xorg.libX11
     libbgcode

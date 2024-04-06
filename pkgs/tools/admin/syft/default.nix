@@ -1,14 +1,19 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "syft";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "anchore";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-VLCxbD9LFXH8bdc2v9RB/vlLZtg1ekDotZi1xwORdjc=";
+    repo = "syft";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-75puiKfXp8vS9iiSk6R85RBn9xlQp9jk51ZNBeJXc/U=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -22,7 +27,8 @@ buildGoModule rec {
   };
   # hash mismatch with darwin
   proxyVendor = true;
-  vendorHash = "sha256-eJCXRXeYAk3VTe+RcFjjKUbKCniPKY1wPXsBpZjeCNw=";
+
+  vendorHash = "sha256-AHzKmitIUw0CqBU2Xinb6UVnlZB+2ED85uqGUFonkWM=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -31,9 +37,9 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.gitDescription=v${version}"
-    "-X main.gitTreeState=clean"
+    "-X=main.version=${version}"
+    "-X=main.gitDescription=v${version}"
+    "-X=main.gitTreeState=clean"
   ];
 
   preBuild = ''
@@ -66,16 +72,20 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
+    description = "CLI tool and library for generating a Software Bill of Materials from container images and filesystems";
     homepage = "https://github.com/anchore/syft";
     changelog = "https://github.com/anchore/syft/releases/tag/v${version}";
-    description = "CLI tool and library for generating a Software Bill of Materials from container images and filesystems";
     longDescription = ''
       A CLI tool and Go library for generating a Software Bill of Materials
       (SBOM) from container images and filesystems. Exceptional for
       vulnerability detection when used with a scanner tool like Grype.
     '';
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ jk developer-guy kashw2 ];
+    maintainers = with maintainers; [
+      developer-guy
+      jk
+      kashw2
+    ];
     mainProgram = "syft";
   };
 }

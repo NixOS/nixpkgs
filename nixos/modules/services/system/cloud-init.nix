@@ -204,7 +204,7 @@ in
       description = "Apply the settings specified in cloud-config";
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
-      after = [ "network-online.target" "syslog.target" "cloud-config.target" ];
+      after = [ "network-online.target" "cloud-config.target" ];
 
       path = path;
       serviceConfig = {
@@ -220,7 +220,7 @@ in
       description = "Execute cloud user/final scripts";
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
-      after = [ "network-online.target" "syslog.target" "cloud-config.service" "rc-local.service" ];
+      after = [ "network-online.target" "cloud-config.service" "rc-local.service" ];
       requires = [ "cloud-config.target" ];
       path = path;
       serviceConfig = {

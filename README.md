@@ -1,9 +1,9 @@
 <p align="center">
   <a href="https://nixos.org">
     <picture>
-      <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/NixOS/nixos-homepage/master/logo/nixos-hires.png">
+      <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/NixOS/nixos-homepage/main/public/logo/nixos-hires.png">
       <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/master/logo/nixos-white.png">
-      <img src="https://raw.githubusercontent.com/NixOS/nixos-homepage/master/logo/nixos-hires.png" width="500px" alt="NixOS logo">
+      <img src="https://raw.githubusercontent.com/NixOS/nixos-homepage/main/public/logo/nixos-hires.png" width="500px" alt="NixOS logo">
     </picture>
   </a>
 </p>
@@ -29,8 +29,8 @@
 * [Discourse Forum](https://discourse.nixos.org/)
 * [Matrix Chat](https://matrix.to/#/#community:nixos.org)
 * [NixOS Weekly](https://weekly.nixos.org/)
-* [Community-maintained wiki](https://nixos.wiki/)
-* [Community-maintained list of ways to get in touch](https://nixos.wiki/wiki/Get_In_Touch#Chat) (Discord, Telegram, IRC, etc.)
+* [Official wiki](https://wiki.nixos.org/)
+* [Community-maintained list of ways to get in touch](https://wiki.nixos.org/wiki/Get_In_Touch#Chat) (Discord, Telegram, IRC, etc.)
 
 # Other Project Repositories
 

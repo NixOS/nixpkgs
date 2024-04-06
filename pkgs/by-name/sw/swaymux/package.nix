@@ -6,7 +6,7 @@
 , stdenv
 }:
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.0";
+  version = "1.1";
   pname = "swaymux";
 
   src = fetchFromGitea {
@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "git.grimmauld.de";
     owner = "Grimmauld";
     repo = "swaymux";
-    hash = "sha256-M85pqfYnYeVPTZXKtjg/ks5LUl3u2onG9Nfn8Xs+BSA=";
+    hash = "sha256-OMJ9wKNuvD1Z9KV7Bp7aIA5gWbBl9PmTdGcGegE0vqM=";
   };
 
   buildInputs = [ qt6.qtwayland nlohmann_json qt6.qtbase];

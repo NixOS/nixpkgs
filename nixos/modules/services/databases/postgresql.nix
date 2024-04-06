@@ -27,7 +27,7 @@ let
     else toString value;
 
   # The main PostgreSQL configuration file.
-  configFile = pkgs.writeTextDir "postgresql.conf" (concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") cfg.settings));
+  configFile = pkgs.writeTextDir "postgresql.conf" (concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") (filterAttrs (const (x: x != null)) cfg.settings)));
 
   configFileCheck = pkgs.runCommand "postgresql-configfile-check" {} ''
     ${cfg.package}/bin/postgres -D${configFile} -C config_file >/dev/null
@@ -41,6 +41,9 @@ in
 {
   imports = [
     (mkRemovedOptionModule [ "services" "postgresql" "extraConfig" ] "Use services.postgresql.settings instead.")
+
+    (mkRenamedOptionModule [ "services" "postgresql" "logLinePrefix" ] [ "services" "postgresql" "settings" "log_line_prefix" ])
+    (mkRenamedOptionModule [ "services" "postgresql" "port" ] [ "services" "postgresql" "settings" "port" ])
   ];
 
   ###### interface
@@ -55,14 +58,6 @@ in
 
       package = mkPackageOption pkgs "postgresql" {
         example = "postgresql_15";
-      };
-
-      port = mkOption {
-        type = types.port;
-        default = 5432;
-        description = lib.mdDoc ''
-          The port on which PostgreSQL listens.
-        '';
       };
 
       checkConfig = mkOption {
@@ -352,17 +347,6 @@ in
         '';
       };
 
-      logLinePrefix = mkOption {
-        type = types.str;
-        default = "[%p] ";
-        example = "%m [%p] ";
-        description = lib.mdDoc ''
-          A printf-style string that is output at the beginning of each log line.
-          Upstream default is `'%m [%p] '`, i.e. it includes the timestamp. We do
-          not include the timestamp, because journal has it anyway.
-        '';
-      };
-
       extraPlugins = mkOption {
         type = with types; coercedTo (listOf path) (path: _ignorePg: path) (functionTo (listOf path));
         default = _: [];
@@ -373,7 +357,38 @@ in
       };
 
       settings = mkOption {
-        type = with types; attrsOf (oneOf [ bool float int str ]);
+        type = with types; submodule {
+          freeformType = attrsOf (oneOf [ bool float int str ]);
+          options = {
+            shared_preload_libraries = mkOption {
+              type = nullOr (coercedTo (listOf str) (concatStringsSep ", ") str);
+              default = null;
+              example = literalExpression ''[ "auto_explain" "anon" ]'';
+              description = mdDoc ''
+                List of libraries to be preloaded.
+              '';
+            };
+
+            log_line_prefix = mkOption {
+              type = types.str;
+              default = "[%p] ";
+              example = "%m [%p] ";
+              description = lib.mdDoc ''
+                A printf-style string that is output at the beginning of each log line.
+                Upstream default is `'%m [%p] '`, i.e. it includes the timestamp. We do
+                not include the timestamp, because journal has it anyway.
+              '';
+            };
+
+            port = mkOption {
+              type = types.port;
+              default = 5432;
+              description = lib.mdDoc ''
+                The port on which PostgreSQL listens.
+              '';
+            };
+          };
+        };
         default = {};
         description = lib.mdDoc ''
           PostgreSQL configuration. Refer to
@@ -439,9 +454,7 @@ in
         hba_file = "${pkgs.writeText "pg_hba.conf" cfg.authentication}";
         ident_file = "${pkgs.writeText "pg_ident.conf" cfg.identMap}";
         log_destination = "stderr";
-        log_line_prefix = cfg.logLinePrefix;
         listen_addresses = if cfg.enableTCPIP then "*" else "localhost";
-        port = cfg.port;
         jit = mkDefault (if cfg.enableJIT then "on" else "off");
       };
 
@@ -524,7 +537,7 @@ in
         # Wait for PostgreSQL to be ready to accept connections.
         postStart =
           ''
-            PSQL="psql --port=${toString cfg.port}"
+            PSQL="psql --port=${toString cfg.settings.port}"
 
             while ! $PSQL -d postgres -c "" 2> /dev/null; do
                 if ! kill -0 "$MAINPID"; then exit 1; fi

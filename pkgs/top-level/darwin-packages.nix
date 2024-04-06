@@ -155,8 +155,6 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     propagatedBuildInputs = [ self.signingUtils ];
   } ../os-specific/darwin/signing-utils/auto-sign-hook.sh;
 
-  insert_dylib = callPackage ../os-specific/darwin/insert_dylib { };
-
   iosSdkPkgs = callPackage ../os-specific/darwin/xcode/sdk-pkgs.nix {
     buildIosSdk = buildPackages.darwin.iosSdkPkgs.sdk;
     targetIosSdkPkgs = targetPackages.darwin.iosSdkPkgs;
@@ -195,7 +193,9 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     xcode_15 xcode_15_1
     xcode;
 
-  CoreSymbolication = callPackage ../os-specific/darwin/CoreSymbolication { };
+  CoreSymbolication = callPackage ../os-specific/darwin/CoreSymbolication {
+    inherit (apple_sdk) darwin-stubs;
+  };
 
   # TODO: Remove the CF hook if a solution to the crashes is not found.
   CF =

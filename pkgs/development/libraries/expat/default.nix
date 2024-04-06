@@ -16,7 +16,7 @@
 # files.
 
 let
-  version = "2.6.0";
+  version = "2.6.2";
   tag = "R_${lib.replaceStrings ["."] ["_"] version}";
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -25,13 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = with finalAttrs; "https://github.com/libexpat/libexpat/releases/download/${tag}/${pname}-${version}.tar.xz";
-    hash = "sha256-y19ajqIR4cq9Wb4KkzpS48Aswyboak04fY0hjn7kej4=";
+    hash = "sha256-7hS0xdiQixvsN62TdgfqsYPU2YBqCK3uRyw8MSHSc2Q=";
   };
-
-  patches = [
-    # Fix tests flakiness on some platforms (like aarch64-darwin), should be released in 2.6.1
-    ./2.6.0-fix-tests-flakiness.patch
-  ];
 
   strictDeps = true;
 

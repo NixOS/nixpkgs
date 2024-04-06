@@ -4,17 +4,20 @@
 , gitUpdater
 , cmake
 , nasm
+
+# for passthru.tests
+, ffmpeg
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "svt-av1";
-  version = "1.8.0";
+  version = "2.0.0";
 
   src = fetchFromGitLab {
     owner = "AOMediaCodec";
     repo = "SVT-AV1";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JV65VuEPJBrADsGviBnE6EgZmbqJ4Z4qli6cAfUMmkw=";
+    hash = "sha256-yfKnkO8GPmMpTWTVYDliERouSFgQPe3CfJmVussxfHY=";
   };
 
   nativeBuildInputs = [
@@ -26,8 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSVT_AV1_LTO=ON"
   ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
+  passthru = {
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
+    tests = {
+      ffmpeg = ffmpeg.override { withSvtav1 = true; };
+    };
   };
 
   meta = with lib; {

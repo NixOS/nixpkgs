@@ -38,7 +38,7 @@
 , pcre
 , qhull
 , systemd
-, tbb_2021_8
+, tbb_2021_11
 , webkitgtk
 , wxGTK31
 , xorg
@@ -53,7 +53,7 @@ let
     ];
   });
   openvdb_tbb_2021_8 = openvdb.overrideAttrs (old: rec {
-    buildInputs = [ openexr boost179 tbb_2021_8 jemalloc c-blosc ilmbase ];
+    buildInputs = [ openexr boost179 tbb_2021_11 jemalloc c-blosc ilmbase ];
   });
 in
 stdenv.mkDerivation rec {
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
     opencascade-occt
     openvdb_tbb_2021_8
     pcre
-    tbb_2021_8
+    tbb_2021_11
     webkitgtk
     wxGTK31'
     xorg.libX11
@@ -164,6 +164,16 @@ stdenv.mkDerivation rec {
       # The upstream setup links in glew statically
       --prefix LD_PRELOAD : "${glew.out}/lib/libGLEW.so"
     )
+  '';
+
+  # needed to prevent collisions between the LICENSE.txt files of
+  # bambu-studio and orca-slicer.
+  postInstall = ''
+    mkdir -p $out/share/doc
+    mv $out/LICENSE.txt $out/share/doc/LICENSE.txt
+    if [ -f $out/README.md ]; then
+      mv $out/README.md $out/share/doc/README.md
+    fi
   '';
 
   meta = with lib; {

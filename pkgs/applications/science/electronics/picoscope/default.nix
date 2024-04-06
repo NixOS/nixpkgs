@@ -49,7 +49,7 @@ let
   # If we don't have a platform available, put a dummy version here, so at
   # least evaluation succeeds.
   sources =
-    (lib.importJSON ./sources.json).${stdenv.system} or { picoscope.version = "unknown"; };
+    (lib.importJSON ./sources.json).${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 
   scopePkg = name:
     { url, version, sha256 }:

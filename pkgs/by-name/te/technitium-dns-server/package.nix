@@ -4,6 +4,7 @@
   fetchurl,
   makeWrapper,
   dotnet-sdk_8,
+  nixosTests,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "technitium-dns-server";
@@ -34,6 +35,10 @@ stdenvNoCC.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) technitium-dns-server;
+  };
 
   meta = {
     changelog = "https://github.com/TechnitiumSoftware/DnsServer/blob/master/CHANGELOG.md";

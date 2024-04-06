@@ -233,6 +233,7 @@ in {
   croc = handleTest ./croc.nix {};
   darling = handleTest ./darling.nix {};
   dae = handleTest ./dae.nix {};
+  davis = handleTest ./davis.nix {};
   dconf = handleTest ./dconf.nix {};
   deconz = handleTest ./deconz.nix {};
   deepin = handleTest ./deepin.nix {};
@@ -457,7 +458,7 @@ in {
   kerberos = handleTest ./kerberos/default.nix {};
   kernel-generic = handleTest ./kernel-generic.nix {};
   kernel-latest-ath-user-regd = handleTest ./kernel-latest-ath-user-regd.nix {};
-  kernel-rust = handleTestOn ["x86_64-linux"] ./kernel-rust.nix {};
+  kernel-rust = handleTest ./kernel-rust.nix {};
   keter = handleTest ./keter.nix {};
   kexec = handleTest ./kexec.nix {};
   keycloak = discoverTests (import ./keycloak.nix);
@@ -521,6 +522,8 @@ in {
   matrix-conduit = handleTest ./matrix/conduit.nix {};
   matrix-synapse = handleTest ./matrix/synapse.nix {};
   matrix-synapse-workers = handleTest ./matrix/synapse-workers.nix {};
+  mautrix-meta-postgres = handleTest ./matrix/mautrix-meta-postgres.nix {};
+  mautrix-meta-sqlite = handleTest ./matrix/mautrix-meta-sqlite.nix {};
   mattermost = handleTest ./mattermost.nix {};
   mealie = handleTest ./mealie.nix {};
   mediamtx = handleTest ./mediamtx.nix {};
@@ -647,6 +650,7 @@ in {
   nvmetcfg = handleTest ./nvmetcfg.nix {};
   nzbget = handleTest ./nzbget.nix {};
   nzbhydra2 = handleTest ./nzbhydra2.nix {};
+  ocis = handleTest ./ocis.nix {};
   oh-my-zsh = handleTest ./oh-my-zsh.nix {};
   ollama = handleTest ./ollama.nix {};
   ombi = handleTest ./ombi.nix {};
@@ -807,6 +811,7 @@ in {
   shattered-pixel-dungeon = handleTest ./shattered-pixel-dungeon.nix {};
   shiori = handleTest ./shiori.nix {};
   signal-desktop = handleTest ./signal-desktop.nix {};
+  silverbullet = handleTest ./silverbullet.nix {};
   simple = handleTest ./simple.nix {};
   sing-box = handleTest ./sing-box.nix {};
   slimserver = handleTest ./slimserver.nix {};
@@ -914,6 +919,7 @@ in {
   tang = handleTest ./tang.nix {};
   taskserver = handleTest ./taskserver.nix {};
   tayga = handleTest ./tayga.nix {};
+  technitium-dns-server = handleTest ./technitium-dns-server.nix {};
   teeworlds = handleTest ./teeworlds.nix {};
   telegraf = handleTest ./telegraf.nix {};
   teleport = handleTest ./teleport.nix {};
@@ -985,6 +991,7 @@ in {
   vsftpd = handleTest ./vsftpd.nix {};
   warzone2100 = handleTest ./warzone2100.nix {};
   wasabibackend = handleTest ./wasabibackend.nix {};
+  wastebin = handleTest ./wastebin.nix {};
   watchdogd = handleTest ./watchdogd.nix {};
   webhook = runTest ./webhook.nix;
   wiki-js = handleTest ./wiki-js.nix {};

@@ -10,7 +10,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     name = "context-mapper-vscode-extension";
     publisher = "contextmapper";
     version = "6.11.0";
-    sha256 = "sha256-TvApcBBI+Egu7t4tJuEYTs6mhvABOY2eXVb57O4gWfs=";
+    hash = "sha256-TvApcBBI+Egu7t4tJuEYTs6mhvABOY2eXVb57O4gWfs=";
   };
 
   nativeBuildInputs = [
