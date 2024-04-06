@@ -14054,6 +14054,18 @@ final: prev:
     meta.homepage = "https://github.com/mzlogin/vim-markdown-toc/";
   };
 
+  vim-matchtag = buildVimPlugin {
+    pname = "vim-matchtag";
+    version = "2022-06-24";
+    src = fetchFromGitHub {
+      owner = "leafOfTree";
+      repo = "vim-matchtag";
+      rev = "54357c00979e07d86aa12b383ddd1d6a7fbda2c2";
+      sha256 = "01ar9qma2glb6wyhpafnwpf1f63v9i417hx1dzck1gi4fcz1pfqa";
+    };
+    meta.homepage = "https://github.com/leafOfTree/vim-matchtag/";
+  };
+
   vim-matchup = buildVimPlugin {
     pname = "vim-matchup";
     version = "2024-02-24";

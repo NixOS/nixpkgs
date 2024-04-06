@@ -10,13 +10,13 @@
 
 buildDotnetModule rec {
   pname = "knossosnet";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "KnossosNET";
     repo = "Knossos.NET";
     rev = "v${version}";
-    hash = "sha256-Wq4WeRf+ELTxZhQyQf6XAOPmbJwX06qQ5GxRnnK3lyI=";
+    hash = "sha256-5pHBCqAEuZDt5lIkLlFN2zKRZkRybc3mUMqsTN44EwU=";
   };
 
   patches = [ ./targetframework.patch ];

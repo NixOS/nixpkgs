@@ -203,6 +203,12 @@
       fingerprint = "D292 365E 3C46 A5AA 75EE  B30B 78DB 7EDE 3540 794B";
     }];
   };
+  _48cf = {
+    name = "czapek";
+    email = "czapek1337@gmail.com";
+    github = "48cf";
+    githubId = 32851089;
+  };
   _6543 = {
     email = "6543@obermui.de";
     github = "6543";
@@ -1424,6 +1430,12 @@
     github = "antonxy";
     githubId = 4194320;
     name = "Anton Schirg";
+  };
+  aorith = {
+    email = "aomanu+nixpkgs@gmail.com";
+    github = "aorith";
+    githubId = 5411704;
+    name = "Manuel Sanchez Pinar";
   };
   apeschar = {
     email = "albert@peschar.net";
@@ -6436,6 +6448,12 @@
     githubId = 5198058;
     name = "Udo Sauer";
   };
+  ferrine = {
+    email = "justferres@yandex.ru";
+    github = "ferrine";
+    githubId = 11705326;
+    name = "Max Kochurov";
+  };
   ffinkdevs = {
     email = "fink@h0st.space";
     github = "ffinkdevs";
@@ -7248,6 +7266,12 @@
     github = "gin66";
     githubId = 5549373;
     name = "Jochen Kiemes";
+  };
+  giodamelio = {
+    name = "Giovanni d'Amelio";
+    email = "gio@damelio.net";
+    github = "giodamelio";
+    githubId = 441646;
   };
   giogadi = {
     email = "lgtorres42@gmail.com";
@@ -10867,6 +10891,12 @@
     }];
     name = "Yaroslav Bolyukin";
   };
+  lachrymal = {
+    email = "lachrymalfutura@gmail.com";
+    name = "lachrymaL";
+    github = "lachrymaLF";
+    githubId = 13716477;
+  };
   lafrenierejm = {
     email = "joseph@lafreniere.xyz";
     github = "lafrenierejm";
@@ -14323,6 +14353,12 @@
     github = "nmattia";
     githubId = 6930756;
     name = "Nicolas Mattia";
+  };
+  noaccos = {
+    name = "Francesco Noacco";
+    email = "francesco.noacco2000@gmail.com";
+    github = "noaccOS";
+    githubId = 24324352;
   };
   nobbz = {
     name = "Norbert Melzer";

@@ -1708,8 +1708,6 @@ with pkgs;
 
   arubaotp-seed-extractor = callPackage ../tools/security/arubaotp-seed-extractor { };
 
-  audible-cli = callPackage ../tools/misc/audible-cli { };
-
   auditwheel = with python3Packages; toPythonApplication auditwheel;
 
   amidst = callPackage ../tools/games/minecraft/amidst { };
@@ -1829,6 +1827,12 @@ with pkgs;
   };
 
   github-copilot-cli = callPackage ../tools/misc/github-copilot-cli { };
+
+  # This is to workaround gfal2-python broken against Python 3.12 or later.
+  # TODO: Remove these lines after solving the breakage.
+  gfal2-util = callPackage ../by-name/gf/gfal2-util/package.nix (lib.optionalAttrs python3Packages.gfal2-python.meta.broken {
+    python3Packages = python311Packages;
+  });
 
   gfshare = callPackage ../tools/security/gfshare { };
 
@@ -2961,8 +2965,6 @@ with pkgs;
   shfm = callPackage ../applications/file-managers/shfm { };
 
   spaceFM = callPackage ../applications/file-managers/spacefm { };
-
-  tuifimanager = callPackage ../applications/file-managers/tuifimanager { };
 
   vifm = callPackage ../applications/file-managers/vifm { };
 
@@ -17093,7 +17095,7 @@ with pkgs;
   swiPrologWithGui = swiProlog.override { withGui = true; };
 
   tbb_2020_3 = callPackage ../development/libraries/tbb/2020_3.nix { };
-  tbb_2021_8 = callPackage ../development/libraries/tbb { };
+  tbb_2021_11 = callPackage ../development/libraries/tbb { };
   # many packages still fail with latest version
   tbb = tbb_2020_3;
 
@@ -17387,7 +17389,7 @@ with pkgs;
   erlang_nox = beam_nox.interpreters.erlang;
 
   inherit (beam.packages.erlang)
-    erlang-ls erlfmt elvis-erlang
+    ex_doc erlang-ls erlfmt elvis-erlang
     rebar rebar3 rebar3WithPlugins
     fetchHex
     lfe lfe_2_1;
@@ -19085,7 +19087,7 @@ with pkgs;
 
   ikos = callPackage ../development/tools/analysis/ikos {
     inherit (llvmPackages_14) stdenv clang llvm;
-    tbb = tbb_2021_8;
+    tbb = tbb_2021_11;
   };
 
   img = callPackage ../development/tools/img { };
@@ -19331,7 +19333,7 @@ with pkgs;
 
   mold = callPackage ../development/tools/mold {
     stdenv = if stdenv.isDarwin then overrideLibcxx darwin.apple_sdk_11_0.llvmPackages_16.stdenv else stdenv;
-    tbb = tbb_2021_8;
+    tbb = tbb_2021_11;
   };
 
   mold-wrapped = wrapBintoolsWith {
@@ -20479,7 +20481,7 @@ with pkgs;
   ccrtp = callPackage ../development/libraries/ccrtp { };
 
   cctag = callPackage ../development/libraries/cctag {
-    tbb = tbb_2021_8;
+    tbb = tbb_2021_11;
   };
 
   cctz = callPackage ../development/libraries/cctz {
@@ -23062,8 +23064,6 @@ with pkgs;
   libstemmer = callPackage ../development/libraries/libstemmer { };
 
   libstroke = callPackage ../development/libraries/libstroke { };
-
-  libstrophe = callPackage ../development/libraries/libstrophe { };
 
   libspatialaudio = callPackage ../development/libraries/libspatialaudio { };
 
@@ -26163,8 +26163,6 @@ with pkgs;
   matterbridge = callPackage ../servers/matterbridge { };
 
   mattermost-desktop = callPackage ../applications/networking/instant-messengers/mattermost-desktop { };
-
-  mbusd = callPackage ../servers/mbusd { };
 
   memcached = callPackage ../servers/memcached { };
 
@@ -30884,7 +30882,7 @@ with pkgs;
 
   gspeech = callPackage ../applications/audio/gspeech { };
 
-  haruna = libsForQt5.callPackage ../applications/video/haruna { };
+  haruna = kdePackages.callPackage ../applications/video/haruna { };
 
   hdrmerge = libsForQt5.callPackage ../applications/graphics/hdrmerge { };
 
@@ -31714,8 +31712,6 @@ with pkgs;
     withGUI = true;
     withDoc = true;
   };
-
-  gpscorrelate = callPackage ../applications/misc/gpscorrelate { };
 
   gpsd = callPackage ../servers/gpsd { };
 
@@ -33947,8 +33943,6 @@ with pkgs;
   paraview = libsForQt5.callPackage ../applications/graphics/paraview { };
 
   parlatype = callPackage ../applications/audio/parlatype { };
-
-  packet = callPackage ../development/tools/packet { };
 
   packet-sd = callPackage ../development/tools/packet-sd { };
 
@@ -40941,7 +40935,7 @@ with pkgs;
   };
 
 
-  discord-screenaudio = qt6.callPackage ../applications/networking/instant-messengers/discord-screenaudio { };
+  discord-screenaudio = qt6Packages.callPackage ../applications/networking/instant-messengers/discord-screenaudio { };
 
   discordo = callPackage ../applications/networking/discordo/default.nix { };
 

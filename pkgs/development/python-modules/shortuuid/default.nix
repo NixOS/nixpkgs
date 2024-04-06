@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "shortuuid";
-  version = "1.0.12";
+  version = "1.0.13";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-w58bNIs8HpsRWpVLM7dsjFItLRd6nSCs27INJPrDzP0=";
+    hash = "sha256-O7nPB/YGJgWEsd9GOZwLh92Edz57JZErfjkeMHl8XnI=";
   };
 
   build-system = [
