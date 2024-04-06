@@ -2,34 +2,24 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, pkg-config
-, bzip2
-, CoreServices
+, Security
 }:
 
-let
+rustPlatform.buildRustPackage rec {
   pname = "mdbook-epub";
-  version = "unstable-2022-12-25";
-in rustPlatform.buildRustPackage {
-  inherit pname version;
+  version = "0.4.37";
 
   src = fetchFromGitHub {
     owner = "michael-f-bryan";
-    repo = pname;
-    rev = "2e1e48d0d1a1b4c1b0f866267e6666b41c598225";
-    hash = "sha256-wjn/7dv/Z2OmwvH/XaEeCz/JOvJWlMJ60q5qozzOEWY=";
+    repo = "mdbook-epub";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ddWClkeGabvqteVUtuwy4pWZGnarrKrIbuPEe62m6es=";
   };
 
-  cargoHash = "sha256-4oSpQUYJDK0srABZMwJ8x8jv6DOnLShXSnjLjf8c9Ac=";
+  cargoHash = "sha256-cJS9HgbnLYXkZrAyGNEeu6q+znH+7cj8CUGIbTCbB9Y=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
-
-  buildInputs = [
-    bzip2
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreServices
+  buildInputs = lib.optionals stdenv.isDarwin [
+    Security
   ];
 
   meta = with lib; {

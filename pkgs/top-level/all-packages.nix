@@ -9993,7 +9993,7 @@ with pkgs;
   mdbook-emojicodes = callPackage ../tools/text/mdbook-emojicodes { };
 
   mdbook-epub = callPackage ../tools/text/mdbook-epub {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
+    inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   mdbook-cmdrun = callPackage ../tools/text/mdbook-cmdrun { };
