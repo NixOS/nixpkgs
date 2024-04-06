@@ -4,6 +4,7 @@
 , autoreconfHook
 , dbus
 , libxml2
+, nixosTests
 , pam
 , pkg-config
 , systemd
@@ -48,6 +49,13 @@ stdenv.mkDerivation rec {
     substituteInPlace src/oddjobd.c \
       --replace "globals.selinux_enabled" "FALSE"
   '';
+
+  # Requires a dbus-daemon environment
+  doCheck = false;
+
+  passthru.tests = {
+    inherit (nixosTests) oddjobd;
+  };
 
   meta = with lib; {
     description = "Odd Job Daemon";
