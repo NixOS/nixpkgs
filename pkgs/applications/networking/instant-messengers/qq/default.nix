@@ -19,7 +19,8 @@
 , vips
 , at-spi2-core
 , autoPatchelfHook
-, makeWrapper
+, makeShellWrapper
+, wrapGAppsHook
 }:
 
 let
@@ -43,7 +44,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    makeWrapper
+    makeShellWrapper
+    wrapGAppsHook
     dpkg
   ];
 
@@ -62,6 +64,8 @@ stdenv.mkDerivation {
     xorg.libXdamage
   ];
 
+  dontWrapGApps = true;
+
   runtimeDependencies = map lib.getLib [
     systemd
   ];
@@ -75,9 +79,11 @@ stdenv.mkDerivation {
     substituteInPlace $out/share/applications/qq.desktop \
       --replace "/opt/QQ/qq" "$out/bin/qq" \
       --replace "/usr/share" "$out/share"
-    makeWrapper $out/opt/QQ/qq $out/bin/qq \
+    makeShellWrapper $out/opt/QQ/qq $out/bin/qq \
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      "''${gappsWrapperArgs[@]}"
 
     # Remove bundled libraries
     rm -r $out/opt/QQ/resources/app/sharp-lib
