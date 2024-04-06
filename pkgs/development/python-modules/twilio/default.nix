@@ -1,20 +1,21 @@
-{ lib
-, aiohttp
-, aiohttp-retry
-, aiounittest
-, buildPythonPackage
-, cryptography
-, django
-, fetchFromGitHub
-, mock
-, multidict
-, pyngrok
-, pyjwt
-, pytestCheckHook
-, pythonOlder
-, pytz
-, requests
-, setuptools
+{
+  lib,
+  aiohttp,
+  aiohttp-retry,
+  aiounittest,
+  buildPythonPackage,
+  cryptography,
+  django,
+  fetchFromGitHub,
+  mock,
+  multidict,
+  pyngrok,
+  pyjwt,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +32,7 @@ buildPythonPackage rec {
     hash = "sha256-3014wT7DXRlWvRxfqx/wIR9v9uX9QROQICDHXcgtOHs=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
@@ -68,9 +67,7 @@ buildPythonPackage rec {
     "tests/cluster/test_cluster.py"
   ];
 
-  pythonImportsCheck = [
-    "twilio"
-  ];
+  pythonImportsCheck = [ "twilio" ];
 
   meta = with lib; {
     description = "Twilio API client and TwiML generator";
