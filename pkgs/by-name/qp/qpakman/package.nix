@@ -33,5 +33,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.not_leader ];
     platforms = platforms.unix;
+    mainProgram = "qpakman";
   };
 }
