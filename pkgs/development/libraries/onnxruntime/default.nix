@@ -133,7 +133,6 @@ effectiveStdenv.mkDerivation rec {
     nlohmann_json
     microsoft-gsl
   ] ++ lib.optionals pythonSupport (with python3Packages; [
-    gtest
     numpy
     pybind11
     packaging
@@ -150,7 +149,9 @@ effectiveStdenv.mkDerivation rec {
     cuda_cudart
   ]);
 
-  nativeCheckInputs = lib.optionals pythonSupport (with python3Packages; [
+  nativeCheckInputs = [
+    gtest
+  ] ++ lib.optionals pythonSupport (with python3Packages; [
     pytest
     sympy
     onnx
@@ -179,7 +180,7 @@ effectiveStdenv.mkDerivation rec {
     "-DFETCHCONTENT_SOURCE_DIR_SAFEINT=${safeint}"
     "-DFETCHCONTENT_TRY_FIND_PACKAGE_MODE=ALWAYS"
     "-Donnxruntime_BUILD_SHARED_LIB=ON"
-    "-Donnxruntime_BUILD_UNIT_TESTS=ON"
+    (lib.cmakeBool "onnxruntime_BUILD_UNIT_TESTS" doCheck)
     "-Donnxruntime_ENABLE_LTO=ON"
     "-Donnxruntime_USE_FULL_PROTOBUF=OFF"
     (lib.cmakeBool "onnxruntime_USE_CUDA" cudaSupport)
