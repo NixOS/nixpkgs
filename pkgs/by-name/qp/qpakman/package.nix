@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/fhomolka/qpakman";
     description = "A command-line tool for managing PAK and WAD files from QuakeI/II & Hexen II";
     license = licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = [ maintainers.not_leader ];
     platforms = platforms.unix;
   };
 }

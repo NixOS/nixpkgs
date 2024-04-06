@@ -14387,6 +14387,13 @@
       fingerprint = "BE62 7373 8E61 6D6D 1B3A  08E8 A21A 0202 4881 6103";
     }];
   };
+  not_leader = {
+    email = "notleader1@outlook.com";
+    matrix = "@not-leader:envs.net";
+    github = "not-leader";
+    githubId = 73873702;
+    name = "not_leader";
+  };
   not-my-segfault = {
     email = "michal@tar.black";
     matrix = "@michal:tar.black";
