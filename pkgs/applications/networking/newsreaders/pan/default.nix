@@ -22,14 +22,14 @@
 
 stdenv.mkDerivation rec {
   pname = "pan";
-  version = "0.155";
+  version = "0.157";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-DsoTqZLcZOc3HlpCC8rmu/rcFeHkb9IWd4PSLwxKqJI=";
+    hash = "sha256-+zzAnppP6ICIhhlqXGVF4h/yIDa6oE1lxenmzcr2BQo=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config gettext intltool itstool libxml2 makeWrapper ];

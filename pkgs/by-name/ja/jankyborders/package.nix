@@ -5,6 +5,7 @@
 , overrideSDK
 , darwin
 , testers
+, nix-update-script
 }:
 let
   stdenv = overrideSDK pkgs.stdenv "11.0";
@@ -41,9 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    version = "borders-v${finalAttrs.version}";
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      version = "borders-v${finalAttrs.version}";
+    };
+
+    updateScript = nix-update-script { };
   };
 
   meta = {
