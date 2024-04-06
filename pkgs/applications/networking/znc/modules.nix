@@ -57,7 +57,7 @@ in
       description = "ZNC module for client specific buffers";
       homepage = "https://github.com/CyberShadow/znc-clientbuffer";
       license = licenses.asl20;
-      maintainers = with maintainers; [ hrdinka szlend ];
+      maintainers = with maintainers; [ hrdinka szlend cybershadow ];
     };
   };
 
