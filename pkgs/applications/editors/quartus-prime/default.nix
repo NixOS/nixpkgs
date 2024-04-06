@@ -37,6 +37,8 @@ in buildFHSEnv rec {
     # qsys requirements
     xorg.libXtst
     xorg.libXi
+    dejavu_fonts
+    gnumake
   ];
 
   # Also support 32-bit executables.
