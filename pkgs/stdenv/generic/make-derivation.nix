@@ -118,6 +118,7 @@ let
     "pic"
     "pie"
     "relro"
+    "spectrev2"
     "stackprotector"
     "strictoverflow"
     "trivialautovarinit"
