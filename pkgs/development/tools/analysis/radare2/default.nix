@@ -79,6 +79,12 @@ stdenv.mkDerivation rec {
    "-Dr2_gittap=${version}"
   ];
 
+  # TODO: remove when upstream fixes the issue
+  # https://github.com/radareorg/radare2/issues/22793
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [
+     "-DTHREAD_CONVERT_THREAD_STATE_TO_SELF=1"
+  ];
+
   enableParallelBuilding = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
