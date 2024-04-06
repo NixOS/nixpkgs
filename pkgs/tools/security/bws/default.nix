@@ -51,7 +51,9 @@ rustPlatform.buildRustPackage rec {
     RUSTONIG_SYSTEM_LIBONIG = true;
   };
 
-  buildAndTestSubdir = "crates/bws";
+  cargoBuildFlags = [ "--package" "bws" ];
+
+  cargoTestFlags = [ "--package" "bws" ];
 
   postInstall = ''
     installShellCompletion --cmd bws \
