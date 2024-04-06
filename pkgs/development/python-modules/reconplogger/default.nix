@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, logmatic-python
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, setuptools
-, testfixtures
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+  logmatic-python,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  setuptools,
+  testfixtures,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-jBWy5oHyZpRUWb8OW0dRFfpu3m3hTd5dpIOQCRO5swM=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     logmatic-python
@@ -46,13 +45,9 @@ buildPythonPackage rec {
     testfixtures
   ];
 
-  pythonImportsCheck = [
-    "reconplogger"
-  ];
+  pythonImportsCheck = [ "reconplogger" ];
 
-  pytestFlagsArray = [
-    "reconplogger_tests.py"
-  ];
+  pytestFlagsArray = [ "reconplogger_tests.py" ];
 
   meta = with lib; {
     description = "Module to ease the standardization of logging within omni:us";
