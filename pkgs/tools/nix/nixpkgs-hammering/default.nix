@@ -5,6 +5,7 @@
 , makeWrapper
 , python3
 , nix
+, unstableGitUpdater
 }:
 
 let
@@ -55,6 +56,8 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = meta // {
     mainProgram = "nixpkgs-hammer";
