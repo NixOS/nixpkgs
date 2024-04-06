@@ -51,6 +51,7 @@ let
     requests
     requests-oauthlib
     rsa
+    setuptools
     six
     urllib3
     websocket-client
