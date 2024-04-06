@@ -1478,7 +1478,7 @@ stdenv.mkDerivation {
 }
 ```
 
-The file [`patch-shebangs.sh`][patch-shebangs.sh] defines the [`patchShebangs`][patchShebangs] function. It is used to implement [`patchShebangsAuto`][patchShebangsAuto], the [setup hook](#ssec-setup-hooks) that is registered to run during the [fixup phase](#ssec-fixup-phase) by default.
+The file [`patch-shebangs.sh`][patch-shebangs.sh] defines the [`patchShebangs`][patchShebangs] function. It is used to implement [`patchShebangsAuto`][patchShebangsAuto], the [setup hook](#ssec-setup-hooks) that is registered to run during the [fixup phase](#ssec-fixup-phase) by default. Set `dontPatchShebangs=true` to skip this hook.
 
 If you need to run `patchShebangs` at build time, it must be called explicitly within [one of the build phases](#sec-stdenv-phases).
 
