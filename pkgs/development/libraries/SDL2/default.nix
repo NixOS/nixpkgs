@@ -58,13 +58,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2";
-  version = "2.30.1";
+  version = "2.30.2";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-nwmmyJK1/5Mu7l1YCk4PsasJIrx3jdiM5f/Cu3n0paA=";
+    hash = "sha256-yYYtsF6+IKynXpfay0rUmCQPdL8vp6dlmon8N7UG89A=";
   };
   dontDisableStatic = if withStatic then 1 else 0;
   outputs = [ "out" "dev" ];
