@@ -48,7 +48,8 @@ buildDotnetModule rec {
 
   meta = {
     description = "Scan documents to PDF and more, as simply as possible.";
-    homepage = "www.naps2.com";
+    homepage = "https://www.naps2.com";
+    changelog = "https://github.com/cyanfish/naps2/blob/master/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ eliandoran ];
     platforms = lib.platforms.linux;
