@@ -1,7 +1,7 @@
 { lib
-, python
 , buildPythonPackage
 , fetchFromGitHub
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -15,9 +15,7 @@ buildPythonPackage rec {
     hash = "sha256-eQYxOnL4/TJbY/nijcPl8TqK2MrwcdISKGfZQoI7828=";
   };
 
-  checkPhase = ''
-    ${python.interpreter} setup.py test
-  '';
+  nativeBuildInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "oncalendar" ];
 
