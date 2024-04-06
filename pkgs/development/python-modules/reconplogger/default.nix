@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "reconplogger";
-  version = "4.15.0";
+  version = "4.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "omni-us";
     repo = "reconplogger";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0+YOrMqyDK6uAni2h5b6P850veIkUiifX6aHzCnRHD0=";
+    hash = "sha256-jBWy5oHyZpRUWb8OW0dRFfpu3m3hTd5dpIOQCRO5swM=";
   };
 
   nativeBuildInputs = [
