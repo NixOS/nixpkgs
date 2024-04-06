@@ -1,70 +1,55 @@
-{ lib
-, asn1crypto
-, buildPythonPackage
-, pythonRelaxDepsHook
-, certifi
-, cffi
-, charset-normalizer
-, fetchPypi
-, filelock
-, idna
-, keyring
-, oscrypto
-, packaging
-, platformdirs
-, pycryptodomex
-, pyjwt
-, pyopenssl
-, pythonOlder
-, pytz
-, requests
-, setuptools
-, sortedcontainers
-, tomlkit
-, typing-extensions
-, wheel
+{
+  lib,
+  asn1crypto,
+  buildPythonPackage,
+  certifi,
+  cffi,
+  charset-normalizer,
+  cython,
+  fetchPypi,
+  filelock,
+  idna,
+  keyring,
+  oscrypto,
+  packaging,
+  pandas,
+  platformdirs,
+  pyarrow,
+  pycryptodomex,
+  pyjwt,
+  pyopenssl,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  pytz,
+  requests,
+  setuptools,
+  sortedcontainers,
+  tomlkit,
+  typing-extensions,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "3.7.1";
-  format = "pyproject";
+  version = "3.8.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3GmC9lOGDt7xYUowR6FrywfiJ3Xm4JCAi79PdinEGR0=";
+    hash = "sha256-tbXoXQK0NIofLWxn30gpqjOHlnsBM9K3+jHRkNBgnDE=";
   };
 
-  # snowflake-connector-python requires arrow 10.0.1, which we don't have in
-  # nixpkgs, so we cannot build the C extensions that use it. thus, patch out
-  # cython and pyarrow from the build dependencies
-  #
-  # keep an eye on following issue for improvements to this situation:
-  #
-  #   https://github.com/snowflakedb/snowflake-connector-python/issues/1144
-  #
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '"cython",' "" \
-      --replace '"pyarrow>=10.0.1,<10.1.0",' ""
-  '';
-
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
+  build-system = [
+    cython
     setuptools
     wheel
   ];
 
-  pythonRelaxDeps = [
-    "pyOpenSSL"
-    "charset-normalizer"
-    "cryptography"
-    "platformdirs"
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asn1crypto
     certifi
     cffi
@@ -85,6 +70,10 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
+    pandas = [
+      pandas
+      pyarrow
+    ];
     secure-local-storage = [ keyring ];
   };
 
@@ -98,9 +87,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/snowflakedb/snowflake-connector-python/blob/v${version}/DESCRIPTION.md";
     description = "Snowflake Connector for Python";
     homepage = "https://github.com/snowflakedb/snowflake-connector-python";
+    changelog = "https://github.com/snowflakedb/snowflake-connector-python/blob/v${version}/DESCRIPTION.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

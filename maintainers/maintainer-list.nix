@@ -4371,6 +4371,13 @@
       fingerprint = "4779 D1D5 3C97 2EAE 34A5  ED3D D8AF C4BF 0567 0F9D";
     }];
   };
+  dan-theriault = {
+    email = "nix@theriault.codes";
+    github = "Dan-Theriault";
+    githubId = 13945563;
+    matrix = "@dan:matrix.org";
+    name = "Daniel Theriault";
+  };
   dariof4 = {
     name = "dariof4";
     email = "dazedtank@gmail.com";
@@ -4516,6 +4523,12 @@
     github = "DavSanchez";
     githubId = 11422515;
     name = "David Sánchez";
+  };
+  dav-wolff = {
+    email = "dav-wolff@outlook.com";
+    github = "dav-wolff";
+    githubId = 130931508;
+    name = "David Wolff";
   };
   dawidd6 = {
     email = "dawidd0811@gmail.com";
@@ -12198,6 +12211,12 @@
     github = "markuskowa";
     githubId = 26470037;
     name = "Markus Kowalewski";
+  };
+  marmolak = {
+    email = "hack.robin@gmail.com";
+    github = "marmolak";
+    githubId = 1709273;
+    name = "Robin Hack";
   };
   marsam = {
     github = "marsam";
