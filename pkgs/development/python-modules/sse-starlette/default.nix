@@ -10,13 +10,14 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, requests
 , starlette
 , uvicorn
 }:
 
 buildPythonPackage rec {
   pname = "sse-starlette";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     owner = "sysid";
     repo = "sse-starlette";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kDcSG/3foP7fMZKYrkKx6FHvT9c9rSzxyv2EHjQ2WSA=";
+    hash = "sha256-gBkEs1jSKIOme2rbLf+pM3jFDgJkxyU92q+GsUsp8Eo=";
   };
 
   build-system = [
@@ -45,6 +46,7 @@ buildPythonPackage rec {
     psutil
     pytest-asyncio
     pytestCheckHook
+    requests
   ];
 
   pythonImportsCheck = [
