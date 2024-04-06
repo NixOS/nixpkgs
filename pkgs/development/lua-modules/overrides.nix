@@ -480,6 +480,17 @@ in
     };
   });
 
+  haskell-tools-nvim  = prev.haskell-tools-nvim.overrideAttrs(oa: {
+    doCheck = lua.luaversion == "5.1";
+    nativeCheckInputs = [ final.nlua final.busted ];
+    checkPhase = ''
+      runHook preCheck
+      export HOME=$(mktemp -d)
+      busted --lua=nlua
+      runHook postCheck
+      '';
+  });
+
   plenary-nvim = prev.plenary-nvim.overrideAttrs (oa: {
     postPatch = ''
       sed -Ei lua/plenary/curl.lua \
