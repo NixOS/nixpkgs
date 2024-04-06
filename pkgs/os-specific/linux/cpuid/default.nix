@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, perl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,14 +15,10 @@ stdenv.mkDerivation rec {
   };
 
   # For pod2man during the build process.
-  nativeBuildInputs = [
-    perl
-  ];
+  nativeBuildInputs = [ perl ];
 
   # As runtime dependency for cpuinfo2cpuid.
-  buildInputs = [
-    perl
-  ];
+  buildInputs = [ perl ];
 
   # The Makefile hardcodes $(BUILDROOT)/usr as installation
   # destination. Just nuke all mentions of /usr to get the right
@@ -50,6 +47,9 @@ stdenv.mkDerivation rec {
     homepage = "http://etallen.com/cpuid.html";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ blitz ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
   };
 }
