@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "1.33.0";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "Backblaze";
     repo = "b2-sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-eMFgsjEb0DMTLqG+8IZru1dEAuKZW4dEszrznZxR+mc=";
+    hash = "sha256-0/UC4O19oO8SpboiPIhvkWBA8XHpc279fl377MooK54=";
   };
 
   nativeBuildInputs = [
