@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "pplpy";
-  version = "0.8.9";
+  version = "0.8.10";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-23o7Vx1u8FP3UTeXXpR8OhweRaMLq5Dq8hW05cwVeX4=";
+    sha256 = "sha256-1CohbIKRTc9NfAAN68mLsza4+D4Ca6XZUszNn4B07/0=";
   };
 
   buildInputs = [
