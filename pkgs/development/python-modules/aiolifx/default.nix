@@ -1,12 +1,12 @@
 { lib
 , async-timeout
+, bitstring
+, buildPythonPackage
 , click
 , fetchPypi
-, buildPythonPackage
-, pythonOlder
 , ifaddr
 , inquirerpy
-, bitstring
+, pythonOlder
 , setuptools
 }:
 
@@ -22,11 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-E3UxNTqss3urpMTwhLhIoAnBekGOIyFy0+sOj3mGlss=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     async-timeout
     bitstring
     click
@@ -43,10 +43,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module for local communication with LIFX devices over a LAN";
-    mainProgram = "aiolifx";
     homepage = "https://github.com/frawau/aiolifx";
     changelog = "https://github.com/frawau/aiolifx/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ netixx ];
+    mainProgram = "aiolifx";
   };
 }
