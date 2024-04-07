@@ -21075,6 +21075,12 @@
     githubId = 357664;
     name = "Viktor Petersson";
   };
+  vpochapuis = {
+    email = "vincent.professional@chapuis.ovh";
+    github = "vpochapuis";
+    githubId = 75721408;
+    name = "Vincent Chapuis";
+  };
   vq = {
     email = "vq@erq.se";
     github = "vq";
