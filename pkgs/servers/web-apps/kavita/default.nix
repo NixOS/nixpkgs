@@ -10,13 +10,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kavita";
-  version = "0.7.13";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "kareadita";
     repo = "kavita";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-S4lJTLxNjGmgBJt89i3whBglMU2EQ0VelLG6iP6bY8g=";
+    hash = "sha256-0pVQ/gezi8Hzxrn/1QVFTOXeHRCayYkA3Kh5b81oW34=";
   };
 
   backend = buildDotnetModule {
@@ -51,7 +51,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     npmBuildScript = "prod";
     npmFlags = [ "--legacy-peer-deps" ];
     npmRebuildFlags = [ "--ignore-scripts" ]; # Prevent playwright from trying to install browsers
-    npmDepsHash = "sha256-jseoczC2Ay3D1wDUZbWXTYQJGSWdgobJ3+Z1bp+PQG4=";
+    npmDepsHash = "sha256-yy4vEI+aDgAcCyXyzfPm31oGiTl+Gsycyh69D3yex2I=";
   };
 
   dontBuild = true;
