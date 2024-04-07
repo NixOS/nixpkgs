@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "nbformat";
-  version = "5.10.3";
+  version = "5.10.4";
   format = "pyproject";
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YO1ekQ73xiZLh9ZE8naxtJ4kARkw3u9UYFGI3eshFoU=";
+    hash = "sha256-MiFosU+Tel0RNimI7KwqSVLT2OOiy+sjGVhGMSJtWzo=";
   };
 
   nativeBuildInputs = [
