@@ -4156,6 +4156,17 @@
     githubId = 16950437;
     name = "cwyc";
   };
+  cybershadow = {
+    name = "Vladimir Panteleev";
+    email = "nixpkgs@cy.md";
+    matrix = "@cybershadow:cy.md";
+    github = "CyberShadow";
+    githubId = 160894;
+
+    keys = [{
+      fingerprint = "BBED 1B08 8CED 7F95 8917 FBE8 5004 F0FA D051 576D";
+    }];
+  };
   cynerd = {
     name = "Karel Kočí";
     email = "cynerd@email.cz";
@@ -4360,6 +4371,13 @@
       fingerprint = "4779 D1D5 3C97 2EAE 34A5  ED3D D8AF C4BF 0567 0F9D";
     }];
   };
+  dan-theriault = {
+    email = "nix@theriault.codes";
+    github = "Dan-Theriault";
+    githubId = 13945563;
+    matrix = "@dan:matrix.org";
+    name = "Daniel Theriault";
+  };
   dariof4 = {
     name = "dariof4";
     email = "dazedtank@gmail.com";
@@ -4505,6 +4523,12 @@
     github = "DavSanchez";
     githubId = 11422515;
     name = "David Sánchez";
+  };
+  dav-wolff = {
+    email = "dav-wolff@outlook.com";
+    github = "dav-wolff";
+    githubId = 130931508;
+    name = "David Wolff";
   };
   dawidd6 = {
     email = "dawidd0811@gmail.com";
@@ -6944,6 +6968,15 @@
     github = "Gabriella439";
     githubId = 1313787;
     name = "Gabriella Gonzalez";
+  };
+  gabyx = {
+    email = "gnuetzi@gmail.com";
+    github = "gabyx";
+    githubId = 647437;
+    name = "Gabriel Nützi";
+    keys = [{
+      fingerprint = "90AE CCB9 7AD3 4CE4 3AED  9402 E969 172A B075 7EB8";
+    }];
   };
   gador = {
     email = "florian.brandes@posteo.de";
@@ -12188,6 +12221,12 @@
     githubId = 26470037;
     name = "Markus Kowalewski";
   };
+  marmolak = {
+    email = "hack.robin@gmail.com";
+    github = "marmolak";
+    githubId = 1709273;
+    name = "Robin Hack";
+  };
   marsam = {
     github = "marsam";
     githubId = 65531;
@@ -13367,6 +13406,12 @@
     github = "moosingin3space";
     githubId = 830082;
     name = "Nathan Moos";
+  };
+  moraxyc = {
+    name = "Moraxyc Xu";
+    email = "nix@qaq.li";
+    github = "Moraxyc";
+    githubId = 69713071;
   };
   moredread = {
     email = "code@apb.name";

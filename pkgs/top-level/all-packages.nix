@@ -3563,7 +3563,7 @@ with pkgs;
 
   boulder = callPackage ../tools/admin/boulder { };
 
-  btrfs-assistant = libsForQt5.callPackage ../tools/misc/btrfs-assistant { };
+  btrfs-assistant = qt6.callPackage ../tools/misc/btrfs-assistant { };
 
   btrfs-heatmap = callPackage ../tools/filesystems/btrfs-heatmap { };
 
@@ -7808,7 +7808,9 @@ with pkgs;
 
   zeekscript = callPackage ../tools/security/zeekscript { };
 
-  zoekt = callPackage ../tools/text/zoekt { };
+  zoekt = callPackage ../tools/text/zoekt {
+    buildGoModule = buildGo121Module;
+  };
 
   zonemaster-cli = perlPackages.ZonemasterCLI;
 
@@ -15074,7 +15076,9 @@ with pkgs;
 
   zip = callPackage ../tools/archivers/zip { };
 
-  zincsearch = callPackage ../servers/search/zincsearch { };
+  zincsearch = callPackage ../servers/search/zincsearch {
+    buildGoModule = buildGo121Module;
+  };
 
   zkfuse = callPackage ../tools/filesystems/zkfuse { };
 
@@ -24945,7 +24949,9 @@ with pkgs;
 
   umockdev = callPackage ../development/libraries/umockdev { };
 
-  unconvert = callPackage ../development/tools/unconvert { };
+  unconvert = callPackage ../development/tools/unconvert {
+    buildGoModule = buildGo121Module;
+  };
 
   uncover = callPackage ../tools/security/uncover { };
 
@@ -37625,8 +37631,6 @@ with pkgs;
   spring = callPackage ../games/spring { asciidoc = asciidoc-full; };
 
   springLobby = callPackage ../games/spring/springlobby.nix { };
-
-  srb2 = callPackage ../games/srb2 { };
 
   ssl-cert-check = callPackage ../tools/admin/ssl-cert-check { };
 

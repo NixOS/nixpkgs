@@ -1,18 +1,16 @@
 { lib
 , stdenv
-, fetchurl
+, fetchgit
 , fetchFromGitHub
 , cmake
 , curl
 , nasm
 , libopenmpt
-, p7zip
 , game-music-emu
 , libpng
 , SDL2
 , SDL2_mixer
 , zlib
-, unzip
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
@@ -32,7 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     nasm
-    p7zip
     makeWrapper
     copyDesktopItems
   ];
@@ -51,20 +48,20 @@ stdenv.mkDerivation (finalAttrs: {
     pname = "srb2-data";
     version = finalAttrs.version;
 
-    nativeBuildInputs = [
-      unzip
-    ];
-
-    src = fetchurl {
-      url = "https://github.com/STJr/SRB2/releases/download/SRB2_release_${finalAttrs.version}/SRB2-v${lib.replaceStrings ["."] [""] finalAttrs.version}-Full.zip";
-      hash = "sha256-g7kaNRE1tjcF5J2v+kTnrDzz4zs5f1b/NH67ce2ifUo=";
+    src = fetchgit {
+      url = "https://git.do.srb2.org/STJr/srb2assets-public";
+      rev = "SRB2_release_${finalAttrs.version}";
+      hash = "sha256-OXvO5ZlujIYmYevc62Dtx192dxoujQMNFUCrH5quBBg=";
+      fetchLFS = true;
     };
 
-    sourceRoot = ".";
-
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/share/srb2
-      cp -r *pk3 *dta *dat models/ $out/share/srb2/
+      cp -r * $out/share/srb2
+
+      runHook postInstall
     '';
   };
 
@@ -92,10 +89,13 @@ stdenv.mkDerivation (finalAttrs: {
       desktopName = name;
       genericName = name;
       categories = [ "Game" ];
+      startupWMClass = ".srb2-wrapped";
     })
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/applications $out/share/pixmaps $out/share/icons
 
     copyDesktopItems
@@ -105,6 +105,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     cp bin/lsdlsrb2 $out/bin/srb2
     wrapProgram $out/bin/srb2 --set SRB2WADDIR "${finalAttrs.assets}/share/srb2"
+
+    runHook postInstall
   '';
 
   meta = with lib; {
