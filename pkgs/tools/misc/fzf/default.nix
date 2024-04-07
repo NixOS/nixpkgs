@@ -3,7 +3,6 @@
 , buildGoModule
 , fetchFromGitHub
 , writeShellScriptBin
-, runtimeShell
 , installShellFiles
 , bc
 , ncurses
@@ -74,14 +73,6 @@ buildGoModule rec {
     install -D plugin/* -t $out/share/vim-plugins/${pname}/plugin
     mkdir -p $out/share/nvim
     ln -s $out/share/vim-plugins/${pname} $out/share/nvim/site
-
-    cat <<SCRIPT > $out/bin/fzf-share
-    #!${runtimeShell}
-    # Run this script to find the fzf shared folder where all the shell
-    # integration scripts are living.
-    echo $out/share/fzf
-    SCRIPT
-    chmod +x $out/bin/fzf-share
   '';
 
   passthru.tests.version = testers.testVersion {
