@@ -38,15 +38,17 @@ let
     getAttr
     importJSON
     listToAttrs
+    optionalAttrs
     recurseIntoAttrs
     replaceStrings
+    versionAtLeast
     ;
 
   callPackage = newScope self;
 
   # The latest Dwarf Fortress version. Maintainers: when a new version comes
   # out, ensure that (unfuck|dfhack|twbt) are all up to date before changing
-  # this. Note that unfuck and twbt are not required for v50.
+  # this. Note that unfuck and twbt are not required for 50.
   latestVersion = "50.12";
 
   # Converts a version to a package name.
@@ -58,16 +60,16 @@ let
       name = versionToName dfVersion;
       value =
         let
-          isV50 = lib.versionAtLeast dfVersion "50.0";
+          isAtLeast50 = versionAtLeast dfVersion "50.0";
 
-          dwarf-fortress-unfuck = if isV50 then null else callPackage ./unfuck.nix { inherit dfVersion; };
+          dwarf-fortress-unfuck = optionalAttrs (!isAtLeast50) (callPackage ./unfuck.nix { inherit dfVersion; });
 
           dwarf-fortress = callPackage ./game.nix {
             inherit dfVersion;
             inherit dwarf-fortress-unfuck;
           };
 
-          twbt = if isV50 then null else callPackage ./twbt { inherit dfVersion; };
+          twbt = optionalAttrs (!isAtLeast50) (callPackage ./twbt { inherit dfVersion; });
 
           dfhack = callPackage ./dfhack {
             inherit (perlPackages) XMLLibXML XMLLibXSLT;
@@ -77,10 +79,13 @@ let
 
           dwarf-therapist = libsForQt5.callPackage ./dwarf-therapist/wrapper.nix {
             inherit dwarf-fortress;
-            dwarf-therapist = libsForQt5.callPackage ./dwarf-therapist {
+            dwarf-therapist = (libsForQt5.callPackage ./dwarf-therapist {
               texlive = texliveBasic.withPackages (ps: with ps; [ float caption wrapfig adjmulticol sidecap preprint enumitem ]);
-              inherit isV50;
-            };
+            }).override (optionalAttrs (!isAtLeast50) {
+              # 41.2.5 is the last version to support Dwarf Fortress 0.47.
+              version = "41.2.5";
+              hash = "sha256-xfYBtnO1n6OcliVt07GsQ9alDJIfWdVhtuyWwuvXSZs=";
+            });
           };
         in
         callPackage ./wrapper {

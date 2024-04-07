@@ -6,23 +6,20 @@
 , cmake
 , texlive
 , ninja
-, isV50 ? true
+, version ? "42.1.5"
+, hash ? "sha256-aUakfUjnIZWNDhCkG3A6u7BaaCG8kPMV/Fu2S73CoDg="
 }:
 
 stdenv.mkDerivation rec {
   pname = "dwarf-therapist";
 
-  # 41.2.5 is the last version to support Dwarf Fortress 0.47.
-  version = if isV50 then "42.1.5" else "41.2.5";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "Dwarf-Therapist";
     repo = "Dwarf-Therapist";
     rev = "v${version}";
-    hash = if isV50 then # latest
-      "sha256-aUakfUjnIZWNDhCkG3A6u7BaaCG8kPMV/Fu2S73CoDg="
-    else # 41.2.5
-      "sha256-xfYBtnO1n6OcliVt07GsQ9alDJIfWdVhtuyWwuvXSZs=";
+    inherit hash;
   };
 
   nativeBuildInputs = [ texlive cmake ninja ];

@@ -39,9 +39,10 @@ let
     inherit enableStoneSense;
   };
 
-  isV50 = dwarf-fortress.baseVersion >= 50;
+  isAtLeast50 = dwarf-fortress.baseVersion >= 50;
 
-  enableTWBT' = enableTWBT && (twbt != null);
+  # If TWBT is null or the dfVersion is wrong, it isn't supported (for example, on version 50).
+  enableTWBT' = enableTWBT && twbt != null && (twbt.dfVersion or null) == dwarf-fortress.version;
 
   ptheme =
     if builtins.isString theme
@@ -200,27 +201,31 @@ stdenv.mkDerivation rec {
   nativeInstallCheckInputs = [ expect xvfb-run ];
 
   installCheckPhase = let
-    commonExpectComponents = fmod: ''
-      ${lib.optionalString isV50 ''expect "Loading audio..."''}
-      ${lib.optionalString (!fmod && isV50) ''expect "Failed to load fmod, trying SDL_mixer"''}
-      ${lib.optionalString isV50 ''expect "Audio loaded successfully!"''}
+    commonExpectStatements = fmod: lib.optionalString isAtLeast50 ''
+      expect "Loading audio..."
+    '' + lib.optionalString (!fmod && isAtLeast50) ''
+      expect "Failed to load fmod, trying SDL_mixer"
+    '' + lib.optionalString isAtLeast50 ''
+      expect "Audio loaded successfully!"
+    '' + ''
       expect "Loading bindings from data/init/interface.txt"
     '';
-    dfHackExpectScript = writeText "dfhack-test.exp" ''
-      spawn xvfb-run $env(out)/bin/dfhack
-      ${commonExpectComponents false}
+    dfHackExpectScript = writeText "dfhack-test.exp" (''
+      spawn env NIXPKGS_DF_OPTS=debug xvfb-run $env(out)/bin/dfhack
+    '' + commonExpectStatements false + ''
+      expect "DFHack is ready. Have a nice day!"
       expect "DFHack version ${version}"
       expect "\[DFHack\]#"
       send -- "lua print(os.getenv('out'))\r"
       expect "$env(out)"
       # Don't send 'die' here; just exit. Some versions of dfhack crash on exit.
       exit 0
-    '';
-    vanillaExpectScript = fmod: writeText "vanilla-test.exp" ''
-      spawn ${lib.optionalString fmod "env NIXPKGS_DF_OPTS=fmod"} xvfb-run $env(out)/bin/dwarf-fortress
-      ${commonExpectComponents fmod}
+    '');
+    vanillaExpectScript = fmod: writeText "vanilla-test.exp" (''
+      spawn env NIXPKGS_DF_OPTS=debug,${lib.optionalString fmod "fmod"} xvfb-run $env(out)/bin/dwarf-fortress
+    '' + commonExpectStatements fmod + ''
       exit 0
-    '';
+    '');
   in
   ''
     export HOME="$(mktemp -dt dwarf-fortress.XXXXXX)"
@@ -228,7 +233,7 @@ stdenv.mkDerivation rec {
     expect ${dfHackExpectScript}
     df_home="$(find ~ -name "df_*" | head -n1)"
     test -f "$df_home/dfhack"
-  '' + lib.optionalString isV50 ''
+  '' + lib.optionalString isAtLeast50 ''
     expect ${vanillaExpectScript true}
     df_home="$(find ~ -name "df_*" | head -n1)"
     test ! -f "$df_home/dfhack"

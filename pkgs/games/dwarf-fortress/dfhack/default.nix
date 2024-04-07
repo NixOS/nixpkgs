@@ -84,18 +84,6 @@ let
       xmlRev = "cca87907c1cbfcf4af957b0bea3a961a345b1581";
       needsPatches = true;
     };
-    "50.10" = {
-      dfHackRelease = "50.10-r1.1";
-      hash = "sha256-k2j8G4kJ/RYE8W0YDOxcsRb5qjjn4El+rigf0v3AqZU=";
-      xmlRev = "041493b221e0799c106abeac1f86df4535ab80d3";
-      prerelease = false;
-    };
-    "50.11" = {
-      dfHackRelease = "50.11-r7";
-      hash = "sha256-3KsFc0i4XkzoeRvcl5GUlx/fJB1HyqfZm+xL6T4oT/A=";
-      xmlRev = "cca87907c1cbfcf4af957b0bea3a961a345b1581";
-      prerelease = false;
-    };
     "50.12" = {
       dfHackRelease = "50.12-r3rc1";
       hash = "sha256-EcM/FLulGVJgaERFMpYi9O5i1QKZyFb0X4HQagVnO8k=";
@@ -112,8 +100,8 @@ let
     else throw "[DFHack] Unsupported Dwarf Fortress version: ${dfVersion}";
 
   version = release.dfHackRelease;
-  isV50 = versionAtLeast version "50.0";
-  needsV50Patches = isV50 && (release.needsPatches or false);
+  isAtLeast50 = versionAtLeast version "50.0";
+  needs50Patches = isAtLeast50 && (release.needsPatches or false);
 
   # revision of library/xml submodule
   xmlRev = release.xmlRev;
@@ -167,11 +155,11 @@ in
       name = "fix-protobuf.patch";
       url = "https://github.com/DFHack/dfhack/commit/7bdf958518d2892ee89a7173224a069c4a2190d8.patch";
       hash = "sha256-p+mKhmYbnhWKNiGPMjbYO505Gcg634n0nudqH0NX3KY=";
-    }) ++ optional needsV50Patches (fetchpatch {
+    }) ++ optional needs50Patches (fetchpatch {
       name = "use-system-sdl2.patch";
       url = "https://github.com/DFHack/dfhack/commit/734fb730d72e53ebe67f4a041a24dd7c50307ee3.patch";
       hash = "sha256-uLX0gdVSzKEVibyUc1UxcQzdYkRm6D8DF+1eSOxM+qU=";
-    }) ++ optional needsV50Patches (fetchpatch {
+    }) ++ optional needs50Patches (fetchpatch {
       name = "rename-lerp.patch";
       url = "https://github.com/DFHack/dfhack/commit/389dcf5cfcdb8bfb8deeb05fa5756c9f4f5709d1.patch";
       hash = "sha256-QuDtGURhP+nM+x+8GIKO5LrMcmBkl9JSHHIeqzqGIPQ=";
@@ -196,8 +184,8 @@ in
 
     # We don't use system libraries because dfhack needs old C++ ABI.
     buildInputs = [ zlib ]
-      ++ optional isV50 SDL2
-      ++ optional (!isV50) SDL
+      ++ optional isAtLeast50 SDL2
+      ++ optional (!isAtLeast50) SDL
       ++ optionals enableStoneSense [ allegro5 libGLU libGL ];
 
     preConfigure = ''
