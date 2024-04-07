@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "herepy";
-  version = "3.6.1";
+  version = "3.6.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "abdullahselek";
     repo = "HerePy";
     rev = "refs/tags/${version}";
-    hash = "sha256-DOtlXoVelTGY/fKkHW/K0d0w52Q7N91Whi9AHG4tRZQ=";
+    hash = "sha256-+DI9wjYVAUKdGEXWhbV9Xp0oOazcB+sS89ugIZuZM2w=";
   };
 
   build-system = [
