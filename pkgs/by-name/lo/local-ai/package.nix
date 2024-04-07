@@ -67,9 +67,17 @@ let
     else if with_clblas then "clblas"
     else "";
 
+  inherit (cudaPackages) libcublas cuda_nvcc cuda_cccl cuda_cudart;
+
   typedBuiltInputs =
     lib.optionals with_cublas
-      [ cudaPackages.cudatoolkit cudaPackages.cuda_cudart ]
+      [
+        cuda_nvcc # should be part of nativeBuildInputs
+        cuda_cudart
+        cuda_cccl
+        (lib.getDev libcublas)
+        (lib.getLib libcublas)
+      ]
     ++ lib.optionals with_clblas
       [ clblast ocl-icd opencl-headers ]
     ++ lib.optionals with_openblas
@@ -430,7 +438,7 @@ let
       "VERSION=v${version}"
       "BUILD_TYPE=${BUILD_TYPE}"
     ]
-    ++ lib.optional with_cublas "CUDA_LIBPATH=${cudaPackages.cuda_cudart}/lib"
+    ++ lib.optional with_cublas "CUDA_LIBPATH=${cuda_cudart}/lib"
     ++ lib.optional with_tts "PIPER_CGO_CXXFLAGS=-DSPDLOG_FMT_EXTERNAL=1";
 
     buildPhase = ''
@@ -467,7 +475,7 @@ let
     postFixup = ''
       wrapProgram $out/bin/${pname} \
     '' + lib.optionalString with_cublas ''
-      --prefix LD_LIBRARY_PATH : "${cudaPackages.libcublas}/lib:${cudaPackages.cuda_cudart}/lib:/run/opengl-driver/lib" \
+      --prefix LD_LIBRARY_PATH : "${lib.getLib libcublas}/lib:${cuda_cudart}/lib:/run/opengl-driver/lib" \
     '' + lib.optionalString with_clblas ''
       --prefix LD_LIBRARY_PATH : "${clblast}/lib:${ocl-icd}/lib" \
     '' + lib.optionalString with_openblas ''
