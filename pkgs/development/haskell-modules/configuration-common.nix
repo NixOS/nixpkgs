@@ -3067,4 +3067,7 @@ self: super: {
     tasty = super.tasty_1_5;
     tasty-quickcheck = super.tasty-quickcheck_0_10_3;
   });
+
+  # Too strict bounds on text. Can be removed after https://github.com/alx741/currencies/pull/3 is merged
+  currencies = doJailbreak super.currencies;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

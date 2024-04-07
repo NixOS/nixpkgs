@@ -1082,7 +1082,6 @@ broken-packages:
   - curl-aeson # failure in job https://hydra.nixos.org/build/233210106 at 2023-09-02
   - curl-runnings # failure in job https://hydra.nixos.org/build/233258680 at 2023-09-02
   - curly-expander # failure in job https://hydra.nixos.org/build/233250838 at 2023-09-02
-  - currencies # failure in job https://hydra.nixos.org/build/233216717 at 2023-09-02
   - currency-convert # failure in job https://hydra.nixos.org/build/233224509 at 2023-09-02
   - curry-base # failure in job https://hydra.nixos.org/build/233246647 at 2023-09-02
   - CurryDB # failure in job https://hydra.nixos.org/build/233238995 at 2023-09-02
