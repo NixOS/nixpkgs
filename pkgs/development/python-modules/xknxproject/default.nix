@@ -7,7 +7,6 @@
 , pyzipper
 , setuptools
 , striprtf
-, wheel
 }:
 
 buildPythonPackage rec {
@@ -24,12 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-/Zg4MYOvbsbJ0zyKuq+gX0PNbm8TyyBMziIaGCq6Lt8=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cryptography
     pyzipper
     striprtf
@@ -44,7 +42,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "ETS project parser";
+    description = "Library to extract KNX projects and parses the underlying XML";
     homepage = "https://github.com/XKNX/xknxproject";
     changelog = "https://github.com/XKNX/xknxproject/releases/tag/${version}";
     license = licenses.gpl2Only;
