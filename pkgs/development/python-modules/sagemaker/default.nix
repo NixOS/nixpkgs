@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, fetchpatch
 , pythonRelaxDepsHook
 , attrs
 , boto3
@@ -37,6 +38,19 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-RE4uyIpFiZNDyS5R6+gMLlj0vcAIiHPattFPTSMGnCI=";
   };
+
+  patches = [
+    # Distutils removal, fix build with python 3.12
+    # https://github.com/aws/sagemaker-python-sdk/pull/4544
+    (fetchpatch {
+      url = "https://github.com/aws/sagemaker-python-sdk/commit/84447ba59e544c810aeb842fd058e20d89e3fc74.patch";
+      hash = "sha256-B8Q18ViB7xYy1F5LoL1NvXj2lnFPgt+C9wssSODyAXM=";
+    })
+    (fetchpatch {
+      url = "https://github.com/aws/sagemaker-python-sdk/commit/e9e08a30cb42d4b2d7299c1c4b42d680a8c78110.patch";
+      hash = "sha256-uGPtXSXfeaIvt9kkZZKQDuiZfoRgw3teffuxai1kKlY=";
+    })
+  ];
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
