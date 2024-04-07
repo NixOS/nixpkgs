@@ -2718,6 +2718,28 @@ buildLuarocksPackage {
   };
 }) {};
 
+neorg = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, lua-utils-nvim, luaOlder, nui-nvim, nvim-nio, pathlib-nvim, plenary-nvim }:
+buildLuarocksPackage {
+  pname = "neorg";
+  version = "9.1.1-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/neorg-9.1.1-1.rockspec";
+    sha256 = "0zafy1hkrvh41vlx1g4rqlcvc4x9pi8dcji30qi0b8lj45pldyr3";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/nvim-neorg/neorg/archive/v9.1.1.zip";
+    sha256 = "18lk22lfzwwn4hy2s035g3kslqmvrr28lm5w9k3dazqwj5nlka3z";
+  };
+  disabled = luaOlder "5.1";
+  propagatedBuildInputs = [ lua-utils-nvim nui-nvim nvim-nio pathlib-nvim plenary-nvim ];
+  meta = {
+    homepage = "https://github.com/nvim-neorg/neorg";
+    description = "Modernity meets insane extensibility. The future of organizing your life in Neovim.";
+    maintainers = with lib.maintainers; [ GaetanLepage ];
+    license.fullName = "GPL-3.0";
+  };
+}) {};
+
 neotest = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder, nvim-nio, plenary-nvim }:
 buildLuarocksPackage {
   pname = "neotest";

@@ -7443,18 +7443,6 @@ final: prev:
     meta.homepage = "https://github.com/ii14/neorepl.nvim/";
   };
 
-  neorg = buildVimPlugin {
-    pname = "neorg";
-    version = "2024-09-08";
-    src = fetchFromGitHub {
-      owner = "nvim-neorg";
-      repo = "neorg";
-      rev = "ba35900b21921c439e676b063a79c8fad914eac9";
-      sha256 = "12sgvf7zbabxvmdf07cv8rcql6jdgdv5xdcn7v5w42q8lg9mps10";
-    };
-    meta.homepage = "https://github.com/nvim-neorg/neorg/";
-  };
-
   neorg-telescope = buildVimPlugin {
     pname = "neorg-telescope";
     version = "2024-07-30";
