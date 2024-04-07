@@ -1,23 +1,24 @@
-{ lib
-, absl-py
-, buildPythonPackage
-, cached-property
-, etils
-, fetchPypi
-, flit-core
-, importlib-resources
-, jax
-, jaxlib
-, msgpack
-, nest-asyncio
-, numpy
-, protobuf
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, tensorstore
-, typing-extensions
+{
+  lib,
+  absl-py,
+  buildPythonPackage,
+  cached-property,
+  etils,
+  fetchPypi,
+  flit-core,
+  importlib-resources,
+  jax,
+  jaxlib,
+  msgpack,
+  nest-asyncio,
+  numpy,
+  protobuf,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  tensorstore,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -33,9 +34,7 @@ buildPythonPackage rec {
     hash = "sha256-H96IkUM3IxV79uddNBCU0dq+0dvPx8/Ps4HeCItGi2A=";
   };
 
-  build-system = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
   dependencies = [
     absl-py
