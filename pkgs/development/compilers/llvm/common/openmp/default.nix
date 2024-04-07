@@ -1,7 +1,10 @@
 { lib
 , stdenv
 , llvm_meta
-, monorepoSrc
+, release_version
+, patches ? []
+, monorepoSrc ? null
+, src ? null
 , runCommand
 , cmake
 , ninja
@@ -14,43 +17,47 @@
 , xcbuild
 , version
 }:
-
-stdenv.mkDerivation rec {
+let
   pname = "openmp";
-  inherit version;
+  src' =
+    if monorepoSrc != null then
+      runCommand "${pname}-src-${version}" {} ''
+        mkdir -p "$out"
+        cp -r ${monorepoSrc}/cmake "$out"
+        cp -r ${monorepoSrc}/${pname} "$out"
+      '' else src;
+in
+stdenv.mkDerivation (rec {
+  inherit pname version patches;
 
-  src = runCommand "${pname}-src-${version}" {} ''
-    mkdir -p "$out"
-    cp -r ${monorepoSrc}/cmake "$out"
-    cp -r ${monorepoSrc}/${pname} "$out"
-  '';
+  src = src';
 
-  sourceRoot = "${src.name}/${pname}";
+  sourceRoot =
+    if lib.versionOlder release_version "13" then null
+    else "${src.name}/${pname}";
 
-  patches = [
-    ./fix-find-tool.patch
-    ./run-lit-directly.patch
+  outputs = [ "out" ]
+    ++ lib.optionals (lib.versionAtLeast release_version "14") [ "dev" ];
+
+  patchFlags =
+    if lib.versionOlder release_version "14" then [ "-p2" ]
+    else null;
+
+  nativeBuildInputs = [
+    cmake
+  ] ++ lib.optionals (lib.versionAtLeast release_version "15") [
+    ninja
+  ] ++ [ perl ] ++ lib.optionals (lib.versionAtLeast release_version "14") [
+    pkg-config lit
   ];
 
-  outputs = [ "out" "dev" ];
-
-  nativeBuildInputs = [ cmake ninja perl pkg-config lit ];
   buildInputs = [
     (if stdenv.buildPlatform == stdenv.hostPlatform then llvm else targetLlvm)
   ];
 
-  nativeCheckInputs = lib.optional stdenv.hostPlatform.isDarwin xcbuild.xcrun;
-
-  # Unsup:Pass:XFail:Fail
-  # 26:267:16:8
-  doCheck = false;
-  checkTarget = "check-openmp";
-
-  preCheck = ''
-    patchShebangs ../tools/archer/tests/deflake.bash
-  '';
-
-  cmakeFlags = [
+  cmakeFlags = lib.optionals (lib.versions.major release_version == "13") [
+    "-DLIBOMPTARGET_BUILD_AMDGCN_BCLIB=OFF" # Building the AMDGCN device RTL fails
+  ] ++ lib.optionals (lib.versionAtLeast release_version "14") [
     "-DCLANG_TOOL=${clang-unwrapped}/bin/clang"
     "-DOPT_TOOL=${llvm}/bin/opt"
     "-DLINK_TOOL=${llvm}/bin/llvm-link"
@@ -70,4 +77,10 @@ stdenv.mkDerivation rec {
     # License (a BSD-like license)":
     license = with lib.licenses; [ mit ncsa ];
   };
-}
+} // (if lib.versionAtLeast release_version "14" then {
+  doCheck = false;
+  checkTarget = "check-openmp";
+  preCheck = ''
+    patchShebangs ../tools/archer/tests/deflake.bash
+  '';
+} else {}))
