@@ -5,6 +5,7 @@
 , pytestCheckHook
 , pythonOlder
 , pythonRelaxDepsHook
+, setuptools
 , setuptools-scm
 , uharfbuzz
 , youseedee
@@ -12,15 +13,16 @@
 
 buildPythonPackage rec {
   pname = "gflanguages";
-  version = "5.0.4";
-  format = "setuptools";
+  version = "0.5.17";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AGXpg9EhwdhrcbdcHqz2v9TLaWH1F5gr0QhSuEN2GDA=";
+    hash = "sha256-dScgRQ6usjSqV0FqDyP+KGvHL06wlTFVcO+MmZ2NMAs=";
   };
+
+  pyproject = true;
 
   # Relax the dependency on protobuf 3. Other packages in the Google Fonts
   # ecosystem have begun upgrading from protobuf 3 to protobuf 4,
@@ -30,11 +32,12 @@ buildPythonPackage rec {
     "protobuf"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     protobuf
   ];
 
