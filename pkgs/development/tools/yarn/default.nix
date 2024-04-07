@@ -4,6 +4,7 @@
 , nodejs
 , stdenvNoCC
 , testers
+, gitUpdater
 , withNode ? true
 }:
 
@@ -38,6 +39,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     tests.version = lib.optionalAttrs withNode (testers.testVersion {
       package = finalAttrs.finalPackage;
     });
+
+    updateScript = gitUpdater {
+      url = "https://github.com/yarnpkg/yarn.git";
+      rev-prefix = "v";
+    };
   };
 
   meta = with lib; {
