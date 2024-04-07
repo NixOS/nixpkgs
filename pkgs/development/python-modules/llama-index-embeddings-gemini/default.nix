@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-generativeai
-, llama-index-core
-, poetry-core
-, pytestCheckHook
-, pythonRelaxDepsHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-generativeai,
+  llama-index-core,
+  poetry-core,
+  pytestCheckHook,
+  pythonRelaxDepsHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-HYwYA67/7gDxE7ZxQkkyblgwE83gZXuDmUuseXujr5g=";
   };
 
-  pythonRelaxDeps = [
-    "google-generativeai"
-  ];
+  pythonRelaxDeps = [ "google-generativeai" ];
 
   build-system = [
     poetry-core
@@ -39,9 +38,7 @@ buildPythonPackage rec {
   # Tests are only available in the mono repo
   doCheck = false;
 
-  pythonImportsCheck = [
-    "llama_index.embeddings.gemini"
-  ];
+  pythonImportsCheck = [ "llama_index.embeddings.gemini" ];
 
   meta = with lib; {
     description = "LlamaIndex Llms Integration for Gemini";
