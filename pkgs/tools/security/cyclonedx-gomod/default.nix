@@ -9,12 +9,17 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
-    repo = pname;
-    rev = "v${version}";
+    repo = "cyclonedx-gomod";
+    rev = "refs/tags/v${version}";
     hash = "sha256-RM8ZH1mO+72ptoU7YKXlCZAyDhYZ7MFXyDYrqBQwsDI=";
   };
 
   vendorHash = "sha256-1ibMneSOYs5C6Ul8m/rVXVFBJHZrH1D5eWRwVVJ6a+A=";
+
+  ldflags = [
+    "-w"
+    "-s"
+  ];
 
   # Tests require network access and cyclonedx executable
   doCheck = false;
