@@ -55,7 +55,6 @@
 , fetchzip
 , fetchurl
 , writeText
-, writeTextFile
 , symlinkJoin
 , linkFarmFromDrvs
 , jq
@@ -167,7 +166,6 @@ let
     patches = [ ];
     nativeBuildInputs = [ cmake ];
     cmakeFlags = (self.cmakeFlags or [ ]) ++ [
-      # -DCMAKE_C_FLAGS="-D_FILE_OFFSET_BITS=64"
       (lib.cmakeBool "BUILD_SHARED_LIBS" true)
       (lib.cmakeBool "USE_ASYNC" false)
       (lib.cmakeBool "USE_MBROLA" false)
