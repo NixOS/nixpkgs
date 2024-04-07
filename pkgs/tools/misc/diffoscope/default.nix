@@ -93,6 +93,7 @@ python3.pkgs.buildPythonApplication rec {
 
   patches = [
     ./ignore_links.patch
+    ./openssh-no-dsa.patch # https://salsa.debian.org/reproducible-builds/diffoscope/-/merge_requests/139
   ];
 
   postPatch = ''
