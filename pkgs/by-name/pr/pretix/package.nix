@@ -82,6 +82,7 @@ python.pkgs.buildPythonApplication rec {
       --replace-fail vat_moss_forked==2020.3.20.0.11.0 vat-moss \
       --replace-fail "bleach==5.0.*" bleach \
       --replace-fail "dnspython==2.6.*" dnspython \
+      --replace-fail "django-countries==7.5.*" django-countries \
       --replace-fail "django-filter==24.1" django-filter \
       --replace-fail "importlib_metadata==7.*" importlib_metadata \
       --replace-fail "markdown==3.6" markdown \
