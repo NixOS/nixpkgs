@@ -1,0 +1,14 @@
+diff --git a/src/globalshortcutsregistry.cpp b/src/globalshortcutsregistry.cpp
+index 3cbaded..9adcf38 100644
+--- a/src/globalshortcutsregistry.cpp
++++ b/src/globalshortcutsregistry.cpp
+@@ -909,7 +909,8 @@ void GlobalShortcutsRegistry::refreshServices()
+             return false;
+         }
+ 
+-        return true;
++        qCDebug(KGLOBALACCELD) << "NIXPKGS: component" << component->uniqueName() << "disappeared, keeping shortcuts anyway";
++        return false;
+     });
+ 
+     m_components.erase(it, m_components.end());
