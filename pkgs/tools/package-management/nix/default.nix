@@ -248,11 +248,8 @@ in lib.makeExtensible (self: ({
   };
 
   nix_2_19 = common {
-    version = "2.19.3";
-    hash = "sha256-EtL6M0H5+0mFbFh+teVjm+0B+xmHoKwtBvigS5NMWoo=";
-    patches = [
-      ./patches/2_19/CVE-2024-27297.patch
-    ];
+    version = "2.19.4";
+    hash = "sha256-qXjyVmDm1SFWk1az3GWIsJ0fVG0nWet2FdldFOnUydI=";
   };
 
   nix_2_20 = common {
