@@ -1,32 +1,37 @@
-{ lib
-, buildPythonPackage
-, setuptools
-, wheel
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ping3";
-  version = "4.0.5";
-  format = "pyproject";
+  version = "4.0.7";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HwkYXokyFDZSSZayEtID08q1rSJofedGRXDxx/udwFE=";
+    hash = "sha256-uO2ObCZvizdGSrobagC6GDh116z5q5yIH9P8PcvpCi8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
+
+  # Tests require additional permissions
+  doCheck = false;
 
   pythonImportsCheck = [ "ping3" ];
 
   meta = with lib; {
-    description = "A pure python3 version of ICMP ping implementation using raw socket";
-    mainProgram = "ping3";
-    homepage = "https://pypi.org/project/ping3";
+    description = "ICMP ping implementation using raw socket";
+    homepage = "https://github.com/kyan001/ping3";
+    changelog = "https://github.com/kyan001/ping3/blob/master/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ siraben ];
+    mainProgram = "ping3";
   };
 }

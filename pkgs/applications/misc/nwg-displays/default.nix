@@ -8,7 +8,7 @@
 , pango
 , python310Packages
 , wrapGAppsHook
-, hyprlandSupport ? false
+, hyprlandSupport ? true
 , wlr-randr
 }:
 
