@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , fetchpatch
 , pythonRelaxDepsHook
+, setuptools
 , attrs
 , boto3
 , cloudpickle
@@ -21,14 +22,18 @@
 , platformdirs
 , tblib
 , urllib3
+, requests
 , docker
+, tqdm
+, psutil
 , scipy
+, accelerate
 }:
 
 buildPythonPackage rec {
   pname = "sagemaker";
   version = "2.214.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -52,16 +57,17 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
-    "attrs"
-    "boto3"
+    "cloudpickle"
+    "importlib-metadata"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     boto3
     cloudpickle
@@ -78,6 +84,11 @@ buildPythonPackage rec {
     jsonschema
     platformdirs
     tblib
+    urllib3
+    requests
+    docker
+    tqdm
+    psutil
   ];
 
   doCheck = false; # many test dependencies are not available in nixpkgs
@@ -90,6 +101,7 @@ buildPythonPackage rec {
   passthru.optional-dependencies = {
     local = [ urllib3 docker pyyaml ];
     scipy = [ scipy ];
+    huggingface = [ accelerate ];
     # feature-processor = [ pyspark sagemaker-feature-store-pyspark ]; # not available in nixpkgs
   };
 
