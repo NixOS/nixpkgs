@@ -35811,7 +35811,7 @@ with pkgs;
     xwaylandSupport = false;
   };
 
-  chatterino2 = qt6Packages.callPackage ../applications/networking/instant-messengers/chatterino2 {
+  chatterino2 = callPackage ../applications/networking/instant-messengers/chatterino2 {
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
 
