@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "xmlschema";
-  version = "3.0.2";
+  version = "3.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "sissaschool";
     repo = "xmlschema";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jYFhoNx4Oxm7c0LsSQ0xw9fY/yxfQU5JoP5RteHzeYM=";
+    hash = "sha256-jhof4C/jbMcvBRTLFdeFq2+ZucoDhbdcLE9IWvgzN0Y=";
   };
 
   nativeBuildInputs = [
