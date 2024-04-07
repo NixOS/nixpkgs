@@ -50,10 +50,10 @@ buildGoModule rec {
     # https://codeberg.org/forgejo/forgejo/pulls/2443
     # https://codeberg.org/forgejo/forgejo/commit/2fe5f6f73283c2f6935ded62440a1f15ded12dcd
     rev = "2fe5f6f73283c2f6935ded62440a1f15ded12dcd";
-    hash = "sha256-s+hYFpgQ6MJgQBRW3Ze7BIjvsc765D5sAcrtO/wmIgo=";
+    hash = "sha256-qk30Sixd4G9ivkpC1c9IAjCkSNU2ohzDPL9WSyQ6NIw=";
   };
 
-  vendorHash = "sha256-dgtZjsLBwblhdge3BvdbK/mN/TeZKps9K5dJbqomtjo=";
+  vendorHash = "sha256-HDKirjQI4KvHvzDCqKe9nHvQUv3VNRl5tkr0rO7gcAY=";
 
   subPackages = [ "." ];
 
