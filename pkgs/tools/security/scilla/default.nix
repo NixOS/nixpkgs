@@ -9,12 +9,17 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "edoardottt";
-    repo = pname;
+    repo = "scilla";
     rev = "refs/tags/v${version}";
     hash = "sha256-ms52ii2cbZSZtcyxhVN+FbGP6hysoLvS7XwdPqxYymU=";
   };
 
   vendorHash = "sha256-tOg4T9yQm1aj5G89lUeRUTxi4YrwpRi5KDcpWw4TimY=";
+
+  ldflags = [
+    "-w"
+    "-s"
+  ];
 
   checkFlags = [
     # requires network access
