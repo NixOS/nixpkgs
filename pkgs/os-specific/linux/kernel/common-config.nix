@@ -32,7 +32,11 @@ let
           (stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit) ||
           (stdenv.hostPlatform.isMips && stdenv.hostPlatform.is64bit));
 
-  options = {
+  options = let
+    # Use zstd for kernel compression if 64-bit and newer than 5.9, otherwise xz.
+    # i686 issues: https://github.com/NixOS/nixpkgs/pull/117961#issuecomment-812106375
+    useZstd = stdenv.buildPlatform.is64bit && versionAtLeast version "5.9";
+  in {
 
     debug = {
       # Necessary for BTF
@@ -916,11 +920,7 @@ let
       MEM_SOFT_DIRTY = mkIf (!stdenv.isx86_32) yes;
     };
 
-    misc = let
-      # Use zstd for kernel compression if 64-bit and newer than 5.9, otherwise xz.
-      # i686 issues: https://github.com/NixOS/nixpkgs/pull/117961#issuecomment-812106375
-      useZstd = stdenv.buildPlatform.is64bit && versionAtLeast version "5.9";
-    in {
+    misc = {
       KERNEL_XZ            = mkIf (!useZstd) yes;
       KERNEL_ZSTD          = mkIf useZstd yes;
 
