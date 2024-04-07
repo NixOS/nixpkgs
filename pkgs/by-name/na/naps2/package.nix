@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildDotnetModule
 , dotnetCorePackages
 , fetchFromGitHub
@@ -54,6 +55,7 @@ buildDotnetModule rec {
     maintainers = with lib.maintainers; [ eliandoran ];
     platforms = lib.platforms.linux;
     mainProgram = "naps2";
+    broken = stdenv.isAarch64;  # Google.Protobuf.Tools dependency fails to build.
   };
 
 }
