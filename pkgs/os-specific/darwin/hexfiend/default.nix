@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     cp -R . "$out/Applications/Hex Fiend.app"
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Open-source macOS hex editor";
     homepage = "http://hexfiend.com/";
