@@ -1,32 +1,32 @@
-{ lib
-, buildPythonPackage
-, django
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  django,
+  fetchPypi,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "django-webpack-loader";
-  version = "3.0.1";
-  format = "setuptools";
+  version = "3.1.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UTMbM9p2aI60078+o7tWQ0sMHfstzYjL+wo5YY9o3Xo=";
+    hash = "sha256-sGuDyoGe1Lu4WKtXuNjLZ6JcSlftgi3t1On+5MCXr9U=";
   };
 
-  propagatedBuildInputs = [
-    django
-  ];
+  build-system = [ setuptools-scm ];
+
+  dependencies = [ django ];
 
   # django.core.exceptions.ImproperlyConfigured (path issue with DJANGO_SETTINGS_MODULE?)
   doCheck = false;
 
-  pythonImportsCheck = [
-    "webpack_loader"
-  ];
+  pythonImportsCheck = [ "webpack_loader" ];
 
   meta = with lib; {
     description = "Use webpack to generate your static bundles";
