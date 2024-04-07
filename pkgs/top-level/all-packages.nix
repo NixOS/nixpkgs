@@ -1571,6 +1571,10 @@ with pkgs;
   };
   akkoma-emoji = recurseIntoAttrs {
     blobs_gg = callPackage ../servers/akkoma/emoji/blobs_gg.nix { };
+    buns = callPackage ../servers/akkoma/emoji/buns.nix { };
+    celestemojis = callPackage ../servers/akkoma/emoji/celestemojis.nix { };
+    longfox = callPackage ../servers/akkoma/emoji/longfox.nix { };
+    rooms = callPackage ../servers/akkoma/emoji/rooms.nix { };
   };
 
   advancecomp = callPackage ../tools/compression/advancecomp { };
