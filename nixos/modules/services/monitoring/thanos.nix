@@ -353,6 +353,10 @@ let
         See <https://tools.ietf.org/html/rfc4366#section-3.1>
       '';
 
+      grpc-compression = mkParam types.str ''
+        Compression algorithm to use for gRPC requests to other clients.
+      '';
+
       web.route-prefix = mkParam types.str ''
         Prefix for API and UI endpoints.
 
@@ -641,6 +645,10 @@ let
     };
 
     receive = params.common cfg.receive // params.objstore cfg.receive // {
+
+      receive.grpc-compression = mkParam types.str ''
+        Compression algorithm to use for gRPC requests to other receivers.
+      '';
 
       remote-write.address = mkParamDef types.str "0.0.0.0:19291" ''
         Address to listen on for remote write requests.
