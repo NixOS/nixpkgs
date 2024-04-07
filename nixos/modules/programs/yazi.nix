@@ -6,8 +6,6 @@ let
   settingsFormat = pkgs.formats.toml { };
 
   files = [ "yazi" "theme" "keymap" ];
-
-  dirs = [ "plugins" "flavors" ];
 in
 {
   options.programs.yazi = {
@@ -41,20 +39,24 @@ in
       description = ''
         The init.lua for Yazi itself.
       '';
+      example = lib.literalExpression "./init.lua";
     };
 
-  } // (lib.listToAttrs (map
-    (name: lib.nameValuePair name (lib.mkOption {
+    plugins = lib.mkOption {
       type = with lib.types; attrsOf (oneOf [ path package ]);
       default = { };
       description = ''
         Lua plugins.
 
-        See https://yazi-rs.github.io/docs/${name}/overview/ for documentation.
+        See https://yazi-rs.github.io/docs/plugins/overview/ for documentation.
       '';
-    }))
-    dirs)
-  );
+      example = lib.literalExpression ''
+        {
+          foo = ./foo;
+          bar = pkgs.bar;
+        }
+      '';
+    };
 
     flavors = lib.mkOption {
       type = with lib.types; attrsOf (oneOf [ path package ]);
@@ -75,27 +77,13 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment = {
-      systemPackages = [ cfg.package ];
-      variables.YAZI_CONFIG_HOME = "/etc/yazi/";
-      etc = (lib.attrsets.mergeAttrsList (map
-        (name: lib.optionalAttrs (cfg.settings.${name} != { }) {
-          "yazi/${name}.toml".source = settingsFormat.generate "${name}.toml" cfg.settings.${name};
-        })
-        files)) // (lib.attrsets.mergeAttrsList (map
-        (dir:
-          if cfg.${dir} != { } then
-            (lib.mapAttrs'
-              (name: value: lib.nameValuePair "yazi/${dir}/${name}" { source = value; })
-              cfg.${dir}) else {
-            # Yazi checks the directories. If they don't exist it tries to create them and then crashes.
-            "yazi/${dir}".source = pkgs.emptyDirectory;
-          })
-        dirs)) // lib.optionalAttrs (cfg.initLua != null) {
-        "yazi/init.lua".source = cfg.initLua;
-      };
-    };
+    environment.systemPackages = [
+      (cfg.package.override {
+        inherit (cfg) settings initLua plugins flavors;
+      })
+    ];
   };
+
   meta = {
     maintainers = with lib.maintainers; [ linsui ];
   };
