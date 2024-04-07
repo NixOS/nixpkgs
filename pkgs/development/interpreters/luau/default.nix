@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "luau";
-  version = "0.617";
+  version = "0.620";
 
   src = fetchFromGitHub {
     owner = "luau-lang";
     repo = "luau";
     rev = version;
-    hash = "sha256-5lWEihumXSyBsEOOb/oIz7NTgbdcI9C58m9h/d0MPRk=";
+    hash = "sha256-J1tVZ3HDcH+DiVsHDWl8A6X/4Fi4s0Fxkb0KzSYP1Pk=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
     install -Dm755 -t $out/bin luau
     install -Dm755 -t $out/bin luau-analyze
+    install -Dm755 -t $out/bin luau-compile
 
     runHook postInstall
   '';
