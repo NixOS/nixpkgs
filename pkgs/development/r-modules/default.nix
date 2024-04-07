@@ -948,6 +948,7 @@ let
     "Rmpi"     # tries to run MPI processes
     "pbdMPI"   # tries to run MPI processes
     "data_table" # fails to rename shared library before check
+    "multiMiR" # tries to connect to DB
   ];
 
   # Packages which cannot be installed due to lack of dependencies or other reasons.
