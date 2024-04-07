@@ -22,6 +22,8 @@
 
   localtuya = callPackage ./localtuya {};
 
+  midea-air-appliances-lan = callPackage ./midea-air-appliances-lan {};
+
   miele = callPackage ./miele {};
 
   moonraker = callPackage ./moonraker {};
