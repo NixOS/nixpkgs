@@ -126,9 +126,6 @@ let
       # GPIO power management
       POWER_RESET_GPIO                 = option yes;
       POWER_RESET_GPIO_RESTART         = option yes;
-
-      # Enable Pulse-Width-Modulation support, commonly used for fan and backlight.
-      PWM                              = yes;
     } // optionalAttrs (stdenv.hostPlatform.isx86) {
       INTEL_IDLE                       = yes;
       INTEL_RAPL                       = whenAtLeast "5.3" module;
