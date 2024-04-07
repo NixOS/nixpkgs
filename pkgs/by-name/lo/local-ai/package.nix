@@ -1,4 +1,5 @@
-{ stdenv
+{ config
+, stdenv
 , lib
 , fetchpatch
 , fetchFromGitHub
@@ -21,7 +22,7 @@
   # CPU extensions
 , enable_avx ? true
 , enable_avx2 ? true
-, enable_avx512 ? false
+, enable_avx512 ? stdenv.hostPlatform.avx512Support
 , enable_f16c ? true
 , enable_fma ? true
 
@@ -31,7 +32,7 @@
 , with_openblas ? false
 , openblas
 
-, with_cublas ? false
+, with_cublas ? config.cudaSupport
 , cudaPackages
 
 , with_clblas ? false
