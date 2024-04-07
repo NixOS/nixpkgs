@@ -29,6 +29,8 @@ in
   options.services.soju = {
     enable = mkEnableOption (lib.mdDoc "soju");
 
+    package = mkPackageOption pkgs "soju" { };
+
     listen = mkOption {
       type = types.listOf types.str;
       default = [ ":6697" ];
@@ -115,7 +117,7 @@ in
       serviceConfig = {
         DynamicUser = true;
         Restart = "always";
-        ExecStart = "${pkgs.soju}/bin/soju -config ${configFile}";
+        ExecStart = "${cfg.package}/bin/soju -config ${configFile}";
         StateDirectory = "soju";
       };
     };
