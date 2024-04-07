@@ -652,6 +652,7 @@ in {
   nzbget = handleTest ./nzbget.nix {};
   nzbhydra2 = handleTest ./nzbhydra2.nix {};
   ocis = handleTest ./ocis.nix {};
+  oddjobd = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./oddjobd.nix {};
   oh-my-zsh = handleTest ./oh-my-zsh.nix {};
   ollama = handleTest ./ollama.nix {};
   ombi = handleTest ./ombi.nix {};
