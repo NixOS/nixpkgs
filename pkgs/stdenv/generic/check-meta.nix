@@ -390,22 +390,24 @@ let
   # reason is one of "unfree", "blocklisted", "broken", "insecure", ...
   # !!! reason strings are hardcoded into OfBorg, make sure to keep them in sync
   # Along with a boolean flag for each reason
-  checkValidity = attrs:
+  checkValidity =
+    let
+      validYes = {
+        valid = "yes";
+        handled = true;
+      };
+    in
+    attrs:
     # Check meta attribute types first, to make sure it is always called even when there are other issues
     # Note that this is not a full type check and functions below still need to by careful about their inputs!
-    let res = checkMeta (attrs.meta or {}); in if res != [] then
-      { valid = "no"; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${concatMapStrings (x: "\n  - " + x) res}\n";
-        unfree = false; nonSource = false; broken = false; unsupported = false; insecure = false;
-      }
-    else {
-      unfree = hasUnfreeLicense attrs;
-      nonSource = hasNonSourceProvenance attrs;
-      broken = isMarkedBroken attrs;
-      unsupported = hasUnsupportedPlatform attrs;
-      insecure = isMarkedInsecure attrs;
-    } // (
+    let
+      res = checkMeta (attrs.meta or {});
+    in
+    if res != [] then
+      { valid = "no"; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${concatMapStrings (x: "\n  - " + x) res}\n"; }
+
     # --- Put checks that cannot be ignored here ---
-    if checkOutputsToInstall attrs then
+    else if checkOutputsToInstall attrs then
       { valid = "no"; reason = "broken-outputs"; errormsg = "has invalid meta.outputsToInstall"; }
 
     # --- Put checks that can be ignored here ---
@@ -438,7 +440,7 @@ let
     else if hasNoMaintainers attrs then
       { valid = "warn"; reason = "maintainerless"; errormsg = "has no maintainers"; }
     # -----
-    else { valid = "yes"; });
+    else validYes;
 
 
   # The meta attribute is passed in the resulting attribute set,
@@ -485,7 +487,10 @@ let
       position = pos.file + ":" + toString pos.line;
     } // {
       # Expose the result of the checks for everyone to see.
-      inherit (validity) unfree broken unsupported insecure;
+      unfree = hasUnfreeLicense attrs;
+      broken = isMarkedBroken attrs;
+      unsupported = hasUnsupportedPlatform attrs;
+      insecure = isMarkedInsecure attrs;
 
       available = validity.valid != "no"
       && (if config.checkMetaRecursively or false
@@ -496,7 +501,7 @@ let
   assertValidity = { meta, attrs }: let
       validity = checkValidity attrs;
       inherit (validity) valid;
-  in validity // {
+  in if validity ? handled then validity else validity // {
       # Throw an error if trying to evaluate a non-valid derivation
       # or, alternatively, just output a warning message.
       handled =
