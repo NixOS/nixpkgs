@@ -103,7 +103,7 @@ in {
           "--http_port ${toString cfg.httpPort} " +
           # Specify alternative htsp port
           "--htsp_port ${toString cfg.htspPort} " +
-          # Fork and run as daemon 
+          # Fork and run as daemon
           "-f " +
           # First run.
           "-C " +
