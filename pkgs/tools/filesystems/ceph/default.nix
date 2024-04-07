@@ -270,7 +270,8 @@ let
     ceph-common
 
     # build time
-    cython
+    # currently, building with cython v3 is broken
+    cython_0
 
     # debian/control
     bcrypt
