@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "rapidgzip";
-  version = "0.13.0";
+  version = "0.13.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MwT4+wzlNXfDLT/o/oT1iy9cVlFIIXc18r7dg+x5SXY=";
+    hash = "sha256-t6mfOsCg0FoV7N4GfTIs1KwxeGIOORuxbEIEJN52nRw=";
   };
 
   nativeBuildInputs = [ cython nasm setuptools ];
