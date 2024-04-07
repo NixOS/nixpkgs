@@ -1558,6 +1558,12 @@
     githubId = 160646;
     name = "Patrick Jackson";
   };
+  arduano = {
+    email = "leonid.shchurov@gmail.com";
+    github = "arduano";
+    githubId = 13347712;
+    name = "Leo Shchurov";
+  };
   ardumont = {
     email = "eniotna.t@gmail.com";
     github = "ardumont";
@@ -1988,12 +1994,6 @@
     github = "averelld";
     githubId = 687218;
     name = "averelld";
-  };
-  avery = {
-    email = "averyl+nixos@protonmail.com";
-    github = "AveryLychee";
-    githubId = 9147625;
-    name = "Avery Lychee";
   };
   avh4 = {
     email = "gruen0aermel@gmail.com";
@@ -3247,6 +3247,12 @@
     githubId = 1141769;
     matrix = "@cawilliamson:nixos.dev";
     name = "Christopher A. Williamson";
+  };
+  cbarrete = {
+    github = "cbarrete";
+    githubId = 62146989;
+    matrix = "@cedric:cbarrete.com";
+    name = "Cédric Barreteau";
   };
   cbleslie = {
     email = "cameronleslie@gmail.com";
@@ -14422,6 +14428,12 @@
     github = "noisersup";
     githubId = 42322511;
     name = "Patryk Kwiatek";
+  };
+  nokazn = {
+    email = "me@nokazn.me";
+    github = "nokazn";
+    githubId = 41154684;
+    name = "nokazn";
   };
   nomeata = {
     email = "mail@joachim-breitner.de";

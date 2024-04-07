@@ -4015,25 +4015,15 @@ with pkgs;
 
   go-audit = callPackage ../tools/system/go-audit { };
 
-  gopass = callPackage ../tools/security/gopass {
-    buildGoModule = buildGo122Module;
-  };
+  gopass = callPackage ../tools/security/gopass { };
 
-  gopass-hibp = callPackage ../tools/security/gopass/hibp.nix {
-    buildGoModule = buildGo122Module;
-  };
+  gopass-hibp = callPackage ../tools/security/gopass/hibp.nix { };
 
-  gopass-jsonapi = callPackage ../tools/security/gopass/jsonapi.nix {
-    buildGoModule = buildGo122Module;
-  };
+  gopass-jsonapi = callPackage ../tools/security/gopass/jsonapi.nix { };
 
-  git-credential-gopass = callPackage ../tools/security/gopass/git-credential.nix {
-    buildGoModule = buildGo122Module;
-  };
+  git-credential-gopass = callPackage ../tools/security/gopass/git-credential.nix { };
 
-  gopass-summon-provider = callPackage ../tools/security/gopass/summon.nix {
-    buildGoModule = buildGo122Module;
-  };
+  gopass-summon-provider = callPackage ../tools/security/gopass/summon.nix { };
 
   gosh = callPackage ../tools/security/gosh { };
 
@@ -9629,7 +9619,7 @@ with pkgs;
 
   kaffeine = libsForQt5.callPackage ../applications/video/kaffeine { };
 
-  kak-lsp = callPackage ../tools/misc/kak-lsp {
+  kakoune-lsp = callPackage ../by-name/ka/kakoune-lsp/package.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
 
@@ -10242,7 +10232,7 @@ with pkgs;
 
   keama = callPackage ../tools/networking/keama { };
 
-  ktailctl = libsForQt5.callPackage ../applications/networking/ktailctl {};
+  ktailctl = kdePackages.callPackage ../applications/networking/ktailctl {};
 
   iredis = callPackage ../tools/admin/iredis { };
 
