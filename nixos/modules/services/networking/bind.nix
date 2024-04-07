@@ -121,7 +121,7 @@ in
       package = mkPackageOption pkgs "bind" { };
 
       cacheNetworks = mkOption {
-        default = [ "127.0.0.0/24" ];
+        default = [ "127.0.0.0/24" "::1/128" ];
         type = types.listOf types.str;
         description = lib.mdDoc ''
           What networks are allowed to use us as a resolver.  Note
