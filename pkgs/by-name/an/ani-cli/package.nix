@@ -15,6 +15,7 @@
 , withIina ? false, iina
 , chromecastSupport ? false
 , syncSupport ? false
+, ani-cli
 }:
 
 assert withMpv || withVlc || withIina;
@@ -52,11 +53,52 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru = lib.attrsets.filterAttrs (n: v: n != "tmpAttrSet") ( builtins.foldl' ( acc: elem:
+      rec {
+        tmpAttrset = {
+          withMpv = if elem == "Mpv" then true else false;
+          "with${elem}" = true;
+        };
+
+        "with${elem}" = ani-cli.override tmpAttrset;
+
+        "with${elem}AndSync" = ani-cli.override (
+        {
+          syncSupport = true;
+        }//tmpAttrset);
+
+        "with${elem}AndCast" = ani-cli.override (
+        {
+          chromecastSupport = true;
+        }//tmpAttrset);
+
+        "with${elem}AndSyncCast" = ani-cli.override (
+        {
+          syncSupport = true;
+          chromecastSupport = true;
+        }//tmpAttrset);
+
+      }//acc ) {
+        withCast = ani-cli.override
+        {
+          chromecastSupport = true;
+        };
+        withSync = ani-cli.override
+        {
+          syncSupport = true;
+        };
+        withSyncCast = ani-cli.override
+        {
+          syncSupport = true;
+          chromecastSupport = true;
+        };
+      } [ "Mpv" "Vlc" "Iina" ]);
+
   meta = with lib; {
     homepage = "https://github.com/pystardust/ani-cli";
     description = "A cli tool to browse and play anime";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ skykanin ];
+    maintainers = with maintainers; [ skykanin rucadi ];
     platforms = platforms.unix;
     mainProgram = "ani-cli";
   };
