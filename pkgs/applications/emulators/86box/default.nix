@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "86Box";
-  version = "4.1";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "86Box";
     repo = "86Box";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JYOJFXiUTLRs6AEMYNx88PwcVw13ChQzV1ZE5OtX6Ds=";
+    hash = "sha256-ioE0EVIXv/biXXvLqwhmtZ/RJM0nLqcE+i+CU+WXBY4=";
   };
 
   nativeBuildInputs = [
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
       owner = "86Box";
       repo = "roms";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-1HtoizO0QIGNjQTW0clzRp40h1ulw55+iTYz12UJSms=";
+      hash = "sha256-58nNTOLund/KeDlNwzwwihjFVigs/P0K8SN07zExE2c=";
     };
   };
 
