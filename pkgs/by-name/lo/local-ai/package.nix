@@ -1,6 +1,7 @@
 { config
 , stdenv
 , lib
+, addDriverRunpath
 , fetchpatch
 , fetchFromGitHub
 , protobuf
@@ -472,19 +473,19 @@ let
 
     # patching rpath with patchelf doens't work. The execuable
     # raises an segmentation fault
-    postFixup = ''
-      wrapProgram $out/bin/${pname} \
-    '' + lib.optionalString with_cublas ''
-      --prefix LD_LIBRARY_PATH : "${lib.getLib libcublas}/lib:${cuda_cudart}/lib:/run/opengl-driver/lib" \
-    '' + lib.optionalString with_clblas ''
-      --prefix LD_LIBRARY_PATH : "${clblast}/lib:${ocl-icd}/lib" \
-    '' + lib.optionalString with_openblas ''
-      --prefix LD_LIBRARY_PATH : "${openblas}/lib" \
-    '' + lib.optionalString with_tts ''
-      --prefix LD_LIBRARY_PATH : "${piper-phonemize}/lib" \
-    '' + ''
-      --prefix PATH : "${ffmpeg}/bin"
-    '';
+    postFixup =
+      let
+        LD_LIBRARY_PATH = [ ]
+          ++ lib.optionals with_cublas [ (lib.getLib libcublas) cuda_cudart addDriverRunpath.driverLink ]
+          ++ lib.optionals with_clblas [ clblast ocl-icd ]
+          ++ lib.optionals with_openblas [ openblas ]
+          ++ lib.optionals with_tts [ piper-phonemize ];
+      in
+      ''
+        wrapProgram $out/bin/${pname} \
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath LD_LIBRARY_PATH}" \
+        --prefix PATH : "${ffmpeg}/bin"
+      '';
 
     passthru.local-packages = {
       inherit
