@@ -348,6 +348,10 @@
     "battery-time": [
       "batime@martin.zurowietz.de",
       "batterytime@typeof.pw"
+    ],
+    "power-profile-indicator": [
+      "power-profile-indicator@laux.wtf",
+      "power-profile@fthx"
     ]
   }
 }
