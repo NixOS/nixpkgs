@@ -727,7 +727,7 @@ rec {
 
   mypy-boto3-translate = buildMypyBoto3Package "translate" "1.34.0" "sha256-4tjjmwMtIPpMwKZ3yqB96XEb1WidCxMIj2Cfjn0nTy8=";
 
-  mypy-boto3-verifiedpermissions = buildMypyBoto3Package "verifiedpermissions" "1.34.78" "sha256-k3Rv2K9/i6VVH0WSb35Izr/g2LWIEXiiFgSWEtQUdY0=";
+  mypy-boto3-verifiedpermissions = buildMypyBoto3Package "verifiedpermissions" "1.34.79" "sha256-su6Lq/NVOp2Shgb6UPdrJLqAv9qG8Mx3bQk9PwihybM=";
 
   mypy-boto3-voice-id = buildMypyBoto3Package "voice-id" "1.34.0" "sha256-c6HseKIqRPs8NmFZYsg+9jWCMGpMi+VpvM9BiWq16PY=";
 
