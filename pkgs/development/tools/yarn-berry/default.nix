@@ -1,7 +1,7 @@
 { fetchFromGitHub, lib, nodejs, stdenv, yarn }:
 
 stdenv.mkDerivation rec {
-  name = "yarn-berry";
+  pname = "yarn-berry";
   version = "4.1.1";
 
   src = fetchFromGitHub {
