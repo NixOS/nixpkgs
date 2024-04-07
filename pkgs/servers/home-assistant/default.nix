@@ -709,6 +709,10 @@ in python.pkgs.buildPythonApplication rec {
         package = home-assistant;
         command = "hass --version";
       };
+      withoutCheckDeps = home-assistant.overridePythonAttrs {
+        pname = "home-assistant-without-check-deps";
+        doCheck = false;
+      };
     };
   };
 
