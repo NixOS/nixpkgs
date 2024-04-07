@@ -1,10 +1,7 @@
 #!@stdenv_shell@ -e
 
+export NIXPKGS_DF_EXE="@dfExe@"
 source @dfInit@
-
-set -euo pipefail
-
-exe="@dfExe@"
 
 # If we're switching back from dfhack to vanilla, cleanup all dfhack
 # links so Dwarf Fortress doesn't autoload its leftover libdfhooks.so.
@@ -21,7 +18,7 @@ dfhack_files=(
   *.init *.init-example
 )
 
-if [ "${exe##*/}" == dfhack ]; then
+if [ "${NIXPKGS_DF_EXE##*/}" == dfhack ]; then
   for i in "${dfhack_files[@]}"; do
     if [ -e "$i" ]; then
       update_path "$i"
@@ -35,5 +32,4 @@ else
   done
 fi
 
-# Go!
-cd "$NIXPKGS_DF_HOME" && exec "./$exe" "$@"
+go

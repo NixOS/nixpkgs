@@ -26,7 +26,6 @@ let
     hasAttr
     licenses
     maintainers
-    makeLibraryPath
     optional
     optionals
     optionalString
@@ -53,14 +52,8 @@ let
   baseVersion = toInt (elemAt dfVersionTuple dfVersionBaseIndex);
   patchVersion = elemAt dfVersionTuple (dfVersionBaseIndex + 1);
 
-  isV50 = baseVersion >= 50;
-  enableUnfuck = !isV50 && dwarf-fortress-unfuck != null;
-
-  libpath = makeLibraryPath (
-    [ stdenv.cc.cc stdenv.cc.libc ]
-    ++ optional (!isV50) SDL
-    ++ optional enableUnfuck dwarf-fortress-unfuck
-  );
+  isAtLeast50 = baseVersion >= 50;
+  enableUnfuck = !isAtLeast50 && dwarf-fortress-unfuck != null;
 
   game =
     if hasAttr dfVersion df-hashes
@@ -92,17 +85,21 @@ stdenv.mkDerivation {
   sourceRoot = ".";
 
   postUnpack = optionalString stdenv.isLinux ''
-    if [ -d df_linux ]; then
-      mv df_linux/* .
-    fi
-  '' + optionalString stdenv.isDarwin ''
-    if [ -d df_osx ]; then
-      mv df_osx/* .
+    directory=${
+      if stdenv.isLinux then "df_linux"
+      else if stdenv.isDarwin then "df_osx"
+      else throw "Unsupported system"
+    }
+    if [ -d "$directory" ]; then
+      mv "$directory/"* .
     fi
   '';
 
-  nativeBuildInputs = optional isV50 autoPatchelfHook;
-  buildInputs = optionals isV50 [ SDL2 SDL2_image SDL2_mixer stdenv.cc.cc.lib ];
+  nativeBuildInputs = [ autoPatchelfHook ];
+  buildInputs = optionals isAtLeast50 [ SDL2 SDL2_image SDL2_mixer ]
+    ++ optional (!isAtLeast50) SDL
+    ++ optional enableUnfuck dwarf-fortress-unfuck
+    ++ [ stdenv.cc.cc.lib ];
 
   installPhase = ''
     runHook preInstall
@@ -118,15 +115,12 @@ stdenv.mkDerivation {
     [ -f $out/df ] && chmod +x $out/df
     [ -f $out/run_df ] && chmod +x $out/run_df
 
+    # We don't need any of these since they will just break autoPatchelf on <version 50.
+    [ -d $out/libs ] && rm -f $out/libs/*.so $out/libs/*.so.*
+
     # Store the original hash
     md5sum $exe | awk '{ print $1 }' > $out/hash.md5.orig
     echo "Original MD5: $(<$out/hash.md5.orig)" >&2
-  '' + optionalString (!isV50 && stdenv.isLinux) ''
-    rm -f $out/libs/*.so
-    patchelf \
-      --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
-      --set-rpath "${libpath}" \
-      $exe
   '' + optionalString stdenv.isDarwin ''
     # My custom unfucked dwarfort.exe for macOS. Can't use
     # absolute paths because original doesn't have enough
@@ -148,14 +142,16 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  fixupPhase = ''
-    runHook preFixup
-    runHook postFixup
+  preFixup = ''
+    recompute_hash() {
+      # Store the new hash as the very last step.
+      exe=$out/${exe}
+      md5sum $exe | awk '{ print $1 }' > $out/hash.md5
+      echo "Patched MD5: $(<$out/hash.md5)" >&2
+    }
 
-    # Store the new hash as the very last step.
-    exe=$out/${exe}
-    md5sum $exe | awk '{ print $1 }' > $out/hash.md5
-    echo "Patched MD5: $(<$out/hash.md5)" >&2
+    # Ensure that this runs after autoPatchelfHook.
+    trap recompute_hash EXIT
   '';
 
   passthru = {
