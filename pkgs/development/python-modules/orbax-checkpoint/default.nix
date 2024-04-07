@@ -33,11 +33,11 @@ buildPythonPackage rec {
     hash = "sha256-H96IkUM3IxV79uddNBCU0dq+0dvPx8/Ps4HeCItGi2A=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     flit-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     absl-py
     cached-property
     etils
