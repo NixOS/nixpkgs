@@ -35,4 +35,6 @@
   smartthinq-sensors = callPackage ./smartthinq-sensors {};
 
   waste_collection_schedule = callPackage ./waste_collection_schedule {};
+
+  yassi = callPackage ./yassi {};
 }
