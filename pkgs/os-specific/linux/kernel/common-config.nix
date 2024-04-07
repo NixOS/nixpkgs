@@ -944,8 +944,9 @@ let
       THRUSTMASTER_FF    = yes;
       ZEROPLUS_FF        = yes;
 
-      MODULE_COMPRESS    = whenOlder "5.13" yes;
-      MODULE_COMPRESS_XZ = yes;
+      MODULE_COMPRESS      = whenOlder "5.13" yes;
+      MODULE_COMPRESS_XZ   = mkIf (!useZstd) yes;
+      MODULE_COMPRESS_ZSTD = mkIf (useZstd) yes;
 
       SYSVIPC            = yes;  # System-V IPC
 
