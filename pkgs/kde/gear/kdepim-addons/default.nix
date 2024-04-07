@@ -28,8 +28,9 @@ mkKdeDerivation rec {
   extraNativeBuildInputs = [
     rustPlatform.cargoSetupHook
     cargo
+    corrosion
     rustc
   ];
 
-  extraBuildInputs = [corrosion discount alpaka];
+  extraBuildInputs = [discount alpaka];
 }
