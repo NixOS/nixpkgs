@@ -11787,6 +11787,12 @@
     githubId = 30468956;
     name = "Lukas Heiligenbrunner";
   };
+  lukaslihotzki = {
+    email = "lukas@lihotzki.de";
+    github = "lukaslihotzki";
+    githubId = 10326063;
+    name = "Lukas Lihotzki";
+  };
   lukaswrz = {
     email = "lukas@wrz.one";
     github = "lukaswrz";
