@@ -1,33 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, python, qmake,
+{ lib, stdenv, fetchFromGitHub, fetchpatch, python3, qmake,
   qtwebengine, qtxmlpatterns,
   qttools, unzip }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "python-qt";
-  version = "3.4.2";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "MeVisLab";
     repo = "pythonqt";
-    rev = "v${version}";
-    hash = "sha256-xJYOD07ACOKtY3psmfHNSCjm6t0fr8JU9CrL0w5P5G0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Yz7w5Gs0W3ilrZXjkC+wXLCCXWTKkhCpWXbg+PshXKI=";
   };
 
-  # https://github.com/CsoundQt/CsoundQt/blob/develop/BUILDING.md#pythonqt
-  postPatch = ''
-    substituteInPlace build/python.prf \
-      --replace "PYTHON_VERSION=2.7" "PYTHON_VERSION=${python.pythonVersion}"
-  '';
-
-  hardeningDisable = [ "all" ];
+  patches = [
+    (fetchpatch {
+      name = "fix-format-security.patch";
+      url = "https://github.com/MeVisLab/pythonqt/pull/197/commits/c35d1efd00b83e0ebd826d7ed8454f3684ddffff.patch";
+      hash = "sha256-WJBLPdMemuKlZWoqYVU9TXldoDpaBm84RxkepIaocUQ=";
+    })
+  ];
 
   nativeBuildInputs = [ qmake qtwebengine qtxmlpatterns qttools unzip ];
 
-  buildInputs = [ python ];
+  buildInputs = [ python3 ];
 
   qmakeFlags = [
-    "PythonQt.pro"
-    "PYTHON_DIR=${python}"
+    "PYTHON_DIR=${python3}"
+    "PYTHON_VERSION=3.${python3.sourceVersion.minor}"
   ];
 
   dontWrapQtApps = true;
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ hlolli ];
   };
-}
+})

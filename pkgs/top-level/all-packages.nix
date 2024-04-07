@@ -24095,10 +24095,9 @@ with pkgs;
 
   pylode = callPackage ../misc/pylode { };
 
-  python-qt = disable-warnings-if-gcc13 (callPackage ../development/libraries/python-qt {
-    python = python3;
+  python-qt = callPackage ../development/libraries/python-qt {
     inherit (qt5) qmake qttools qtwebengine qtxmlpatterns;
-  });
+  };
 
   pyotherside = libsForQt5.callPackage ../development/libraries/pyotherside { };
 
