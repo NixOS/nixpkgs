@@ -9432,6 +9432,8 @@ self: super: with self; {
 
   pbr = callPackage ../development/python-modules/pbr { };
 
+  pbs-installer = callPackage ../development/python-modules/pbs-installer { };
+
   pc-ble-driver-py = toPythonModule (callPackage ../development/python-modules/pc-ble-driver-py { });
 
   pcapy-ng = callPackage ../development/python-modules/pcapy-ng {
