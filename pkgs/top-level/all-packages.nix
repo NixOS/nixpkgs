@@ -24095,15 +24095,9 @@ with pkgs;
 
   pylode = callPackage ../misc/pylode { };
 
-  python-qt = (callPackage ../development/libraries/python-qt {
+  python-qt = disable-warnings-if-gcc13 (callPackage ../development/libraries/python-qt {
     python = python3;
-    inherit (builtins.mapAttrs (_: pkg: pkg.override (previousArgs: lib.optionalAttrs (previousArgs ? stdenv) { stdenv = gcc12Stdenv; })) qt5)
-      qmake qttools qtwebengine qtxmlpatterns;
-    stdenv = gcc12Stdenv;
-  })
-  .overrideAttrs(previousAttrs: {
-    NIX_CFLAGS_COMPILE = "-w";
-    meta = previousAttrs.meta // { broken = true; };
+    inherit (qt5) qmake qttools qtwebengine qtxmlpatterns;
   });
 
   pyotherside = libsForQt5.callPackage ../development/libraries/pyotherside { };
