@@ -30,7 +30,6 @@
 , range-v3
 , tl-expected
 , hunspell
-, glibmm_2_68
 , webkitgtk_6_0
 , jemalloc
 , rnnoise
@@ -64,14 +63,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "4.14.9";
+  version = "4.16.1";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-VqLCkGav6qtam9qk2MsjCdyVSj3630FGQg50Mv0OBNE=";
+    hash = "sha256-sb7BpEIjSJS4ntv8s0RSJAj4BhTgHF7fEei5QXl60mA=";
   };
 
   patches = [
@@ -94,6 +93,9 @@ stdenv.mkDerivation rec {
       --replace '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
     substituteInPlace Telegram/lib_webview/webview/platform/linux/webview_linux_webkitgtk_library.cpp \
       --replace '"libwebkitgtk-6.0.so.4"' '"${webkitgtk_6_0}/lib/libwebkitgtk-6.0.so.4"'
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Telegram/lib_webrtc/webrtc/platform/mac/webrtc_environment_mac.mm \
+      --replace kAudioObjectPropertyElementMain kAudioObjectPropertyElementMaster
   '';
 
   # We want to run wrapProgram manually (with additional parameters)
@@ -141,7 +143,6 @@ stdenv.mkDerivation rec {
     libpulseaudio
     pipewire
     hunspell
-    glibmm_2_68
     webkitgtk_6_0
     jemalloc
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
