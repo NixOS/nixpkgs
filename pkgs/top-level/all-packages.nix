@@ -30348,9 +30348,7 @@ with pkgs;
 
   csound-manual = callPackage ../applications/audio/csound/csound-manual { };
 
-  csound-qt = libsForQt5.callPackage ../applications/audio/csound/csound-qt {
-    python = python3;
-  };
+  csound-qt = libsForQt5.callPackage ../applications/audio/csound/csound-qt { };
 
   codeblocks = callPackage ../applications/editors/codeblocks { };
   codeblocksFull = codeblocks.override { contribPlugins = true; };
