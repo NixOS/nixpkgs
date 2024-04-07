@@ -8,7 +8,7 @@
 , libfido2
 , libnotify
 , python3
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 
 buildGoModule rec {
@@ -55,7 +55,7 @@ buildGoModule rec {
   nativeBuildInputs = [
     gobject-introspection
     python3.pkgs.wrapPython
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
