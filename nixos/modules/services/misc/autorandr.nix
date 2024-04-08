@@ -260,6 +260,12 @@ in {
         description = lib.mdDoc "Treat outputs as connected even if their lids are closed";
       };
 
+      matchEdid = mkOption {
+        default = false;
+        type = types.bool;
+        description = lib.mdDoc "Match displays based on edid instead of name";
+      };
+
       hooks = mkOption {
         type = hooksModule;
         description = lib.mdDoc "Global hook scripts";
@@ -351,7 +357,8 @@ in {
             --batch \
             --change \
             --default ${cfg.defaultTarget} \
-            ${optionalString cfg.ignoreLid "--ignore-lid"}
+            ${optionalString cfg.ignoreLid "--ignore-lid"} \
+            ${optionalString cfg.matchEdid "--match-edid"}
         '';
         Type = "oneshot";
         RemainAfterExit = false;
