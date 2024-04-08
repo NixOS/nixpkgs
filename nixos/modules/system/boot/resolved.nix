@@ -7,6 +7,20 @@ let
   dnsmasqResolve = config.services.dnsmasq.enable &&
                    config.services.dnsmasq.resolveLocalQueries;
 
+  resolvedConf = ''
+    [Resolve]
+    ${optionalString (config.networking.nameservers != [])
+      "DNS=${concatStringsSep " " config.networking.nameservers}"}
+    ${optionalString (cfg.fallbackDns != null)
+      "FallbackDNS=${concatStringsSep " " cfg.fallbackDns}"}
+    ${optionalString (cfg.domains != [])
+      "Domains=${concatStringsSep " " cfg.domains}"}
+    LLMNR=${cfg.llmnr}
+    DNSSEC=${cfg.dnssec}
+    DNSOverTLS=${cfg.dnsovertls}
+    ${config.services.resolved.extraConfig}
+  '';
+
 in
 {
 
@@ -126,6 +140,15 @@ in
       '';
     };
 
+    boot.initrd.services.resolved.enable = mkOption {
+      default = config.boot.initrd.systemd.network.enable;
+      defaultText = "config.boot.initrd.systemd.network.enable";
+      description = ''
+        Whether to enable resolved for stage 1 networking.
+        Uses the toplevel 'services.resolved' options for 'resolved.conf'
+      '';
+    };
+
   };
 
   config = mkMerge [
@@ -155,19 +178,7 @@ in
       };
 
       environment.etc = {
-        "systemd/resolved.conf".text = ''
-          [Resolve]
-          ${optionalString (config.networking.nameservers != [])
-            "DNS=${concatStringsSep " " config.networking.nameservers}"}
-          ${optionalString (cfg.fallbackDns != null)
-            "FallbackDNS=${concatStringsSep " " cfg.fallbackDns}"}
-          ${optionalString (cfg.domains != [])
-            "Domains=${concatStringsSep " " cfg.domains}"}
-          LLMNR=${cfg.llmnr}
-          DNSSEC=${cfg.dnssec}
-          DNSOverTLS=${cfg.dnsovertls}
-          ${config.services.resolved.extraConfig}
-        '';
+        "systemd/resolved.conf".text = resolvedConf;
 
         # symlink the dynamic stub resolver of resolv.conf as recommended by upstream:
         # https://www.freedesktop.org/software/systemd/man/systemd-resolved.html#/etc/resolv.conf
@@ -183,6 +194,33 @@ in
 
     })
 
+    (mkIf config.boot.initrd.services.resolved.enable {
+
+      assertions = [
+        {
+          assertion = config.boot.initrd.systemd.enable;
+          message = "'boot.initrd.services.resolved.enable' can only be enabled with systemd stage 1.";
+        }
+      ];
+
+      boot.initrd.systemd = {
+        contents = {
+          "/etc/tmpfiles.d/resolv.conf".text =
+            "L /etc/resolv.conf - - - - /run/systemd/resolve/stub-resolv.conf";
+          "/etc/systemd/resolved.conf".text = resolvedConf;
+        };
+
+        additionalUpstreamUnits = ["systemd-resolved.service"];
+        users.systemd-resolve = {};
+        groups.systemd-resolve = {};
+        storePaths = ["${config.boot.initrd.systemd.package}/lib/systemd/systemd-resolved"];
+        services.systemd-resolved = {
+          wantedBy = ["sysinit.target"];
+          aliases = [ "dbus-org.freedesktop.resolve1.service" ];
+        };
+      };
+
+    })
   ];
 
 }
