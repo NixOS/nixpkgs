@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "trafilatura";
-  version = "1.8.0";
+  version = "1.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6lSHXtJPPq+vGZuKD4m1g1x880NzPDLvvEr50wV6j3I=";
+    hash = "sha256-a4eN/b1cXftV0Pgwfyt9wVrDRYBU90hh/5ihcvXjhyA=";
   };
 
   nativeBuildInputs = [
