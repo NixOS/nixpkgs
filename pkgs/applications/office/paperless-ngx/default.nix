@@ -65,8 +65,8 @@ let
 
     buildInputs = [
       pango
-      giflib
     ] ++ lib.optionals stdenv.isDarwin [
+      giflib
       darwin.apple_sdk.frameworks.CoreText
     ];
 
