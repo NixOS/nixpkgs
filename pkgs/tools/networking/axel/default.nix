@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "axel";
-  version = "2.17.13";
+  version = "2.17.14";
 
   src = fetchFromGitHub {
     owner = "axel-download-accelerator";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-iCxKQsymTE8ppOAilQtFeQUS+Fpdjhkcw4jaa9TEv3E=";
+    sha256 = "sha256-5GUna5k8GhAx1Xe8n9IvXT7IO6gksxCLh+sMANlxTBM=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config autoconf-archive txt2man ];
