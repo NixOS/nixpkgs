@@ -797,7 +797,7 @@ A shell array containing additional arguments passed to the configure script. Yo
 
 ##### `dontAddPrefix` {#var-stdenv-dontAddPrefix}
 
-By default, the flag `--prefix=$prefix` is added to the configure flags. If this is undesirable, set this variable to true.
+By default, the flag set by a combination of [`prefixKey`](#var-stdenv-prefixKey) and [`prefix`](#var-stdenv-prefix) is added to the configure flags. If this is undesirable, set this variable to true.
 
 ##### `prefix` {#var-stdenv-prefix}
 
@@ -805,7 +805,7 @@ The prefix under which the package must be installed, passed via the `--prefix` 
 
 ##### `prefixKey` {#var-stdenv-prefixKey}
 
-The key to use when specifying the prefix. By default, this is set to `--prefix=` as that is used by the majority of packages.
+The key to use when specifying the prefix. By default, this is set to `--prefix=` as that is used by the majority of packages. Other packages may need `--prefix ` (with a trailing space) or `PREFIX=`.
 
 ##### `dontAddStaticConfigureFlags` {#var-stdenv-dontAddStaticConfigureFlags}
 
