@@ -576,6 +576,8 @@ in
             copy_bin_and_libs ${cfgZfs.package}/sbin/zfs
             copy_bin_and_libs ${cfgZfs.package}/sbin/zdb
             copy_bin_and_libs ${cfgZfs.package}/sbin/zpool
+            copy_bin_and_libs ${cfgZfs.package}/lib/udev/vdev_id
+            copy_bin_and_libs ${cfgZfs.package}/lib/udev/zvol_id
           '';
         extraUtilsCommandsTest =
           mkIf (!config.boot.initrd.systemd.enable) ''
@@ -632,7 +634,12 @@ in
             zfs = "${cfgZfs.package}/sbin/zfs";
             awk = "${pkgs.gawk}/bin/awk";
           };
+          storePaths = [
+            "${cfgZfs.package}/lib/udev/vdev_id"
+            "${cfgZfs.package}/lib/udev/zvol_id"
+          ];
         };
+        services.udev.packages = [cfgZfs.package]; # to hook zvol naming, in stage 1
       };
 
       systemd.shutdownRamfs.contents."/etc/systemd/system-shutdown/zpool".source = pkgs.writeShellScript "zpool-sync-shutdown" ''
