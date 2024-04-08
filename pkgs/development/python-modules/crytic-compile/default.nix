@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "crytic-compile";
-  version = "0.3.6";
+  version = "0.3.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "crytic";
     repo = "crytic-compile";
     rev = "refs/tags/${version}";
-    hash = "sha256-dQynnILHt6YO5qtvVVwcxRwtBJgokyfsQ5ubH15dkuA=";
+    hash = "sha256-SMkFzGZg/6akclQ0XLUvjK3uoypsHfRru+B4VurjOrM=";
   };
 
   propagatedBuildInputs = [
