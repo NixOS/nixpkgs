@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "vale";
-  version = "3.3.1";
+  version = "3.4.0";
 
   subPackages = [ "cmd/vale" ];
   outputs = [ "out" "data" ];
@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "errata-ai";
     repo = "vale";
     rev = "v${version}";
-    hash = "sha256-6hj8fm2eCGQeWY3+eaJlKeZglJUSMY4/Yz2ySGp6m58=";
+    hash = "sha256-b2IPoBu9gIPnq/G4vbomA6L6dPD7GK4dzjL0eUy6b3Q=";
   };
 
   vendorHash = "sha256-HMzFLSmO6sBDNU89UoIvHcPPd3ubpti2ii4sFMKUDmI=";
