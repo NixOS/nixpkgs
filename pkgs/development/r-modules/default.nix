@@ -578,6 +578,7 @@ let
     odbc = [ pkgs.pkg-config ];
     openssl = [ pkgs.pkg-config ];
     pdftools = [ pkgs.pkg-config ];
+    RQuantLib = with pkgs; [ quantlib.dev boost.dev ];
     sf = with pkgs; [ pkg-config sqlite.dev proj.dev ];
     terra = with pkgs; [ pkg-config sqlite.dev proj.dev ];
     showtext = [ pkgs.pkg-config ];
