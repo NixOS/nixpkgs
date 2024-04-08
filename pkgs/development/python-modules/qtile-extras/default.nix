@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "qtile-extras";
-  version = "0.24.0";
+  version = "0.25.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "elParaguayo";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-DJmnJcqhfCfl39SF3Ypv0PGtI4r8heaVv9JmpiCBGJo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-OYzSKOVg4D5gKxaEreclYq3D16dl8ddLipSdifokDNY=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
