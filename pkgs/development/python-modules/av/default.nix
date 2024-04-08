@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "av";
-  version = "11.0.0";
+  version = "12.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,13 +23,16 @@ buildPythonPackage rec {
     owner = "mikeboers";
     repo = "PyAV";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pCKP+4ZmZCJcG7/Qy9H6aS4svQdgaRA9S1QVNWFYhSQ=";
+    hash = "sha256-+xbVkNyFg5VKIf+G6AbAAYVqTSwxFE0Hyc52XSmibAw=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   nativeBuildInputs = [
     cython
     pkg-config
-    setuptools
   ];
 
   buildInputs = [
@@ -51,6 +54,22 @@ buildPythonPackage rec {
     # urlopen fails during DNS resolution
     "test_writing_to_custom_io"
     "test_decode_close_then_use"
+    "test_bits_per_coded_sample"
+    "test_codec_delay"
+    "test_frame_index"
+    "test_penguin_joke"
+    "test_sky_timelapse"
+    "test_flush_decoded_video_frame_count"
+    "test_path_input"
+    "test_path_output"
+    "test_str_input"
+    "test_str_output"
+    "test_is_corrupt"
+    "test_is_discard"
+    "test_is_disposable"
+    "test_is_keyframe"
+    "test_noside_data"
+    "test_side_data"
     # Tests that want to download FATE data, https://github.com/PyAV-Org/PyAV/issues/955
     "test_vobsub"
     "test_transcode"
@@ -131,10 +150,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pythonic bindings for FFmpeg/Libav";
-    mainProgram = "pyav";
     homepage = "https://github.com/mikeboers/PyAV/";
     changelog = "https://github.com/PyAV-Org/PyAV/blob/v${version}/CHANGELOG.rst";
     license = licenses.bsd2;
     maintainers = with maintainers; [ ];
+    mainProgram = "pyav";
   };
 }
