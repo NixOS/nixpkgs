@@ -20,6 +20,8 @@
 
   homematicip_local = callPackage ./homematicip_local { };
 
+  local_luftdaten = callPackage ./local_luftdaten { };
+
   localtuya = callPackage ./localtuya {};
 
   midea-air-appliances-lan = callPackage ./midea-air-appliances-lan {};
