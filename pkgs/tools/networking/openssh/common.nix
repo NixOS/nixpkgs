@@ -22,7 +22,7 @@
 , pam
 , libredirect
 , etcDir ? null
-, withKerberos ? true
+, withKerberos ? false
 , withLdns ? true
 , libkrb5
 , libfido2
@@ -177,9 +177,12 @@ stdenv.mkDerivation {
     "sysconfdir=\${out}/etc/ssh"
   ];
 
-  passthru.tests = {
-    borgbackup-integration = nixosTests.borgbackup;
-    openssh = nixosTests.openssh;
+  passthru = {
+    inherit withKerberos;
+    tests = {
+      borgbackup-integration = nixosTests.borgbackup;
+      openssh = nixosTests.openssh;
+    };
   };
 
   meta = with lib; {
