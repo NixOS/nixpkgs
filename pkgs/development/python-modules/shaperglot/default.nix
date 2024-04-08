@@ -3,9 +3,11 @@
 , fetchFromGitHub
 , gflanguages
 , num2words
-, poetry-core
 , protobuf
 , pytestCheckHook
+, pyyaml
+, setuptools
+, setuptools-scm
 , strictyaml
 , termcolor
 , ufo2ft
@@ -27,18 +29,20 @@ buildPythonPackage rec {
 
   pyproject = true;
 
-  propagatedBuildInputs = [
+  dependencies = [
     gflanguages
     num2words
     protobuf
+    pyyaml
     strictyaml
     termcolor
     ufo2ft
     vharfbuzz
     youseedee
   ];
-  nativeBuildInputs = [
-    poetry-core
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
   doCheck = true;

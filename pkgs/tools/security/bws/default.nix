@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, installShellFiles
 , pkg-config
 , oniguruma
 , openssl
@@ -29,17 +30,20 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [
-    perl
+    installShellFiles
     pkg-config
+  ] ++ lib.optionals stdenv.isLinux [
+    perl
   ];
 
   buildInputs =
     [
       oniguruma
+    ] ++ lib.optionals stdenv.isLinux [
       openssl
     ]
     ++ lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
     ];
 
   env = {
@@ -47,12 +51,21 @@ rustPlatform.buildRustPackage rec {
     RUSTONIG_SYSTEM_LIBONIG = true;
   };
 
-  buildAndTestSubdir = "crates/bws";
+  cargoBuildFlags = [ "--package" "bws" ];
+
+  cargoTestFlags = [ "--package" "bws" ];
+
+  postInstall = ''
+    installShellCompletion --cmd bws \
+      --bash <($out/bin/bws completions bash) \
+      --fish <($out/bin/bws completions fish) \
+      --zsh <($out/bin/bws completions zsh)
+  '';
 
   meta = {
-    changelog = "https://github.com/bitwarden/sdk/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/bitwarden/sdk/blob/${src.rev}/crates/bws/CHANGELOG.md";
     description = "Bitwarden Secrets Manager CLI";
-    homepage = "https://github.com/bitwarden/sdk";
+    homepage = "https://bitwarden.com/help/secrets-manager-cli/";
     license = lib.licenses.unfree; # BITWARDEN SOFTWARE DEVELOPMENT KIT LICENSE AGREEMENT
     mainProgram = "bws";
     maintainers = with lib.maintainers; [ dit7ya ];

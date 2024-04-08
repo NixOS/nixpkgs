@@ -13,7 +13,7 @@ in
 {
   options.programs.hyprland = {
     enable = mkEnableOption null // {
-      description = mdDoc ''
+      description = ''
         Hyprland, the dynamic tiling Wayland compositor that doesn't sacrifice on its looks.
 
         You can manually launch Hyprland by executing {command}`Hyprland` on a TTY.
@@ -33,14 +33,24 @@ in
       };
       defaultText = literalExpression
         "`programs.hyprland.package` with applied configuration";
-      description = mdDoc ''
+      description = ''
         The Hyprland package after applying configuration.
       '';
     };
 
     portalPackage = mkPackageOption pkgs "xdg-desktop-portal-hyprland" { };
 
-    xwayland.enable = mkEnableOption (mdDoc "XWayland") // { default = true; };
+    xwayland.enable = mkEnableOption ("XWayland") // { default = true; };
+
+    systemd.setPath.enable = mkEnableOption null // {
+      default = true;
+      example = false;
+      description = ''
+        Set environment path of systemd to include the current system's bin directory.
+        This is needed in Hyprland setups, where opening links in applications do not work.
+        Enabled by default.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -62,6 +72,12 @@ in
       enable = mkDefault true;
       extraPortals = [ finalPortalPackage ];
       configPackages = mkDefault [ cfg.finalPackage ];
+    };
+
+    systemd = mkIf cfg.systemd.setPath.enable {
+      user.extraConfig = ''
+        DefaultEnvironment="PATH=$PATH:/run/current-system/sw/bin:/etc/profiles/per-user/$USER/bin:/run/wrappers/bin"
+      '';
     };
   };
 

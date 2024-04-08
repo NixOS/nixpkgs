@@ -5,7 +5,7 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook4
 , desktop-file-utils
 , feedbackd
 , gtk4
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     ninja
     phosh
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [

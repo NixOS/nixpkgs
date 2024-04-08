@@ -3275,8 +3275,8 @@ let
           publisher = "myriad-dreamin";
           # Please update the corresponding binary (tinymist) when updating
           # this extension.
-          version = "0.11.1";
-          hash = "sha256-jyZBnT8UW94TVnZKZna1cJa/UIj+DwYwlAbU4pnaf04=";
+          version = "0.11.3";
+          hash = "sha256-b5aD4gz4j+QAEPmYaNnaputbYTPoFxVFih76HmznUP8=";
         };
 
         nativeBuildInputs = [ jq moreutils ];

@@ -1,5 +1,6 @@
 { appstream-glib
 , cargo
+, dbus
 , desktop-file-utils
 , fetchFromGitLab
 , git
@@ -16,7 +17,7 @@
 , rustPlatform
 , rustc
 , stdenv
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "audio-sharing";
@@ -46,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     rustc
-    wrapGAppsHook
+    wrapGAppsHook4
   ] ++ (with rustPlatform; [
     cargoSetupHook
   ]);
@@ -59,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gstreamer
     gtk4
     libadwaita
+    dbus
   ];
 
   passthru = {

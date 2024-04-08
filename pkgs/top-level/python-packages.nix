@@ -4725,6 +4725,8 @@ self: super: with self; {
 
   gflanguages = callPackage ../development/python-modules/gflanguages { };
 
+  gfsubsets = callPackage ../development/python-modules/gfsubsets { };
+
   ghapi = callPackage ../development/python-modules/ghapi { };
 
   ghdiff = callPackage ../development/python-modules/ghdiff { };
@@ -7337,6 +7339,8 @@ self: super: with self; {
 
   microsoft-kiota-serialization-text = callPackage ../development/python-modules/microsoft-kiota-serialization-text { };
 
+  midea-beautiful-air = callPackage ../development/python-modules/midea-beautiful-air { };
+
   midiutil = callPackage ../development/python-modules/midiutil { };
 
   mido = callPackage ../development/python-modules/mido { };
@@ -8961,6 +8965,8 @@ self: super: with self; {
 
   omrdatasettools = callPackage ../development/python-modules/omrdatasettools { };
 
+  oncalendar = callPackage ../development/python-modules/oncalendar { };
+
   ondilo = callPackage ../development/python-modules/ondilo { };
 
   onetimepass = callPackage ../development/python-modules/onetimepass { };
@@ -9429,6 +9435,8 @@ self: super: with self; {
   pbkdf2 = callPackage ../development/python-modules/pbkdf2 { };
 
   pbr = callPackage ../development/python-modules/pbr { };
+
+  pbs-installer = callPackage ../development/python-modules/pbs-installer { };
 
   pc-ble-driver-py = toPythonModule (callPackage ../development/python-modules/pc-ble-driver-py { });
 
@@ -12823,6 +12831,8 @@ self: super: with self; {
   ramlfications = callPackage ../development/python-modules/ramlfications { };
 
   random2 = callPackage ../development/python-modules/random2 { };
+
+  randomfiletree = callPackage ../development/python-modules/randomfiletree { };
 
   range-typed-integers = callPackage ../development/python-modules/range-typed-integers { };
 

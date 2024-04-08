@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.4.0";
+  version = "2024.4.1";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -4981,6 +4981,7 @@
       psutil-home-assistant
       sqlalchemy
       systembridgeconnector
+      systembridgemodels
       zeroconf
     ];
     "system_health" = ps: with ps; [

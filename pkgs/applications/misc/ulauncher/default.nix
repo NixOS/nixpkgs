@@ -21,11 +21,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ulauncher";
-  version = "5.15.6";
+  version = "5.15.7";
 
   src = fetchurl {
     url = "https://github.com/Ulauncher/Ulauncher/releases/download/${version}/ulauncher_${version}.tar.gz";
-    sha256 = "sha256-WOWDekh9rcXeiN/ejiYC4BELhJwd98GkmyDOLN26ayU=";
+    sha256 = "sha256-YgOw3Gyy/o8qorWAnAlQrAZ2ZTnyP3PagLs2Qkdg788=";
   };
 
   nativeBuildInputs = with python3Packages; [

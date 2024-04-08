@@ -573,6 +573,7 @@ mapAliases ({
   # now kube3d/k3d will take it's place
   kube3d = k3d; # Added 2022-0705
   kafkacat = kcat; # Added 2021-10-07
+  kak-lsp = kakoune-lsp; # Added 2024-04-01
   kdeconnect = plasma5Packages.kdeconnect-kde; # Added 2020-10-28
   keepassx = throw "KeePassX is no longer actively developed. Please consider KeePassXC as a maintained alternative."; # Added 2023-02-17
   keepassx2 = throw "KeePassX is no longer actively developed. Please consider KeePassXC as a maintained alternative."; # Added 2023-02-17
@@ -780,6 +781,7 @@ mapAliases ({
   minetestserver_5 = minetestserver; # Added 2023-12-11
   minizip2 = pkgs.minizip-ng; # Added 2022-12-28
   mirage-im = throw "'mirage-im' has been removed, as it was broken and unmaintained"; # Added 2023-11-26
+  mlton20210107 = throw "'mlton20210107' has been renamed to 'mlton20210117', correcting the version number"; # Added 2024-03-31
   mod_dnssd = apacheHttpdPackages.mod_dnssd; # Added 2014-11-07
   mod_fastcgi = apacheHttpdPackages.mod_fastcgi; # Added 2014-11-07
   mod_python = apacheHttpdPackages.mod_python; # Added 2014-11-07

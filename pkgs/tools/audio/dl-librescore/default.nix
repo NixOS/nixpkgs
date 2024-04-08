@@ -8,13 +8,13 @@
 
 buildNpmPackage rec {
   pname = "dl-librescore";
-  version = "0.35.1";
+  version = "0.35.7";
 
   src = fetchFromGitHub {
     owner = "LibreScore";
     repo = "dl-librescore";
     rev = "v${version}";
-    hash = "sha256-W/55Bbq5yiocNLOU1+j1TwkGawyF8sObtMmPW3ph35A=";
+    hash = "sha256-g/dOQj2S9iUmN3Ohj7RPBpSk/4N9a39qY+/UIbsKDf4=";
   };
 
   npmDepsHash = "sha256-Boa/WnptJYJNRdcLgua5GmLT2H9tBpZR+vvAFZC1s4k=";

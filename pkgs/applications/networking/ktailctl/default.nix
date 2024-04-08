@@ -8,31 +8,33 @@
 , go
 , wrapQtAppsHook
 , qtbase
-, qtquickcontrols2
+, qtdeclarative
+, qtsvg
 , kconfig
 , kcoreaddons
 , kguiaddons
 , ki18n
-, kirigami2
+, kirigami
 , kirigami-addons
 , knotifications
+, nlohmann_json
 }:
 
 let
-  version = "0.9.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "f-koehler";
     repo = "KTailctl";
     rev = "v${version}";
-    hash = "sha256-nY6DEHkDVWIlvc64smXb9KshrhNgNLKiilYydbMKCqc=";
+    hash = "sha256-fIx6XfNGK+jDpeaoCzTKwv3J01yWoHOgWxjbwTGVK1U=";
   };
 
   goDeps = (buildGoModule {
     pname = "tailwrap";
     inherit src version;
     modRoot = "tailwrap";
-    vendorHash = "sha256-Y9xhoTf3vCtiNi5qOPg020EQmASo58BZI3rAoUEC8qE=";
+    vendorHash = "sha256-egTzSdOKrhdEBKarIfROxZUsxbnR9F1JDbdoKzGf9UM=";
   }).goModules;
 in
 stdenv.mkDerivation {
@@ -63,14 +65,15 @@ stdenv.mkDerivation {
 
   buildInputs = [
     qtbase
-    qtquickcontrols2
+    qtdeclarative
+    qtsvg
     kconfig
     kcoreaddons
     kguiaddons
     ki18n
-    kirigami2
-    kirigami-addons
+    kirigami
     knotifications
+    nlohmann_json
   ];
 
   meta = with lib; {
