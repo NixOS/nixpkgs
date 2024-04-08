@@ -8438,6 +8438,12 @@
     github = "Icy-Thought";
     githubId = 53710398;
   };
+  id3v1669 = {
+    name = "id3v1669";
+    email = "id3v1669@gmail.com";
+    github = "id3v1669";
+    githubId = 57532211;
+  };
   idlip = {
     name = "Dilip";
     email = "igoldlip@gmail.com";
