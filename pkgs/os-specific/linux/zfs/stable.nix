@@ -2,7 +2,6 @@
 , kernel ? null
 , stdenv
 , linuxKernel
-, removeLinuxDRM ? false
 , nixosTests
 , ...
 } @ args:
@@ -15,10 +14,7 @@ callPackage ./generic.nix args {
   # this attribute is the correct one for this package.
   kernelModuleAttribute = "zfs";
   # check the release notes for compatible kernels
-  kernelCompatible =
-    if stdenv'.isx86_64 || removeLinuxDRM
-    then kernel.kernelOlder "6.8"
-    else kernel.kernelOlder "6.2";
+  kernelCompatible = kernel.kernelOlder "6.8";
 
   latestCompatibleLinuxPackages = linuxKernel.packages.linux_6_6;
 
