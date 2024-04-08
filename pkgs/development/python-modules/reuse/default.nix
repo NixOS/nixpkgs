@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "reuse";
   version = "3.0.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fsfe";
@@ -22,11 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-ZYmQtJ503HDmu+Cd6IxOrCcOVH+CcFnFe3oe6PqvcE0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     binaryornot
     boolean-py
     debian
