@@ -525,4 +525,9 @@ in rec {
       )}
     '';
 
+  # The maximum number of characters allowed in a GPT partition label. This
+  # limit is specified by UEFI and enforced by systemd-repart.
+  # Corresponds to GPT_LABEL_MAX from systemd's gpt.h.
+  GPTMaxLabelLength = 36;
+
 }
