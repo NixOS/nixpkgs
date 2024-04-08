@@ -8953,7 +8953,7 @@ self: super: with self; {
 
   omniorb = toPythonModule (pkgs.omniorb.override { python3 = self.python; });
 
-  omniorbpy = callPackage ../development/python-modules/omniorbpy { python3Packages = self; };
+  omniorbpy = callPackage ../development/python-modules/omniorbpy { };
 
   omorfi = callPackage ../development/python-modules/omorfi { };
 
