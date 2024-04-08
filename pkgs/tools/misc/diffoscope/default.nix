@@ -216,7 +216,7 @@ python3.pkgs.buildPythonApplication rec {
       h5py
       pdfminer-six
       r2pipe
-      # docx2txt, breaks the tests.
+      # docx2txt, nixpkgs packages another project named the same, which does not work
     ])
     # oggvideotools is broken on Darwin, please put it back when it will be fixed?
     ++ lib.optionals stdenv.isLinux [ oggvideotools ]
