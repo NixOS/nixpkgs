@@ -308,6 +308,13 @@ backendStdenv.mkDerivation (finalAttrs: {
   # Indeed, we want to do the opposite -- fat "out" outputs that contain all the other outputs.
   propagatedBuildOutputs = false;
 
+  # By default, if the dev output exists it just uses that.
+  # However, because we disabled propagatedBuildOutputs, dev doesn't contain libraries or
+  # anything of the sort. To remedy this, we set outputSpecified to true, and use
+  # outputsToInstall, which tells Nix which outputs to use when the package name is used
+  # unqualified (that is, without an explicit output).
+  outputSpecified = true;
+
   meta = {
     description = "${redistribRelease.name}. By downloading and using the packages you accept the terms and conditions of the ${finalAttrs.meta.license.shortName}";
     sourceProvenance = [ sourceTypes.binaryNativeCode ];
