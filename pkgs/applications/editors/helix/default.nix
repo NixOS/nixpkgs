@@ -16,9 +16,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ git installShellFiles ];
 
-  preBuild = ''
-    export HELIX_DEFAULT_RUNTIME="$out/lib/runtime"
-  '';
+  env.HELIX_DEFAULT_RUNTIME = "${placeholder "out"}/lib/runtime";
 
   postInstall = ''
     # not needed at runtime
