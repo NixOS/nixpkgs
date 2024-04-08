@@ -124,6 +124,10 @@ in mkDerivation rec {
     popd
   '';
 
+  patches = [
+    ./23.10-CVE-2024-22412.patch
+  ];
+
   postPatch = ''
     patchShebangs src/
 
