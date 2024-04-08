@@ -28,11 +28,11 @@ buildPythonPackage rec {
     hash = "sha256-aRXYFW4fl3iXH3bwP30+TllRm4BkIUcGMX/lNfhiqjo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiormq
     yarl
   ];
