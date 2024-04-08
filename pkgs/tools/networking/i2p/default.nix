@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
       publicDomain
     ];
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ joelmo ];
+    maintainers = with maintainers; [ linsui ];
     mainProgram = "i2prouter-plain";
   };
 })
