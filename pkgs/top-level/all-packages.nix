@@ -9279,6 +9279,8 @@ with pkgs;
 
   inadyn = callPackage ../tools/networking/inadyn { };
 
+  incus-lts = callPackage ../by-name/in/incus/lts.nix { };
+
   incron = callPackage ../tools/system/incron { };
 
   indexed-bzip2 = with python3Packages; toPythonApplication indexed-bzip2;
