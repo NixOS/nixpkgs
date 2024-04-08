@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libXp libXau ];
 
   prePatch = lib.optionalString (!demoSupport) ''
-    sed '/^SUBDIRS =,^$/s/\<demos\>//' -i Makefile.{am,in}
+    sed 's/\<demos\>//' -i Makefile.{am,in}
   '';
 
   patches = [
