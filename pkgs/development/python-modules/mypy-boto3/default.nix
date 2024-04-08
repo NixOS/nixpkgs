@@ -575,7 +575,7 @@ rec {
 
   mypy-boto3-qldb-session = buildMypyBoto3Package "qldb-session" "1.34.0" "sha256-JHePiaFCfIJPxZzvC1U38xrBGkDvB9+yKwPecaZl7BY=";
 
-  mypy-boto3-quicksight = buildMypyBoto3Package "quicksight" "1.34.73" "sha256-tbO9V8EiPR1OyCYImQHYmMsZtvclNK7Mnoqt3s0YRFM=";
+  mypy-boto3-quicksight = buildMypyBoto3Package "quicksight" "1.34.79" "sha256-oHaZrX3aRoaFs5VLC7dQMihSocWLmCupHGhReXPbGBo=";
 
   mypy-boto3-ram = buildMypyBoto3Package "ram" "1.34.0" "sha256-9sOspEfirpVQ8cT9ILUSWypxBswpAD75A0hHRV7glNg=";
 
@@ -597,7 +597,7 @@ rec {
 
   mypy-boto3-resource-explorer-2 = buildMypyBoto3Package "resource-explorer-2" "1.34.41" "sha256-Q4MCAvEZkYRnDLEF9d8x+FOMUJ9O2eCb2mZr/e8Ut24=";
 
-  mypy-boto3-resource-groups = buildMypyBoto3Package "resource-groups" "1.34.0" "sha256-Wz1Oo/Ze6ROHkg5EAas7ZKLOWE6RS+uKpNea79WUrLY=";
+  mypy-boto3-resource-groups = buildMypyBoto3Package "resource-groups" "1.34.79" "sha256-tSCHhtaSb+dnXD8D2aNR6DBAlhHbvU3zx6YceGTlzgM=";
 
   mypy-boto3-resourcegroupstaggingapi = buildMypyBoto3Package "resourcegroupstaggingapi" "1.34.0" "sha256-ko55TJeH/EGsAp1Y8ZTYhmGEqWGKQTnN3IQEF31V6Ns=";
 
@@ -727,7 +727,7 @@ rec {
 
   mypy-boto3-translate = buildMypyBoto3Package "translate" "1.34.0" "sha256-4tjjmwMtIPpMwKZ3yqB96XEb1WidCxMIj2Cfjn0nTy8=";
 
-  mypy-boto3-verifiedpermissions = buildMypyBoto3Package "verifiedpermissions" "1.34.78" "sha256-k3Rv2K9/i6VVH0WSb35Izr/g2LWIEXiiFgSWEtQUdY0=";
+  mypy-boto3-verifiedpermissions = buildMypyBoto3Package "verifiedpermissions" "1.34.79" "sha256-su6Lq/NVOp2Shgb6UPdrJLqAv9qG8Mx3bQk9PwihybM=";
 
   mypy-boto3-voice-id = buildMypyBoto3Package "voice-id" "1.34.0" "sha256-c6HseKIqRPs8NmFZYsg+9jWCMGpMi+VpvM9BiWq16PY=";
 
