@@ -3,6 +3,7 @@ import os
 import sys
 import time
 import unicodedata
+from abc import ABC, abstractmethod
 from contextlib import contextmanager
 from queue import Empty, Queue
 from typing import Any, Dict, Iterator
@@ -12,7 +13,43 @@ from xml.sax.xmlreader import AttributesImpl
 from colorama import Fore, Style
 
 
-class Logger:
+class AbstractLogger(ABC):
+    @abstractmethod
+    def log(self, message: str, attributes: Dict[str, str] = {}) -> None:
+        pass
+
+    @abstractmethod
+    @contextmanager
+    def subtest(self, name: str, attributes: Dict[str, str] = {}) -> Iterator[None]:
+        pass
+
+    @abstractmethod
+    @contextmanager
+    def nested(self, message: str, attributes: Dict[str, str] = {}) -> Iterator[None]:
+        pass
+
+    @abstractmethod
+    def info(self, *args, **kwargs) -> None:  # type: ignore
+        pass
+
+    @abstractmethod
+    def warning(self, *args, **kwargs) -> None:  # type: ignore
+        pass
+
+    @abstractmethod
+    def error(self, *args, **kwargs) -> None:  # type: ignore
+        pass
+
+    @abstractmethod
+    def log_serial(self, message: str, machine: str) -> None:
+        pass
+
+    @abstractmethod
+    def print_serial_logs(self, enable: bool) -> None:
+        pass
+
+
+class Logger(AbstractLogger):
     def __init__(self) -> None:
         self.logfile = os.environ.get("LOGFILE", "/dev/null")
         self.logfile_handle = codecs.open(self.logfile, "wb")
@@ -110,4 +147,4 @@ class Logger:
         self.xml.endElement("nest")
 
 
-rootlog = Logger()
+rootlog: AbstractLogger = Logger()
