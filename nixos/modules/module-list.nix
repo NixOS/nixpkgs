@@ -260,6 +260,7 @@
   ./programs/skim.nix
   ./programs/slock.nix
   ./programs/sniffnet.nix
+  ./programs/soundmodem.nix
   ./programs/spacefm.nix
   ./programs/ssh.nix
   ./programs/starship.nix
@@ -281,8 +282,8 @@
   ./programs/virt-manager.nix
   ./programs/wavemon.nix
   ./programs/wayland/cardboard.nix
-  ./programs/wayland/labwc.nix
   ./programs/wayland/hyprland.nix
+  ./programs/wayland/labwc.nix
   ./programs/wayland/river.nix
   ./programs/wayland/sway.nix
   ./programs/wayland/waybar.nix
