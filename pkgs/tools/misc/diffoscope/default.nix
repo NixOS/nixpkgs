@@ -168,7 +168,7 @@ python3.pkgs.buildPythonApplication rec {
     jsondiff
     libarchive-c
     progressbar33
-    pypdf2
+    pypdf
     python-magic
     pyxattr
     rpm
