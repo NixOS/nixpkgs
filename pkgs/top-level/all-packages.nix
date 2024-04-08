@@ -1792,14 +1792,18 @@ with pkgs;
     libgamemode32 = pkgsi686Linux.gamemode.lib;
   };
 
-  gamescope = callPackage ../applications/window-managers/gamescope {
+  gamescope = callPackage ../by-name/ga/gamescope/package.nix {
     enableExecutable = true;
     enableWsi = false;
+
+    wlroots = wlroots_0_17;
   };
 
-  gamescope-wsi = callPackage ../applications/window-managers/gamescope {
+  gamescope-wsi = callPackage ../by-name/ga/gamescope/package.nix {
     enableExecutable = false;
     enableWsi = true;
+
+    wlroots = wlroots_0_17;
   };
 
   gay = callPackage ../tools/misc/gay {  };
