@@ -2,27 +2,30 @@
 , aiomisc-pytest
 , aiormq
 , buildPythonPackage
+, docker
 , fetchFromGitHub
 , pamqp
 , poetry-core
 , pytestCheckHook
 , pythonOlder
 , shortuuid
+, testcontainers
+, wrapt
 , yarl
 }:
 
 buildPythonPackage rec {
   pname = "aio-pika";
-  version = "9.4.0";
+  version = "9.4.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mosquito";
     repo = "aio-pika";
     rev = "refs/tags/${version}";
-    hash = "sha256-EntV/CBvT4II4nxsVe3KjNA4EPV7Oc6h2G0fX0fHKTU=";
+    hash = "sha256-aRXYFW4fl3iXH3bwP30+TllRm4BkIUcGMX/lNfhiqjo=";
   };
 
   nativeBuildInputs = [
@@ -36,9 +39,20 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aiomisc-pytest
+    docker
     pamqp
     pytestCheckHook
     shortuuid
+    testcontainers
+    wrapt
+  ];
+
+  disabledTests = [
+    # Tests attempt to connect to a RabbitMQ server
+    "test_connection_interleave"
+    "test_connection_happy_eyeballs_delay"
+    "test_robust_connection_interleave"
+    "test_robust_connection_happy_eyeballs_delay"
   ];
 
   disabledTestPaths = [
