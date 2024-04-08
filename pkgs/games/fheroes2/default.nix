@@ -1,5 +1,6 @@
 { stdenv, lib, fetchFromGitHub, imagemagick
 , gettext, glibcLocalesUtf8, libpng, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, zlib
+, libiconv
 
 , gitUpdater
 }:
@@ -17,7 +18,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ imagemagick ];
 
-  buildInputs = [ gettext glibcLocalesUtf8 libpng SDL2 SDL2_image SDL2_mixer SDL2_ttf zlib ];
+  buildInputs = [ gettext glibcLocalesUtf8 libpng SDL2 SDL2_image SDL2_mixer SDL2_ttf zlib ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   makeFlags = [
     "FHEROES2_STRICT_COMPILATION=1"
@@ -67,6 +69,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.karolchmist ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
