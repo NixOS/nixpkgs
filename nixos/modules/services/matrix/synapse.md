@@ -18,7 +18,27 @@ around Matrix.
 
 [Synapse](https://github.com/element-hq/synapse) is
 the reference homeserver implementation of Matrix from the core development
-team at matrix.org. The following configuration example will set up a
+team at matrix.org.
+
+Before deploying synapse server, a postgresql database must be set up.
+For that, please make sure that postgresql is running and the following
+SQL statements to create a user & database called `matrix-synapse` were
+executed before synapse starts up:
+
+```sql
+CREATE ROLE "matrix-synapse";
+CREATE DATABASE "matrix-synapse" WITH OWNER "matrix-synapse"
+  TEMPLATE template0
+  LC_COLLATE = "C"
+  LC_CTYPE = "C";
+```
+
+Usually, it's sufficient to do this once manually before
+continuing with the installation.
+
+Please make sure to set a different password.
+
+The following configuration example will set up a
 synapse server for the `example.org` domain, served from
 the host `myhostname.example.org`. For more information,
 please refer to the
@@ -41,13 +61,6 @@ in {
   networking.firewall.allowedTCPPorts = [ 80 443 ];
 
   services.postgresql.enable = true;
-  services.postgresql.initialScript = pkgs.writeText "synapse-init.sql" ''
-    CREATE ROLE "matrix-synapse" WITH LOGIN PASSWORD 'synapse';
-    CREATE DATABASE "matrix-synapse" WITH OWNER "matrix-synapse"
-      TEMPLATE template0
-      LC_COLLATE = "C"
-      LC_CTYPE = "C";
-  '';
 
   services.nginx = {
     enable = true;
