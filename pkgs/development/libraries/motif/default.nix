@@ -38,6 +38,27 @@ stdenv.mkDerivation rec {
       url = "https://raw.githubusercontent.com/void-linux/void-packages/b9a1110dabb01c052dadc1abae1413bd4afe3652/srcpkgs/motif/patches/02-${name}";
       sha256 = "13vzpf8yxvhf4gl7q0yzlr6ak1yzx382fsqsrv5lc8jbbg4nwrrq";
     })
+    (fetchpatch {
+      name = "missing-headers.patch";
+      url = "https://gitlab.freedesktop.org/xorg/lib/libxpm/-/commit/4cedf181bcfe13e5d206554c51edb82cb17e7ad5.patch";
+      extraPrefix = "lib/Xm/";
+      stripLen = 2;
+      hash = "sha256-WlagHOgf2gZDxXN+SSEW6de1FuN4fbpd9zviMwo1+HI=";
+    })
+    (fetchurl {
+      name = "noreturn.patch";
+      url = "https://dev.gentoo.org/~ulm/distfiles/motif-2.3.8-patches-5.tar.xz";
+      downloadToTemp = true;
+      postFetch = ''
+        tar -xOf $downloadedFile patch/12_all_noreturn.patch > $out
+      '';
+      hash = "sha256-FyaBfqD/TuJVFFHZlp1/b1MyL8BJAfV43ktuusgxbfE=";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/macports/macports-ports/acc8c7cb2247d9892bf5a52eb92431a4c0c8e1cd/x11/openmotif/files/wcs-functions.patch";
+      extraPrefix = "";
+      hash = "sha256-w3zCUs/RbnRoUJ0sNCI00noEOkov/IGV/zIygakSQqc=";
+    })
   ];
 
   enableParallelBuilding = true;
@@ -48,5 +69,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = with licenses; [ lgpl21Plus ];
     maintainers = with maintainers; [ qyliss ];
+    broken = demoSupport && stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16";
   };
 }
