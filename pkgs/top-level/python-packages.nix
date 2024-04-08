@@ -8810,6 +8810,8 @@ self: super: with self; {
 
   noiseprotocol = callPackage ../development/python-modules/noiseprotocol { };
 
+  noisereduce = callPackage ../development/python-modules/noisereduce { };
+
   norfair = callPackage ../development/python-modules/norfair { };
 
   normality = callPackage ../development/python-modules/normality { };

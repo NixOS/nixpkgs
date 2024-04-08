@@ -13596,6 +13596,11 @@
     githubId = 3579600;
     name = "Jacob Moody";
   };
+  moon = {
+    email = "compiler@tuta.io";
+    github = "0xm00n"; 
+    name = "moon";
+  };
   moosingin3space = {
     email = "moosingin3space@gmail.com";
     github = "moosingin3space";
