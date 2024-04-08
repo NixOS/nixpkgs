@@ -1,4 +1,4 @@
-{ stdenv
+{ stdenvNoCC
 , lib
 , fetchFromGitHub
 , substituteAll
@@ -20,7 +20,7 @@
 , nix-update-script
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "tomb";
   version = "2.10";
 
