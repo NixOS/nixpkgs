@@ -46,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A tool for compliance with the REUSE Initiative recommendations";
     homepage = "https://github.com/fsfe/reuse-tool";
+    changelog = "https://github.com/fsfe/reuse-tool/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 cc-by-sa-40 cc0 gpl3Plus ];
     maintainers = with maintainers; [ FlorianFranzen Luflosi ];
     mainProgram = "reuse";
