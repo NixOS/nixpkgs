@@ -4553,6 +4553,7 @@ with pkgs;
   candle = libsForQt5.callPackage ../applications/misc/candle { };
 
   capstone = callPackage ../development/libraries/capstone { };
+  capstone_4 = callPackage ../development/libraries/capstone/4.nix { };
 
   keystone = callPackage ../development/libraries/keystone { };
 
@@ -12247,8 +12248,6 @@ with pkgs;
   pwgen-secure = callPackage ../tools/security/pwgen-secure { };
 
   pwnat = callPackage ../tools/networking/pwnat { };
-
-  pwndbg = callPackage ../development/tools/misc/pwndbg { };
 
   pwninit = callPackage ../development/tools/misc/pwninit {
     inherit (darwin.apple_sdk.frameworks) Security;

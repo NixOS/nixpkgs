@@ -1887,6 +1887,9 @@ self: super: with self; {
   capstone = callPackage ../development/python-modules/capstone {
     inherit (pkgs) capstone;
   };
+  capstone_4 = callPackage ../development/python-modules/capstone/4.nix {
+    inherit (pkgs) capstone_4;
+  };
 
   captcha = callPackage ../development/python-modules/captcha { };
 
@@ -4610,6 +4613,8 @@ self: super: with self; {
   gdal = toPythonModule (pkgs.gdal.override { python3 = python; });
 
   gdata = callPackage ../development/python-modules/gdata { };
+
+  gdb-pt-dump = callPackage ../development/python-modules/gdb-pt-dump { };
 
   gdcm = toPythonModule (pkgs.gdcm.override {
     inherit (self) python;
@@ -10389,6 +10394,8 @@ self: super: with self; {
   pweave = callPackage ../development/python-modules/pweave { };
 
   pwlf = callPackage ../development/python-modules/pwlf { };
+
+  pwndbg = callPackage ../development/python-modules/pwndbg { };
 
   pwntools = callPackage ../development/python-modules/pwntools {
     debugger = pkgs.gdb;

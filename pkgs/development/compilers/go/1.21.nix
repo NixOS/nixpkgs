@@ -32,6 +32,7 @@ let
     "mips" = "mips";
     "mips64el" = "mips64le";
     "mipsel" = "mipsle";
+    "powerpc64" = "ppc64";
     "powerpc64le" = "ppc64le";
     "riscv64" = "riscv64";
     "s390x" = "s390x";
