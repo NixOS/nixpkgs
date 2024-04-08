@@ -8951,7 +8951,7 @@ self: super: with self; {
 
   omnilogic = callPackage ../development/python-modules/omnilogic { };
 
-  omniorb = toPythonModule (pkgs.omniorb.override { python3 = self.python; });
+  omniorb = toPythonModule (pkgs.omniorb.override { python3Packages = self; });
 
   omniorbpy = callPackage ../development/python-modules/omniorbpy { };
 

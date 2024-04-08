@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , pkg-config
-, python3
+, python3Packages
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ python3 ];
+  buildInputs = [ python3Packages.python ];
 
   enableParallelBuilding = true;
   hardeningDisable = [ "format" ];
@@ -24,16 +24,16 @@ stdenv.mkDerivation rec {
   # Transform omniidl_be into a PEP420 namespace to allow other projects to define
   # their omniidl backends. Especially useful for omniorbpy, the python backend.
   postInstall = ''
-    rm $out/${python3.sitePackages}/omniidl_be/__init__.py
-    rm $out/${python3.sitePackages}/omniidl_be/__pycache__/__init__.*.pyc
+    rm $out/${python3Packages.python.sitePackages}/omniidl_be/__init__.py
+    rm $out/${python3Packages.python.sitePackages}/omniidl_be/__pycache__/__init__.*.pyc
   '';
 
   # Ensure postInstall didn't break cxx backend
   # Same as 'pythonImportsCheck = ["omniidl_be.cxx"];', but outside buildPythonPackage
   doInstallCheck = true;
   postInstallCheck = ''
-    export PYTHONPATH=$out/${python3.sitePackages}:$PYTHONPATH
-    ${lib.getExe python3} -c "import omniidl_be.cxx"
+    export PYTHONPATH=$out/${python3Packages.python.sitePackages}:$PYTHONPATH
+    ${python3Packages.python.interpreter} -c "import omniidl_be.cxx"
   '';
 
   meta = with lib; {
