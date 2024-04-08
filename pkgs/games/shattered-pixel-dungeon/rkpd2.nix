@@ -4,16 +4,16 @@
 
 callPackage ./generic.nix rec {
   pname = "rkpd2";
-  version = "1.0.0";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "Zrp200";
     repo = "rkpd2";
     rev = "v${version}";
-    hash = "sha256-3WKQCXFDyliObXaIRp3x0kRh3XeNd24SCoTgdFA8/rM=";
+    hash = "sha256-dng/QoG9FTNU/fNVqPtLW/MVhO1uDBkXxWcI5mESUKw=";
   };
 
-  depsHash = "sha256-yE6zuLnFLtNq76AhtyE+giGLF2vcCqF7sfIvcY8W6Lg=";
+  depsHash = "sha256-vihoR0bPh7590sRxeYJ1uuynNRxtRBuiFUrdmsRNUJc=";
 
   desktopName = "Rat King Pixel Dungeon 2";
 
