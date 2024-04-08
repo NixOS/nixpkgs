@@ -16,7 +16,7 @@ let
   daemonService = appName: args:
     { description = "Samba Service Daemon ${appName}";
 
-      after = [ (mkIf (cfg.enableNmbd && "${appName}" == "smbd") "samba-nmbd.service") "network.target" ];
+      after = [ (mkIf (cfg.nmbd.enable && "${appName}" == "smbd") "samba-nmbd.service") "network.target" ];
       requiredBy = [ "samba.target" ];
       partOf = [ "samba.target" ];
 
@@ -63,6 +63,8 @@ in
     (lib.mkRenamedOptionModule [ "services" "samba" "securityType" ] [ "services" "samba" "settings" "global" "security type" ])
     (lib.mkRenamedOptionModule [ "services" "samba" "shares" ] [ "services" "samba" "settings" ])
 
+    (lib.mkRenamedOptionModule [ "services" "samba" "enableWinbindd" ] [ "services" "samba" "winbindd" "enable" ])
+    (lib.mkRenamedOptionModule [ "services" "samba" "enableNmbd" ] [ "services" "samba" "nmbd" "enable" ])
   ];
 
   ###### interface
@@ -96,7 +98,7 @@ in
         '';
       };
 
-      enableNmbd = mkOption {
+      nmbd.enable = mkOption {
         type = types.bool;
         default = true;
         description = ''
@@ -106,7 +108,7 @@ in
         '';
       };
 
-      enableWinbindd = mkOption {
+      winbindd.enable = mkOption {
         type = types.bool;
         default = true;
         description = ''
@@ -164,8 +166,8 @@ in
 
   config = mkMerge
     [ { assertions =
-          [ { assertion = cfg.nsswins -> cfg.enableWinbindd;
-              message   = "If samba.nsswins is enabled, then samba.enableWinbindd must also be enabled";
+          [ { assertion = cfg.nsswins -> cfg.winbindd.enable;
+              message   = "If services.samba.nsswins is enabled, then services.samba.winbindd.enable must also be enabled";
             }
           ];
       }
@@ -192,8 +194,8 @@ in
           # for correct use with systemd
           services = {
             samba-smbd = daemonService "smbd" "";
-            samba-nmbd = mkIf cfg.enableNmbd (daemonService "nmbd" "");
-            samba-winbindd = mkIf cfg.enableWinbindd (daemonService "winbindd" "");
+            samba-nmbd = mkIf cfg.nmbd.enable (daemonService "nmbd" "");
+            samba-winbindd = mkIf cfg.winbindd.enable (daemonService "winbindd" "");
           };
           tmpfiles.rules = [
             "d /var/lock/samba - - - - -"
