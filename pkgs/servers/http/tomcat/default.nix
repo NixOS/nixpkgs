@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchurl, nixosTests, testers, jre }:
+{ stdenvNoCC, lib, fetchurl, nixosTests, testers, jre }:
 
 let
-  common = { version, hash }: stdenv.mkDerivation (finalAttrs: {
+  common = { version, hash }: stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "apache-tomcat";
     inherit version;
 
