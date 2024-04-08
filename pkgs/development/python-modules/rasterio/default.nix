@@ -5,6 +5,7 @@
 , pytestCheckHook
 , pythonOlder
 , stdenv
+, testers
 
 , affine
 , attrs
@@ -26,6 +27,8 @@
 , shapely
 , snuggs
 , wheel
+
+, rasterio  # required to run version test
 }:
 
 buildPythonPackage rec {
@@ -106,6 +109,7 @@ buildPythonPackage rec {
   postInstall = ''
     wrapPythonProgramsIn "$out/bin" "$out $setuptoolsPythonPath"
   '';
+
   doCheck = true;
 
   preCheck = ''
@@ -129,6 +133,12 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "rasterio"
   ];
+
+  passthru.tests.version = testers.testVersion {
+    package = rasterio;
+    version = version;
+    command = "${rasterio}/bin/rio --version";
+  };
 
   meta = with lib; {
     description = "Python package to read and write geospatial raster data";
