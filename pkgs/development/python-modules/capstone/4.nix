@@ -3,9 +3,10 @@
 , capstone_4
 , stdenv
 , setuptools
+, pythonAtLeast
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "capstone";
   inherit (capstone_4) version src;
 
@@ -34,5 +35,6 @@ buildPythonPackage rec {
     license = licenses.bsdOriginal;
     description = "Python bindings for Capstone disassembly engine";
     maintainers = with maintainers; [ bennofs ris ];
+    broken = pythonAtLeast "3.12"; # uses distutils
   };
 }
