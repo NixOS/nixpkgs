@@ -1,35 +1,34 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   toStr = value:
     if true == value then "yes"
     else if false == value then "no"
     else toString value;
 
+  inherit (lib.attrsets) mapAttrsToList optionalAttrs;
+  inherit (lib.lists) optional;
+  inherit (lib.modules) mkIf;
+  inherit (lib.options) literalExpression mkEnableOption mkOption;
+  inherit (lib.strings) concatLines;
+  inherit (lib.types) lines str submodule;
+
   cfg = config.services.davfs2;
   format = pkgs.formats.toml { };
   configFile = let
     settings = mapAttrsToList (n: v: "${n} = ${toStr v}") cfg.settings;
   in pkgs.writeText "davfs2.conf" ''
-    ${concatStringsSep "\n" settings}
+    ${concatLines settings}
     ${cfg.extraConfig}
   '';
 in
 {
 
   options.services.davfs2 = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether to enable davfs2.
-      '';
-    };
+    enable = mkEnableOption "davfs2";
 
     davUser = mkOption {
-      type = types.str;
+      type = str;
       default = "davfs2";
       description = ''
         When invoked by root the mount.davfs daemon will run as this user.
@@ -38,7 +37,7 @@ in
     };
 
     davGroup = mkOption {
-      type = types.str;
+      type = str;
       default = "davfs2";
       description = ''
         The group of the running mount.davfs daemon. Ordinary users must be
@@ -48,7 +47,7 @@ in
     };
 
     extraConfig = mkOption {
-      type = types.lines;
+      type = lines;
       default = "";
       example = ''
         kernel_fs coda
@@ -66,7 +65,7 @@ in
     };
 
     settings = mkOption {
-      type = types.submodule {
+      type = submodule {
         freeformType = format.type;
       };
       default = {};
@@ -86,7 +85,7 @@ in
 
   config = mkIf cfg.enable {
 
-    warnings = lib.optional (cfg.extraConfig != "") ''
+    warnings = optional (cfg.extraConfig != "") ''
       services.davfs2.extraConfig will be deprecated in future releases;
       please use services.davfs2.settings instead.
     '';
