@@ -10,13 +10,13 @@ in
 buildKodiBinaryAddon rec {
   pname = "inputstream-adaptive";
   namespace = "inputstream.adaptive";
-  version = "20.3.14";
+  version = "20.3.18";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = "inputstream.adaptive";
     rev = "${version}-${rel}";
-    sha256 = "sha256-9S98LgeXq2Wc5CLd5WGo7iNM9ZkSuDBO/O35wf0SjZY=";
+    sha256 = "sha256-cjlUKrus4Dv48dCk6AlOgY2iZYTwT39tj2u7aq1P104=";
   };
 
   extraCMakeFlags = [

@@ -36,6 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pandoc filter suite providing facilities for cross-referencing in markdown documents";
+    mainProgram = "pandoc-xnos";
     homepage = "https://github.com/tomduck/pandoc-xnos";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ppenguin ];

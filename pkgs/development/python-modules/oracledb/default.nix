@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "oracledb";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+0SB560anoEhSCiiGaRbZTMB2AxaHMR+A4VxBbYa4sk=";
+    hash = "sha256-HJpEjJhD2zPxC3d9aSD7k5XqsLD9wX8WIPrHw+7NtXo=";
   };
 
   nativeBuildInputs = [

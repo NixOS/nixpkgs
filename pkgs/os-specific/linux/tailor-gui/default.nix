@@ -15,9 +15,9 @@
 }:
 let
   src = tuxedo-rs.src;
-  sourceRoot = "source/tailor_gui";
+  sourceRoot = "${src.name}/tailor_gui";
   pname = "tailor_gui";
-  version = tuxedo-rs.version;
+  version = "0.2.3";
 in
 stdenv.mkDerivation {
 
@@ -48,13 +48,14 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Rust GUI for interacting with hardware from TUXEDO Computers";
+    mainProgram = "tailor_gui";
     longDescription = ''
       An alternative to the TUXEDO Control Center (https://www.tuxedocomputers.com/en/TUXEDO-Control-Center.tuxedo),
       written in Rust.
     '';
     homepage = "https://github.com/AaronErhardt/tuxedo-rs";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ mrcjkb ];
+    maintainers = with maintainers; [ mrcjkb xaverdh ];
     platforms = platforms.linux;
   };
 }

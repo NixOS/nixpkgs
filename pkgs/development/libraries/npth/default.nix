@@ -2,17 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "npth";
-  version = "1.6";
+  version = "1.7";
 
   src = fetchurl {
     url = "mirror://gnupg/npth/npth-${version}.tar.bz2";
-    sha256 = "1lg2lkdd3z1s3rpyf88786l243adrzyk9p4q8z9n41ygmpcsp4qk";
+    sha256 = "sha256-hYn1aTe3XOM7KNMS/MvzArO3HsPzlF/eaqp0AnkUrQU=";
   };
 
   doCheck = true;
 
   meta = with lib; {
     description = "The New GNU Portable Threads Library";
+    mainProgram = "npth-config";
     longDescription = ''
       This is a library to provide the GNU Pth API and thus a non-preemptive
       threads implementation.

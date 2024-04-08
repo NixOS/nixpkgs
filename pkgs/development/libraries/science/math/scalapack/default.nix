@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF
       -DLAPACK_LIBRARIES="-llapack"
       -DBLAS_LIBRARIES="-lblas"
-      -DCMAKE_Fortran_COMPILER=${mpi}/bin/mpif90
+      -DCMAKE_Fortran_COMPILER=${lib.getDev mpi}/bin/mpif90
       ${lib.optionalString passthru.isILP64 ''
         -DCMAKE_Fortran_FLAGS="-fdefault-integer-8"
         -DCMAKE_C_FLAGS="-DInt=long"

@@ -49,5 +49,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/unixorn/ha-mqtt-discoverable/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    broken = versionAtLeast pydantic.version "2";
   };
 }

@@ -36,6 +36,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/galkan/crowbar";
     description = "A brute forcing tool that can be used during penetration tests";
+    mainProgram = "crowbar";
     license = licenses.mit;
     maintainers = with maintainers; [ pamplemousse ];
   };

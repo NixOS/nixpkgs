@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ncnn";
-  version = "20231027";
+  version = "20240102";
 
   src = fetchFromGitHub {
     owner = "Tencent";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ak/5QTOptg5M2I+3olnrBK6JZ01haIE6oh+sagEboAc=";
+    hash = "sha256-kk70oLY+2QJOkyYq10whLRMxBuibQMWMOBA9dcbKf/I=";
   };
 
   patches = [
@@ -33,8 +33,6 @@ stdenv.mkDerivation rec {
     "-DNCNN_BUILD_TOOLS=0"
     "-DNCNN_SYSTEM_GLSLANG=1"
     "-DNCNN_PYTHON=0" # Should be an attribute
-
-    "-DGLSLANG_TARGET_DIR=${glslang}/lib/cmake"
   ];
 
   nativeBuildInputs = [ cmake ];

@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/GSound";
     description = "Small library for playing system sounds";
+    mainProgram = "gsound-play";
     maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.unix;

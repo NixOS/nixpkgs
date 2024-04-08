@@ -2,13 +2,13 @@
 , buildPythonPackage
 , docopt
 , fetchFromGitHub
-, fetchpatch
 , hypothesis
 , passlib
 , poetry-core
 , pytest-logdog
 , pytest-asyncio
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , pyyaml
 , setuptools
@@ -58,6 +58,19 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "--asyncio-mode=auto"
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # stuck in epoll
+    "test_publish_qos0"
+    "test_publish_qos1"
+    "test_publish_qos1_retry"
+    "test_publish_qos2"
+    "test_publish_qos2_retry"
+    "test_receive_qos0"
+    "test_receive_qos1"
+    "test_receive_qos2"
+    "test_start_stop"
   ];
 
   disabledTestPaths = [

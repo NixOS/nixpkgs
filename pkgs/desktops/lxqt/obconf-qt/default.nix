@@ -15,13 +15,13 @@
 
 mkDerivation rec {
   pname = "obconf-qt";
-  version = "0.16.3";
+  version = "0.16.4";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-ExBcP+j1uf9Y8f6YfZsqyD6YTx1PriS3w8I6qdqQGeE=";
+    hash = "sha256-uF90v56BthEts/Jy+a6kH2b1QFHCtft4ZLxyi/K/Vnc=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +46,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/lxqt/obconf-qt";
     description = "The Qt port of obconf, the Openbox configuration tool";
+    mainProgram = "obconf-qt";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
     maintainers = teams.lxqt.members;

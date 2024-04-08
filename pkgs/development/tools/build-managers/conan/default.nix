@@ -10,14 +10,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "conan";
-  version = "2.0.14";
+  version = "2.0.17";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "conan-io";
     repo = "conan";
     rev = "refs/tags/${version}";
-    hash = "sha256-zPN6OlEWYc/OvUb7LHF1/mZYrieG8n2bLcZ/IzwlvtE=";
+    hash = "sha256-liCeGe0WBW+tOjW81cqrFUiOEWYhlqsBVgns6SxjPNM=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -107,6 +107,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Decentralized and portable C/C++ package manager";
+    mainProgram = "conan";
     homepage = "https://conan.io";
     changelog = "https://github.com/conan-io/conan/releases/tag/${version}";
     license = licenses.mit;

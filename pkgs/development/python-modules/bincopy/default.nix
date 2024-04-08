@@ -31,6 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Mangling of various file formats that conveys binary information (Motorola S-Record, Intel HEX, TI-TXT, ELF and binary files)";
+    mainProgram = "bincopy";
     homepage = "https://github.com/eerimoq/bincopy";
     license = licenses.mit;
     maintainers = with maintainers; [ frogamic sbruder ];

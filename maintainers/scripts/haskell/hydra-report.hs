@@ -83,7 +83,7 @@ import Prelude hiding (id)
 import Data.List (sortOn)
 import Control.Concurrent.Async (concurrently)
 import Control.Exception (evaluate)
-import qualified Data.IntMap.Strict as IntMap
+import qualified Data.IntMap.Lazy as IntMap
 import qualified Data.IntSet as IntSet
 import Data.Bifunctor (second)
 import Data.Data (Proxy)
@@ -299,7 +299,7 @@ calculateReverseDependencies depMap =
    Map.fromDistinctAscList $ zip keys (zip (rdepMap False) (rdepMap True))
  where
     -- This code tries to efficiently invert the dependency map and calculate
-    -- it’s transitive closure by internally identifying every pkg with it’s index
+    -- its transitive closure by internally identifying every pkg with its index
     -- in the package list and then using memoization.
     keys :: [PkgName]
     keys = Map.keys depMap
@@ -317,11 +317,11 @@ calculateReverseDependencies depMap =
     intDeps :: [(Int, (Bool, [Int]))]
     intDeps = zip [0..] (fmap depInfoToIdx depInfos)
 
-    rdepMap onlyUnbroken = IntSet.size <$> resultList
+    rdepMap onlyUnbroken = IntSet.size <$> IntMap.elems resultList
      where
-       resultList = go <$> [0..]
+       resultList = IntMap.fromDistinctAscList [(i, go i) | i <- [0..length keys - 1]]
        oneStepMap = IntMap.fromListWith IntSet.union $ (\(key,(_,deps)) -> (,IntSet.singleton key) <$> deps) <=< filter (\(_, (broken,_)) -> not (broken && onlyUnbroken)) $ intDeps
-       go pkg = IntSet.unions (oneStep:((resultList !!) <$> IntSet.toList oneStep))
+       go pkg = IntSet.unions (oneStep:((resultList IntMap.!) <$> IntSet.toList oneStep))
         where oneStep = IntMap.findWithDefault mempty pkg oneStepMap
 
 -- | Generate a mapping of Hydra job names to maintainer GitHub handles. Calls

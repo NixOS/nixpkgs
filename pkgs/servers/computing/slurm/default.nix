@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "slurm";
-  version = "23.11.1.1";
+  version = "23.11.4.1";
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
   # because the latter does not keep older releases.
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     repo = "slurm";
     # The release tags use - instead of .
     rev = "${pname}-${builtins.replaceStrings ["."] ["-"] version}";
-    hash = "sha256-dfCQKKw44bD5d7Sv7e40Qm3df9Mzz7WvmWf7SP8R1KQ=";
+    hash = "sha256-oUkFLw1vgPubsA2htzsJ5SfsL7UA6J0ufwjl7vWoX+s=";
   };
 
   outputs = [ "out" "dev" ];
@@ -37,6 +37,13 @@ stdenv.mkDerivation rec {
   prePatch = ''
     substituteInPlace src/common/env.c \
         --replace "/bin/echo" "${coreutils}/bin/echo"
+
+    # Autoconf does not support split packages for pmix (libs and headers).
+    # Fix the path to the pmix libraries, so dlopen can find it.
+    substituteInPlace src/plugins/mpi/pmix/mpi_pmix.c \
+        --replace 'xstrfmtcat(full_path, "%s/", PMIXP_LIBPATH)' \
+                  'xstrfmtcat(full_path, "${lib.getLib pmix}/lib/")'
+
   '' + (lib.optionalString enableX11 ''
     substituteInPlace src/common/x11_util.c \
         --replace '"/usr/bin/xauth"' '"${xorg.xauth}/bin/xauth"'
@@ -68,7 +75,7 @@ stdenv.mkDerivation rec {
       "--with-yaml=${lib.getDev libyaml}"
       "--with-ofed=${lib.getDev rdma-core}"
       "--sysconfdir=/etc/slurm"
-      "--with-pmix=${pmix}"
+      "--with-pmix=${lib.getDev pmix}"
       "--with-bpf=${libbpf}"
       "--without-rpath" # Required for configure to pick up the right dlopen path
     ] ++ (optional enableGtk2  "--disable-gtktest")

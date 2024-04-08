@@ -25,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     changelog = "https://codeberg.org/librecast/lcsync/src/tag/v${finalAttrs.version}/CHANGELOG.md";
     description = "Librecast File and Syncing Tool";
+    mainProgram = "lcsync";
     homepage = "https://librecast.net/lcsync.html";
     license = [ lib.licenses.gpl2 lib.licenses.gpl3 ];
     maintainers = with lib.maintainers; [ albertchae aynish DMills27 jasonodoom jleightcap ];

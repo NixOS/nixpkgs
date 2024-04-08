@@ -114,7 +114,6 @@ self: super: builtins.intersectAttrs super {
       }))
       super)
     hls-brittany-plugin
-    hls-stan-plugin
     hls-floskell-plugin
     hls-fourmolu-plugin
     hls-overloaded-record-dot-plugin
@@ -123,6 +122,9 @@ self: super: builtins.intersectAttrs super {
   # PLUGINS WITH DISABLED TESTS
   # 2023-04-01: TODO: We should reenable all these tests to figure if they are still broken.
   inherit (pkgs.lib.mapAttrs (_: dontCheck) super)
+    # Tests require ghcide-test-utils which is broken
+    hls-semantic-tokens-plugin
+
     # Tests have file permissions expections that don’t work with the nix store.
     hls-gadt-plugin
 
@@ -173,6 +175,9 @@ self: super: builtins.intersectAttrs super {
 
     # 2023-04-03: https://github.com/haskell/haskell-language-server/issues/3549
     hls-retrie-plugin
+
+    # 2024-01-25: Golden files are missing
+    hls-stan-plugin
   ;
 
   ###########################################
@@ -229,11 +234,7 @@ self: super: builtins.intersectAttrs super {
   # hledger* overrides
   inherit (
     let
-      # Copy hledger man pages from the source tarball into the proper place.
-      # It always contains the relevant man page(s) at the top level. For
-      # hledger it additionally has all the other man pages in embeddedfiles/
-      # which we ignore.
-      installHledgerManPages = overrideCabal (drv: {
+      installHledgerExtraFiles = overrideCabal (drv: {
         buildTools = drv.buildTools or [] ++ [
           pkgs.buildPackages.installShellFiles
         ];
@@ -243,6 +244,10 @@ self: super: builtins.intersectAttrs super {
           done
 
           install -v -Dm644 *.info* -t "$out/share/info/"
+
+          if [ -e shell-completion/hledger-completion.bash ]; then
+            installShellCompletion --name hledger shell-completion/hledger-completion.bash
+          fi
         '';
       });
 
@@ -254,15 +259,15 @@ self: super: builtins.intersectAttrs super {
       });
     in
     {
-      hledger = installHledgerManPages super.hledger;
-      hledger-web = installHledgerManPages (hledgerWebTestFix super.hledger-web);
-      hledger-ui = installHledgerManPages super.hledger-ui;
+      hledger = installHledgerExtraFiles super.hledger;
+      hledger-web = installHledgerExtraFiles (hledgerWebTestFix super.hledger-web);
+      hledger-ui = installHledgerExtraFiles super.hledger-ui;
 
-      hledger_1_30_1 = installHledgerManPages
+      hledger_1_30_1 = installHledgerExtraFiles
         (doDistribute (super.hledger_1_30_1.override {
           hledger-lib = self.hledger-lib_1_30;
         }));
-      hledger-web_1_30 = installHledgerManPages (hledgerWebTestFix
+      hledger-web_1_30 = installHledgerExtraFiles (hledgerWebTestFix
         (doDistribute (super.hledger-web_1_30.override {
           hledger = self.hledger_1_30_1;
           hledger-lib = self.hledger-lib_1_30;
@@ -428,7 +433,6 @@ self: super: builtins.intersectAttrs super {
   hasql-interpolate = dontCheck super.hasql-interpolate;
   hasql-notifications = dontCheck super.hasql-notifications;
   hasql-pool = dontCheck super.hasql-pool;
-  hasql-pool_0_10_0_1 = doDistribute (dontCheck super.hasql-pool_0_10_0_1);
   hasql-transaction = dontCheck super.hasql-transaction;
 
   # Test suite requires a running postgresql server,
@@ -466,6 +470,7 @@ self: super: builtins.intersectAttrs super {
   wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK32; };
 
   shellify = enableSeparateBinOutput super.shellify;
+  specup = enableSeparateBinOutput super.specup;
 
   # Test suite wants to connect to $DISPLAY.
   bindings-GLFW = dontCheck super.bindings-GLFW;
@@ -491,9 +496,6 @@ self: super: builtins.intersectAttrs super {
 
   # Uses OpenGL in testing
   caramia = dontCheck super.caramia;
-
-  # requires llvm 9 specifically https://github.com/llvm-hs/llvm-hs/#building-from-source
-  llvm-hs = super.llvm-hs.override { llvm-config = pkgs.llvm_9; };
 
   # llvm-ffi needs a specific version of LLVM which we hard code here. Since we
   # can't use pkg-config (LLVM has no official .pc files), we need to pass the
@@ -655,6 +657,8 @@ self: super: builtins.intersectAttrs super {
   # tests require working stack installation with all-cabal-hashes cloned in $HOME
   stackage-curator = dontCheck super.stackage-curator;
 
+  stack = self.generateOptparseApplicativeCompletions [ "stack" ] super.stack;
+
   # hardcodes /usr/bin/tr: https://github.com/snapframework/io-streams/pull/59
   io-streams = enableCabalFlag "NoInteractiveTests" super.io-streams;
 
@@ -794,6 +798,7 @@ self: super: builtins.intersectAttrs super {
       substituteInPlace Test.hs \
         --replace ', testCase "crypto" test_crypto' ""
     '' + (drv.postPatch or "");
+
     # Ensure git-annex uses the exact same coreutils it saw at build-time.
     # This is especially important on Darwin but also in Linux environments
     # where non-GNU coreutils are used by default.
@@ -804,6 +809,19 @@ self: super: builtins.intersectAttrs super {
     buildTools = [
       pkgs.buildPackages.makeWrapper
     ] ++ (drv.buildTools or []);
+
+    # Git annex provides a restricted login shell. Setting
+    # passthru.shellPath here allows a user's login shell to be set to
+    # `git-annex-shell` by making `shell = haskellPackages.git-annex`.
+    # https://git-annex.branchable.com/git-annex-shell/
+    passthru.shellPath = "/bin/git-annex-shell";
+
+    # Install man pages which is no longer done by Setup.hs
+    # TODO(@sternenseemann): figure out why install-desktops wants to create /usr
+    # and run that, too.
+    postInstall = drv.postInstall or "" + ''
+      make install-mans "DESTDIR=$out" PREFIX=
+    '';
   }) (super.git-annex.override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
@@ -1085,55 +1103,22 @@ self: super: builtins.intersectAttrs super {
   rel8 = pkgs.lib.pipe super.rel8 [
     (addTestToolDepend pkgs.postgresql)
     # https://github.com/NixOS/nixpkgs/issues/198495
-    (overrideCabal { doCheck = pkgs.postgresql.doCheck; })
+    (dontCheckIf (!pkgs.postgresql.doCheck))
   ];
 
   # Wants running postgresql database accessible over ip, so postgresqlTestHook
   # won't work (or would need to patch test suite).
   domaindriven-core = dontCheck super.domaindriven-core;
 
-  cachix-api = overrideCabal (drv: {
-    version = "1.6.1";
-    src = pkgs.fetchFromGitHub {
-      owner = "cachix";
-      repo = "cachix";
-      rev = "v1.6.1";
-      sha256 = "sha256-6S8EOs7bGTyY4eDXGuTbJMTlaz0n1JYIAPKIB2cVYxg=";
-    };
-    postUnpack = "sourceRoot=$sourceRoot/cachix-api";
-    postPatch = ''
-      sed -i 's/1.6/1.6.1/' cachix-api.cabal
-    '';
-  }) super.cachix-api;
-  cachix = overrideCabal (drv: {
-    version = "1.6.1";
-    src = pkgs.fetchFromGitHub {
-      owner = "cachix";
-      repo = "cachix";
-      rev = "v1.6.1";
-      sha256 = "sha256-6S8EOs7bGTyY4eDXGuTbJMTlaz0n1JYIAPKIB2cVYxg=";
-    };
-    postUnpack = "sourceRoot=$sourceRoot/cachix";
-    postPatch = ''
-      sed -i 's/1.6/1.6.1/' cachix.cabal
-    '';
-  }) (lib.pipe
-        (super.cachix.override {
-          nix = self.hercules-ci-cnix-store.nixPackage;
-        })
-        [
-         (addBuildTool self.hercules-ci-cnix-store.nixPackage)
-         (addBuildTool pkgs.pkg-config)
-         (addBuildDepend self.immortal)
-        ]
-  );
+  cachix = self.generateOptparseApplicativeCompletions [ "cachix" ]
+    (enableSeparateBinOutput super.cachix);
 
   hercules-ci-agent = super.hercules-ci-agent.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; };
   hercules-ci-cnix-expr = addTestToolDepend pkgs.git (super.hercules-ci-cnix-expr.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; });
   hercules-ci-cnix-store = overrideCabal
     (old: {
       passthru = old.passthru or { } // {
-        nixPackage = pkgs.nixVersions.nix_2_16;
+        nixPackage = pkgs.nixVersions.nix_2_19;
       };
     })
     (super.hercules-ci-cnix-store.override {
@@ -1150,10 +1135,16 @@ self: super: builtins.intersectAttrs super {
     preCheck = "export CI=true";
   }) super.aeson-typescript;
 
-  # Enable extra optimisations which increase build time, but also
-  # later compiler performance, so we should do this for user's benefit.
-  # Flag added in Agda 2.6.2
-  Agda = appendConfigureFlag "-foptimise-heavily" super.Agda;
+  Agda = lib.pipe super.Agda [
+    # Enable extra optimisations which increase build time, but also
+    # later compiler performance, so we should do this for user's benefit.
+    # Flag added in Agda 2.6.2
+    (enableCabalFlag "optimise-heavily")
+    # Enable debug printing, which worsens performance slightly but is
+    # very useful.
+    # Flag added in Agda 2.6.4.1, was always enabled before
+    (enableCabalFlag "debug")
+  ];
 
   # ats-format uses cli-setup in Setup.hs which is quite happy to write
   # to arbitrary files in $HOME. This doesn't either not achieve anything
@@ -1187,10 +1178,7 @@ self: super: builtins.intersectAttrs super {
 
   # Some hash implementations are x86 only, but part of the test suite.
   # So executing and building it on non-x86 platforms will always fail.
-  hashes = overrideCabal {
-    doCheck = with pkgs.stdenv; hostPlatform == buildPlatform
-      && buildPlatform.isx86;
-  } super.hashes;
+  hashes = dontCheckIf (!pkgs.stdenv.hostPlatform.isx86) super.hashes;
 
   # Tries to access network
   aws-sns-verify = dontCheck super.aws-sns-verify;
@@ -1228,11 +1216,9 @@ self: super: builtins.intersectAttrs super {
 
     {
       fourmolu = fourmoluTestFix super.fourmolu;
-      fourmolu_0_14_0_0 = fourmoluTestFix super.fourmolu_0_14_0_0;
       fourmolu_0_14_1_0 = fourmoluTestFix super.fourmolu_0_14_1_0;
     })
     fourmolu
-    fourmolu_0_14_0_0
     fourmolu_0_14_1_0
     ;
 
@@ -1369,6 +1355,10 @@ self: super: builtins.intersectAttrs super {
       webkit2gtk3-javascriptcore
       gi-webkit2
       gi-webkit2webextension
+      gi-gtk_4_0_8
+      gi-gdk_4_0_7
+      gi-gsk
+      gi-adwaita
       ;
 
   # Makes the mpi-hs package respect the choice of mpi implementation in Nixpkgs.
@@ -1390,4 +1380,12 @@ self: super: builtins.intersectAttrs super {
     mpi-hs-cereal
     mpi-hs-binary
     ;
+
+  postgresql-libpq = overrideCabal (drv: {
+    # Using use-pkg-config flag, because pg_config won't work when cross-compiling.
+    configureFlags = drv.configureFlags or [] ++ [ "-fuse-pkg-config" ];
+    # Move postgresql from SystemDepends to PkgconfigDepends
+    libraryPkgconfigDepends = drv.librarySystemDepends;
+    librarySystemDepends = [];
+  }) super.postgresql-libpq;
 }

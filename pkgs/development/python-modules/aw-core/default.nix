@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, pythonRelaxDepsHook
 , poetry-core
 , jsonschema
 , peewee
@@ -34,6 +35,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -46,6 +48,11 @@ buildPythonPackage rec {
     tomlkit
     deprecation
     timeslot
+  ];
+
+  pythonRelaxDeps = [
+    "platformdirs"
+    "iso8601"
   ];
 
   nativeCheckInputs = [
@@ -65,6 +72,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Core library for ActivityWatch";
+    mainProgram = "aw-cli";
     homepage = "https://github.com/ActivityWatch/aw-core";
     maintainers = with maintainers; [ huantian ];
     license = licenses.mpl20;

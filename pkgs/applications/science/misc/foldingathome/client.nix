@@ -3,18 +3,23 @@
 , fetchFromGitHub
 , ocl-icd
 , openssl
+, re2
+, libevent
+, git
+, zlib
+, expat
 , scons
 , stdenv
 , extraPkgs ? [ ]
 }:
 let
-  version = "8.1.18";
+  version = "8.3.7";
 
   cbangSrc = fetchFromGitHub {
     owner = "cauldrondevelopmentllc";
     repo = "cbang";
     rev = "bastet-v${version}";
-    hash = "sha256-G0rknVmZiyC4sRTOowFjf7EQ5peGf+HLPPcLWXXFlX4=";
+    sha256 = "sha256-acAImItdkgo6PBFL6Vu/caIdcnvp/3VEW2lgVDgKy9g=";
   };
 
   fah-client = stdenv.mkDerivation {
@@ -25,10 +30,10 @@ let
       owner = "FoldingAtHome";
       repo = "fah-client-bastet";
       rev = "v${version}";
-      hash = "sha256-IgT/5NqCwN8N8OObjtASuT4IRb2EN4bdixxUdjiyddI=";
+      sha256 = "sha256-d+LY/R4TAko+2e2W76KEBQ8fXj0hzzmBOm+c4tksXMA=";
     };
 
-    nativeBuildInputs = [ scons ];
+    nativeBuildInputs = [ scons re2 libevent git ];
 
     buildInputs = [ openssl ];
 
@@ -45,14 +50,15 @@ let
     installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/{bin,share/applications,share/feh-client}
+      mkdir -p $out/{bin,share/applications}
 
       cp fah-client $out/bin/fah-client
 
-      cp install/lin/fah-client.desktop $out/share/applications/
-      cp -r images $out/share/feh-client/
-
-      sed -e "s|Icon=.*|Icon=$out/share/feh-client/images/fahlogo.png|g" -i $out/share/applications/fah-client.desktop
+      cp install/lin/fah-client.desktop.in $out/share/applications/fah-client.desktop
+      sed \
+        -e "s|Icon=.*|Icon=$out/share/feh-client/images/fahlogo.png|g" \
+        -e "s|%(PACKAGE_URL)s|https://github.com/FoldingAtHome/fah-client-bastet|g" \
+        -i $out/share/applications/fah-client.desktop
 
       runHook postInstall
     '';
@@ -62,7 +68,7 @@ in
 buildFHSEnv {
   name = fah-client.name;
 
-  targetPkgs = _: [ fah-client ocl-icd ] ++ extraPkgs;
+  targetPkgs = _: [ fah-client ocl-icd zlib expat ] ++ extraPkgs;
 
   runScript = "/bin/fah-client";
 

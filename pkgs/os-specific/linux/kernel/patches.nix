@@ -65,4 +65,27 @@
     name = "export-rt-sched-migrate";
     patch = ./export-rt-sched-migrate.patch;
   };
+
+  rust_1_74 = {
+    name = "rust-1.74.patch";
+    patch = fetchpatch {
+      name = "rust-1.74.patch";
+      url = "https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/patch/?id=80fe9e51510b23472ad0f97175556490549ed714";
+      hash = "sha256-yGt7PwqN/G+ZtZSt6eARvVFdkC8tnUiu0Fz4cFCyguM=";
+    };
+  };
+
+  rust_1_75 = {
+    name = "rust-1.75.patch";
+    patch = ./rust-1.75.patch;
+  };
+
+  rust_1_76 = {
+    name = "rust-1.76.patch";
+    patch = fetchurl {
+      name = "rust-1.76.patch";
+      url = "https://lore.kernel.org/rust-for-linux/20240217002638.57373-2-ojeda@kernel.org/raw";
+      hash = "sha256-q3iNBo8t4b1Rn5k5lau2myqOAqdA/9V9A+ok2jGkLdY=";
+    };
+  };
 }

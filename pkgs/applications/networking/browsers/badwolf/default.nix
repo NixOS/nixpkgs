@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Minimalist and privacy-oriented WebKitGTK+ browser";
+    mainProgram = "badwolf";
     homepage = "https://hacktivis.me/projects/badwolf";
     license = licenses.bsd3;
     platforms = platforms.linux;

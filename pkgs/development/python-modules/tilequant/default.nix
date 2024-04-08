@@ -4,6 +4,7 @@
 , click
 , ordered-set
 , pythonOlder
+, pythonRelaxDepsHook
 , pillow
 , sortedcollections
 , setuptools_dso
@@ -21,6 +22,14 @@ buildPythonPackage rec {
     hash = "sha256-uW1g3nlT6Y+1beifo/MOlGxsGL7on/jcAROxSddySHk=";
   };
 
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "pillow"
+  ];
+
   propagatedBuildInputs = [
     click
     ordered-set
@@ -37,6 +46,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Tool for quantizing image colors using tile-based palette restrictions";
+    mainProgram = "tilequant";
     homepage = "https://github.com/SkyTemple/tilequant";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ marius851000 xfix ];

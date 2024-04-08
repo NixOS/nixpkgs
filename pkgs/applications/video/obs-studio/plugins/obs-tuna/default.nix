@@ -28,6 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  # obs_frontend_add_dock() deprecated in obs 30
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
   patches = [
     # fix build with qt 6.6.0
     # treewide: replace deprecated qAsConst with std::as_const()
@@ -35,6 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch2 {
       url = "https://github.com/univrsal/tuna/commit/0d570e771f8d8e6ae7c85bd2b86bbf59c264789e.patch";
       hash = "sha256-A5idhMiM9funqhTm5XMIBqwy+FO1SaNPtgZjo+Vws6k=";
+    })
+    # fix build with obs 30
+    (fetchpatch2 {
+      url = "https://github.com/univrsal/tuna/commit/723bd3c7b4e257cf0997611426e555068de77ae7.patch";
+      hash = "sha256-MF5vghGYknL6q+A8BJ1yrQcEKIu9I+PWk+RZNYg3fRU=";
     })
   ];
 

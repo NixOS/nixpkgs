@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "The tree sequence toolkit";
+    mainProgram = "tskit";
     homepage = "https://github.com/tskit-dev/tskit";
     license = licenses.mit;
     maintainers = with maintainers; [ alxsimon ];

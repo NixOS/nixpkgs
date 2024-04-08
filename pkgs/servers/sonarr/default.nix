@@ -1,12 +1,28 @@
-{ lib, stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper, nixosTests }:
+{ lib, stdenv, fetchurl, dotnet-runtime, icu, ffmpeg, openssl, sqlite, curl, makeWrapper, nixosTests }:
 
+let
+  os = if stdenv.isDarwin then "osx" else "linux";
+  arch = {
+    x86_64-linux = "x64";
+    aarch64-linux = "arm64";
+    x86_64-darwin = "x64";
+    aarch64-darwin = "arm64";
+  }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
+  hash = {
+    x64-linux_hash = "sha256-S9j6zXEJM963tki88awPW0uK0fQd1bBwBcsHBlDSg/E=";
+    arm64-linux_hash = "sha256-73FkmdliX5SNrQRRZeAkU0G96ehCd9mT8NVyJoZiA38=";
+    x64-osx_hash = "sha256-XZ4ITJtc2ENw7IAYrBZF0N/NCjUVve+SkWhu6kfQIQA=";
+    arm64-osx_hash = "sha256-2tA17mDuCX5X0U96Rp6QUQOVWvu9sPMOimD6kks+S00=";
+  }."${arch}-${os}_hash";
+in
 stdenv.mkDerivation rec {
   pname = "sonarr";
-  version = "3.0.10.1567";
+  version = "4.0.2.1183";
 
   src = fetchurl {
-    url = "https://download.sonarr.tv/v3/main/${version}/Sonarr.main.${version}.linux.tar.gz";
-    hash = "sha256-6zdp/Bg+9pcrElW5neB+BC16Vn1VhTjhMRRIxGrKhxc=";
+    url = "https://github.com/Sonarr/Sonarr/releases/download/v${version}/Sonarr.main.${version}.${os}-${arch}.tar.gz";
+    inherit hash;
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -14,12 +30,13 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    cp -r * $out/bin/
-    makeWrapper "${mono}/bin/mono" $out/bin/NzbDrone \
-      --add-flags "$out/bin/Sonarr.exe" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
-          curl sqlite libmediainfo ]}
+    mkdir -p $out/{bin,share/sonarr-${version}}
+    cp -r * $out/share/sonarr-${version}/.
+
+    makeWrapper "${dotnet-runtime}/bin/dotnet" $out/bin/NzbDrone \
+      --add-flags "$out/share/sonarr-${version}/Sonarr.dll" \
+      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]} \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ curl sqlite openssl icu ]}
 
     runHook postInstall
   '';

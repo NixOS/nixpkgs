@@ -2,6 +2,7 @@
 , stdenv
 , fetchgit
 , fetchzip
+, fetchpatch
 , alsa-lib
 , aubio
 , boost
@@ -79,6 +80,12 @@ stdenv.mkDerivation rec {
     # AS=as in the environment causes build failure https://tracker.ardour.org/view.php?id=8096
     ./as-flags.patch
     ./default-plugin-search-paths.patch
+
+    # Fix build with libxml2 2.12.
+    (fetchpatch {
+      url = "https://github.com/Ardour/ardour/commit/e995daa37529715214c6c4a2587e4134aaaba02f.patch";
+      hash = "sha256-EpXOIIObOwwcNgNma0E3nvaBad3930sagDjBpa+78WI=";
+    })
   ];
 
   # Ardour's wscript requires git revision and date to be available.

@@ -28,6 +28,7 @@ let
 
       meta = with lib; {
         description = "Dependency manager for the Crystal language";
+        mainProgram = "shards";
         license = licenses.asl20;
         maintainers = with maintainers; [ peterhoeg ];
         inherit (crystal.meta) homepage platforms;

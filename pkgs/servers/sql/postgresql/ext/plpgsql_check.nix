@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "plpgsql-check";
-  version = "2.7.1";
+  version = "2.7.4";
 
   src = fetchFromGitHub {
     owner = "okbob";
     repo = "plpgsql_check";
     rev = "v${version}";
-    hash = "sha256-2SOBisIElNqqg5NwFk+pp7sE/+OvTifJUKMWOaOvO3k=";
+    hash = "sha256-qPYH6i8XJZVH+5zM/gozf+0Kts/Tzv6fRWkayGEe+5U=";
   };
 
   buildInputs = [ postgresql ];
@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/okbob/plpgsql_check/releases/tag/v${version}";
     platforms = postgresql.meta.platforms;
     license = licenses.mit;
-    broken = versionOlder postgresql.version "12";
     maintainers = [ maintainers.marsam ];
   };
 }

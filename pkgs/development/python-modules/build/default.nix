@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "build";
-  version = "1.0.3";
+  version = "1.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -30,6 +30,11 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-SGWpm+AGIfqKMpDfmz2aMYmcs+XVREbHIXSuU4R7U/k=";
   };
+
+  postPatch = ''
+    # not strictly required, causes circular dependency cycle
+    sed -i '/importlib-metadata >= 4.6/d' pyproject.toml
+  '';
 
   nativeBuildInputs = [
     flit-core

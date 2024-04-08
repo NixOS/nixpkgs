@@ -65,6 +65,7 @@ let
 
   meta = with lib; {
     description = "A good-looking third-party netease cloud music player";
+    mainProgram = "yesplaymusic";
     homepage = "https://github.com/qier222/YesPlayMusic/";
     license = licenses.mit;
     maintainers = with maintainers; [ ChaosAttractor ];

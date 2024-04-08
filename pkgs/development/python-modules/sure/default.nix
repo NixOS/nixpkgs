@@ -30,6 +30,8 @@ buildPythonPackage rec {
     six
   ];
 
+  doCheck = pythonOlder "3.12"; # nose requires imp module
+
   nativeCheckInputs = [
     nose
   ];
@@ -40,6 +42,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Utility belt for automated testing";
+    mainProgram = "sure";
     homepage = "https://sure.readthedocs.io/";
     changelog = "https://github.com/gabrielfalcao/sure/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;

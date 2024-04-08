@@ -153,9 +153,6 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     propagatedBuildInputs = [ self.signingUtils ];
   } ../os-specific/darwin/signing-utils/auto-sign-hook.sh;
 
-  maloader = callPackage ../os-specific/darwin/maloader {
-  };
-
   insert_dylib = callPackage ../os-specific/darwin/insert_dylib { };
 
   iosSdkPkgs = callPackage ../os-specific/darwin/xcode/sdk-pkgs.nix {
@@ -172,11 +169,8 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   moltenvk = pkgs.darwin.apple_sdk_11_0.callPackage ../os-specific/darwin/moltenvk {
     inherit (apple_sdk_11_0.frameworks) AppKit Foundation Metal QuartzCore;
-    inherit (apple_sdk_11_0) MacOSX-SDK Libsystem;
-    inherit (pkgs.darwin) cctools sigtool;
+    inherit (apple_sdk_11_0.libs) simd;
   };
-
-  opencflite = callPackage ../os-specific/darwin/opencflite { };
 
   openwith = pkgs.darwin.apple_sdk_11_0.callPackage ../os-specific/darwin/openwith {
     inherit (apple_sdk_11_0.frameworks) AppKit Foundation UniformTypeIdentifiers;
@@ -196,6 +190,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     xcode_12 xcode_12_0_1 xcode_12_1 xcode_12_2 xcode_12_3 xcode_12_4 xcode_12_5 xcode_12_5_1
     xcode_13 xcode_13_1 xcode_13_2 xcode_13_3 xcode_13_3_1 xcode_13_4 xcode_13_4_1
     xcode_14 xcode_14_1
+    xcode_15 xcode_15_1
     xcode;
 
   CoreSymbolication = callPackage ../os-specific/darwin/CoreSymbolication { };
@@ -233,7 +228,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   discrete-scroll = callPackage ../os-specific/darwin/discrete-scroll { };
 
-  # See doc/builders/special/darwin-builder.section.md
+  # See doc/packages/darwin-builder.section.md
   linux-builder = lib.makeOverridable ({ modules }:
     let
       toGuest = builtins.replaceStrings [ "darwin" ] [ "linux" ];

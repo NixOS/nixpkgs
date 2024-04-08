@@ -25,6 +25,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A python command-line tool which draws basic graphs in the terminal";
+    mainProgram = "termgraph";
     homepage = "https://github.com/mkaz/termgraph";
     license = licenses.mit;
     maintainers = with maintainers; [ samuela ];

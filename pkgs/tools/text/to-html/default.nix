@@ -20,7 +20,8 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = {
-    description = "Terminal wrapper for rendering a terminal on a website by converting ANSI escape sequences to HTML.";
+    description = "Terminal wrapper for rendering a terminal on a website by converting ANSI escape sequences to HTML";
+    mainProgram = "to-html";
     homepage = "https://github.com/Aloso/to-html";
     changelog = "https://github.com/Aloso/to-html/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;

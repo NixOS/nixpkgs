@@ -8,14 +8,14 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "waycorner";
-  version = "0.2.1";
+  version = "0.2.2";
   src = fetchFromGitHub {
     owner = "AndreasBackx";
     repo = "waycorner";
     rev = version;
-    hash = "sha256-xvmvtn6dMqt8kUwvn5d5Nl1V84kz1eWa9BSIN/ONkSQ=";
+    hash = "sha256-b0wGqtCvWzCV9mj2eZ0SXzxM02fbyQ+OfKcbZ2MhLOE=";
   };
-  cargoHash = "sha256-Dl+GhJywWhaC4QMS70klazPsFipGVRW+6jrXH2XsEAI=";
+  cargoHash = "sha256-Xl2nBBcfWjULKG2L+qX4ruw7gux6+qfFg/dTAarqgAU=";
   buildInputs = [
     wayland
   ];
@@ -31,6 +31,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Hot corners for Wayland";
+    mainProgram = "waycorner";
     changelog = "https://github.com/AndreasBackx/waycorner/blob/main/CHANGELOG.md";
     homepage = "https://github.com/AndreasBackx/waycorner";
     platforms = platforms.linux;

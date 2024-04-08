@@ -277,7 +277,7 @@ self: super: {
 Here's a recipe on how to override a particular plugin through an overlay:
 ```
 self: super: {
-  postgresql_15 = super.postgresql_15.override { this = self.postgresql_15; } // {
+  postgresql_15 = super.postgresql_15// {
     pkgs = super.postgresql_15.pkgs // {
       pg_repack = super.postgresql_15.pkgs.pg_repack.overrideAttrs (_: {
         name = "pg_repack-v20181024";

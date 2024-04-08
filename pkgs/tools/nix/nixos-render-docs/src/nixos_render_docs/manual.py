@@ -8,7 +8,7 @@ import xml.sax.saxutils as xml
 from abc import abstractmethod
 from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any, cast, ClassVar, Generic, get_args, NamedTuple
+from typing import Any, Callable, cast, ClassVar, Generic, get_args, NamedTuple
 
 from markdown_it.token import Token
 
@@ -44,8 +44,40 @@ class BaseConverter(Converter[md.TR], Generic[md.TR]):
     def _postprocess(self, infile: Path, outfile: Path, tokens: Sequence[Token]) -> None:
         pass
 
-    def _parse(self, src: str) -> list[Token]:
+    def _handle_headings(self, tokens: list[Token], *, on_heading: Callable[[Token,str],None]) -> None:
+        # Headings in a globally numbered order
+        # h1 to h6
+        curr_heading_pos: list[int] = []
+        for token in tokens:
+            if token.type == "heading_open":
+                if token.tag not in ["h1", "h2", "h3", "h4", "h5", "h6"]:
+                    raise RuntimeError(f"Got invalid heading tag {token.tag} in line {token.map[0] + 1 if token.map else 'NOT FOUND'}. Only h1 to h6 headings are allowed.")
+
+                idx = int(token.tag[1:]) - 1
+
+                if idx >= len(curr_heading_pos):
+                    # extend the list if necessary
+                    curr_heading_pos.extend([0 for _i in range(idx+1 - len(curr_heading_pos))])
+
+                curr_heading_pos = curr_heading_pos[:idx+1]
+                curr_heading_pos[-1] += 1
+
+
+                ident = ".".join(f"{a}" for a in curr_heading_pos)
+                on_heading(token,ident)
+
+
+
+    def _parse(self, src: str, *, auto_id_prefix: None | str = None) -> list[Token]:
         tokens = super()._parse(src)
+        if auto_id_prefix:
+            def set_token_ident(token: Token, ident: str) -> None:
+                if "id" not in token.attrs:
+                    token.attrs["id"] = f"{auto_id_prefix}-{ident}"
+
+            self._handle_headings(tokens, on_heading=set_token_ident)
+
+
         check_structure(self._current_type[-1], tokens)
         for token in tokens:
             if not is_include(token):
@@ -89,7 +121,12 @@ class BaseConverter(Converter[md.TR], Generic[md.TR]):
             try:
                 self._base_paths.append(path)
                 with open(path, 'r') as f:
-                    tokens = self._parse(f.read())
+                    prefix = None
+                    if "auto-id-prefix" in block_args:
+                        # include the current file number to prevent duplicate ids within include blocks
+                        prefix = f"{block_args.get('auto-id-prefix')}-{lnum}"
+
+                    tokens = self._parse(f.read(), auto_id_prefix=prefix)
                     included.append((tokens, path))
                 self._base_paths.pop()
             except Exception as e:
@@ -554,8 +591,8 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
             infile.parent, outfile.parent)
         super().convert(infile, outfile)
 
-    def _parse(self, src: str) -> list[Token]:
-        tokens = super()._parse(src)
+    def _parse(self, src: str, *, auto_id_prefix: None | str = None) -> list[Token]:
+        tokens = super()._parse(src,auto_id_prefix=auto_id_prefix)
         for token in tokens:
             if not token.type.startswith('included_') \
                or not (into := token.meta['include-args'].get('into-file')):

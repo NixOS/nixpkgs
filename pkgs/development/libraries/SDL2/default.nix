@@ -48,8 +48,8 @@
 , OpenGL
 , audiofile
 , libiconv
-, withStatic ? false
-# passthru.tests
+, withStatic ? stdenv.hostPlatform.isMinGW
+  # passthru.tests
 , testers
 }:
 
@@ -58,13 +58,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2";
-  version = "2.28.5";
+  version = "2.30.1";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-YcM7bfLo+KkWx8LdtG4z2UwJvzlEkvIkm+M5aMSztwU=";
+    hash = "sha256-nwmmyJK1/5Mu7l1YCk4PsasJIrx3jdiM5f/Cu3n0paA=";
   };
   dontDisableStatic = if withStatic then 1 else 0;
   outputs = [ "out" "dev" ];
@@ -172,7 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit openglSupport;
-    updateScript = nix-update-script { extraArgs = ["--version-regex" "release-(.*)"]; };
+    updateScript = nix-update-script { extraArgs = [ "--version-regex" "release-(.*)" ]; };
     tests.pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
     };
@@ -180,6 +180,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "A cross-platform multimedia library";
+    mainProgram = "sdl2-config";
     homepage = "http://www.libsdl.org/";
     changelog = "https://github.com/libsdl-org/SDL/releases/tag/release-${version}";
     license = licenses.zlib;

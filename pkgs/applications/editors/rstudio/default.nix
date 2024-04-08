@@ -7,7 +7,7 @@
 , makeDesktopItem
 , copyDesktopItems
 , cmake
-, boost
+, boost183
 , zlib
 , openssl
 , R
@@ -40,18 +40,19 @@
 
 let
   pname = "RStudio";
-  version =
-  "${RSTUDIO_VERSION_MAJOR}.${RSTUDIO_VERSION_MINOR}.${RSTUDIO_VERSION_PATCH}${RSTUDIO_VERSION_SUFFIX}";
-  RSTUDIO_VERSION_MAJOR  = "2023";
-  RSTUDIO_VERSION_MINOR  = "09";
-  RSTUDIO_VERSION_PATCH  = "0";
-  RSTUDIO_VERSION_SUFFIX = "+463";
+  version = "2023.12.1+402";
+  RSTUDIO_VERSION_MAJOR = lib.versions.major version;
+  RSTUDIO_VERSION_MINOR = lib.versions.minor version;
+  RSTUDIO_VERSION_PATCH = lib.versions.patch version;
+  RSTUDIO_VERSION_SUFFIX = "+" + toString (
+    lib.tail (lib.splitString "+" version)
+  );
 
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "rstudio";
-    rev = "v${version}";
-    hash = "sha256-FwNuU2rbE3GEhuwphvZISUMhvSZJ6FjjaZ1oQ9F8NWc=";
+    rev = version;
+    hash = "sha256-ecMzkpHazg8jEBz9wh8hqRX2UdziOC8b6F+3xxdugy0=";
   };
 
   mathJaxSrc = fetchurl {
@@ -62,8 +63,8 @@ let
   rsconnectSrc = fetchFromGitHub {
     owner = "rstudio";
     repo = "rsconnect";
-    rev = "5175a927a41acfd9a21d9fdecb705ea3292109f2";
-    hash = "sha256-c1fFcN6KAfxXv8bv4WnIqQKg1wcNP2AywhEmIbyzaBA=";
+    rev = "v1.2.0";
+    hash = "sha256-ghRz4Frd+I9ShRNNOE/kdk9KjRCj0Z1mPnThueriiUY=";
   };
 
   # Ideally, rev should match the rstudio release name.
@@ -93,7 +94,7 @@ in
     ];
 
     buildInputs = [
-      boost
+      boost183
       zlib
       openssl
       R
@@ -133,6 +134,7 @@ in
       ./fix-resources-path.patch
       ./pandoc-nix-path.patch
       ./use-system-quarto.patch
+      ./ignore-etc-os-release.patch
     ];
 
     postPatch = ''

@@ -36,6 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Parser for HCL2 written in Python using Lark";
+    mainProgram = "hcl2tojson";
     longDescription = ''
       This parser only supports HCL2 and isn't backwards compatible with HCL v1.
       It can be used to parse any HCL2 config file such as Terraform.

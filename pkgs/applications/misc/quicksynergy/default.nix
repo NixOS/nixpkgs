@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.spinus ];
     platforms = lib.platforms.linux;
+    mainProgram = "quicksynergy";
   };
 }

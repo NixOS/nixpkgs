@@ -188,7 +188,7 @@ let
         description = "A flexible, powerful daemon for playing music";
         homepage    = "https://www.musicpd.org/";
         license     = licenses.gpl2Only;
-        maintainers = with maintainers; [ astsmtl ehmry tobim ];
+        maintainers = with maintainers; [ astsmtl tobim ];
         platforms   = platforms.unix;
         mainProgram = "mpd";
 

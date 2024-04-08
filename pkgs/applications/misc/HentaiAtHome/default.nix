@@ -52,5 +52,6 @@ stdenvNoCC.mkDerivation rec {
       "Hentai@Home is an open-source P2P gallery distribution system which reduces the load on the E-Hentai Galleries";
     license = licenses.gpl3;
     maintainers = with maintainers; [ terrorjack ];
+    mainProgram = "HentaiAtHome";
   };
 }

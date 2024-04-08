@@ -4,7 +4,7 @@ let
     version = "unstable-2023-01-26";
     dontBuild = true;
     meta = with lib; {
-      description = "Data repository for seaborn examples.";
+      description = "Data repository for seaborn examples";
       homepage = "https://github.com/mwaskom/seaborn-data";
       platforms = platforms.all;
       maintainers = with maintainers; [ mbalatsko ];

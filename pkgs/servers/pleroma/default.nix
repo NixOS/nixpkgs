@@ -7,14 +7,14 @@
 
 beamPackages.mixRelease rec {
   pname = "pleroma";
-  version = "2.6.1";
+  version = "2.6.2";
 
   src = fetchFromGitLab {
     domain = "git.pleroma.social";
     owner = "pleroma";
     repo = "pleroma";
     rev = "v${version}";
-    sha256 = "sha256-VIGlJ5+99l+VSUl7c9jiQf94X/JV0+HFgI8xQ4ZLQ9s=";
+    sha256 = "sha256-KVB6e/B6DJbylpfR8QTZJ1GOJrAqF6shqoU/zIndi1U=";
   };
 
   patches = [
@@ -47,8 +47,8 @@ beamPackages.mixRelease rec {
           group = "pleroma";
           owner = "elixir-libraries";
           repo = "elixir-captcha";
-          rev = "e0f16822d578866e186a0974d65ad58cddc1e2ab";
-          sha256 = "0qbf86l59kmpf1nd82v4141ba9ba75xwmnqzpgbm23fa1hh8pi9c";
+          rev = "90f6ce7672f70f56708792a98d98bd05176c9176";
+          hash = "sha256-s7EuAhmCsQA/4p2NJHJSWB/DZ5hA+7EelPsUOvKr2Po=";
         };
         beamDeps = with final; [ ];
 
@@ -163,7 +163,7 @@ beamPackages.mixRelease rec {
   meta = with lib; {
     description = "ActivityPub microblogging server";
     homepage = "https://git.pleroma.social/pleroma/pleroma";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ picnoir yuka kloenk yayayayaka ];
     platforms = platforms.unix;
   };

@@ -98,9 +98,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optional (enableGL || enableX11) copyDesktopItems
+    ++ lib.optional (stdenv.isDarwin && (enableGL || enableX11)) desktopToDarwinBundle
     ++ lib.optionals (enableCxx || enablePython) [ python3 python3.pkgs.setuptools python3.pkgs.libclang ]
     ++ lib.optionals (enablePython) [ which swig ]
-    ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle fixDarwinDylibNames xcbuild ];
+    ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames xcbuild ];
 
   buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg gumbo ]
     ++ lib.optionals enableX11 [ libX11 libXext libXi libXrandr ]
@@ -126,7 +127,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  desktopItems = [
+  desktopItems = lib.optionals (enableGL || enableX11) [
     (makeDesktopItem {
       name = pname;
       desktopName = pname;
@@ -154,21 +155,25 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/lib/pkgconfig"
     cat >"$out/lib/pkgconfig/mupdf.pc" <<EOF
     prefix=$out
-    libdir=$out/lib
-    includedir=$out/include
+    libdir=\''${prefix}/lib
+    includedir=\''${prefix}/include
 
     Name: mupdf
     Description: Library for rendering PDF documents
     Version: ${version}
-    Libs: -L$out/lib -lmupdf
-    Cflags: -I$dev/include
+    Libs: -L\''${libdir} -lmupdf
+    Cflags: -I\''${includedir}
     EOF
 
     moveToOutput "bin" "$bin"
-  '' + lib.optionalString (enableX11 || enableGL) ''
+  '' + (lib.optionalString (stdenv.isDarwin) ''
+    for exe in $bin/bin/*; do
+      install_name_tool -change build/shared-release/libmupdf.dylib $out/lib/libmupdf.dylib "$exe"
+    done
+  '') + (lib.optionalString (enableX11 || enableGL) ''
     mkdir -p $bin/share/icons/hicolor/48x48/apps
     cp docs/logo/mupdf.png $bin/share/icons/hicolor/48x48/apps
-  '' + (if enableGL then ''
+  '') + (if enableGL then ''
     ln -s "$bin/bin/mupdf-gl" "$bin/bin/mupdf"
   '' else lib.optionalString (enableX11) ''
     ln -s "$bin/bin/mupdf-x11" "$bin/bin/mupdf"

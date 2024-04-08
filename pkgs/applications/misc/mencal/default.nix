@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.mmahut ];
     platforms = platforms.all;
+    mainProgram = "mencal";
   };
 }

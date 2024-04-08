@@ -3,10 +3,12 @@
 , fetchFromGitHub
 , jaxtyping
 , pytestCheckHook
+, pythonRelaxDepsHook
 , scipy
 , setuptools
 , setuptools-scm
 , torch
+, typeguard
 , wheel
 }:
 
@@ -22,9 +24,8 @@ buildPythonPackage rec {
     hash = "sha256-OuE6jx9Q4IU+b2a+mrglRdBOReN1tt/thetNXxwk1GI=";
   };
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     setuptools
     setuptools-scm
     wheel
@@ -34,6 +35,11 @@ buildPythonPackage rec {
     jaxtyping
     scipy
     torch
+    typeguard
+  ];
+
+  pythonRelaxDeps = [
+    "typeguard"
   ];
 
   pythonImportsCheck = [ "linear_operator" ];
@@ -44,6 +50,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # flaky numerical tests
+    "test_matmul_matrix_broadcast"
     "test_svd"
   ];
 

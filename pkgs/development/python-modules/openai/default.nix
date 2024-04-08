@@ -10,6 +10,7 @@
 , anyio
 , distro
 , sniffio
+, cached-property
 , tqdm
 # optional
 , numpy
@@ -25,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.6.1";
+  version = "1.13.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7.1";
@@ -34,7 +35,7 @@ buildPythonPackage rec {
     owner = "openai";
     repo = "openai-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-w5jj2XWTAbiu64NerLvDyGe9PybeE/WHkukoWT97SJE=";
+    hash = "sha256-8SHXUrPLZ7lgvB0jqZlcvKq5Zv2d2UqXjJpgiBpR8P8=";
   };
 
   nativeBuildInputs = [
@@ -44,12 +45,13 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     httpx
     pydantic
+    typing-extensions
     anyio
     distro
     sniffio
     tqdm
   ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
+    cached-property
   ];
 
   passthru.optional-dependencies = {
@@ -72,16 +74,27 @@ buildPythonPackage rec {
     dirty-equals
   ];
 
-  OPENAI_API_KEY = "sk-foo";
+  pytestFlagsArray = [
+    "-W" "ignore::DeprecationWarning"
+  ];
+
+  disabledTests = [
+    # Tests make network requests
+    "test_streaming_response"
+    "test_copy_build_request"
+
+    # Test fails with pytest>=8
+    "test_basic_attribute_access_works"
+  ];
 
   disabledTestPaths = [
-    # makes network requests
-    "tests/test_client.py"
+    # Test makes network requests
     "tests/api_resources"
   ];
 
   meta = with lib; {
     description = "Python client library for the OpenAI API";
+    mainProgram = "openai";
     homepage = "https://github.com/openai/openai-python";
     changelog = "https://github.com/openai/openai-python/releases/tag/v${version}";
     license = licenses.mit;

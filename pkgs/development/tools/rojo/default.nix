@@ -8,21 +8,21 @@
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) CoreServices;
+  inherit (darwin.apple_sdk.frameworks) CoreServices SystemConfiguration;
 in
 rustPlatform.buildRustPackage rec {
   pname = "rojo";
-  version = "7.2.1";
+  version = "7.4.1";
 
   src = fetchFromGitHub {
     owner = "rojo-rbx";
     repo = "rojo";
     rev = "v${version}";
-    sha256 = "sha256-Kmq/lBwayYkFU4mbjExj7M9wpg59OkIiTc+2ZrwpuBc=";
+    hash = "sha256-7fnzNYAbsZW/48C4dwpMXXQy2ZgxbYFSs85wNKGcu/4=";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "sha256-qx6Ja0DMe4cEmDSpovtY9T3+0nJS9XivR92K3UKgacE=";
+  cargoHash = "sha256-9kmSNWsZY0OcqaYOCblMwkXTdGXhj7f/2pUDx/L/o2o=";
 
   nativeBuildInputs = [
     pkg-config
@@ -32,13 +32,18 @@ rustPlatform.buildRustPackage rec {
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
     CoreServices
+    SystemConfiguration
   ];
+
+  # reqwest's native-tls-vendored feature flag uses vendored openssl. this disables that
+  OPENSSL_NO_VENDOR = "1";
 
   # tests flaky on darwin on hydra
   doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "Project management tool for Roblox";
+    mainProgram = "rojo";
     longDescription = ''
       Rojo is a tool designed to enable Roblox developers to use professional-grade software engineering tools.
     '';

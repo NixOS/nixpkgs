@@ -1,4 +1,6 @@
-{ lib
+{ stdenv
+, lib
+, darwin
 , rustPlatform
 , fetchFromGitHub
 , withCmd ? false
@@ -17,6 +19,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-IzgVF6SHJjOB48VehQ5taD5iWQXFKLcVBWTEl3ArkGQ=";
 
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
+
   buildFeatures = lib.optional withCmd "cmd";
 
   postInstall = ''
@@ -27,8 +31,8 @@ rustPlatform.buildRustPackage rec {
     description = "A tool to improve keyboard comfort and usability with advanced customization";
     homepage = "https://github.com/jtroo/kanata";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ linj ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ bmanuel linj ];
+    platforms = platforms.unix;
     mainProgram = "kanata";
   };
 }

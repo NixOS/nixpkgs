@@ -4,7 +4,7 @@
 , setuptools
 , importlib-metadata
 , numpy
-, rpyc
+, rpyc4
 , scipy
 , appdirs
 , callPackage
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-ZgAp1SEiHijyjK74VZyRLYY3Hzfc3BQ6cnoO3hZzvbE=";
   };
 
-  sourceRoot = "source/linien-common";
+  sourceRoot = "${src.name}/linien-common";
 
   preBuild = ''
     export HOME=$(mktemp -d)
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     importlib-metadata
     numpy
-    rpyc
+    rpyc4
     scipy
     appdirs
   ];

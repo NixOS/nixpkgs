@@ -104,10 +104,6 @@ super: lib.trivial.pipe super [
         nautilus_gsettings_path = "${glib.getSchemaPath gnome.nautilus}";
       })
     ];
-    postFixup = ''
-      wrapGApp "$out/share/gnome-shell/extensions/gtk4-ding@smedius.gitlab.com/app/ding.js"
-      wrapGApp "$out/share/gnome-shell/extensions/gtk4-ding@smedius.gitlab.com/app/createThumbnail.js"
-    '';
   }))
 
   (patchExtension "pano@elhan.io" (old: {

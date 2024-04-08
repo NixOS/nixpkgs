@@ -406,8 +406,10 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
   passthru = {
     inherit langC langCC langObjC langObjCpp langAda langFortran langGo langD langJava version;
     isGNU = true;
-  } // lib.optionalAttrs (!atLeast12) {
-    hardeningUnsupportedFlags = lib.optionals is48 [ "stackprotector" ] ++ [ "fortify3" ];
+    hardeningUnsupportedFlags = lib.optional is48 "stackprotector"
+      ++ lib.optional (!atLeast11) "zerocallusedregs"
+      ++ lib.optionals (!atLeast12) [ "fortify3" "trivialautovarinit" ]
+      ++ lib.optionals (langFortran) [ "fortify" "format" ];
   };
 
   enableParallelBuilding = true;

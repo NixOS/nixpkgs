@@ -135,7 +135,7 @@ stdenv.mkDerivation {
   # https://codeberg.org/dnkl/foot/src/branch/master/INSTALL.md#release-build
   CFLAGS =
     if !doPgo
-    then "-O3 -fno-plt"
+    then "-O3"
     else pgoCflags;
 
   # ar with gcc plugins for lto objects
@@ -165,10 +165,10 @@ stdenv.mkDerivation {
     meson configure -Db_pgo=generate
     ninja
     # make sure there is _some_ profiling data on all binaries
+    meson test
     ./footclient --version
     ./foot --version
     ./utils/xtgettcap
-    ./tests/test-config
     # generate pgo data of wayland independent code
     ./pgo ${stimuliFile} ${stimuliFile} ${stimuliFile}
     meson configure -Db_pgo=use
@@ -181,6 +181,10 @@ stdenv.mkDerivation {
   postInstall = ''
     moveToOutput share/foot/themes "$themes"
   '';
+
+  doCheck = true;
+
+  strictDeps = true;
 
   outputs = [ "out" "terminfo" "themes" ];
 
@@ -208,19 +212,6 @@ stdenv.mkDerivation {
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann maintainers.abbe ];
     platforms = platforms.linux;
-    # From (presumably) ncurses version 6.3, it will ship a foot
-    # terminfo file. This however won't include some non-standard
-    # capabilities foot's bundled terminfo file contains. Unless we
-    # want to have some features in e. g. vim or tmux stop working,
-    # we need to make sure that the foot terminfo overwrites ncurses'
-    # one. Due to <nixpkgs/nixos/modules/config/system-path.nix>
-    # ncurses is always added to environment.systemPackages on
-    # NixOS with its priority increased by 3, so we need to go
-    # one bigger.
-    # This doesn't matter a lot for local use since foot sets
-    # TERMINFO to a store path, but allows installing foot.terminfo
-    # on remote systems for proper foot terminfo support.
-    priority = (ncurses.meta.priority or 5) + 3 + 1;
     mainProgram = "foot";
   };
 }

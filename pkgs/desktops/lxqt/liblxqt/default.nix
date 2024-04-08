@@ -54,6 +54,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Core utility library for all LXQt components";
+    mainProgram = "lxqt-backlight_backend";
     homepage = "https://github.com/lxqt/liblxqt";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;

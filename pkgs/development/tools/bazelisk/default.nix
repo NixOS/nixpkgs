@@ -19,6 +19,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A user-friendly launcher for Bazel";
+    mainProgram = "bazelisk";
     longDescription = ''
       BEWARE: This package does not work on NixOS.
     '';

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "oslo-log";
-  version = "5.4.0";
+  version = "5.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "oslo.log";
     inherit version;
-    hash = "sha256-LrNVtYVw8lgR2nb6gUU7h1x8lEoZoj0sMFtKTf670iM=";
+    hash = "sha256-TO3RZpx94o2OZrZ6X21sb+g5KFNfqHzWm/ZhG1n1Z+c=";
   };
 
   propagatedBuildInputs = [
@@ -58,6 +58,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "oslo.log library";
+    mainProgram = "convert-json";
     homepage = "https://github.com/openstack/oslo.log";
     license = licenses.asl20;
     maintainers = teams.openstack.members;

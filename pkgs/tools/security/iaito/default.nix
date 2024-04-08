@@ -87,6 +87,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An official graphical interface of radare2";
+    mainProgram = "iaito";
     longDescription = ''
       iaito is the official graphical interface of radare2. It's the
       continuation of Cutter for radare2 after the Rizin fork.

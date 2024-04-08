@@ -17,13 +17,13 @@
 
 mkDerivation rec {
   pname = "pcmanfm-qt";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-+U8eV6oDpaJfTzejsVtbcaQrfSjWUnVpnIDbkvVCY/c=";
+    hash = "sha256-Z3OivGlUZQVoeMWn8ZBvhajH5hrvVMIsjGKcrx5FkEE=";
   };
 
   nativeBuildInputs = [
@@ -52,6 +52,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/lxqt/pcmanfm-qt";
     description = "File manager and desktop icon manager (Qt port of PCManFM and libfm)";
+    mainProgram = "pcmanfm-qt";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
     maintainers = teams.lxqt.members;

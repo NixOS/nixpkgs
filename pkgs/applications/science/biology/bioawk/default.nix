@@ -42,6 +42,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "BWK awk modified for biological data";
+    mainProgram = "bioawk";
     homepage = "https://github.com/lh3/bioawk";
     license = licenses.hpnd;
     maintainers = with maintainers; [ natsukium ];

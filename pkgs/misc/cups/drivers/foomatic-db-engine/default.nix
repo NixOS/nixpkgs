@@ -17,15 +17,15 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "foomatic-db-engine";
-  version = "unstable-2022-05-03";
+  version = "unstable-2024-02-10";
 
   src = fetchFromGitHub {
     # there is also a daily snapshot at the `downloadPage`,
     # but it gets deleted quickly and would provoke 404 errors
     owner = "OpenPrinting";
     repo = "foomatic-db-engine";
-    rev = "2e6f14b54748fa121a4d2e3d480010e10b070c5a";
-    hash = "sha256-m7FQTxWmawbtm24h8UqznGKXgX41JhOtyyFMRwEhm5k=";
+    rev = "fa91bdfd87da9005591ac2ef2c9c7b8ecdd19511";
+    hash = "sha256-Ufy9BtYMD7sUUVfraTmO5e8+nZ4C4up5a5GXeGTtejg=";
   };
 
   outputs = [ "out" ];

@@ -14,16 +14,16 @@
 
 buildPythonPackage rec {
   pname = "lsprotocol";
-  version = "2023.0.0";
-  format = "pyproject";
+  version = "2023.0.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "microsoft";
-    repo = pname;
+    repo = "lsprotocol";
     rev = "refs/tags/${version}";
-    hash = "sha256-K5jocKVxMNoUYYUi9YO2+N7hHWj0MFLprqGOzsg1QRs=";
+    hash = "sha256-PHjLKazMaT6W4Lve1xNxm6hEwqE3Lr2m5L7Q03fqb68=";
   };
 
   nativeBuildInputs = [
@@ -70,6 +70,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python implementation of the Language Server Protocol";
     homepage = "https://github.com/microsoft/lsprotocol";
+    changelog = "https://github.com/microsoft/lsprotocol/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ doronbehar fab ];
   };

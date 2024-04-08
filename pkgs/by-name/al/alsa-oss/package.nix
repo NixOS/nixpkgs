@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.alsa-project.org/";
     description = "ALSA, the Advanced Linux Sound Architecture alsa-oss emulation";
+    mainProgram = "aoss";
 
     longDescription = ''
       The Advanced Linux Sound Architecture (ALSA) provides audio and

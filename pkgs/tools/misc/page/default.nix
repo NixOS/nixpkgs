@@ -34,6 +34,7 @@ rustPlatform.buildRustPackage rec {
     description = "Use neovim as pager";
     homepage = "https://github.com/I60R/page";
     license = licenses.mit;
+    mainProgram = "page";
     maintainers = [ maintainers.s1341 ];
   };
 }

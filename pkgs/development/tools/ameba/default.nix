@@ -15,6 +15,7 @@ crystal.buildCrystalPackage rec {
 
   meta = with lib; {
     description = "A static code analysis tool for Crystal";
+    mainProgram = "ameba";
     homepage = "https://crystal-ameba.github.io";
     changelog = "https://github.com/crystal-ameba/ameba/releases/tag/v${version}";
     license = licenses.mit;

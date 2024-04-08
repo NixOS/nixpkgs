@@ -9,15 +9,16 @@ let
   inherit (pythonPackages) buildPythonPackage python isPy27 pyqt5 sip pyqt-builder;
   inherit (darwin) autoSignDarwinBinariesHook;
 in buildPythonPackage (rec {
-  pname = "PyQtWebEngine";
-  version = "5.15.4";
+  pname = "pyqtwebengine";
+  version = "5.15.6";
   format = "pyproject";
 
   disabled = isPy27;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "06fc35hzg346a9c86dk7vzm1fakkgzn5l52jfq3bix3587sjip6f";
+    pname = "PyQtWebEngine";
+    inherit version;
+    sha256 = "sha256-riQe8qYceCk5xYtSwq6lOtmbMPOTTINY1eCm67P9ByE=";
   };
 
   postPatch = ''

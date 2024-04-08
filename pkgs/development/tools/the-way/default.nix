@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "the-way";
-  version = "0.20.2";
+  version = "0.20.3";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-jUo46NHjgSFOV7fsqh9Ki0QtTGfoaPjQ87/a66zBz1Q=";
+    sha256 = "sha256-/vG5LkQiA8iPP+UV1opLeJwbYfmzqYwpsoMizpGT98o=";
   };
 
-  cargoHash = "sha256-nmVsg8LX3di7ZAvvDuPQ3PXlLjs+L6YFTzwXRAkcxig=";
+  cargoHash = "sha256-iZxV099582LuZ8A3uOsKPyekAQG2cQusLZhW+W1wW/8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -29,6 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Terminal code snippets manager";
+    mainProgram = "the-way";
     homepage = "https://github.com/out-of-cheese-error/the-way";
     changelog = "https://github.com/out-of-cheese-error/the-way/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];

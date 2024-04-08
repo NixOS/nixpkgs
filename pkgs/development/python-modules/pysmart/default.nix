@@ -23,8 +23,6 @@ buildPythonPackage rec {
     hash = "sha256-1k+5XnIT/AfZmzKUxkyU/uc0eW05CvugpY6OdJCoALc=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   postPatch = ''
     substituteInPlace pySMART/utils.py \
       --replace "which('smartctl')" '"${smartmontools}/bin/smartctl"'

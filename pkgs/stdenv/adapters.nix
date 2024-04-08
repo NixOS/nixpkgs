@@ -6,7 +6,7 @@
 
 let
   # N.B. Keep in sync with default arg for stdenv/generic.
-  defaultMkDerivationFromStdenv = import ./generic/make-derivation.nix { inherit lib config; };
+  defaultMkDerivationFromStdenv = stdenv: (import ./generic/make-derivation.nix { inherit lib config; } stdenv).mkDerivation;
 
   # Low level function to help with overriding `mkDerivationFromStdenv`. One
   # gives it the old stdenv arguments and a "continuation" function, and
@@ -50,19 +50,18 @@ rec {
   # because older compilers may not be able to parse the headers from the default stdenv’s libc++.
   overrideLibcxx = stdenv:
     assert stdenv.cc.libcxx != null;
+    assert pkgs.stdenv.cc.libcxx != null;
+    # only unified libcxx / libcxxabi stdenv's are supported
+    assert lib.versionAtLeast pkgs.stdenv.cc.libcxx.version "12";
+    assert lib.versionAtLeast stdenv.cc.libcxx.version "12";
     let
       llvmLibcxxVersion = lib.getVersion llvmLibcxx;
-      stdenvLibcxxVersion = lib.getVersion stdenvLibcxx;
 
       stdenvLibcxx = pkgs.stdenv.cc.libcxx;
-      stdenvCxxabi = pkgs.stdenv.cc.libcxx.cxxabi;
-
       llvmLibcxx = stdenv.cc.libcxx;
-      llvmCxxabi = stdenv.cc.libcxx.cxxabi;
 
       libcxx = pkgs.runCommand "${stdenvLibcxx.name}-${llvmLibcxxVersion}" {
         outputs = [ "out" "dev" ];
-        inherit cxxabi;
         isLLVM = true;
       } ''
         mkdir -p "$dev/nix-support"
@@ -70,20 +69,12 @@ rec {
         echo '${stdenvLibcxx}' > "$dev/nix-support/propagated-build-inputs"
         ln -s '${lib.getDev llvmLibcxx}/include' "$dev/include"
       '';
-
-      cxxabi = pkgs.runCommand "${stdenvCxxabi.name}-${llvmLibcxxVersion}" {
-        outputs = [ "out" "dev" ];
-        inherit (stdenvCxxabi) libName;
-      } ''
-        mkdir -p "$dev/nix-support"
-        ln -s '${stdenvCxxabi}' "$out"
-        echo '${stdenvCxxabi}' > "$dev/nix-support/propagated-build-inputs"
-        ln -s '${lib.getDev llvmCxxabi}/include' "$dev/include"
-      '';
     in
     overrideCC stdenv (stdenv.cc.override {
       inherit libcxx;
-      extraPackages = [ cxxabi pkgs.pkgsTargetTarget."llvmPackages_${lib.versions.major llvmLibcxxVersion}".compiler-rt ];
+      extraPackages = [
+        pkgs.buildPackages.targetPackages."llvmPackages_${lib.versions.major llvmLibcxxVersion}".compiler-rt
+      ];
     });
 
   # Override the setup script of stdenv.  Useful for testing new
@@ -141,10 +132,10 @@ rec {
     # extraBuildInputs are dropped in cross.nix, but darwin still needs them
     extraBuildInputs = [ pkgs.buildPackages.darwin.CF ];
     mkDerivationFromStdenv = withOldMkDerivation old (stdenv: mkDerivationSuper: args:
-    (mkDerivationSuper args).overrideAttrs (finalAttrs: {
-      NIX_CFLAGS_LINK = toString (finalAttrs.NIX_CFLAGS_LINK or "")
+    (mkDerivationSuper args).overrideAttrs (prevAttrs: {
+      NIX_CFLAGS_LINK = toString (prevAttrs.NIX_CFLAGS_LINK or "")
         + lib.optionalString (stdenv.cc.isGNU or false) " -static-libgcc";
-      nativeBuildInputs = (finalAttrs.nativeBuildInputs or [])
+      nativeBuildInputs = (prevAttrs.nativeBuildInputs or [])
         ++ lib.optionals stdenv.hasCC [
           (pkgs.buildPackages.makeSetupHook {
             name = "darwin-portable-libSystem-hook";
@@ -233,6 +224,34 @@ rec {
         NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -fuse-ld=gold";
       });
     });
+
+  /* Copy the libstdc++ from the model stdenv to the target stdenv.
+   *
+   * TODO(@connorbaker):
+   * This interface provides behavior which should be revisited prior to the
+   * release of 24.05. For a more detailed explanation and discussion, see
+   * https://github.com/NixOS/nixpkgs/issues/283517. */
+  useLibsFrom = modelStdenv: targetStdenv:
+    let
+      ccForLibs = modelStdenv.cc.cc;
+      /* NOTE(@connorbaker):
+       * This assumes targetStdenv.cc is a cc-wrapper. */
+      cc = targetStdenv.cc.override {
+        /* NOTE(originally by rrbutani):
+         * Normally the `useCcForLibs`/`gccForLibs` mechanism is used to get a
+         * clang based `cc` to use `libstdc++` (from gcc).
+         *
+         * Here we (ab)use it to use a `libstdc++` from a different `gcc` than our
+         * `cc`.
+         *
+         * Note that this does not inhibit our `cc`'s lib dir from being added to
+         * cflags/ldflags (see `cc_solib` in `cc-wrapper`) but this is okay: our
+         * `gccForLibs`'s paths should take precedence. */
+        useCcForLibs = true;
+        gccForLibs = ccForLibs;
+      };
+    in
+    overrideCC targetStdenv cc;
 
   useMoldLinker = stdenv: let
     bintools = stdenv.cc.bintools.override {
@@ -416,5 +435,19 @@ rec {
         "propagatedNativeBuildInputs"
         "propagatedBuildInputs"
       ]);
+    });
+
+  withDefaultHardeningFlags = defaultHardeningFlags: stdenv: let
+    bintools = let
+      bintools' = stdenv.cc.bintools;
+    in if bintools' ? override then (bintools'.override {
+      inherit defaultHardeningFlags;
+    }) else bintools';
+  in
+    stdenv.override (old: {
+      cc = if stdenv.cc == null then null else stdenv.cc.override {
+        inherit bintools;
+      };
+      allowedRequisites = lib.mapNullable (rs: rs ++ [ bintools ]) (stdenv.allowedRequisites or null);
     });
 }

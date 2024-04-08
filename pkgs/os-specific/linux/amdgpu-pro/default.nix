@@ -9,7 +9,7 @@
 , perl
 , zlib
 , expat
-, libffi
+, libffi_3_3
 , libselinux
 , libdrm
 , udev
@@ -119,7 +119,7 @@ in stdenv.mkDerivation rec {
     libxshmfence
     elfutils
     expat
-    libffi
+    libffi_3_3
     libselinux
     # libudev is not listed in any dependencies, but is loaded dynamically
     udev

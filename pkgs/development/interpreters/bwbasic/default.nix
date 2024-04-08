@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Bywater BASIC Interpreter";
+    mainProgram = "bwbasic";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ irenes ];
     platforms = platforms.all;

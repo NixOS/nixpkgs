@@ -30,6 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for interacting with OPPLE lights";
+    mainProgram = "oppleio";
     homepage = "https://github.com/jedmeng/python-oppleio";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];

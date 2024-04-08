@@ -17,7 +17,7 @@ buildGoModule rec {
   vendorHash = "sha256-YKu+7LFUoQwCH//URIswiaqa0rmnWZJvuSn/68G3TUA=";
 
   meta = with lib; {
-    description = "Discord rich presence for MPRIS music players.";
+    description = "Discord rich presence for MPRIS music players";
     homepage = "https://github.com/TorchedSammy/Clematis";
     license = licenses.mit;
     platforms = platforms.linux;

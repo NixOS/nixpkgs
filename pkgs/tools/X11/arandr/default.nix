@@ -36,5 +36,6 @@ buildPythonApplication rec {
     description = "A simple visual front end for XRandR";
     license = licenses.gpl3;
     maintainers = with maintainers; [ gepbird ];
+    mainProgram = "arandr";
   };
 }

@@ -58,13 +58,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bambu-studio";
-  version = "01.08.02.56";
+  version = "01.08.04.51";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
     rev = "v${version}";
-    hash = "sha256-9AUHS7dXqWx8LPkTP7/scxu3Cc/mxuK+v+5PrCvUPf0=";
+    hash = "sha256-rqD1+3Q4ZUBgS57iCItuLX6ZMP7VQuedaJmgKB1szgs=";
   };
 
   nativeBuildInputs = [
@@ -113,6 +113,8 @@ stdenv.mkDerivation rec {
   patches = [
     # Fix for webkitgtk linking
     ./0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
+    # Fix build with cgal-5.6.1+
+    ./meshboolean-const.patch
   ];
 
   doCheck = true;
@@ -167,7 +169,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "PC Software for BambuLab's 3D printers";
     homepage = "https://github.com/bambulab/BambuStudio";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [ zhaofengli ];
     mainProgram = "bambu-studio";
     platforms = platforms.linux;

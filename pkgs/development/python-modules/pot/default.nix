@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "pot";
-  version = "0.9.2";
+  version = "0.9.3";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "PythonOT";
     repo = "POT";
     rev = "refs/tags/${version}";
-    hash = "sha256-sq8jIWC2DD0T6675W4THbNethm7a//U8HuccKuK0Hjo=";
+    hash = "sha256-fdqDM0V6zTFe1lcqi53ZZNHAfmuR2I7fdX4SN9qeNn8=";
   };
 
   nativeBuildInputs = [

@@ -14,6 +14,15 @@ let
 
 in
 {
+
+  imports = [
+    (mkRemovedOptionModule [ "services" "rabbitmq" "cookie" ] ''
+      This option wrote the Erlang cookie to the store, while it should be kept secret.
+      Please remove it from your NixOS configuration and deploy a cookie securely instead.
+      The renamed `unsafeCookie` must ONLY be used in isolated non-production environments such as NixOS VM tests.
+    '')
+  ];
+
   ###### interface
   options = {
     services.rabbitmq = {
@@ -62,13 +71,18 @@ in
         '';
       };
 
-      cookie = mkOption {
+      unsafeCookie = mkOption {
         default = "";
         type = types.str;
         description = lib.mdDoc ''
           Erlang cookie is a string of arbitrary length which must
           be the same for several nodes to be allowed to communicate.
           Leave empty to generate automatically.
+
+          Setting the cookie via this option exposes the cookie to the store, which
+          is not recommended for security reasons.
+          Only use this option in an isolated non-production environment such as
+          NixOS VM tests.
         '';
       };
 
@@ -209,9 +223,8 @@ in
       };
 
       preStart = ''
-        ${optionalString (cfg.cookie != "") ''
-            echo -n ${cfg.cookie} > ${cfg.dataDir}/.erlang.cookie
-            chmod 600 ${cfg.dataDir}/.erlang.cookie
+        ${optionalString (cfg.unsafeCookie != "") ''
+          install -m 600 <(echo -n ${cfg.unsafeCookie}) ${cfg.dataDir}/.erlang.cookie
         ''}
       '';
     };

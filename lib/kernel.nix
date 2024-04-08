@@ -1,6 +1,8 @@
 { lib }:
 
-with lib;
+let
+  inherit (lib) mkIf versionAtLeast versionOlder;
+in
 {
 
 

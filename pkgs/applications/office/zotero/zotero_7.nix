@@ -47,8 +47,8 @@ stdenv.mkDerivation rec {
   version = "7.0.0-beta";
 
   src = fetchurl {
-    url = "https://download.zotero.org/client/beta/${version}.51%2B7c5600913/Zotero-${version}.51%2B7c5600913_linux-x86_64.tar.bz2";
-    hash = "sha256-zJ+jG7zlvWq+WEYOPyMIhqHPfsUe9tn0cbRyibQ7bFw=";
+    url = "https://download.zotero.org/client/beta/${version}.65%2Bb047f3d90/Zotero-${version}.65%2Bb047f3d90_linux-x86_64.tar.bz2";
+    hash = "sha256-e7T/hvb8bFb4hkouihBkgqUu4ugYoUMHNVKxh0r/WUM=";
   };
 
   nativeBuildInputs = [
@@ -125,10 +125,12 @@ stdenv.mkDerivation rec {
     # install desktop file and icons.
     mkdir -p $out/share/applications
     cp ${desktopItem}/share/applications/* $out/share/applications/
-    for size in 16 32 48 256; do
-      install -Dm444 chrome/icons/default/default$size.png \
+    for size in 32 64 128; do
+      install -Dm444 icons/icon$size.png \
         $out/share/icons/hicolor/''${size}x''${size}/apps/zotero.png
     done
+    install -Dm444 icons/symbolic.svg \
+        $out/share/icons/hicolor/symbolic/apps/zotero-symbolic.svg
 
     runHook postInstall
   '';
@@ -142,6 +144,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.zotero.org";
     description = "Collect, organize, cite, and share your research sources";
+    mainProgram = "zotero";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.agpl3Only;
     platforms = [ "x86_64-linux" ];

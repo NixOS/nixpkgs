@@ -1,33 +1,43 @@
 { lib
-, aiohttp
 , buildPythonPackage
-, ddt
 , fetchPypi
-, pbr
-, pytestCheckHook
 , pythonOlder
+
+# build-system
+, pbr
 , setuptools
+
+# dependencies
+, aiohttp
+
+# tests
+, ddt
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "aioresponses";
-  version = "0.7.4";
-  format = "setuptools";
+  version = "0.7.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-m4wQizY1TARjO60Op1K1XZVqdgL+PjI0uTn8RK+W8dg=";
+    hash = "sha256-95XZ29otYXdIQOfjL1Nm9FdS0a3Bt0yTYq/QFylsfuE=";
   };
 
   nativeBuildInputs = [
     pbr
+    setuptools
   ];
 
   propagatedBuildInputs = [
     aiohttp
-    setuptools
+  ];
+
+  pythonImportsCheck = [
+    "aioresponses"
   ];
 
   nativeCheckInputs = [
@@ -39,10 +49,6 @@ buildPythonPackage rec {
     # Skip a test which makes requests to httpbin.org
     "test_address_as_instance_of_url_combined_with_pass_through"
     "test_pass_through_with_origin_params"
-  ];
-
-  pythonImportsCheck = [
-    "aioresponses"
   ];
 
   meta = {

@@ -35,6 +35,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python implementation of the FLIRT technology";
+    mainProgram = "dumpsig.py";
     homepage = "https://github.com/thebabush/nampa";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ fab ];

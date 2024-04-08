@@ -8,14 +8,14 @@
 }:
 
 buildGoModule rec {
-  version = "2.9.3";
+  version = "2.9.5";
   pname = "grafana-loki";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "loki";
     rev = "v${version}";
-    hash = "sha256-9EUlznnZczgHXUy784830FvUS6OwaFf7FmUJGeWeXP0=";
+    hash = "sha256-+X9ODzyIaeizLItUqorDdvgpIOPML+MzgwmyKbes9dA=";
   };
 
   vendorHash = null;
@@ -52,6 +52,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Like Prometheus, but for logs";
+    mainProgram = "promtail";
     license = with licenses; [ agpl3Only asl20 ];
     homepage = "https://grafana.com/oss/loki/";
     changelog = "https://github.com/grafana/loki/releases/tag/v${version}";

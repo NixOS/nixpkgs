@@ -25,8 +25,6 @@ buildPythonPackage rec {
     hash = "sha256-ivlenHPD00bxc0c9G368tfTEckOC3vqDB5kMQzHXbVM==";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     setuptools-scm
   ];
@@ -57,6 +55,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python converter for Japanese Kana-kanji sentences into Kana-Roman";
+    mainProgram = "kakasi";
     homepage = "https://github.com/miurahr/pykakasi";
     changelog = "https://github.com/miurahr/pykakasi/releases/tag/v${version}";
     license = licenses.mit;

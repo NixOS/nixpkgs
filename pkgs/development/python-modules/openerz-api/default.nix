@@ -4,22 +4,27 @@
 , pytestCheckHook
 , pythonOlder
 , requests
+, setuptools
 , testfixtures
 }:
 
 buildPythonPackage rec {
   pname = "openerz-api";
-  version = "0.2.0";
-  format = "setuptools";
+  version = "0.3.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "misialq";
-    repo = pname;
+    repo = "openerz-api";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6q0mKWyTTlNJ/DCeAsck1meM5dQovYBcV2EqmjlABvc=";
+    hash = "sha256-CwK61StspZJt0TALv76zfibUzlriwp9HRoYOtX9bU+c=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     requests
@@ -32,11 +37,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "openerz_api"
-  ];
-
-  disabledTests = [
-    # Assertion issue
-    "test_sensor_make_api_request"
   ];
 
   meta = with lib; {

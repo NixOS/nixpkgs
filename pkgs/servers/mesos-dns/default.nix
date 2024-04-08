@@ -18,4 +18,5 @@ buildGoPackage rec {
   };
 
   goDeps = ./deps.nix;
+  meta.mainProgram = "mesos-dns";
 }

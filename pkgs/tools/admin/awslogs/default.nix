@@ -45,6 +45,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "AWS CloudWatch logs for Humans";
+    mainProgram = "awslogs";
     homepage = "https://github.com/jorgebastida/awslogs";
     license = licenses.bsd3;
     maintainers = with maintainers; [ dbrock ];

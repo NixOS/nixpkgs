@@ -62,6 +62,6 @@ in
     license = licenses.asl20;
 
     # as it needs to be used with timescaledb, simply use the condition from there
-    broken = versionOlder postgresql.version "12" || stdenv.isDarwin;
+    broken = stdenv.isDarwin;
   };
 }

@@ -109,6 +109,17 @@ in {
         '';
       };
 
+      fixedRandomDelay = mkOption {
+        default = false;
+        type = types.bool;
+        example = true;
+        description = lib.mdDoc ''
+          Make the randomized delay consistent between runs.
+          This reduces the jitter between automatic upgrades.
+          See {option}`randomizedDelaySec` for configuring the randomized delay.
+        '';
+      };
+
       rebootWindow = mkOption {
         description = lib.mdDoc ''
           Define a lower and upper time value (in HH:MM format) which
@@ -253,6 +264,7 @@ in {
     systemd.timers.nixos-upgrade = {
       timerConfig = {
         RandomizedDelaySec = cfg.randomizedDelaySec;
+        FixedRandomDelay = cfg.fixedRandomDelay;
         Persistent = cfg.persistent;
       };
     };

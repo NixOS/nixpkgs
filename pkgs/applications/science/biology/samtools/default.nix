@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "samtools";
-  version = "1.19";
+  version = "1.19.2";
 
   src = fetchurl {
     url = "https://github.com/samtools/samtools/releases/download/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-+ms7GOIIUbbzy1WvrzIF0C/LedrjuEn89S6PwQ/wi4M=";
+    hash = "sha256-cfYEmWaOTAjn10X7/yTBXMigl3q6sazV0rtBm9sGXpY=";
   };
 
   # tests require `bgzip` from the htslib package

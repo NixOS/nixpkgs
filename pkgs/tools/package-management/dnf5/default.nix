@@ -30,7 +30,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnf5";
-  version = "5.1.10";
+  version = "5.1.15";
 
   outputs = [ "out" "man" ];
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rpm-software-management";
     repo = "dnf5";
     rev = finalAttrs.version;
-    hash = "sha256-u+UiiCl67VtIedW4kn3fycafkgBVsFFkWQcN3NXQKl4=";
+    hash = "sha256-IDF/jRnPpGbHk5bY7plkCO1x/i10H+HCcU88JI4EHvs=";
   };
 
   nativeBuildInputs = [

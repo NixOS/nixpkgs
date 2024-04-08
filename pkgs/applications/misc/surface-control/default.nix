@@ -39,5 +39,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
+    mainProgram = "surface";
   };
 }

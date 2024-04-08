@@ -30,6 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Build Postgres Extensions with Rust!";
+    mainProgram = "cargo-pgrx";
     homepage = "https://github.com/tcdi/pgrx";
     changelog = "https://github.com/tcdi/pgrx/releases/tag/v${version}";
     license = licenses.mit;

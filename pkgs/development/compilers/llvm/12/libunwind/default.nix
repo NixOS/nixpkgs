@@ -9,10 +9,8 @@ stdenv.mkDerivation rec {
   src = fetch pname "192ww6n81lj2mb9pj4043z79jp3cf58a9c2qrxjwm5c3a64n1shb";
 
   postUnpack = ''
-    unpackFile ${libcxx.src}
-    mv libcxx-* libcxx
-    unpackFile ${llvm.src}
-    mv llvm-* llvm
+    ln -s ${libcxx.src}/libcxx .
+    ln -s ${libcxx.src}/llvm .
   '';
 
   patches = [

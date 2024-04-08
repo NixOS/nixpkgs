@@ -19,6 +19,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Generate method stubs for implementing an interface";
+    mainProgram = "impl";
     homepage = "https://github.com/josharian/impl";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];

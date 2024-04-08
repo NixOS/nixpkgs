@@ -1,11 +1,20 @@
-{ stdenv, lib, fetchurl, ncurses, autoreconfHook }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, ncurses
+, autoreconfHook
+}:
+
 stdenv.mkDerivation rec {
   pname = "xstow";
-  version = "1.1.0";
+  version = "1.1.1";
 
-  src = fetchurl {
-    url = "http://downloads.sourceforge.net/sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-wXQ5XSmogAt1torfarrqIU4nBYj69MGM/HBYqeIE+dw=";
+  src = fetchFromGitHub {
+    owner = "majorkingleo";
+    repo = "xstow";
+    rev = version;
+    fetchSubmodules = true;
+    hash = "sha256-c89+thw5N3Cgl1Ww+W7c3YsyhNJMLlreedvdWJFY3WY=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -23,9 +32,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "A replacement of GNU Stow written in C++";
-    homepage = "https://xstow.sourceforge.net";
+    homepage = "https://github.com/majorkingleo/xstow";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ nzbr ];
     platforms = platforms.unix;

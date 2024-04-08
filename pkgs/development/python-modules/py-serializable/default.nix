@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "py-serializable";
-  version = "0.16.0";
-  format = "pyproject";
+  version = "1.0.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "madpah";
     repo = "serializable";
     rev = "refs/tags/v${version}";
-    hash = "sha256-javjmdFQBxg/yqa6lsxKK18DgvVu/YmqvaWo2Upgzqs=";
+    hash = "sha256-RhipoPTewPaYwspTnywLr5FvFVUaFixfRQk6aUMvB4w=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Pythonic library to aid with serialisation and deserialisation to/from JSON and XML";
     homepage = "https://github.com/madpah/serializable";
-    changelog = "https://github.com/madpah/serializable/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/madpah/serializable/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

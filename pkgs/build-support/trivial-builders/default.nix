@@ -1,4 +1,4 @@
-{ lib, stdenv, stdenvNoCC, lndir, runtimeShell, shellcheck-minimal }:
+{ lib, config, stdenv, stdenvNoCC, jq, lndir, runtimeShell, shellcheck-minimal }:
 
 let
   inherit (lib)
@@ -9,55 +9,24 @@ in
 
 rec {
 
-  /*
-    Run the shell command `buildCommand' to produce a store path named `name'.
-
-    The attributes in `env' are added to the environment prior to running the command.
-    Environment variables set by `stdenv.mkDerivation` take precedence.
-
-    By default `runCommand` runs in a stdenv with no compiler environment.
-    `runCommandCC` uses the default stdenv, `pkgs.stdenv`.
-
-    Example:
-
-    ```nix
-    runCommand "name" {envVariable = true;} ''echo hello > $out'';
-    ```
-
-    ```nix
-    runCommandCC "name" {} ''gcc -o myfile myfile.c; cp myfile $out'';
-    ```
-
-    The `*Local` variants force a derivation to be built locally,
-    it is not substituted.
-
-    This is intended for very cheap commands (<1s execution time).
-    It saves on the network roundrip and can speed up a build.
-
-    It is the same as adding the special fields
-
-    ```nix
-    {
-      preferLocalBuild = true;
-      allowSubstitutes = false;
-    }
-    ```
-
-    to a derivation’s attributes.
-  */
+  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
+  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-runCommand
   runCommand = name: env: runCommandWith {
     stdenv = stdenvNoCC;
     runLocal = false;
     inherit name;
     derivationArgs = env;
   };
+  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
+  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-runCommandLocal
   runCommandLocal = name: env: runCommandWith {
     stdenv = stdenvNoCC;
     runLocal = true;
     inherit name;
     derivationArgs = env;
   };
-
+  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
+  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-runCommandCC
   runCommandCC = name: env: runCommandWith {
     stdenv = stdenv;
     runLocal = false;
@@ -67,6 +36,7 @@ rec {
   # `runCommandCCLocal` left out on purpose.
   # We shouldn’t force the user to have a cc in scope.
 
+  # TODO: Move documentation for runCommandWith to the Nixpkgs manual
   /*
     Generalized version of the `runCommand`-variants
     which does customized behavior via a single
@@ -112,59 +82,32 @@ rec {
       // builtins.removeAttrs derivationArgs [ "passAsFile" ]);
 
 
-  /*
-    Writes a text file to the nix store.
-    The contents of text is added to the file in the store.
-
-    Example:
-
-
-    # Writes my-file to /nix/store/<store path>
-    writeTextFile {
-      name = "my-file";
-      text = ''
-        Contents of File
-      '';
-    }
-
-
-    See also the `writeText` helper function below.
-
-
-    # Writes executable my-file to /nix/store/<store path>/bin/my-file
-    writeTextFile {
-      name = "my-file";
-      text = ''
-        Contents of File
-      '';
-      executable = true;
-      destination = "/bin/my-file";
-    }
-
-
-   */
+  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
+  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeTextFile
   writeTextFile =
-    { name # the name of the derivation
+    { name
     , text
-    , executable ? false # run chmod +x ?
-    , destination ? ""   # relative path appended to $out eg "/bin/foo"
-    , checkPhase ? ""    # syntax checks, e.g. for scripts
+    , executable ? false
+    , destination ? ""
+    , checkPhase ? ""
     , meta ? { }
     , allowSubstitutes ? false
     , preferLocalBuild ? true
+    , derivationArgs ? { }
     }:
     let
       matches = builtins.match "/bin/([^/]+)" destination;
     in
     runCommand name
-      {
+      ({
         inherit text executable checkPhase allowSubstitutes preferLocalBuild;
-        passAsFile = [ "text" ];
+        passAsFile = [ "text" ]
+          ++ derivationArgs.passAsFile or [ ];
         meta = lib.optionalAttrs (executable && matches != null)
           {
             mainProgram = lib.head matches;
-          } // meta;
-      }
+          } // meta // derivationArgs.meta or {};
+      } // removeAttrs derivationArgs [ "passAsFile" "meta" ])
       ''
         target=$out${lib.escapeShellArg destination}
         mkdir -p "$(dirname "$target")"
@@ -182,101 +125,32 @@ rec {
         eval "$checkPhase"
       '';
 
-  /*
-     Writes a text file to nix store with no optional parameters available.
-
-     Example:
-
-
-     # Writes contents of file to /nix/store/<store path>
-     writeText "my-file"
-     ''
-     Contents of File
-     '';
-
-
-  */
+  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeText = name: text: writeTextFile { inherit name text; };
 
-  /*
-    Writes a text file to nix store in a specific directory with no
-    optional parameters available.
-
-    Example:
-
-
-    # Writes contents of file to /nix/store/<store path>/share/my-file
-    writeTextDir "share/my-file"
-     ''
-     Contents of File
-     '';
-
-
-  */
+  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeTextDir = path: text: writeTextFile {
     inherit text;
     name = builtins.baseNameOf path;
     destination = "/${path}";
   };
 
-  /*
-    Writes a text file to /nix/store/<store path> and marks the file as
-    executable.
-
-    If passed as a build input, will be used as a setup hook. This makes setup
-    hooks more efficient to create: you don't need a derivation that copies
-    them to $out/nix-support/setup-hook, instead you can use the file as is.
-
-    Example:
-
-
-    # Writes my-file to /nix/store/<store path> and makes executable
-    writeScript "my-file"
-      ''
-      Contents of File
-      '';
-
-
-  */
+  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeScript = name: text: writeTextFile { inherit name text; executable = true; };
 
-  /*
-    Writes a text file to /nix/store/<store path>/bin/<name> and
-    marks the file as executable.
-
-    Example:
-
-
-
-    # Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
-    writeScriptBin "my-file"
-      ''
-      Contents of File
-      '';
-
-
-  */
+  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeScriptBin = name: text: writeTextFile {
     inherit name text;
     executable = true;
     destination = "/bin/${name}";
   };
 
-  /*
-    Similar to writeScript. Writes a Shell script and checks its syntax.
-    Automatically includes interpreter above the contents passed.
-
-    Example:
-
-
-    # Writes my-file to /nix/store/<store path> and makes executable.
-    writeShellScript "my-file"
-      ''
-      Contents of File
-      '';
-
-
-  */
+  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeShellScript = name: text:
     writeTextFile {
       inherit name;
@@ -290,22 +164,8 @@ rec {
       '';
     };
 
-  /*
-    Similar to writeShellScript and writeScriptBin.
-    Writes an executable Shell script to /nix/store/<store path>/bin/<name> and checks its syntax.
-    Automatically includes interpreter above the contents passed.
-
-    Example:
-
-
-    # Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
-    writeShellScriptBin "my-file"
-      ''
-      Contents of File
-      '';
-
-
-  */
+  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeShellScriptBin = name: text:
     writeTextFile {
       inherit name;
@@ -321,53 +181,95 @@ rec {
       meta.mainProgram = name;
     };
 
-  /*
-    Similar to writeShellScriptBin and writeScriptBin.
-    Writes an executable Shell script to /nix/store/<store path>/bin/<name> and
-    checks its syntax with shellcheck and the shell's -n option.
-    Individual checks can be foregone by putting them in the excludeShellChecks
-    list, e.g. [ "SC2016" ].
-    Automatically includes sane set of shellopts (errexit, nounset, pipefail)
-    and handles creation of PATH based on runtimeInputs
-
-    Note that the checkPhase uses stdenv.shell for the test run of the script,
-    while the generated shebang uses runtimeShell. If, for whatever reason,
-    those were to mismatch you might lose fidelity in the default checks.
-
-    Example:
-
-    Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
-
-
-    writeShellApplication {
-      name = "my-file";
-      runtimeInputs = [ curl w3m ];
-      text = ''
-        curl -s 'https://nixos.org' | w3m -dump -T text/html
-       '';
-    }
-
-  */
+  # TODO: move parameter documentation to the Nixpkgs manual
+  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeShellApplication
   writeShellApplication =
-    { name
-    , text
-    , runtimeInputs ? [ ]
-    , meta ? { }
-    , checkPhase ? null
-    , excludeShellChecks ? [ ]
+    {
+      /*
+         The name of the script to write.
+
+         Type: String
+       */
+      name,
+      /*
+         The shell script's text, not including a shebang.
+
+         Type: String
+       */
+      text,
+      /*
+         Inputs to add to the shell script's `$PATH` at runtime.
+
+         Type: [String|Derivation]
+       */
+      runtimeInputs ? [ ],
+      /*
+         Extra environment variables to set at runtime.
+
+         Type: AttrSet
+       */
+      runtimeEnv ? null,
+      /*
+         `stdenv.mkDerivation`'s `meta` argument.
+
+         Type: AttrSet
+       */
+      meta ? { },
+      /*
+         The `checkPhase` to run. Defaults to `shellcheck` on supported
+         platforms and `bash -n`.
+
+         The script path will be given as `$target` in the `checkPhase`.
+
+         Type: String
+       */
+      checkPhase ? null,
+      /*
+         Checks to exclude when running `shellcheck`, e.g. `[ "SC2016" ]`.
+
+         See <https://www.shellcheck.net/wiki/> for a list of checks.
+
+         Type: [String]
+       */
+      excludeShellChecks ? [ ],
+      /*
+         Bash options to activate with `set -o` at the start of the script.
+
+         Defaults to `[ "errexit" "nounset" "pipefail" ]`.
+
+         Type: [String]
+       */
+      bashOptions ? [ "errexit" "nounset" "pipefail" ],
+      /* Extra arguments to pass to `stdenv.mkDerivation`.
+
+         :::{.caution}
+         Certain derivation attributes are used internally,
+         overriding those could cause problems.
+         :::
+
+         Type: AttrSet
+       */
+      derivationArgs ? { },
     }:
     writeTextFile {
-      inherit name meta;
+      inherit name meta derivationArgs;
       executable = true;
       destination = "/bin/${name}";
       allowSubstitutes = true;
       preferLocalBuild = false;
       text = ''
         #!${runtimeShell}
-        set -o errexit
-        set -o nounset
-        set -o pipefail
-      '' + lib.optionalString (runtimeInputs != [ ]) ''
+        ${lib.concatMapStringsSep "\n" (option: "set -o ${option}") bashOptions}
+      '' + lib.optionalString (runtimeEnv != null)
+        (lib.concatStrings
+          (lib.mapAttrsToList
+            (name: value: ''
+              ${lib.toShellVar name value}
+              export ${name}
+            '')
+            runtimeEnv))
+      + lib.optionalString (runtimeInputs != [ ]) ''
 
         export PATH="${lib.makeBinPath runtimeInputs}:$PATH"
       '' + ''
@@ -397,6 +299,7 @@ rec {
     };
 
   # Create a C binary
+  # TODO: add to writers? pkgs/build-support/writers
   writeCBin = pname: code:
     runCommandCC pname
       {
@@ -417,7 +320,9 @@ rec {
         $CC -x c code.c -o "$n"
       '';
 
-
+  # TODO: deduplicate with documentation in doc/build-helpers/trivial-build-helpers.chapter.md
+  #       see also https://github.com/NixOS/nixpkgs/pull/249721
+  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-concatText
   /* concat a list of files to the nix store.
     The contents of files are added to the file in the store.
 
@@ -466,7 +371,9 @@ rec {
         eval "$checkPhase"
       '';
 
-
+  # TODO: deduplicate with documentation in doc/build-helpers/trivial-build-helpers.chapter.md
+  #       see also https://github.com/NixOS/nixpkgs/pull/249721
+  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-concatText
   /*
     Writes a text file to nix store with no optional parameters available.
 
@@ -480,6 +387,9 @@ rec {
   */
   concatText = name: files: concatTextFile { inherit name files; };
 
+  # TODO: deduplicate with documentation in doc/build-helpers/trivial-build-helpers.chapter.md
+  #       see also https://github.com/NixOS/nixpkgs/pull/249721
+  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-concatText
   /*
     Writes a text file to nix store with and mark it as executable.
 
@@ -492,7 +402,11 @@ rec {
 
 
   /*
-    Create a forest of symlinks to the files in `paths'.
+    TODO: Deduplicate this documentation.
+    More docs in doc/build-helpers/trivial-build-helpers.chapter.md
+    See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-symlinkJoin
+
+    Create a forest of symlinks to the files in `paths`.
 
     This creates a single derivation that replicates the directory structure
     of all the input paths.
@@ -568,6 +482,7 @@ rec {
         ${postBuild}
       '';
 
+  # TODO: move linkFarm docs to the Nixpkgs manual
   /*
     Quickly create a set of symlinks to derivations.
 
@@ -624,6 +539,7 @@ rec {
       ${lib.concatStrings linkCommands}
     '';
 
+  # TODO: move linkFarmFromDrvs docs to the Nixpkgs manual
   /*
     Easily create a linkFarm from a set of derivations.
 
@@ -649,6 +565,7 @@ rec {
     let mkEntryFromDrv = drv: { name = drv.name; path = drv; };
     in linkFarm name (map mkEntryFromDrv drvs);
 
+  # TODO: move onlyBin docs to the Nixpkgs manual
   /*
     Produce a derivation that links to the target derivation's `/bin`,
     and *only* `/bin`.
@@ -663,7 +580,8 @@ rec {
   '';
 
 
-  # docs in doc/builders/special/makesetuphook.section.md
+  # Docs in doc/builders/special/makesetuphook.section.md
+  # See https://nixos.org/manual/nixpkgs/unstable/#sec-pkgs.makeSetupHook
   makeSetupHook =
     { name ? lib.warn "calling makeSetupHook without passing a name is deprecated." "hook"
     , deps ? [ ]
@@ -705,27 +623,28 @@ rec {
       '');
 
 
-  # Write the references (i.e. the runtime dependencies in the Nix store) of `path' to a file.
+  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
+  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeReferencesToFile
+  # TODO: Convert to throw after Nixpkgs 24.05 branch-off.
+  writeReferencesToFile = (if config.allowAliases then lib.warn else throw)
+    "writeReferencesToFile is deprecated in favour of writeClosure"
+    (path: writeClosure [ path ]);
 
-  writeReferencesToFile = path: runCommand "runtime-deps"
+  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
+  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeClosure
+  writeClosure = paths: runCommand "runtime-deps"
     {
-      exportReferencesGraph = [ "graph" path ];
+      # Get the cleaner exportReferencesGraph interface
+      __structuredAttrs = true;
+      exportReferencesGraph.graph = paths;
+      nativeBuildInputs = [ jq ];
     }
     ''
-      touch $out
-      while read path; do
-        echo $path >> $out
-        read dummy
-        read nrRefs
-        for ((i = 0; i < nrRefs; i++)); do read ref; done
-      done < graph
+      jq -r ".graph | map(.path) | sort | .[]" "$NIX_ATTRS_JSON_FILE" > "$out"
     '';
 
-  /*
-    Write the set of references to a file, that is, their immediate dependencies.
-
-    This produces the equivalent of `nix-store -q --references`.
-   */
+  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
+  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeDirectReferencesToFile
   writeDirectReferencesToFile = path: runCommand "runtime-references"
     {
       exportReferencesGraph = [ "graph" path ];
@@ -750,7 +669,7 @@ rec {
       sort ./references >$out
     '';
 
-
+  # TODO: move writeStringReferencesToFile docs to the Nixpkgs manual
   /*
     Extract a string's references to derivations and paths (its
     context) and write them to a text file, removing the input string
@@ -763,13 +682,13 @@ rec {
   writeStringReferencesToFile = string:
     /*
        The basic operation this performs is to copy the string context
-       from `string' to a second string and wrap that string in a
+       from `string` to a second string and wrap that string in a
        derivation. However, that alone is not enough, since nothing in the
        string refers to the output paths of the derivations/paths in its
        context, meaning they'll be considered build-time dependencies and
        removed from the wrapper derivation's closure. Putting the
        necessary output paths in the new string is however not very
-       straightforward - the attrset returned by `getContext' contains
+       straightforward - the attrset returned by `getContext` contains
        only references to derivations' .drv-paths, not their output
        paths. In order to "convert" them, we try to extract the
        corresponding paths from the original string using regex.
@@ -833,21 +752,8 @@ rec {
       writeDirectReferencesToFile (writeText "string-file" string);
 
 
-  /* Print an error message if the file with the specified name and
-    hash doesn't exist in the Nix store. This function should only
-    be used by non-redistributable software with an unfree license
-    that we need to require the user to download manually. It produces
-    packages that cannot be built automatically.
-
-    Example:
-
-    requireFile {
-      name = "my-file";
-      url = "http://example.com/download/";
-      sha256 = "ffffffffffffffffffffffffffffffffffffffffffffffffffff";
-    }
-
-   */
+  # Docs in doc/build-helpers/fetchers.chapter.md
+  # See https://nixos.org/manual/nixpkgs/unstable/#requirefile
   requireFile =
     { name ? null
     , sha256 ? null
@@ -903,6 +809,7 @@ rec {
       };
 
 
+  # TODO: move copyPathToStore docs to the Nixpkgs manual
   /*
     Copy a path to the Nix store.
     Nix automatically copies files to the store before stringifying paths.
@@ -912,11 +819,13 @@ rec {
   copyPathToStore = builtins.filterSource (p: t: true);
 
 
+  # TODO: move copyPathsToStore docs to the Nixpkgs manual
   /*
     Copy a list of paths to the Nix store.
   */
   copyPathsToStore = builtins.map copyPathToStore;
 
+  # TODO: move applyPatches docs to the Nixpkgs manual
   /* Applies a list of patches to a source directory.
 
     Example:
@@ -944,20 +853,25 @@ rec {
         else throw "applyPatches: please supply a `name` argument because a default name can only be computed when the `src` is a path or is an attribute set with a `name` attribute."
       ) + "-patched"
     , patches ? [ ]
+    , prePatch ? ""
     , postPatch ? ""
     , ...
-    }@args: stdenvNoCC.mkDerivation
-      {
-        inherit name src patches postPatch;
+    }@args:
+    if patches == [ ] && prePatch == "" && postPatch == ""
+    then src # nothing to do, so use original src to avoid additional drv
+    else stdenvNoCC.mkDerivation
+      ({
+        inherit name src patches prePatch postPatch;
         preferLocalBuild = true;
         allowSubstitutes = false;
         phases = "unpackPhase patchPhase installPhase";
         installPhase = "cp -R ./ $out";
       }
-    # Carry `meta` information from the underlying `src` if present.
-    // (optionalAttrs (src?meta) { inherit (src) meta; })
-    // (removeAttrs args [ "src" "name" "patches" "postPatch" ]);
+      # Carry `meta` information from the underlying `src` if present.
+      // (optionalAttrs (src?meta) { inherit (src) meta; })
+      // (removeAttrs args [ "src" "name" "patches" "prePatch" "postPatch" ]));
 
+  # TODO: move docs to Nixpkgs manual
   /* An immutable file in the store with a length of 0 bytes. */
   emptyFile = runCommand "empty-file"
     {
@@ -967,6 +881,7 @@ rec {
       preferLocalBuild = true;
     } "touch $out";
 
+  # TODO: move docs to Nixpkgs manual
   /* An immutable empty directory in the store. */
   emptyDirectory = runCommand "empty-directory"
     {

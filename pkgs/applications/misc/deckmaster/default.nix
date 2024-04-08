@@ -38,6 +38,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "An application to control your Elgato Stream Deck on Linux";
+    mainProgram = "deckmaster";
     homepage = "https://github.com/muesli/deckmaster";
     changelog = "https://github.com/muesli/deckmaster/releases/tag/v${version}";
     license = licenses.mit;

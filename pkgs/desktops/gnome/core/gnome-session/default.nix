@@ -25,7 +25,6 @@
 , libepoxy
 , bash
 , gnome-session-ctl
-, gnomeShellSupport ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -114,7 +113,7 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/libexec/gnome-session-binary" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --suffix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH" \
-      ${lib.optionalString gnomeShellSupport "--suffix XDG_DATA_DIRS : \"${gnome.gnome-shell}/share\""} \
+      --suffix XDG_DATA_DIRS : "${gnome.gnome-shell}/share" \
       --suffix XDG_CONFIG_DIRS : "${gnome.gnome-settings-daemon}/etc/xdg"
   '';
 

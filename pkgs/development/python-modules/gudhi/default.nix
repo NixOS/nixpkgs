@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , buildPythonPackage
 , cmake
+, setuptools
 , boost
 , eigen
 , gmp
@@ -19,37 +20,44 @@
 
 buildPythonPackage rec {
   pname = "gudhi";
-  version = "3.8.0";
-  format = "setuptools";
+  version = "3.9.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GUDHI";
     repo = "gudhi-devel";
     rev = "tags/gudhi-release-${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-f2ajy4muG9vuf4JarGWZmdk/LF9OYd2KLSaGyY6BQrY=";
+    hash = "sha256-VL6RIPe8a2/cUHnHOql9e9EUMBB9QU311kMCaMZTbGI=";
   };
 
-  patches = [ ./remove_explicit_PYTHONPATH.patch ];
-
-  nativeBuildInputs = [ cmake numpy cython pybind11 matplotlib ];
+  nativeBuildInputs = [ cmake numpy cython pybind11 matplotlib setuptools ];
   buildInputs = [ boost eigen gmp cgal mpfr ]
     ++ lib.optionals enableTBB [ tbb ];
   propagatedBuildInputs = [ numpy scipy ];
   nativeCheckInputs = [ pytest ];
 
   cmakeFlags = [
-    "-DWITH_GUDHI_PYTHON=ON"
-    "-DPython_ADDITIONAL_VERSIONS=3"
+    (lib.cmakeBool "WITH_GUDHI_PYTHON" true)
+    (lib.cmakeFeature "Python_ADDITIONAL_VERSIONS" "3")
   ];
+
+  prePatch = ''
+    substituteInPlace src/python/CMakeLists.txt \
+      --replace '"''${GUDHI_PYTHON_PATH_ENV}"' ""
+  '';
 
   preBuild = ''
     cd src/python
   '';
 
   checkPhase = ''
+    runHook preCheck
+
     rm -r gudhi
-    ${cmake}/bin/ctest --output-on-failure
+    ctest --output-on-failure
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "gudhi" "gudhi.hera" "gudhi.point_cloud" "gudhi.clustering" ];

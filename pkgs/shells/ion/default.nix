@@ -49,6 +49,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Modern system shell with simple (and powerful) syntax";
+    mainProgram = "ion";
     homepage = "https://gitlab.redox-os.org/redox-os/ion";
     license = licenses.mit;
     maintainers = with maintainers; [ dywedir ];

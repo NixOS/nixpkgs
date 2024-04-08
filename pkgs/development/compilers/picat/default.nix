@@ -28,6 +28,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Logic-based programming langage";
+    mainProgram = "picat";
     homepage    = "http://picat-lang.org/";
     license     = licenses.mpl20;
     platforms   = platforms.linux;

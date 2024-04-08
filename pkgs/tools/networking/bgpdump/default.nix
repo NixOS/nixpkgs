@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.hpnd;
     maintainers = with lib.maintainers; [ lewo ];
     platforms = with lib.platforms; linux;
+    mainProgram = "bgpdump";
   };
 }

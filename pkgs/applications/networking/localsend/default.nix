@@ -2,28 +2,29 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
-, flutter
+, flutter313
 , makeDesktopItem
 , pkg-config
 , libayatana-appindicator
 , undmg
+, makeBinaryWrapper
 }:
 
 let
   pname = "localsend";
-  version = "1.12.0";
+  version = "1.14.0";
 
-  linux = flutter.buildFlutterApplication {
+  linux = flutter313.buildFlutterApplication rec {
     inherit pname version;
 
     src = fetchFromGitHub {
       owner = pname;
       repo = pname;
       rev = "v${version}";
-      hash = "sha256-mk0CLZP0x/mEixeAig7X41aFgQzs+kZkBJx6T//3ZKY=";
+      hash = "sha256-CO0uFcZnOfE31EZxRUpgtod3+1lyXPpbytHB45DEM98=";
     };
 
-    sourceRoot = "source/app";
+    sourceRoot = "${src.name}/app";
 
     pubspecLock = lib.importJSON ./pubspec.lock.json;
 
@@ -52,12 +53,14 @@ let
       exec = "@out@/bin/localsend_app";
       icon = "localsend";
       desktopName = "LocalSend";
-      startupWMClass = "localsend";
+      startupWMClass = "localsend_app";
       genericName = "An open source cross-platform alternative to AirDrop";
       categories = [ "Network" ];
     };
 
-    meta = meta // {
+    passthru.updateScript = ./update.sh;
+
+    meta = metaCommon // {
       mainProgram = "localsend_app";
     };
   };
@@ -67,30 +70,31 @@ let
 
     src = fetchurl {
       url = "https://github.com/localsend/localsend/releases/download/v${version}/LocalSend-${version}.dmg";
-      hash = "sha256-XKYc3lA7x0Tf1Mf3o7D2RYwYDRDVHoSb/lj9PhKzV5U=";
+      hash = "sha256-L7V48QoOA0cjx45n+9Xav/zzCzCsZB3TBip0WGusMXg=";
     };
 
-    nativeBuildInputs = [ undmg ];
+    nativeBuildInputs = [ undmg makeBinaryWrapper ];
 
     sourceRoot = ".";
 
     installPhase = ''
       mkdir -p $out/Applications
       cp -r *.app $out/Applications
+      makeBinaryWrapper $out/Applications/LocalSend.app/Contents/MacOS/LocalSend $out/bin/localsend
     '';
 
-    meta = meta // {
+    meta = metaCommon // {
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       platforms = [ "x86_64-darwin" "aarch64-darwin" ];
     };
   };
 
-  meta = with lib; {
+  metaCommon = with lib; {
     description = "An open source cross-platform alternative to AirDrop";
     homepage = "https://localsend.org/";
     license = licenses.mit;
     mainProgram = "localsend";
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = with maintainers; [ sikmir linsui ];
   };
 in
 if stdenv.isDarwin

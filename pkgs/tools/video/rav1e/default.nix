@@ -15,14 +15,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rav1e";
-  version = "0.6.6";
+  version = "0.7.1";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-urYMT1sJUMBj1L/2Hi+hcYbWbi0ScSls0pm9gLj9H3o=";
+    sha256 = "sha256-Db7qb7HBAy6lniIiN07iEzURmbfNtuhmgJRv7OUagUM=";
   };
 
-  cargoHash = "sha256-qQfEpynhlIEKU1Ptq/jM1Wdtn+BVCZT1lmou2S1GL4I=";
+  cargoHash = "sha256-VyQ6n2kIJ7OjK6Xlf0T0GNsBvgESRETzKZDZzAn8ZuY=";
 
   depsBuildBuild = [ pkg-config ];
 
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   # Darwin uses `llvm-strip`, which results in link errors when using `-x` to strip the asm library
   # and linking it with cctools ld64.
   postPatch = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
-    substituteInPlace build.rs --replace 'cmd.arg("-x")' 'cmd.arg("-S")'
+    substituteInPlace build.rs --replace-fail '.arg("-x")' '.arg("-S")'
   '';
 
   checkType = "debug";

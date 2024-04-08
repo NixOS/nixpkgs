@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage    = "https://knightos.org/";
     description = "Makes TI calculator upgrade files from ROM dumps";
+    mainProgram = "mktiupgrade";
     license     = licenses.mit;
     maintainers = with maintainers; [ siraben ];
     platforms   = platforms.unix;

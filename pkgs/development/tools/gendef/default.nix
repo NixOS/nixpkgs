@@ -10,10 +10,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-0vbAHSN+uwxoXXZtbuycP67PxjcB8Ftxd/Oij1gqE3Y=";
   };
 
-  sourceRoot = "mingw-w64/mingw-w64-tools/gendef";
+  sourceRoot = "${finalAttrs.src.name}/mingw-w64-tools/gendef";
 
   meta = {
     description = "A tool which generate def files from DLLs";
+    mainProgram = "gendef";
     homepage = "https://sourceforge.net/p/mingw-w64/wiki2/gendef/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ hughobrien ];

@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Modular multi screen pdf presentation viewer";
     homepage = "https://github.com/stiglers-eponym/BeamerPresenter";
-    license = with licenses; [ agpl3 gpl3Plus ];
+    license = with licenses; [ agpl3Only gpl3Plus ];
     platforms = platforms.all;
     maintainers = with maintainers; [ pacien dotlambda ];
     mainProgram = "beamerpresenter";

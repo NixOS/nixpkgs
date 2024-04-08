@@ -52,5 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/vangorra/python_withings_api";
     license = licenses.mit;
     maintainers = with maintainers; [ kittywitch ];
+    broken = versionAtLeast pydantic.version "2";
   };
 }

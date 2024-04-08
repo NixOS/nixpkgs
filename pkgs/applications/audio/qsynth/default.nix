@@ -23,6 +23,7 @@ mkDerivation  rec {
 
   meta = with lib; {
     description = "Fluidsynth GUI";
+    mainProgram = "qsynth";
     homepage = "https://sourceforge.net/projects/qsynth";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ goibhniu ];

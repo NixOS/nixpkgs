@@ -11,8 +11,8 @@
 
 buildPythonPackage rec {
   pname = "aiocomelit";
-  version = "0.7.0";
-  format = "pyproject";
+  version = "0.9.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
@@ -20,12 +20,12 @@ buildPythonPackage rec {
     owner = "chemelli74";
     repo = "aiocomelit";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xUtLRHNsv1q6QV6dYsS2OBQj/HsiZDfPhqMPDwNKS7A=";
+    hash = "sha256-Fjf7mXXUnBTtPfNHHJdFx5ho4eg0N3iHCGsACa4IMjY=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=aiocomelit --cov-report=term-missing:skip-covered" ""
+      --replace-fail " --cov=aiocomelit --cov-report=term-missing:skip-covered" ""
   '';
 
   nativeBuildInputs = [

@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "phik";
-  version = "0.12.3";
+  version = "0.12.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "KaveIO";
     repo = "PhiK";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9o3EDhgmne2J1QfzjjNQc1mUcyCzoVrCnWXqjWkiZU0=";
+    hash = "sha256-YsH7vVn6gzejunUjUY/RIcvWtaQ/W1gbciJWKi5LDTk=";
   };
 
   nativeBuildInputs = [

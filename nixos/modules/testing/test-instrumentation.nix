@@ -42,8 +42,10 @@ let
         # Otherwise we get errors on the terminal because bash tries to
         # setup things like job control.
         # Note: calling bash explicitly here instead of sh makes sure that
-        # we can also run non-NixOS guests during tests.
-        PS1= exec /usr/bin/env bash --norc /dev/hvc0
+        # we can also run non-NixOS guests during tests. This, however, is
+        # mostly futureproofing as the test instrumentation is still very
+        # tightly coupled to NixOS.
+        PS1= exec ${pkgs.coreutils}/bin/env bash --norc /dev/hvc0
       '';
       serviceConfig.KillSignal = "SIGHUP";
   };
@@ -121,7 +123,9 @@ in
           }
         ];
 
-        contents."/usr/bin/env".source = "${pkgs.coreutils}/bin/env";
+        storePaths = [
+          "${pkgs.coreutils}/bin/env"
+        ];
       })
     ];
 
@@ -207,7 +211,10 @@ in
     networking.usePredictableInterfaceNames = false;
 
     # Make it easy to log in as root when running the test interactively.
-    users.users.root.initialHashedPassword = mkOverride 150 "";
+    # This needs to be a file because of a quirk in systemd credentials,
+    # where you cannot specify an empty string as a value. systemd-sysusers
+    # uses credentials to set passwords on users.
+    users.users.root.hashedPasswordFile = mkOverride 150 "${pkgs.writeText "hashed-password.root" ""}";
 
     services.xserver.displayManager.job.logToJournal = true;
 

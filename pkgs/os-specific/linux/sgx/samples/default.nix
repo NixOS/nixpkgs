@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , makeWrapper
+, openssl
 , sgx-sdk
 , sgx-psw
 , which
@@ -18,6 +19,7 @@ let
 
     nativeBuildInputs = [
       makeWrapper
+      openssl
       which
     ];
 
@@ -66,7 +68,9 @@ let
 in
 {
   cxx11SGXDemo = buildSample "Cxx11SGXDemo";
-  localAttestation = (buildSample "LocalAttestation").overrideAttrs (oldAttrs: {
+  cxx14SGXDemo = buildSample "Cxx14SGXDemo";
+  cxx17SGXDemo = buildSample "Cxx17SGXDemo";
+  localAttestation = (buildSample "LocalAttestation").overrideAttrs (old: {
     installPhase = ''
       runHook preInstall
 
@@ -86,7 +90,7 @@ in
   });
   powerTransition = buildSample "PowerTransition";
   protobufSGXDemo = buildSample "ProtobufSGXDemo";
-  remoteAttestation = (buildSample "RemoteAttestation").overrideAttrs (oldAttrs: {
+  remoteAttestation = (buildSample "RemoteAttestation").overrideAttrs (old: {
     # Makefile sets rpath to point to $TMPDIR
     preFixup = ''
       patchelf --remove-rpath $out/bin/app
@@ -97,13 +101,40 @@ in
     '';
   });
   sampleEnclave = buildSample "SampleEnclave";
-  sampleEnclavePCL = buildSample "SampleEnclavePCL";
   sampleEnclaveGMIPP = buildSample "SampleEnclaveGMIPP";
-  sealUnseal = (buildSample "SealUnseal").overrideAttrs (oldAttrs: {
+  sampleMbedCrypto = buildSample "SampleMbedCrypto";
+  sealUnseal = (buildSample "SealUnseal").overrideAttrs (old: {
     prePatch = ''
       substituteInPlace App/App.cpp \
         --replace '"sealed_data_blob.txt"' '"/tmp/sealed_data_blob.txt"'
     '';
   });
   switchless = buildSample "Switchless";
+  # # Requires SGX-patched openssl (sgxssl) build
+  # sampleAttestedTLS = buildSample "SampleAttestedTLS";
+} // lib.optionalAttrs (!isSimulation) {
+  # # Requires kernel >= v6.2 && HW SGX
+  # sampleAEXNotify = buildSample "SampleAEXNotify";
+
+  # Requires HW SGX
+  sampleCommonLoader = (buildSample "SampleCommonLoader").overrideAttrs (old: {
+    nativeBuildInputs = [ sgx-psw ] ++ old.nativeBuildInputs;
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/{bin,lib}
+      mv sample app
+      install -m 755 app $out/bin
+
+      wrapProgram "$out/bin/app" \
+        --chdir "$out/lib" \
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [sgx-psw]}"
+
+      runHook postInstall
+    '';
+  });
+
+  # # SEGFAULTs in simulation mode?
+  # sampleEnclavePCL = buildSample "SampleEnclavePCL";
 }

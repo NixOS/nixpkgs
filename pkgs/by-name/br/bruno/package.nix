@@ -1,5 +1,6 @@
 { lib
 
+, stdenv
 , fetchFromGitHub
 , buildNpmPackage
 , nix-update-script
@@ -13,36 +14,49 @@
 , cairo
 , pango
 , npm-lockfile-fix
+, overrideSDK
+, darwin
 }:
 
-buildNpmPackage rec {
+let
+  # fix for: https://github.com/NixOS/nixpkgs/issues/272156
+  buildNpmPackage' =
+    buildNpmPackage.override {
+      stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+    };
+in
+buildNpmPackage' rec {
   pname = "bruno";
-  version = "1.6.1";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     rev = "v${version}";
-    hash = "sha256-Vf4UHN13eE9W4rekOEGAWIP3x79cVH3vI9sxuIscv8c=";
+    hash = "sha256-Urskhzs00OEucoR17NDXNtnrcXk9h75E806Re0HvYyw=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-pfV9omdJiozJ9VotTImfM/DRsBPNGAEzmSdj3/C//4A=";
+  npmDepsHash = "sha256-48xzx7dTalceXzjFBHIkkUS83pqP/OQ0L2tnMESpHII=";
+  npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
     (writeShellScriptBin "phantomjs" "echo 2.1.1")
+    pkg-config
+  ] ++ lib.optionals (! stdenv.isDarwin) [
     makeWrapper
     copyDesktopItems
-    pkg-config
   ];
 
   buildInputs = [
     pixman
     cairo
     pango
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.CoreText
   ];
 
   desktopItems = [
@@ -66,6 +80,7 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
   postBuild = ''
+    npm run build --workspace=packages/bruno-common
     npm run build --workspace=packages/bruno-graphql-docs
     npm run build --workspace=packages/bruno-app
     npm run build --workspace=packages/bruno-query
@@ -74,11 +89,27 @@ buildNpmPackage rec {
 
     pushd packages/bruno-electron
 
+    ${if stdenv.isDarwin then ''
+    cp -r ${electron}/Applications/Electron.app ./
+    find ./Electron.app -name 'Info.plist' | xargs -d '\n' chmod +rw
+
+    substituteInPlace electron-builder-config.js \
+      --replace "identity: 'Anoop MD (W7LPPWA48L)'" 'identity: null' \
+      --replace "afterSign: 'notarize.js'," ""
+
+    npm exec electron-builder -- \
+      --dir \
+      --config electron-builder-config.js \
+      -c.electronDist=./ \
+      -c.electronVersion=${electron.version} \
+      -c.npmRebuild=false
+    '' else ''
     npm exec electron-builder -- \
       --dir \
       -c.electronDist=${electron}/libexec/electron \
       -c.electronVersion=${electron.version} \
       -c.npmRebuild=false
+    ''}
 
     popd
   '';
@@ -88,9 +119,15 @@ buildNpmPackage rec {
   installPhase = ''
     runHook preInstall
 
+
+    ${if stdenv.isDarwin then ''
+    mkdir -p $out/Applications
+
+    cp -R packages/bruno-electron/out/**/Bruno.app $out/Applications/
+    '' else ''
     mkdir -p $out/opt/bruno $out/bin
 
-    cp -r packages/bruno-electron/dist/linux-unpacked/{locales,resources{,.pak}} $out/opt/bruno
+    cp -r packages/bruno-electron/dist/linux*-unpacked/{locales,resources{,.pak}} $out/opt/bruno
 
     makeWrapper ${lib.getExe electron} $out/bin/bruno \
       --add-flags $out/opt/bruno/resources/app.asar \
@@ -102,6 +139,7 @@ buildNpmPackage rec {
       size=${"$"}{s}x$s
       install -Dm644 $src/packages/bruno-electron/resources/icons/png/$size.png $out/share/icons/hicolor/$size/apps/bruno.png
     done
+    ''}
 
     runHook postInstall
   '';
@@ -113,7 +151,7 @@ buildNpmPackage rec {
     homepage = "https://www.usebruno.com";
     inherit (electron.meta) platforms;
     license = licenses.mit;
-    maintainers = with maintainers; [ water-sucks lucasew kashw2 ];
+    maintainers = with maintainers; [ water-sucks lucasew kashw2 mattpolzin ];
     mainProgram = "bruno";
   };
 }

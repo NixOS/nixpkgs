@@ -1,7 +1,7 @@
 { lib
 , stdenv
+, stdenvNoCC
 , fetchurl
-, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -17,30 +17,19 @@
 , libxkbcommon
 , wlroots
 , xorg
-, gitUpdater
+, directoryListingUpdater
 , nixosTests
+, testers
 }:
 
-let
-  phocWlroots = wlroots.overrideAttrs (old: {
-    patches = (old.patches or []) ++ [
-      # Revert "layer-shell: error on 0 dimension without anchors"
-      # https://source.puri.sm/Librem5/phosh/-/issues/422
-      (fetchpatch {
-        name = "0001-Revert-layer-shell-error-on-0-dimension-without-anch.patch";
-        url = "https://gitlab.gnome.org/World/Phosh/phoc/-/raw/acb17171267ae0934f122af294d628ad68b09f88/subprojects/packagefiles/wlroots/0001-Revert-layer-shell-error-on-0-dimension-without-anch.patch";
-        hash = "sha256-uNJaYwkZImkzNUEqyLCggbXAoIRX5h2eJaGbSHj1B+o=";
-      })
-    ];
-  });
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "phoc";
-  version = "0.31.0";
+  version = "0.37.0";
 
   src = fetchurl {
     # This tarball includes the meson wrapped subproject 'gmobile'.
-    url = "https://storage.puri.sm/releases/phoc/phoc-${version}.tar.xz";
-    hash = "sha256-P7Bs9JMv6KNKo4d2ID0/Ba4+Nel6DMn8o4I7EDvY4vY=";
+    url = with finalAttrs; "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
+    hash = "sha256-SQLoOjqDBL1G3SDO4mfVRV2U0i+M1EwiqUR52ytFJmM=";
   };
 
   nativeBuildInputs = [
@@ -61,30 +50,40 @@ in stdenv.mkDerivation rec {
     # For keybindings settings schemas
     gnome.mutter
     wayland
-    phocWlroots
+    finalAttrs.wlroots
     xorg.xcbutilwm
   ];
 
   mesonFlags = ["-Dembed-wlroots=disabled"];
 
-  postPatch = ''
-    chmod +x build-aux/post_install.py
-    patchShebangs build-aux/post_install.py
-  '';
+  # Patch wlroots to remove a check which crashes Phosh.
+  # This patch can be found within the phoc source tree.
+  wlroots = wlroots.overrideAttrs (old: {
+    patches = (old.patches or []) ++ [
+      (stdenvNoCC.mkDerivation {
+        name = "0001-Revert-layer-shell-error-on-0-dimension-without-anch.patch";
+        inherit (finalAttrs) src;
+        preferLocalBuild = true;
+        allowSubstitutes = false;
+        installPhase = "cp subprojects/packagefiles/wlroots/$name $out";
+      })
+    ];
+  });
 
   passthru = {
     tests.phosh = nixosTests.phosh;
-    updateScript = gitUpdater {
-      url = "https://gitlab.gnome.org/World/Phosh/phoc";
-      rev-prefix = "v";
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
     };
+    updateScript = directoryListingUpdater { };
   };
 
   meta = with lib; {
     description = "Wayland compositor for mobile phones like the Librem 5";
+    mainProgram = "phoc";
     homepage = "https://gitlab.gnome.org/World/Phosh/phoc";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ masipcat tomfitzhenry zhaofengli ];
     platforms = platforms.linux;
   };
-}
+})

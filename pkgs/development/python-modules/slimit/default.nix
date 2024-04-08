@@ -31,6 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "SlimIt -  a JavaScript minifier/parser in Python";
+    mainProgram = "slimit";
     homepage = "https://github.com/rspivak/slimit";
     changelog = "https://github.com/rspivak/slimit/blob/${src.rev}/CHANGES";
     license = licenses.mit;

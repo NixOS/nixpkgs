@@ -25,4 +25,5 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = nixosTests.mod_perl;
+  meta.mainProgram = "mp2bug";
 }

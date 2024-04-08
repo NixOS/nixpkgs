@@ -2,13 +2,13 @@
 
 maven.buildMavenPackage rec {
   pname = "ktfmt";
-  version = "0.46";
+  version = "0.47";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "ktfmt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OIbJ+J5LX6SPv5tuAiY66v/edeM7nFPHj90GXV6zaxw=";
+    hash = "sha256-vdvKHTTD84OAQacv/VE/5BxYdW4n3bxPUHF2MdH+sQQ=";
   };
 
   mvnHash = "sha256-Cl7P2i4VFJ/yk7700u62YPcacfKkhBztFvcDkYBfZEA=";

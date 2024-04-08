@@ -12,13 +12,13 @@ SystemConfiguration
 
 rustPlatform.buildRustPackage rec {
   pname = "trunk";
-  version = "0.18.3";
+  version = "0.18.8";
 
   src = fetchFromGitHub {
-    owner = "thedodd";
+    owner = "trunk-rs";
     repo = "trunk";
     rev = "v${version}";
-    hash = "sha256-R7i2tY8wd7Jhyx+zs+OqkZ+K+d/triBRqaAsATtCM+o=";
+    hash = "sha256-cx14IVqsu1SQezs8T1HFZ75+MPWkvf5RcvGCodW5G4A=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   # requires network
   checkFlags = [ "--skip=tools::tests::download_and_install_binaries" ];
 
-  cargoHash = "sha256-70fzBqF/6bDStvhpc7IV4ekVEinBFqiCScK4X0HTkgY=";
+  cargoHash = "sha256-zMkRCNFrfkUvq6oz/7GtaWNw9YS5NygBUYzoOAoQl40=";
 
   # the dependency css-minify contains both README.md and Readme.md,
   # which causes a hash mismatch on systems with a case-insensitive filesystem
@@ -52,8 +52,9 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    homepage = "https://github.com/thedodd/trunk";
+    homepage = "https://github.com/trunk-rs/trunk";
     description = "Build, bundle & ship your Rust WASM application to the web";
+    mainProgram = "trunk";
     maintainers = with maintainers; [ freezeboy ];
     license = with licenses; [ asl20 ];
   };

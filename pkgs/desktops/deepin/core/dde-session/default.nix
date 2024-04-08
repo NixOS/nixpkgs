@@ -15,16 +15,19 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-session";
-  version = "1.1.9";
+  version = "1.2.5";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-CyHvvNALXe4fOMjD48By/iaU6/xNUhH9yG19Ob3bHy0=";
+    hash = "sha256-YYGRjVbVFyzmRhYu6sDtxzghocgM7Myr3K77AqWQk3E=";
   };
 
   postPatch = ''
+    substituteInPlace misc/CMakeLists.txt \
+      --replace "/etc" "$out/etc"
+
     # Avoid using absolute path to distinguish applications
     substituteInPlace src/dde-session/impl/sessionmanager.cpp \
       --replace 'file.readAll().startsWith("/usr/bin/dde-lock")' 'file.readAll().contains("dde-lock")' \

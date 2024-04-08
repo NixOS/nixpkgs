@@ -24,8 +24,6 @@ buildPythonPackage rec {
     hash = "sha256-9xAUMr1SWFePEvIz6DFEexk9Txex3u8wPNfMAdxEUCA=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     setuptools-scm
   ];
@@ -53,6 +51,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A social networking service scraper";
+    mainProgram = "snscrape";
     homepage = "https://github.com/JustAnotherArchivist/snscrape";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ivan ];

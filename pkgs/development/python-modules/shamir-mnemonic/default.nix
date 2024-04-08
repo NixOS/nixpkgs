@@ -34,6 +34,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Reference implementation of SLIP-0039";
+    mainProgram = "shamir";
     homepage = "https://github.com/trezor/python-shamir-mnemonic";
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];

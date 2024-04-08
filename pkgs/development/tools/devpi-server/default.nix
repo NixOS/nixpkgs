@@ -13,6 +13,7 @@
 , platformdirs
 , pluggy
 , py
+, httpx
 , pyramid
 , pytestCheckHook
 , repoze-lru
@@ -20,12 +21,14 @@
 , strictyaml
 , waitress
 , webtest
+, testers
+, devpi-server
 }:
 
 
 buildPythonApplication rec {
   pname = "devpi-server";
-  version = "6.9.2";
+  version = "6.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -34,7 +37,7 @@ buildPythonApplication rec {
     owner = "devpi";
     repo = "devpi";
     rev = "server-${version}";
-    hash = "sha256-HnxWLxOK+6B8O/7lpNjuSUQ0Z7NOmV2n01WFyjow6oU=";
+    hash = "sha256-JqYWWItdAgtUtiYSqxUd40tT7ON4oHiDA4/3Uhb01b8=";
   };
 
   sourceRoot = "${src.name}/server";
@@ -64,6 +67,8 @@ buildPythonApplication rec {
     setuptools
     strictyaml
     waitress
+    py
+    httpx
   ] ++ passlib.optional-dependencies.argon2;
 
   nativeCheckInputs = [
@@ -83,7 +88,6 @@ buildPythonApplication rec {
   '';
   pytestFlagsArray = [
     "./test_devpi_server"
-    "--slow"
     "-rfsxX"
     "--ignore=test_devpi_server/test_nginx_replica.py"
     "--ignore=test_devpi_server/test_streaming_nginx.py"
@@ -95,6 +99,7 @@ buildPythonApplication rec {
     "test_auth_mirror_url_no_hash"
     "test_auth_mirror_url_with_hash"
     "test_auth_mirror_url_hidden_in_logs"
+    "test_simplelinks_timeout"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -102,6 +107,10 @@ buildPythonApplication rec {
   pythonImportsCheck = [
     "devpi_server"
   ];
+
+  passthru.tests.version = testers.testVersion {
+    package = devpi-server;
+  };
 
   meta = with lib;{
     homepage = "http://doc.devpi.net";

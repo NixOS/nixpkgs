@@ -1,35 +1,56 @@
 { lib
 , attrs
+, beautifulsoup4
 , buildPythonPackage
 , certvalidator
+, colorama
 , cryptoparser
+, dnspython
 , fetchPypi
+, pathlib2
+, pyfakefs
+, python-dateutil
 , pythonOlder
 , requests
-, six
+, setuptools
 , urllib3
 }:
 
 buildPythonPackage rec {
   pname = "cryptolyzer";
-  version = "0.12.1";
-  format = "setuptools";
+  version = "0.12.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "CryptoLyzer";
     inherit version;
-    hash = "sha256-1Ec57A5lCjy9FsA3vDmCyfOeHZaQz01FNiKyNV3eJfc=";
+    hash = "sha256-UffFdQ+MiB8kPzqnmWdnGRwAAM9wJwpUDK2bPvPvH0c=";
   };
 
+  postPatch = ''
+    substituteInPlace requirements.txt  \
+      --replace-warn "attrs>=20.3.0,<22.0.1" "attrs>=20.3.0" \
+      --replace-warn "bs4" "beautifulsoup4"
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
-    certvalidator
     attrs
-    six
-    urllib3
+    beautifulsoup4
+    certvalidator
+    colorama
     cryptoparser
+    dnspython
+    pathlib2
+    pyfakefs
+    python-dateutil
     requests
+    urllib3
   ];
 
   # Tests require networking

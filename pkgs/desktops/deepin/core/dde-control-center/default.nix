@@ -17,19 +17,20 @@
 , polkit-qt
 , libxcrypt
 , librsvg
+, gtest
 , runtimeShell
 , dbus
 }:
 
 stdenv.mkDerivation rec {
   pname = "dde-control-center";
-  version = "6.0.28";
+  version = "6.0.44";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-kgQ4ySiYtaklOqER56QtKD9lk1CnRSEAU4QPHycl9eI=";
+    hash = "sha256-NN2CSIYByxeTZraK48lAsQSJYAOTDHzKT1FOa+VWMo0=";
   };
 
   postPatch = ''
@@ -57,6 +58,7 @@ stdenv.mkDerivation rec {
     polkit-qt
     libxcrypt
     librsvg
+    gtest
   ];
 
   cmakeFlags = [
@@ -89,6 +91,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Control panel of Deepin Desktop Environment";
+    mainProgram = "dde-control-center";
     homepage = "https://github.com/linuxdeepin/dde-control-center";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

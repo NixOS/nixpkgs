@@ -143,7 +143,7 @@ in
       # ConnectionTimeout = 180
 
       #RemoteServiceName = gds_db
-      RemoteServicePort = ${cfg.port}
+      RemoteServicePort = ${toString cfg.port}
 
       # randomly choose port for server Event Notification
       #RemoteAuxPort = 0

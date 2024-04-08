@@ -2,7 +2,6 @@
 , rustPlatform
 , fetchCrate
 , pkg-config
-, libgit2_1_6
 , libssh2
 , openssl
 , zlib
@@ -12,21 +11,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-workspaces";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-1wNoMVfouuPRGFGB6XIhgeeWgknxMctrBl5Vfco6qug=";
+    hash = "sha256-1YFTBzFr11FUfwgdGJgyF1lWvrfQ6ZPIkYAG7vySfFA=";
   };
 
-  cargoHash = "sha256-OJGqIo6mYqXjmQb/2CVVTskecYZretw+K46Fvbu/PcQ=";
+  cargoHash = "sha256-wL1DKZ1QhBKB4Gy2rbwe4y/hR4A/wiiVqGAIcM+Om8E=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
   buildInputs = [
-    libgit2_1_6
     libssh2
     openssl
     zlib

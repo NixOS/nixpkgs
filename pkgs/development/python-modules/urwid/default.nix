@@ -1,25 +1,34 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-
-# build-system
+, exceptiongroup
+, fetchFromGitHub
+, glibcLocales
+, pygobject3
+, pyserial
+, pytestCheckHook
+, pythonOlder
+, pyzmq
 , setuptools
 , setuptools-scm
-, wheel
-
-# tests
-, glibcLocales
-, pytestCheckHook
+, tornado
+, trio
+, twisted
+, typing-extensions
+, wcwidth
 }:
 
 buildPythonPackage rec {
   pname = "urwid";
-  version = "2.2.1";
-  format = "pyproject";
+  version = "2.6.8";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-4zkRqxjyxz/dvpvyFtAh504gstWqm+MEA8WPVRMbuKE=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "urwid";
+    repo = "urwid";
+    rev = "refs/tags/${version}";
+    hash = "sha256-KtIcmAPOcxC9wTq6mKRZWcohH0skYMHlq4mehpn6raY=";
   };
 
   postPatch = ''
@@ -29,19 +38,52 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     setuptools-scm
-    wheel
   ];
+
+  propagatedBuildInputs = [
+    typing-extensions
+    wcwidth
+  ];
+
+  passthru.optional-dependencies = {
+    glib = [
+      pygobject3
+    ];
+    tornado = [
+      tornado
+    ];
+    trio = [
+      exceptiongroup
+      trio
+    ];
+    twisted = [
+      twisted
+    ];
+    zmq = [
+      pyzmq
+    ];
+    serial = [
+      pyserial
+    ];
+    lcd = [
+      pyserial
+    ];
+  };
 
   nativeCheckInputs = [
     glibcLocales
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   env.LC_ALL = "en_US.UTF8";
 
+  pytestFlagsArray = [
+    "tests"
+  ];
+
   disabledTestPaths = [
     # expect call hangs
-    "urwid/tests/test_vterm.py"
+    "tests/test_vterm.py"
   ];
 
   pythonImportsCheck = [
@@ -49,8 +91,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/urwid/urwid/releases/tag/${version}";
     description = "A full-featured console (xterm et al.) user interface library";
+    changelog = "https://github.com/urwid/urwid/releases/tag/${version}";
     downloadPage = "https://github.com/urwid/urwid";
     homepage = "https://urwid.org/";
     license = licenses.lgpl21Plus;

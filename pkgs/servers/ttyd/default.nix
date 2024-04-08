@@ -1,6 +1,7 @@
 { lib, stdenv, fetchFromGitHub
 , pkg-config, cmake, xxd
 , openssl, libwebsockets, json_c, libuv, zlib
+, nixosTests
 }:
 
 with builtins;
@@ -19,6 +20,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl libwebsockets json_c libuv zlib ];
 
   outputs = [ "out" "man" ];
+
+  passthru.tests = {
+    inherit (nixosTests) ttyd;
+  };
 
   meta = {
     description = "Share your terminal over the web";

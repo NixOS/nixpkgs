@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/auerswal/ssocr";
     license = licenses.gpl3;
     maintainers = [ maintainers.kroell ];
+    mainProgram = "ssocr";
   };
 }

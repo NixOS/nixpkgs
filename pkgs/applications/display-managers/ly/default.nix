@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/fairyglade/ly";
     maintainers = [ maintainers.vidister ];
     platforms = platforms.linux;
+    mainProgram = "ly";
   };
 }

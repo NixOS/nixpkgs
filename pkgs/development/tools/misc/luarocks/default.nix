@@ -19,23 +19,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "luarocks";
-  version = "3.9.1";
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = "luarocks";
     repo = "luarocks";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-G6HDap3pspeQtGDBq+ukN7kftDaT/CozMVdYM60F6HI=";
+    hash = "sha256-lM0jbKbV1fNz6AgJX6Pu6rlAzos/wEzn8wTvCBrOOe4=";
   };
 
   patches = [
     ./darwin-3.7.0.patch
-    # follow standard environmental variables
-    # https://github.com/luarocks/luarocks/pull/1433
-    (fetchpatch {
-      url = "https://github.com/luarocks/luarocks/commit/d719541577a89909185aa8de7a33cf73b7a63ac3.diff";
-      sha256 = "sha256-rMnhZFqLEul0wnsxvw9nl6JXVanC5QgOZ+I/HJ0vRCM=";
-    })
   ];
 
   postPatch = lib.optionalString stdenv.targetPlatform.isDarwin ''
@@ -67,7 +61,19 @@ stdenv.mkDerivation (finalAttrs: {
     sed -e "1s@.*@#! ${lua}/bin/lua$LUA_SUFFIX@" -i "$out"/bin/*
     substituteInPlace $out/etc/luarocks/* \
      --replace '${lua.luaOnBuild}' '${lua}'
+   ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd luarocks \
+      --bash <($out/bin/luarocks completion bash) \
+      --fish <($out/bin/luarocks completion fish) \
+      --zsh <($out/bin/luarocks completion zsh)
 
+    installShellCompletion --cmd luarocks-admin \
+      --bash <($out/bin/luarocks-admin completion bash) \
+      --fish <($out/bin/luarocks-admin completion fish) \
+      --zsh <($out/bin/luarocks-admin completion zsh)
+  ''
+  + ''
     for i in "$out"/bin/*; do
         test -L "$i" || {
             wrapProgram "$i" \
@@ -79,11 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
                 lib.optionals (finalAttrs.pname == "luarocks-nix") [ file nix-prefetch-git ])}
         }
     done
-  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd luarocks \
-      --bash <($out/bin/luarocks completion bash) \
-      --fish <($out/bin/luarocks completion fish) \
-      --zsh <($out/bin/luarocks completion zsh)
   '';
 
   propagatedBuildInputs = [ zip unzip cmake ];

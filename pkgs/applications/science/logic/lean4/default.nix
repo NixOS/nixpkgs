@@ -5,22 +5,23 @@
 , git
 , gmp
 , perl
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lean4";
-  version = "4.4.0";
+  version = "4.6.1";
 
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "lean4";
-    rev = "v${version}";
-    hash = "sha256-lU67wjl6yJP2r97lHYxrJqn+JhqMcBIbz/+qlCgY3/o=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-wUqGADwSocg2ciycCxg9qp+vJLJ2otA/5JpTrkFrDoQ=";
   };
 
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \
-      --replace 'set(GIT_SHA1 "")' 'set(GIT_SHA1 "${src.rev}")'
+      --replace 'set(GIT_SHA1 "")' 'set(GIT_SHA1 "${finalAttrs.src.rev}")'
 
     # Remove tests that fails in sandbox.
     # It expects `sourceRoot` to be a git repository.
@@ -49,18 +50,19 @@ stdenv.mkDerivation rec {
     "-DINSTALL_LICENSE=OFF"
   ];
 
-  # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
   };
 
   meta = with lib; {
     description = "Automatic and interactive theorem prover";
     homepage = "https://leanprover.github.io/";
-    changelog = "https://github.com/leanprover/lean4/blob/${src.rev}/RELEASES.md";
+    changelog = "https://github.com/leanprover/lean4/blob/${finalAttrs.src.rev}/RELEASES.md";
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ marsam ];
     mainProgram = "lean";
   };
-}
+})

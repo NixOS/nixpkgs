@@ -18,5 +18,6 @@ buildGoModule rec {
     homepage = "https://github.com/lucagrulla/cw";
     license = licenses.asl20;
     maintainers = with maintainers; [ onthestairs ];
+    mainProgram = "cw";
   };
 }

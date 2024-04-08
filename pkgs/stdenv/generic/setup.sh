@@ -815,6 +815,8 @@ fi
 ######################################################################
 # Textual substitution functions.
 
+# only log once, due to max logging limit on hydra
+_substituteStream_has_warned_replace_deprecation=false
 
 substituteStream() {
     local var=$1
@@ -822,8 +824,18 @@ substituteStream() {
     shift 2
 
     while (( "$#" )); do
+        local replace_mode="$1"
         case "$1" in
             --replace)
+                # deprecated 2023-11-22
+                # this will either get removed, or switch to the behaviour of --replace-fail in the future
+                if ! "$_substituteStream_has_warned_replace_deprecation"; then
+                    echo "substituteStream(): WARNING: '--replace' is deprecated, use --replace-{fail,warn,quiet}. ($description)" >&2
+                    _substituteStream_has_warned_replace_deprecation=true
+                fi
+                replace_mode='--replace-warn'
+                ;&
+            --replace-quiet|--replace-warn|--replace-fail)
                 pattern="$2"
                 replacement="$3"
                 shift 3
@@ -832,7 +844,12 @@ substituteStream() {
                 eval "$var"'=${'"$var"'//"$pattern"/"$replacement"}'
                 if [ "$pattern" != "$replacement" ]; then
                     if [ "${!var}" == "$savedvar" ]; then
-                        echo "substituteStream(): WARNING: pattern '$pattern' doesn't match anything in $description" >&2
+                        if [ "$replace_mode" == --replace-warn ]; then
+                            printf "substituteStream(): WARNING: pattern %q doesn't match anything in %s\n" "$pattern" "$description" >&2
+                        elif [ "$replace_mode" == --replace-fail ]; then
+                            printf "substituteStream(): ERROR: pattern %q doesn't match anything in %s\n" "$pattern" "$description" >&2
+                            return 1
+                        fi
                     fi
                 fi
                 ;;
@@ -1044,7 +1061,15 @@ _defaultUnpack() {
         case "$fn" in
             *.tar.xz | *.tar.lzma | *.txz)
                 # Don't rely on tar knowing about .xz.
-                xz -d < "$fn" | tar xf - --warning=no-timestamp
+                # Additionally, we have multiple different xz binaries with different feature sets in different
+                # stages. The XZ_OPT env var is only used by the full "XZ utils" implementation, which supports
+                # the --threads (-T) flag. This allows us to enable multithreaded decompression exclusively on
+                # that implementation, without the use of complex bash conditionals and checks.
+                # Since tar does not control the decompression, we need to
+                # disregard the error code from the xz invocation. Otherwise,
+                # it can happen that tar exits earlier, causing xz to fail
+                # from a SIGPIPE.
+                (XZ_OPT="--threads=$NIX_BUILD_CORES" xz -d < "$fn"; true) | tar xf - --warning=no-timestamp
                 ;;
             *.tar | *.tar.* | *.tgz | *.tbz2 | *.tbz)
                 # GNU tar can automatically select the decompression method

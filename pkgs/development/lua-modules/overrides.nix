@@ -2,6 +2,11 @@
 { stdenv
 , cargo
 , cmake
+
+# plenary utilities
+, which
+, findutils
+, coreutils
 , curl
 , cyrus_sasl
 , dbus
@@ -27,6 +32,7 @@
 , libuv
 , libxcrypt
 , libyaml
+, luajitPackages
 , mariadb
 , magic-enum
 , mpfr
@@ -52,6 +58,18 @@
 final: prev:
 with prev;
 {
+  argparse = prev.argparse.overrideAttrs(oa: {
+
+    doCheck = true;
+    checkInputs = [ final.busted ];
+
+    checkPhase = ''
+      runHook preCheck
+      export LUA_PATH="src/?.lua;$LUA_PATH"
+      busted spec/
+      runHook postCheck
+    '';
+  });
   ##########################################3
   #### manual fixes for generated packages
   ##########################################3
@@ -150,8 +168,15 @@ with prev;
     */
   });
 
+  image-nvim = prev.image-nvim.overrideAttrs (oa: {
+    propagatedBuildInputs = [
+      lua
+      luajitPackages.magick
+    ];
+  });
+
   ldbus = prev.ldbus.overrideAttrs (oa: {
-    extraVariables = {
+    luarocksConfig.variables = {
       DBUS_DIR = "${dbus.lib}";
       DBUS_ARCH_INCDIR = "${dbus.lib}/lib/dbus-1.0/include";
       DBUS_INCDIR = "${dbus.dev}/include/dbus-1.0";
@@ -296,7 +321,7 @@ with prev;
   });
 
   luadbi-mysql = prev.luadbi-mysql.overrideAttrs (oa: {
-    extraVariables = {
+    luarocksConfig.variables = {
       # Can't just be /include and /lib, unfortunately needs the trailing 'mysql'
       MYSQL_INCDIR = "${libmysqlclient.dev}/include/mysql";
       MYSQL_LIBDIR = "${libmysqlclient}/lib/mysql";
@@ -449,6 +474,32 @@ with prev;
   });
 
 
+  plenary-nvim = prev.plenary-nvim.overrideAttrs (oa: {
+    postPatch = ''
+      sed -Ei lua/plenary/curl.lua \
+          -e 's@(command\s*=\s*")curl(")@\1${curl}/bin/curl\2@'
+    '';
+
+    # disabled for now because too flaky
+    doCheck = false;
+    # for env/find/ls
+    checkInputs = [
+      which
+      neovim-unwrapped
+      coreutils
+      findutils
+    ];
+
+    checkPhase = ''
+      runHook preCheck
+      # remove failing tests, need internet access for instance
+      rm tests/plenary/job_spec.lua tests/plenary/scandir_spec.lua tests/plenary/curl_spec.lua
+      export HOME="$TMPDIR"
+      make test
+      runHook postCheck
+    '';
+  });
+
   # as advised in https://github.com/luarocks/luarocks/issues/1402#issuecomment-1080616570
   # we shouldn't use luarocks machinery to build complex cmake components
   libluv = stdenv.mkDerivation {
@@ -481,7 +532,7 @@ with prev;
     buildInputs = [ libuv ];
 
     # Use system libuv instead of building local and statically linking
-    extraVariables = {
+    luarocksConfig.variables = {
       WITH_SHARED_LIBUV = "ON";
     };
 
@@ -534,6 +585,7 @@ with prev;
     '';
   });
 
+  # upstream broken, can't be generated, so moved out from the generated set
   readline = final.callPackage({ buildLuarocksPackage, fetchurl, luaAtLeast, luaOlder, lua, luaposix }:
   buildLuarocksPackage ({
     pname = "readline";
@@ -549,7 +601,7 @@ with prev;
       sha256 = "1mk9algpsvyqwhnq7jlw4cgmfzj30l7n2r6ak4qxgdxgc39f48k4";
     };
 
-    extraVariables = rec {
+    luarocksConfig.variables = rec {
       READLINE_INCDIR = "${readline.dev}/include";
       HISTORY_INCDIR = READLINE_INCDIR;
     };
@@ -558,7 +610,6 @@ with prev;
       tar xf *.tar.gz
     '';
 
-    disabled = (luaOlder "5.1") || (luaAtLeast "5.5");
     propagatedBuildInputs = [ lua luaposix
       readline.out
     ];
@@ -567,6 +618,7 @@ with prev;
       homepage = "http://pjb.com.au/comp/lua/readline.html";
       description = "Interface to the readline library";
       license.fullName = "MIT/X11";
+      broken = (luaOlder "5.1") || (luaAtLeast "5.5");
     };
   })) {};
 
@@ -600,6 +652,14 @@ with prev;
     preConfigure = ''
       make all
     '';
+  });
+
+  tiktoken_core = prev.tiktoken_core.overrideAttrs (oa: {
+    cargoDeps = rustPlatform.fetchCargoTarball {
+      src = oa.src;
+      hash = "sha256-YApsOGfAw34zp069lyGR6FGjxty1bE23+Tic07f8zI4=";
+    };
+    nativeBuildInputs = oa.nativeBuildInputs ++ [ cargo rustPlatform.cargoSetupHook ];
   });
 
   toml = prev.toml.overrideAttrs (oa: {

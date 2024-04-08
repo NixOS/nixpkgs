@@ -34,6 +34,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Get data from the Azure DevOps API";
+    mainProgram = "aioazuredevops";
     homepage = "https://github.com/timmo001/aioazuredevops";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

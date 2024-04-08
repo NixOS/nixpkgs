@@ -127,8 +127,8 @@ with python.pkgs; buildPythonApplication rec {
 
   fixupPhase = ''
     cp -r src/baserow/contrib/database/{api,action,trash,formula,file_import} \
-      $out/lib/${python.libPrefix}/site-packages/baserow/contrib/database/
-    cp -r src/baserow/core/management/backup $out/lib/${python.libPrefix}/site-packages/baserow/core/management/
+      $out/${python.sitePackages}/baserow/contrib/database/
+    cp -r src/baserow/core/management/backup $out/${python.sitePackages}/baserow/core/management/
   '';
 
   disabledTests = [

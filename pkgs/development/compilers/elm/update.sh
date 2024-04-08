@@ -1,6 +1,8 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -p cabal2nix elm2nix -i bash ../../..
 
+cabal2nix https://github.com/ekmett/ansi-wl-pprint --revision d16e2f6896d76b87b72af7220c2e93ba15c53280 > packages/ansi-wl-pprint.nix
+
 # We're building binaries from commit that npm installer is using since
 # November 1st release called 0.19.1-6 in npm registry.
 # These binaries are built with newer ghc version and also support Aarch64 for Linux and Darwin.

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cadical";
-  version = "1.9.3";
+  version = "1.9.5";
 
   src = fetchFromGitHub {
     owner = "arminbiere";
     repo = "cadical";
     rev = "rel-${version}";
-    sha256 = "sha256-kjvbWFcoEe7Df2HDKKc2txrxpS8/StwiCLbS2RqnkyE=";
+    sha256 = "sha256-mAKuz8WjX+ywQ7Sw5hRMPftsbbilTlmQ9qZVowXxs28=";
   };
 
   outputs = [ "out" "dev" "lib" ];

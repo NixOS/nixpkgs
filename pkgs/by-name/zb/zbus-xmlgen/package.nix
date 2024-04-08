@@ -2,16 +2,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zbus_xmlgen";
-  version = "3.1.1";
+  version = "4.0.1";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-vaefyfasOLFFYWPjSJFgjIFkvnRiJVe/GLYUQxUYlt0=";
+    hash = "sha256-GkNxlfwLIBfAAcwQnwJHjcviB8tiNVNDZNDib1FQcvs=";
   };
 
-  cargoHash = "sha256-WXJ49X4B2aNy1zPbTllIzRhZJvF+RwfQ0Hhm/D+LQfk=";
+  cargoHash = "sha256-dKoxLEdLZ8B8kTJj3tHcFJzY/Rv3NvwmZBAmHyNhOg8=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
+  nativeCheckInputs = [ rustfmt ];
 
   postInstall = ''
     wrapProgram $out/bin/zbus-xmlgen \

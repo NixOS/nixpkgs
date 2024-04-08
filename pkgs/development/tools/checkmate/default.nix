@@ -20,6 +20,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Pluggable code security analysis tool";
+    mainProgram = "checkmate";
     homepage = "https://github.com/adedayo/checkmate";
     changelog = "https://github.com/adedayo/checkmate/releases/tag/v${version}";
     license = licenses.bsd3;

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "srt";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "Haivision";
     repo = "srt";
     rev = "v${version}";
-    sha256 = "sha256-HW5l26k9w4F6IJrtiahU/8/CPY6M/cKn8AgESsntC6A=";
+    sha256 = "sha256-HmfbBPyR+z5d9/XBvNhosk8pSSPToNtM+V0hEyb2G2w=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     # (setting it to an absolute path causes include files to go to $out/$out/include,
     #  because the absolute path is interpreted with root at $out).
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DENABLE_SHARED=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
     # TODO Remove this when https://github.com/Haivision/srt/issues/538 is fixed and available to nixpkgs
     # Workaround for the fact that srt incorrectly disables GNUInstallDirs when LIBDIR is specified,
     # see https://github.com/NixOS/nixpkgs/pull/54463#discussion_r249878330

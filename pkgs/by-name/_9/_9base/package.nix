@@ -39,7 +39,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
   strictDeps = true;
   nativeBuildInputs = [ pkg-config ];
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString ([
     # workaround build failure on -fno-common toolchains like upstream
     # gcc-10. Otherwise build fails as:
     #   ld: diffio.o:(.bss+0x16): multiple definition of `bflag'; diffdir.o:(.bss+0x6): first defined here
@@ -47,8 +47,11 @@ stdenv.mkDerivation {
     # hide really common warning that floods the logs:
     #   warning: #warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE"
     "-D_DEFAULT_SOURCE"
-  ];
-  LDFLAGS = lib.optionalString enableStatic "-static";
+  ] ++ lib.optionals stdenv.cc.isClang [
+    # error: call to undeclared function 'p9mbtowc'; ISO C99 and later do not support implicit function declarations
+    "-Wno-error=implicit-function-declaration"
+  ]);
+  env.LDFLAGS = lib.optionalString enableStatic "-static";
   makeFlags = [
     "PREFIX=${placeholder "out"}"
   ];

@@ -982,8 +982,10 @@ in
         }
         { assertion = config.boot.initrd.systemd.enable -> !luks.fido2Support;
           message = ''
-            systemd stage 1 does not support configuring FIDO2 unlocking through `boot.initrd.luks.devices.<name>.fido2`.
-            Use systemd-cryptenroll(1) to configure FIDO2 support.
+            systemd stage 1 does not support configuring FIDO2 unlocking through `boot.initrd.luks.fido2Support`.
+            Use systemd-cryptenroll(1) to configure FIDO2 support, and set
+            `boot.initrd.luks.devices.''${DEVICE}.crypttabExtraOpts` as appropriate per crypttab(5)
+            (e.g. `fido2-device=auto`).
           '';
         }
         # TODO
@@ -1076,7 +1078,7 @@ in
     boot.initrd.systemd = {
       contents."/etc/crypttab".source = stage1Crypttab;
 
-      extraBin.systemd-cryptsetup = "${config.boot.initrd.systemd.package}/lib/systemd/systemd-cryptsetup";
+      extraBin.systemd-cryptsetup = "${config.boot.initrd.systemd.package}/bin/systemd-cryptsetup";
 
       additionalUpstreamUnits = [
         "cryptsetup-pre.target"
@@ -1084,7 +1086,7 @@ in
         "remote-cryptsetup.target"
       ];
       storePaths = [
-        "${config.boot.initrd.systemd.package}/lib/systemd/systemd-cryptsetup"
+        "${config.boot.initrd.systemd.package}/bin/systemd-cryptsetup"
         "${config.boot.initrd.systemd.package}/lib/systemd/system-generators/systemd-cryptsetup-generator"
       ];
 

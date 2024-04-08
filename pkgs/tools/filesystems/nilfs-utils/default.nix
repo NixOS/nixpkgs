@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nilfs-utils";
-  version = "2.2.9";
+  version = "2.2.10";
 
   src = fetchFromGitHub {
     owner = "nilfs-dev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XqViUvPj2BHO3bGs9xBO3VpRq9XqnwBptHvMwBOntqo=";
+    sha256 = "sha256-xTnd3sfBaVU4Ovcsk4oufylNpGS+5n3ZLa2GXzUbeCE=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

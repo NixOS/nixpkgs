@@ -18,6 +18,7 @@
 , openscenegraph
 , pkg-config
 , postgresql
+, proj
 , tiledb
 , xercesc
 , zlib
@@ -26,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdal";
-  version = "2.5.6";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "PDAL";
     repo = "PDAL";
     rev = finalAttrs.version;
-    sha256 = "sha256-JKwa89c05EfZ/FxOkj8lYmw0o2EgSqafRDIV2mTpZ5E=";
+    sha256 = "sha256-knyDVUZH+X563UzKkvDpi08EcXU5s4+Jvya3Xprpt1A=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     openscenegraph
     postgresql
+    proj
     tiledb
     xercesc
     zlib
@@ -63,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_PLUGIN_HDF=ON"
     "-DBUILD_PLUGIN_PGPOINTCLOUD=ON"
     "-DBUILD_PLUGIN_TILEDB=ON"
+    "-DWITH_COMPLETION=ON"
     "-DWITH_TESTS=ON"
     "-DBUILD_PGPOINTCLOUD_TESTS=OFF"
 
@@ -92,6 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     "pdal_io_tiledb_time_writer_test"
     "pdal_io_tiledb_time_reader_test"
     "pdal_io_tiledb_bit_fields_test"
+    "pdal_io_tiledb_utils_test"
     "pdal_io_e57_read_test"
     "pdal_io_e57_write_test"
     "pdal_io_stac_reader_test"

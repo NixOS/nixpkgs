@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "survey";
-  version = "4.5.4";
+  version = "5.2.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wjpO1+9AXi75uPXOTE5/owEiZgtffkkMAaZ+gDO0t5I=";
+    hash = "sha256-Hr7sYn6V2iw4r3P8mXhYVyUD8JpU2zGq4nG6hHM7gxU=";
   };
 
   nativeBuildInputs = [

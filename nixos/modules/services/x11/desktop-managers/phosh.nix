@@ -186,6 +186,21 @@ in
         UtmpIdentifier = "tty7";
         UtmpMode = "user";
       };
+      environment = {
+        # We are running without a display manager, so need to provide
+        # a value for XDG_CURRENT_DESKTOP.
+        #
+        # Among other things, this variable influences:
+        #  - visibility of desktop entries with "OnlyShowIn=Phosh;"
+        #    https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-1.5.html#key-onlyshowin
+        #  - the chosen xdg-desktop-portal configuration.
+        #    https://flatpak.github.io/xdg-desktop-portal/docs/portals.conf.html
+        XDG_CURRENT_DESKTOP = "Phosh:GNOME";
+        # pam_systemd uses these to identify the session in logind.
+        # https://www.freedesktop.org/software/systemd/man/latest/pam_systemd.html#desktop=
+        XDG_SESSION_DESKTOP = "phosh";
+        XDG_SESSION_TYPE = "wayland";
+      };
     };
 
     environment.systemPackages = [

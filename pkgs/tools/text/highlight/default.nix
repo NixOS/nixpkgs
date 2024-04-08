@@ -51,6 +51,7 @@ let
 
     meta = with lib; {
       description = "Source code highlighting tool";
+      mainProgram = "highlight";
       homepage = "http://www.andre-simon.de/doku/highlight/en/highlight.php";
       platforms = platforms.unix;
       maintainers = with maintainers; [ willibutz ];

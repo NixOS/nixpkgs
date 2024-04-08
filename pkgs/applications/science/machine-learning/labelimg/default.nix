@@ -15,7 +15,7 @@
     propagatedBuildInputs = with python3Packages; [
       pyqt5
       lxml
-      sip_4
+      sip4
     ];
     preBuild = ''
       make qt5py3
@@ -29,6 +29,7 @@
     '';
     meta = with lib; {
       description = "A graphical image annotation tool and label object bounding boxes in images";
+      mainProgram = "labelImg";
       homepage = "https://github.com/tzutalin/labelImg";
       license = licenses.mit;
       platforms = platforms.linux;

@@ -12,13 +12,13 @@
 
 let
   c4-lib = fetchzip {
-    url = "https://github.com/plantuml-stdlib/C4-PlantUML/archive/88a3f99150c6ff7953c4a99b184d03412ffdedb1.zip";
-    sha256 = "sha256-vk4YWdGb47OsI9mApGTQ7OfELRZdBouzKfUZq3kchcM=";
+    url = "https://github.com/plantuml-stdlib/C4-PlantUML/archive/refs/tags/v2.8.0.zip";
+    hash = "sha256-pGtTFg7HcAFYPrjd+CAaxS4C6Cqaj94aq45v3NpiAxM=";
   };
 
   sprites = fetchzip {
     url = "https://github.com/tupadr3/plantuml-icon-font-sprites/archive/fa3f885dbd45c9cd0cdf6c0e5e4fb51ec8b76582.zip";
-    sha256 = "sha256-lt9+NNMIaZSkKNsGyHoqXUCTlKmZFGfNYYGjer6X0Xc=";
+    hash = "sha256-lt9+NNMIaZSkKNsGyHoqXUCTlKmZFGfNYYGjer6X0Xc=";
   };
 
   # In order to pre-fix the plantuml.jar parameter with the argument
@@ -41,7 +41,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "plantuml-c4";
-  version = "unstable-2022-08-21";
+  version = "2.8.0";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "PlantUML bundled with C4-Plantuml and plantuml sprites library";
+    mainProgram = "plantuml";
     homepage = "https://github.com/plantuml-stdlib/C4-PlantUML";
     license = licenses.mit;
     maintainers = with maintainers; [ tfc ];

@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/ludios/qolibri";
     description = "EPWING reader for viewing Japanese dictionaries";
+    mainProgram = "qolibri";
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];
     license = licenses.gpl2;

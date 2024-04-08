@@ -37,6 +37,7 @@
     clevisLuksFallback
     clevisZfs
     clevisZfsFallback
+    gptAutoRoot
     ;
 
 }

@@ -4,6 +4,7 @@ with haskellLib;
 
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin;
+  inherit (pkgs) lib;
 in
 
 self: super: {
@@ -74,14 +75,21 @@ self: super: {
 
   stylish-haskell = doJailbreak super.stylish-haskell_0_14_4_0;
 
-  haskell-language-server = disableCabalFlag "fourmolu" (super.haskell-language-server.override {
+  haskell-language-server = lib.pipe (super.haskell-language-server.override {
+    hls-ormolu-plugin = null;
+    hls-stylish-haskell-plugin = null;
     hls-fourmolu-plugin = null;
     # Not buildable if GHC > 9.2.3, so we ship no compatible GHC
     hls-stan-plugin = null;
-  });
+  }) [
+     (disableCabalFlag "fourmolu")
+     (disableCabalFlag "ormolu")
+     (disableCabalFlag "stylishHaskell")
+    ];
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
   hashable = addBuildDepends [ self.data-array-byte ] super.hashable;
   primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
+  primitive-unlifted = super.primitive-unlifted_0_1_3_1;
 
   # Jailbreaks & Version Updates
   hashable-time = doJailbreak super.hashable-time;
@@ -127,4 +135,18 @@ self: super: {
 
   # Requires GHC < 9.4
   ghc-source-gen = doDistribute (unmarkBroken super.ghc-source-gen);
+
+  # Packages which need compat library for GHC < 9.6
+  inherit
+    (lib.mapAttrs
+      (_: addBuildDepends [ self.foldable1-classes-compat ])
+      super)
+    indexed-traversable
+    OneTuple
+    these
+  ;
+  base-compat-batteries = addBuildDepends [
+    self.foldable1-classes-compat
+    self.OneTuple
+  ] super.base-compat-batteries;
 }

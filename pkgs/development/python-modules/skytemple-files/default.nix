@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "skytemple-files";
-  version = "1.6.1";
+  version = "1.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    hash = "sha256-P0VME1keazqcyb0JuQ4iXPyJH7/gTmYE7uASpjvhqUo=";
+    hash = "sha256-OkokbVD8j+Sgypj25demzSZdiAEf8TJrnl0QRIM2HsI=";
   };
 
   postPatch = ''
@@ -85,6 +85,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/SkyTemple/skytemple-files";
     description = "Python library to edit the ROM of Pokémon Mystery Dungeon Explorers of Sky";
+    mainProgram = "skytemple_export_maps";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ xfix marius851000 ];
     broken = stdenv.isDarwin; # pyobjc is missing

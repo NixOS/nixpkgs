@@ -198,12 +198,12 @@ in rec {
 
   dracula = mkTmuxPlugin rec {
     pluginName = "dracula";
-    version = "2.2.0";
+    version = "2.3.0";
     src = fetchFromGitHub {
       owner = "dracula";
       repo = "tmux";
       rev = "v${version}";
-      sha256 = "9p+KO3/SrASHGtEk8ioW+BnC4cXndYx4FL0T70lKU2w=";
+      sha256 = "IrNDBRopg9lgN5AfeXbhhh+uXiWQD2bjS1sNOgOJsu4=";
     };
     meta = with lib; {
       homepage = "https://draculatheme.com/tmux";
@@ -243,24 +243,27 @@ in rec {
   };
 
   fingers = mkTmuxPlugin rec {
-    pluginName = "fingers";
-    rtpFilePath = "tmux-fingers.tmux";
-    version = "1.0.1";
+    pluginName = "tmux-fingers";
+    rtpFilePath = "load-config.tmux";
+    version = "2.1.1";
     src = fetchFromGitHub {
       owner = "Morantron";
       repo = "tmux-fingers";
-      rev = version;
-      sha256 = "0gp37m3d0irrsih96qv2yalvr1wmf1n64589d4qzyzq16lzyjcr0";
-      fetchSubmodules = true;
+      rev = "${version}";
+      sha256 = "sha256-1YMh6m8M6FKf8RPXsOfWCVC5CXSr/MynguwkG7O+oEY=";
     };
-    nativeBuildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = [ pkgs.makeWrapper pkgs.crystal pkgs.shards ];
     postInstall = ''
-      for f in config.sh tmux-fingers.sh setup-fingers-mode-bindings.sh; do
-      wrapProgram $target/scripts/$f \
+      shards build --production
+      rm -rf $target/* $target/.*
+      cp -r bin $target/bin
+      echo "$target/bin/${pluginName} load-config" > $target/${rtpFilePath}
+      chmod +x $target/${rtpFilePath}
+
+      wrapProgram $target/${rtpFilePath} \
         --prefix PATH : ${with pkgs; lib.makeBinPath (
           [ gawk ] ++ lib.optionals stdenv.isDarwin [ reattach-to-user-namespace ]
         )}
-      done
     '';
   };
 
@@ -531,6 +534,23 @@ in rec {
     };
   };
 
+  rose-pine = mkTmuxPlugin {
+    pluginName = "rose-pine";
+    version = "unstable-2024-01-08";
+    rtpFilePath = "rose-pine.tmux";
+    src = fetchFromGitHub {
+      owner = "rose-pine";
+      repo = "tmux";
+      rev = "dd6d01338ac4afeb96542dcf24e4a7fe179b69e6";
+      sha256 = "sha256-Tccb4VjdotOSw7flJV4N0H4557NxRhXiCecZBPU9ICQ=";
+    };
+    meta = {
+      homepage = "https://github.com/rose-pine/tmux";
+      description = "Rosé Pine theme for tmux";
+      license = lib.licenses.mit;
+    };
+  };
+
   sensible = mkTmuxPlugin {
     pluginName = "sensible";
     version = "unstable-2017-09-05";
@@ -542,6 +562,39 @@ in rec {
     };
     postInstall = lib.optionalString stdenv.isDarwin ''
       sed -e 's:reattach-to-user-namespace:${pkgs.reattach-to-user-namespace}/bin/reattach-to-user-namespace:g' -i $target/sensible.tmux
+    '';
+  };
+
+  session-wizard = mkTmuxPlugin rec {
+    pluginName = "session-wizard";
+    rtpFilePath = "session-wizard.tmux";
+    version = "1.2.0";
+    src = pkgs.fetchFromGitHub {
+      owner = "27medkamal";
+      repo = "tmux-session-wizard";
+      rev = "V${version}";
+      sha256 = "sha256-IfSgX02vXdpzyu1GRF1EvzVCqqOEiTjeXtl1EvNr7EI=";
+    };
+    meta = with lib; {
+      homepage = "https://github.com/27medkamal/tmux-session-wizard";
+      description = "Tmux plugin for creating and switching between sessions based on recently accessed directories";
+      longDescription = ''
+        Session Wizard is using fzf and zoxide to do all the magic. Features:
+        * Creating a new session from a list of recently accessed directories
+        * Naming a session after a folder/project
+        * Switching sessions
+        * Viewing current or creating new sessions in one popup
+      '';
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ mandos ];
+    };
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postInstall = ''
+      substituteInPlace $target/session-wizard.tmux \
+        --replace  \$CURRENT_DIR/session-wizard.sh $target/session-wizard.sh
+      wrapProgram $target/session-wizard.sh \
+        --prefix PATH : ${with pkgs; lib.makeBinPath ([ fzf zoxide coreutils gnugrep gnused ])}
     '';
   };
 
@@ -646,6 +699,28 @@ in rec {
 
   tmux-thumbs = pkgs.callPackage ./tmux-thumbs {
     inherit mkTmuxPlugin;
+  };
+
+  t-smart-tmux-session-manager = mkTmuxPlugin rec {
+    pluginName = "t-smart-tmux-session-manager";
+    version = "2.8.0";
+    rtpFilePath = "t-smart-tmux-session-manager.tmux";
+    src = pkgs.fetchFromGitHub {
+      owner = "joshmedeski";
+      repo = "t-smart-tmux-session-manager";
+      rev = "v${version}";
+      sha256 = "sha256-EMDEEIWJ+XFOk0WsQPAwj9BFBVDNwFUCyd1ScceqKpc=";
+    };
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postInstall = ''
+      wrapProgram $out/share/tmux-plugins/t-smart-tmux-session-manager/bin/t \
+          --prefix PATH : ${with pkgs; lib.makeBinPath (
+            [ pkgs.fzf pkgs.zoxide ]
+          )}
+
+      find $target -type f -print0 | xargs -0 sed -i -e 's|fzf |${pkgs.fzf}/bin/fzf |g'
+      find $target -type f -print0 | xargs -0 sed -i -e 's|zoxide |${pkgs.zoxide}/bin/zoxide |g'
+    '';
   };
 
   urlview = mkTmuxPlugin {

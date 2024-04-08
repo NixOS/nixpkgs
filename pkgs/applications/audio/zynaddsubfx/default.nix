@@ -94,6 +94,11 @@ in stdenv.mkDerivation rec {
     # Find FLTK without requiring an OpenGL library in buildInputs
     ++ lib.optional (guiModule == "fltk") "-DFLTK_SKIP_OPENGL=ON";
 
+  CXXFLAGS = [
+    # GCC 13: error: 'uint8_t' does not name a type
+    "-include cstdint"
+  ];
+
   doCheck = true;
   nativeCheckInputs = [ cxxtest ruby ];
 
@@ -136,6 +141,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "High quality software synthesizer (${guiName} GUI)";
+    mainProgram = "zynaddsubfx";
     homepage =
       if guiModule == "zest"
       then "https://zynaddsubfx.sourceforge.io/zyn-fusion.html"

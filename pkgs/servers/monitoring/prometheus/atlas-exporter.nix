@@ -15,6 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Prometheus exporter for RIPE Atlas measurement results ";
+    mainProgram = "atlas_exporter";
     homepage = "https://github.com/czerwonk/atlas_exporter";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ clerie ];

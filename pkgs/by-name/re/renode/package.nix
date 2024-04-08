@@ -23,11 +23,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renode";
-  version = "1.14.0";
+  version = "1.15.0";
 
   src = fetchurl {
-    url = "https://builds.renode.io/renode-${finalAttrs.version}.linux-portable.tar.gz";
-    hash = "sha256-1wfVHtCYc99ACz8m2XEg1R0nIDh9xP4ffV/vxeeEHxE=";
+    url = "https://github.com/renode/renode/releases/download/v${finalAttrs.version}/renode-${finalAttrs.version}.linux-portable.tar.gz";
+    hash = "sha256-w3HKYctW1LmiAse/27Y1Gmz9hDprQ1CK7+TXIexCrkg=";
   };
 
   nativeBuildInputs = [
@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Virtual development framework for complex embedded systems";
-    homepage = "https://renode.org";
+    homepage = "https://renode.io";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ otavio ];
     platforms = [ "x86_64-linux" ];

@@ -4,7 +4,7 @@
 , storeDir ? builtins.storeDir
 , writeScript
 , singularity
-, writeReferencesToFile
+, writeClosure
 , bash
 , vmTools
 , gawk
@@ -50,18 +50,13 @@ rec {
     }:
     let
       projectName = singularity.projectName or "singularity";
-      layer = mkLayer {
-        inherit name;
-        contents = contents ++ [ bash runScriptFile ];
-        inherit projectName;
-      };
       runAsRootFile = shellScript "run-as-root.sh" runAsRoot;
       runScriptFile = shellScript "run-script.sh" runScript;
       result = vmTools.runInLinuxVM (
         runCommand "${projectName}-image-${name}.img"
           {
             buildInputs = [ singularity e2fsprogs util-linux gawk ];
-            layerClosure = writeReferencesToFile layer;
+            layerClosure = writeClosure contents;
             preVM = vmTools.createEmptyImage {
               size = diskSize;
               fullName = "${projectName}-run-disk";

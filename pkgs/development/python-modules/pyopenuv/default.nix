@@ -3,6 +3,7 @@
 , aresponses
 , backoff
 , buildPythonPackage
+, certifi
 , fetchFromGitHub
 , poetry-core
 , pytest-aiohttp
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     backoff
+    certifi
   ];
 
   __darwinAllowLocalNetworking = true;

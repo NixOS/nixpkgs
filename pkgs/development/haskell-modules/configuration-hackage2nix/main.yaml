@@ -28,33 +28,10 @@ default-package-overrides:
   - gi-gdkx11 < 4
   # 2021-11-09: ghc-bignum is bundled starting with 9.0.1; only 1.0 builds with GHCs prior to 9.2.1
   - ghc-bignum == 1.0
-  # needs http-client >= 0.7.11 which isn't part of Stackage LTS 18
-  - http-client-restricted < 0.0.5
-  # Downgrade hasql-dynamic-statements until hasql 1.6 is in Stackage
-  - hasql-dynamic-statements < 0.3.1.2
-  - rope-utf16-splay < 0.4.0.0
-
-  # 2023-07-06: ghcide-2.0.0.1 explicitly needs implicit-hie < 0.1.3, because some sort of
-  # breaking change was introduced in implicit-hie-0.1.3.0.
-  # https://github.com/haskell/haskell-language-server/blob/feb596592de95f09cf4ee885f3e74178161919f1/ghcide/ghcide.cabal#L107-L111
-  - implicit-hie < 0.1.3
-  - hie-bios < 0.13
-
-  # pandoc-crossref 0.3.17 needs pandoc >= 3.1.8
-  - pandoc-crossref < 0.3.17.0
-
-  # 2023-09-17: reflex-dom 0.6.3.0 is broken https://github.com/reflex-frp/reflex-dom/issues/462
-  - reflex-dom < 0.6.2.0
-
-  # Only an older version of dependent-sum-template is compatible with ghc 9.4
-  # https://github.com/obsidiansystems/dependent-sum-template/issues/5
-  - dependent-sum-template < 0.1.2
-
-  # hls-floskell-plugin 2.4 does not yet support floskell 0.11
-  - floskell < 0.11
-
-  # Newer daemons requires GHC 9.6
-  - daemons == 0.3.0
+  # 2024-02-22: Needed for haskell-language-server-2.6.0.0
+  - lsp < 2.4.0.0
+  # 2024-02-22: Needed for hls-fourmolu-plugin-2.6.0.0 and others
+  - lsp-test < 0.17.0.0
 
 extra-packages:
   - Cabal-syntax == 3.6.*               # Dummy package that ensures packages depending on Cabal-syntax can work for Cabal < 3.8
@@ -71,8 +48,7 @@ extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
   - basement < 0.0.15                   # 2022-08-30: last version to support GHC < 8.10
   - bower-json == 1.0.0.1               # 2022-05-21: Needed for spago 0.20.9
-  - brick == 0.70.*                     # 2022-08-13: needed by matterhorn-50200.17.0
-  - brick-skylighting < 1.0             # 2022-08-13: needed by matterhorn-50200.17.0 to match brick
+  - brick == 0.70.*                     # 2022-08-13: needed by taskell
   - brittany == 0.13.1.2                # 2022-09-20: needed for hls on ghc 8.8
   - crackNum < 3.0                      # 2021-05-21: 3.0 removed the lib which sbv 7.13 uses
   - dependent-map == 0.2.4.0            # required by Hasura 1.3.1, 2020-08-20
@@ -84,18 +60,9 @@ extra-packages:
   - ghc-exactprint == 0.6.*             # 2022-12-12: needed for GHC < 9.2
   - ghc-exactprint == 1.5.*             # 2023-03-30: needed for GHC == 9.2
   - ghc-exactprint == 1.6.*             # 2023-03-30: needed for GHC == 9.4
-  - ghc-lib == 8.10.7.*                 # 2022-02-17: preserve for GHC 8.10.7
   - ghc-lib == 9.2.*                    # 2022-02-17: preserve for GHC 9.2
-  - ghc-lib == 9.4.*                    # 2023-03-17: preserve for GHC 9.4
-  - ghc-lib == 9.6.*                    # 2023-03-17: preserve for GHC 9.6
-  - ghc-lib-parser == 8.10.7.*          # 2022-02-17: preserve for GHC 8.10.7
   - ghc-lib-parser == 9.2.*             # 2022-02-17: preserve for GHC 9.2
-  - ghc-lib-parser == 9.4.*             # 2023-03-17: preserve for GHC 9.4
-  - ghc-lib-parser == 9.6.*             # 2023-10-24: preserve for GHC 9.6
-  - ghc-lib-parser-ex == 8.10.*         # 2022-02-17: preserve for GHC 8.10.7
   - ghc-lib-parser-ex == 9.2.*          # 2022-07-13: preserve for GHC 9.2
-  - ghc-lib-parser-ex == 9.4.*          # 2023-03-17: preserve for GHC 9.4
-  - ghc-lib-parser-ex == 9.6.*          # 2023-10-24: preserve for GHC 9.6
   - ghc-syntax-highlighter == 0.0.10.*  # 2023-11-20:
   - gi-soup == 2.4.28                   # 2023-04-05: the last version to support libsoup-2.4 (and thus be compatible with our other gi- packages)
   - haddock == 2.23.*                   # required on GHC < 8.10.x
@@ -117,8 +84,8 @@ extra-packages:
   - language-docker == 11.0.0           # required by hadolint 2.12.0, 2022-11-16
   - language-javascript == 0.7.0.0      # required by purescript
   - lens-aeson < 1.2                    # 2022-12-17: For aeson < 2.0 compat
-  - lsp == 1.4.0.0                      # 2022-09-18: need for dhall-lsp-server 1.1.2
-  - lsp-types == 1.4.0.1                # 2022-09-18: need for dhall-lsp-server 1.1.2
+  - lsp == 2.1.0.0                      # 2024-02-28: need for dhall-lsp-server unstable
+  - lsp-types == 2.0.2.0                # 2024-02-28: need for dhall-lsp-server unstable
   - mmorph == 1.1.3                     # Newest working version of mmorph on ghc 8.6.5. needed for hls
   - network == 2.6.3.1                  # required by pkgs/games/hedgewars/default.nix, 2020-11-15
   - optparse-applicative < 0.16         # needed for niv-0.2.19
@@ -126,6 +93,7 @@ extra-packages:
   - fourmolu == 0.14.0.0                # 2023-11-13: for ghc-lib-parser 9.6 compat
   - ormolu == 0.5.2.0                   # 2023-08-08: for hls on ghc 9.0 and 9.2
   - ormolu == 0.7.2.0                   # 2023-11-13: for ghc-lib-parser 9.6 compat
+  - primitive-unlifted == 0.1.3.1       # 2024-03-16: Needed for hls on ghc 9.2
   - path == 0.9.0                       # 2021-12-03: path version building with stackage genvalidity and GHC 9.0.2
   - resolv < 0.2                        # required to build cabal-install-3.10.1.0 with Stackage LTS 21
   - sbv == 7.13                         # required for pkgs.petrinizer
@@ -137,12 +105,10 @@ extra-packages:
   - weeder == 2.2.*                     # 2022-02-21: preserve for GHC 8.10.7
   - weeder == 2.3.*                     # 2022-05-31: preserve for GHC 9.0.2
   - weeder == 2.4.*                     # 2023-02-02: preserve for GHC 9.2.*
-  - commonmark-extensions < 0.2.3.3     # 2022-12-17: required by emanote 1.0.0.0 (to avoid a bug in 0.2.3.3)
   - retrie < 1.2.0.0                    # 2022-12-30: required for hls on ghc < 9.2
   - ghc-tags == 1.5.*                   # 2023-02-18: preserve for ghc-lib == 9.2.*
   - ghc-tags == 1.6.*                   # 2023-02-18: preserve for ghc-lib == 9.4.*
   - shake-cabal < 0.2.2.3               # 2023-07-01: last version to support Cabal 3.6.*
-  - unix-compat < 0.7                   # 2023-07-04: Need System.PosixCompat.User for git-annex
   - algebraic-graphs < 0.7              # 2023-08-14: Needed for building weeder < 2.6.0
   - fuzzyset == 0.2.4                   # 2023-12-20: Needed for building postgrest > 10
 
@@ -180,6 +146,7 @@ package-maintainers:
   danielrolls:
     - byte-count-reader
     - shellify
+    - specup
   domenkozar:
     - cachix
     - cachix-api
@@ -300,13 +267,11 @@ package-maintainers:
     - hlint
     - hmatrix
     - hspec-discover
-    - iCalendar
     - matrix-client
     - optics
     - pandoc
     - pandoc-cli
     - pandoc-crossref
-    - paths
     - postgresql-simple
     - purebred-email
     - reflex-dom
@@ -392,6 +357,14 @@ package-maintainers:
   shlok:
     - streamly-archive
     - streamly-lmdb
+  slotThe:
+    - X11
+    - X11-xft
+    - html-parse-util
+    - optparse-applicative-cmdline-util
+    - xmonad
+    - xmonad-contrib
+    - xmonad-extras
   sorki:
     - cayenne-lpp
     - blockfrost-client
@@ -773,6 +746,7 @@ supported-platforms:
   swisstable:                                   [ platforms.x86_64 ] # Needs AVX2
   systemd-api:                                  [ platforms.linux ]
   tasty-papi:                                   [ platforms.linux ] # limited by pkgs.papi
+  tcod-haskell:                                 [ platforms.linux ] # limited by pkgs.libtcod
   udev:                                         [ platforms.linux ]
   vty-windows:                                  [ platforms.windows ] # depends on Win32
   Win32-console:                                [ platforms.windows ]

@@ -27,6 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "CLI tool to search and replace";
+    mainProgram = "sad";
     homepage = "https://github.com/ms-jpq/sad";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

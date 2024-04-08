@@ -15,6 +15,7 @@
 , pytest
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , pyyaml
 , reptor
 , requests
@@ -22,16 +23,17 @@
 , setuptools
 , sqlparse
 , termcolor
-, toml
+, tomli
 , tomli-w
+, tomlkit
 , urllib3
 , xmltodict
 }:
 
 buildPythonPackage rec {
   pname = "reptor";
-  version = "0.7";
-  format = "pyproject";
+  version = "0.13";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -39,10 +41,13 @@ buildPythonPackage rec {
     owner = "Syslifters";
     repo = "reptor";
     rev = "refs/tags/${version}";
-    hash = "sha256-d76Hsf+leJKYOh7k/RVuo6adfjMW6yAYt+vh7KNh7sA=";
+    hash = "sha256-7jFS3GCaPeGBBxB++XTtIYh+m0uXTm5NHuLeIen0KYc=";
   };
 
+  pythonRelaxDeps = true;
+
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     setuptools
   ];
 
@@ -61,7 +66,8 @@ buildPythonPackage rec {
     rich
     sqlparse
     termcolor
-    toml
+    tomli
+    tomlkit
     tomli-w
     urllib3
     xmltodict
@@ -103,6 +109,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module to do automated pentest reporting with SysReptor";
+    mainProgram = "reptor";
     homepage = "https://github.com/Syslifters/reptor";
     changelog = "https://github.com/Syslifters/reptor/releases/tag/${version}";
     license = licenses.mit;

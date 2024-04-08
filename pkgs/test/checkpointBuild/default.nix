@@ -10,7 +10,7 @@ let
       patch -p1 < ${./hello.patch}
     '';
   });
-  checkpointBuiltHello = checkpointBuildTools.mkCheckpointedBuild patchedHello baseHelloArtifacts;
+  checkpointBuiltHello = checkpointBuildTools.mkCheckpointBuild patchedHello baseHelloArtifacts;
 
   checkpointBuiltHelloWithCheck = checkpointBuiltHello.overrideAttrs (old: {
     doCheck = true;
@@ -41,7 +41,7 @@ let
     '';
   });
 
-  checkpointBuiltHelloWithRemovedFile = checkpointBuildTools.mkCheckpointedBuild patchedHelloRemoveFile baseHelloRemoveFileArtifacts;
+  checkpointBuiltHelloWithRemovedFile = checkpointBuildTools.mkCheckpointBuild patchedHelloRemoveFile baseHelloRemoveFileArtifacts;
 in
 stdenv.mkDerivation {
   name = "patched-hello-returns-correct-output";

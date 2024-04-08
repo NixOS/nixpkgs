@@ -5,21 +5,26 @@
 , pytest-aiohttp
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "arris-tg2492lg";
-  version = "2.1.0";
-  format = "setuptools";
+  version = "2.2.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "vanbalken";
-    repo = pname;
-    rev = version;
-    hash = "sha256-C1o9HWWJ/G/7Pp6I0FbRmX2PQvUJx71L9wHRkUMtnL4=";
+    repo = "arris-tg2492lg";
+    rev = "refs/tags/${version}";
+    hash = "sha256-MQq9jMUoJgqaY0f9YIbhME2kO+ektPqBnT9REg3qDpg=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -37,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to connect to an Arris TG2492LG";
     homepage = "https://github.com/vanbalken/arris-tg2492lg";
+    changelog = "https://github.com/vanbalken/arris-tg2492lg/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

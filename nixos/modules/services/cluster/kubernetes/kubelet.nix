@@ -33,6 +33,41 @@ let
 
   kubeconfig = top.lib.mkKubeConfig "kubelet" cfg.kubeconfig;
 
+  # Flag based settings are deprecated, use the `--config` flag with a
+  # `KubeletConfiguration` struct.
+  # https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/
+  #
+  # NOTE: registerWithTaints requires a []core/v1.Taint, therefore requires
+  # additional work to be put in config format.
+  #
+  kubeletConfig = pkgs.writeText "kubelet-config" (builtins.toJSON ({
+    apiVersion = "kubelet.config.k8s.io/v1beta1";
+    kind = "KubeletConfiguration";
+    address = cfg.address;
+    port = cfg.port;
+    authentication = {
+      x509 = lib.optionalAttrs (cfg.clientCaFile != null) { clientCAFile = cfg.clientCaFile; };
+      webhook = {
+        enabled = true;
+        cacheTTL = "10s";
+      };
+    };
+    authorization = {
+      mode = "Webhook";
+    };
+    cgroupDriver = "systemd";
+    hairpinMode = "hairpin-veth";
+    registerNode = cfg.registerNode;
+    containerRuntimeEndpoint = cfg.containerRuntimeEndpoint;
+    healthzPort = cfg.healthz.port;
+    healthzBindAddress = cfg.healthz.bind;
+  } // lib.optionalAttrs (cfg.tlsCertFile != null)  { tlsCertFile = cfg.tlsCertFile; }
+    // lib.optionalAttrs (cfg.tlsKeyFile != null)   { tlsPrivateKeyFile = cfg.tlsKeyFile; }
+    // lib.optionalAttrs (cfg.clusterDomain != "")  { clusterDomain = cfg.clusterDomain; }
+    // lib.optionalAttrs (cfg.clusterDns != "")     { clusterDNS = [ cfg.clusterDns ] ; }
+    // lib.optionalAttrs (cfg.featureGates != [])   { featureGates = cfg.featureGates; }
+  ));
+
   manifestPath = "kubernetes/manifests";
 
   taintOptions = with lib.types; { name, ... }: {
@@ -294,21 +329,7 @@ in
           Restart = "on-failure";
           RestartSec = "1000ms";
           ExecStart = ''${top.package}/bin/kubelet \
-            --address=${cfg.address} \
-            --authentication-token-webhook \
-            --authentication-token-webhook-cache-ttl="10s" \
-            --authorization-mode=Webhook \
-            ${optionalString (cfg.clientCaFile != null)
-              "--client-ca-file=${cfg.clientCaFile}"} \
-            ${optionalString (cfg.clusterDns != "")
-              "--cluster-dns=${cfg.clusterDns}"} \
-            ${optionalString (cfg.clusterDomain != "")
-              "--cluster-domain=${cfg.clusterDomain}"} \
-            ${optionalString (cfg.featureGates != [])
-              "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
-            --hairpin-mode=hairpin-veth \
-            --healthz-bind-address=${cfg.healthz.bind} \
-            --healthz-port=${toString cfg.healthz.port} \
+            --config=${kubeletConfig} \
             --hostname-override=${cfg.hostname} \
             --kubeconfig=${kubeconfig} \
             ${optionalString (cfg.nodeIp != null)
@@ -316,18 +337,10 @@ in
             --pod-infra-container-image=pause \
             ${optionalString (cfg.manifests != {})
               "--pod-manifest-path=/etc/${manifestPath}"} \
-            --port=${toString cfg.port} \
-            --register-node=${boolToString cfg.registerNode} \
             ${optionalString (taints != "")
               "--register-with-taints=${taints}"} \
             --root-dir=${top.dataDir} \
-            ${optionalString (cfg.tlsCertFile != null)
-              "--tls-cert-file=${cfg.tlsCertFile}"} \
-            ${optionalString (cfg.tlsKeyFile != null)
-              "--tls-private-key-file=${cfg.tlsKeyFile}"} \
             ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
-            --container-runtime-endpoint=${cfg.containerRuntimeEndpoint} \
-            --cgroup-driver=systemd \
             ${cfg.extraOpts}
           '';
           WorkingDirectory = top.dataDir;

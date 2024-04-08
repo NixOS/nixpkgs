@@ -23,6 +23,7 @@ buildGoModule {
   meta = with lib; {
     homepage = "https://github.com/Arachnid/evmdis";
     description = "Ethereum EVM disassembler";
+    mainProgram = "evmdis";
     license = [ licenses.asl20 ];
     maintainers = with maintainers; [ asymmetric ];
   };

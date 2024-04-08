@@ -74,6 +74,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/jupyter/jupyter_events/releases/tag/v${version}";
     description = "Configurable event system for Jupyter applications and extensions";
+    mainProgram = "jupyter-events";
     homepage = "https://github.com/jupyter/jupyter_events";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];

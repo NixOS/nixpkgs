@@ -64,7 +64,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Trezor address/account balance backend";
     homepage = "https://github.com/trezor/blockbook";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ mmahut _1000101 ];
     platforms = platforms.unix;
     mainProgram = "blockbook";

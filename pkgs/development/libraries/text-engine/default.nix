@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Rich text framework for GTK";
+    mainProgram = "text-engine-demo";
     homepage = "https://github.com/mjakeman/text-engine";
     license = with licenses; [ mpl20 lgpl21Plus ];
     maintainers = with maintainers; [ foo-dogsquared ];

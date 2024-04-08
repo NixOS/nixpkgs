@@ -18,6 +18,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "An interactive kubernetes client featuring auto-complete";
+    mainProgram = "kube-prompt";
     license = licenses.mit;
     homepage = "https://github.com/c-bata/kube-prompt";
     maintainers = with maintainers; [ vdemeester ];

@@ -28,8 +28,10 @@ let
   version = "2.5.0";
   format = "wheel";
   pyShortVersion = "cp${builtins.replaceStrings ["."] [""] python.pythonVersion}";
+  cpuOrGpu = if cudaSupport then "gpu" else "cpu";
   allHashAndPlatform = import ./binary-hashes.nix;
-  hash = allHashAndPlatform."${stdenv.system}"."${if cudaSupport then "gpu" else "cpu"}"."${pyShortVersion}";
+  hash = allHashAndPlatform."${stdenv.system}"."${cpuOrGpu}"."${pyShortVersion}"
+    or (throw "${pname} has no binary-hashes.nix entry for '${stdenv.system}.${cpuOrGpu}.${pyShortVersion}' attribute");
   platform = allHashAndPlatform."${stdenv.system}".platform;
   src = fetchPypi ({
     inherit version format hash platform;

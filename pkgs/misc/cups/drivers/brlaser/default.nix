@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "brlaser";
-  version = "6";
+  version = "6-unstable-2023-02-30";
 
   src = fetchFromGitHub {
     owner = "pdewacht";
     repo = "brlaser";
-    rev = "v${version}";
-    sha256 = "1995s69ksq1fz0vb34v0ndiqncrinbrlpmp70rkl6az7kag99s80";
+    rev = "2a49e3287c70c254e7e3ac9dabe9d6a07218c3fa";
+    sha256 = "sha256-1fvO9F7ifbYQHAy54mOx052XutfKXSK6iT/zj4Mhbww=";
   };
 
   nativeBuildInputs = [ cmake ];

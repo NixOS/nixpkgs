@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "recurring-ical-events";
-  version = "2.1.2";
+  version = "2.1.3";
 
   disabled = pythonOlder "3.7";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "niccokunzmann";
     repo = "python-recurring-ical-events";
     rev = "v${version}";
-    hash = "sha256-6qFUw5xfZvDuM/UBEGtoiHON15/6oq1S8H0Z1qk3k8s=";
+    hash = "sha256-K2pflwHpzuYDMNUB7YQu6NX21O0aOwRChBgjdiwFQ+Y=";
   };
 
   nativeBuildInputs = [

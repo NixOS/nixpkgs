@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, lib
+{ stdenv, fetchFromGitHub, lib, fetchpatch
 , cmake, uthash, pkg-config
 , python, freetype, zlib, glib, giflib, libpng, libjpeg, libtiff, libxml2, cairo, pango
 , readline, woff2, zeromq
@@ -22,6 +22,14 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-/RYhvL+Z4n4hJ8dmm+jbA1Ful23ni2DbCRZC5A3+pP0=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2024-25081.CVE-2024-25082.patch";
+      url = "https://github.com/fontforge/fontforge/commit/216eb14b558df344b206bf82e2bdaf03a1f2f429.patch";
+      hash = "sha256-aRnir09FSQMT50keoB7z6AyhWAVBxjSQsTRvBzeBuHU=";
+    })
+  ];
 
   # use $SOURCE_DATE_EPOCH instead of non-deterministic timestamps
   postPatch = ''

@@ -5,11 +5,11 @@
 
 let
   pname = "requestly";
-  version = "1.5.15";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "https://github.com/requestly/requestly-desktop-app/releases/download/v${version}/Requestly-${version}.AppImage";
-    hash = "sha256-GTc4VikXsyiEfgN6oY/YQPBqNLia4cFz1aYS65+SboI=";
+    hash = "sha256-aUhgn6QeCHcs3yi1KKzw+yOUucbTOeNqObTYZTkKqrs=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
@@ -30,5 +30,6 @@ appimageTools.wrapType2 {
     homepage = "https://requestly.io";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ dit7ya ];
+    mainProgram = "requestly";
   };
 }

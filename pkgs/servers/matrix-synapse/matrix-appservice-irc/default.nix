@@ -84,6 +84,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Node.js IRC bridge for Matrix";
+    mainProgram = "matrix-appservice-irc";
     maintainers = with maintainers; [ rhysmdnz ];
     homepage = "https://github.com/matrix-org/matrix-appservice-irc";
     license = licenses.asl20;

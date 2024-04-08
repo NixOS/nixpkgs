@@ -6,6 +6,7 @@
 , pkg-config
 , help2man
 , python3
+, linuxHeaders
 
 , alsa-lib
 , libxslt
@@ -60,9 +61,6 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    # use empty inc file instead of a from linux kernel generated one
-    touch lib/lirc/input_map.inc
-
     export PKGCONFIG="$PKG_CONFIG"
   '';
 
@@ -72,7 +70,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ alsa-lib systemd libusb-compat-0_1 libftdi1 libICE libSM libX11 ];
 
-  DEVINPUT_HEADER = "include/linux/input-event-codes.h";
+  DEVINPUT_HEADER = "${linuxHeaders}/include/linux/input-event-codes.h";
 
   configureFlags = [
     "--sysconfdir=/etc"

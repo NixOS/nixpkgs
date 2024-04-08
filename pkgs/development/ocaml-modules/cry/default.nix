@@ -2,17 +2,17 @@
 
 buildDunePackage rec {
   pname = "cry";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-cry";
     rev = "v${version}";
-    sha256 = "sha256-wn9hLqbydzFTdYsJ1e76dmDLtwcZ7CGjbzFe5o9veYQ=";
+    hash = "sha256-wtilYOUOHElW8ZVxolMNomvT//ho2tACmoubEvU2bpQ=";
   };
 
   postPatch = ''
-    substituteInPlace src/dune --replace bytes ""
+    substituteInPlace src/dune --replace-warn bytes ""
   '';
 
   minimalOCamlVersion = "4.12";

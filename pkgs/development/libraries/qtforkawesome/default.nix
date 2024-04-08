@@ -40,6 +40,7 @@ in stdenv.mkDerivation (finalAttrs: {
     qtutilities
   ];
   cmakeFlags = [
+    "-DQT_PACKAGE_PREFIX=Qt${lib.versions.major qtbase.version}"
     # Current freetype used by NixOS users doesn't support the `.woff2` font
     # format, so we use ttf. See
     # https://github.com/NixOS/nixpkgs/pull/174875#discussion_r883423881

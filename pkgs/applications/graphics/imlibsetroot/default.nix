@@ -32,5 +32,6 @@ stdenv.mkDerivation {
     license = licenses.mitAdvertising;
     platforms = platforms.linux;
     maintainers = with maintainers; [ dwarfmaster ];
+    mainProgram = "imlibsetroot";
   };
 }

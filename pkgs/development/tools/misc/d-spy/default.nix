@@ -43,11 +43,13 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "d-spy";
+      versionPolicy = "odd-unstable";
     };
   };
 
   meta = with lib; {
     description = "D-Bus exploration tool";
+    mainProgram = "d-spy";
     homepage = "https://gitlab.gnome.org/GNOME/d-spy";
     license = with licenses; [
       lgpl3Plus # library

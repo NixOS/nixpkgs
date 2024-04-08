@@ -33,7 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "vte";
   version = "0.74.2";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ]
+    ++ lib.optional (gtkVersion != null) "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/vte/${lib.versions.majorMinor finalAttrs.version}/vte-${finalAttrs.version}.tar.xz";
@@ -68,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     fribidi
     gnutls
+    pango # duplicated with propagatedBuildInputs to support gtkVersion == null
     pcre2
     zlib
     icu
@@ -75,9 +77,10 @@ stdenv.mkDerivation (finalAttrs: {
     systemd
   ];
 
-  propagatedBuildInputs = assert (gtkVersion == "3" || gtkVersion == "4"); [
-    # Required by vte-2.91.pc.
-    (if gtkVersion == "3" then gtk3 else gtk4)
+  # Required by vte-2.91.pc.
+  propagatedBuildInputs = lib.optionals (gtkVersion != null) [
+    (assert (gtkVersion == "3" || gtkVersion == "4");
+    if gtkVersion == "3" then gtk3 else gtk4)
     glib
     pango
   ];

@@ -6,16 +6,7 @@ let
   cfg = config.services.jitsi-videobridge;
   attrsToArgs = a: concatStringsSep " " (mapAttrsToList (k: v: "${k}=${toString v}") a);
 
-  # HOCON is a JSON superset that videobridge2 uses for configuration.
-  # It can substitute environment variables which we use for passwords here.
-  # https://github.com/lightbend/config/blob/master/README.md
-  #
-  # Substitution for environment variable FOO is represented as attribute set
-  # { __hocon_envvar = "FOO"; }
-  toHOCON = x: if isAttrs x && x ? __hocon_envvar then ("\${" + x.__hocon_envvar + "}")
-    else if isAttrs x then "{${ concatStringsSep "," (mapAttrsToList (k: v: ''"${k}":${toHOCON v}'') x) }}"
-    else if isList x then "[${ concatMapStringsSep "," toHOCON x }]"
-    else builtins.toJSON x;
+  format = pkgs.formats.hocon { };
 
   # We're passing passwords in environment variables that have names generated
   # from an attribute name, which may not be a valid bash identifier.
@@ -38,7 +29,7 @@ let
         hostname = xmppConfig.hostName;
         domain = xmppConfig.domain;
         username = xmppConfig.userName;
-        password = { __hocon_envvar = toVarName name; };
+        password = format.lib.mkSubstitution (toVarName name);
         muc_jids = xmppConfig.mucJids;
         muc_nickname = xmppConfig.mucNickname;
         disable_certificate_verification = xmppConfig.disableCertificateVerification;
@@ -221,7 +212,7 @@ in
         "-Dnet.java.sip.communicator.SC_HOME_DIR_LOCATION" = "/etc/jitsi";
         "-Dnet.java.sip.communicator.SC_HOME_DIR_NAME" = "videobridge";
         "-Djava.util.logging.config.file" = "/etc/jitsi/videobridge/logging.properties";
-        "-Dconfig.file" = pkgs.writeText "jvb.conf" (toHOCON jvbConfig);
+        "-Dconfig.file" = format.generate "jvb.conf" jvbConfig;
         # Mitigate CVE-2021-44228
         "-Dlog4j2.formatMsgNoLookups" = true;
       } // (mapAttrs' (k: v: nameValuePair "-D${k}" v) cfg.extraProperties);

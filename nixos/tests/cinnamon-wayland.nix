@@ -64,7 +64,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           # This is not supported at the moment.
           # https://trello.com/b/HHs01Pab/cinnamon-wayland
           machine.execute("${su "cinnamon-screensaver-command -l >&2 &"}")
-          machine.wait_until_succeeds("journalctl -b --grep 'Cinnamon Screensaver is unavailable on Wayland'")
+          machine.wait_until_succeeds("journalctl -b --grep 'cinnamon-screensaver is disabled in wayland sessions'")
 
       with subtest("Open GNOME Terminal"):
           machine.succeed("${su "dbus-launch gnome-terminal"}")

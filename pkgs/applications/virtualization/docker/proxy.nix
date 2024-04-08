@@ -19,6 +19,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "Docker proxy binary to forward traffic between host and containers";
+    mainProgram = "docker-proxy";
     license = licenses.asl20;
     homepage = "https://github.com/docker/libnetwork";
     maintainers = with maintainers; [vdemeester];

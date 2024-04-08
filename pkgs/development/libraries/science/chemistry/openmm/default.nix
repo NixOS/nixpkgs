@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openmm";
-  version = "8.1.0";
+  version = "8.1.1";
 
   src = fetchFromGitHub {
     owner = "openmm";
     repo = pname;
     rev = version;
-    hash = "sha256-uNAqjklgBWM2v2z6qu17ZMFO4gn3fsnYPxyGO++UtTw=";
+    hash = "sha256-pYWBniV1J+UZBOPPjuUxVevONHaclo+GvGBEpr7Zmxg=";
   };
 
   # "This test is stochastic and may occassionally fail". It does.
@@ -100,6 +100,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Toolkit for molecular simulation using high performance GPU code";
+    mainProgram = "TestReferenceHarmonicBondForce";
     homepage = "https://openmm.org/";
     license = with licenses; [ gpl3Plus lgpl3Plus mit ];
     platforms = platforms.linux;

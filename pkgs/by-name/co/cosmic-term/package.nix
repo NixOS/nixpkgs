@@ -1,70 +1,74 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rust,
-  rustPlatform,
-  cmake,
-  makeBinaryWrapper,
-  cosmic-icons,
-  just,
-  pkg-config,
-  libxkbcommon,
-  glib,
-  gtk3,
-  libinput,
-  fontconfig,
-  freetype,
-  wayland,
-  xorg
+{ lib
+, cosmic-icons
+, fetchFromGitHub
+, fontconfig
+, freetype
+, just
+, libglvnd
+, libinput
+, libxkbcommon
+, makeBinaryWrapper
+, mesa
+, pkg-config
+, rustPlatform
+, stdenv
+, vulkan-loader
+, wayland
+, xorg
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-term";
-  version = "unstable-2023-12-26";
-
+  version = "unstable-2024-02-28";
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = pname;
-    rev = "bf3f507fdd73a06ab1f9b199a98dca6988aafec2";
-    hash = "sha256-c5RNrC0AZvz+O3nj7VvMQuA/U0sgxZCVHn+cc+4pIN8=";
+    rev = "36477e06dc6d05bd01dc08b3f20e0a6e388d6c7e";
+    hash = "sha256-VkRVfV4sC+5+/8g1FOlBjJCeR/KGb5gP0SWy5bmFo+Y=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "accesskit-0.11.0" = "sha256-xVhe6adUb8VmwIKKjHxwCwOo5Y1p3Or3ylcJJdLDrrE=";
+      "accesskit-0.12.2" = "sha256-ksaYMGT/oug7isQY8/1WD97XDUsX2ShBdabUzxWffYw=";
       "atomicwrites-0.4.2" = "sha256-QZSuGPrJXh+svMeFWqAXoqZQxLq/WfIiamqvjJNVhxA=";
-      "cosmic-config-0.1.0" = "sha256-V371fmSmLIwUxtx6w+C55cBJ8oyYgN86r3FZ8rGBLEs=";
-      "cosmic-text-0.10.0" = "sha256-/4Hg+7R0LRF4paXIREkMOTtbQ1xgONym5nKb/TuyeD4=";
-      "glyphon-0.3.0" = "sha256-T7hvqtR3zi9wNemFrPPGakq2vEraLpnPkN7umtumwVg=";
-      "sctk-adwaita-0.5.4" = "sha256-yK0F2w/0nxyKrSiHZbx7+aPNY2vlFs7s8nu/COp2KqQ=";
-      "softbuffer-0.3.3" = "sha256-eKYFVr6C1+X6ulidHIu9SP591rJxStxwL9uMiqnXx4k=";
-      "smithay-client-toolkit-0.16.1" = "sha256-z7EZThbh7YmKzAACv181zaEZmWxTrMkFRzP0nfsHK6c=";
+      "cosmic-config-0.1.0" = "sha256-Zyi95zcBAohM1WBropLzJczSIfNNNBK2odB4AmW4h5I=";
+      "cosmic-files-0.1.0" = "sha256-64An0MPgnFgyVlWmtBGBs+IV2z+4vmEY2uRPetZM4/M=";
+      "cosmic-text-0.11.2" = "sha256-Y9i5stMYpx+iqn4y5DJm1O1+3UIGp0/fSsnNq3Zloug=";
+      "d3d12-0.19.0" = "sha256-usrxQXWLGJDjmIdw1LBXtBvX+CchZDvE8fHC0LjvhD4=";
+      "glyphon-0.5.0" = "sha256-j1HrbEpUBqazWqNfJhpyjWuxYAxkvbXzRKeSouUoPWg=";
+      "libc-0.2.151" = "sha256-VcNTcLOnVXMlX86yeY0VDfIfKOZyyx/DO1Hbe30BsaI=";
+      "softbuffer-0.4.1" = "sha256-a0bUFz6O8CWRweNt/OxTvflnPYwO5nm6vsyc/WcXyNg=";
+      "systemicons-0.7.0" = "sha256-zzAI+6mnpQOh+3mX7/sJ+w4a7uX27RduQ99PNxLNF78=";
       "taffy-0.3.11" = "sha256-SCx9GEIJjWdoNVyq+RZAGn0N71qraKZxf9ZWhvyzLaI=";
-      "winit-0.28.6" = "sha256-FhW6d2XnXCGJUMoT9EMQew9/OPXiehy/JraeCiVd76M=";
+      "winit-0.29.10" = "sha256-ScTII2AzK3SC8MVeASZ9jhVWsEaGrSQ2BnApTxgfxK4=";
     };
   };
+
+  # COSMIC applications now uses vergen for the About page
+  # Update the COMMIT_DATE to match when the commit was made
+  env.VERGEN_GIT_COMMIT_DATE = "2024-02-28";
+  env.VERGEN_GIT_SHA = src.rev;
 
   postPatch = ''
     substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
   '';
 
   nativeBuildInputs = [
-    cmake
     just
     pkg-config
     makeBinaryWrapper
   ];
+
   buildInputs = [
-    libxkbcommon
-    xorg.libX11
-    libinput
     fontconfig
     freetype
+    libglvnd
+    libinput
+    libxkbcommon
+    vulkan-loader
     wayland
-    glib
-    gtk3
+    xorg.libX11
   ];
 
   dontUseJustBuild = true;
@@ -75,23 +79,40 @@ rustPlatform.buildRustPackage rec {
     (placeholder "out")
     "--set"
     "bin-src"
-    "target/${
-      rust.lib.toRustTargetSpecShort stdenv.hostPlatform
-    }/release/cosmic-term"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-term"
+  ];
+
+  # Force linking to libEGL, which is always dlopen()ed, and to
+  # libwayland-client, which is always dlopen()ed except by the
+  # obscure winit backend.
+  RUSTFLAGS = map (a: "-C link-arg=${a}") [
+    "-Wl,--push-state,--no-as-needed"
+    "-lEGL"
+    "-lwayland-client"
+    "-Wl,--pop-state"
   ];
 
   # LD_LIBRARY_PATH can be removed once tiny-xlib is bumped above 0.2.2
   postInstall = ''
     wrapProgram "$out/bin/${pname}" \
       --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ xorg.libX11 wayland libxkbcommon ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
+        libxkbcommon
+        mesa.drivers
+        vulkan-loader
+        xorg.libX11
+        xorg.libXcursor
+        xorg.libXi
+        xorg.libXrandr
+      ]}
   '';
 
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-term";
     description = "Terminal for the COSMIC Desktop Environment";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ahoneybun ];
+    maintainers = with maintainers; [ ahoneybun nyanbinary ];
     platforms = platforms.linux;
+    mainProgram = "cosmic-term";
   };
 }

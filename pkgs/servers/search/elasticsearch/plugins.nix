@@ -38,7 +38,7 @@ in
     src = fetchurl {
       url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${version}.zip";
       hash =
-        if version == "7.17.10" then "sha256-D08CVW/qHpZZaKnploM4aCJ4bunvPjVmieDYr1d6jQA="
+        if version == "7.17.16" then "sha256-wgm6N5fofs5wTM25ZT3dJkg7iDesXsc3Up419IAY9gk="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
@@ -54,7 +54,7 @@ in
     src = fetchurl {
       url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${version}.zip";
       hash =
-        if version == "7.17.10" then "sha256-cpgr2zPCpsLrmshWJWoGNcGl0X+bO/K4A9bMqLv8+H8="
+        if version == "7.17.16" then "sha256-SShdBcWfm21XoVhghSSiWIhsoXzG7wz6162iOmuf5EU="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
@@ -87,7 +87,7 @@ in
     src = fetchurl {
       url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${version}.zip";
       hash =
-        if version == "7.17.10" then "sha256-UmykO+hZDvlFhEbf7zL2bdw4j6NhByRBu9eH3F6/EtM="
+        if version == "7.17.16" then "sha256-S/Cp9opeLitFh2/3Qw7/MFt6GcYKufxXKD6cJSi3SaQ="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
@@ -103,7 +103,7 @@ in
     src = fetchurl {
       url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${version}.zip";
       hash =
-        if version == "7.17.10" then "sha256-Y/AbLfHSdocX0NQbnKm63gTWgwzssb4kpSwRqLozD9w="
+        if version == "7.17.16" then "sha256-hMErTLd5fXg420Olz+j6Zv7WByA1aNq9FlEgCtkYIxY="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
@@ -119,7 +119,7 @@ in
     src = fetchurl {
       url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${version}.zip";
       hash =
-        if version == "7.17.10" then "sha256-QIYD7cGpJQg+csv/tekN6GFtdnuhYU6VyAXk7nY/uWs="
+        if version == "7.17.16" then "sha256-z0gfdx98urCzdQNlVn99CmteG6jweOmUDmGJW89twtU="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
@@ -135,7 +135,7 @@ in
     src = fetchurl {
       url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${esVersion}.zip";
       hash =
-        if version == "7.17.10" then "sha256-L8lS+EPYuhNNTnP3ImeZsBQ5a5DAncs3qBFDWGWISRI="
+        if version == "7.17.16" then "sha256-TWMN8jzFjzBVTUB+zn4tJr47VMXHC8U+014BvnArK8M="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
@@ -151,7 +151,7 @@ in
     src = fetchurl {
       url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${esVersion}.zip";
       hash =
-        if version == "7.17.10" then "sha256-eXstbxlyS8WzW8u5YiMFXGpILCcEWrIb/IxXVzAGFLU="
+        if version == "7.17.16" then "sha256-hG5wy1Xw4T1NzI7pja3CejwJg002/n6YqM1/QaVSWbg="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
@@ -167,13 +167,13 @@ in
     pluginName = "search-guard";
     version =
       # https://docs.search-guard.com/latest/search-guard-versions
-      if esVersion == "7.17.10" then "${esVersion}-53.7.0"
+      if esVersion == "7.17.16" then "${esVersion}-53.8.0"
       else throw "unsupported version ${esVersion} for plugin ${pluginName}";
     src =
-      if esVersion == "7.17.10" then
+      if esVersion == "7.17.16" then
         fetchurl {
           url = "https://maven.search-guard.com/search-guard-suite-release/com/floragunn/search-guard-suite-plugin/${version}/search-guard-suite-plugin-${version}.zip";
-          hash = "sha256-FIF4O8z0U2giXVA2cNEdCDbpuJDJhaxHBOmv2fACucw=";
+          hash = "sha256-j8dz7rUKWqMvT6EksoFIuGJzYcgdMipKeg2d8UtzlDI=";
         }
       else throw "unsupported version ${version} for plugin ${pluginName}";
     meta = with lib; {

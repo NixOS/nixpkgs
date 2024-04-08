@@ -31,6 +31,7 @@ let
       # sourcehut is not (yet) compatible with SQLAlchemy 2.x
       sqlalchemy = super.sqlalchemy_1_4;
 
+      # sourcehut is not (yet) compatible with flask-sqlalchemy 3.x
       flask-sqlalchemy = super.flask-sqlalchemy.overridePythonAttrs (oldAttrs: rec {
         version = "2.5.1";
         format = "setuptools";
@@ -45,6 +46,26 @@ let
         ];
       });
 
+      # flask-sqlalchemy 2.x requires flask 2.x
+      flask = super.flask.overridePythonAttrs (oldAttrs: rec {
+        version = "2.3.3";
+        src = fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          hash = "sha256-CcNHqSqn/0qOfzIGeV8w2CZlS684uHPQdEzVccpgnvw=";
+        };
+      });
+
+      # flask 2.x requires werkzeug 2.x
+      werkzeug = super.werkzeug.overridePythonAttrs (oldAttrs: rec {
+        version = "2.3.8";
+        src = fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          hash = "sha256-VUslfHS763oNJUFgpPj/4YUkP1KlIDUGC3Ycpi2XfwM=";
+        };
+      });
+
       # sourcehut is not (yet) compatible with factory-boy 3.x
       factory-boy = super.factory-boy.overridePythonAttrs (oldAttrs: rec {
         version = "2.12.0";
@@ -55,11 +76,11 @@ let
         };
         nativeCheckInputs = (with super; [
           django
-          flask
           mongoengine
           pytestCheckHook
         ]) ++ (with self; [
           sqlalchemy
+          flask
           flask-sqlalchemy
         ]);
         postPatch = "";

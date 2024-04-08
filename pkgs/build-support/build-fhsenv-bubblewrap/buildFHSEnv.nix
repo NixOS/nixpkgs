@@ -251,7 +251,7 @@ let
 
 in runCommandLocal "${name}-fhs" {
   passthru = {
-    inherit args baseTargetPaths targetPaths baseMultiPaths multiPaths ldconfig;
+    inherit args baseTargetPaths targetPaths baseMultiPaths ldconfig;
   };
 } ''
   mkdir -p $out

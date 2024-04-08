@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "censys";
-  version = "2.2.10";
+  version = "2.2.11";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "censys";
     repo = "censys-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rjLTEaHSBB6igffNGt4qJZeSyIn1Cc1ZGEGfEoMj7OQ=";
+    hash = "sha256-/aB8rsyymNTXJLsf/IkA6o7M/mzyao10cl7kbxHEzGc=";
   };
 
   nativeBuildInputs = [
@@ -74,6 +74,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python API wrapper for the Censys Search Engine (censys.io)";
+    mainProgram = "censys";
     homepage = "https://github.com/censys/censys-python";
     changelog = "https://github.com/censys/censys-python/releases/tag/v${version}";
     license = with licenses; [ asl20 ];

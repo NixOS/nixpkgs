@@ -23,6 +23,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Converts code coverage from lcov format to Cobertura's XML format";
+    mainProgram = "lcov_cobertura";
     homepage = "https://eriwen.github.io/lcov-to-cobertura-xml/";
     license = lib.licenses.asl20;
   };

@@ -20,20 +20,20 @@
 
 let
   pname = "torchmetrics";
-  version = "1.2.1";
+  version = "1.3.2";
 in
 buildPythonPackage {
   inherit pname version;
   pyproject = true;
 
+  disabled = pythonOlder "3.8";
+
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "torchmetrics";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uvebKCJL2TSQUGmtVE1MtYwzgs+0lWvHvsN5PwJyl/g=";
+    hash = "sha256-0lverGF8HVlnwWmnCjScWoSfWPLZlMF2cHDG+uxNCCQ=";
   };
-
-  disabled = pythonOlder "3.8";
 
   propagatedBuildInputs = [
     numpy

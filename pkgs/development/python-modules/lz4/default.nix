@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "python-lz4";
-  version = "4.3.2";
+  version = "4.3.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -21,10 +21,8 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-aVnXCrTh+0Ip+FgYWN7hLw8N3iQCmXSywhReD5RTUfI=";
+    hash = "sha256-ZvGUkb9DoheYY2/sejUhxgh2lS5eoBrFCXR4E0IcFcs=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   postPatch = ''
     sed -i '/pytest-cov/d' setup.py

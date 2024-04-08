@@ -60,6 +60,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Pass extension for importing data from existing password managers";
+    mainProgram = "pimport";
     homepage = "https://github.com/roddhjav/pass-import";
     changelog = "https://github.com/roddhjav/pass-import/blob/v${version}/CHANGELOG.rst";
     license = licenses.gpl3Plus;

@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://codeberg.org/LazyT/ubpm";
     description = "Universal Blood Pressure Manager";
+    mainProgram = "ubpm";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ kurnevsky ];
   };

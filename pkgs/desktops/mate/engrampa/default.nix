@@ -5,22 +5,24 @@
 , gettext
 , itstool
 , libxml2
+, caja
 , gtk3
-, mate
 , hicolor-icon-theme
+, json-glib
+, mate-desktop
 , wrapGAppsHook
 , mateUpdateScript
-# can be defaulted to true once engrampa builds with meson (version > 1.27.0)
+# can be defaulted to true once switch to meson
 , withMagic ? stdenv.buildPlatform.canExecute stdenv.hostPlatform, file
 }:
 
 stdenv.mkDerivation rec {
   pname = "engrampa";
-  version = "1.26.1";
+  version = "1.28.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "8CJBB6ek6epjCcnniqX6rIAsTPcqSawoOqnnrh6KbEo=";
+    sha256 = "nFxMm8+LCO6qjydVONJLTJVQidWK7AMx6JwCuE2FOGo=";
   };
 
   nativeBuildInputs = [
@@ -32,10 +34,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    caja
     gtk3
-    mate.caja
     hicolor-icon-theme
-    mate.mate-desktop
+    json-glib
+    mate-desktop
   ] ++ lib.optionals withMagic [
     file
   ];
@@ -52,6 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Archive Manager for MATE";
+    mainProgram = "engrampa";
     homepage = "https://mate-desktop.org";
     license = with licenses; [ gpl2Plus lgpl2Plus fdl11Plus ];
     platforms = platforms.unix;

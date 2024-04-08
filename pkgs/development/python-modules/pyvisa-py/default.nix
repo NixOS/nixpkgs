@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pyvisa-py";
-  version = "0.7.1";
+  version = "0.7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "pyvisa";
     repo = "pyvisa-py";
     rev = "refs/tags/${version}";
-    hash = "sha256-zsa4TGDvvPAogOC0ljXC9uwWC9mteldUYprLmwrXNMQ=";
+    hash = "sha256-UFAKLrZ1ZrTmFXwVuyTCPVo3Y1YIDOvkx5krpsz71BM=";
   };
 
   nativeBuildInputs = [
@@ -50,8 +50,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ];
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   meta = with lib; {
     description = "Module that implements the Virtual Instrument Software Architecture";

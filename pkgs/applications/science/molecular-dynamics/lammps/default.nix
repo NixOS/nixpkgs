@@ -46,14 +46,14 @@
 stdenv.mkDerivation (finalAttrs: {
   # LAMMPS has weird versioning convention. Updates should go smoothly with:
   # nix-update --commit lammps --version-regex 'stable_(.*)'
-  version = "2Aug2023_update2";
+  version = "2Aug2023_update3";
   pname = "lammps";
 
   src = fetchFromGitHub {
     owner = "lammps";
     repo = "lammps";
     rev = "stable_${finalAttrs.version}";
-    hash = "sha256-E918Jv6RAfXmHxyHZos2F7S8HFWzU6KjxDwXYNAYFMY=";
+    hash = "sha256-jx0hkiYxQlnE2sa4WTvluEgphF//sNbK91VGAQJMwjw=";
   };
   preConfigure = ''
     cd cmake
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     # Although not always needed, it is needed if cmakeFlags include
     # GPU_API=cuda, and it doesn't users that don't enable the GPU package.
-    cudaPackages.autoAddOpenGLRunpathHook
+    cudaPackages.autoAddDriverRunpath
   ];
 
   passthru = {

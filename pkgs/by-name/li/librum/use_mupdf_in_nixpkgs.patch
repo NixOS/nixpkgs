@@ -1,0 +1,109 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 191ff732..de46f35b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -71,7 +71,7 @@ endif()
+ 
+ # Dependencies
+ add_subdirectory(libs/rapidfuzz-cpp)
+-
++include_directories(@nixMupdfIncludePath@)
+ 
+ # Build
+ add_subdirectory(src/)
+diff --git a/src/application/CMakeLists.txt b/src/application/CMakeLists.txt
+index bf122a66..64415be3 100644
+--- a/src/application/CMakeLists.txt
++++ b/src/application/CMakeLists.txt
+@@ -102,10 +102,9 @@ if(ANDROID)
+ endif()
+ 
+ if(UNIX)
+-    set(MUPDF_OUTPUT_DIR "${PROJECT_SOURCE_DIR}/libs/mupdf/build/$<IF:$<CONFIG:Debug>,shared-debug,shared-release>")
++    set(MUPDF_OUTPUT_DIR "@nixMupdfLibPath@")
+     set(MUPDF_OUTPUT "${MUPDF_OUTPUT_DIR}/libmupdfcpp.so")
+     set(MUPDF_OUTPUT "${MUPDF_OUTPUT_DIR}/libmupdfcpp.so" PARENT_SCOPE)
+-    set(MUPDF_BUILD_COMMAND ./scripts/mupdfwrap.py ${VENV_OPTION} -d build/$<IF:$<CONFIG:Debug>,shared-debug,shared-release> -b --m-target libs ${EXTRA_MAKE_AGRS} -j 0 m01)
+ elseif(WIN32)
+     set(MUPDF_OUTPUT_DIR "${PROJECT_SOURCE_DIR}/libs/mupdf/platform/win32/x64/$<IF:$<CONFIG:Debug>,Debug,Release>")
+     set(MUPDF_OUTPUT "${MUPDF_OUTPUT_DIR}/mupdfcpp64.lib" PARENT_SCOPE)
+@@ -113,8 +112,6 @@ elseif(WIN32)
+     set(MUPDF_BUILD_COMMAND python scripts/mupdfwrap.py ${VENV_OPTION} -d build/$<IF:$<CONFIG:Debug>,shared-debug,shared-release> -b -j 0 m01)
+ endif()
+ 
+-message("MuPdf build command: " ${MUPDF_BUILD_COMMAND})
+-
+ 
+ set(CC_COMMAND "${CMAKE_C_COMPILER}")
+ set(CXX_COMMAND "${CMAKE_CXX_COMPILER}")
+@@ -135,18 +132,6 @@ else()
+ endif()
+ 
+ 
+-add_custom_target(mupdf
+-   COMMAND ${CMAKE_COMMAND} -E env
+-        ${ANDROID_COMPILERS}
+-        "USE_SYSTEM_LIBJPEG=${USE_SYSTEM_LIBJPEG_VALUE}"
+-        "USE_SONAME=no"
+-        ${MUPDF_BUILD_COMMAND}
+-   BYPRODUCTS ${MUPDF_OUTPUT}
+-   WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/libs/mupdf
+-   COMMENT "Building mupdf (This takes a while) ..."
+-)
+-
+-
+ #Copy the mupdf dlls to the build directory for windows
+ if(WIN32)
+     add_custom_command(
+@@ -168,8 +153,6 @@ add_library(application
+                     interfaces/utility/i_book_getter.hpp
+ )
+ 
+-add_dependencies(application mupdf) # Ensure the mupdf target is built before the application target
+-
+ target_compile_definitions(application PRIVATE APPLICATION_LIBRARY)
+ 
+ target_include_directories(application
+@@ -188,12 +171,6 @@ target_include_directories(application
+                     ${CMAKE_CURRENT_SOURCE_DIR}/core/utils
+ )
+ 
+-# Make sure to ignore warnings from mupdf by adding it as a system include directory
+-target_include_directories(application SYSTEM PUBLIC
+-                    ${PROJECT_SOURCE_DIR}/libs/mupdf/platform/c++/include
+-                    ${PROJECT_SOURCE_DIR}/libs/mupdf/include
+-)
+-
+ target_compile_definitions(application
+                 PRIVATE
+                     $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>
+@@ -236,29 +213,10 @@ if(LINUX)
+     install(TARGETS application
+             DESTINATION lib
+             )
+-    
+-    # Install mupdf's shared libraries
+-    install(FILES ${MUPDF_OUTPUT_DIR}/libmupdfcpp.so
+-                  ${MUPDF_OUTPUT_DIR}/libmupdf.so
+-            DESTINATION lib)
+-
+-    # Install links with correct permissions
+-    if(EXISTS "${MUPDF_OUTPUT_DIR}/libmupdfcpp.so.24.0")
+-        install(FILES ${MUPDF_OUTPUT_DIR}/libmupdfcpp.so.24.0
+-                      ${MUPDF_OUTPUT_DIR}/libmupdf.so.24.0
+-                PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
+-                            GROUP_READ GROUP_EXECUTE
+-                            WORLD_READ WORLD_EXECUTE
+-                DESTINATION lib)
+-    endif()
+ 
+ elseif(APPLE)
+     install(TARGETS application
+             DESTINATION lib
+             )
+     
+-    # Install mupdf's shared libraries
+-    install(FILES ${MUPDF_OUTPUT_DIR}/libmupdfcpp.so
+-                  ${MUPDF_OUTPUT_DIR}/libmupdf.dylib
+-            DESTINATION lib)
+ endif()

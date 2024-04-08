@@ -43,5 +43,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ prusnak ];
     platforms = platforms.linux;
+    mainProgram = "luppp";
   };
 }

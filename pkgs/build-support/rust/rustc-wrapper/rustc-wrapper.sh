@@ -1,7 +1,20 @@
 #!@shell@
 
-extraBefore=(@sysroot@)
-extraAfter=($NIX_RUSTFLAGS)
+defaultSysroot=(@sysroot@)
+
+for arg; do
+    case "$arg" in
+        --sysroot|--sysroot=*)
+            defaultSysroot=()
+            ;;
+        --)
+            break
+            ;;
+    esac
+done
+
+extraBefore=(@defaultArgs@ "${defaultSysroot[@]}")
+extraAfter=($@extraFlagsVar@)
 
 # Optionally print debug info.
 if (( "${NIX_DEBUG:-0}" >= 1 )); then

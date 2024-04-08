@@ -5,14 +5,9 @@ with lib;
 let
   cfg = config.services.jicofo;
 
-  # HOCON is a JSON superset that some jitsi-meet components use for configuration
-  toHOCON = x: if isAttrs x && x ? __hocon_envvar then ("\${" + x.__hocon_envvar + "}")
-    else if isAttrs x && x ? __hocon_unquoted_string then x.__hocon_unquoted_string
-    else if isAttrs x then "{${ concatStringsSep "," (mapAttrsToList (k: v: ''"${k}":${toHOCON v}'') x) }}"
-    else if isList x then "[${ concatMapStringsSep "," toHOCON x }]"
-    else builtins.toJSON x;
+  format = pkgs.formats.hocon { };
 
-  configFile = pkgs.writeText "jicofo.conf" (toHOCON cfg.config);
+  configFile = format.generate "jicofo.conf" cfg.config;
 in
 {
   options.services.jicofo = with types; {
@@ -77,7 +72,7 @@ in
     };
 
     config = mkOption {
-      type = (pkgs.formats.json {}).type;
+      type = format.type;
       default = { };
       example = literalExpression ''
         {
@@ -99,7 +94,7 @@ in
             hostname = cfg.xmppHost;
             username = cfg.userName;
             domain = cfg.userDomain;
-            password = { __hocon_envvar = "JICOFO_AUTH_PASS"; };
+            password = format.lib.mkSubstitution "JICOFO_AUTH_PASS";
             xmpp-domain = if cfg.xmppDomain == null then cfg.xmppHost else cfg.xmppDomain;
           };
           service = client;

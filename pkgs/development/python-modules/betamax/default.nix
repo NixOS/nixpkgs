@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "betamax";
-  version = "0.8.1";
+  version = "0.9.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1hki1c2vs7adq7zr56wi6i5bhrkia4s2ywpv2c98ibnczz709w2v";
+    sha256 = "sha256-gjFuFnm8aHnjyDMY0Ba1S3ySJf8IxEYt5IE+IgONX5Q=";
   };
 
   propagatedBuildInputs = [ requests ];

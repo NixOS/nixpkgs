@@ -1,4 +1,5 @@
 { lib
+, aiohttp
 , async-timeout
 , bitstring
 , buildPythonPackage
@@ -27,6 +28,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    aiohttp
     async-timeout
     bitstring
     pyserial-asyncio

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "starboard";
-  version = "0.15.19";
+  version = "0.15.20";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-99YxScZNSNBiqFb7vsus7yJ99oGf+e2AjWn8aqnuQso=";
+    sha256 = "sha256-oOz7Dt+j2EmBL/aJUjqRST90wYpXkyREnKCcmNBQX18=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -69,6 +69,7 @@ buildGoModule rec {
     homepage = "https://github.com/aquasecurity/starboard";
     changelog = "https://github.com/aquasecurity/starboard/releases/tag/v${version}";
     description = "Kubernetes-native security tool kit";
+    mainProgram = "starboard";
     longDescription = ''
       Starboard integrates security tools into the Kubernetes environment, so
       that users can find and view the risks that relate to different resources

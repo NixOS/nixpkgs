@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pyramid-jinja2";
-  version = "2.10";
+  version = "2.10.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pyramid_jinja2";
     inherit version;
-    hash = "sha256-8nEGnZ6ay6x622kSGQqEj2M49+V6+68+lSN/6DzI9NI=";
+    hash = "sha256-jFCMs1wTX5UUnKI2EQ+ciHU0NXV0DRbFy3OlDvHCFnc=";
   };
 
   propagatedBuildInputs = [

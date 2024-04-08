@@ -47,6 +47,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A simple browser based on the litehtml engine";
+    mainProgram = "litebrowser";
     homepage = "https://github.com/litehtml/litebrowser-linux";
     license = licenses.bsd3;
     platforms = platforms.unix;

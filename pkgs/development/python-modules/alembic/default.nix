@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "alembic";
-  version = "1.12.0";
+  version = "1.13.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jnZFwy5PIAZ15p8HRUFTNetZo2Y/X+tIer+gswxFiIs=";
+    hash = "sha256-STLIVYv2jy7pK5u8uCGGccYnBk1bCJOUN69td9wF5ZU=";
   };
 
   nativeBuildInputs = [

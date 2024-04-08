@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-settings-components";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-settings-components";
     rev = finalAttrs.version;
-    hash = "sha256-13uxUBM+uOmt8X0uLGWNP8YbwCdb2QCChB8IP3td5a4=";
+    hash = "sha256-2Wyh+2AW6EeKRv26D4l+GIoH5sWC9SmOODNHOveFZPg=";
   };
 
   postPatch = ''
@@ -58,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "QML settings components for the Lomiri Desktop Environment";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-settings-components";
+    changelog = "https://gitlab.com/ubports/development/core/lomiri-settings-components/-/blob/${finalAttrs.version}/ChangeLog";
     license = licenses.lgpl3Only;
     maintainers = teams.lomiri.members;
     platforms = platforms.linux;

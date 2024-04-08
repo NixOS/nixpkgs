@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libremines";
-  version = "1.10.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "Bollos00";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-aqWzTvvRoke+Rakb6dNpDoD7haKHEKW3XARGLrH2WiY=";
+    hash = "sha256-LejDXjli+AEVGp23y+ez/NyJY/8w7uHcOij6RsDwIH4=";
   };
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ];
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Qt based Minesweeper game";
+    mainProgram = "libremines";
     longDescription = ''
       A Free/Libre and Open Source Software Qt based Minesweeper game available for GNU/Linux, FreeBSD and Windows systems.
     '';

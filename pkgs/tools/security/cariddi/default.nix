@@ -18,6 +18,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Crawler for URLs and endpoints";
+    mainProgram = "cariddi";
     homepage = "https://github.com/edoardottt/cariddi";
     changelog = "https://github.com/edoardottt/cariddi/releases/tag/v${version}";
     license = with licenses; [ gpl3Plus ];

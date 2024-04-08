@@ -1,1 +1,2 @@
 pkgs/by-name/fo/foo: This path is a file, but it should be a directory.
+This PR introduces the problems listed above. Please fix them before merging, otherwise the base branch would break.

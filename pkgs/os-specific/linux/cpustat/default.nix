@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "CPU usage monitoring tool";
+    mainProgram = "cpustat";
     homepage = "https://github.com/ColinIanKing/cpustat";
     license = licenses.gpl2;
     platforms = platforms.linux;

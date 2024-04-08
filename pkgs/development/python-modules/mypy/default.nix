@@ -2,12 +2,14 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, pythonAtLeast
 , pythonOlder
 
 # build-system
 , setuptools
 , types-psutil
 , types-setuptools
+, wheel
 
 # propagates
 , mypy-extensions
@@ -22,44 +24,42 @@
 , attrs
 , filelock
 , pytest-xdist
-, pytest-forked
 , pytestCheckHook
-, py
-, six
 }:
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "1.5.1";
-  format = "pyproject";
+  version = "1.9.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python";
     repo = "mypy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-qs+axm2+UWNuWzLW8CI4qBV7k7Ra8gBajid8mYKDsso=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-uOOZX8bKRunTOgYVbmetu2m0B7kijxBgWdNiLCAhiQ4=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     mypy-extensions
     setuptools
     types-psutil
     types-setuptools
     typing-extensions
+    wheel
   ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     mypy-extensions
     typing-extensions
   ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     dmypy = [
       psutil
     ];
@@ -88,17 +88,23 @@ buildPythonPackage rec {
     "mypy.report"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     attrs
     filelock
     pytest-xdist
-    pytest-forked
     pytestCheckHook
-    py
     setuptools
-    six
     tomli
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  disabledTests = [
+    # fails with typing-extensions>=4.10
+    # https://github.com/python/mypy/issues/17005
+    "test_runtime_typing_objects"
+  ] ++ lib.optionals (pythonAtLeast "3.12") [
+    # requires distutils
+    "test_c_unit_test"
+  ];
 
   disabledTestPaths = [
     # fails to find tyoing_extensions
@@ -118,6 +124,6 @@ buildPythonPackage rec {
     homepage = "https://www.mypy-lang.org";
     license = licenses.mit;
     mainProgram = "mypy";
-    maintainers = with maintainers; [ martingms lnl7 ];
+    maintainers = with maintainers; [ lnl7 ];
   };
 }

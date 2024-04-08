@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "vulture";
-  version = "2.10";
+  version = "2.11";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KlwxYL/7p3WVtubfzEEgFr0qCc1LZs33+7qRNoSJn28=";
+    hash = "sha256-8Pu2C85lEarYfuBzbFAkVnN0kKgtkZpE5tkiYss18cI=";
   };
 
   postPatch = ''
@@ -46,6 +46,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Finds unused code in Python programs";
+    mainProgram = "vulture";
     homepage = "https://github.com/jendrikseipp/vulture";
     changelog = "https://github.com/jendrikseipp/vulture/releases/tag/v${version}";
     license = licenses.mit;

@@ -1,25 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "httplab";
-  version = "0.4.0";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "qustavo";
     repo = "httplab";
     rev = "v${version}";
-    hash = "sha256-+qcECfQo9Wa4JQ09ujhKjQndmcFn03hTfII636+1ghA=";
+    hash = "sha256-UL1i8JpgofXUB+jtW2EtSR1pM/Fdqnbg2EXPJAjc0H0=";
   };
 
-  vendorHash = null;
-
-  patches = [
-    # Add Go Modules support
-    (fetchpatch {
-      url = "https://github.com/qustavo/httplab/commit/80680bebc83f1ed19216f60339c62cd9213d736b.patch";
-      hash = "sha256-y4KO3FGwKNAfM+4uR3KDbV90d/4JeBGvWtfirDJrWZk=";
-    })
-  ];
+  vendorHash = "sha256-vL3a9eO5G0WqnqcIjA9D2XM7iQ87JH0q+an2nLcG28A=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -28,5 +20,6 @@ buildGoModule rec {
     description = "Interactive WebServer";
     license = licenses.mit;
     maintainers = with maintainers; [ pradeepchhetri ];
+    mainProgram = "httplab";
   };
 }

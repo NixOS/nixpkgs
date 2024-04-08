@@ -19,6 +19,7 @@
 , sqlite
 , telepathy
 , telepathy-mission-control
+, validatePkgConfig
 , wrapQtAppsHook
 , xvfb-run
 }:
@@ -28,13 +29,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "history-service";
-  version = "0.4";
+  version = "0.5";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/history-service";
     rev = finalAttrs.version;
-    hash = "sha256-oCX+moGQewzstbpddEYYp1kQdO2mVXpWJITfvzDzQDI=";
+    hash = "sha256-m/ytJoHxW0q1vlVKK6Z9ovHzjoiS1AodCSGHTeKygfQ=";
   };
 
   outputs = [
@@ -43,38 +44,31 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Deprecation warnings with Qt5.15, allow disabling -Werror
-    # Remove when version > 0.4
-    (fetchpatch {
-      url = "https://gitlab.com/ubports/development/core/history-service/-/commit/1370777952c6a2efb85f582ff8ba085c2c0e290a.patch";
-      hash = "sha256-Z/dFrFo7WoPZlKto6wNGeWdopsi8iBjmd5ycbqMKgxo=";
-    })
-
     # Drop deprecated qt5_use_modules usage
     # Remove when https://gitlab.com/ubports/development/core/history-service/-/merge_requests/36 merged & in release
     (fetchpatch {
-      url = "https://gitlab.com/OPNA2608/history-service/-/commit/b36ab377aca93555b29d1471d6eaa706b5c843ca.patch";
+      url = "https://gitlab.com/ubports/development/core/history-service/-/commit/b36ab377aca93555b29d1471d6eaa706b5c843ca.patch";
       hash = "sha256-mOpXqqd4JI7lHtcWDm9LGCrtB8ERge04jMpHIagDM2k=";
     })
 
     # Add more / correct existing GNUInstallDirs usage
     # Remove when https://gitlab.com/ubports/development/core/history-service/-/merge_requests/37 merged & in release
     (fetchpatch {
-      url = "https://gitlab.com/OPNA2608/history-service/-/commit/bb4dbdd16e80dcd286d8edfb86b08f0b61bc7fec.patch";
+      url = "https://gitlab.com/ubports/development/core/history-service/-/commit/bb4dbdd16e80dcd286d8edfb86b08f0b61bc7fec.patch";
       hash = "sha256-C/XaygI663yaU06klQD9g0NnbqYxHSmzdbrRxcfiJkk=";
     })
 
     # Correct version information
     # Remove when https://gitlab.com/ubports/development/core/history-service/-/merge_requests/38 merged & in release
     (fetchpatch {
-      url = "https://gitlab.com/OPNA2608/history-service/-/commit/30d9fbee203205ec1ea8fd19c9b6eb54c080a9e2.patch";
-      hash = "sha256-vSZ1ii5Yhw7pB+Pd1pjWnW7JsQxKnn+LeuBKo6qZjQs=";
+      url = "https://gitlab.com/ubports/development/core/history-service/-/commit/98458126f9f494b124134fb35c198af0545f6a98.patch";
+      hash = "sha256-4EfLsaueKTCovl8EilN30cmfNfg19wvyCsbKqOrXtuw=";
     })
 
     # Make tests optional
     # Remove when https://gitlab.com/ubports/development/core/history-service/-/merge_requests/39 merged & in release
     (fetchpatch {
-      url = "https://gitlab.com/OPNA2608/history-service/-/commit/cb5c80cffc35611657244e15a7eb10edcd598ccd.patch";
+      url = "https://gitlab.com/ubports/development/core/history-service/-/commit/cb5c80cffc35611657244e15a7eb10edcd598ccd.patch";
       hash = "sha256-MFHGu4OMScdThq9htUgFMpezP7Ym6YTIZUHWol20wqw=";
     })
   ];
@@ -131,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     sqlite
+    validatePkgConfig
     wrapQtAppsHook
   ];
 
@@ -193,6 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
       Database location: ~/.local/share/history-service/history.sqlite
     '';
     homepage = "https://gitlab.com/ubports/development/core/history-service";
+    changelog = "https://gitlab.com/ubports/development/core/history-service/-/blob/${finalAttrs.version}/ChangeLog";
     license = licenses.gpl3Only;
     maintainers = teams.lomiri.members;
     platforms = platforms.linux;

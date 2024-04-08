@@ -14,6 +14,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/ezaffanella/PPLite";
     description = "Convex polyhedra library for Abstract Interpretation";
+    mainProgram = "pplite_lcdd";
     license = lib.licenses.gpl3Only;
   };
 }

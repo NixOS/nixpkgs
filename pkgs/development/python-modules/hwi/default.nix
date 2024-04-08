@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "hwi";
-  version = "2.3.1";
+  version = "2.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "bitcoin-core";
     repo = "HWI";
     rev = "refs/tags/${version}";
-    hash = "sha256-V4BWB4mCONQ8kjAy6ySonAbCUTaKpBTvhSnHmoH8TQM=";
+    hash = "sha256-a1ppYDuY7CtNrKSvuAofS79nvDaYUMIm4FCHiiQYrtQ=";
   };
 
   propagatedBuildInputs = [

@@ -20,5 +20,6 @@ stdenv.mkDerivation  rec {
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ goibhniu ];
+    mainProgram = "seq24";
   };
 }

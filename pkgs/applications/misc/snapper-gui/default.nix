@@ -34,6 +34,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Graphical interface for snapper";
+    mainProgram = "snapper-gui";
     longDescription = ''
       A graphical user interface for the tool snapper for Linux filesystem
       snapshot management. It can compare snapshots and revert differences between snapshots.

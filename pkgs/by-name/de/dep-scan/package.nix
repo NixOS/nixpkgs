@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dep-scan";
-  version = "5.0.2";
+  version = "5.2.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "owasp-dep-scan";
     repo = "dep-scan";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qiJyGBGxznNF4LNG9fbmjG7wX0odhrUO2LxOWABtLQA=";
+    hash = "sha256-UoppQAokiWBcgTcSmwfoqrDKt/QHYd2NBR3CpNOqI4k=";
   };
 
   postPatch = ''
@@ -26,9 +26,11 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     appthreat-vulnerability-db
+    cvss
     defusedxml
     jinja2
     oras
+    packageurl-python
     pdfkit
     pygithub
     pyyaml

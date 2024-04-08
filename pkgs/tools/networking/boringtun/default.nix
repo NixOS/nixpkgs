@@ -24,5 +24,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ xrelkd marsam ];
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "boringtun-cli";
   };
 }

@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/emikulic/darkstat/releases/tag/${version}";
     license = licenses.gpl2Only;
     platforms = with platforms; unix;
+    mainProgram = "darkstat";
   };
 }

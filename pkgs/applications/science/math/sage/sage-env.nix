@@ -42,7 +42,7 @@
 , flintqs
 , blas
 , lapack
-, flint
+, flint3
 , gmp
 , mpfr
 , zlib
@@ -155,7 +155,7 @@ writeTextFile rec {
     # cython needs to find these libraries, otherwise will fail with `ld: cannot find -lflint` or similar
     export LDFLAGS='${
       lib.concatStringsSep " " (map (pkg: "-L${pkg}/lib") [
-        flint
+        flint3
         gap
         glpk
         gmp
@@ -174,7 +174,7 @@ writeTextFile rec {
         singular
         gmp.dev
         glpk
-        flint
+        flint3
         gap
         mpfr.dev
       ])

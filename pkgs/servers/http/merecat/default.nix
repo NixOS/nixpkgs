@@ -10,15 +10,15 @@
 , nixosTests
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "merecat";
   version = "2.31";
 
-  # Or, already reconf'd: ftp://ftp.troglobit.com/merecat/merecat-${version}.tar.xz
+  # Or, already reconf'd: ftp://ftp.troglobit.com/merecat/merecat-${finalAttrs.version}.tar.xz
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "merecat";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-oIzOXUnCFqd3HPyKp58r+enRRpaE7f9hqNITtxCCB7I=";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     # Strange header and/or linker errors
     broken = stdenv.isDarwin;
   };
-}
+})

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , uthash
 , meson
 , ninja
@@ -18,6 +19,15 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-9n0Gp9+fmTM/shgWC8zpwt1pic9BrvDubOt7f+ZDMeE=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2024-24793.CVE-2024-24794.patch";
+      url = "https://github.com/ImagingDataCommons/libdicom/commit/3661aa4cdbe9c39f67d38ae87520f9e3ed50ab16.patch";
+      excludes = [ "CHANGELOG.md" ];
+      hash = "sha256-/KTp0nKYk6jX4phNHY+nzjEptUBHKM2JkOftS5vHsEw=";
+    })
+  ];
 
   buildInputs = [ uthash ];
 

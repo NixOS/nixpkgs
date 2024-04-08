@@ -20,5 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/jmhobbs/terminal-parrot";
     license = licenses.mit;
     maintainers = [ maintainers.heel ];
+    mainProgram = "terminal-parrot";
   };
 }

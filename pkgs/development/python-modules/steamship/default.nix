@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "steamship";
-  version = "2.17.32";
+  version = "2.17.34";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dTpz2/XXu8patDnorg/36652j9VLUjE5uF2fVzbDjfI=";
+    hash = "sha256-U9SA2Dvepl9BjrvhH+8bVBNjby8IWu5UE+/oor7YWzI=";
   };
 
   pythonRelaxDeps = [
@@ -58,5 +58,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/steamship-core/python-client/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
+    # https://github.com/steamship-core/python-client/issues/503
+    broken = versionAtLeast pydantic.version "2";
   };
 }

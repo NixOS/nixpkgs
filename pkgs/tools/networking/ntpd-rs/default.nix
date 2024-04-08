@@ -1,39 +1,51 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, installShellFiles
+, pandoc
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ntpd-rs";
-  version = "0.3.7";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "pendulum-project";
     repo = "ntpd-rs";
     rev = "v${version}";
-    hash = "sha256-AUCzsveG9U+KxYO/4LGmyCPkR+w9pGDA/vTzMAGiVuI=";
+    hash = "sha256-IoTuI0M+stZNUVpaVsf7JR7uHcamSSVDMJxJ+7n5ayA=";
   };
 
-  cargoHash = "sha256-6FUVkr3uock43ZBHuMEVIZ5F8Oh8wMifh2EokMWv4hU=";
+  cargoHash = "sha256-iZuDNFy8c2UZUh3J11lEtfHlDFN+qPl4iZg+ps7AenE=";
+
+  nativeBuildInputs = [ pandoc installShellFiles ];
+
+  postPatch = ''
+    substituteInPlace utils/generate-man.sh \
+      --replace 'utils/pandoc.sh' 'pandoc'
+  '';
+
+  postBuild = ''
+    source utils/generate-man.sh
+  '';
+
+  doCheck = true;
 
   checkFlags = [
     # doesn't find the testca
     "--skip=keyexchange::tests::key_exchange_roundtrip"
-    # seems flaky
+    # seems flaky?
     "--skip=algorithm::kalman::peer::tests::test_offset_steering_and_measurements"
     # needs networking
     "--skip=hwtimestamp::tests::get_hwtimestamp"
   ];
 
   postInstall = ''
-    install -vDt $out/lib/systemd/system pkg/common/ntpd-rs.service
-
-    for testprog in demobilize-server rate-limit-server nts-ke nts-ke-server peer-state simple-daemon; do
-      moveToOutput bin/$testprog "$tests"
-    done
+    install -Dm444 -t $out/lib/systemd/system docs/examples/conf/{ntpd-rs,ntpd-rs-metrics}.service
+    installManPage docs/precompiled/man/{ntp.toml.5,ntp-ctl.8,ntp-daemon.8,ntp-metrics-exporter.8}
   '';
 
-  outputs = [ "out" "tests" ];
+  outputs = [ "out" "man" ];
 
   meta = with lib; {
     description = "A full-featured implementation of the Network Time Protocol";

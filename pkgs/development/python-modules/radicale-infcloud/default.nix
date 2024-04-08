@@ -22,7 +22,7 @@ buildPythonPackage {
   meta = with lib; {
     homepage = "https://github.com/Unrud/RadicaleInfCloud/";
     description = "Integrate InfCloud into Radicale's web interface";
-    license = with licenses; [ agpl3 gpl3 ];
+    license = with licenses; [ agpl3Plus gpl3 ];
     maintainers = with maintainers; [ erictapen ];
   };
 }

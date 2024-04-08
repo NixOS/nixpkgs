@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "msoffcrypto-tool";
-  version = "5.2.0";
+  version = "5.3.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "nolze";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-9qhTGf4IE8PtTfshnqu2fcctznA+2bWH4jz0dmKtoOo=";
+    hash = "sha256-aQtEJyG0JGe4eSIRI4OUjJZNDBni6FFyJXXkbeiotSY=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +48,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python tool and library for decrypting MS Office files with passwords or other keys";
+    mainProgram = "msoffcrypto-tool";
     homepage = "https://github.com/nolze/msoffcrypto-tool";
     changelog = "https://github.com/nolze/msoffcrypto-tool/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];

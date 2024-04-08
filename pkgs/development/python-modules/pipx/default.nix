@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , hatchling
+, hatch-vcs
 , importlib-metadata
 , packaging
 , pip
@@ -10,11 +11,12 @@
 , pytestCheckHook
 , pythonOlder
 , userpath
+, git
 }:
 
 buildPythonPackage rec {
   pname = "pipx";
-  version = "1.2.1";
+  version = "1.4.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -23,11 +25,12 @@ buildPythonPackage rec {
     owner = "pipxproject";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-eNZJXznKgamGR9yrswrrLEqUTxFhLGxWTkYbi13bebY=";
+    hash = "sha256-NxXOeVXwBhGqi4DUABV8UV+cDER0ROBFdgiyYTzdvuo=";
   };
 
   nativeBuildInputs = [
     hatchling
+    hatch-vcs
   ];
 
   propagatedBuildInputs = [
@@ -41,6 +44,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    git
   ];
 
   preCheck = ''
@@ -77,6 +81,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Install and run Python applications in isolated environments";
+    mainProgram = "pipx";
     homepage = "https://github.com/pipxproject/pipx";
     changelog = "https://github.com/pypa/pipx/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

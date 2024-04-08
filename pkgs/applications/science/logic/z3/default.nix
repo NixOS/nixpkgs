@@ -79,6 +79,7 @@ let common = { version, sha256, patches ? [ ], tag ? "z3" }:
 
     meta = with lib; {
       description = "A high-performance theorem prover and SMT solver";
+      mainProgram = "z3";
       homepage = "https://github.com/Z3Prover/z3";
       changelog = "https://github.com/Z3Prover/z3/releases/tag/z3-${version}";
       license = licenses.mit;
@@ -89,8 +90,8 @@ let common = { version, sha256, patches ? [ ], tag ? "z3" }:
 in
 {
   z3_4_12 = common {
-    version = "4.12.4";
-    sha256 = "sha256-cxl7D47dRn+uMVOHbF0avj5+ZFWjaJ7lXj/8l6r9q2I=";
+    version = "4.12.5";
+    sha256 = "sha256-Qj9w5s02OSMQ2qA7HG7xNqQGaUacA1d4zbOHynq5k+A=";
   };
   z3_4_11 = common {
     version = "4.11.2";

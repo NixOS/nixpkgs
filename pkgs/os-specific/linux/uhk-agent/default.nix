@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , stdenvNoCC
 , fetchurl
 , appimageTools
@@ -11,12 +12,12 @@
 
 let
   pname = "uhk-agent";
-  version = "3.2.2";
+  version = "4.0.2";
 
   src = fetchurl {
     url = "https://github.com/UltimateHackingKeyboard/agent/releases/download/v${version}/UHK.Agent-${version}-linux-x86_64.AppImage";
     name = "${pname}-${version}.AppImage";
-    sha256 = "sha256-0kNcpdYktgzIPVvfSitJ5aIuhJvCEcbubumHhW00QUE=";
+    sha256 = "sha256-yx5hOmb1la+vNh8x0PM3edcMn4ojdwzNmGBUg/BH7wE=";
   };
 
   appimageContents = appimageTools.extract {
@@ -36,7 +37,12 @@ stdenvNoCC.mkDerivation {
   ];
 
   buildInputs = [
+    stdenv.cc.cc.lib
     libusb1
+  ];
+
+  autoPatchelfIgnoreMissingDeps = [
+    "libc.musl-x86_64.so.1"
   ];
 
   installPhase = ''

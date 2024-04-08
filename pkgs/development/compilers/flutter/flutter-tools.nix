@@ -1,4 +1,6 @@
-{ hostPlatform
+{ lib
+, stdenv
+, systemPlatform
 , buildDartApplication
 , git
 , which
@@ -15,13 +17,20 @@ buildDartApplication.override { inherit dart; } rec {
   dartOutputType = "jit-snapshot";
 
   src = flutterSrc;
-  sourceRoot = "source/packages/flutter_tools";
+  sourceRoot = "${src.name}/packages/flutter_tools";
   postUnpack = ''chmod -R u+w "$NIX_BUILD_TOP/source"'';
 
   inherit patches;
   # The given patches are made for the entire SDK source tree.
   prePatch = ''pushd "$NIX_BUILD_TOP/source"'';
-  postPatch = ''popd'';
+  postPatch = ''
+    popd
+  ''
+  # Use arm64 instead of arm64e.
+  + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace lib/src/ios/xcodeproj.dart \
+      --replace-fail arm64e arm64
+  '';
 
   # When the JIT snapshot is being built, the application needs to run.
   # It attempts to generate configuration files, and relies on a few external
@@ -35,7 +44,7 @@ buildDartApplication.override { inherit dart; } rec {
   '';
 
   dartEntryPoints."flutter_tools.snapshot" = "bin/flutter_tools.dart";
-  dartCompileFlags = [ "--define=NIX_FLUTTER_HOST_PLATFORM=${hostPlatform.system}" ];
+  dartCompileFlags = [ "--define=NIX_FLUTTER_HOST_PLATFORM=${systemPlatform}" ];
 
   # The Dart wrapper launchers are useless for the Flutter tool - it is designed
   # to be launched from a snapshot by the SDK.

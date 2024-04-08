@@ -7,6 +7,7 @@
 , numpy
 , tensorflow-probability
 , dm-haiku
+, pytest-xdist
 , pytestCheckHook
 }:
 
@@ -33,6 +34,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     dm-haiku
+    pytest-xdist
     pytestCheckHook
   ];
 

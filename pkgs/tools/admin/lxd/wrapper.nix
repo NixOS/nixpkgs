@@ -76,20 +76,11 @@ let
 
   ovmf-2mb = OVMF.override {
     secureBoot = true;
-    csmSupport = false;
     fdSize2MB = true;
   };
 
   ovmf-4mb = OVMF.override {
     secureBoot = true;
-    csmSupport = false;
-    fdSize4MB = true;
-  };
-
-  ovmf-4mb-csm = OVMF.override {
-    secureBoot = true;
-    csmSupport = false;
-    fdSize2MB = false;
     fdSize4MB = true;
   };
 
@@ -99,13 +90,11 @@ let
   # also found in /snap/lxd/current/share/qemu/ on a snap install
   ovmf = linkFarm "lxd-ovmf" [
     { name = "OVMF_CODE.2MB.fd"; path = "${ovmf-2mb.fd}/FV/${ovmf-prefix}_CODE.fd"; }
-    { name = "OVMF_CODE.4MB.CSM.fd"; path = "${ovmf-4mb-csm.fd}/FV/${ovmf-prefix}_CODE.fd"; }
     { name = "OVMF_CODE.4MB.fd"; path = "${ovmf-4mb.fd}/FV/${ovmf-prefix}_CODE.fd"; }
     { name = "OVMF_CODE.fd"; path = "${ovmf-2mb.fd}/FV/${ovmf-prefix}_CODE.fd"; }
 
     { name = "OVMF_VARS.2MB.fd"; path = "${ovmf-2mb.fd}/FV/${ovmf-prefix}_VARS.fd"; }
     { name = "OVMF_VARS.2MB.ms.fd"; path = "${ovmf-2mb.fd}/FV/${ovmf-prefix}_VARS.fd"; }
-    { name = "OVMF_VARS.4MB.CSM.fd"; path = "${ovmf-4mb-csm.fd}/FV/${ovmf-prefix}_VARS.fd"; }
     { name = "OVMF_VARS.4MB.fd"; path = "${ovmf-4mb.fd}/FV/${ovmf-prefix}_VARS.fd"; }
     { name = "OVMF_VARS.4MB.ms.fd"; path = "${ovmf-4mb.fd}/FV/${ovmf-prefix}_VARS.fd"; }
     { name = "OVMF_VARS.fd"; path = "${ovmf-2mb.fd}/FV/${ovmf-prefix}_VARS.fd"; }

@@ -25,6 +25,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Live coding music with SuperCollider";
+    mainProgram = "FoxDot";
     homepage = "https://foxdot.org/";
     license = licenses.cc-by-sa-40;
     maintainers = with maintainers; [ mrmebelman ];

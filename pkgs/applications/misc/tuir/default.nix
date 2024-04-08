@@ -25,6 +25,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Browse Reddit from your Terminal (fork of rtv)";
+    mainProgram = "tuir";
     homepage = "https://gitlab.com/ajak/tuir/";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne matthiasbeyer ];

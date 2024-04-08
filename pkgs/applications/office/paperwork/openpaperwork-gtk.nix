@@ -29,8 +29,6 @@ buildPythonPackage rec {
     patchShebangs ../tools
   '';
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     pkgs.gettext
     pkgs.which

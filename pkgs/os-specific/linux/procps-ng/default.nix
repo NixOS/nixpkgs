@@ -48,8 +48,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # Too red
-  configureFlags = [ "--disable-modern-top" ]
+  # Too red; 8bit support for fixing https://github.com/NixOS/nixpkgs/issues/275220
+  configureFlags = [ "--disable-modern-top" "--enable-watch8bit" ]
     ++ lib.optional withSystemd "--with-systemd"
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_malloc_0_nonnull=yes"

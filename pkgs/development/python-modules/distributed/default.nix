@@ -10,6 +10,7 @@
 , packaging
 , psutil
 , pythonOlder
+, pythonRelaxDepsHook
 , pyyaml
 , setuptools
 , setuptools-scm
@@ -43,10 +44,15 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     setuptools
     setuptools-scm
     versioneer
   ] ++ versioneer.optional-dependencies.toml;
+
+  pythonRelaxDeps = [
+    "dask"
+  ];
 
   propagatedBuildInputs = [
     click

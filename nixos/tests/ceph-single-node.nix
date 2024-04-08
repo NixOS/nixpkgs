@@ -145,6 +145,14 @@ let
     monA.succeed(
         "ceph osd pool create single-node-test 32 32",
         "ceph osd pool ls | grep 'single-node-test'",
+
+        # We need to enable an application on the pool, otherwise it will
+        # stay unhealthy in state POOL_APP_NOT_ENABLED.
+        # Creating a CephFS would do this automatically, but we haven't done that here.
+        # See: https://docs.ceph.com/en/reef/rados/operations/pools/#associating-a-pool-with-an-application
+        # We use the custom application name "nixos-test" for this.
+        "ceph osd pool application enable single-node-test nixos-test",
+
         "ceph osd pool rename single-node-test single-node-other-test",
         "ceph osd pool ls | grep 'single-node-other-test'",
     )
@@ -182,19 +190,16 @@ let
     monA.wait_until_succeeds("ceph -s | grep 'mgr: ${cfg.monA.name}(active,'")
     monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
 
-    # This test has been commented out due to the upstream issue with pyo3
-    # that has broken this dashboard
-    # Reference: https://www.spinics.net/lists/ceph-users/msg77812.html
     # Enable the dashboard and recheck health
-    # monA.succeed(
-    #     "ceph mgr module enable dashboard",
-    #     "ceph config set mgr mgr/dashboard/ssl false",
-    #     # default is 8080 but it's better to be explicit
-    #     "ceph config set mgr mgr/dashboard/server_port 8080",
-    # )
-    # monA.wait_for_open_port(8080)
-    # monA.wait_until_succeeds("curl -q --fail http://localhost:8080")
-    # monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
+    monA.succeed(
+        "ceph mgr module enable dashboard",
+        "ceph config set mgr mgr/dashboard/ssl false",
+        # default is 8080 but it's better to be explicit
+        "ceph config set mgr mgr/dashboard/server_port 8080",
+    )
+    monA.wait_for_open_port(8080)
+    monA.wait_until_succeeds("curl -q --fail http://localhost:8080")
+    monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
   '';
 in {
   name = "basic-single-node-ceph-cluster";

@@ -4,19 +4,16 @@
 with lib;
 stdenv.mkDerivation rec {
   pname = "dcmtk";
-  version = "3.6.7";
+  version = "3.6.8";
   src = fetchFromGitHub {
     owner = "DCMTK";
     repo = pname;
     rev = "DCMTK-${version}";
-    sha256 = "sha256-Pw99R6oGcLX6Z7s8ZnpbBBqcIvY9Rl/nw2PVGjpD3gY=";
+    hash = "sha256-PQR9+xSlfBvogv0p6AL/yapelJpsYteA4T4lPkOIfLc=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libpng zlib libtiff libxml2 openssl libiconv ];
-
-  # This is only needed until https://github.com/DCMTK/dcmtk/pull/75/files is merged
-  patches = [ ./0001-Fix-cmake.patch ];
 
   doCheck = true;
 

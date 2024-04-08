@@ -117,6 +117,37 @@ in buildFHSEnv rec {
   passthru = {
     inherit unwrapped;
     tests = {
+      buildSof = runCommand "quartus-prime-lite-test-build-sof"
+        { nativeBuildInputs = [ quartus-prime-lite ];
+        }
+        ''
+          cat >mydesign.vhd <<EOF
+          library ieee;
+          use ieee.std_logic_1164.all;
+
+          entity mydesign is
+          port (
+              in_0: in std_logic;
+              in_1: in std_logic;
+              out_1: out std_logic
+          );
+          end mydesign;
+
+          architecture dataflow of mydesign is
+          begin
+              out_1 <= in_0 and in_1;
+          end dataflow;
+          EOF
+
+          quartus_sh --flow compile mydesign
+
+          if ! [ -f mydesign.sof ]; then
+              echo "error: failed to produce mydesign.sof" >&2
+              exit 1
+          fi
+
+          touch "$out"
+        '';
       questaEncryptedModel = runCommand "quartus-prime-lite-test-questa-encrypted-model" {} ''
         "${quartus-prime-lite}/bin/vlog" "${quartus-prime-lite.unwrapped}/questa_fse/intel/verilog/src/arriav_atoms_ncrypt.v"
         touch "$out"

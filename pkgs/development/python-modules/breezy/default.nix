@@ -1,8 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchpatch
-, fetchPypi
+, fetchFromGitHub
 , cargo
 , configobj
 , cython
@@ -29,23 +28,17 @@
 
 buildPythonPackage rec {
   pname = "breezy";
-  version = "3.3.4";
-  format = "pyproject";
+  version = "3.3.5";
+  pyproject = true;
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-fEEvOfo8YWhx+xuiqD/KNstlso5/K1XJnGY64tkLIwE=";
+  src = fetchFromGitHub {
+    owner = "breezy-team";
+    repo = "breezy";
+    rev = "brz-${version}";
+    hash = "sha256-z8NKb8gFgA6dufM12jnZIZ6b1ZMZRzFA3w7t7gECEts=";
   };
-
-  patches = [
-    # Explicitly track which URLs are used for GitLab
-    (fetchpatch {
-      url = "https://github.com/breezy-team/breezy/commit/cc9fdf3774253183f726127c2ee191c24640d898.patch";
-      hash = "sha256-HTDAW3CPEZ1YBe0wnv6ncWEd0QRHwHawfTplbVDiOGc=";
-    })
-  ];
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
@@ -129,7 +122,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Friendly distributed version control system";
     homepage = "https://www.breezy-vcs.org/";
-    changelog = "https://github.com/breezy-team/breezy/blob/brz-${version}/doc/en/release-notes/brz-${versions.majorMinor version}.txt";
+    changelog = "https://github.com/breezy-team/breezy/blob/${src.rev}/doc/en/release-notes/brz-${versions.majorMinor version}.txt";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.marsam ];
     mainProgram = "brz";

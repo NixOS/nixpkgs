@@ -120,7 +120,7 @@ with lib;
         };
 
         maxpause = mkOption {
-          type = types.nullOr types.str;
+          type = with types; nullOr (oneOf [ str int ]);
           default = null;
           description = lib.mdDoc ''
              The maximum time to pause between successive queue runs, in seconds.
@@ -138,7 +138,7 @@ with lib;
         };
 
         pausetime = mkOption {
-          type = types.nullOr types.str;
+          type = with types; nullOr (oneOf [ str int ]);
           default = null;
           description = lib.mdDoc ''
             The minimum time to pause between successive queue runs when there
@@ -168,7 +168,7 @@ with lib;
         };
 
         sendtimeout = mkOption {
-          type = types.nullOr types.str;
+          type = with types; nullOr (oneOf [ str int ]);
           default = null;
           description = lib.mdDoc ''
             The  time to wait for a remote module listed above to complete sending
@@ -194,7 +194,7 @@ with lib;
     environment = {
       systemPackages = [ pkgs.nullmailer ];
       etc = let
-        validAttrs = filterAttrs (name: value: value != null) cfg.config;
+        validAttrs = lib.mapAttrs (_: toString) (filterAttrs (_: value: value != null) cfg.config);
       in
         (foldl' (as: name: as // { "nullmailer/${name}".text = validAttrs.${name}; }) {} (attrNames validAttrs))
           // optionalAttrs (cfg.remotesFile != null) { "nullmailer/remotes".source = cfg.remotesFile; };

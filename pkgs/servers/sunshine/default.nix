@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoPatchelfHook
 , makeWrapper
 , buildNpmPackage
@@ -39,29 +40,42 @@
 , vulkan-loader
 , libappindicator
 , libnotify
+, miniupnpc
 , config
 , cudaSupport ? config.cudaSupport
-, cudaPackages ? {}
+, cudaPackages ? { }
 }:
-stdenv.mkDerivation rec {
+let
+  stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+in
+stdenv'.mkDerivation rec {
   pname = "sunshine";
-  version = "0.21.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
     rev = "v${version}";
-    sha256 = "sha256-uvQAJkoKazFLz5iTpYSAGYJQZ2EprQ+p9+tryqorFHM=";
+    sha256 = "sha256-O9U4zP1o6yWtzk+2DW7ueimvsTuajLY8IETlvCT4jTE=";
     fetchSubmodules = true;
   };
 
-  # fetch node_modules needed for webui
+  patches = [
+    # remove npm install as it needs internet access -- handled separately below
+    ./dont-build-webui.patch
+    # revert https://github.com/LizardByte/Sunshine/pull/2046 - let cmake install handle udev and systemd files
+    (fetchpatch {
+      url = "https://github.com/LizardByte/Sunshine/commit/0d4dfcd708c0027b7d8827a03163858800fa79fa.patch";
+      hash = "sha256-77NtfX0zB7ty92AyFOz9wJoa1jHshlNbPQ7NOpqUuYo=";
+      revert = true;
+    })
+  ];
+
+  # build webui
   ui = buildNpmPackage {
     inherit src version;
     pname = "sunshine-ui";
-    npmDepsHash = "sha256-+T1XAf4SThoJLOFpnVxDa2qiKFLIKQPGewjA83GQovM=";
-
-    dontNpmBuild = true;
+    npmDepsHash = "sha256-jAZUu2CfcqhC2xMiZYpY7KPCRVFQgT/kgUvSI+5Cpkc=";
 
     # use generated package-lock.json as upstream does not provide one
     postPatch = ''
@@ -70,7 +84,7 @@ stdenv.mkDerivation rec {
 
     installPhase = ''
       mkdir -p $out
-      cp -r node_modules $out/
+      cp -r * $out/
     '';
   };
 
@@ -80,7 +94,7 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
     makeWrapper
   ] ++ lib.optionals cudaSupport [
-    cudaPackages.autoAddOpenGLRunpathHook
+    cudaPackages.autoAddDriverRunpath
   ];
 
   buildInputs = [
@@ -121,6 +135,7 @@ stdenv.mkDerivation rec {
     svt-av1
     libappindicator
     libnotify
+    miniupnpc
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cudatoolkit
   ] ++ lib.optionals stdenv.isx86_64 [
@@ -146,13 +161,13 @@ stdenv.mkDerivation rec {
 
     substituteInPlace packaging/linux/sunshine.desktop \
       --replace '@PROJECT_NAME@' 'Sunshine' \
-      --replace '@PROJECT_DESCRIPTION@' 'Self-hosted game stream host for Moonlight'
+      --replace '@PROJECT_DESCRIPTION@' 'Self-hosted game stream host for Moonlight' \
+      --replace '/usr/bin/env systemctl start --u sunshine' 'sunshine'
   '';
 
   preBuild = ''
-    # copy node_modules where they can be picked up by build
-    mkdir -p ../node_modules
-    cp -r ${ui}/node_modules/* ../node_modules
+    # copy webui where it can be picked up by build
+    cp -r ${ui}/build ../
   '';
 
   # allow Sunshine to find libvulkan

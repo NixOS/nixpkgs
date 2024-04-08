@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Get what motivates you done, without losing concentration";
+    mainProgram = "flowtime";
     homepage = "https://github.com/Diego-Ivan/Flowtime";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ foo-dogsquared pokon548 ];

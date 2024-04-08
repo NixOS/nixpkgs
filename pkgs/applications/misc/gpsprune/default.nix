@@ -50,5 +50,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ rycee ];
     platforms = platforms.all;
+    mainProgram = "gpsprune";
   };
 }

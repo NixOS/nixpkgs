@@ -17,6 +17,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A tool for tuning your TimescaleDB for better performance";
+    mainProgram = "timescaledb-tune";
     homepage = "https://github.com/timescale/timescaledb-tune";
     license = licenses.asl20;
     maintainers = with maintainers; [ marsam ];

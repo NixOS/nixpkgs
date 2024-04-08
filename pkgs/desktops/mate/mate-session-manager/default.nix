@@ -8,11 +8,13 @@
 , systemd
 , libSM
 , libXtst
+, glib
 , gtk3
 , libepoxy
 , polkit
 , hicolor-icon-theme
-, mate
+, mate-desktop
+, mate-screensaver
 , wrapGAppsHook
 , fetchpatch
 , mateUpdateScript
@@ -20,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-session-manager";
-  version = "1.26.1";
+  version = "1.28.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "W4x9ZEH9nCk8hjiCq2enSTxTzfZOqyfAlFdfQj69Qng=";
+    sha256 = "0yzkWVuh2mUpB3cgPyvIK9lzshSjoECAoe9caJkKLXs=";
   };
 
   patches = [
@@ -48,7 +50,8 @@ stdenv.mkDerivation rec {
     libSM
     libXtst
     gtk3
-    mate.mate-desktop
+    mate-desktop
+    mate-screensaver # for gsm_manager_init
     hicolor-icon-theme
     libepoxy
     polkit
@@ -56,9 +59,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+
   postFixup = ''
     substituteInPlace $out/share/xsessions/mate.desktop \
-      --replace "Exec=mate-session" "Exec=$out/bin/mate-session"
+      --replace-fail "Exec=mate-session" "Exec=$out/bin/mate-session"
   '';
 
   passthru.providedSessions = [ "mate" ];

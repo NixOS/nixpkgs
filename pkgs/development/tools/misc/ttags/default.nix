@@ -21,6 +21,7 @@ in rustPlatform.buildRustPackage {
 
   meta = with lib; {
     description = "Generate tags using tree-sitter";
+    mainProgram = "ttags";
     longDescription = ''
       ttags generates tags (similar to ctags) for various
       languages, using tree-sitter.

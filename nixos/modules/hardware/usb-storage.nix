@@ -14,7 +14,7 @@ with lib;
 
   config = mkIf config.hardware.usbStorage.manageStartStop {
     services.udev.extraRules = ''
-      ACTION=="add|change", SUBSYSTEM=="scsi_disk", DRIVERS=="usb-storage", ATTR{manage_start_stop}="1"
+      ACTION=="add|change", SUBSYSTEM=="scsi_disk", DRIVERS=="usb-storage", ATTR{manage_system_start_stop}="1"
     '';
   };
 }

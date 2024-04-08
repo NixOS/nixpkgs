@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "apprise";
-  version = "1.7.1";
+  version = "1.7.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jUOdCFUEcFJEJd7e5LyKcnZsIWwhjzdyw3QE6y/Yblo=";
+    hash = "sha256-716DAFEUDUIop1nFvC1oV7zH+GZN8+RPMPZGF84MenM=";
   };
 
   nativeBuildInputs = [
@@ -75,5 +75,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/caronc/apprise/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ marsam ];
+    mainProgram = "apprise";
   };
 }

@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , cython
 , joblib
+, matplotlib
 , numpy
 , pandas
 , scikit-learn
@@ -43,10 +44,18 @@ buildPythonPackage rec {
   # Make sure we're running the tests for the actually installed
   # package, so that cython's compiled files are available.
   preCheck = ''
-    cd $out/lib/${python.libPrefix}/site-packages
+    cd $out/${python.sitePackages}
   '';
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    matplotlib
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   disabledTests= [
     # touches internet
     "test_load_from_web"

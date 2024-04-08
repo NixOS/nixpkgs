@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xsct";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "faf0";
     repo = "sct";
     rev = finalAttrs.version;
-    hash = "sha256-VT92NRz4Te5+8NmpEm1PFXfsL2CoVT+b91/KD9sCg0Q=";
+    hash = "sha256-PDkbZTtl14wYdfALv43SIU9MKhbfiYlRqkI1mFn1qa4=";
   };
 
   buildInputs = [
@@ -30,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Set color temperature of screen";
+    mainProgram = "xsct";
     homepage = "https://github.com/faf0/sct";
     license = licenses.unlicense;
     maintainers = with maintainers; [ OPNA2608 ];

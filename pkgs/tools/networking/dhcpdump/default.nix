@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ nickcao ];
     license = licenses.bsd2;
+    mainProgram = "dhcpdump";
   };
 }

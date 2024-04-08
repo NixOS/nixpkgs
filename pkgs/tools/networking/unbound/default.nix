@@ -41,6 +41,8 @@
 # enable support for python plugins in unbound: note this is distinct from pyunbound
 # see https://unbound.docs.nlnetlabs.nl/en/latest/developer/python-modules.html
 , withPythonModule ? false
+, withLto ? !stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isMinGW
+, withMakeWrapper ? !stdenv.hostPlatform.isMinGW
 , libnghttp2
 
 # for passthru.tests
@@ -49,16 +51,43 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unbound";
-  version = "1.19.0";
+  version = "1.19.2";
 
   src = fetchurl {
     url = "https://nlnetlabs.nl/downloads/unbound/unbound-${finalAttrs.version}.tar.gz";
-    hash = "sha256-qXUyRohUxhwt5IykFw3oVP07yVyAQ7sM+w/iZgWWZiQ=";
+    hash = "sha256-zFYNNFc0ImwbOecadpeX5/3eImXLt3685UJwS7pInlU=";
   };
+
+
+  # Cherry pick some already merged upstream patches for configure
+  patches = [
+    # Search for protobuf-c with pkg-config
+    # https://github.com/NLnetLabs/unbound/pull/999
+    (fetchpatch {
+      url = "https://github.com/NLnetLabs/unbound/commit/59d98b9ef64e597c331c27160715d7a1b40c8638.patch";
+      hash = "sha256-DvYoYBTXOwbR8Z0GRgt724WqX3dbIEOdICU2/VMRSVQ=";
+    })
+    # Fix for previous patch
+    # https://github.com/NLnetLabs/unbound/issues/1006
+    (fetchpatch {
+      url = "https://github.com/NLnetLabs/unbound/commit/93490a0fc1bf9e62e6edcd6b69f1463c7ac410e9.patch";
+      hash = "sha256-mBo63ZlayD3YkOgIoQN0dG+xuFq/BxcjBmSo1vapiYA=";
+      excludes = [ "doc/Changelog" ];
+    })
+    # Fix for previous patch
+    # https://github.com/NLnetLabs/unbound/commit/3f5175584b0bb9ff7d417bc195ec6e4316ae58d3
+    (fetchpatch {
+      url = "https://github.com/NLnetLabs/unbound/commit/3f5175584b0bb9ff7d417bc195ec6e4316ae58d3.patch";
+      hash = "sha256-DcWfvmk+4K3c9Z+4grwzEGIkEBYNpbTK3xuBqRI33fY=";
+    })
+  ];
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
 
-  nativeBuildInputs = [ makeWrapper pkg-config ]
+  nativeBuildInputs =
+    lib.optionals withMakeWrapper [ makeWrapper ]
+    ++ lib.optionals withDNSTAP [ protobufc ]
+    ++ [ pkg-config ]
     ++ lib.optionals withPythonModule [ swig ];
 
   buildInputs = [ openssl nettle expat libevent ]
@@ -78,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-rootkey-file=${dns-root-data}/root.key"
     "--enable-pie"
     "--enable-relro-now"
-  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+  ] ++ lib.optionals (!withLto) [
     "--disable-flto"
   ] ++ lib.optionals withSystemd [
     "--enable-systemd"
@@ -93,7 +122,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-libsodium=${symlinkJoin { name = "libsodium-full"; paths = [ libsodium.dev libsodium.out ]; }}"
   ] ++ lib.optionals withDNSTAP [
     "--enable-dnstap"
-    "--with-protobuf-c=${protobufc}"
   ] ++ lib.optionals withTFO [
     "--enable-tfo-client"
     "--enable-tfo-server"
@@ -124,9 +152,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     make unbound-event-install
+  '' + lib.optionalString withMakeWrapper ''
     wrapProgram $out/bin/unbound-control-setup \
       --prefix PATH : ${lib.makeBinPath [ openssl ]}
-  '' + lib.optionalString withPythonModule ''
+  '' + lib.optionalString (withMakeWrapper && withPythonModule) ''
     wrapProgram $out/bin/unbound \
       --prefix PYTHONPATH : "$out/${python.sitePackages}" \
       --argv0 $out/bin/unbound
@@ -161,6 +190,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd3;
     homepage = "https://www.unbound.net";
     maintainers = lib.teams.helsinki-systems.members;
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
   };
 })

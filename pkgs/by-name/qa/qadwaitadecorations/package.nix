@@ -19,13 +19,13 @@ let
 
 in stdenv.mkDerivation (finalAttrs: {
   pname = "qadwaitadecorations";
-  version = "0.1.3";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "FedoraQt";
     repo = "QAdwaitaDecorations";
     rev = finalAttrs.version;
-    hash = "sha256-9uK2ojukuwzOz/genWiCch4c3pL5qEfyy8ERpFxS8/8=";
+    hash = "sha256-aqjm93tmBfDkmce1WG5xx8MCDCvo6AOrRHArj/+Ko9E=";
   };
 
   nativeBuildInputs = [

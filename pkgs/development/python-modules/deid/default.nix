@@ -67,6 +67,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Best-effort anonymization for medical images";
+    mainProgram = "deid";
     homepage = "https://pydicom.github.io/deid";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];

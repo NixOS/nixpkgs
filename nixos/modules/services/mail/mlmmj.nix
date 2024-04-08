@@ -143,11 +143,13 @@ in
 
     environment.systemPackages = [ pkgs.mlmmj ];
 
-    systemd.tmpfiles.rules = [
-      ''d "${stateDir}" -''
-      ''d "${spoolDir}/${cfg.listDomain}" -''
-      ''Z "${spoolDir}" - "${cfg.user}" "${cfg.group}" -''
-    ];
+    systemd.tmpfiles.settings."10-mlmmj" = {
+      ${stateDir}.d = { };
+      "${spoolDir}/${cfg.listDomain}".d = { };
+      ${spoolDir}.Z = {
+        inherit (cfg) user group;
+      };
+    };
 
     systemd.services.mlmmj-maintd = {
       description = "mlmmj maintenance daemon";

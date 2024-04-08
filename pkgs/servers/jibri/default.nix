@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "JItsi BRoadcasting Infrastructure";
+    mainProgram = "jibri";
     longDescription = ''
       Jibri provides services for recording or streaming a Jitsi Meet conference.
       It works by launching a Chrome instance rendered in a virtual framebuffer and capturing and

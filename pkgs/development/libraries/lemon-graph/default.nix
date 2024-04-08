@@ -18,6 +18,11 @@ stdenv.mkDerivation rec {
   # error: no viable conversion from ...
   doCheck = !stdenv.isDarwin;
 
+  patches = [
+    # error: ISO C++17 does not allow 'register' storage class specifier
+    ./remove-register.patch
+  ];
+
   meta = with lib; {
     homepage = "https://lemon.cs.elte.hu/trac/lemon";
     description = "Efficient library for combinatorial optimization tasks on graphs and networks";

@@ -7,7 +7,7 @@
 , scrot
 }:
 buildPythonPackage rec {
-  pname = "PyScreeze";
+  pname = "pyscreeze";
   version = "0.1.26";
 
   src = fetchFromGitHub {

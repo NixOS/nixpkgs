@@ -140,6 +140,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A divelog program";
+    mainProgram = "subsurface";
     longDescription = ''
       Subsurface can track single- and multi-tank dives using air, Nitrox or TriMix.
       It allows tracking of dive locations including GPS coordinates (which can also

@@ -93,6 +93,7 @@ buildGoModule rec {
     homepage = "https://aquasecurity.github.io/tracee/latest/";
     changelog = "https://github.com/aquasecurity/tracee/releases/tag/v${version}";
     description = "Linux Runtime Security and Forensics using eBPF";
+    mainProgram = "tracee";
     longDescription = ''
       Tracee is a Runtime Security and forensics tool for Linux. It is using
       Linux eBPF technology to trace your system and applications at runtime,

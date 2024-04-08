@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "schismtracker";
-  version = "20231029";
+  version = "20240308";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-ELCV5c79fFX1C4+S9bnDFOx3jAs/R2TERH1Q9fkBGnY=";
+    sha256 = "sha256-6MzMmeD4HCS/7VTFTAcOhyKjz5NvzvDEzcSpHGUwFvM=";
   };
 
   configureFlags = [ "--enable-dependency-tracking" ]
@@ -43,5 +43,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ftrvxmtrx ];
+    mainProgram = "schismtracker";
   };
 }

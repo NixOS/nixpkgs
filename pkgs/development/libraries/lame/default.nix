@@ -57,5 +57,6 @@ stdenv.mkDerivation rec {
     license     = licenses.lgpl2;
     maintainers = with maintainers; [ codyopel ];
     platforms   = platforms.all;
+    mainProgram = "lame";
   };
 }

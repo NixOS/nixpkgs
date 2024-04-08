@@ -1,9 +1,19 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonRelaxDepsHook
+
+# build-system
 , poetry-core
 , poetry-dynamic-versioning
+
+# dependencies
+, docutils
+, pygments
 , sphinx
+
+# tests
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -26,9 +36,27 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     poetry-core
     poetry-dynamic-versioning
+    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [ sphinx ];
+  pythonRelaxDeps = [
+    "docutils"
+    "pygments"
+    "Sphinx"
+  ];
+
+  propagatedBuildInputs = [
+    docutils
+    pygments
+    sphinx
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  # versions >=1.8.0 cannot be build from source
+  passthru.skipBulkUpdate = true;
 
   meta = with lib; {
     description = "A sphinx extension for creating unselectable prompt";

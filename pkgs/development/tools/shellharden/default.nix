@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "The corrective bash syntax highlighter";
+    mainProgram = "shellharden";
     longDescription = ''
       Shellharden is a syntax highlighter and a tool to semi-automate the
       rewriting of scripts to ShellCheck conformance, mainly focused on quoting.

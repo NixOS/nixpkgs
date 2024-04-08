@@ -5,22 +5,28 @@
 
 buildGoModule rec {
   pname = "cloudfox";
-  version = "1.13.0";
+  version = "1.13.4";
 
   src = fetchFromGitHub {
     owner = "BishopFox";
-    repo = pname;
+    repo = "cloudfox";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4donwh7yG7R4+k+ydGto2CZclnM95qodQuL1Huu4GDo=";
+    hash = "sha256-nN/gSvAwKjfZulqH4caGoJmzlY0ik8JrFReuvYWwZTE=";
   };
 
-  vendorHash = "sha256-RdcfAZVqCp+egLbgx1c/A/zk0YlBY6aeeq0Lv4cLivY=";
+  vendorHash = "sha256-aRbGBEci3QT1mH+yaOUVynPysJ1za6CaoLGppJaa94c=";
+
+  ldflags = [
+    "-w"
+    "-s"
+  ];
 
   # Some tests are failing because of wrong filename/path
   doCheck = false;
 
   meta = with lib; {
     description = "Tool for situational awareness of cloud penetration tests";
+    mainProgram = "cloudfox";
     homepage = "https://github.com/BishopFox/cloudfox";
     changelog = "https://github.com/BishopFox/cloudfox/releases/tag/v${version}";
     license = licenses.mit;

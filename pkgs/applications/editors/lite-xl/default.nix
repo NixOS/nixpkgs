@@ -1,5 +1,4 @@
-{ agg
-, fetchFromGitHub
+{ fetchFromGitHub
 , Foundation
 , freetype
 , lib
@@ -8,33 +7,34 @@
 , ninja
 , pcre2
 , pkg-config
-, reproc
 , SDL2
 , stdenv
 }:
 
 stdenv.mkDerivation rec {
   pname = "lite-xl";
-  version = "2.1.1";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "lite-xl";
     repo = "lite-xl";
     rev = "v${version}";
-    sha256 = "sha256-tZ9bCazs4ygNl5RKFNUtxboaMcG8a7mIz2FuiExX1d4=";
+    hash = "sha256-4ykUdcNwJ4r/4u9H+c8pgupY3BaPi2y69X6yaDjCjac=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];
 
   buildInputs = [
-    agg
     freetype
     lua5_4
     pcre2
-    reproc
     SDL2
   ] ++ lib.optionals stdenv.isDarwin [
     Foundation
+  ];
+
+  mesonFlags = [
+    "-Duse_system_lua=true"
   ];
 
   meta = with lib; {

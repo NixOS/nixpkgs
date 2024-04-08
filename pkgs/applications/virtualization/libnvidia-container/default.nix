@@ -116,6 +116,7 @@ stdenv.mkDerivation rec {
     description = "NVIDIA container runtime library";
     license = licenses.asl20;
     platforms = platforms.linux;
+    mainProgram = "nvidia-container-cli";
     maintainers = with maintainers; [ cpcloud ];
   };
 }

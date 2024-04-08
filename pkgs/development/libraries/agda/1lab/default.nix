@@ -11,9 +11,13 @@ mkDerivation rec {
     hash = "sha256-0U6s6sXdynk2IWRBDXBJCf7Gc+gE8AhR1PXZl0DS4yU=";
   };
 
-  # We don't need anything in support; avoid installing LICENSE.agda
   postPatch = ''
+    # We don't need anything in support; avoid installing LICENSE.agda
     rm -rf support
+
+    # Remove verbosity options as they make Agda take longer and use more memory.
+    shopt -s globstar extglob
+    sed -Ei '/OPTIONS/s/ -v ?[^ #]+//g' src/**/*.@(agda|lagda.md)
   '';
 
   libraryName = "1lab";
@@ -24,7 +28,7 @@ mkDerivation rec {
     description =
       "A formalised, cross-linked reference resource for mathematics done in Homotopy Type Theory ";
     homepage = src.meta.homepage;
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ncfavier ];
   };

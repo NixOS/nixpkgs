@@ -15,6 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Go tool to convert markdown to man pages";
+    mainProgram = "go-md2man";
     license = licenses.mit;
     homepage = "https://github.com/cpuguy83/go-md2man";
     maintainers = with maintainers; [offline];

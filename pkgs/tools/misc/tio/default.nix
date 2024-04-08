@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, inih, bash-completion }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, inih, bash-completion, darwin }:
 
 stdenv.mkDerivation rec {
   pname = "tio";
@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  buildInputs = [ inih ];
+  buildInputs = [ inih ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ darwin.apple_sdk.frameworks.IOKit ];
 
   nativeBuildInputs = [ meson ninja pkg-config bash-completion ];
 

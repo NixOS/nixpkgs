@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "pytest-httpserver";
-  version = "1.0.7";
-  format = "pyproject";
+  version = "1.0.10";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "csernazs";
-    repo = pname;
+    repo = "pytest-httpserver";
     rev = "refs/tags/${version}";
-    hash = "sha256-bjysG+7niSUBl8YMWR8pr7oOz9GDbSfq3PeloYBkq3s=";
+    hash = "sha256-KCsZs4MGENByF/wB+aj3yvMp7lssHNVKx8jLhDQ1u4k=";
   };
 
   nativeBuildInputs = [

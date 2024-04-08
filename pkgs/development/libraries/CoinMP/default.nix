@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    CXXFLAGS = "-std=c++14";
+  };
+
   hardeningDisable = [ "format" ];
 
   meta = with lib; {

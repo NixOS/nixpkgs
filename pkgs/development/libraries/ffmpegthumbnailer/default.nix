@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   meta = with lib;  {
     homepage = "https://github.com/dirkvdb/ffmpegthumbnailer";
     description = "A lightweight video thumbnailer";
+    mainProgram = "ffmpegthumbnailer";
     longDescription = "FFmpegthumbnailer is a lightweight video
         thumbnailer that can be used by file managers to create thumbnails
         for your video files. The thumbnailer uses ffmpeg o decode frames

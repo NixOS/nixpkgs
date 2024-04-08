@@ -29,6 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library to listen for BLE advertized packets";
+    mainProgram = "aioblescan";
     homepage = "https://github.com/frawau/aioblescan";
     changelog = "https://github.com/frawau/aioblescan/releases/tag/${version}";
     license = licenses.mit;

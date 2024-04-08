@@ -53,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Puzzle game where you move atoms to build a molecule";
+    mainProgram = "atomix";
     homepage = "https://wiki.gnome.org/Apps/Atomix";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;

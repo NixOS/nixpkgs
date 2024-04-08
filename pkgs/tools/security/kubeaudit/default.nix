@@ -25,6 +25,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Audit tool for Kubernetes";
+    mainProgram = "kubeaudit";
     homepage = "https://github.com/Shopify/kubeaudit";
     changelog = "https://github.com/Shopify/kubeaudit/releases/tag/v${version}";
     license = with licenses; [ mit ];

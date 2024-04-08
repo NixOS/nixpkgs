@@ -22,13 +22,10 @@ stdenv.mkDerivation {
     openssl
   ];
 
-  # Build doesn't have a way to disable building the CPU plugin, which is already
-  # provided by 'tuxclocker-plugins'
-  patches = [ ./no-cpu-plugin.patch ];
-
   mesonFlags = [
     "-Ddaemon=false"
     "-Dgui=false"
     "-Drequire-nvidia=true"
+    "-Dplugins-cpu=false" # provided by tuxclocker-plugins
   ];
 }

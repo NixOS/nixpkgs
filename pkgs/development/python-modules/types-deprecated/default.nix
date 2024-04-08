@@ -1,18 +1,23 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "types-deprecated";
-  version = "1.2.9.3";
-  format = "setuptools";
+  version = "1.2.9.20240311";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "types-Deprecated";
     inherit version;
-    hash = "sha256-74cyet8+PEpMfY4G5Y9kdnENNGbs+1PEnvsICASnDvM=";
+    hash = "sha256-BoDomYmoFCcH3oED8V0YJEWlM8EEf9m36MVFkQHpuQo=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   # Modules has no tests
   doCheck = false;
