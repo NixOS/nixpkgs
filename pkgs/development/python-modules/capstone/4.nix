@@ -1,27 +1,20 @@
 { lib
 , buildPythonPackage
-, capstone
+, capstone_4
 , stdenv
 , setuptools
 , pythonAtLeast
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "capstone";
-  version = lib.getVersion capstone;
-  format = "setuptools";
+  inherit (capstone_4) version src;
 
-  # distutils usage
-  disabled = pythonAtLeast "3.12";
+  sourceRoot = "source/bindings/python";
 
-  src = capstone.src;
-  sourceRoot = "${src.name}/bindings/python";
-
-  # libcapstone.a is not built with BUILD_SHARED_LIBS. For some reason setup.py
-  # checks if it exists but it is not really needed. Most likely a bug in setup.py.
   postPatch = ''
-    ln -s ${capstone}/lib/libcapstone${stdenv.targetPlatform.extensions.sharedLibrary} prebuilt/
-    touch prebuilt/libcapstone${stdenv.targetPlatform.extensions.staticLibrary}
+    ln -s ${capstone_4}/lib/libcapstone${stdenv.targetPlatform.extensions.sharedLibrary} prebuilt/
+    ln -s ${capstone_4}/lib/libcapstone${stdenv.targetPlatform.extensions.staticLibrary} prebuilt/
     substituteInPlace setup.py --replace manylinux1 manylinux2014
   '';
 
@@ -42,5 +35,6 @@ buildPythonPackage rec {
     license = licenses.bsdOriginal;
     description = "Python bindings for Capstone disassembly engine";
     maintainers = with maintainers; [ bennofs ris ];
+    broken = pythonAtLeast "3.12"; # uses distutils
   };
 }
