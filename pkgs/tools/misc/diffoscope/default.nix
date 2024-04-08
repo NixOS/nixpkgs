@@ -215,6 +215,7 @@ python3.pkgs.buildPythonApplication rec {
       guestfs
       h5py
       pdfminer-six
+      r2pipe
       # docx2txt, breaks the tests.
     ])
     # oggvideotools is broken on Darwin, please put it back when it will be fixed?
