@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, binaryornot
-, boolean-py
-, debian
-, jinja2
-, license-expression
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  binaryornot,
+  boolean-py,
+  debian,
+  jinja2,
+  license-expression,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-ZYmQtJ503HDmu+Cd6IxOrCcOVH+CcFnFe3oe6PqvcE0=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     binaryornot
@@ -47,8 +46,16 @@ buildPythonPackage rec {
     description = "A tool for compliance with the REUSE Initiative recommendations";
     homepage = "https://github.com/fsfe/reuse-tool";
     changelog = "https://github.com/fsfe/reuse-tool/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 cc-by-sa-40 cc0 gpl3Plus ];
-    maintainers = with maintainers; [ FlorianFranzen Luflosi ];
+    license = with licenses; [
+      asl20
+      cc-by-sa-40
+      cc0
+      gpl3Plus
+    ];
+    maintainers = with maintainers; [
+      FlorianFranzen
+      Luflosi
+    ];
     mainProgram = "reuse";
   };
 }
