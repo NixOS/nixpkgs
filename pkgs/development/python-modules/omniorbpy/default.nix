@@ -2,8 +2,9 @@
   lib,
   buildPythonPackage,
   fetchurl,
+  omniorb,
   pkg-config,
-  python3Packages,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -23,18 +24,18 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  propagatedBuildInputs = [ python3Packages.omniorb ];
+  propagatedBuildInputs = [ omniorb ];
 
   configureFlags = [
-    "--with-omniorb=${python3Packages.omniorb}"
+    "--with-omniorb=${omniorb}"
     "PYTHON_PREFIX=$out"
-    "PYTHON=${python3Packages.python.interpreter}"
+    "PYTHON=${python.interpreter}"
   ];
 
   # Transform omniidl_be into a PEP420 namespace
   postInstall = ''
-    rm $out/${python3Packages.python.sitePackages}/omniidl_be/__init__.py
-    rm $out/${python3Packages.python.sitePackages}/omniidl_be/__pycache__/__init__.*.pyc
+    rm $out/${python.sitePackages}/omniidl_be/__init__.py
+    rm $out/${python.sitePackages}/omniidl_be/__pycache__/__init__.*.pyc
   '';
 
   # Ensure both python & cxx backends are available
