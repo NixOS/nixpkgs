@@ -26,7 +26,7 @@
 , systemdLibs
 , writeShellApplication
 , xorg
-, microchip-xc8
+# , microchip-xc8
 , microchip-xc16
 # , microchip-xc32
 # , microchip-xc-dsc
@@ -91,8 +91,8 @@ let
         ln -s "$f" "$rt/overlay/opt/microchip/"
       done
 
-      mkdir "$rt/overlay/opt/microchip/xc8"
-      ln -s ${microchip-xc8} "$rt/overlay/opt/microchip/xc8/v${microchip-xc8.version}"
+      # mkdir "$rt/overlay/opt/microchip/xc8"
+      # ln -s ${microchip-xc8} "$rt/overlay/opt/microchip/xc8/v${microchip-xc8.version}"
       mkdir "$rt/overlay/opt/microchip/xc16"
       ln -s ${microchip-xc16} "$rt/overlay/opt/microchip/xc16/v${microchip-xc16.version}"
 

@@ -22,6 +22,8 @@ stdenvNoCC.mkDerivation rec {
     ];
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ bubblewrap rsync ];
 
   unpackPhase = ''
