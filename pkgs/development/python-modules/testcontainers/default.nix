@@ -6,11 +6,12 @@
 , deprecation
 , docker
 , wrapt
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "testcontainers";
-  version = "4.3.1";
+  version = "4.3.3";
   disabled = pythonOlder "3.9";
 
   pyproject = true;
@@ -19,7 +20,7 @@ buildPythonPackage rec {
     owner = "testcontainers";
     repo = "testcontainers-python";
     rev = "refs/tags/testcontainers-v${version}";
-    hash = "sha256-pS5YEcHDHpTIWLD4vMPWL4r86DOI+47jN7cTwhDeXHE=";
+    hash = "sha256-qb7mOtL+YJI24DOBgrqxc817k4fD2kTOtUNF2X0qEIc=";
   };
 
   postPatch = ''
@@ -34,6 +35,10 @@ buildPythonPackage rec {
     deprecation
     docker
     wrapt
+  ];
+
+  dependencies = [
+    typing-extensions
   ];
 
   # Tests require various container and database services running
