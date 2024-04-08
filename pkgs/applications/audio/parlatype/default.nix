@@ -10,6 +10,7 @@
 , hicolor-icon-theme
 , isocodes
 , itstool
+, libadwaita
 , libxml2
 , meson
 , ninja
@@ -20,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "parlatype";
-  version = "4.0";
+  version = "4.1";
 
   src = fetchFromGitHub {
     owner = "gkarsay";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1iyjxss6sgc9gx6ij30zz97bl31qix8pxklzn4kknh1b0j7hhbwq";
+    sha256 = "0546rl5sm7xmgl54cqps3a7bhfs7xdvz98jgdcf4sgiz1k2vh9xq";
   };
 
   nativeBuildInputs = [
@@ -53,6 +54,7 @@ stdenv.mkDerivation rec {
     gtk4
     hicolor-icon-theme
     isocodes
+    libadwaita
   ];
 
   postPatch = ''
@@ -71,7 +73,8 @@ stdenv.mkDerivation rec {
       useful for journalists, students, scientists and whoever needs to
       transcribe audio files.
     '';
-    homepage = "https://www.parlatype.org/";
+    # maintainer lost control of parlatype.org
+    homepage = "https://github.com/gkarsay/parlatype";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ alexshpilkin melchips ];
     platforms = platforms.linux;

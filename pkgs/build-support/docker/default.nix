@@ -839,41 +839,26 @@ rec {
     })
   );
 
+  # Arguments are documented in ../../../doc/build-helpers/images/dockertools.section.md
   streamLayeredImage = lib.makeOverridable (
     {
-      # Image Name
       name
-    , # Image tag, the Nix's output hash will be used if null
-      tag ? null
-    , # Parent image, to append to.
-      fromImage ? null
-    , # Files to put on the image (a nix store path or list of paths).
-      contents ? [ ]
-    , # Docker config; e.g. what command to run on the container.
-      config ? { }
-    , # Image architecture, defaults to the architecture of the `hostPlatform` when unset
-      architecture ? defaultArchitecture
-    , # Time of creation of the image. Passing "now" will make the
-      # created date be the time of building.
-      created ? "1970-01-01T00:00:01Z"
-    , # Optional bash script to run on the files prior to fixturizing the layer.
-      extraCommands ? ""
-    , # Optional bash script to run inside fakeroot environment.
-      # Could be used for changing ownership of files in customisation layer.
-      fakeRootCommands ? ""
-    , # Whether to run fakeRootCommands in fakechroot as well, so that they
-      # appear to run inside the image, but have access to the normal Nix store.
-      # Perhaps this could be enabled on by default on pkgs.stdenv.buildPlatform.isLinux
-      enableFakechroot ? false
-    , # We pick 100 to ensure there is plenty of room for extension. I
-      # believe the actual maximum is 128.
-      maxLayers ? 100
-    , # Whether to include store paths in the image. You generally want to leave
-      # this on, but tooling may disable this to insert the store paths more
-      # efficiently via other means, such as bind mounting the host store.
-      includeStorePaths ? true
-    , # Passthru arguments for the underlying derivation.
-      passthru ? {}
+    , tag ? null
+    , fromImage ? null
+    , contents ? [ ]
+    , config ? { }
+    , architecture ? defaultArchitecture
+    , created ? "1970-01-01T00:00:01Z"
+    , uid ? 0
+    , gid ? 0
+    , uname ? "root"
+    , gname ? "root"
+    , maxLayers ? 100
+    , extraCommands ? ""
+    , fakeRootCommands ? ""
+    , enableFakechroot ? false
+    , includeStorePaths ? true
+    , passthru ? {}
     ,
     }:
       assert
@@ -956,7 +941,7 @@ rec {
 
         conf = runCommand "${baseName}-conf.json"
           {
-            inherit fromImage maxLayers created;
+            inherit fromImage maxLayers created uid gid uname gname;
             imageName = lib.toLower name;
             preferLocalBuild = true;
             passthru.imageTag =
@@ -1035,14 +1020,22 @@ rec {
               "store_layers": $store_layers[0],
               "customisation_layer", $customisation_layer,
               "repo_tag": $repo_tag,
-              "created": $created
+              "created": $created,
+              "uid": $uid,
+              "gid": $gid,
+              "uname": $uname,
+              "gname": $gname
             }
             ' --arg store_dir "${storeDir}" \
               --argjson from_image ${if fromImage == null then "null" else "'\"${fromImage}\"'"} \
               --slurpfile store_layers store_layers.json \
               --arg customisation_layer ${customisationLayer} \
               --arg repo_tag "$imageName:$imageTag" \
-              --arg created "$created" |
+              --arg created "$created" \
+              --arg uid "$uid" \
+              --arg gid "$gid" \
+              --arg uname "$uname" \
+              --arg gname "$gname" |
             tee $out
         '';
 
