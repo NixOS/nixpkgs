@@ -946,6 +946,7 @@ let
 
   packagesToSkipCheck = [
     "Rmpi"     # tries to run MPI processes
+    "ReactomeContentService4R" # tries to connect to Reactome
     "pbdMPI"   # tries to run MPI processes
     "data_table" # fails to rename shared library before check
   ];

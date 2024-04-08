@@ -5,6 +5,8 @@
 , nixosTests
 , gettext
 , python3
+, giflib
+, darwin
 , ghostscript
 , imagemagickBig
 , jbig2enc
@@ -22,13 +24,13 @@
 }:
 
 let
-  version = "2.7.1";
+  version = "2.7.2";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-k19dQeXuPwggTfrsxL4oesExAz4tkT/GN6lt7sLU3Nk=";
+    hash = "sha256-vXW2d45Mth3Y95xPPH8bFjVLWVdUl+WuvSXJyPD3FyU=";
   };
 
   # subpath installation is broken with uvicorn >= 0.26
@@ -80,6 +82,9 @@ let
 
     buildInputs = [
       pango
+    ] ++ lib.optionals stdenv.isDarwin [
+      giflib
+      darwin.apple_sdk.frameworks.CoreText
     ];
 
     CYPRESS_INSTALL_BINARY = "0";

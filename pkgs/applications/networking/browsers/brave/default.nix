@@ -176,12 +176,12 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${binpath}
       --suffix PATH : ${lib.makeBinPath [ xdg-utils coreutils ]}
       ${optionalString (enableFeatures != []) ''
-      --add-flags "--enable-features=${strings.concatStringsSep "," enableFeatures}"
+      --add-flags "--enable-features=${strings.concatStringsSep "," enableFeatures}\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+,WaylandWindowDecorations}}"
       ''}
       ${optionalString (disableFeatures != []) ''
       --add-flags "--disable-features=${strings.concatStringsSep "," disableFeatures}"
       ''}
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto}}"
       ${optionalString vulkanSupport ''
       --prefix XDG_DATA_DIRS  : "${addOpenGLRunpath.driverLink}/share"
       ''}
