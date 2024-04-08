@@ -249,10 +249,10 @@ class Driver:
         )
 
     def serial_stdout_on(self) -> None:
-        rootlog._print_serial_logs = True
+        rootlog.print_serial_logs(True)
 
     def serial_stdout_off(self) -> None:
-        rootlog._print_serial_logs = False
+        rootlog.print_serial_logs(False)
 
     def check_polling_conditions(self) -> None:
         for condition in self.polling_conditions:

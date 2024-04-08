@@ -24,6 +24,9 @@ class Logger:
 
         self._print_serial_logs = True
 
+    def print_serial_logs(self, enable: bool) -> None:
+        self._print_serial_logs = enable
+
     @staticmethod
     def _eprint(*args: object, **kwargs: Any) -> None:
         print(*args, file=sys.stderr, **kwargs)
