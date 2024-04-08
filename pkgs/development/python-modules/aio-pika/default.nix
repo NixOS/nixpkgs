@@ -1,17 +1,18 @@
-{ lib
-, aiomisc-pytest
-, aiormq
-, buildPythonPackage
-, docker
-, fetchFromGitHub
-, pamqp
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, shortuuid
-, testcontainers
-, wrapt
-, yarl
+{
+  lib,
+  aiomisc-pytest,
+  aiormq,
+  buildPythonPackage,
+  docker,
+  fetchFromGitHub,
+  pamqp,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  shortuuid,
+  testcontainers,
+  wrapt,
+  yarl,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     hash = "sha256-aRXYFW4fl3iXH3bwP30+TllRm4BkIUcGMX/lNfhiqjo=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     aiormq
@@ -67,9 +66,7 @@ buildPythonPackage rec {
     "tests/test_types.py"
   ];
 
-  pythonImportsCheck = [
-    "aio_pika"
-  ];
+  pythonImportsCheck = [ "aio_pika" ];
 
   meta = with lib; {
     description = "AMQP 0.9 client designed for asyncio and humans";
