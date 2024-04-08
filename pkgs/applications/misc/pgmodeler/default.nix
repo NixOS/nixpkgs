@@ -28,12 +28,23 @@ stdenv.mkDerivation rec {
     "PGSQL_LIB=${postgresql.lib}/lib/libpq.dylib"
     "XML_INC=${libxml2.dev}/include/libxml2"
     "XML_LIB=${libxml2.out}/lib/libxml2.dylib"
+    "PREFIX=${placeholder "out"}/Applications/pgModeler.app/Contents"
   ];
 
   # todo: libpq would suffice here. Unfortunately this won't work, if one uses only postgresql.lib here.
   buildInputs = [ postgresql qtsvg ]
     ++ lib.optionals stdenv.isLinux [ qtwayland ]
     ++ lib.optionals stdenv.isDarwin [ cups libxml2 ];
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/bin
+    for item in pgmodeler pgmodeler-{cli,se,ch}
+    do
+      ln -s $out/Applications/pgModeler.app/Contents/MacOS/$item $out/bin
+    done
+  '';
+
+  dontWrapQtApps = lib.optional stdenv.isDarwin true;
 
   meta = with lib; {
     description = "A database modeling tool for PostgreSQL";
