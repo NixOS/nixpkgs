@@ -26752,6 +26752,8 @@ with pkgs;
 
   redis = callPackage ../servers/nosql/redis { };
 
+  redisModules = recurseIntoAttrs redis.modules;
+
   redli = callPackage ../tools/networking/redli { };
 
   redstore = callPackage ../servers/http/redstore { };
