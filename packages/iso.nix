@@ -2,13 +2,32 @@
 let
   isoModule = { config, lib, pkgs, ... }: {
     config = {
+      documentation = {
+        nixos = {
+          enable = false;
+        };
+        doc = {
+          enable = false;
+        };
+      };
+      services = {
+        getty = {
+          greetingLine = ''<<< Welcome to Openmesh Xnode/OS ${config.system.nixos.label} (\m) - \l >>>'';
+        };
+      };
       boot = {
         loader = {
           timeout = lib.mkForce 1;
           grub = {
-            timeoutStyle = "countdown";
+            timeoutStyle = lib.mkForce "countdown";
           };
         };
+      };
+      isoImage = {
+        forceTextMode = true;
+        makeBiosBootable = true;
+        makeEfiBootable = true;
+        makeUsbBootable = true;
       };
       environment = {
         systemPackages = [
