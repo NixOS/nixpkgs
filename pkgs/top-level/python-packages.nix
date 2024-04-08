@@ -4614,6 +4614,8 @@ self: super: with self; {
 
   gdata = callPackage ../development/python-modules/gdata { };
 
+  gdb-pt-dump = callPackage ../development/python-modules/gdb-pt-dump { };
+
   gdcm = toPythonModule (pkgs.gdcm.override {
     inherit (self) python;
     enablePython = true;
@@ -10392,6 +10394,8 @@ self: super: with self; {
   pweave = callPackage ../development/python-modules/pweave { };
 
   pwlf = callPackage ../development/python-modules/pwlf { };
+
+  pwndbg = callPackage ../development/python-modules/pwndbg { };
 
   pwntools = callPackage ../development/python-modules/pwntools {
     debugger = pkgs.gdb;
