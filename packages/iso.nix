@@ -5,6 +5,9 @@ let
       boot = {
         loader = {
           timeout = lib.mkForce 1;
+          grub = {
+            timeoutStyle = "countdown";
+          };
         };
       };
       environment = {
