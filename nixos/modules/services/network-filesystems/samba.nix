@@ -42,6 +42,11 @@ let
 in
 
 {
+  meta = {
+    doc = ./samba.md;
+    maintainers = [ lib.maintainers.anthonyroussel ];
+  };
+
   imports = [
     (mkRemovedOptionModule [ "services" "samba" "defaultShare" ] "")
     (mkRemovedOptionModule [ "services" "samba" "syncPasswordsByPam" ] "This option has been removed by upstream, see https://bugzilla.samba.org/show_bug.cgi?id=10669#c10")
