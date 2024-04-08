@@ -1701,8 +1701,6 @@ let
       inherit (pkgs) soundtouch;
     };
 
-    spacetime_lib = callPackage ../development/ocaml-modules/spacetime_lib { };
-
     speex = callPackage ../development/ocaml-modules/speex {
       inherit (pkgs) speex;
     };
