@@ -87,7 +87,8 @@ in
   config = mkIf cfg.enable {
 
     warnings = lib.optional (cfg.extraConfig != "") ''
-      services.davfs2.extraConfig will be deprecated in future releases, please use the settings option now.
+      services.davfs2.extraConfig will be deprecated in future releases;
+      please use services.davfs2.settings instead.
     '';
 
     environment.systemPackages = [ pkgs.davfs2 ];
