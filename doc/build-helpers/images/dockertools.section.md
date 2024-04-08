@@ -155,6 +155,15 @@ Create a Docker image with many of the store paths being on their own layer to i
 
     *Default:* `1970-01-01T00:00:01Z`
 
+`uid` _optional_
+`gid` _optional_
+`uname` _optional_
+`gname` _optional_
+
+: Credentials for Nix store ownership. Can be overridden to e.g. `1000` / `1000` / `"user"` / `"user"` to enable building a container where Nix can be used as an unprivileged user in single-user mode.
+
+  *Default:* `0` / `0` / `"root"` / `"root"`
+
 `maxLayers` _optional_
 
 : Maximum number of layers to create.
