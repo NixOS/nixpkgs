@@ -38,7 +38,7 @@ stdenvNoCC.mkDerivation rec {
   postPatch = ''
     # if not, it shows .tomb-wrapped when running
     substituteInPlace tomb \
-      --replace 'TOMBEXEC=$0' 'TOMBEXEC=tomb'
+      --replace-fail 'TOMBEXEC=$0' 'TOMBEXEC=tomb'
   '';
 
   installPhase = ''
