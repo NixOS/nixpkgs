@@ -11,12 +11,12 @@
 }:
 flutter.buildFlutterApplication rec {
   pname = "intiface-central";
-  version = "2.5.3";
+  version = "2.5.6";
   src = fetchFromGitHub {
     owner = "intiface";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-i0G3wCfJ9Q7DEmVMrQv2K6fy4YRWsEMNns9zMZkJxvY=";
+    hash = "sha256-EcOFiaWqljNZIvsCkhuCEChEC51ERxM74EYE6u7Q4U8=";
   };
   patches = [
     ./corrosion.patch
@@ -28,7 +28,7 @@ flutter.buildFlutterApplication rec {
     name = "${pname}-${version}-cargo-deps";
     inherit src;
     sourceRoot = "${src.name}/intiface-engine-flutter-bridge";
-    hash = "sha256-0sCHa3rMaLYaUG3E3fmsLi0dSdb9vGyv7qNR3JQkXuU=";
+    hash = "sha256-tkJcwT2lt8+FT9GZ0ROrm1jkOxoq875O3wZkgZl22r4=";
   };
   cargoRoot = "intiface-engine-flutter-bridge";
 
