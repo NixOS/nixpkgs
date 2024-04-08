@@ -21,10 +21,8 @@ curl=(
 
 if [ -n "$NIX_SSL_CERT_FILE" ]; then
     curl+=(--cacert $NIX_SSL_CERT_FILE)
-else
-    if ! [ -f "$SSL_CERT_FILE" ]; then
-        curl+=(--insecure)
-    fi
+elif ! [ -f "$SSL_CERT_FILE" ]; then
+    curl+=(--insecure)
 fi
 
 eval "curl+=($curlOptsList)"
