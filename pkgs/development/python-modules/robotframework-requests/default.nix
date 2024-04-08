@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "robotframework-requests";
-  version = "0.9.6";
+  version = "0.9.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "MarketSquare";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-TuKfR+pUcQ4kf9HsX6s9WYukhwLBbJkwModoreAgo60=";
+    hash = "sha256-NRhf3delcqUw9vWRPL6pJzpcmRMDou2pHmUHMstF8hw=";
   };
 
   propagatedBuildInputs = [
