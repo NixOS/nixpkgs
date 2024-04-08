@@ -6,18 +6,18 @@
 
 buildGoModule rec {
   pname = "crawley";
-  version = "1.7.4";
+  version = "1.7.5";
 
   src = fetchFromGitHub {
     owner = "s0rg";
     repo = "crawley";
     rev = "v${version}";
-    hash = "sha256-WV9r+Oz6wMZtSl7YbeuHRaVLCtLGlJXHk/WVLIA85Mc=";
+    hash = "sha256-Ai+Y4WoU0REmo9ECsrV/i0PnPY+gO2+22np+nVH3Xsc=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  vendorHash = "sha256-2XF/oqqArvppuppA8kdr3WnUAvaJs39ohHzHBR+Xz/4=";
+  vendorHash = "sha256-bI7PdUl+/kBx4F9T+tvF7QHNQ2pSvRjT31O/nIUvUAE=";
 
   ldflags = [ "-w" "-s" ];
 
