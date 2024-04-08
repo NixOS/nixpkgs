@@ -13,14 +13,14 @@ let
 
   partitionAssertions = lib.mapAttrsToList (fileName: definition:
     let
-      maxLabelLength = 36; # GPT_LABEL_MAX defined in systemd's gpt.h
+      inherit (utils.systemdUtils.lib) GPTMaxLabelLength;
       labelLength = builtins.stringLength definition.Label;
     in
     {
-      assertion = definition ? Label -> maxLabelLength >= labelLength;
+      assertion = definition ? Label -> GPTMaxLabelLength >= labelLength;
       message = ''
         The partition label '${definition.Label}' defined for '${fileName}' is ${toString labelLength}
-        characters long, but the maximum label length supported by systemd is ${toString maxLabelLength}.
+        characters long, but the maximum label length supported by systemd is ${toString GPTMaxLabelLength}.
       '';
     }
   ) cfg.partitions;
