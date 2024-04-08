@@ -98,6 +98,12 @@ in
         '';
       };
 
+      smbd.enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = lib.mdDoc "Whether to enable Samba's smbd daemon.";
+      };
+
       nmbd.enable = mkOption {
         type = types.bool;
         default = true;
@@ -193,7 +199,7 @@ in
           # Refer to https://github.com/samba-team/samba/tree/master/packaging/systemd
           # for correct use with systemd
           services = {
-            samba-smbd = daemonService "smbd" "";
+            samba-smbd = mkIf cfg.smbd.enable (daemonService "smbd" "");
             samba-nmbd = mkIf cfg.nmbd.enable (daemonService "nmbd" "");
             samba-winbindd = mkIf cfg.winbindd.enable (daemonService "winbindd" "");
           };
