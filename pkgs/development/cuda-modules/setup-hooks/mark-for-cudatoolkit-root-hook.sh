@@ -7,7 +7,7 @@ echo "Sourcing mark-for-cudatoolkit-root-hook" >&2
 
 markForCUDAToolkit_ROOT() {
     mkdir -p "${prefix}/nix-support"
-    [[ -f "${prefix}/nix-support/include-in-cudatoolkit-root" ]] && return
+    [[ -f "${prefix}/nix-support/include-in-cudatoolkit-root" ]] && return 0
     echo "$pname-$output" > "${prefix}/nix-support/include-in-cudatoolkit-root"
 }
 
