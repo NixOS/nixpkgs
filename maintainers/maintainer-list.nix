@@ -19462,6 +19462,13 @@
     githubId = 506181;
     name = "Peter Marheine";
   };
+  tasiaiso = {
+    email = "tasiaiso@proton.me";
+    matrix = "@tasiaiso:kitsunes.club";
+    github = "tasiaiso";
+    githubId = 164172552;
+    name = "Tasia Iso";
+  };
   tasmo = {
     email = "tasmo@tasmo.de";
     github = "tasmo";
