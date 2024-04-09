@@ -110,6 +110,6 @@ crystal.buildCrystalPackage rec {
     mainProgram = "invidious";
     homepage = "https://invidious.io/";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ infinisil sbruder ];
+    maintainers = with maintainers; [ sbruder ];
   };
 }
