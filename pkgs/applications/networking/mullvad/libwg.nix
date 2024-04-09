@@ -13,7 +13,7 @@ buildGoModule {
 
   sourceRoot = "${mullvad.src.name}/wireguard/libwg";
 
-  vendorHash = "sha256-MQ5tVbcwMee6lmPyKSsNBh9jrz4zwx7INf1Cb0GxjHo=";
+  vendorHash = "sha256-2hb6+OHifm/oAgXCiYf+nwtNDDZNWR6lAbLSGT3AG0I=";
 
   # XXX: hack to make the ar archive go to the correct place
   # This is necessary because passing `-o ...` to `ldflags` does not work
@@ -23,13 +23,6 @@ buildGoModule {
   ldflags = [ "-s" "-w" "-buildmode=c-archive" ];
 
   patches = [
-   # build broken without wintun reference
-   # https://github.com/mullvad/mullvadvpn-app/pull/5621
-   (fetchpatch {
-     url = "https://github.com/mullvad/mullvadvpn-app/commit/5dff68ac9c8ec26f1a39a7f44e3b684bb0833bf1.patch";
-     hash = "sha256-bUcDVmrrDblK7OJvHqf627vzVwmmvO2EL+sioAnZGbk=";
-     relative = "wireguard/libwg";
-   })
  ];
 
   postInstall = ''
