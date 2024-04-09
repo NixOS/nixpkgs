@@ -185,6 +185,7 @@ self: super: {
 
   # https://github.com/mpickering/eventlog2html/pull/187
   eventlog2html = lib.pipe super.eventlog2html [
+    doJailbreak
     (appendPatch (fetchpatch {
       name = "blaze-html-compat.patch";
       url = "https://github.com/mpickering/eventlog2html/commit/666aee9ee44c571173a73036b36ad4154c188481.patch";
