@@ -27053,8 +27053,6 @@ with pkgs;
 
   pg_tileserv = callPackage ../servers/geospatial/pg_tileserv { };
 
-  tegola = callPackage ../servers/geospatial/tegola { };
-
   tile38 = callPackage ../servers/geospatial/tile38 { };
 
   ### OS-SPECIFIC
