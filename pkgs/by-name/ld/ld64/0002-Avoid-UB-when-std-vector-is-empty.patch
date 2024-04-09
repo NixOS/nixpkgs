@@ -1,0 +1,1239 @@
+From e4434c35b2922bbcf1034ccfc985c33cf6afc90b Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sun, 7 Apr 2024 13:37:58 -0400
+Subject: [PATCH 2/6] Avoid UB when std::vector is empty
+
+---
+ src/ld/LinkEdit.hpp                         |  2 +-
+ src/ld/LinkEditClassic.hpp                  |  6 +--
+ src/ld/Options.h                            | 12 ++---
+ src/ld/Resolver.cpp                         |  4 +-
+ src/ld/parsers/generic_dylib_file.hpp       |  4 +-
+ src/ld/parsers/lto_file.cpp                 |  8 ++--
+ src/ld/parsers/macho_relocatable_file.cpp   | 16 +++----
+ src/ld/passes/branch_island.cpp             | 16 +++----
+ src/ld/passes/branch_shim.cpp               | 20 ++++----
+ src/ld/passes/code_dedup.cpp                |  4 +-
+ src/ld/passes/compact_unwind.cpp            |  8 ++--
+ src/ld/passes/dtrace_dof.cpp                |  4 +-
+ src/ld/passes/got.cpp                       |  6 +--
+ src/ld/passes/inits.cpp                     |  4 +-
+ src/ld/passes/objc.cpp                      | 20 ++++----
+ src/ld/passes/objc_constants.cpp            |  2 +-
+ src/ld/passes/objc_stubs.cpp                | 16 +++----
+ src/ld/passes/stubs/stub_arm.hpp            | 52 ++++++++++-----------
+ src/ld/passes/stubs/stub_arm64.hpp          | 32 ++++++-------
+ src/ld/passes/stubs/stub_arm64_32.hpp       | 32 ++++++-------
+ src/ld/passes/stubs/stub_arm64e.hpp         | 20 ++++----
+ src/ld/passes/stubs/stub_arm_classic.hpp    | 12 ++---
+ src/ld/passes/stubs/stub_x86.hpp            | 32 ++++++-------
+ src/ld/passes/stubs/stub_x86_64.hpp         | 32 ++++++-------
+ src/ld/passes/stubs/stub_x86_64_classic.hpp | 12 ++---
+ src/ld/passes/stubs/stub_x86_classic.hpp    | 12 ++---
+ src/ld/passes/tlvp.cpp                      |  2 +-
+ src/mach_o/ExportsTrie.cpp                  |  4 +-
+ 28 files changed, 197 insertions(+), 197 deletions(-)
+
+diff --git a/src/ld/LinkEdit.hpp b/src/ld/LinkEdit.hpp
+index 2d72109..acd3e5c 100644
+--- a/src/ld/LinkEdit.hpp
++++ b/src/ld/LinkEdit.hpp
+@@ -56,7 +56,7 @@ public:
+ 	std::vector<uint8_t>& bytes() { return _data; }
+ 	unsigned long size() const { return _data.size(); }
+ 	void reserve(unsigned long l) { _data.reserve(l); }
+-	const uint8_t* start() const { return &_data[0]; }
++	const uint8_t* start() const { return _data.data(); }
+ 
+ 	void append_uleb128(uint64_t value) {
+ 		uint8_t byte;
+diff --git a/src/ld/LinkEditClassic.hpp b/src/ld/LinkEditClassic.hpp
+index 9bf8c0b..7add285 100644
+--- a/src/ld/LinkEditClassic.hpp
++++ b/src/ld/LinkEditClassic.hpp
+@@ -754,11 +754,11 @@ uint64_t SymbolTableAtom<A>::size() const
+ template <typename A>
+ void SymbolTableAtom<A>::copyRawContent(uint8_t buffer[]) const
+ {
+-	memcpy(&buffer[this->_writer._localSymbolsStartIndex*sizeof(macho_nlist<P>)], &_locals[0], 
++	memcpy(&buffer[this->_writer._localSymbolsStartIndex*sizeof(macho_nlist<P>)], _locals.data(),
+ 												this->_writer._localSymbolsCount*sizeof(macho_nlist<P>));
+-	memcpy(&buffer[this->_writer._globalSymbolsStartIndex*sizeof(macho_nlist<P>)], &_globals[0],
++	memcpy(&buffer[this->_writer._globalSymbolsStartIndex*sizeof(macho_nlist<P>)], _globals.data(),
+ 												this->_writer._globalSymbolsCount*sizeof(macho_nlist<P>));
+-	memcpy(&buffer[this->_writer._importSymbolsStartIndex *sizeof(macho_nlist<P>)], &_imports[0], 
++	memcpy(&buffer[this->_writer._importSymbolsStartIndex *sizeof(macho_nlist<P>)], _imports.data(), 
+ 												this->_writer._importSymbolsCount*sizeof(macho_nlist<P>));
+ }
+ 
+diff --git a/src/ld/Options.h b/src/ld/Options.h
+index 4cf09a1..3900a71 100644
+--- a/src/ld/Options.h
++++ b/src/ld/Options.h
+@@ -358,15 +358,15 @@ public:
+ 	uint64_t					customStackAddr() const { return fStackAddr; }
+ 	bool						hasExecutableStack() const { return fExecutableStack; }
+ 	bool						hasNonExecutableHeap() const { return fNonExecutableHeap; }
+-	UndefinesIterator			initialUndefinesBegin() const { return &fInitialUndefines[0]; }
+-	UndefinesIterator			initialUndefinesEnd() const { return &fInitialUndefines[fInitialUndefines.size()]; }
++	UndefinesIterator			initialUndefinesBegin() const { return fInitialUndefines.data(); }
++	UndefinesIterator			initialUndefinesEnd() const { return fInitialUndefines.data() + fInitialUndefines.size(); }
+ 	const std::vector<const char*>&	initialUndefines() const { return fInitialUndefines; }
+ 	bool						printWhyLive(const char* name) const;
+ 	bool						printWhyLive() const { return !fWhyLive.empty(); }
+ 	uint32_t					minimumHeaderPad() const { return fMinimumHeaderPad; }
+ 	bool						maxMminimumHeaderPad() const { return fMaxMinimumHeaderPad; }
+-	ExtraSection::const_iterator	extraSectionsBegin() const { return &fExtraSections[0]; }
+-	ExtraSection::const_iterator	extraSectionsEnd() const { return &fExtraSections[fExtraSections.size()]; }
++	ExtraSection::const_iterator	extraSectionsBegin() const { return fExtraSections.data(); }
++	ExtraSection::const_iterator	extraSectionsEnd() const { return fExtraSections.data() + fExtraSections.size(); }
+ 	CommonsMode					commonsMode() const { return fCommonsMode; }
+ 	bool						warnCommons() const { return fWarnCommons; }
+ 	bool						keepRelocations();
+@@ -389,8 +389,8 @@ public:
+ 	const char*					dTraceScriptName() { return fDtraceScriptName; }
+ 	bool						dTrace() { return (fDtraceScriptName != NULL); }
+ 	unsigned long				orderedSymbolsCount() const { return fOrderedSymbols.size(); }
+-	OrderedSymbolsIterator		orderedSymbolsBegin() const { return &fOrderedSymbols[0]; }
+-	OrderedSymbolsIterator		orderedSymbolsEnd() const { return &fOrderedSymbols[fOrderedSymbols.size()]; }
++	OrderedSymbolsIterator		orderedSymbolsBegin() const { return fOrderedSymbols.data(); }
++	OrderedSymbolsIterator		orderedSymbolsEnd() const { return fOrderedSymbols.data() + fOrderedSymbols.size(); }
+ 	uint64_t					baseWritableAddress() { return fBaseWritableAddress; }
+ 	uint64_t					segmentAlignment() const { return fSegmentAlignment; }
+ 	uint64_t					segPageSize(const char* segName) const;
+diff --git a/src/ld/Resolver.cpp b/src/ld/Resolver.cpp
+index 063d2b4..9d7d86a 100644
+--- a/src/ld/Resolver.cpp
++++ b/src/ld/Resolver.cpp
+@@ -130,8 +130,8 @@ public:
+ 															{ return _aliasOf.contentHash(ibt);  }
+ 	virtual bool						canCoalesceWith(const ld::Atom& rhs, const class ld::IndirectBindingTable& ibt) const 
+ 															{ return _aliasOf.canCoalesceWith(rhs,ibt); }
+-	virtual ld::Fixup::iterator				fixupsBegin() const	{ return (ld::Fixup*)&_fixup; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const	{ return &((ld::Fixup*)&_fixup)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const	{ return const_cast<ld::Fixup*>(&_fixup); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const	{ return const_cast<ld::Fixup*>(&_fixup + 1); }
+ 	virtual ld::Atom::UnwindInfo::iterator	beginUnwind() const { return  NULL; }
+ 	virtual ld::Atom::UnwindInfo::iterator	endUnwind() const	{ return NULL; }
+ 	virtual ld::Atom::LineInfo::iterator	beginLineInfo() const { return  NULL; }
+diff --git a/src/ld/parsers/generic_dylib_file.hpp b/src/ld/parsers/generic_dylib_file.hpp
+index f6a38b4..52898e1 100644
+--- a/src/ld/parsers/generic_dylib_file.hpp
++++ b/src/ld/parsers/generic_dylib_file.hpp
+@@ -80,8 +80,8 @@ public:
+ 	virtual const char*				name() const override final { return "import-atom"; }
+ 	virtual uint64_t				size() const override final { return 0; }
+ 	virtual uint64_t				objectAddress() const override final { return 0; }
+-	virtual ld::Fixup::iterator		fixupsBegin() const	override final { return &_undefs[0]; }
+-	virtual ld::Fixup::iterator		fixupsEnd()	const override final { return &_undefs[_undefs.size()]; }
++	virtual ld::Fixup::iterator		fixupsBegin() const	override final { return _undefs.data(); }
++	virtual ld::Fixup::iterator		fixupsEnd()	const override final { return _undefs.data() + _undefs.size(); }
+ 	virtual void					copyRawContent(uint8_t buffer[]) const override final { }
+ 
+ 	virtual void					setScope(Scope)		{ }
+diff --git a/src/ld/parsers/lto_file.cpp b/src/ld/parsers/lto_file.cpp
+index 80e35bf..5318212 100644
+--- a/src/ld/parsers/lto_file.cpp
++++ b/src/ld/parsers/lto_file.cpp
+@@ -73,8 +73,8 @@ public:
+ 	uint64_t							size() const override		{ return 0; }
+ 	uint64_t							objectAddress() const override { return 0; }
+ 	void								copyRawContent(uint8_t buffer[]) const override { }
+-	ld::Fixup::iterator					fixupsBegin() const override	{ return &_undefs[0]; }
+-	ld::Fixup::iterator					fixupsEnd()	const override 	{ return &_undefs[_undefs.size()]; }
++	ld::Fixup::iterator					fixupsBegin() const override	{ return _undefs.data(); }
++	ld::Fixup::iterator					fixupsEnd()	const override 	{ return _undefs.data() + _undefs.size(); }
+ 
+ 	// for adding references to symbols outside bitcode file
+ 	void										addReference(const char* nm)
+@@ -188,9 +188,9 @@ public:
+ 	bool						canCoalesceWith(const ld::Atom& rhs, const class ld::IndirectBindingTable& ibt) const override
+ 															{ return (_compiledAtom ? _compiledAtom->canCoalesceWith(rhs,ibt) : false); }
+ 	ld::Fixup::iterator				fixupsBegin() const override
+-															{ return (_compiledAtom ? _compiledAtom->fixupsBegin() : (ld::Fixup*)&_file._fixupToInternal); }
++															{ return (_compiledAtom ? _compiledAtom->fixupsBegin() : &_file._fixupToInternal); }
+ 	ld::Fixup::iterator				fixupsEnd() const override
+-															{ return (_compiledAtom ? _compiledAtom->fixupsEnd() : &((ld::Fixup*)&_file._fixupToInternal)[1]); }
++															{ return (_compiledAtom ? _compiledAtom->fixupsEnd() : (&_file._fixupToInternal + 1)); }
+ 	ld::Atom::UnwindInfo::iterator	beginUnwind() const override
+ 															{ return (_compiledAtom ? _compiledAtom->beginUnwind() : NULL); }
+ 	ld::Atom::UnwindInfo::iterator	endUnwind() const override
+diff --git a/src/ld/parsers/macho_relocatable_file.cpp b/src/ld/parsers/macho_relocatable_file.cpp
+index 4497169..b9a3694 100644
+--- a/src/ld/parsers/macho_relocatable_file.cpp
++++ b/src/ld/parsers/macho_relocatable_file.cpp
+@@ -763,12 +763,12 @@ public:
+ 															{ if ( _hash == 0 ) _hash = sect().contentHash(this, ind); return _hash; }
+ 	virtual bool								canCoalesceWith(const ld::Atom& rhs, const ld::IndirectBindingTable& ind) const 
+ 															{ return sect().canCoalesceWith(this, rhs, ind); }
+-	virtual ld::Fixup::iterator					fixupsBegin() const	{ return &machofile()._fixups[_fixupsStartIndex]; }
+-	virtual ld::Fixup::iterator					fixupsEnd()	const	{ return &machofile()._fixups[_fixupsStartIndex+_fixupsCount]; }
+-	virtual ld::Atom::UnwindInfo::iterator		beginUnwind() const	{ return &machofile()._unwindInfos[_unwindInfoStartIndex]; }
+-	virtual ld::Atom::UnwindInfo::iterator		endUnwind()	const	{ return &machofile()._unwindInfos[_unwindInfoStartIndex+_unwindInfoCount];  }
+-	virtual ld::Atom::LineInfo::iterator		beginLineInfo() const{ return &machofile()._lineInfos[_lineInfoStartIndex]; }
+-	virtual ld::Atom::LineInfo::iterator		endLineInfo() const { return &machofile()._lineInfos[_lineInfoStartIndex+_lineInfoCount];  }
++	virtual ld::Fixup::iterator					fixupsBegin() const	{ return machofile()._fixups.data() + _fixupsStartIndex; }
++	virtual ld::Fixup::iterator					fixupsEnd()	const	{ return machofile()._fixups.data() + _fixupsStartIndex + _fixupsCount; }
++	virtual ld::Atom::UnwindInfo::iterator		beginUnwind() const	{ return machofile()._unwindInfos.data() + _unwindInfoStartIndex; }
++	virtual ld::Atom::UnwindInfo::iterator		endUnwind()	const	{ return machofile()._unwindInfos.data() + _unwindInfoStartIndex + _unwindInfoCount;  }
++	virtual ld::Atom::LineInfo::iterator		beginLineInfo() const{ return machofile()._lineInfos.data() + _lineInfoStartIndex; }
++	virtual ld::Atom::LineInfo::iterator		endLineInfo() const { return machofile()._lineInfos.data() + _lineInfoStartIndex + _lineInfoCount;  }
+ 	virtual void								setFile(const ld::File* f);
+ 
+ private:
+@@ -993,8 +993,8 @@ public:
+ 	virtual uint64_t					size() const		{ return 0; }
+ 	virtual uint64_t					objectAddress() const { return 0; }
+ 	virtual void						copyRawContent(uint8_t buffer[]) const { }
+-	virtual ld::Fixup::iterator			fixupsBegin() const	{ return &((ld::Fixup*)&_fixup)[0]; }
+-	virtual ld::Fixup::iterator			fixupsEnd()	const	{ return &((ld::Fixup*)&_fixup)[1]; }
++	virtual ld::Fixup::iterator			fixupsBegin() const	{ return const_cast<ld::Fixup*>(&_fixup); }
++	virtual ld::Fixup::iterator			fixupsEnd()	const	{ return const_cast<ld::Fixup*>(&_fixup + 1); }
+ 
+ private:
+ 	static ld::Section					_s_section;
+diff --git a/src/ld/passes/branch_island.cpp b/src/ld/passes/branch_island.cpp
+index 22976bc..7d6fc2d 100644
+--- a/src/ld/passes/branch_island.cpp
++++ b/src/ld/passes/branch_island.cpp
+@@ -85,8 +85,8 @@ public:
+ 		OSWriteLittleInt32(buffer, 0, 0x14000000);
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup2)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup2 + 1); }
+ 
+ private:
+ 	const char*								_name;
+@@ -117,8 +117,8 @@ public:
+ 		OSWriteLittleInt32(buffer, 0, 0xEA000000);
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup2)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup2 + 1); }
+ 
+ private:
+ 	const char*								_name;
+@@ -188,8 +188,8 @@ public:
+ 		OSWriteLittleInt32(buffer, 0, 0xf0008000);
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup2)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup2 + 1); }
+ 
+ private:
+ 	const char*								_name;
+@@ -225,8 +225,8 @@ public:
+ 		OSWriteLittleInt16(&buffer[8], 0, 0x4760);		// 	bx		r12
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup5)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup5 + 1); }
+ 
+ private:
+ 	const char*								_name;
+diff --git a/src/ld/passes/branch_shim.cpp b/src/ld/passes/branch_shim.cpp
+index fed4a92..3842f2c 100644
+--- a/src/ld/passes/branch_shim.cpp
++++ b/src/ld/passes/branch_shim.cpp
+@@ -73,8 +73,8 @@ public:
+ 	}
+ 
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const				{ return &((ld::Fixup*)&_fixup4)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const				{ return const_cast<ld::Fixup*>(&_fixup4 + 1); }
+ 
+ private:
+ 	const char*								_name;
+@@ -112,8 +112,8 @@ public:
+ 	}
+ 
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const				{ return &((ld::Fixup*)&_fixup1)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const				{ return const_cast<ld::Fixup*>(&_fixup1 + 1); }
+ 
+ private:
+ 	const char*								_name;
+@@ -153,8 +153,8 @@ public:
+ 		OSWriteLittleInt32(&buffer[12], 0, 0x00000000);	// 	.long target-this		
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const				{ return &((ld::Fixup*)&_fixup4)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const				{ return const_cast<ld::Fixup*>(&_fixup4 + 1); }
+ 
+ private:
+ 	const char*								_name;
+@@ -196,8 +196,8 @@ public:
+ 		OSWriteLittleInt32(&buffer[12], 0, 0);			// 	.long target-this		
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const				{ return &((ld::Fixup*)&_fixup4)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const				{ return const_cast<ld::Fixup*>(&_fixup4 + 1); }
+ 
+ private:
+ 	const char*								_name;
+@@ -232,8 +232,8 @@ public:
+ 		OSWriteLittleInt32(&buffer[ 8], 0, 0);			// 	.long target		
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const				{ return &((ld::Fixup*)&_fixup1)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(const_cast<ld::Fixup*>(&_fixup1)); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const				{ return const_cast<ld::Fixup*>(&_fixup1 + 1); }
+ 
+ private:
+ 	const char*								_name;
+diff --git a/src/ld/passes/code_dedup.cpp b/src/ld/passes/code_dedup.cpp
+index be91432..94f4d73 100644
+--- a/src/ld/passes/code_dedup.cpp
++++ b/src/ld/passes/code_dedup.cpp
+@@ -64,8 +64,8 @@ public:
+ 	virtual uint64_t					size() const		{ return 0; }
+ 	virtual uint64_t					objectAddress() const { return 0; }
+ 	virtual void						copyRawContent(uint8_t buffer[]) const { }
+-	virtual ld::Fixup::iterator			fixupsBegin() const	{ return &((ld::Fixup*)&_fixup)[0]; }
+-	virtual ld::Fixup::iterator			fixupsEnd()	const	{ return &((ld::Fixup*)&_fixup)[1]; }
++    virtual ld::Fixup::iterator			fixupsBegin() const	{ return const_cast<ld::Fixup*>(&_fixup); }
++	virtual ld::Fixup::iterator			fixupsEnd()	const	{ return const_cast<ld::Fixup*>(&_fixup + 1); }
+ 
+ private:
+ 	const ld::Atom*                     _dedupOf;
+diff --git a/src/ld/passes/compact_unwind.cpp b/src/ld/passes/compact_unwind.cpp
+index a7b696d..7082fcc 100644
+--- a/src/ld/passes/compact_unwind.cpp
++++ b/src/ld/passes/compact_unwind.cpp
+@@ -76,8 +76,8 @@ public:
+ 	virtual uint64_t						objectAddress() const			{ return 0; }
+ 	virtual void							copyRawContent(uint8_t buffer[]) const;
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixups[0]; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return (ld::Fixup*)&_fixups[_fixups.size()]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(_fixups.data()); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(_fixups.data() + _fixups.size()); }
+ 
+ private:
+ 	typedef typename A::P						P;
+@@ -1022,8 +1022,8 @@ public:
+ 	virtual uint64_t						objectAddress() const			{ return 0; }
+ 	virtual void							copyRawContent(uint8_t buffer[]) const;
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixups[0]; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return (ld::Fixup*)&_fixups[_fixups.size()]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(_fixups.data()); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(_fixups.data() + _fixups.size()); }
+ 
+ private:
+ 	typedef typename A::P						P;
+diff --git a/src/ld/passes/dtrace_dof.cpp b/src/ld/passes/dtrace_dof.cpp
+index 80e323d..0fbba39 100644
+--- a/src/ld/passes/dtrace_dof.cpp
++++ b/src/ld/passes/dtrace_dof.cpp
+@@ -54,8 +54,8 @@ public:
+ 	virtual void							copyRawContent(uint8_t buffer[]) const
+ 																			{ memcpy(buffer, _content, _size); }
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixups[0]; }
+-	virtual ld::Fixup::iterator				fixupsEnd() const				{ return &_fixups[_fixups.size()]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return _fixups.data(); }
++	virtual ld::Fixup::iterator				fixupsEnd() const				{ return _fixups.data() + _fixups.size(); }
+ 
+ protected:
+ 	friend class File;
+diff --git a/src/ld/passes/got.cpp b/src/ld/passes/got.cpp
+index 8f702f4..92a12f2 100644
+--- a/src/ld/passes/got.cpp
++++ b/src/ld/passes/got.cpp
+@@ -61,7 +61,7 @@ public:
+ 	virtual void							copyRawContent(uint8_t buffer[]) const { }
+ 	virtual void							setScope(Scope)					{ }
+ 	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup)[1]; }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &_fixup + 1; }
+ 
+ private:
+ 	mutable ld::Fixup						_fixup;
+@@ -104,8 +104,8 @@ public:
+ 	virtual uint64_t						objectAddress() const			{ return 0; }
+ 	virtual void							copyRawContent(uint8_t buffer[]) const { }
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup2)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &_fixup2 + 1; }
+ 
+ private:
+ 	mutable ld::Fixup						_fixup1;
+diff --git a/src/ld/passes/inits.cpp b/src/ld/passes/inits.cpp
+index 8123e05..8b06346 100644
+--- a/src/ld/passes/inits.cpp
++++ b/src/ld/passes/inits.cpp
+@@ -57,8 +57,8 @@ public:
+ 	virtual uint64_t						size() const					{ return 4; }
+ 	virtual uint64_t						objectAddress() const			{ return 0; }
+ 	virtual void							copyRawContent(uint8_t buffer[]) const { }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const				{ return &((ld::Fixup*)&_fixup2)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const				{ return const_cast<ld::Fixup*>(&_fixup2 + 1); }
+ 
+ protected:
+ 	mutable ld::Fixup						_fixup1;
+diff --git a/src/ld/passes/objc.cpp b/src/ld/passes/objc.cpp
+index 826b6a3..76ed67a 100644
+--- a/src/ld/passes/objc.cpp
++++ b/src/ld/passes/objc.cpp
+@@ -138,7 +138,7 @@ public:
+ 	virtual void							copyRawContent(uint8_t buffer[]) const { }
+ 	virtual void							setScope(Scope)					{ }
+ 	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup)[1]; }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &_fixup + 1; }
+ 
+ private:
+ 	mutable ld::Fixup						_fixup;
+@@ -173,7 +173,7 @@ public:
+ 	virtual void							copyRawContent(uint8_t buffer[]) const { }
+ 	virtual void							setScope(Scope)					{ }
+ 	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup)[1]; }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &_fixup + 1; }
+ 
+ private:
+ 	mutable ld::Fixup						_fixup;
+@@ -250,8 +250,8 @@ public:
+ 	virtual uint64_t						objectAddress() const			{ return 0; }
+ 	virtual void							setScope(Scope)					{ }
+ 	virtual void							copyRawContent(uint8_t buffer[]) const;
+-	virtual ld::Fixup::iterator				fixupsBegin() const	{ return (ld::Fixup*)&_fixups[0]; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const	{ return (ld::Fixup*)&_fixups[_fixups.size()]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const	{ return const_cast<ld::Fixup*>(_fixups.data()); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const	{ return const_cast<ld::Fixup*>(_fixups.data() + _fixups.size()); }
+ 		
+ 
+ private:	
+@@ -297,8 +297,8 @@ public:
+ 		bzero(buffer, size());
+ 		A::P::setP(*((pint_t*)(buffer)), _protocolCount);
+ 	}
+-	virtual ld::Fixup::iterator				fixupsBegin() const	{ return (ld::Fixup*)&_fixups[0]; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const	{ return (ld::Fixup*)&_fixups[_fixups.size()]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const	{ return const_cast<ld::Fixup*>(_fixups.data()); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const	{ return const_cast<ld::Fixup*>(_fixups.data() + _fixups.size()); }
+ 
+ private:
+ 	typedef typename A::P::uint_t			pint_t;
+@@ -337,8 +337,8 @@ public:
+ 		A::P::E::set32(((uint32_t*)(buffer))[0], 2*sizeof(pint_t)); // sizeof(objc_property)
+ 		A::P::E::set32(((uint32_t*)(buffer))[1], _propertyCount);
+ 	}
+-	virtual ld::Fixup::iterator				fixupsBegin() const	{ return (ld::Fixup*)&_fixups[0]; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const	{ return (ld::Fixup*)&_fixups[_fixups.size()]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const	{ return const_cast<ld::Fixup*>(_fixups.data()); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const	{ return const_cast<ld::Fixup*>(_fixups.data() + _fixups.size()); }
+ 
+ private:
+ 	typedef typename A::P::uint_t			pint_t;
+@@ -381,8 +381,8 @@ public:
+ 	virtual bool						canCoalesceWith(const ld::Atom& rhs, const class ld::IndirectBindingTable& ibt) const
+ 															{ return _atom->canCoalesceWith(rhs,ibt); }
+ 
+-	virtual ld::Fixup::iterator			fixupsBegin() const	{ return (ld::Fixup*)&_fixups[0]; }
+-	virtual ld::Fixup::iterator			fixupsEnd()	const	{ return (ld::Fixup*)&_fixups[_fixups.size()]; }
++	virtual ld::Fixup::iterator			fixupsBegin() const	{ return const_cast<ld::Fixup*>(_fixups.data()); }
++	virtual ld::Fixup::iterator			fixupsEnd()	const	{ return const_cast<ld::Fixup*>(_fixups.data() + _fixups.size()); }
+ 
+ protected:
+ 	void addFixupAtOffset(uint32_t offset, bool isAuthPtr=false);
+diff --git a/src/ld/passes/objc_constants.cpp b/src/ld/passes/objc_constants.cpp
+index 3e99538..0ae2d5d 100644
+--- a/src/ld/passes/objc_constants.cpp
++++ b/src/ld/passes/objc_constants.cpp
+@@ -60,7 +60,7 @@ public:
+     virtual void                            copyRawContent(uint8_t buffer[]) const  { }
+     virtual void                            setScope(Scope)                         { }
+     virtual ld::Fixup::iterator             fixupsBegin() const                     { return &_fixup; }
+-    virtual ld::Fixup::iterator             fixupsEnd()    const                    { return &((ld::Fixup*)&_fixup)[1]; }
++    virtual ld::Fixup::iterator             fixupsEnd()    const                    { return &_fixup + 1; }
+ 
+ private:
+     mutable ld::Fixup                       _fixup;
+diff --git a/src/ld/passes/objc_stubs.cpp b/src/ld/passes/objc_stubs.cpp
+index 79d8643..fd4b24a 100644
+--- a/src/ld/passes/objc_stubs.cpp
++++ b/src/ld/passes/objc_stubs.cpp
+@@ -157,8 +157,8 @@ public:
+     virtual uint64_t                        size() const override;
+     virtual uint64_t                        objectAddress() const override           { return 0; }
+     virtual void                            copyRawContent(uint8_t buffer[]) const override;
+-    virtual ld::Fixup::iterator             fixupsBegin() const override             { return &_fixups.front(); }
+-    virtual ld::Fixup::iterator             fixupsEnd() const override               { return &_fixups.front() + _fixups.size(); }
++    virtual ld::Fixup::iterator             fixupsBegin() const override             { return _fixups.data(); }
++    virtual ld::Fixup::iterator             fixupsEnd() const override               { return _fixups.data() + _fixups.size(); }
+ 
+ private:
+     void                                    addFixups(const ld::Atom* selector, const ld::Atom* msgSend, uint32_t msgSendSlot);
+@@ -300,8 +300,8 @@ public:
+     virtual uint64_t                        size() const override                    { return (_is64 ? 8 : 4); }
+     virtual uint64_t                        objectAddress() const override           { return 0; }
+     virtual void                            copyRawContent(uint8_t buffer[]) const override { }
+-    virtual ld::Fixup::iterator             fixupsBegin() const override             { return &_fixup; }
+-    virtual ld::Fixup::iterator             fixupsEnd() const override               { return &((ld::Fixup*)&_fixup)[1]; }
++    virtual ld::Fixup::iterator             fixupsBegin() const override             { return const_cast<ld::Fixup*>(&_fixup); }
++    virtual ld::Fixup::iterator             fixupsEnd() const override               { return const_cast<ld::Fixup*>(&_fixup + 1); }
+ 
+ private:
+     mutable ld::Fixup                       _fixup;
+@@ -331,8 +331,8 @@ public:
+ 	virtual uint64_t						objectAddress() const			{ return 0; }
+ 	virtual void							copyRawContent(uint8_t buffer[]) const { }
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup1)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup1 + 1); }
+ 
+ private:
+ 	const ld::Atom&							_target;
+@@ -363,8 +363,8 @@ public:
+ 	virtual uint64_t						objectAddress() const			{ return 0; }
+ 	virtual void							copyRawContent(uint8_t buffer[]) const { }
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup2)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup2 + 1); }
+ 
+ private:
+ 	const ld::Atom&							_target;
+diff --git a/src/ld/passes/stubs/stub_arm.hpp b/src/ld/passes/stubs/stub_arm.hpp
+index 85bfd5e..6aee106 100644
+--- a/src/ld/passes/stubs/stub_arm.hpp
++++ b/src/ld/passes/stubs/stub_arm.hpp
+@@ -41,8 +41,8 @@ public:
+ 	virtual uint64_t						objectAddress() const			{ return 0; }
+ 	virtual void							copyRawContent(uint8_t buffer[]) const { }
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup + 1); }
+ 
+ private:
+ 	ld::Fixup								_fixup;
+@@ -111,8 +111,8 @@ public:
+ 		OSWriteLittleInt32(&buffer[32], 0, 0x00000000); // L2: .long _fast_lazy_bind - (helperhelper+28)
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const				{ return &((ld::Fixup*)&_fixup8)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const				{ return const_cast<ld::Fixup*>(&_fixup8 + 1); }
+ 
+ private:
+ 	static ld::Atom* compressedImageCache(ld::passes::stubs::Pass& pass) {
+@@ -163,8 +163,8 @@ public:
+ 		OSWriteLittleInt32(&buffer[8], 0, 0);		   // .long lazy-info-offset
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd() const				{ return &((ld::Fixup*)&_fixup3)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd() const				{ return const_cast<ld::Fixup*>(&_fixup3 + 1); }
+ 
+ private:
+ 	static ld::Atom* helperHelper(ld::passes::stubs::Pass& pass, StubHelperAtom& stub, bool stubToResolver) {
+@@ -216,8 +216,8 @@ public:
+ 		OSWriteLittleInt32(&buffer[32], 0, 0x00000000); // .long foo$lazyptr - helper + 20
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd() const				{ return &((ld::Fixup*)&_fixup5)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd() const				{ return const_cast<ld::Fixup*>(&_fixup5 + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+@@ -261,8 +261,8 @@ public:
+ 	virtual uint64_t						objectAddress() const			{ return 0; }
+ 	virtual void							copyRawContent(uint8_t buffer[]) const { }
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup2)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup2 + 1); }
+ 
+ private:
+ 	static ld::Section& selectSection(bool close, bool stubToGlobalWeakDef, bool stubToResolver, bool usingDataConst) {
+@@ -313,8 +313,8 @@ public:
+ 	virtual uint64_t						objectAddress() const			{ return 0; }
+ 	virtual void							copyRawContent(uint8_t buffer[]) const { }
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup1)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup1 + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+@@ -360,8 +360,8 @@ public:
+ 			OSWriteLittleInt16(&buffer[14], 0, 0x4760);		// 	bx		ip
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup8)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup8 + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+@@ -409,8 +409,8 @@ public:
+ 		OSWriteLittleInt32(&buffer[12], 0, 0x00000000);	// 	L1:  .long L_foo$lazy_ptr
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup4)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup4 + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+@@ -446,8 +446,8 @@ public:
+ 			OSWriteLittleInt32(&buffer[ 4], 0, 0x00000000);	// 	.long   L_foo$lazy_ptr
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+@@ -486,8 +486,8 @@ public:
+ 			OSWriteLittleInt32(&buffer[12], 0, 0x00000000);	// 	.long L_foo$lazy_ptr - (L1$scv + 8)
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup4)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup4 + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+@@ -526,8 +526,8 @@ public:
+ 			OSWriteLittleInt32(&buffer[ 8], 0, 0x00000000);	// 	.long   L_foo$lazy_ptr
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const				{ return &((ld::Fixup*)&_fixup)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const				{ return const_cast<ld::Fixup*>(&_fixup + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+@@ -562,8 +562,8 @@ public:
+ 			OSWriteLittleInt32(&buffer[ 0], 0, 0xE59FF000); // 	ldr	pc, [pc, #foo$lazy_ptr]
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const				{ return &((ld::Fixup*)&_fixup)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const				{ return const_cast<ld::Fixup*>(&_fixup + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+@@ -602,8 +602,8 @@ public:
+ 			OSWriteLittleInt32(&buffer[12], 0, 0x00000000);	// 	.long L_foo$nonlazy_ptr - (L1$scv + 8)
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup4)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup4 + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+diff --git a/src/ld/passes/stubs/stub_arm64.hpp b/src/ld/passes/stubs/stub_arm64.hpp
+index 6fcbcf4..ba29717 100644
+--- a/src/ld/passes/stubs/stub_arm64.hpp
++++ b/src/ld/passes/stubs/stub_arm64.hpp
+@@ -44,8 +44,8 @@ public:
+ 	virtual uint64_t						objectAddress() const			{ return 0; }
+ 	virtual void							copyRawContent(uint8_t buffer[]) const { }
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup + 1); }
+ 
+ private:
+ 	mutable ld::Fixup						_fixup;
+@@ -113,8 +113,8 @@ public:
+ 		OSWriteLittleInt32(&buffer[20], 0, 0xD61F0200); //     BR    X16
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const				{ return &((ld::Fixup*)&_fixup6)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const				{ return const_cast<ld::Fixup*>(&_fixup6 + 1); }
+ 
+ private:
+ 	static ld::Atom* compressedImageCache(ld::passes::stubs::Pass& pass) {
+@@ -164,8 +164,8 @@ public:
+ 		OSWriteLittleInt32(&buffer[8], 0, 0x00000000); // L0: .long 0
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd() const				{ return &((ld::Fixup*)&_fixup3)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd() const				{ return const_cast<ld::Fixup*>(&_fixup3 + 1); }
+ 
+ private:
+ 	static ld::Atom* helperHelper(ld::passes::stubs::Pass& pass, StubHelperAtom& stub, bool stubToResolver) {
+@@ -232,8 +232,8 @@ public:
+ 		OSWriteLittleInt32(&buffer[96], 0, 0xd61f0200); // br	x16
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd() const				{ return &((ld::Fixup*)&_fixup3)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd() const				{ return const_cast<ld::Fixup*>(&_fixup3 + 1); }
+ 
+ private:
+ 
+@@ -277,8 +277,8 @@ public:
+ 	virtual uint64_t						objectAddress() const			{ return 0; }
+ 	virtual void							copyRawContent(uint8_t buffer[]) const { }
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup2)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup2 + 1); }
+ 
+ private:
+ 	static ld::Section& selectSection(bool stubToGlobalWeakDef, bool stubToResolver, bool dataConstUsed) {
+@@ -330,8 +330,8 @@ public:
+ 		OSWriteLittleInt32(&buffer[8], 0, 0xD61F0200); // BR    X16
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup3)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup3 + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+@@ -366,8 +366,8 @@ public:
+ 	virtual uint64_t						objectAddress() const			{ return 0; }
+ 	virtual void							copyRawContent(uint8_t buffer[]) const { }
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup1)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup1 + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+@@ -404,8 +404,8 @@ public:
+ 		OSWriteLittleInt32(&buffer[8], 0, 0xD61F0200); // BR    X16
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup2)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup2 + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+diff --git a/src/ld/passes/stubs/stub_arm64_32.hpp b/src/ld/passes/stubs/stub_arm64_32.hpp
+index 958718c..041ea72 100644
+--- a/src/ld/passes/stubs/stub_arm64_32.hpp
++++ b/src/ld/passes/stubs/stub_arm64_32.hpp
+@@ -48,8 +48,8 @@ public:
+ 	virtual uint64_t						objectAddress() const			{ return 0; }
+ 	virtual void							copyRawContent(uint8_t buffer[]) const { }
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup + 1); }
+ 
+ private:
+ 	mutable ld::Fixup						_fixup;
+@@ -117,8 +117,8 @@ public:
+ 		OSWriteLittleInt32(&buffer[20], 0, 0xD61F0200); //     BR    X16
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const				{ return &((ld::Fixup*)&_fixup6)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const				{ return const_cast<ld::Fixup*>(&_fixup6 + 1); }
+ 
+ private:
+ 	static ld::Atom* compressedImageCache(ld::passes::stubs::Pass& pass) {
+@@ -168,8 +168,8 @@ public:
+ 		OSWriteLittleInt32(&buffer[8], 0, 0x00000000); // L0: .long 0
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd() const				{ return &((ld::Fixup*)&_fixup3)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd() const				{ return const_cast<ld::Fixup*>(&_fixup3 + 1); }
+ 
+ private:
+     static ld::Atom* helperHelper(ld::passes::stubs::Pass& pass, StubHelperAtom& stub, bool stubToResolver) {
+@@ -236,8 +236,8 @@ public:
+ 		OSWriteLittleInt32(&buffer[96], 0, 0xd61f0200); // br	x16
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd() const				{ return &((ld::Fixup*)&_fixup3)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd() const				{ return const_cast<ld::Fixup*>(&_fixup3 + 1); }
+ 
+ private:
+ 
+@@ -280,8 +280,8 @@ public:
+ 	virtual uint64_t						objectAddress() const			{ return 0; }
+ 	virtual void							copyRawContent(uint8_t buffer[]) const { }
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup2)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup2 + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+@@ -320,8 +320,8 @@ public:
+ 		OSWriteLittleInt32(&buffer[8], 0, 0xD61F0200); // BR    X16
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup3)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup3 + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+@@ -356,8 +356,8 @@ public:
+ 	virtual uint64_t						objectAddress() const			{ return 0; }
+ 	virtual void							copyRawContent(uint8_t buffer[]) const { }
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup1)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup1 + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+@@ -394,8 +394,8 @@ public:
+ 		OSWriteLittleInt32(&buffer[8], 0, 0xD61F0200); // BR    X16
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup2)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup2 + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+diff --git a/src/ld/passes/stubs/stub_arm64e.hpp b/src/ld/passes/stubs/stub_arm64e.hpp
+index d7ac04d..e9fb816 100644
+--- a/src/ld/passes/stubs/stub_arm64e.hpp
++++ b/src/ld/passes/stubs/stub_arm64e.hpp
+@@ -76,8 +76,8 @@ public:
+ 	}
+ 
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd() const				{ return &((ld::Fixup*)&_fixup3)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd() const				{ return const_cast<ld::Fixup*>(&_fixup3 + 1); }
+ 
+ private:
+ 
+@@ -118,8 +118,8 @@ public:
+ 	virtual uint64_t						objectAddress() const			{ return 0; }
+ 	virtual void							copyRawContent(uint8_t buffer[]) const { }
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup2)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup2 + 1); }
+ 
+ private:
+ 	static ld::Section& selectSection(bool stubToGlobalWeakDef, bool stubToResolver, bool dataConstUsed) {
+@@ -170,8 +170,8 @@ public:
+ 		OSWriteLittleInt32(&buffer[8], 0, 0xD61F0A1F); // BRAAZ X16
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup3)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup3 + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+@@ -207,8 +207,8 @@ public:
+ 	virtual uint64_t						objectAddress() const			{ return 0; }
+ 	virtual void							copyRawContent(uint8_t buffer[]) const { }
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup2)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup2 + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+@@ -247,8 +247,8 @@ public:
+ 		OSWriteLittleInt32(&buffer[12], 0, 0xD71F0A11); // BRAA  X16, X17
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup2)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup2 + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+diff --git a/src/ld/passes/stubs/stub_arm_classic.hpp b/src/ld/passes/stubs/stub_arm_classic.hpp
+index c7967d7..203e702 100644
+--- a/src/ld/passes/stubs/stub_arm_classic.hpp
++++ b/src/ld/passes/stubs/stub_arm_classic.hpp
+@@ -46,8 +46,8 @@ public:
+ 	virtual uint64_t						objectAddress() const			{ return 0; }
+ 	virtual void							copyRawContent(uint8_t buffer[]) const { }
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup2)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup2 + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+@@ -88,8 +88,8 @@ public:
+ 			OSWriteLittleInt32(&buffer[12], 0, 0x00000000);	// 	.long L_foo$lazy_ptr - (L1$scv + 8)
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup4)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup4 + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+@@ -128,8 +128,8 @@ public:
+ 			OSWriteLittleInt32(&buffer[ 8], 0, 0x00000000);	// 	.long   L_foo$lazy_ptr
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const				{ return &((ld::Fixup*)&_fixup)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const				{ return const_cast<ld::Fixup*>(&_fixup + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+diff --git a/src/ld/passes/stubs/stub_x86.hpp b/src/ld/passes/stubs/stub_x86.hpp
+index 80570e5..65fcc83 100644
+--- a/src/ld/passes/stubs/stub_x86.hpp
++++ b/src/ld/passes/stubs/stub_x86.hpp
+@@ -44,8 +44,8 @@ public:
+ 	virtual uint64_t						objectAddress() const			{ return 0; }
+ 	virtual void							copyRawContent(uint8_t buffer[]) const { }
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup + 1); }
+ 
+ private:
+ 	mutable ld::Fixup						_fixup;
+@@ -115,8 +115,8 @@ public:
+ 			buffer[11] = 0x90;		// nop
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const				{ return &((ld::Fixup*)&_fixup2)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const				{ return const_cast<ld::Fixup*>(&_fixup2 + 1); }
+ 
+ private:
+ 	static ld::Atom* compressedImageCache(ld::passes::stubs::Pass& pass) {
+@@ -169,8 +169,8 @@ public:
+ 			buffer[9]  = 0x00;
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd() const				{ return &((ld::Fixup*)&_fixup3)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd() const				{ return const_cast<ld::Fixup*>(&_fixup3 + 1); }
+ 
+ private:
+ 	static ld::Atom* helperHelper(ld::passes::stubs::Pass& pass, StubHelperAtom& stub, bool stubToResolver) {
+@@ -234,8 +234,8 @@ public:
+ 			buffer[21]  = 0x00;
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd() const				{ return &((ld::Fixup*)&_fixup3)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd() const				{ return const_cast<ld::Fixup*>(&_fixup3 + 1); }
+ 
+ private:
+ 
+@@ -277,8 +277,8 @@ public:
+ 	virtual uint64_t						objectAddress() const			{ return 0; }
+ 	virtual void							copyRawContent(uint8_t buffer[]) const { }
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup2)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup2 + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+@@ -317,8 +317,8 @@ public:
+ 			buffer[5] = 0x00;
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+@@ -353,8 +353,8 @@ public:
+ 	virtual uint64_t						objectAddress() const			{ return 0; }
+ 	virtual void							copyRawContent(uint8_t buffer[]) const { }
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup1)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup1 + 1); }
+ 
+ private:
+ 	const ld::Atom&							_target;
+@@ -402,8 +402,8 @@ public:
+ 			buffer[13] = 0x20;
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup4)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup4 + 1); }
+ 
+ private:
+ 	const ld::Atom&							_target;
+diff --git a/src/ld/passes/stubs/stub_x86_64.hpp b/src/ld/passes/stubs/stub_x86_64.hpp
+index d6489e5..d903853 100644
+--- a/src/ld/passes/stubs/stub_x86_64.hpp
++++ b/src/ld/passes/stubs/stub_x86_64.hpp
+@@ -44,8 +44,8 @@ public:
+ 	virtual uint64_t						objectAddress() const			{ return 0; }
+ 	virtual void							copyRawContent(uint8_t buffer[]) const { }
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup + 1); }
+ 
+ private:
+ 	mutable ld::Fixup						_fixup;
+@@ -124,8 +124,8 @@ public:
+ 		buffer[15] = 0x90;		// nop
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const				{ return &((ld::Fixup*)&_fixup2)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const				{ return const_cast<ld::Fixup*>(&_fixup2 + 1); }
+ 
+ private:
+ 	static ld::Atom* compressedImageCache(ld::passes::stubs::Pass& pass) {
+@@ -178,8 +178,8 @@ public:
+ 			buffer[9]  = 0x00;
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd() const				{ return &((ld::Fixup*)&_fixup3)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd() const				{ return const_cast<ld::Fixup*>(&_fixup3 + 1); }
+ 
+ private:
+ 	static ld::Atom* helperHelper(ld::passes::stubs::Pass& pass, StubHelperAtom& stub, bool stubToResolver) {
+@@ -257,8 +257,8 @@ public:
+ 			buffer[35]  = 0x00;
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd() const				{ return &((ld::Fixup*)&_fixup3)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd() const				{ return const_cast<ld::Fixup*>(&_fixup3 + 1); }
+ 
+ private:
+ 
+@@ -302,8 +302,8 @@ public:
+ 	virtual uint64_t						objectAddress() const			{ return 0; }
+ 	virtual void							copyRawContent(uint8_t buffer[]) const { }
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup2)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup2 + 1); }
+ 
+ private:
+ 	static ld::Section& selectSection(bool stubToGlobalWeakDef, bool stubToResolver, bool dataConstUsed) {
+@@ -355,8 +355,8 @@ public:
+ 			buffer[5] = 0x00;
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+@@ -390,8 +390,8 @@ public:
+ 	virtual uint64_t						objectAddress() const			{ return 0; }
+ 	virtual void							copyRawContent(uint8_t buffer[]) const { }
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return (ld::Fixup*)&_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup1)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup1 + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+@@ -428,8 +428,8 @@ public:
+ 			buffer[5] = 0x00;
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+diff --git a/src/ld/passes/stubs/stub_x86_64_classic.hpp b/src/ld/passes/stubs/stub_x86_64_classic.hpp
+index 057ce61..27dcfe9 100644
+--- a/src/ld/passes/stubs/stub_x86_64_classic.hpp
++++ b/src/ld/passes/stubs/stub_x86_64_classic.hpp
+@@ -62,8 +62,8 @@ public:
+ 			buffer[11] = 0x00;
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd() const				{ return &((ld::Fixup*)&_fixup2)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd() const				{ return const_cast<ld::Fixup*>(&_fixup2 + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+@@ -98,8 +98,8 @@ public:
+ 	virtual uint64_t						objectAddress() const			{ return 0; }
+ 	virtual void							copyRawContent(uint8_t buffer[]) const { }
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup2)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup2 + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+@@ -140,8 +140,8 @@ public:
+ 			buffer[5] = 0x00;
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+diff --git a/src/ld/passes/stubs/stub_x86_classic.hpp b/src/ld/passes/stubs/stub_x86_classic.hpp
+index 481055d..bccc3cc 100644
+--- a/src/ld/passes/stubs/stub_x86_classic.hpp
++++ b/src/ld/passes/stubs/stub_x86_classic.hpp
+@@ -60,8 +60,8 @@ public:
+ 			buffer[9]  = 0x00;
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd() const				{ return &((ld::Fixup*)&_fixup2)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd() const				{ return const_cast<ld::Fixup*>(&_fixup2 + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+@@ -96,8 +96,8 @@ public:
+ 	virtual uint64_t						objectAddress() const			{ return 0; }
+ 	virtual void							copyRawContent(uint8_t buffer[]) const { }
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup1; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup2)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup1); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup2 + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+@@ -138,8 +138,8 @@ public:
+ 			buffer[5] = 0x00;
+ 	}
+ 	virtual void							setScope(Scope)					{ }
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup)[1]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(&_fixup); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return const_cast<ld::Fixup*>(&_fixup + 1); }
+ 
+ private:
+ 	const ld::Atom&							_stubTo;
+diff --git a/src/ld/passes/tlvp.cpp b/src/ld/passes/tlvp.cpp
+index 2a163fd..6fa451f 100644
+--- a/src/ld/passes/tlvp.cpp
++++ b/src/ld/passes/tlvp.cpp
+@@ -59,7 +59,7 @@ public:
+ 	virtual void							copyRawContent(uint8_t buffer[]) const { }
+ 	virtual void							setScope(Scope)					{ }
+ 	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixup; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &((ld::Fixup*)&_fixup)[1]; }
++	virtual ld::Fixup::iterator				fixupsEnd()	const 				{ return &_fixup + 1; }
+ 
+ private:
+ 	mutable ld::Fixup						_fixup;
+diff --git a/src/mach_o/ExportsTrie.cpp b/src/mach_o/ExportsTrie.cpp
+index 2dd4ed2..0364c2f 100644
+--- a/src/mach_o/ExportsTrie.cpp
++++ b/src/mach_o/ExportsTrie.cpp
+@@ -98,8 +98,8 @@ void GenericTrie::buildTrieBytes(size_t entriesCount, const std::vector<uint8_t>
+     }
+ 
+     // set up trie buffer
+-    _trieStart = &_trieBytes[0];
+-    _trieEnd   = &_trieBytes[_trieBytes.size()];
++    _trieStart = _trieBytes.data();
++    _trieEnd   = _trieBytes.data() + _trieBytes.size();
+ }
+ 
+ Error GenericTrie::Node::addEntry(const WriterEntry& newEntry, const std::vector<uint8_t>& terminalBuffer, std::vector<Node*>& allNodes)
+-- 
+2.42.0
+
