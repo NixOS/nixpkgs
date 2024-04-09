@@ -5,6 +5,7 @@
   stdenv,
   fetchFromGitLab,
   gitUpdater,
+  systemd,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ethercat";
@@ -24,6 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
+  buildInputs = [ systemd ];
+
   outputs = [
     "bin"
     "dev"
@@ -34,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-tool=yes"
     "--enable-userlib=yes"
     "--enable-kernel=no"
+
+    "--with-systemdsystemunitdir=$$out/lib/systemd/system"
 
     # Features
     "--enable-eoe=yes"
