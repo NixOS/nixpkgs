@@ -45,7 +45,7 @@ alternative one by picking one of the following lines:
 
 ```nix
 {
-  services.xserver.displayManager.sddm.enable = true;
+  services.displayManager.sddm.enable = true;
   services.xserver.displayManager.gdm.enable = true;
 }
 ```
@@ -99,7 +99,7 @@ your window manager, you'd define:
 
 ```nix
 {
-  services.xserver.displayManager.defaultSession = "none+i3";
+  services.displayManager.defaultSession = "none+i3";
 }
 ```
 
@@ -109,8 +109,8 @@ using lightdm for a user `alice`:
 ```nix
 {
   services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.displayManager.autoLogin.enable = true;
-  services.xserver.displayManager.autoLogin.user = "alice";
+  services.displayManager.autoLogin.enable = true;
+  services.displayManager.autoLogin.user = "alice";
 }
 ```
 

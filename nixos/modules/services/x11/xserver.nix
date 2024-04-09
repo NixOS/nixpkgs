@@ -639,27 +639,17 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    services.displayManager.enable = true;
 
     services.xserver.displayManager.lightdm.enable =
       let dmConf = cfg.displayManager;
           default = !(dmConf.gdm.enable
-                    || dmConf.sddm.enable
+                    || config.services.displayManager.sddm.enable
                     || dmConf.xpra.enable
                     || dmConf.sx.enable
                     || dmConf.startx.enable
                     || config.services.greetd.enable);
       in mkIf (default) (mkDefault true);
-
-    # so that the service won't be enabled when only startx is used
-    systemd.services.display-manager.enable  =
-      let dmConf = cfg.displayManager;
-          noDmUsed = !(dmConf.gdm.enable
-                    || dmConf.sddm.enable
-                    || dmConf.xpra.enable
-                    || dmConf.lightdm.enable);
-      in mkIf (noDmUsed) (mkDefault false);
-
-    hardware.opengl.enable = mkDefault true;
 
     services.xserver.videoDrivers = mkIf (cfg.videoDriver != null) [ cfg.videoDriver ];
 
@@ -694,19 +684,6 @@ in
           # -xkbdir command line option does not seems to be passed to xkbcomp.
           "X11/xkb".source = "${cfg.xkb.dir}";
         })
-      # localectl looks into 00-keyboard.conf
-      //{
-          "X11/xorg.conf.d/00-keyboard.conf".text = ''
-            Section "InputClass"
-              Identifier "Keyboard catchall"
-              MatchIsKeyboard "on"
-              Option "XkbModel" "${cfg.xkb.model}"
-              Option "XkbLayout" "${cfg.xkb.layout}"
-              Option "XkbOptions" "${cfg.xkb.options}"
-              Option "XkbVariant" "${cfg.xkb.variant}"
-            EndSection
-          '';
-        }
       # Needed since 1.18; see https://bugs.freedesktop.org/show_bug.cgi?id=89023#c5
       // (let cfgPath = "X11/xorg.conf.d/10-evdev.conf"; in
         {
@@ -726,30 +703,11 @@ in
         xorg.xprop
         xorg.xauth
         pkgs.xterm
-        pkgs.xdg-utils
         xorg.xf86inputevdev.out # get evdev.4 man page
-        pkgs.nixos-icons # needed for gnome and pantheon about dialog, nixos-manual and maybe more
       ] config.services.xserver.excludePackages
       ++ optional (elem "virtualbox" cfg.videoDrivers) xorg.xrefresh;
 
     environment.pathsToLink = [ "/share/X11" ];
-
-    xdg = {
-      autostart.enable = true;
-      menus.enable = true;
-      mime.enable = true;
-      icons.enable = true;
-    };
-
-    # The default max inotify watches is 8192.
-    # Nowadays most apps require a good number of inotify watches,
-    # the value below is used by default on several other distros.
-    boot.kernel.sysctl."fs.inotify.max_user_instances" = mkDefault 524288;
-    boot.kernel.sysctl."fs.inotify.max_user_watches" = mkDefault 524288;
-
-    programs.gnupg.agent.pinentryPackage = lib.mkOverride 1100 pkgs.pinentry-gnome3;
-
-    systemd.defaultUnit = mkIf cfg.autorun "graphical.target";
 
     systemd.services.display-manager =
       { description = "Display Manager";
@@ -761,17 +719,17 @@ in
         environment =
           optionalAttrs config.hardware.opengl.setLdLibraryPath
             { LD_LIBRARY_PATH = lib.makeLibraryPath [ pkgs.addOpenGLRunpath.driverLink ]; }
-          // cfg.displayManager.job.environment;
+          // config.services.displayManager.environment;
 
         preStart =
           ''
-            ${cfg.displayManager.job.preStart}
+            ${config.services.displayManager.preStart}
 
             rm -f /tmp/.X0-lock
           '';
 
         # TODO: move declaring the systemd service to its own mkIf
-        script = mkIf (config.systemd.services.display-manager.enable == true) "${cfg.displayManager.job.execCmd}";
+        script = mkIf (config.systemd.services.display-manager.enable == true) "${config.services.displayManager.execCmd}";
 
         # Stop restarting if the display manager stops (crashes) 2 times
         # in one minute. Starting X typically takes 3-4s.
@@ -910,7 +868,6 @@ in
         ${cfg.extraConfig}
       '';
 
-    fonts.enableDefaultPackages = mkDefault true;
     fonts.packages = [
       (if cfg.upscaleDefaultCursor then fontcursormisc_hidpi else pkgs.xorg.fontcursormisc)
       pkgs.xorg.fontmiscmisc
