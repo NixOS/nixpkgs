@@ -1,12 +1,16 @@
 {
+  callPackage,
   autoreconfHook,
   pkg-config,
   stdenv,
-  pkgs,
   lib,
   kernel,
+  ethercat,
 }:
 let
+  common = callPackage ./common.nix { };
+
+  # From: https://docs.etherlab.org/ethercat/1.6/doxygen/devicedrivers.html
   deviceKernelCompatabilities = {
     "6.6" = [ "igc" ];
     "6.4" = [
@@ -125,75 +129,45 @@ let
     ];
   };
 
-  kernelVersionMajorMinor = builtins.concatStringsSep "." (
-    lib.lists.take 2 (builtins.splitVersion kernel.version)
-  );
+  kernelVersionMajorMinor =
+    with builtins;
+    concatStringsSep "." (lib.lists.take 2 (splitVersion kernel.version));
 
-  supportedDrivers = deviceKernelCompatabilities.${kernelVersionMajorMinor};
+  supportedDrivers = deviceKernelCompatabilities.${kernelVersionMajorMinor} or [ ];
 in
-stdenv.mkDerivation (
-  finalAttrs:
-  (
-    with pkgs.ethercat;
-    {
-      inherit version;
-      inherit src;
-      inherit meta;
-    }
-    // {
-      pname = "ethercat-kernel";
+common.overrideAttrs (
+  finalAttrs: previousAttrs: ({
+    pname = "${previousAttrs.pname}-kernel";
 
-      separateDebugInfo = true;
-      hardeningDisable = [
-        "pic"
-        "format"
-      ];
+    hardeningDisable = [
+      "pic"
+      "format"
+    ];
 
-      nativeBuildInputs = [
-        autoreconfHook
-        pkg-config
-        kernel.moduleBuildDependencies
-      ];
+    outputs = [
+      "bin"
+      "out"
+    ];
 
-      enableParallelBuilding = true;
+    buildInputs = [ kernel.moduleBuildDependencies ];
 
-      makeFlags = [
-        "KERNELRELEASE=${kernel.modDirVersion}"
-        "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-        "INSTALL_MOD_PATH=$(out)"
-      ];
+    makeFlags = [
+      "KERNELRELEASE=${kernel.modDirVersion}"
+      "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+      "INSTALL_MOD_PATH=$(bin)"
+    ];
 
-      configureFlags = [
-        # Components
+    configureFlags =
+      previousAttrs.configureFlags
+      ++ [
         "--enable-tool=no"
         "--enable-userlib=no"
         "--enable-kernel=yes"
-
-        # Features
-        "--enable-eoe=yes"
-        "--enable-cycles=yes"
-        "--enable-rtmutex=yes"
-        "--enable-hrtimer=yes"
-        "--enable-regalias=yes"
-        "--enable-refclkop=yes"
-        "--enable-tty=no" # Is broken
-        "--enable-wildcards"
-
-        # Devices
-        "--enable-generic"
-        "--enable-ccat"
-
-        # Kernel
         "--with-linux-dir=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+      ]
+      ++ builtins.map (driver: "--enable-${driver}=yes") supportedDrivers;
 
-        # Debugging
-        "--enable-debug-if=yes"
-        "--enable-debug-ring=no" # Is broken
-      ] ++ builtins.map (driver: "--enable-${driver}=yes") supportedDrivers;
-
-      buildFlags = [ "modules" ];
-
-      installTargets = [ "modules_install" ];
-    }
-  )
+    buildFlags = [ "modules" ];
+    installTargets = [ "modules_install" ];
+  })
 )
