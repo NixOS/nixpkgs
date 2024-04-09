@@ -29,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   separateDebugInfo = true;
+  enableParallelBuilding = true;
 
   nativeBuildInputs = [
     autoreconfHook
