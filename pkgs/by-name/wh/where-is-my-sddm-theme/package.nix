@@ -45,21 +45,31 @@ stdenvNoCC.mkDerivation rec {
   propagatedUserEnvPkgs =
     [ ]
     ++ lib.optional (lib.elem "qt5" variants) [ libsForQt5.qtgraphicaleffects ]
-    ++ lib.optional (lib.elem "qt6" variants) [ qt6.qt5compat ];
+    ++ lib.optional (lib.elem "qt6" variants) [
+      qt6.qt5compat
+      qt6.qtsvg
+    ];
 
   installPhase =
     ''
       mkdir -p $out/share/sddm/themes/
     ''
-    + lib.optionalString (lib.elem "qt6" variants) ''
-      cp -r where_is_my_sddm_theme/ $out/share/sddm/themes/
-    ''
-    + lib.optionalString (lib.elem "qt5" variants) ''
-      cp -r where_is_my_sddm_theme_qt5/ $out/share/sddm/themes/
-    ''
-    + lib.optionalString (lib.isAttrs themeConfig) ''
-      ln -sf ${user-cfg} $out/share/sddm/themes/where_is_my_sddm_theme/theme.conf.user
-    '';
+    + lib.optionalString (lib.elem "qt6" variants) (
+      ''
+        cp -r where_is_my_sddm_theme/ $out/share/sddm/themes/
+      ''
+      + lib.optionalString (lib.isAttrs themeConfig) ''
+        ln -sf ${user-cfg} $out/share/sddm/themes/where_is_my_sddm_theme/theme.conf.user
+      ''
+    )
+    + lib.optionalString (lib.elem "qt5" variants) (
+      ''
+        cp -r where_is_my_sddm_theme_qt5/ $out/share/sddm/themes/
+      ''
+      + lib.optionalString (lib.isAttrs themeConfig) ''
+        ln -sf ${user-cfg} $out/share/sddm/themes/where_is_my_sddm_theme_qt5/theme.conf.user
+      ''
+    );
 
   meta = with lib; {
     description = "The most minimalistic SDDM theme among all themes";
