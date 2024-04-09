@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/latchset/jose";
     maintainers = with lib.maintainers; [ ];
     license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
   };
 }
