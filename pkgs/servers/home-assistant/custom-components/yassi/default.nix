@@ -23,7 +23,6 @@ buildHomeAssistantComponent rec {
     homepage = "https://ha-samsung-soundbar.vercel.app/";
     changelog = "https://github.com/samuelspagl/ha_samsung_soundbar/releases/tag/${version}";
     maintainers = with maintainers; [ k900 ];
-    # https://github.com/samuelspagl/ha_samsung_soundbar/issues/31
-    license = licenses.unfree;
+    license = licenses.mit;
   };
 }
