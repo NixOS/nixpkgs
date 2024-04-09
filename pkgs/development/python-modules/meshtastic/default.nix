@@ -1,22 +1,23 @@
-{ lib
-, bleak
-, buildPythonPackage
-, dotmap
-, fetchFromGitHub
-, pexpect
-, protobuf
-, pygatt
-, pypubsub
-, pyqrcode
-, pyserial
-, pytap2
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, setuptools
-, tabulate
-, timeago
+{
+  lib,
+  bleak,
+  buildPythonPackage,
+  dotmap,
+  fetchFromGitHub,
+  pexpect,
+  protobuf,
+  pygatt,
+  pypubsub,
+  pyqrcode,
+  pyserial,
+  pytap2,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  setuptools,
+  tabulate,
+  timeago,
 }:
 
 buildPythonPackage rec {
@@ -33,9 +34,7 @@ buildPythonPackage rec {
     hash = "sha256-WxiddF1n9lyxKkZk1MU40NzLh6goLVs81mbJZ3F33R8=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     bleak
@@ -54,9 +53,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    tunnel = [
-      pytap2
-    ];
+    tunnel = [ pytap2 ];
   };
 
   nativeCheckInputs = [
@@ -68,9 +65,7 @@ buildPythonPackage rec {
     export PATH="$PATH:$out/bin";
   '';
 
-  pythonImportsCheck = [
-    "meshtastic"
-  ];
+  pythonImportsCheck = [ "meshtastic" ];
 
   disabledTests = [
     # TypeError
