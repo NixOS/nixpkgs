@@ -9,6 +9,7 @@
 , yarn
 , prefetch-yarn-deps
 , nodejs
+, stdenv
 , server-mode ? true
 }:
 
@@ -44,6 +45,17 @@ let
     hash = yarnHash;
   };
 
+  # don't bother to test kerberos authentication
+  # skip tests on macOS which fail due to an error in keyring, see https://github.com/NixOS/nixpkgs/issues/281214
+  skippedTests = builtins.concatStringsSep "," (
+    [ "browser.tests.test_kerberos_with_mocking" ]
+    ++ lib.optionals stdenv.isDarwin [
+      "browser.server_groups.servers.tests.test_all_server_get"
+      "browser.server_groups.servers.tests.test_check_connect"
+      "browser.server_groups.servers.tests.test_check_ssh_mock_connect"
+      "browser.server_groups.servers.tests.test_is_password_saved"
+    ]
+  );
 in
 
 pythonPackages.buildPythonApplication rec {
@@ -228,9 +240,7 @@ pythonPackages.buildPythonApplication rec {
     substituteInPlace regression/runtests.py --replace-fail "builtins.SERVER_MODE = None" "builtins.SERVER_MODE = False"
 
     ## Browser test ##
-
-    # don't bother to test kerberos authentication
-    python regression/runtests.py --pkg browser --exclude browser.tests.test_kerberos_with_mocking
+    python regression/runtests.py --pkg browser --exclude ${skippedTests}
 
     ## Reverse engineered SQL test ##
 
@@ -250,7 +260,7 @@ pythonPackages.buildPythonApplication rec {
       This should NOT be used in combination with the `pgadmin4-desktopmode` package as they will interfere.
       '' else ''
       This version is build with SERVER_MODE set to False. It will require access to `~/.pgadmin/`. This version is suitable
-      for single-user deployment or where access to `/var/lib/pgadmin` cannot be granted or the NixOS module cannot be used.
+      for single-user deployment or where access to `/var/lib/pgadmin` cannot be granted or the NixOS module cannot be used (e.g. on MacOS).
       This should NOT be used in combination with the NixOS module `pgadmin` as they will interfere.
       ''}
     '';
@@ -259,5 +269,6 @@ pythonPackages.buildPythonApplication rec {
     changelog = "https://www.pgadmin.org/docs/pgadmin4/latest/release_notes_${lib.versions.major version}_${lib.versions.minor version}.html";
     maintainers = with maintainers; [ gador ];
     mainProgram = "pgadmin4";
+    platforms = platforms.unix;
   };
 }
