@@ -8,14 +8,14 @@
 }:
 
 buildGoModule rec {
-  version = "2.9.6";
+  version = "3.0.0";
   pname = "grafana-loki";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "loki";
     rev = "v${version}";
-    hash = "sha256-79hK7axHf6soku5DvdXkE/0K4WKc4pnS9VMbVc1FS2I=";
+    hash = "sha256-2+OST6bKIjuhrXJKA+8vUERKT1/min7tN8oFxKn3L74=";
   };
 
   vendorHash = null;
@@ -40,7 +40,7 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) loki; };
 
-  ldflags = let t = "github.com/grafana/loki/pkg/util/build"; in [
+  ldflags = let t = "github.com/grafana/loki/v3/pkg/util/build"; in [
     "-s"
     "-w"
     "-X ${t}.Version=${version}"
