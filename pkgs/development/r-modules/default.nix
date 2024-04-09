@@ -1065,6 +1065,10 @@ let
       patchPhase = "patchShebangs configure";
     });
 
+    SpliceWiz = old.SpliceWiz.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
     data_table = old.data_table.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -fopenmp";
