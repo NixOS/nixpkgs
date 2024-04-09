@@ -602,6 +602,7 @@ let
     vcfR = with pkgs; [ zlib.dev ];
     bio3d = with pkgs; [ zlib.dev ];
     arrangements = with pkgs; [ gmp.dev ];
+    gfilogisreg = [ pkgs.gmp.dev ];
     spp = with pkgs; [ zlib.dev ];
     Rbowtie = with pkgs; [ zlib.dev ];
     gaston = with pkgs; [ zlib.dev ];
