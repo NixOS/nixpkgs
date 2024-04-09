@@ -34,11 +34,11 @@ buildPythonPackage rec {
     hash = "sha256-fukFcrTTE7WCuZyJ5OzPd5tX/1TtwzGHPGs/unf6qLA=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     brotli
     certifi
     mutagen
@@ -86,6 +86,7 @@ buildPythonPackage rec {
       youtube-dl is released to the public domain, which means
       you can modify it, redistribute it or use it however you like.
     '';
+    changelog = "https://github.com/yt-dlp/yt-dlp/releases/tag/${version}";
     license = licenses.unlicense;
     maintainers = with maintainers; [ mkg20001 SuperSandro2000 marsam ];
     mainProgram = "yt-dlp";
