@@ -215,7 +215,7 @@ let
       # Bootstrap a cross stdenv using the LLVM toolchain.
       # This is currently not possible when compiling natively,
       # so we don't need to check hostPlatform != buildPlatform.
-      crossSystem = stdenv.targetPlatform // {
+      crossSystem = {
         useLLVM = true;
         linker = "lld";
       };
@@ -266,13 +266,10 @@ let
     pkgsStatic = createPackageSet "pkgsStatic" ({
       crossSystem = {
         isStatic = true;
-        config = lib.systems.parse.tripleFromSystem (
-          if stdenv.isLinux
-          then makeMuslParsedPlatform stdenv.hostPlatform.parsed
-          else stdenv.hostPlatform.parsed
-        );
-        gcc = lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") { abi = "elfv2"; } //
-          stdenv.hostPlatform.gcc or {};
+      } // lib.optionalAttrs stdenv.isLinux {
+        config = lib.systems.parse.tripleFromSystem (makeMuslParsedPlatform stdenv.hostPlatform.parsed);
+      } // lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") {
+        gcc = { abi = "elfv2"; } // stdenv.hostPlatform.gcc or {};
       };
     });
 

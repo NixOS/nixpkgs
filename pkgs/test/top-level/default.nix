@@ -111,7 +111,7 @@ lib.recurseIntoAttrs {
       assert isComposable "pkgsLLVM";
       # TODO: attribute 'useLLVM' missing
       # assert isComposable "pkgsMusl";
-      # assert isComposable "pkgsStatic";
+      assert isComposable "pkgsStatic";
       # assert isComposable "pkgsi686Linux";
 
       # Special cases regarding buildPlatform vs hostPlatform

@@ -44,7 +44,7 @@
 
 let # Rename the function arguments
   config0 = config;
-  crossSystem0 = crossSystem;
+  crossSystem0 = if crossSystem == null then localSystem else crossSystem;
 
 in let
   lib = import ../../lib;
@@ -74,7 +74,7 @@ in let
   # inferred from the system double in `localSystem`.
   crossSystem =
     let system = lib.systems.elaborate crossSystem0; in
-    if crossSystem0 == null || lib.systems.equals system localSystem
+    if lib.systems.equals system localSystem
     then localSystem
     else system;
 
@@ -125,7 +125,7 @@ in let
     args // lib.optionalAttrs (newArgs ? "localSystem") {
       localSystem = newArgs.localSystem;
     } // lib.optionalAttrs (newArgs ? "crossSystem") {
-      crossSystem = newArgs.crossSystem;
+      crossSystem = lib.systems.asAttrs crossSystem0 // newArgs.crossSystem;
     } // lib.optionalAttrs (newArgs ? "overlays") {
       overlays = overlays ++ newArgs.overlays;
     });
