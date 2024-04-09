@@ -12,20 +12,20 @@
 
 stdenv.mkDerivation rec {
   pname = "Archi";
-  version = "5.2.0";
+  version = "5.3.0";
 
   src = {
     "x86_64-linux" = fetchurl {
-      url = "https://www.archimatetool.com/downloads/archi_5.php?/${version}/Archi-Linux64-${version}.tgz";
-      hash = "sha256-uGW4Wl3E71ZCgWzPHkmXv/PluegDF8C64FUQ7C5/SDA=";
+      url = "https://www.archimatetool.com/downloads/archi/${version}/Archi-Linux64-${version}.tgz";
+      hash = "sha256-ngO3YFCChsnefxdxtR00Dy736K2GYnTEYI4vKWLnPsw=";
     };
     "x86_64-darwin" = fetchurl {
-      url = "https://www.archimatetool.com/downloads/archi_5.php?/${version}/Archi-Mac-${version}.dmg";
-      hash = "sha256-GI9aIAYwu60RdjN0Y3O94sVMzJR1+nX4txVcvqn1r58=";
+      url = "https://www.archimatetool.com/downloads/archi/${version}/Archi-Mac-${version}.dmg";
+      hash = "sha256-dL1c7IrbDMY/WbijQh1dCmCrRQQhj4fjGN+6m19OjO0=";
     };
     "aarch64-darwin" = fetchurl {
-      url = "https://www.archimatetool.com/downloads/archi_5.php?/${version}/Archi-Mac-Silicon-${version}.dmg";
-      hash = "sha256-Jg+tl902OWSm4GHxF7QXbRU5nxX4/5q6LTGubHWQ08E=";
+      url = "https://www.archimatetool.com/downloads/archi/${version}/Archi-Mac-Silicon-${version}.dmg";
+      hash = "sha256-iczIUm1LCAjYKOyHXbFCgb+zoUxxATSOVkB8Ldk7pxQ=";
     };
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
