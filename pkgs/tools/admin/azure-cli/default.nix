@@ -219,6 +219,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage rec {
     requests
     scp
     semver
+    setuptools
     six
     sshtunnel
     tabulate
