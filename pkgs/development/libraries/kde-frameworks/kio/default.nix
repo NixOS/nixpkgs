@@ -6,7 +6,6 @@
   kdbusaddons, ki18n, kiconthemes, kitemviews, kjobwidgets, knotifications,
   kservice, ktextwidgets, kwallet, kwidgetsaddons, kwindowsystem, kxmlgui,
   qtbase, qtscript, qtx11extras, solid, kcrash, kded,
-  withKcms ? true
 }:
 
 mkDerivation {
@@ -31,10 +30,6 @@ mkDerivation {
   patches = [
     ./0001-Remove-impure-smbd-search-path.patch
   ];
-  postPatch = lib.optionalString (!withKcms) ''
-    substituteInPlace src/CMakeLists.txt \
-      --replace-fail "add_subdirectory(kcms)" ""
-  '';
   meta = {
     homepage = "https://api.kde.org/frameworks/kio/html/";
   };
