@@ -23,7 +23,7 @@ crystal.buildCrystalPackage rec {
     owner = "iv-org";
     repo = pname;
     fetchSubmodules = true;
-    inherit (versions.invidious) rev sha256;
+    inherit (versions.invidious) rev hash;
   };
 
   postPatch =

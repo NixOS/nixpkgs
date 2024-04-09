@@ -2,7 +2,6 @@
 , kernel ? null
 , stdenv
 , linuxKernel
-, removeLinuxDRM ? false
 , nixosTests
 , ...
 } @ args:
@@ -14,11 +13,9 @@ callPackage ./generic.nix args {
   # You have to ensure that in `pkgs/top-level/linux-kernels.nix`
   # this attribute is the correct one for this package.
   kernelModuleAttribute = "zfsUnstable";
+
   # check the release notes for compatible kernels
-  kernelCompatible =
-    if stdenv'.isx86_64 || removeLinuxDRM
-    then kernel.kernelOlder "6.7"
-    else kernel.kernelOlder "6.2";
+  kernelCompatible = kernel.kernelOlder "6.9";
 
   latestCompatibleLinuxPackages = linuxKernel.packages.linux_6_6;
 
