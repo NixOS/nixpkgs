@@ -5,11 +5,12 @@
 , setuptools
 , incremental
 , pytestCheckHook
+, syrupy
 }:
 
 buildPythonPackage rec {
   pname = "systembridgemodels";
-  version = "4.0.4";
+  version = "4.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -18,19 +19,21 @@ buildPythonPackage rec {
     owner = "timmo001";
     repo = "system-bridge-models";
     rev = "refs/tags/${version}";
-    hash = "sha256-iFJ95ouhfbaC0D2Gkc1KO+JueYTFTOj1unnYSDyPAe8=";
+    hash = "sha256-2vJrH67vhUcNIAC5B0HKUD7sBdiB+suWxLlfcpBn6PM=";
   };
 
   postPatch = ''
     substituteInPlace systembridgemodels/_version.py \
-      --replace-fail ", dev=1" ""
+      --replace-fail ", dev=0" ""
+    substituteInPlace tests/__snapshots__/test_update.ambr \
+      --replace-fail "4.1.1.dev0" "4.2.0"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     incremental
   ];
 
@@ -38,6 +41,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    syrupy
   ];
 
   meta = {
