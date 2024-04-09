@@ -37,6 +37,7 @@ localPython.pkgs.buildPythonApplication rec {
     aws-encryption-sdk
     base64io
     urllib3
+    setuptools # for pkg_resources
   ];
 
   doCheck = true;
