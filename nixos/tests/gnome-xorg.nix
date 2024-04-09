@@ -15,15 +15,16 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
       services.xserver.displayManager = {
         gdm.enable = true;
         gdm.debug = true;
-        autoLogin = {
-          enable = true;
-          user = user.name;
-        };
+      };
+
+      services.displayManager.autoLogin = {
+        enable = true;
+        user = user.name;
       };
 
       services.xserver.desktopManager.gnome.enable = true;
       services.xserver.desktopManager.gnome.debug = true;
-      services.xserver.displayManager.defaultSession = "gnome-xorg";
+      services.displayManager.defaultSession = "gnome-xorg";
 
       systemd.user.services = {
         "org.gnome.Shell@x11" = {

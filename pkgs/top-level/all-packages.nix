@@ -6871,7 +6871,9 @@ with pkgs;
 
   unionfs-fuse = callPackage ../tools/filesystems/unionfs-fuse { };
 
-  unparam = callPackage ../tools/misc/unparam { };
+  unparam = callPackage ../tools/misc/unparam {
+    buildGoModule = buildGo121Module;
+  };
 
   inherit (nodePackages) uppy-companion;
 
@@ -37000,7 +37002,7 @@ with pkgs;
   fairymax = callPackage ../games/fairymax { };
 
   ferium = callPackage ../games/ferium {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   fheroes2 = callPackage ../games/fheroes2 { };
@@ -40046,6 +40048,8 @@ with pkgs;
   nix-serve-ng = haskell.lib.compose.justStaticExecutables haskellPackages.nix-serve-ng;
 
   nix-simple-deploy = callPackage ../tools/package-management/nix-simple-deploy { };
+
+  nix-visualize = python3.pkgs.callPackage ../tools/package-management/nix-visualize { };
 
   alejandra = callPackage ../tools/nix/alejandra { };
 

@@ -106,6 +106,7 @@ with self;
   };
 
   ppx_expect = janePackage {
+    duneVersion = "3";
     pname = "ppx_expect";
     hash = "1wawsbjfkri4sw52n8xqrzihxc3xfpdicv3ahz83a1rsn4lb8j5q";
     meta.description = "Cram like framework for OCaml";
@@ -275,6 +276,7 @@ with self;
   };
 
   ppx_jane = janePackage {
+    duneVersion = "3";
     pname = "ppx_jane";
     hash = "1a2602isqzsh640q20qbmarx0sc316mlsqc3i25ysv2kdyhh0kyw";
     meta.description = "Standard Jane Street ppx rewriters";
@@ -282,6 +284,7 @@ with self;
   };
 
   base_bigstring = janePackage {
+    duneVersion = "3";
     pname = "base_bigstring";
     hash = "0rbgyg511847fbnxad40prz2dyp4da6sffzyzl88j18cxqxbh1by";
     meta.description = "String type based on [Bigarray], for use in I/O and C-bindings";
@@ -303,15 +306,17 @@ with self;
   };
 
   core_kernel = janePackage {
+    duneVersion = "3";
     pname = "core_kernel";
-    version = "0.12.2";
-    hash = "0c85bjvadrb4pmjcg0gjk3bkkgka62r90pjm690mjvcbbv5zjxzj";
+    version = "0.12.3";
+    hash = "sha256-bDgxuOILAs4FYB8o92ysPHDdEzflZMsU/jk5hB9xfuc=";
     meta.description = "System-independent part of Core";
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [ base_bigstring sexplib ];
   };
 
   spawn = janePackage {
+    duneVersion = "3";
     pname = "spawn";
     version = "0.13.0";
     hash = "1w003k1kw1lmyiqlk58gkxx8rac7dchiqlz6ah7aj7bh49b36ppf";
@@ -320,6 +325,7 @@ with self;
   };
 
   core = janePackage {
+    duneVersion = "3";
     pname = "core";
     version = "0.12.3";
     hash = "1vmjqiafkg45hqfvahx6jnlaww1q4a4215k8znbgprf0qn3zymnj";
@@ -329,6 +335,7 @@ with self;
   };
 
   async_kernel = janePackage {
+    duneVersion = "3";
     pname = "async_kernel";
     hash = "1d9illx7vvpblj1i2r9y0f2yff2fbhy3rp4hhvamq1n9n3lvxmh2";
     meta.description = "Monadic concurrency library";
@@ -336,6 +343,7 @@ with self;
   };
 
   protocol_version_header = janePackage {
+    duneVersion = "3";
     pname = "protocol_version_header";
     hash = "14vqhx3r84rlfhcjq52gxdqksckiaswlck9s47g7y2z1lsc17v7r";
     meta.description = "Protocol versioning";
@@ -343,6 +351,7 @@ with self;
   };
 
   async_rpc_kernel = janePackage {
+    duneVersion = "3";
     pname = "async_rpc_kernel";
     hash = "1znhqbzx4fp58i7dbcgyv5rx7difbhb5d8cbqzv96yqvbn67lsjk";
     meta.description = "Platform-independent core of Async RPC library";
@@ -350,6 +359,7 @@ with self;
   };
 
   async_unix = janePackage {
+    duneVersion = "3";
     pname = "async_unix";
     hash = "09h10rdyykbm88n6r9nb5a22mlb6vcxa04q6hvrcr0kys6qhhqmb";
     meta.description = "Monadic concurrency library";
@@ -357,6 +367,7 @@ with self;
   };
 
   async_extra = janePackage {
+    duneVersion = "3";
     pname = "async_extra";
     hash = "10j4mwlyqvf67yrp5dwd857llqjinpnnykmlzw2gpmks9azxk6mh";
     meta.description = "Monadic concurrency library";
@@ -364,6 +375,7 @@ with self;
   };
 
   textutils = janePackage {
+    duneVersion = "3";
     pname = "textutils";
     hash = "0302awqihf3abib9mvzvn4g8m364hm6jxry1r3kc01hzybhy9acq";
     meta.description = "Text output utilities";
@@ -371,6 +383,7 @@ with self;
   };
 
   async = janePackage {
+    duneVersion = "3";
     pname = "async";
     hash = "0pk7z3h2gi21nfchvmjz2wx516bynf9vgwf84zf5qhvlvqqsmyrx";
     meta.description = "Monadic concurrency library";
@@ -378,6 +391,7 @@ with self;
   };
 
   async_find = janePackage {
+    duneVersion = "3";
     pname = "async_find";
     hash = "0qsz9f15s5rlk6za10s810v6nlkdxg2g9p1827lcpa7nhjcpi673";
     meta.description = "Directory traversal with Async";
@@ -385,8 +399,10 @@ with self;
   };
 
   re2 = janePackage {
+    duneVersion = "3";
     pname = "re2";
-    hash = "1sw32lb0y501y971ij7287796lvfhs0nfgla895r74ymfks2rcjb";
+    version = "0.12.1";
+    hash = "sha256-NPQKKUSwckZx4GN4wX2sc0Mn7bes6p79oZrN6xouc6o=";
     meta.description = "OCaml bindings for RE2, Google's regular expression library";
     propagatedBuildInputs = [ core_kernel ];
     prePatch = ''
@@ -396,6 +412,7 @@ with self;
   };
 
   shell = janePackage {
+    duneVersion = "3";
     pname = "shell";
     hash = "158857rdr6qgglc5iksg0l54jgf51b5lmsw7nlazpxwdwc9fcn5n";
     meta.description = "Yet another implementation of fork&exec and related functionality";
@@ -404,6 +421,7 @@ with self;
   };
 
   async_shell = janePackage {
+    duneVersion = "3";
     pname = "async_shell";
     hash = "0cxln9hkc3cy522la9yi9p23qjwl69kqmadsq4lnjh5bxdad06sv";
     meta.description = "Shell helpers for Async";
@@ -411,6 +429,7 @@ with self;
   };
 
   core_bench = janePackage {
+    duneVersion = "3";
     pname = "core_bench";
     hash = "00hyzbbj19dkcw0vhfnc8w0ca3zkjriwwvl00ssa0a2g9mygijdm";
     meta.description = "Benchmarking library";
@@ -418,6 +437,7 @@ with self;
   };
 
   core_extended = janePackage {
+    duneVersion = "3";
     pname = "core_extended";
     hash = "1gwx66235irpf5krb1r25a3c7w52qhmass8hp7rdv89il9jn49w4";
     meta.description = "Extra components that are not as closely vetted or as stable as Core";
@@ -425,6 +445,7 @@ with self;
   };
 
   sexp_pretty = janePackage {
+    duneVersion = "3";
     pname = "sexp_pretty";
     hash = "06hdsaszc5cd7fphiblbn4r1sh36xgjwf2igzr2rvlzqs7jiv2v4";
     meta.description = "S-expression pretty-printer";
@@ -432,6 +453,7 @@ with self;
   };
 
   expect_test_helpers_kernel = janePackage {
+    duneVersion = "3";
     pname = "expect_test_helpers_kernel";
     hash = "18ya187y2i2hfxr771sd9vy5jdsa30vhs56yjdhwk06v01b2fzbq";
     meta.description = "Helpers for writing expectation tests";
@@ -440,6 +462,7 @@ with self;
   };
 
   expect_test_helpers = janePackage {
+    duneVersion = "3";
     pname = "expect_test_helpers";
     hash = "0ixqck2lnsmz107yw0q2sr8va80skjpldx7lz4ymjiq2vsghk0rb";
     meta.description = "Async helpers for writing expectation tests";
@@ -447,6 +470,7 @@ with self;
   };
 
   patience_diff = janePackage {
+    duneVersion = "3";
     pname = "patience_diff";
     hash = "055kd3piadjnplip8c8q99ssh79d4irmhg2wng7aida5pbqp2p9f";
     meta.description = "Diff library using Bram Cohen's patience diff algorithm";
@@ -454,6 +478,7 @@ with self;
   };
 
   ecaml = janePackage {
+    duneVersion = "3";
     pname = "ecaml";
     hash = "0n9xi6agc3lgyj2nsi10cbif0xwn57xyaranad9r285rmbxrgjh7";
     meta.description = "Library for writing Emacs plugin in OCaml";

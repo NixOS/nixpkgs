@@ -2939,6 +2939,8 @@ self: super: with self; {
 
   devtools = callPackage ../development/python-modules/devtools { };
 
+  dfdiskcache = callPackage ../development/python-modules/dfdiskcache { };
+
   diagrams = callPackage ../development/python-modules/diagrams { };
 
   diceware = callPackage ../development/python-modules/diceware { };
@@ -5332,6 +5334,8 @@ self: super: with self; {
   hieroglyph = callPackage ../development/python-modules/hieroglyph { };
 
   hijri-converter = callPackage ../development/python-modules/hijri-converter { };
+
+  hikari = callPackage ../development/python-modules/hikari { };
 
   hikvision = callPackage ../development/python-modules/hikvision { };
 
@@ -13762,6 +13766,8 @@ self: super: with self; {
 
   simplesat = callPackage ../development/python-modules/simplesat { };
 
+  simplesqlite = callPackage ../development/python-modules/simplesqlite { };
+
   simple-dftd3 = callPackage ../development/libraries/science/chemistry/simple-dftd3/python.nix {
     inherit (pkgs) simple-dftd3;
   };
@@ -14275,6 +14281,8 @@ self: super: with self; {
   sqlite-fts4 = callPackage ../development/python-modules/sqlite-fts4 { };
 
   sqlite-utils = callPackage ../development/python-modules/sqlite-utils { };
+
+  sqliteschema = callPackage ../development/python-modules/sqliteschema { };
 
   sqlmap = callPackage ../development/python-modules/sqlmap { };
 
