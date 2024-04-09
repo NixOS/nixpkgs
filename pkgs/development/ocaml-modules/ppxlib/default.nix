@@ -17,6 +17,7 @@ let param = {
   };
   "0.13.0" = {
     sha256 = "sha256-geHz0whQDg5/YQjVsN2iuHlkClwh7z3Eqb2QOBzuOdk=";
+    min_version = "4.07";
     max_version = "4.11";
     useDune2 = false;
     OMP = [ ocaml-migrate-parsetree ];
