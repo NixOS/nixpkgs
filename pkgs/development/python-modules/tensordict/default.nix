@@ -11,11 +11,12 @@
 , h5py
 , pytestCheckHook
 , stdenv
+, pythonAtLeast
 }:
 
 buildPythonPackage rec {
   pname = "tensordict";
-  version = "0.3.1";
+  version = "0.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "pytorch";
     repo = "tensordict";
     rev = "refs/tags/v${version}";
-    hash = "sha256-eCx1r7goqOdGX/0mSGCiLhdGQTh4Swa5aFiLSsL56p0=";
+    hash = "sha256-Gpl277HraNuTYPxdL/GSX6Nvn6Ntl+XYl/7m0t1lZAg=";
   };
 
   nativeBuildInputs = [
@@ -72,5 +73,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/pytorch/tensordict";
     license = licenses.mit;
     maintainers = with maintainers; [ GaetanLepage ];
+    # No python 3.12 support yet: https://github.com/pytorch/rl/issues/2035
+    broken = pythonAtLeast "3.12";
   };
 }
