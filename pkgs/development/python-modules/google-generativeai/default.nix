@@ -3,11 +3,12 @@
 , fetchFromGitHub
 , google-ai-generativelanguage
 , google-api-core
+, google-api-python-client
 , google-auth
 , protobuf
+, pydantic
 , pythonOlder
 , pythonRelaxDepsHook
-, pydantic
 , setuptools
 , tqdm
 , typing-extensions
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "google-generativeai";
-  version = "0.4.1";
+  version = "0.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "google";
     repo = "generative-ai-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+PRsxwy8Um6wCku9s7h8ERKEhcFsomEYAwYg+vpAGyg=";
+    hash = "sha256-WFkzqsiYADrxVUHClBHY0+oYz2sF52DrVblHT+94QYw=";
   };
 
   pythonRelaxDeps = [
@@ -32,14 +33,18 @@ buildPythonPackage rec {
   ];
 
   build-system = [
-    pythonRelaxDepsHook
     setuptools
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
   ];
 
   dependencies = [
     google-ai-generativelanguage
-    google-auth
     google-api-core
+    google-api-python-client
+    google-auth
     protobuf
     pydantic
     tqdm
