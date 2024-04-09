@@ -1,14 +1,15 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, fetchPypi
-, llama-index-core
-, poetry-core
-, pymupdf
-, pypdf
-, pythonOlder
-, pythonRelaxDepsHook
-, striprtf
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchPypi,
+  llama-index-core,
+  poetry-core,
+  pymupdf,
+  pypdf,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  striprtf,
 }:
 
 buildPythonPackage rec {
@@ -29,13 +30,9 @@ buildPythonPackage rec {
     "pypdf"
   ];
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     beautifulsoup4
@@ -48,9 +45,7 @@ buildPythonPackage rec {
   # Tests are only available in the mono repo
   doCheck = false;
 
-  pythonImportsCheck = [
-    "llama_index.readers.file"
-  ];
+  pythonImportsCheck = [ "llama_index.readers.file" ];
 
   meta = with lib; {
     description = "LlamaIndex Readers Integration for files";
