@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "1.13.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "tolstislon";
@@ -21,6 +21,11 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-NGdNpNJ9ejwneSacNmifGJ8TMUuBqMu9tHTyLxTB5Uk=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "setuptools_scm==7.1.0" "setuptools_scm"
+  '';
 
   nativeBuildInputs = [
     setuptools-scm
