@@ -30554,7 +30554,7 @@ with pkgs;
   dnglab = callPackage ../tools/graphics/dnglab { };
 
   inherit (callPackage ../applications/virtualization/docker {})
-    docker_24 docker_25;
+    docker_24 docker_25 docker_26;
 
   docker = docker_24;
   docker-client = docker.override { clientOnly = true; };
