@@ -6,7 +6,7 @@ from pathlib import Path
 import ptpython.repl
 
 from test_driver.driver import Driver
-from test_driver.logger import rootlog
+from test_driver.logger import JunitXMLLogger, XMLLogger, rootlog
 
 
 class EnvDefault(argparse.Action):
@@ -93,6 +93,11 @@ def main() -> None:
         type=writeable_dir,
     )
     arg_parser.add_argument(
+        "--junit-xml",
+        help="Enable JunitXML report generation to the given path",
+        type=Path,
+    )
+    arg_parser.add_argument(
         "testscript",
         action=EnvDefault,
         envvar="testScript",
@@ -102,6 +107,14 @@ def main() -> None:
 
     args = arg_parser.parse_args()
 
+    output_directory = args.output_directory.resolve()
+
+    if "LOGFILE" in os.environ.keys():
+        rootlog.add_logger(XMLLogger(os.environ["LOGFILE"]))
+
+    if args.junit_xml:
+        rootlog.add_logger(JunitXMLLogger(output_directory / args.junit_xml))
+
     if not args.keep_vm_state:
         rootlog.info("Machine state will be reset. To keep it, pass --keep-vm-state")
 
@@ -109,7 +122,7 @@ def main() -> None:
         args.start_scripts,
         args.vlans,
         args.testscript.read_text(),
-        args.output_directory.resolve(),
+        output_directory,
         args.keep_vm_state,
         args.global_timeout,
     ) as driver:
