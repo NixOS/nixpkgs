@@ -1,37 +1,38 @@
-{ lib
-, stdenv
-, ailment
-, archinfo
-, buildPythonPackage
-, cachetools
-, capstone
-, cffi
-, claripy
-, cle
-, cppheaderparser
-, dpkt
-, fetchFromGitHub
-, gitpython
-, itanium-demangler
-, mulpyplexer
-, nampa
-, networkx
-, progressbar2
-, protobuf
-, psutil
-, pycparser
-, pyformlang
-, pythonOlder
-, pythonRelaxDepsHook
-, pyvex
-, rich
-, rpyc
-, setuptools
-, sortedcontainers
-, sqlalchemy
-, sympy
-, unicorn
-, unique-log-filter
+{
+  lib,
+  stdenv,
+  ailment,
+  archinfo,
+  buildPythonPackage,
+  cachetools,
+  capstone,
+  cffi,
+  claripy,
+  cle,
+  cppheaderparser,
+  dpkt,
+  fetchFromGitHub,
+  gitpython,
+  itanium-demangler,
+  mulpyplexer,
+  nampa,
+  networkx,
+  progressbar2,
+  protobuf,
+  psutil,
+  pycparser,
+  pyformlang,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  pyvex,
+  rich,
+  rpyc,
+  setuptools,
+  sortedcontainers,
+  sqlalchemy,
+  sympy,
+  unicorn,
+  unique-log-filter,
 }:
 
 buildPythonPackage rec {
@@ -48,9 +49,7 @@ buildPythonPackage rec {
     hash = "sha256-9NLQtwakM041yNY/mb9WbSGC1Q8AHHkiqqjf5bZUOlI=";
   };
 
-  pythonRelaxDeps = [
-    "capstone"
-  ];
+  pythonRelaxDeps = [ "capstone" ];
 
   build-system = [
     pythonRelaxDepsHook
@@ -88,9 +87,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    AngrDB = [
-      sqlalchemy
-    ];
+    AngrDB = [ sqlalchemy ];
   };
 
   setupPyBuildFlags = lib.optionals stdenv.isLinux [
