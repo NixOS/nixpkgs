@@ -224,9 +224,8 @@ class TerminalLogger(AbstractLogger):
 
 
 class XMLLogger(AbstractLogger):
-    def __init__(self) -> None:
-        self.logfile = os.environ.get("LOGFILE", "/dev/null")
-        self.logfile_handle = codecs.open(self.logfile, "wb")
+    def __init__(self, outfile: str) -> None:
+        self.logfile_handle = codecs.open(outfile, "wb")
         self.xml = XMLGenerator(self.logfile_handle, encoding="utf-8")
         self.queue: "Queue[Dict[str, str]]" = Queue()
 
@@ -310,6 +309,4 @@ class XMLLogger(AbstractLogger):
         self.xml.endElement("nest")
 
 
-terminal_logger = TerminalLogger()
-xml_logger = XMLLogger()
-rootlog: CompositeLogger = CompositeLogger([terminal_logger, xml_logger])
+rootlog: CompositeLogger = CompositeLogger([TerminalLogger()])
