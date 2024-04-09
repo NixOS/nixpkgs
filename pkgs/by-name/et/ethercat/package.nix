@@ -6,6 +6,7 @@
   fetchFromGitLab,
   gitUpdater,
   pkg-config,
+  systemdMinimal,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ethercat";
@@ -25,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
+  buildInputs = [ systemdMinimal ];
+
   outputs = [
     "bin"
     "dev"
@@ -35,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-tool=yes"
     "--enable-userlib=yes"
     "--enable-kernel=no"
+
+    "--with-systemdsystemunitdir=$$out/lib/systemd/system"
 
     # Features
     "--enable-eoe=yes"
