@@ -30,6 +30,6 @@ buildPythonPackage {
   meta = with lib; {
     homepage = "https://yapsy.sourceforge.net/";
     description = "Yet another plugin system";
-    license = licenses.bsd0;
+    license = licenses.bsd2;
   };
 }
