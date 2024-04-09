@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, stdenv }:
+{ fetchFromGitHub, lib, stdenv, unstableGitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "argos";
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   passthru = {
     extensionUuid = "argos@pew.worldwidemann.com";
     extensionPortalSlug = "argos";
+    updateScript = unstableGitUpdater { };
   };
 
   meta = with lib; {
