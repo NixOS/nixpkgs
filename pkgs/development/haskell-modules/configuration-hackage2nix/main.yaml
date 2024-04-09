@@ -365,6 +365,7 @@ package-maintainers:
     - X11
     - X11-xft
     - html-parse-util
+    - kmonad
     - optparse-applicative-cmdline-util
     - xmonad
     - xmonad-contrib
