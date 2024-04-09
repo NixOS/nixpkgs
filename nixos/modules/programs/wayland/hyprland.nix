@@ -14,7 +14,7 @@ in
   options.programs.hyprland = {
     enable = mkEnableOption null // {
       description = ''
-        Hyprland, the dynamic tiling Wayland compositor that doesn't sacrifice on its looks.
+        Whether to enable Hyprland, the dynamic tiling Wayland compositor that doesn't sacrifice on its looks.
 
         You can manually launch Hyprland by executing {command}`Hyprland` on a TTY.
 

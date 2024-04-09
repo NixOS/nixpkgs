@@ -3395,6 +3395,8 @@ with pkgs;
 
   azure-cli = callPackage ../tools/admin/azure-cli { };
 
+  azure-cli-extensions = recurseIntoAttrs azure-cli.extensions;
+
   azure-functions-core-tools = callPackage ../development/tools/azure-functions-core-tools { };
 
   azure-static-sites-client = callPackage ../development/tools/azure-static-sites-client { };
@@ -9279,6 +9281,8 @@ with pkgs;
   in-formant = qt6Packages.callPackage ../applications/audio/in-formant { };
 
   inadyn = callPackage ../tools/networking/inadyn { };
+
+  incus-lts = callPackage ../by-name/in/incus/lts.nix { };
 
   incron = callPackage ../tools/system/incron { };
 

@@ -8,7 +8,7 @@ let
 in
 {
   options.services.evdevremapkeys = {
-    enable = mkEnableOption (lib.mdDoc ''evdevremapkeys'');
+    enable = mkEnableOption (lib.mdDoc ''evdevremapkeys, a daemon to remap events on linux input devices'');
 
     settings = mkOption {
       type = format.type;

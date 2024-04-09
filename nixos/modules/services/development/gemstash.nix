@@ -24,7 +24,7 @@ let
 in
 {
   options.services.gemstash = {
-    enable = mkEnableOption (lib.mdDoc "gemstash service");
+    enable = mkEnableOption (lib.mdDoc "gemstash, a cache for rubygems.org and a private gem server");
 
     openFirewall = mkOption {
       type = types.bool;

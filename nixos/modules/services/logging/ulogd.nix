@@ -8,7 +8,7 @@ let
 in {
   options = {
     services.ulogd = {
-      enable = mkEnableOption (lib.mdDoc "ulogd");
+      enable = mkEnableOption (lib.mdDoc "ulogd, a userspace logging daemon for netfilter/iptables related logging");
 
       settings = mkOption {
         example = {

@@ -7,7 +7,7 @@ let cfg = config.services.nzbhydra2;
 in {
   options = {
     services.nzbhydra2 = {
-      enable = mkEnableOption (lib.mdDoc "NZBHydra2");
+      enable = mkEnableOption (lib.mdDoc "NZBHydra2, Usenet meta search");
 
       dataDir = mkOption {
         type = types.str;

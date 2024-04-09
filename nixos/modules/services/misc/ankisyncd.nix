@@ -22,7 +22,7 @@ let
 in
   {
     options.services.ankisyncd = {
-      enable = mkEnableOption (lib.mdDoc "ankisyncd");
+      enable = mkEnableOption (lib.mdDoc "ankisyncd, a standalone unofficial anky sync server");
 
       package = mkPackageOption pkgs "ankisyncd" { };
 

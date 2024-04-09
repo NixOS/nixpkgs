@@ -18,7 +18,7 @@ let
 in
 {
   options.services.pcscd = {
-    enable = mkEnableOption (lib.mdDoc "PCSC-Lite daemon");
+    enable = mkEnableOption (lib.mdDoc "PCSC-Lite daemon, to access smart cards using SCard API (PC/SC)");
 
     plugins = mkOption {
       type = types.listOf types.package;

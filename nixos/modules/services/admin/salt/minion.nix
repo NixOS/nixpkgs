@@ -21,7 +21,7 @@ in
 {
   options = {
     services.salt.minion = {
-      enable = mkEnableOption (lib.mdDoc "Salt minion service");
+      enable = mkEnableOption (lib.mdDoc "Salt configuration management system minion service");
       configuration = mkOption {
         type = types.attrs;
         default = {};

@@ -6,7 +6,7 @@ let
   cfg = config.services.hardware.openrgb;
 in {
   options.services.hardware.openrgb = {
-    enable = mkEnableOption (lib.mdDoc "OpenRGB server");
+    enable = mkEnableOption (lib.mdDoc "OpenRGB server, for RGB lighting control");
 
     package = mkPackageOption pkgs "openrgb" { };
 

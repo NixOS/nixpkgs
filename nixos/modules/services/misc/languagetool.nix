@@ -7,7 +7,7 @@ let
   settingsFormat = pkgs.formats.javaProperties {};
 in {
   options.services.languagetool = {
-    enable = mkEnableOption (mdDoc "the LanguageTool server");
+    enable = mkEnableOption (mdDoc "the LanguageTool server, a multilingual spelling, style, and grammar checker that helps correct or paraphrase texts");
 
     port = mkOption {
       type = types.port;
