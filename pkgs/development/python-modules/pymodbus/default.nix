@@ -22,7 +22,7 @@ buildPythonPackage rec {
   version = "3.6.7";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pymodbus-dev";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
       --replace-fail "--cov-report html " ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
@@ -85,7 +85,6 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python implementation of the Modbus protocol";
-    mainProgram = "pymodbus.simulator";
     longDescription = ''
       Pymodbus is a full Modbus protocol implementation using twisted,
       torndo or asyncio for its asynchronous communications core. It can
@@ -96,5 +95,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/pymodbus-dev/pymodbus/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "pymodbus.simulator";
   };
 }
