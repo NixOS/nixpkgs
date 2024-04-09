@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, rosa }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, rosa, nix-update-script }:
 
 buildGoModule rec {
   pname = "rosa";
@@ -24,9 +24,12 @@ buildGoModule rec {
       --zsh <($out/bin/rosa completion zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = rosa;
-    command = "rosa version --client";
+  passthru = {
+    tests.version = testers.testVersion {
+      package = rosa;
+      command = "rosa version --client";
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
