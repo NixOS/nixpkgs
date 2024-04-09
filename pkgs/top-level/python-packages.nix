@@ -10153,6 +10153,8 @@ self: super: with self; {
 
   posix-ipc = callPackage ../development/python-modules/posix-ipc { };
 
+  postgrest = callPackage ../development/python-modules/postgrest { };
+
   posthog = callPackage ../development/python-modules/posthog { };
 
   pot = callPackage ../development/python-modules/pot { };
@@ -12916,6 +12918,8 @@ self: super: with self; {
 
   reactivex = callPackage ../development/python-modules/reactivex { };
 
+  realtime = callPackage ../development/python-modules/realtime { };
+
   rebulk = callPackage ../development/python-modules/rebulk { };
 
   recipe-scrapers = callPackage ../development/python-modules/recipe-scrapers { };
@@ -14394,6 +14398,8 @@ self: super: with self; {
 
   stopit = callPackage ../development/python-modules/stopit { };
 
+  storage3 = callPackage ../development/python-modules/storage3 { };
+
   stransi = callPackage ../development/python-modules/stransi { };
 
   strategies = callPackage ../development/python-modules/strategies { };
@@ -14495,6 +14501,12 @@ self: super: with self; {
   supervise-api = callPackage ../development/python-modules/supervise-api { };
 
   supervisor = callPackage ../development/python-modules/supervisor { };
+
+  supabase_auth = callPackage ../development/python-modules/supabase_auth { };
+
+  supabase-py = callPackage ../development/python-modules/supabase { };
+
+  supafunc = callPackage ../development/python-modules/supafunc { };
 
   superqt = callPackage ../development/python-modules/superqt { };
 
