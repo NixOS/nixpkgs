@@ -29,12 +29,11 @@ buildPythonPackage rec {
     "pypdf"
   ];
 
-  pythonRemoveDeps = [
-    "bs4"
-  ];
-
   build-system = [
     poetry-core
+  ];
+
+  nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
 
