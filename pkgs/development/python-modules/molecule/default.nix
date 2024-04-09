@@ -1,22 +1,24 @@
-{ lib
-, ansible-compat
-, ansible-core
-, buildPythonPackage
-, click-help-colors
-, enrich
-, fetchPypi
-, jsonschema
-, molecule
-, packaging
-, pluggy
-, pythonOlder
-, rich
-, setuptools
-, setuptools-scm
-, testers
-, wcmatch
-, withPlugins ? true, molecule-plugins
-, yamllint
+{
+  lib,
+  ansible-compat,
+  ansible-core,
+  buildPythonPackage,
+  click-help-colors,
+  enrich,
+  fetchPypi,
+  jsonschema,
+  molecule,
+  packaging,
+  pluggy,
+  pythonOlder,
+  rich,
+  setuptools,
+  setuptools-scm,
+  testers,
+  wcmatch,
+  withPlugins ? true,
+  molecule-plugins,
+  yamllint,
 }:
 
 buildPythonPackage rec {
@@ -54,13 +56,15 @@ buildPythonPackage rec {
   # tests can't be easily run without installing things from ansible-galaxy
   doCheck = false;
 
-  passthru.tests.version = (testers.testVersion {
-    package = molecule;
-    command = "PY_COLORS=0 ${pname} --version";
-  }).overrideAttrs (old: {
-    # workaround the error: Permission denied: '/homeless-shelter'
-    HOME = "$(mktemp -d)";
-  });
+  passthru.tests.version =
+    (testers.testVersion {
+      package = molecule;
+      command = "PY_COLORS=0 ${pname} --version";
+    }).overrideAttrs
+      (old: {
+        # workaround the error: Permission denied: '/homeless-shelter'
+        HOME = "$(mktemp -d)";
+      });
 
   meta = with lib; {
     description = "Molecule aids in the development and testing of Ansible roles";
