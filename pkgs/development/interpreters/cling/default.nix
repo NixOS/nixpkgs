@@ -1,6 +1,5 @@
 { cmake
 , fetchFromGitHub
-, fetchgit
 , git
 , lib
 , libffi
@@ -28,7 +27,7 @@
 
 # Build with libc++ (LLVM) rather than stdlibc++ (GCC).
 # This is experimental and not all features work.
-, useLLVMLibcxx ? false
+, useLLVMLibcxx ? clangStdenv.isDarwin
 }:
 
 let
@@ -53,7 +52,7 @@ let
     clingSrc = fetchFromGitHub {
       owner = "root-project";
       repo = "cling";
-      rev = "v1.0";
+      rev = "v${version}";
       sha256 = "sha256-Ye8EINzt+dyNvUIRydACXzb/xEPLm0YSkz08Xxw3xp4=";
     };
 
@@ -66,8 +65,6 @@ let
 
     patches = [
       ./no-clang-cpp.patch
-
-      # ./force-install-cling-targets.patch
     ];
 
     nativeBuildInputs = [ python3 git cmake ];
@@ -122,10 +119,10 @@ let
   cxxFlags = if useLLVMLibcxx then [
     "-I" "${lib.getDev llvmPackages_13.libcxx}/include/c++/v1"
     "-L" "${llvmPackages_13.libcxx}/lib"
-    "-l" "${llvmPackages_13.libcxx}/lib/libc++.so"
+    "-l" "${llvmPackages_13.libcxx}/lib/libc++${stdenv.hostPlatform.extensions.sharedLibrary}"
   ] else [
     "-I" "${gcc-unwrapped}/include/c++/${gcc-unwrapped.version}"
-    "-I" "${gcc-unwrapped}/include/c++/${gcc-unwrapped.version}/x86_64-unknown-linux-gnu"
+    "-I" "${gcc-unwrapped}/include/c++/${gcc-unwrapped.version}/${stdenv.hostPlatform.config}"
   ];
 
   # The flags passed to the wrapped cling should

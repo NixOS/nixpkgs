@@ -20381,7 +20381,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
 
-  box2d = callPackage ../development/libraries/box2d { };
+  box2d = callPackage ../development/libraries/box2d {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa Kernel OpenGL;
+  };
 
   boxfort = callPackage ../development/libraries/boxfort { };
 
@@ -20872,6 +20874,9 @@ with pkgs;
     ffmpeg_6
     ffmpeg_6-headless
     ffmpeg_6-full
+    ffmpeg_7
+    ffmpeg_7-headless
+    ffmpeg_7-full
     ffmpeg
     ffmpeg-headless
     ffmpeg-full;
@@ -31727,8 +31732,6 @@ with pkgs;
   guardian-agent = callPackage ../tools/networking/guardian-agent { };
 
   gv = callPackage ../applications/misc/gv { };
-
-  gvisor = callPackage ../applications/virtualization/gvisor { };
 
   guvcview = libsForQt5.callPackage ../os-specific/linux/guvcview { };
 
