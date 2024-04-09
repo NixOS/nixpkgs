@@ -2,8 +2,8 @@ name: "Check cherry-picks"
 on:
   pull_request_target:
     branches:
-     - 'release-*'
-     - 'staging-*'
+     - 'release-**'
+     - 'staging-**'
 
 permissions: {}
 
