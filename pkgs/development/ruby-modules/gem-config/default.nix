@@ -27,7 +27,7 @@
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
 , bundler, libsass, dart-sass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
 , CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libepoxy, libxkbcommon, libmaxminddb, libyaml
-, cargo, rustc, rustPlatform
+, cargo, rustc, rustup, rustPlatform
 , autoSignDarwinBinariesHook, fetchpatch
 }@args:
 
@@ -119,6 +119,15 @@ in
 
   cocoapods-try-release-fix = attrs: {
     dependencies = [ "cocoapods" ];
+  };
+
+  commonmarker = attrs: {
+    nativeBuildInputs = [ rustup libiconv ];
+    preInstall = ''
+      # use a temporarily writable HOME
+      export HOME=$TMPDIR
+      rustup default stable
+    '';
   };
 
   curb = attrs: {
