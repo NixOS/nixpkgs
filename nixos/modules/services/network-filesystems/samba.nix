@@ -15,6 +15,7 @@ let
 
   daemonService = appName: args:
     { description = "Samba Service Daemon ${appName}";
+      documentation = [ "man:${appName}(8)" "man:samba(7)" "man:smb.conf(5)" ];
 
       after = [ (mkIf (cfg.nmbd.enable && "${appName}" == "smbd") "samba-nmbd.service") "network.target" ];
       requiredBy = [ "samba.target" ];
