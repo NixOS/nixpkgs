@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
         install -D -m755 Archi $out/libexec/Archi
         makeWrapper $out/libexec/Archi $out/bin/Archi \
           --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ webkitgtk ])} \
+          --set WEBKIT_DISABLE_DMABUF_RENDERER 1 \
           --prefix PATH : ${jdk}/bin
       ''
     else
