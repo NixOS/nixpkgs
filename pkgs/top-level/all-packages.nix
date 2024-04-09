@@ -40047,6 +40047,8 @@ with pkgs;
 
   nix-simple-deploy = callPackage ../tools/package-management/nix-simple-deploy { };
 
+  nix-visualize = python3.pkgs.callPackage ../tools/package-management/nix-visualize { };
+
   alejandra = callPackage ../tools/nix/alejandra { };
 
   nixci = callPackage ../tools/nix/nixci {
