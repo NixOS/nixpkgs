@@ -684,6 +684,9 @@ in
             libcxx = superLib.libcxx.override ({
               stdenv = libcxxBootstrapStdenv;
             });
+            libunwind = superLib.libunwind.override ({
+              stdenv = libcxxBootstrapStdenv;
+            });
           });
         in
         { inherit libraries; } // libraries
@@ -729,7 +732,7 @@ in
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage.llvmPackages; [
       clang-unwrapped libclang libllvm llvm
     ]);
-    assert lib.all isBuiltByNixpkgsCompiler (with prevStage.llvmPackages; [ libcxx ]);
+    assert lib.all isBuiltByNixpkgsCompiler (with prevStage.llvmPackages; [ libcxx libunwind ]);
     assert prevStage.llvmPackages.compiler-rt == null;
 
     assert lib.getVersion prevStage.stdenv.cc.bintools.bintools == lib.getVersion prevStage.darwin.cctools-port;
@@ -770,7 +773,7 @@ in
           });
 
           libraries = super.llvmPackages.libraries.extend (selfLib: superLib: {
-            inherit (prevStage.llvmPackages) compiler-rt libcxx;
+            inherit (prevStage.llvmPackages) compiler-rt libcxx libunwind;
           });
         in
         { inherit tools libraries; inherit (prevStage.llvmPackages) release_version; } // tools // libraries
@@ -833,7 +836,7 @@ in
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage.llvmPackages; [
       clang-unwrapped libclang libllvm llvm
     ]);
-    assert lib.all isBuiltByNixpkgsCompiler (with prevStage.llvmPackages; [ libcxx ]);
+    assert lib.all isBuiltByNixpkgsCompiler (with prevStage.llvmPackages; [ libcxx libunwind ]);
     assert prevStage.llvmPackages.compiler-rt == null;
 
     assert lib.getVersion prevStage.stdenv.cc.bintools.bintools == lib.getVersion prevStage.darwin.cctools-llvm;
@@ -878,7 +881,7 @@ in
           });
 
           libraries = super.llvmPackages.libraries.extend (selfLib: superLib: {
-            inherit (prevStage.llvmPackages) libcxx;
+            inherit (prevStage.llvmPackages) libcxx libunwind;
 
             # Make sure compiler-rt is linked against the CF from this stage, which can be
             # propagated to the final stdenv. CF is required by ASAN.
@@ -991,7 +994,7 @@ in
       llvmPackages = super.llvmPackages // (
         let
           libraries = super.llvmPackages.libraries.extend (_: _: {
-           inherit (prevStage.llvmPackages) compiler-rt libcxx;
+           inherit (prevStage.llvmPackages) compiler-rt libcxx libunwind;
           });
         in
         { inherit libraries; } // libraries
@@ -1038,7 +1041,7 @@ in
     assert lib.all isFromNixpkgs (with prevStage.darwin; [ dyld launchd libclosure libdispatch xnu ]);
 
     assert lib.all isBuiltByNixpkgsCompiler (with prevStage.llvmPackages; [
-      clang-unwrapped libclang libllvm llvm compiler-rt libcxx
+      clang-unwrapped libclang libllvm llvm compiler-rt libcxx libunwind
     ]);
 
     assert lib.getVersion prevStage.stdenv.cc.bintools.bintools == lib.getVersion prevStage.darwin.cctools-llvm;
@@ -1151,7 +1154,7 @@ in
             };
           });
           libraries = super.llvmPackages.libraries.extend (_: _:{
-            inherit (prevStage.llvmPackages) compiler-rt libcxx;
+            inherit (prevStage.llvmPackages) compiler-rt libcxx libunwind;
           });
         in
         { inherit tools libraries; } // tools // libraries
@@ -1193,7 +1196,7 @@ in
     assert lib.all isFromNixpkgs (with prevStage.darwin; [ dyld launchd libclosure libdispatch xnu ]);
 
     assert lib.all isBuiltByNixpkgsCompiler (with prevStage.llvmPackages; [
-      clang-unwrapped libclang libllvm llvm compiler-rt libcxx
+      clang-unwrapped libclang libllvm llvm compiler-rt libcxx libunwind
     ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
@@ -1352,7 +1355,7 @@ in
               inherit (prevStage.llvmPackages) clang clang-unwrapped libclang libllvm llvm;
             });
             libraries = super.llvmPackages.libraries.extend (_: _: {
-              inherit (prevStage.llvmPackages) compiler-rt libcxx;
+              inherit (prevStage.llvmPackages) compiler-rt libcxx libunwind;
             });
           in
           { inherit tools libraries; } // tools // libraries
