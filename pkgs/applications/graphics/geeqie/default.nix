@@ -2,36 +2,32 @@
 , gtk3, lcms2, exiv2, libchamplain, clutter-gtk, ffmpegthumbnailer, fbida
 , libarchive, djvulibre, libheif, openjpeg, libjxl, libraw, lua5_3, poppler
 , gspell, libtiff, libwebp
+, gphoto2, imagemagick, yad, exiftool, gnome, libnotify
 , wrapGAppsHook, fetchpatch, doxygen
 , nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "geeqie";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "BestImageViewer";
     repo = "geeqie";
     rev = "v${version}";
-    hash = "sha256-qkM/7auZ9TMF2r8KLnitxmvlyPmIjh7q9Ugh+QKh8hw=";
+    hash = "sha256-13Ayr6r4JhqexaUvwzdc6XHT+j2l2D5YBws6gSAhU3Y=";
   };
 
   patches = [
+    # Remove changelog from menu
     (fetchpatch {
-      name = "exiv2-0.28.0-support-1.patch";
-      url = "https://github.com/BestImageViewer/geeqie/commit/c45cca777aa3477eaf297db99f337e18d9683c61.patch";
-      hash = "sha256-YiFzAj3G3Z2w7p+8zZlDBjWqUqnfSqvaxMkESfPFdzc=";
+      url = "https://salsa.debian.org/debian/geeqie/-/raw/debian/master/debian/patches/Remove-changelog-from-menu-item.patch";
+      hash = "sha256-0awKKTLg/gUZhmwluVbHCOqssog9SneFOaUtG89q0go=";
     })
+    # Fix missing execute permissions for geocode-parametres.awk plugin
     (fetchpatch {
-      name = "exiv2-0.28.0-support-2.patch";
-      url = "https://github.com/BestImageViewer/geeqie/commit/b04f7cd0546976dc4f7ea440648ac0eedd8df3ce.patch";
-      hash = "sha256-V0ZOHbAZOrhLcNN+Al1/kvxvbw0vc/R7r99CegjuBQg=";
-    })
-    (fetchpatch {
-      name = "fix-compilation-with-lua.patch";
-      url = "https://github.com/BestImageViewer/geeqie/commit/a132645ee87e612217ac955b227cad04f21a5722.patch";
-      hash = "sha256-BozarBPoIKxZS3qpjuzHHAWZGIWZAwvJyqsNC8v+TMk=";
+      url = "https://github.com/BestImageViewer/geeqie/commit/4d3ddcf5b9c0668bfdaf1dfe24219ee57c2f0237.patch";
+      hash = "sha256-Na2qiwCTbOv1yt251oaSZiLaOwJCkjWew+us4lQju0I=";
     })
   ];
 
@@ -54,8 +50,29 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # Allow geeqie to find exiv2 and exiftran, necessary to
     # losslessly rotate JPEG images.
+    # Requires exiftran (fbida package) and exiv2.
     sed -i $out/lib/geeqie/geeqie-rotate \
         -e '1 a export PATH=${lib.makeBinPath [ exiv2 fbida ]}:$PATH'
+    # Zenity and yad are used in some scripts for reporting errors.
+    # Allow change quality of image.
+    # Requires imagemagick and yad.
+    sed -i $out/lib/geeqie/geeqie-resize-image \
+        -e '1 a export PATH=${lib.makeBinPath [ imagemagick yad ]}:$PATH'
+    # Allow to crop image.
+    # Requires imagemagick, exiv2 and exiftool.
+    sed -i $out/lib/geeqie/geeqie-image-crop \
+        -e '1 a export PATH=${lib.makeBinPath [ imagemagick exiv2 exiftool gnome.zenity ]}:$PATH'
+    # Requires gphoto2 and libnotify
+    sed -i $out/lib/geeqie/geeqie-tethered-photography \
+        -e '1 a export PATH=${lib.makeBinPath [ gphoto2 gnome.zenity libnotify ]}:$PATH'
+    # Import images from camera.
+    # Requires gphoto2.
+    sed -i $out/lib/geeqie/geeqie-camera-import \
+        -e '1 a export PATH=${lib.makeBinPath [ gphoto2 gnome.zenity ]}:$PATH'
+    # Export jpeg from raw file.
+    # Requires exiv2, exiftool and lcms2.
+    sed -i $out/lib/geeqie/geeqie-export-jpeg \
+        -e '1 a export PATH=${lib.makeBinPath [ gnome.zenity exiv2 exiftool lcms2 ]}:$PATH'
   '';
 
   enableParallelBuilding = true;

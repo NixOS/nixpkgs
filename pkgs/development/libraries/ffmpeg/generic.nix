@@ -405,6 +405,14 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/e06ce6d2b45edac4a2df04f304e18d4727417d24";
         hash = "sha256-73mlX1rdJrguw7OXaSItfHtI7gflDrFj+7SepVvvUIg=";
       }
+    ])
+    ++ (lib.optionals (lib.versionAtLeast version "7.0") [
+      {
+        # Will likely be obsolete in >7.0
+        name = "fate_avoid_dependency_on_samples";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/7b7b7819bd21cc92ac07f6696b0e7f26fa8f9834";
+        hash = "sha256-TKI289XqtG86Sj9s7mVYvmkjAuRXeK+2cYYEDkg6u6I=";
+      }
     ]));
 
   configurePlatforms = [];
