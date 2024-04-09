@@ -118,8 +118,8 @@ lib.recurseIntoAttrs {
       # assert isComposable "pkgsZig";
       # TODO: attribute 'abi' missing
       # assert isComposable "pkgsMusl";
+      assert isComposable "pkgsStatic";
       # TODO: fails
-      # assert isComposable "pkgsStatic";
       # assert isComposable "pkgsi686Linux";
 
       # Special cases regarding buildPlatform vs hostPlatform
