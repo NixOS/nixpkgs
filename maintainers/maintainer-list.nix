@@ -10190,6 +10190,12 @@
     githubId = 845652;
     name = "Kier Davis";
   };
+  kiike = {
+    email = "me@enric.me";
+    github = "kiike";
+    githubId = 464625;
+    name = "Enric Morales";
+  };
   kilianar = {
     email = "mail@kilianar.de";
     github = "kilianar";
