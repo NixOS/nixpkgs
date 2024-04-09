@@ -1,4 +1,4 @@
-{ fetchzip, lib, rustPlatform, git, installShellFiles, makeWrapper }:
+{ fetchzip, lib, rustPlatform, git, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "helix";
@@ -14,7 +14,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-THzPUVcmboVJHu3rJ6rev3GrkNilZRMlitCx7M1+HBE=";
 
-  nativeBuildInputs = [ git installShellFiles makeWrapper ];
+  nativeBuildInputs = [ git installShellFiles ];
+
+  env.HELIX_DEFAULT_RUNTIME = "${placeholder "out"}/lib/runtime";
 
   postInstall = ''
     # not needed at runtime
@@ -26,9 +28,6 @@ rustPlatform.buildRustPackage rec {
     mkdir -p $out/share/{applications,icons/hicolor/256x256/apps}
     cp contrib/Helix.desktop $out/share/applications
     cp contrib/helix.png $out/share/icons/hicolor/256x256/apps
-  '';
-  postFixup = ''
-    wrapProgram $out/bin/hx --set HELIX_RUNTIME $out/lib/runtime
   '';
 
   meta = with lib; {
