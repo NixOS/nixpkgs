@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, click
-, construct
-, dacite
-, fetchFromGitHub
-, paho-mqtt
-, poetry-core
-, pycryptodome
-, pycryptodomex
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  stdenv,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  click,
+  construct,
+  dacite,
+  fetchFromGitHub,
+  paho-mqtt,
+  poetry-core,
+  pycryptodome,
+  pycryptodomex,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -36,17 +37,11 @@ buildPythonPackage rec {
       --replace "poetry-core==1.8.0" "poetry-core"
   '';
 
-  pythonRelaxDeps = [
-    "pycryptodome"
-  ];
+  pythonRelaxDeps = [ "pycryptodome" ];
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -56,18 +51,14 @@ buildPythonPackage rec {
     dacite
     paho-mqtt
     pycryptodome
-  ] ++ lib.optionals stdenv.isDarwin [
-    pycryptodomex
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ pycryptodomex ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "roborock"
-  ];
+  pythonImportsCheck = [ "roborock" ];
 
   meta = with lib; {
     description = "Python library & console tool for controlling Roborock vacuum";
