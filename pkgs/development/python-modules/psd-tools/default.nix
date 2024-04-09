@@ -12,7 +12,7 @@
 , pytestCheckHook
 , pytest-cov
 , ipython
-, cython_3
+, cython
 }:
 
 buildPythonPackage rec {
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    cython_3
+    cython
   ];
 
   propagatedBuildInputs = [
