@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Francis uses the well-known pomodoro technique to help you get more productive";
+    description = "Using the well-known pomodoro technique to help you get more productive";
     homepage = "https://apps.kde.org/francis/";
     license = with licenses; [ bsd2 bsd3 cc0 lgpl2Plus lgpl21Plus gpl3Plus ];
     mainProgram = "francis";
