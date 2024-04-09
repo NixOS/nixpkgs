@@ -23,11 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-UJSDnkdohFn+U7i5fYiRVMLZZ8Nyb0fdihBZl2z2RBc=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     pdm-backend
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     griffe
     mkdocstrings
   ];
