@@ -92,11 +92,6 @@ stdenv.mkDerivation {
     "-DINSTALL_DEFAULT_BINDIR=${placeholder "out"}/bin"
   ];
 
-  postInstall = ''
-    makeWrapper $out/bin/etl.* $out/bin/etl
-    makeWrapper $out/bin/etlded.* $out/bin/etlded
-  '';
-
   hardeningDisable = [ "fortify" ];
 
   meta = {
