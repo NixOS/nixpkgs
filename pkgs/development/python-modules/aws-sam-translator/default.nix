@@ -1,18 +1,19 @@
-{ lib
-, boto3
-, buildPythonPackage
-, fetchFromGitHub
-, jsonschema
-, parameterized
-, pydantic
-, pytest-env
-, pytest-rerunfailures
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, setuptools
-, typing-extensions
+{
+  lib,
+  boto3,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jsonschema,
+  parameterized,
+  pydantic,
+  pytest-env,
+  pytest-rerunfailures,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     rm pytest.ini
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     boto3
@@ -85,9 +84,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "samtranslator"
-  ];
+  pythonImportsCheck = [ "samtranslator" ];
 
   meta = with lib; {
     description = "Python library to transform SAM templates into AWS CloudFormation templates";
