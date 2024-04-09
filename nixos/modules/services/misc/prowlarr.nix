@@ -13,6 +13,12 @@ in
 
       package = mkPackageOption pkgs "prowlarr" { };
 
+      dataDir = mkOption {
+        type = types.str;
+        default = "/var/lib/prowlarr";
+        description = lib.mdDoc "The directory where Prowlarr stores its data files.";
+      };
+
       openFirewall = mkOption {
         type = types.bool;
         default = false;
@@ -31,7 +37,7 @@ in
         Type = "simple";
         DynamicUser = true;
         StateDirectory = "prowlarr";
-        ExecStart = "${lib.getExe cfg.package} -nobrowser -data=/var/lib/prowlarr";
+        ExecStart = "${lib.getExe cfg.package} -nobrowser -data='${cfg.dataDir}'";
         Restart = "on-failure";
       };
     };
