@@ -75,6 +75,7 @@ stdenvNoCC.mkDerivation rec {
     description = "The most minimalistic SDDM theme among all themes";
     homepage = "https://github.com/stepanzubkov/where-is-my-sddm-theme";
     license = licenses.mit;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ name-snrl ];
   };
 }
