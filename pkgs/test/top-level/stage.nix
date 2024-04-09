@@ -87,36 +87,37 @@ assert isIdempotent "pkgsStatic";
 assert isIdempotent "pkgsi686Linux";
 assert isIdempotent "pkgsx86_64Darwin";
 
-# TODO: fails
-# assert isNoop [ "pkgsStatic" ] "pkgsMusl";
-# TODO: fails because of ppc64-musl
-# assert lib.all (sys: isNoop [ "pkgsCross" sys ] "pkgsMusl") allMuslExamples;
+assert isNoop [ "pkgsStatic" ] "pkgsMusl";
+assert lib.all (sys: isNoop [ "pkgsCross" sys ] "pkgsMusl") allMuslExamples;
 # This will fail on all systems which are not handled in pkgs/os-specific/bsd/openbsd/pkgs/mkDerivation.nix,
 # for example armv6l-linux, powerpc64le-linux, riscv64-linux
 assert lib.all (sys: isNoop [ "pkgsCross" sys ] "pkgsLLVM") allLLVMExamples;
 
-# TODO: fails
-# assert isComposable "pkgsExtraHardening";
-# assert isComposable "pkgsLLVM";
+assert isComposable "pkgsExtraHardening";
+assert isComposable "pkgsLLVM";
+# TODO: Results in infinite recursion
 # assert isComposable "pkgsLLVMLibc";
-# assert isComposable "pkgsArocc";
-# assert isComposable "pkgsZig";
-# TODO: attribute 'abi' missing
-# assert isComposable "pkgsMusl";
-# TODO: fails
-# assert isComposable "pkgsStatic";
-# assert isComposable "pkgsi686Linux";
+assert isComposable "pkgsArocc";
+assert isComposable "pkgsZig";
+assert isComposable "pkgsMusl";
+assert isComposable "pkgsStatic";
+assert isComposable "pkgsi686Linux";
 
 # Special cases regarding buildPlatform vs hostPlatform
 # TODO: fails
 # assert discardEvaluationErrors (pkgsCross.gnu64.pkgsMusl.stdenv.hostPlatform.isMusl);
 # assert discardEvaluationErrors (pkgsCross.gnu64.pkgsi686Linux.stdenv.hostPlatform.isx86_32);
-# assert discardEvaluationErrors (pkgsCross.mingwW64.pkgsLinux.stdenv.hostPlatform.isLinux);
-# assert discardEvaluationErrors (pkgsCross.aarch64-darwin.pkgsx86_64Darwin.stdenv.hostPlatform.isx86_64);
+assert discardEvaluationErrors (pkgsCross.mingwW64.pkgsLinux.stdenv.hostPlatform.isLinux);
+assert discardEvaluationErrors (
+  pkgsCross.aarch64-darwin.pkgsx86_64Darwin.stdenv.hostPlatform.isx86_64
+);
 
 # pkgsCross should keep upper cross settings
-# TODO: fails
-# assert discardEvaluationErrors (with pkgsStatic.pkgsCross.gnu64.stdenv.hostPlatform; isGnu && isStatic);
-# assert discardEvaluationErrors (with pkgsLLVM.pkgsCross.musl64.stdenv.hostPlatform; isMusl && useLLVM);
+assert discardEvaluationErrors (
+  with pkgsStatic.pkgsCross.gnu64.stdenv.hostPlatform; isGnu && isStatic
+);
+assert discardEvaluationErrors (
+  with pkgsLLVM.pkgsCross.musl64.stdenv.hostPlatform; isMusl && useLLVM
+);
 
 emptyFile
