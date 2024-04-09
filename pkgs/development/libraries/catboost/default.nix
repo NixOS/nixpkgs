@@ -11,13 +11,31 @@
 , ragel
 , yasm
 , zlib
+, R
+, rPackages
 , cudaSupport ? config.cudaSupport
 , cudaPackages ? {}
 , pythonSupport ? false
+, rLibrary ? false
 }:
 
-stdenv.mkDerivation (finalAttrs: {
-  pname = "catboost";
+assert rLibrary -> !pythonSupport;
+assert pythonSupport -> !rLibrary;
+
+stdenv.mkDerivation (finalAttrs: rec {
+  pnameBase = "catboost";
+  pname = lib.optionalString rLibrary "r-" + finalAttrs.pnameBase;
+  # The R package build results in a special catboost.so file
+  # that contains a subset of the .so file use for the CLI
+  # and python version. Catboost is not available from CRAN, so
+  # the rLibrary option follows the same steps as r-modules.
+  # Build with:
+  # nix-build -E "with (import $NIXPKGS{}); \
+  #   let \
+  #     cboost = catboost.override{ rLibrary = true; }; \
+  #   in \
+  #   rWrapper.override{ packages = [ cboost ]; }"
+  # An overlay would also work fine.
   version = "1.2.2";
 
   src = fetchFromGitHub {
@@ -35,6 +53,15 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace cmake/common.cmake \
       --replace  "\''${RAGEL_BIN}" "${ragel}/bin/ragel" \
       --replace "\''${YASM_BIN}" "${yasm}/bin/yasm"
+
+    # catboost caps the number of threads to ensure deterministic
+    # results in tests, but the limit causes the library to fail
+    # on larger machines. Raising the limit seems to have no
+    # adverse effect on smaller machines which are already well
+    # under the limit. See some discussion here:
+    # https://github.com/catboost/catboost/issues/120
+    substituteInPlace catboost/private/libs/options/restrictions.h \
+      --replace "CB_THREAD_LIMIT = 128" "CB_THREAD_LIMIT = 300"
 
     shopt -s globstar
     for cmakelists in **/CMakeLists.*; do
@@ -57,7 +84,8 @@ stdenv.mkDerivation (finalAttrs: {
     yasm
   ] ++ lib.optionals cudaSupport (with cudaPackages; [
     cuda_nvcc
-  ]);
+    autoAddOpenGLRunpathHook
+  ]) ++ lib.optionals rLibrary [ R rPackages.devtools rPackages.withr ];
 
   buildInputs = [
     openssl
@@ -70,6 +98,10 @@ stdenv.mkDerivation (finalAttrs: {
     libcublas
   ]);
 
+  propagatedBuildInputs = lib.optionals rLibrary [
+    rPackages.jsonlite
+  ];
+
   env = {
     CUDAHOSTCXX = lib.optionalString cudaSupport "${stdenv.cc}/bin/cc";
     NIX_CFLAGS_LINK = lib.optionalString stdenv.isLinux "-fuse-ld=lld";
@@ -79,22 +111,43 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DCMAKE_BINARY_DIR=$out"
     "-DCMAKE_POSITION_INDEPENDENT_CODE=on"
-    "-DCATBOOST_COMPONENTS=app;libs${lib.optionalString pythonSupport ";python-package"}"
+    "-DCATBOOST_COMPONENTS=app;libs${lib.optionalString pythonSupport ";python-package"}${lib.optionalString rLibrary ";R-package"}"
   ] ++ lib.optionals cudaSupport [
-    "-DHAVE_CUDA=on"
+    "-DHAVE_CUDA=yes"
   ];
+
+  preConfigure = lib.optionals rLibrary ''
+    export R_LIBS_SITE="$R_LIBS_SITE''${R_LIBS_SITE:+:}$out/library"
+  '';
+
+  postConfigure = lib.optionals rLibrary ''
+    # catboost's configure step deletes the contents of the R-package directory
+    # and this step replaces it from src so it can be build for rLibrary
+    cp -r $src/catboost/R-package/* catboost/R-package
+  '';
 
   installPhase = ''
     runHook preInstall
-
     mkdir $dev
     cp -r catboost $dev
+  '' + lib.optionalString (!rLibrary) ''
     install -Dm555 catboost/app/catboost -t $out/bin
     install -Dm444 catboost/libs/model_interface/static/lib/libmodel_interface-static-lib.a -t $out/lib
     install -Dm444 catboost/libs/model_interface/libcatboostmodel${stdenv.hostPlatform.extensions.sharedLibrary} -t $out/lib
     install -Dm444 catboost/libs/train_interface/libcatboost${stdenv.hostPlatform.extensions.sharedLibrary} -t $out/lib
-
+  '' + lib.optionalString rLibrary ''
+    mkdir $out
+    mkdir $out/library
+    export R_LIBS_SITE="$out/library:$R_LIBS_SITE''${R_LIBS_SITE:+:}"
+    ${R}/bin/R CMD INSTALL -l $out/library catboost/R-package
+  '' + ''
     runHook postInstall
+  '';
+
+  postFixup = lib.optionalString rLibrary ''
+    if test -e $out/nix-support/propagated-build-inputs; then
+        ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
+    fi
   '';
 
   meta = with lib; {
