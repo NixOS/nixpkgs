@@ -7,7 +7,7 @@
 , nix-update-script
 }:
 let
-  version = "0.8.0";
+  version = "0.8.1";
 in
 buildGoModule rec {
   inherit version;
@@ -17,7 +17,7 @@ buildGoModule rec {
     owner = "AnalogJ";
     repo = "scrutiny";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ysjE2nn1WwhEiFIvJ5cRCJQf9mECTgiGUyenwf3mKTA=";
+    hash = "sha256-WoU5rdsIEhZQ+kPoXcestrGXC76rFPvhxa0msXjFsNg=";
   };
 
   subPackages = "collector/cmd/collector-metrics";
