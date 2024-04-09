@@ -14385,7 +14385,8 @@ with pkgs;
 
   wasm-tools = callPackage ../tools/misc/wasm-tools { };
 
-  wasmedge = darwin.apple_sdk_11_0.callPackage ../development/tools/wasmedge {
+  wasmedge = callPackage ../development/tools/wasmedge {
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else llvmPackages.stdenv;
     inherit (darwin.apple_sdk_11_0.frameworks) Foundation;
   };
 
