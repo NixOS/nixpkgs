@@ -1,48 +1,44 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , runCommand
 , shaka-packager
+, cmake
+, ninja
+, python3
+, darwin
+, nix-update-script
 }:
 
-let
-  sources = {
-    "x86_64-linux" = {
-      filename = "packager-linux-x64";
-      hash = "sha256-MoMX6PEtvPmloXJwRpnC2lHlT+tozsV4dmbCqweyyI0=";
-    };
-    aarch64-linux = {
-      filename = "packager-linux-arm64";
-      hash = "sha256-6+7SfnwVRsqFwI7/1F7yqVtkJVIoOFUmhoGU3P6gdQ0=";
-    };
-    x86_64-darwin = {
-      filename = "packager-osx-x64";
-      hash = "sha256-fFBtOp/Zb37LP7TWAEB0yp0xM88cMT9QS59EwW4MrAY=";
-    };
-  };
-
-  source = sources."${stdenv.hostPlatform.system}"
-    or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shaka-packager";
-  version = "2.6.1";
+  version = "3.0.4";
 
-  src = fetchurl {
-    url = "https://github.com/shaka-project/shaka-packager/releases/download/v${finalAttrs.version}/${source.filename}";
-    inherit (source) hash;
+  src = fetchFromGitHub {
+    owner = "shaka-project";
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-SR5sFcpSbhk1W/epeXMnLfEc/pypuNAieDCzZk4DhEY=";
+    # dependencies are vendored as git submodules
+    fetchSubmodules = true;
   };
 
-  dontUnpack = true;
-  sourceRoot = ".";
+  patches = [ ./0001-packager-version.patch ];
 
-  installPhase = ''
-    runHook preInstall
+  enableParallelBuilding = true;
 
-    install -m755 -D $src $out/bin/packager
+  nativeBuildInputs = [ cmake ninja ];
 
-    runHook postInstall
-  '';
+  buildInputs = [ python3 ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.SystemConfiguration
+  ];
+
+  cmakeFlags = [
+    "-DPACKAGER_VERSION=v${finalAttrs.version}"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    # required for abseil-cpp C++17 compatibility on x86_64-darwin
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.13"
+  ];
 
   passthru.tests = {
     simple = runCommand "${finalAttrs.pname}-test" { } ''
@@ -50,13 +46,14 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  meta = {
+  passthru.updateScript = nix-update-script { };
+
+  meta = with lib; {
     description = "Media packaging framework for VOD and Live DASH and HLS applications";
     homepage = "https://shaka-project.github.io/shaka-packager/html/";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     mainProgram = "packager";
-    maintainers = with lib.maintainers; [ ];
-    platforms = builtins.attrNames sources;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ niklaskorz ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 })
