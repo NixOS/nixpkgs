@@ -47,8 +47,11 @@ buildPythonPackage rec {
   pythonRelaxDeps = true;
 
   build-system = [
-    pythonRelaxDepsHook
     setuptools
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
   ];
 
   dependencies = [
