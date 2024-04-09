@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "pymodbus";
-  version = "3.6.6";
+  version = "3.6.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "pymodbus-dev";
     repo = "pymodbus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-CnMCHFwzNyzTgVyFDSlE7ggI6eXXYbtGuERIomUa3uA=";
+    hash = "sha256-SbfvVaIpTz4Mzojx9y13lYei4dEz+1NQEE/7bwz29tQ=";
   };
 
   postPatch = ''
