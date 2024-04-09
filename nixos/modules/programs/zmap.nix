@@ -6,7 +6,7 @@ let
   cfg = config.programs.zmap;
 in {
   options.programs.zmap = {
-    enable = mkEnableOption (lib.mdDoc "ZMap");
+    enable = mkEnableOption (lib.mdDoc "ZMap, a network scanner designed for Internet-wide network surveys");
   };
 
   config = mkIf cfg.enable {

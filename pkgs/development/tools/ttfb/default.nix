@@ -7,18 +7,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ttfb";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-94gBofb7H7+qU50+cp+rq14Vtbk2vuXFQksNITvICm4=";
+    hash = "sha256-38mhwYfWoMZzdbkgv65hBpX23wCpAWwiahuzO5xRpmA=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
-  cargoHash = "sha256-CUisxtUQXkStqSZikIoAN0GwpUjvQqon7KqI0beHL5U=";
+  cargoHash = "sha256-Gqv4XvG3aYMRdMP1mzUlsCPN+NMLHq2nf283KBQCems==";
 
   # The bin feature activates all dependencies of the binary. Otherwise,
   # only the library is build.

@@ -19,10 +19,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       user = "alice";
     };
 
-    services.xserver = {
-      enable = true;
-      displayManager.defaultSession = lib.mkForce "miriway";
-    };
+    services.xserver.enable = true;
+    services.displayManager.defaultSession = lib.mkForce "miriway";
 
     programs.miriway = {
       enable = true;

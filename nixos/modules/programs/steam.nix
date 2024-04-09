@@ -55,8 +55,6 @@ in {
             then [ package ] ++ extraPackages
             else [ package32 ] ++ extraPackages32;
         in prevLibs ++ additionalLibs;
-        # ensure font packages are picked up by Steam
-        extraPkgs = (prev.extraPkgs or []) ++ config.fonts.packages;
       } // optionalAttrs (cfg.gamescopeSession.enable && gamescopeCfg.capSysNice)
       {
         buildFHSEnv = pkgs.buildFHSEnv.override {
@@ -163,7 +161,7 @@ in {
     };
 
     programs.gamescope.enable = mkDefault cfg.gamescopeSession.enable;
-    services.xserver.displayManager.sessionPackages = mkIf cfg.gamescopeSession.enable [ gamescopeSessionFile ];
+    services.displayManager.sessionPackages = mkIf cfg.gamescopeSession.enable [ gamescopeSessionFile ];
 
     # optionally enable 32bit pulseaudio support if pulseaudio is enabled
     hardware.pulseaudio.support32Bit = config.hardware.pulseaudio.enable;

@@ -170,7 +170,17 @@ in {
         breeze.qt5
         plasma-integration.qt5
         pkgs.plasma5Packages.kwayland-integration
-        (pkgs.plasma5Packages.kio.override { withKcms = false; })
+        (
+          # Only symlink the KIO plugins, so we don't accidentally pull any services
+          # like KCMs or kcookiejar
+          let
+            kioPluginPath = "${pkgs.plasma5Packages.qtbase.qtPluginPrefix}/kf5/kio";
+            inherit (pkgs.plasma5Packages) kio;
+          in pkgs.runCommand "kio5-plugins-only" {} ''
+            mkdir -p $out/${kioPluginPath}
+            ln -s ${kio}/${kioPluginPath}/* $out/${kioPluginPath}
+          ''
+        )
         kio-extras-kf5
       ]
       # Optional hardware support features
@@ -246,11 +256,11 @@ in {
     xdg.portal.configPackages = mkDefault [kdePackages.xdg-desktop-portal-kde];
     services.pipewire.enable = mkDefault true;
 
-    services.xserver.displayManager = {
+    services.displayManager = {
       sessionPackages = [kdePackages.plasma-workspace];
       defaultSession = mkDefault "plasma";
     };
-    services.xserver.displayManager.sddm = {
+    services.displayManager.sddm = {
       package = kdePackages.sddm;
       theme = mkDefault "breeze";
       wayland.compositor = "kwin";

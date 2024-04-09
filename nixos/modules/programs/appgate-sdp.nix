@@ -5,7 +5,7 @@ with lib;
 {
   options = {
     programs.appgate-sdp = {
-      enable = mkEnableOption (lib.mdDoc "AppGate SDP VPN client");
+      enable = mkEnableOption (lib.mdDoc "the AppGate SDP VPN client");
     };
   };
 

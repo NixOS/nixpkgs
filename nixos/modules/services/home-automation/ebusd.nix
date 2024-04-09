@@ -44,7 +44,7 @@ in
   meta.maintainers = with maintainers; [ nathan-gs ];
 
   options.services.ebusd = {
-    enable = mkEnableOption (lib.mdDoc "ebusd service");
+    enable = mkEnableOption (lib.mdDoc "ebusd, a daemon for communication with eBUS heating systems");
 
     device = mkOption {
       type = types.str;

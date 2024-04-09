@@ -55,7 +55,7 @@ in
 
   options = {
     services.forgejo = {
-      enable = mkEnableOption (mdDoc "Forgejo");
+      enable = mkEnableOption (mdDoc "Forgejo, a software forge");
 
       package = mkPackageOption pkgs "forgejo" { };
 

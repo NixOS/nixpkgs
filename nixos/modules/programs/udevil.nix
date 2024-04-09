@@ -6,7 +6,7 @@ let
   cfg = config.programs.udevil;
 
 in {
-  options.programs.udevil.enable = mkEnableOption (lib.mdDoc "udevil");
+  options.programs.udevil.enable = mkEnableOption (lib.mdDoc "udevil, to mount filesystems without password");
 
   config = mkIf cfg.enable {
     security.wrappers.udevil =

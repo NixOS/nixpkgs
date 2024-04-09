@@ -1,30 +1,31 @@
-{ lib
-, buildPythonPackage
-, clarifai-grpc
-, fetchFromGitHub
-, inquirerpy
-, llama-index-core
-, numpy
-, opencv4
-, pandas
-, pillow
-, pycocotools
-, pypdf
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, pyyaml
-, rich
-, schema
-, setuptools
-, tabulate
-, tqdm
-, tritonclient
+{
+  lib,
+  buildPythonPackage,
+  clarifai-grpc,
+  fetchFromGitHub,
+  inquirerpy,
+  llama-index-core,
+  numpy,
+  opencv4,
+  pandas,
+  pillow,
+  pycocotools,
+  pypdf,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  pyyaml,
+  rich,
+  schema,
+  setuptools,
+  tabulate,
+  tqdm,
+  tritonclient,
 }:
 
 buildPythonPackage rec {
   pname = "clarifai";
-  version = "10.2.1";
+  version = "10.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -33,21 +34,16 @@ buildPythonPackage rec {
     owner = "Clarifai";
     repo = "clarifai-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-jI85xMApeEd0Hl6h4Am5qxWoSSTWHsmb7FxUjJPmBQM=";
+    hash = "sha256-8EPs6kGB+Px9Fs2Z+YwDcmEYI5+z/kOIKLraJFMykF0=";
   };
 
-  pythonRelaxDeps = [
-    "clarifai-grpc"
-  ];
+  pythonRelaxDeps = [ "clarifai-grpc" ];
 
-  pythonRemoveDeps = [
-    "opencv-python"
-  ];
+  pythonRemoveDeps = [ "opencv-python" ];
 
-  build-system = [
-    pythonRelaxDepsHook
-    setuptools
-  ];
+  build-system = [ setuptools ];
+
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     clarifai-grpc
@@ -67,14 +63,10 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    all = [
-      pycocotools
-    ];
+    all = [ pycocotools ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -99,9 +91,7 @@ buildPythonPackage rec {
     "clarifai/models/model_serving/repo_build/static_files/base_test.py"
   ];
 
-  pythonImportsCheck = [
-    "clarifai"
-  ];
+  pythonImportsCheck = [ "clarifai" ];
 
   meta = with lib; {
     description = "Clarifai Python Utilities";

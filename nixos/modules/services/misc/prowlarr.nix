@@ -9,7 +9,7 @@ in
 {
   options = {
     services.prowlarr = {
-      enable = mkEnableOption (lib.mdDoc "Prowlarr");
+      enable = mkEnableOption (lib.mdDoc "Prowlarr, an indexer manager/proxy for Torrent trackers and Usenet indexers");
 
       package = mkPackageOption pkgs "prowlarr" { };
 

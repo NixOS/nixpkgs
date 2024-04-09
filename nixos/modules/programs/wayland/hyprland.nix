@@ -14,7 +14,7 @@ in
   options.programs.hyprland = {
     enable = mkEnableOption null // {
       description = ''
-        Hyprland, the dynamic tiling Wayland compositor that doesn't sacrifice on its looks.
+        Whether to enable Hyprland, the dynamic tiling Wayland compositor that doesn't sacrifice on its looks.
 
         You can manually launch Hyprland by executing {command}`Hyprland` on a TTY.
 
@@ -66,7 +66,7 @@ in
 
     security.polkit.enable = true;
 
-    services.xserver.displayManager.sessionPackages = [ cfg.finalPackage ];
+    services.displayManager.sessionPackages = [ cfg.finalPackage ];
 
     xdg.portal = {
       enable = mkDefault true;

@@ -104,9 +104,12 @@ in
         default = { };
         description = lib.mdDoc ''
           logrotate freeform settings: each attribute here will define its own section,
-          ordered by priority, which can either define files to rotate with their settings
+          ordered by {option}`services.logrotate.settings.<name>.priority`,
+          which can either define files to rotate with their settings
           or settings common to all further files settings.
-          Refer to <https://linux.die.net/man/8/logrotate> for details.
+          All attribute names not explicitly defined as sub-options here are passed through
+          as logrotate config directives,
+          refer to <https://linux.die.net/man/8/logrotate> for details.
         '';
         example = literalExpression ''
           {
@@ -124,6 +127,14 @@ in
                 "/var/log/first*.log"
                 "/var/log/second.log"
               ];
+            };
+            # specify custom order of sections
+            "/var/log/myservice/*.log" = {
+              # ensure lower priority
+              priority = 110;
+              postrotate = '''
+                systemctl reload myservice
+              ''';
             };
           };
           '';

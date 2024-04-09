@@ -25,7 +25,7 @@ in
 
   options = {
     services.lifecycled = {
-      enable = mkEnableOption (lib.mdDoc "lifecycled");
+      enable = mkEnableOption (lib.mdDoc "lifecycled, a daemon for responding to AWS AutoScaling Lifecycle Hooks");
 
       queueCleaner = {
         enable = mkEnableOption (lib.mdDoc "lifecycled-queue-cleaner");

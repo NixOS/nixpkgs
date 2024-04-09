@@ -15,7 +15,7 @@ in
 
   options.xdg.portal.wlr = {
     enable = mkEnableOption (lib.mdDoc ''
-      desktop portal for wlroots-based desktops
+      desktop portal for wlroots-based desktops.
 
       This will add the `xdg-desktop-portal-wlr` package into
       the {option}`xdg.portal.extraPortals` option, and provide the

@@ -8,7 +8,7 @@ in
 {
   options = {
     services.distccd = {
-      enable = mkEnableOption (lib.mdDoc "distccd");
+      enable = mkEnableOption (lib.mdDoc "distccd, a distributed C/C++ compiler");
 
       allowedClients = mkOption {
         type = types.listOf types.str;

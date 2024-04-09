@@ -14,7 +14,7 @@ with lib;
 
   options = {
     services.zeitgeist = {
-      enable = mkEnableOption (lib.mdDoc "zeitgeist");
+      enable = mkEnableOption (lib.mdDoc "zeitgeist, a service which logs the users' activities and events");
     };
   };
 

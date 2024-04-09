@@ -8,7 +8,9 @@ in {
   options = {
     services.ombi = {
       enable = mkEnableOption (lib.mdDoc ''
-        Ombi.
+        Ombi, a web application that automatically gives your shared Plex or
+        Emby users the ability to request content by themselves!
+
         Optionally see <https://docs.ombi.app/info/reverse-proxy>
         on how to set up a reverse proxy
       '');

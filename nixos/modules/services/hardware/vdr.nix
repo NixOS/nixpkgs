@@ -9,7 +9,7 @@ in
   options = {
 
     services.vdr = {
-      enable = mkEnableOption (mdDoc "Start VDR");
+      enable = mkEnableOption (mdDoc "VDR, a video disk recorder");
 
       package = mkPackageOption pkgs "vdr" {
         example = "wrapVdr.override { plugins = with pkgs.vdrPlugins; [ hello ]; }";

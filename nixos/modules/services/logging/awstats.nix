@@ -95,7 +95,7 @@ in
   ];
 
   options.services.awstats = {
-    enable = mkEnableOption (lib.mdDoc "awstats");
+    enable = mkEnableOption (lib.mdDoc "awstats, a real-time logfile analyzer");
 
     dataDir = mkOption {
       type = types.path;

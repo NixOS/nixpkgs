@@ -6,7 +6,7 @@ in
 {
   options = {
     programs.oddjobd = {
-      enable = lib.mkEnableOption "oddjob";
+      enable = lib.mkEnableOption "oddjob, a D-Bus service which runs odd jobs on behalf of client applications";
       package = lib.mkPackageOption pkgs "oddjob" {};
     };
   };

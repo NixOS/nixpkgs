@@ -8,7 +8,7 @@ let
 in
 {
   options.services.signald = {
-    enable = mkEnableOption (lib.mdDoc "the signald service");
+    enable = mkEnableOption (lib.mdDoc "signald, the unofficial daemon for interacting with Signal");
 
     user = mkOption {
       type = types.str;

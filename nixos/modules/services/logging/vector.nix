@@ -6,7 +6,7 @@ let cfg = config.services.vector;
 in
 {
   options.services.vector = {
-    enable = mkEnableOption (lib.mdDoc "Vector");
+    enable = mkEnableOption (lib.mdDoc "Vector, a high-performance observability data pipeline");
 
     package = mkPackageOption pkgs "vector" { };
 

@@ -7,7 +7,7 @@ in
 {
   options = {
     programs.nano = {
-      enable = lib.mkEnableOption (lib.mdDoc "nano") // {
+      enable = lib.mkEnableOption (lib.mdDoc "nano, a small user-friendly console text editor") // {
         default = true;
       };
 

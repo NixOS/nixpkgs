@@ -21,7 +21,7 @@ in
 
   options.services = {
     castopod = {
-      enable = lib.mkEnableOption (lib.mdDoc "Castopod");
+      enable = lib.mkEnableOption (lib.mdDoc "Castopod, a hosting platform for podcasters");
       package = lib.mkOption {
         type = lib.types.package;
         default = pkgs.castopod;

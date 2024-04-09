@@ -49,7 +49,7 @@ in {
 
     programs.proxychains = {
 
-      enable = mkEnableOption (lib.mdDoc "installing proxychains configuration");
+      enable = mkEnableOption (lib.mdDoc "proxychains configuration");
 
       package = mkPackageOption pkgs "proxychains" {
         example = "proxychains-ng";

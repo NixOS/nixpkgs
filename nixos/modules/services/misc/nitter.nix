@@ -52,7 +52,7 @@ in
 
   options = {
     services.nitter = {
-      enable = mkEnableOption (lib.mdDoc "Nitter");
+      enable = mkEnableOption (lib.mdDoc "Nitter, an alternative Twitter front-end");
 
       package = mkPackageOption pkgs "nitter" { };
 

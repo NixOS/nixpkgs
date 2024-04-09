@@ -8,7 +8,7 @@ in
 {
   options = {
     services.lidarr = {
-      enable = mkEnableOption (lib.mdDoc "Lidarr");
+      enable = mkEnableOption (lib.mdDoc "Lidarr, a Usenet/BitTorrent music downloader");
 
       dataDir = mkOption {
         type = types.str;
