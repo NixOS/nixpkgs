@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, elementpath
-, fetchFromGitHub
-, jinja2
-, lxml
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  elementpath,
+  fetchFromGitHub,
+  jinja2,
+  lxml,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -23,13 +24,9 @@ buildPythonPackage rec {
     hash = "sha256-jhof4C/jbMcvBRTLFdeFq2+ZucoDhbdcLE9IWvgzN0Y=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    elementpath
-  ];
+  dependencies = [ elementpath ];
 
   nativeCheckInputs = [
     jinja2
@@ -37,9 +34,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "xmlschema"
-  ];
+  pythonImportsCheck = [ "xmlschema" ];
 
   meta = with lib; {
     description = "XML Schema validator and data conversion library for Python";
