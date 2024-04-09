@@ -26,8 +26,8 @@ To create a new key without a passphrase you can do:
 ```ShellSession
 $ ssh-keygen -t ed25519 -P '' -f example-key
 Generating public/private ed25519 key pair.
-Your identification has been saved in test-key
-Your public key has been saved in test-key.pub
+Your identification has been saved in example-key
+Your public key has been saved in example-key.pub
 The key fingerprint is:
 SHA256:yjxl3UbTn31fLWeyLYTAKYJPRmzknjQZoyG8gSNEoIE my-user@workstation
 ```

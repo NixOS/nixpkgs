@@ -41,6 +41,25 @@
 }:
 
 let
+  systemdArch = let
+    inherit (stdenvNoCC) hostPlatform;
+  in
+    if hostPlatform.isAarch32 then "arm"
+    else if hostPlatform.isAarch64 then "arm64"
+    else if hostPlatform.isx86_32 then "x86"
+    else if hostPlatform.isx86_64 then "x86-64"
+    else if hostPlatform.isMips32 then "mips-le"
+    else if hostPlatform.isMips64 then "mips64-le"
+    else if hostPlatform.isPower then "ppc"
+    else if hostPlatform.isPower64 then "ppc64"
+    else if hostPlatform.isRiscV32 then "riscv32"
+    else if hostPlatform.isRiscV64 then "riscv64"
+    else if hostPlatform.isS390 then "s390"
+    else if hostPlatform.isS390x then "s390x"
+    else if hostPlatform.isLoongArch64 then "loongarch64"
+    else if hostPlatform.isAlpha then "alpha"
+    else hostPlatform.parsed.cpu.name;
+
   amendRepartDefinitions = runCommand "amend-repart-definitions.py"
     {
       # TODO: ruff does not splice properly in nativeBuildInputs
@@ -99,6 +118,7 @@ in
   finalRepartDefinitions = "repart.d";
 
   systemdRepartFlags = [
+    "--architecture=${systemdArch}"
     "--dry-run=no"
     "--size=auto"
     "--seed=${seed}"
