@@ -650,7 +650,7 @@ let
     rtk = [ pkgs.zlib.dev ];
     scPipe = [ pkgs.zlib.dev ];
     seqTools = [ pkgs.zlib.dev ];
-    seqbias = [ pkgs.zlib.dev ];
+    seqbias = with pkgs; [ zlib.dev bzip2.dev xz.dev ];
     sparkwarc = [ pkgs.zlib.dev ];
     RoBMA = [ pkgs.jags ];
     pexm = [ pkgs.jags ];
