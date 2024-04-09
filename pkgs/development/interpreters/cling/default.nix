@@ -1,6 +1,5 @@
 { cmake
 , fetchFromGitHub
-, fetchgit
 , git
 , lib
 , libffi
@@ -53,7 +52,7 @@ let
     clingSrc = fetchFromGitHub {
       owner = "root-project";
       repo = "cling";
-      rev = "v1.0";
+      rev = "v${version}";
       sha256 = "sha256-Ye8EINzt+dyNvUIRydACXzb/xEPLm0YSkz08Xxw3xp4=";
     };
 
@@ -66,8 +65,6 @@ let
 
     patches = [
       ./no-clang-cpp.patch
-
-      # ./force-install-cling-targets.patch
     ];
 
     nativeBuildInputs = [ python3 git cmake ];
