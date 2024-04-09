@@ -52,6 +52,9 @@ localPython.pkgs.buildPythonApplication rec {
     "test/integration"
   ];
 
+  # Upstream did not adapt to pytest 8 yet.
+  pytestFlagsArray = [ "-W" "ignore::pytest.PytestRemovedIn8Warning" ];
+
   passthru = {
     updateScript = nix-update-script { };
     tests.version = testers.testVersion {
