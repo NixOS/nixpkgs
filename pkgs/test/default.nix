@@ -16,6 +16,7 @@ with pkgs;
         (filter (n: n != "llvmPackages_6"))
         (filter (n: n != "llvmPackages_7"))
         (filter (n: n != "llvmPackages_8"))
+        (filter (n: n != "llvmPackages_9"))
         (filter (n: n != "llvmPackages_10"))
         (filter (n: n != "llvmPackages_11"))
       ];
