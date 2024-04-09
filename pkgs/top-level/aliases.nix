@@ -199,7 +199,7 @@ mapAliases ({
   clang6Stdenv = throw "clang6Stdenv has been removed from nixpkgs"; # Added 2024-01-08
   clang7Stdenv = throw "clang7Stdenv has been removed from nixpkgs"; # Added 2023-11-19
   clang8Stdenv = throw "clang8Stdenv has been removed from nixpkgs"; # Added 2024-01-24
-  clang9Stdenv = lowPrio llvmPackages_9.stdenv;
+  clang9Stdenv = throw "clang9Stdenv has been remvoed from nixpkgs"; # Added 2024-04-08
   clang10Stdenv = throw "clang10Stdenv has been removed from nixpkgs"; # Added 2024-01-26
   clang11Stdenv = throw "clang11Stdenv has been removed from nixpkgs"; # Added 2023-01-24
   clang12Stdenv = lowPrio llvmPackages_12.stdenv;
@@ -212,11 +212,13 @@ mapAliases ({
   clang-tools_6 = throw "clang-tools_6 has been removed from nixpkgs"; # Added 2024-01-08
   clang-tools_7 = throw "clang-tools_7 has been removed from nixpkgs"; # Added 2023-11-19
   clang-tools_8  = throw "clang-tools_8 has been removed from nixpkgs"; # Added 2024-01-24
+  clang-tools_9 = throw "clang-tools_9 has been removed from nixpkgs"; # Added 2024-04-08
   clang-tools_10 = throw "clang-tools_10 has been removed from nixpkgs"; # Added 2023-01-26
   clang-tools_11 = throw "clang-tools_11 has been removed from nixpkgs"; # Added 2023-01-24
   clang_6 = throw "clang_6 has been removed from nixpkgs"; # Added 2024-01-08
   clang_7 = throw "clang_7 has been removed from nixpkgs"; # Added 2023-11-19
   clang_8  = throw "clang_8 has been removed from nixpkgs"; # Added 2024-01-24
+  clang_9 = throw "clang_9 has been removed from nixpkgs"; # Added 2024-01-08
   clang_10 = throw "clang_10 has been removed from nixpkgs"; # Added 2024-01-26
   clang_11 = throw "clang_11 has been removed from nixpkgs"; # Added 2023-01-24
 
@@ -729,21 +731,25 @@ mapAliases ({
   lld_6 = throw "lld_6 has been removed from nixpkgs"; # Added 2024-01-08
   lld_7 = throw "lld_7 has been removed from nixpkgs"; # Added 2023-11-19
   lld_8 = throw "lld_8 has been removed from nixpkgs"; # Added 2024-01-24
+  lld_9 = throw "lld_9 has been removed from nixpkgs"; # Added 2024-04-08
   lld_10 = throw "lld_10 has been removed from nixpkgs"; # Added 2024-01-26
   lld_11 = throw "lld_11 has been removed from nixpkgs"; # Added 2024-01-24
   lldb_6 = throw "lldb_6 has been removed from nixpkgs"; # Added 2024-01-08
   lldb_7 = throw "lldb_7 has been removed from nixpkgs"; # Added 2023-11-19
   lldb_8 = throw "lldb_8 has been removed from nixpkgs"; # Added 2024-01-24
+  lldb_9 = throw "lldb_9 has been removed from nixpkgs"; # Added 2024-04-08
   lldb_10 = throw "lldb_10 has been removed from nixpkgs"; # Added 2024-01-26
   lldb_11 = throw "lldb_11 has been removed from nixpkgs"; # Added 2024-01-24
   llvmPackages_6 = throw "llvmPackages_6 has been removed from nixpkgs"; # Added 2024-01-09
   llvmPackages_7 = throw "llvmPackages_7 has been removed from nixpkgs"; # Added 2023-11-19
   llvmPackages_8 = throw "llvmPackages_8 has been removed from nixpkgs"; # Added 2024-01-24
+  llvmPackages_9 = throw "llvmPackages_9 has been removed from nixpkgs"; # Added 2024-04-08
   llvmPackages_10 = throw "llvmPackages_10 has been removed from nixpkgs"; # Added 2024-01-26
   llvmPackages_11 = throw "llvmPackages_11 has been removed from nixpkgs"; # Added 2024-01-24
   llvm_6 = throw "llvm_6 has been removed from nixpkgs"; # Added 2024-01-08
   llvm_7 = throw "llvm_7 has been removed from nixpkgs"; # Added 2023-11-19
   llvm_8 = throw "llvm_8 has been removed from nixpkgs"; # Added 2024-01-24
+  llvm_9 = throw "llvm_9 has been removed from nixpkgs"; # Added 2024-04-08
   llvm_10 = throw "llvm_10 has been removed from nixpkgs"; # Added 2024-01-26
   llvm_11 = throw "llvm_11 has been removed from nixpkgs"; # Added 2024-01-24
 
