@@ -5,7 +5,7 @@
   libuuid, systemd, nspr, check, cmocka, uid_wrapper, p11-kit,
   nss_wrapper, ncurses, Po4a, http-parser, jansson, jose,
   docbook_xsl, docbook_xml_dtd_44,
-  testers, nix-update-script, nixosTests,
+  testers, nix-update-script, nixosTests, fetchpatch,
   withSudo ? false }:
 
 let
@@ -21,6 +21,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "refs/tags/${finalAttrs.version}";
     hash = "sha256-VJXZndbmC6mAVxzvv5Wjb4adrQkP16Rt4cgjl4qGDIc=";
   };
+
+  patches = [
+    # Fix the build with Samba 4.20
+    (fetchpatch {
+      url = "https://github.com/SSSD/sssd/commit/1bf51929a48b84d62ac54f2a42f17e7fbffe1612.patch";
+      hash = "sha256-VLx04APEipp860iOJNIwTGywxZ7rIDdyh3te6m7Ymlo=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs ./sbus_generate.sh.in

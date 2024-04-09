@@ -80,13 +80,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal";
-  version = "3.8.4";
+  version = "3.8.5";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-R9VLof13OXPbWGHOG1Q4WZWSPoF739C6WuNWxoIwKTw=";
+    hash = "sha256-Z+mYlyOX9vJ772qwZMQfCbD/V7RL6+9JLHTzoZ55ot0=";
   };
 
   patches = [

@@ -13,14 +13,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dioxus-cli";
-  version = "0.5.0";
+  version = "0.5.4";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-iNlJLDxb8v7x19q0iaAnGmtmoPjMW8YXzbx5Fcf8Yws=";
+    hash = "sha256-rfftCJW3MRDg7a2WUDXZWGx1lYmOkqVRcJTEGMObars=";
   };
 
-  cargoHash = "sha256-6XKNBLDNWYd5+O7buHupXzVss2jCdh3wu9mXVLivH44=";
+  cargoHash = "sha256-cpgjs8ZxpJrnA5UtoVoP97VFfmQ7CS1H74D19x0bzAA=";
 
   nativeBuildInputs = [ pkg-config cacert ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [

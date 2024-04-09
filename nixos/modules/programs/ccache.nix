@@ -5,7 +5,7 @@ let
 in {
   options.programs.ccache = {
     # host configuration
-    enable = lib.mkEnableOption (lib.mdDoc "CCache");
+    enable = lib.mkEnableOption (lib.mdDoc "CCache, a compiler cache for fast recompilation of C/C++ code");
     cacheDir = lib.mkOption {
       type = lib.types.path;
       description = lib.mdDoc "CCache directory";

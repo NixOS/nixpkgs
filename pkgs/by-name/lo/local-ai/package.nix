@@ -1,5 +1,7 @@
-{ stdenv
+{ config
+, stdenv
 , lib
+, addDriverRunpath
 , fetchpatch
 , fetchFromGitHub
 , protobuf
@@ -21,7 +23,7 @@
   # CPU extensions
 , enable_avx ? true
 , enable_avx2 ? true
-, enable_avx512 ? false
+, enable_avx512 ? stdenv.hostPlatform.avx512Support
 , enable_f16c ? true
 , enable_fma ? true
 
@@ -31,7 +33,7 @@
 , with_openblas ? false
 , openblas
 
-, with_cublas ? false
+, with_cublas ? config.cudaSupport
 , cudaPackages
 
 , with_clblas ? false
@@ -54,7 +56,6 @@
 , fetchzip
 , fetchurl
 , writeText
-, writeTextFile
 , symlinkJoin
 , linkFarmFromDrvs
 , jq
@@ -67,9 +68,17 @@ let
     else if with_clblas then "clblas"
     else "";
 
+  inherit (cudaPackages) libcublas cuda_nvcc cuda_cccl cuda_cudart;
+
   typedBuiltInputs =
     lib.optionals with_cublas
-      [ cudaPackages.cudatoolkit cudaPackages.cuda_cudart ]
+      [
+        cuda_nvcc # should be part of nativeBuildInputs
+        cuda_cudart
+        cuda_cccl
+        (lib.getDev libcublas)
+        (lib.getLib libcublas)
+      ]
     ++ lib.optionals with_clblas
       [ clblast ocl-icd opencl-headers ]
     ++ lib.optionals with_openblas
@@ -166,7 +175,6 @@ let
     patches = [ ];
     nativeBuildInputs = [ cmake ];
     cmakeFlags = (self.cmakeFlags or [ ]) ++ [
-      # -DCMAKE_C_FLAGS="-D_FILE_OFFSET_BITS=64"
       (lib.cmakeBool "BUILD_SHARED_LIBS" true)
       (lib.cmakeBool "USE_ASYNC" false)
       (lib.cmakeBool "USE_MBROLA" false)
@@ -431,7 +439,7 @@ let
       "VERSION=v${version}"
       "BUILD_TYPE=${BUILD_TYPE}"
     ]
-    ++ lib.optional with_cublas "CUDA_LIBPATH=${cudaPackages.cuda_cudart}/lib"
+    ++ lib.optional with_cublas "CUDA_LIBPATH=${cuda_cudart}/lib"
     ++ lib.optional with_tts "PIPER_CGO_CXXFLAGS=-DSPDLOG_FMT_EXTERNAL=1";
 
     buildPhase = ''
@@ -465,19 +473,19 @@ let
 
     # patching rpath with patchelf doens't work. The execuable
     # raises an segmentation fault
-    postFixup = ''
-      wrapProgram $out/bin/${pname} \
-    '' + lib.optionalString with_cublas ''
-      --prefix LD_LIBRARY_PATH : "${cudaPackages.libcublas}/lib:${cudaPackages.cuda_cudart}/lib:/run/opengl-driver/lib" \
-    '' + lib.optionalString with_clblas ''
-      --prefix LD_LIBRARY_PATH : "${clblast}/lib:${ocl-icd}/lib" \
-    '' + lib.optionalString with_openblas ''
-      --prefix LD_LIBRARY_PATH : "${openblas}/lib" \
-    '' + lib.optionalString with_tts ''
-      --prefix LD_LIBRARY_PATH : "${piper-phonemize}/lib" \
-    '' + ''
-      --prefix PATH : "${ffmpeg}/bin"
-    '';
+    postFixup =
+      let
+        LD_LIBRARY_PATH = [ ]
+          ++ lib.optionals with_cublas [ (lib.getLib libcublas) cuda_cudart addDriverRunpath.driverLink ]
+          ++ lib.optionals with_clblas [ clblast ocl-icd ]
+          ++ lib.optionals with_openblas [ openblas ]
+          ++ lib.optionals with_tts [ piper-phonemize ];
+      in
+      ''
+        wrapProgram $out/bin/${pname} \
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath LD_LIBRARY_PATH}" \
+        --prefix PATH : "${ffmpeg}/bin"
+      '';
 
     passthru.local-packages = {
       inherit

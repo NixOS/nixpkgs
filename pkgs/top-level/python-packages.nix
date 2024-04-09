@@ -327,6 +327,8 @@ self: super: with self; {
 
   aionotion = callPackage ../development/python-modules/aionotion { };
 
+  aionut = callPackage ../development/python-modules/aionut { };
+
   aiooncue = callPackage ../development/python-modules/aiooncue { };
 
   aioopenexchangerates = callPackage ../development/python-modules/aioopenexchangerates { };
@@ -1884,6 +1886,9 @@ self: super: with self; {
 
   capstone = callPackage ../development/python-modules/capstone {
     inherit (pkgs) capstone;
+  };
+  capstone_4 = callPackage ../development/python-modules/capstone/4.nix {
+    inherit (pkgs) capstone_4;
   };
 
   captcha = callPackage ../development/python-modules/captcha { };
@@ -3884,6 +3889,8 @@ self: super: with self; {
 
   eufylife-ble-client = callPackage ../development/python-modules/eufylife-ble-client { };
 
+  eval-type-backport = callPackage ../development/python-modules/eval-type-backport { };
+
   evaluate = callPackage ../development/python-modules/evaluate { };
 
   evdev = callPackage ../development/python-modules/evdev { };
@@ -4543,6 +4550,8 @@ self: super: with self; {
 
   fx2 = callPackage ../development/python-modules/fx2 { };
 
+  fyta-cli = callPackage ../development/python-modules/fyta-cli { };
+
   g2pkk = callPackage ../development/python-modules/g2pkk { };
 
   galario = toPythonModule (pkgs.galario.override {
@@ -4597,6 +4606,8 @@ self: super: with self; {
   gdal = toPythonModule (pkgs.gdal.override { python3 = python; });
 
   gdata = callPackage ../development/python-modules/gdata { };
+
+  gdb-pt-dump = callPackage ../development/python-modules/gdb-pt-dump { };
 
   gdcm = toPythonModule (pkgs.gdcm.override {
     inherit (self) python;
@@ -4711,6 +4722,8 @@ self: super: with self; {
   gflags = callPackage ../development/python-modules/gflags { };
 
   gflanguages = callPackage ../development/python-modules/gflanguages { };
+
+  gfsubsets = callPackage ../development/python-modules/gfsubsets { };
 
   ghapi = callPackage ../development/python-modules/ghapi { };
 
@@ -7324,6 +7337,8 @@ self: super: with self; {
 
   microsoft-kiota-serialization-text = callPackage ../development/python-modules/microsoft-kiota-serialization-text { };
 
+  midea-beautiful-air = callPackage ../development/python-modules/midea-beautiful-air { };
+
   midiutil = callPackage ../development/python-modules/midiutil { };
 
   mido = callPackage ../development/python-modules/mido { };
@@ -8948,6 +8963,8 @@ self: super: with self; {
 
   omrdatasettools = callPackage ../development/python-modules/omrdatasettools { };
 
+  oncalendar = callPackage ../development/python-modules/oncalendar { };
+
   ondilo = callPackage ../development/python-modules/ondilo { };
 
   onetimepass = callPackage ../development/python-modules/onetimepass { };
@@ -9416,6 +9433,8 @@ self: super: with self; {
   pbkdf2 = callPackage ../development/python-modules/pbkdf2 { };
 
   pbr = callPackage ../development/python-modules/pbr { };
+
+  pbs-installer = callPackage ../development/python-modules/pbs-installer { };
 
   pc-ble-driver-py = toPythonModule (callPackage ../development/python-modules/pc-ble-driver-py { });
 
@@ -9958,6 +9977,8 @@ self: super: with self; {
     inherit (pkgs) memcached;
   };
 
+  python-motionmount = callPackage ../development/python-modules/python-motionmount { };
+
   python-otbr-api = callPackage ../development/python-modules/python-otbr-api { };
 
   python-openems = callPackage ../development/python-modules/python-openems { };
@@ -10366,6 +10387,8 @@ self: super: with self; {
   pweave = callPackage ../development/python-modules/pweave { };
 
   pwlf = callPackage ../development/python-modules/pwlf { };
+
+  pwndbg = callPackage ../development/python-modules/pwndbg { };
 
   pwntools = callPackage ../development/python-modules/pwntools {
     debugger = pkgs.gdb;
@@ -12810,6 +12833,8 @@ self: super: with self; {
   ramlfications = callPackage ../development/python-modules/ramlfications { };
 
   random2 = callPackage ../development/python-modules/random2 { };
+
+  randomfiletree = callPackage ../development/python-modules/randomfiletree { };
 
   range-typed-integers = callPackage ../development/python-modules/range-typed-integers { };
 
@@ -17092,6 +17117,8 @@ self: super: with self; {
   zeversolarlocal = callPackage ../development/python-modules/zeversolarlocal { };
 
   zfec = callPackage ../development/python-modules/zfec { };
+
+  zha = callPackage ../development/python-modules/zha { };
 
   zha-quirks = callPackage ../development/python-modules/zha-quirks { };
 

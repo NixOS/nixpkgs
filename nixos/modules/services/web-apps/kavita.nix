@@ -34,8 +34,8 @@ in
     tokenKeyFile = lib.mkOption {
       type = lib.types.path;
       description = lib.mdDoc ''
-        A file containing the TokenKey, a secret with at 128+ bits.
-        It can be generated with `head -c 32 /dev/urandom | base64`.
+        A file containing the TokenKey, a secret with at 512+ bits.
+        It can be generated with `head -c 64 /dev/urandom | base64 --wrap=0`.
       '';
     };
 

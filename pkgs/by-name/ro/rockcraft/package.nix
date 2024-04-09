@@ -8,13 +8,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "rockcraft";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "rockcraft";
     rev = "refs/tags/${version}";
-    hash = "sha256-f6qLvk5cebHjZx51nJYYAwILGCTyj6FKlb3HGt6iz4M=";
+    hash = "sha256-Qk7Fi4I/5TCf9llGTsTBQsAxUkeVmAlH6tFNYMsyZ1c=";
   };
 
   postPatch = ''

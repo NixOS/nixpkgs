@@ -15,6 +15,22 @@ in
     services.ollama = {
       enable = lib.mkEnableOption "ollama server for local large language models";
       package = lib.mkPackageOption pkgs "ollama" { };
+      home = lib.mkOption {
+        type = types.str;
+        default = "%S/ollama";
+        example = "/home/foo";
+        description = ''
+          The home directory that the ollama service is started in.
+        '';
+      };
+      models = lib.mkOption {
+        type = types.str;
+        default = "%S/ollama/models";
+        example = "/path/to/ollama/models";
+        description = ''
+          The directory that the ollama service will read models from and download new models to.
+        '';
+      };
       listenAddress = lib.mkOption {
         type = types.str;
         default = "127.0.0.1:11434";
@@ -58,8 +74,8 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       environment = cfg.environmentVariables // {
-        HOME = "%S/ollama";
-        OLLAMA_MODELS = "%S/ollama/models";
+        HOME = cfg.home;
+        OLLAMA_MODELS = cfg.models;
         OLLAMA_HOST = cfg.listenAddress;
       };
       serviceConfig = {

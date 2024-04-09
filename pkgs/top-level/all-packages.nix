@@ -1792,14 +1792,18 @@ with pkgs;
     libgamemode32 = pkgsi686Linux.gamemode.lib;
   };
 
-  gamescope = callPackage ../applications/window-managers/gamescope {
+  gamescope = callPackage ../by-name/ga/gamescope/package.nix {
     enableExecutable = true;
     enableWsi = false;
+
+    wlroots = wlroots_0_17;
   };
 
-  gamescope-wsi = callPackage ../applications/window-managers/gamescope {
+  gamescope-wsi = callPackage ../by-name/ga/gamescope/package.nix {
     enableExecutable = false;
     enableWsi = true;
+
+    wlroots = wlroots_0_17;
   };
 
   gay = callPackage ../tools/misc/gay {  };
@@ -3391,6 +3395,8 @@ with pkgs;
 
   azure-cli = callPackage ../tools/admin/azure-cli { };
 
+  azure-cli-extensions = recurseIntoAttrs azure-cli.extensions;
+
   azure-functions-core-tools = callPackage ../development/tools/azure-functions-core-tools { };
 
   azure-static-sites-client = callPackage ../development/tools/azure-static-sites-client { };
@@ -3563,7 +3569,7 @@ with pkgs;
 
   boulder = callPackage ../tools/admin/boulder { };
 
-  btrfs-assistant = libsForQt5.callPackage ../tools/misc/btrfs-assistant { };
+  btrfs-assistant = qt6.callPackage ../tools/misc/btrfs-assistant { };
 
   btrfs-heatmap = callPackage ../tools/filesystems/btrfs-heatmap { };
 
@@ -4015,25 +4021,15 @@ with pkgs;
 
   go-audit = callPackage ../tools/system/go-audit { };
 
-  gopass = callPackage ../tools/security/gopass {
-    buildGoModule = buildGo122Module;
-  };
+  gopass = callPackage ../tools/security/gopass { };
 
-  gopass-hibp = callPackage ../tools/security/gopass/hibp.nix {
-    buildGoModule = buildGo122Module;
-  };
+  gopass-hibp = callPackage ../tools/security/gopass/hibp.nix { };
 
-  gopass-jsonapi = callPackage ../tools/security/gopass/jsonapi.nix {
-    buildGoModule = buildGo122Module;
-  };
+  gopass-jsonapi = callPackage ../tools/security/gopass/jsonapi.nix { };
 
-  git-credential-gopass = callPackage ../tools/security/gopass/git-credential.nix {
-    buildGoModule = buildGo122Module;
-  };
+  git-credential-gopass = callPackage ../tools/security/gopass/git-credential.nix { };
 
-  gopass-summon-provider = callPackage ../tools/security/gopass/summon.nix {
-    buildGoModule = buildGo122Module;
-  };
+  gopass-summon-provider = callPackage ../tools/security/gopass/summon.nix { };
 
   gosh = callPackage ../tools/security/gosh { };
 
@@ -4563,6 +4559,7 @@ with pkgs;
   candle = libsForQt5.callPackage ../applications/misc/candle { };
 
   capstone = callPackage ../development/libraries/capstone { };
+  capstone_4 = callPackage ../development/libraries/capstone/4.nix { };
 
   keystone = callPackage ../development/libraries/keystone { };
 
@@ -7808,7 +7805,9 @@ with pkgs;
 
   zeekscript = callPackage ../tools/security/zeekscript { };
 
-  zoekt = callPackage ../tools/text/zoekt { };
+  zoekt = callPackage ../tools/text/zoekt {
+    buildGoModule = buildGo121Module;
+  };
 
   zonemaster-cli = perlPackages.ZonemasterCLI;
 
@@ -9283,6 +9282,8 @@ with pkgs;
 
   inadyn = callPackage ../tools/networking/inadyn { };
 
+  incus-lts = callPackage ../by-name/in/incus/lts.nix { };
+
   incron = callPackage ../tools/system/incron { };
 
   indexed-bzip2 = with python3Packages; toPythonApplication indexed-bzip2;
@@ -9627,7 +9628,7 @@ with pkgs;
 
   kaffeine = libsForQt5.callPackage ../applications/video/kaffeine { };
 
-  kak-lsp = callPackage ../tools/misc/kak-lsp {
+  kakoune-lsp = callPackage ../by-name/ka/kakoune-lsp/package.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
 
@@ -10240,7 +10241,7 @@ with pkgs;
 
   keama = callPackage ../tools/networking/keama { };
 
-  ktailctl = libsForQt5.callPackage ../applications/networking/ktailctl {};
+  ktailctl = kdePackages.callPackage ../applications/networking/ktailctl {};
 
   iredis = callPackage ../tools/admin/iredis { };
 
@@ -12255,8 +12256,6 @@ with pkgs;
   pwgen-secure = callPackage ../tools/security/pwgen-secure { };
 
   pwnat = callPackage ../tools/networking/pwnat { };
-
-  pwndbg = callPackage ../development/tools/misc/pwndbg { };
 
   pwninit = callPackage ../development/tools/misc/pwninit {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -15074,7 +15073,9 @@ with pkgs;
 
   zip = callPackage ../tools/archivers/zip { };
 
-  zincsearch = callPackage ../servers/search/zincsearch { };
+  zincsearch = callPackage ../servers/search/zincsearch {
+    buildGoModule = buildGo121Module;
+  };
 
   zkfuse = callPackage ../tools/filesystems/zkfuse { };
 
@@ -16563,10 +16564,10 @@ with pkgs;
     mlton20130715
     mlton20180207Binary
     mlton20180207
-    mlton20210107
+    mlton20210117
     mltonHEAD;
 
-  mlton = mlton20210107;
+  mlton = mlton20210117;
 
   mono = mono6;
 
@@ -19092,7 +19093,7 @@ with pkgs;
   img = callPackage ../development/tools/img { };
 
   include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use {
-    llvmPackages = llvmPackages_17;
+    llvmPackages = llvmPackages_18;
   };
 
   indent = callPackage ../development/tools/misc/indent { };
@@ -24944,7 +24945,9 @@ with pkgs;
 
   umockdev = callPackage ../development/libraries/umockdev { };
 
-  unconvert = callPackage ../development/tools/unconvert { };
+  unconvert = callPackage ../development/tools/unconvert {
+    buildGoModule = buildGo121Module;
+  };
 
   uncover = callPackage ../tools/security/uncover { };
 
@@ -25133,8 +25136,6 @@ with pkgs;
   webrtc-audio-processing = webrtc-audio-processing_0_3;
 
   whereami = callPackage ../development/libraries/whereami { };
-
-  where-is-my-sddm-theme = libsForQt5.callPackage ../data/themes/where-is-my-sddm-theme { };
 
   wildmidi = callPackage ../development/libraries/wildmidi {
     inherit (darwin.apple_sdk.frameworks) OpenAL;
@@ -32494,7 +32495,7 @@ with pkgs;
 
   krane = callPackage ../applications/networking/cluster/krane { };
 
-  krita = libsForQt5.callPackage ../applications/graphics/krita { };
+  krita = callPackage ../applications/graphics/krita/wrapper.nix { };
 
   ksuperkey = callPackage ../tools/X11/ksuperkey { };
 
@@ -37625,8 +37626,6 @@ with pkgs;
 
   springLobby = callPackage ../games/spring/springlobby.nix { };
 
-  srb2 = callPackage ../games/srb2 { };
-
   ssl-cert-check = callPackage ../tools/admin/ssl-cert-check { };
 
   stardust = callPackage ../games/stardust { };
@@ -37802,7 +37801,7 @@ with pkgs;
 
   voxelands = callPackage ../games/voxelands { };
 
-  vvvvvv = callPackage ../games/vvvvvv {
+  vvvvvv = callPackage ../by-name/vv/vvvvvv/package.nix {
     inherit (darwin.apple_sdk.frameworks) Foundation IOKit;
   };
 

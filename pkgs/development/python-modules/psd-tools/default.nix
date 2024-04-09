@@ -10,8 +10,9 @@
 , numpy
 , aggdraw
 , pytestCheckHook
+, pytest-cov
 , ipython
-, cython
+, cython_3
 }:
 
 buildPythonPackage rec {
@@ -33,7 +34,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    cython
+    cython_3
   ];
 
   propagatedBuildInputs = [
@@ -49,6 +50,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov
   ];
 
   pythonImportsCheck = [

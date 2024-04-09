@@ -25,7 +25,7 @@ in
 
   options = {
     services.nzbget = {
-      enable = mkEnableOption (lib.mdDoc "NZBGet");
+      enable = mkEnableOption (lib.mdDoc "NZBGet, for downloading files from news servers");
 
       user = mkOption {
         type = types.str;

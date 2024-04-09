@@ -18,10 +18,9 @@ symlinkJoin {
   ];
 
   postBuild = ''
-    rm -rf $out/bin/*
-    makeWrapper ${etlegacy-unwrapped}/bin/etl.* $out/bin/etl \
+    makeWrapper $out/bin/etl.* $out/bin/etl \
       --add-flags "+set fs_basepath ${placeholder "out"}/lib/etlegacy"
-    makeWrapper ${etlegacy-unwrapped}/bin/etlded.* $out/bin/etlded \
+    makeWrapper $out/bin/etlded.* $out/bin/etlded \
       --add-flags "+set fs_basepath ${placeholder "out"}/lib/etlegacy"
   '';
 

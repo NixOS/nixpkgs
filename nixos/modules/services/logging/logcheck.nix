@@ -109,7 +109,7 @@ in
 {
   options = {
     services.logcheck = {
-      enable = mkEnableOption (lib.mdDoc "logcheck cron job");
+      enable = mkEnableOption (lib.mdDoc "logcheck cron job, to mail anomalies in the system logfiles to the administrator");
 
       user = mkOption {
         default = "logcheck";

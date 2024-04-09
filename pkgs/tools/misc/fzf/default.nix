@@ -1,39 +1,25 @@
-{ stdenv
-, lib
+{ lib
 , buildGoModule
 , fetchFromGitHub
-, writeShellScriptBin
-, runtimeShell
 , installShellFiles
 , bc
 , ncurses
-, perl
 , testers
 , fzf
 }:
 
-let
-  # on Linux, wrap perl in the bash completion scripts with the glibc locales,
-  # so that using the shell completion (ctrl+r, etc) doesn't result in ugly
-  # warnings on non-nixos machines
-  ourPerl = if !stdenv.isLinux then perl else (
-    writeShellScriptBin "perl" ''
-      export PERL_BADLANG=0
-      exec ${perl}/bin/perl "$@"
-    '');
-in
 buildGoModule rec {
   pname = "fzf";
-  version = "0.47.0";
+  version = "0.49.0";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    hash = "sha256-rIRn8g4j/drWEHnvZnJW2sSLq5mrw8Q2pn3LN2sEXDY=";
+    hash = "sha256-XecMHKi5JMWx3RHQRk2FqS3SjyR6KzWjfyQ5JCI45xM=";
   };
 
-  vendorHash = "sha256-BOPACUQKcllmA2eWQs+sOfofAQLle2Byb/rZgOhmkVY=";
+  vendorHash = "sha256-ZEwB2GKohmOx8xosj14VII6sQ4a82s7+h9r620MKEeU=";
 
   CGO_ENABLED = 0;
 
@@ -56,14 +42,9 @@ buildGoModule rec {
         exit 1
     fi
 
-    # Has a sneaky dependency on perl
-    # Include first args to make sure we're patching the right thing
-    substituteInPlace shell/key-bindings.bash \
-      --replace "command -v perl" "command -v ${ourPerl}/bin/perl" \
-      --replace " perl -n " " ${ourPerl}/bin/perl -n "
     # fzf-tmux depends on bc
-   substituteInPlace bin/fzf-tmux \
-     --replace "bc" "${bc}/bin/bc"
+    substituteInPlace bin/fzf-tmux \
+      --replace "bc" "${bc}/bin/bc"
   '';
 
   postInstall = ''
@@ -74,23 +55,6 @@ buildGoModule rec {
     install -D plugin/* -t $out/share/vim-plugins/${pname}/plugin
     mkdir -p $out/share/nvim
     ln -s $out/share/vim-plugins/${pname} $out/share/nvim/site
-
-    # Install shell integrations
-    install -D shell/* -t $out/share/fzf/
-    install -D shell/key-bindings.fish $out/share/fish/vendor_functions.d/fzf_key_bindings.fish
-    mkdir -p $out/share/fish/vendor_conf.d
-    cat << EOF > $out/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
-      status is-interactive; or exit 0
-      fzf_key_bindings
-    EOF
-
-    cat <<SCRIPT > $out/bin/fzf-share
-    #!${runtimeShell}
-    # Run this script to find the fzf shared folder where all the shell
-    # integration scripts are living.
-    echo $out/share/fzf
-    SCRIPT
-    chmod +x $out/bin/fzf-share
   '';
 
   passthru.tests.version = testers.testVersion {

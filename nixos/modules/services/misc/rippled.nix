@@ -207,7 +207,7 @@ in
 
   options = {
     services.rippled = {
-      enable = mkEnableOption (lib.mdDoc "rippled");
+      enable = mkEnableOption (lib.mdDoc "rippled, a decentralized cryptocurrency blockchain daemon implementing the XRP Ledger protocol in C++");
 
       package = mkPackageOption pkgs "rippled" { };
 

@@ -1,4 +1,4 @@
-{ appimageTools, lib, fetchurl }:
+{ appimageTools, lib, fetchurl, makeWrapper}:
 
 appimageTools.wrapType2 rec {
   pname = "cider";
@@ -14,9 +14,13 @@ appimageTools.wrapType2 rec {
     in ''
       mv $out/bin/${pname}-${version} $out/bin/${pname}
 
+      source "${makeWrapper}/nix-support/setup-hook"
+      wrapProgram $out/bin/${pname} \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+
       install -m 444 -D ${contents}/${pname}.desktop -t $out/share/applications
       substituteInPlace $out/share/applications/${pname}.desktop \
-        --replace 'Exec=AppRun' 'Exec=${pname}'
+        --replace-warn 'Exec=AppRun' 'Exec=${pname}'
       cp -r ${contents}/usr/share/icons $out/share
     '';
 
@@ -24,8 +28,8 @@ appimageTools.wrapType2 rec {
     description = "A new look into listening and enjoying Apple Music in style and performance.";
     homepage = "https://github.com/ciderapp/Cider";
     license = licenses.agpl3Only;
+    mainProgram = "cider";
     maintainers = [ maintainers.cigrainger ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = "cider";
   };
 }
