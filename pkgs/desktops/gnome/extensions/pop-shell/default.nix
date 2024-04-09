@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, glib, gjs, typescript }:
+{ stdenv, lib, fetchFromGitHub, glib, gjs, typescript, unstableGitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-pop-shell";
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   passthru = {
     extensionUuid = "pop-shell@system76.com";
     extensionPortalSlug = "pop-shell";
+    updateScript = unstableGitUpdater { };
   };
 
   postPatch = ''
