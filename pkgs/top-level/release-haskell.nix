@@ -270,7 +270,7 @@ let
         cabal-install
         cabal2nix
         cachix
-        carp
+        # carp broken on 2024-04-09
         cedille
         client-ip-echo
         darcs
