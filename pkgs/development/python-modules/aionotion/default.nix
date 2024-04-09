@@ -31,11 +31,11 @@ buildPythonPackage rec {
     hash = "sha256-FPXltYgjU6ym/UhWEEbMBIJ+7REf+m5t0FnB/ZBeiM8=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     certifi
     ciso8601
