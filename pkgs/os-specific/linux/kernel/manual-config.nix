@@ -8,15 +8,7 @@ let
   lib_ = lib;
   stdenv_ = stdenv;
 
-  readConfig = configfile: import (runCommand "config.nix" {} ''
-    echo "{" > "$out"
-    while IFS='=' read key val; do
-      [ "x''${key#CONFIG_}" != "x$key" ] || continue
-      no_firstquote="''${val#\"}";
-      echo '  "'"$key"'" = "'"''${no_firstquote%\"}"'";' >> "$out"
-    done < "${configfile}"
-    echo "}" >> $out
-  '').outPath;
+  readConfig = import ./read-config.nix { inherit lib; };
 in lib.makeOverridable ({
   # The kernel version
   version,
@@ -35,7 +27,7 @@ in lib.makeOverridable ({
   configfile,
   # Manually specified nixexpr representing the config
   # If unspecified, this will be autodetected from the .config
-  config ? lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
+  config ? null,
   # Custom seed used for CONFIG_GCC_PLUGIN_RANDSTRUCT if enabled. This is
   # automatically extended with extra per-version and per-config values.
   randstructSeed ? "",
@@ -56,6 +48,13 @@ in lib.makeOverridable ({
 let
   inherit (lib)
     hasAttr getAttr optional optionals optionalString optionalAttrs maintainers platforms;
+
+  canReadConfig = allowImportFromDerivation || (builtins.getContext (builtins.toString configfile)) == {};
+
+  configReal =
+    if config == null
+    then optionalAttrs canReadConfig (readConfig configfile)
+    else config;
 
   drvAttrs = config_: kernelConf: kernelPatches: configfile:
     let
@@ -372,7 +371,7 @@ in
 assert lib.versionOlder version "5.8" -> libelf != null;
 assert lib.versionAtLeast version "5.8" -> elfutils != null;
 
-stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPatches configfile) // {
+stdenv.mkDerivation ((drvAttrs configReal stdenv.hostPlatform.linux-kernel kernelPatches configfile) // {
   pname = "linux";
   inherit version;
 
