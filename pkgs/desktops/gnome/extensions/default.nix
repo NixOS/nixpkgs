@@ -64,9 +64,10 @@ in rec {
   gnome43Extensions = mapUuidNames (produceExtensionsList "43");
   gnome44Extensions = mapUuidNames (produceExtensionsList "44");
   gnome45Extensions = mapUuidNames (produceExtensionsList "45");
+  gnome46Extensions = mapUuidNames (produceExtensionsList "46");
 
   # Keep the last three versions in here
-  gnomeExtensions = lib.trivial.pipe (gnome43Extensions // gnome44Extensions // gnome45Extensions) [
+  gnomeExtensions = lib.trivial.pipe (gnome44Extensions // gnome45Extensions // gnome46Extensions) [
     (v: builtins.removeAttrs v [ "__attrsFailEvaluation" ])
     # Apply some custom patches for automatically packaged extensions
     (callPackage ./extensionOverrides.nix {})
