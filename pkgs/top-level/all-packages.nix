@@ -19443,6 +19443,8 @@ with pkgs;
 
   pgcli = with pkgs.python3Packages; toPythonApplication pgcli;
 
+  pgroll = callPackage ../development/tools/pgroll{ } ;
+
   picotool = callPackage ../development/tools/picotool { };
 
   planus = callPackage ../development/tools/misc/planus { };
