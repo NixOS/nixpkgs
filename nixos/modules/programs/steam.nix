@@ -55,6 +55,10 @@ in {
             then [ package ] ++ extraPackages
             else [ package32 ] ++ extraPackages32;
         in prevLibs ++ additionalLibs;
+        extraPkgs = pkgs: let
+          prevPkgs = if prev ? extraPkgs then prev.extraPkgs pkgs else [ ];
+        in prevPkgs ++ config.fonts.packages;
+
       } // optionalAttrs (cfg.gamescopeSession.enable && gamescopeCfg.capSysNice)
       {
         buildFHSEnv = pkgs.buildFHSEnv.override {
