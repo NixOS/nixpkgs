@@ -55,8 +55,6 @@ in {
             then [ package ] ++ extraPackages
             else [ package32 ] ++ extraPackages32;
         in prevLibs ++ additionalLibs;
-        # ensure font packages are picked up by Steam
-        extraPkgs = (prev.extraPkgs or []) ++ config.fonts.packages;
       } // optionalAttrs (cfg.gamescopeSession.enable && gamescopeCfg.capSysNice)
       {
         buildFHSEnv = pkgs.buildFHSEnv.override {
