@@ -56,7 +56,6 @@ An example of this is building a kernel for use in a VM or micro VM. You can use
   configfile = ./path_to_config_file;
   linux = pkgs.linuxManualConfig {
     inherit version src configfile;
-    allowImportFromDerivation = true;
   };
 }
 ```
@@ -74,10 +73,11 @@ If necessary, the version string can be slightly modified to explicitly mark it 
   configfile = ./path_to_config_file;
   linux = pkgs.linuxManualConfig {
     inherit version modDirVersion src configfile;
-    allowImportFromDerivation = true;
   };
 }
 ```
+
+If `configfile` is a derivation instead of a path, pass `allowImportFromDerivation = true;` to linuxManualConfig to allow reading the config file to detect options from it.
 
 :::
 
