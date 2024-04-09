@@ -31,8 +31,6 @@ python3Packages.buildPythonPackage rec {
   # tests are not in pypi package
   doCheck = false;
 
-  # passthru.tests = nixosTests.pinnwand;
-
   meta = with lib; {
     homepage = "https://github.com/supabase-community/supabase-py";
     license = licenses.mit;
