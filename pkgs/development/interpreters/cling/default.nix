@@ -122,7 +122,7 @@ let
     "-l" "${llvmPackages_13.libcxx}/lib/libc++.so"
   ] else [
     "-I" "${gcc-unwrapped}/include/c++/${gcc-unwrapped.version}"
-    "-I" "${gcc-unwrapped}/include/c++/${gcc-unwrapped.version}/x86_64-unknown-linux-gnu"
+    "-I" "${gcc-unwrapped}/include/c++/${gcc-unwrapped.version}/${stdenv.hostPlatform.config}"
   ];
 
   # The flags passed to the wrapped cling should
