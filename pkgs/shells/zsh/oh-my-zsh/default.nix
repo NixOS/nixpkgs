@@ -99,8 +99,7 @@ stdenv.mkDerivation rec {
         nixpkgs="$(git rev-parse --show-toplevel)"
         default_nix="$nixpkgs/pkgs/shells/zsh/oh-my-zsh/default.nix"
         latestDate="$(curl -L -s https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/$latestSha | jq '.commit.committer.date' | sed 's|"\(.*\)T.*|\1|g')"
-        update-source-version oh-my-zsh "$latestSha" --version-key=rev
-        update-source-version oh-my-zsh "$latestDate" --ignore-same-hash
+        update-source-version oh-my-zsh "$latestDate" --rev="$latestSha"
         nixfmt "$default_nix"
       else
         echo "${pname} is already up-to-date"
