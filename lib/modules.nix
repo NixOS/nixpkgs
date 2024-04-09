@@ -807,6 +807,9 @@ let
 
     in warnDeprecation opt //
       { value = builtins.addErrorContext "while evaluating the option `${showOption loc}':" value;
+        # The merged value before applying the options `apply` function to it.
+        # In general though, `apply` should not be used, it's an anti-pattern.
+        beforeApply = res.mergedValue;
         inherit (res.defsFinal') highestPrio;
         definitions = map (def: def.value) res.defsFinal;
         files = map (def: def.file) res.defsFinal;
