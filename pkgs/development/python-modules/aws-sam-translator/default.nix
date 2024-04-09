@@ -11,15 +11,16 @@
 , pytestCheckHook
 , pythonOlder
 , pyyaml
+, setuptools
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "aws-sam-translator";
   version = "1.87.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aws";
@@ -33,7 +34,11 @@ buildPythonPackage rec {
     rm pytest.ini
   '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     boto3
     jsonschema
     pydantic
