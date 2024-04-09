@@ -18,6 +18,7 @@
 , xmltodict
 
 # optional-dependencies
+, antlr4-python3-runtime
 , aws-xray-sdk
 , cfn-lint
 , flask
@@ -25,6 +26,7 @@
 , docker
 , graphql-core
 , joserfc
+, jsonpath-ng
 , jsondiff
 , multipart
 , openapi-spec-validator
@@ -41,17 +43,17 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "5.0.3";
+  version = "5.0.5";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BwrC7fia167ihTRIHOaOLzRMimqP7+xUJ+6g1Zm/29s=";
+    hash = "sha256-Lqyi33dY9oaN9CC/ByXNC5PZhwlgbx+4sjQ7W9yCLZE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
@@ -70,6 +72,7 @@ buildPythonPackage rec {
   passthru.optional-dependencies = {
     # non-exhaustive list of extras, that was cobbled together for testing
     all = [
+      antlr4-python3-runtime
       aws-xray-sdk
       cfn-lint
       docker
@@ -78,6 +81,7 @@ buildPythonPackage rec {
       graphql-core
       joserfc
       jsondiff
+      jsonpath-ng
       multipart
       openapi-spec-validator
       pyparsing
