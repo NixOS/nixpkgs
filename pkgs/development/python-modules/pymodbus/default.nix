@@ -1,20 +1,21 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, prompt-toolkit
-, pygments
-, pyserial
-, pytest-asyncio
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, redis
-, setuptools
-, sqlalchemy
-, twisted
-, typer
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  prompt-toolkit,
+  pygments,
+  pyserial,
+  pytest-asyncio,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  setuptools,
+  sqlalchemy,
+  twisted,
+  typer,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
       --replace-fail "--cov-report html " ""
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   passthru.optional-dependencies = {
     repl = [
@@ -48,9 +47,7 @@ buildPythonPackage rec {
       pygments
       click
     ] ++ typer.optional-dependencies.all;
-    serial = [
-      pyserial
-    ];
+    serial = [ pyserial ];
   };
 
   nativeCheckInputs = [
@@ -70,18 +67,18 @@ buildPythonPackage rec {
     popd
   '';
 
-  pythonImportsCheck = [
-    "pymodbus"
-  ];
+  pythonImportsCheck = [ "pymodbus" ];
 
-  disabledTests = [
-    # Tests often hang
-    "test_connected"
-  ] ++ lib.optionals (lib.versionAtLeast aiohttp.version "3.9.0") [
-    "test_split_serial_packet"
-    "test_serial_poll"
-    "test_simulator"
-  ];
+  disabledTests =
+    [
+      # Tests often hang
+      "test_connected"
+    ]
+    ++ lib.optionals (lib.versionAtLeast aiohttp.version "3.9.0") [
+      "test_split_serial_packet"
+      "test_serial_poll"
+      "test_simulator"
+    ];
 
   meta = with lib; {
     description = "Python implementation of the Modbus protocol";
