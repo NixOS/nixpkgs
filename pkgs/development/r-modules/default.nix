@@ -627,6 +627,7 @@ let
     QuasR = with pkgs; [ zlib.dev xz.dev bzip2.dev ];
     Rarr = [ pkgs.zlib.dev ];
     Rbowtie2 = [ pkgs.zlib.dev ];
+    Rfastp = with pkgs; [ xz.dev bzip2.dev zlib.dev ];
     maftools = with pkgs; [ zlib.dev bzip2 xz.dev ];
     Rmmquant = [ pkgs.zlib.dev ];
     SICtools = with pkgs; [ zlib.dev ncurses.dev ];
