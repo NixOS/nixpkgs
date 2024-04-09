@@ -25,5 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/ibireme/yyjson/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ federicoschonborn ];
+    platforms = lib.platforms.all;
   };
 })
