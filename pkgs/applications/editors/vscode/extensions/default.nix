@@ -3611,6 +3611,23 @@ let
         };
       };
 
+      signageos.signageos-vscode-sops = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "signageos-vscode-sops";
+          publisher = "signageos";
+          version = "0.9.1";
+          hash = "sha256-b1Gp+tL5/e97xMuqkz4EvN0PxI7cJOObusEkcp+qKfM=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/signageos.signageos-vscode-sops/changelog";
+          description = "A Visual Studio Code extension for SOPS support";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=signageos.signageos-vscode-sops";
+          homepage = "https://github.com/signageos/vscode-sops";
+          license = lib.licenses.unfree;
+          maintainers = [ lib.maintainers.superherointj ];
+        };
+      };
+
       silofy.hackthebox = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "hackthebox";
