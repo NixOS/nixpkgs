@@ -50,9 +50,14 @@ in
       type = lines;
       default = "";
       example = ''
-        kernel_fs coda
         proxy foo.bar:8080
         use_locks 0
+
+        [/media/dav]
+        use_locks 1
+
+        [/home/otto/mywebspace]
+        gui_optimize 1
       '';
       description = ''
         Extra lines appended to the configuration of davfs2.
