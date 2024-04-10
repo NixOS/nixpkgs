@@ -23,7 +23,7 @@ let
   signingPrivateKeyId = "4D642DE8B678C79D";
 
   supportedDbTypes = [ "mysql" "postgres" "sqlite3" ];
-  makeGForgejoTest = type: nameValuePair type (makeTest {
+  makeForgejoTest = type: nameValuePair type (makeTest {
     name = "forgejo-${type}";
     meta.maintainers = with maintainers; [ bendlas emilylange ];
 
@@ -62,11 +62,20 @@ let
           };
         };
       };
-      client1 = { config, pkgs, ... }: {
-        environment.systemPackages = [ pkgs.git ];
-      };
-      client2 = { config, pkgs, ... }: {
-        environment.systemPackages = [ pkgs.git ];
+      client = { ... }: {
+        programs.git = {
+          enable = true;
+          config = {
+            user.email = "test@localhost";
+            user.name = "test";
+            init.defaultBranch = "main";
+          };
+        };
+        programs.ssh.extraConfig = ''
+          Host *
+            StrictHostKeyChecking no
+            IdentityFile ~/.ssh/privk
+        '';
       };
     };
 
@@ -75,26 +84,22 @@ let
         inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
         serverSystem = nodes.server.system.build.toplevel;
         dumpFile = with nodes.server.specialisation.dump.configuration.services.forgejo.dump; "${backupDir}/${file}";
+        remoteUri = "forgejo@server:test/repo";
       in
       ''
         import json
-        GIT_SSH_COMMAND = "ssh -i $HOME/.ssh/privk -o StrictHostKeyChecking=no"
-        REPO = "forgejo@server:test/repo"
-        PRIVK = "${snakeOilPrivateKey}"
 
         start_all()
 
-        client1.succeed("mkdir /tmp/repo")
-        client1.succeed("mkdir -p $HOME/.ssh")
-        client1.succeed(f"cat {PRIVK} > $HOME/.ssh/privk")
-        client1.succeed("chmod 0400 $HOME/.ssh/privk")
-        client1.succeed("git -C /tmp/repo init")
-        client1.succeed("echo hello world > /tmp/repo/testfile")
-        client1.succeed("git -C /tmp/repo add .")
-        client1.succeed("git config --global user.email test@localhost")
-        client1.succeed("git config --global user.name test")
-        client1.succeed("git -C /tmp/repo commit -m 'Initial import'")
-        client1.succeed(f"git -C /tmp/repo remote add origin {REPO}")
+        client.succeed("mkdir -p ~/.ssh")
+        client.succeed("(umask 0077; cat ${snakeOilPrivateKey} > ~/.ssh/privk)")
+
+        client.succeed("mkdir /tmp/repo")
+        client.succeed("git -C /tmp/repo init")
+        client.succeed("echo 'hello world' > /tmp/repo/testfile")
+        client.succeed("git -C /tmp/repo add .")
+        client.succeed("git -C /tmp/repo commit -m 'Initial import'")
+        client.succeed("git -C /tmp/repo remote add origin ${remoteUri}")
 
         server.wait_for_unit("forgejo.service")
         server.wait_for_open_port(3000)
@@ -143,18 +148,14 @@ let
             + ' -d \'{"key":"${snakeOilPublicKey}","read_only":true,"title":"SSH"}\'''
         )
 
-        client1.succeed(
-            f"GIT_SSH_COMMAND='{GIT_SSH_COMMAND}' git -C /tmp/repo push origin master"
-        )
+        client.succeed("git -C /tmp/repo push origin main")
 
-        client2.succeed("mkdir -p $HOME/.ssh")
-        client2.succeed(f"cat {PRIVK} > $HOME/.ssh/privk")
-        client2.succeed("chmod 0400 $HOME/.ssh/privk")
-        client2.succeed(f"GIT_SSH_COMMAND='{GIT_SSH_COMMAND}' git clone {REPO}")
-        client2.succeed('test "$(cat repo/testfile | xargs echo -n)" = "hello world"')
+        client.succeed("git clone ${remoteUri} /tmp/repo-clone")
+        print(client.succeed("ls -lash /tmp/repo-clone"))
+        assert "hello world" == client.succeed("cat /tmp/repo-clone/testfile").strip()
 
         with subtest("Testing git protocol version=2 over ssh"):
-            git_protocol = client2.succeed(f"GIT_SSH_COMMAND='{GIT_SSH_COMMAND}' GIT_TRACE2_EVENT=true git -C repo fetch |& grep negotiated-version")
+            git_protocol = client.succeed("GIT_TRACE2_EVENT=true git -C /tmp/repo-clone fetch |& grep negotiated-version")
             version = json.loads(git_protocol).get("value")
             assert version == "2", f"git did not negotiate protocol version 2, but version {version} instead."
 
@@ -181,4 +182,4 @@ let
   });
 in
 
-listToAttrs (map makeGForgejoTest supportedDbTypes)
+listToAttrs (map makeForgejoTest supportedDbTypes)
