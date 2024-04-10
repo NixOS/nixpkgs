@@ -15348,6 +15348,12 @@
     githubId = 1368952;
     name = "Pedro Lara Campos";
   };
+  peefy = {
+    email = "xpf6677@gmail.com";
+    github = "Peefy";
+    githubId = 22744597;
+    name = "Peefy";
+  };
   peelz = {
     email = "peelz.dev+nixpkgs@gmail.com";
     github = "notpeelz";
