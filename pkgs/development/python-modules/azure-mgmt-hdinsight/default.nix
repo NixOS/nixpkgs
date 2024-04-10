@@ -1,12 +1,13 @@
-{ lib
-, azure-common
-, azure-mgmt-core
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
-, pythonOlder
-, setuptools
+{
+  lib,
+  azure-common,
+  azure-mgmt-core,
+  buildPythonPackage,
+  fetchPypi,
+  msrest,
+  msrestazure,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     azure-common
@@ -36,7 +35,10 @@ buildPythonPackage rec {
   # no tests included
   doCheck = false;
 
-  pythonImportsCheck = [ "azure.common" "azure.mgmt.hdinsight" ];
+  pythonImportsCheck = [
+    "azure.common"
+    "azure.mgmt.hdinsight"
+  ];
 
   meta = with lib; {
     description = "Microsoft Azure HDInsight Management Client Library for Python";
