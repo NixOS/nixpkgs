@@ -1421,7 +1421,8 @@ fixupPhase() {
     # Make sure everything is writable so "strip" et al. work.
     local output
     for output in $(getAllOutputNames); do
-        if [ -e "${!output}" ]; then chmod -R u+w "${!output}"; fi
+        # for set*id bits see #300635
+        if [ -e "${!output}" ]; then chmod -R u+w,u-s,g-s "${!output}"; fi
     done
 
     runHook preFixup
