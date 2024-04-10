@@ -700,7 +700,7 @@ with import <nixpkgs> {};
     hello = attrs: lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0")  {
       postPatch = ''
         substituteInPlace lib/zoneinfo.rs \
-          --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+          --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
       '';
     };
   };

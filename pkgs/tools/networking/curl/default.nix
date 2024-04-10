@@ -65,6 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-CVE-2023-42619.patch
     # https://curl.se/docs/CVE-2023-46218.html
     ./0002-CVE-2023-42618.patch
+    # https://curl.se/docs/CVE-2024-2398.html
+    ./0003-CVE-2024-2398.patch
+    # https://curl.se/docs/CVE-2024-2004.html
+    ./0004-CVE-2024-2004.patch
   ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];

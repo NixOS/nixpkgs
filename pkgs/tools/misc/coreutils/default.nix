@@ -39,6 +39,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-rbz8/omSNbceh2jc8HzVMlILf1T5qAZIQ/jRmakEu6o=";
   };
 
+  patches = [
+    # https://www.openwall.com/lists/oss-security/2024/01/18/2
+    ./CVE-2024-0684.patch
+  ];
+
   postPatch = ''
     # The test tends to fail on btrfs, f2fs and maybe other unusual filesystems.
     sed '2i echo Skipping dd sparse test && exit 77' -i ./tests/dd/sparse.sh

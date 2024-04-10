@@ -1,0 +1,31 @@
+From c4c5ed8f4e9cd55a12966d4f520e3a13101637d9 Mon Sep 17 00:00:00 2001
+From: Paul Eggert <eggert@cs.ucla.edu>
+Date: Tue, 16 Jan 2024 13:48:32 -0800
+Subject: [PATCH] split: do not shrink hold buffer
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+* src/split.c (line_bytes_split): Do not shrink hold buffer.
+If it’s large for this batch it’s likely to be large for the next
+batch, and for ‘split’ it’s not worth the complexity/CPU hassle to
+shrink it.  Do not assume hold_size can be bufsize.
+---
+ src/split.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/src/split.c b/src/split.c
+index 64020c859..037960a59 100644
+--- a/src/split.c
++++ b/src/split.c
+@@ -809,10 +809,7 @@ line_bytes_split (intmax_t n_bytes, char *buf, idx_t bufsize)
+             {
+               cwrite (n_out == 0, hold, n_hold);
+               n_out += n_hold;
+-              if (n_hold > bufsize)
+-                hold = xirealloc (hold, bufsize);
+               n_hold = 0;
+-              hold_size = bufsize;
+             }
+ 
+           /* Output to eol if present.  */

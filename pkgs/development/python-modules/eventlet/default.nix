@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pythonOlder
 , dnspython
 , greenlet
@@ -25,6 +26,15 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-iSSEZgPkK7RrZfU11z7hUk+JbFsCPH/SD16e+/f6TFU=";
   };
+
+  patches = [
+    # fix tests running on kernel 6.6 or newer
+    # https://github.com/eventlet/eventlet/pull/905
+    (fetchpatch {
+      url = "https://github.com/eventlet/eventlet/commit/413327b229c80a97e9c89c52f7714224942701b4.patch";
+      hash = "sha256-rbYPd5cg3ElSYWYaZJrS7bb4nMJkTMO0ScvNnXRXzE0=";
+    })
+  ];
 
   propagatedBuildInputs = [
     dnspython
