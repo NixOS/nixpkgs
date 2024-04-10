@@ -55,7 +55,7 @@
 /pkgs/pkgs-lib/formats/hocon                     @h7x4
 
 # pkgs/by-name
-/pkgs/test/nixpkgs-check-by-name @infinisil
+/pkgs/test/check-by-name @infinisil
 /pkgs/by-name/README.md @infinisil
 /pkgs/top-level/by-name-overlay.nix @infinisil
 /.github/workflows/check-by-name.yml @infinisil
