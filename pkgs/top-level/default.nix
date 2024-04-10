@@ -45,6 +45,7 @@
 let # Rename the function arguments
   config0 = config;
   crossSystem0 = if crossSystem == null then localSystem else crossSystem;
+  localSystem0 = localSystem;
 
 in let
   lib = import ../../lib;
@@ -58,7 +59,7 @@ in let
     lib.foldr (x: throwIfNot (lib.isFunction x) "All crossOverlays passed to nixpkgs must be functions.") (r: r) crossOverlays
     ;
 
-  localSystem = lib.systems.elaborate args.localSystem;
+  localSystem = lib.systems.elaborate localSystem0;
 
   # Condition preserves sharing which in turn affects equality.
   #
@@ -123,7 +124,7 @@ in let
   # experience here.)
   nixpkgsFun = newArgs: import ./. (
     args // lib.optionalAttrs (newArgs ? "localSystem") {
-      localSystem = newArgs.localSystem;
+      localSystem = lib.systems.asAttrs localSystem0 // newArgs.localSystem;
     } // lib.optionalAttrs (newArgs ? "crossSystem") {
       crossSystem = lib.systems.asAttrs crossSystem0 // newArgs.crossSystem;
     } // lib.optionalAttrs (newArgs ? "overlays") {
