@@ -130,7 +130,7 @@ let
         echo >> $out
 
         echo "$config" >> $out
-      ''; # */
+      '';
 
   prefixStringLines = prefix: str:
     concatMapStringsSep "\n" (line: prefix + line) (splitString "\n" str);
