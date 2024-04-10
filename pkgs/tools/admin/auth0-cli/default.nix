@@ -28,6 +28,9 @@ buildGoModule rec {
     # This is because subPackages above limits what is built to just what we
     # want but also limits the tests
     unset subPackages
+    # Test requires network access
+    substituteInPlace internal/cli/universal_login_customize_test.go \
+      --replace-fail "TestFetchUniversalLoginBrandingData" "SkipFetchUniversalLoginBrandingData"
   '';
 
   subPackages = [ "cmd/auth0" ];
