@@ -1,4 +1,4 @@
-{ config, lib, stdenv, fetchurl, fetchsvn, pkg-config, freetype, yasm, ffmpeg_4
+{ config, lib, stdenv, fetchurl, pkg-config, freetype, yasm, ffmpeg_4
 , aalibSupport ? true, aalib
 , fontconfigSupport ? true, fontconfig, freefont_ttf
 , fribidiSupport ? true, fribidi
@@ -37,7 +37,7 @@ let
 
   codecs_src =
     let
-      dir = "http://www.mplayerhq.hu/MPlayer/releases/codecs/";
+      dir = "https://mplayerhq.hu/MPlayer/releases/codecs/";
       version = "20071007";
     in
     if stdenv.hostPlatform.system == "i686-linux" then fetchurl {
@@ -70,12 +70,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "mplayer";
-  version = "unstable-2022-02-03";
+  version = "1.5";
 
-  src = fetchsvn {
-    url = "svn://svn.mplayerhq.hu/mplayer/trunk";
-    rev = "38331";
-    sha256 = "1vpic8i6zvg0zsy50vhm45ysqag561bpn9jycfbvvwl9ji7l55zi";
+  src = fetchurl {
+    url = "https://mplayerhq.hu/MPlayer/releases/MPlayer-${version}.tar.xz";
+    hash = "sha256-ZQzVW7PLRMmznONtrEiEKFWXmcXxjRbZjtsrclbLv4U=";
   };
 
   prePatch = ''
@@ -203,7 +202,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A movie player that supports many video formats";
-    homepage = "http://mplayerhq.hu";
+    homepage = "https://mplayerhq.hu";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ eelco ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" ];
