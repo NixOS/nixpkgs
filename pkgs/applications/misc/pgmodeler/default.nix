@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  dontWrapQtApps = lib.optional stdenv.isDarwin true;
+  dontWrapQtApps = stdenv.isDarwin;
 
   meta = with lib; {
     description = "A database modeling tool for PostgreSQL";
