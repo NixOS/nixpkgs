@@ -3,7 +3,7 @@
 let
   inherit (lib) maintainers;
   inherit (lib.meta) getExe;
-  inherit (lib.modules) mkIf mkRemovedOptionModule;
+  inherit (lib.modules) mkAfter mkIf mkRemovedOptionModule;
   inherit (lib.options) mkEnableOption mkPackageOption;
   inherit (lib.strings) optionalString;
 
@@ -33,7 +33,7 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
-    programs.bash.interactiveShellInit = ''
+    programs.bash.promptPluginInit = mkAfter ''
       eval "$(${getExe cfg.package} --bash)"
     '';
 
