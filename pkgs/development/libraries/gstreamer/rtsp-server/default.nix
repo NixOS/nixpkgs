@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-rtsp-server";
-  version = "1.24.1";
+  version = "1.24.2";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-q0NqLsnDxY+/08Wxc2QZiRu1MV0TbXxyxYR58oBwCOY=";
+    hash = "sha256-5MhKeGdefv7zsm6cueLkJzGEIbStnuS1E2767rtrugw=";
   };
 
   outputs = [
