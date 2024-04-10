@@ -200,7 +200,7 @@ mapAliases ({
   clang6Stdenv = throw "clang6Stdenv has been removed from nixpkgs"; # Added 2024-01-08
   clang7Stdenv = throw "clang7Stdenv has been removed from nixpkgs"; # Added 2023-11-19
   clang8Stdenv = throw "clang8Stdenv has been removed from nixpkgs"; # Added 2024-01-24
-  clang9Stdenv = throw "clang9Stdenv has been remvoed from nixpkgs"; # Added 2024-04-08
+  clang9Stdenv = throw "clang9Stdenv has been removed from nixpkgs"; # Added 2024-04-08
   clang10Stdenv = throw "clang10Stdenv has been removed from nixpkgs"; # Added 2024-01-26
   clang11Stdenv = throw "clang11Stdenv has been removed from nixpkgs"; # Added 2023-01-24
   clang12Stdenv = lowPrio llvmPackages_12.stdenv;
@@ -219,7 +219,7 @@ mapAliases ({
   clang_6 = throw "clang_6 has been removed from nixpkgs"; # Added 2024-01-08
   clang_7 = throw "clang_7 has been removed from nixpkgs"; # Added 2023-11-19
   clang_8  = throw "clang_8 has been removed from nixpkgs"; # Added 2024-01-24
-  clang_9 = throw "clang_9 has been removed from nixpkgs"; # Added 2024-01-08
+  clang_9 = throw "clang_9 has been removed from nixpkgs"; # Added 2024-04-08
   clang_10 = throw "clang_10 has been removed from nixpkgs"; # Added 2024-01-26
   clang_11 = throw "clang_11 has been removed from nixpkgs"; # Added 2023-01-24
 
