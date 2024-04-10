@@ -14,27 +14,27 @@
 buildPythonPackage rec {
   pname = "bleak-retry-connector";
   version = "3.5.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
-    repo = pname;
+    repo = "bleak-retry-connector";
     rev = "refs/tags/v${version}";
     hash = "sha256-oqc997siTg43Ulrc539G3utfQvHjcBZJgQ8/CfcSduc=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=bleak_retry_connector --cov-report=term-missing:skip-covered" ""
+      --replace-fail " --cov=bleak_retry_connector --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     async-timeout
     bleak
     bluetooth-adapters
