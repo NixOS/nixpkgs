@@ -46,6 +46,17 @@ let
     GUIX_LOCPATH = "${cfg.stateDir}/guix/profiles/per-user/root/guix-profile/lib/locale";
     LC_ALL = "C.UTF-8";
   };
+
+  # Currently, this is just done the lazy way with the official Guix script. A
+  # more "formal" way would be creating our own Guix script to handle and
+  # generate the ACL file ourselves.
+  aclFile = pkgs.runCommandLocal "guix-acl" { } ''
+    export GUIX_CONFIGURATION_DIRECTORY=./
+    for official_server_keys in ${lib.concatStringsSep " " cfg.authorizedKeys}; do
+      ${lib.getExe' cfg.package "guix"} archive --authorize < "$official_server_keys"
+    done
+    install -Dm0600 ./acl "$out"
+  '';
 in
 {
   meta.maintainers = with lib.maintainers; [ foo-dogsquared ];
@@ -116,6 +127,33 @@ in
         :::
       '';
       example = "/gnu/var";
+    };
+
+    authorizedKeys = lib.mkOption {
+      type = with lib.types; listOf path;
+      default = [
+        "${cfg.package}/share/guix/ci.guix.gnu.org.pub"
+        "${cfg.package}/share/guix/bordeaux.guix.gnu.org.pub"
+        "${cfg.package}/share/guix/berlin.guix.gnu.org.pub"
+      ];
+      defaultText = ''
+        The packaged signing keys from {option}`services.guix.package`.
+      '';
+      example = lib.literalExpression ''
+        options.services.guix.authorizedKeys.default ++ [
+          (builtins.fetchurl {
+            url = "https://guix.example.com/signing-key.pub";
+          })
+
+          (builtins.fetchurl {
+            url = "https://guix.example.org/static/signing-key.pub";
+          })
+        ]
+      '';
+      description = ''
+        A list of signing keys for each substitute server to be authorized as
+        a source of substitutes.
+      '';
     };
 
     publish = {
@@ -254,11 +292,7 @@ in
 
       # Make transferring files from one store to another easier with the usual
       # case being of most substitutes from the official Guix CI instance.
-      system.activationScripts.guix-authorize-keys = ''
-        for official_server_keys in ${package}/share/guix/*.pub; do
-          ${lib.getExe' package "guix"} archive --authorize < $official_server_keys
-        done
-      '';
+      environment.etc."guix/acl".source = aclFile;
 
       # Link the usual Guix profiles to the home directory. This is useful in
       # ephemeral setups where only certain part of the filesystem is
@@ -270,8 +304,8 @@ in
         in ''
           [ -d "${userProfile}" ] && ln -sfn "${userProfile}" "${location}"
         '';
-        linkProfileToPath = acc: profile: location: let
-          in acc + (linkProfile profile location);
+        linkProfileToPath = acc: profile: location:
+          acc + (linkProfile profile location);
 
         # This should contain export-only Guix user profiles. The rest of it is
         # handled manually in the activation script.
@@ -387,7 +421,7 @@ in
           Type = "oneshot";
 
           PrivateDevices = true;
-          PrivateNetworks = true;
+          PrivateNetwork = true;
           ProtectControlGroups = true;
           ProtectHostname = true;
           ProtectKernelTunables = true;
