@@ -26,18 +26,17 @@ buildPythonPackage rec {
       --replace-fail "version: file: VERSION" "version = ${version}"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-  ];
-
-  pythonImportsCheck = [
-    "goodwe"
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
   ];
 
+  pythonImportsCheck = [
+    "goodwe"
+  ];
 
   meta = with lib; {
     description = "Python library for connecting to GoodWe inverter";
