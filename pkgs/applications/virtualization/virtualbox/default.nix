@@ -142,10 +142,6 @@ in stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
       src/VBox/HostDrivers/adpctl/VBoxNetAdpCtl.cpp
-  '' + optionalString headless ''
-    # Fix compile error in version 6.1.6
-    substituteInPlace src/VBox/HostServices/SharedClipboard/VBoxSharedClipboardSvc-x11-stubs.cpp \
-      --replace PSHCLFORMATDATA PSHCLFORMATS
   '';
 
   # first line: ugly hack, and it isn't yet clear why it's a problem
