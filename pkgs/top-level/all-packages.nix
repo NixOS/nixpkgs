@@ -3853,8 +3853,6 @@ with pkgs;
 
   gluesql = callPackage ../servers/sql/gluesql { };
 
-  gmid = callPackage ../servers/gemini/gmid { };
-
   gmni = callPackage ../applications/networking/browsers/gmni { };
 
   gmnisrv = callPackage ../servers/gemini/gmnisrv { };
