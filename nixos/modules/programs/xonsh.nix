@@ -7,6 +7,9 @@ with lib;
 let
 
   cfg = config.programs.xonsh;
+  package = cfg.package.overridePythonAttrs ( old: {
+    propagatedBuildInputs = old.propagatedBuildInputs ++ cfg.xontribs;
+  });
 
 in
 
@@ -32,6 +35,15 @@ in
         default = "";
         description = "Control file to customize your shell behavior.";
         type = types.lines;
+      };
+
+      xontribs = mkOption {
+        default = [];
+        description = lib.mdDoc ''
+          Add the listed xontribs to the package options. Available xontribs are
+          under xonsh.xontribs.
+        '';
+        example = "xontribs = with pkgs.xonsh.xontribs; [ xontrib-vox xontrib-abbrevs ];";
       };
 
     };
@@ -67,11 +79,13 @@ in
       ${cfg.config}
     '';
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [
+      package
+    ];
 
     environment.shells =
       [ "/run/current-system/sw/bin/xonsh"
-        "${cfg.package}/bin/xonsh"
+        "${package}/bin/xonsh"
       ];
 
   };
