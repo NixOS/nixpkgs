@@ -9,12 +9,12 @@ in
 {
   imports = [
     (lib.mkRemovedOptionModule [ "programs" "fzf" "keybindings" ] ''
-      Use "programs.fzf.enable" instead, due to fzf upstream-change it's not possible to load shell-completion and keybindings separately.
-      If you want to change/disable certain keybindings please check the fzf-documentation.
+      Use "programs.fzf.enable" instead; due to fzf upstream changes, it's not possible to load shell-completion and keybindings separately.
+      If you want to change/disable certain keybindings, please check the fzf documentation.
     '')
     (lib.mkRemovedOptionModule [ "programs" "fzf" "fuzzyCompletion" ] ''
-      Use "programs.fzf.enable" instead, due to fzf upstream-change it's not possible to load shell-completion and keybindings separately.
-      If you want to change/disable certain keybindings please check the fzf-documentation.
+      Use "programs.fzf.enable" instead; due to fzf upstream changes, it's not possible to load shell-completion and keybindings separately.
+      If you want to change/disable certain keybindings, please check the fzf documentation.
     '')
   ];
 
