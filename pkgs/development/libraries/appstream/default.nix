@@ -29,6 +29,7 @@
 , pango
 , librsvg
 , systemd
+, appstream
 , nixosTests
 , testers
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
@@ -79,6 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
     vala
     gperf
   ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    # TODO(Mindavi): Probably should be done for _all_ cross cases?
+    appstream
     mesonEmulatorHook
   ];
 
