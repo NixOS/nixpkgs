@@ -25,18 +25,18 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.fzf ];
 
-    programs.bash.interactiveShellInit = ''
+    programs.bash.interactiveShellInit = lib.mkAfter ''
       eval "$(${getExe pkgs.fzf} --bash)"
     '';
 
-    programs.fish.interactiveShellInit = ''
+    programs.fish.interactiveShellInit = lib.mkAfter ''
       ${getExe pkgs.fzf} --fish | source
     '';
 
     programs.zsh = {
-      interactiveShellInit = optionalString (!config.programs.zsh.ohMyZsh.enable) ''
+      interactiveShellInit = lib.mkAfter (optionalString (!config.programs.zsh.ohMyZsh.enable) ''
         eval "$(${getExe pkgs.fzf} --zsh)"
-      '';
+      '');
 
       ohMyZsh.plugins = mkIf (config.programs.zsh.ohMyZsh.enable) [ "fzf" ];
     };
