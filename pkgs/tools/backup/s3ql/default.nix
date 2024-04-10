@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, python3
-, sqlite
-, which
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  sqlite,
+  which,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -17,15 +18,9 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-7N09b7JwMPliuyv2fEy1gQYaFCMSSvajOBPhNL3DQsg=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
-  nativeBuildInputs = [
-    which
-  ] ++ (with python3.pkgs; [
-    cython
-  ]);
+  nativeBuildInputs = [ which ] ++ (with python3.pkgs; [ cython ]);
 
   propagatedBuildInputs = with python3.pkgs; [
     apsw
@@ -53,13 +48,9 @@ python3.pkgs.buildPythonApplication rec {
     export HOME=$(mktemp -d)
   '';
 
-  pythonImportsCheck = [
-    "s3ql"
-  ];
+  pythonImportsCheck = [ "s3ql" ];
 
-  pytestFlagsArray = [
-    "tests/"
-  ];
+  pytestFlagsArray = [ "tests/" ];
 
   meta = with lib; {
     description = "A full-featured file system for online data storage";
