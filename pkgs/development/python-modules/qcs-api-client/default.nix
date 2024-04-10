@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "qcs-api-client";
-  version = "0.24.1";
+  version = "0.25.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = "qcs-api-client-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7PgWIAHwMcuKXHxTX66xmLP1VTNYWecTIMbWoTQqmjs=";
+    hash = "sha256-dKjiicrPLRlaIwHwSqpY5dBMTzrZD4xfw3h54IN3rh0=";
   };
 
   patches = [
