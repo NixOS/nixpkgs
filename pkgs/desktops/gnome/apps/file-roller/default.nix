@@ -26,11 +26,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "file-roller";
-  version = "44";
+  version = "44.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/file-roller/${lib.versions.major finalAttrs.version}/file-roller-${finalAttrs.version}.tar.xz";
-    hash = "sha256-WxwOai5951OSvUJFUMHlZD3Rz2wzP7HtanZBmilQeqQ=";
+    hash = "sha256-JQz1Uc/LEqZwyorflT4GgfHJt27gnZRYsgIDxiYCxIc=";
   };
 
   nativeBuildInputs = [
