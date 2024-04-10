@@ -17,9 +17,9 @@
 buildPythonPackage rec {
   pname = "schema-salad";
   version = "8.5.20240410123758";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
@@ -28,11 +28,11 @@ buildPythonPackage rec {
     hash = "sha256-AgXqeiA4sP7KBnUpb2uMWq45G0LhJ5uLtORrOG4UuB0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cachecontrol
     mistune
     mypy-extensions
