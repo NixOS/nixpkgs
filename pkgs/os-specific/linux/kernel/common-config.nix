@@ -480,8 +480,8 @@ let
       F2FS_FS_COMPRESSION = whenAtLeast "5.6" yes;
       UDF_FS              = module;
 
-      NFSD_V2_ACL            = whenOlder "6.1" yes;
-      NFSD_V3                = whenOlder "5.18" yes;
+      NFSD_V2_ACL            = whenOlder "5.15" yes;
+      NFSD_V3                = whenOlder "5.15" yes;
       NFSD_V3_ACL            = yes;
       NFSD_V4                = yes;
       NFSD_V4_SECURITY_LABEL = yes;
