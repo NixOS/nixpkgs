@@ -154,6 +154,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     mainProgram = "nekoray";
     maintainers = with lib.maintainers; [ tomasajt ];
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.linux;
   };
 })
