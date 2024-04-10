@@ -93,7 +93,7 @@ in stdenv.mkDerivation (finalAttrs: {
     # attempts to download the missing source tarball
     "--set=build.rustfmt=${rustfmt}/bin/rustfmt"
   ] ++ [
-    "--tools=rustc,rust-analyzer-proc-macro-srv"
+    "--tools=rustc,rustdoc,rust-analyzer-proc-macro-srv"
     "--enable-rpath"
     "--enable-vendor"
     "--build=${stdenv.buildPlatform.rust.rustcTargetSpec}"
