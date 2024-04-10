@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   gobject-introspection,
-  wrapGAppsHook,
+  wrapGAppsHook4,
   gtk4,
   gtk4-layer-shell,
 }:
