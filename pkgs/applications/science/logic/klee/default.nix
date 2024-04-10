@@ -6,7 +6,6 @@
 , clang
 , llvm
 , python3
-, zlib
 , z3
 , stp
 , cryptominisat
@@ -45,13 +44,13 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "klee";
-  version = "3.0";
+  version = "3.1";
 
   src = fetchFromGitHub {
     owner = "klee";
     repo = "klee";
     rev = "v${version}";
-    hash = "sha256-y5lWmtIcLAthQ0oHYQNd+ir75YaxHZR9Jgiz+ZUFQjY=";
+    hash = "sha256-5js1N8qVF0lCkahSU3ojT7+p/a9IaUpPWhIyFHEzqto=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -97,6 +96,9 @@ in stdenv.mkDerivation rec {
   prePatch = ''
     patchShebangs .
   '';
+
+  # https://github.com/klee/klee/issues/1690
+  hardeningDisable = [ "fortify" ];
 
   doCheck = true;
 
