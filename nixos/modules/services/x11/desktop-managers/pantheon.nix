@@ -12,6 +12,7 @@ let
     extraGSettingsOverrides = cfg.extraGSettingsOverrides;
   };
 
+  notExcluded = pkg: (!(lib.elem pkg config.environment.pantheon.excludePackages));
 in
 
 {
@@ -288,8 +289,8 @@ in
     })
 
     (mkIf serviceCfg.apps.enable {
-      programs.evince.enable = mkDefault true;
-      programs.file-roller.enable = mkDefault true;
+      programs.evince.enable = mkDefault (notExcluded pkgs.gnome.evince);
+      programs.file-roller.enable = mkDefault (notExcluded pkgs.gnome.file-roller);
 
       environment.systemPackages = utils.removePackagesByName ([
         pkgs.gnome.gnome-font-viewer

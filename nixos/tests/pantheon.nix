@@ -13,6 +13,13 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
     services.xserver.enable = true;
     services.xserver.desktopManager.pantheon.enable = true;
 
+    # We ship pantheon.appcenter by default when this is enabled.
+    services.flatpak.enable = true;
+
+    # We don't ship gnome-text-editor in Pantheon module, we add this line mainly
+    # to catch eval issues related to this option.
+    environment.pantheon.excludePackages = [ pkgs.gnome-text-editor ];
+
     environment.systemPackages = [ pkgs.xdotool ];
   };
 
