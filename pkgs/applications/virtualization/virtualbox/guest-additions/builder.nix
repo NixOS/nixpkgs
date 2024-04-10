@@ -5,8 +5,6 @@
 , yasm, patchelf, makeWrapper, makeself, nasm
 , linuxHeaders, openssl, libpulseaudio}:
 
-with lib;
-
 let
   buildType = "release";
 
