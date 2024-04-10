@@ -50,11 +50,11 @@ buildPythonPackage rec {
     hash = "sha256-OWoMqJlf0vmBHWWsW6mF4u5X9USzxkFmCJyX7Ws0dD0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     certifi
     urllib3
   ];
