@@ -67,7 +67,7 @@ in stdenv.mkDerivation {
     ++ optional pulseSupport libpulseaudio
     ++ optionals headless [ libGL ]
     ++ optionals (!headless) [ qtbase qtx11extras libXinerama SDL2 libGLU ]
-    ++ [ gsoap zlib jdk ];
+    ++ optionals enableWebService [ gsoap zlib ];
 
   hardeningDisable = [ "format" "fortify" "pic" "stackprotector" ];
 

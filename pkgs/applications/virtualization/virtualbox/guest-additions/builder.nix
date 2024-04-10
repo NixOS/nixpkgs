@@ -19,9 +19,9 @@ in stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration";
 
-  nativeBuildInputs = [ patchelf makeWrapper pkg-config which yasm ];
-  buildInputs =  kernel.moduleBuildDependencies ++ [ libxslt libX11 libXext libXcursor
-    glib nasm alsa-lib makeself pam libXmu libXrandr linuxHeaders openssl libpulseaudio xorg.xorgserver ];
+  nativeBuildInputs = [ patchelf makeWrapper pkg-config which yasm makeself nasm xorg.xorgserver openssl linuxHeaders ] ++ kernel.moduleBuildDependencies;
+  buildInputs = [ dbus libxslt libXext libXcursor
+    alsa-lib pam libXmu libXrandr libpulseaudio ];
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
   KERN_INCL = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/source/include";
