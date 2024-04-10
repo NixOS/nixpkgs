@@ -14,11 +14,9 @@
   pkg-config,
 }:
 
-let
-  version = "2.4.4";
-in buildGoModule {
+buildGoModule rec {
   pname = "fyne";
-  inherit version;
+  version = "2.4.4";
 
   src = fetchFromGitHub {
     owner = "fyne-io";
@@ -51,15 +49,12 @@ in buildGoModule {
 
   preCheck = ''
     OLD_DIR=$PWD
-    OLD_GOPATH=$GOPATH
     export HOME=$(mktemp -d)
-    export GOPATH=$(mktemp -d)
     cd $HOME
   '';
 
   preInstall = ''
-    cd $OLD_DIR
-    export GOPATH=$OLD_GOPATH
+    if [ -n "$OLD_DIR" ]; then cd "$OLD_DIR"; fi
   '';
 
   meta = with lib; {
