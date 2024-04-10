@@ -31,7 +31,7 @@ with lib;
       hostName = config.networking.hostName;
       doMetadataFile = "/run/do-metadata/v1.json";
     in mkMerge [{
-      fileSystems."/" = {
+      fileSystems."/" = lib.mkDefault {
         device = "/dev/disk/by-label/nixos";
         autoResize = true;
         fsType = "ext4";
@@ -41,11 +41,7 @@ with lib;
         kernelParams = [ "console=ttyS0" "panic=1" "boot.panic_on_fail" ];
         initrd.kernelModules = [ "virtio_scsi" ];
         kernelModules = [ "virtio_pci" "virtio_net" ];
-        loader = {
-          grub.device = "/dev/vda";
-          timeout = 0;
-          grub.configurationLimit = 0;
-        };
+        loader.grub.devices = lib.mkDefault ["/dev/vda"];
       };
       services.openssh = {
         enable = mkDefault true;
