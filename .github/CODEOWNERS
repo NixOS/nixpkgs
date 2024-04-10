@@ -359,3 +359,16 @@ pkgs/development/tools/continuous-integration/buildbot @Mic92 @zowoq
 pkgs/by-name/pr/pretix/ @mweinelt
 nixos/modules/services/web-apps/pretix.nix @mweinelt
 nixos/tests/web-apps/pretix.nix @mweinelt
+
+# incus/lxc/lxd
+nixos/maintainers/scripts/lxd/          @adamcstephens
+nixos/modules/virtualisation/incus.nix  @adamcstephens
+nixos/modules/virtualisation/lxc*       @adamcstephens
+nixos/modules/virtualisation/lxd*       @adamcstephens
+nixos/tests/incus/                      @adamcstephens
+nixos/tests/lxd/                        @adamcstephens
+pkgs/by-name/in/incus/                  @adamcstephens
+pkgs/by-name/lx/lxc*                    @adamcstephens
+pkgs/by-name/lx/lxd*                    @adamcstephens
+pkgs/os-specific/linux/lxc/             @adamcstephens
+
