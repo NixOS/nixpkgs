@@ -105,10 +105,8 @@ lib.recurseIntoAttrs {
       assert isIdempotent "pkgsi686Linux";
       assert isIdempotent "pkgsx86_64Darwin";
 
-      # TODO: fails
-      # assert isNoop [ "pkgsStatic" ] "pkgsMusl";
-      # TODO: fails because of ppc64-musl
-      # assert lib.all (sys: isNoop [ "pkgsCross" sys ] "pkgsMusl") allMuslExamples;
+      assert isNoop [ "pkgsStatic" ] "pkgsMusl";
+      assert lib.all (sys: isNoop [ "pkgsCross" sys ] "pkgsMusl") allMuslExamples;
       assert lib.all (sys: isNoop [ "pkgsCross" sys ] "pkgsLLVM") allLLVMExamples;
 
       assert isComposable "pkgsExtraHardening";
@@ -116,11 +114,9 @@ lib.recurseIntoAttrs {
       assert isComposable "pkgsArocc";
       # TODO: unexpected argument 'bintools'
       # assert isComposable "pkgsZig";
-      # TODO: attribute 'abi' missing
-      # assert isComposable "pkgsMusl";
+      assert isComposable "pkgsMusl";
       assert isComposable "pkgsStatic";
-      # TODO: fails
-      # assert isComposable "pkgsi686Linux";
+      assert isComposable "pkgsi686Linux";
 
       # Special cases regarding buildPlatform vs hostPlatform
       # TODO: fails
