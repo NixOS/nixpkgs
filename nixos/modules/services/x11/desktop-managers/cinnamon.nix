@@ -95,7 +95,7 @@ in
       '';
 
       # Default services
-      services.blueman.enable = mkDefault true;
+      services.blueman.enable = mkDefault (notExcluded pkgs.blueman);
       hardware.bluetooth.enable = mkDefault true;
       hardware.pulseaudio.enable = mkDefault true;
       security.polkit.enable = true;
@@ -228,10 +228,10 @@ in
     })
 
     (mkIf serviceCfg.apps.enable {
-      programs.geary.enable = mkDefault true;
-      programs.gnome-disks.enable = mkDefault true;
-      programs.gnome-terminal.enable = mkDefault true;
-      programs.file-roller.enable = mkDefault true;
+      programs.geary.enable = mkDefault (notExcluded pkgs.gnome.geary);
+      programs.gnome-disks.enable = mkDefault (notExcluded pkgs.gnome.gnome-disk-utility);
+      programs.gnome-terminal.enable = mkDefault (notExcluded pkgs.gnome.gnome-terminal);
+      programs.file-roller.enable = mkDefault (notExcluded pkgs.gnome.file-roller);
 
       environment.systemPackages = with pkgs // pkgs.gnome // pkgs.cinnamon; utils.removePackagesByName [
         # cinnamon team apps

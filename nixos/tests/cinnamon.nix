@@ -8,6 +8,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     services.xserver.enable = true;
     services.xserver.desktopManager.cinnamon.enable = true;
 
+    # We don't ship gnome-text-editor in Cinnamon module, we add this line mainly
+    # to catch eval issues related to this option.
+    environment.cinnamon.excludePackages = [ pkgs.gnome-text-editor ];
+
     # For the sessionPath subtest.
     services.xserver.desktopManager.cinnamon.sessionPath = [ pkgs.gnome.gpaste ];
   };
