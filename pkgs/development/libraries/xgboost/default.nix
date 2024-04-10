@@ -115,21 +115,15 @@ stdenv.mkDerivation rec {
     let libname = "libxgboost${stdenv.hostPlatform.extensions.sharedLibrary}";
     in ''
       runHook preInstall
-      mkdir -p $out
-      cp -r ../include $out
-      cp -r ../dmlc-core/include/dmlc $out/include
-      cp -r ../rabit/include/rabit $out/include
-    '' + lib.optionalString (!rLibrary) ''
-      install -Dm755 ../lib/${libname} $out/lib/${libname}
-      install -Dm755 ../xgboost $out/bin/xgboost
     ''
     # the R library option builds a completely different binary xgboost.so instead of
     # libxgboost.so, which isn't full featured for python and CLI
     + lib.optionalString rLibrary ''
-      mkdir $out/library
+      mkdir -p $out/library
       export R_LIBS_SITE="$out/library:$R_LIBS_SITE''${R_LIBS_SITE:+:}"
-      make install -l $out/library
     '' + ''
+      cmake --install .
+      cp -r ../rabit/include/rabit $out/include
       runHook postInstall
     '';
 
