@@ -1331,4 +1331,6 @@ self: super: builtins.intersectAttrs super {
   # Test failure is related to a GHC implementation detail of primitives and doesn't
   # cause actual problems in dependent packages, see https://github.com/lehins/pvar/issues/4
   pvar = dontCheck super.pvar;
+
+  kmonad = enableSeparateBinOutput super.kmonad;
 }

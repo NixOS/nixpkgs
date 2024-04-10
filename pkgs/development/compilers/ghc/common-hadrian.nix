@@ -350,10 +350,10 @@ stdenv.mkDerivation ({
                     '*-android*|*-gnueabi*|*-musleabi*)'
       done
   ''
-  # Need to make writable EM_CACHE for emscripten
+  # Need to make writable EM_CACHE for emscripten. The path in EM_CACHE must be absolute.
   # https://gitlab.haskell.org/ghc/ghc/-/wikis/javascript-backend#configure-fails-with-sub-word-sized-atomic-operations-not-available
   + lib.optionalString targetPlatform.isGhcjs ''
-    export EM_CACHE="$(mktemp -d emcache.XXXXXXXXXX)"
+    export EM_CACHE="$(realpath $(mktemp -d emcache.XXXXXXXXXX))"
     cp -Lr ${targetCC /* == emscripten */}/share/emscripten/cache/* "$EM_CACHE/"
     chmod u+rwX -R "$EM_CACHE"
   ''

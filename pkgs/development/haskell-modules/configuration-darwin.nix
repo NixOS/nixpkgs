@@ -303,6 +303,8 @@ self: super: ({
     stripLen = 1;
   }) super.inline-c-cpp;
 
+  # Tests fail on macOS https://github.com/mrkkrp/zip/issues/112
+  zip = dontCheck super.zip;
 } // lib.optionalAttrs pkgs.stdenv.isAarch64 {  # aarch64-darwin
 
   # https://github.com/fpco/unliftio/issues/87

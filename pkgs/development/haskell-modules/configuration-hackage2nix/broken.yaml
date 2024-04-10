@@ -693,7 +693,6 @@ broken-packages:
   - cassava-records # failure in job https://hydra.nixos.org/build/233259049 at 2023-09-02
   - cassava-streams # failure in job https://hydra.nixos.org/build/233222669 at 2023-09-02
   - cassette # failure in job https://hydra.nixos.org/build/233201251 at 2023-09-02
-  - castagnoli # failure in job https://hydra.nixos.org/build/233213036 at 2023-09-02
   - castle # failure in job https://hydra.nixos.org/build/233204027 at 2023-09-02
   - catamorphism # failure in job https://hydra.nixos.org/build/233208488 at 2023-09-02
   - Catana # failure in job https://hydra.nixos.org/build/233196550 at 2023-09-02
@@ -1083,7 +1082,6 @@ broken-packages:
   - curl-aeson # failure in job https://hydra.nixos.org/build/233210106 at 2023-09-02
   - curl-runnings # failure in job https://hydra.nixos.org/build/233258680 at 2023-09-02
   - curly-expander # failure in job https://hydra.nixos.org/build/233250838 at 2023-09-02
-  - currencies # failure in job https://hydra.nixos.org/build/233216717 at 2023-09-02
   - currency-convert # failure in job https://hydra.nixos.org/build/233224509 at 2023-09-02
   - curry-base # failure in job https://hydra.nixos.org/build/233246647 at 2023-09-02
   - CurryDB # failure in job https://hydra.nixos.org/build/233238995 at 2023-09-02
@@ -3300,7 +3298,6 @@ broken-packages:
   - kind-integer # failure in job https://hydra.nixos.org/build/233250066 at 2023-09-02
   - kleene-list # failure in job https://hydra.nixos.org/build/233237651 at 2023-09-02
   - kmn-programming # failure in job https://hydra.nixos.org/build/233258328 at 2023-09-02
-  - kmonad # failure in job https://hydra.nixos.org/build/252717089 at 2024-03-16
   - kmp-dfa # failure in job https://hydra.nixos.org/build/233237266 at 2023-09-02
   - knots # failure in job https://hydra.nixos.org/build/233209153 at 2023-09-02
   - koellner-phonetic # failure in job https://hydra.nixos.org/build/233217750 at 2023-09-02
@@ -4233,7 +4230,6 @@ broken-packages:
   - optimization # failure in job https://hydra.nixos.org/build/233191078 at 2023-09-02
   - optional # failure in job https://hydra.nixos.org/build/233241818 at 2023-09-02
   - options-time # failure in job https://hydra.nixos.org/build/233194289 at 2023-09-02
-  - optparse-applicative-cmdline-util # failure in job https://hydra.nixos.org/build/252739738 at 2024-03-16
   - optparse-applicative-simple # failure in job https://hydra.nixos.org/build/233236802 at 2023-09-02
   - optparse-declarative # failure in job https://hydra.nixos.org/build/252718969 at 2024-03-16
   - optparse-helper # failure in job https://hydra.nixos.org/build/233248522 at 2023-09-02
