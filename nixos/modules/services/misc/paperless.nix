@@ -220,15 +220,16 @@ in
   config = mkIf cfg.enable {
     services.redis.servers.paperless.enable = mkIf enableRedis true;
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
-      "d '${cfg.mediaDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
-      (if cfg.consumptionDirIsPublic then
-        "d '${cfg.consumptionDir}' 777 - - - -"
-      else
-        "d '${cfg.consumptionDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
-      )
-    ];
+    systemd.tmpfiles.settings."10-paperless" = let
+      defaultRule = {
+        inherit (cfg) user;
+        inherit (config.users.users.${cfg.user}) group;
+      };
+    in {
+      "${cfg.dataDir}".d = defaultRule;
+      "${cfg.mediaDir}".d = defaultRule;
+      "${cfg.consumptionDir}".d = if cfg.consumptionDirIsPublic then { mode = "777"; } else defaultRule;
+    };
 
     systemd.services.paperless-scheduler = {
       description = "Paperless Celery Beat";
