@@ -553,7 +553,7 @@ rec {
 
   mypy-boto3-pi = buildMypyBoto3Package "pi" "1.34.0" "sha256-97giGYtpINPHxtcUU6cE/mPF0/r6YfLixAdcC/LGKC0=";
 
-  mypy-boto3-pinpoint = buildMypyBoto3Package "pinpoint" "1.34.0" "sha256-oa8RAEtGeoyGpXq2sJSbEnLXorS6liInO196SGO6D/E=";
+  mypy-boto3-pinpoint = buildMypyBoto3Package "pinpoint" "1.34.81" "sha256-vs7gJCsMrpXBhPFwcHmQ/IT4sOYBMJ6IlcCLGMPuog8=";
 
   mypy-boto3-pinpoint-email = buildMypyBoto3Package "pinpoint-email" "1.34.0" "sha256-AHwJtYsAxFiEX16L0HZXz9JzjNZck9V40bFwzicMKUE=";
 
