@@ -259,11 +259,6 @@ in
 
   config = lib.mkIf cfg.enable (lib.mkMerge [
     {
-      services.guix.extraArgs =
-        lib.optionals (cfg.substituters.urls != [ ]) [
-          "--substitute-urls='${lib.concatStringsSep " " cfg.substituters.urls}'"
-        ];
-
       environment.systemPackages = [ package ];
 
       users.users = guixBuildUsers cfg.nrBuildUsers;
@@ -282,6 +277,8 @@ in
         script = ''
           ${lib.getExe' package "guix-daemon"} \
             --build-users-group=${cfg.group} \
+            ${lib.optionalString (cfg.substituters.urls != [ ])
+              "--substitute-urls='${lib.concatStringsSep " " cfg.substituters.urls}'"} \
             ${lib.escapeShellArgs cfg.extraArgs}
         '';
         serviceConfig = {
