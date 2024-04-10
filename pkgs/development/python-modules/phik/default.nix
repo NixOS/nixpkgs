@@ -11,10 +11,12 @@
 , numba
 , numpy
 , pandas
+, pathspec
 , pybind11
+, pyproject-metadata
 , pytestCheckHook
 , pythonOlder
-, scikit-build
+, scikit-build-core
 , scipy
 , setuptools
 }:
@@ -36,7 +38,9 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cmake
     ninja
-    scikit-build
+    pathspec
+    pyproject-metadata
+    scikit-build-core
     setuptools
   ];
 
@@ -64,26 +68,10 @@ buildPythonPackage rec {
     "phik"
   ];
 
-  postInstall = ''
-    rm -r $out/bin
-  '';
-
   preCheck = ''
     # import from $out
     rm -r phik
   '';
-
-  disabledTests = [
-    # TypeError: 'numpy.float64' object cannot be interpreted as an integer
-    # https://github.com/KaveIO/PhiK/issues/73
-    "test_significance_matrix_hybrid"
-    "test_significance_matrix_mc"
-  ];
-
-  disabledTestPaths = [
-    # Don't test integrations
-    "tests/phik_python/integration/"
-  ];
 
   meta = with lib; {
     description = "Phi_K correlation analyzer library";
