@@ -19,6 +19,7 @@
 , libffi
 , llvmPackages_13
 , llvmPackages_15
+, llvmPackages_18
 , makeWrapper
 , openssl
 , pcre2
@@ -314,5 +315,12 @@ rec {
     llvmPackages = llvmPackages_15;
   };
 
-  crystal = crystal_1_11;
+  crystal_1_12 = generic {
+    version = "1.12.0";
+    sha256 = "sha256-2oH2EtZDBDnRMh5AGB2UdTVVEaku+DXZT+QTQ+V8vmM=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_18;
+  };
+
+  crystal = crystal_1_12;
 }
