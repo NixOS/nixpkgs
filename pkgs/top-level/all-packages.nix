@@ -12014,8 +12014,6 @@ with pkgs;
 
   pdf-quench = callPackage ../applications/misc/pdf-quench { };
 
-  pdf-sign = callPackage ../tools/graphics/pdf-sign { };
-
   pdfarranger = callPackage ../applications/misc/pdfarranger { };
 
   briss = callPackage ../tools/graphics/briss { };
@@ -27425,7 +27423,7 @@ with pkgs;
 
   smcroute = callPackage ../servers/smcroute { };
 
-  snipe-it = callPackage ../servers/web-apps/snipe-it {
+  snipe-it = callPackage ../by-name/sn/snipe-it/package.nix {
     php = php81;
   };
 
