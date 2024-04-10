@@ -197,5 +197,6 @@ buildBazelPackage {
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
+    knownVulnerabilities = [ "CVE-2024-30255" ];
   };
 }
