@@ -49,6 +49,10 @@ buildGoModule rec {
 
   postInstall = ''
     install bin/fzf-tmux $out/bin
+    # Individual shell files for those who want to load specific plugins (see
+    # fzf installation instructions in their README)
+    mkdir -p $out/share
+    cp -r shell $out/share/shell
 
     installManPage man/man1/fzf.1 man/man1/fzf-tmux.1
 
