@@ -38,8 +38,10 @@ let
         is_nixenv = "False";
         is_virtualenv = "False";
       };
-    } // lib.optionalAttrs (!python.isPyPy) {
+    } // lib.optionalAttrs (!python.isPyPy && !stdenv.isDarwin) {
       # Use virtualenv with symlinks from a Nix env.
+      # Fails on darwin with
+      #   virtualenv: error: argument dest: the destination . is not write-able at /nix/store
       nixenv-virtualenv-links = rec {
         env = runCommand "${python.name}-virtualenv-links" {} ''
           ${pythonVirtualEnv.interpreter} -m virtualenv --system-site-packages --symlinks --no-seed $out
@@ -49,8 +51,10 @@ let
         is_nixenv = "True";
         is_virtualenv = "True";
       };
-    } // lib.optionalAttrs (!python.isPyPy) {
+    } // lib.optionalAttrs (!python.isPyPy && !stdenv.isDarwin) {
       # Use virtualenv with copies from a Nix env.
+      # Fails on darwin with
+      #   virtualenv: error: argument dest: the destination . is not write-able at /nix/store
       nixenv-virtualenv-copies = rec {
         env = runCommand "${python.name}-virtualenv-copies" {} ''
           ${pythonVirtualEnv.interpreter} -m virtualenv --system-site-packages --copies --no-seed $out
