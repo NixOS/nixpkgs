@@ -55,6 +55,15 @@ buildGoModule rec {
     install -D plugin/* -t $out/share/vim-plugins/${pname}/plugin
     mkdir -p $out/share/nvim
     ln -s $out/share/vim-plugins/${pname} $out/share/nvim/site
+
+    # Install shell integrations
+    install -D shell/* -t $out/share/fzf/
+    install -D shell/key-bindings.fish $out/share/fish/vendor_functions.d/fzf_key_bindings.fish
+    mkdir -p $out/share/fish/vendor_conf.d
+    cat << EOF > $out/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
+      status is-interactive; or exit 0
+      fzf_key_bindings
+    EOF
   '';
 
   passthru.tests.version = testers.testVersion {
