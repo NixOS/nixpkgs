@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, file
-, pythonOlder
-, setuptools
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  file,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -28,16 +29,12 @@ buildPythonPackage rec {
     echo 'LAST_UPDATE_NAGGING_DAYS = float("inf")' >> sqlmap/lib/core/settings.py
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   # No tests in archive
   doCheck = false;
 
-  pythonImportsCheck = [
-    "sqlmap"
-  ];
+  pythonImportsCheck = [ "sqlmap" ];
 
   meta = with lib; {
     description = "Automatic SQL injection and database takeover tool";
