@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, defusedxml
-, fetchFromGitHub
-, marshmallow
-, pytest-datafiles
-, pytest-vcr
-, pytestCheckHook
-, python-box
-, python-dateutil
-, pythonOlder
-, requests
-, requests-pkcs12
-, responses
-, restfly
-, semver
-, setuptools
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  defusedxml,
+  fetchFromGitHub,
+  marshmallow,
+  pytest-datafiles,
+  pytest-vcr,
+  pytestCheckHook,
+  python-box,
+  python-dateutil,
+  pythonOlder,
+  requests,
+  requests-pkcs12,
+  responses,
+  restfly,
+  semver,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     hash = "sha256-acMafLlO0yGEnW+0XeBWUpDWvOPFAB4RK/XyAb2JbPw=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     defusedxml
@@ -71,9 +70,7 @@ buildPythonPackage rec {
     "test_events_list_vcr"
   ];
 
-  pythonImportsCheck = [
-    "tenable"
-  ];
+  pythonImportsCheck = [ "tenable" ];
 
   meta = with lib; {
     description = "Python library for the Tenable.io and TenableSC API";
