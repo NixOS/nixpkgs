@@ -3,11 +3,12 @@
 , cython
 , fetchFromGitHub
 , matplotlib
-, mock
 , numpy
 , pillow
 , pytestCheckHook
 , pythonOlder
+, setuptools-scm
+, python
 }:
 
 buildPythonPackage rec {
@@ -26,11 +27,12 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace " --cov --cov-report xml --tb=short" ""
+      --replace-warn " --cov --cov-report xml --tb=short" ""
   '';
 
   nativeBuildInputs = [
     cython
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
@@ -40,9 +42,12 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    mock
     pytestCheckHook
   ];
+
+  postInstall = ''
+    cp ${src}/wordcloud/stopwords $out/${python.sitePackages}/wordcloud/stopwords
+  '';
 
   preCheck = ''
     cd test
