@@ -1,14 +1,15 @@
-{ lib
-, boto3
-, buildPythonPackage
-, cryptography
-, docutils
-, fetchFromGitHub
-, fetchpatch
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, setuptools
+{
+  lib,
+  boto3,
+  buildPythonPackage,
+  cryptography,
+  docutils,
+  fetchFromGitHub,
+  fetchpatch,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,6 @@ buildPythonPackage rec {
   pyproject = true;
 
   disabled = pythonOlder "3.7";
-
 
   src = fetchFromGitHub {
     owner = "fugue";
@@ -41,9 +41,7 @@ buildPythonPackage rec {
   # file ensures that Python imports the module from site-packages library.
   postInstall = "rm $out/bin/credstash.py";
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     boto3
@@ -52,9 +50,7 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  nativeBuildInputs = [
-    pytestCheckHook
-  ];
+  nativeBuildInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # Tests require a region
