@@ -13,7 +13,6 @@ rec {
 
   buildVimPlugin =
     { name ? "${attrs.pname}-${attrs.version}"
-    , namePrefix ? "vimplugin-"
     , src
     , unpackPhase ? ""
     , configurePhase ? ":"
@@ -27,8 +26,7 @@ rec {
     }@attrs:
     let
       drv = stdenv.mkDerivation (attrs // {
-        name = namePrefix + name;
-
+        inherit name;
         inherit unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
 
         installPhase = ''
