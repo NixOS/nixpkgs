@@ -25,7 +25,7 @@ buildGoModule rec {
   nativeBuildInputs = [
     pkg-config
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
