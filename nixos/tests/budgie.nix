@@ -18,6 +18,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       };
     };
 
+    # We don't ship gnome-text-editor in Budgie module, we add this line mainly
+    # to catch eval issues related to this option.
+    environment.budgie.excludePackages = [ pkgs.gnome-text-editor ];
+
     services.xserver.desktopManager.budgie = {
       enable = true;
       extraPlugins = [
