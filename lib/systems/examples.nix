@@ -134,6 +134,11 @@ rec {
     libc = "newlib";
   };
 
+  riscv32-nommu = {
+    config = "riscv32-unknown-linux-uclibc";
+    libc = "uclibc";
+  };
+
   mips64-embedded = {
     config = "mips64-none-elf";
     libc = "newlib";

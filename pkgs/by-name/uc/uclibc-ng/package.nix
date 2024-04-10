@@ -6,9 +6,21 @@
 , linuxHeaders
 , libiconvReal
 , extraConfig ? ""
+, makeLinuxHeaders
 }:
 
 let
+  locallinuxHeaders = let version = "6.1"; in
+    makeLinuxHeaders {
+      inherit version;
+      src = fetchurl {
+        url = "mirror://kernel/linux/kernel/v${lib.versions.major version}.x/linux-${version}.tar.xz";
+        hash = "sha256-LKHxcFGkMPb+0RluSVJxdQcXGs/ZfZZXchJQJwOyXes=";
+      };
+      patches = [
+        ../../../os-specific/linux/kernel-headers/no-relocs.patch # for building x86 kernel headers on non-ELF platforms
+      ];
+    };
   isCross = (stdenv.buildPlatform != stdenv.hostPlatform);
   configParser = ''
     function parseconfig {
@@ -45,7 +57,7 @@ let
     UCLIBC_HAS_RESOLVER_SUPPORT y
     UCLIBC_SUSV4_LEGACY y
     UCLIBC_HAS_THREADS_NATIVE y
-    KERNEL_HEADERS "${linuxHeaders}/include"
+    KERNEL_HEADERS "${locallinuxHeaders}/include"
   '' + lib.optionalString (stdenv.hostPlatform.gcc.float or "" == "soft") ''
     UCLIBC_HAS_FPU n
   '' + lib.optionalString (stdenv.isAarch32 && isCross) ''
@@ -55,6 +67,10 @@ let
     ARCH_WANTS_LITTLE_ENDIAN y
     ARCH_LITTLE_ENDIAN y
     UCLIBC_HAS_FPU n
+  '' + lib.optionalString (stdenv.targetPlatform.config == "riscv32-unknown-linux-uclibc") ''
+    ARCH_USE_MMU n
+    TARGET_riscv32 y
+    UCLIBC_USE_TIME64 y
   '';
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -63,11 +79,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://downloads.uclibc-ng.org/releases/${finalAttrs.version}/uClibc-ng-${finalAttrs.version}.tar.xz";
-    hash = "sha256-KaTWhKBto0TuPuCazCynZJ1ZKuP/hI9pgUXEbe8F78s=";
+    sha256 = "sha256-KaTWhKBto0TuPuCazCynZJ1ZKuP/hI9pgUXEbe8F78s=";
   };
 
   # 'ftw' needed to build acl, a coreutils dependency
   configurePhase = ''
+    rm libc/sysdeps/linux/common/adjtimex.c
+    rm libc/sysdeps/linux/common/clock_adjtime.c
     make defconfig
     ${configParser}
     cat << EOF | parseconfig
@@ -76,6 +94,8 @@ stdenv.mkDerivation (finalAttrs: {
     ${stdenv.hostPlatform.uclibc.extraConfig or ""}
     EOF
     ( set +o pipefail; yes "" | make oldconfig )
+    cp -v ${./uclibc.config} .config
+    echo 'KERNEL_HEADERS="${locallinuxHeaders}/include"' >> .config
   '';
 
   hardeningDisable = [ "stackprotector" ];
@@ -86,8 +106,8 @@ stdenv.mkDerivation (finalAttrs: {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   makeFlags = [
-    "ARCH=${stdenv.hostPlatform.linuxArch}"
-    "TARGET_ARCH=${stdenv.hostPlatform.linuxArch}"
+    "ARCH=${stdenv.hostPlatform.linuxArch}32"
+    "TARGET_ARCH=${stdenv.hostPlatform.linuxArch}32"
     "VERBOSE=1"
   ] ++ lib.optionals (isCross) [
     "CROSS=${stdenv.cc.targetPrefix}"
@@ -102,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out
     make $makeFlags PREFIX=$out VERBOSE=1 install
-    (cd $out/include && ln -s $(ls -d ${linuxHeaders}/include/* | grep -v "scsi$") .)
+    (cd $out/include && ln -s $(ls -d ${locallinuxHeaders}/include/* | grep -v "scsi$") .)
     # libpthread.so may not exist, so I do || true
     sed -i s@/lib/@$out/lib/@g $out/lib/libc.so $out/lib/libpthread.so || true
 
