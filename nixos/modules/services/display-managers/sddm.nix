@@ -66,7 +66,7 @@ let
       HideShells = "/run/current-system/sw/bin/nologin";
     };
 
-    X11 = {
+    X11 = optionalAttrs xcfg.enable {
       MinimumVT = if xcfg.tty != null then xcfg.tty else 7;
       ServerPath = toString xserverWrapper;
       XephyrPath = "${pkgs.xorg.xorgserver.out}/bin/Xephyr";
