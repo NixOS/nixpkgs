@@ -1,14 +1,15 @@
-{ lib
-, async-timeout
-, bleak
-, bluetooth-adapters
-, dbus-fast
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, pytest-asyncio
+{
+  lib,
+  async-timeout,
+  bleak,
+  bluetooth-adapters,
+  dbus-fast,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
       --replace-fail " --cov=bleak_retry_connector --cov-report=term-missing:skip-covered" ""
   '';
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     async-timeout
@@ -53,9 +52,7 @@ buildPythonPackage rec {
     "test_establish_connection_without_dangerous_use_cached_services"
   ];
 
-  pythonImportsCheck = [
-    "bleak_retry_connector"
-  ];
+  pythonImportsCheck = [ "bleak_retry_connector" ];
 
   meta = with lib; {
     description = "Connector for Bleak Clients that handles transient connection failures";
