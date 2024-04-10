@@ -4,7 +4,7 @@ let
   inherit (lib) maintainers;
   inherit (lib.meta) getExe;
   inherit (lib.modules) mkIf mkRemovedOptionModule;
-  inherit (lib.options) mkEnableOption;
+  inherit (lib.options) mkEnableOption mkPackageOption;
   inherit (lib.strings) optionalString;
 
   cfg = config.programs.fzf;
@@ -23,23 +23,27 @@ in
   ];
 
   options = {
-    programs.fzf.enable = mkEnableOption "fuzzy completion with fzf and keybindings";
+    programs.fzf = {
+      enable = mkEnableOption "fuzzy completion with fzf and keybindings";
+
+      package = mkPackageOption pkgs "fzf" { };
+    };
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.fzf ];
+    environment.systemPackages = [ cfg.package ];
 
     programs.bash.interactiveShellInit = ''
-      eval "$(${getExe pkgs.fzf} --bash)"
+      eval "$(${getExe cfg.package} --bash)"
     '';
 
     programs.fish.interactiveShellInit = ''
-      ${getExe pkgs.fzf} --fish | source
+      ${getExe cfg.package} --fish | source
     '';
 
     programs.zsh = {
       interactiveShellInit = optionalString (!config.programs.zsh.ohMyZsh.enable) ''
-        eval "$(${getExe pkgs.fzf} --zsh)"
+        eval "$(${getExe cfg.package} --zsh)"
       '';
 
       ohMyZsh.plugins = mkIf (config.programs.zsh.ohMyZsh.enable) [ "fzf" ];
