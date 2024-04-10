@@ -28,8 +28,6 @@ assert enableKvm -> !enableHardening;
 # The web services use Java infrastructure.
 assert enableWebService -> javaBindings;
 
-with lib;
-
 let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
@@ -41,6 +39,8 @@ let
   withModsrc = !enableKvm;
 
   virtualboxGuestAdditionsIso = callPackage guest-additions-iso/default.nix { };
+
+  inherit (lib) optional optionals optionalString getDev getLib;
 in stdenv.mkDerivation {
   pname = "virtualbox";
   inherit version;
@@ -67,14 +67,14 @@ in stdenv.mkDerivation {
     ++ optional pulseSupport libpulseaudio
     ++ optionals headless [ libGL ]
     ++ optionals (!headless) [ qtbase qtx11extras libXinerama SDL2 libGLU ]
-    ++ optionals enableWebService [ gsoap zlib ];
+    ++ [ gsoap zlib jdk ];
 
   hardeningDisable = [ "format" "fortify" "pic" "stackprotector" ];
 
   prePatch = ''
     set -x
     sed -e 's@MKISOFS --version@MKISOFS -version@' \
-        -e 's@PYTHONDIR=.*@PYTHONDIR=${lib.optionalString pythonBindings python3}@' \
+        -e 's@PYTHONDIR=.*@PYTHONDIR=${optionalString pythonBindings python3}@' \
         -e 's@CXX_FLAGS="\(.*\)"@CXX_FLAGS="-std=c++11 \1"@' \
         ${optionalString (!headless) ''
         -e 's@TOOLQT5BIN=.*@TOOLQT5BIN="${getDev qtbase}/bin"@' \
@@ -285,9 +285,9 @@ in stdenv.mkDerivation {
       fromSource
       binaryNativeCode
     ];
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     homepage = "https://www.virtualbox.org/";
-    maintainers = with maintainers; [ sander friedrichaltheide blitz ];
+    maintainers = with lib.maintainers; [ sander friedrichaltheide blitz ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "VirtualBox";
   };
