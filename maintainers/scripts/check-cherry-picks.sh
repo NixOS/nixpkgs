@@ -23,10 +23,10 @@ while read new_commit_sha ; do
   original_commit_sha=$(
     git rev-list --max-count=1 --format=format:%B "$new_commit_sha" \
     | grep -Ei -m1 "cherry.*[0-9a-f]{40}" \
-    | grep -Eoi -m1 '[0-9a-f]{40}'
+    | grep -Eoi -m1 '[0-9a-f]{40}' || true
   )
-  if [ "$?" != "0" ] ; then
-    echo "  ? Couldn't locate original commit hash in message"
+  if [ -z "$original_commit_sha" ] ; then
+    echo "  ? Couldn't locate original commit hash in message, maybe \`git cherry-pick -x ...\` was not used?"
     [ "$GITHUB_ACTIONS" = 'true' ] && echo ::endgroup::
     continue
   fi
@@ -85,7 +85,7 @@ while read new_commit_sha ; do
   problem=1
 done <<< "$(
   git rev-list \
-    -E -i --grep="cherry.*[0-9a-f]{40}" --reverse \
+    -E -i --reverse \
     "$1..$2"
 )"
 
