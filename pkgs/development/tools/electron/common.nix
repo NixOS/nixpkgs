@@ -127,7 +127,7 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
         for patch in $(cat $patch_dir/.patches)
         do
           echo applying in $repo: $patch
-          git apply -p1 --directory=$repo --exclude='src/third_party/blink/web_tests/*' $patch_dir/$patch
+          git apply -p1 --directory=$repo --exclude='src/third_party/blink/web_tests/*' --exclude='src/content/test/data/*' $patch_dir/$patch
         done
       done
     )
