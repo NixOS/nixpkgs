@@ -176,6 +176,10 @@ stdenv.mkDerivation (finalAttrs: {
       sed -i $out/lib/systemd/user/"$service".service \
         -e '/ofono-setup.service/d'
     done
+
+    # Parses the call & SMS indicator desktop files & tries to find its own executable in PATH
+    wrapProgram $out/bin/telephony-service-indicator \
+      --prefix PATH : "$out/bin"
   '';
 
   passthru = {
