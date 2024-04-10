@@ -12,6 +12,9 @@ PICKABLE_BRANCHES=${PICKABLE_BRANCHES:-master staging release-??.?? staging-??.?
 problem=0
 
 while read new_commit_sha ; do
+  if [ -z "$new_commit_sha" ] ; then
+    continue  # skip empty lines
+  fi
   if [ "$GITHUB_ACTIONS" = 'true' ] ; then
     echo "::group::Commit $new_commit_sha"
   else
