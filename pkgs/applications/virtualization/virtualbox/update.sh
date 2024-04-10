@@ -34,7 +34,9 @@ if [ ! "$oldVersion" = "$latestVersion" ]; then
   virtualBoxOldShaSum=$(oldHash ${attr}Extpack)
   extpackOldShaSum=$(oldHash ${attr}Extpack)
 
-  update-source-version $attr $latestVersion $virtualBoxShaSum
+  sed -e "s/virtualboxVersion =.*;/virtualboxVersion = \"$latestVersion\";/g" \
+      -e "s/virtualboxSha256 =.*;/virtualboxSha256 = \"$virtualBoxShaSum\";/g" \
+      -i $virtualboxNixFile
   sed -i -e 's|value = "'$extpackOldShaSum'"|value = "'$extpackShaSum'"|' $extpackNixFile
   sed -e "s/sha256 =.*;/sha256 = \"$guestAdditionsIsoShaSum\";/g" \
       -i $guestAdditionsIsoNixFile
