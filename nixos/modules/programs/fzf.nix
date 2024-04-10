@@ -19,7 +19,7 @@ in
   ];
 
   options = {
-    programs.fzf.enable = mkEnableOption (mdDoc "fuzzy completion with fzf and keybindings");
+    programs.fzf.enable = mkEnableOption "fuzzy completion with fzf and keybindings";
   };
 
   config = mkIf cfg.enable {
