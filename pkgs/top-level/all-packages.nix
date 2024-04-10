@@ -299,8 +299,6 @@ with pkgs;
 
   melange = callPackage ../development/tools/melange { };
 
-  appthreat-depscan = callPackage ../development/tools/appthreat-depscan { };
-
   activate-linux = callPackage ../applications/misc/activate-linux { };
 
   ansi = callPackage ../development/tools/ansi { };
