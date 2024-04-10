@@ -1,11 +1,12 @@
-{ lib
-, azure-common
-, azure-mgmt-core
-, buildPythonPackage
-, fetchPypi
-, isodate
-, pythonOlder
-, setuptools
+{
+  lib,
+  azure-common,
+  azure-mgmt-core,
+  buildPythonPackage,
+  fetchPypi,
+  isodate,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
     sha256 = "sha256-XPUJzALti7QXTmgtuwVDhCA2luWz7zfykWEsJmpHzA4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     azure-common
@@ -33,7 +32,10 @@ buildPythonPackage rec {
   # no tests included
   doCheck = false;
 
-  pythonImportsCheck = [ "azure.common" "azure.mgmt.apimanagement" ];
+  pythonImportsCheck = [
+    "azure.common"
+    "azure.mgmt.apimanagement"
+  ];
 
   meta = with lib; {
     description = "Microsoft Azure API Management Client Library for Python";
