@@ -10098,6 +10098,12 @@
     githubId = 66669;
     name = "Jeff Zellner";
   };
+  kanielrkirby = {
+    email = "kanielrkirby@runbox.com";
+    name = "Kaniel Kirby";
+    github = "kanielrkirby";
+    githubId = 77940607;
+  };
   k3a = {
     email = "git+nix@catmail.app";
     name = "Mario Hros";
