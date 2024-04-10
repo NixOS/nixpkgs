@@ -164,14 +164,7 @@ in
     [ ./display-managers/default.nix
       ./window-managers/default.nix
       ./desktop-managers/default.nix
-      (mkRemovedOptionModule [ "services" "xserver" "startGnuPGAgent" ]
-        "See the 16.09 release notes for more information.")
-      (mkRemovedOptionModule
-        [ "services" "xserver" "startDbusSession" ]
-        "The user D-Bus session is now always socket activated and this option can safely be removed.")
-      (mkRemovedOptionModule [ "services" "xserver" "useXFS" ]
-        "Use services.xserver.fontPath instead of useXFS")
-      (mkRemovedOptionModule [ "services" "xserver" "useGlamor" ]
+      (lib.mkRemovedOptionModule [ "services" "xserver" "useGlamor" ]
         "Option services.xserver.useGlamor was removed because it is unnecessary. Drivers that uses Glamor will use it automatically.")
       (lib.mkRenamedOptionModuleWith {
         sinceRelease = 2311;
