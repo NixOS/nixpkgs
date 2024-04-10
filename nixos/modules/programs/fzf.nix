@@ -1,18 +1,22 @@
 { pkgs, config, lib, ... }:
 
-with lib;
-
 let
+  inherit (lib) maintainers;
+  inherit (lib.meta) getExe;
+  inherit (lib.modules) mkIf mkRemovedOptionModule;
+  inherit (lib.options) mkEnableOption;
+  inherit (lib.strings) optionalString;
+
   cfg = config.programs.fzf;
 
 in
 {
   imports = [
-    (lib.mkRemovedOptionModule [ "programs" "fzf" "keybindings" ] ''
+    (mkRemovedOptionModule [ "programs" "fzf" "keybindings" ] ''
       Use "programs.fzf.enable" instead; due to fzf upstream changes, it's not possible to load shell-completion and keybindings separately.
       If you want to change/disable certain keybindings, please check the fzf documentation.
     '')
-    (lib.mkRemovedOptionModule [ "programs" "fzf" "fuzzyCompletion" ] ''
+    (mkRemovedOptionModule [ "programs" "fzf" "fuzzyCompletion" ] ''
       Use "programs.fzf.enable" instead; due to fzf upstream changes, it's not possible to load shell-completion and keybindings separately.
       If you want to change/disable certain keybindings, please check the fzf documentation.
     '')
