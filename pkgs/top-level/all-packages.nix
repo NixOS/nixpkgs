@@ -14447,7 +14447,7 @@ with pkgs;
   crystal2nix = callPackage ../development/compilers/crystal2nix { };
 
   crystalline = callPackage ../development/tools/language-servers/crystalline {
-    llvmPackages = llvmPackages_15;
+    llvmPackages = llvmPackages_18;
   };
 
   icr = callPackage ../development/tools/icr { };
