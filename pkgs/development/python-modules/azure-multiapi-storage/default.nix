@@ -1,14 +1,15 @@
-{ lib
-, azure-common
-, azure-core
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, msrest
-, msrestazure
-, pythonOlder
-, requests
-, setuptools
+{
+  lib,
+  azure-common,
+  azure-core,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  msrest,
+  msrestazure,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-CQuoWHeh0EMitTRsvifotrTwpWd/Q9LWWD7jZ2w9r8I=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     azure-common
@@ -42,7 +41,10 @@ buildPythonPackage rec {
   # no tests included
   doCheck = false;
 
-  pythonImportsCheck = [ "azure.common" "azure.multiapi.storage" ];
+  pythonImportsCheck = [
+    "azure.common"
+    "azure.multiapi.storage"
+  ];
 
   meta = with lib; {
     description = "Microsoft Azure Storage Client Library for Python with multi API version support.";
