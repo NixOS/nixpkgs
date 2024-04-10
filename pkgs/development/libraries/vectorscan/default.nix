@@ -2,32 +2,38 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+, pkg-config
 , ragel
 , util-linux
 , python3
-, boost
+, boost184
+, sqlite
+, pcre
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
 stdenv.mkDerivation rec {
   pname = "vectorscan";
-  version = "5.4.10.1";
+  version = "5.4.11";
 
   src = fetchFromGitHub {
     owner = "VectorCamp";
     repo = "vectorscan";
     rev = "vectorscan/${version}";
-    hash = "sha256-x6FefOrUvpN/A4GXTd+3SGZEAQL6pXt83ufxRIY3Q9k=";
+    hash = "sha256-wz2oIhau/vjnri3LOyPZSCFAWg694FTLVt7+SZYEsL4=";
   };
 
   nativeBuildInputs = [
     cmake
+    pkg-config
     ragel
     python3
   ] ++ lib.optional stdenv.isLinux util-linux;
 
   buildInputs = [
-    boost
+    boost184
+    sqlite
+    pcre
   ];
 
   # FAT_RUNTIME bundles optimized implementations for different CPU extensions and uses CPUID to
