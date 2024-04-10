@@ -8490,8 +8490,6 @@ with pkgs;
 
   forgejo = callPackage ../applications/version-management/forgejo { };
 
-  forgejo-actions-runner = callPackage ../development/tools/continuous-integration/forgejo-actions-runner { };
-
   gokart = callPackage ../development/tools/gokart { };
 
   gl2ps = callPackage ../development/libraries/gl2ps { };
