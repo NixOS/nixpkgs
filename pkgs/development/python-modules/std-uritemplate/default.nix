@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, poetry-core
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -18,16 +19,12 @@ buildPythonPackage rec {
     hash = "sha256-85dldY+2WB+Hn6fBBHoKJ7fIe7fDyddYxAjDD83lHGc=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   # Module doesn't have unittest, only functional tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "stduritemplate"
-  ];
+  pythonImportsCheck = [ "stduritemplate" ];
 
   meta = with lib; {
     description = "Std-uritemplate implementation for Python";
