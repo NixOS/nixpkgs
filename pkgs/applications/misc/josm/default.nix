@@ -10,7 +10,7 @@ let
       hash = "sha256-iH6g18lJrvfAvtkAaVPSK7vhgdU6oI7X10GkFcwpsBs=";
     };
     macosx = fetchurl {
-      url = "https://josm.openstreetmap.de/download/macosx/josm-macos-${version}-java17.zip";
+      url = "https://josm.openstreetmap.de/download/macosx/josm-macos-${version}-java21.zip";
       hash = "sha256-yA+Qf76MbouiLdH9o1Ri8ptbG70YZoI13pBA9Ki61/0=";
     };
     pkg = fetchsvn {
