@@ -956,6 +956,7 @@ let
     "pbdMPI"   # tries to run MPI processes
     "data_table" # fails to rename shared library before check
     "multiMiR" # tries to connect to DB
+    "snapcount" # tries to connect to snaptron.cs.jhu.edu
   ];
 
   # Packages which cannot be installed due to lack of dependencies or other reasons.
