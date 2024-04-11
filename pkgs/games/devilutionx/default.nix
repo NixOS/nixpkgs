@@ -8,10 +8,12 @@
 , gettext
 , libsodium
 , SDL2
+, SDL_audiolib
 , SDL2_image
 , fmt
 , libpng
 , smpq
+, flac
 }:
 
 let
@@ -45,10 +47,16 @@ let
   };
 
   # breaks without this version
-  SDL_audiolib = fetchurl {
-    url = "https://github.com/realnc/SDL_audiolib/archive/cc1bb6af8d4cf5e200259072bde1edd1c8c5137e.tar.gz";
-    sha256 = "sha256-WtxxvuNQaxbFBcFmLac/z9/YeJFGRXhPgPxw25eVM6U=";
-  };
+  SDL_audiolib' = SDL_audiolib.overrideAttrs (oldAttrs: {
+    src = fetchFromGitHub {
+      owner = "realnc";
+      repo = "SDL_audiolib";
+      rev = "cc1bb6af8d4cf5e200259072bde1edd1c8c5137e";
+      sha256 = "sha256-xP7qlwwOkqVeTlCEZLinnvmx8LbU2co5+t//cf4n190=";
+    };
+
+    buildInputs = oldAttrs.buildInputs ++ [ flac ];
+  });
 
   # missing pkg-config and/or cmake file
   simpleini = fetchurl {
@@ -75,7 +83,6 @@ stdenv.mkDerivation rec {
     substituteInPlace 3rdParty/libzt/CMakeLists.txt \
       --replace-fail "GIT_REPOSITORY https://github.com/diasurgical/libzt.git" "" \
       --replace-fail "GIT_TAG ${libzt.rev}" "SOURCE_DIR ${libzt}"
-    substituteInPlace 3rdParty/SDL_audiolib/CMakeLists.txt --replace-fail "${SDL_audiolib.url}" "${SDL_audiolib}"
     substituteInPlace 3rdParty/simpleini/CMakeLists.txt --replace-fail "${simpleini.url}" "${simpleini}"
   '';
 
@@ -92,6 +99,7 @@ stdenv.mkDerivation rec {
     libpng
     libsodium
     SDL2
+    SDL_audiolib'
     SDL2_image
   ];
 
