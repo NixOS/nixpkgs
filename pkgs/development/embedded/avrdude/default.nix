@@ -1,10 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, bison, flex, libusb1, libelf
+{ lib, callPackage, stdenv, fetchFromGitHub, cmake, bison, flex, libusb1, elfutils
 , libftdi1, readline, hidapi, libserialport
 # Documentation building doesn't work on Darwin. It fails with:
 #   Undefined subroutine &Locale::Messages::dgettext called in ... texi2html
 #
 # https://github.com/NixOS/nixpkgs/issues/224761
 , docSupport ? (!stdenv.hostPlatform.isDarwin), texliveMedium, texinfo, texi2html, unixtools }:
+
+let
+  useElfutils = lib.meta.availableOn stdenv.hostPlatform elfutils;
+in
 
 stdenv.mkDerivation rec {
   pname = "avrdude";
@@ -24,7 +28,19 @@ stdenv.mkDerivation rec {
     texi2html
   ];
 
-  buildInputs = [ hidapi libusb1 libelf libftdi1 libserialport readline ];
+  buildInputs = [
+    (if useElfutils then elfutils else finalAttrs.finalPackage.passthru.libelf)
+    hidapi
+    libusb1
+    libftdi1
+    libserialport
+    readline
+  ];
+
+  postPatch = lib.optionalString (!useElfutils) ''
+    # vendored libelf is a static library
+    sed -i "s/PREFERRED_LIBELF elf/PREFERRED_LIBELF libelf.a elf/" CMakeLists.txt
+  '';
 
   # Not used:
   #
@@ -38,6 +54,12 @@ stdenv.mkDerivation rec {
   postInstall = lib.optionalString docSupport ''
     rm $out/share/doc/${pname}/*.ps
   '';
+
+  passthru = {
+    # Vendored and mutated copy of libelf for avrdudes use.
+    # Produces a static library only.
+    libelf = callPackage ./libelf.nix { };
+  };
 
   meta = with lib; {
     description = "Command-line tool for programming Atmel AVR microcontrollers";
