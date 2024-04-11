@@ -2,6 +2,8 @@
 , stdenvNoCC
 , fetchurl
 , unzip
+, makeDesktopItem
+, copyDesktopItems
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -15,38 +17,41 @@ stdenvNoCC.mkDerivation rec {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [
+    unzip
+    copyDesktopItems
+  ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share/applications
+    mkdir -p $out/bin $out/share/pixmaps
     unzip -d $out/bin $src
-    mv $out/bin/JackboxUtility $out/bin/${pname}
-    chmod +x $out/bin/${pname}
+    cp $out/bin/data/flutter_assets/assets/logo.png $out/share/pixmaps/jackbox-utility.png
+    mv $out/bin/JackboxUtility $out/bin/jackbox-utility
+    chmod +x $out/bin/jackbox-utility
 
     runHook postInstall
   '';
 
-  postInstall = ''
-    cat << EOF > $out/share/applications/${pname}.desktop
-      [Desktop Entry]
-      Version=${version}
-      Type=Application
-      Name=JackboxUtility
-      Exec=$out/bin/${pname}
-      Icon=$out/bin/data/flutter_assets/assets/logo.png
-      Terminal=false
-      Comment=An app to download patches and launch Jackbox games
-    EOF
-    chmod +x $out/share/applications/${pname}.desktop
-  '';
+  desktopItems = [
+    (makeDesktopItem {
+      name = "JackboxUtility";
+      exec = "jackbox-utility";
+      icon = "jackbox-utility";
+      comment = meta.description;
+      desktopName = "JackboxUtility";
+      categories = [ "Game" "Utility" ];
+    })
+  ];
 
   meta = with lib; {
-    description = "An app to download patches and launch Jackbox games ";
-    homepage = "https://github.com/JackboxUtility/JackboxUtility";
-    license = licenses.gpl3;
+    description = "An app to download patches and launch Jackbox games";
+    homepage = "https://jackboxutility.com";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jpeterburs ];
     mainProgram = "jackbox-utility";
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }
