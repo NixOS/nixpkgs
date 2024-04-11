@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "snakemake-interface-common";
-  version = "1.17.1";
+  version = "1.17.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-23PGKSBX7KMt0Q7sWiLIPfCkxr2HtBas7flYeNHABWM=";
+    hash = "sha256-N8mSS+gABAgXm01BcsMk89a3HsIsc3RHxCAi3GlxtRg=";
   };
 
   nativeBuildInputs = [
