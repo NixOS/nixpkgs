@@ -37,7 +37,7 @@
 
 let
   pname = "vector";
-  version = "0.37.0";
+  version = "0.37.1";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -46,16 +46,13 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-v93ZsNGoswPpey409V7qKqsBsfRt5pgY5PxGti4MlDg=";
+    hash = "sha256-wRXwgy+UY2z5fIWpQbDxRti54GE357WMGWXM/xKjz18=";
   };
 
   patches = [
     # Enable LTO to bring down binary size
-    (fetchpatch {
-      name = "vector-20034-lto.patch";
-      url  = "https://patch-diff.githubusercontent.com/raw/vectordotdev/vector/pull/20034.diff";
-      hash = "sha256-X6YWnW0x5WpKAgyqIaLjKF1F1/G4JgvmNhAHtozXrPQ=";
-    })
+    # Adapted from https://github.com/vectordotdev/vector/pull/20034
+    ./vector-lto.patch
   ];
 
   cargoLock = {

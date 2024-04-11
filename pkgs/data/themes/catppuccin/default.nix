@@ -1,5 +1,5 @@
 let
-  validThemes = [ "bat" "bottom" "btop" "grub" "hyprland" "k9s" "kvantum" "lazygit" "plymouth" "qt5ct" "refind" "rofi" "starship" "thunderbird" "waybar" ];
+  validThemes = [ "bat" "bottom" "btop" "grub" "hyprland" "k9s" "kvantum" "lazygit" "lxqt" "plymouth" "qt5ct" "refind" "rofi" "starship" "thunderbird" "waybar" ];
 in
 { fetchFromGitHub
 , lib
@@ -78,6 +78,14 @@ let
       repo = "lazygit";
       rev = "v2.0.0";
       hash = "sha256-gM0HplHhcpvtpmIVdlX/p59h0v+ihKEidS1imqPYlBg=";
+    };
+
+    lxqt = fetchFromGitHub {
+      name = "lxqt";
+      owner = "catppuccin";
+      repo = "lxqt";
+      rev = "38cf86b3e499e0c0928a102c9c030e5dc6b79255";
+      hash = "sha256-3TuUkOwk6BSc7BnLnTowGAkSlNTOtGTRlEcjJ6MNJ5g=";
     };
 
     plymouth = fetchFromGitHub {
@@ -193,6 +201,10 @@ stdenvNoCC.mkDerivation {
     mkdir -p $out/lazygit/{themes,themes-mergable}
     cp "${sources.lazygit}/themes/${variant}/${accent}.yml" "$out/lazygit/themes/"
     cp "${sources.lazygit}/themes-mergable/${variant}/${accent}.yml" "$out/lazygit/themes-mergable/"
+
+  '' + lib.optionalString (lib.elem "lxqt" themeList) ''
+    mkdir -p $out/share/lxqt/themes/catppuccin-${variant}
+    cp -r ${sources.lxqt}/src/catppuccin-${variant}/* $out/share/lxqt/themes/catppuccin-${variant}/
 
   '' + lib.optionalString (lib.elem "plymouth" themeList) ''
     mkdir -p $out/share/plymouth/themes/catppuccin-${variant}

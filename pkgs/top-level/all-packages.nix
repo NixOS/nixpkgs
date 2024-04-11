@@ -299,8 +299,6 @@ with pkgs;
 
   melange = callPackage ../development/tools/melange { };
 
-  appthreat-depscan = callPackage ../development/tools/appthreat-depscan { };
-
   activate-linux = callPackage ../applications/misc/activate-linux { };
 
   ansi = callPackage ../development/tools/ansi { };
@@ -3852,8 +3850,6 @@ with pkgs;
   glaxnimate = libsForQt5.callPackage ../applications/video/glaxnimate { };
 
   gluesql = callPackage ../servers/sql/gluesql { };
-
-  gmid = callPackage ../servers/gemini/gmid { };
 
   gmni = callPackage ../applications/networking/browsers/gmni { };
 
@@ -8352,7 +8348,7 @@ with pkgs;
   })
     garage
       garage_0_8 garage_0_9
-      garage_0_8_7 garage_0_9_3;
+      garage_0_8_7 garage_0_9_4;
 
   garmintools = callPackage ../development/libraries/garmintools { };
 
@@ -8489,8 +8485,6 @@ with pkgs;
   gitea-actions-runner = callPackage ../development/tools/continuous-integration/gitea-actions-runner { };
 
   forgejo = callPackage ../applications/version-management/forgejo { };
-
-  forgejo-actions-runner = callPackage ../development/tools/continuous-integration/forgejo-actions-runner { };
 
   gokart = callPackage ../development/tools/gokart { };
 
@@ -16771,7 +16765,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   cargo-deb = callPackage ../development/tools/rust/cargo-deb { };
-  cargo-deps = callPackage ../development/tools/rust/cargo-deps { };
   cargo-docset = callPackage ../development/tools/rust/cargo-docset { };
   cargo-duplicates = callPackage ../development/tools/rust/cargo-duplicates { };
   cargo-edit = callPackage ../development/tools/rust/cargo-edit {
@@ -32421,7 +32414,10 @@ with pkgs;
 
   khard = callPackage ../applications/misc/khard { };
 
-  kid3 = libsForQt5.callPackage ../applications/audio/kid3 { };
+  kid3-cli = qt6Packages.callPackage ../applications/audio/kid3 { withCLI = true; withKDE = false; withQt = false; };
+  kid3-kde = qt6Packages.callPackage ../applications/audio/kid3 { withCLI = true; withKDE = true; withQt = false; };
+  kid3-qt = qt6Packages.callPackage ../applications/audio/kid3 { withCLI = true; withKDE = false; withQt = true; };
+  kid3 = kid3-kde;
 
   kile = libsForQt5.callPackage ../applications/editors/kile { };
 
@@ -32435,7 +32431,7 @@ with pkgs;
 
   klayout = libsForQt5.callPackage ../applications/misc/klayout { };
 
-  klee = callPackage ../applications/science/logic/klee (with llvmPackages_12; {
+  klee = callPackage ../applications/science/logic/klee (with llvmPackages_13; {
     clang = clang;
     llvm = llvm;
     stdenv = stdenv;

@@ -563,6 +563,7 @@ let
     apsimx = [ pkgs.which ];
     cairoDevice = [ pkgs.pkg-config ];
     chebpol = [ pkgs.pkg-config ];
+    eds = [ pkgs.zlib.dev ];
     fftw = [ pkgs.pkg-config ];
     gdtools = [ pkgs.pkg-config ];
     archive = [ pkgs.libarchive];
@@ -654,7 +655,7 @@ let
     rtk = [ pkgs.zlib.dev ];
     scPipe = with pkgs; [ bzip2.dev xz.dev zlib.dev ];
     seqTools = [ pkgs.zlib.dev ];
-    seqbias = [ pkgs.zlib.dev ];
+    seqbias = with pkgs; [ zlib.dev bzip2.dev xz.dev ];
     sparkwarc = [ pkgs.zlib.dev ];
     RoBMA = [ pkgs.jags ];
     pexm = [ pkgs.jags ];
@@ -976,6 +977,7 @@ let
     "DuoClustering2018"
     "FieldEffectCrc"
     "GenomicDistributionsData"
+    "hpar"
     "HDCytoData"
     "HMP16SData"
     "PANTHER_db"

@@ -18,21 +18,21 @@
 , setuptools
 }:
 let
-  version = "0.68.5";
-  gqlgen = import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.36"; };
+  version = "0.69.8";
+  gqlgen = import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.43"; };
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "meta.sr.ht";
     rev = version;
-    hash = "sha256-mwUqBzi7nMTZL7uwv7hBjGkO8U3krXXpvfUCaYHgHBU=";
+    hash = "sha256-K7p6cytkPYgUuYr7BVfU/+sVbSr2YEmreIDnTatUMyk=";
   };
 
   metasrht-api = buildGoModule ({
     inherit src version;
     pname = "metasrht-api";
     modRoot = "api";
-    vendorHash = "sha256-4T1xnHDjxsIyddA51exNwwz6ZWeuT7N8LBsCJ7c8sRI=";
+    vendorHash = "sha256-vIkUK1pigVU8vZL5xpHLeinOga5eXXHTuDkHxwUz6uM=";
   } // gqlgen);
 in
 buildPythonPackage rec {

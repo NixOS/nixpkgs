@@ -2,22 +2,22 @@
 , buildGoModule
 , fetchFromGitea
 , testers
-, forgejo-actions-runner
+, forgejo-runner
 }:
 
 buildGoModule rec {
-  pname = "forgejo-actions-runner";
-  version = "3.3.0";
+  pname = "forgejo-runner";
+  version = "3.4.1";
 
   src = fetchFromGitea {
     domain = "code.forgejo.org";
     owner = "forgejo";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-ZpsHytsIp+ZW4DI7X9MmI7nZRnXVHvx905YdZGS6WMY=";
+    hash = "sha256-c8heIHt+EJ6LnZT4/6TTWd7v85VRHjH72bdje12un4M=";
   };
 
-  vendorHash = "sha256-5GnGXpMy1D7KpVAVroX07Vw5QKYYtwdIhQsk23WCLgc=";
+  vendorHash = "sha256-FCCQZdAYRtJR3DGQIEvUzv+1kqvxVTGkwJwZSohq28s=";
 
   ldflags = [
     "-s"
@@ -28,16 +28,16 @@ buildGoModule rec {
   doCheck = false; # Test try to lookup code.forgejo.org.
 
   passthru.tests.version = testers.testVersion {
-    package = forgejo-actions-runner;
+    package = forgejo-runner;
     version = src.rev;
   };
 
   meta = with lib; {
     description = "A runner for Forgejo based on act";
     homepage = "https://code.forgejo.org/forgejo/runner";
-    changelog = "https://gitea.com/gitea/act_runner/releases/tag/${src.rev}";
+    changelog = "https://code.forgejo.org/forgejo/runner/src/tag/${src.rev}/RELEASE-NOTES.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ kranzes ];
+    maintainers = with maintainers; [ kranzes emilylange ];
     mainProgram = "act_runner";
   };
 }
