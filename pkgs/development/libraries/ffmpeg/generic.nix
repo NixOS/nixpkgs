@@ -80,6 +80,8 @@
 , withOpus ? withHeadlessDeps # Opus de/encoder
 , withPlacebo ? withFullDeps && !stdenv.isDarwin # libplacebo video processing library
 , withPulse ? withSmallDeps && stdenv.isLinux # Pulseaudio input support
+, withQrencode ? withFullDeps && lib.versionAtLeast version "7" # QR encode generation
+, withQuirc ? withFullDeps && lib.versionAtLeast version "7" # QR decoding
 , withRav1e ? withFullDeps # AV1 encoder (focused on speed and safety)
 , withRtmp ? false # RTMP[E] support
 , withSamba ? withFullDeps && !stdenv.isDarwin && withGPLv3 # Samba protocol
@@ -263,6 +265,8 @@
 , opencore-amr
 , openh264
 , openjpeg
+, qrencode
+, quirc
 , rav1e
 , rtmpdump
 , samba
@@ -551,6 +555,10 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withPlacebo "libplacebo")
   ] ++ [
     (enableFeature withPulse "libpulse")
+  ] ++ optionals (versionAtLeast version "7") [
+    (enableFeature withQrencode "libqrencode")
+    (enableFeature withQuirc "libquirc")
+  ] ++ [
     (enableFeature withRav1e "librav1e")
     (enableFeature withRtmp "librtmp")
     (enableFeature withSamba "libsmbclient")
@@ -668,6 +676,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withOpus [ libopus ]
   ++ optionals withPlacebo [ (if (lib.versionAtLeast version "6.1") then libplacebo else libplacebo_5) vulkan-headers ]
   ++ optionals withPulse [ libpulseaudio ]
+  ++ optionals withQrencode [ qrencode ]
+  ++ optionals withQuirc [ quirc ]
   ++ optionals withRav1e [ rav1e ]
   ++ optionals withRtmp [ rtmpdump ]
   ++ optionals withSamba [ samba ]
