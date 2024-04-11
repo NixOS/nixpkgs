@@ -62,6 +62,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Numerical Geometric Algebra Module";
     homepage = "https://clifford.readthedocs.io";
+    changelog = "https://github.com/pygae/clifford/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };
