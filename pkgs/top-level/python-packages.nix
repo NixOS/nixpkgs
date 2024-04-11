@@ -7053,6 +7053,8 @@ self: super: with self; {
 
   regress = callPackage ../development/python-modules/regress { };
 
+  macaroonbakery = callPackage ../development/python-modules/macaroonbakery { };
+
   mail-parser = callPackage ../development/python-modules/mail-parser { };
 
   makefun = callPackage ../development/python-modules/makefun { };
