@@ -5389,6 +5389,12 @@
       fingerprint = "389A 78CB CD88 5E0C 4701  DEB9 FD42 C7D0 D414 94C8";
     }];
   };
+  duijf = {
+    email = "git@duijf.io";
+    github = "duijf";
+    githubId = 1123589;
+    name = "Laurens Duijvesteijn";
+  };
   dukc = {
     email = "ajieskola@gmail.com";
     github = "dukc";
