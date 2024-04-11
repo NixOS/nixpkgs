@@ -1,9 +1,13 @@
 { lib
 , aiohttp
+, aioresponses
 , buildPythonPackage
 , fetchFromGitHub
-, setuptools
+, pytest-asyncio
+, pytestCheckHook
+, python-dotenv
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -20,16 +24,20 @@ buildPythonPackage rec {
     hash = "sha256-fhZMn0v908VzV+JLuS8tM+BPKJBoj77vEh1pINL4Cco=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
   ];
 
-  # Module has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    aioresponses
+    pytest-asyncio
+    pytestCheckHook
+    python-dotenv
+  ];
 
   pythonImportsCheck = [
     "bring_api"
