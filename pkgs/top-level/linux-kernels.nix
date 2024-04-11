@@ -548,6 +548,8 @@ in {
 
     ithc = callPackage ../os-specific/linux/ithc { };
 
+    ryzen-smu = callPackage ../os-specific/linux/ryzen-smu { };
+
     zenpower = callPackage ../os-specific/linux/zenpower { };
 
     zfs_2_1 = callPackage ../os-specific/linux/zfs/2_1.nix {
