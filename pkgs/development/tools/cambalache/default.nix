@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "jpu";
-    repo = pname;
+    repo = "cambalache";
     rev = version;
     hash = "sha256-m3rearoCFQUzdZMXY2xyKf4dgdq7G4QlUbetrIqW83U=";
   };
