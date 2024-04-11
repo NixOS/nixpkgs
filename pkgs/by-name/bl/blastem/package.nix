@@ -3,7 +3,7 @@
   stdenv,
   fetchhg,
   pkg-config,
-  makeWrapper,
+  makeBinaryWrapper,
   SDL2,
   glew,
   gtk3,
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    makeWrapper
+    makeBinaryWrapper
   ];
 
   buildInputs = [
