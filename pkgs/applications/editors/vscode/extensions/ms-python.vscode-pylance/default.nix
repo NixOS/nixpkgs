@@ -1,6 +1,6 @@
 {
   lib,
-  nodePackages,
+  pyright,
   vscode-utils,
 }:
 
@@ -12,7 +12,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     hash = "sha256-xJU/j5r/Idp/0VorEfciT4SFKRBpMCv9Z0LKO/++1Gk=";
   };
 
-  buildInputs = [ nodePackages.pyright ];
+  buildInputs = [ pyright ];
 
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/ms-python.vscode-pylance/changelog";
