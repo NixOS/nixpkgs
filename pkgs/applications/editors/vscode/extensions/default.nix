@@ -2653,10 +2653,9 @@ let
         mktplcRef = {
           name = "direnv";
           publisher = "mkhl";
-          version = "0.16.0";
-          hash = "sha256-u2AFjvhm3zio1ygW9yD9ZwbywLrEssd0O7/0AtfCvMo=";
+          version = "0.17.0";
+          hash = "sha256-9sFcfTMeLBGw2ET1snqQ6Uk//D/vcD9AVsZfnUNrWNg=";
         };
-
         meta = {
           description = "direnv support for Visual Studio Code";
           license = lib.licenses.bsd0;
