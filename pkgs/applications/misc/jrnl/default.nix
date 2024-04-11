@@ -17,6 +17,12 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-DtujXSDJWnOrHjVgJEJNKJMhSrNBHlR2hvHeHLSIF2o=";
   };
 
+  postPatch = ''
+    # Support pytest_bdd 7.1.2 and later, https://github.com/jrnl-org/jrnl/pull/1878
+    substituteInPlace tests/lib/when_steps.py \
+      --replace-fail "from pytest_bdd.steps import inject_fixture" "from pytest_bdd.compat import inject_fixture"
+  '';
+
   build-system = with python3.pkgs; [
     poetry-core
   ];
