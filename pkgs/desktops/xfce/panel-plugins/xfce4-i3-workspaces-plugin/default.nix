@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xfce4-i3-workspaces-plugin";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "denesb";
     repo = "xfce4-i3-workspaces-plugin";
     rev = version;
-    sha256 = "sha256-Ss3uUmNvBqiu7hUaSy98+YYrWs64LFGbV4DMAV+xkvA=";
+    sha256 = "sha256-CKpofupoJhe5IORJgij6gOGotB+dGkUDtTUdon8/JdE=";
   };
 
   nativeBuildInputs = [
