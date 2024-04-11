@@ -18,15 +18,14 @@ buildPythonPackage rec {
     hash = "sha256-4A2TWTxYqckJ3DX5cd2KN3KXcmO/lQdXmOEnGi76RsA=";
   };
 
-  dependencies = [ setuptools ];
+  build-system = [ setuptools ];
 
-  buildInputs = [ colormath ];
+  dependencies = [ colormath ];
 
   nativeCheckInputs = [ nose ];
   checkPhase = "nosetests";
 
   meta = {
-    changelog = "https://github.com/jsvine/spectra/releases/tag/v${version}";
     description = "Spectra is a Python library that makes color math, color scales, and color-space conversion easy";
     longDescription = ''
     Spectra has support for:
@@ -41,6 +40,7 @@ buildPythonPackage rec {
     Spectra is built on colormath and grapefruit. Spectra is enormously inspired by chroma.js and d3's scales.
     '';
     homepage = "https://github.com/jsvine/spectra";
+    changelog = "https://github.com/jsvine/spectra/releases/tag/v${version}";
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dflores ];
