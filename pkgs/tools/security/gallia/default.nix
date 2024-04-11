@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gallia";
-  version = "1.6.0";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Fraunhofer-AISEC";
     repo = "gallia";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LvzEyBkhji7ruVVO2EpqM8pKOcTX8Dnkqu/GtWOfMZs=";
+    hash = "sha256-hLGaImYkv6/1Wv1a+0tKmW4qmV4akNoyd0RXopJjetI=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
