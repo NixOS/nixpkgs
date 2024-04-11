@@ -1,4 +1,4 @@
-{ lib, stdenv, targetPackages, fetchurl, fetchpatch, noSysDirs
+{ lib, stdenv, targetPackages, fetchFromGitHub, fetchurl, fetchpatch, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
 , langAda ? false
 , langObjC ? stdenv.targetPlatform.isDarwin
@@ -45,11 +45,15 @@
 , libXrender ? null, xorgproto ? null
 , libXrandr ? null, libXi ? null
 , x11Support ? langJava
+
+, gccSrc ? null
 }:
 
 let
   versions = import ./versions.nix;
-  version = versions.fromMajorMinor majorMinorVersion;
+  version = if gccSrc != null
+    then majorMinorVersion
+    else versions.fromMajorMinor majorMinorVersion;
 
   majorVersion = lib.versions.major version;
   atLeast14 = lib.versionAtLeast version "14";
@@ -236,7 +240,9 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
   pname = "${crossNameAddon}${name}";
   inherit version;
 
-  src = if is6 && stdenv.targetPlatform.isVc4 then fetchFromGitHub {
+  src = if gccSrc != null
+  then gccSrc
+  else if is6 && stdenv.targetPlatform.isVc4 then fetchFromGitHub {
     owner = "itszor";
     repo = "gcc-vc4";
     rev = "e90ff43f9671c760cf0d1dd62f569a0fb9bf8918";

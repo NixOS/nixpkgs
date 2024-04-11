@@ -15631,6 +15631,34 @@ with pkgs;
   gccFun = callPackage ../development/compilers/gcc;
   gcc-unwrapped = gcc.cc;
 
+  gccFromSrc =
+    let
+      noSysDirs' = noSysDirs;
+    in
+    lib.makeOverridable
+      ({ stdenv ? pkgs.stdenv
+       , src
+       , majorMinorVersion ? lib.fileContents "${src}/gcc/BASE-VER"
+       , noSysDirs ? noSysDirs'
+       , profiledCompiler ? false
+       , reproducibleBuild ? true
+       , libcCross ? if stdenv.targetPlatform != stdenv.buildPlatform then pkgs.libcCross else null
+       , threadsCross ? if stdenv.targetPlatform != stdenv.buildPlatform then pkgs.threadsCrossFor majorMinorVersion else { }
+       , cloog ? if stdenv.isDarwin
+         then null
+         else if lib.versionAtLeast majorMinorVersion "4.9" then cloog_0_18_0
+         else pkgs.cloog
+       , isl ? if stdenv.isDarwin then null
+         else if lib.versionAtLeast majorMinorVersion "9" then isl_0_20
+         else if lib.versionAtLeast majorMinorVersion "7" then isl_0_17
+         else if lib.versionAtLeast majorMinorVersion "6" then (if stdenv.targetPlatform.isRedox then isl_0_17 else isl_0_14)
+         else if lib.versionAtLeast majorMinorVersion "4.9" then isl_0_11
+         else /* "4.8" */ isl_0_14
+       }: wrapCC (gccFun {
+        inherit stdenv majorMinorVersion noSysDirs profiledCompiler reproducibleBuild libcCross threadsCross cloog isl;
+        gccSrc = src;
+      }));
+
   wrapNonDeterministicGcc = stdenv: ccWrapper:
     if ccWrapper.isGNU then ccWrapper.overrideAttrs(old: {
       env = old.env // {
