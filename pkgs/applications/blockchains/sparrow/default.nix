@@ -21,11 +21,11 @@
 
 let
   pname = "sparrow";
-  version = "1.8.4";
+  version = "1.8.5";
 
   src = fetchurl {
     url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-x86_64.tar.gz";
-    sha256 = "0w6z84w9spwfpqrf5m9bcq30xqp94c27jw3qzxfdyisp8n22xvd8";
+    sha256 = "sha256-LIYAfoMgdk/eAXKe68DmQD1QsYNT7O5ggtEjFClwlM4=";
   };
 
   launcher = writeScript "sparrow" ''
@@ -150,7 +150,6 @@ let
       # with one from Nixpkgs.
       gzip -c ${torWrapper}  > tor.gz
       cp tor.gz modules/kmp.tor.binary.linuxx64/kmptor/linux/x64/tor.gz
-      find modules
     '';
 
     installPhase = ''
