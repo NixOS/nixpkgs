@@ -22970,9 +22970,7 @@ with pkgs;
     stdenv = gccStdenv; # Required for darwin
   }) libprom libpromhttp;
 
-  libproxy = callPackage ../development/libraries/libproxy {
-    inherit (darwin.apple_sdk.frameworks) SystemConfiguration CoreFoundation JavaScriptCore;
-  };
+  libproxy = callPackage ../development/libraries/libproxy { };
 
   libpseudo = callPackage ../development/libraries/libpseudo { };
 
