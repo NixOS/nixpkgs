@@ -7,6 +7,7 @@
   prefetch-yarn-deps,
   yarn,
   nixosTests,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -60,10 +61,12 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests.default = nixosTests.lxd.ui;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Web user interface for LXD";
     homepage = "https://github.com/canonical/lxd-ui";
+    changelog = "https://github.com/canonical/lxd-ui/releases/tag/${version}";
     license = lib.licenses.gpl3;
     maintainers = lib.teams.lxc.members;
     platforms = lib.platforms.linux;
