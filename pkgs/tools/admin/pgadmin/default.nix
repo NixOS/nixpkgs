@@ -109,6 +109,7 @@ pythonPackages.buildPythonApplication rec {
       hash = "sha256-uIOWefMjbequVfS6haJeSbXv/I6ZdA7uCEwCZSnCtRM=";
       excludes = [ "docs/en_US/release_notes_8_4.rst" ];
     })
+    ./CVE-2024-3116.patch
   ];
 
   postPatch = ''
