@@ -9612,6 +9612,8 @@ self: super: with self; {
 
   openwrt-ubus-rpc = callPackage ../development/python-modules/openwrt-ubus-rpc { };
 
+  opnieuw = callPackage ../development/python-modules/opnieuw { };
+
   opower = callPackage ../development/python-modules/opower { };
 
   opsdroid-get-image-size = callPackage ../development/python-modules/opsdroid-get-image-size { };
