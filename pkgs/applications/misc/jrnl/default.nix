@@ -8,20 +8,20 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "jrnl";
   version = "4.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jrnl-org";
-    repo = pname;
+    repo = "jrnl";
     rev = "refs/tags/v${version}";
     hash = "sha256-DtujXSDJWnOrHjVgJEJNKJMhSrNBHlR2hvHeHLSIF2o=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     asteval
     colorama
     cryptography
@@ -58,9 +58,9 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    changelog = "https://github.com/jrnl-org/jrnl/releases/tag/v${version}";
-    description = "Simple command line journal application that stores your journal in a plain text file";
+    description = "Command line journal application that stores your journal in a plain text file";
     homepage = "https://jrnl.sh/";
+    changelog = "https://github.com/jrnl-org/jrnl/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ bryanasdev000 zalakain ];
     mainProgram = "jrnl";
