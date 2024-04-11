@@ -180,12 +180,7 @@ let
       ((config.packageOverrides or (super: {})) super);
 
   # Convenience attributes for instantitating package sets. Each of
-  # these will instantiate a new version of allPackages. Currently the
-  # following package sets are provided:
-  #
-  # - pkgsCross.<system> where system is a member of lib.systems.examples
-  # - pkgsMusl
-  # - pkgsi686Linux
+  # these will instantiate a new version of allPackages.
   otherPackageSets = self: super: {
     # This maps each entry in lib.systems.examples to its own package
     # set. Each of these will contain all packages cross compiled for
