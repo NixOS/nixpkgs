@@ -7,6 +7,7 @@
 , numba
 , numpy
 , pytestCheckHook
+, setuptools
 , scipy
 , sparse
 }:
@@ -14,7 +15,7 @@
 buildPythonPackage rec {
   pname = "clifford";
   version = "1.4.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
@@ -23,7 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-eVE8FrD0YHoRreY9CrNb8v4v4KrG83ZU0oFz+V+p+Q0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     h5py
     numba
     numpy
