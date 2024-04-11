@@ -2486,6 +2486,8 @@ self: super: with self; {
 
   craft-providers = callPackage ../development/python-modules/craft-providers { };
 
+  craft-store = callPackage ../development/python-modules/craft-store { };
+
   cram = callPackage ../development/python-modules/cram { };
 
   cramjam = callPackage ../development/python-modules/cramjam { };
