@@ -237,6 +237,7 @@ backendStdenv.mkDerivation rec {
       ${lib.optionalString (lib.versionAtLeast version "10.1" && lib.versionOlder version "11") ''
         cd pkg/builds/cuda-toolkit
         mv * $out/
+        rm -f $out/nsight-systems-*/host-linux-x64/libstdc++.so*
       ''}
       ${lib.optionalString (lib.versionAtLeast version "11") ''
         mkdir -p $out/bin $out/lib64 $out/include $doc
