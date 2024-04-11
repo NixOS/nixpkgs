@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "bring-api";
-  version = "0.5.6";
+  version = "0.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "miaucl";
     repo = "bring-api";
     rev = "refs/tags/${version}";
-    hash = "sha256-vfc4xKLeGF2FuBFwqU99qbkUDBK5Uz66S4F2ODRDPa8=";
+    hash = "sha256-fhZMn0v908VzV+JLuS8tM+BPKJBoj77vEh1pINL4Cco=";
   };
 
   nativeBuildInputs = [
