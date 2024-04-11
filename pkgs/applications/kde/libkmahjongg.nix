@@ -8,7 +8,7 @@
 mkDerivation {
   pname = "libkmahjongg";
   meta = {
-    license = with lib.licenses; [ gpl2 ];
+    license = with lib.licenses; [ gpl2Only ];
     maintainers = with lib.maintainers; [ ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

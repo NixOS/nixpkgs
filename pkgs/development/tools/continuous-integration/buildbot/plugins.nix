@@ -25,7 +25,7 @@
       homepage = "https://buildbot.net/";
       description = "Buildbot UI";
       maintainers = teams.buildbot.members;
-      license = licenses.gpl2;
+      license = licenses.gpl2Only;
     };
   };
 
@@ -74,7 +74,7 @@
       homepage = "https://buildbot.net/";
       description = "Buildbot Console View Plugin";
       maintainers = teams.buildbot.members;
-      license = licenses.gpl2;
+      license = licenses.gpl2Only;
     };
   };
 
@@ -96,7 +96,7 @@
       homepage = "https://buildbot.net/";
       description = "Buildbot Console View Plugin (React)";
       maintainers = teams.buildbot.members;
-      license = licenses.gpl2;
+      license = licenses.gpl2Only;
     };
   };
 
@@ -118,7 +118,7 @@
       homepage = "https://buildbot.net/";
       description = "Buildbot Waterfall View Plugin";
       maintainers = teams.buildbot.members;
-      license = licenses.gpl2;
+      license = licenses.gpl2Only;
     };
   };
 
@@ -140,7 +140,7 @@
       homepage = "https://buildbot.net/";
       description = "Buildbot Waterfall View Plugin (React)";
       maintainers = teams.buildbot.members;
-      license = licenses.gpl2;
+      license = licenses.gpl2Only;
     };
   };
 
@@ -162,7 +162,7 @@
       homepage = "https://buildbot.net/";
       description = "Buildbot Grid View Plugin";
       maintainers = teams.buildbot.members;
-      license = licenses.gpl2;
+      license = licenses.gpl2Only;
     };
   };
 
@@ -184,7 +184,7 @@
       homepage = "https://buildbot.net/";
       description = "Buildbot Grid View Plugin (React)";
       maintainers = teams.buildbot.members;
-      license = licenses.gpl2;
+      license = licenses.gpl2Only;
     };
   };
 
@@ -206,7 +206,7 @@
       homepage = "https://buildbot.net/";
       description = "Buildbot WSGI dashboards Plugin";
       maintainers = teams.buildbot.members;
-      license = licenses.gpl2;
+      license = licenses.gpl2Only;
     };
   };
 
@@ -228,7 +228,7 @@
       homepage = "https://buildbot.net/";
       description = "Buildbot WSGI dashboards Plugin (React)";
       maintainers = teams.buildbot.members;
-      license = licenses.gpl2;
+      license = licenses.gpl2Only;
     };
   };
 
@@ -251,7 +251,7 @@
       homepage = "https://buildbot.net/";
       description = "Buildbot Badges Plugin";
       maintainers = teams.buildbot.members ++ [ maintainers.julienmalka ];
-      license = licenses.gpl2;
+      license = licenses.gpl2Only;
     };
   };
 

@@ -44,7 +44,7 @@ mkDerivation rec {
       virtual machines through libvirt. It primarily targets KVM VMs, but also
       manages Xen and LXC (linux containers).
     '';
-    license     = licenses.gpl2;
+    license     = licenses.gpl2Only;
     maintainers = with maintainers; [ peterhoeg ];
     inherit (qtbase.meta) platforms;
   };

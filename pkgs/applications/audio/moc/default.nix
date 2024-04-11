@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An ncurses console audio player designed to be powerful and easy to use";
     homepage = "http://moc.daper.net/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ aethelz pSub jagajaga ];
     platforms = platforms.unix;
     mainProgram = "mocp";

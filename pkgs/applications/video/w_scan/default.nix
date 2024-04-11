@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     homepage = "http://wirbel.htpc-forum.de/w_scan/index_en.html";
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.nico202 ] ;
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "w_scan";
   };
 }

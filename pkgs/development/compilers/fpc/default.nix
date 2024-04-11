@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     description = "Free Pascal Compiler from a source distribution";
     homepage = "https://www.freepascal.org";
     maintainers = [ maintainers.raskin ];
-    license = with licenses; [ gpl2 lgpl2 ];
+    license = with licenses; [ gpl2Plus lgpl2 ];
     platforms = platforms.unix;
   };
 }

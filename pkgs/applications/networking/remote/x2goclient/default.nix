@@ -63,7 +63,7 @@ qt5.mkDerivation rec {
     mainProgram = "x2goclient";
     homepage = "http://x2go.org/";
     maintainers = with maintainers; [ ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

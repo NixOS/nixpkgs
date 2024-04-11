@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/jacksonliam/mjpg-streamer";
     description = "Takes JPGs from Linux-UVC compatible webcams, filesystem or other input plugins and streams them as M-JPEG via HTTP to webbrowsers, VLC and other software";
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ gebner ];
     mainProgram = "mjpg_streamer";
   };

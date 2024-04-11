@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     mainProgram = "traceFileSim";
     homepage = "https://github.com/GarCoSim";
     maintainers = [ maintainers.cmcdragonkai ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
   };
 

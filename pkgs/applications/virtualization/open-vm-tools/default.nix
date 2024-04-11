@@ -143,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
       A set of services and modules that enable several features in VMware products for
       better management of, and seamless user interactions with, guests.
     '';
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ joamaki kjeremy ];
   };

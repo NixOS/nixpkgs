@@ -31,7 +31,7 @@ buildPythonPackage rec {
   meta = with lib; {
     broken = stdenv.isDarwin;
     homepage = "https://zeroc.com/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     description = "Comprehensive RPC framework with support for Python, C++, .NET, Java, JavaScript and more.";
     mainProgram = "slice2py";
     maintainers = with maintainers; [ abbradar ];

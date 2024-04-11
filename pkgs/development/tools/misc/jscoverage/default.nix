@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "http://siliconforks.com/jscoverage/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
 }

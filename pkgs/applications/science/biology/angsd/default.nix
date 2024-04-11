@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "Program for analysing NGS data";
     homepage = "http://www.popgen.dk/angsd";
     maintainers = [ maintainers.bzizou ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
   };
 }
 

@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Command-line MP3 player";
     homepage = "https://mpg321.sourceforge.net/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
 }

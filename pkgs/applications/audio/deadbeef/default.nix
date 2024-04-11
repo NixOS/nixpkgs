@@ -133,7 +133,7 @@ in clangStdenv.mkDerivation {
     mainProgram = "deadbeef";
     homepage = "http://deadbeef.sourceforge.net/";
     downloadPage = "https://github.com/DeaDBeeF-Player/deadbeef";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = [ maintainers.abbradar ];
   };

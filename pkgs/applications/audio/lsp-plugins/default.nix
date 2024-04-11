@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
       '';
       homepage = "https://lsp-plug.in";
       maintainers = with maintainers; [ magnetophon PowerUser64 ];
-      license = licenses.gpl2;
+      license = licenses.gpl2Plus;
       platforms = platforms.linux;
     };
 }

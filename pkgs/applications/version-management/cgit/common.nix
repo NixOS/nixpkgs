@@ -74,7 +74,7 @@ stdenv.mkDerivation {
 
   meta = {
     inherit homepage description;
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = maintainers ++ (with lib.maintainers; [ qyliss ]);
   };

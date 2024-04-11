@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       process, allowing your scripts to take advantage of key-based logins.
     '';
     homepage = "https://www.funtoo.org/Keychain";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ sigma ];
     mainProgram = "keychain";

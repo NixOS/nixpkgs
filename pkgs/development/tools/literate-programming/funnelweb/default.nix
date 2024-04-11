@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "A simple, reliable literate-programming macro preprocessor";
     mainProgram = "fw";
     homepage = "http://www.ross.net/funnelweb/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.AndersonTorres ];
   };

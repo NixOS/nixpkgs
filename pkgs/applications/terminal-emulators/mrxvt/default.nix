@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       Supports transparency, backgroundimages, freetype fonts, ...
     ";
     homepage = "https://sourceforge.net/projects/materm";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];
     knownVulnerabilities = [

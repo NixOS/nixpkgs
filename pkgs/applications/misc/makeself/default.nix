@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://makeself.io";
     description = "Utility to create self-extracting packages";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.wmertens ];
     platforms = platforms.all;
     mainProgram = "makeself";

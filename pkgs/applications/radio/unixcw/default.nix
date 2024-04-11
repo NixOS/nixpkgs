@@ -33,7 +33,7 @@ mkDerivation rec {
      '';
     homepage = "https://unixcw.sourceforge.net";
     maintainers = [ maintainers.mafo ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms=platforms.linux;
   };
 }

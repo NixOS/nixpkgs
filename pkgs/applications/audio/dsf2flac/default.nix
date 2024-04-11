@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A DSD to FLAC transcoding tool";
     homepage = "https://github.com/hank/dsf2flac";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ artemist ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "dsf2flac";

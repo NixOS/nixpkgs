@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://hyperglitch.com/dev/VocProc";
     description = "An LV2 plugin for pitch shifting (with or without formant correction), vocoding, automatic pitch correction and harmonizing of singing voice (harmonizer)";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.michalrus ];
     platforms = platforms.linux;
   };

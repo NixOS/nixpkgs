@@ -39,7 +39,7 @@ stdenv.mkDerivation {
       that is played over the internet.
     '';
     homepage = "https://gtetrinet.sourceforge.net/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.chris-martin ];
   };

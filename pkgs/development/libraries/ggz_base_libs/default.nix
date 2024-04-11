@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       raskin
     ];
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     downloadPage = "http://www.ggzgamingzone.org/releases/";
   };
 }

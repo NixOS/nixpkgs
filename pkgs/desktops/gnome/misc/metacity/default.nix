@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Window manager used in Gnome Flashback";
     homepage = "https://wiki.gnome.org/Projects/Metacity";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };

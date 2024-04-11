@@ -46,7 +46,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Fast genome-wide functional annotation through orthology assignment";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     homepage = "https://github.com/eggnogdb/eggnog-mapper/wiki";
     maintainers = with maintainers; [ luispedro ];
     platforms = platforms.all;

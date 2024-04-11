@@ -41,7 +41,7 @@ stdenv.mkDerivation {
   meta = {
     description = "A standalone contribution to AGILe for steering Pythia 8";
     mainProgram = "run-pythia";
-    license     = lib.licenses.gpl2;
+    license     = lib.licenses.gpl2Only;
     homepage    = "https://agile.hepforge.org/trac/wiki/Sacrifice";
     platforms   = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];

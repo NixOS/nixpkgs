@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "OCaml bindings for libvirt";
     homepage = "https://libvirt.org/ocaml/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ ];
     inherit (ocaml.meta) platforms;
   };

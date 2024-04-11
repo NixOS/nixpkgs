@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     homepage = "http://wiredtiger.com/";
     description = "";
     mainProgram = "wt";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = intersectLists platforms.unix platforms.x86_64;
   };
 }

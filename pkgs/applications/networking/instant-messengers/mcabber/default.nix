@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     homepage = "http://mcabber.com/";
     description = "Small Jabber console client";
     mainProgram = "mcabber";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; linux;
     downloadPage = "http://mcabber.com/files/";

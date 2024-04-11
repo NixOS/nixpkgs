@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://linuxcontainers.org/";
     description = "Userspace tools for Linux Containers, a lightweight virtualization system";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
 
     longDescription = ''
       LXC containers are often considered as something in the middle between a chroot and a

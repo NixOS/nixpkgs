@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Python application that forms a wrapper around the standard Linux filesystem calls, to make using the cpusets facilities in the Linux kernel easier";
     homepage = "https://github.com/SUSE/cpuset";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     mainProgram = "cset";
     maintainers = with maintainers; [ wykurz ];
     platforms = platforms.linux;

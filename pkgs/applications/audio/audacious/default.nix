@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     license = with licenses; [
       bsd2
       bsd3 #https://github.com/audacious-media-player/audacious/blob/master/COPYING
-      gpl2
+      gpl2Only
       gpl3
       lgpl2Plus #http://redmine.audacious-media-player.org/issues/46
     ];

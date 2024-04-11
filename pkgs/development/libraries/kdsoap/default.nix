@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
       provides the means to create web services without the need for any further
       component such as a dedicated web server.
     '';
-    license = with licenses; [ gpl2 gpl3 lgpl21 ];
+    license = with licenses; [ gpl2Only gpl3 lgpl21 ];
     maintainers = [ maintainers.ttuegel ];
   };
 }

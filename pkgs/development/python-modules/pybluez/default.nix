@@ -37,7 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Bluetooth Python extension module";
     homepage = "https://github.com/pybluez/pybluez";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ leenaars ];
     broken = stdenv.isDarwin; # requires pyobjc-core, pyobjc-framework-Cocoa
   };

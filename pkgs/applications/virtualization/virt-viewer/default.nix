@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
     description = "A viewer for remote virtual machines";
     maintainers = with maintainers; [ raskin atemu ];
     platforms = with platforms; linux ++ darwin;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
   };
   passthru = {
     updateInfo = {

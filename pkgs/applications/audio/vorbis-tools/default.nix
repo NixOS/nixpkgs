@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       files, notably the `ogg123' player and the `oggenc' encoder.
     '';
     homepage = "https://xiph.org/vorbis/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.all;
   };
 }

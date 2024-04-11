@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Simulation of High-Energy Reactions of PArticles in lepton-lepton, lepton-photon, photon-photon, lepton-hadron and hadron-hadron collisions";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     homepage = "https://gitlab.com/sherpa-team/sherpa";
     platforms = platforms.unix;
     maintainers = with maintainers; [ veprbl ];

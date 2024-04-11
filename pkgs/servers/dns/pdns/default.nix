@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.powerdns.com";
     platforms = platforms.unix;
     broken = stdenv.isDarwin;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ mic92 disassembler nickcao ];
   };
 })

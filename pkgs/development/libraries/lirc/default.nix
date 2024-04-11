@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Allows to receive and send infrared signals";
     homepage = "https://www.lirc.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ];
   };

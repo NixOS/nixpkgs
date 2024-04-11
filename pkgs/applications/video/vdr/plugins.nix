@@ -51,7 +51,7 @@ in {
       inherit (src.meta) homepage;
       description = "DVB Frontend Status Monitor plugin for VDR";
       maintainers = [ maintainers.ck3d ];
-      license = licenses.gpl2;
+      license = licenses.gpl2Plus;
       inherit (vdr.meta) platforms;
     };
 
@@ -101,7 +101,7 @@ in {
       description = "Searchtimer and replacement of the VDR program menu";
       mainProgram = "createcats";
       maintainers = [ maintainers.ck3d ];
-      license = licenses.gpl2;
+      license = licenses.gpl2Plus;
       inherit (vdr.meta) platforms;
     };
 
@@ -126,7 +126,7 @@ in {
       inherit (src.meta) homepage;
       description = "VDR plugin to handle KODI clients.";
       maintainers = [ maintainers.ck3d ];
-      license = licenses.gpl2;
+      license = licenses.gpl2Plus;
       inherit (vdr.meta) platforms;
     };
 
@@ -163,7 +163,7 @@ in {
       inherit (src.meta) homepage;
       description = "VDR Text2Skin Plugin";
       maintainers = [ maintainers.ck3d ];
-      license = licenses.gpl2;
+      license = licenses.gpl2Only;
       inherit (vdr.meta) platforms;
     };
   };
@@ -188,7 +188,7 @@ in {
       inherit (src.meta) homepage;
       description = "A plugin for VDR to access AVMs Fritz Box routers";
       maintainers = [ maintainers.ck3d ];
-      license = licenses.gpl2;
+      license = licenses.gpl2Plus;
       inherit (vdr.meta) platforms;
     };
   };

@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Apps/Yelp";
     description = "The help viewer in Gnome";
     maintainers = teams.gnome.members;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     description =
       "butt (broadcast using this tool) is an easy to use, multi OS streaming tool";
     homepage = "https://danielnoethen.de/butt/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ehmry ];
     mainProgram = "butt";
   };

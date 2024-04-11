@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     homepage = "http://gopher.quux.org:70/devel/gopher";
     description = "A ncurses gopher client";
     platforms = platforms.linux; # clang doesn't like local regex.h
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ sternenseemann ];
   };
 }

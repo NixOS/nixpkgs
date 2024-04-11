@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tiling window management for GNOME Shell";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ benley ];
     homepage = "https://github.com/rliang/gnome-shell-extension-tilingnome";
     platforms = gnome.gnome-shell.meta.platforms;

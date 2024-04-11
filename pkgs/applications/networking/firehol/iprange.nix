@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     description = "manage IP ranges";
     mainProgram = "iprange";
     homepage = "https://github.com/firehol/iprange";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ oxzi ];
   };
 }

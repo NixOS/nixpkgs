@@ -280,7 +280,7 @@ in stdenv.mkDerivation {
       fromSource
       binaryNativeCode
     ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     homepage = "https://www.virtualbox.org/";
     maintainers = with maintainers; [ sander friedrichaltheide blitz ];
     platforms = [ "x86_64-linux" ];

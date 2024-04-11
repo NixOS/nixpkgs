@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Higher Order Perturbative Parton Evolution Toolkit";
     mainProgram = "hoppet-config";
-    license     = licenses.gpl2;
+    license     = licenses.gpl2Only;
     homepage    = "https://hoppet.hepforge.org";
     platforms   = platforms.unix;
     maintainers = with maintainers; [ veprbl ];

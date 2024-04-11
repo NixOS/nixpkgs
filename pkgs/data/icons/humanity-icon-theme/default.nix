@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "Humanity icons from Ubuntu";
     homepage = "https://launchpad.net/humanity/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
   };

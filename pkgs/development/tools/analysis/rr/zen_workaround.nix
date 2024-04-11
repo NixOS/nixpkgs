@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Kernel module supporting the rr debugger on (some) AMD Zen-based CPUs";
     homepage = "https://github.com/rr-debugger/rr/wiki/Zen#kernel-module";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.vcunat ];
     platforms = [ "x86_64-linux" ];
     broken = versionOlder kernel.version "4.19"; # 4.14 breaks and 4.19 works

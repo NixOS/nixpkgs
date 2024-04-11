@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       details and see the big picture from combined workloads.
     '';
 
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
 
     homepage = "https://igprof.org/";
     platforms = lib.platforms.linux;

@@ -132,7 +132,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Photo Management Program";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     homepage = "https://www.digikam.org";
     maintainers = with maintainers; [ spacefault ];
     platforms = platforms.linux;

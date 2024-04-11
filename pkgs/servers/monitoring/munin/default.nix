@@ -142,7 +142,7 @@ stdenv.mkDerivation rec {
       to kill our performance?' problems.
     '';
     homepage = "https://munin-monitoring.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.bjornfor ];
     platforms = platforms.linux;
   };

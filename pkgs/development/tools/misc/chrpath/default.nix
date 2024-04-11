@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       linker should look for the libraries needed for a program.
     '';
     homepage = "https://tracker.debian.org/pkg/chrpath";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
   };

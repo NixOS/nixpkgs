@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Common functions for gnome-mplayer and gecko-mediaplayer";
     homepage = "https://sites.google.com/site/kdekorte2/gnomemplayer";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = gnome_mplayer.meta.maintainers;
     platforms = platforms.linux;
   };

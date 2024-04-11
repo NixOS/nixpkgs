@@ -43,7 +43,7 @@ stdenv.mkDerivation {
     description = "An editor that allows the interactive creation of footprints electronic components";
     mainProgram = "fped";
     homepage = "http://projects.qi-hardware.com/index.php/p/fped/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ expipiplus1 ];
     platforms = platforms.linux;
   };

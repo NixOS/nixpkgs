@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Library for handling paper characteristics";
     homepage = "http://packages.debian.org/unstable/source/libpaper";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
   };
 }

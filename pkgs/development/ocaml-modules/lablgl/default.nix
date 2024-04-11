@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "OpenGL bindings for ocaml";
     homepage = "http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgl.html";
-    license = licenses.gpl2;
+    license = licenses.mit;
     maintainers = with maintainers; [ pSub vbgl ];
     mainProgram = "lablglut";
   };

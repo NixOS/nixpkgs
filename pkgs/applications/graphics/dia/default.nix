@@ -71,7 +71,7 @@ stdenv.mkDerivation {
     mainProgram = "dia";
     homepage = "http://live.gnome.org/Dia";
     maintainers = with maintainers; [ raskin ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
 }

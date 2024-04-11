@@ -105,7 +105,7 @@ in stdenv.mkDerivation {
         host/guest clipboard support.
       '';
       sourceProvenance = with lib.sourceTypes; [ fromSource ];
-      license = licenses.gpl2;
+      license = licenses.gpl2Only;
       maintainers = [ lib.maintainers.sander lib.maintainers.friedrichaltheide ];
       platforms = [ "i686-linux" "x86_64-linux" ];
       broken = stdenv.hostPlatform.is32bit && (kernel.kernelAtLeast "5.10");

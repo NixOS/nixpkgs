@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://factorial.hu/plugins/lv2/ir";
     description = "Zero-latency, realtime, high performance signal convolver especially for creating reverb effects";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;
     mainProgram = "convert4chan";

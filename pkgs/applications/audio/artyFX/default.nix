@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://openavproductions.com/artyfx/";
     description = "A LV2 plugin bundle of artistic realtime effects";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;
     # Build uses `-msse` and `-mfpmath=sse`

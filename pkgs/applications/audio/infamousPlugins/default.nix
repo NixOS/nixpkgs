@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
         * ewham - a whammy style pitchshifter
         * lushlife - a simulated double tracking plugin capable of everything from a thin beatle effect to thick lush choruses to weird outlandish effects
     '';
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;
     mainProgram = "infamous-rule";

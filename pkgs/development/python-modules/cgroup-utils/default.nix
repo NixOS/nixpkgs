@@ -25,6 +25,6 @@ buildPythonPackage rec {
     mainProgram = "cgutil";
     maintainers = with maintainers; [ layus ];
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
   };
 }

@@ -33,7 +33,7 @@ in stdenv.mkDerivation {
   meta = with lib; {
     description = "MPRISv2 plugin for the DeaDBeeF music player";
     homepage = "https://github.com/DeaDBeeF-Player/deadbeef-mpris2-plugin/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.abbradar ];
   };

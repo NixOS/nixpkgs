@@ -98,6 +98,6 @@ stdenv.mkDerivation rec {
     broken = stdenv.isDarwin;
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
     maintainers = with lib.maintainers; [ veprbl ];
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
   };
 }

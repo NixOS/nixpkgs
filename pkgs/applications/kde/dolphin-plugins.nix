@@ -7,7 +7,7 @@
 mkDerivation {
   pname = "dolphin-plugins";
   meta = {
-    license = [ lib.licenses.gpl2 ];
+    license = [ lib.licenses.gpl2Only ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

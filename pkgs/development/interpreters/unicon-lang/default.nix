@@ -46,7 +46,7 @@ stdenv.mkDerivation {
     description = "A very high level, goal-directed, object-oriented, general purpose applications language";
     maintainers = with maintainers; [ vrthra ];
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     homepage = "http://unicon.org";
   };
 }

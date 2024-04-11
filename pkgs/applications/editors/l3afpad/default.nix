@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/stevenhoneyman/l3afpad";
     platforms = platforms.linux;
     maintainers = with maintainers; [ ckie ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     mainProgram = "l3afpad";
   };
 }

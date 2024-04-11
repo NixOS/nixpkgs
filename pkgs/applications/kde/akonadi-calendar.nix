@@ -8,7 +8,7 @@
 mkDerivation {
   pname = "akonadi-calendar";
   meta = {
-    license = with lib.licenses; [ gpl2 lgpl21 ];
+    license = with lib.licenses; [ gpl2Only lgpl21 ];
     maintainers = kdepimTeam;
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

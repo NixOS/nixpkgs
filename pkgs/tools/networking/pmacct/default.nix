@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.pmacct.net/";
     changelog = "https://github.com/pmacct/pmacct/blob/v${version}/ChangeLog";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ _0x4A6F ];
     platforms = platforms.unix;
   };

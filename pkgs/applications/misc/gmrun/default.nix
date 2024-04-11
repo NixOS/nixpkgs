@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       Running commands in a terminal with CTRL-Enter. URL handlers.
     '';
     homepage = "https://sourceforge.net/projects/gmrun/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [];
     platforms = platforms.all;
     mainProgram = "gmrun";

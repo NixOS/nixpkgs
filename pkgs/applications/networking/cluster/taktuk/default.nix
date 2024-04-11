@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       require any specific software on the nodes thanks to a self-propagation
       algorithm.'';
     homepage = "http://taktuk.gforge.inria.fr/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.bzizou ];
     platforms = lib.platforms.linux;
   };

@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.ctan.org/pkg/latex2html";
 
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ yurrriq ];
   };

@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     mainProgram = "sambamba";
     homepage = "https://lomereiter.github.io/sambamba/";
     maintainers = with maintainers; [ jbedo ];
-    license = with licenses; gpl2;
+    license = with licenses; gpl2Plus;
     platforms = platforms.x86_64;
   };
 }

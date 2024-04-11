@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     description = "A host, service and network monitoring program";
     homepage = "https://www.nagios.org/";
     changelog = "https://github.com/NagiosEnterprises/nagioscore/blob/nagios-${version}/Changelog";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     mainProgram = "nagios";
     maintainers = with lib.maintainers; [ immae thoughtpolice relrod anthonyroussel ];

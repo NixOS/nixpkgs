@@ -50,7 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for parsing media metadata, which can extract metadata (e.g., such as id3 tags) from a wide range of media files";
     homepage = "https://github.com/freevo/kaa-metadata";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ ];
   };
 

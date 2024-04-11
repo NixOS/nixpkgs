@@ -21,7 +21,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A simple bencode decoder/encoder library in pure Python";
     homepage = "https://github.com/utdemir/bencoder";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ somasis ];
   };
 }

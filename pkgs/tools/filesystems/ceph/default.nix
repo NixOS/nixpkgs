@@ -140,7 +140,7 @@ let
   getMeta = description: with lib; {
      homepage = "https://ceph.io/en/";
      inherit description;
-     license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
+     license = with licenses; [ lgpl21 gpl2Only bsd3 mit publicDomain ];
      maintainers = with maintainers; [ adev ak johanot krav ];
      platforms = [ "x86_64-linux" "aarch64-linux" ];
    };

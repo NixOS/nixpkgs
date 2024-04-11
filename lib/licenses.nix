@@ -1284,11 +1284,6 @@ in mkLicense lset) ({
     fullName = "Apple Public Source License 2.0";
     deprecated = true;
   };
-  gpl2 = {
-    spdxId = "GPL-2.0";
-    fullName = "GNU General Public License v2.0";
-    deprecated = true;
-  };
   gpl3 = {
     spdxId = "GPL-3.0";
     fullName = "GNU General Public License v3.0";

@@ -88,6 +88,6 @@ mkDerivation rec {
     homepage = "https://www.calligra.org/";
     maintainers = with maintainers; [ ebzzry zraexy ];
     platforms = platforms.linux;
-    license = with licenses; [ gpl2 lgpl2 ];
+    license = with licenses; [ gpl2Only lgpl2 ];
   };
 }

@@ -72,7 +72,7 @@ let
         '';
 
         homepage = "http://simonkagstrom.github.io/kcov/index.html";
-        license = licenses.gpl2;
+        license = licenses.gpl2Only;
         changelog = "https://github.com/SimonKagstrom/kcov/blob/master/ChangeLog";
 
         maintainers = with maintainers; [ gal_bolle ekleog ];

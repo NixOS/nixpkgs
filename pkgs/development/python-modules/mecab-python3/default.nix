@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "A python wrapper for mecab: Morphological Analysis engine";
     homepage =  "https://github.com/SamuraiT/mecab-python3";
     changelog = "https://github.com/SamuraiT/mecab-python3/releases/tag/v${version}";
-    license = with licenses; [ gpl2 lgpl21 bsd3 ]; # any of the three
+    license = with licenses; [ gpl2Only lgpl21 bsd3 ]; # any of the three
   };
 }

@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
       and extensibility using the excellent Python programming language.
     '';
     homepage = "https://codezen.org/canto-ng/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.devhell ];
   };

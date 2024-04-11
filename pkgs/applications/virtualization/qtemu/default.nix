@@ -38,7 +38,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "Qt-based front-end for QEMU emulator";
     homepage = "https://qtemu.org";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ romildo ];
     mainProgram = "qtemu";

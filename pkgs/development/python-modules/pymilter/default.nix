@@ -36,6 +36,6 @@ buildPythonPackage rec {
     homepage = "http://bmsi.com/python/milter.html";
     description = "Python bindings for libmilter api";
     maintainers = with maintainers; [ yorickvp ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
   };
 }

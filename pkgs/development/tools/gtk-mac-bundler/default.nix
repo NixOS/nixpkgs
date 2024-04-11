@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.matthewbauer ];
     platforms = platforms.darwin;
     homepage = "https://wiki.gnome.org/Projects/GTK/OSX/Bundling";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
   };
 }

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Lightweight library to handle the sending and receiving of messages according to the Open Sound Control (OSC) protocol";
     homepage = "https://sourceforge.net/projects/liblo";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = [lib.maintainers.marcweber];
     platforms = with lib.platforms; linux ++ darwin;
   };

@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gmpclient.org";
     description = "A GTK2 frontend for Music Player Daemon";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [];
     platforms = platforms.linux;
   };

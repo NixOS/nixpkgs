@@ -11,7 +11,7 @@ mkDerivation {
   pname = "ktouch";
   meta = {
     homepage = "https://apps.kde.org/ktouch/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.schmittlauch ];
     description = "A touch typing tutor from the KDE software collection";
     mainProgram = "ktouch";

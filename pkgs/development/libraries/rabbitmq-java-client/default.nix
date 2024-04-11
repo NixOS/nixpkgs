@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       fromSource
       binaryBytecode  # source bundles dependencies as jars
     ];
-    license = with licenses; [ mpl11 gpl2 ];
+    license = with licenses; [ mpl11 gpl2Only ];
     platforms = platforms.linux;
   };
 }

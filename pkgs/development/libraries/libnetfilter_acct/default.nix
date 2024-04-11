@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.netfilter.org/projects/libnetfilter_acct/";
     description = "Userspace library providing interface to extended accounting infrastructure";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
   };
 }

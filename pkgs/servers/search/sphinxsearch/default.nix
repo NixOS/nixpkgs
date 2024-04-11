@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An open source full text search server";
     homepage    = "http://sphinxsearch.com";
-    license     = lib.licenses.gpl2;
+    license     = lib.licenses.gpl2Plus;
     platforms   = lib.platforms.all;
     maintainers = with lib.maintainers; [ ederoyd46 valodim ];
   };

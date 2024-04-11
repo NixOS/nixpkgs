@@ -61,6 +61,6 @@ clangStdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     hydraPlatforms = [];
     maintainers = with lib.maintainers; [ fxfactorial ];
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
   };
 }

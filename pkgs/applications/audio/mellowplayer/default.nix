@@ -67,7 +67,7 @@ mkDerivation rec {
     description = "Cloud music integration for your desktop";
     mainProgram = "MellowPlayer";
     homepage = "https://gitlab.com/ColinDuquesnoy/MellowPlayer";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ kalbasit ];
   };
 }

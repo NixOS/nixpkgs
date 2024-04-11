@@ -51,7 +51,7 @@ mkDerivation rec {
     '';
     homepage = "https://github.com/debauchee/barrier";
     downloadPage = "https://github.com/debauchee/barrier/releases";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.phryneas ];
     platforms = lib.platforms.linux;
     mainProgram = "barrier";

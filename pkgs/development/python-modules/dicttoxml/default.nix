@@ -19,6 +19,6 @@ buildPythonPackage rec {
   meta = {
     description = "Converts a Python dictionary or other native data type into a valid XML string";
     homepage = "https://github.com/quandyfactory/dicttoxml";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
   };
 }

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Input layer utilities, includes lsinput";
     homepage    = "https://www.kraxel.org/blog/linux/input/";
-    license     = licenses.gpl2;
+    license     = licenses.gpl2Only;
     maintainers = with maintainers; [ samueldr ];
     platforms   = platforms.linux;
   };

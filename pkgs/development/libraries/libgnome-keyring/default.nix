@@ -38,6 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "gnome-keyring-1" ];
     inherit (glib.meta) platforms maintainers;
     homepage = "https://wiki.gnome.org/Projects/GnomeKeyring";
-    license = with lib.licenses; [ gpl2 lgpl2 ];
+    license = with lib.licenses; [ gpl2Plus lgpl2 ];
   };
 })

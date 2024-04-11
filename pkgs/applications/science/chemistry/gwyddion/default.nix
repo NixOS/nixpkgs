@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
       analysis of profilometry data or thickness maps from imaging
       spectrophotometry.
     '';
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = [ lib.maintainers.cge ];
     # never built on aarch64-darwin since first introduction in nixpkgs

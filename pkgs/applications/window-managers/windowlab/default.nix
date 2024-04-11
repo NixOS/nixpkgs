@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   meta = with lib;
     { description = "Small and simple stacking window manager";
       homepage    = "http://nickgravgaard.com/windowlab/";
-      license     = licenses.gpl2;
+      license     = licenses.gpl2Plus;
       maintainers = with maintainers; [ ehmry ];
       platforms   = platforms.linux;
       mainProgram = "windowlab";

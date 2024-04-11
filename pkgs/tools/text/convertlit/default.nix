@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.convertlit.com/";
     description = "A tool for converting Microsoft Reader ebooks to more open formats";
     mainProgram = "clit";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
 }

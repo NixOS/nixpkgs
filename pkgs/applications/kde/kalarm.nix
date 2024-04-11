@@ -21,7 +21,7 @@ mkDerivation {
   meta = {
     homepage = "https://apps.kde.org/kalarm/";
     description = "Personal alarm scheduler";
-    license = with lib.licenses; [ gpl2 ];
+    license = with lib.licenses; [ gpl2Only ];
     maintainers = [ ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

@@ -159,7 +159,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "gobject-introspection-1.0" ];
     platforms = platforms.unix;
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
-    license = with licenses; [ gpl2 lgpl2 ];
+    license = with licenses; [ gpl2Plus lgpl2 ];
 
     longDescription = ''
       GObject introspection is a middleware layer between C libraries (using

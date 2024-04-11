@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A set of filters for motion estimation and compensation";
     homepage = "https://github.com/dubhater/vapoursynth-mvtools";
-    license  = licenses.gpl2;
+    license  = licenses.gpl2Plus;
     maintainers = with maintainers; [ rnhmjoj ];
   };
 }

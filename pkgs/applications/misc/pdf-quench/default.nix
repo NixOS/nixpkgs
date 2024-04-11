@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication {
     description = "A visual tool for cropping pdf files";
     mainProgram = "pdf-quench";
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ flokli ];
   };
 }

@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Network intrusion prevention and detection system (IDS/IPS)";
     homepage = "https://www.snort.org";
     maintainers = with lib.maintainers; [ aycanirican ];
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = with lib.platforms; linux;
   };
 }

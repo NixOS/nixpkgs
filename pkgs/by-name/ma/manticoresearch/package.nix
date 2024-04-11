@@ -119,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Easy to use open source fast database for search";
     homepage = "https://manticoresearch.com";
     changelog = "https://github.com/manticoresoftware/manticoresearch/releases/tag/${finalAttrs.version}";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     mainProgram = "searchd";
     maintainers = [ maintainers.jdelStrother ];
     platforms = platforms.all;

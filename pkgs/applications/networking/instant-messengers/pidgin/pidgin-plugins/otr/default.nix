@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://otr.cypherpunks.ca/";
     description = "Plugin for Pidgin 2.x which implements OTR Messaging";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
   };

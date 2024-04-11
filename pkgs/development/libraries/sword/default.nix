@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       translators of the Bible, and have a growing collection of many hundred
       texts in around 100 languages.
     '';
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };

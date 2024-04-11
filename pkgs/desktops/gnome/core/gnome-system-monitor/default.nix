@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     description = "System Monitor shows you what programs are running and how much processor time, memory, and disk space are being used";
     mainProgram = "gnome-system-monitor";
     maintainers = teams.gnome.members;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

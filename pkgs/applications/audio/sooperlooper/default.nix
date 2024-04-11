@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
       and the engine can be run standalone on a computer without a monitor.
     '';
     homepage = "https://sonosaurus.com/sooperlooper/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ magnetophon ];
     platforms = platforms.linux;
   };

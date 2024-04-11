@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
   meta = {
     description = "Tubing and extrusion library";
-    license = lib.licenses.gpl2 ;
+    license = lib.licenses.gpl2Only ;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;
   };

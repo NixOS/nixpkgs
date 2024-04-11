@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "A replacement for Terminal and the successor to iTerm";
     homepage = "https://www.iterm2.com/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ steinybot tricktron ];
     platforms = [ "x86_64-darwin" "aarch64-darwin" ];
   };

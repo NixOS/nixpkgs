@@ -10,7 +10,7 @@ mkDerivation {
     homepage = "https://apps.kde.org/kruler/";
     description = "Screen ruler";
     mainProgram = "kruler";
-    license = with lib.licenses; [ gpl2 ];
+    license = with lib.licenses; [ gpl2Only ];
     maintainers = [ lib.maintainers.vandenoever ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

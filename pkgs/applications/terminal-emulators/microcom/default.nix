@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     description = "A minimalistic terminal program for communicating
     with devices over a serial connection";
     inherit (src.meta) homepage;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ emantor ];
     platforms = with platforms; linux;
     mainProgram = "microcom";

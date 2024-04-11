@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     this program could be at least 100x faster.
     '';
     homepage = "http://www.vanheusden.com/nasty/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ davidak ];
     platforms = platforms.unix;
   };

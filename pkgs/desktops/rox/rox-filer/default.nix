@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     description = "Fast, lightweight, gtk2 file manager";
     mainProgram = "rox";
     homepage = "http://rox.sourceforge.net/desktop";
-    license = with licenses; [ gpl2 lgpl2 ];
+    license = with licenses; [ gpl2Plus lgpl2 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.eleanor ];
   };

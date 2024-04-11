@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "Export Skype history to HTML";
     mainProgram = "SkypeExport";
     homepage = "https://github.com/Temptin/SkypeExport";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ yana ];
   };

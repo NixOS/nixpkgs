@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/afrantzis/bless";
     description = "Gtk# Hex Editor";
     maintainers = [ maintainers.mkg20001 ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     mainProgram = "bless";
   };

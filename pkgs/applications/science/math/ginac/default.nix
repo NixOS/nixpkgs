@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     description = "GiNaC is Not a CAS";
     homepage = "https://www.ginac.de/";
     maintainers = with maintainers; [ lovek323 ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.all;
   };
 }

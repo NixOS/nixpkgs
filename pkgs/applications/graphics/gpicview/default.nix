@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A simple and fast image viewer for X";
     homepage = "https://lxde.sourceforge.net/gpicview/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ lovek323 ];
     platforms = platforms.unix;
     mainProgram = "gpicview";

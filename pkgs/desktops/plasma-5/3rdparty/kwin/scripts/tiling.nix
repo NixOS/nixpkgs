@@ -45,7 +45,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Tiling script for kwin";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ peterhoeg ];
     inherit (src.meta) homepage;
     inherit (kwindowsystem.meta) platforms;

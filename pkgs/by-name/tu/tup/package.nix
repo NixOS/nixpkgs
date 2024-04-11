@@ -62,7 +62,7 @@ in stdenv.mkDerivation rec {
       your project rather than on your build system.
     '';
     homepage = "https://gittup.org/tup/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ ehmry ];
     platforms = platforms.unix;
 

@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     description = "Dictionary is the GNOME application to look up definitions";
     mainProgram = "gnome-dictionary";
     maintainers = teams.gnome.members;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
 }

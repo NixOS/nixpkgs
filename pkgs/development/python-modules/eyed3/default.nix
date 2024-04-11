@@ -39,7 +39,7 @@ buildPythonPackage rec {
     description = "A Python module and command line program for processing ID3 tags";
     mainProgram = "eyeD3";
     homepage    = "https://eyed3.nicfit.net/";
-    license     = licenses.gpl2;
+    license     = licenses.gpl2Only;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;
     longDescription = ''

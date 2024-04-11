@@ -59,7 +59,7 @@ tcl.mkTclDerivation {
     platforms   = platforms.all;
     license     = with licenses; [
       bsd2 # tix
-      gpl2 # patches from portage
+      gpl2Only # patches from portage
     ];
   };
 }

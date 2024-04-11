@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       complexity and metrics proposed by Chidamber&Kemerer and Henry&Kafura.
     '';
     homepage = "https://cccc.sourceforge.net/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.linquize ];
   };

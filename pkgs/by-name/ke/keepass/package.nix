@@ -145,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.keepass.info/";
     maintainers = with lib.maintainers; [ amorsillo obadz ];
     platforms = with lib.platforms; all;
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "keepass";
   };
 })

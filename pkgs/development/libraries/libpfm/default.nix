@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
       events such as those provided by the Performance Monitoring Unit
       (PMU) of modern processors.
     '';
-    license = licenses.gpl2;
+    license = licenses.mit;
     maintainers = with maintainers; [ pierron t4ccer ];
     platforms = platforms.linux ++ platforms.windows;
   };

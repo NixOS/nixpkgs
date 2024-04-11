@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/x42/ltc-tools";
     description = "Tools to deal with linear-timecode (LTC)";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ tg-x ];
   };

@@ -92,7 +92,7 @@ stdenv.mkDerivation {
       mit # MTEngine
       # emulators included in c64-debugger
       gpl2Plus # VICE, atari800
-      gpl2 # nestopiaue
+      gpl2Only # nestopiaue
     ];
     mainProgram = "c64debugger";
     maintainers = [ maintainers.detegr ];

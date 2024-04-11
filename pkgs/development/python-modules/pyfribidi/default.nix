@@ -25,7 +25,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A simple wrapper around fribidi";
     homepage = "https://github.com/pediapress/pyfribidi";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
   };
 
 }

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       It is written in plain C, and intended to be very portable.
     '';
     homepage = "https://github.com/saintdev/libmkv";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.wmertens ];
     platforms = lib.platforms.unix;
   };

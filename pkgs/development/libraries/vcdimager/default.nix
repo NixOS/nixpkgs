@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/vcdimager/";
     description = "Full-featured mastering suite for authoring, disassembling and analyzing Video CDs and Super Video CDs";
     platforms = platforms.unix;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
   };
 }

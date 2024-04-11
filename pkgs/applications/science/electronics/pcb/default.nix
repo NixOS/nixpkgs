@@ -63,6 +63,6 @@ stdenv.mkDerivation rec {
     homepage = "http://pcb.geda-project.org/";
     maintainers = with maintainers; [ mog ];
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
   };
 }

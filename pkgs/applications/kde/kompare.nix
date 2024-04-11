@@ -10,7 +10,7 @@ mkDerivation {
     homepage = "https://apps.kde.org/kompare/";
     description = "Diff/patch frontend";
     mainProgram = "kompare";
-    license = with lib.licenses; [ gpl2 ];
+    license = with lib.licenses; [ gpl2Only ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [

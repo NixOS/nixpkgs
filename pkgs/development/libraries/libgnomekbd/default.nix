@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     description = "Keyboard management library";
     mainProgram = "gkbd-keyboard-display";
     maintainers = teams.gnome.members;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

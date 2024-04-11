@@ -76,7 +76,7 @@ in
     meta = with lib; {
       description = "ZNC clientaway module";
       homepage = "https://github.com/kylef/znc-contrib";
-      license = licenses.gpl2;
+      license = licenses.gpl2Only;
       maintainers = with maintainers; [ kiwi ];
     };
   };
@@ -116,7 +116,7 @@ in
     meta = with lib; {
       description = "ZNC ignore module";
       homepage = "https://github.com/kylef/znc-contrib";
-      license = licenses.gpl2;
+      license = licenses.gpl2Only;
       maintainers = with maintainers; [ kiwi ];
     };
   };

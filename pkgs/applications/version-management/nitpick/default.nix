@@ -34,7 +34,7 @@ buildPythonPackage rec {
       follow the code via whatever VCS or distribution mechanism.
     '';
     homepage = "http://travisbrown.ca/projects/nitpick/docs/nitpick.html";
-    license = with lib.licenses; gpl2;
+    license = with lib.licenses; gpl2Only;
     maintainers = [];
   };
 }

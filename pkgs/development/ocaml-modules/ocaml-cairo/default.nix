@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://cairographics.org/cairo-ocaml";
     description = "ocaml bindings for cairo library";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     inherit (ocaml.meta) platforms;
   };
 }

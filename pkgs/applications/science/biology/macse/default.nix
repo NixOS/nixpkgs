@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     mainProgram = "macse";
     homepage = "https://bioweb.supagro.inra.fr/macse/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.bzizou ];
     platforms = platforms.all;
   };

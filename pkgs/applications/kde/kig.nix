@@ -10,7 +10,7 @@ mkDerivation {
   meta = {
     homepage = "https://apps.kde.org/kig/";
     description = "Interactive geometry";
-    license = with lib.licenses; [ gpl2 ];
+    license = with lib.licenses; [ gpl2Only ];
     maintainers = with lib.maintainers; [ raskin ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

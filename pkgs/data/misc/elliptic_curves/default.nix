@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
          http://sage.math.washington.edu/cremona/INDEX.html
        * William Stein's database of interesting curves
     '';
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.all;
     maintainers = teams.sage.members;
   };

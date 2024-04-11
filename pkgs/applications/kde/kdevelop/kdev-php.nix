@@ -13,6 +13,6 @@ mkDerivation rec {
     platforms = platforms.linux;
     description = "PHP support for KDevelop";
     homepage = "https://www.kdevelop.org";
-    license = [ licenses.gpl2 ];
+    license = [ licenses.gpl2Only ];
   };
 }

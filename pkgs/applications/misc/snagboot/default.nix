@@ -71,7 +71,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     homepage = "https://github.com/bootlin/snagboot";
     description = "Generic recovery and reflashing tool for embedded platforms";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ otavio ];
   };
 }

@@ -118,7 +118,7 @@ in makePackage {
 
   meta = with lib; {
     homepage = "http://openjdk.java.net/projects/openjfx/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     description = "The next-generation Java client toolkit";
     maintainers = with maintainers; [ abbradar ];
     knownVulnerabilities = [

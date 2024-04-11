@@ -16,7 +16,7 @@ mkDerivation {
     description = "Mahjongg solitaire";
     mainProgram = "kmahjongg";
     homepage = "https://apps.kde.org/kmahjongg/";
-    license = with lib.licenses; [ gpl2 ];
+    license = with lib.licenses; [ gpl2Only ];
     maintainers = with lib.maintainers; [ ];
   };
 }

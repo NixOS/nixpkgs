@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       tree and allows you to "cruise" within a visualized filesystem.
     '';
     homepage = "https://xcruiser.sourceforge.net/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ehmry ];
     platforms = with platforms; linux;
     mainProgram = "xcruiser";

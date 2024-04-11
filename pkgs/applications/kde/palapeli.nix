@@ -17,7 +17,7 @@ mkDerivation {
     homepage = "https://apps.kde.org/palapeli/";
     description = "A single-player jigsaw puzzle game";
     mainProgram = "palapeli";
-    license = with lib.licenses; [ gpl2 ];
+    license = with lib.licenses; [ gpl2Only ];
     maintainers = with lib.maintainers; [ harrisonthorne ];
   };
 }

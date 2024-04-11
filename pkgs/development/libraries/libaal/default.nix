@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.namesys.com/";
     description = "Support library for Reiser4";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ mglolenstine ];
     platforms = with lib.platforms; linux;
   };

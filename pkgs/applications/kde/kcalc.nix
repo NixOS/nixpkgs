@@ -11,7 +11,7 @@ mkDerivation {
     homepage = "https://apps.kde.org/kcalc/";
     description = "Scientific calculator";
     mainProgram = "kcalc";
-    license = with lib.licenses; [ gpl2 ];
+    license = with lib.licenses; [ gpl2Only ];
     maintainers = [ lib.maintainers.fridh ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

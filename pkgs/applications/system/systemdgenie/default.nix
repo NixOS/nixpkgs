@@ -26,7 +26,7 @@ stdenv.mkDerivation rec{
     description = "Systemd management utility";
     mainProgram = "systemdgenie";
     homepage = "https://kde.org";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.pasqui23 ];
     platforms = platforms.linux;
   };

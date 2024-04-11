@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "Small library for playing system sounds";
     mainProgram = "gsound-play";
     maintainers = teams.gnome.members;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
 }

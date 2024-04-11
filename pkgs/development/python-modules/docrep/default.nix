@@ -28,7 +28,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python package for docstring repetition";
     homepage = "https://github.com/Chilipp/docrep";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ];
   };
 }

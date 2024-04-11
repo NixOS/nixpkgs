@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage = "http://dist.schmorp.de/libptytty";
     maintainers = with maintainers; [ rnhmjoj ];
     platforms = platforms.unix;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     # pkgsMusl.pkgsStatic errors as:
     #   ln: failed to create symbolic link './include': File exists
     broken = isStatic && isMusl;

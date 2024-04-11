@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       Remember to open port 24800 (used by synergys program) if you want to
       host mouse and keyboard.";
     homepage = "https://sourceforge.net/projects/quicksynergy/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.spinus ];
     platforms = lib.platforms.linux;
     mainProgram = "quicksynergy";

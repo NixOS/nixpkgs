@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "Renders an image of the earth or other planets into the X root window";
     mainProgram = "xplanet";
     homepage = "https://xplanet.sourceforge.net";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ lassulus sander ];
     platforms = platforms.all;
   };

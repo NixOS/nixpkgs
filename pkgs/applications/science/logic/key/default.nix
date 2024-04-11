@@ -113,7 +113,7 @@ in stdenv.mkDerivation rec {
       At the core of the system is a novel theorem prover for the first-order
       Dynamic Logic for Java with a user-friendly graphical interface.
     '';
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fgaz ];
     mainProgram = executable-name;
     platforms = platforms.all;

@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       platforms.
     '';
     homepage = "https://xiph.org/ao/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];
     platforms = with platforms; unix;
   };

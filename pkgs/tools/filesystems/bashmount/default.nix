@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "A menu-driven bash script for the management of removable media with udisks";
     mainProgram = "bashmount";
     maintainers = [ maintainers.koral ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.all;
   };
 }

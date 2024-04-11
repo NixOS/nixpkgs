@@ -25,7 +25,7 @@ stdenv.mkDerivation rec{
   meta = {
     homepage = "http://www.winfield.demon.nl/";
     description = "Convert MS Word documents to plain text or PostScript";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
 
     platforms = with lib.platforms; linux ++ darwin;
   };

@@ -46,7 +46,7 @@ multiStdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/wineasio/wineasio";
     description = "ASIO to JACK driver for WINE";
-    license = with licenses; [ gpl2 lgpl21 ];
+    license = with licenses; [ gpl2Plus lgpl21 ];
     maintainers = with maintainers; [ lovesegfault ];
     platforms = platforms.linux;
   };

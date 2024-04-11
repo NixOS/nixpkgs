@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://tombaran.info/autotalent.html";
     description = "A real-time pitch correction LADSPA plugin (no MIDI control)";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.michalrus ];
     platforms = platforms.linux;
   };

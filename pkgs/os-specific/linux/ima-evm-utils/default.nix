@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     description = "evmctl utility to manage digital signatures of the Linux kernel integrity subsystem (IMA/EVM)";
     mainProgram = "evmctl";
     homepage = "https://sourceforge.net/projects/linux-ima/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ nickcao ];
   };

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       level of a printer connected to a Linux or FreeBSD box.
     '';
     homepage = "https://libinklevel.sourceforge.net/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux ++ platforms.freebsd;
     maintainers = with maintainers; [ samb96 ];
   };

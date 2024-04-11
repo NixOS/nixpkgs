@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A program to help create and publish crosswords";
     homepage = "https://www.quinapalus.com/qxw.html";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.tckmn ];
     platforms = platforms.linux;
     mainProgram = "qxw";

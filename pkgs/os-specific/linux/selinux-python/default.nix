@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "SELinux policy core utilities written in Python";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     homepage = "https://selinuxproject.org";
     platforms = platforms.linux;
   };

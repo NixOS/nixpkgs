@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
       to the space age...
     '';
     homepage = "http://www.freeciv.org"; # http only
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pierron ];
     platforms = platforms.unix;
     hydraPlatforms = platforms.linux; # sdl-config times out on darwin

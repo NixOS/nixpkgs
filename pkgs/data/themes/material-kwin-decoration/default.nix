@@ -53,7 +53,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "Material-ish window decoration theme for KWin";
     homepage = "https://github.com/Zren/material-decoration";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ nickcao ];
   };
 }

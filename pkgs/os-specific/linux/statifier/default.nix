@@ -20,6 +20,6 @@ multiStdenv.mkDerivation rec {
     description = "Tool for creating static Linux binaries";
     mainProgram = "statifier";
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
   };
 }

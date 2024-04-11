@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Receive CW through the soundcard";
     homepage = "https://www.pa3fwm.nl/software/rscw/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ earldouglas ];
     platforms = platforms.linux;
   };

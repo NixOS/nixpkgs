@@ -34,7 +34,7 @@ mkDerivation rec {
     homepage = "https://github.com/jeromerobert/k4dirstat";
     description = "A small utility program that sums up disk usage for directory trees";
     mainProgram = "k4dirstat";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.raboof ];
     platforms = platforms.linux;
   };

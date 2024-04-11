@@ -21,6 +21,6 @@ mkDerivation {
     description = "Paint program";
     mainProgram = "kolourpaint";
     maintainers = [ lib.maintainers.fridh ];
-    license = with lib.licenses; [ gpl2 ];
+    license = with lib.licenses; [ gpl2Only ];
   };
 }

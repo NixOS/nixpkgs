@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "An mpv-based video player for studying Japanese";
     homepage = "https://ripose-jp.github.io/Memento/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ teto ];
     platforms = platforms.linux;
     mainProgram = "memento";

@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/akopytov/sysbench";
     downloadPage = "https://github.com/akopytov/sysbench/releases/tag/${version}";
     changelog = "https://github.com/akopytov/sysbench/blob/${version}/ChangeLog";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
   };
 }

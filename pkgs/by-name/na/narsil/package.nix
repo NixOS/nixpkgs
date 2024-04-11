@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
       but based on the codebase of modern Angband.
     '';
     maintainers = [ maintainers.nanotwerp ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
   };
 }

@@ -10,7 +10,7 @@ mkDerivation {
   meta = {
     homepage = "https://apps.kde.org/kcachegrind/";
     description = "Profiler frontend";
-    license = with lib.licenses; [ gpl2 ];
+    license = with lib.licenses; [ gpl2Only ];
     maintainers = with lib.maintainers; [ orivej ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools makeBinaryWrapper ];

@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Library for manipulation of the Mac OS icns resource format";
     homepage = "https://icns.sourceforge.io";
-    license = with licenses; [ gpl2 lgpl2 lgpl21 ];
+    license = with licenses; [ gpl2Plus lgpl2 lgpl21 ];
     platforms = platforms.unix;
   };
 }

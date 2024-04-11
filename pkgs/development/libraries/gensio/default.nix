@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "General Stream I/O";
     homepage = "https://sourceforge.net/projects/ser2net/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ emantor ];
     mainProgram = "gensiot";
     platforms = platforms.unix;

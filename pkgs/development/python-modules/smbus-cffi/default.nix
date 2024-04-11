@@ -44,7 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for SMBus access through Linux I2C /dev interface";
     homepage = "https://github.com/bivab/smbus-cffi";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ mic92 ];
     platforms = platforms.linux;
   };

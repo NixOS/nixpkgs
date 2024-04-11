@@ -28,7 +28,7 @@ mkDerivation rec {
     homepage = "https://github.com/stolowski/QComicBook";
     description = "Comic book reader in Qt5";
     mainProgram = "qcomicbook";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
 
     longDescription = ''
       QComicBook is a viewer for PDF files and comic book archives containing

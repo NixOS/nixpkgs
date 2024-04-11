@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/apertium/lttoolbox";
     maintainers = with maintainers; [ onthestairs ];
     changelog = "https://github.com/apertium/lttoolbox/releases/tag/v${version}";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

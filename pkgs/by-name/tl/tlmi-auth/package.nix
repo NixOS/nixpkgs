@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ snpschaaf ];
     description = "Utility for creating signature strings needed for thinklmi certificate based authentication";
     mainProgram = "tlmi-auth";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 })

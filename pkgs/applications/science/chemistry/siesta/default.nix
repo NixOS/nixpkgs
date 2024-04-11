@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
          and all-electron methods.
       '';
     homepage = "https://siesta-project.org/siesta/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.costrouc ];
   };

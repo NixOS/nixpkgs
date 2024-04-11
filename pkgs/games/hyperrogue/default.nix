@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     description = "A roguelike game set in hyperbolic geometry";
     mainProgram = "hyperrogue";
     maintainers = with maintainers; [ rardiol ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.all;
   };
 }

@@ -21,7 +21,7 @@ mkDerivation rec {
     description = "Offline conference schedule viewer";
     mainProgram = "confclerk";
     homepage = "http://www.toastfreeware.priv.at/confclerk";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ehmry ];
     platforms = lib.platforms.linux;
   };

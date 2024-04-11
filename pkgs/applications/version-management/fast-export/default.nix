@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Import mercurial into git";
     homepage = "https://repo.or.cz/w/fast-export.git";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.koral ];
     platforms = platforms.unix;
   };

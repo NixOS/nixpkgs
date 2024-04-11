@@ -42,7 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://pygobject.readthedocs.io/";
     description = "Python bindings for GLib";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];
   };
 }

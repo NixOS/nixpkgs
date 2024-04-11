@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A popular and easy to use graphical IRC (chat) client";
     homepage = "https://hexchat.github.io/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };

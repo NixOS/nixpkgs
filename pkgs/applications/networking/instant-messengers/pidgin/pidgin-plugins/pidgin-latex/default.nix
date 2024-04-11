@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://sourceforge.net/projects/pidgin-latex/";
     description = "LaTeX rendering plugin for Pidgin IM";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
   };

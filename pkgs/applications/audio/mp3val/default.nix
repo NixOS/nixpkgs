@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       common types of tags (ID3v1, ID3v2, APEv2).
     '';
     homepage = "https://mp3val.sourceforge.net/index.shtml";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.devhell ];
     mainProgram = "mp3val";

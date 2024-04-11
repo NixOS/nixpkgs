@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-libusb_1_0" ];
 
   meta = with lib; {
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     description = "A Device Firmware Update based USB programmer for Atmel chips with a USB bootloader";
     mainProgram = "dfu-programmer";
     homepage = "http://dfu-programmer.sourceforge.net/";

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Verification of stateful processes (via Proverif)";
     homepage    = "https://markryan.eu/research/statverif/";
-    license     = lib.licenses.gpl2;
+    license     = lib.licenses.gpl2Plus;
     platforms   = lib.platforms.unix;
     maintainers = [ lib.maintainers.thoughtpolice ];
   };

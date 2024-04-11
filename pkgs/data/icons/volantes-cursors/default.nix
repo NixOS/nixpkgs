@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://www.pling.com/p/1356095/";
     description = "Classic cursor theme with a flying style";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ jordanisaacs ];
     platforms = platforms.unix;
   };

@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       analysis.
     '';
     homepage = "https://www.ettercap-project.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ pSub ];
   };

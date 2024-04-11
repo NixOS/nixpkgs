@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Librecast File and Syncing Tool";
     mainProgram = "lcsync";
     homepage = "https://librecast.net/lcsync.html";
-    license = [ lib.licenses.gpl2 lib.licenses.gpl3 ];
+    license = [ lib.licenses.gpl2Only lib.licenses.gpl3 ];
     maintainers = with lib.maintainers; [ albertchae aynish DMills27 jasonodoom jleightcap ];
     platforms = lib.platforms.gnu;
   };

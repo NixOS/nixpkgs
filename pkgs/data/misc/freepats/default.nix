@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       patches, in any format, that can be used with softsynths.
     '';
     homepage = "https://freepats.zenvoid.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];
   };

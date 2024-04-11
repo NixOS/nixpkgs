@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A fast yet clean lookahead limiter for jack and lv2";
     homepage = "https://magnetophon.github.io/LazyLimiter/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.magnetophon ];
   };
 }

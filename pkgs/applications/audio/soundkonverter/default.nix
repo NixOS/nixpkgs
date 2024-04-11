@@ -75,7 +75,7 @@ mkDerivation rec {
     '';
   meta = {
     homepage = "https://github.com/dfaust/soundkonverter";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.schmittlauch ];
     description = "Audio file converter, CD ripper and Replay Gain tool";
     mainProgram = "soundkonverter";

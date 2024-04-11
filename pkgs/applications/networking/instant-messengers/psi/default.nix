@@ -27,7 +27,7 @@ mkDerivation rec {
     description = "An XMPP (Jabber) client";
     mainProgram = "psi";
     maintainers = [ maintainers.raskin ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

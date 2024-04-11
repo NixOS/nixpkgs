@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     mainProgram = "selectdefaultapplication";
     homepage = "https://github.com/sandsmark/selectdefaultapplication";
     maintainers = with maintainers; [ nsnelson ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
   };
 }

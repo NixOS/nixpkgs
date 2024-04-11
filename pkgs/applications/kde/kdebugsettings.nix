@@ -12,7 +12,7 @@ mkDerivation {
     homepage = "https://apps.kde.org/kdebugsettings/";
     description = "KDE debug settings";
     mainProgram = "kdebugsettings";
-    license = with lib.licenses; [ gpl2 ];
+    license = with lib.licenses; [ gpl2Only ];
     maintainers = [ ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

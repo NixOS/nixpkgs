@@ -35,7 +35,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Tempora font";
-    license = lib.licenses.gpl2 ;
+    license = lib.licenses.gpl2Only ;
     maintainers = [lib.maintainers.raskin];
   };
 }

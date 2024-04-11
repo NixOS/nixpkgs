@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://qmidiarp.sourceforge.net";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ sjfloat ];
   };

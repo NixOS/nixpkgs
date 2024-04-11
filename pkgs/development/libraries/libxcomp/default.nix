@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "NX compression library";
     homepage = "http://wiki.x2go.org/doku.php/wiki:libs:nx-libs";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
   };
 }

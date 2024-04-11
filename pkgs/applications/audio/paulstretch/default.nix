@@ -55,7 +55,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://hypermammut.sourceforge.net/paulstretch/";
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     mainProgram = "paulstretch";
   };
 }

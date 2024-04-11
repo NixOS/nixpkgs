@@ -50,7 +50,7 @@ buildPythonPackage rec {
     description = "Framework for building toolchains and utilities for working with the Node.js ecosystem";
     mainProgram = "calmjs";
     homepage = "https://github.com/calmjs/calmjs";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ onny ];
   };
 }

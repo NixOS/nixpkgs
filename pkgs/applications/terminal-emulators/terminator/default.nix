@@ -71,7 +71,7 @@ python3.pkgs.buildPythonApplication rec {
     '';
     changelog = "https://github.com/gnome-terminator/terminator/releases/tag/v${version}";
     homepage = "https://github.com/gnome-terminator/terminator";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ bjornfor ];
     platforms = platforms.linux;
   };

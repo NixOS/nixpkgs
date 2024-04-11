@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     mainProgram = "frotz";
     platforms = platforms.unix;
     maintainers = with maintainers; [ nicknovitski ddelabru ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
   };
 }

@@ -32,7 +32,7 @@ let
         "x86_64-linux"
       ];
       # licensing info was found in source files https://github.com/SketchingDev/Character-Copy/search?q=license
-      license     = licenses.gpl2;
+      license     = licenses.gpl2Plus;
       maintainers = with maintainers; [ nazarewk ];
     };
   };

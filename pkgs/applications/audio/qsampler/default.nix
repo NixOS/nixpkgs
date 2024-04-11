@@ -21,7 +21,7 @@ mkDerivation rec {
     homepage = "http://www.linuxsampler.org";
     description = "Graphical frontend to LinuxSampler";
     mainProgram = "qsampler";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;
   };

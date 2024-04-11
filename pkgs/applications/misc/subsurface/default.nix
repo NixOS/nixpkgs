@@ -56,7 +56,7 @@ let
       homepage = "https://www.libdivecomputer.org";
       description = "A cross-platform and open source library for communication with dive computers from various manufacturers";
       maintainers = with maintainers; [ mguentner ];
-      license = licenses.lgpl21;
+      license = licenses.lgpl2Only1;
       platforms = platforms.all;
     };
   };
@@ -148,7 +148,7 @@ stdenv.mkDerivation {
       names of other divers, and lets users rate dives and provide additional notes.
     '';
     homepage = "https://subsurface-divelog.org";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ mguentner adisbladis ];
     platforms = platforms.all;
   };

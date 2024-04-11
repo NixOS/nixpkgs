@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/bit-team/backintime";
     description = "Simple backup tool for Linux";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ stephen-huan ];
     platforms = lib.platforms.all;
     longDescription = ''

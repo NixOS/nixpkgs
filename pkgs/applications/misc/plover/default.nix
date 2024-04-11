@@ -11,7 +11,7 @@
       broken = stdenv.isDarwin;
       description = "OpenSteno Plover stenography software";
       maintainers = with maintainers; [ twey kovirobi ];
-      license     = licenses.gpl2;
+      license     = licenses.gpl2Only;
     };
 
     src = fetchFromGitHub {

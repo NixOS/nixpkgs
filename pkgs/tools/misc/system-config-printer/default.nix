@@ -80,6 +80,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/openprinting/system-config-printer";
     platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
   };
 }

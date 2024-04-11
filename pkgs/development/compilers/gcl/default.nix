@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "GNU Common Lisp compiler working via GCC";
     mainProgram = "gcl";
     maintainers = lib.teams.lisp.members;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

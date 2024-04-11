@@ -18,7 +18,7 @@ buildDunePackage rec {
   meta = with lib; {
     homepage = "https://github.com/let-def/ppx_tools_versioned";
     description = "Tools for authors of syntactic tools (such as ppx rewriters)";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ ];
   };
 }

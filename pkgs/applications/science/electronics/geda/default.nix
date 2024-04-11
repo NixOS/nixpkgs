@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.geda-project.org/";
     maintainers = with maintainers; [ pjones ];
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
   };
 }

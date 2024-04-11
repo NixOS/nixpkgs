@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     { description = "Collection of LV2 plugins by Robin Gareus";
       homepage = "https://github.com/x42/x42-plugins";
       maintainers = with maintainers; [ magnetophon orivej ];
-      license = licenses.gpl2;
+      license = licenses.gpl2Plus;
       platforms = [ "i686-linux" "x86_64-linux" ];
     };
 }

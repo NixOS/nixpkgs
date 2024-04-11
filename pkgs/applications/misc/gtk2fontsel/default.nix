@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gtk2fontsel.sourceforge.net/";
     downloadPage = "https://sourceforge.net/projects/gtk2fontsel/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.prikhi ];
     platforms = platforms.linux;
     mainProgram = "gtk2fontsel";

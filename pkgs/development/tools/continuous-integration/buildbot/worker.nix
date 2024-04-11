@@ -60,7 +60,7 @@ buildPythonPackage (rec {
     homepage = "https://buildbot.net/";
     description = "Buildbot Worker Daemon";
     maintainers = teams.buildbot.members;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     broken = stdenv.isDarwin; # https://hydra.nixos.org/build/243534318/nixlog/6
   };
 })

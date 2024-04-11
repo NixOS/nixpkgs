@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       performant.
     '';
     homepage = "https://github.com/M4444/TMatrix";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ Br1ght0ne ];
     mainProgram = "tmatrix";

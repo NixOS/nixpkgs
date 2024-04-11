@@ -141,7 +141,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description =
       "A tracepoint-based system tracing tool for Linux (with clients for other OSes)";
-    license = with licenses; [ asl20 gpl2 mit ];
+    license = with licenses; [ asl20 gpl2Only mit ];
     maintainers = [ maintainers.raskin ];
     platforms = [ "x86_64-linux" ] ++ platforms.darwin;
     broken = kernel != null && ((versionOlder kernel.version "4.14") || kernel.isHardened || kernel.isZen);

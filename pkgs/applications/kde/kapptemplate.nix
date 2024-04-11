@@ -16,7 +16,7 @@ mkDerivation {
   meta = with lib; {
     description = "KDE App Code Template Generator";
     mainProgram = "kapptemplate";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     homepage = "https://kde.org/applications/en/development/org.kde.kapptemplate";
     maintainers = [ maintainers.shamilton ];
     platforms = platforms.linux;

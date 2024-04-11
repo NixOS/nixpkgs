@@ -16,7 +16,7 @@ mkDerivation {
 
   meta = {
     description = "Plugins for KDE-based image applications";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://github.com/KDE/kipi-plugins";
     maintainers = with lib.maintainers; [ ttuegel ];
   };

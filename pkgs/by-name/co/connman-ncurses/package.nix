@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     description = "Simple ncurses UI for connman";
     mainProgram = "connman_ncurses";
     homepage = "https://github.com/eurogiciel-oss/connman-json-client";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];
   };

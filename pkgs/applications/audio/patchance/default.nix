@@ -43,7 +43,7 @@ buildPythonApplication rec {
     homepage = "https://github.com/Houston4444/Patchance";
     description = "JACK Patchbay GUI";
     mainProgram = "patchance";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.linux;
   };

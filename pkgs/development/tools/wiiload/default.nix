@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     description = "Load homebrew apps over network/usbgecko to your Wii";
     mainProgram = "wiiload";
     homepage = "https://wiibrew.org/wiki/Wiiload";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ tomsmeets ];
   };
 }

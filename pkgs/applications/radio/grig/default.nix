@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       same interface regardless of which radio they use.
     '';
     homepage = "https://groundstation.sourceforge.net/grig/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ melling ];
   };

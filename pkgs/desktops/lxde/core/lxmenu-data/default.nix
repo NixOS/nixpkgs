@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://lxde.org/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     description = "Freedesktop.org desktop menus for LXDE";
     platforms = lib.platforms.linux;
   };

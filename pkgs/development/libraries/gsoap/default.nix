@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
     # 2. GPLv2 covers all of the software
     # 3. Proprietary commercial software development license (removes GPL
     #    restrictions)
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor ];
   };

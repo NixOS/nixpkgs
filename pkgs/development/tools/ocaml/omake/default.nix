@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     homepage = "http://projects.camlcity.org/projects/omake.html";
     license = with lib.licenses; [
       mit /* scripts */
-      gpl2 /* program */
+      gpl2Only /* program */
     ];
     inherit (ocaml.meta) platforms;
   };

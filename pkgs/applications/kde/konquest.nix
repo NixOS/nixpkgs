@@ -25,7 +25,7 @@ mkDerivation {
     homepage = "https://apps.kde.org/konquest/";
     description = "Galactic strategy game";
     mainProgram = "konquest";
-    license = with lib.licenses; [ gpl2 ];
+    license = with lib.licenses; [ gpl2Only ];
     maintainers = with lib.maintainers; [ lheckemann ];
   };
 }

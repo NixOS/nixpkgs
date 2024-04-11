@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "MiFare Classic Universal toolKit";
     mainProgram = "mfcuk";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     homepage = "https://github.com/nfc-tools/mfcuk";
     maintainers = with maintainers; [ offline ];
     platforms = platforms.unix;

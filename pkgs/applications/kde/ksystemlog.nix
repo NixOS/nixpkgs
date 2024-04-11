@@ -14,7 +14,7 @@ mkDerivation {
     homepage = "https://apps.kde.org/ksystemlog/";
     description = "System log viewer";
     mainProgram = "ksystemlog";
-    license = with licenses; [ gpl2 ];
+    license = with licenses; [ gpl2Only ];
     maintainers = with maintainers; [ peterhoeg ];
   };
 }

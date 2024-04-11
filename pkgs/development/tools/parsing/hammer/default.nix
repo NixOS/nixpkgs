@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       executables.
     '';
     homepage = "https://gitlab.special-circumstanc.es/hammer/hammer";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ azahi ];
   };
 }

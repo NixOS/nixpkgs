@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Cellular automata simulation program";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;
     downloadPage = "https://sourceforge.net/projects/golly/files/golly";

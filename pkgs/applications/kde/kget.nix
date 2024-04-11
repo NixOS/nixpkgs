@@ -19,7 +19,7 @@ mkDerivation {
     homepage = "https://apps.kde.org/kget/";
     description = "Download manager";
     mainProgram = "kget";
-    license = with licenses; [ gpl2 ];
+    license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ peterhoeg ];
   };
 }

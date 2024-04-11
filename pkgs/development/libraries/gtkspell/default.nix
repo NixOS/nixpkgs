@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     description = "Word-processor-style highlighting and replacement of misspelled words";
     homepage = "https://gtkspell.sourceforge.net";
     platforms = platforms.unix;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
   };
 }

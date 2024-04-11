@@ -245,7 +245,7 @@ stdenv.mkDerivation (rec {
                     + withXenfiles (name: x: "* ${name}: ${x.meta.description or "(No description)"}.");
     platforms = [ "x86_64-linux" ];
     maintainers = [ ];
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     knownVulnerabilities = [
       # https://www.openwall.com/lists/oss-security/2023/03/21/1
       # Affects 3.2 (at *least*) - 4.17

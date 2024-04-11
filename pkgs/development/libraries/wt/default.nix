@@ -40,7 +40,7 @@ let
         homepage = "https://www.webtoolkit.eu/wt";
         description = "C++ library for developing web applications";
         platforms = platforms.linux;
-        license = licenses.gpl2;
+        license = licenses.gpl2Only;
         maintainers = with maintainers; [ juliendehos ];
       };
     };

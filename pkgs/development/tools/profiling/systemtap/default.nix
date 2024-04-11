@@ -38,7 +38,7 @@ in runCommand "systemtap-${kernel.version}-${version}" {
   meta = {
     homepage = "https://sourceware.org/systemtap/";
     description = "Provides a scripting language for instrumentation on a live kernel plus user-space";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.systems.inspect.patterns.isGnu;
   };
 } ''

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "Application designed to test GTK performance";
     mainProgram = "gtkperf";
     homepage = "https://gtkperf.sourceforge.net/";
-    license = with licenses; [ gpl2 ];
+    license = with licenses; [ gpl2Only ];
     maintainers = with maintainers; [ dtzWill ];
   };
 }

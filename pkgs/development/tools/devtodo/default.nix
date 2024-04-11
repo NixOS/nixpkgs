@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://swapoff.org/devtodo1.html";
     description = "A hierarchical command-line task manager";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.woffs ];
     platforms = platforms.linux;
   };

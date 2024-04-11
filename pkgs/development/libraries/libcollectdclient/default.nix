@@ -15,7 +15,7 @@ collectd.overrideAttrs (oldAttrs: {
   meta = with lib; {
     description = "C Library for collectd, a daemon which collects system performance statistics periodically";
     homepage = "http://collectd.org";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux; # TODO: collectd may be linux but the C client may be more portable?
     maintainers = [ maintainers.sheenobu maintainers.bjornfor ];
   };

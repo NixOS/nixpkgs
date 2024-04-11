@@ -36,6 +36,6 @@ in stdenv.mkDerivation rec {
     longDescription = "A mod of falquinhos Fusée Launcher for use with Nintendo Homebrew Switch Guide. It also adds the ability to mount SD while in RCM.
     Must be run as sudo.";
     maintainers = with maintainers; [ kristian-brucaj ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
   };
 }

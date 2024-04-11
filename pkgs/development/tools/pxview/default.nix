@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     description = "Program to convert Paradox databases";
     mainProgram = "pxview";
     homepage = "https://pxlib.sourceforge.net/pxview/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.winpat ];
   };

@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       # Stylesheets
       lgpl2Plus
       # Icons, unclear: https://gitlab.gnome.org/GNOME/yelp-xsl/issues/25
-      gpl2
+      gpl2Only
       # highlight.js
       bsd3
     ];

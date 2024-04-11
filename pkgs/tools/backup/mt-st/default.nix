@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       Fork of the standard "mt" tool with additional Linux-specific IOCTLs.
     '';
     homepage = "https://github.com/iustin/mt-st";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.redvers ];
     platforms = lib.platforms.linux;
   };

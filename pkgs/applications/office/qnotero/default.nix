@@ -45,7 +45,7 @@ python3Packages.buildPythonPackage rec {
     description = "Quick access to Zotero references";
     mainProgram = "qnotero";
     homepage = "https://www.cogsci.nl/software/qnotero";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     broken = stdenv.isDarwin; # Build fails even after adding cx-freeze to `buildInputs`
     maintainers = [ lib.maintainers.nico202 ];

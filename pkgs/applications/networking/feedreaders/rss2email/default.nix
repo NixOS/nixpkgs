@@ -54,7 +54,7 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "A tool that converts RSS/Atom newsfeeds to email";
     homepage = "https://pypi.python.org/pypi/rss2email";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ ekleog ];
     mainProgram = "r2e";
   };

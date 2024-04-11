@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     '';
     maintainers = with lib.maintainers; [ jboy ];
     homepage    = "https://minimacy.net";
-    license     = lib.licenses.gpl2;
+    license     = lib.licenses.gpl2Only;
     platforms   = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

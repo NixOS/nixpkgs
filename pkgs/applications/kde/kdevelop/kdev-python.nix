@@ -23,6 +23,6 @@ mkDerivation rec {
     platforms = platforms.linux;
     description = "Python support for KDevelop";
     homepage = "https://www.kdevelop.org";
-    license = [ licenses.gpl2 ];
+    license = [ licenses.gpl2Only ];
   };
 }

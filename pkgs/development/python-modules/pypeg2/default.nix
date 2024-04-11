@@ -25,7 +25,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "PEG parser interpreter in Python";
     homepage = "http://fdik.org/pyPEG";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
   };
 
 }

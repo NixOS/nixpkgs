@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Finely-grained git repository hosting";
     homepage    = "https://gitolite.com/gitolite/index.html";
-    license     = licenses.gpl2;
+    license     = licenses.gpl2Only;
     platforms   = platforms.unix;
     maintainers = [ maintainers.thoughtpolice maintainers.lassulus maintainers.tomberek ];
   };

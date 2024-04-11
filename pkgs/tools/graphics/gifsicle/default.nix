@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Command-line tool for creating, editing, and getting information about GIF images and animations";
     homepage = "https://www.lcdf.org/gifsicle/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ zimbatm ];
   };

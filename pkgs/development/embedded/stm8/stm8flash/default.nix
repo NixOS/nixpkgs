@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "A tool for flashing STM8 MCUs via ST-LINK (V1 and V2)";
     mainProgram = "stm8flash";
     maintainers = with maintainers; [ pkharvey ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.all;
   };
 }

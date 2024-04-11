@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Tools for gamecube/wii projects";
     homepage = "https://github.com/devkitPro/gamecube-tools/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ tomsmeets ];
   };
 }

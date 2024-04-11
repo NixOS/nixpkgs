@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://github.com/dylex/slack-libpurple";
     description = "Slack plugin for Pidgin";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ eyjhb ];
   };

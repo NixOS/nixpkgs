@@ -244,7 +244,7 @@ stdenv.mkDerivation rec {
     description = "Open-source electronics prototyping platform";
     mainProgram = "arduino";
     homepage = "https://www.arduino.cc/";
-    license = if withTeensyduino then licenses.unfreeRedistributable else licenses.gpl2;
+    license = if withTeensyduino then licenses.unfreeRedistributable else licenses.gpl2Only;
     sourceProvenance = with sourceTypes; [
       binaryBytecode
       binaryNativeCode

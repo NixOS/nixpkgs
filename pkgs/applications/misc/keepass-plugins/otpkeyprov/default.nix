@@ -16,7 +16,7 @@ let
       description = "OtpKeyProv is a key provider based on one-time passwords";
       homepage    = "https://keepass.info/plugins.html#otpkeyprov";
       platforms   = with lib.platforms; linux;
-      license     = lib.licenses.gpl2;
+      license     = lib.licenses.gpl2Only;
       maintainers = [ lib.maintainers.Enteee ];
     };
 

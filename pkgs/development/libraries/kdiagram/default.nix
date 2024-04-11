@@ -18,7 +18,7 @@ mkDerivation rec {
   propagatedBuildInputs = [ qtbase qtsvg ];
   meta = {
     description = "Libraries for creating business diagrams";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = qtbase.meta.platforms;
     maintainers = [ lib.maintainers.ttuegel ];
   };

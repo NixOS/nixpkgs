@@ -53,7 +53,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Generator for the PySide2 Qt bindings";
     mainProgram = "shiboken2";
-    license = with licenses; [ gpl2 lgpl21 ];
+    license = with licenses; [ gpl2Plus lgpl21 ];
     homepage = "https://wiki.qt.io/Qt_for_Python";
     maintainers = with maintainers; [ gebner ];
     broken = stdenv.isDarwin;

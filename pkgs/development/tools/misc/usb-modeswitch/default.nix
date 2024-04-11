@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A mode switching tool for controlling 'multi-mode' USB devices";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ marcweber peterhoeg ];
     platforms = platforms.linux;
   };

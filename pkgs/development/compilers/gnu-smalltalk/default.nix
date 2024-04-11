@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
       language, well-versed to scripting tasks.
     '';
     homepage = "http://smalltalk.gnu.org/";
-    license = with licenses; [ gpl2 lgpl2 ];
+    license = with licenses; [ gpl2Plus lgpl2 ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ AndersonTorres ];
   };

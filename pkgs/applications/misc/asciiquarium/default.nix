@@ -24,7 +24,7 @@ in stdenv.mkDerivation {
     description = "Enjoy the mysteries of the sea from the safety of your own terminal!";
     mainProgram = "asciiquarium";
     homepage = "https://robobunny.com/projects/asciiquarium/html/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.utdemir ];
   };

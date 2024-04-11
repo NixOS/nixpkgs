@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     homepage = "https://xournal.sourceforge.net/";
     description = "Note-taking application (supposes stylus)";
     maintainers = [ maintainers.guibert ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = with platforms; linux ++ darwin;
     mainProgram = "xournal";
   };

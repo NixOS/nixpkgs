@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "The slrn (S-Lang read news) newsreader";
     homepage = "https://slrn.sourceforge.net/index.html";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = with platforms; linux;
   };
 }

@@ -66,6 +66,6 @@ stdenv.mkDerivation rec {
     description = "Graphical User Interface Toolkit for mono and .Net";
     homepage = "https://www.mono-project.com/docs/gui/gtksharp";
     platforms = platforms.unix;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
   };
 }

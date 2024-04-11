@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       functional language used in teaching and research.
     '';
     homepage = "https://mosml.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ vaibhavsagar ];
   };

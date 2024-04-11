@@ -10,7 +10,7 @@ mkDerivation {
     homepage = "https://apps.kde.org/kfind/";
     description = "Find files/folders";
     mainProgram = "kfind";
-    license = with lib.licenses; [ gpl2 ];
+    license = with lib.licenses; [ gpl2Only ];
     maintainers = [ lib.maintainers.iblech ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       panel of the GNOME Control Center.
     '';
     homepage = "https://wiki.gnome.org/Projects/Mousetweaks";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.johnazoidberg ];
     mainProgram = "mousetweaks";

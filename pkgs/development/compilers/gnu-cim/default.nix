@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       discrete event modelling.
     '';
     homepage = "https://www.gnu.org/software/cim/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.all;
     badPlatforms = [ "aarch64-darwin" ];
     maintainers = with maintainers; [ pbsds ];

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     user community, including libraries. The software automatically copes with
     data in a variety of formats and even allows transparent retrieval of
     sequence data from the web.'';
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://emboss.sourceforge.net/";
   };
 }

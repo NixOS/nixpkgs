@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "C++ library based on Qt that eases the creation of OpenGL 3D viewers";
     homepage = "http://libqglviewer.com";
-    license = licenses.gpl2;
+    license = [ licenses.gpl2Only licenses.gpl3Only ];
     platforms = platforms.all;
   };
 }

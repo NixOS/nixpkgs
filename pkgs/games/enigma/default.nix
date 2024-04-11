@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Puzzle game inspired by Oxyd on the Atari ST and Rock'n'Roll on the Amiga";
     mainProgram = "enigma";
-    license = with licenses; [ gpl2 free ]; # source + bundles libs + art
+    license = with licenses; [ gpl2Plus free ]; # source + bundles libs + art
     platforms = platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [ iblech ];

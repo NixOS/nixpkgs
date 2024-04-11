@@ -16,7 +16,7 @@ let
       description = "KeePass plugin to allow other programs to access SSH keys stored in a KeePass database for authentication";
       homepage    = "http://lechnology.com/software/keeagent";
       platforms   = with lib.platforms; linux;
-      license     = lib.licenses.gpl2;
+      license     = lib.licenses.gpl2Only;
       maintainers = [ ];
     };
 

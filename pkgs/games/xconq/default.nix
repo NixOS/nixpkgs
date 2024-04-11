@@ -56,6 +56,6 @@ stdenv.mkDerivation rec {
     description = "A programmable turn-based strategy game";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
   };
 }

@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
       under many platforms, binaries for Windows, Linux and macOS are
       provided.
     '';
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ];
   };

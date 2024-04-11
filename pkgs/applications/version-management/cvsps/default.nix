@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       same time (using a single "cvs commit" command).
     '';
     homepage = "http://www.cobite.com/cvsps/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
     mainProgram = "cvsps";
   };

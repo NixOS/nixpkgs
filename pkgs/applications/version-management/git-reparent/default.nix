@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     description = "Git command to recommit HEAD with a new set of parents";
     maintainers = [ maintainers.marsam ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.unix;
     mainProgram = "git-reparent";
   };

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A free text editor for developers";
     homepage = "https://fte.sourceforge.net/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ ];
     platforms = platforms.all;
   };

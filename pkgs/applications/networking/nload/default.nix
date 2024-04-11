@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       transfered data and min/max network usage.
     '';
     homepage = "http://www.roland-riegel.de/nload/index.html";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.devhell ];
     mainProgram = "nload";

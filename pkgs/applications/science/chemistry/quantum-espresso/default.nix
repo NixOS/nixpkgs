@@ -124,7 +124,7 @@ stdenv.mkDerivation rec {
       pseudopotentials.
     '';
     homepage = "https://www.quantum-espresso.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = [ maintainers.costrouc ];
   };

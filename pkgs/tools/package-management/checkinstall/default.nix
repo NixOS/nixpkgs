@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     description = "A tool for automatically generating Slackware, RPM or Debian packages when doing `make install'";
     maintainers = [ lib.maintainers.eelco ];
     platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     knownVulnerabilities = [
       "CVE-2020-25031"
     ];

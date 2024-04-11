@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       To complete the feature set; xtermcontrol lets advanced users issue any xterm control sequence of their choosing.
     '';
     homepage = "http://thrysoee.dk/xtermcontrol";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.derchris ];
     mainProgram = "xtermcontrol";

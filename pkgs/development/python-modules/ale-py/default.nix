@@ -91,7 +91,7 @@ buildPythonPackage rec {
     description = "a simple framework that allows researchers and hobbyists to develop AI agents for Atari 2600 games";
     mainProgram = "ale-import-roms";
     homepage = "https://github.com/mgbellemare/Arcade-Learning-Environment";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ billhuang ];
     broken = stdenv.isDarwin; # fails to link with missing library
   };

@@ -52,6 +52,6 @@ mkDerivation rec {
     homepage = "https://kexi-project.org/";
     maintainers = with maintainers; [ zraexy ];
     platforms = platforms.linux;
-    license = with licenses; [ gpl2 lgpl2 ];
+    license = with licenses; [ gpl2Only lgpl2 ];
   };
 }

@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     description = "Hebrew spell checker";
     homepage = "http://hspell.ivrix.org.il/";
     platforms = platforms.all;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
   };
 }

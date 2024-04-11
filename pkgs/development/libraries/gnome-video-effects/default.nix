@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Projects/GnomeVideoEffects";
     platforms = platforms.unix;
     maintainers = teams.gnome.members;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
   };
 }

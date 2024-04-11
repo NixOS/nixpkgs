@@ -45,7 +45,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "PySide2 development tools";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     homepage = "https://wiki.qt.io/Qt_for_Python";
     maintainers = with maintainers; [ gebner ];
   };

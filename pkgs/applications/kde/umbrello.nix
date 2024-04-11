@@ -14,7 +14,7 @@ mkDerivation {
   meta = {
     homepage = "https://umbrello.kde.org/";
     description = "A Unified Modelling Language (UML) diagram program";
-    license = [ lib.licenses.gpl2 ];
+    license = [ lib.licenses.gpl2Plus ];
   };
   nativeBuildInputs = [
     cmake extra-cmake-modules

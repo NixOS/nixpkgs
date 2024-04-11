@@ -30,7 +30,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Disable screensaver and auto suspend";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ peterhoeg ];
     inherit (src.meta) homepage;
     inherit (kwindowsystem.meta) platforms;

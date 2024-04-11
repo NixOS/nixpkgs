@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://hugin.sourceforge.net/";
     description = "Implementation in C of the autopano-sift algorithm for automatically stitching panoramas";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
   };
 }

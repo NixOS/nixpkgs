@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
     description = "Liberation Sans fork with improved cyrillic support";
     homepage = "https://sourceforge.net/projects/lib-ka/";
 
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.all;
     maintainers = [ ];
   };

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     description = "Slide blocks to solve the puzzle";
     mainProgram = "gnome-klotski";
     maintainers = teams.gnome.members;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
 }

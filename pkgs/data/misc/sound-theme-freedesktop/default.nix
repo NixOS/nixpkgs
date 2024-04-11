@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     description = "Freedesktop reference sound theme";
     homepage = "http://freedesktop.org/wiki/Specifications/sound-theme-spec";
     # See http://cgit.freedesktop.org/sound-theme-freedesktop/tree/CREDITS:
-    license = with licenses; [ cc-by-30 cc-by-sa-25 gpl2 gpl2Plus ];
+    license = with licenses; [ cc-by-30 cc-by-sa-25 gpl2Only gpl2Plus ];
     platforms = with platforms; unix;
   };
 }

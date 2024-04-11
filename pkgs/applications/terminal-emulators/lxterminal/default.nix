@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       unnecessary dependencies.
     '';
     homepage = "https://wiki.lxde.org/en/LXTerminal";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.pbsds ];
     platforms = lib.platforms.linux;
     mainProgram = "lxterminal";

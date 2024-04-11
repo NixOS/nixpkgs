@@ -20,7 +20,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://pypi.python.org/pypi/enum/";
     description = "Robust enumerated type support in Python";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
   };
 
 }

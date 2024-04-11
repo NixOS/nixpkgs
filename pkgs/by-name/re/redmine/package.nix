@@ -48,6 +48,6 @@ in
       homepage = "https://www.redmine.org/";
       platforms = platforms.linux;
       maintainers = with maintainers; [ aanderse felixsinger megheaiulian ];
-      license = licenses.gpl2;
+      license = licenses.gpl2Plus;
     };
   }

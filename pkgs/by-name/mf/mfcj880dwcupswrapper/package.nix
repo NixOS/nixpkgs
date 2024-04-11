@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.brother.com/";
     description = "Brother MFC-J880DW CUPS wrapper driver";
-    license = with licenses; gpl2;
+    license = with licenses; gpl2Plus;
     platforms = with platforms; linux;
     downloadPage = "https://support.brother.com/g/b/downloadlist.aspx?c=us&lang=en&prod=mfcj880dw_us_eu_as&os=128";
     maintainers = with maintainers; [ _6543 ];

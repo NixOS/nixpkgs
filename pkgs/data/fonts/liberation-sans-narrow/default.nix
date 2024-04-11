@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       license to the Open Font License.
     '';
 
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     homepage = "https://github.com/liberationfonts";
     maintainers = [ maintainers.leenaars ];
   };

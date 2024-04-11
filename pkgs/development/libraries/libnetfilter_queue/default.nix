@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.netfilter.org/projects/libnetfilter_queue/";
     description = "Userspace API to packets queued by the kernel packet filter";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

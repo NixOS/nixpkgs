@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication {
     description = "Desktop notification integration for connman";
     mainProgram = "connman-notify";
     homepage = "https://gitlab.com/wavexx/connman-notify";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];
   };

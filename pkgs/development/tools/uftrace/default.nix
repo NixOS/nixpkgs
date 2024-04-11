@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     description = "Function (graph) tracer for user-space";
     mainProgram = "uftrace";
     homepage = "https://github.com/namhyung/uftrace";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = [lib.maintainers.nthorne];
   };

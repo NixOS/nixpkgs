@@ -216,7 +216,7 @@ let
         homepage = "http://xuxen.eus/";
         description = shortDescription;
         longDescription = longDescription;
-        license = licenses.gpl2;
+        license = licenses.gpl2Only;
         maintainers = with maintainers; [ zalakain ];
         platforms = platforms.all;
       };
@@ -253,7 +253,7 @@ let
       meta = with lib; {
         homepage = "https://www.j3e.de/ispell/igerman98/index_en.html";
         description = shortDescription;
-        license = with licenses; [ gpl2 gpl3 ];
+        license = with licenses; [ gpl2Only gpl3 ];
         maintainers = with maintainers; [ timor ];
         platforms = platforms.all;
       };
@@ -739,7 +739,7 @@ rec {
     dictFileName = "cs_CZ";
     shortDescription = "Czech (Czechia)";
     readmeFile = "README_cs.txt";
-    license = with lib.licenses; [ gpl2 ];
+    license = with lib.licenses; [ gpl2Only ];
   };
 
   /* SLOVAK */
@@ -750,7 +750,7 @@ rec {
     dictFileName = "sk_SK";
     shortDescription = "Slovak (Slovakia)";
     readmeFile = "README_sk.txt";
-    license = with lib.licenses; [ gpl2 lgpl21 mpl11 ];
+    license = with lib.licenses; [ gpl2Only lgpl21 mpl11 ];
   };
 
   /* DANISH */
@@ -932,7 +932,7 @@ rec {
     dictFileName = "pt_PT";
     shortDescription = "Portuguese (Portugal)";
     readmeFile = "README_pt_PT.txt";
-    license = with lib.licenses; [ gpl2 lgpl21 mpl11 ];
+    license = with lib.licenses; [ gpl2Only lgpl21 mpl11 ];
   };
 
   /* PERSIAN */

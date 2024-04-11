@@ -51,6 +51,6 @@ buildDunePackage rec {
     inherit (src.meta) homepage;
     description = "Build and execute typed scientific workflows";
     maintainers = [ lib.maintainers.vbgl ];
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
   };
 }

@@ -46,7 +46,7 @@ buildPythonPackage rec {
     description = "opensuse-commander with svn like handling";
     mainProgram = "osc";
     maintainers = with maintainers; [ peti saschagrunert ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
   };
 
 }

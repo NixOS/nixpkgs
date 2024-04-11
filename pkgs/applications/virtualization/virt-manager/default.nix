@@ -105,7 +105,7 @@ python3.pkgs.buildPythonApplication rec {
       virtual machines through libvirt. It primarily targets KVM VMs, but also
       manages Xen and LXC (linux containers).
     '';
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.unix;
     mainProgram = "virt-manager";
     maintainers = with maintainers; [ qknight offline fpletz globin ];

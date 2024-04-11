@@ -152,7 +152,7 @@ stdenv.mkDerivation rec {
     # why a local build is preferable in that situation. The timeframe is
     # reasonable and that way the binary cache doesn't get overloaded.
     hydraPlatforms = lib.optionals (!keepAllPackages) meta.platforms;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     homepage = "https://www.gap-system.org";
   };
 }

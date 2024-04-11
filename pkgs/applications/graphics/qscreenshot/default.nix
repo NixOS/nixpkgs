@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "Simple creation and editing of screenshots";
     mainProgram = "qScreenshot";
     homepage = "https://sourceforge.net/projects/qscreenshot/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];
   };

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A hierarchical matrix C/C++ library";
     homepage = "https://github.com/jeromerobert/hmat-oss";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ gdinh ];
   };

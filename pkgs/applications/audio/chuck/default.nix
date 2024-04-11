@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Programming language for real-time sound synthesis and music creation";
     homepage = "http://chuck.cs.princeton.edu";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ftrvxmtrx ];
     mainProgram = "chuck";

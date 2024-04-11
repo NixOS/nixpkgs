@@ -21,7 +21,7 @@ buildDunePackage rec {
   meta = {
     description = "Compiler from OCaml bytecode to Javascript";
     homepage = "https://ocsigen.org/js_of_ocaml/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.vbgl ];
     mainProgram = "js_of_ocaml";
   };

@@ -32,7 +32,7 @@ mkDerivation rec {
     description = "Dock-style app launcher based on Plasma frameworks";
     mainProgram = "latte-dock";
     homepage = "https://invent.kde.org/plasma/latte-dock";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.unix;
     maintainers = [ maintainers.ysndr ];
   };

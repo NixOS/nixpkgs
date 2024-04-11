@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation rec {
 
       They were converted to TrueType with the FontForge (PfaEdit) by Won-kyu Park in 2003.
     '';
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.all;
     maintainers = [ maintainers.ehmry ];
   };

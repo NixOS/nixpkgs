@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Provide detailed information on the hardware configuration of the machine";
     homepage = "https://ezix.org/project/wiki/HardwareLiSter";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     mainProgram = "lshw";
     maintainers = with maintainers; [ thiagokokada ];
     platforms = platforms.linux;

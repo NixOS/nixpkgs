@@ -30,6 +30,6 @@ stdenv.mkDerivation (rec {
     mainProgram = "rdesktop";
     homepage = "http://www.rdesktop.org/";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
   };
 })

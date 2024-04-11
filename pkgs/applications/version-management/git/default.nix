@@ -379,7 +379,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://git-scm.com/";
     description = "Distributed version control system";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     changelog = "https://github.com/git/git/blob/v${version}/Documentation/RelNotes/${version}.txt";
 
     longDescription = ''

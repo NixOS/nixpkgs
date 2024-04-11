@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       a free text-to-speech engine developed at the CMU Speech
       Center as an off-shoot of Festival.
     '';
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ jhhuh ];
     mainProgram = "eflite";

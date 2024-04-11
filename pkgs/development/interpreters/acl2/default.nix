@@ -141,7 +141,7 @@ in stdenv.mkDerivation rec {
     ] ++ optionals certifyBooks [
       # The community books are mostly bsd3 or mit but with a few
       # other things thrown in.
-      mit gpl2 llgpl21 cc0 publicDomain unfreeRedistributable
+      mit gpl2Plus llgpl21 cc0 publicDomain unfreeRedistributable
     ];
     maintainers = with maintainers; [ kini raskin ];
     platforms = platforms.all;

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       menstruation (or other) cycles conveniently.
     '';
     homepage = "http://www.kyberdigi.cz/projects/mencal/english.html";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.mmahut ];
     platforms = platforms.all;
     mainProgram = "mencal";

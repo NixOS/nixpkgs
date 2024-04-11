@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       is profiled: hardware and software interrupt handlers, kernel
       modules, the kernel, shared libraries, and applications.
     '';
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     homepage = "http://oprofile.sourceforge.net/";
 
     platforms = lib.platforms.linux;

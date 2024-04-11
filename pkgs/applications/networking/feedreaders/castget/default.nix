@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://castget.johndal.com/";
     maintainers = with maintainers; [ doronbehar ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 })

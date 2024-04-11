@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://ccl.northwestern.edu/netlogo/index.shtml";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.dpaetzel ];
     platforms = platforms.linux;
   };

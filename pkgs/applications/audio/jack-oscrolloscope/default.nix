@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     description = "A simple waveform viewer for JACK";
     mainProgram = "jack_oscrolloscope";
     homepage = "http://das.nasophon.de/jack_oscrolloscope";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.goibhniu ];
     platforms = lib.platforms.linux;
   };

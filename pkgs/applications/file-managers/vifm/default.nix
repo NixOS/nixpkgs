@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
     description = "A vi-like file manager${lib.optionalString isFullPackage "; Includes support for optional features"}";
     maintainers = with maintainers; [ raskin ];
     platforms = if mediaSupport then platforms.linux else platforms.unix;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     downloadPage = "https://vifm.info/downloads.shtml";
     homepage = "https://vifm.info/";
     changelog = "https://github.com/vifm/vifm/blob/v${version}/ChangeLog";

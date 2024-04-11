@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       contests, general QSO and DXpedition mode.
     '';
     homepage = "https://tlf.github.io/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };

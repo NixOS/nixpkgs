@@ -35,7 +35,7 @@ let
 
           See https://www.chromium.org/developers/how-tos/editing-the-spell-checking-dictionaries/
         '';
-        license = with lib.licenses; [ gpl2 lgpl21 mpl11 lgpl3 ];
+        license = with lib.licenses; [ gpl2Only lgpl21 mpl11 lgpl3 ];
         maintainers = with lib.maintainers; [ networkexception ];
         platforms = lib.platforms.all;
       };

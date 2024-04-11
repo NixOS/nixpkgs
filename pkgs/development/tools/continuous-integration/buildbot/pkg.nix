@@ -26,6 +26,6 @@ buildPythonPackage rec {
     homepage = "https://buildbot.net/";
     description = "Buildbot Packaging Helper";
     maintainers = teams.buildbot.members;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
   };
 }

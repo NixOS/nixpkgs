@@ -19,7 +19,7 @@ mkDerivation {
     description = "Disk usage statistics";
     mainProgram = "filelight";
     homepage = "https://apps.kde.org/filelight/";
-    license = with lib.licenses; [ gpl2 ];
+    license = with lib.licenses; [ gpl2Only ];
     maintainers = with lib.maintainers; [ fridh vcunat ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

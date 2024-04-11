@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     '';
     homepage    = "https://github.com/lkl/linux/";
     platforms   = platforms.linux; # Darwin probably works too but I haven't tested it
-    license     = licenses.gpl2;
+    license     = licenses.gpl2Only;
     maintainers = with maintainers; [ copumpkin raitobezarius ];
   };
 }

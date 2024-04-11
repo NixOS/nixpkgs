@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     description = "Utility for converting bitmap into vector graphics";
     platforms = platforms.unix;
     maintainers = with maintainers; [ hodapp ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     mainProgram = "autotrace";
   };
 }

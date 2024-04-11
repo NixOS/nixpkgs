@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     '' ;
 
     homepage = "https://freewheeling.sourceforge.net";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.sepi ];
     platforms = lib.platforms.linux;
     mainProgram = "fweelin";

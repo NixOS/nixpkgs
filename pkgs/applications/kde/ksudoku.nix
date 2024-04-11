@@ -15,7 +15,7 @@ mkDerivation {
     homepage = "https://apps.kde.org/ksudoku/";
     description = "Suduko game";
     mainProgram = "ksudoku";
-    license = with lib.licenses; [ gpl2 ];
+    license = with lib.licenses; [ gpl2Plus ];
     maintainers = with lib.maintainers; [ ];
   };
 }

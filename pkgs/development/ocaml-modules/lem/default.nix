@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     description = "A tool for lightweight executable mathematics";
     mainProgram = "lem";
     maintainers = with maintainers; [ genericnerdyusername ];
-    license = with licenses; [ bsd3 gpl2 ];
+    license = with licenses; [ bsd3 gpl2Only ];
     platforms = ocaml.meta.platforms;
   };
 }

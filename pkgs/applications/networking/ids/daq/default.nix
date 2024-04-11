@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     mainProgram = "daq-modules-config";
     homepage = "https://www.snort.org";
     maintainers = with lib.maintainers; [ aycanirican ];
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = with lib.platforms; linux;
   };
 }

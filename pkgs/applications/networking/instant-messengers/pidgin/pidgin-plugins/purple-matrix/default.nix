@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/matrix-org/purple-matrix";
     description = "Matrix support for Pidgin / libpurple";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ symphorien ];
   };

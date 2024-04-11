@@ -30,6 +30,6 @@ buildDunePackage rec {
     description = "Bioinformatics library for Ocaml";
     homepage = "http://${pname}.org";
     maintainers = [ maintainers.bcdarwin ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
   };
 }

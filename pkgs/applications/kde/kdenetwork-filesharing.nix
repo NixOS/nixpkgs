@@ -7,7 +7,7 @@
 mkDerivation {
   pname = "kdenetwork-filesharing";
   meta = {
-    license = [ lib.licenses.gpl2 lib.licenses.lgpl21 ];
+    license = [ lib.licenses.gpl2Only lib.licenses.lgpl21 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

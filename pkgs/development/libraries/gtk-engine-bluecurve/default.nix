@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Original Bluecurve engine from Red Hat's artwork package";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };

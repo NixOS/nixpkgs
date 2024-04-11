@@ -186,7 +186,7 @@ let
       description = "GNOME 2.x-like session for GNOME 3";
       mainProgram = "gnome-flashback";
       homepage = "https://wiki.gnome.org/Projects/GnomeFlashback";
-      license = licenses.gpl2;
+      license = licenses.gpl2Plus;
       maintainers = teams.gnome.members;
       platforms = platforms.linux;
     };

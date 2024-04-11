@@ -18,7 +18,7 @@ pythonPackages.buildPythonApplication rec {
   meta = with lib; {
     description = "A status monitor for the desktop";
     homepage = "https://nagstamon.ifw-dresden.de/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pSub ];
     # fails to install with:
     # TypeError: cannot unpack non-iterable bool object

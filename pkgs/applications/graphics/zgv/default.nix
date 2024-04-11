@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.svgalib.org/rus/zgv/";
     description = "Picture viewer with a thumbnail-based selector";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.vrthra ];
     platforms = platforms.linux;
     mainProgram = "zgv";

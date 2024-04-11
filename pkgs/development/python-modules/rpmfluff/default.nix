@@ -20,7 +20,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "lightweight way of building RPMs, and sabotaging them";
     homepage = "https://pagure.io/rpmfluff";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ disassembler ];
   };
 

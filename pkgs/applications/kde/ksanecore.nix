@@ -9,7 +9,7 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ qtbase ki18n sane-backends ];
   meta = with lib; {
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ andrevmatos ];
   };
 }

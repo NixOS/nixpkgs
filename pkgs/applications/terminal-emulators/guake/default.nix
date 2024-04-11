@@ -65,7 +65,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Drop-down terminal for GNOME";
     homepage = "http://guake-project.org";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.msteen ];
     platforms = platforms.linux;
   };

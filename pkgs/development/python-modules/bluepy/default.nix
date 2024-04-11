@@ -31,6 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/IanHarvey/bluepy";
     maintainers = with maintainers; [ georgewhewell ];
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
   };
 }

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     description = "Highly customizable native true color skin for the Video Disc Recorder";
     maintainers = [ maintainers.ck3d ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     inherit (vdr.meta) platforms;
   };
 }

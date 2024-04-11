@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     description =
       "Creates MIDI tracks for a soloist to perform over from a user supplied file containing chords";
     homepage = "https://www.mellowood.ca/mma/index.html";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
   };

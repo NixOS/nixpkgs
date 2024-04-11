@@ -15,7 +15,7 @@ gccStdenv.mkDerivation rec {
     description = "C/C++ library for numbers, a part of GiNaC";
     mainProgram = "pi";
     homepage = "https://www.ginac.de/CLN/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.unix; # Once had cygwin problems
   };
 }

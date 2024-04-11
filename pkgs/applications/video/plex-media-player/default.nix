@@ -45,7 +45,7 @@ in mkDerivation rec {
 
   meta = with lib; {
     description = "Streaming media player for Plex";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ b4dm4n ];
     homepage = "https://plex.tv";
     mainProgram = "plexmediaplayer";

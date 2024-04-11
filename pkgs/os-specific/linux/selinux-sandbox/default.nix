@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "SELinux sandbox utility";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     homepage = "https://selinuxproject.org";
     platforms = platforms.linux;
   };

@@ -38,7 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Tools for virtual machine firmware volumes";
     homepage = "https://gitlab.com/kraxel/virt-firmware";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ lheckemann raitobezarius ];
   };
 }

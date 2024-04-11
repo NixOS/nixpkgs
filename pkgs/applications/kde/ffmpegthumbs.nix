@@ -7,7 +7,7 @@
 mkDerivation {
   pname = "ffmpegthumbs";
   meta = {
-    license = with lib.licenses; [ gpl2 bsd3 ];
+    license = with lib.licenses; [ gpl2Plus bsd3 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
   nativeBuildInputs = [ extra-cmake-modules ];

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       remote files or directories locally ('kaget' command). It relies on TakTuk
       for efficiency and scalability.'';
     homepage = "http://taktuk.gforge.inria.fr/kanif";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.bzizou ];
     platforms = lib.platforms.linux;
   };

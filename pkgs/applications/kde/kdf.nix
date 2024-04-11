@@ -7,7 +7,7 @@
 mkDerivation {
   pname = "kdf";
   meta = {
-    license = with lib.licenses; [ gpl2 ];
+    license = with lib.licenses; [ gpl2Only ];
     maintainers = [ lib.maintainers.peterhoeg ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

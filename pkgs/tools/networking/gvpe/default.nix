@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "http://software.schmorp.de/pkg/gvpe.html";
     maintainers = [ maintainers.raskin ];
     platforms = with platforms; linux ++ freebsd;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
   };
 }

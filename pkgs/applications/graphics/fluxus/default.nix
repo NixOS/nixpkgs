@@ -69,7 +69,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Livecoding environment for 3D graphics, sound, and games";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     homepage = "http://www.pawfal.org/fluxus/";
     maintainers = [ maintainers.brainrape ];
     platforms = platforms.linux;

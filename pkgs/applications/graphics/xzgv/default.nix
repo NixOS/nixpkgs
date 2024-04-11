@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://sourceforge.net/projects/xzgv/";
     description = "Picture viewer for X with a thumbnail-based selector";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.womfoo ];
     platforms = platforms.linux;
     mainProgram = "xzgv";

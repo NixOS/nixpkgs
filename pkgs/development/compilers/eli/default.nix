@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
       arbitrary special cases. Output is the C subset of C++.
     '';
     homepage = "https://eli-project.sourceforge.net/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ timokau ];
     platforms = lib.platforms.linux;
   };

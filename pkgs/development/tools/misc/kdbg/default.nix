@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       stepping through code.
     '';
     mainProgram = "kdbg";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.catern ];
   };
 }

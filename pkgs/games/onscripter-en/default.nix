@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     description = "Japanese visual novel scripting engine";
     mainProgram = "onscripter-en";
     homepage = "http://unclemion.com/onscripter/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar ];
   };

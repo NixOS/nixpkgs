@@ -26,7 +26,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python interface to iTerm2's scripting API";
     homepage = "https://github.com/gnachman/iTerm2";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.darwin;
     maintainers = with maintainers; [ jeremyschlatter ];
   };

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       tool for extracting chapter information from DVD.
     '';
     homepage = "https://www.bunkus.org/videotools/ogmtools/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
   };
 }

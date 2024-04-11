@@ -20,7 +20,7 @@ buildPythonPackage {
   meta = with lib; {
     description = "Python bindings for the Linux unshare() syscall";
     homepage    = "https://github.com/thetincho/python-unshare";
-    license     = licenses.gpl2;
+    license     = licenses.gpl2Plus;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
   };

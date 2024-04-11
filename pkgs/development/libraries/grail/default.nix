@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://launchpad.net/canonical-multitouch/grail";
     description = "Gesture Recognition And Instantiation Library";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
   };
 }

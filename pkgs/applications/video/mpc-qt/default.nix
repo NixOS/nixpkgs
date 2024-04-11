@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Media Player Classic Qute Theater";
     homepage = "https://mpc-qt.github.io";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     broken = stdenv.isDarwin;
     maintainers = with maintainers; [ romildo ];

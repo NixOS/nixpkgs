@@ -86,7 +86,7 @@
     meta = with lib; {
       description = "MariaDB ODBC database driver";
       homepage = "https://downloads.mariadb.org/connector-odbc/";
-      license = licenses.gpl2;
+      license = licenses.gpl2Plus;
       platforms = platforms.linux ++ platforms.darwin;
     };
   };
@@ -115,7 +115,7 @@
     meta = with lib; {
       description = "MySQL ODBC database driver";
       homepage = "https://dev.mysql.com/downloads/connector/odbc/";
-      license = licenses.gpl2;
+      license = licenses.gpl2Plus;
       platforms = platforms.linux;
       broken = true;
     };

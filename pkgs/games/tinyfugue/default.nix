@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       TinyFugue, aka "tf", is a flexible, screen-oriented MUD client, for use
       with any type of text MUD.
     '';
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.KibaFox ];
   };

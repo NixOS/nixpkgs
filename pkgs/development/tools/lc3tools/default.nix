@@ -49,7 +49,7 @@ stdenv.mkDerivation {
     '';
     description = "Toolchain and emulator for the LC-3 architecture";
     homepage = "https://highered.mheducation.com/sites/0072467509/student_view0/lc-3_simulator.html";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ anna328p ];
     mainProgram = "lc3sim-tk";
     platforms = with lib.platforms; unix ++ windows;

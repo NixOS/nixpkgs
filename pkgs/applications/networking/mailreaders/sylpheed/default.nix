@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
     mainProgram = "sylpheed";
     maintainers = with maintainers; [ eelco ];
     platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
   };
 }

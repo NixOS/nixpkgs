@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       mbelib, which is a separate package.
     '';
     homepage = "https://github.com/szechyjs/dsd";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ andrew-d ];
     mainProgram = "dsd";

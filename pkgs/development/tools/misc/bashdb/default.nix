@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     description = "Bash script debugger";
     mainProgram = "bashdb";
     homepage = "https://bashdb.sourceforge.net/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
 }

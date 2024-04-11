@@ -71,7 +71,7 @@ mkDerivation rec {
     description = "Free software to create electric diagrams";
     mainProgram = "qelectrotech";
     homepage = "https://qelectrotech.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ yvesf ];
     platforms = qtbase.meta.platforms;
     broken = stdenv.isDarwin;
