@@ -15,7 +15,7 @@ callPackage ./generic.nix rec {
 
   postPatch = ''
     substituteInPlace build.gradle \
-      --replace "gdxControllersVersion = '2.2.3-SNAPSHOT'" "gdxControllersVersion = '2.2.3'"
+      --replace-fail "gdxControllersVersion = '2.2.3-SNAPSHOT'" "gdxControllersVersion = '2.2.3'"
   '';
 
   depsHash = "sha256-PyBEhlOOVD3/YH4SWs1yMkdg3U96znk1/VV6SAr8S30=";
