@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, python3
-, testers
-, jrnl
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  testers,
+  jrnl,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -23,9 +24,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace-fail "from pytest_bdd.steps import inject_fixture" "from pytest_bdd.compat import inject_fixture"
   '';
 
-  build-system = with python3.pkgs; [
-    poetry-core
-  ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
   dependencies = with python3.pkgs; [
     asteval
@@ -49,14 +48,11 @@ python3.pkgs.buildPythonApplication rec {
     toml
   ];
 
-
   preCheck = ''
     export HOME=$(mktemp -d);
   '';
 
-  pythonImportsCheck = [
-    "jrnl"
-  ];
+  pythonImportsCheck = [ "jrnl" ];
 
   passthru.tests.version = testers.testVersion {
     package = jrnl;
@@ -68,7 +64,10 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://jrnl.sh/";
     changelog = "https://github.com/jrnl-org/jrnl/releases/tag/v${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ bryanasdev000 zalakain ];
+    maintainers = with maintainers; [
+      bryanasdev000
+      zalakain
+    ];
     mainProgram = "jrnl";
   };
 }
