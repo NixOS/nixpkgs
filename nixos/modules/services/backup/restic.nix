@@ -300,7 +300,7 @@ in
       mapAttrs'
         (name: backup: nameValuePair "restic-backups-${name}" {
            source = "${backup.package}/bin/restic";
-           owner = "${backup.user}";
+           owner = backup.user;
            group = "restic";
            permissions = "u=rwx,g=,o=";
            capabilities = "cap_dac_read_search=+ep";
