@@ -133,7 +133,7 @@ rec {
 
   mypy-boto3-chime-sdk-voice = buildMypyBoto3Package "chime-sdk-voice" "1.34.0" "sha256-9fQQgWFKeabSblJIhP6mN0CEnSixkz1r3mf/k6IL/BE=";
 
-  mypy-boto3-cleanrooms = buildMypyBoto3Package "cleanrooms" "1.34.78" "sha256-76zy6rTsSqmKdwrZwBsf7m6qPZXSdi6GpQEXMvN82Tw=";
+  mypy-boto3-cleanrooms = buildMypyBoto3Package "cleanrooms" "1.34.82" "sha256-KaCs/P3NM3IeZ9V9khIwysyBXBG/8RuGFBAlrbMYn4Y=";
 
   mypy-boto3-cloud9 = buildMypyBoto3Package "cloud9" "1.34.24" "sha256-fryD7UfO5cdFS7vMxmZaT9LW4nNSGTQCd3NyD60f9wA=";
 
