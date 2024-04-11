@@ -8297,12 +8297,6 @@
     githubId = 55025025;
     name = "Feather Lin";
   };
-  iggyZiggy = {
-    email = "iggy.ziggy@gmail.com";
-    github = "iggyZiggy";
-    githubId = 4414394;
-    name = "Iggy Ziggy";
-  };
   igsha = {
     email = "igor.sharonov@gmail.com";
     github = "igsha";
