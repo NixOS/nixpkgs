@@ -28,12 +28,12 @@
         version = "2024-02-19";
       };
       ungoogled-patches = {
-        hash = "sha256-81SoZBOAAV0cAVzz3yOzBstRW3vWjmkFoFNjYdPnme4=";
-        rev = "123.0.6312.105-1";
+        hash = "sha256-ojKIAkJB/gfg6scCxUYNAGx4lsquAaCySBDcUCFLqSU=";
+        rev = "d5773b0fb696ef107cc6df6a94cbe732c9e905f9";
       };
     };
-    hash = "sha256-C17TPDVFW3+cHO1tcEghjI6H59TVPm9hdCrF2s5NI68=";
-    hash_deb_amd64 = "sha256-zmnBi4UBx52fQKHHJuUaCMuDJl7ntQzhG6h/yH7YPNU=";
-    version = "123.0.6312.105";
+    hash = "sha256-7H7h621AHPyhFYbaVFO892TtS+SP3Qu7cYUVk3ICL14=";
+    hash_deb_amd64 = "sha256-tNkO1mPZg1xltBfoWeNhLekITtZV/WNgu//i2DJb17c=";
+    version = "123.0.6312.122";
   };
 }
