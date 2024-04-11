@@ -1730,6 +1730,8 @@ self: super: with self; {
 
   brian2 = callPackage ../development/python-modules/brian2 { };
 
+  bring-api = callPackage ../development/python-modules/bring-api { };
+
   broadbean = callPackage ../development/python-modules/broadbean { };
 
   broadlink = callPackage ../development/python-modules/broadlink { };
@@ -5378,8 +5380,6 @@ self: super: with self; {
   holoviews = callPackage ../development/python-modules/holoviews { };
 
   home-assistant-bluetooth = callPackage ../development/python-modules/home-assistant-bluetooth { };
-
-  homeassistant-bring-api = callPackage ../development/python-modules/homeassistant-bring-api { };
 
   home-assistant-chip-clusters = callPackage ../development/python-modules/home-assistant-chip-clusters { };
 
