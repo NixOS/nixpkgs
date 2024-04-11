@@ -255,9 +255,9 @@
     "hash": "sha256-XChjJlDcoDD9mpNl28Vv4ImObUhjwkYlrW5QPBzCPsY="
   },
   "plasma-workspace": {
-    "version": "6.0.5",
-    "url": "mirror://kde/stable/plasma/6.0.5/plasma-workspace-6.0.5.tar.xz",
-    "hash": "sha256-xU0tWt9esv7vcJK5IX8e1ZyY42n5tdexLddzZfTresk="
+    "version": "6.0.5.1",
+    "url": "mirror://kde/stable/plasma/6.0.5/plasma-workspace-6.0.5.1.tar.xz",
+    "hash": "sha256-iQf5/e1fxuXZU1X4NGMo3hjXyIUNq9kQnXVFjVru2BM="
   },
   "plasma-workspace-wallpapers": {
     "version": "6.0.5",
