@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, intltool, gtk3
-, libxfce4ui, libxfce4util, xfconf, xfce4-dev-tools, xfce4-panel
+, libxfce4ui, libxfce4util, xfce4-dev-tools, xfce4-panel
 , i3ipc-glib
 }:
 
@@ -17,22 +17,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     intltool
+    xfce4-dev-tools
   ];
 
   buildInputs = [
     gtk3
-    xfconf
     libxfce4ui
     libxfce4util
-    xfce4-dev-tools
     xfce4-panel
     i3ipc-glib
    ];
-
-  preConfigure = ''
-    ./autogen.sh
-    patchShebangs .
-  '';
 
   enableParallelBuilding = true;
 
