@@ -113,7 +113,8 @@ rec {
       num:
       if num < 0 then
         throw "lib.network.ipv4._encode: ${toString num} cannot be encoded into an IPv4 address."
-      else if num > 4294967295 then
+      # ipv4 only has 4*8 = 32 bits, so 2^32 addresses
+      else if num >= 4294967296 then
         throw "lib.network.ipv4._encode: ${toString num} is too large to encode into an IPv4 address."
       else
         concatStringsSep "." (
