@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ hidapi libusb1 libelf libftdi1 libserialport readline ];
 
+  # Not used:
+  #
+  #   -DHAVE_LINUXGPIO=ON    because it's incompatible with libgpiod 2.x
+  #
   cmakeFlags = lib.optionals stdenv.hostPlatform.isLinux [ "-DHAVE_LINUXSPI=ON" ]
     ++ lib.optionals docSupport [ "-DBUILD_DOC=ON" ];
 
