@@ -9,6 +9,7 @@ on:
     paths:
       - 'doc/**'
       - 'lib/**'
+      - 'pkgs/tools/nix/nixdoc/**'
 
 jobs:
   nixpkgs:
