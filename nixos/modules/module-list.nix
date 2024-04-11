@@ -252,6 +252,7 @@
   ./programs/regreet.nix
   ./programs/rog-control-center.nix
   ./programs/rust-motd.nix
+  ./programs/ryzen-monitor-ng.nix
   ./programs/screen.nix
   ./programs/seahorse.nix
   ./programs/sedutil.nix
