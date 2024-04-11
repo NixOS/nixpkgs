@@ -1,13 +1,14 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, python-dotenv
-, pythonOlder
-, setuptools
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  python-dotenv,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -24,13 +25,9 @@ buildPythonPackage rec {
     hash = "sha256-fhZMn0v908VzV+JLuS8tM+BPKJBoj77vEh1pINL4Cco=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    aiohttp
-  ];
+  dependencies = [ aiohttp ];
 
   nativeCheckInputs = [
     aioresponses
@@ -39,9 +36,7 @@ buildPythonPackage rec {
     python-dotenv
   ];
 
-  pythonImportsCheck = [
-    "bring_api"
-  ];
+  pythonImportsCheck = [ "bring_api" ];
 
   meta = with lib; {
     description = "Module to access the Bring! shopping lists API";
