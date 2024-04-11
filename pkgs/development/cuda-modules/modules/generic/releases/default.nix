@@ -1,4 +1,4 @@
-{lib, config, ...}:
+{ lib, config, ... }:
 let
   inherit (config.generic.types) majorMinorVersion majorMinorPatchBuildVersion;
   inherit (lib) options types;

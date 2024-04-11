@@ -1,17 +1,17 @@
 { lib, stdenv, fetchurl, fetchpatch, xorg, ncurses, freetype, fontconfig
 , pkg-config, makeWrapper, nixosTests, gitUpdater
-, nixfmt, nix, gnused, coreutils, enableDecLocator ? true }:
+, nix, gnused, coreutils, enableDecLocator ? true }:
 
 stdenv.mkDerivation rec {
   pname = "xterm";
-  version = "388";
+  version = "390";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.invisible-island.net/xterm/${pname}-${version}.tgz"
       "https://invisible-mirror.net/archives/xterm/${pname}-${version}.tgz"
     ];
-    hash = "sha256-rEKTReb5N6WUWonUJaJl/ubCFfxmnb3GoDJuIfTF9nQ=";
+    hash = "sha256-dRF8PMUXSgnEJe8QbmlATXL17wXgOl2gCq8VeS1vnA8=";
   };
 
   strictDeps = true;

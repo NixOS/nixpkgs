@@ -20,6 +20,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://www.tegola.io/";
     description = "Mapbox Vector Tile server";
+    mainProgram = "tegola";
     maintainers = with maintainers; [ ingenieroariel ];
     license = licenses.mit;
   };

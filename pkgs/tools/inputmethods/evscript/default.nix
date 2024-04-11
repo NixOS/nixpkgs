@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     homepage = "https://codeberg.org/valpackett/evscript";
     description = "A tiny sandboxed Dyon scripting environment for evdev input devices";
+    mainProgram = "evscript";
     license = licenses.unlicense;
     maintainers = with maintainers; [ milesbreslin ];
     platforms = platforms.linux;

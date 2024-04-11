@@ -93,6 +93,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "Remake of Star Control II";
+    mainProgram = "uqm";
     longDescription = ''
       The goals for the The Ur-Quan Masters project are:
         - to bring Star Control II to modern platforms, thereby making a lot of

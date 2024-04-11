@@ -45,5 +45,6 @@ stdenvNoCC.mkDerivation rec {
       * Updating variables and retries
       * Viewing cluster status
     '';
+    mainProgram = "zbctl";
   };
 }

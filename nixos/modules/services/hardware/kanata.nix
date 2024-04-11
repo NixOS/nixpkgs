@@ -151,7 +151,7 @@ let
 in
 {
   options.services.kanata = {
-    enable = mkEnableOption (mdDoc "kanata");
+    enable = mkEnableOption (mdDoc "kanata, a tool to improve keyboard comfort and usability with advanced customization");
     package = mkPackageOption pkgs "kanata" {
       example = "kanata-with-cmd";
       extraDescription = ''

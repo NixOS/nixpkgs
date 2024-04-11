@@ -20,6 +20,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Rule-based system for Russian sentence and word tokenization";
+    mainProgram = "razdel-ctl";
     homepage = "https://github.com/natasha/razdel";
     license = licenses.mit;
     maintainers = with maintainers; [ npatsakula ];

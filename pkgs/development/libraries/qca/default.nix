@@ -4,11 +4,11 @@ let
   isQt6 = lib.versions.major qtbase.version == "6";
 in stdenv.mkDerivation rec {
   pname = "qca";
-  version = "2.3.7";
+  version = "2.3.8";
 
   src = fetchurl {
     url = "mirror://kde/stable/qca/${version}/qca-${version}.tar.xz";
-    sha256 = "sha256-/uI0O1RofVvj4w+zPOKW7lCseuXiPXq3JfY//fevP0M=";
+    sha256 = "sha256-SHWcqGoCAkYdkIumYTQ4DMO7fSD+08AxufwCiXlqgmQ=";
   };
 
   buildInputs = [ openssl qtbase qt5compat ];

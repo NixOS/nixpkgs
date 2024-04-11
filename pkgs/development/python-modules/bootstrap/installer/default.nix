@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "${python.libPrefix}-bootstrap-${installer.pname}";
-  inherit (installer) version src meta;
+  inherit (installer) version src patches meta;
 
   buildPhase = ''
     runHook preBuild

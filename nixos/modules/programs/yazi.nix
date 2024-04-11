@@ -22,7 +22,7 @@ in
             description = lib.mdDoc ''
               Configuration included in `${name}.toml`.
 
-              See https://github.com/sxyazi/yazi/blob/v${cfg.package.version}/config/docs/${name}.md for documentation.
+              See https://yazi-rs.github.io/docs/configuration/${name}/ for documentation.
             '';
           }))
           names);
@@ -47,7 +47,5 @@ in
   };
   meta = {
     maintainers = with lib.maintainers; [ linsui ];
-    # The version of the package is used in the doc.
-    buildDocsInSandbox = false;
   };
 }

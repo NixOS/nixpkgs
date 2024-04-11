@@ -79,6 +79,10 @@ in
       serviceConfig.StandardOutput = "journal+console";
     };
 
+    # Amazon-issued AMIs include the SSM Agent by default, so we do the same.
+    # https://docs.aws.amazon.com/systems-manager/latest/userguide/ami-preinstalled-agent.html
+    services.amazon-ssm-agent.enable = true;
+
     # Allow root logins only using the SSH key that the user specified
     # at instance creation time.
     services.openssh.enable = true;
@@ -103,4 +107,5 @@ in
     # (e.g. it depends on GTK).
     services.udisks2.enable = false;
   };
+  meta.maintainers = with maintainers; [ arianvp ];
 }

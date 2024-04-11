@@ -1,21 +1,114 @@
-/*
-Nix evaluation tests for various lib functions.
+/**
+  Nix evaluation tests for various lib functions.
 
-Since these tests are implemented with Nix evaluation, error checking is limited to what `builtins.tryEval` can detect, which is `throw`'s and `abort`'s, without error messages.
-If you need to test error messages or more complex evaluations, see ./modules.sh, ./sources.sh or ./filesystem.sh as examples.
+  Since these tests are implemented with Nix evaluation,
+  error checking is limited to what `builtins.tryEval` can detect,
+  which is `throw`'s and `abort`'s, without error messages.
 
-To run these tests:
+  If you need to test error messages or more complex evaluations, see
+  `lib/tests/modules.sh`, `lib/tests/sources.sh` or `lib/tests/filesystem.sh` as examples.
 
-  [nixpkgs]$ nix-instantiate --eval --strict lib/tests/misc.nix
+  To run these tests:
 
-If the resulting list is empty, all tests passed.
-Alternatively, to run all `lib` tests:
+    [nixpkgs]$ nix-instantiate --eval --strict lib/tests/misc.nix
 
-  [nixpkgs]$ nix-build lib/tests/release.nix
+  If the resulting list is empty, all tests passed.
+  Alternatively, to run all `lib` tests:
+
+    [nixpkgs]$ nix-build lib/tests/release.nix
 */
-with import ../default.nix;
 
 let
+  lib = import ../default.nix;
+
+  inherit (lib)
+    allUnique
+    and
+    attrNames
+    attrsets
+    attrsToList
+    bitAnd
+    bitOr
+    bitXor
+    boolToString
+    callPackagesWith
+    callPackageWith
+    cartesianProductOfSets
+    cli
+    composeExtensions
+    composeManyExtensions
+    concatLines
+    concatMapAttrs
+    concatMapStrings
+    concatStrings
+    concatStringsSep
+    const
+    escapeXML
+    evalModules
+    filter
+    fix
+    fold
+    foldAttrs
+    foldl
+    foldl'
+    foldlAttrs
+    foldr
+    functionArgs
+    generators
+    genList
+    getExe
+    getExe'
+    groupBy
+    groupBy'
+    hasAttrByPath
+    hasInfix
+    id
+    isStorePath
+    lazyDerivation
+    lists
+    listToAttrs
+    makeExtensible
+    makeIncludePath
+    makeOverridable
+    mapAttrs
+    matchAttrs
+    mergeAttrs
+    meta
+    mkOption
+    mod
+    nameValuePair
+    optionalDrvAttr
+    optionAttrSetToDocList
+    overrideExisting
+    packagesFromDirectoryRecursive
+    pipe
+    range
+    recursiveUpdateUntil
+    removePrefix
+    replicate
+    runTests
+    setFunctionArgs
+    showAttrPath
+    sort
+    sortOn
+    stringLength
+    strings
+    stringToCharacters
+    systems
+    tail
+    take
+    testAllTrue
+    toBaseDigits
+    toHexString
+    toInt
+    toIntBase10
+    toShellVars
+    types
+    updateManyAttrsByPath
+    versions
+    xor
+    ;
+
   testingThrow = expr: {
     expr = (builtins.tryEval (builtins.seq expr "didn't throw"));
     expected = { success = false; value = false; };
@@ -55,6 +148,24 @@ runTests {
     expected = { a = false; b = false; c = true; };
   };
 
+  testCallPackageWithOverridePreservesArguments =
+    let
+      f = { a ? 0, b }: {};
+      f' = callPackageWith { a = 1; b = 2; } f {};
+    in {
+      expr = functionArgs f'.override;
+      expected = functionArgs f;
+    };
+
+  testCallPackagesWithOverridePreservesArguments =
+    let
+      f = { a ? 0, b }: { nested = {}; };
+      f' = callPackagesWith { a = 1; b = 2; } f {};
+    in {
+      expr = functionArgs f'.nested.override;
+      expected = functionArgs f;
+    };
+
 # TRIVIAL
 
   testId = {
@@ -93,15 +204,30 @@ runTests {
   };
 
   /*
-  testOr = {
-    expr = or true false;
-    expected = true;
-  };
+    testOr = {
+      expr = or true false;
+      expected = true;
+    };
   */
 
   testAnd = {
     expr = and true false;
     expected = false;
+  };
+
+  testXor = {
+    expr = [
+      (xor true false)
+      (xor true true)
+      (xor false false)
+      (xor false true)
+    ];
+    expected = [
+      true
+      false
+      false
+      true
+    ];
   };
 
   testFix = {
@@ -189,6 +315,35 @@ runTests {
   testConcatLines = {
     expr = concatLines ["a" "b" "c"];
     expected = "a\nb\nc\n";
+  };
+
+  testMakeIncludePathWithPkgs = {
+    expr = (makeIncludePath [
+      # makeIncludePath preferably selects the "dev" output
+      { dev.outPath = "/dev"; out.outPath = "/out"; outPath = "/default"; }
+      # "out" is used if "dev" is not found
+      { out.outPath = "/out"; outPath = "/default"; }
+      # And it returns the derivation directly if there's no "out" either
+      { outPath = "/default"; }
+      # Same if the output is specified explicitly, even if there's a "dev"
+      { dev.outPath = "/dev"; outPath = "/default"; outputSpecified = true; }
+    ]);
+    expected = "/dev/include:/out/include:/default/include:/default/include";
+  };
+
+  testMakeIncludePathWithEmptyList = {
+    expr = (makeIncludePath [ ]);
+    expected = "";
+  };
+
+  testMakeIncludePathWithOneString = {
+    expr = (makeIncludePath [ "/usr" ]);
+    expected = "/usr/include";
+  };
+
+  testMakeIncludePathWithManyString = {
+    expr = (makeIncludePath [ "/usr" "/usr/local" ]);
+    expected = "/usr/include:/usr/local/include";
   };
 
   testReplicateString = {
@@ -1162,7 +1317,7 @@ runTests {
     '';
   };
 
-  /* right now only invocation check */
+  # right now only invocation check
   testToJSONSimple =
     let val = {
       foobar = [ "baz" 1 2 3 ];
@@ -1173,7 +1328,7 @@ runTests {
       expected = builtins.toJSON val;
   };
 
-  /* right now only invocation check */
+  # right now only invocation check
   testToYAMLSimple =
     let val = {
       list = [ { one = 1; } { two = 2; } ];
@@ -1971,6 +2126,24 @@ runTests {
       name = "foo";
       x = 1;
     }).drvPath;
+  };
+
+  testLazyDerivationMultiOutputReturnsDerivationAttrs = let
+    derivation = {
+      type = "derivation";
+      outputs = ["out" "dev"];
+      dev = "test dev";
+      out = "test out";
+      outPath = "test outPath";
+      outputName = "out";
+      drvPath = "test drvPath";
+      name = "test name";
+      system = "test system";
+      meta.position = "/hi:23";
+    };
+  in {
+    expr = lazyDerivation { inherit derivation; outputs = ["out" "dev"]; passthru.meta.position = "/hi:23"; };
+    expected = derivation;
   };
 
   testTypeDescriptionInt = {

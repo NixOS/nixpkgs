@@ -18,6 +18,7 @@ ocamlPackages.buildDunePackage rec {
 
   meta = {
     description = "A simple tool which produces pretty-printed output from a Menhir parser file (.mly)";
+    mainProgram = "obelisk";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
     homepage = "https://github.com/Lelio-Brun/Obelisk";

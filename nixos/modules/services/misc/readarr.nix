@@ -8,7 +8,7 @@ in
 {
   options = {
     services.readarr = {
-      enable = mkEnableOption (lib.mdDoc "Readarr");
+      enable = mkEnableOption (lib.mdDoc "Readarr, a Usenet/BitTorrent ebook downloader");
 
       dataDir = mkOption {
         type = types.str;

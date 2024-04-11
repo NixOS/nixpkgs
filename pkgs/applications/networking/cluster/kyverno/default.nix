@@ -41,6 +41,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Kubernetes Native Policy Management";
+    mainProgram = "kyverno";
     homepage = "https://kyverno.io/";
     changelog = "https://github.com/kyverno/kyverno/releases/tag/v${version}";
     license = licenses.asl20;

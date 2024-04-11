@@ -7,7 +7,13 @@
   nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
 }:
 
-with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
+let
+  release-lib = import ./release-lib.nix {
+    inherit supportedSystems nixpkgsArgs;
+  };
+
+  inherit (release-lib) all linux darwin mapTestOn unix;
+in
 
 {
 

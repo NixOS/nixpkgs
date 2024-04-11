@@ -47,6 +47,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/rust-secure-code/cargo-geiger";
     changelog = "https://github.com/rust-secure-code/cargo-geiger/blob/${pname}-${version}/CHANGELOG.md";
     description = "Detects usage of unsafe Rust in a Rust crate and its dependencies";
+    mainProgram = "cargo-geiger";
     longDescription = ''
       A cargo plugin that detects the usage of unsafe Rust in a Rust crate and
       its dependencies. It provides information to aid auditing and guide

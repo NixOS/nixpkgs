@@ -41,6 +41,7 @@ buildPythonPackage rec {
   buildInputs = [
     bzip2
     c-blosc
+    blosc2.c-blosc2
     hdf5
     lzo
   ];
@@ -75,6 +76,7 @@ buildPythonPackage rec {
     "--lzo=${lib.getDev lzo}"
     "--bzip2=${lib.getDev bzip2}"
     "--blosc=${lib.getDev c-blosc}"
+    "--blosc2=${lib.getDev blosc2.c-blosc2}"
   ];
 
   nativeCheckInputs = [

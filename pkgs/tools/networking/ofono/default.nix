@@ -62,5 +62,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
+    mainProgram = "ofonod";
   };
 }

@@ -4,6 +4,7 @@
 
 , autoPatchelfHook
 , dpkg
+, makeBinaryWrapper
 , makeWrapper
 , undmg
 , wrapGAppsHook
@@ -17,7 +18,7 @@
 
 let
   pname = "spotube";
-  version = "3.4.1";
+  version = "3.5.0";
 
   meta = {
     description = "An open source, cross-platform Spotify client compatible across multiple platforms";
@@ -46,18 +47,18 @@ let
 
     src = fetchArtifact {
       filename = "Spotube-macos-universal.dmg";
-      hash = "sha256-VobLCxsmE5kGIlDDa3v5xIHkw2x2YV14fgHHcDb+bLo=";
+      hash = "sha256-omXhiH/hVxFef03GqmpYf65SfdLjLyeMyuAWuvSpYiI=";
     };
 
     sourceRoot = ".";
 
-    nativeBuildInputs = [ undmg ];
+    nativeBuildInputs = [ undmg makeBinaryWrapper ];
 
     installPhase = ''
       runHook preInstall
       mkdir -p $out/Applications $out/bin
       cp -r spotube.app $out/Applications
-      ln -s $out/Applications/spotube.app/Contents/MacOS/spotube $out/bin/spotube
+      makeBinaryWrapper $out/Applications/spotube.app/Contents/MacOS/spotube $out/bin/spotube
       runHook postInstall
     '';
   };
@@ -67,7 +68,7 @@ let
 
     src = fetchArtifact {
       filename = "Spotube-linux-x86_64.deb";
-      hash = "sha256-NEGhzNz0E8jK2NPmigzoPAvYcU7zN9YHikuXHpzWfx0=";
+      hash = "sha256-Rea4GvxdkUfZF8lCBzI9UrD9Iz9D5vq9oxYBn5bahZE=";
     };
 
     nativeBuildInputs = [

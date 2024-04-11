@@ -16,6 +16,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python object API for managing the Linux LIO kernel target";
+    mainProgram = "targetctl";
     homepage = "https://github.com/open-iscsi/rtslib-fb";
     license = licenses.asl20;
   };

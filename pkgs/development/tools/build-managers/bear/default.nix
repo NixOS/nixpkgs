@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tool that generates a compilation database for clang tooling";
+    mainProgram = "bear";
     longDescription = ''
       Note: the bear command is very useful to generate compilation commands
       e.g. for YouCompleteMe.  You just enter your development nix-shell

@@ -31,6 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library offers programmatic access to the status information provided by apcupsd over its Network Information Server";
+    mainProgram = "apcaccess";
     homepage = "https://github.com/flyte/apcaccess";
     license = licenses.mit;
     maintainers = with maintainers; [ uvnikita ];

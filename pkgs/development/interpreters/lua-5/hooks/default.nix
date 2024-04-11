@@ -8,7 +8,6 @@
 
 let
   callPackage = lua.pkgs.callPackage;
-  luaInterpreter = lua.interpreter;
 in {
 
   lua-setup-hook = LuaPathSearchPaths: LuaCPathSearchPaths:

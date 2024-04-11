@@ -40,7 +40,7 @@ with lib;
   # If you prefer another desktop manager or display manager, you may want
   # to disable the default.
   # services.xserver.desktopManager.plasma5.enable = lib.mkForce false;
-  # services.xserver.displayManager.sddm.enable = lib.mkForce false;
+  # services.displayManager.sddm.enable = lib.mkForce false;
 
   # Enable GDM/GNOME by uncommenting above two lines and two lines below.
   # services.xserver.displayManager.gdm.enable = true;

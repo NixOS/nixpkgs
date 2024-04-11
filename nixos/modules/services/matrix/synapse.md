@@ -23,7 +23,7 @@ synapse server for the `example.org` domain, served from
 the host `myhostname.example.org`. For more information,
 please refer to the
 [installation instructions of Synapse](https://element-hq.github.io/synapse/latest/setup/installation.html) .
-```
+```nix
 { pkgs, lib, config, ... }:
 let
   fqdn = "${config.networking.hostName}.${config.networking.domain}";
@@ -126,8 +126,9 @@ then enable `services.matrix-synapse.settings.enable_registration = true;`.
 Otherwise, or you can generate a registration secret with
 {command}`pwgen -s 64 1` and set it with
 [](#opt-services.matrix-synapse.settings.registration_shared_secret).
-To create a new user or admin, run the following after you have set the secret
-and have rebuilt NixOS:
+To create a new user or admin from the terminal your client listener
+must be configured to use TCP sockets. Then you can run the following
+after you have set the secret and have rebuilt NixOS:
 ```ShellSession
 $ nix-shell -p matrix-synapse
 $ register_new_matrix_user -k your-registration-shared-secret http://localhost:8008
@@ -157,7 +158,7 @@ in an additional file like this:
     by `matrix-synapse`.
   - Include the file like this in your configuration:
 
-    ```
+    ```nix
     {
       services.matrix-synapse.extraConfigFiles = [
         "/run/secrets/matrix-shared-secret"
@@ -189,7 +190,7 @@ fill in the required connection details automatically when you enter your
 Matrix Identifier. See
 [Try Matrix Now!](https://matrix.org/docs/projects/try-matrix-now.html)
 for a list of existing clients and their supported featureset.
-```
+```nix
 {
   services.nginx.virtualHosts."element.${fqdn}" = {
     enableACME = true;

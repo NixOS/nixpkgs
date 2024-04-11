@@ -185,6 +185,19 @@ in
           can be loaded using "nft -f".  The ruleset is updated atomically.
         '';
     };
+
+    networking.nftables.flattenRulesetFile = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Use `builtins.readFile` rather than `include` to handle {option}`networking.nftables.rulesetFile`. It is useful when you want to apply {option}`networking.nftables.preCheckRuleset` to {option}`networking.nftables.rulesetFile`.
+
+        ::: {.note}
+        It is expected that {option}`networking.nftables.rulesetFile` can be accessed from the build sandbox.
+        :::
+      '';
+    };
+
     networking.nftables.tables = mkOption {
       type = types.attrsOf (types.submodule tableSubmodule);
 
@@ -252,8 +265,10 @@ in
     networking.nftables.flushRuleset = mkDefault (versionOlder config.system.stateVersion "23.11" || (cfg.rulesetFile != null || cfg.ruleset != ""));
     systemd.services.nftables = {
       description = "nftables firewall";
-      before = [ "network-pre.target" ];
-      wants = [ "network-pre.target" ];
+      after = [ "sysinit.target" ];
+      before = [ "network-pre.target" "shutdown.target" ];
+      conflicts = [ "shutdown.target" ];
+      wants = [ "network-pre.target" "sysinit.target" ];
       wantedBy = [ "multi-user.target" ];
       reloadIfChanged = true;
       serviceConfig = let
@@ -293,9 +308,13 @@ in
               }
             '') enabledTables)}
             ${cfg.ruleset}
-            ${lib.optionalString (cfg.rulesetFile != null) ''
-              include "${cfg.rulesetFile}"
-            ''}
+            ${if cfg.rulesetFile != null then
+              if cfg.flattenRulesetFile then
+                builtins.readFile cfg.rulesetFile
+                else ''
+                  include "${cfg.rulesetFile}"
+                ''
+              else ""}
           '';
           checkPhase = lib.optionalString cfg.checkRuleset ''
             cp $out ruleset.conf
@@ -315,6 +334,7 @@ in
         ExecStop = [ deletionsScriptVar cleanupDeletionsScript ];
         StateDirectory = "nftables";
       };
+      unitConfig.DefaultDependencies = false;
     };
   };
 }

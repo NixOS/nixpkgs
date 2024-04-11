@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Flexible Intermediate Representation for RTL";
+    mainProgram = "firrtl";
     longDescription = ''
       Firrtl is an intermediate representation (IR) for digital circuits
       designed as a platform for writing circuit-level transformations.

@@ -62,6 +62,8 @@ in
     # Link some extra directories in /run/current-system/software/share
     environment.pathsToLink = [ "/share" ];
 
+    programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-qt;
+
     # virtual file systems support for PCManFM-QT
     services.gvfs.enable = true;
 

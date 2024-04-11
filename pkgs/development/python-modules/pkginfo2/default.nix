@@ -29,6 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Query metadatdata from sdists, bdists or installed packages";
+    mainProgram = "pkginfo2";
     homepage = "https://github.com/nexB/pkginfo2";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

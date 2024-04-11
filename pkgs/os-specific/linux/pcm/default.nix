@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pcm";
-  version = "202401";
+  version = "202403";
 
   src = fetchFromGitHub {
     owner = "opcm";
     repo = "pcm";
     rev = version;
-    hash = "sha256-S4E9q4pdF9pT0ehKkeOMbJEFlTV9zB15BZA0R+cjVi8=";
+    hash = "sha256-qefqtuxRaQEsWpXNAuGxuIT3LiH2b8xQb54B0RkzKGA=";
   };
 
   nativeBuildInputs = [ cmake ];

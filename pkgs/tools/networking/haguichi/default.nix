@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Graphical frontend for Hamachi on Linux";
+    mainProgram = "haguichi";
     homepage = "https://haguichi.net/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

@@ -14,6 +14,7 @@ stdenv.mkDerivation {
   '';
   meta = {
     description = "Internal Nixpkgs utility for buildNimPackage.";
+    mainProgram = "nim_builder";
     maintainers = [ lib.maintainers.ehmry ];
   };
 }

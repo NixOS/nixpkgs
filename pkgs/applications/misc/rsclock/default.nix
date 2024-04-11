@@ -18,5 +18,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/valebes/rsClock";
     license = licenses.mit;
     maintainers = with maintainers; [valebes];
+    mainProgram = "rsclock";
   };
 }

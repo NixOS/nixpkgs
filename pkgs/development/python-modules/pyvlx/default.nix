@@ -7,11 +7,12 @@
 , pyyaml
 , setuptools
 , typing-extensions
+, zeroconf
 }:
 
 buildPythonPackage rec {
   pname = "pyvlx";
-  version = "0.2.21";
+  version = "0.2.23";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "Julius2342";
     repo = "pyvlx";
     rev = "refs/tags/${version}";
-    hash = "sha256-t6lbpP9IwNhXpoZ9+0n9vKCuZ+azWqP7w5v0BfqbMcs=";
+    hash = "sha256-J+oJQHsULrJQNdZqYsl2hufNubMwV1KtG10jZH0jbU4=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     pyyaml
     typing-extensions
+    zeroconf
   ];
 
   nativeCheckInputs = [

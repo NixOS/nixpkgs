@@ -1,6 +1,5 @@
 { stdenv, lib, fetchgit, darwin, writeText
 , ninja, python3
-, disable-warnings-if-gcc13
 , ...
 }:
 
@@ -18,7 +17,7 @@ let
     #endif  // OUT_LAST_COMMIT_POSITION_H_
   '';
 
-in disable-warnings-if-gcc13 (stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "gn-unstable";
   inherit version;
 
@@ -39,6 +38,8 @@ in disable-warnings-if-gcc13 (stdenv.mkDerivation {
     AppKit
   ]);
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
+
   buildPhase = ''
     python build/gen.py --no-last-commit-position
     ln -s ${lastCommitPosition} out/last_commit_position.h
@@ -53,9 +54,10 @@ in disable-warnings-if-gcc13 (stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A meta-build system that generates build files for Ninja";
+    mainProgram = "gn";
     homepage = "https://gn.googlesource.com/gn";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ stesie matthewbauer primeos ];
   };
-})
+}

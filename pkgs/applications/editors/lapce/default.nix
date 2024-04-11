@@ -75,10 +75,6 @@ rustPlatform.buildRustPackage rec {
 
     # This variable is read by build script, so that Lapce editor knows its version
     RELEASE_TAG_NAME = "v${version}";
-
-  } // lib.optionalAttrs stdenv.cc.isClang {
-    # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
   };
 
   postPatch = ''

@@ -17,6 +17,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "Arris Surfboard signal metrics exporter";
+    mainProgram = "surfboard_exporter";
     homepage = "https://github.com/ipstatic/surfboard_exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ disassembler ];

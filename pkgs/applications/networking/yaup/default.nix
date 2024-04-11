@@ -8,7 +8,7 @@
 , miniupnpc
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "yaup";
   version = "unstable-2019-10-16";
 

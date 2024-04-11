@@ -15,8 +15,8 @@
 
 buildPythonPackage rec {
   pname = "aiooss2";
-  version = "0.2.9";
-  format = "pyproject";
+  version = "0.2.10";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "karajan1001";
     repo = "aiooss2";
     rev = "refs/tags/${version}";
-    hash = "sha256-LdH04pRioxpHY1amRO90l9l5540IsDxmQcrEUVSq8dk=";
+    hash = "sha256-xlbOLqillSpN6DHYn7bqTL7qMlicYCXGxO30Z/tiKJY=";
   };
 
   pythonRelaxDeps = [
@@ -32,13 +32,13 @@ buildPythonPackage rec {
     "oss2"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     pythonRelaxDepsHook
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     oss2
   ];

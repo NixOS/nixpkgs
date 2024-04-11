@@ -40,6 +40,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Simple and fast GTK image viewer with basic image manipulation tools";
+    mainProgram = "image-roll";
     homepage = "https://github.com/weclaw1/image-roll";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

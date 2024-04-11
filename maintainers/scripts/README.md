@@ -11,7 +11,7 @@ What follows is a (very incomplete) overview of available scripts.
 
 ### `check-by-name.sh`
 
-An alias for `pkgs/test/nixpkgs-check-by-name/scripts/run-local.sh`, see [documentation](../../pkgs/test/nixpkgs-check-by-name/scripts/README.md).
+An alias for `pkgs/test/check-by-name/run-local.sh`, see [documentation](../../pkgs/test/check-by-name/README.md).
 
 ### `get-maintainer.sh`
 

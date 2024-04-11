@@ -8,7 +8,13 @@ if test -n "$dir"; then
     mkdir -p $out/$dir
 fi
 
-substitute $src $target $replacements
+substitutionsList=($replacements)
+
+if [[ -v substitutions ]]; then
+    eval "substitutionsList+=($substitutions)"
+fi
+
+substitute $src $target "${substitutionsList[@]}"
 
 if test -n "$isExecutable"; then
     chmod +x $target

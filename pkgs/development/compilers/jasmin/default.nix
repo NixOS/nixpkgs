@@ -5,7 +5,7 @@
 , ant
 , jdk8
 , makeWrapper
-, canonicalize-jars-hook
+, stripJavaArchivesHook
 , callPackage
 }:
 
@@ -27,7 +27,7 @@ in stdenv.mkDerivation (finalAttrs: {
     ant
     jdk
     makeWrapper
-    canonicalize-jars-hook
+    stripJavaArchivesHook
   ];
 
   buildPhase = ''

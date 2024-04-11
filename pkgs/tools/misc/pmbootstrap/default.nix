@@ -1,23 +1,18 @@
 { stdenv, lib, git, openssl, buildPythonApplication, pytestCheckHook, ps
-, fetchPypi, fetchFromSourcehut, sudo }:
+, fetchPypi, fetchFromGitLab, sudo }:
 
 buildPythonApplication rec {
   pname = "pmbootstrap";
-  version = "2.1.0";
+  version = "2.2.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-buCfQsi10LezDzYeplArmFRSc3vbjtl+FuTm/VUS2us=";
-  };
-
-  repo = fetchFromSourcehut {
-    owner = "~postmarketos";
+  src = fetchFromGitLab {
+    owner = "postmarketos";
     repo = pname;
     rev = version;
-    hash = "sha256-3GZ4PeMnG/a46WwvWPQFeYbJPp+NGU7A98QasnlMIL0=";
+    hash = "sha256-wRJvvABIUPh79QfS8VcwRueB/vO9oGcqyE/OugfTsd8=";
   };
 
-  pmb_test = "${repo}/test";
+  pmb_test = "${src}/test";
 
   # Tests depend on sudo
   doCheck = stdenv.isLinux;
@@ -33,14 +28,17 @@ buildPythonApplication rec {
     "test_aportgen"
     "test_aportgen_device_wizard"
     "test_bootimg"
+    "test_build_abuild_leftovers"
     "test_build_depends_binary_outdated"
     "test_build_depends_high_level"
     "test_build_depends_no_binary_error"
     "test_build_is_necessary"
     "test_build_local_source_high_level"
     "test_build_src_invalid_path"
+    "test_check"
     "test_can_fast_forward"
     "test_check_build_for_arch"
+    "test_check_config"
     "test_chroot_arguments"
     "test_chroot_interactive_shell"
     "test_chroot_interactive_shell_user"
@@ -49,6 +47,8 @@ buildPythonApplication rec {
     "test_config_user"
     "test_cross_compile_distcc"
     "test_crossdirect"
+    "test_extract_arch"
+    "test_extract_version"
     "test_file"
     "test_filter_aport_packages"
     "test_filter_missing_packages_binary_exists"
@@ -56,6 +56,7 @@ buildPythonApplication rec {
     "test_filter_missing_packages_pmaports"
     "test_finish"
     "test_folder_size"
+    "test_get_all_component_names"
     "test_get_apkbuild"
     "test_get_depends"
     "test_get_upstream_remote"
@@ -72,6 +73,7 @@ buildPythonApplication rec {
     "test_pkgrel_bump"
     "test_pmbootstrap_status"
     "test_print_checks_git_repo"
+    "test_proxy"
     "test_pull"
     "test_qemu_running_processes"
     "test_questions_additional_options"
@@ -87,18 +89,13 @@ buildPythonApplication rec {
     "test_skip_already_built"
     "test_switch_to_channel_branch"
     "test_version"
-    "test_build_abuild_leftovers"
-    "test_get_all_component_names"
-    "test_check_config"
-    "test_extract_arch"
-    "test_extract_version"
-    "test_check"
   ];
 
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ git openssl ]}" ];
 
   meta = with lib; {
-    description = "Sophisticated chroot/build/flash tool to develop and install postmarketOS";
+    description =
+      "Sophisticated chroot/build/flash tool to develop and install postmarketOS";
     homepage = "https://gitlab.com/postmarketOS/pmbootstrap";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ onny ];

@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
   '';
   meta = with lib; {
     description = "A chat client for Twitch chat";
+    mainProgram = "chatterino";
     longDescription = ''
       Chatterino is a chat client for Twitch chat. It aims to be an
       improved/extended version of the Twitch web chat. Chatterino 2 is

@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A command line program which draws, removes, and repairs ASCII art boxes";
+    mainProgram = "boxes";
     homepage = "https://boxes.thomasjensen.com";
     license = licenses.gpl2;
     maintainers = with maintainers; [ waiting-for-dev ];

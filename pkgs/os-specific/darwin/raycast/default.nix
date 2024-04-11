@@ -1,17 +1,21 @@
 { lib
 , stdenvNoCC
 , fetchurl
+, writeShellApplication
+, curl
+, jq
+, common-updater-scripts
 , undmg
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "raycast";
-  version = "1.66.2";
+  version = "1.71.1";
 
   src = fetchurl {
     name = "Raycast.dmg";
     url = "https://releases.raycast.com/releases/${finalAttrs.version}/download?build=universal";
-    hash = "sha256-HV3urzJX33dQjzUxtQhVgMaguGk8nqtXJJBXjHwaqC0=";
+    hash = "sha256-TJBBguUMgH0QM8h6GMHrQmfmREB1O8k4tp3YMywYeXY=";
   };
 
   dontPatch = true;
@@ -31,6 +35,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru = {
+    updateScript = writeShellApplication {
+      name = "raycast-update-script";
+      runtimeInputs = [ curl jq common-updater-scripts ];
+      text = ''
+        set -eo pipefail
+        url=$(curl --silent "https://releases.raycast.com/releases/latest?build=universal")
+        version=$(echo "$url" | jq -r '.version')
+        update-source-version raycast "$version" --file=./pkgs/os-specific/darwin/raycast/default.nix
+      '';
+    };
+  };
 
   meta = with lib; {
     description = "Control your tools with a few keystrokes";

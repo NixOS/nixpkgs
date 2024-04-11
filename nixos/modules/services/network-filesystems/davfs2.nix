@@ -3,14 +3,22 @@
 with lib;
 
 let
+  toStr = value:
+    if true == value then "yes"
+    else if false == value then "no"
+    else toString value;
+
   cfg = config.services.davfs2;
-  cfgFile = pkgs.writeText "davfs2.conf" ''
-    dav_user ${cfg.davUser}
-    dav_group ${cfg.davGroup}
+  format = pkgs.formats.toml { };
+  configFile = let
+    settings = mapAttrsToList (n: v: "${n} = ${toStr v}") cfg.settings;
+  in pkgs.writeText "davfs2.conf" ''
+    ${concatStringsSep "\n" settings}
     ${cfg.extraConfig}
   '';
 in
 {
+
   options.services.davfs2 = {
     enable = mkOption {
       type = types.bool;
@@ -49,13 +57,46 @@ in
       '';
       description = lib.mdDoc ''
         Extra lines appended to the configuration of davfs2.
+        See {manpage}`davfs2.conf(5)` for available settings.
+
+        **Note**: Please pass structured settings via
+        {option}`settings` instead, this option
+        will get deprecated in the future.
+      ''  ;
+    };
+
+    settings = mkOption {
+      type = types.submodule {
+        freeformType = format.type;
+      };
+      default = {};
+      example = literalExpression ''
+        {
+          kernel_fs = "coda";
+          proxy = "foo.bar:8080";
+          use_locks = 0;
+        }
+      '';
+      description = lib.mdDoc ''
+        Extra settings appended to the configuration of davfs2.
+        See {manpage}`davfs2.conf(5)` for available settings.
       ''  ;
     };
   };
 
   config = mkIf cfg.enable {
+
+    warnings = lib.optional (cfg.extraConfig != null) ''
+      services.davfs2.extraConfig will be deprecated in future releases, please use the settings option now.
+    '';
+
     environment.systemPackages = [ pkgs.davfs2 ];
-    environment.etc."davfs2/davfs2.conf".source = cfgFile;
+    environment.etc."davfs2/davfs2.conf".source = configFile;
+
+    services.davfs2.settings = {
+      dav_user = cfg.davUser;
+      dav_group = cfg.davGroup;
+    };
 
     users.groups = optionalAttrs (cfg.davGroup == "davfs2") {
       davfs2.gid = config.ids.gids.davfs2;

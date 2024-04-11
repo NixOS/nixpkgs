@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "otpclient";
-  version = "3.3.0";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "paolostivanin";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ca0lGlpR9ynaGQPNLoe7/MegXcyRxLltF/65DJC3830=";
+    hash = "sha256-3Nv2ci8MBjvWc7gF5UOJnyfSV8XK0REN1XwI8RUYgWI=";
   };
 
   nativeBuildInputs = [

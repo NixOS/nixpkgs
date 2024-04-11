@@ -36,6 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python client for Vizio SmartCast";
+    mainProgram = "pyvizio";
     homepage = "https://github.com/vkorn/pyvizio";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];

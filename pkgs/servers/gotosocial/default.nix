@@ -9,11 +9,11 @@ let
   owner = "superseriousbusiness";
   repo = "gotosocial";
 
-  version = "0.13.2";
+  version = "0.14.2";
 
   web-assets = fetchurl {
     url = "https://github.com/${owner}/${repo}/releases/download/v${version}/${repo}_${version}_web-assets.tar.gz";
-    hash = "sha256-Iyqn0/VyigmOhlyyz1NfvNIXmWtF617QbWzM2c7jHWw=";
+    hash = "sha256-3aSOP8BTHdlODQnZr6DOZuybLl+02SWgP9YZ21guAPU=";
   };
 in
 buildGoModule rec {
@@ -23,7 +23,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     inherit owner repo;
     rev = "refs/tags/v${version}";
-    hash = "sha256-VQnE4Xff4gtjQ6V2B42zK8UjosBWEMgcL/3Q8S0wc5Q=";
+    hash = "sha256-oeOxP9FkGsOH66Uk946H0b/zggz536YvRRuo1cINxSM=";
   };
 
   vendorHash = null;
@@ -43,6 +43,19 @@ buildGoModule rec {
   # tests are working only on x86_64-linux
   doCheck = stdenv.isLinux && stdenv.isx86_64;
 
+  checkFlags =
+    let
+      # flaky / broken tests
+      skippedTests = [
+        # See: https://github.com/superseriousbusiness/gotosocial/issues/2651
+        "TestPage/minID,_maxID_and_limit_set"
+        # See: https://github.com/superseriousbusiness/gotosocial/pull/2760. Stop skipping
+        # this test when fixed for go 1.21.8 and above
+        "TestValidationTestSuite/TestValidateEmail"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
   passthru.tests.gotosocial = nixosTests.gotosocial;
 
   meta = with lib; {
@@ -56,7 +69,7 @@ buildGoModule rec {
       advertised to! A light-weight alternative to Mastodon
       and Pleroma, with support for clients!
     '';
-    maintainers = with maintainers; [ misuzu ];
+    maintainers = with maintainers; [ misuzu blakesmith ];
     license = licenses.agpl3Only;
   };
 }

@@ -36,6 +36,7 @@ buildGoModule rec {
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "Command line tool for installing and using Jenkins X";
+    mainProgram = "jx";
     homepage = "https://jenkins-x.io";
     longDescription = ''
       Jenkins X provides automated CI+CD for Kubernetes with Preview

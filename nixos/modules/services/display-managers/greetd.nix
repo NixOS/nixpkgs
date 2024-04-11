@@ -8,7 +8,7 @@ let
 in
 {
   options.services.greetd = {
-    enable = mkEnableOption (lib.mdDoc "greetd");
+    enable = mkEnableOption (lib.mdDoc "greetd, a minimal and flexible login manager daemon");
 
     package = mkPackageOption pkgs [ "greetd" "greetd" ] { };
 
@@ -61,6 +61,8 @@ in
     systemd.services."autovt@${tty}".enable = false;
 
     systemd.services.greetd = {
+      aliases = [ "display-manager.service" ];
+
       unitConfig = {
         Wants = [
           "systemd-user-sessions.service"
@@ -78,7 +80,7 @@ in
       serviceConfig = {
         ExecStart = "${pkgs.greetd.greetd}/bin/greetd --config ${settingsFormat.generate "greetd.toml" cfg.settings}";
 
-        Restart = mkIf cfg.restart "always";
+        Restart = mkIf cfg.restart "on-success";
 
         # Defaults from greetd upstream configuration
         IgnoreSIGPIPE = false;

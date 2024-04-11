@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , cython
 , joblib
+, matplotlib
 , numpy
 , pandas
 , scikit-learn
@@ -46,7 +47,15 @@ buildPythonPackage rec {
     cd $out/${python.sitePackages}
   '';
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    matplotlib
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   disabledTests= [
     # touches internet
     "test_load_from_web"

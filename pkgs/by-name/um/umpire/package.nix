@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "umpire";
-  version = "2023.06.0";
+  version = "2024.02.0";
 
   src = fetchFromGitHub {
     owner = "LLNL";
     repo = "umpire";
     rev = "v${version}";
-    hash = "sha256-gdwr0ACCfkrtlVROPhxM7zT7SaCo2Eg1etrPFN4JHaA=";
+    hash = "sha256-0xJrICpGHQCLXfhDfS0/6gD3wrM9y6XB4XxyjG3vWGw=";
     fetchSubmodules = true;
   };
 

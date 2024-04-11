@@ -52,9 +52,10 @@
 /pkgs/pkgs-lib                                   @infinisil
 ## Format generators/serializers
 /pkgs/pkgs-lib/formats/libconfig                 @ckiee @h7x4
+/pkgs/pkgs-lib/formats/hocon                     @h7x4
 
 # pkgs/by-name
-/pkgs/test/nixpkgs-check-by-name @infinisil
+/pkgs/test/check-by-name @infinisil
 /pkgs/by-name/README.md @infinisil
 /pkgs/top-level/by-name-overlay.nix @infinisil
 /.github/workflows/check-by-name.yml @infinisil
@@ -130,13 +131,13 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius @ma27
 /pkgs/development/interpreters/python/hooks                 @FRidh @jonringer
 
 # Haskell
-/doc/languages-frameworks/haskell.section.md  @cdepillabout @sternenseemann @maralorn @ncfavier
-/maintainers/scripts/haskell                  @cdepillabout @sternenseemann @maralorn @ncfavier
-/pkgs/development/compilers/ghc               @cdepillabout @sternenseemann @maralorn @ncfavier
-/pkgs/development/haskell-modules             @cdepillabout @sternenseemann @maralorn @ncfavier
-/pkgs/test/haskell                            @cdepillabout @sternenseemann @maralorn @ncfavier
-/pkgs/top-level/release-haskell.nix           @cdepillabout @sternenseemann @maralorn @ncfavier
-/pkgs/top-level/haskell-packages.nix          @cdepillabout @sternenseemann @maralorn @ncfavier
+/doc/languages-frameworks/haskell.section.md  @sternenseemann @maralorn @ncfavier
+/maintainers/scripts/haskell                  @sternenseemann @maralorn @ncfavier
+/pkgs/development/compilers/ghc               @sternenseemann @maralorn @ncfavier
+/pkgs/development/haskell-modules             @sternenseemann @maralorn @ncfavier
+/pkgs/test/haskell                            @sternenseemann @maralorn @ncfavier
+/pkgs/top-level/release-haskell.nix           @sternenseemann @maralorn @ncfavier
+/pkgs/top-level/haskell-packages.nix          @sternenseemann @maralorn @ncfavier
 
 # Perl
 /pkgs/development/interpreters/perl @stigtsp @zakame @dasJ
@@ -158,7 +159,6 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius @ma27
 
 # C compilers
 /pkgs/development/compilers/gcc
-/pkgs/development/compilers/llvm @RaitoBezarius
 /pkgs/development/compilers/emscripten @raitobezarius
 /doc/languages-frameworks/emscripten.section.md @raitobezarius
 
@@ -184,11 +184,18 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 # Licenses
 /lib/licenses.nix @alyssais
 
-# Qt / KDE
-/pkgs/applications/kde @ttuegel
-/pkgs/desktops/plasma-5 @ttuegel
-/pkgs/development/libraries/kde-frameworks @ttuegel
-/pkgs/development/libraries/qt-5 @ttuegel
+# Qt
+/pkgs/development/libraries/qt-5 @NixOS/qt-kde
+/pkgs/development/libraries/qt-6 @NixOS/qt-kde
+
+# KDE / Plasma 5
+/pkgs/applications/kde @NixOS/qt-kde
+/pkgs/desktops/plasma-5 @NixOS/qt-kde
+/pkgs/development/libraries/kde-frameworks @NixOS/qt-kde
+
+# KDE / Plasma 6
+/pkgs/kde @NixOS/qt-kde
+/maintainers/scripts/kde @NixOS/qt-kde
 
 # PostgreSQL and related stuff
 /pkgs/servers/sql/postgresql @thoughtpolice @marsam
@@ -266,13 +273,13 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/applications/editors/vscode/extensions   @jonringer
 
 # PHP interpreter, packages, extensions, tests and documentation
-/doc/languages-frameworks/php.section.md          @aanderse @drupol @etu @globin @ma27 @talyz
-/nixos/tests/php                                  @aanderse @drupol @etu @globin @ma27 @talyz
-/pkgs/build-support/php/build-pecl.nix            @aanderse @drupol @etu @globin @ma27 @talyz
-/pkgs/build-support/php                                     @drupol @etu
-/pkgs/development/interpreters/php       @jtojnar @aanderse @drupol @etu @globin @ma27 @talyz
-/pkgs/development/php-packages                    @aanderse @drupol @etu @globin @ma27 @talyz
-/pkgs/top-level/php-packages.nix         @jtojnar @aanderse @drupol @etu @globin @ma27 @talyz
+/doc/languages-frameworks/php.section.md          @aanderse @drupol @globin @ma27 @talyz
+/nixos/tests/php                                  @aanderse @drupol @globin @ma27 @talyz
+/pkgs/build-support/php/build-pecl.nix            @aanderse @drupol @globin @ma27 @talyz
+/pkgs/build-support/php                                     @drupol
+/pkgs/development/interpreters/php       @jtojnar @aanderse @drupol @globin @ma27 @talyz
+/pkgs/development/php-packages                    @aanderse @drupol @globin @ma27 @talyz
+/pkgs/top-level/php-packages.nix         @jtojnar @aanderse @drupol @globin @ma27 @talyz
 
 # Docker tools
 /pkgs/build-support/docker                   @roberth
@@ -347,3 +354,8 @@ nixos/tests/zfs.nix                       @raitobezarius
 nixos/modules/services/continuous-integration/buildbot @Mic92 @zowoq
 nixos/tests/buildbot.nix                               @Mic92 @zowoq
 pkgs/development/tools/continuous-integration/buildbot @Mic92 @zowoq
+
+# Pretix
+pkgs/by-name/pr/pretix/ @mweinelt
+nixos/modules/services/web-apps/pretix.nix @mweinelt
+nixos/tests/web-apps/pretix.nix @mweinelt

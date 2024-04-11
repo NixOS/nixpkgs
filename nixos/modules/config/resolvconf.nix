@@ -28,6 +28,8 @@ let
     '' + optionalString cfg.useLocalResolver ''
       # This hosts runs a full-blown DNS resolver.
       name_servers='127.0.0.1'
+    '' + optionalString (cfg.useLocalResolver && config.networking.enableIPv6) ''
+      name_servers='::1'
     '' + cfg.extraConfig;
 
 in

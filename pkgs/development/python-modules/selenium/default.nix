@@ -1,12 +1,13 @@
 { lib
 , fetchFromGitHub
 , buildPythonPackage
+, selenium-manager
 , certifi
-, geckodriver
 , pytestCheckHook
 , pythonOlder
 , trio
 , trio-websocket
+, typing-extensions
 , urllib3
 , pytest-trio
 , nixosTests
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "selenium";
-  version = "4.15.0";
+  version = "4.18.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     repo = "selenium";
     # check if there is a newer tag with or without -python suffix
     rev = "refs/tags/selenium-${version}";
-    hash = "sha256-AacpHZw6N6RruuBO+bZ3/cxOODe9VPGblKmIm1ffqrc=";
+    hash = "sha256-1C9Epsk9rFlShxHGGzbWl6smrMzPn2h3yCWlzUIMpY8=";
   };
 
   preConfigure = ''
@@ -44,10 +45,10 @@ buildPythonPackage rec {
     cp ../third_party/js/selenium/webdriver.json $DST_FF/webdriver_prefs.json
   '' + lib.optionalString stdenv.isDarwin ''
     mkdir -p $DST_PREFIX/common/macos
-    cp ../common/manager/macos/selenium-manager $DST_PREFIX/common/macos
+    ln -s ${lib.getExe selenium-manager} $DST_PREFIX/common/macos/
   '' + lib.optionalString stdenv.isLinux ''
     mkdir -p $DST_PREFIX/common/linux/
-    cp ../common/manager/linux/selenium-manager $DST_PREFIX/common/linux/
+    ln -s ${lib.getExe selenium-manager} $DST_PREFIX/common/linux/
   '';
 
   propagatedBuildInputs = [
@@ -55,12 +56,15 @@ buildPythonPackage rec {
     trio
     trio-websocket
     urllib3
+    typing-extensions
   ] ++ urllib3.optional-dependencies.socks;
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-trio
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   passthru.tests = {
     testing-vaultwarden = nixosTests.vaultwarden;

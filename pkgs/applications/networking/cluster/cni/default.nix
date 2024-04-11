@@ -21,6 +21,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Container Network Interface - networking for Linux containers";
+    mainProgram = "cnitool";
     license = licenses.asl20;
     homepage = "https://github.com/containernetworking/cni";
     maintainers = with maintainers; [ offline vdemeester ];

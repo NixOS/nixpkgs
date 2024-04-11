@@ -41,6 +41,11 @@ buildPythonPackage rec {
     uritemplate
   ];
 
+  pytestFlagsArray = [
+    # ytest.PytestRemovedIn8Warning: Support for nose tests is deprecated and will be removed in a future release.
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   pythonImportsCheck = [ "rest_framework" ];
 
   meta = with lib; {

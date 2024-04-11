@@ -261,7 +261,7 @@ in
       services.gnome.core-shell.enable = true;
       services.gnome.core-utilities.enable = mkDefault true;
 
-      services.xserver.displayManager.sessionPackages = [ pkgs.gnome.gnome-session.sessions ];
+      services.displayManager.sessionPackages = [ pkgs.gnome.gnome-session.sessions ];
 
       environment.extraInit = ''
         ${concatMapStrings (p: ''
@@ -285,7 +285,7 @@ in
     })
 
     (mkIf flashbackEnabled {
-      services.xserver.displayManager.sessionPackages =
+      services.displayManager.sessionPackages =
         let
           wmNames = map (wm: wm.wmName) flashbackWms;
           namesAreUnique = lib.unique wmNames == wmNames;

@@ -6,7 +6,7 @@
 , jdk
 , jre
 , makeWrapper
-, canonicalize-jars-hook
+, stripJavaArchivesHook
 }:
 
 let
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     jdk
     fakeHostname
     makeWrapper
-    canonicalize-jars-hook
+    stripJavaArchivesHook
   ];
 
   buildPhase = ''

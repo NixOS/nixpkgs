@@ -29,6 +29,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = {
     description = "DHCPv6 network spoofing application";
+    mainProgram = "mitm6";
     homepage = "https://github.com/dirkjanm/mitm6";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ arcayr ];

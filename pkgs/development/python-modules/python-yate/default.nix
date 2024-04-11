@@ -33,6 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library for the yate telephony engine";
+    mainProgram = "yate_callgen";
     homepage = "https://github.com/eventphone/python-yate";
     changelog = "https://github.com/eventphone/python-yate/releases/tag/v${version}";
     license = with licenses; [ mit ];

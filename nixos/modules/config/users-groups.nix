@@ -496,6 +496,7 @@ let
     in
       filter types.shellPackage.check shells;
 
+  lingeringUsers = map (u: u.name) (attrValues (flip filterAttrs cfg.users (n: u: u.linger)));
 in {
   imports = [
     (mkAliasOptionModuleMD [ "users" "extraUsers" ] [ "users" "users" ])
@@ -649,7 +650,6 @@ in {
         home = "/root";
         shell = mkDefault cfg.defaultUserShell;
         group = "root";
-        initialHashedPassword = mkDefault "!";
       };
       nobody = {
         uid = ids.uids.nobody;
@@ -696,19 +696,31 @@ in {
       '';
     } else ""; # keep around for backwards compatibility
 
-    system.activationScripts.update-lingering = let
-      lingerDir = "/var/lib/systemd/linger";
-      lingeringUsers = map (u: u.name) (attrValues (flip filterAttrs cfg.users (n: u: u.linger)));
-      lingeringUsersFile = builtins.toFile "lingering-users"
-        (concatStrings (map (s: "${s}\n")
-          (sort (a: b: a < b) lingeringUsers)));  # this sorting is important for `comm` to work correctly
-    in stringAfter [ "users" ] ''
-      if [ -e ${lingerDir} ] ; then
+    systemd.services.linger-users = lib.mkIf ((builtins.length lingeringUsers) > 0) {
+      wantedBy = ["multi-user.target"];
+      after = ["systemd-logind.service"];
+      requires = ["systemd-logind.service"];
+
+      script = let
+        lingerDir = "/var/lib/systemd/linger";
+        lingeringUsersFile = builtins.toFile "lingering-users"
+          (concatStrings (map (s: "${s}\n")
+            (sort (a: b: a < b) lingeringUsers)));  # this sorting is important for `comm` to work correctly
+      in ''
+        mkdir -vp ${lingerDir}
         cd ${lingerDir}
-        ls ${lingerDir} | sort | comm -3 -1 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl disable-linger
-        ls ${lingerDir} | sort | comm -3 -2 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl  enable-linger
-      fi
-    '';
+        for user in $(ls); do
+          if ! id "$user" >/dev/null; then
+            echo "Removing linger for missing user $user"
+            rm --force -- "$user"
+          fi
+        done
+        ls | sort | comm -3 -1 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl disable-linger
+        ls | sort | comm -3 -2 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl  enable-linger
+      '';
+
+      serviceConfig.Type = "oneshot";
+    };
 
     # Warn about user accounts with deprecated password hashing schemes
     # This does not work when the users and groups are created by
@@ -859,7 +871,6 @@ in {
           }
           {
             assertion = let
-              xor = a: b: a && !b || b && !a;
               isEffectivelySystemUser = user.isSystemUser || (user.uid != null && user.uid < 1000);
             in xor isEffectivelySystemUser user.isNormalUser;
             message = ''
@@ -897,7 +908,26 @@ in {
     ));
 
     warnings =
-      builtins.filter (x: x != null) (
+      flip concatMap (attrValues cfg.users) (user: let
+        unambiguousPasswordConfiguration = 1 >= length (filter (x: x != null) ([
+          user.hashedPassword
+          user.hashedPasswordFile
+          user.password
+        ] ++ optionals cfg.mutableUsers [
+          # For immutable users, initialHashedPassword is set to hashedPassword,
+          # so using these options would always trigger the assertion.
+          user.initialHashedPassword
+          user.initialPassword
+        ]));
+      in optional (!unambiguousPasswordConfiguration) ''
+        The user '${user.name}' has multiple of the options
+        `hashedPassword`, `password`, `hashedPasswordFile`, `initialPassword`
+        & `initialHashedPassword` set to a non-null value.
+        The options silently discard others by the order of precedence
+        given above which can lead to surprising results. To resolve this warning,
+        set at most one of the options above to a non-`null` value.
+      '')
+      ++ builtins.filter (x: x != null) (
         flip mapAttrsToList cfg.users (_: user:
         # This regex matches a subset of the Modular Crypto Format (MCF)[1]
         # informal standard. Since this depends largely on the OS or the

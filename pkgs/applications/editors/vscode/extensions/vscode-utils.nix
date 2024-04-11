@@ -32,6 +32,10 @@ let
 
     inherit configurePhase buildPhase dontPatchELF dontStrip;
 
+    # Some .vsix files contain other directories (e.g., `package`) that we don't use.
+    # If other directories are present but `sourceRoot` is unset, the unpacker phase fails.
+    sourceRoot = "extension";
+
     installPrefix = "share/vscode/extensions/${vscodeExtUniqueId}";
 
     nativeBuildInputs = [ unzip ] ++ nativeBuildInputs;
@@ -74,6 +78,7 @@ let
     "publisher"
     "version"
     "sha256"
+    "hash"
     "arch"
   ];
 

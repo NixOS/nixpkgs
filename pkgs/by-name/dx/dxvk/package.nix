@@ -43,6 +43,7 @@ stdenvNoCC.mkDerivation (finalAttrs:
 
     meta = {
       description = "Setup script for DXVK";
+      mainProgram = "setup_dxvk.sh";
       homepage = "https://github.com/doitsujin/dxvk";
       changelog = "https://github.com/doitsujin/dxvk/releases";
       maintainers = [ lib.maintainers.reckenrode ];

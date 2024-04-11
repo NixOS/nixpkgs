@@ -71,5 +71,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ dotlambda foo-dogsquared ];
     platforms = lib.platforms.all;
     mainProgram = "warp";
+    broken = stdenv.isDarwin;
   };
 }

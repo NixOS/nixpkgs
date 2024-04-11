@@ -24,6 +24,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://www.python-excel.org/";
     description = "Library for developers to extract data from Microsoft Excel (tm) spreadsheet files";
+    mainProgram = "runxlrd.py";
     license = licenses.bsd0;
   };
 

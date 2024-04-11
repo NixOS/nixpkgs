@@ -51,6 +51,7 @@ mkDerivation rec {
   meta = {
     homepage = "http://www.qtrac.eu/diffpdfc.html";
     description = "Tool for diffing pdf files visually or textually";
+    mainProgram = "diffpdf";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ];
     platforms = with lib.platforms; linux;

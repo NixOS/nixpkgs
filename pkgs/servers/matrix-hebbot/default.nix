@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
     description = "A Matrix bot which can generate \"This Week in X\" like blog posts ";
     homepage = "https://github.com/haecker-felix/hebbot";
     changelog = "https://github.com/haecker-felix/hebbot/releases/tag/v${version}";
-    license = with licenses; [ agpl3 ];
+    license = with licenses; [ agpl3Only ];
     mainProgram = "hebbot";
     maintainers = with maintainers; [ a-kenji ];
   };

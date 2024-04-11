@@ -10,9 +10,9 @@
 , pytest-mock
 }:
 
-buildPythonPackage rec {
+let self = buildPythonPackage rec {
   pname = "pydantic-settings";
-  version = "2.1.0";
+  version = "2.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic-settings";
-    rev = "v${version}";
-    hash = "sha256-hU7u/AzaqCHKSUDHybsgXTW8IWi9hzBttPYDmMqdZbI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4o8LlIFVizoxb484lVT67e24jhtUl49otr1lX/2zZ4M=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +50,15 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
+  # ruff is a dependency of pytest-examples which is required to run the tests.
+  # We do not want all of the downstream packages that depend on pydantic-settings to also depend on ruff.
+  doCheck = false;
+  passthru.tests = {
+    pytest = self.overridePythonAttrs {
+      doCheck = true;
+    };
+  };
+
   meta = with lib; {
     description = "Settings management using pydantic";
     homepage = "https://github.com/pydantic/pydantic-settings";
@@ -57,4 +66,4 @@ buildPythonPackage rec {
     broken = lib.versionOlder pydantic.version "2.0.0";
     maintainers = with maintainers; [ ];
   };
-}
+}; in self

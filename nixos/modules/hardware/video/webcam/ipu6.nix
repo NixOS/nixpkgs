@@ -30,7 +30,10 @@ in
       ipu6-drivers
     ];
 
-    hardware.firmware = [ pkgs.ipu6-camera-bins ];
+    hardware.firmware = with pkgs; [
+      ipu6-camera-bins
+      ivsc-firmware
+    ];
 
     services.udev.extraRules = ''
       SUBSYSTEM=="intel-ipu6-psys", MODE="0660", GROUP="video"

@@ -5,7 +5,8 @@ buildPythonPackage rec {
   version = "4.19.25";
   format = "other";
 
-  disabled = isPyPy;
+  # relies on distutils
+  disabled = isPyPy || pythonAtLeast "3.12";
 
   src = fetchurl {
     url = "https://www.riverbankcomputing.com/static/Downloads/sip/${version}/sip-${version}.tar.gz";
@@ -35,6 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Creates C++ bindings for Python modules";
+    mainProgram = "sip";
     homepage    = "https://riverbankcomputing.com/";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ lovek323 sander ];

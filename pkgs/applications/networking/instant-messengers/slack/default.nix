@@ -45,14 +45,14 @@ let
 
   pname = "slack";
 
-  x86_64-darwin-version = "4.36.138";
-  x86_64-darwin-sha256 = "1dj4q98sva25kbniqnwz2l38lg48dhrdmjx31sg8j0ayrs82hha4";
+  x86_64-darwin-version = "4.37.94";
+  x86_64-darwin-sha256 = "01v7v977fq8mfsl0lipdc7ig55p2sknxzr1jmh8qxiq4f4y0rj5g";
 
-  x86_64-linux-version = "4.36.138";
-  x86_64-linux-sha256 = "06h258fvpprx37vjvd5sxl6bxnfcq3shviwx9wv8m9fmg2riwnsg";
+  x86_64-linux-version = "4.37.94";
+  x86_64-linux-sha256 = "1f1spl767ldrarvpxrayry2d0nyr22b8xacxl4g1r8raryvnyz0x";
 
-  aarch64-darwin-version = "4.36.138";
-  aarch64-darwin-sha256 = "10xg5aa668iq0n56la1rqgpbzw8jym0y8dgv99f1l7yn03fcwpql";
+  aarch64-darwin-version = "4.37.94";
+  aarch64-darwin-sha256 = "0gh45gvlbjzxh0fn24z15glxqih5lggam8w6kpawsxgivkw6rjcc";
 
   version = {
     x86_64-darwin = x86_64-darwin-version;
@@ -181,7 +181,11 @@ let
         --replace /usr/bin/ $out/bin/ \
         --replace /usr/share/pixmaps/slack.png slack \
         --replace bin/slack "bin/slack -s"
-
+    '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+      # Prevent Un-blacklist pipewire integration to enable screen sharing on wayland.
+      # https://github.com/flathub/com.slack.Slack/issues/101#issuecomment-1807073763
+      sed -i -e 's/,"WebRTCPipeWireCapturer"/,"LebRTCPipeWireCapturer"/' $out/lib/slack/resources/app.asar
+    '' + ''
       runHook postInstall
     '';
   };

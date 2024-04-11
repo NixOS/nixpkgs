@@ -84,5 +84,6 @@ buildFHSEnv {
     platforms = jdk.meta.platforms;
     hydraPlatforms = [ ];
     maintainers = with maintainers; [ arcayr bennofs ];
+    mainProgram = "burpsuite";
   };
 }

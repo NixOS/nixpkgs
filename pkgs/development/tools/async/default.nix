@@ -15,6 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A tool to parallelize shell commands";
+    mainProgram = "async";
     longDescription = ''
       `async` is a tool to run shell commands in parallel and is designed to be
       able to quickly parallelize shell scripts with minimal changes. It was

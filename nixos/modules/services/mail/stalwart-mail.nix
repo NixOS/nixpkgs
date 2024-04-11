@@ -32,10 +32,15 @@ in {
       global.tracing.level = mkDefault "info";
       queue.path = mkDefault "${dataDir}/queue";
       report.path = mkDefault "${dataDir}/reports";
+      store.db.type = mkDefault "sqlite";
       store.db.path = mkDefault "${dataDir}/data/index.sqlite3";
-      store.blob.type = mkDefault "local";
-      store.blob.local.path = mkDefault "${dataDir}/data/blobs";
+      store.blob.type = mkDefault "fs";
+      store.blob.path = mkDefault "${dataDir}/data/blobs";
+      storage.data = mkDefault "db";
+      storage.fts = mkDefault "db";
+      storage.blob = mkDefault "blob";
       resolver.type = mkDefault "system";
+      resolver.public-suffix = mkDefault ["https://publicsuffix.org/list/public_suffix_list.dat"];
     };
 
     systemd.services.stalwart-mail = {
@@ -57,8 +62,8 @@ in {
         KillSignal = "SIGINT";
         Restart = "on-failure";
         RestartSec = 5;
-        StandardOutput = "syslog";
-        StandardError = "syslog";
+        StandardOutput = "journal";
+        StandardError = "journal";
         SyslogIdentifier = "stalwart-mail";
 
         DynamicUser = true;

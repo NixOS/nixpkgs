@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "gtt";
-  version = "8";
+  version = "9";
 
   src = fetchFromGitHub {
     owner = "eeeXun";
     repo = "gtt";
     rev = "v${version}";
-    hash = "sha256-HC1cz2CAjyuirzhn720RD9P0gFjtP+Dh1jTniDCWBz8=";
+    hash = "sha256-WDuQ8daKA8Skto4soG9L4ChkYzV18BwVZh+AbyDyXYs=";
   };
 
   vendorHash = "sha256-5Uwi1apowHoUtvkSgmUV9WbfpVQFTqJ9GA2sRnC5nFw=";

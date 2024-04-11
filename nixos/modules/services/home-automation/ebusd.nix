@@ -15,12 +15,12 @@ let
     "--port=${toString cfg.port}"
     "--configpath=${cfg.configpath}"
     "--scanconfig=${cfg.scanconfig}"
+    "--log=all:${cfg.logs.all}"
     "--log=main:${cfg.logs.main}"
     "--log=network:${cfg.logs.network}"
     "--log=bus:${cfg.logs.bus}"
     "--log=update:${cfg.logs.update}"
     "--log=other:${cfg.logs.other}"
-    "--log=all:${cfg.logs.all}"
   ] ++ lib.optionals cfg.readonly [
     "--readonly"
   ] ++ lib.optionals cfg.mqtt.enable [
@@ -44,7 +44,7 @@ in
   meta.maintainers = with maintainers; [ nathan-gs ];
 
   options.services.ebusd = {
-    enable = mkEnableOption (lib.mdDoc "ebusd service");
+    enable = mkEnableOption (lib.mdDoc "ebusd, a daemon for communication with eBUS heating systems");
 
     device = mkOption {
       type = types.str;

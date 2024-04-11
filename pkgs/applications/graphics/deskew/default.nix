@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
     license = with licenses; [ mit mpl11 ];
     maintainers = with maintainers; [ryantm];
     platforms = platforms.all;
+    mainProgram = "deskew";
   };
 
 }

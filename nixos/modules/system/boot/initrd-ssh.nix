@@ -93,6 +93,21 @@ in
       defaultText = literalExpression "config.users.users.root.openssh.authorizedKeys.keys";
       description = lib.mdDoc ''
         Authorized keys for the root user on initrd.
+        You can combine the `authorizedKeys` and `authorizedKeyFiles` options.
+      '';
+      example = [
+        "ssh-rsa AAAAB3NzaC1yc2etc/etc/etcjwrsh8e596z6J0l7 example@host"
+        "ssh-ed25519 AAAAC3NzaCetcetera/etceteraJZMfk3QPfQ foo@bar"
+      ];
+    };
+
+    authorizedKeyFiles = mkOption {
+      type = types.listOf types.path;
+      default = config.users.users.root.openssh.authorizedKeys.keyFiles;
+      defaultText = literalExpression "config.users.users.root.openssh.authorizedKeys.keyFiles";
+      description = lib.mdDoc ''
+        Authorized keys taken from files for the root user on initrd.
+        You can combine the `authorizedKeyFiles` and `authorizedKeys` options.
       '';
     };
 
@@ -152,7 +167,7 @@ in
   in mkIf enabled {
     assertions = [
       {
-        assertion = cfg.authorizedKeys != [];
+        assertion = cfg.authorizedKeys != [] || cfg.authorizedKeyFiles != [];
         message = "You should specify at least one authorized key for initrd SSH";
       }
 
@@ -206,6 +221,9 @@ in
       ${concatStrings (map (key: ''
         echo ${escapeShellArg key} >> /root/.ssh/authorized_keys
       '') cfg.authorizedKeys)}
+      ${concatStrings (map (keyFile: ''
+        cat ${keyFile} >> /root/.ssh/authorized_keys
+      '') cfg.authorizedKeyFiles)}
 
       ${flip concatMapStrings cfg.hostKeys (path: ''
         # keys from Nix store are world-readable, which sshd doesn't like
@@ -236,9 +254,13 @@ in
 
       users.root.shell = mkIf (config.boot.initrd.network.ssh.shell != null) config.boot.initrd.network.ssh.shell;
 
-      contents."/etc/ssh/authorized_keys.d/root".text =
-        concatStringsSep "\n" config.boot.initrd.network.ssh.authorizedKeys;
-      contents."/etc/ssh/sshd_config".text = sshdConfig;
+      contents = {
+        "/etc/ssh/sshd_config".text = sshdConfig;
+        "/etc/ssh/authorized_keys.d/root".text =
+          concatStringsSep "\n" (
+            config.boot.initrd.network.ssh.authorizedKeys ++
+            (map (file: lib.fileContents file) config.boot.initrd.network.ssh.authorizedKeyFiles));
+      };
       storePaths = ["${package}/bin/sshd"];
 
       services.sshd = {

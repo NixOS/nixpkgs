@@ -36,16 +36,15 @@
 , withLinuxHeaders ? false
 , profilingLibraries ? false
 , withGd ? false
-, withLibcrypt ? false
 , extraBuildInputs ? []
 , extraNativeBuildInputs ? []
 , ...
 } @ args:
 
 let
-  version = "2.38";
-  patchSuffix = "-27";
-  sha256 = "sha256-+4KZiZiyspllRnvBtp0VLpwwfSzzAcnq+0VVt3DvP9I=";
+  version = "2.39";
+  patchSuffix = "-5";
+  sha256 = "sha256-93vUfPgXDFc2Wue/hmlsEYrbOxINMlnGTFAtPcHi2SY=";
 in
 
 assert withLinuxHeaders -> linuxHeaders != null;
@@ -59,14 +58,14 @@ stdenv.mkDerivation ({
   patches =
     [
       /* No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
-          $ git fetch --all -p && git checkout origin/release/2.38/master && git describe
-          glibc-2.38-27-g750a45a783
-          $ git show --minimal --reverse glibc-2.38.. | gzip -9n --rsyncable - > 2.38-master.patch.gz
+          $ git fetch --all -p && git checkout origin/release/2.39/master && git describe
+          glibc-2.39-5-ge0910f1d32
+          $ git show --minimal --reverse glibc-2.39.. > 2.39-master.patch
 
          To compare the archive contents zdiff can be used.
-          $ zdiff -u 2.38-master.patch.gz ../nixpkgs/pkgs/development/libraries/glibc/2.38-master.patch.gz
+          $ diff -u 2.39-master.patch ../nixpkgs/pkgs/development/libraries/glibc/2.39-master.patch
        */
-      ./2.38-master.patch.gz
+      ./2.39-master.patch
 
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch
@@ -155,7 +154,7 @@ stdenv.mkDerivation ({
       # and on aarch64 with binutils 2.30 or later.
       # https://sourceware.org/glibc/wiki/PortStatus
       "--enable-static-pie"
-    ] ++ lib.optionals stdenv.hostPlatform.isx86 [
+    ] ++ lib.optionals stdenv.hostPlatform.isx86_64 [
       # Enable Intel Control-flow Enforcement Technology (CET) support
       "--enable-cet"
     ] ++ lib.optionals withLinuxHeaders [
@@ -172,8 +171,7 @@ stdenv.mkDerivation ({
       # so the glibc does not depend on its compiler store path
       "libc_cv_as_needed=no"
     ]
-    ++ lib.optional withGd "--with-gd"
-    ++ lib.optional withLibcrypt "--enable-crypt";
+    ++ lib.optional withGd "--with-gd";
 
   makeFlags = (args.makeFlags or []) ++ [
     "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"

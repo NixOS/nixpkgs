@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
+    mainProgram = "pactester";
   };
 }

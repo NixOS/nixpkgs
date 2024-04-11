@@ -23,6 +23,7 @@ python3Packages.buildPythonApplication {
   meta = {
     homepage = "https://github.com/nvllsvm/base16-shell-preview";
     description = "Browse and preview Base16 Shell themes in your terminal";
+    mainProgram = "base16-shell-preview";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ AndersonTorres ];
   };

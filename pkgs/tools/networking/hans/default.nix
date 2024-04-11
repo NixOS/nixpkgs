@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     homepage = "https://code.gerade.org/hans/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    mainProgram = "hans";
   };
 }

@@ -7,6 +7,9 @@ let
   cfg = config.services.mysql;
 
   isMariaDB = lib.getName cfg.package == lib.getName pkgs.mariadb;
+  isOracle = lib.getName cfg.package == lib.getName pkgs.mysql80;
+  # Oracle MySQL has supported "notify" service type since 8.0
+  hasNotify = isMariaDB || (isOracle && versionAtLeast cfg.package.version "8.0");
 
   mysqldOptions =
     "--user=${cfg.user} --datadir=${cfg.dataDir} --basedir=${cfg.package}";
@@ -377,19 +380,11 @@ in
         # The super user account to use on *first* run of MySQL server
         superUser = if isMariaDB then cfg.user else "root";
       in ''
-        ${optionalString (!isMariaDB) ''
+        ${optionalString (!hasNotify) ''
           # Wait until the MySQL server is available for use
-          count=0
           while [ ! -e /run/mysqld/mysqld.sock ]
           do
-              if [ $count -eq 30 ]
-              then
-                  echo "Tried 30 times, giving up..."
-                  exit 1
-              fi
-
               echo "MySQL daemon not yet started. Waiting for 1 second..."
-              count=$((count++))
               sleep 1
           done
         ''}
@@ -477,7 +472,7 @@ in
 
       serviceConfig = mkMerge [
         {
-          Type = if isMariaDB then "notify" else "simple";
+          Type = if hasNotify then "notify" else "simple";
           Restart = "on-abort";
           RestartSec = "5s";
 

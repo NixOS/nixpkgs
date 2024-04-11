@@ -18,6 +18,7 @@
 , openal
 , jdk8
 , jdk17
+, jdk21
 , gamemode
 , flite
 , mesa-demos
@@ -39,7 +40,7 @@
   # itself can take slightly longer to start
 , withWaylandGLFW ? false
 
-, jdks ? [ jdk17 jdk8 ]
+, jdks ? [ jdk21 jdk17 jdk8 ]
 , additionalLibs ? [ ]
 , additionalPrograms ? [ ]
 }:

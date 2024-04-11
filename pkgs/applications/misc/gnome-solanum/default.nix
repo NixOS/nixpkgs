@@ -10,7 +10,7 @@
 , ninja
 , pkg-config
 , rustc
-, wrapGAppsHook
+, wrapGAppsHook4
 , python3
 , git
 , glib
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
     python3
     git
     desktop-file-utils

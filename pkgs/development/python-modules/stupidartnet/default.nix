@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "stupidartnet";
-  version = "1.4.0";
+  version = "1.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "cpvalente";
     repo = "stupidArtnet";
     rev = "refs/tags/${version}";
-    hash = "sha256-2LfK63FJcdnXfDLuUzYNlspj1jmtw00S6el49cH+RRM=";
+    hash = "sha256-6vEzInt1ofVVjTZAOH0Zw3BdwpX//1ZWwJqWPP5fIC8=";
   };
 
   nativeBuildInputs = [

@@ -20,6 +20,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python package to control BlinkStick USB devices";
+    mainProgram = "blinkstick";
     homepage = "https://github.com/arvydas/blinkstick-python";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ np perstark ];

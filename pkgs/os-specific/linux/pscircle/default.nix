@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.com/mildlyparallel/pscircle";
     description = "Visualize Linux processes in a form of a radial tree";
+    mainProgram = "pscircle";
     license = licenses.gpl2;
     maintainers = [ maintainers.ldesgoui ];
     platforms = platforms.linux;

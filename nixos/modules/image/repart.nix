@@ -6,6 +6,8 @@
 let
   cfg = config.image.repart;
 
+  inherit (utils.systemdUtils.lib) GPTMaxLabelLength;
+
   partitionOptions = {
     options = {
       storePaths = lib.mkOption {
@@ -60,6 +62,11 @@ let
       };
     };
   };
+
+  mkfsOptionsToEnv = opts: lib.mapAttrs' (fsType: options: {
+    name = "SYSTEMD_REPART_MKFS_OPTIONS_${lib.toUpper fsType}";
+    value = builtins.concatStringsSep " " options;
+  }) opts;
 in
 {
   options.image.repart = {
@@ -183,9 +190,77 @@ in
       '';
     };
 
+    mkfsOptions = lib.mkOption {
+      type = with lib.types; attrsOf (listOf str);
+      default = {};
+      example = lib.literalExpression ''
+        {
+          vfat = [ "-S 512" "-c" ];
+        }
+      '';
+      description = lib.mdDoc ''
+        Specify extra options for created file systems. The specified options
+        are converted to individual environment variables of the format
+        `SYSTEMD_REPART_MKFS_OPTIONS_<FSTYPE>`.
+
+        See [upstream systemd documentation](https://github.com/systemd/systemd/blob/v255/docs/ENVIRONMENT.md?plain=1#L575-L577)
+        for information about the usage of these environment variables.
+
+        The example would produce the following environment variable:
+        ```
+        SYSTEMD_REPART_MKFS_OPTIONS_VFAT="-S 512 -c"
+        ```
+      '';
+    };
+
+    finalPartitions = lib.mkOption {
+      type = lib.types.attrs;
+      internal = true;
+      readOnly = true;
+      description = lib.mdDoc ''
+        Convenience option to access partitions with added closures.
+      '';
+    };
+
   };
 
   config = {
+
+    assertions = lib.mapAttrsToList (fileName: partitionConfig:
+      let
+        inherit (partitionConfig) repartConfig;
+        labelLength = builtins.stringLength repartConfig.Label;
+      in
+      {
+        assertion = repartConfig ? Label -> GPTMaxLabelLength >= labelLength;
+        message = ''
+          The partition label '${repartConfig.Label}'
+          defined for '${fileName}' is ${toString labelLength} characters long,
+          but the maximum label length supported by UEFI is ${toString
+          GPTMaxLabelLength}.
+        '';
+      }
+    ) cfg.partitions;
+
+    warnings = lib.filter (v: v != null) (lib.mapAttrsToList (fileName: partitionConfig:
+      let
+        inherit (partitionConfig) repartConfig;
+        suggestedMaxLabelLength = GPTMaxLabelLength - 2;
+        labelLength = builtins.stringLength repartConfig.Label;
+      in
+        if (repartConfig ? Label && labelLength >= suggestedMaxLabelLength) then ''
+          The partition label '${repartConfig.Label}'
+          defined for '${fileName}' is ${toString labelLength} characters long.
+          The suggested maximum label length is ${toString
+          suggestedMaxLabelLength}.
+
+          If you use sytemd-sysupdate style A/B updates, this might
+          not leave enough space to increment the version number included in
+          the label in a future release. For example, if your label is
+          ${toString GPTMaxLabelLength} characters long (the maximum enforced by UEFI) and
+          you're at version 9, you cannot increment this to 10.
+        '' else null
+    ) cfg.partitions);
 
     image.repart =
       let
@@ -196,6 +271,16 @@ in
             "zstd" = ".zst";
             "xz" = ".xz";
           }."${cfg.compression.algorithm}";
+
+        makeClosure = paths: pkgs.closureInfo { rootPaths = paths; };
+
+        # Add the closure of the provided Nix store paths to cfg.partitions so
+        # that amend-repart-definitions.py can read it.
+        addClosure = _name: partitionConfig: partitionConfig // (
+          lib.optionalAttrs
+            (partitionConfig.storePaths or [ ] != [ ])
+            { closure = "${makeClosure partitionConfig.storePaths}/store-paths"; }
+        );
       in
       {
         name = lib.mkIf (config.system.image.id != null) (lib.mkOptionDefault config.system.image.id);
@@ -211,6 +296,8 @@ in
             "xz" = 3;
           }."${cfg.compression.algorithm}";
         };
+
+        finalPartitions = lib.mapAttrs addClosure cfg.partitions;
       };
 
     system.build.image =
@@ -219,34 +306,25 @@ in
           (f: f != null)
           (lib.mapAttrsToList (_n: v: v.repartConfig.Format or null) cfg.partitions);
 
-        makeClosure = paths: pkgs.closureInfo { rootPaths = paths; };
-
-        # Add the closure of the provided Nix store paths to cfg.partitions so
-        # that amend-repart-definitions.py can read it.
-        addClosure = _name: partitionConfig: partitionConfig // (
-          lib.optionalAttrs
-            (partitionConfig.storePaths or [ ] != [ ])
-            { closure = "${makeClosure partitionConfig.storePaths}/store-paths"; }
-        );
-
-        finalPartitions = lib.mapAttrs addClosure cfg.partitions;
 
         format = pkgs.formats.ini { };
 
         definitionsDirectory = utils.systemdUtils.lib.definitions
           "repart.d"
           format
-          (lib.mapAttrs (_n: v: { Partition = v.repartConfig; }) finalPartitions);
+          (lib.mapAttrs (_n: v: { Partition = v.repartConfig; }) cfg.finalPartitions);
 
-        partitions = pkgs.writeText "partitions.json" (builtins.toJSON finalPartitions);
+        partitionsJSON = pkgs.writeText "partitions.json" (builtins.toJSON cfg.finalPartitions);
+
+        mkfsEnv = mkfsOptionsToEnv cfg.mkfsOptions;
       in
       pkgs.callPackage ./repart-image.nix {
         systemd = cfg.package;
-        inherit (cfg) imageFileBasename compression split seed sectorSize;
-        inherit fileSystems definitionsDirectory partitions;
+        inherit (cfg) name version imageFileBasename compression split seed sectorSize;
+        inherit fileSystems definitionsDirectory partitionsJSON mkfsEnv;
       };
 
-    meta.maintainers = with lib.maintainers; [ nikstur ];
+    meta.maintainers = with lib.maintainers; [ nikstur willibutz ];
 
   };
 }

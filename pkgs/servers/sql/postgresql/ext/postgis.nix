@@ -13,6 +13,8 @@
 , libiconv
 , pcre2
 , nixosTests
+, jitSupport
+, llvm
 }:
 
 let
@@ -20,24 +22,22 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "postgis";
-  version = "3.4.1";
+  version = "3.4.2";
 
   outputs = [ "out" "doc" ];
 
   src = fetchurl {
     url = "https://download.osgeo.org/postgis/source/postgis-${version}.tar.gz";
-    sha256 = "sha256-/vahQSE9D/J79FszuEnMOWwi3bH/xv7UNUacnokfyB0=";
+    sha256 = "sha256-yMh0wAukqYSocDCva/lUSCFQIGCtRz1clvHU0INcWJI=";
   };
 
   buildInputs = [ libxml2 postgresql geos proj gdal json_c protobufc pcre2.dev ]
                 ++ lib.optional stdenv.isDarwin libiconv;
-  nativeBuildInputs = [ perl pkg-config ] ++ lib.optional postgresql.jitSupport postgresql.llvm;
+  nativeBuildInputs = [ perl pkg-config ] ++ lib.optional jitSupport llvm;
   dontDisableStatic = true;
 
   # postgis config directory assumes /include /lib from the same root for json-c library
-  NIX_LDFLAGS = "-L${lib.getLib json_c}/lib"
-    # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-    + lib.optionalString (stdenv.cc.isClang && stdenv.cc.libcxx != null) " -l${stdenv.cc.libcxx.cxxabi.libName}";
+  env.NIX_LDFLAGS = "-L${lib.getLib json_c}/lib";
 
 
   preConfigure = ''
@@ -83,6 +83,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; teams.geospatial.members ++ [ marcweber ];
     inherit (postgresql.meta) platforms;
-    broken = versionOlder postgresql.version "12";
   };
 }

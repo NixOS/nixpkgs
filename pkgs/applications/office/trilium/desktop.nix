@@ -7,13 +7,13 @@
 
 let
   pname = "trilium-desktop";
-  version = "0.62.5";
+  version = "0.63.5";
 
   linuxSource.url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
-  linuxSource.sha256 = "1f2f8nvj1gx9i797mck5aazgz821sjcs06538py9za4m532i66pj";
+  linuxSource.sha256 = "1a2h96gd04mqn6cskjhj657dx9wqvlqsvgydjbaqpwc8593swpb3";
 
   darwinSource.url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-mac-x64-${version}.zip";
-  darwinSource.sha256 = "19zny4akf3hxqjqayiz4s47vdblbrn4kgwg3nykljv4lpqnqkyn3";
+  darwinSource.sha256 = "155y85vsawrqd0wcdpl87sv9s2nkamc73aiklsw8nbw1x96hqvap";
 
   meta = metaCommon // {
     mainProgram = "trilium";

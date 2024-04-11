@@ -30,5 +30,6 @@ appimageTools.wrapType2 {
     homepage = "https://requestly.io";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ dit7ya ];
+    mainProgram = "requestly";
   };
 }

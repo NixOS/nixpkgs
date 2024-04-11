@@ -10,16 +10,17 @@
 , dejavu_fonts
 , autoreconfHook
 , CoreFoundation
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fontconfig";
   version = "2.15.0";
 
   outputs = [ "bin" "dev" "lib" "out" ]; # $out contains all the config
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/fontconfig/release/${pname}-${version}.tar.xz";
+    url = with finalAttrs; "https://www.freedesktop.org/software/fontconfig/release/${pname}-${version}.tar.xz";
     hash = "sha256-Y6BljQ4G4PqIYQZFK1jvBPIfWCAuoCqUw53g0zNdfA4=";
   };
 
@@ -77,11 +78,18 @@ stdenv.mkDerivation rec {
     rm -r $bin/share/man/man3
   '';
 
+  passthru.tests = {
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
+
   meta = with lib; {
     description = "A library for font customization and configuration";
     homepage = "http://fontconfig.org/";
     license = licenses.bsd2; # custom but very bsd-like
     platforms = platforms.all;
     maintainers = with maintainers; teams.freedesktop.members ++ [ ];
+    pkgConfigModules = [ "fontconfig" ];
   };
-}
+})

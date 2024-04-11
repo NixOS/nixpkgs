@@ -13,6 +13,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-6kdf+LwMrIjwC3uZHlMdpEHvonxKfr86PQaMOgzgYOc=";
 
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
+
   doCheck = false; # tries to resolve DNS
 
   meta = {
@@ -20,5 +26,6 @@ buildGoModule rec {
     homepage = "https://github.com/natesales/q";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.das_j ];
+    mainProgram = "q";
   };
 }

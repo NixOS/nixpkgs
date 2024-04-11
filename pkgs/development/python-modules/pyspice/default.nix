@@ -14,12 +14,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "PySpice";
+  pname = "pyspice";
   version = "1.5";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "PySpice";
+    inherit version;
     sha256 = "d28448accad98959e0f5932af8736e90a1f3f9ff965121c6881d24cdfca23d22";
   };
 

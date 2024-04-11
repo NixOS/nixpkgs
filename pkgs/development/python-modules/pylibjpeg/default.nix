@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , pythonOlder
 , pytestCheckHook
+, flit-core
 , setuptools
 , numpy
 , pydicom
@@ -31,7 +32,7 @@ in
 
 buildPythonPackage rec {
   pname = "pylibjpeg";
-  version = "1.4.0";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -40,10 +41,10 @@ buildPythonPackage rec {
     owner = "pydicom";
     repo = "pylibjpeg";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Px1DyYDkKAUdYo+ZxZ1w7TkPzWN++styiFl02iQOvyQ=";
+    hash = "sha256-qGtrphsBBVieGS/8rdymbsjLMU/QEd7zFNAANN8bD+k=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [ numpy ];
 

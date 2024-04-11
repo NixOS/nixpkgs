@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Ultra fast and sensitive sequence search and clustering suite";
+    mainProgram = "mmseqs";
     homepage = "https://mmseqs.com/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ natsukium ];

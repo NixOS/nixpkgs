@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "colord-gtk";
-  version = "0.3.0";
+  version = "0.3.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/colord/releases/${pname}-${version}.tar.xz";
-    sha256 = "uUZmVtZtmm/7wt0E+pHI9q9Ra/nvqstpdE7sD1bzwdA=";
+    sha256 = "wXa4ibdWMKF/Tj1+8kwJo+EjaOYzSWCHRZyLU6w6Ei0=";
   };
 
   nativeBuildInputs = [

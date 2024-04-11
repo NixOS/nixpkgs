@@ -129,6 +129,12 @@ in
       example = lib.literalExpression "\"1y\"";
     };
 
+    debugMode = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = lib.mdDoc "Run Stargazer in debug mode.";
+    };
+
     routes = lib.mkOption {
       type = lib.types.listOf
         (lib.types.submodule {
@@ -195,7 +201,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.stargazer}/bin/stargazer ${configFile}";
+        ExecStart = "${pkgs.stargazer}/bin/stargazer ${configFile} ${lib.optionalString cfg.debugMode "-D"}";
         Restart = "always";
         # User and group
         User = cfg.user;

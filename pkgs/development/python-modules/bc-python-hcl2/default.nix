@@ -2,14 +2,15 @@
 , buildPythonPackage
 , fetchPypi
 , lark
-, nose
+, pynose
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "bc-python-hcl2";
   version = "0.4.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -20,10 +21,11 @@ buildPythonPackage rec {
 
   # Nose is required during build process, so can not use `nativeCheckInputs`.
   buildInputs = [
-    nose
+    pynose
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     lark
   ];
 
@@ -45,5 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/amplify-education/python-hcl2";
     license = licenses.mit;
     maintainers = with maintainers; [ anhdle14 ];
+    mainProgram = "hcl2tojson";
   };
 }

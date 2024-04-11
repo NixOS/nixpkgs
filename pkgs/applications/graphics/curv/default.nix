@@ -64,5 +64,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     broken = stdenv.isDarwin;
     maintainers = with maintainers; [ pbsds ];
+    mainProgram = "curv";
   };
 }

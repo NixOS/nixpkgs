@@ -47,5 +47,6 @@ appimageTools.wrapType2 rec {
     license = licenses.mit;
     maintainers = with maintainers; [ tiagolobocastro ];
     platforms = [ "x86_64-linux" "aarch64-linux" "armv7l-linux" ];
+    mainProgram = "p3x-onenote";
   };
 }

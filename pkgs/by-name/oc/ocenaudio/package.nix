@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ocenaudio";
-  version = "3.13.3";
+  version = "3.13.5";
 
   src = fetchurl {
-    url = "https://www.ocenaudio.com/downloads/index.php/ocenaudio_debian9_64.deb?version=${version}";
-    hash = "sha256-B0+NyFZ9c0ljzYMJm3741TpoxFS0Zo6hxzhadYFofSA=";
+    url = "https://www.ocenaudio.com/downloads/index.php/ocenaudio_debian9_64.deb?version=v${version}";
+    hash = "sha256-9eDDllf6D2hAhjztPhi1MrUky7zQfiE4uLAbfRDx+7s=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     mv $out/usr/share $out/share
     rm -rf $out/usr
     substituteInPlace $out/share/applications/ocenaudio.desktop \
-      --replace "/opt/ocenaudio/bin/ocenaudio" "ocenaudio"
+      --replace-fail "/opt/ocenaudio/bin/ocenaudio" "ocenaudio"
     mkdir -p $out/share/licenses/ocenaudio
     mv $out/bin/ocenaudio_license.txt $out/share/licenses/ocenaudio/LICENSE
 

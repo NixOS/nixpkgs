@@ -1,4 +1,4 @@
-{ config, pkgs, lib, options, ... }:
+{ config, pkgs, lib, options, utils, ... }:
 
 let
   inherit (lib) concatStrings foldl foldl' genAttrs literalExpression maintainers
@@ -35,6 +35,7 @@ let
     "dovecot"
     "fastly"
     "flow"
+    "fritz"
     "fritzbox"
     "graphite"
     "idrac"
@@ -54,6 +55,7 @@ let
     "modemmanager"
     "mongodb"
     "mysqld"
+    "nats"
     "nextcloud"
     "nginx"
     "nginxlog"
@@ -94,10 +96,10 @@ let
     "zfs"
   ]
     (name:
-      import (./. + "/exporters/${name}.nix") { inherit config lib pkgs options; }
+      import (./. + "/exporters/${name}.nix") { inherit config lib pkgs options utils; }
     )) // (mapAttrs
     (name: params:
-      import (./. + "/exporters/${params.name}.nix") { inherit config lib pkgs options; type = params.type ; })
+      import (./. + "/exporters/${params.name}.nix") { inherit config lib pkgs options utils; type = params.type ; })
     {
       exportarr-bazarr = {
         name = "exportarr";
@@ -168,6 +170,17 @@ let
         is true. It is used as `ip46tables -I nixos-fw firewallFilter -j nixos-fw-accept`.
       '';
     };
+    firewallRules = mkOption {
+      type = types.nullOr types.lines;
+      default = null;
+      example = literalExpression ''
+        iifname "eth0" tcp dport ${toString port} counter accept
+      '';
+      description = lib.mdDoc ''
+        Specify rules for nftables to add to the input chain
+        when {option}`services.prometheus.exporters.${name}.openFirewall` is true.
+      '';
+    };
     user = mkOption {
       type = types.str;
       default = "${name}-exporter";
@@ -193,6 +206,7 @@ let
         } // extraOpts);
       } ({ config, ... }: mkIf config.openFirewall {
         firewallFilter = mkDefault "-p tcp -m tcp --dport ${toString config.port}";
+        firewallRules = mkDefault ''tcp dport ${toString config.port} accept comment "${name}-exporter"'';
       })];
       internal = true;
       default = {};
@@ -211,6 +225,7 @@ let
   mkExporterConf = { name, conf, serviceOpts }:
     let
       enableDynamicUser = serviceOpts.serviceConfig.DynamicUser or true;
+      nftables = config.networking.nftables.enable;
     in
     mkIf conf.enable {
       warnings = conf.warnings or [];
@@ -222,10 +237,11 @@ let
       users.groups = (mkIf (conf.group == "${name}-exporter" && !enableDynamicUser) {
         "${name}-exporter" = {};
       });
-      networking.firewall.extraCommands = mkIf conf.openFirewall (concatStrings [
+      networking.firewall.extraCommands = mkIf (conf.openFirewall && !nftables) (concatStrings [
         "ip46tables -A nixos-fw ${conf.firewallFilter} "
         "-m comment --comment ${name}-exporter -j nixos-fw-accept"
       ]);
+      networking.firewall.extraInputRules = mkIf (conf.openFirewall && nftables) conf.firewallRules;
       systemd.services."prometheus-${name}-exporter" = mkMerge ([{
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];

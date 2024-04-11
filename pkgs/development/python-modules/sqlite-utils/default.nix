@@ -56,6 +56,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python CLI utility and library for manipulating SQLite databases";
+    mainProgram = "sqlite-utils";
     homepage = "https://github.com/simonw/sqlite-utils";
     changelog = "https://github.com/simonw/sqlite-utils/releases/tag/${version}";
     license = licenses.asl20;

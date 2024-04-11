@@ -27,6 +27,7 @@
 , common-updater-scripts
 , coreutils
 , git
+, wrapGAppsHook
 }:
 { baseName ? "erlang"
 , version
@@ -43,7 +44,7 @@
 , odbcSupport ? false
 , odbcPackages ? [ unixODBC ]
 , opensslPackage ? openssl
-, wxPackages ? [ libGL libGLU wxGTK xorg.libX11 ]
+, wxPackages ? [ libGL libGLU wxGTK xorg.libX11 wrapGAppsHook ]
 , preUnpack ? ""
 , postUnpack ? ""
 , patches ? [ ]

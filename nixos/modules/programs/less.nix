@@ -35,7 +35,7 @@ in
 
       # note that environment.nix sets PAGER=less, and
       # therefore also enables this module
-      enable = mkEnableOption (lib.mdDoc "less");
+      enable = mkEnableOption (lib.mdDoc "less, a file pager");
 
       configFile = mkOption {
         type = types.nullOr types.path;

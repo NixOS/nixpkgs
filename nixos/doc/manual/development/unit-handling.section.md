@@ -94,11 +94,13 @@ To make an existing sysinit service restart correctly during system switch, you
 have to declare:
 
 ```nix
-systemd.services.my-sysinit = {
-  requiredBy = [ "sysinit-reactivation.target" ];
-  before = [ "sysinit-reactivation.target" ];
-  restartTriggers = [ config.environment.etc."my-sysinit.d".source ];
-};
+{
+  systemd.services.my-sysinit = {
+    requiredBy = [ "sysinit-reactivation.target" ];
+    before = [ "sysinit-reactivation.target" ];
+    restartTriggers = [ config.environment.etc."my-sysinit.d".source ];
+  };
+}
 ```
 
 You need to configure appropriate `restartTriggers` specific to your service.

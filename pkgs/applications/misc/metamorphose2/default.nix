@@ -39,5 +39,6 @@ stdenv.mkDerivation {
     license     = with licenses; gpl3Plus;
     maintainers = with maintainers; [ ramkromberg ];
     platforms   = with platforms; linux;
+    mainProgram = "metamorphose2";
   };
 }

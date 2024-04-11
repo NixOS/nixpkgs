@@ -71,8 +71,7 @@ let
 in
 stdenv.mkDerivation (mkDerivationArgs // {
 
-  configurePhase = args.configurePhase or lib.concatStringsSep "\n"
-    (
+  configurePhase = args.configurePhase or (lib.concatStringsSep "\n" (
       [
         "runHook preConfigure"
       ]
@@ -83,7 +82,7 @@ stdenv.mkDerivation (mkDerivationArgs // {
         "cp shard.lock lib/.shards.info"
       ]
       ++ [ "runHook postConfigure" ]
-    );
+    ));
 
   CRFLAGS = lib.concatStringsSep " " defaultOptions;
 

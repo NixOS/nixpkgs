@@ -34,6 +34,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Graphical sudo utility from Project Trident";
+    mainProgram = "qsudo";
     homepage = "https://github.com/project-trident/qsudo";
     license = licenses.bsd2;
     platforms = platforms.linux;

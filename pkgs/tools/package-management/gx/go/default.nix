@@ -17,6 +17,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A tool for importing go packages into gx";
+    mainProgram = "gx-go";
     homepage = "https://github.com/whyrusleeping/gx-go";
     license = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];

@@ -31,16 +31,12 @@ rustPlatform.buildRustPackage rec {
     export RUSTC_BOOTSTRAP=1
   '';
 
-  # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  };
-
   # depends on cpu instructions that may not be available on builders
   doCheck = false;
 
   meta = with lib; {
     description = "A small programming language for writing short programs processing textual data";
+    mainProgram = "frawk";
     homepage = "https://github.com/ezrosent/frawk";
     changelog = "https://github.com/ezrosent/frawk/releases/tag/v${version}";
     license = with licenses; [ mit /* or */ asl20 ];

@@ -15,8 +15,8 @@
 
 buildPythonPackage rec {
   pname = "pysigma";
-  version = "0.10.10";
-  format = "pyproject";
+  version = "0.11.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -24,19 +24,20 @@ buildPythonPackage rec {
     owner = "SigmaHQ";
     repo = "pySigma";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QudaAZOxUXLUMMx10gEpWcaI+2ewpkNZOGUDEbxChg0=";
+    hash = "sha256-tlFrUAwOTK+O/YJjfA6nwsVAcZrMNXFmCYoxHc2ykVY=";
   };
 
   pythonRelaxDeps = [
+    "jinja2"
     "packaging"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jinja2
     packaging
     pyparsing

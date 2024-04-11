@@ -1,28 +1,33 @@
 { lib
-, aioredis
 , buildPythonPackage
 , fetchFromGitHub
 , msgpack
 , pythonOlder
+, redis
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "aiocache";
   version = "0.12.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
-    repo = pname;
+    repo = "aiocache";
     rev = "refs/tags/v${version}";
     hash = "sha256-yvXDNJL8uxReaU81klVWudJwh1hmvg5GeeILcNpm/YA=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   passthru.optional-dependencies = {
     redis = [
-      aioredis
+      redis
     ];
     msgpack = [
       msgpack

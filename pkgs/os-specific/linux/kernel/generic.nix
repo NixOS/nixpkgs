@@ -12,8 +12,10 @@
 , rustc
 , rustPlatform
 , rust-bindgen
+, nixosTests
+}@args':
 
-, # The kernel source tarball.
+lib.makeOverridable ({ # The kernel source tarball.
   src
 
 , # The kernel version.
@@ -66,7 +68,10 @@
 , preferBuiltin ? stdenv.hostPlatform.linux-kernel.preferBuiltin or false
 , kernelArch ? stdenv.hostPlatform.linuxArch
 , kernelTests ? []
-, nixosTests
+
+, stdenv ? args'.stdenv
+, buildPackages ? args'.buildPackages
+
 , ...
 }@args:
 
@@ -212,7 +217,10 @@ let
     config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; } // lib.optionalAttrs withRust { CONFIG_RUST = "y"; };
   } // lib.optionalAttrs (modDirVersion != null) { inherit modDirVersion; });
 
-  passthru = basicArgs // {
+in
+kernel.overrideAttrs (finalAttrs: previousAttrs: {
+
+  passthru = previousAttrs.passthru or { } // basicArgs // {
     features = kernelFeatures;
     inherit commonStructuredConfig structuredExtraConfig extraMakeFlags isZen isHardened isLibre;
     isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
@@ -225,17 +233,15 @@ let
       ]);
     });
 
-    passthru = kernel.passthru // (removeAttrs passthru [ "passthru" ]);
     tests = let
-      overridableKernel = finalKernel // {
+      overridableKernel = finalAttrs.finalPackage // {
         override = args:
           lib.warn (
             "override is stubbed for NixOS kernel tests, not applying changes these arguments: "
-            + toString (lib.attrNames (if lib.isAttrs args then args else args {}))
+            + toString (lib.attrNames (lib.toFunction args { }))
           ) overridableKernel;
       };
     in [ (nixosTests.kernel-generic.passthru.testsForKernel overridableKernel) ] ++ kernelTests;
   };
 
-  finalKernel = lib.extendDerivation true passthru kernel;
-in finalKernel
+}))

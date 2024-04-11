@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "kubernetes-polaris";
-  version = "8.5.4";
+  version = "8.5.5";
 
   src = fetchFromGitHub {
     owner = "FairwindsOps";
     repo = "polaris";
     rev = version;
-    sha256 = "sha256-Ip8SJi77QjNF2ez2NU48NKi+suOhViecuQyXSY6hLkI=";
+    sha256 = "sha256-DKfCXtFrZgmR0jiXwCD1iuwx/8aNEjwZ/fCQNeRhSu4=";
   };
 
   vendorHash = "sha256-ZWetW+Xar4BXXlR0iG+O/NRqYk41x+PPVCGis2W2Nkk=";
@@ -45,6 +45,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Validate and remediate Kubernetes resources to ensure configuration best practices are followed";
+    mainProgram = "polaris";
     homepage = "https://www.fairwinds.com/polaris";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ longer ];

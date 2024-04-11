@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A simple ncurses VoIP program based on the Opus codec";
+    mainProgram = "seren";
     longDescription = ''
       Seren is a simple VoIP program based on the Opus codec
       that allows you to create a voice conference from the terminal, with up to 10

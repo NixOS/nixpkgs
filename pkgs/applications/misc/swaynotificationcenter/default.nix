@@ -24,22 +24,23 @@
 , scdoc
 , vala
 , xvfb-run
+, sassc
+, pantheon
 }:
 
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "SwayNotificationCenter";
-  version = "0.9.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "ErikReider";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-mwwSTs4d9jUXUy33nSYJCRFlpH6naCmbRUSpfVacMBE=";
+    hash = "sha256-SR3FfEit50y4XSCLh3raUoigRNXpxh0mk4qLhQ/FozM=";
   };
 
-  patches = [
-    ./001-backport-pr296.patch
-  ];
+  # build pkg-config is required to locate the native `scdoc` input
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     bash-completion
@@ -51,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     ninja
     pkg-config
     python3
+    sassc
     scdoc
     vala
     wrapGAppsHook
@@ -68,14 +70,14 @@ stdenv.mkDerivation (finalAttrs: rec {
     libhandy
     libpulseaudio
     librsvg
+    pantheon.granite
     # systemd # ends with broken permission
   ];
 
   postPatch = ''
     chmod +x build-aux/meson/postinstall.py
     patchShebangs build-aux/meson/postinstall.py
-
-    substituteInPlace src/functions.vala --replace /usr/local/etc $out/etc
+    substituteInPlace src/functions.vala --replace "/usr/local/etc/xdg/swaync" "$out/etc/xdg/swaync"
   '';
 
   passthru.tests.version = testers.testVersion {

@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "flare";
-  version = "0.11.2";
+  version = "0.13.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "schmiddi-on-mobile";
-    repo = pname;
+    repo = "flare";
     rev = version;
-    hash = "sha256-p6G+FbSiBkaF/qlUOPdPdgTqrrKFAOuIaCr6DCv+az4=";
+    hash = "sha256-WfW2xUlF1vCaYFVP6ds06+niULKZgMMxgAOm66LK2xQ=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
     outputHashes = {
       "curve25519-dalek-4.0.0" = "sha256-KUXvYXeVvJEQ/+dydKzXWCZmA2bFa2IosDzaBL6/Si0=";
       "libsignal-protocol-0.1.0" = "sha256-FCrJO7porlY5FrwZ2c67UPd4tgN7cH2/3DTwfPjihwM=";
-      "libsignal-service-0.1.0" = "sha256-Ul1mg+oQ8te364Jc2gOBoiq2udYsw9UBret/O9VU9ec=";
-      "presage-0.6.0-dev" = "sha256-0Z2ySXMZZ4wpyesxOikhra/eN7K3I+ElAh7vAaNSbb0=";
+      "libsignal-service-0.1.0" = "sha256-XkCb83IvlnmvhHD8Vi9D5fNuBOoR9yX0/Vlb+YhrDz8=";
+      "presage-0.6.0-dev" = "sha256-zot92dlGtB7B423BU74oqpPzQKvLm2Dw9P8lCWkbsoE=";
     };
   };
 
@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
   meta = {
     changelog = "https://gitlab.com/schmiddi-on-mobile/flare/-/blob/${src.rev}/CHANGELOG.md";
     description = "An unofficial Signal GTK client";
+    mainProgram = "flare";
     homepage = "https://gitlab.com/schmiddi-on-mobile/flare";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];

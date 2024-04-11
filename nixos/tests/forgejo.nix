@@ -108,6 +108,12 @@ let
 
         assert "BEGIN PGP PUBLIC KEY BLOCK" in server.succeed("curl http://localhost:3000/api/v1/signing-key.gpg")
 
+        api_version = json.loads(server.succeed("curl http://localhost:3000/api/forgejo/v1/version")).get("version")
+        assert "development" != api_version and "-gitea-" in api_version, (
+            "/api/forgejo/v1/version should not return 'development' "
+            + f"but should contain a gitea compatibility version string. Got '{api_version}' instead."
+        )
+
         server.succeed(
             "curl --fail http://localhost:3000/user/sign_up | grep 'Registration is disabled. "
             + "Please contact your site administrator.'"

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "riscv-config";
-  version = "3.17.0";
+  version = "3.18.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "riscv-software-src";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-dMs900w5sXggqxU+2W8qKrKjGpyrXhA2QEbXQeaKZTs=";
+    hash = "sha256-3QjPJRFb7X23jZICRx4ZJlnuhe+RN6GcKeypoKtK2bk=";
   };
 
   propagatedBuildInputs = [
@@ -37,6 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "RISC-V configuration validator";
+    mainProgram = "riscv-config";
     homepage = "https://github.com/riscv/riscv-config";
     changelog = "https://github.com/riscv-software-src/riscv-config/blob/${version}/CHANGELOG.md";
     maintainers = with maintainers; [ genericnerdyusername ];

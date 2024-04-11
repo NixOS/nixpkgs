@@ -47,6 +47,7 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/pytesseract/";
     license = licenses.asl20;
     description = "A Python wrapper for Google Tesseract";
+    mainProgram = "pytesseract";
     maintainers = with maintainers; [ ];
   };
 }

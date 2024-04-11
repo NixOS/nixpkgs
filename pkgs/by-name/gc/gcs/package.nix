@@ -56,13 +56,8 @@ buildGoModule rec {
   ];
 
   # flags are based on https://github.com/richardwilkes/gcs/blob/master/build.sh
-  flags = [ "-a -trimpath" ];
+  flags = [ "-a" ];
   ldflags = [ "-s" "-w" "-X github.com/richardwilkes/toolbox/cmdline.AppVersion=${version}" ];
-
-  # Workaround for https://github.com/NixOS/nixpkgs/issues/166205
-  env = lib.optionalAttrs (stdenv.cc.libcxx != null) {
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  };
 
   installPhase = ''
     runHook preInstall

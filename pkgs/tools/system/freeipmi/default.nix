@@ -1,12 +1,12 @@
 { buildPackages, fetchurl, lib, stdenv, libgcrypt, readline, libgpg-error }:
 
 stdenv.mkDerivation rec {
-  version = "1.6.11";
+  version = "1.6.14";
   pname = "freeipmi";
 
   src = fetchurl {
     url = "mirror://gnu/freeipmi/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ZfvWkQ/AEEV3SGlUFPJ8V1W06NdXNCISIfOFjGIwqJc=";
+    sha256 = "sha256-Gj2sXHa3zMTU+GqhK475shK673SJvwXombiau34U7bU=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];

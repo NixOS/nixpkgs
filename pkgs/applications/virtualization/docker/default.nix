@@ -12,7 +12,7 @@ rec {
       # package dependencies
       , stdenv, fetchFromGitHub, fetchpatch, buildGoPackage
       , makeWrapper, installShellFiles, pkg-config, glibc
-      , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
+      , go-md2man, go, containerd, runc, tini, libtool
       , sqlite, iproute2, docker-buildx, docker-compose, docker-sbom
       , iptables, e2fsprogs, xz, util-linux, xfsprogs, git
       , procps, rootlesskit, slirp4netns, fuse-overlayfs, nixosTests
@@ -120,7 +120,7 @@ rec {
       ];
 
       postPatch = ''
-        patchShebangs hack/make.sh hack/make/
+        patchShebangs hack/make.sh hack/make/ hack/with-go-mod.sh
       '';
 
       buildPhase = ''
@@ -137,6 +137,7 @@ rec {
       installPhase = ''
         cd ./go/src/${goPackagePath}
         install -Dm755 ./bundles/dynbinary-daemon/dockerd $out/libexec/docker/dockerd
+        install -Dm755 ./bundles/dynbinary-daemon/docker-proxy $out/libexec/docker/docker-proxy
 
         makeWrapper $out/libexec/docker/dockerd $out/bin/dockerd \
           --prefix PATH : "$out/libexec/docker:$extraPath"
@@ -144,7 +145,6 @@ rec {
         ln -s ${docker-containerd}/bin/containerd $out/libexec/docker/containerd
         ln -s ${docker-containerd}/bin/containerd-shim $out/libexec/docker/containerd-shim
         ln -s ${docker-runc}/bin/runc $out/libexec/docker/runc
-        ln -s ${docker-proxy}/bin/docker-proxy $out/libexec/docker/docker-proxy
         ln -s ${docker-tini}/bin/tini-static $out/libexec/docker/docker-init
 
         # systemd
@@ -172,7 +172,7 @@ rec {
   buildGoPackage (lib.optionalAttrs (!clientOnly) {
     # allow overrides of docker components
     # TODO: move packages out of the let...in into top-level to allow proper overrides
-    inherit docker-runc docker-containerd docker-proxy docker-tini moby;
+    inherit docker-runc docker-containerd docker-tini moby;
   } // rec {
     pname = "docker";
     inherit version;
@@ -272,27 +272,13 @@ rec {
         To enable the docker daemon on NixOS, set the `virtualisation.docker.enable` option to `true`.
       '';
       license = licenses.asl20;
-      maintainers = with maintainers; [ offline vdemeester periklis amaxine ];
+      maintainers = with maintainers; [ offline vdemeester periklis ];
       mainProgram = "docker";
     };
   });
 
   # Get revisions from
   # https://github.com/moby/moby/tree/${version}/hack/dockerfile/install/*
-  docker_20_10 = callPackage dockerGen rec {
-    version = "20.10.26";
-    cliRev = "v${version}";
-    cliHash = "sha256-EPhsng0kLnweVbC8ZnH0NK1/yHlYSA5Sred4rWJX/Gs=";
-    mobyRev = "v${version}";
-    mobyHash = "sha256-IJ7m2mQnsLiom0EuZLpuLY6fYEko7rEy35igJv1AY04=";
-    runcRev = "v1.1.8";
-    runcHash = "sha256-rDJYEc64KW4Qa3Eg2oUjJqIKrg6THb5hxQFFbvb9Zp4=";
-    containerdRev = "v1.6.22";
-    containerdHash = "sha256-In7OkK3xm7Cz3H1jzG9b4tsZbmo44QCq8pNU+PPy8dY=";
-    tiniRev = "v0.19.0";
-    tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
-  };
-
   docker_24 = callPackage dockerGen rec {
     version = "24.0.5";
     cliRev = "v${version}";
@@ -303,6 +289,20 @@ rec {
     runcHash = "sha256-rDJYEc64KW4Qa3Eg2oUjJqIKrg6THb5hxQFFbvb9Zp4=";
     containerdRev = "v1.7.1";
     containerdHash = "sha256-WwedtcsrDQwMQcKFO5nnPiHyGJpl5hXZlmpbBe1/ftY=";
+    tiniRev = "v0.19.0";
+    tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
+  };
+
+  docker_25 = callPackage dockerGen rec {
+    version = "25.0.3";
+    cliRev = "v${version}";
+    cliHash = "sha256-Jvb0plV1O/UzrcpzN4zH5OulmTVF+p9UQQQ9xqkiObQ=";
+    mobyRev = "v${version}";
+    mobyHash = "sha256-cDlRVdQNzH/X2SJUYHK1QLUHlKQtSyRYCVbz3wPx1ZM=";
+    runcRev = "v1.1.12";
+    runcHash = "sha256-N77CU5XiGYIdwQNPFyluXjseTeaYuNJ//OsEUS0g/v0=";
+    containerdRev = "v1.7.13";
+    containerdHash = "sha256-y3CYDZbA2QjIn1vyq/p1F1pAVxQHi/0a6hGWZCRWzyk=";
     tiniRev = "v0.19.0";
     tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
   };

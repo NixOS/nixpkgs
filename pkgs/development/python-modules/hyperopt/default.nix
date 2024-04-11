@@ -45,6 +45,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Distributed Asynchronous Hyperparameter Optimization";
+    mainProgram = "hyperopt-mongo-worker";
     homepage = "http://hyperopt.github.io/hyperopt/";
     license = licenses.bsd2;
     platforms = platforms.unix;

@@ -40,8 +40,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Controller library that allows applications to interact with Tor";
+    mainProgram = "tor-prompt";
     homepage = "https://github.com/onionshare/cepa";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ lourkeur ];
+    maintainers = with maintainers; [ bbjubjub ];
   };
 }

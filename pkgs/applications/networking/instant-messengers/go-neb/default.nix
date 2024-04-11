@@ -23,6 +23,7 @@ buildGoModule {
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "Extensible matrix bot written in Go";
+    mainProgram = "go-neb";
     homepage = "https://github.com/matrix-org/go-neb";
     license = licenses.asl20;
     maintainers = with maintainers; [ hexa maralorn ];

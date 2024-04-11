@@ -18,6 +18,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A command line editor for HCL";
+    mainProgram = "hcledit";
     homepage = "https://github.com/minamijoyo/hcledit";
     license = licenses.mit;
     maintainers = with maintainers; [ aleksana ];

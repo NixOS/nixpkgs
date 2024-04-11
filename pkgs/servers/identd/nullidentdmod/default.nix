@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Simple identd that just replies with a random string or customized userid";
+    mainProgram = "nullidentdmod";
     license = licenses.gpl2;
     homepage = "http://acidhub.click/NullidentdMod";
     maintainers = with maintainers; [ das_j ];

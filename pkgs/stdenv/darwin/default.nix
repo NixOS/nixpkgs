@@ -81,7 +81,6 @@ let
         };
 
         extraPackages = [
-          prevStage.llvmPackages.libcxxabi
           prevStage.llvmPackages.compiler-rt
         ];
 
@@ -159,8 +158,16 @@ let
         __stdenvImpureHostDeps = commonImpureHostDeps;
         __extraImpureHostDeps = commonImpureHostDeps;
 
+        # Using the bootstrap tools curl for fetchers allows the stdenv bootstrap to avoid
+        # having a dependency on curl, allowing curl to be updated without triggering a
+        # new stdenv bootstrap on Darwin.
         overrides = self: super: (overrides self super) // {
           fetchurl = thisStdenv.fetchurlBoot;
+          fetchpatch = super.fetchpatch.override { inherit (self) fetchurl; };
+          fetchgit = super.fetchgit.override {
+            git = super.git.override { curl = bootstrapTools; };
+          };
+          fetchzip = super.fetchzip.override { inherit (self) fetchurl; };
         };
       };
 
@@ -196,7 +203,6 @@ in
       clang-unwrapped = null;
       libllvm = null;
       libcxx = null;
-      libcxxabi = null;
       compiler-rt = null;
     };
   })
@@ -317,7 +323,10 @@ in
                 ln -s ${bootstrapTools}/lib/clang $out/lib
                 ln -s ${bootstrapTools}/include   $out
               '';
-              passthru.isFromBootstrapFiles = true;
+              passthru = {
+                isFromBootstrapFiles = true;
+                hardeningUnsupportedFlags = [ "fortify3" "zerocallusedregs" ];
+              };
             };
             clang-unwrapped = selfTools.libclang;
             libllvm = self.stdenv.mkDerivation {
@@ -343,18 +352,6 @@ in
               '';
               passthru = {
                 isLLVM = true;
-                cxxabi = self.llvmPackages.libcxxabi;
-                isFromBootstrapFiles = true;
-              };
-            };
-            libcxxabi = self.stdenv.mkDerivation {
-              name = "bootstrap-stage0-libcxxabi";
-              buildCommand = ''
-                mkdir -p $out/lib
-                ln -s ${bootstrapTools}/lib/libc++abi.dylib $out/lib
-              '';
-              passthru = {
-                libName = "c++abi";
                 isFromBootstrapFiles = true;
               };
             };
@@ -410,7 +407,7 @@ in
     assert (with prevStage.darwin; (! useAppleSDKLibs) -> CF == null);
 
     assert lib.all isFromBootstrapFiles (with prevStage.llvmPackages; [
-      clang-unwrapped libclang libllvm llvm compiler-rt libcxx libcxxabi
+      clang-unwrapped libclang libllvm llvm compiler-rt libcxx
     ]);
 
     stageFun prevStage {
@@ -425,8 +422,6 @@ in
       cmakeMinimal = super.cmakeMinimal.overrideAttrs (old: {
         buildInputs = old.buildInputs ++ [ self.darwin.CF ];
       });
-
-      curl = super.curlMinimal;
 
       # Disable tests because they use dejagnu, which fails to run.
       libffi = super.libffi.override { doCheck = false; };
@@ -477,7 +472,7 @@ in
             inherit (prevStage.llvmPackages) clang-unwrapped libclang libllvm llvm;
           });
           libraries = super.llvmPackages.libraries.extend (_: _: {
-            inherit (prevStage.llvmPackages) compiler-rt libcxx libcxxabi;
+            inherit (prevStage.llvmPackages) compiler-rt libcxx;
           });
         in
         { inherit tools libraries; inherit (prevStage.llvmPackages) release_version; } // tools // libraries
@@ -500,8 +495,9 @@ in
     '';
   })
 
-  # Build sysctl and Python for use by LLVM’s check phase. These must be built in their
-  # own stage, or an infinite recursion results on x86_64-darwin when using the source-based SDK.
+  # Build cctools, Python, and sysctl for use by LLVM’s check phase. They must be built in
+  # their stage to prevent infinite recursions and to make sure the stdenv used to build
+  # LLVM has the newly built cctools instead of the one from the bootstrap tools.
   (prevStage:
     # previous stage1 stdenv:
     assert lib.all isFromBootstrapFiles (with prevStage; [ coreutils gnugrep ]);
@@ -523,7 +519,7 @@ in
     assert lib.all isFromNixpkgs (with prevStage.darwin; [ dyld launchd xnu ]);
 
     assert lib.all isFromBootstrapFiles (with prevStage.llvmPackages; [
-      clang-unwrapped libclang libllvm llvm compiler-rt libcxx libcxxabi
+      clang-unwrapped libclang libllvm llvm compiler-rt libcxx
     ]);
 
     assert lib.getVersion prevStage.stdenv.cc.bintools.bintools == "boot";
@@ -577,7 +573,7 @@ in
             clang = prevStage.stdenv.cc;
           });
           libraries = super.llvmPackages.libraries.extend (_: _: {
-            inherit (prevStage.llvmPackages) compiler-rt libcxx libcxxabi;
+            inherit (prevStage.llvmPackages) compiler-rt libcxx;
           });
         in
         { inherit tools libraries; inherit (prevStage.llvmPackages) release_version; } // tools // libraries
@@ -623,7 +619,7 @@ in
     assert lib.all isFromNixpkgs (with prevStage.darwin; [ dyld launchd xnu ]);
 
     assert lib.all isFromBootstrapFiles (with prevStage.llvmPackages; [
-      clang-unwrapped libclang libllvm llvm compiler-rt libcxx libcxxabi
+      clang-unwrapped libclang libllvm llvm compiler-rt libcxx
     ]);
 
     assert lib.getVersion prevStage.stdenv.cc.bintools.bintools == lib.getVersion prevStage.darwin.cctools-port;
@@ -667,17 +663,8 @@ in
           libraries = super.llvmPackages.libraries.extend (selfLib: superLib: {
             compiler-rt = null;
             libcxx = superLib.libcxx.override ({
-              inherit (selfLib) libcxxabi;
               stdenv = libcxxBootstrapStdenv;
             });
-            libcxxabi = superLib.libcxxabi.override {
-              stdenv = libcxxBootstrapStdenv;
-            }
-            # Setting `standalone = true` is only needed with older verions of LLVM. Newer ones
-            # automatically do what is necessary to bootstrap lib++abi.
-            // lib.optionalAttrs (builtins.any (v: llvmMajor == v) [ "7" "11" "12" "13" ]) {
-              standalone = true;
-            };
           });
         in
         { inherit libraries; } // libraries
@@ -723,7 +710,7 @@ in
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage.llvmPackages; [
       clang-unwrapped libclang libllvm llvm
     ]);
-    assert lib.all isBuiltByNixpkgsCompiler (with prevStage.llvmPackages; [ libcxx libcxxabi ]);
+    assert lib.all isBuiltByNixpkgsCompiler (with prevStage.llvmPackages; [ libcxx ]);
     assert prevStage.llvmPackages.compiler-rt == null;
 
     assert lib.getVersion prevStage.stdenv.cc.bintools.bintools == lib.getVersion prevStage.darwin.cctools-port;
@@ -760,7 +747,7 @@ in
           });
 
           libraries = super.llvmPackages.libraries.extend (selfLib: superLib: {
-            inherit (prevStage.llvmPackages) compiler-rt libcxx libcxxabi;
+            inherit (prevStage.llvmPackages) compiler-rt libcxx;
           });
         in
         { inherit tools libraries; inherit (prevStage.llvmPackages) release_version; } // tools // libraries
@@ -776,7 +763,6 @@ in
         in
         self.overrideCC stdenvNoCF (self.llvmPackages.clangNoCompilerRtWithLibc.override {
           inherit (self.llvmPackages) libcxx;
-          extraPackages = [ self.llvmPackages.libcxxabi ];
         });
     };
 
@@ -824,7 +810,7 @@ in
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage.llvmPackages; [
       clang-unwrapped libclang libllvm llvm
     ]);
-    assert lib.all isBuiltByNixpkgsCompiler (with prevStage.llvmPackages; [ libcxx libcxxabi ]);
+    assert lib.all isBuiltByNixpkgsCompiler (with prevStage.llvmPackages; [ libcxx ]);
     assert prevStage.llvmPackages.compiler-rt == null;
 
     assert lib.getVersion prevStage.stdenv.cc.bintools.bintools == lib.getVersion prevStage.darwin.cctools-llvm;
@@ -871,12 +857,11 @@ in
           });
 
           libraries = super.llvmPackages.libraries.extend (selfLib: superLib: {
-            inherit (prevStage.llvmPackages) libcxx libcxxabi;
+            inherit (prevStage.llvmPackages) libcxx;
 
             # Make sure compiler-rt is linked against the CF from this stage, which can be
             # propagated to the final stdenv. CF is required by ASAN.
             compiler-rt = superLib.compiler-rt.override ({
-              inherit (selfLib) libcxxabi;
               inherit (self.llvmPackages) libllvm;
               stdenv = self.stdenv.override {
                 extraBuildInputs = [ self.darwin.CF ];
@@ -904,8 +889,6 @@ in
           bintools = self.llvmPackages.clangNoCompilerRtWithLibc.bintools.override {
             libc = self.darwin.Libsystem;
           };
-
-          extraPackages = [ self.llvmPackages.libcxxabi ];
         });
     };
 
@@ -921,7 +904,7 @@ in
 
   # Rebuild LLVM with LLVM. This stage also rebuilds certain dependencies needed by LLVM.
   #
-  # LLVM requires: libcxx libcxxabi libffi libiconv libxml2 ncurses zlib
+  # LLVM requires: libcxx libffi libiconv libxml2 ncurses zlib
   (prevStage:
     # previous stage2-CF stdenv:
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
@@ -951,7 +934,7 @@ in
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage.llvmPackages; [
       clang-unwrapped libclang libllvm llvm
     ]);
-    assert lib.all isBuiltByNixpkgsCompiler (with prevStage.llvmPackages; [ libcxx libcxxabi ]);
+    assert lib.all isBuiltByNixpkgsCompiler (with prevStage.llvmPackages; [ libcxx ]);
 
     assert lib.getVersion prevStage.stdenv.cc.bintools.bintools == lib.getVersion prevStage.darwin.cctools-llvm;
 
@@ -983,7 +966,7 @@ in
       llvmPackages = super.llvmPackages // (
         let
           libraries = super.llvmPackages.libraries.extend (_: _: {
-           inherit (prevStage.llvmPackages) compiler-rt libcxx libcxxabi;
+           inherit (prevStage.llvmPackages) compiler-rt libcxx;
           });
         in
         { inherit libraries; } // libraries
@@ -1030,7 +1013,7 @@ in
     assert lib.all isFromNixpkgs (with prevStage.darwin; [ dyld launchd libclosure libdispatch xnu ]);
 
     assert lib.all isBuiltByNixpkgsCompiler (with prevStage.llvmPackages; [
-      clang-unwrapped libclang libllvm llvm compiler-rt libcxx libcxxabi
+      clang-unwrapped libclang libllvm llvm compiler-rt libcxx
     ]);
 
     assert lib.getVersion prevStage.stdenv.cc.bintools.bintools == lib.getVersion prevStage.darwin.cctools-llvm;
@@ -1051,39 +1034,10 @@ in
         # LLVM dependencies - don’t rebuild them.
         libffi libiconv libxml2 ncurses zlib;
 
-      # These overrides are required to break an infinite recursion. curl depends on Darwin
-      # frameworks, but those frameworks require these dependencies to build, which
-      # depend on curl indirectly.
-      cpio = super.cpio.override {
-        inherit (prevStage) fetchurl;
-      };
-
-      libyaml = super.libyaml.override {
-        inherit (prevStage) fetchFromGitHub;
-      };
-
-      pbzx = super.pbzx.override {
-        inherit (prevStage) fetchFromGitHub;
-      };
-
-      python3Minimal = super.python3Minimal.override {
-        inherit (prevStage) fetchurl;
-      };
-
-      xar = super.xar.override {
-        inherit (prevStage) fetchurl;
-      };
-
       darwin = super.darwin.overrideScope (selfDarwin: superDarwin: {
         inherit (prevStage.darwin) dyld CF Libsystem darwin-stubs
           # CF dependencies - don’t rebuild them.
           libobjc objc4;
-
-        # rewrite-tbd is also needed to build Darwin frameworks, so it’s built using the
-        # previous stage’s fetchFromGitHub to avoid an infinite recursion (same as above).
-        rewrite-tbd = superDarwin.rewrite-tbd.override {
-          inherit (prevStage) fetchFromGitHub;
-        };
 
         signingUtils = superDarwin.signingUtils.override {
           inherit (selfDarwin) sigtool;
@@ -1099,6 +1053,28 @@ in
           bintools = selfDarwin.binutils-unwrapped;
           libc = selfDarwin.Libsystem;
         };
+
+        # cctools needs to build the LLVM man pages, which requires sphinx. Sphinx
+        # has hatch-vcs as a transitive dependency, which pulls in git (and curl).
+        # Disabling the tests for hatch-vcs allows the stdenv bootstrap to avoid having
+        # any dependency on curl other than the one provided in the bootstrap tools.
+        cctools-llvm = superDarwin.cctools-llvm.override (old: {
+          llvmPackages =
+            let
+              tools = old.llvmPackages.tools.extend (_: superTools: {
+                llvm-manpages = superTools.llvm-manpages.override {
+                  python3Packages = prevStage.python3Packages.overrideScope (_: superPython: {
+                    hatch-vcs = (superPython.hatch-vcs.override {
+                      git = null;
+                      pytestCheckHook = null;
+                    });
+                  });
+                };
+              });
+              inherit (old.llvmPackages) libraries release_version;
+            in
+            { inherit tools libraries release_version; } // tools // libraries;
+        });
       });
 
       llvmPackages = super.llvmPackages // (
@@ -1114,7 +1090,6 @@ in
               };
 
               extraPackages = [
-                self.llvmPackages.libcxxabi
                 self.llvmPackages.compiler-rt
               ];
 
@@ -1155,7 +1130,7 @@ in
             };
           });
           libraries = super.llvmPackages.libraries.extend (_: _:{
-            inherit (prevStage.llvmPackages) compiler-rt libcxx libcxxabi;
+            inherit (prevStage.llvmPackages) compiler-rt libcxx;
           });
         in
         { inherit tools libraries; } // tools // libraries
@@ -1197,7 +1172,7 @@ in
     assert lib.all isFromNixpkgs (with prevStage.darwin; [ dyld launchd libclosure libdispatch xnu ]);
 
     assert lib.all isBuiltByNixpkgsCompiler (with prevStage.llvmPackages; [
-      clang-unwrapped libclang libllvm llvm compiler-rt libcxx libcxxabi
+      clang-unwrapped libclang libllvm llvm compiler-rt libcxx
     ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
@@ -1309,8 +1284,6 @@ in
         compiler-rt.dev
         libcxx
         libcxx.dev
-        libcxxabi
-        libcxxabi.dev
         lld
         llvm
         llvm.lib
@@ -1353,7 +1326,7 @@ in
               inherit (prevStage.llvmPackages) clang clang-unwrapped libclang libllvm llvm;
             });
             libraries = super.llvmPackages.libraries.extend (_: _: {
-              inherit (prevStage.llvmPackages) compiler-rt libcxx libcxxabi;
+              inherit (prevStage.llvmPackages) compiler-rt libcxx;
             });
           in
           { inherit tools libraries; } // tools // libraries
@@ -1379,7 +1352,6 @@ in
     assert isBuiltByNixpkgsCompiler prevStage.llvmPackages.clang-unwrapped;
     assert isBuiltByNixpkgsCompiler prevStage.llvmPackages.libllvm;
     assert isBuiltByNixpkgsCompiler prevStage.llvmPackages.libcxx;
-    assert isBuiltByNixpkgsCompiler prevStage.llvmPackages.libcxxabi;
     assert isBuiltByNixpkgsCompiler prevStage.llvmPackages.compiler-rt;
     { inherit (prevStage) config overlays stdenv; })
 ]

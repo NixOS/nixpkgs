@@ -32,6 +32,7 @@ stdenv.mkDerivation  {
 
   meta = {
     description = "Automatically adjust the client window resolution in Linux KVM guests using the SPICE driver.";
+    mainProgram = "spice-autorandr";
     longDescription = ''
       Some desktop environments update the display resolution automatically,
       this package is only useful when running without a DE or with a DE that

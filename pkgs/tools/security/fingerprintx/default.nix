@@ -26,6 +26,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Standalone utility for service discovery on open ports";
+    mainProgram = "fingerprintx";
     homepage = "https://github.com/praetorian-inc/fingerprintx";
     changelog = "https://github.com/praetorian-inc/fingerprintx/releases/tag/v${version}";
     license = licenses.asl20;

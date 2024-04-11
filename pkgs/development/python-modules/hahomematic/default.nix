@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "hahomematic";
-  version = "2024.2.1";
+  version = "2024.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -27,15 +27,15 @@ buildPythonPackage rec {
     owner = "danielperna84";
     repo = "hahomematic";
     rev = "refs/tags/${version}";
-    hash = "sha256-Q9cuazn07LCzCMkhnNl/h6QxrFBv4fybMaDi8zN7jy0=";
+    hash = "sha256-/ulqUyplNu8YTHJKcfNPYzyzPvGkLFtoJDu5SqvfQrs=";
   };
 
   __darwinAllowLocalNetworking = true;
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "setuptools~=68.2" "setuptools" \
-      --replace "wheel~=0.41.2" "wheel"
+      --replace-fail "setuptools~=69.1.0" "setuptools" \
+      --replace-fail "wheel~=0.42.0" "wheel"
   '';
 
   nativeBuildInputs = [
@@ -66,6 +66,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/danielperna84/hahomematic";
     changelog = "https://github.com/danielperna84/hahomematic/releases/tag/${version}";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [ dotlambda fab ];
   };
 }

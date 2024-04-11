@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , makeWrapper
 , pkg-config
 , libxslt
@@ -51,6 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./i686-test-remove-battery-check.patch
   ] ++ [
     ./installed-tests-path.patch
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/upower/upower/-/merge_requests/207.diff";
+      hash = "sha256-ldr1bKbSAdYpwbbe/Iq9i0Q9zQrHWvIvBGym/F3+vxs=";
+    })
   ];
 
   strictDeps = true;
@@ -211,6 +216,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://upower.freedesktop.org/";
     changelog = "https://gitlab.freedesktop.org/upower/upower/-/blob/v${finalAttrs.version}/NEWS";
     description = "A D-Bus service for power management";
+    mainProgram = "upower";
     maintainers = teams.freedesktop.members;
     platforms = platforms.linux;
     license = licenses.gpl2Plus;

@@ -2,7 +2,7 @@
 
 let
   version = "1.0.1";
-in buildPecl {
+in buildPecl rec {
   inherit version;
   pname = "opentelemetry";
 
@@ -13,7 +13,7 @@ in buildPecl {
     hash = "sha256-VHUzRhTtHygHoW+poItaphV+mxe4rmmSfGgesUgPz8Q=";
   };
 
-  sourceRoot = "source/ext";
+  sourceRoot = "${src.name}/ext";
 
   doCheck = true;
 

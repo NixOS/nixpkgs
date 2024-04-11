@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An amateur radio companion to WSJT-X or JTDX";
+    mainProgram = "gridtracker";
     longDescription = ''
       GridTracker listens to traffic from WSJT-X/JTDX, displays it on a map,
       and has a sophisticated alerting and filtering system for finding and

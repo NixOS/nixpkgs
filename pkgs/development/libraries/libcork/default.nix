@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/dcreager/libcork";
     description = "A simple, easily embeddable cross-platform C library";
+    mainProgram = "cork-hash";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ lovesegfault ];

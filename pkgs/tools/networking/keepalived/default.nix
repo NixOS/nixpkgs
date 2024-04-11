@@ -1,7 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, nixosTests
-, file, libmnl, libnftnl, libnl
-, net-snmp, openssl, pkg-config
-, autoreconfHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, nixosTests
+, file
+, libmnl
+, libnftnl
+, libnl
+, net-snmp
+, openssl
+, pkg-config
+, autoreconfHook
+, withNetSnmp ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+}:
 
 stdenv.mkDerivation rec {
   pname = "keepalived";
@@ -19,8 +29,9 @@ stdenv.mkDerivation rec {
     libmnl
     libnftnl
     libnl
-    net-snmp
     openssl
+  ] ++ lib.optionals withNetSnmp [
+    net-snmp
   ];
 
   enableParallelBuilding = true;
@@ -31,8 +42,9 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-sha1"
+  ] ++ lib.optionals withNetSnmp [
     "--enable-snmp"
- ];
+  ];
 
   meta = with lib; {
     homepage = "https://keepalived.org";

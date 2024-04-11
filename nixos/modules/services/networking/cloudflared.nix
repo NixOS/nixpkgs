@@ -11,7 +11,7 @@ let
       default = null;
       example = "30s";
       description = lib.mdDoc ''
-        Timeout for establishing a new TCP connection to your origin server. This excludes the time taken to establish TLS, which is controlled by [https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/configuration/local-management/ingress/#tlstimeout](tlsTimeout).
+        Timeout for establishing a new TCP connection to your origin server. This excludes the time taken to establish TLS, which is controlled by [tlsTimeout](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/configuration/local-management/ingress/#tlstimeout).
       '';
     };
 
@@ -276,9 +276,11 @@ in
             ingressesSet = filterIngressSet tunnel.ingress;
             ingressesStr = filterIngressStr tunnel.ingress;
 
-            fullConfig = {
+            fullConfig = filterConfig {
               tunnel = name;
               "credentials-file" = tunnel.credentialsFile;
+              warp-routing = filterConfig tunnel.warp-routing;
+              originRequest = filterConfig tunnel.originRequest;
               ingress =
                 (map
                   (key: {
@@ -294,6 +296,7 @@ in
                   (attrNames ingressesStr))
                 ++ [{ service = tunnel.default; }];
             };
+
             mkConfigFile = pkgs.writeText "cloudflared.yml" (builtins.toJSON fullConfig);
           in
           nameValuePair "cloudflared-tunnel-${name}" ({
@@ -322,5 +325,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ bbigras ];
+  meta.maintainers = with maintainers; [ bbigras anpin ];
 }

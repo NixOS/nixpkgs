@@ -18,6 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Cargo subcommand for ‘pgx’ to make Postgres extension development easy";
+    mainProgram = "cargo-pgx";
     homepage = "https://github.com/tcdi/pgx/tree/v${version}/cargo-pgx";
     license = licenses.mit;
     maintainers = with maintainers; [ typetetris ];

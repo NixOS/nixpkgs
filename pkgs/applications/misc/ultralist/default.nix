@@ -18,5 +18,6 @@ buildGoModule rec {
     homepage = "https://ultralist.io";
     license = licenses.mit;
     maintainers = with maintainers; [ uvnikita ];
+    mainProgram = "ultralist";
   };
 }

@@ -1,11 +1,9 @@
 { lib
 , stdenv
-, archinfo
 , bitstring
 , buildPythonPackage
 , cffi
 , fetchPypi
-, future
 , pycparser
 , pythonOlder
 , setuptools
@@ -13,31 +11,29 @@
 
 buildPythonPackage rec {
   pname = "pyvex";
-  version = "9.2.84";
+  version = "9.2.98";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-asTvaSwoT1yD6nqHTr6vICeukynMq1WRRn3gEvvnoVA=";
+    hash = "sha256-+X4G5jLG7c75XIItNlQLF5YV0XUQwdA6JyF1IGBfiE0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    archinfo
+  dependencies = [
     bitstring
     cffi
-    future
     pycparser
   ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace vex/Makefile-gcc \
-      --replace '/usr/bin/ar' 'ar'
+      --replace-fail '/usr/bin/ar' 'ar'
   '';
 
   setupPyBuildFlags = lib.optionals stdenv.isLinux [

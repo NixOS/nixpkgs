@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freefilesync";
-  version = "13.3";
+  version = "13.5";
 
   src = fetchurl {
     url = "https://freefilesync.org/download/FreeFileSync_${finalAttrs.version}_Source.zip";
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
       rm -f $out
       tryDownload "$url"
     '';
-    hash = "sha256-mpCCecG1teBjIJqCzB3pGAQKT6t8bMKbK8KihMXOn3g=";
+    hash = "sha256-8At8QobAQR2mQnFjFSPTkEuxmP9M8gINP0qH28J3ynY=";
   };
 
   sourceRoot = ".";
@@ -55,14 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
       debianRevision = "1";
       patch = "Disable_wxWidgets_uncaught_exception_handling.patch";
       hash = "sha256-Fem7eDDKSqPFU/t12Jco8OmYC8FM9JgB4/QVy/ouvbI=";
-    })
-    # Fix gui freeze
-    (fetchDebianPatch {
-      pname = "freefilesync";
-      version = "13.3";
-      debianRevision = "1";
-      patch = "revert_buggy_gtk3_change_in_12.1.patch";
-      hash = "sha256-eqush3zXxypQUxtO5110GoOJ30F5LZcF8XIC/Y8/fgM=";
     })
     # Disable update patch
     (fetchDebianPatch {

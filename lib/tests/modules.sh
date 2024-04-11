@@ -103,6 +103,18 @@ checkConfigError 'The option .sub.wrong2. does not exist. Definition values:' co
 checkConfigError '.*This can happen if you e.g. declared your options in .types.submodule.' config.sub ./error-mkOption-in-submodule-config.nix
 checkConfigError '.*A definition for option .bad. is not of type .non-empty .list of .submodule...\.' config.bad ./error-nonEmptyListOf-submodule.nix
 
+# types.attrTag
+checkConfigOutput '^true$' config.okChecks ./types-attrTag.nix
+checkConfigError 'A definition for option .intStrings\.syntaxError. is not of type .attribute-tagged union' config.intStrings.syntaxError ./types-attrTag.nix
+checkConfigError 'A definition for option .intStrings\.syntaxError2. is not of type .attribute-tagged union' config.intStrings.syntaxError2 ./types-attrTag.nix
+checkConfigError 'A definition for option .intStrings\.syntaxError3. is not of type .attribute-tagged union' config.intStrings.syntaxError3 ./types-attrTag.nix
+checkConfigError 'A definition for option .intStrings\.syntaxError4. is not of type .attribute-tagged union' config.intStrings.syntaxError4 ./types-attrTag.nix
+checkConfigError 'A definition for option .intStrings\.mergeError. is not of type .attribute-tagged union' config.intStrings.mergeError ./types-attrTag.nix
+checkConfigError 'A definition for option .intStrings\.badTagError. is not of type .attribute-tagged union' config.intStrings.badTagError ./types-attrTag.nix
+checkConfigError 'A definition for option .intStrings\.badTagTypeError\.left. is not of type .signed integer.' config.intStrings.badTagTypeError.left ./types-attrTag.nix
+checkConfigError 'A definition for option .nested\.right\.left. is not of type .signed integer.' config.nested.right.left ./types-attrTag.nix
+checkConfigError 'In attrTag, each tag value must be an option, but tag int was a bare type, not wrapped in mkOption.' config.opt.int ./types-attrTag-wrong-decl.nix
+
 # types.pathInStore
 checkConfigOutput '".*/store/0lz9p8xhf89kb1c1kk6jxrzskaiygnlh-bash-5.2-p15.drv"' config.pathInStore.ok1 ./types.nix
 checkConfigOutput '".*/store/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15"' config.pathInStore.ok2 ./types.nix
@@ -406,6 +418,16 @@ checkConfigOutput "{}" config.submodule.a ./emptyValues.nix
 # These types don't have empty values
 checkConfigError 'The option .int.a. is used but not defined' config.int.a ./emptyValues.nix
 checkConfigError 'The option .nonEmptyList.a. is used but not defined' config.nonEmptyList.a ./emptyValues.nix
+
+# types.unique
+#   requires a single definition
+checkConfigError 'The option .examples\.merged. is defined multiple times while it.s expected to be unique' config.examples.merged.a ./types-unique.nix
+#   user message is printed
+checkConfigError 'We require a single definition, because seeing the whole value at once helps us maintain critical invariants of our system.' config.examples.merged.a ./types-unique.nix
+#   let the inner merge function check the values (on demand)
+checkConfigError 'A definition for option .examples\.badLazyType\.a. is not of type .string.' config.examples.badLazyType.a ./types-unique.nix
+#   overriding still works (unlike option uniqueness)
+checkConfigOutput '^"bee"$' config.examples.override.b ./types-unique.nix
 
 ## types.raw
 checkConfigOutput '^true$' config.unprocessedNestingEvaluates.success ./raw.nix

@@ -19,7 +19,6 @@
 , typing-extensions
 , requests
 , retrying
-, ansi2html
 , nest-asyncio
 
 , celery
@@ -37,16 +36,16 @@
 
 buildPythonPackage rec {
   pname = "dash";
-  version = "2.14.2";
+  version = "2.16.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "dash";
-    rev = "v${version}";
-    hash = "sha256-EFEsFgd3VbzlIUiz1fBIsKHywgWrL74taDFx0yIM/Ks=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-IPyGQXrC2FTTSIC4IFGwKTceyzPYAe4jwDoO5C9YeF0=";
   };
 
   nativeBuildInputs = [
@@ -58,7 +57,7 @@ buildPythonPackage rec {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/@plotly/dash-jupyterlab/yarn.lock";
-    hash = "sha256-mkiyrA0jGiP0zbabSjgHFLEUX3f+LZdJ8eARI5QA8CU=";
+    hash = "sha256-L/or8jO6uEypI5krwy/ElIxa6jJrXGsCRZ9mh+0kcGA=";
   };
 
   preBuild = ''
@@ -90,7 +89,6 @@ buildPythonPackage rec {
     typing-extensions
     requests
     retrying
-    ansi2html
     nest-asyncio
   ];
 

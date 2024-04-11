@@ -8,6 +8,7 @@
 , dconf
 , ddcutil
 , glib
+, hwdata
 , imagemagick_light
 , libXrandr
 , libglvnd
@@ -20,7 +21,6 @@
 , nix-update-script
 , ocl-icd
 , opencl-headers
-, pciutils
 , pcre
 , pcre2
 , pkg-config
@@ -43,13 +43,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "2.7.1";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     rev = finalAttrs.version;
-    hash = "sha256-s0N3Rt3lLOCyaeXeNYu6hlGtNtGR+YC7Aj4/3SeVMpQ=";
+    hash = "sha256-FTZXfZhLplpjB6QQssz/5hXckNaR9KTdw8NRDLYOvaM=";
   };
 
   outputs = [ "out" "man" ];
@@ -73,13 +73,13 @@ stdenv.mkDerivation (finalAttrs: {
     dconf
     ddcutil
     glib
+    hwdata
     libpulseaudio
     libselinux
     libsepol
     networkmanager
     ocl-icd
     opencl-headers
-    pciutils
     util-linux
     zlib
   ] ++ lib.optionals rpmSupport [
@@ -95,11 +95,12 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXau
     xorg.libXdmcp
     xorg.libXext
-  ] ++ lib.optionals (x11Support && (!stdenv.isDarwin))  [
+  ] ++ lib.optionals (x11Support && (!stdenv.isDarwin)) [
     xfce.xfconf
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
     Apple80211
     AppKit
+    AVFoundation
     Cocoa
     CoreDisplay
     CoreVideo
@@ -128,11 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_XCB_RANDR" x11Support)
     (lib.cmakeBool "ENABLE_XFCONF" (x11Support && (!stdenv.isDarwin)))
     (lib.cmakeBool "ENABLE_XRANDR" x11Support)
-  ];
-
-  env.NIX_CFLAGS_COMPILE = toString [
-    # Needed with GCC 12
-    "-Wno-error=uninitialized"
   ];
 
   postInstall = ''

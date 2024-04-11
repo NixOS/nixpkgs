@@ -21,28 +21,21 @@
 
 stdenv.mkDerivation rec {
   pname = "delfin";
-  version = "0.3.0";
+  version = "0.4.2";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "avery42";
     repo = "delfin";
     rev = "v${version}";
-    hash = "sha256-1Q3Aywf80CCXxorWSymwxJwMU1I4k7juDoWG5J18AXY=";
+    hash = "sha256-7GHwwwFibmwBcrlC2zSpEUZ2dca14wZFU6PJWjincPQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-/RZD4b7hrbC1Z5MtHDdib5TFEmxAh9odjNPo4m+FqK4=";
+    hash = "sha256-zlecw6230AC/+y537iEhJU+BgWRs2WCFP0AIcxchZBA=";
   };
-
-  # upstream pinned the linker to clang/mold through 0.3.0, unnecessarily.
-  # remove this patch for version > 0.3.0.
-  # see: <https://codeberg.org/avery42/delfin/commit/e6deee77e9a6a6ba2425d1cc88dcbdeb471d1fdc>
-  postPatch = ''
-    rm .cargo/config.toml
-  '';
 
   nativeBuildInputs = [
     appstream

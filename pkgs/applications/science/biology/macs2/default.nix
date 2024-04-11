@@ -46,6 +46,7 @@ python3.pkgs.buildPythonPackage rec {
 
   meta = with lib; {
     description = "Model-based Analysis for ChIP-Seq";
+    mainProgram = "macs2";
     homepage = "https://github.com/macs3-project/MACS/";
     changelog = "https://github.com/macs3-project/MACS/releases/tag/v${version}";
     license = licenses.bsd3;

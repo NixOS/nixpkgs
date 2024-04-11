@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     pony
     psutil
     pyasn1
-    pydantic
+    pydantic_1
     pyopenssl
     pyyaml
     sentry-sdk
@@ -108,6 +108,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Decentralised P2P filesharing client based on the Bittorrent protocol";
+    mainProgram = "tribler";
     homepage = "https://www.tribler.org/";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ xvapx viric mkg20001 ];

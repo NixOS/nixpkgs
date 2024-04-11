@@ -11,7 +11,7 @@ in
 {
   options = {
     services.plikd = {
-      enable = mkEnableOption (lib.mdDoc "the plikd server");
+      enable = mkEnableOption (lib.mdDoc "plikd, a temporary file upload system");
 
       openFirewall = mkOption {
         type = types.bool;

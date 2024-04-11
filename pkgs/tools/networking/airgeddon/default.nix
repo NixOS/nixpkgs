@@ -158,6 +158,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Multi-use TUI to audit wireless networks";
+    mainProgram = "airgeddon";
     homepage = "https://github.com/v1s1t0r1sh3r3/airgeddon";
     changelog = "https://github.com/v1s1t0r1sh3r3/airgeddon/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;

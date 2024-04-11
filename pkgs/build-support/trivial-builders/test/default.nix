@@ -26,6 +26,9 @@ recurseIntoAttrs {
     then references
     else {};
   writeCBin = callPackage ./writeCBin.nix {};
+  writeClosure-union = callPackage ./writeClosure-union.nix {
+    inherit (references) samples;
+  };
   writeShellApplication = callPackage ./writeShellApplication.nix {};
   writeScriptBin = callPackage ./writeScriptBin.nix {};
   writeShellScript = callPackage ./write-shell-script.nix {};

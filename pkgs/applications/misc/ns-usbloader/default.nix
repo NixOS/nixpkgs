@@ -100,5 +100,6 @@ maven.buildMavenPackage rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ soupglasses ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
+    mainProgram = "ns-usbloader";
   };
 }

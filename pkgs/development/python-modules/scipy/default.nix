@@ -13,10 +13,10 @@
 , pkg-config
 , pythran
 , wheel
-, nose
 , setuptools
 , hypothesis
 , pytestCheckHook
+, pytest_7
 , pytest-xdist
 , numpy
 , pybind11
@@ -76,6 +76,11 @@ in buildPythonPackage {
         "doc/source/dev/contributor/meson_advanced.rst"
       ];
     })
+    (fetchpatch {
+      name = "openblas-0.3.26-compat.patch";
+      url = "https://github.com/scipy/scipy/commit/8c96a1f742335bca283aae418763aaba62c03378.patch";
+      hash = "sha256-SGoYDxwSAkr6D5/XEqHLerF4e4nmmI+PX+z+3taWAps=";
+    })
   ];
 
   # Upstream complicated numpy version pinning is causing issues in the
@@ -110,9 +115,9 @@ in buildPythonPackage {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    nose
     hypothesis
-    pytestCheckHook
+    # Failed: DID NOT WARN. No warnings of type (<class 'DeprecationWarning'>, <class 'PendingDeprecationWarning'>, <class 'FutureWarning'>) were emitted.
+    (pytestCheckHook.override { pytest = pytest_7; })
     pytest-xdist
   ];
 

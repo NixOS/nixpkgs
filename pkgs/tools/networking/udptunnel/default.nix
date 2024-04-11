@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [viric];
     platforms = with lib.platforms; linux;
+    mainProgram = "udptunnel";
   };
 }

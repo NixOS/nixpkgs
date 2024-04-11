@@ -5,16 +5,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rcp";
-  version = "0.5.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "wykurz";
     repo = "rcp";
     rev = "v${version}";
-    hash = "sha256-5CqQwTJAQhO9mLfMan6JhNY3N2gfwR6wmGtVBYzVxuc=";
+    hash = "sha256-kVO2WMwB/Lv4fCcdXaWL/Gfmenky6uMNVrUwhWU9y7A=";
   };
 
-  cargoHash = "sha256-sF7RjuVRNfJa3vw71S+BKIBLeWT6biekAE/56BsZYkw=";
+  cargoHash = "sha256-Pa8YgFAT9nue/QLhHQm6PlTJU/myK60UcND5TthMOxc=";
+
+  RUSTFLAGS = "--cfg tokio_unstable";
 
   checkFlags = [
     # this test also sets setuid permissions on a test file (3oXXX) which doesn't work in a sandbox

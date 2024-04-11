@@ -43,12 +43,12 @@ let
     else ceres-solver;
 in
 buildPythonPackage rec {
-  pname = "OpenSfM";
+  pname = "opensfm";
   version = "unstable-2023-12-09";
 
   src = fetchFromGitHub {
     owner = "mapillary";
-    repo = pname;
+    repo = "OpenSfM";
     rev = "7f170d0dc352340295ff480378e3ac37d0179f8e";
     sha256 = "sha256-l/HTVenC+L+GpMNnDgnSGZ7+Qd2j8b8cuTs3SmORqrg=";
   };

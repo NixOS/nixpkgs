@@ -4,7 +4,6 @@
 , curl
 , fetchFromBitbucket
 , fetchFromGitHub
-, fetchzip
 , ghc_filesystem
 , glew
 , glfw
@@ -19,8 +18,6 @@
 , libjack2
 , libpulseaudio
 , libsamplerate
-, libXext
-, libXi
 , makeDesktopItem
 , makeWrapper
 , pkg-config
@@ -114,8 +111,8 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  pname = "VCV-Rack";
-  version = "2.4.0";
+  pname = "vcv-rack";
+  version = "2.4.1";
 
   desktopItems = [
     (makeDesktopItem {
@@ -135,7 +132,7 @@ stdenv.mkDerivation rec {
     owner = "VCVRack";
     repo = "Rack";
     rev = "v${version}";
-    sha256 = "0azrqyx5as4jmk9dxb7cj7x9dha81i0mm9pkvdv944qyccqwg55i";
+    hash = "sha256-Gn/sFltLXX2mLv4dDqmr/UPd+JBXVkIZGwMI6Rm0Ih4=";
   };
 
   patches = [
@@ -169,6 +166,10 @@ stdenv.mkDerivation rec {
     cp -r ${fundamental-source} plugins/Fundamental/
     chmod -R +rw plugins/Fundamental # will be used as build dir
     substituteInPlace plugin.mk --replace ":= all" ":= dist"
+    substituteInPlace plugins/Fundamental/src/Logic.cpp \
+      --replace \
+        "LightButton<VCVBezelBig, VCVBezelLightBig<WhiteLight>>" \
+        "struct rack::componentlibrary::LightButton<VCVBezelBig, VCVBezelLightBig<WhiteLight>>"
 
     # Fix reference to zenity
     substituteInPlace dep/osdialog/osdialog_zenity.c \

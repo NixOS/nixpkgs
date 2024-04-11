@@ -909,7 +909,7 @@ in {
                 in {
                   settings = {
                     ssid = bssCfg.ssid;
-                    utf8_ssid = bssCfg.ssid;
+                    utf8_ssid = bssCfg.utf8Ssid;
 
                     logger_syslog = mkDefault (-1);
                     logger_syslog_level = bssCfg.logLevel;

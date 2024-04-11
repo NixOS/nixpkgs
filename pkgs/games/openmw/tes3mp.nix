@@ -7,14 +7,13 @@
 , luajit
 , makeWrapper
 , symlinkJoin
-, disable-warnings-if-gcc13
 }:
 
 # revisions are taken from https://github.com/GrimKriegor/TES3MP-deploy
 
 let
   # raknet could also be split into dev and lib outputs
-  raknet = disable-warnings-if-gcc13 (stdenv.mkDerivation {
+  raknet = stdenv.mkDerivation {
     pname = "raknet";
     version = "unstable-2020-01-19";
 
@@ -27,6 +26,16 @@ let
       sha256 = "WIaJkSQnoOm9T7GoAwmWl7fNg79coIo/ILUsWcbH+lA=";
     };
 
+    patches = [
+      # gcc-13 build fix:
+      #   https://github.com/TES3MP/CrabNet/pull/18
+      (fetchpatch {
+        name = "gcc-13.patch";
+        url = "https://github.com/TES3MP/CrabNet/commit/3ec9a338a7cefd5cc751c9d29095cafa4c73be20.patch";
+        hash = "sha256-zE87icjX9GSnApgKQXj0K4IjlrReV/upFLjVgNYkNfM=";
+      })
+    ];
+
     cmakeFlags = [
       "-DCRABNET_ENABLE_DLL=OFF"
     ];
@@ -36,7 +45,7 @@ let
     installPhase = ''
       install -Dm555 lib/libRakNetLibStatic.a $out/lib/libRakNetLibStatic.a
     '';
-  });
+  };
 
   coreScripts = stdenv.mkDerivation {
     pname = "corescripts";
@@ -88,9 +97,18 @@ let
     '';
 
     patches = [
+      # glibc-2.34 support
       (fetchpatch {
         url = "https://gitlab.com/OpenMW/openmw/-/commit/98a7d90ee258ceef9c70b0b2955d0458ec46f048.patch";
-        sha256 = "sha256-RhbIGeE6GyqnipisiMTwWjcFnIiR055hUPL8IkjPgZw=";
+        hash = "sha256-RhbIGeE6GyqnipisiMTwWjcFnIiR055hUPL8IkjPgZw=";
+      })
+
+      # gcc-13 build fix:
+      #   https://github.com/TES3MP/TES3MP/pull/674
+      (fetchpatch {
+        name = "gcc-13.patch";
+        url = "https://github.com/TES3MP/TES3MP/commit/7921f71a79e96f817a2009100e5105a7948b3fe2.patch";
+        hash = "sha256-mpxuOSPA2xixgBeYXsxutEUI7VJL5PxAeZgaNU7YkJQ=";
       })
 
       # https://github.com/TES3MP/openmw-tes3mp/issues/552

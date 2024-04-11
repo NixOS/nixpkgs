@@ -33,6 +33,7 @@ mkDerivation {
 
   meta = with lib; {
     description = "Editor of tesseract-ocr box files";
+    mainProgram = "qt-box-editor-1.12rc1";
     homepage = "https://github.com/zdenop/qt-box-editor";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libvibrant";
     repo = "vibrantLinux";
-    rev = version;
+    rev = "v${version}";
     hash = "sha256-rvJiVId6221hTrfEIvVO9HTMhaZ6KY44Bu3a5MinPHI=";
   };
 

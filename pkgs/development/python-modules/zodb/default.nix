@@ -15,11 +15,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "ZODB";
+  pname = "zodb";
   version = "5.8.1";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "ZODB";
+    inherit version;
     hash = "sha256-xsc6vTZg1gb/wfIfl97xS1K0b0pwLsnm7kSabiviZN8=";
   };
 

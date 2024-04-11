@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     description = "Advanced command-line metronome for JACK";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+    mainProgram = "klick";
   };
 }

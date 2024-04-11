@@ -1,72 +1,72 @@
 { lib
-, atk
 , buildPythonApplication
 , fetchFromGitHub
-, gdk-pixbuf
-, gobject-introspection
-, gst-plugins-good
+, brotlicffi
 , gst-python
-, gtk3
 , kiss-headers
-, libhandy
-, librsvg
 , logbook
-, networkmanager
-, pango
 , pillow
-, poetry-core
 , pygobject3
-, pytestCheckHook
-, python
 , python-zbar
-, pythonRelaxDepsHook
 , requests
 , single-version
+, gobject-introspection
+, gst-plugins-good
+, gtk3
+, libhandy
+, librsvg
+, networkmanager
+, setuptools
+, python
+, pytestCheckHook
 , wrapGAppsHook
 }:
 
 buildPythonApplication rec {
   pname = "cobang";
-  version = "0.10.1";
-  format = "pyproject";
+  version = "0.10.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hongquan";
     repo = "CoBang";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yNDnBTBmwcP3g51UkkLNyF4eHYjblwxPxS2lMwbFKUM=";
+    hash = "sha256-CfT/farNOJiWIioFBPx2q7bAFAE4khcojdZ7AsYaU6o=";
   };
 
-  pythonRelaxDeps = [
-    "logbook"
-    "Pillow"
-  ];
+  postPatch = ''
+    # Fixes "Multiple top-level packages discovered in a flat-layout"
+    sed -i '$ a\[tool.setuptools]' pyproject.toml
+    sed -i '$ a\packages = ["cobang"]' pyproject.toml
+  '';
 
   nativeBuildInputs = [
+    # Needed to recognize gobject namespaces
     gobject-introspection
-    pythonRelaxDepsHook
     wrapGAppsHook
+    setuptools
   ];
 
   buildInputs = [
-    atk
-    gdk-pixbuf
+    # Requires v4l2src
     gst-plugins-good
+    # For gobject namespaces
     libhandy
     networkmanager
-    pango
   ];
 
   propagatedBuildInputs = [
-    gst-python
+    brotlicffi
     kiss-headers
     logbook
     pillow
-    poetry-core
-    pygobject3
-    python-zbar
     requests
     single-version
+    # Unlisted dependencies
+    pygobject3
+    python-zbar
+    # Needed as a gobject namespace and to fix 'Caps' object is not subscriptable
+    gst-python
   ];
 
   nativeCheckInputs = [
@@ -82,9 +82,8 @@ buildPythonApplication rec {
 
     # Icons and applications
     install -Dm 644 $out/${python.sitePackages}/data/vn.hoabinh.quan.CoBang.svg -t $out/share/pixmaps/
-    install -Dm 644 $out/${python.sitePackages}/data/vn.hoabinh.quan.CoBang.desktop -t $out/share/applications/
-    substituteInPlace $out/share/applications/vn.hoabinh.quan.CoBang.desktop \
-      --replace "Exec=" "Exec=$out/bin/"
+    install -Dm 644 $out/${python.sitePackages}/data/vn.hoabinh.quan.CoBang.desktop.in -t $out/share/applications/
+    mv $out/${python.sitePackages}/data/vn.hoabinh.quan.CoBang.desktop{.in,}
   '';
 
   preFixup = ''
@@ -99,6 +98,7 @@ buildPythonApplication rec {
     homepage = "https://github.com/hongquan/CoBang";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ wolfangaukang ];
+    mainProgram = "cobang";
     platforms = [ "x86_64-linux" ];
   };
 }

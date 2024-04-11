@@ -29,6 +29,14 @@ let
     toList
     isList
     elem
+    ;
+
+  inherit (lib.meta)
+    availableOn
+  ;
+
+  inherit (lib.generators)
+    toPretty
   ;
 
   # If we're in hydra, we can dispense with the more verbose error
@@ -84,7 +92,7 @@ let
     # was `licenses: lib.lists.any (l: !l.free or true) licenses;`
     # which always evaluates to `!true` for strings.
     else if isString licenses then false
-    else lib.lists.any (l: !l.free or true) licenses;
+    else any (l: !l.free or true) licenses;
 
   hasUnfreeLicense = attrs: hasLicense attrs && isUnfree attrs.meta.license;
 
@@ -94,7 +102,7 @@ let
   isMarkedBroken = attrs: attrs.meta.broken or false;
 
   hasUnsupportedPlatform =
-    pkg: !(lib.meta.availableOn hostPlatform pkg);
+    pkg: !(availableOn hostPlatform pkg);
 
   isMarkedInsecure = attrs: (attrs.meta.knownVulnerabilities or []) != [];
 
@@ -360,7 +368,7 @@ let
         [ ]
       else
         [ "key 'meta.${k}' has invalid value; expected ${metaTypes.${k}.name}, got\n    ${
-          lib.generators.toPretty { indent = "    "; } v
+          toPretty { indent = "    "; } v
         }" ]
     else
       [ "key 'meta.${k}' is unrecognized; expected one of: \n  [${concatMapStringsSep ", " (x: "'${x}'") (attrNames metaTypes)}]" ];
@@ -382,22 +390,24 @@ let
   # reason is one of "unfree", "blocklisted", "broken", "insecure", ...
   # !!! reason strings are hardcoded into OfBorg, make sure to keep them in sync
   # Along with a boolean flag for each reason
-  checkValidity = attrs:
+  checkValidity =
+    let
+      validYes = {
+        valid = "yes";
+        handled = true;
+      };
+    in
+    attrs:
     # Check meta attribute types first, to make sure it is always called even when there are other issues
     # Note that this is not a full type check and functions below still need to by careful about their inputs!
-    let res = checkMeta (attrs.meta or {}); in if res != [] then
-      { valid = "no"; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${concatMapStrings (x: "\n  - " + x) res}\n";
-        unfree = false; nonSource = false; broken = false; unsupported = false; insecure = false;
-      }
-    else {
-      unfree = hasUnfreeLicense attrs;
-      nonSource = hasNonSourceProvenance attrs;
-      broken = isMarkedBroken attrs;
-      unsupported = hasUnsupportedPlatform attrs;
-      insecure = isMarkedInsecure attrs;
-    } // (
+    let
+      res = checkMeta (attrs.meta or {});
+    in
+    if res != [] then
+      { valid = "no"; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${concatMapStrings (x: "\n  - " + x) res}\n"; }
+
     # --- Put checks that cannot be ignored here ---
-    if checkOutputsToInstall attrs then
+    else if checkOutputsToInstall attrs then
       { valid = "no"; reason = "broken-outputs"; errormsg = "has invalid meta.outputsToInstall"; }
 
     # --- Put checks that can be ignored here ---
@@ -410,7 +420,7 @@ let
     else if !allowBroken && attrs.meta.broken or false then
       { valid = "no"; reason = "broken"; errormsg = "is marked as broken"; }
     else if !allowUnsupportedSystem && hasUnsupportedPlatform attrs then
-      let toPretty = lib.generators.toPretty {
+      let toPretty' = toPretty {
             allowPrettyValues = true;
             indent = "  ";
           };
@@ -418,8 +428,8 @@ let
            errormsg = ''
              is not available on the requested hostPlatform:
                hostPlatform.config = "${hostPlatform.config}"
-               package.meta.platforms = ${toPretty (attrs.meta.platforms or [])}
-               package.meta.badPlatforms = ${toPretty (attrs.meta.badPlatforms or [])}
+               package.meta.platforms = ${toPretty' (attrs.meta.platforms or [])}
+               package.meta.badPlatforms = ${toPretty' (attrs.meta.badPlatforms or [])}
             '';
          }
     else if !(hasAllowedInsecure attrs) then
@@ -430,7 +440,7 @@ let
     else if hasNoMaintainers attrs then
       { valid = "warn"; reason = "maintainerless"; errormsg = "has no maintainers"; }
     # -----
-    else { valid = "yes"; });
+    else validYes;
 
 
   # The meta attribute is passed in the resulting attribute set,
@@ -443,6 +453,7 @@ let
   commonMeta = { validity, attrs, pos ? null, references ? [ ] }:
     let
       outputs = attrs.outputs or [ "out" ];
+      hasOutput = out: builtins.elem out outputs;
     in
     {
       # `name` derivation attribute includes cross-compilation cruft,
@@ -461,10 +472,13 @@ let
       #   Services and users should specify outputs explicitly,
       #   unless they are comfortable with this default.
       outputsToInstall =
-        let
-          hasOutput = out: builtins.elem out outputs;
-        in
-        [ (findFirst hasOutput null ([ "bin" "out" ] ++ outputs)) ]
+        [
+          (
+            if hasOutput "bin" then "bin"
+            else if hasOutput "out" then "out"
+            else findFirst hasOutput null outputs
+          )
+        ]
         ++ optional (hasOutput "man") "man";
     }
     // attrs.meta or { }
@@ -473,7 +487,10 @@ let
       position = pos.file + ":" + toString pos.line;
     } // {
       # Expose the result of the checks for everyone to see.
-      inherit (validity) unfree broken unsupported insecure;
+      unfree = hasUnfreeLicense attrs;
+      broken = isMarkedBroken attrs;
+      unsupported = hasUnsupportedPlatform attrs;
+      insecure = isMarkedInsecure attrs;
 
       available = validity.valid != "no"
       && (if config.checkMetaRecursively or false
@@ -484,7 +501,7 @@ let
   assertValidity = { meta, attrs }: let
       validity = checkValidity attrs;
       inherit (validity) valid;
-  in validity // {
+  in if validity ? handled then validity else validity // {
       # Throw an error if trying to evaluate a non-valid derivation
       # or, alternatively, just output a warning message.
       handled =

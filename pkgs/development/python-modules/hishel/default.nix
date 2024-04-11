@@ -1,10 +1,12 @@
 { lib
 , anysqlite
+, boto3
 , buildPythonPackage
 , fetchFromGitHub
 , hatch-fancy-pypi-readme
 , hatchling
 , httpx
+, moto
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
@@ -15,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "hishel";
-  version = "0.0.22";
+  version = "0.0.25";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,21 +26,24 @@ buildPythonPackage rec {
     owner = "karpetrosyan";
     repo = "hishel";
     rev = "refs/tags/${version}";
-    hash = "sha256-2GboU1J0jvZUz20+KpDYnfDqc+qi0tmlypbWeOoYjX0=";
+    hash = "sha256-vDzXrAGJUqG9+wOUWXeKLYraUrILJFAQXf60iCAHRPo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-fancy-pypi-readme
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
   ];
 
   passthru.optional-dependencies = {
     redis = [
       redis
+    ];
+    s3 = [
+      boto3
     ];
     sqlite = [
       anysqlite
@@ -49,6 +54,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    moto
     pytest-asyncio
     pytestCheckHook
     trio
@@ -61,6 +67,12 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests require a running Redis instance
     "test_redis"
+  ];
+
+  disabledTestPaths = [
+    # ImportError: cannot import name 'mock_s3' from 'moto'
+    "tests/_async/test_storages.py"
+    "tests/_sync/test_storages.py"
   ];
 
   meta = with lib; {

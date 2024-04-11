@@ -25,5 +25,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/herlon214/transmission-rss";
     maintainers = with maintainers; [ icewind1991 ];
     license = licenses.mit;
+    mainProgram = "transmission-rss";
   };
 }

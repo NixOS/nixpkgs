@@ -2,47 +2,44 @@
 , stdenv
 , fetchFromSourcehut
 , qbe
-, fetchgit
-, unstableGitUpdater
+, gitUpdater
 }:
 let
-  # harec needs the dbgfile and dbgloc features implemented up to this commit.
-  # This can be dropped once 1.2 is released. For a possible release date, see:
-  # https://lists.sr.ht/~mpu/qbe/%3CZPkmHE9KLohoEohE%40cloudsdale.the-delta.net.eu.org%3E
-  qbe' = qbe.overrideAttrs (_old: {
-    version = "1.1-unstable-2024-01-12";
-    src = fetchgit {
-      url = "git://c9x.me/qbe.git";
-      rev = "85287081c4a25785dec1ec48c488a5879b3c37ac";
-      hash = "sha256-7bVbxUU/HXJXLtAxhoK0URmPtjGwMSZrPkx8WKl52Mg=";
-    };
-  });
-
   platform = lib.toLower stdenv.hostPlatform.uname.system;
   arch = stdenv.hostPlatform.uname.processor;
+  qbePlatform = {
+    x86_64 = "amd64_sysv";
+    aarch64 = "arm64";
+    riscv64 = "rv64";
+  }.${arch};
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "harec";
-  version = "0-unstable-2024-01-29";
+  version = "0.24.0";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "harec";
-    rev = "f9e17e633845d8d38566b4ea32db0a29ac85d96e";
-    hash = "sha256-Xy9VOcDtbJUz3z6Vk8bqH41VbAFKtJ9fzPGEwVz8KQM=";
+    rev = finalAttrs.version;
+    hash = "sha256-NOfoCT/wKZ3CXYzXZq7plXcun+MXQicfzBOmetXN7Qs=";
   };
 
   nativeBuildInputs = [
-    qbe'
+    qbe
   ];
 
   buildInputs = [
-    qbe'
+    qbe
   ];
 
   makeFlags = [
     "PREFIX=${builtins.placeholder "out"}"
     "ARCH=${arch}"
+    "VERSION=${finalAttrs.version}-nixpkgs"
+    "QBEFLAGS=-t${qbePlatform}"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "AS=${stdenv.cc.targetPrefix}as"
+    "LD=${stdenv.cc.targetPrefix}ld"
   ];
 
   strictDeps = true;
@@ -56,10 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    # We create this attribute so that the `hare` package can access the
-    # overwritten `qbe`.
-    qbeUnstable = qbe';
-    updateScript = unstableGitUpdater { };
+    updateScript = gitUpdater { };
   };
 
   meta = {

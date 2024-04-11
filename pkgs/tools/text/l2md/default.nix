@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Convert public-inbox archives to maildir messages";
+    mainProgram = "l2md";
     longDescription = ''
       Quick and dirty hack to import lore.kernel.org list archives via git,
       to export them in maildir format or through a pipe, and to keep them

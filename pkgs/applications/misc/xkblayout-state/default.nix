@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.jagajaga ];
     platforms = platforms.linux;
+    mainProgram = "xkblayout-state";
   };
 }

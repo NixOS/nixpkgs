@@ -10,31 +10,30 @@
 
 buildPythonPackage rec {
   pname = "catppuccin";
-  version = "1.3.2";
+  version = "2.2.0";
+
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "catppuccin";
     repo = "python";
-    rev = "v${version}";
-    hash = "sha256-spPZdQ+x3isyeBXZ/J2QE6zNhyHRfyRQGiHreuXzzik=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+V1rln3FlFvs1FEIANIch7k/b2EsI9xBxhg3Bwg99+I=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
     poetry-dynamic-versioning
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     pygments = [ pygments ];
     rich = [ rich ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTestPaths = [
-    "tests/test_flavour.py" # would download a json to check correctness of flavours
-  ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "catppuccin" ];
 

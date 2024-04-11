@@ -55,6 +55,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A standalone Luau script runtime";
+    mainProgram = "lune";
     homepage = "https://github.com/lune-org/lune";
     changelog = "https://github.com/lune-org/lune/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mpl20;

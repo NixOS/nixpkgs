@@ -17,6 +17,7 @@ let
   ++ optional cfg.ext4.enable e2fsprogs
   ++ optional cfg.xfs.enable xfsprogs
   ;
+  hasFs = fsName: lib.any (fs: fs.fsType == fsName) (lib.attrValues config.fileSystems);
   settingsFormat = pkgs.formats.yaml { };
   cfgfile = settingsFormat.generate "cloud.cfg" cfg.settings;
 in
@@ -44,7 +45,8 @@ in
 
       btrfs.enable = mkOption {
         type = types.bool;
-        default = false;
+        default = hasFs "btrfs";
+        defaultText = literalExpression ''hasFs "btrfs"'';
         description = mdDoc ''
           Allow the cloud-init service to operate `btrfs` filesystem.
         '';
@@ -52,7 +54,8 @@ in
 
       ext4.enable = mkOption {
         type = types.bool;
-        default = true;
+        default = hasFs "ext4";
+        defaultText = literalExpression ''hasFs "ext4"'';
         description = mdDoc ''
           Allow the cloud-init service to operate `ext4` filesystem.
         '';
@@ -60,7 +63,8 @@ in
 
       xfs.enable = mkOption {
         type = types.bool;
-        default = false;
+        default = hasFs "xfs";
+        defaultText = literalExpression ''hasFs "xfs"'';
         description = mdDoc ''
           Allow the cloud-init service to operate `xfs` filesystem.
         '';
@@ -204,7 +208,7 @@ in
       description = "Apply the settings specified in cloud-config";
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
-      after = [ "network-online.target" "syslog.target" "cloud-config.target" ];
+      after = [ "network-online.target" "cloud-config.target" ];
 
       path = path;
       serviceConfig = {
@@ -220,7 +224,7 @@ in
       description = "Execute cloud user/final scripts";
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
-      after = [ "network-online.target" "syslog.target" "cloud-config.service" "rc-local.service" ];
+      after = [ "network-online.target" "cloud-config.service" "rc-local.service" ];
       requires = [ "cloud-config.target" ];
       path = path;
       serviceConfig = {

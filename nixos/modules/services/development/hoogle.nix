@@ -56,6 +56,16 @@ in {
       description = lib.mdDoc "Set the host to bind on.";
       default = "127.0.0.1";
     };
+
+    extraOptions = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "--no-security-headers" ];
+      description = lib.mdDoc ''
+        Additional command-line arguments to pass to
+        {command}`hoogle server`
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -66,7 +76,10 @@ in {
 
       serviceConfig = {
         Restart = "always";
-        ExecStart = ''${hoogleEnv}/bin/hoogle server --local --port ${toString cfg.port} --home ${cfg.home} --host ${cfg.host}'';
+        ExecStart = ''
+          ${hoogleEnv}/bin/hoogle server --local --port ${toString cfg.port} --home ${cfg.home} --host ${cfg.host} \
+            ${concatStringsSep " " cfg.extraOptions}
+        '';
 
         DynamicUser = true;
 

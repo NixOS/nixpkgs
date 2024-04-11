@@ -1,27 +1,27 @@
-{
-  buildPythonApplication,
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  makeWrapper,
-  pytestCheckHook,
-  python3,
-  pythonOlder,
-  ruff,
-  setuptools,
-}: let
+{ lib
+, buildPythonApplication
+, buildPythonPackage
+, fetchFromGitHub
+, makeWrapper
+, pytestCheckHook
+, python3
+, pythonOlder
+, ruff
+, setuptools
+}:
+let
   llm = buildPythonPackage rec {
     pname = "llm";
-    version = "0.12";
+    version = "0.13.1";
     pyproject = true;
 
     disabled = pythonOlder "3.8";
 
     src = fetchFromGitHub {
       owner = "simonw";
-      repo = pname;
+      repo = "llm";
       rev = "refs/tags/${version}";
-      hash = "sha256-aCqdw2co/cXrBwVY/k/aSLl3C22nlH5LvU2yir1/NnQ=";
+      hash = "sha256-Nq6pduzl8IK+nA3pctst/W4ux7+P6mBFTEHMF+vtBQw=";
     };
 
     patches = [
@@ -36,6 +36,7 @@
       click-default-group
       numpy
       openai
+      pip
       pluggy
       pydantic
       python-ulid
@@ -48,8 +49,8 @@
     nativeCheckInputs = with python3.pkgs; [
       cogapp
       numpy
+      pytest-httpx
       pytestCheckHook
-      requests-mock
     ];
 
     doCheck = true;

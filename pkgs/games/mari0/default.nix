@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Crossover between Super Mario Bros. and Portal";
+    mainProgram = "mari0";
     platforms = platforms.linux;
     license = licenses.mit;
     downloadPage = "https://stabyourself.net/mari0/";

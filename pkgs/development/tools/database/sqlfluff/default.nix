@@ -5,17 +5,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sqlfluff";
-  version = "2.3.5";
-  format = "setuptools";
+  version = "3.0.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "sqlfluff";
+    repo = "sqlfluff";
     rev = "refs/tags/${version}";
-    hash = "sha256-l9py+qMI8t5L+FcUmJYXwemjUy/pcugbvhdW3oUOZMo=";
+    hash = "sha256-/Zp/iAX6Y6MaXMjpk3dRYgZNhjJtl3cr/FiCyhGK9X4=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     appdirs
     cached-property
     chardet
@@ -67,5 +71,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/sqlfluff/sqlfluff/blob/${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "sqlfluff";
   };
 }

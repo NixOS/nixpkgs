@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "switchbot-api";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -17,14 +17,14 @@ buildPythonPackage rec {
     owner = "SeraphicCorp";
     repo = "py-switchbot-api";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QM8oVfd+hdVNdhOgI3ujyY82Im0Yr5Nl+OcqzEtZ7XE=";
+    hash = "sha256-dJLjWwBzrT3GnsRpTIXu3SkVDUlnAbRwBlfSQaHWPzc=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
   ];
 

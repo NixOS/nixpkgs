@@ -38,7 +38,7 @@
 
 mkDerivationWith buildPythonPackage rec {
   pname = "napari";
-  version = "0.4.18";
+  version = "0.4.19.post1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -47,7 +47,7 @@ mkDerivationWith buildPythonPackage rec {
     owner = "napari";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-xF0DYK+226MZpB050IukNvTg2iHMQAIZW0serKRJd/0=";
+    hash = "sha256-qw5WdFPySNkmm+dNu+hqsmr+csBpHnSl9bMpb4nKEqI=";
   };
 
   postPatch = ''

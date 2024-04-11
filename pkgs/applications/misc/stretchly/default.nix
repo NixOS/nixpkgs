@@ -75,5 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd2;
     maintainers = with maintainers; [ _1000101 ];
     platforms = platforms.linux;
+    mainProgram = "stretchly";
   };
 })

@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Generate static golang bindings for GObject";
+    mainProgram = "gir-generator";
     homepage = "https://github.com/linuxdeepin/go-gir-generator";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

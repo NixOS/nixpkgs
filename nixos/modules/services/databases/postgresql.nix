@@ -14,7 +14,7 @@ let
       #     package = pkgs.postgresql_<major>;
       #   };
       # works.
-      base = if cfg.enableJIT && !cfg.package.jitSupport then cfg.package.withJIT else cfg.package;
+      base = if cfg.enableJIT then cfg.package.withJIT else cfg.package;
     in
     if cfg.extraPlugins == []
       then base
@@ -27,7 +27,7 @@ let
     else toString value;
 
   # The main PostgreSQL configuration file.
-  configFile = pkgs.writeTextDir "postgresql.conf" (concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") cfg.settings));
+  configFile = pkgs.writeTextDir "postgresql.conf" (concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") (filterAttrs (const (x: x != null)) cfg.settings)));
 
   configFileCheck = pkgs.runCommand "postgresql-configfile-check" {} ''
     ${cfg.package}/bin/postgres -D${configFile} -C config_file >/dev/null
@@ -41,6 +41,9 @@ in
 {
   imports = [
     (mkRemovedOptionModule [ "services" "postgresql" "extraConfig" ] "Use services.postgresql.settings instead.")
+
+    (mkRenamedOptionModule [ "services" "postgresql" "logLinePrefix" ] [ "services" "postgresql" "settings" "log_line_prefix" ])
+    (mkRenamedOptionModule [ "services" "postgresql" "port" ] [ "services" "postgresql" "settings" "port" ])
   ];
 
   ###### interface
@@ -55,14 +58,6 @@ in
 
       package = mkPackageOption pkgs "postgresql" {
         example = "postgresql_15";
-      };
-
-      port = mkOption {
-        type = types.port;
-        default = 5432;
-        description = lib.mdDoc ''
-          The port on which PostgreSQL listens.
-        '';
       };
 
       checkConfig = mkOption {
@@ -158,33 +153,6 @@ in
               type = types.str;
               description = lib.mdDoc ''
                 Name of the user to ensure.
-              '';
-            };
-
-            ensurePermissions = mkOption {
-              type = types.attrsOf types.str;
-              default = {};
-              visible = false; # This option has been deprecated.
-              description = lib.mdDoc ''
-                This option is DEPRECATED and should not be used in nixpkgs anymore,
-                use `ensureDBOwnership` instead. It can also break with newer
-                versions of PostgreSQL (≥ 15).
-
-                Permissions to ensure for the user, specified as an attribute set.
-                The attribute names specify the database and tables to grant the permissions for.
-                The attribute values specify the permissions to grant. You may specify one or
-                multiple comma-separated SQL privileges here.
-
-                For more information on how to specify the target
-                and on which privileges exist, see the
-                [GRANT syntax](https://www.postgresql.org/docs/current/sql-grant.html).
-                The attributes are used as `GRANT ''${attrValue} ON ''${attrName}`.
-              '';
-              example = literalExpression ''
-                {
-                  "DATABASE \"nextcloud\"" = "ALL PRIVILEGES";
-                  "ALL TABLES IN SCHEMA public" = "ALL PRIVILEGES";
-                }
               '';
             };
 
@@ -379,17 +347,6 @@ in
         '';
       };
 
-      logLinePrefix = mkOption {
-        type = types.str;
-        default = "[%p] ";
-        example = "%m [%p] ";
-        description = lib.mdDoc ''
-          A printf-style string that is output at the beginning of each log line.
-          Upstream default is `'%m [%p] '`, i.e. it includes the timestamp. We do
-          not include the timestamp, because journal has it anyway.
-        '';
-      };
-
       extraPlugins = mkOption {
         type = with types; coercedTo (listOf path) (path: _ignorePg: path) (functionTo (listOf path));
         default = _: [];
@@ -400,7 +357,38 @@ in
       };
 
       settings = mkOption {
-        type = with types; attrsOf (oneOf [ bool float int str ]);
+        type = with types; submodule {
+          freeformType = attrsOf (oneOf [ bool float int str ]);
+          options = {
+            shared_preload_libraries = mkOption {
+              type = nullOr (coercedTo (listOf str) (concatStringsSep ", ") str);
+              default = null;
+              example = literalExpression ''[ "auto_explain" "anon" ]'';
+              description = mdDoc ''
+                List of libraries to be preloaded.
+              '';
+            };
+
+            log_line_prefix = mkOption {
+              type = types.str;
+              default = "[%p] ";
+              example = "%m [%p] ";
+              description = lib.mdDoc ''
+                A printf-style string that is output at the beginning of each log line.
+                Upstream default is `'%m [%p] '`, i.e. it includes the timestamp. We do
+                not include the timestamp, because journal has it anyway.
+              '';
+            };
+
+            port = mkOption {
+              type = types.port;
+              default = 5432;
+              description = lib.mdDoc ''
+                The port on which PostgreSQL listens.
+              '';
+            };
+          };
+        };
         default = {};
         description = lib.mdDoc ''
           PostgreSQL configuration. Refer to
@@ -460,25 +448,13 @@ in
         Offender: ${name} has not been found among databases.
       '';
     }) cfg.ensureUsers;
-    # `ensurePermissions` is now deprecated, let's avoid it.
-    warnings = lib.optional (any ({ ensurePermissions, ... }: ensurePermissions != {}) cfg.ensureUsers) "
-      `services.postgresql.ensureUsers.*.ensurePermissions` is used in your expressions,
-      this option is known to be broken with newer PostgreSQL versions,
-      consider migrating to `services.postgresql.ensureUsers.*.ensureDBOwnership` or
-      consult the release notes or manual for more migration guidelines.
-
-      This option will be removed in NixOS 24.05 unless it sees significant
-      maintenance improvements.
-    ";
 
     services.postgresql.settings =
       {
         hba_file = "${pkgs.writeText "pg_hba.conf" cfg.authentication}";
         ident_file = "${pkgs.writeText "pg_ident.conf" cfg.identMap}";
         log_destination = "stderr";
-        log_line_prefix = cfg.logLinePrefix;
         listen_addresses = if cfg.enableTCPIP then "*" else "localhost";
-        port = cfg.port;
         jit = mkDefault (if cfg.enableJIT then "on" else "off");
       };
 
@@ -561,7 +537,7 @@ in
         # Wait for PostgreSQL to be ready to accept connections.
         postStart =
           ''
-            PSQL="psql --port=${toString cfg.port}"
+            PSQL="psql --port=${toString cfg.settings.port}"
 
             while ! $PSQL -d postgres -c "" 2> /dev/null; do
                 if ! kill -0 "$MAINPID"; then exit 1; fi
@@ -583,11 +559,6 @@ in
               concatMapStrings
               (user:
               let
-                  userPermissions = concatStringsSep "\n"
-                    (mapAttrsToList
-                      (database: permission: ''$PSQL -tAc 'GRANT ${permission} ON ${database} TO "${user.name}"' '')
-                      user.ensurePermissions
-                    );
                   dbOwnershipStmt = optionalString
                     user.ensureDBOwnership
                     ''$PSQL -tAc 'ALTER DATABASE "${user.name}" OWNER TO "${user.name}";' '';
@@ -599,7 +570,6 @@ in
                   userClauses = ''$PSQL -tAc 'ALTER ROLE "${user.name}" ${concatStringsSep " " clauseSqlStatements}' '';
                 in ''
                   $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || $PSQL -tAc 'CREATE USER "${user.name}"'
-                  ${userPermissions}
                   ${userClauses}
 
                   ${dbOwnershipStmt}

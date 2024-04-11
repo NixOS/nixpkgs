@@ -39,6 +39,7 @@ let
     meta.maintainers = [ maintainers.aanderse ];
   };
 in {
+  sqlite3 = redmineTest { name = "sqlite3"; type = "sqlite3"; };
   mysql = redmineTest { name = "mysql"; type = "mysql2"; };
   pgsql = redmineTest { name = "pgsql"; type = "postgresql"; };
 }

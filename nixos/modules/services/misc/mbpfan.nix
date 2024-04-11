@@ -4,14 +4,13 @@ with lib;
 let
   cfg = config.services.mbpfan;
   verbose = optionalString cfg.verbose "v";
-  settingsFormat = pkgs.formats.ini {};
-  settingsFile = settingsFormat.generate "mbpfan.ini" cfg.settings;
+  format = pkgs.formats.ini {};
+  cfgfile = format.generate "mbpfan.ini" cfg.settings;
 
 in {
   options.services.mbpfan = {
     enable = mkEnableOption (lib.mdDoc "mbpfan, fan controller daemon for Apple Macs and MacBooks");
-
-    package = mkPackageOption pkgs "mbpfan" { };
+    package = mkPackageOption pkgs "mbpfan" {};
 
     verbose = mkOption {
       type = types.bool;
@@ -29,7 +28,7 @@ in {
       default = {};
       description = lib.mdDoc "INI configuration for Mbpfan.";
       type = types.submodule {
-        freeformType = settingsFormat.type;
+        freeformType = format.type;
 
         options.general.low_temp = mkOption {
           type = types.int;
@@ -70,12 +69,12 @@ in {
   config = mkIf cfg.enable {
     boot.kernelModules = [ "coretemp" "applesmc" ];
     environment.systemPackages = [ cfg.package ];
-    environment.etc."mbpfan.conf".source = settingsFile;
+    environment.etc."mbpfan.conf".source = cfgfile;
 
     systemd.services.mbpfan = {
       description = "A fan manager daemon for MacBook Pro";
       wantedBy = [ "sysinit.target" ];
-      after = [ "syslog.target" "sysinit.target" ];
+      after = [ "sysinit.target" ];
       restartTriggers = [ config.environment.etc."mbpfan.conf".source ];
 
       serviceConfig = {

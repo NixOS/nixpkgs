@@ -396,6 +396,9 @@ in {
             modules = [nvidia_x11.bin];
             display = !offloadCfg.enable;
             deviceSection =
+              ''
+                Option "SidebandSocketPath" "/run/nvidia-xdriver/"
+              '' +
               lib.optionalString primeEnabled
               ''
                 BusID "${pCfg.nvidiaBusId}"
@@ -533,8 +536,14 @@ in {
 
         hardware.firmware = lib.optional cfg.open nvidia_x11.firmware;
 
-        systemd.tmpfiles.rules =
-          lib.optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
+        systemd.tmpfiles.rules = [
+          # Remove the following log message:
+          #    (WW) NVIDIA: Failed to bind sideband socket to
+          #    (WW) NVIDIA:     '/var/run/nvidia-xdriver-b4f69129' Permission denied
+          #
+          # https://bbs.archlinux.org/viewtopic.php?pid=1909115#p1909115
+          "d /run/nvidia-xdriver 0770 root users"
+        ] ++ lib.optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
           "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
 
         boot = {

@@ -246,12 +246,8 @@ in
             shopt -s lastpipe
             ${pkg}/bin/makekeys | { read private ipv6 public; }
 
-            umask 0077
-            echo "CJDNS_PRIVATE_KEY=$private" >> /etc/cjdns.keys
-            echo -e "CJDNS_IPV6=$ipv6\nCJDNS_PUBLIC_KEY=$public" > /etc/cjdns.public
-
-            chmod 600 /etc/cjdns.keys
-            chmod 444 /etc/cjdns.public
+            install -m 600 <(echo "CJDNS_PRIVATE_KEY=$private") /etc/cjdns.keys
+            install -m 444 <(echo -e "CJDNS_IPV6=$ipv6\nCJDNS_PUBLIC_KEY=$public") /etc/cjdns.public
         fi
 
         if [ -z "$CJDNS_ADMIN_PASSWORD" ]; then

@@ -108,7 +108,7 @@ stdenv.mkDerivation {
     updateScript = import ./update.nix {
       inherit pname channel lib writeScript xidel coreutils gnused gnugrep gnupg curl runtimeShell;
       baseUrl =
-        if channel == "devedition"
+        if channel == "developer-edition"
           then "https://archive.mozilla.org/pub/devedition/releases/"
           else "https://archive.mozilla.org/pub/firefox/releases/";
     };

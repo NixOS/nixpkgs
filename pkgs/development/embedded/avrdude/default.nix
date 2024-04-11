@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Command-line tool for programming Atmel AVR microcontrollers";
+    mainProgram = "avrdude";
     longDescription = ''
       AVRDUDE (AVR Downloader/UploaDEr) is an utility to
       download/upload/manipulate the ROM and EEPROM contents of AVR

@@ -66,6 +66,13 @@ in {
       default = [];
       example = ["--ssh"];
     };
+
+    extraDaemonFlags = mkOption {
+      description = lib.mdDoc "Extra flags to pass to {command}`tailscaled`.";
+      type = types.listOf types.str;
+      default = [];
+      example = ["--no-logs-no-support"];
+    };
   };
 
   config = mkIf cfg.enable {
@@ -80,7 +87,7 @@ in {
       ] ++ lib.optional config.networking.resolvconf.enable config.networking.resolvconf.package;
       serviceConfig.Environment = [
         "PORT=${toString cfg.port}"
-        ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName}"''
+        ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName} ${lib.concatStringsSep " " cfg.extraDaemonFlags}"''
       ] ++ (lib.optionals (cfg.permitCertUid != null) [
         "TS_PERMIT_CERT_UID=${cfg.permitCertUid}"
       ]);

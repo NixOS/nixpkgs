@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xlockmore";
-  version = "5.74";
+  version = "5.76";
 
   src = fetchurl {
     url = "http://sillycycle.com/xlock/xlockmore-${version}.tar.xz";
-    sha256 = "sha256-SIre4GeovkMaWG4NR+9tfdhrMXaLSPBO5JLy8REWUYQ=";
+    sha256 = "sha256-gnn7crvjflmW05+J8EIg0pbK11IGlXz/EbCqc7gFvfM=";
     curlOpts = "--user-agent 'Mozilla/5.0'";
   };
 

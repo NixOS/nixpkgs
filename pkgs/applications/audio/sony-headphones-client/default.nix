@@ -57,5 +57,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ stunkymonkey ];
     platforms = platforms.linux;
+    mainProgram = "SonyHeadphonesClient";
   };
 }

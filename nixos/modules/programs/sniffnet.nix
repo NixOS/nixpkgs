@@ -7,7 +7,7 @@ in
 {
   options = {
     programs.sniffnet = {
-      enable = lib.mkEnableOption (lib.mdDoc "sniffnet");
+      enable = lib.mkEnableOption (lib.mdDoc "sniffnet, a network traffic monitor application");
     };
   };
 

@@ -33,6 +33,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "An interactive Unix-like shell written in Go";
+    mainProgram = "hilbish";
     changelog = "https://github.com/Rosettea/Hilbish/releases/tag/v${version}";
     homepage = "https://github.com/Rosettea/Hilbish";
     maintainers = with maintainers; [ moni ];

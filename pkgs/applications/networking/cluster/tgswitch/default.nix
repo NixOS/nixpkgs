@@ -21,6 +21,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Command line tool to switch between different versions of terragrunt";
+    mainProgram = "tgswitch";
     homepage = "https://github.com/warrensbox/tgswitch";
     license = licenses.mit;
     maintainers = with maintainers; [ psibi ];

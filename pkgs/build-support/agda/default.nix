@@ -2,14 +2,28 @@
 
 { stdenv, lib, self, Agda, runCommand, makeWrapper, writeText, ghcWithPackages, nixosTests }:
 
-with lib.strings;
-
 let
+  inherit (lib)
+    attrValues
+    elem
+    filter
+    filterAttrs
+    isAttrs
+    isList
+    platforms
+    ;
+
+  inherit (lib.strings)
+    concatMapStrings
+    concatMapStringsSep
+    optionalString
+    ;
+
   withPackages' = {
     pkgs,
     ghc ? ghcWithPackages (p: with p; [ ieee754 ])
   }: let
-    pkgs' = if builtins.isList pkgs then pkgs else pkgs self;
+    pkgs' = if isList pkgs then pkgs else pkgs self;
     library-file = writeText "libraries" ''
       ${(concatMapStringsSep "\n" (p: "${p}/${p.libraryFile}") pkgs')}
     '';
@@ -23,7 +37,7 @@ let
       inherit withPackages;
       tests = {
         inherit (nixosTests) agda;
-        allPackages = withPackages (lib.filter self.lib.isUnbrokenAgdaPackage (lib.attrValues self));
+        allPackages = withPackages (filter self.lib.isUnbrokenAgdaPackage (attrValues self));
       };
     };
     inherit (Agda) meta;
@@ -31,12 +45,11 @@ let
     mkdir -p $out/bin
     makeWrapper ${Agda}/bin/agda $out/bin/agda \
       --add-flags "--with-compiler=${ghc}/bin/ghc" \
-      --add-flags "--library-file=${library-file}" \
-      --add-flags "--local-interfaces"
+      --add-flags "--library-file=${library-file}"
     ln -s ${Agda}/bin/agda-mode $out/bin/agda-mode
-    ''; # Local interfaces has been added for now: See https://github.com/agda/agda/issues/4526
+    '';
 
-  withPackages = arg: if builtins.isAttrs arg then withPackages' arg else withPackages' { pkgs = arg; };
+  withPackages = arg: if isAttrs arg then withPackages' arg else withPackages' { pkgs = arg; };
 
   extensions = [
     "agda"
@@ -63,7 +76,7 @@ let
     , extraExtensions ? []
     , ...
     }: let
-      agdaWithArgs = withPackages (builtins.filter (p: p ? isAgdaDerivation) buildInputs);
+      agdaWithArgs = withPackages (filter (p: p ? isAgdaDerivation) buildInputs);
       includePathArgs = concatMapStrings (path: "-i" + path + " ") (includePaths ++ [(dirOf everythingFile)]);
     in
       {
@@ -76,13 +89,14 @@ let
         buildPhase = if buildPhase != null then buildPhase else ''
           runHook preBuild
           agda ${includePathArgs} ${everythingFile}
+          rm ${everythingFile} ${lib.interfaceFile Agda.version everythingFile}
           runHook postBuild
         '';
 
         installPhase = if installPhase != null then installPhase else ''
           runHook preInstall
           mkdir -p $out
-          find -not \( -path ${everythingFile} -or -path ${lib.interfaceFile everythingFile} \) -and \( ${concatMapStringsSep " -or " (p: "-name '*.${p}'") (extensions ++ extraExtensions)} \) -exec cp -p --parents -t "$out" {} +
+          find \( ${concatMapStringsSep " -or " (p: "-name '*.${p}'") (extensions ++ extraExtensions)} \) -exec cp -p --parents -t "$out" {} +
           runHook postInstall
         '';
 
@@ -91,13 +105,13 @@ let
         # darwin, it seems that there is no standard such locale; luckily,
         # the referenced issue doesn't seem to surface on darwin. Hence let's
         # set this only on non-darwin.
-        LC_ALL = lib.optionalString (!stdenv.isDarwin) "C.UTF-8";
+        LC_ALL = optionalString (!stdenv.isDarwin) "C.UTF-8";
 
-        meta = if meta.broken or false then meta // { hydraPlatforms = lib.platforms.none; } else meta;
+        meta = if meta.broken or false then meta // { hydraPlatforms = platforms.none; } else meta;
 
         # Retrieve all packages from the finished package set that have the current package as a dependency and build them
-        passthru.tests = with builtins;
-          lib.filterAttrs (name: pkg: self.lib.isUnbrokenAgdaPackage pkg && elem pname (map (pkg: pkg.pname) pkg.buildInputs)) self;
+        passthru.tests =
+          filterAttrs (name: pkg: self.lib.isUnbrokenAgdaPackage pkg && elem pname (map (pkg: pkg.pname) pkg.buildInputs)) self;
       };
 in
 {

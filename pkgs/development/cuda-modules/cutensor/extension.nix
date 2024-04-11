@@ -65,12 +65,10 @@ let
       # Un-nest the manifests attribute set.
       releaseGrabber = evaluatedModules: evaluatedModules.config.cutensor.manifests;
     in
-    lists.map
-      (trivial.flip trivial.pipe [
-        configEvaluator
-        releaseGrabber
-      ])
-      cutensorVersions;
+    lists.map (trivial.flip trivial.pipe [
+      configEvaluator
+      releaseGrabber
+    ]) cutensorVersions;
 
   # Our cudaVersion tells us which version of CUDA we're building against.
   # The subdirectories in lib/ tell us which versions of CUDA are supported.
@@ -96,15 +94,11 @@ let
   redistArch = flags.getRedistArch hostPlatform.system;
   # platformIsSupported :: Manifests -> Boolean
   platformIsSupported =
-    {feature, ...}:
-    (attrsets.attrByPath
-      [
-        pname
-        redistArch
-      ]
-      null
-      feature
-    ) != null;
+    { feature, ... }:
+    (attrsets.attrByPath [
+      pname
+      redistArch
+    ] null feature) != null;
 
   # TODO(@connorbaker): With an auxilliary file keeping track of the CUDA versions each release supports,
   # we could filter out releases that don't support our CUDA version.
@@ -116,41 +110,39 @@ let
   # Compute versioned attribute name to be used in this package set
   # Patch version changes should not break the build, so we only use major and minor
   # computeName :: RedistribRelease -> String
-  computeName = {version, ...}: mkVersionedPackageName redistName version;
+  computeName = { version, ... }: mkVersionedPackageName redistName version;
 in
 final: _:
 let
   # buildCutensorPackage :: Manifests -> AttrSet Derivation
   buildCutensorPackage =
-    {redistrib, feature}:
+    { redistrib, feature }:
     let
       drv = final.callPackage ../generic-builders/manifest.nix {
         inherit pname redistName libPath;
         redistribRelease = redistrib.${pname};
         featureRelease = feature.${pname};
       };
-      fixedDrv = drv.overrideAttrs (
-        prevAttrs: {
-          buildInputs =
-            prevAttrs.buildInputs
-            ++ lists.optionals (strings.versionOlder cudaVersion "11.4") [final.cudatoolkit]
-            ++ lists.optionals (strings.versionAtLeast cudaVersion "11.4") (
-              [final.libcublas.lib]
-              # For some reason, the 1.4.x release of cuTENSOR requires the cudart library.
-              ++ lists.optionals (strings.hasPrefix "1.4" redistrib.${pname}.version) [final.cuda_cudart.lib]
-            );
-          meta = prevAttrs.meta // {
-            description = "cuTENSOR: A High-Performance CUDA Library For Tensor Primitives";
-            homepage = "https://developer.nvidia.com/cutensor";
-            maintainers = prevAttrs.meta.maintainers ++ [lib.maintainers.obsidian-systems-maintenance];
-            license = lib.licenses.unfreeRedistributable // {
-              shortName = "cuTENSOR EULA";
-              name = "cuTENSOR SUPPLEMENT TO SOFTWARE LICENSE AGREEMENT FOR NVIDIA SOFTWARE DEVELOPMENT KITS";
-              url = "https://docs.nvidia.com/cuda/cutensor/license.html";
-            };
+      fixedDrv = drv.overrideAttrs (prevAttrs: {
+        buildInputs =
+          prevAttrs.buildInputs
+          ++ lists.optionals (strings.versionOlder cudaVersion "11.4") [ final.cudatoolkit ]
+          ++ lists.optionals (strings.versionAtLeast cudaVersion "11.4") (
+            [ final.libcublas.lib ]
+            # For some reason, the 1.4.x release of cuTENSOR requires the cudart library.
+            ++ lists.optionals (strings.hasPrefix "1.4" redistrib.${pname}.version) [ final.cuda_cudart.lib ]
+          );
+        meta = prevAttrs.meta // {
+          description = "cuTENSOR: A High-Performance CUDA Library For Tensor Primitives";
+          homepage = "https://developer.nvidia.com/cutensor";
+          maintainers = prevAttrs.meta.maintainers ++ [ lib.maintainers.obsidian-systems-maintenance ];
+          license = lib.licenses.unfreeRedistributable // {
+            shortName = "cuTENSOR EULA";
+            name = "cuTENSOR SUPPLEMENT TO SOFTWARE LICENSE AGREEMENT FOR NVIDIA SOFTWARE DEVELOPMENT KITS";
+            url = "https://docs.nvidia.com/cuda/cutensor/license.html";
           };
-        }
-      );
+        };
+      });
     in
     attrsets.nameValuePair (computeName redistrib.${pname}) fixedDrv;
 
@@ -158,7 +150,7 @@ let
     let
       nameOfNewest = computeName (lists.last supportedManifests).redistrib.${pname};
       drvs = builtins.listToAttrs (lists.map buildCutensorPackage supportedManifests);
-      containsDefault = attrsets.optionalAttrs (drvs != {}) {cutensor = drvs.${nameOfNewest};};
+      containsDefault = attrsets.optionalAttrs (drvs != { }) { cutensor = drvs.${nameOfNewest}; };
     in
     drvs // containsDefault;
 in

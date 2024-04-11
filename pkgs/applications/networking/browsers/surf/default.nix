@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A simple web browser based on WebKitGTK";
+    mainProgram = "surf";
     longDescription = ''
       surf is a simple web browser based on WebKitGTK. It is able to display
       websites and follow links. It supports the XEmbed protocol which makes it

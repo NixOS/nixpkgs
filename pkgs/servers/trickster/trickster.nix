@@ -41,6 +41,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Reverse proxy cache and time series dashboard accelerator";
+    mainProgram = "trickster";
     longDescription = ''
       Trickster is a fully-featured HTTP Reverse Proxy Cache for HTTP
       applications like static file servers and web APIs.

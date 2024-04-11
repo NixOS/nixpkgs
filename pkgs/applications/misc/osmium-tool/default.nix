@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
     homepage = "https://osmcode.org/osmium-tool/";
     changelog = "https://github.com/osmcode/osmium-tool/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ gpl3Plus mit bsd3 ];
-    maintainers = with maintainers; [ das-g ];
+    maintainers = with maintainers; teams.geospatial.members ++ [ das-g ];
+    mainProgram = "osmium";
   };
 }

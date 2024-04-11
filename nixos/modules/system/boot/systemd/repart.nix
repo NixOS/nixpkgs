@@ -10,6 +10,20 @@ let
     "repart.d"
     format
     (lib.mapAttrs (_n: v: { Partition = v; }) cfg.partitions);
+
+  partitionAssertions = lib.mapAttrsToList (fileName: definition:
+    let
+      inherit (utils.systemdUtils.lib) GPTMaxLabelLength;
+      labelLength = builtins.stringLength definition.Label;
+    in
+    {
+      assertion = definition ? Label -> GPTMaxLabelLength >= labelLength;
+      message = ''
+        The partition label '${definition.Label}' defined for '${fileName}' is ${toString labelLength}
+        characters long, but the maximum label length supported by systemd is ${toString GPTMaxLabelLength}.
+      '';
+    }
+  ) cfg.partitions;
 in
 {
   options = {
@@ -81,7 +95,7 @@ in
           'boot.initrd.systemd.repart.enable' requires 'boot.initrd.systemd.enable' to be enabled.
         '';
       }
-    ];
+    ] ++ partitionAssertions;
 
     # systemd-repart uses loopback devices for partition creation
     boot.initrd.availableKernelModules = lib.optional initrdCfg.enable "loop";

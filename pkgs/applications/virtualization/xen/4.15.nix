@@ -125,7 +125,7 @@ callPackage (import ./generic.nix (rec {
     ++ optional (withSeabios) "--with-system-seabios=${seabios}/share/seabios"
     ++ optional (!withInternalSeabios && !withSeabios) "--disable-seabios"
 
-    ++ optional (withOVMF) "--with-system-ovmf=${OVMF.fd}/FV/OVMF.fd"
+    ++ optional (withOVMF) "--with-system-ovmf=${OVMF.firmware}"
     ++ optional (withInternalOVMF) "--enable-ovmf";
 
   NIX_CFLAGS_COMPILE = toString [

@@ -57,6 +57,7 @@ let doit = buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://pydoit.org/";
     description = "A task management & automation tool";
+    mainProgram = "doit";
     license = licenses.mit;
     longDescription = ''
       doit is a modern open-source build-tool written in python

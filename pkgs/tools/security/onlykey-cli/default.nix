@@ -27,6 +27,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "OnlyKey client and command-line tool";
+    mainProgram = "onlykey-cli";
     homepage = "https://github.com/trustcrypto/python-onlykey";
     license = licenses.mit;
     maintainers = with maintainers; [ ranfdev ];

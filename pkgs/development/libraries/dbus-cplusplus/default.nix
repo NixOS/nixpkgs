@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
       url = "https://src.fedoraproject.org/rpms/dbus-c++/raw/9f515ace0594c8b2b9f0d41ffe71bc5b78d30eee/f/dbus-c++-template-operators.patch";
       hash = "sha256-B8S7z/YH2YEQgaRsBJBBVTx8vHQhHW7z171TZmogpL8=";
     })
-  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
       name = "0001-src-eventloop.cpp-use-portable-method-for-initializi.patch";
       url = "https://github.com/openembedded/meta-openembedded/raw/119e75e48dbf0539b4e440417901458ffff79b38/meta-oe/recipes-core/dbus/libdbus-c++-0.9.0/0001-src-eventloop.cpp-use-portable-method-for-initializi.patch";

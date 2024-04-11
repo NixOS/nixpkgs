@@ -123,6 +123,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Full-featured video player supporting playing local and streaming media in multiple video formats";
+    mainProgram = "deepin-movie";
     homepage = "https://github.com/linuxdeepin/deepin-movie-reborn";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

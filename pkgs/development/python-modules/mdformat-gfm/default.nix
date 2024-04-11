@@ -29,14 +29,11 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  buildInputs = [
-    mdformat
-    markdown-it-py
-    mdit-py-plugins
-  ];
-
   propagatedBuildInputs = [
+    markdown-it-py
+    mdformat
     mdformat-tables
+    mdit-py-plugins
     linkify-it-py
   ];
 

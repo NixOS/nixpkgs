@@ -52,7 +52,7 @@ in {
           # See: https://github.com/NixOS/nixpkgs/issues/213408
           pkgs.substitute {
             src = "${systemd}/example/sysctl.d/50-coredump.conf";
-            replacements = [
+            substitutions = [
               "--replace"
               "${systemd}"
               "${pkgs.symlinkJoin { name = "systemd"; paths = [ systemd ]; }}"

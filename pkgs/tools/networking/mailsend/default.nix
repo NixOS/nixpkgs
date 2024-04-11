@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     homepage = "https://github.com/muquit/mailsend";
     downloadPage = "https://github.com/muquit/mailsend/releases";
+    mainProgram = "mailsend";
   };
 }

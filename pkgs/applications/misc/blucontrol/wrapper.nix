@@ -19,6 +19,7 @@ in
 
     meta = with lib; {
       description = "Configurable blue light filter";
+      mainProgram = "blucontrol";
       longDescription = ''
         This application is a blue light filter, with the main focus on configurability.
         Configuration is done in Haskell in the style of xmonad.

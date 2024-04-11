@@ -8,7 +8,11 @@ let
     inherit (self) callPackage;
   in {
     #### Core Apps
+    lomiri-system-settings-unwrapped = callPackage ./applications/lomiri-system-settings { };
+    lomiri-system-settings-security-privacy = callPackage ./applications/lomiri-system-settings/plugins/lomiri-system-settings-security-privacy.nix { };
+    lomiri-system-settings = callPackage ./applications/lomiri-system-settings/wrapper.nix { };
     lomiri-terminal-app = callPackage ./applications/lomiri-terminal-app { };
+    morph-browser = callPackage ./applications/morph-browser { };
 
     #### Data
     lomiri-schemas = callPackage ./data/lomiri-schemas { };
@@ -31,6 +35,7 @@ let
     #### QML / QML-related
     lomiri-action-api = callPackage ./qml/lomiri-action-api { };
     lomiri-notifications = callPackage ./qml/lomiri-notifications { };
+    lomiri-push-qml = callPackage ./qml/lomiri-push-qml { };
     lomiri-settings-components = callPackage ./qml/lomiri-settings-components { };
     lomiri-ui-extras = callPackage ./qml/lomiri-ui-extras { };
     lomiri-ui-toolkit = callPackage ./qml/lomiri-ui-toolkit { };

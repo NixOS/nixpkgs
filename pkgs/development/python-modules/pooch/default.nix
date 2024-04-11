@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pooch";
-  version = "1.8.0";
+  version = "1.8.1";
   format = "pyproject";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9ZmB/VubXQMtzej0oR6qSSwqxjQ/rjWWov2uNfxUsKA=";
+    hash = "sha256-J+9jCX3ZpuT50mlPXPvy8KXe+kT8yv7AjWAecx10YnA=";
   };
 
   nativeBuildInputs = [

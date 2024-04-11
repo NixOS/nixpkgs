@@ -53,6 +53,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-workspaces-epoch";
     description = "Workspaces Epoch for the COSMIC Desktop Environment";
+    mainProgram = "cosmic-workspaces";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ nyanbinary ];
     platforms = platforms.linux;

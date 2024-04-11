@@ -5,6 +5,7 @@
 , pytestCheckHook
 , pythonOlder
 , stdenv
+, testers
 
 , affine
 , attrs
@@ -26,6 +27,8 @@
 , shapely
 , snuggs
 , wheel
+
+, rasterio  # required to run version test
 }:
 
 buildPythonPackage rec {
@@ -54,6 +57,12 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    # remove useless import statement requiring distutils to be present at the runtime
+    substituteInPlace rasterio/rio/calc.py \
+      --replace-fail "from distutils.version import LooseVersion" ""
+    '';
+
   nativeBuildInputs = [
     cython_3
     gdal
@@ -71,7 +80,6 @@ buildPythonPackage rec {
     click-plugins
     cligj
     numpy
-    setuptools
     snuggs
   ];
 
@@ -96,6 +104,12 @@ buildPythonPackage rec {
     shapely
   ];
 
+  # rio has runtime dependency on setuptools
+  setuptoolsPythonPath = [ setuptools ];
+  postInstall = ''
+    wrapPythonProgramsIn "$out/bin" "$out $setuptoolsPythonPath"
+  '';
+
   doCheck = true;
 
   preCheck = ''
@@ -104,9 +118,15 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "-m 'not network'"
+
+    # pytest.PytestRemovedIn8Warning: Passing None has been deprecated.
+    "-W ignore::pytest.PytestRemovedIn8Warning"
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = [
+    # flaky
+    "test_outer_boundless_pixel_fidelity"
+  ] ++ lib.optionals stdenv.isDarwin [
     "test_reproject_error_propagation"
   ];
 
@@ -114,8 +134,15 @@ buildPythonPackage rec {
     "rasterio"
   ];
 
+  passthru.tests.version = testers.testVersion {
+    package = rasterio;
+    version = version;
+    command = "${rasterio}/bin/rio --version";
+  };
+
   meta = with lib; {
     description = "Python package to read and write geospatial raster data";
+    mainProgram = "rio";
     homepage = "https://rasterio.readthedocs.io/";
     changelog = "https://github.com/rasterio/rasterio/blob/${version}/CHANGES.txt";
     license = licenses.bsd3;

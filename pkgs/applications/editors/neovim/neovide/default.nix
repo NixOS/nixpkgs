@@ -78,11 +78,6 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     darwin.apple_sdk.frameworks.AppKit
   ];
 
-  env = lib.optionalAttrs stdenv.isDarwin {
-    # Work around https://github.com/NixOS/nixpkgs/issues/166205
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  };
-
   postFixup = let
     libPath = lib.makeLibraryPath ([
       libglvnd
@@ -114,6 +109,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
 
   meta = with lib; {
     description = "This is a simple graphical user interface for Neovim.";
+    mainProgram = "neovide";
     homepage = "https://github.com/neovide/neovide";
     changelog = "https://github.com/neovide/neovide/releases/tag/${version}";
     license = with licenses; [ mit ];

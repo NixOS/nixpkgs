@@ -22,7 +22,7 @@ in
 {
   options = {
     services.mchprs = {
-      enable = mkEnableOption "MCHPRS";
+      enable = mkEnableOption "MCHPRS, a Minecraft server";
 
       declarativeSettings = mkOption {
         type = types.bool;
