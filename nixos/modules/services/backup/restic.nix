@@ -256,6 +256,14 @@ in
             having to manually specify most options.
           '';
         };
+
+        elevatedReadPermission = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = lib.mdDoc ''
+            Whether to use a security wrapper to allow backing up data owned by other users.
+          '';
+        };
       };
     }));
     default = { };
@@ -287,12 +295,24 @@ in
       assertion = (v.repository == null) != (v.repositoryFile == null);
       message = "services.restic.backups.${n}: exactly one of repository or repositoryFile should be set";
     }) config.services.restic.backups;
+    users.groups.restic = {};
+    security.wrappers =
+      mapAttrs'
+        (name: backup: nameValuePair "restic-backups-${name}" {
+           source = "${backup.package}/bin/restic";
+           owner = "${backup.user}";
+           group = "restic";
+           permissions = "u=rwx,g=,o=";
+           capabilities = "cap_dac_read_search=+ep";
+        })
+        (filterAttrs (_: backup: backup.elevatedReadPermission ) config.services.restic.backups);
+
     systemd.services =
       mapAttrs'
         (name: backup:
           let
             extraOptions = concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
-            resticCmd = "${backup.package}/bin/restic${extraOptions}";
+            resticCmd = "${if backup.elevatedReadPermission then "/run/wrappers/bin/restic-backups-${name}" else "${backup.package}/bin/restic"}${extraOptions}";
             excludeFlags = optional (backup.exclude != []) "--exclude-file=${pkgs.writeText "exclude-patterns" (concatStringsSep "\n" backup.exclude)}";
             filesFromTmpFile = "/run/restic-backups-${name}/includes";
             doBackup = (backup.dynamicFilesFrom != null) || (backup.paths != null && backup.paths != []);
@@ -378,7 +398,7 @@ in
     # generate wrapper scripts, as described in the createWrapper option
     environment.systemPackages = lib.mapAttrsToList (name: backup: let
       extraOptions = lib.concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
-      resticCmd = "${backup.package}/bin/restic${extraOptions}";
+      resticCmd = "${if backup.elevatedReadPermission then "/run/wrappers/bin/restic-backups-${name}" else "${backup.package}/bin/restic"}${extraOptions}";
     in pkgs.writeShellScriptBin "restic-${name}" ''
       set -a  # automatically export variables
       ${lib.optionalString (backup.environmentFile != null) "source ${backup.environmentFile}"}
