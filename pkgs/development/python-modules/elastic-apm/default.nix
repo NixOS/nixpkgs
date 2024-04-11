@@ -1,33 +1,34 @@
-{ lib
-, stdenv
-, aiohttp
-, blinker
-, buildPythonPackage
-, certifi
-, ecs-logging
-, fetchFromGitHub
-, httpx
-, jinja2
-, jsonschema
-, logbook
-, mock
-, pytest-asyncio
-, pytest-bdd
-, pytest-localserver
-, pytest-mock
-, pytest-random-order
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, sanic
-, sanic-testing
-, setuptools
-, starlette
-, structlog
-, tornado
-, urllib3
-, webob
-, wrapt
+{
+  lib,
+  stdenv,
+  aiohttp,
+  blinker,
+  buildPythonPackage,
+  certifi,
+  ecs-logging,
+  fetchFromGitHub,
+  httpx,
+  jinja2,
+  jsonschema,
+  logbook,
+  mock,
+  pytest-asyncio,
+  pytest-bdd,
+  pytest-localserver,
+  pytest-mock,
+  pytest-random-order,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  sanic,
+  sanic-testing,
+  setuptools,
+  starlette,
+  structlog,
+  tornado,
+  urllib3,
+  webob,
+  wrapt,
 }:
 
 buildPythonPackage rec {
@@ -44,17 +45,11 @@ buildPythonPackage rec {
     hash = "sha256-VuVx+QUiV4M/ebyv2uF/YZwfvcaPDJAEi55fXfoIttU=";
   };
 
-  pythonRelaxDeps = [
-    "wrapt"
-  ];
+  pythonRelaxDeps = [ "wrapt" ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     aiohttp
@@ -85,21 +80,19 @@ buildPythonPackage rec {
     webob
   ];
 
-  disabledTests = [
-    "elasticapm_client"
-  ];
+  disabledTests = [ "elasticapm_client" ];
 
-  disabledTestPaths = [
-    # Exclude tornado tests
-    "tests/contrib/asyncio/tornado/tornado_tests.py"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # Flaky tests on Darwin
-    "tests/utils/threading_tests.py"
-  ];
+  disabledTestPaths =
+    [
+      # Exclude tornado tests
+      "tests/contrib/asyncio/tornado/tornado_tests.py"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # Flaky tests on Darwin
+      "tests/utils/threading_tests.py"
+    ];
 
-  pythonImportsCheck = [
-    "elasticapm"
-  ];
+  pythonImportsCheck = [ "elasticapm" ];
 
   meta = with lib; {
     description = "Python agent for the Elastic APM";
