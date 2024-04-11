@@ -11,8 +11,8 @@ rec {
   glslang = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = "9fd0fcd737f1369e89fb3aa8b2e62bad57ac46c6";
-    hash = "sha256-A3IFW3kOuOGj4AfpdDfAHIySDLdIB9IK+wk8TSBcPrk=";
+    rev = "bada5c87ec6db4441db129d8506742c4a72bd610";
+    hash = "sha256-GayYjvJ935arbe4GUg8l6KhfImBCpqWRe8xSqlxXLYQ=";
   };
 
   jsoncpp = fetchFromGitHub {
