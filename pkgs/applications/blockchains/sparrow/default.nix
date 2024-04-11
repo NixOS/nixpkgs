@@ -18,6 +18,7 @@
 , hwi
 , imagemagick
 , gzip
+, gnupg
 }:
 
 let
@@ -27,7 +28,43 @@ let
   src = fetchurl {
     url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-x86_64.tar.gz";
     sha256 = "sha256-LIYAfoMgdk/eAXKe68DmQD1QsYNT7O5ggtEjFClwlM4=";
+
+    # nativeBuildInputs, downloadToTemp, and postFetch are used to verify the signed upstream package.
+    # The signature is not a self-contained file. Instead the SHA256 of the package is added to a manifest file.
+    # The manifest file is signed by the owner of the public key, Craig Raw.
+    # Thus to verify the signed package, the manifest is verified with the public key,
+    # and then the package is verified against the manifest.
+    # The public key is obtained from https://keybase.io/craigraw/pgp_keys.asc
+    # and is included in this repo to provide reproducibility.
+    nativeBuildInputs = [ gnupg ];
+    downloadToTemp = true;
+
+    postFetch = ''
+      pushd $(mktemp -d)
+      export GNUPGHOME=$PWD/gnupg
+      mkdir -m 700 -p $GNUPGHOME
+      ln -s ${manifest} ./manifest.txt
+      ln -s ${manifestSignature} ./manifest.txt.asc
+      ln -s $downloadedFile ./${pname}-${version}-x86_64.tar.gz
+      gpg --import ${publicKey}
+      gpg --verify manifest.txt.asc manifest.txt
+      sha256sum -c --ignore-missing manifest.txt
+      popd
+      mv $downloadedFile $out
+    '';
   };
+
+  manifest = fetchurl {
+    url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-manifest.txt";
+    sha256 = "sha256-oYeAKBW0pci41NNSSPaXdxevbMtZCZ91c8Vl7tNGr7Q=";
+  };
+
+  manifestSignature = fetchurl {
+    url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-manifest.txt.asc";
+    sha256 = "sha256-XPJoiCLvkDh3auk2ggQUp0CRw7bocE95oTreT4yMqro=";
+  };
+
+  publicKey = ./publickey.asc;
 
   launcher = writeScript "sparrow" ''
     #! ${bash}/bin/bash
