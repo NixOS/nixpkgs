@@ -7,7 +7,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "homeassistant-bring-api";
+  pname = "bring-api";
   version = "0.5.6";
   pyproject = true;
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "miaucl";
-    repo = "homeassistant-bring-api";
+    repo = "bring-api";
     rev = "refs/tags/${version}";
     hash = "sha256-vfc4xKLeGF2FuBFwqU99qbkUDBK5Uz66S4F2ODRDPa8=";
   };
@@ -32,13 +32,13 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [
-    "homeassistant_bring_api"
+    "bring_api"
   ];
 
   meta = with lib; {
-    description = "Module to access the Bring! shopping lists API with Home Assistant";
-    homepage = "https://github.com/miaucl/homeassistant-bring-api";
-    changelog = "https://github.com/miaucl/homeassistant-bring-api/blob/${version}/CHANGELOG.md";
+    description = "Module to access the Bring! shopping lists API";
+    homepage = "https://github.com/miaucl/bring-api";
+    changelog = "https://github.com/miaucl/bring-api/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
