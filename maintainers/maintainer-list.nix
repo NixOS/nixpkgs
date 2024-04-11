@@ -20625,6 +20625,12 @@
     githubId = 20206121;
     name = "umlx5h";
   };
+  uncenter = {
+    name = "uncenter";
+    email = "uncenter@uncenter.dev";
+    github = "uncenter";
+    githubId = 47499684;
+  };
   unclamped = {
     name = "Maru";
     email = "clear6860@tutanota.com";
