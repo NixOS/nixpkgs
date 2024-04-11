@@ -46,5 +46,6 @@ crystal.buildCrystalPackage rec {
     license = licenses.bsd2;
     mainProgram = "collision";
     maintainers = with maintainers; [ sund3RRR ];
+    broken = true; # gi-crystal error: fatal - Binding config already loaded for Gio namespace.
   };
 }
