@@ -1,3 +1,5 @@
+# Before adding a new extension, read ./README.md
+
 { config
 , lib
 , fetchurl
@@ -31,15 +33,6 @@
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
 
-  #
-  # Unless there is a good reason not to, we attempt to use the lowercase
-  # version of the extension's unique identifier. The unique identifier can be
-  # found on the marketplace extension page, and is the name under which the
-  # extension is installed by VSCode under `~/.vscode`.
-  #
-  # This means an extension should be located at
-  # ${lib.strings.toLower mktplcRef.publisher}.${lib.string.toLower mktplcRef.name}
-  #
   baseExtensions = self: lib.mapAttrs (_n: lib.recurseIntoAttrs)
     {
       "13xforever".language-x86-64-assembly = buildVscodeMarketplaceExtension {
