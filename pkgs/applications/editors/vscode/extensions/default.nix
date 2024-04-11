@@ -9,7 +9,6 @@
 , jdk
 , llvmPackages
 , llvmPackages_14
-, nixpkgs-fmt
 , protobuf
 , jq
 , shellcheck
@@ -422,22 +421,7 @@ let
 
       azdavis.millet = callPackage ./azdavis.millet { };
 
-      b4dm4n.vscode-nixpkgs-fmt = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "nixpkgs-fmt";
-          publisher = "B4dM4n";
-          version = "0.0.1";
-          hash = "sha256-vz2kU36B1xkLci2QwLpl/SBEhfSWltIDJ1r7SorHcr8=";
-        };
-        nativeBuildInputs = [ jq moreutils ];
-        postInstall = ''
-          cd "$out/$installPrefix"
-          jq '.contributes.configuration.properties."nixpkgs-fmt.path".default = "${nixpkgs-fmt}/bin/nixpkgs-fmt"' package.json | sponge package.json
-        '';
-        meta = {
-          license = lib.licenses.mit;
-        };
-      };
+      b4dm4n.vscode-nixpkgs-fmt = callPackage ./b4dm4n.vscode-nixpkgs-fmt { };
 
       baccata.scaladex-search = buildVscodeMarketplaceExtension {
         mktplcRef = {
