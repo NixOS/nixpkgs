@@ -1,9 +1,10 @@
-{ lib
-, elasticsearch-curator
-, fetchFromGitHub
-, nix-update-script
-, python3
-, testers
+{
+  lib,
+  elasticsearch-curator,
+  fetchFromGitHub,
+  nix-update-script,
+  python3,
+  testers,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -18,9 +19,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-pW928jT9oL76RJuJgH7nhCvgWPzXixzqBKVYsaJy9xw=";
   };
 
-  build-system = with python3.pkgs; [
-    hatchling
-  ];
+  build-system = with python3.pkgs; [ hatchling ];
 
   dependencies = with python3.pkgs; [
     certifi
