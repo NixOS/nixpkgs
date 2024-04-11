@@ -3,7 +3,6 @@ let
   inherit (lib)
     concatStringsSep
     elemAt
-    fold
     foldl
     genList
     mod
@@ -12,7 +11,12 @@ let
     toInt
     ;
 
-  inherit (builtins) all any toString;
+  inherit (builtins)
+    all
+    any
+    foldl'
+    toString
+    ;
 in
 rec {
   common = {
@@ -48,7 +52,7 @@ rec {
       else if exponent == 0 then
         1
       else
-        fold (x: y: y * base) base (range 2 exponent);
+        foldl' (acc: _: acc * base) 1 (range 1 exponent);
   };
 
   ipv4 = rec {
