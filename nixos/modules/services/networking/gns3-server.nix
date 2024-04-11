@@ -129,7 +129,14 @@ in {
       }
     ];
 
+    users.groups.gns3 = { };
+
     users.groups.ubridge = lib.mkIf cfg.ubridge.enable { };
+
+    users.users.gns3 = {
+      group = "gns3";
+      isSystemUser = true;
+    };
 
     security.wrappers.ubridge = lib.mkIf cfg.ubridge.enable {
       capabilities = "cap_net_raw,cap_net_admin=eip";
@@ -206,7 +213,6 @@ in {
       serviceConfig = {
         ConfigurationDirectory = "gns3";
         ConfigurationDirectoryMode = "0750";
-        DynamicUser = true;
         Environment = "HOME=%S/gns3";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         ExecStart = "${lib.getExe cfg.package} ${commandArgs}";
