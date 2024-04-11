@@ -26,9 +26,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ hidapi libusb1 libelf libftdi1 libserialport readline ];
 
-  cmakeFlags = lib.optionals docSupport [
-    "-DBUILD_DOC=ON"
-  ];
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isLinux [ "-DHAVE_LINUXSPI=ON" ]
+    ++ lib.optionals docSupport [ "-DBUILD_DOC=ON" ];
 
   # dvips output references texlive in comments, resulting in a huge closure
   postInstall = lib.optionalString docSupport ''
