@@ -38,7 +38,7 @@ let
   buildHashes = builtins.fromJSON (builtins.readFile ./hashes.json);
 
   # our version of buck2; this should be a git tag
-  version = "2024-03-15";
+  version = "2024-04-01";
 
   # the platform-specific, statically linked binary — which is also
   # zstd-compressed
@@ -63,7 +63,7 @@ let
   # tooling
   prelude-src =
     let
-      prelude-hash = "c68a0e4b35928891e72df1738c890bfcb76a6174";
+      prelude-hash = "c6f483c05f81464b314e24bf1a2a4115a4e4c874";
       name = "buck2-prelude-${version}.tar.gz";
       hash = buildHashes."_prelude";
       url = "https://github.com/facebook/buck2-prelude/archive/${prelude-hash}.tar.gz";
