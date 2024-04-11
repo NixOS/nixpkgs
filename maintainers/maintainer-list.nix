@@ -5990,6 +5990,12 @@
     githubId = 928448;
     name = "Jeremy White";
   };
+  duijf = {
+    email = "git@duijf.io";
+    github = "duijf";
+    githubId = 1123589;
+    name = "Laurens Duijvesteijn";
+  };
   dukc = {
     email = "ajieskola@gmail.com";
     github = "dukc";
