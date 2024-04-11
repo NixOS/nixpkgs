@@ -52,6 +52,7 @@ let
   version = versions.fromMajorMinor majorMinorVersion;
 
   majorVersion = lib.versions.major version;
+  atLeast14 = lib.versionAtLeast version "14";
   atLeast13 = lib.versionAtLeast version "13";
   atLeast12 = lib.versionAtLeast version "12";
   atLeast11 = lib.versionAtLeast version "11";
@@ -61,6 +62,7 @@ let
   atLeast7  = lib.versionAtLeast version  "7";
   atLeast6  = lib.versionAtLeast version  "6";
   atLeast49 = lib.versionAtLeast version  "4.9";
+  is14 = majorVersion == "14";
   is13 = majorVersion == "13";
   is12 = majorVersion == "12";
   is11 = majorVersion == "11";
@@ -221,6 +223,8 @@ let inherit version;
         url = "https://www.antlr.org/download/antlr-4.4-complete.jar";
         sha256 = "02lda2imivsvsis8rnzmbrbp8rh1kb8vmq4i67pqhkwz7lf8y6dz";
       };
+    } // lib.optionalAttrs atLeast14 {
+      inherit flex;
     });
 
 in
