@@ -10,14 +10,14 @@ let
   useElfutils = lib.meta.availableOn stdenv.hostPlatform elfutils;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "avrdude";
   version = "7.3";
 
   src = fetchFromGitHub {
     owner = "avrdudes";
-    repo = pname;
-    rev = "v${version}";
+    repo = "avdude";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-JqW3AOMmAfcy+PQRcqviWlxA6GoMSEfzIFt1pRYY7Dw=";
   };
 
@@ -43,16 +43,13 @@ stdenv.mkDerivation rec {
   '';
 
   # Not used:
-  #
   #   -DHAVE_LINUXGPIO=ON    because it's incompatible with libgpiod 2.x
-  #
-  cmakeFlags = [ ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ "-DHAVE_LINUXSPI=ON" "-DHAVE_PARPORT=ON" ]
-    ++ lib.optionals docSupport [ "-DBUILD_DOC=ON" ];
+  cmakeFlags = lib.optionals docSupport [ "-DBUILD_DOC=ON" ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ "-DHAVE_LINUXSPI=ON" "-DHAVE_PARPORT=ON" ];
 
   # dvips output references texlive in comments, resulting in a huge closure
   postInstall = lib.optionalString docSupport ''
-    rm $out/share/doc/${pname}/*.ps
+    rm $out/share/doc/avrdude/*.ps
   '';
 
   passthru = {
@@ -74,4 +71,4 @@ stdenv.mkDerivation rec {
     platforms = with platforms; linux ++ darwin;
     maintainers = [ maintainers.bjornfor ];
   };
-}
+})
