@@ -108,7 +108,7 @@ in
     unifiVideoPackage = mkPackageOption pkgs "unifi-video" { };
 
     mongodbPackage = mkPackageOption pkgs "mongodb" {
-      default = "mongodb-4_4";
+      default = "mongodb-5_0";
     };
 
     logDir = mkOption {
