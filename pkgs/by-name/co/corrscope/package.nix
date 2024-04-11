@@ -2,7 +2,7 @@
 , lib
 , python3Packages
 , fetchFromGitHub
-, ffmpeg-full
+, ffmpeg
 , libsForQt5
 , testers
 , corrscope
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
   ]);
 
   buildInputs = [
-    ffmpeg-full
+    ffmpeg
   ] ++ (with libsForQt5; [
     qtbase
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -56,7 +56,7 @@ python3Packages.buildPythonApplication rec {
 
   preFixup = ''
     makeWrapperArgs+=(
-      --prefix PATH : ${lib.makeBinPath [ ffmpeg-full ]}
+      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
       "''${qtWrapperArgs[@]}"
     )
   '';
