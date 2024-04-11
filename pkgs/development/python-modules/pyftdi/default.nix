@@ -4,23 +4,28 @@
 , pyserial
 , pythonOlder
 , pyusb
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pyftdi";
   version = "0.55.4";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "eblot";
-    repo = pname;
-    rev = "v${version}";
+    repo = "pyftdi";
+    rev = "refs/tags/v${version}";
     hash = "sha256-InJJnbAPYlV071EkEWECJC79HLZ6SWo2VP7PqMgOGow=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     pyserial
     pyusb
   ];
