@@ -11,7 +11,7 @@ let
       default = null;
       example = "30s";
       description = lib.mdDoc ''
-        Timeout for establishing a new TCP connection to your origin server. This excludes the time taken to establish TLS, which is controlled by [https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/configuration/local-management/ingress/#tlstimeout](tlsTimeout).
+        Timeout for establishing a new TCP connection to your origin server. This excludes the time taken to establish TLS, which is controlled by [tlsTimeout](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/configuration/local-management/ingress/#tlstimeout).
       '';
     };
 
