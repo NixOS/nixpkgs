@@ -19,13 +19,15 @@ let
     else if builtins.isString value then "\"${escapeString value}\""
     else toString value;
 
-  configFile = pkgs.writeText "davfs2.conf" ''
-    ${toINIWithGlobalSection {
-      mkSectionName = escapeString;
-      mkKeyValue = k: v: "${k} ${formatValue v}";
-    } cfg.settings}
-    ${cfg.extraConfig}
-  '';
+  configFile = pkgs.writeText "davfs2.conf" (
+    if (cfg.settings != { }) then
+      (toINIWithGlobalSection {
+        mkSectionName = escapeString;
+        mkKeyValue = k: v: "${k} ${formatValue v}";
+      } cfg.settings)
+    else
+      cfg.extraConfig
+  );
 in
 {
 
@@ -106,6 +108,16 @@ in
   };
 
   config = mkIf cfg.enable {
+
+    assertions = [
+      {
+        assertion = cfg.extraConfig != "" -> cfg.settings == { };
+        message = ''
+          services.davfs2.extraConfig and services.davfs2.settings cannot be used together.
+          Please prefer using services.davfs2.settings.
+        '';
+      }
+    ];
 
     warnings = optional (cfg.extraConfig != "") ''
       services.davfs2.extraConfig will be deprecated in future releases;
