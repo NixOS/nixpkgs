@@ -117,6 +117,7 @@ let
         inherit (prevStage) coreutils gnugrep;
 
         stdenvNoCC = prevStage.ccWrapperStdenv;
+        runtimeShell = prevStage.ccWrapperStdenv.shell;
       };
 
       bash = prevStage.bash or bootstrapTools;
@@ -258,6 +259,7 @@ in
 
           inherit lib;
           inherit (self) stdenvNoCC coreutils gnugrep;
+          runtimeShell = self.stdenvNoCC.shell;
 
           bintools = selfDarwin.binutils-unwrapped;
 
@@ -457,6 +459,8 @@ in
 
           bintools = selfDarwin.binutils-unwrapped;
           libc = selfDarwin.Libsystem;
+          # TODO(@sternenseemann): can this be removed?
+          runtimeShell = "${bootstrapTools}/bin/bash";
         };
 
         binutils-unwrapped = superDarwin.binutils-unwrapped.override {
@@ -1044,8 +1048,6 @@ in
         };
 
         binutils = superDarwin.binutils.override {
-          shell = self.bash + "/bin/bash";
-
           buildPackages = {
             inherit (prevStage) stdenv;
           };
@@ -1124,9 +1126,7 @@ in
               inherit (self.llvmPackages) libcxx;
 
               inherit lib;
-              inherit (self) stdenvNoCC coreutils gnugrep;
-
-              shell = self.bash + "/bin/bash";
+              inherit (self) stdenvNoCC coreutils gnugrep runtimeShell;
             };
           });
           libraries = super.llvmPackages.libraries.extend (_: _:{

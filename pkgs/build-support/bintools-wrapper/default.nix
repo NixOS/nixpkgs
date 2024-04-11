@@ -8,7 +8,8 @@
 { name ? ""
 , lib
 , stdenvNoCC
-, bintools ? null, libc ? null, coreutils ? null, shell ? stdenvNoCC.shell, gnugrep ? null
+, runtimeShell
+, bintools ? null, libc ? null, coreutils ? null, gnugrep ? null
 , netbsd ? null, netbsdCross ? null
 , sharedLibraryLoader ?
   if libc == null then
@@ -419,7 +420,8 @@ stdenvNoCC.mkDerivation {
   env = {
     # for substitution in utils.bash
     expandResponseParams = "${expand-response-params}/bin/expand-response-params";
-    shell = getBin shell + shell.shellPath or "";
+    # TODO(@sternenseemann): rename env var via stdenv rebuild
+    shell = (getBin runtimeShell + runtimeShell.shellPath or "");
     gnugrep_bin = optionalString (!nativeTools) gnugrep;
     wrapperName = "BINTOOLS_WRAPPER";
     inherit dynamicLinker targetPrefix suffixSalt coreutils_bin;

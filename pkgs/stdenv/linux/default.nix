@@ -196,6 +196,7 @@ let
           inherit (prevStage) coreutils gnugrep;
           stdenvNoCC = prevStage.ccWrapperStdenv;
           fortify-headers = prevStage.fortify-headers;
+          runtimeShell = prevStage.ccWrapperStdenv.shell;
         }).overrideAttrs(a: lib.optionalAttrs (prevStage.gcc-unwrapped.passthru.isXgcc or false) {
           # This affects only `xgcc` (the compiler which compiles the final compiler).
           postFixup = (a.postFixup or "") + ''
@@ -265,6 +266,7 @@ in
         inherit lib;
         inherit (self) stdenvNoCC coreutils gnugrep;
         bintools = bootstrapTools;
+        runtimeShell = "${bootstrapTools}/bin/bash";
       };
       coreutils = bootstrapTools;
       gnugrep = bootstrapTools;
@@ -332,6 +334,14 @@ in
         inherit (prevStage) ccWrapperStdenv coreutils gnugrep gettext bison texinfo zlib gnum4 perl patchelf;
         ${localSystem.libc} = getLibc prevStage;
         gmp = super.gmp.override { cxx = false; };
+        # This stage also rebuilds binutils which will of course be used only in the next stage.
+        # We inherit this until stage3, in stage4 it will be rebuilt using the adjacent bash/runtimeShell pkg.
+        # TODO(@sternenseemann): Can we already build the wrapper with the actual runtimeShell here?
+        # Historically, the wrapper didn't use runtimeShell, so the used shell had to be changed explicitly
+        # (or stdenvNoCC.shell would be used) which happened in stage4.
+        binutils = super.binutils.override {
+          runtimeShell = "${bootstrapTools}/bin/bash";
+        };
         gcc-unwrapped =
           (super.gcc-unwrapped.override (commonGccOverrides // {
             # The most logical name for this package would be something like
@@ -544,9 +554,8 @@ in
       # other purposes (binutils and top-level pkgs) too.
       inherit (prevStage) gettext gnum4 bison perl texinfo zlib linuxHeaders libidn2 libunistring;
       ${localSystem.libc} = getLibc prevStage;
+      # Since this is the first fresh build of binutils since stage2, our own runtimeShell will be used.
       binutils = super.binutils.override {
-        # Don't use stdenv's shell but our own
-        shell = self.bash + "/bin/bash";
         # Build expand-response-params with last stage like below
         buildPackages = {
           inherit (prevStage) stdenv;
@@ -568,8 +577,7 @@ in
         bintools = self.binutils;
         libc = getLibc self;
         inherit lib;
-        inherit (self) stdenvNoCC coreutils gnugrep;
-        shell = self.bash + "/bin/bash";
+        inherit (self) stdenvNoCC coreutils gnugrep runtimeShell;
         fortify-headers = self.fortify-headers;
       };
     };
