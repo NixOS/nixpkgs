@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, runtimeShell
 , installShellFiles
 , bc
 , ncurses
@@ -64,6 +65,14 @@ buildGoModule rec {
       status is-interactive; or exit 0
       fzf_key_bindings
     EOF
+
+    cat <<SCRIPT > $out/bin/fzf-share
+    #!${runtimeShell}
+    # Run this script to find the fzf shared folder where all the shell
+    # integration scripts are living.
+    echo $out/share/fzf
+    SCRIPT
+    chmod +x $out/bin/fzf-share
   '';
 
   passthru.tests.version = testers.testVersion {
