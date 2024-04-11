@@ -1,7 +1,10 @@
 { lib, stdenv, fetchFromGitHub, cmake, bison, flex, libusb1, libelf
-, libftdi1, readline, libserialport, hidapi
-# documentation building is broken on darwin
-, docSupport ? (!stdenv.isDarwin), texliveMedium, texinfo, texi2html, unixtools }:
+, libftdi1, readline, hidapi, libserialport
+# Documentation building doesn't work on Darwin. It fails with:
+#   Undefined subroutine &Locale::Messages::dgettext called in ... texi2html
+#
+# https://github.com/NixOS/nixpkgs/issues/224761
+, docSupport ? (!stdenv.hostPlatform.isDarwin), texliveMedium, texinfo, texi2html, unixtools }:
 
 stdenv.mkDerivation rec {
   pname = "avrdude";
