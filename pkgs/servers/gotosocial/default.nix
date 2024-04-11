@@ -49,9 +49,6 @@ buildGoModule rec {
       skippedTests = [
         # See: https://github.com/superseriousbusiness/gotosocial/issues/2651
         "TestPage/minID,_maxID_and_limit_set"
-        # See: https://github.com/superseriousbusiness/gotosocial/pull/2760. Stop skipping
-        # this test when fixed for go 1.21.8 and above
-        "TestValidationTestSuite/TestValidateEmail"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
