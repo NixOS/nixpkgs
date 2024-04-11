@@ -86,6 +86,25 @@ with pkgs;
   stdenv-inputs = callPackage ./stdenv-inputs { };
   stdenv = callPackage ./stdenv { };
 
+  # Unit tests for setup.sh
+  setup = import ./setup {
+    # NB: ^^^^^^
+    #     `import` and not `callPackage`, because we manipulate the whole `pkgs`
+    #     so that we can unit test without rebuilding everything; see setup/default.nix.
+    basePkgs =
+      if ! pkgs.config?baseCommit then pkgs
+      else import ../.. {
+        inherit (pkgs.stdenv.hostPlatform) system;
+        config = {
+          setupScript = "${
+            let oldPkgsStr = builtins.fetchGit { url = ../..; ref = pkgs.config.baseCommit; };
+                oldPkgsPath = /. + builtins.unsafeDiscardStringContext (oldPkgsStr);
+            in oldPkgsPath + "/pkgs/stdenv/generic/setup.sh"
+          }";
+        };
+    };
+  };
+
   hardeningFlags = recurseIntoAttrs (callPackage ./cc-wrapper/hardening.nix {});
   hardeningFlags-gcc = recurseIntoAttrs (callPackage ./cc-wrapper/hardening.nix {
     stdenv = gccStdenv;

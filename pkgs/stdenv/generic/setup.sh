@@ -1,5 +1,21 @@
 # shellcheck shell=bash
 # shellcheck disable=1090,2154,2123,2034,2178,2048,2068,1091
+
+# TESTING
+
+# This file can be tested without mass-rebuild.
+# See `pkgs/test/setup/default.nix`.
+
+# DOCUMENTATION
+
+# This file is sourced by the derivation `builder` and is responsible for
+# some shell setup, loading scripts from inputs, and running phases and hooks.
+#
+# Comments in this file are implementation oriented. User facing documentation
+# is maintained outside of this file, so that it can be improved without mass
+# rebuilds.
+# See https://nixos.org/manual/nixpkgs/unstable/index.html#chap-stdenv
+
 __nixpkgs_setup_set_original=$-
 set -eu
 set -o pipefail
