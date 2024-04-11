@@ -5,13 +5,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "wildmidi";
-  version = "0.4.5";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "Mindwerks";
     repo = "wildmidi";
     rev = "${pname}-${version}";
-    sha256 = "sha256-5El8aDpAgjrW0/4lphZEF+Hfv9Xr7J4DMk1b/Tb+0TU=";
+    sha256 = "sha256-syjs8y75M2ul7whiZxnWMSskRJd0ixFqnep7qsTbiDE=";
   };
 
   nativeBuildInputs = [ cmake ];
