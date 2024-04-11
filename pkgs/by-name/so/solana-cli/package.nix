@@ -7,10 +7,11 @@
 , protobuf
 , libcxx
 , rocksdb
+, installShellFiles
 , pkg-config
 , openssl
 , nix-update-script
-# Taken from https://github.com/solana-labs/solana/blob/master/scripts/cargo-install-all.sh#L84
+  # Taken from https://github.com/solana-labs/solana/blob/master/scripts/cargo-install-all.sh#L84
 , solanaPkgs ? [
     "solana"
     "solana-bench-tps"
@@ -23,7 +24,7 @@
     "solana-net-shaper"
     "solana-validator"
     "solana-test-validator"
-] ++ [
+  ] ++ [
     # XXX: Ensure `solana-genesis` is built LAST!
     # See https://github.com/solana-labs/solana/issues/5826
     "solana-genesis"
@@ -66,36 +67,42 @@ rustPlatform.buildRustPackage rec {
   # I'm not in the mood ((ΦωΦ))
   doCheck = false;
 
-  nativeBuildInputs = [ protobuf pkg-config ];
+  nativeBuildInputs = [ installShellFiles protobuf pkg-config ];
   buildInputs = [ openssl rustPlatform.bindgenHook ]
-                ++ lib.optionals stdenv.isLinux [ udev ]
-                ++ lib.optionals stdenv.isDarwin [
-                  libcxx
-                  IOKit
-                  Security
-                  AppKit
-                  System
-                  Libsystem ];
+    ++ lib.optionals stdenv.isLinux [ udev ]
+    ++ lib.optionals stdenv.isDarwin [
+    libcxx
+    IOKit
+    Security
+    AppKit
+    System
+    Libsystem
+  ];
 
   postInstall = ''
+    installShellCompletion --cmd solana \
+      --bash <($out/bin/solana completion --shell bash) \
+      --fish <($out/bin/solana completion --shell fish) \
+      --zsh  <($out/bin/solana completion --shell zsh)
+
     mkdir -p $out/bin/sdk/bpf
     cp -a ./sdk/bpf/* $out/bin/sdk/bpf/
   '';
 
   # Used by build.rs in the rocksdb-sys crate. If we don't set these, it would
   # try to build RocksDB from source.
-  ROCKSDB_LIB_DIR="${rocksdb}/lib";
+  ROCKSDB_LIB_DIR = "${rocksdb}/lib";
 
   # Require this on darwin otherwise the compiler starts rambling about missing
   # cmath functions
-  CPPFLAGS=lib.optionals stdenv.isDarwin "-isystem ${lib.getDev libcxx}/include/c++/v1";
-  LDFLAGS=lib.optionals stdenv.isDarwin "-L${lib.getLib libcxx}/lib";
+  CPPFLAGS = lib.optionals stdenv.isDarwin "-isystem ${lib.getDev libcxx}/include/c++/v1";
+  LDFLAGS = lib.optionals stdenv.isDarwin "-L${lib.getLib libcxx}/lib";
 
   # If set, always finds OpenSSL in the system, even if the vendored feature is enabled.
   OPENSSL_NO_VENDOR = 1;
 
   meta = with lib; {
-    description = "Web-Scale Blockchain for fast, secure, scalable, decentralized apps and marketplaces. ";
+    description = "Web-Scale Blockchain for fast, secure, scalable, decentralized apps and marketplaces";
     homepage = "https://solana.com";
     license = licenses.asl20;
     maintainers = with maintainers; [ netfox happysalada aikooo7 ];
