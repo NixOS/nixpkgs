@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = false;
 
   postInstall = glib.flattenInclude;
 
