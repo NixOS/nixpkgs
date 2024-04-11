@@ -4138,11 +4138,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xorgproto = callPackage ({ stdenv, pkg-config, fetchurl, libXt, python3, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xorgproto";
-    version = "2023.2";
+    version = "2024.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/proto/xorgproto-2023.2.tar.xz";
-      sha256 = "0b4c27aq25w1fccks49p020avf9jzh75kaq5qwnww51bp1yvq7xn";
+      url = "mirror://xorg/individual/proto/xorgproto-2024.1.tar.xz";
+      sha256 = "0nfbbi4j130m2gxzp20hp642xizbbl68jpbzahiq8nw183yja8ip";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
