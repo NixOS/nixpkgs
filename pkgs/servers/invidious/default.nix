@@ -51,6 +51,13 @@ crystal.buildCrystalPackage rec {
       inherit (versions.invidious) commit date;
     in
     ''
+      # bugfix for crystal_1_12 Time::Span, can be removed when fixed upstream
+      substituteInPlace src/invidious/yt_backend/proxy.cr \
+        --replace-fail "opts[:dns_timeout] = @dns_timeout" "opts[:dns_timeout] = @dns_timeout.try(&.to_f)" \
+        --replace-fail "opts[:connect_timeout] = @connect_timeout" "opts[:connect_timeout] = @connect_timeout.try(&.to_f)" \
+        --replace-fail "opts[:read_timeout] = @read_timeout" "opts[:read_timeout] = @read_timeout.try(&.to_f)" \
+
+
       for d in ${videojs}/*; do ln -s "$d" assets/videojs; done
 
       # Use the version metadata from the derivation instead of using git at
