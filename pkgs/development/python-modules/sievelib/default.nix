@@ -5,12 +5,13 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools-scm
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "sievelib";
   version = "1.4.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,6 +22,10 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools-scm
+  ];
+
+  dependencies = [
+    typing-extensions
   ];
 
   nativeCheckInputs = [
