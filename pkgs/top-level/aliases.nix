@@ -1250,7 +1250,10 @@ mapAliases ({
   unicorn-emu = unicorn; # Added 2020-10-29
   uniffi-bindgen = throw "uniffi-bindgen has been removed since upstream no longer provides a standalone package for the CLI";
   unifi-poller = unpoller; # Added 2022-11-24
-  unifiStable = unifi6; # Added 2020-12-28
+  unifi5 = throw "'unifi5' has been removed since its required MongoDB version is EOL."; # Added 2024-04-11
+  unifi6 = throw "'unifi6' has been removed since its required MongoDB version is EOL."; # Added 2024-04-11
+  unifiLTS = throw "'unifiLTS' has been removed since UniFi no longer has LTS and stable releases. Use `pkgs.unifi` instead."; # Added 2024-04-11
+  unifiStable = throw "'unifiStable' has been removed since UniFi no longer has LTS and stable releases. Use `pkgs.unifi` instead."; # Converted to throw 2024-04-11
   untrunc = untrunc-anthwlock; # Added 2021-02-01
   urlview = throw "'urlview' has been dropped because it's unmaintained. Consider switching to an alternative such as `pkgs.extract_url` or `pkgs.urlscan`."; # Added 2023-12-14
   urxvt_autocomplete_all_the_things = rxvt-unicode-plugins.autocomplete-all-the-things; # Added 2020-02-02

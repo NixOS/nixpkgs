@@ -26908,9 +26908,6 @@ with pkgs;
   axis2 = callPackage ../servers/http/tomcat/axis2 { };
 
   inherit (callPackages ../servers/unifi { })
-    unifiLTS
-    unifi5
-    unifi6
     unifi7
     unifi8;
 
