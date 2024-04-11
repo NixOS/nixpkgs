@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, bison, flex, libusb1, libelf
-, libftdi1, readline, libserialport
+, libftdi1, readline, libserialport, hidapi
 # documentation building is broken on darwin
 , docSupport ? (!stdenv.isDarwin), texliveMedium, texinfo, texi2html, unixtools }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     texi2html
   ];
 
-  buildInputs = [ libusb1 libelf libftdi1 libserialport readline ];
+  buildInputs = [ hidapi libusb1 libelf libftdi1 libserialport readline ];
 
   cmakeFlags = lib.optionals docSupport [
     "-DBUILD_DOC=ON"
