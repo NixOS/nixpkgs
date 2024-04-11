@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "sievelib";
-  version = "1.3.0";
+  version = "1.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MxPX8fP4Mkq2qOISnknXbuCN8NQ+L1UOaBuPEuP0TNE=";
+    hash = "sha256-eM8es/WZENFBASjOk1KVbbwkmzxTr7NirOiSLt7F3N8=";
   };
 
   build-system = [
