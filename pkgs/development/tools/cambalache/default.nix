@@ -32,7 +32,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "jpu";
     repo = pname;
     rev = version;
-    sha256 = "sha256-m3rearoCFQUzdZMXY2xyKf4dgdq7G4QlUbetrIqW83U=";
+    hash = "sha256-m3rearoCFQUzdZMXY2xyKf4dgdq7G4QlUbetrIqW83U=";
   };
 
   nativeBuildInputs = [
