@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--with-cajadir=$$out/lib/caja/extensions-2.0"
+    "--with-cajadir=${placeholder "out"}/lib/caja/extensions-2.0"
   ] ++ lib.optionals withMagic [
     "--enable-magic"
   ];

@@ -30,7 +30,7 @@ stdenv.mkDerivation {
 
   installFlags = [
     "prefix=/"
-    "DESTDIR=$$out"
+    "DESTDIR=$(out)"
   ];
 
   meta = with lib; {

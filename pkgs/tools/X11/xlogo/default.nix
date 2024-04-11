@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ xorg-autoconf autoreconfHook pkg-config ];
 
-  configureFlags = [ "--with-appdefaultdir=$out/share/X11/app-defaults" ];
+  configureFlags = [ "--with-appdefaultdir=${placeholder "out"}/share/X11/app-defaults" ];
 
   buildInputs = [ xorg.libX11 xorg.libXext xorg.libSM xorg.libXmu xorg.libXaw xorg.libXt ];
 

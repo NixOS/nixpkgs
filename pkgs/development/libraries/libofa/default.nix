@@ -19,9 +19,10 @@ stdenv.mkDerivation rec {
 
   setOutputFlags = false;
 
-  preConfigure = ''
-    configureFlagsArray=(--includedir=$dev/include --libdir=$out/lib)
-  '';
+  configureFlags = [
+    "--includedir=${placeholder "dev"}/include"
+    "--libdir=${placeholder "out"}/lib"
+  ];
 
   propagatedBuildInputs = [ expat curl fftw ];
 

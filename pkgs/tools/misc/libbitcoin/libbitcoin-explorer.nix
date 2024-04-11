@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "--with-tests=no"
     "--with-boost=${boost.dev}"
     "--with-boost-libdir=${boost.out}/lib"
-    "--with-bash-completiondir=$out/share/bash-completion/completions"
+    "--with-bash-completiondir=${placeholder "out"}/share/bash-completion/completions"
   ];
 
   meta = with lib; {

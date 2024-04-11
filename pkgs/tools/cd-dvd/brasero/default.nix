@@ -30,9 +30,11 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = [
-    "--with-girdir=$out/share/gir-1.0"
-    "--with-typelibdir=$out/lib/girepository-1.0"
+  configureFlags = let
+    out = placeholder "out";
+  in [
+    "--with-girdir=${out}/share/gir-1.0"
+    "--with-typelibdir=${out}/lib/girepository-1.0"
   ];
 
   preFixup = ''

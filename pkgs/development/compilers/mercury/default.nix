@@ -22,14 +22,17 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  preConfigure = ''
-    mkdir -p $out/lib/mercury/cgi-bin ;
-    configureFlags="--enable-deep-profiler=$out/lib/mercury/cgi-bin";
-  '';
+  configureFlags = [
+    "--enable-deep-profiler=${placeholder "out"}/lib/mercury/cgi-bin"
+  ]
 
-  preBuild = ''
+  makeFlags = [
     # Mercury buildsystem does not take -jN directly.
-    makeFlags="PARALLEL=-j$NIX_BUILD_CORES" ;
+    "PARALLEL=-j$NIX_BUILD_CORES"
+  ];
+
+  preConfigure = ''
+    mkdir -p $out/lib/mercury/cgi-bin
   '';
 
   postInstall = ''

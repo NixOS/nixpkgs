@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-GrC++v7PCAnaEtMFt+el/ct2g+/9Axev04g/jMIGyOQ=";
   };
 
-  configureFlags = [ "--with-systemdsystemunitdir=$out" ];
+  configureFlags = [ "--with-systemdsystemunitdir=${placeholder "out"}" ];
 
   postPatch = ''
     echo "${version}" > .tarball-version

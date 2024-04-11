@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontConfigure = true;
 
-  installFlags = [ "PREFIX=$$out" ];
+  installFlags = [ "PREFIX=$(out)" ];
 
   postInstall = ''
     install -Dm 644 havoc.cfg -t $out/etc/havoc/

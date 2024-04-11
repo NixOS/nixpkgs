@@ -29,14 +29,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost zlib minisat cryptominisat python3 ];
   nativeBuildInputs = [ cmake bison flex perl ];
   preConfigure = ''
-    python_install_dir=$out/${python3Packages.python.sitePackages}
-    mkdir -p $python_install_dir
-    cmakeFlagsArray=(
-      $cmakeFlagsArray
-      "-DBUILD_SHARED_LIBS=ON"
-      "-DPYTHON_LIB_INSTALL_DIR=$python_install_dir"
-    )
+    mkdir -p $out/${python3Packages.python.sitePackages}
   '';
+
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DPYTHON_LIB_INSTALL_DIR=${placeholder "out"}/${python3Packages.python.sitePackages}"
+  ];
 
   meta = with lib; {
     description = "Simple Theorem Prover";

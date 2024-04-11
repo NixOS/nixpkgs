@@ -12,9 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libfido2 pam openssl ];
 
-  preConfigure = ''
-    configureFlagsArray+=("--with-pam-dir=$out/lib/security")
-  '';
+  configureFlags = [ "--with-pam-dir=${placeholder "out"}/lib/security" ];
 
   # a no-op makefile to prevent building the fuzz targets
   postConfigure = ''

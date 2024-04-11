@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  configureFlags = [ "--with-cajadir=$$out/lib/caja/extensions-2.0" ];
+  configureFlags = [ "--with-cajadir=${placeholder "out"}/lib/caja/extensions-2.0" ];
 
   enableParallelBuilding = true;
 

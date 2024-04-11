@@ -10,11 +10,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-YSSUcwVLzRgRUZ75qYmogKe9zDbTF8nCVFf8YU30dfI=";
   };
 
-  configureFlags = [
+  configureFlags = let
+    out = placeholder "out";
+  in [
     "--with-crypto-backend=botan"
     "--with-botan=${lib.getDev botan2}"
-    "--sysconfdir=$out/etc"
-    "--localstatedir=$out/var"
+    "--sysconfdir=${out}/etc"
+    "--localstatedir=${out}/var"
     ];
 
   propagatedBuildInputs =

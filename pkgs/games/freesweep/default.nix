@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook installShellFiles ];
   buildInputs = [ ncurses ];
 
-  configureFlags = [ "--with-prefsdir=$out/share" ];
+  configureFlags = [ "--with-prefsdir=${placeholder "out"}/share" ];
 
   enableParallelBuilding = true;
 

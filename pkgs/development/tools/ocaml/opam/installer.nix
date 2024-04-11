@@ -8,7 +8,10 @@ ocamlPackages.buildDunePackage {
   inherit (opam) version src;
   nativeBuildInputs = [ unzip ];
 
-  configureFlags = [ "--disable-checks" "--prefix=$out" ];
+  configureFlags = [
+    "--disable-checks"
+    "--prefix=${placeholder "out"}"
+  ];
   buildInputs = with ocamlPackages; [ opam-format cmdliner ];
 
   meta = opam.meta // {

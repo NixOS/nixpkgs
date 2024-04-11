@@ -22,8 +22,9 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     ./autogen.sh
-    configureFlagsArray+=("--datadir=$out/share/dbench")
   '';
+
+  configureFlags = [ "--datadir=${placeholder "out"}/share/dbench" ];
 
   postInstall = ''
     cp -R loadfiles/* $out/share/dbench/doc/dbench/loadfiles

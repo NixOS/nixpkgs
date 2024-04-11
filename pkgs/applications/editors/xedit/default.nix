@@ -37,9 +37,11 @@ stdenv.mkDerivation rec {
     libXt
   ];
 
-  configureFlags = [
-    "--with-lispdir=$out/share/X11/xedit/lisp"
-    "--with-appdefaultdir=$out/share/X11/app-defaults"
+  configureFlags = let
+    out = placeholder out;
+  in [
+    "--with-lispdir=${out}/share/X11/xedit/lisp"
+    "--with-appdefaultdir=${out}/share/X11/app-defaults"
   ];
 
   meta = with lib; {

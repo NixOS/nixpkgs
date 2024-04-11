@@ -73,7 +73,7 @@ in stdenv.mkDerivation {
     runHook postCheck
   '';
 
-  installFlags = [ "DESTDIR=$$out/upstream" ];
+  installFlags = [ "DESTDIR=$(out)/upstream" ];
 
   postInstall = ''
     mv $out/upstream/usr/sbin $out/bin
