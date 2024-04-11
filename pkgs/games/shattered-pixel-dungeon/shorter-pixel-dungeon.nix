@@ -4,13 +4,13 @@
 
 callPackage ./generic.nix rec {
   pname = "shorter-pixel-dungeon";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "TrashboxBobylev";
     repo = "Shorter-Pixel-Dungeon";
     rev = "Short-${version}";
-    hash = "sha256-8vmh65XlNqfIh4WHLPuWU68tb3ajKI8kBMI68CYlsSk=";
+    hash = "sha256-dfBFAXlMjazTjvvRZ87H48OmitZuHhaa3qUF81pF4wc=";
   };
 
   postPatch = ''
