@@ -8,7 +8,8 @@
 { name ? ""
 , lib
 , stdenvNoCC
-, cc ? null, libc ? null, bintools, coreutils ? null, shell ? stdenvNoCC.shell
+, runtimeShell
+, cc ? null, libc ? null, bintools, coreutils ? null
 , zlib ? null
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , propagateDoc ? cc != null && cc ? man
@@ -739,7 +740,8 @@ stdenvNoCC.mkDerivation {
 
     # for substitution in utils.bash
     expandResponseParams = "${expand-response-params}/bin/expand-response-params";
-    shell = getBin shell + shell.shellPath or "";
+    # TODO(@sternenseemann): rename env var via stdenv rebuild
+    shell = getBin runtimeShell + runtimeShell.shellPath or "";
     gnugrep_bin = optionalString (!nativeTools) gnugrep;
     # stdenv.cc.cc should not be null and we have nothing better for now.
     # if the native impure bootstrap is gotten rid of this can become `inherit cc;` again.
