@@ -186,6 +186,37 @@ let
         (assertNetdevMacAddress "MACAddress")
       ];
 
+      sectionBridge = checkUnitConfig "Bridge" [
+        (assertOnlyFields [
+          "HelloTimeSec"
+          "MaxAgeSec"
+          "ForwardDelaySec"
+          "AgeingTimeSec"
+          "Priority"
+          "GroupForwardMask"
+          "DefaultPVID"
+          "MulticastQuerier"
+          "MulticastSnooping"
+          "VLANFiltering"
+          "VLANProtocol"
+          "STP"
+          "MulticastIGMPVersion"
+        ])
+        (assertInt "HelloTimeSec")
+        (assertInt "MaxAgeSec")
+        (assertInt "ForwardDelaySec")
+        (assertInt "AgeingTimeSec")
+        (assertRange "Priority" 0 65535)
+        (assertRange "GroupForwardMask" 0 65535)
+        (assertRangeOrOneOf "DefaultPVID" 0 4094 ["none"])
+        (assertValueOneOf "MulticastQuerier" boolValues)
+        (assertValueOneOf "MulticastSnooping" boolValues)
+        (assertValueOneOf "VLANFiltering" boolValues)
+        (assertValueOneOf "VLANProtocol" ["802.1q" "802.ad"])
+        (assertValueOneOf "STP" boolValues)
+        (assertValueOneOf "MulticastIGMPVersion" [2 3])
+      ];
+
       sectionVLAN = checkUnitConfig "VLAN" [
         (assertOnlyFields [
           "Id"
@@ -1631,6 +1662,17 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         `[Netdev]` section of the unit.  See
+        {manpage}`systemd.netdev(5)` for details.
+      '';
+    };
+
+    bridgeConfig = mkOption {
+      default = {};
+      example = { STP = true; };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionBridge;
+      description = ''
+        Each attribute in this set specifies an option in the
+        `[Bridge]` section of the unit.  See
         {manpage}`systemd.netdev(5)` for details.
       '';
     };
