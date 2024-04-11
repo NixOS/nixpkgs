@@ -12,6 +12,7 @@
 , remotezip
 , requests
 , requests-mock
+, setuptools
 , shapely
 , tenacity
 }:
@@ -19,7 +20,7 @@
 buildPythonPackage rec {
   pname = "asf-search";
   version = "7.0.9";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -30,7 +31,11 @@ buildPythonPackage rec {
     hash = "sha256-CD9Up4h23dplTt51zif+4ZdW0qczRUz2hCOwUOOlS24=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     dateparser
     importlib-metadata
     numpy
@@ -53,9 +58,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/asfadmin/Discovery-asf_search/blob/${src.rev}/CHANGELOG.md";
     description = "Python wrapper for the ASF SearchAPI";
     homepage = "https://github.com/asfadmin/Discovery-asf_search";
+    changelog = "https://github.com/asfadmin/Discovery-asf_search/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bzizou ];
   };
