@@ -16,7 +16,6 @@
 , shellcheck
 , moreutils
 , racket
-, clojure-lsp
 , alejandra
 , millet
 , craftos-pc
@@ -587,24 +586,9 @@ let
         };
       };
 
-      betterthantomorrow.calva = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "calva";
-          publisher = "betterthantomorrow";
-          version = "2.0.374";
-          hash = "sha256-VwdHOkduSSIrcOvrcVf7K8DSp3N1u9fvbaCVDCxp+bk=";
-        };
-        nativeBuildInputs = [ jq moreutils ];
-        postInstall = ''
-          cd "$out/$installPrefix"
-          jq '.contributes.configuration[0].properties."calva.clojureLspPath".default = "${clojure-lsp}/bin/clojure-lsp"' package.json | sponge package.json
-        '';
-        meta = {
-          license = lib.licenses.mit;
-        };
-      };
+      betterthantomorrow.calva = callPackage ./betterthantomorrow.calva { };
 
-       bierner.docs-view = buildVscodeMarketplaceExtension {
+      bierner.docs-view = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "docs-view";
           publisher = "bierner";
