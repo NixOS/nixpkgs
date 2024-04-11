@@ -105,7 +105,7 @@ rustPlatform.buildRustPackage rec {
     )
   '';
 
-  postPhases = lib.optionals stdenv.hostPlatform.isLinux  [ "addDlopenRunpathsPhase" ];
+  postPhases = lib.optionals stdenv.hostPlatform.isLinux [ "addDlopenRunpathsPhase" ];
 
   cargoTestFlags = [
     "-p"
