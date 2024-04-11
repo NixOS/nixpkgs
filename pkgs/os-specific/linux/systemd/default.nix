@@ -150,6 +150,10 @@
 , withUserDb ? true
 , withUtmp ? !stdenv.hostPlatform.isMusl
 , withVmspawn ? true
+  # kernel-install shouldn't usually be used on NixOS, but can be useful, e.g. for
+  # building disk images for non-NixOS systems. To save users from trying to use it
+  # on their live NixOS system, we disable it by default.
+, withKernelInstall ? false
   # tests assume too much system access for them to be feasible for us right now
 , withTests ? false
   # build only libudev and libsystemd
@@ -628,6 +632,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "efi" withEfi)
     (lib.mesonBool "utmp" withUtmp)
     (lib.mesonBool "log-trace" withLogTrace)
+    (lib.mesonBool "kernel-install" withKernelInstall)
     (lib.mesonBool "quotacheck" false)
     (lib.mesonBool "ldconfig" false)
     (lib.mesonBool "install-sysconfdir" false)
@@ -819,7 +824,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
 
     rm -rf $out/etc/rpm
-
+  '' + lib.optionalString (!withKernelInstall) ''
     # "kernel-install" shouldn't be used on NixOS.
     find $out -name "*kernel-install*" -exec rm {} \;
   '' + lib.optionalString (!withDocumentation) ''
