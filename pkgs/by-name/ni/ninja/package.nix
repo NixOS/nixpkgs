@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , asciidoc
 , docbook_xml_dtd_45
 , docbook_xsl
@@ -15,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ninja";
-  version = "1.11.1";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "ninja-build";
     repo = "ninja";
     rev = "v${version}";
-    hash = "sha256-LvV/Fi2ARXBkfyA1paCRmLUwCh/rTyz+tGMg2/qEepI=";
+    hash = "sha256-ewMn735TJTiQZYk3Y7QxNLRnKh6xdRUcdJzCX+HCmEo=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -36,15 +35,6 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_45
     docbook_xsl
     libxslt.bin
-  ];
-
-  patches = lib.optionals stdenv.is32bit [
-    # Otherwise ninja may fail on some files in a larger FS.
-    (fetchpatch {
-      name = "stat64.patch";
-      url = "https://github.com/ninja-build/ninja/commit/7bba11ae704efc84cac5fde5e9be53f653f237d1.diff";
-      hash = "sha256-tINS57xLh1lwnYFWCQs5OudfgtIShaOh5zbmv7w5BnQ=";
-    })
   ];
 
   postPatch = ''
