@@ -50,6 +50,10 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace libmessaging-menu/messaging-menu.pc.in \
       --replace "\''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@" '@CMAKE_INSTALL_FULL_LIBDIR@' \
       --replace "\''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@" '@CMAKE_INSTALL_FULL_INCLUDEDIR@'
+
+    # Fix tests with gobject-introspection & glib 1.78
+    substituteInPlace tests/CMakeLists.txt \
+      --replace-fail 'GI_TYPELIB_PATH=\"' 'GI_TYPELIB_PATH=\"$GI_TYPELIB_PATH$\{GI_TYPELIB_PATH\:+\:\}'
   '' + lib.optionalString (!withDocumentation) ''
     sed -i CMakeLists.txt \
       '/add_subdirectory(doc)/d'
