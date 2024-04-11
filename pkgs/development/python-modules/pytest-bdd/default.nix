@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , mako
 , parse
 , parse-type
@@ -14,27 +13,19 @@
 
 buildPythonPackage rec {
   pname = "pytest-bdd";
-  version = "6.1.1";
-  format = "pyproject";
+  version = "7.1.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
-    repo = pname;
+    repo = "pytest-bdd";
     rev = "refs/tags/${version}";
-    hash = "sha256-+76jIgfDQPdIoesTr1+QUu8wmOnrdf4KT+TJr9F2Hqk=";
+    hash = "sha256-PC4VSsUU5qEFp/C/7OTgHINo8wmOo0w2d1Hpe0EnFzE=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "remove-setuptools.patch";
-      url = "https://github.com/pytest-dev/pytest-bdd/commit/5d8eda3a30b47d3bd27849884a851adafca765cb.patch";
-      hash = "sha256-G2WHaRKlQ9HINufh8wl7+ly7HfDGobMLzzlbwDwd+o8=";
-    })
-  ];
-
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
@@ -42,7 +33,7 @@ buildPythonPackage rec {
     pytest
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     mako
     parse
     parse-type
@@ -63,9 +54,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "BDD library for the pytest";
-    mainProgram = "pytest-bdd";
     homepage = "https://github.com/pytest-dev/pytest-bdd";
+    changelog = "https://github.com/pytest-dev/pytest-bdd/blob/${version}/CHANGES.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ jm2dev ];
+    mainProgram = "pytest-bdd";
   };
 }
