@@ -92,8 +92,13 @@ stdenv.mkDerivation rec {
     # Install all files, remove unnecessary ones
     cp -a . $out/opt/${basename}/
     rm -r $out/opt/${basename}/{{add,remove}-menuitem.sh,credits.html,icons/}
-    ln -s "$out/opt/${basename}/${basename}" $out/bin/
-    cp -r "${desktopItem}/share/applications" $out/share/
+    ln -s $out/opt/${basename}/${basename} $out/bin/
+    for res in 16 32 48 64 128 256; do
+      install -Dm644 \
+        icons/icon-"$res".png \
+        $out/share/icons/hicolor/"$res"x"$res"/apps/${basename}.png
+    done
+    ln -s $desktopItem/share/applications $out/share/
     runHook postInstall
   '';
 
