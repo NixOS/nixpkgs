@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
   #
   #   -DHAVE_LINUXGPIO=ON    because it's incompatible with libgpiod 2.x
   #
-  cmakeFlags = lib.optionals stdenv.hostPlatform.isLinux [ "-DHAVE_LINUXSPI=ON" ]
+  cmakeFlags = [ ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ "-DHAVE_LINUXSPI=ON" "-DHAVE_PARPORT=ON" ]
     ++ lib.optionals docSupport [ "-DBUILD_DOC=ON" ];
 
   # dvips output references texlive in comments, resulting in a huge closure
