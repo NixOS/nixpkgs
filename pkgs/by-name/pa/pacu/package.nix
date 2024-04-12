@@ -31,12 +31,15 @@ in python.pkgs.buildPythonApplication rec {
     "urllib3"
   ];
 
-  nativeBuildInputs = with python.pkgs; [
+  build-system = with python.pkgs; [
     poetry-core
+  ];
+
+  nativeBuildInputs = with python.pkgs; [
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     awscli
   ] ++ (with python.pkgs; [
     awscli
