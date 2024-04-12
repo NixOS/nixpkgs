@@ -884,9 +884,6 @@
       "kcrash",
       "kxmlgui"
     ],
-    "gpgme": [
-      "libgpg-error"
-    ],
     "granatier": [
       "extra-cmake-modules",
       "kconfig",
@@ -956,18 +953,6 @@
       "kio",
       "kirigami",
       "mpvqt"
-    ],
-    "hash-o-matic": [
-      "extra-cmake-modules",
-      "kcolorscheme",
-      "kconfig",
-      "kcoreaddons",
-      "kdbusaddons",
-      "ki18n",
-      "kirigami",
-      "kwindowsystem",
-      "libkleo",
-      "qqc2-desktop-style"
     ],
     "heaptrack": [
       "extra-cmake-modules",
@@ -2594,7 +2579,6 @@
     ],
     "kirigami-gallery": [
       "extra-cmake-modules",
-      "kconfig",
       "kirigami",
       "kitemmodels"
     ],
@@ -3175,19 +3159,6 @@
       "ktextwidgets",
       "kxmlgui",
       "syntax-highlighting"
-    ],
-    "kompare": [
-      "extra-cmake-modules",
-      "kcodecs",
-      "kconfig",
-      "kcoreaddons",
-      "kdoctools",
-      "kiconthemes",
-      "kjobwidgets",
-      "kparts",
-      "ktexteditor",
-      "kwidgetsaddons",
-      "libkomparediff2"
     ],
     "kongress": [
       "extra-cmake-modules",
@@ -4342,14 +4313,6 @@
       "ki18n",
       "kwidgetsaddons"
     ],
-    "libkomparediff2": [
-      "extra-cmake-modules",
-      "kconfig",
-      "kcoreaddons",
-      "ki18n",
-      "kio",
-      "kxmlgui"
-    ],
     "libksane": [
       "extra-cmake-modules",
       "ki18n",
@@ -4829,9 +4792,6 @@
     ],
     "phonon": [
       "extra-cmake-modules"
-    ],
-    "phonon-gstreamer": [
-      "phonon"
     ],
     "phonon-vlc": [
       "extra-cmake-modules",
@@ -5417,11 +5377,7 @@
       "kconfig",
       "kcoreaddons",
       "ki18n",
-      "knotifications",
-      "kservice",
-      "libksysguard",
-      "libplasma",
-      "solid"
+      "libplasma"
     ],
     "plasmatube": [
       "extra-cmake-modules",
@@ -5592,21 +5548,6 @@
       "mailcommon",
       "messagelib",
       "pimcommon"
-    ],
-    "rkward": [
-      "extra-cmake-modules",
-      "karchive",
-      "kconfig",
-      "kcoreaddons",
-      "kcrash",
-      "kdoctools",
-      "ki18n",
-      "knotifications",
-      "kparts",
-      "ktexteditor",
-      "kwidgetsaddons",
-      "kwindowsystem",
-      "kxmlgui"
     ],
     "rocs": [
       "extra-cmake-modules",
@@ -6129,5 +6070,5 @@
       "kwindowsystem"
     ]
   },
-  "version": "56eceecf"
+  "version": "c03e6379"
 }
