@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, cerberus
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
-, pyyaml
-, ruamel-yaml
-, setuptools
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  cerberus,
+  fetchFromGitHub,
+  fetchpatch,
+  pythonOlder,
+  pyyaml,
+  ruamel-yaml,
+  setuptools,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -24,17 +25,11 @@ buildPythonPackage rec {
     hash = "sha256-lBjSHfnuNPi4Ks5ZCRLqJx3/l4GMmMEEIud8ZVl/S4Q=";
   };
 
-  pythonRelaxDeps = [
-    "pyyaml"
-  ];
+  pythonRelaxDeps = [ "pyyaml" ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     cerberus
@@ -45,9 +40,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "riscv_config"
-  ];
+  pythonImportsCheck = [ "riscv_config" ];
 
   meta = with lib; {
     description = "RISC-V configuration validator";
