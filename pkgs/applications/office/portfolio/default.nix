@@ -11,18 +11,10 @@
 , makeDesktopItem
 , webkitgtk
 , wrapGAppsHook
+, copyDesktopItems
 , writeScript
 }:
 let
-  desktopItem = makeDesktopItem {
-    name = "Portfolio";
-    exec = "portfolio";
-    icon = "portfolio";
-    comment = "Calculate Investment Portfolio Performance";
-    desktopName = "Portfolio Performance";
-    categories = [ "Office" ];
-  };
-
   runtimeLibs = lib.makeLibraryPath [ gtk3 webkitgtk ];
 in
 stdenv.mkDerivation rec {
@@ -37,6 +29,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     wrapGAppsHook
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -54,12 +47,20 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
       --prefix PATH : ${jre}/bin
 
-    # Create desktop item
-    mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications
     mkdir -p $out/share/pixmaps
     ln -s $out/portfolio/icon.xpm $out/share/pixmaps/portfolio.xpm
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Portfolio";
+      exec = "portfolio";
+      icon = "portfolio";
+      comment = "Calculate Investment Portfolio Performance";
+      desktopName = "Portfolio Performance";
+      categories = [ "Office" ];
+    })
+  ];
 
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell

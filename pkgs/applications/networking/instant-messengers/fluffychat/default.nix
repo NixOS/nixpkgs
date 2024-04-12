@@ -2,6 +2,7 @@
 , fetchzip
 , fetchFromGitHub
 , imagemagick
+, copyDesktopItems
 , mesa
 , libdrm
 , flutter
@@ -47,7 +48,7 @@ flutter.buildFlutterApplication (rec {
     sourceProvenance = [ sourceTypes.fromSource ];
   };
 } // lib.optionalAttrs (targetFlutterPlatform == "linux") {
-  nativeBuildInputs = [ imagemagick ];
+  nativeBuildInputs = [ imagemagick copyDesktopItems ];
 
   runtimeDependencies = [ pulseaudio ];
 
@@ -55,22 +56,22 @@ flutter.buildFlutterApplication (rec {
 
   env.NIX_LDFLAGS = "-rpath-link ${libwebrtcRpath}";
 
-  desktopItem = makeDesktopItem {
-    name = "Fluffychat";
-    exec = "fluffychat";
-    icon = "fluffychat";
-    desktopName = "Fluffychat";
-    genericName = "Chat with your friends (matrix client)";
-    categories = [ "Chat" "Network" "InstantMessaging" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Fluffychat";
+      exec = "fluffychat";
+      icon = "fluffychat";
+      desktopName = "Fluffychat";
+      genericName = "Chat with your friends (matrix client)";
+      categories = [ "Chat" "Network" "InstantMessaging" ];
+    })
+  ];
 
   postInstall = ''
     FAV=$out/app/data/flutter_assets/assets/favicon.png
     ICO=$out/share/icons
 
     install -D $FAV $ICO/fluffychat.png
-    mkdir $out/share/applications
-    cp $desktopItem/share/applications/*.desktop $out/share/applications
     for size in 24 32 42 64 128 256 512; do
       D=$ICO/hicolor/''${s}x''${s}/apps
       mkdir -p $D

@@ -1,19 +1,9 @@
-{ lib, stdenv, requireFile, unzip, makeDesktopItem, SDL2, SDL2_mixer, libogg, libvorbis }:
+{ lib, stdenv, requireFile, unzip, copyDesktopItems, makeDesktopItem, SDL2, SDL2_mixer, libogg, libvorbis }:
 
 let
   arch = if stdenv.system == "x86_64-linux"
     then "x86_64"
     else "x86";
-
-  desktopItem = makeDesktopItem {
-    desktopName = "World of Goo";
-    genericName = "World of Goo";
-    categories = [ "Game" ];
-    exec = "WorldOfGoo.bin.${arch}";
-    icon = "2dboy-worldofgoo";
-    name = "worldofgoo";
-  };
-
 in
 
 stdenv.mkDerivation rec {
@@ -33,7 +23,7 @@ stdenv.mkDerivation rec {
     sha256 = "175e4b0499a765f1564942da4bd65029f8aae1de8231749c56bec672187d53ee";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip copyDesktopItems ];
   sourceRoot = pname;
   phases = [ "unpackPhase installPhase" ];
 
@@ -49,16 +39,25 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/applications $out/share/icons/hicolor/256x256/apps
+    mkdir -p $out/bin $out/share/icons/hicolor/256x256/apps
 
     install -t $out/bin -m755 data/${arch}/WorldOfGoo.bin.${arch}
     cp -R data/noarch/* $out/bin
     cp data/noarch/game/gooicon.png $out/share/icons/hicolor/256x256/apps/2dboy-worldofgoo.png
-    cp ${desktopItem}/share/applications/worldofgoo.desktop \
-      $out/share/applications/worldofgoo.desktop
 
     patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath $libPath $out/bin/WorldOfGoo.bin.${arch}
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "World of Goo";
+      genericName = "World of Goo";
+      categories = [ "Game" ];
+      exec = "WorldOfGoo.bin.${arch}";
+      icon = "2dboy-worldofgoo";
+      name = "worldofgoo";
+    })
+  ];
 
   meta = with lib; {
     description = "A physics based puzzle game";

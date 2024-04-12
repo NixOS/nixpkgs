@@ -6,21 +6,13 @@
 , openjdk11
 , makeDesktopItem
 , icoutils
+, copyDesktopItems
 , config
 , acceptLicense ? config.xxe-pe.acceptLicense or false
 }:
 
 let
   pkg_path = "$out/lib/xxe";
-
-  desktopItem = makeDesktopItem {
-    name = "XMLmind XML Editor Personal Edition";
-    exec = "xxe";
-    icon = "xxe";
-    desktopName = "xxe";
-    genericName = "XML Editor";
-    categories = [ "Development" "IDE" "TextEditor" "Java" ];
-  };
 in
 stdenv.mkDerivation rec {
   pname = "xxe-pe";
@@ -42,15 +34,14 @@ stdenv.mkDerivation rec {
     unzip
     makeWrapper
     icoutils
+    copyDesktopItems
   ];
 
   dontStrip = true;
 
   installPhase = ''
     mkdir -p "${pkg_path}"
-    mkdir -p "${pkg_path}" "$out/share/applications"
     cp -a * "${pkg_path}"
-    ln -s ${desktopItem}/share/applications/* $out/share/applications
 
     icotool -x "${pkg_path}/bin/icon/xxe.ico"
     ls
@@ -66,6 +57,17 @@ stdenv.mkDerivation rec {
     makeWrapper "${pkg_path}/bin/xxe" "$out/bin/xxe" \
       --prefix PATH : ${lib.makeBinPath [ openjdk11 ]}
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "XMLmind XML Editor Personal Edition";
+      exec = "xxe";
+      icon = "xxe";
+      desktopName = "xxe";
+      genericName = "XML Editor";
+      categories = [ "Development" "IDE" "TextEditor" "Java" ];
+    })
+  ];
 
   meta = with lib; {
     description = "Strictly validating, near WYSIWYG, XML editor with DocBook support";

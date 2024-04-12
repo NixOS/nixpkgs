@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, makeWrapper, makeDesktopItem, jdk8 }:
+{ lib, stdenv, fetchzip, makeWrapper, copyDesktopItems, makeDesktopItem, jdk8 }:
 
 stdenv.mkDerivation rec {
   pname = "jpexs";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
 
   installPhase = ''
     runHook preInstall
@@ -23,22 +23,23 @@ stdenv.mkDerivation rec {
     cp ffdec.jar $out/share/ffdec
     cp -r lib $out/share/ffdec
     cp icon.png $out/share/icons/hicolor/512x512/apps/ffdec.png
-    cp -r ${desktopItem}/share/applications $out/share
 
     makeWrapper ${jdk8}/bin/java $out/bin/ffdec \
       --add-flags "-jar $out/share/ffdec/ffdec.jar"
   '';
 
-  desktopItem = makeDesktopItem rec {
-    name = "ffdec";
-    exec = name;
-    icon = name;
-    desktopName = "JPEXS Free Flash Decompiler";
-    genericName = "Flash Decompiler";
-    comment = meta.description;
-    categories = [ "Development" "Java" ];
-    startupWMClass = "com-jpexs-decompiler-flash-gui-Main";
-  };
+  desktopItems = [
+    (makeDesktopItem rec {
+      name = "ffdec";
+      exec = name;
+      icon = name;
+      desktopName = "JPEXS Free Flash Decompiler";
+      genericName = "Flash Decompiler";
+      comment = meta.description;
+      categories = [ "Development" "Java" ];
+      startupWMClass = "com-jpexs-decompiler-flash-gui-Main";
+    })
+  ];
 
   meta = with lib; {
     description = "Flash SWF decompiler and editor";

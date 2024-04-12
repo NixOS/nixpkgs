@@ -4,6 +4,7 @@
 , lib, stdenv, fetchzip, cmake, makeDesktopItem
 , zlib, libpng, cups ? null, freetype ? null
 , qtbase ? null, qtsvg ? null, wrapQtAppsHook
+, copyDesktopItems
 }:
 
 assert enableGUI -> qtbase != null && qtsvg != null && freetype != null;
@@ -32,7 +33,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs =
     [ cmake ]
-    ++ lib.optional enableGUI wrapQtAppsHook;
+    ++ lib.optional enableGUI wrapQtAppsHook
+    ++ lib.optional (!stdenv.isDarwin) copyDesktopItems;
 
   cmakeFlags = ["-DSYSTEM_XPDFRC=/etc/xpdfrc" "-DA4_PAPER=ON" "-DOPI_SUPPORT=ON"]
     ++ lib.optional (!enablePrinting) "-DXPDFWIDGET_PRINTING=OFF";
@@ -42,17 +44,18 @@ stdenv.mkDerivation rec {
     lib.optional enablePrinting cups ++
     lib.optional enablePDFtoPPM freetype;
 
-  desktopItem = makeDesktopItem {
-    name = "xpdf";
-    desktopName = "Xpdf";
-    comment = "Views Adobe PDF files";
-    icon = "xpdf";
-    exec = "xpdf %f";
-    categories = [ "Office" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "xpdf";
+      desktopName = "Xpdf";
+      comment = "Views Adobe PDF files";
+      icon = "xpdf";
+      exec = "xpdf %f";
+      categories = [ "Office" ];
+    })
+  ];
 
   postInstall = lib.optionalString (!stdenv.isDarwin) ''
-    install -Dm644 ${desktopItem}/share/applications/xpdf.desktop -t $out/share/applications
     install -Dm644 $src/xpdf-qt/xpdf-icon.svg $out/share/pixmaps/xpdf.svg
   '';
 

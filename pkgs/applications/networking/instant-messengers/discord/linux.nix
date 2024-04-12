@@ -1,5 +1,6 @@
 { pname, version, src, meta, binaryName, desktopName, autoPatchelfHook
-, makeDesktopItem, lib, stdenv, wrapGAppsHook, makeShellWrapper, alsa-lib, at-spi2-atk
+, makeDesktopItem, lib, stdenv, wrapGAppsHook, makeShellWrapper, copyDesktopItems
+, alsa-lib, at-spi2-atk
 , at-spi2-core, atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk-pixbuf
 , glib, gtk3, libcxx, libdrm, libglvnd, libnotify, libpulseaudio, libuuid, libX11
 , libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext, libXfixes
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     nss
     wrapGAppsHook
     makeShellWrapper
+    copyDesktopItems
   ];
 
   dontWrapGApps = true;
@@ -120,8 +122,6 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/${binaryName}/discord.png $out/share/pixmaps/${pname}.png
     ln -s $out/opt/${binaryName}/discord.png $out/share/icons/hicolor/256x256/apps/${pname}.png
 
-    ln -s "$desktopItem/share/applications" $out/share/
-
     runHook postInstall
   '';
 
@@ -134,15 +134,17 @@ stdenv.mkDerivation rec {
     echo 'require("${vencord}/patcher.js")' > $out/opt/${binaryName}/resources/app.asar/index.js
   '';
 
-  desktopItem = makeDesktopItem {
-    name = pname;
-    exec = binaryName;
-    icon = pname;
-    inherit desktopName;
-    genericName = meta.description;
-    categories = [ "Network" "InstantMessaging" ];
-    mimeTypes = [ "x-scheme-handler/discord" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      exec = binaryName;
+      icon = pname;
+      inherit desktopName;
+      genericName = meta.description;
+      categories = [ "Network" "InstantMessaging" ];
+      mimeTypes = [ "x-scheme-handler/discord" ];
+    })
+  ];
 
   passthru = {
     # make it possible to run disableBreakingUpdates standalone

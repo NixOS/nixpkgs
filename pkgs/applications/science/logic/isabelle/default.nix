@@ -4,6 +4,7 @@
 , coreutils
 , nettools
 , java
+, copyDesktopItems
 , scala_3
 , polyml
 , veriT
@@ -70,7 +71,7 @@ in stdenv.mkDerivation (finalAttrs: rec {
         hash = "sha256-Tzxxs0gKw6vymbaXIzH8tK5VgUrpOIp9vcWQ/zxnRCc=";
       };
 
-  nativeBuildInputs = [ java ];
+  nativeBuildInputs = [ java copyDesktopItems ];
 
   buildInputs = [ polyml veriT vampire eprover-ho nettools ]
     ++ lib.optionals (!stdenv.isDarwin) [ java ];
@@ -190,20 +191,18 @@ in stdenv.mkDerivation (finalAttrs: rec {
     # icon
     mkdir -p "$out/share/icons/hicolor/isabelle/apps"
     cp "$out/Isabelle${version}/lib/icons/isabelle.xpm" "$out/share/icons/hicolor/isabelle/apps/"
-
-    # desktop item
-    mkdir -p "$out/share"
-    cp -r "${desktopItem}/share/applications" "$out/share/applications"
   '';
 
-  desktopItem = makeDesktopItem {
-    name = "isabelle";
-    exec = "isabelle jedit";
-    icon = "isabelle";
-    desktopName = "Isabelle";
-    comment = meta.description;
-    categories = [ "Education" "Science" "Math" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "isabelle";
+      exec = "isabelle jedit";
+      icon = "isabelle";
+      desktopName = "Isabelle";
+      comment = "A generic proof assistant";
+      categories = [ "Education" "Science" "Math" ];
+    })
+  ];
 
   meta = with lib; {
     description = "A generic proof assistant";

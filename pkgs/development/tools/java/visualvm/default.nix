@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, lib, makeWrapper, makeDesktopItem, jdk, gawk }:
+{ stdenv, fetchzip, lib, makeWrapper, copyDesktopItems, makeDesktopItem, jdk, gawk }:
 
 stdenv.mkDerivation rec {
   version = "2.1.8";
@@ -9,16 +9,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-yWSB8mqcOG7xd4/8YjPXzGvl7BgyOLdIoyAs69+/kv4=";
   };
 
-  desktopItem = makeDesktopItem {
+  desktopItems = [
+    (makeDesktopItem {
       name = "visualvm";
       exec = "visualvm";
       comment = "Java Troubleshooting Tool";
       desktopName = "VisualVM";
       genericName = "Java Troubleshooting Tool";
       categories = [ "Development" ];
-  };
+    })
+  ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
 
   installPhase = ''
     find . -type f -name "*.dll" -o -name "*.exe"  -delete;

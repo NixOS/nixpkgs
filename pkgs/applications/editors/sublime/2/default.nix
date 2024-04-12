@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, glib, xorg, cairo, gtk2, makeDesktopItem }:
+{ fetchurl, lib, stdenv, glib, xorg, cairo, gtk2, copyDesktopItems, makeDesktopItem }:
 let
   libPath = lib.makeLibraryPath [ glib xorg.libX11 gtk2 cairo ];
 in
@@ -26,6 +26,9 @@ stdenv.mkDerivation rec {
         ];
         sha256 = "115b71nbv9mv8cz6bkjwpbdf2ywnjc1zy2d3080f6ck4sqqfvfh1";
       };
+
+  nativeBuildInputs = [ copyDesktopItems ];
+
   buildCommand = ''
     tar xvf ${src}
     mkdir -p $out/bin
@@ -45,19 +48,19 @@ stdenv.mkDerivation rec {
       mkdir -p $out/share/icons/hicolor/$x/apps
       cp -v $out/sublime/Icon/$x/* $out/share/icons/hicolor/$x/apps
     done
-
-    ln -sv "${desktopItem}/share/applications" $out/share
   '';
 
-  desktopItem = makeDesktopItem {
-    name = "sublime2";
-    exec = "sublime2 %F";
-    comment = meta.description;
-    desktopName = "Sublime Text";
-    genericName = "Text Editor";
-    categories = [ "TextEditor" "Development" ];
-    icon = "sublime_text";
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "sublime2";
+      exec = "sublime2 %F";
+      comment = meta.description;
+      desktopName = "Sublime Text";
+      genericName = "Text Editor";
+      categories = [ "TextEditor" "Development" ];
+      icon = "sublime_text";
+    })
+  ];
 
   meta = {
     description = "Sophisticated text editor for code, markup and prose";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, SDL2, SDL2_net }:
+{ lib, stdenv, fetchurl, copyDesktopItems, makeDesktopItem, SDL2, SDL2_net }:
 
 stdenv.mkDerivation rec {
   pname = "maelstrom";
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   # this fixes a typedef compilation error with gcc-3.x
   patches = [ ./fix-compilation.patch ];
+
+  nativeBuildInputs = [ copyDesktopItems ];
 
   buildInputs = [ SDL2 SDL2_net ];
 

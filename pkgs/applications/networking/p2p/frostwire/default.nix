@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, gradle_6, perl, jre, makeWrapper, makeDesktopItem, mplayer }:
+{ lib, stdenv, fetchFromGitHub, gradle_6, perl, jre, makeWrapper, copyDesktopItems, makeDesktopItem, mplayer }:
 
 let
   version = "6.6.7-build-529";
@@ -8,16 +8,6 @@ let
     repo = "frostwire";
     rev = "frostwire-desktop-${version}";
     sha256 = "03wdj2kr8akzx8m1scvg98132zbaxh81qjdsxn2645b3gahjwz0m";
-  };
-
-  desktopItem = makeDesktopItem {
-    name = "frostwire";
-    desktopName = "FrostWire";
-    genericName = "P2P Bittorrent client";
-    exec = "frostwire";
-    icon = "frostwire";
-    comment = "Search and explore all kinds of files on the Bittorrent network";
-    categories = [ "Network" "FileTransfer" "P2P" ];
   };
 
   # fake build to pre-download deps into fixed-output derivation
@@ -46,7 +36,7 @@ in stdenv.mkDerivation {
   pname = "frostwire-desktop";
   inherit version src;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
   buildInputs = [ gradle_6 ];
 
   buildPhase = ''
@@ -78,11 +68,21 @@ in stdenv.mkDerivation {
           }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}")
         } $out/lib
 
-    cp -dpR ${desktopItem}/share $out
-
     makeWrapper ${jre}/bin/java $out/bin/frostwire \
       --add-flags "-Djava.library.path=$out/lib -jar $out/share/java/frostwire.jar"
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "frostwire";
+      desktopName = "FrostWire";
+      genericName = "P2P Bittorrent client";
+      exec = "frostwire";
+      icon = "frostwire";
+      comment = "Search and explore all kinds of files on the Bittorrent network";
+      categories = [ "Network" "FileTransfer" "P2P" ];
+    })
+  ];
 
   meta = with lib; {
     homepage = "https://www.frostwire.com/";

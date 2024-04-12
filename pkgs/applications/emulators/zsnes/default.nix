@@ -1,18 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, nasm, SDL, zlib, libpng, ncurses, libGLU, libGL
+{ lib, stdenv, fetchFromGitHub, copyDesktopItems, nasm, SDL, zlib, libpng, ncurses, libGLU, libGL
 , makeDesktopItem }:
 
-let
-  desktopItem = makeDesktopItem {
-    name = "zsnes";
-    exec = "zsnes";
-    icon = "zsnes";
-    comment = "A SNES emulator";
-    desktopName = "zsnes";
-    genericName = "zsnes";
-    categories = [ "Game" ];
-  };
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation {
   pname = "zsnes";
   version = "1.51";
 
@@ -27,6 +16,8 @@ in stdenv.mkDerivation {
     ./zlib-1.3.patch
     ./fortify3.patch
   ];
+
+  nativeBuildInputs = [ copyDesktopItems ];
 
   buildInputs = [ nasm SDL zlib libpng ncurses libGLU libGL ];
 
@@ -59,10 +50,19 @@ in stdenv.mkDerivation {
     installIcon "32x32"
     installIcon "48x48"
     installIcon "64x64"
-
-    mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "zsnes";
+      exec = "zsnes";
+      icon = "zsnes";
+      comment = "A SNES emulator";
+      desktopName = "zsnes";
+      genericName = "zsnes";
+      categories = [ "Game" ];
+    })
+  ];
 
   meta = {
     description = "A Super Nintendo Entertainment System Emulator";

@@ -1,6 +1,7 @@
 { lib, stdenv
 , autoPatchelfHook
 , makeWrapper
+, copyDesktopItems
 , fetchurl
 , makeDesktopItem
 , lttng-ust_2_12
@@ -34,16 +35,18 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  desktopItem = makeDesktopItem {
-    name = "wasabi";
-    exec = "wasabiwallet";
-    desktopName = "Wasabi";
-    genericName = "Bitcoin wallet";
-    comment = meta.description;
-    categories = [ "Network" "Utility" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "wasabi";
+      exec = "wasabiwallet";
+      desktopName = "Wasabi";
+      genericName = "Bitcoin wallet";
+      comment = meta.description;
+      categories = [ "Network" "Utility" ];
+    })
+  ];
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper copyDesktopItems ];
   buildInputs = runtimeLibs ++ [
     lttng-ust_2_12
   ];
@@ -57,8 +60,6 @@ stdenv.mkDerivation rec {
 
     makeWrapper "$out/opt/${pname}/wassabeed" "$out/bin/${pname}d" \
       --suffix "LD_LIBRARY_PATH" : "${lib.makeLibraryPath runtimeLibs}"
-
-    cp -v $desktopItem/share/applications/* $out/share/applications
   '';
 
   meta = with lib; {

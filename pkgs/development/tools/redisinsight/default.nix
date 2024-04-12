@@ -14,6 +14,7 @@
 , libsass
 , buildPackages
 , pkg-config
+, copyDesktopItems
 , sqlite
 , xdg-utils
 }:
@@ -46,8 +47,17 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "P99+1Dhdg/vznC2KepPrVGNlrofJFydXkZVxgwprIx4=";
   };
 
-  nativeBuildInputs = [ yarn fixup_yarn_lock nodejs makeWrapper python3 nest-cli libsass pkg-config ]
-    ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
+  nativeBuildInputs = [
+    yarn
+    fixup_yarn_lock
+    nodejs
+    makeWrapper
+    python3
+    nest-cli
+    libsass
+    pkg-config
+    copyDesktopItems
+  ] ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [ sqlite xdg-utils ];
 
@@ -122,8 +132,6 @@ stdenv.mkDerivation (finalAttrs: {
       ln -s "$icon" "$out/share/icons/hicolor/$(basename $icon .png)/apps/redisinsight.png"
     done
 
-    ln -s "${finalAttrs.desktopItem}/share/applications" "$out/share/applications"
-
     makeWrapper '${electron}/bin/electron' "$out/bin/redisinsight" \
       --add-flags "$out/share/redisinsight/app.asar" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
@@ -133,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  desktopItem = makeDesktopItem {
+  desktopItems = makeDesktopItem {
     name = "redisinsight";
     exec = "redisinsight %u";
     icon = "redisinsight";

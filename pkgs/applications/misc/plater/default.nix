@@ -1,5 +1,6 @@
 { mkDerivation
 , cmake
+, copyDesktopItems
 , fetchFromGitHub
 , lib
 , libGLU
@@ -19,21 +20,22 @@ mkDerivation rec {
     sha256 = "0r20mbzd16zv1aiadjqdy7z6sp09rr6lgfxhvir4ll3cpakkynr4";
   };
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook ];
+  nativeBuildInputs = [ cmake wrapQtAppsHook copyDesktopItems ];
   buildInputs = [ libGLU qtbase ];
 
-  desktopItem = makeDesktopItem {
-    name = pname;
-    exec = pname;
-    icon = pname;
-    desktopName = "Ideamaker";
-    genericName = meta.description;
-    categories = ["Utility" "Engineering"];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      exec = pname;
+      icon = pname;
+      desktopName = "Ideamaker";
+      genericName = meta.description;
+      categories = ["Utility" "Engineering"];
+    })
+  ];
 
   postInstall = ''
     mkdir -p $out/share/pixmaps
-    ln -s ${desktopItem}/share/applications $out/share/
     cp $src/gui/img/plater.png $out/share/pixmaps/${pname}.png
   '';
 

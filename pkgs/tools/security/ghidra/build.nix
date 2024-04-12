@@ -7,6 +7,7 @@
 , openjdk17
 , unzip
 , makeDesktopItem
+, copyDesktopItems
 , icoutils
 , xcbuild
 , protobuf
@@ -25,15 +26,6 @@ let
   };
 
   gradle = gradle_7;
-
-  desktopItem = makeDesktopItem {
-    name = "ghidra";
-    exec = "ghidra";
-    icon = "ghidra";
-    desktopName = "Ghidra";
-    genericName = "Ghidra Software Reverse Engineering Suite";
-    categories = [ "Development" ];
-  };
 
   # postPatch scripts.
   # Adds a gradle step that downloads all the dependencies to the gradle cache.
@@ -98,7 +90,7 @@ in stdenv.mkDerivation {
   inherit pname version src;
 
   nativeBuildInputs = [
-    gradle unzip makeWrapper icoutils protobuf
+    gradle unzip makeWrapper icoutils protobuf copyDesktopItems
   ] ++ lib.optional stdenv.isDarwin xcbuild;
 
   dontStrip = true;
@@ -120,7 +112,7 @@ in stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    mkdir -p "${pkg_path}" "$out/share/applications"
+    mkdir -p "${pkg_path}"
 
     ZIP=build/dist/$(ls build/dist)
     echo $ZIP
@@ -128,8 +120,6 @@ in stdenv.mkDerivation {
     f=("${pkg_path}"/*)
     mv "${pkg_path}"/*/* "${pkg_path}"
     rmdir "''${f[@]}"
-
-    ln -s ${desktopItem}/share/applications/* $out/share/applications
 
     icotool -x "Ghidra/RuntimeScripts/Windows/support/ghidra.ico"
     rm ghidra_4_40x40x32.png
@@ -146,6 +136,17 @@ in stdenv.mkDerivation {
     wrapProgram "${pkg_path}/support/launch.sh" \
       --prefix PATH : ${lib.makeBinPath [ openjdk17 ]}
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "ghidra";
+      exec = "ghidra";
+      icon = "ghidra";
+      desktopName = "Ghidra";
+      genericName = "Ghidra Software Reverse Engineering Suite";
+      categories = [ "Development" ];
+    })
+  ];
 
   meta = with lib; {
     description = "A software reverse engineering (SRE) suite of tools developed by NSA's Research Directorate in support of the Cybersecurity mission";

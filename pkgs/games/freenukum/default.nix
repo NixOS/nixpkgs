@@ -3,6 +3,7 @@
 , fetchFromGitLab
 , makeDesktopItem
 , installShellFiles
+, copyDesktopItems
 , dejavu_fonts
 , SDL2
 , SDL2_ttf
@@ -10,18 +11,6 @@
 }:
 let
   pname = "freenukum";
-  description = "Clone of the original Duke Nukum 1 Jump'n Run game";
-
-  desktopItem = makeDesktopItem {
-    desktopName = pname;
-    name = pname;
-    exec = pname;
-    icon = pname;
-    comment = description;
-    categories = [ "Game" "ArcadeGame" "ActionGame" ];
-    genericName = pname;
-  };
-
 in
 rustPlatform.buildRustPackage rec {
   inherit pname;
@@ -39,6 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -60,8 +50,19 @@ rustPlatform.buildRustPackage rec {
     mkdir -p $out/share/doc/freenukum
     install -Dm644 README.md CHANGELOG.md $out/share/doc/freenukum/
     installManPage doc/freenukum.6
-    install -Dm644 "${desktopItem}/share/applications/"* -t $out/share/applications/
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = pname;
+      name = pname;
+      exec = pname;
+      icon = pname;
+      comment = "Clone of the original Duke Nukum 1 Jump'n Run game";
+      categories = [ "Game" "ArcadeGame" "ActionGame" ];
+      genericName = pname;
+    })
+  ];
 
   meta = with lib; {
     description = "Clone of the original Duke Nukum 1 Jump'n Run game";

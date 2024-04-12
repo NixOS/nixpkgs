@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , wrapGAppsHook
+, copyDesktopItems
 , makeDesktopItem
 , atk
 , cairo
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-HAVLmamEPuFf0548/iEXes+f4XnQ7kU1u9hyOYhVyZ0=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook copyDesktopItems ];
   buildInputs =
     [ gsettings-desktop-schemas glib gtk3 gnome.adwaita-icon-theme dconf ];
 
@@ -96,17 +97,19 @@ stdenv.mkDerivation rec {
     sed -i '/pref("app.update.enabled", true);/c\pref("app.update.enabled", false);' defaults/preferences/prefs.js
   '';
 
-  desktopItem = makeDesktopItem {
-    name = "zotero";
-    exec = "zotero -url %U";
-    icon = "zotero";
-    comment = meta.description;
-    desktopName = "Zotero";
-    genericName = "Reference Management";
-    categories = [ "Office" "Database" ];
-    startupNotify = true;
-    mimeTypes = [ "x-scheme-handler/zotero" "text/plain" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "zotero";
+      exec = "zotero -url %U";
+      icon = "zotero";
+      comment = "Collect, organize, cite, and share your research sources";
+      desktopName = "Zotero";
+      genericName = "Reference Management";
+      categories = [ "Office" "Database" ];
+      startupNotify = true;
+      mimeTypes = [ "x-scheme-handler/zotero" "text/plain" ];
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -116,9 +119,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
     ln -s "$prefix/usr/lib/zotero-bin-${version}/zotero" "$out/bin/"
 
-    # install desktop file and icons.
-    mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications/
+    # install icons.
     for size in 16 32 48 256; do
       install -Dm444 chrome/icons/default/default$size.png \
         $out/share/icons/hicolor/''${size}x''${size}/apps/zotero.png

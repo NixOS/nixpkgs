@@ -1,19 +1,5 @@
-{ lib, fetchFromGitHub, rustPlatform, alsa-lib, atk, cairo, dbus, gdk-pixbuf, glib, gtk3, pango, pkg-config, makeDesktopItem }:
+{ lib, fetchFromGitHub, rustPlatform, alsa-lib, atk, cairo, dbus, gdk-pixbuf, glib, gtk3, pango, pkg-config, makeDesktopItem, copyDesktopItems }:
 
-let
-  desktopItem = makeDesktopItem {
-    name = "Psst";
-    exec = "psst-gui";
-    comment = "Fast and multi-platform Spotify client with native GUI";
-    desktopName = "Psst";
-    type = "Application";
-    categories = [ "Audio" "AudioVideo" ];
-    icon = "psst";
-    terminal = false;
-    startupWMClass = "psst-gui";
-  };
-
-in
 rustPlatform.buildRustPackage rec {
   pname = "psst";
   version = "unstable-2024-04-01";
@@ -36,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   # specify the subdirectory of the binary crate to build from the workspace
   buildAndTestSubdir = "psst-gui";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config copyDesktopItems ];
 
   buildInputs = [
     alsa-lib
@@ -56,8 +42,21 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     install -Dm444 psst-gui/assets/logo_512.png $out/share/icons/hicolor/512x512/apps/${pname}.png
-    install -Dm444 -t $out/share/applications ${desktopItem}/share/applications/*
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Psst";
+      exec = "psst-gui";
+      comment = "Fast and multi-platform Spotify client with native GUI";
+      desktopName = "Psst";
+      type = "Application";
+      categories = [ "Audio" "AudioVideo" ];
+      icon = "psst";
+      terminal = false;
+      startupWMClass = "psst-gui";
+    })
+  ];
 
   passthru = {
     updateScript = ./update.sh;

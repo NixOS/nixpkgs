@@ -7,22 +7,14 @@
 , stdenv
 , lib
 , wrapGAppsHook
+, copyDesktopItems
 , alsa-lib
 , nss
 , nspr
 , systemd
 , xorg
 }:
-let
-  desktopItem = makeDesktopItem {
-    desktopName = "HakuNeko Desktop";
-    genericName = "Manga & Anime Downloader";
-    categories = [ "Network" "FileTransfer" ];
-    exec = "hakuneko";
-    icon = "hakuneko-desktop";
-    name = "hakuneko-desktop";
-  };
-in
+
 stdenv.mkDerivation rec {
   pname = "hakuneko";
   version = "6.1.7";
@@ -49,6 +41,7 @@ stdenv.mkDerivation rec {
     dpkg
     makeWrapper
     wrapGAppsHook
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -67,9 +60,6 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     cp -R usr "$out"
-    # Overwrite existing .desktop file.
-    cp "${desktopItem}/share/applications/hakuneko-desktop.desktop" \
-       "$out/share/applications/hakuneko-desktop.desktop"
   '';
 
   runtimeDependencies = [
@@ -80,6 +70,17 @@ stdenv.mkDerivation rec {
     makeWrapper $out/lib/hakuneko-desktop/hakuneko $out/bin/hakuneko \
       "''${gappsWrapperArgs[@]}"
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "HakuNeko Desktop";
+      genericName = "Manga & Anime Downloader";
+      categories = [ "Network" "FileTransfer" ];
+      exec = "hakuneko";
+      icon = "hakuneko-desktop";
+      name = "hakuneko-desktop";
+    })
+  ];
 
   meta = with lib; {
     description = "Manga & Anime Downloader";

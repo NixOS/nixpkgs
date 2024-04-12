@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, copyDesktopItems
 , fetchFromGitLab
 , fftw
 , liblo
@@ -23,6 +24,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    copyDesktopItems
     qmake
     wrapQtAppsHook
   ];
@@ -35,15 +37,17 @@ stdenv.mkDerivation rec {
     qtbase
   ];
 
-  desktopItem = makeDesktopItem {
-    type = "Application";
-    desktopName = pname;
-    name = pname;
-    comment = "A sample masher designed by Aphex Twin";
-    exec = pname;
-    icon = pname;
-    categories = [ "Audio" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      type = "Application";
+      desktopName = pname;
+      name = pname;
+      comment = "A sample masher designed by Aphex Twin";
+      exec = pname;
+      icon = pname;
+      categories = [ "Audio" ];
+    })
+  ];
 
   installPhase = ''
     mkdir -p $out/bin

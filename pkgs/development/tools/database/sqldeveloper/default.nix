@@ -1,17 +1,7 @@
-{ lib, stdenv, makeDesktopItem, makeWrapper, requireFile, unzip, jdk }:
+{ lib, stdenv, makeDesktopItem, makeWrapper, requireFile, unzip, copyDesktopItems, jdk }:
 
 let
   version = "20.4.0.379.2205";
-
-  desktopItem = makeDesktopItem {
-    name = "sqldeveloper";
-    exec = "sqldeveloper";
-    icon = "sqldeveloper";
-    desktopName = "Oracle SQL Developer";
-    genericName = "Oracle SQL Developer";
-    comment = "Oracle's Oracle DB GUI client";
-    categories = [ "Development" ];
-  };
 in
   stdenv.mkDerivation {
 
@@ -49,21 +39,32 @@ in
     sha256 = "1h53gl41ydr7kim6q9ckg3xyhb0rhmwj7jnis0xz6vms52b3h59k";
   };
 
-  nativeBuildInputs = [ makeWrapper unzip ];
+  nativeBuildInputs = [ makeWrapper unzip copyDesktopItems ];
 
   unpackCmd = "unzip $curSrc";
 
   installPhase = ''
-    mkdir -p $out/libexec $out/share/{applications,pixmaps}
+    mkdir -p $out/libexec $out/share/{pixmaps}
     mv * $out/libexec/
 
     mv $out/libexec/icon.png $out/share/pixmaps/sqldeveloper.png
-    cp ${desktopItem}/share/applications/* $out/share/applications
 
     makeWrapper $out/libexec/sqldeveloper/bin/sqldeveloper $out/bin/sqldeveloper \
       --set JAVA_HOME ${jdk.home} \
       --chdir "$out/libexec/sqldeveloper/bin"
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "sqldeveloper";
+      exec = "sqldeveloper";
+      icon = "sqldeveloper";
+      desktopName = "Oracle SQL Developer";
+      genericName = "Oracle SQL Developer";
+      comment = "Oracle's Oracle DB GUI client";
+      categories = [ "Development" ];
+    })
+  ];
 
   meta = with lib; {
     description = "Oracle's Oracle DB GUI client";

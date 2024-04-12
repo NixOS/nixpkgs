@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, SDL, SDL_ttf, SDL_gfx, SDL_mixer, libpng
+{ lib, stdenv, fetchFromGitHub, copyDesktopItems, SDL, SDL_ttf, SDL_gfx, SDL_mixer, libpng
 , glew, dejavu_fonts, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
@@ -21,17 +21,21 @@ stdenv.mkDerivation rec {
   HYPERROGUE_USE_GLEW = 1;
   HYPERROGUE_USE_PNG = 1;
 
+  nativeBuildInputs = [ copyDesktopItems ];
+
   buildInputs = [ SDL SDL_ttf SDL_gfx SDL_mixer libpng glew ];
 
-  desktopItem = makeDesktopItem {
-    name = "hyperrogue";
-    desktopName = "HyperRogue";
-    genericName = "HyperRogue";
-    comment = meta.description;
-    icon = "hyperrogue";
-    exec = "hyperrogue";
-    categories = [ "Game" "AdventureGame" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "hyperrogue";
+      desktopName = "HyperRogue";
+      genericName = "HyperRogue";
+      comment = meta.description;
+      icon = "hyperrogue";
+      exec = "hyperrogue";
+      categories = [ "Game" "AdventureGame" ];
+    })
+  ];
 
   installPhase = ''
     install -d $out/share/hyperrogue/{sounds,music}
@@ -41,8 +45,6 @@ stdenv.mkDerivation rec {
     install -m 444 -D music/* $out/share/hyperrogue/music
     install -m 444 -D sounds/* $out/share/hyperrogue/sounds
 
-    install -m 444 -D ${desktopItem}/share/applications/hyperrogue.desktop \
-      $out/share/applications/hyperrogue.desktop
     install -m 444 -D hyperroid/app/src/main/res/drawable-ldpi/icon.png \
       $out/share/icons/hicolor/36x36/apps/hyperrogue.png
     install -m 444 -D hyperroid/app/src/main/res/drawable-mdpi/icon.png \

@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
+, copyDesktopItems
 , SDL2
 , alsa-lib
 , ffmpeg
@@ -23,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-n4iaJG9k+/TFfGMDCYL83Z6paxpm/gY3thP9T84GeQU=";
   };
 
-  nativeBuildInputs = [ autoreconfHook qt5.wrapQtAppsHook pkg-config ];
+  nativeBuildInputs = [ autoreconfHook qt5.wrapQtAppsHook pkg-config copyDesktopItems ];
   buildInputs = [ SDL2 alsa-lib ffmpeg lua5_3 qt5.qtbase ];
 
   configureFlags = [

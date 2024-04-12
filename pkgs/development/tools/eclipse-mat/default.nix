@@ -11,6 +11,7 @@
 , libXtst
 , makeDesktopItem
 , makeWrapper
+, copyDesktopItems
 , shared-mime-info
 , stdenv
 , unzip
@@ -36,15 +37,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-icmo5zdK0XaH32kXwZUVaQ0VPSGEgvlLr7v7PtdbmCg=";
   };
 
-  desktopItem = makeDesktopItem {
-    name = "eclipse-mat";
-    exec = "eclipse-mat";
-    icon = "eclipse";
-    comment = "Eclipse Memory Analyzer";
-    desktopName = "Eclipse MAT";
-    genericName = "Java Memory Analyzer";
-    categories = [ "Development" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "eclipse-mat";
+      exec = "eclipse-mat";
+      icon = "eclipse";
+      comment = "Eclipse Memory Analyzer";
+      desktopName = "Eclipse MAT";
+      genericName = "Java Memory Analyzer";
+      categories = [ "Development" ];
+    })
+  ];
 
   unpackPhase = ''
     unzip $src
@@ -70,15 +73,12 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
       --add-flags "-configuration \$HOME/.eclipse-mat/''${version}/configuration"
 
-    # Create desktop item.
-    mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications
     mkdir -p $out/share/pixmaps
     find $out/mat/plugins -name 'eclipse*.png' -type f -exec cp {} $out/share/pixmaps \;
     mv $out/share/pixmaps/eclipse64.png $out/share/pixmaps/eclipse.png
   '';
 
-  nativeBuildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [ unzip makeWrapper copyDesktopItems ];
   buildInputs = [
     fontconfig
     freetype

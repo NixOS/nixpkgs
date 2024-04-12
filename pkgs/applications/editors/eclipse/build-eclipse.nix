@@ -1,23 +1,25 @@
 { lib, stdenv, makeDesktopItem, freetype, fontconfig, libX11, libXrender
 , zlib, jdk, glib, glib-networking, gtk, libXtst, libsecret, gsettings-desktop-schemas, webkitgtk
-, makeWrapper, perl, ... }:
+, makeWrapper, perl, copyDesktopItems, ... }:
 
 { name, src ? builtins.getAttr stdenv.hostPlatform.system sources, sources ? null, description, productVersion }:
 
 stdenv.mkDerivation rec {
   inherit name src;
 
-  desktopItem = makeDesktopItem {
-    name = "Eclipse";
-    exec = "eclipse";
-    icon = "eclipse";
-    comment = "Integrated Development Environment";
-    desktopName = "Eclipse IDE";
-    genericName = "Integrated Development Environment";
-    categories = [ "Development" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Eclipse";
+      exec = "eclipse";
+      icon = "eclipse";
+      comment = "Integrated Development Environment";
+      desktopName = "Eclipse IDE";
+      genericName = "Integrated Development Environment";
+      categories = [ "Development" ];
+    })
+  ];
 
-  nativeBuildInputs = [ makeWrapper perl ];
+  nativeBuildInputs = [ makeWrapper perl copyDesktopItems ];
   buildInputs = [
     fontconfig freetype glib gsettings-desktop-schemas gtk jdk libX11
     libXrender libXtst libsecret zlib
@@ -48,7 +50,6 @@ stdenv.mkDerivation rec {
 
     # Create desktop item.
     mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications
     mkdir -p $out/share/pixmaps
     ln -s $out/eclipse/icon.xpm $out/share/pixmaps/eclipse.xpm
 

@@ -2,18 +2,10 @@
 , qtbase, qtsvg, qtserialport, qtwebengine, qtmultimedia, qttools
 , qtconnectivity, qtcharts, libusb-compat-0_1, gsl, blas
 , bison, flex, zlib, qmake, makeDesktopItem, wrapQtAppsHook
+, copyDesktopItems
 }:
 
 let
-  desktopItem = makeDesktopItem {
-    name = "goldencheetah";
-    exec = "GoldenCheetah";
-    icon = "goldencheetah";
-    desktopName = "GoldenCheetah";
-    genericName = "GoldenCheetah";
-    comment = "Performance software for cyclists, runners and triathletes";
-    categories = [ "Utility" ];
-  };
 in mkDerivation rec {
   pname = "golden-cheetah";
   version = "3.6";
@@ -39,7 +31,7 @@ in mkDerivation rec {
     gsl
     blas
   ];
-  nativeBuildInputs = [ flex wrapQtAppsHook qmake bison ];
+  nativeBuildInputs = [ flex wrapQtAppsHook qmake bison copyDesktopItems ];
 
   patches = [
     # allow building with bison 3.7
@@ -66,11 +58,22 @@ in mkDerivation rec {
 
     mkdir -p $out/bin
     cp src/GoldenCheetah $out/bin
-    install -Dm644 "${desktopItem}/share/applications/"* -t $out/share/applications/
     install -Dm644 src/Resources/images/gc.png $out/share/pixmaps/goldencheetah.png
 
     runHook postInstall
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "goldencheetah";
+      exec = "GoldenCheetah";
+      icon = "goldencheetah";
+      desktopName = "GoldenCheetah";
+      genericName = "GoldenCheetah";
+      comment = "Performance software for cyclists, runners and triathletes";
+      categories = [ "Utility" ];
+    })
+  ];
 
   passthru.updateScript = nix-update-script { };
 

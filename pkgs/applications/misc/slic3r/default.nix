@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, perl, makeWrapper
 , makeDesktopItem, which, perlPackages, boost, wrapGAppsHook
+, copyDesktopItems
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-cf0QTOzhLyTcbJryCQoTVzU8kfrPV6SLpqi4s36X5N0=";
   };
 
-  nativeBuildInputs = [ makeWrapper which wrapGAppsHook ];
+  nativeBuildInputs = [ makeWrapper which wrapGAppsHook copyDesktopItems ];
   buildInputs =
   [boost] ++
   (with perlPackages; [ perl
@@ -25,15 +26,17 @@ stdenv.mkDerivation rec {
     DevelChecklib locallib
   ]);
 
-  desktopItem = makeDesktopItem {
-    name = "slic3r";
-    exec = "slic3r";
-    icon = "slic3r";
-    comment = "G-code generator for 3D printers";
-    desktopName = "Slic3r";
-    genericName = "3D printer tool";
-    categories = [ "Development" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "slic3r";
+      exec = "slic3r";
+      icon = "slic3r";
+      comment = "G-code generator for 3D printers";
+      desktopName = "Slic3r";
+      genericName = "3D printer tool";
+      categories = [ "Development" ];
+    })
+  ];
 
   prePatch = ''
     # In nix ioctls.h isn't available from the standard kernel-headers package
@@ -83,8 +86,6 @@ stdenv.mkDerivation rec {
     ln -s "$out/share/slic3r/slic3r.pl" "$out/bin/slic3r"
     mkdir -p "$out/share/pixmaps/"
     ln -s "$out/share/slic3r/var/Slic3r.png" "$out/share/pixmaps/slic3r.png"
-    mkdir -p "$out/share/applications"
-    cp "$desktopItem"/share/applications/* "$out/share/applications/"
   '';
 
   meta = with lib; {

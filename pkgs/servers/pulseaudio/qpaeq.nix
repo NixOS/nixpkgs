@@ -1,25 +1,17 @@
 { mkDerivation
 , makeDesktopItem
+, copyDesktopItems
 , python3
 , fetchurl
 , lib
 , pulseaudio
 }:
 
-let
-  desktopItem = makeDesktopItem {
-    name = "qpaeq";
-    exec = "@out@/bin/qpaeq";
-    icon = "audio-volume-high";
-    desktopName = "qpaeq";
-    genericName = "Audio equalizer";
-    categories = [ "AudioVideo" "Audio" "Mixer" ];
-    startupNotify = false;
-  };
-in
 mkDerivation rec {
   pname = "qpaeq";
   inherit (pulseaudio) version src;
+
+  nativeBuildInputs = [ copyDesktopItems ];
 
   buildInputs = [
     ((python3.withPackages (ps: with ps; [
@@ -34,7 +26,6 @@ mkDerivation rec {
   installPhase = ''
     runHook preInstall
     install -D ./src/utils/qpaeq $out/bin/qpaeq
-    install -D ${desktopItem}/share/applications/qpaeq.desktop $out/share/applications/qpaeq.desktop
     runHook postInstall
   '';
 
@@ -43,6 +34,18 @@ mkDerivation rec {
     wrapQtApp $out/bin/qpaeq
     sed "s|@out@|$out|g" -i $out/share/applications/qpaeq.desktop
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "qpaeq";
+      exec = "@out@/bin/qpaeq";
+      icon = "audio-volume-high";
+      desktopName = "qpaeq";
+      genericName = "Audio equalizer";
+      categories = [ "AudioVideo" "Audio" "Mixer" ];
+      startupNotify = false;
+    })
+  ];
 
   meta = {
     description = "An equalizer interface for pulseaudio's equalizer sinks";

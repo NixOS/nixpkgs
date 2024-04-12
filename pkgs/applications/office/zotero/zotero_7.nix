@@ -3,6 +3,7 @@
 , fetchurl
 , wrapGAppsHook
 , autoPatchelfHook
+, copyDesktopItems
 , makeDesktopItem
 , atk
 , cairo
@@ -54,6 +55,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     wrapGAppsHook
     autoPatchelfHook
+    copyDesktopItems
   ];
   buildInputs = [
     gsettings-desktop-schemas
@@ -101,17 +103,19 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
 
-  desktopItem = makeDesktopItem {
-    name = "zotero";
-    exec = "zotero -url %U";
-    icon = "zotero";
-    comment = meta.description;
-    desktopName = "Zotero";
-    genericName = "Reference Management";
-    categories = [ "Office" "Database" ];
-    startupNotify = true;
-    mimeTypes = [ "x-scheme-handler/zotero" "text/plain" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "zotero";
+      exec = "zotero -url %U";
+      icon = "zotero";
+      comment = "Collect, organize, cite, and share your research sources";
+      desktopName = "Zotero";
+      genericName = "Reference Management";
+      categories = [ "Office" "Database" ];
+      startupNotify = true;
+      mimeTypes = [ "x-scheme-handler/zotero" "text/plain" ];
+    })
+  ];
 
 
   installPhase = ''
@@ -122,9 +126,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
     ln -s "$prefix/usr/lib/zotero-bin-${version}/zotero" "$out/bin/"
 
-    # install desktop file and icons.
-    mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications/
+    # install icons.
     for size in 32 64 128; do
       install -Dm444 icons/icon$size.png \
         $out/share/icons/hicolor/''${size}x''${size}/apps/zotero.png

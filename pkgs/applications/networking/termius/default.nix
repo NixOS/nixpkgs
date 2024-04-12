@@ -1,6 +1,7 @@
 { autoPatchelfHook
 , squashfsTools
 , alsa-lib
+, copyDesktopItems
 , fetchurl
 , makeDesktopItem
 , makeWrapper
@@ -27,15 +28,17 @@ stdenv.mkDerivation rec {
     hash = "sha512-M/cyLfSnoCFJcdGXlA5/kH/MuyRpYcfBoyp6y6KSsTyh8Goq6niGZAQcCdIjNX8KVUvmcTWISsx8so4W5BrkCw==";
   };
 
-  desktopItem = makeDesktopItem {
-    categories = [ "Network" ];
-    comment = "The SSH client that works on Desktop and Mobile";
-    desktopName = "Termius";
-    exec = "termius-app";
-    genericName = "Cross-platform SSH client";
-    icon = "termius-app";
-    name = "termius-app";
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      categories = [ "Network" ];
+      comment = "The SSH client that works on Desktop and Mobile";
+      desktopName = "Termius";
+      exec = "termius-app";
+      genericName = "Cross-platform SSH client";
+      icon = "termius-app";
+      name = "termius-app";
+    })
+  ];
 
   dontBuild = true;
   dontConfigure = true;
@@ -43,7 +46,13 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   # TODO: migrate off autoPatchelfHook and use nixpkgs' electron
-  nativeBuildInputs = [ autoPatchelfHook squashfsTools makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    copyDesktopItems
+    squashfsTools
+    makeWrapper
+    wrapGAppsHook
+  ];
 
   buildInputs = [
     alsa-lib
@@ -63,8 +72,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/opt/termius
     cp -r ./ $out/opt/termius
 
-    mkdir -p "$out/share/applications" "$out/share/pixmaps/termius-app.png"
-    cp "${desktopItem}/share/applications/"* "$out/share/applications"
+    mkdir -p "$out/share/pixmaps/termius-app.png"
     cp meta/gui/icon.png $out/share/pixmaps/termius-app.png
 
     runHook postInstall

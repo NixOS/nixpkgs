@@ -2,6 +2,7 @@
 , buildNpmPackage
 , fetchFromGitHub
 , makeWrapper
+, copyDesktopItems
 , ffmpeg
 , yt-dlp
 , makeDesktopItem
@@ -21,18 +22,20 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-lhFyiWy9dgnxxaElavzqA4YpRm7cVC23pvL5Kwve58E=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
   buildInputs = [ ffmpeg yt-dlp ];
 
-  desktopItem = makeDesktopItem {
-    name = "ytDownloader";
-    exec = "ytdownloader %U";
-    icon = "ytdownloader";
-    desktopName = "ytDownloader";
-    comment = "A modern GUI video and audio downloader";
-    categories = [ "Utility" ];
-    startupWMClass = "ytDownloader";
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "ytDownloader";
+      exec = "ytdownloader %U";
+      icon = "ytdownloader";
+      desktopName = "ytDownloader";
+      comment = "A modern GUI video and audio downloader";
+      categories = [ "Utility" ];
+      startupWMClass = "ytDownloader";
+    })
+  ];
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -56,7 +59,6 @@ buildNpmPackage rec {
         --add-flags $out/lib/node_modules/ytdownloader/main.js
 
     install -Dm444 assets/images/icon.png $out/share/pixmaps/ytdownloader.png
-    install -Dm444 "${desktopItem}/share/applications/"* -t $out/share/applications
   '';
 
   meta = {

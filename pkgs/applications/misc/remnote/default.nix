@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchurl, appimageTools, makeDesktopItem }:
+{ lib, stdenv, fetchurl, copyDesktopItems, appimageTools, makeDesktopItem }:
 
 stdenv.mkDerivation (finalAttrs: let
-  inherit (finalAttrs) pname version src appexec icon desktopItem;
+  inherit (finalAttrs) pname version src appexec icon;
 
 in
 {
@@ -13,6 +13,8 @@ in
     hash = "sha256-6WBdTOj/seinx1wJGb/4if3PzCPmtzHyNAFmQwmsrvE=";
   };
 
+  nativeBuildInputs = [ copyDesktopItems ];
+
   appexec = appimageTools.wrapType2 {
     inherit pname version src;
   };
@@ -22,16 +24,18 @@ in
     hash = "sha256-r5D7fNefKPdjtmV7f/88Gn3tqeEG8LGuD4nHI/sCk94=";
   };
 
-  desktopItem = makeDesktopItem {
-    type = "Application";
-    name = "remnote";
-    desktopName = "RemNote";
-    comment = "Spaced Repetition";
-    icon = "remnote";
-    exec = "remnote %u";
-    categories = [ "Office" ];
-    mimeTypes = [ "x-scheme-handler/remnote" "x-scheme-handler/rn" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      type = "Application";
+      name = "remnote";
+      desktopName = "RemNote";
+      comment = "Spaced Repetition";
+      icon = "remnote";
+      exec = "remnote %u";
+      categories = [ "Office" ];
+      mimeTypes = [ "x-scheme-handler/remnote" "x-scheme-handler/rn" ];
+    })
+  ];
 
   dontUnpack = true;
   dontConfigure = true;
@@ -41,7 +45,6 @@ in
     runHook preInstall
 
     install -Dm755 ${appexec}/bin/remnote-${version} $out/bin/remnote
-    install -Dm444 "${desktopItem}/share/applications/"* -t $out/share/applications/
     install -Dm444 ${icon} $out/share/pixmaps/remnote.png
 
     runHook postInstall

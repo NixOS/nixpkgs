@@ -2,6 +2,7 @@
 , lib
 , fetchurl
 , makeWrapper
+, copyDesktopItems
 , electron
 , common-updater-scripts
 , writeShellScript
@@ -22,16 +23,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-tO0cNKopG/recQus7KDUTyGpApvR5/tpmF5C4V14DnI=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin $out/share/${finalAttrs.pname}/
     mv resources/app.asar* $out/share/${finalAttrs.pname}/
-
-    mkdir -p $out/share/applications
-    ln -s ${finalAttrs.desktopItem}/share/applications/* $out/share/applications/
 
     makeWrapper ${electron}/bin/electron $out/bin/${finalAttrs.pname} \
       --add-flags $out/share/${finalAttrs.pname}/app.asar
@@ -52,14 +50,16 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  desktopItem = makeDesktopItem {
-    name = finalAttrs.pname;
-    exec = finalAttrs.pname;
-    icon = finalAttrs.icon;
-    desktopName = "Stretchly";
-    genericName = "Stretchly";
-    categories = [ "Utility" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = finalAttrs.pname;
+      exec = finalAttrs.pname;
+      icon = finalAttrs.icon;
+      desktopName = "Stretchly";
+      genericName = "Stretchly";
+      categories = [ "Utility" ];
+    })
+  ];
 
   meta = with lib; {
     description = "A break time reminder app";

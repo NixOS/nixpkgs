@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitHub
 , pkg-config
+, copyDesktopItems
 , nixosTests
 , freetype
 , fontconfig
@@ -18,18 +19,6 @@
 , makeDesktopItem
 }:
 
-let
-  desktopItem = makeDesktopItem {
-    desktopName = "Wayst";
-    name = "wayst";
-    genericName = "Terminal";
-    exec = "wayst";
-    icon = "wayst";
-    categories = [ "System" "TerminalEmulator" ];
-    keywords = [ "wayst" "terminal" ];
-    comment = "A simple terminal emulator";
-  };
-in
 stdenv.mkDerivation rec {
   pname = "wayst";
   version = "unstable-2023-07-16";
@@ -43,7 +32,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "INSTALL_DIR=\${out}/bin" ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config copyDesktopItems ];
 
   buildInputs = [
     fontconfig
@@ -70,10 +59,21 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications
     install -D icons/wayst.svg $out/share/icons/hicolor/scalable/apps/wayst.svg
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "Wayst";
+      name = "wayst";
+      genericName = "Terminal";
+      exec = "wayst";
+      icon = "wayst";
+      categories = [ "System" "TerminalEmulator" ];
+      keywords = [ "wayst" "terminal" ];
+      comment = "A simple terminal emulator";
+    })
+  ];
 
   passthru.tests.test = nixosTests.terminal-emulators.wayst;
 
