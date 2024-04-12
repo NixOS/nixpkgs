@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ananicy";
-  version = "unstable-2023-10-11";
+  version = "unstable-2024-04-10";
 
   src = fetchFromGitHub {
     owner = "CachyOS";
     repo = "ananicy-rules";
-    rev = "3dafc3eb667b6ed7024359de78bf961c7248954d";
-    sha256 = "sha256-bMwM/2R6jdgrQ6C0JnHyMp9L4OWI6KVGcninrr7wLQ8=";
+    rev = "de55e2f55e6adf559bf4990aa433f5c202dc073d";
+    sha256 = "sha256-TWaOMVEeTLI67eG5BPyb+OSnz31QvTueQD2yfEEbTEo=";
   };
 
   dontConfigure = true;
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "ananicy-cpp-rules for CachyOS ";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ artturin ];
+    maintainers = with maintainers; [ artturin johnrtitor ];
   };
 }
