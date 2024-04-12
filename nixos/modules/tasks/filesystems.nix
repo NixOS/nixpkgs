@@ -97,7 +97,20 @@ let
         default = null;
         example = "root-partition";
         type = types.nullOr nonEmptyStr;
-        description = lib.mdDoc "Label of the device (if any).";
+        description = lib.mdDoc ''
+          Filesystem label of the device (if any). This option will be
+          ignored if `device` is set.
+        '';
+      };
+
+      partlabel = mkOption {
+        default = null;
+        example = "root-partition";
+        type = types.nullOr nonEmptyStr;
+        description = lib.mdDoc ''
+          Partition label of the device (if any). This option will be
+          ignored if either `device` or `label` is set.
+        '';
       };
 
       autoFormat = mkOption {
@@ -190,6 +203,7 @@ let
     in fstabFileSystems: { }: concatMapStrings (fs:
       (if fs.device != null then escape fs.device
          else if fs.label != null then "/dev/disk/by-label/${escape fs.label}"
+         else if fs.partlabel != null then "/dev/disk/by-partlabel/${escape fs.partlabel}"
          else throw "No device specified for mount point ‘${fs.mountPoint}’.")
       + " " + escape fs.mountPoint
       + " " + fs.fsType

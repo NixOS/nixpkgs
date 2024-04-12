@@ -314,14 +314,19 @@ let
     inherit (config.boot.initrd) checkJournalingFS verbose
       preLVMCommands preDeviceCommands postDeviceCommands postResumeCommands postMountCommands preFailCommands kernelModules;
 
-    resumeDevices = map (sd: if sd ? device then sd.device else "/dev/disk/by-label/${sd.label}")
-                    (filter (sd: hasPrefix "/dev/" sd.device && !sd.randomEncryption.enable
+    resumeDevices = map (sd: if sd ? device then sd.device
+      else if fs.label != null then "/dev/disk/by-label/${fs.label}"
+      else "/dev/disk/by-partlabel/${fs.partlabel}"
+    ) (filter (sd: hasPrefix "/dev/" sd.device && !sd.randomEncryption.enable
                              # Don't include zram devices
                              && !(hasPrefix "/dev/zram" sd.device)
                             ) config.swapDevices);
 
     fsInfo =
-      let f = fs: [ fs.mountPoint (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fs.fsType (builtins.concatStringsSep "," fs.options) ];
+      let f = fs: [ fs.mountPoint (if fs.device != null then fs.device
+        else if fs.label != null then "/dev/disk/by-label/${fs.label}"
+        else "/dev/disk/by-partlabel/${fs.partlabel}"
+      ) fs.fsType (builtins.concatStringsSep "," fs.options) ];
       in pkgs.writeText "initrd-fsinfo" (concatStringsSep "\n" (concatMap f fileSystems));
 
     setHostId = optionalString (config.networking.hostId != null) ''
