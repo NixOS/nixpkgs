@@ -4099,6 +4099,27 @@ let
 
       sumneko.lua = callPackage ./sumneko.lua { };
 
+      supermaven.supermaven = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          hash = "sha256-O3AN8fy28ZSun+k6MJnJdFcmwDDE21ib+I9HtDE0JwU=";
+          name = "supermaven";
+          publisher = "supermaven";
+          version = "0.1.42";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/supermaven.supermaven/changelog";
+          description = "A Visual Studio Code extension for code completion suggestions";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=supermaven.supermaven";
+          homepage = "https://supermaven.com/";
+          license = lib.licenses.unfree;
+          longDescription = ''
+            Supermaven uses a 300,000 token context window to provide you the best code completion suggestions and the lowest latency.
+            With our extension you will get the fastest and best completions of any tool on the market.
+          '';
+          maintainers = [ lib.maintainers.msanft ];
+        };
+      };
+
       svelte.svelte-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "svelte-vscode";
