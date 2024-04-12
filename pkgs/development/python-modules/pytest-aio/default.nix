@@ -7,6 +7,7 @@
 , pytest
 , pytestCheckHook
 , pythonOlder
+, poetry-core
 , sniffio
 , trio
 , trio-asyncio
@@ -14,8 +15,8 @@
 
 buildPythonPackage rec {
   pname = "pytest-aio";
-  version = "1.5.0";
-  format = "setuptools";
+  version = "1.8.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -23,25 +24,28 @@ buildPythonPackage rec {
     owner = "klen";
     repo = "pytest-aio";
     rev = "refs/tags/${version}";
-    hash = "sha256-BIVorMRWyboKFZCiELoBh/1oxSpdV263zfLce1fNVhU=";
+    hash = "sha256-MexIL9yFTzhkJ/61GgYoT54MWV8B0c1/CWkN5FVTvnw=";
   };
 
-  postPatch = ''
-    sed -i '/addopts/d' setup.cfg
-  '';
+  build-system = [
+    poetry-core
+  ];
 
   buildInputs = [
     pytest
   ];
 
-  nativeCheckInputs = [
+  dependencies = [
     anyio
     curio
     hypothesis
-    pytestCheckHook
     sniffio
     trio
     trio-asyncio
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
@@ -49,8 +53,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/klen/pytest-aio";
     description = "Pytest plugin for aiohttp support";
+    homepage = "https://github.com/klen/pytest-aio";
+    changelog = "https://github.com/klen/pytest-aio/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
