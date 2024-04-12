@@ -1,17 +1,18 @@
-{ lib
-, aws-sam-cli
-, boto3
-, buildPythonPackage
-, cfn-lint
-, fetchFromGitHub
-, mock
-, moto
-, mypy-boto3-ebs
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, typer
-, urllib3
+{
+  lib,
+  aws-sam-cli,
+  boto3,
+  buildPythonPackage,
+  cfn-lint,
+  fetchFromGitHub,
+  mock,
+  moto,
+  mypy-boto3-ebs,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  typer,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
       --replace-fail 'urllib3 = "^1.26.4"' 'urllib3 = "*"'
   '';
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     boto3
@@ -44,9 +43,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    cli = [
-      typer
-    ];
+    cli = [ typer ];
     scannerd = [
       aws-sam-cli
       cfn-lint
@@ -64,9 +61,7 @@ buildPythonPackage rec {
   # ImportError: cannot import name 'mock_iam' from 'moto'
   doCheck = false;
 
-  pythonImportsCheck = [
-    "dsnap"
-  ];
+  pythonImportsCheck = [ "dsnap" ];
 
   meta = with lib; {
     description = "Utility for downloading and mounting EBS snapshots using the EBS Direct API's";
@@ -77,4 +72,3 @@ buildPythonPackage rec {
     mainProgram = "dsnap";
   };
 }
-
