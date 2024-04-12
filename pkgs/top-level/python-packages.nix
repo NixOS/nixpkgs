@@ -16088,6 +16088,8 @@ self: super: with self; {
 
   types-colorama = callPackage ../development/python-modules/types-colorama { };
 
+  types-dataclasses = callPackage ../development/python-modules/types-dataclasses { };
+
   types-dateutil = callPackage ../development/python-modules/types-dateutil { };
 
   types-decorator = callPackage ../development/python-modules/types-decorator { };
