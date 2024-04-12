@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, requests
-, requests-oauthlib
-, voluptuous
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  requests,
+  requests-oauthlib,
+  voluptuous,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
       --replace-fail "urllib3.disable_warnings(urllib3.exceptions.SubjectAltNameWarning)" "# urllib3.disable_warnings(urllib3.exceptions.SubjectAltNameWarning)"
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     requests
@@ -39,9 +38,7 @@ buildPythonPackage rec {
   # Module no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pybotvac"
-  ];
+  pythonImportsCheck = [ "pybotvac" ];
 
   meta = with lib; {
     description = "Python module for interacting with Neato Botvac Connected vacuum robots";
