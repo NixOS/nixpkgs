@@ -1,11 +1,12 @@
-{ lib
-, argparse-dataclass
-, buildPythonPackage
-, configargparse
-, fetchFromGitHub
-, poetry-core
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  argparse-dataclass,
+  buildPythonPackage,
+  configargparse,
+  fetchFromGitHub,
+  poetry-core,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,26 +23,18 @@ buildPythonPackage rec {
     hash = "sha256-N8mSS+gABAgXm01BcsMk89a3HsIsc3RHxCAi3GlxtRg=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     argparse-dataclass
     configargparse
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "snakemake_interface_common"
-  ];
+  pythonImportsCheck = [ "snakemake_interface_common" ];
 
-  pytestFlagsArray = [
-    "tests/tests.py"
-  ];
+  pytestFlagsArray = [ "tests/tests.py" ];
 
   meta = with lib; {
     description = "Common functions and classes for Snakemake and its plugins";
