@@ -106,6 +106,7 @@ mapAliases ({
   diff_cover = diff-cover; # added 2021-07-02
   discogs_client = discogs-client; # added 2021-07-02
   distutils_extra = distutils-extra; # added 2023-10-12
+  digital-ocean = python-digitalocean; # addad 2024-04-12
   djangorestframework-jwt = drf-jwt; # added 2021-07-20
   django-sampledatahelper = throw "django-sampledatahelper was removed because it is no longer compatible to latest Django version"; # added 2022-07-18
   django_2 = throw "Django 2 has reached it's projected EOL in 2022/04 and has therefore been removed."; # added 2022-03-05

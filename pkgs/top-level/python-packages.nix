@@ -2973,8 +2973,6 @@ self: super: with self; {
 
   diffusers = callPackage ../development/python-modules/diffusers { };
 
-  digital-ocean = callPackage ../development/python-modules/digitalocean { };
-
   digi-xbee = callPackage ../development/python-modules/digi-xbee { };
 
   dill = callPackage ../development/python-modules/dill { };
@@ -12194,6 +12192,8 @@ self: super: with self; {
   pythondialog = callPackage ../development/python-modules/pythondialog { };
 
   python-didl-lite = callPackage ../development/python-modules/python-didl-lite { };
+
+  python-digitalocean = callPackage ../development/python-modules/python-digitalocean { };
 
   python-docx = callPackage ../development/python-modules/python-docx { };
 
