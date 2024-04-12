@@ -662,7 +662,7 @@ let
     rGEDI = with pkgs; [ libgeotiff.dev libaec zlib.dev hdf5.dev ];
     rawrr = [ pkgs.mono ];
     HDF5Array = [ pkgs.zlib.dev ];
-    FLAMES = [ pkgs.zlib.dev ];
+    FLAMES = with pkgs; [ zlib.dev bzip2.dev xz.dev ];
     ncdfFlow = [ pkgs.zlib.dev ];
     proj4 = [ pkgs.proj.dev ];
     rtmpt = [ pkgs.gsl ];
@@ -1213,6 +1213,10 @@ let
 
     spMC = old.spMC.overrideAttrs (attrs: {
       patches = [ ./patches/spMC.patch ];
+    });
+
+    FLAMES = old.FLAMES.overrideAttrs (attrs: {
+      patches = [ ./patches/FLAMES.patch ];
     });
 
     openssl = old.openssl.overrideAttrs (attrs: {
