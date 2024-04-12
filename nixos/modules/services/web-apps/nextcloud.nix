@@ -228,6 +228,8 @@ in {
     hostName = mkOption {
       type = types.str;
       description = lib.mdDoc "FQDN for the nextcloud instance.";
+      default = "localhost";
+      example = "nextcloud.yourdomain.org";
     };
     home = mkOption {
       type = types.str;
