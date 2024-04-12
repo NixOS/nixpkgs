@@ -74,8 +74,9 @@ in python.pkgs.buildPythonApplication rec {
   ];
 
   disabledTests = [
-    # sqlalchemy.exc.ArgumentError: Textual SQL expression
-    #"test_migrations"
+    # sAttributeError: module 'moto' has no attribute 'mock_s3'
+    "test_update"
+    "test_update_second_time"
   ];
 
   meta = with lib; {
