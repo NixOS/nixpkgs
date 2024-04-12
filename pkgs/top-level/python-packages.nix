@@ -13914,6 +13914,10 @@ self: super: with self; {
     inherit (self) python;
   });
 
+  snakemake = toPythonModule (pkgs.snakemake.override {
+    python3 = python;
+  });
+
   snakemake-executor-plugin-cluster-generic = callPackage ../development/python-modules/snakemake-executor-plugin-cluster-generic { };
 
   snakemake-interface-common = callPackage ../development/python-modules/snakemake-interface-common { };
@@ -13923,6 +13927,10 @@ self: super: with self; {
   snakemake-interface-report-plugins = callPackage ../development/python-modules/snakemake-interface-report-plugins { };
 
   snakemake-interface-storage-plugins = callPackage ../development/python-modules/snakemake-interface-storage-plugins { };
+
+  snakemake-storage-plugin-s3 = callPackage ../development/python-modules/snakemake-storage-plugin-s3 { };
+
+  snakemake-storage-plugin-xrootd = callPackage ../development/python-modules/snakemake-storage-plugin-xrootd { };
 
   snakebite = callPackage ../development/python-modules/snakebite { };
 
