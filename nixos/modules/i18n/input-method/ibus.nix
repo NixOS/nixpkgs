@@ -44,6 +44,13 @@ in
           in
             lib.mdDoc "Enabled IBus engines. Available engines are: ${engines}.";
       };
+      waylandFrontend = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Use the Wayland input method frontend.
+        '';
+      };
       panel = mkOption {
         type = with types; nullOr path;
         default = null;
@@ -70,9 +77,10 @@ in
     ];
 
     environment.variables = {
+      XMODIFIERS = "@im=ibus";
+    } // lib.optionalAttrs (!cfg.waylandFrontend) {
       GTK_IM_MODULE = "ibus";
       QT_IM_MODULE = "ibus";
-      XMODIFIERS = "@im=ibus";
     };
 
     xdg.portal.extraPortals = mkIf config.xdg.portal.enable [
