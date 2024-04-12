@@ -15,17 +15,6 @@ It should have the following properties.
 
 Tests are declared in `tests.sh`.
 
-## Internal Representation
-
-`IPv4Address`
-
-An attribute set with these values:
-
-- `cidr`: A CIDR.
-- `address`: An IP address.
-- `prefixLength`: A prefix length.
-- `subnetMask`: A subnet mask.
-
 ## Other implementations and references
 
 - [Haskell](https://hackage.haskell.org/package/ip)

@@ -1,3 +1,26 @@
+/*
+  <!-- This anchor is here for backwards compatibity -->
+  []{#sec-network}
+
+  The `lib.network` library allows you to work with IPv4 addresses in CIDR notation.
+
+  ## IPv4 {#sec-network-ipv4}
+
+  ### Structure {#sec-network-ipv4-structure}
+
+  The `lib.network.ipv4` library provides ingestion functions the create an `IPv4Address` object.
+  This is an attribute set with these values:
+
+  - `cidr`: A CIDR.
+  - `address`: An IP address.
+  - `prefixLength`: A prefix length.
+  - `subnetMask`: A subnet mask.
+
+  - [`lib.network.ipv4.fromCidrString`](#function-library-lib.network.ipv4.fromCidrString):
+
+  Creates an `IPv4Address` object from an IPv4 address in CIDR notation as a string.
+*/
+
 { lib }:
 let
   internal = import ./internal.nix { inherit lib; };
