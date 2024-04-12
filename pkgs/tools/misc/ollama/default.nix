@@ -19,23 +19,24 @@
 , linuxPackages
 , darwin
 
-  # one of `[ null "rocm" "cuda" ]`
-, acceleration ? null
-
 , testers
 , ollama
+
+, config
+  # one of `[ null false "rocm" "cuda" ]`
+, acceleration ? null
 }:
 
 let
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.1.30";
+  version = "0.1.31";
 
   src = fetchFromGitHub {
     owner = "jmorganca";
     repo = "ollama";
     rev = "v${version}";
-    hash = "sha256-+cdYT5NUf00Rx0fpCvWUNg4gi+PAOmZVDUdB3omibm0=";
+    hash = "sha256-Ip1zrhgGpeYo2zsN206/x+tcG/bmPJAq4zGatqsucaw=";
     fetchSubmodules = true;
   };
   vendorHash = "sha256-Lj7CBvS51RqF63c01cOCgY7BCQeCKGu794qzb/S80C0=";
@@ -55,13 +56,24 @@ let
   };
 
 
-  validAccel = lib.assertOneOf "ollama.acceleration" acceleration [ null "rocm" "cuda" ];
-
-  warnIfNotLinux = api: (lib.warnIfNot stdenv.isLinux
+  accelIsValid = builtins.elem acceleration [ null false "rocm" "cuda" ];
+  validateFallback = lib.warnIf (config.rocmSupport && config.cudaSupport)
+    (lib.concatStrings [
+      "both `nixpkgs.config.rocmSupport` and `nixpkgs.config.cudaSupport` are enabled, "
+      "but they are mutually exclusive; falling back to cpu"
+    ])
+    (!(config.rocmSupport && config.cudaSupport));
+  validateLinux = api: (lib.warnIfNot stdenv.isLinux
     "building ollama with `${api}` is only supported on linux; falling back to cpu"
     stdenv.isLinux);
-  enableRocm = validAccel && (acceleration == "rocm") && (warnIfNotLinux "rocm");
-  enableCuda = validAccel && (acceleration == "cuda") && (warnIfNotLinux "cuda");
+  shouldEnable = assert accelIsValid;
+    mode: fallback:
+      ((acceleration == mode)
+      || (fallback && acceleration == null && validateFallback))
+      && (validateLinux mode);
+
+  enableRocm = shouldEnable "rocm" config.rocmSupport;
+  enableCuda = shouldEnable "cuda" config.cudaSupport;
 
 
   rocmClang = linkFarm "rocm-clang" {
