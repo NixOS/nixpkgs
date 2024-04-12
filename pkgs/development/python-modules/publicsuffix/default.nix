@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -23,13 +24,9 @@ buildPythonPackage rec {
     \\t@unittest.skip('requires internet')" -e "/def additional_tests():/,+1d" tests.py
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  pythonImportsCheck = [
-    "publicsuffix"
-  ];
+  pythonImportsCheck = [ "publicsuffix" ];
 
   meta = with lib; {
     description = "Allows to get the public suffix of a domain name";
