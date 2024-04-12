@@ -457,20 +457,65 @@ let
     ${optionalString (luks.fido2Support && fido2luksCredentials != []) ''
 
     open_with_hardware() {
-      local passsphrase
+    ${let
+      inherit (dev.fido2) gracePeriod passwordLess requiresPIN salt slot;
+      salt' = lib.optionalString (!passwordLess) salt;
 
-        ${if dev.fido2.passwordLess then ''
-          export passphrase=""
-        '' else ''
-          read -rsp "FIDO2 salt for ${dev.device}: " passphrase
-          echo
-        ''}
-        ${optionalString (lib.versionOlder kernelPackages.kernel.version "5.4") ''
-          echo "On systems with Linux Kernel < 5.4, it might take a while to initialize the CRNG, you might want to use linuxPackages_latest."
-          echo "Please move your mouse to create needed randomness."
-        ''}
-          echo "Waiting for your FIDO2 device..."
-          fido2luks open${optionalString dev.allowDiscards " --allow-discards"} ${dev.device} ${dev.name} "${builtins.concatStringsSep "," fido2luksCredentials}" --await-dev ${toString dev.fido2.gracePeriod} --salt string:$passphrase
+      env = {
+        FIDO2LUKS_DEVICE = dev.device;
+        FIDO2LUKS_MAPPER_NAME = dev.name;
+        FIDO2LUKS_CREDENTIAL_ID = builtins.concatStringsSep "," fido2luksCredentials;
+        FIDO2LUKS_SALT = if salt' != null then "string:${salt'}" else "file:/crypt-ramfs/salt";
+      }
+      // lib.optionalAttrs requiresPIN { FIDO2LUKS_PIN_SOURCE = "/crypt-ramfs/pin"; }
+      // lib.optionalAttrs (gracePeriod != null) { FIDO2LUKS_DEVICE_AWAIT = gracePeriod; }
+      // lib.optionalAttrs (slot != null) { FIDO2LUKS_DEVICE_SLOT = slot; };
+
+      toEnv = key: value: "    export ${key}=${lib.escapeShellArg value}";
+      env' = lib.mapAttrsToList toEnv env;
+
+      queryPIN = lib.optional requiresPIN ''
+        ${""}    local pin
+            if [ ! -f /crypt-ramfs/pin ]; then
+              IFS= read -rsp "Enter FIDO2 PIN for ${dev.device}: " pin
+              echo
+              echo -n "$pin" > /crypt-ramfs/pin
+            fi'';
+
+      querySalt = lib.optional (salt' == null) ''
+        ${""}    local salt
+            if [ ! -f /crypt-ramfs/salt ]; then
+              IFS= read -rsp "Enter FIDO2 Salt (NOT PIN!) for ${dev.device}: " salt
+              echo
+              echo -n "$salt" > /crypt-ramfs/salt
+            fi'';
+    in
+      lib.concatLines (queryPIN ++ querySalt ++ env')
+    }
+        echo "Waiting for your FIDO2 device..."
+        ${let
+          inherit (dev.fido2) maxRetries requiresPIN;
+        in builtins.concatStringsSep " " (
+            [ "fido2luks open" ]
+            ++ optional dev.allowDiscards "--allow-discards"
+            ++ optional requiresPIN "--pin"
+            ++ optional (maxRetries != null) "--max-retries ${toString maxRetries}"
+            ++ [
+              # fido2luks open --help states that these could be set with env-variables,
+              #   yet these arguments must be given?!
+              "$FIDO2LUKS_DEVICE"
+              "$FIDO2LUKS_MAPPER_NAME"
+              "$FIDO2LUKS_CREDENTIAL_ID"
+            ]
+        )}${
+          lib.optionalString
+            (!luks.reusePassphrases && dev.fido2.requiresPIN)
+            "shred /crypt-ramfs/pin"
+        }${
+          lib.optionalString
+            (!luks.reusePassphrases && !dev.fido2.passwordLess && dev.fido2.salt == null)
+            "shred /crypt-ramfs/salt"
+        }
         if [ $? -ne 0 ]; then
           echo "No FIDO2 key found, falling back to normal open procedure"
           open_normally
@@ -766,8 +811,8 @@ in
             };
 
             gracePeriod = mkOption {
-              default = 10;
-              type = types.int;
+              default = null;
+              type = types.nullOr types.int;
               description = lib.mdDoc "Time in seconds to wait for the FIDO2 key.";
             };
 
@@ -777,7 +822,45 @@ in
               description = lib.mdDoc ''
                 Defines whatever to use an empty string as a default salt.
 
-                Enable only when your device is PIN protected, such as [Trezor](https://trezor.io/).
+                Enable only when your device is PIN protected, such as [Trezor](https://trezor.io/) or YubiKeys.
+              '';
+            };
+
+            salt = mkOption {
+              default = null;
+              type = types.nullOr types.str;
+              example = "";
+              description = lib.mdDoc ''
+                If set to `null`, you will be asked for the salt to decrypt the partition.
+                Otherwise, this string is used as FIDO2-salt.
+
+                Enable only when your device is PIN protected, such as [Trezor](https://trezor.io/) or YubiKeys.
+              '';
+            };
+
+            requiresPIN = mkOption {
+              default = false;
+              type = types.bool;
+              example = true;
+              description = lib.mdDoc ''
+                Whether a PIN is required to unlock the authenticator.
+              '';
+            };
+
+            slot = mkOption {
+              default = null;
+              type = types.nullOr types.int;
+              description = lib.mdDoc ''
+                Try to unlock the device using a specifc keyslot, ignore all other slots.
+              '';
+            };
+
+            maxRetries = mkOption {
+              default = null;
+              type = types.nullOr types.int;
+              example = 3;
+              description = lib.mdDoc ''
+                Maximum number of retries.
               '';
             };
           };
@@ -958,6 +1041,10 @@ in
         { assertion = any (dev: dev.bypassWorkqueues) (attrValues luks.devices)
                       -> versionAtLeast kernelPackages.kernel.version "5.9";
           message = "boot.initrd.luks.devices.<name>.bypassWorkqueues is not supported for kernels older than 5.9";
+        }
+
+        { assertion = all ({ fido2, ... }: !fido2.passwordLess || fido2.salt == null) (attrValues luks.devices);
+          message = "boot.initrd.luks.devices.<name>.fido2.passwordLess and boot.initrd.luks.devices.<name>.fido2.salt are mutually exclusive";
         }
 
         { assertion = !config.boot.initrd.systemd.enable -> all (x: x.keyFileTimeout == null) (attrValues luks.devices);
