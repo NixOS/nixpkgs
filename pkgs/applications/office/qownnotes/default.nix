@@ -21,14 +21,14 @@
 let
   pname = "qownnotes";
   appname = "QOwnNotes";
-  version = "24.4.1";
+  version = "24.4.2";
 in
 stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/pbek/QOwnNotes/releases/download/v${version}/qownnotes-${version}.tar.xz";
-    hash = "sha256-E4tLlzjIOElsZr2jcbsnge5jJqKQ0kWf86tFonZ1+Zs=";
+    hash = "sha256-HnWxIcOy7Te6Q5YfZYhvITpfsgeQw8Tt/Nr++wcpxEU=";
   };
 
   nativeBuildInputs = [
@@ -55,11 +55,11 @@ stdenv.mkDerivation {
 
   postInstall = ''
     installShellCompletion --cmd ${appname} \
-      --bash <(xvfb-run $out/bin/${appname} --completion bash --allow-multiple-instances) \
-      --fish <(xvfb-run $out/bin/${appname} --completion fish --allow-multiple-instances)
+      --bash <(xvfb-run $out/bin/${appname} --completion bash) \
+      --fish <(xvfb-run $out/bin/${appname} --completion fish)
     installShellCompletion --cmd ${pname} \
-      --bash <(xvfb-run $out/bin/${appname} --completion bash --allow-multiple-instances) \
-      --fish <(xvfb-run $out/bin/${appname} --completion fish --allow-multiple-instances)
+      --bash <(xvfb-run $out/bin/${appname} --completion bash) \
+      --fish <(xvfb-run $out/bin/${appname} --completion fish)
   ''
   # Create a lowercase symlink for Linux
   + lib.optionalString stdenv.isLinux ''
