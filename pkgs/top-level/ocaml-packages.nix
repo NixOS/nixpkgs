@@ -930,6 +930,10 @@ let
       inherit (pkgs) lame;
     };
 
+    landmarks = callPackage ../development/ocaml-modules/landmarks { };
+
+    landmarks-ppx = callPackage ../development/ocaml-modules/landmarks-ppx { };
+
     lastfm = callPackage ../development/ocaml-modules/lastfm { };
 
     lem = callPackage ../development/ocaml-modules/lem { };
