@@ -437,21 +437,21 @@ buildLuarocksPackage {
 dkjson = callPackage({ buildLuarocksPackage, fetchurl, lua, luaAtLeast, luaOlder }:
 buildLuarocksPackage {
   pname = "dkjson";
-  version = "2.6-1";
+  version = "2.7-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/dkjson-2.6-1.rockspec";
-    sha256 = "1hhmgz2nixqg23shfnl0kq6wxdadx36z6hhsrz33g7idbm6rbwm1";
+    url    = "mirror://luarocks/dkjson-2.7-1.rockspec";
+    sha256 = "sha256-rVMDFF/yY7fTlY4Icj4LWt72qmKMCwedbgoigqx/+U0=";
   }).outPath;
   src = fetchurl {
-    url    = "http://dkolf.de/src/dkjson-lua.fsl/tarball/dkjson-2.6.tar.gz?uuid=release_2_6";
-    sha256 = "0wwpdz20fvg5j36902892mnb99craf22697r6v7xdblqnd7fw1xx";
+    url    = "http://dkolf.de/dkjson-lua/dkjson-2.7.tar.gz";
+    sha256 = "sha256-TFGmIQLy9r23Z3fx23NgUJtKARaANYi06CVfQ1ryOVw=";
   };
 
   disabled = (luaOlder "5.1") || (luaAtLeast "5.5");
   propagatedBuildInputs = [ lua ];
 
   meta = {
-    homepage = "http://dkolf.de/src/dkjson-lua.fsl/";
+    homepage = "http://dkolf.de/dkjson-lua/";
     description = "David Kolf's JSON module for Lua";
     license.fullName = "MIT/X11";
   };
