@@ -6,7 +6,7 @@ let
 
   sgx-psw = pkgs.sgx-psw.override { inherit (cfg) debug; };
 
-  configFile = with cfg.settings; pkgs.writeText "aesmd.conf" (
+  aesmdConfigFile = with cfg; pkgs.writeText "aesmd.conf" (
     concatStringsSep "\n" (
       optional (whitelistUrl != null) "whitelist url = ${whitelistUrl}" ++
       optional (proxy != null) "aesm proxy = ${proxy}" ++
@@ -18,12 +18,19 @@ let
   );
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "aesmd" "settings" "debug" ]        [ "services" "aesmd" "debug" ])
+    (mkRenamedOptionModule [ "services" "aesmd" "settings" "whitelistUrl" ] [ "services" "aesmd" "whitelistUrl" ])
+    (mkRenamedOptionModule [ "services" "aesmd" "settings" "proxy" ]        [ "services" "aesmd" "proxy" ])
+    (mkRenamedOptionModule [ "services" "aesmd" "settings" "proxyType" ]    [ "services" "aesmd" "proxyType" ])
+  ];
+
   options.services.aesmd = {
     enable = mkEnableOption (lib.mdDoc "Intel's Architectural Enclave Service Manager (AESM) for Intel SGX");
     debug = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc "Whether to build the PSW package in debug mode.";
+      description = mdDoc "Whether to build the PSW package in debug mode.";
     };
     environment = mkOption {
       type = with types; attrsOf str;
@@ -41,43 +48,141 @@ in
       example = literalExpression "pkgs.sgx-azure-dcap-client";
       description = lib.mdDoc "Custom quote provider library to use.";
     };
-    settings = mkOption {
-      description = lib.mdDoc "AESM configuration";
-      default = { };
-      type = types.submodule {
-        options.whitelistUrl = mkOption {
+    whitelistUrl = mkOption {
+      type = with types; nullOr str;
+      default = null;
+      example = "http://whitelist.trustedservices.intel.com/SGX/LCWL/Linux/sgx_white_list_cert.bin";
+      description = mdDoc "URL to retrieve authorized Intel SGX enclave signers.";
+    };
+    proxy = mkOption {
+      type = with types; nullOr str;
+      default = null;
+      example = "http://proxy_url:1234";
+      description = mdDoc "HTTP network proxy.";
+    };
+    proxyType = mkOption {
+      type = with types; nullOr (enum [ "default" "direct" "manual" ]);
+      default = if (cfg.proxy != null) then "manual" else null;
+      defaultText = literalExpression ''
+        if (config.services.aesmd.proxy != null) then "manual" else null
+      '';
+      example = "default";
+      description = mdDoc ''
+        Type of proxy to use. The `default` uses the system's default proxy.
+        If `direct` is given, uses no proxy.
+        A value of `manual` uses the proxy from
+        {option}`services.aesmd.proxy`.
+      '';
+    };
+    defaultQuotingType = mkOption {
+      type = with types; nullOr (enum [ "ecdsa_256" "epid_linkable" "epid_unlinkable" ]);
+      default = null;
+      example = "ecdsa_256";
+      description = mdDoc "Attestation quote type.";
+    };
+    qcnl = mkOption {
+      description = mdDoc "QCNL configuration";
+      default = null;
+      type = with types; nullOr (submodule {
+        options.pccsUrl = mkOption {
           type = with types; nullOr str;
           default = null;
-          example = "http://whitelist.trustedservices.intel.com/SGX/LCWL/Linux/sgx_white_list_cert.bin";
-          description = lib.mdDoc "URL to retrieve authorized Intel SGX enclave signers.";
+          example = "https://localhost:8081/sgx/certification/v3/";
+          description = mdDoc "PCCS server address.";
         };
-        options.proxy = mkOption {
+        options.useSecureCert = mkOption {
+          type = with types; nullOr bool;
+          default = null;
+          example = false;
+          description = mdDoc "To accept insecure HTTPS certificate, set this option to `false`.";
+        };
+        options.collateralService = mkOption {
           type = with types; nullOr str;
           default = null;
-          example = "http://proxy_url:1234";
-          description = lib.mdDoc "HTTP network proxy.";
-        };
-        options.proxyType = mkOption {
-          type = with types; nullOr (enum [ "default" "direct" "manual" ]);
-          default = if (cfg.settings.proxy != null) then "manual" else null;
-          defaultText = literalExpression ''
-            if (config.${opt.settings}.proxy != null) then "manual" else null
-          '';
-          example = "default";
-          description = lib.mdDoc ''
-            Type of proxy to use. The `default` uses the system's default proxy.
-            If `direct` is given, uses no proxy.
-            A value of `manual` uses the proxy from
-            {option}`services.aesmd.settings.proxy`.
+          example = "https://api.trustedservices.intel.com/sgx/certification/v3/";
+          description = mdDoc ''
+            You can use the Intel PCS or another PCCS to get quote verification collateral.
+
+            Retrieval of PCK Certificates will always use the PCCS described in `config.services.aesmd.qcnl.pccsUrl`.
+
+            When `null`, both PCK Certs and verification collateral will be retrieved using `config.services.aesmd.qcnl.pccsUrl`.
           '';
         };
-        options.defaultQuotingType = mkOption {
-          type = with types; nullOr (enum [ "ecdsa_256" "epid_linkable" "epid_unlinkable" ]);
+        options.pccsApiVersion = mkOption {
+          type = with types; nullOr (enum [ "3.0" "3.1" ]);
           default = null;
-          example = "ecdsa_256";
-          description = lib.mdDoc "Attestation quote type.";
+          example = "3.1";
+          description = mdDoc ''
+            If you use a PCCS service to get the quote verification collateral, you can specify which PCCS API version is to be used.
+
+            The legacy 3.0 API will return CRLs in HEX encoded DER format and the sgx_ql_qve_collateral_t.version will be set to 3.0, while
+            the new 3.1 API will return raw DER format and the `sgx_ql_qve_collateral_t.version` will be set to 3.1.
+
+            This setting is ignored if `config.services.aesmd.qcnl.collateralService` is set to the Intel PCS.
+            In this case, the PCCS API version is forced to be 3.1 internally.
+
+            Currently, only values of `"3.0"` and `"3.1"` are valid.
+            Note, if you set this to `"3.1"`, the PCCS used to retrieve verification collateral must support the new 3.1 APIs.
+          '';
         };
-      };
+        options.retryTimes = mkOption {
+          type = with types; nullOr ints.u32;
+          default = null;
+          example = 6;
+          description = mdDoc ''
+            Maximum retry times for QCNL. When `null` or set to `0`, no retry will be performed.
+
+            It will first wait one second and then for all forthcoming retries it will double the waiting time.
+
+            By using {option}`services.aesmd.qcnl.retryDelay` you disable this exponential backoff algorithm.
+          '';
+        };
+        options.retryDelay = mkOption {
+          type = with types; nullOr ints.u32;
+          default = null;
+          example = 10;
+          description = mdDoc ''
+            Sleep this amount of seconds before each retry when a transfer has failed with a transient error.
+          '';
+        };
+        options.localPckUrl = mkOption {
+          type = with types; nullOr str;
+          default = null;
+          example = "http://localhost:8081/sgx/certification/v3/";
+          description = mdDoc ''
+            When not `null`, the QCNL will try to retrieve PCK cert chain from this URL first,
+            and failover to {option}`services.aesmd.qcnl.pccsUrl` as in legacy mode.
+          '';
+        };
+        options.pckCacheExpireHours = mkOption {
+          type = with types; nullOr ints.u32;
+          default = null;
+          example = 168;
+          description = mdDoc ''
+            If {option}`services.aesmd.qcnl.localPckUrl` is `null`, the QCNL will cache PCK certificates in memory by default.
+            The cached PCK certificates will expire after this many hours.
+          '';
+        };
+        options.customRequestOptions = mkOption {
+          type = with types; nullOr attrs;
+          default = null;
+          example = {
+            get_cert = {
+              headers = {
+                head1 = "value1";
+              };
+              params = {
+                param1 = "value1";
+                param2 = "value2";
+              };
+            };
+          };
+          description = mdDoc ''
+            You can add custom request headers and parameters to the get certificate API.
+            But the default PCCS implementation just ignores them.
+          '';
+        };
+      });
     };
   };
 
@@ -163,8 +268,16 @@ in
           BindReadOnlyPaths = [
             builtins.storeDir
             # Hardcoded path AESM_CONFIG_FILE in psw/ae/aesm_service/source/utils/aesm_config.cpp
-            "${configFile}:/etc/aesmd.conf"
-          ];
+            "${aesmdConfigFile}:/etc/aesmd.conf"
+          ]
+          ++ optional (!isNull cfg.qcnl) (let
+            toSnakeCase = replaceStrings upperChars (map (s: "_${s}") lowerChars);
+            qcnlConfig = builtins.toJSON (mapAttrs' (name: value: nameValuePair (toSnakeCase name) value) (filterAttrs (n: v: !isNull v) cfg.qcnl));
+            qcnlConfigFile = pkgs.writeText "sgx_default_qcnl.conf" qcnlConfig;
+          in
+            # Hardcoded path in qcnl https://github.com/intel/SGXDataCenterAttestationPrimitives/blob/68a77a852cd911a44a97733aec870e9bd93a3b86/QuoteGeneration/qcnl/linux/qcnl_config_impl.cpp#L112
+            "${qcnlConfigFile}:/etc/sgx_default_qcnl.conf"
+          );
           BindPaths = [
             # Hardcoded path CONFIG_SOCKET_PATH in psw/ae/aesm_service/source/core/ipc/SocketConfig.h
             "%t/aesmd:/var/run/aesmd"
