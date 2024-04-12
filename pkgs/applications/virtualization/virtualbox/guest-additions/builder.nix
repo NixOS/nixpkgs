@@ -90,6 +90,7 @@ in stdenv.mkDerivation (finalAttrs: {
       VBOX_WITH_GUEST_CONTROL := 1
       VBOX_WITHOUT_LINUX_GUEST_PACKAGE := 1
       VBOX_WITH_PAM :=
+      VBOX_WITH_UPDATE_AGENT :=
 
       VBOX_BUILD_PUBLISHER := _NixOS
       LOCAL_CONFIG
