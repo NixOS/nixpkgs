@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
-, samba
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  samba,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -16,17 +17,15 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-VpNYgdgvsQG5UcxoyyLCj5ijJdIKKhCSqnHTvTgD4lA=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
-  dependencies = [
-    samba
-  ] ++ (with python3.pkgs; [
-    impacket
-    ldap3
-    pyyaml
-  ]);
+  dependencies =
+    [ samba ]
+    ++ (with python3.pkgs; [
+      impacket
+      ldap3
+      pyyaml
+    ]);
 
   # It's only a script and not a Python module. Project has no tests
   doCheck = false;
