@@ -41,9 +41,7 @@ in stdenv.mkDerivation {
       runHook preBuild
 
       # Build kernel modules.
-      cd src
-      find . -type f | xargs sed 's/depmod -a/true/' -i
-      cd vboxguest-${virtualBoxNixGuestAdditionsBuilder.version}_NixOS
+      cd src/vboxguest-${virtualBoxNixGuestAdditionsBuilder.version}_NixOS
       # Run just make first. If we only did make install, we get symbol warnings during build.
       make
       cd ../..
@@ -61,6 +59,8 @@ in stdenv.mkDerivation {
     installPhase = ''
       runHook preInstall
 
+      mkdir -p $out/bin
+
       # Install kernel modules.
       cd src/vboxguest-${virtualBoxNixGuestAdditionsBuilder.version}_NixOS
       make install INSTALL_MOD_PATH=$out KBUILD_EXTRA_SYMBOLS=$PWD/vboxsf/Module.symvers
@@ -70,7 +70,6 @@ in stdenv.mkDerivation {
       install -D -m 755 other/mount.vboxsf $out/bin/mount.vboxsf
       install -D -m 755 sbin/VBoxService $out/bin/VBoxService
 
-      mkdir -p $out/bin
       install -m 755 bin/VBoxClient $out/bin
       install -m 755 bin/VBoxControl $out/bin
       install -m 755 bin/VBoxDRMClient $out/bin
