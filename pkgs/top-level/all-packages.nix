@@ -9183,8 +9183,6 @@ with pkgs;
 
   i2c-tools = callPackage ../os-specific/linux/i2c-tools { };
 
-  i2p = callPackage ../tools/networking/i2p { };
-
   i2pd = callPackage ../tools/networking/i2pd { };
 
   iannix = libsForQt5.callPackage ../applications/audio/iannix { };
@@ -18020,13 +18018,6 @@ with pkgs;
     src = oldAttrs.src.override {
       inherit version;
       hash = "sha256-JfmxtaWvPAmGvTko7QhurduGdSf7XIOv7xoDz60080U=";
-    };
-  }));
-  ansible_2_14 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
-    version = "2.14.13";
-    src = oldAttrs.src.override {
-      inherit version;
-      hash = "sha256-ThuzNPDDImq0jFme/knNX+A/JdRVi8BsJ0reK6PiV2o=";
     };
   }));
 
@@ -28332,6 +28323,7 @@ with pkgs;
     ubootROCPCRK3399
     ubootSheevaplug
     ubootSopine
+    ubootTuringRK1
     ubootUtilite
     ubootWandboard
     ;
@@ -36453,8 +36445,6 @@ with pkgs;
   stellar-core = callPackage ../applications/blockchains/stellar-core { };
 
   sumokoin = callPackage ../applications/blockchains/sumokoin { };
-
-  solana-cli = callPackage ../applications/blockchains/solana { };
 
   solana-validator = callPackage ../applications/blockchains/solana-validator { };
 

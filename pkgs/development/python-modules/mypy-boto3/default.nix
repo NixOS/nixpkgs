@@ -133,7 +133,7 @@ rec {
 
   mypy-boto3-chime-sdk-voice = buildMypyBoto3Package "chime-sdk-voice" "1.34.0" "sha256-9fQQgWFKeabSblJIhP6mN0CEnSixkz1r3mf/k6IL/BE=";
 
-  mypy-boto3-cleanrooms = buildMypyBoto3Package "cleanrooms" "1.34.78" "sha256-76zy6rTsSqmKdwrZwBsf7m6qPZXSdi6GpQEXMvN82Tw=";
+  mypy-boto3-cleanrooms = buildMypyBoto3Package "cleanrooms" "1.34.82" "sha256-KaCs/P3NM3IeZ9V9khIwysyBXBG/8RuGFBAlrbMYn4Y=";
 
   mypy-boto3-cloud9 = buildMypyBoto3Package "cloud9" "1.34.24" "sha256-fryD7UfO5cdFS7vMxmZaT9LW4nNSGTQCd3NyD60f9wA=";
 
@@ -197,7 +197,7 @@ rec {
 
   mypy-boto3-config = buildMypyBoto3Package "config" "1.34.45" "sha256-LN1CcIOj9cgzSNCvnUVwLRNPXlitHAlt+5jj6wu6i8E=";
 
-  mypy-boto3-connect = buildMypyBoto3Package "connect" "1.34.67" "sha256-kWjC/FacCsC0xevx2dOs67UxaKG1WM3xMahcO3CqZL8=";
+  mypy-boto3-connect = buildMypyBoto3Package "connect" "1.34.82" "sha256-QyZteRrk1d+Qwqj87uUb4f2ZK5SjPdMJV4NGv6kwrl4=";
 
   mypy-boto3-connect-contact-lens = buildMypyBoto3Package "connect-contact-lens" "1.34.0" "sha256-Wx9vcjlgXdWZ2qP3Y/hTY2LAeTd+hyyV5JSIuKQ5I5k=";
 
@@ -591,7 +591,7 @@ rec {
 
   mypy-boto3-redshift-serverless = buildMypyBoto3Package "redshift-serverless" "1.34.16" "sha256-ag5tKb1+4cHiG99OszDNGdnX9RPRPraaqM8p3IqgLBg=";
 
-  mypy-boto3-rekognition = buildMypyBoto3Package "rekognition" "1.34.20" "sha256-zKJX/AlDoDKUbrI1LZq2kk5fr+SNqES6gniM0FQGeaM=";
+  mypy-boto3-rekognition = buildMypyBoto3Package "rekognition" "1.34.82" "sha256-qy7yacSuG6cARR2L/YjBGWYM1BU5/qtMr/H08x3XFIM=";
 
   mypy-boto3-resiliencehub = buildMypyBoto3Package "resiliencehub" "1.34.0" "sha256-F/ZRCp/M/6kBI4Apb3mISzqe1Zi4Y7gq/vu0dvyyTvM=";
 

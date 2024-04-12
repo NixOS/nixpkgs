@@ -80,6 +80,8 @@
 , withOpus ? withHeadlessDeps # Opus de/encoder
 , withPlacebo ? withFullDeps && !stdenv.isDarwin # libplacebo video processing library
 , withPulse ? withSmallDeps && stdenv.isLinux # Pulseaudio input support
+, withQrencode ? withFullDeps && lib.versionAtLeast version "7" # QR encode generation
+, withQuirc ? withFullDeps && lib.versionAtLeast version "7" # QR decoding
 , withRav1e ? withFullDeps # AV1 encoder (focused on speed and safety)
 , withRtmp ? false # RTMP[E] support
 , withSamba ? withFullDeps && !stdenv.isDarwin && withGPLv3 # Samba protocol
@@ -112,6 +114,8 @@
 , withXcbShape ? withFullDeps # X11 grabbing shape rendering
 , withXcbShm ? withFullDeps # X11 grabbing shm communication
 , withXcbxfixes ? withFullDeps # X11 grabbing mouse rendering
+, withXevd ? withFullDeps && lib.versionAtLeast version "7" && stdenv.hostPlatform.isx86 # MPEG-5 EVC decoding
+, withXeve ? withFullDeps && lib.versionAtLeast version "7" && stdenv.hostPlatform.isx86 # MPEG-5 EVC encoding
 , withXlib ? withFullDeps # Xlib support
 , withXml2 ? withFullDeps # libxml2 support, for IMF and DASH demuxers
 , withXvid ? withHeadlessDeps && withGPL # Xvid encoder, native encoder exists
@@ -263,6 +267,8 @@
 , opencore-amr
 , openh264
 , openjpeg
+, qrencode
+, quirc
 , rav1e
 , rtmpdump
 , samba
@@ -279,6 +285,8 @@
 , x264
 , x265
 , xavs
+, xevd
+, xeve
 , xvidcore
 , xz
 , zeromq4
@@ -551,6 +559,10 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withPlacebo "libplacebo")
   ] ++ [
     (enableFeature withPulse "libpulse")
+  ] ++ optionals (versionAtLeast version "7") [
+    (enableFeature withQrencode "libqrencode")
+    (enableFeature withQuirc "libquirc")
+  ] ++ [
     (enableFeature withRav1e "librav1e")
     (enableFeature withRtmp "librtmp")
     (enableFeature withSamba "libsmbclient")
@@ -587,6 +599,10 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withXcbShape "libxcb-shape")
     (enableFeature withXcbShm "libxcb-shm")
     (enableFeature withXcbxfixes "libxcb-xfixes")
+  ] ++ optionals (versionAtLeast version "7")  [
+    (enableFeature withXevd "libxevd")
+    (enableFeature withXeve "libxeve")
+  ] ++ [
     (enableFeature withXlib "xlib")
     (enableFeature withXml2 "libxml2")
     (enableFeature withXvid "libxvid")
@@ -668,6 +684,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withOpus [ libopus ]
   ++ optionals withPlacebo [ (if (lib.versionAtLeast version "6.1") then libplacebo else libplacebo_5) vulkan-headers ]
   ++ optionals withPulse [ libpulseaudio ]
+  ++ optionals withQrencode [ qrencode ]
+  ++ optionals withQuirc [ quirc ]
   ++ optionals withRav1e [ rav1e ]
   ++ optionals withRtmp [ rtmpdump ]
   ++ optionals withSamba [ samba ]
@@ -696,6 +714,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withX265 [ x265 ]
   ++ optionals withXavs [ xavs ]
   ++ optionals withXcb [ libxcb ]
+  ++ optionals withXevd [ xevd ]
+  ++ optionals withXeve [ xeve ]
   ++ optionals withXlib [ libX11 libXv libXext ]
   ++ optionals withXml2 [ libxml2 ]
   ++ optionals withXvid [ xvidcore ]

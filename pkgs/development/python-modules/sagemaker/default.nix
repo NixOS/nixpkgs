@@ -2,7 +2,9 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, fetchpatch
 , pythonRelaxDepsHook
+, setuptools
 , attrs
 , boto3
 , cloudpickle
@@ -20,14 +22,18 @@
 , platformdirs
 , tblib
 , urllib3
+, requests
 , docker
+, tqdm
+, psutil
 , scipy
+, accelerate
 }:
 
 buildPythonPackage rec {
   pname = "sagemaker";
   version = "2.214.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -38,16 +44,30 @@ buildPythonPackage rec {
     hash = "sha256-RE4uyIpFiZNDyS5R6+gMLlj0vcAIiHPattFPTSMGnCI=";
   };
 
-  nativeBuildInputs = [
+  patches = [
+    # Distutils removal, fix build with python 3.12
+    # https://github.com/aws/sagemaker-python-sdk/pull/4544
+    (fetchpatch {
+      url = "https://github.com/aws/sagemaker-python-sdk/commit/84447ba59e544c810aeb842fd058e20d89e3fc74.patch";
+      hash = "sha256-B8Q18ViB7xYy1F5LoL1NvXj2lnFPgt+C9wssSODyAXM=";
+    })
+    (fetchpatch {
+      url = "https://github.com/aws/sagemaker-python-sdk/commit/e9e08a30cb42d4b2d7299c1c4b42d680a8c78110.patch";
+      hash = "sha256-uGPtXSXfeaIvt9kkZZKQDuiZfoRgw3teffuxai1kKlY=";
+    })
+  ];
+
+  build-system = [
+    setuptools
     pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
-    "attrs"
-    "boto3"
+    "cloudpickle"
+    "importlib-metadata"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     boto3
     cloudpickle
@@ -64,6 +84,11 @@ buildPythonPackage rec {
     jsonschema
     platformdirs
     tblib
+    urllib3
+    requests
+    docker
+    tqdm
+    psutil
   ];
 
   doCheck = false; # many test dependencies are not available in nixpkgs
@@ -76,6 +101,7 @@ buildPythonPackage rec {
   passthru.optional-dependencies = {
     local = [ urllib3 docker pyyaml ];
     scipy = [ scipy ];
+    huggingface = [ accelerate ];
     # feature-processor = [ pyspark sagemaker-feature-store-pyspark ]; # not available in nixpkgs
   };
 

@@ -1770,6 +1770,16 @@
     githubId = 11037075;
     name = "Ashley Hooper";
   };
+  ashuramaruzxc = {
+    email = "ashuramaru@tenjin-dk.com";
+    matrix = "@tenjin:mozilla.org";
+    github = "ashuramaruzxc";
+    githubId = 72100551;
+    name = "Mariia Holovata";
+    keys = [{
+      fingerprint = "409D 201E 9450 8732 A49E  D0FC 6BDA F874 0068 08DF";
+    }];
+  };
   ashvith-shetty = {
     github = "Ashvith10";
     githubId = 113123021;
@@ -5378,6 +5388,12 @@
     keys = [{
       fingerprint = "389A 78CB CD88 5E0C 4701  DEB9 FD42 C7D0 D414 94C8";
     }];
+  };
+  dudymas = {
+    email = "jeremy.white@cloudposse.com";
+    github = "dudymas";
+    githubId = 928448;
+    name = "Jeremy White";
   };
   dukc = {
     email = "ajieskola@gmail.com";
@@ -11403,6 +11419,13 @@
       fingerprint = "80EE AAD8 43F9 3097 24B5  3D7E 27E9 7B91 E63A 7FF8";
     }];
   };
+  link2xt = {
+    email = "link2xt@testrun.org";
+    githubId = 18373967;
+    github = "link2xt";
+    matrix = "@link2xt:matrix.org";
+    name = "link2xt";
+  };
   linquize = {
     email = "linquize@yahoo.com.hk";
     github = "linquize";
@@ -11804,6 +11827,12 @@
     github = "lukas-heiligenbrunner";
     githubId = 30468956;
     name = "Lukas Heiligenbrunner";
+  };
+  lukaslihotzki = {
+    email = "lukas@lihotzki.de";
+    github = "lukaslihotzki";
+    githubId = 10326063;
+    name = "Lukas Lihotzki";
   };
   lukaswrz = {
     email = "lukas@wrz.one";
@@ -14905,6 +14934,12 @@
     github = "ony";
     githubId = 11265;
   };
+  oo-infty = {
+    name = "Justin Chen";
+    email = "oo-infty@outlook.com";
+    github = "oo-infty";
+    githubId = 42143810;
+  };
   ooliver1 = {
     name = "Oliver Wilkes";
     email = "oliverwilkes2006@icloud.com";
@@ -15485,6 +15520,12 @@
     keys = [{
       fingerprint = "7756 E88F 3C6A 47A5 C5F0  CDFB AB54 6777 F93E 20BF";
     }];
+  };
+  phdyellow = {
+    name = "Phil Dyer";
+    email = "phildyer@protonmail.com";
+    github = "PhDyellow";
+    githubId = 7740661;
   };
   phfroidmont = {
     name = "Paul-Henri Froidmont";

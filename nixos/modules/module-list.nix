@@ -54,6 +54,7 @@
   ./hardware/corectrl.nix
   ./hardware/cpu/amd-microcode.nix
   ./hardware/cpu/amd-sev.nix
+  ./hardware/cpu/amd-ryzen-smu.nix
   ./hardware/cpu/intel-microcode.nix
   ./hardware/cpu/intel-sgx.nix
   ./hardware/cpu/x86-msr.nix
@@ -212,6 +213,8 @@
   ./programs/kbdlight.nix
   ./programs/kclock.nix
   ./programs/kdeconnect.nix
+  ./programs/lazygit.nix
+  ./programs/kubeswitch.nix
   ./programs/less.nix
   ./programs/liboping.nix
   ./programs/light.nix
@@ -251,6 +254,7 @@
   ./programs/regreet.nix
   ./programs/rog-control-center.nix
   ./programs/rust-motd.nix
+  ./programs/ryzen-monitor-ng.nix
   ./programs/screen.nix
   ./programs/seahorse.nix
   ./programs/sedutil.nix
@@ -1363,6 +1367,7 @@
   ./services/web-apps/miniflux.nix
   ./services/web-apps/monica.nix
   ./services/web-apps/moodle.nix
+  ./services/web-apps/movim.nix
   ./services/web-apps/netbox.nix
   ./services/web-apps/nextcloud.nix
   ./services/web-apps/nextcloud-notify_push.nix

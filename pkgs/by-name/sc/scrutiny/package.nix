@@ -7,13 +7,13 @@
 }:
 let
   pname = "scrutiny";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "AnalogJ";
     repo = "scrutiny";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ysjE2nn1WwhEiFIvJ5cRCJQf9mECTgiGUyenwf3mKTA=";
+    hash = "sha256-WoU5rdsIEhZQ+kPoXcestrGXC76rFPvhxa0msXjFsNg=";
   };
 
   frontend = buildNpmPackage {
@@ -64,6 +64,7 @@ buildGoModule rec {
   meta = {
     description = "Hard Drive S.M.A.R.T Monitoring, Historical Trends & Real World Failure Thresholds.";
     homepage = "https://github.com/AnalogJ/scrutiny";
+    changelog = "https://github.com/AnalogJ/scrutiny/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jnsgruk ];
     mainProgram = "scrutiny";
