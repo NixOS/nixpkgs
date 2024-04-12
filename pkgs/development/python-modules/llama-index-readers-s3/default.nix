@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, llama-index-core
-, llama-index-readers-file
-, poetry-core
-, pythonOlder
-, s3fs
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  llama-index-core,
+  llama-index-readers-file,
+  poetry-core,
+  pythonOlder,
+  s3fs,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-xj7uRsc56Wv/SF4OPo/jc+43PabJ4vaM5HcxhnxTzY8=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     llama-index-core
@@ -34,9 +33,7 @@ buildPythonPackage rec {
   # Tests are only available in the mono repo
   doCheck = false;
 
-  pythonImportsCheck = [
-    "llama_index.readers.s3"
-  ];
+  pythonImportsCheck = [ "llama_index.readers.s3" ];
 
   meta = with lib; {
     description = "LlamaIndex Readers Integration for S3";
