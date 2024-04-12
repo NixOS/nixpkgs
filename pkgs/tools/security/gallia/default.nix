@@ -16,16 +16,19 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-hLGaImYkv6/1Wv1a+0tKmW4qmV4akNoyd0RXopJjetI=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
-
   pythonRelaxDeps = [
     "httpx"
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    poetry-core
+  ];
+
+  nativeBuildInputs = with python3.pkgs; [
+    pythonRelaxDepsHook
+  ];
+
+  dependencies = with python3.pkgs; [
     aiofiles
     aiohttp
     aiosqlite
