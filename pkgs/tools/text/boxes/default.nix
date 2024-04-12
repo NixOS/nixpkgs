@@ -1,19 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, bison, flex }:
+{ lib, stdenv, fetchFromGitHub, bison, flex, libunistring, pcre2, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "boxes";
-  version = "1.3";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "ascii-boxes";
     repo = "boxes";
     rev = "v${version}";
-    sha256 = "0b12rsynrmkldlwcb62drk33kk0aqwbj10mq5y5x3hjf626gjwsi";
+    sha256 = "sha256-/gc/5vDflmEwOtQbtLwRcchyr22rLQcWqs5GrwRxY70=";
   };
 
   # Building instructions:
   # https://boxes.thomasjensen.com/build.html#building-on-linux--unix
-  nativeBuildInputs = [ bison flex ];
+  nativeBuildInputs = [ bison flex libunistring pcre2 ncurses ];
 
   dontConfigure = true;
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
-    install -Dm755 -t $out/bin src/boxes
+    install -Dm755 -t $out/bin out/boxes
     install -Dm644 -t $out/share/boxes boxes-config
     install -Dm644 -t $out/share/man/man1 doc/boxes.1
   '';
