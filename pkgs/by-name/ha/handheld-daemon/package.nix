@@ -8,14 +8,14 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "handheld-daemon";
-  version = "1.1.0";
+  version = "2.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hhd-dev";
     repo = "hhd";
     rev = "v${version}";
-    hash = "sha256-ovLC1BQ98jUaDEMPBzWma4TYSzTF+yE/cMemFdJmqlE=";
+    hash = "sha256-fsH8H6ZhiguOWI2t79GnxqAmqL/1m06RQzs+k8bUWcU=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -26,6 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     rich
     setuptools
     toybox
+    xlib
   ];
 
   # This package doesn't have upstream tests.
