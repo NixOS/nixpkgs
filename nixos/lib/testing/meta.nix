@@ -36,7 +36,7 @@ in
           };
           platforms = lib.mkOption {
             type = types.listOf types.raw;
-            default = lib.platforms.linux;
+            default = lib.platforms.linux ++ lib.platforms.darwin;
             description = ''
               Sets the [`meta.platforms`](https://nixos.org/manual/nixpkgs/stable/#var-meta-platforms) attribute on the [{option}`test`](#test-opt-test) derivation.
             '';
