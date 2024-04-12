@@ -26416,7 +26416,6 @@ with pkgs;
     mariadb_105
     mariadb_106
     mariadb_1011
-    mariadb_110
     mariadb_112
   ;
   mariadb = mariadb_1011;
