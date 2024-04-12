@@ -122,10 +122,7 @@ class KDERepoMetadata:
             dep_graph={},
         )
 
-        dep_specs = [
-            "dependency-data-common",
-            "dependency-data-kf6-qt6"
-        ]
+        dep_specs = ["dependency-data-stable-kf6-qt6"]
         dep_graph = collections.defaultdict(set)
 
         for spec in dep_specs:
