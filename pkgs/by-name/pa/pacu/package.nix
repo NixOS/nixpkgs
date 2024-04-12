@@ -27,6 +27,7 @@ in python.pkgs.buildPythonApplication rec {
     "dsnap"
     "sqlalchemy-utils"
     "sqlalchemy"
+    "pycognito"
     "urllib3"
   ];
 
