@@ -31,14 +31,14 @@ buildPythonPackage rec {
   postPatch = ''
     # Is no direct dependency
     substituteInPlace pyproject.toml \
-      --replace 'urllib3 = "^1.26.4"' 'urllib3 = "*"'
+      --replace-fail 'urllib3 = "^1.26.4"' 'urllib3 = "*"'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     boto3
     urllib3
   ];
@@ -66,11 +66,11 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Utility for downloading and mounting EBS snapshots using the EBS Direct API's";
-    mainProgram = "dsnap";
     homepage = "https://github.com/RhinoSecurityLabs/dsnap";
     changelog = "https://github.com/RhinoSecurityLabs/dsnap/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "dsnap";
   };
 }
 
