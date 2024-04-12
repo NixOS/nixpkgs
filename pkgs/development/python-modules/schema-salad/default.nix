@@ -6,13 +6,18 @@
   fetchFromGitHub,
   importlib-resources,
   mistune,
+  mypy,
   mypy-extensions,
   pytestCheckHook,
+  pythonRelaxDepsHook,
   pythonOlder,
   rdflib,
   requests,
   ruamel-yaml,
   setuptools-scm,
+  types-dataclasses,
+  types-requests,
+  types-setuptools,
 }:
 
 buildPythonPackage rec {
@@ -29,16 +34,25 @@ buildPythonPackage rec {
     hash = "sha256-AgXqeiA4sP7KBnUpb2uMWq45G0LhJ5uLtORrOG4UuB0=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "black>=19.10b0,<23.12" "black>=19.10b0"
+  '';
+
   build-system = [ setuptools-scm ];
 
   dependencies =
     [
       cachecontrol
       mistune
+      mypy
       mypy-extensions
       rdflib
       requests
       ruamel-yaml
+      types-dataclasses
+      types-requests
+      types-setuptools
     ]
     ++ cachecontrol.optional-dependencies.filecache
     ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
