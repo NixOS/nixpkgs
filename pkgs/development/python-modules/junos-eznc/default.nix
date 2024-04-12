@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, jinja2
-, lxml
-, mock
-, ncclient
-, netaddr
-, nose2
-, ntc-templates
-, paramiko
-, pyparsing
-, pyserial
-, pythonOlder
-, pyyaml
-, scp
-, setuptools
-, pytestCheckHook
-, six
-, transitions
-, yamlordereddictloader
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jinja2,
+  lxml,
+  mock,
+  ncclient,
+  netaddr,
+  nose2,
+  ntc-templates,
+  paramiko,
+  pyparsing,
+  pyserial,
+  pythonOlder,
+  pyyaml,
+  scp,
+  setuptools,
+  pytestCheckHook,
+  six,
+  transitions,
+  yamlordereddictloader,
 }:
 
 buildPythonPackage rec {
@@ -35,9 +36,7 @@ buildPythonPackage rec {
     hash = "sha256-aoi+in5A8qSdQNY3V4S4wBBfPchR1an7G6GQHDhgxpQ=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     jinja2
@@ -61,9 +60,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-   "tests/unit"
-  ];
+  pytestFlagsArray = [ "tests/unit" ];
 
   disabledTests = [
     # jnpr.junos.exception.FactLoopError: A loop was detected while gathering the...
@@ -76,9 +73,7 @@ buildPythonPackage rec {
     "test_domain_fact_from_config"
   ];
 
-  pythonImportsCheck = [
-    "jnpr.junos"
-  ];
+  pythonImportsCheck = [ "jnpr.junos" ];
 
   meta = with lib; {
     description = "Junos 'EZ' automation for non-programmers";
