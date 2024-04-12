@@ -110,6 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests = {
       inherit (nixosTests) sssd sssd-ldap;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       version = testers.testVersion {
         package = finalAttrs.finalPackage;
         command = "sssd --version";
@@ -125,5 +126,11 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ illustris ];
+    pkgConfigModules = [
+      "ipa_hbac"
+      "sss_certmap"
+      "sss_idmap"
+      "sss_nss_idmap"
+    ];
   };
 })
