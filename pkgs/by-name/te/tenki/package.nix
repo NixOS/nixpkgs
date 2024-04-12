@@ -4,16 +4,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "tenki";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "ckaznable";
     repo = "tenki";
     rev = "v${version}";
-    hash = "sha256-X/GnOgxwBhkrdhUmEhyxdgk5ElayMOAmtDxR2cqRJc8=";
+    hash = "sha256-l2MDO0LIL+uSPiXA3+WVpan43lWJbaY9XSdQbwacRqQ=";
   };
 
-  cargoHash = "sha256-rmMUVZwNouUvFFPgZfbR4sgtig5zx1WC3bxnfPPT3yQ=";
+  cargoHash = "sha256-8tabXFijgq+E6YVY1J2nAhDHFahWx7QC8S401KNy2Jc=";
 
   meta = with lib; {
     description = "tty-clock with weather effect";
