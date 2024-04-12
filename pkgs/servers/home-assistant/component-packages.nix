@@ -570,7 +570,8 @@
     "brel_home" = ps: with ps; [
     ];
     "bring" = ps: with ps; [
-    ]; # missing inputs: bring-api
+      bring-api
+    ];
     "broadlink" = ps: with ps; [
       broadlink
     ];
@@ -6004,6 +6005,7 @@
     "bond"
     "bosch_shc"
     "braviatv"
+    "bring"
     "broadlink"
     "brother"
     "brottsplatskartan"
