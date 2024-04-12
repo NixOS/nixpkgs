@@ -28,8 +28,6 @@ buildPythonPackage rec {
     hash = "sha256-hkgm9Qc4ZEUOJNvuuFzjkgzfsJhIo9aev1N7Uh8UvMk=";
   };
 
-  patches = [ ./fix-setup-py-bad-syntax-detection.patch ];
-
   nativeBuildInputs = [
     setuptools-scm
   ];
@@ -64,6 +62,8 @@ buildPythonPackage rec {
     "test_direct_reference_with_extras"
     "test_local_duplicate_subdependency_combined"
     "test_bad_setup_file"
+    # asserts pip behaviour, we don't pin pip
+    "test_cli_compile_all_extras_with_multiple_packages"
     # Assertion error
     "test_compile_recursive_extras"
     "test_combine_different_extras_of_the_same_package"
