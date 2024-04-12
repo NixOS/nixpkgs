@@ -593,8 +593,8 @@ in {
   nimdow = handleTest ./nimdow.nix {};
   neo4j = handleTest ./neo4j.nix {};
   netdata = handleTest ./netdata.nix {};
-  networking.networkd = handleTest ./networking.nix { networkd = true; };
-  networking.scripted = handleTest ./networking.nix { networkd = false; };
+  networking.scripted = handleTest ./networking/networkd-and-scripted.nix { networkd = false; };
+  networking.networkd = handleTest ./networking/networkd-and-scripted.nix { networkd = true; };
   netbox_3_6 = handleTest ./web-apps/netbox.nix { netbox = pkgs.netbox_3_6; };
   netbox_3_7 = handleTest ./web-apps/netbox.nix { netbox = pkgs.netbox_3_7; };
   netbox-upgrade = handleTest ./web-apps/netbox-upgrade.nix {};
