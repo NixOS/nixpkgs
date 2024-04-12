@@ -274,4 +274,11 @@ in
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
+    mariadb_112 = self.callPackage generic {
+      # Supported until 2024-11-21
+      version = "11.2.3";
+      hash = "sha256-FKC7oMKEfrP2mkY39VeY+KvhCQTNHdIomcmwo5xD418=";
+      inherit (self.darwin) cctools;
+      inherit (self.darwin.apple_sdk.frameworks) CoreServices;
+    };
   }
