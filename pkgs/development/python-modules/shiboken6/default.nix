@@ -1,6 +1,5 @@
 { lib
 , fetchurl
-, fetchpatch
 , llvmPackages
 , python
 , cmake
@@ -13,25 +12,18 @@ let
 in
 stdenv'.mkDerivation rec {
   pname = "shiboken6";
-  version = "6.6.0";
+  version = "6.7.0";
 
   src = fetchurl {
     # https://download.qt.io/official_releases/QtForPython/shiboken6/
     url = "https://download.qt.io/official_releases/QtForPython/shiboken6/PySide6-${version}-src/pyside-setup-everywhere-src-${version}.tar.xz";
-    sha256 = "sha256-LdAC24hRqHFzNU84qoxuxC0P8frJnqQisp4t/OUtFjg=";
+    hash = "sha256-gurjcHN99ez1OcFl0J18gdX8YVOlQbjT03sRJ1+ePo8=";
   };
 
-  sourceRoot = "pyside-setup-everywhere-src-${lib.removeSuffix ".0" version}/sources/${pname}";
+  sourceRoot = "pyside-setup-everywhere-src-${version}/sources/${pname}";
 
   patches = [
     ./fix-include-qt-headers.patch
-    # TODO: remove after bumping above 6.6.0
-    (fetchpatch {
-      name = "shiboken6-improve-api-extractor-argument-parsing.patch";
-      url = "https://code.qt.io/cgit/pyside/pyside-setup.git/patch/?id=6abde77c3df60ccac25089660df5797de7f6e68c";
-      hash = "sha256-uctp5rjY16X37BYzsZzg9AAgM2hwNVkcNxT1bCobb0I=";
-      stripLen = 2;
-    })
   ];
 
   nativeBuildInputs = [
@@ -57,7 +49,7 @@ stdenv'.mkDerivation rec {
   # We intentionally use single quotes around `${BASH}` since it expands from a CMake
   # variable available in this file.
   postPatch = ''
-    substituteInPlace cmake/ShibokenHelpers.cmake --replace '#!/bin/bash' '#!''${BASH}'
+    substituteInPlace cmake/ShibokenHelpers.cmake --replace-fail '#!/bin/bash' '#!''${BASH}'
   '';
 
   # Due to Shiboken.abi3.so being linked to libshiboken6.abi3.so.6.6 in the build tree,
