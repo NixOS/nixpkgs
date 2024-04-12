@@ -1,17 +1,16 @@
-{ lib
-, awscli
-, fetchFromGitHub
-, python3
+{
+  lib,
+  awscli,
+  fetchFromGitHub,
+  python3,
 }:
-
 
 let
   python = python3.override {
-    packageOverrides = self: super: {
-      sqlalchemy = super.sqlalchemy_1_4;
-    };
+    packageOverrides = self: super: { sqlalchemy = super.sqlalchemy_1_4; };
   };
-in python.pkgs.buildPythonApplication rec {
+in
+python.pkgs.buildPythonApplication rec {
   pname = "pacu";
   version = "1.5.2";
   pyproject = true;
@@ -27,34 +26,34 @@ in python.pkgs.buildPythonApplication rec {
     "dsnap"
     "sqlalchemy-utils"
     "sqlalchemy"
+    "pycognito"
     "urllib3"
   ];
 
-  nativeBuildInputs = with python.pkgs; [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = with python.pkgs; [ poetry-core ];
 
-  propagatedBuildInputs = [
-    awscli
-  ] ++ (with python.pkgs; [
-    awscli
-    boto3
-    botocore
-    chalice
-    dsnap
-    jq
-    policyuniverse
-    pycognito
-    pyyaml
-    qrcode
-    requests
-    sqlalchemy
-    sqlalchemy-utils
-    toml
-    typing-extensions
-    urllib3
-  ]);
+  nativeBuildInputs = with python.pkgs; [ pythonRelaxDepsHook ];
+
+  dependencies =
+    [ awscli ]
+    ++ (with python.pkgs; [
+      awscli
+      boto3
+      botocore
+      chalice
+      dsnap
+      jq
+      policyuniverse
+      pycognito
+      pyyaml
+      qrcode
+      requests
+      sqlalchemy
+      sqlalchemy-utils
+      toml
+      typing-extensions
+      urllib3
+    ]);
 
   nativeCheckInputs = with python.pkgs; [
     moto
@@ -65,13 +64,12 @@ in python.pkgs.buildPythonApplication rec {
     export HOME=$(mktemp -d)
   '';
 
-  pythonImportsCheck = [
-    "pacu"
-  ];
+  pythonImportsCheck = [ "pacu" ];
 
   disabledTests = [
-    # sqlalchemy.exc.ArgumentError: Textual SQL expression
-    #"test_migrations"
+    # sAttributeError: module 'moto' has no attribute 'mock_s3'
+    "test_update"
+    "test_update_second_time"
   ];
 
   meta = with lib; {
