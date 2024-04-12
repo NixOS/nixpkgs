@@ -317,7 +317,7 @@ in let
       stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
-    libunwind = callPackage ./libunwind {
+    libunwind = callPackage ../common/libunwind {
       inherit llvm_meta;
       stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };

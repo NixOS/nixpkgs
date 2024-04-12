@@ -259,9 +259,12 @@ let
       stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
-    libunwind = callPackage ./libunwind {
+    libunwind = callPackage ../common/libunwind {
+      src = fetch "libunwind" "192ww6n81lj2mb9pj4043z79jp3cf58a9c2qrxjwm5c3a64n1shb";
+      patches = [
+        ./libunwind/gnu-install-dirs.patch
+      ];
       inherit llvm_meta;
-      inherit (buildLlvmTools) llvm;
       stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
