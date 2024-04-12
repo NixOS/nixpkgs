@@ -179,6 +179,7 @@ mapAliases ({
   clpm = throw "'clpm' has been removed from nixpkgs"; # Added 2024-04-01
   collada-dom = opencollada; # added 2024-02-21
   composable_kernel = throw "'composable_kernel' has been replaced with 'rocmPackages.composable_kernel'"; # Added 2023-10-08
+  cope = throw "'cope' has been removed, as it is broken in nixpkgs since it was added, and fixing it is not trivial"; # Added 2024-04-12
   cpp-ipfs-api = cpp-ipfs-http-client; # Project has been renamed. Added 2022-05-15
   crispyDoom = crispy-doom; # Added 2023-05-01
   cryptowatch-desktop = throw "Cryptowatch Desktop was sunset on September 30th 2023 and has been removed from nixpkgs"; # Added 2023-12-22
