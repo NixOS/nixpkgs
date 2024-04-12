@@ -162,6 +162,9 @@ in stdenv.mkDerivation (finalAttrs: {
     VBOX_WITH_RUNPATH              := $out/libexec/virtualbox
     VBOX_PATH_APP_PRIVATE          := $out/share/virtualbox
     VBOX_PATH_APP_DOCS             := $out/doc
+
+    VBOX_WITH_UPDATE_AGENT :=
+
     ${optionalString javaBindings ''
     VBOX_JAVA_HOME                 := ${jdk}
     ''}
