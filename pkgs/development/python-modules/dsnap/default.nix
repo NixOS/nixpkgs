@@ -60,6 +60,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
+  # https://github.com/RhinoSecurityLabs/dsnap/issues/26
+  # ImportError: cannot import name 'mock_iam' from 'moto'
+  doCheck = false;
+
   pythonImportsCheck = [
     "dsnap"
   ];
