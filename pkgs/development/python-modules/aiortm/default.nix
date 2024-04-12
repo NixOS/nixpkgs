@@ -29,14 +29,14 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-warn " --cov=aiortm --cov-report=term-missing:skip-covered" ""
+      --replace-fail " --cov=aiortm --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     ciso8601
     click
@@ -56,10 +56,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for the Remember the Milk API";
-    mainProgram = "aiortm";
     homepage = "https://github.com/MartinHjelmare/aiortm";
     changelog = "https://github.com/MartinHjelmare/aiortm/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "aiortm";
   };
 }
