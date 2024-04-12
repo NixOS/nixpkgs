@@ -115,7 +115,11 @@ let
       extraBuildCommands = mkExtraBuildCommands cc;
     };
 
-    lld = callPackage ./lld {
+    lld = callPackage ../common/lld {
+      src = fetch "lld" "0qg3fgc7wj34hdkqn21y03zcmsdd01szhhm1hfki63iifrm3y2v9";
+      patches = [
+        ./lld/gnu-install-dirs.patch
+      ];
       inherit llvm_meta;
       inherit (libraries) libunwind;
     };
