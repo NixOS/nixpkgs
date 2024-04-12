@@ -1108,6 +1108,23 @@ let
       };
     });
 
+    rawrr = old.rawrr.overrideAttrs (attrs: {
+      postPatch = ''
+        substituteInPlace "R/zzz.R" "R/dotNetAssembly.R" --replace-warn \
+          "Sys.which('mono')" "'${lib.getBin pkgs.mono}/bin/mono'"
+
+        substituteInPlace "R/dotNetAssembly.R" --replace-warn \
+          "Sys.which(\"xbuild\")" "\"${lib.getBin pkgs.mono}/bin/xbuild\""
+
+        substituteInPlace "R/dotNetAssembly.R" --replace-warn \
+          "cmd <- ifelse(Sys.which(\"msbuild\") != \"\", \"msbuild\", \"xbuild\")" \
+          "cmd <- \"${lib.getBin pkgs.mono}/bin/xbuild\""
+
+        substituteInPlace "R/rawrr.R" --replace-warn \
+          "Sys.which(\"mono\")" "\"${lib.getBin pkgs.mono}/bin/mono\""
+      '';
+    });
+
     rpf = old.rpf.overrideAttrs (attrs: {
       patchPhase = "patchShebangs configure";
     });
