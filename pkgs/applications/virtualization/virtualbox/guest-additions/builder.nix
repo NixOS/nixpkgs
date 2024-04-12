@@ -1,9 +1,9 @@
 { config, stdenv, kernel, fetchurl, lib, pam, libxslt
 , libX11, libXext, libXcursor, libXmu
-, glib, alsa-lib, libXrandr, dbus
+, glib, libXrandr, dbus
 , pkg-config, which, zlib, xorg
 , yasm, patchelf, makeWrapper, makeself, nasm
-, linuxHeaders, openssl, libpulseaudio}:
+, linuxHeaders, openssl}:
 
 let
   buildType = "release";
@@ -20,8 +20,7 @@ in stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration";
 
   nativeBuildInputs = [ patchelf makeWrapper pkg-config which yasm makeself nasm xorg.xorgserver openssl linuxHeaders ] ++ kernel.moduleBuildDependencies;
-  buildInputs = [ dbus libxslt libXext libXcursor
-    alsa-lib pam libXmu libXrandr libpulseaudio ];
+  buildInputs = [ dbus libxslt libXext libXcursor pam libXmu libXrandr ];
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
   KERN_INCL = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/source/include";
@@ -97,6 +96,8 @@ in stdenv.mkDerivation (finalAttrs: {
       VBOX_WITHOUT_LINUX_GUEST_PACKAGE := 1
       VBOX_WITH_PAM :=
       VBOX_WITH_UPDATE_AGENT :=
+      VBOX_WITH_AUDIO_ALSA :=
+      VBOX_WITH_AUDIO_PULSE :=
 
       VBOX_BUILD_PUBLISHER := _NixOS
       LOCAL_CONFIG
