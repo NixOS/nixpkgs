@@ -92,15 +92,22 @@ rec {
     0
     ```
 
+    :::{.warning}
+    This function is deprecated, see <https://github.com/NixOS/nixpkgs/pull/275760> for alternatives.
+    :::
+
     Type: (a -> a) -> a -> a
   */
-  converge = f: x:
-    let
-      x' = f x;
-    in
-      if x' == x
-      then x
-      else converge f x';
+  converge =
+    lib.warn "lib.converge is deprecated, see https://github.com/NixOS/nixpkgs/pull/275760 for alternatives."
+    (f: x:
+      let
+        x' = f x;
+      in
+        if x' == x
+        then x
+        else converge f x'
+    );
 
   /*
     Extend a function using an overlay.
