@@ -7,6 +7,45 @@ let
   dnsmasqResolve = config.services.dnsmasq.enable &&
                    config.services.dnsmasq.resolveLocalQueries;
 
+  zeroConfOpts = [ "true" "resolve" "false" ];
+
+  zeroConfOptsType = types.enum zeroConfOpts;
+
+  zeroConfDetailedOptsType = types.submodule {
+    options = {
+      enable = {
+        type = zeroConfOptsType;
+      };
+      openFirewall = {
+        type = types.bool;
+        description = lib.mdDoc ''
+          Whether to open the firewall for the required UDP port.
+          Disabling this setting also disables discovering of network devices via the protocol.
+        '';
+      };
+    };
+  };
+
+  zeroConfEnable = { option }:
+    if builtins.elem option zeroConfOpts then
+      option
+    else
+      option.enable;
+
+  zeroConfOpenFirewall = { option }:
+    if builtins.elem option zeroConfOpts then
+      false
+    else
+      option.openFirewall;
+
+  mdnsEnable = zeroConfEnable cfg.mdns;
+
+  mdnsOpenFirewall = zeroConfOpenFirewall cfg.mdns;
+
+  llmnrEnable = zeroConfEnable cfg.llmnr;
+
+  llmnrOpenFirewall = zeroConfOpenFirewall cfg.llmnr;
+
 in
 {
 
@@ -51,10 +90,24 @@ in
       '';
     };
 
+    services.resolved.mdns = mkOption {
+      default = "true";
+      example = "false";
+      type = types.either zeroConfOptsType zeroConfDetailedOptsType;
+      description = lib.mdDoc ''
+        Controls Multicast DNS support (RFC 6762[2]) on the local host.
+
+        If set to
+        - `"true"`: Enables full Multicast DNS responder and resolver support.
+        - `"false"`: Disables both.
+        - `"resolve"`: Only resolution support is enabled, but responding is disabled.
+      '';
+    };
+
     services.resolved.llmnr = mkOption {
       default = "true";
       example = "false";
-      type = types.enum [ "true" "resolve" "false" ];
+      type = types.either zeroConfOptsType zeroConfDetailedOptsType;
       description = lib.mdDoc ''
         Controls Link-Local Multicast Name Resolution support
         (RFC 4795) on the local host.
@@ -162,7 +215,8 @@ in
           "FallbackDNS=${concatStringsSep " " cfg.fallbackDns}"}
         ${optionalString (cfg.domains != [])
           "Domains=${concatStringsSep " " cfg.domains}"}
-        LLMNR=${cfg.llmnr}
+        MulticastDNS=${mdnsEnable}
+        LLMNR=${llmnrEnable}
         DNSSEC=${cfg.dnssec}
         DNSOverTLS=${cfg.dnsovertls}
         ${config.services.resolved.extraConfig}
@@ -179,6 +233,16 @@ in
     networking.networkmanager.dns = "systemd-resolved";
 
     networking.resolvconf.package = pkgs.systemd;
+
+    networking.firewall = lib.mkMerge [
+      (mkIf mdnsOpenFirewall {
+        allowedUDPPorts = [ 5353 ];
+      })
+
+      (mkIf llmnrOpenFirewall {
+        allowedUDPPorts = [ 5355 ];
+      })
+    ];
 
   };
 
