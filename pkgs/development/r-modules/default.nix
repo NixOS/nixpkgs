@@ -651,7 +651,7 @@ let
     matchingMarkets = [ pkgs.zlib.dev ];
     methylKit = with pkgs; [ zlib.dev bzip2.dev xz.dev ];
     ndjson = [ pkgs.zlib.dev ];
-    podkat = [ pkgs.zlib.dev ];
+    podkat = with pkgs; [ zlib.dev xz.dev bzip2.dev ];
     qrqc = [ pkgs.zlib.dev ];
     rJPSGCS = [ pkgs.zlib.dev ];
     rhdf5filters = with pkgs; [ zlib.dev bzip2.dev ];
