@@ -5,25 +5,32 @@
 , requests
 , requests-oauthlib
 , voluptuous
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pybotvac";
-  version = "0.0.24";
-  format = "setuptools";
+  version = "0.0.25";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SXIs9AUXWm1H49MVDT4z6msNPaW5sAU20rcsWZ7ERdU=";
+    hash = "sha256-EvGBStEYgqFO9GMtxs1qtDixb4y2Ptom8xncRUv4ur4=";
   };
 
-  patches = [
-    ./urllib3-2.0-compat.patch
+  postPatch = ''
+    substituteInPlace pybotvac/robot.py \
+      --replace-fail "import urllib3" "" \
+      --replace-fail "urllib3.disable_warnings(urllib3.exceptions.SubjectAltNameWarning)" "# urllib3.disable_warnings(urllib3.exceptions.SubjectAltNameWarning)"
+  '';
+
+  build-system = [
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     requests
     requests-oauthlib
     voluptuous
