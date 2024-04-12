@@ -1,4 +1,5 @@
 { stdenv
+, stdenvNoCC
 , lib
 , makeWrapper
 , fetchurl
@@ -74,7 +75,7 @@ let
     exec ${tor}/bin/tor "$@"
   '';
 
-  jdk-modules = stdenv.mkDerivation {
+  jdk-modules = stdenvNoCC.mkDerivation {
     name = "jdk-modules";
     nativeBuildInputs = [ openjdk ];
     dontUnpack = true;
@@ -95,7 +96,7 @@ let
     '';
   };
 
-  sparrow-modules = stdenv.mkDerivation {
+  sparrow-modules = stdenvNoCC.mkDerivation {
     pname = "sparrow-modules";
     inherit version src;
     nativeBuildInputs = [ makeWrapper gzip gnugrep openjdk autoPatchelfHook stdenv.cc.cc.lib zlib ];
@@ -161,7 +162,7 @@ let
     '';
   };
 in
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   inherit version src;
   pname = "sparrow-unwrapped";
   nativeBuildInputs = [ makeWrapper copyDesktopItems ];
@@ -179,7 +180,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  sparrow-icons = stdenv.mkDerivation {
+  sparrow-icons = stdenvNoCC.mkDerivation {
     inherit version src;
     pname = "sparrow-icons";
     nativeBuildInputs = [ imagemagick ];
