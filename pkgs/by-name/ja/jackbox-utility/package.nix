@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "jackbox-utility";
-  version = "1.3.7+1";
+  version = "1.3.7+2";
 
   src = fetchurl {
     url = "https://github.com/JackboxUtility/JackboxUtility/releases/download/${version}/JackboxUtility_Linux.zip";
-    hash = "sha256-fPLcbVqZ5rXkYRmBsOacwuJaIK47/JZMqsJRQTTsZRM=";
+    hash = "sha256-Eygy8gIOlD1gLXDtyqGmE6sLM0WLkureZIO43DmWf38=";
   };
 
   dontUnpack = true;
