@@ -1,16 +1,17 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, ciso8601
-, click
-, fetchFromGitHub
-, mashumaro
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, yarl
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  ciso8601,
+  click,
+  fetchFromGitHub,
+  mashumaro,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  yarl,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
       --replace-fail " --cov=aiortm --cov-report=term-missing:skip-covered" ""
   '';
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
@@ -50,9 +49,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aiortm"
-  ];
+  pythonImportsCheck = [ "aiortm" ];
 
   meta = with lib; {
     description = "Library for the Remember the Milk API";
