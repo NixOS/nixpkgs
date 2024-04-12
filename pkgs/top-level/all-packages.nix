@@ -30376,10 +30376,6 @@ with pkgs;
     inherit (gnome2) libgnomeui GConf;
   };
 
-  corrscope = libsForQt5.callPackage ../applications/video/corrscope {
-    ffmpeg = ffmpeg-full;
-  };
-
   cpeditor = libsForQt5.callPackage ../applications/editors/cpeditor { };
 
   csa = callPackage ../applications/audio/csa { };
