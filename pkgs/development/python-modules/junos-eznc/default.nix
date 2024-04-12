@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "junos-eznc";
-  version = "2.7.0";
+  version = "2.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "Juniper";
     repo = "py-junos-eznc";
     rev = "refs/tags/${version}";
-    hash = "sha256-06OV6UrF2i4SxL5dCvVxsEX2e8ef8UBFx/oMbvCZDaM=";
+    hash = "sha256-aoi+in5A8qSdQNY3V4S4wBBfPchR1an7G6GQHDhgxpQ=";
   };
 
   nativeBuildInputs = [
