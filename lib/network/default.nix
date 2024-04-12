@@ -27,6 +27,30 @@ let
 in
 {
   ipv4 = {
+    /**
+      Creates an `IPv4Address` object from an IPv4 address in CIDR notation as a string.
+
+      # Example
+
+      ```nix
+      fromCidrString "192.168.0.1/24"
+      => {
+        address = "192.168.0.1";
+        cidr = "192.168.0.1/24";
+        prefixLength = "24";
+      }
+      ```
+
+      # Type
+
+      ```
+      fromCidrString :: String -> IPv4Address
+      ```
+
+      # Arguments
+
+      - [cidr] An IPv4 address in CIDR notation.
+    */
     fromCidrString =
       cidr:
       let
