@@ -16,7 +16,7 @@ buildPythonPackage rec {
   version = "0.15.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,7 +24,8 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    sed -i "/addopts =/d" pytest.ini
+    substituteInPlace pytest.ini \
+      --replace-fail "--cov-report term-missing --cov-report html --cov-report=xml --cov-report=term --cov sparse --cov-config .coveragerc --junitxml=junit/test-results.xml" ""
   '';
 
   build-system = [
@@ -45,6 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "sparse"
+  ];
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   meta = with lib; {

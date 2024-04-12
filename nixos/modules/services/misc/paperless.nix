@@ -220,15 +220,16 @@ in
   config = mkIf cfg.enable {
     services.redis.servers.paperless.enable = mkIf enableRedis true;
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
-      "d '${cfg.mediaDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
-      (if cfg.consumptionDirIsPublic then
-        "d '${cfg.consumptionDir}' 777 - - - -"
-      else
-        "d '${cfg.consumptionDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
-      )
-    ];
+    systemd.tmpfiles.settings."10-paperless" = let
+      defaultRule = {
+        inherit (cfg) user;
+        inherit (config.users.users.${cfg.user}) group;
+      };
+    in {
+      "${cfg.dataDir}".d = defaultRule;
+      "${cfg.mediaDir}".d = defaultRule;
+      "${cfg.consumptionDir}".d = if cfg.consumptionDirIsPublic then { mode = "777"; } else defaultRule;
+    };
 
     systemd.services.paperless-scheduler = {
       description = "Paperless Celery Beat";
@@ -238,6 +239,7 @@ in
         User = cfg.user;
         ExecStart = "${pkg}/bin/celery --app paperless beat --loglevel INFO";
         Restart = "on-failure";
+        LoadCredential = lib.optionalString (cfg.passwordFile != null) "PAPERLESS_ADMIN_PASSWORD:${cfg.passwordFile}";
       };
       environment = env;
 
@@ -270,7 +272,7 @@ in
       ''
       + optionalString (cfg.passwordFile != null) ''
         export PAPERLESS_ADMIN_USER="''${PAPERLESS_ADMIN_USER:-admin}"
-        export PAPERLESS_ADMIN_PASSWORD=$(cat "${cfg.dataDir}/superuser-password")
+        export PAPERLESS_ADMIN_PASSWORD=$(cat $CREDENTIALS_DIRECTORY/PAPERLESS_ADMIN_PASSWORD)
         superuserState="$PAPERLESS_ADMIN_USER:$PAPERLESS_ADMIN_PASSWORD"
         superuserStateFile="${cfg.dataDir}/superuser-state"
 
@@ -296,19 +298,6 @@ in
         PrivateNetwork = false;
       };
       environment = env;
-    };
-
-    # Reading the user-provided password file requires root access
-    systemd.services.paperless-copy-password = mkIf (cfg.passwordFile != null) {
-      requiredBy = [ "paperless-scheduler.service" ];
-      before = [ "paperless-scheduler.service" ];
-      serviceConfig = {
-        ExecStart = ''
-          ${pkgs.coreutils}/bin/install --mode 600 --owner '${cfg.user}' --compare \
-            '${cfg.passwordFile}' '${cfg.dataDir}/superuser-password'
-        '';
-        Type = "oneshot";
-      };
     };
 
     systemd.services.paperless-consumer = {

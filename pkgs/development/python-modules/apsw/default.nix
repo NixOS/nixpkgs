@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, sqlite
-, isPyPy
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  pythonOlder,
+  setuptools,
+  sqlite,
 }:
 
 buildPythonPackage rec {
@@ -12,7 +13,7 @@ buildPythonPackage rec {
   version = "3.45.2.0";
   pyproject = true;
 
-  disabled = isPyPy;
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "rogerbinns";
@@ -21,13 +22,10 @@ buildPythonPackage rec {
     hash = "sha256-tTi3/10W4OoGH6PQVhvPWc5o09on5BZrWoAvrfh4C/E=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  buildInputs = [
-    sqlite
-  ];
+  buildInputs = [ sqlite ];
+
 
   # Project uses custom test setup to exclude some tests by default, so using pytest
   # requires more maintenance
@@ -36,9 +34,7 @@ buildPythonPackage rec {
     ${python.interpreter} setup.py test
   '';
 
-  pythonImportsCheck = [
-    "apsw"
-  ];
+  pythonImportsCheck = [ "apsw" ];
 
   meta = with lib; {
     changelog = "https://github.com/rogerbinns/apsw/blob/${src.rev}/doc/changes.rst";

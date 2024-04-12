@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     description = "A library to handle Apple Property List format in binary or XML";
     homepage = "https://github.com/libimobiledevice/libplist";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ infinisil ];
+    maintainers = [ ];
     platforms = platforms.unix;
     mainProgram = "plistutil";
   };

@@ -299,8 +299,6 @@ with pkgs;
 
   melange = callPackage ../development/tools/melange { };
 
-  appthreat-depscan = callPackage ../development/tools/appthreat-depscan { };
-
   activate-linux = callPackage ../applications/misc/activate-linux { };
 
   ansi = callPackage ../development/tools/ansi { };
@@ -3853,8 +3851,6 @@ with pkgs;
 
   gluesql = callPackage ../servers/sql/gluesql { };
 
-  gmid = callPackage ../servers/gemini/gmid { };
-
   gmni = callPackage ../applications/networking/browsers/gmni { };
 
   gmnisrv = callPackage ../servers/gemini/gmnisrv { };
@@ -6871,7 +6867,9 @@ with pkgs;
 
   unionfs-fuse = callPackage ../tools/filesystems/unionfs-fuse { };
 
-  unparam = callPackage ../tools/misc/unparam { };
+  unparam = callPackage ../tools/misc/unparam {
+    buildGoModule = buildGo121Module;
+  };
 
   inherit (nodePackages) uppy-companion;
 
@@ -8350,7 +8348,7 @@ with pkgs;
   })
     garage
       garage_0_8 garage_0_9
-      garage_0_8_7 garage_0_9_3;
+      garage_0_8_7 garage_0_9_4;
 
   garmintools = callPackage ../development/libraries/garmintools { };
 
@@ -8487,8 +8485,6 @@ with pkgs;
   gitea-actions-runner = callPackage ../development/tools/continuous-integration/gitea-actions-runner { };
 
   forgejo = callPackage ../applications/version-management/forgejo { };
-
-  forgejo-actions-runner = callPackage ../development/tools/continuous-integration/forgejo-actions-runner { };
 
   gokart = callPackage ../development/tools/gokart { };
 
@@ -9186,8 +9182,6 @@ with pkgs;
   hyphen = callPackage ../development/libraries/hyphen { };
 
   i2c-tools = callPackage ../os-specific/linux/i2c-tools { };
-
-  i2p = callPackage ../tools/networking/i2p { };
 
   i2pd = callPackage ../tools/networking/i2pd { };
 
@@ -16768,7 +16762,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   cargo-deb = callPackage ../development/tools/rust/cargo-deb { };
-  cargo-deps = callPackage ../development/tools/rust/cargo-deps { };
   cargo-docset = callPackage ../development/tools/rust/cargo-docset { };
   cargo-duplicates = callPackage ../development/tools/rust/cargo-duplicates { };
   cargo-edit = callPackage ../development/tools/rust/cargo-edit {
@@ -18024,13 +18017,6 @@ with pkgs;
     src = oldAttrs.src.override {
       inherit version;
       hash = "sha256-JfmxtaWvPAmGvTko7QhurduGdSf7XIOv7xoDz60080U=";
-    };
-  }));
-  ansible_2_14 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
-    version = "2.14.13";
-    src = oldAttrs.src.override {
-      inherit version;
-      hash = "sha256-ThuzNPDDImq0jFme/knNX+A/JdRVi8BsJ0reK6PiV2o=";
     };
   }));
 
@@ -28334,6 +28320,7 @@ with pkgs;
     ubootROCPCRK3399
     ubootSheevaplug
     ubootSopine
+    ubootTuringRK1
     ubootUtilite
     ubootWandboard
     ;
@@ -32416,7 +32403,10 @@ with pkgs;
 
   khard = callPackage ../applications/misc/khard { };
 
-  kid3 = libsForQt5.callPackage ../applications/audio/kid3 { };
+  kid3-cli = qt6Packages.callPackage ../applications/audio/kid3 { withCLI = true; withKDE = false; withQt = false; };
+  kid3-kde = qt6Packages.callPackage ../applications/audio/kid3 { withCLI = true; withKDE = true; withQt = false; };
+  kid3-qt = qt6Packages.callPackage ../applications/audio/kid3 { withCLI = true; withKDE = false; withQt = true; };
+  kid3 = kid3-kde;
 
   kile = libsForQt5.callPackage ../applications/editors/kile { };
 
@@ -32430,7 +32420,7 @@ with pkgs;
 
   klayout = libsForQt5.callPackage ../applications/misc/klayout { };
 
-  klee = callPackage ../applications/science/logic/klee (with llvmPackages_12; {
+  klee = callPackage ../applications/science/logic/klee (with llvmPackages_13; {
     clang = clang;
     llvm = llvm;
     stdenv = stdenv;
@@ -36453,8 +36443,6 @@ with pkgs;
 
   sumokoin = callPackage ../applications/blockchains/sumokoin { };
 
-  solana-cli = callPackage ../applications/blockchains/solana { };
-
   solana-validator = callPackage ../applications/blockchains/solana-validator { };
 
   snarkos = callPackage ../applications/blockchains/snarkos {
@@ -36997,7 +36985,7 @@ with pkgs;
   fairymax = callPackage ../games/fairymax { };
 
   ferium = callPackage ../games/ferium {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   fheroes2 = callPackage ../games/fheroes2 { };
@@ -39763,6 +39751,8 @@ with pkgs;
 
   kmon = callPackage ../tools/system/kmon { };
 
+  kmonad = haskellPackages.kmonad.bin;
+
   kompose = callPackage ../applications/networking/cluster/kompose { };
 
   kompute = callPackage ../development/libraries/kompute {
@@ -40043,6 +40033,8 @@ with pkgs;
   nix-serve-ng = haskell.lib.compose.justStaticExecutables haskellPackages.nix-serve-ng;
 
   nix-simple-deploy = callPackage ../tools/package-management/nix-simple-deploy { };
+
+  nix-visualize = python3.pkgs.callPackage ../tools/package-management/nix-visualize { };
 
   alejandra = callPackage ../tools/nix/alejandra { };
 

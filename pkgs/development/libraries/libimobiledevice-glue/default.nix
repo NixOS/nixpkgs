@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     description = "Library with common code used by the libraries and tools around the libimobiledevice project";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ infinisil ];
+    maintainers = [ ];
   };
 }

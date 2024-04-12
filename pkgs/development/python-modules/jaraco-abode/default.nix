@@ -24,26 +24,17 @@
 
 buildPythonPackage rec {
   pname = "jaraco-abode";
-  version = "5.1.0";
-  format = "pyproject";
+  version = "5.1.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.abode";
     rev = "refs/tags/v${version}";
-    hash = "sha256-guLgmhjFgYLRZsQ0j92NXkktZ80bwVvMUJLZeg3dgxE=";
+    hash = "sha256-TUxljF1k/fvQoNcHx6jMRJrYgzxjXefvMl+mBD0DL8o=";
   };
-
-  postPatch = ''
-    # https://github.com/jaraco/jaraco.abode/issues/19
-    echo "graft jaraco" > MANIFEST.in
-
-    # https://github.com/jaraco/jaraco.abode/commit/9e3e789efc96cddcaa15f920686bbeb79a7469e0
-    substituteInPlace jaraco/abode/helpers/timeline.py \
-      --replace "call_aside" "invoke"
-  '';
 
   nativeBuildInputs = [
     setuptools

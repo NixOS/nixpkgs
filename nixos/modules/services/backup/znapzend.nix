@@ -465,5 +465,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ infinisil SlothOfAnarchy ];
+  meta.maintainers = with maintainers; [ SlothOfAnarchy ];
 }

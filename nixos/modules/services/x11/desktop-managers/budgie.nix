@@ -43,6 +43,8 @@ let
   budgie-control-center = pkgs.budgie.budgie-control-center.override {
     enableSshSocket = config.services.openssh.startWhenNeeded;
   };
+
+  notExcluded = pkg: (!(lib.elem pkg config.environment.budgie.excludePackages));
 in {
   meta.maintainers = lib.teams.budgie.members;
 
@@ -91,7 +93,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.xserver.displayManager.sessionPackages = with pkgs; [
+    services.displayManager.sessionPackages = with pkgs; [
       budgie.budgie-desktop
     ];
 
@@ -160,7 +162,7 @@ in {
       ++ cfg.sessionPath;
 
     # Both budgie-desktop-view and nemo defaults to this emulator.
-    programs.gnome-terminal.enable = mkDefault true;
+    programs.gnome-terminal.enable = mkDefault (notExcluded pkgs.gnome.gnome-terminal);
 
     # Fonts.
     fonts.packages = [

@@ -31,7 +31,7 @@ let
       postConfigure = ''
         # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
         substituteInPlace vendor/github.com/bgentry/speakeasy/speakeasy_unix.go \
-          --replace "/bin/stty" "${coreutils}/bin/stty"
+          --replace-fail "/bin/stty" "${coreutils}/bin/stty"
       '';
 
       nativeBuildInputs = [ installShellFiles ];

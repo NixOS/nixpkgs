@@ -34,6 +34,10 @@ python3Packages.buildPythonApplication rec {
 
   pytestFlagsArray = [
     "awslimitchecker/tests"
+
+    # Upstream did not adapt to pytest 8 yet.
+    "-W"
+    "ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   disabledTestPaths = [

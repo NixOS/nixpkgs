@@ -546,6 +546,7 @@ let
     bayesWatch = [ pkgs.boost.dev ];
     clustermq = [  pkgs.pkg-config ];
     coga = [ pkgs.gsl.dev ];
+    deepSNV = with pkgs; [ xz.dev bzip2.dev zlib.dev ];
     gpg = [ pkgs.gpgme ];
     webp = [ pkgs.libwebp ];
     RMark = [ pkgs.which ];
@@ -562,6 +563,7 @@ let
     apsimx = [ pkgs.which ];
     cairoDevice = [ pkgs.pkg-config ];
     chebpol = [ pkgs.pkg-config ];
+    eds = [ pkgs.zlib.dev ];
     fftw = [ pkgs.pkg-config ];
     gdtools = [ pkgs.pkg-config ];
     archive = [ pkgs.libarchive];
@@ -606,6 +608,7 @@ let
     s2 = [ pkgs.openssl.dev ];
     ArrayExpressHTS = with pkgs; [ zlib.dev curl.dev which ];
     bbl = with pkgs; [ gsl ];
+    diffHic = with pkgs; [ xz.dev bzip2.dev ];
     writexl = with pkgs; [ zlib.dev ];
     xslt = with pkgs; [ libxslt libxml2 ];
     qpdf = with pkgs; [ libjpeg.dev zlib.dev ];
@@ -625,7 +628,9 @@ let
     HiCDCPlus = [ pkgs.zlib.dev ];
     PopGenome = [ pkgs.zlib.dev ];
     QuasR = with pkgs; [ zlib.dev xz.dev bzip2.dev ];
+    Rarr = [ pkgs.zlib.dev ];
     Rbowtie2 = [ pkgs.zlib.dev ];
+    Rfastp = with pkgs; [ xz.dev bzip2.dev zlib.dev ];
     maftools = with pkgs; [ zlib.dev bzip2 xz.dev ];
     Rmmquant = [ pkgs.zlib.dev ];
     SICtools = with pkgs; [ zlib.dev ncurses.dev ];
@@ -648,9 +653,9 @@ let
     rhdf5filters = with pkgs; [ zlib.dev bzip2.dev ];
     symengine = with pkgs; [ mpfr symengine flint ];
     rtk = [ pkgs.zlib.dev ];
-    scPipe = [ pkgs.zlib.dev ];
+    scPipe = with pkgs; [ bzip2.dev xz.dev zlib.dev ];
     seqTools = [ pkgs.zlib.dev ];
-    seqbias = [ pkgs.zlib.dev ];
+    seqbias = with pkgs; [ zlib.dev bzip2.dev xz.dev ];
     sparkwarc = [ pkgs.zlib.dev ];
     RoBMA = [ pkgs.jags ];
     pexm = [ pkgs.jags ];
@@ -950,6 +955,7 @@ let
     "ReactomeContentService4R" # tries to connect to Reactome
     "pbdMPI"   # tries to run MPI processes
     "data_table" # fails to rename shared library before check
+    "multiMiR" # tries to connect to DB
   ];
 
   # Packages which cannot be installed due to lack of dependencies or other reasons.
@@ -971,6 +977,7 @@ let
     "DuoClustering2018"
     "FieldEffectCrc"
     "GenomicDistributionsData"
+    "hpar"
     "HDCytoData"
     "HMP16SData"
     "PANTHER_db"

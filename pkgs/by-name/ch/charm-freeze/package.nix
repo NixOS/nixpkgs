@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "charm-freeze";
-  version = "0.1.4";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "freeze";
     rev = "v${version}";
-    hash = "sha256-ItcdgQUPrz2hpWS6nDYfnZaCdfocR3QgJTQ4TXzPQOw=";
+    hash = "sha256-HLlMUOLDvNLVl4dvtyRwuLhp3pOlpm/naUXK2NiIAg8=";
   };
 
-  vendorHash = "sha256-01tTr5NSyg52KGspYh9Rw98uQld6U+31Fy7jnyBoPx8=";
+  vendorHash = "sha256-AUFzxmQOb/h0UgcprY09IVI7Auitn3JTDU/ptKicIAU=";
 
   ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
 
