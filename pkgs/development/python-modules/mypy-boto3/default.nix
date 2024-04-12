@@ -111,7 +111,7 @@ rec {
 
   mypy-boto3-backupstorage = buildMypyBoto3Package "backupstorage" "1.34.0" "sha256-Y8kjZ+ov8OsiJ8Sm1LlvP8YbgVc+AkLkbZIhOh4y7ZY=";
 
-  mypy-boto3-batch = buildMypyBoto3Package "batch" "1.34.72" "sha256-ha5OZVVcO/+slxQOPIrd+D1Ehaw6YpGqCWofSgFj5JI=";
+  mypy-boto3-batch = buildMypyBoto3Package "batch" "1.34.83" "sha256-mJ6t+8ov7x8tfJNavY6qZpHxwenVGhTXy6NRlD7muPc=";
 
   mypy-boto3-billingconductor = buildMypyBoto3Package "billingconductor" "1.34.1" "sha256-uXxQkoe2u3idcYta9YFbjxoK8HsvUiRQSyYrYhVi1kU=";
 
