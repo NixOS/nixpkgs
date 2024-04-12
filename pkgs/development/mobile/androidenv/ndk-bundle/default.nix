@@ -11,22 +11,37 @@ deployAndroidPackage rec {
   inherit package os;
   nativeBuildInputs = [ makeWrapper ]
     ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
-  autoPatchelfIgnoreMissingDeps = true;
-  buildInputs = lib.optionals (os == "linux") [ pkgs.zlib ];
+  buildInputs = lib.optionals (os == "linux") [
+    pkgs.stdenv.cc.cc.lib
+    pkgs.zlib
+
+    # Python module dependencies.
+    pkgs.bzip2
+    pkgs.libxcrypt-legacy
+    pkgs.ncurses5
+  ];
 
   patchElfBnaries = ''
+
     # Patch the executables of the toolchains, but not the libraries -- they are needed for crosscompiling
-    if [ -d $out/libexec/android-sdk/ndk-bundle/toolchains/renderscript/prebuilt/linux-x86_64/lib64 ]; then
-      addAutoPatchelfSearchPath $out/libexec/android-sdk/ndk-bundle/toolchains/renderscript/prebuilt/linux-x86_64/lib64
+    if [ -d $out/libexec/android-sdk/ndk-bundle/toolchains/renderscript/prebuilt/linux-x86_64/lib ]; then
+      addAutoPatchelfSearchPath $out/libexec/android-sdk/ndk-bundle/toolchains/renderscript/prebuilt/linux-x86_64/lib
     fi
 
-    if [ -d $out/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/lib64 ]; then
-      addAutoPatchelfSearchPath $out/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/lib64
+    if [ -d $out/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/lib ]; then
+      addAutoPatchelfSearchPath $out/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/lib
     fi
 
-    find toolchains -type d -name bin -or -name lib64 | while read dir; do
-      autoPatchelf "$dir"
-    done
+    if [ -d $out/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/python3/lib ]; then
+      addAutoPatchelfSearchPath $out/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/python3/lib
+    fi
+
+    # find toolchains -type d -name bin -or -name lib | while read dir; do
+    #   autoPatchelf "$dir"
+    # done
+    if [ -d toolchains/llvm/prebuilt/linux-x86_64 ]; then
+      autoPatchelf toolchains/llvm/prebuilt/linux-x86_64
+    fi
 
     # Patch executables
     if [ -d prebuilt/linux-x86_64 ]; then
