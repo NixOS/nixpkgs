@@ -103,7 +103,6 @@ expectFailure() {
 expectEqual '(ipv4.fromCidrString "192.168.0.1/24").cidr' '"192.168.0.1/24"'
 expectEqual '(ipv4.fromCidrString "192.168.0.1/24").address' '"192.168.0.1"'
 expectEqual '(ipv4.fromCidrString "192.168.0.1/24").prefixLength' '"24"'
-expectEqual '(ipv4.fromCidrString "192.168.0.1/24").subnetMask' '"255.255.255.0"'
 
 # Test pow function
 expectEqual 'internal.common.pow 2 0' '1'
@@ -131,6 +130,3 @@ expectFailure 'internal.ipv4._verifyPrefixLength "192.168.0.1/"' 'lib.network.ip
 expectFailure 'internal.ipv4._verifyPrefixLength "192.168.0.1/33"' 'lib.network.ipv4: CIDR 192.168.0.1/33 has an out of bounds prefix length, 33.'
 expectFailure 'internal.ipv4._verifyPrefixLength "192.168.0.1/-1"' 'lib.network.ipv4: CIDR 192.168.0.1/-1 has an out of bounds prefix length, -1.'
 expectFailure 'internal.ipv4._verifyPrefixLength "192.168.0.1/24/bad"' 'lib.network.ipv4: Could not verify prefix length for CIDR 192.168.0.1/24/bad'
-
-# Test prefix length to subnet mask conversion.
-expectEqual 'internal.ipv4._prefixToSubnetMask "24"' '"255.255.255.0"'

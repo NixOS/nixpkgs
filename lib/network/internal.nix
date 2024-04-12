@@ -3,7 +3,6 @@ let
   inherit (lib)
     concatStringsSep
     elemAt
-    foldl
     genList
     mod
     range
@@ -55,33 +54,7 @@ rec {
         foldl' (acc: _: acc * base) 1 (range 1 exponent);
   };
 
-  ipv4 = rec {
-    /**
-      Given a prefix length, returns the equivalent subnet mask.
-
-      # Example
-
-      ```nix
-      _prefixToSubnetMask "24"
-      => "255.255.255.0"
-      ```
-
-      # Type
-
-      ```
-      _prefixToSubnetMask :: String -> String
-
-      # Arguments
-
-      - [prefixLength] A prefix length
-    */
-    _prefixToSubnetMask =
-      prefixLength:
-      let
-        prefixLength' = toInt prefixLength;
-      in
-      _encode ((foldl (x: y: 2 * x + 1) 0 (range 1 prefixLength')) * (common.pow 2 (32 - prefixLength')));
-
+  ipv4 = {
     /**
       Encodes an integer into a valid IPv4 address.
 
@@ -198,7 +171,6 @@ rec {
         address = "192.168.0.1";
         cidr = "192.168.0.1/24";
         prefixLength = "24";
-        subnetMask = "255.255.255.0";
       }
       ```
 
@@ -219,7 +191,6 @@ rec {
         prefixLength
       ];
       inherit address prefixLength;
-      subnetMask = _prefixToSubnetMask prefixLength;
     };
   };
 }
