@@ -1,16 +1,17 @@
-{ lib
-, backports-datetime-fromisoformat
-, buildPythonPackage
-, charset-normalizer
-, dateparser
-, faust-cchardet
-, fetchPypi
-, lxml
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, setuptools
-, urllib3
+{
+  lib,
+  backports-datetime-fromisoformat,
+  buildPythonPackage,
+  charset-normalizer,
+  dateparser,
+  faust-cchardet,
+  fetchPypi,
+  lxml,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  setuptools,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-yvFobPdcYd0fBh7eXXpG51mxXV+Zh82OE8jEI3URJj0=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     charset-normalizer
@@ -35,28 +34,26 @@ buildPythonPackage rec {
     lxml
     python-dateutil
     urllib3
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    backports-datetime-fromisoformat
-  ];
+  ] ++ lib.optionals (pythonOlder "3.7") [ backports-datetime-fromisoformat ];
 
   passthru.optional-dependencies = {
-    speed = [
-      faust-cchardet
-      urllib3
-    ] ++ lib.optionals (pythonOlder "3.11") [
-      backports-datetime-fromisoformat
-    ] ++ urllib3.optional-dependencies.brotli;
-    all = [
-      faust-cchardet
-      urllib3
-    ] ++ lib.optionals (pythonOlder "3.11") [
-      backports-datetime-fromisoformat
-    ] ++ urllib3.optional-dependencies.brotli;
+    speed =
+      [
+        faust-cchardet
+        urllib3
+      ]
+      ++ lib.optionals (pythonOlder "3.11") [ backports-datetime-fromisoformat ]
+      ++ urllib3.optional-dependencies.brotli;
+    all =
+      [
+        faust-cchardet
+        urllib3
+      ]
+      ++ lib.optionals (pythonOlder "3.11") [ backports-datetime-fromisoformat ]
+      ++ urllib3.optional-dependencies.brotli;
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # disable tests that require an internet connection
   disabledTests = [
@@ -65,9 +62,7 @@ buildPythonPackage rec {
     "test_download"
   ];
 
-  pythonImportsCheck = [
-    "htmldate"
-  ];
+  pythonImportsCheck = [ "htmldate" ];
 
   meta = with lib; {
     description = "Module for the extraction of original and updated publication dates from URLs and web pages";
