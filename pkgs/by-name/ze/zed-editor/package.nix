@@ -202,5 +202,7 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "zed";
     platforms = platforms.all;
+    # Currently broken on darwin: https://github.com/NixOS/nixpkgs/pull/303233#issuecomment-2048650618
+    broken = stdenv.isDarwin;
   };
 }
