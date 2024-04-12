@@ -12,23 +12,28 @@
 , requests
 , ruamel-yaml
 , schema-salad
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "cwl-utils";
-  version = "0.32";
-  format = "setuptools";
+  version = "0.33";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
-    repo = pname;
+    repo = "cwl-utils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-CM2UlJ86FcjsOm0msBNpY2li8bhm5T/aMD1q292HpLM=";
+    hash = "sha256-+GvG5Uu2nQWYCcuAkBkegsmMCWhf269jH6Zcex99I4M=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     cwl-upgrader
     packaging
     rdflib
