@@ -16,9 +16,9 @@ qtModule {
   nativeBuildInputs = [ python3 ];
   patches = [
     # prevent headaches from stale qmlcache data
-    ../patches/qtdeclarative-default-disable-qmlcache.patch
+    ../patches/0001-qtdeclarative-disable-qml-disk-cache.patch
     # add version specific QML import path
-    ../patches/qtdeclarative-qml-paths.patch
+    ../patches/0002-qtdeclarative-also-use-versioned-qml-paths.patch
   ];
   cmakeFlags = [
     "-DQt6ShaderToolsTools_DIR=${pkgsBuildBuild.qt6.qtshadertools}/lib/cmake/Qt6ShaderTools"
