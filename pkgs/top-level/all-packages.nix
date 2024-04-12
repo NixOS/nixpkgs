@@ -18020,13 +18020,6 @@ with pkgs;
       hash = "sha256-JfmxtaWvPAmGvTko7QhurduGdSf7XIOv7xoDz60080U=";
     };
   }));
-  ansible_2_14 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
-    version = "2.14.13";
-    src = oldAttrs.src.override {
-      inherit version;
-      hash = "sha256-ThuzNPDDImq0jFme/knNX+A/JdRVi8BsJ0reK6PiV2o=";
-    };
-  }));
 
   ansible-builder = with python3Packages; toPythonApplication ansible-builder;
 
@@ -28330,6 +28323,7 @@ with pkgs;
     ubootROCPCRK3399
     ubootSheevaplug
     ubootSopine
+    ubootTuringRK1
     ubootUtilite
     ubootWandboard
     ;
