@@ -7453,6 +7453,8 @@ self: super: with self; {
   mkdocstrings-python = callPackage ../development/python-modules/mkdocstrings-python { };
 
   mkdocs-mermaid2-plugin = callPackage ../development/python-modules/mkdocs-mermaid2-plugin { };
+  
+  mkdocs-techodocs-core = callPackage ../development/python-modules/mkdocs-techdocs-core { };
 
   mkl-service = callPackage ../development/python-modules/mkl-service { };
 
