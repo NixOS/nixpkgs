@@ -75,38 +75,22 @@ in
     # !!! clean up the descriptions.
 
     services.samba = {
+      enable = lib.mkEnableOption "Samba, the SMB/CIFS protocol";
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable Samba, which provides file and print
-          services to Windows clients through the SMB/CIFS protocol.
-
-          ::: {.note}
-          If you use the firewall consider adding the following:
-
-              services.samba.openFirewall = true;
-          :::
-        '';
+      package = lib.mkPackageOption pkgs "samba" {
+        example = "samba4Full";
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to automatically open the necessary ports in the firewall.
-        '';
-      };
+      openFirewall = lib.mkEnableOption "opening the default ports in the firewall for Samba";
 
-      smbd.enable = mkOption {
-        type = types.bool;
+      smbd.enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = lib.mdDoc "Whether to enable Samba's smbd daemon.";
       };
 
-      nmbd.enable = mkOption {
-        type = types.bool;
+      nmbd.enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to enable Samba's nmbd, which replies to NetBIOS over IP name
@@ -115,8 +99,8 @@ in
         '';
       };
 
-      winbindd.enable = mkOption {
-        type = types.bool;
+      winbindd.enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to enable Samba's winbindd, which provides a number of services
@@ -125,19 +109,12 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "samba" {
-        example = "samba4Full";
-      };
+      nsswins = lib.mkEnableOption ''
+        WINS NSS (Name Service Switch) plug-in.
 
-      nsswins = mkOption {
-        default = false;
-        type = types.bool;
-        description = ''
-          Whether to enable the WINS NSS (Name Service Switch) plug-in.
-          Enabling it allows applications to resolve WINS/NetBIOS names (a.k.a.
-          Windows machine names) by transparently querying the winbindd daemon.
-        '';
-      };
+        Enabling it allows applications to resolve WINS/NetBIOS names (a.k.a.
+        Windows machine names) by transparently querying the winbindd daemon
+      '';
 
       settings = lib.mkOption {
         type = lib.types.submodule { freeformType = settingsFormat.type; };
@@ -165,9 +142,7 @@ in
         '';
       };
     };
-
   };
-
 
   ###### implementation
 
