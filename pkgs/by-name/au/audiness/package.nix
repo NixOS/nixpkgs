@@ -15,11 +15,11 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-r+xWwXRKuTp5ifUUlF1K6BIVWh67hNLMBKBB7wnLLAM=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     pytenable
     typer
     validators
