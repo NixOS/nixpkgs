@@ -16,6 +16,7 @@ let
     RUN_USER = ${cfg.user}
     RUN_MODE = prod
     WORK_PATH = ${cfg.stateDir}
+    ${optionalString (cfg.extraRootConfig != null) cfg.extraRootConfig}
 
     ${generators.toINI {} cfg.settings}
 
@@ -383,10 +384,16 @@ in
         };
       };
 
+      extraRootConfig = mkOption {
+        type = with types; nullOr str;
+        default = null;
+        description = lib.mdDoc "Configuration lines appended to the top of the gitea configuration file.";
+      };
+
       extraConfig = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = lib.mdDoc "Configuration lines appended to the generated gitea configuration file.";
+        description = lib.mdDoc "Configuration lines appended to the end of the generated gitea configuration file.";
       };
     };
   };
