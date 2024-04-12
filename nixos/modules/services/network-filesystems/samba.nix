@@ -8,38 +8,6 @@ let
   settingsFormat = pkgs.formats.ini { };
   configFile = settingsFormat.generate "smb.conf" cfg.settings;
 
-  samba = cfg.package;
-
-  # This may include nss_ldap, needed for samba if it has to use ldap.
-  nssModulesPath = config.system.nssModules.path;
-
-  daemonService = appName: args:
-    { description = "Samba Service Daemon ${appName}";
-      documentation = [ "man:${appName}(8)" "man:samba(7)" "man:smb.conf(5)" ];
-
-      after = [ (mkIf (cfg.nmbd.enable && "${appName}" == "smbd") "samba-nmbd.service") "network.target" ];
-      requiredBy = [ "samba.target" ];
-      partOf = [ "samba.target" ];
-
-      environment = {
-        LD_LIBRARY_PATH = nssModulesPath;
-        LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
-      };
-
-      serviceConfig = {
-        ExecStart = "${samba}/sbin/${appName} --foreground --no-process-group ${args}";
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-        LimitNOFILE = 16384;
-        PIDFile = "/run/${appName}.pid";
-        Type = "notify";
-        NotifyAccess = "all"; #may not do anything...
-        Slice = "system-samba.slice";
-      };
-      unitConfig.RequiresMountsFor = "/var/lib/samba";
-
-      restartTriggers = [ configFile ];
-    };
-
 in
 
 {
@@ -71,9 +39,6 @@ in
   ###### interface
 
   options = {
-
-    # !!! clean up the descriptions.
-
     services.samba = {
       enable = lib.mkEnableOption "Samba, the SMB/CIFS protocol";
 
@@ -83,30 +48,54 @@ in
 
       openFirewall = lib.mkEnableOption "opening the default ports in the firewall for Samba";
 
-      smbd.enable = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = lib.mdDoc "Whether to enable Samba's smbd daemon.";
+      smbd = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = "Whether to enable Samba's smbd daemon.";
+        };
+
+        extraArgs = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          default = [ ];
+          description = "Extra arguments to pass to the smbd service.";
+        };
       };
 
-      nmbd.enable = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = ''
-          Whether to enable Samba's nmbd, which replies to NetBIOS over IP name
-          service requests. It also participates in the browsing protocols
-          which make up the Windows "Network Neighborhood" view.
-        '';
+      nmbd = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = ''
+            Whether to enable Samba's nmbd, which replies to NetBIOS over IP name
+            service requests. It also participates in the browsing protocols
+            which make up the Windows "Network Neighborhood" view.
+          '';
+        };
+
+        extraArgs = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          default = [ ];
+          description = "Extra arguments to pass to the nmbd service.";
+        };
       };
 
-      winbindd.enable = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = ''
-          Whether to enable Samba's winbindd, which provides a number of services
-          to the Name Service Switch capability found in most modern C libraries,
-          to arbitrary applications via PAM and ntlm_auth and to Samba itself.
-        '';
+      winbindd = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = ''
+            Whether to enable Samba's winbindd, which provides a number of services
+            to the Name Service Switch capability found in most modern C libraries,
+            to arbitrary applications via PAM and ntlm_auth and to Samba itself.
+          '';
+        };
+
+        extraArgs = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          default = [ ];
+          description = "Extra arguments to pass to the winbindd service.";
+        };
       };
 
       nsswins = lib.mkEnableOption ''
@@ -154,30 +143,21 @@ in
           ];
       }
 
-      (mkIf cfg.enable {
+      (lib.mkIf cfg.enable {
         environment.etc."samba/smb.conf".source = configFile;
 
-        system.nssModules = optional cfg.nsswins samba;
+        system.nssModules = optional cfg.nsswins cfg.package;
         system.nssDatabases.hosts = optional cfg.nsswins "wins";
 
         systemd = {
+          slices.system-samba = {
+            description = "Samba slice";
+          };
           targets.samba = {
             description = "Samba Server";
             after = [ "network.target" ];
             wants = [ "network-online.target" ];
             wantedBy = [ "multi-user.target" ];
-          };
-
-          slices.system-samba = {
-            description = "Samba slice";
-          };
-
-          # Refer to https://github.com/samba-team/samba/tree/master/packaging/systemd
-          # for correct use with systemd
-          services = {
-            samba-smbd = mkIf cfg.smbd.enable (daemonService "smbd" "");
-            samba-nmbd = mkIf cfg.nmbd.enable (daemonService "nmbd" "");
-            samba-winbindd = mkIf cfg.winbindd.enable (daemonService "winbindd" "");
           };
           tmpfiles.rules = [
             "d /var/lock/samba - - - - -"
@@ -202,6 +182,103 @@ in
         networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ 139 445 ];
         networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ 137 138 ];
       })
-    ];
 
+      (lib.mkIf cfg.nmbd.enable {
+        systemd.services.samba-nmbd = {
+          description = "Samba NMB Daemon";
+          documentation = [ "man:nmbd(8)" "man:samba(7)" "man:smb.conf(5)" ];
+
+          after = [
+            "network.target"
+            "network-online.target"
+          ];
+
+          partOf = [ "samba.target" ];
+          wantedBy = [ "samba.target" ];
+          wants = [ "network-online.target" ];
+
+          environment.LD_LIBRARY_PATH = config.system.nssModules.path;
+
+          serviceConfig = {
+            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+            ExecStart = "${cfg.package}/sbin/nmbd --foreground --no-process-group ${lib.escapeShellArgs cfg.nmbd.extraArgs}";
+            LimitCORE = "infinity";
+            PIDFile = "/run/samba/nmbd.pid";
+            Slice = "system-samba.slice";
+            Type = "notify";
+          };
+
+          unitConfig.RequiresMountsFor = "/var/lib/samba";
+
+          restartTriggers = [ configFile ];
+        };
+      })
+
+      (lib.mkIf cfg.smbd.enable {
+        systemd.services.samba-smbd = {
+          description = "Samba SMB Daemon";
+          documentation = [ "man:smbd(8)" "man:samba(7)" "man:smb.conf(5)" ];
+
+          after = [
+            "network.target"
+            "network-online.target"
+          ] ++ lib.optionals (cfg.nmbd.enable) [
+            "samba-nmbd.service"
+          ] ++ lib.optionals (cfg.winbindd.enable) [
+            "samba-winbindd.service"
+          ];
+
+          partOf = [ "samba.target" ];
+          wantedBy = [ "samba.target" ];
+          wants = [ "network-online.target" ];
+
+          environment.LD_LIBRARY_PATH = config.system.nssModules.path;
+
+          serviceConfig = {
+            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+            ExecStart = "${cfg.package}/sbin/smbd --foreground --no-process-group ${lib.escapeShellArgs cfg.smbd.extraArgs}";
+            LimitCORE = "infinity";
+            LimitNOFILE = 16384;
+            PIDFile = "/run/samba/smbd.pid";
+            Slice = "system-samba.slice";
+            Type = "notify";
+          };
+
+          unitConfig.RequiresMountsFor = "/var/lib/samba";
+
+          restartTriggers = [ configFile ];
+        };
+      })
+
+      (lib.mkIf cfg.winbindd.enable {
+        systemd.services.samba-winbindd = {
+          description = "Samba Winbind Daemon";
+          documentation = [ "man:winbindd(8)" "man:samba(7)" "man:smb.conf(5)" ];
+
+          after = [
+            "network.target"
+          ] ++ lib.optionals (cfg.nmbd.enable) [
+            "samba-nmbd.service"
+          ];
+
+          partOf = [ "samba.target" ];
+          wantedBy = [ "samba.target" ];
+
+          environment.LD_LIBRARY_PATH = config.system.nssModules.path;
+
+          serviceConfig = {
+            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+            ExecStart = "${cfg.package}/sbin/winbindd --foreground --no-process-group ${lib.escapeShellArgs cfg.winbindd.extraArgs}";
+            LimitCORE = "infinity";
+            PIDFile = "/run/samba/winbindd.pid";
+            Slice = "system-samba.slice";
+            Type = "notify";
+          };
+
+          unitConfig.RequiresMountsFor = "/var/lib/samba";
+
+          restartTriggers = [ configFile ];
+        };
+      })
+    ];
 }
