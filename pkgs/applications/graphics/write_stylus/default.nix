@@ -1,15 +1,5 @@
-{ mkDerivation, stdenv, lib, qtbase, qtsvg, libglvnd, libX11, libXi, fetchurl, makeDesktopItem }:
-let
-  desktopItem = makeDesktopItem {
-    name = "Write";
-    exec = "Write";
-    comment = "A word processor for handwriting";
-    icon = "write_stylus";
-    desktopName = "Write";
-    genericName = "Write";
-    categories = [ "Office" "Graphics" ];
-  };
-in
+{ mkDerivation, stdenv, lib, copyDesktopItems, qtbase, qtsvg, libglvnd, libX11, libXi, fetchurl, makeDesktopItem }:
+
 mkDerivation rec {
   pname = "write_stylus";
   version = "300";
@@ -21,6 +11,8 @@ mkDerivation rec {
 
   sourceRoot = ".";
 
+  nativeBuildInputs = [ copyDesktopItems ];
+
   dontBuild = true;
 
   installPhase = ''
@@ -29,9 +21,6 @@ mkDerivation rec {
     # symlink the binary to bin/
     ln -s $out/Write/Write $out/bin/Write
 
-    # Create desktop item
-    mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
     mkdir -p $out/share/icons
     ln -s $out/Write/Write144x144.png $out/share/icons/write_stylus.png
   '';
@@ -50,6 +39,18 @@ mkDerivation rec {
       --set-rpath "${libPath}" \
       $out/Write/Write
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Write";
+      exec = "Write";
+      comment = "A word processor for handwriting";
+      icon = "write_stylus";
+      desktopName = "Write";
+      genericName = "Write";
+      categories = [ "Office" "Graphics" ];
+    })
+  ];
 
   meta = with lib; {
     homepage = "http://www.styluslabs.com/";

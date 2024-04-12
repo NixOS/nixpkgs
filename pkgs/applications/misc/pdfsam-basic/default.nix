@@ -1,4 +1,4 @@
-{ lib, stdenv, makeDesktopItem, fetchurl, jdk21, wrapGAppsHook, glib }:
+{ lib, stdenv, makeDesktopItem, fetchurl, jdk21, wrapGAppsHook, copyDesktopItems, glib }:
 
 stdenv.mkDerivation rec {
   pname = "pdfsam-basic";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     tar xvf data.tar.gz
   '';
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook copyDesktopItems ];
   buildInputs = [ glib ];
 
   preFixup = ''
@@ -24,20 +24,21 @@ stdenv.mkDerivation rec {
   installPhase = ''
     cp -R opt/pdfsam-basic/ $out/
     mkdir -p "$out"/share/icons
-    cp --recursive ${desktopItem}/share/applications $out/share
     cp $out/icon.svg "$out"/share/icons/pdfsam-basic.svg
   '';
 
-  desktopItem = makeDesktopItem {
-    name = pname;
-    exec = pname;
-    icon = pname;
-    comment = meta.description;
-    desktopName = "PDFsam Basic";
-    genericName = "PDF Split and Merge";
-    mimeTypes = [ "application/pdf" ];
-    categories = [ "Office" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      exec = pname;
+      icon = pname;
+      comment = meta.description;
+      desktopName = "PDFsam Basic";
+      genericName = "PDF Split and Merge";
+      mimeTypes = [ "application/pdf" ];
+      categories = [ "Office" ];
+    })
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/torakiki/pdfsam";

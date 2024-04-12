@@ -26,16 +26,18 @@ mkDerivation rec {
   buildInputs = [ qtbase qtquickcontrols ];
   nativeBuildInputs = [ qmake ];
 
-  desktopItem = makeDesktopItem {
-    name = "tensor";
-    exec = "@bin@";
-    icon = "tensor.png";
-    comment = meta.description;
-    desktopName = "Tensor Matrix Client";
-    genericName = meta.description;
-    categories = [ "Chat" "Utility" ];
-    mimeTypes = [ "application/x-chat" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "tensor";
+      exec = "tensor";
+      icon = "tensor.png";
+      comment = meta.description;
+      desktopName = "Tensor Matrix Client";
+      genericName = meta.description;
+      categories = [ "Chat" "Utility" ];
+      mimeTypes = [ "application/x-chat" ];
+    })
+  ];
 
   installPhase = if stdenv.isDarwin then ''
     runHook preInstall
@@ -50,11 +52,6 @@ mkDerivation rec {
     install -Dm755 tensor $out/bin/tensor
     install -Dm644 client/logo.png \
                    $out/share/icons/hicolor/512x512/apps/tensor.png
-    install -Dm644 ${desktopItem}/share/applications/tensor.desktop \
-                   $out/share/applications/tensor.desktop
-
-    substituteInPlace $out/share/applications/tensor.desktop \
-      --subst-var-by bin $out/bin/tensor
 
     runHook postInstall
   '';

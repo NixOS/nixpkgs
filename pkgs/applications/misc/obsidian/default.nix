@@ -5,6 +5,7 @@
 , electron
 , makeDesktopItem
 , imagemagick
+, copyDesktopItems
 , writeScript
 , undmg
 , unzip
@@ -33,20 +34,22 @@ let
     hash = "sha256-EZsBuWyZ9zYJh0LDKfRAMTtnY70q6iLK/ggXlplDEoA=";
   };
 
-  desktopItem = makeDesktopItem {
-    name = "obsidian";
-    desktopName = "Obsidian";
-    comment = "Knowledge base";
-    icon = "obsidian";
-    exec = "obsidian %u";
-    categories = [ "Office" ];
-    mimeTypes = [ "x-scheme-handler/obsidian" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "obsidian";
+      desktopName = "Obsidian";
+      comment = "Knowledge base";
+      icon = "obsidian";
+      exec = "obsidian %u";
+      categories = [ "Office" ];
+      mimeTypes = [ "x-scheme-handler/obsidian" ];
+    })
+  ];
 
   linux = stdenv.mkDerivation {
-    inherit pname version src desktopItem icon;
+    inherit pname version src desktopItems icon;
     meta = meta // { platforms = [ "x86_64-linux" "aarch64-linux" ]; };
-    nativeBuildInputs = [ makeWrapper imagemagick ];
+    nativeBuildInputs = [ makeWrapper imagemagick copyDesktopItems ];
     installPhase = ''
       runHook preInstall
       mkdir -p $out/bin
@@ -55,8 +58,6 @@ let
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}"
       install -m 444 -D resources/app.asar $out/share/obsidian/app.asar
       install -m 444 -D resources/obsidian.asar $out/share/obsidian/obsidian.asar
-      install -m 444 -D "${desktopItem}/share/applications/"* \
-        -t $out/share/applications/
       for size in 16 24 32 48 64 128 256 512; do
         mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
         convert -background none -resize "$size"x"$size" ${icon} $out/share/icons/hicolor/"$size"x"$size"/apps/obsidian.png

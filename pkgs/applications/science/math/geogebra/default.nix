@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libGL, xorg, jre, makeDesktopItem, makeWrapper, unzip, language ? "en_US" }:
+{ lib, stdenv, fetchurl, libGL, xorg, jre, makeDesktopItem, makeWrapper, copyDesktopItems, unzip, language ? "en_US" }:
 let
   pname = "geogebra";
   version = "5-0-785-0";
@@ -6,17 +6,6 @@ let
   srcIcon = fetchurl {
     url = "https://web.archive.org/web/20200227000442if_/https://static.geogebra.org/images/geogebra-logo.svg";
     hash = "sha256-Vd7Wteya04JJT4WNirXe8O1sfVKUgc0hKGOy7d47Xgc=";
-  };
-
-  desktopItem = makeDesktopItem {
-    name = "geogebra";
-    exec = "geogebra";
-    icon = "geogebra";
-    desktopName = "Geogebra";
-    genericName = "Geogebra";
-    comment = meta.description;
-    categories = [ "Education" "Science" "Math" ];
-    mimeTypes = [ "application/vnd.geogebra.file" "application/vnd.geogebra.tool" ];
   };
 
   meta = with lib; {
@@ -38,7 +27,7 @@ let
   };
 
   linuxPkg = stdenv.mkDerivation {
-    inherit pname version meta srcIcon desktopItem;
+    inherit pname version meta srcIcon;
 
     preferLocalBuild = true;
 
@@ -50,7 +39,7 @@ let
       hash = "sha256-cL4ERKZpE9Y6IdOjvYiX3nIIW3E2qoqkpMyTszvFseM=";
     };
 
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper copyDesktopItems ];
 
     installPhase = ''
       install -D geogebra/* -t "$out/libexec/geogebra/"
@@ -64,12 +53,22 @@ let
         --set GG_PATH "$out/libexec/geogebra" \
         --add-flags "--language=${language}"
 
-      install -Dm644 "${desktopItem}/share/applications/"* \
-        -t $out/share/applications/
-
       install -Dm644 "${srcIcon}" \
         "$out/share/icons/hicolor/scalable/apps/geogebra.svg"
     '';
+
+    desktopItems = [
+      (makeDesktopItem {
+        name = "geogebra";
+        exec = "geogebra";
+        icon = "geogebra";
+        desktopName = "Geogebra";
+        genericName = "Geogebra";
+        comment = meta.description;
+        categories = [ "Education" "Science" "Math" ];
+        mimeTypes = [ "application/vnd.geogebra.file" "application/vnd.geogebra.tool" ];
+      })
+    ];
   };
 
   darwinPkg = stdenv.mkDerivation {

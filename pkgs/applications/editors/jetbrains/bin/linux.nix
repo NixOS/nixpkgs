@@ -47,16 +47,18 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
   passthru.buildNumber = buildNumber;
   meta = args.meta // { mainProgram = pname; };
 
-  desktopItem = makeDesktopItem {
-    name = pname;
-    exec = pname;
-    comment = lib.replaceStrings [ "\n" ] [ " " ] meta.longDescription;
-    desktopName = product;
-    genericName = meta.description;
-    categories = [ "Development" ];
-    icon = pname;
-    startupWMClass = wmClass;
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      exec = pname;
+      comment = lib.replaceStrings [ "\n" ] [ " " ] meta.longDescription;
+      desktopName = product;
+      genericName = meta.description;
+      categories = [ "Development" ];
+      icon = pname;
+      startupWMClass = wmClass;
+    })
+  ];
 
   vmoptsFile = lib.optionalString (vmopts != null) (writeText vmoptsName vmopts);
 
@@ -100,7 +102,6 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
     cp ${fsnotifier}/bin/fsnotifier $out/$pname/bin/fsnotifier
 
     jdk=${jdk.home}
-    item=${desktopItem}
 
     wrapProgram  "$out/$pname/bin/${loName}.sh" \
       --prefix PATH : "${lib.makeBinPath [ jdk coreutils gnugrep which git ]}" \
@@ -119,7 +120,6 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
     echo -e '#!/usr/bin/env bash\n'"$out/$pname/bin/remote-dev-server.sh"' "$@"' > $out/$pname/bin/remote-dev-server-wrapped.sh
     chmod +x $out/$pname/bin/remote-dev-server-wrapped.sh
     ln -s "$out/$pname/bin/remote-dev-server-wrapped.sh" $out/bin/$pname-remote-dev-server
-    ln -s "$item/share/applications" $out/share
 
     runHook postInstall
   '';

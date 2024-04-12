@@ -1,6 +1,6 @@
 # To enable specific database drivers, override this derivation and pass the
 # driver packages in the drivers argument (e.g. mysql_jdbc, postgresql_jdbc).
-{ lib, stdenv, fetchurl, makeDesktopItem, makeWrapper, unzip
+{ lib, stdenv, fetchurl, makeDesktopItem, copyDesktopItems, makeWrapper, unzip
 , jre
 , drivers ? []
 }:
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Y7eG2otbLjtXvs3mRXWL8jJywuhBQ9i/MfWJXvkxnuU=";
   };
 
-  nativeBuildInputs = [ makeWrapper unzip ];
+  nativeBuildInputs = [ makeWrapper unzip copyDesktopItems ];
   buildInputs = [ jre ];
 
   unpackPhase = ''
@@ -52,20 +52,21 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/icons/hicolor/32x32/apps
     ln -s $out/share/squirrel-sql/icons/acorn.png \
       $out/share/icons/hicolor/32x32/apps/squirrel-sql.png
-    ln -s ${desktopItem}/share/applications $out/share
 
     runHook postInstall
   '';
 
-  desktopItem = makeDesktopItem {
-    name = "squirrel-sql";
-    exec = "squirrel-sql";
-    comment = meta.description;
-    desktopName = "SQuirreL SQL";
-    genericName = "SQL Client";
-    categories = [ "Development" ];
-    icon = "squirrel-sql";
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "squirrel-sql";
+      exec = "squirrel-sql";
+      comment = "Universal SQL Client";
+      desktopName = "SQuirreL SQL";
+      genericName = "SQL Client";
+      categories = [ "Development" ];
+      icon = "squirrel-sql";
+    })
+  ];
 
   meta = with lib; {
     description = "Universal SQL Client";

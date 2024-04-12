@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitHub
 , makeDesktopItem
+, copyDesktopItems
 , python3
 , python3Packages
 , netcdf
@@ -16,25 +17,6 @@
 let
   pname = "pymol";
   description = "A Python-enhanced molecular graphics tool";
-
-  desktopItem = makeDesktopItem {
-    name = pname;
-    exec = pname;
-    desktopName = "PyMol Molecular Graphics System";
-    genericName = "Molecular Modeler";
-    comment = description;
-    icon = pname;
-    mimeTypes = [
-      "chemical/x-pdb"
-      "chemical/x-mdl-molfile"
-      "chemical/x-mol2"
-      "chemical/seq-aa-fasta"
-      "chemical/seq-na-fasta"
-      "chemical/x-xyz"
-      "chemical/x-mdl-sdf"
-    ];
-    categories = [ "Graphics" "Education" "Science" "Chemistry" ];
-  };
 in
 python3Packages.buildPythonApplication rec {
   inherit pname;
@@ -46,7 +28,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-JdsgcVF1w1xFPZxVcyS+GcWg4a1Bd4SvxFOuSdlz9SM=";
   };
 
-  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [ qt5.wrapQtAppsHook copyDesktopItems ];
   buildInputs = [ python3Packages.numpy python3Packages.pyqt5 glew glm libpng libxml2 freetype msgpack netcdf ];
   env.NIX_CFLAGS_COMPILE = "-I ${libxml2.dev}/include/libxml2";
   hardeningDisable = [ "format" ];
@@ -62,12 +44,32 @@ python3Packages.buildPythonApplication rec {
 
     mkdir -p "$out/share/icons/"
     ln -s ../../lib/python/pymol/pymol_path/data/pymol/icons/icon2.svg "$out/share/icons/pymol.svg"
-    cp -r "${desktopItem}/share/applications/" "$out/share/"
   '';
 
   preFixup = ''
     wrapQtApp "$out/bin/pymol"
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      exec = pname;
+      desktopName = "PyMol Molecular Graphics System";
+      genericName = "Molecular Modeler";
+      comment = description;
+      icon = pname;
+      mimeTypes = [
+        "chemical/x-pdb"
+        "chemical/x-mdl-molfile"
+        "chemical/x-mol2"
+        "chemical/seq-aa-fasta"
+        "chemical/seq-na-fasta"
+        "chemical/x-xyz"
+        "chemical/x-mdl-sdf"
+      ];
+      categories = [ "Graphics" "Education" "Science" "Chemistry" ];
+    })
+  ];
 
   meta = with lib; {
     inherit description;

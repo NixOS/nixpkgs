@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , autoPatchelfHook
+, copyDesktopItems
 , gtk3
 , zlib
 , alsa-lib
@@ -32,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" "doc" ];
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = [ autoPatchelfHook copyDesktopItems ];
 
   buildInputs = [
     # Load-time libraries (loaded from DT_NEEDED section in ELF binary)
@@ -57,14 +58,16 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
   ];
 
-  desktopItem = makeDesktopItem {
-    name = "clonehero";
-    desktopName = "Clone Hero";
-    comment = finalAttrs.meta.description;
-    icon = "clonehero";
-    exec = "clonehero";
-    categories = [ "Game" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "clonehero";
+      desktopName = "Clone Hero";
+      comment = finalAttrs.meta.description;
+      icon = "clonehero";
+      exec = "clonehero";
+      categories = [ "Game" ];
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -76,7 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r clonehero_Data "$out/share/clonehero"
     ln -s "$out/share/clonehero" "$out/bin/clonehero_Data"
     ln -s "$out/share/clonehero/Resources/UnityPlayer.png" "$out/share/pixmaps/clonehero.png"
-    install -Dm644 "$desktopItem/share/applications/clonehero.desktop" "$out/share/applications/clonehero.desktop"
 
     mkdir -p "$doc/share/doc/clonehero"
     cp -r CLONE_HERO_MANUAL.{pdf,txt} Custom EULA.txt THIRDPARTY.txt "$doc/share/doc/clonehero"

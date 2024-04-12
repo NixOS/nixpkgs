@@ -1,6 +1,6 @@
 { lib, stdenv, makeDesktopItem, fetchurl, unzip
 , gdk-pixbuf, glib, gtk3, atk, at-spi2-atk, pango, cairo, freetype, fontconfig, dbus, nss, nspr, alsa-lib, cups, expat, udev, gnome
-, xorg, mozjpeg, makeWrapper, wrapGAppsHook, libuuid, at-spi2-core, libdrm, mesa, libxkbcommon
+, xorg, mozjpeg, makeWrapper, wrapGAppsHook, copyDesktopItems, libuuid, at-spi2-core, libdrm, mesa, libxkbcommon
 }:
 
 stdenv.mkDerivation rec {
@@ -50,17 +50,19 @@ stdenv.mkDerivation rec {
     mesa
   ]);
 
-  desktopItem = makeDesktopItem {
-    name = "Avocode";
-    exec = "avocode";
-    icon = "avocode";
-    desktopName = "Avocode";
-    genericName = "Design Inspector";
-    categories = [ "Development" ];
-    comment = "The bridge between designers and developers";
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Avocode";
+      exec = "avocode";
+      icon = "avocode";
+      desktopName = "Avocode";
+      genericName = "Design Inspector";
+      categories = [ "Development" ];
+      comment = "The bridge between designers and developers";
+    })
+  ];
 
-  nativeBuildInputs = [makeWrapper wrapGAppsHook unzip];
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook unzip copyDesktopItems ];
   buildInputs = [ gtk3 gnome.adwaita-icon-theme ];
 
   # src is producing multiple folder on unzip so we must
@@ -75,8 +77,7 @@ stdenv.mkDerivation rec {
       --replace /path/to/avocode-dir/Avocode $out/bin/avocode \
       --replace /path/to/avocode-dir/avocode.png avocode
 
-    mkdir -p share/applications share/pixmaps
-    mv avocode.desktop.in share/applications/avocode.desktop
+    mkdir -p share/pixmaps
     mv avocode.png share/pixmaps/
 
     rm resources/cjpeg

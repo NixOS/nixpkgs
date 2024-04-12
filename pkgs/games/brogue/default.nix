@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, SDL, ncurses, libtcod, makeDesktopItem }:
+{ lib, stdenv, fetchurl, fetchpatch, copyDesktopItems, SDL, ncurses, libtcod, makeDesktopItem }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "brogue";
@@ -26,21 +26,24 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf src/libtcod*
   '';
 
+  nativeBuildInputs = [ copyDesktopItems ];
+
   buildInputs = [ SDL ncurses libtcod ];
 
-  desktopItem = makeDesktopItem {
-    name = "brogue";
-    desktopName = "Brogue";
-    genericName = "Roguelike";
-    comment = "Brave the Dungeons of Doom!";
-    icon = "brogue";
-    exec = "brogue";
-    categories = [ "Game" "AdventureGame" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "brogue";
+      desktopName = "Brogue";
+      genericName = "Roguelike";
+      comment = "Brave the Dungeons of Doom!";
+      icon = "brogue";
+      exec = "brogue";
+      categories = [ "Game" "AdventureGame" ];
+    })
+  ];
 
   installPhase = ''
     install -m 555 -D bin/brogue $out/bin/brogue
-    install -m 444 -D ${finalAttrs.desktopItem}/share/applications/brogue.desktop $out/share/applications/brogue.desktop
     install -m 444 -D bin/brogue-icon.png $out/share/icons/hicolor/256x256/apps/brogue.png
     mkdir -p $out/share/brogue
     cp -r bin/fonts $out/share/brogue/

@@ -2,7 +2,7 @@
 , ghostscript, atk, gtk2, glib, fontconfig, freetype
 , libgnomecanvas
 , pango, libX11, xorgproto, zlib, poppler
-, autoconf, automake, libtool, pkg-config}:
+, autoconf, automake, libtool, pkg-config, copyDesktopItems }:
 
 let
   isGdkQuartzBackend = (gtk2.gdktarget == "quartz");
@@ -22,21 +22,23 @@ stdenv.mkDerivation rec {
     pango libX11 xorgproto zlib poppler
   ];
 
-  nativeBuildInputs = [ autoconf automake libtool pkg-config ];
+  nativeBuildInputs = [ autoconf automake libtool pkg-config copyDesktopItems ];
 
   NIX_LDFLAGS = "-lz"
     + lib.optionalString (!isGdkQuartzBackend) " -lX11";
 
-  desktopItem = makeDesktopItem {
-    name = "xournal-${version}";
-    exec = "xournal";
-    icon = "xournal";
-    desktopName = "Xournal";
-    comment = meta.description;
-    categories = [ "Office" "Graphics" ];
-    mimeTypes = [ "application/pdf" "application/x-xoj" ];
-    genericName = "PDF Editor";
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "xournal-${version}";
+      exec = "xournal";
+      icon = "xournal";
+      desktopName = "Xournal";
+      comment = meta.description;
+      categories = [ "Office" "Graphics" ];
+      mimeTypes = [ "application/pdf" "application/x-xoj" ];
+      genericName = "PDF Editor";
+    })
+  ];
 
   postInstall=''
       mkdir --parents $out/share/mime/packages
@@ -48,7 +50,6 @@ stdenv.mkDerivation rec {
          </mime-type>
       </mime-info>
       EOF
-      cp --recursive ${desktopItem}/share/applications $out/share
       mkdir --parents $out/share/icons
       cp $out/share/xournal/pixmaps/xournal.png $out/share/icons
   '';

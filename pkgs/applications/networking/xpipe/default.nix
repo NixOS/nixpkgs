@@ -3,6 +3,7 @@
 , fetchzip
 , makeDesktopItem
 , autoPatchelfHook
+, copyDesktopItems
 , zlib
 , fontconfig
 , udev
@@ -50,6 +51,7 @@ in stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     makeShellWrapper
+    copyDesktopItems
   ];
 
   # Ignore libavformat dependencies as we don't need them
@@ -76,15 +78,17 @@ in stdenvNoCC.mkDerivation rec {
       libXxf86vm
     ];
 
-  desktopItem = makeDesktopItem {
-    categories = [ "Network" ];
-    comment = "Your entire server infrastructure at your fingertips";
-    desktopName = displayname;
-    exec = "/opt/${pname}/cli/bin/xpipe open %U";
-    genericName = "Shell connection hub";
-    icon = "/opt/${pname}/logo.png";
-    name = displayname;
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      categories = [ "Network" ];
+      comment = "Your entire server infrastructure at your fingertips";
+      desktopName = displayname;
+      exec = "xpipe open %U";
+      genericName = "Shell connection hub";
+      icon = "${placeholder "out"}/opt/${pname}/logo.png";
+      name = displayname;
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -96,14 +100,8 @@ in stdenvNoCC.mkDerivation rec {
     mkdir -p "$out/bin"
     ln -s "$out/opt/$pkg/cli/bin/xpipe" "$out/bin/$pkg"
 
-    mkdir -p "$out/share/applications"
-    cp -r "${desktopItem}/share/applications/" "$out/share/"
-
     mkdir -p "$out/etc/bash_completion.d"
     ln -s "$out/opt/$pkg/cli/xpipe_completion" "$out/etc/bash_completion.d/$pkg"
-
-    substituteInPlace "$out/share/applications/${displayname}.desktop" --replace "Exec=" "Exec=$out"
-    substituteInPlace "$out/share/applications/${displayname}.desktop" --replace "Icon=" "Icon=$out"
 
     mv "$out/opt/$pkg/app/bin/xpiped" "$out/opt/$pkg/app/bin/xpiped_raw"
     mv "$out/opt/$pkg/app/lib/app/xpiped.cfg" "$out/opt/$pkg/app/lib/app/xpiped_raw.cfg"

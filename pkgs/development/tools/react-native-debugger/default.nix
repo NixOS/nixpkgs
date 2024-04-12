@@ -21,6 +21,7 @@
 , cups
 , expat
 , udev
+, copyDesktopItems
 , makeDesktopItem
 , libdrm
 , libxkbcommon
@@ -74,7 +75,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-RioBe0MAR47M84aavFaTJikGsJtcZDak8Tkg3WtX2l0=";
   };
 
-  nativeBuildInputs = [ makeWrapper unzip ];
+  nativeBuildInputs = [ makeWrapper unzip copyDesktopItems ];
   buildCommand = ''
     shopt -s extglob
     mkdir -p $out
@@ -93,18 +94,17 @@ stdenv.mkDerivation rec {
       --add-flags --no-sandbox
 
     ln -s $out/share/react-native-debugger $out/bin/react-native-debugger
-
-    install -Dm644 "${desktopItem}/share/applications/"* \
-      -t $out/share/applications/
   '';
 
-  desktopItem = makeDesktopItem {
-    name = "rndebugger";
-    exec = "react-native-debugger";
-    desktopName = "React Native Debugger";
-    genericName = "React Native Debugger";
-    categories = [ "Development" "Debugger" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "rndebugger";
+      exec = "react-native-debugger";
+      desktopName = "React Native Debugger";
+      genericName = "React Native Debugger";
+      categories = [ "Development" "Debugger" ];
+    })
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/jhen0409/react-native-debugger";

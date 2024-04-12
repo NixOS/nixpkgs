@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, makeDesktopItem, makeWrapper
+{ lib, stdenv, fetchzip, makeDesktopItem, makeWrapper, copyDesktopItems
 , jre
 }:
 
@@ -12,20 +12,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-U9x64UIBuVtW44zbsdWuMRZyEJhZ8VUWbDVtapTGPMo=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
   buildInputs = [ jre ];
 
   installPhase = let
-
-    desktopItem = makeDesktopItem {
-      name = "ganttproject";
-      exec = "ganttproject";
-      icon = "ganttproject";
-      desktopName = "GanttProject";
-      genericName = "Shedule and manage projects";
-      comment = meta.description;
-      categories = [ "Office" ];
-    };
 
     javaOptions = [
       "-Dawt.useSystemAAFontSettings=on"
@@ -41,9 +31,19 @@ stdenv.mkDerivation rec {
       --set _JAVA_OPTIONS "${builtins.toString javaOptions}"
 
     mv -v "$out/share/ganttproject/ganttproject" "$out/bin"
-
-    cp -rv "${desktopItem}/share/applications" "$out/share"
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "ganttproject";
+      exec = "ganttproject";
+      icon = "ganttproject";
+      desktopName = "GanttProject";
+      genericName = "Shedule and manage projects";
+      comment = meta.description;
+      categories = [ "Office" ];
+    })
+  ];
 
   meta = with lib; {
     description = "Project scheduling and management";

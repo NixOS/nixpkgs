@@ -1,5 +1,5 @@
 { lib, fetchurl, makeDesktopItem, ffmpeg
-, qmake, qttools, mkDerivation
+, qmake, qttools, copyDesktopItems, mkDerivation
 , qtbase, qtdeclarative, qtlocation, qtquickcontrols2, qtwebchannel, qtwebengine
 , yt-dlp
 }:
@@ -15,7 +15,7 @@ mkDerivation rec {
   };
 
   buildInputs = [ ffmpeg qtbase qtdeclarative qtlocation qtquickcontrols2 qtwebchannel qtwebengine ];
-  nativeBuildInputs = [ qmake qttools ];
+  nativeBuildInputs = [ qmake qttools copyDesktopItems ];
 
   patches = [
     ./yt-dlp-path.patch
@@ -33,21 +33,22 @@ mkDerivation rec {
 
   qmakeFlags = [ "clipgrab.pro" ];
 
-  desktopItem = makeDesktopItem rec {
-    name = "clipgrab";
-    exec = name;
-    icon = name;
-    desktopName = "ClipGrab";
-    comment = meta.description;
-    genericName = "Web video downloader";
-    categories = [ "Qt" "AudioVideo" "Audio" "Video" ];
-  };
+  desktopItems = [
+    (makeDesktopItem rec {
+      name = "clipgrab";
+      exec = name;
+      icon = name;
+      desktopName = "ClipGrab";
+      comment = meta.description;
+      genericName = "Web video downloader";
+      categories = [ "Qt" "AudioVideo" "Audio" "Video" ];
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
     install -Dm755 clipgrab $out/bin/clipgrab
     install -Dm644 icon.png $out/share/pixmaps/clipgrab.png
-    cp -r ${desktopItem}/share/applications $out/share
     runHook postInstall
   '';
 

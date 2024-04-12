@@ -1,15 +1,7 @@
-{ jre, lib, stdenv, fetchurl, makeWrapper, makeDesktopItem }:
+{ jre, lib, stdenv, fetchurl, makeWrapper, copyDesktopItems, makeDesktopItem }:
 
 let
 
-  desktopItem = makeDesktopItem rec {
-    name = "netlogo";
-    exec = name;
-    icon = name;
-    comment = "A multi-agent programmable modeling environment";
-    desktopName = "NetLogo";
-    categories = [ "Science" ];
-  };
 
 in
 
@@ -28,10 +20,10 @@ stdenv.mkDerivation rec {
     sha256 = "1i43lhr31lzva8d2r0dxpcgr58x496gb5vmb0h2da137ayvifar8";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
 
   installPhase = ''
-    mkdir -pv $out/share/netlogo $out/share/icons/hicolor/256x256/apps $out/share/applications $out/share/doc
+    mkdir -pv $out/share/netlogo $out/share/icons/hicolor/256x256/apps $out/share/doc
     cp -rv app $out/share/netlogo
     cp -v readme.md $out/share/doc/
 
@@ -41,8 +33,18 @@ stdenv.mkDerivation rec {
       --add-flags "-jar netlogo-${version}.jar"
 
     cp $src1 $out/share/icons/hicolor/256x256/apps/netlogo.png
-    cp ${desktopItem}/share/applications/* $out/share/applications
   '';
+
+  desktopItems = [
+    (makeDesktopItem rec {
+      name = "netlogo";
+      exec = name;
+      icon = name;
+      comment = "A multi-agent programmable modeling environment";
+      desktopName = "NetLogo";
+      categories = [ "Science" ];
+    })
+  ];
 
   meta = with lib; {
     description = "A multi-agent programmable modeling environment";

@@ -42,15 +42,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-widkv2VGh+eOauUK/6Sz/e2auCNFAsc8n9z0fdrSnW0=";
   };
 
-  desktopItem = makeDesktopItem {
-    name = "ida-free";
-    exec = "ida64";
-    icon = icon;
-    comment = meta.description;
-    desktopName = "IDA Free";
-    genericName = "Interactive Disassembler";
-    categories = [ "Development" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "ida-free";
+      exec = "ida64";
+      icon = icon;
+      comment = meta.description;
+      desktopName = "IDA Free";
+      genericName = "Interactive Disassembler";
+      categories = [ "Development" ];
+    })
+  ];
 
   nativeBuildInputs = [ makeWrapper copyDesktopItems autoPatchelfHook libsForQt5.wrapQtAppsHook ];
 

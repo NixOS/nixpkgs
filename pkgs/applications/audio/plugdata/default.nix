@@ -14,20 +14,9 @@
 , xorg
 , python3
 , makeWrapper
+, copyDesktopItems
 }:
 
-let
-  # data copied from build system: https://build.opensuse.org/package/view_file/home:plugdata/plugdata/PlugData.desktop
-  desktopItem = makeDesktopItem {
-    name = "PlugData";
-    desktopName = "PlugData";
-    exec = "plugdata";
-    icon = "plugdata_logo.png";
-    comment = "Pure Data as a plugin, with a new GUI";
-    type = "Application";
-    categories = [ "AudioVideo" "Music" ];
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "plugdata";
   version = "0.8.0";
@@ -47,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     imagemagick
     python3
     makeWrapper
+    copyDesktopItems
   ];
   buildInputs = [
     alsa-lib
@@ -88,7 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     icon_name="plugdata_logo.png"
     icon_path="Resources/Icons/$icon_name"
 
-    install -m644 -D "${desktopItem}"/share/applications/* -t $out/share/applications
     for size in 16 24 32 48 64 128 256 512; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
       convert -resize "$size"x"$size" "$icon_path" $out/share/icons/hicolor/"$size"x"$size"/apps/"$icon_name"
@@ -96,6 +85,19 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  # data copied from build system: https://build.opensuse.org/package/view_file/home:plugdata/plugdata/PlugData.desktop
+  desktopItems = [
+    (makeDesktopItem {
+      name = "PlugData";
+      desktopName = "PlugData";
+      exec = "plugdata";
+      icon = "plugdata_logo.png";
+      comment = "Pure Data as a plugin, with a new GUI";
+      type = "Application";
+      categories = [ "AudioVideo" "Music" ];
+    })
+  ];
 
   postInstall = ''
       # Ensure zenity is available, or it won't be able to open new files.

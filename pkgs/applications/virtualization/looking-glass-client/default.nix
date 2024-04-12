@@ -4,6 +4,7 @@
 , makeDesktopItem
 , pkg-config
 , cmake
+, copyDesktopItems
 , freefont_ttf
 , spice-protocol
 , nettle
@@ -36,16 +37,6 @@
 , pulseSupport ? true
 }:
 
-let
-  desktopItem = makeDesktopItem {
-    name = "looking-glass-client";
-    desktopName = "Looking Glass Client";
-    type = "Application";
-    exec = "looking-glass-client";
-    icon = "lg-logo";
-    terminal = true;
-  };
-in
 stdenv.mkDerivation rec {
   pname = "looking-glass-client";
   version = "B6";
@@ -58,7 +49,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config copyDesktopItems ];
 
   buildInputs = [ libGL libX11 freefont_ttf spice-protocol expat libbfd nettle fontconfig libffi ]
     ++ lib.optionals xorgSupport [ libxkbcommon libXi libXScrnSaver libXinerama libXcursor libXpresent libXext libXrandr ]
@@ -80,9 +71,19 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mkdir -p $out/share/pixmaps
-    ln -s ${desktopItem}/share/applications $out/share/
     cp $src/resources/lg-logo.png $out/share/pixmaps
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "looking-glass-client";
+      desktopName = "Looking Glass Client";
+      type = "Application";
+      exec = "looking-glass-client";
+      icon = "lg-logo";
+      terminal = true;
+    })
+  ];
 
   meta = with lib; {
     description = "A KVM Frame Relay (KVMFR) implementation";

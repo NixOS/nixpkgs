@@ -11,6 +11,7 @@
 , openssl
 , pkg-config
 , rustPlatform
+, copyDesktopItems
 , stdenv
 , wayland
 , xorg
@@ -55,6 +56,7 @@ rustPlatform.buildRustPackage rec {
     git
     pkg-config
     rustPlatform.bindgenHook
+    copyDesktopItems
   ];
 
   buildInputs = [

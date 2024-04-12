@@ -1,10 +1,9 @@
-{ lib, stdenv, unzip, fetchurl, electron, makeWrapper, geogebra }:
+{ lib, stdenv, unzip, fetchurl, electron, makeWrapper, copyDesktopItems, geogebra }:
 let
   pname = "geogebra";
   version = "6-0-794-0";
 
   srcIcon = geogebra.srcIcon;
-  desktopItem = geogebra.desktopItem;
 
   meta = with lib; {
     description = "Dynamic mathematics software with graphics, algebra and spreadsheets";
@@ -41,6 +40,7 @@ let
     nativeBuildInputs = [
       unzip
       makeWrapper
+      copyDesktopItems
     ];
 
     unpackPhase = ''
@@ -51,12 +51,12 @@ let
       mkdir -p $out/libexec/geogebra/ $out/bin
       cp -r GeoGebra-linux-x64/{resources,locales} "$out/"
       makeWrapper ${lib.getBin electron}/bin/electron $out/bin/geogebra --add-flags "$out/resources/app"
-      install -Dm644 "${desktopItem}/share/applications/"* \
-        -t $out/share/applications/
 
       install -Dm644 "${srcIcon}" \
         "$out/share/icons/hicolor/scalable/apps/geogebra.svg"
     '';
+
+    desktopItems = geogebra.desktopItems;
   };
 
   darwinPkg = stdenv.mkDerivation {

@@ -1,28 +1,13 @@
 { stdenv
 , lib
 , fetchurl
+, copyDesktopItems
 , unzip
 , makeDesktopItem
 , jre
 }:
 
 let
-  desktopItem = makeDesktopItem {
-    name = "jmol";
-    exec = "jmol";
-    desktopName = "JMol";
-    genericName = "Molecular Modeler";
-    mimeTypes = [
-      "chemical/x-pdb"
-      "chemical/x-mdl-molfile"
-      "chemical/x-mol2"
-      "chemical/seq-aa-fasta"
-      "chemical/seq-na-fasta"
-      "chemical/x-xyz"
-      "chemical/x-mdl-sdf"
-    ];
-    categories = [ "Graphics" "Education" "Science" "Chemistry" ];
-  };
 in
 stdenv.mkDerivation rec {
   version = "16.1.63";
@@ -35,6 +20,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-zUX3msosz0LNQJuEUbFgT32Hw0Wq4CgW1iHMkvReysU=";
   };
 
+  nativeBuildInputs = [ copyDesktopItems ];
+
   patchPhase = ''
     sed -i -e "4s:.*:command=${jre}/bin/java:" -e "10s:.*:jarpath=$out/share/jmol/Jmol.jar:" -e "11,21d" jmol
   '';
@@ -45,11 +32,29 @@ stdenv.mkDerivation rec {
     ${unzip}/bin/unzip jsmol.zip -d "$out/share/"
 
     cp *.jar jmol.sh "$out/share/jmol"
-    cp -r ${desktopItem}/share/applications $out/share
     cp jmol $out/bin
   '';
 
   enableParallelBuilding = true;
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "jmol";
+      exec = "jmol";
+      desktopName = "JMol";
+      genericName = "Molecular Modeler";
+      mimeTypes = [
+        "chemical/x-pdb"
+        "chemical/x-mdl-molfile"
+        "chemical/x-mol2"
+        "chemical/seq-aa-fasta"
+        "chemical/seq-na-fasta"
+        "chemical/x-xyz"
+        "chemical/x-mdl-sdf"
+      ];
+      categories = [ "Graphics" "Education" "Science" "Chemistry" ];
+    })
+  ];
 
   meta = with lib; {
      description = "A Java 3D viewer for chemical structures";

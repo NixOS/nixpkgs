@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch, makeDesktopItem
 , libX11, libXt, libXft, libXrender, libXext
 , ncurses, fontconfig, freetype
-, pkg-config, gdk-pixbuf, perl
+, pkg-config, copyDesktopItems, gdk-pixbuf, perl
 , libptytty
 , perlSupport      ? true
 , gdkPixbufSupport ? true
@@ -14,16 +14,6 @@ let
   pname = "rxvt-unicode";
   version = "9.31";
   description = "A clone of the well-known terminal emulator rxvt";
-
-  desktopItem = makeDesktopItem {
-    name = pname;
-    exec = "urxvt";
-    icon = "utilities-terminal";
-    comment = description;
-    desktopName = "URxvt";
-    genericName = pname;
-    categories = [ "System" "TerminalEmulator" ];
-  };
 
   fetchPatchFromAUR = { package, name, rev, sha256 }:
     fetchpatch rec {
@@ -44,7 +34,7 @@ stdenv.mkDerivation {
     sha256 = "qqE/y8FJ/g8/OR+TMnlYD3Spb9MS1u0GuP8DwtRmcug=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config copyDesktopItems ];
   buildInputs =
     [ libX11 libXt libXft ncurses  # required to build the terminfo file
       fontconfig freetype libXrender
@@ -106,8 +96,19 @@ stdenv.mkDerivation {
   postInstall = ''
     mkdir -p $out/nix-support
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
-    cp -r ${desktopItem}/share/applications/ $out/share/
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      exec = "urxvt";
+      icon = "utilities-terminal";
+      comment = description;
+      desktopName = "URxvt";
+      genericName = pname;
+      categories = [ "System" "TerminalEmulator" ];
+    })
+  ];
 
   passthru.tests.test = nixosTests.terminal-emulators.urxvt;
 

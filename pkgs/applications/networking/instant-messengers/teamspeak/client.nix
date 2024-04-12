@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, zlib, glib, libpng, freetype, openssl
 , xorg, fontconfig, qtbase, qtwebengine, qtwebchannel, qtsvg, qtwebsockets, xkeyboard_config
 , alsa-lib, libpulseaudio ? null, libredirect, quazip, which, unzip, perl, llvmPackages
+, copyDesktopItems
 }:
 
 let
@@ -15,16 +16,6 @@ let
       xorg.libxcb fontconfig xorg.libXext xorg.libX11 alsa-lib qtbase qtwebengine qtwebchannel qtsvg
       qtwebsockets libpulseaudio quazip llvmPackages.libcxx
     ];
-
-  desktopItem = makeDesktopItem {
-    name = "teamspeak";
-    exec = "ts3client";
-    icon = "teamspeak";
-    comment = "The TeamSpeak voice communication tool";
-    desktopName = "TeamSpeak";
-    genericName = "TeamSpeak";
-    categories = [ "Network" ];
-  };
 in
 
 stdenv.mkDerivation rec {
@@ -48,6 +39,7 @@ stdenv.mkDerivation rec {
     which
     unzip
     perl # Installer script needs `shasum`
+    copyDesktopItems
   ];
 
   # This just runs the installer script. If it gets stuck at something like
@@ -85,10 +77,9 @@ stdenv.mkDerivation rec {
       mv * $out/lib/teamspeak/
 
       # Make a desktop item
-      mkdir -p $out/share/applications/ $out/share/icons/hicolor/64x64/apps/
+      mkdir -p $out/share/icons/hicolor/64x64/apps/
       unzip ${pluginsdk}
       cp pluginsdk/docs/client_html/images/logo.png $out/share/icons/hicolor/64x64/apps/teamspeak.png
-      cp ${desktopItem}/share/applications/* $out/share/applications/
 
       # Make a symlink to the binary from bin.
       mkdir -p $out/bin/
@@ -104,6 +95,18 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
   dontPatchELF = true;
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "teamspeak";
+      exec = "ts3client";
+      icon = "teamspeak";
+      comment = "The TeamSpeak voice communication tool";
+      desktopName = "TeamSpeak";
+      genericName = "TeamSpeak";
+      categories = [ "Network" ];
+    })
+  ];
 
   meta = with lib; {
     description = "The TeamSpeak voice communication tool";

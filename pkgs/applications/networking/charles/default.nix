@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , makeWrapper
+, copyDesktopItems
 , makeDesktopItem
 , fetchurl
 , jdk11
@@ -10,34 +11,36 @@
 let
   generic = { version, sha256, platform ? "", jdk, ... }@attrs:
   let
-    desktopItem = makeDesktopItem {
-      categories = [ "Network" "Development" "WebDevelopment" "Java" ];
-      desktopName = "Charles";
-      exec = "charles %F";
-      genericName  = "Web Debugging Proxy";
-      icon = "charles-proxy";
-      mimeTypes = [
-        "application/x-charles-savedsession"
-        "application/x-charles-savedsession+xml"
-        "application/x-charles-savedsession+json"
-        "application/har+json"
-        "application/vnd.tcpdump.pcap"
-        "application/x-charles-trace"
-      ];
-      name = "Charles";
-      startupNotify = true;
-    };
+    desktopItems = [
+      (makeDesktopItem {
+        categories = [ "Network" "Development" "WebDevelopment" "Java" ];
+        desktopName = "Charles";
+        exec = "charles %F";
+        genericName  = "Web Debugging Proxy";
+        icon = "charles-proxy";
+        mimeTypes = [
+          "application/x-charles-savedsession"
+          "application/x-charles-savedsession+xml"
+          "application/x-charles-savedsession+json"
+          "application/har+json"
+          "application/vnd.tcpdump.pcap"
+          "application/x-charles-trace"
+        ];
+        name = "Charles";
+        startupNotify = true;
+      })
+    ];
 
   in stdenv.mkDerivation {
       pname = "charles";
-      inherit version;
+      inherit version desktopItems;
 
       src = fetchurl {
         url = "https://www.charlesproxy.com/assets/release/${version}/charles-proxy-${version}${platform}.tar.gz";
         curlOptsList = [ "--user-agent" "Mozilla/5.0" ]; # HTTP 104 otherwise
         inherit sha256;
       };
-      nativeBuildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ makeWrapper copyDesktopItems ];
 
       installPhase = ''
         makeWrapper ${jdk}/bin/java $out/bin/charles \
@@ -46,9 +49,6 @@ let
         for fn in lib/*.jar; do
           install -D -m644 $fn $out/share/java/$(basename $fn)
         done
-
-        mkdir -p $out/share/applications
-        ln -s ${desktopItem}/share/applications/* $out/share/applications/
 
         mkdir -p $out/share/icons
         cp -r icon $out/share/icons/hicolor

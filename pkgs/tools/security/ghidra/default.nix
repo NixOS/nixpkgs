@@ -1,4 +1,5 @@
 { stdenv
+, copyDesktopItems
 , fetchzip
 , lib
 , makeWrapper
@@ -13,15 +14,6 @@ let
 
   pkg_path = "$out/lib/ghidra";
 
-  desktopItem = makeDesktopItem {
-    name = "ghidra";
-    exec = "ghidra";
-    icon = "ghidra";
-    desktopName = "Ghidra";
-    genericName = "Ghidra Software Reverse Engineering Suite";
-    categories = [ "Development" ];
-  };
-
 in stdenv.mkDerivation rec {
   pname = "ghidra";
   version = "10.4";
@@ -35,6 +27,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     makeWrapper
     icoutils
+    copyDesktopItems
   ]
   ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
@@ -47,9 +40,7 @@ in stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p "${pkg_path}"
-    mkdir -p "${pkg_path}" "$out/share/applications"
     cp -a * "${pkg_path}"
-    ln -s ${desktopItem}/share/applications/* $out/share/applications
 
     icotool -x "${pkg_path}/support/ghidra.ico"
     rm ghidra_4_40x40x32.png
@@ -67,6 +58,17 @@ in stdenv.mkDerivation rec {
     wrapProgram "${pkg_path}/support/launch.sh" \
       --prefix PATH : ${lib.makeBinPath [ openjdk17 ]}
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "ghidra";
+      exec = "ghidra";
+      icon = "ghidra";
+      desktopName = "Ghidra";
+      genericName = "Ghidra Software Reverse Engineering Suite";
+      categories = [ "Development" ];
+    })
+  ];
 
   meta = with lib; {
     description = "A software reverse engineering (SRE) suite of tools developed by NSA's Research Directorate in support of the Cybersecurity mission";

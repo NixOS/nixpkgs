@@ -2,6 +2,7 @@
 , fetchurl
 , makeDesktopItem
 , makeWrapper
+, copyDesktopItems
 , patchelf
 , fontconfig
 , freetype
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-ZN0vadGbjGj9U2wPqvHLjS9fsk3DNCbXoNvzUfnn8IM=";
   };
 
-  nativeBuildInputs = [ patchelf makeWrapper ];
+  nativeBuildInputs = [ patchelf makeWrapper copyDesktopItems ];
   buildPhase = with xorg;
     let
       stunnelBinary = if stdenv.hostPlatform.system == "x86_64-linux" then "linux/stunnel64"
@@ -39,21 +40,21 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
-  desktopItem = makeDesktopItem rec {
-    name = "IPMIView";
-    exec = "IPMIView";
-    desktopName = name;
-    genericName = "Supermicro BMC manager";
-    categories = [ "Network" ];
-  };
+  desktopItems = [
+    (makeDesktopItem rec {
+      name = "IPMIView";
+      exec = "IPMIView";
+      desktopName = name;
+      genericName = "Supermicro BMC manager";
+      categories = [ "Network" ];
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin
     cp -R . $out/
-
-    ln -s ${desktopItem}/share $out/share
 
     # LD_LIBRARY_PATH: fontconfig is used from java code
     # PATH: iputils is used for ping, and psmisc is for killall

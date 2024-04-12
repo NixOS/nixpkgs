@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , makeWrapper
 , makeDesktopItem
+, copyDesktopItems
 , writeText
 , runtimeShell
 , jdk17
@@ -91,6 +92,7 @@ in stdenv.mkDerivation rec {
     makeWrapper
     jdk
     gradle
+    copyDesktopItems
   ];
 
   buildPhase = ''

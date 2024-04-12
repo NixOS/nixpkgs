@@ -35,8 +35,6 @@ in appimageTools.wrapType2 rec {
   extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
   extraInstallCommands = ''
     mv $out/bin/{${pname}-${version},${pname}}
-    mkdir "$out/share"
-    ln -s "${desktopItem}/share/applications" "$out/share/"
   '';
 
   meta = with lib; {

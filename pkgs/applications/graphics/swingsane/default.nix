@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, unzip, jre, runtimeShell }:
+{ lib, stdenv, fetchurl, makeDesktopItem, unzip, copyDesktopItems, jre, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "swingsane";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/swingsane/swingsane-${version}-bin.zip";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip copyDesktopItems ];
 
   dontConfigure = true;
 
@@ -20,16 +20,6 @@ stdenv.mkDerivation rec {
       exec ${jre}/bin/java -jar $out/share/java/swingsane/swingsane-${version}.jar "$@"
     '';
 
-    desktopItem = makeDesktopItem {
-      name = "swingsane";
-      exec = "swingsane";
-      icon = "swingsane";
-      desktopName = "SwingSane";
-      genericName = "Scan from local or remote SANE servers";
-      comment = meta.description;
-      categories = [ "Office" ];
-    };
-
   in ''
     install -v -m 755    -d $out/share/java/swingsane/
     install -v -m 644 *.jar $out/share/java/swingsane/
@@ -39,9 +29,19 @@ stdenv.mkDerivation rec {
 
     unzip -j swingsane-${version}.jar "com/swingsane/images/*.png"
     install -v -D -m 644 swingsane_512x512.png $out/share/pixmaps/swingsane.png
-
-    cp -v -r ${desktopItem}/share/applications $out/share
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "swingsane";
+      exec = "swingsane";
+      icon = "swingsane";
+      desktopName = "SwingSane";
+      genericName = "Scan from local or remote SANE servers";
+      comment = meta.description;
+      categories = [ "Office" ];
+    })
+  ];
 
   meta = with lib; {
     description = "Java GUI for SANE scanner servers (saned)";

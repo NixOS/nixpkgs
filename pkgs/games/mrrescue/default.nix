@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, love, lua, makeWrapper, makeDesktopItem }:
+{ lib, stdenv, fetchurl, love, lua, makeWrapper, copyDesktopItems, makeDesktopItem }:
 
 let
   pname = "mrrescue";
@@ -8,17 +8,6 @@ let
     url = "http://tangramgames.dk/img/thumb/mrrescue.png";
     sha256 = "1y5ahf0m01i1ch03axhvp2kqc6lc1yvh59zgvgxw4w7y3jryw20k";
   };
-
-  desktopItem = makeDesktopItem {
-    name = "mrrescue";
-    exec = pname;
-    icon = icon;
-    comment = "Arcade-style fire fighting game";
-    desktopName = "Mr. Rescue";
-    genericName = "mrrescue";
-    categories = [ "Game" ];
-  };
-
 in
 
 stdenv.mkDerivation {
@@ -29,7 +18,7 @@ stdenv.mkDerivation {
     sha256 = "0kzahxrgpb4vsk9yavy7f8nc34d62d1jqjrpsxslmy9ywax4yfpi";
   };
 
-  nativeBuildInputs = [ lua love makeWrapper ];
+  nativeBuildInputs = [ lua love makeWrapper copyDesktopItems ];
 
   dontUnpack = true;
 
@@ -43,9 +32,19 @@ stdenv.mkDerivation {
     makeWrapper ${love}/bin/love $out/bin/${pname} --add-flags $out/share/games/lovegames/${pname}.love
 
     chmod +x $out/bin/${pname}
-    mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "mrrescue";
+      exec = pname;
+      icon = icon;
+      comment = "Arcade-style fire fighting game";
+      desktopName = "Mr. Rescue";
+      genericName = "mrrescue";
+      categories = [ "Game" ];
+    })
+  ];
 
   meta = with lib; {
     description = "Arcade-style fire fighting game";

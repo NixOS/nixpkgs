@@ -14,6 +14,7 @@
 , openal
 , imagemagick
 , makeDesktopItem
+, copyDesktopItems
 }:
 let
   version = "4.0";
@@ -25,14 +26,6 @@ let
       "x86"
     else
       throw "Unsupported platform ${stdenv.hostPlatform.system}";
-
-  desktopItem = makeDesktopItem {
-    name = "Heaven";
-    exec = "heaven";
-    genericName = "A GPU Stress test tool from the UNIGINE";
-    icon = "Heaven";
-    desktopName = "Heaven Benchmark";
-  };
 in
 stdenv.mkDerivation
 {
@@ -50,7 +43,6 @@ stdenv.mkDerivation
 
       mkdir -p $out/lib/unigine/heaven/bin
       mkdir -p $out/bin
-      mkdir -p $out/share/applications/
       mkdir -p $out/share/icons/hicolor
 
       install -m 0755 $name/bin/browser_${arch} $out/lib/unigine/heaven/bin
@@ -71,8 +63,6 @@ stdenv.mkDerivation
           mkdir -p $out/share/icons/hicolor/"$RES"x"$RES"/apps
           convert $out/lib/unigine/heaven/data/launcher/icon.png -resize "$RES"x"$RES" $out/share/icons/hicolor/"$RES"x"$RES"/apps/Heaven.png
       done
-
-      ln -s ${desktopItem}/share/applications/* $out/share/applications
     '';
 
   nativeBuildInputs =
@@ -80,6 +70,7 @@ stdenv.mkDerivation
       autoPatchelfHook
       makeWrapper
       imagemagick
+      copyDesktopItems
     ];
 
   buildInputs =
@@ -93,6 +84,16 @@ stdenv.mkDerivation
       libXrender
       libXinerama
     ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Heaven";
+      exec = "heaven";
+      genericName = "A GPU Stress test tool from the UNIGINE";
+      icon = "Heaven";
+      desktopName = "Heaven Benchmark";
+    })
+  ];
 
   dontUnpack = true;
 

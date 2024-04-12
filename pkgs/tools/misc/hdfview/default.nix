@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       runHook postBuild
     '';
 
-  desktopItem = makeDesktopItem rec {
+  desktopItems = makeDesktopItem rec {
     name = "HDFView";
     desktopName = name;
     exec = name;

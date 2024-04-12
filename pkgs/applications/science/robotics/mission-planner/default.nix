@@ -1,15 +1,7 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, makeWrapper, unzip, mono }:
+{ lib, stdenv, fetchurl, copyDesktopItems, makeDesktopItem, makeWrapper, unzip, mono }:
 
 let
   pname = "mission-planner";
-  desktopItem = makeDesktopItem {
-    name = pname;
-    exec = pname;
-    icon = pname;
-    comment = "MissionPlanner GCS & Ardupilot configuration tool";
-    desktopName = "MissionPlanner";
-    genericName = "Ground Control Station";
-  };
 in stdenv.mkDerivation rec {
   inherit pname;
   version = "1.3.80";
@@ -19,7 +11,7 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-iivlaQWtOMJHchmR92FoqTaosGJ9F1AgFtuFgDE/9qQ=";
   };
 
-  nativeBuildInputs = [ makeWrapper mono unzip ];
+  nativeBuildInputs = [ makeWrapper mono unzip copyDesktopItems ];
   sourceRoot = ".";
 
   AOT_FILES = [ "MissionPlanner.exe" "MissionPlanner.*.dll" ];
@@ -37,12 +29,22 @@ in stdenv.mkDerivation rec {
     runHook preInstall
     mkdir -p $out/{bin,opt/mission-planner}
     install -m 444 -D mpdesktop150.png $out/share/icons/mission-planner.png
-    cp -r ${desktopItem}/share/applications $out/share/
     mv * $out/opt/mission-planner
     makeWrapper ${mono}/bin/mono $out/bin/mission-planner \
       --add-flags $out/opt/mission-planner/MissionPlanner.exe
     runHook postInstall
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      exec = pname;
+      icon = pname;
+      comment = "MissionPlanner GCS & Ardupilot configuration tool";
+      desktopName = "MissionPlanner";
+      genericName = "Ground Control Station";
+    })
+  ];
 
   meta = with lib; {
     description = "An ArduPilot ground station";

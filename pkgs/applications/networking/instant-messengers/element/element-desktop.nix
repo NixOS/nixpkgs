@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , makeWrapper
 , makeDesktopItem
+, copyDesktopItems
 , prefetch-yarn-deps
 , yarn
 , nodejs
@@ -42,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     sha256 = desktopYarnHash;
   };
 
-  nativeBuildInputs = [ yarn prefetch-yarn-deps nodejs makeWrapper jq ]
+  nativeBuildInputs = [ yarn prefetch-yarn-deps nodejs makeWrapper jq copyDesktopItems ]
     ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
 
   inherit seshat;
@@ -103,10 +104,6 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
       ln -s "$icon" "$out/share/icons/hicolor/$(basename $icon .png)/apps/element.png"
     done
 
-    # desktop item
-    mkdir -p "$out/share"
-    ln -s "${finalAttrs.desktopItem}/share/applications" "$out/share/applications"
-
     # executable wrapper
     # LD_PRELOAD workaround for sqlcipher not found: https://github.com/matrix-org/seshat/issues/102
     makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
@@ -120,17 +117,19 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
 
   # The desktop item properties should be kept in sync with data from upstream:
   # https://github.com/vector-im/element-desktop/blob/develop/package.json
-  desktopItem = makeDesktopItem {
-    name = "element-desktop";
-    exec = "${executableName} %u";
-    icon = "element";
-    desktopName = "Element";
-    genericName = "Matrix Client";
-    comment = finalAttrs.meta.description;
-    categories = [ "Network" "InstantMessaging" "Chat" ];
-    startupWMClass = "Element";
-    mimeTypes = [ "x-scheme-handler/element" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "element-desktop";
+      exec = "${executableName} %u";
+      icon = "element";
+      desktopName = "Element";
+      genericName = "Matrix Client";
+      comment = finalAttrs.meta.description;
+      categories = [ "Network" "InstantMessaging" "Chat" ];
+      startupWMClass = "Element";
+      mimeTypes = [ "x-scheme-handler/element" ];
+    })
+  ];
 
   postFixup = lib.optionalString stdenv.isDarwin ''
     cp build/icon.icns $out/Applications/Element.app/Contents/Resources/element.icns

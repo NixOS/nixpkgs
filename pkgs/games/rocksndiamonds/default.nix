@@ -3,6 +3,7 @@
 , fetchurl
 , fetchpatch
 , makeDesktopItem
+, copyDesktopItems
 , SDL2
 , SDL2_image
 , SDL2_mixer
@@ -19,15 +20,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-e/aYjjnEM6MP14FGX+N92U9fRNEjIaDfE1znl6A+4As=";
   };
 
-  desktopItem = makeDesktopItem {
-    name = "rocksndiamonds";
-    exec = "rocksndiamonds";
-    icon = "rocksndiamonds";
-    comment = meta.description;
-    desktopName = "Rocks'n'Diamonds";
-    genericName = "Tile-based puzzle";
-    categories = [ "Game" "LogicGame" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "rocksndiamonds";
+      exec = "rocksndiamonds";
+      icon = "rocksndiamonds";
+      comment = meta.description;
+      desktopName = "Rocks'n'Diamonds";
+      genericName = "Tile-based puzzle";
+      categories = [ "Game" "LogicGame" ];
+    })
+  ];
+
+  nativeBuildInputs = [ copyDesktopItems ];
 
   buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_net zlib ];
 
@@ -37,11 +42,9 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    appDir=$out/share/applications
     iconDir=$out/share/icons/hicolor/32x32/apps
-    mkdir -p $out/bin $appDir $iconDir $dataDir
+    mkdir -p $out/bin $iconDir $dataDir
     cp rocksndiamonds $out/bin/
-    ln -s ${desktopItem}/share/applications/* $appDir/
     ln -s $dataDir/graphics/gfx_classic/RocksIcon32x32.png $iconDir/rocksndiamonds.png
     cp -r conf docs graphics levels music sounds $dataDir
   '';

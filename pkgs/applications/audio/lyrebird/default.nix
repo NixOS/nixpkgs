@@ -5,19 +5,11 @@
 , wrapGAppsHook
 , gtk3
 , gobject-introspection
+, copyDesktopItems
 , sox
 , pulseaudio
 }:
-let
-  desktopItem = makeDesktopItem {
-    name = "lyrebird";
-    exec = "lyrebird";
-    icon = "${placeholder "out"}/share/lyrebird/icon.png";
-    desktopName = "Lyrebird";
-    genericName = "Voice Changer";
-    categories = [ "AudioVideo" "Audio" ];
-  };
-in
+
 python3Packages.buildPythonApplication rec {
   pname = "lyrebird";
   version = "1.2.0";
@@ -34,7 +26,7 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [ toml pygobject3 ];
 
-  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
+  nativeBuildInputs = [ wrapGAppsHook gobject-introspection copyDesktopItems ];
 
   buildInputs = [ gtk3 sox ];
 
@@ -49,9 +41,19 @@ python3Packages.buildPythonApplication rec {
   installPhase = ''
     mkdir -p $out/{bin,share/{applications,lyrebird}}
     cp -at $out/share/lyrebird/ app icon.png
-    cp -at $out/share/applications/ ${desktopItem}
     install -Dm755 app.py $out/bin/lyrebird
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "lyrebird";
+      exec = "lyrebird";
+      icon = "${placeholder "out"}/share/lyrebird/icon.png";
+      desktopName = "Lyrebird";
+      genericName = "Voice Changer";
+      categories = [ "AudioVideo" "Audio" ];
+    })
+  ];
 
   meta = with lib; {
     description = "Simple and powerful voice changer for Linux, written in GTK 3";

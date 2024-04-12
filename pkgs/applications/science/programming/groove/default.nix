@@ -1,16 +1,6 @@
-{ lib, stdenv, fetchurl, unzip, makeWrapper, makeDesktopItem, icoutils, jre8 }:
+{ lib, stdenv, fetchurl, unzip, makeWrapper, copyDesktopItems, makeDesktopItem, icoutils, jre8 }:
 
-let
-  desktopItem = makeDesktopItem {
-    name = "groove-simulator";
-    exec = "groove-simulator";
-    icon = "groove";
-    desktopName = "GROOVE Simulator";
-    comment = "GRaphs for Object-Oriented VErification";
-    categories = [ "Science" "ComputerScience" ];
-  };
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "groove";
   version = "5.8.1";
 
@@ -19,7 +9,7 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-JwoUlO6F2+8NtCnLC+xm5q0Jm8RIyU1rnuKGmjgJhFU=";
   };
 
-  nativeBuildInputs = [ unzip makeWrapper icoutils ];
+  nativeBuildInputs = [ unzip makeWrapper icoutils copyDesktopItems ];
 
   dontBuild = true;
 
@@ -36,13 +26,21 @@ in stdenv.mkDerivation rec {
         --add-flags "-jar $out/share/groove/bin/$bin.jar"
     done
 
-    mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
-
     mkdir -p $out/share/icons/hicolor/{16x16,32x32}/apps
     icotool -x -i 1 -o $out/share/icons/hicolor/32x32/apps/groove.png groove-green-g.ico
     icotool -x -i 2 -o $out/share/icons/hicolor/16x16/apps/groove.png groove-green-g.ico
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "groove-simulator";
+      exec = "groove-simulator";
+      icon = "groove";
+      desktopName = "GROOVE Simulator";
+      comment = "GRaphs for Object-Oriented VErification";
+      categories = [ "Science" "ComputerScience" ];
+    })
+  ];
 
   meta = with lib; {
     description = "GRaphs for Object-Oriented VErification";

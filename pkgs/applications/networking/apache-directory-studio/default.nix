@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, jdk, makeWrapper, autoPatchelfHook, makeDesktopItem, glib, libsecret, webkitgtk }:
+{ lib, stdenv, fetchurl, jdk, makeWrapper, autoPatchelfHook, copyDesktopItems, makeDesktopItem, glib, libsecret, webkitgtk }:
 
 stdenv.mkDerivation rec {
   pname = "apache-directory-studio";
@@ -13,18 +13,20 @@ stdenv.mkDerivation rec {
       }
     else throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
-  desktopItem = makeDesktopItem {
-    name = "apache-directory-studio";
-    exec = "ApacheDirectoryStudio";
-    icon = "apache-directory-studio";
-    comment = "Eclipse-based LDAP browser and directory client";
-    desktopName = "Apache Directory Studio";
-    genericName = "Apache Directory Studio";
-    categories = [ "Java" "Network" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "apache-directory-studio";
+      exec = "ApacheDirectoryStudio";
+      icon = "apache-directory-studio";
+      comment = "Eclipse-based LDAP browser and directory client";
+      desktopName = "Apache Directory Studio";
+      genericName = "Apache Directory Studio";
+      categories = [ "Java" "Network" ];
+    })
+  ];
 
   buildInputs = [ glib libsecret ];
-  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
+  nativeBuildInputs = [ makeWrapper autoPatchelfHook copyDesktopItems ];
 
   installPhase = ''
     dest="$out/libexec/ApacheDirectoryStudio"
@@ -40,7 +42,6 @@ stdenv.mkDerivation rec {
         --prefix PATH : "${jdk}/bin" \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ webkitgtk ])}
     install -D icon.xpm "$out/share/pixmaps/apache-directory-studio.xpm"
-    install -D -t "$out/share/applications" ${desktopItem}/share/applications/*
   '';
 
   meta = with lib; {

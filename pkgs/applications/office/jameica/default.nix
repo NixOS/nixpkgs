@@ -5,6 +5,7 @@
 , makeWrapper
 , wrapGAppsHook
 , stripJavaArchivesHook
+, copyDesktopItems
 , ant
 , jdk
 , jre
@@ -25,16 +26,6 @@ let
     else if stdenv.hostPlatform.system == "aarch64-linux" then "linux-arm64"
     else if stdenv.hostPlatform.system == "x86_64-darwin" then "macos64"
     else throw "Unsupported system: ${stdenv.hostPlatform.system}";
-
-  desktopItem = makeDesktopItem {
-    name = "jameica";
-    exec = "jameica";
-    comment = "Free Runtime Environment for Java Applications.";
-    desktopName = "Jameica";
-    genericName = "Jameica";
-    icon = "jameica";
-    categories = [ "Office" ];
-  };
 in
 stdenv.mkDerivation rec {
   pname = "jameica";
@@ -47,7 +38,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-MSVSd5DyVL+dcfTDv1M99hxickPwT2Pt6QGNsu6DGZI=";
   };
 
-  nativeBuildInputs = [ ant jdk wrapGAppsHook makeWrapper stripJavaArchivesHook ];
+  nativeBuildInputs = [
+    ant
+    jdk
+    wrapGAppsHook
+    makeWrapper
+    stripJavaArchivesHook
+    copyDesktopItems
+  ];
   buildInputs = lib.optionals stdenv.isLinux [ gtk2 glib libXtst ]
     ++ lib.optional stdenv.isDarwin Cocoa;
 
@@ -64,7 +62,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/libexec $out/lib $out/bin $out/share/{applications,jameica-${version},java}/
+    mkdir -p $out/libexec $out/lib $out/bin $out/share/{jameica-${version},java}/
 
     # copy libraries except SWT
     cp $(find lib -type f -iname '*.jar' | grep -ve 'swt/.*/swt.jar') $out/share/jameica-${version}/
@@ -74,7 +72,6 @@ stdenv.mkDerivation rec {
     install -Dm644 releases/${_version}-*/jameica/jameica.jar $out/share/java/
     install -Dm644 plugin.xml $out/share/java/
     install -Dm644 build/jameica-icon.png $out/share/pixmaps/jameica.png
-    cp ${desktopItem}/share/applications/* $out/share/applications/
 
     runHook postInstall
   '';
@@ -88,6 +85,18 @@ stdenv.mkDerivation rec {
       --chdir "$out/share/java/" \
       "''${gappsWrapperArgs[@]}"
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "jameica";
+      exec = "jameica";
+      comment = "Free Runtime Environment for Java Applications.";
+      desktopName = "Jameica";
+      genericName = "Jameica";
+      icon = "jameica";
+      categories = [ "Office" ];
+    })
+  ];
 
   meta = with lib; {
     homepage = "https://www.willuhn.de/products/jameica/";

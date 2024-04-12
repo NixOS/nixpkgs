@@ -11,6 +11,7 @@
 , freetype
 , xkeyboard_config
 , makeDesktopItem
+, copyDesktopItems
 , makeWrapper
 }:
 
@@ -29,17 +30,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-2PkUxBq2ow0wl09k8B6LJJUQ+y4GpnmoAeumKN1u5xg=";
   };
 
-  desktopItem = makeDesktopItem {
-    name = "robo3t";
-    exec = "robo3t";
-    icon = icon;
-    comment = "Query GUI for mongodb";
-    desktopName = "Robo3T";
-    genericName = "MongoDB management tool";
-    categories = [ "Development" "IDE" ];
-  };
-
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
 
   ldLibraryPath = lib.makeLibraryPath [
     stdenv.cc.cc
@@ -70,9 +61,6 @@ stdenv.mkDerivation rec {
     mkdir -p $BASEDIR/lib
     cp -r lib/* $BASEDIR/lib
 
-    mkdir -p $out/share/applications
-    cp $desktopItem/share/applications/* $out/share/applications
-
     mkdir -p $out/share/icons
     cp ${icon} $out/share/icons/robomongo.png
 
@@ -86,6 +74,18 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "robo3t";
+      exec = "robo3t";
+      icon = icon;
+      comment = "Query GUI for mongodb";
+      desktopName = "Robo3T";
+      genericName = "MongoDB management tool";
+      categories = [ "Development" "IDE" ];
+    })
+  ];
 
   meta = with lib; {
     homepage = "https://robomongo.org/";

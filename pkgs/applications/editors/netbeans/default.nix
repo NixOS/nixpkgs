@@ -1,18 +1,20 @@
-{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, which, unzip, libicns, imagemagick
+{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, copyDesktopItems, which, unzip, libicns, imagemagick
 , jdk, perl
 }:
 
 let
   version = "20";
-  desktopItem = makeDesktopItem {
-    name = "netbeans";
-    exec = "netbeans";
-    comment = "Integrated Development Environment";
-    desktopName = "Apache NetBeans IDE";
-    genericName = "Integrated Development Environment";
-    categories = [ "Development" ];
-    icon = "netbeans";
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "netbeans";
+      exec = "netbeans";
+      comment = "Integrated Development Environment";
+      desktopName = "Apache NetBeans IDE";
+      genericName = "Integrated Development Environment";
+      categories = [ "Development" ];
+      icon = "netbeans";
+    })
+  ];
 in
 stdenv.mkDerivation {
   pname = "netbeans";
@@ -54,10 +56,9 @@ stdenv.mkDerivation {
 
     # Create desktop item, so we can pick it from the KDE/GNOME menu
     mkdir -pv $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications
   '';
 
-  nativeBuildInputs = [ makeWrapper unzip ];
+  nativeBuildInputs = [ makeWrapper unzip copyDesktopItems ];
   buildInputs = [ perl libicns imagemagick ];
 
   meta = {

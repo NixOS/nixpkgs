@@ -1,15 +1,7 @@
-{lib, stdenv, fetchurl, unzip, makeDesktopItem, nwjs, wrapGAppsHook, gsettings-desktop-schemas, gtk3 }:
+{lib, stdenv, fetchurl, unzip, copyDesktopItems, makeDesktopItem, nwjs, wrapGAppsHook, gsettings-desktop-schemas, gtk3 }:
 
 let
   pname = "betaflight-configurator";
-  desktopItem = makeDesktopItem {
-    name = pname;
-    exec = pname;
-    icon = pname;
-    comment = "Betaflight configuration tool";
-    desktopName = "Betaflight Configurator";
-    genericName = "Flight controller configuration tool";
-  };
 in
 stdenv.mkDerivation rec {
   inherit pname;
@@ -24,7 +16,7 @@ stdenv.mkDerivation rec {
     find -name "lib*.so" -delete
   '';
 
-  nativeBuildInputs = [ wrapGAppsHook unzip ];
+  nativeBuildInputs = [ wrapGAppsHook unzip copyDesktopItems ];
 
   buildInputs = [ gsettings-desktop-schemas gtk3 ];
 
@@ -35,11 +27,21 @@ stdenv.mkDerivation rec {
 
     cp -r . $out/opt/${pname}/
     install -m 444 -D icon/bf_icon_128.png $out/share/icons/hicolor/128x128/apps/${pname}.png
-    cp -r ${desktopItem}/share/applications $out/share/
 
     makeWrapper ${nwjs}/bin/nw $out/bin/${pname} --add-flags $out/opt/${pname}
     runHook postInstall
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      exec = pname;
+      icon = pname;
+      comment = "Betaflight configuration tool";
+      desktopName = "Betaflight Configurator";
+      genericName = "Flight controller configuration tool";
+    })
+  ];
 
   meta = with lib; {
     description = "The Betaflight flight control system configuration tool";

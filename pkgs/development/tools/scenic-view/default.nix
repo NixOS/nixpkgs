@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, openjdk, openjfx, gradle_7, makeDesktopItem, perl, writeText, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, openjdk, openjfx, gradle_7, makeDesktopItem, perl, writeText, makeWrapper
+, copyDesktopItems
+}:
 let
   jdk = openjdk.override (lib.optionalAttrs stdenv.isLinux {
     enableJavaFX = true;
@@ -79,7 +81,7 @@ let
 
 in stdenv.mkDerivation rec {
   inherit pname version src;
-  nativeBuildInputs = [ jdk gradle makeWrapper ];
+  nativeBuildInputs = [ jdk gradle makeWrapper copyDesktopItems ];
 
   buildPhase = ''
     runHook preBuild

@@ -8,22 +8,9 @@
 , glib
 , zlib
 , wrapGAppsHook
+, copyDesktopItems
 }:
 
-let
-  desktopItem = makeDesktopItem rec {
-    name = "TLA+Toolbox";
-    exec = "tla-toolbox";
-    icon = "tla-toolbox";
-    comment = "IDE for TLA+";
-    desktopName = name;
-    genericName = comment;
-    categories = [ "Development" ];
-    startupWMClass = "TLA+ Toolbox";
-  };
-
-
-in
 stdenv.mkDerivation rec {
   pname = "tla-toolbox";
   version = "1.7.1";
@@ -37,6 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     makeShellWrapper
     wrapGAppsHook
+    copyDesktopItems
   ];
 
   dontWrapGApps = true;
@@ -81,11 +69,21 @@ stdenv.mkDerivation rec {
     done
     popd
 
-    echo -e "\nCreating TLA Toolbox desktop entry..."
-    cp -r "${desktopItem}/share/applications"* "$out/share/applications"
-
     runHook postInstall
   '';
+
+  desktopItems = [
+    (makeDesktopItem rec {
+      name = "TLA+Toolbox";
+      exec = "tla-toolbox";
+      icon = "tla-toolbox";
+      comment = "IDE for TLA+";
+      desktopName = name;
+      genericName = comment;
+      categories = [ "Development" ];
+      startupWMClass = "TLA+ Toolbox";
+    })
+  ];
 
   meta = {
     homepage = "http://research.microsoft.com/en-us/um/people/lamport/tla/toolbox.html";

@@ -1,18 +1,8 @@
 { lib, stdenv, cmake, pkg-config, fetchFromGitHub, makeDesktopItem, alsa-lib, speex
 , libopus, curl, gsm, libgcrypt, libsigcxx, popt, qtbase, qttools
-, wrapQtAppsHook, rtl-sdr, tcl, doxygen, groff }:
+, wrapQtAppsHook, copyDesktopItems, rtl-sdr, tcl, doxygen, groff }:
 
-let
-  desktopItem = makeDesktopItem rec {
-    name = "Qtel";
-    exec = "qtel";
-    icon = "qtel";
-    desktopName = name;
-    genericName = "EchoLink Client";
-    categories = [ "HamRadio" "Qt" "Network" ];
-  };
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "svxlink";
   version = "19.09.2";
 
@@ -31,7 +21,14 @@ in stdenv.mkDerivation rec {
   ];
   dontWrapQtApps = true;
 
-  nativeBuildInputs = [ cmake pkg-config doxygen groff wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    doxygen
+    groff
+    wrapQtAppsHook
+    copyDesktopItems
+  ];
 
   buildInputs = [
     alsa-lib
@@ -50,11 +47,21 @@ in stdenv.mkDerivation rec {
 
   postInstall = ''
     rm -f $out/share/applications/*
-    cp -v ${desktopItem}/share/applications/* $out/share/applications
     mv $out/share/icons/link.xpm $out/share/icons/qtel.xpm
 
     wrapQtApp $out/bin/qtel
   '';
+
+  desktopItems = [
+    (makeDesktopItem rec {
+      name = "Qtel";
+      exec = "qtel";
+      icon = "qtel";
+      desktopName = name;
+      genericName = "EchoLink Client";
+      categories = [ "HamRadio" "Qt" "Network" ];
+    })
+  ];
 
   meta = with lib; {
     description = "Advanced repeater controller and EchoLink software";

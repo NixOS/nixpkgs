@@ -2,6 +2,7 @@
 , fetchurl
 , lib
 , makeDesktopItem
+, copyDesktopItems
 , makeWrapper
 , stdenv
 , wrapGAppsHook
@@ -78,6 +79,7 @@ stdenv.mkDerivation rec {
     libXtst
     makeWrapper
     wrapGAppsHook
+    copyDesktopItems
   ];
 
   buildInputs = [ streamlink ];
@@ -93,7 +95,6 @@ stdenv.mkDerivation rec {
     cp -a . $out/opt/${basename}/
     rm -r $out/opt/${basename}/{{add,remove}-menuitem.sh,credits.html,icons/}
     ln -s "$out/opt/${basename}/${basename}" $out/bin/
-    cp -r "${desktopItem}/share/applications" $out/share/
     runHook postInstall
   '';
 
@@ -105,14 +106,16 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  desktopItem = makeDesktopItem {
-    name = basename;
-    exec = basename;
-    icon = basename;
-    desktopName = "Streamlink Twitch GUI";
-    genericName = meta.description;
-    categories = [ "AudioVideo" "Network" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = basename;
+      exec = basename;
+      icon = basename;
+      desktopName = "Streamlink Twitch GUI";
+      genericName = "Twitch.tv browser for Streamlink";
+      categories = [ "AudioVideo" "Network" ];
+    })
+  ];
 
   meta = with lib; {
     description = "Twitch.tv browser for Streamlink";
