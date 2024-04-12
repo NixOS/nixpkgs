@@ -38,7 +38,7 @@ in
       finalPackage
     ];
 
-    services.xserver.displayManager.sessionPackages = [ finalPackage ];
+    services.displayManager.sessionPackages = [ finalPackage ];
 
     xdg.portal = {
       enable = lib.mkDefault true;

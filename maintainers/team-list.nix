@@ -146,6 +146,15 @@ with lib.maintainers; {
     enableFeatureFreezePing = true;
   };
 
+  cloudposse = {
+    members = [
+      dudymas
+    ];
+    scope = "Maintain atmos and applications made by the Cloud Posse team.";
+    shortName = "CloudPosse";
+    enableFeatureFreezePing = true;
+  };
+
   coq = {
     members = [
       cohencyril
@@ -442,6 +451,7 @@ with lib.maintainers; {
     # Verify additions to this team with at least one already existing member of the team.
     members = [
       das_j
+      conni2461
     ];
     scope = "Group registration for packages maintained by Helsinki Systems";
     shortName = "Helsinki Systems employees";
@@ -475,6 +485,7 @@ with lib.maintainers; {
       ryantm
       lassulus
       yayayayaka
+      asymmetric
     ];
     scope = "Maintain Jitsi.";
     shortName = "Jitsi";

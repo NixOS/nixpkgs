@@ -86,6 +86,7 @@ let
     paths = [
       cudaPackages.cudatoolkit
       cudaPackages.cuda_cudart
+      cudaPackages.cuda_cudart.static
     ];
     postBuild = ''
       rm "$out/lib64"

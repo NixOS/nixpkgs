@@ -348,7 +348,7 @@ in
         (flip mapAttrsToList cfg.networks (network: data:
           flip mapAttrs' data.hosts (host: text: nameValuePair
             ("tinc/${network}/hosts/${host}")
-            ({ mode = "0644"; user = "tinc.${network}"; inherit text; })
+            ({ mode = "0644"; user = "tinc-${network}"; inherit text; })
           ) // {
             "tinc/${network}/tinc.conf" = {
               mode = "0444";
@@ -375,13 +375,13 @@ in
             Restart = "always";
             RestartSec = "3";
             ExecReload = mkIf (versionAtLeast version "1.1pre") "${data.package}/bin/tinc -n ${network} reload";
-            ExecStart = "${data.package}/bin/tincd -D -U tinc.${network} -n ${network} ${optionalString (data.chroot) "-R"} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}";
+            ExecStart = "${data.package}/bin/tincd -D -U tinc-${network} -n ${network} ${optionalString (data.chroot) "-R"} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}";
           };
           preStart = ''
             mkdir -p /etc/tinc/${network}/hosts
-            chown tinc.${network} /etc/tinc/${network}/hosts
+            chown tinc-${network} /etc/tinc/${network}/hosts
             mkdir -p /etc/tinc/${network}/invitations
-            chown tinc.${network} /etc/tinc/${network}/invitations
+            chown tinc-${network} /etc/tinc/${network}/invitations
 
             # Determine how we should generate our keys
             if type tinc >/dev/null 2>&1; then
@@ -420,14 +420,14 @@ in
       in [ cli-wrappers ];
 
       users.users = flip mapAttrs' cfg.networks (network: _:
-        nameValuePair ("tinc.${network}") ({
+        nameValuePair ("tinc-${network}") ({
           description = "Tinc daemon user for ${network}";
           isSystemUser = true;
-          group = "tinc.${network}";
+          group = "tinc-${network}";
         })
       );
       users.groups = flip mapAttrs' cfg.networks (network: _:
-        nameValuePair "tinc.${network}" {}
+        nameValuePair "tinc-${network}" {}
       );
     });
 

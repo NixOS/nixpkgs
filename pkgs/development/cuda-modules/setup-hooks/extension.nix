@@ -1,11 +1,4 @@
 final: _: {
-  # TODO:
-  # - Move to cuda-modules/aliases.nix once
-  #   https://github.com/NixOS/nixpkgs/issues/141803 is ready.
-  # - Consider removing after 24.11.
-  inherit (final.pkgs) autoAddDriverRunpath autoFixElfFiles;
-  autoAddOpenGLRunpathHook = final.autoAddDriverRunpath;
-
   # Internal hook, used by cudatoolkit and cuda redist packages
   # to accommodate automatic CUDAToolkit_ROOT construction
   markForCudatoolkitRootHook = final.callPackage (

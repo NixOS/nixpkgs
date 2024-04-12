@@ -216,7 +216,7 @@ in
     # uses credentials to set passwords on users.
     users.users.root.hashedPasswordFile = mkOverride 150 "${pkgs.writeText "hashed-password.root" ""}";
 
-    services.xserver.displayManager.job.logToJournal = true;
+    services.displayManager.logToJournal = true;
 
     # Make sure we use the Guest Agent from the QEMU package for testing
     # to reduce the closure size required for the tests.

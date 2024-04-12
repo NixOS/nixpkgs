@@ -428,8 +428,8 @@ let
         mktplcRef = {
           name = "vscode-neovim";
           publisher = "asvetliakov";
-          version = "1.7.1";
-          sha256 = "0ib4sjk7r370ckvaqb4yzgy7csy8pli9z2jhibhhwwcq2748ah4q";
+          version = "1.8.1";
+          sha256 = "0kqzry0cbvvy1pkbx5rhnk5ry7j91cbf11vz1s1jrqc7j0hq0yx8";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/asvetliakov.vscode-neovim/changelog";
@@ -941,8 +941,8 @@ let
         mktplcRef = {
           name = "coder-remote";
           publisher = "coder";
-          version = "0.1.18";
-          sha256 = "soNGZuyvG5+haWRcwYmYB+0OcyDAm4UQ419UnEd8waA=";
+          version = "0.1.36";
+          hash = "sha256-N1X8wB2n6JYoFHCP5iHBXHnEaRa9S1zooQZsR5mUeh8=";
         };
         meta = {
           description = "An extension for Visual Studio Code to open any Coder workspace in VS Code with a single click.";
@@ -2803,8 +2803,8 @@ let
         mktplcRef = {
           name = "typst-preview";
           publisher = "mgt19937";
-          version = "0.11.1";
-          hash = "sha256-OsCgkq0OSBu7RZYHlxgy7W7zDNDUgJFSeSET20CX8zA=";
+          version = "0.11.4";
+          hash = "sha256-GwlzFphZmP87pLys01+PWTv13imcdGjunCMH6atz9xs=";
         };
 
         buildInputs = [
@@ -4098,6 +4098,27 @@ let
       };
 
       sumneko.lua = callPackage ./sumneko.lua { };
+
+      supermaven.supermaven = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          hash = "sha256-O3AN8fy28ZSun+k6MJnJdFcmwDDE21ib+I9HtDE0JwU=";
+          name = "supermaven";
+          publisher = "supermaven";
+          version = "0.1.42";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/supermaven.supermaven/changelog";
+          description = "A Visual Studio Code extension for code completion suggestions";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=supermaven.supermaven";
+          homepage = "https://supermaven.com/";
+          license = lib.licenses.unfree;
+          longDescription = ''
+            Supermaven uses a 300,000 token context window to provide you the best code completion suggestions and the lowest latency.
+            With our extension you will get the fastest and best completions of any tool on the market.
+          '';
+          maintainers = [ lib.maintainers.msanft ];
+        };
+      };
 
       svelte.svelte-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {

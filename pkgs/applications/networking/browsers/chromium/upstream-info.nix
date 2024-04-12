@@ -1,11 +1,11 @@
 {
   stable = {
     chromedriver = {
-      hash_darwin = "sha256-sB6gH5k5zK1IIctBTXQpxlgmLEoIatcLDYO+WIFaYxA=";
+      hash_darwin = "sha256-PmLV++FK6aCvdhNNhb2ZAmRLumr+VRFvN+7IByieEZk=";
       hash_darwin_aarch64 =
-        "sha256-sikyGQG0Y14eNjT3f/Z50cPmm38T58X7zQIGopXOHOs=";
-      hash_linux = "sha256-2WZmRXyvxN3hXeOoPQXL6lU6Xki9iUmTdETRxOkIYD0=";
-      version = "123.0.6312.86";
+        "sha256-6Ys1EMSLmJNNaWdPeQiCT+bC0H7ABInVNzwXorGavn4=";
+      hash_linux = "sha256-iimq37dcEcY2suW73a6lhgHuNaoqtzbAZCHkQP9ro/Y=";
+      version = "123.0.6312.122";
     };
     deps = {
       gn = {
@@ -15,9 +15,9 @@
         version = "2024-02-19";
       };
     };
-    hash = "sha256-C17TPDVFW3+cHO1tcEghjI6H59TVPm9hdCrF2s5NI68=";
-    hash_deb_amd64 = "sha256-zmnBi4UBx52fQKHHJuUaCMuDJl7ntQzhG6h/yH7YPNU=";
-    version = "123.0.6312.105";
+    hash = "sha256-7H7h621AHPyhFYbaVFO892TtS+SP3Qu7cYUVk3ICL14=";
+    hash_deb_amd64 = "sha256-tNkO1mPZg1xltBfoWeNhLekITtZV/WNgu//i2DJb17c=";
+    version = "123.0.6312.122";
   };
   ungoogled-chromium = {
     deps = {
@@ -28,12 +28,12 @@
         version = "2024-02-19";
       };
       ungoogled-patches = {
-        hash = "sha256-81SoZBOAAV0cAVzz3yOzBstRW3vWjmkFoFNjYdPnme4=";
-        rev = "123.0.6312.105-1";
+        hash = "sha256-ojKIAkJB/gfg6scCxUYNAGx4lsquAaCySBDcUCFLqSU=";
+        rev = "d5773b0fb696ef107cc6df6a94cbe732c9e905f9";
       };
     };
-    hash = "sha256-C17TPDVFW3+cHO1tcEghjI6H59TVPm9hdCrF2s5NI68=";
-    hash_deb_amd64 = "sha256-zmnBi4UBx52fQKHHJuUaCMuDJl7ntQzhG6h/yH7YPNU=";
-    version = "123.0.6312.105";
+    hash = "sha256-7H7h621AHPyhFYbaVFO892TtS+SP3Qu7cYUVk3ICL14=";
+    hash_deb_amd64 = "sha256-tNkO1mPZg1xltBfoWeNhLekITtZV/WNgu//i2DJb17c=";
+    version = "123.0.6312.122";
   };
 }

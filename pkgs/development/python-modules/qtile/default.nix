@@ -97,6 +97,6 @@ buildPythonPackage rec {
     description = "A small, flexible, scriptable tiling window manager written in Python";
     mainProgram = "qtile";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ kamilchm arjan-s ];
+    maintainers = with maintainers; [ arjan-s ];
   };
 }

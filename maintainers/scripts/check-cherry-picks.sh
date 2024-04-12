@@ -12,6 +12,9 @@ PICKABLE_BRANCHES=${PICKABLE_BRANCHES:-master staging release-??.?? staging-??.?
 problem=0
 
 while read new_commit_sha ; do
+  if [ -z "$new_commit_sha" ] ; then
+    continue  # skip empty lines
+  fi
   if [ "$GITHUB_ACTIONS" = 'true' ] ; then
     echo "::group::Commit $new_commit_sha"
   else
@@ -57,6 +60,8 @@ while read new_commit_sha ; do
 
           $range_diff_common --color
 
+          echo "Note this should not necessarily be treated as a hard fail, but a reviewer's attention should" \
+            "be drawn to it and github actions have no way of doing that but to raise a 'failure'"
           problem=1
         else
           echo "  ✔ $original_commit_sha highly similar to $new_commit_sha"

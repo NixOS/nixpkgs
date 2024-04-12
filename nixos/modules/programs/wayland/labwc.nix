@@ -18,7 +18,7 @@ in
       xdg.portal.config.wlroots.default = lib.mkDefault [ "wlr" "gtk" ];
 
       # To make a labwc session available for certain DMs like SDDM
-      services.xserver.displayManager.sessionPackages = [ cfg.package ];
+      services.displayManager.sessionPackages = [ cfg.package ];
     }
     (import ./wayland-session.nix { inherit lib pkgs; })
   ]);
