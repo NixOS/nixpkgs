@@ -86,10 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
     isocodes
     libpng
     libjpeg
-    libdrm
     tremor
     pango
   ] ++ lib.optionals (!stdenv.isDarwin) [
+    libdrm
     libGL
     libvisual
   ] ++ lib.optionals stdenv.isDarwin [
@@ -108,6 +108,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     gstreamer
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    libdrm
   ];
 
   mesonFlags = [
