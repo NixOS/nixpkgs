@@ -6,7 +6,7 @@
 , meson
 , ninja
 , pkg-config
-, gradle_7
+, gradle_8
 , curl
 , cryptopp
 , fontconfig
@@ -20,16 +20,16 @@
 
 let
   pname = "cie-middleware-linux";
-  version = "1.5.0";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "M0rf30";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Z8K2Ibg5bBfSql5HEapKgdfiCf/EIKTTD15oVeysQGk=";
+    sha256 = "sha256-M3Xwg3G2ZZhPRV7uhFVXQPyvuuY4zI5Z+D/Dt26KVM0=";
   };
 
-  gradle = gradle_7;
+  gradle = gradle_8;
 
   # Shared libraries needed by the Java application
   libraries = lib.makeLibraryPath [ ghostscript ];
@@ -44,7 +44,6 @@ let
     buildPhase = ''
       # Run the fetchDeps task
       export GRADLE_USER_HOME=$(mktemp -d)
-      ls -l
       gradle --no-daemon -b cie-java/build.gradle fetchDeps
     '';
 
@@ -61,7 +60,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-jtaH8dBpnx8KMJe+jzJfkvcx1NO4nL5jsRO4+GI+d0c=";
+    outputHash = "sha256-fxrjo4iduXzTgMqmQGwdI1vLMA4EZLObsHyKGZ6b14I=";
   };
 
 in
@@ -71,35 +70,31 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  outputs = [ "out" "dev" ];
-
   nativeBuildInputs = [
     makeWrapper
+    strip-nondeterminism
     meson
     ninja
     pkg-config
     gradle
-    strip-nondeterminism
   ];
 
   buildInputs = [
     cryptopp
     fontconfig
-    podofo.dev
+    podofo
     openssl
     pcsclite
     curl
     libxml2
   ];
 
+  patches = [ ./use-system-podofo.patch ];
+
   postPatch = ''
     # substitute the cieid command with this $out/bin/cieid
     substituteInPlace libs/pkcs11/src/CSP/AbilitaCIE.cpp \
       --replace 'file = "cieid"' 'file = "'$out'/bin/cieid"'
-
-    # revert https://github.com/M0Rf30/cie-middleware-linux/commit/1a389d8
-    sed -i libs/meson.build \
-        -e "s@podofo_dep = .\+@podofo_dep = dependency('libpodofo')@g"
   '';
 
   # Note: we use pushd/popd to juggle between the
@@ -150,9 +145,6 @@ stdenv.mkDerivation {
   '';
 
   postFixup = ''
-    # Move static libraries to the dev output
-    mv -t "$dev/lib" "$out/lib/"*.a
-
     # Make the jar deterministic (mainly, sorting its files)
     strip-nondeterminism "$out/share/cieid/cieid.jar"
   '';
