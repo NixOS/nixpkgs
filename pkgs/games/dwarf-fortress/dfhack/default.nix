@@ -85,10 +85,9 @@ let
       needsPatches = true;
     };
     "50.12" = {
-      dfHackRelease = "50.12-r3rc1";
-      hash = "sha256-EcM/FLulGVJgaERFMpYi9O5i1QKZyFb0X4HQagVnO8k=";
-      xmlRev = "425bb89041565432bb5e9574baadbc15a7c5db0e";
-      prerelease = true;
+      dfHackRelease = "50.12-r3";
+      hash = "sha256-2mO8DpNmZRCV7IRY0arf3SMvlO4Pxs61Kxfh3q3k3HU=";
+      xmlRev = "980b1af13acc31660dce632f913c968f52e2b275";
     };
   };
 
