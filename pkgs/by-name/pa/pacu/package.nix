@@ -1,17 +1,16 @@
-{ lib
-, awscli
-, fetchFromGitHub
-, python3
+{
+  lib,
+  awscli,
+  fetchFromGitHub,
+  python3,
 }:
-
 
 let
   python = python3.override {
-    packageOverrides = self: super: {
-      sqlalchemy = super.sqlalchemy_1_4;
-    };
+    packageOverrides = self: super: { sqlalchemy = super.sqlalchemy_1_4; };
   };
-in python.pkgs.buildPythonApplication rec {
+in
+python.pkgs.buildPythonApplication rec {
   pname = "pacu";
   version = "1.5.2";
   pyproject = true;
@@ -31,34 +30,30 @@ in python.pkgs.buildPythonApplication rec {
     "urllib3"
   ];
 
-  build-system = with python.pkgs; [
-    poetry-core
-  ];
+  build-system = with python.pkgs; [ poetry-core ];
 
-  nativeBuildInputs = with python.pkgs; [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = with python.pkgs; [ pythonRelaxDepsHook ];
 
-  dependencies = [
-    awscli
-  ] ++ (with python.pkgs; [
-    awscli
-    boto3
-    botocore
-    chalice
-    dsnap
-    jq
-    policyuniverse
-    pycognito
-    pyyaml
-    qrcode
-    requests
-    sqlalchemy
-    sqlalchemy-utils
-    toml
-    typing-extensions
-    urllib3
-  ]);
+  dependencies =
+    [ awscli ]
+    ++ (with python.pkgs; [
+      awscli
+      boto3
+      botocore
+      chalice
+      dsnap
+      jq
+      policyuniverse
+      pycognito
+      pyyaml
+      qrcode
+      requests
+      sqlalchemy
+      sqlalchemy-utils
+      toml
+      typing-extensions
+      urllib3
+    ]);
 
   nativeCheckInputs = with python.pkgs; [
     moto
@@ -69,9 +64,7 @@ in python.pkgs.buildPythonApplication rec {
     export HOME=$(mktemp -d)
   '';
 
-  pythonImportsCheck = [
-    "pacu"
-  ];
+  pythonImportsCheck = [ "pacu" ];
 
   disabledTests = [
     # sAttributeError: module 'moto' has no attribute 'mock_s3'
