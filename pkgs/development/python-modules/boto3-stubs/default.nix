@@ -376,11 +376,11 @@ buildPythonPackage rec {
     hash = "sha256-c7u1CaacSsjM4DivsVEGhriDmMvUbV3x4yOPzmbfmvU=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     botocore-stubs
     types-s3transfer
     typing-extensions
