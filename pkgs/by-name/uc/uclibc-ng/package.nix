@@ -7,15 +7,16 @@
 , libiconvReal
 , extraConfig ? ""
 , makeLinuxHeaders
+, fetchpatch
 }:
 
 let
-  locallinuxHeaders = let version = "6.1"; in
+  locallinuxHeaders = let version = "6.6"; in
     makeLinuxHeaders {
       inherit version;
       src = fetchurl {
         url = "mirror://kernel/linux/kernel/v${lib.versions.major version}.x/linux-${version}.tar.xz";
-        hash = "sha256-LKHxcFGkMPb+0RluSVJxdQcXGs/ZfZZXchJQJwOyXes=";
+        hash = "sha256-2SagbGPdisffP4buH/ws4qO4Gi0WhITna1s4mrqOVtA=";
       };
       patches = [
         ../../../os-specific/linux/kernel-headers/no-relocs.patch # for building x86 kernel headers on non-ELF platforms
@@ -82,10 +83,14 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-KaTWhKBto0TuPuCazCynZJ1ZKuP/hI9pgUXEbe8F78s=";
   };
 
+  patches = [
+    ./RV32_TIME64_3.patch
+  ];
+
   # 'ftw' needed to build acl, a coreutils dependency
   configurePhase = ''
-    rm libc/sysdeps/linux/common/adjtimex.c
-    rm libc/sysdeps/linux/common/clock_adjtime.c
+    #rm libc/sysdeps/linux/common/adjtimex.c
+    #rm libc/sysdeps/linux/common/clock_adjtime.c
     make defconfig
     ${configParser}
     cat << EOF | parseconfig
@@ -93,9 +98,10 @@ stdenv.mkDerivation (finalAttrs: {
     ${extraConfig}
     ${stdenv.hostPlatform.uclibc.extraConfig or ""}
     EOF
-    ( set +o pipefail; yes "" | make oldconfig )
     cp -v ${./uclibc.config} .config
     echo 'KERNEL_HEADERS="${locallinuxHeaders}/include"' >> .config
+    ( set +o pipefail; yes "" | make oldconfig )
+    grep --color TIME64 .config
   '';
 
   hardeningDisable = [ "stackprotector" ];

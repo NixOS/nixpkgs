@@ -1,0 +1,226 @@
+diff --git a/extra/Configs/Config.in b/extra/Configs/Config.in
+index 122a7eb71..716c4e06c 100644
+--- a/extra/Configs/Config.in
++++ b/extra/Configs/Config.in
+@@ -1038,6 +1038,7 @@ config UCLIBC_USE_TIME64
+ 		   TARGET_sh                             || \
+ 		   TARGET_xtensa
+ 	# TODO: add support for other architectures
++	default y if TARGET_riscv32
+ 	default n
+ 
+ 	help
+diff --git a/libc/sysdeps/linux/common/adjtimex.c b/libc/sysdeps/linux/common/adjtimex.c
+index f45d54371..2fd7977f6 100644
+--- a/libc/sysdeps/linux/common/adjtimex.c
++++ b/libc/sysdeps/linux/common/adjtimex.c
+@@ -9,8 +9,16 @@
+ #include <sys/syscall.h>
+ #include <sys/timex.h>
+ 
+-
++#if defined(__NR_adjtimex)
+ _syscall1(int, adjtimex, struct timex *, buf)
++#else
++#include <time.h>
++int adjtimex(struct timex *buf)
++{
++    return clock_adjtime(CLOCK_REALTIME, buf);
++}
++#endif
++
+ libc_hidden_def(adjtimex)
+ weak_alias(adjtimex,__adjtimex)
+ #if defined __UCLIBC_NTP_LEGACY__
+diff --git a/libc/sysdeps/linux/common/futimens.c b/libc/sysdeps/linux/common/futimens.c
+index 03e58f4b5..2f3d72420 100644
+--- a/libc/sysdeps/linux/common/futimens.c
++++ b/libc/sysdeps/linux/common/futimens.c
+@@ -8,7 +8,7 @@
+ 
+ #include <sys/syscall.h>
+ #include <time.h>
+-#ifdef __NR_utimensat
++#if defined(__NR_utimensat) || defined(__NR_utimensat_time64)
+ /* To avoid superfluous warnings about passing NULL to the non-null annotated
+  * 2nd param "__path" below, we bypass inclusion of sys/stat.h and use
+  * a non annotated, local decl.
+diff --git a/libc/sysdeps/linux/common/not-cancel.h b/libc/sysdeps/linux/common/not-cancel.h
+index 9d1588494..e4fb1d7fe 100644
+--- a/libc/sysdeps/linux/common/not-cancel.h
++++ b/libc/sysdeps/linux/common/not-cancel.h
+@@ -113,9 +113,9 @@ extern __typeof(pause) __pause_nocancel;
+ #ifdef __NR_nanosleep
+ # define nanosleep_not_cancel(requested_time, remaining) \
+   INLINE_SYSCALL (nanosleep, 2, requested_time, remaining)
+-/*#else
++#else
+ # define nanosleep_not_cancel(requested_time, remaining) \
+-  __nanosleep_nocancel (requested_time, remaining)*/
++  __nanosleep_nocancel (requested_time, remaining)
+ #endif
+ 
+ #if 0
+diff --git a/libc/sysdeps/linux/common/utimes.c b/libc/sysdeps/linux/common/utimes.c
+index e6fc578f3..a28594dfd 100644
+--- a/libc/sysdeps/linux/common/utimes.c
++++ b/libc/sysdeps/linux/common/utimes.c
+@@ -9,7 +9,7 @@
+ #include <sys/syscall.h>
+ #include <sys/time.h>
+ 
+-#if defined __NR_utimensat && !defined __NR_utimes
++#if (defined (__NR_utimensat) || defined(__NR_utimensat_time64)) && !defined __NR_utimes
+ # include <fcntl.h>
+ # include <stddef.h>
+ int utimes(const char *file, const struct timeval tvp[2])
+@@ -50,6 +50,6 @@ int utimes(const char *file, const struct timeval tvp[2])
+ }
+ #endif
+ 
+-#if defined __NR_utimensat || defined __NR_utimes || defined __NR_utime
++#if defined __NR_utimensat || defined __NR_utimensat_time64 || defined __NR_utimes || defined __NR_utime
+ libc_hidden_def(utimes)
+ #endif
+diff --git a/libc/sysdeps/linux/common/wait4.c b/libc/sysdeps/linux/common/wait4.c
+index cd042d5e7..486ffaab8 100644
+--- a/libc/sysdeps/linux/common/wait4.c
++++ b/libc/sysdeps/linux/common/wait4.c
+@@ -10,6 +10,7 @@
+ #include <sys/wait.h>
+ #include <sys/resource.h>
+ 
++#if defined(__NR_wait4)
+ # define __NR___syscall_wait4 __NR_wait4
+ static __always_inline _syscall4(int, __syscall_wait4, __kernel_pid_t, pid,
+ 				 int *, status, int, opts, struct rusage *, rusage)
+@@ -32,6 +33,59 @@ pid_t __wait4_nocancel(pid_t pid, int *status, int opts, struct rusage *rusage)
+ 	return __syscall_wait4(pid, status, opts, rusage);
+ #endif
+ }
++
++#else
++pid_t __wait4_nocancel(pid_t pid, int *status, int opts, struct rusage *rusage)
++{
++	idtype_t type;
++	int __res;
++	siginfo_t info;
++
++	info.si_pid = 0;
++
++	if (pid < -1) {
++		type = P_PGID;
++		pid = -pid;
++	} else if (pid == -1) {
++		type = P_ALL;
++	} else if (pid == 0) {
++		type = P_PGID;
++	} else {
++		type = P_PID;
++	}
++
++	__res = INLINE_SYSCALL(waitid, 5, type, pid, &info, opts|WEXITED, rusage);
++
++	if ( __res < 0 )
++		return __res;
++
++	if (info.si_pid && status) {
++			int sw = 0;
++			switch (info.si_code) {
++			case CLD_CONTINUED:
++				sw = 0xffff;
++				break;
++			case CLD_DUMPED:
++				sw = (info.si_status & 0x7f) | 0x80;
++				break;
++			case CLD_EXITED:
++				sw = (info.si_status & 0xff) << 8;
++				break;
++			case CLD_KILLED:
++				sw = info.si_status & 0x7f;
++				break;
++			case CLD_STOPPED:
++			case CLD_TRAPPED:
++				sw = (info.si_status << 8) + 0x7f;
++				break;
++			}
++			*status = sw;
++	}
++
++	return info.si_pid;
++}
++#endif
++
+ #ifdef __USE_BSD
+ strong_alias(__wait4_nocancel,wait4)
+ #endif
+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/timer_gettime.c b/libpthread/nptl/sysdeps/unix/sysv/linux/timer_gettime.c
+index 220df0c37..fccda6976 100644
+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/timer_gettime.c
++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/timer_gettime.c
+@@ -24,7 +24,7 @@
+ #include "kernel-posix-timers.h"
+ 
+ 
+-#ifdef __NR_timer_gettime
++#if defined(__NR_timer_gettime) || defined(__NR_timer_gettime64)
+ # ifndef __ASSUME_POSIX_TIMERS
+ static int compat_timer_gettime (timer_t timerid, struct itimerspec *value);
+ #  define timer_gettime static compat_timer_gettime
+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/timer_routines.c b/libpthread/nptl/sysdeps/unix/sysv/linux/timer_routines.c
+index 60f2a724c..8c828fbb1 100644
+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/timer_routines.c
++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/timer_routines.c
+@@ -90,8 +90,13 @@ timer_helper_thread (void *arg)
+ 
+       /* XXX The size argument hopefully will have to be changed to the
+ 	 real size of the user-level sigset_t.  */
++#if defined(__NR_rt_sigtimedwait_time64) && defined(__UCLIBC_USE_TIME64__)
++      int result = INLINE_SYSCALL (rt_sigtimedwait_time64, 4, &ss, &si, NULL,
++				   _NSIG / 8);
++#else
+       int result = INLINE_SYSCALL (rt_sigtimedwait, 4, &ss, &si, NULL,
+ 				   _NSIG / 8);
++#endif
+ 
+       LIBC_CANCEL_RESET (oldtype);
+ 
+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/timer_settime.c b/libpthread/nptl/sysdeps/unix/sysv/linux/timer_settime.c
+index 1cccf57cb..fca839d64 100644
+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/timer_settime.c
++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/timer_settime.c
+@@ -27,7 +27,7 @@
+ #include "internal/time64_helpers.h"
+ #endif
+ 
+-#ifdef __NR_timer_settime
++#if defined(__NR_timer_settime) || defined(__NR_timer_settime64)
+ # ifndef __ASSUME_POSIX_TIMERS
+ static int compat_timer_settime (timer_t timerid, int flags,
+ 				 const struct itimerspec *value,
+diff --git a/librt/mq_receive.c b/librt/mq_receive.c
+index e6fd62b87..217848cca 100644
+--- a/librt/mq_receive.c
++++ b/librt/mq_receive.c
+@@ -8,7 +8,7 @@
+ 
+ #include <mqueue.h>
+ 
+-#ifdef __NR_mq_timedreceive
++#if defined(__NR_mq_timedreceive) || defined(__NR_mq_timedreceive_time64)
+ ssize_t mq_receive(mqd_t mqdes, char *msg_ptr, size_t msg_len, unsigned int *msg_prio)
+ {
+ 	return mq_timedreceive(mqdes, msg_ptr, msg_len, msg_prio, NULL);
+diff --git a/librt/mq_send.c b/librt/mq_send.c
+index fb4fa6555..079e804f7 100644
+--- a/librt/mq_send.c
++++ b/librt/mq_send.c
+@@ -8,7 +8,7 @@
+ 
+ #include <mqueue.h>
+ 
+-#ifdef __NR_mq_timedsend
++#if defined(__NR_mq_timedsend) || defined(__NR_mq_timedsend_time64)
+ int mq_send(mqd_t mqdes, const char *msg_ptr, size_t msg_len, unsigned int msg_prio)
+ {
+ 	return mq_timedsend(mqdes, msg_ptr, msg_len, msg_prio, NULL);
