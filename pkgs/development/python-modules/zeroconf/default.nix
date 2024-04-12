@@ -1,5 +1,5 @@
 { lib
-, cython_3
+, cython
 , async-timeout
 , buildPythonPackage
 , fetchFromGitHub
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    cython_3
+    cython
     poetry-core
     setuptools
   ];

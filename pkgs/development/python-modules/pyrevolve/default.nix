@@ -4,7 +4,7 @@
 , contexttimer
 , setuptools
 , versioneer
-, cython
+, cython_0
 , numpy
 , pytestCheckHook
 , pythonOlder
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    cython
+    cython_0
     setuptools
     versioneer
   ];

@@ -4,7 +4,7 @@
 , fetchPypi
 
 # build-system
-, cython_3
+, cython
 , gfortran
 , numpy
 , scipy
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   ];
 
   build-system = [
-    cython_3
+    cython
     numpy
     scipy
     setuptools

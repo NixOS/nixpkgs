@@ -9,7 +9,7 @@
 , CoreGraphics
 , CoreVideo
 , cymem
-, cython
+, cython_0
 , fetchPypi
 , hypothesis
 , mock
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    cython
+    cython_0
   ] ++ lib.optionals stdenv.isDarwin [
     Accelerate
     CoreFoundation

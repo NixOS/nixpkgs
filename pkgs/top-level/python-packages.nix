@@ -2640,14 +2640,7 @@ self: super: with self; {
 
   cython = callPackage ../development/python-modules/cython { };
 
-  cython_3 = self.cython.overridePythonAttrs (old: rec {
-    version = "3.0.9";
-    src = old.src.override {
-      inherit version;
-      hash = "sha256-otNU8FnR8FXTTPqmLFtovHisLOq2QHFI1H+1CM87pPM=";
-    };
-    patches = [ ];
-  });
+  cython_0 = callPackage ../development/python-modules/cython/0.nix { };
 
   cython-test-exception-raiser = callPackage ../development/python-modules/cython-test-exception-raiser { };
 
@@ -11881,6 +11874,8 @@ self: super: with self; {
   pytest = callPackage ../development/python-modules/pytest { };
 
   pytest_7 = callPackage ../development/python-modules/pytest/7.nix { };
+
+  pytest7CheckHook = pytestCheckHook.override { pytest = pytest_7; };
 
   pytest-aio = callPackage ../development/python-modules/pytest-aio { };
 

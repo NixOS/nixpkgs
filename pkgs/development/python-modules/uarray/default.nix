@@ -2,18 +2,19 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
+, setuptools
 , matchpy
 , numpy
 , astunparse
 , typing-extensions
-, pytestCheckHook
+, pytest7CheckHook
 , pytest-cov
 }:
 
 buildPythonPackage rec {
   pname = "uarray";
   version = "0.8.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Quansight-Labs";
@@ -31,14 +32,32 @@ buildPythonPackage rec {
     }
   )];
 
-  nativeCheckInputs = [ pytestCheckHook pytest-cov ];
-  propagatedBuildInputs = [ matchpy numpy astunparse typing-extensions ];
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
+    astunparse
+    matchpy
+    numpy
+    typing-extensions
+  ];
+
+  nativeCheckInputs = [
+    pytest7CheckHook
+    pytest-cov
+  ];
 
   # Tests must be run from outside the source directory
   preCheck = ''
     cd $TMP
   '';
-  pytestFlagsArray = ["--pyargs" "uarray" "-W" "ignore::pytest.PytestRemovedIn8Warning" ];
+
+  pytestFlagsArray = [
+    "--pyargs"
+    "uarray"
+  ];
+
   pythonImportsCheck = [ "uarray" ];
 
   meta = with lib; {

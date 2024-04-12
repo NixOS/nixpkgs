@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , click
-, cython_3
+, cython
 , fetchFromGitHub
 , jieba
 , joblib
@@ -30,13 +30,13 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
     setuptools
   ];
 
   propagatedBuildInputs = [
     click
-    cython_3
+    cython
     jieba
     joblib
     lmdb

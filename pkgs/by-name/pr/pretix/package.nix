@@ -97,7 +97,6 @@ python.pkgs.buildPythonApplication rec {
   build-system = with python.pkgs; [
     gettext
     nodejs
-    pythonRelaxDepsHook
     setuptools
     tomli
   ];

@@ -7,7 +7,7 @@
 , wheel
 , numpy
 , hdf5
-, cython
+, cython_0
 , pkgconfig
 , mpi4py ? null
 , openssh
@@ -50,7 +50,7 @@ in buildPythonPackage rec {
   preBuild = lib.optionalString mpiSupport "export CC=${lib.getDev mpi}/bin/mpicc";
 
   nativeBuildInputs = [
-    cython
+    cython_0
     oldest-supported-numpy
     pkgconfig
     setuptools

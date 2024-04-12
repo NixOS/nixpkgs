@@ -5,7 +5,7 @@
 
 # build-system
 , cysignals
-, cython_3
+, cython
 , pkgconfig
 , setuptools
 
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    cython_3
+    cython
     cysignals
     pkgconfig
     setuptools

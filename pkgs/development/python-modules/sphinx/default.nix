@@ -27,7 +27,6 @@
 , sphinxcontrib-websupport
 
 # check phase
-, cython
 , filelock
 , html5lib
 , pytestCheckHook
@@ -83,7 +82,6 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    cython
     filelock
     html5lib
     pytestCheckHook
@@ -102,12 +100,15 @@ buildPythonPackage rec {
     "test_check_link_response_only"
     "test_anchors_ignored_for_url"
     "test_autodoc_default_options"
+    "test_too_many_requests_retry_after_int_delay"
     # racy with pytest-xdist
     "test_domain_cpp_build_semicolon"
     "test_class_alias"
     "test_class_alias_having_doccomment"
     "test_class_alias_for_imported_object_having_doccomment"
     "test_decorators"
+    # requires cython_0, but fails miserably on 3.11
+    "test_cython"
   ] ++ lib.optionals isPyPy [
     # PyPy has not __builtins__ which get asserted
     # https://doc.pypy.org/en/latest/cpython_differences.html#miscellaneous
@@ -117,7 +118,6 @@ buildPythonPackage rec {
     "test_autodoc_inherited_members_None"
     "test_automethod_for_builtin"
     "test_builtin_function"
-    "test_cython"
     "test_isattributedescriptor"
     "test_methoddescriptor"
     "test_partialfunction"

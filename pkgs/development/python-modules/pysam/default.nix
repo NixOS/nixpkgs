@@ -4,7 +4,7 @@
 , bzip2
 , bcftools
 , curl
-, cython_3
+, cython
 , htslib
 , libdeflate
 , xz
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
     samtools
     setuptools
   ];

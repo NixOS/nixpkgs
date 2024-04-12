@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gettext, msgpack-c, libtermkey, libiconv
+{ lib, stdenv, fetchFromGitHub, removeReferencesTo, cmake, gettext, msgpack-c, libtermkey, libiconv
 , libuv, lua, ncurses, pkg-config
 , unibilium, gperf
 , libvterm-neovim
@@ -121,6 +121,7 @@ in {
       cmake
       gettext
       pkg-config
+      removeReferencesTo
     ];
 
     # extra programs test via `make functionaltest`
@@ -141,8 +142,11 @@ in {
       sed -i src/nvim/po/CMakeLists.txt \
         -e "s|\$<TARGET_FILE:nvim|\${stdenv.hostPlatform.emulator buildPackages} &|g"
     '';
+    postInstall = ''
+      find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
+    '';
     # check that the above patching actually works
-    disallowedReferences = [ stdenv.cc ] ++ lib.optional (lua != codegenLua) codegenLua;
+    disallowedRequisites = [ stdenv.cc ] ++ lib.optional (lua != codegenLua) codegenLua;
 
     cmakeFlags = [
       # Don't use downloaded dependencies. At the end of the configurePhase one

@@ -5,7 +5,7 @@
 , mock
 , pkgs
 , pyahocorasick
-, pytestCheckHook
+, pytest7CheckHook
 , pythonOlder
 , pyyaml
 , requests
@@ -37,15 +37,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
-    pytestCheckHook
+    pytest7CheckHook
     responses
     unidiff
     pkgs.gitMinimal
-  ];
-
-  pytestFlagsArray = [
-    # Pytest.PytestRemovedIn8Warning: Support for nose tests is deprecated and will be removed in a future release.
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   preCheck = ''
