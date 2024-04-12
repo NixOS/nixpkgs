@@ -19614,6 +19614,12 @@
     githubId = 2389333;
     name = "Andy Tockman";
   };
+  tcmal = {
+    email = "me@aria.rip";
+    github = "tcmal";
+    githubId = 4183876;
+    name = "Aria Shrimpton";
+  };
   teatwig = {
     email = "nix@teatwig.net";
     name = "tea";

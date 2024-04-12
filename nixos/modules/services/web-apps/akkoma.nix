@@ -764,6 +764,21 @@ in {
                 };
               };
 
+              "Pleroma.Upload" = let
+                httpConf = cfg.config.":pleroma"."Pleroma.Web.Endpoint".url;
+              in {
+                base_url = mkOption {
+                    type = types.nonEmptyStr;
+                    default = if lib.versionOlder config.system.stateVersion "24.05"
+                              then "${httpConf.scheme}://${httpConf.host}:${builtins.toString httpConf.port}/media/"
+                              else null;
+                    description = mdDoc ''
+                      Base path which uploads will be stored at.
+                      Whilst this can just be set to a subdirectory of the main domain, it is now recommended to use a different subdomain.
+                    '';
+                };
+              };
+
               ":frontends" = mkOption {
                 type = elixirValue;
                 default = mapAttrs
@@ -781,6 +796,30 @@ in {
                   [{option}`config.services.akkoma.frontends`](#opt-services.akkoma.frontends).
                 '';
               };
+
+
+              ":media_proxy" = let
+                httpConf = cfg.config.":pleroma"."Pleroma.Web.Endpoint".url;
+              in {
+                enabled = mkOption {
+                    type = types.bool;
+                    default = false;
+                    description = mdDoc ''
+                      Whether to enable proxying of remote media through the instance's proxy.
+                    '';
+                };
+                base_url = mkOption {
+                    type = types.nullOr types.nonEmptyStr;
+                    default = if lib.versionOlder config.system.stateVersion "24.05"
+                              then "${httpConf.scheme}://${httpConf.host}:${builtins.toString httpConf.port}/media/"
+                              else null;
+                    description = mdDoc ''
+                      Base path for the media proxy.
+                      Whilst this can just be set to a subdirectory of the main domain, it is now recommended to use a different subdomain.
+                    '';
+                };
+              };
+
             };
 
             ":web_push_encryption" = mkOption {
@@ -904,6 +943,9 @@ in {
   };
 
   config = mkIf cfg.enable {
+    assertions = optionals (cfg.config.":pleroma".":media_proxy".enabled && cfg.config.":pleroma".":media_proxy".base_url == null) [''
+      `services.akkoma.config.":pleroma".":media_proxy".base_url` must be set when the media proxy is enabled.
+    ''];
     warnings = optionals (with config.security; (!sudo.enable) && (!sudo-rs.enable)) [''
       The pleroma_ctl wrapper enabled by the installWrapper option relies on
       sudo, which appears to have been disabled through security.sudo.enable.
@@ -1083,6 +1125,6 @@ in {
     };
   };
 
-  meta.maintainers = with maintainers; [ mvs ];
+  meta.maintainers = with maintainers; [ mvs tcmal ];
   meta.doc = ./akkoma.md;
 }
