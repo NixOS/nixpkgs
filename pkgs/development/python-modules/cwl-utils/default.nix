@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, cwl-upgrader
-, cwlformat
-, fetchFromGitHub
-, packaging
-, pytest-mock
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, rdflib
-, requests
-, ruamel-yaml
-, schema-salad
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  cwl-upgrader,
+  cwlformat,
+  fetchFromGitHub,
+  packaging,
+  pytest-mock,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  rdflib,
+  requests,
+  ruamel-yaml,
+  schema-salad,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
     hash = "sha256-+GvG5Uu2nQWYCcuAkBkegsmMCWhf269jH6Zcex99I4M=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     cwl-upgrader
@@ -49,9 +48,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "cwl_utils"
-  ];
+  pythonImportsCheck = [ "cwl_utils" ];
 
   disabledTests = [
     # Don't run tests which require Node.js
