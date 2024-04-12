@@ -1,16 +1,17 @@
-{ lib
-, anyio
-, buildPythonPackage
-, curio
-, fetchFromGitHub
-, hypothesis
-, pytest
-, pytestCheckHook
-, pythonOlder
-, poetry-core
-, sniffio
-, trio
-, trio-asyncio
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  curio,
+  fetchFromGitHub,
+  hypothesis,
+  pytest,
+  pytestCheckHook,
+  pythonOlder,
+  poetry-core,
+  sniffio,
+  trio,
+  trio-asyncio,
 }:
 
 buildPythonPackage rec {
@@ -27,13 +28,9 @@ buildPythonPackage rec {
     hash = "sha256-MexIL9yFTzhkJ/61GgYoT54MWV8B0c1/CWkN5FVTvnw=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
   dependencies = [
     anyio
@@ -44,13 +41,9 @@ buildPythonPackage rec {
     trio-asyncio
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pytest_aio"
-  ];
+  pythonImportsCheck = [ "pytest_aio" ];
 
   meta = with lib; {
     description = "Pytest plugin for aiohttp support";
