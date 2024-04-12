@@ -10,7 +10,9 @@
 , libxslt
 , nixosTests
 , perl
+, perlPackages
 , systemd
+, keyutils
 
 # drbd-utils are compiled twice, once with forOCF = true to extract
 # its OCF definitions for use in the ocf-resource-agents derivation,
@@ -22,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "drbd";
-  version = "9.19.1";
+  version = "9.27.0";
 
   src = fetchurl {
     url = "https://pkg.linbit.com/downloads/drbd/utils/${pname}-utils-${version}.tar.gz";
-    sha256 = "1l99kcrb0j85wxxmrdihpx9bk1a4sdi7wlp5m1x5l24k8ck1m5cf";
+    sha256 = "1qwdrjrgas8z8vc6c85xcrqaczjwyqd61yig01n44wa5z0j3v4aq";
   };
 
   nativeBuildInputs = [
@@ -34,11 +36,12 @@ stdenv.mkDerivation rec {
     libxslt
     docbook_xsl
     asciidoctor
+    keyutils
   ];
 
   buildInputs = [
     perl
-    # perlPackages.Po4a used by ja documentation
+    perlPackages.Po4a
   ];
 
   configureFlags = [
@@ -123,6 +126,10 @@ stdenv.mkDerivation rec {
     description = "Distributed Replicated Block Device, a distributed storage system for Linux (userspace utilities)";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ryantm astro ];
+    maintainers = with maintainers; [ ryantm astro birkb ];
+    longDescription = ''
+       DRBD is a software-based, shared-nothing, replicated storage solution
+       mirroring the content of block devices (hard disks, partitions, logical volumes, and so on) between hosts.
+    '';
   };
 }

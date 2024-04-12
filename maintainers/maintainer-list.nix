@@ -2621,6 +2621,12 @@
     githubId = 30630233;
     name = "Timo Triebensky";
   };
+  birkb = {
+    email = "birk@batchworks.de";
+    github = "birkb";
+    githubId = 10164833;
+    name = "Birk Bohne";
+  };
   bjornfor = {
     email = "bjorn.forsman@gmail.com";
     github = "bjornfor";
