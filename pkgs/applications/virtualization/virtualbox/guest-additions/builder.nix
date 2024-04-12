@@ -28,8 +28,12 @@ in stdenv.mkDerivation (finalAttrs: {
 
   prePatch = ''
     rm -r src/VBox/Additions/x11/x11include/
+    rm -r src/VBox/Additions/3D/mesa/mesa-*/
     rm -r src/libs/openssl-*/
     rm -r src/libs/curl-*/
+    rm -r src/libs/libpng-*/
+    rm -r src/libs/libxml2-*/
+    rm -r src/libs/zlib*/
   '';
 
   patches = [
