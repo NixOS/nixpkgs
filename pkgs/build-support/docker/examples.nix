@@ -65,11 +65,11 @@ rec {
     nginxConf = pkgs.writeText "nginx.conf" ''
       user nobody nobody;
       daemon off;
-      error_log /dev/stdout info;
+      error_log stderr info;
       pid /dev/null;
       events {}
       http {
-        access_log /dev/stdout;
+        access_log off;
         server {
           listen ${nginxPort};
           index index.html;
