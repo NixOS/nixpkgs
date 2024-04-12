@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "poetry-core==1.8.0" "poetry-core"
+      --replace-fail "poetry-core==1.8.0" "poetry-core"
   '';
 
   pythonRelaxDeps = [ "pycryptodome" ];
