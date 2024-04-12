@@ -58,9 +58,10 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/etc $out/usr/share
+    mkdir -p $out/etc $out/usr/share $out/lib/udev/
     cp -r chroot/etc/.mplab_ide $out/etc/
     cp -r chroot/etc/udev $out/etc/
+    cp -r chroot/etc/udev/rules.d $out/lib/udev/
     cp -r chroot/usr/share/applications chroot/usr/share/icons $out/usr/share/
     cp -r chroot/opt $out/
     # cp -r chroot/usr/lib/udev

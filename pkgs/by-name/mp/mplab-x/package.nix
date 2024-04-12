@@ -13,6 +13,7 @@
 , glibc
 , gtk2
 , gtk3
+, gtk-engine-murrine
 , libdrm
 , libxkbcommon
 , libusb1
@@ -47,6 +48,7 @@ let
       glibc
       gtk2
       gtk3
+      gtk-engine-murrine
       libdrm
       libxkbcommon
       libxslt
@@ -88,6 +90,7 @@ let
       mkdir -p "$rt/overlay/opt/microchip"
       rsync -rlp ${fhsEnv.fhsenv}/             "$rt/overlay/"
       rsync -rlp ${mplab-x-unwrapped}/etc/     "$rt/overlay/etc/"
+      rsync -rlp ${mplab-x-unwrapped}/lib/udev "$rt/overlay/lib/udev/"
       ln -s "$HOME"                            "$rt/overlay/root"
       for f in ${mplab-x-unwrapped}/opt/microchip/*; do
         ln -s "$f" "$rt/overlay/opt/microchip/"
