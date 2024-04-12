@@ -1,7 +1,7 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "samba";
 
-  meta.maintainers = [ ];
+  meta.maintainers = [ lib.maintainers.anthonyroussel ];
 
   nodes = {
     client =
@@ -34,8 +34,6 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         };
       };
   };
-
-  # client# [    4.542997] mount[777]: sh: systemd-ask-password: command not found
 
   testScript = ''
     server.start()
