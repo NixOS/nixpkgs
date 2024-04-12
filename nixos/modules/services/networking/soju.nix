@@ -50,8 +50,13 @@ in
 
     hostName = mkOption {
       type = types.str;
-      default = config.networking.hostName;
-      defaultText = literalExpression "config.networking.hostName";
+      default =
+        config.networking.hostName +
+        optionalString (config.networking.domain != null) ".${config.networking.domain}";
+      defaultText = literalExpression ''
+        config.networking.hostName +
+        optionalString (config.networking.domain != null) ".''${config.networking.domain}"
+      '';
       description = lib.mdDoc "Server hostname.";
     };
 
