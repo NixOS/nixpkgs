@@ -31,6 +31,11 @@ let
   libcConfig = lib.optionalString useMusl ''
     CONFIG_FEATURE_UTMP n
     CONFIG_FEATURE_WTMP n
+  '' + lib.optionalString (stdenv.hostPlatform.libc == "uclibc") ''
+    CONFIG_ASH_INTERNAL_GLOB y
+    CONFIG_ASH n
+    CONFIG_NOMMU y
+    CONFIG_HUSH y
   '';
 
   # The debian version lags behind the upstream version and also contains

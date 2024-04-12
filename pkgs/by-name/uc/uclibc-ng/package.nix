@@ -72,15 +72,21 @@ let
     ARCH_USE_MMU n
     TARGET_riscv32 y
     UCLIBC_USE_TIME64 y
+    UCLIBC_HAS_LINUXTHREADS y
+    HAS_NO_THREADS n
+    UCLIBC_HAS_THREADS y
+    UCLIBC_HAS_UTMPX y
   '';
+  # UCLIBC_HAS_UTMPX is needed by busybox
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "uclibc-ng";
   version = "1.0.47";
 
   src = fetchurl {
-    url = "https://downloads.uclibc-ng.org/releases/${finalAttrs.version}/uClibc-ng-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-KaTWhKBto0TuPuCazCynZJ1ZKuP/hI9pgUXEbe8F78s=";
+    #url = "https://downloads.uclibc-ng.org/releases/${finalAttrs.version}/uClibc-ng-${finalAttrs.version}.tar.xz";
+    url = "https://github.com/wbx-github/uclibc-ng/archive/70eea5e0f753483dccaabf2ac7ce5b6ef7e8e851.tar.gz";
+    sha256 = "sha256-31Qs1XiAV+nbRZKwT5SQ8Lkzv1JvS6lct/XJkT+uQBM=";
   };
 
   patches = [
@@ -98,10 +104,8 @@ stdenv.mkDerivation (finalAttrs: {
     ${extraConfig}
     ${stdenv.hostPlatform.uclibc.extraConfig or ""}
     EOF
-    cp -v ${./uclibc.config} .config
-    echo 'KERNEL_HEADERS="${locallinuxHeaders}/include"' >> .config
     ( set +o pipefail; yes "" | make oldconfig )
-    grep --color TIME64 .config
+    grep --color THREAD .config
   '';
 
   hardeningDisable = [ "stackprotector" ];
