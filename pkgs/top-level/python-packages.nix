@@ -12195,6 +12195,8 @@ self: super: with self; {
 
   python-didl-lite = callPackage ../development/python-modules/python-didl-lite { };
 
+  python-doctr = callPackage ../development/python-modules/python-doctr { };
+
   python-docx = callPackage ../development/python-modules/python-docx { };
 
   python-doi = callPackage ../development/python-modules/python-doi { };
