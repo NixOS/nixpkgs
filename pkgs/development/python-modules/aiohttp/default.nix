@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.9.3";
+  version = "3.9.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "aiohttp";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dEeMHruFJ1o0J6VUJcpUk7LhEC8sV8hUKXoKcd618lE=";
+    hash = "sha256-coONsU2p7+A93O0I1YYFunwMIvKuuI5az3gJbb/Qgv0=";
   };
 
   patches = [
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     touch .git  # tools/gen.py uses .git to find the project root
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     setuptools
   ];
@@ -66,7 +66,7 @@ buildPythonPackage rec {
     make cythonize
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     multidict
     async-timeout
@@ -96,14 +96,6 @@ buildPythonPackage rec {
     "test_client_session_timeout_zero"
     "test_mark_formdata_as_processed"
     "test_requote_redirect_url_default"
-    # Disable tests that trigger deprecation warnings in pytest
-    "test_async_with_session"
-    "test_session_close_awaitable"
-    "test_close_run_until_complete_not_deprecated"
-    # https://github.com/aio-libs/aiohttp/issues/7130
-    "test_static_file_if_none_match"
-    "test_static_file_if_match"
-    "test_static_file_if_modified_since_past_date"
     # don't run benchmarks
     "test_import_time"
   ] ++ lib.optionals stdenv.is32bit [
