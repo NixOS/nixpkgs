@@ -21269,6 +21269,12 @@
     github = "water-sucks";
     githubId = 68445574;
   };
+  waynevanson = {
+    name = "Wayne Van Son";
+    email = "waynevanson@gmail.com";
+    github = "waynevanson";
+    githubId = 29592214;
+  };
   waynr = {
     name = "Wayne Warren";
     email = "wayne.warren.s@gmail.com";
