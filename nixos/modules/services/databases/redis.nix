@@ -338,7 +338,7 @@ in {
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/redis-server /var/lib/${redisName name}/redis.conf ${escapeShellArgs conf.extraParams}";
+        ExecStart = "${cfg.package}/bin/${cfg.package.serverBin or "redis-server"} /var/lib/${redisName name}/redis.conf ${escapeShellArgs conf.extraParams}";
         ExecStartPre = "+"+pkgs.writeShellScript "${redisName name}-prep-conf" (let
           redisConfVar = "/var/lib/${redisName name}/redis.conf";
           redisConfRun = "/run/${redisName name}/nixos.conf";
@@ -391,7 +391,8 @@ in {
         RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
         RestrictNamespaces = true;
         LockPersonality = true;
-        MemoryDenyWriteExecute = true;
+        # we need to disable MemoryDenyWriteExecute for keydb
+        MemoryDenyWriteExecute = cfg.package.pname != "keydb";
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         PrivateMounts = true;
