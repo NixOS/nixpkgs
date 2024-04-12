@@ -56,45 +56,6 @@ rec {
 
   ipv4 = {
     /**
-      Encodes an integer into a valid IPv4 address.
-
-      # Example
-
-      ```nix
-      _encode 0
-      => "0.0.0.0"
-      _encode 3232235521
-      => "192.168.0.1"
-      ```
-
-      # Type
-
-      ```
-      _encode :: Int -> String
-      ```
-
-      # Arguments
-
-      - [num] A decoded integer representation of an IPv4 address.
-
-      # Throws
-
-      - If the argument is less than zero.
-      - If the argument is greater than or equal to 2^32.
-    */
-    _encode =
-      num:
-      if num < 0 then
-        throw "lib.network.ipv4._encode: ${toString num} cannot be encoded into an IPv4 address."
-      # ipv4 only has 4*8 = 32 bits, so 2^32 addresses
-      else if num >= 4294967296 then
-        throw "lib.network.ipv4._encode: ${toString num} is too large to encode into an IPv4 address."
-      else
-        concatStringsSep "." (
-          map (x: toString (mod (num / x) 256)) (reverseList (genList (x: common.pow 2 (x * 8)) 4))
-        );
-
-    /**
       Extracts a prefix length from a CIDR and verifies it is valid.
 
       If an IP address is given without a CIDR, then a prefix length of 32 is returned.

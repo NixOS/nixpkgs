@@ -109,13 +109,6 @@ expectEqual 'internal.common.pow 2 0' '1'
 expectEqual 'internal.common.pow 2 3' '8'
 expectFailure 'internal.common.pow 2 (-1)' 'lib.network.pow: Exponent cannot be negative.'
 
-# Test basic cases for encoding IPv4 address.
-expectEqual 'internal.ipv4._encode 0' '"0.0.0.0"'
-expectEqual 'internal.ipv4._encode 4294967295' '"255.255.255.255"'
-expectEqual 'internal.ipv4._encode 3232235521' '"192.168.0.1"'
-expectFailure 'internal.ipv4._encode 4294967296' 'lib.network.ipv4._encode: [[:digit:]]+ is too large to encode into an IPv4 address.'
-expectFailure 'internal.ipv4._encode (-1)' 'lib.network.ipv4._encode: -[[:digit:]]+ cannot be encoded into an IPv4 address.'
-
 # Test basic cases for verifying an address.
 expectEqual 'internal.ipv4._verifyAddress "192.168.0.1/24"' '"192.168.0.1"'
 expectFailure 'internal.ipv4._verifyAddress "192.168.0./24"' 'lib.network.ipv4: CIDR 192.168.0./24 has an empty octet.'
