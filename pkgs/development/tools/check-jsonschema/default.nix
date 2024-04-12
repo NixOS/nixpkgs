@@ -4,7 +4,7 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "check-jsonschema";
-  version = "0.28.1";
+  version = "0.28.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -13,7 +13,7 @@ buildPythonApplication rec {
     owner = "python-jsonschema";
     repo = "check-jsonschema";
     rev = "refs/tags/${version}";
-    hash = "sha256-JUb6jrbO1dylqOiDUDgYpMsXtMw7vErw6NJNyvfJIoM=";
+    hash = "sha256-QHcpcpICYqQUUCkLAV4BpDYn7Te/TGbXFPgr8Emp0ew=";
   };
 
   propagatedBuildInputs = [
