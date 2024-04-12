@@ -3,21 +3,13 @@ let
   inherit (lib)
     concatStringsSep
     elemAt
-    genList
-    mod
     range
-    reverseList
     toInt
     ;
 
-  inherit (builtins)
-    all
-    any
-    foldl'
-    toString
-    ;
+  inherit (builtins) all any foldl';
 in
-rec {
+{
   common = {
     /**
       Given a base and exponent, calculates base raised to the exponent.
