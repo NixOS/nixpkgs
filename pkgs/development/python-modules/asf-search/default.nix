@@ -9,11 +9,12 @@
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
+  pythonRelaxDepsHook,
   pytz,
   remotezip,
-  requests,
   requests-mock,
-  setuptools,
+  requests,
+  setuptools-scm,
   shapely,
   tenacity,
 }:
@@ -32,7 +33,11 @@ buildPythonPackage rec {
     hash = "sha256-CD9Up4h23dplTt51zif+4ZdW0qczRUz2hCOwUOOlS24=";
   };
 
-  build-system = [ setuptools ];
+  pythonRelaxDeps = [ "tenacity" ];
+
+  build-system = [ setuptools-scm ];
+
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     dateparser
