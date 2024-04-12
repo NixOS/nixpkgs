@@ -8,6 +8,7 @@
 { name ? ""
 , lib
 , stdenvNoCC
+, testers ? {}
 , bintools ? null, libc ? null, coreutils ? null, shell ? stdenvNoCC.shell, gnugrep ? null
 , netbsd ? null, netbsdCross ? null
 , sharedLibraryLoader ?
@@ -138,7 +139,7 @@ let
 
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = targetPrefix
     + (if name != "" then name else "${bintoolsName}-wrapper");
   version = optionalString (bintools != null) bintoolsVersion;
@@ -150,6 +151,11 @@ stdenv.mkDerivation {
   passthru = {
     inherit targetPrefix suffixSalt;
     inherit bintools libc nativeTools nativeLibc nativePrefix isGNU isLLVM;
+
+    tests = import ./tests.nix {
+      inherit lib stdenvNoCC testers;
+      inherit (finalAttrs) finalPackage;
+    };
 
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too
@@ -438,4 +444,4 @@ stdenv.mkDerivation {
   } // optionalAttrs useMacosReexportHack {
     platforms = platforms.darwin;
   };
-}
+})
