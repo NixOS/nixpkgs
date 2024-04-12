@@ -99,7 +99,7 @@ expectFailure() {
 }
 
 
-# Test basic cases for ingesting a CIDR string.
+# Test basic cases for ingesting a CIDR string
 expectEqual '(ipv4.fromCidrString "192.168.0.1/24").cidr' '"192.168.0.1/24"'
 expectEqual '(ipv4.fromCidrString "192.168.0.1/24").address' '"192.168.0.1"'
 expectEqual '(ipv4.fromCidrString "192.168.0.1/24").prefixLength' '"24"'
@@ -112,7 +112,7 @@ expectFailure 'ipv4.fromCidrString "192.168.0/24"' 'lib.network.ipv4: CIDR 192.1
 expectFailure 'ipv4.fromCidrString "192.168.0.256/24"' 'lib.network.ipv4: CIDR 192.168.0.256/24 has an out of bounds octet.'
 expectFailure 'ipv4.fromCidrString "192.168.0.-1/24"' 'lib.network.ipv4: CIDR 192.168.0.-1/24 has an out of bounds octet.'
 
-# Test basic cases for verifying a prefix length.
+# Test cases for bad prefix length
 expectFailure 'ipv4.fromCidrString "192.168.0.1/"' 'lib.network.ipv4: CIDR 192.168.0.1/ has no prefix length.'
 expectFailure 'ipv4.fromCidrString "192.168.0.1/33"' 'lib.network.ipv4: CIDR 192.168.0.1/33 has an out of bounds prefix length, 33.'
 expectFailure 'ipv4.fromCidrString "192.168.0.1/-1"' 'lib.network.ipv4: CIDR 192.168.0.1/-1 has an out of bounds prefix length, -1.'
