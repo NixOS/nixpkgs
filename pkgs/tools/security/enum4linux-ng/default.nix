@@ -1,32 +1,31 @@
-{ lib
-, fetchFromGitHub
-, python3
-, samba
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  samba,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "enum4linux-ng";
-  version = "1.3.2";
+  version = "1.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cddmp";
     repo = "enum4linux-ng";
     rev = "refs/tags/v${version}";
-    hash = "sha256-O3TZcCn2kRLrMjQPVg8F5Q2ri968xRbXrdnfytfMkYM=";
+    hash = "sha256-VpNYgdgvsQG5UcxoyyLCj5ijJdIKKhCSqnHTvTgD4lA=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
-  dependencies = [
-    samba
-  ] ++ (with python3.pkgs; [
-    impacket
-    ldap3
-    pyyaml
-  ]);
+  dependencies =
+    [ samba ]
+    ++ (with python3.pkgs; [
+      impacket
+      ldap3
+      pyyaml
+    ]);
 
   # It's only a script and not a Python module. Project has no tests
   doCheck = false;
