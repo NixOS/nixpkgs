@@ -17,6 +17,7 @@
 , CoreServices
 , desktopToDarwinBundle
 , libnotify
+, pipewire
 , useKeytar ? true
 }:
 
@@ -82,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     let
       libPath = lib.makeLibraryPath [
         libnotify
+        pipewire
       ];
     in
   ''
