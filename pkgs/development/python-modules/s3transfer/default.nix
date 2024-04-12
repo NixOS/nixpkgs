@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, botocore
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  stdenv,
+  botocore,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -22,38 +23,28 @@ buildPythonPackage rec {
     hash = "sha256-EHNkYviafnuU8AADp9oyaDuAnoPOdOVNSLCcoONnHPY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    botocore
-  ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  disabledTestPaths = [
-    # Requires network access
-    "tests/integration"
-  ] ++
-  # There was a change in python 3.8 that defaults multiprocessing to spawn instead of fork on macOS
-  # See https://bugs.python.org/issue33725 and https://github.com/python/cpython/pull/13603.
-  # I suspect the underlying issue here is that upstream tests aren't compatible with spawn multiprocessing, and pass on linux where the default is still fork
-  lib.optionals stdenv.isDarwin [
-    "tests/unit/test_compat.py"
-  ];
-
-  pythonImportsCheck = [
-    "s3transfer"
-  ];
+  dependencies = [ botocore ];
 
   passthru.optional-dependencies = {
-    crt = [
-      botocore.optional-dependencies.crt
-    ];
+    crt = [ botocore.optional-dependencies.crt ];
   };
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTestPaths =
+    [
+      # Requires network access
+      "tests/integration"
+    ]
+    ++
+    # There was a change in Python 3.8 that defaults multiprocessing to spawn instead of fork on macOS
+    # See https://bugs.python.org/issue33725 and https://github.com/python/cpython/pull/13603.
+    # I suspect the underlying issue here is that upstream tests aren't compatible with spawn multiprocessing, and pass on linux where the default is still fork
+    lib.optionals stdenv.isDarwin [ "tests/unit/test_compat.py" ];
+
+  pythonImportsCheck = [ "s3transfer" ];
 
   meta = with lib; {
     description = "Library for managing Amazon S3 transfers";
