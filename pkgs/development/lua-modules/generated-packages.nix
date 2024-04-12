@@ -3636,30 +3636,21 @@ buildLuarocksPackage {
   };
 }) {};
 
-toml-edit = callPackage({ buildLuarocksPackage, fetchgit, fetchurl, lua, luaOlder, luarocks-build-rust-mlua }:
+toml-edit = callPackage({ buildLuarocksPackage, fetchzip, fetchurl, lua, luaOlder }:
 buildLuarocksPackage {
   pname = "toml-edit";
-  version = "0.1.5-1";
+  version = "0.3.6-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/toml-edit-0.1.5-1.rockspec";
-    sha256 = "1xgjh8x44kn24vc29si811zq2a7pr24zqj4w07pys5k6ccnv26qz";
+    url    = "mirror://luarocks/toml-edit-0.3.6-1.rockspec";
+    sha256 = "18fw256vzvfavfwrnzm507k4h3x2lx9l93ghr1ggsi4mhsnjki46";
   }).outPath;
-  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
-  "url": "https://github.com/vhyrro/toml-edit.lua",
-  "rev": "34f072d8ff054b3124d9d2efc0263028d7425525",
-  "date": "2023-12-29T15:53:36+01:00",
-  "path": "/nix/store/z1gn59hz9ypk3icn3gmafaa19nzx7a1v-toml-edit.lua",
-  "sha256": "0jzzp4sd48haq1kmh2k85gkygfq39i10kvgjyqffcrv3frdihxvx",
-  "hash": "sha256-fXcYW3ZjZ+Yc9vLtCUJMA7vn5ytoClhnwAoi0jS5/0s=",
-  "fetchLFS": false,
-  "fetchSubmodules": true,
-  "deepClone": false,
-  "leaveDotGit": false
-}
- '') ["date" "path" "sha256"]) ;
+  src = fetchzip {
+    url    = "https://github.com/vhyrro/toml-edit.lua/archive/v0.3.6.zip";
+    sha256 = "19v6axraj2n22lmilfr4x9nr40kcjb6wnpsfhf1mh2zy9nsd6ji6";
+  };
 
   disabled = (luaOlder "5.1");
-  propagatedBuildInputs = [ lua luarocks-build-rust-mlua ];
+  propagatedBuildInputs = [ lua ];
 
   meta = {
     homepage = "https://github.com/vhyrro/toml-edit.lua";
