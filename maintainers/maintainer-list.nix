@@ -11778,12 +11778,6 @@
     githubId = 5767106;
     name = "Lukas Schmidt";
   };
-  luis = {
-    email = "luis.nixos@gmail.com";
-    github = "Luis-Hebendanz";
-    githubId = 22085373;
-    name = "Luis Hebendanz";
-  };
   luisdaranda = {
     email = "luisdomingoaranda@gmail.com";
     github = "propet";
@@ -16340,6 +16334,12 @@
     githubId = 74491719;
     matrix = "@quantenzitrone:matrix.org";
     name = "quantenzitrone";
+  };
+  qubasa = {
+    email = "consulting@qube.email";
+    github = "Qubasa";
+    githubId = 22085373;
+    name = "Luis Hebendanz";
   };
   queezle = {
     email = "git@queezle.net";
