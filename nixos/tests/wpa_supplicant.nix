@@ -181,7 +181,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
 
       with subtest("Daemon is running and accepting connections"):
           basic.wait_for_unit("wpa_supplicant-wlan1.service")
-          status = basic.succeed("wpa_cli -i wlan1 status")
+          status = basic.succeed("sudo -u wpa-supplicant wpa_cli -i wlan1 status")
           assert "Failed to connect" not in status, \
                  "Failed to connect to the daemon"
 
@@ -189,22 +189,22 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
       machineSae.copy_from_vm("/run/hostapd/wlan0.hostapd.conf")
       with subtest("Daemon can connect to the SAE access point using SAE"):
           machineSae.wait_until_succeeds(
-            "wpa_cli -i wlan1 status | grep -q wpa_state=COMPLETED"
+            "sudo -u wpa-supplicant wpa_cli -i wlan1 status | grep -q wpa_state=COMPLETED"
           )
 
       with subtest("Daemon can connect to the SAE and WPA2 mixed access point using SAE"):
           machineMixedUsingSae.wait_until_succeeds(
-            "wpa_cli -i wlan1 status | grep -q wpa_state=COMPLETED"
+            "sudo -u wpa-supplicant wpa_cli -i wlan1 status | grep -q wpa_state=COMPLETED"
           )
 
       with subtest("Daemon can connect to the SAE and WPA2 mixed access point using WPA2"):
           machineMixedUsingWpa2.wait_until_succeeds(
-            "wpa_cli -i wlan1 status | grep -q wpa_state=COMPLETED"
+            "sudo -u wpa-supplicant wpa_cli -i wlan1 status | grep -q wpa_state=COMPLETED"
           )
 
       with subtest("Daemon can connect to the WPA2 access point using WPA2"):
           machineWpa2.wait_until_succeeds(
-            "wpa_cli -i wlan1 status | grep -q wpa_state=COMPLETED"
+            "sudo -u wpa-supplicant wpa_cli -i wlan1 status | grep -q wpa_state=COMPLETED"
           )
     '';
 })

@@ -107,6 +107,12 @@ let
       stopIfChanged = false;
 
       path = [ package ];
+      serviceConfig.User = "wpa-supplicant";
+      serviceConfig.Group = "wpa-supplicant";
+      serviceConfig.AmbientCapabilities = [
+        "cap_net_raw"
+        "cap_net_admin"
+      ];
       # if `userControl.enable`, the supplicant automatically changes the permissions
       #  and owning group of the runtime dir; setting `umask` ensures the generated
       #  config file isn't readable (except to root);  see nixpkgs#267693
@@ -456,7 +462,7 @@ in {
 
         group = mkOption {
           type = types.str;
-          default = "wheel";
+          default = "wpa-supplicant";
           example = "network";
           description = "Members of this group can control wpa_supplicant.";
         };
@@ -489,6 +495,11 @@ in {
   };
 
   config = mkIf cfg.enable {
+    users.groups.wpa-supplicant = {};
+    users.users.wpa-supplicant = {
+      isSystemUser = true;
+      group = "wpa-supplicant";
+    };
     assertions = flip mapAttrsToList cfg.networks (name: cfg: {
       assertion = with cfg; count (x: x != null) [ psk pskRaw auth ] <= 1;
       message = ''options networking.wireless."${name}".{psk,pskRaw,auth} are mutually exclusive'';

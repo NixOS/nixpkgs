@@ -1,0 +1,30 @@
+commit e9a70008582562d9d83cf56ad5f93fe0c98e57b8
+Author: Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
+Date:   Sun Apr 21 21:23:17 2024 +1000
+
+    unprivileged dbus
+
+diff --git a/wpa_supplicant/dbus/dbus-wpa_supplicant.conf b/wpa_supplicant/dbus/dbus-wpa_supplicant.conf
+index e81b495f4..eeea505cc 100644
+--- a/wpa_supplicant/dbus/dbus-wpa_supplicant.conf
++++ b/wpa_supplicant/dbus/dbus-wpa_supplicant.conf
+@@ -2,7 +2,7 @@
+  "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
+  "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
+ <busconfig>
+-        <policy user="root">
++        <policy user="wpa-supplicant">
+                 <allow own="fi.w1.wpa_supplicant1"/>
+ 
+                 <allow send_destination="fi.w1.wpa_supplicant1"/>
+diff --git a/wpa_supplicant/dbus/fi.w1.wpa_supplicant1.service.in b/wpa_supplicant/dbus/fi.w1.wpa_supplicant1.service.in
+index d97ff3921..ed6e421f2 100644
+--- a/wpa_supplicant/dbus/fi.w1.wpa_supplicant1.service.in
++++ b/wpa_supplicant/dbus/fi.w1.wpa_supplicant1.service.in
+@@ -1,5 +1,5 @@
+ [D-BUS Service]
+ Name=fi.w1.wpa_supplicant1
+ Exec=@BINDIR@/wpa_supplicant -u
+-User=root
++User=wpa-supplicant
+ SystemdService=wpa_supplicant.service
