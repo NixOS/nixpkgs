@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , SDL2
 , cmake
-, copyDesktopItems
 , cubeb
 , curl
 , extra-cmake-modules
@@ -48,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    copyDesktopItems
     extra-cmake-modules
     ninja
     pkg-config
