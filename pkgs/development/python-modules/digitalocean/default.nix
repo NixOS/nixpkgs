@@ -1,39 +1,40 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy3k
 , jsonpickle
-, mock
-, pytest
 , pytestCheckHook
+, pythonOlder
 , requests
 , responses
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "python-digitalocean";
   version = "1.17.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "koalalorenzo";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1c50ka4y712rr551gq3kdfw7fgfxr4w837sww6yy683yz7m1d1h8";
+    repo = "python-digitalocean";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-CIYW6vl+IOO94VyfgTjJ3T13uGtz4BdKyVmE44maoLA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     jsonpickle
     requests
   ];
 
-  dontUseSetuptoolsCheck = true;
-
   nativeCheckInputs = [
-    pytest
     pytestCheckHook
     responses
-  ] ++ lib.optionals (!isPy3k) [
-    mock
   ];
 
   preCheck = ''
@@ -48,6 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API to manage Digital Ocean Droplets and Images";
     homepage = "https://github.com/koalalorenzo/python-digitalocean";
+    changelog = "https://github.com/koalalorenzo/python-digitalocean/releases/tag/v${version}";
     license = with licenses; [ lgpl3Only ];
     maintainers = with maintainers; [ kiwi teh ];
   };
