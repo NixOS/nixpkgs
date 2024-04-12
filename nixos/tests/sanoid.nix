@@ -47,6 +47,17 @@ in {
             target = "root@target:pool/sanoid";
             extraArgs = [ "--no-sync-snap" "--create-bookmark" ];
           };
+          # Sync the same dataset to different targets
+          "pool/sanoid1" = {
+            source = "pool/sanoid";
+            target = "root@target:pool/sanoid1";
+            extraArgs = [ "--no-sync-snap" "--create-bookmark" ];
+          };
+          "pool/sanoid2" = {
+            source = "pool/sanoid";
+            target = "root@target:pool/sanoid2";
+            extraArgs = [ "--no-sync-snap" "--create-bookmark" ];
+          };
           # Take snapshot and sync
           "pool/syncoid".target = "root@target:pool/syncoid";
 
@@ -93,7 +104,6 @@ in {
         "mkdir -m 700 -p /var/lib/syncoid",
         "cat '${snakeOilPrivateKey}' > /var/lib/syncoid/id_ecdsa",
         "chmod 600 /var/lib/syncoid/id_ecdsa",
-        "chown -R syncoid:syncoid /var/lib/syncoid/",
     )
 
     assert len(source.succeed("zfs allow pool")) == 0, "Pool shouldn't have delegated permissions set before snapshotting"
@@ -109,6 +119,16 @@ in {
     assert len(source.succeed("zfs allow pool/sanoid")) == 0, "Sanoid dataset shouldn't have delegated permissions set after snapshotting"
     assert len(source.succeed("zfs allow pool/syncoid")) == 0, "Syncoid dataset shouldn't have delegated permissions set after snapshotting"
 
+    # Add some unused dynamic users to the stateful allow list of ZFS datasets,
+    # simulating a state where they remain after the system crashed,
+    # to check they'll be correctly removed by the syncoid services.
+    # Each syncoid service run from now may reuse at most one of them for itself.
+    source.succeed(
+        "zfs allow -u $(printf %s, {61184..61200})65519 dedup pool",
+        "zfs allow -u $(printf %s, {61184..61200})65519 dedup pool/sanoid",
+        "zfs allow -u $(printf %s, {61184..61200})65519 dedup pool/syncoid",
+    )
+
     # Sync snapshots
     target.wait_for_open_port(22)
     source.succeed("touch /mnt/pool/syncoid/test.txt")
@@ -117,6 +137,9 @@ in {
     source.systemctl("start --wait syncoid-pool-syncoid.service")
     source.systemctl("start --wait syncoid-pool-syncoid.service")
     target.succeed("cat /mnt/pool/syncoid/test.txt")
+    source.systemctl("start --wait syncoid-pool-sanoid{1,2}.service")
+    target.succeed("cat /mnt/pool/sanoid1/test.txt")
+    target.succeed("cat /mnt/pool/sanoid2/test.txt")
 
     assert(len(source.succeed("zfs list -H -t snapshot pool/syncoid").splitlines()) == 1), "Syncoid should only retain one sync snapshot"
 

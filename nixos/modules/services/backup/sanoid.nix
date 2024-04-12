@@ -199,6 +199,13 @@ in
       after = [ "zfs.target" ];
       startAt = cfg.interval;
     };
+
+    # Put those packages in the global environment
+    # so that syncoid can find them when targeting this host through ssh.
+    environment.systemPackages = with pkgs; [
+      lzop
+      mbuffer
+    ];
   };
 
   meta.maintainers = with maintainers; [ lopsided98 ];
