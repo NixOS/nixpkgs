@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
 }:
 let
   tagVersion = "2.2019-12-21";
@@ -10,7 +11,7 @@ buildPythonPackage {
   pname = "publicsuffix2";
   # tags have dashes, while the library version does not
   # see https://github.com/nexB/python-publicsuffix2/issues/12
-  version = lib.replaceStrings ["-"] [""] tagVersion;
+  version = lib.replaceStrings [ "-" ] [ "" ] tagVersion;
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -20,9 +21,7 @@ buildPythonPackage {
     hash = "sha256-OV0O4LLxQ2LQiEHc1JTvScu35o2IWxo/hgn/COh2e7Y=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   postPatch = ''
     # only used to update the interal publicsuffix list
