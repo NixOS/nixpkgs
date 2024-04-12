@@ -6,23 +6,37 @@
 , pythonOlder
 , pyyaml
 , ruamel-yaml
+, setuptools
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "riscv-config";
   version = "3.18.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "riscv-software-src";
-    repo = pname;
+    repo = "riscv-config";
     rev = "refs/tags/${version}";
     hash = "sha256-lBjSHfnuNPi4Ks5ZCRLqJx3/l4GMmMEEIud8ZVl/S4Q=";
   };
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "pyyaml"
+  ];
+
+  build-system = [
+    setuptools
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  dependencies = [
     cerberus
     pyyaml
     ruamel-yaml
@@ -37,10 +51,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "RISC-V configuration validator";
-    mainProgram = "riscv-config";
     homepage = "https://github.com/riscv/riscv-config";
     changelog = "https://github.com/riscv-software-src/riscv-config/blob/${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ genericnerdyusername ];
     license = licenses.bsd3;
+    maintainers = with maintainers; [ genericnerdyusername ];
+    mainProgram = "riscv-config";
   };
 }
