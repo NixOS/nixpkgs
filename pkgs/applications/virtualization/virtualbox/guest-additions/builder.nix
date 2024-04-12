@@ -79,6 +79,8 @@ in stdenv.mkDerivation (finalAttrs: {
       VBOX_USE_SYSTEM_XORG_HEADERS := 1
       VBOX_USE_SYSTEM_GL_HEADERS := 1
       VBOX_NO_LEGACY_XORG_X11 := 1
+      SDK_VBoxLibPng_INCS :=
+      SDK_VBoxLibXml2_INCS :=
 
       SDK_VBoxOpenSslStatic_INCS := ${openssl.dev}/include/ssl
 
