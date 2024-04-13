@@ -77,6 +77,11 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
+  disabledTestPaths = lib.optionals (!pythonOlder "3.12") [
+    # tries to use `distutils`, removed in Python 3.12
+    "nisext/tests/test_sexts.py"
+  ];
+
   meta = with lib; {
     homepage = "https://nipy.org/nibabel";
     changelog = "https://github.com/nipy/nibabel/blob/${version}/Changelog";
