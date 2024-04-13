@@ -57,7 +57,10 @@ in let
   inherit (import ../common/common-let.nix { inherit lib fetchFromGitHub release_version gitRelease officialRelease monorepoSrc'; }) llvm_meta monorepoSrc;
 
   lldbPlugins = lib.makeExtensible (lldbPlugins: let
-    callPackage = newScope (lldbPlugins // { inherit stdenv; inherit (tools) lldb; });
+    callPackage = newScope (lldbPlugins // {
+      inherit stdenv;
+      inherit (tools) lldb;
+    });
   in {
     llef = callPackage ../common/lldb-plugins/llef.nix {};
   });
