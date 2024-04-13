@@ -263,7 +263,7 @@ EOF
   '';
 
   passthru.tests = {
-    inherit (python3.pkgs) numpy scipy;
+    inherit (python3.pkgs) numpy scipy scikit-learn;
     inherit ceres-solver giac octave opencv;
   };
 
