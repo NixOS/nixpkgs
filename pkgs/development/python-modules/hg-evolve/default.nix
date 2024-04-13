@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "hg-evolve";
-  version = "11.1.2";
+  version = "11.1.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ug+T1sRSB+J5FyqzdTR7xZtvybhdzBZYI7g4rX14DHo=";
+    hash = "sha256-WUPOok/tpZJSookzCIEHRKAlTzeZ6RJY0IiclgQUOs8=";
   };
 
   nativeCheckInputs = [
