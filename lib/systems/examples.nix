@@ -137,6 +137,13 @@ rec {
   riscv32-nommu = {
     config = "riscv32-unknown-linux-uclibc";
     libc = "uclibc";
+    gcc.arch = "rv32ima";
+    gcc.abi = "ilp32";
+  };
+
+  riscv32-nommu-musl = {
+    config = "riscv32-unknown-linux-musl";
+    libc = "musl";
   };
 
   mips64-embedded = {
