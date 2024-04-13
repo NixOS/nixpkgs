@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   name = "pixel-code";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchzip {
     url = "https://github.com/qwerasd205/PixelCode/releases/download/v${version}/otf.zip";
-    hash = "sha256-qu55qXcDL6YIyiFavysI9O2foccvu2Hyw7/JyIMXYv4=";
+    hash = "sha256-GNYEnv0bIWz5d8821N46FD2NBNBf3Dd7DNqjSdJKDoE=";
     stripRoot=false;
   };
 
