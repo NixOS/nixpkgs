@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnunet";
-  version = "0.20.0";
+  version = "0.21.1";
 
   src = fetchurl {
-    url = "mirror://gnu/gnunet/${pname}-${version}.tar.gz";
-    sha256 = "sha256-VgKeeKmcBNUrE1gJSuUHTkzY6puYz2hV9XrZryeslRg=";
+    url = "mirror://gnu/gnunet/gnunet-${version}.tar.gz";
+    hash = "sha256-k+aLPqynCHJz49doX+auOLLoBV5MnnANNg3UBVJJeFw=";
   };
 
   enableParallelBuilding = true;
@@ -34,10 +34,6 @@ stdenv.mkDerivation rec {
     # builds.
     find . \( -iname \*test\*.c -or -name \*.conf \) | \
       xargs sed -ie "s|/tmp|$TMPDIR|g"
-
-    sed -ie 's|@LDFLAGS@|@LDFLAGS@ $(Z_LIBS)|g' \
-      src/regex/Makefile.in \
-      src/fs/Makefile.in
   '';
 
   # unfortunately, there's still a few failures with impure tests
