@@ -11,7 +11,7 @@ in
     configFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Path to a mikrotik exporter configuration file. Mutually exclusive with
         {option}`configuration` option.
       '';
@@ -21,7 +21,7 @@ in
     configuration = mkOption {
       type = types.nullOr types.attrs;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Mikrotik exporter configuration as nix attribute set. Mutually exclusive with
         {option}`configFile` option.
 

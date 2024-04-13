@@ -18,7 +18,7 @@ in
 
       enable = mkOption {
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to configure xonsh as an interactive shell.
         '';
         type = types.bool;
@@ -30,7 +30,7 @@ in
 
       config = mkOption {
         default = "";
-        description = lib.mdDoc "Control file to customize your shell behavior.";
+        description = "Control file to customize your shell behavior.";
         type = types.lines;
       };
 

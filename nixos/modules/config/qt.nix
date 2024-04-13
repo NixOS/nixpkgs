@@ -42,7 +42,7 @@ in
   options = {
     qt = {
       enable = lib.mkEnableOption "" // {
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable Qt configuration, including theming.
 
           Enabling this option is necessary for Qt plugins to work in the
@@ -66,7 +66,7 @@ in
           [ "qt6Packages" "qt6ct" ]
           [ "qt6Packages" "qt6gtk2" ]
         ];
-        description = lib.mdDoc ''
+        description = ''
           Selects the platform theme to use for Qt applications.
 
           The options are
@@ -93,7 +93,7 @@ in
           [ "qt6Packages" "qt6gtk2" ]
           [ "qt6Packages" "qtstyleplugin-kvantum" ]
         ];
-        description = lib.mdDoc ''
+        description = ''
           Selects the style to use for Qt applications.
 
           The options are

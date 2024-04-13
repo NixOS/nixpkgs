@@ -10,11 +10,11 @@ in
 
   options.hardware.ipu6 = {
 
-    enable = mkEnableOption (lib.mdDoc "support for Intel IPU6/MIPI cameras");
+    enable = mkEnableOption "support for Intel IPU6/MIPI cameras";
 
     platform = mkOption {
       type = types.enum [ "ipu6" "ipu6ep" "ipu6epmtl" ];
-      description = lib.mdDoc ''
+      description = ''
         Choose the version for your hardware platform.
 
         Use `ipu6` for Tiger Lake, `ipu6ep` for Alder Lake or Raptor Lake,

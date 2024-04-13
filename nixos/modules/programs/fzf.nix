@@ -6,8 +6,8 @@ in
 {
   options = {
     programs.fzf = {
-      fuzzyCompletion = lib.mkEnableOption (lib.mdDoc "fuzzy completion with fzf");
-      keybindings = lib.mkEnableOption (lib.mdDoc "fzf keybindings");
+      fuzzyCompletion = lib.mkEnableOption "fuzzy completion with fzf";
+      keybindings = lib.mkEnableOption "fzf keybindings";
     };
   };
 

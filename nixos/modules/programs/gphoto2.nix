@@ -11,7 +11,7 @@ with lib;
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Whether to configure system to use gphoto2.
           To grant digital camera access to a user, the user must
           be part of the camera group:

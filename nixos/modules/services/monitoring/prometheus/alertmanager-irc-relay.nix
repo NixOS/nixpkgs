@@ -10,14 +10,14 @@ let
 in
 {
   options.services.prometheus.alertmanagerIrcRelay = {
-    enable = mkEnableOption (mdDoc "Alertmanager IRC Relay");
+    enable = mkEnableOption "Alertmanager IRC Relay";
 
     package = mkPackageOption pkgs "alertmanager-irc-relay" { };
 
     extraFlags = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = mdDoc "Extra command line options to pass to alertmanager-irc-relay.";
+      description = "Extra command line options to pass to alertmanager-irc-relay.";
     };
 
     settings = mkOption {
@@ -36,7 +36,7 @@ in
           ];
         }
       '';
-      description = mdDoc ''
+      description = ''
         Configuration for Alertmanager IRC Relay as a Nix attribute set.
         For a reference, check out the
         [example configuration](https://github.com/google/alertmanager-irc-relay#configuring-and-running-the-bot)

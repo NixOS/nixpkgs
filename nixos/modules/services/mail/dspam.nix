@@ -38,43 +38,43 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether to enable the dspam spam filter.";
+        description = "Whether to enable the dspam spam filter.";
       };
 
       user = mkOption {
         type = types.str;
         default = "dspam";
-        description = lib.mdDoc "User for the dspam daemon.";
+        description = "User for the dspam daemon.";
       };
 
       group = mkOption {
         type = types.str;
         default = "dspam";
-        description = lib.mdDoc "Group for the dspam daemon.";
+        description = "Group for the dspam daemon.";
       };
 
       storageDriver = mkOption {
         type = types.str;
         default = "hash";
-        description =  lib.mdDoc "Storage driver backend to use for dspam.";
+        description = "Storage driver backend to use for dspam.";
       };
 
       domainSocket = mkOption {
         type = types.nullOr types.path;
         default = defaultSock;
-        description = lib.mdDoc "Path to local domain socket which is used for communication with the daemon. Set to null to disable UNIX socket.";
+        description = "Path to local domain socket which is used for communication with the daemon. Set to null to disable UNIX socket.";
       };
 
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc "Additional dspam configuration.";
+        description = "Additional dspam configuration.";
       };
 
       maintenanceInterval = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc "If set, maintenance script will be run at specified (in systemd.timer format) interval";
+        description = "If set, maintenance script will be run at specified (in systemd.timer format) interval";
       };
 
     };

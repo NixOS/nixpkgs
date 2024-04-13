@@ -24,7 +24,7 @@ in {
           "http://127.0.0.1:8547"
         ]
       '';
-      description = lib.mdDoc ''
+      description = ''
         Paths or URLs to the Kea control socket.
       '';
     };

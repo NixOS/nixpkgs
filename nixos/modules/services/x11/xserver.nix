@@ -37,7 +37,7 @@ let
     output = mkOption {
       type = types.str;
       example = "DVI-0";
-      description = lib.mdDoc ''
+      description = ''
         The output name of the monitor, as shown by
         {manpage}`xrandr(1)` invoked without arguments.
       '';
@@ -46,7 +46,7 @@ let
     primary = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether this head is treated as the primary monitor,
       '';
     };
@@ -58,7 +58,7 @@ let
         DisplaySize 408 306
         Option "DPMS" "false"
       '';
-      description = lib.mdDoc ''
+      description = ''
         Extra lines to append to the `Monitor` section
         verbatim. Available options are documented in the MONITOR section in
         {manpage}`xorg.conf(5)`.
@@ -210,7 +210,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the X server.
         '';
       };
@@ -218,7 +218,7 @@ in
       autorun = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to start the X server automatically.
         '';
       };
@@ -227,13 +227,13 @@ in
         default = [];
         example = literalExpression "[ pkgs.xterm ]";
         type = types.listOf types.package;
-        description = lib.mdDoc "Which X11 packages to exclude from the default environment";
+        description = "Which X11 packages to exclude from the default environment";
       };
 
       exportConfiguration = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to symlink the X server configuration under
           {file}`/etc/X11/xorg.conf`.
         '';
@@ -242,7 +242,7 @@ in
       enableTCP = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to allow the X server to accept TCP connections.
         '';
       };
@@ -250,7 +250,7 @@ in
       autoRepeatDelay = mkOption {
         type = types.nullOr types.int;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Sets the autorepeat delay (length of time in milliseconds that a key must be depressed before autorepeat starts).
         '';
       };
@@ -258,7 +258,7 @@ in
       autoRepeatInterval = mkOption {
         type = types.nullOr types.int;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Sets the autorepeat interval (length of time in milliseconds that should elapse between autorepeat-generated keystrokes).
         '';
       };
@@ -276,21 +276,21 @@ in
             '''
           ]
         '';
-        description = lib.mdDoc "Content of additional InputClass sections of the X server configuration file.";
+        description = "Content of additional InputClass sections of the X server configuration file.";
       };
 
       modules = mkOption {
         type = types.listOf types.path;
         default = [];
         example = literalExpression "[ pkgs.xf86_input_wacom ]";
-        description = lib.mdDoc "Packages to be added to the module search path of the X server.";
+        description = "Packages to be added to the module search path of the X server.";
       };
 
       resolutions = mkOption {
         type = types.listOf types.attrs;
         default = [];
         example = [ { x = 1600; y = 1200; } { x = 1024; y = 786; } ];
-        description = lib.mdDoc ''
+        description = ''
           The screen resolutions for the X server.  The first element
           is the default resolution.  If this list is empty, the X
           server will automatically configure the resolution.
@@ -311,7 +311,7 @@ in
               path  = [ "xorg" n ];
               title = removePrefix "xf86video" n;
             }) pkgs.xorg);
-        description = lib.mdDoc ''
+        description = ''
           The names of the video drivers the configuration
           supports. They will be tried in order until one that
           supports your card is found.
@@ -327,7 +327,7 @@ in
         type = types.nullOr types.str;
         default = null;
         example = "i810";
-        description = lib.mdDoc ''
+        description = ''
           The name of the video driver for your graphics card.  This
           option is obsolete; please set the
           {option}`services.xserver.videoDrivers` instead.
@@ -337,7 +337,7 @@ in
       drivers = mkOption {
         type = types.listOf types.attrs;
         internal = true;
-        description = lib.mdDoc ''
+        description = ''
           A list of attribute sets specifying drivers to be loaded by
           the X11 server.
         '';
@@ -346,7 +346,7 @@ in
       dpi = mkOption {
         type = types.nullOr types.int;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Force global DPI resolution to use for X server. It's recommended to
           use this only when DPI is detected incorrectly; also consider using
           `Monitor` section in configuration file instead.
@@ -356,7 +356,7 @@ in
       updateDbusEnvironment = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to update the DBus activation environment after launching the
           desktop manager.
         '';
@@ -366,7 +366,7 @@ in
         layout = mkOption {
           type = types.str;
           default = "us";
-          description = lib.mdDoc ''
+          description = ''
             X keyboard layout, or multiple keyboard layouts separated by commas.
           '';
         };
@@ -375,7 +375,7 @@ in
           type = types.str;
           default = "pc104";
           example = "presario";
-          description = lib.mdDoc ''
+          description = ''
             X keyboard model.
           '';
         };
@@ -384,7 +384,7 @@ in
           type = types.commas;
           default = "terminate:ctrl_alt_bksp";
           example = "grp:caps_toggle,grp_led:scroll";
-          description = lib.mdDoc ''
+          description = ''
             X keyboard options; layout switching goes here.
           '';
         };
@@ -393,7 +393,7 @@ in
           type = types.str;
           default = "";
           example = "colemak";
-          description = lib.mdDoc ''
+          description = ''
             X keyboard variant.
           '';
         };
@@ -402,7 +402,7 @@ in
           type = types.path;
           default = "${pkgs.xkeyboard_config}/etc/X11/xkb";
           defaultText = literalExpression ''"''${pkgs.xkeyboard_config}/etc/X11/xkb"'';
-          description = lib.mdDoc ''
+          description = ''
             Path used for -xkbdir xserver parameter.
           '';
         };
@@ -410,7 +410,7 @@ in
 
       config = mkOption {
         type = types.lines;
-        description = lib.mdDoc ''
+        description = ''
           The contents of the configuration file of the X server
           ({file}`xorg.conf`).
 
@@ -427,14 +427,14 @@ in
         type = types.lines;
         default = "";
         example = ''FontPath "/path/to/my/fonts"'';
-        description = lib.mdDoc "Contents of the first `Files` section of the X server configuration file.";
+        description = "Contents of the first `Files` section of the X server configuration file.";
       };
 
       deviceSection = mkOption {
         type = types.lines;
         default = "";
         example = "VideoRAM 131072";
-        description = lib.mdDoc "Contents of the first Device section of the X server configuration file.";
+        description = "Contents of the first Device section of the X server configuration file.";
       };
 
       screenSection = mkOption {
@@ -443,20 +443,20 @@ in
         example = ''
           Option "RandRRotation" "on"
         '';
-        description = lib.mdDoc "Contents of the first Screen section of the X server configuration file.";
+        description = "Contents of the first Screen section of the X server configuration file.";
       };
 
       monitorSection = mkOption {
         type = types.lines;
         default = "";
         example = "HorizSync 28-49";
-        description = lib.mdDoc "Contents of the first Monitor section of the X server configuration file.";
+        description = "Contents of the first Monitor section of the X server configuration file.";
       };
 
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc "Additional contents (sections) included in the X server configuration file";
+        description = "Additional contents (sections) included in the X server configuration file";
       };
 
       xrandrHeads = mkOption {
@@ -476,7 +476,7 @@ in
           firstPrimary = head heads // { primary = true; };
           newHeads = singleton firstPrimary ++ tail heads;
         in if heads != [] && !hasPrimary then newHeads else heads;
-        description = lib.mdDoc ''
+        description = ''
           Multiple monitor configuration, just specify a list of XRandR
           outputs. The individual elements should be either simple strings or
           an attribute set of output options.
@@ -512,7 +512,7 @@ in
           Option "SuspendTime" "0"
           Option "OffTime" "0"
           '';
-        description = lib.mdDoc "Contents of the ServerFlags section of the X server configuration file.";
+        description = "Contents of the ServerFlags section of the X server configuration file.";
       };
 
       moduleSection = mkOption {
@@ -523,7 +523,7 @@ in
             SubSection "extmod"
             EndSubsection
           '';
-        description = lib.mdDoc "Contents of the Module section of the X server configuration file.";
+        description = "Contents of the Module section of the X server configuration file.";
       };
 
       serverLayoutSection = mkOption {
@@ -533,28 +533,28 @@ in
           ''
             Option "AIGLX" "true"
           '';
-        description = lib.mdDoc "Contents of the ServerLayout section of the X server configuration file.";
+        description = "Contents of the ServerLayout section of the X server configuration file.";
       };
 
       extraDisplaySettings = mkOption {
         type = types.lines;
         default = "";
         example = "Virtual 2048 2048";
-        description = lib.mdDoc "Lines to be added to every Display subsection of the Screen section.";
+        description = "Lines to be added to every Display subsection of the Screen section.";
       };
 
       defaultDepth = mkOption {
         type = types.int;
         default = 0;
         example = 8;
-        description = lib.mdDoc "Default colour depth.";
+        description = "Default colour depth.";
       };
 
       fontPath = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "unix/:7100";
-        description = lib.mdDoc ''
+        description = ''
           Set the X server FontPath. Defaults to null, which
           means the compiled in defaults will be used. See
           man xorg.conf for details.
@@ -564,20 +564,20 @@ in
       tty = mkOption {
         type = types.nullOr types.int;
         default = 7;
-        description = lib.mdDoc "Virtual console for the X server.";
+        description = "Virtual console for the X server.";
       };
 
       display = mkOption {
         type = types.nullOr types.int;
         default = 0;
-        description = lib.mdDoc "Display number for the X server.";
+        description = "Display number for the X server.";
       };
 
       virtualScreen = mkOption {
         type = types.nullOr types.attrs;
         default = null;
         example = { x = 2048; y = 2048; };
-        description = lib.mdDoc ''
+        description = ''
           Virtual screen size for Xrandr.
         '';
       };
@@ -586,7 +586,7 @@ in
         type = types.nullOr types.str;
         default = "/dev/null";
         example = "/var/log/Xorg.0.log";
-        description = lib.mdDoc ''
+        description = ''
           Controls the file Xorg logs to.
 
           The default of `/dev/null` is set so that systemd services (like `displayManagers`) only log to the journal and don't create their own log files.
@@ -599,7 +599,7 @@ in
         type = types.nullOr types.int;
         default = 3;
         example = 7;
-        description = lib.mdDoc ''
+        description = ''
           Controls verbosity of X logging.
         '';
       };
@@ -607,7 +607,7 @@ in
       enableCtrlAltBackspace = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the DontZap option, which binds Ctrl+Alt+Backspace
           to forcefully kill X. This can lead to data loss and is disabled
           by default.
@@ -617,7 +617,7 @@ in
       terminateOnReset = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to terminate X upon server reset.
         '';
       };
@@ -625,7 +625,7 @@ in
       upscaleDefaultCursor = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Upscale the default X cursor to be more visible on high-density displays.
           Requires `config.services.xserver.dpi` to be set.
         '';

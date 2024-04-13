@@ -15,20 +15,20 @@ in
     boot.uki = {
       name = lib.mkOption {
         type = lib.types.str;
-        description = lib.mdDoc "Name of the UKI";
+        description = "Name of the UKI";
       };
 
       version = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = config.system.image.version;
         defaultText = lib.literalExpression "config.system.image.version";
-        description = lib.mdDoc "Version of the image or generation the UKI belongs to";
+        description = "Version of the image or generation the UKI belongs to";
       };
 
       tries = lib.mkOption {
         type = lib.types.nullOr lib.types.ints.unsigned;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Number of boot attempts before this UKI is considered bad.
 
           If no tries are specified (the default) automatic boot assessment remains inactive.
@@ -41,7 +41,7 @@ in
 
       settings = lib.mkOption {
         type = format.type;
-        description = lib.mdDoc ''
+        description = ''
           The configuration settings for ukify. These control what the UKI
           contains and how it is built.
         '';
@@ -49,7 +49,7 @@ in
 
       configFile = lib.mkOption {
         type = lib.types.path;
-        description = lib.mdDoc ''
+        description = ''
           The configuration file passed to {manpage}`ukify(1)` to create the UKI.
 
           By default this configuration file is created from {option}`boot.uki.settings`.
@@ -60,7 +60,7 @@ in
     system.boot.loader.ukiFile = lib.mkOption {
       type = lib.types.str;
       internal = true;
-      description = lib.mdDoc "Name of the UKI file";
+      description = "Name of the UKI file";
     };
 
   };
