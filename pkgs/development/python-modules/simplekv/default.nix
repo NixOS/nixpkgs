@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, dulwich
-, fetchFromGitHub
-, mock
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, six
+{
+  lib,
+  buildPythonPackage,
+  dulwich,
+  fetchFromGitHub,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-seUGDj2q84+AjDFM1pxMLlHbe9uBgEhmqA96UHjnCmo=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     dulwich
@@ -34,9 +33,7 @@ buildPythonPackage rec {
     six
   ];
 
-  pythonImportsCheck = [
-    "simplekv"
-  ];
+  pythonImportsCheck = [ "simplekv" ];
 
   disabledTests = [
     # Issue with fixture
