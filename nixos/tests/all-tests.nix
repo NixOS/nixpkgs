@@ -1042,6 +1042,7 @@ in {
   yabar = handleTest ./yabar.nix {};
   ydotool = handleTest ./ydotool.nix {};
   yggdrasil = handleTest ./yggdrasil.nix {};
+  your_spotify = handleTest ./your_spotify.nix {};
   zammad = handleTest ./zammad.nix {};
   zeronet-conservancy = handleTest ./zeronet-conservancy.nix {};
   zfs = handleTest ./zfs.nix {};
