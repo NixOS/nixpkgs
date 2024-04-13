@@ -89,6 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "uclibc-ng";
   version = "1.0.47";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchurl {
     #url = "https://downloads.uclibc-ng.org/releases/${finalAttrs.version}/uClibc-ng-${finalAttrs.version}.tar.xz";
     url = "https://github.com/wbx-github/uclibc-ng/archive/70eea5e0f753483dccaabf2ac7ce5b6ef7e8e851.tar.gz";
@@ -133,7 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # `make libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrwlock.h`:
   # error: bits/sysnum.h: No such file or directory
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   installPhase = ''
     runHook preInstall
@@ -144,9 +146,13 @@ stdenv.mkDerivation (finalAttrs: {
     # libpthread.so may not exist, so I do || true
     sed -i s@/lib/@$out/lib/@g $out/lib/libc.so $out/lib/libpthread.so || true
 
-    cp .config $out/
+    mkdir -p $dev/lib/
+    cp .config $dev/
     ls -ltrh lib/
     cp -va lib/ld-uClibc* $out/lib/
+
+    #mv $out/lib/*.{o,a} $dev/lib/
+
     ln -sv crt1.o $out/lib/Scrt1.o
 
     runHook postInstall
