@@ -4,6 +4,7 @@
 , runCommand
 , git
 , nix-update-script
+, nixosTests
 ,
 }:
 buildGoModule rec {
@@ -35,6 +36,9 @@ buildGoModule rec {
     cp -a $src/app/server/migrations $out/share/plandex/
   '';
 
+  passthru.tests = {
+    inherit (nixosTests) plandex-server;
+  };
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
