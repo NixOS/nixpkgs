@@ -537,7 +537,7 @@ let
         Refresh interval to re-read the instance list.
       '';
 
-      port = mkDefOpt types.int "80" ''
+      port = mkDefOpt types.port "80" ''
         The port to scrape metrics from. If using the public IP
         address, this must instead be specified in the relabeling
         rule.
@@ -609,7 +609,7 @@ let
   };
 
   promTypes.digitalocean_sd_config = mkSdConfigModule {
-    port = mkDefOpt types.int "80" ''
+    port = mkDefOpt types.port "80" ''
       The port to scrape metrics from.
     '';
 
@@ -626,7 +626,7 @@ let
       '';
     };
 
-    port = mkDefOpt types.int "80" ''
+    port = mkDefOpt types.port "80" ''
       The port to scrape metrics from, when `role` is nodes, and for discovered
       tasks and services that don't have published ports.
     '';
@@ -687,7 +687,7 @@ let
         The type of DNS query to perform. One of SRV, A, or AAAA.
       '';
 
-      port = mkOpt types.int ''
+      port = mkOpt types.port ''
         The port number used if the query type is not SRV.
       '';
 
@@ -731,7 +731,7 @@ let
         Refresh interval to re-read the instance list.
       '';
 
-      port = mkDefOpt types.int "80" ''
+      port = mkDefOpt types.port "80" ''
         The port to scrape metrics from. If using the public IP
         address, this must instead be specified in the relabeling
         rule.
@@ -840,7 +840,7 @@ let
       '';
     };
 
-    port = mkDefOpt types.int "80" ''
+    port = mkDefOpt types.port "80" ''
       The port to scrape metrics from.
     '';
 
@@ -999,7 +999,7 @@ let
         Refresh interval to re-read the instance list.
       '';
 
-      port = mkDefOpt types.int "80" ''
+      port = mkDefOpt types.port "80" ''
         The port to scrape metrics from. If using the public IP address, this must
         instead be specified in the relabeling rule.
       '';
@@ -1007,7 +1007,7 @@ let
   };
 
   promTypes.linode_sd_config = mkSdConfigModule {
-    port = mkDefOpt types.int "80" ''
+    port = mkDefOpt types.port "80" ''
       The port to scrape metrics from.
     '';
 
@@ -1148,7 +1148,7 @@ let
           Refresh interval to re-read the instance list.
         '';
 
-        port = mkDefOpt types.int "80" ''
+        port = mkDefOpt types.port "80" ''
           The port to scrape metrics from. If using the public IP address, this must
           instead be specified in the relabeling rule.
         '';
@@ -1193,7 +1193,7 @@ let
       Refresh interval to re-read the resources list.
     '';
 
-    port = mkDefOpt types.int "80" ''
+    port = mkDefOpt types.port "80" ''
       The port to scrape metrics from.
     '';
   };
@@ -1231,7 +1231,7 @@ let
         '';
       };
 
-      port = mkDefOpt types.int "80" ''
+      port = mkDefOpt types.port "80" ''
         The port to scrape metrics from.
       '';
 
@@ -1307,7 +1307,7 @@ let
         If omitted all containers owned by the requesting account are scraped.
       '';
 
-      port = mkDefOpt types.int "9163" ''
+      port = mkDefOpt types.port "9163" ''
         The port to use for discovery and metric scraping.
       '';
 
