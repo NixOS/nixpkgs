@@ -27,13 +27,13 @@
 
 resholve.mkDerivation rec {
   pname = "bats";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "bats-core";
     repo = "bats-core";
     rev = "v${version}";
-    sha256 = "sha256-gy4dyoKRlf2WFmH1/mSNwhVR3df92BgpT4TjTpV4FyQ=";
+    hash = "sha256-goHIhbBoCf1eb1N8xIHdVvAURofvLDgEDXofhDHrr7Y=";
   };
 
   patchPhase = ''
@@ -69,11 +69,13 @@ resholve.mkDerivation rec {
         external = [
           "greadlink"
           "shlock"
+        ] ++ lib.optionals stdenv.isDarwin [
           "pkill" # procps doesn't supply this on darwin
         ];
       };
       fix = {
         "$BATS_ROOT" = [ "${placeholder "out"}" ];
+        "$BATS_LIBDIR" = [ "lib" ];
         "$BATS_LIBEXEC" = [ "${placeholder "out"}/libexec/bats-core" ];
       };
       keep = {
@@ -99,6 +101,7 @@ resholve.mkDerivation rec {
         "$BATS_LINE_REFERENCE_FORMAT" = "comma_line";
         "$BATS_LOCKING_IMPLEMENTATION" = "${flock}/bin/flock";
         "$parallel_binary_name" = "${parallel}/bin/parallel";
+        "${placeholder "out"}/libexec/bats-core/bats-preprocess" = true;
       };
       execer = [
         /*
@@ -115,6 +118,10 @@ resholve.mkDerivation rec {
         # these do exec, but other internal files
         "cannot:libexec/bats-core/bats-exec-file"
         "cannot:libexec/bats-core/bats-exec-suite"
+        "cannot:libexec/bats-core/bats-gather-tests"
+      ] ++ lib.optionals (!stdenv.isDarwin) [
+        # checked invocations for exec
+        "cannot:${procps}/bin/pkill"
       ];
     };
   };
