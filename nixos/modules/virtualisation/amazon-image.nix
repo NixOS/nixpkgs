@@ -75,8 +75,11 @@ in
       after = ["network-online.target"];
       path = [ pkgs.curl ];
       script = builtins.readFile ./ec2-metadata-fetcher.sh;
-      serviceConfig.Type = "oneshot";
-      serviceConfig.StandardOutput = "journal+console";
+      serviceConfig = {
+        Type = "oneshot";
+        StandardOutput = "journal+console";
+        RemainAfterExit = true;
+      };
     };
 
     # Amazon-issued AMIs include the SSM Agent by default, so we do the same.
