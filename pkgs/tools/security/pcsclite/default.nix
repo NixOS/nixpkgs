@@ -75,9 +75,12 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals polkitSupport [ dbus polkit ];
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      command = "pcscd --version";
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "pcscd --version";
+      };
     };
     updateScript = nix-update-script { };
   };
@@ -89,6 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd3;
     mainProgram = "pcscd";
     maintainers = [ maintainers.anthonyroussel ];
+    pkgConfigModules = [ "libpcsclite" ];
     platforms = with platforms; unix;
   };
 })
