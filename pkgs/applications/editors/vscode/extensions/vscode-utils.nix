@@ -114,6 +114,8 @@ let
 
     version = ext.version;
 
+    relativeLocation = ext.vscodeExtUniqueId;
+
     location = {
       "$mid" = 1;
       fsPath = ext.outPath + "/share/vscode/extensions/${ext.vscodeExtUniqueId}";
