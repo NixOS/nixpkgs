@@ -16600,6 +16600,12 @@
     githubId = 145816;
     name = "David McKay";
   };
+  raylas = {
+    email = "r@raymond.sh";
+    github = "raylas";
+    githubId = 8099415;
+    name = "Raymond Douglas";
+  };
   rayslash = {
     email = "stevemathewjoy@tutanota.com";
     github = "rayslash";
