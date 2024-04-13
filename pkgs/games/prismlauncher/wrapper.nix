@@ -24,6 +24,7 @@
 , mesa-demos
 , pciutils
 , udev
+, vulkan-loader
 , libusb1
 
 , msaClientID ? null
@@ -100,6 +101,7 @@ symlinkJoin {
         glfw
         openal
         stdenv.cc.cc.lib
+        vulkan-loader # VulkanMod's lwjgl
 
         # oshi
         udev
