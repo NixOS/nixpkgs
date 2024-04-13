@@ -18,14 +18,14 @@ in
         type = with types; listOf package;
         default = [ ];
         example = literalExpression "with pkgs; [ fcitx5-rime ]";
-        description = lib.mdDoc ''
+        description = ''
           Enabled Fcitx5 addons.
         '';
       };
       waylandFrontend = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Use the Wayland input method frontend.
           See [Using Fcitx 5 on Wayland](https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland).
         '';
@@ -34,7 +34,7 @@ in
         type = types.bool;
         default = config.services.desktopManager.plasma6.enable;
         defaultText = literalExpression "config.services.desktopManager.plasma6.enable";
-        description = lib.mdDoc ''
+        description = ''
           Use qt6 versions of fcitx5 packages.
           Required for configuring fcitx5 in KDE System Settings.
         '';
@@ -48,7 +48,7 @@ in
             angry = "(￣ー￣)";
           }
         '';
-        description = lib.mdDoc "Quick phrases.";
+        description = "Quick phrases.";
       };
       quickPhraseFiles = mkOption {
         type = with types; attrsOf path;
@@ -59,7 +59,7 @@ in
             numbers = ./numbers.mb;
           }
         '';
-        description = lib.mdDoc "Quick phrase files.";
+        description = "Quick phrase files.";
       };
       settings = {
         globalOptions = lib.mkOption {
@@ -67,7 +67,7 @@ in
             freeformType = settingsFormat.type;
           };
           default = { };
-          description = lib.mdDoc ''
+          description = ''
             The global options in `config` file in ini format.
           '';
         };
@@ -76,14 +76,14 @@ in
             freeformType = settingsFormat.type;
           };
           default = { };
-          description = lib.mdDoc ''
+          description = ''
             The input method configure in `profile` file in ini format.
           '';
         };
         addons = lib.mkOption {
           type = with lib.types; (attrsOf anything);
           default = { };
-          description = lib.mdDoc ''
+          description = ''
             The addon configures in `conf` folder in ini format with global sections.
             Each item is written to the corresponding file.
           '';
@@ -93,7 +93,7 @@ in
       ignoreUserConfig = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Ignore the user configures. **Warning**: When this is enabled, the
           user config files are totally ignored and the user dict can't be saved
           and loaded.

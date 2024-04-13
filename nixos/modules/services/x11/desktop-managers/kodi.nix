@@ -12,7 +12,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Enable the kodi multimedia center.";
+        description = "Enable the kodi multimedia center.";
       };
 
       package = mkPackageOption pkgs "kodi" {

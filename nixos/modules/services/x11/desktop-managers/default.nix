@@ -33,7 +33,7 @@ in
           type = types.enum [ "center" "fill" "max" "scale" "tile" ];
           default = "scale";
           example = "fill";
-          description = lib.mdDoc ''
+          description = ''
             The file {file}`~/.background-image` is used as a background image.
             This option specifies the placement of this image onto your desktop.
 
@@ -49,7 +49,7 @@ in
         combineScreens = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             When set to `true` the wallpaper will stretch across all screens.
             When set to `false` the wallpaper is duplicated to all screens.
           '';
@@ -64,7 +64,7 @@ in
             bgSupport = true;
             start = "...";
           };
-        description = lib.mdDoc ''
+        description = ''
           Internal option used to add some common line to desktop manager
           scripts before forwarding the value to the
           `displayManager`.
@@ -86,7 +86,7 @@ in
         type = types.nullOr types.str;
         default = null;
         example = "none";
-        description = lib.mdDoc ''
+        description = ''
           **Deprecated**, please use [](#opt-services.displayManager.defaultSession) instead.
 
           Default desktop manager loaded if none have been chosen.

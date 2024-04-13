@@ -33,13 +33,13 @@ lib.checkListOfEnum "where-is-my-sddm-theme: variant" validVariants variants
 
 stdenvNoCC.mkDerivation rec {
   pname = "where-is-my-sddm-theme";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "stepanzubkov";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-/D3i4QcE5+GbiAw32bFYJ7UxW/5NAl9FqQfiQc4akzI=";
+    hash = "sha256-eIqSS+Kzf543HiY8WItyZ2vO1SHp7y9yOAD9hIzFPfg=";
   };
 
   propagatedUserEnvPkgs =

@@ -14,8 +14,8 @@ in
 
     programs.java = {
 
-      enable = mkEnableOption (lib.mdDoc "java") // {
-        description = lib.mdDoc ''
+      enable = mkEnableOption "java" // {
+        description = ''
           Install and setup the Java development kit.
 
           ::: {.note}
@@ -34,7 +34,7 @@ in
         example = "jre";
       };
 
-      binfmt = mkEnableOption (lib.mdDoc "binfmt to execute java jar's and classes");
+      binfmt = mkEnableOption "binfmt to execute java jar's and classes";
 
     };
 

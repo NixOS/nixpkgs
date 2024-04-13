@@ -15,21 +15,21 @@ in
     environmentFile = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         File containing env-vars to be substituted into the exporter's config.
       '';
     };
     configurationFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Specify the JunOS exporter configuration file to use.
       '';
     };
     configuration = mkOption {
       type = types.nullOr types.attrs;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         JunOS exporter configuration as nix attribute set. Mutually exclusive with the `configurationFile` option.
       '';
       example = {
@@ -44,7 +44,7 @@ in
     telemetryPath = mkOption {
       type = types.str;
       default = "/metrics";
-      description = lib.mdDoc ''
+      description = ''
         Path under which to expose metrics.
       '';
     };

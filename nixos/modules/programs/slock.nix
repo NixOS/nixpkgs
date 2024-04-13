@@ -12,7 +12,7 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Whether to install slock screen locker with setuid wrapper.
         '';
       };

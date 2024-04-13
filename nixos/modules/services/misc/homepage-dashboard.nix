@@ -12,20 +12,20 @@ in
 {
   options = {
     services.homepage-dashboard = {
-      enable = lib.mkEnableOption (lib.mdDoc "Homepage Dashboard, a highly customizable application dashboard");
+      enable = lib.mkEnableOption "Homepage Dashboard, a highly customizable application dashboard";
 
       package = lib.mkPackageOption pkgs "homepage-dashboard" { };
 
       openFirewall = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = lib.mdDoc "Open ports in the firewall for Homepage.";
+        description = "Open ports in the firewall for Homepage.";
       };
 
       listenPort = lib.mkOption {
         type = lib.types.int;
         default = 8082;
-        description = lib.mdDoc "Port for Homepage to bind to.";
+        description = "Port for Homepage to bind to.";
       };
 
       environmentFile = lib.mkOption {
@@ -44,7 +44,7 @@ in
 
       customCSS = lib.mkOption {
         type = lib.types.lines;
-        description = lib.mdDoc ''
+        description = ''
           Custom CSS for styling Homepage.
 
           See https://gethomepage.dev/latest/configs/custom-css-js/.
@@ -54,7 +54,7 @@ in
 
       customJS = lib.mkOption {
         type = lib.types.lines;
-        description = lib.mdDoc ''
+        description = ''
           Custom Javascript for Homepage.
 
           See https://gethomepage.dev/latest/configs/custom-css-js/.
@@ -64,7 +64,7 @@ in
 
       bookmarks = lib.mkOption {
         inherit (settingsFormat) type;
-        description = lib.mdDoc ''
+        description = ''
           Homepage bookmarks configuration.
 
           See https://gethomepage.dev/latest/configs/bookmarks/.
@@ -87,7 +87,7 @@ in
 
       services = lib.mkOption {
         inherit (settingsFormat) type;
-        description = lib.mdDoc ''
+        description = ''
           Homepage services configuration.
 
           See https://gethomepage.dev/latest/configs/services/.
@@ -120,7 +120,7 @@ in
 
       widgets = lib.mkOption {
         inherit (settingsFormat) type;
-        description = lib.mdDoc ''
+        description = ''
           Homepage widgets configuration.
 
           See https://gethomepage.dev/latest/configs/service-widgets/.
@@ -146,7 +146,7 @@ in
 
       kubernetes = lib.mkOption {
         inherit (settingsFormat) type;
-        description = lib.mdDoc ''
+        description = ''
           Homepage kubernetes configuration.
 
           See https://gethomepage.dev/latest/configs/kubernetes/.
@@ -156,7 +156,7 @@ in
 
       docker = lib.mkOption {
         inherit (settingsFormat) type;
-        description = lib.mdDoc ''
+        description = ''
           Homepage docker configuration.
 
           See https://gethomepage.dev/latest/configs/docker/.
@@ -166,7 +166,7 @@ in
 
       settings = lib.mkOption {
         inherit (settingsFormat) type;
-        description = lib.mdDoc ''
+        description = ''
           Homepage settings.
 
           See https://gethomepage.dev/latest/configs/settings/.

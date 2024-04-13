@@ -13973,6 +13973,10 @@
     githubId = 56316606;
     name = "Amneesh Singh";
   };
+  nayala = {
+    name = "Nia";
+    matrix = "@fly:asra.gr";
+  };
   nazarewk = {
     name = "Krzysztof Nazarewski";
     matrix = "@nazarewk:matrix.org";
