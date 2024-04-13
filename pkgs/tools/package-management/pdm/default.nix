@@ -94,10 +94,12 @@ buildPythonApplication rec {
   '';
 
   postInstall = ''
-    installShellCompletion --cmd pdm \
-      --bash <($out/bin/pdm completion bash) \
-      --fish <($out/bin/pdm completion fish) \
-      --zsh <($out/bin/pdm completion zsh)
+    export PDM_LOG_DIR=/tmp/pdm/log
+    $out/bin/pdm completion bash >pdm.bash
+    $out/bin/pdm completion fish >pdm.fish
+    $out/bin/pdm completion zsh >pdm.zsh
+    installShellCompletion pdm.{bash,fish,zsh}
+    unset PDM_LOG_DIR
   '';
 
   nativeCheckInputs = [
