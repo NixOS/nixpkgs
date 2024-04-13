@@ -14,7 +14,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the hound code search daemon.
         '';
       };
@@ -24,7 +24,7 @@ in {
       user = mkOption {
         default = "hound";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           User the hound daemon should execute under.
         '';
       };
@@ -32,7 +32,7 @@ in {
       group = mkOption {
         default = "hound";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Group the hound daemon should execute under.
         '';
       };
@@ -40,7 +40,7 @@ in {
       home = mkOption {
         default = "/var/lib/hound";
         type = types.path;
-        description = lib.mdDoc ''
+        description = ''
           The path to use as hound's $HOME.
           If the default user "hound" is configured then this is the home of the "hound" user.
         '';
@@ -48,7 +48,7 @@ in {
 
       config = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           The full configuration of the Hound daemon. Note the dbpath
           should be an absolute path to a writable location on disk.
         '';
@@ -68,7 +68,7 @@ in {
         type = types.str;
         default = "0.0.0.0:6080";
         example = ":6080";
-        description = lib.mdDoc ''
+        description = ''
           Listen on this [IP]:port
         '';
       };

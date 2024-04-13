@@ -10,7 +10,7 @@ in
 {
   options = {
     programs.kubeswitch = {
-      enable = lib.mkEnableOption (lib.mdDoc "kubeswitch");
+      enable = lib.mkEnableOption "kubeswitch";
 
       commandName = lib.mkOption {
         type = lib.types.str;

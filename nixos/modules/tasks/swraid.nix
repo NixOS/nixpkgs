@@ -17,8 +17,8 @@ in {
 
 
   options.boot.swraid = {
-    enable = lib.mkEnableOption (lib.mdDoc "swraid support using mdadm") // {
-      description = lib.mdDoc ''
+    enable = lib.mkEnableOption "swraid support using mdadm" // {
+      description = ''
         Whether to enable support for Linux MD RAID arrays.
 
         When this is enabled, mdadm will be added to the system path,
@@ -32,11 +32,11 @@ in {
         procedure.
       '';
       default = enable_implicitly_for_old_state_versions;
-      defaultText = lib.mdDoc "`true` if stateVersion is older than 23.11";
+      defaultText = "`true` if stateVersion is older than 23.11";
     };
 
     mdadmConf = lib.mkOption {
-      description = lib.mdDoc "Contents of {file}`/etc/mdadm.conf`.";
+      description = "Contents of {file}`/etc/mdadm.conf`.";
       type = lib.types.lines;
       default = "";
     };

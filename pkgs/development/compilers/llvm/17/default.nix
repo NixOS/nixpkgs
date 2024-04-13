@@ -1,6 +1,6 @@
 { lowPrio, newScope, pkgs, lib, stdenv, cmake, ninja
 , preLibcCrossHeaders
-, libxml2, python3, fetchFromGitHub, overrideCC, wrapCCWith, wrapBintoolsWith
+, libxml2, python3, fetchFromGitHub, fetchpatch, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 , targetLlvm
@@ -285,14 +285,40 @@ in let
     callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake ninja libxml2 python3 release_version version monorepoSrc; });
   in {
 
-    compiler-rt-libc = callPackage ./compiler-rt {
+    compiler-rt-libc = callPackage ../common/compiler-rt {
+      patches = [
+        ./compiler-rt/X86-support-extension.patch # Add support for i486 i586 i686 by reusing i386 config
+        ./compiler-rt/gnu-install-dirs.patch
+        # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
+        # extra `/`.
+        ./compiler-rt/normalize-var.patch
+        # Prevent a compilation error on darwin
+        ./compiler-rt/darwin-targetconditionals.patch
+        # See: https://github.com/NixOS/nixpkgs/pull/186575
+        ../common/compiler-rt/darwin-plistbuddy-workaround.patch
+        # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
+        # ../common/compiler-rt/armv7l-15.patch
+      ];
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic)
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
                else stdenv;
     };
 
-    compiler-rt-no-libc = callPackage ./compiler-rt {
+    compiler-rt-no-libc = callPackage ../common/compiler-rt {
+      patches = [
+        ./compiler-rt/X86-support-extension.patch # Add support for i486 i586 i686 by reusing i386 config
+        ./compiler-rt/gnu-install-dirs.patch
+        # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
+        # extra `/`.
+        ./compiler-rt/normalize-var.patch
+        # Prevent a compilation error on darwin
+        ./compiler-rt/darwin-targetconditionals.patch
+        # See: https://github.com/NixOS/nixpkgs/pull/186575
+        ../common/compiler-rt/darwin-plistbuddy-workaround.patch
+        # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
+        # ../common/compiler-rt/armv7l-15.patch
+      ];
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRt
@@ -311,7 +337,15 @@ in let
     # `libcxx` requires a fairly modern C++ compiler,
     # so: we use the clang from this LLVM package set instead of the regular
     # stdenv's compiler.
-    libcxx = callPackage ./libcxx {
+    libcxx = callPackage ../common/libcxx {
+      patches = lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
+        # https://github.com/llvm/llvm-project/issues/64226
+        (fetchpatch {
+          name = "0042-mbstate_t-not-defined.patch";
+          url = "https://github.com/macports/macports-ports/raw/acd8acb171f1658596ed1cf25da48d5b932e2d19/lang/llvm-17/files/0042-mbstate_t-not-defined.patch";
+          hash = "sha256-jo+DYA6zuSv9OH3A0bYwY5TlkWprup4OKQ7rfK1WHBI=";
+        })
+      ];
       inherit llvm_meta;
       stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };

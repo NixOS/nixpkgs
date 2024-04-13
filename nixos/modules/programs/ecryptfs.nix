@@ -7,7 +7,7 @@ let
 
 in {
   options.programs.ecryptfs = {
-    enable = mkEnableOption (lib.mdDoc "ecryptfs setuid mount wrappers");
+    enable = mkEnableOption "ecryptfs setuid mount wrappers";
   };
 
   config = mkIf cfg.enable {

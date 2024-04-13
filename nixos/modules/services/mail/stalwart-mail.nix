@@ -10,13 +10,13 @@ let
 
 in {
   options.services.stalwart-mail = {
-    enable = mkEnableOption (mdDoc "the Stalwart all-in-one email server");
+    enable = mkEnableOption "the Stalwart all-in-one email server";
     package = mkPackageOption pkgs "stalwart-mail" { };
 
     settings = mkOption {
       inherit (configFormat) type;
       default = { };
-      description = mdDoc ''
+      description = ''
         Configuration options for the Stalwart email server.
         See <https://stalw.art/docs/category/configuration> for available options.
 

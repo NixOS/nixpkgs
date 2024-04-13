@@ -11,10 +11,10 @@ in {
 
   options = {
     services.qdrant = {
-      enable = mkEnableOption (lib.mdDoc "Vector Search Engine for the next generation of AI applications");
+      enable = mkEnableOption "Vector Search Engine for the next generation of AI applications";
 
       settings = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Configuration for Qdrant
           Refer to <https://github.com/qdrant/qdrant/blob/master/config/config.yaml> for details on supported values.
         '';
