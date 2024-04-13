@@ -18,7 +18,7 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Start SSH service during initrd boot. It can be used to debug failing
         boot on a remote server, enter pasphrase for an encrypted partition etc.
         Service is killed when stage-1 boot is finished.
@@ -31,7 +31,7 @@ in
     port = mkOption {
       type = types.port;
       default = 22;
-      description = lib.mdDoc ''
+      description = ''
         Port on which SSH initrd service should listen.
       '';
     };
@@ -40,7 +40,7 @@ in
       type = types.nullOr types.str;
       default = null;
       defaultText = ''"/bin/ash"'';
-      description = lib.mdDoc ''
+      description = ''
         Login shell of the remote user. Can be used to limit actions user can do.
       '';
     };
@@ -52,7 +52,7 @@ in
         "/etc/secrets/initrd/ssh_host_rsa_key"
         "/etc/secrets/initrd/ssh_host_ed25519_key"
       ];
-      description = lib.mdDoc ''
+      description = ''
         Specify SSH host keys to import into the initrd.
 
         To generate keys, use
@@ -81,7 +81,7 @@ in
     ignoreEmptyHostKeys = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Allow leaving {option}`config.boot.initrd.network.ssh` empty,
         to deploy ssh host keys out of band.
       '';
@@ -91,7 +91,7 @@ in
       type = types.listOf types.str;
       default = config.users.users.root.openssh.authorizedKeys.keys;
       defaultText = literalExpression "config.users.users.root.openssh.authorizedKeys.keys";
-      description = lib.mdDoc ''
+      description = ''
         Authorized keys for the root user on initrd.
         You can combine the `authorizedKeys` and `authorizedKeyFiles` options.
       '';
@@ -105,7 +105,7 @@ in
       type = types.listOf types.path;
       default = config.users.users.root.openssh.authorizedKeys.keyFiles;
       defaultText = literalExpression "config.users.users.root.openssh.authorizedKeys.keyFiles";
-      description = lib.mdDoc ''
+      description = ''
         Authorized keys taken from files for the root user on initrd.
         You can combine the `authorizedKeyFiles` and `authorizedKeys` options.
       '';
@@ -114,7 +114,7 @@ in
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = lib.mdDoc "Verbatim contents of {file}`sshd_config`.";
+      description = "Verbatim contents of {file}`sshd_config`.";
     };
   };
 

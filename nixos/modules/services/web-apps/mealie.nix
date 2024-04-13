@@ -24,7 +24,7 @@ in
     settings = lib.mkOption {
       type = with lib.types; attrsOf anything;
       default = {};
-      description = lib.mdDoc ''
+      description = ''
         Configuration of the Mealie service.
 
         See [the mealie documentation](https://nightly.mealie.io/documentation/getting-started/installation/backend-config/) for available options and default values.

@@ -25,7 +25,7 @@ in
       '';
     };
     system.activatableSystemBuilderCommands = options.system.systemBuilderCommands // {
-      description = lib.mdDoc ''
+      description = ''
         Like `system.systemBuilderCommands`, but only for the commands that are
         needed *both* when the system is activatable and when it isn't.
 

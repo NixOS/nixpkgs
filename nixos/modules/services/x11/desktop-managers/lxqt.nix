@@ -18,14 +18,14 @@ in
     services.xserver.desktopManager.lxqt.enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc "Enable the LXQt desktop manager";
+      description = "Enable the LXQt desktop manager";
     };
 
     environment.lxqt.excludePackages = mkOption {
       default = [];
       example = literalExpression "[ pkgs.lxqt.qterminal ]";
       type = types.listOf types.package;
-      description = lib.mdDoc "Which LXQt packages to exclude from the default environment";
+      description = "Which LXQt packages to exclude from the default environment";
     };
 
   };

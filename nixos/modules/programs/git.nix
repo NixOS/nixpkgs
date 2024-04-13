@@ -9,7 +9,7 @@ in
 {
   options = {
     programs.git = {
-      enable = mkEnableOption (lib.mdDoc "git, a distributed version control system");
+      enable = mkEnableOption "git, a distributed version control system";
 
       package = mkPackageOption pkgs "git" {
         example = "gitFull";
@@ -43,7 +43,7 @@ in
           init.defaultBranch = "main";
           url."https://github.com/".insteadOf = [ "gh:" "github:" ];
         };
-        description = lib.mdDoc ''
+        description = ''
           Configuration to write to /etc/gitconfig. A list can also be
           specified to keep the configuration in order. For example, setting
           `config` to `[ { foo.x = 42; } { bar.y = 42; }]` will put the `foo`
@@ -59,7 +59,7 @@ in
       };
 
       lfs = {
-        enable = mkEnableOption (lib.mdDoc "git-lfs (Large File Storage)");
+        enable = mkEnableOption "git-lfs (Large File Storage)";
 
         package = mkPackageOption pkgs "git-lfs" { };
       };

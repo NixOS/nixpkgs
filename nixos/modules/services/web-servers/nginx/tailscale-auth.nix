@@ -7,27 +7,27 @@ let
 in
 {
   options.services.nginx.tailscaleAuth = {
-    enable = mkEnableOption (lib.mdDoc "Enable tailscale.nginx-auth, to authenticate nginx users via tailscale.");
+    enable = mkEnableOption "Enable tailscale.nginx-auth, to authenticate nginx users via tailscale.";
 
     package = lib.mkPackageOptionMD pkgs "tailscale-nginx-auth" {};
 
     user = mkOption {
       type = types.str;
       default = "tailscale-nginx-auth";
-      description = lib.mdDoc "User which runs tailscale-nginx-auth";
+      description = "User which runs tailscale-nginx-auth";
     };
 
     group = mkOption {
       type = types.str;
       default = "tailscale-nginx-auth";
-      description = lib.mdDoc "Group which runs tailscale-nginx-auth";
+      description = "Group which runs tailscale-nginx-auth";
     };
 
     expectedTailnet = mkOption {
       default = "";
       type = types.nullOr types.str;
       example = "tailnet012345.ts.net";
-      description = lib.mdDoc ''
+      description = ''
         If you want to prevent node sharing from allowing users to access services
         across tailnets, declare your expected tailnets domain here.
       '';
@@ -36,7 +36,7 @@ in
     socketPath = mkOption {
       default = "/run/tailscale-nginx-auth/tailscale-nginx-auth.sock";
       type = types.path;
-      description = lib.mdDoc ''
+      description = ''
         Path of the socket listening to nginx authorization requests.
       '';
     };
@@ -44,7 +44,7 @@ in
     virtualHosts = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = lib.mdDoc ''
+      description = ''
         A list of nginx virtual hosts to put behind tailscale.nginx-auth
       '';
     };

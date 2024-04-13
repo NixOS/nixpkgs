@@ -1,7 +1,7 @@
 { lib, pkgs, config, utils, ... }:
 
 let
-  inherit (lib) concatMapStrings literalExpression mdDoc mkDefault mkEnableOption mkIf mkOption types;
+  inherit (lib) concatMapStrings literalExpression mkDefault mkEnableOption mkIf mkOption types;
 
   cfg = config.services.xserver.desktopManager.budgie;
 
@@ -50,10 +50,10 @@ in {
 
   options = {
     services.xserver.desktopManager.budgie = {
-      enable = mkEnableOption (mdDoc "the Budgie desktop");
+      enable = mkEnableOption "the Budgie desktop";
 
       sessionPath = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Additional list of packages to be added to the session search path.
           Useful for GSettings-conditional autostart.
 
@@ -65,19 +65,19 @@ in {
       };
 
       extraGSettingsOverrides = mkOption {
-        description = mdDoc "Additional GSettings overrides.";
+        description = "Additional GSettings overrides.";
         type = types.lines;
         default = "";
       };
 
       extraGSettingsOverridePackages = mkOption {
-        description = mdDoc "List of packages for which GSettings are overridden.";
+        description = "List of packages for which GSettings are overridden.";
         type = types.listOf types.path;
         default = [];
       };
 
       extraPlugins = mkOption {
-        description = mdDoc "Extra plugins for the Budgie desktop";
+        description = "Extra plugins for the Budgie desktop";
         type = types.listOf types.package;
         default = [];
         example = literalExpression "[ pkgs.budgiePlugins.budgie-analogue-clock-applet ]";
@@ -85,7 +85,7 @@ in {
     };
 
     environment.budgie.excludePackages = mkOption {
-      description = mdDoc "Which packages Budgie should exclude from the default environment.";
+      description = "Which packages Budgie should exclude from the default environment.";
       type = types.listOf types.package;
       default = [];
       example = literalExpression "[ pkgs.mate-terminal ]";

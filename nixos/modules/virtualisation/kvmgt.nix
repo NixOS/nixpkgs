@@ -10,28 +10,28 @@ let
   vgpuOptions = {
     uuid = mkOption {
       type = with types; listOf str;
-      description = lib.mdDoc "UUID(s) of VGPU device. You can generate one with `libossp_uuid`.";
+      description = "UUID(s) of VGPU device. You can generate one with `libossp_uuid`.";
     };
   };
 
 in {
   options = {
     virtualisation.kvmgt = {
-      enable = mkEnableOption (lib.mdDoc ''
+      enable = mkEnableOption ''
         KVMGT (iGVT-g) VGPU support. Allows Qemu/KVM guests to share host's Intel integrated graphics card.
         Currently only one graphical device can be shared. To allow users to access the device without root add them
         to the kvm group: `users.extraUsers.<yourusername>.extraGroups = [ "kvm" ];`
-      '');
+      '';
       # multi GPU support is under the question
       device = mkOption {
         type = types.str;
         default = "0000:00:02.0";
-        description = lib.mdDoc "PCI ID of graphics card. You can figure it with {command}`ls /sys/class/mdev_bus`.";
+        description = "PCI ID of graphics card. You can figure it with {command}`ls /sys/class/mdev_bus`.";
       };
       vgpus = mkOption {
         default = {};
         type = with types; attrsOf (submodule [ { options = vgpuOptions; } ]);
-        description = lib.mdDoc ''
+        description = ''
           Virtual GPUs to be used in Qemu. You can find devices via {command}`ls /sys/bus/pci/devices/*/mdev_supported_types`
           and find info about device via {command}`cat /sys/bus/pci/devices/*/mdev_supported_types/i915-GVTg_V5_4/description`
         '';

@@ -11,7 +11,7 @@ with lib;
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable the OATH (one-time password) PAM module.
         '';
       };
@@ -19,7 +19,7 @@ with lib;
       digits = mkOption {
         type = types.enum [ 6 7 8 ];
         default = 6;
-        description = lib.mdDoc ''
+        description = ''
           Specify the length of the one-time password in number of
           digits.
         '';
@@ -28,7 +28,7 @@ with lib;
       window = mkOption {
         type = types.int;
         default = 5;
-        description = lib.mdDoc ''
+        description = ''
           Specify the number of one-time passwords to check in order
           to accommodate for situations where the system and the
           client are slightly out of sync (iteration for HOTP or time
@@ -39,7 +39,7 @@ with lib;
       usersFile = mkOption {
         type = types.path;
         default = "/etc/users.oath";
-        description = lib.mdDoc ''
+        description = ''
           Set the path to file where the user's credentials are
           stored. This file must not be world readable!
         '';

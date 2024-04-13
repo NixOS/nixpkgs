@@ -2,12 +2,12 @@
 
 let
   cfg = config.services.cockpit;
-  inherit (lib) types mkEnableOption mkOption mkIf mdDoc literalMD mkPackageOption;
+  inherit (lib) types mkEnableOption mkOption mkIf literalMD mkPackageOption;
   settingsFormat = pkgs.formats.ini {};
 in {
   options = {
     services.cockpit = {
-      enable = mkEnableOption (mdDoc "Cockpit");
+      enable = mkEnableOption "Cockpit";
 
       package = mkPackageOption pkgs "Cockpit" {
         default = [ "cockpit" ];
@@ -18,7 +18,7 @@ in {
 
         default = {};
 
-        description = mdDoc ''
+        description = ''
           Settings for cockpit that will be saved in /etc/cockpit/cockpit.conf.
 
           See the [documentation](https://cockpit-project.org/guide/latest/cockpit.conf.5.html), that is also available with `man cockpit.conf.5` for details.
@@ -26,13 +26,13 @@ in {
       };
 
       port = mkOption {
-        description = mdDoc "Port where cockpit will listen.";
+        description = "Port where cockpit will listen.";
         type = types.port;
         default = 9090;
       };
 
       openFirewall = mkOption {
-        description = mdDoc "Open port for cockpit.";
+        description = "Open port for cockpit.";
         type = types.bool;
         default = false;
       };

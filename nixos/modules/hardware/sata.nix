@@ -36,12 +36,12 @@ in
   meta.maintainers = with lib.maintainers; [ peterhoeg ];
 
   options.hardware.sata.timeout = {
-    enable = mkEnableOption (lib.mdDoc "SATA drive timeouts");
+    enable = mkEnableOption "SATA drive timeouts";
 
     deciSeconds = mkOption {
       example = 70;
       type = types.int;
-      description = lib.mdDoc ''
+      description = ''
         Set SCT Error Recovery Control timeout in deciseconds for use in RAID configurations.
 
         Values are as follows:
@@ -53,17 +53,17 @@ in
     };
 
     drives = mkOption {
-      description = lib.mdDoc "List of drives for which to configure the timeout.";
+      description = "List of drives for which to configure the timeout.";
       type = types.listOf
         (types.submodule {
           options = {
             name = mkOption {
-              description = lib.mdDoc "Drive name without the full path.";
+              description = "Drive name without the full path.";
               type = types.str;
             };
 
             idBy = mkOption {
-              description = lib.mdDoc "The method to identify the drive.";
+              description = "The method to identify the drive.";
               type = types.enum [ "path" "wwn" ];
               default = "path";
             };

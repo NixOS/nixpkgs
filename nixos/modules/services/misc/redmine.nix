@@ -56,7 +56,7 @@ in
   # interface
   options = {
     services.redmine = {
-      enable = mkEnableOption (lib.mdDoc "Redmine, a project management web application");
+      enable = mkEnableOption "Redmine, a project management web application";
 
       package = mkPackageOption pkgs "redmine" {
         example = "redmine.override { ruby = pkgs.ruby_3_2; }";
@@ -65,31 +65,31 @@ in
       user = mkOption {
         type = types.str;
         default = "redmine";
-        description = lib.mdDoc "User under which Redmine is ran.";
+        description = "User under which Redmine is ran.";
       };
 
       group = mkOption {
         type = types.str;
         default = "redmine";
-        description = lib.mdDoc "Group under which Redmine is ran.";
+        description = "Group under which Redmine is ran.";
       };
 
       port = mkOption {
         type = types.port;
         default = 3000;
-        description = lib.mdDoc "Port on which Redmine is ran.";
+        description = "Port on which Redmine is ran.";
       };
 
       stateDir = mkOption {
         type = types.str;
         default = "/var/lib/redmine";
-        description = lib.mdDoc "The state directory, logs and plugins are stored here.";
+        description = "The state directory, logs and plugins are stored here.";
       };
 
       settings = mkOption {
         type = format.type;
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           Redmine configuration ({file}`configuration.yml`). Refer to
           <https://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration>
           for details.
@@ -110,7 +110,7 @@ in
       extraEnv = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra configuration in additional_environment.rb.
 
           See <https://svn.redmine.org/redmine/trunk/config/additional_environment.rb.example>
@@ -124,7 +124,7 @@ in
       themes = mkOption {
         type = types.attrsOf types.path;
         default = {};
-        description = lib.mdDoc "Set of themes.";
+        description = "Set of themes.";
         example = literalExpression ''
           {
             dkuk-redmine_alex_skin = builtins.fetchurl {
@@ -138,7 +138,7 @@ in
       plugins = mkOption {
         type = types.attrsOf types.path;
         default = {};
-        description = lib.mdDoc "Set of plugins.";
+        description = "Set of plugins.";
         example = literalExpression ''
           {
             redmine_env_auth = builtins.fetchurl {
@@ -154,39 +154,39 @@ in
           type = types.enum [ "mysql2" "postgresql" "sqlite3" ];
           example = "postgresql";
           default = "mysql2";
-          description = lib.mdDoc "Database engine to use.";
+          description = "Database engine to use.";
         };
 
         host = mkOption {
           type = types.str;
           default = "localhost";
-          description = lib.mdDoc "Database host address.";
+          description = "Database host address.";
         };
 
         port = mkOption {
           type = types.port;
           default = if cfg.database.type == "postgresql" then 5432 else 3306;
           defaultText = literalExpression "3306";
-          description = lib.mdDoc "Database host port.";
+          description = "Database host port.";
         };
 
         name = mkOption {
           type = types.str;
           default = "redmine";
-          description = lib.mdDoc "Database name.";
+          description = "Database name.";
         };
 
         user = mkOption {
           type = types.str;
           default = "redmine";
-          description = lib.mdDoc "Database user.";
+          description = "Database user.";
         };
 
         passwordFile = mkOption {
           type = types.nullOr types.path;
           default = null;
           example = "/run/keys/redmine-dbpassword";
-          description = lib.mdDoc ''
+          description = ''
             A file containing the password corresponding to
             {option}`database.user`.
           '';
@@ -200,13 +200,13 @@ in
             else null;
           defaultText = literalExpression "/run/mysqld/mysqld.sock";
           example = "/run/mysqld/mysqld.sock";
-          description = lib.mdDoc "Path to the unix socket file to use for authentication.";
+          description = "Path to the unix socket file to use for authentication.";
         };
 
         createLocally = mkOption {
           type = types.bool;
           default = true;
-          description = lib.mdDoc "Create the database and database user locally.";
+          description = "Create the database and database user locally.";
         };
       };
 
@@ -214,49 +214,49 @@ in
         subversion = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc "Subversion integration.";
+          description = "Subversion integration.";
         };
 
         mercurial = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc "Mercurial integration.";
+          description = "Mercurial integration.";
         };
 
         git = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc "git integration.";
+          description = "git integration.";
         };
 
         cvs = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc "cvs integration.";
+          description = "cvs integration.";
         };
 
         breezy = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc "bazaar integration.";
+          description = "bazaar integration.";
         };
 
         imagemagick = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc "Allows exporting Gant diagrams as PNG.";
+          description = "Allows exporting Gant diagrams as PNG.";
         };
 
         ghostscript = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc "Allows exporting Gant diagrams as PDF.";
+          description = "Allows exporting Gant diagrams as PDF.";
         };
 
         minimagick_font_path = mkOption {
           type = types.str;
           default = "";
-          description = lib.mdDoc "MiniMagick font path";
+          description = "MiniMagick font path";
           example = "/run/current-system/sw/share/X11/fonts/LiberationSans-Regular.ttf";
         };
       };

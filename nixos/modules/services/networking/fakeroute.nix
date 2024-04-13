@@ -14,7 +14,7 @@ in
 
     services.fakeroute = {
 
-      enable = lib.mkEnableOption (lib.mdDoc "the fakeroute service");
+      enable = lib.mkEnableOption "the fakeroute service";
 
       route = lib.mkOption {
         type = with lib.types; listOf str;
@@ -25,7 +25,7 @@ in
           "198.116.142.34"
           "63.199.8.242"
         ];
-        description = lib.mdDoc ''
+        description = ''
          Fake route that will appear after the real
          one to any host running a traceroute.
         '';

@@ -10,7 +10,7 @@ in
 
   options = {
     services.xserver.windowManager.ragnarwm = {
-      enable = mkEnableOption (lib.mdDoc "ragnarwm");
+      enable = mkEnableOption "ragnarwm";
       package = mkPackageOption pkgs "ragnarwm" { };
     };
   };

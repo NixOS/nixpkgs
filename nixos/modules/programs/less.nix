@@ -35,13 +35,13 @@ in
 
       # note that environment.nix sets PAGER=less, and
       # therefore also enables this module
-      enable = mkEnableOption (lib.mdDoc "less, a file pager");
+      enable = mkEnableOption "less, a file pager";
 
       configFile = mkOption {
         type = types.nullOr types.path;
         default = null;
         example = literalExpression ''"''${pkgs.my-configs}/lesskey"'';
-        description = lib.mdDoc ''
+        description = ''
           Path to lesskey configuration file.
 
           {option}`configFile` takes precedence over {option}`commands`,
@@ -57,13 +57,13 @@ in
           h = "noaction 5\\e(";
           l = "noaction 5\\e)";
         };
-        description = lib.mdDoc "Defines new command keys.";
+        description = "Defines new command keys.";
       };
 
       clearDefaultCommands = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Clear all default commands.
           You should remember to set the quit key.
           Otherwise you will not be able to leave less without killing it.
@@ -76,7 +76,7 @@ in
         example = {
           e = "abort";
         };
-        description = lib.mdDoc "Defines new line-editing keys.";
+        description = "Defines new line-editing keys.";
       };
 
       envVariables = mkOption {
@@ -87,14 +87,14 @@ in
         example = {
           LESS = "--quit-if-one-screen";
         };
-        description = lib.mdDoc "Defines environment variables.";
+        description = "Defines environment variables.";
       };
 
       lessopen = mkOption {
         type = types.nullOr types.str;
         default = "|${pkgs.lesspipe}/bin/lesspipe.sh %s";
         defaultText = literalExpression ''"|''${pkgs.lesspipe}/bin/lesspipe.sh %s"'';
-        description = lib.mdDoc ''
+        description = ''
           Before less opens a file, it first gives your input preprocessor a chance to modify the way the contents of the file are displayed.
         '';
       };
@@ -102,7 +102,7 @@ in
       lessclose = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           When less closes a file opened in such a way, it will call another program, called the input postprocessor,
           which may perform any desired clean-up action (such as deleting the replacement file created by LESSOPEN).
         '';

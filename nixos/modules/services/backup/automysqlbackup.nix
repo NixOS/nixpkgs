@@ -34,12 +34,12 @@ in
   options = {
     services.automysqlbackup = {
 
-      enable = mkEnableOption (lib.mdDoc "AutoMySQLBackup");
+      enable = mkEnableOption "AutoMySQLBackup";
 
       calendar = mkOption {
         type = types.str;
         default = "01:15:00";
-        description = lib.mdDoc ''
+        description = ''
           Configured when to run the backup service systemd unit (DayOfWeek Year-Month-Day Hour:Minute:Second).
         '';
       };
@@ -47,7 +47,7 @@ in
       settings = mkOption {
         type = with types; attrsOf (oneOf [ str int bool (listOf str) ]);
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           automysqlbackup configuration. Refer to
           {file}`''${pkgs.automysqlbackup}/etc/automysqlbackup.conf`
           for details on supported values.

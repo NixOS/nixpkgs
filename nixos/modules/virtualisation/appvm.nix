@@ -13,13 +13,13 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           This enables AppVMs and related virtualisation settings.
         '';
       };
       user = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           AppVM user login. Currently only AppVMs are supported for a single user only.
         '';
       };

@@ -36,7 +36,7 @@ in
     agent.enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enables GnuPG agent with socket-activation for every user session.
       '';
     };
@@ -44,7 +44,7 @@ in
     agent.enableSSHSupport = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enable SSH agent support in GnuPG agent. Also sets SSH_AUTH_SOCK
         environment variable correctly. This will disable socket-activation
         and thus always start a GnuPG agent per user session.
@@ -54,7 +54,7 @@ in
     agent.enableExtraSocket = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enable extra socket for GnuPG agent.
       '';
     };
@@ -62,7 +62,7 @@ in
     agent.enableBrowserSocket = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enable browser socket for GnuPG agent.
       '';
     };
@@ -72,7 +72,7 @@ in
       example = lib.literalMD "pkgs.pinentry-gnome3";
       default = pkgs.pinentry-curses;
       defaultText = lib.literalMD "matching the configured desktop environment or `pkgs.pinentry-curses`";
-      description = lib.mdDoc ''
+      description = ''
         Which pinentry package to use. The path to the mainProgram as defined in
         the package's meta attriutes will be set in /etc/gnupg/gpg-agent.conf.
         If not set by the user, it'll pick an appropriate flavor depending on the
@@ -87,7 +87,7 @@ in
       example = {
         default-cache-ttl = 600;
       };
-      description = lib.mdDoc ''
+      description = ''
         Configuration for /etc/gnupg/gpg-agent.conf.
         See {manpage}`gpg-agent(1)` for supported options.
       '';
@@ -96,7 +96,7 @@ in
     dirmngr.enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enables GnuPG network certificate management daemon with socket-activation for every user session.
       '';
     };

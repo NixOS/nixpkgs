@@ -28,7 +28,7 @@ let
 in
 {
   options.services.scion.scion-control = {
-    enable = mkEnableOption (lib.mdDoc "the scion-control service");
+    enable = mkEnableOption "the scion-control service";
     settings = mkOption {
       default = { };
       type = toml.type;
@@ -42,7 +42,7 @@ in
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         scion-control configuration. Refer to
         <https://docs.scion.org/en/latest/manuals/common.html>
         for details on supported values.

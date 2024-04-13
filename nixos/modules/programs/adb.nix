@@ -11,7 +11,7 @@ with lib;
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Whether to configure system to use Android Debug Bridge (adb).
           To grant access to a user, it must be part of adbusers group:
           `users.users.alice.extraGroups = ["adbusers"];`

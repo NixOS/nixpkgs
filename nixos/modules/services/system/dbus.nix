@@ -22,7 +22,7 @@ in
   options = {
 
     boot.initrd.systemd.dbus = {
-      enable = mkEnableOption (lib.mdDoc "dbus in stage 1");
+      enable = mkEnableOption "dbus in stage 1";
     };
 
     services.dbus = {
@@ -31,7 +31,7 @@ in
         type = types.bool;
         default = false;
         internal = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to start the D-Bus message bus daemon, which is
           required by many other system services and applications.
         '';
@@ -40,7 +40,7 @@ in
       implementation = mkOption {
         type = types.enum [ "dbus" "broker" ];
         default = "broker";
-        description = lib.mdDoc ''
+        description = ''
           The implementation to use for the message bus defined by the D-Bus specification.
           Can be either the classic dbus daemon or dbus-broker, which aims to provide high
           performance and reliability, while keeping compatibility to the D-Bus
@@ -52,7 +52,7 @@ in
       packages = mkOption {
         type = types.listOf types.path;
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           Packages whose D-Bus configuration files should be included in
           the configuration of the D-Bus system-wide or session-wide
           message bus.  Specifically, files in the following directories
@@ -68,7 +68,7 @@ in
 
       apparmor = mkOption {
         type = types.enum [ "enabled" "disabled" "required" ];
-        description = lib.mdDoc ''
+        description = ''
           AppArmor mode for dbus.
 
           `enabled` enables mediation when it's

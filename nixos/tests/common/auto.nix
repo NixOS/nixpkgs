@@ -12,7 +12,7 @@ in
     test-support.displayManager.auto = {
       enable = lib.mkOption {
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the fake "auto" display manager, which
           automatically logs in the user specified in the
           {option}`user` option.  This is mostly useful for
@@ -22,7 +22,7 @@ in
 
       user = lib.mkOption {
         default = "root";
-        description = lib.mdDoc "The user account to login automatically.";
+        description = "The user account to login automatically.";
       };
     };
   };

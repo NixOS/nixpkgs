@@ -40,20 +40,20 @@ in
 
   options.services = {
     zabbixWeb = {
-      enable = mkEnableOption (lib.mdDoc "the Zabbix web interface");
+      enable = mkEnableOption "the Zabbix web interface";
 
       package = mkPackageOption pkgs [ "zabbix" "web" ] { };
 
       server = {
         port = mkOption {
           type = types.port;
-          description = lib.mdDoc "The port of the Zabbix server to connect to.";
+          description = "The port of the Zabbix server to connect to.";
           default = 10051;
         };
 
         address = mkOption {
           type = types.str;
-          description = lib.mdDoc "The IP address or hostname of the Zabbix server to connect to.";
+          description = "The IP address or hostname of the Zabbix server to connect to.";
           default = "localhost";
         };
       };
@@ -63,13 +63,13 @@ in
           type = types.enum [ "mysql" "pgsql" "oracle" ];
           example = "mysql";
           default = "pgsql";
-          description = lib.mdDoc "Database engine to use.";
+          description = "Database engine to use.";
         };
 
         host = mkOption {
           type = types.str;
           default = "";
-          description = lib.mdDoc "Database host address.";
+          description = "Database host address.";
         };
 
         port = mkOption {
@@ -83,26 +83,26 @@ in
             else if config.${opt.database.type} == "pgsql" then config.services.postgresql.settings.port
             else 1521
           '';
-          description = lib.mdDoc "Database host port.";
+          description = "Database host port.";
         };
 
         name = mkOption {
           type = types.str;
           default = "zabbix";
-          description = lib.mdDoc "Database name.";
+          description = "Database name.";
         };
 
         user = mkOption {
           type = types.str;
           default = "zabbix";
-          description = lib.mdDoc "Database user.";
+          description = "Database user.";
         };
 
         passwordFile = mkOption {
           type = types.nullOr types.path;
           default = null;
           example = "/run/keys/zabbix-dbpassword";
-          description = lib.mdDoc ''
+          description = ''
             A file containing the password corresponding to
             {option}`database.user`.
           '';
@@ -112,7 +112,7 @@ in
           type = types.nullOr types.path;
           default = null;
           example = "/run/postgresql";
-          description = lib.mdDoc "Path to the unix socket file to use for authentication.";
+          description = "Path to the unix socket file to use for authentication.";
         };
       };
 
@@ -126,7 +126,7 @@ in
             enableACME = true;
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Apache configuration can be done by adapting `services.httpd.virtualHosts.<name>`.
           See [](#opt-services.httpd.virtualHosts) for further information.
         '';
@@ -142,7 +142,7 @@ in
           "pm.max_spare_servers" = 4;
           "pm.max_requests" = 500;
         };
-        description = lib.mdDoc ''
+        description = ''
           Options for the Zabbix PHP pool. See the documentation on `php-fpm.conf` for details on configuration directives.
         '';
       };
@@ -150,7 +150,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Additional configuration to be copied verbatim into {file}`zabbix.conf.php`.
         '';
       };

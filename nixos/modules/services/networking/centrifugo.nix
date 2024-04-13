@@ -8,14 +8,14 @@ let
 in
 {
   options.services.centrifugo = {
-    enable = lib.mkEnableOption (lib.mdDoc "Centrifugo messaging server");
+    enable = lib.mkEnableOption "Centrifugo messaging server";
 
     package = lib.mkPackageOption pkgs "centrifugo" { };
 
     settings = lib.mkOption {
       type = settingsFormat.type;
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Declarative Centrifugo configuration. See the [Centrifugo
         documentation] for a list of options.
 
@@ -29,7 +29,7 @@ in
       example = {
         CENTRIFUGO_UNI_GRPC_TLS_KEY = "/run/keys/centrifugo-uni-grpc-tls.key";
       };
-      description = lib.mdDoc ''
+      description = ''
         Environment variables with absolute paths to credentials files to load
         on service startup.
       '';
@@ -38,7 +38,7 @@ in
     environmentFiles = lib.mkOption {
       type = lib.types.listOf lib.types.path;
       default = [ ];
-      description = lib.mdDoc ''
+      description = ''
         Files to load environment variables from. Options set via environment
         variables take precedence over {option}`settings`.
 
@@ -53,7 +53,7 @@ in
       type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [ "redis-centrifugo" ];
-      description = lib.mdDoc ''
+      description = ''
         Additional groups for the systemd service.
       '';
     };

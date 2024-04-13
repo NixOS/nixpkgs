@@ -9,7 +9,7 @@
       internal = true;
       visible = false;
       type = lib.types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Enable dynamic CDI configuration for NVidia devices by running
         nvidia-container-toolkit on boot.
       '';

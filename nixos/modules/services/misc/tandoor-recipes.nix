@@ -33,7 +33,7 @@ in
     enable = mkOption {
       type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enable Tandoor Recipes.
 
         When started, the Tandoor Recipes database is automatically created if
@@ -48,19 +48,19 @@ in
     address = mkOption {
       type = types.str;
       default = "localhost";
-      description = lib.mdDoc "Web interface address.";
+      description = "Web interface address.";
     };
 
     port = mkOption {
       type = types.port;
       default = 8080;
-      description = lib.mdDoc "Web interface port.";
+      description = "Web interface port.";
     };
 
     extraConfig = mkOption {
       type = types.attrs;
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Extra tandoor recipes config options.
 
         See [the example dot-env file](https://raw.githubusercontent.com/vabene1111/recipes/master/.env.template)

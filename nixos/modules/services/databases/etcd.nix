@@ -10,7 +10,7 @@ in {
 
   options.services.etcd = {
     enable = mkOption {
-      description = lib.mdDoc "Whether to enable etcd.";
+      description = "Whether to enable etcd.";
       default = false;
       type = types.bool;
     };
@@ -18,83 +18,83 @@ in {
     package = mkPackageOption pkgs "etcd" { };
 
     name = mkOption {
-      description = lib.mdDoc "Etcd unique node name.";
+      description = "Etcd unique node name.";
       default = config.networking.hostName;
       defaultText = literalExpression "config.networking.hostName";
       type = types.str;
     };
 
     advertiseClientUrls = mkOption {
-      description = lib.mdDoc "Etcd list of this member's client URLs to advertise to the rest of the cluster.";
+      description = "Etcd list of this member's client URLs to advertise to the rest of the cluster.";
       default = cfg.listenClientUrls;
       defaultText = literalExpression "config.${opt.listenClientUrls}";
       type = types.listOf types.str;
     };
 
     listenClientUrls = mkOption {
-      description = lib.mdDoc "Etcd list of URLs to listen on for client traffic.";
+      description = "Etcd list of URLs to listen on for client traffic.";
       default = ["http://127.0.0.1:2379"];
       type = types.listOf types.str;
     };
 
     listenPeerUrls = mkOption {
-      description = lib.mdDoc "Etcd list of URLs to listen on for peer traffic.";
+      description = "Etcd list of URLs to listen on for peer traffic.";
       default = ["http://127.0.0.1:2380"];
       type = types.listOf types.str;
     };
 
     initialAdvertisePeerUrls = mkOption {
-      description = lib.mdDoc "Etcd list of this member's peer URLs to advertise to rest of the cluster.";
+      description = "Etcd list of this member's peer URLs to advertise to rest of the cluster.";
       default = cfg.listenPeerUrls;
       defaultText = literalExpression "config.${opt.listenPeerUrls}";
       type = types.listOf types.str;
     };
 
     initialCluster = mkOption {
-      description = lib.mdDoc "Etcd initial cluster configuration for bootstrapping.";
+      description = "Etcd initial cluster configuration for bootstrapping.";
       default = ["${cfg.name}=http://127.0.0.1:2380"];
       defaultText = literalExpression ''["''${config.${opt.name}}=http://127.0.0.1:2380"]'';
       type = types.listOf types.str;
     };
 
     initialClusterState = mkOption {
-      description = lib.mdDoc "Etcd initial cluster configuration for bootstrapping.";
+      description = "Etcd initial cluster configuration for bootstrapping.";
       default = "new";
       type = types.enum ["new" "existing"];
     };
 
     initialClusterToken = mkOption {
-      description = lib.mdDoc "Etcd initial cluster token for etcd cluster during bootstrap.";
+      description = "Etcd initial cluster token for etcd cluster during bootstrap.";
       default = "etcd-cluster";
       type = types.str;
     };
 
     discovery = mkOption {
-      description = lib.mdDoc "Etcd discovery url";
+      description = "Etcd discovery url";
       default = "";
       type = types.str;
     };
 
     clientCertAuth = mkOption {
-      description = lib.mdDoc "Whether to use certs for client authentication";
+      description = "Whether to use certs for client authentication";
       default = false;
       type = types.bool;
     };
 
     trustedCaFile = mkOption {
-      description = lib.mdDoc "Certificate authority file to use for clients";
+      description = "Certificate authority file to use for clients";
       default = null;
       type = types.nullOr types.path;
     };
 
     certFile = mkOption {
-      description = lib.mdDoc "Cert file to use for clients";
+      description = "Cert file to use for clients";
       default = null;
       type = types.nullOr types.path;
     };
 
     keyFile = mkOption {
-      description = lib.mdDoc "Key file to use for clients";
+      description = "Key file to use for clients";
       default = null;
       type = types.nullOr types.path;
     };
@@ -102,7 +102,7 @@ in {
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Open etcd ports in the firewall.
         Ports opened:
         - 2379/tcp for client requests
@@ -111,34 +111,34 @@ in {
     };
 
     peerCertFile = mkOption {
-      description = lib.mdDoc "Cert file to use for peer to peer communication";
+      description = "Cert file to use for peer to peer communication";
       default = cfg.certFile;
       defaultText = literalExpression "config.${opt.certFile}";
       type = types.nullOr types.path;
     };
 
     peerKeyFile = mkOption {
-      description = lib.mdDoc "Key file to use for peer to peer communication";
+      description = "Key file to use for peer to peer communication";
       default = cfg.keyFile;
       defaultText = literalExpression "config.${opt.keyFile}";
       type = types.nullOr types.path;
     };
 
     peerTrustedCaFile = mkOption {
-      description = lib.mdDoc "Certificate authority file to use for peer to peer communication";
+      description = "Certificate authority file to use for peer to peer communication";
       default = cfg.trustedCaFile;
       defaultText = literalExpression "config.${opt.trustedCaFile}";
       type = types.nullOr types.path;
     };
 
     peerClientCertAuth = mkOption {
-      description = lib.mdDoc "Whether to check all incoming peer requests from the cluster for valid client certificates signed by the supplied CA";
+      description = "Whether to check all incoming peer requests from the cluster for valid client certificates signed by the supplied CA";
       default = false;
       type = types.bool;
     };
 
     extraConf = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Etcd extra configuration. See
         <https://github.com/coreos/etcd/blob/master/Documentation/op-guide/configuration.md#configuration-flags>
       '';
@@ -158,7 +158,7 @@ in {
     dataDir = mkOption {
       type = types.path;
       default = "/var/lib/etcd";
-      description = lib.mdDoc "Etcd data directory.";
+      description = "Etcd data directory.";
     };
   };
 

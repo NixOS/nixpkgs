@@ -11,13 +11,13 @@ in
   ##### interface
   options = {
     programs.coolercontrol = {
-      enable = lib.mkEnableOption (lib.mdDoc "CoolerControl GUI & its background services");
+      enable = lib.mkEnableOption "CoolerControl GUI & its background services";
 
       nvidiaSupport = lib.mkOption {
         type = lib.types.bool;
         default = lib.elem "nvidia" config.services.xserver.videoDrivers;
         defaultText = lib.literalExpression "lib.elem \"nvidia\" config.services.xserver.videoDrivers";
-        description = lib.mdDoc ''
+        description = ''
           Enable support for Nvidia GPUs.
         '';
       };

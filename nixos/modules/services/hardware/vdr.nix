@@ -3,13 +3,13 @@ let
   cfg = config.services.vdr;
 
   inherit (lib)
-    mkEnableOption mkPackageOption mkOption types mkIf optional mdDoc;
+    mkEnableOption mkPackageOption mkOption types mkIf optional;
 in
 {
   options = {
 
     services.vdr = {
-      enable = mkEnableOption (mdDoc "VDR, a video disk recorder");
+      enable = mkEnableOption "VDR, a video disk recorder";
 
       package = mkPackageOption pkgs "vdr" {
         example = "wrapVdr.override { plugins = with pkgs.vdrPlugins; [ hello ]; }";
@@ -18,21 +18,21 @@ in
       videoDir = mkOption {
         type = types.path;
         default = "/srv/vdr/video";
-        description = mdDoc "Recording directory";
+        description = "Recording directory";
       };
 
       extraArguments = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        description = mdDoc "Additional command line arguments to pass to VDR.";
+        description = "Additional command line arguments to pass to VDR.";
       };
 
-      enableLirc = mkEnableOption (mdDoc "LIRC");
+      enableLirc = mkEnableOption "LIRC";
 
       user = mkOption {
         type = types.str;
         default = "vdr";
-        description = mdDoc ''
+        description = ''
           User under which the VDR service runs.
         '';
       };
@@ -40,7 +40,7 @@ in
       group = mkOption {
         type = types.str;
         default = "vdr";
-        description = mdDoc ''
+        description = ''
           Group under which the VDRvdr service runs.
         '';
       };

@@ -80,12 +80,12 @@ let
     {
       options = {
 
-        enable = mkEnableOption (lib.mdDoc "InvoicePlane web application");
+        enable = mkEnableOption "InvoicePlane web application";
 
         stateDir = mkOption {
           type = types.path;
           default = "/var/lib/invoiceplane/${name}";
-          description = lib.mdDoc ''
+          description = ''
             This directory is used for uploads of attachments and cache.
             The directory passed here is automatically created and permissions
             adjusted as required.
@@ -96,32 +96,32 @@ let
           host = mkOption {
             type = types.str;
             default = "localhost";
-            description = lib.mdDoc "Database host address.";
+            description = "Database host address.";
           };
 
           port = mkOption {
             type = types.port;
             default = 3306;
-            description = lib.mdDoc "Database host port.";
+            description = "Database host port.";
           };
 
           name = mkOption {
             type = types.str;
             default = "invoiceplane";
-            description = lib.mdDoc "Database name.";
+            description = "Database name.";
           };
 
           user = mkOption {
             type = types.str;
             default = "invoiceplane";
-            description = lib.mdDoc "Database user.";
+            description = "Database user.";
           };
 
           passwordFile = mkOption {
             type = types.nullOr types.path;
             default = null;
             example = "/run/keys/invoiceplane-dbpassword";
-            description = lib.mdDoc ''
+            description = ''
               A file containing the password corresponding to
               {option}`database.user`.
             '';
@@ -130,14 +130,14 @@ let
           createLocally = mkOption {
             type = types.bool;
             default = true;
-            description = lib.mdDoc "Create the database and database user locally.";
+            description = "Create the database and database user locally.";
           };
         };
 
         invoiceTemplates = mkOption {
           type = types.listOf types.path;
           default = [];
-          description = lib.mdDoc ''
+          description = ''
             List of path(s) to respective template(s) which are copied from the 'invoice_templates/pdf' directory.
 
             ::: {.note}
@@ -176,7 +176,7 @@ let
             "pm.max_spare_servers" = 4;
             "pm.max_requests" = 500;
           };
-          description = lib.mdDoc ''
+          description = ''
             Options for the InvoicePlane PHP pool. See the documentation on `php-fpm.conf`
             for details on configuration directives.
           '';
@@ -190,7 +190,7 @@ let
             DISABLE_SETUP=true
             IP_URL=https://invoice.example.com
           '';
-          description = lib.mdDoc ''
+          description = ''
             InvoicePlane configuration. Refer to
             <https://github.com/InvoicePlane/InvoicePlane/blob/master/ipconfig.php.example>
             for details on supported values.
@@ -204,7 +204,7 @@ let
         settings = mkOption {
           type = types.attrsOf types.anything;
           default = {};
-          description = lib.mdDoc ''
+          description = ''
             Structural InvoicePlane configuration. Refer to
             <https://github.com/InvoicePlane/InvoicePlane/blob/master/ipconfig.php.example>
             for details and supported values.
@@ -222,7 +222,7 @@ let
           enable = mkOption {
             type = types.bool;
             default = false;
-            description = lib.mdDoc ''
+            description = ''
               Enable cron service which periodically runs Invoiceplane tasks.
               Requires key taken from the administration page. Refer to
               <https://wiki.invoiceplane.com/en/1.0/modules/recurring-invoices>
@@ -231,7 +231,7 @@ let
           };
           key = mkOption {
             type = types.str;
-            description = lib.mdDoc "Cron key taken from the administration page.";
+            description = "Cron key taken from the administration page.";
           };
         };
 
@@ -248,20 +248,20 @@ in
         options.sites = mkOption {
           type = types.attrsOf (types.submodule siteOpts);
           default = {};
-          description = lib.mdDoc "Specification of one or more WordPress sites to serve";
+          description = "Specification of one or more WordPress sites to serve";
         };
 
         options.webserver = mkOption {
           type = types.enum [ "caddy" "nginx" ];
           default = "caddy";
           example = "nginx";
-          description = lib.mdDoc ''
+          description = ''
             Which webserver to use for virtual host management.
           '';
         };
       };
       default = {};
-      description = lib.mdDoc "InvoicePlane configuration.";
+      description = "InvoicePlane configuration.";
     };
 
   };

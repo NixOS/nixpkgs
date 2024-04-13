@@ -10,7 +10,7 @@ in
 {
   options.programs.regreet = {
     enable = lib.mkEnableOption null // {
-      description = lib.mdDoc ''
+      description = ''
         Enable ReGreet, a clean and customizable greeter for greetd.
 
         To use ReGreet, {option}`services.greetd` has to be enabled and
@@ -29,7 +29,7 @@ in
     settings = lib.mkOption {
       type = lib.types.either lib.types.path settingsFormat.type;
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         ReGreet configuration file. Refer
         <https://github.com/rharish101/ReGreet/blob/main/regreet.sample.toml>
         for options.
@@ -43,7 +43,7 @@ in
         ''
           [ "-s" "-m" "last" ]
         '';
-      description = lib.mdDoc ''
+      description = ''
         Additional arguments to be passed to
         [cage](https://github.com/cage-kiosk/cage).
       '';
@@ -52,7 +52,7 @@ in
     extraCss = lib.mkOption {
       type = lib.types.either lib.types.path lib.types.lines;
       default = "";
-      description = lib.mdDoc ''
+      description = ''
         Extra CSS rules to apply on top of the GTK theme. Refer to
         [GTK CSS Properties](https://docs.gtk.org/gtk4/css-properties.html) for
         modifiable properties.

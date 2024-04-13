@@ -21,14 +21,14 @@ with lib; let
 in
 {
   options.programs.gamescope = {
-    enable = mkEnableOption (mdDoc "gamescope, the SteamOS session compositing window manager");
+    enable = mkEnableOption "gamescope, the SteamOS session compositing window manager";
 
     package = mkPackageOption pkgs "gamescope" { };
 
     capSysNice = mkOption {
       type = types.bool;
       default = false;
-      description = mdDoc ''
+      description = ''
         Add cap_sys_nice capability to the GameScope
         binary so that it may renice itself.
       '';
@@ -38,7 +38,7 @@ in
       type = types.listOf types.str;
       default = [ ];
       example = [ "--rt" "--prefer-vk-device 8086:9bc4" ];
-      description = mdDoc ''
+      description = ''
         Arguments passed to GameScope on startup.
       '';
     };
@@ -55,7 +55,7 @@ in
           __GLX_VENDOR_LIBRARY_NAME = "nvidia";
         }
       '';
-      description = mdDoc ''
+      description = ''
         Default environment variables available to the GameScope process, overridable at runtime.
       '';
     };

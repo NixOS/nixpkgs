@@ -8,30 +8,30 @@ in
 {
   options = {
     services.bazarr = {
-      enable = mkEnableOption (lib.mdDoc "bazarr, a subtitle manager for Sonarr and Radarr");
+      enable = mkEnableOption "bazarr, a subtitle manager for Sonarr and Radarr";
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Open ports in the firewall for the bazarr web interface.";
+        description = "Open ports in the firewall for the bazarr web interface.";
       };
 
       listenPort = mkOption {
         type = types.port;
         default = 6767;
-        description = lib.mdDoc "Port on which the bazarr web interface should listen";
+        description = "Port on which the bazarr web interface should listen";
       };
 
       user = mkOption {
         type = types.str;
         default = "bazarr";
-        description = lib.mdDoc "User account under which bazarr runs.";
+        description = "User account under which bazarr runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "bazarr";
-        description = lib.mdDoc "Group under which bazarr runs.";
+        description = "Group under which bazarr runs.";
       };
     };
   };

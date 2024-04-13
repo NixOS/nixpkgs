@@ -8,7 +8,7 @@ in {
       enable = lib.mkOption {
         type        = types.bool;
         default     = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable Shorewall IPv6 Firewall.
 
           ::: {.warning}
@@ -22,12 +22,12 @@ in {
         type        = types.package;
         default     = pkgs.shorewall;
         defaultText = lib.literalExpression "pkgs.shorewall";
-        description = lib.mdDoc "The shorewall package to use.";
+        description = "The shorewall package to use.";
       };
       configs = lib.mkOption {
         type        = types.attrsOf types.lines;
         default     = {};
-        description = lib.mdDoc ''
+        description = ''
           This option defines the Shorewall configs.
           The attribute name defines the name of the config,
           and the attribute value defines the content of the config.

@@ -26,7 +26,7 @@ in
         type = types.lines;
         default = "";
         example = "ip6 saddr { fc00::/7, fe80::/10 } tcp dport 24800 accept";
-        description = lib.mdDoc ''
+        description = ''
           Additional nftables rules to be appended to the input-allow
           chain.
 
@@ -38,7 +38,7 @@ in
         type = types.lines;
         default = "";
         example = "iifname wg0 accept";
-        description = lib.mdDoc ''
+        description = ''
           Additional nftables rules to be appended to the forward-allow
           chain.
 

@@ -22,7 +22,7 @@ let
   mkOpt = type: description: mkOption {
     type = types.nullOr type;
     default = null;
-    description = lib.mdDoc description;
+    description = description;
   };
   accountOptions.options = {
     mailaddress = mkOpt types.str "Your email address (at the moment used as login name)";
@@ -39,21 +39,21 @@ in
     oldestUnseenDate = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enable metric with timestamp of oldest unseen mail
       '';
     };
     accounts = mkOption {
       type = types.attrsOf (types.submodule accountOptions);
       default = {};
-      description = lib.mdDoc ''
+      description = ''
         Accounts to monitor
       '';
     };
     configurationFile = mkOption {
       type = types.path;
       example = "/path/to/config-file";
-      description = lib.mdDoc ''
+      description = ''
         File containing the configuration
       '';
     };

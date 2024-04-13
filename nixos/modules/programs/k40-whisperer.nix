@@ -10,11 +10,11 @@ let
 in
 {
   options.programs.k40-whisperer = {
-    enable = mkEnableOption (lib.mdDoc "K40-Whisperer");
+    enable = mkEnableOption "K40-Whisperer";
 
     group = mkOption {
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         Group assigned to the device when connected.
       '';
       default = "k40";

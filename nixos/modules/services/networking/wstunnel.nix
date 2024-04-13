@@ -10,11 +10,11 @@ let
   hostPortSubmodule = {
     options = {
       host = mkOption {
-        description = mdDoc "The hostname.";
+        description = "The hostname.";
         type = types.str;
       };
       port = mkOption {
-        description = mdDoc "The port.";
+        description = "The port.";
         type = types.port;
       };
     };
@@ -22,7 +22,7 @@ let
   localRemoteSubmodule = {
     options = {
       local = mkOption {
-        description = mdDoc "Local address and port to listen on.";
+        description = "Local address and port to listen on.";
         type = types.submodule hostPortSubmodule;
         example = {
           host = "127.0.0.1";
@@ -30,7 +30,7 @@ let
         };
       };
       remote = mkOption {
-        description = mdDoc "Address and port on remote to forward traffic to.";
+        description = "Address and port on remote to forward traffic to.";
         type = types.submodule hostPortSubmodule;
         example = {
           host = "127.0.0.1";
@@ -43,7 +43,7 @@ let
   localRemoteToString = { local, remote }: utils.escapeSystemdExecArg "${hostPortToString local}:${hostPortToString remote}";
   commonOptions = {
     enable = mkOption {
-      description = mdDoc "Whether to enable this `wstunnel` instance.";
+      description = "Whether to enable this `wstunnel` instance.";
       type = types.bool;
       default = true;
     };
@@ -51,13 +51,13 @@ let
     package = mkPackageOption pkgs "wstunnel" {};
 
     autoStart = mkOption {
-      description = mdDoc "Whether this tunnel server should be started automatically.";
+      description = "Whether this tunnel server should be started automatically.";
       type = types.bool;
       default = true;
     };
 
     extraArgs = mkOption {
-      description = mdDoc "Extra command line arguments to pass to `wstunnel`. Attributes of the form `argName = true;` will be translated to `--argName`, and `argName = \"value\"` to `--argName=value`.";
+      description = "Extra command line arguments to pass to `wstunnel`. Attributes of the form `argName = true;` will be translated to `--argName`, and `argName = \"value\"` to `--argName=value`.";
       type = with types; attrsOf (either str bool);
       default = {};
       example = {
@@ -67,13 +67,13 @@ let
     };
 
     verboseLogging = mkOption {
-      description = mdDoc "Enable verbose logging.";
+      description = "Enable verbose logging.";
       type = types.bool;
       default = false;
     };
 
     environmentFile = mkOption {
-      description = mdDoc "Environment file to be passed to the systemd service. Useful for passing secrets to the service to prevent them from being world-readable in the Nix store. Note however that the secrets are passed to `wstunnel` through the command line, which makes them locally readable for all users of the system at runtime.";
+      description = "Environment file to be passed to the systemd service. Useful for passing secrets to the service to prevent them from being world-readable in the Nix store. Note however that the secrets are passed to `wstunnel` through the command line, which makes them locally readable for all users of the system at runtime.";
       type = types.nullOr types.path;
       default = null;
       example = "/var/lib/secrets/wstunnelSecrets";
@@ -83,7 +83,7 @@ let
   serverSubmodule = { config, ...}: {
     options = commonOptions // {
       listen = mkOption {
-        description = mdDoc "Address and port to listen on. Setting the port to a value below 1024 will also give the process the required `CAP_NET_BIND_SERVICE` capability.";
+        description = "Address and port to listen on. Setting the port to a value below 1024 will also give the process the required `CAP_NET_BIND_SERVICE` capability.";
         type = types.submodule hostPortSubmodule;
         default = {
           host = "0.0.0.0";
@@ -98,7 +98,7 @@ let
       };
 
       restrictTo = mkOption {
-        description = mdDoc "Accepted traffic will be forwarded only to this service. Set to `null` to allow forwarding to arbitrary addresses.";
+        description = "Accepted traffic will be forwarded only to this service. Set to `null` to allow forwarding to arbitrary addresses.";
         type = types.nullOr (types.submodule hostPortSubmodule);
         example = {
           host = "127.0.0.1";
@@ -107,27 +107,27 @@ let
       };
 
       enableHTTPS = mkOption {
-        description = mdDoc "Use HTTPS for the tunnel server.";
+        description = "Use HTTPS for the tunnel server.";
         type = types.bool;
         default = true;
       };
 
       tlsCertificate = mkOption {
-        description = mdDoc "TLS certificate to use instead of the hardcoded one in case of HTTPS connections. Use together with `tlsKey`.";
+        description = "TLS certificate to use instead of the hardcoded one in case of HTTPS connections. Use together with `tlsKey`.";
         type = types.nullOr types.path;
         default = null;
         example = "/var/lib/secrets/cert.pem";
       };
 
       tlsKey = mkOption {
-        description = mdDoc "TLS key to use instead of the hardcoded on in case of HTTPS connections. Use together with `tlsCertificate`.";
+        description = "TLS key to use instead of the hardcoded on in case of HTTPS connections. Use together with `tlsCertificate`.";
         type = types.nullOr types.path;
         default = null;
         example = "/var/lib/secrets/key.pem";
       };
 
       useACMEHost = mkOption {
-        description = mdDoc "Use a certificate generated by the NixOS ACME module for the given host. Note that this will not generate a new certificate - you will need to do so with `security.acme.certs`.";
+        description = "Use a certificate generated by the NixOS ACME module for the given host. Note that this will not generate a new certificate - you will need to do so with `security.acme.certs`.";
         type = types.nullOr types.str;
         default = null;
         example = "example.com";
@@ -137,7 +137,7 @@ let
   clientSubmodule = { config, ... }: {
     options = commonOptions // {
       connectTo = mkOption {
-        description = mdDoc "Server address and port to connect to.";
+        description = "Server address and port to connect to.";
         type = types.submodule hostPortSubmodule;
         example = {
           host = "example.com";
@@ -145,13 +145,13 @@ let
       };
 
       enableHTTPS = mkOption {
-        description = mdDoc "Enable HTTPS when connecting to the server.";
+        description = "Enable HTTPS when connecting to the server.";
         type = types.bool;
         default = true;
       };
 
       localToRemote = mkOption {
-        description = mdDoc "Local hosts and ports to listen on, plus the hosts and ports on remote to forward traffic to. Setting a local port to a value less than 1024 will additionally give the process the required CAP_NET_BIND_SERVICE capability.";
+        description = "Local hosts and ports to listen on, plus the hosts and ports on remote to forward traffic to. Setting a local port to a value less than 1024 will additionally give the process the required CAP_NET_BIND_SERVICE capability.";
         type = types.listOf (types.submodule localRemoteSubmodule);
         default = [];
         example = [ {
@@ -167,7 +167,7 @@ let
       };
 
       dynamicToRemote = mkOption {
-        description = mdDoc "Host and port for the SOCKS5 proxy to dynamically forward traffic to. Leave this at `null` to disable the SOCKS5 proxy. Setting the port to a value less than 1024 will additionally give the service the required CAP_NET_BIND_SERVICE capability.";
+        description = "Host and port for the SOCKS5 proxy to dynamically forward traffic to. Leave this at `null` to disable the SOCKS5 proxy. Setting the port to a value less than 1024 will additionally give the service the required CAP_NET_BIND_SERVICE capability.";
         type = types.nullOr (types.submodule hostPortSubmodule);
         default = null;
         example = {
@@ -177,19 +177,19 @@ let
       };
 
       udp = mkOption {
-        description = mdDoc "Whether to forward UDP instead of TCP traffic.";
+        description = "Whether to forward UDP instead of TCP traffic.";
         type = types.bool;
         default = false;
       };
 
       udpTimeout = mkOption {
-        description = mdDoc "When using UDP forwarding, timeout in seconds after which the tunnel connection is closed. `-1` means no timeout.";
+        description = "When using UDP forwarding, timeout in seconds after which the tunnel connection is closed. `-1` means no timeout.";
         type = types.int;
         default = 30;
       };
 
       httpProxy = mkOption {
-        description = mdDoc ''
+        description = ''
           Proxy to use to connect to the wstunnel server (`USER:PASS@HOST:PORT`).
 
           ::: {.warning}
@@ -202,45 +202,45 @@ let
       };
 
       soMark = mkOption {
-        description = mdDoc "Mark network packets with the SO_MARK sockoption with the specified value. Setting this option will also enable the required `CAP_NET_ADMIN` capability for the systemd service.";
+        description = "Mark network packets with the SO_MARK sockoption with the specified value. Setting this option will also enable the required `CAP_NET_ADMIN` capability for the systemd service.";
         type = types.nullOr types.int;
         default = null;
       };
 
       upgradePathPrefix = mkOption {
-        description = mdDoc "Use a specific HTTP path prefix that will show up in the upgrade request to the `wstunnel` server. Useful when running `wstunnel` behind a reverse proxy.";
+        description = "Use a specific HTTP path prefix that will show up in the upgrade request to the `wstunnel` server. Useful when running `wstunnel` behind a reverse proxy.";
         type = types.nullOr types.str;
         default = null;
         example = "wstunnel";
       };
 
       hostHeader = mkOption {
-        description = mdDoc "Use this as the HTTP host header instead of the real hostname. Useful for circumventing hostname-based firewalls.";
+        description = "Use this as the HTTP host header instead of the real hostname. Useful for circumventing hostname-based firewalls.";
         type = types.nullOr types.str;
         default = null;
       };
 
       tlsSNI = mkOption {
-        description = mdDoc "Use this as the SNI while connecting via TLS. Useful for circumventing hostname-based firewalls.";
+        description = "Use this as the SNI while connecting via TLS. Useful for circumventing hostname-based firewalls.";
         type = types.nullOr types.str;
         default = null;
       };
 
       tlsVerifyCertificate = mkOption {
-        description = mdDoc "Whether to verify the TLS certificate of the server. It might be useful to set this to `false` when working with the `tlsSNI` option.";
+        description = "Whether to verify the TLS certificate of the server. It might be useful to set this to `false` when working with the `tlsSNI` option.";
         type = types.bool;
         default = true;
       };
 
       # The original argument name `websocketPingFrequency` is a misnomer, as the frequency is the inverse of the interval.
       websocketPingInterval = mkOption {
-        description = mdDoc "Do a heartbeat ping every N seconds to keep up the websocket connection.";
+        description = "Do a heartbeat ping every N seconds to keep up the websocket connection.";
         type = types.nullOr types.ints.unsigned;
         default = null;
       };
 
       upgradeCredentials = mkOption {
-        description = mdDoc ''
+        description = ''
           Use these credentials to authenticate during the HTTP upgrade request (Basic authorization type, `USER:[PASS]`).
 
           ::: {.warning}
@@ -252,7 +252,7 @@ let
       };
 
       customHeaders = mkOption {
-        description = mdDoc "Custom HTTP headers to send during the upgrade request.";
+        description = "Custom HTTP headers to send during the upgrade request.";
         type = types.attrsOf types.str;
         default = {};
         example = {
@@ -355,10 +355,10 @@ let
   };
 in {
   options.services.wstunnel = {
-    enable = mkEnableOption (mdDoc "wstunnel");
+    enable = mkEnableOption "wstunnel";
 
     servers = mkOption {
-      description = mdDoc "`wstunnel` servers to set up.";
+      description = "`wstunnel` servers to set up.";
       type = types.attrsOf (types.submodule serverSubmodule);
       default = {};
       example = {
@@ -376,7 +376,7 @@ in {
     };
 
     clients = mkOption {
-      description = mdDoc "`wstunnel` clients to set up.";
+      description = "`wstunnel` clients to set up.";
       type = types.attrsOf (types.submodule clientSubmodule);
       default = {};
       example = {
