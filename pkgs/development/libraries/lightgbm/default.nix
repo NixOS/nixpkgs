@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = lib.optionals doCheck [ "-DBUILD_CPP_TEST=ON" ]
-    ++ lib.optionals cudaSupport [ "-DUSE_CUDA=1" "-DCMAKE_CXX_COMPILER=${cudaPackages.cudatoolkit.cc}/bin/cc" ]
+    ++ lib.optionals cudaSupport [ "-DUSE_CUDA=1" "-DCMAKE_CXX_COMPILER=${cudaPackages.backendStdenv.cc}/bin/cc" ]
     ++ lib.optionals openclSupport [ "-DUSE_GPU=ON" ]
     ++ lib.optionals mpiSupport [ "-DUSE_MPI=ON" ]
     ++ lib.optionals hdfsSupport [
