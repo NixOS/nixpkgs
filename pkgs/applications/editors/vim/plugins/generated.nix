@@ -4247,6 +4247,18 @@ final: prev:
     meta.homepage = "https://github.com/liuchengxu/graphviz.vim/";
   };
 
+  grapple-nvim = buildVimPlugin {
+    pname = "grapple.nvim";
+    version = "2024-04-11";
+    src = fetchFromGitHub {
+      owner = "cbochs";
+      repo = "grapple.nvim";
+      rev = "12172536620464f8cc124e07c6e3ccd306ea3c5c";
+      sha256 = "0rpiq47zb0ms6bbbd3c1ywmq5vc88132xcqwfnbfn3d2hrvbz8d1";
+    };
+    meta.homepage = "https://github.com/cbochs/grapple.nvim/";
+  };
+
   gruber-darker-nvim = buildVimPlugin {
     pname = "gruber-darker.nvim";
     version = "2024-01-08";
