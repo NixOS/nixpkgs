@@ -3,19 +3,24 @@
 , fetchPypi
 , cryptography
 , types-pyopenssl
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "types-redis";
   version = "4.6.0.20240409";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-ziF8J5WB12nfmSxbdtYcZUJbCmeWJgSOYz5kOGjriBs=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     cryptography
     types-pyopenssl
   ];
