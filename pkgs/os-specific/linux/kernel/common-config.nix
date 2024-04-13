@@ -871,11 +871,12 @@ let
     };
 
     zram = {
-      ZRAM           = module;
-      ZRAM_WRITEBACK = option yes;
-      ZSWAP          = option yes;
-      ZPOOL          = yes;
-      ZBUD           = option yes;
+      ZRAM            = module;
+      ZRAM_WRITEBACK  = option yes;
+      ZRAM_MULTI_COMP = whenAtLeast "6.2" yes;
+      ZSWAP           = option yes;
+      ZPOOL           = yes;
+      ZBUD            = option yes;
     };
 
     brcmfmac = {
