@@ -13650,6 +13650,8 @@ self: super: with self; {
 
   seventeentrack = callPackage ../development/python-modules/seventeentrack { };
 
+  sev-snp-measure = callPackage ../development/python-modules/sev-snp-measure { };
+
   sexpdata = callPackage ../development/python-modules/sexpdata { };
 
   sfepy = callPackage ../development/python-modules/sfepy { };
