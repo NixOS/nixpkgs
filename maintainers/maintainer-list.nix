@@ -13315,6 +13315,12 @@
       fingerprint = "64BE BF11 96C3 DD7A 443E  8314 1DC0 82FA DE5B A863";
     }];
   };
+  mlaradji = {
+    name = "Mohamed Laradji";
+    email = "mlaradji@pm.me";
+    github = "mlaradji";
+    githubId = 33703663;
+  };
   mlatus = {
     email = "wqseleven@gmail.com";
     github = "Ninlives";
