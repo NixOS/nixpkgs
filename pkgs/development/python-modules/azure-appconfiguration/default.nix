@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "azure-appconfiguration";
-  version = "1.5.0";
+  version = "1.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cJIRe68GzY6T7ukhN+coF2m0AD/EFtSh7aZGuyVkAnw=";
+    hash = "sha256-z2KKPh6mZDR5ZDzSRt2kZO3Eq3hXQzOaao/oCbwTf+w=";
   };
 
   propagatedBuildInputs = [
