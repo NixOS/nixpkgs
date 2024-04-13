@@ -1,10 +1,11 @@
-{ lib
-, azure-core
-, buildPythonPackage
-, fetchPypi
-, isodate
-, pythonOlder
-, setuptools
+{
+  lib,
+  azure-core,
+  buildPythonPackage,
+  fetchPypi,
+  isodate,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-z2KKPh6mZDR5ZDzSRt2kZO3Eq3hXQzOaao/oCbwTf+w=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     azure-core
@@ -31,9 +30,7 @@ buildPythonPackage rec {
   # Tests are not shipped
   doCheck = false;
 
-  pythonImportsCheck = [
-    "azure.appconfiguration"
-  ];
+  pythonImportsCheck = [ "azure.appconfiguration" ];
 
   meta = with lib; {
     description = "Microsoft App Configuration Data Library for Python";
