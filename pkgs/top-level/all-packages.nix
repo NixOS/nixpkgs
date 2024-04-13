@@ -10486,9 +10486,16 @@ with pkgs;
 
   lidarr = callPackage ../servers/lidarr { };
 
-  limesuite = callPackage ../applications/radio/limesuite {
-    inherit (darwin.apple_sdk.frameworks) GLUT;
-  };
+  inherit ({
+    limesuite = callPackage ../applications/radio/limesuite {
+      inherit (darwin.apple_sdk.frameworks) GLUT;
+    };
+    limesuiteWithGui = limesuite.override {
+      withGui = true;
+    };
+  })
+  limesuite
+  limesuiteWithGui;
 
   limesurvey = callPackage ../servers/limesurvey { };
 
