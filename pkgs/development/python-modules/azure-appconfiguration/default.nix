@@ -1,15 +1,16 @@
 { lib
-, pythonOlder
-, isodate
-, fetchPypi
-, buildPythonPackage
 , azure-core
+, buildPythonPackage
+, fetchPypi
+, isodate
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "azure-appconfiguration";
   version = "1.6.0";
-  format = "setuptools";
+  pyporject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -18,7 +19,11 @@ buildPythonPackage rec {
     hash = "sha256-z2KKPh6mZDR5ZDzSRt2kZO3Eq3hXQzOaao/oCbwTf+w=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     azure-core
     isodate
   ];
