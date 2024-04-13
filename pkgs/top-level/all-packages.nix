@@ -10486,9 +10486,16 @@ with pkgs;
 
   lidarr = callPackage ../servers/lidarr { };
 
-  limesuite = callPackage ../applications/radio/limesuite {
-    inherit (darwin.apple_sdk.frameworks) GLUT;
-  };
+  inherit ({
+    limesuite = callPackage ../applications/radio/limesuite {
+      inherit (darwin.apple_sdk.frameworks) GLUT;
+    };
+    limesuiteWithGui = limesuite.override {
+      withGui = true;
+    };
+  })
+  limesuite
+  limesuiteWithGui;
 
   limesurvey = callPackage ../servers/limesurvey { };
 
@@ -35742,7 +35749,7 @@ with pkgs;
     xwaylandSupport = false;
   };
 
-  chatterino2 = libsForQt5.callPackage ../applications/networking/instant-messengers/chatterino2 {
+  chatterino2 = callPackage ../applications/networking/instant-messengers/chatterino2 {
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
 
