@@ -19,9 +19,9 @@
 # LLVM release information; specify one of these but not both:
 , gitRelease ? {
     version = "19.0.0-git";
-    rev = "65058a8d732c3c41664a4dad1a1ae2a504d5c98e";
-    rev-version = "19.0.0-unstable-2024-03-16";
-    sha256 = "sha256-xV33kx/8OZ2KLtaz25RmudDrlIX7nScauTykf87jyTE=";
+    rev = "cebf77fb936a7270c7e3fa5c4a7e76216321d385";
+    rev-version = "19.0.0-unstable-2024-04-07";
+    sha256 = "sha256-616tscgsiFgHQcXW4KzK5srrudYizQFnJVM6K0qRf+I=";
 }
   # i.e.:
   # {
@@ -141,7 +141,10 @@ in let
       extraBuildCommands = mkExtraBuildCommands cc;
     };
 
-    lld = callPackage ./lld {
+    lld = callPackage ../common/lld {
+      patches = [
+        ./lld/gnu-install-dirs.patch
+      ];
       inherit llvm_meta;
     };
 
@@ -317,12 +320,16 @@ in let
       stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
-    libunwind = callPackage ./libunwind {
+    libunwind = callPackage ../common/libunwind {
       inherit llvm_meta;
       stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
-    openmp = callPackage ./openmp {
+    openmp = callPackage ../common/openmp {
+      patches = [
+        ./openmp/fix-find-tool.patch
+        ./openmp/run-lit-directly.patch
+      ];
       inherit llvm_meta targetLlvm;
     };
   });

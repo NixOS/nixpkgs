@@ -60,6 +60,9 @@ in
     # This prevents nixos-rebuild from killing greetd by activating getty again
     systemd.services."autovt@${tty}".enable = false;
 
+    # Enable desktop session data
+    services.displayManager.enable = lib.mkDefault true;
+
     systemd.services.greetd = {
       aliases = [ "display-manager.service" ];
 

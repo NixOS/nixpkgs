@@ -26,6 +26,7 @@
     "-DIRODS_LINUX_DISTRIBUTION_VERSION_MAJOR=1.0"
     "-DCPACK_GENERATOR=TGZ"
     "-DCMAKE_CXX_FLAGS=-I${lib.getDev libcxx}/include/c++/v1"
+    "-DPAM_LIBRARY=${pam}/lib/libpam.so"
   ];
 
   postPatch = ''

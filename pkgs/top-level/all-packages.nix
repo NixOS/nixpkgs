@@ -717,6 +717,8 @@ with pkgs;
 
   inspec = callPackage ../tools/misc/inspec { };
 
+  lshw-gui = lshw.override { withGUI = true; };
+
   kdePackages = callPackage ../kde { };
 
   buildcatrust = with python3.pkgs; toPythonApplication buildcatrust;
@@ -5094,8 +5096,6 @@ with pkgs;
 
   dsvpn = callPackage ../applications/networking/dsvpn { };
 
-  dtools = callPackage ../development/tools/dtools { };
-
   dwt1-shell-color-scripts = callPackage ../tools/misc/dwt1-shell-color-scripts { };
 
   dtrx = callPackage ../tools/compression/dtrx { };
@@ -7460,7 +7460,7 @@ with pkgs;
 
   dleyna-server = callPackage ../development/libraries/dleyna-server { };
 
-  dmd = callPackage ../development/compilers/dmd ({
+  dmd = callPackage ../by-name/dm/dmd/package.nix ({
     inherit (darwin.apple_sdk.frameworks) Foundation;
   } // lib.optionalAttrs stdenv.isLinux {
     # https://github.com/NixOS/nixpkgs/pull/206907#issuecomment-1527034123
@@ -27225,7 +27225,7 @@ with pkgs;
 
   dmraid = callPackage ../os-specific/linux/dmraid { lvm2 = lvm2_dmeventd; };
 
-  drbd = callPackage ../os-specific/linux/drbd { };
+  drbd = callPackage ../os-specific/linux/drbd/utils.nix { };
 
   dropwatch = callPackage ../os-specific/linux/dropwatch { };
 
@@ -29838,7 +29838,7 @@ with pkgs;
   apache-directory-studio = callPackage ../applications/networking/apache-directory-studio { };
 
   apkeep = callPackage ../tools/misc/apkeep {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   apngasm = callPackage ../applications/graphics/apngasm { };
@@ -30549,7 +30549,7 @@ with pkgs;
   dnglab = callPackage ../tools/graphics/dnglab { };
 
   inherit (callPackage ../applications/virtualization/docker {})
-    docker_24 docker_25;
+    docker_24 docker_25 docker_26;
 
   docker = docker_24;
   docker-client = docker.override { clientOnly = true; };
@@ -34954,7 +34954,7 @@ with pkgs;
   teams = callPackage ../applications/networking/instant-messengers/teams { };
 
   teams-for-linux = callPackage ../applications/networking/instant-messengers/teams-for-linux {
-    electron = electron_28;
+    electron = electron_29;
   };
 
   teamspeak_client = libsForQt5.callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };

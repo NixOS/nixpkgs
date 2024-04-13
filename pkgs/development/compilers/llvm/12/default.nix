@@ -1,5 +1,6 @@
 { lowPrio, newScope, pkgs, lib, stdenv, cmake
 , preLibcCrossHeaders
+, fetchpatch
 , libxml2, python3, isl, fetchurl, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
@@ -114,7 +115,11 @@ let
       extraBuildCommands = mkExtraBuildCommands cc;
     };
 
-    lld = callPackage ./lld {
+    lld = callPackage ../common/lld {
+      src = fetch "lld" "0qg3fgc7wj34hdkqn21y03zcmsdd01szhhm1hfki63iifrm3y2v9";
+      patches = [
+        ./lld/gnu-install-dirs.patch
+      ];
       inherit llvm_meta;
       inherit (libraries) libunwind;
     };
@@ -258,13 +263,24 @@ let
       stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
-    libunwind = callPackage ./libunwind {
+    libunwind = callPackage ../common/libunwind {
+      src = fetch "libunwind" "192ww6n81lj2mb9pj4043z79jp3cf58a9c2qrxjwm5c3a64n1shb";
+      patches = [
+        ./libunwind/gnu-install-dirs.patch
+      ];
       inherit llvm_meta;
-      inherit (buildLlvmTools) llvm;
       stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
-    openmp = callPackage ./openmp {
+    openmp = callPackage ../common/openmp {
+      src = fetch "openmp" "14dh0r6h2xh747ffgnsl4z08h0ri04azi9vf79cbz7ma1r27kzk0";
+      patches = [
+        # Fix cross.
+        (fetchpatch {
+          url = "https://github.com/llvm/llvm-project/commit/5e2358c781b85a18d1463fd924d2741d4ae5e42e.patch";
+          hash = "sha256-UxIlAifXnexF/MaraPW0Ut6q+sf3e7y1fMdEv1q103A=";
+        })
+      ];
       inherit llvm_meta targetLlvm;
     };
   });

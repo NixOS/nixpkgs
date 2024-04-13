@@ -1,5 +1,6 @@
 { lowPrio, newScope, pkgs, lib, stdenv, cmake
 , preLibcCrossHeaders
+, fetchpatch
 , libxml2, python3, isl, fetchFromGitHub, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
@@ -139,7 +140,10 @@ in let
       extraBuildCommands = mkExtraBuildCommands cc;
     };
 
-    lld = callPackage ./lld {
+    lld = callPackage ../common/lld {
+      patches = [
+        ./lld/gnu-install-dirs.patch
+      ];
       inherit llvm_meta;
     };
 
@@ -296,12 +300,22 @@ in let
       monorepoSrc = src;
     };
 
-    libunwind = callPackage ./libunwind {
+    libunwind = callPackage ../common/libunwind {
+      patches = [
+        ./libunwind/gnu-install-dirs.patch
+      ];
       inherit llvm_meta;
       stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
-    openmp = callPackage ./openmp {
+    openmp = callPackage ../common/openmp {
+      patches = [
+        # Fix cross.
+        (fetchpatch {
+          url = "https://github.com/llvm/llvm-project/commit/5e2358c781b85a18d1463fd924d2741d4ae5e42e.patch";
+          hash = "sha256-UxIlAifXnexF/MaraPW0Ut6q+sf3e7y1fMdEv1q103A=";
+        })
+      ];
       inherit llvm_meta targetLlvm;
     };
   });
