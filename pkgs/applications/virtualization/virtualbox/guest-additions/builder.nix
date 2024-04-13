@@ -1,6 +1,6 @@
 { config, stdenv, kernel, fetchurl, lib, pam, libxslt
 , libX11, libXext, libXcursor, libXmu
-, glib, libXrandr, dbus
+, glib, libXrandr, dbus, xz
 , pkg-config, which, zlib, xorg
 , yasm, patchelf, makeself, nasm
 , linuxHeaders, openssl}:
@@ -19,7 +19,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration";
 
-  nativeBuildInputs = [ patchelf pkg-config which yasm makeself nasm xorg.xorgserver openssl linuxHeaders ] ++ kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ patchelf pkg-config which yasm makeself nasm xorg.xorgserver openssl linuxHeaders xz ] ++ kernel.moduleBuildDependencies;
   buildInputs = [ dbus libxslt libXext libXcursor pam libXmu libXrandr ];
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
@@ -32,6 +32,7 @@ in stdenv.mkDerivation (finalAttrs: {
     rm -r src/libs/curl-*/
     rm -r src/libs/libpng-*/
     rm -r src/libs/libxml2-*/
+    rm -r src/libs/liblzma-*/
     rm -r src/libs/zlib*/
   '';
 
@@ -84,6 +85,8 @@ in stdenv.mkDerivation (finalAttrs: {
       VBOX_NO_LEGACY_XORG_X11 := 1
       SDK_VBoxLibPng_INCS :=
       SDK_VBoxLibXml2_INCS :=
+      SDK_VBoxLibLzma_INCS := ${xz.dev}/include
+      SDK_VBoxLibLzma_LIBS := ${xz.out}/lib
 
       SDK_VBoxOpenSslStatic_INCS := ${openssl.dev}/include/ssl
 
