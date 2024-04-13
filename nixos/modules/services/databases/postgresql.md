@@ -69,6 +69,9 @@ postgres by default will accept a passwordless connection via unix
 domain socket. This makes it possible to run many postgres-backed
 services without creating any database secrets at all
 
+Additionally, you can assign `services.postgresql.ensureUsers.*.ensureDBOwnership`
+to a list of database names of which to set the database ownership.
+
 ### Assigning extra permissions {#module-services-postgres-initializing-extra-permissions}
 
 For many cases, it will be enough to have the database user be the
