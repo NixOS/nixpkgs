@@ -18,6 +18,11 @@
 , makeWrapper
 , runCommand
 , doInstallCheck ? true
+# packages that use bats (for update testing)
+, bash-preexec
+, kikit
+, locate-dominating-file
+, packcc
 }:
 
 resholve.mkDerivation rec {
@@ -207,6 +212,16 @@ resholve.mkDerivation rec {
         touch $out
       '';
     });
+
+    # to see when updates would break things, include packages
+    # that use nixpkgs' bats for testing (as long as they
+    # aren't massive builds)
+    inherit bash-preexec locate-dominating-file packcc;
+    resholve = resholve.tests.cli;
+  } // lib.optionalAttrs (!stdenv.isDarwin) {
+    # TODO: kikit's kicad dependency is marked broken on darwin atm
+    # may be able to fold this up if that resolves.
+    inherit kikit;
   };
 
   meta = with lib; {
