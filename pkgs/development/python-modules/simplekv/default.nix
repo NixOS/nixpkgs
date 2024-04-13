@@ -5,13 +5,14 @@
 , mock
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , six
 }:
 
 buildPythonPackage rec {
   pname = "simplekv";
   version = "0.14.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -22,7 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-seUGDj2q84+AjDFM1pxMLlHbe9uBgEhmqA96UHjnCmo=";
   };
 
-  nativeCheckInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     dulwich
     mock
     pytestCheckHook
