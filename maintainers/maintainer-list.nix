@@ -12879,6 +12879,12 @@
       fingerprint = "E90C BA34 55B3 6236 740C  038F 0D94 8CE1 9CF4 9C5F";
     }];
   };
+  mksafavi = {
+    name = "MK Safavi";
+    email = "mksafavi@gmail.com";
+    github = "mksafavi";
+    githubId = 50653293;
+  };
   mktip = {
     email = "mo.issa.ok+nix@gmail.com";
     github = "mktip";
