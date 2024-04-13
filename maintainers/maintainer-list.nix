@@ -20159,9 +20159,14 @@
     githubId = 62384384;
     matrix = "@tomasajt:matrix.org";
     name = "TomaSajt";
-    keys = [{
-      fingerprint = "8CA9 8016 F44D B717 5B44  6032 F011 163C 0501 22A1";
-    }];
+    keys = [
+      {
+        fingerprint = "8CA9 8016 F44D B717 5B44  6032 F011 163C 0501 22A1";
+      }
+      {
+        fingerprint = "5657 97AD 41B5 BC82 79CB  044F 1AA0 BCAC A57A 7225";
+      }
+    ];
   };
   tomaskala = {
     email = "public+nixpkgs@tomaskala.com";
