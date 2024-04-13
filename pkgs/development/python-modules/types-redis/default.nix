@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cryptography
-, types-pyopenssl
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cryptography,
+  types-pyopenssl,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -16,9 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-ziF8J5WB12nfmSxbdtYcZUJbCmeWJgSOYz5kOGjriBs=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     cryptography
@@ -28,9 +27,7 @@ buildPythonPackage rec {
   # Module doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "redis-stubs"
-  ];
+  pythonImportsCheck = [ "redis-stubs" ];
 
   meta = with lib; {
     description = "Typing stubs for redis";
