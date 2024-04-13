@@ -153,7 +153,7 @@ import ./make-test-python.nix {
 
     options.__testSteps = lib.mkOption {
       type = lib.types.lines;
-      description = lib.mdDoc "All of the test steps combined as a single script.";
+      description = "All of the test steps combined as a single script.";
     };
 
     config.environment.systemPackages = lib.singleton testClient;

@@ -7,7 +7,6 @@ let
     mkEnableOption
     mkIf
     mkOption
-    mdDoc
     types
     ;
 
@@ -24,38 +23,38 @@ in
   meta.maintainers = with maintainers; [ oddlama ];
 
   options.services.esphome = {
-    enable = mkEnableOption (mdDoc "esphome, for making custom firmwares for ESP32/ESP8266");
+    enable = mkEnableOption "esphome, for making custom firmwares for ESP32/ESP8266";
 
     package = lib.mkPackageOption pkgs "esphome" { };
 
     enableUnixSocket = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc "Listen on a unix socket `/run/esphome/esphome.sock` instead of the TCP port.";
+      description = "Listen on a unix socket `/run/esphome/esphome.sock` instead of the TCP port.";
     };
 
     address = mkOption {
       type = types.str;
       default = "localhost";
-      description = mdDoc "esphome address";
+      description = "esphome address";
     };
 
     port = mkOption {
       type = types.port;
       default = 6052;
-      description = mdDoc "esphome port";
+      description = "esphome port";
     };
 
     openFirewall = mkOption {
       default = false;
       type = types.bool;
-      description = mdDoc "Whether to open the firewall for the specified port.";
+      description = "Whether to open the firewall for the specified port.";
     };
 
     allowedDevices = mkOption {
       default = ["char-ttyS" "char-ttyUSB"];
       example = ["/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0"];
-      description = lib.mdDoc ''
+      description = ''
         A list of device nodes to which {command}`esphome` has access to.
         Refer to DeviceAllow in systemd.resource-control(5) for more information.
         Beware that if a device is referred to by an absolute path instead of a device category,
@@ -67,7 +66,7 @@ in
     usePing = mkOption {
       default = false;
       type = types.bool;
-      description = lib.mdDoc "Use ping to check online status of devices instead of mDNS";
+      description = "Use ping to check online status of devices instead of mDNS";
     };
   };
 

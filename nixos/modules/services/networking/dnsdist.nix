@@ -80,31 +80,31 @@ let
 in {
   options = {
     services.dnsdist = {
-      enable = mkEnableOption (lib.mdDoc "dnsdist domain name server");
+      enable = mkEnableOption "dnsdist domain name server";
 
       listenAddress = mkOption {
         type = types.str;
-        description = lib.mdDoc "Listen IP address";
+        description = "Listen IP address";
         default = "0.0.0.0";
       };
       listenPort = mkOption {
         type = types.port;
-        description = lib.mdDoc "Listen port";
+        description = "Listen port";
         default = 53;
       };
 
       dnscrypt = {
-        enable = mkEnableOption (lib.mdDoc "a DNSCrypt endpoint to dnsdist");
+        enable = mkEnableOption "a DNSCrypt endpoint to dnsdist";
 
         listenAddress = mkOption {
           type = types.str;
-          description = lib.mdDoc "Listen IP address of the endpoint";
+          description = "Listen IP address of the endpoint";
           default = "0.0.0.0";
         };
 
         listenPort = mkOption {
           type = types.port;
-          description = lib.mdDoc "Listen port of the endpoint";
+          description = "Listen port of the endpoint";
           default = 443;
         };
 
@@ -113,7 +113,7 @@ in {
           default = "2.dnscrypt-cert.${config.networking.hostName}";
           defaultText = literalExpression "2.dnscrypt-cert.\${config.networking.hostName}";
           example = "2.dnscrypt-cert.myresolver";
-          description = lib.mdDoc ''
+          description = ''
             The name that will be given to this DNSCrypt resolver.
 
             ::: {.note}
@@ -125,7 +125,7 @@ in {
         providerKey = mkOption {
           type = types.nullOr types.path;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             The filepath to the provider secret key.
             If not given a new provider key pair will be generated in
             /var/lib/dnsdist on the first run.
@@ -139,7 +139,7 @@ in {
         certLifetime = mkOption {
           type = types.ints.positive;
           default = 15;
-          description = lib.mdDoc ''
+          description = ''
             The lifetime (in minutes) of the resolver certificate.
             This will be automatically rotated before expiration.
           '';
@@ -150,7 +150,7 @@ in {
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra lines to be added verbatim to dnsdist.conf.
         '';
       };

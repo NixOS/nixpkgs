@@ -7,12 +7,12 @@ let
 in {
   options = {
     services.duckling = {
-      enable = mkEnableOption (lib.mdDoc "duckling");
+      enable = mkEnableOption "duckling";
 
       port = mkOption {
         type = types.port;
         default = 8080;
-        description = lib.mdDoc ''
+        description = ''
           Port on which duckling will run.
         '';
       };

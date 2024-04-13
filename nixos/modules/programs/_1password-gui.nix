@@ -16,13 +16,13 @@ in
 
   options = {
     programs._1password-gui = {
-      enable = mkEnableOption (lib.mdDoc "the 1Password GUI application");
+      enable = mkEnableOption "the 1Password GUI application";
 
       polkitPolicyOwners = mkOption {
         type = types.listOf types.str;
         default = [ ];
         example = literalExpression ''["user1" "user2" "user3"]'';
-        description = lib.mdDoc ''
+        description = ''
           A list of users who should be able to integrate 1Password with polkit-based authentication mechanisms.
         '';
       };

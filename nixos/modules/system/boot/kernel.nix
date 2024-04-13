@@ -20,7 +20,7 @@ in
   ###### interface
 
   options = {
-    boot.kernel.enable = mkEnableOption (lib.mdDoc "the Linux kernel. This is useful for systemd-like containers which do not require a kernel") // {
+    boot.kernel.enable = mkEnableOption "the Linux kernel. This is useful for systemd-like containers which do not require a kernel" // {
       default = true;
     };
 
@@ -28,7 +28,7 @@ in
       default = {};
       example = literalExpression "{ debug = true; }";
       internal = true;
-      description = lib.mdDoc ''
+      description = ''
         This option allows to enable or disable certain kernel features.
         It's not API, because it's about kernel feature sets, that
         make sense for specific use cases. Mostly along with programs,
@@ -51,7 +51,7 @@ in
       # - some of it might not even evaluate correctly.
       defaultText = literalExpression "pkgs.linuxPackages";
       example = literalExpression "pkgs.linuxKernel.packages.linux_5_10";
-      description = lib.mdDoc ''
+      description = ''
         This option allows you to override the Linux kernel used by
         NixOS.  Since things like external kernel module packages are
         tied to the kernel you're using, it also overrides those.
@@ -90,7 +90,7 @@ in
           }
         ]
       '';
-      description = lib.mdDoc ''
+      description = ''
         A list of additional patches to apply to the kernel.
 
         Every item should be an attribute set with the following attributes:
@@ -127,7 +127,7 @@ in
       type = types.str;
       default = "";
       example = "my secret seed";
-      description = lib.mdDoc ''
+      description = ''
         Provides a custom seed for the {var}`RANDSTRUCT` security
         option of the Linux kernel. Note that {var}`RANDSTRUCT` is
         only enabled in NixOS hardened kernels. Using a custom seed requires
@@ -142,13 +142,13 @@ in
         description = "string, with spaces inside double quotes";
       });
       default = [ ];
-      description = lib.mdDoc "Parameters added to the kernel command line.";
+      description = "Parameters added to the kernel command line.";
     };
 
     boot.consoleLogLevel = mkOption {
       type = types.int;
       default = 4;
-      description = lib.mdDoc ''
+      description = ''
         The kernel console `loglevel`. All Kernel Messages with a log level smaller
         than this setting will be printed to the console.
       '';
@@ -157,7 +157,7 @@ in
     boot.vesa = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         (Deprecated) This option, if set, activates the VESA 800x600 video
         mode on boot and disables kernel modesetting. It is equivalent to
         specifying `[ "vga=0x317" "nomodeset" ]` in the
@@ -171,13 +171,13 @@ in
       type = types.listOf types.package;
       default = [];
       example = literalExpression "[ config.boot.kernelPackages.nvidia_x11 ]";
-      description = lib.mdDoc "A list of additional packages supplying kernel modules.";
+      description = "A list of additional packages supplying kernel modules.";
     };
 
     boot.kernelModules = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = lib.mdDoc ''
+      description = ''
         The set of kernel modules to be loaded in the second stage of
         the boot process.  Note that modules that are needed to
         mount the root file system should be added to
@@ -190,7 +190,7 @@ in
       type = types.listOf types.str;
       default = [];
       example = [ "sata_nv" "ext3" ];
-      description = lib.mdDoc ''
+      description = ''
         The set of kernel modules in the initial ramdisk used during the
         boot process.  This set must include all modules necessary for
         mounting the root device.  That is, it should include modules
@@ -210,13 +210,13 @@ in
     boot.initrd.kernelModules = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = lib.mdDoc "List of modules that are always loaded by the initrd.";
+      description = "List of modules that are always loaded by the initrd.";
     };
 
     boot.initrd.includeDefaultModules = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         This option, if set, adds a collection of default kernel modules
         to {option}`boot.initrd.availableKernelModules` and
         {option}`boot.initrd.kernelModules`.
@@ -227,7 +227,7 @@ in
       type = types.listOf types.path;
       internal = true;
       default = [];
-      description = lib.mdDoc ''
+      description = ''
         Tree of kernel modules.  This includes the kernel, plus modules
         built outside of the kernel.  Combine these into a single tree of
         symlinks because modprobe only supports one directory.
@@ -249,7 +249,7 @@ in
       '';
       internal = true;
       type = types.listOf types.attrs;
-      description = lib.mdDoc ''
+      description = ''
         This option allows modules to specify the kernel config options that
         must be set (or unset) for the module to work. Please use the
         lib.kernelConfig functions to build list elements.

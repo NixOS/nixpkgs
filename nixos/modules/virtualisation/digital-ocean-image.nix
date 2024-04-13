@@ -13,7 +13,7 @@ in
       type = with types; either (enum [ "auto" ]) int;
       default = "auto";
       example = 4096;
-      description = lib.mdDoc ''
+      description = ''
         Size of disk image. Unit is MB.
       '';
     };
@@ -21,7 +21,7 @@ in
     virtualisation.digitalOceanImage.configFile = mkOption {
       type = with types; nullOr path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         A path to a configuration file which will be placed at
         `/etc/nixos/configuration.nix` and be used when switching
         to a new configuration. If set to `null`, a default
@@ -34,7 +34,7 @@ in
       type = types.enum [ "gzip" "bzip2" ];
       default = "gzip";
       example = "bzip2";
-      description = lib.mdDoc ''
+      description = ''
         Disk image compression method. Choose bzip2 to generate smaller images that
         take longer to generate but will consume less metered storage space on your
         Digital Ocean account.

@@ -6,26 +6,26 @@ let
 in
 {
   options.services.torrentstream = {
-    enable = lib.mkEnableOption (lib.mdDoc "TorrentStream daemon");
+    enable = lib.mkEnableOption "TorrentStream daemon";
     package = lib.mkPackageOption pkgs "torrentstream" { };
     port = lib.mkOption {
       type = lib.types.port;
       default = 5082;
-      description = lib.mdDoc ''
+      description = ''
         TorrentStream port.
       '';
     };
     openFirewall = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Open ports in the firewall for TorrentStream daemon.
       '';
     };
     address = lib.mkOption {
       type = lib.types.str;
       default = "0.0.0.0";
-      description = lib.mdDoc ''
+      description = ''
         Address to listen on.
       '';
     };

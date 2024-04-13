@@ -10,7 +10,7 @@ in {
     settings = mkOption {
       type = types.attrs;
       default = {};
-      description = lib.mdDoc ''
+      description = ''
         All settings of nginxlog expressed as an Nix attrset.
 
         Check the official documentation for the corresponding YAML
@@ -24,7 +24,7 @@ in {
     metricsEndpoint = mkOption {
       type = types.str;
       default = "/metrics";
-      description = lib.mdDoc ''
+      description = ''
         Path under which to expose metrics.
       '';
     };

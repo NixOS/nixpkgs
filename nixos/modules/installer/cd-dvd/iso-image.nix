@@ -483,7 +483,7 @@ in
     isoImage.isoName = mkOption {
       default = "${config.isoImage.isoBaseName}.iso";
       type = lib.types.str;
-      description = lib.mdDoc ''
+      description = ''
         Name of the generated ISO image file.
       '';
     };
@@ -491,7 +491,7 @@ in
     isoImage.isoBaseName = mkOption {
       default = config.system.nixos.distroId;
       type = lib.types.str;
-      description = lib.mdDoc ''
+      description = ''
         Prefix of the name of the generated ISO image file.
       '';
     };
@@ -499,7 +499,7 @@ in
     isoImage.compressImage = mkOption {
       default = false;
       type = lib.types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Whether the ISO image should be compressed using
         {command}`zstd`.
       '';
@@ -513,7 +513,7 @@ in
                 + lib.optionalString (isPower && is32bit && isBigEndian) "-Xbcj powerpc"
                 + lib.optionalString (isSparc) "-Xbcj sparc";
       type = lib.types.nullOr lib.types.str;
-      description = lib.mdDoc ''
+      description = ''
         Compression settings to use for the squashfs nix store.
         `null` disables compression.
       '';
@@ -523,7 +523,7 @@ in
     isoImage.edition = mkOption {
       default = "";
       type = lib.types.str;
-      description = lib.mdDoc ''
+      description = ''
         Specifies which edition string to use in the volume ID of the generated
         ISO image.
       '';
@@ -533,7 +533,7 @@ in
       # nixos-$EDITION-$RELEASE-$ARCH
       default = "nixos${optionalString (config.isoImage.edition != "") "-${config.isoImage.edition}"}-${config.system.nixos.release}-${pkgs.stdenv.hostPlatform.uname.processor}";
       type = lib.types.str;
-      description = lib.mdDoc ''
+      description = ''
         Specifies the label or volume ID of the generated ISO image.
         Note that the label is used by stage 1 of the boot process to
         mount the CD, so it should be reasonably distinctive.
@@ -547,7 +547,7 @@ in
           }
         ]
       '';
-      description = lib.mdDoc ''
+      description = ''
         This option lists files to be copied to fixed locations in the
         generated ISO image.
       '';
@@ -555,7 +555,7 @@ in
 
     isoImage.storeContents = mkOption {
       example = literalExpression "[ pkgs.stdenv ]";
-      description = lib.mdDoc ''
+      description = ''
         This option lists additional derivations to be included in the
         Nix store in the generated ISO image.
       '';
@@ -564,7 +564,7 @@ in
     isoImage.includeSystemBuildDependencies = mkOption {
       default = false;
       type = lib.types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Set this option to include all the needed sources etc in the
         image. It significantly increases image size. Use that when
         you want to be able to keep all the sources needed to build your
@@ -586,7 +586,7 @@ in
         e.g. i686 and x86_64.
       '';
       type = lib.types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Whether the ISO image should be a BIOS-bootable disk.
       '';
     };
@@ -594,7 +594,7 @@ in
     isoImage.makeEfiBootable = mkOption {
       default = false;
       type = lib.types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Whether the ISO image should be an EFI-bootable volume.
       '';
     };
@@ -602,7 +602,7 @@ in
     isoImage.makeUsbBootable = mkOption {
       default = false;
       type = lib.types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Whether the ISO image should be bootable from CD as well as USB.
       '';
     };
@@ -612,7 +612,7 @@ in
           url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/a9e05d7deb38a8e005a2b52575a3f59a63a4dba0/bootloader/efi-background.png";
           sha256 = "18lfwmp8yq923322nlb9gxrh5qikj1wsk6g5qvdh31c4h5b1538x";
         };
-      description = lib.mdDoc ''
+      description = ''
         The splash image to use in the EFI bootloader.
       '';
     };
@@ -622,7 +622,7 @@ in
           url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/a9e05d7deb38a8e005a2b52575a3f59a63a4dba0/bootloader/isolinux/bios-boot.png";
           sha256 = "1wp822zrhbg4fgfbwkr7cbkr4labx477209agzc0hr6k62fr6rxd";
         };
-      description = lib.mdDoc ''
+      description = ''
         The splash image to use in the legacy-boot bootloader.
       '';
     };
@@ -630,7 +630,7 @@ in
     isoImage.grubTheme = mkOption {
       default = pkgs.nixos-grub2-theme;
       type = types.nullOr (types.either types.path types.package);
-      description = lib.mdDoc ''
+      description = ''
         The grub2 theme used for UEFI boot.
       '';
     };
@@ -661,7 +661,7 @@ in
         MENU COLOR SEL          7;37;40    #FFFFFFFF    #FF5277C3   std
       '';
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         The syslinux theme used for BIOS boot.
       '';
     };
@@ -670,7 +670,7 @@ in
       default = "";
       type = types.str;
       example = "Install ";
-      description = lib.mdDoc ''
+      description = ''
         The string to prepend before the menu label for the NixOS system.
         This will be directly prepended (without whitespace) to the NixOS version
         string, like for example if it is set to `XXX`:
@@ -683,7 +683,7 @@ in
       default = " Installer";
       type = types.str;
       example = " Live System";
-      description = lib.mdDoc ''
+      description = ''
         The string to append after the menu label for the NixOS system.
         This will be directly appended (without whitespace) to the NixOS version
         string, like for example if it is set to `XXX`:
@@ -696,7 +696,7 @@ in
       default = false;
       type = types.bool;
       example = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to use text mode instead of graphical grub.
         A value of `true` means graphical mode is not tried to be used.
 

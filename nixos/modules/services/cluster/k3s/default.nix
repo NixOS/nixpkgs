@@ -13,12 +13,12 @@ in
 
   # interface
   options.services.k3s = {
-    enable = mkEnableOption (lib.mdDoc "k3s");
+    enable = mkEnableOption "k3s";
 
     package = mkPackageOption pkgs "k3s" { };
 
     role = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Whether k3s should run as a server or agent.
 
         If it's a server:
@@ -38,7 +38,7 @@ in
 
     serverAddr = mkOption {
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         The k3s server to connect to.
 
         Servers and agents need to communicate each other. Read
@@ -52,7 +52,7 @@ in
     clusterInit = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Initialize HA cluster using an embedded etcd datastore.
 
         If this option is `false` and `role` is `server`
@@ -73,7 +73,7 @@ in
 
     token = mkOption {
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         The k3s token to use when connecting to a server.
 
         WARNING: This option will expose store your token unencrypted world-readable in the nix store.
@@ -84,12 +84,12 @@ in
 
     tokenFile = mkOption {
       type = types.nullOr types.path;
-      description = lib.mdDoc "File path containing k3s token to use when connecting to the server.";
+      description = "File path containing k3s token to use when connecting to the server.";
       default = null;
     };
 
     extraFlags = mkOption {
-      description = lib.mdDoc "Extra flags to pass to the k3s command.";
+      description = "Extra flags to pass to the k3s command.";
       type = types.str;
       default = "";
       example = "--no-deploy traefik --cluster-cidr 10.24.0.0/16";
@@ -98,12 +98,12 @@ in
     disableAgent = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc "Only run the server. This option only makes sense for a server.";
+      description = "Only run the server. This option only makes sense for a server.";
     };
 
     environmentFile = mkOption {
       type = types.nullOr types.path;
-      description = lib.mdDoc ''
+      description = ''
         File path containing environment variables for configuring the k3s service in the format of an EnvironmentFile. See systemd.exec(5).
       '';
       default = null;
@@ -112,7 +112,7 @@ in
     configPath = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = lib.mdDoc "File path containing the k3s YAML config. This is useful when the config is generated (for example on boot).";
+      description = "File path containing the k3s YAML config. This is useful when the config is generated (for example on boot).";
     };
   };
 
