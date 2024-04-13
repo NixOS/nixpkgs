@@ -4,7 +4,7 @@ let
   inherit (lib)
     maintainers types literalExpression
     escapeShellArg escapeShellArgs
-    mkEnableOption mkOption mkRemovedOptionModule mkIf 
+    mkEnableOption mkOption mkRemovedOptionModule mkIf
     mkPackageOption optionalString concatMapStrings concatStringsSep;
 
   cfg = config.services.mtr-exporter;
