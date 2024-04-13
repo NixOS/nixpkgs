@@ -1,6 +1,7 @@
 { autoPatchelfHook
 , fetchurl
 , lib
+, copyDesktopItems
 , makeDesktopItem
 , makeWrapper
 , stdenv
@@ -52,6 +53,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     autoPatchelfHook
     cairo
+    copyDesktopItems
     cups.lib
     dbus.lib
     expat
@@ -98,7 +100,6 @@ stdenv.mkDerivation rec {
         icons/icon-"$res".png \
         $out/share/icons/hicolor/"$res"x"$res"/apps/${basename}.png
     done
-    ln -s $desktopItem/share/applications $out/share/
     runHook postInstall
   '';
 
@@ -110,14 +111,14 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  desktopItem = makeDesktopItem {
+  desktopItems = [(makeDesktopItem {
     name = basename;
     exec = basename;
     icon = basename;
     desktopName = "Streamlink Twitch GUI";
     genericName = meta.description;
     categories = [ "AudioVideo" "Network" ];
-  };
+  })];
 
   meta = with lib; {
     description = "Twitch.tv browser for Streamlink";
