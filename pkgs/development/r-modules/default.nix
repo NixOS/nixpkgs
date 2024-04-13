@@ -903,6 +903,7 @@ let
     "MSnID"
     "OmnipathR"
     "precommit"
+    "protGear"
     "PSCBS"
     "iemisc"
     "repmis"
