@@ -22,7 +22,7 @@
 , tensorboard
 , config
 , cudaSupport ? config.cudaSupport
-, cudaPackagesGoogle
+, cudaPackages
 , zlib
 , python
 , keras-applications
@@ -43,7 +43,7 @@ assert ! (stdenv.isDarwin && cudaSupport);
 
 let
   packages = import ./binary-hashes.nix;
-  inherit (cudaPackagesGoogle) cudatoolkit cudnn;
+  inherit (cudaPackages) cudatoolkit cudnn;
 in buildPythonPackage {
   pname = "tensorflow" + lib.optionalString cudaSupport "-gpu";
   inherit (packages) version;
@@ -198,10 +198,6 @@ in buildPythonPackage {
     "tensorflow.python"
     "tensorflow.python.framework"
   ];
-
-  passthru = {
-    cudaPackages = cudaPackagesGoogle;
-  };
 
   meta = with lib; {
     description = "Computation using data flow graphs for scalable machine learning";
