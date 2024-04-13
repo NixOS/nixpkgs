@@ -86,4 +86,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "coder";
     maintainers = with lib.maintainers; [ ghuntley urandom ];
   };
+
+  passthru = {
+    updateScript = ./update.sh;
+  };
 })
