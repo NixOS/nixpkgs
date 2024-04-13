@@ -1,6 +1,6 @@
 { lowPrio, newScope, pkgs, lib, stdenv, cmake, ninja
 , preLibcCrossHeaders
-, libxml2, python3, fetchFromGitHub, overrideCC, wrapCCWith, wrapBintoolsWith
+, libxml2, python3, fetchFromGitHub, fetchpatch, substitute, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 , targetLlvm
@@ -336,7 +336,30 @@ in let
     # `libcxx` requires a fairly modern C++ compiler,
     # so: we use the clang from this LLVM package set instead of the regular
     # stdenv's compiler.
-    libcxx = callPackage ./libcxx {
+    libcxx = callPackage ../common/libcxx {
+      patches = [
+        # See:
+        #   - https://reviews.llvm.org/D133566
+        #   - https://github.com/NixOS/nixpkgs/issues/214524#issuecomment-1429146432
+        # !!! Drop in LLVM 16+
+        (fetchpatch {
+          url = "https://github.com/llvm/llvm-project/commit/57c7bb3ec89565c68f858d316504668f9d214d59.patch";
+          hash = "sha256-B07vHmSjy5BhhkGSj3e1E0XmMv5/9+mvC/k70Z29VwY=";
+        })
+        (substitute {
+          src = ../common/libcxxabi/wasm.patch;
+          replacements = [
+            "--replace-fail" "/cmake/" "/llvm/cmake/"
+          ];
+        })
+      ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+        (substitute {
+          src = ../common/libcxx/libcxx-0001-musl-hacks.patch;
+          replacements = [
+            "--replace-fail" "/include/" "/libcxx/include/"
+          ];
+        })
+      ];
       inherit llvm_meta;
       stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
