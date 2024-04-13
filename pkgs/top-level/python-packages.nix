@@ -6035,6 +6035,8 @@ self: super: with self; {
 
   joblib = callPackage ../development/python-modules/joblib { };
 
+  joblib-spark = callPackage ../development/python-modules/joblib-spark { };
+
   johnnycanencrypt = callPackage ../development/python-modules/johnnycanencrypt {
     inherit (pkgs.darwin.apple_sdk.frameworks) PCSC;
   };
