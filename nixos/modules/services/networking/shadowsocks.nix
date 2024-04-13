@@ -136,10 +136,16 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    assertions = singleton
-      { assertion = cfg.password == null || cfg.passwordFile == null;
-        message = "Cannot use both password and passwordFile for shadowsocks-libev";
-      };
+    assertions = [
+      {
+        # xor, make sure either password or passwordFile be set.
+        # shadowsocks-libev not support plain/none encryption method
+        # which indicated that password must set.
+        assertion = let noPasswd = cfg.password == null; noPasswdFile = cfg.passwordFile == null;
+          in (noPasswd && !noPasswdFile) || (!noPasswd && noPasswdFile);
+        message = "Option `password` or `passwordFile` must be set and cannot be set simultaneously";
+      }
+    ];
 
     systemd.services.shadowsocks-libev = {
       description = "shadowsocks-libev Daemon";
