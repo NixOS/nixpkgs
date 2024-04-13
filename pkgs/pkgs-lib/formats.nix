@@ -69,6 +69,51 @@ rec {
 
   };
 
+  jsonWithRuntimeSubstitution = {}: rec {
+    inherit (json {}) type;
+
+    findSubstitutions = let
+      prefixSubstitution = attrOrIndex: {attrpath, source}: { attrpath = [attrOrIndex] ++ attrpath; inherit source; };
+    in value:
+        if null == value || lib.isBool value || lib.isInt value || lib.isFloat value || lib.isString value || lib.isPath value then []
+        else
+          if lib.isList value then
+            lib.concatLists (lib.imap0 (index: value: map (prefixSubstitution index) (findSubstitutions value)) value)
+          else if lib.isAttrs value then
+            if value._runtimeSource or null != null then
+              # We shouldn't have anything other than a runtime source if this is a runtime-sourced string.
+              assert lib.attrNames value == ["_runtimeSource"];
+                [{attrpath = []; source = value._runtimeSource;}]
+            else
+              lib.concatLists (lib.mapAttrsToList (name: value: map (prefixSubstitution name) (findSubstitutions value)) value)
+          else
+            throw "unexpected type for jsonWithRuntimeSubstitution. How did you get this past module type checking??"
+    ;
+
+    generate = filename: value: let
+      substitutions = findSubstitutions value;
+      substitutionToJq = index: { attrpath, ... }:
+        "| " + lib.concatMapStrings (attr: "." + (if lib.isString attr then builtins.toJSON attr else "[${toString attr}]")) attrpath
+        + " = $file${toString index}"
+      ;
+      jqScript = ".\n" + (lib.concatStrings (lib.imap0 substitutionToJq substitutions));
+    in pkgs.writeShellScript "generate-${filename}.sh" ''
+      set -e
+      jqArgs=(
+        ${lib.concatStrings (lib.imap0 (index: { source, ... }:
+          if source ? file then
+            "--rawfile file${toString index} ${lib.escapeShellArg source.file}\n"
+          else if source ? systemdCredential then
+            ''--rawfile file${toString index} "''${CREDENTIALS_DIRECTORY:?missing credentials directory}/"${lib.escapeShellArg source.systemdCredential}''
+          else throw "Unknown runtime source type."
+        ) substitutions)}
+        ${lib.escapeShellArg jqScript}
+      )
+      ${pkgs.jq}/bin/jq < ${(json {}).generate "${filename}-unsubstituted" value} \
+        "''${jqArgs[@]}"
+    '';
+  };
+
   yaml = {}: {
 
     generate = name: value: pkgs.callPackage ({ runCommand, remarshal }: runCommand name {

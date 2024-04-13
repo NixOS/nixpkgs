@@ -13,25 +13,18 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 
     hedgedocPostgresWithTCPSocket = { ... }: {
       systemd.services.hedgedoc.after = [ "postgresql.service" ];
+      systemd.services.hedgedoc.serviceConfig.SetCredential = "dbpassword:snakeoilpassword";
       services = {
         hedgedoc = {
           enable = true;
           settings.db = {
             dialect = "postgres";
             user = "hedgedoc";
-            password = "$DB_PASSWORD";
+            password = lib.stringFromSystemdCredential "dbpassword";
             host = "localhost";
             port = 5432;
             database = "hedgedocdb";
           };
-
-          /*
-           * Do not use pkgs.writeText for secrets as
-           * they will end up in the world-readable Nix store.
-           */
-          environmentFile = pkgs.writeText "hedgedoc-env" ''
-            DB_PASSWORD=snakeoilpassword
-          '';
         };
         postgresql = {
           enable = true;
@@ -45,20 +38,21 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 
     hedgedocPostgresWithUNIXSocket = { ... }: {
       systemd.services.hedgedoc.after = [ "postgresql.service" ];
+      # In a non-test scenario, this should be emplaced by some
+      # secrets handling mechanism like sops-nix or colmena secrets.
+      systemd.tmpfiles.rules = [
+        "L+ /run/secrets/hedgedoc-db-password - - - - ${pkgs.writeText "password" "snakeoilpassword"}"
+      ];
       services = {
         hedgedoc = {
           enable = true;
           settings.db = {
             dialect = "postgres";
             user = "hedgedoc";
-            password = "$DB_PASSWORD";
+            password = lib.stringFromRuntimeFile "/run/secrets/hedgedoc-db-password";
             host = "/run/postgresql";
             database = "hedgedocdb";
           };
-
-          environmentFile = pkgs.writeText "hedgedoc-env" ''
-            DB_PASSWORD=snakeoilpassword
-          '';
         };
         postgresql = {
           enable = true;
