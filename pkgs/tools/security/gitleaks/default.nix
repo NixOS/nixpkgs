@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, gitleaks
-, installShellFiles
-, testers
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  gitleaks,
+  installShellFiles,
+  testers,
 }:
 
 buildGoModule rec {
@@ -25,9 +26,7 @@ buildGoModule rec {
     "-X=github.com/zricethezav/gitleaks/v${lib.versions.major version}/cmd.Version=${version}"
   ];
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   # With v8 the config tests are are blocking
   doCheck = false;
