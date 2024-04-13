@@ -17,11 +17,11 @@ buildPythonPackage rec {
   version = "2024.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fsspec";
-    repo = pname;
+    repo = "adlfs";
     rev = "refs/tags/${version}";
     hash = "sha256-t+7LcjgDrKbTY/WiBqLSkt/Wh+4niulN7G5PIpWN7WU=";
   };
