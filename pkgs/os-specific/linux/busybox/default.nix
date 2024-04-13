@@ -36,6 +36,7 @@ let
     CONFIG_ASH n
     CONFIG_NOMMU y
     CONFIG_HUSH y
+    CONFIG_PIE y
   '';
 
   # The debian version lags behind the upstream version and also contains
@@ -65,7 +66,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-uMwkyVdNgJ5yecO+NJeVxdXOtv3xnKcJ+AzeUOR94xQ=";
   };
 
-  hardeningDisable = [ "format" "pie" ]
+  hardeningDisable = [ "format" "pie" "stackprotector" ]
     ++ lib.optionals enableStatic [ "fortify" ];
 
   patches = [

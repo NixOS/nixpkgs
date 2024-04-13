@@ -76,6 +76,12 @@ let
     HAS_NO_THREADS n
     UCLIBC_HAS_THREADS y
     UCLIBC_HAS_UTMPX y
+    HAVE_SHARED y
+    ARCH_HAS_NO_SHARED n
+    HAVE_LDSO y
+    STATIC_PIE y
+    DOPIC y
+    UCLIBC_FORMAT_ELF y
   '';
   # UCLIBC_HAS_UTMPX is needed by busybox
 in
@@ -91,6 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./RV32_TIME64_3.patch
+    ./riscv32.patch
   ];
 
   # 'ftw' needed to build acl, a coreutils dependency
@@ -105,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     ${stdenv.hostPlatform.uclibc.extraConfig or ""}
     EOF
     ( set +o pipefail; yes "" | make oldconfig )
-    grep --color THREAD .config
+    grep --color SHARED .config
   '';
 
   hardeningDisable = [ "stackprotector" ];
@@ -135,6 +142,11 @@ stdenv.mkDerivation (finalAttrs: {
     (cd $out/include && ln -s $(ls -d ${locallinuxHeaders}/include/* | grep -v "scsi$") .)
     # libpthread.so may not exist, so I do || true
     sed -i s@/lib/@$out/lib/@g $out/lib/libc.so $out/lib/libpthread.so || true
+
+    cp .config $out/
+    ls -ltrh lib/
+    cp -va lib/ld-uClibc* $out/lib/
+    ln -sv crt1.o $out/lib/Scrt1.o
 
     runHook postInstall
   '';
