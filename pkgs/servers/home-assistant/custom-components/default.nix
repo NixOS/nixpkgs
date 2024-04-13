@@ -20,6 +20,8 @@
 
   homematicip_local = callPackage ./homematicip_local { };
 
+  indego = callPackage ./indego { };
+
   local_luftdaten = callPackage ./local_luftdaten { };
 
   localtuya = callPackage ./localtuya {};
