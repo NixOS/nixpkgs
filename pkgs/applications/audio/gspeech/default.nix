@@ -60,6 +60,12 @@ python3.pkgs.buildPythonApplication rec {
     install -Dm444 icons/*.svg -t $out/share/icons/hicolor/scalable/apps
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   postFixup = ''
     wrapProgram $out/bin/gspeech --prefix PATH : ${lib.makeBinPath [ picotts sox ]}
     wrapProgram $out/bin/gspeech-cli --prefix PATH : ${lib.makeBinPath [ picotts sox ]}

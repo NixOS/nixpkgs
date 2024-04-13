@@ -67,6 +67,12 @@ python3.pkgs.buildPythonApplication rec {
     meson test --print-errorlogs
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "LaTeX editor written in Python with Gtk";
     mainProgram = "setzer";

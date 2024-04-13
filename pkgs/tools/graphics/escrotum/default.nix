@@ -41,6 +41,12 @@ with python3Packages; buildPythonApplication {
     cp man/escrotum.1 $man/share/man/man1/
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/Roger/escrotum";
     description = "Linux screen capture using pygtk, inspired by scrot";

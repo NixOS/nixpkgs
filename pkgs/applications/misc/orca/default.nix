@@ -89,6 +89,12 @@ buildPythonApplication rec {
     gst_all_1.gst-plugins-good
   ];
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;

@@ -50,6 +50,12 @@ python3.pkgs.buildPythonApplication rec {
     pygobject3
   ];
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "Mobile-friendly Gtk frontend for password-store";
     mainProgram = "caerbannog";

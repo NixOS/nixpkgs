@@ -70,6 +70,12 @@ python3Packages.buildPythonApplication rec {
   # Necessary to set GDK_PIXBUF_MODULE_FILE.
   strictDeps = false;
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     homepage = "https://soundconverter.org/";
     description = "Leading audio file converter for the GNOME Desktop";

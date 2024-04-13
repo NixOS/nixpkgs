@@ -53,6 +53,12 @@ python3.pkgs.buildPythonApplication rec {
   # bunch of linting
   doCheck = false;
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "GTK/GNOME application to use GnuPG for signing other peoples’ keys";
     homepage = "https://wiki.gnome.org/Apps/Keysign";

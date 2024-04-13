@@ -71,6 +71,12 @@ in python.pkgs.buildPythonApplication {
     runHook postInstall
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = {
     description = "ABC music notation editor";
     mainProgram = "easyabc";

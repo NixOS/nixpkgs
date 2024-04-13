@@ -42,9 +42,14 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "volctl" ];
 
+  dontWrapGApps = true;
+
   preFixup = ''
     glib-compile-schemas ${glib.makeSchemaPath "$out" "${pname}-${version}"}
-    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${libpulseaudio}/lib")
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
+      --prefix LD_LIBRARY_PATH : "${libpulseaudio}/lib"
+    )
   '';
 
   meta = with lib; {

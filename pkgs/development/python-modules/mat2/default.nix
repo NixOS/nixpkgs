@@ -95,6 +95,12 @@ buildPythonPackage rec {
     "test_all_parametred"
   ];
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "A handy tool to trash your metadata";
     homepage = "https://0xacab.org/jvoisin/mat2";

@@ -42,6 +42,12 @@ python3.pkgs.buildPythonApplication rec {
 
   strictDeps = true;
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "A program for showing navigation satellite data";
     longDescription = ''

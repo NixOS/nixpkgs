@@ -75,8 +75,11 @@ python3.pkgs.buildPythonApplication rec {
     librosa
   ];
 
+  dontWrapGApps = true;
+
   preFixup = ''
-    gappsWrapperArgs+=(
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
       # The icon theme is hardcoded.
       --prefix XDG_DATA_DIRS : "${hicolor-icon-theme}/share"
     )

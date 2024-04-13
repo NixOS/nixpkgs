@@ -36,6 +36,12 @@ python3.pkgs.buildPythonApplication rec {
   # "running build_ext" fails with no output
   doCheck = false;
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   passthru.updateScript = unstableGitUpdater {
     branch = "py3";
   };

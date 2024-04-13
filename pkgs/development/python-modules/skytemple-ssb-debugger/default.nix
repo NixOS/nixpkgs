@@ -53,6 +53,12 @@ buildPythonPackage rec {
   doCheck = false; # requires Pokémon Mystery Dungeon ROM
   pythonImportsCheck = [ "skytemple_ssb_debugger" ];
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/SkyTemple/skytemple-ssb-debugger";
     description = "Script Engine Debugger for Pokémon Mystery Dungeon Explorers of Sky";

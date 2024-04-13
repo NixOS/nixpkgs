@@ -32,6 +32,12 @@ python3Packages.buildPythonApplication rec {
     snapper
   ];
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "Graphical interface for snapper";
     mainProgram = "snapper-gui";

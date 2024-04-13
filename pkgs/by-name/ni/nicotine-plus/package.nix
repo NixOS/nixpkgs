@@ -32,8 +32,11 @@ python3Packages.buildPythonApplication rec {
     ln -s $out/bin/nicotine $out/bin/nicotine-plus
   '';
 
+  dontWrapGApps = true;
+
   preFixup = ''
-    gappsWrapperArgs+=(
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
       --prefix XDG_DATA_DIRS : "${gtk4}/share/gsettings-schemas/${gtk4.name}"
     )
   '';

@@ -51,6 +51,12 @@ buildPythonApplication rec {
   doCheck = false;
   pythonImportsCheck = [ "tuna" ];
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "Thread and IRQ affinity setting GUI and cmd line tool";
     mainProgram = "tuna";

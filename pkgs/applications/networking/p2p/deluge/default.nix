@@ -81,6 +81,12 @@ let
         rm -r $out/share/{icons,man/man1/deluge-gtk*,pixmaps}
       '');
 
+      dontWrapGApps = true;
+
+      preFixup = ''
+        makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+      '';
+
       postFixup = ''
         for f in $out/lib/systemd/system/*; do
           substituteInPlace $f --replace /usr/bin $out/bin

@@ -61,6 +61,12 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false;
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = {
     description = "The client of the Tryton application platform";
     mainProgram = "tryton";

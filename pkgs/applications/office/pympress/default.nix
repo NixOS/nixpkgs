@@ -40,6 +40,12 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false; # there are no tests
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "Simple yet powerful PDF reader designed for dual-screen presentations";
     mainProgram = "pympress";

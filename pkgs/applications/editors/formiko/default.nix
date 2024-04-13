@@ -42,6 +42,12 @@ buildPythonApplication rec {
   # Needs a display
   doCheck = false;
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "reStructuredText editor and live previewer";
     homepage = "https://github.com/ondratu/formiko";

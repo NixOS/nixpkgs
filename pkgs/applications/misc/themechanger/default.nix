@@ -50,6 +50,12 @@ python3Packages.buildPythonApplication rec {
     patchShebangs postinstall.py
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/ALEX11BR/ThemeChanger";
     description = "A theme changing utility for Linux";

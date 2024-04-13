@@ -26,6 +26,12 @@ python3Packages.buildPythonApplication {
     install -D -t $out/share/doc README.rst
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "Desktop notification integration for connman";
     mainProgram = "connman-notify";

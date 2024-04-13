@@ -82,7 +82,14 @@ python3Packages.buildPythonApplication rec {
     LC_ALL=C PYTHONPATH=src/:$PYTHONPATH pytest tests --ignore=src/gpodder/utilwin32ctypes.py --ignore=src/mygpoclient --cov=gpodder
   '';
 
-  makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}" ];
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=(
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+      "''${gappsWrapperArgs[@]}"
+    )
+  '';
 
   passthru.updateScript = gitUpdater {};
 

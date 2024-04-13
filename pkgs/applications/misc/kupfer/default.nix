@@ -50,6 +50,12 @@ buildPythonApplication rec {
 
   doCheck = false; # no tests
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "A smart, quick launcher";
     homepage    = "https://kupferlauncher.github.io/";

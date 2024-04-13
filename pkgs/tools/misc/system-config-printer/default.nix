@@ -63,10 +63,6 @@ stdenv.mkDerivation rec {
   postInstall =
     ''
       buildPythonPath "$out $pythonPath"
-      gappsWrapperArgs+=(
-        --prefix PATH : "$program_PATH"
-        --set CUPS_DATADIR "${cups-filters}/share/cups"
-      )
 
       find $out/share/system-config-printer -name \*.py -type f -perm -0100 -print0 | while read -d "" f; do
         patchPythonScript "$f"
@@ -76,6 +72,16 @@ stdenv.mkDerivation rec {
       substituteInPlace $out/etc/udev/rules.d/70-printers.rules \
         --replace "udev-configure-printer" "$out/etc/udev/udev-configure-printer"
     '';
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
+      --prefix PATH : "$program_PATH"
+      --set CUPS_DATADIR "${cups-filters}/share/cups"
+    )
+  '';
 
   meta = {
     homepage = "https://github.com/openprinting/system-config-printer";

@@ -46,6 +46,12 @@ buildPythonApplication rec {
   # Unable to access the X Display, is $DISPLAY set properly?
   doCheck = false;
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "A tool to create a Windows USB stick installer from a real Windows DVD or image";
     homepage = "https://github.com/WoeUSB/WoeUSB-ng";

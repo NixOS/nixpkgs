@@ -53,6 +53,12 @@ python3.pkgs.buildPythonApplication rec {
     pygobject3
   ];
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "Info on your IP";
     mainProgram = "whatip";

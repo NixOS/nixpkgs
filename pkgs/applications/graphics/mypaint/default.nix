@@ -108,6 +108,12 @@ in buildPythonApplication rec {
     runHook postCheck
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "A graphics application for digital painters";
     homepage = "http://mypaint.org/";

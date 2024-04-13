@@ -31,6 +31,12 @@ pythonPackages.buildPythonApplication rec {
     (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad ]) ++
     (with pythonPackages; [ pygobject3 pylast ]);
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "Pandora Internet Radio player for GNOME";

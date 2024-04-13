@@ -67,7 +67,7 @@ python3Packages.buildPythonApplication rec {
     usbutils
   ];
 
-  dontWrapGapps = true;
+  dontWrapGApps = true;
   dontWrapQtApps = true;
 
   makeWrapperArgs = [

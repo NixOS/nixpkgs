@@ -63,6 +63,12 @@ buildPythonApplication rec {
 
   enableParallelBuilding = true;
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "Ear training program";
     homepage = "https://www.gnu.org/software/solfege/";

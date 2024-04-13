@@ -67,6 +67,12 @@ python3.pkgs.buildPythonApplication rec {
       --replace "item { custom: profile; }" 'item { custom: "profile"; }'
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "A Reddit app, built with Python, GTK and Handy; Created with mobile Linux in mind";
     maintainers = with maintainers; [ dasj19 ];

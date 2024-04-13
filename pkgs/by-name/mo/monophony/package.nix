@@ -46,9 +46,12 @@ python3Packages.buildPythonApplication rec {
 
   installFlags = [ "prefix=$(out)" ];
 
+  dontWrapGApps = true;
+
   preFixup = ''
     buildPythonPath "$pythonPath"
-    gappsWrapperArgs+=(
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
       --prefix PYTHONPATH : "$program_PYTHONPATH"
       --prefix PATH : "${lib.makeBinPath [yt-dlp]}"
     )

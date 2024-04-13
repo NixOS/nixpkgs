@@ -41,6 +41,12 @@ python3Packages.buildPythonApplication rec {
     pygobject3
   ];
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = {
     description = "A simple Gtk wrapper for Adwaita-for-Steam";
     homepage = "https://github.com/Foldex/AdwSteamGtk";

@@ -47,6 +47,12 @@ python3.pkgs.buildPythonApplication rec {
     cp apparmor/usr.bin.onioncircuits $out/etc/apparmor.d
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     broken = stdenv.isDarwin;
     homepage = "https://tails.boum.org";

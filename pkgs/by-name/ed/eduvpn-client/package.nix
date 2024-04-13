@@ -48,6 +48,12 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     changelog = "https://raw.githubusercontent.com/eduvpn/python-eduvpn-client/${version}/CHANGES.md";
     description = "Linux client for eduVPN";
