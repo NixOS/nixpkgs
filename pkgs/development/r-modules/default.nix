@@ -548,6 +548,7 @@ let
     clustermq = [  pkgs.pkg-config ];
     coga = [ pkgs.gsl.dev ];
     deepSNV = with pkgs; [ xz.dev bzip2.dev zlib.dev ];
+    epialleleR = with pkgs; [ xz.dev bzip2.dev zlib.dev ];
     gpg = [ pkgs.gpgme ];
     webp = [ pkgs.libwebp ];
     RMark = [ pkgs.which ];
@@ -999,6 +1000,7 @@ let
     "muscData"
     "org_Mxanthus_db"
     "scpdata"
+    "signatureSearch"
     "nullrangesData"
   ];
 
