@@ -1,15 +1,16 @@
-{ lib
-, aiohttp
-, azure-core
-, azure-datalake-store
-, azure-identity
-, azure-storage-blob
-, buildPythonPackage
-, fetchFromGitHub
-, fsspec
-, pythonOlder
-, setuptools
-, setuptools-scm
+{
+  lib,
+  aiohttp,
+  azure-core,
+  azure-datalake-store,
+  azure-identity,
+  azure-storage-blob,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fsspec,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -43,9 +44,7 @@ buildPythonPackage rec {
   # Tests require a running Docker instance
   doCheck = false;
 
-  pythonImportsCheck = [
-    "adlfs"
-  ];
+  pythonImportsCheck = [ "adlfs" ];
 
   meta = with lib; {
     description = "Filesystem interface to Azure-Datalake Gen1 and Gen2 Storage";
