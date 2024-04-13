@@ -2,6 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , makeWrapper
+, nix-update-script
 }:
 
 buildGoModule rec {
@@ -24,6 +25,8 @@ buildGoModule rec {
     wrapProgram $out/bin/ugm \
         --set RUNEWIDTH_EASTASIAN 0
   '';
+
+  passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
     description = "A terminal based UNIX user and group browser";
