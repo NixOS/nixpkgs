@@ -50,8 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
   # see also: https://github.com/LudovicRousseau/PCSC/issues/25
   postPatch = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     substituteInPlace src/Makefile.am \
-      --replace "noinst_PROGRAMS = testpcsc pcsc-wirecheck pcsc-wirecheck-gen" \
-                "noinst_PROGRAMS = testpcsc"
+      --replace-fail "noinst_PROGRAMS = testpcsc pcsc-wirecheck pcsc-wirecheck-gen" \
+                     "noinst_PROGRAMS = testpcsc"
   '';
 
   postInstall = ''
@@ -85,14 +85,14 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Middleware to access a smart card using SCard API (PC/SC)";
     homepage = "https://pcsclite.apdu.fr/";
     changelog = "https://salsa.debian.org/rousseau/PCSC/-/blob/${finalAttrs.version}/ChangeLog";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     mainProgram = "pcscd";
-    maintainers = [ maintainers.anthonyroussel ];
+    maintainers = [ lib.maintainers.anthonyroussel ];
     pkgConfigModules = [ "libpcsclite" ];
-    platforms = with platforms; unix;
+    platforms = lib.platforms.unix;
   };
 })
