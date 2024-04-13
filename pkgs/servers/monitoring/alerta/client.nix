@@ -5,11 +5,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "alerta";
-  version = "8.5.2";
+  version = "8.5.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-5KLR+F5GtNkFXJMctJ5F4OvkQRhohd6SWB2ZFVtc/0s=";
+    sha256 = "sha256-ePvT2icsgv+io5aDDUr1Zhfodm4wlqh/iqXtNkFhS10=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
