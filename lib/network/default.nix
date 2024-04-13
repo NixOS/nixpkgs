@@ -26,37 +26,35 @@ let
   internal = import ./internal.nix { inherit lib; };
 in
 {
-  ipv4 = {
-    /**
-      Creates an `IPv4Address` object from an IPv4 address in CIDR notation as a string.
+  /**
+    Creates an `IPv4Address` object from an IPv4 address in CIDR notation as a string.
 
-      # Example
+    # Example
 
-      ```nix
-      fromCidrString "192.168.0.1/24"
-      => {
-        address = "192.168.0.1";
-        cidr = "192.168.0.1/24";
-        prefixLength = "24";
-      }
-      ```
+    ```nix
+    fromCidrString "192.168.0.1/24"
+    => {
+      address = "192.168.0.1";
+      cidr = "192.168.0.1/24";
+      prefixLength = "24";
+    }
+    ```
 
-      # Type
+    # Type
 
-      ```
-      fromCidrString :: String -> IPv4Address
-      ```
+    ```
+    fromCidrString :: String -> IPv4Address
+    ```
 
-      # Arguments
+    # Arguments
 
-      - [cidr] An IPv4 address in CIDR notation.
-    */
-    fromCidrString =
-      cidr:
-      let
-        address = internal.ipv4._verifyAddress cidr;
-        prefixLength = internal.ipv4._verifyPrefixLength cidr;
-      in
-      internal.ipv4._parse address prefixLength;
-  };
+    - [cidr] An IPv4 address in CIDR notation.
+  */
+  ipv4.fromCidrString =
+    cidr:
+    let
+      address = internal.ipv4._verifyAddress cidr;
+      prefixLength = internal.ipv4._verifyPrefixLength cidr;
+    in
+    internal.ipv4._parse address prefixLength;
 }
