@@ -3,6 +3,7 @@
 , version
 , hash
 , fetchFromGitHub
+, patches ? []
 
 , cmake
 , ninja
@@ -22,6 +23,8 @@ stdenv.mkDerivation rec {
     rev = "${pname}-${version}";
     inherit hash;
   };
+
+  inherit patches;
 
   nativeBuildInputs = [ cmake ninja perl python3 ];
 
