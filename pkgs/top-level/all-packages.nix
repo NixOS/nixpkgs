@@ -22584,8 +22584,10 @@ with pkgs;
   inherit
     ({
       libmicrohttpd_0_9_77 = callPackage ../development/libraries/libmicrohttpd/0.9.77.nix { };
+      libmicrohttpd_1_0 = callPackage ../development/libraries/libmicrohttpd/1.0.nix { };
     })
     libmicrohttpd_0_9_77
+    libmicrohttpd_1_0
     ;
 
   libmicrohttpd = libmicrohttpd_0_9_77;
