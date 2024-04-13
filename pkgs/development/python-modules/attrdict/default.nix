@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -30,20 +31,14 @@ buildPythonPackage rec {
       --replace-fail "from collections" "from collections.abc"
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    six
-  ];
+  dependencies = [ six ];
 
   # Tests are not shipped and source is not tagged
   doCheck = false;
 
-  pythonImportsCheck = [
-    "attrdict"
-  ];
+  pythonImportsCheck = [ "attrdict" ];
 
   meta = with lib; {
     description = "A dict with attribute-style access";
