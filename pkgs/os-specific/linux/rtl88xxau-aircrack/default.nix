@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rtl88xxau-aircrack";
-  version = "${kernel.version}-unstable-02-05-2023";
+  version = "${kernel.version}-unstable-2024-04-09";
 
   src = fetchFromGitHub {
     owner = "aircrack-ng";
     repo = "rtl8812au";
-    rev = "35308f4dd73e77fa572c48867cce737449dd8548";
-    hash = "sha256-0kHrNsTKRl/xTQpDkIOYqTtcHlytXhXX8h+6guvLmLI=";
+    rev = "63cf0b4584aa8878b0fe8ab38017f31c319bde3d";
+    hash = "sha256-tDsI/ZzsQm9999EpCpDFArfEIg/ueUJEbSYESbGxd4A=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
