@@ -2621,6 +2621,12 @@
     githubId = 30630233;
     name = "Timo Triebensky";
   };
+  birkb = {
+    email = "birk@batchworks.de";
+    github = "birkb";
+    githubId = 10164833;
+    name = "Birk Bohne";
+  };
   bjornfor = {
     email = "bjorn.forsman@gmail.com";
     github = "bjornfor";
@@ -11778,12 +11784,6 @@
     githubId = 5767106;
     name = "Lukas Schmidt";
   };
-  luis = {
-    email = "luis.nixos@gmail.com";
-    github = "Luis-Hebendanz";
-    githubId = 22085373;
-    name = "Luis Hebendanz";
-  };
   luisdaranda = {
     email = "luisdomingoaranda@gmail.com";
     github = "propet";
@@ -16341,6 +16341,12 @@
     matrix = "@quantenzitrone:matrix.org";
     name = "quantenzitrone";
   };
+  qubasa = {
+    email = "consulting@qube.email";
+    github = "Qubasa";
+    githubId = 22085373;
+    name = "Luis Hebendanz";
+  };
   queezle = {
     email = "git@queezle.net";
     github = "queezle42";
@@ -19608,6 +19614,12 @@
     githubId = 2389333;
     name = "Andy Tockman";
   };
+  tcmal = {
+    email = "me@aria.rip";
+    github = "tcmal";
+    githubId = 4183876;
+    name = "Aria Shrimpton";
+  };
   teatwig = {
     email = "nix@teatwig.net";
     name = "tea";
@@ -20618,6 +20630,12 @@
     github = "umlx5h";
     githubId = 20206121;
     name = "umlx5h";
+  };
+  uncenter = {
+    name = "uncenter";
+    email = "uncenter@uncenter.dev";
+    github = "uncenter";
+    githubId = 47499684;
   };
   unclamped = {
     name = "Maru";

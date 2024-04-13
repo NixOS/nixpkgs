@@ -10,7 +10,8 @@ let
 
   resolvconfOptions = cfg.extraOptions
     ++ optional cfg.dnsSingleRequest "single-request"
-    ++ optional cfg.dnsExtensionMechanism "edns0";
+    ++ optional cfg.dnsExtensionMechanism "edns0"
+    ++ optional cfg.useLocalResolver "trust-ad";
 
   configText =
     ''
@@ -27,9 +28,7 @@ let
       resolv_conf_options='${concatStringsSep " " resolvconfOptions}'
     '' + optionalString cfg.useLocalResolver ''
       # This hosts runs a full-blown DNS resolver.
-      name_servers='127.0.0.1'
-    '' + optionalString (cfg.useLocalResolver && config.networking.enableIPv6) ''
-      name_servers='::1'
+      name_servers='127.0.0.1${optionalString config.networking.enableIPv6 " ::1"}'
     '' + cfg.extraConfig;
 
 in

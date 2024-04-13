@@ -1730,6 +1730,8 @@ self: super: with self; {
 
   brian2 = callPackage ../development/python-modules/brian2 { };
 
+  bring-api = callPackage ../development/python-modules/bring-api { };
+
   broadbean = callPackage ../development/python-modules/broadbean { };
 
   broadlink = callPackage ../development/python-modules/broadlink { };
@@ -5378,8 +5380,6 @@ self: super: with self; {
   holoviews = callPackage ../development/python-modules/holoviews { };
 
   home-assistant-bluetooth = callPackage ../development/python-modules/home-assistant-bluetooth { };
-
-  homeassistant-bring-api = callPackage ../development/python-modules/homeassistant-bring-api { };
 
   home-assistant-chip-clusters = callPackage ../development/python-modules/home-assistant-chip-clusters { };
 
@@ -13914,6 +13914,10 @@ self: super: with self; {
     inherit (self) python;
   });
 
+  snakemake = toPythonModule (pkgs.snakemake.override {
+    python3 = python;
+  });
+
   snakemake-executor-plugin-cluster-generic = callPackage ../development/python-modules/snakemake-executor-plugin-cluster-generic { };
 
   snakemake-interface-common = callPackage ../development/python-modules/snakemake-interface-common { };
@@ -13923,6 +13927,10 @@ self: super: with self; {
   snakemake-interface-report-plugins = callPackage ../development/python-modules/snakemake-interface-report-plugins { };
 
   snakemake-interface-storage-plugins = callPackage ../development/python-modules/snakemake-interface-storage-plugins { };
+
+  snakemake-storage-plugin-s3 = callPackage ../development/python-modules/snakemake-storage-plugin-s3 { };
+
+  snakemake-storage-plugin-xrootd = callPackage ../development/python-modules/snakemake-storage-plugin-xrootd { };
 
   snakebite = callPackage ../development/python-modules/snakebite { };
 
@@ -16079,6 +16087,8 @@ self: super: with self; {
   types-click = callPackage ../development/python-modules/types-click { };
 
   types-colorama = callPackage ../development/python-modules/types-colorama { };
+
+  types-dataclasses = callPackage ../development/python-modules/types-dataclasses { };
 
   types-dateutil = callPackage ../development/python-modules/types-dateutil { };
 

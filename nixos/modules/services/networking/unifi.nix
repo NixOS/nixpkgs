@@ -39,10 +39,10 @@ in
     services.unifi.unifiPackage = lib.mkPackageOption pkgs "unifi5" { };
 
     services.unifi.mongodbPackage = lib.mkPackageOption pkgs "mongodb" {
-      default = "mongodb-4_4";
+      default = "mongodb-5_0";
       extraDescription = ''
         ::: {.note}
-        unifi7 officially only supports mongodb up until 3.6 but works with 4.4.
+        unifi7 officially only supports mongodb up until 4.4 but works with 5.0.
         :::
       '';
     };

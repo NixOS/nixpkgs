@@ -12,14 +12,14 @@ stdenv.mkDerivation rec {
 
   inherit (shiboken6) version src;
 
-  sourceRoot = "pyside-setup-everywhere-src-${lib.removeSuffix ".0" version}/sources/${pname}";
+  sourceRoot = "pyside-setup-everywhere-src-${version}/sources/${pname}";
 
   # FIXME: cmake/Macros/PySideModules.cmake supposes that all Qt frameworks on macOS
   # reside in the same directory as QtCore.framework, which is not true for Nix.
   postPatch = lib.optionalString stdenv.isLinux ''
     # Don't ignore optional Qt modules
     substituteInPlace cmake/PySideHelpers.cmake \
-      --replace \
+      --replace-fail \
         'string(FIND "''${_module_dir}" "''${_core_abs_dir}" found_basepath)' \
         'set (found_basepath 0)'
   '';

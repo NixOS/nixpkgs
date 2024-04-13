@@ -106,6 +106,14 @@ super: lib.trivial.pipe super [
     ];
   }))
 
+  (patchExtension "mullvadindicator@pobega.github.com" (old: {
+    patches = [
+      # Patch from https://github.com/Pobega/gnome-shell-extension-mullvad-indicator/pull/36
+      # tweaked to drop the Makefile changes to fix application
+      ./extensionOverridesPatches/mullvadindicator_at_pobega.github.com.patch
+    ];
+  }))
+
   (patchExtension "pano@elhan.io" (old: {
     patches = [
       (substituteAll {
