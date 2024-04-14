@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , apksigner
 , bash
 , fetchFromGitHub
@@ -23,11 +24,14 @@ python3.pkgs.buildPythonApplication rec {
     pandoc
   ];
 
+  disallowedRequisites = [ pandoc ];
+
   propagatedBuildInputs = with python3.pkgs; [
     click
   ];
 
-  makeWrapperArgs = [
+  # due to apksigner being (as of this writing) broken on macOS
+  makeWrapperArgs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform apksigner) [
     "--prefix"
     "PATH"
     ":"
@@ -72,5 +76,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/obfusk/apksigcopier";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ obfusk ];
+    platforms = platforms.unix;
   };
 }

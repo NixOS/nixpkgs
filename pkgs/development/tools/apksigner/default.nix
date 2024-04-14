@@ -91,5 +91,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ linsui ];
     platforms = platforms.unix;
+    badPlatforms = platforms.darwin;
   };
 }
