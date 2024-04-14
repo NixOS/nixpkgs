@@ -106,7 +106,6 @@ stdenv.mkDerivation rec {
     bzip2
     libdv
     libvpx
-    libdrm
     speex
     opencore-amr
     flac
@@ -148,6 +147,7 @@ stdenv.mkDerivation rec {
   ]) ++ lib.optionals stdenv.isDarwin [
     Cocoa
   ] ++ lib.optionals stdenv.isLinux [
+    libdrm
     libGL
     libv4l
     libpulseaudio
