@@ -371,12 +371,12 @@ let
       stdenv;
 
   pname = "local-ai";
-  version = "2.12.3";
+  version = "2.12.4";
   src = fetchFromGitHub {
     owner = "go-skynet";
     repo = "LocalAI";
     rev = "v${version}";
-    hash = "sha256-/Q0t5OozpgqmjUOYHvVAj1k7VnIixfOS8gNAguuu6p0=";
+    hash = "sha256-piu2B6u4ZfxiOd9SXrE7jiiiwL2SM8EqXo2s5qeKRl0=";
   };
 
   self = buildGoModule.override { stdenv = effectiveStdenv; } {

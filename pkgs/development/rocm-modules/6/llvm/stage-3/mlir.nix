@@ -7,6 +7,7 @@
 , glslang
 , shaderc
 , lit
+, fetchpatch
 }:
 
 callPackage ../base.nix rec {
@@ -17,9 +18,12 @@ callPackage ../base.nix rec {
   targetDir = targetName;
 
   # Fix `DebugTranslation.cpp:139:10: error: no matching function for call to 'get'`
-  # We patch at a different source root, so we modify the patch and include it locally
-  # https://github.com/ROCm/llvm-project/commit/f1d1e10ec7e1061bf0b90abbc1e298d9438a5e74.patch
-  extraPatches = [ ./0000-mlir-fix-debugtranslation.patch ];
+  extraPatches = [
+    (fetchpatch {
+      url = "https://github.com/ROCm/llvm-project/commit/f1d1e10ec7e1061bf0b90abbc1e298d9438a5e74.patch";
+      hash = "sha256-3c91A9InMKxm+JcnWxoUeOU68y5I6w1AAXx6T9UByqI=";
+    })
+  ];
   extraNativeBuildInputs = [ clr ];
 
   extraBuildInputs = [
@@ -41,7 +45,7 @@ callPackage ../base.nix rec {
   extraPostPatch = ''
     # `add_library cannot create target "llvm_gtest" because an imported target with the same name already exists`
     substituteInPlace CMakeLists.txt \
-      --replace "EXISTS \''${UNITTEST_DIR}/googletest/include/gtest/gtest.h" "FALSE"
+      --replace-fail "EXISTS \''${UNITTEST_DIR}/googletest/include/gtest/gtest.h" "FALSE"
 
     # Mainly `No such file or directory`
     cat ${./1001-mlir-failing-tests.list} | xargs -d \\n rm
