@@ -2,6 +2,7 @@
 , buildPythonPackage
 , isPy27
 , fetchFromGitHub
+, setuptools
 , pytestCheckHook
 , pytest-cov
 , hyppo
@@ -15,7 +16,8 @@
 
 buildPythonPackage rec {
   pname = "graspologic";
-  version = "2.0.1";
+  version = "3.3.0";
+  pyproject = true;
 
   disabled = isPy27;
 
@@ -23,8 +25,12 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "graspologic";
     rev = "refs/tags/v${version}";
-    hash = "sha256-EmbCA4JpY2OIwXrRWjBxA4iNm0ddQODjoGmHIYgvAWs=";
+    hash = "sha256-hd3OyV95N8vhc4s50HbKkrcUOeSegn66Dkw7dixim00=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     hyppo

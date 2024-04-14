@@ -34,9 +34,10 @@ python3Packages.buildPythonApplication rec {
     pkg-config meson ninja
     appstream-glib desktop-file-utils
     wrapGAppsHook
+    gobject-introspection
   ];
   buildInputs = [
-    gtk3 gobject-introspection
+    gtk3
     glib
   ];
   nativeCheckInputs = with python3Packages; [ flake8 pytest ];
@@ -55,6 +56,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "DBus daemon to access Wacom SmartPad devices";
+    mainProgram = "tuhi";
     homepage = "https://github.com/tuhiproject/tuhi";
     license = licenses.gpl2;
     platforms = platforms.linux;

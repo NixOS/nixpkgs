@@ -11,12 +11,13 @@
 
 buildPythonPackage rec {
   pname = "pytools";
-  version = "2023.1";
+  version = "2024.1.1";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8Q5CUiCu+h/5JTQrZY/wLcM1l8IfuI16Y/lEG/LnpQ4=";
+    hash = "sha256-LIjt+pkMjjJRZ8N2WfseEKPBEz3691K719hFZAK43P8=";
   };
 
   propagatedBuildInputs = [

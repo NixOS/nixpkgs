@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , autoreconfHook
 , libgpg-error
 , gnupg
@@ -9,7 +8,6 @@
 , glib
 , pth
 , libassuan
-, file
 , which
 , ncurses
 , texinfo
@@ -19,30 +17,37 @@
 , swig2 ? null
 # only for passthru.tests
 , libsForQt5
+, qt6Packages
 , python3
 }:
-let
-  inherit (stdenv.hostPlatform) system;
-in
+
 stdenv.mkDerivation rec {
   pname = "gpgme";
-  version = "1.20.0";
-
-  src = fetchurl {
-    url = "mirror://gnupg/gpgme/${pname}-${version}.tar.bz2";
-    hash = "sha256-JaV4Wl2jVmiQAUQJJrlOln0C4TxJ63dD417wzyLkJ1A=";
-  };
-
-  patches = [
-    # Support Python 3.10 version detection without distutils, https://dev.gnupg.org/D545
-    ./python-310-detection-without-distutils.patch
-    # Fix a test after disallowing compressed signatures in gpg (PR #180336)
-    ./test_t-verify_double-plaintext.patch
-  ];
+  version = "1.23.2";
+  pyproject = true;
 
   outputs = [ "out" "dev" "info" ];
 
   outputBin = "dev"; # gpgme-config; not so sure about gpgme-tool
+
+  src = fetchurl {
+    url = "mirror://gnupg/gpgme/gpgme-${version}.tar.bz2";
+    hash = "sha256-lJnosfM8zLaBVSehvBYEnTWmGYpsX64BhfK9VhvOUiQ=";
+  };
+
+  patches = [
+    # Support Python 3.10-3.12, remove distutils, https://dev.gnupg.org/D545
+    ./python-310-312-remove-distutils.patch
+    # Fix a test after disallowing compressed signatures in gpg (PR #180336)
+    ./test_t-verify_double-plaintext.patch
+  ];
+
+  postPatch = ''
+    # autoconf's beta detection requires a git repo to work
+    # and otherwise appends -unknown to the version number used in the python package which pip stumbles upon
+    substituteInPlace autogen.sh \
+      --replace-fail 'tmp="-unknown"' 'tmp=""'
+  '';
 
   nativeBuildInputs = [
     autoreconfHook
@@ -50,7 +55,10 @@ stdenv.mkDerivation rec {
     pkg-config
     texinfo
   ] ++ lib.optionals pythonSupport [
-    python3.pythonForBuild
+    python3.pythonOnBuildForHost
+    python3.pkgs.pip
+    python3.pkgs.setuptools
+    python3.pkgs.wheel
     ncurses
     swig2
     which
@@ -109,7 +117,8 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     python = python3.pkgs.gpgme;
-    qt = libsForQt5.qgpgme;
+    qt5 = libsForQt5.qgpgme;
+    qt6 = qt6Packages.qgpgme;
   };
 
   meta = with lib; {

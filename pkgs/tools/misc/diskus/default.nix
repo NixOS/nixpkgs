@@ -25,5 +25,6 @@ rustPlatform.buildRustPackage rec {
       diskus is a very simple program that computes the total size of the
       current directory. It is a parallelized version of du -sh.
     '';
+    mainProgram = "diskus";
   };
 }

@@ -1,4 +1,4 @@
-{ config, lib, stdenv, fetchFromGitHub, runCommand, ncurses, pkg-config
+{ config, lib, stdenv, fetchFromGitHub, ncurses, pkg-config
 , libiconv, CoreAudio, AudioUnit, VideoToolbox
 
 , alsaSupport ? stdenv.isLinux, alsa-lib ? null
@@ -92,16 +92,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "cmus";
-  version = "2.10.0";
+  version = "2.10.0-unstable-2023-11-05";
 
   src = fetchFromGitHub {
     owner  = "cmus";
     repo   = "cmus";
-    rev    = "v${version}";
-    sha256 = "sha256-Ha0bIh3SYMhA28YXQ//Loaz9J1lTJAzjTx8eK3AqUjM=";
+    rev    = "23afab39902d3d97c47697196b07581305337529";
+    sha256 = "sha256-pxDIYbeJMoaAuErCghWJpDSh1WbYbhgJ7+ca5WLCrOs=";
   };
-
-  patches = [ ./option-debugging.patch ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses ]

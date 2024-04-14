@@ -39,7 +39,7 @@ in
   # Allow root logins only using SSH keys
   # and disable password authentication in general
   services.openssh.enable = true;
-  services.openssh.settings.PermitRootLogin = "prohibit-password";
+  services.openssh.settings.PermitRootLogin = mkDefault "prohibit-password";
   services.openssh.settings.PasswordAuthentication = mkDefault false;
 
   # enable OS Login. This also requires setting enable-oslogin=TRUE metadata on
@@ -81,6 +81,10 @@ in
   systemd.services.google-shutdown-scripts.wantedBy = [ "multi-user.target" ];
 
   security.sudo.extraRules = mkIf config.users.mutableUsers [
+    { groups = [ "google-sudoers" ]; commands = [ { command = "ALL"; options = [ "NOPASSWD" ]; } ]; }
+  ];
+
+  security.sudo-rs.extraRules = mkIf config.users.mutableUsers [
     { groups = [ "google-sudoers" ]; commands = [ { command = "ALL"; options = [ "NOPASSWD" ]; } ]; }
   ];
 

@@ -8,19 +8,24 @@
 , pyte
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "curtsies";
-  version = "0.4.1";
+  version = "0.4.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YtEPNJxVOEUwZVan8mY86WsJjYxbvEDa7Hpu7d4WIrA=";
+    hash = "sha256-br4zIVvXyShRpQYEnHIMykz1wZLBZlwdepigTEcCdg4=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     blessed
@@ -37,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Curses-like terminal wrapper, with colored strings!";
     homepage = "https://github.com/bpython/curtsies";
+    changelog = "https://github.com/bpython/curtsies/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ flokli ];
     broken = stdenv.isDarwin;

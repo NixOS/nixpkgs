@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "directv";
   version = "0.4.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ctalkington";

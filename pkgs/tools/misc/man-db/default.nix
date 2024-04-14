@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "man-db";
-  version = "2.11.2";
+  version = "2.12.0";
 
   src = fetchurl {
     url = "mirror://savannah/man-db/man-db-${version}.tar.xz";
-    sha256 = "sha256-z/oe5Ol0vnhkbEZQjm3S8358WJqqspOMwQZPBY/vn40=";
+    hash = "sha256-QVpihKInZK0i/w9mcQ2FO+d5DdRRzXFDbj0lx02ZapU=";
   };
 
   outputs = [ "out" "doc" ];
@@ -31,7 +31,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpipeline db groff ]; # (Yes, 'groff' is both native and build input)
   nativeCheckInputs = [ libiconv /* for 'iconv' binary */ ];
 
-  patches = [ ./systemwide-man-db-conf.patch ];
+  patches = [
+    ./systemwide-man-db-conf.patch
+  ];
 
   postPatch = ''
     # Remove all mandatory manpaths. Nixpkgs makes no requirements on
@@ -79,7 +81,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = !stdenv.hostPlatform.isMusl /* iconv binary */ && !stdenv.hostPlatform.isDarwin;
+  doCheck = !stdenv.hostPlatform.isMusl /* iconv binary */;
 
   passthru.tests = {
     nixos = nixosTests.man;

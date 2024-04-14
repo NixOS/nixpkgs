@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zsh-prezto";
-  version = "unstable-2023-06-22";
+  version = "unstable-2024-03-17";
 
   src = fetchFromGitHub {
     owner = "sorin-ionescu";
     repo = "prezto";
-    rev = "c9c716e9c11938a1aff2f30230d4dc1da38dc564";
-    sha256 = "QwFWQMg9Q67eKkzGVz4zmcXtPcuLvFTUlagVxDN/2h4=";
+    rev = "c667dd3ea62b62b111102f0da58d33b5b20847a6";
+    sha256 = "cpxJII4bMunfdbWYo/feP2ZyVDlba3wG99o0n7DKt1k=";
     fetchSubmodules = true;
   };
 

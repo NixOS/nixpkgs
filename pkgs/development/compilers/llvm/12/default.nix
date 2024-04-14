@@ -1,5 +1,6 @@
 { lowPrio, newScope, pkgs, lib, stdenv, cmake
-, gccForLibs, preLibcCrossHeaders
+, preLibcCrossHeaders
+, substitute, substituteAll, fetchFromGitHub, fetchpatch
 , libxml2, python3, isl, fetchurl, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
@@ -23,7 +24,6 @@ let
   candidate = ""; # empty or "rcN"
   dash-candidate = lib.optionalString (candidate != "") "-${candidate}";
   version = "${release_version}${dash-candidate}"; # differentiating these (variables) is important for RCs
-  targetConfig = stdenv.targetPlatform.config;
 
   fetch = name: sha256: fetchurl {
     url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-${version}/${name}-${release_version}${candidate}.src.tar.xz";
@@ -32,21 +32,7 @@ let
 
   clang-tools-extra_src = fetch "clang-tools-extra" "1r9a4fdz9ci58b5z2inwvm4z4cdp6scrivnaw05dggkxz7yrwrb5";
 
-  llvm_meta = {
-    license     = lib.licenses.ncsa;
-    maintainers = lib.teams.llvm.members;
-
-    # See llvm/cmake/config-ix.cmake.
-    platforms   =
-      lib.platforms.aarch64 ++
-      lib.platforms.arm ++
-      lib.platforms.mips ++
-      lib.platforms.power ++
-      lib.platforms.riscv ++
-      lib.platforms.s390x ++
-      lib.platforms.wasi ++
-      lib.platforms.x86;
-  };
+  inherit (import ../common/common-let.nix { inherit lib release_version; }) llvm_meta;
 
   tools = lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch buildLlvmTools; });
@@ -70,7 +56,7 @@ let
     then tools.bintools
     else bootBintools;
 
-  in {
+  in rec {
 
     libllvm = callPackage ./llvm {
       inherit llvm_meta;
@@ -80,7 +66,17 @@ let
     # we need to reintroduce `outputSpecified` to get the expected behavior e.g. of lib.get*
     llvm = tools.libllvm;
 
-    libclang = callPackage ./clang {
+    libclang = callPackage ../common/clang {
+      src = fetch "clang" "0px4gl27az6cdz6adds89qzdwb1cqpjsfvrldbz9qvpmphrj34bf";
+      patches = [
+        ./clang/purity.patch
+        # https://reviews.llvm.org/D51899
+        ./clang/gnu-install-dirs.patch
+        (substituteAll {
+          src = ../common/clang/clang-11-15-LLVMgold-path.patch;
+          libllvmLibdir = "${libllvm.lib}/lib";
+        })
+      ];
       inherit clang-tools-extra_src llvm_meta;
     };
 
@@ -124,13 +120,16 @@ let
       cc = tools.clang-unwrapped;
       libcxx = targetLlvmLibraries.libcxx;
       extraPackages = [
-        libcxx.cxxabi
         targetLlvmLibraries.compiler-rt
       ];
       extraBuildCommands = mkExtraBuildCommands cc;
     };
 
-    lld = callPackage ./lld {
+    lld = callPackage ../common/lld {
+      src = fetch "lld" "0qg3fgc7wj34hdkqn21y03zcmsdd01szhhm1hfki63iifrm3y2v9";
+      patches = [
+        ./lld/gnu-install-dirs.patch
+      ];
       inherit llvm_meta;
       inherit (libraries) libunwind;
     };
@@ -139,19 +138,20 @@ let
       src = fetch "lldb" "0g3pj1m3chafavpr35r9fynm85y2hdyla6klj0h28khxs2613i78";
       patches =
         let
-          resourceDirPatch = callPackage ({ runCommand, libclang }: (runCommand "resource-dir.patch"
-            {
-              clangLibDir = "${libclang.lib}/lib";
-            } ''
-            substitute '${./lldb/resource-dir.patch}' "$out" --subst-var clangLibDir
-          '')) { };
+          resourceDirPatch = callPackage
+            ({ substituteAll, libclang }: substituteAll
+              {
+                src = ./lldb/resource-dir.patch;
+                clangLibDir = "${libclang.lib}/lib";
+              })
+            { };
         in
         [
           ./lldb/procfs.patch
           resourceDirPatch
           ./lldb/gnu-install-dirs.patch
         ];
-      inherit llvm_meta release_version;
+      inherit llvm_meta;
     };
 
     # Below, is the LLVM bootstrapping logic. It handles building a
@@ -161,7 +161,7 @@ let
     # doesn’t support like LLVM. Probably we should move to some other
     # file.
 
-    bintools-unwrapped = callPackage ./bintools {};
+    bintools-unwrapped = callPackage ../common/bintools.nix { };
 
     bintoolsNoLibc = wrapBintoolsWith {
       bintools = tools.bintools-unwrapped;
@@ -177,7 +177,6 @@ let
       libcxx = targetLlvmLibraries.libcxx;
       bintools = bintools';
       extraPackages = [
-        libcxx.cxxabi
         targetLlvmLibraries.compiler-rt
       ] ++ lib.optionals (!stdenv.targetPlatform.isWasm) [
         targetLlvmLibraries.libunwind
@@ -187,6 +186,7 @@ let
         echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
       '' + lib.optionalString (!stdenv.targetPlatform.isWasm) ''
         echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
+        echo "-L${targetLlvmLibraries.libunwind}/lib" >> $out/nix-support/cc-ldflags
       '' + lib.optionalString (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false) ''
         echo "-lunwind" >> $out/nix-support/cc-ldflags
       '' + lib.optionalString stdenv.targetPlatform.isWasm ''
@@ -245,14 +245,44 @@ let
     callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch; });
   in {
 
-    compiler-rt-libc = callPackage ./compiler-rt {
+    compiler-rt-libc = callPackage ../common/compiler-rt {
+      src = fetch "compiler-rt" "1950rg294izdwkaasi7yjrmadc9mzdd5paf0q63jjcq2m3rdbj5l";
+      patches = [
+        ../common/compiler-rt/7-12-codesign.patch # Revert compiler-rt commit that makes codesign mandatory
+        ./compiler-rt/X86-support-extension.patch # Add support for i486 i586 i686 by reusing i386 config
+        ./compiler-rt/gnu-install-dirs.patch
+        # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
+        # extra `/`.
+        ./compiler-rt/normalize-var.patch
+        ../common/compiler-rt/darwin-plistbuddy-workaround.patch
+        ./compiler-rt/armv7l.patch
+        # Fix build on armv6l
+        ../common/compiler-rt/armv6-mcr-dmb.patch
+        ../common/compiler-rt/armv6-sync-ops-no-thumb.patch
+        ../common/compiler-rt/armv6-no-ldrexd-strexd.patch
+      ];
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
                else stdenv;
     };
 
-    compiler-rt-no-libc = callPackage ./compiler-rt {
+    compiler-rt-no-libc = callPackage ../common/compiler-rt {
+      src = fetch "compiler-rt" "1950rg294izdwkaasi7yjrmadc9mzdd5paf0q63jjcq2m3rdbj5l";
+      patches = [
+        ../common/compiler-rt/7-12-codesign.patch # Revert compiler-rt commit that makes codesign mandatory
+        ./compiler-rt/X86-support-extension.patch # Add support for i486 i586 i686 by reusing i386 config
+        ./compiler-rt/gnu-install-dirs.patch
+        # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
+        # extra `/`.
+        ./compiler-rt/normalize-var.patch
+        ../common/compiler-rt/darwin-plistbuddy-workaround.patch
+        ./compiler-rt/armv7l.patch
+        # Fix build on armv6l
+        ../common/compiler-rt/armv6-mcr-dmb.patch
+        ../common/compiler-rt/armv6-sync-ops-no-thumb.patch
+        ../common/compiler-rt/armv6-no-ldrexd-strexd.patch
+      ];
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRt
@@ -268,31 +298,60 @@ let
 
     libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
 
-    libcxx = callPackage ./libcxx {
+    libcxx = callPackage ../common/libcxx {
+      src = fetchFromGitHub {
+        owner = "llvm";
+        repo = "llvm-project";
+        rev = "refs/tags/llvmorg-${version}";
+        sparseCheckout = [
+          "libcxx"
+          "libcxxabi"
+          "llvm/cmake"
+          "llvm/utils"
+          "runtimes"
+        ];
+        hash = "sha256-etxgXIdWxMTmbZ83Hsc0w6Jt5OSQSUEPVEWqLkHsNBY=";
+      };
+      patches = [
+        (substitute {
+          src = ../common/libcxxabi/wasm.patch;
+          replacements = [
+            "--replace-fail" "/cmake/" "/llvm/cmake/"
+          ];
+        })
+      ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+        (substitute {
+          src = ../common/libcxx/libcxx-0001-musl-hacks.patch;
+          replacements = [
+            "--replace-fail" "/include/" "/libcxx/include/"
+          ];
+        })
+      ];
       inherit llvm_meta;
-      stdenv = if stdenv.hostPlatform.useLLVM or false
-               then overrideCC stdenv buildLlvmTools.clangNoLibcxx
-               else stdenv;
+      stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
-    libcxxabi = callPackage ./libcxxabi {
+    libunwind = callPackage ../common/libunwind {
+      src = fetch "libunwind" "192ww6n81lj2mb9pj4043z79jp3cf58a9c2qrxjwm5c3a64n1shb";
+      patches = [
+        ./libunwind/gnu-install-dirs.patch
+      ];
       inherit llvm_meta;
-      stdenv = if stdenv.hostPlatform.useLLVM or false
-               then overrideCC stdenv buildLlvmTools.clangNoLibcxx
-               else stdenv;
+      stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
-    libunwind = callPackage ./libunwind {
-      inherit llvm_meta;
-      inherit (buildLlvmTools) llvm;
-      stdenv = if stdenv.hostPlatform.useLLVM or false
-               then overrideCC stdenv buildLlvmTools.clangNoLibcxx
-               else stdenv;
-    };
-
-    openmp = callPackage ./openmp {
+    openmp = callPackage ../common/openmp {
+      src = fetch "openmp" "14dh0r6h2xh747ffgnsl4z08h0ri04azi9vf79cbz7ma1r27kzk0";
+      patches = [
+        # Fix cross.
+        (fetchpatch {
+          url = "https://github.com/llvm/llvm-project/commit/5e2358c781b85a18d1463fd924d2741d4ae5e42e.patch";
+          hash = "sha256-UxIlAifXnexF/MaraPW0Ut6q+sf3e7y1fMdEv1q103A=";
+        })
+      ];
       inherit llvm_meta targetLlvm;
     };
   });
+  noExtend = extensible: lib.attrsets.removeAttrs extensible [ "extend" ];
 
-in { inherit tools libraries release_version; } // libraries // tools
+in { inherit tools libraries release_version; } // (noExtend libraries) // (noExtend tools)

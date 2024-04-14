@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "requests-oauthlib";
   version = "1.3.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

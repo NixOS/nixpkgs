@@ -3,21 +3,26 @@
 , fetchFromGitHub
 , pythonOlder
 , requests
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "prayer-times-calculator";
-  version = "0.0.8";
-  format = "setuptools";
+  version = "0.0.12";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "uchagani";
-    repo = pname;
+    repo = "prayer-times-calculator";
     rev = "refs/tags/${version}";
-    hash = "sha256-Zk7lzZUfojJrsrLRS9cf9AhEfGGsxZJo2MnIIOv6Ezk=";
+    hash = "sha256-HeGUnApQZ12aieaV/UBbJqqpEn4i/ZZKw41H/Yx3+cY=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     requests

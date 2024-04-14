@@ -42,5 +42,6 @@ stdenv.mkDerivation {
     license = licenses.unfree;
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     maintainers = with maintainers; [ bobvanderlinden brodes ];
+    mainProgram = "ngrok";
   };
 }

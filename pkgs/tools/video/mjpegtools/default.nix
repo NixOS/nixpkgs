@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-sYBTbX2ZYLBeACOhl7ANyxAJKaSaq3HRnVX0obIQ9Jo=";
   };
 
+  # Clang 16 defaults to C++17. `std::auto_ptr` has been removed from C++17, and the
+  # `register` type class specifier is no longer allowed.
+  patches = [ ./c++-17-fixes.patch ];
+
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [ pkg-config ];

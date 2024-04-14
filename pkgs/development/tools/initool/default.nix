@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "initool";
-  version = "0.10.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "dbohdan";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-pszlP9gy1zjQjNNr0L1NY0XViejUUuvUZH6JHtUxdJI=";
+    hash = "sha256-wb9hJ0R1R7kYt+TWznqfVGKms3hQjzB8TJYpS89da/E=";
   };
 
   nativeBuildInputs = [ mlton ];
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     inherit (mlton.meta) platforms;
 
     description = "Manipulate INI files from the command line";
+    mainProgram = "initool";
     homepage = "https://github.com/dbohdan/initool";
     license = licenses.mit;
     maintainers = with maintainers; [ e1mo ];

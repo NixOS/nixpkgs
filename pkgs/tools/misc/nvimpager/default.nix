@@ -31,14 +31,15 @@ stdenv.mkDerivation rec {
   doCheck = true;
   nativeCheckInputs = [ lua51Packages.busted util-linux neovim ];
   # filter out one test that fails in the sandbox of nix
-  checkPhase = ''
+  checkPhase = let
+    exclude-tags = if stdenv.isDarwin then "nix,mac" else "nix";
+  in ''
     runHook preCheck
-    make test BUSTED='busted --output TAP --exclude-tags=nix'
+    make test BUSTED='busted --output TAP --exclude-tags=${exclude-tags}'
     runHook postCheck
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Use neovim as pager";
     longDescription = ''
       Use neovim as a pager to view manpages, diffs, etc with nvim's syntax
@@ -49,5 +50,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = [ maintainers.lucc ];
+    mainProgram = "nvimpager";
   };
 }

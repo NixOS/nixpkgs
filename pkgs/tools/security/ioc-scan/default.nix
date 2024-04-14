@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ioc-scan";
-  version = "1.5.0";
+  version = "1.5.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "cisagov";
     repo = "ioc-scanner";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dRrLd41HVVHJse7nkem8Cy+ltfJRnJiWrX/WShMfcOw=";
+    hash = "sha256-LQljpIlTDy1uxuwj1WyygwrB5hQ7dib1ViB+SEhRJ6Y=";
   };
 
   postPatch = ''

@@ -1,29 +1,29 @@
 { ffmpeg_6-full
-, nv-codec-headers-12
-, chromaprint
 , fetchFromGitHub
 , lib
 }:
 
-(ffmpeg_6-full.override {
-  nv-codec-headers-11 = nv-codec-headers-12;
-}).overrideAttrs (old: rec {
-  pname = "jellyfin-ffmpeg";
-  version = "6.0-4";
+let
+  version = "6.0.1-3";
+in
 
-  src = fetchFromGitHub {
+(ffmpeg_6-full.override {
+  inherit version; # Important! This sets the ABI.
+  source = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-ffmpeg";
     rev = "v${version}";
-    sha256 = "sha256-o0D/GWbSoy5onbYG29wTbpZ8z4sZ2s1WclGCXRMSekA=";
+    hash = "sha256-UINiXO61nB/AL0HJJy7G7emujakk/mQv81aUioyJz0Y=";
   };
+}).overrideAttrs (old: {
+  pname = "jellyfin-ffmpeg";
 
-  buildInputs = old.buildInputs ++ [ chromaprint ];
+  # Clobber upstream patches as they don't apply to the Jellyfin fork
+  patches = [];
 
   configureFlags = old.configureFlags ++ [
     "--extra-version=Jellyfin"
     "--disable-ptx-compression" # https://github.com/jellyfin/jellyfin/issues/7944#issuecomment-1156880067
-    "--enable-chromaprint"
   ];
 
   postPatch = ''
@@ -39,5 +39,6 @@
     homepage = "https://github.com/jellyfin/jellyfin-ffmpeg";
     license = licenses.gpl3;
     maintainers = with maintainers; [ justinas ];
+    pkgConfigModules = [ "libavutil" ];
   };
 })

@@ -6,6 +6,7 @@
 , automake
 , gnome2
 , gtk2
+, libGL
 , libjack2
 , libtool
 , libxml2
@@ -27,6 +28,7 @@ stdenv.mkDerivation rec {
     audiofile
     gnome2.gtkglext
     gtk2
+    libGL
     libjack2
     libtool
     libxml2
@@ -44,5 +46,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
+    mainProgram = "psindustrializer";
   };
 }

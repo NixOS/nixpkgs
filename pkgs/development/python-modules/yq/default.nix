@@ -13,11 +13,12 @@
 
 buildPythonPackage rec {
   pname = "yq";
-  version = "3.2.2";
+  version = "3.3.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jbt6DJN92/w90XXmR49AlgwUDT6LHxoDFd52OE1mZQo=";
+    hash = "sha256-0qtWLxGx4OW5ZUubBtQ/iiBSacx72izgdzJfWhI2Udw=";
   };
 
   patches = [
@@ -39,7 +40,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-   pytestCheckHook
+    pytestCheckHook
   ];
 
   pytestFlagsArray = [ "test/test.py" ];
@@ -51,5 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/kislyuk/yq";
     license = licenses.asl20;
     maintainers = with maintainers; [ womfoo SuperSandro2000 ];
+    mainProgram = "yq";
   };
 }

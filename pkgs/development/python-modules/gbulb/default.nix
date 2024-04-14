@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "gbulb";
   version = "0.6.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "beeware";

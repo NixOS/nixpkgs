@@ -15,6 +15,12 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-ChVVXUjm6y71iRs64Kv63oiOG1GSqmx6J0YiGtEI0ao=";
   };
 
+  # Posted a PR for discussion upstream that can be followed:
+  # https://github.com/p0dalirius/ApacheTomcatScanner/pull/32
+  postPatch = ''
+    sed -i '/apachetomcatscanner=apachetomcatscanner\.__main__:main/d' setup.py
+  '';
+
   propagatedBuildInputs = with python3.pkgs; [
     requests
     sectools
@@ -30,6 +36,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool to scan for Apache Tomcat server vulnerabilities";
+    mainProgram = "ApacheTomcatScanner";
     homepage = "https://github.com/p0dalirius/ApacheTomcatScanner";
     changelog = "https://github.com/p0dalirius/ApacheTomcatScanner/releases/tag/${version}";
     license = with licenses; [ gpl2Only ];

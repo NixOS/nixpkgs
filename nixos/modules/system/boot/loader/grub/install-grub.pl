@@ -75,6 +75,7 @@ my $backgroundColor = get("backgroundColor");
 my $configurationLimit = int(get("configurationLimit"));
 my $copyKernels = get("copyKernels") eq "true";
 my $timeout = int(get("timeout"));
+my $timeoutStyle = get("timeoutStyle");
 my $defaultEntry = get("default");
 my $fsIdentifier = get("fsIdentifier");
 my $grubEfi = get("grubEfi");
@@ -135,7 +136,6 @@ sub GetFs {
         chomp $fs;
         my @fields = split / /, $fs;
         my $mountPoint = $fields[4];
-        next unless -d $mountPoint;
         my @mountOptions = split /,/, $fields[5];
 
         # Skip the optional fields.
@@ -154,6 +154,11 @@ sub GetFs {
 
         # Is it better than our current match?
         if (length($mountPoint) > length($bestFs->mount)) {
+
+            # -d performs a stat, which can hang forever on network file systems,
+            # so we only make this call last, when it's likely that this is the mount point we need.
+            next unless -d $mountPoint;
+
             $bestFs = Fs->new(device => $device, type => $fsType, mount => $mountPoint);
         }
     }
@@ -319,6 +324,7 @@ $conf .= "
       set default=$defaultEntryText
       set timeout=$timeout
     fi
+    set timeout_style=$timeoutStyle
 
     function savedefault {
         if [ -z \"\${boot_once}\"]; then
@@ -383,6 +389,31 @@ rmtree("$bootPath/theme") or die "cannot clean up theme folder in $bootPath\n" i
 if ($theme) {
     # Copy theme
     rcopy($theme, "$bootPath/theme") or die "cannot copy $theme to $bootPath\n";
+
+    # Detect which modules will need to be loaded
+    my $with_png = 0;
+    my $with_jpeg = 0;
+
+    find({ wanted => sub {
+            if ($_ =~ /\.png$/i) {
+                $with_png = 1;
+            }
+            elsif ($_ =~ /\.jpe?g$/i) {
+                $with_jpeg = 1;
+            }
+    }, no_chdir => 1 }, $theme);
+
+    if ($with_png) {
+        $conf .= "
+            insmod png
+        "
+    }
+    if ($with_jpeg) {
+        $conf .= "
+            insmod jpeg
+        "
+    }
+
     $conf .= "
         # Sets theme.
         set theme=" . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/theme/theme.txt
@@ -489,37 +520,52 @@ sub addEntry {
     $conf .= "}\n\n";
 }
 
+sub addGeneration {
+    my ($name, $nameSuffix, $path, $options, $current) = @_;
+
+    # Do not search for grand children
+    my @links = sort (glob "$path/specialisation/*");
+
+    if ($current != 1 && scalar(@links) != 0) {
+        $conf .= "submenu \"> $name$nameSuffix\" --class submenu {\n";
+    }
+
+    addEntry("$name" . (scalar(@links) == 0 ? "" : " - Default") . $nameSuffix, $path, $options, $current);
+
+    # Find all the children of the current default configuration
+    # Do not search for grand children
+    foreach my $link (@links) {
+
+        my $entryName = "";
+
+        my $cfgName = readFile("$link/configuration-name");
+
+        my $date = strftime("%F", localtime(lstat($link)->mtime));
+        my $version =
+            -e "$link/nixos-version"
+            ? readFile("$link/nixos-version")
+            : basename((glob(dirname(Cwd::abs_path("$link/kernel")) . "/lib/modules/*"))[0]);
+
+        if ($cfgName) {
+            $entryName = $cfgName;
+        } else {
+            my $linkname = basename($link);
+            $entryName = "($linkname - $date - $version)";
+        }
+        addEntry("$name - $entryName", $link, "", 1);
+    }
+
+    if ($current != 1 && scalar(@links) != 0) {
+        $conf .= "}\n";
+    }
+}
 
 # Add default entries.
 $conf .= "$extraEntries\n" if $extraEntriesBeforeNixOS;
 
-addEntry("@distroName@ - Default", $defaultConfig, $entryOptions, 1);
+addGeneration("@distroName@", "", $defaultConfig, $entryOptions, 1);
 
 $conf .= "$extraEntries\n" unless $extraEntriesBeforeNixOS;
-
-# Find all the children of the current default configuration
-# Do not search for grand children
-my @links = sort (glob "$defaultConfig/specialisation/*");
-foreach my $link (@links) {
-
-    my $entryName = "";
-
-    my $cfgName = readFile("$link/configuration-name");
-
-    my $date = strftime("%F", localtime(lstat($link)->mtime));
-    my $version =
-        -e "$link/nixos-version"
-        ? readFile("$link/nixos-version")
-        : basename((glob(dirname(Cwd::abs_path("$link/kernel")) . "/lib/modules/*"))[0]);
-
-    if ($cfgName) {
-        $entryName = $cfgName;
-    } else {
-        my $linkname = basename($link);
-        $entryName = "($linkname - $date - $version)";
-    }
-    addEntry("@distroName@ - $entryName", $link, "", 1);
-}
 
 my $grubBootPath = $grubBoot->path;
 # extraEntries could refer to @bootRoot@, which we have to substitute
@@ -550,7 +596,7 @@ sub addProfile {
             -e "$link/nixos-version"
             ? readFile("$link/nixos-version")
             : basename((glob(dirname(Cwd::abs_path("$link/kernel")) . "/lib/modules/*"))[0]);
-        addEntry("@distroName@ - Configuration " . nrFromGen($link) . " ($date - $version)", $link, $subEntryOptions, 0);
+        addGeneration("@distroName@ - Configuration " . nrFromGen($link), " ($date - $version)", $link, $subEntryOptions, 0);
     }
 
     $conf .= "}\n";
@@ -725,9 +771,8 @@ if (($requireNewInstall != 0) && ($efiTarget eq "only" || $efiTarget eq "both"))
     if ($forceInstall eq "true") {
         push @command, "--force";
     }
-    if ($canTouchEfiVariables eq "true") {
-        push @command, "--bootloader-id=$bootloaderId";
-    } else {
+    push @command, "--bootloader-id=$bootloaderId";
+    if ($canTouchEfiVariables ne "true") {
         push @command, "--no-nvram";
         push @command, "--removable" if $efiInstallAsRemovable eq "true";
     }

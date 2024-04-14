@@ -14,10 +14,11 @@ buildGoModule rec {
     hash = "sha256-ryMLiehJVZhQ3ZQf4/g7ILeJri78A6z5jfell0pD9E8=";
   };
 
-  vendorSha256 = "sha256-b+tWTQUyYDzY2O28hwy5vI6b6S889TCiVh7hQhw/KAc=";
+  vendorHash = "sha256-b+tWTQUyYDzY2O28hwy5vI6b6S889TCiVh7hQhw/KAc=";
 
   meta = with lib; {
     description = "Command line tool checking password safety";
+    mainProgram = "cmd";
     homepage = "https://github.com/edoardottt/pwdsafety";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];

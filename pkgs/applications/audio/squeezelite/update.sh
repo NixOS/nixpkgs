@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p common-updater-scripts coreutils curl gnused jq nix nix-prefetch-github ripgrep
+#!nix-shell -I nixpkgs=./. -i bash -p common-updater-scripts coreutils curl gnused jq nix nix-prefetch-git nix-prefetch-github ripgrep
 
 set -euo pipefail
 

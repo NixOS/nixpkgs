@@ -5,6 +5,7 @@
 , fasteners
 , fetchFromGitLab
 , qgrid
+, ipynbname
 , ipywidgets
 , odfpy
 , scipy
@@ -18,14 +19,15 @@
 
 buildPythonPackage rec {
   pname = "experiment-utilities";
-  version = "0.3.4";
+  version = "0.3.6";
+  format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "creinke";
     repo = "exputils";
     domain = "gitlab.inria.fr";
     rev = "refs/tags/version_${version}";
-    hash = "sha256-zjmmLUpGjUhpw2+stLJE6cImesnBSvrcid5bHMftX/Q=";
+    hash = "sha256-jo0CBSpUc/F1lJ2vagocngDM1Lopw5/AJnt1QwCunA8=";
   };
 
   # This dependency constraint (<=7.6.5) was due to a bug in qgrid that has been patched in its
@@ -39,6 +41,7 @@ buildPythonPackage rec {
     cloudpickle
     dill
     fasteners
+    ipynbname
     ipywidgets
     odfpy
     plotly

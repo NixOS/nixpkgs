@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "lcgit";
-  version = "0.2.0";
+  version = "0.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "cisagov";
     repo = "lcgit";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MYRqlfz2MRayBT7YGZmcyqJdoDRfENmgxk/TmhyoAlQ=";
+    hash = "sha256-bLeblC68+j+YwvgnV1wgJiWm/jxZFzhTSDwXpoSzUTg=";
   };
 
   postPatch = ''

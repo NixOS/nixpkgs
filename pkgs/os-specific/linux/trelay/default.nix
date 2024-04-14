@@ -2,7 +2,7 @@
 let
   version = "22.03.5";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "trelay";
   version = "${version}-${kernel.version}";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     sparseCheckout = [ "package/kernel/trelay/src" ];
   };
 
-  sourceRoot = "openwrt/package/kernel/trelay/src";
+  sourceRoot = "${finalAttrs.src.name}/package/kernel/trelay/src";
   hardeningDisable = [ "pic" "format" ];
   nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     broken = lib.versionOlder kernel.version "5.10";
   };
-}
+})

@@ -8,7 +8,8 @@
 buildPythonPackage rec {
   pname = "sphinx-basic-ng";
   version = "1.0.0.beta2";
-  disable = pythonOlder "3.7";
+  format = "setuptools";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pradyunsg";

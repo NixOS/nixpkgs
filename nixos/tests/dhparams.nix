@@ -18,6 +18,8 @@ import ./make-test-python.nix {
         systemd.services.foo = {
           description = "Check systemd Ordering";
           wantedBy = [ "multi-user.target" ];
+          before = [ "shutdown.target" ];
+          conflicts = [ "shutdown.target" ];
           unitConfig = {
             # This is to make sure that the dhparams generation of foo occurs
             # before this service so we need this service to start as early as

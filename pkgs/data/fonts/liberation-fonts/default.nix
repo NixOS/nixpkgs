@@ -4,7 +4,7 @@ let
 
   commonNativeBuildInputs = [ fontforge python3 ];
   common =
-    { version, repo, sha256, nativeBuildInputs, postPatch ? null }:
+    { version, repo, sha256, docsToInstall, nativeBuildInputs, postPatch ? null }:
       stdenv.mkDerivation rec {
         pname = "liberation-fonts";
         inherit version;
@@ -20,11 +20,10 @@ let
         installPhase = ''
           find . -name '*.ttf' -exec install -m444 -Dt $out/share/fonts/truetype {} \;
 
-          install -m444 -Dt $out/share/doc/${pname}-${version} AUTHORS     || true
-          install -m444 -Dt $out/share/doc/${pname}-${version} ChangeLog   || true
-          install -m444 -Dt $out/share/doc/${pname}-${version} COPYING     || true
-          install -m444 -Dt $out/share/doc/${pname}-${version} License.txt || true
-          install -m444 -Dt $out/share/doc/${pname}-${version} README      || true
+          for i in ${toString docsToInstall}; do
+            # not all docs exist in all versions
+            install -m444 -Dt $out/share/doc/${pname}-${version} $i || true
+          done
         '';
 
         meta = with lib; {
@@ -51,18 +50,20 @@ in
   liberation_ttf_v1 = common {
     repo = "liberation-1.7-fonts";
     version = "1.07.5";
-    nativeBuildInputs = commonNativeBuildInputs ;
+    docsToInstall = [ "AUTHORS" "ChangeLog" "COPYING" "License.txt" "README" ];
+    nativeBuildInputs = commonNativeBuildInputs;
     sha256 = "1ffl10mf78hx598sy9qr5m6q2b8n3mpnsj73bwixnd4985gsz56v";
   };
   liberation_ttf_v2 = common {
     repo = "liberation-fonts";
-    version = "2.1.0";
+    version = "2.1.5";
+    docsToInstall = [ "AUTHORS" "ChangeLog" "LICENSE" "README.md" ];
     nativeBuildInputs = commonNativeBuildInputs ++ [ fonttools ];
     postPatch = ''
       substituteInPlace scripts/setisFixedPitch-fonttools.py --replace \
         'font = ttLib.TTFont(fontfile)' \
         'font = ttLib.TTFont(fontfile, recalcTimestamp=False)'
     '';
-    sha256 = "03xpzaas264x5n6qisxkhc68pkpn32m7y78qdm3rdkxdwi8mv8mz";
+    sha256 = "Wg1uoD2k/69Wn6XU+7wHqf2KO/bt4y7pwgmG7+IUh4Q=";
   };
 }

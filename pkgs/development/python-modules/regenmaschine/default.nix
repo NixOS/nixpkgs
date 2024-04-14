@@ -2,6 +2,7 @@
 , aiohttp
 , aresponses
 , buildPythonPackage
+, certifi
 , fetchFromGitHub
 , poetry-core
 , pytest-aiohttp
@@ -14,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "regenmaschine";
-  version = "2023.06.0";
-  format = "pyproject";
+  version = "2024.03.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
+    repo = "regenmaschine";
     rev = "refs/tags/${version}";
-    hash = "sha256-W5W/2gBraraZs8ai8tyg3aRWvHt6WOQCVICuiAigae0=";
+    hash = "sha256-RdmK6oK92j4xqLoAjjqlONYu3IfNNWudo4v7jcc+VGU=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +33,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    certifi
     typing-extensions
   ];
 

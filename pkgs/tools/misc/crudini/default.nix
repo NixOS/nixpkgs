@@ -1,32 +1,42 @@
-{ lib, fetchFromGitHub, python3Packages, help2man, installShellFiles }:
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, python3Packages
+, help2man
+, installShellFiles
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "crudini";
-  version = "0.9.3";
+  version = "0.9.5";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pixelb";
     repo = "crudini";
     rev = version;
-    sha256 = "0298hvg0fpk0m0bjpwryj3icksbckwqqsr9w1ain55wf5s0v24k3";
+    hash = "sha256-BU4u7uBsNyDOwWUjOIlBWcf1AeUXXZ+johAe+bjws1U=";
   };
 
-  nativeBuildInputs = [ help2man installShellFiles ];
+  postPatch = ''
+    patchShebangs crudini.py crudini-help tests/test.sh
+  '';
+
+  nativeBuildInputs = [
+    help2man
+    installShellFiles
+    python3Packages.setuptools
+    python3Packages.setuptools-scm
+    python3Packages.wheel
+  ];
 
   propagatedBuildInputs = with python3Packages; [ iniparse ];
-
-  postPatch = ''
-    substituteInPlace crudini-help \
-      --replace ./crudini $out/bin/crudini
-    substituteInPlace tests/test.sh \
-      --replace ..: $out/bin:
-  '';
 
   postInstall = ''
     # this just creates the man page
     make all
 
-    install -Dm444 -t $out/share/doc/${pname} README EXAMPLES
+    install -Dm444 -t $out/share/doc/${pname} README.md EXAMPLES
     installManPage *.1
   '';
 
@@ -34,7 +44,7 @@ python3Packages.buildPythonApplication rec {
     runHook preCheck
 
     pushd tests >/dev/null
-    bash ./test.sh
+    ./test.sh
     popd >/dev/null
 
     runHook postCheck
@@ -45,5 +55,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://www.pixelbeat.org/programs/crudini/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ peterhoeg ];
+    mainProgram = "crudini";
   };
 }

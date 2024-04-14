@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+
 , cmake
 , zlib
 , lz4
@@ -12,31 +13,65 @@
 , boost
 , libpqxx
 , clang-tools
-, catch2
+, catch2_3
 , python3
 , gtest
 , doxygen
 , fixDarwinDylibNames
+, useAVX2 ? stdenv.hostPlatform.avx2Support
 }:
 
+let
+  # pre-fetch ExternalProject from cmake/Modules/FindMagic_EP.cmake
+  ep-file-windows = fetchFromGitHub {
+    owner = "TileDB-Inc";
+    repo   = "file-windows";
+    rev    = "5.38.2.tiledb";
+    hash = "sha256-TFn30VCuWZr252VN1T5NNCZe2VEN3xQSomS7XxxKGF8=";
+    fetchSubmodules = true;
+  };
+
+in
 stdenv.mkDerivation rec {
   pname = "tiledb";
-  version = "2.8.3";
+  version = "2.18.2";
 
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB";
     rev = version;
-    hash = "sha256-HKMVwrPnk9/mukH3mJ2LEAvA9LBF4PcgBZjbbLhO9qU=";
+    hash = "sha256-uLiXhigYz3v7NgY38twot3sBHxZS5QCrOiPfME4wWzE=";
   };
+
+  patches = [
+    ./FindMagic_EP.cmake.patch
+  ];
+
+  postPatch = ''
+    # copy pre-fetched external project to directory where it is expected to be
+    mkdir -p build/externals/src
+    cp -a ${ep-file-windows} build/externals/src/ep_magic
+    chmod -R u+w build/externals/src/ep_magic
+
+    # add openssl on path
+    sed -i '49i list(APPEND OPENSSL_PATHS "${openssl.dev}" "${openssl.out}")' \
+      cmake/Modules/FindOpenSSL_EP.cmake
+  '';
+
+  # upstream will hopefully fix this in some newer release
+  env.CXXFLAGS = "-include random";
 
   # (bundled) blosc headers have a warning on some archs that it will be using
   # unaccelerated routines.
   cmakeFlags = [
-    "-DTILEDB_WERROR=0"
-  ];
+    "-DTILEDB_VCPKG=OFF"
+    "-DTILEDB_WEBP=OFF"
+    "-DTILEDB_WERROR=OFF"
+  ] ++ lib.optional (!useAVX2) "-DCOMPILER_SUPPORTS_AVX2=FALSE";
 
   nativeBuildInputs = [
+    ep-file-windows
+    catch2_3
     clang-tools
     cmake
     python3
@@ -48,7 +83,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    catch2
     zlib
     lz4
     bzip2
@@ -60,10 +94,14 @@ stdenv.mkDerivation rec {
     libpqxx
   ];
 
-  # emulate the process of pulling catch down
-  postPatch = ''
-    mkdir -p build/externals/src/ep_catch
-    ln -sf ${catch2}/include/catch2 build/externals/src/ep_catch/single_include
+  # test commands taken from
+  # https://github.com/TileDB-Inc/TileDB/blob/dev/.github/workflows/unit-test-runs.yml
+  checkPhase = ''
+    runHook preCheck
+    make -C tiledb tests -j$NIX_BUILD_CORES
+    make -C tiledb test ARGS="-R '^unit_'" -R "test_assert"
+    make -C tiledb test ARGS="-R 'test_ci_asserts'"
+    runHook postCheck
   '';
 
   doCheck = true;
@@ -81,5 +119,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ rakesh4g ];
   };
-
 }

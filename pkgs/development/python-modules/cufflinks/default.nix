@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "cufflinks";
   version = "0.17.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -43,6 +44,6 @@ buildPythonPackage rec {
     description = "Productivity Tools for Plotly + Pandas";
     homepage = "https://github.com/santosjorge/cufflinks";
     license = licenses.mit;
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [ ];
   };
 }

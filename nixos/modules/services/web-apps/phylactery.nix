@@ -4,30 +4,25 @@ with lib;
 let cfg = config.services.phylactery;
 in {
   options.services.phylactery = {
-    enable = mkEnableOption (lib.mdDoc "Whether to enable Phylactery server");
+    enable = mkEnableOption "Phylactery server";
 
     host = mkOption {
       type = types.str;
       default = "localhost";
-      description = lib.mdDoc "Listen host for Phylactery";
+      description = "Listen host for Phylactery";
     };
 
     port = mkOption {
       type = types.port;
-      description = lib.mdDoc "Listen port for Phylactery";
+      description = "Listen port for Phylactery";
     };
 
     library = mkOption {
       type = types.path;
-      description = lib.mdDoc "Path to CBZ library";
+      description = "Path to CBZ library";
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.phylactery;
-      defaultText = literalExpression "pkgs.phylactery";
-      description = lib.mdDoc "The Phylactery package to use";
-    };
+    package = mkPackageOption pkgs "phylactery" { };
   };
 
   config = mkIf cfg.enable {

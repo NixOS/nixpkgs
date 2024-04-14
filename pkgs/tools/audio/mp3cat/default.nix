@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.omnipotententity ];
     platforms = platforms.all;
+    mainProgram = "mp3cat";
   };
 }

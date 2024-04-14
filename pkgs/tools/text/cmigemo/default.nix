@@ -30,6 +30,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A tool that supports Japanese incremental search with Romaji";
+    mainProgram = "cmigemo";
     homepage = "https://www.kaoriya.net/software/cmigemo";
     license = licenses.mit;
     maintainers = [ maintainers.cohei ];

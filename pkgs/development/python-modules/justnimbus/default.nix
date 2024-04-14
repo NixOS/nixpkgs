@@ -8,16 +8,16 @@
 
 buildPythonPackage rec {
   pname = "justnimbus";
-  version = "0.6.0";
-  format = "pyproject";
+  version = "0.7.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "kvanzuijlen";
-    repo = pname;
-    rev = version;
-    hash = "sha256-uQ5Nc5sxqHeAuavyfX4Q6Umsd54aileJjFwOOU6X7Yg=";
+    repo = "justnimbus";
+    rev = "refs/tags/${version}";
+    hash = "sha256-JO8T0JItkkNHxlnDKOO8kM9KSzT7QML4sszPymgXSBA=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for the JustNimbus API";
     homepage = "https://github.com/kvanzuijlen/justnimbus";
+    changelog = "https://github.com/kvanzuijlen/justnimbus/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

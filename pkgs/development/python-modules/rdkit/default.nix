@@ -5,7 +5,7 @@
 , cmake
 , comic-neue
 , boost
-, catch2
+, catch2_3
 , inchi
 , cairo
 , eigen
@@ -21,16 +21,16 @@
 let
   external = {
     avalon = fetchFromGitHub {
-      owner = "rohdebe1";
+      owner = "rdkit";
       repo = "ava-formake";
-      rev = "AvalonToolkit_2.0.4a";
-      hash = "sha256-ZyhrDBBv9XuXe1NY/Djiad86tGIJwCSTrxEMICHgSqk=";
+      rev = "AvalonToolkit_2.0.5-pre.3";
+      hash = "sha256-2MuFZgRIHXnkV7Nc1da4fa7wDx57VHUtwLthrmjk+5o=";
     };
     yaehmop = fetchFromGitHub {
       owner = "greglandrum";
       repo = "yaehmop";
-      rev = "v2022.09.1";
-      hash = "sha256-QMnc5RyHlY3giw9QmrkGntiA+Srs7OhCIKs9GGo5DfQ=";
+      rev = "v2023.03.1";
+      hash = "sha256-K9//cDN69U4sLETfIZq9NUaBE3RXOReH53qfiCzutqM=";
     };
     freesasa = fetchFromGitHub {
       owner = "mittinatten";
@@ -42,8 +42,8 @@ let
 in
 buildPythonPackage rec {
   pname = "rdkit";
-  version = "2023.03.2";
-  format = "other";
+  version = "2023.09.5";
+  pyproject = false;
 
   src =
     let
@@ -53,7 +53,7 @@ buildPythonPackage rec {
       owner = pname;
       repo = pname;
       rev = "Release_${versionTag}";
-      hash = "sha256-p1zJLMtIlO+0qKMO7ghDLrONNZFPTuc2QtOtB1LJPtc=";
+      hash = "sha256-ZYNAHNBHQPx8rBJSvEWFEpdSpYyXcoqJ+nBA7tpHwQs=";
     };
 
   unpackPhase = ''
@@ -84,6 +84,7 @@ buildPythonPackage rec {
   buildInputs = [
     boost
     cairo
+    catch2_3
   ] ++ lib.optionals (stdenv.system == "x86_64-darwin") [
     memorymappingHook
   ];
@@ -109,7 +110,6 @@ buildPythonPackage rec {
   '';
 
   cmakeFlags = [
-    "-DCATCH_DIR=${catch2}/include/catch2"
     "-DINCHI_LIBRARY=${inchi}/lib/libinchi.so"
     "-DINCHI_LIBRARIES=${inchi}/lib/libinchi.so"
     "-DINCHI_INCLUDE_DIR=${inchi}/include/inchi"
@@ -141,7 +141,7 @@ buildPythonPackage rec {
   checkPhase = ''
     export QT_QPA_PLATFORM='offscreen'
     export RDBASE=$(realpath ..)
-    export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+    export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
     (cd $RDBASE/rdkit/Chem && python $RDBASE/rdkit/TestRunner.py test_list.py)
   '';
 

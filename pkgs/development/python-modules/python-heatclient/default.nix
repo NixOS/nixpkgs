@@ -1,5 +1,4 @@
 { lib
-, babel
 , buildPythonPackage
 , cliff
 , fetchPypi
@@ -22,18 +21,17 @@
 
 buildPythonPackage rec {
   pname = "python-heatclient";
-  version = "3.3.0";
+  version = "3.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-opBb9Zf60kgMtBNis2c+22VGS7psFEDPYvlz7WyKIHs=";
+    hash = "sha256-B1F40HYHFF91mkxwySR/kqCvlwLLtBgqwUvw2byOc9g=";
   };
 
   propagatedBuildInputs = [
-    babel
     cliff
     iso8601
     keystoneauth1
@@ -67,6 +65,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for Heat built on the Heat orchestration API";
+    mainProgram = "heat";
     homepage = "https://github.com/openstack/python-heatclient";
     license = licenses.asl20;
     maintainers = teams.openstack.members;

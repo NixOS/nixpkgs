@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rixx/git-backdate";
     license = licenses.wtfpl;
     maintainers = with maintainers; [ matthiasbeyer ];
+    mainProgram = "git-backdate";
   };
 }
 

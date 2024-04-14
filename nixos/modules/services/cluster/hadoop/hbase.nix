@@ -7,25 +7,25 @@ let
   mkIfNotNull = x: mkIf (x != null) x;
   # generic hbase role options
   hbaseRoleOption = name: extraOpts: {
-    enable = mkEnableOption (mdDoc "HBase ${name}");
+    enable = mkEnableOption "HBase ${name}";
 
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = mdDoc "Open firewall ports for HBase ${name}.";
+      description = "Open firewall ports for HBase ${name}.";
     };
 
     restartIfChanged = mkOption {
       type = types.bool;
       default = false;
-      description = mdDoc "Restart ${name} con config change.";
+      description = "Restart ${name} con config change.";
     };
 
     extraFlags = mkOption {
       type = with types; listOf str;
       default = [];
       example = literalExpression ''[ "--backup" ]'';
-      description = mdDoc "Extra flags for the ${name} service.";
+      description = "Extra flags for the ${name} service.";
     };
 
     environment = mkOption {
@@ -36,7 +36,7 @@ let
           HBASE_MASTER_OPTS = "-Dcom.sun.management.jmxremote.ssl=true";
         }
       '';
-      description = mdDoc "Environment variables passed to ${name}.";
+      description = "Environment variables passed to ${name}.";
     };
   } // extraOpts;
   # generic hbase role configs
@@ -93,7 +93,7 @@ in
 {
   options.services.hadoop = {
 
-    gatewayRole.enableHbaseCli = mkEnableOption (mdDoc "HBase CLI tools");
+    gatewayRole.enableHbaseCli = mkEnableOption "HBase CLI tools";
 
     hbaseSiteDefault = mkOption {
       default = {
@@ -105,7 +105,7 @@ in
         "hbase.cluster.distributed" = "true";
       };
       type = types.attrsOf types.anything;
-      description = mdDoc ''
+      description = ''
         Default options for hbase-site.xml
       '';
     };
@@ -118,7 +118,7 @@ in
           "hbase.table.normalization.enabled" = "true";
         }
       '';
-      description = mdDoc ''
+      description = ''
         Additional options and overrides for hbase-site.xml
         <https://github.com/apache/hbase/blob/rel/2.4.11/hbase-common/src/main/resources/hbase-default.xml>
       '';
@@ -127,22 +127,17 @@ in
       default = {};
       type = with types; attrsOf anything;
       internal = true;
-      description = mdDoc ''
+      description = ''
         Internal option to add configs to hbase-site.xml based on module options
       '';
     };
 
     hbase = {
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.hbase;
-        defaultText = literalExpression "pkgs.hbase";
-        description = mdDoc "HBase package";
-      };
+      package = mkPackageOption pkgs "hbase" { };
 
       rootdir = mkOption {
-        description = mdDoc ''
+        description = ''
           This option will set "hbase.rootdir" in hbase-site.xml and determine
           the directory shared by region servers and into which HBase persists.
           The URL should be 'fully-qualified' to include the filesystem scheme.
@@ -156,7 +151,7 @@ in
         default = "/hbase";
       };
       zookeeperQuorum = mkOption {
-        description = mdDoc ''
+        description = ''
           This option will set "hbase.zookeeper.quorum" in hbase-site.xml.
           Comma separated list of servers in the ZooKeeper ensemble.
         '';
@@ -169,20 +164,20 @@ in
         port = mkOption {
           type = types.int;
           default = port;
-          description = mdDoc "RPC port";
+          description = "RPC port";
         };
         infoPort = mkOption {
           type = types.int;
           default = infoPort;
-          description = mdDoc "web UI port";
+          description = "web UI port";
         };
       };
     in mapAttrs hbaseRoleOption {
-      master.initHDFS = mkEnableOption (mdDoc "initialization of the hbase directory on HDFS");
+      master.initHDFS = mkEnableOption "initialization of the hbase directory on HDFS";
       regionServer.overrideHosts = mkOption {
         type = types.bool;
         default = true;
-        description = mdDoc ''
+        description = ''
           Remove /etc/hosts entries for "127.0.0.2" and "::1" defined in nixos/modules/config/networking.nix
           Regionservers must be able to resolve their hostnames to their IP addresses, through PTR records
           or /etc/hosts entries.

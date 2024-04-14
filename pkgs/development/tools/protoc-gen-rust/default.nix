@@ -22,6 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Protobuf plugin for generating Rust code";
+    mainProgram = "protoc-gen-rust";
     homepage = "https://github.com/stepancheg/rust-protobuf";
     license = licenses.mit;
     maintainers = with maintainers; [ lucperkins ];

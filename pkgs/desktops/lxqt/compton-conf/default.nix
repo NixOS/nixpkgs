@@ -19,18 +19,18 @@ mkDerivation rec {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0gcvyn7aabdz5yj0jzv14hlgjgbm8d9ib5r73i842f0hv4cv9m0q";
+    hash = "sha256-GNS0GdkQOEFQHCeXFVNDdT35KCRhfwmkL78tpY71mz0=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     lxqt.lxqt-build-tools
+    qttools
   ];
 
   buildInputs = [
     qtbase
-    qttools
     libconfig
   ];
 
@@ -45,6 +45,7 @@ mkDerivation rec {
     broken = stdenv.isDarwin;
     homepage = "https://github.com/lxqt/compton-conf";
     description = "GUI configuration tool for compton X composite manager";
+    mainProgram = "compton-conf";
     license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
     maintainers = teams.lxqt.members;

@@ -44,6 +44,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python client library for the mwdb service";
+    mainProgram = "mwdb";
     homepage = "https://github.com/CERT-Polska/mwdblib";
     changelog = "https://github.com/CERT-Polska/mwdblib/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];

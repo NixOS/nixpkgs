@@ -2,21 +2,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-toc";
-  version = "0.13.0";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "badboy";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Z3ZspXD7M3VVi70+dRz7NhO6msw5htmPRX6VzhA9NPY=";
+    sha256 = "sha256-OFNp+kFDafYbzqb7xfPTO885cAjgWfNeDvUPDKq5GJU=";
   };
 
-  cargoHash = "sha256-5EC9xfjSg0sIkZ2fIkX3SrwL0wzBfpIObFQpkMRj6oM=";
+  cargoHash = "sha256-95W0gERjwL9r0+DOgxQu+sjSFSThWeShLAqlDQiGxFw=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
   meta = with lib; {
     description = "A preprocessor for mdbook to add inline Table of Contents support";
+    mainProgram = "mdbook-toc";
     homepage = "https://github.com/badboy/mdbook-toc";
     license = [ licenses.mpl20 ];
     maintainers = with maintainers; [ matthiasbeyer ];

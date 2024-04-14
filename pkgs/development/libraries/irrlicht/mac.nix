@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ OpenGL Cocoa IOKit ];
 
   meta = {
-    homepage = "http://irrlicht.sourceforge.net/";
+    homepage = "https://irrlicht.sourceforge.net/";
     license = lib.licenses.zlib;
     description = "Open source high performance realtime 3D engine written in C++";
     platforms = lib.platforms.darwin;

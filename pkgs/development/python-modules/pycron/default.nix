@@ -5,6 +5,7 @@
 buildPythonPackage rec {
   pname = "pycron";
   version = "3.0.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "kipe";

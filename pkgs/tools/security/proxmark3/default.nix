@@ -7,8 +7,10 @@
 , bzip2
 , openssl
 , jansson
+, gd
 , whereami
 , lua
+, lz4
 , Foundation
 , AppKit
 , withGui ? true, wrapQtAppsHook, qtbase
@@ -22,15 +24,15 @@
 , standalone ? "LF_SAMYRUN"
 }:
 assert withBlueshark -> stdenv.hostPlatform.isLinux;
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "proxmark3";
-  version = "4.16717";
+  version = "4.18341";
 
   src = fetchFromGitHub {
     owner = "RfidResearchGroup";
     repo = "proxmark3";
-    rev = "v${version}";
-    sha256 = "sha256-rkfVgT+9fqlWvUXzLH28Nzd8HldJnU+IZz8conY8Mis=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-YeBrrzCiDgl4WdhWYatm9sOAtBAECIv/f+OzB/RTdeg=";
   };
 
   patches = [
@@ -58,6 +60,8 @@ stdenv.mkDerivation rec {
     bzip2
     openssl
     jansson
+    gd
+    lz4
     whereami
     lua
   ] ++ lib.optional withGui qtbase
@@ -82,5 +86,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ nyanotech emilytrau ];
     platforms = platforms.unix;
+    mainProgram = "pm3";
   };
-}
+})

@@ -1,12 +1,14 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
+, fetchpatch
 , gtk3
 , colloid-gtk-theme
 , gnome-themes-extra
 , gtk-engine-murrine
 , python3
 , sassc
+, nix-update-script
 , accents ? [ "blue" ]
 , size ? "standard"
 , tweaks ? [ ]
@@ -15,7 +17,7 @@
 let
   validAccents = [ "blue" "flamingo" "green" "lavender" "maroon" "mauve" "peach" "pink" "red" "rosewater" "sapphire" "sky" "teal" "yellow" ];
   validSizes = [ "standard" "compact" ];
-  validTweaks = [ "black" "rimless" "normal" ];
+  validTweaks = [ "black" "rimless" "normal" "float" ];
   validVariants = [ "latte" "frappe" "macchiato" "mocha" ];
 
   pname = "catppuccin-gtk";
@@ -28,16 +30,28 @@ lib.checkListOfEnum "${pname}: tweaks" validTweaks tweaks
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "0.6.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "catppuccin";
     repo = "gtk";
     rev = "v${version}";
-    sha256 = "sha256-b03V/c2do5FSm4Q0yN7V0RuoQX1fYsBd//Hj3R5MESI=";
+    hash = "sha256-7EvKcyh9gH/QbiXKlyAKMSBXMF3DmbHD+wJD3Sq39DE=";
   };
 
   nativeBuildInputs = [ gtk3 sassc ];
+
+  patches = [
+    ./colloid-src-git-reset.patch
+
+    # Can be removed next release
+    # Adds compatibility with the 2.x.x versions of the catppuccin python package
+    (fetchpatch {
+      name = "catppuccin-python-compatibility.patch";
+      url = "https://github.com/catppuccin/gtk/commit/355e12387f73b27cf4734a6a3eb431554fabb74f.patch";
+      hash = "sha256-4vgZbNeGMtsQEitIWDCVb5o4fAjhVu3iIUttUYqtHPc=";
+    })
+  ];
 
   buildInputs = [
     gnome-themes-extra
@@ -53,12 +67,16 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   postPatch = ''
-    patchShebangs --build colloid/clean-old-theme.sh colloid/install.sh
+    patchShebangs --build colloid/install.sh colloid/build.sh
   '';
+
+  dontConfigure = true;
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
 
+    cp -r colloid colloid-base
     mkdir -p $out/share/themes
     export HOME=$(mktemp -d)
 
@@ -71,11 +89,13 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "Soothing pastel theme for GTK";
     homepage = "https://github.com/catppuccin/gtk";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.fufexan ];
+    maintainers = with maintainers; [ fufexan dixslyf ];
   };
 }

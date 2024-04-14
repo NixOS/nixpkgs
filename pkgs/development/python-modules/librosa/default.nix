@@ -1,6 +1,8 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 
 # build-system
 , setuptools
@@ -32,7 +34,7 @@
 
 buildPythonPackage rec {
   pname = "librosa";
-  version = "0.10.0";
+  version = "0.10.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
@@ -40,11 +42,21 @@ buildPythonPackage rec {
     repo = "librosa";
     rev = "refs/tags/${version}";
     fetchSubmodules = true; # for test data
-    hash = "sha256-MXzPIcbG8b1JwhEyAZG4DRObGaHq+ipVHMrZCzaxLdE=";
+    hash = "sha256-zbmU87hI9A1CVcBZ/5FU8z0t6SS4jfJk9bj9kLe/EHI=";
   };
 
   nativeBuildInputs = [
     setuptools
+  ];
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/librosa/librosa/issues/1754
+      # https://github.com/librosa/librosa/pull/1755
+      name = "matplotlib-3.8-compat.patch";
+      url = "https://github.com/librosa/librosa/commit/beef47885ce1255b43b65e48ea2054ddace37c6c.patch";
+      hash = "sha256-rrnlUHXHY2me4BWGs3wFq8WJmz75CbXTWKFp3VdJKzE=";
+    })
   ];
 
   postPatch = ''
@@ -95,6 +107,11 @@ buildPythonPackage rec {
     "test_example"
     "test_example_info"
     "test_load_resample"
+    # does not converge
+    "test_nnls_vector"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # https://github.com/librosa/librosa/pull/1808
+    "test_pyin_multi_center"
   ];
 
   meta = with lib; {

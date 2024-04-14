@@ -8,10 +8,11 @@
 
 qtModule {
   pname = "qtdeclarative";
-  qtInputs = [ qtbase qtlanguageserver qtshadertools ];
-  propagatedBuildInputs = [ openssl python3 ];
+  propagatedBuildInputs = [ qtbase qtlanguageserver qtshadertools openssl python3 ];
   patches = [
     # prevent headaches from stale qmlcache data
-    ../patches/qtdeclarative-default-disable-qmlcache.patch
+    ../patches/0001-qtdeclarative-disable-qml-disk-cache.patch
+    # add version specific QML import path
+    ../patches/0002-qtdeclarative-also-use-versioned-qml-paths.patch
   ];
 }

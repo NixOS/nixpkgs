@@ -6,41 +6,52 @@
 , fetchFromGitHub
 , protobuf
 , pythonOlder
-, fetchpatch
+, mysql80
+, openssl
+, pkgs
 }:
 
 buildPythonPackage rec {
   pname = "mysql-connector";
-  version = "8.0.29";
+  version = "8.0.33";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
+
+  setupPyBuildFlags = [
+    "--with-mysql-capi=\"${mysql80}\""
+    "--with-openssl-include-dir=\"${openssl.dev}/include\""
+    "--with-openssl-lib-dir=\"${lib.getLib openssl}/lib\""
+    "-L \"${lib.getLib pkgs.zstd}/lib:${lib.getLib mysql80}/lib\""
+  ];
 
   src = fetchFromGitHub {
     owner = "mysql";
     repo = "mysql-connector-python";
     rev = version;
-    hash = "sha256-X0qiXNYkNoR00ESUdByPj4dPnEnjLyopm25lm1JvkAk=";
+    hash = "sha256-GtMq7E2qBqFu54hjUotzPyxScTKXNdEQcmgHnS7lBhc=";
   };
 
   patches = [
     # mysql-connector overrides MACOSX_DEPLOYMENT_TARGET to 11.
     # This makes the installation with nixpkgs fail. I suspect, that's
-    # because stdenv.targetPlatform.darwinSdkVersion is (currently) set to
+    # because stdenv.hostPlatform.darwinSdkVersion is (currently) set to
     # 10.12. The patch reverts
     # https://github.com/mysql/mysql-connector-python/commit/d1e89fd3d7391084cdf35b0806cb5d2a4b413654
     ./0001-Revert-Fix-MacOS-wheels-platform-tag.patch
-
-    # Allow for clang to be used to build native extensions
-    (fetchpatch {
-      url = "https://github.com/mysql/mysql-connector-python/commit/fd24ce9dc8c60cc446a8e69458f7851d047c7831.patch";
-      hash = "sha256-WvU1iB53MavCsksKCjGvUl7R3Ww/38alxxMVzjpr5Xg=";
-    })
   ];
+
+  nativeBuildInputs = [
+    mysql80
+  ];
+
 
   propagatedBuildInputs = [
     dnspython
     protobuf
+    mysql80
+    openssl
+    pkgs.zstd
   ];
 
   pythonImportsCheck = [

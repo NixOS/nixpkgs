@@ -17,5 +17,5 @@ let
   };
 in
 lib.recurseIntoAttrs {
-  defaultPkgConfigPackages = allPkgs.callPackage ./test-defaultPkgConfigPackages.nix { };
+  defaultPkgConfigPackages = allPkgs.callPackage ./test-defaultPkgConfigPackages.nix { } // { __recurseIntoDerivationForReleaseJobs = true; };
 }

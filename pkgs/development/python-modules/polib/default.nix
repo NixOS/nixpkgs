@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "polib";
   version = "1.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

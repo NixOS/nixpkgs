@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "docplex";
   version = "2.25.236";
+  format = "setuptools";
 
   # No source available from official repo
   src = fetchPypi {

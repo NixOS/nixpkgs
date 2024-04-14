@@ -16,30 +16,42 @@
 , extraInstallCommands ? ""
 , meta ? {}
 , passthru ? {}
+, extraPreBwrapCmds ? ""
 , extraBwrapArgs ? []
-, unshareUser ? true
-, unshareIpc ? true
-, unsharePid ? true
+, unshareUser ? false
+, unshareIpc ? false
+, unsharePid ? false
 , unshareNet ? false
-, unshareUts ? true
-, unshareCgroup ? true
+, unshareUts ? false
+, unshareCgroup ? false
+, privateTmp ? false
 , dieWithParent ? true
 , ...
 } @ args:
 
 assert (pname != null || version != null) -> (name == null && pname != null); # You must declare either a name or pname + version (preferred).
 
-with builtins;
 let
-  pname = if args.name != null then args.name else args.pname;
-  versionStr = lib.optionalString (version != null) ("-" + version);
+  inherit (lib)
+    concatLines
+    concatStringsSep
+    escapeShellArgs
+    filter
+    optionalString
+    splitString
+    ;
+
+  inherit (lib.attrsets) removeAttrs;
+
+  pname = if args ? name && args.name != null then args.name else args.pname;
+  versionStr = optionalString (version != null) ("-" + version);
   name = pname + versionStr;
 
   buildFHSEnv = callPackage ./buildFHSEnv.nix { };
 
   fhsenv = buildFHSEnv (removeAttrs (args // { inherit name; }) [
-    "runScript" "extraInstallCommands" "meta" "passthru" "extraBwrapArgs" "dieWithParent"
-    "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc"
+    "runScript" "extraInstallCommands" "meta" "passthru" "extraPreBwrapCmds" "extraBwrapArgs" "dieWithParent"
+    "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc" "privateTmp"
     "pname" "version"
   ]);
 
@@ -114,12 +126,15 @@ let
     exec ${run} "$@"
   '';
 
-  indentLines = str: lib.concatLines (map (s: "  " + s) (filter (s: s != "") (lib.splitString "\n" str)));
+  indentLines = str: concatLines (map (s: "  " + s) (filter (s: s != "") (splitString "\n" str)));
   bwrapCmd = { initArgs ? "" }: ''
-    ignored=(/nix /dev /proc /etc)
+    ${extraPreBwrapCmds}
+    ignored=(/nix /dev /proc /etc ${optionalString privateTmp "/tmp"})
     ro_mounts=()
     symlinks=()
     etc_ignored=()
+
+    # loop through all entries of root in the fhs environment, except its /etc.
     for i in ${fhsenv}/*; do
       path="/''${i##*/}"
       if [[ $path == '/etc' ]]; then
@@ -133,6 +148,7 @@ let
       fi
     done
 
+    # loop through the entries of /etc in the fhs environment.
     if [[ -d ${fhsenv}/etc ]]; then
       for i in ${fhsenv}/etc/*; do
         path="/''${i##*/}"
@@ -141,19 +157,29 @@ let
         if [[ $path == '/fonts' || $path == '/ssl' ]]; then
           continue
         fi
-        ro_mounts+=(--ro-bind "$i" "/etc$path")
+        if [[ -L $i ]]; then
+          symlinks+=(--symlink "$i" "/etc$path")
+        else
+          ro_mounts+=(--ro-bind "$i" "/etc$path")
+        fi
         etc_ignored+=("/etc$path")
       done
     fi
 
-    for i in ${lib.escapeShellArgs etcBindEntries}; do
+    # propagate /etc from the actual host if nested
+    if [[ -e /.host-etc ]]; then
+      ro_mounts+=(--ro-bind /.host-etc /.host-etc)
+    else
+      ro_mounts+=(--ro-bind /etc /.host-etc)
+    fi
+
+    # link selected etc entries from the actual root
+    for i in ${escapeShellArgs etcBindEntries}; do
       if [[ "''${etc_ignored[@]}" =~ "$i" ]]; then
         continue
       fi
-      if [[ -L $i ]]; then
-        symlinks+=(--symlink "$(${coreutils}/bin/readlink "$i")" "$i")
-      else
-        ro_mounts+=(--ro-bind-try "$i" "$i")
+      if [[ -e $i ]]; then
+        symlinks+=(--symlink "/.host-etc/''${i#/etc/}" "$i")
       fi
     done
 
@@ -179,19 +205,40 @@ let
       x11_args+=(--ro-bind-try "$local_socket" "$local_socket")
     fi
 
+    ${optionalString privateTmp ''
+    # sddm places XAUTHORITY in /tmp
+    if [[ "$XAUTHORITY" == /tmp/* ]]; then
+      x11_args+=(--ro-bind-try "$XAUTHORITY" "$XAUTHORITY")
+    fi
+
+    # dbus-run-session puts the socket in /tmp
+    IFS=";" read -ra addrs <<<"$DBUS_SESSION_BUS_ADDRESS"
+    for addr in "''${addrs[@]}"; do
+      [[ "$addr" == unix:* ]] || continue
+      IFS="," read -ra parts <<<"''${addr#unix:}"
+      for part in "''${parts[@]}"; do
+        printf -v part '%s' "''${part//\\/\\\\}"
+        printf -v part '%b' "''${part//%/\\x}"
+        [[ "$part" == path=/tmp/* ]] || continue
+        x11_args+=(--ro-bind-try "''${part#path=}" "''${part#path=}")
+      done
+    done
+    ''}
+
     cmd=(
       ${bubblewrap}/bin/bwrap
       --dev-bind /dev /dev
       --proc /proc
       --chdir "$(pwd)"
-      ${lib.optionalString unshareUser "--unshare-user"}
-      ${lib.optionalString unshareIpc "--unshare-ipc"}
-      ${lib.optionalString unsharePid "--unshare-pid"}
-      ${lib.optionalString unshareNet "--unshare-net"}
-      ${lib.optionalString unshareUts "--unshare-uts"}
-      ${lib.optionalString unshareCgroup "--unshare-cgroup"}
-      ${lib.optionalString dieWithParent "--die-with-parent"}
+      ${optionalString unshareUser "--unshare-user"}
+      ${optionalString unshareIpc "--unshare-ipc"}
+      ${optionalString unsharePid "--unshare-pid"}
+      ${optionalString unshareNet "--unshare-net"}
+      ${optionalString unshareUts "--unshare-uts"}
+      ${optionalString unshareCgroup "--unshare-cgroup"}
+      ${optionalString dieWithParent "--die-with-parent"}
       --ro-bind /nix /nix
+      ${optionalString privateTmp "--tmpfs /tmp"}
       # Our glibc will look for the cache in its own path in `/nix/store`.
       # As such, we need a cache to exist there, because pressure-vessel
       # depends on the existence of an ld cache. However, adding one
@@ -200,11 +247,12 @@ let
       # Also, the cache needs to go to both 32 and 64 bit glibcs, for games
       # of both architectures to work.
       --tmpfs ${glibc}/etc \
+      --tmpfs /etc \
       --symlink /etc/ld.so.conf ${glibc}/etc/ld.so.conf \
       --symlink /etc/ld.so.cache ${glibc}/etc/ld.so.cache \
       --ro-bind ${glibc}/etc/rpc ${glibc}/etc/rpc \
       --remount-ro ${glibc}/etc \
-  '' + lib.optionalString (stdenv.isx86_64 && stdenv.isLinux) (indentLines ''
+  '' + optionalString fhsenv.isMultiBuild (indentLines ''
       --tmpfs ${pkgsi686Linux.glibc}/etc \
       --symlink /etc/ld.so.conf ${pkgsi686Linux.glibc}/etc/ld.so.conf \
       --symlink /etc/ld.so.cache ${pkgsi686Linux.glibc}/etc/ld.so.cache \
@@ -223,6 +271,7 @@ let
 
   bin = writeShellScript "${name}-bwrap" (bwrapCmd { initArgs = ''"$@"''; });
 in runCommandLocal name {
+  inherit pname version;
   inherit meta;
 
   passthru = passthru // {

@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "pkgtop";
-  version = "2.4.1";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "pkgtop";
     rev = version;
-    hash = "sha256-Skk7Zur2UMxNjrJmcp+FvUuNvbh9HmzuZ5mWcvhxcKk=";
+    hash = "sha256-NY8nx4BKAUq1nGBlzRzm2OH1k01TV6qs2IcoErhuxTc=";
   };
 
   vendorHash = "sha256-dlDbNym7CNn5088znMNgGAr2wBM3+nYv3q362353aLs=";
@@ -26,5 +26,6 @@ buildGoModule rec {
     changelog = "https://github.com/orhun/pkgtop/releases/tag/${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "pkgtop";
   };
 }

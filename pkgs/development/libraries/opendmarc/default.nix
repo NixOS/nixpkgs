@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opendmarc";
-  version = "1.3.3";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "trusteddomainproject";
     repo = "opendmarc";
     rev = "rel-opendmarc-${builtins.replaceStrings [ "." ] [ "-" ] version}";
-    sha256 = "sha256-SQH85FLfVEEtYhR1+A1XxCDMiTjDgLQX6zifbLxCa5c=";
+    hash = "sha256-vnWtTvHhzCed7P6rN3wAz6zfRvtV0cLn5GhDxLF8H3c=";
   };
 
   outputs = [ "bin" "dev" "out" "doc" ];
@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     description = "A free open source software implementation of the DMARC specification";
     homepage = "http://www.trusteddomain.org/opendmarc/";
     license = with licenses; [ bsd3 sendmail ];
-    maintainers = with maintainers; [ ajs124 das_j ];
+    maintainers = teams.helsinki-systems.members;
   };
 }

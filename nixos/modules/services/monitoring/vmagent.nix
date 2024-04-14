@@ -5,12 +5,12 @@ let
   settingsFormat = pkgs.formats.json { };
 in {
   options.services.vmagent = {
-    enable = mkEnableOption (lib.mdDoc "vmagent");
+    enable = mkEnableOption "vmagent";
 
     user = mkOption {
       default = "vmagent";
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         User account under which vmagent runs.
       '';
     };
@@ -18,24 +18,17 @@ in {
     group = mkOption {
       type = types.str;
       default = "vmagent";
-      description = lib.mdDoc ''
+      description = ''
         Group under which vmagent runs.
       '';
     };
 
-    package = mkOption {
-      default = pkgs.vmagent;
-      defaultText = lib.literalMD "pkgs.vmagent";
-      type = types.package;
-      description = lib.mdDoc ''
-        vmagent package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "vmagent" { };
 
     dataDir = mkOption {
       type = types.str;
       default = "/var/lib/vmagent";
-      description = lib.mdDoc ''
+      description = ''
         The directory where vmagent stores its data files.
       '';
     };
@@ -43,14 +36,14 @@ in {
     remoteWriteUrl = mkOption {
       default = "http://localhost:8428/api/v1/write";
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         The storage endpoint such as VictoriaMetrics
       '';
     };
 
     prometheusConfig = mkOption {
       type = lib.types.submodule { freeformType = settingsFormat.type; };
-      description = lib.mdDoc ''
+      description = ''
         Config for prometheus style metrics
       '';
     };
@@ -58,8 +51,18 @@ in {
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to open the firewall for the default ports.
+      '';
+    };
+
+    extraArgs = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      description = ''
+        Extra args to pass to `vmagent`. See the docs:
+        <https://docs.victoriametrics.com/vmagent.html#advanced-usage>
+        or {command}`vmagent -help` for more information.
       '';
     };
   };
@@ -90,7 +93,7 @@ in {
         Type = "simple";
         Restart = "on-failure";
         WorkingDirectory = cfg.dataDir;
-        ExecStart = "${cfg.package}/bin/vmagent -remoteWrite.url=${cfg.remoteWriteUrl} -promscrape.config=${prometheusConfig}";
+        ExecStart = "${cfg.package}/bin/vmagent -remoteWrite.url=${cfg.remoteWriteUrl} -promscrape.config=${prometheusConfig} ${escapeShellArgs cfg.extraArgs}";
       };
     };
 

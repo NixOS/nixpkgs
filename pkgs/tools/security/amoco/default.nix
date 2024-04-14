@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
       prompt-toolkit
       pygments
       # pyside6
-      z3
+      z3-solver
     ];
   };
 
@@ -65,6 +65,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool for analysing binaries";
+    mainProgram = "amoco";
     homepage = "https://github.com/bdcht/amoco";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ fab ];

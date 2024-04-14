@@ -7,15 +7,16 @@
 }:
 
 buildPythonPackage {
-  inherit (opentelemetry-api) version src;
+  inherit (opentelemetry-api) src;
   pname = "opentelemetry-semantic-conventions";
-  disabled = pythonOlder "3.7";
+  version = "0.44b0";
+  pyproject = true;
 
-  sourceRoot = "source/opentelemetry-semantic-conventions";
+  disabled = pythonOlder "3.8";
 
-  format = "pyproject";
+  sourceRoot = "${opentelemetry-api.src.name}/opentelemetry-semantic-conventions";
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
   ];
 

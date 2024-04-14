@@ -11,6 +11,7 @@
 , jinja2
 , lxml
 , markupsafe
+, platformdirs
 , pycairo
 , pycountry
 , pyflakes
@@ -26,16 +27,16 @@
 
 buildPythonPackage rec {
   pname = "xml2rfc";
-  version = "3.17.3";
+  version = "3.20.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ietf-tools";
     repo = "xml2rfc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5RL4DkWcQRxzi1dhSJlGgoU0BU3aUWOfBNINFKiOwLg=";
+    hash = "sha256-JDJZegJR34aaIzMdq/GYzOpIBH7epe9yHnUaI7OzRes=";
   };
 
   postPatch = ''
@@ -56,6 +57,7 @@ buildPythonPackage rec {
     jinja2
     lxml
     markupsafe
+    platformdirs
     pycountry
     pyflakes
     pypdf2
@@ -85,6 +87,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Tool generating IETF RFCs and drafts from XML sources";
+    mainProgram = "xml2rfc";
     homepage = "https://github.com/ietf-tools/xml2rfc";
     changelog = "https://github.com/ietf-tools/xml2rfc/blob/v${version}/CHANGELOG.md";
     # Well, parts might be considered unfree, if being strict; see:

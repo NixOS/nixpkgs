@@ -18,25 +18,19 @@ in
 
       enable = mkOption {
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to configure xonsh as an interactive shell.
         '';
         type = types.bool;
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.xonsh;
-        defaultText = literalExpression "pkgs.xonsh";
-        example = literalExpression "pkgs.xonsh.override { extraPackages = ps: [ ps.requests ]; }";
-        description = lib.mdDoc ''
-          xonsh package to use.
-        '';
+      package = mkPackageOption pkgs "xonsh" {
+        example = "xonsh.override { extraPackages = ps: [ ps.requests ]; }";
       };
 
       config = mkOption {
         default = "";
-        description = lib.mdDoc "Control file to customize your shell behavior.";
+        description = "Control file to customize your shell behavior.";
         type = types.lines;
       };
 

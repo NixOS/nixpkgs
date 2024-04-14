@@ -25,5 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; unix;
+    mainProgram = "edlin";
   };
 })

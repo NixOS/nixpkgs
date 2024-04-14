@@ -63,6 +63,7 @@ python3Packages.buildPythonApplication {
   };
 
   meta = with lib; {
+    broken = true; # dependencies are not up to date, the project doesn't look well maintained, this doesn't look like it's going in the right direction. I'm happy to handle maintainership to whoever wants to.
     homepage = "https://github.com/openai/chatgpt-retrieval-plugin";
     description = "Tool to search and find personal or work documents by asking questions in everyday language";
     license = licenses.mit;

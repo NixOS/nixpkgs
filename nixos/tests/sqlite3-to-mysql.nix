@@ -19,7 +19,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
             python3Packages.pytest
             python3Packages.pytest-mock
             python3Packages.pytest-timeout
-            python3Packages.factory_boy
+            python3Packages.factory-boy
             python3Packages.docker # only needed so import does not fail
             sqlite3-to-mysql
           ])

@@ -1,0 +1,62 @@
+{
+  "name": "@electron/asar",
+  "description": "Creating Electron app packages",
+  "version": "0.0.0-development",
+  "main": "./lib/asar.js",
+  "types": "./lib/index.d.ts",
+  "bin": {
+    "asar": "./bin/asar.js"
+  },
+  "files": [
+    "bin",
+    "lib",
+    "lib/index.d.ts"
+  ],
+  "engines": {
+    "node": ">=10.12.0"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/electron/asar",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/electron/asar.git"
+  },
+  "bugs": {
+    "url": "https://github.com/electron/asar/issues"
+  },
+  "scripts": {
+    "mocha": "xvfb-maybe electron-mocha --reporter spec && mocha --reporter spec",
+    "test": "npm run lint && npm run mocha",
+    "lint": "tsd && standard",
+    "standard": "standard",
+    "tsd": "tsd"
+  },
+  "standard": {
+    "env": {
+      "mocha": true
+    },
+    "globals": [
+      "BigInt"
+    ]
+  },
+  "tsd": {
+    "directory": "test"
+  },
+  "dependencies": {
+    "chromium-pickle-js": "^0.2.0",
+    "commander": "^5.0.0",
+    "glob": "^7.1.6",
+    "minimatch": "^3.0.4"
+  },
+  "devDependencies": {
+    "@continuous-auth/semantic-release-npm": "^3.0.0",
+    "electron": "^22.0.0",
+    "electron-mocha": "^11.0.2",
+    "lodash": "^4.17.15",
+    "mocha": "^10.1.0",
+    "rimraf": "^3.0.2",
+    "standard": "^14.3.3",
+    "tsd": "^0.25.0",
+    "xvfb-maybe": "^0.2.1"
+  }
+}

@@ -1,10 +1,3 @@
-##
-## Caveat: a copy of configuration-ghc-8.6.x.nix with minor changes:
-##
-##  1. "8.7" strings
-##  2. llvm 6
-##  3. disabled library update: parallel
-##
 { pkgs, haskellLib }:
 
 with haskellLib;
@@ -46,43 +39,96 @@ self: super: {
   process = null;
   rts = null;
   stm = null;
+  system-cxx-std-lib = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_6;
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else doDistribute self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
   unix = null;
   xhtml = null;
 
-  # https://github.com/tibbe/unordered-containers/issues/214
-  unordered-containers = dontCheck super.unordered-containers;
+  #
+  # Version upgrades
+  #
+  th-abstraction = doDistribute self.th-abstraction_0_7_0_0;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_8_2_20240223;
+  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_8_0_2;
+  ghc-lib = doDistribute self.ghc-lib_9_8_1_20231121;
+  megaparsec = doDistribute self.megaparsec_9_6_1;
+  # TODO: remove when aeson updates or launches a revision
+  # see https://github.com/haskell/aeson/issues/1089 and https://github.com/haskell/aeson/pulls/1088
+  aeson = doJailbreak (doDistribute self.aeson_2_2_1_0);
+  attoparsec-aeson = doDistribute self.attoparsec-aeson_2_2_0_1;
+  xmonad = doDistribute self.xmonad_0_18_0;
+  apply-refact = self.apply-refact_0_14_0_0;
+  ormolu = self.ormolu_0_7_4_0;
+  fourmolu = self.fourmolu_0_15_0_0;
+  stylish-haskell = self.stylish-haskell_0_14_6_0;
+  hlint = self.hlint_3_8;
+  ghc-syntax-highlighter = self.ghc-syntax-highlighter_0_0_11_0;
 
-  # Test suite does not compile.
-  data-clist = doJailbreak super.data-clist;  # won't cope with QuickCheck 2.12.x
-  dates = doJailbreak super.dates; # base >=4.9 && <4.12
-  Diff = dontCheck super.Diff;
-  HaTeX = doJailbreak super.HaTeX; # containers >=0.4 && <0.6 is too tight; https://github.com/Daniel-Diaz/HaTeX/issues/126
-  hpc-coveralls = doJailbreak super.hpc-coveralls; # https://github.com/guillaume-nargeot/hpc-coveralls/issues/82
-  http-api-data = doJailbreak super.http-api-data;
-  persistent-sqlite = dontCheck super.persistent-sqlite;
-  system-fileio = dontCheck super.system-fileio;  # avoid dependency on broken "patience"
-  unicode-transforms = dontCheck super.unicode-transforms;
-  wl-pprint-extras = doJailbreak super.wl-pprint-extras; # containers >=0.4 && <0.6 is too tight; https://github.com/ekmett/wl-pprint-extras/issues/17
-  RSA = dontCheck super.RSA; # https://github.com/GaloisInc/RSA/issues/14
-  monad-par = dontCheck super.monad-par;  # https://github.com/simonmar/monad-par/issues/66
-  github = dontCheck super.github; # hspec upper bound exceeded; https://github.com/phadej/github/pull/341
-  binary-orphans = dontCheck super.binary-orphans; # tasty upper bound exceeded; https://github.com/phadej/binary-orphans/commit/8ce857226595dd520236ff4c51fa1a45d8387b33
+  # A given major version of ghc-exactprint only supports one version of GHC.
+  ghc-exactprint = self.ghc-exactprint_1_8_0_0;
+  ghc-exactprint_1_8_0_0 = addBuildDepends [
+    self.Diff
+    self.HUnit
+    self.data-default
+    self.extra
+    self.free
+    self.ghc-paths
+    self.ordered-containers
+    self.silently
+    self.syb
+  ] super.ghc-exactprint_1_8_0_0;
 
-  # https://github.com/jgm/skylighting/issues/55
-  skylighting-core = dontCheck super.skylighting-core;
+  #
+  # Jailbreaks
+  #
+  blaze-svg = doJailbreak super.blaze-svg; # base <4.19
+  commutative-semigroups = doJailbreak super.commutative-semigroups; # base < 4.19
+  diagrams-lib = doJailbreak super.diagrams-lib; # base <4.19, text <2.1
+  diagrams-postscript = doJailbreak super.diagrams-postscript;  # base <4.19, bytestring <0.12
+  diagrams-svg = doJailbreak super.diagrams-svg;  # base <4.19, text <2.1
+  ghc-trace-events = doJailbreak super.ghc-trace-events; # text < 2.1, bytestring < 0.12, base < 4.19
+  primitive-unlifted = doJailbreak super.primitive-unlifted; # bytestring < 0.12
+  statestack = doJailbreak super.statestack; # base < 4.19
+  newtype-generics = doJailbreak super.newtype-generics; # base < 4.19
+  hw-prim = doJailbreak super.hw-prim; # doctest < 0.22, ghc-prim < 0.11, hedgehog < 1.4
+  svg-builder = doJailbreak super.svg-builder; # base <4.19, bytestring <0.12, text <2.1
+  # Too strict bound on base, believe it or not.
+  # https://github.com/judah/terminfo/pull/55#issuecomment-1876894232
+  terminfo_0_4_1_6 = doJailbreak super.terminfo_0_4_1_6;
+  HaskellNet-SSL = doJailbreak super.HaskellNet-SSL; # bytestring >=0.9 && <0.12
+  raven-haskell = doJailbreak super.raven-haskell; # aeson <2.2
+  stripe-concepts = doJailbreak super.stripe-concepts; # text >=1.2.5 && <1.3 || >=2.0 && <2.1
+  stripe-signature = doJailbreak super.stripe-signature; # text >=1.2.5 && <1.3 || >=2.0 && <2.1
+  string-random = doJailbreak super.string-random; # text >=1.2.2.1 && <2.1
+  inflections = doJailbreak super.inflections; # text >=0.2 && <2.1
 
-  # Break out of "yaml >=0.10.4.0 && <0.11": https://github.com/commercialhaskell/stack/issues/4485
-  stack = doJailbreak super.stack;
+  #
+  # Test suite issues
+  #
+  unordered-containers = dontCheck super.unordered-containers; # ChasingBottoms doesn't support base 4.20
+  lifted-base = dontCheck super.lifted-base; # doesn't compile with transformers == 0.6.*
+  hourglass = dontCheck super.hourglass; # umaintained, test suite doesn't compile anymore
+  bsb-http-chunked = dontCheck super.bsb-http-chunked; # umaintained, test suite doesn't compile anymore
+  pcre-heavy = dontCheck super.pcre-heavy; # GHC warnings cause the tests to fail
 
-  # https://github.com/fpco/inline-c/pull/131
-  # and/or https://gitlab.haskell.org/ghc/ghc/-/merge_requests/7739
-  inline-c-cpp =
-    (if isDarwin then appendConfigureFlags ["--ghc-option=-fcompact-unwind"] else x: x)
-    super.inline-c-cpp;
+  #
+  # Other build fixes
+  #
+
+  # 2023-12-23: It needs this to build under ghc-9.6.3.
+  #   A factor of 100 is insufficent, 200 seems seems to work.
+  hip = appendConfigureFlag "--ghc-options=-fsimpl-tick-factor=200" super.hip;
+
+  # Fix build with text-2.x.
+  libmpd = appendPatch (pkgs.fetchpatch
+      { url = "https://github.com/vimus/libmpd-haskell/pull/138.patch";
+        sha256 = "Q4fA2J/Tq+WernBo+UIMdj604ILOMlIYkG4Pr046DfM=";
+      })
+    super.libmpd;
+
 }

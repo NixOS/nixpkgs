@@ -35,5 +35,6 @@ buildGoModule rec {
     homepage = "https://github.com/hionay/tailer";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "tailer";
   };
 }

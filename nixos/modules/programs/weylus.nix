@@ -7,12 +7,12 @@ let
 in
 {
   options.programs.weylus = with types; {
-    enable = mkEnableOption (lib.mdDoc "weylus");
+    enable = mkEnableOption "weylus, which turns your smart phone into a graphic tablet/touch screen for your computer";
 
     openFirewall = mkOption {
       type = bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Open ports needed for the functionality of the program.
       '';
     };
@@ -20,18 +20,13 @@ in
      users = mkOption {
       type = listOf str;
       default = [ ];
-      description = lib.mdDoc ''
+      description = ''
         To enable stylus and multi-touch support, the user you're going to use must be added to this list.
         These users can synthesize input events system-wide, even when another user is logged in - untrusted users should not be added.
       '';
     };
 
-    package = mkOption {
-      type = package;
-      default = pkgs.weylus;
-      defaultText = lib.literalExpression "pkgs.weylus";
-      description = lib.mdDoc "Weylus package to install.";
-    };
+    package = mkPackageOption pkgs "weylus" { };
   };
   config = mkIf cfg.enable {
     networking.firewall = mkIf cfg.openFirewall {

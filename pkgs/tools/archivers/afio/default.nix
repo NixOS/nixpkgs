@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub } :
+{ lib, stdenv, fetchFromGitHub, fetchpatch } :
 
 stdenv.mkDerivation rec {
   version = "2.5.2";
@@ -11,11 +11,20 @@ stdenv.mkDerivation rec {
     sha256 = "1vbxl66r5rp5a1qssjrkfsjqjjgld1cq57c871gd0m4qiq9rmcfy";
   };
 
-  /*
-   * A patch to simplify the installation and for removing the
-   * hard coded dependency on GCC.
-   */
-  patches = [ ./0001-makefile-fix-installation.patch ];
+  patches = [
+    /*
+     * A patch to simplify the installation and for removing the
+     * hard coded dependency on GCC.
+     */
+    ./0001-makefile-fix-installation.patch
+
+    # fix darwin build (include headers)
+    (fetchpatch {
+      url = "https://github.com/kholtman/afio/pull/18/commits/a726614f99913ced08f6ae74091c56969d5db210.patch";
+      name = "darwin-headers.patch";
+      hash = "sha256-pK8mN29fC2mL4B69Fv82dWFIQMGwquyl825OBDTxzpo=";
+    })
+  ];
 
   installFlags = [ "DESTDIR=$(out)" ];
 
@@ -29,5 +38,6 @@ stdenv.mkDerivation rec {
      * a comprehensive discussion.
      */
     license = lib.licenses.free;
+    mainProgram = "afio";
   };
 }

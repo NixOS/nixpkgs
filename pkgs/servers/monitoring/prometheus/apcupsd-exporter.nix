@@ -11,12 +11,13 @@ buildGoModule rec {
     sha256 = "sha256-c0LsUqpJbmWQmbmSGdEy7Bbk20my6iWNLeqtU5BjYlw=";
   };
 
-  vendorSha256 = "sha256-bvLwHLviIAGmxYY1O0wFDWAMginEUklicrbjIbbPuUw=";
+  vendorHash = "sha256-bvLwHLviIAGmxYY1O0wFDWAMginEUklicrbjIbbPuUw=";
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) apcupsd; };
 
   meta = with lib; {
     description = "Provides a Prometheus exporter for the apcupsd Network Information Server (NIS)";
+    mainProgram = "apcupsd_exporter";
     homepage = "https://github.com/mdlayher/apcupsd_exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ _1000101 mdlayher ];

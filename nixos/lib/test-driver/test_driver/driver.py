@@ -1,14 +1,20 @@
-from contextlib import contextmanager
-from pathlib import Path
-from typing import Any, Dict, Iterator, List, Union, Optional, Callable, ContextManager
 import os
 import re
+import signal
 import tempfile
+import threading
+from contextlib import contextmanager
+from pathlib import Path
+from typing import Any, Callable, ContextManager, Dict, Iterator, List, Optional, Union
+
+from colorama import Fore, Style
 
 from test_driver.logger import rootlog
 from test_driver.machine import Machine, NixStartScript, retry
-from test_driver.vlan import VLan
 from test_driver.polling_condition import PollingCondition
+from test_driver.vlan import VLan
+
+SENTINEL = object()
 
 
 def get_tmp_dir() -> Path:
@@ -41,6 +47,8 @@ class Driver:
     vlans: List[VLan]
     machines: List[Machine]
     polling_conditions: List[PollingCondition]
+    global_timeout: int
+    race_timer: threading.Timer
 
     def __init__(
         self,
@@ -49,9 +57,12 @@ class Driver:
         tests: str,
         out_dir: Path,
         keep_vm_state: bool = False,
+        global_timeout: int = 24 * 60 * 60 * 7,
     ):
         self.tests = tests
         self.out_dir = out_dir
+        self.global_timeout = global_timeout
+        self.race_timer = threading.Timer(global_timeout, self.terminate_test)
 
         tmp_dir = get_tmp_dir()
 
@@ -82,6 +93,7 @@ class Driver:
 
     def __exit__(self, *_: Any) -> None:
         with rootlog.nested("cleanup"):
+            self.race_timer.cancel()
             for machine in self.machines:
                 machine.release()
 
@@ -144,6 +156,10 @@ class Driver:
 
     def run_tests(self) -> None:
         """Run the test script (for non-interactive test runs)"""
+        rootlog.info(
+            f"Test will time out and terminate in {self.global_timeout} seconds"
+        )
+        self.race_timer.start()
         self.test_script()
         # TODO: Collect coverage data
         for machine in self.machines:
@@ -161,24 +177,75 @@ class Driver:
         with rootlog.nested("wait for all VMs to finish"):
             for machine in self.machines:
                 machine.wait_for_shutdown()
+            self.race_timer.cancel()
 
-    def create_machine(self, args: Dict[str, Any]) -> Machine:
+    def terminate_test(self) -> None:
+        # This will be usually running in another thread than
+        # the thread actually executing the test script.
+        with rootlog.nested("timeout reached; test terminating..."):
+            for machine in self.machines:
+                machine.release()
+            # As we cannot `sys.exit` from another thread
+            # We can at least force the main thread to get SIGTERM'ed.
+            # This will prevent any user who caught all the exceptions
+            # to swallow them and prevent itself from terminating.
+            os.kill(os.getpid(), signal.SIGTERM)
+
+    def create_machine(
+        self,
+        start_command: str | dict,
+        *,
+        name: Optional[str] = None,
+        keep_vm_state: bool = False,
+    ) -> Machine:
+        # Legacy args handling
+        # FIXME: remove after 24.05
+        if isinstance(start_command, dict):
+            if name is not None or keep_vm_state:
+                raise TypeError(
+                    "Dictionary passed to create_machine must be the only argument"
+                )
+
+            args = start_command
+            start_command = args.pop("startCommand", SENTINEL)
+
+            if start_command is SENTINEL:
+                raise TypeError(
+                    "Dictionary passed to create_machine must contain startCommand"
+                )
+
+            if not isinstance(start_command, str):
+                raise TypeError(
+                    f"startCommand must be a string, got: {repr(start_command)}"
+                )
+
+            name = args.pop("name", None)
+            keep_vm_state = args.pop("keep_vm_state", False)
+
+            if args:
+                raise TypeError(
+                    f"Unsupported arguments passed to create_machine: {args}"
+                )
+
+            rootlog.warning(
+                Fore.YELLOW
+                + Style.BRIGHT
+                + "WARNING: Using create_machine with a single dictionary argument is deprecated and will be removed in NixOS 24.11"
+                + Style.RESET_ALL
+            )
+        # End legacy args handling
+
         tmp_dir = get_tmp_dir()
 
-        if args.get("startCommand"):
-            start_command: str = args.get("startCommand", "")
-            cmd = NixStartScript(start_command)
-            name = args.get("name", cmd.machine_name)
-        else:
-            cmd = Machine.create_startcommand(args)  # type: ignore
-            name = args.get("name", "machine")
+        cmd = NixStartScript(start_command)
+        name = name or cmd.machine_name
 
         return Machine(
             tmp_dir=tmp_dir,
             out_dir=self.out_dir,
             start_command=cmd,
             name=name,
-            keep_vm_state=args.get("keep_vm_state", False),
+            keep_vm_state=keep_vm_state,
         )
 
     def serial_stdout_on(self) -> None:

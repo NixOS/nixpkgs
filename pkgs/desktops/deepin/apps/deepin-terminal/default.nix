@@ -1,12 +1,10 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , nixosTests
 , dtkwidget
 , qt5integration
 , qt5platform-plugins
-, dde-qt-dbus-factory
 , cmake
 , qtbase
 , qtsvg
@@ -14,7 +12,6 @@
 , qtx11extras
 , pkg-config
 , wrapQtAppsHook
-, at-spi2-core
 , libsecret
 , chrpath
 , lxqt
@@ -22,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-terminal";
-  version = "6.0.5";
+  version = "6.0.12";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-pRTdvR3hyiJVpi38Ex58X74ns+rSWuytsOXemvdW1Rk=";
+    hash = "sha256-VAF6Dn9cGmipQhAKhEOLd7lJyYWySOJ+rehc9L8pfL0=";
   };
 
   cmakeFlags = [ "-DVERSION=${version}" ];
@@ -47,9 +44,7 @@ stdenv.mkDerivation rec {
     qtbase
     qtsvg
     dtkwidget
-    dde-qt-dbus-factory
     qtx11extras
-    at-spi2-core
     libsecret
     chrpath
   ];
@@ -60,6 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Terminal emulator with workspace, multiple windows, remote management, quake mode and other features";
+    mainProgram = "deepin-terminal";
     homepage = "https://github.com/linuxdeepin/deepin-terminal";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

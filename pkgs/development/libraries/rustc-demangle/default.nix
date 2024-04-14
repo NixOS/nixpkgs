@@ -1,4 +1,4 @@
-{ rustPlatform, fetchFromGitHub, rust, lib, stdenv }:
+{ rustPlatform, fetchFromGitHub, lib, stdenv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rustc-demangle";
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     mkdir -p $out/lib
-    cp target/${rust.toRustTargetSpec stdenv.hostPlatform}/release/librustc_demangle.so $out/lib
+    cp target/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/librustc_demangle.so $out/lib
     cp -R crates/capi/include $out
   '';
 

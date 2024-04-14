@@ -1,12 +1,13 @@
 { lib, stdenv, fetchFromGitHub, python3Packages, libunistring
 , harfbuzz, fontconfig, pkg-config, ncurses, imagemagick
 , libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor
-, libxkbcommon, libXi, libXext, wayland-protocols, wayland
+, libxkbcommon, libXi, libXext, wayland-protocols, wayland, xxHash
 , lcms2
 , librsync
 , openssl
 , installShellFiles
 , dbus
+, sudo
 , Libsystem
 , Cocoa
 , Kernel
@@ -17,40 +18,43 @@
 , libpng
 , python3
 , zlib
+, simde
 , bashInteractive
 , zsh
 , fish
 , nixosTests
-, go
-, buildGoModule
+, go_1_22
+, buildGo122Module
 , nix-update-script
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.29.2";
+  version = "0.33.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ureJHG6Jh4bsXqQZnGwY5Hlq7sXxYX3iTajb8ZkpZw8=";
+    hash = "sha256-E6gFGgySXs2oCS4Ipevbr9aPWzF4tb4Arl4w+4lQ+wg=";
   };
 
-  goModules = (buildGoModule {
+  goModules = (buildGo122Module {
     pname = "kitty-go-modules";
     inherit src version;
-    vendorHash = "sha256-jk2EcYVuhV/UQfHAIfpnn8ZIZnwjA/o8YRXmpoC85Vc=";
+    vendorHash = "sha256-ypSZHJpk9wTXLH9sbmaSQB28iOIpv2nDPlgweM0Ldhs=";
   }).goModules;
 
   buildInputs = [
     harfbuzz
     ncurses
+    simde
     lcms2
     librsync
     openssl.dev
+    xxHash
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
     Kernel
@@ -76,7 +80,7 @@ buildPythonApplication rec {
     sphinx-copybutton
     sphinxext-opengraph
     sphinx-inline-tabs
-    go
+    go_1_22
   ] ++ lib.optionals stdenv.isDarwin [
     imagemagick
     libicns  # For the png2icns tool.
@@ -102,9 +106,6 @@ buildPythonApplication rec {
   hardeningDisable = [
     # causes redefinition of _FORTIFY_SOURCE
     "fortify3"
-  ] ++ lib.optionals stdenv.cc.isClang [
-    # Causes build failure due to warning
-    "strictoverflow"
   ];
 
   CGO_ENABLED = 0;
@@ -130,17 +131,17 @@ buildPythonApplication rec {
     runHook preBuild
     ${ lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) "export MACOSX_DEPLOYMENT_TARGET=11" }
     ${if stdenv.isDarwin then ''
-      ${python.pythonForBuild.interpreter} setup.py build ${darwinOptions}
+      ${python.pythonOnBuildForHost.interpreter} setup.py build ${darwinOptions}
       make docs
-      ${python.pythonForBuild.interpreter} setup.py kitty.app ${darwinOptions}
+      ${python.pythonOnBuildForHost.interpreter} setup.py kitty.app ${darwinOptions}
     '' else ''
-      ${python.pythonForBuild.interpreter} setup.py linux-package \
+      ${python.pythonOnBuildForHost.interpreter} setup.py linux-package \
       --egl-library='${lib.getLib libGL}/lib/libEGL.so.1' \
       --startup-notification-library='${libstartup_notification}/lib/libstartup-notification-1.so' \
       --canberra-library='${libcanberra}/lib/libcanberra.so' \
       --fontconfig-library='${fontconfig.lib}/lib/libfontconfig.so' \
       ${commonOptions}
-      ${python.pythonForBuild.interpreter} setup.py build-launcher
+      ${python.pythonOnBuildForHost.interpreter} setup.py build-launcher
     ''}
     runHook postBuild
   '';
@@ -152,13 +153,17 @@ buildPythonApplication rec {
     bashInteractive
     zsh
     fish
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    # integration tests need sudo
+    sudo
   ];
 
   # skip failing tests due to darwin sandbox
   preCheck = lib.optionalString stdenv.isDarwin ''
     substituteInPlace kitty_tests/file_transmission.py \
       --replace test_file_get dont_test_file_get \
-      --replace test_path_mapping_receive dont_test_path_mapping_receive
+      --replace test_path_mapping_receive dont_test_path_mapping_receive \
+      --replace test_transfer_send dont_test_transfer_send
     substituteInPlace kitty_tests/shell_integration.py \
       --replace test_fish_integration dont_test_fish_integration
     substituteInPlace kitty_tests/shell_integration.py \
@@ -229,7 +234,9 @@ buildPythonApplication rec {
   '';
 
   passthru = {
-    tests.test = nixosTests.terminal-emulators.kitty;
+    tests = lib.optionalAttrs stdenv.isLinux {
+      default = nixosTests.terminal-emulators.kitty;
+    };
     updateScript = nix-update-script {};
   };
 
@@ -237,8 +244,12 @@ buildPythonApplication rec {
     homepage = "https://github.com/kovidgoyal/kitty";
     description = "A modern, hackable, featureful, OpenGL based terminal emulator";
     license = licenses.gpl3Only;
-    changelog = "https://sw.kovidgoyal.net/kitty/changelog/";
+    changelog = [
+      "https://sw.kovidgoyal.net/kitty/changelog/"
+      "https://github.com/kovidgoyal/kitty/blob/v${version}/docs/changelog.rst"
+    ];
     platforms = platforms.darwin ++ platforms.linux;
-    maintainers = with maintainers; [ tex rvolosatovs Luflosi adamcstephens ];
+    mainProgram = "kitty";
+    maintainers = with maintainers; [ tex rvolosatovs Luflosi adamcstephens kashw2 ];
   };
 }

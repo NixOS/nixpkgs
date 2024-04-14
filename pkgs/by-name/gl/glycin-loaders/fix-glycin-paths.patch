@@ -1,0 +1,13 @@
+diff --git a/vendor/glycin/src/dbus.rs b/vendor/glycin/src/dbus.rs
+index aa5a876..4f37420 100644
+--- a/vendor/glycin/src/dbus.rs
++++ b/vendor/glycin/src/dbus.rs
+@@ -43,7 +43,7 @@ impl<'a> DecoderProcess<'a> {
+ 
+         let (bin, args, final_arg) = match sandbox_mechanism {
+             SandboxMechanism::Bwrap => (
+-                "bwrap".into(),
++                "@bwrap@".into(),
+                 vec![
+                     "--unshare-all",
+                     "--die-with-parent",

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, perl
 , gmp
 , mpfr
 , flint
@@ -15,6 +14,7 @@
 , ninja
 , ant
 , openjdk
+, perl
 , perlPackages
 , makeWrapper
 }:
@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "polymake";
-  version = "4.10";
+  version = "4.11";
 
   src = fetchurl {
     # "The minimal version is a packager friendly version which omits
     # the bundled sources of cdd, lrs, libnormaliz, nauty and jReality."
     url = "https://polymake.org/lib/exe/fetch.php/download/polymake-${version}-minimal.tar.bz2";
-    sha256 = "sha256-YDiyZtbUC76ZVe3oRtzPRBfkEU+qh+d1ZWFhzUyi+Pg=";
+    sha256 = "sha256-XfbwrNcAEZvQxLV2Z2KFL/vYV3ZbXcyIgC/10hCK3SM=";
   };
 
   nativeBuildInputs = [

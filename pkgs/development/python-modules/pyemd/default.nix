@@ -3,8 +3,11 @@
 , pythonOlder
 , fetchPypi
 , cython
+, oldest-supported-numpy
 , packaging
 , setuptools
+, setuptools-scm
+, wheel
 , numpy
 , pytestCheckHook
 }:
@@ -24,8 +27,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cython
+    numpy
+    oldest-supported-numpy
     packaging
     setuptools
+    setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -40,6 +47,5 @@ buildPythonPackage rec {
     description = "A Python wrapper for Ofir Pele and Michael Werman's implementation of the Earth Mover's Distance";
     homepage = "https://github.com/wmayner/pyemd";
     license = licenses.mit;
-    maintainers = with maintainers; [ rvl ];
   };
 }

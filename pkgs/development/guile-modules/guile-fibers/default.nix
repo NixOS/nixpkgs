@@ -19,17 +19,23 @@ stdenv.mkDerivation rec {
     hash = "sha256-jJKA5JEHsmqQ/IKb1aNmOtoVaGKNjcgTKyo5VCiJbXM=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     autoreconfHook
+    guile
     pkg-config
+    texinfo # for makeinfo
   ];
+
   buildInputs = [
     guile
     libevent
-    texinfo
   ];
 
-  autoreconfPhase = "./autogen.sh";
+  makeFlags = [
+    "GUILE_AUTO_COMPILE=0"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/wingo/fibers";

@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
+    mainProgram = "fuse-7z-ng";
   };
 }

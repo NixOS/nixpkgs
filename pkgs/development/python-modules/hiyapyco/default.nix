@@ -1,20 +1,26 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , pyyaml
 , jinja2
 }:
 
 buildPythonPackage rec {
   pname = "hiyapyco";
-  version = "0.5.1";
+  version = "0.5.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zerwes";
     repo = pname;
     rev = "refs/tags/release-${version}";
-    hash = "sha256-MVJoMnEi+319ZkhffYWYVi/wj0Ihm0nfVeEXvx7Ac/4=";
+    hash = "sha256-hKTqdclWMKTGeRtQuNj0gYdiGFovFh5FQ2rRjCgbvBM=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     pyyaml
@@ -22,8 +28,12 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
+
     set -e
     find test -name 'test_*.py' -exec python {} \;
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "hiyapyco" ];

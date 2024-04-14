@@ -2,9 +2,11 @@
 , cargo
 , cmake
 , fetchFromGitHub
-, fetchpatch
 , go
 , lib
+, libcap
+, libgcrypt
+, libgpg-error
 , libsecret
 , pkg-config
 , polkit
@@ -14,6 +16,7 @@
 , qtnetworkauth
 , qtsvg
 , qttools
+, qtwayland
 , qtwebsockets
 , rustPlatform
 , rustc
@@ -24,29 +27,17 @@
 
 let
   pname = "mozillavpn";
-  version = "2.15.0";
+  version = "2.21.0";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-eyYrA8ysfmXxlHNUBkGU9ioYrnbx3L1wP9byNz9L/MA=";
+    hash = "sha256-XBvKSgMuWgMuV+is2G028UNQ4hID7tKiHFuMdPOZcsI=";
   };
-  patches = [
-    # Force version downgrade for openssl and openssl-sys crates
-    (fetchpatch {
-      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/commit/5911071ea37d12401af32dcdf2a542ca5049bf2f.patch";
-      hash = "sha256-b3yOgn3Et0sYpqzUUdmlGIbzZSz13Q9HW56hyQqRnHc=";
-      revert = true;
-    })
-    # [2.15] Restore qtglean/Cargo.lock
-    (fetchpatch {
-      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/pull/7026/commits/13c1b77ee4249883a33b6ac240b3ca143b485ba1.patch";
-      hash = "sha256-L4D71zreDMLAIbP4x1as9QdNmMC1snUZSwlkKehg5yM=";
-    })
-  ];
+  patches = [ ];
 
-  netfilter-goModules = (buildGoModule {
+  netfilterGoModules = (buildGoModule {
     inherit pname version src patches;
     modRoot = "linux/netfilter";
     vendorHash = "sha256-Cmo0wnl0z5r1paaEf1MhCPbInWeoMhGjnxCxGh0cyO8=";
@@ -56,19 +47,19 @@ let
     inherit src patches;
     name = "${pname}-${version}-extension-bridge";
     preBuild = "cd extension/bridge";
-    hash = "sha256-R/9ePEhc4qVgg3WC5ng+cD88K/N3PTnx4QWyaZZfRds=";
+    hash = "sha256-1BXlp9AC9oQo/UzCtgNWVv8Er2ERoDLKdlTYXLzodMQ=";
   };
   signatureDeps = rustPlatform.fetchCargoTarball {
     inherit src patches;
     name = "${pname}-${version}-signature";
     preBuild = "cd signature";
-    hash = "sha256-27g2qnnUrxbThM1cHZquQgWQLWDtZaBnlf8PjvQtBJU=";
+    hash = "sha256-GtkDkeFdPsLuTpZh5UqIhFMpzW3HMkbz7npryOQkkGw=";
   };
   qtgleanDeps = rustPlatform.fetchCargoTarball {
     inherit src patches;
     name = "${pname}-${version}-qtglean";
     preBuild = "cd qtglean";
-    hash = "sha256-cW+nf+Dho+eSzOBo3xhxki7NXpg0wd5ZM9OMA6iOUl4=";
+    hash = "sha256-HFmRcfxCcc83IPPIovbf3jNftp0olKQ6RzV8vPpCYAM=";
   };
 
 in
@@ -76,15 +67,19 @@ stdenv.mkDerivation {
   inherit pname version src patches;
 
   buildInputs = [
+    libcap
+    libgcrypt
+    libgpg-error
     libsecret
-    polkit
     qt5compat
     qtbase
     qtnetworkauth
     qtsvg
+    qtwayland
     qtwebsockets
   ];
   nativeBuildInputs = [
+    cargo
     cmake
     go
     pkg-config
@@ -92,8 +87,8 @@ stdenv.mkDerivation {
     python3.pkgs.glean-parser
     python3.pkgs.pyyaml
     python3.pkgs.setuptools
+    qttools
     rustPlatform.cargoSetupHook
-    cargo
     rustc
     wrapQtAppsHook
   ];
@@ -117,22 +112,15 @@ stdenv.mkDerivation {
   dontCargoSetupPostUnpack = true;
 
   postPatch = ''
-    substituteInPlace src/apps/vpn/platforms/linux/daemon/org.mozilla.vpn.dbus.service --replace /usr/bin/mozillavpn "$out/bin/mozillavpn"
-
-    substituteInPlace scripts/addon/build.py \
-      --replace 'qtbinpath = args.qtpath' 'qtbinpath = "${qttools.dev}/bin"' \
-      --replace 'rcc = os.path.join(qtbinpath, rcc_bin)' 'rcc = "${qtbase.dev}/libexec/rcc"'
-
-    substituteInPlace src/apps/vpn/cmake/linux.cmake \
+    substituteInPlace src/cmake/linux.cmake \
       --replace '/etc/xdg/autostart' "$out/etc/xdg/autostart" \
-      --replace '${"$"}{POLKIT_POLICY_DIR}' "$out/share/polkit-1/actions" \
       --replace '/usr/share/dbus-1' "$out/share/dbus-1" \
       --replace '${"$"}{SYSTEMD_UNIT_DIR}' "$out/lib/systemd/system"
 
     substituteInPlace extension/CMakeLists.txt \
       --replace '/etc' "$out/etc"
 
-    ln -s '${netfilter-goModules}' linux/netfilter/vendor
+    ln -s '${netfilterGoModules}' linux/netfilter/vendor
 
     pushd extension/bridge
     cargoDepsCopy="$extensionBridgeDepsCopy" cargoSetupPostPatchHook
@@ -161,6 +149,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Client for the Mozilla VPN service";
+    mainProgram = "mozillavpn";
     homepage = "https://vpn.mozilla.org/";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ andersk ];

@@ -42,13 +42,13 @@ let
 
 in stdenv.mkDerivation (finalAttrs: {
   pname = "nanomq";
-  version = "0.18.2";
+  version = "0.20.8";
 
   src = fetchFromGitHub {
     owner = "emqx";
     repo = "nanomq";
     rev = finalAttrs.version;
-    hash = "sha256-XGJBBuRSL3InXUMGxOttdbt0zmI1APFlc4IvwC2up8g=";
+    hash = "sha256-VCKlXQ7qvBab+wRDnJ6EUA5qaQ36gTFfuerN1GU6sW0=";
     fetchSubmodules = true;
   };
 
@@ -71,7 +71,7 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DNNG_ENABLE_TLS=ON"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-return-type";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-return-type -Wno-implicit-function-declaration -Wno-error=implicit-int";
 
   # disabled by default - not 100% reliable and making nanomq depend on
   # mosquitto would annoy people

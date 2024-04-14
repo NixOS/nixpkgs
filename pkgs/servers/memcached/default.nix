@@ -1,12 +1,12 @@
 {lib, stdenv, fetchurl, cyrus_sasl, libevent, nixosTests }:
 
 stdenv.mkDerivation rec {
-  version = "1.6.21";
+  version = "1.6.24";
   pname = "memcached";
 
   src = fetchurl {
     url = "https://memcached.org/files/${pname}-${version}.tar.gz";
-    sha256 = "sha256-x4iYDvxBfdXZPEQrHIuHafsgGIlsKd44h9IqLxQ9ou4=";
+    sha256 = "sha256-+QXsCzhDKoqAvM0E6Q501ey6mLj2R+XWHku1QIWnpCI=";
   };
 
   configureFlags = [
@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = [ maintainers.coconnor ];
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "memcached";
   };
   passthru.tests = {
     smoke-tests = nixosTests.memcached;

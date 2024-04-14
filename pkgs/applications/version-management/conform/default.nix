@@ -2,15 +2,16 @@
 
 buildGoModule rec {
   pname = "conform";
-  version = "0.1.0-alpha.27";
+  version = "0.1.0-alpha.29";
 
   src = fetchFromGitHub {
     owner = "siderolabs";
     repo = "conform";
     rev = "v${version}";
-    sha256 = "sha256-lIXkflWQcUcmRDX9iSszFLKpI8nSgkCCB2+GQn07+DM=";
+    hash = "sha256-5knN+lTedUdgWG8rb3zuJAxx9N0lt7LjJvmSJhdTSgw=";
   };
-  vendorSha256 = "sha256-Oigt7tAK4jhBQtfG1wdLHqi11NWu6uJn5fmuqTmR76E=";
+
+  vendorHash = "sha256-hDdNYXy5NIrlqT6yyOglFg2v7HOM9nE+oh7mx2kLdnQ=";
 
   ldflags = [
     "-s"
@@ -25,5 +26,6 @@ buildGoModule rec {
     homepage = "https://github.com/siderolabs/conform";
     license = licenses.mpl20;
     maintainers = with maintainers; [ jmgilman jk ];
+    mainProgram = "conform";
   };
 }

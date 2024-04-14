@@ -9,6 +9,8 @@
 , sha256
 , odd-unstable ? true
 , patchlevel-unstable ? true
+, passthru ? { }
+, meta ? { }
 , ...
 } @ args:
 
@@ -22,9 +24,7 @@ let
   concatAttrLists = attrsets:
     zipAttrsWithNames (filterAttrNames isList (head attrsets)) (_: concatLists) attrsets;
 
-  template = rec {
-    inherit pname version;
-
+  template = {
     nativeBuildInputs = [ pkg-config xfce4-dev-tools wrapGAppsHook ];
     buildInputs = [ hicolor-icon-theme ];
     configureFlags = [ "--enable-maintainer-mode" ];
@@ -41,19 +41,21 @@ let
 
     pos = builtins.unsafeGetAttrPos "pname" args;
 
-    passthru.updateScript = gitUpdater {
-      inherit rev-prefix odd-unstable patchlevel-unstable;
-    };
+    passthru = {
+      updateScript = gitUpdater {
+        inherit rev-prefix odd-unstable patchlevel-unstable;
+      };
+    } // passthru;
 
     meta = with lib; {
       homepage = "https://gitlab.xfce.org/${category}/${pname}";
       license = licenses.gpl2Plus; # some libraries are under LGPLv2+
       platforms = platforms.linux;
-    };
+    } // meta;
   };
 
-  publicArgs = removeAttrs args [ "category" "pname" "sha256" ];
+  publicArgs = removeAttrs args [ "category" "sha256" ];
 in
 
-stdenv.mkDerivation (recursiveUpdate template publicArgs // concatAttrLists [ template args ])
+stdenv.mkDerivation (publicArgs // template // concatAttrLists [ template args ])
 # TODO [ AndersonTorres ]: verify if it allows using hash attribute as an option to sha256

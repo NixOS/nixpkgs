@@ -12,7 +12,7 @@
 , libiconv
 , sqlite
 , postgresql
-, mariadb
+, libmysqlclient
 , zlib
 }:
 
@@ -25,15 +25,15 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "diesel-cli";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchCrate {
     inherit version;
     crateName = "diesel_cli";
-    hash = "sha256-FdmjfywvDD3mo1d1pUQMYvebo5AUTa99gQbQuOWmZZk=";
+    hash = "sha256-fpvC9C30DJy5ih+sFTTMoiykUHqG6OzDhF9jvix1Ctg=";
   };
 
-  cargoHash = "sha256-onPzM9E53VUogZdIu3jAeB4dL3MC2FP3b6QWZ5Tr3j0=";
+  cargoHash = "sha256-nPmUCww8sOJwnG7+uIflLPgT87xPX0s7g0AcuDKhY2I=";
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
     ++ optional (stdenv.isDarwin && mysqlSupport) libiconv
     ++ optional sqliteSupport sqlite
     ++ optional postgresqlSupport postgresql
-    ++ optionals mysqlSupport [ mariadb zlib ];
+    ++ optionals mysqlSupport [ libmysqlclient zlib ];
 
   buildNoDefaultFeatures = true;
   buildFeatures = optional sqliteSupport "sqlite"

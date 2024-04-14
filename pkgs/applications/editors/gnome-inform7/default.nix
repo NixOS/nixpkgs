@@ -23,10 +23,10 @@ let
       docbook2x
       docbook-xsl-nons
       wrapGAppsHook
+      gobject-introspection
     ];
     buildInputs = [
       gtk3
-      gobject-introspection
       vala gtk-doc
     ];
   });
@@ -50,10 +50,10 @@ let
       python3
       glib
       wrapGAppsHook
+      gobject-introspection
     ];
     buildInputs = [
       gtk3
-      gobject-introspection
       vala
       gtk-doc
       gst_all_1.gstreamer
@@ -113,5 +113,6 @@ in stdenv.mkDerivation {
     license = licenses.gpl3Only;
     maintainers = [ maintainers.fitzgibbon ];
     platforms = platforms.linux;
+    mainProgram = "gnome-inform7";
   };
 }

@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/nothings/stb";
     license = licenses.publicDomain;
     platforms = platforms.all;
-    maintainers = with maintainers; [ jfrankenau ];
+    maintainers = with maintainers; [ ];
   };
 }

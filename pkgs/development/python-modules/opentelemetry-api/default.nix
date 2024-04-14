@@ -12,32 +12,34 @@
 }:
 
 let
-  self = buildPythonPackage {
+  self = buildPythonPackage rec {
     pname = "opentelemetry-api";
-    version = "1.18.0";
-    disabled = pythonOlder "3.7";
+    version = "1.23.0";
+    pyproject = true;
+
+    disabled = pythonOlder "3.8";
 
     # to avoid breakage, every package in opentelemetry-python must inherit this version, src, and meta
     src = fetchFromGitHub {
       owner = "open-telemetry";
       repo = "opentelemetry-python";
-      rev = "refs/tags/v${self.version}";
-      hash = "sha256-8xf4TqEkBeueejQBckFGwBNN4Gyo+/7/my6Z1Mnei5Q=";
+      rev = "refs/tags/v${version}";
+      hash = "sha256-Ge/DjVG7ajoS0nJLZxtfn4Mmx0SffAE/91dViA5qWAA=";
     };
 
-    sourceRoot = "source/opentelemetry-api";
-
-    format = "pyproject";
+    sourceRoot = "${src.name}/opentelemetry-api";
 
     nativeBuildInputs = [
-      hatchling
       pythonRelaxDepsHook
     ];
 
-    propagatedBuildInputs = [
+    build-system = [
+      hatchling
+    ];
+
+    dependencies = [
       deprecated
       importlib-metadata
-      setuptools
     ];
 
     pythonRelaxDeps = [

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "okteto";
-  version = "2.18.0";
+  version = "2.25.4";
 
   src = fetchFromGitHub {
     owner = "okteto";
     repo = "okteto";
     rev = version;
-    hash = "sha256-u0Ue5padTT2hPEta0ysm7W2oR1/FMFyTZd9yuciCehU=";
+    hash = "sha256-F3tvk3vC6h8fJ2hZMKo2eQ0uUj0UsK7MEujo//wXJi0=";
   };
 
-  vendorHash = "sha256-ruDXfDwVmMLFsIF+YV4CryEPSeU2cEul9FfRiApII9g=";
+  vendorHash = "sha256-+Adnveutg8soqK2Zwn2SNq7SEHd/Z91diHbPYHrGVrA=";
 
   postPatch = ''
     # Disable some tests that need file system & network access.
@@ -47,6 +47,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Develop your applications directly in your Kubernetes Cluster";
+    mainProgram = "okteto";
     homepage = "https://okteto.com/";
     license = licenses.asl20;
     maintainers = with maintainers; [ aaronjheng ];

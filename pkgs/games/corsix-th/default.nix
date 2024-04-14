@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "corsix-th";
-  version = "0.66";
+  version = "0.67";
 
   src = fetchFromGitHub {
     owner = "CorsixTH";
     repo = "CorsixTH";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-GsZU2FHcFRlwN3hnFTyQmUK6kJLwnarKDtvg+DDc+mk=";
+    hash = "sha256-WA/VJqHXzBfVUBNtxCVsGBRzSRQ0pvDvAy03ntc0KZE=";
   };
 
   luaEnv = lua.withPackages(p: with p; [ luafilesystem lpeg luasec luasocket ]);
@@ -35,7 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A reimplementation of the 1997 Bullfrog business sim Theme Hospital.";
+    description = "A reimplementation of the 1997 Bullfrog business sim Theme Hospital";
+    mainProgram = "corsix-th";
     homepage = "https://corsixth.com/";
     license = licenses.mit;
     maintainers = with maintainers; [ hughobrien ];

@@ -12,18 +12,19 @@
 # tests
 , pytest-timeout
 , pytestCheckHook
+, pytest_7
 }:
 
 buildPythonPackage rec {
   pname = "lightning-utilities";
-  version = "0.9.0";
+  version = "0.10.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "utilities";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vSeHtvsIt4L4qJCVlTPVjIjd62+08JWBnr9+9+ujOfw=";
+    hash = "sha256-kP7BllA9FR/nMNTxRCxmG6IJYHz/Nxqb1HoF9KxuKl8=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +42,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-timeout
-    pytestCheckHook
+    (pytestCheckHook.override { pytest = pytest_7; })
   ];
 
   disabledTests = [
@@ -71,6 +72,6 @@ buildPythonPackage rec {
     description = "Common Python utilities and GitHub Actions in Lightning Ecosystem";
     homepage = "https://github.com/Lightning-AI/utilities";
     license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

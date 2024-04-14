@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://bitmath.org/code/mtdev/";
     description = "Multitouch Protocol Translation Library";
+    mainProgram = "mtdev-test";
     longDescription = ''
       The mtdev is a stand-alone library which transforms all variants of
       kernel MT events to the slotted type B protocol. The events put into

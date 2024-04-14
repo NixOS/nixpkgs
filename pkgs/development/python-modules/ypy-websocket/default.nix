@@ -9,12 +9,13 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonRelaxDepsHook
+, uvicorn
 , websockets
 }:
 
 buildPythonPackage rec {
   pname = "ypy-websocket";
-  version = "0.9.0";
+  version = "0.12.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "y-crdt";
     repo = "ypy-websocket";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dHcXJavzR1BDAM9Xjm144gfNMSDEkenumI3POBfCjvQ=";
+    hash = "sha256-48x+MUhev9dErC003XOP3oGKd5uOghlBFgcR8Nm/0xs=";
   };
 
   pythonRelaxDeps = [
@@ -48,6 +49,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
+    uvicorn
     websockets
   ];
 

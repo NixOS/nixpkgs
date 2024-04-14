@@ -7,7 +7,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "adguardhome";
-  version = "0.107.35";
+  version = "0.107.36";
   src = sources.${system} or (throw "Source for ${pname} is not available for ${system}");
 
   installPhase = ''
@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ numkem iagoq rhoriguchi ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Only;
+    mainProgram = "adguardhome";
   };
 }

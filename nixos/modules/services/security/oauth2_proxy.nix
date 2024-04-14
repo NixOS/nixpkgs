@@ -85,16 +85,9 @@ let
 in
 {
   options.services.oauth2_proxy = {
-    enable = mkEnableOption (lib.mdDoc "oauth2_proxy");
+    enable = mkEnableOption "oauth2_proxy";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.oauth2-proxy;
-      defaultText = literalExpression "pkgs.oauth2-proxy";
-      description = lib.mdDoc ''
-        The package that provides oauth2-proxy.
-      '';
-    };
+    package = mkPackageOption pkgs "oauth2-proxy" { };
 
     ##############################################
     # PROVIDER configuration
@@ -117,7 +110,7 @@ in
         "oidc"
       ];
       default = "google";
-      description = lib.mdDoc ''
+      description = ''
         OAuth provider.
       '';
     };
@@ -125,14 +118,14 @@ in
     approvalPrompt = mkOption {
       type = types.enum ["force" "auto"];
       default = "force";
-      description = lib.mdDoc ''
+      description = ''
         OAuth approval_prompt.
       '';
     };
 
     clientID = mkOption {
       type = types.nullOr types.str;
-      description = lib.mdDoc ''
+      description = ''
         The OAuth Client ID.
       '';
       example = "123456.apps.googleusercontent.com";
@@ -140,7 +133,7 @@ in
 
     clientSecret = mkOption {
       type = types.nullOr types.str;
-      description = lib.mdDoc ''
+      description = ''
         The OAuth Client Secret.
       '';
     };
@@ -148,7 +141,7 @@ in
     skipAuthRegexes = mkOption {
      type = types.listOf types.str;
      default = [];
-     description = lib.mdDoc ''
+     description = ''
        Skip authentication for requests matching any of these regular
        expressions.
      '';
@@ -159,7 +152,7 @@ in
       domains = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           Authenticate emails with the specified domains. Use
           `*` to authenticate any email.
         '';
@@ -168,7 +161,7 @@ in
       addresses = mkOption {
         type = types.nullOr types.lines;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Line-separated email addresses that are allowed to authenticate.
         '';
       };
@@ -177,7 +170,7 @@ in
     loginURL = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Authentication endpoint.
 
         You only need to set this if you are using a self-hosted provider (e.g.
@@ -190,7 +183,7 @@ in
     redeemURL = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Token redemption endpoint.
 
         You only need to set this if you are using a self-hosted provider (e.g.
@@ -203,7 +196,7 @@ in
     validateURL = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Access token validation endpoint.
 
         You only need to set this if you are using a self-hosted provider (e.g.
@@ -218,7 +211,7 @@ in
       # doesn't require it so making it optional.
       type = types.nullOr types.str;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         The OAuth2 redirect URL.
       '';
       example = "https://internalapp.yourcompany.com/oauth2/callback";
@@ -228,14 +221,14 @@ in
       tenant = mkOption {
         type = types.str;
         default = "common";
-        description = lib.mdDoc ''
+        description = ''
           Go to a tenant-specific or common (tenant-independent) endpoint.
         '';
       };
 
       resource = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           The resource that is protected.
         '';
       };
@@ -244,7 +237,7 @@ in
     google = {
       adminEmail = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           The Google Admin to impersonate for API calls.
 
           Only users with access to the Admin APIs can access the Admin SDK
@@ -258,14 +251,14 @@ in
       groups = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           Restrict logins to members of these Google groups.
         '';
       };
 
       serviceAccountJSON = mkOption {
         type = types.path;
-        description = lib.mdDoc ''
+        description = ''
           The path to the service account JSON credentials.
         '';
       };
@@ -275,7 +268,7 @@ in
       org = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Restrict logins to members of this organisation.
         '';
       };
@@ -283,7 +276,7 @@ in
       team = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Restrict logins to members of this team.
         '';
       };
@@ -295,7 +288,7 @@ in
     upstream = mkOption {
       type = with types; coercedTo str (x: [x]) (listOf str);
       default = [];
-      description = lib.mdDoc ''
+      description = ''
         The http url(s) of the upstream endpoint or `file://`
         paths for static files. Routing is based on the path.
       '';
@@ -304,7 +297,7 @@ in
     passAccessToken = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Pass OAuth access_token to upstream via X-Forwarded-Access-Token header.
       '';
     };
@@ -312,7 +305,7 @@ in
     passBasicAuth = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Pass HTTP Basic Auth, X-Forwarded-User and X-Forwarded-Email information to upstream.
       '';
     };
@@ -320,7 +313,7 @@ in
     basicAuthPassword = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         The password to set when passing the HTTP Basic Auth header.
       '';
     };
@@ -328,7 +321,7 @@ in
     passHostHeader = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Pass the request Host Header to upstream.
       '';
     };
@@ -336,7 +329,7 @@ in
     signatureKey = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         GAP-Signature request signature key.
       '';
       example = "sha1:secret0";
@@ -346,7 +339,7 @@ in
       domain = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Optional cookie domains to force cookies to (ie: `.yourcompany.com`).
           The longest domain matching the request's host will be used (or the shortest
           cookie domain if there is no match).
@@ -357,7 +350,7 @@ in
       expire = mkOption {
         type = types.str;
         default = "168h0m0s";
-        description = lib.mdDoc ''
+        description = ''
           Expire timeframe for cookie.
         '';
       };
@@ -365,7 +358,7 @@ in
       httpOnly = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Set HttpOnly cookie flag.
         '';
       };
@@ -373,7 +366,7 @@ in
       name = mkOption {
         type = types.str;
         default = "_oauth2_proxy";
-        description = lib.mdDoc ''
+        description = ''
           The name of the cookie that the oauth_proxy creates.
         '';
       };
@@ -382,7 +375,7 @@ in
         # XXX: Unclear what the behavior is when this is not specified.
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Refresh the cookie after this duration; 0 to disable.
         '';
         example = "168h0m0s";
@@ -390,7 +383,7 @@ in
 
       secret = mkOption {
         type = types.nullOr types.str;
-        description = lib.mdDoc ''
+        description = ''
           The seed string for secure cookies.
         '';
       };
@@ -398,7 +391,7 @@ in
       secure = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Set secure (HTTPS) cookie flag.
         '';
       };
@@ -410,7 +403,7 @@ in
     httpAddress = mkOption {
       type = types.str;
       default = "http://127.0.0.1:4180";
-      description = lib.mdDoc ''
+      description = ''
         HTTPS listening address.  This module does not expose the port by
         default. If you want this URL to be accessible to other machines, please
         add the port to `networking.firewall.allowedTCPPorts`.
@@ -421,7 +414,7 @@ in
       file = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Additionally authenticate against a htpasswd file. Entries must be
           created with `htpasswd -s` for SHA encryption.
         '';
@@ -430,7 +423,7 @@ in
       displayForm = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Display username / password login form if an htpasswd file is provided.
         '';
       };
@@ -439,7 +432,7 @@ in
     customTemplatesDir = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Path to custom HTML templates.
       '';
     };
@@ -447,7 +440,7 @@ in
     reverseProxy = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         In case when running behind a reverse proxy, controls whether headers
         like `X-Real-Ip` are accepted. Usage behind a reverse
         proxy will require this flag to be set to avoid logging the reverse
@@ -458,7 +451,7 @@ in
     proxyPrefix = mkOption {
       type = types.str;
       default = "/oauth2";
-      description = lib.mdDoc ''
+      description = ''
         The url root path that this proxy should be nested under.
       '';
     };
@@ -467,21 +460,21 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to serve over TLS.
         '';
       };
 
       certificate = mkOption {
         type = types.path;
-        description = lib.mdDoc ''
+        description = ''
           Path to certificate file.
         '';
       };
 
       key = mkOption {
         type = types.path;
-        description = lib.mdDoc ''
+        description = ''
           Path to private key file.
         '';
       };
@@ -489,7 +482,7 @@ in
       httpsAddress = mkOption {
         type = types.str;
         default = ":443";
-        description = lib.mdDoc ''
+        description = ''
           `addr:port` to listen on for HTTPS clients.
 
           Remember to add `port` to
@@ -502,7 +495,7 @@ in
     requestLogging = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Log requests to stdout.
       '';
     };
@@ -516,7 +509,7 @@ in
       # doesn't require it so making it optional.
       type = types.nullOr types.str;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         OAuth scope specification.
       '';
     };
@@ -524,7 +517,7 @@ in
     profileURL = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Profile access endpoint.
       '';
     };
@@ -532,7 +525,7 @@ in
     setXauthrequest = mkOption {
       type = types.nullOr types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Set X-Auth-Request-User and X-Auth-Request-Email response headers (useful in Nginx auth_request mode). Setting this to 'null' means using the upstream default (false).
       '';
     };
@@ -540,7 +533,7 @@ in
     extraConfig = mkOption {
       default = {};
       type = types.attrsOf types.anything;
-      description = lib.mdDoc ''
+      description = ''
         Extra config to pass to oauth2-proxy.
       '';
     };
@@ -548,7 +541,7 @@ in
     keyFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         oauth2-proxy allows passing sensitive configuration via environment variables.
         Make a file that contains lines like
         OAUTH2_PROXY_CLIENT_SECRET=asdfasdfasdf.apps.googleuserscontent.com
@@ -579,7 +572,8 @@ in
       description = "OAuth2 Proxy";
       path = [ cfg.package ];
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
 
       serviceConfig = {
         User = "oauth2_proxy";

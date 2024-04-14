@@ -6,19 +6,14 @@ let
 in {
   options = {
     services.shiori = {
-      enable = mkEnableOption (lib.mdDoc "Shiori simple bookmarks manager");
+      enable = mkEnableOption "Shiori simple bookmarks manager";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.shiori;
-        defaultText = literalExpression "pkgs.shiori";
-        description = lib.mdDoc "The Shiori package to use.";
-      };
+      package = mkPackageOption pkgs "shiori" { };
 
       address = mkOption {
         type = types.str;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           The IP address on which Shiori will listen.
           If empty, listens on all interfaces.
         '';
@@ -27,7 +22,14 @@ in {
       port = mkOption {
         type = types.port;
         default = 8080;
-        description = lib.mdDoc "The port of the Shiori web application";
+        description = "The port of the Shiori web application";
+      };
+
+      webRoot = mkOption {
+        type = types.str;
+        default = "/";
+        example = "/shiori";
+        description = "The root of the Shiori web application";
       };
     };
   };
@@ -40,7 +42,7 @@ in {
       environment.SHIORI_DIR = "/var/lib/shiori";
 
       serviceConfig = {
-        ExecStart = "${package}/bin/shiori serve --address '${address}' --port '${toString port}'";
+        ExecStart = "${package}/bin/shiori serve --address '${address}' --port '${toString port}' --webroot '${webRoot}'";
 
         DynamicUser = true;
         StateDirectory = "shiori";

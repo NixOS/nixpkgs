@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pydot";
-  version = "1.4.2";
+  version = "2.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "248081a39bcb56784deb018977e428605c1c758f10897a339fce1dd728ff007d";
+    sha256 = "sha256-YCRq8hUSP6Bi8hzXkb5n3aI6bygN8J9okZ5jeh5PMjU=";
   };
 
   propagatedBuildInputs = [
@@ -53,9 +53,8 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    "test_exception_msg"
-    # Hash mismatch
-    "test_my_regression_tests"
+    # broken, fixed after 2.0.0
+    "test_graph_with_shapefiles"
   ];
 
   pythonImportsCheck = [

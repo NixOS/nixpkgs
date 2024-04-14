@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "hug";
   version = "2.6.0";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchFromGitHub {

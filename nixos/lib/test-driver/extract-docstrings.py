@@ -1,5 +1,6 @@
 import ast
 import sys
+from pathlib import Path
 
 """
 This program takes all the Machine class methods and prints its methods in
@@ -40,27 +41,34 @@ some_function(param1, param2)
 
 """
 
-assert len(sys.argv) == 2
 
-with open(sys.argv[1], "r") as f:
-    module = ast.parse(f.read())
+def main() -> None:
+    if len(sys.argv) != 2:
+        print(f"Usage: {sys.argv[0]} <path-to-test-driver>")
+        sys.exit(1)
 
-class_definitions = (node for node in module.body if isinstance(node, ast.ClassDef))
+    module = ast.parse(Path(sys.argv[1]).read_text())
 
-machine_class = next(filter(lambda x: x.name == "Machine", class_definitions))
-assert machine_class is not None
+    class_definitions = (node for node in module.body if isinstance(node, ast.ClassDef))
 
-function_definitions = [
-    node for node in machine_class.body if isinstance(node, ast.FunctionDef)
-]
-function_definitions.sort(key=lambda x: x.name)
+    machine_class = next(filter(lambda x: x.name == "Machine", class_definitions))
+    assert machine_class is not None
 
-for f in function_definitions:
-    docstr = ast.get_docstring(f)
-    if docstr is not None:
-        args = ", ".join((a.arg for a in f.args.args[1:]))
-        args = f"({args})"
+    function_definitions = [
+        node for node in machine_class.body if isinstance(node, ast.FunctionDef)
+    ]
+    function_definitions.sort(key=lambda x: x.name)
 
-        docstr = "\n".join((f"    {l}" for l in docstr.strip().splitlines()))
+    for function in function_definitions:
+        docstr = ast.get_docstring(function)
+        if docstr is not None:
+            args = ", ".join(a.arg for a in function.args.args[1:])
+            args = f"({args})"
 
-        print(f"{f.name}{args}\n\n:{docstr[1:]}\n")
+            docstr = "\n".join(f"    {line}" for line in docstr.strip().splitlines())
+
+            print(f"{function.name}{args}\n\n:{docstr[1:]}\n")
+
+
+if __name__ == "__main__":
+    main()

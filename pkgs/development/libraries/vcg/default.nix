@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vcg";
-  version = "2022.02";
+  version = "2023.12";
 
   src = fetchFromGitHub {
     owner = "cnr-isti-vclab";
     repo = "vcglib";
     rev = version;
-    sha256 = "sha256-XCjbVlgE0C9UagPj4fraA7BNsM6ONKo66aKQ87gQOfE=";
+    sha256 = "sha256-U3pu1k2pCH+G4CtacaDQ9SgkFX5A9/O/qrdpgWvB1+U=";
   };
 
   propagatedBuildInputs = [ eigen ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://vcg.isti.cnr.it/vcglib/install.html";
+    homepage = "https://vcg.isti.cnr.it/vcglib/install.html";
     description = "C++ library for manipulation, processing and displaying with OpenGL of triangle and tetrahedral meshes";
     license = licenses.gpl3;
     platforms = platforms.all;

@@ -15,23 +15,23 @@
 buildPythonPackage {
   inherit (opentelemetry-instrumentation) version src;
   pname = "opentelemetry-instrumentation-aiohttp-client";
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
-  sourceRoot = "source/instrumentation/opentelemetry-instrumentation-aiohttp-client";
+  disabled = pythonOlder "3.8";
 
-  format = "pyproject";
+  sourceRoot = "${opentelemetry-instrumentation.src.name}/instrumentation/opentelemetry-instrumentation-aiohttp-client";
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    aiohttp
     opentelemetry-api
     opentelemetry-instrumentation
     opentelemetry-semantic-conventions
     opentelemetry-util-http
     wrapt
-    aiohttp
   ];
 
   # missing https://github.com/ezequielramos/http-server-mock

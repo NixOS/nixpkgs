@@ -7,8 +7,11 @@
 , python3
 }:
 
-# To test:
-# $(nix-build -E 'with import <nixpkgs> {}; jupyter.override { definitions = { octave = octave-kernel.definition; }; }')/bin/jupyter-notebook
+# Jupyter console:
+# nix run --impure --expr 'with import <nixpkgs> {}; jupyter-console.withSingleKernel octave-kernel.definition'
+
+# Jupyter notebook:
+# nix run --impure --expr 'with import <nixpkgs> {}; jupyter.override { definitions.octave = octave-kernel.definition; }'
 
 let
   kernel = callPackage ./kernel.nix {

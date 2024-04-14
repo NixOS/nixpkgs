@@ -10,39 +10,34 @@ in
   meta.maintainers = with maintainers; [ etu stunkymonkey mattchrist ];
 
   options.services.freshrss = {
-    enable = mkEnableOption (mdDoc "FreshRSS feed reader");
+    enable = mkEnableOption "FreshRSS feed reader";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.freshrss;
-      defaultText = lib.literalExpression "pkgs.freshrss";
-      description = mdDoc "Which FreshRSS package to use.";
-    };
+    package = mkPackageOption pkgs "freshrss" { };
 
     defaultUser = mkOption {
       type = types.str;
       default = "admin";
-      description = mdDoc "Default username for FreshRSS.";
+      description = "Default username for FreshRSS.";
       example = "eva";
     };
 
     passwordFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = mdDoc "Password for the defaultUser for FreshRSS.";
+      description = "Password for the defaultUser for FreshRSS.";
       example = "/run/secrets/freshrss";
     };
 
     baseUrl = mkOption {
       type = types.str;
-      description = mdDoc "Default URL for FreshRSS.";
+      description = "Default URL for FreshRSS.";
       example = "https://freshrss.example.com";
     };
 
     language = mkOption {
       type = types.str;
       default = "en";
-      description = mdDoc "Default language for FreshRSS.";
+      description = "Default language for FreshRSS.";
       example = "de";
     };
 
@@ -50,46 +45,46 @@ in
       type = mkOption {
         type = types.enum [ "sqlite" "pgsql" "mysql" ];
         default = "sqlite";
-        description = mdDoc "Database type.";
+        description = "Database type.";
         example = "pgsql";
       };
 
       host = mkOption {
         type = types.nullOr types.str;
         default = "localhost";
-        description = mdDoc "Database host for FreshRSS.";
+        description = "Database host for FreshRSS.";
       };
 
       port = mkOption {
         type = types.nullOr types.port;
         default = null;
-        description = mdDoc "Database port for FreshRSS.";
+        description = "Database port for FreshRSS.";
         example = 3306;
       };
 
       user = mkOption {
         type = types.nullOr types.str;
         default = "freshrss";
-        description = mdDoc "Database user for FreshRSS.";
+        description = "Database user for FreshRSS.";
       };
 
       passFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = mdDoc "Database password file for FreshRSS.";
+        description = "Database password file for FreshRSS.";
         example = "/run/secrets/freshrss";
       };
 
       name = mkOption {
         type = types.nullOr types.str;
         default = "freshrss";
-        description = mdDoc "Database name for FreshRSS.";
+        description = "Database name for FreshRSS.";
       };
 
       tableprefix = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = mdDoc "Database table prefix for FreshRSS.";
+        description = "Database table prefix for FreshRSS.";
         example = "freshrss";
       };
     };
@@ -97,14 +92,14 @@ in
     dataDir = mkOption {
       type = types.str;
       default = "/var/lib/freshrss";
-      description = mdDoc "Default data folder for FreshRSS.";
+      description = "Default data folder for FreshRSS.";
       example = "/mnt/freshrss";
     };
 
     virtualHost = mkOption {
       type = types.nullOr types.str;
       default = "freshrss";
-      description = mdDoc ''
+      description = ''
         Name of the nginx virtualhost to use and setup. If null, do not setup any virtualhost.
       '';
     };
@@ -112,7 +107,7 @@ in
     pool = mkOption {
       type = types.str;
       default = poolName;
-      description = mdDoc ''
+      description = ''
         Name of the phpfpm pool to use and setup. If not specified, a pool will be created
         with default values.
       '';
@@ -121,13 +116,13 @@ in
     user = mkOption {
       type = types.str;
       default = "freshrss";
-      description = lib.mdDoc "User under which FreshRSS runs.";
+      description = "User under which FreshRSS runs.";
     };
 
     authType = mkOption {
       type = types.enum [ "form" "http_auth" "none" ];
       default = "form";
-      description = mdDoc "Authentication type for FreshRSS.";
+      description = "Authentication type for FreshRSS.";
     };
   };
 
@@ -220,7 +215,7 @@ in
             "catch_workers_output" = true;
           };
           phpEnv = {
-            FRESHRSS_DATA_PATH = "${cfg.dataDir}";
+            DATA_PATH = "${cfg.dataDir}";
           };
         };
       };
@@ -233,9 +228,10 @@ in
       };
       users.groups."${cfg.user}" = { };
 
-      systemd.tmpfiles.rules = [
-        "d '${cfg.dataDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
-      ];
+      systemd.tmpfiles.settings."10-freshrss".${cfg.dataDir}.d = {
+        inherit (cfg) user;
+        group = config.users.users.${cfg.user}.group;
+      };
 
       systemd.services.freshrss-config =
         let
@@ -267,7 +263,7 @@ in
             WorkingDirectory = cfg.package;
           };
           environment = {
-            FRESHRSS_DATA_PATH = cfg.dataDir;
+            DATA_PATH = cfg.dataDir;
           };
 
           script =
@@ -299,10 +295,9 @@ in
       systemd.services.freshrss-updater = {
         description = "FreshRSS feed updater";
         after = [ "freshrss-config.service" ];
-        wantedBy = [ "multi-user.target" ];
         startAt = "*:0/5";
         environment = {
-          FRESHRSS_DATA_PATH = cfg.dataDir;
+          DATA_PATH = cfg.dataDir;
         };
         serviceConfig = defaultServiceConfig //{
           ExecStart = "${cfg.package}/app/actualize_script.php";

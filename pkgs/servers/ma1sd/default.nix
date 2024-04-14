@@ -95,6 +95,7 @@ stdenv.mkDerivation {
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ mguentner ];
     platforms = platforms.all;
+    mainProgram = "ma1sd";
   };
 
 }

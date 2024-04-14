@@ -1,16 +1,16 @@
 { lib, stdenv, fetchurl, jre, unzip, runtimeShell }:
 
-let
-  major = "15";
-  minor = "0";
-  patch = "0";
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "umlet";
-  version = "${major}.${minor}.${patch}";
+  version = "15.1.0";
 
   src = fetchurl {
-    url = "https://www.umlet.com/umlet_${major}_${minor}/umlet-standalone-${version}.zip";
-    sha256 = "sha256-gdvhqYGyrFuQhhrkF26wXb3TQLRCLm59/uSxTPmHdAE=";
+    # NOTE: The download URL breaks consistency - sometimes w/ patch versions
+    # and sometimes w/o. Furthermore, for 15.1.0 they moved everything to the
+    # new /download subfolder.
+    # As releases are very rarely, just modify it by hand..
+    url = "https://www.umlet.com/download/umlet_15_1/umlet-standalone-15.1.zip";
+    hash = "sha256-M6oVWbOmPBTygS+TFkY9PWucFfYLD33suNUuWpFLMIo=";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -50,5 +50,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ oxzi ];
     platforms = platforms.all;
+    mainProgram = "umlet";
   };
 }

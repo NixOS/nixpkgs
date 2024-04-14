@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "terraform-backend-git";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "plumber-cd";
     repo = "terraform-backend-git";
     rev = "v${version}";
-    hash = "sha256-ryHFuHIEJ4i1R3oBW3w3aAvtv+vIrO745qwx0+SqBF4=";
+    hash = "sha256-ZbQfL7uKCFD98HcoeqscZaIsWFvWH0Ytzlqr6fMmXUs=";
   };
 
   vendorHash = "sha256-Y/4UgG/2Vp+gxBnGrNpAgRNfPZWJXhVo8TVa/VfOYt0=";
@@ -36,6 +36,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Terraform HTTP Backend implementation that uses Git repository as storage";
+    mainProgram = "terraform-backend-git";
     homepage = "https://github.com/plumber-cd/terraform-backend-git";
     changelog = "https://github.com/plumber-cd/terraform-backend-git/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;

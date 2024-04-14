@@ -3,10 +3,11 @@
 , fetchFromGitHub
 , makeWrapper
 , makeDesktopItem
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , yarn
 , nodejs
 , fetchYarnDeps
+, jq
 , electron
 , element-web
 , sqlcipher
@@ -15,6 +16,7 @@
 , AppKit
 , CoreServices
 , desktopToDarwinBundle
+, libnotify
 , useKeytar ? true
 }:
 
@@ -40,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     sha256 = desktopYarnHash;
   };
 
-  nativeBuildInputs = [ yarn fixup_yarn_lock nodejs makeWrapper ]
+  nativeBuildInputs = [ yarn prefetch-yarn-deps nodejs makeWrapper jq ]
     ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
 
   inherit seshat;
@@ -50,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
 
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror $offlineCache
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
 
@@ -76,7 +78,13 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     runHook postBuild
   '';
 
-  installPhase = ''
+  installPhase =
+    let
+      libPath = lib.makeLibraryPath [
+        libnotify
+      ];
+    in
+  ''
     runHook preInstall
 
     # resources
@@ -103,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     # LD_PRELOAD workaround for sqlcipher not found: https://github.com/matrix-org/seshat/issues/102
     makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
       --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher.so \
+      --set LD_LIBRARY_PATH "${libPath}" \
       --add-flags "$out/share/element/electron" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 
@@ -119,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     genericName = "Matrix Client";
     comment = finalAttrs.meta.description;
     categories = [ "Network" "InstantMessaging" "Chat" ];
-    startupWMClass = "element";
+    startupWMClass = "Element";
     mimeTypes = [ "x-scheme-handler/element" ];
   };
 

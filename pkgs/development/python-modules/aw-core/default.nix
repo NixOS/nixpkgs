@@ -2,10 +2,11 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, pythonRelaxDepsHook
 , poetry-core
 , jsonschema
 , peewee
-, appdirs
+, platformdirs
 , iso8601
 , rfc3339-validator
 , strict-rfc3339
@@ -18,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "aw-core";
-  version = "0.5.14";
+  version = "0.5.16";
 
   format = "pyproject";
 
@@ -27,25 +28,31 @@ buildPythonPackage rec {
     owner = "ActivityWatch";
     repo = "aw-core";
     rev = "v${version}";
-    sha256 = "sha256-+XmFh4/wPUpuoRVi8OdzFs/3dwoI1Mjx1hnTiGj+12I=";
+    sha256 = "sha256-7xT7bOGzH5G4WpgNo8pDyiQqX0dWNLNHpgssozUa9kQ=";
   };
 
   disabled = pythonOlder "3.8";
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
     jsonschema
     peewee
-    appdirs
+    platformdirs
     iso8601
     rfc3339-validator
     strict-rfc3339
     tomlkit
     deprecation
     timeslot
+  ];
+
+  pythonRelaxDeps = [
+    "platformdirs"
+    "iso8601"
   ];
 
   nativeCheckInputs = [
@@ -65,6 +72,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Core library for ActivityWatch";
+    mainProgram = "aw-cli";
     homepage = "https://github.com/ActivityWatch/aw-core";
     maintainers = with maintainers; [ huantian ];
     license = licenses.mpl20;

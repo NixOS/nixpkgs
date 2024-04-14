@@ -22,16 +22,16 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.16.2";
-  format = "pyproject";
+  version = "3.1.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7.2";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "PyCQA";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-xNCGf4CsxEKScIn6dl2Ka31P6bhMo5fTs9TIQz+vPiM=";
+    owner = "pylint-dev";
+    repo = "pylint";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-JHtMaZNwl+yLwEDD4Nl0vOt9NQ9DO7iIy5LR/9ta1Pw=";
   };
 
   nativeBuildInputs = [
@@ -68,6 +68,7 @@ buildPythonPackage rec {
     # implementation relies on the '__implements__'  attribute proposed
     # in PEP 245, which was rejected in 2006.
     "-W" "ignore::DeprecationWarning"
+    "-v"
   ];
 
   dontUseSetuptoolsCheck = true;
@@ -95,6 +96,8 @@ buildPythonPackage rec {
     "test_save_and_load_not_a_linter_stats"
     # Truncated string expectation mismatch
     "test_truncated_compare"
+    # Probably related to pytest versions, see pylint-dev/pylint#9477 and pylint-dev/pylint#9483
+    "test_functional"
     # AssertionError: assert [('specializa..., 'Ancestor')] == [('aggregatio..., 'Ancestor')]
     "test_functional_relation_extraction"
   ] ++ lib.optionals stdenv.isDarwin [
@@ -103,8 +106,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://pylint.pycqa.org/";
+    homepage = "https://pylint.readthedocs.io/en/stable/";
     description = "A bug and style checker for Python";
+    changelog = "https://github.com/pylint-dev/pylint/releases/tag/v${version}";
     longDescription = ''
       Pylint is a Python static code analysis tool which looks for programming errors,
       helps enforcing a coding standard, sniffs for code smells and offers simple

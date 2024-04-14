@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "braceexpand";
   version = "0.1.7";
+  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 

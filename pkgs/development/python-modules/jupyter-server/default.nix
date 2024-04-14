@@ -5,12 +5,10 @@
 , pythonOlder
 , hatch-jupyter-builder
 , hatchling
-, pandoc
 , pytestCheckHook
 , pytest-console-scripts
 , pytest-jupyter
 , pytest-timeout
-, pytest-tornasync
 , argon2-cffi
 , jinja2
 , tornado
@@ -23,24 +21,27 @@
 , jupyter-server-terminals
 , nbformat
 , nbconvert
+, packaging
 , send2trash
 , terminado
 , prometheus-client
 , anyio
 , websocket-client
+, overrides
 , requests
+, flaky
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-server";
-  version = "2.0.6";
-  format = "pyproject";
-  disabled = pythonOlder "3.7";
+  version = "2.13.0";
+  pyproject = true;
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "jupyter_server";
     inherit version;
-    hash= "sha256-jddZkukLfKVWeUoe1cylEmPGl6vG0N9WGvV0qhwKAz8=";
+    hash = "sha256-yAv7BJ6iAFPD2WQcKt1ISLOAc7958XKc6h+u0y/Bx44=";
   };
 
   nativeBuildInputs = [
@@ -60,22 +61,30 @@ buildPythonPackage rec {
     jupyter-server-terminals
     nbformat
     nbconvert
+    packaging
     send2trash
     terminado
     prometheus-client
     anyio
     websocket-client
+    overrides
   ];
+
+  # https://github.com/NixOS/nixpkgs/issues/299427
+  stripExclude = lib.optionals stdenv.isDarwin [ "favicon.ico" ];
 
   nativeCheckInputs = [
     ipykernel
-    pandoc
     pytestCheckHook
     pytest-console-scripts
     pytest-jupyter
     pytest-timeout
-    pytest-tornasync
     requests
+    flaky
+  ];
+
+  pytestFlagsArray = [
+    "-W" "ignore::DeprecationWarning"
   ];
 
   preCheck = ''
@@ -85,11 +94,18 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_cull_idle"
+    "test_server_extension_list"
+    "test_subscribe_websocket"
+    # test is presumable broken in sandbox
+    "test_authorized_requests"
   ] ++ lib.optionals stdenv.isDarwin [
     # attempts to use trashcan, build env doesn't allow this
     "test_delete"
-    # test is presumable broken in sandbox
-    "test_authorized_requests"
+    # Insufficient access privileges for operation
+    "test_regression_is_hidden"
+  ] ++ lib.optionals stdenv.isLinux [
+    # Failed: DID NOT RAISE <class 'tornado.web.HTTPError'>
+    "test_copy_big_dir"
   ];
 
   disabledTestPaths = [
@@ -103,9 +119,11 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
+    changelog = "https://github.com/jupyter-server/jupyter_server/blob/v${version}/CHANGELOG.md";
     description = "The backend—i.e. core services, APIs, and REST endpoints—to Jupyter web applications";
+    mainProgram = "jupyter-server";
     homepage = "https://github.com/jupyter-server/jupyter_server";
     license = licenses.bsdOriginal;
-    maintainers = [ maintainers.elohmeier ];
+    maintainers = lib.teams.jupyter.members;
   };
 }

@@ -8,14 +8,13 @@ import xml.sax.saxutils as xml
 from abc import abstractmethod
 from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any, cast, ClassVar, Generic, get_args, NamedTuple
+from typing import Any, Callable, cast, ClassVar, Generic, get_args, NamedTuple
 
 from markdown_it.token import Token
 
 from . import md, options
-from .docbook import DocBookRenderer, Heading, make_xml_id
 from .html import HTMLRenderer, UnresolvedXrefError
-from .manual_structure import check_structure, FragmentType, is_include, TocEntry, TocEntryType, XrefTarget
+from .manual_structure import check_structure, FragmentType, is_include, make_xml_id, TocEntry, TocEntryType, XrefTarget
 from .md import Converter, Renderer
 
 class BaseConverter(Converter[md.TR], Generic[md.TR]):
@@ -44,8 +43,40 @@ class BaseConverter(Converter[md.TR], Generic[md.TR]):
     def _postprocess(self, infile: Path, outfile: Path, tokens: Sequence[Token]) -> None:
         pass
 
-    def _parse(self, src: str) -> list[Token]:
+    def _handle_headings(self, tokens: list[Token], *, on_heading: Callable[[Token,str],None]) -> None:
+        # Headings in a globally numbered order
+        # h1 to h6
+        curr_heading_pos: list[int] = []
+        for token in tokens:
+            if token.type == "heading_open":
+                if token.tag not in ["h1", "h2", "h3", "h4", "h5", "h6"]:
+                    raise RuntimeError(f"Got invalid heading tag {token.tag} in line {token.map[0] + 1 if token.map else 'NOT FOUND'}. Only h1 to h6 headings are allowed.")
+
+                idx = int(token.tag[1:]) - 1
+
+                if idx >= len(curr_heading_pos):
+                    # extend the list if necessary
+                    curr_heading_pos.extend([0 for _i in range(idx+1 - len(curr_heading_pos))])
+
+                curr_heading_pos = curr_heading_pos[:idx+1]
+                curr_heading_pos[-1] += 1
+
+
+                ident = ".".join(f"{a}" for a in curr_heading_pos)
+                on_heading(token,ident)
+
+
+
+    def _parse(self, src: str, *, auto_id_prefix: None | str = None) -> list[Token]:
         tokens = super()._parse(src)
+        if auto_id_prefix:
+            def set_token_ident(token: Token, ident: str) -> None:
+                if "id" not in token.attrs:
+                    token.attrs["id"] = f"{auto_id_prefix}-{ident}"
+
+            self._handle_headings(tokens, on_heading=set_token_ident)
+
+
         check_structure(self._current_type[-1], tokens)
         for token in tokens:
             if not is_include(token):
@@ -89,7 +120,12 @@ class BaseConverter(Converter[md.TR], Generic[md.TR]):
             try:
                 self._base_paths.append(path)
                 with open(path, 'r') as f:
-                    tokens = self._parse(f.read())
+                    prefix = None
+                    if "auto-id-prefix" in block_args:
+                        # include the current file number to prevent duplicate ids within include blocks
+                        prefix = f"{block_args.get('auto-id-prefix')}-{lnum}"
+
+                    tokens = self._parse(f.read(), auto_id_prefix=prefix)
                     included.append((tokens, path))
                 self._base_paths.pop()
             except Exception as e:
@@ -162,74 +198,6 @@ class RendererMixin(Renderer):
     @abstractmethod
     def included_options(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise NotImplementedError()
-
-class ManualDocBookRenderer(RendererMixin, DocBookRenderer):
-    def __init__(self, toplevel_tag: str, revision: str, manpage_urls: Mapping[str, str]):
-        super().__init__(toplevel_tag, revision, manpage_urls)
-
-    def _render_book(self, tokens: Sequence[Token]) -> str:
-        assert tokens[1].children
-        assert tokens[4].children
-        if (maybe_id := cast(str, tokens[0].attrs.get('id', ""))):
-            maybe_id = "xml:id=" + xml.quoteattr(maybe_id)
-        return (f'<book xmlns="http://docbook.org/ns/docbook"'
-                f'      xmlns:xlink="http://www.w3.org/1999/xlink"'
-                f'      {maybe_id} version="5.0">'
-                f'  <title>{self.renderInline(tokens[1].children)}</title>'
-                f'  <subtitle>{self.renderInline(tokens[4].children)}</subtitle>'
-                f'  {super(DocBookRenderer, self).render(tokens[6:])}'
-                f'</book>')
-
-    def _heading_tag(self, token: Token, tokens: Sequence[Token], i: int) -> tuple[str, dict[str, str]]:
-        (tag, attrs) = super()._heading_tag(token, tokens, i)
-        # render() has already verified that we don't have supernumerary headings and since the
-        # book tag is handled specially we can leave the check this simple
-        if token.tag != 'h1':
-            return (tag, attrs)
-        return (self._toplevel_tag, attrs | {
-            'xmlns': "http://docbook.org/ns/docbook",
-            'xmlns:xlink': "http://www.w3.org/1999/xlink",
-        })
-
-    def _included_thing(self, tag: str, token: Token, tokens: Sequence[Token], i: int) -> str:
-        result = []
-        # close existing partintro. the generic render doesn't really need this because
-        # it doesn't have a concept of structure in the way the manual does.
-        if self._headings and self._headings[-1] == Heading('part', 1):
-            result.append("</partintro>")
-            self._headings[-1] = self._headings[-1]._replace(partintro_closed=True)
-        # must nest properly for structural includes. this requires saving at least
-        # the headings stack, but creating new renderers is cheap and much easier.
-        r = ManualDocBookRenderer(tag, self._revision, self._manpage_urls)
-        for (included, path) in token.meta['included']:
-            try:
-                result.append(r.render(included))
-            except Exception as e:
-                raise RuntimeError(f"rendering {path}") from e
-        return "".join(result)
-    def included_options(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        conv = options.DocBookConverter(self._manpage_urls, self._revision, 'fragment',
-                                        token.meta['list-id'], token.meta['id-prefix'])
-        conv.add_options(token.meta['source'])
-        return conv.finalize(fragment=True)
-
-    # TODO minimize docbook diffs with existing conversions. remove soon.
-    def paragraph_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        return super().paragraph_open(token, tokens, i) + "\n "
-    def paragraph_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        return "\n" + super().paragraph_close(token, tokens, i)
-    def code_block(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        return f"<programlisting>\n{xml.escape(token.content)}</programlisting>"
-    def fence(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        info = f" language={xml.quoteattr(token.info)}" if token.info != "" else ""
-        return f"<programlisting{info}>\n{xml.escape(token.content)}</programlisting>"
-
-class DocBookConverter(BaseConverter[ManualDocBookRenderer]):
-    INCLUDE_ARGS_NS = "docbook"
-
-    def __init__(self, manpage_urls: Mapping[str, str], revision: str):
-        super().__init__()
-        self._renderer = ManualDocBookRenderer('book', revision, manpage_urls)
 
 
 class HTMLParameters(NamedTuple):
@@ -420,7 +388,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                     f' </span>'
                     f'</dt>'
                 )
-                # we want to look straight through parts because docbook-xsl does too, but it
+                # we want to look straight through parts because docbook-xsl did too, but it
                 # also makes for more uesful top-level tocs.
                 next_level = walk_and_emit(child, depth - (0 if child.kind == 'part' else 1))
                 if next_level:
@@ -440,7 +408,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 '</div>'
             )
         # we don't want to generate the "Title of Contents" header for sections,
-        # docbook doesn't and it's only distracting clutter unless it's the main table.
+        # docbook didn't and it's only distracting clutter unless it's the main table.
         # we also want to generate tocs only for a top-level section (ie, one that is
         # not itself contained in another section)
         print_title = toc.kind != 'section'
@@ -469,12 +437,12 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         ])
 
     def _make_hN(self, level: int) -> tuple[str, str]:
-        # for some reason chapters don't increase the hN nesting count in docbook xslts. duplicate
-        # this for consistency.
+        # for some reason chapters didn't increase the hN nesting count in docbook xslts.
+        # originally this was duplicated here for consistency with docbook rendering, but
+        # it could be reevaluated and changed now that docbook is gone.
         if self._toplevel_tag == 'chapter':
             level -= 1
-        # TODO docbook compat. these are never useful for us, but not having them breaks manual
-        # compare workflows while docbook is still allowed.
+        # this style setting is also for docbook compatibility only and could well go away.
         style = ""
         if level + self._hlevel_offset < 3 \
            and (self._toplevel_tag == 'section' or (self._toplevel_tag == 'chapter' and level > 0)):
@@ -500,7 +468,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         if into:
             toc = TocEntry.of(fragments[0][0][0])
             inner.append(self._file_header(toc))
-            # we do not set _hlevel_offset=0 because docbook doesn't either.
+            # we do not set _hlevel_offset=0 because docbook didn't either.
         else:
             inner = outer
         in_dir = self._in_dir
@@ -554,8 +522,8 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
             infile.parent, outfile.parent)
         super().convert(infile, outfile)
 
-    def _parse(self, src: str) -> list[Token]:
-        tokens = super()._parse(src)
+    def _parse(self, src: str, *, auto_id_prefix: None | str = None) -> list[Token]:
+        tokens = super()._parse(src,auto_id_prefix=auto_id_prefix)
         for token in tokens:
             if not token.type.startswith('included_') \
                or not (into := token.meta['include-args'].get('into-file')):
@@ -623,7 +591,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
             elif bt.type == 'footnote_ref' and (id := cast(str, bt.attrs.get('id', ''))):
                 result.append(XrefTarget(id, "???", None, None, target_file))
             elif bt.type == 'inline':
-                assert bt.children
+                assert bt.children is not None
                 result += self._collect_ids(bt.children, target_file, typ, False)
             elif id := cast(str, bt.attrs.get('id', '')):
                 # anchors and examples have no titles we could use, but we'll have to put
@@ -705,12 +673,6 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
 
 
 
-def _build_cli_db(p: argparse.ArgumentParser) -> None:
-    p.add_argument('--manpage-urls', required=True)
-    p.add_argument('--revision', required=True)
-    p.add_argument('infile', type=Path)
-    p.add_argument('outfile', type=Path)
-
 def _build_cli_html(p: argparse.ArgumentParser) -> None:
     p.add_argument('--manpage-urls', required=True)
     p.add_argument('--revision', required=True)
@@ -724,11 +686,6 @@ def _build_cli_html(p: argparse.ArgumentParser) -> None:
     p.add_argument('infile', type=Path)
     p.add_argument('outfile', type=Path)
 
-def _run_cli_db(args: argparse.Namespace) -> None:
-    with open(args.manpage_urls, 'r') as manpage_urls:
-        md = DocBookConverter(json.load(manpage_urls), args.revision)
-        md.convert(args.infile, args.outfile)
-
 def _run_cli_html(args: argparse.Namespace) -> None:
     with open(args.manpage_urls, 'r') as manpage_urls:
         md = HTMLConverter(
@@ -740,13 +697,10 @@ def _run_cli_html(args: argparse.Namespace) -> None:
 
 def build_cli(p: argparse.ArgumentParser) -> None:
     formats = p.add_subparsers(dest='format', required=True)
-    _build_cli_db(formats.add_parser('docbook'))
     _build_cli_html(formats.add_parser('html'))
 
 def run_cli(args: argparse.Namespace) -> None:
-    if args.format == 'docbook':
-        _run_cli_db(args)
-    elif args.format == 'html':
+    if args.format == 'html':
         _run_cli_html(args)
     else:
         raise RuntimeError('format not hooked up', args)

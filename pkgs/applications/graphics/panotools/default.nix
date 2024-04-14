@@ -1,25 +1,43 @@
-{ fetchurl, lib, stdenv, libjpeg, libpng, libtiff, perl, cmake }:
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, libjpeg
+, libpng
+, libtiff
+, perl
+, darwin
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libpano13";
-  version = "2.9.21";
+  version = "2.9.22";
 
   src = fetchurl {
-    url = "mirror://sourceforge/panotools/${pname}-${version}.tar.gz";
-    sha256 = "sha256-eeWhRSGZMF4pYUYnIO9ZQRUnecEnxblvw0DSSS5jNZA=";
+    url = "mirror://sourceforge/panotools/libpano13-${finalAttrs.version}.tar.gz";
+    hash = "sha256-r/xoMM2+ccKNJzHcv43qKs2m2f/UYJxtvzugxoRAqOM=";
   };
 
-  buildInputs = [ perl libjpeg libpng libtiff ];
-  nativeBuildInputs = [ cmake ];
+  strictDeps = true;
 
-  # one of the tests succeeds on my machine but fails on Hydra (no idea why)
-  #doCheck = true;
+  nativeBuildInputs = [
+    cmake
+  ];
+
+  buildInputs = [
+    libjpeg
+    libpng
+    libtiff
+    perl
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Carbon
+  ];
 
   meta = {
-    homepage = "https://panotools.sourceforge.net/";
     description = "Free software suite for authoring and displaying virtual reality panoramas";
+    homepage = "https://panotools.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
-
-    platforms = lib.platforms.gnu ++ lib.platforms.linux;  # arbitrary choice
+    maintainers = [ lib.maintainers.wegank ];
+    platforms = lib.platforms.unix;
   };
-}
+})

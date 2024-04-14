@@ -22,14 +22,14 @@
 
 stdenv.mkDerivation rec {
   pname = "transcribe";
-  version = "9.25";
+  version = "9.40.0";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchzip
         {
-          url = "https://www.seventhstring.com/xscribe/downlo/xscsetup-${version}.0.tar.gz";
-          sha256 = "sha256-vgl3BCAC7gOYTviHJzMbgZfHTpP90XUvxpC1IhvEZ8I=";
+          url = "https://www.seventhstring.com/xscribe/downlo/xscsetup-${version}.tar.gz";
+          sha256 = "sha256-GHTr1rk7Kh5M0UYnryUlCk/G6pW3p80GJ6Ai0zXdfNs=";
         }
     else throw "Platform not supported";
 
@@ -110,5 +110,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ iwanb ];
     platforms = platforms.linux;
+    mainProgram = "transcribe";
   };
 }

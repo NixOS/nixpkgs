@@ -11,20 +11,13 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to add mtr to the global environment and configure a
           setcap wrapper for it.
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.mtr;
-        defaultText = literalExpression "pkgs.mtr";
-        description = lib.mdDoc ''
-          The package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "mtr" { };
     };
   };
 

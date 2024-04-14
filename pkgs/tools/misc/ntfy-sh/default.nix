@@ -5,21 +5,21 @@
 
 buildGoModule rec {
   pname = "ntfy-sh";
-  version = "2.6.2";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "binwiederhier";
     repo = "ntfy";
     rev = "v${version}";
-    hash = "sha256-VX5QXJqHvYE8n/TcSBIg8vuLx2OCe6rM87G1PXBiKRI=";
+    hash = "sha256-Ns73kZ7XJKj93fhTDQ3L5hk4NZVEcKysJVEZk6jX7KE=";
   };
 
-  vendorHash = "sha256-KcA35MVtF/bHtdiMqofs9gSnjl6oYedgqpKZtnFce20=";
+  vendorHash = "sha256-c7fOSI+BPF3lwAJEftZHk9o/97T9kntgSsXoko3AYtQ=";
 
   ui = buildNpmPackage {
     inherit src version;
     pname = "ntfy-sh-ui";
-    npmDepsHash = "sha256-JvoTssXiBnl/H4odFqRoGtQz2pGwQL4BGxX8Vp/PBwY=";
+    npmDepsHash = "sha256-nU5atvqyt5U7z8XB0+25uF+7tWPW2yYnkV/124fKoPE=";
 
     prePatch = ''
       cd web/
@@ -42,7 +42,7 @@ buildGoModule rec {
     mkdocs
     python3
     python3Packages.mkdocs-material
-    python3Packages.mkdocs-minify
+    python3Packages.mkdocs-minify-plugin
     python3Packages.mkdocs-simple-hooks
   ];
 

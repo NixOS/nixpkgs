@@ -29,12 +29,13 @@ stdenv.mkDerivation rec {
     let
       libSuff = stdenv.hostPlatform.extensions.sharedLibrary;
       soVersion = "3";
+      libName = if stdenv.isDarwin then "libsvm.${soVersion}${libSuff}" else "libsvm${libSuff}.${soVersion}";
     in
     ''
       runHook preInstall
 
-      install -D libsvm.so.${soVersion} $out/lib/libsvm.${soVersion}${libSuff}
-      ln -s $out/lib/libsvm.${soVersion}${libSuff} $out/lib/libsvm${libSuff}
+      install -D libsvm.so.${soVersion} $out/lib/${libName}
+      ln -s $out/lib/${libName} $out/lib/libsvm${libSuff}
 
       install -Dt $bin/bin/ svm-scale svm-train svm-predict
 

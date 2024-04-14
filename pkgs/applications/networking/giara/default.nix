@@ -73,5 +73,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://gitlab.gnome.org/World/giara";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    mainProgram = "giara";
   };
 }

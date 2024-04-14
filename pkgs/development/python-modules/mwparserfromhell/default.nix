@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "mwparserfromhell";
-  version = "0.6.4";
+  version = "0.6.6";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kr7JUorjTScok8yvK1J9+FwxT/KM+7MFY0BGewldg0w=";
+    hash = "sha256-ca/sHpeEulduldbzSEVYLTxzOjpSuncN2KnDpA5bZJ8=";
   };
 
   postPatch = ''

@@ -28,7 +28,6 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = with gst_all_1; [
     glib-networking
-    gobject-introspection
     gst-libav
     gst-plugins-base
     gst-plugins-ugly
@@ -72,6 +71,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "A new GNOME web browser";
+    mainProgram = "eolie";
     homepage = "https://wiki.gnome.org/Apps/Eolie";
     license  = licenses.gpl3Plus;
     maintainers = with maintainers; [ samdroid-apps ];

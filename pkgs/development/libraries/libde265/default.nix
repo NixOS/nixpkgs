@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, autoreconfHook
+, cmake
 , pkg-config
 
 , callPackage
@@ -14,17 +14,17 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: rec {
-  version = "1.0.12";
+  version = "1.0.15";
   pname = "libde265";
 
   src = fetchFromGitHub {
     owner = "strukturag";
     repo = "libde265";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pl1r3n4T4FcJ4My/wCE54R2fmTdrlJOvgb2U0MZf1BI=";
+    hash = "sha256-guiLM4RNe5O0qpeCoQUbs1Z7j0wp8iK9za2+6NIB8yY=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   enableParallelBuilding = true;
 
@@ -40,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   meta = {
     homepage = "https://github.com/strukturag/libde265";
     description = "Open h.265 video codec implementation";
+    mainProgram = "dec265";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ gebner ];

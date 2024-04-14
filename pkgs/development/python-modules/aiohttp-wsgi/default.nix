@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "aiohttp-wsgi";
   version = "0.10.0";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -30,6 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "WSGI adapter for aiohttp";
+    mainProgram = "aiohttp-wsgi-serve";
     homepage = "https://github.com/etianen/aiohttp-wsgi";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "yamlfmt";
-  version = "0.9.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-l081PgSAT9h2oHp1eH96XztcCLeyv1Y11l6lJhHQj1I=";
+    sha256 = "sha256-7+ui5jEJkjejAZRdM+okoF3Qw8SJSTKJS7LNNnBgz0g=";
   };
 
-  vendorHash = "sha256-qrHrLOfyJhsuU75arDtfOhLaLqP+GWTfX+oyLX3aea8=";
+  vendorHash = "sha256-JiFVc2+LcCgvnEX6W4XBtIgXcILEO2HZT4DTp62eUJU=";
 
   doCheck = false;
 
@@ -20,5 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/google/yamlfmt";
     license = licenses.asl20;
     maintainers = with maintainers; [ sno2wman ];
+    mainProgram = "yamlfmt";
   };
 }

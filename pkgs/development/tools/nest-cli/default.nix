@@ -1,32 +1,41 @@
 { buildNpmPackage
+, darwin
 , fetchFromGitHub
 , lib
+, python3
+, stdenv
 }:
 
 buildNpmPackage rec {
   pname = "nest-cli";
-  version = "9.4.2";
+  version = "10.3.2";
 
   src = fetchFromGitHub {
     owner = "nestjs";
     repo = pname;
     rev = version;
-    hash = "sha256-9I6ez75byOPVKvX93Yv1qSM3JaWlmmvZCTjNB++cmw0=";
+    hash = "sha256-FSI87oeHiNqL8FhGavPtqurOr/1Y5iGawSwhBhLB2Ls=";
   };
 
-  # Generated a new package-lock.json by running `npm upgrade`
-  # The upstream lockfile is using an old version of `fsevents`,
-  # which does not build on Darwin
-  postPatch = ''
-    cp ${./package-lock.json} ./package-lock.json
-  '';
+  npmDepsHash = "sha256-RqotLpMISfB2xE9zng0TkapJ0y1fuVWP/0nY2VcMVRU=";
 
-  npmDepsHash = "sha256-QA2ZgbXiG84HuutJ2ZCGMrnqpwrPlHL/Bur7Pak8WcQ=";
+  env = {
+    npm_config_build_from_source = true;
+  };
+
+  nativeBuildInputs = [
+    python3
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.CoreServices
+  ];
 
   meta = with lib; {
-    description = "CLI tool for Nest applications 🍹";
+    description = "CLI tool for Nest applications";
     homepage = "https://nestjs.com";
     license = licenses.mit;
+    mainProgram = "nest";
     maintainers = [ maintainers.ehllie ];
   };
 }

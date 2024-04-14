@@ -6,6 +6,7 @@
 , lz4
 , msgpack
 , pytestCheckHook
+, pytest_7
 , pythonOlder
 , setuptools
 , setuptools-scm
@@ -15,19 +16,17 @@
 
 buildPythonPackage rec {
   pname = "flow-record";
-  version = "3.10";
-  format = "pyproject";
+  version = "3.14";
+  pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "flow.record";
     rev = "refs/tags/${version}";
-    hash = "sha256-pOEK53+rIwzTxDEla1xoWo/xgy+eN0nxR0MeW7VQFds=";
+    hash = "sha256-8XQeXfrgTk+jHR1ABlEEIn3E/MkUkGnvkgzePws4qhQ=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools
@@ -53,7 +52,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    pytestCheckHook
+    (pytestCheckHook.override { pytest = pytest_7; })
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [

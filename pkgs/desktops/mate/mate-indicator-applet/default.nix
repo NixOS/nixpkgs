@@ -4,8 +4,8 @@
 , pkg-config
 , gettext
 , gtk3
-, libindicator-gtk3
-, mate
+, libayatana-indicator
+, mate-panel
 , hicolor-icon-theme
 , wrapGAppsHook
 , mateUpdateScript
@@ -13,12 +13,18 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-indicator-applet";
-  version = "1.26.0";
+  version = "1.28.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "144fh9f3lag2cqnmb6zxlh8k83ya8kha6rmd7r8gg3z5w3nzpyz4";
+    sha256 = "zrPXA5cKPlWNfNffCxwhceOvdSolSVrO0uIiwemtSc0=";
   };
+
+  postPatch = ''
+    # Find installed Unity & Ayatana (new-style) indicators
+    substituteInPlace src/applet-main.c \
+      --replace-fail '/usr/share' '/run/current-system/sw/share'
+  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -28,10 +34,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    libindicator-gtk3
-    mate.mate-panel
+    libayatana-indicator
+    mate-panel
     hicolor-icon-theme
   ];
+
+  configureFlags = [ "--with-ayatana-indicators" ];
 
   enableParallelBuilding = true;
 

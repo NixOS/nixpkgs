@@ -1,16 +1,28 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pytestCheckHook, setuptools-scm }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, setuptools
+, setuptools-scm
+}:
 
 buildPythonPackage rec {
   pname = "configparser";
-  version = "5.3.0";
-  format = "pyproject";
+  version = "6.0.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-i+JngktUHAmwjbEkkX9Iq1JabD6DcBHzEweBoiTFcJA=";
+  src = fetchFromGitHub {
+    owner = "jaraco";
+    repo = "configparser";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-r+poK+knBQi48Z1VrNFqUt9Qm9iGERAOTFa4bKfXi0g=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

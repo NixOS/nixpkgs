@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib rocksdb rapidjson ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DPORTABLE=off"
     "-DRAPIDJSON_HOME=${rapidjson}"
     "-DROCKSDB_HOME=${rocksdb}"
@@ -33,10 +32,15 @@ stdenv.mkDerivation rec {
     substituteInPlace src/sortmerna/CMakeLists.txt \
       --replace "target_link_libraries(sortmerna" \
         "target_link_libraries(sortmerna Threads::Threads"
+
+    # Fix gcc-13 build by adding missing <cstdint> includes:
+    #   https://github.com/sortmerna/sortmerna/issues/412
+    sed -e '1i #include <cstdint>' -i include/kseq_load.hpp
   '';
 
   meta = with lib; {
     description = "Tools for filtering, mapping, and OTU-picking from shotgun genomics data";
+    mainProgram = "sortmerna";
     license = licenses.lgpl3;
     platforms = platforms.x86_64;
     homepage = "https://bioinfo.lifl.fr/RNA/sortmerna/";

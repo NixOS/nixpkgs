@@ -8,8 +8,8 @@ buildRubyGem rec {
   inherit ruby;
   name = "${gemName}-${version}";
   gemName = "tmuxinator";
-  version = "3.0.5";
-  source.sha256 = "1ycsx9mvl0jsds4igi6avxclsyl5lndh1mpj2ykvzfz26wdddg6p";
+  version = "3.1.2";
+  source.sha256 = "t96v3RwBfezB644RVbTmO8i/xh1F23WQC8PBxc/msjg=";
 
   erubis = buildRubyGem rec {
     inherit ruby;
@@ -23,8 +23,8 @@ buildRubyGem rec {
     inherit ruby;
     name = "ruby${ruby.version}-${gemName}-${version}";
     gemName = "thor";
-    version = "1.2.1";
-    source.sha256 = "0inl77jh4ia03jw3iqm5ipr76ghal3hyjrd6r8zqsswwvi9j2xdi";
+    version = "1.3.0";
+    source.sha256 = "sha256-Gtx/nls2VaaMcTk/7ovQrQiNFO6Og6C3NybyPLs8p8M=";
   };
 
   xdg = buildRubyGem rec {
@@ -49,5 +49,6 @@ buildRubyGem rec {
     license     = licenses.mit;
     maintainers = with maintainers; [ auntie ericsagnes ];
     platforms   = platforms.unix;
+    mainProgram = "tmuxinator";
   };
 }

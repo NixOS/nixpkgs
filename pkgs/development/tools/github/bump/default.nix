@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "bump";
-  version = "0.2.3";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "mroth";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-tgTG/QlDxX1Ns0WpcNjwr/tvsdtgap7RcxX/JuYcxw8=";
+    sha256 = "sha256-DFgNx0H9/hZ+wUdPkEybRCIjnLsmuoYWruYgbDuFRhU=";
   };
 
-  vendorSha256 = "sha256-ZeKokW6jMiKrXLfnxwEBF+wLuFQufnPUnA/EnuhvrwI=";
+  vendorHash = "sha256-AiXbCS3RXd6KZwIo7qzz3yM28cJloLRR+gdWqEpyims=";
 
   doCheck = false;
 
@@ -23,6 +23,7 @@ buildGoModule rec {
     license = licenses.mit;
     homepage = "https://github.com/mroth/bump";
     description = "CLI tool to draft a GitHub Release for the next semantic version";
+    mainProgram = "bump";
     maintainers = with maintainers; [ doronbehar ];
   };
 }

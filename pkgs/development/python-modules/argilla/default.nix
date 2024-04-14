@@ -61,11 +61,11 @@
 , pytest-cov
 , pytest-mock
 , pytest-asyncio
-, factory_boy
+, factory-boy
 }:
 let
   pname = "argilla";
-  version = "1.13.2";
+  version = "1.26.1";
   optional-dependencies = {
     server = [
       fastapi
@@ -126,7 +126,7 @@ buildPythonPackage {
     owner = "argilla-io";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-FCPlEbgViWZEyXpdtaa6pJxpgbSXmcfJX/1RUFF7Zs4=";
+    hash = "sha256-7d8zvP06GrHrSEJn2NNv2BUNea1wamf21e+qa1dZU18=";
   };
 
   pythonRelaxDeps = [
@@ -166,7 +166,7 @@ buildPythonPackage {
     pytest-cov
     pytest-mock
     pytest-asyncio
-    factory_boy
+    factory-boy
   ]
     ++ optional-dependencies.server
     ++ optional-dependencies.postgresql
@@ -179,6 +179,7 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "Argilla: the open-source data curation platform for LLMs";
+    mainProgram = "argilla";
     homepage = "https://github.com/argilla-io/argilla";
     changelog = "https://github.com/argilla-io/argilla/releases/tag/v${version}";
     license = licenses.asl20;

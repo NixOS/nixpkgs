@@ -1,20 +1,27 @@
-{ lib, mkYarnPackage, fetchFromGitHub, nodejs, runtimeShell }:
+{ lib, mkYarnPackage, fetchFromGitHub, fetchYarnDeps, nodejs, runtimeShell }:
 
 # Notes for the upgrade:
 # * Download the tarball of the new version to use.
-# * Replace new `package.json`, `yarn.nix`, `yarn.lock` here.
+# * Replace new `package.json` here.
 # * Update `version`+`hash` and rebuild.
 
 mkYarnPackage rec {
   pname = "grafana-image-renderer";
-  version = "3.7.1";
+  version = "3.10.2";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafana-image-renderer";
     rev = "v${version}";
-    sha256 = "sha256-hYjl8jwRqcWdxDlUxUBTd3A6giJVWa0l+BZvfYInD0Y=";
+    hash = "sha256-GL9uJV4/j3tcD9DMoBuO/59OsfG+njc2FH1Bt3VP7K8=";
   };
+
+  offlineCache = fetchYarnDeps {
+    yarnLock = src + "/yarn.lock";
+    hash = "sha256-xgaaIY5Jy8JTSJVGHwPOYgh+fASSPiyoUcmLN516jic=";
+  };
+
+  packageJSON = ./package.json;
 
   buildPhase = ''
     runHook preBuild
@@ -27,10 +34,6 @@ mkYarnPackage rec {
   '';
 
   dontInstall = true;
-
-  packageJSON = ./package.json;
-  yarnNix = ./yarn.nix;
-  yarnLock = ./yarn.lock;
 
   distPhase = ''
     runHook preDist
@@ -57,8 +60,9 @@ mkYarnPackage rec {
   meta = with lib; {
     homepage = "https://github.com/grafana/grafana-image-renderer";
     description = "A Grafana backend plugin that handles rendering of panels & dashboards to PNGs using headless browser (Chromium/Chrome)";
+    mainProgram = "grafana-image-renderer";
     license = licenses.asl20;
     maintainers = with maintainers; [ ma27 ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

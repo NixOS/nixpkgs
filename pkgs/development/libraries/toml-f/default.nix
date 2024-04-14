@@ -2,29 +2,28 @@
 , lib
 , fetchFromGitHub
 , gfortran
-, cmake
+, meson
+, ninja
+, pkg-config
 , test-drive
 }:
 
 stdenv.mkDerivation rec {
   pname = "toml-f";
-  version = "0.3.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-8FbnUkeJUP4fiuJCroAVDo6U2M7ZkFLpG2OYrapMYtU=";
+    hash = "sha256-+cac4rUNpd2w3yBdH1XoCKdJ9IgOHZioZg8AhzGY0FE=";
   };
 
-  nativeBuildInputs = [ gfortran cmake ];
+  nativeBuildInputs = [ gfortran meson ninja pkg-config ];
 
   buildInputs = [ test-drive ];
 
-  postInstall = ''
-    substituteInPlace $out/lib/pkgconfig/${pname}.pc \
-      --replace "''${prefix}/" ""
-  '';
+  outputs = [ "out" "dev" ];
 
   doCheck = true;
 
@@ -32,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "TOML parser implementation for data serialization and deserialization in Fortran";
     license = with licenses; [ asl20 mit ];
     homepage = "https://github.com/toml-f/toml-f";
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
     maintainers = [ maintainers.sheepforce ];
   };
 }

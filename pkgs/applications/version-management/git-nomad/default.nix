@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-nomad";
-  version = "0.6.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "rraval";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1PXAdXafkPOIVzaWjW/RlWHwYhMqPoj0Hj5JmOMUj8A=";
+    sha256 = "sha256-N+iPr389l9PDfJIhvRL6ziGSPI6pgvfdGX6wxmapLhA=";
   };
 
-  cargoHash = "sha256-ULcdJRla1JwI0y6ngW9xQXjNw2wO48HuAczsNIsJJK0=";
+  cargoHash = "sha256-7CZC29y9dLpyanolO+epKd0KwmRc1iGY+sPM9f/j5hk=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
@@ -27,5 +27,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/rraval/git-nomad/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ rraval ];
+    mainProgram = "git-nomad";
   };
 }

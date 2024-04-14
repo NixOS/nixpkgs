@@ -32,17 +32,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "diffsitter";
-  version = "0.8.0";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "afnanenayet";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-KrmK0RJdNJcZGM/7IxDP5IbJMTY3v6MkHA1SQW+U3hw=";
+    hash = "sha256-rB580TlM0/HXYgPvWtm7KMtXrw6i996HyvCrNr3QmNA=";
     fetchSubmodules = false;
   };
 
-  cargoHash = "sha256-3HALOoa3QDl9KE2UHxszzDw/VuDLLmjccXQvBBrfrHA=";
+  cargoHash = "sha256-8ajCXoB+mVhHrstVG+QkWYfXJqDk4+XPcO6yjR4TqpQ=";
 
   buildNoDefaultFeatures = true;
   buildFeatures = [

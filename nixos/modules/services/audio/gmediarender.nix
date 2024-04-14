@@ -7,12 +7,12 @@ let
 in
 {
   options.services.gmediarender = {
-    enable = mkEnableOption (mdDoc "the gmediarender DLNA renderer");
+    enable = mkEnableOption "the gmediarender DLNA renderer";
 
     audioDevice = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = mdDoc ''
+      description = ''
         The audio device to use.
       '';
     };
@@ -20,7 +20,7 @@ in
     audioSink = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = mdDoc ''
+      description = ''
         The audio sink to use.
       '';
     };
@@ -28,7 +28,7 @@ in
     friendlyName = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = mdDoc ''
+      description = ''
         A "friendly name" for identifying the endpoint.
       '';
     };
@@ -36,25 +36,25 @@ in
     initialVolume = mkOption {
       type = types.nullOr types.int;
       default = 0;
-      description = mdDoc ''
+      description = ''
         A default volume attenuation (in dB) for the endpoint.
       '';
     };
 
-    package = mkPackageOptionMD pkgs "gmediarender" {
+    package = mkPackageOption pkgs "gmediarender" {
       default = "gmrender-resurrect";
     };
 
     port = mkOption {
       type = types.nullOr types.port;
       default = null;
-      description = mdDoc "Port that will be used to accept client connections.";
+      description = "Port that will be used to accept client connections.";
     };
 
     uuid = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = mdDoc ''
+      description = ''
         A UUID for uniquely identifying the endpoint.  If you have
         multiple renderers on your network, you MUST set this.
       '';
@@ -64,6 +64,7 @@ in
   config = mkIf cfg.enable {
     systemd = {
       services.gmediarender = {
+        wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
         description = "gmediarender server daemon";

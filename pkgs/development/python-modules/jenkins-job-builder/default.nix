@@ -9,22 +9,16 @@
 
 buildPythonPackage rec {
   pname = "jenkins-job-builder";
-  version = "5.0.3";
+  version = "6.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9SrFF1QAEpbS5WWBhOA1p8/YyToSbUb69vINUMQ1cug=";
+    hash = "sha256-kV2g1qbS5L7bEqfPijj60eK+pbTc8SAs/tctpNv0PFs=";
   };
 
   postPatch = ''
-    # relax version constraint, https://storyboard.openstack.org/#!/story/2009723
-    substituteInPlace requirements.txt --replace 'PyYAML>=3.10.0,<6' 'PyYAML>=3.10.0'
-
-    # Allow building with setuptools from nixpkgs.
-    # Related: https://github.com/NixOS/nixpkgs/issues/238226.
-    substituteInPlace requirements.txt --replace 'setuptools<=65.7.0' 'setuptools'
-
-    export HOME=$TMPDIR
+    export HOME=$(mktemp -d)
   '';
 
   propagatedBuildInputs = [ pbr python-jenkins pyyaml six stevedore fasteners jinja2 ];
@@ -34,7 +28,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Jenkins Job Builder is a system for configuring Jenkins jobs using simple YAML files stored in Git";
-    homepage = "https://docs.openstack.org/infra/jenkins-job-builder/";
+    mainProgram = "jenkins-jobs";
+    homepage = "https://jenkins-job-builder.readthedocs.io/en/latest/";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

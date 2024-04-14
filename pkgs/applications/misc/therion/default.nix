@@ -10,7 +10,7 @@
 , expat
 , bwidget
 , python3
-, texlive
+, texliveTeTeX
 , survex
 , makeWrapper
 , fmt
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     pkg-config
     perl
     python3
-    texlive.combined.scheme-tetex
+    texliveTeTeX
     makeWrapper
     tcl.tclPackageHook
   ];
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
   fixupPhase = ''
     runHook preFixup
     wrapProgram $out/bin/therion \
-      --prefix PATH : ${lib.makeBinPath [ survex texlive.combined.scheme-tetex ]}
+      --prefix PATH : ${lib.makeBinPath [ survex texliveTeTeX ]}
     wrapProgram $out/bin/xtherion \
       --prefix PATH : ${lib.makeBinPath [ tk ]}
     runHook postFixup

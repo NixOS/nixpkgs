@@ -1,5 +1,5 @@
 { lib
-, stdenv
+, clangStdenv
 , fetchFromGitHub
 , gnustep
 , libxkbcommon
@@ -12,9 +12,10 @@
 assert wayland.withLibraries;
 
 let
-  mkDerivation = if stdenv.isDarwin then stdenv.mkDerivation else gnustep.gsmakeDerivation;
+  stdenv = clangStdenv;
 in
-mkDerivation {
+
+stdenv.mkDerivation {
   pname = "owl-compositor";
   version = "unstable-2021-11-10";
 
@@ -43,6 +44,7 @@ mkDerivation {
     darwin.bootstrap_cmds
   ] ++ lib.optionals (!stdenv.isDarwin) [
     gnustep.make
+    gnustep.wrapGNUstepAppsHook
   ];
 
   buildInputs = [

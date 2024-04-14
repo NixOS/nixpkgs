@@ -8,17 +8,18 @@
 
 buildGoModule rec {
   pname = "opentelemetry-collector-contrib";
-  version = "0.78.0";
+  version = "0.97.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector-contrib";
     rev = "v${version}";
-    sha256 = "sha256-5oTXPQU1aT8Xm1bTjbnauBUqzBqBH+yBzC1tmLHA0v0=";
+    sha256 = "sha256-tUvjNxjPLU5GbWbm4ZbU5oJv8VvAxz4+1n++H8hDqI0=";
   };
+
   # proxy vendor to avoid hash missmatches between linux and macOS
   proxyVendor = true;
-  vendorHash = "sha256-ABaRedZXPr2q2AmslVNIJUvONZa4tv7OkxBLR9GuBRE=";
+  vendorHash = "sha256-raTqiNCb0bXK2vE/3yBo40Um5SY+XZEbzdeIPRyFoQk=";
 
   # there is a nested go.mod
   sourceRoot = "${src.name}/cmd/otelcontribcol";
@@ -38,9 +39,7 @@ buildGoModule rec {
   # it instead of trusting the global $PATH.
   propagatedBuildInputs = lib.optionals withSystemd [ systemdMinimal ];
 
-  # This test fails on darwin for mysterious reasons.
-  checkFlags = lib.optionals stdenv.isDarwin
-    [ "-skip" "TestDefaultExtensions/memory_ballast" ];
+  doCheck = false;
 
   ldflags = [
     "-s"

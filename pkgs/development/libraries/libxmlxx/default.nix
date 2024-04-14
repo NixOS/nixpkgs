@@ -9,6 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "1sb3akryklvh2v6m6dihdnbpf1lkx441v972q9hlz1sq6bfspm2a";
   };
 
+  configureFlags = [
+    # remove if library is updated
+    "CXXFLAGS=-std=c++11"
+  ];
+
   outputs = [ "out" "devdoc" ];
 
   nativeBuildInputs = [ pkg-config perl ];

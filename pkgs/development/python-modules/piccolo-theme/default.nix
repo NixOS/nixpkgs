@@ -2,12 +2,13 @@
 
 buildPythonPackage rec {
   pname = "piccolo-theme";
-  version = "0.16.1";
+  version = "0.21.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "piccolo_theme";
     inherit version;
-    hash = "sha256-4VOJ7l6tBhMBZ2x+T5Bl5WdnMg4JEBkwaGDA/9XUmc8=";
+    hash = "sha256-mQqZ6Rwx0VoDBVQ0zbvCOmAMKAMv67Xd1ksYW6w2QPM=";
   };
 
   propagatedBuildInputs = [

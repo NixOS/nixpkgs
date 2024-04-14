@@ -4,7 +4,6 @@
 , boost
 , cgal
 , cmake
-, copyDesktopItems
 , gpp
 , mpfr
 , qtbase
@@ -15,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "valeronoi";
-  version = "0.1.9";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "ccoors";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-Xa70kOPQLavuJTF9PxCgpKYj15C2fna++cFlCId0a08=";
+    sha256 = "sha256-7z967y1hWpitZfXNlHHM8qEBdyuBQSFlJElS4ldsAaE=";
   };
 
   buildInputs = [
@@ -36,7 +35,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    copyDesktopItems
     wrapQtAppsHook
   ];
 
@@ -48,5 +46,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ nova-madeline maeve ];
+    mainProgram = "valeronoi";
   };
 }

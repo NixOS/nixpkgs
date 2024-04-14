@@ -1,28 +1,30 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, cython
+, cython_3
 , pexpect
 , python
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "cpyparsing";
-  version = "2.4.7.2.1.2";
-  format = "setuptools";
+  version = "2.4.7.2.3.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "evhub";
-    repo = pname;
+    repo = "cpyparsing";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Y3EyX9Gjssez0DkD6dIaOpazNLy7rDYzjKO1u+lLGFI=";
+    hash = "sha256-vnzZdJ7pZz1QxlTqw5UKjxB4GVcXuCfKWX4lu3ORWas=";
   };
 
   nativeBuildInputs = [
-    cython
+    cython_3
+    setuptools
   ];
 
   nativeCheckInputs = [

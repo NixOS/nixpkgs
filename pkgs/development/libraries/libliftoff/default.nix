@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/emersion/libliftoff/releases/tag/v${version}";
     license     = licenses.mit;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ pedrohlc primeos Scrumplex ];
+    maintainers = with maintainers; [ primeos Scrumplex ];
   };
 }

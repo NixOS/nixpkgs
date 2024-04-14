@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "wmenu";
-  version = "0.1.2";
+  version = "0.1.7";
 
   strictDeps = true;
 
@@ -23,14 +23,14 @@ stdenv.mkDerivation rec {
     owner = "~adnano";
     repo = "wmenu";
     rev = version;
-    hash = "sha256-mS4qgf2sjgswasZXsmnbIWlqVv+Murvx1/ob0G3xsws=";
+    hash = "sha256-9do7zL7yaZuqVjastySwjsByo5ja+KUP3590VjIyVnI=";
   };
 
-  # Patch needed to remove build warning, gets merged in next release
+  # Upstream patch needed to fix NULL deref
   patches = [
     (fetchpatch {
-      url = "https://git.sr.ht/~adnano/wmenu/commit/ba10072cdec9b0d4b51bcf305ff27dcf3003ae42.patch";
-      hash = "sha256-XF7xmEnsKlExMJQ5iS7wQG9Ja6ocrR0YvQuWFfByKVA=";
+      url = "https://git.sr.ht/~adnano/wmenu/commit/2856dddcac861ddf248143e66ba164d7aa05a0bb.patch";
+      hash = "sha256-P7SEjMssA8unNAlrgrTHm0uW5pefjpupPb4s/u2fTAM=";
     })
   ];
 
@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ eken ];
+    mainProgram = "wmenu";
   };
 }
 

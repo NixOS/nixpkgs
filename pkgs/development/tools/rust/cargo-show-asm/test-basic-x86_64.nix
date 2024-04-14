@@ -9,7 +9,7 @@ name = "add"
 version = "0.0.0"
 EOF
   cat >src/lib.rs <<EOF
-pub fn add(a: u32, b: u32) -> u32 { a + b }
+#[inline(never)] pub fn add(a: u32, b: u32) -> u32 { a + b }
 EOF
 
   [[ "$(cargo asm add::add | tee /dev/stderr)" == *"lea eax, "* ]]

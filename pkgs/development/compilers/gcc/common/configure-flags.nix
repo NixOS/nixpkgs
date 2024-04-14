@@ -47,7 +47,7 @@ let
   # See https://github.com/NixOS/nixpkgs/pull/209870#issuecomment-1500550903
   disableBootstrap' = disableBootstrap && !langFortran && !langGo;
 
-  crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
+  crossMingw = targetPlatform != hostPlatform && targetPlatform.isMinGW;
   crossDarwin = targetPlatform != hostPlatform && targetPlatform.libc == "libSystem";
 
   targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
@@ -135,6 +135,8 @@ let
       # We pick "/" path to effectively avoid sysroot offset and make it work
       # as a native case.
       "--with-build-sysroot=/"
+      # Same with the stdlibc++ headers embedded in the gcc output
+      "--with-gxx-include-dir=${placeholder "out"}/include/c++/${version}/"
     ]
 
     # Basic configuration
@@ -243,6 +245,16 @@ let
     ]
     ++ lib.optionals (langD) [
       "--with-target-system-zlib=yes"
+    ]
+    # On mips64-unknown-linux-gnu libsanitizer defines collide with
+    # glibc's definitions and fail the build. It was fixed in gcc-13+.
+    ++ lib.optionals (targetPlatform.isMips && targetPlatform.parsed.abi.name == "gnu" && lib.versions.major version == "12") [
+      "--disable-libsanitizer"
+    ]
+    ++ lib.optionals targetPlatform.isAlpha [
+      # Workaround build failures like:
+      #   cc1: error: fp software completion requires '-mtrap-precision=i' [-Werror]
+      "--disable-werror"
     ]
   ;
 

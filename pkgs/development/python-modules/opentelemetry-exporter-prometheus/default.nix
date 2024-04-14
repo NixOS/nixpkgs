@@ -10,19 +10,20 @@
 }:
 
 buildPythonPackage {
-  inherit (opentelemetry-api) version src;
+  inherit (opentelemetry-api) src;
   pname = "opentelemetry-exporter-prometheus";
-  disabled = pythonOlder "3.7";
+  version = "0.44b0";
+  pyproject = true;
 
-  sourceRoot = "source/exporter/opentelemetry-exporter-prometheus";
+  disabled = pythonOlder "3.8";
 
-  format = "pyproject";
+  sourceRoot = "${opentelemetry-api.src.name}/exporter/opentelemetry-exporter-prometheus";
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     opentelemetry-api
     opentelemetry-sdk
     prometheus-client

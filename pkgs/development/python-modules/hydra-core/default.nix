@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , antlr4
 , antlr4-python3-runtime
 , buildPythonPackage
@@ -65,11 +64,17 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "-W" "ignore::UserWarning"
+  ];
+
   # Test environment setup broken under Nix for a few tests:
   disabledTests = [
     "test_bash_completion_with_dot_in_path"
     "test_install_uninstall"
     "test_config_search_path"
+    # does not raise UserWarning
+    "test_initialize_compat_version_base"
   ];
 
   disabledTestPaths = [
@@ -83,7 +88,6 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "A framework for configuring complex applications";
     homepage = "https://hydra.cc";
     license = licenses.mit;

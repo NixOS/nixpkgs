@@ -26,7 +26,7 @@ in
 {
   options = {
     services.discourse = {
-      enable = lib.mkEnableOption (lib.mdDoc "Discourse, an open source discussion platform");
+      enable = lib.mkEnableOption "Discourse, an open source discussion platform";
 
       package = lib.mkOption {
         type = lib.types.package;
@@ -35,7 +35,7 @@ in
           plugins = lib.unique (p.enabledPlugins ++ cfg.plugins);
         };
         defaultText = lib.literalExpression "pkgs.discourse";
-        description = lib.mdDoc ''
+        description = ''
           The discourse package to use.
         '';
       };
@@ -45,7 +45,7 @@ in
         default = config.networking.fqdnOrHostName;
         defaultText = lib.literalExpression "config.networking.fqdnOrHostName";
         example = "discourse.example.com";
-        description = lib.mdDoc ''
+        description = ''
           The hostname to serve Discourse on.
         '';
       };
@@ -54,7 +54,7 @@ in
         type = with lib.types; nullOr path;
         default = null;
         example = "/run/keys/secret_key_base";
-        description = lib.mdDoc ''
+        description = ''
           The path to a file containing the
           `secret_key_base` secret.
 
@@ -78,7 +78,7 @@ in
         type = with lib.types; nullOr path;
         default = null;
         example = "/run/keys/ssl.cert";
-        description = lib.mdDoc ''
+        description = ''
           The path to the server SSL certificate. Set this to enable
           SSL.
         '';
@@ -88,7 +88,7 @@ in
         type = with lib.types; nullOr path;
         default = null;
         example = "/run/keys/ssl.key";
-        description = lib.mdDoc ''
+        description = ''
           The path to the server SSL certificate key. Set this to
           enable SSL.
         '';
@@ -101,7 +101,7 @@ in
           `true`, unless {option}`services.discourse.sslCertificate`
           and {option}`services.discourse.sslCertificateKey` are set.
         '';
-        description = lib.mdDoc ''
+        description = ''
           Whether an ACME certificate should be used to secure
           connections to the server.
         '';
@@ -118,7 +118,7 @@ in
             max_reqs_per_ip_mode = "warn+block";
           };
         '';
-        description = lib.mdDoc ''
+        description = ''
           Additional settings to put in the
           {file}`discourse.conf` file.
 
@@ -147,7 +147,7 @@ in
             };
           };
         '';
-        description = lib.mdDoc ''
+        description = ''
           Discourse site settings. These are the settings that can be
           changed from the UI. This only defines their default values:
           they can still be overridden from the UI.
@@ -175,7 +175,7 @@ in
         skipCreate = lib.mkOption {
           type = lib.types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Do not create the admin account, instead rely on other
             existing admin accounts.
           '';
@@ -184,7 +184,7 @@ in
         email = lib.mkOption {
           type = lib.types.str;
           example = "admin@example.com";
-          description = lib.mdDoc ''
+          description = ''
             The admin user email address.
           '';
         };
@@ -192,21 +192,21 @@ in
         username = lib.mkOption {
           type = lib.types.str;
           example = "admin";
-          description = lib.mdDoc ''
+          description = ''
             The admin user username.
           '';
         };
 
         fullName = lib.mkOption {
           type = lib.types.str;
-          description = lib.mdDoc ''
+          description = ''
             The admin user's full name.
           '';
         };
 
         passwordFile = lib.mkOption {
           type = lib.types.path;
-          description = lib.mdDoc ''
+          description = ''
             A path to a file containing the admin user's password.
 
             This should be a string, not a nix path, since nix paths are
@@ -218,7 +218,7 @@ in
       nginx.enable = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether an `nginx` virtual host should be
           set up to serve Discourse. Only disable if you're planning
           to use a different web server, which is not recommended.
@@ -229,7 +229,7 @@ in
         pool = lib.mkOption {
           type = lib.types.int;
           default = 8;
-          description = lib.mdDoc ''
+          description = ''
             Database connection pool size.
           '';
         };
@@ -237,7 +237,7 @@ in
         host = lib.mkOption {
           type = with lib.types; nullOr str;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             Discourse database hostname. `null` means
             “prefer local unix socket connection”.
           '';
@@ -246,7 +246,7 @@ in
         passwordFile = lib.mkOption {
           type = with lib.types; nullOr path;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             File containing the Discourse database user password.
 
             This should be a string, not a nix path, since nix paths are
@@ -257,7 +257,7 @@ in
         createLocally = lib.mkOption {
           type = lib.types.bool;
           default = true;
-          description = lib.mdDoc ''
+          description = ''
             Whether a database should be automatically created on the
             local host. Set this to `false` if you plan
             on provisioning a local database yourself. This has no effect
@@ -268,7 +268,7 @@ in
         name = lib.mkOption {
           type = lib.types.str;
           default = "discourse";
-          description = lib.mdDoc ''
+          description = ''
             Discourse database name.
           '';
         };
@@ -276,7 +276,7 @@ in
         username = lib.mkOption {
           type = lib.types.str;
           default = "discourse";
-          description = lib.mdDoc ''
+          description = ''
             Discourse database user.
           '';
         };
@@ -284,7 +284,7 @@ in
         ignorePostgresqlVersion = lib.mkOption {
           type = lib.types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Whether to allow other versions of PostgreSQL than the
             recommended one. Only effective when
             {option}`services.discourse.database.createLocally`
@@ -297,7 +297,7 @@ in
         host = lib.mkOption {
           type = lib.types.str;
           default = "localhost";
-          description = lib.mdDoc ''
+          description = ''
             Redis server hostname.
           '';
         };
@@ -305,7 +305,7 @@ in
         passwordFile = lib.mkOption {
           type = with lib.types; nullOr path;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             File containing the Redis password.
 
             This should be a string, not a nix path, since nix paths are
@@ -316,7 +316,7 @@ in
         dbNumber = lib.mkOption {
           type = lib.types.int;
           default = 0;
-          description = lib.mdDoc ''
+          description = ''
             Redis database number.
           '';
         };
@@ -325,7 +325,7 @@ in
           type = lib.types.bool;
           default = cfg.redis.host != "localhost";
           defaultText = lib.literalExpression ''config.${opt.redis.host} != "localhost"'';
-          description = lib.mdDoc ''
+          description = ''
             Connect to Redis with SSL.
           '';
         };
@@ -338,7 +338,7 @@ in
           defaultText = lib.literalExpression ''
             "''${if config.services.discourse.mail.incoming.enable then "notifications" else "noreply"}@''${config.services.discourse.hostname}"
           '';
-          description = lib.mdDoc ''
+          description = ''
             The `from:` email address used when
             sending all essential system emails. The domain specified
             here must have SPF, DKIM and reverse PTR records set
@@ -349,7 +349,7 @@ in
         contactEmailAddress = lib.mkOption {
           type = lib.types.str;
           default = "";
-          description = lib.mdDoc ''
+          description = ''
             Email address of key contact responsible for this
             site. Used for critical notifications, as well as on the
             `/about` contact form for urgent matters.
@@ -360,7 +360,7 @@ in
           serverAddress = lib.mkOption {
             type = lib.types.str;
             default = "localhost";
-            description = lib.mdDoc ''
+            description = ''
               The address of the SMTP server Discourse should use to
               send email.
             '';
@@ -369,7 +369,7 @@ in
           port = lib.mkOption {
             type = lib.types.port;
             default = 25;
-            description = lib.mdDoc ''
+            description = ''
               The port of the SMTP server Discourse should use to
               send email.
             '';
@@ -378,7 +378,7 @@ in
           username = lib.mkOption {
             type = with lib.types; nullOr str;
             default = null;
-            description = lib.mdDoc ''
+            description = ''
               The username of the SMTP server.
             '';
           };
@@ -386,7 +386,7 @@ in
           passwordFile = lib.mkOption {
             type = lib.types.nullOr lib.types.path;
             default = null;
-            description = lib.mdDoc ''
+            description = ''
               A file containing the password of the SMTP server account.
 
               This should be a string, not a nix path, since nix paths
@@ -398,7 +398,7 @@ in
             type = lib.types.str;
             default = cfg.hostname;
             defaultText = lib.literalExpression "config.${opt.hostname}";
-            description = lib.mdDoc ''
+            description = ''
               HELO domain to use for outgoing mail.
             '';
           };
@@ -406,15 +406,15 @@ in
           authentication = lib.mkOption {
             type = with lib.types; nullOr (enum ["plain" "login" "cram_md5"]);
             default = null;
-            description = lib.mdDoc ''
-              Authentication type to use, see http://api.rubyonrails.org/classes/ActionMailer/Base.html
+            description = ''
+              Authentication type to use, see https://api.rubyonrails.org/classes/ActionMailer/Base.html
             '';
           };
 
           enableStartTLSAuto = lib.mkOption {
             type = lib.types.bool;
             default = true;
-            description = lib.mdDoc ''
+            description = ''
               Whether to try to use StartTLS.
             '';
           };
@@ -422,15 +422,15 @@ in
           opensslVerifyMode = lib.mkOption {
             type = lib.types.str;
             default = "peer";
-            description = lib.mdDoc ''
-              How OpenSSL checks the certificate, see http://api.rubyonrails.org/classes/ActionMailer/Base.html
+            description = ''
+              How OpenSSL checks the certificate, see https://api.rubyonrails.org/classes/ActionMailer/Base.html
             '';
           };
 
           forceTLS = lib.mkOption {
             type = lib.types.bool;
             default = false;
-            description = lib.mdDoc ''
+            description = ''
               Force implicit TLS as per RFC 8314 3.3.
             '';
           };
@@ -440,7 +440,7 @@ in
           enable = lib.mkOption {
             type = lib.types.bool;
             default = false;
-            description = lib.mdDoc ''
+            description = ''
               Whether to set up Postfix to receive incoming mail.
             '';
           };
@@ -449,7 +449,7 @@ in
             type = lib.types.str;
             default = "%{reply_key}@${cfg.hostname}";
             defaultText = lib.literalExpression ''"%{reply_key}@''${config.services.discourse.hostname}"'';
-            description = lib.mdDoc ''
+            description = ''
               Template for reply by email incoming email address, for
               example: %{reply_key}@reply.example.com or
               replies+%{reply_key}@example.com
@@ -460,7 +460,7 @@ in
             type = lib.types.package;
             default = pkgs.discourse-mail-receiver;
             defaultText = lib.literalExpression "pkgs.discourse-mail-receiver";
-            description = lib.mdDoc ''
+            description = ''
               The discourse-mail-receiver package to use.
             '';
           };
@@ -468,7 +468,7 @@ in
           apiKeyFile = lib.mkOption {
             type = lib.types.nullOr lib.types.path;
             default = null;
-            description = lib.mdDoc ''
+            description = ''
               A file containing the Discourse API key used to add
               posts and messages from mail. If left at its default
               value `null`, one will be automatically
@@ -490,7 +490,7 @@ in
             discourse-github
           ];
         '';
-        description = lib.mdDoc ''
+        description = ''
           Plugins to install as part of Discourse, expressed as a list of derivations.
         '';
       };
@@ -498,7 +498,7 @@ in
       sidekiqProcesses = lib.mkOption {
         type = lib.types.int;
         default = 1;
-        description = lib.mdDoc ''
+        description = ''
           How many Sidekiq processes should be spawned.
         '';
       };
@@ -506,7 +506,7 @@ in
       unicornTimeout = lib.mkOption {
         type = lib.types.int;
         default = 30;
-        description = lib.mdDoc ''
+        description = ''
           Time in seconds before a request to Unicorn times out.
 
           This can be raised if the system Discourse is running on is

@@ -10,18 +10,16 @@ in {
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         If enabled, the Crossfire game server will be started at boot.
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.crossfire-server;
-      defaultText = literalExpression "pkgs.crossfire-server";
-      description = lib.mdDoc ''
-        The package to use for the Crossfire server (and map/arch data, if you
-        don't change dataDir).
+    package = mkPackageOption pkgs "crossfire-server" {
+      extraDescription = ''
+        ::: {.note}
+        This will also be used for map/arch data, if you don't change {option}`dataDir`
+        :::
       '';
     };
 
@@ -29,7 +27,7 @@ in {
       type = types.str;
       default = "${cfg.package}/share/crossfire";
       defaultText = literalExpression ''"''${config.services.crossfire.package}/share/crossfire"'';
-      description = lib.mdDoc ''
+      description = ''
         Where to load readonly data from -- maps, archetypes, treasure tables,
         and the like. If you plan to edit the data on the live server (rather
         than overlaying the crossfire-maps and crossfire-arch packages and
@@ -41,7 +39,7 @@ in {
     stateDir = mkOption {
       type = types.str;
       default = "/var/lib/crossfire";
-      description = lib.mdDoc ''
+      description = ''
         Where to store runtime data (save files, persistent items, etc).
 
         If left at the default, this will be automatically created on server
@@ -54,14 +52,14 @@ in {
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to open ports in the firewall for the server.
       '';
     };
 
     configFiles = mkOption {
       type = types.attrsOf types.str;
-      description = lib.mdDoc ''
+      description = ''
         Text to append to the corresponding configuration files. Note that the
         files given in the example are *not* the complete set of files available
         to customize; look in /etc/crossfire after enabling the server to see

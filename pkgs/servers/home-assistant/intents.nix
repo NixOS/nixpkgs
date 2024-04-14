@@ -1,65 +1,36 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , pythonOlder
+
+# build-system
 , setuptools
-
-# build
-, hassil
-, jinja2
-, pyyaml
-, regex
-, voluptuous
-, python
-
-# tests
-, pytest-xdist
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "home-assistant-intents";
-  version = "2023.7.25";
-  format = "pyproject";
+  version = "2024.4.3";
+  format = "wheel";
 
   disabled = pythonOlder "3.9";
 
-  src = fetchFromGitHub {
-    owner = "home-assistant";
-    repo = "intents-package";
-    rev = "refs/tags/${version}";
-    hash = "sha256-/9+d22CqlEi+ukjIZRsyCuPPeTCD+XZp8+5iUM3Nc3o=";
-    fetchSubmodules = true;
+  src = fetchPypi {
+    inherit version format;
+    pname = "home_assistant_intents";
+    dist = "py3";
+    python = "py3";
+    hash = "sha256-GraYVtioKIoKlPRBhhhzlbBfI6heXAaA1MQpUqAgEDQ=";
   };
 
-  nativeBuildInputs = [
-    hassil
-    jinja2
-    pyyaml
-    regex
+  build-system = [
     setuptools
-    voluptuous
   ];
 
-  postInstall = ''
-    pushd intents
-    # https://github.com/home-assistant/intents/blob/main/script/package#L18
-    ${python.pythonForBuild.interpreter} -m script.intentfest merged_output $out/${python.sitePackages}/home_assistant_intents/data
-    popd
-  '';
-
-  checkInputs = [
-    pytest-xdist
-    pytestCheckHook
-  ];
+  # sdist/wheel do not ship tests
+  doCheck = false;
 
   pytestFlagsArray = [
     "intents/tests"
-  ];
-
-  disabledTests = [
-    # AssertionError: Recognition failed for 'put apples on the list'
-    "test_shopping_list_HassShoppingListAddItem"
   ];
 
   meta = with lib; {

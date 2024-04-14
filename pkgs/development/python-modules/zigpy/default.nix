@@ -1,11 +1,16 @@
 { lib
 , aiohttp
+, aioresponses
 , aiosqlite
+, async-timeout
+, attrs
 , buildPythonPackage
 , crccheck
 , cryptography
-, freezegun
 , fetchFromGitHub
+, freezegun
+, importlib-resources
+, jsonschema
 , pycryptodome
 , pyserial-asyncio
 , pytest-asyncio
@@ -13,13 +18,14 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, typing-extensions
 , voluptuous
 }:
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.56.2";
-  format = "pyproject";
+  version = "0.63.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -27,29 +33,38 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zigpy";
     rev = "refs/tags/${version}";
-    hash = "sha256-VUnt2rk1nQZqmoS8ytBCX2q3E4zxSz2A0Hg7AUXmtJo=";
+    hash = "sha256-iZxHXxheyoA5vo0Pxojs7QE8rSyTpsYpJ6/OzDSZJ20=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail '"setuptools-git-versioning<2"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    attrs
     aiohttp
     aiosqlite
     crccheck
     cryptography
+    jsonschema
     pyserial-asyncio
+    typing-extensions
     pycryptodome
     voluptuous
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    async-timeout
   ];
 
   nativeCheckInputs = [
+    aioresponses
     freezegun
     pytest-asyncio
     pytest-timeout
@@ -61,6 +76,11 @@ buildPythonPackage rec {
     # assert len(mock_scan.mock_calls) == 3
     # AssertionError: assert 4 == 3
     "test_periodic_scan_priority"
+  ];
+
+  disabledTestPaths = [
+    # Tests require network access
+    "tests/ota/test_ota_providers.py"
   ];
 
   pythonImportsCheck = [

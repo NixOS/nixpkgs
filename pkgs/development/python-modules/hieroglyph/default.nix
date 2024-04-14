@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "hieroglyph";
   version = "2.1.0";
+  format = "setuptools";
   disabled = isPy27; # python2 compatible sphinx is too low
 
   src = fetchPypi {

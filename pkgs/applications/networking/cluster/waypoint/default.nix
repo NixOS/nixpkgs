@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "waypoint";
-  version = "0.11.2";
+  version = "0.11.4";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mYds46+35sdo9aF5XETwZuvYKW5vExEgm/hAwv2g3do=";
+    sha256 = "sha256-Zn11mVQV8lN62BVYfhXauKets7/mIqA0r+mG2TkRyPk=";
   };
 
   vendorHash = "sha256-z0qe8zSQ9PopGeyvMDhRpU+3jUgHoh+8jTsYGLPk3i4=";
@@ -70,6 +70,7 @@ buildGoModule rec {
     homepage = "https://waypointproject.io";
     changelog = "https://github.com/hashicorp/waypoint/blob/v${version}/CHANGELOG.md";
     description = "A tool to build, deploy, and release any application on any platform";
+    mainProgram = "waypoint";
     longDescription = ''
       Waypoint allows developers to define their application build, deploy, and
       release lifecycle as code, reducing the time to deliver deployments

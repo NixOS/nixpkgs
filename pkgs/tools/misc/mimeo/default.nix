@@ -35,5 +35,6 @@ in python3Packages.buildPythonApplication {
     license = [ licenses.gpl2Only ];
     maintainers = [ maintainers.rycee ];
     platforms = platforms.unix;
+    mainProgram = "mimeo";
   };
 }

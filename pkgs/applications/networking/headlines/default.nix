@@ -14,7 +14,7 @@
 , gtkmm4
 , libsecret
 , fetchFromGitLab
-, makeWrapper
+, wrapGAppsHook4
 , xdg-utils
 , youtube-dl
 , ffmpeg
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    makeWrapper
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -56,10 +56,10 @@ stdenv.mkDerivation rec {
     gst-plugins-bad
   ]);
 
-  postFixup = ''
-    wrapProgram "$out/bin/headlines" \
-      --prefix PATH : "${lib.makeBinPath [ xdg-utils youtube-dl ffmpeg ]}" \
-      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : "${lib.makeBinPath [ xdg-utils youtube-dl ffmpeg ]}"
+    )
   '';
 
   meta = with lib; {
@@ -68,5 +68,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ chuangzhu ];
+    mainProgram = "headlines";
   };
 }

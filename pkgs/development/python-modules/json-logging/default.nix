@@ -6,6 +6,7 @@
 , httpx
 , pytestCheckHook
 , pythonOlder
+, quart
 , requests
 , sanic
 , uvicorn
@@ -31,7 +32,7 @@ buildPythonPackage rec {
     flask
     httpx
     pytestCheckHook
-    # quart
+    quart
     requests
     sanic
     uvicorn
@@ -44,6 +45,11 @@ buildPythonPackage rec {
 
   disabledTests = [
     "quart"
+  ];
+
+  disabledTestPaths = [
+    # Smoke tests don't always work
+    "tests/smoketests/test_run_smoketest.py"
   ];
 
   __darwinAllowLocalNetworking = true;

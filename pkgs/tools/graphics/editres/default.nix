@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     description = "A dynamic resource editor for X Toolkit applications";
     license = licenses.mit;
     platforms = platforms.linux;
+    mainProgram = "editres";
   };
 }

@@ -1,74 +1,55 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, setuptools
-, mock
-, netaddr
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  setuptools,
+  mock,
+  netaddr,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyeapi";
-  version = "0.8.4";
-  format = "pyproject";
+  version = "1.0.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "arista-eosplus";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "13chya6wix5jb82k67gr44bjx35gcdwz80nsvpv0gvzs6shn4d7b";
+    repo = "pyeapi";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-GZBoCoAqij54rZezRDF/ihJDQ5T6FFyDSRXGV3//avQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  patches = [
+    # Replace imp, https://github.com/arista-eosplus/pyeapi/pull/295
+    (fetchpatch {
+      name = "replace-imp.patch";
+      url = "https://github.com/arista-eosplus/pyeapi/commit/1f2d8e1fa61566082ccb11a1a17e0f3d8a0c89df.patch";
+      hash = "sha256-ONviRU6eUUZ+TTJ4F41ZXqavW7RIi1MBO7s7OsnWknk=";
+    })
   ];
 
-  propagatedBuildInputs = [
-    netaddr
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ netaddr ];
 
   nativeCheckInputs = [
     mock
     pytestCheckHook
   ];
 
-  patches = [
-    # Fix usage of collection, https://github.com/arista-eosplus/pyeapi/pull/223
-    (fetchpatch {
-      name = "fix-collection-usage.patch";
-      url = "https://github.com/arista-eosplus/pyeapi/commit/81754f57eb095703cc474f527a0915360af76f68.patch";
-      hash = "sha256-ZNBTPRNmXCFVJeRAJxzIHmCOXZiGwU6t4ekSupU3BX8=";
-    })
-    (fetchpatch {
-      name = "fix-collection-usage-2.patch";
-      url = "https://github.com/arista-eosplus/pyeapi/commit/cc9c584e4a3167e3c1624cccb6bc0d9c9bcdbc1c.patch";
-      hash = "sha256-EY0i1Skm1llEQAAzvrb2yelhhLBkqKAFJB5ObAIxAYo=";
-      excludes = [
-        ".github/workflows/ci.yml"
-      ];
-    })
-    (fetchpatch {
-      name = "fix-collection-usage-3.patch";
-      url = "https://github.com/arista-eosplus/pyeapi/commit/dc35ab076687ea71665ae9524480b05a4e893909.patch";
-      hash = "sha256-xPaYULCPTxiQGB9Im/qLet+XebW9wq+TAfrxcgQxcoE=";
-    })
-  ];
+  pytestFlagsArray = [ "test/unit" ];
 
-  pytestFlagsArray = [
-    "test/unit"
-  ];
-
-  pythonImportsCheck = [
-    "pyeapi"
-  ];
+  pythonImportsCheck = [ "pyeapi" ];
 
   meta = with lib; {
     description = "Client for Arista eAPI";
     homepage = "https://github.com/arista-eosplus/pyeapi";
+    changelog = "https://github.com/arista-eosplus/pyeapi/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ astro ];
   };

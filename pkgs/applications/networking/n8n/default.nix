@@ -9,11 +9,13 @@ in
 nodePackages.n8n.override {
   nativeBuildInputs = [
     pkgs.nodePackages.node-pre-gyp
+    pkgs.which
   ];
 
   buildInputs = [
-    pkgs.postgresql
+    pkgs.libkrb5
     pkgs.libmongocrypt
+    pkgs.postgresql
   ];
 
   # Oracle's official package on npm is binary only (WHY?!) and doesn't provide binaries for aarch64.
@@ -39,5 +41,6 @@ nodePackages.n8n.override {
     description = "Free and source-available fair-code licensed workflow automation tool. Easily automate tasks across different services.";
     maintainers = with maintainers; [ freezeboy k900 ];
     license = licenses.sustainableUse;
+    mainProgram = "n8n";
   };
 }

@@ -22,5 +22,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ luc65r ivar ];
     platforms = platforms.linux;
+    mainProgram = "tuigreet";
   };
 }

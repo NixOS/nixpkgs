@@ -18,23 +18,20 @@ pub(super) fn packages(content: &str) -> anyhow::Result<Vec<Package>> {
         1 => {
             let initial_url = get_initial_url()?;
 
-            lockfile
-                .dependencies
-                .map(|p| to_new_packages(p, &initial_url))
-                .transpose()?
+            to_new_packages(lockfile.dependencies.unwrap_or_default(), &initial_url)?
         }
-        2 | 3 => lockfile.packages.map(|pkgs| {
-            pkgs.into_iter()
-                .filter(|(n, p)| !n.is_empty() && matches!(p.resolved, Some(UrlOrString::Url(_))))
-                .map(|(n, p)| Package { name: Some(n), ..p })
-                .collect()
-        }),
+        2 | 3 => lockfile
+            .packages
+            .unwrap_or_default()
+            .into_iter()
+            .filter(|(n, p)| !n.is_empty() && matches!(p.resolved, Some(UrlOrString::Url(_))))
+            .map(|(n, p)| Package { name: Some(n), ..p })
+            .collect(),
         _ => bail!(
             "We don't support lockfile version {}, please file an issue.",
             lockfile.version
         ),
-    }
-    .expect("lockfile should have packages");
+    };
 
     packages.par_sort_by(|x, y| {
         x.resolved
@@ -182,6 +179,7 @@ impl fmt::Display for Hash {
     }
 }
 
+#[allow(clippy::incorrect_partial_ord_impl_on_ord_type)]
 impl PartialOrd for Hash {
     fn partial_cmp(&self, other: &Hash) -> Option<Ordering> {
         let lhs = self.0.split_once('-')?.0;
@@ -216,29 +214,35 @@ fn to_new_packages(
         }
 
         if let UrlOrString::Url(v) = &package.version {
-            for (scheme, host) in [
-                ("github", "github.com"),
-                ("bitbucket", "bitbucket.org"),
-                ("gitlab", "gitlab.com"),
-            ] {
-                if v.scheme() == scheme {
-                    package.version = {
-                        let mut new_url = initial_url.clone();
+            if v.scheme() == "npm" {
+                if let Some(UrlOrString::Url(ref url)) = &package.resolved {
+                    package.version = UrlOrString::Url(url.clone());
+                }
+            } else {
+                for (scheme, host) in [
+                    ("github", "github.com"),
+                    ("bitbucket", "bitbucket.org"),
+                    ("gitlab", "gitlab.com"),
+                ] {
+                    if v.scheme() == scheme {
+                        package.version = {
+                            let mut new_url = initial_url.clone();
 
-                        new_url.set_host(Some(host))?;
+                            new_url.set_host(Some(host))?;
 
-                        if v.path().ends_with(".git") {
-                            new_url.set_path(v.path());
-                        } else {
-                            new_url.set_path(&format!("{}.git", v.path()));
-                        }
+                            if v.path().ends_with(".git") {
+                                new_url.set_path(v.path());
+                            } else {
+                                new_url.set_path(&format!("{}.git", v.path()));
+                            }
 
-                        new_url.set_fragment(v.fragment());
+                            new_url.set_fragment(v.fragment());
 
-                        UrlOrString::Url(new_url)
-                    };
+                            UrlOrString::Url(new_url)
+                        };
 
-                    break;
+                        break;
+                    }
                 }
             }
         }
@@ -268,7 +272,8 @@ fn get_initial_url() -> anyhow::Result<Url> {
 #[cfg(test)]
 mod tests {
     use super::{
-        get_initial_url, to_new_packages, Hash, HashCollection, OldPackage, Package, UrlOrString,
+        get_initial_url, packages, to_new_packages, Hash, HashCollection, OldPackage, Package,
+        UrlOrString,
     };
     use std::{
         cmp::Ordering,
@@ -328,6 +333,38 @@ mod tests {
             })
             .into_best(),
             Some(Hash(String::from("sha512-foo")))
+        );
+    }
+
+    #[test]
+    fn parse_lockfile_correctly() {
+        let packages = packages(
+            r#"{
+                "name": "node-ddr",
+                "version": "1.0.0",
+                "lockfileVersion": 1,
+                "requires": true,
+                "dependencies": {
+                    "string-width-cjs": {
+                        "version": "npm:string-width@4.2.3",
+                        "resolved": "https://registry.npmjs.org/string-width/-/string-width-4.2.3.tgz",
+                        "integrity": "sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==",
+                        "requires": {
+                            "emoji-regex": "^8.0.0",
+                            "is-fullwidth-code-point": "^3.0.0",
+                            "strip-ansi": "^6.0.1"
+                        }
+                    }
+                }
+            }"#).unwrap();
+
+        assert_eq!(packages.len(), 1);
+        assert_eq!(
+            packages[0].resolved,
+            Some(UrlOrString::Url(
+                Url::parse("https://registry.npmjs.org/string-width/-/string-width-4.2.3.tgz")
+                    .unwrap()
+            ))
         );
     }
 }

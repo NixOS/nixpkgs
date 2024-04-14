@@ -1,17 +1,17 @@
-{ lib, fetchFromGitHub, buildGoModule, nixosTests, fetchpatch }:
+{ lib, fetchFromGitHub, buildGoModule, nixosTests }:
 
 buildGoModule rec {
   pname = "prometheus-nextcloud-exporter";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "xperimental";
     repo = "nextcloud-exporter";
     rev = "v${version}";
-    sha256 = "sha256-8Pz1Xa8P0T+5P4qCoyRyRqPtAaSiZw4BV+rSZf4exC0=";
+    sha256 = "sha256-tbzXxrAzMZyyePeI+Age31+XJFJcp+1RqoCAGCKaLmQ=";
   };
 
-  vendorHash = "sha256-NIJH5Ya+fZ+37y+Lim/WizNCOYk1lpPRf6u70IoiFZk=";
+  vendorHash = "sha256-9ABGc5uSOIjhKcnTH5WOuwg0kXhFsxOlAkatcOQy3dg=";
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) nextcloud; };
 

@@ -69,46 +69,46 @@ let
 in
 {
   options.services.cloudlog = with types; {
-    enable = mkEnableOption (mdDoc "Whether to enable Cloudlog");
+    enable = mkEnableOption "Cloudlog";
     dataDir = mkOption {
       type = str;
       default = "/var/lib/cloudlog";
-      description = mdDoc "Cloudlog data directory.";
+      description = "Cloudlog data directory.";
     };
     baseUrl = mkOption {
       type = str;
       default = "http://localhost";
-      description = mdDoc "Cloudlog base URL";
+      description = "Cloudlog base URL";
     };
     user = mkOption {
       type = str;
       default = "cloudlog";
-      description = mdDoc "User account under which Cloudlog runs.";
+      description = "User account under which Cloudlog runs.";
     };
     database = {
       createLocally = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Create the database and database user locally.";
+        description = "Create the database and database user locally.";
       };
       host = mkOption {
         type = str;
-        description = mdDoc "MySQL database host";
+        description = "MySQL database host";
         default = "localhost";
       };
       name = mkOption {
         type = str;
-        description = mdDoc "MySQL database name.";
+        description = "MySQL database name.";
         default = "cloudlog";
       };
       user = mkOption {
         type = str;
-        description = mdDoc "MySQL user name.";
+        description = "MySQL user name.";
         default = "cloudlog";
       };
       passwordFile = mkOption {
         type = nullOr str;
-        description = mdDoc "MySQL user password file.";
+        description = "MySQL user password file.";
         default = null;
       };
     };
@@ -122,20 +122,20 @@ in
         "pm.max_spare_servers" = 4;
         "pm.max_requests" = 500;
       };
-      description = mdDoc ''
+      description = ''
         Options for Cloudlog's PHP-FPM pool.
       '';
     };
     virtualHost = mkOption {
       type = nullOr str;
       default = "localhost";
-      description = mdDoc ''
+      description = ''
         Name of the nginx virtualhost to use and setup. If null, do not setup
          any virtualhost.
       '';
     };
     extraConfig = mkOption {
-      description = mdDoc ''
+      description = ''
        Any additional text to be appended to the config.php
        configuration file. This is a PHP script. For configuration
        settings, see <https://github.com/magicbug/Cloudlog/wiki/Cloudlog.php-Configuration-File>.
@@ -150,7 +150,7 @@ in
       enable = mkOption {
         type = bool;
         default = true;
-        description = mdDoc ''
+        description = ''
           Whether to periodically upload logs to LoTW. If enabled, a systemd
           timer will run the log upload task as specified by the interval
            option.
@@ -159,7 +159,7 @@ in
       interval = mkOption {
         type = str;
         default = "daily";
-        description = mdDoc ''
+        description = ''
           Specification (in the format described by systemd.time(7)) of the
           time at which the LoTW upload will occur.
         '';
@@ -169,7 +169,7 @@ in
       enable = mkOption {
         type = bool;
         default = true;
-        description = mdDoc ''
+        description = ''
           Whether to periodically upload logs to Clublog. If enabled, a systemd
           timer will run the log upload task as specified by the interval option.
         '';
@@ -177,7 +177,7 @@ in
       interval = mkOption {
         type = str;
         default = "daily";
-        description = mdDoc ''
+        description = ''
           Specification (in the format described by systemd.time(7)) of the time
           at which the Clublog upload will occur.
         '';
@@ -187,7 +187,7 @@ in
       enable = mkOption {
         type = bool;
         default = true;
-        description = mdDoc ''
+        description = ''
           Whether to periodically update the list of LoTW users. If enabled, a
           systemd timer will run the update task as specified by the interval
           option.
@@ -196,7 +196,7 @@ in
       interval = mkOption {
         type = str;
         default = "weekly";
-        description = mdDoc ''
+        description = ''
           Specification (in the format described by systemd.time(7)) of the
           time at which the LoTW user update will occur.
         '';
@@ -206,7 +206,7 @@ in
       enable = mkOption {
         type = bool;
         default = true;
-        description = mdDoc ''
+        description = ''
           Whether to periodically update the DOK resource file. If enabled, a
           systemd timer will run the update task as specified by the interval option.
         '';
@@ -214,7 +214,7 @@ in
       interval = mkOption {
         type = str;
         default = "monthly";
-        description = mdDoc ''
+        description = ''
           Specification (in the format described by systemd.time(7)) of the
           time at which the DOK update will occur.
         '';
@@ -224,7 +224,7 @@ in
       enable = mkOption {
         type = bool;
         default = true;
-        description = mdDoc ''
+        description = ''
           Whether to periodically update the Clublog SCP database. If enabled,
           a systemd timer will run the update task as specified by the interval
           option.
@@ -233,7 +233,7 @@ in
       interval = mkOption {
         type = str;
         default = "monthly";
-        description = mdDoc ''
+        description = ''
           Specification (in the format described by systemd.time(7)) of the time
           at which the Clublog SCP update will occur.
         '';
@@ -243,7 +243,7 @@ in
       enable = mkOption {
         type = bool;
         default = true;
-        description = mdDoc ''
+        description = ''
           Whether to periodically update the WWFF database. If enabled, a
           systemd timer will run the update task as specified by the interval
           option.
@@ -252,7 +252,7 @@ in
       interval = mkOption {
         type = str;
         default = "monthly";
-        description = mdDoc ''
+        description = ''
           Specification (in the format described by systemd.time(7)) of the time
           at which the WWFF update will occur.
         '';
@@ -262,7 +262,7 @@ in
       enable = mkOption {
         type = bool;
         default = true;
-        description = mdDoc ''
+        description = ''
           Whether to periodically upload logs to QRZ. If enabled, a systemd
           timer will run the update task as specified by the interval option.
         '';
@@ -270,7 +270,7 @@ in
       interval = mkOption {
         type = str;
         default = "daily";
-        description = mdDoc ''
+        description = ''
           Specification (in the format described by systemd.time(7)) of the
           time at which the QRZ upload will occur.
         '';
@@ -280,7 +280,7 @@ in
       enable = mkOption {
         type = bool;
         default = true;
-        description = mdDoc ''
+        description = ''
           Whether to periodically update the SOTA database. If enabled, a
           systemd timer will run the update task as specified by the interval option.
         '';
@@ -288,7 +288,7 @@ in
       interval = mkOption {
         type = str;
         default = "monthly";
-        description = mdDoc ''
+        description = ''
           Specification (in the format described by systemd.time(7)) of the time
           at which the SOTA update will occur.
         '';
@@ -308,8 +308,6 @@ in
       pools.cloudlog = {
         inherit (cfg) user;
         group = config.services.nginx.group;
-        # cloudlog is currently broken on php 8.2
-        phpPackage = pkgs.php81;
         settings =  {
           "listen.owner" = config.services.nginx.user;
           "listen.group" = config.services.nginx.group;

@@ -1,6 +1,12 @@
 # do not add pkgs, it messes up splicing
 { stdenv
+, cargo
 , cmake
+
+# plenary utilities
+, which
+, findutils
+, coreutils
 , curl
 , cyrus_sasl
 , dbus
@@ -26,7 +32,9 @@
 , libuv
 , libxcrypt
 , libyaml
+, luajitPackages
 , mariadb
+, magic-enum
 , mpfr
 , neovim-unwrapped
 , openldap
@@ -35,7 +43,10 @@
 , pkg-config
 , postgresql
 , readline
+, rustPlatform
+, sol2
 , sqlite
+, tomlplusplus
 , unbound
 , vimPlugins
 , vimUtils
@@ -45,8 +56,22 @@
 }:
 
 final: prev:
-with prev;
+let
+  inherit (prev) luaOlder luaAtLeast lua isLuaJIT;
+in
 {
+  argparse = prev.argparse.overrideAttrs(oa: {
+
+    doCheck = true;
+    checkInputs = [ final.busted ];
+
+    checkPhase = ''
+      runHook preCheck
+      export LUA_PATH="src/?.lua;$LUA_PATH"
+      busted spec/
+      runHook postCheck
+    '';
+  });
   ##########################################3
   #### manual fixes for generated packages
   ##########################################3
@@ -112,18 +137,22 @@ with prev;
       '';
   });
 
-  cyrussasl = prev.cyrussasl.overrideAttrs (drv: {
-    externalDeps = [
-      { name = "LIBSASL"; dep = cyrus_sasl; }
-    ];
-  });
-
   fennel = prev.fennel.overrideAttrs(oa: {
     nativeBuildInputs = oa.nativeBuildInputs ++ [
       installShellFiles
     ];
     postInstall = ''
       installManPage fennel.1
+    '';
+  });
+
+  # Until https://github.com/swarn/fzy-lua/pull/8 is merged,
+  # we have to invoke busted manually
+  fzy = prev.fzy.overrideAttrs(oa: {
+    doCheck = true;
+    nativeCheckInputs = [ prev.busted ];
+    checkPhase = ''
+      busted test/test.lua
     '';
   });
 
@@ -141,15 +170,20 @@ with prev;
     */
   });
 
-  lpty = prev.lpty.overrideAttrs (oa: {
-    meta.broken = luaOlder "5.1" || luaAtLeast "5.3";
+  image-nvim = prev.image-nvim.overrideAttrs (oa: {
+    propagatedBuildInputs = [
+      lua
+      luajitPackages.magick
+    ];
   });
 
   ldbus = prev.ldbus.overrideAttrs (oa: {
-    extraVariables = {
-      DBUS_DIR = "${dbus.lib}";
-      DBUS_ARCH_INCDIR = "${dbus.lib}/lib/dbus-1.0/include";
-      DBUS_INCDIR = "${dbus.dev}/include/dbus-1.0";
+    luarocksConfig = oa.luarocksConfig // {
+      variables = {
+        DBUS_DIR = "${dbus.lib}";
+        DBUS_ARCH_INCDIR = "${dbus.lib}/lib/dbus-1.0/include";
+        DBUS_INCDIR = "${dbus.dev}/include/dbus-1.0";
+      };
     };
     buildInputs = [
       dbus
@@ -172,7 +206,7 @@ with prev;
     '';
     meta.broken = luaOlder "5.1" || luaAtLeast "5.3";
 
-    propagatedBuildInputs = with lib; oa.propagatedBuildInputs ++ optional (!isLuaJIT) luaffi;
+    propagatedBuildInputs = with lib; oa.propagatedBuildInputs ++ optional (!isLuaJIT) final.luaffi;
   });
 
   lgi = prev.lgi.overrideAttrs (oa: {
@@ -291,10 +325,13 @@ with prev;
   });
 
   luadbi-mysql = prev.luadbi-mysql.overrideAttrs (oa: {
-    extraVariables = {
-      # Can't just be /include and /lib, unfortunately needs the trailing 'mysql'
-      MYSQL_INCDIR = "${libmysqlclient.dev}/include/mysql";
-      MYSQL_LIBDIR = "${libmysqlclient}/lib/mysql";
+
+    luarocksConfig = lib.recursiveUpdate oa.luarocksConfig {
+      variables = {
+        # Can't just be /include and /lib, unfortunately needs the trailing 'mysql'
+        MYSQL_INCDIR = "${libmysqlclient.dev}/include/mysql";
+        MYSQL_LIBDIR = "${libmysqlclient}/lib/mysql";
+      };
     };
     buildInputs = oa.buildInputs ++ [
       mariadb.client
@@ -316,12 +353,12 @@ with prev;
 
   luaevent = prev.luaevent.overrideAttrs (oa: {
     propagatedBuildInputs = oa.propagatedBuildInputs ++ [
-      luasocket
+      final.luasocket
     ];
     externalDeps = [
       { name = "EVENT"; dep = libevent; }
     ];
-    disabled = luaOlder "5.1" || luaAtLeast "5.4";
+    meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
   });
 
   luaexpat = prev.luaexpat.overrideAttrs (_: {
@@ -385,6 +422,11 @@ with prev;
     ];
   });
 
+  # lua-resty-session =  prev.lua-resty-session.overrideAttrs (oa: {
+  #   # lua_pack and lua-ffi-zlib are unpackaged, causing this package to not evaluate
+  #   meta.broken = true;
+  # });
+
   lua-yajl =  prev.lua-yajl.overrideAttrs (oa: {
     buildInputs = oa.buildInputs ++ [
       yajl
@@ -399,6 +441,17 @@ with prev;
 
   lua-subprocess = prev.lua-subprocess.overrideAttrs (oa: {
     meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
+  });
+
+  lua-rtoml = prev.lua-rtoml.overrideAttrs (oa: {
+
+    cargoDeps = rustPlatform.fetchCargoTarball {
+      src = oa.src;
+      hash = "sha256-EcP4eYsuOVeEol+kMqzsVHd8F2KoBdLzf6K0KsYToUY=";
+    };
+
+    propagatedBuildInputs = oa.propagatedBuildInputs ++ [ cargo rustPlatform.cargoSetupHook ];
+
   });
 
   lush-nvim = prev.lush-nvim.overrideAttrs (drv: {
@@ -427,6 +480,32 @@ with prev;
     };
   });
 
+
+  plenary-nvim = prev.plenary-nvim.overrideAttrs (oa: {
+    postPatch = ''
+      sed -Ei lua/plenary/curl.lua \
+          -e 's@(command\s*=\s*")curl(")@\1${curl}/bin/curl\2@'
+    '';
+
+    # disabled for now because too flaky
+    doCheck = false;
+    # for env/find/ls
+    checkInputs = [
+      which
+      neovim-unwrapped
+      coreutils
+      findutils
+    ];
+
+    checkPhase = ''
+      runHook preCheck
+      # remove failing tests, need internet access for instance
+      rm tests/plenary/job_spec.lua tests/plenary/scandir_spec.lua tests/plenary/curl_spec.lua
+      export HOME="$TMPDIR"
+      make test
+      runHook postCheck
+    '';
+  });
 
   # as advised in https://github.com/luarocks/luarocks/issues/1402#issuecomment-1080616570
   # we shouldn't use luarocks machinery to build complex cmake components
@@ -460,8 +539,8 @@ with prev;
     buildInputs = [ libuv ];
 
     # Use system libuv instead of building local and statically linking
-    extraVariables = {
-      WITH_SHARED_LIBUV = "ON";
+    luarocksConfig = lib.recursiveUpdate oa.luarocksConfig {
+      variables = { WITH_SHARED_LIBUV = "ON"; };
     };
 
     # we unset the LUA_PATH since the hook erases the interpreter defaults (To fix)
@@ -490,7 +569,7 @@ with prev;
 
     postPatch = ''
       substituteInPlace magick/wand/lib.lua \
-        --replace @nix_wand@ ${imagemagick}/lib/libMagickWand-7.Q16HDRI.so
+        --replace @nix_wand@ ${imagemagick}/lib/libMagickWand-7.Q16HDRI${stdenv.hostPlatform.extensions.sharedLibrary}
     '';
 
     # Requires ffi
@@ -513,9 +592,23 @@ with prev;
     '';
   });
 
-  readline = prev.readline.overrideAttrs (oa: {
-    propagatedBuildInputs = oa.propagatedBuildInputs ++ [ readline.out ];
-    extraVariables = rec {
+  # upstream broken, can't be generated, so moved out from the generated set
+  readline = final.callPackage({ buildLuarocksPackage, fetchurl, luaAtLeast, luaOlder, lua, luaposix }:
+  buildLuarocksPackage ({
+    pname = "readline";
+    version = "3.2-0";
+    knownRockspec = (fetchurl {
+      url    = "mirror://luarocks/readline-3.2-0.rockspec";
+      sha256 = "1r0sgisxm4xd1r6i053iibxh30j7j3rcj4wwkd8rzkj8nln20z24";
+    }).outPath;
+    src = fetchurl {
+      # the rockspec url doesn't work because 'www.' is not covered by the certificate so
+      # I manually removed the 'www' prefix here
+      url    = "http://pjb.com.au/comp/lua/readline-3.2.tar.gz";
+      sha256 = "1mk9algpsvyqwhnq7jlw4cgmfzj30l7n2r6ak4qxgdxgc39f48k4";
+    };
+
+    luarocksConfig.variables = rec {
       READLINE_INCDIR = "${readline.dev}/include";
       HISTORY_INCDIR = READLINE_INCDIR;
     };
@@ -523,11 +616,19 @@ with prev;
       unzip "$curSrc"
       tar xf *.tar.gz
     '';
-    # Without this, source root is wrongly set to ./readline-2.6/doc
-    setSourceRoot = ''
-      sourceRoot=./readline-${lib.versions.majorMinor oa.version}
-    '';
-  });
+
+    propagatedBuildInputs = [ lua luaposix
+      readline.out
+    ];
+
+    meta = {
+      homepage = "http://pjb.com.au/comp/lua/readline.html";
+      description = "Interface to the readline library";
+      license.fullName = "MIT/X11";
+      broken = (luaOlder "5.1") || (luaAtLeast "5.5");
+    };
+  })) {};
+
 
   sqlite = prev.sqlite.overrideAttrs (drv: {
 
@@ -558,6 +659,45 @@ with prev;
     preConfigure = ''
       make all
     '';
+  });
+
+  tiktoken_core = prev.tiktoken_core.overrideAttrs (oa: {
+    cargoDeps = rustPlatform.fetchCargoTarball {
+      src = oa.src;
+      hash = "sha256-YApsOGfAw34zp069lyGR6FGjxty1bE23+Tic07f8zI4=";
+    };
+    nativeBuildInputs = oa.nativeBuildInputs ++ [ cargo rustPlatform.cargoSetupHook ];
+  });
+
+  toml = prev.toml.overrideAttrs (oa: {
+    patches = [ ./toml.patch ];
+
+    propagatedBuildInputs = oa.propagatedBuildInputs ++ [ magic-enum sol2 ];
+
+    postPatch = ''
+      substituteInPlace CMakeLists.txt --replace \
+        "TOML_PLUS_PLUS_SRC" \
+        "${tomlplusplus.src}"
+    '';
+  });
+
+  toml-edit = prev.toml-edit.overrideAttrs (oa: {
+
+    cargoDeps = rustPlatform.fetchCargoTarball {
+      src = oa.src;
+      hash = "sha256-2P+mokkjdj2PccQG/kAGnIoUPVnK2FqNfYpHPhsp8kw=";
+    };
+
+    nativeBuildInputs = let
+      # HACK: luarocks-nix doesn't pick up rockspec build dependencies,
+      # so we have to pass the correct package in here.
+      lua = lib.head oa.propagatedBuildInputs;
+    in oa.nativeBuildInputs ++ [
+      cargo
+      rustPlatform.cargoSetupHook
+      lua.pkgs.luarocks-build-rust-mlua
+    ];
+
   });
 
   vstruct = prev.vstruct.overrideAttrs (_: {

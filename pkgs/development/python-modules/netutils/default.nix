@@ -1,31 +1,39 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, jinja2
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, toml
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jinja2,
+  jsonschema,
+  napalm,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  toml,
 }:
 
 buildPythonPackage rec {
   pname = "netutils";
-  version = "1.4.1";
-  format = "pyproject";
+  version = "1.8.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "networktocode";
-    repo = pname;
+    repo = "netutils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hSSHCWi0L/ZfFz0JQ6Al5mjhb2g0DpykLF66uMKMIN8=";
+    hash = "sha256-Eqs/YkU2XrjD7x2WgvvR89/Pdi9AW9vhw3alJ8kIDgc=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
+  build-system = [ poetry-core ];
+
+  dependencies = [ jsonschema ];
+
+  passthru.optional-dependencies.optionals = [
+    jsonschema
+    napalm
   ];
 
   nativeCheckInputs = [
@@ -35,9 +43,7 @@ buildPythonPackage rec {
     toml
   ];
 
-  pythonImportsCheck = [
-    "netutils"
-  ];
+  pythonImportsCheck = [ "netutils" ];
 
   disabledTests = [
     # Tests require network access
@@ -49,6 +55,9 @@ buildPythonPackage rec {
     # OSError: [Errno 22] Invalid argument
     "test_compare_type5"
     "test_encrypt_type5"
+    "test_compare_cisco_type5"
+    "test_get_napalm_getters_napalm_installed_default"
+    "test_encrypt_cisco_type5"
   ];
 
   meta = with lib; {

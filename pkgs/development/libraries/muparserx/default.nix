@@ -16,10 +16,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
-  ];
-
   doCheck = true;
   checkPhase = ''
     echo "***Muparserx self-test***"

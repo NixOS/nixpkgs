@@ -44,5 +44,6 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.publicDomain;
     platforms = platforms.unix;
     maintainers = with maintainers; [ nomeata ];
+    mainProgram = "listadmin";
   };
 }

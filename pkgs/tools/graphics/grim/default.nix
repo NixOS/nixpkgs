@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "~emersion";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5csJqRLNqhyeXR4dEQtnPUSwuZ8oY+BIt6AVICkm1+o=";
+    hash = "sha256-5csJqRLNqhyeXR4dEQtnPUSwuZ8oY+BIt6AVICkm1+o=";
   };
 
   mesonFlags = [
@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/emersion/grim";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ buffet ];
+    maintainers = with maintainers; [ buffet eclairevoyant ];
+    mainProgram = "grim";
   };
 }

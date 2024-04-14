@@ -13,17 +13,17 @@
 buildPythonPackage {
   inherit (opentelemetry-instrumentation) version src;
   pname = "opentelemetry-instrumentation-wsgi";
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
-  sourceRoot = "source/instrumentation/opentelemetry-instrumentation-wsgi";
+  disabled = pythonOlder "3.8";
 
-  format = "pyproject";
+  sourceRoot = "${opentelemetry-instrumentation.src.name}/instrumentation/opentelemetry-instrumentation-wsgi";
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     opentelemetry-instrumentation
     opentelemetry-api
     opentelemetry-semantic-conventions

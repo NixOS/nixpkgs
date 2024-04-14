@@ -22,13 +22,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "memento";
-  version = "v1.1.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "ripose-jp";
     repo = "Memento";
-    rev = finalAttrs.version;
-    hash = "sha256-29AzQ+Z2PNs65Tvmt2Z5Ra2G3Yhm4LVBpAqvnSsnE0Y=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-55VvT7pHN0/HqxM4vMDQDgUwkVmO/8aOEOye8jcFzgI=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2;
     maintainers = with maintainers; [ teto ];
     platforms = platforms.linux;
+    mainProgram = "memento";
   };
 })
 

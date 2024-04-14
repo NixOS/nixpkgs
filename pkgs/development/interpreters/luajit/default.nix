@@ -1,11 +1,9 @@
 { lib
 , stdenv
-, fetchFromGitHub
 , buildPackages
 , version
 , src
 , extraMeta ? { }
-, callPackage
 , self
 , packageOverrides ? (final: prev: {})
 , pkgsBuildBuild
@@ -24,6 +22,7 @@
 , enableGDBJITSupport ? false
 , enableAPICheck ? false
 , enableVMAssertions ? false
+, enableRegisterAllocationRandomization ? false
 , useSystemMalloc ? false
 # Upstream generates randomized string id's by default for security reasons
 # https://github.com/LuaJIT/LuaJIT/issues/626. Deterministic string id's should
@@ -50,6 +49,7 @@ let
     ++ optional enableGDBJITSupport "-DLUAJIT_USE_GDBJIT"
     ++ optional enableAPICheck "-DLUAJIT_USE_APICHECK"
     ++ optional enableVMAssertions "-DLUAJIT_USE_ASSERT"
+    ++ optional enableRegisterAllocationRandomization "-DLUAJIT_RANDOM_RA"
     ++ optional deterministicStringIds "-DLUAJIT_SECURITY_STRID=0"
   ;
 
@@ -62,7 +62,7 @@ let
     else buildPackages.stdenv;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "luajit";
   inherit version src;
 
@@ -75,15 +75,6 @@ stdenv.mkDerivation rec {
       # passed by nixpkgs CC wrapper is insufficient on its own
       substituteInPlace src/Makefile --replace "#CCDEBUG= -g" "CCDEBUG= -g"
     fi
-
-    {
-      echo -e '
-        #undef  LUA_PATH_DEFAULT
-        #define LUA_PATH_DEFAULT "./share/lua/${luaversion}/?.lua;./?.lua;./?/init.lua"
-        #undef  LUA_CPATH_DEFAULT
-        #define LUA_CPATH_DEFAULT "./lib/lua/${luaversion}/?.so;./?.so;./lib/lua/${luaversion}/loadall.so"
-      '
-    } >> src/luaconf.h
   '';
 
   dontConfigure = true;
@@ -122,7 +113,8 @@ stdenv.mkDerivation rec {
     inputs' = lib.filterAttrs (n: v: ! lib.isDerivation v && n != "passthruFun") inputs;
     override = attr: let lua = attr.override (inputs' // { self = lua; }); in lua;
   in passthruFun rec {
-    inherit self luaversion packageOverrides luaAttr;
+    inherit self packageOverrides luaAttr;
+    inherit (finalAttrs) luaversion;
     executable = "lua";
     luaOnBuildForBuild = override pkgsBuildBuild.${luaAttr};
     luaOnBuildForHost = override pkgsBuildHost.${luaAttr};
@@ -142,4 +134,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with maintainers; [ thoughtpolice smironov vcunat lblasc ];
   } // extraMeta;
-}
+})

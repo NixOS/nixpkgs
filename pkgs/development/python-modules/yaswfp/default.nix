@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "yaswfp";
   version = "unstable-20210331";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "facundobatista";
@@ -23,6 +24,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python SWF Parser";
+    mainProgram = "swfparser";
     homepage = "https://github.com/facundobatista/yaswfp";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];

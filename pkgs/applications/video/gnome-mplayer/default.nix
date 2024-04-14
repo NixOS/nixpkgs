@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Gnome MPlayer, a simple GUI for MPlayer";
+    mainProgram = "gnome-mplayer";
     homepage = "https://sites.google.com/site/kdekorte2/gnomemplayer";
     license = licenses.gpl2;
     maintainers = with maintainers; [];

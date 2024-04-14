@@ -1,5 +1,4 @@
 { lib
-, python-dateutil
 , buildPythonPackage
 , emoji
 , fetchFromGitHub
@@ -7,39 +6,33 @@
 , tzdata
 , pyparsing
 , pydantic
-, pytest-asyncio
 , pytest-benchmark
-, pytest-golden
 , pytestCheckHook
 , pythonOlder
-, pythonRelaxDepsHook
-, pyyaml
+, python-dateutil
+, setuptools
+, syrupy
 }:
 
 buildPythonPackage rec {
   pname = "ical";
-  version = "5.0.0";
-  format = "setuptools";
+  version = "7.0.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "allenporter";
-    repo = pname;
+    repo = "ical";
     rev = "refs/tags/${version}";
-    hash = "sha256-6xDbr/y9ZNT9thWMLHPi9/EXVXrUdMCVJdQAcd3G2vo=";
+    hash = "sha256-RiwWnRSe0HdeGVo592A+Rk+IvA1Lfp6mY+/ZEyqJBDU=";
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
-
-  pythonRelaxDeps = [
-    "tzdata"
+    setuptools
   ];
 
   propagatedBuildInputs = [
-    emoji
     python-dateutil
     tzdata
     pydantic
@@ -47,12 +40,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    emoji
     freezegun
-    pytest-asyncio
     pytest-benchmark
-    pytest-golden
     pytestCheckHook
-    pyyaml
+    syrupy
   ];
 
   pythonImportsCheck = [

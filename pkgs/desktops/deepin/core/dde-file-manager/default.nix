@@ -38,17 +38,18 @@
 , pcre
 , udisks2
 , libisoburn
+, gsettings-qt
 }:
 
 stdenv.mkDerivation rec {
   pname = "dde-file-manager";
-  version = "6.0.23";
+  version = "6.0.40";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-H+pCWZ1jj5p3gOKXYyLxSmjCMv5/BPIz5A25JGGzrR8=";
+    hash = "sha256-fvxP6wle4hezt9nEDpTgK+xB4J5XIC0mP5jWCmkjJPA=";
   };
 
   nativeBuildInputs = [
@@ -59,6 +60,10 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
   dontWrapGApps = true;
+
+  patches = [
+    ./patch_check_v23_interface.diff
+  ];
 
   postPatch = ''
     patchShebangs .
@@ -115,11 +120,13 @@ stdenv.mkDerivation rec {
     pcre
     udisks2
     libisoburn
+    gsettings-qt
   ];
 
   cmakeFlags = [
     "-DVERSION=${version}"
-    "-DDEEPIN_OS_VERSION=20"
+    "-DNIX_DEEPIN_VERSION=23"
+    "-DSYSTEMD_USER_UNIT_DIR=${placeholder "out"}/lib/systemd/user"
   ];
 
   enableParallelBuilding = true;

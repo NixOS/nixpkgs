@@ -21,7 +21,7 @@ buildGoModule rec {
     substituteInPlace main.go --replace 'notify-send' ${libnotify}/bin/notify-send
   '';
 
-  vendorSha256 = "sha256-+IRPs3wm3EvIgfQRpzcVpo2JBaFQlyY/RI1G7XfVS84=";
+  vendorHash = "sha256-+IRPs3wm3EvIgfQRpzcVpo2JBaFQlyY/RI1G7XfVS84=";
 
   doCheck = false;
 
@@ -37,6 +37,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A seamless ssh-agent for YubiKeys";
+    mainProgram = "yubikey-agent";
     license = licenses.bsd3;
     homepage = "https://filippo.io/yubikey-agent";
     maintainers = with lib.maintainers; [ philandstuff rawkode ];

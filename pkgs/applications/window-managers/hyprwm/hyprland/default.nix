@@ -2,13 +2,19 @@
 , stdenv
 , fetchFromGitHub
 , pkg-config
+, makeWrapper
 , meson
 , ninja
+, binutils
 , cairo
 , git
+, hyprcursor
 , hyprland-protocols
+, hyprlang
 , jq
+, libGL
 , libdrm
+, libexecinfo
 , libinput
 , libxcb
 , libxkbcommon
@@ -16,54 +22,65 @@
 , pango
 , pciutils
 , systemd
-, udis86
+, tomlplusplus
+, udis86-hyprland
 , wayland
 , wayland-protocols
 , wayland-scanner
-, wlroots
+, wlroots-hyprland
 , xcbutilwm
 , xwayland
 , debug ? false
 , enableXWayland ? true
-, hidpiXWayland ? false
 , legacyRenderer ? false
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, wrapRuntimeDeps ? true
+  # deprecated flags
 , nvidiaPatches ? false
-, withSystemd ? true
+, hidpiXWayland ? false
+, enableNvidiaPatches ? false
 }:
+assert lib.assertMsg (!nvidiaPatches) "The option `nvidiaPatches` has been removed.";
+assert lib.assertMsg (!enableNvidiaPatches) "The option `enableNvidiaPatches` has been removed.";
+assert lib.assertMsg (!hidpiXWayland) "The option `hidpiXWayland` has been removed. Please refer https://wiki.hyprland.org/Configuring/XWayland";
+
 let
-  assertXWayland = lib.assertMsg (hidpiXWayland -> enableXWayland) ''
-    Hyprland: cannot have hidpiXWayland when enableXWayland is false.
-  '';
+  wlr = wlroots-hyprland.override { inherit enableXWayland; };
 in
-assert assertXWayland;
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + lib.optionalString debug "-debug";
-  version = "0.27.0";
+  version = "0.38.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-mEKF6Wcx+wSF/eos/91A7LxhFLDYhSnQnLpwZF13ntg=";
+    hash = "sha256-6y422rx8ScSkjR1dNYGYUxBmFewRYlCz9XZZ+XrVZng=";
   };
 
   patches = [
     # make meson use the provided dependencies instead of the git submodules
-    "${finalAttrs.src}/nix/meson-build.patch"
-    # look into $XDG_DESKTOP_PORTAL_DIR instead of /usr; runtime checks for conflicting portals
-    "${finalAttrs.src}/nix/portals.patch"
+    "${finalAttrs.src}/nix/patches/meson-build.patch"
   ];
 
   postPatch = ''
     # Fix hardcoded paths to /usr installation
     sed -i "s#/usr#$out#" src/render/OpenGL.cpp
-    substituteInPlace meson.build \
-      --replace "@GIT_COMMIT_HASH@" '${finalAttrs.src.rev}' \
-      --replace "@GIT_DIRTY@" ""
+
+    # Generate version.h
+    cp src/version.h.in src/version.h
+    substituteInPlace src/version.h \
+      --replace "@HASH@" '${finalAttrs.src.rev}' \
+      --replace "@BRANCH@" "" \
+      --replace "@MESSAGE@" "" \
+      --replace "@DATE@" "2024-04-06" \
+      --replace "@TAG@" "" \
+      --replace "@DIRTY@" ""
   '';
 
   nativeBuildInputs = [
     jq
+    makeWrapper
     meson
     ninja
     pkg-config
@@ -80,18 +97,23 @@ stdenv.mkDerivation (finalAttrs: {
     [
       cairo
       git
+      hyprcursor
       hyprland-protocols
+      hyprlang
+      libGL
       libdrm
       libinput
       libxkbcommon
       mesa
-      udis86
+      udis86-hyprland
       wayland
       wayland-protocols
       pango
       pciutils
-      (wlroots.override { inherit enableXWayland hidpiXWayland nvidiaPatches; })
+      tomlplusplus
+      wlr
     ]
+    ++ lib.optionals stdenv.hostPlatform.isMusl [ libexecinfo ]
     ++ lib.optionals enableXWayland [ libxcb xcbutilwm xwayland ]
     ++ lib.optionals withSystemd [ systemd ];
 
@@ -100,20 +122,30 @@ stdenv.mkDerivation (finalAttrs: {
     then "debug"
     else "release";
 
-  mesonFlags = builtins.concatLists [
-    (lib.optional (!enableXWayland) "-Dxwayland=disabled")
-    (lib.optional legacyRenderer "-DLEGACY_RENDERER:STRING=true")
-    (lib.optional withSystemd "-Dsystemd=enabled")
+  mesonAutoFeatures = "disabled";
+
+  mesonFlags = [
+    (lib.mesonEnable "xwayland" enableXWayland)
+    (lib.mesonEnable "legacy_renderer" legacyRenderer)
+    (lib.mesonEnable "systemd" withSystemd)
   ];
+
+  postInstall = ''
+    ln -s ${wlr}/include/wlr $dev/include/hyprland/wlroots
+    ${lib.optionalString wrapRuntimeDeps ''
+      wrapProgram $out/bin/Hyprland \
+        --suffix PATH : ${lib.makeBinPath [binutils pciutils stdenv.cc]}
+    ''}
+  '';
 
   passthru.providedSessions = [ "hyprland" ];
 
   meta = with lib; {
-    homepage = "https://github.com/vaxerski/Hyprland";
+    homepage = "https://github.com/hyprwm/Hyprland";
     description = "A dynamic tiling Wayland compositor that doesn't sacrifice on its looks";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wozeparrot fufexan ];
     mainProgram = "Hyprland";
-    platforms = wlroots.meta.platforms;
+    platforms = wlr.meta.platforms;
   };
 })

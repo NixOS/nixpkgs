@@ -15,6 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Format json into table view";
+    mainProgram = "tv";
     homepage = "https://github.com/uzimaru0000/tv";
     changelog = "https://github.com/uzimaru0000/tv/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

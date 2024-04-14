@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "nwg-dock-hyprland";
-  version = "0.1.3";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5RPp/CZgEkQDg+xn1xQDpLOCzfgWWdTl12aE+SRRPvE=";
+    sha256 = "sha256-Lekvk3tQfeOR+Ltbc5b7TMiUZpktZ2nvCtUncrFb+Kc=";
   };
 
-  vendorHash = "sha256-GhcrIVnZRbiGTfeUAWvslOVWDZmoL0ZRnjgTtQgxe2Q=";
+  vendorHash = "sha256-5fN/6HASfTMb80YYAIoWRqnRGMvvX4d8C2UvOc0jQU0=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -26,6 +26,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "GTK3-based dock for Hyprland";
+    mainProgram = "nwg-dock-hyprland";
     homepage = "https://github.com/nwg-piotr/nwg-dock-hyprland";
     license = licenses.mit;
     platforms = platforms.linux;

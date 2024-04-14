@@ -1,21 +1,27 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , setuptools
+, setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
-  version = "1.0.0";
+  version = "1.1.0";
   pname = "python-vagrant";
   format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-qP6TzPL/N+zJXsL0nqdKkabOc6TbShapjdJtOXz9CeU=";
+  src = fetchFromGitHub {
+    owner = "pycontribs";
+    repo = "python-vagrant";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-apvYzH0IY6ZyUP/FiOVbGN3dXejgN7gn7Mq2tlEaTww=";
   };
 
   nativeBuildInputs = [
     setuptools
+    setuptools-scm
+    wheel
   ];
 
   # The tests try to connect to qemu

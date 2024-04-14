@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   # go to the source directory after unpacking the sources
-  setSourceRoot = "export sourceRoot=rox-filer-${version}/ROX-Filer/";
+  sourceRoot = "rox-filer-${version}/ROX-Filer";
 
   # account for 'setSourceRoot' offset
   patchFlags = [ "-p2" ];
@@ -89,6 +89,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fast, lightweight, gtk2 file manager";
+    mainProgram = "rox";
     homepage = "http://rox.sourceforge.net/desktop";
     license = with licenses; [ gpl2 lgpl2 ];
     platforms = platforms.linux;

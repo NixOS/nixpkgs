@@ -4,12 +4,14 @@
 , fetchPypi
 
 # build dependencies
+, setuptools
 , setuptools-scm
 
 # dependencies
 , django
 
 # tests
+, elasticsearch
 , geopy
 , nose
 , pysolr
@@ -21,7 +23,8 @@
 buildPythonPackage rec {
   pname = "django-haystack";
   version = "3.2.1";
-  format = "setuptools";
+  format = "pyproject";
+
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
@@ -35,12 +38,21 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  buildInputs = [
     django
   ];
+
+  passthru.optional-dependencies = {
+    elasticsearch = [
+      elasticsearch
+    ];
+  };
+
+  doCheck = lib.versionOlder django.version "4";
 
   nativeCheckInputs = [
     geopy
@@ -49,7 +61,14 @@ buildPythonPackage rec {
     python-dateutil
     requests
     whoosh
-  ];
+  ]
+  ++ passthru.optional-dependencies.elasticsearch;
+
+  checkPhase = ''
+    runHook preCheck
+    python test_haystack/run_tests.py
+    runHook postCheck
+  '';
 
   meta = with lib; {
     description = "Pluggable search for Django";

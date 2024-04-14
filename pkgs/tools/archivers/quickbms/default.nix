@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
+    mainProgram = "quickbms";
   };
 }

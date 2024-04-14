@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fontfor";
-  version = "0.3.1";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "7sDream";
     repo = "fontfor";
     rev = "v${version}";
-    sha256 = "1b07hd41blwsnb91vh2ax9zigm4lh8n0i5man0cjmxhavvbfy12b";
+    sha256 = "sha256-/UoZ+5X6Csoyqc+RSP0Hree7NtCDs7BjsqcpALxAazc=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     freetype
   ];
 
-  cargoSha256 = "1drfrq32lvmi1xlshynzh66gb1cah43pqcyxv3qxp487br9w1iyj";
+  cargoHash = "sha256-j1Qf0IKlAUEyiGAUoF7IlEbPIv2pGkn+YMCoFdF9oUE=";
 
   meta = with lib; {
     description = "Find fonts which can show a specified character and preview them in browser";
@@ -37,5 +37,6 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ shamilton ];
     platforms = platforms.linux;
+    mainProgram = "fontfor";
   };
 }

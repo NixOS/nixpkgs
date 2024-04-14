@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , setuptools
 , setuptools-scm
@@ -8,13 +9,15 @@
 
 buildPythonPackage rec {
   pname = "universal-pathlib";
-  version = "0.1.0";
+  version = "0.2.2";
   format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "universal_pathlib";
     inherit version;
-    hash = "sha256-LqzljIZUZh8zHvcyBqFHBbunpJVYFpk6mfuesVGyojg=";
+    hash = "sha256-a8IVVIeSrV2zVTcIscGbr9ni+hZn3JJe1ATJXlKuLxM=";
   };
 
   nativeBuildInputs = [

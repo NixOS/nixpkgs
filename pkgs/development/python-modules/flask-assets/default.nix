@@ -1,12 +1,22 @@
-{ lib, buildPythonPackage, fetchPypi, flask, webassets, flask_script, nose }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, flask
+, webassets
+, flask-script
+, nose
+}:
 
 buildPythonPackage rec {
-  pname = "Flask-Assets";
-  version = "2.0";
+  pname = "flask-assets";
+  version = "2.1.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1dfdea35e40744d46aada72831f7613d67bf38e8b20ccaaa9e91fdc37aa3b8c2";
+    pname = "Flask-Assets";
+    inherit version;
+    hash = "sha256-+E1lMv/lnJ/zUoheh0D/TaJcC8+s2AXwqAaBXkQ1SBM=";
   };
 
   patchPhase = ''
@@ -15,7 +25,16 @@ buildPythonPackage rec {
     substituteInPlace tests/test_integration.py --replace "'/foo'" "'/x/foo'"
   '';
 
-  propagatedBuildInputs = [ flask webassets flask_script nose ];
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    flask
+    webassets
+    flask-script
+    nose
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/miracle2k/flask-assets";

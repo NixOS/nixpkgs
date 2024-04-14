@@ -54,7 +54,6 @@ in
     (mkRemovedOptionModule [ "services" "chronos" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "couchpotato" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "dd-agent" ] "dd-agent was removed from nixpkgs in favor of the newer datadog-agent.")
-    (mkRemovedOptionModule [ "services" "ddclient" ] "ddclient has been removed on the request of the upstream maintainer because it is unmaintained and has bugs. Please switch to a different software like `inadyn` or `knsupdate`.") # Added 2023-07-04
     (mkRemovedOptionModule [ "services" "dnscrypt-proxy" ] "Use services.dnscrypt-proxy2 instead")
     (mkRemovedOptionModule [ "services" "exhibitor" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "firefox" "syncserver" ] "The corresponding package was removed from nixpkgs.")
@@ -63,6 +62,7 @@ in
     (mkRemovedOptionModule [ "services" "fourStoreEndpoint" ] "The fourStoreEndpoint module has been removed")
     (mkRemovedOptionModule [ "services" "fprot" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "frab" ] "The frab module has been removed")
+    (mkRemovedOptionModule [ "services" "homeassistant-satellite"] "The `services.homeassistant-satellite` module has been replaced by `services.wyoming-satellite`.")
     (mkRemovedOptionModule [ "services" "ihatemoney" ] "The ihatemoney module has been removed for lack of downstream maintainer")
     (mkRemovedOptionModule [ "services" "kippo" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "mailpile" ] "The corresponding package was removed from nixpkgs.")
@@ -93,7 +93,7 @@ in
       The services.xserver.displayManager.auto module has been removed
       because it was only intended for use in internal NixOS tests, and gave the
       false impression of it being a special display manager when it's actually
-      LightDM. Please use the services.xserver.displayManager.autoLogin options
+      LightDM. Please use the services.displayManager.autoLogin options
       instead, or any other display manager in NixOS as they all support auto-login.
     '')
     (mkRemovedOptionModule [ "services" "xserver" "multitouch" ] ''
@@ -112,6 +112,8 @@ in
     (mkRemovedOptionModule [ "services" "riak" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "cryptpad" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "rtsp-simple-server" ] "Package has been completely rebranded by upstream as mediamtx, and thus the service and the package were renamed in NixOS as well.")
+    (mkRemovedOptionModule [ "services" "prayer" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "services" "restya-board" ] "The corresponding package was removed from nixpkgs.")
 
     (mkRemovedOptionModule [ "i18n" "inputMethod" "fcitx" ] "The fcitx module has been removed. Please use fcitx5 instead")
     (mkRemovedOptionModule [ "services" "dhcpd4" ] ''
@@ -123,6 +125,9 @@ in
       The dhcpd6 module has been removed because ISC DHCP reached its end of life.
       See https://www.isc.org/blogs/isc-dhcp-eol/ for details.
       Please switch to a different implementation like kea or dnsmasq.
+    '')
+    (mkRemovedOptionModule [ "services" "tedicross" ] ''
+      The corresponding package was broken and removed from nixpkgs.
     '')
 
     # Do NOT add any option renames here, see top of the file

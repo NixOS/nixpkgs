@@ -1,21 +1,26 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, installShellFiles
+, testers
+, opentelemetry-collector
 }:
 
 buildGoModule rec {
   pname = "opentelemetry-collector";
-  version = "0.81.0";
+  version = "0.97.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector";
     rev = "v${version}";
-    hash = "sha256-yywmnJUTigDYeiAuK0f2511vh6sS4oD4hJLPozAlWz4=";
+    hash = "sha256-0zTEaSylZEU7mCCrMf9aV8V0MMD4Au4y0zacWSLcujg=";
   };
   # there is a nested go.mod
   sourceRoot = "${src.name}/cmd/otelcorecol";
-  vendorHash = "sha256-BNIQ0pTHGgwWw1cy7au6hUeECC8oGsSkxaX5BUCRG9Y=";
+  vendorHash = "sha256-/8WxTtTTuwdPP/4Bix8d9nkR/w6MDKLyumv4KBx5VqU=";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   # upstream strongly recommends disabling CGO
   # additionally dependencies have had issues when GCO was enabled that weren't caught upstream
@@ -28,6 +33,19 @@ buildGoModule rec {
   '';
 
   ldflags = [ "-s" "-w" ];
+
+  postInstall = ''
+    installShellCompletion --cmd otelcorecol \
+      --bash <($out/bin/otelcorecol completion bash) \
+      --fish <($out/bin/otelcorecol completion fish) \
+      --zsh <($out/bin/otelcorecol completion zsh)
+  '';
+
+  passthru.tests.version = testers.testVersion {
+    inherit version;
+    package = opentelemetry-collector;
+    command = "otelcorecol -v";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/open-telemetry/opentelemetry-collector";

@@ -6,4 +6,5 @@ lib.recurseIntoAttrs {
   documentationTarball = callPackage ./documentationTarball { };
   setBuildTarget = callPackage ./setBuildTarget { };
   incremental = callPackage ./incremental { };
+  upstreamStackHpackVersion = callPackage ./upstreamStackHpackVersion { };
 }

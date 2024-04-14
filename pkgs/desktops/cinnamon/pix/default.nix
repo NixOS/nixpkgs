@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, fetchurl
 , fetchFromGitHub
 , pkg-config
 , meson
@@ -34,13 +33,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pix";
-  version = "3.0.2";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-iNUhcHG4nCZ4WNELodyLdztzfNg9g+F0eQrZHXS6Zj0=";
+    sha256 = "sha256-tRndJjUw/k5mJPFTBMfW88Mvp2wZtC3RUzyS8bBO1jc=";
   };
 
   nativeBuildInputs = [
@@ -96,6 +95,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A generic image viewer from Linux Mint";
+    mainProgram = "pix";
     homepage = "https://github.com/linuxmint/pix";
     license = licenses.gpl2Only;
     platforms = platforms.linux;

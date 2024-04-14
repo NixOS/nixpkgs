@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, dm-tree
 , fetchFromGitHub
 , emcee
 , h5netcdf
@@ -8,14 +9,13 @@
 , numba
 , numpy
 , pandas
-, pytest
 , setuptools
 , cloudpickle
 , pytestCheckHook
 , scipy
 , packaging
-, typing-extensions
 , pythonOlder
+, typing-extensions
 , xarray
 , xarray-einstats
 , zarr
@@ -28,31 +28,37 @@
 , pyro-ppl
   #, pystan (not packaged)
 , numpyro
+, bokeh
 }:
 
 buildPythonPackage rec {
   pname = "arviz";
-  version = "0.15.1";
-  format = "setuptools";
+  version = "0.18.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
-    repo = pname;
+    repo = "arviz";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jjA+yltvpPZldIxXXqu1bXCLqpiU5/NBYTPlI9ImGVs=";
+    hash = "sha256-SZRqSqChQBSA9/jBXN2ds9hh6TI3qZksHai1j2oVsq0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    packaging
+    setuptools
+  ];
+
+  dependencies = [
+    dm-tree
     h5netcdf
     matplotlib
     netcdf4
     numpy
-    packaging
     pandas
     scipy
-    setuptools
+    typing-extensions
     xarray
     xarray-einstats
   ];
@@ -72,6 +78,7 @@ buildPythonPackage rec {
     pytestCheckHook
     torchvision
     zarr
+    bokeh
   ];
 
   preCheck = ''
@@ -84,6 +91,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Tests require network access
+    "test_plot_ppc_transposed"
     "test_plot_separation"
     "test_plot_trace_legend"
     "test_cov"
@@ -93,6 +101,13 @@ buildPythonPackage rec {
     "test_plot_pair"
     # Array mismatch
     "test_plot_ts"
+    # The following two tests fail in a common venv-based setup.
+    # An issue has been opened upstream: https://github.com/arviz-devs/arviz/issues/2282
+    "test_plot_ppc_discrete"
+    "test_plot_ppc_discrete_save_animation"
+    # Assertion error
+    "test_data_zarr"
+    "test_plot_forest"
   ];
 
   pythonImportsCheck = [

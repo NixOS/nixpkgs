@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A generic Sokoban game for X11";
+    mainProgram = "xsok";
     license = lib.licenses.gpl2Plus;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.unix;

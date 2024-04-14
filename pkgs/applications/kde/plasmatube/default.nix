@@ -50,6 +50,7 @@ mkDerivation {
 
   meta = {
     description = "Youtube player powered by an invidious server";
+    mainProgram = "plasmatube";
     homepage = "https://invent.kde.org/plasma-mobile/plasmatube";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];

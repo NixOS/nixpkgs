@@ -1,0 +1,60 @@
+diff --git a/requirements.txt b/requirements.txt
+index f492cac..e61d1a4 100755
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -2,4 +2,3 @@
+ psutil
+ click
+ distro
+-requests
+
+diff --git a/auto_cpufreq/core.py b/auto_cpufreq/core.py
+index 99397a9..697fb68 100755
+--- a/auto_cpufreq/core.py
++++ b/auto_cpufreq/core.py
+@@ -18,7 +18,6 @@ from math import isclose
+ from pathlib import Path
+ from shutil import which
+ from subprocess import getoutput, call, run, check_output, DEVNULL
+-import requests
+ import re
+ 
+ # execution timestamp used in countdown func
+
+diff --git a/bin/auto-cpufreq b/bin/auto-cpufreq
+index b89d925..b73974c 100755
+--- a/bin/auto-cpufreq
++++ b/bin/auto-cpufreq
+@@ -193,31 +193,7 @@
+         elif remove:
+             print("remove is disabled in the nix package")
+         elif update:
+-            root_check()
+-            if os.getenv("PKG_MARKER") == "SNAP":
+-                print("Detected auto-cpufreq was installed using snap")
+-                # refresh snap directly using this command
+-
+-                print("Please update using snap package manager, i.e: `sudo snap refresh auto-cpufreq`.")
+-                #check for AUR 
+-            elif subprocess.run(["bash", "-c", "command -v yay >/dev/null 2>&1"]).returncode == 0 or subprocess.run(["bash", "-c", "command -v pacman >/dev/null 2>&1"]).returncode == 0:
+-                print("Arch-based distribution with AUR support detected. Please refresh auto-cpufreq using your AUR helper.")
+-            else:
+-                verify_update()
+-                ans = input ("Do you want to update auto-cpufreq to the latest release? [y/n]: ")
+-                valid_options = ['y', 'Y', 'yes', 'YES', 'Yes']
+-                if ans.lower() in valid_options:
+-                    remove_daemon()
+-                    remove_complete_msg()
+-                    new_update()
+-                else:
+-                    print("incorrect input\n")
+-                    print("Aborted")
+-                print("enabling daemon")
+-                run(["auto-cpufreq", "--install"])
+-                print("auto-cpufreq is installed with the latest version")
+-                app_version()
+-            
++            print("update is disabled in the nix package")            
+
+
+ if __name__ == "__main__":

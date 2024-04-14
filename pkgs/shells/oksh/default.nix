@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "oksh";
-  version = "7.3";
+  version = "7.5";
 
   src = fetchFromGitHub {
     owner = "ibara";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-uGiPbkIeKH9zu+xKJJLCYFnyejWLdq7bE59yub3f3KM=";
+    sha256 = "sha256-r75jjH1E7/36b0ebjsZK7rAuOHEyaIta5Bi8nB4zVjo=";
   };
 
   strictDeps = true;
@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Portable OpenBSD ksh, based on the Public Domain Korn Shell (pdksh)";
+    mainProgram = "oksh";
     homepage = "https://github.com/ibara/oksh";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ siraben ];

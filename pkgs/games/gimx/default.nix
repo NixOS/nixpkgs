@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, curl, libusb1, xorg, libxml2
+{ stdenv, lib, fetchFromGitHub, fetchpatch
+, makeWrapper, curl, libusb1, xorg, libxml2
 , ncurses5, bluez, libmhash, gimxPdpGamepad ? false }:
 
 let
@@ -21,7 +22,23 @@ in stdenv.mkDerivation rec {
     sha256 = "05kdv2qqr311c2p76hdlgvrq7b04vcpps5c80zn8b8l7p831ilgz";
   };
 
-  patches = [ ./conf.patch ];
+  patches = [
+    ./conf.patch
+
+    # gcc-13 build fixes:
+    #   https://github.com/matlo/GIMX/pull/705
+    (fetchpatch {
+      name = "gcc-13-headers.patch";
+      url = "https://github.com/matlo/GIMX/commit/4525dff4d9af672116d8c6c182707f2ad6295b2d.patch";
+      hash = "sha256-LkswnFsxqADooa09yO7Yf0AbxTrGfjBObyv/6FQJvRs=";
+    })
+    (fetchpatch {
+      name = "gcc-13-protos.patch";
+      url = "https://github.com/matlo/GIMX/commit/f11855fcb8bd9d0cb9c94871b4111ddfd5b610df.patch";
+      hash = "sha256-JL67UUsEyPcOuaimJtMviiGLGghuq9665Lg1QuiaWUU=";
+    })
+  ];
+
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
     curl libusb1 bluez libxml2 ncurses5 libmhash

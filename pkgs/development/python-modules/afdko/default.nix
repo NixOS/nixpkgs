@@ -1,8 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
-, fetchpatch
+, fetchFromGitHub
 , pythonOlder
 , fonttools
 , defcon
@@ -18,11 +17,11 @@
 , booleanoperations
 , ufoprocessor
 , ufonormalizer
-, psautohint
 , tqdm
 , setuptools-scm
 , scikit-build
 , cmake
+, ninja
 , antlr4_9
 , libxml2
 , pytestCheckHook
@@ -33,20 +32,23 @@
 
 buildPythonPackage rec {
   pname = "afdko";
-  version = "3.9.3";
+  version = "4.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-v0fIhf3P5Xjdn5/ryRNj0Q2YHAisMqi5RTmJQabaUO0=";
+  src = fetchFromGitHub {
+    owner = "adobe-type-tools";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-I5GKPkbyQX8QNSZgNB3wPKdWwpx8Xkklesu1M7nhgp8=";
   };
 
   nativeBuildInputs = [
     setuptools-scm
     scikit-build
     cmake
+    ninja
   ];
 
   buildInputs = [
@@ -61,6 +63,16 @@ buildPythonPackage rec {
     # Use antlr4 runtime from nixpkgs and link it dynamically
     ./use-dynamic-system-antlr4-runtime.patch
   ];
+
+  # Happy new year
+  postPatch = ''
+    substituteInPlace tests/tx_data/expected_output/alt-missing-glif.pfb --replace 2023 2024
+  '';
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [
+    "-Wno-error=incompatible-function-pointer-types"
+    "-Wno-error=int-conversion"
+  ]);
 
   # setup.py will always (re-)execute cmake in buildPhase
   dontConfigure = true;
@@ -80,7 +92,6 @@ buildPythonPackage rec {
     mutatormath
     ufoprocessor
     ufonormalizer
-    psautohint
     tqdm
   ];
 
@@ -91,6 +102,9 @@ buildPythonPackage rec {
 
   preCheck = ''
     export PATH=$PATH:$out/bin
+
+    # Remove build artifacts to prevent them from messing with the tests
+    rm -rf _skbuild
   '';
 
   disabledTests = lib.optionals (!runAllTests) [

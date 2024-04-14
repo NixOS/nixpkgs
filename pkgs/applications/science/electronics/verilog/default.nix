@@ -44,6 +44,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  env = lib.optionalAttrs stdenv.isDarwin {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
   # NOTE(jleightcap): the `make check` target only runs a "Hello, World"-esque sanity check.
   # the tests in the doInstallCheck phase run a full regression test suite.
   # however, these tests currently fail upstream on aarch64

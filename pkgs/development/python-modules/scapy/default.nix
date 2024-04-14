@@ -5,7 +5,7 @@
 , withCryptography ? true, cryptography
 , withVoipSupport ? true, sox
 , withPlottingSupport ? true, matplotlib
-, withGraphicsSupport ? false, pyx, texlive, graphviz, imagemagick
+, withGraphicsSupport ? false, pyx, texliveBasic, graphviz, imagemagick
 , withManufDb ? false, wireshark
 , libpcap
 # 2D/3D graphics and graphs TODO: VPython
@@ -15,6 +15,7 @@
 buildPythonPackage rec {
   pname = "scapy";
   version = "2.5.0";
+  format = "setuptools";
 
   disabled = isPyPy;
 
@@ -43,12 +44,13 @@ buildPythonPackage rec {
     substituteInPlace scapy/data.py --replace "/opt/wireshark" "${wireshark}"
   '';
 
+  buildInputs = lib.optional withVoipSupport sox;
+
   propagatedBuildInputs = [ pycrypto ecdsa ]
     ++ lib.optionals withOptionalDeps [ tcpdump ipython ]
     ++ lib.optional withCryptography cryptography
-    ++ lib.optional withVoipSupport sox
     ++ lib.optional withPlottingSupport matplotlib
-    ++ lib.optionals withGraphicsSupport [ pyx texlive.combined.scheme-basic graphviz imagemagick ];
+    ++ lib.optionals withGraphicsSupport [ pyx texliveBasic graphviz imagemagick ];
 
   # Running the tests seems too complicated:
   doCheck = false;
@@ -62,6 +64,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python-based network packet manipulation program and library";
+    mainProgram = "scapy";
     longDescription = ''
       Scapy is a powerful Python-based interactive packet manipulation program
       and library.

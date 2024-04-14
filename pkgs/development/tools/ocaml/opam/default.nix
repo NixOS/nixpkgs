@@ -139,7 +139,7 @@ in stdenv.mkDerivation {
     description = "A package manager for OCaml";
     homepage = "https://opam.ocaml.org/";
     changelog = "https://github.com/ocaml/opam/raw/${version}/CHANGES";
-    maintainers = [ maintainers.henrytill maintainers.marsam ];
+    maintainers = [ maintainers.marsam ];
     license = licenses.lgpl21Only;
     platforms = platforms.all;
   };

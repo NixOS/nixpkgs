@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "SDL_gfx";
-  version = "2.0.26";
+  version = "2.0.27";
 
   src = fetchurl {
     url = "https://www.ferzkopp.net/Software/SDL_gfx-2.0/${pname}-${version}.tar.gz";
-    sha256 = "0ijljhs0v99dj6y27hc10z6qchyp8gdp4199y6jzngy6dzxlzsvw";
+    sha256 = "sha256-37FaxfjOeklS3BLSrtl0dRjF5rM1wOMWNtI/k8Yw9Bk=";
   };
 
   # SDL_gfx.pc refers to sdl.pc and some SDL_gfx headers import SDL.h

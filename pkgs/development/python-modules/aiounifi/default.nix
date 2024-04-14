@@ -1,7 +1,6 @@
 { lib
 , aiohttp
 , aioresponses
-, async-timeout
 , buildPythonPackage
 , fetchFromGitHub
 , orjson
@@ -10,25 +9,38 @@
 , pytestCheckHook
 , pythonOlder
 , segno
+, setuptools
+, trustme
 }:
 
 buildPythonPackage rec {
   pname = "aiounifi";
-  version = "50";
-  format = "setuptools";
+  version = "74";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Kane610";
-    repo = pname;
+    repo = "aiounifi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ydSKXydtOJaAI2PCPX+8jh4w9otX64Lj7QwbasTdWf0=";
+    hash = "sha256-5xxgpbnTqR8AWUvRQJiXGJECn0neV8QQyjYKw09sqZg=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools==" "setuptools>=" \
+      --replace-fail "wheel==" "wheel>="
+
+    sed -i '/--cov=/d' pyproject.toml
+  '';
+
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     aiohttp
-    async-timeout
     orjson
     segno
   ];
@@ -38,6 +50,7 @@ buildPythonPackage rec {
     pytest-aiohttp
     pytest-asyncio
     pytestCheckHook
+    trustme
   ];
 
   pytestFlagsArray = [
@@ -53,6 +66,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/Kane610/aiounifi";
     changelog = "https://github.com/Kane610/aiounifi/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "aiounifi";
   };
 }

@@ -6,11 +6,11 @@
 , databricks-cli
 , docker
 , entrypoints
-, fetchpatch
 , fetchPypi
 , flask
 , gitpython
 , gorilla
+, graphene
 , gunicorn
 , importlib-metadata
 , markdown
@@ -26,11 +26,11 @@
 , pyarrow
 , pytz
 , pyyaml
-, querystring_parser
+, querystring-parser
 , requests
+, setuptools
 , scikit-learn
 , scipy
-, shap
 , simplejson
 , sqlalchemy
 , sqlparse
@@ -38,22 +38,29 @@
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "2.4.2";
-  format = "setuptools";
+  version = "2.11.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CxpxsP9Gedzo/yrpcz6ZbsC2wQbbk0EuDfhgb3kYZ8g=";
+    hash = "sha256-Yht+MR6JC3lxnC53dyhtjgjTjdBNWrCAlmmQvUpV/rs=";
   };
 
   # Remove currently broken dependency `shap`, a model explainability package.
   # This seems quite unprincipled especially with tests not being enabled,
   # but not mlflow has a 'skinny' install option which does not require `shap`.
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+    setuptools
+  ];
   pythonRemoveDeps = [ "shap" ];
-  pythonRelaxDeps = [ "pytz" "pyarrow" ];
+  pythonRelaxDeps = [
+    "packaging"
+    "pytz"
+    "pyarrow"
+  ];
 
   propagatedBuildInputs = [
     alembic
@@ -65,6 +72,7 @@ buildPythonPackage rec {
     flask
     gitpython
     gorilla
+    graphene
     gunicorn
     importlib-metadata
     markdown
@@ -78,7 +86,7 @@ buildPythonPackage rec {
     pyarrow
     pytz
     pyyaml
-    querystring_parser
+    querystring-parser
     requests
     scikit-learn
     scipy
@@ -99,6 +107,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Open source platform for the machine learning lifecycle";
+    mainProgram = "mlflow";
     homepage = "https://github.com/mlflow/mlflow";
     changelog = "https://github.com/mlflow/mlflow/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;

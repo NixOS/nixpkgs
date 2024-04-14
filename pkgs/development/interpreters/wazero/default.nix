@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "wazero";
-  version = "1.3.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "tetratelabs";
     repo = "wazero";
     rev = "v${version}";
-    hash = "sha256-gLiUEJdO/2btZb5D9O1r+uF3ZVBN4Oy3dFwqUNQRoW8=";
+    hash = "sha256-TBGRO+5PHPna2dNSeNktxALEc6TvJzV+kEiynYqvhgY=";
   };
 
   vendorHash = null;
@@ -46,5 +46,6 @@ buildGoModule rec {
     changelog = "https://github.com/tetratelabs/wazero/releases/tag/${src.rev}";
     license = licenses.asl20;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "wazero";
   };
 }

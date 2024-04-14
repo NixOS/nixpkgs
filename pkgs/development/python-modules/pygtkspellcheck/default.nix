@@ -1,19 +1,39 @@
-{ lib, buildPythonPackage, fetchPypi, gobject-introspection, gtk3, pyenchant, pygobject3 }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, gobject-introspection
+, gtk3
+, poetry-core
+, pyenchant
+, pygobject3
+}:
 
 buildPythonPackage rec {
   pname = "pygtkspellcheck";
-  version = "5.0.1";
+  version = "5.0.3";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hIHf1LBmFhPWN138jaAAOpmx+frbe6XM22+jG+OWcvw=";
+    hash = "sha256-NzaxRXU3BTIcRO9nowEak+Vk+XYw8nBCsTl//e/qg6w=";
   };
 
-  nativeBuildInputs = [ gobject-introspection ];
-  propagatedBuildInputs = [ pyenchant pygobject3 gtk3 ];
+  nativeBuildInputs = [
+    gobject-introspection
+    poetry-core
+  ];
+
+  propagatedBuildInputs = [
+    pyenchant
+    pygobject3
+    gtk3
+  ];
 
   doCheck = false; # there are no tests
-  pythonImportsCheck = [ "gtkspellcheck" ];
+
+  pythonImportsCheck = [
+    "gtkspellcheck"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/koehlma/pygtkspellcheck";

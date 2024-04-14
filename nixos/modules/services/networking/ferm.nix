@@ -20,7 +20,7 @@ in {
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable Ferm Firewall.
           *Warning*: Enabling this service WILL disable the existing NixOS
           firewall! Default firewall rules provided by packages are not
@@ -28,17 +28,12 @@ in {
         '';
       };
       config = mkOption {
-        description = lib.mdDoc "Verbatim ferm.conf configuration.";
+        description = "Verbatim ferm.conf configuration.";
         default = "";
         defaultText = literalMD "empty firewall, allows any traffic";
         type = types.lines;
       };
-      package = mkOption {
-        description = lib.mdDoc "The ferm package.";
-        type = types.package;
-        default = pkgs.ferm;
-        defaultText = literalExpression "pkgs.ferm";
-      };
+      package = mkPackageOption pkgs "ferm" { };
     };
   };
 

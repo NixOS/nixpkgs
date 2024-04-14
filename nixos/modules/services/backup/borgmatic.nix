@@ -6,32 +6,50 @@ let
   cfg = config.services.borgmatic;
   settingsFormat = pkgs.formats.yaml { };
 
+  repository = with types; submodule {
+    options = {
+      path = mkOption {
+        type = str;
+        description = ''
+          Path to the repository
+        '';
+      };
+      label = mkOption {
+        type = str;
+        description = ''
+          Label to the repository
+        '';
+      };
+    };
+  };
   cfgType = with types; submodule {
     freeformType = settingsFormat.type;
-    options.location = {
+    options = {
       source_directories = mkOption {
-        type = listOf str;
-        description = mdDoc ''
-          List of source directories to backup (required). Globs and
-          tildes are expanded.
+        type = nullOr (listOf str);
+        default = null;
+        description = ''
+          List of source directories and files to backup. Globs and tildes are
+          expanded. Do not backslash spaces in path names.
         '';
-        example = [ "/home" "/etc" "/var/log/syslog*" ];
+        example = [ "/home" "/etc" "/var/log/syslog*" "/home/user/path with spaces" ];
       };
       repositories = mkOption {
-        type = listOf str;
-        description = mdDoc ''
-          Paths to local or remote repositories (required). Tildes are
-          expanded. Multiple repositories are backed up to in
-          sequence. Borg placeholders can be used. See the output of
-          "borg help placeholders" for details. See ssh_command for
-          SSH options like identity file or port. If systemd service
-          is used, then add local repository paths in the systemd
-          service file to the ReadWritePaths list.
+        type = nullOr (listOf repository);
+        default = null;
+        description = ''
+          A required list of local or remote repositories with paths and
+          optional labels (which can be used with the --repository flag to
+          select a repository). Tildes are expanded. Multiple repositories are
+          backed up to in sequence. Borg placeholders can be used. See the
+          output of "borg help placeholders" for details. See ssh_command for
+          SSH options like identity file or port. If systemd service is used,
+          then add local repository paths in the systemd service file to the
+          ReadWritePaths list.
         '';
         example = [
-          "ssh://user@backupserver/./sourcehostname.borg"
-          "ssh://user@backupserver/./{fqdn}"
-          "/var/local/backups/local.borg"
+          { path="ssh://user@backupserver/./sourcehostname.borg"; label="backupserver"; }
+          { path="/mnt/backup"; label="local"; }
         ];
       };
     };
@@ -41,10 +59,10 @@ let
 in
 {
   options.services.borgmatic = {
-    enable = mkEnableOption (mdDoc "borgmatic");
+    enable = mkEnableOption "borgmatic";
 
     settings = mkOption {
-      description = mdDoc ''
+      description = ''
         See https://torsion.org/borgmatic/docs/reference/configuration/
       '';
       default = null;
@@ -52,7 +70,7 @@ in
     };
 
     configurations = mkOption {
-      description = mdDoc ''
+      description = ''
         Set of borgmatic configurations, see https://torsion.org/borgmatic/docs/reference/configuration/
       '';
       default = { };
@@ -61,6 +79,13 @@ in
   };
 
   config = mkIf cfg.enable {
+
+    warnings = []
+      ++ optional (cfg.settings != null && cfg.settings ? location)
+        "`services.borgmatic.settings.location` is deprecated, please move your options out of sections to the global scope"
+      ++ optional (catAttrs "location" (attrValues cfg.configurations) != [])
+        "`services.borgmatic.configurations.<name>.location` is deprecated, please move your options out of sections to the global scope"
+    ;
 
     environment.systemPackages = [ pkgs.borgmatic ];
 

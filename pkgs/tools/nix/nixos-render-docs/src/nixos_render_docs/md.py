@@ -365,7 +365,7 @@ def _attr_span_plugin(md: markdown_it.MarkdownIt) -> None:
                 return False
             id, classes = parsed_attrs
 
-            token = state.push("attr_span_begin", "span", 1) # type: ignore[no-untyped-call]
+            token = state.push("attr_span_begin", "span", 1)
             if id:
                 token.attrs['id'] = id
             if classes:
@@ -375,7 +375,7 @@ def _attr_span_plugin(md: markdown_it.MarkdownIt) -> None:
             state.posMax = label_end
             state.md.inline.tokenize(state)
 
-            state.push("attr_span_end", "span", -1) # type: ignore[no-untyped-call]
+            state.push("attr_span_end", "span", -1)
 
         state.pos = label_end + match.end() + 1
         state.posMax = input_end
@@ -458,7 +458,7 @@ def _footnote_ids(md: markdown_it.MarkdownIt) -> None:
                 token.attrs['id'] = f'{token.meta["label"]}.__back.{token.meta["subId"]}'
                 token.meta['target'] = token.meta["label"]
             elif token.type == 'inline':
-                assert token.children
+                assert token.children is not None
                 generate_ids(token.children)
 
     def footnote_ids(state: markdown_it.rules_core.StateCore) -> None:

@@ -1,20 +1,21 @@
 { stdenvNoCC, lib, fetchFromGitHub, makeWrapper, wget }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "distrobox";
-  version = "1.5.0.2";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "89luca89";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-ss8049D6n1V/gDzEMjywDnoke5s2we9j3mO8yta72UA=";
+    repo = "distrobox";
+    rev = finalAttrs.version;
+    hash = "sha256-mSka8QyoLjnaVEP23TtyzbPTBHDlnrSomVZdfw4PPng=";
   };
 
   dontConfigure = true;
   dontBuild = true;
 
   nativeBuildInputs = [ makeWrapper ];
+
   installPhase = ''
     runHook preInstall
 
@@ -30,6 +31,9 @@ stdenvNoCC.mkDerivation rec {
   postFixup = ''
     wrapProgram "$out/bin/distrobox-generate-entry" \
       --prefix PATH ":" ${lib.makeBinPath [ wget ]}
+
+    mkdir -p $out/share/distrobox
+    echo 'container_additional_volumes="/nix:/nix"' > $out/share/distrobox/distrobox.conf
   '';
 
   meta = with lib; {
@@ -39,9 +43,9 @@ stdenvNoCC.mkDerivation rec {
       forward compatibility with software and freedom to use whatever distribution
       you’re more comfortable with
     '';
-    homepage = "https://distrobox.privatedns.org/";
+    homepage = "https://distrobox.it/";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ atila ];
   };
-}
+})

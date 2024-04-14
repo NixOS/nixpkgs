@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [jamiemagee];
     platforms = with platforms; linux;
+    mainProgram = "nzbhydra2";
   };
 }

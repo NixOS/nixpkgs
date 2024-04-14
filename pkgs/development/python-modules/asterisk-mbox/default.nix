@@ -1,17 +1,38 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch2
+, setuptools
+, packaging
 }:
 
 buildPythonPackage rec {
   pname = "asterisk-mbox";
   version = "0.5.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "asterisk_mbox";
     inherit version;
-    sha256 = "0624f9ab85ce9c4d43655f8653e8539fa10c81b60fd7b94b1a15dce306c20888";
+    hash = "sha256-BiT5q4XOnE1DZV+GU+hTn6EMgbYP17lLGhXc4wbCCIg=";
   };
+
+  patches = [
+    # https://github.com/PhracturedBlue/asterisk_mbox/pull/1
+    (fetchpatch2 {
+      name = "distutils-deprecated.patch";
+      url = "https://github.com/PhracturedBlue/asterisk_mbox/commit/bab84525306a0c41aadd3aab4ebba7c062253d07.patch";
+      hash = "sha256-2j7jIl3Ydn2dHJhEzu/77Zkxhw58NIebgULifpTVidY=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    packaging
+  ];
 
   # no tests implemented
   doCheck = false;

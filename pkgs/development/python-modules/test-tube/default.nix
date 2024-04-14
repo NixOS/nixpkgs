@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "test-tube";
   version = "0.628";
+  format = "setuptools";
 
   disabled = isPy27;
 

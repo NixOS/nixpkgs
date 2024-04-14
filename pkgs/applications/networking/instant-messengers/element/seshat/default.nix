@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, callPackage, sqlcipher, nodejs, python3, yarn, fixup_yarn_lock, CoreServices, fetchYarnDeps, removeReferencesTo }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, callPackage, sqlcipher, nodejs, python3, yarn, prefetch-yarn-deps, CoreServices, fetchYarnDeps, removeReferencesTo }:
 
 let
   pinData = lib.importJSON ./pin.json;
@@ -16,7 +16,7 @@ in rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/seshat-node/native";
 
-  nativeBuildInputs = [ nodejs python3 yarn ];
+  nativeBuildInputs = [ nodejs python3 yarn prefetch-yarn-deps ];
   buildInputs = [ sqlcipher ] ++ lib.optional stdenv.isDarwin CoreServices;
 
   npm_config_nodedir = nodejs;
@@ -33,7 +33,7 @@ in rustPlatform.buildRustPackage rec {
     export HOME=$PWD/tmp
     mkdir -p $HOME
     yarn config --offline set yarn-offline-mirror $yarnOfflineCache
-    ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
     node_modules/.bin/neon build --release

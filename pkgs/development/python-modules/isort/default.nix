@@ -1,4 +1,6 @@
-{ lib, buildPythonPackage, fetchFromGitHub
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
 , colorama
 , hypothesis
 , poetry-core
@@ -9,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "isort";
-  version = "5.12.0";
+  version = "5.13.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "isort";
     rev = "refs/tags/${version}";
-    hash = "sha256-8ija4xWWZuYkElXLdziV7ulN8dubIsChcZQ5dx9hfO0=";
+    hash = "sha256-/1iKYmtNRw9u59zzJDwV7b9+EPxFJDHvhjTioGt5LLU=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +52,8 @@ buildPythonPackage rec {
     "--ignore=tests/benchmark/" # requires pytest-benchmark
     "--ignore=tests/integration/" # pulls in 10 other packages
     "--ignore=tests/unit/profiles/test_black.py" # causes infinite recursion to include black
+    # pytest.PytestRemovedIn8Warning: Passing None has been deprecated.
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   disabledTests = [
@@ -77,5 +81,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/PyCQA/isort";
     license = licenses.mit;
     maintainers = with maintainers; [ couchemar ];
+    mainProgram = "isort";
   };
 }

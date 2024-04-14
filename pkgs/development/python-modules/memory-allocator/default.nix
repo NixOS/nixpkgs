@@ -1,20 +1,21 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, cython
+, cython_3
 }:
 
 buildPythonPackage rec {
   pname = "memory-allocator";
-  version = "0.1.3";
+  version = "0.1.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "memory_allocator";
-    hash = "sha256-E4BcKuHAG3SJ+rXo6sk2FmK08sAkEuNlLuzkj/aVMWI=";
+    hash = "sha256-1gkhawMDGWfitFqASxL/kClXj07AGf3kLPau1soJ7+Q=";
   };
 
-  propagatedBuildInputs = [ cython ];
+  propagatedBuildInputs = [ cython_3 ];
 
   pythonImportsCheck = [ "memory_allocator" ];
 

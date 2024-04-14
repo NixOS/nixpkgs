@@ -29,13 +29,8 @@ buildPythonPackage rec {
     maturinBuildHook
   ]);
 
-  preBuild = ''
-    cd synapse
-  '';
+  buildAndTestSubdir = "synapse";
 
-  postBuild = ''
-    cd ..
-  '';
 
   pythonImportsCheck = [ "matrix_http_rendezvous_synapse" ];
 

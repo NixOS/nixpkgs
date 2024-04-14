@@ -8,8 +8,8 @@
 
 buildPythonPackage rec {
   pname = "argcomplete";
-  version = "3.1.1";
-  format = "pyproject";
+  version = "3.2.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -17,10 +17,8 @@ buildPythonPackage rec {
     owner = "kislyuk";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-N1Us/dpF/y638qIuwTzBiuv4vXfBMtWxmQnMBxNTUuc=";
+    hash = "sha256-xHUK57Adp3pnzHtFzvjFYb3t1cywRrEeKKXgJJqg10s=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools
@@ -35,9 +33,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Bash tab completion for argparse";
-    homepage = "https://kislyuk.github.io/argcomplete/";
     changelog = "https://github.com/kislyuk/argcomplete/blob/v${version}/Changes.rst";
+    description = "Bash tab completion for argparse";
+    downloadPage = "https://github.com/kislyuk/argcomplete";
+    homepage = "https://kislyuk.github.io/argcomplete/";
     license = licenses.asl20;
     maintainers = with maintainers; [ womfoo ];
   };

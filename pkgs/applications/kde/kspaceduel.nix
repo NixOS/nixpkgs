@@ -14,6 +14,7 @@ mkDerivation {
   meta = {
     homepage = "https://apps.kde.org/kspaceduel/";
     description = "Space arcade game";
+    mainProgram = "kspaceduel";
     license = with lib.licenses; [ lgpl21 gpl3 ];
   };
   outputs = [ "out" "dev" ];

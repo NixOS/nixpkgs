@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
     inherit rev;
   };
 
-  sourceRoot = "./source/platform-independent/c/cli";
+  sourceRoot = "${src.name}/platform-independent/c/cli";
 
   postPatch = ''
     rm build
@@ -57,6 +57,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A stateless password management solution";
+    mainProgram = "mpw";
     homepage = "https://masterpasswordapp.com/";
     license = licenses.gpl3;
     platforms = platforms.unix;

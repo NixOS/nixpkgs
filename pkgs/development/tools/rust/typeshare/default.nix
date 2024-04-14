@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "typeshare";
-  version = "1.6.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "1password";
     repo = "typeshare";
     rev = "v${version}";
-    hash = "sha256-vKjSpjbjTY9YxJGtqyoat6qI9ipmou+HQt35Dhpgk4E=";
+    hash = "sha256-20IaTC0fMt6ADSwyQh9yBn3i3z6cmQ1j/wy1KNB3Dog=";
   };
 
-  cargoHash = "sha256-dnQttsI6v90TJD8MekaLV63ltl147zBCe3mmfWj6cxs=";
+  cargoHash = "sha256-5jY4GO/EbBokE9p9e68bTKj6nJ0LhtWYHtFGfTIf9Po=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -30,6 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Command Line Tool for generating language files with typeshare";
+    mainProgram = "typeshare";
     homepage = "https://github.com/1password/typeshare";
     changelog = "https://github.com/1password/typeshare/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];

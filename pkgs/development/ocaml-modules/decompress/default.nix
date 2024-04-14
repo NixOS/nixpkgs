@@ -6,14 +6,13 @@
 
 buildDunePackage rec {
   pname = "decompress";
-  version = "1.5.2";
+  version = "1.5.3";
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/decompress/releases/download/v${version}/decompress-${version}.tbz";
-    hash = "sha256-qMmmuhMlFNVq02JvvV55EkhEg2AQNQ7hYdQ7spv1di4=";
+    hash = "sha256-+R5peL7/P8thRA0y98mcmfHoZUtPsYQIdB02A1NzrGA=";
   };
 
   buildInputs = [ cmdliner ];

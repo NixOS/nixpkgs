@@ -3,10 +3,15 @@
 perlPackages.buildPerlPackage rec {
   pname = "SpamAssassin";
   version = "4.0.0";
+  rulesRev = "r1905950";
 
   src = fetchurl {
     url = "mirror://apache/spamassassin/source/Mail-${pname}-${version}.tar.bz2";
     hash = "sha256-5aoXBQowvHK6qGr9xgSMrepNHsLsxh14dxegWbgxnog=";
+  };
+  defaultRulesSrc = fetchurl {
+    url = "mirror://apache/spamassassin/source/Mail-${pname}-rules-${version}.${rulesRev}.tgz";
+    hash = "sha256-rk/7uRfrx/76ckD8W7UVHdpmP45AWRYa18m0Lu0brG0=";
   };
 
   patches = [
@@ -47,11 +52,18 @@ perlPackages.buildPerlPackage rec {
     export HOME=$NIX_BUILD_TOP/home
     mkdir -p $HOME
     mkdir t/log  # pre-create to avoid race conditions
+
+    # https://bz.apache.org/SpamAssassin/show_bug.cgi?id=8068
+    checkFlagsArray+=(TEST_FILES='$(shell find t -name *.t -not -name spamd_ssl_accept_fail.t)')
   '';
 
   postInstall = ''
     mkdir -p $out/share/spamassassin
     mv "rules/"* $out/share/spamassassin/
+
+    tar -xzf ${defaultRulesSrc} -C $out/share/spamassassin/
+    local moduleversion="$(${perlPackages.perl}/bin/perl -I lib -e 'use Mail::SpamAssassin; print $Mail::SpamAssassin::VERSION')"
+    sed -i -e "s/@@VERSION@@/$moduleversion/" $out/share/spamassassin/*.cf
 
     for n in "$out/bin/"*; do
       # Skip if this isn't a perl script

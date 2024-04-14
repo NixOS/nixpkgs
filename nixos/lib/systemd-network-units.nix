@@ -1,8 +1,13 @@
 { lib, systemdUtils }:
 
-with lib;
-
 let
+  inherit (lib)
+    concatMapStrings
+    concatStringsSep
+    flip
+    optionalString
+    ;
+
   attrsToSection = systemdUtils.lib.attrsToSection;
   commonMatchText = def:
     optionalString (def.matchConfig != { }) ''
@@ -23,6 +28,12 @@ in {
     '' + optionalString (def.vlanConfig != { }) ''
       [VLAN]
       ${attrsToSection def.vlanConfig}
+    '' + optionalString (def.ipvlanConfig != { }) ''
+      [IPVLAN]
+      ${attrsToSection def.ipvlanConfig}
+    '' + optionalString (def.ipvtapConfig != { }) ''
+      [IPVTAP]
+      ${attrsToSection def.ipvtapConfig}
     '' + optionalString (def.macvlanConfig != { }) ''
       [MACVLAN]
       ${attrsToSection def.macvlanConfig}
@@ -65,6 +76,9 @@ in {
     '' + optionalString (def.vrfConfig != { }) ''
       [VRF]
       ${attrsToSection def.vrfConfig}
+    '' + optionalString (def.wlanConfig != { }) ''
+      [WLAN]
+      ${attrsToSection def.wlanConfig}
     '' + optionalString (def.batmanAdvancedConfig != { }) ''
       [BatmanAdvanced]
       ${attrsToSection def.batmanAdvancedConfig}

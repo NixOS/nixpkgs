@@ -61,6 +61,10 @@ def run_as_taskd_user():
     os.setuid(uid)
 
 
+def run_as_taskd_group():
+    gid = grp.getgrnam(TASKD_GROUP).gr_gid
+    os.setgid(gid)
+
 def taskd_cmd(cmd, *args, **kwargs):
     """
     Invoke taskd with the specified command with the privileges of the 'taskd'
@@ -90,7 +94,7 @@ def certtool_cmd(*args, **kwargs):
     """
     return subprocess.check_output(
         [CERTTOOL_COMMAND] + list(args),
-        preexec_fn=lambda: os.umask(0o077),
+        preexec_fn=run_as_taskd_group,
         stderr=subprocess.STDOUT,
         **kwargs
     )
@@ -156,17 +160,33 @@ def generate_key(org, user):
         sys.stderr.write(msg.format(user))
         return
 
-    basedir = os.path.join(TASKD_DATA_DIR, "keys", org, user)
-    if os.path.exists(basedir):
+    keysdir = os.path.join(TASKD_DATA_DIR, "keys" )
+    orgdir  = os.path.join(keysdir       , org    )
+    userdir = os.path.join(orgdir        , user   )
+    if os.path.exists(userdir):
         raise OSError("Keyfile directory for {} already exists.".format(user))
 
-    privkey = os.path.join(basedir, "private.key")
-    pubcert = os.path.join(basedir, "public.cert")
+    privkey = os.path.join(userdir, "private.key")
+    pubcert = os.path.join(userdir, "public.cert")
 
     try:
-        os.makedirs(basedir, mode=0o700)
+        # We change the permissions and the owner ship of the base directories
+        # so that cfg.group and cfg.user could read the directories' contents.
+        # See also: https://bugs.python.org/issue42367
+        for bd in [keysdir, orgdir, userdir]:
+            # Allow cfg.group, but not others to read the contents of this group
+            os.makedirs(bd, exist_ok=True)
+            # not using mode= argument to makedirs intentionally - forcing the
+            # permissions we want
+            os.chmod(bd, mode=0o750)
+            os.chown(
+                bd,
+                uid=pwd.getpwnam(TASKD_USER).pw_uid,
+                gid=grp.getgrnam(TASKD_GROUP).gr_gid,
+            )
 
         certtool_cmd("-p", "--bits", CERT_BITS, "--outfile", privkey)
+        os.chmod(privkey, 0o640)
 
         template_data = [
             "organization = {0}".format(org),
@@ -187,7 +207,7 @@ def generate_key(org, user):
                 "--outfile", pubcert
             )
     except:
-        rmtree(basedir)
+        rmtree(userdir)
         raise
 
 

@@ -1,35 +1,63 @@
-{ lib, stdenv
-, fetchurl
+{ lib
+, stdenv
+, fetchFromGitLab
+, gitUpdater
+, testers
 , cmake
 , pkg-config
 , gtest
 , doxygen
 , graphviz
-, lcov
+, lomiri
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "properties-cpp";
-  version = "0.0.1";
+  version = "0.0.3";
 
-  src = let srcver = "${version}+14.10.20140730"; in
-    fetchurl {
-      url = "https://launchpad.net/ubuntu/+archive/primary/+files/${pname}_${srcver}.orig.tar.gz";
-      sha256 = "08vjyv7ibn6jh2ikj5v48kjpr3n6hlkp9qlvdn8r0vpiwzah0m2w";
-    };
+  src = fetchFromGitLab {
+    owner = "ubports";
+    repo = "development/core/lib-cpp/properties-cpp";
+    rev = finalAttrs.version;
+    hash = "sha256-C/BDEuKNMQHOjATO5aWBptjIlgfv6ykzjFAsHb6uP3Q=";
+  };
 
-  postPatch = ''
+  postPatch = lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     sed -i "/add_subdirectory(tests)/d" CMakeLists.txt
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  strictDeps = true;
 
-  buildInputs = [ gtest doxygen graphviz lcov ];
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    graphviz
+    pkg-config
+  ];
+
+  buildInputs = [
+    lomiri.cmake-extras
+  ];
+
+  checkInputs = [
+    gtest
+  ];
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    updateScript = gitUpdater { };
+  };
 
   meta = with lib; {
-    homepage = "https://launchpad.net/properties-cpp";
+    homepage = "https://gitlab.com/ubports/development/core/lib-cpp/properties-cpp";
     description = "A very simple convenience library for handling properties and signals in C++11";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ edwtjo ];
+    platforms = platforms.linux;
+    pkgConfigModules = [
+      "properties-cpp"
+    ];
   };
-}
+})

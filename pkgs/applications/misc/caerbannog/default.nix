@@ -38,7 +38,6 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     gtk3
     atk
-    gobject-introspection
     libhandy
     libnotify
     pango
@@ -53,6 +52,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Mobile-friendly Gtk frontend for password-store";
+    mainProgram = "caerbannog";
     homepage = "https://sr.ht/~craftyguy/caerbannog/";
     changelog = "https://git.sr.ht/~craftyguy/caerbannog/refs/${version}";
     license = licenses.gpl3Plus;

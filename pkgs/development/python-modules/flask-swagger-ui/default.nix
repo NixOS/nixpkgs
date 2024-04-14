@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "flask-swagger-ui";
   version = "4.11.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

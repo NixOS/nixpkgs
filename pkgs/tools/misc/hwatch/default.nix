@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hwatch";
-  version = "0.3.10";
+  version = "0.3.12";
 
   src = fetchFromGitHub {
     owner = "blacknon";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-RvsL6OajXwEY77W3Wj6GMijYwn7XDnKiJyDXbNG01ag=";
+    sha256 = "sha256-Klv1VIJv4/R7HvvB6H+WxTeJxQYFqAFU3HC6oafD/90=";
   };
 
-  cargoHash = "sha256-v7MvXnc9Xa+6QAyi2N9/WtqnvXf9M1SlR86kNjfu46Y=";
+  cargoHash = "sha256-Aos/QP8tLiKFmAZss19jn5h/murZR2jgTYRYalUONHw=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -35,5 +35,6 @@ rustPlatform.buildRustPackage rec {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ hamburger1984 ];
+    mainProgram = "hwatch";
   };
 }

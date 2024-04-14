@@ -4,7 +4,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "apkg";
-  version = "0.4.1";
+  version = "0.5.0";
   format = "pyproject";
 
   src = fetchFromGitLab {
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
     owner = "packaging";
     repo = pname;
     rev = "v${version}";
-    sha256 = "x7UYkqkF1XJ3OMfQpIQ4+27KI0dLvL42Wms5xQTY/H4=";
+    hash = "sha256-VQNUzbWIDo/cbCdtx8JxN5UUMBW3mQ2B42In4b3AA+A=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -47,5 +47,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://pkg.labs.nic.cz/pages/apkg";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.vcunat /* close to upstream */ ];
+    mainProgram = "apkg";
   };
 }

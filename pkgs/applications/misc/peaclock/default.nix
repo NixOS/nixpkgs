@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ djanatyn ];
+    mainProgram = "peaclock";
   };
 }

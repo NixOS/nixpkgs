@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "datree";
-  version = "1.9.17";
+  version = "1.9.19";
 
   src = fetchFromGitHub {
     owner = "datreeio";
     repo = "datree";
     rev = "refs/tags/${version}";
-    hash = "sha256-vGlvujN9/1e9X/c2WgVSuc+yuqECUF55NLPmBecwvT0=";
+    hash = "sha256-W1eX7eUMdPGbHA/f08xkG2EUeZmaunEAQn7/LRBe2nk=";
   };
 
-  vendorHash = "sha256-ECVKofvmLuFAFvncq63hYUaYW8/2+F4gZr8wIGQyrdU=";
+  vendorHash = "sha256-+PQhuIO4KjXtW/ZcS0OamuOHzK7ZL+nwOBxeCRoXuKE=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -44,6 +44,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "CLI tool to ensure K8s manifests and Helm charts follow best practices";
+    mainProgram = "datree";
     longDescription = ''
       Datree provides an E2E policy enforcement solution to run automatic checks
       for rule violations. Datree can be used on the command line, admission

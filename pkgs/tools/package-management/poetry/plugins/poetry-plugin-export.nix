@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "poetry-plugin-export";
-  version = "1.4.0";
+  version = "1.7.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-okI91Z9u5w7IHpPb9jL4Hb8+MkYJEF2qm0mqqCdyKbk=";
+    hash = "sha256-HXzlfiZYDkrQRFXF1up52KrwGhrIctd3CtjQTNz8xH4=";
   };
 
   postPatch = ''
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Poetry plugin to export the dependencies to various formats";
     license = licenses.mit;
     homepage = "https://github.com/python-poetry/poetry-plugin-export";
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

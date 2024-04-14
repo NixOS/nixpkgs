@@ -44,7 +44,7 @@ in
 
       shellAliases = mkOption {
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           Set of aliases for bash shell, which overrides {option}`environment.shellAliases`.
           See {option}`environment.shellAliases` for an option format description.
         '';
@@ -53,7 +53,7 @@ in
 
       shellInit = mkOption {
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Shell script code called during bash shell initialisation.
         '';
         type = types.lines;
@@ -61,7 +61,7 @@ in
 
       loginShellInit = mkOption {
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Shell script code called during login bash shell initialisation.
         '';
         type = types.lines;
@@ -69,7 +69,7 @@ in
 
       interactiveShellInit = mkOption {
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Shell script code called during interactive bash shell initialisation.
         '';
         type = types.lines;
@@ -81,7 +81,7 @@ in
           if [ "$TERM" != "dumb" ] || [ -n "$INSIDE_EMACS" ]; then
             PROMPT_COLOR="1;31m"
             ((UID)) && PROMPT_COLOR="1;32m"
-            if [ -n "$INSIDE_EMACS" ] || [ "$TERM" = "eterm" ] || [ "$TERM" = "eterm-color" ]; then
+            if [ -n "$INSIDE_EMACS" ]; then
               # Emacs term mode doesn't support xterm title escape sequence (\e]0;)
               PS1="\n\[\033[$PROMPT_COLOR\][\u@\h:\w]\\$\[\033[0m\] "
             else
@@ -92,7 +92,7 @@ in
             fi
           fi
         '';
-        description = lib.mdDoc ''
+        description = ''
           Shell script code used to initialise the bash prompt.
         '';
         type = types.lines;
@@ -100,7 +100,7 @@ in
 
       promptPluginInit = mkOption {
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Shell script code used to initialise bash prompt plugins.
         '';
         type = types.lines;

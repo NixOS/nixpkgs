@@ -46,7 +46,6 @@ in
     dontWrapQtApps = true;
 
     cmakeFlags = [
-      "-DCMAKE_BUILD_TYPE=RELEASE"
       "-DSDK_ARUCO_LIBPATH=${aruco}/lib/libaruco.a"
       "-DSDK_XPLANE=${xplaneSdk}"
     ];
@@ -72,6 +71,7 @@ in
     meta = with lib; {
       homepage = "https://github.com/opentrack/opentrack";
       description = "Head tracking software for MS Windows, Linux, and Apple OSX";
+      mainProgram = "opentrack";
       changelog = "https://github.com/opentrack/opentrack/releases/tag/${version}";
       license = licenses.isc;
       maintainers = with maintainers; [zaninime];

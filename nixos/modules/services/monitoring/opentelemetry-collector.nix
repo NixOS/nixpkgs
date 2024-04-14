@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkEnableOption mkIf mkOption types getExe;
+  inherit (lib) mkEnableOption mkPackageOption mkIf mkOption types getExe;
 
   cfg = config.services.opentelemetry-collector;
   opentelemetry-collector = cfg.package;
@@ -9,19 +9,14 @@ let
   settingsFormat = pkgs.formats.yaml {};
 in {
   options.services.opentelemetry-collector = {
-    enable = mkEnableOption (lib.mdDoc "Opentelemetry Collector");
+    enable = mkEnableOption "Opentelemetry Collector";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.opentelemetry-collector;
-      defaultText = lib.literalExpression "pkgs.opentelemetry-collector";
-      description = lib.mdDoc "The opentelemetry-collector package to use.";
-    };
+    package = mkPackageOption pkgs "opentelemetry-collector" { };
 
     settings = mkOption {
       type = settingsFormat.type;
       default = {};
-      description = lib.mdDoc ''
+      description = ''
         Specify the configuration for Opentelemetry Collector in Nix.
 
         See https://opentelemetry.io/docs/collector/configuration/ for available options.
@@ -31,7 +26,7 @@ in {
     configFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Specify a path to a configuration file that Opentelemetry Collector should use.
       '';
     };

@@ -11,24 +11,24 @@
 , hatch-vcs
 , hatchling
 , importlib-metadata
-, importlib-resources
 , platformdirs
 , pytest-freezegun
 , pytest-mock
 , pytest-timeout
 , pytestCheckHook
+, time-machine
 }:
 
 buildPythonPackage rec {
   pname = "virtualenv";
-  version = "20.19.0";
+  version = "20.25.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-N6ZAuoLtQLImWZxSLUEeS+XtszmgwN4DDA3HtkbWFZA=";
+    hash = "sha256-4I4T7NynoL1TeY81bVgxQ0r6Wwe5Pwq98Hl7egb/4Zc=";
   };
 
   nativeBuildInputs = [
@@ -40,14 +40,8 @@ buildPythonPackage rec {
     distlib
     filelock
     platformdirs
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    importlib-resources
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
-  ];
-
-  patches = lib.optionals (isPy27) [
-    ./0001-Check-base_prefix-and-base_exec_prefix-for-Python-2.patch
   ];
 
   nativeCheckInputs = [
@@ -57,6 +51,8 @@ buildPythonPackage rec {
     pytest-mock
     pytest-timeout
     pytestCheckHook
+  ] ++ lib.optionals (!isPyPy) [
+    time-machine
   ];
 
   preCheck = ''
@@ -75,6 +71,8 @@ buildPythonPackage rec {
     "test_seed_link_via_app_data"
     # Permission Error
     "test_bad_exe_py_info_no_raise"
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    "test_help"
   ] ++ lib.optionals (isPyPy) [
     # encoding problems
     "test_bash"
@@ -90,8 +88,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A tool to create isolated Python environments";
+    mainProgram = "virtualenv";
     homepage = "http://www.virtualenv.org";
-    changelog = "https://github.com/pypa/virtualenv/releases/tag/${version}";
+    changelog = "https://github.com/pypa/virtualenv/blob/${version}/docs/changelog.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ goibhniu ];
   };

@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Read the Word of God from your terminal + Apocrypha";
+    mainProgram = "kjv";
     homepage = "https://lukesmith.xyz/articles/command-line-bibles";
     license = licenses.unlicense;
     platforms = platforms.unix;

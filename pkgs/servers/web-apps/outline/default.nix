@@ -1,28 +1,32 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchYarnDeps
 , makeWrapper
+, prefetch-yarn-deps
 , nodejs
 , yarn
-, yarn2nix-moretea
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "outline";
-  version = "0.70.2";
+  version = "0.75.2";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${version}";
-    hash = "sha256-y2VGWuwJX91Aa8Bs7YcT4MKOURrFKXUz9CcQkUI/U2s=";
+    hash = "sha256-jK1jZ9NyBl3Dioh/7gXWx6XyyI6xJKt2a/XXzbhllZM=";
   };
 
-  nativeBuildInputs = [ makeWrapper yarn2nix-moretea.fixup_yarn_lock ];
+  nativeBuildInputs = [ makeWrapper prefetch-yarn-deps ];
   buildInputs = [ yarn nodejs ];
 
-  yarnOfflineCache = yarn2nix-moretea.importOfflineCache ./yarn.nix;
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = "${src}/yarn.lock";
+    hash = "sha256-8CfaP5T/pf/xq1lOfdOW4n2m12QLnkLFynHABjZwNiY=";
+  };
 
   configurePhase = ''
     export HOME=$(mktemp -d)/yarn_home
@@ -33,7 +37,7 @@ stdenv.mkDerivation rec {
     export NODE_OPTIONS=--openssl-legacy-provider
 
     yarn config --offline set yarn-offline-mirror $yarnOfflineCache
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
 
     yarn install --offline \
       --frozen-lockfile \
@@ -59,7 +63,8 @@ stdenv.mkDerivation rec {
     makeWrapper ${nodejs}/bin/node $out/bin/outline-server \
       --add-flags $build/server/index.js \
       --set NODE_ENV production \
-      --set NODE_PATH $node_modules
+      --set NODE_PATH $node_modules \
+      --prefix PATH : ${lib.makeBinPath [ nodejs ]} # required to run migrations
 
     runHook postInstall
   '';

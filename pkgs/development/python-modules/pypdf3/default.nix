@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "pypdf3";
   version = "1.0.6";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "PyPDF3";

@@ -2,25 +2,35 @@
 , stdenv
 , cmake
 , fetchFromGitHub
+, fetchpatch
 , python3
 , flex
 , bison
 , qt5
 , CoreServices
 , libiconv
-, withSqlite ? true, sqlite
+, spdlog
+, sqlite
 }:
 
 stdenv.mkDerivation rec {
   pname = "doxygen";
-  version = "1.9.7";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "doxygen";
     repo = "doxygen";
     rev = "Release_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "sha256-ezeMQk+Vyi9qNsYwbaRRruaIYGY8stFf71W7GonXqco=";
+    sha256 = "sha256-FPI5ICdn9Tne/g9SP6jAQS813AAyoDNooDR/Hyvq6R4=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "sys-spdlog-fix.patch";
+      url = "https://github.com/doxygen/doxygen/commit/0df6da616f01057d28b11c8bee28443c102dd424.patch";
+      hash = "sha256-7efkCQFYGslwqhIuPsLYTEiA1rq+mO0DuyQBMt0O+m0=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -29,14 +39,15 @@ stdenv.mkDerivation rec {
     bison
   ];
 
-  buildInputs = [ libiconv ]
-    ++ lib.optionals withSqlite [ sqlite ]
+  buildInputs = [ libiconv spdlog sqlite ]
     ++ lib.optionals (qt5 != null) (with qt5; [ qtbase wrapQtAppsHook ])
     ++ lib.optionals stdenv.isDarwin [ CoreServices ];
 
-  cmakeFlags = [ "-DICONV_INCLUDE_DIR=${libiconv}/include" ]
-    ++ lib.optional withSqlite "-Duse_sqlite3=ON"
-    ++ lib.optional (qt5 != null) "-Dbuild_wizard=YES";
+  cmakeFlags = [
+    "-DICONV_INCLUDE_DIR=${libiconv}/include"
+    "-Duse_sys_spdlog=ON"
+    "-Duse_sys_sqlite3=ON"
+  ] ++ lib.optional (qt5 != null) "-Dbuild_wizard=YES";
 
   env.NIX_CFLAGS_COMPILE =
     lib.optionalString stdenv.isDarwin "-mmacosx-version-min=10.9";
@@ -52,6 +63,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.doxygen.nl/";
     changelog = "https://www.doxygen.nl/manual/changelog.html";
     description = "Source code documentation generator tool";
+    mainProgram = "doxygen";
 
     longDescription = ''
       Doxygen is the de facto standard tool for generating documentation from

@@ -16,10 +16,6 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  preConfigure = ''
-    patchShebangs ./configure
-  '';
-
   env.NIX_CFLAGS_COMPILE = "-fpermissive";
 
   meta = {

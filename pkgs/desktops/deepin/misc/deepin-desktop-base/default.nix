@@ -1,16 +1,17 @@
 { stdenvNoCC
 , lib
 , fetchFromGitHub
+, nixos-icons
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "deepin-desktop-base";
-  version = "2022.11.15-deepin";
+  version = "2024.01.03";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-GTgIHWz+x1Pl3F4zKA9V8o2oq6c53OK94q95WoMG+Qo=";
+    hash = "sha256-45qR1LCnA8ZSrWykqNvvm7Dxbi5pQnAuFy6nZJrzyi0=";
   };
 
   makeFlags = [ "DESTDIR=${placeholder "out"}" ];
@@ -24,6 +25,15 @@ stdenvNoCC.mkDerivation rec {
     mv $out/usr/* $out/
     rm -r $out/usr
     install -D ${./distribution_logo_transparent.svg} $out/share/pixmaps/distribution_logo_transparent.svg
+    cat > $out/share/deepin/distribution.info <<EOF
+    [Distribution]
+    Name=NixOS
+    WebsiteName=www.nixos.org
+    Website=https://www.nixos.org
+    Logo=${nixos-icons}/share/icons/hicolor/96x96/apps/nix-snowflake.png
+    LogoLight=${nixos-icons}/share/icons/hicolor/32x32/apps/nix-snowflake.png
+    LogoTransparent=$out/share/pixmaps/distribution_logo_transparent.svg
+    EOF
   '';
 
   meta = with lib; {

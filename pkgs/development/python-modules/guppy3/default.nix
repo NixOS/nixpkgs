@@ -2,20 +2,27 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, setuptools
 , tkinter
 }:
 
 buildPythonPackage rec {
   pname = "guppy3";
-  version = "3.1.3";
-  disabled = pythonOlder "3.6";
+  version = "3.1.4.post1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zhuyifei1999";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-i3WqXlNnNhBVw9rdnxnzQISFkZHBpc/gqG+rxOWPiyc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-HHy57P6WEHZKygAbdjEh6XAApFlQueiYGr02eSQMWfc=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [ tkinter ];
 

@@ -42,29 +42,36 @@
 
 buildPythonPackage rec {
   pname = "strawberry-graphql";
-  version = "0.185.1";
+  version = "0.219.2";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "strawberry-graphql";
     repo = "strawberry";
     rev = "refs/tags/${version}";
-    hash = "sha256-PwhTD1k2GOVf6ACNDY1atLLP1jjAF6eTDCE3eLUIpJA=";
+    hash = "sha256-uIUETjzuDnlQp6wM7uxyLRSMT5uyrXFrI9NilcjP0BU=";
   };
 
   patches = [
     (fetchpatch {
+      # https://github.com/strawberry-graphql/strawberry/pull/2199
       name = "switch-to-poetry-core.patch";
       url = "https://github.com/strawberry-graphql/strawberry/commit/710bb96f47c244e78fc54c921802bcdb48f5f421.patch";
       hash = "sha256-ekUZ2hDPCqwXp9n0YjBikwSkhCmVKUzQk7LrPECcD7Y=";
+    })
+    (fetchpatch {
+      # https://github.com/strawberry-graphql/strawberry/pull/3255
+      name = "fix-tests-with-pydantic_2.patch";
+      url = "https://github.com/strawberry-graphql/strawberry/commit/0a0dc284ee6d31d4e82ac7ff1ed9fea4dff39fa6.patch";
+      hash = "sha256-LACWD7XA6YL/apJwhpx3LPCKxKUfa+XWyTLK+Zkxlaw=";
     })
   ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --emoji --mypy-ini-file=mypy.ini --benchmark-disable" "" \
+      --replace "--emoji --mypy-ini-file=mypy.ini" "" \
   '';
 
   nativeBuildInputs = [
@@ -175,8 +182,11 @@ buildPythonPackage rec {
     "tests/websockets/test_graphql_transport_ws.py"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "A GraphQL library for Python that leverages type annotations";
+    mainProgram = "strawberry";
     homepage = "https://strawberry.rocks";
     changelog = "https://github.com/strawberry-graphql/strawberry/blob/${version}/CHANGELOG.md";
     license = with licenses; [ mit ];

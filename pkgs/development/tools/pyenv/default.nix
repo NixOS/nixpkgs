@@ -6,18 +6,14 @@
 
 stdenv.mkDerivation rec {
   pname = "pyenv";
-  version = "2.3.23";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "pyenv";
     repo = "pyenv";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gvxun/izEC7KQVfuPe0yjYKqJyqaoTFYNSAldhfBKVc=";
+    hash = "sha256-urF0glUR6W2jtT3Ek3OpbpmImiQrwHGbS1/pGuTcgyA=";
   };
-
-  postPatch = ''
-    patchShebangs --build src/configure
-  '';
 
   nativeBuildInputs = [
     installShellFiles

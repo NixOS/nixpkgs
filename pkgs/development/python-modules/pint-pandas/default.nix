@@ -3,6 +3,8 @@
 , buildPythonPackage
 , fetchFromGitHub
 , setuptools
+, setuptools-scm
+, wheel
 , pint
 , pandas
 , pytestCheckHook
@@ -22,6 +24,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+    setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [

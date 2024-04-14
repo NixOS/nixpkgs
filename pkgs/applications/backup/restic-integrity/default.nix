@@ -21,5 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://gitlab.upi.li/networkException/restic-integrity";
     license = with licenses; [ bsd2 ];
     maintainers = with maintainers; [ janik ];
+    mainProgram = "restic-integrity";
   };
 }

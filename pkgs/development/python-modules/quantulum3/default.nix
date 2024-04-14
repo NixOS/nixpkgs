@@ -12,6 +12,7 @@
 , joblib
 , wikipedia
 , stemming
+, setuptools
 }:
 let
   pname = "quantulum3";
@@ -40,12 +41,14 @@ buildPythonPackage {
     joblib
     wikipedia
     stemming
+    setuptools
   ];
 
   pythonImportsCheck = [ "quantulum3" ];
 
   meta = with lib; {
     description = "Library for unit extraction - fork of quantulum for python3";
+    mainProgram = "quantulum3-training";
     homepage = "https://github.com/nielstron/quantulum3";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];

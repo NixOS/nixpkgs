@@ -4,6 +4,7 @@
 , pkg-config
 , glib
 , gdk-pixbuf
+, installShellFiles
 , pango
 , cairo
 , libxml2
@@ -14,25 +15,34 @@
 , libobjc
 , rustPlatform
 , rustc
-, rust
 , cargo-auditable-cargo-wrapper
 , gi-docgen
 , python3Packages
 , gnome
 , vala
 , writeScript
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , buildPackages
 , gobject-introspection
 , _experimental-update-script-combinators
 , common-updater-scripts
 , jq
 , nix
+
+# for passthru.tests
+, enlightenment
+, ffmpeg
+, gegl
+, gimp
+, imagemagick
+, imlib2
+, vips
+, xfce
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "librsvg";
-  version = "2.56.2";
+  version = "2.57.92";
 
   outputs = [ "out" "dev" ] ++ lib.optionals withIntrospection [
     "devdoc"
@@ -40,13 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/librsvg/${lib.versions.majorMinor finalAttrs.version}/librsvg-${finalAttrs.version}.tar.xz";
-    sha256 = "PsPE2Pc+C6S5EwAmlp6DccCStzQpjTbi/bPrSvzsEgA=";
+    hash = "sha256-Kiwwvqvzz91ApKbb7T+zPmd8ruXY8wR4gkm3Mee+OFI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src;
     name = "librsvg-deps-${finalAttrs.version}";
-    hash = "sha256-GIEpZ5YMvmYQLcaLXseXQ6gIF7ICtUKq28JCVJ3PEYk=";
+    hash = "sha256-yJf3V2dPwI+RcDH6Lh/AhUgaisdbTnzdAFt+SeNw9NY=";
     # TODO: move this to fetchCargoTarball
     dontConfigure = true;
   };
@@ -59,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     gdk-pixbuf
+    installShellFiles
     pkg-config
     rustc
     cargo-auditable-cargo-wrapper
@@ -94,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     "--enable-always-build-tests"
   ] ++ lib.optional stdenv.isDarwin "--disable-Bsymbolic"
-    ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "RUST_TARGET=${rust.toRustTarget stdenv.hostPlatform}";
+    ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "RUST_TARGET=${stdenv.hostPlatform.rust.rustcTarget}";
 
   doCheck = false; # all tests fail on libtool-generated rsvg-convert not being able to find coreutils
 
@@ -121,12 +132,10 @@ stdenv.mkDerivation (finalAttrs: {
   postConfigure = ''
     GDK_PIXBUF=$out/lib/gdk-pixbuf-2.0/2.10.0
     mkdir -p $GDK_PIXBUF/loaders
-    sed -e "s#gdk_pixbuf_moduledir = .*#gdk_pixbuf_moduledir = $GDK_PIXBUF/loaders#" \
-        -i gdk-pixbuf-loader/Makefile
-    sed -e "s#gdk_pixbuf_cache_file = .*#gdk_pixbuf_cache_file = $GDK_PIXBUF/loaders.cache#" \
-        -i gdk-pixbuf-loader/Makefile
-    sed -e "s#\$(GDK_PIXBUF_QUERYLOADERS)#GDK_PIXBUF_MODULEDIR=$GDK_PIXBUF/loaders \$(GDK_PIXBUF_QUERYLOADERS)#" \
-         -i gdk-pixbuf-loader/Makefile
+    sed -i gdk-pixbuf-loader/Makefile \
+      -e "s#gdk_pixbuf_moduledir = .*#gdk_pixbuf_moduledir = $GDK_PIXBUF/loaders#" \
+      -e "s#gdk_pixbuf_cache_file = .*#gdk_pixbuf_cache_file = $GDK_PIXBUF/loaders.cache#" \
+      -e "s#\$(GDK_PIXBUF_QUERYLOADERS)#GDK_PIXBUF_MODULEDIR=$GDK_PIXBUF/loaders \$(GDK_PIXBUF_QUERYLOADERS)#"
 
     # Fix thumbnailer path
     sed -e "s#@bindir@\(/gdk-pixbuf-thumbnailer\)#${gdk-pixbuf}/bin\1#g" \
@@ -141,18 +150,17 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Not generated when cross compiling.
-  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
-    # Merge gdkpixbuf and librsvg loaders
-    cat ${lib.getLib gdk-pixbuf}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache $GDK_PIXBUF/loaders.cache > $GDK_PIXBUF/loaders.cache.tmp
-    mv $GDK_PIXBUF/loaders.cache.tmp $GDK_PIXBUF/loaders.cache
+  postInstall = let emulator = stdenv.hostPlatform.emulator buildPackages; in
+    lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+      # Merge gdkpixbuf and librsvg loaders
+      cat ${lib.getLib gdk-pixbuf}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache $GDK_PIXBUF/loaders.cache > $GDK_PIXBUF/loaders.cache.tmp
+      mv $GDK_PIXBUF/loaders.cache.tmp $GDK_PIXBUF/loaders.cache
 
-    mkdir -p "$out/share/bash-completion/completions/"
-    $out/bin/rsvg-convert --completion bash > "$out/share/bash-completion/completions/rsvg-convert"
-    mkdir -p "$out/share/zsh/site-functions/"
-    $out/bin/rsvg-convert --completion zsh > "$out/share/zsh/site-functions/_rsvg-convert"
-    mkdir -p "$out/share/fish/vendor_completions.d/"
-    $out/bin/rsvg-convert --completion fish > "$out/share/fish/vendor_completions.d/rsvg-convert.fish"
-  '';
+      installShellCompletion --cmd rsvg-convert \
+        --bash <(${emulator} $out/bin/rsvg-convert --completion bash) \
+        --fish <(${emulator} $out/bin/rsvg-convert --completion fish) \
+        --zsh <(${emulator} $out/bin/rsvg-convert --completion zsh)
+    '';
 
   postFixup = lib.optionalString withIntrospection ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
@@ -194,6 +202,17 @@ stdenv.mkDerivation (finalAttrs: {
         updateSource
         updateLockfile
       ];
+    tests = {
+      inherit
+        gegl
+        gimp
+        imagemagick
+        imlib2
+        vips;
+      inherit (enlightenment) efl;
+      inherit (xfce) xfwm4;
+      ffmpeg = ffmpeg.override { withSvg = true; };
+    };
   };
 
   meta = with lib; {

@@ -11,11 +11,15 @@
 , glib
 , glib-networking
 , gtk4
+, gtksourceview5
+, gxml
 , json-glib
 , libadwaita
 , libgee
 , libical
 , libportal-gtk4
+, libsecret
+, libsoup_3
 , pantheon
 , sqlite
 , webkitgtk_6_0
@@ -23,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "planify";
-  version = "4.1";
+  version = "4.5.12";
 
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planify";
     rev = version;
-    sha256 = "sha256-H8TPuqKRwbcB+2NTC5ZIK7y6uiYbTT4svtx21FbTzME=";
+    hash = "sha256-Aj2kvffLl8vEqzirAy45E+jGB9iRp2mSYq0YWJ3nrj8=";
   };
 
   nativeBuildInputs = [
@@ -46,14 +50,22 @@ stdenv.mkDerivation rec {
     glib
     glib-networking
     gtk4
+    gtksourceview5
+    gxml
     json-glib
     libadwaita
     libgee
     libical
     libportal-gtk4
+    libsecret
+    libsoup_3
     pantheon.granite7
     sqlite
     webkitgtk_6_0
+  ];
+
+  mesonFlags = [
+    "-Dprofile=default"
   ];
 
   meta = with lib; {

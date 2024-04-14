@@ -11,20 +11,23 @@
 , qtimageformats
 , lxqt
 , librsvg
-, freeimage
-, libraw
 }:
 
 stdenv.mkDerivation rec {
   pname = "dtkgui";
-  version = "5.6.10";
+  version = "5.6.22";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-4NHt/hLtt99LhWvBX9e5ueB5G86SXx553G6fyHZBXcE=";
+    hash = "sha256-h3DFG6FaJXP9o9u8R31MtX3Z1+P3DrNDT8Xbd8tlI4Y=";
   };
+
+  patches = [
+    ./fix-pkgconfig-path.patch
+    ./fix-pri-path.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -38,8 +41,6 @@ stdenv.mkDerivation rec {
     qtbase
     lxqt.libqtxdg
     librsvg
-    freeimage
-    libraw
   ];
 
   propagatedBuildInputs = [
@@ -48,12 +49,11 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DDVERSION=${version}"
+    "-DDTK_VERSION=${version}"
     "-DBUILD_DOCS=ON"
-    "-DQCH_INSTALL_DESTINATION=${qtbase.qtDocPrefix}"
     "-DMKSPECS_INSTALL_DIR=${placeholder "out"}/mkspecs/modules"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DQCH_INSTALL_DESTINATION=${placeholder "doc"}/${qtbase.qtDocPrefix}"
+    "-DCMAKE_INSTALL_LIBEXECDIR=${placeholder "dev"}/libexec"
   ];
 
   preConfigure = ''
@@ -61,6 +61,8 @@ stdenv.mkDerivation rec {
     # A workaround is to set QT_PLUGIN_PATH explicitly
     export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
   '';
+
+  outputs = [ "out" "dev" "doc" ];
 
   meta = with lib; {
     description = "Deepin Toolkit, gui module for DDE look and feel";

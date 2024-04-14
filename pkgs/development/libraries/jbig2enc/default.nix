@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  propagatedBuildInputs = [
+
+  buildInputs = [
     leptonica
     zlib
     libwebp
@@ -42,6 +43,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # We don't want to install this Python 2 script
+  postInstall = ''
+    rm "$out/bin/pdf.py"
+  '';
+
   # This is necessary, because the resulting library has
   # /tmp/nix-build-jbig2enc/src/.libs before /nix/store/jbig2enc/lib
   # in its rpath, which means that patchelf --shrink-rpath removes
@@ -56,5 +62,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
     homepage = "https://github.com/agl/jbig2enc";
+    mainProgram = "jbig2";
   };
 }

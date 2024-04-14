@@ -49,6 +49,7 @@ in appimageTools.wrapType2 rec {
     homepage = "https://mycrypto.com";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ oxalica ];
+    maintainers = [ ];
+    mainProgram = "MyCrypto";
   };
 }

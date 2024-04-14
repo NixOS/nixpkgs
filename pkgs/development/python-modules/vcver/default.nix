@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "vcver";
   version = "0.2.12";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "toumorokoshi";

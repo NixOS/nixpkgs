@@ -2,11 +2,11 @@
 , lib
 , fetchFromGitHub
 , makeWrapper
-, strip-nondeterminism
+, stripJavaArchivesHook
 , meson
 , ninja
 , pkg-config
-, gradle_7
+, gradle_8
 , curl
 , cryptopp
 , fontconfig
@@ -20,16 +20,16 @@
 
 let
   pname = "cie-middleware-linux";
-  version = "1.4.4.0";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "M0rf30";
     repo = pname;
-    rev = "${version}-podofo";
-    sha256 = "sha256-Kyr9OTiY6roJ/wVJS/1aWfrrzDNQbuRTJQqo0akbMUU=";
+    rev = version;
+    sha256 = "sha256-M3Xwg3G2ZZhPRV7uhFVXQPyvuuY4zI5Z+D/Dt26KVM0=";
   };
 
-  gradle = gradle_7;
+  gradle = gradle_8;
 
   # Shared libraries needed by the Java application
   libraries = lib.makeLibraryPath [ ghostscript ];
@@ -60,7 +60,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-WzT5vYF9yCMU2A7EkLZyjgWrN3gD7pnkPXc3hDFqpD8=";
+    outputHash = "sha256-fxrjo4iduXzTgMqmQGwdI1vLMA4EZLObsHyKGZ6b14I=";
   };
 
 in
@@ -70,15 +70,13 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  outputs = [ "out" "dev" ];
-
   nativeBuildInputs = [
     makeWrapper
+    stripJavaArchivesHook
     meson
     ninja
     pkg-config
     gradle
-    strip-nondeterminism
   ];
 
   buildInputs = [
@@ -90,6 +88,8 @@ stdenv.mkDerivation {
     curl
     libxml2
   ];
+
+  patches = [ ./use-system-podofo.patch ];
 
   postPatch = ''
     # substitute the cieid command with this $out/bin/cieid
@@ -142,14 +142,6 @@ stdenv.mkDerivation {
     install -Dm644 data/cieid.desktop "$out/share/applications/cieid.desktop"
     install -Dm755 data/logo.png "$out/share/pixmaps/cieid.png"
     install -Dm644 LICENSE "$out/share/licenses/cieid/LICENSE"
-  '';
-
-  postFixup = ''
-    # Move static libraries to the dev output
-    mv -t "$dev/lib" "$out/lib/"*.a
-
-    # Make the jar deterministic (mainly, sorting its files)
-    strip-nondeterminism "$out/share/cieid/cieid.jar"
   '';
 
   passthru = { inherit javaDeps; };

@@ -78,5 +78,6 @@ in stdenv.mkDerivation rec {
     license = licenses.publicDomain;
     platforms = platforms.unix;
     maintainers = with maintainers; [ yuriaisaka ];
+    mainProgram = "imagej";
   };
 }

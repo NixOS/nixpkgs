@@ -1,13 +1,13 @@
 { unzip
-, gqlgenVersion ? "0.17.2"
+, gqlgenVersion
 }:
 {
   overrideModAttrs = (_: {
     # No need to workaround -trimpath: it's not used in goModules,
     # but do download `go generate`'s dependencies nonetheless.
     preBuild = ''
-      go generate ./loaders
-      go generate ./graph
+      if [ -d ./loaders ]; then go generate ./loaders; fi
+      if [ -d ./graph ]; then go generate ./graph; fi
     '';
   });
 
@@ -25,8 +25,8 @@
   # If it fails, the gqlgenVersion may have to be updated.
   preBuild = ''
     unzip ''${GOPROXY#"file://"}/github.com/99designs/gqlgen/@v/v${gqlgenVersion}.zip
-    go generate ./loaders
-    go generate ./graph
+    if [ -d ./loaders ]; then go generate ./loaders; fi
+    if [ -d ./graph ]; then go generate ./graph; fi
     rm -rf github.com
   '';
 }

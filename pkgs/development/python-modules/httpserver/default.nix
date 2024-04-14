@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "httpserver";
   version = "1.1.0";
+  format = "setuptools";
 
   buildInputs = [ docopt ];
 
@@ -20,6 +21,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Asyncio implementation of an HTTP server";
+    mainProgram = "httpserver";
     homepage = "https://github.com/thomwiggers/httpserver";
     license = with lib.licenses; [ bsd3 ];
   };

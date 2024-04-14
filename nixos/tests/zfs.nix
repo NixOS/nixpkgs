@@ -7,21 +7,19 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 
 let
 
-  makeZfsTest = name:
-    { kernelPackage ? if enableUnstable
-                      then pkgs.zfsUnstable.latestCompatibleLinuxPackages
-                      else pkgs.linuxPackages
-    , enableUnstable ? false
+  makeZfsTest =
+    { kernelPackages
     , enableSystemdStage1 ? false
+    , zfsPackage
     , extraTest ? ""
     }:
     makeTest {
-      name = "zfs-" + name;
+      name = zfsPackage.kernelModuleAttribute;
       meta = with pkgs.lib.maintainers; {
-        maintainers = [ adisbladis elvishjerricco ];
+        maintainers = [ elvishjerricco ];
       };
 
-      nodes.machine = { pkgs, lib, ... }:
+      nodes.machine = { config, pkgs, lib, ... }:
         let
           usersharePath = "/var/lib/samba/usershares";
         in {
@@ -34,9 +32,9 @@ let
         boot.loader.timeout = 0;
         boot.loader.efi.canTouchEfiVariables = true;
         networking.hostId = "deadbeef";
-        boot.kernelPackages = kernelPackage;
+        boot.kernelPackages = kernelPackages;
+        boot.zfs.package = zfsPackage;
         boot.supportedFilesystems = [ "zfs" ];
-        boot.zfs.enableUnstable = enableUnstable;
         boot.initrd.systemd.enable = enableSystemdStage1;
 
         environment.systemPackages = [ pkgs.parted ];
@@ -133,9 +131,8 @@ let
             )
             machine.crash()
             machine.wait_for_unit("multi-user.target")
+            machine.succeed("zfs set sharesmb=on rpool/shared_smb")
             machine.succeed(
-                "zfs set sharesmb=on rpool/shared_smb",
-                "zfs share rpool/shared_smb",
                 "smbclient -gNL localhost | grep rpool_shared_smb",
                 "umount /tmp/mnt",
                 "zpool destroy rpool",
@@ -194,17 +191,29 @@ let
 
 in {
 
-  stable = makeZfsTest "stable" { };
-
-  unstable = makeZfsTest "unstable" {
-    enableUnstable = true;
+  # maintainer: @raitobezarius
+  series_2_1 = makeZfsTest {
+    zfsPackage = pkgs.zfs_2_1;
+    kernelPackages = pkgs.linuxPackages;
   };
 
-  unstableWithSystemdStage1 = makeZfsTest "unstable" {
-    enableUnstable = true;
+  series_2_2 = makeZfsTest {
+    zfsPackage = pkgs.zfs_2_2;
+    kernelPackages = pkgs.linuxPackages;
+  };
+
+  unstable = makeZfsTest rec {
+    zfsPackage = pkgs.zfs_unstable;
+    kernelPackages = zfsPackage.latestCompatibleLinuxPackages;
+  };
+
+  unstableWithSystemdStage1 = makeZfsTest rec {
+    zfsPackage = pkgs.zfs_unstable;
+    kernelPackages = zfsPackage.latestCompatibleLinuxPackages;
     enableSystemdStage1 = true;
   };
 
+  installerBoot = (import ./installer.nix { }).separateBootZfs;
   installer = (import ./installer.nix { }).zfsroot;
 
   expand-partitions = makeTest {

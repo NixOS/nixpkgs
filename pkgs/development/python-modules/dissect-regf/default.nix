@@ -11,19 +11,17 @@
 
 buildPythonPackage rec {
   pname = "dissect-regf";
-  version = "3.6";
-  format = "pyproject";
+  version = "3.9";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.regf";
     rev = "refs/tags/${version}";
-    hash = "sha256-doyyBmkRPH2wRZA44/7ldkUdNLX1lulo/XcSVFxaIfM=";
+    hash = "sha256-NLhZnStcJCtXMBkayLjvuG7aK2aN3sWGZaPKVXIoRew=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools

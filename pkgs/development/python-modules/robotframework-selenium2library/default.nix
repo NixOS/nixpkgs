@@ -2,6 +2,7 @@
 
 buildPythonPackage rec {
   version = "3.0.0";
+  format = "setuptools";
   pname = "robotframework-selenium2library";
 
   src = fetchPypi {

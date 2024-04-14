@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sozu";
-  version = "0.15.2";
+  version = "0.15.19";
 
   src = fetchFromGitHub {
     owner = "sozu-proxy";
     repo = pname;
     rev = version;
-    hash = "sha256-6CuBJUMymnqNx/675PeBuZNhYYh9HtU99J1LYO2+Rxc=";
+    hash = "sha256-9TSu27s/rnO48zEhBzaHaU3pHyIJ0LVZC8LBRhn0PNM=";
   };
 
-  cargoHash = "sha256-c/TC8Mn9UFIymkXxD02iB6E3kKyeuKDgvlgapiV0Nco=";
+  cargoHash = "sha256-h9igqV9YqMqRhqwsKYIji8WAVmcPQfErcPPm0PcDwss=";
 
   nativeBuildInputs = [ protobuf ];
 
@@ -43,8 +43,10 @@ rustPlatform.buildRustPackage rec {
       "Open Source HTTP Reverse Proxy built in Rust for Immutable Infrastructures";
     homepage = "https://www.sozu.io";
     changelog = "https://github.com/sozu-proxy/sozu/releases/tag/${version}";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ Br1ght0ne gaelreyrol ];
-    platforms = [ "x86_64-linux" ];
+    mainProgram = "sozu";
+    # error[E0432]: unresolved import `std::arch::x86_64`
+    broken = !stdenv.isx86_64;
   };
 }

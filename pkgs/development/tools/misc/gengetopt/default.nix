@@ -27,8 +27,13 @@ stdenv.mkDerivation rec {
       'set +o posix'
   '';
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    CXXFLAGS = "-std=c++14";
+  };
+
   meta = {
     description = "Command-line option parser generator";
+    mainProgram = "gengetopt";
 
     longDescription =
       '' GNU Gengetopt program generates a C function that uses getopt_long

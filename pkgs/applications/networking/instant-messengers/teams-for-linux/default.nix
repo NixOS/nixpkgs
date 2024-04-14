@@ -7,43 +7,41 @@
 , yarn
 , nodejs
 , fetchYarnDeps
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , electron
+, libnotify
 , libpulseaudio
 , pipewire
 , alsa-utils
 , which
+, testers
+, teams-for-linux
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "teams-for-linux";
-  version = "1.2.8";
+  version = "1.4.22";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5OocTsQjmNZCnzAY1RfrxD6Ad/kZTIkFl/3OmeJl1oI=";
+    hash = "sha256-eNd12p9QvuYpiy9FaGaMSfQ3qVYzmYyO2/v/rdV3nN8=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-XUASMWrH8wWeYsr6gCdQGgV/7E6hLDWkJ0BXHZCepKQ=";
+    hash = "sha256-jBwyIyiWeqNmOnxmVOr7c4oMWwHElEjM25sShhTMi78=";
   };
 
-  patches = [
-    # Can be removed once Electron upstream resolves https://github.com/electron/electron/issues/36660
-    ./screensharing-wayland-hack-fix.patch
-  ];
-
-  nativeBuildInputs = [ yarn fixup_yarn_lock nodejs copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [ yarn prefetch-yarn-deps nodejs copyDesktopItems makeWrapper ];
 
   configurePhase = ''
     runHook preConfigure
 
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror $offlineCache
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
 
@@ -55,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     yarn --offline electron-builder \
       --dir ${if stdenv.isDarwin then "--macos" else "--linux"} ${if stdenv.hostPlatform.isAarch64 then "--arm64" else "--x64"} \
-      -c.electronDist=${electron}/lib/electron \
+      -c.electronDist=${electron}/libexec/electron \
       -c.electronVersion=${electron.version}
 
     runHook postBuild
@@ -74,11 +72,11 @@ stdenv.mkDerivation (finalAttrs: {
     done
     popd
 
-    # Linux needs 'aplay' for notification sounds, 'libpulse' for meeting sound, and 'libpipewire' for screen sharing
+    # Linux needs 'aplay' for notification sounds, 'libpulse' for meeting sound, 'libpipewire' for screen sharing and 'libnotify' for notifications
     makeWrapper '${electron}/bin/electron' "$out/bin/teams-for-linux" \
       ${lib.optionalString stdenv.isLinux ''
         --prefix PATH : ${lib.makeBinPath [ alsa-utils which ]} \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio pipewire ]} \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio pipewire libnotify ]} \
       ''} \
       --add-flags "$out/share/teams-for-linux/app.asar" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
@@ -96,12 +94,17 @@ stdenv.mkDerivation (finalAttrs: {
   })];
 
   passthru.updateScript = ./update.sh;
+  passthru.tests.version = testers.testVersion rec {
+    package = teams-for-linux;
+    command = "HOME=$TMPDIR ${package.meta.mainProgram or package.pname} --version";
+  };
 
   meta = {
     description = "Unofficial Microsoft Teams client for Linux";
+    mainProgram = "teams-for-linux";
     homepage = "https://github.com/IsmaelMartinez/teams-for-linux";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ muscaln lilyinstarlight ];
+    maintainers = with lib.maintainers; [ muscaln lilyinstarlight qjoly chvp ];
     platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
   };

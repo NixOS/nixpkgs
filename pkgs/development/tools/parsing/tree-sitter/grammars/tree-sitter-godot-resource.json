@@ -4,6 +4,7 @@
   "date": "2021-12-20T22:40:16-08:00",
   "path": "/nix/store/3lmwkk16jmjnkx8lrl33i7a19hjca2jz-tree-sitter-godot-resource",
   "sha256": "0agnvg95fx60xkr5fivl1x3yhcw6ca58f7bpx3dq6fl7pyfgrky2",
+  "hash": "sha256-ws/8nL+HOoPb6Hcdh4pihjPoRw90R1fy7MB0V9Lb9ik=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tldr";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "tldr-pages";
-    repo = "tldr-cpp-client";
+    repo = "tldr-c-client";
     rev = "v${version}";
-    sha256 = "sha256-9pBMo+t/44tuT/CisS0w60KaKXjPfNTMr2v6Ftjaf1k=";
+    sha256 = "sha256-1L9frURnzfq0XvPBs8D+hBikybAw8qkb0DyZZtkZleY=";
   };
 
   buildInputs = [ curl libzip ];
@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ taeer carlosdagos kbdharun];
     platforms = platforms.all;
+    mainProgram = "tldr";
   };
 }

@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "autofaiss";
-  version = "2.15.5";
+  version = "2.17.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "criteo";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-IcAlvFlCERnw1UQWPRpSWpscOuPx0wd1MXOfoXZhvCU=";
+    hash = "sha256-pey3wrW7CDLMiPPKnmYrcSJqGuy6ecA2SE9m3Jtt6DU=";
   };
 
   nativeBuildInputs = [
@@ -71,6 +71,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Automatically create Faiss knn indices with the most optimal similarity search parameters";
+    mainProgram = "autofaiss";
     homepage = "https://github.com/criteo/autofaiss";
     changelog = "https://github.com/criteo/autofaiss/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;

@@ -49,7 +49,18 @@ stripDirs() {
     local ranlibCmd="$2"
     local paths="$3"
     local stripFlags="$4"
+    local excludeFlags=()
     local pathsNew=
+
+    [ -z "$cmd" ] && echo "stripDirs: Strip command is empty" 1>&2 && exit 1
+    [ -z "$ranlibCmd" ] && echo "stripDirs: Ranlib command is empty" 1>&2 && exit 1
+
+    local pattern
+    if [ -n "${stripExclude:-}" ]; then
+        for pattern in "${stripExclude[@]}"; do
+            excludeFlags+=(-a '!' '(' -name "$pattern" -o -wholename "$prefix/$pattern" ')' )
+        done
+    fi
 
     local p
     for p in ${paths}; do
@@ -61,8 +72,22 @@ stripDirs() {
 
     if [ -n "${paths}" ]; then
         echo "stripping (with command $cmd and flags $stripFlags) in $paths"
+        local striperr
+        striperr="$(mktemp --tmpdir="$TMPDIR" 'striperr.XXXXXX')"
         # Do not strip lib/debug. This is a directory used by setup-hooks/separate-debug-info.sh.
-        find $paths -type f -a '!' -wholename "$prefix/lib/debug/*" -exec $cmd $stripFlags '{}' \; 2>/dev/null
+        find $paths -type f "${excludeFlags[@]}" -a '!' -path "$prefix/lib/debug/*" -print0 |
+            # Make sure we process files under symlinks only once. Otherwise
+            # 'strip` can corrupt files when writes to them in parallel:
+            #   https://github.com/NixOS/nixpkgs/issues/246147#issuecomment-1657072039
+            xargs -r -0 -n1 -- realpath -z | sort -u -z |
+
+            xargs -r -0 -n1 -P "$NIX_BUILD_CORES" -- $cmd $stripFlags 2>"$striperr" || exit_code=$?
+        # xargs exits with status code 123 if some but not all of the
+        # processes fail. We don't care if some of the files couldn't
+        # be stripped, so ignore specifically this code.
+        [[ "$exit_code" = 123 || -z "$exit_code" ]] || (cat "$striperr" 1>&2 && exit 1)
+
+        rm "$striperr"
         # 'strip' does not normally preserve archive index in .a files.
         # This usually causes linking failures against static libs like:
         #   ld: ...-i686-w64-mingw32-stage-final-gcc-13.0.0-lib/i686-w64-mingw32/lib/libstdc++.dll.a:

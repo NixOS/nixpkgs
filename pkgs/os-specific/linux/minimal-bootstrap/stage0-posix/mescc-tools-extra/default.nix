@@ -4,9 +4,12 @@
 , mescc-tools
 , src
 , version
+, platforms
+, m2libcArch
+, m2libcOS
 }:
 derivationWithMeta {
-  inherit version src mescc-tools;
+  inherit version src mescc-tools m2libcArch m2libcOS;
   pname = "mescc-tools-extra";
   builder = kaem-unwrapped;
   args = [
@@ -16,14 +19,11 @@ derivationWithMeta {
     ./build.kaem
   ];
 
-  ARCH = "x86";
-  OPERATING_SYSTEM = "linux";
-
   meta = with lib; {
     description = "Collection of tools written for use in bootstrapping";
     homepage = "https://github.com/oriansj/mescc-tools-extra";
     license = licenses.gpl3Plus;
     maintainers = teams.minimal-bootstrap.members;
-    platforms = [ "i686-linux" ];
+    inherit platforms;
   };
 }

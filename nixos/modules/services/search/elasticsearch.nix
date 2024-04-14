@@ -45,50 +45,45 @@ in
 
   options.services.elasticsearch = {
     enable = mkOption {
-      description = lib.mdDoc "Whether to enable elasticsearch.";
+      description = "Whether to enable elasticsearch.";
       default = false;
       type = types.bool;
     };
 
-    package = mkOption {
-      description = lib.mdDoc "Elasticsearch package to use.";
-      default = pkgs.elasticsearch;
-      defaultText = literalExpression "pkgs.elasticsearch";
-      type = types.package;
-    };
+    package = mkPackageOption pkgs "elasticsearch" { };
 
     listenAddress = mkOption {
-      description = lib.mdDoc "Elasticsearch listen address.";
+      description = "Elasticsearch listen address.";
       default = "127.0.0.1";
       type = types.str;
     };
 
     port = mkOption {
-      description = lib.mdDoc "Elasticsearch port to listen for HTTP traffic.";
+      description = "Elasticsearch port to listen for HTTP traffic.";
       default = 9200;
       type = types.port;
     };
 
     tcp_port = mkOption {
-      description = lib.mdDoc "Elasticsearch port for the node to node communication.";
+      description = "Elasticsearch port for the node to node communication.";
       default = 9300;
       type = types.int;
     };
 
     cluster_name = mkOption {
-      description = lib.mdDoc "Elasticsearch name that identifies your cluster for auto-discovery.";
+      description = "Elasticsearch name that identifies your cluster for auto-discovery.";
       default = "elasticsearch";
       type = types.str;
     };
 
     single_node = mkOption {
-      description = lib.mdDoc "Start a single-node cluster";
+      description = "Start a single-node cluster";
       default = true;
       type = types.bool;
     };
 
     extraConf = mkOption {
-      description = lib.mdDoc "Extra configuration for elasticsearch.";
+      description = "Extra configuration for elasticsearch.";
       default = "";
       type = types.str;
       example = ''
@@ -99,7 +94,7 @@ in
     };
 
     logging = mkOption {
-      description = lib.mdDoc "Elasticsearch logging configuration.";
+      description = "Elasticsearch logging configuration.";
       default = ''
         logger.action.name = org.elasticsearch.action
         logger.action.level = info
@@ -118,26 +113,26 @@ in
     dataDir = mkOption {
       type = types.path;
       default = "/var/lib/elasticsearch";
-      description = lib.mdDoc ''
+      description = ''
         Data directory for elasticsearch.
       '';
     };
 
     extraCmdLineOptions = mkOption {
-      description = lib.mdDoc "Extra command line options for the elasticsearch launcher.";
+      description = "Extra command line options for the elasticsearch launcher.";
       default = [ ];
       type = types.listOf types.str;
     };
 
     extraJavaOptions = mkOption {
-      description = lib.mdDoc "Extra command line options for Java.";
+      description = "Extra command line options for Java.";
       default = [ ];
       type = types.listOf types.str;
       example = [ "-Djava.net.preferIPv4Stack=true" ];
     };
 
     plugins = mkOption {
-      description = lib.mdDoc "Extra elasticsearch plugins";
+      description = "Extra elasticsearch plugins";
       default = [ ];
       type = types.listOf types.package;
       example = lib.literalExpression "[ pkgs.elasticsearchPlugins.discovery-ec2 ]";
@@ -145,7 +140,7 @@ in
 
     restartIfChanged  = mkOption {
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Automatically restart the service on config change.
         This can be set to false to defer restarts on a server or cluster.
         Please consider the security implications of inadvertently running an older version,

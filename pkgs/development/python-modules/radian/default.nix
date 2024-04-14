@@ -11,24 +11,28 @@
 , prompt-toolkit
 , pygments
 , rchitect
-, six
 , R
 , rPackages
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "radian";
-  version = "0.6.5";
+  version = "0.6.12";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "randy3k";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "iuD4EkGZ1GwNxR8Gpg9ANe3lMHJYZ/Q/RyuN6vZZWME=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-cojKbDNqcUay5RxvWszQ96eC4jVI4G7iRv/ZYWgidCQ=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace '"pytest-runner"' ""
+    substituteInPlace setup.py \
+      --replace '"pytest-runner"' ""
   '';
 
   nativeBuildInputs = [
@@ -40,7 +44,6 @@ buildPythonPackage rec {
     prompt-toolkit
     pygments
     rchitect
-    six
   ] ++ (with rPackages; [
     reticulate
     askpass
@@ -55,6 +58,8 @@ buildPythonPackage rec {
     git
   ];
 
+  makeWrapperArgs = [ "--set R_HOME ${R}/lib/R" ];
+
   preCheck = ''
     export HOME=$TMPDIR
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${R}/lib/R/lib
@@ -64,7 +69,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A 21 century R console";
+    mainProgram = "radian";
     homepage = "https://github.com/randy3k/radian";
+    changelog = "https://github.com/randy3k/radian/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ savyajha ];
   };

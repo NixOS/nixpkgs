@@ -34,6 +34,10 @@ buildPythonPackage rec {
     requests-mock
   ];
 
+  pytestFlagsArray = [
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   pythonImportsCheck = [
     "favicon"
   ];

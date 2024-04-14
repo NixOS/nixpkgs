@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "pycritty";
   version = "0.4.0";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
@@ -25,6 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A CLI tool for changing your alacritty configuration on the fly";
+    mainProgram = "pycritty";
     homepage = "https://github.com/antoniosarosi/pycritty";
     license = licenses.mit;
     maintainers = with maintainers; [ jperras ];

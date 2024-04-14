@@ -5,15 +5,17 @@
 , ed25519
 , fetchFromGitHub
 , nats-server
+, nkeys
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , uvloop
 }:
 
 buildPythonPackage rec {
   pname = "nats-py";
-  version = "2.2.0";
-  format = "setuptools";
+  version = "2.7.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,24 +23,34 @@ buildPythonPackage rec {
     owner = "nats-io";
     repo = "nats.py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-w+YySX9RNXUttt7iLg/Efh8bNzmhIQTKMXcoPO1k4lI=";
+    hash = "sha256-5lvdt1JbOmdts0CYU00bSmv0LsMQsOe//yUgyevBULE=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
-    aiohttp
     ed25519
   ];
+
+  passthru.optional-dependencies = {
+    aiohttp = [
+      aiohttp
+    ];
+    nkeys = [
+      nkeys
+    ];
+    # fast_parse = [
+    #   fast-mail-parser
+    # ];
+  };
 
   nativeCheckInputs = [
     nats-server
     pytestCheckHook
     uvloop
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=nats --cov-report html" ""
-  '';
 
   disabledTests = [
     # AssertionError: assert 5 == 0

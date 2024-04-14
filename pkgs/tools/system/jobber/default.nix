@@ -36,5 +36,6 @@ buildGoModule rec {
     description = "An alternative to cron, with sophisticated status-reporting and error-handling";
     license = licenses.mit;
     maintainers = with maintainers; [ urandom ];
+    mainProgram = "jobber";
   };
 }

@@ -45,5 +45,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/VHT/yarn-lock-converter";
     license = licenses.mit;
     maintainers = with maintainers; [ gador ];
+    mainProgram = "yarn-lock-converter";
   };
 }

@@ -11,23 +11,22 @@
 
 buildGoModule rec {
   pname = "sing-box";
-  version = "1.3.5";
+  version = "1.8.11";
 
   src = fetchFromGitHub {
     owner = "SagerNet";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-fSQuVvV2dL+cdPIAqyXbDB8OSW77gxaYaOHKElEbq6o=";
+    hash = "sha256-arAT23Cf72CcBVxsSK46eqVxTw8lHiHzzr2u2Xj0dcg=";
   };
 
-  vendorHash = "sha256-AMtDAAKNbKRFcu9OEW9E+S73gGgXK7HaroEdidrXS4Y=";
+  vendorHash = "sha256-JI8YB1o84xFcfG1p4SkWdhubZlp9q1THfj1Clb8TvHA=";
 
   tags = [
     "with_quic"
     "with_grpc"
     "with_dhcp"
     "with_wireguard"
-    "with_shadowsocksr"
     "with_ech"
     "with_utls"
     "with_reality_server"
@@ -54,8 +53,8 @@ buildGoModule rec {
       --zsh  <(${emulator} $out/bin/sing-box completion zsh )
 
     substituteInPlace release/config/sing-box{,@}.service \
-      --replace "/usr/bin/sing-box" "$out/bin/sing-box" \
-      --replace "/bin/kill" "${coreutils}/bin/kill"
+      --replace-fail "/usr/bin/sing-box" "$out/bin/sing-box" \
+      --replace-fail "/bin/kill" "${coreutils}/bin/kill"
     install -Dm444 -t "$out/lib/systemd/system/" release/config/sing-box{,@}.service
   '';
 
@@ -69,5 +68,6 @@ buildGoModule rec {
     description = "The universal proxy platform";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ nickcao ];
+    mainProgram = "sing-box";
   };
 }

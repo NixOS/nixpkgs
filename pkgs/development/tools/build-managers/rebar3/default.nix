@@ -3,7 +3,7 @@
   writeScript, common-updater-scripts, coreutils, git, gnused, nix, rebar3-nix }:
 
 let
-  version = "3.22.0";
+  version = "3.23.0";
   owner = "erlang";
   deps = import ./rebar-deps.nix { inherit fetchFromGitHub fetchgit fetchHex; };
   rebar3 = stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ let
       inherit owner;
       repo = pname;
       rev = version;
-      sha256 = "OCd9wGwnwOuv/Ojf1S4ALLn73AGKuXlRtukIiTSE2rs=";
+      sha256 = "dLJ1ca7Tlx6Cfk/AyJ0HmAgH9+qRrto/m0GWWUeXNko=";
     };
 
     buildInputs = [ erlang ];
@@ -53,6 +53,7 @@ let
     meta = {
       homepage = "https://github.com/rebar/rebar3";
       description = "Erlang build tool that makes it easy to compile and test Erlang applications, port drivers and releases";
+      mainProgram = "rebar3";
 
       longDescription = ''
         rebar is a self-contained Erlang script, so it's easy to distribute or

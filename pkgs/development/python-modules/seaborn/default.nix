@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , flit-core
 , matplotlib
 , pytest-xdist
@@ -10,18 +10,21 @@
 , pandas
 , pythonOlder
 , scipy
+, statsmodels
 }:
 
 buildPythonPackage rec {
   pname = "seaborn";
-  version = "0.12.2";
+  version = "0.13.2";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-N0ZF82UJ0NyriVy6W0fa8Fhvd7/js2yXxgfbfaW+ATk=";
+  src = fetchFromGitHub {
+    owner = "mwaskom";
+    repo = "seaborn";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-aGIVcdG/XN999nYBHh3lJqGa3QVt0j8kmzaxdkULznY=";
   };
 
   nativeBuildInputs = [
@@ -32,8 +35,14 @@ buildPythonPackage rec {
     matplotlib
     numpy
     pandas
-    scipy
   ];
+
+  passthru.optional-dependencies = {
+    stats = [
+      scipy
+      statsmodels
+    ];
+  };
 
   nativeCheckInputs = [
     pytest-xdist
@@ -41,10 +50,6 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # incompatible with matplotlib 3.7
-    # https://github.com/mwaskom/seaborn/issues/3288
-    "test_subplot_kws"
-
     # requires internet connection
     "test_load_dataset_string_error"
   ] ++ lib.optionals (!stdenv.hostPlatform.isx86) [
@@ -54,7 +59,7 @@ buildPythonPackage rec {
 
   # All platforms should use Agg. Let's set it explicitly to avoid probing GUI
   # backends (leads to crashes on macOS).
-  MPLBACKEND="Agg";
+  env.MPLBACKEND="Agg";
 
   pythonImportsCheck = [
     "seaborn"
@@ -63,6 +68,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Statistical data visualization";
     homepage = "https://seaborn.pydata.org/";
+    changelog = "https://github.com/mwaskom/seaborn/blob/master/doc/whatsnew/${src.rev}.rst";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fridh ];
   };

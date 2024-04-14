@@ -25,6 +25,10 @@ buildPythonApplication rec {
     hash = "sha256-tvsBTf6+zKBzB5aL+LUcEvE4jmVHnnoY0L4xoKMJ0vM=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py --replace "root_dir = sys.prefix" "root_dir = '/'"
+  '';
+
   nativeBuildInputs = [
     wrapGAppsHook
     gobject-introspection
@@ -49,9 +53,7 @@ buildPythonApplication rec {
   dontWrapGApps = true;
 
   postInstall = ''
-    mkdir -p $out/share/applications
-    cp -r safeeyes/platform/icons $out/share/icons/
-    cp safeeyes/platform/io.github.slgobinath.SafeEyes.desktop $out/share/applications/io.github.slgobinath.SafeEyes.desktop
+    mv $out/lib/python*/site-packages/share $out/share
   '';
 
   preFixup = ''

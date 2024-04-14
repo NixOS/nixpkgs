@@ -1,13 +1,15 @@
 { lib
 , aiofiles
 , aiohttp
-, async_generator
+, async-timeout
+, async-generator
 , buildPythonPackage
 , fetchFromGitHub
 , pypubsub
 , pyserial
 , pyserial-asyncio
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , setuptools
 , voluptuous
@@ -15,25 +17,26 @@
 
 buildPythonPackage rec {
   pname = "pyinsteon";
-  version = "1.4.3";
-  format = "pyproject";
+  version = "1.5.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "pyinsteon";
+    repo = "pyinsteon";
     rev = "refs/tags/${version}";
-    hash = "sha256-KKF+XYQgdmLbbicyMFyZBG4ol69xAWCF2W/r15gH2Mo=";
+    hash = "sha256-9d6QbekUv63sjKdK+ZogYOkGfFXVW+JB6ITHnehLwtM=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiofiles
     aiohttp
+    async-timeout
     pypubsub
     pyserial
     pyserial-asyncio
@@ -41,8 +44,13 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    async_generator
+    async-generator
     pytestCheckHook
+  ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [
+    # Tests are blocking or failing
+    "tests/test_handlers/"
   ];
 
   pythonImportsCheck = [
@@ -57,7 +65,9 @@ buildPythonPackage rec {
       2413U, 2412S, 2448A7 and Hub models 2242 and 2245.
     '';
     homepage = "https://github.com/pyinsteon/pyinsteon";
+    changelog = "https://github.com/pyinsteon/pyinsteon/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "insteon_tools";
   };
 }

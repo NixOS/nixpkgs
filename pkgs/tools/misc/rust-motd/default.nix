@@ -38,5 +38,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/rust-motd/rust-motd/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "rust-motd";
   };
 }

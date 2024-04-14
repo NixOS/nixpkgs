@@ -1,20 +1,28 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, copyDesktopItems, SDL, SDL_mixer, freepats }:
+{ lib, stdenv, fetchzip, fetchFromGitHub
+, makeDesktopItem, copyDesktopItems
+, cmake
+, SDL2, SDL2_mixer, freepats
+}:
 
 stdenv.mkDerivation rec {
   pname   = "abuse";
-  version = "0.8";
+  version = "0.9.1";
 
-  src = fetchurl {
-    url    = "http://abuse.zoy.org/raw-attachment/wiki/download/${pname}-${version}.tar.gz";
-    sha256 = "0104db5fd2695c9518583783f7aaa7e5c0355e27c5a803840a05aef97f9d3488";
+  src = fetchFromGitHub {
+    owner = "Xenoveritas";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-eneu0HxEoM//Ju2XMHnDMZ/igeVMPSLg7IaxR2cnJrk=";
   };
 
-  configureFlags = [
-    "--with-x"
-    "--with-assetdir=$(out)/orig"
-    # The "--enable-debug" is to work around a segfault on start, see https://bugs.archlinux.org/task/52915.
-    "--enable-debug"
-  ];
+  data = fetchzip {
+    url  = "http://abuse.zoy.org/raw-attachment/wiki/download/abuse-0.8.tar.gz";
+    hash = "sha256-SOrtBNLWskN7Tqa0B3+KjlZlqPjC64Jp02Pk7to2hFg=";
+  };
+
+  preConfigure = ''
+    cp --reflink=auto -r ${data}/data/sfx ${data}/data/music data/
+  '';
 
   desktopItems = [ (makeDesktopItem {
     name = "abuse";
@@ -33,11 +41,13 @@ stdenv.mkDerivation rec {
     substituteAll "${./abuse.sh}" $out/bin/abuse
     chmod +x $out/bin/abuse
 
-    install -Dm644 doc/abuse.png $out/share/pixmaps/abuse.png
+    install -Dm644 ${data}/doc/abuse.png $out/share/pixmaps/abuse.png
   '';
 
-  nativeBuildInputs = [ copyDesktopItems ];
-  buildInputs       = [ SDL SDL_mixer freepats ];
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL2}/include/SDL2";
+
+  nativeBuildInputs = [ copyDesktopItems cmake ];
+  buildInputs       = [ SDL2 SDL2_mixer freepats ];
 
   meta = with lib; {
     description = "Side-scroller action game that pits you against ruthless alien killers";

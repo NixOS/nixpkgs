@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed '1i#include <cstring>' -i src/tools/text.cpp # gcc12
+    sed '8i#include <cstdint>' -i src/io/fs.cpp # gcc13
   '';
 
   nativeBuildInputs = [ pkg-config ensureNewerSourcesForZipFilesHook python3Packages.six ];

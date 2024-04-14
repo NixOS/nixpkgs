@@ -1,19 +1,24 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
+, kdeclarative
+, plasma-framework
+, plasma-workspace
 , gitUpdater
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "colloid-kde";
-  version = "unstable-2022-07-13";
+  version = "unstable-2023-07-04";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
-    rev = "eaf6844e997aa60c755af7ea560ffba798e72ff5";
-    hash = "sha256-FNTG5aVvTWHqNVVR23LFG/ykPtXRD7oH5C6eyWaqc60=";
+    rev = "0b79befdad9b442b5a8287342c4b7e47ff87d555";
+    hash = "sha256-AYH9fW20/p+mq6lxR1lcCV1BQ/kgcsjHncpMvYWXnWA=";
   };
+
+  outputs = [ "out" "sddm" ];
 
   postPatch = ''
     patchShebangs install.sh
@@ -21,6 +26,14 @@ stdenvNoCC.mkDerivation rec {
     substituteInPlace install.sh \
       --replace '$HOME/.local' $out \
       --replace '$HOME/.config' $out/share
+
+    substituteInPlace sddm/install.sh \
+      --replace /usr $sddm \
+      --replace '$(cd $(dirname $0) && pwd)' . \
+      --replace '"$UID" -eq "$ROOT_UID"' true
+
+    substituteInPlace sddm/Colloid/Main.qml \
+      --replace /usr $sddm
   '';
 
   installPhase = ''
@@ -31,7 +44,21 @@ stdenvNoCC.mkDerivation rec {
     name= HOME="$TMPDIR" \
     ./install.sh --dest $out/share/themes
 
+    mkdir -p $sddm/share/sddm/themes
+    cd sddm
+    source install.sh
+
     runHook postInstall
+  '';
+
+  postFixup = ''
+    # Propagate sddm theme dependencies to user env otherwise sddm
+    # does not find them. Putting them in buildInputs is not enough.
+
+    mkdir -p $sddm/nix-support
+
+    printWords ${kdeclarative.bin} ${plasma-framework} ${plasma-workspace} \
+      >> $sddm/nix-support/propagated-user-env-packages
   '';
 
   passthru.updateScript = gitUpdater { };

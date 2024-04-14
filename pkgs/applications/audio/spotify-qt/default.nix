@@ -22,12 +22,13 @@ mkDerivation rec {
 
    nativeBuildInputs = [ cmake ];
 
-   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_INSTALL_PREFIX=" ];
+   cmakeFlags = [ "-DCMAKE_INSTALL_PREFIX=" ];
 
    installFlags = [ "DESTDIR=$(out)" ];
 
    meta = with lib; {
     description = "Lightweight unofficial Spotify client using Qt";
+    mainProgram = "spotify-qt";
     homepage = "https://github.com/kraxarn/spotify-qt";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ];

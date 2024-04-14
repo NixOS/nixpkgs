@@ -3,6 +3,7 @@
   bison, flex, fontforge, makeWrapper, pkg-config,
   nixosTests,
   supportFlags,
+  wineRelease,
   patches,
   moltenvk,
   buildScript ? null, configureFlags ? [], mainProgram ? "wine"
@@ -22,6 +23,8 @@ let
       mingwGccsSuffixSalts = map (gcc: gcc.suffixSalt) mingwGccs;
     };
   } ./setup-hook-darwin.sh;
+  darwinUnsupportedFlags = [ "alsaSupport" "cairoSupport" "dbusSupport" "fontconfigSupport" "gtkSupport" "netapiSupport" "pulseaudioSupport" "udevSupport" "v4lSupport" "vaSupport" "waylandSupport" "x11Support" "xineramaSupport" ];
+  darwinUnsupported = builtins.any (name: builtins.getAttr name supportFlags) darwinUnsupportedFlags;
 in
 stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   builder = buildScript;
@@ -37,13 +40,16 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
     # The Wine preloader must _not_ be linked to any system libraries, but `NIX_LDFLAGS` will link
     # to libintl, libiconv, and CoreFoundation no matter what. Delete the one that was built and
     # rebuild it with empty NIX_LDFLAGS.
-    rm loader/wine64-preloader
-    make loader/wine64-preloader NIX_LDFLAGS="" NIX_LDFLAGS_${stdenv.cc.suffixSalt}=""
+    for preloader in wine-preloader wine64-preloader; do
+      rm loader/$preloader &> /dev/null \
+      && ( echo "Relinking loader/$preloader"; make loader/$preloader NIX_LDFLAGS="" NIX_LDFLAGS_${stdenv.cc.suffixSalt}="" ) \
+      || echo "loader/$preloader not built, skipping relink."
+    done
   '';
 }) // rec {
   inherit version src;
 
-  pname = prevName + lib.optionalString supportFlags.waylandSupport "-wayland";
+  pname = prevName + lib.optionalString (wineRelease != "stable" && wineRelease != "unstable") "-${wineRelease}";
 
   # Fixes "Compiler cannot create executables" building wineWow with mingwSupport
   strictDeps = true;
@@ -78,7 +84,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optional fontconfigSupport      pkgs.fontconfig
   ++ lib.optional alsaSupport            pkgs.alsa-lib
   ++ lib.optional pulseaudioSupport      pkgs.libpulseaudio
-  ++ lib.optional (xineramaSupport && !waylandSupport) pkgs.xorg.libXinerama
+  ++ lib.optional (xineramaSupport && x11Support) pkgs.xorg.libXinerama
   ++ lib.optional udevSupport            pkgs.udev
   ++ lib.optional vulkanSupport          (if stdenv.isDarwin then moltenvk else pkgs.vulkan-loader)
   ++ lib.optional sdlSupport             pkgs.SDL2
@@ -90,11 +96,11 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optionals tlsSupport    [ pkgs.openssl pkgs.gnutls ]
   ++ lib.optionals (openglSupport && !stdenv.isDarwin) [ pkgs.libGLU pkgs.libGL pkgs.mesa.osmesa pkgs.libdrm ]
   ++ lib.optionals stdenv.isDarwin (with pkgs.buildPackages.darwin.apple_sdk.frameworks; [
-     CoreServices Foundation ForceFeedback AppKit OpenGL IOKit DiskArbitration Security
+     CoreServices Foundation ForceFeedback AppKit OpenGL IOKit DiskArbitration PCSC Security
      ApplicationServices AudioToolbox CoreAudio AudioUnit CoreMIDI OpenCL Cocoa Carbon
   ])
-  ++ lib.optionals (stdenv.isLinux && !waylandSupport) (with pkgs.xorg; [
-     libX11 libXi libXcursor libXrandr libXrender libXxf86vm libXcomposite libXext
+  ++ lib.optionals (x11Support) (with pkgs.xorg; [
+    libX11 libXcomposite libXcursor libXext libXfixes libXi libXrandr libXrender libXxf86vm
   ])
   ++ lib.optionals waylandSupport (with pkgs; [
      wayland libxkbcommon wayland-protocols wayland.dev libxkbcommon.dev
@@ -103,18 +109,32 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
 
   patches = [ ]
     ++ lib.optionals stdenv.isDarwin [
-      # Wine requires `MTLDevice.registryID` for `winemac.drv`, but that property is not available
-      # in the 10.12 SDK (current SDK on x86_64-darwin). Work around that by using selector syntax.
-      ./darwin-metal-compat.patch
+      # Wine uses `MTLDevice.registryID` in `winemac.drv`, but that property is not available in
+      # the 10.12 SDK (current SDK on x86_64-darwin). That can be worked around by using selector
+      # syntax. As of Wine 8.12, the logic has changed and uses selector syntax, but it still
+      # uses property syntax in one place. The first patch is necessary only with older
+      # versions of Wine. The second is needed on all versions of Wine.
+      (lib.optional (lib.versionOlder version "8.12") ./darwin-metal-compat-pre8.12.patch)
+      (lib.optional (lib.versionOlder version "8.18") ./darwin-metal-compat-pre8.18.patch)
+      (lib.optional (lib.versionAtLeast version "8.18") ./darwin-metal-compat.patch)
       # Wine requires `qos.h`, which is not included by default on the 10.12 SDK in nixpkgs.
       ./darwin-qos.patch
     ]
     ++ patches';
 
+  # Because the 10.12 SDK doesn’t define `registryID`, clang assumes the undefined selector returns
+  # `id`, which is a pointer. This causes implicit pointer to integer errors in clang 15+.
+  # The following post-processing step adds a cast to `uint64_t` before the selector invocation to
+  # silence these errors.
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    sed -e 's|\(\[[A-Za-z_][][A-Za-z_0-9]* registryID\]\)|(uint64_t)\1|' \
+      -i dlls/winemac.drv/cocoa_display.m
+  '';
+
   configureFlags = prevConfigFlags
     ++ lib.optionals supportFlags.waylandSupport [ "--with-wayland" ]
     ++ lib.optionals supportFlags.vulkanSupport [ "--with-vulkan" ]
-    ++ lib.optionals (stdenv.isDarwin && !supportFlags.xineramaSupport) [ "--without-x" ];
+    ++ lib.optionals ((stdenv.isDarwin && !supportFlags.xineramaSupport) || !supportFlags.x11Support) [ "--without-x" ];
 
   # Wine locates a lot of libraries dynamically through dlopen().  Add
   # them to the RPATH so that the user doesn't have to set them in
@@ -190,9 +210,10 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
       fromSource
       binaryNativeCode  # mono, gecko
     ];
-    description = if supportFlags.waylandSupport then "An Open Source implementation of the Windows API on top of OpenGL and Unix (with experimental Wayland support)" else "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
-    platforms = if supportFlags.waylandSupport then (lib.remove "x86_64-darwin" prevPlatforms) else prevPlatforms;
-    maintainers = with lib.maintainers; [ avnik raskin bendlas jmc-figueira ];
+    broken = stdenv.isDarwin && !supportFlags.mingwSupport;
+    description = "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
+    platforms = if darwinUnsupported then (lib.remove "x86_64-darwin" prevPlatforms) else prevPlatforms;
+    maintainers = with lib.maintainers; [ avnik raskin bendlas jmc-figueira reckenrode ];
     inherit mainProgram;
   };
 })

@@ -4,26 +4,27 @@
 , fetchPypi
 , importlib-metadata
 , packaging
-, setuptools
 , tomli
 , pytestCheckHook
 , build
+, hatchling
 , pydantic
 , pytest-mock
+, setuptools
 , git
 , mercurial
 }:
 
 buildPythonPackage rec {
   pname = "versioningit";
-  version = "2.2.0";
+  version = "3.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6xjnunJoqIC/HM/pLlNOlqs04Dl/KNy8s/wNpPaltr0=";
+    hash = "sha256-TjzkemQk2FCunlXhsTSgIOn8vLiVM48QfytcUdNMnBs=";
   };
 
   postPatch = ''
@@ -33,9 +34,12 @@ buildPythonPackage rec {
       --replace "--no-cov-on-fail" ""
   '';
 
+  nativeBuildInputs = [
+    hatchling
+  ];
+
   propagatedBuildInputs = [
     packaging
-    setuptools
   ] ++ lib.optionals (pythonOlder "3.10") [
     importlib-metadata
   ] ++ lib.optionals (pythonOlder "3.11") [
@@ -45,8 +49,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     build
+    hatchling
     pydantic
     pytest-mock
+    setuptools
     git
     mercurial
   ];
@@ -62,6 +68,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "setuptools plugin for determining package version from VCS";
+    mainProgram = "versioningit";
     homepage = "https://github.com/jwodder/versioningit";
     changelog = "https://versioningit.readthedocs.io/en/latest/changelog.html";
     license     = licenses.mit;

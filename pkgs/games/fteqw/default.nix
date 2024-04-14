@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchsvn
+, fetchFromGitHub
 , gzip
 , libvorbis
 , libmad

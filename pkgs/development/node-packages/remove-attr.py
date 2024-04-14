@@ -43,6 +43,25 @@ def remove(attr):
                 else:
                     sys.stdout.write(line)
 
+    with fileinput.input(os.path.join(os.path.dirname(__file__), 'main-programs.nix'), inplace=1) as main_programs:
+        safe_attr = re.escape(attr)
+        for line in main_programs:
+            if not re.fullmatch(rf'  "?{safe_attr}"? = ".*";\n', line):
+                sys.stdout.write(line)
+
+    with fileinput.input(os.path.join(os.path.dirname(__file__), 'overrides.nix'), inplace=1) as overrides:
+        safe_attr = re.escape(attr)
+        in_attr = False
+        for line in overrides:
+            if in_attr:
+                if re.fullmatch(r'  \}\)?;\n', line):
+                    in_attr = False
+            else:
+                if re.fullmatch(rf'  (?:{safe_attr}|"{safe_attr}") = .* \{{\n', line):
+                    in_attr = True
+                else:
+                    sys.stdout.write(line)
+
 
 if __name__ == '__main__':
     import argparse

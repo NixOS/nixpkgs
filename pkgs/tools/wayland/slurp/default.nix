@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "slurp";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = "slurp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jUuY2wuN00libHDaJEmrvQAb1o989Ly3nLyKHV0jz8Q=";
+    hash = "sha256-2M8f3kN6tihwKlUCp2Qowv5xD6Ufb71AURXqwQShlXI=";
   };
 
   depsBuildBuild = [
@@ -47,11 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [ (lib.mesonEnable "man-pages" buildDocs) ];
 
   meta = with lib; {
-    homepage = "https://github.com/emersion/slurp";
-    description = "Select a region in a Wayland compositor";
     changelog = "https://github.com/emersion/slurp/releases/tag/v${finalAttrs.version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ buffet ];
+    description = "Select a region in a Wayland compositor";
     inherit (wayland.meta) platforms;
+    homepage = "https://github.com/emersion/slurp";
+    license = licenses.mit;
+    mainProgram = "slurp";
+    maintainers = with maintainers; [ buffet nickcao ];
   };
 })

@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     wrapGAppsHook
+    gobject-introspection
   ];
   buildInputs = [
     glib
@@ -29,7 +30,6 @@ stdenv.mkDerivation rec {
     libgee
     xorg.libSM
     xorg.libICE
-    gobject-introspection
     libsecret
   ];
 
@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.libertyzero.com/GEncfsM/";
     downloadPage = "https://launchpad.net/gencfsm/";
     description = "EncFS manager and mounter with GNOME3 integration";
+    mainProgram = "gnome-encfs-manager";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.spacefrogg ];

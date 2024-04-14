@@ -33,5 +33,6 @@ stdenv.mkDerivation {
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = [ maintainers.flokli ];
+    mainProgram = "svn-all-fast-export";
   };
 }

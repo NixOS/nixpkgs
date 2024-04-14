@@ -9,12 +9,20 @@ stdenv.mkDerivation rec {
     sha256 = "1fy0ymvzrrvs889zanxcaxjfcxarm2d3k43c9frmbl1ld7dblmkd";
   };
 
-  preBuild =
-    ''
-      # Fix building on Darwin with GCC.
-      substituteInPlace compat/regex.c --replace \
-         __private_extern__  '__attribute__ ((visibility ("hidden")))'
-    '';
+  patches = [
+    # fix compile failure on macos. use system getopt like linux
+    # requires that compat/getopt.h is also removed
+    # https://savannah.gnu.org/bugs/?64307
+    ./0001-use-system-getopt.patch
+  ];
+
+  postPatch = ''
+    # the delete component of 0001-use-system-getopt.patch
+    rm compat/getopt.h
+    # Fix building on Darwin with GCC.
+    substituteInPlace compat/regex.c --replace \
+       __private_extern__  '__attribute__ ((visibility ("hidden")))'
+  '';
 
   buildInputs = [ gettext ];
 

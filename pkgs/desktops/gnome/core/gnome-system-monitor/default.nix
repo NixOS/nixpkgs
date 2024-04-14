@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-system-monitor";
-  version = "44.0";
+  version = "45.0.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-system-monitor/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "wrq37dupKCfEyN5EKT5+PITJ5QdvMZhYh/+Jac7EXm4=";
+    sha256 = "xeJy2Qv5mGo/hhPXbg0n+kLfrO5cAZLnOSG7lLGGii4=";
   };
 
   patches = [
@@ -72,6 +72,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/SystemMonitor";
     description = "System Monitor shows you what programs are running and how much processor time, memory, and disk space are being used";
+    mainProgram = "gnome-system-monitor";
     maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;

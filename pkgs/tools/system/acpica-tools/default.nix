@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "acpica-tools";
-  version = "20230331";
+  version = "20230628";
 
   src = fetchurl {
-    url = "https://acpica.org/sites/acpica/files/acpica-unix-${version}.tar.gz";
-    hash = "sha256-DF1pXWBaqmFwnzxj9XoambiQIpFyOZhEawgTtXrDEOI=";
+    url = "https://downloadmirror.intel.com/783534/acpica-unix-${version}.tar.gz";
+    hash = "sha256-hodqdF49Ik3P0iLtPeRltHVZ6FgR3y25gg7wmp3/XM4=";
   };
 
   nativeBuildInputs = [ bison flex ];
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.acpica.org/";
     description = "ACPICA Tools";
     license = with licenses; [ iasl gpl2Only bsd3 ];
-    maintainers = with maintainers; [ tadfisher ];
+    maintainers = with maintainers; [ delroth tadfisher ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -2,17 +2,17 @@
 , libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
-  version = "0.6.3";
+  version = "0.7.0";
   pname = "rink";
 
   src = fetchFromGitHub {
     owner = "tiffany352";
     repo = "rink-rs";
     rev = "v${version}";
-    sha256 = "sha256-AhC3c6CpV0tlD6d/hFWt7hGj2UsXsOCeujkRSDlpvCM=";
+    sha256 = "sha256-5UrSJ/y6GxDUNaljal57JJY17NuI+2yLwVTwp+xBNxs=";
   };
 
-  cargoSha256 = "sha256-Xo5iYwL4Db+GWMl5UXbPmj0Y0PJYR4Q0aUGnYCd+NB8=";
+  cargoHash = "sha256-G30NcP1ej01ygHzaxZ2OdgfksvXe/SCsmZFwamxlDvA=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses ]
@@ -23,6 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Unit-aware calculator";
+    mainProgram = "rink";
     homepage = "https://rinkcalc.app";
     license = with licenses; [ mpl20 gpl3Plus ];
     maintainers = with maintainers; [ sb0 Br1ght0ne ];

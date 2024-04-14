@@ -11,15 +11,15 @@
 , gtest
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libkiwix";
-  version = "12.0.0";
+  version = "13.1.0";
 
   src = fetchFromGitHub {
     owner = "kiwix";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-4FxLxJxVhqbeNqX4vorHkROUuRURvE6AXlteIZCEBtc=";
+    repo = "libkiwix";
+    rev = finalAttrs.version;
+    hash = "sha256-DKOwzfGyad/3diOaV1K8hXqT8YGfqCP6QDKDkxWu/1U=";
   };
 
   nativeBuildInputs = [
@@ -55,8 +55,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Common code base for all Kiwix ports";
     homepage = "https://kiwix.org";
+    changelog = "https://github.com/kiwix/libkiwix/releases/tag/${finalAttrs.version}";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ colinsane ];
   };
-}
+})

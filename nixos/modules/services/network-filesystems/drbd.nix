@@ -15,7 +15,7 @@ let cfg = config.services.drbd; in
     services.drbd.enable = mkOption {
       default = false;
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable support for DRBD, the Distributed Replicated
         Block Device.
       '';
@@ -24,7 +24,7 @@ let cfg = config.services.drbd; in
     services.drbd.config = mkOption {
       default = "";
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Contents of the {file}`drbd.conf` configuration file.
       '';
     };
@@ -55,8 +55,8 @@ let cfg = config.services.drbd; in
       wants = [ "systemd-udev.settle.service" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.drbd}/sbin/drbdadm up all";
-        ExecStop = "${pkgs.drbd}/sbin/drbdadm down all";
+        ExecStart = "${pkgs.drbd}/bin/drbdadm up all";
+        ExecStop = "${pkgs.drbd}/bin/drbdadm down all";
       };
     };
   };

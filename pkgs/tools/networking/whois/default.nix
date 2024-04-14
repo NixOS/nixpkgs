@@ -1,15 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, perl, gettext, pkg-config, libidn2, libiconv }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, perl, gettext, pkg-config, libidn2, libiconv }:
 
 stdenv.mkDerivation rec {
-  version = "5.5.17";
+  version = "5.5.22";
   pname = "whois";
 
   src = fetchFromGitHub {
     owner = "rfc1036";
     repo = "whois";
     rev = "v${version}";
-    sha256 = "sha256-Nqnbi2nS95nzyzFNdahSKY/Om30sZXRJhoCSrzRiD9c=";
+    hash = "sha256-5ogHgGODqEUQ5ggoevpfSmJ8GvWImm0ufjnpcbcX7rk=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/macports/macports-ports/raw/93de4e9fc1e5e8427bf98f48209e783a5e8fab57/net/whois/files/implicit.patch";
+      extraPrefix = "";
+      hash = "sha256-ogVylQz//tpXxPNIWIHkhghvToU1z1D1FfnUBdZLyRY=";
+    })
+  ];
 
   nativeBuildInputs = [ perl gettext pkg-config ];
   buildInputs = [ libidn2 libiconv ];
@@ -38,5 +46,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.unix;
+    mainProgram = "whois";
   };
 }

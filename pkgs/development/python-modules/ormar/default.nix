@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "ormar";
-  version = "0.12.1";
+  version = "0.12.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "collerek";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-7d0vmYDN1EjzNWmylb/As4ywo8YYzQ88UwigIsVnwMM=";
+    hash = "sha256-Yd5ex0bcy61zq5Sn2dKeb98s/CMxUWnyGx6jFWQ3RUs=";
   };
 
   pythonRelaxDeps = [

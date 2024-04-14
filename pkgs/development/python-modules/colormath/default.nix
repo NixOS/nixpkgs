@@ -12,6 +12,7 @@ buildPythonPackage rec {
   # versions, should be included in versions > 3.0
   # https://github.com/gtaylor/python-colormath/issues/104
   version = "unstable-2021-04-17";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "gtaylor";

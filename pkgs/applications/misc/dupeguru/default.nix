@@ -1,8 +1,8 @@
-{ stdenv, lib, python3Packages, gettext, qt5, fetchFromGitHub}:
+{ stdenv, lib, python3Packages, gettext, qt5, fetchFromGitHub }:
 
 python3Packages.buildPythonApplication rec {
   pname = "dupeguru";
-  version = "4.1.1";
+  version = "4.3.1";
 
   format = "other";
 
@@ -10,23 +10,25 @@ python3Packages.buildPythonApplication rec {
     owner = "arsenetar";
     repo = "dupeguru";
     rev = version;
-    sha256 = "sha256-0lJocrNQHTrpslbPE6xjZDWhzza8cAt2js35LvicZKg=";
-    fetchSubmodules = true;
+    hash = "sha256-/jkZiCapmCLMp7WfgUmpsR8aNCfb3gBELlMYaC4e7zI=";
   };
 
   nativeBuildInputs = [
     gettext
     python3Packages.pyqt5
+    python3Packages.setuptools
     qt5.wrapQtAppsHook
   ];
 
-  pythonPath = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
+    hsaudiotag3k
+    mutagen
+    polib
     pyqt5
-    pyqt5_sip
+    pyqt5-sip
+    semantic-version
     send2trash
     sphinx
-    polib
-    hsaudiotag3k
   ];
 
   makeFlags = [
@@ -37,6 +39,7 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
+
   preCheck = ''
     export HOME="$(mktemp -d)"
   '';
@@ -62,6 +65,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/arsenetar/dupeguru";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = [ maintainers.novoxd ];
+    maintainers = with maintainers; [ novoxd ];
+    mainProgram = "dupeguru";
   };
 }

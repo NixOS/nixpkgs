@@ -6,25 +6,40 @@
 , igraph
 , pygments
 , pytestCheckHook
+, pythonRelaxDepsHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "explorerscript";
-  version = "0.1.2";
+  version = "0.1.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    sha256 = "sha256-REQYyxB2sb/gG54+OkMw+M4Agg9SWfAyqAhiSNnd3tE=";
+    hash = "sha256-dGbzZYEFEWE5bUz+647pPzP4Z/XmrJU82jNT4ZBRNHk=";
   };
 
   nativeBuildInputs = [
     antlr4
+    pythonRelaxDepsHook
+    setuptools
+  ];
+
+  pythonRelaxDeps = [
+    # antlr output is rebuilt in postPatch step.
+    "antlr4-python3-runtime"
+    # igraph > 0.10.4 was marked as incompatible by upstream
+    # due to a breaking change introduced in 0.10.5. Later versions reverted
+    # this change, and introduced a deprecation warning instead.
+    #
+    # https://github.com/igraph/python-igraph/issues/693
+    "igraph"
   ];
 
   postPatch = ''
-    sed -i "s/antlr4-python3-runtime.*/antlr4-python3-runtime',/" setup.py
     antlr -Dlanguage=Python3 -visitor explorerscript/antlr/{ExplorerScript,SsbScript}.g4
   '';
 
@@ -49,6 +64,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/SkyTemple/explorerscript";
     description = "A programming language + compiler/decompiler for creating scripts for Pokémon Mystery Dungeon Explorers of Sky";
     license = licenses.mit;
-    maintainers = with maintainers; [ xfix ];
+    maintainers = with maintainers; [ marius851000 xfix ];
   };
 }

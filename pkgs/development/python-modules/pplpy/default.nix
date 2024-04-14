@@ -5,7 +5,7 @@
 , mpfr
 , libmpc
 , ppl
-, cython
+, cython_3
 , cysignals
 , gmpy2
 , sphinx
@@ -13,11 +13,12 @@
 
 buildPythonPackage rec {
   pname = "pplpy";
-  version = "0.8.7";
+  version = "0.8.10";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "500bd0f4ae1a76956fae7fcba77854f5ec3e64fce76803664983763c3f2bd8bd";
+    sha256 = "sha256-1CohbIKRTc9NfAAN68mLsza4+D4Ca6XZUszNn4B07/0=";
   };
 
   buildInputs = [
@@ -32,7 +33,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    cython
+    cython_3
     cysignals
     gmpy2
   ];

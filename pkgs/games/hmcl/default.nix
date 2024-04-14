@@ -89,9 +89,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://hmcl.huangyuhui.net";
     description = "A Minecraft Launcher which is multi-functional, cross-platform and popular";
+    mainProgram = "hmcl";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ rs0vere ];
+    maintainers = with maintainers; [ ];
     inherit (jre.meta) platforms;
   };
 })

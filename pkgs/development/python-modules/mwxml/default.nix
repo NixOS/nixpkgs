@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "mwxml";
   version = "0.3.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -36,6 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A set of utilities for processing MediaWiki XML dump data";
+    mainProgram = "mwxml";
     homepage = "https://github.com/mediawiki-utilities/python-mwxml";
     license = licenses.mit;
     maintainers = with maintainers; [ GaetanLepage ];

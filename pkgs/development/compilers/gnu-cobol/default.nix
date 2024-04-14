@@ -13,7 +13,7 @@
 # docs
 , help2man
 , texinfo
-, texlive
+, texliveBasic
 # test
 , writeText
 }:
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     libtool
     help2man
     texinfo
-    texlive.combined.scheme-basic
+    texliveBasic
   ];
 
   buildInputs = [

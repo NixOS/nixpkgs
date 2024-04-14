@@ -11,12 +11,13 @@ buildGoModule rec {
     hash = "sha256-hD4GudSkGZO41nR/CgcMg/SqKjpAO1yJDkfwa8AUges=";
   };
 
-  vendorSha256 = "sha256-oPkSWpqNozfSFLIFsJ+e2pOL6CcR91YHbqibEVF2aSk=";
+  vendorHash = "sha256-oPkSWpqNozfSFLIFsJ+e2pOL6CcR91YHbqibEVF2aSk=";
 
   meta = with lib; {
     description = "M3U Proxy for Plex DVR and Emby Live TV";
     homepage = "https://github.com/xteve-project/xTeVe";
     license = licenses.mit;
     maintainers = with maintainers; [ nrhelmi ];
+    mainProgram = "xteve";
   };
 }

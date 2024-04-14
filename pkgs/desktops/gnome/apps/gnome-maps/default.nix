@@ -16,6 +16,7 @@
 , geoclue2
 , wrapGAppsHook4
 , desktop-file-utils
+, libportal
 , libshumate
 , libsecret
 , libsoup_3
@@ -25,13 +26,13 @@
 , geocode-glib_2
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-maps";
-  version = "44.3";
+  version = "45.5";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-O+E7Ie66mp2jDmnfFtcYvrEw7b+9QG649AK/6hdBJgI=";
+    url = "mirror://gnome/sources/gnome-maps/${lib.versions.major finalAttrs.version}/gnome-maps-${finalAttrs.version}.tar.xz";
+    hash = "sha256-HCD14Q3OaEre+ylhUmJmoiTmxGwW+gO5VK/6Czobt0A=";
   };
 
   doCheck = true;
@@ -57,6 +58,7 @@ stdenv.mkDerivation rec {
     gjs
     gsettings-desktop-schemas
     gtk4
+    libportal
     libshumate
     libgweather
     libadwaita
@@ -82,16 +84,17 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "gnome-maps";
+      attrPath = "gnome.gnome-maps";
     };
   };
 
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Maps";
     description = "A map application for GNOME 3";
+    mainProgram = "gnome-maps";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
-}
+})

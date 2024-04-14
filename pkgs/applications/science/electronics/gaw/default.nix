@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Gtk Analog Wave viewer";
+    mainProgram = "gaw";
     longDescription = ''
       Gaw is a software tool for displaying analog waveforms from
       sampled datas, for example from the output of simulators or

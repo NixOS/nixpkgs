@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, xz, dpkg
+{lib, stdenv, fetchurl, fetchpatch, xz, dpkg
 , libxslt, docbook_xsl, makeWrapper, writeShellScript
 , python3Packages
 , perlPackages, curl, gnupg, diffutils, nano, pkg-config, bash-completion, help2man
@@ -19,6 +19,14 @@ in stdenv.mkDerivation rec {
     hash = "sha256-j0fUVTS/lPKFdgeMhksiJz2+E5koB07IK2uEj55EWG0=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "hardening-check-obey-binutils-env-vars.patch";
+      url = "https://github.com/Debian/devscripts/pull/2/commits/c6a018e0ef50a1b0cb4962a2f96dae7c6f21f1d4.patch";
+      hash = "sha256-UpS239JiAM1IYxNuJLdILq2h0xlR5t0Tzhj47xiMHww=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace scripts/Makefile --replace /usr/share/dpkg ${dpkg}/share/dpkg
     substituteInPlace scripts/debrebuild.pl --replace /usr/bin/perl ${perlPackages.perl}/bin/perl
@@ -31,7 +39,7 @@ in stdenv.mkDerivation rec {
 
   preConfigure = ''
     export PERL5LIB="$PERL5LIB''${PERL5LIB:+:}${dpkg}";
-    tgtpy="$out/lib/${python.libPrefix}/site-packages"
+    tgtpy="$out/${python.sitePackages}"
     mkdir -p "$tgtpy"
     export PYTHONPATH="$PYTHONPATH''${PYTHONPATH:+:}$tgtpy"
     find lib po4a scripts -type f -exec sed -r \

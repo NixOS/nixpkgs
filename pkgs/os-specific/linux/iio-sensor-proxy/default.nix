@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, glib
 , cmake
 , libxml2
 , meson
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     cmake
+    glib
     libxml2
     ninja
     pkg-config
@@ -50,6 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Proxy for sending IIO sensor data to D-Bus";
+    mainProgram = "monitor-sensor";
     homepage = "https://gitlab.freedesktop.org/hadess/iio-sensor-proxy";
     license = licenses.gpl3;
     maintainers = with maintainers; [ _999eagle ];

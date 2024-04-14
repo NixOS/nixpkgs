@@ -39,5 +39,6 @@ mkDerivation rec {
     description = "A QT based cross-platform utility designed to facilitate reconfiguration of the Yubikey";
     license = licenses.bsd2;
     platforms = platforms.unix;
+    mainProgram = "yubikey-personalization-gui";
   };
 }

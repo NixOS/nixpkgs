@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpcap guile_2_2 openssl ];
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   configureFlags = [
-    "GUILELIBDIR=\${out}/share/guile/site"
-    "GUILECACHEDIR=\${out}/lib/guile/ccache"
+    "GUILELIBDIR=\${out}/${guile_2_2.siteDir}"
+    "GUILECACHEDIR=\${out}/${guile_2_2.siteCcacheDir}"
   ];
 
   meta = {

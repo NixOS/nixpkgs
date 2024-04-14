@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "sqlcmd";
-  version = "1.2.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     repo = "go-sqlcmd";
     owner = "microsoft";
     rev = "v${version}";
-    sha256 = "sha256-d9XxE+yY3LEsg9JYOFYs9r2ZHaH0+tnEOqNV+5tEiAs=";
+    sha256 = "sha256-LLRNaY6ArUNoKSWSauCh2RKEGO5+G1OnoCAqMaAfOkY=";
   };
 
-  vendorHash = "sha256-+buoX9etR34p1N2G8+48ZvF6cg/y4uKb89sSIwkoeuY=";
+  vendorHash = "sha256-NVmgAlNQvRj/7poIEWjMyKw2qWMd/HwbdSFHpumnRlo=";
   proxyVendor = true;
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
@@ -47,6 +47,7 @@ buildGoModule rec {
 
   meta = {
     description = "A command line tool for working with Microsoft SQL Server, Azure SQL Database, and Azure Synapse";
+    mainProgram = "sqlcmd";
     homepage = "https://github.com/microsoft/go-sqlcmd";
     changelog = "https://github.com/microsoft/go-sqlcmd/releases/tag/v${version}";
     license = lib.licenses.mit;

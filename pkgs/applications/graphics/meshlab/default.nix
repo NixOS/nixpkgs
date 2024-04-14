@@ -14,7 +14,7 @@
 , levmar
 , qhull
 , cmake
-, cgal_5
+, cgal
 , boost179
 , mpfr
 , xercesc
@@ -27,8 +27,8 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cnr-isti-vclab";
     repo = "meshlab";
-    rev = "Meshlab-${version}";
-    sha256 = "sha256-MP+jkiV6yS1T1eWClxM56kZWLXwu0g4w/zBHy6CSL6Y=";
+    rev = "MeshLab-${version}";
+    sha256 = "sha256-jcc3PfsiIeYyipteZgzd0NwZgFFgR/mMBiaInzhOcDY=";
     fetchSubmodules = true; # for vcglib
   };
 
@@ -45,7 +45,7 @@ mkDerivation rec {
     gmp
     levmar
     qhull
-    cgal_5
+    cgal
     boost179
     mpfr
     xercesc
@@ -75,12 +75,18 @@ mkDerivation rec {
     "-DALLOW_BUNDLED_LEVMAR=ON"
   ];
 
+  CXXFLAGS = [
+    # GCC 13: error: 'int16_t' has not been declared in 'std'
+    "-include cstdint"
+  ];
+
   postFixup = ''
     patchelf --add-needed $out/lib/meshlab/libmeshlab-common.so $out/bin/.meshlab-wrapped
   '';
 
   meta = {
     description = "A system for processing and editing 3D triangular meshes";
+    mainProgram = "meshlab";
     homepage = "https://www.meshlab.net/";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ viric ];

@@ -14,8 +14,8 @@
 
 buildPythonPackage rec {
   pname = "pipdeptree";
-  version = "2.12.0";
-  format = "pyproject";
+  version = "2.16.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -23,17 +23,15 @@ buildPythonPackage rec {
     owner = "tox-dev";
     repo = "pipdeptree";
     rev = "refs/tags/${version}";
-    hash = "sha256-4qRMET04JLVuDRfQtv/uQquf76iU00rnsWNaUXj1Gfw=";
+    hash = "sha256-g0O0ndHd2ehBUmHwb0HoWgCGSsqbjmlPFOd6KrkUv2Y=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];
 
-  propagatedBuildInput = [
+  dependencies = [
     pip
   ];
 
@@ -61,6 +59,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Command line utility to show dependency tree of packages";
+    mainProgram = "pipdeptree";
     homepage = "https://github.com/tox-dev/pipdeptree";
     changelog = "https://github.com/tox-dev/pipdeptree/releases/tag/${version}";
     license = licenses.mit;

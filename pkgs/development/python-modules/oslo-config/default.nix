@@ -14,12 +14,13 @@
 
 buildPythonPackage rec {
   pname = "oslo-config";
-  version = "9.1.1";
+  version = "9.4.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "oslo.config";
     inherit version;
-    hash = "sha256-sHZUtT2HeSro5zmWKtcpxSnJk4oRjYkezp7jHVlxa8k=";
+    hash = "sha256-NbEaZhtgjttQMF2tkeTjCBnZDveUt9fbpb2LLvLrjA0=";
   };
 
   postPatch = ''

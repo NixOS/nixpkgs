@@ -20,6 +20,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Your personal markdown scribe with template-engine and Git(Hub) & RSS powers";
+    mainProgram = "markscribe";
     homepage = "https://github.com/muesli/markscribe";
     changelog = "https://github.com/muesli/markscribe/releases/tag/${src.rev}";
     license = licenses.mit;

@@ -44,13 +44,13 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     wrapGAppsHook
+    gobject-introspection
   ];
 
   buildInputs = [
     appstream
     desktop-file-utils
     glib
-    gobject-introspection
     gtk3
     html2text
     libgee
@@ -82,6 +82,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A simple, focused eBook reader";
+    mainProgram = "com.github.babluboy.bookworm";
     longDescription = ''
       Read the books you love without having to worry about different format complexities like epub, pdf, mobi, cbr, etc.
     '';

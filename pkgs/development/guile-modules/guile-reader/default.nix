@@ -27,9 +27,13 @@ stdenv.mkDerivation rec {
     libffi
   ];
 
-  GUILE_SITE="${guile-lib}/share/guile/site";
+  env = {
+    GUILE_SITE = "${guile-lib}/${guile.siteDir}";
+  } // lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
 
-  configureFlags = [ "--with-guilemoduledir=$(out)/share/guile/site" ];
+  configureFlags = [ "--with-guilemoduledir=$(out)/${guile.siteDir}" ];
 
   meta = with lib; {
     homepage = "https://www.nongnu.org/guile-reader/";

@@ -14,15 +14,15 @@
 
 buildPythonPackage rec {
   pname = "ifcopenshell";
-  version = "210410";
+  version = "240306";
   format = "other";
 
   src = fetchFromGitHub {
     owner  = "IfcOpenShell";
     repo   = "IfcOpenShell";
-    rev    = "blenderbim-${version}";
+    rev = "refs/tags/blenderbim-${version}";
     fetchSubmodules = true;
-    sha256 = "1g52asxrqcfj01iqvf03k3bb6rg3v04hh1wc3nmn329a2lwjbxpw";
+    sha256 = "sha256-DtA8KeWipPfOnztKG/lrgLZeOCUG3nWR9oW7OST7koc=";
   };
 
   nativeBuildInputs = [ gcc10 cmake ];

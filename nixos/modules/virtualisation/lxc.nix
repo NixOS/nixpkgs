@@ -2,24 +2,21 @@
 
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
-
   cfg = config.virtualisation.lxc;
-
 in
 
 {
-  ###### interface
+  meta = {
+    maintainers = lib.teams.lxc.members;
+  };
 
   options.virtualisation.lxc = {
     enable =
-      mkOption {
-        type = types.bool;
+      lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description =
-          lib.mdDoc ''
+        description = ''
             This enables Linux Containers (LXC), which provides tools
             for creating and managing system or application containers
             on Linux.
@@ -27,33 +24,30 @@ in
       };
 
     systemConfig =
-      mkOption {
-        type = types.lines;
+      lib.mkOption {
+        type = lib.types.lines;
         default = "";
-        description =
-          lib.mdDoc ''
+        description = ''
             This is the system-wide LXC config. See
             {manpage}`lxc.system.conf(5)`.
           '';
       };
 
     defaultConfig =
-      mkOption {
-        type = types.lines;
+      lib.mkOption {
+        type = lib.types.lines;
         default = "";
-        description =
-          lib.mdDoc ''
+        description = ''
             Default config (default.conf) for new containers, i.e. for
             network config. See {manpage}`lxc.container.conf(5)`.
           '';
       };
 
     usernetConfig =
-      mkOption {
-        type = types.lines;
+      lib.mkOption {
+        type = lib.types.lines;
         default = "";
-        description =
-          lib.mdDoc ''
+        description = ''
             This is the config file for managing unprivileged user network
             administration access in LXC. See {manpage}`lxc-usernet(5)`.
           '';
@@ -62,7 +56,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.lxc ];
     environment.etc."lxc/lxc.conf".text = cfg.systemConfig;
     environment.etc."lxc/lxc-usernet".text = cfg.usernetConfig;

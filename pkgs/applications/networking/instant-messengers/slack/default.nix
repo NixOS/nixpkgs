@@ -4,7 +4,7 @@
 , dpkg
 , undmg
 , makeWrapper
-, nodePackages
+, asar
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
@@ -45,14 +45,14 @@ let
 
   pname = "slack";
 
-  x86_64-darwin-version = "4.33.73";
-  x86_64-darwin-sha256 = "0y8plkl3pm8250xpavc91kn5b9gcdwr7bqzd3i79n48395lx11ka";
+  x86_64-darwin-version = "4.37.101";
+  x86_64-darwin-sha256 = "03k4iv6y7y1z9ac7if35r3lk7kp7ic4aa4rdyzbrzihvpfb3nvdh";
 
-  x86_64-linux-version = "4.33.73";
-  x86_64-linux-sha256 = "007i8sjnm1ikjxvgw6nisj4nmv99bwk0r4sfpvc2j4w4wk68sx3m";
+  x86_64-linux-version = "4.37.101";
+  x86_64-linux-sha256 = "0vmaam0aiqcqmm8n3zrjmf012d6pdi0g1d08v1zhgx2rhl614ff9";
 
-  aarch64-darwin-version = "4.33.73";
-  aarch64-darwin-sha256 = "15s3ss15yawb04dyzn82xmk1gs70sg2i3agsj2aw0xdx73yjl34p";
+  aarch64-darwin-version = "4.37.101";
+  aarch64-darwin-sha256 = "07qfqrq32sh5cw7vmq2x0s5zvkvcl7j1kkvdncg36fay9276f2pp";
 
   version = {
     x86_64-darwin = x86_64-darwin-version;
@@ -81,9 +81,10 @@ let
   meta = with lib; {
     description = "Desktop client for Slack";
     homepage = "https://slack.com";
+    changelog = "https://slack.com/release-notes";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ mmahut maxeaubrey ];
+    maintainers = with maintainers; [ mmahut amaxine ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-darwin" ];
     mainProgram = "slack";
   };
@@ -143,7 +144,7 @@ let
       gtk3 # needed for GSETTINGS_SCHEMAS_PATH
     ];
 
-    nativeBuildInputs = [ dpkg makeWrapper nodePackages.asar ];
+    nativeBuildInputs = [ dpkg makeWrapper asar ];
 
     dontUnpack = true;
     dontBuild = true;
@@ -180,7 +181,11 @@ let
         --replace /usr/bin/ $out/bin/ \
         --replace /usr/share/pixmaps/slack.png slack \
         --replace bin/slack "bin/slack -s"
-
+    '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+      # Prevent Un-blacklist pipewire integration to enable screen sharing on wayland.
+      # https://github.com/flathub/com.slack.Slack/issues/101#issuecomment-1807073763
+      sed -i -e 's/,"WebRTCPipeWireCapturer"/,"LebRTCPipeWireCapturer"/' $out/lib/slack/resources/app.asar
+    '' + ''
       runHook postInstall
     '';
   };

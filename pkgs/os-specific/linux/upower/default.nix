@@ -4,7 +4,6 @@
 , fetchpatch
 , makeWrapper
 , pkg-config
-, rsync
 , libxslt
 , meson
 , ninja
@@ -18,14 +17,19 @@
 , libgudev
 , libusb1
 , glib
-, gobject-introspection
 , gettext
 , systemd
+, nixosTests
 , useIMobileDevice ? true
 , libimobiledevice
-, withDocs ? (stdenv.buildPlatform == stdenv.hostPlatform)
-, nixosTests
+, withDocs ? withIntrospection
+, mesonEmulatorHook
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
+, buildPackages
+, gobject-introspection
 }:
+
+assert withDocs -> withIntrospection;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "upower";
@@ -48,6 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./i686-test-remove-battery-check.patch
   ] ++ [
     ./installed-tests-path.patch
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/upower/upower/-/merge_requests/207.diff";
+      hash = "sha256-ldr1bKbSAdYpwbbe/Iq9i0Q9zQrHWvIvBGym/F3+vxs=";
+    })
   ];
 
   strictDeps = true;
@@ -60,14 +68,18 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     python3
-    gtk-doc
     docbook-xsl-nons
     gettext
-    gobject-introspection
     libxslt
     makeWrapper
     pkg-config
-    rsync
+    glib
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
+  ] ++ lib.optionals withDocs [
+    gtk-doc
+  ] ++ lib.optionals (withDocs && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
@@ -110,8 +122,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsystemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
     "-Dudevrulesdir=${placeholder "out"}/lib/udev/rules.d"
     "-Dudevhwdbdir=${placeholder "out"}/lib/udev/hwdb.d"
-    "-Dintrospection=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "auto" else "disabled"}"
-    "-Dgtk-doc=${lib.boolToString withDocs}"
+    (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonBool "gtk-doc" withDocs)
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
   ];
 
@@ -129,7 +141,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Our gobject-introspection patches make the shared library paths absolute
     # in the GIR files. When running tests, the library is not yet installed,
     # though, so we need to replace the absolute path with a local one during build.
-    # We are using a symlink that will be overwitten during installation.
     mkdir -p "$out/lib"
     ln -s "$PWD/libupower-glib/libupower-glib.so" "$out/lib/libupower-glib.so.3"
   '';
@@ -150,21 +161,28 @@ stdenv.mkDerivation (finalAttrs: {
     # meson rebuild during install and it is not used at runtime anyway.
     sed -Ei 's~#!.+/bin/python3~#!/usr/bin/python3~' \
       ../src/linux/integration-test.py
+
+    # Undo preCheck installation since DESTDIR hack expects outputs to not exist.
+    rm "$out/lib/libupower-glib.so.3"
+    rmdir "$out/lib" "$out"
   '';
 
   postInstall = ''
     # Move stuff from DESTDIR to proper location.
-    # We use rsync to merge the directories.
-    for dir in etc var; do
-        rsync --archive "$DESTDIR/$dir" "$out"
-        rm --recursive "$DESTDIR/$dir"
+    for o in $(getAllOutputNames); do
+        # devdoc is created later by _multioutDocs hook.
+        if [[ "$o" = "devdoc" ]]; then continue; fi
+        mv "$DESTDIR''${!o}" "$(dirname "''${!o}")"
     done
-    for o in out dev installedTests; do
-        rsync --archive "$DESTDIR/''${!o}" "$(dirname "''${!o}")"
-        rm --recursive "$DESTDIR/''${!o}"
-    done
-    # Ensure the DESTDIR is removed.
-    rmdir "$DESTDIR/nix/store" "$DESTDIR/nix" "$DESTDIR"
+
+    mv "$DESTDIR/var" "$out"
+    # The /etc already exist so we need to merge it.
+    cp --recursive "$DESTDIR/etc" "$out"
+    rm --recursive "$DESTDIR/etc"
+
+    # Ensure we did not forget to install anything.
+    rmdir --parents --ignore-fail-on-non-empty "$DESTDIR${builtins.storeDir}"
+    ! test -e "$DESTDIR"
   '';
 
   postFixup = ''
@@ -185,7 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
     # at install time but Meson does not support this
     # so we need to convince it to install all files to a temporary
     # location using DESTDIR and then move it to proper one in postInstall.
-    DESTDIR = "${placeholder "out"}/dest";
+    DESTDIR = "dest";
   };
 
   passthru = {
@@ -198,6 +216,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://upower.freedesktop.org/";
     changelog = "https://gitlab.freedesktop.org/upower/upower/-/blob/v${finalAttrs.version}/NEWS";
     description = "A D-Bus service for power management";
+    mainProgram = "upower";
     maintainers = teams.freedesktop.members;
     platforms = platforms.linux;
     license = licenses.gpl2Plus;

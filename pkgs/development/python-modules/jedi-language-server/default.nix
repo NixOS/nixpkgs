@@ -9,14 +9,13 @@
 , pydantic
 , pyhamcrest
 , pytestCheckHook
-, python-jsonrpc-server
+, python-lsp-jsonrpc
 , pythonOlder
-, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "jedi-language-server";
-  version = "0.40.0";
+  version = "0.41.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -24,17 +23,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pappasam";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-+3VgONZzlobgs4wujCaGTTYpIgYrWgWwYgKQqirS7t8=";
+    rev = "v${version}";
+    hash = "sha256-+k4WOoEbVe7mlPyPj0ttBM+kmjq8V739yHi36BDYK2U=";
   };
-
-  pythonRelaxDeps = [
-    "pygls"
-  ];
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -48,7 +42,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pyhamcrest
-    python-jsonrpc-server
+    python-lsp-jsonrpc
   ];
 
   preCheck = ''
@@ -61,6 +55,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Language Server for the latest version(s) of Jedi";
+    mainProgram = "jedi-language-server";
     homepage = "https://github.com/pappasam/jedi-language-server";
     changelog = "https://github.com/pappasam/jedi-language-server/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "bazel-buildtools";
-  version = "6.1.2";
+  version = "7.1.0";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "buildtools";
     rev = "v${version}";
-    hash = "sha256-iYLebD41x03kCW/k+bYVaYa2/erhrx/EithLaeTKfCw=";
+    hash = "sha256-/YHTMIhxFqxHpEmtYvFuQ1bjvKF6tDaYudSnBrCncPQ=";
   };
 
   vendorHash = "sha256-DigTREfI6I48wxRpGp/bfH1NbUZ4E1B5UTQXpI0LY1A=";

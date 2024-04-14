@@ -47,7 +47,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to run the GNUnet daemon.  GNUnet is GNU's anonymous
           peer-to-peer communication and file sharing framework.
         '';
@@ -57,7 +57,7 @@ in
         quota = mkOption {
           type = types.int;
           default = 1024;
-          description = lib.mdDoc ''
+          description = ''
             Maximum file system usage (in MiB) for file sharing.
           '';
         };
@@ -67,7 +67,7 @@ in
         port = mkOption {
           type = types.port;
           default = 2086;  # assigned by IANA
-          description = lib.mdDoc ''
+          description = ''
             The UDP port for use by GNUnet.
           '';
         };
@@ -77,7 +77,7 @@ in
         port = mkOption {
           type = types.port;
           default = 2086;  # assigned by IANA
-          description = lib.mdDoc ''
+          description = ''
             The TCP port for use by GNUnet.
           '';
         };
@@ -87,7 +87,7 @@ in
         maxNetDownBandwidth = mkOption {
           type = types.int;
           default = 50000;
-          description = lib.mdDoc ''
+          description = ''
             Maximum bandwidth usage (in bits per second) for GNUnet
             when downloading data.
           '';
@@ -96,7 +96,7 @@ in
         maxNetUpBandwidth = mkOption {
           type = types.int;
           default = 50000;
-          description = lib.mdDoc ''
+          description = ''
             Maximum bandwidth usage (in bits per second) for GNUnet
             when downloading data.
           '';
@@ -105,25 +105,21 @@ in
         hardNetUpBandwidth = mkOption {
           type = types.int;
           default = 0;
-          description = lib.mdDoc ''
+          description = ''
             Hard bandwidth limit (in bits per second) when uploading
             data.
           '';
         };
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.gnunet;
-        defaultText = literalExpression "pkgs.gnunet";
-        description = lib.mdDoc "Overridable attribute of the gnunet package to use.";
-        example = literalExpression "pkgs.gnunet_git";
+      package = mkPackageOption pkgs "gnunet" {
+        example = "gnunet_git";
       };
 
       extraOptions = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Additional options that will be copied verbatim in `gnunet.conf`.
           See {manpage}`gnunet.conf(5)` for details.
         '';

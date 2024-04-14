@@ -1,23 +1,28 @@
 { lib
 , buildPythonPackage
-, certifi
-, configparser
-, faker
 , fetchFromGitHub
-, future
-, mock
-, nose
-, pytestCheckHook
-, python-dateutil
 , pythonOlder
-, pytz
+
+# build-system
+, setuptools
+
+# dependencies
+, argon2-cffi
+, certifi
 , urllib3
+, pycryptodome
+, typing-extensions
+
+# test
+, faker
+, mock
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "minio";
-  version = "7.1.15";
-  format = "setuptools";
+  version = "7.2.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -25,22 +30,29 @@ buildPythonPackage rec {
     owner = "minio";
     repo = "minio-py";
     rev = "refs/tags/${version}";
-    hash = "sha256-eqQPOMEJOTdvYHaQ+ty+bDJn4/S5KnUOtF42O1wc+mw=";
+    hash = "sha256-Xb6XaGI/bwkhp6YKgoqi5Tbs74pSXc6aJpWVUgG5uR4=";
   };
 
+  postPatch = ''
+    substituteInPlace tests/unit/crypto_test.py \
+      --replace-fail "assertEquals" "assertEqual"
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
+    argon2-cffi
     certifi
-    configparser
-    future
-    python-dateutil
-    pytz
     urllib3
+    pycryptodome
+    typing-extensions
   ];
 
   nativeCheckInputs = [
     faker
     mock
-    nose
     pytestCheckHook
   ];
 

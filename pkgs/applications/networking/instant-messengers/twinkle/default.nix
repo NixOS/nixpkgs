@@ -21,13 +21,13 @@
 
 mkDerivation rec {
   pname = "twinkle";
-  version = "unstable-2021-02-06";
+  version = "unstable-2023-03-25";
 
   src = fetchFromGitHub {
     owner = "LubosD";
     repo = "twinkle";
-    rev = "2301b66a3f54b266675415d261985488d86e9e4c";
-    sha256 = "xSwcaj1Hm62iL7C/AxqjVR07VEae8gDgYdr2EWmCoOM=";
+    rev = "355813d5640ad58c84dc063826069384470ce310";
+    hash = "sha256-u+RewFwW17Oz2+lJLlmwebaGn4ebTBquox9Av7Jh1as=";
   };
 
   buildInputs = [
@@ -56,6 +56,7 @@ mkDerivation rec {
     "-DWITH_G729=On"
     "-DWITH_SPEEX=On"
     "-DWITH_ILBC=On"
+    "-DHAVE_LIBATOMIC=atomic"
     /* "-DWITH_DIAMONDCARD=On" seems ancient and broken */
   ];
 

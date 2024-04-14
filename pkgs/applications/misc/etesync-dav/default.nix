@@ -7,41 +7,7 @@
 , radicale3
 }:
 
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-      flask = super.flask.overridePythonAttrs (old: rec {
-        version = "2.0.3";
-        src = old.src.override {
-          inherit version;
-          hash = "sha256-4RIMIoyi9VO0cN9KX6knq2YlhGdSYGmYGz6wqRkCaH0=";
-        };
-      });
-      flask-wtf = super.flask-wtf.overridePythonAttrs (old: rec {
-        version = "0.15.1";
-        src = old.src.override {
-          inherit version;
-          hash = "sha256-/xdxhfiRMC3CU0N/5jCB56RqTpmsph3+CG+yPlT/8tw=";
-        };
-        disabledTests = [
-          "test_outside_request"
-        ];
-        disabledTestPaths = [
-          "tests/test_form.py"
-          "tests/test_html5.py"
-        ];
-        patches = [ ];
-      });
-      werkzeug = super.werkzeug.overridePythonAttrs (old: rec {
-        version = "2.0.3";
-        src = old.src.override {
-          inherit version;
-          hash = "sha256-uGP4/wV8UiFktgZ8niiwQRYbS+W6TQ2s7qpQoWOCLTw=";
-        };
-      });
-    };
-  };
-in python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "etesync-dav";
   version = "0.32.1";
 
@@ -58,7 +24,7 @@ in python.pkgs.buildPythonApplication rec {
     })
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     appdirs
     etebase
     etesync
@@ -80,6 +46,7 @@ in python.pkgs.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://www.etesync.com/";
     description = "Secure, end-to-end encrypted, and privacy respecting sync for contacts, calendars and tasks";
+    mainProgram = "etesync-dav";
     license = licenses.gpl3;
     maintainers = with maintainers; [ thyol valodim ];
     broken = stdenv.isDarwin; # pyobjc-framework-Cocoa is missing

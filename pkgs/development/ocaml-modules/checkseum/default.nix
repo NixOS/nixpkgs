@@ -1,28 +1,22 @@
-{ lib, fetchurl, buildDunePackage, ocaml, dune-configurator, pkg-config
+{ lib, fetchurl, buildDunePackage, ocaml, dune-configurator
 , optint
 , fmt, rresult, bos, fpath, astring, alcotest
-, withFreestanding ? false
-, ocaml-freestanding
 }:
 
 buildDunePackage rec {
-  version = "0.4.0";
+  version = "0.5.2";
   pname = "checkseum";
 
   minimalOCamlVersion = "4.07";
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/checkseum/releases/download/v${version}/checkseum-${version}.tbz";
-    hash = "sha256-K6QPMts5+hxH2a+WQ1N0lwMBoshG2T0bSozNgzRvAlo=";
+    hash = "sha256-nl5P1EBctKi03wCHdUMlGDPgimSZ70LMuNulgt8Nr8g=";
   };
 
   buildInputs = [ dune-configurator ];
-  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [
     optint
-  ] ++ lib.optionals withFreestanding [
-    ocaml-freestanding
   ];
 
   checkInputs = [

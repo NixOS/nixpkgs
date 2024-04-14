@@ -14,6 +14,7 @@ cuda.section.md
 cuelang.section.md
 dart.section.md
 dhall.section.md
+dlang.section.md
 dotnet.section.md
 emscripten.section.md
 gnome.section.md
@@ -21,9 +22,11 @@ go.section.md
 haskell.section.md
 hy.section.md
 idris.section.md
+idris2.section.md
 ios.section.md
 java.section.md
 javascript.section.md
+julia.section.md
 lisp.section.md
 lua.section.md
 maven.section.md

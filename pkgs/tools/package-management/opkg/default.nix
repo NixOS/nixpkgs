@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "opkg";
-  version = "0.6.1";
+  version = "0.6.3";
 
   src = fetchurl {
     url = "https://downloads.yoctoproject.org/releases/opkg/opkg-${version}.tar.gz";
-    hash = "sha256-6H/MtXXGTTrAVZREAWonlfEhJZhqDaiWurl8ShovGyo=";
+    hash = "sha256-85OONZZGtAbEDV1EKhRnx+cjV/kauCLkQml1KWQeBt4=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +36,11 @@ stdenv.mkDerivation rec {
     attr
     acl
     libxml2
+  ];
+
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
   ];
 
   meta = with lib; {

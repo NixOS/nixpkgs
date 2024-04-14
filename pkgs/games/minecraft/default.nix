@@ -100,8 +100,7 @@ stdenv.mkDerivation rec {
     sha256 = "0w8z21ml79kblv20wh5lz037g130pxkgs8ll9s3bi94zn2pbrhim";
   };
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook copyDesktopItems ];
-  buildInputs = [ gobject-introspection ];
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook copyDesktopItems gobject-introspection ];
 
   sourceRoot = ".";
 
@@ -148,7 +147,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Official launcher for Minecraft, a sandbox-building game";
     homepage = "https://minecraft.net";
-    maintainers = with maintainers; [ cpages ryantm infinisil ];
+    maintainers = with maintainers; [ cpages ryantm ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];

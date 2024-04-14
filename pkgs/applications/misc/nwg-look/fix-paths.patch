@@ -1,0 +1,35 @@
+diff --git a/main.go b/main.go
+index 23c4756..c52e9c3 100644
+--- a/main.go
++++ b/main.go
+@@ -335,7 +335,7 @@ func main() {
+
+ 	gtkSettings, _ = gtk.SettingsGetDefault()
+
+-	builder, _ := gtk.BuilderNewFromFile("/usr/share/nwg-look/main.glade")
++	builder, _ := gtk.BuilderNewFromFile("@out@/share/nwg-look/main.glade")
+ 	win, _ := getWindow(builder, "window")
+
+ 	win.Connect("destroy", func() {
+diff --git a/tools.go b/tools.go
+index e6e7665..59d6f35 100644
+--- a/tools.go
++++ b/tools.go
+@@ -1034,7 +1034,7 @@ func getDataDirs() []string {
+ 	if os.Getenv("XDG_DATA_DIRS") != "" {
+ 		xdgDataDirs = os.Getenv("XDG_DATA_DIRS")
+ 	} else {
+-		xdgDataDirs = "/usr/local/share/:/usr/share/"
++		xdgDataDirs = "@out@/local/share/:@out@/share/"
+ 	}
+
+ 	for _, d := range strings.Split(xdgDataDirs, ":") {
+@@ -1280,7 +1280,7 @@ func detectLang() string {
+ }
+
+ func loadVocabulary(lang string) map[string]string {
+-	langsDir := "/usr/share/nwg-look/langs/"
++	langsDir := "@out@/share/nwg-look/langs/"
+ 	enUSFile := filepath.Join(langsDir, "en_US.json")
+ 	if pathExists(enUSFile) {
+ 		log.Infof(">>> Loading basic lang from '%s'", enUSFile)

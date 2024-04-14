@@ -1,14 +1,13 @@
-{ stdenv, lib, fetchurl }:
+{ stdenvNoCC, lib, fetchurl, nixosTests, testers, jre }:
 
 let
-
-  common = { versionMajor, versionMinor, sha256 }: stdenv.mkDerivation (rec {
+  common = { version, hash }: stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "apache-tomcat";
-    version = "${versionMajor}.${versionMinor}";
+    inherit version;
 
     src = fetchurl {
-      url = "mirror://apache/tomcat/tomcat-${versionMajor}/v${version}/bin/${pname}-${version}.tar.gz";
-      inherit sha256;
+      url = "mirror://apache/tomcat/tomcat-${lib.versions.major version}/v${version}/bin/apache-tomcat-${version}.tar.gz";
+      inherit hash;
     };
 
     outputs = [ "out" "webapps" ];
@@ -20,11 +19,19 @@ let
         mv $out/webapps $webapps/
       '';
 
+    passthru.tests = {
+      inherit (nixosTests) tomcat;
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "JAVA_HOME=${jre} ${finalAttrs.finalPackage}/bin/version.sh";
+      };
+    };
+
     meta = with lib; {
       homepage = "https://tomcat.apache.org/";
       description = "An implementation of the Java Servlet and JavaServer Pages technologies";
-      platforms = platforms.all;
-      maintainers = [ ];
+      platforms = jre.meta.platforms;
+      maintainers = with maintainers; [ anthonyroussel ];
       license = [ licenses.asl20 ];
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
     };
@@ -32,14 +39,12 @@ let
 
 in {
   tomcat9 = common {
-    versionMajor = "9";
-    versionMinor = "0.75";
-    sha256 = "sha256-VWfKg789z+ns1g3hDsCZFYQ+PsdqUEBeBHCihkGZelk=";
+    version = "9.0.87";
+    hash = "sha256-2kgvuSIAhtvzceGAqgnGQCr48EhYZzTN7dSgjEjUzgI=";
   };
 
   tomcat10 = common {
-    versionMajor = "10";
-    versionMinor = "0.27";
-    sha256 = "sha256-N2atmOdhVrGx88eXOc9Wziq8kn7IWzTeFyFpir/5HLc=";
+    version = "10.1.20";
+    hash = "sha256-hCfFUJ8U5IKUCgFfP2DeIDQtPXLI3qmYKk1xEstxpu4=";
   };
 }

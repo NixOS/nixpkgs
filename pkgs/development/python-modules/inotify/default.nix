@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "inotify";
   version = "unstable-2020-08-27";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dsoprea";

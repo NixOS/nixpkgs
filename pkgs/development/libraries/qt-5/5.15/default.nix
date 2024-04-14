@@ -7,12 +7,12 @@ Check for any minor version changes.
 
 */
 
-{ makeScopeWithSplicing, generateSplicesForMkScope
+{ makeScopeWithSplicing', generateSplicesForMkScope
 , lib, stdenv, fetchurl, fetchgit, fetchpatch, fetchFromGitHub, makeSetupHook, makeWrapper
 , bison, cups ? null, harfbuzz, libGL, perl, python3
 , gstreamer, gst-plugins-base, gtk3, dconf
+, llvmPackages_15, overrideSDK, overrideLibcxx
 , darwin
-, buildPackages
 
   # options
 , developerBuild ? false
@@ -23,7 +23,7 @@ Check for any minor version changes.
 
 let
 
-  srcs = import ./srcs.nix { inherit lib fetchgit fetchFromGitHub; };
+  srcs = import ./srcs.nix { inherit lib fetchgit fetchFromGitHub; } // { __attrsFailEvaluation = true; };
 
   qtCompatVersion = srcs.qtbase.version;
 
@@ -51,6 +51,25 @@ let
       ./qtdeclarative.patch
       # prevent headaches from stale qmlcache data
       ./qtdeclarative-default-disable-qmlcache.patch
+      # add version specific QML import path
+      ./qtdeclarative-qml-paths.patch
+    ];
+    qtlocation = lib.optionals stdenv.cc.isClang [
+      # Fix build with Clang 16
+      (fetchpatch {
+        url = "https://github.com/boostorg/numeric_conversion/commit/50a1eae942effb0a9b90724323ef8f2a67e7984a.patch";
+        stripLen = 1;
+        extraPrefix = "src/3rdparty/mapbox-gl-native/deps/boost/1.65.1/";
+        hash = "sha256-UEvIXzn387f9BAeBdhheStD/4M7en+rmqX8C6gstl6k=";
+      })
+    ];
+    qtmultimedia = lib.optionals stdenv.isDarwin [
+      # build patch for qtmultimedia with xcode 15
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/3f509180/qt5/qt5-qtmultimedia-xcode15.patch";
+        stripLen = 1;
+        hash = "sha256-HrEqfmm8WbapWgLM0L4AKW8168pwT2zYI8HOJruEPSs=";
+      })
     ];
     qtpim = [
       ## Upstream patches after the Qt6 transition that apply without problems & fix bugs
@@ -170,6 +189,7 @@ let
         extraPrefix = "src/3rdparty/";
         hash = "sha256-s4GsGMJTBNWw2gTJuIEP3tqT82AmTsR2mbj59m2p6rM=";
       })
+      ./qtwebengine-link-pulseaudio.patch
     ] ++ lib.optionals stdenv.isDarwin [
       ./qtwebengine-darwin-no-platform-check.patch
       ./qtwebengine-mac-dont-set-dsymutil-path.patch
@@ -191,8 +211,14 @@ let
         url = "https://github.com/qtwebkit/qtwebkit/commit/5c272a21e621a66862821d3ae680f27edcc64c19.patch";
         sha256 = "9hjqLyABz372QDgoq7nXXXQ/3OXBGcYN1/92ekcC3WE=";
       })
+      (fetchpatch {
+        name = "qtwebkit-libxml2-api-change.patch";
+        url = "https://github.com/WebKit/WebKit/commit/1bad176b2496579d760852c80cff3ad9fb7c3a4b.patch";
+        sha256 = "WZEj+UuKhgJBM7auhND3uddk1wWdTY728jtiWVe7CSI=";
+      })
       ./qtwebkit.patch
       ./qtwebkit-icu68.patch
+      ./qtwebkit-cstdint.patch
     ] ++ lib.optionals stdenv.isDarwin [
       ./qtwebkit-darwin-no-readline.patch
       ./qtwebkit-darwin-no-qos-classes.patch
@@ -200,32 +226,24 @@ let
     qttools = [ ./qttools.patch ];
   };
 
-  addPackages = self: with self;
+  addPackages = self:
     let
-      qtModule =
-        import ../qtModule.nix
-        {
-          inherit perl;
-          inherit lib;
-          # Use a variant of mkDerivation that does not include wrapQtApplications
-          # to avoid cyclic dependencies between Qt modules.
-          mkDerivation =
-            import ../mkDerivation.nix
-            { inherit lib; inherit debug; wrapQtAppsHook = null; }
-            stdenv.mkDerivation;
-        }
-        { inherit self srcs patches; };
+      qtModule = callPackage ../qtModule.nix {
+        inherit patches;
+        # Use a variant of mkDerivation that does not include wrapQtApplications
+        # to avoid cyclic dependencies between Qt modules.
+        mkDerivation =
+          (callPackage ../mkDerivation.nix { wrapQtAppsHook = null; }) stdenv.mkDerivation;
+      };
 
       callPackage = self.newScope { inherit qtCompatVersion qtModule srcs stdenv; };
     in {
 
       inherit callPackage qtCompatVersion qtModule srcs;
 
-      mkDerivationWith =
-        import ../mkDerivation.nix
-        { inherit lib; inherit debug; inherit (self) wrapQtAppsHook; };
+      mkDerivationWith = callPackage ../mkDerivation.nix { };
 
-      mkDerivation = mkDerivationWith stdenv.mkDerivation;
+      mkDerivation = callPackage ({ mkDerivationWith }: mkDerivationWith stdenv.mkDerivation) { };
 
       qtbase = callPackage ../modules/qtbase.nix {
         inherit (srcs.qtbase) src version;
@@ -264,6 +282,7 @@ let
       qtquick1 = null;
       qtquickcontrols = callPackage ../modules/qtquickcontrols.nix {};
       qtquickcontrols2 = callPackage ../modules/qtquickcontrols2.nix {};
+      qtremoteobjects = callPackage ../modules/qtremoteobjects.nix {};
       qtscript = callPackage ../modules/qtscript.nix {};
       qtsensors = callPackage ../modules/qtsensors.nix {};
       qtserialbus = callPackage ../modules/qtserialbus.nix {};
@@ -278,6 +297,18 @@ let
       qtwayland = callPackage ../modules/qtwayland.nix {};
       qtwebchannel = callPackage ../modules/qtwebchannel.nix {};
       qtwebengine = callPackage ../modules/qtwebengine.nix {
+        # The version of Chromium used by Qt WebEngine 5.15.x does not build with clang 16 due
+        # to the following errors:
+        # * -Wenum-constexpr-conversion: This is a downgradable error in clang 16, but it is planned
+        #   to be made into a hard error in a future version of clang. Patches are not available for
+        #   the version of v8 used by Chromium in Qt WebEngine, and fixing the code is non-trivial.
+        # * -Wincompatible-function-pointer-types: This is also a downgradable error generated
+        #   starting with clang 16. Patches are available upstream that can be backported.
+        # Because the first error is non-trivial to fix and suppressing it risks future breakage,
+        # clang is pinned to clang 15. That also makes fixing the second set of errors unnecessary.
+        stdenv =
+          let stdenv' = if stdenv.cc.isClang then overrideLibcxx llvmPackages_15.stdenv else stdenv;
+          in if stdenv'.isDarwin then overrideSDK stdenv' "11.0" else stdenv';
         inherit (srcs.qtwebengine) version;
         python = python3;
         postPatch = ''
@@ -306,32 +337,51 @@ let
       qtxmlpatterns = callPackage ../modules/qtxmlpatterns.nix {};
 
       env = callPackage ../qt-env.nix {};
-      full = env "qt-full-${qtbase.version}" ([
+      full = callPackage ({ env, qtbase }: env "qt-full-${qtbase.version}") { }
+      # `with self` is ok to use here because having these spliced is unnecessary
+      (with self; [
         qt3d qtcharts qtconnectivity qtdeclarative qtdoc qtgraphicaleffects
         qtimageformats qtlocation qtmultimedia qtquickcontrols qtquickcontrols2
         qtscript qtsensors qtserialport qtsvg qttools qttranslations
-        qtvirtualkeyboard qtwebchannel qtwebengine qtwebkit qtwebsockets
+        qtvirtualkeyboard qtwebchannel qtwebengine qtwebsockets
         qtwebview qtx11extras qtxmlpatterns qtlottie qtdatavis3d
       ] ++ lib.optional (!stdenv.isDarwin) qtwayland
         ++ lib.optional (stdenv.isDarwin) qtmacextras);
 
-      qmake = makeSetupHook {
+      qmake = callPackage ({ qtbase }: makeSetupHook {
         name = "qmake-hook";
-        propagatedBuildInputs = [ self.qtbase.dev ];
+        ${if stdenv.buildPlatform == stdenv.hostPlatform
+          then "propagatedBuildInputs"
+          else "depsTargetTargetPropagated"} = [ qtbase.dev ];
         substitutions = {
           inherit debug;
           fix_qmake_libtool = ../hooks/fix-qmake-libtool.sh;
         };
-      } ../hooks/qmake-hook.sh;
+      } ../hooks/qmake-hook.sh) { };
 
-      wrapQtAppsHook = makeSetupHook {
+      wrapQtAppsHook = callPackage ({ makeBinaryWrapper, qtbase, qtwayland }: makeSetupHook {
         name = "wrap-qt5-apps-hook";
-        propagatedBuildInputs = [ self.qtbase.dev buildPackages.makeBinaryWrapper ]
-          ++ lib.optional stdenv.isLinux self.qtwayland.dev;
-      } ../hooks/wrap-qt-apps-hook.sh;
-    } // lib.optionalAttrs config.allowAliases {
-      # remove before 23.11
-      overrideScope' = lib.warn "qt5 now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\"." self.overrideScope;
+        propagatedBuildInputs = [ qtbase.dev makeBinaryWrapper ]
+          ++ lib.optional stdenv.isLinux qtwayland.dev;
+      } ../hooks/wrap-qt-apps-hook.sh) { };
     };
 
-in makeScopeWithSplicing (generateSplicesForMkScope "qt5") (_: {}) (_: {}) addPackages
+  baseScope = makeScopeWithSplicing' {
+    otherSplices = generateSplicesForMkScope "qt5";
+    f = addPackages;
+  };
+
+  bootstrapScope = baseScope.overrideScope(final: prev: {
+    qtbase = prev.qtbase.override { qttranslations = null; };
+    qtdeclarative = null;
+  });
+
+  finalScope = baseScope.overrideScope(final: prev: {
+    # qttranslations causes eval-time infinite recursion when
+    # cross-compiling; disabled for now.
+    qttranslations =
+      if stdenv.buildPlatform == stdenv.hostPlatform
+      then bootstrapScope.qttranslations
+      else null;
+  });
+in finalScope

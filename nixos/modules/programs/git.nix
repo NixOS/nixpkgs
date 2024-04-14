@@ -9,14 +9,10 @@ in
 {
   options = {
     programs.git = {
-      enable = mkEnableOption (lib.mdDoc "git");
+      enable = mkEnableOption "git, a distributed version control system";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.git;
-        defaultText = literalExpression "pkgs.git";
-        example = literalExpression "pkgs.gitFull";
-        description = lib.mdDoc "The git package to use";
+      package = mkPackageOption pkgs "git" {
+        example = "gitFull";
       };
 
       config = mkOption {
@@ -47,7 +43,7 @@ in
           init.defaultBranch = "main";
           url."https://github.com/".insteadOf = [ "gh:" "github:" ];
         };
-        description = lib.mdDoc ''
+        description = ''
           Configuration to write to /etc/gitconfig. A list can also be
           specified to keep the configuration in order. For example, setting
           `config` to `[ { foo.x = 42; } { bar.y = 42; }]` will put the `foo`
@@ -58,15 +54,14 @@ in
         '';
       };
 
-      lfs = {
-        enable = mkEnableOption (lib.mdDoc "git-lfs");
+      prompt = {
+        enable = mkEnableOption "automatically sourcing git-prompt.sh. This does not change $PS1; it simply provides relevant utility functions";
+      };
 
-        package = mkOption {
-          type = types.package;
-          default = pkgs.git-lfs;
-          defaultText = literalExpression "pkgs.git-lfs";
-          description = lib.mdDoc "The git-lfs package to use";
-        };
+      lfs = {
+        enable = mkEnableOption "git-lfs (Large File Storage)";
+
+        package = mkPackageOption pkgs "git-lfs" { };
       };
     };
   };
@@ -88,6 +83,11 @@ in
           required = true;
         };
       };
+    })
+    (mkIf (cfg.enable && cfg.prompt.enable) {
+      environment.interactiveShellInit = ''
+        source ${cfg.package}/share/bash-completion/completions/git-prompt.sh
+      '';
     })
   ];
 

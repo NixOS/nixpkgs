@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "codespell";
-  version = "2.2.5";
+  version = "2.2.6";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "codespell-project";
     repo = "codespell";
     rev = "v${version}";
-    sha256 = "sha256-Cu1bbLzVOAvPNzTavaMUfW2SCnQHc9mOM+IHAgVHhT4=";
+    sha256 = "sha256-esewCJw4o4SfSst5ALZ90X3XgOuOAsaxytpotvFeHB0=";
   };
 
   postPatch = ''
@@ -33,8 +33,6 @@ python3.pkgs.buildPythonApplication rec {
     pytest-dependency
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   preCheck = ''
     export ASPELL_CONF="dict-dir ${aspellDicts.en}/lib/aspell"
   '';
@@ -50,6 +48,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Fix common misspellings in source code";
+    mainProgram = "codespell";
     homepage = "https://github.com/codespell-project/codespell";
     license = with licenses; [ gpl2Only cc-by-sa-30 ];
     maintainers = with maintainers; [ johnazoidberg SuperSandro2000 ];

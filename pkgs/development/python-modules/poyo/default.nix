@@ -5,6 +5,7 @@
 
 buildPythonPackage rec {
   version = "0.5.0";
+  format = "setuptools";
   pname = "poyo";
 
   src = fetchPypi {

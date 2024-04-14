@@ -40,6 +40,7 @@
 , autoconf
 , automake
 , libtool
+, seatd # =libseat
 , ...
 }:
 
@@ -172,6 +173,11 @@ in
     buildInputs = [ openssl zlib libgit2 ];
   };
 
+  libseat-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ seatd ];
+  };
+
   libsqlite3-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ sqlite ];
@@ -193,8 +199,8 @@ in
   };
 
   graphene-sys = attrs: {
-    nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ graphene gobject-introspection ];
+    nativeBuildInputs = [ pkg-config gobject-introspection ];
+    buildInputs = [ graphene ];
   };
 
   nettle-sys = attrs: {

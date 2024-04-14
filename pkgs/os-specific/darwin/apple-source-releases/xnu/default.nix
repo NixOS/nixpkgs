@@ -34,7 +34,7 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
       --replace "-Werror " ""
 
     substituteInPlace SETUP/kextsymboltool/Makefile \
-      --replace "-lstdc++" "-lc++ -lc++abi"
+      --replace "-lstdc++" "-lc++"
 
     substituteInPlace libsyscall/xcodescripts/mach_install_mig.sh \
       --replace "/usr/include" "/include" \
@@ -63,6 +63,7 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
   MIG = "mig";
   MIGCOM = "migcom";
   STRIP = "${stdenv.cc.bintools.targetPrefix or ""}strip";
+  RANLIB = "${stdenv.cc.bintools.targetPrefix or ""}ranlib";
   NM = "${stdenv.cc.bintools.targetPrefix or ""}nm";
   UNIFDEF = "unifdef";
   DSYMUTIL = "dsymutil";

@@ -13,17 +13,22 @@
 
 buildPythonPackage rec {
   pname = "deezer-python";
-  version = "6.0.0";
-  format = "pyproject";
+  version = "6.1.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "browniebroke";
-    repo = pname;
+    repo = "deezer-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gIjb8+UEMf/wQSJOassMc9MBysTtieExFTIiSq1m/3Y=";
+    hash = "sha256-pzEXiWKMP2Wqme/pqfTMHxWH/4YcCS6u865wslHrUqI=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=deezer" ""
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -41,13 +46,14 @@ buildPythonPackage rec {
     tornado
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=deezer" ""
-  '';
-
   pythonImportsCheck = [
     "deezer"
+  ];
+
+  disabledTests = [
+    # JSONDecodeError issue
+    "test_get_user_flow"
+    "test_with_language_header"
   ];
 
   meta = with lib; {

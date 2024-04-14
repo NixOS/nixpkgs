@@ -7,7 +7,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 
@@ -20,6 +20,7 @@ buildGoModule rec {
 
   meta = {
     description = "Print where symbols are defined in Go source code";
+    mainProgram = "godef";
     homepage = "https://github.com/rogpeppe/godef/";
     maintainers = with lib.maintainers; [ vdemeester rvolosatovs ];
     license = lib.licenses.bsd3;

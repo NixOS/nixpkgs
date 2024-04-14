@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-g7fVeoqquxPa17AfTu6wnB6PQJDluJ21T3ETrcvWtWg=";
   };
 
-  vendorSha256 = "sha256-nH/myA/KdTeFXvmBymXITyx5fdCGnWRn6hNRinXc3/s=";
+  vendorHash = "sha256-nH/myA/KdTeFXvmBymXITyx5fdCGnWRn6hNRinXc3/s=";
 
   subPackages = [
     "./cnitool"
@@ -21,6 +21,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Container Network Interface - networking for Linux containers";
+    mainProgram = "cnitool";
     license = licenses.asl20;
     homepage = "https://github.com/containernetworking/cni";
     maintainers = with maintainers; [ offline vdemeester ];

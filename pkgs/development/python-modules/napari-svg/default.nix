@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , imageio
 , napari-plugin-engine
+, numpy
 , pythonOlder
 , setuptools-scm
 , vispy
@@ -10,28 +11,27 @@
 
 buildPythonPackage rec {
   pname = "napari-svg";
-  version = "0.1.6";
-  format = "setuptools";
+  version = "0.1.10";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "napari";
-    repo = pname;
+    repo = "napari-svg";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lvI6RWT9oUE95vL6WO75CASc/Z+1G5UMm2p8vhqIjA0=";
+    hash = "sha256-ywN9lUwBFW8zP7ivP7MNTYFbTCcmaZxAuKr056uY68Q=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm
   ];
 
   propagatedBuildInputs = [
-    vispy
-    napari-plugin-engine
     imageio
+    napari-plugin-engine
+    numpy
+    vispy
   ];
 
   # Circular dependency: napari
@@ -40,6 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A plugin for writing svg files from napari";
     homepage = "https://github.com/napari/napari-svg";
+    changelog = "https://github.com/napari/napari-svg/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ SomeoneSerge ];
   };

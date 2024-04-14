@@ -3,22 +3,22 @@
 let
   pname = "anki-bin";
   # Update hashes for both Linux and Darwin!
-  version = "2.1.65";
+  version = "24.04";
 
   sources = {
     linux = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-linux-qt6.tar.zst";
-      sha256 = "sha256-JBqW/aCMUyR0H52WMYuVkcE3/t/joLxfvFho64IzvDg=";
+      sha256 = "sha256-mIQ448ecBDrMo3qspXVOBJM/0LebJ9lA1JIwz70Uqhc=";
     };
 
     # For some reason anki distributes completely separate dmg-files for the aarch64 version and the x86_64 version
     darwin-x86_64 = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac-intel-qt6.dmg";
-      sha256 = "sha256-zmCI77yLdoJm/znUgy+xZ8Jd77F3CPlzq3ceBzckA4U=";
+      sha256 = "sha256-ab8cc+QMt3ZJp1NZmAwz2VNZwWQK0DBPKnz2fGmC7Fs=";
     };
     darwin-aarch64 = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac-apple-qt6.dmg";
-      sha256 = "sha256-1owbeL28dnOYD7nR9uZt9EHvFK75GFGRe6S9oV85Eoo=";
+      sha256 = "sha256-bRpPVOXpDRq+EXwW1yWiAgzkcdLhLnMrHo/t9Jgzth0=";
     };
   };
 
@@ -45,7 +45,7 @@ let
   meta = with lib; {
     inherit (anki.meta) license homepage description longDescription;
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
-    maintainers = with maintainers; [ mahmoudk1000 atemu ];
+    maintainers = with maintainers; [ mahmoudk1000 ];
   };
 
   passthru = { inherit sources; };
@@ -54,11 +54,16 @@ let
     inherit pname version;
     name = null; # Appimage sets it to "appimage-env"
 
+    profile = ''
+      # anki vendors QT and mixing QT versions usually causes crashes
+      unset QT_PLUGIN_PATH
+    '';
+
     # Dependencies of anki
-    targetPkgs = pkgs: (with pkgs; [ xorg.libxkbfile xcb-util-cursor-HEAD krb5 ]);
+    targetPkgs = pkgs: (with pkgs; [ xorg.libxkbfile xcb-util-cursor-HEAD krb5 zstd ]);
 
     runScript = writeShellScript "anki-wrapper.sh" ''
-      exec ${unpacked}/bin/anki ${ lib.strings.escapeShellArgs commandLineArgs }
+      exec ${unpacked}/bin/anki ${ lib.strings.escapeShellArgs commandLineArgs } "$@"
     '';
 
     extraInstallCommands = ''

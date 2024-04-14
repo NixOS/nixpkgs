@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "sacremoses";
   version = "0.0.35";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "alvations";
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/alvations/sacremoses";
     description = "Python port of Moses tokenizer, truecaser and normalizer";
+    mainProgram = "sacremoses";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ pashashocky ];

@@ -12,6 +12,8 @@
 , cloudpickle
 , deepmerge
 , fs
+, httpx
+, inflection
 , jinja2
 , numpy
 , opentelemetry-api
@@ -27,7 +29,7 @@
 , pip-tools
 , prometheus-client
 , psutil
-, pynvml
+, nvidia-ml-py
 , python-dateutil
 , python-json-logger
 , python-multipart
@@ -67,7 +69,7 @@
 }:
 
 let
-  version = "1.1.1";
+  version = "1.2.5";
   aws = [ fs-s3fs ];
   grpc = [
     grpcio
@@ -102,9 +104,15 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "bentoml";
     repo = "BentoML";
-    rev = "v${version}";
-    hash = "sha256-V5lquPZT7XBnRdPIEfgbxIBHX+i4N081SYQVK0CkSo8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-GBKxyjCs02mxYiMK4GhgFUATRCUSVf8mFbWjuPVD7SU=";
   };
+
+  # https://github.com/bentoml/BentoML/pull/4227 should fix this test
+  postPatch = ''
+    substituteInPlace tests/unit/_internal/utils/test_analytics.py \
+      --replace "requests" "httpx"
+  '';
 
   pythonRelaxDeps = [
     "opentelemetry-semantic-conventions"
@@ -125,6 +133,8 @@ buildPythonPackage {
     cloudpickle
     deepmerge
     fs
+    httpx
+    inflection
     jinja2
     numpy
     opentelemetry-api
@@ -140,7 +150,7 @@ buildPythonPackage {
     pip-tools
     prometheus-client
     psutil
-    pynvml
+    nvidia-ml-py
     python-dateutil
     python-json-logger
     python-multipart
@@ -194,5 +204,7 @@ buildPythonPackage {
     changelog = "https://github.com/bentoml/BentoML/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada natsukium ];
+    # https://github.com/bentoml/BentoML/issues/3885
+    broken = versionAtLeast pydantic.version "2";
   };
 }

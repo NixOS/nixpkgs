@@ -1,23 +1,19 @@
 { buildPythonPackage
 , isPyPy
 , pytest
-, hypothesis
-, pygments
 }:
 
 buildPythonPackage rec {
   pname = "pytest-tests";
   inherit (pytest) version;
+  format = "other";
 
   src = pytest.testout;
 
   dontBuild = true;
   dontInstall = true;
 
-  nativeCheckInputs = [
-    hypothesis
-    pygments
-  ];
+  nativeCheckInputs = pytest.optional-dependencies.testing;
 
   doCheck = !isPyPy; # https://github.com/pytest-dev/pytest/issues/3460
 
@@ -25,7 +21,7 @@ buildPythonPackage rec {
   # test_missing_required_plugins will emit deprecation warning which is treated as error
   checkPhase = ''
     runHook preCheck
-    ${pytest.out}/bin/py.test -x testing/ \
+    ${pytest.out}/bin/pytest -x testing/ \
       --ignore=testing/test_junitxml.py \
       --ignore=testing/test_argcomplete.py \
       -k "not test_collect_pyargs_with_testpaths and not test_missing_required_plugins"

@@ -1,10 +1,12 @@
 { lib
 , buildPythonPackage
+, deprecated
 , fetchPypi
 , google-api-core
 , google-cloud-core
 , google-cloud-testutils
 , grpc-google-iam-v1
+, grpc-interceptor
 , libcst
 , mock
 , proto-plus
@@ -13,24 +15,31 @@
 , pytestCheckHook
 , pythonOlder
 , sqlparse
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-spanner";
-  version = "3.38.0";
-  format = "setuptools";
+  version = "3.44.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+JprkY2HU6RjkarQ74IemkD8lC3CW53x0kDwhrX/jRk=";
+    hash = "sha256-NTzAsG/UVn2BxPwUxE/ZnXqkCA9LwhmDRoq3LdstLIo=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
+    deprecated
     google-api-core
     google-cloud-core
     grpc-google-iam-v1
+    grpc-interceptor
     proto-plus
     protobuf
     sqlparse

@@ -21,6 +21,7 @@ let
 in buildPythonPackage rec {
   pname = "online-judge-api-client";
   version = "10.10.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "online-judge-tools";
@@ -53,6 +54,7 @@ in buildPythonPackage rec {
 
   meta = with lib; {
     description = "API client to develop tools for competitive programming";
+    mainProgram = "oj-api";
     homepage = "https://github.com/online-judge-tools/api-client";
     license = licenses.mit;
     maintainers = with maintainers; [ sei40kr ];

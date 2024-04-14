@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ ma27 ];
+    mainProgram = "rpcgen";
   };
 }

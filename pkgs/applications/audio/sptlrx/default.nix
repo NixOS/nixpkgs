@@ -29,5 +29,6 @@ buildGoModule rec {
     changelog = "https://github.com/raitonoberu/sptlrx/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ MoritzBoehme ];
+    mainProgram = "sptlrx";
   };
 }

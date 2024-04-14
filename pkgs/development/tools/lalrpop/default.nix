@@ -1,6 +1,5 @@
 { lib
 , rustPlatform
-, rust
 , fetchFromGitHub
 , substituteAll
 , stdenv
@@ -24,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   patches = [
     (substituteAll {
       src = ./use-correct-binary-path-in-tests.patch;
-      target_triple = rust.toRustTarget stdenv.hostPlatform;
+      target_triple = stdenv.hostPlatform.rust.rustcTarget;
     })
   ];
 
@@ -41,6 +40,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/lalrpop/lalrpop";
     changelog = "https://github.com/lalrpop/lalrpop/blob/${src.rev}/RELEASES.md";
     license = with licenses; [ asl20 /* or */ mit ];
+    mainProgram = "lalrpop";
     maintainers = with maintainers; [ chayleaf ];
   };
 }

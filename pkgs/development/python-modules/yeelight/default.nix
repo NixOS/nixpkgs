@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "yeelight";
-  version = "0.7.12";
+  version = "0.7.14";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "stavros";
     repo = "python-yeelight";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oTlfrx3YN6mPxu7+xzTmYG2L7KulFDlB3+oOhVOFSA8=";
+    hash = "sha256-BnMvRs95rsmoBa/5bp0zShgU1BBHtZzyADjbH0y1d/o=";
   };
 
   nativeBuildInputs = [ flit-core ];

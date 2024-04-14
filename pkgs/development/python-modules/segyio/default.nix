@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "segyio";
-  version = "1.9.11";
+  version = "1.9.12";
 
   postPatch = ''
     # Removing unecessary build dependency
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "equinor";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-4izeMRgg5nJ9pRfSEMDlKSYYNWkhbKEzIz7czea6Vrc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+N2JvHBxpdbysn4noY/9LZ4npoQ9143iFEzaxoafnms=";
   };
 
   nativeBuildInputs = [ cmake ninja python scikit-build ];

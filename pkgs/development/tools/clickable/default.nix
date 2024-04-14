@@ -76,6 +76,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A build system for Ubuntu Touch apps";
+    mainProgram = "clickable";
     homepage = "https://clickable-ut.dev";
     changelog = "https://clickable-ut.dev/en/latest/changelog.html";
     license = lib.licenses.gpl3Only;

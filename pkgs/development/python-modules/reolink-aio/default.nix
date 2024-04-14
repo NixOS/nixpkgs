@@ -1,17 +1,18 @@
 { lib
 , aiohttp
+, aiortsp
 , buildPythonPackage
 , fetchFromGitHub
-, ffmpeg-python
 , orjson
 , pythonOlder
-, requests
+, setuptools
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "reolink-aio";
-  version = "0.7.6";
-  format = "setuptools";
+  version = "0.8.9";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -19,28 +20,26 @@ buildPythonPackage rec {
     owner = "starkillerOG";
     repo = "reolink_aio";
     rev = "refs/tags/${version}";
-    hash = "sha256-muxM9+3D8WL2muw5yxbYKmbkVc5lTcj9XQOr67hb/pU=";
+    hash = "sha256-MUhB8A51dj+FA3+lvBrFyAWizKq5CpYwo38E1euJsHs=";
   };
 
-  postPatch = ''
-    # Packages in nixpkgs is different than the module name
-    substituteInPlace setup.py \
-      --replace "ffmpeg" "ffmpeg-python"
-  '';
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp
-    ffmpeg-python
+    aiortsp
     orjson
-    requests
+    typing-extensions
   ];
-
-  # All tests require a network device
-  doCheck = false;
 
   pythonImportsCheck = [
     "reolink_aio"
   ];
+
+  # All tests require a network device
+  doCheck = false;
 
   meta = with lib; {
     description = "Module to interact with the Reolink IP camera API";

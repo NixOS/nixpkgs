@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "tiny-proxy";
-  version = "0.2.0";
+  version = "0.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "romis2012";
     repo = "tiny-proxy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-emQRiG2QiuZt4/lI8shJOvMpaqXNyJ/PMvtDZPaoyLo=";
+    hash = "sha256-59T09qcOstl/yfzQmNlTNxGerQethZntwDAHwz/5FFM=";
   };
 
   nativeBuildInputs = [

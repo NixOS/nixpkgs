@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "flower";
-  version = "2.0.0";
+  version = "2.0.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Vld4XXKKVJFCVsNP0FUf4tcVKqsIBi68ZFv4a5e4rsU=";
+    sha256 = "sha256-WrcXuXlTB3DBavtItQ0qmNI8Pp/jmFHc9rxNAYRaAqA=";
   };
 
   postPatch = ''

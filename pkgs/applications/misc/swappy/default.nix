@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "jtheoof";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/XPvy98Il4i8cDl9vH6f0/AZmiSqseSXnen7HfMqCDo=";
+    hash = "sha256-/XPvy98Il4i8cDl9vH6f0/AZmiSqseSXnen7HfMqCDo=";
   };
 
   nativeBuildInputs = [ glib meson ninja pkg-config scdoc wrapGAppsHook ];
@@ -40,9 +40,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/jtheoof/swappy";
     description = "A Wayland native snapshot editing tool, inspired by Snappy on macOS";
+    homepage = "https://github.com/jtheoof/swappy";
     license = licenses.mit;
+    mainProgram = "swappy";
     maintainers = [ maintainers.matthiasbeyer ];
     platforms = platforms.linux;
   };

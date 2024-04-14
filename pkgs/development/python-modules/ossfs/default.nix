@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "ossfs";
-  version = "2023.5.0";
+  version = "2023.12.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,10 +20,8 @@ buildPythonPackage rec {
     owner = "fsspec";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-h9h5h2eJO1wzOR7oC2usrEx0ADSoKDu74YczAmZL9NU=";
+    hash = "sha256-N1NkpI8inGJCf0xuc+FFmVX85CS7vqzoNddxZ9kqEk0=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   pythonRelaxDeps = [
     "aiooss2"

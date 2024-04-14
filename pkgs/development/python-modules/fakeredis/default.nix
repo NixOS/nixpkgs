@@ -1,23 +1,24 @@
 { lib
-, aioredis
 , buildPythonPackage
 , fetchFromGitHub
 , hypothesis
+, jsonpath-ng
 , lupa
 , poetry-core
+, pybloom-live
+, pyprobables
 , pytest-asyncio
-, pytestCheckHook
 , pytest-mock
+, pytestCheckHook
 , pythonOlder
 , redis
-, six
 , sortedcontainers
 }:
 
 buildPythonPackage rec {
   pname = "fakeredis";
-  version = "2.17.0";
-  format = "pyproject";
+  version = "2.21.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     owner = "dsoftwareinc";
     repo = "fakeredis-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nDxuXDWnTt/ljd/M4pElo4U8jn91l+J9fPAfYpS0mOc=";
+    hash = "sha256-GIg+a8G5S0dmbvMKqS/Vn+wzNM6iNIs3bKPqhecsQt4=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +35,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     redis
-    six
     sortedcontainers
   ];
 
@@ -49,8 +49,17 @@ buildPythonPackage rec {
     lua = [
       lupa
     ];
-    aioredis = [
-      aioredis
+    json = [
+      jsonpath-ng
+    ];
+    bf = [
+      pyprobables
+    ];
+    cf = [
+      pyprobables
+    ];
+    probabilistic = [
+      pyprobables
     ];
   };
 
@@ -62,7 +71,7 @@ buildPythonPackage rec {
     description = "Fake implementation of Redis API";
     homepage = "https://github.com/dsoftwareinc/fakeredis-py";
     changelog = "https://github.com/cunla/fakeredis-py/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };
 }

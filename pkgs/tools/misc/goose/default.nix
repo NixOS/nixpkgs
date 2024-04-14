@@ -6,17 +6,17 @@
 
 buildGoModule rec {
   pname = "goose";
-  version = "3.14.0";
+  version = "3.19.2";
 
   src = fetchFromGitHub {
     owner = "pressly";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-4WBYfxEmEuFZM+Qt2miw6GxuV5B2nc4XXeyDQi1IISg=";
+    hash = "sha256-kGa3vZSFQ8Dgndc0qRnFnQwlU2hst6j3UFUXw+tfYR0=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-zsqulNAPcGVp6+ClYtRwM5U6YwRak4ttSLbgPWDxtbI=";
+  vendorHash = "sha256-aoBxReKRk7dkFR/fJ5uHDZrJRGutLTU2BhDWCTBN2BA=";
 
   # end-to-end tests require a docker daemon
   postPatch = ''
@@ -43,5 +43,6 @@ buildGoModule rec {
     homepage = "https://pressly.github.io/goose/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ yuka ];
+    mainProgram = "goose";
   };
 }

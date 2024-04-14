@@ -1,14 +1,14 @@
-{ fetchFromGitHub, lib, nodejs, stdenv, yarn }:
+{ fetchFromGitHub, lib, nodejs, stdenv, testers, yarn }:
 
-stdenv.mkDerivation rec {
-  name = "yarn-berry";
-  version = "3.4.1";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "yarn-berry";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "yarnpkg";
     repo = "berry";
-    rev = "@yarnpkg/cli/${version}";
-    hash = "sha256-eBBB/F+mnGi93Qf23xgt306/ogoV76RXOM90O14u5Tw=";
+    rev = "@yarnpkg/cli/${finalAttrs.version}";
+    hash = "sha256-75bERA1uZeywMjYznFDyk4+AtVDLo7eIajVtWdAD/RA=";
   };
 
   buildInputs = [
@@ -33,11 +33,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-   meta = with lib; {
+  passthru.updateScript = ./update.sh;
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+  };
+
+  meta = with lib; {
     homepage = "https://yarnpkg.com/";
     description = "Fast, reliable, and secure dependency management.";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ryota-ka ];
+    maintainers = with maintainers; [ ryota-ka thehedgeh0g DimitarNestorov ];
     platforms = platforms.unix;
+    mainProgram = "yarn";
   };
-}
+})

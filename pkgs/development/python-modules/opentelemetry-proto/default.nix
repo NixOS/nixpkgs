@@ -10,17 +10,17 @@
 buildPythonPackage {
   inherit (opentelemetry-api) version src;
   pname = "opentelemetry-proto";
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
-  sourceRoot = "source/opentelemetry-proto";
+  disabled = pythonOlder "3.8";
 
-  format = "pyproject";
+  sourceRoot = "${opentelemetry-api.src.name}/opentelemetry-proto";
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     protobuf
   ];
 

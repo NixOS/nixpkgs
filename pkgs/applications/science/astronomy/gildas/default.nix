@@ -7,8 +7,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  srcVersion = "feb23a";
-  version = "20230201_a";
+  srcVersion = "aug23a";
+  version = "20230801_a";
   pname = "gildas";
 
   src = fetchurl {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     # source code of the previous release to a different directory
     urls = [ "http://www.iram.fr/~gildas/dist/gildas-src-${srcVersion}.tar.xz"
       "http://www.iram.fr/~gildas/dist/archive/gildas/gildas-src-${srcVersion}.tar.xz" ];
-    sha256 = "sha256-A6jtcC8QMtJ7YcNaPiOjwNPDGPAjmRA3jZLEt5iBONE=";
+    sha256 = "sha256-jlyv2K1V+510C4uLek4oofm13d40nGJ46wqjW+tjfq4=";
   };
 
   nativeBuildInputs = [ pkg-config groff perl getopt gfortran which ];
@@ -38,14 +38,15 @@ stdenv.mkDerivation rec {
     echo "gag_doc:        $out/share/doc/" >> kernel/etc/gag.dico.lcl
   '';
 
+  userExec = "astro class greg imager mapping sic";
+
   postInstall=''
     mkdir -p $out/bin
     cp -a ../gildas-exe-${srcVersion}/* $out
     mv $out/$GAG_EXEC_SYSTEM $out/libexec
-    cp admin/wrapper.sh $out/bin/gildas-wrapper.sh
-    chmod 755 $out/bin/gildas-wrapper.sh
-    for i in $out/libexec/bin/* ; do
-      ln -s $out/bin/gildas-wrapper.sh $out/bin/$(basename "$i")
+    for i in ${userExec} ; do
+      cp admin/wrapper.sh $out/bin/$i
+      chmod 755 $out/bin/$i
     done
   '';
 

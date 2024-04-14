@@ -16,12 +16,11 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "insomnia";
-  version = "2023.4.0";
+  version = "8.6.1";
 
   src = fetchurl {
-    url =
-      "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.deb";
-    sha256 = "sha256-7tkd0HaJeDdCvX1t1XCHrrQ23xFrcMsy1nhJJEp6klk=";
+    url = "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.deb";
+    hash = "sha256-qy2j6kdmtDgfTab8gTz7eb/uNKwtzbxcoJHNibVa35c=";
   };
 
   nativeBuildInputs = [
@@ -82,16 +81,20 @@ in stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    wrapProgram "$out/bin/insomnia" "''${gappsWrapperArgs[@]}" --prefix LD_LIBRARY_PATH : ${runtimeLibs}
+    wrapProgramShell "$out/bin/insomnia" \
+        "''${gappsWrapperArgs[@]}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}" \
+        --prefix LD_LIBRARY_PATH : ${runtimeLibs}
   '';
 
   meta = with lib; {
     homepage = "https://insomnia.rest/";
     description = "The most intuitive cross-platform REST API Client";
+    mainProgram = "insomnia";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ markus1189 babariviere ];
+    maintainers = with maintainers; [ markus1189 babariviere kashw2 ];
   };
 
 }

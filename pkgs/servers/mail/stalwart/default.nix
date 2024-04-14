@@ -10,10 +10,11 @@
 , stdenv
 , darwin
 , nix-update-script
+, rocksdb
 }:
 
 let
-  version = "0.3.2";
+  version = "0.6.0";
 in
 rustPlatform.buildRustPackage {
   pname = "stalwart-mail";
@@ -23,27 +24,18 @@ rustPlatform.buildRustPackage {
     owner = "stalwartlabs";
     repo = "mail-server";
     rev = "v${version}";
-    hash = "sha256-5+r1xWpxIwyvRUPw2X4vIvbvqUe6lBcYurbxwNySXAY=";
+    hash = "sha256-OHwUWSUW6ovLQTxnuUrolQGhxbhp4YqKSH+ZTpe2WXc=";
     fetchSubmodules = true;
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
-    outputHashes = {
-      "hyper-util-0.0.0" = "sha256-wGtB6hUjIOKR7UZJrX9ve4x4/7TDQuSPG0Sq9VyW7iI=";
-      "jmap-client-0.3.0" = "sha256-GNqSPygiVq5Z9y8Kfhzacq3lTIEg2o4UxzOMDbBO7xY=";
-      "mail-auth-0.3.2" = "sha256-CTafQCXPo91ZUlfS9JUqU+RfUf4+6EbdG97+nIqQtNw=";
-      "mail-builder-0.3.0" = "sha256-0o/fV7ZKiRKeitBBt8yOM/2nXIEgOGSMEMaBj+3i7Kw=";
-      "mail-parser-0.8.2" = "sha256-XvKEgzQ+HDoLI16CmqE/RRgApg0q9Au9sqOOEpZz6W0=";
-      "mail-send-0.4.0" = "sha256-bMPI871hBj/RvrW4kESGS9XzfnkSo8r2/9uUwgE12EU=";
-      "sieve-rs-0.3.1" = "sha256-FJBQorFRXQYhiCzprAqiv69Qae9YI5OAipjayooFDAw=";
-      "smtp-proto-0.1.1" = "sha256-HhKZQHQv3tMEfRZgCoAtyxVzwHbcB4FSjKlMoU1PkHg=";
-    };
   };
 
   nativeBuildInputs = [
     pkg-config
     protobuf
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
@@ -60,6 +52,8 @@ rustPlatform.buildRustPackage {
   env = {
     OPENSSL_NO_VENDOR = true;
     ZSTD_SYS_USE_PKG_CONFIG = true;
+    ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
+    ROCKSDB_LIB_DIR = "${rocksdb}/lib";
   };
 
   # Tests require reading to /etc/resolv.conf

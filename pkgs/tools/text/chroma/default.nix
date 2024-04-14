@@ -17,7 +17,7 @@ buildGoModule rec {
     inherit (srcInfo) sha256;
   };
 
-  vendorSha256 = "1qawayihklidfzln3jr899wh4zp9w7yq3i18klaylqndrg47k286";
+  vendorHash = "sha256-Bol5yMvNYuoVnSjEgf3h6X4CeUooy2Hpdy3SCaNXXOE=";
 
   modRoot = "./cmd/chroma";
 
@@ -33,5 +33,6 @@ buildGoModule rec {
     description = "A general purpose syntax highlighter in pure Go";
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann ];
+    mainProgram = "chroma";
   };
 }

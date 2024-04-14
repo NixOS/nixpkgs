@@ -2,16 +2,16 @@
 
 buildNpmPackage rec {
   pname = "uptime-kuma";
-  version = "1.22.1";
+  version = "1.23.11";
 
   src = fetchFromGitHub {
     owner = "louislam";
     repo = "uptime-kuma";
     rev = version;
-    hash = "sha256-thLhJF6+DS4plqKWYidb1e/KW5PvPf/Gc2iH2SEooYw=";
+    hash = "sha256-PhIe2aDz6hr8001LL8N5L8jcUyzuamU0yYIVKcwmTlw=";
   };
 
-  npmDepsHash = "sha256-CZfWsjtooxa6BJ5ieptUuYSQ7Ve/uVbdMPLEn2+WAX4=";
+  npmDepsHash = "sha256-Jyp/xY9K3sfqVnR7NQhgly8B54FmvnrStFO2GO2Kszs=";
 
   patches = [
     # Fixes the permissions of the database being not set correctly
@@ -37,6 +37,7 @@ buildNpmPackage rec {
 
   meta = with lib; {
     description = "A fancy self-hosted monitoring tool";
+    mainProgram = "uptime-kuma-server";
     homepage = "https://github.com/louislam/uptime-kuma";
     changelog = "https://github.com/louislam/uptime-kuma/releases/tag/${version}";
     license = licenses.mit;

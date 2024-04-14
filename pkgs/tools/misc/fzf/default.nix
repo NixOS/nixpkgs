@@ -1,40 +1,26 @@
-{ stdenv
-, lib
+{ lib
 , buildGoModule
 , fetchFromGitHub
-, writeShellScriptBin
 , runtimeShell
 , installShellFiles
 , bc
 , ncurses
-, perl
-, glibcLocales
 , testers
 , fzf
 }:
 
-let
-  # on Linux, wrap perl in the bash completion scripts with the glibc locales,
-  # so that using the shell completion (ctrl+r, etc) doesn't result in ugly
-  # warnings on non-nixos machines
-  ourPerl = if !stdenv.isLinux then perl else (
-    writeShellScriptBin "perl" ''
-      export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
-      exec ${perl}/bin/perl "$@"
-    '');
-in
 buildGoModule rec {
   pname = "fzf";
-  version = "0.42.0";
+  version = "0.49.0";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    hash = "sha256-+65R7cbj62UXw3ZYXIK9VcAeGnpP4pLigr21awoPLi4=";
+    hash = "sha256-XecMHKi5JMWx3RHQRk2FqS3SjyR6KzWjfyQ5JCI45xM=";
   };
 
-  vendorHash = "sha256-O6OjBbrVAxDQd27ar2mmFkU1XyVM2C8SJWJ54rgaf2s=";
+  vendorHash = "sha256-ZEwB2GKohmOx8xosj14VII6sQ4a82s7+h9r620MKEeU=";
 
   CGO_ENABLED = 0;
 
@@ -57,13 +43,9 @@ buildGoModule rec {
         exit 1
     fi
 
-    # Has a sneaky dependency on perl
-    # Include first args to make sure we're patching the right thing
-    substituteInPlace shell/key-bindings.bash \
-      --replace " perl -n " " ${ourPerl}/bin/perl -n "
     # fzf-tmux depends on bc
-   substituteInPlace bin/fzf-tmux \
-     --replace "bc" "${bc}/bin/bc"
+    substituteInPlace bin/fzf-tmux \
+      --replace "bc" "${bc}/bin/bc"
   '';
 
   postInstall = ''
@@ -79,7 +61,10 @@ buildGoModule rec {
     install -D shell/* -t $out/share/fzf/
     install -D shell/key-bindings.fish $out/share/fish/vendor_functions.d/fzf_key_bindings.fish
     mkdir -p $out/share/fish/vendor_conf.d
-    echo fzf_key_bindings > $out/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
+    cat << EOF > $out/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
+      status is-interactive; or exit 0
+      fzf_key_bindings
+    EOF
 
     cat <<SCRIPT > $out/bin/fzf-share
     #!${runtimeShell}
@@ -101,5 +86,6 @@ buildGoModule rec {
     maintainers = with maintainers; [ Br1ght0ne ma27 zowoq ];
     platforms = platforms.unix;
     changelog = "https://github.com/junegunn/fzf/blob/${version}/CHANGELOG.md";
+    mainProgram = "fzf";
   };
 }

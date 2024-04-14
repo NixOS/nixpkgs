@@ -6,18 +6,12 @@ let
     repo = "llvm-project";
     # codelldb/14.x branch
     rev = "4c267c83cbb55fedf2e0b89644dc1db320fdfde7";
-    sha256 = "sha256-jM//ej6AxnRYj+8BAn4QrxHPT6HiDzK5RqHPSg3dCcw=";
+    hash = "sha256-jM//ej6AxnRYj+8BAn4QrxHPT6HiDzK5RqHPSg3dCcw=";
   };
 in (llvmPackages.lldb.overrideAttrs (oldAttrs: rec {
   passthru = (oldAttrs.passthru or {}) // {
     inherit llvmSrc;
   };
-
-  patches = oldAttrs.patches ++ [
-    # backport of https://github.com/NixOS/nixpkgs/commit/0d3002334850a819d1a5c8283c39f114af907cd4
-    # remove when https://github.com/NixOS/nixpkgs/issues/166604 fixed
-    ./fix-python-installation.patch
-  ];
 
   doInstallCheck = true;
 

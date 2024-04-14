@@ -23,6 +23,12 @@ buildPythonApplication rec {
     "doc"
   ];
 
+  postPatch = ''
+    # Remove when https://github.com/posativ/isso/pull/973 is available.
+    substituteInPlace isso/tests/test_comments.py \
+      --replace "self.client.delete_cookie('localhost.local', '1')" "self.client.delete_cookie(key='1', domain='localhost')"
+  '';
+
   propagatedBuildInputs = [
     itsdangerous
     jinja2
@@ -63,6 +69,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "A commenting server similar to Disqus";
+    mainProgram = "isso";
     homepage = "https://posativ.org/isso/";
     license = licenses.mit;
     maintainers = with maintainers; [ fgaz ];

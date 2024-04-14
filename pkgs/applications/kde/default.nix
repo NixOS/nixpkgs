@@ -13,7 +13,7 @@ IF YOUR PACKAGE IS NOT LISTED IN `./srcs.nix`, IT DOES NOT GO HERE.
 Many of the packages released upstream are not yet built in Nixpkgs due to lack
 of demand. To add a Nixpkgs build for an upstream package, copy one of the
 existing packages here and modify it as necessary. A simple example package that
-still shows most of the available features is in `./gwenview.nix`.
+still shows most of the available features is in `./gwenview`.
 
 # Updates
 
@@ -73,6 +73,7 @@ let
       akonadiconsole = callPackage ./akonadiconsole.nix {};
       akregator = callPackage ./akregator.nix {};
       analitza = callPackage ./analitza.nix {};
+      arianna = callPackage ./arianna.nix {};
       ark = callPackage ./ark {};
       baloo-widgets = callPackage ./baloo-widgets.nix {};
       bomber = callPackage ./bomber.nix {};
@@ -91,15 +92,17 @@ let
       ghostwriter = callPackage ./ghostwriter.nix {};
       granatier = callPackage ./granatier.nix {};
       grantleetheme = callPackage ./grantleetheme {};
-      gwenview = callPackage ./gwenview.nix {};
+      gwenview = callPackage ./gwenview {};
       incidenceeditor = callPackage ./incidenceeditor.nix {};
+      itinerary = callPackage ./itinerary.nix {};
       juk = callPackage ./juk.nix {};
       k3b = callPackage ./k3b.nix {};
       kaccounts-integration = callPackage ./kaccounts-integration.nix {};
       kaccounts-providers = callPackage ./kaccounts-providers.nix {};
       kaddressbook = callPackage ./kaddressbook.nix {};
       kalarm = callPackage ./kalarm.nix {};
-      kalendar = callPackage ./kalendar.nix {};
+      kalgebra = callPackage ./kalgebra.nix {};
+      merkuro = callPackage ./merkuro.nix {};
       kalzium = callPackage ./kalzium.nix {};
       kamoso = callPackage ./kamoso.nix {};
       kapman = callPackage ./kapman.nix {};
@@ -119,7 +122,7 @@ let
       kdebugsettings = callPackage ./kdebugsettings.nix {};
       kdeconnect-kde = callPackage ./kdeconnect-kde.nix {};
       kdegraphics-mobipocket = callPackage ./kdegraphics-mobipocket.nix {};
-      kdegraphics-thumbnailers = callPackage ./kdegraphics-thumbnailers.nix {};
+      kdegraphics-thumbnailers = callPackage ./kdegraphics-thumbnailers {};
       kdenetwork-filesharing = callPackage ./kdenetwork-filesharing.nix {};
       kdenlive = callPackage ./kdenlive {};
       kdepim-addons = callPackage ./kdepim-addons.nix {};
@@ -134,7 +137,6 @@ let
       kdiamond = callPackage ./kdiamond.nix {};
       keditbookmarks = callPackage ./keditbookmarks.nix {};
       kfind = callPackage ./kfind.nix {};
-      kfloppy = callPackage ./kfloppy.nix {};
       kgeography = callPackage ./kgeography.nix {};
       kget = callPackage ./kget.nix {};
       kgpg = callPackage ./kgpg.nix {};
@@ -179,10 +181,13 @@ let
       kontact = callPackage ./kontact.nix {};
       konversation = callPackage ./konversation.nix {};
       kontactinterface = callPackage ./kontactinterface.nix {};
+      kopeninghours = callPackage ./kopeninghours.nix {};
       korganizer = callPackage ./korganizer.nix {};
+      kosmindoormap = callPackage ./kosmindoormap.nix {};
       kpat = callPackage ./kpat.nix {};
       kpimtextedit = callPackage ./kpimtextedit.nix {};
       kpkpass = callPackage ./kpkpass.nix {};
+      kpmcore = callPackage ./kpmcore {};
       kpublictransport = callPackage ./kpublictransport.nix {};
       kqtquickcharts = callPackage ./kqtquickcharts.nix {};
       krdc = callPackage ./krdc.nix {};
@@ -226,6 +231,7 @@ let
       minuet = callPackage ./minuet.nix {};
       okular = callPackage ./okular.nix {};
       palapeli = callPackage ./palapeli.nix {};
+      partitionmanager = callPackage ./partitionmanager {};
       picmi = callPackage ./picmi.nix {};
       pim-data-exporter = callPackage ./pim-data-exporter.nix {};
       pim-sieve-editor = callPackage ./pim-sieve-editor.nix {};

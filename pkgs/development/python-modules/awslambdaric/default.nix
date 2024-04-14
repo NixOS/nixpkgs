@@ -5,25 +5,28 @@
 , fetchpatch
 , isPy27
 , pytestCheckHook
-, autoconf
+, autoconf271
 , automake
 , cmake
 , gcc
 , libtool
 , perl
+, setuptools
 , simplejson
 }:
 
 buildPythonPackage rec {
   pname = "awslambdaric";
-  version = "2.0.0";
+  version = "2.0.10";
+  pyproject = true;
+
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-lambda-python-runtime-interface-client";
-    rev = version;
-    sha256 = "1amlaq119mk8fa3fxi3d6vgp83vcd81mbk53jzbixacklmcsp50k";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-tvTN6gV73Qnbe4OBHtfxt4jXV32fMTPE4H79WIkgkxE=";
   };
 
   patches = [
@@ -41,7 +44,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ simplejson ];
 
-  nativeBuildInputs = [ autoconf automake cmake libtool perl ];
+  nativeBuildInputs = [ autoconf271 automake cmake libtool perl setuptools ];
 
   buildInputs = [ gcc ];
 

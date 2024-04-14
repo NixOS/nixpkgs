@@ -27,13 +27,13 @@ assert !(pulseaudioSupport && portaudioSupport);
 
 gnuradioMinimal.pkgs.mkDerivation rec {
   pname = "gqrx";
-  version = "2.16";
+  version = "2.17.4";
 
   src = fetchFromGitHub {
     owner = "gqrx-sdr";
     repo = "gqrx";
     rev = "v${version}";
-    hash = "sha256-14MVimOxM7upq6vpEhvVRnrverBuFToE2ktNhG59LKE=";
+    hash = "sha256-7TjmtF0B+dxUcoXXzpF47dHwxhNMKKQ8Mpf/FFTuwl4=";
   };
 
   nativeBuildInputs = [
@@ -81,6 +81,7 @@ gnuradioMinimal.pkgs.mkDerivation rec {
 
   meta = with lib; {
     description = "Software defined radio (SDR) receiver";
+    mainProgram = "gqrx";
     longDescription = ''
       Gqrx is a software defined radio receiver powered by GNU Radio and the Qt
       GUI toolkit. It can process I/Q data from many types of input devices,

@@ -31,6 +31,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://github.com/jgeumlek/MoltenGamepad";
     description = "Flexible Linux input device translator, geared for gamepads";
+    mainProgram = "moltengamepad";
     license = licenses.mit;
     maintainers = [ maintainers.ebzzry ];
     platforms = platforms.linux;

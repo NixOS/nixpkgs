@@ -12,13 +12,14 @@ buildGoModule rec {
   };
 
   deleteVendor = true;
-  vendorSha256 = "sha256-4h/+ZNxlJPYY0Kyu2vDE1pDXxC/kGE5JdnagWVOGzAE=";
+  vendorHash = "sha256-4h/+ZNxlJPYY0Kyu2vDE1pDXxC/kGE5JdnagWVOGzAE=";
 
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     homepage = "https://rsc.io/2fa";
     description = "Two-factor authentication on the command line";
+    mainProgram = "2fa";
     license = licenses.bsd3;
     maintainers = with maintainers; [ rvolosatovs ];
   };

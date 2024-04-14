@@ -12,10 +12,10 @@ buildGoModule rec {
     owner = "evilsocket";
     repo = pname;
     inherit rev;
-    sha256 = "1a1bc2za2ppb7j7ibhykgxwivwmx7yq0593255jd55gl60r0l7i4";
+    hash = "sha256-JB4KMjD0ldJkKWKkArA/vfIdeX/TwxWPPOteob5gK6g=";
   };
 
-  vendorSha256 = "1ml3x00zzkwj1f76a4wk2y8z4bxjhadf2p1li96qjpnc8fgfd50l";
+  vendorHash = "sha256-FJTmnkPMXolNijRc4ZqCsi/ykReTE2WOC5LP/wHog9Y=";
 
   meta = with lib; {
     description = "Tool for monitoring and profiling single processes";

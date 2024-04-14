@@ -43,5 +43,6 @@ mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
+    mainProgram = "dialogbox";
   };
 }

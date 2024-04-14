@@ -14,17 +14,17 @@
 buildPythonPackage {
   inherit (opentelemetry-instrumentation) version src;
   pname = "opentelemetry-instrumentation-asgi";
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
-  sourceRoot = "source/instrumentation/opentelemetry-instrumentation-asgi";
+  disabled = pythonOlder "3.8";
 
-  format = "pyproject";
+  sourceRoot = "${opentelemetry-instrumentation.src.name}/instrumentation/opentelemetry-instrumentation-asgi";
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asgiref
     opentelemetry-instrumentation
     opentelemetry-api

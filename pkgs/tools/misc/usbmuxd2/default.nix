@@ -1,30 +1,29 @@
 { lib
 , clangStdenv
 , fetchFromGitHub
-, fetchpatch
 , autoreconfHook
 , pkg-config
 , libimobiledevice
 , libusb1
 , avahi
 , clang
+, git
 }: let
 
   libgeneral = clangStdenv.mkDerivation rec {
     pname = "libgeneral";
-    version = "unstable-2021-12-12";
+    version = "74";
     src = fetchFromGitHub {
       owner = "tihmstar";
       repo = pname;
-      rev = "017d71edb0a12ff4fa01a39d12cd297d8b3d8d34";
-      hash = "sha256-NrSl/BeKe3wahiYTHGRVSq3PLgQfu76kHCC5ziY7cgQ=";
+      rev = "refs/tags/${version}";
+      hash = "sha256-6aowcIYssc1xqH6kTi/cpH2F7rgc8+lGC8HgZWYH2w0=";
+      # Leave DotGit so that autoconfigure can read version from git tags
+      leaveDotGit = true;
     };
-    postPatch = ''
-      # Set package version so we don't require git
-      sed -i '/AC_INIT/s/m4_esyscmd.*/${version})/' configure.ac
-    '';
     nativeBuildInputs = [
       autoreconfHook
+      git
       pkg-config
     ];
     meta = with lib; {
@@ -38,33 +37,26 @@
 in
 clangStdenv.mkDerivation rec {
   pname = "usbmuxd2";
-  version = "unstable-2022-02-07";
+  version = "unstable-2023-12-12";
 
   src = fetchFromGitHub {
     owner = "tihmstar";
     repo = pname;
-    rev = "753b79eaf317c56df6c8b1fb6da5847cc54a0bb0";
-    hash = "sha256-T9bt3KOJwFpdPeFuXfBhkBZNaNzix3Q3D47vASR+fVg=";
+    rev = "2ce399ddbacb110bd5a83a6b8232d42c9a9b6e84";
+    hash = "sha256-UVLLE73XuWTgGlpTMxUDykFmiBDqz6NCRO2rpRAYfow=";
+    # Leave DotGit so that autoconfigure can read version from git tags
+    leaveDotGit = true;
   };
 
-  patches = [
-    (fetchpatch {
-      name = "libplist-2.3.0-compatibility.patch";
-      url = "https://github.com/tihmstar/usbmuxd2/commit/e527bce2360afc22c95542f1252f94c994f45c72.patch";
-      hash = "sha256-ig4j4z2HH8gitXxZYW9fm74Ix9XmJeX2Lz9HBCuDsuk=";
-    })
-  ];
-
   postPatch = ''
-    # Set package version so we don't require git
-    sed -i '/AC_INIT/s/m4_esyscmd.*/${version})/' configure.ac
-    # Do not check libgeneral version
-    sed -i 's/libgeneral >= 39/libgeneral/' configure.ac
+    # Checking for libgeneral version still fails
+    sed -i 's/libgeneral >= $LIBGENERAL_MINVERS_STR/libgeneral/' configure.ac
   '';
 
   nativeBuildInputs = [
     autoreconfHook
     clang
+    git
     pkg-config
   ];
 
@@ -90,5 +82,6 @@ clangStdenv.mkDerivation rec {
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ onny ];
+    mainProgram = "usbmuxd";
   };
 }

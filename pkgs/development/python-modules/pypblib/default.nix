@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "pypblib";
   version = "0.0.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

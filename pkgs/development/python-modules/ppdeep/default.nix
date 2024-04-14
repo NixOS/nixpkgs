@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "ppdeep";
   version = "20200505";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

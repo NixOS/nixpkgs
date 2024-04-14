@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
 , cmake
 , opencv
@@ -26,19 +27,20 @@
 
 stdenv.mkDerivation rec {
   pname = "rtabmap";
-  version = "0.21.0";
+  version = "0.21.4";
 
   src = fetchFromGitHub {
     owner = "introlab";
     repo = "rtabmap";
     rev = "refs/tags/${version}";
-    hash = "sha256-1xb8O3VrErldid2OgAUMG28mSUO7QBUsPuSz8p03tSI";
+    hash = "sha256-HrIATYRuhFfTlO4oTRZo7CM30LFVyatZJON31Fe4HTQ=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook wrapGAppsHook ];
   buildInputs = [
     ## Required
     opencv
+    opencv.cxxdev
     pcl
     liblapack
     xorg.libSM

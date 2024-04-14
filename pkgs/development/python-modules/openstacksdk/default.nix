@@ -2,7 +2,7 @@
 , buildPythonPackage
 , callPackage
 , fetchPypi
-, appdirs
+, platformdirs
 , cryptography
 , dogpile-cache
 , jmespath
@@ -19,18 +19,18 @@
 
 buildPythonPackage rec {
   pname = "openstacksdk";
-  version = "1.3.1";
+  version = "3.0.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+g/YOGv311SaOs65xOKai3BJp4GbhkD1awEFL4oQLMo=";
+    hash = "sha256-sMf5oCXV2pKtTHYpQeasxMtTkwoH/3OamuvMXlpySuY=";
   };
 
   propagatedBuildInputs = [
-    appdirs
+    platformdirs
     cryptography
     dogpile-cache
     jmespath
@@ -57,6 +57,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "An SDK for building applications to work with OpenStack";
+    mainProgram = "openstack-inventory";
     homepage = "https://github.com/openstack/openstacksdk";
     license = licenses.asl20;
     maintainers = teams.openstack.members;

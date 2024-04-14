@@ -50,7 +50,8 @@ import ./make-test-python.nix (
             options = Options()
             options.add_argument("--headless")
 
-            driver = webdriver.Firefox(options=options)
+            service = webdriver.FirefoxService(executable_path="${lib.getExe pkgs.geckodriver}")  # noqa: E501
+            driver = webdriver.Firefox(options=options, service=service)
 
             driver.implicitly_wait(10)
 

@@ -1,27 +1,27 @@
 { lib, stdenv, fetchFromGitHub, cmake, bison, flex, libusb-compat-0_1, libelf
-, libftdi1, readline
+, libftdi1, readline, libserialport
 # documentation building is broken on darwin
-, docSupport ? (!stdenv.isDarwin), texlive, texinfo, texi2html, unixtools }:
+, docSupport ? (!stdenv.isDarwin), texliveMedium, texinfo, texi2html, unixtools }:
 
 stdenv.mkDerivation rec {
   pname = "avrdude";
-  version = "7.2";
+  version = "7.3";
 
   src = fetchFromGitHub {
     owner = "avrdudes";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/JyhMBcjNklyyXZEFZGTjrTNyafXEdHEhcLz6ZQx9aU=";
+    sha256 = "sha256-JqW3AOMmAfcy+PQRcqviWlxA6GoMSEfzIFt1pRYY7Dw=";
   };
 
   nativeBuildInputs = [ cmake bison flex ] ++ lib.optionals docSupport [
     unixtools.more
-    texlive.combined.scheme-medium
+    texliveMedium
     texinfo
     texi2html
   ];
 
-  buildInputs = [ libusb-compat-0_1 libelf libftdi1 readline ];
+  buildInputs = [ libusb-compat-0_1 libelf libftdi1 libserialport readline ];
 
   cmakeFlags = lib.optionals docSupport [
     "-DBUILD_DOC=ON"
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Command-line tool for programming Atmel AVR microcontrollers";
+    mainProgram = "avrdude";
     longDescription = ''
       AVRDUDE (AVR Downloader/UploaDEr) is an utility to
       download/upload/manipulate the ROM and EEPROM contents of AVR

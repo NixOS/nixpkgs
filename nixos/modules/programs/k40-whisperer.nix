@@ -10,25 +10,17 @@ let
 in
 {
   options.programs.k40-whisperer = {
-    enable = mkEnableOption (lib.mdDoc "K40-Whisperer");
+    enable = mkEnableOption "K40-Whisperer";
 
     group = mkOption {
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         Group assigned to the device when connected.
       '';
       default = "k40";
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.k40-whisperer;
-      defaultText = literalExpression "pkgs.k40-whisperer";
-      example = literalExpression "pkgs.k40-whisperer";
-      description = lib.mdDoc ''
-        K40 Whisperer package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "k40-whisperer" { };
   };
 
   config = mkIf cfg.enable {

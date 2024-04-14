@@ -17,6 +17,7 @@
 buildPythonPackage rec {
   pname = "coveralls";
   version = "3.3.1";
+  format = "setuptools";
   disabled = isPy27;
 
   # wanted by tests
@@ -55,6 +56,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Show coverage stats online via coveralls.io";
+    mainProgram = "coveralls";
     homepage = "https://github.com/coveralls-clients/coveralls-python";
     license = lib.licenses.mit;
   };

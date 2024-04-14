@@ -46,10 +46,12 @@ buildPythonPackage rec {
     # Tests expecting results from a different version of libmagic
     "test_process_archive_ace"
     "test_process_runnable_win32_lnk"
+    "test_process_misc_csv"
   ];
 
   meta = with lib; {
     description = "File type classifier for the Karton framework";
+    mainProgram = "karton-classifier";
     homepage = "https://github.com/CERT-Polska/karton-classifier";
     changelog = "https://github.com/CERT-Polska/karton-classifier/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];

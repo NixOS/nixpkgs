@@ -9,16 +9,17 @@ let
     #  - Alternatively, blocked on a NixOps 2 release
     #    https://github.com/NixOS/nixops/issues/1242
     # stable = testsLegacyNetwork { nixopsPkg = pkgs.nixops; };
-    unstable = testsForPackage { nixopsPkg = pkgs.nixops_unstable; };
+    unstable = testsForPackage { nixopsPkg = pkgs.nixops_unstable_minimal; };
 
     # inherit testsForPackage;
   };
 
-  testsForPackage = lib.makeOverridable (args: lib.recurseIntoAttrs {
+  testsForPackage = args: lib.recurseIntoAttrs {
     legacyNetwork = testLegacyNetwork args;
-  });
+    passthru.override = args': testsForPackage (args // args');
+  };
 
-  testLegacyNetwork = { nixopsPkg }: pkgs.nixosTest ({
+  testLegacyNetwork = { nixopsPkg, ... }: pkgs.testers.nixosTest ({
     name = "nixops-legacy-network";
     nodes = {
       deployer = { config, lib, nodes, pkgs, ... }: {
@@ -31,6 +32,7 @@ let
           pkgs.hello
           pkgs.figlet
         ];
+        virtualisation.memorySize = 2048;
 
         # TODO: make this efficient, https://github.com/NixOS/nixpkgs/issues/180529
         system.includeBuildDependencies = true;
@@ -52,7 +54,7 @@ let
           chmod 0400 ~/.ssh/id_ed25519
         '';
         serverNetworkJSON = pkgs.writeText "server-network.json"
-          (builtins.toJSON nodes.server.config.system.build.networkConfig);
+          (builtins.toJSON nodes.server.system.build.networkConfig);
       in
       ''
         import shlex
@@ -90,24 +92,6 @@ let
   });
 
   inherit (import ../ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
-
-  /*
-    Return a store path with a closure containing everything including
-    derivations and all build dependency outputs, all the way down.
-  */
-  allDrvOutputs = pkg:
-    let name = "allDrvOutputs-${pkg.pname or pkg.name or "unknown"}";
-    in
-    pkgs.runCommand name { refs = pkgs.writeReferencesToFile pkg.drvPath; } ''
-      touch $out
-      while read ref; do
-        case $ref in
-          *.drv)
-            cat $ref >>$out
-            ;;
-        esac
-      done <$refs
-    '';
 
 in
 tests

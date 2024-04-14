@@ -5,6 +5,7 @@
 , bison
 , boost182
 , flex
+, fmt
 , gtest
 , libbacktrace
 , lit
@@ -18,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nixd";
-  version = "1.2.0";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nixd";
     rev = version;
-    hash = "sha256-3PI/Bzs5WPIKevbRPz6TQ5yo7QpY4HeALrqbUY/zUgY=";
+    hash = "sha256-i/z5VnsWPWloQfdk48i+a4XaGnTMPJ6QougChkT9IWw=";
   };
 
   mesonBuildType = "release";
@@ -45,6 +46,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libbacktrace
     nix
+    fmt
     gtest
     boost182
     llvmPackages.llvm
@@ -52,7 +54,8 @@ stdenv.mkDerivation rec {
 
   env.CXXFLAGS = "-include ${nix.dev}/include/nix/config.h";
 
-  doCheck = true;
+  # https://github.com/nix-community/nixd/issues/215
+  doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
     runHook preCheck
@@ -80,8 +83,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Nix language server";
     homepage = "https://github.com/nix-community/nixd";
+    changelog = "https://github.com/nix-community/nixd/releases/tag/${version}";
     license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ inclyc Ruixi-rebirth ];
+    maintainers = with lib.maintainers; [ inclyc Ruixi-rebirth marsam ];
+    mainProgram = "nixd";
     platforms = lib.platforms.unix;
   };
 }

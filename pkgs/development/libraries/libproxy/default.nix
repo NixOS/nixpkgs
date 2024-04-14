@@ -76,7 +76,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.lgpl21;
-    homepage = "http://libproxy.github.io/libproxy/";
+    homepage = "https://libproxy.github.io/libproxy/";
     description = "A library that provides automatic proxy configuration management";
+    mainProgram = "proxy";
   };
 }

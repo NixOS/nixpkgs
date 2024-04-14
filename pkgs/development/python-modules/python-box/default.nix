@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, cython_3
 , fetchFromGitHub
 , msgpack
 , poetry-core
@@ -15,19 +16,20 @@
 
 buildPythonPackage rec {
   pname = "python-box";
-  version = "7.0.1";
+  version = "7.1.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "cdgriffith";
     repo = "Box";
     rev = "refs/tags/${version}";
-    hash = "sha256-Ddt8/S6HzmOt1kvzRzed3+TbOacw6RG9nd2UNn+ELB4=";
+    hash = "sha256-oxT2y3um6BZ3bwYa+LWBoTgU+9b+V7XtQdCdECU3Gu0=";
   };
 
   nativeBuildInputs = [
+    cython_3
     setuptools
   ];
 

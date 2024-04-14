@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "dicom2nifti";
   version = "2.4.8";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   # no tests in PyPI dist
@@ -41,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/icometrix/dicom2nifti";
     description = "Library for converting dicom files to nifti";
+    mainProgram = "dicom2nifti";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };

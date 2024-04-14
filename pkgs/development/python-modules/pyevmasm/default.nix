@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "pyevmasm";
   version = "0.2.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "crytic";
@@ -22,6 +23,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Ethereum Virtual Machine (EVM) assembler and disassembler";
+    mainProgram = "evmasm";
     homepage = "https://github.com/crytic/pyevmasm";
     changelog = "https://github.com/crytic/pyevmasm/releases/tag/${version}";
     license = licenses.asl20;

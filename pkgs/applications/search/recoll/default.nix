@@ -3,8 +3,10 @@
 , lib
 , mkDerivation
 , antiword
+, aspell
 , bison
 , catdoc
+, catdvi
 , chmlib
 , djvulibre
 , file
@@ -26,6 +28,7 @@
 , poppler_utils
 , python3Packages
 , qtbase
+, qttools
 , unrtf
 , untex
 , unzip
@@ -43,6 +46,7 @@ let filters = {
       awk = gawk;
       antiword = antiword;
       catppt = catdoc;
+      catdvi = catdvi;
       djvused = djvulibre;
       djvutxt = djvulibre;
       egrep = gnugrep;
@@ -66,11 +70,11 @@ in
 
 mkDerivation rec {
   pname = "recoll";
-  version = "1.33.4";
+  version = "1.37.4";
 
   src = fetchurl {
     url = "https://www.lesbonscomptes.com/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ffD49sGYWYEWAFPRtpyDU/CYFvkrEDL21Ddq3QsXCvc=";
+    hash = "sha256-MQnXamW7L4hyMbZDmU7XAcLv5roHcfhFGzni8YbDtq0=";
   };
 
   configureFlags = [
@@ -93,25 +97,31 @@ mkDerivation rec {
     (lib.withFeature stdenv.isLinux "inotify")
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-DNIXPKGS" ];
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-DNIXPKGS"
+    "-fpermissive" # libxml2-2.12 changed const qualifiers
+  ];
 
   patches = [
     # fix "No/bad main configuration file" error
     ./fix-datadir.patch
+    # use the same configure based build for darwin as linux
+    ./0001-no-qtgui-darwin-bundle.patch
   ];
 
-  nativeBuildInputs = lib.optionals withGui [
-    qtbase
-  ] ++ [
+  nativeBuildInputs = [
+    makeWrapper
     pkg-config
+    which
+  ] ++ lib.optionals withGui [
+    qtbase
+    qttools
   ] ++ lib.optionals withPython [
     python3Packages.setuptools
-  ] ++ [
-    makeWrapper
-    which
   ];
 
   buildInputs = [
+    aspell
     bison
     chmlib
   ] ++ lib.optionals withPython [
@@ -125,6 +135,10 @@ mkDerivation rec {
     qtbase
   ] ++ lib.optionals stdenv.isDarwin [
     libiconv
+  ];
+
+  qtWrapperArgs = [
+    "--prefix PATH : ${filterPath}"
   ];
 
   # the filters search through ${PATH} using a sh proc 'checkcmds' for the
@@ -142,8 +156,6 @@ mkDerivation rec {
         substituteInPlace $f --replace /usr/bin/perl   ${lib.getBin (perl.passthru.withPackages (p: [ p.ImageExifTool ]))}/bin/perl
       fi
     done
-    wrapProgram $out/bin/recoll      --prefix PATH : "${filterPath}"
-    wrapProgram $out/bin/recollindex --prefix PATH : "${filterPath}"
     wrapProgram $out/share/recoll/filters/rclaudio.py \
       --prefix PYTHONPATH : $PYTHONPATH
     wrapProgram $out/share/recoll/filters/rclimg \
@@ -155,6 +167,11 @@ mkDerivation rec {
     mv $out/bin/recoll.app $out/Applications
   '';
 
+  # create symlink after fixup to prevent double wrapping of recoll
+  postFixup = lib.optionalString (stdenv.isDarwin && withGui) ''
+    ln -s ../Applications/recoll.app/Contents/MacOS/recoll $out/bin/recoll
+  '';
+
   enableParallelBuilding = true;
 
   meta = with lib; {
@@ -164,7 +181,7 @@ mkDerivation rec {
       members, email attachments.
     '';
     homepage = "https://www.lesbonscomptes.com/recoll/";
-    changelog = "https://www.lesbonscomptes.com/recoll/pages/release-${version}.html";
+    changelog = "https://www.lesbonscomptes.com/recoll/pages/release-${versions.majorMinor version}.html";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ jcumming ehmry ];

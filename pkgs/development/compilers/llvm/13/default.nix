@@ -1,6 +1,7 @@
 { lowPrio, newScope, pkgs, lib, stdenv, cmake
-, gccForLibs, preLibcCrossHeaders
-, libxml2, python3, isl, fetchFromGitHub, overrideCC, wrapCCWith, wrapBintoolsWith
+, preLibcCrossHeaders
+, fetchpatch
+, libxml2, python3, isl, fetchFromGitHub, substitute, substituteAll, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 , targetLlvm
@@ -16,39 +17,48 @@
     then null
     else pkgs.bintools
 , darwin
+# LLVM release information; specify one of these but not both:
+, gitRelease ? null
+  # i.e.:
+  # {
+  #   version = /* i.e. "15.0.0" */;
+  #   rev = /* commit SHA */;
+  #   rev-version = /* human readable version; i.e. "unstable-2022-26-07" */;
+  #   sha256 = /* checksum for this release, can omit if specifying your own `monorepoSrc` */;
+  # }
+, officialRelease ? { version = "13.0.1"; sha256 = "06dv6h5dmvzdxbif2s8njki6h32796v368dyb5945x8gjj72xh7k"; }
+  # i.e.:
+  # {
+  #   version = /* i.e. "15.0.0" */;
+  #   candidate = /* optional; if specified, should be: "rcN" */
+  #   sha256 = /* checksum for this release, can omit if specifying your own `monorepoSrc` */;
+  # }
+# By default, we'll try to fetch a release from `github:llvm/llvm-project`
+# corresponding to the `gitRelease` or `officialRelease` specified.
+#
+# You can provide your own LLVM source by specifying this arg but then it's up
+# to you to make sure that the LLVM repo given matches the release configuration
+# specified.
+, monorepoSrc ? null
+
 }:
 
+assert
+  lib.assertMsg
+    (lib.xor
+      (gitRelease != null)
+      (officialRelease != null))
+    ("must specify `gitRelease` or `officialRelease`" +
+      (lib.optionalString (gitRelease != null) " — not both"));
 let
-  release_version = "13.0.1";
-  candidate = ""; # empty or "rcN"
-  dash-candidate = lib.optionalString (candidate != "") "-${candidate}";
-  rev = ""; # When using a Git commit
-  rev-version = ""; # When using a Git commit
-  version = if rev != "" then rev-version else "${release_version}${dash-candidate}";
-  targetConfig = stdenv.targetPlatform.config;
+  monorepoSrc' = monorepoSrc;
+in let
+  # Import releaseInfo separately to avoid infinite recursion
+  inherit (import ../common/common-let.nix { inherit lib gitRelease officialRelease; }) releaseInfo;
+  inherit (releaseInfo) release_version version;
+  inherit (import ../common/common-let.nix { inherit lib fetchFromGitHub release_version gitRelease officialRelease monorepoSrc'; }) llvm_meta monorepoSrc;
 
-  src = fetchFromGitHub {
-    owner = "llvm";
-    repo = "llvm-project";
-    rev = if rev != "" then rev else "llvmorg-${version}";
-    sha256 = "06dv6h5dmvzdxbif2s8njki6h32796v368dyb5945x8gjj72xh7k";
-  };
-
-  llvm_meta = {
-    license     = lib.licenses.ncsa;
-    maintainers = lib.teams.llvm.members;
-
-    # See llvm/cmake/config-ix.cmake.
-    platforms   =
-      lib.platforms.aarch64 ++
-      lib.platforms.arm ++
-      lib.platforms.mips ++
-      lib.platforms.power ++
-      lib.platforms.riscv ++
-      lib.platforms.s390x ++
-      lib.platforms.wasi ++
-      lib.platforms.x86;
-  };
+  src = monorepoSrc;
 
   tools = lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version src buildLlvmTools; });
@@ -72,7 +82,7 @@ let
     then tools.bintools
     else bootBintools;
 
-  in {
+  in rec {
 
     libllvm = callPackage ./llvm {
       inherit llvm_meta;
@@ -82,7 +92,22 @@ let
     # we need to reintroduce `outputSpecified` to get the expected behavior e.g. of lib.get*
     llvm = tools.libllvm;
 
-    libclang = callPackage ./clang {
+    libclang = callPackage ../common/clang {
+      patches = [
+        ./clang/purity.patch
+        # https://reviews.llvm.org/D51899
+        ./clang/gnu-install-dirs.patch
+        # Revert of https://reviews.llvm.org/D100879
+        # The malloc alignment assumption is incorrect for jemalloc and causes
+        # mis-compilation in firefox.
+        # See: https://bugzilla.mozilla.org/show_bug.cgi?id=1741454
+        ./clang/revert-malloc-alignment-assumption.patch
+        ../common/clang/add-nostdlibinc-flag.patch
+        (substituteAll {
+          src = ../common/clang/clang-11-15-LLVMgold-path.patch;
+          libllvmLibdir = "${libllvm.lib}/lib";
+        })
+      ];
       inherit llvm_meta;
     };
 
@@ -125,25 +150,28 @@ let
       cc = tools.clang-unwrapped;
       libcxx = targetLlvmLibraries.libcxx;
       extraPackages = [
-        libcxx.cxxabi
         targetLlvmLibraries.compiler-rt
       ];
       extraBuildCommands = mkExtraBuildCommands cc;
     };
 
-    lld = callPackage ./lld {
+    lld = callPackage ../common/lld {
+      patches = [
+        ./lld/gnu-install-dirs.patch
+      ];
       inherit llvm_meta;
     };
 
     lldb = callPackage ../common/lldb.nix {
       patches =
         let
-          resourceDirPatch = callPackage ({ runCommand, libclang }: (runCommand "resource-dir.patch"
-            {
-              clangLibDir = "${libclang.lib}/lib";
-            } ''
-            substitute '${./lldb/resource-dir.patch}' "$out" --subst-var clangLibDir
-          '')) { };
+          resourceDirPatch = callPackage
+            ({ substituteAll, libclang }: substituteAll
+              {
+                src = ./lldb/resource-dir.patch;
+                clangLibDir = "${libclang.lib}/lib";
+              })
+            { };
         in
         [
           ./lldb/procfs.patch
@@ -164,7 +192,7 @@ let
             && !stdenv.targetPlatform.isAarch64
             && (lib.versionOlder darwin.apple_sdk.sdk.version "11.0")
         ) ./lldb/cpu_subtype_arm64e_replacement.patch;
-      inherit llvm_meta release_version;
+      inherit llvm_meta;
     };
 
     # Below, is the LLVM bootstrapping logic. It handles building a
@@ -174,7 +202,7 @@ let
     # doesn’t support like LLVM. Probably we should move to some other
     # file.
 
-    bintools-unwrapped = callPackage ./bintools {};
+    bintools-unwrapped = callPackage ../common/bintools.nix { };
 
     bintoolsNoLibc = wrapBintoolsWith {
       bintools = tools.bintools-unwrapped;
@@ -190,7 +218,6 @@ let
       libcxx = targetLlvmLibraries.libcxx;
       bintools = bintools';
       extraPackages = [
-        libcxx.cxxabi
         targetLlvmLibraries.compiler-rt
       ] ++ lib.optionals (!stdenv.targetPlatform.isWasm) [
         targetLlvmLibraries.libunwind
@@ -200,6 +227,7 @@ let
         echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
       '' + lib.optionalString (!stdenv.targetPlatform.isWasm) ''
         echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
+        echo "-L${targetLlvmLibraries.libunwind}/lib" >> $out/nix-support/cc-ldflags
       '' + lib.optionalString (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false) ''
         echo "-lunwind" >> $out/nix-support/cc-ldflags
       '' + lib.optionalString stdenv.targetPlatform.isWasm ''
@@ -258,14 +286,48 @@ let
     callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake libxml2 python3 isl release_version version src; });
   in {
 
-    compiler-rt-libc = callPackage ./compiler-rt {
+    compiler-rt-libc = callPackage ../common/compiler-rt {
+      patches = [
+        ./compiler-rt/codesign.patch # Revert compiler-rt commit that makes codesign mandatory
+        ./compiler-rt/X86-support-extension.patch # Add support for i486 i586 i686 by reusing i386 config
+        # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
+        # extra `/`.
+        ./compiler-rt/normalize-var.patch
+        # Prevent a compilation error on darwin
+        ./compiler-rt/darwin-targetconditionals.patch
+        ../common/compiler-rt/darwin-plistbuddy-workaround.patch
+        ./compiler-rt/armv7l.patch
+        # Fix build on armv6l
+        ../common/compiler-rt/armv6-mcr-dmb.patch
+        ../common/compiler-rt/armv6-sync-ops-no-thumb.patch
+        ../common/compiler-rt/armv6-no-ldrexd-strexd.patch
+        ../common/compiler-rt/armv6-scudo-no-yield.patch
+        ../common/compiler-rt/armv6-scudo-libatomic.patch
+      ];
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
                else stdenv;
     };
 
-    compiler-rt-no-libc = callPackage ./compiler-rt {
+    compiler-rt-no-libc = callPackage ../common/compiler-rt {
+      patches = [
+        ./compiler-rt/codesign.patch # Revert compiler-rt commit that makes codesign mandatory
+        ./compiler-rt/X86-support-extension.patch # Add support for i486 i586 i686 by reusing i386 config
+        # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
+        # extra `/`.
+        ./compiler-rt/normalize-var.patch
+        # Prevent a compilation error on darwin
+        ./compiler-rt/darwin-targetconditionals.patch
+        ../common/compiler-rt/darwin-plistbuddy-workaround.patch
+        ./compiler-rt/armv7l.patch
+        # Fix build on armv6l
+        ../common/compiler-rt/armv6-mcr-dmb.patch
+        ../common/compiler-rt/armv6-sync-ops-no-thumb.patch
+        ../common/compiler-rt/armv6-no-ldrexd-strexd.patch
+        ../common/compiler-rt/armv6-scudo-no-yield.patch
+        ../common/compiler-rt/armv6-scudo-libatomic.patch
+      ];
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRt
@@ -281,40 +343,46 @@ let
 
     libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
 
-    libcxx = callPackage ./libcxx {
+    libcxx = callPackage ../common/libcxx {
+      patches = [
+        (substitute {
+          src = ../common/libcxxabi/wasm.patch;
+          replacements = [
+            "--replace-fail" "/cmake/" "/llvm/cmake/"
+          ];
+        })
+      ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+        (substitute {
+          src = ../common/libcxx/libcxx-0001-musl-hacks.patch;
+          replacements = [
+            "--replace-fail" "/include/" "/libcxx/include/"
+          ];
+        })
+      ];
       inherit llvm_meta;
-      stdenv = if stdenv.hostPlatform.useLLVM or false
-               then overrideCC stdenv buildLlvmTools.clangNoLibcxx
-               else (
-                 # libcxx >= 13 does not build on gcc9
-                 if stdenv.cc.isGNU && lib.versionOlder stdenv.cc.version "10"
-                 then pkgs.gcc10Stdenv
-                 else stdenv
-               );
+      stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
+      monorepoSrc = src;
     };
 
-    libcxxabi = let
-      stdenv_ = if stdenv.hostPlatform.useLLVM or false
-               then overrideCC stdenv buildLlvmTools.clangNoLibcxx
-               else stdenv;
-      cxx-headers = callPackage ./libcxx {
-        inherit llvm_meta;
-        stdenv = stdenv_;
-        headersOnly = true;
-      };
-    in callPackage ./libcxxabi {
-      stdenv = stdenv_;
-      inherit llvm_meta cxx-headers;
-    };
-
-    libunwind = callPackage ./libunwind {
+    libunwind = callPackage ../common/libunwind {
+      patches = [
+        ./libunwind/gnu-install-dirs.patch
+      ];
       inherit llvm_meta;
       stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
-    openmp = callPackage ./openmp {
+    openmp = callPackage ../common/openmp {
+      patches = [
+        # Fix cross.
+        (fetchpatch {
+          url = "https://github.com/llvm/llvm-project/commit/5e2358c781b85a18d1463fd924d2741d4ae5e42e.patch";
+          hash = "sha256-UxIlAifXnexF/MaraPW0Ut6q+sf3e7y1fMdEv1q103A=";
+        })
+      ];
       inherit llvm_meta targetLlvm;
     };
   });
+  noExtend = extensible: lib.attrsets.removeAttrs extensible [ "extend" ];
 
-in { inherit tools libraries release_version; } // libraries // tools
+in { inherit tools libraries release_version; } // (noExtend libraries) // (noExtend tools)

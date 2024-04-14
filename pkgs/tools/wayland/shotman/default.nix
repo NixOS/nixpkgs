@@ -9,21 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "shotman";
-  version = "0.4.3";
+  version = "0.4.5";
 
   src = fetchFromSourcehut {
     owner = "~whynothugo";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-c2fgP6XB/fqKfsjqRRQpOFzHZyF/a9tLAKIGdKFAcSQ=";
+    hash = "sha256-SctWNhYCFTAOOnDEcsFZH61+QQAcmup11GVVXA1U5Dw=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "smithay-client-toolkit-0.16.0" = "sha256-n+s+qH39tna0yN44D6GGlQGZHjsr9FBpp+NZItyqwaE=";
-    };
-  };
+  cargoHash = "sha256-q5scdgfB5NgtjAgnIy/+c+y/mymF0b9ZZSz2LmM0pfw=";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
@@ -39,6 +34,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://git.sr.ht/~whynothugo/shotman";
     license = licenses.isc;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ zendo ];
+    maintainers = with maintainers; [ zendo fpletz ];
   };
 }

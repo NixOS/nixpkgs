@@ -1,23 +1,38 @@
 { lib, buildPythonPackage, fetchPypi, isPyPy
-, pytest, pytest-cov, pytest-mock, freezegun
-, jinja2, future, binaryornot, click, jinja2-time, requests
+, setuptools
+, pytest, pytest-cov, pytest-mock, freezegun, safety, pre-commit
+, jinja2, binaryornot, click, jinja2-time, requests
 , python-slugify
 , pyyaml
+, arrow
+, rich
 }:
 
 buildPythonPackage rec {
   pname = "cookiecutter";
-  version = "2.1.1";
+  version = "2.6.0";
+  pyproject = true;
 
   # not sure why this is broken
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-85gr6NnFPawSYYZAE/3sf4Ov0uQu3m9t0GnF4UnFQNU=";
+    hash = "sha256-2yH4Fp6k9P3CQI1IykSFk0neJkf75JSp1sPt/AVCwhw=";
   };
 
-  nativeCheckInputs = [ pytest pytest-cov pytest-mock freezegun ];
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  nativeCheckInputs = [
+    pytest
+    pytest-cov
+    pytest-mock
+    freezegun
+    safety
+    pre-commit
+  ];
   propagatedBuildInputs = [
     binaryornot
     jinja2
@@ -26,6 +41,8 @@ buildPythonPackage rec {
     jinja2-time
     python-slugify
     requests
+    arrow
+    rich
   ];
 
   # requires network access for cloning git repos
@@ -37,6 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/audreyr/cookiecutter";
     description = "A command-line utility that creates projects from project templates";
+    mainProgram = "cookiecutter";
     license = licenses.bsd3;
     maintainers = with maintainers; [ kragniz ];
   };

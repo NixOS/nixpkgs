@@ -3,8 +3,9 @@
 , fetchFromGitHub
 , python
 , cython
+, oldest-supported-numpy
 , setuptools
-, substituteAll
+, setuptools-scm
 , numpy
 , pandas
 , cramjam
@@ -14,41 +15,39 @@
 , pytestCheckHook
 , pythonOlder
 , packaging
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "fastparquet";
-  version = "2023.4.0";
-  format = "pyproject";
+  version = "2024.2.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dask";
-    repo = pname;
-    rev = version;
-    hash = "sha256-1hWiwXjTgflQlmy0Dk2phUa1cgYBvvH99tb0TdUmDRI=";
+    repo = "fastparquet";
+    rev = "refs/tags/${version}";
+    hash = "sha256-e0gnC/HMYdrYdEwy6qNOD1J52xgN2x81oCG03YNsYjg=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"pytest-runner"' ""
+
+    sed -i \
+      -e "/pytest-runner/d" \
+      -e '/"git", "status"/d' setup.py
+  '';
 
   nativeBuildInputs = [
     cython
+    oldest-supported-numpy
     setuptools
+    setuptools-scm
+    wheel
   ];
-
-  patches = [
-    (substituteAll {
-      src = ./version.patch;
-      inherit version;
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'pytest-runner'," "" \
-      --replace "oldest-supported-numpy" "numpy"
-
-    sed -i '/"git", "status"/d' setup.py
-  '';
 
   propagatedBuildInputs = [
     cramjam
@@ -86,7 +85,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A python implementation of the parquet format";
+    description = "Implementation of the parquet format";
     homepage = "https://github.com/dask/fastparquet";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ veprbl ];

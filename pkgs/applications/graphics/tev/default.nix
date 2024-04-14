@@ -5,14 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "tev";
-  version = "1.23";
+  version = "1.26";
 
   src = fetchFromGitHub {
     owner = "Tom94";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-NtnnZV/+8aUm8BkUz8Xm3aeSbOI2gNUPNfvYlwUl01Y=";
+    sha256 = "sha256-6acFt0fyL0yStUwreGggJ+7Zi+0Fqburj/ytmf+Oi4w=";
   };
 
   nativeBuildInputs = [ cmake wrapGAppsHook ];
@@ -31,8 +31,11 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" "${gnome.zenity}/bin"
   '';
 
+  env.CXXFLAGS = "-include cstdint";
+
   meta = with lib; {
     description = "A high dynamic range (HDR) image comparison tool";
+    mainProgram = "tev";
     longDescription = ''
       A high dynamic range (HDR) image comparison tool for graphics people. tev
       allows viewing images through various tonemapping operators and inspecting

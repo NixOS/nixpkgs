@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromSourcehut, meson, ninja, pkg-config, wlroots, wayland, wayland-protocols
+{ lib, stdenv, fetchFromSourcehut, meson, ninja, pkg-config, wayland
 , libX11, libGL }:
 
 stdenv.mkDerivation rec {
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description =
       "Wallpaper program for wlroots based Wayland compositors such as sway that allows you to render glsl shaders as your wallpaper";
+    mainProgram = "glpaper";
     homepage = "https://hg.sr.ht/~scoopta/glpaper";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

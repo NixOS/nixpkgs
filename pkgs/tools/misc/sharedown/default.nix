@@ -12,6 +12,7 @@
 , makeDesktopItem
 , copyDesktopItems
 , yarn2nix-moretea
+, fetchYarnDeps
 , chromium
 }:
 
@@ -51,7 +52,7 @@ stdenvNoCC.mkDerivation rec {
         yt-dlp
       ]);
 
-      modules = yarn2nix-moretea.mkYarnModules {
+      modules = yarn2nix-moretea.mkYarnModules rec {
         name = "${pname}-modules-${version}";
         inherit pname version;
 
@@ -74,20 +75,22 @@ stdenvNoCC.mkDerivation rec {
           };
         };
 
+        # needed for node-gyp, copied from https://nixos.org/manual/nixpkgs/unstable/#javascript-yarn2nix-pitfalls
+        # permalink: https://github.com/NixOS/nixpkgs/blob/d176767c02cb2a048e766215078c3d231e666091/doc/languages-frameworks/javascript.section.md#pitfalls-javascript-yarn2nix-pitfalls
         preBuild = ''
-          # Set up headers for node-gyp, which is needed to build keytar.
-          mkdir -p "$HOME/.cache/node-gyp/${nodejs.version}"
-
-          # Set up version which node-gyp checks in <https://github.com/nodejs/node-gyp/blob/4937722cf597ccd1953628f3d5e2ab5204280051/lib/install.js#L87-L96> against the version in <https://github.com/nodejs/node-gyp/blob/4937722cf597ccd1953628f3d5e2ab5204280051/package.json#L15>.
-          echo 9 > "$HOME/.cache/node-gyp/${nodejs.version}/installVersion"
-
-          # Link node headers so that node-gyp does not try to download them.
-          ln -sfv "${nodejs}/include" "$HOME/.cache/node-gyp/${nodejs.version}"
+          mkdir -p $HOME/.node-gyp/${nodejs.version}
+          echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
+          ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
+          export npm_config_nodedir=${nodejs}
         '';
 
         packageJSON = "${src}/package.json";
         yarnLock = ./yarn.lock;
-        yarnNix = ./yarndeps.nix;
+
+        offlineCache = fetchYarnDeps {
+          inherit yarnLock;
+          hash = "sha256-NzWzkZbf5R1R72K7KVJbZUCzso1UZ0p3+lRYZE2M/dI=";
+        };
       };
     in
     ''
@@ -119,5 +122,6 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with maintainers; [
     ];
     platforms = platforms.unix;
+    mainProgram = "Sharedown";
   };
 }

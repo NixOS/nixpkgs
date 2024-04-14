@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "avro-python3";
   version = "1.10.2";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchPypi {
@@ -15,6 +16,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A serialization and RPC framework";
+    mainProgram = "avro";
     homepage = "https://pypi.python.org/pypi/avro-python3/";
     license = licenses.asl20;
 

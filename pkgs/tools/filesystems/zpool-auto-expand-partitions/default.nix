@@ -8,16 +8,21 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "zpool-auto-expand-partitions";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
     repo = "zpool-auto-expand-partitions";
     rev = "v${version}";
-    hash = "sha256-LA6YO6vv7VCXwFfayQVxVR80niSCo89sG0hqh0wDEh8=";
+    hash = "sha256-N1znZbJULEeNR4ABSrUtHHkmz08N+CZqX6Ni7jFzc4c=";
   };
 
-  cargoHash = "sha256-5v0fqp8aro+QD/f5VudMREc8RvKQapNAoArcCKMN1Sw=";
+  cargoLock.lockFile = ./Cargo.lock;
+  # We rely on a fork of libzfs in order to bump the bindgen version to fix
+  # builds against LLVM 16.
+  cargoLock.outputHashes = {
+    "libzfs-0.6.16" = "sha256-kQunP/xW1Zb1q+TcgAkmZkt1yDnJo9CwF5qldikVN94=";
+  };
 
   preBuild = ''
     substituteInPlace src/grow.rs \
@@ -41,5 +46,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/DeterminateSystems/zpool-auto-expand-partitions";
     license = licenses.asl20;
     maintainers = teams.determinatesystems.members;
+    mainProgram = "zpool_part_disks";
   };
 }

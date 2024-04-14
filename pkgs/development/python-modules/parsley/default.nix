@@ -4,10 +4,11 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Parsley";
+  pname = "parsley";
   version = "1.3";
   src = fetchPypi {
-    inherit pname version;
+    pname = "Parsley";
+    inherit version;
     sha256 = "0hcd41bl07a8sx7nmx12p16xprnblc4phxkawwmmy78n8y6jfi4l";
   };
   # Tests fail although the package works just fine.  Unfortunately

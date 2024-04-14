@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "usort";
-  version = "1.1.0b2";
+  version = "1.0.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -26,10 +26,8 @@ buildPythonPackage rec {
     owner = "facebook";
     repo = "usort";
     rev = "refs/tags/v${version}";
-    hash = "sha256-c3gQ+f/BRgM+Nwc+mEP7dcmig7ws7FqL5zwQhNJJlsI=";
+    hash = "sha256-emnrghdsUs+VfvYiJExG13SKQNrXAEtGNAJQLScADnw=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     hatch-vcs
@@ -57,6 +55,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Safe, minimal import sorting for Python projects";
+    mainProgram = "usort";
     homepage = "https://github.com/facebook/usort";
     changelog = "https://github.com/facebook/usort/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

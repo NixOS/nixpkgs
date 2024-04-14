@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation {
   pname = "hello-wayland";
-  version = "unstable-2023-04-23";
+  version = "0-unstable-2024-03-04";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = "hello-wayland";
-    rev = "77e270c19672f3ad863e466093f429cde8eb1f16";
-    sha256 = "NMQE2zU858b6OZhdS2oZnGvLK+eb7yU0nFaMAcpNw04=";
+    rev = "5f3a35def81116f0a74fcaf5a421d66c6700482d";
+    hash = "sha256-gcLR8gosQlPPgFrxqmRQ6/59RjAfJNX6CcsYP+L+A58=";
   };
 
   separateDebugInfo = true;
@@ -35,5 +35,6 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ qyliss ];
     license = licenses.mit;
     platforms = platforms.linux;
+    mainProgram = "hello-wayland";
   };
 }

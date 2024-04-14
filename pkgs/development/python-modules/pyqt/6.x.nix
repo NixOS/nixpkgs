@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchurl
 , pkg-config
 , dbus
 , lndir
@@ -22,15 +22,18 @@
 }:
 
 buildPythonPackage rec {
-  pname = "PyQt6";
-  version = "6.5.2";
+  pname = "pyqt6";
+  version = "6.7.0.dev2404081550";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-FIfuc1D5/7ZtYKtBdlGSUsKzcXYsvo+DQP2VH2OAEoA=";
+  src = fetchurl {
+    urls = [
+      "https://riverbankcomputing.com/pypi/packages/PyQt6/PyQt6-${version}.tar.gz"
+      "http://web.archive.org/web/20240411124842if_/https://riverbankcomputing.com/pypi/packages/PyQt6/PyQt6-${version}.tar.gz"
+    ];
+    hash = "sha256-H5qZ/rnruGh+UVSXLZyTSvjagmmli/iYq+7BaIzl1YQ=";
   };
 
   patches = [
@@ -43,11 +46,15 @@ buildPythonPackage rec {
   ];
 
   # be more verbose
+  # and normalize version
   postPatch = ''
     cat >> pyproject.toml <<EOF
     [tool.sip.project]
     verbose = true
     EOF
+
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "${version}"' 'version = "${lib.versions.pad 3 version}"'
   '';
 
   enableParallelBuilding = true;
@@ -131,6 +138,8 @@ buildPythonPackage rec {
   # ++ lib.optional withConnectivity "PyQt6.QtConnectivity"
   ++ lib.optional withLocation "PyQt6.QtPositioning"
   ;
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-address-of-temporary";
 
   meta = with lib; {
     description = "Python bindings for Qt6";

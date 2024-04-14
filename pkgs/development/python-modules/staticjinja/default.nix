@@ -11,13 +11,14 @@
 , markdown
 , testers
 , tomlkit
+, typing-extensions
 , staticjinja
 , callPackage
 }:
 
 buildPythonPackage rec {
   pname = "staticjinja";
-  version = "4.1.3";
+  version = "5.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     owner = "staticjinja";
     repo = pname;
     rev = version;
-    hash = "sha256-w6ge5MQXNRHCM43jKnagTlbquJJys7mprgBOS2uuwHQ=";
+    hash = "sha256-LfJTQhZtnTOm39EWF1m2MP5rxz/5reE0G1Uk9L7yx0w=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +46,7 @@ buildPythonPackage rec {
     pytest-check
     markdown
     tomlkit
+    typing-extensions
   ];
 
   # The tests need to find and call the installed staticjinja executable
@@ -59,6 +61,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A library and cli tool that makes it easy to build static sites using Jinja2";
+    mainProgram = "staticjinja";
     homepage = "https://staticjinja.readthedocs.io/en/latest/";
     license = licenses.mit;
     maintainers = with maintainers; [ fgaz ];

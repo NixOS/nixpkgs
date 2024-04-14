@@ -16,7 +16,7 @@ in
     security.googleOsLogin.enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable Google OS Login.
 
         The OS Login package enables the following components:
@@ -42,6 +42,10 @@ in
     security.sudo.extraConfig = ''
       #includedir /run/google-sudoers.d
     '';
+    security.sudo-rs.extraConfig = ''
+      #includedir /run/google-sudoers.d
+    '';
+
     systemd.tmpfiles.rules = [
       "d /run/google-sudoers.d 750 root root -"
       "d /var/google-users.d 750 root root -"

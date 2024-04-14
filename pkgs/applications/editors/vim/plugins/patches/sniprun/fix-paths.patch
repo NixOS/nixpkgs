@@ -1,5 +1,5 @@
 diff --git a/lua/sniprun.lua b/lua/sniprun.lua
-index aa39e0b..188d54a 100644
+index fe29d1e..92d4729 100644
 --- a/lua/sniprun.lua
 +++ b/lua/sniprun.lua
 @@ -4,9 +4,7 @@ M.custom_highlight=false
@@ -13,24 +13,3 @@ index aa39e0b..188d54a 100644
  
  local sniprun_path = vim.fn.fnamemodify( vim.api.nvim_get_runtime_file("lua/sniprun.lua", false)[1], ":p:h") .. "/.."
  
-diff --git a/ressources/init_repl.sh b/ressources/init_repl.sh
-index 2e6264d..0eab1c6 100644
---- a/ressources/init_repl.sh
-+++ b/ressources/init_repl.sh
-@@ -23,7 +23,7 @@ mkfifo $working_dir/$pipe
- touch $working_dir/$out
- sleep 36000 > $working_dir/$pipe &
- 
--echo "/bin/cat " $working_dir/$pipe " | " $repl  > $working_dir/real_launcher.sh
-+echo "cat " $working_dir/$pipe " | " $repl  > $working_dir/real_launcher.sh
- chmod +x $working_dir/real_launcher.sh
- 
- echo $repl " process started at $(date +"%F %T")." >> $working_dir/log
-diff --git a/ressources/launcher_repl.sh b/ressources/launcher_repl.sh
-index feaa91e..749c55e 100755
---- a/ressources/launcher_repl.sh
-+++ b/ressources/launcher_repl.sh
-@@ -1,2 +1,2 @@
- #!/bin/bash
--/bin/cat $1 > $2
-+cat $1 > $2

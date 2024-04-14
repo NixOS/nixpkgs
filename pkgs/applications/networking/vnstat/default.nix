@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vnstat";
-  version = "2.10";
+  version = "2.12";
 
   src = fetchFromGitHub {
     owner = "vergoh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XBApdQA6E2mx9WPIEiY9z2vxJS3qR0mjBnhbft4LNuQ=";
+    sha256 = "sha256-JwVYhmCscEdbwNGa+aKdOt8cIclpvjl4tmWFU3zhcwc=";
   };
 
   postPatch = ''

@@ -9,9 +9,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-OFPreVhLqPvieoFUJbZan38Vsljg1DoFqFa9t11YiuQ=";
   };
 
+  postPatch = ''
+    sed -i 's/void main/int main/' *.c
+  '';
+
   configurePhase = ''
     sed -e 's,/usr/local/bin/perl,${perl}/bin/perl,' \
       -e "s,/usr/local,$out," \
+      -e "s,CFLAGS =,CFLAGS = -std=c89," \
       Makefile.unix > Makefile
   '';
 

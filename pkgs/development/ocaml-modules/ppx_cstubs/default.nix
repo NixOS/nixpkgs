@@ -18,14 +18,14 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.08";
 
-  duneVersion = "3";
-
   src = fetchFromGitHub {
     owner = "fdopen";
     repo = "ppx_cstubs";
     rev = version;
     hash = "sha256-qMmwRWCIfNyhCQYPKLiufnb57sTR3P+WInOqtPDywFs=";
   };
+
+  patches = [ ./ppxlib.patch ];
 
   nativeBuildInputs = [ cppo ];
 

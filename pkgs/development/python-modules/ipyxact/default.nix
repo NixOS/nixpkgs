@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "ipyxact";
   version = "0.3.2";
+  format = "setuptools";
 
   propagatedBuildInputs = [ pyyaml ];
   checkInputs = [ six lxml ];
@@ -25,6 +26,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/olofk/ipyxact";
     description = "IP-XACT parser";
+    mainProgram = "ipxact2v";
     maintainers = with maintainers; [ genericnerdyusername ];
     license = licenses.mit;
   };

@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "django-debug-toolbar";
-  version = "3.8.1";
+  version = "4.3";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-GlEw25wem8iwwm3rYLk6TFEAIzC1pYjpSHdAkHwtFcE=";
+    hash = "sha256-8rwEM+YSO9TtkC1UWS4JrzFH+TlGOHzL+WmxNwMJIWQ=";
   };
 
   nativeBuildInputs = [
@@ -59,5 +59,5 @@ buildPythonPackage rec {
     changelog = "https://django-debug-toolbar.readthedocs.io/en/latest/changes.html";
     license = licenses.bsd3;
     maintainers = with maintainers; [ yuu ];
-};
+  };
 }

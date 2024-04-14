@@ -5,16 +5,18 @@
 
 buildGoModule rec {
   pname = "benthos";
-  version = "4.18.0";
+  version = "4.26.0";
 
   src = fetchFromGitHub {
     owner = "benthosdev";
     repo = "benthos";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wap11/D1PIvDt5Jk3CCyxWJNULMg62WFmiA09gc95dY=";
+    hash = "sha256-xFh0dmiLkU/o14OCefARtvkdN4Z1hzMfamyyB/mhf9s=";
   };
 
-  vendorHash = "sha256-pA8SBawcl8YFbUrDfWxzcrMK715xBTx1slvHoA/a9OM=";
+  proxyVendor = true;
+
+  vendorHash = "sha256-Ce2vXPKbyj517N3uJEGc00hCVZhcRrPvXUSuK+jjK3U=";
 
   doCheck = false;
 
@@ -30,6 +32,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Fancy stream processing made operationally mundane";
+    mainProgram = "benthos";
     homepage = "https://www.benthos.dev";
     changelog = "https://github.com/benthosdev/benthos/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

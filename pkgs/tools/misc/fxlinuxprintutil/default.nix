@@ -9,10 +9,10 @@ stdenv.mkDerivation rec {
   pname = "fxlinuxprintutil";
   version = "1.1.1-1";
 
+  # https://support-fb.fujifilm.com/driver_downloads/fxlinuxpdf112119031.zip is gone
   src = fetchzip {
-    url = "https://onlinesupport.fujixerox.com/driver_downloads/fxlinuxpdf112119031.zip";
+    url = "https://github.com/NixOS/nixpkgs/files/12232817/fxlinuxpdf112119031.zip";
     sha256 = "1mv07ch6ysk9bknfmjqsgxb803sj6vfin29s9knaqv17jvgyh0n3";
-    curlOpts = "--user-agent Mozilla/5.0";  # HTTP 410 otherwise
   };
 
   patches = [

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "ytt";
-  version = "0.45.3";
+  version = "0.48.0";
 
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
     repo = "carvel-ytt";
     rev = "v${version}";
-    sha256 = "sha256-2Q/a5GXHLh8RO6SLSqh6tiq5D8rPu9ftCQ1FaELwcv0=";
+    sha256 = "sha256-jHSSccD9jQGR2bblp1J9LQNPiTI47hsjPBmtPVmIRtI=";
   };
 
   vendorHash = null;
@@ -30,6 +30,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "YAML templating tool that allows configuration of complex software via reusable templates with user-provided values";
+    mainProgram = "ytt";
     homepage = "https://get-ytt.io";
     license = licenses.asl20;
     maintainers = with maintainers; [ brodes techknowlogick ];

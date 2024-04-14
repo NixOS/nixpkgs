@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/DanielAdolfsson/ndppd";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fadenb globin ];
+    maintainers = with maintainers; [ fadenb ];
+    mainProgram = "ndppd";
   };
 }

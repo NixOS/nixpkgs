@@ -21,5 +21,6 @@ stdenv.mkDerivation {
     license = licenses.boost;
     maintainers = with maintainers; [ Anillc ];
     platforms = platforms.all;
+    mainProgram = "telegram-bot-api";
   };
 }

@@ -1,7 +1,7 @@
 { lib, buildGoModule, fetchFromGitLab, fetchurl, bash }:
 
 let
-  version = "16.2.0";
+  version = "16.10.0";
 in
 buildGoModule rec {
   inherit version;
@@ -17,13 +17,13 @@ buildGoModule rec {
   # For patchShebangs
   buildInputs = [ bash ];
 
-  vendorHash = "sha256-sP9lboy1M4+AB1Z0VsX5eNxZ9ckuJBgEPxavAbOSk8g=";
+  vendorHash = "sha256-ng3ea60qK98nKGmwlSN2hPiE4BF64cgxEYPSeAoeOh0=";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     rev = "v${version}";
-    sha256 = "sha256-gTjGf/WuMoGNvsiWWj3Y7l2MvSzBM12RY/Odolm4fNw=";
+    sha256 = "sha256-TN8T/iib7G1NjyHZzZw686KZ3RCwpA1xRli3/0fnLBI=";
   };
 
   patches = [
@@ -40,6 +40,7 @@ buildGoModule rec {
 
     # No writable developer environment
     rm common/build_test.go
+    rm common/build_settings_test.go
     rm executors/custom/custom_test.go
 
     # No docker during build
@@ -67,8 +68,8 @@ buildGoModule rec {
   meta = with lib; {
     description = "GitLab Runner the continuous integration executor of GitLab";
     license = licenses.mit;
-    homepage = "https://about.gitlab.com/gitlab-ci/";
+    homepage = "https://docs.gitlab.com/runner/";
     platforms = platforms.unix ++ platforms.darwin;
-    maintainers = with maintainers; [ bachp zimbatm globin ] ++ teams.gitlab.members;
+    maintainers = with maintainers; [ bachp zimbatm ] ++ teams.gitlab.members;
   };
 }

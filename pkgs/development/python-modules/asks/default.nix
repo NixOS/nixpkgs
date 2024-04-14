@@ -1,9 +1,10 @@
 { lib
 , buildPythonPackage
+, pythonAtLeast
 , pythonOlder
 , fetchFromGitHub
 , anyio
-, async_generator
+, async-generator
 , h11
 , curio
 , overly
@@ -28,7 +29,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     anyio
-    async_generator
+    async-generator
     h11
   ];
 
@@ -37,6 +38,12 @@ buildPythonPackage rec {
     overly
     pytestCheckHook
     trio
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # stuck in threading waiter.acquire()
+    "test_https_get"
+    "test_https_get_checks_cert"
   ];
 
   pythonImportsCheck = [ "asks" ];

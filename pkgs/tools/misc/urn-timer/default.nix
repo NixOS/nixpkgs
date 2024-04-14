@@ -7,17 +7,18 @@
 , wrapGAppsHook
 , gtk3
 , jansson
+, nixosTests
 }:
 
 stdenv.mkDerivation {
   pname = "urn-timer";
-  version = "unstable-2023-07-31";
+  version = "unstable-2024-03-05";
 
   src = fetchFromGitHub {
     owner = "paoloose";
     repo = "urn";
-    rev = "2dad51949aa21e0e66a3d34e916fb66689c6be2e";
-    hash = "sha256-0pZjgKW4kyBgMGKEa8ZMhKtzbJX2MoXKID++iy16m2A=";
+    rev = "10082428749fabb69db1556f19940d8700ce48a2";
+    hash = "sha256-sQjHQ/i1d4v4ZnM0YAay+MdIj5l/FfIYj+NdH48OqfU=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +38,8 @@ stdenv.mkDerivation {
   passthru.updateScript = unstableGitUpdater {
     url = "https://github.com/paoloose/urn.git";
   };
+
+  passthru.tests.nixosTest = nixosTests.urn-timer;
 
   meta = with lib; {
     homepage = "https://github.com/paoloose/urn";

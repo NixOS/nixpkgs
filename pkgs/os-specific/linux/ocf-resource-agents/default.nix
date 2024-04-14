@@ -5,6 +5,7 @@
 , runCommand
 , lndir
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , pkg-config
 , python3
@@ -31,6 +32,16 @@ let
       rev = "v${version}";
       sha256 = "0haryi3yrszdfpqnkfnppxj1yiy6ipah6m80snvayc7v0ss0wnir";
     };
+
+    patches = [
+      # autoconf-2.72 upstream fix:
+      #   https://github.com/ClusterLabs/resource-agents/pull/1908
+      (fetchpatch {
+        name = "autoconf-2.72.patch";
+        url = "https://github.com/ClusterLabs/resource-agents/commit/bac658711a61fd704e792e2a0a45a2137213c442.patch";
+        hash = "sha256-Xq7W8pMRmFZmkqb2430bY5zdmVTrUrob6GwGiN6/bKY=";
+      })
+    ];
 
     nativeBuildInputs = [
       autoreconfHook
@@ -60,7 +71,17 @@ in
 
 # This combines together OCF definitions from other derivations.
 # https://github.com/ClusterLabs/resource-agents/blob/master/doc/dev-guides/ra-dev-guide.asc
-runCommand "ocf-resource-agents" {} ''
+runCommand "ocf-resource-agents" {
+  # Fix derivation location so things like
+  #   $ nix edit -f. ocf-resource-agents
+  # just work.
+  pos = builtins.unsafeGetAttrPos "version" resource-agentsForOCF;
+
+  # Useful to build and undate inputs individually:
+  passthru.inputs = {
+    inherit resource-agentsForOCF drbdForOCF pacemakerForOCF;
+  };
+} ''
   mkdir -p $out/usr/lib/ocf
   ${lndir}/bin/lndir -silent "${resource-agentsForOCF}/lib/ocf/" $out/usr/lib/ocf
   ${lndir}/bin/lndir -silent "${drbdForOCF}/usr/lib/ocf/" $out/usr/lib/ocf

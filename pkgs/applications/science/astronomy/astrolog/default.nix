@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.kmein ];
     homepage = "https://astrolog.org/astrolog.htm";
     description = "Freeware astrology program";
+    mainProgram = "astrolog";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
   };

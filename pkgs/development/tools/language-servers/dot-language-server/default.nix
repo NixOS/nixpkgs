@@ -17,6 +17,7 @@ buildNpmPackage rec {
 
   meta = with lib; {
     description = "A language server for the DOT language";
+    mainProgram = "dot-language-server";
     homepage = "https://github.com/nikeee/dot-language-server";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];

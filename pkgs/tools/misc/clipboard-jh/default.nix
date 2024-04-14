@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "clipboard-jh";
-  version = "0.8.1";
+  version = "0.9.0.1";
 
   src = fetchFromGitHub {
     owner = "Slackadays";
     repo = "clipboard";
     rev = version;
-    hash = "sha256-UlN2BjtzS54oImAGM2Kl+j/LwfAyDXtbEMhsijBh/yg=";
+    hash = "sha256-iILtyURYCshicgAV3MWkgMQsXHe7Unj1A08W7tUMU2o=";
   };
 
   postPatch = ''
@@ -42,8 +42,9 @@ stdenv.mkDerivation rec {
     darwin.apple_sdk.frameworks.AppKit
   ];
 
+  cmakeBuildType = "MinSizeRel";
+
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE='MinSizeRel'"
     "-Wno-dev"
     "-DINSTALL_PREFIX=${placeholder "out"}"
   ];

@@ -50,6 +50,7 @@ buildPythonPackage {
     openstack.tests.unit.cloud.test_image.TestImage.test_create_image_task
     openstack.tests.unit.image.v2.test_proxy.TestImageProxy.test_wait_for_task_error_396
     openstack.tests.unit.image.v2.test_proxy.TestImageProxy.test_wait_for_task_wait
+    openstack.tests.unit.test_resource.TestWaitForStatus.test_callback
     openstack.tests.unit.test_resource.TestWaitForStatus.test_status_fails
     openstack.tests.unit.test_resource.TestWaitForStatus.test_status_fails_different_attribute
     openstack.tests.unit.test_resource.TestWaitForStatus.test_status_match

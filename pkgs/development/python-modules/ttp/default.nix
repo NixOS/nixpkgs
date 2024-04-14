@@ -104,8 +104,9 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/dmulyalin/ttp/releases/tag/${version}";
     description = "Template Text Parser";
+    mainProgram = "ttp";
     homepage = "https://github.com/dmulyalin/ttp";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

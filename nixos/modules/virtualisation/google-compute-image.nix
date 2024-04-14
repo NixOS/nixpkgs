@@ -21,7 +21,7 @@ in
       type = with types; either (enum [ "auto" ]) int;
       default = "auto";
       example = 1536;
-      description = lib.mdDoc ''
+      description = ''
         Size of disk image. Unit is MB.
       '';
     };
@@ -29,7 +29,7 @@ in
     virtualisation.googleComputeImage.configFile = mkOption {
       type = with types; nullOr str;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         A path to a configuration file which will be placed at `/etc/nixos/configuration.nix`
         and be used when switching to a new configuration.
         If set to `null`, a default configuration is used, where the only import is
@@ -40,14 +40,26 @@ in
     virtualisation.googleComputeImage.compressionLevel = mkOption {
       type = types.int;
       default = 6;
-      description = lib.mdDoc ''
+      description = ''
         GZIP compression level of the resulting disk image (1-9).
       '';
     };
+    virtualisation.googleComputeImage.efi = mkEnableOption "EFI booting";
   };
 
   #### implementation
   config = {
+    boot.initrd.availableKernelModules = [ "nvme" ];
+    boot.loader.grub = mkIf cfg.efi {
+      device = mkForce "nodev";
+      efiSupport = true;
+      efiInstallAsRemovable = true;
+    };
+
+    fileSystems."/boot" = mkIf cfg.efi {
+      device = "/dev/disk/by-label/ESP";
+      fsType = "vfat";
+    };
 
     system.build.googleComputeImage = import ../../lib/make-disk-image.nix {
       name = "google-compute-image";
@@ -62,6 +74,7 @@ in
       '';
       format = "raw";
       configFile = if cfg.configFile == null then defaultConfigFile else cfg.configFile;
+      partitionTableType = if cfg.efi then "efi" else "legacy";
       inherit (cfg) diskSize;
       inherit config lib pkgs;
     };

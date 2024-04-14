@@ -11,12 +11,12 @@ in
   };
 
   options.services.grafana-agent = {
-    enable = mkEnableOption (lib.mdDoc "grafana-agent");
+    enable = mkEnableOption "grafana-agent";
 
-    package = mkPackageOptionMD pkgs "grafana-agent" { };
+    package = mkPackageOption pkgs "grafana-agent" { };
 
     credentials = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Credentials to load at service startup. Keys that are UPPER_SNAKE will be loaded as env vars. Values are absolute paths to the credentials.
       '';
       type = types.attrsOf types.str;
@@ -36,7 +36,7 @@ in
       type = with types; listOf str;
       default = [ ];
       example = [ "-enable-features=integrations-next" "-disable-reporting" ];
-      description = lib.mdDoc ''
+      description = ''
         Extra command-line flags passed to {command}`grafana-agent`.
 
         See <https://grafana.com/docs/agent/latest/static/configuration/flags/>
@@ -44,7 +44,7 @@ in
     };
 
     settings = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Configuration for {command}`grafana-agent`.
 
         See <https://grafana.com/docs/agent/latest/configuration/>

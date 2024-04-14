@@ -1,22 +1,48 @@
-{ cmake, fetchFromGitHub, lib, ninja, stdenv, testers, quick-lint-js }:
+{ buildPackages, cmake, fetchFromGitHub, lib, ninja, stdenv, testers, quick-lint-js }:
 
-
-stdenv.mkDerivation rec {
-  pname = "quick-lint-js";
-  version = "2.15.0";
+let
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "quick-lint";
     repo = "quick-lint-js";
     rev = version;
-    sha256 = "sha256-jymn3xqFwAKskBivkm9s/pLkPLpX1haQhNuH18xgiYw=";
+    hash = "sha256-L2LCRm1Fsg+xRdPc8YmgxDnuXJo92nxs862ewzObZ3I=";
   };
+
+  quick-lint-js-build-tools = buildPackages.stdenv.mkDerivation {
+    pname = "quick-lint-js-build-tools";
+    inherit version src;
+
+    nativeBuildInputs = [ cmake ninja ];
+    doCheck = false;
+
+    cmakeFlags = [
+      "-DQUICK_LINT_JS_ENABLE_BUILD_TOOLS=ON"
+      # Temporary workaround for https://github.com/NixOS/nixpkgs/pull/108496#issuecomment-1192083379
+      "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    ];
+    ninjaFlags = "quick-lint-js-build-tools";
+
+    installPhase = ''
+      runHook preInstall
+      cmake --install . --component build-tools
+      runHook postInstall
+    '';
+  };
+in
+stdenv.mkDerivation rec {
+  pname = "quick-lint-js";
+  inherit version src;
 
   nativeBuildInputs = [ cmake ninja ];
   doCheck = true;
 
-  # Temporary workaround for https://github.com/NixOS/nixpkgs/pull/108496#issuecomment-1192083379
-  cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=ON" ];
+  cmakeFlags = [
+    "-DQUICK_LINT_JS_USE_BUILD_TOOLS=${quick-lint-js-build-tools}/bin"
+    # Temporary workaround for https://github.com/NixOS/nixpkgs/pull/108496#issuecomment-1192083379
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+  ];
 
   passthru.tests = {
     version = testers.testVersion { package = quick-lint-js; };
@@ -24,9 +50,13 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Find bugs in Javascript programs";
+    mainProgram = "quick-lint-js";
     homepage = "https://quick-lint-js.com";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ratsclub ];
     platforms = platforms.all;
   };
+
+  # Expose quick-lint-js-build-tools to nix repl as quick-lint-js.build-tools.
+  passthru.build-tools = quick-lint-js-build-tools;
 }

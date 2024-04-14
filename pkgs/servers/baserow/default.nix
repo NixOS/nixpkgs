@@ -29,6 +29,8 @@ let
 
         doCheck = false;
       };
+
+      django = super.django_3;
     };
   };
 in
@@ -48,10 +50,15 @@ with python.pkgs; buildPythonApplication rec {
   sourceRoot = "${src.name}/backend";
 
   postPatch = ''
+    # use input files to not depend on outdated peer dependencies
+    mv requirements/base.{in,txt}
+    mv requirements/dev.{in,txt}
+
     # remove dependency constraints
-    sed 's/[~<>=].*//' -i requirements/base.in requirements/base.txt
-    sed 's/zope-interface/zope.interface/' -i requirements/base.in requirements/base.txt
-    sed 's/\[standard\]//' -i requirements/base.in requirements/base.txt
+    sed -i requirements/base.txt \
+      -e 's/[~<>=].*//' -i requirements/base.txt \
+      -e 's/zope-interface/zope.interface/' \
+      -e 's/\[standard\]//'
   '';
 
   nativeBuildInputs = [
@@ -115,13 +122,13 @@ with python.pkgs; buildPythonApplication rec {
     pytest-django
     pytest-unordered
     responses
-    zope_interface
+    zope-interface
   ];
 
   fixupPhase = ''
     cp -r src/baserow/contrib/database/{api,action,trash,formula,file_import} \
-      $out/lib/${python.libPrefix}/site-packages/baserow/contrib/database/
-    cp -r src/baserow/core/management/backup $out/lib/${python.libPrefix}/site-packages/baserow/core/management/
+      $out/${python.sitePackages}/baserow/contrib/database/
+    cp -r src/baserow/core/management/backup $out/${python.sitePackages}/baserow/core/management/
   '';
 
   disabledTests = [
@@ -147,5 +154,6 @@ with python.pkgs; buildPythonApplication rec {
     homepage = "https://baserow.io";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];
+    mainProgram = "baserow";
   };
 }

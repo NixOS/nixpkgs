@@ -5,32 +5,35 @@
 , buildPythonPackage
 , dacite
 , fetchFromGitHub
-, orjson
 , pytest-asyncio
 , pytest-error-for-skips
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "nettigo-air-monitor";
-  version = "2.1.0";
-  format = "setuptools";
+  version = "2.2.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bieniu";
-    repo = pname;
+    repo = "nettigo-air-monitor";
     rev = "refs/tags/${version}";
-    hash = "sha256-6pLdaBeyTIrsAzkr83Iywta+K4Vx3nt0QyL8opHNwV8=";
+    hash = "sha256-Z88IkXQi9Uqc+HX++Cp5nj4S0puwMfToqXzBCnbG59g=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp
     aqipy-atmotech
     dacite
-    orjson
   ];
 
   nativeCheckInputs = [

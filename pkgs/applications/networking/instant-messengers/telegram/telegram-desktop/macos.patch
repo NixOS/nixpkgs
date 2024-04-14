@@ -1,0 +1,145 @@
+diff --git a/Telegram/SourceFiles/platform/mac/overlay_widget_mac.mm b/Telegram/SourceFiles/platform/mac/overlay_widget_mac.mm
+index ef544803e9..69c61b3139 100644
+--- a/Telegram/SourceFiles/platform/mac/overlay_widget_mac.mm
++++ b/Telegram/SourceFiles/platform/mac/overlay_widget_mac.mm
+@@ -97,9 +97,11 @@ void MacOverlayWidgetHelper::updateStyles(bool fullscreen) {
+ 	[window setTitleVisibility:NSWindowTitleHidden];
+ 	[window setTitlebarAppearsTransparent:YES];
+ 	[window setStyleMask:[window styleMask] | NSWindowStyleMaskFullSizeContentView];
++#if 0
+ 	if (@available(macOS 12.0, *)) {
+ 		_data->topNotchSkip = [[window screen] safeAreaInsets].top;
+ 	}
++#endif
+ }
+ 
+ void MacOverlayWidgetHelper::refreshButtons(bool fullscreen) {
+Submodule Telegram/lib_base contains modified content
+diff --git a/Telegram/lib_base/base/platform/mac/base_battery_saving_mac.mm b/Telegram/lib_base/base/platform/mac/base_battery_saving_mac.mm
+index 7ce90d3..dac3c2c 100644
+--- a/Telegram/lib_base/base/platform/mac/base_battery_saving_mac.mm
++++ b/Telegram/lib_base/base/platform/mac/base_battery_saving_mac.mm
+@@ -138,6 +138,7 @@ BatterySaving::BatterySaving(Fn<void()> changedCallback) {
+ 	_observer = [[LowPowerModeObserver alloc] initWithCallback:std::move(wrapped)];
+ 
+ 	NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
++#if 0
+ 	if (@available(macOS 12.0, *)) {
+ 		[center
+ 			addObserver: _observer
+@@ -145,6 +146,7 @@ BatterySaving::BatterySaving(Fn<void()> changedCallback) {
+ 			name: NSProcessInfoPowerStateDidChangeNotification
+ 			object: nil];
+ 	}
++#endif
+ 	[center
+ 		addObserver: _observer
+ 		selector: @selector(powerStateChanged:)
+@@ -178,11 +180,13 @@ std::optional<bool> BatterySaving::enabled() const {
+ 		return std::nullopt;
+ 	}
+ 	NSProcessInfo *info = [NSProcessInfo processInfo];
++#if 0
+ 	if (@available(macOS 12.0, *)) {
+ 		if ([info isLowPowerModeEnabled]) {
+ 			return true;
+ 		}
+ 	}
++#endif
+ 	const auto state = DetectBatteryState();
+ 	if (!state.has || !state.draining) {
+ 		return false;
+Submodule Telegram/lib_webrtc contains modified content
+diff --git a/Telegram/lib_webrtc/webrtc/platform/mac/webrtc_environment_mac.mm b/Telegram/lib_webrtc/webrtc/platform/mac/webrtc_environment_mac.mm
+index 7521c08..5e22da2 100644
+--- a/Telegram/lib_webrtc/webrtc/platform/mac/webrtc_environment_mac.mm
++++ b/Telegram/lib_webrtc/webrtc/platform/mac/webrtc_environment_mac.mm
+@@ -364,6 +364,7 @@ EnvironmentMac::EnvironmentMac(not_null<EnvironmentDelegate*> delegate)
+ 	DefaultCaptureDeviceChangedMonitor.registerEnvironment(this);
+ 	AudioDeviceListChangedMonitor.registerEnvironment(this);
+ 
++#if 0
+ 	if (@available(macOS 14.0, *)) {
+ 		const auto weak = base::make_weak(this);
+ 		id block = [^(BOOL shouldBeMuted){
+@@ -387,6 +388,7 @@ EnvironmentMac::EnvironmentMac(not_null<EnvironmentDelegate*> delegate)
+ 			setInputMuteStateChangeHandler:block
+ 			error:nil];
+ 	}
++#endif
+ }
+ 
+ EnvironmentMac::~EnvironmentMac() {
+@@ -537,15 +539,18 @@ void EnvironmentMac::devicesRequested(DeviceType type) {
+ }
+ 
+ void EnvironmentMac::setCaptureMuted(bool muted) {
++#if 0
+ 	if (@available(macOS 14.0, *)) {
+ 		if (!_captureMuteNotification) {
+ 			const auto value = muted ? YES : NO;
+ 			[[AVAudioApplication sharedInstance] setInputMuted:value error:nil];
+ 		}
+ 	}
++#endif
+ }
+ 
+ void EnvironmentMac::captureMuteSubscribe() {
++#if 0
+ 	if (@available(macOS 14.0, *)) {
+ 		id observer = [[InputMuteObserver alloc] init];
+ 		[[[NSWorkspace sharedWorkspace] notificationCenter]
+@@ -578,6 +583,7 @@ void EnvironmentMac::captureMuteSubscribe() {
+ 			[observer release];
+ 		});
+ 	}
++#endif
+ }
+ 
+ void EnvironmentMac::captureMuteUnsubscribe() {
+@@ -595,6 +601,7 @@ void EnvironmentMac::captureMuteRestartAdm() {
+ void EnvironmentMac::setCaptureMuteTracker(
+ 		not_null<CaptureMuteTracker*> tracker,
+ 		bool track) {
++#if 0
+ 	if (@available(macOS 14.0, *)) {
+ 		if (track) {
+ 			if (!_captureMuteTracker) {
+@@ -619,6 +626,7 @@ void EnvironmentMac::setCaptureMuteTracker(
+ 			}
+ 		}
+ 	}
++#endif
+ }
+ 
+ std::unique_ptr<Environment> CreateEnvironment(
+Submodule Telegram/lib_webview contains modified content
+diff --git a/Telegram/lib_webview/webview/platform/mac/webview_mac.mm b/Telegram/lib_webview/webview/platform/mac/webview_mac.mm
+index 738e574..80ff5f0 100644
+--- a/Telegram/lib_webview/webview/platform/mac/webview_mac.mm
++++ b/Telegram/lib_webview/webview/platform/mac/webview_mac.mm
+@@ -314,9 +314,11 @@ Instance::Instance(Config config) {
+ 	_dataRequestHandler = std::move(config.dataRequestHandler);
+ 	[configuration setURLSchemeHandler:_handler forURLScheme:stdToNS(kDataUrlScheme)];
+ 	_webview = [[WKWebView alloc] initWithFrame:NSZeroRect configuration:configuration];
++#if 0
+ 	if (@available(macOS 13.3, *)) {
+ 		_webview.inspectable = config.debug ? YES : NO;
+ 	}
++#endif
+ 	[_manager addScriptMessageHandler:_handler name:@"external"];
+ 	[_webview setNavigationDelegate:_handler];
+ 	[_webview setUIDelegate:_handler];
+@@ -658,10 +660,12 @@ void *Instance::winId() {
+ }
+ 
+ void Instance::setOpaqueBg(QColor opaqueBg) {
++#if 0
+ 	if (@available(macOS 12.0, *)) {
+ 		[_webview setValue: @NO forKey: @"drawsBackground"];
+ 		[_webview setUnderPageBackgroundColor:[NSColor clearColor]];
+ 	}
++#endif
+ }
+ 
+ void Instance::resizeToWindow() {

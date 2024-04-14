@@ -3,7 +3,9 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, installShellFiles
 , setuptools-scm
+, shtab
 , importlib-metadata
 , dbus-python
 , jaraco-classes
@@ -14,17 +16,19 @@
 
 buildPythonPackage rec {
   pname = "keyring";
-  version = "23.13.1";
-  format = "pyproject";
-  disabled = pythonOlder "3.7";
+  version = "24.3.1";
+  pyproject = true;
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ui4VqbNeIZCNCq9OCkesxS1q4zRE3w2itJ1BpG721ng=";
+    hash = "sha256-wzJ7b/r8DovvvbWXys20ko/+XBIS92RfGG5tmVeomNs=";
   };
 
   nativeBuildInputs = [
+    installShellFiles
     setuptools-scm
+    shtab
   ];
 
   propagatedBuildInputs = [
@@ -35,6 +39,12 @@ buildPythonPackage rec {
   ] ++ lib.optionals (pythonOlder "3.12") [
     importlib-metadata
   ];
+
+  postInstall = ''
+    installShellCompletion --cmd keyring \
+      --bash <($out/bin/keyring --print-completion bash) \
+      --zsh <($out/bin/keyring --print-completion zsh)
+  '';
 
   pythonImportsCheck = [
     "keyring"
@@ -54,8 +64,9 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Store and access your passwords safely";
     homepage    = "https://github.com/jaraco/keyring";
-    changelog   = "https://github.com/jaraco/keyring/blob/v${version}/CHANGES.rst";
+    changelog   = "https://github.com/jaraco/keyring/blob/v${version}/NEWS.rst";
     license     = licenses.mit;
+    mainProgram = "keyring";
     maintainers = with maintainers; [ lovek323 dotlambda ];
     platforms   = platforms.unix;
   };

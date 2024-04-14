@@ -7,6 +7,7 @@
 , ncclient
 , netaddr
 , paramiko
+, ansible-pylibssh
 , pynetbox
 , scp
 , textfsm
@@ -20,7 +21,7 @@
 
 let
   pname = "ansible";
-  version = "8.1.0";
+  version = "9.4.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -30,7 +31,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kfILW/z18phTPBdKk4geALyea0FBFGT0TAVKONcWpWo=";
+    hash = "sha256-3UMcYzgOGMP6yjKI696M4vT5kjY6tVijwRyPIDLZCGc=";
   };
 
   postPatch = ''
@@ -45,6 +46,7 @@ buildPythonPackage {
     ncclient
     netaddr
     paramiko
+    ansible-pylibssh
     xmltodict
     # ansible.posix
     # ansible.utils
@@ -62,6 +64,7 @@ buildPythonPackage {
     jxmlease
     ncclient
     paramiko
+    ansible-pylibssh
     scp
     xmltodict
   ] ++ lib.optionals (withNetbox) [
@@ -77,6 +80,7 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "Radically simple IT automation";
+    mainProgram = "ansible-community";
     homepage = "https://www.ansible.com";
     changelog = "https://github.com/ansible-community/ansible-build-data/blob/${version}/${lib.versions.major version}/CHANGELOG-v${lib.versions.major version}.rst";
     license = licenses.gpl3Plus;

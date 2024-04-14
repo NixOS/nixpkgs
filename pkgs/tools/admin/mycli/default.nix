@@ -8,11 +8,11 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "mycli";
-  version = "1.26.1";
+  version = "1.27.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-jAMDXJtFJtv6CwhZZU4pdKDndZKp6bJ/QPWo2q6DvrE=";
+    sha256 = "sha256-0R2k5hRkAJbqgGZEPXWUb48oFxTKMKiQZckf3F+VC3I=";
   };
 
   propagatedBuildInputs = [
@@ -57,6 +57,7 @@ buildPythonApplication rec {
   meta = with lib; {
     inherit version;
     description = "Command-line interface for MySQL";
+    mainProgram = "mycli";
     longDescription = ''
       Rich command-line interface for MySQL with auto-completion and
       syntax highlighting.

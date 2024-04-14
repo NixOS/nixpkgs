@@ -1,9 +1,7 @@
 { lib
 , stdenv
-, writeText
 , rustPlatform
 , fetchFromGitHub
-, fetchpatch
 , pkg-config
 , protobuf
 , makeWrapper
@@ -19,19 +17,21 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "mullvad";
-  version = "2023.3";
+  version = "2024.1";
 
   src = fetchFromGitHub {
     owner = "mullvad";
     repo = "mullvadvpn-app";
     rev = version;
-    hash = "sha256-as/d14xVTqJvb+QxzEyZWh1EMRVpE8cDQRbdc4R4pcU=";
+    hash = "sha256-syIBYZe+e6i5A6Te51eNKcwwycnRhO1o2tP+z81NYXQ=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
+      "nix-0.26.1" = "sha256-b5bLeZVNbJE7aBnyzl0qvo0mXFeXa4hAZiuT1VJiFLk=";
       "udp-over-tcp-0.3.0" = "sha256-5PeaM7/zhux1UdlaKpnQ2yIdmFy1n2weV/ux9lSRha4=";
+      "hickory-proto-0.24.0" = "sha256-IqGVoQ1vRruCcaDr82ARkvSo42Pe9Q6iJIWnSd6GqEg=";
     };
   };
 
@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
 
   # talpid-core wants libwg.a in build/lib/{triple}
   preBuild = ''
-    dest=build/lib/${stdenv.targetPlatform.config}
+    dest=build/lib/${stdenv.hostPlatform.config}
     mkdir -p $dest
     ln -s ${libwg}/lib/libwg.a $dest
   '';

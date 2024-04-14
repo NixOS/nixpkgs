@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages, file, less, highlight, w3m
+{ lib, fetchFromGitHub, python3Packages, file, less, highlight, w3m, ranger, testers
 , imagePreviewSupport ? true
 , neoVimSupport ? true
 , improvedEncodingDetection ? true
@@ -48,6 +48,10 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace ranger/config/rc.conf \
       --replace "set preview_images false" "set preview_images true"
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = ranger;
+  };
 
   meta =  with lib; {
     description = "File manager with minimalistic curses interface";

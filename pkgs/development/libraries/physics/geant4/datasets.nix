@@ -35,15 +35,15 @@ in
   builtins.listToAttrs (map (a: { name = a.pname; value = mkDataset a; }) [
     {
       pname = "G4NDL";
-      version = "4.6";
-      sha256 = "sha256-nSh88q4PuIeirc6AHudPub4hsNFm2rSby+6UCKUUVAg=";
+      version = "4.7";
+      sha256 = "sha256-fn09JiEQLcYU91OtkocwopDRlmDu2WMEqdJLRT1nAwk=";
       envvar = "NEUTRONHP";
     }
 
     {
       pname = "G4EMLOW";
-      version = "8.0";
-      sha256 = "sha256-2Rmo5YOGiCV7kkimE5EOsqdjMFngMMi1DAosKtn9Kzs=";
+      version = "8.5";
+      sha256 = "sha256-ZrrKSaxdReKsEMEltPsmYiXlEYA+ZpgZCc6c0+m873M=";
       envvar = "LE";
     }
 
@@ -77,15 +77,15 @@ in
 
     {
       pname = "G4ABLA";
-      version = "3.1";
-      sha256 = "sha256-dpiwUrWL8bmIa+rNvWr2B63B4Jn8cwq2shz38JDAJ+0=";
+      version = "3.3";
+      sha256 = "sha256-HgQbMlLunO+IbWJPdT5pMwOqMtfl7zu6h7NPNtkuorE=";
       envvar = "ABLA";
     }
 
     {
       pname = "G4INCL";
-      version = "1.0";
-      sha256 = "sha256-cWFhghrp89BWX788LPNPTgLj5RnrQZqCI27vIsLENn0=";
+      version = "1.2";
+      sha256 = "sha256-+ICxYHPuCpLXSU8ydqbVLU3h02d6DUx8WHADlu0OGn4=";
       envvar = "INCL";
     }
 

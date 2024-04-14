@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gcompris";
-  version = "3.3";
+  version = "4.0";
 
   src = fetchurl {
-    url = "https://download.kde.org/stable/gcompris/qt/src/gcompris-qt-${version}.tar.xz";
-    hash = "sha256-8hqiq1wYw4irbOXCrwcJqTMuLISzSmSqPuw2Rn8XzQA=";
+    url = "mirror://kde/stable/gcompris/qt/src/gcompris-qt-${version}.tar.xz";
+    hash = "sha256-wcTqnK7ESv+jWHr5asedlkQ5rZV9iV4PLS8yQkvuDrY=";
   };
 
   cmakeFlags = [

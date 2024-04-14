@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "scikit-optimize";
   version = "0.9.0";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchFromGitHub {

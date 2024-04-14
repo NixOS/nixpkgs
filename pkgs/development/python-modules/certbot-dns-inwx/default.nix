@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "certbot-dns-inwx";
   version = "2.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

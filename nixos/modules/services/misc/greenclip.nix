@@ -7,14 +7,9 @@ let
 in {
 
   options.services.greenclip = {
-    enable = mkEnableOption (lib.mdDoc "Greenclip daemon");
+    enable = mkEnableOption "Greenclip, a clipboard manager";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.haskellPackages.greenclip;
-      defaultText = literalExpression "pkgs.haskellPackages.greenclip";
-      description = lib.mdDoc "greenclip derivation to use.";
-    };
+    package = mkPackageOption pkgs [ "haskellPackages" "greenclip" ] { };
   };
 
   config = mkIf cfg.enable {

@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A presenter console with multi-monitor support for PDF files";
+    mainProgram = "pdfpc";
     homepage = "https://pdfpc.github.io/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pSub ];

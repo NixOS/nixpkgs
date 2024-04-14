@@ -20,13 +20,13 @@
 assert withLibsecretSupport -> withGuiSupport;
 buildDotnetModule rec {
   pname = "git-credential-manager";
-  version = "2.2.2";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "git-ecosystem";
     repo = "git-credential-manager";
     rev = "v${version}";
-    hash = "sha256-XXtir/sSjJ1rpv3UQHM3Kano/fMBch/sm8ZtYwGyFyQ=";
+    hash = "sha256-Uf0EXaGM4k9Aanz16B9xA2EcseXTI9lLCws/ZVNb3e8=";
   };
 
   projectFile = "src/shared/Git-Credential-Manager/Git-Credential-Manager.csproj";
@@ -63,5 +63,6 @@ buildDotnetModule rec {
       .NET can find `/usr/bin/codesign` to sign the compiled binary.
       This problem is common to all .NET packages on MacOS with Nix.
     '';
+    mainProgram = "git-credential-manager";
   };
 }

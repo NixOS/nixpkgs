@@ -10,15 +10,14 @@
 let
   patches = [
     ./use-go-in-path.patch
-    ./fix-rules-go-3408.patch
   ];
 
   # Patch the protoc alias so that it always builds from source.
   rulesProto = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "rules_proto";
-    rev = "4.0.0-3.19.2";
-    sha256 = "sha256-wdmp+Tmf63PPr7G4X5F7rDas45WEETU3eKb47PFVI6o=";
+    rev = "4.0.0";
+    hash = "sha256-WVPZx14thneAC4PdiDhBibnPwlCKEF9c93CHR0t1Efo=";
     postFetch = ''
       sed -i 's|name = "protoc"|name = "_protoc_original"|' $out/proto/private/BUILD.release
       cat <<EOF >>$out/proto/private/BUILD.release
@@ -30,13 +29,13 @@ let
 in
 buildBazelPackage rec {
   pname = "bazel-watcher";
-  version = "0.21.2";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-watcher";
     rev = "v${version}";
-    sha256 = "sha256-wigrE9u1VuFnqLWyVJK3M7xsjyme2dDG6YTcD9whKnw=";
+    hash = "sha256-ebNHAYKyE3226KiCc2/VSz1OSITuPwuYlAIS3JrWzj0=";
   };
 
   nativeBuildInputs = [ go git python3 ];
@@ -64,7 +63,7 @@ buildBazelPackage rec {
       # currently present in PATH. Without removing the go_sdk from the marker
       # file, the hash of it will change anytime the Go derivation changes and
       # that would lead to impurities in the marker files which would result in
-      # a different sha256 for the fetch phase.
+      # a different hash for the fetch phase.
       rm -rf $bazelOut/external/{go_sdk,\@go_sdk.marker}
       sed -e '/^FILE:@go_sdk.*/d' -i $bazelOut/external/\@*.marker
 
@@ -82,7 +81,7 @@ buildBazelPackage rec {
       rm -rf $bazelOut/external/com_google_protobuf
     '';
 
-    sha256 = "sha256-lC9e5Z2cxLAeWXkiFGmcB6aOaurMvwrP/k5jl3gCfAc=";
+    sha256 = "sha256-B2KVD/FmkAa7MNhLaH286gF3uA20qjN3CoA83KRB9E8=";
   };
 
   buildAttrs = {

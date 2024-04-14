@@ -252,7 +252,16 @@ name = "bincode"
 version = "2.0.0-rc.3"
 source = "git+https://github.com/bincode-org/bincode.git#224e41274b089e3833a3533459f5c5758c43ab2c"
 dependencies = [
+ "bincode_derive",
  "serde",
+]
+
+[[package]]
+name = "bincode_derive"
+version = "2.0.0-rc.3"
+source = "git+https://github.com/bincode-org/bincode.git#224e41274b089e3833a3533459f5c5758c43ab2c"
+dependencies = [
+ "virtue",
 ]
 
 [[package]]
@@ -2249,7 +2258,7 @@ dependencies = [
 
 [[package]]
 name = "rtz"
-version = "0.4.2"
+version = "0.5.3"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -2281,20 +2290,19 @@ dependencies = [
  "wasm-bindgen",
  "wasm-bindgen-futures",
  "wee_alloc",
-]
-
-[[package]]
-name = "rtz-build"
-version = "0.2.3"
-dependencies = [
- "reqwest",
- "rtz-core",
  "zip",
 ]
 
 [[package]]
+name = "rtz-build"
+version = "0.2.6"
+dependencies = [
+ "rtz-core",
+]
+
+[[package]]
 name = "rtz-core"
-version = "0.1.1"
+version = "0.1.4"
 dependencies = [
  "anyhow",
  "bincode",
@@ -2303,8 +2311,10 @@ dependencies = [
  "geojson",
  "pretty_assertions",
  "rayon",
+ "reqwest",
  "serde",
  "serde_json",
+ "zip",
 ]
 
 [[package]]
@@ -3110,6 +3120,12 @@ name = "version_check"
 version = "0.9.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
+
+[[package]]
+name = "virtue"
+version = "0.0.14"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b522f715ead3537dc57c9907899a08e461a8f1e87fc8414a4a89bbd9854289ff"
 
 [[package]]
 name = "want"

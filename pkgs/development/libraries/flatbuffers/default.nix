@@ -7,21 +7,16 @@
 
 stdenv.mkDerivation rec {
   pname = "flatbuffers";
-  version = "23.3.3";
+  version = "23.5.26";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flatbuffers";
     rev = "v${version}";
-    sha256 = "sha256-h0lF7jf1cDVVyqhUCi7D0NoZ3b4X/vWXsFplND80lGs=";
+    hash = "sha256-e+dNPNbCHYDXUS/W+hMqf/37fhVgEGzId6rhP3cToTE=";
   };
 
   nativeBuildInputs = [ cmake python3 ];
-
-  postPatch = ''
-    # Fix default value of "test_data_path" to make tests work
-    substituteInPlace tests/test.cpp --replace '"tests/";' '"../tests/";'
-  '';
 
   cmakeFlags = [
     "-DFLATBUFFERS_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"

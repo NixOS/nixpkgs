@@ -49,22 +49,19 @@ let
   };
 in {
   options.services.datadog-agent = {
-    enable = mkEnableOption (lib.mdDoc "Datadog-agent v7 monitoring service");
+    enable = mkEnableOption "Datadog-agent v7 monitoring service";
 
-    package = mkOption {
-      default = pkgs.datadog-agent;
-      defaultText = literalExpression "pkgs.datadog-agent";
-      description = lib.mdDoc ''
-        Which DataDog v7 agent package to use. Note that the provided
-        package is expected to have an overridable `pythonPackages`-attribute
-        which configures the Python environment with the Datadog
-        checks.
+    package = mkPackageOption pkgs "datadog-agent" {
+      extraDescription = ''
+        ::: {.note}
+        The provided package is expected to have an overridable `pythonPackages`-attribute
+        which configures the Python environment with the Datadog checks.
+        :::
       '';
-      type = types.package;
     };
 
     apiKeyFile = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Path to a file containing the Datadog API key to associate the
         agent with your account.
       '';
@@ -73,7 +70,7 @@ in {
     };
 
     ddUrl = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Custom dd_url to configure the agent with. Useful if traffic to datadog
         needs to go through a proxy.
         Don't use this to point to another datadog site (EU) - use site instead.
@@ -84,7 +81,7 @@ in {
     };
 
     site = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         The datadog site to point the agent towards.
         Set to datadoghq.eu to point it to their EU site.
       '';
@@ -94,21 +91,21 @@ in {
     };
 
     tags = mkOption {
-      description = lib.mdDoc "The tags to mark this Datadog agent";
+      description = "The tags to mark this Datadog agent";
       example = [ "test" "service" ];
       default = null;
       type = types.nullOr (types.listOf types.str);
     };
 
     hostname = mkOption {
-      description = lib.mdDoc "The hostname to show in the Datadog dashboard (optional)";
+      description = "The hostname to show in the Datadog dashboard (optional)";
       default = null;
       example = "mymachine.mydomain";
       type = types.nullOr types.str;
     };
 
     logLevel = mkOption {
-      description = lib.mdDoc "Logging verbosity.";
+      description = "Logging verbosity.";
       default = null;
       type = types.nullOr (types.enum ["DEBUG" "INFO" "WARN" "ERROR"]);
     };
@@ -117,7 +114,7 @@ in {
       default = {};
       type    = types.attrs;
 
-      description = lib.mdDoc ''
+      description = ''
         Extra integrations from the Datadog core-integrations
         repository that should be built and included.
 
@@ -139,22 +136,34 @@ in {
     extraConfig = mkOption {
       default = {};
       type = types.attrs;
-      description = lib.mdDoc ''
+      description = ''
         Extra configuration options that will be merged into the
         main config file {file}`datadog.yaml`.
       '';
      };
 
     enableLiveProcessCollection = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable the live process collection agent.
       '';
       default = false;
       type = types.bool;
     };
 
+    processAgentPackage = mkOption {
+      default = pkgs.datadog-process-agent;
+      defaultText = literalExpression "pkgs.datadog-process-agent";
+      description = ''
+        Which DataDog v7 agent package to use. Note that the provided
+        package is expected to have an overridable `pythonPackages`-attribute
+        which configures the Python environment with the Datadog
+        checks.
+      '';
+      type = types.package;
+    };
+
     enableTraceAgent = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable the trace agent.
       '';
       default = false;
@@ -162,7 +171,7 @@ in {
     };
 
     checks = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Configuration for all Datadog checks. Keys of this attribute
         set will be used as the name of the check to create the
         appropriate configuration in `conf.d/$check.d/conf.yaml`.
@@ -201,7 +210,7 @@ in {
     };
 
     diskCheck = mkOption {
-      description = lib.mdDoc "Disk check config";
+      description = "Disk check config";
       type = types.attrs;
       default = {
         init_config = {};
@@ -210,7 +219,7 @@ in {
     };
 
     networkCheck = mkOption {
-      description = lib.mdDoc "Network check config";
+      description = "Network check config";
       type = types.attrs;
       default = {
         init_config = {};
@@ -270,7 +279,7 @@ in {
         path = [ ];
         script = ''
           export DD_API_KEY=$(head -n 1 ${cfg.apiKeyFile})
-          ${pkgs.datadog-process-agent}/bin/process-agent --config /etc/datadog-agent/datadog.yaml
+          ${cfg.processAgentPackage}/bin/process-agent --config /etc/datadog-agent/datadog.yaml
         '';
       });
 

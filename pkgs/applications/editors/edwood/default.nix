@@ -43,5 +43,6 @@ buildGoModule rec {
     homepage = "https://github.com/rjkroege/edwood";
     license = with licenses; [ mit bsd3 ];
     maintainers = with maintainers; [ kranzes ];
+    mainProgram = "edwood";
   };
 }

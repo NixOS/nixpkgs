@@ -4,28 +4,19 @@
 
 stdenv.mkDerivation rec {
   pname = "python-qt";
-  version = "3.3.0";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "MeVisLab";
     repo = "pythonqt";
     rev = "v${version}";
-    hash = "sha256-zbQ6X4Q2/QChaw3GAz/aVBj2JjWEz52YuPuHbBz935k=";
+    hash = "sha256-xJYOD07ACOKtY3psmfHNSCjm6t0fr8JU9CrL0w5P5G0=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "remove-unneeded-pydebug-include.patch";
-      url = "https://github.com/MeVisLab/pythonqt/commit/a93104dea4d9c79351276ec963e931ca617625ec.patch";
-      includes = [ "src/PythonQt.cpp" ];
-      hash = "sha256-Tc4+6dIdvrda/z3Nz1s9Xz+ZWJLV2BQh8i552UynSI0=";
-    })
-  ];
 
   # https://github.com/CsoundQt/CsoundQt/blob/develop/BUILDING.md#pythonqt
   postPatch = ''
     substituteInPlace build/python.prf \
-      --replace "unix:PYTHON_VERSION=2.7" "unix:PYTHON_VERSION=${python.pythonVersion}"
+      --replace "PYTHON_VERSION=2.7" "PYTHON_VERSION=${python.pythonVersion}"
   '';
 
   hardeningDisable = [ "all" ];

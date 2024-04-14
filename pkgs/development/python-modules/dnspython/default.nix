@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , aioquic
 , buildPythonPackage
 , cacert
@@ -7,31 +6,32 @@
 , curio
 , fetchPypi
 , h2
+, httpcore
 , httpx
 , idna
+, hatchling
 , pytestCheckHook
 , pythonOlder
 , requests
 , requests-toolbelt
-, setuptools-scm
 , sniffio
 , trio
 }:
 
 buildPythonPackage rec {
   pname = "dnspython";
-  version = "2.3.0";
-  format = "setuptools";
+  version = "2.6.1";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ik4ysD60a+cOEu9tZOC+Ejpk5iGrTAgi/21FDVKlQLk=";
+    hash = "sha256-6PD5wjp7fLmd7WTmw6bz5wHXj1DFXgArg53qciXP98w=";
   };
 
   nativeBuildInputs = [
-    setuptools-scm
+    hatchling
   ];
 
   passthru.optional-dependencies = {
@@ -40,6 +40,7 @@ buildPythonPackage rec {
       h2
       requests
       requests-toolbelt
+      httpcore
     ];
     IDNA = [
       idna
@@ -70,15 +71,6 @@ buildPythonPackage rec {
   disabledTests = [
     # dns.exception.SyntaxError: protocol not found
     "test_misc_good_WKS_text"
-    # fails if IPv6 isn't available
-    "test_resolver_override"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # Tests that run inconsistently on darwin systems
-    # 9 tests fail with: BlockingIOError: [Errno 35] Resource temporarily unavailable
-    "testQueryUDP"
-    # 6 tests fail with: dns.resolver.LifetimeTimeout: The resolution lifetime expired after ...
-    "testResolveCacheHit"
-    "testResolveTCP"
   ];
 
   pythonImportsCheck = [

@@ -46,9 +46,10 @@ mkDerivation rec {
 
   meta = {
     description = "An equalizer interface for pulseaudio's equalizer sinks";
+    mainProgram = "qpaeq";
     homepage = "http://www.pulseaudio.org/";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ lovek323 mkg20001 ];
+    maintainers = with lib.maintainers; [ lovek323 ];
     platforms = lib.platforms.unix;
   };
 }

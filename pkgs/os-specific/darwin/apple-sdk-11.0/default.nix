@@ -61,12 +61,15 @@ let
   mkStdenv = stdenv:
     if stdenv.isAarch64 then stdenv
     else
+      let
+        darwinMinVersion = "10.12";
+        darwinSdkVersion = "11.0";
+      in
       (overrideCC stdenv (mkCc stdenv.cc)).override {
         extraBuildInputs = [ pkgs.darwin.apple_sdk_11_0.frameworks.CoreFoundation ];
-        targetPlatform = stdenv.targetPlatform // {
-          darwinMinVersion = "10.12";
-          darwinSdkVersion = "11.0";
-        };
+        buildPlatform = stdenv.buildPlatform // { inherit darwinMinVersion darwinSdkVersion; };
+        hostPlatform = stdenv.hostPlatform // { inherit darwinMinVersion darwinSdkVersion; };
+        targetPlatform = stdenv.targetPlatform // { inherit darwinMinVersion darwinSdkVersion; };
       };
 
   stdenvs = {
@@ -94,6 +97,7 @@ let
     Libsystem = callPackage ./libSystem.nix { };
     LibsystemCross = pkgs.darwin.Libsystem;
     libcharset = callPackage ./libcharset.nix { };
+    libcompression = callPackage ./libcompression.nix { };
     libunwind = callPackage ./libunwind.nix { };
     libnetwork = callPackage ./libnetwork.nix { };
     libpm = callPackage ./libpm.nix { };
@@ -139,5 +143,16 @@ let
       });
       xcbuild = xcodebuild;
     }));
+
+    darwin-stubs = stdenvNoCC.mkDerivation {
+      pname = "darwin-stubs";
+      inherit (MacOSX-SDK) version;
+
+      buildCommand = ''
+        mkdir -p "$out"
+        ln -s ${MacOSX-SDK}/System "$out/System"
+        ln -s ${MacOSX-SDK}/usr "$out/usr"
+      '';
+    };
   };
 in packages

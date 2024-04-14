@@ -1,22 +1,35 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, nix-update-script
+, testers
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "upx";
-  version = "4.0.2";
+  version = "4.2.3";
   src = fetchFromGitHub {
     owner = "upx";
-    repo = pname;
-    rev = "v${version}";
+    repo = "upx";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    sha256 = "sha256-5jqEdMlHmsD88kT/EGieL7DktppVdfWyJWGRNRKbRc4=";
+    hash = "sha256-3+aOadTqQ1apnrXt2I27j8P6iJF96W90YjxVTPmRhs0=";
   };
 
   nativeBuildInputs = [ cmake ];
 
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+  };
+
   meta = with lib; {
     homepage = "https://upx.github.io/";
     description = "The Ultimate Packer for eXecutables";
+    changelog = "https://github.com/upx/upx/blob/${finalAttrs.src.rev}/NEWS";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
+    mainProgram = "upx";
   };
-}
+})

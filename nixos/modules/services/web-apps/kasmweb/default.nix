@@ -5,12 +5,12 @@ let
 in
 {
   options.services.kasmweb = {
-    enable = lib.mkEnableOption (lib.mdDoc "kasmweb");
+    enable = lib.mkEnableOption "kasmweb";
 
     networkSubnet = lib.mkOption {
       default = "172.20.0.0/16";
       type = lib.types.str;
-      description = lib.mdDoc ''
+      description = ''
         The network subnet to use for the containers.
       '';
     };
@@ -19,14 +19,14 @@ in
       user = lib.mkOption {
         default = "kasmweb";
         type = lib.types.str;
-        description = lib.mdDoc ''
+        description = ''
           Username to use for the postgres database.
         '';
       };
       password = lib.mkOption {
         default = "kasmweb";
         type = lib.types.str;
-        description = lib.mdDoc ''
+        description = ''
           password to use for the postgres database.
         '';
       };
@@ -35,7 +35,7 @@ in
     redisPassword = lib.mkOption {
       default = "kasmweb";
       type = lib.types.str;
-      description = lib.mdDoc ''
+      description = ''
         password to use for the redis cache.
       '';
     };
@@ -43,7 +43,7 @@ in
     defaultAdminPassword = lib.mkOption {
       default = "kasmweb";
       type = lib.types.str;
-      description = lib.mdDoc ''
+      description = ''
         default admin password to use.
       '';
     };
@@ -51,7 +51,7 @@ in
     defaultUserPassword = lib.mkOption {
       default = "kasmweb";
       type = lib.types.str;
-      description = lib.mdDoc ''
+      description = ''
         default user password to use.
       '';
     };
@@ -59,7 +59,7 @@ in
     defaultManagerToken = lib.mkOption {
       default = "kasmweb";
       type = lib.types.str;
-      description = lib.mdDoc ''
+      description = ''
         default manager token to use.
       '';
     };
@@ -67,7 +67,7 @@ in
     defaultGuacToken = lib.mkOption {
       default = "kasmweb";
       type = lib.types.str;
-      description = lib.mdDoc ''
+      description = ''
         default guac token to use.
       '';
     };
@@ -75,7 +75,7 @@ in
     defaultRegistrationToken = lib.mkOption {
       default = "kasmweb";
       type = lib.types.str;
-      description = lib.mdDoc ''
+      description = ''
         default registration token to use.
       '';
     };
@@ -83,7 +83,7 @@ in
     datastorePath = lib.mkOption {
       type = lib.types.str;
       default = "/var/lib/kasmweb";
-      description = lib.mdDoc ''
+      description = ''
         The directory used to store all data for kasmweb.
       '';
     };
@@ -91,7 +91,7 @@ in
     listenAddress = lib.mkOption {
       type = lib.types.str;
       default = "0.0.0.0";
-      description = lib.mdDoc ''
+      description = ''
         The address on which kasmweb should listen.
       '';
     };
@@ -99,7 +99,7 @@ in
     listenPort = lib.mkOption {
       type = lib.types.int;
       default = 443;
-      description = lib.mdDoc ''
+      description = ''
         The port on which kasmweb should listen.
       '';
     };
@@ -107,7 +107,7 @@ in
     sslCertificate = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         The SSL certificate to be used for kasmweb.
       '';
     };
@@ -115,7 +115,7 @@ in
     sslCertificateKey = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         The SSL certificate's key to be used for kasmweb. Make sure to specify
         this as a string and not a literal path, so that it is not accidentally
         included in your nixstore.

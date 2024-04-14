@@ -37,20 +37,20 @@
 
 stdenv.mkDerivation rec {
   pname = "389-ds-base";
-  version = "2.4.2";
+  version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "389ds";
     repo = pname;
     rev = "${pname}-${version}";
-    hash = "sha256-3wePHYA2z4qwW0KTECTDN8X9yJuUB0n14KjKbWN0Knk=";
+    hash = "sha256-bUjL1fjzyrq9jjpB/xbRCAISiPBwrlXbbDqT0aLOVOc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${src.name}/src";
     name = "${pname}-${version}";
-    hash = "sha256-972tJ8aKNxC3O8VxbAau7OSej873IBXsP3isMXAXKcU=";
+    hash = "sha256-FlrHaz1whwzDvm3MA+wEaQpq7h2X9ZDnQc3f73vLZ58=";
   };
 
   nativeBuildInputs = [
@@ -141,5 +141,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.ners ];
+    # https://hydra.nixos.org/build/249763145, doesn't build since glibc 2.39.
+    # Potential fix is documented in https://github.com/389ds/389-ds-base/issues/5332,
+    # but it doesn't apply here.
+    broken = true;
   };
 }

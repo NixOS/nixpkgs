@@ -4,8 +4,10 @@
 , pythonOlder
 
 # build
+, meson
+, meson-python
+, ninja
 , pybind11
-, setuptools
 
 # propagates
 , numpy
@@ -23,7 +25,7 @@
 
 let countourpy = buildPythonPackage rec {
   pname = "contourpy";
-  version = "1.0.7";
+  version = "1.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -32,12 +34,14 @@ let countourpy = buildPythonPackage rec {
     owner = "contourpy";
     repo = "contourpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-n04b9yUoUMH2H7t8um/8h5XaL3hzY/uNMYmOKTVKEPA=";
+    hash = "sha256-5yZrIwwe9dL5vtdSJnOhY9X4BdK/cdEY4DkVVjCq1uw=";
   };
 
   nativeBuildInputs = [
+    meson
+    meson-python
+    ninja
     pybind11
-    setuptools
   ];
 
   propagatedBuildInputs = [

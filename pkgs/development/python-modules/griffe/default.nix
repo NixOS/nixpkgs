@@ -1,7 +1,6 @@
 { lib
 , aiofiles
 , buildPythonPackage
-, cached-property
 , colorama
 , fetchFromGitHub
 , git
@@ -13,22 +12,17 @@
 
 buildPythonPackage rec {
   pname = "griffe";
-  version = "0.32.3";
-  format = "pyproject";
+  version = "0.42.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
-    repo = pname;
+    repo = "griffe";
     rev = "refs/tags/${version}";
-    hash = "sha256-rPh4FtcigZzscm3y/BJ/0Q0wURlumowlHY15MiQw2B8=";
+    hash = "sha256-KaD3j96FJJx43m/nfHa4kAft4FcDOdq+2dsiaMY7PPY=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'license = "ISC"' 'license = {file = "LICENSE"}' \
-  '';
 
   nativeBuildInputs = [
     pdm-backend
@@ -36,8 +30,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     colorama
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    cached-property
   ];
 
   nativeCheckInputs = [
@@ -58,6 +50,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Signatures for entire Python programs";
+    mainProgram = "griffe";
     homepage = "https://github.com/mkdocstrings/griffe";
     changelog = "https://github.com/mkdocstrings/griffe/blob/${version}/CHANGELOG.md";
     license = licenses.isc;

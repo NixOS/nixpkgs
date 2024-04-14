@@ -4,6 +4,7 @@
 buildPythonPackage rec {
   pname = "pytest-virtualenv";
   version = "1.7.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

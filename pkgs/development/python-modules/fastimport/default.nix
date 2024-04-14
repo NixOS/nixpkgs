@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "fastimport";
   version = "0.9.14";
+  format = "setuptools";
 
   disabled = pythonOlder "3.5";
 

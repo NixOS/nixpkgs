@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "microdata";
   version = "0.8.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "edsu";
@@ -28,6 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for extracting html microdata";
+    mainProgram = "microdata";
     homepage = "https://github.com/edsu/microdata";
     license = licenses.cc0;
     maintainers = with maintainers; [ ambroisie ];

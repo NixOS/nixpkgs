@@ -36,21 +36,21 @@ python3.pkgs.buildPythonApplication rec {
     absl-py
     fonttools
     lxml
-    ninja-python
+    ninja
     picosvg
     pillow
     regex
     toml
     tomlkit
     ufo2ft
-    ufoLib2
+    ufolib2
     zopfli
   ];
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
 
-    ninja-python
+    ninja
     picosvg
   ];
 

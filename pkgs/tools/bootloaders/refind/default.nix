@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, fetchpatch, gnu-efi, nixosTests }:
+{ lib
+, stdenv
+, fetchurl
+, gnu-efi
+, nixosTests
+, efibootmgr
+, openssl
+, withSbsigntool ? false # currently, cross compiling sbsigntool is broken, so default to false
+, sbsigntool
+, makeWrapper
+}:
 
 let
   archids = {
@@ -14,25 +24,19 @@ in
 
 stdenv.mkDerivation rec {
   pname = "refind";
-  version = "0.13.3.1";
+  version = "0.14.0.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/refind/${version}/${pname}-src-${version}.tar.gz";
-    sha256 = "1lfgqqiyl6isy25wrxzyi3s334ii057g88714igyjjmxh47kygks";
+    url = "mirror://sourceforge/project/refind/${version}/refind-src-${version}.tar.gz";
+    hash = "sha256-JqDFXf01ZUmeH4LY/ldGTb7xnKiGzm0BqBUii478iw8=";
   };
 
   patches = [
     # Removes hardcoded toolchain for aarch64, allowing successful aarch64 builds.
     ./0001-toolchain.patch
-
-    # Fixes issue with null dereference in ReadHiddenTags
-    # Upstream: https://sourceforge.net/p/refind/code/merge-requests/45/
-    (fetchpatch {
-      url = "https://github.com/samueldr/rEFInd/commit/29cd79dedabf84d5ddfe686f5692278cae6cc4d6.patch";
-      sha256 = "sha256-/jAmOwvMmFWazyukN+ru1tQDiIBtgGk/e/pczsl1Xc8=";
-    })
   ];
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ gnu-efi ];
 
   hardeningDisable = [ "stackprotector" ];
@@ -102,16 +106,16 @@ stdenv.mkDerivation rec {
     install -D -m0644 keys/* $out/share/refind/keys/
 
     # Fix variable definition of 'RefindDir' which is used to locate ressource files.
-    sed -i "s,\bRefindDir=.*,RefindDir=$out/share/refind,g" $out/bin/refind-install
-
-    # Patch uses of `which`.  We could patch in calls to efibootmgr,
-    # openssl, convert, and openssl, but that would greatly enlarge
-    # refind's closure (from ca 28MB to over 400MB).
-    sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-install
-    sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-mvrefind
-    sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-mkfont
+    sed -i "s,\bRefindDir=\"\$This.*,RefindDir=$out/share/refind,g" $out/bin/refind-install
 
     runHook postInstall
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/refind-install \
+      --prefix PATH : ${lib.makeBinPath ( [ efibootmgr openssl ] ++ lib.optional withSbsigntool sbsigntool )}
+    wrapProgram $out/bin/refind-mvrefind \
+      --prefix PATH : ${lib.makeBinPath [ efibootmgr ]}
   '';
 
   passthru.tests = {
@@ -136,7 +140,7 @@ stdenv.mkDerivation rec {
       Linux kernels that provide EFI stub support.
     '';
     homepage = "http://refind.sourceforge.net/";
-    maintainers = with maintainers; [ AndersonTorres samueldr ];
+    maintainers = with maintainers; [ AndersonTorres samueldr chewblacka ];
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
     license = licenses.gpl3Plus;
   };

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "python-yubico";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1gd3an1cdcq328nr1c9ijrsf32v0crv6dgq7knld8m9cadj517c7";
+    sha256 = "sha256-2EZkJ6pZIqxdS36cZbaTEIQnz1N9ZT1oyyEsBxPo5vU=";
   };
 
   propagatedBuildInputs = [ pyusb ];

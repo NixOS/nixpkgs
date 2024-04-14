@@ -37,6 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Show information about files in different file formats";
+    mainProgram = "ropper";
     homepage = "https://scoding.de/ropper/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bennofs ];

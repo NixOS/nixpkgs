@@ -6,25 +6,29 @@
 , pytest-trio
 , pytestCheckHook
 , pythonOlder
+, setuptools
+, setuptools-scm
 , twisted
 , typing-extensions
-, vcversioner
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pyee";
-  version = "9.0.4";
-  format = "setuptools";
+  version = "11.1.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-J3DEkoq8ch9GtwXmpysMWUgMSmnJqDygsAu5lPHqSzI=";
+    hash = "sha256-tTr5j2mQyBDt2bVrh3kQIaj1T9E9tO3RFCQ41EuiJj8=";
   };
 
-  buildInputs = [
-    vcversioner
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [

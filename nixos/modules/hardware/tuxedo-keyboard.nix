@@ -8,8 +8,8 @@ let
 in
   {
     options.hardware.tuxedo-keyboard = {
-      enable = mkEnableOption (lib.mdDoc ''
-          Enables the tuxedo-keyboard driver.
+      enable = mkEnableOption ''
+          the tuxedo-keyboard driver.
 
           To configure the driver, pass the options to the {option}`boot.kernelParams` configuration.
           There are several parameters you can change. It's best to check at the source code description which options are supported.
@@ -24,7 +24,7 @@ in
            "tuxedo_keyboard.color_left=0xff0a0a"
           ];
           ```
-      '');
+      '';
     };
 
     config = mkIf cfg.enable

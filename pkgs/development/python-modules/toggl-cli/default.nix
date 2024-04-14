@@ -2,7 +2,7 @@
 , buildPythonPackage
 , click
 , click-completion
-, factory_boy
+, factory-boy
 , faker
 , fetchPypi
 , inquirer
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-mock
     faker
-    factory_boy
+    factory-boy
   ];
 
   postPatch = ''
@@ -83,8 +83,12 @@ buildPythonPackage rec {
     "toggl"
   ];
 
+  # updates to a bogus tag
+  passthru.skipBulkUpdate = true;
+
   meta = with lib; {
     description = "Command line tool and set of Python wrapper classes for interacting with toggl's API";
+    mainProgram = "toggl";
     homepage = "https://toggl.uhlir.dev/";
     license = licenses.mit;
     maintainers = with maintainers; [ mmahut ];

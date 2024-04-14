@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flow";
-  version = "0.213.0";
+  version = "0.233.0";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "flow";
     rev = "v${version}";
-    sha256 = "sha256-6w09lo1+gBiFU481a6wYGQmJ61yVwQhMOll7QUeXy0U=";
+    hash = "sha256-FMSwCou8J8gpuZ6lPKp+qO58iZWxBDOv8vcZvSdFWWE=";
   };
 
   postPatch = ''
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A static type checker for JavaScript";
+    mainProgram = "flow";
     homepage = "https://flow.org/";
     changelog = "https://github.com/facebook/flow/blob/v${version}/Changelog.md";
     license = licenses.mit;

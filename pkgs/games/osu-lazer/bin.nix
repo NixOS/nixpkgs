@@ -7,70 +7,35 @@
 
 let
   pname = "osu-lazer-bin";
-  version = "2023.803.0";
-  name = "${pname}-${version}";
+  version = "2024.412.1";
 
-  osu-lazer-bin-src = {
-    aarch64-darwin = {
+  src = {
+    aarch64-darwin = fetchzip {
       url = "https://github.com/ppy/osu/releases/download/${version}/osu.app.Apple.Silicon.zip";
-      sha256 = "sha256-41UvP3h7Nnmjnjr1nl35uCe6CUK54p1Ok1KhQ8F5/4M=";
+      hash = "sha256-iV9m6w2bs2123uUmH1lgc+sZFG0NtvEIaQmADkaF/x8=";
+      stripRoot = false;
     };
-    x86_64-darwin = {
+    x86_64-darwin = fetchzip {
       url = "https://github.com/ppy/osu/releases/download/${version}/osu.app.Intel.zip";
-      sha256 = "sha256-qxAgXL4igfttsPN3xr4JPBGy9FalR1JIS7OtB4iqNB8=";
+      hash = "sha256-yuVoNApIp9g+Un2LHdDsvVo+BCflPT4rMPtOf1vltZA=";
+      stripRoot = false;
     };
-    x86_64-linux = {
+    x86_64-linux = fetchurl {
       url = "https://github.com/ppy/osu/releases/download/${version}/osu.AppImage";
-      sha256 = "sha256-fO9j7hIEhxEDWVdNAPVriHuDQyF2XgReeROBNpXM8gU=";
+      hash = "sha256-9mMP8+Ee8lZcaIkZfcaDmgDqe/rFvEGc01oGwFpnhOY=";
     };
   }.${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
 
-  linux = appimageTools.wrapType2 rec {
-    inherit name pname version meta;
-
-    src = fetchurl (osu-lazer-bin-src);
-
-    extraPkgs = pkgs: with pkgs; [ icu ];
-
-    extraInstallCommands =
-      let contents = appimageTools.extract { inherit pname version src; };
-      in
-      ''
-        mv -v $out/bin/${pname}-${version} $out/bin/osu\!
-        install -m 444 -D ${contents}/osu\!.desktop -t $out/share/applications
-        for i in 16 32 48 64 96 128 256 512 1024; do
-          install -D ${contents}/osu\!.png $out/share/icons/hicolor/''${i}x$i/apps/osu\!.png
-        done
-      '';
-  };
-
-  darwin = stdenv.mkDerivation rec {
-    inherit name pname version meta;
-
-    src = fetchzip (osu-lazer-bin-src // { stripRoot = false; });
-
-    dontBuild = true;
-    dontFixup = true;
-
-    installPhase = ''
-      runHook preInstall
-      APP_DIR="$out/Applications"
-      mkdir -p "$APP_DIR"
-      cp -r . "$APP_DIR"
-      runHook postInstall
-    '';
-  };
-
-  meta = with lib; {
+  meta = {
     description = "Rhythm is just a *click* away (AppImage version for score submission and multiplayer, and binary distribution for Darwin systems)";
     homepage = "https://osu.ppy.sh";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       cc-by-nc-40
       unfreeRedistributable # osu-framework contains libbass.so in repository
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ delan stepbrobd ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ delan gepbird spacefault stepbrobd ];
     mainProgram = "osu!";
     platforms = [ "aarch64-darwin" "x86_64-darwin" "x86_64-linux" ];
   };
@@ -78,6 +43,31 @@ let
   passthru.updateScript = ./update-bin.sh;
 in
 if stdenv.isDarwin
-then darwin
-else linux
+then stdenv.mkDerivation {
+  inherit pname version src meta passthru;
 
+  installPhase = ''
+    runHook preInstall
+    APP_DIR="$out/Applications"
+    mkdir -p "$APP_DIR"
+    cp -r . "$APP_DIR"
+    runHook postInstall
+  '';
+}
+else appimageTools.wrapType2 {
+  inherit pname version src meta passthru;
+
+  extraPkgs = pkgs: with pkgs; [ icu ];
+
+  extraInstallCommands =
+    let
+      contents = appimageTools.extract { inherit pname version src; };
+    in
+    ''
+      mv -v $out/bin/${pname}-${version} $out/bin/osu\!
+      install -m 444 -D ${contents}/osu\!.desktop -t $out/share/applications
+      for i in 16 32 48 64 96 128 256 512 1024; do
+        install -D ${contents}/osu\!.png $out/share/icons/hicolor/''${i}x$i/apps/osu\!.png
+      done
+    '';
+}

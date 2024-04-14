@@ -14,9 +14,8 @@
 , brotli
 , gnomeSupport ? true
 , sqlite
-, glib-networking
 , buildPackages
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -72,6 +71,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-lpthread";
 
   doCheck = false; # ERROR:../tests/socket-test.c:37:do_unconnected_socket_test: assertion failed (res == SOUP_STATUS_OK): (2 == 200)
+  separateDebugInfo = true;
 
   postPatch = ''
     # fixes finding vapigen when cross-compiling
@@ -84,9 +84,6 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    propagatedUserEnvPackages = [
-      glib-networking.out
-    ];
     updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
@@ -99,5 +96,9 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Projects/libsoup";
     license = lib.licenses.lgpl2Plus;
     inherit (glib.meta) maintainers platforms;
+    pkgConfigModules = [
+      "libsoup-2.4"
+      "libsoup-gnome-2.4"
+    ];
   };
 }

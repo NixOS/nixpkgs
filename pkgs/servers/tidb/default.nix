@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "tidb";
-  version = "7.2.0";
+  version = "7.4.0";
 
   src = fetchFromGitHub {
     owner = "pingcap";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-7iz82H3H22GCLvy8VD+t1BkEEoNQ0+6ZLBOUwWTlNfI=";
+    sha256 = "sha256-OsyQ7YZjErjfWg/1wf21AxBu2wrotey8hJSzoQQ0OSc=";
   };
 
-  vendorHash = "sha256-9vgxdX8CPUbyJZNSkwTZK02ORIXACjad/yPef8zB7FU=";
+  vendorHash = "sha256-jtuf3/CClz37TTQ2zs49yryccoaraAG4UrIOIlBYFqQ=";
 
   ldflags = [
     "-s"
@@ -27,5 +27,6 @@ buildGoModule rec {
     homepage = "https://pingcap.com";
     license = licenses.asl20;
     maintainers = [];
+    mainProgram = "tidb-server";
   };
 }

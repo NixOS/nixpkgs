@@ -2,7 +2,7 @@
 , desktop-file-utils
 , fetchFromGitHub
 , fetchYarnDeps
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , gjs
 , glib-networking
 , gobject-introspection
@@ -17,27 +17,36 @@
 , wrapGAppsHook4
 , yarn
 , nodejs
+, blueprint-compiler
+, libsecret
 }:
 
 stdenv.mkDerivation rec {
   pname = "muzika";
-  version = "unstable-2023-06-07";
+  version = "unstable-2023-11-07";
 
   src = fetchFromGitHub {
     owner = "vixalien";
     repo = "muzika";
-    rev = "d0ca7eebad67082e73513ebd7ca04edb1fdec7ce";
-    hash = "sha256-ycnHpyYaUJZgproTLCWCVzsvnUisXlq3fqlij1KryWA=";
+    rev = "69c25e066297c45f4ce42d84d5d4c200789fbedf";
+    hash = "sha256-Uof72o6HG4pYj1KZ8KgCwQA+0m778ezZxmt3TohNZcY=";
     fetchSubmodules = true;
   };
 
+  postPatch = ''
+    # Remove git command from version query
+    sed -i '2d' meson.build
+  '';
+
   nativeBuildInputs = [
+    blueprint-compiler
     desktop-file-utils
     gobject-introspection
     meson
     ninja
     nodejs
     pkg-config
+    prefetch-yarn-deps
     wrapGAppsHook4
     yarn
   ];
@@ -45,23 +54,25 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gjs
     glib-networking
+    gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-rs
     gtk4
     libadwaita
+    libsecret
     libsoup_3
   ];
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-FvPEbYIydgfyKKsf2jnXUbPEhIboPi3wR7BWzEuo72Q=";
+    hash = "sha256-/NkLfBmQGvgufF9ajgs7DQsBkWUUK4Bslhy7VmCBrGg=";
   };
 
   preConfigure = ''
     export HOME="$PWD"
     yarn config --offline set yarn-offline-mirror $yarnOfflineCache
-    ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
   '';
 
   mesonFlags = [

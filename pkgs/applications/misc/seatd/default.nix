@@ -6,24 +6,32 @@
 , scdoc
 , stdenv
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
+, nixosTests
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "seatd";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromSourcehut {
     owner = "~kennylevinsen";
     repo = "seatd";
-    rev = version;
-    sha256 = "sha256-m8xoL90GI822FTgCXuVr3EejLAMUStkPKVoV7w8ayIE=";
+    rev = finalAttrs.version;
+    hash = "sha256-YaR4VuY+wrzbnhER4bkwdm0rTY1OVMtixdDEhu7Lnws=";
   };
 
   outputs = [ "bin" "out" "dev" "man" ];
 
-  depsBuildBuild = [ pkg-config ];
+  depsBuildBuild = [
+    pkg-config
+  ];
 
-  nativeBuildInputs = [ meson ninja pkg-config scdoc ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    scdoc
+  ];
 
   buildInputs = lib.optionals systemdSupport [ systemd ];
 
@@ -33,12 +41,15 @@ stdenv.mkDerivation rec {
     "-Dserver=enabled"
   ];
 
-  meta = with lib; {
-    description = "A universal seat management library";
-    changelog   = "https://git.sr.ht/~kennylevinsen/seatd/refs/${version}";
-    homepage    = "https://sr.ht/~kennylevinsen/seatd/";
-    license     = licenses.mit;
-    platforms   = with platforms; freebsd ++ linux ++ netbsd;
-    maintainers = with maintainers; [ emantor ];
+  passthru.tests.basic = nixosTests.seatd;
+
+  meta = {
+    description = "A minimal seat management daemon, and a universal seat management library";
+    changelog = "https://git.sr.ht/~kennylevinsen/seatd/refs/${finalAttrs.version}";
+    homepage = "https://sr.ht/~kennylevinsen/seatd/";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ emantor ];
+    platforms = with lib.platforms; freebsd ++ linux ++ netbsd;
+    mainProgram = "seatd";
   };
-}
+})

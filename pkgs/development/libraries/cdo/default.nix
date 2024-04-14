@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "cdo";
-  version = "2.2.0";
+  version = "2.2.2";
 
   # Dependencies
   buildInputs = [ curl netcdf hdf5 python3 ];
 
   src = fetchurl {
-    url = "https://code.mpimet.mpg.de/attachments/download/28013/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Z5yNEFcGyv/LoJYOxd3EoTMsG0DFL4LDk3NWmZ2PrfI=";
+    url = "https://code.mpimet.mpg.de/attachments/download/28882/${pname}-${version}.tar.gz";
+    sha256 = "sha256-QZx3MVJEAZr0GilsBQZvR0zMv5Tev6rp4hBtpRvHyTc=";
   };
 
  configureFlags = [
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Collection of command line Operators to manipulate and analyse Climate and NWP model Data";
+    mainProgram = "cdo";
     longDescription = ''
       Supported data formats are GRIB 1/2, netCDF 3/4, SERVICE, EXTRA and IEG.
       There are more than 600 operators available.

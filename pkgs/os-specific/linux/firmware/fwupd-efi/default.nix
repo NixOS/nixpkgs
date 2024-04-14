@@ -8,15 +8,16 @@
 , ninja
 , gnu-efi
 , python3
+, python3Packages
 }:
 
 stdenv.mkDerivation rec {
   pname = "fwupd-efi";
-  version = "1.3";
+  version = "1.5";
 
   src = fetchurl {
     url = "https://people.freedesktop.org/~hughsient/releases/${pname}-${version}.tar.xz";
-    sha256 = "sha256-1Ys04TwhWYZ8ORJgr04kGO6/lI1I36sC6kcrVoP/r1k=";
+    sha256 = "sha256-RdKneTGzYkFt7CY22r9O/w0doQvBzMoayYDoMv7buhI=";
   };
 
   nativeBuildInputs = [
@@ -24,6 +25,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
+    python3Packages.pefile
   ];
 
   buildInputs = [
@@ -49,7 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://fwupd.org/";
-    maintainers = with maintainers; [ maxeaubrey ];
+    maintainers = with maintainers; [ amaxine ];
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };

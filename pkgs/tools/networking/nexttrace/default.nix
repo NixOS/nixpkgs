@@ -2,29 +2,34 @@
 
 buildGoModule rec {
   pname = "nexttrace";
-  version = "1.1.7-1";
+  version = "1.2.9";
 
   src = fetchFromGitHub {
-    owner = "sjlleo";
-    repo = pname;
+    owner = "nxtrace";
+    repo = "NTrace-core";
     rev = "v${version}";
-    sha256 = "sha256-ZMbX37gi9aGamDtoTdfUMiCPieP4DhjBSE5CIJLK6Z0=";
+    sha256 = "sha256-cnFFlEgq3zYIvVAe7ocw4oiqZQHINvrquBfylm2+dCw=";
   };
-  vendorHash = "sha256-u5EIzYWr81tmMmImoRH0wT7aD3/0tx+W3CXeymWVACM=";
+  vendorHash = "sha256-eNRJxz/rbqf1mVRvE83JXUR3/F7XmBhfsOvxaSgDRjc=";
 
   doCheck = false; # Tests require a network connection.
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/xgadget-lab/nexttrace/config.Version=v${version}"
+    "-X github.com/nxtrace/NTrace-core/config.Version=v${version}"
   ];
+
+  postInstall = ''
+    mv $out/bin/NTrace-core $out/bin/nexttrace
+  '';
 
   meta = with lib; {
     description = "An open source visual route tracking CLI tool";
     homepage = "https://mtr.moe";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ sharzy ];
+    mainProgram = "nexttrace";
   };
 }
 

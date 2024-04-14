@@ -7,6 +7,7 @@
 , opencv4
 , pillow
 , scikit-learn
+, setuptools
 , torch
 , torchvision
 , ttach
@@ -15,18 +16,24 @@
 
 buildPythonPackage rec {
   pname = "grad-cam";
-  version = "1.4.8";
-  disabled = pythonOlder "3.6";
-  format = "pyproject";
+  version = "1.5.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BNcwDaEEmRsEoJ4nvvGfjZ9LdG0eRqZCFuY5/Gmp5N4=";
+    hash = "sha256-aw7Z/6/AMKH2PVBcOr8HxsmRDa6c3v8Xd4xa8HTiFGA=";
   };
 
   postPatch = ''
-    substituteInPlace requirements.txt --replace "opencv-python" "opencv"
+    substituteInPlace requirements.txt\
+      --replace "opencv-python" "opencv"
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     matplotlib

@@ -1,8 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, guile, flex, fetchpatch }:
 
-let
-  guileVersion = lib.versions.majorMinor guile.version;
-in
 stdenv.mkDerivation rec {
   version = "1.1.11";
   pname = "libmatheval";
@@ -32,8 +29,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev guile}/include/guile/${guileVersion}";
-  env.NIX_LDFLAGS = "-L${guile}/lib -lguile-${guileVersion}";
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev guile}/include/guile/${guile.effectiveVersion}";
+  env.NIX_LDFLAGS = "-L${guile}/lib -lguile-${guile.effectiveVersion}";
 
   meta = {
     description = "A library to parse and evaluate symbolic expressions input as text";

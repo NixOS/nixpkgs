@@ -9,22 +9,22 @@
 , zstd
 , stdenv
 , darwin
-, runCommand
+, testers
 , espup
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "espup";
-  version = "0.4.1";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "esp-rs";
     repo = "espup";
     rev = "v${version}";
-    hash = "sha256-gzM+RT4Rt+LaYk7CwYUTIMci8DDI0y3+7y+N2yKRDOc=";
+    hash = "sha256-BW71yFX4jfx90KHdynkGSqWD4diyjEBQfdBNquVdDDI=";
   };
 
-  cargoHash = "sha256-GYhF6VDBAieZbu4x9EiQVVJkmx0aRYK0xwGGP0nuVGc=";
+  cargoHash = "sha256-iUVOU1P996hLC1rR/wWtsDBkKSB0rD7PPh6ZsQkHq3I=";
 
   nativeBuildInputs = [
     pkg-config
@@ -39,6 +39,7 @@ rustPlatform.buildRustPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation
     darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   env = {
@@ -62,21 +63,15 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/espup completions zsh)
   '';
 
-  passthru.tests = {
-    simple = runCommand "${pname}-test" { } ''
-      if [[ `${espup}/bin/espup --version` != *"${version}"*  ]]; then
-        echo "Error: program version does not match package version"
-        exit 1
-      fi
-
-      touch $out
-    '';
+  passthru.tests.version = testers.testVersion {
+    package = espup;
   };
 
   meta = with lib; {
     description = "Tool for installing and maintaining Espressif Rust ecosystem.";
     homepage = "https://github.com/esp-rs/espup/";
     license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ knightpp ];
+    maintainers = with maintainers; [ knightpp beeb ];
+    mainProgram = "espup";
   };
 }

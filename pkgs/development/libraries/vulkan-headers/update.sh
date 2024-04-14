@@ -3,27 +3,22 @@
 
 set -euf -o pipefail
 
-V_PACKAGES=(
+SDK_PACKAGES=(
     "vulkan-headers"
     "vulkan-loader"
-    "spirv-tools"
     "vulkan-validation-layers"
     "vulkan-tools"
     "vulkan-tools-lunarg"
     "vulkan-extension-layer"
-)
-
-SDK_PACKAGES=(
+    "vulkan-utility-libraries"
+    "vulkan-volk"
     "spirv-headers"
     "spirv-cross"
+    "spirv-tools"
 )
 
 nix-update glslang --version-regex '(\d+\.\d+\.\d+)' --commit
 
-for P in "${V_PACKAGES[@]}"; do
-    nix-update "$P" --version-regex "(?:v)(.*)" --commit
-done
-
 for P in "${SDK_PACKAGES[@]}"; do
-    nix-update "$P" --version-regex "(?:sdk-)(.*)" --commit
+    nix-update "$P" --version-regex "(?:vulkan-sdk-)(.*)" --commit
 done

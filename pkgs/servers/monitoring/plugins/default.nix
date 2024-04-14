@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, writeShellScript
+, fetchpatch
 , autoreconfHook
 , pkg-config
 , runCommand
@@ -21,6 +21,7 @@
 , openldap
 , procps
 , runtimeShell
+, unixtools
 }:
 
 let
@@ -39,26 +40,34 @@ let
     mkdir -p $out/bin
     ln -s /run/wrappers/bin/sendmail $out/bin/mailq
   '';
-
-  # For unknown reasons the installer tries executing $out/share and fails so
-  # we create it and remove it again later.
-  share = writeShellScript "share" ''
-    exit 0
-  '';
-
 in
 stdenv.mkDerivation rec {
   pname = "monitoring-plugins";
-  version = "2.3.0";
+  version = "2.3.5";
 
   src = fetchFromGitHub {
     owner = "monitoring-plugins";
     repo = "monitoring-plugins";
-    rev = "v" + lib.versions.majorMinor version;
-    sha256 = "sha256-yLhHOSrPFRjW701aOL8LPe4OnuJxL6f+dTxNqm0evIg=";
+    rev = "v${version}";
+    sha256 = "sha256-J9fzlxIpujoG7diSRscFhmEV9HpBOxFTJSmGGFjAzcM=";
   };
 
-  # TODO: Awful hack. Grrr... this of course only works on NixOS.
+  patches = [
+    # fix build (makefile cannot produce -lcrypto)
+    # remove on next release
+    (fetchpatch {
+      url = "https://github.com/monitoring-plugins/monitoring-plugins/commit/bad156676894a2755c8b76519a11cdd2037e5cd6.patch";
+      hash = "sha256-aI/sX04KXe968SwdS8ZamNtgdNbHtho5cDsDaA+cjZY=";
+    })
+    # fix check_smtp with --starttls https://github.com/monitoring-plugins/monitoring-plugins/pull/1952
+    # remove on next release
+    (fetchpatch {
+      url = "https://github.com/monitoring-plugins/monitoring-plugins/commit/2eea6bb2a04bbfb169bac5f0f7c319f998e8ab87.patch";
+      hash = "sha256-CyVD340+zOxuxRRPmtowD3DFFRB1Q7+AANzul9HqwBI=";
+    })
+  ];
+
+  # TODO: Awful hack. Grrr...
   # Anyway the check that configure performs to figure out the ping
   # syntax is totally impure, because it runs an actual ping to
   # localhost (which won't work for ping6 if IPv6 support isn't
@@ -74,11 +83,9 @@ stdenv.mkDerivation rec {
       -e 's|^DEFAULT_PATH=.*|DEFAULT_PATH=\"${binPath}\"|'
 
     configureFlagsArray+=(
-      --with-ping-command='/run/wrappers/bin/ping -4 -n -U -w %d -c %d %s'
-      --with-ping6-command='/run/wrappers/bin/ping -6 -n -U -w %d -c %d %s'
+      --with-ping-command='${lib.getBin unixtools.ping}/bin/ping -4 -n -U -w %d -c %d %s'
+      --with-ping6-command='${lib.getBin unixtools.ping}/bin/ping -6 -n -U -w %d -c %d %s'
     )
-
-    install -Dm555 ${share} $out/share
   '';
 
   configureFlags = [
@@ -105,10 +112,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   enableParallelBuilding = true;
-
-  postInstall = ''
-    rm $out/share
-  '';
 
   meta = with lib; {
     description = "Official monitoring plugins for Nagios/Icinga/Sensu and others";

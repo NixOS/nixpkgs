@@ -40,9 +40,10 @@ stdenv.mkDerivation rec {
     substituteInPlace src/CMakeLists.txt --replace '@libirc_includes@' '${libirc.out}'
   '';
 
+  cmakeBuildType = "None";
+
   cmakeFlags = [
     "-S" "/build/source/src"
-    "-DCMAKE_BUILD_TYPE=None"
     "-DINSTALL_DATA_DIR=bin"
     "-DQT5_BUILD=ON"
     "-DWEB_ENGINE=ON"
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Anti-vandalism tool for use on MediaWiki-based projects";
+    mainProgram = "huggle";
     homepage = "https://github.com/huggle/huggle3-qt-lx";
     license = licenses.gpl3Only;
     maintainers = [ maintainers.fee1-dead ];

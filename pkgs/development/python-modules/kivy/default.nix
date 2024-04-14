@@ -3,21 +3,21 @@
 , pkg-config, cython, docutils
 , kivy-garden
 , mesa, mtdev, SDL2, SDL2_image, SDL2_ttf, SDL2_mixer
-, ApplicationServices, AVFoundation, libcxx
+, Accelerate, ApplicationServices, AVFoundation, libcxx
 , withGstreamer ? true
 , gst_all_1
-, pillow, requests, pygments
+, packaging, pillow, pygments, requests
 }:
 
 buildPythonPackage rec {
-  pname = "Kivy";
-  version = "2.1.0";
+  pname = "kivy";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "kivy";
     repo = "kivy";
     rev = version;
-    hash = "sha256-k9LIiLtlHY6H1xfVylI/Xbm7R6pCpC5UHe8GWnCwEGA=";
+    hash = "sha256-QJ490vjpEj/JSE9OzSvDpkCruaTFdlThUHIEAMm0BZ4=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +35,7 @@ buildPythonPackage rec {
     mesa
     mtdev
   ] ++ lib.optionals stdenv.isDarwin [
+    Accelerate
     ApplicationServices
     AVFoundation
     libcxx
@@ -48,6 +49,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     kivy-garden
+    packaging
     pillow
     pygments
     requests

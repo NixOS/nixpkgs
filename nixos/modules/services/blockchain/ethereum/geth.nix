@@ -9,138 +9,133 @@ let
 
     options = {
 
-      enable = lib.mkEnableOption (lib.mdDoc "Go Ethereum Node");
+      enable = lib.mkEnableOption "Go Ethereum Node";
 
       port = mkOption {
         type = types.port;
         default = 30303;
-        description = lib.mdDoc "Port number Go Ethereum will be listening on, both TCP and UDP.";
+        description = "Port number Go Ethereum will be listening on, both TCP and UDP.";
       };
 
       http = {
-        enable = lib.mkEnableOption (lib.mdDoc "Go Ethereum HTTP API");
+        enable = lib.mkEnableOption "Go Ethereum HTTP API";
         address = mkOption {
           type = types.str;
           default = "127.0.0.1";
-          description = lib.mdDoc "Listen address of Go Ethereum HTTP API.";
+          description = "Listen address of Go Ethereum HTTP API.";
         };
 
         port = mkOption {
           type = types.port;
           default = 8545;
-          description = lib.mdDoc "Port number of Go Ethereum HTTP API.";
+          description = "Port number of Go Ethereum HTTP API.";
         };
 
         apis = mkOption {
           type = types.nullOr (types.listOf types.str);
           default = null;
-          description = lib.mdDoc "APIs to enable over WebSocket";
+          description = "APIs to enable over WebSocket";
           example = ["net" "eth"];
         };
       };
 
       websocket = {
-        enable = lib.mkEnableOption (lib.mdDoc "Go Ethereum WebSocket API");
+        enable = lib.mkEnableOption "Go Ethereum WebSocket API";
         address = mkOption {
           type = types.str;
           default = "127.0.0.1";
-          description = lib.mdDoc "Listen address of Go Ethereum WebSocket API.";
+          description = "Listen address of Go Ethereum WebSocket API.";
         };
 
         port = mkOption {
           type = types.port;
           default = 8546;
-          description = lib.mdDoc "Port number of Go Ethereum WebSocket API.";
+          description = "Port number of Go Ethereum WebSocket API.";
         };
 
         apis = mkOption {
           type = types.nullOr (types.listOf types.str);
           default = null;
-          description = lib.mdDoc "APIs to enable over WebSocket";
+          description = "APIs to enable over WebSocket";
           example = ["net" "eth"];
         };
       };
 
       authrpc = {
-        enable = lib.mkEnableOption (lib.mdDoc "Go Ethereum Auth RPC API");
+        enable = lib.mkEnableOption "Go Ethereum Auth RPC API";
         address = mkOption {
           type = types.str;
           default = "127.0.0.1";
-          description = lib.mdDoc "Listen address of Go Ethereum Auth RPC API.";
+          description = "Listen address of Go Ethereum Auth RPC API.";
         };
 
         port = mkOption {
           type = types.port;
           default = 8551;
-          description = lib.mdDoc "Port number of Go Ethereum Auth RPC API.";
+          description = "Port number of Go Ethereum Auth RPC API.";
         };
 
         vhosts = mkOption {
           type = types.nullOr (types.listOf types.str);
           default = ["localhost"];
-          description = lib.mdDoc "List of virtual hostnames from which to accept requests.";
+          description = "List of virtual hostnames from which to accept requests.";
           example = ["localhost" "geth.example.org"];
         };
 
         jwtsecret = mkOption {
           type = types.str;
           default = "";
-          description = lib.mdDoc "Path to a JWT secret for authenticated RPC endpoint.";
+          description = "Path to a JWT secret for authenticated RPC endpoint.";
           example = "/var/run/geth/jwtsecret";
         };
       };
 
       metrics = {
-        enable = lib.mkEnableOption (lib.mdDoc "Go Ethereum prometheus metrics");
+        enable = lib.mkEnableOption "Go Ethereum prometheus metrics";
         address = mkOption {
           type = types.str;
           default = "127.0.0.1";
-          description = lib.mdDoc "Listen address of Go Ethereum metrics service.";
+          description = "Listen address of Go Ethereum metrics service.";
         };
 
         port = mkOption {
           type = types.port;
           default = 6060;
-          description = lib.mdDoc "Port number of Go Ethereum metrics service.";
+          description = "Port number of Go Ethereum metrics service.";
         };
       };
 
       network = mkOption {
         type = types.nullOr (types.enum [ "goerli" "rinkeby" "yolov2" "ropsten" ]);
         default = null;
-        description = lib.mdDoc "The network to connect to. Mainnet (null) is the default ethereum network.";
+        description = "The network to connect to. Mainnet (null) is the default ethereum network.";
       };
 
       syncmode = mkOption {
         type = types.enum [ "snap" "fast" "full" "light" ];
         default = "snap";
-        description = lib.mdDoc "Blockchain sync mode.";
+        description = "Blockchain sync mode.";
       };
 
       gcmode = mkOption {
         type = types.enum [ "full" "archive" ];
         default = "full";
-        description = lib.mdDoc "Blockchain garbage collection mode.";
+        description = "Blockchain garbage collection mode.";
       };
 
       maxpeers = mkOption {
         type = types.int;
         default = 50;
-        description = lib.mdDoc "Maximum peers to connect to.";
+        description = "Maximum peers to connect to.";
       };
 
       extraArgs = mkOption {
         type = types.listOf types.str;
-        description = lib.mdDoc "Additional arguments passed to Go Ethereum.";
+        description = "Additional arguments passed to Go Ethereum.";
         default = [];
       };
 
-      package = mkOption {
-        default = pkgs.go-ethereum.geth;
-        defaultText = literalExpression "pkgs.go-ethereum.geth";
-        type = types.package;
-        description = lib.mdDoc "Package to use as Go Ethereum node.";
-      };
+      package = mkPackageOption pkgs [ "go-ethereum" "geth" ] { };
     };
   };
 in
@@ -153,7 +148,7 @@ in
     services.geth = mkOption {
       type = types.attrsOf (types.submodule gethOpts);
       default = {};
-      description = lib.mdDoc "Specification of one or more geth instances.";
+      description = "Specification of one or more geth instances.";
     };
   };
 

@@ -10,13 +10,14 @@
 , scons
 , setuptools
 , tinyprog
+, flit-core
 , pytestCheckHook
 }:
 
 buildPythonApplication rec {
   pname = "apio";
   version = "0.8.1";
-  format = "flit";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "FPGAwars";
@@ -47,6 +48,10 @@ buildPythonApplication rec {
         'version = semantic_version.Version(pkg_version.replace(".dev", "-dev"))'
   '';
 
+  nativeBuildInputs = [
+    flit-core
+  ];
+
   propagatedBuildInputs = [
     click
     semantic-version
@@ -68,6 +73,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Open source ecosystem for open FPGA boards";
+    mainProgram = "apio";
     homepage = "https://github.com/FPGAwars/apio";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ Luflosi ];

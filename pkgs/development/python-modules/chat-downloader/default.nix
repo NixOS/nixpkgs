@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "chat-downloader";
-  version = "0.2.7";
+  version = "0.2.8";
   format = "setuptools";
 
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-FKdeuw4MEy1ZNeOCYllYxxFBUj2/fy0r/pxJv8FpOso=";
+    hash = "sha256-WBasBhefgRkOdMdz2K/agvS+cY6m3/33wiu+Jl4d1Cg=";
   };
 
   propagatedBuildInputs = [
@@ -36,6 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A simple tool used to retrieve chat messages from livestreams, videos, clips and past broadcasts";
+    mainProgram = "chat_downloader";
     homepage = "https://github.com/xenova/chat-downloader";
     changelog = "https://github.com/xenova/chat-downloader/releases/tag/v${version}";
     license = licenses.mit;

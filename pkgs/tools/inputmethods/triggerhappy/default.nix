@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/wertarbyte/triggerhappy/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jfrankenau taha ];
+    maintainers = with maintainers; [ taha ];
   };
 }

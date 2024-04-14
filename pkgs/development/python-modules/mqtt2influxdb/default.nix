@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "mqtt2influxdb";
   version = "1.5.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "hardwario";
@@ -35,6 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/hardwario/bch-mqtt2influxdb";
     description = "Flexible MQTT to InfluxDB Bridge";
+    mainProgram = "mqtt2influxdb";
     platforms = platforms.linux;
     license = licenses.mit;
     maintainers = with maintainers; [ cynerd ];

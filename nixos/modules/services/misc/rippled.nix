@@ -92,41 +92,41 @@ let
 
       ip = mkOption {
         default = "127.0.0.1";
-        description = lib.mdDoc "Ip where rippled listens.";
+        description = "Ip where rippled listens.";
         type = types.str;
       };
 
       port = mkOption {
-        description = lib.mdDoc "Port where rippled listens.";
+        description = "Port where rippled listens.";
         type = types.port;
       };
 
       protocol = mkOption {
-        description = lib.mdDoc "Protocols expose by rippled.";
+        description = "Protocols expose by rippled.";
         type = types.listOf (types.enum ["http" "https" "ws" "wss" "peer"]);
       };
 
       user = mkOption {
-        description = lib.mdDoc "When set, these credentials will be required on HTTP/S requests.";
+        description = "When set, these credentials will be required on HTTP/S requests.";
         type = types.str;
         default = "";
       };
 
       password = mkOption {
-        description = lib.mdDoc "When set, these credentials will be required on HTTP/S requests.";
+        description = "When set, these credentials will be required on HTTP/S requests.";
         type = types.str;
         default = "";
       };
 
       admin = mkOption {
-        description = lib.mdDoc "A comma-separated list of admin IP addresses.";
+        description = "A comma-separated list of admin IP addresses.";
         type = types.listOf types.str;
         default = ["127.0.0.1"];
       };
 
       ssl = {
         key = mkOption {
-          description = lib.mdDoc ''
+          description = ''
             Specifies the filename holding the SSL key in PEM format.
           '';
           default = null;
@@ -134,7 +134,7 @@ let
         };
 
         cert = mkOption {
-          description = lib.mdDoc ''
+          description = ''
             Specifies the path to the SSL certificate file in PEM format.
             This is not needed if the chain includes it.
           '';
@@ -143,7 +143,7 @@ let
         };
 
         chain = mkOption {
-          description = lib.mdDoc ''
+          description = ''
             If you need a certificate chain, specify the path to the
             certificate chain here. The chain may include the end certificate.
           '';
@@ -157,33 +157,33 @@ let
   dbOptions = {
     options = {
       type = mkOption {
-        description = lib.mdDoc "Rippled database type.";
+        description = "Rippled database type.";
         type = types.enum ["rocksdb" "nudb"];
         default = "rocksdb";
       };
 
       path = mkOption {
-        description = lib.mdDoc "Location to store the database.";
+        description = "Location to store the database.";
         type = types.path;
         default = cfg.databasePath;
         defaultText = literalExpression "config.${opt.databasePath}";
       };
 
       compression = mkOption {
-        description = lib.mdDoc "Whether to enable snappy compression.";
+        description = "Whether to enable snappy compression.";
         type = types.nullOr types.bool;
         default = null;
       };
 
       onlineDelete = mkOption {
-        description = lib.mdDoc "Enable automatic purging of older ledger information.";
+        description = "Enable automatic purging of older ledger information.";
         type = types.nullOr (types.addCheck types.int (v: v > 256));
         default = cfg.ledgerHistory;
         defaultText = literalExpression "config.${opt.ledgerHistory}";
       };
 
       advisoryDelete = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           If set, then require administrative RPC call "can_delete"
           to enable online deletion of ledger records.
         '';
@@ -192,7 +192,7 @@ let
       };
 
       extraOpts = mkOption {
-        description = lib.mdDoc "Extra database options.";
+        description = "Extra database options.";
         type = types.lines;
         default = "";
       };
@@ -207,17 +207,12 @@ in
 
   options = {
     services.rippled = {
-      enable = mkEnableOption (lib.mdDoc "rippled");
+      enable = mkEnableOption "rippled, a decentralized cryptocurrency blockchain daemon implementing the XRP Ledger protocol in C++";
 
-      package = mkOption {
-        description = lib.mdDoc "Which rippled package to use.";
-        type = types.package;
-        default = pkgs.rippled;
-        defaultText = literalExpression "pkgs.rippled";
-      };
+      package = mkPackageOption pkgs "rippled" { };
 
       ports = mkOption {
-        description = lib.mdDoc "Ports exposed by rippled";
+        description = "Ports exposed by rippled";
         type = with types; attrsOf (submodule portOptions);
         default = {
           rpc = {
@@ -241,7 +236,7 @@ in
       };
 
       nodeDb = mkOption {
-        description = lib.mdDoc "Rippled main database options.";
+        description = "Rippled main database options.";
         type = with types; nullOr (submodule dbOptions);
         default = {
           type = "rocksdb";
@@ -256,19 +251,19 @@ in
       };
 
       tempDb = mkOption {
-        description = lib.mdDoc "Rippled temporary database options.";
+        description = "Rippled temporary database options.";
         type = with types; nullOr (submodule dbOptions);
         default = null;
       };
 
       importDb = mkOption {
-        description = lib.mdDoc "Settings for performing a one-time import.";
+        description = "Settings for performing a one-time import.";
         type = with types; nullOr (submodule dbOptions);
         default = null;
       };
 
       nodeSize = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Rippled size of the node you are running.
           "tiny", "small", "medium", "large", and "huge"
         '';
@@ -277,7 +272,7 @@ in
       };
 
       ips = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           List of hostnames or ips where the Ripple protocol is served.
           For a starter list, you can either copy entries from:
           https://ripple.com/ripple.txt or if you prefer you can let it
@@ -292,7 +287,7 @@ in
       };
 
       ipsFixed = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           List of IP addresses or hostnames to which rippled should always
           attempt to maintain peer connections with. This is useful for
           manually forming private networks, for example to configure a
@@ -306,7 +301,7 @@ in
       };
 
       validators = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           List of nodes to always accept as validators. Nodes are specified by domain
           or public key.
         '';
@@ -321,7 +316,7 @@ in
       };
 
       databasePath = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Path to the ripple database.
         '';
         type = types.path;
@@ -329,7 +324,7 @@ in
       };
 
       validationQuorum = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           The minimum number of trusted validations a ledger must have before
           the server considers it fully validated.
         '';
@@ -338,7 +333,7 @@ in
       };
 
       ledgerHistory = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           The number of past ledgers to acquire on server startup and the minimum
           to maintain while running.
         '';
@@ -347,7 +342,7 @@ in
       };
 
       fetchDepth = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           The number of past ledgers to serve to other peers that request historical
           ledger data (or "full" for no limit).
         '';
@@ -356,7 +351,7 @@ in
       };
 
       sntpServers = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           IP address or domain of NTP servers to use for time synchronization.;
         '';
         type = types.listOf types.str;
@@ -369,22 +364,22 @@ in
       };
 
       logLevel = mkOption {
-        description = lib.mdDoc "Logging verbosity.";
+        description = "Logging verbosity.";
         type = types.enum ["debug" "error" "info"];
         default = "error";
       };
 
       statsd = {
-        enable = mkEnableOption (lib.mdDoc "statsd monitoring for rippled");
+        enable = mkEnableOption "statsd monitoring for rippled";
 
         address = mkOption {
-          description = lib.mdDoc "The UDP address and port of the listening StatsD server.";
+          description = "The UDP address and port of the listening StatsD server.";
           default = "127.0.0.1:8125";
           type = types.str;
         };
 
         prefix = mkOption {
-          description = lib.mdDoc "A string prepended to each collected metric.";
+          description = "A string prepended to each collected metric.";
           default = "";
           type = types.str;
         };
@@ -393,7 +388,7 @@ in
       extraConfig = mkOption {
         default = "";
         type = types.lines;
-        description = lib.mdDoc ''
+        description = ''
           Extra lines to be added verbatim to the rippled.cfg configuration file.
         '';
       };

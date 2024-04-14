@@ -2,66 +2,64 @@
 , stdenv
 , fetchFromGitHub
 , appstream-glib
-, dbus
 , desktop-file-utils
 , gettext
 , glib
-, gobject-introspection
-, gsettings-desktop-schemas
 , gst_all_1
-, gtk3
+, gtk4
 , hicolor-icon-theme
 , isocodes
 , itstool
+, libadwaita
 , libxml2
 , meson
 , ninja
 , pkg-config
 , python3
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
   pname = "parlatype";
-  version = "3.1";
+  version = "4.1";
 
   src = fetchFromGitHub {
     owner = "gkarsay";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1a4xlsbszb50vnz1g7kf7hl7aywp7s7xaravkcx13csn0a7l3x45";
+    sha256 = "0546rl5sm7xmgl54cqps3a7bhfs7xdvz98jgdcf4sgiz1k2vh9xq";
   };
 
   nativeBuildInputs = [
     appstream-glib
     desktop-file-utils
     gettext
-    gobject-introspection
     itstool
     libxml2
     meson
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    dbus
     glib
-    gsettings-desktop-schemas
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-ugly
     gst_all_1.gstreamer
-    gtk3
+    gtk4
     hicolor-icon-theme
     isocodes
+    libadwaita
   ];
 
   postPatch = ''
+    substituteInPlace data/meson_post_install.py \
+      --replace-fail 'gtk-update-icon-cache' 'gtk4-update-icon-cache'
     patchShebangs data/meson_post_install.py
     patchShebangs libparlatype/tests/data/generate_config_data
   '';
@@ -70,6 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GNOME audio player for transcription";
+    mainProgram = "parlatype";
     longDescription = ''
       Parlatype is a minimal audio player for manual speech transcription,
       written for the GNOME desktop environment. It plays audio sources to
@@ -77,7 +76,8 @@ stdenv.mkDerivation rec {
       useful for journalists, students, scientists and whoever needs to
       transcribe audio files.
     '';
-    homepage = "https://www.parlatype.org/";
+    # maintainer lost control of parlatype.org
+    homepage = "https://github.com/gkarsay/parlatype";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ alexshpilkin melchips ];
     platforms = platforms.linux;

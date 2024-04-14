@@ -2,7 +2,11 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+, file
+, hyprlang
+, libGL
 , libjpeg
+, libwebp
 , mesa
 , pango
 , pkg-config
@@ -13,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpaper";
-  version = "0.3.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/ehJbAtSJS86NlqHVOeR2ViBKlImKH4guFVPacTmCr8=";
+    hash = "sha256-mqxnaNiCVJS88Dk4V1v2wdS0RaCbOk8HFOUUbp0Uiy0=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    file
+    hyprlang
+    libGL
     libjpeg
+    libwebp
     mesa
     pango
     wayland
@@ -60,5 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ wozeparrot fufexan ];
     inherit (wayland.meta) platforms;
     broken = stdenv.isDarwin;
+    mainProgram = "hyprpaper";
   };
 })

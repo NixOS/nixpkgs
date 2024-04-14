@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libmilter";
-  version = "8.17.2";
+  version = "8.18.1";
 
   src = fetchurl {
     url = "ftp://ftp.sendmail.org/pub/sendmail/sendmail.${version}.tar.gz";
-    sha256 = "sha256-kPWudMNahICIYZM7oJQgG5AbcMaykDaE3POb2uiloaI=";
+    sha256 = "sha256-y/HzCcOOSAb3zz6tJCYPF9H+j7YyVtE+2zzdGgmPB3A=";
   };
 
   buildPhase = ''

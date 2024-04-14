@@ -1,5 +1,5 @@
 { lib, stdenv, linkFarm, lightdm-tiny-greeter, fetchFromGitHub
-, pkg-config, lightdm, gtk3, glib, wrapGAppsHook, conf ? "" }:
+, pkg-config, lightdm, gtk3, glib, wrapGAppsHook, config, conf ? config.lightdm-tiny-greeter.conf or "" }:
 
 stdenv.mkDerivation rec {
   pname = "lightdm-tiny-greeter";
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A tiny multi user lightdm greeter";
+    mainProgram = "lightdm-tiny-greeter";
     homepage = "https://github.com/off-world/lightdm-tiny-greeter";
     license = licenses.bsd3;
     maintainers = with maintainers; [ edwtjo ];

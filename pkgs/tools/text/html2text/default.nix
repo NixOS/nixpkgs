@@ -13,6 +13,9 @@ stdenv.mkDerivation rec {
     substituteInPlace configure \
         --replace /bin/echo echo \
         --replace CXX=unknown ':'
+  '' + lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace HTMLParser.C \
+      --replace "register " ""
   '';
 
   # the --prefix has no effect
@@ -25,6 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Convert HTML to plain text";
+    mainProgram = "html2text";
     homepage = "http://www.mbayer.de/html2text/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;

@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "crabz";
-  version = "0.8.1";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "sstadick";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-w/e0NFmBsYNEECT+2zHEm/UUpp5LxPYr0BdKikT2o1M=";
+    sha256 = "sha256-GJHxo4WD/XMudwxOHdNwY1M+b/DFJMpU0uD3sOvO5YU=";
   };
 
-  cargoSha256 = "sha256-9VOJeRvyudZSCaUZ1J9gHMEoWXEnEhCZPxvfYGRKzj0=";
+  cargoHash = "sha256-T+Sdzts7gzkG2EFcKrkVDUIq2V34PBdW3oyxMUcCWaI=";
 
   nativeBuildInputs = [ cmake ];
 
@@ -25,5 +25,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/sstadick/crabz/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ unlicense /* or */ mit ];
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "crabz";
   };
 }

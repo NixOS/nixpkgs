@@ -3,12 +3,14 @@
 , version, buildPlatform, hostPlatform, targetPlatform
 , gnat-bootstrap ? null
 , langAda ? false
+, langFortran
 , langJava ? false
 , langJit ? false
 , langGo
 , withoutTargetLibc
 , enableShared
 , enableMultilib
+, pkgsBuildTarget
 }:
 
 assert langJava -> lib.versionOlder version "7";
@@ -25,6 +27,15 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
   export lib=$out;
 '' + lib.optionalString langAda ''
   export PATH=${gnat-bootstrap}/bin:$PATH
+''
+
+# For a cross-built native compiler, i.e. build!=(host==target), the
+# bundled libgfortran needs a gfortran which can run on the
+# buildPlatform and emit code for the targetPlatform.  The compiler
+# which is built alongside gfortran in this configuration doesn't
+# meet that need: it runs on the hostPlatform.
++ lib.optionalString (langFortran && (with stdenv; buildPlatform != hostPlatform && hostPlatform == targetPlatform)) ''
+  export GFORTRAN_FOR_TARGET=${pkgsBuildTarget.gfortran}/bin/${stdenv.targetPlatform.config}-gfortran
 ''
 
 # On x86_64-darwin, the gnat-bootstrap bootstrap compiler that we need to build a
@@ -105,59 +116,14 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 
 # Normally (for host != target case) --without-headers automatically
 # enables 'inhibit_libc=true' in gcc's gcc/configure.ac. But case of
-# gcc->clang "cross"-compilation manages to evade it: there
+# gcc->clang or dynamic->static "cross"-compilation manages to evade it: there
 # hostPlatform != targetPlatform, hostPlatform.config == targetPlatform.config.
 # We explicitly inhibit libc headers use in this case as well.
-+ lib.optionalString (targetPlatform != hostPlatform && withoutTargetLibc) ''
++ lib.optionalString (targetPlatform != hostPlatform &&
+                      withoutTargetLibc &&
+                      targetPlatform.config == hostPlatform.config) ''
   export inhibit_libc=true
 ''
 
-# Trick to build a gcc that is capable of emitting shared libraries *without* having the
-# targetPlatform libc available beforehand.  Taken from:
-#   https://web.archive.org/web/20170222224855/http://frank.harvard.edu/~coldwell/toolchain/
-#   https://web.archive.org/web/20170224235700/http://frank.harvard.edu/~coldwell/toolchain/t-linux.diff
 + lib.optionalString (targetPlatform != hostPlatform && withoutTargetLibc && enableShared)
-  (let
-
-    # crt{i,n}.o are the first and last (respectively) object file
-    # linked when producing an executable.  Traditionally these
-    # files are delivered as part of the C library, but on GNU
-    # systems they are in fact built by GCC.  Since libgcc needs to
-    # build before glibc, we can't wait for them to be copied by
-    # glibc.  At this early pre-glibc stage these files sometimes
-    # have different names.
-    crtstuff-ofiles =
-      if targetPlatform.isPower
-      then "ecrti.o ecrtn.o ncrti.o ncrtn.o"
-      else "crti.o crtn.o";
-
-    # Normally, `SHLIB_LC` is set to `-lc`, which means that
-    # `libgcc_s.so` cannot be built until `libc.so` is available.
-    # The assignment below clobbers this variable, removing the
-    # `-lc`.
-    #
-    # On PowerPC we add `-mnewlib`, which means "libc has not been
-    # built yet".  This causes libgcc's Makefile to use the
-    # gcc-built `{e,n}crt{n,i}.o` instead of failing to find the
-    # versions which have been repackaged in libc as `crt{n,i}.o`
-    #
-    SHLIB_LC = lib.optionalString targetPlatform.isPower "-mnewlib";
-
-  in ''
-    echo 'libgcc.a: ${crtstuff-ofiles}' >> libgcc/Makefile.in
-    echo 'SHLIB_LC=${SHLIB_LC}' >> libgcc/Makefile.in
-  '')
-
-+ lib.optionalString (!enableMultilib && hostPlatform.is64bit && !hostPlatform.isMips64n32) ''
-  export linkLib64toLib=1
-''
-
-# On mips platforms, gcc follows the IRIX naming convention:
-#
-#  $PREFIX/lib   = mips32
-#  $PREFIX/lib32 = mips64n32
-#  $PREFIX/lib64 = mips64
-#
-+ lib.optionalString (!enableMultilib && targetPlatform.isMips64n32) ''
-  export linkLib32toLib=1
-''
+  (import ./libgcc-buildstuff.nix { inherit lib stdenv; })

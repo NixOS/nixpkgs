@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-n9Koi01Te77bpYbRX46UThyD2FhCu9OGHd/6xDQLqjQ=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 
@@ -19,6 +19,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A CI friendly wrapper around nix-build";
+    mainProgram = "nix-build-uncached";
     license = licenses.mit;
     homepage = "https://github.com/Mic92/nix-build-uncached";
     maintainers = [ maintainers.mic92 ];

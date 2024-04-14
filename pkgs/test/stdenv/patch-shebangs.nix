@@ -39,6 +39,23 @@ let
       };
     };
 
+    updates-nix-store = stdenv.mkDerivation {
+      name = "updates-nix-store";
+      strictDeps = false;
+      dontUnpack = true;
+      installPhase = ''
+        mkdir -p $out/bin
+        echo "#!$NIX_STORE/path/to/bash" > $out/bin/test
+        echo "echo -n hello" >> $out/bin/test
+        chmod +x $out/bin/test
+        patchShebangs --update $out/bin/test
+        dontPatchShebangs=1
+      '';
+      passthru = {
+        assertion = "grep '^#!${stdenv.shell}' $out/bin/test > /dev/null";
+      };
+    };
+
     split-string = stdenv.mkDerivation {
       name = "split-string";
       strictDeps = false;
@@ -55,11 +72,26 @@ let
       };
     };
 
+    without-trailing-newline = stdenv.mkDerivation {
+      name = "without-trailing-newline";
+      strictDeps = false;
+      dontUnpack = true;
+      installPhase = ''
+        mkdir -p $out/bin
+        printf "#!/bin/bash" > $out/bin/test
+        chmod +x $out/bin/test
+        dontPatchShebangs=
+      '';
+      passthru = {
+        assertion = "grep '^#!${stdenv.shell}' $out/bin/test > /dev/null";
+      };
+    };
+
   };
 in
 stdenv.mkDerivation {
   name = "test-patch-shebangs";
-  passthru = { inherit (tests) bad-shebang ignores-nix-store split-string; };
+  passthru = { inherit (tests) bad-shebang ignores-nix-store updates-nix-store split-string without-trailing-newline; };
   buildCommand = ''
     validate() {
       local name=$1

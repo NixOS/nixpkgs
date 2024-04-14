@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ jansson ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=strict-prototypes";
+
   patches = [
     (fetchpatch {
       # https://github.com/keenerd/jshon/pull/62
@@ -34,6 +36,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://kmkeen.com/jshon";
     description = "JSON parser designed for maximum convenience within the shell";
+    mainProgram = "jshon";
     license = licenses.free;
     platforms = platforms.all;
     maintainers = with maintainers; [ rushmorem ];

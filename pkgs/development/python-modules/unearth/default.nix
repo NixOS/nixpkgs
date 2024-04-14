@@ -2,12 +2,12 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, cached-property
 , packaging
-, pdm-pep517
-, requests
+, pdm-backend
+, httpx
 , flask
 , pytest-httpserver
+, pytest-mock
 , pytestCheckHook
 , requests-wsgi-adapter
 , trustme
@@ -15,30 +15,31 @@
 
 buildPythonPackage rec {
   pname = "unearth";
-  version = "0.9.2";
-  format = "pyproject";
+  version = "0.15.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hF9LVzOHTOO0JyEm3kluq+AKSa1nj90E1ILR533u1CU=";
+    hash = "sha256-hj3rMznA1lpb4NCtLGfUbV9XSnmOdO8FUr8R0pijCrs=";
   };
 
-  nativeBuildInputs = [
-    pdm-pep517
+  build-system = [
+    pdm-backend
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     packaging
-    requests
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    cached-property
+    httpx
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     flask
     pytest-httpserver
+    pytest-mock
     pytestCheckHook
     requests-wsgi-adapter
     trustme
@@ -50,6 +51,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A utility to fetch and download Python packages";
+    mainProgram = "unearth";
     homepage = "https://github.com/frostming/unearth";
     changelog = "https://github.com/frostming/unearth/releases/tag/${version}";
     license = licenses.mit;

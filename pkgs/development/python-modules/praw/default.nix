@@ -9,7 +9,7 @@
 , pytestCheckHook
 , pythonOlder
 , requests-toolbelt
-, update_checker
+, update-checker
 , websocket-client
 }:
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     mock
     prawcore
-    update_checker
+    update-checker
     websocket-client
   ];
 
@@ -40,6 +40,11 @@ buildPythonPackage rec {
     betamax-matchers
     pytestCheckHook
     requests-toolbelt
+  ];
+
+  disabledTestPaths = [
+    # tests requiring network
+    "tests/integration"
   ];
 
   pythonImportsCheck = [

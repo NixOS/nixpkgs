@@ -1,3 +1,5 @@
+{ pkgs, haskellLib }:
+
 # EXTRA HASKELL PACKAGES NOT ON HACKAGE
 #
 # This file should only contain packages that are not in ./hackage-packages.nix.
@@ -6,6 +8,8 @@
 # configuration-common.nix or to one of the compiler specific configuration
 # files.
 self: super: {
+
+  changelog-d = self.callPackage ../misc/haskell/changelog-d {};
 
   dconf2nix = self.callPackage ../tools/haskell/dconf2nix/dconf2nix.nix { };
 
@@ -36,4 +40,5 @@ self: super: {
   # Unofficial fork until PRs are merged https://github.com/pcapriotti/optparse-applicative/pulls/roberth
   # cabal2nix --maintainer roberth https://github.com/hercules-ci/optparse-applicative.git > pkgs/development/misc/haskell/hercules-ci-optparse-applicative.nix
   hercules-ci-optparse-applicative = self.callPackage ../misc/haskell/hercules-ci-optparse-applicative.nix {};
+
 }

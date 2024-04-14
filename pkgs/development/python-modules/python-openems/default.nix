@@ -12,14 +12,10 @@
 
 buildPythonPackage rec {
   pname = "python-openems";
-  version = "unstable-2020-02-15";
+  version = openems.version;
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "thliebig";
-    repo = "openEMS";
-    rev = "ba793ac84e2f78f254d6d690bb5a4c626326bbfd";
-    sha256 = "1dca6b6ccy771irxzsj075zvpa3dlzv4mjb8xyg9d889dqlgyl45";
-  };
+  src = openems.src;
 
   sourceRoot = "${src.name}/python";
 

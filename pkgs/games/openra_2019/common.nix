@@ -7,9 +7,16 @@
 , zenity
 }:
 
-with lib;
-
 let
+  inherit (lib)
+    licenses
+    maintainers
+    makeBinPath
+    makeLibraryPath
+    optional
+    platforms
+    ;
+
   path = makeBinPath ([ mono python3 ] ++ optional (zenity != null) zenity);
   rpath = makeLibraryPath [ lua freetype openal SDL2 ];
   mkdirp = makeSetupHook {
@@ -61,7 +68,7 @@ in {
     dontStrip = true;
 
     meta = {
-      maintainers = with maintainers; [ fusion809 msteen rardiol ];
+      maintainers = with maintainers; [ fusion809 msteen ];
       license = licenses.gpl3;
       platforms = platforms.linux;
     };

@@ -45,7 +45,7 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "gucharmap";
-  version = "15.0.4";
+  version = "15.1.2";
 
   outputs = [ "out" "lib" "dev" "devdoc" ];
 
@@ -54,7 +54,7 @@ in stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "gucharmap";
     rev = version;
-    sha256 = "sha256-lfWIaAr5FGWvDkNLOPe19hVQiFarbYVXwM78jZc5FFk=";
+    sha256 = "sha256-tvFw2k5xCl+QE6cHvLj5KKdYFSghN7PVgHPmd27wh7k=";
   };
 
   strictDeps = true;
@@ -105,6 +105,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GNOME Character Map, based on the Unicode Character Database";
+    mainProgram = "gucharmap";
     homepage = "https://wiki.gnome.org/Apps/Gucharmap";
     license = licenses.gpl3;
     maintainers = teams.gnome.members;

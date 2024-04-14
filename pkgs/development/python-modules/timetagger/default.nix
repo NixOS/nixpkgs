@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "timetagger";
-  version = "23.7.1";
+  version = "23.11.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "almarklein";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-OLIjb5mFNNi0elPeXaPoK9V0fVw2Cnd7CHjPc1oGfyM=";
+    hash = "sha256-YzS69Sapwbg29usIz93hSEPiDjulFdCTeXbX4I8ZW+Q=";
   };
 
   propagatedBuildInputs = [
@@ -55,6 +55,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library to interact with TimeTagger";
+    mainProgram = "timetagger";
     homepage = "https://github.com/almarklein/timetagger";
     changelog = "https://github.com/almarklein/timetagger/releases/tag/v${version}";
     license = licenses.gpl3Only;

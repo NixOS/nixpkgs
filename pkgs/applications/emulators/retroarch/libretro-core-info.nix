@@ -1,17 +1,18 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
+, gitUpdater
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "libretro-core-info";
-  version = "1.15.0";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "libretro-core-info";
-    hash = "sha256-WIgcHuZgAOrlg+WyOS4TyzWziNzjyQB2sPDM9fR6kwA=";
     rev = "v${version}";
+    hash = "sha256-tIuDDueYocvRDbA8CTR5ubGI7/Up02zUENw/HaDwC0U=";
   };
 
   makeFlags = [
@@ -22,6 +23,10 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   dontBuild = true;
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     description = "Libretro's core info files";

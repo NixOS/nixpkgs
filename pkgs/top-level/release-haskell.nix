@@ -49,8 +49,7 @@ let
   # ```
   # {
   #   ghc810 = "ghc810";
-  #   ghc8102Binary = "ghc8102Binary";
-  #   ghc8102BinaryMinimal = "ghc8102BinaryMinimal";
+  #   ghc8107Binary = "ghc8107Binary";
   #   ghc8107 = "ghc8107";
   #   ghc924 = "ghc924";
   #   ...
@@ -60,16 +59,20 @@ let
 
   # list of all compilers to test specific packages on
   released = with compilerNames; [
-    ghc884
     ghc8107
     ghc902
-    ghc924
     ghc925
     ghc926
     ghc927
     ghc928
     ghc945
-    ghc962
+    ghc946
+    ghc947
+    ghc948
+    ghc963
+    ghc964
+    ghc981
+    ghc982
   ];
 
   # packagePlatforms applied to `haskell.packages.*`
@@ -267,7 +270,7 @@ let
         cabal-install
         cabal2nix
         cachix
-        carp
+        # carp broken on 2024-04-09
         cedille
         client-ip-echo
         darcs
@@ -304,8 +307,6 @@ let
         hledger-web
         hlint
         hpack
-        # hyper-haskell  # depends on electron-10.4.7 which is marked as insecure
-        # hyper-haskell-server-with-packages # hyper-haskell-server is broken
         icepeak
         ihaskell
         jacinda
@@ -315,6 +316,7 @@ let
         lambdabot
         lhs2tex
         madlang
+        mailctl
         matterhorn
         mueval
         naproche
@@ -330,6 +332,7 @@ let
         nota
         nvfetcher
         ormolu
+        # pakcs broken by set-extra on 2024-03-15
         pandoc
         petrinizer
         place-cursor-at
@@ -340,6 +343,7 @@ let
         sourceAndTags
         spacecookie
         spago
+        specup
         splot
         stack
         stack2nix
@@ -355,7 +359,7 @@ let
         uusi
         uqm
         uuagc
-        vaultenv
+        # vaultenv: broken by connection on 2024-03-16
         wstunnel
         xmobar
         xmonadctl
@@ -370,7 +374,7 @@ let
           elm
           elm-format
           elm-instrument
-          elmi-to-json
+          # elmi-to-json broken by hashable-time on 2024-03-16
           ;
       };
 
@@ -380,15 +384,10 @@ let
         {
           # remove musl ghc865Binary since it is known to be broken and
           # causes an evaluation error on darwin.
-          # TODO: remove ghc865Binary altogether and use ghc8102Binary
           ghc865Binary = {};
 
           ghcjs = {};
           ghcjs810 = {};
-
-          # Can't be built with musl, see meta.broken comment in the drv
-          integer-simple.ghc884 = {};
-          integer-simple.ghc88 = {};
         };
 
       # Get some cache going for MUSL-enabled GHC.
@@ -415,7 +414,7 @@ let
 
       # Test some statically linked packages to catch regressions
       # and get some cache going for static compilation with GHC.
-      # Use integer-simple to avoid GMP linking problems (LGPL)
+      # Use native-bignum to avoid GMP linking problems (LGPL)
       pkgsStatic =
         removePlatforms
           [
@@ -437,8 +436,8 @@ let
               ;
             };
 
-            haskell.packages.native-bignum.ghc928 = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc928)
+            haskell.packages.native-bignum.ghc948 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc948)
                 hello
                 lens
                 random
@@ -447,6 +446,15 @@ let
                 terminfo # isn't bundled for cross
                 xhtml # isn't bundled for cross
               ;
+            };
+
+            haskell.packages.native-bignum.ghc982 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc982)
+                hello
+                random
+                QuickCheck
+                terminfo # isn't bundled for cross
+                ;
             };
           };
 
@@ -479,73 +487,100 @@ let
       # and to confirm that critical packages for the
       # package sets (like Cabal, jailbreak-cabal) are
       # working as expected.
-      cabal-install = released;
-      Cabal_3_6_3_0 = released;
-      Cabal_3_8_1_0 = released;
-      Cabal-syntax_3_8_1_0 = released;
-      Cabal_3_10_1_0 = released;
-      Cabal-syntax_3_10_1_0 = released;
+      cabal-install = lib.subtractLists [
+        compilerNames.ghc981
+        compilerNames.ghc982
+      ] released;
+      Cabal_3_10_3_0 = lib.subtractLists [
+        compilerNames.ghc981
+        compilerNames.ghc982
+      ] released;
+      Cabal-syntax_3_10_3_0 = lib.subtractLists [
+        compilerNames.ghc981
+        compilerNames.ghc982
+      ] released;
       cabal2nix = lib.subtractLists [
-        compilerNames.ghc962
+        compilerNames.ghc981
+        compilerNames.ghc982
       ] released;
       cabal2nix-unstable = lib.subtractLists [
-        compilerNames.ghc962
+        compilerNames.ghc981
+        compilerNames.ghc982
       ] released;
-      funcmp = lib.subtractLists [
-        compilerNames.ghc962
-      ] released;
+      funcmp = released;
       haskell-language-server = lib.subtractLists [
-        # Support ceased as of 1.9.0.0
-        compilerNames.ghc884
+        # Support ceased as of 2.3.0.0
+        compilerNames.ghc8107
+        # Support ceased as of 2.5.0.0
+        compilerNames.ghc902
       ] released;
       hoogle = lib.subtractLists [
-        compilerNames.ghc962
+        compilerNames.ghc981
+        compilerNames.ghc982
       ] released;
       hlint = lib.subtractLists [
-        compilerNames.ghc962
+        compilerNames.ghc902
+        compilerNames.ghc981
+        compilerNames.ghc982
       ] released;
       hpack = lib.subtractLists [
-        compilerNames.ghc962
+        compilerNames.ghc981
+        compilerNames.ghc982
       ] released;
       hsdns = released;
       jailbreak-cabal = released;
       language-nix = lib.subtractLists [
-        compilerNames.ghc962
+        compilerNames.ghc981
+        compilerNames.ghc982
       ] released;
+      large-hashable = [
+        compilerNames.ghc928
+      ];
       nix-paths = released;
-      titlecase = released;
+      titlecase = lib.subtractLists [
+        compilerNames.ghc981
+        compilerNames.ghc982
+      ] released;
       ghc-api-compat = [
-        compilerNames.ghc884
         compilerNames.ghc8107
         compilerNames.ghc902
       ];
       ghc-bignum = [
-        compilerNames.ghc884
         compilerNames.ghc8107
       ];
-      ghc-lib = released;
-      ghc-lib-parser = released;
-      ghc-lib-parser-ex = released;
-      ghc-tags = [
+      ghc-lib = lib.subtractLists [
+        compilerNames.ghc981
+        compilerNames.ghc982
+      ] released;
+      ghc-lib-parser = lib.subtractLists [
+        compilerNames.ghc981
+        compilerNames.ghc982
+      ] released;
+      ghc-lib-parser-ex = lib.subtractLists [
+        compilerNames.ghc981
+        compilerNames.ghc982
+      ] released;
+      ghc-source-gen = [
+        # Feel free to remove these as they break,
+        # ghc-source-gen currently doesn't support GHC 9.4
         compilerNames.ghc8107
         compilerNames.ghc902
-        compilerNames.ghc924
-        compilerNames.ghc925
-        compilerNames.ghc926
-        compilerNames.ghc927
         compilerNames.ghc928
-        compilerNames.ghc945
       ];
-      weeder = [
-        compilerNames.ghc8107
-        compilerNames.ghc902
-        compilerNames.ghc924
-        compilerNames.ghc925
-        compilerNames.ghc926
-        compilerNames.ghc927
-        compilerNames.ghc928
-        compilerNames.ghc945
-      ];
+      # broken on 2024-03-16
+      # ghc-tags = lib.subtractLists [
+      #   compilerNames.ghc981
+      #   compilerNames.ghc982
+      # ] released;
+      hashable = lib.subtractLists [
+        compilerNames.ghc981
+        compilerNames.ghc982
+      ] released;
+      primitive = released;
+      weeder = lib.subtractLists [
+        compilerNames.ghc981
+        compilerNames.ghc982
+      ] released;
     })
     {
       mergeable = pkgs.releaseTools.aggregate {
@@ -616,12 +651,9 @@ let
           ];
         };
         constituents = accumulateDerivations [
-          jobs.pkgsMusl.haskell.compiler.ghc8102Binary
           jobs.pkgsMusl.haskell.compiler.ghc8107Binary
-          jobs.pkgsMusl.haskell.compiler.ghc884
           jobs.pkgsMusl.haskell.compiler.ghc8107
           jobs.pkgsMusl.haskell.compiler.ghc902
-          jobs.pkgsMusl.haskell.compiler.ghc924
           jobs.pkgsMusl.haskell.compiler.ghc925
           jobs.pkgsMusl.haskell.compiler.ghc926
           jobs.pkgsMusl.haskell.compiler.ghc927
@@ -629,7 +661,6 @@ let
           jobs.pkgsMusl.haskell.compiler.ghcHEAD
           jobs.pkgsMusl.haskell.compiler.integer-simple.ghc8107
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc902
-          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc924
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc925
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc926
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc927
@@ -648,8 +679,9 @@ let
           ];
         };
         constituents = accumulateDerivations [
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc948 # non-hadrian
           jobs.pkgsStatic.haskellPackages
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc928
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc982
         ];
       };
     }

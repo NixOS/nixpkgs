@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "civo";
-  version = "1.0.61";
+  version = "1.0.80";
 
   src = fetchFromGitHub {
     owner  = "civo";
     repo   = "cli";
     rev    = "v${version}";
-    sha256 = "sha256-Q3GIAbQ1I1qsMc5Is9SkYxc+nGuC6z8zu9cW2shwC6c=";
+    sha256 = "sha256-jzz9mny59YM5PLcQvcus3gHuRSbl/OISAOjDoS/4Y78=";
   };
 
-  vendorHash = "sha256-Ye01MmYHK2YGFsbELLVaXBeQbFGABS6WQUoH8AldRW0=";
+  vendorHash = "sha256-Uh2/4qdJQfqQdjXbOBkUVv2nF1AN+QRKRI0+yta+G5Q=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -39,6 +39,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "CLI for interacting with Civo resources";
+    mainProgram = "civo";
     homepage = "https://github.com/civo/cli";
     license = licenses.asl20;
     maintainers = with maintainers; [ berryp ];

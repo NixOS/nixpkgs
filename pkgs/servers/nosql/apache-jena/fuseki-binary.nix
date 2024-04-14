@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     description = "SPARQL server";
     license = licenses.asl20;
     maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
     homepage = "https://jena.apache.org";
     downloadPage = "https://archive.apache.org/dist/jena/binaries/";
   };

@@ -5,29 +5,32 @@ with (import ./param-lib.nix lib);
 
 let
   cfg = config.services.strongswan-swanctl;
+  configFile = pkgs.writeText "swanctl.conf"
+      ( (paramsToConf cfg.swanctl swanctlParams)
+      + (concatMapStrings (i: "\ninclude ${i}") cfg.includes));
   swanctlParams = import ./swanctl-params.nix lib;
 in  {
   options.services.strongswan-swanctl = {
-    enable = mkEnableOption (lib.mdDoc "strongswan-swanctl service");
+    enable = mkEnableOption "strongswan-swanctl service";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.strongswan;
-      defaultText = literalExpression "pkgs.strongswan";
-      description = lib.mdDoc ''
-        The strongswan derivation to use.
-      '';
-    };
+    package = mkPackageOption pkgs "strongswan" { };
 
     strongswan.extraConfig = mkOption {
       type = types.str;
       default = "";
-      description = lib.mdDoc ''
+      description = ''
         Contents of the `strongswan.conf` file.
       '';
     };
 
     swanctl = paramsToOptions swanctlParams;
+    includes = mkOption {
+      type = types.listOf types.path;
+      default = [];
+      description = ''
+        Extra configuration files to include in the swanctl configuration. This can be used to provide secret values from outside the nix store.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -38,30 +41,30 @@ in  {
       }
     ];
 
-    environment.etc."swanctl/swanctl.conf".text =
-      paramsToConf cfg.swanctl swanctlParams;
+    environment.etc."swanctl/swanctl.conf".source = configFile;
 
     # The swanctl command complains when the following directories don't exist:
     # See: https://wiki.strongswan.org/projects/strongswan/wiki/Swanctldirectory
-    system.activationScripts.strongswan-swanctl-etc = stringAfter ["etc"] ''
-      mkdir -p '/etc/swanctl/x509'     # Trusted X.509 end entity certificates
-      mkdir -p '/etc/swanctl/x509ca'   # Trusted X.509 Certificate Authority certificates
-      mkdir -p '/etc/swanctl/x509ocsp'
-      mkdir -p '/etc/swanctl/x509aa'   # Trusted X.509 Attribute Authority certificates
-      mkdir -p '/etc/swanctl/x509ac'   # Attribute Certificates
-      mkdir -p '/etc/swanctl/x509crl'  # Certificate Revocation Lists
-      mkdir -p '/etc/swanctl/pubkey'   # Raw public keys
-      mkdir -p '/etc/swanctl/private'  # Private keys in any format
-      mkdir -p '/etc/swanctl/rsa'      # PKCS#1 encoded RSA private keys
-      mkdir -p '/etc/swanctl/ecdsa'    # Plain ECDSA private keys
-      mkdir -p '/etc/swanctl/bliss'
-      mkdir -p '/etc/swanctl/pkcs8'    # PKCS#8 encoded private keys of any type
-      mkdir -p '/etc/swanctl/pkcs12'   # PKCS#12 containers
-    '';
+    systemd.tmpfiles.rules = [
+      "d /etc/swanctl/x509 -"     # Trusted X.509 end entity certificates
+      "d /etc/swanctl/x509ca -"   # Trusted X.509 Certificate Authority certificates
+      "d /etc/swanctl/x509ocsp -"
+      "d /etc/swanctl/x509aa -"   # Trusted X.509 Attribute Authority certificates
+      "d /etc/swanctl/x509ac -"   # Attribute Certificates
+      "d /etc/swanctl/x509crl -"  # Certificate Revocation Lists
+      "d /etc/swanctl/pubkey -"   # Raw public keys
+      "d /etc/swanctl/private -"  # Private keys in any format
+      "d /etc/swanctl/rsa -"      # PKCS#1 encoded RSA private keys
+      "d /etc/swanctl/ecdsa -"    # Plain ECDSA private keys
+      "d /etc/swanctl/bliss -"
+      "d /etc/swanctl/pkcs8 -"    # PKCS#8 encoded private keys of any type
+      "d /etc/swanctl/pkcs12 -"   # PKCS#12 containers
+    ];
 
     systemd.services.strongswan-swanctl = {
       description = "strongSwan IPsec IKEv1/IKEv2 daemon using swanctl";
       wantedBy = [ "multi-user.target" ];
+      wants    = [ "network-online.target" ];
       after    = [ "network-online.target" ];
       path     = with pkgs; [ kmod iproute2 iptables util-linux ];
       environment = {

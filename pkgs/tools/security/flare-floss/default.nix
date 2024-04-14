@@ -2,40 +2,18 @@
 , python3
 , fetchFromGitHub
 }:
-let
-  py = python3.override {
-    packageOverrides = final: prev: {
-      # required for networkx 2.5.1
-      decorator = prev.decorator.overridePythonAttrs (o: o // rec {
-        version = "4.4.2";
-        src = o.src.override {
-          inherit version;
-          hash = "sha256-46YvBSAXJEDKDcyCN0kxk4Ljd/N/FAoLme9F/suEv+c=";
-        };
-      });
 
-      # flare-floss requires this exact version (newer versions are incompatible)
-      networkx = prev.networkx.overridePythonAttrs (o: o // rec {
-        version = "2.5.1";
-        src = o.src.override {
-          inherit version;
-          hash = "sha256-EJzVhcrEEpf3EQPDxCrG73N58peI61TLdRvlpmO7I1o=";
-        };
-      });
-    };
-  };
-in
-py.pkgs.buildPythonPackage rec {
+python3.pkgs.buildPythonPackage rec {
   pname = "flare-floss";
-  version = "2.2.0";
-  format = "setuptools";
+  version = "3.0.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mandiant";
     repo = "flare-floss";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true; # for tests
-    hash = "sha256-Oa0DMl7RKNfA00shcc4y1sNd2OiKCf0sA0EUC5gByBI=";
+    hash = "sha256-bmOWOFqyvOvSrNTbwLqo0WMq4IAZxZ0YYaWCdCrpziU=";
   };
 
   postPatch = ''
@@ -46,17 +24,24 @@ py.pkgs.buildPythonPackage rec {
       --replace 'sigs_path = os.path.join(get_default_root(), "sigs")' 'sigs_path = "'"$out"'/share/flare-floss/sigs"'
   '';
 
-  propagatedBuildInputs = with py.pkgs; [
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
+    binary2strings
     halo
     networkx
-    pydantic
+    pefile
+    pydantic_1
+    rich
     tabulate
     tqdm
     viv-utils
     vivisect
   ] ++ viv-utils.optional-dependencies.flirt;
 
-  nativeCheckInputs = with py.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytest-sugar
     pytestCheckHook
     pyyaml
@@ -65,6 +50,10 @@ py.pkgs.buildPythonPackage rec {
   postInstall = ''
     mkdir -p $out/share/flare-floss/
     cp -r floss/sigs $out/share/flare-floss/
+  '';
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
   '';
 
   meta = with lib; {

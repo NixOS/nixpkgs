@@ -35,5 +35,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/stampery/mongoaudit";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "mongoaudit";
   };
 }

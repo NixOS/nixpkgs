@@ -392,8 +392,9 @@ rec {
 
   inherit (import ./build-vim-plugin.nix {
     inherit lib stdenv rtpPath toVimPlugin;
-  }) buildVimPlugin buildVimPluginFrom2Nix;
+  }) buildVimPlugin;
 
+  buildVimPluginFrom2Nix = lib.warn "buildVimPluginFrom2Nix is deprecated: use buildVimPlugin instead" buildVimPlugin;
 
   # used to figure out which python dependencies etc. neovim needs
   requiredPlugins = {
@@ -418,7 +419,7 @@ rec {
       forceShare = [ "man" "info" ];
 
       nativeBuildInputs = oldAttrs.nativeBuildInputs or []
-      ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+      ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
         vimCommandCheckHook vimGenDocHook
         # many neovim plugins keep using buildVimPlugin
         neovimRequireCheckHook

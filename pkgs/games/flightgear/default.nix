@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "2020.3.18";
+  version = "2020.3.19";
   shortVersion = builtins.substring 0 6 version;
   data = stdenv.mkDerivation rec {
     pname = "flightgear-data";
@@ -14,7 +14,7 @@ let
 
     src = fetchurl {
       url = "mirror://sourceforge/flightgear/release-${shortVersion}/FlightGear-${version}-data.txz";
-      sha256 = "sha256-U8lsHrw40Xo6a3jZw6GiPnOALvvg9PdecVAdkZewUjg=";
+      sha256 = "sha256-863EnNBU+rYTdxHwMV6HbBu99lO6H3mKGuyumm6YR5U=";
     };
 
     dontUnpack = true;
@@ -32,24 +32,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/flightgear/release-${shortVersion}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-OajjGj/Bgqg8H/6PjXkwJHwbSQqtzbQ1b3Xwk3aI3jc=";
-  };
-
-  # Of all the files in the source and data archives, there doesn't seem to be
-  # a decent icon :-)
-  iconsrc = fetchurl {
-    url = "https://wiki.flightgear.org/w/images/6/62/FlightGear_logo.png";
-    sha256 = "1ikz413jia55vfnmx8iwrlxvx8p16ggm81mbrj66wam3q7s2dm5p";
-  };
-
-  desktopItem = makeDesktopItem {
-    name = "flightgear";
-    exec = "fgfs";
-    icon = iconsrc;
-    comment = "FlightGear Flight Simulator";
-    desktopName = "FlightGear";
-    genericName = "Flight simulator";
-    categories = [ "Game" "Simulation" ];
+    sha256 = "sha256-Fn0I3pzA9yIYs3myPNflbH9u4Y19VZUS2lGjvWfzjm4=";
   };
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ];
@@ -59,11 +42,6 @@ stdenv.mkDerivation rec {
     libXmu libXt simgear zlib boost libpng udev fltk13 apr qtbase
     glew qtdeclarative curl
   ];
-
-  postInstall = ''
-    mkdir -p "$out/share/applications/"
-    cp "${desktopItem}"/share/applications/* "$out/share/applications/" #*/
-  '';
 
   qtWrapperArgs = [
     "--set FG_ROOT ${data}/share/FlightGear"
@@ -75,5 +53,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     hydraPlatforms = []; # disabled from hydra because it's so big
     license = licenses.gpl2;
+    mainProgram = "fgfs";
   };
 }

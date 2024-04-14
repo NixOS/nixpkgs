@@ -35,24 +35,24 @@
 , icu
 , fetchYarnDeps
 , yarn
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , nodePackages
-, nodejs_16
-, dart-sass-embedded
+, nodejs_18
 , jq
 , moreutils
+, terser
 
 , plugins ? []
 }@args:
 
 let
-  version = "3.1.0.beta4";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-22GXFYPjPYL20amR4xFB4L/dCp32H4Z3uf0GLGEghUE=";
+    sha256 = "sha256-Iv7VSnK8nZDpmIwIRPedSWlftABKuMOQ4MXDGpjuWrY=";
   };
 
   ruby = ruby_3_2;
@@ -162,9 +162,9 @@ let
                 cd ../..
 
                 mkdir -p vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/
-                ln -s "${nodejs_16.libv8}/lib/libv8.a" vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/libv8_monolith.a
+                ln -s "${nodejs_18.libv8}/lib/libv8.a" vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/libv8_monolith.a
 
-                ln -s ${nodejs_16.libv8}/include vendor/v8/include
+                ln -s ${nodejs_18.libv8}/include vendor/v8/include
 
                 mkdir -p ext/libv8-node
                 echo '--- !ruby/object:Libv8::Node::Location::Vendor {}' >ext/libv8-node/.location.yml
@@ -186,21 +186,7 @@ let
             # available for aarch64. It has to be called
             # libpsl.x86_64.so or it isn't found.
             postPatch = ''
-              cp $(readlink -f ${libpsl}/lib/libpsl.so) vendor/libpsl.x86_64.so
-            '';
-          };
-          sass-embedded = gems.sass-embedded // {
-            dontBuild = false;
-            # `sass-embedded` depends on `dart-sass-embedded` and tries to
-            # fetch that as `.tar.gz` from GitHub releases. That `.tar.gz`
-            # can also be specified via `SASS_EMBEDDED`. But instead of
-            # compressing our `dart-sass-embedded` just to decompress it
-            # again, we simply patch the Rakefile to symlink that path.
-            patches = [
-              ./rubyEnv/sass-embedded-static.patch
-            ];
-            postPatch = ''
-              export SASS_EMBEDDED=${dart-sass-embedded}/bin
+              cp $(readlink -f ${lib.getLib libpsl}/lib/libpsl.so) vendor/libpsl.x86_64.so
             '';
           };
         };
@@ -216,19 +202,20 @@ let
 
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = src + "/app/assets/javascripts/yarn.lock";
-      sha256 = "0a20kns4irdpzzx2dvdjbi0m3s754gp737q08z5nlcnffxqvykrk";
+      sha256 = "0sclrv3303dgg3r08dwhd1yvi3pvlnvnikn300vjsh6c71fnzhnj";
     };
 
     nativeBuildInputs = runtimeDeps ++ [
       postgresql
       redis
       nodePackages.uglify-js
-      nodePackages.terser
+      terser
       nodePackages.patch-package
       yarn
-      nodejs_16
+      nodejs_18
       jq
       moreutils
+      prefetch-yarn-deps
     ];
 
     outputs = [ "out" "javascripts" ];
@@ -266,7 +253,7 @@ let
       yarn config --offline set yarn-offline-mirror $yarnOfflineCache
 
       # Fixup "resolved"-entries in yarn.lock to match our offline cache
-      ${fixup_yarn_lock}/bin/fixup_yarn_lock app/assets/javascripts/yarn.lock
+      fixup-yarn-lock app/assets/javascripts/yarn.lock
 
       export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
 

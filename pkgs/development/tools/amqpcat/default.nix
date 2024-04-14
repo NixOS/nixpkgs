@@ -1,14 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, crystal, openssl, testers, amqpcat }:
+{ lib, fetchFromGitHub, crystal, openssl, testers, amqpcat }:
 
 crystal.buildCrystalPackage rec {
   pname = "amqpcat";
-  version = "0.2.4";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "cloudamqp";
     repo = "amqpcat";
     rev = "v${version}";
-    hash = "sha256-Ec8LlOYYp3fXYgvps/ikeB4MqBEXTw1BAF5nJyL7dI0=";
+    hash = "sha256-AXX4aF5717lSIO0/2jNDPXXLtM/h//BlxO+cX71aWG4=";
   };
 
   format = "shards";
@@ -25,9 +25,9 @@ crystal.buildCrystalPackage rec {
 
   meta = with lib; {
     description = "A CLI tool for publishing to and consuming from AMQP servers";
+    mainProgram = "amqpcat";
     homepage = "https://github.com/cloudamqp/amqpcat";
     license = licenses.mit;
     maintainers = with maintainers; [ aaronjheng ];
-    broken = stdenv.isDarwin; # Linking errors. Hope someone can help fix it.
   };
 }

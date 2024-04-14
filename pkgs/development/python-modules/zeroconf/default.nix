@@ -1,6 +1,5 @@
 { lib
-, stdenv
-, cython
+, cython_3
 , async-timeout
 , buildPythonPackage
 , fetchFromGitHub
@@ -15,25 +14,30 @@
 
 buildPythonPackage rec {
   pname = "zeroconf";
-  version = "0.72.0";
-  format = "pyproject";
+  version = "0.132.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jstasiak";
     repo = "python-zeroconf";
     rev = "refs/tags/${version}";
-    hash = "sha256-Km7qZEXp0Srzt7XAq9D/U8WI/7go81Lvgx3Xck24XDc=";
+    hash = "sha256-eHB+SkJU5aTQPF7QqRhYHMBJgN7EYZkwtk7gjxWxIno=";
   };
 
-  nativeBuildInputs = [
-    cython
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython>=3.0.8" "Cython"
+  '';
+
+  build-system = [
+    cython_3
     poetry-core
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ifaddr
   ] ++ lib.optionals (pythonOlder "3.11") [
     async-timeout
@@ -66,9 +70,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/python-zeroconf/python-zeroconf/releases/tag/${version}";
     description = "Python implementation of multicast DNS service discovery";
     homepage = "https://github.com/python-zeroconf/python-zeroconf";
+    changelog = "https://github.com/python-zeroconf/python-zeroconf/releases/tag/${version}";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ abbradar ];
   };

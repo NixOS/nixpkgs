@@ -23,5 +23,6 @@ buildGoModule rec {
     homepage = "https://github.com/getAlby/lndhub.go";
     license = licenses.gpl3;
     maintainers = with maintainers; [ prusnak ];
+    mainProgram = "lndhub.go";
   };
 }

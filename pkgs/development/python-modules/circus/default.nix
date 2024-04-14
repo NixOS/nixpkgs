@@ -1,6 +1,8 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
+, flit-core
 , psutil
 , pytestCheckHook
 , pyyaml
@@ -11,12 +13,16 @@
 buildPythonPackage rec {
   pname = "circus";
   version = "0.18.0";
-  format = "flit";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-GTzoIk4GjO1mckz0gxBvtmdLUaV1g6waDn7Xp+6Mcas=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     psutil
@@ -28,6 +34,11 @@ buildPythonPackage rec {
     pytestCheckHook
     pyyaml
   ];
+
+  # On darwin: Too many open files
+  preCheck = lib.optionalString stdenv.isDarwin ''
+    ulimit -n 1024
+  '';
 
   disabledTests = [
     # these tests raise circus.tests.support.TimeoutException

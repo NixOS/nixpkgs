@@ -3,7 +3,7 @@
 let
   cfg = config.services.zabbixAgent;
 
-  inherit (lib) mkDefault mkEnableOption mkIf mkMerge mkOption;
+  inherit (lib) mkDefault mkEnableOption mkPackageOption mkIf mkMerge mkOption;
   inherit (lib) attrValues concatMapStringsSep literalExpression optionalString types;
   inherit (lib.generators) toKeyValue;
 
@@ -29,21 +29,16 @@ in
   options = {
 
     services.zabbixAgent = {
-      enable = mkEnableOption (lib.mdDoc "the Zabbix Agent");
+      enable = mkEnableOption "the Zabbix Agent";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.zabbix.agent;
-        defaultText = literalExpression "pkgs.zabbix.agent";
-        description = lib.mdDoc "The Zabbix package to use.";
-      };
+      package = mkPackageOption pkgs [ "zabbix" "agent" ] { };
 
       extraPackages = mkOption {
         type = types.listOf types.package;
         default = with pkgs; [ nettools ];
         defaultText = literalExpression "with pkgs; [ nettools ]";
         example = literalExpression "with pkgs; [ nettools mysql ]";
-        description = lib.mdDoc ''
+        description = ''
           Packages to be added to the Zabbix {env}`PATH`.
           Typically used to add executables for scripts, but can be anything.
         '';
@@ -51,7 +46,7 @@ in
 
       modules = mkOption {
         type = types.attrsOf types.package;
-        description = lib.mdDoc "A set of modules to load.";
+        description = "A set of modules to load.";
         default = {};
         example = literalExpression ''
           {
@@ -71,7 +66,7 @@ in
 
       server = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           The IP address or hostname of the Zabbix server to connect to.
         '';
       };
@@ -80,7 +75,7 @@ in
         ip = mkOption {
           type = types.str;
           default = "0.0.0.0";
-          description = lib.mdDoc ''
+          description = ''
             List of comma delimited IP addresses that the agent should listen on.
           '';
         };
@@ -88,7 +83,7 @@ in
         port = mkOption {
           type = types.port;
           default = 10050;
-          description = lib.mdDoc ''
+          description = ''
             Agent will listen on this port for connections from the server.
           '';
         };
@@ -97,7 +92,7 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Open ports in the firewall for the Zabbix Agent.
         '';
       };
@@ -105,7 +100,7 @@ in
       settings = mkOption {
         type = with types; attrsOf (oneOf [ int str (listOf str) ]);
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           Zabbix Agent configuration. Refer to
           <https://www.zabbix.com/documentation/current/manual/appendix/config/zabbix_agentd>
           for details on supported values.

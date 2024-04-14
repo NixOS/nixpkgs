@@ -9,7 +9,6 @@
 , pkg-config
 , python3
 , vala
-, vala-lint
 , wrapGAppsHook
 , cairo
 , glib
@@ -41,7 +40,6 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    vala-lint
     wrapGAppsHook
   ];
 

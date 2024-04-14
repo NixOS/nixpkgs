@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "pyjks";
   version = "20.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

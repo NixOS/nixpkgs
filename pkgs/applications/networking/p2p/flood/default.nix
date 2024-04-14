@@ -21,5 +21,6 @@ buildNpmPackage rec {
     homepage = "https://flood.js.org";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ thiagokokada winter ];
+    mainProgram = "flood";
   };
 }

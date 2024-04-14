@@ -37,8 +37,8 @@ buildPythonPackage rec {
 
   preConfigure = ''
     cd Source
-    ${python.pythonForBuild.interpreter} setup.py backport
-    ${python.pythonForBuild.interpreter} setup.py configure \
+    ${python.pythonOnBuildForHost.interpreter} setup.py backport
+    ${python.pythonOnBuildForHost.interpreter} setup.py configure \
       --apr-inc-dir=${apr.dev}/include \
       --apu-inc-dir=${aprutil.dev}/include \
       --pycxx-dir=${pycxx.dev}/include \

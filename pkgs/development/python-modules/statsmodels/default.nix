@@ -2,38 +2,46 @@
 , buildPythonPackage
 , cython
 , fetchPypi
-, matplotlib
 , numpy
+, oldest-supported-numpy
+, packaging
 , pandas
 , patsy
+, pythonAtLeast
 , pythonOlder
 , scipy
+, setuptools
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "statsmodels";
-  version = "0.14.0";
-  format = "pyproject";
+  version = "0.14.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aHXH1onpZtlI8V64FqtWFvSShwaxgM9HD9WQerb2R6Q=";
+    hash = "sha256-ImDv3B74nznGcKC9gVGx0IQ1Z3gbyv7GzaBTTrR6lPY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cython
+    oldest-supported-numpy
+    scipy
+    setuptools
     setuptools-scm
+  ] ++ lib.optionals (pythonAtLeast "3.12") [
+    numpy
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
-    scipy
+    packaging
     pandas
     patsy
-    matplotlib
+    scipy
   ];
 
   # Huge test suites with several test failures

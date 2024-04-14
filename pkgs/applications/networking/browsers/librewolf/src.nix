@@ -1,13 +1,20 @@
-{ lib, fetchurl, fetchFromGitLab }:
+{ lib, fetchurl, fetchFromGitea }:
 let src = lib.importJSON ./src.json;
 in
 {
   inherit (src) packageVersion;
-  source = fetchFromGitLab {
-    owner = "librewolf-community";
-    repo = "browser/source";
+  source = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "librewolf";
+    repo = "source";
     fetchSubmodules = true;
     inherit (src.source) rev sha256;
+  };
+  settings = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "librewolf";
+    repo = "settings";
+    inherit (src.settings) rev sha256;
   };
   firefox = fetchurl {
     url =

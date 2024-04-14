@@ -1,23 +1,28 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles, testers, fd }:
+{ lib, rustPlatform, fetchFromGitHub, installShellFiles, rust-jemalloc-sys, testers, fd }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fd";
-  version = "8.7.0";
+  version = "9.0.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "fd";
     rev = "v${version}";
-    hash = "sha256-y7IrwMLQnvz1PeKt8BE9hbEBwQBiUXM4geYbiTjMymw=";
+    hash = "sha256-xcrvAWbSvUUtbFXyENy3eQimxt5aXzFrHnL6VptyydA=";
   };
 
-  cargoHash = "sha256-AstE8KGICgPhqRKlJecrE9iPUUWaOvca6ocWf85IzNo=";
+  cargoHash = "sha256-z4PV8k6avaLwo58yJq47WEUJGw3JCW1GZGviBaPTs+8=";
 
   nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = [ rust-jemalloc-sys ];
 
   # skip flaky test
   checkFlags = [
     "--skip=test_owner_current_group"
+    # Fails if the filesystem performs UTF-8 validation (such as ZFS with utf8only=on)
+    "--skip=test_exec_invalid_utf8"
+    "--skip=test_invalid_utf8"
   ];
 
   postInstall = ''
@@ -45,5 +50,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/sharkdp/fd/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ dywedir figsoda globin ma27 zowoq ];
+    mainProgram = "fd";
   };
 }

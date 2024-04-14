@@ -12,13 +12,13 @@ in
 
 {
 
-  options.hardware.facetimehd.enable = mkEnableOption (lib.mdDoc "facetimehd kernel module");
+  options.hardware.facetimehd.enable = mkEnableOption "the facetimehd kernel module";
 
   options.hardware.facetimehd.withCalibration = mkOption {
     default = false;
     example = true;
     type = types.bool;
-    description = lib.mdDoc ''
+    description = ''
       Whether to include sensor calibration files for facetimehd.
       This makes colors look much better but is experimental, see
       <https://github.com/patjak/facetimehd/wiki/Extracting-the-sensor-calibration-files>

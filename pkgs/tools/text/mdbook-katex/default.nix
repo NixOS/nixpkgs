@@ -2,19 +2,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-katex";
-  version = "0.5.5";
+  version = "0.7.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-ZiMMO3v//re6rCwDojJqaXChKL4wTK1fKVdQ8plHv9Q=";
+    hash = "sha256-hrST3bfODCqsGUsO2sMk70KICMZCe+J1pDeO3TTcsaU=";
   };
 
-  cargoHash = "sha256-FEyUWR5WcKZsGTFAnvysYReH1wOrKYoKQ0wlrPaW4ok=";
+  cargoHash = "sha256-qoeHdgR67aZvmM6l8IPLcR2sHW2v5sL4k7ymxHPdlis=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
   meta = with lib; {
-    description = "A preprocessor for mdbook, rendering LaTeX equations to HTML at build time.";
+    description = "A preprocessor for mdbook, rendering LaTeX equations to HTML at build time";
+    mainProgram = "mdbook-katex";
     homepage = "https://github.com/lzanini/${pname}";
     license = [ licenses.mit ];
     maintainers = with maintainers; [ lovesegfault ];

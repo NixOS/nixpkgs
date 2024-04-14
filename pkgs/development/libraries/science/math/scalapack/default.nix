@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, openssh
-, mpi, blas, lapack
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake
+, openssh, mpiCheckPhaseHook, mpi, blas, lapack
 } :
 
 assert blas.isILP64 == lapack.isILP64;
@@ -34,8 +34,10 @@ stdenv.mkDerivation rec {
     sed -i '/xssep/d;/xsgsep/d;/xssyevr/d' TESTING/CMakeLists.txt
   '';
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ cmake ];
-  nativeCheckInputs = [ openssh ];
+  nativeCheckInputs = [ openssh mpiCheckPhaseHook ];
   buildInputs = [ blas lapack ];
   propagatedBuildInputs = [ mpi ];
   hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
@@ -49,7 +51,7 @@ stdenv.mkDerivation rec {
       -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF
       -DLAPACK_LIBRARIES="-llapack"
       -DBLAS_LIBRARIES="-lblas"
-      -DCMAKE_Fortran_COMPILER=${mpi}/bin/mpif90
+      -DCMAKE_Fortran_COMPILER=${lib.getDev mpi}/bin/mpif90
       ${lib.optionalString passthru.isILP64 ''
         -DCMAKE_Fortran_FLAGS="-fdefault-integer-8"
         -DCMAKE_C_FLAGS="-DInt=long"
@@ -61,15 +63,12 @@ stdenv.mkDerivation rec {
   # sometimes fail due to this
   checkFlagsArray = [ "ARGS=--timeout 10000" ];
 
-  preCheck = ''
-    # make sure the test starts even if we have less than 4 cores
-    export OMPI_MCA_rmaps_base_oversubscribe=1
-
-    # Fix to make mpich run in a sandbox
-    export HYDRA_IFACE=lo
-
-    # Run single threaded
-    export OMP_NUM_THREADS=1
+  postFixup = ''
+    # _IMPORT_PREFIX, used to point to lib, points to dev output. Every package using the generated
+    # cmake file will thus look for the library in the dev output instead of out.
+    # Use the absolute path to $out instead to fix the issue.
+    substituteInPlace  $dev/lib/cmake/scalapack-${version}/scalapack-targets-release.cmake \
+      --replace "\''${_IMPORT_PREFIX}" "$out"
   '';
 
   meta = with lib; {

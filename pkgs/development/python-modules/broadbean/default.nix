@@ -1,9 +1,11 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , pythonOlder
 , setuptools
 , versioningit
+, wheel
 , numpy
 , matplotlib
 , schema
@@ -13,17 +15,21 @@
 
 buildPythonPackage rec {
   pname = "broadbean";
-  version = "0.11.0";
+  version = "0.14.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-e+LAcmWxT+SkaWtToPgg+x3QRu5fCSm+w4dLCcyZrw8=";
+    hash = "sha256-v+Ov6mlSnaJG98ooA9AhPGJflrFafKQoO5wi+PxcZVw=";
   };
 
-  nativeBuildInputs = [ setuptools versioningit ];
+  nativeBuildInputs = [
+    setuptools
+    versioningit
+    wheel
+  ];
 
   propagatedBuildInputs = [
     numpy
@@ -34,6 +40,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # on a 200ms deadline
+    "test_points"
   ];
 
   pythonImportsCheck = [ "broadbean" ];

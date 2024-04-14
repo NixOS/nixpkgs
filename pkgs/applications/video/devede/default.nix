@@ -5,14 +5,14 @@ let
   inherit (python3Packages) dbus-python buildPythonApplication pygobject3 urllib3 setuptools;
 in buildPythonApplication rec {
   pname = "devede";
-  version = "4.16.0";
+  version = "4.17.0";
   namePrefix = "";
 
   src = fetchFromGitLab {
     owner = "rastersoft";
     repo = "devedeng";
     rev = version;
-    sha256 = "1xb7acjphvn4ya8fgjsvag5gzi9a6c2famfl0ffr8nhb9y8ig9mg";
+    sha256 = "sha256-CdntdD5DRA/eXTBRBRszkbYFeFxj+0odb8XHkAFdobU=";
   };
 
   nativeBuildInputs = [

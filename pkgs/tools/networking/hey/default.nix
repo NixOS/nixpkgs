@@ -11,12 +11,13 @@ buildGoModule rec {
     sha256 = "0gsdksrzlwpba14a43ayyy41l1hxpw4ayjpvqyd4ycakddlkvgzb";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   meta = with lib; {
     description = "HTTP load generator, ApacheBench (ab) replacement";
     homepage = "https://github.com/rakyll/hey";
     license = licenses.asl20;
     maintainers = with maintainers; [ Br1ght0ne ];
+    mainProgram = "hey";
   };
 }

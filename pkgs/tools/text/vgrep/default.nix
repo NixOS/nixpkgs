@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "vgrep";
-  version = "2.6.1";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "vrothberg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-8xLyk1iid3xDCAuZwz1oXsEyboLaxvzm1BEyA2snQt4=";
+    hash = "sha256-+KZNNkTuZyF02YDZX3u1KdhOcZ3+Ud6aDGL/sGUN1hI=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
@@ -25,6 +25,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "User-friendly pager for grep/git-grep/ripgrep";
+    mainProgram = "vgrep";
     homepage = "https://github.com/vrothberg/vgrep";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ SuperSandro2000 ];

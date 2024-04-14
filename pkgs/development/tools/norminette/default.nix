@@ -5,13 +5,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "norminette";
-  version = "3.3.53";
+  version = "3.3.55";
 
   src = fetchFromGitHub {
     owner = "42School";
     repo = pname;
-    rev = version;
-    hash = "sha256-IvLy6ryu3Cwfl8XAV+Hyof6mjKDGQy17gYQFrQU5kXg=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-SaXOUpYEbc2QhZ8aKS+JeJ22MSXZ8HZuRmVQ9fWk7tM=";
   };
 
   nativeCheckInputs = with python3Packages; [
@@ -24,6 +24,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Open source norminette to apply 42's norme to C files";
+    mainProgram = "norminette";
     homepage = "https://github.com/42School/norminette";
     license = licenses.mit;
     maintainers = with maintainers; [ wegank ];

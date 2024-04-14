@@ -51,9 +51,10 @@ stdenv.mkDerivation rec {
       end-to-end encryption, powerful extensions, and open-source applications.
     '';
     homepage = "https://standardnotes.org";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ mgregoire chuangzhu squalus ];
     sourceProvenance = [ sourceTypes.binaryNativeCode ];
     platforms = builtins.attrNames srcjson.deb;
+    mainProgram = "standardnotes";
   };
 }

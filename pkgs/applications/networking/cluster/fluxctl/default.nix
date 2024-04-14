@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-rKZ0fI9UN4oq6gfDMNR2+kCazlDexE1+UVzQ3xgkSA8=";
   };
 
-  vendorSha256 = "sha256-6Trk49Vo3oMjSaHRDm2v+elPDHwdn2D3Z6i4UYcx0IQ=";
+  vendorHash = "sha256-6Trk49Vo3oMjSaHRDm2v+elPDHwdn2D3Z6i4UYcx0IQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -30,6 +30,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "CLI client for Flux, the GitOps Kubernetes operator";
+    mainProgram = "fluxctl";
     homepage = "https://github.com/fluxcd/flux";
     license = licenses.asl20;
     maintainers = with maintainers; [ Gonzih Br1ght0ne ];

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "zstandard";
-  version = "0.20.0";
+  version = "0.22.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YT2q3XLHGxSIdCyvssOzgcOdDJu4xswVeqLV6kXMLvw=";
+    hash = "sha256-giajPFQry1TNa9CjZgZ7YQtBcTtkyavsG8RTPWn1HnA=";
   };
 
   propagatedNativeBuildInputs = [

@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "djangorestframework-camel-case";
   version = "1.4.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

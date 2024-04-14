@@ -26,6 +26,18 @@ let
           rev = "refs/tags/${version}";
           hash = "sha256-IWTo/P9JRxBQlhtcH3JMJZZrwAA8EALF4dtHajWUc4w=";
         };
+        doCheck = false; # no tests
+      });
+
+      dataclasses-json = super.dataclasses-json.overridePythonAttrs (oldAttrs: rec {
+        version = "0.5.7";
+        src = fetchFromGitHub {
+          owner = "lidatong";
+          repo = "dataclasses-json";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-0tw5Lz+c4ymO+AGpG6THbiALWGBrehC84+yWWk1eafc=";
+        };
+        nativeBuildInputs = [ python3.pkgs.setuptools ];
       });
     };
   };
@@ -33,7 +45,7 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "sublime-music";
   version = "0.12.0";
-  format = "flit";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "sublime-music";
@@ -43,6 +55,7 @@ python.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
+    python.pkgs.flit-core
     gobject-introspection
     wrapGAppsHook
   ];
@@ -50,6 +63,9 @@ python.pkgs.buildPythonApplication rec {
   postPatch = ''
     sed -i "/--cov/d" setup.cfg
     sed -i "/--no-cov-on-fail/d" setup.cfg
+
+    # https://github.com/sublime-music/sublime-music/commit/f477659d24e372ed6654501deebad91ae4b0b51c
+    sed -i "s/python-mpv/mpv/g" pyproject.toml
   '';
 
   buildInputs = [
@@ -102,6 +118,7 @@ python.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "GTK3 Subsonic/Airsonic client";
+    mainProgram = "sublime-music";
     homepage = "https://sublimemusic.app/";
     changelog = "https://github.com/sublime-music/sublime-music/blob/v${version}/CHANGELOG.rst";
     license = licenses.gpl3Plus;

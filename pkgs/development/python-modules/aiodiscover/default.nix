@@ -1,6 +1,8 @@
 { lib
+, aiodns
 , async-timeout
 , buildPythonPackage
+, cached-ipaddress
 , dnspython
 , fetchFromGitHub
 , ifaddr
@@ -9,34 +11,36 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "aiodiscover";
-  version = "1.4.16";
-  format = "setuptools";
+  version = "2.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bdraco";
-    repo = pname;
+    repo = "aiodiscover";
     rev = "refs/tags/v${version}";
-    hash = "sha256-umHw9DFLIsoxBNlUSuSmaRy5O270lP0tLZ8rilw0oWg=";
+    hash = "sha256-7oeyuwirQ2mm0UQEOwTkAz126UnxkoMjg+DDu5DWY3E=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     async-timeout
+    aiodns
+    cached-ipaddress
     dnspython
+    ifaddr
     netifaces
     pyroute2
-    ifaddr
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"pytest-runner>=5.2",' ""
-  '';
 
   nativeCheckInputs = [
     pytest-asyncio

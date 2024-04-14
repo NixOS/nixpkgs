@@ -49,7 +49,7 @@ in
 
       enable = mkOption {
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to configure fish as an interactive shell.
         '';
         type = types.bool;
@@ -58,7 +58,7 @@ in
       useBabelfish = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           If enabled, the configured environment will be translated to native fish using [babelfish](https://github.com/bouk/babelfish).
           Otherwise, [foreign-env](https://github.com/oh-my-fish/plugin-foreign-env) will be used.
         '';
@@ -67,7 +67,7 @@ in
       vendor.config.enable = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether fish should source configuration snippets provided by other packages.
         '';
       };
@@ -75,7 +75,7 @@ in
       vendor.completions.enable = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether fish should use completion files provided by other packages.
         '';
       };
@@ -83,7 +83,7 @@ in
       vendor.functions.enable = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether fish should autoload fish functions provided by other packages.
         '';
       };
@@ -94,7 +94,7 @@ in
           gco = "git checkout";
           npu = "nix-prefetch-url";
         };
-        description = lib.mdDoc ''
+        description = ''
           Set of fish abbreviations.
         '';
         type = with types; attrsOf str;
@@ -102,7 +102,7 @@ in
 
       shellAliases = mkOption {
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           Set of aliases for fish shell, which overrides {option}`environment.shellAliases`.
           See {option}`environment.shellAliases` for an option format description.
         '';
@@ -111,7 +111,7 @@ in
 
       shellInit = mkOption {
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Shell script code called during fish shell initialisation.
         '';
         type = types.lines;
@@ -119,7 +119,7 @@ in
 
       loginShellInit = mkOption {
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Shell script code called during fish login shell initialisation.
         '';
         type = types.lines;
@@ -127,7 +127,7 @@ in
 
       interactiveShellInit = mkOption {
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Shell script code called during interactive fish shell initialisation.
         '';
         type = types.lines;
@@ -135,7 +135,7 @@ in
 
       promptInit = mkOption {
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Shell script code used to initialise fish prompt.
         '';
         type = types.lines;
@@ -208,7 +208,7 @@ in
         end
 
         # if we haven't sourced the login config, do it
-        status --is-login; and not set -q __fish_nixos_login_config_sourced
+        status is-login; and not set -q __fish_nixos_login_config_sourced
         and begin
           ${sourceEnv "loginShellInit"}
 
@@ -220,7 +220,7 @@ in
         end
 
         # if we haven't sourced the interactive config, do it
-        status --is-interactive; and not set -q __fish_nixos_interactive_config_sourced
+        status is-interactive; and not set -q __fish_nixos_interactive_config_sourced
         and begin
           ${fishAbbrs}
           ${fishAliases}
@@ -258,20 +258,17 @@ in
             preferLocalBuild = true;
             allowSubstitutes = false;
           };
-          generateCompletions = package: pkgs.runCommand
-            "${package.name}_fish-completions"
-            (
-              {
-                inherit package;
-                preferLocalBuild = true;
-                allowSubstitutes = false;
-              }
-              // optionalAttrs (package ? meta.priority) { meta.priority = package.meta.priority; }
-            )
+          generateCompletions = package: pkgs.runCommandLocal
+            ( with lib.strings; let
+                storeLength = stringLength storeDir + 34; # Nix' StorePath::HashLen + 2 for the separating slash and dash
+                pathName = substring storeLength (stringLength package - storeLength) package;
+              in (package.name or pathName) + "_fish-completions")
+            ( { inherit package; } //
+              optionalAttrs (package ? meta.priority) { meta.priority = package.meta.priority; })
             ''
               mkdir -p $out
               if [ -d $package/share/man ]; then
-                find $package/share/man -type f | xargs ${pkgs.python3.interpreter} ${patchedGenerator}/create_manpage_completions.py --directory $out >/dev/null
+                find $package/share/man -type f | xargs ${pkgs.python3.pythonOnBuildForHost.interpreter} ${patchedGenerator}/create_manpage_completions.py --directory $out >/dev/null
               fi
             '';
         in

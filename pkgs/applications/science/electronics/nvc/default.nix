@@ -7,7 +7,6 @@
 , pkg-config
 , which
 , elfutils
-, libelf
 , libffi
 , llvm
 , zlib
@@ -16,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nvc";
-  version = "1.10.1";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "nickg";
     repo = "nvc";
     rev = "r${version}";
-    hash = "sha256-7Kw9irZltNE8VRnIvVX786/u0QQtmRhV8pzpba0h1JY=";
+    hash = "sha256-7g4Ki5lhmX/13XCv0on1PgvEthCTfe9wh8EFjMcP1+c=";
   };
 
   nativeBuildInputs = [
@@ -40,8 +39,6 @@ stdenv.mkDerivation rec {
     zstd
   ] ++ lib.optionals stdenv.isLinux [
     elfutils
-  ] ++ lib.optionals (!stdenv.isLinux) [
-    libelf
   ];
 
   preConfigure = ''
@@ -60,6 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "VHDL compiler and simulator";
+    mainProgram = "nvc";
     homepage = "https://www.nickg.me.uk/nvc/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ wegank ];

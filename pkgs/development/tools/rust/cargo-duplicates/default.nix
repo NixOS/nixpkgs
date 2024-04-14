@@ -39,8 +39,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A cargo subcommand for displaying when different versions of a same dependency are pulled in";
+    mainProgram = "cargo-duplicates";
     homepage = "https://github.com/Keruspe/cargo-duplicates";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda matthiasbeyer ];
   };
 }

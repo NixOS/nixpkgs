@@ -4,6 +4,7 @@
 # build+runtime deps.
 , knot-dns, luajitPackages, libuv, gnutls, lmdb
 , jemalloc, systemd, libcap_ng, dns-root-data, nghttp2 # optionals, in principle
+, fstrm, protobufc # more optionals
 # test-only deps.
 , cmocka, which, cacert
 , extraFeatures ? false /* catch-all if defaults aren't enough */
@@ -17,11 +18,11 @@ lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "5.6.0";
+  version = "5.7.1";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "0c82ae937b685dc477fb3176098e3dc106c898b7cd83553e5bc54dccb83c80d7";
+    sha256 = "da14b415c61d53747a991f12d6209367ef826a13dc6bf4eeaf5d88760294c3a2";
   };
 
   outputs = [ "out" "dev" ];
@@ -52,6 +53,8 @@ unwrapped = stdenv.mkDerivation rec {
     echo 'os.exit(77)' > daemon/lua/trust_anchors.test/bootstrap.test.lua
     sed -E '/^[[:blank:]]*test_(dstaddr|headers),?$/d' -i \
       tests/config/doh2.test.lua modules/http/http_doh.test.lua
+  '' + /* FIXME: see PR #286822 */ ''
+    sed '/doh2\.test\.lua/d' -i tests/config/meson.build
   '';
 
   preConfigure = ''
@@ -62,9 +65,10 @@ unwrapped = stdenv.mkDerivation rec {
 
   # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
   buildInputs = [ knot-dns lua.lua libuv gnutls lmdb ]
+    ## the rest are optional dependencies
     ++ optionals stdenv.isLinux [ /*lib*/systemd libcap_ng ]
     ++ [ jemalloc nghttp2 ]
-    ## optional dependencies; TODO: dnstap
+    ++ [ fstrm protobufc ] # dnstap support
     ;
 
   mesonFlags = [
@@ -83,7 +87,7 @@ unwrapped = stdenv.mkDerivation rec {
   postInstall = ''
     rm "$out"/lib/libkres.a
     rm "$out"/lib/knot-resolver/upgrade-4-to-5.lua # not meaningful on NixOS
-  '' + optionalString stdenv.targetPlatform.isLinux ''
+  '' + optionalString stdenv.hostPlatform.isLinux ''
     rm -r "$out"/lib/sysusers.d/ # ATM more likely to harm than help
   '';
 
@@ -116,7 +120,8 @@ wrapped-full = runCommand unwrapped.name
     allowSubstitutes = false;
     inherit (unwrapped) meta;
   }
-  (''
+  (assert false; # FIXME: the http module won't work; see PR #286822
+  ''
     mkdir -p "$out"/bin
     makeWrapper '${unwrapped}/bin/kresd' "$out"/bin/kresd \
       --set LUA_PATH  "$LUA_PATH" \

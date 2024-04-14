@@ -4,7 +4,6 @@
 , aiosignal
 , attrs
 , autoPatchelfHook
-, buildBazelPackage
 , buildPythonPackage
 , fetchPypi
 , click
@@ -18,7 +17,6 @@
 , frozenlist
 , fsspec
 , gpustat
-, grpc
 , grpcio
 , gym
 , jsonschema
@@ -32,7 +30,6 @@
 , pandas
 , py-spy
 , prometheus-client
-, protobuf3_20
 , psutil
 , pyarrow
 , pydantic
@@ -41,14 +38,12 @@
 , pythonOlder
 , pythonRelaxDepsHook
 , pyyaml
-, redis
 , requests
 , scikit-image
 , scipy
 , setproctitle
 , smart-open
 , starlette
-, stdenv
 , tabulate
 , tensorboardx
 , uvicorn
@@ -57,13 +52,13 @@
 
 let
   pname = "ray";
-  version = "2.4.0";
+  version = "2.9.0";
 in
 buildPythonPackage rec {
   inherit pname version;
   format = "wheel";
 
-  disabled = pythonOlder "3.9" || pythonAtLeast "3.12";
+  disabled = pythonOlder "3.10" || pythonAtLeast "3.12";
 
   src =
     let
@@ -120,6 +115,7 @@ buildPythonPackage rec {
     "click"
     "grpcio"
     "protobuf"
+    "virtualenv"
   ];
 
   propagatedBuildInputs = [
@@ -143,7 +139,6 @@ buildPythonPackage rec {
     packaging
     py-spy
     prometheus-client
-    protobuf3_20
     psutil
     pydantic
     pyyaml

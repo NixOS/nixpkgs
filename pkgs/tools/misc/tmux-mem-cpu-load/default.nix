@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ thomasjm ];
     platforms = platforms.all;
+    mainProgram = "tmux-mem-cpu-load";
   };
 }

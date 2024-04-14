@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Simple method of reading and writing to memory registers on a PCI card";
+    mainProgram = "pcimem";
     homepage = "https://github.com/billfarrow/pcimem";
     license = licenses.gpl2Only;
     platforms = platforms.linux;

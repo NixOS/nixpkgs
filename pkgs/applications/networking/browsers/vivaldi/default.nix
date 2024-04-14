@@ -16,6 +16,7 @@
 , enableWidevine ? false, widevine-cdm ? null
 , commandLineArgs ? ""
 , pulseSupport ? stdenv.isLinux, libpulseaudio
+, kerberosSupport ? true, libkrb5
 }:
 
 let
@@ -23,7 +24,7 @@ let
   vivaldiName = if isSnapshot then "vivaldi-snapshot" else "vivaldi";
 in stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "6.1.3035.204";
+  version = "6.6.3271.57";
 
   suffix = {
     aarch64-linux = "arm64";
@@ -33,8 +34,8 @@ in stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}-1_${suffix}.deb";
     hash = {
-      aarch64-linux = "sha256-i2eIm4AF7avjy3KSUvoOOKWw7Q+BatozGpy/yyX4Esg=";
-      x86_64-linux = "sha256-TLuTYXp6EdQDBWPM1TEXwhdxWWMSPKIi5fW+SGUVdRo=";
+      aarch64-linux = "sha256-v/UG4eL/66i/0sSqN8JmJJIEjHzJjTTDZLRzLMJpJMA=";
+      x86_64-linux = "sha256-uVrEVf9mePqalU2OJRMj0Zy9d7jDXwsdMwEQhn9uUh8=";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
@@ -57,7 +58,8 @@ in stdenv.mkDerivation rec {
     libdrm mesa vulkan-loader
     wayland pipewire
   ] ++ lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs
-    ++ lib.optional pulseSupport libpulseaudio;
+    ++ lib.optional pulseSupport libpulseaudio
+    ++ lib.optional kerberosSupport libkrb5;
 
   libPath = lib.makeLibraryPath buildInputs
     + lib.optionalString (stdenv.is64bit)

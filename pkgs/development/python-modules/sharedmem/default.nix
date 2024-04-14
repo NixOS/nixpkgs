@@ -4,6 +4,7 @@ buildPythonPackage rec {
 
   pname = "sharedmem";
   version = "0.3.8";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -4,4 +4,4 @@ source "https://rubygems.org"
 
 # gem "rails"
 gem "webrick", "1.7.0"
-gem "prometheus_exporter",     File.read(File.expand_path("../prometheus_exporter_version", __FILE__)).strip
+gem "prometheus_exporter", "2.0.6"

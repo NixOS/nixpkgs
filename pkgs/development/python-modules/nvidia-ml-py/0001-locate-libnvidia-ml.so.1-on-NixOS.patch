@@ -11,7 +11,7 @@ index 9a424de..669afe0 100644
 +                            nvmlLib = CDLL("libnvidia-ml.so.1")
 +                        except OSError:
 +                            # Assume NixOS
-+                            nvmlLib = CDLL("/run/opengl-driver/lib/libnvidia-ml.so.1")
++                            nvmlLib = CDLL("@driverLink@/lib/libnvidia-ml.so.1")
                  except OSError as ose:
                      _nvmlCheckReturn(NVML_ERROR_LIBRARY_NOT_FOUND)
                  if (nvmlLib == None):

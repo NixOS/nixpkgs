@@ -8,7 +8,6 @@ buildDunePackage rec {
   inherit (mirage-runtime) version src;
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   outputs = [ "out" "dev" ];
 

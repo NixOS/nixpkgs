@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, rust, callPackage, version, hashes }:
+{ stdenv, fetchurl, callPackage, version, hashes }:
 
 let
-  platform = rust.toRustTarget stdenv.hostPlatform;
+  platform = stdenv.hostPlatform.rust.rustcTarget;
 
   src = fetchurl {
      url = "https://static.rust-lang.org/dist/rust-${version}-${platform}.tar.gz";

@@ -50,16 +50,16 @@ in
 
 stdenv.mkDerivation rec {
   pname = "racket";
-  version = "8.9"; # always change at once with ./minimal.nix
+  version = "8.12"; # always change at once with ./minimal.nix
 
-  src = (lib.makeOverridable ({ name, sha256 }:
+  src = (lib.makeOverridable ({ name, hash }:
     fetchurl {
       url = "https://mirror.racket-lang.org/installers/${version}/${name}-src.tgz";
-      inherit sha256;
+      inherit hash;
     }
   )) {
     name = "${pname}-${version}";
-    sha256 = "sha256-OuIl6E4Rn0zRpH8bFhM1aPx9NcKQxQVJVWbZ3M78UiQ=";
+    hash = "sha256-or26nirm5dGhg2S8to99BFOOSS2Oksn7Yb0y2L5b69c=";
   };
 
   FONTCONFIG_FILE = fontsConf;
@@ -131,11 +131,13 @@ stdenv.mkDerivation rec {
   shared = if stdenv.isDarwin then "dylib" else "shared";
   configureFlags = [ "--enable-${shared}"  "--enable-lt=${libtool}/bin/libtool" ]
                    ++ lib.optionals disableDocs [ "--disable-docs" ]
-                   ++ lib.optionals stdenv.isDarwin [ "--enable-xonx" ];
+                   ++ lib.optionals stdenv.isDarwin [ "--disable-strip" "--enable-xonx" ];
 
   configureScript = "../configure";
 
   enableParallelBuilding = false;
+
+  dontStrip = stdenv.isDarwin;
 
   meta = with lib; {
     description = "A programmable programming language";
@@ -149,8 +151,9 @@ stdenv.mkDerivation rec {
       GUIs and charts.
     '';
     homepage = "https://racket-lang.org/";
+    changelog = "https://github.com/racket/racket/releases/tag/v${version}";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ henrytill vrthra ];
+    maintainers = with maintainers; [ vrthra ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
   };
 }

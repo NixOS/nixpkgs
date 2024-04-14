@@ -2,6 +2,6 @@
 
 qtModule {
   pname = "qtsvg";
-  qtInputs = [ qtbase ];
+  propagatedBuildInputs = [ qtbase ];
   outputs = [ "out" "dev" "bin" ];
 }

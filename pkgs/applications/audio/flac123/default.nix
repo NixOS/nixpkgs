@@ -17,5 +17,6 @@ stdenv.mkDerivation rec {
     description = "A command-line program for playing FLAC audio files";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
+    mainProgram = "flac123";
   };
 }

@@ -5,6 +5,12 @@
 , installShellFiles
 , pytestCheckHook
 , isPy3k
+
+# for passthru.tests
+, django
+, django_4
+, django-silk
+, pgadmin4
 }:
 
 buildPythonPackage rec {
@@ -28,8 +34,13 @@ buildPythonPackage rec {
     installManPage docs/sqlformat.1
   '';
 
+  passthru.tests = {
+    inherit django django_4 django-silk pgadmin4;
+  };
+
   meta = with lib; {
     description = "Non-validating SQL parser for Python";
+    mainProgram = "sqlformat";
     longDescription = ''
       Provides support for parsing, splitting and formatting SQL statements.
     '';

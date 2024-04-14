@@ -1,24 +1,32 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPyPy
-, nose
+
+# build-system
+, setuptools
+
+# dependencies
 , importlib-metadata
 , platformdirs
 , tomli
+
+# tests
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "yapf";
-  version = "0.40.1";
+  version = "0.40.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lYWH61yOxshgEZqcJdAq3fMKRPdaoVKkIg0w5WqYA3w=";
+    hash = "sha256-TauKXtcTTibVfBZHx0g6+z8TaHi1eQYreGyboWuUY3s=";
   };
 
-  # nose is unavailable on pypy
-  doCheck = !isPyPy;
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     importlib-metadata
@@ -26,11 +34,15 @@ buildPythonPackage rec {
     tomli
   ];
 
+  # nose is unavailable on pypy
+  #doCheck = !isPyPy;
+
   nativeCheckInputs = [
-    nose
+    pytestCheckHook
   ];
 
   meta = {
+    changelog = "https://github.com/google/yapf/blob/v${version}/CHANGELOG.md";
     homepage = "https://github.com/google/yapf";
     description = "Yet Another Python Formatter";
     longDescription = ''

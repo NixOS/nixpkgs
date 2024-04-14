@@ -9,14 +9,13 @@ let
 in {
   options = {
     services.auto-cpufreq = {
-      enable = mkEnableOption (lib.mdDoc "auto-cpufreq daemon");
+      enable = mkEnableOption "auto-cpufreq daemon";
 
       settings = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Configuration for `auto-cpufreq`.
 
-          See its [example configuration file] for supported settings.
-          [example configuration file]: https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto-cpufreq.conf-example
+          The available options can be found in [the example configuration file](https://github.com/AdnanHodzic/auto-cpufreq/blob/v${pkgs.auto-cpufreq.version}/auto-cpufreq.conf-example).
           '';
 
         default = {};
@@ -35,11 +34,18 @@ in {
         wantedBy = [ "multi-user.target" ];
         path = with pkgs; [ bash coreutils ];
 
+        serviceConfig.WorkingDirectory = "";
         serviceConfig.ExecStart = [
           ""
           "${lib.getExe pkgs.auto-cpufreq} --daemon --config ${cfgFile}"
         ];
       };
     };
+  };
+
+  # uses attributes of the linked package
+  meta = {
+    buildDocsInSandbox = false;
+    maintainers = with lib.maintainers; [ nicoo ];
   };
 }

@@ -3,10 +3,17 @@
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
 , extraLibraries ? pkgs: [ ] # extra packages to add to multiPkgs
 , extraProfile ? "" # string to append to profile
+, extraPreBwrapCmds ? "" # extra commands to run before calling bubblewrap (real default is at usage site)
+, extraBwrapArgs ? [ ] # extra arguments to pass to bubblewrap (real default is at usage site)
 , extraArgs ? "" # arguments to always pass to steam
 , extraEnv ? { } # Environment variables to pass to Steam
-, withGameSpecificLibraries ? true # exclude game specific libraries
-}:
+
+# steamwebhelper deletes unrelated electron programs' singleton cookies from /tmp on startup:
+# https://github.com/ValveSoftware/steam-for-linux/issues/9121
+, privateTmp ? true # Whether to separate steam's /tmp from the host system
+
+, withGameSpecificLibraries ? true # include game specific libraries
+}@args:
 
 let
   commonTargetPkgs = pkgs: with pkgs; [
@@ -15,6 +22,8 @@ let
     lsb-release
     # Errors in output without those
     pciutils
+    # run.sh wants ldconfig
+    glibc.bin
     # Games' dependencies
     xorg.xrandr
     which
@@ -56,7 +65,10 @@ let
     fi
   '';
 
-  envScript = lib.toShellVars extraEnv;
+  envScript = ''
+    # prevents various error messages
+    unset GIO_EXTRA_MODULES
+  '' + lib.toShellVars extraEnv;
 
 in buildFHSEnv rec {
   name = "steam";
@@ -80,7 +92,7 @@ in buildFHSEnv rec {
     xorg.libXfixes
     libGL
     libva
-    pipewire.lib
+    pipewire
 
     # steamwebhelper
     harfbuzz
@@ -99,8 +111,7 @@ in buildFHSEnv rec {
     xorg.libXdamage
     xorg.libxshmfence
     xorg.libXxf86vm
-    libelf
-    (lib.getLib elfutils)
+    elfutils
 
     # Without these it silently fails
     xorg.libXinerama
@@ -168,6 +179,7 @@ in buildFHSEnv rec {
     libcaca
     libcanberra
     libgcrypt
+    libunwind
     libvpx
     librsvg
     xorg.libXft
@@ -193,6 +205,7 @@ in buildFHSEnv rec {
     libxcrypt # Alien Isolation, XCOM 2, Company of Heroes 2
     mono
     ncurses # Crusader Kings III
+    openssl
     xorg.xkeyboardconfig
     xorg.libpciaccess
     xorg.libXScrnSaver # Dead Cells
@@ -214,6 +227,7 @@ in buildFHSEnv rec {
     alsa-lib
 
     # Loop Hero
+    # FIXME: Also requires openssl_1_1, which is EOL. Either find an alternative solution, or remove these dependencies (if not needed by other games)
     libidn2
     libpsl
     nghttp2.lib
@@ -275,31 +289,33 @@ in buildFHSEnv rec {
     exec steam ${extraArgs} "$@"
   '';
 
+  inherit privateTmp;
+
+  extraPreBwrapCmds = ''
+    install -m 1777 -d /tmp/dumps
+  '' + args.extraPreBwrapCmds or "";
+
+  extraBwrapArgs = [
+    "--bind-try /tmp/dumps /tmp/dumps"
+  ] ++ args.extraBwrapArgs or [];
+
   meta =
     if steam != null
     then
       steam.meta // lib.optionalAttrs (!withGameSpecificLibraries) {
         description = steam.meta.description + " (without game specific libraries)";
+        mainProgram = "steam";
       }
     else {
       description = "Steam dependencies (dummy package, do not use)";
     };
 
-  # allows for some gui applications to share IPC
-  # this fixes certain issues where they don't render correctly
-  unshareIpc = false;
-
-  # Some applications such as Natron need access to MIT-SHM or other
-  # shared memory mechanisms. Unsharing the pid namespace
-  # breaks the ability for application to reference shared memory.
-  unsharePid = false;
-
+  passthru.steamargs = args;
   passthru.run = buildFHSEnv {
     name = "steam-run";
 
     targetPkgs = commonTargetPkgs;
-    inherit multiArch multiPkgs profile extraInstallCommands;
-    inherit unshareIpc unsharePid;
+    inherit multiArch multiPkgs profile extraInstallCommands extraBwrapArgs;
 
     runScript = writeShellScript "steam-run" ''
       run="$1"
@@ -319,6 +335,7 @@ in buildFHSEnv rec {
 
     meta = (steam.meta or {}) // {
       description = "Run commands in the same FHS environment that is used for Steam";
+      mainProgram = "steam-run";
       name = "steam-run";
     };
   };

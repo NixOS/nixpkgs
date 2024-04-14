@@ -7,20 +7,20 @@ let
   settingsFmt = pkgs.formats.toml {};
 in {
   options.services.mackerel-agent = {
-    enable = mkEnableOption (lib.mdDoc "mackerel.io agent");
+    enable = mkEnableOption "mackerel.io agent";
 
     # the upstream package runs as root, but doesn't seem to be strictly
     # necessary for basic functionality
-    runAsRoot = mkEnableOption (lib.mdDoc "Whether to run as root");
+    runAsRoot = mkEnableOption "running as root";
 
-    autoRetirement = mkEnableOption (lib.mdDoc ''
-      Whether to automatically retire the host upon OS shutdown.
-    '');
+    autoRetirement = mkEnableOption ''
+      retiring the host upon OS shutdown
+    '';
 
     apiKeyFile = mkOption {
       type = types.path;
       example = "/run/keys/mackerel-api-key";
-      description = lib.mdDoc ''
+      description = ''
         Path to file containing the Mackerel API key. The file should contain a
         single line of the following form:
 
@@ -29,7 +29,7 @@ in {
     };
 
     settings = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Options for mackerel-agent.conf.
 
         Documentation:
@@ -48,18 +48,18 @@ in {
         options.host_status = {
           on_start = mkOption {
             type = types.enum [ "working" "standby" "maintenance" "poweroff" ];
-            description = lib.mdDoc "Host status after agent startup.";
+            description = "Host status after agent startup.";
             default = "working";
           };
           on_stop = mkOption {
             type = types.enum [ "working" "standby" "maintenance" "poweroff" ];
-            description = lib.mdDoc "Host status after agent shutdown.";
+            description = "Host status after agent shutdown.";
             default = "poweroff";
           };
         };
 
         options.diagnostic =
-          mkEnableOption (lib.mdDoc "Collect memory usage for the agent itself");
+          mkEnableOption "collecting memory usage for the agent itself";
       };
     };
   };
@@ -81,9 +81,10 @@ in {
       include = mkDefault "/etc/mackerel-agent/conf.d/*.conf";
     };
 
-    # upstream service file in https://git.io/JUt4Q
+    # upstream service file in https://github.com/mackerelio/mackerel-agent/blob/master/packaging/rpm/src/mackerel-agent.service
     systemd.services.mackerel-agent = {
       description = "mackerel.io agent";
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" "nss-lookup.target" ];
       wantedBy = [ "multi-user.target" ];
       environment = {

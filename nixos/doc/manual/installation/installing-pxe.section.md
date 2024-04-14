@@ -4,7 +4,7 @@ Advanced users may wish to install NixOS using an existing PXE or iPXE
 setup.
 
 These instructions assume that you have an existing PXE or iPXE
-infrastructure and simply want to add the NixOS installer as another
+infrastructure and want to add the NixOS installer as another
 option. To build the necessary files from your current version of nixpkgs,
 you can run:
 

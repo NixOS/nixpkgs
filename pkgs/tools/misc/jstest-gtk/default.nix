@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ wucke13 ];
     platforms = platforms.linux;
+    mainProgram = "jstest-gtk";
   };
 }

@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "pylyrics";
   version = "1.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "PyLyrics";

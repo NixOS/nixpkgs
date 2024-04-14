@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , dj-rest-auth
 , django
 , django-allauth
@@ -28,14 +29,23 @@
 
 buildPythonPackage rec {
   pname = "drf-spectacular";
-  version = "0.26.2";
+  version = "0.27.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "tfranzel";
     repo = "drf-spectacular";
     rev = "refs/tags/${version}";
-    hash = "sha256-wwR7ZdbWFNRgxQubdgriDke5W6u7VNsNZV9xqQypSrY=";
+    hash = "sha256-R6rxEo9SNNziXRWB+01UUInParpGcFDIkDZtN4k+dFE=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/tfranzel/drf-spectacular/pull/1090
+      url = "https://github.com/tfranzel/drf-spectacular/commit/8db4c2458f8403c53db0db352dd94057d285814b.patch";
+      hash = "sha256-Ue5y7IB4ie+9CEineMBgMMCLGiF4zqmn60TJvKsV1h0=";
+    })
+  ];
 
   propagatedBuildInputs = [
     django
@@ -69,6 +79,8 @@ buildPythonPackage rec {
   disabledTests = [
     # requires django with gdal
     "test_rest_framework_gis"
+    # outdated test artifact
+    "test_pydantic_decoration"
   ];
 
   pythonImportsCheck = [ "drf_spectacular" ];

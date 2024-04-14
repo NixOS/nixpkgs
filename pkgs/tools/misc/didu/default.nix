@@ -19,5 +19,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://codeberg.org/annaaurora/didu";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ annaaurora ];
+    mainProgram = "didu";
   };
 }

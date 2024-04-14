@@ -1,26 +1,34 @@
-{ lib, buildPythonPackage, fetchFromGitHub
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
 , mock
 , nose
 , plotly
 , pytest
 , requests
 , retrying
+, setuptools
 , six
 }:
 
 buildPythonPackage rec {
   pname = "chart-studio";
-  version = "5.15.0";
+  version = "5.20.0";
+  pyproject = true;
 
   # chart-studio was split from plotly
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "plotly.py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-H+p2fPBXn+VqrW63KkdmPn2xqxC9uAOzQUV1ruKEUSs=";
+    hash = "sha256-LSZGaefxQC6h9VAJ2wgZyaQPR6vs0wrp2oxd51I3pL8=";
   };
 
   sourceRoot = "${src.name}/packages/python/chart-studio";
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     plotly

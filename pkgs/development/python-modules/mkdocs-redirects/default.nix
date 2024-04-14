@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "mkdocs-redirects";
   version = "1.2.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mkdocs";

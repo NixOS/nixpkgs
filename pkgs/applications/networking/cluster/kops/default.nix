@@ -38,6 +38,7 @@ let
 
         meta = with lib; {
           description = "Easiest way to get a production Kubernetes up and running";
+          mainProgram = "kops";
           homepage = "https://github.com/kubernetes/kops";
           changelog = "https://github.com/kubernetes/kops/tree/master/docs/releases";
           license = licenses.asl20;
@@ -48,21 +49,21 @@ in
 rec {
   mkKops = generic;
 
-  kops_1_25 = mkKops rec {
-    version = "1.25.4";
-    sha256 = "sha256-Q40d62D+H7CpLmrjweCy75U3LgnHEV2pFZs2Ze+koqo=";
-    rev = "v${version}";
-  };
-
   kops_1_26 = mkKops rec {
-    version = "1.26.5";
-    sha256 = "sha256-DbKzqfcQCHP3ZWJQcRhPDkKVzHB/MkcfukguUDG4UQg=";
+    version = "1.26.6";
+    sha256 = "sha256-qaehvPgB3phZl/K577hig4G4RxAUi6Im94vXP5ctnWM=";
     rev = "v${version}";
   };
 
   kops_1_27 = mkKops rec {
-    version = "1.27.0";
-    sha256 = "sha256-XJOdqOT/vMVXZmVasXRb+pdmWcSd6lsyQDCnZKyqrto=";
+    version = "1.27.1";
+    sha256 = "sha256-WV+0380yj8GHckY4PDM3WspbZ/YuYZOAQEMd2ygEOjo=";
+    rev = "v${version}";
+  };
+
+  kops_1_28 = mkKops rec {
+    version = "1.28.4";
+    sha256 = "sha256-nknsrLdV7tQKLOir5RM3LRhTS+dyiAc1GjbByJzjwCo=";
     rev = "v${version}";
   };
 }

@@ -8,12 +8,12 @@ let
 in {
   options = {
     services.coder = {
-      enable = mkEnableOption (lib.mdDoc "Coder service");
+      enable = mkEnableOption "Coder service";
 
       user = mkOption {
         type = types.str;
         default = "coder";
-        description = lib.mdDoc ''
+        description = ''
           User under which the coder service runs.
 
           ::: {.note}
@@ -26,7 +26,7 @@ in {
       group = mkOption {
         type = types.str;
         default = "coder";
-        description = lib.mdDoc ''
+        description = ''
           Group under which the coder service runs.
 
           ::: {.note}
@@ -36,18 +36,11 @@ in {
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.coder;
-        description = lib.mdDoc ''
-          Package to use for the service.
-        '';
-        defaultText = literalExpression "pkgs.coder";
-      };
+      package = mkPackageOption pkgs "coder" { };
 
       homeDir = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Home directory for coder user.
         '';
         default = "/var/lib/coder";
@@ -55,7 +48,7 @@ in {
 
       listenAddress = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Listen address.
         '';
         default = "127.0.0.1:3000";
@@ -63,7 +56,7 @@ in {
 
       accessUrl = mkOption {
         type = types.nullOr types.str;
-        description = lib.mdDoc ''
+        description = ''
           Access URL should be a external IP address or domain with DNS records pointing to Coder.
         '';
         default = null;
@@ -72,7 +65,7 @@ in {
 
       wildcardAccessUrl = mkOption {
         type = types.nullOr types.str;
-        description = lib.mdDoc ''
+        description = ''
           If you are providing TLS certificates directly to the Coder server, you must use a single certificate for the root and wildcard domains.
         '';
         default = null;
@@ -83,7 +76,7 @@ in {
         createLocally = mkOption {
           type = types.bool;
           default = true;
-          description = lib.mdDoc ''
+          description = ''
             Create the database and database user locally.
           '';
         };
@@ -91,7 +84,7 @@ in {
         host = mkOption {
           type = types.str;
           default = "/run/postgresql";
-          description = lib.mdDoc ''
+          description = ''
             Hostname hosting the database.
           '';
         };
@@ -99,7 +92,7 @@ in {
         database = mkOption {
           type = types.str;
           default = "coder";
-          description = lib.mdDoc ''
+          description = ''
             Name of database.
           '';
         };
@@ -107,7 +100,7 @@ in {
         username = mkOption {
           type = types.str;
           default = "coder";
-          description = lib.mdDoc ''
+          description = ''
             Username for accessing the database.
           '';
         };
@@ -115,7 +108,7 @@ in {
         password = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             Password for accessing the database.
           '';
         };
@@ -123,7 +116,7 @@ in {
         sslmode = mkOption {
           type = types.nullOr types.str;
           default = "disable";
-          description = lib.mdDoc ''
+          description = ''
             Password for accessing the database.
           '';
         };
@@ -131,7 +124,7 @@ in {
 
       tlsCert = mkOption {
         type = types.nullOr types.path;
-        description = lib.mdDoc ''
+        description = ''
           The path to the TLS certificate.
         '';
         default = null;
@@ -139,7 +132,7 @@ in {
 
       tlsKey = mkOption {
         type = types.nullOr types.path;
-        description = lib.mdDoc ''
+        description = ''
           The path to the TLS key.
         '';
         default = null;
@@ -149,8 +142,8 @@ in {
 
   config = mkIf cfg.enable {
     assertions = [
-      { assertion = cfg.database.createLocally -> cfg.database.username == name;
-        message = "services.coder.database.username must be set to ${user} if services.coder.database.createLocally is set true";
+      { assertion = cfg.database.createLocally -> cfg.database.username == name && cfg.database.database == cfg.database.username;
+        message = "services.coder.database.username must be set to ${name} if services.coder.database.createLocally is set true";
       }
     ];
 
@@ -193,10 +186,8 @@ in {
         cfg.database.database
       ];
       ensureUsers = [{
-        name = cfg.database.username;
-        ensurePermissions = {
-          "DATABASE \"${cfg.database.database}\"" = "ALL PRIVILEGES";
-        };
+        name = cfg.user;
+        ensureDBOwnership = true;
         }
       ];
     };

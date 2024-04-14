@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "statistics";
   version = "1.0.3.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

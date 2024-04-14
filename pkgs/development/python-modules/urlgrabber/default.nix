@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "urlgrabber";
   version = "4.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -15,6 +16,7 @@ buildPythonPackage rec {
     homepage = "http://urlgrabber.baseurl.org";
     license = licenses.lgpl2Plus;
     description = "Python module for downloading files";
+    mainProgram = "urlgrabber";
     maintainers = with maintainers; [ qknight ];
   };
 }

@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "liferea";
-  version = "1.15.0";
+  version = "1.15.6";
 
   src = fetchurl {
     url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "1a7dlwuUOHeCsB+ofAOPlbyuh/QAB8kf50MsocMNz70=";
+    hash = "sha256-4P/0fwHofsRjZcLuFdkUKxWIp/9P5yXA2ED/zqTGd94=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     python3Packages.wrapPython
     intltool
     pkg-config
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -49,7 +50,6 @@ stdenv.mkDerivation rec {
     libpeas
     gsettings-desktop-schemas
     json-glib
-    gobject-introspection
     libsecret
     glib-networking
     libnotify
@@ -60,14 +60,11 @@ stdenv.mkDerivation rec {
     gst-plugins-bad
   ]);
 
-  pythonPath = with python3Packages; [
-    pygobject3
-    pycairo
-  ];
+  enableParallelBuilding = true;
 
-  preFixup = ''
-    buildPythonPath "$out $pythonPath"
-    gappsWrapperArgs+=(--prefix PYTHONPATH : "$program_PYTHONPATH")
+  postFixup = ''
+    buildPythonPath ${python3Packages.pycairo}
+    patchPythonScript $out/lib/liferea/plugins/trayicon.py
   '';
 
   passthru.updateScript = gitUpdater {
@@ -79,7 +76,7 @@ stdenv.mkDerivation rec {
     description = "A GTK-based news feed aggregator";
     homepage = "http://lzone.de/liferea/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [ romildo yayayayaka ];
     platforms = platforms.linux;
 
     longDescription = ''

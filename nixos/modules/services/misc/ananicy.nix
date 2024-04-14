@@ -13,24 +13,16 @@ in
 {
   options = {
     services.ananicy = {
-      enable = mkEnableOption (lib.mdDoc "Ananicy, an auto nice daemon");
+      enable = mkEnableOption "Ananicy, an auto nice daemon";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.ananicy;
-        defaultText = literalExpression "pkgs.ananicy";
-        example = literalExpression "pkgs.ananicy-cpp";
-        description = lib.mdDoc ''
-          Which ananicy package to use.
-        '';
+      package = mkPackageOption pkgs "ananicy" {
+        example = "ananicy-cpp";
       };
 
-      rulesProvider = mkOption {
-        type = types.package;
-        default = pkgs.ananicy;
-        defaultText = literalExpression "pkgs.ananicy";
-        example = literalExpression "pkgs.ananicy-cpp";
-        description = lib.mdDoc ''
+      rulesProvider = mkPackageOption pkgs "ananicy" {
+        example = "ananicy-cpp";
+      } // {
+        description = ''
           Which package to copy default rules,types,cgroups from.
         '';
       };
@@ -41,7 +33,7 @@ in
         example = {
           apply_nice = false;
         };
-        description = lib.mdDoc ''
+        description = ''
           See <https://github.com/Nefelim4ag/Ananicy/blob/master/ananicy.d/ananicy.conf>
         '';
       };
@@ -49,7 +41,7 @@ in
       extraRules = mkOption {
         type = with types; listOf attrs;
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           Rules to write in 'nixRules.rules'. See:
           <https://github.com/Nefelim4ag/Ananicy#configuration>
           <https://gitlab.com/ananicy-cpp/ananicy-cpp/#global-configuration>
@@ -62,7 +54,7 @@ in
       extraTypes = mkOption {
         type = with types; listOf attrs;
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           Types to write in 'nixTypes.types'. See:
           <https://gitlab.com/ananicy-cpp/ananicy-cpp/#types>
         '';
@@ -74,7 +66,7 @@ in
       extraCgroups = mkOption {
         type = with types; listOf attrs;
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           Cgroups to write in 'nixCgroups.cgroups'. See:
           <https://gitlab.com/ananicy-cpp/ananicy-cpp/#cgroups>
         '';

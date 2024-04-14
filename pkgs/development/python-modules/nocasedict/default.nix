@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "nocasedict";
   version = "2.0.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -20,6 +21,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   pythonImportsCheck = [

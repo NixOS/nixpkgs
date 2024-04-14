@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, dos2unix
 , pythonRelaxDepsHook
 , asn1crypto
 , astunparse
@@ -10,57 +9,56 @@
 , click
 , click-command-tree
 , click-option-group
-, cmsis-pack-manager
-, commentjson
+, colorama
 , crcmod
 , cryptography
 , deepmerge
 , fastjsonschema
 , hexdump
-, jinja2
 , libusbsio
 , oscrypto
-, pycryptodome
+, platformdirs
+, prettytable
 , pylink-square
 , pyocd
+, pyocd-pemicro
 , pypemicro
 , pyserial
+, requests
 , ruamel-yaml
+, setuptools
 , sly
+, spsdk
+, testers
 , typing-extensions
+, ipykernel
+, pytest-notebook
 , pytestCheckHook
 , voluptuous
 }:
 
 buildPythonPackage rec {
   pname = "spsdk";
-  version = "1.10.1";
+  version = "2.1.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "NXPmicro";
-    repo = pname;
+    owner = "nxp-mcuxpresso";
+    repo = "spsdk";
     rev = "refs/tags/${version}";
-    hash = "sha256-2UTgVHqFJqizJ6mDT7+PFec3bQexcBG6v8X0E5Ai4Hc=";
+    hash = "sha256-cWz2zML/gb9l2C5VEBti+nX3ZLyGbLFyLZGjk5GfTJw=";
   };
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
+    setuptools
   ];
 
   pythonRelaxDeps = [
-    "bincopy"
-    "bitstring"
-    "cmsis-pack-manager"
-    "deepmerge"
-    "jinja2"
-    "pycryptodome"
-    "pylink-square"
-    "pyocd"
+    "click"
+    "cryptography"
+    "platformdirs"
     "typing-extensions"
-  ];
-
-  pythonRemoveDeps = [
-    "pyocd-pemicro"
   ];
 
   propagatedBuildInputs = [
@@ -71,37 +69,50 @@ buildPythonPackage rec {
     click
     click-command-tree
     click-option-group
-    cmsis-pack-manager
-    commentjson
+    colorama
     crcmod
     cryptography
     deepmerge
     fastjsonschema
     hexdump
-    jinja2
     libusbsio
     oscrypto
-    pycryptodome
+    platformdirs
+    prettytable
     pylink-square
     pyocd
+    pyocd-pemicro
     pypemicro
     pyserial
+    requests
     ruamel-yaml
     sly
     typing-extensions
   ];
 
   nativeCheckInputs = [
+    ipykernel
+    pytest-notebook
     pytestCheckHook
     voluptuous
   ];
 
+  disabledTests = [
+    "test_nxpcrypto_create_signature_algorithm"
+    "test_nxpimage_sb31_kaypair_not_matching"
+  ];
+
   pythonImportsCheck = [ "spsdk" ];
 
+  passthru.tests.version = testers.testVersion { package = spsdk; };
+
   meta = with lib; {
+    broken = versionAtLeast cryptography.version "41.1";
+    changelog = "https://github.com/nxp-mcuxpresso/spsdk/blob/${src.rev}/docs/release_notes.rst";
     description = "NXP Secure Provisioning SDK";
-    homepage = "https://github.com/NXPmicro/spsdk";
+    homepage = "https://github.com/nxp-mcuxpresso/spsdk";
     license = licenses.bsd3;
     maintainers = with maintainers; [ frogamic sbruder ];
+    mainProgram = "spsdk";
   };
 }

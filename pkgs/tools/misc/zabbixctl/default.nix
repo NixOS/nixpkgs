@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-fWT3cgIHjHcKwFDjWIf3BUUUaVZ7hyc2ibkpU+AsW0I=";
   };
 
-  vendorSha256 = "sha256-BphQcPPmeNU7RDtaHJQxIoW8xxD86xWgqLBsLR08Tag=";
+  vendorHash = "sha256-BphQcPPmeNU7RDtaHJQxIoW8xxD86xWgqLBsLR08Tag=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -20,5 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/kovetskiy/zabbixctl";
     license = licenses.mit;
     maintainers = with maintainers; [ mmahut ];
+    mainProgram = "zabbixctl";
   };
 }

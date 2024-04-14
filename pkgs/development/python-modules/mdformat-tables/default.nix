@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, flit-core
 , mdformat
 , mdit-py-plugins
 , pytestCheckHook
@@ -10,7 +11,7 @@
 buildPythonPackage rec {
   pname = "mdformat-tables";
   version = "0.4.1";
-  format = "flit";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,7 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-Q61GmaRxjxJh9GjyR8QCZOH0njFUtAWihZ9lFQJ2nQQ=";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
+    flit-core
+  ];
+
+  propagatedBuildInputs = [
     mdformat
   ];
 

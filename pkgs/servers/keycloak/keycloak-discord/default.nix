@@ -5,19 +5,20 @@
 
 stdenv.mkDerivation rec {
   pname = "keycloak-discord";
-  version = "0.3.1";
+  version = "0.5.0";
 
   src = fetchurl {
-    url = "https://github.com/wadahiro/keycloak-discord/releases/download/v${version}/keycloak-discord-ear-${version}.ear";
-    sha256 = "0fswhbnxc80dpfqf5y6j29dxk3vcnm4kki6qdk22qliasvpw5n9c";
+    url = "https://github.com/wadahiro/keycloak-discord/releases/download/v${version}/keycloak-discord-${version}.jar";
+    hash = "sha256-radvUu2a6t0lbo5f/ADqy7+I/ONXB7/8pk2d1BtYzQA=";
   };
 
   dontUnpack = true;
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p "$out"
-    install "$src" "$out/${pname}-ear-${version}.ear"
+    runHook preInstall
+    install -Dm444 "$src" "$out/keycloak-discord-$version.jar"
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -25,5 +26,6 @@ stdenv.mkDerivation rec {
     description = "Keycloak Social Login extension for Discord";
     license = licenses.asl20;
     maintainers = with maintainers; [ mkg20001 ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
   };
 }

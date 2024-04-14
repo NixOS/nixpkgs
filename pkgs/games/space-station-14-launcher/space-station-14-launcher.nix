@@ -31,7 +31,7 @@
 , gdk-pixbuf
 }:
 let
-  version = "0.21.1";
+  version = "0.25.1";
   pname = "space-station-14-launcher";
 in
 buildDotnetModule rec {
@@ -44,7 +44,7 @@ buildDotnetModule rec {
     owner = "space-wizards";
     repo = "SS14.Launcher";
     rev = "v${version}";
-    hash = "sha256-uJ/47cQZsGgrExemWCWeSM/U6eW2HoKWHCsVE2KypVQ=";
+    hash = "sha256-Hm+ILxFXHaP0Zh96GZLG4h1Y7h1kapbn844NVFiyIjw=";
     fetchSubmodules = true;
   };
 
@@ -63,8 +63,9 @@ buildDotnetModule rec {
     updateScript = ./update.sh;
   };
 
-  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_7_0 sdk_6_0 ];
-  dotnet-runtime = dotnetCorePackages.runtime_7_0;
+  # SDK 6.0 required for Robust.LoaderApi
+  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_8_0 sdk_6_0 ];
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   dotnetFlags = [
     "-p:FullRelease=true"
@@ -121,7 +122,7 @@ buildDotnetModule rec {
 
   postInstall = ''
     mkdir -p $out/lib/space-station-14-launcher/loader
-    cp -r SS14.Loader/bin/${buildType}/*/* $out/lib/space-station-14-launcher/loader/
+    cp -r SS14.Loader/bin/${buildType}/*/*/* $out/lib/space-station-14-launcher/loader/
 
     icoFileToHiColorTheme SS14.Launcher/Assets/icon.ico space-station-14-launcher $out
   '';

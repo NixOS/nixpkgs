@@ -9,14 +9,10 @@ in
 {
   options = {
     services.teleport = with lib.types; {
-      enable = mkEnableOption (lib.mdDoc "the Teleport service");
+      enable = mkEnableOption "the Teleport service";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.teleport;
-        defaultText = lib.literalMD "pkgs.teleport";
-        example = lib.literalMD "pkgs.teleport_11";
-        description = lib.mdDoc "The teleport package to use";
+      package = mkPackageOption pkgs "teleport" {
+        example = "teleport_11";
       };
 
       settings = mkOption {
@@ -41,7 +37,7 @@ in
             auth_service.enabled = false;
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Contents of the `teleport.yaml` config file.
           The `--config` arguments will only be passed if this set is not empty.
 
@@ -49,7 +45,7 @@ in
         '';
       };
 
-      insecure.enable = mkEnableOption (lib.mdDoc ''
+      insecure.enable = mkEnableOption ''
         starting teleport in insecure mode.
 
         This is dangerous!
@@ -57,25 +53,25 @@ in
         Proceed with caution!
 
         Teleport starts with disabled certificate validation on Proxy Service, validation still occurs on Auth Service
-      '');
+      '';
 
       diag = {
-        enable = mkEnableOption (lib.mdDoc ''
+        enable = mkEnableOption ''
           endpoints for monitoring purposes.
 
           See <https://goteleport.com/docs/setup/admin/troubleshooting/#troubleshooting/>
-        '');
+        '';
 
         addr = mkOption {
           type = str;
           default = "127.0.0.1";
-          description = lib.mdDoc "Metrics and diagnostics address.";
+          description = "Metrics and diagnostics address.";
         };
 
         port = mkOption {
           type = port;
           default = 3000;
-          description = lib.mdDoc "Metrics and diagnostics port.";
+          description = "Metrics and diagnostics port.";
         };
       };
     };

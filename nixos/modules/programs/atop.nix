@@ -14,22 +14,15 @@ in
 
     programs.atop = rec {
 
-      enable = mkEnableOption (lib.mdDoc "Atop");
+      enable = mkEnableOption "Atop, a tool for monitoring system resources";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.atop;
-        defaultText = literalExpression "pkgs.atop";
-        description = lib.mdDoc ''
-          Which package to use for Atop.
-        '';
-      };
+      package = mkPackageOption pkgs "atop" { };
 
       netatop = {
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Whether to install and enable the netatop kernel module.
             Note: this sets the kernel taint flag "O" for loading out-of-tree modules.
           '';
@@ -38,7 +31,7 @@ in
           type = types.package;
           default = config.boot.kernelPackages.netatop;
           defaultText = literalExpression "config.boot.kernelPackages.netatop";
-          description = lib.mdDoc ''
+          description = ''
             Which package to use for netatop.
           '';
         };
@@ -47,7 +40,7 @@ in
       atopgpu.enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to install and enable the atopgpud daemon to get information about
           NVIDIA gpus.
         '';
@@ -56,7 +49,7 @@ in
       setuidWrapper.enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to install a setuid wrapper for Atop. This is required to use some of
           the features as non-root user (e.g.: ipc information, netatop, atopgpu).
           Atop tries to drop the root privileges shortly after starting.
@@ -66,7 +59,7 @@ in
       atopService.enable = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the atop service responsible for storing statistics for
           long-term analysis.
         '';
@@ -74,7 +67,7 @@ in
       atopRotateTimer.enable = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the atop-rotate timer, which restarts the atop service
           daily to make sure the data files are rotate.
         '';
@@ -82,7 +75,7 @@ in
       atopacctService.enable = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the atopacct service which manages process accounting.
           This allows Atop to gather data about processes that disappeared in between
           two refresh intervals.
@@ -95,7 +88,7 @@ in
           flags = "a1f";
           interval = 5;
         };
-        description = lib.mdDoc ''
+        description = ''
           Parameters to be written to {file}`/etc/atoprc`.
         '';
       };
@@ -144,6 +137,7 @@ in
                 atop.preStart = ''
                   set -e -u
                   shopt -s nullglob
+                  rm -f "$LOGPATH"/atop_*.new
                   for logfile in "$LOGPATH"/atop_*
                   do
                     ${atop}/bin/atopconvert "$logfile" "$logfile".new
@@ -151,9 +145,9 @@ in
                     # false positives for atop-rotate.service
                     if ! ${pkgs.diffutils}/bin/cmp -s "$logfile" "$logfile".new
                     then
-                      ${pkgs.coreutils}/bin/mv -v -f "$logfile".new "$logfile"
+                      mv -v -f "$logfile".new "$logfile"
                     else
-                      ${pkgs.coreutils}/bin/rm -f "$logfile".new
+                      rm -f "$logfile".new
                     fi
                   done
                 '';

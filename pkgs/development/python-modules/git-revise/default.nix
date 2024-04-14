@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "git-revise";
   version = "0.7.0";
+  format = "setuptools";
 
   # Missing tests on PyPI
   src = fetchFromGitHub {
@@ -28,6 +29,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/mystor/git-revise";
     changelog = "https://github.com/mystor/git-revise/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
+    mainProgram = "git-revise";
     maintainers = with maintainers; [ emily ];
   };
 }

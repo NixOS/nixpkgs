@@ -86,7 +86,7 @@ let
       runHook postUnpack
     '';
 
-    sourceRoot = "${nameApp}";
+    sourceRoot = nameApp;
 
     installPhase = ''
       runHook preInstall

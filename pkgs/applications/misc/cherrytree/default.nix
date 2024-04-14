@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cherrytree";
-  version = "0.99.56";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "giuspen";
     repo = "cherrytree";
-    rev = version;
-    hash = "sha256-kDbUn81YfSMAX7FKcw+nDSrsNvrhOX0+NmgZUYNqCqQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-gDDFrF1yK6mWwkb3KJVRj6P5aiH1pQ/xL17XwVb4rfk=";
   };
 
   nativeBuildInputs = [
@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An hierarchical note taking application";
+    mainProgram = "cherrytree";
     longDescription = ''
       Cherrytree is an hierarchical note taking application, featuring rich
       text, syntax highlighting and powerful search capabilities. It organizes
@@ -65,5 +66,6 @@ stdenv.mkDerivation rec {
     changelog = "https://raw.githubusercontent.com/giuspen/cherrytree/${version}/changelog.txt";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];
+    platforms = platforms.unix;
   };
 }

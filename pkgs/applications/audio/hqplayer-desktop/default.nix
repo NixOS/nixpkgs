@@ -8,7 +8,7 @@
 , lib
 , libmicrohttpd
 , libusb-compat-0_1
-, llvmPackages_10
+, llvmPackages
 , qtcharts
 , qtdeclarative
 , qtquickcontrols2
@@ -39,7 +39,7 @@ mkDerivation rec {
     gcc12.cc.lib
     libmicrohttpd
     libusb-compat-0_1
-    llvmPackages_10.openmp
+    llvmPackages.openmp
     qtcharts
     qtdeclarative
     qtquickcontrols2

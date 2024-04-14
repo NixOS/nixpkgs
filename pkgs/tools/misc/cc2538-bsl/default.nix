@@ -1,17 +1,34 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, python3Packages
+}:
 
 python3Packages.buildPythonPackage rec {
   pname = "cc2538-bsl";
-  version = "unstable-2022-08-03";
+  version = "2.1-unstable-2023-10-03";
+  format = "pyproject";
 
-  src = fetchFromGitHub rec {
+  src = fetchFromGitHub {
     owner = "JelmerT";
-    repo = pname;
-    rev = "538ea0deb99530e28fdf1b454e9c9d79d85a3970";
-    hash = "sha256-fPY12kValxbJORi9xNyxzwkGpD9F9u3M1+aa9IlSiaE=";
+    repo = "cc2538-bsl";
+    rev = "4d64ac633dbaf29d098842c5937ed6eea2fd7c45";
+    hash = "sha256-NX2jPYAz15bSucj/YR5E/0eJy/cbszSrNxyJHRsbXxo=";
   };
 
-  nativeBuildInputs = [ python3Packages.setuptools-scm ];
+  patches = [
+    (fetchpatch {
+      # fix extras specification in setup.py; https://github.com/JelmerT/cc2538-bsl/pull/143
+      url = "https://github.com/JelmerT/cc2538-bsl/commit/c70f58ec0222357db8020176711d6d45cf24da35.patch";
+      hash = "sha256-Rxm/TRcm87WgRfq60cu0loyrbJmZou09XYR7uhrhhj8=";
+    })
+  ];
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = "0.1.dev0+g${lib.substring 0 7 src.rev}";
+
+  nativeBuildInputs = with python3Packages; [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     intelhex
@@ -19,7 +36,10 @@ python3Packages.buildPythonPackage rec {
     python-magic
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = "0.1.dev0+g${lib.substring 0 7 src.rev}";
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+    scripttest
+  ];
 
   postInstall = ''
     # Remove .py from binary
@@ -31,6 +51,7 @@ python3Packages.buildPythonPackage rec {
     description = "Flash TI SimpleLink chips (CC2538, CC13xx, CC26xx) over serial";
     license = licenses.bsd3;
     maintainers = with maintainers; [ lorenz ];
+    mainProgram = "cc2538-bsl";
   };
 }
 

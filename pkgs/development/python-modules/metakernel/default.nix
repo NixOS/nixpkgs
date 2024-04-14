@@ -11,21 +11,21 @@
 
 buildPythonPackage rec {
   pname = "metakernel";
-  version = "0.29.5";
-  format = "pyproject";
+  version = "0.30.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tGp8CHQ1Ekn/2KiGZGd/8V6NdWMseDSETZ/Z3T3P91U=";
+    hash = "sha256-Siff2FO4SfASgkLFUgTuWXpajYZClPJghLry+8gU1aQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ipykernel
     jedi
     jupyter-core

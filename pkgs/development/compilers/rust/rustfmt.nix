@@ -22,8 +22,8 @@ rustPlatform.buildRustPackage rec {
   # [0]: https://github.com/rust-lang/rust/blob/f77f4d55bdf9d8955d3292f709bd9830c2fdeca5/src/bootstrap/builder.rs#L1543
   # [1]: https://github.com/rust-lang/rust/blob/f77f4d55bdf9d8955d3292f709bd9830c2fdeca5/compiler/rustc_codegen_ssa/src/back/linker.rs#L323-L331
   preFixup = lib.optionalString stdenv.isDarwin ''
-    install_name_tool -add_rpath "${rustc}/lib" "$out/bin/rustfmt"
-    install_name_tool -add_rpath "${rustc}/lib" "$out/bin/git-rustfmt"
+    install_name_tool -add_rpath "${rustc.unwrapped}/lib" "$out/bin/rustfmt"
+    install_name_tool -add_rpath "${rustc.unwrapped}/lib" "$out/bin/git-rustfmt"
   '';
 
   # As of 1.0.0 and rustc 1.30 rustfmt requires a nightly compiler
@@ -38,6 +38,7 @@ rustPlatform.buildRustPackage rec {
     description = "A tool for formatting Rust code according to style guidelines";
     homepage = "https://github.com/rust-lang-nursery/rustfmt";
     license = with licenses; [ mit asl20 ];
+    mainProgram = "rustfmt";
     maintainers = with maintainers; [ globin basvandijk ];
   };
 }

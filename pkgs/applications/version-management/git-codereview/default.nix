@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "git-codereview";
-  version = "1.4.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "review";
     rev = "v${version}";
-    hash = "sha256-N6L+TlPU/lStMPTFYKFH2GiwyGkEJJuKtkH7wKLuM00=";
+    hash = "sha256-aLvx9lYQJYUw2XBj+2P+yEJMboUjmHKzxP5QA3N93JA=";
   };
 
   vendorHash = null;
@@ -22,5 +22,6 @@ buildGoModule rec {
     homepage = "https://golang.org/x/review/git-codereview";
     license = licenses.bsd3;
     maintainers = [ maintainers.edef ];
+    mainProgram = "git-codereview";
   };
 }

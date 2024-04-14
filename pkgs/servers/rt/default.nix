@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rt";
-  version = "5.0.3";
+  version = "5.0.5";
 
   src = fetchFromGitHub {
     repo = pname;
     rev = "${pname}-${version}";
     owner = "bestpractical";
-    hash = "sha256-ZitlueLEbV3mGJg0aDrLa5IReJiOVaEf+JicbA9zUS4=";
+    hash = "sha256-4E6xEk1sIiNBKJT4jD+SNK8Fs+hX8EuTv+jD1U1g6qY=";
   };
 
   patches = [
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
         GD
         GDGraph
         GnuPGInterface
-        GraphViz
+        GraphViz2
         HTMLFormatExternal
         HTMLFormatTextWithLinks
         HTMLFormatTextWithLinksAndTables

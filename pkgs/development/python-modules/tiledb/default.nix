@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "tiledb";
-  version = "0.20.0";
+  version = "0.26.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB-Py";
     rev = "refs/tags/${version}";
-    hash = "sha256-Be83b9JVxGxPYoOfqTfVm7qAjZD7cfH5BG6tbSHXhIQ=";
+    hash = "sha256-8c1l4zoD44SjaOUXlFUSho/y7oMNOEVM9ZlnRs1irV8=";
   };
 
   nativeBuildInputs = [
@@ -47,8 +47,6 @@ buildPythonPackage rec {
   ];
 
   TILEDB_PATH = tiledb;
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   disabled = !isPy3k; # Not bothering with python2 anymore
 

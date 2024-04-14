@@ -1,18 +1,15 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
 , boost, libbitcoin-client, libbitcoin-network }:
 
-let
+stdenv.mkDerivation rec {
   pname = "libbitcoin-explorer";
-  version = "3.5.0";
-
-in stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "libbitcoin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "033nrdzrha4kypxk4biixjsbjd16r4m2mjvpid4gdj5hzbbj1p93";
+    hash = "sha256-NUAtjrfRbZg5ewQo4PZ1HEoG8GRrsPcNb78UYMHqdyo=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -29,11 +26,12 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Bitcoin command line tool";
+    mainProgram = "bx";
     homepage = "https://github.com/libbitcoin/libbitcoin-explorer";
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ asymmetric ];
 
     # AGPL with a lesser clause
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
   };
 }

@@ -3,22 +3,27 @@
 , fetchPypi
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 let
   pname = "lru-dict";
-  version = "1.2.0";
+  version = "1.3.0";
 in
 buildPythonPackage {
   inherit pname version;
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-E8VngvGdaN302NsBcAQRkoWWFlFMcGsSbQ3y7HKhG9c=";
+    hash = "sha256-VP0ZZta9H83ngVlsuGBoIU7e6/8dsTos6hEHnj/Qe2s=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

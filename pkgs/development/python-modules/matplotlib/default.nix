@@ -6,12 +6,13 @@
 , isPyPy
 , pythonOlder
 
-# https://github.com/matplotlib/matplotlib/blob/main/doc/devel/dependencies.rst
 # build-system
+, certifi
 , pkg-config
 , pybind11
 , setuptools
 , setuptools-scm
+, wheel
 
 # native libraries
 , ffmpeg-headless
@@ -76,7 +77,7 @@ let
 in
 
 buildPythonPackage rec {
-  version = "3.7.1";
+  version = "3.8.3";
   pname = "matplotlib";
   format = "pyproject";
 
@@ -84,7 +85,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-e3MwXyXqtFQb1+4Llth+U66cnxgjvlZZuAbNhXhv6II=";
+    hash = "sha256-e0FiOemuOL5UsCirv5BIr/UFSpq6VBa+8L0X+RYs4WE=";
   };
 
   env.XDG_RUNTIME_DIR = "/tmp";
@@ -106,21 +107,18 @@ buildPythonPackage rec {
       substituteInPlace src/_c_internal_utils.c \
         --replace libX11.so.6 ${libX11}/lib/libX11.so.6 \
         --replace libwayland-client.so.0 ${wayland}/lib/libwayland-client.so.0
-    '' +
-    # bring our own system libraries
-    # https://github.com/matplotlib/matplotlib/blob/main/doc/devel/dependencies.rst#c-libraries
-    ''
-      echo "[libs]
-      system_freetype=true
-      system_qhull=true" > mplsetup.cfg
     '';
 
   nativeBuildInputs = [
+    certifi
+    numpy
     pkg-config
     pybind11
     setuptools
     setuptools-scm
-    numpy
+    wheel
+  ] ++ lib.optionals enableGtk3 [
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -131,7 +129,6 @@ buildPythonPackage rec {
     ghostscript
   ] ++ lib.optionals enableGtk3 [
     cairo
-    gobject-introspection
     gtk3
   ] ++ lib.optionals enableTk [
     libX11
@@ -177,16 +174,17 @@ buildPythonPackage rec {
     libs = {
       system_freetype = true;
       system_qhull = true;
-    } // lib.optionalAttrs stdenv.isDarwin {
       # LTO not working in darwin stdenv, see #19312
-      enable_lto = false;
+      enable_lto = !stdenv.isDarwin;
     };
   };
 
   env.MPLSETUPCFG = writeText "mplsetup.cfg" (lib.generators.toINI {} passthru.config);
 
-  # Matplotlib needs to be built against a specific version of freetype in
-  # order for all of the tests to pass.
+  # Encountering a ModuleNotFoundError, as describved and investigated at:
+  # https://github.com/NixOS/nixpkgs/issues/255262 . It could be that some of
+  # which may fail due to a freetype version that doesn't match the freetype
+  # version used by upstream.
   doCheck = false;
 
   meta = with lib; {

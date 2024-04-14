@@ -3,34 +3,25 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
-, fetchpatch
 , isPyPy
 , defusedxml, olefile, freetype, libjpeg, zlib, libtiff, libwebp, libxcrypt, tcl, lcms2, tk, libX11
-, libxcb, openjpeg, libimagequant, pyroma, numpy, pytestCheckHook
+, libxcb, openjpeg, libimagequant, numpy, pytestCheckHook, setuptools
 # for passthru.tests
 , imageio, matplotlib, pilkit, pydicom, reportlab
 }@args:
 
 import ./generic.nix (rec {
   pname = "pillow";
-  version = "9.5.0";
-  format = "setuptools";
+  version = "10.2.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    pname = "Pillow";
+    pname = "pillow";
     inherit version;
-    hash = "sha256-v1SEedM2cm16Ds6252fhefveN4M65CeUYCYxoHDWMPE=";
+    hash = "sha256-6H8LLHgVfhLXaGsn1jwHD9ZdmU6N2ubzKODc9KDNAH4=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Fixed type handling for include and lib directories; Remove with 10.0.0
-      url = "https://github.com/python-pillow/Pillow/commit/0ec0a89ead648793812e11739e2a5d70738c6be5.patch";
-      hash = "sha256-m5R5fLflnbJXbRxFlTjT2X3nKdC05tippMoJUDsJmy0=";
-    })
-  ];
 
   passthru.tests = {
     inherit imageio matplotlib pilkit pydicom reportlab;

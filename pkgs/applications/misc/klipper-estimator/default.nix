@@ -6,24 +6,25 @@
 , openssl
 , libgit2
 , Security
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "klipper-estimator";
-  version = "3.5.0";
+  version = "3.7.2";
 
   src = fetchFromGitHub {
     owner = "Annex-Engineering";
     repo = "klipper_estimator";
     rev = "v${version}";
-    hash = "sha256-sq0HWK+zH7Rj/XFgMrI4+SVhBXPbvvoSr3A/1Aq/Fa8=";
+    hash = "sha256-OvDdANowsz3qU2KV4WbUWyDrh3sG02+lBKNtcq6ecZ8=";
   };
 
-  cargoHash = "sha256-QHSydaE867HaY7vBoV+v4p7G5qbQy5l3TemD3k41T4A=";
+  cargoHash = "sha256-1O3kXeGPALSa/kNWRArk6ULG0+3UgTxVBzrsqDHHpDU=";
 
   buildInputs =
     [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ libgit2 Security ];
+    ++ lib.optionals stdenv.isDarwin [ libgit2 Security SystemConfiguration ];
 
   nativeBuildInputs = [ pkg-config ];
 

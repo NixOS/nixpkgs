@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "pre-commit-hooks";
-  version = "4.4.0";
+  version = "4.6.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-V23pgHQ9GdZ2mukFEMAhkp+dl/CQTGxWHAhF7s1VvHo=";
+    hash = "sha256-p/pPpuuNjVxHSPyi4RL2DJlj9weSq8QinugQ4zmv9Ck=";
   };
 
   propagatedBuildInputs = [

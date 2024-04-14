@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "auroranoaa";
   version = "0.0.3";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {

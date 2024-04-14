@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, docutils, libev, openssl, pkg-config, nixosTests }:
 stdenv.mkDerivation rec {
-  version = "1.7.3";
+  version = "1.8.0";
   pname = "hitch";
 
   src = fetchurl {
     url = "https://hitch-tls.org/source/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Ghv0lV13W3GNwxyJoaBRdlMLDKhW+V7kKivHoj8ol4c=";
+    sha256 = "sha256-38mUhLx//qJ6MWnoTWwheYjtpHsgirLlUk3Cpd0Vj04=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = [ maintainers.jflanglois ];
     platforms = platforms.linux;
+    mainProgram = "hitch";
   };
 }

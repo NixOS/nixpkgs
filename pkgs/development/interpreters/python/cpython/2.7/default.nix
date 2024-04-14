@@ -56,11 +56,11 @@ assert lib.assertMsg (reproducibleBuild -> (!rebuildBytecode))
 
 let
   buildPackages = pkgsBuildHost;
-  inherit (passthru) pythonForBuild;
+  inherit (passthru) pythonOnBuildForHost;
 
-  pythonForBuildInterpreter = if stdenv.hostPlatform == stdenv.buildPlatform then
+  pythonOnBuildForHostInterpreter = if stdenv.hostPlatform == stdenv.buildPlatform then
     "$out/bin/python"
-  else pythonForBuild.interpreter;
+  else pythonOnBuildForHost.interpreter;
 
   passthru = passthruFun rec {
     inherit self sourceVersion packageOverrides;
@@ -131,8 +131,19 @@ let
       # * https://github.com/python/cpython/commit/e6b247c8e524
       ../3.7/no-win64-workaround.patch
 
+      # fix openssl detection by reverting irrelevant change for us, to enable hashlib which is required by pip
+      (fetchpatch {
+        url = "https://github.com/ActiveState/cpython/pull/35/commits/20ea5b46aaf1e7bdf9d6905ba8bece2cc73b05b0.patch";
+        revert = true;
+        hash = "sha256-Lp5fGlcfJJ6p6vKmcLckJiAA2AZz4prjFE0aMEJxotw=";
+      })
     ] ++ lib.optionals (x11Support && stdenv.isDarwin) [
       ./use-correct-tcl-tk-on-darwin.patch
+
+    ] ++ lib.optionals stdenv.isDarwin [
+      # Fix darwin build https://bugs.python.org/issue34027
+      ../3.7/darwin-libutil.patch
+
     ] ++ lib.optionals stdenv.isLinux [
 
       # Disable the use of ldconfig in ctypes.util.find_library (since
@@ -297,9 +308,9 @@ in with passthru; stdenv.mkDerivation ({
         # We build 3 levels of optimized bytecode. Note the default level, without optimizations,
         # is not reproducible yet. https://bugs.python.org/issue29708
         # Not creating bytecode will result in a large performance loss however, so we do build it.
-        find $out -name "*.py" | ${pythonForBuildInterpreter} -m compileall -q -f -x "lib2to3" -i -
-        find $out -name "*.py" | ${pythonForBuildInterpreter} -O  -m compileall -q -f -x "lib2to3" -i -
-        find $out -name "*.py" | ${pythonForBuildInterpreter} -OO -m compileall -q -f -x "lib2to3" -i -
+        find $out -name "*.py" | ${pythonOnBuildForHostInterpreter} -m compileall -q -f -x "lib2to3" -i -
+        find $out -name "*.py" | ${pythonOnBuildForHostInterpreter} -O  -m compileall -q -f -x "lib2to3" -i -
+        find $out -name "*.py" | ${pythonOnBuildForHostInterpreter} -OO -m compileall -q -f -x "lib2to3" -i -
       '' + lib.optionalString stdenv.hostPlatform.isCygwin ''
         cp libpython2.7.dll.a $out/lib
       '';
@@ -307,8 +318,6 @@ in with passthru; stdenv.mkDerivation ({
     inherit passthru;
 
     postFixup = ''
-      # Include a sitecustomize.py file. Note it causes an error when it's in postInstall with 2.7.
-      cp ${../../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
     '' + lib.optionalString strip2to3 ''
       rm -R $out/bin/2to3 $out/lib/python*/lib2to3
     '' + lib.optionalString stripConfig ''
@@ -339,7 +348,7 @@ in with passthru; stdenv.mkDerivation ({
       '';
       license = lib.licenses.psfl;
       platforms = lib.platforms.all;
-      maintainers = with lib.maintainers; [ fridh thiagokokada ];
+      maintainers = with lib.maintainers; [ fridh ];
       knownVulnerabilities = [
         "Python 2.7 has reached its end of life after 2020-01-01. See https://www.python.org/doc/sunset-python-2/."
         # Quote: That means that we will not improve it anymore after that day,

@@ -83,6 +83,7 @@ in
         shell = stdenv.shell;
         which = "${which}/bin/which";
         dirname = "${coreutils}/bin/dirname";
+        realpath = "${coreutils}/bin/realpath";
       };
     } ./dotnet-fixup-hook.sh) { };
 }

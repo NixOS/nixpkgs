@@ -1,20 +1,23 @@
-{ fetchCrate, lib, rustPlatform }:
+{ lib, rustPlatform, fetchCrate }:
 
 rustPlatform.buildRustPackage rec {
   pname = "textplots";
-  version = "0.8.0";
+  version = "0.8.5";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "07lxnvg8g24r1j6h07w91j5lp0azngmb76lagk55y28br0y70qr4";
+    hash = "sha256-83EAe6O8ETsuGJ5MK6kt68OnJL+r+BAYkFzvzlxHyp4=";
   };
 
-  cargoSha256 = "19xb1ann3bqx26nhjjvcwqdsvzg7lflg9fdrnlx05ndd2ip44flz";
+  cargoHash = "sha256-O47b00PGRXTWWxywitS2V15gXahzgjNvFKUvE+VMXaM=";
+
+  buildFeatures = [ "tool" ];
 
   meta = with lib; {
     description = "Terminal plotting written in Rust";
     homepage = "https://github.com/loony-bean/textplots-rs";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "textplots";
   };
 }

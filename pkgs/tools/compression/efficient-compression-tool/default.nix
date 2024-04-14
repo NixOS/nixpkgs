@@ -29,11 +29,17 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DECT_FOLDER_SUPPORT=ON" ];
 
+  CXXFLAGS = [
+    # GCC 13: error: 'uint32_t' does not name a type
+    "-include cstdint"
+  ];
+
   meta = with lib; {
     description = "Fast and effective C++ file optimizer";
     homepage = "https://github.com/fhanau/Efficient-Compression-Tool";
     license = licenses.asl20;
     maintainers = [ maintainers.lunik1 ];
     platforms = platforms.linux;
+    mainProgram = "ect";
   };
 }

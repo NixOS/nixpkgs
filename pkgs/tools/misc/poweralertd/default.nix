@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "19rw9q4pcqw56nmzjfglfikzx5wwjl4n08awwdhg0jy1k0bm3dvp";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace meson.build --replace "systemd.get_pkgconfig_variable('systemduserunitdir')" "'${placeholder "out"}/lib/systemd/user'"
   '';
 
@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ thibautmarty ];
+    mainProgram = "poweralertd";
   };
 }

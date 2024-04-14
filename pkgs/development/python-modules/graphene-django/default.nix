@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , pythonAtLeast
 , pythonOlder
@@ -21,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "graphene-django";
-  version = "3.1.2";
+  version = "3.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     owner = "graphql-python";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-VQwDK9FRbHy/AFbdZKmvl5e52smSCyWTrs00DvJqVmo=";
+    hash = "sha256-wzU9U4mYvBf43qBQi20ewKtmw1eFskQk+nnsdaM7HQM=";
   };
 
   postPatch = ''
@@ -60,12 +61,20 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    # pytest.PytestRemovedIn8Warning: Passing None has been deprecated.
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   disabledTests = lib.optionals (pythonAtLeast "3.11") [
-    # Pèython 3.11 support, https://github.com/graphql-python/graphene-django/pull/1365
+    # Python 3.11 support, https://github.com/graphql-python/graphene-django/pull/1365
     "test_django_objecttype_convert_choices_enum_naming_collisions"
     "test_django_objecttype_choices_custom_enum_name"
     "test_django_objecttype_convert_choices_enum_list"
     "test_schema_representation"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # this test touches files in the "/" directory and fails in darwin sandbox
+    "test_should_filepath_convert_string"
   ];
 
   meta = with lib; {

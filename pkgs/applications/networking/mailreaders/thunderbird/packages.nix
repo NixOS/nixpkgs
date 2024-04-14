@@ -5,13 +5,13 @@ rec {
 
   thunderbird-102 = (buildMozillaMach rec {
     pname = "thunderbird";
-    version = "102.13.0";
+    version = "102.14.0";
     application = "comm/mail";
     applicationName = "Mozilla Thunderbird";
     binaryName = pname;
     src = fetchurl {
       url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-      sha512 = "1ed48220f91cc2c38f59067664c02f1f2098c843810b8f81cb8dee4fe98911d87aac352ab8639c68d0eed74297240cd9e0ce0e64a40360511be85315f2bfcfc6";
+      hash = "sha512-SuPyFoM67FVCH4J9VbwbX8LwrU/v7LJ3JKW+MxjDUd8k0wpIl7kk5zPtLjmVvihLbRNQSdRgARQ/sclh/vwYMA==";
     };
     extraPatches = [
       # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
@@ -22,12 +22,14 @@ rec {
       changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
       description = "A full-featured e-mail client";
       homepage = "https://thunderbird.net/";
+      mainProgram = "thunderbird";
       maintainers = with maintainers; [ eelco lovesegfault pierron vcunat ];
       platforms = platforms.unix;
       badPlatforms = platforms.darwin;
       broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
                                              # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
       license = licenses.mpl20;
+      knownVulnerabilities = [ "Thunderbird 102 support has ended" ];
     };
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbird-unwrapped";
@@ -42,13 +44,13 @@ rec {
 
   thunderbird-115 = (buildMozillaMach rec {
     pname = "thunderbird";
-    version = "115.0.1";
+    version = "115.9.0";
     application = "comm/mail";
     applicationName = "Mozilla Thunderbird";
     binaryName = pname;
     src = fetchurl {
       url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-      sha512 = "9a53024790a537fb012d66e683248e82a9b2c2a4db6fc90d1e1d3c785c28e9d65f1d110c33dcbdad63f8f6ecb3e5c6a526c0028c3970125022ebe384506d4ba3";
+      sha512 = "8ff0bed6e6d7f337ebae09011a10b59343ae7a8355ed1da2d72ec0d4218010adfae78e42565e5b784df26cef4702f313dc9616ac5ca5530fb772d77bdf7f2ea4";
     };
     extraPatches = [
       # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
@@ -59,6 +61,7 @@ rec {
       changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
       description = "A full-featured e-mail client";
       homepage = "https://thunderbird.net/";
+      mainProgram = "thunderbird";
       maintainers = with maintainers; [ eelco lovesegfault pierron vcunat ];
       platforms = platforms.unix;
       badPlatforms = platforms.darwin;

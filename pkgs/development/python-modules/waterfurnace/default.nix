@@ -45,6 +45,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python interface to waterfurnace geothermal systems";
+    mainProgram = "waterfurnace-debug";
     homepage = "https://github.com/sdague/waterfurnace";
     changelog = "https://github.com/sdague/waterfurnace/blob/v${version}/HISTORY.rst";
     license = with licenses; [ asl20 ];

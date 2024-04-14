@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "watchgod";
   version = "0.8.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,6 +25,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Simple, modern file watching and code reload in python";
+    mainProgram = "watchgod";
     homepage = "https://github.com/samuelcolvin/watchgod";
     license = licenses.mit;
     maintainers = with maintainers; [ globin ];

@@ -1,29 +1,25 @@
-{ fetchFromGitHub, lib, rustPlatform, pkg-config, openssl, stdenv, Security }:
+{ fetchCrate, lib, rustPlatform, pkg-config, stdenv, Security, SystemConfiguration }:
 
 rustPlatform.buildRustPackage rec {
   pname = "vrc-get";
-  version = "1.1.2";
+  version = "1.8.0";
 
-  src = fetchFromGitHub {
-    owner = "anatawa12";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "03p3y6q6md2m6fj9v01419cy1wa13dhasd2izs7j9gl9jh69w9xm";
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-+xbHw1DpFmapjsFoUvxUqTok8TKMebMw3gYjO/rx/iU=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
-  # Make openssl-sys use pkg-config.
-  OPENSSL_NO_VENDOR = 1;
-
-  cargoSha256 = "03lv72gw39q7hibg2rzibvc1y0az30691jdf2fwn1m5ng0r7lqvp";
+  cargoHash = "sha256-iuLhDcii+wXDNUsUMo8lj4kfJve5RAz7FT5Pxs9yFPQ=";
 
   meta = with lib; {
     description = "Command line client of VRChat Package Manager, the main feature of VRChat Creator Companion (VCC)";
-    homepage = "https://github.com/anatawa12/vrc-get";
+    homepage = "https://github.com/vrc-get/vrc-get";
     license = licenses.mit;
     maintainers = with maintainers; [ bddvlpr ];
+    mainProgram = "vrc-get";
   };
 }

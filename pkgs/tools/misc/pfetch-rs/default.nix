@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pfetch-rs";
-  version = "2.7.0";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "Gobidev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-KNd6EKYxuSNvWXNERZ+ZGq3HzRbE75LZPcAlfB4Aoyw=";
+    hash = "sha256-tpJk31Z7QzZNLmEv/L1008tf6hpJJI6b7E1o/kwbJe0=";
   };
 
-  cargoHash = "sha256-Zxtf1OPsafm/BexDsHKb4Ei/ca3Nxz7c/U/A0AnAAI4=";
+  cargoHash = "sha256-CQVPEUpblypDyr48MrLY3roGunOxem0eM1OtbcKlnsw=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
@@ -25,5 +25,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/Gobidev/pfetch-rs/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ gobidev ];
+    mainProgram = "pfetch";
   };
 }

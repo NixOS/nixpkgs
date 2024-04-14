@@ -5,19 +5,21 @@
 
 buildGoModule rec {
   pname = "doc2go";
-  version = "0.4.1";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "abhinav";
     repo = "doc2go";
     rev = "v${version}";
-    hash = "sha256-iypcjj6FFsus9mrafLBX0u7bHnzs718aEWC5dO3q0es=";
+    hash = "sha256-b4L20/9jm+bFGdNsHmcwSnzcmr3Il9XoV20284Ba8PU=";
   };
-  vendorHash = "sha256-IMqYCVGsspYigTmYNHD1b6Sgzxl47cdiCs+rq4C3Y08=";
+  vendorHash = "sha256-d5ZRMFi7GIfDHsYRNvMnDdfnGhTM1sA0WDYD2aDoEd0=";
 
   ldflags = [ "-s" "-w" "-X main._version=${version}" ];
 
   subPackages = [ "." ];
+  # integration is it's own module
+  excludedPackages = [ "integration" ];
 
   checkFlags = [
     # needs to fetch additional go modules
@@ -33,6 +35,7 @@ buildGoModule rec {
     homepage = "https://github.com/abhinav/doc2go";
     changelog = "https://github.com/abhinav/doc2go/blob/${src.rev}/CHANGELOG.md";
     description = "Your Go project's documentation, to-go";
+    mainProgram = "doc2go";
     longDescription = ''
       doc2go is a command line tool that generates static HTML documentation
       from your Go code. It is a self-hosted static alternative to

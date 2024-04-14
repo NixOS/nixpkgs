@@ -117,10 +117,13 @@ stdenv.mkDerivation {
     cp -r doc/doxygen/output/html $devdoc/share/devhelp/openafs/doxygen
   '';
 
-  # Avoid references to $TMPDIR by removing it and let patchelf cleanup the
-  # binaries.
+  # remove forbidden references to $TMPDIR
   preFixup = ''
-    rm -rf "$(pwd)" && mkdir "$(pwd)"
+    for f in "$out"/bin/*; do
+      if isELF "$f"; then
+        patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$f"
+      fi
+    done
   '';
 
   meta = with lib; {

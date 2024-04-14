@@ -30,13 +30,10 @@ with python3Packages; buildPythonApplication rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
-  '';
-
   meta = with lib; {
     homepage = "https://github.com/tinyfpga/TinyFPGA-Bootloader/tree/master/programmer";
     description = "Programmer for FPGA boards using the TinyFPGA USB Bootloader";
+    mainProgram = "tinyprog";
     maintainers = with maintainers; [ emily ];
     license = licenses.asl20;
   };

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "hap-python";
-  version = "4.7.1";
+  version = "4.9.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "ikalchev";
     repo = "HAP-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-M/STfco+Bx+KxBT1lUIrYyGSjBcPw2UVX02gNOROke4=";
+    hash = "sha256-nnh8PSEcuPN1qGuInJ7uYe83zdne8axbTrHd4g1xoJs=";
   };
 
   propagatedBuildInputs = [

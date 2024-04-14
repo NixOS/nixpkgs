@@ -56,7 +56,7 @@ let
   levelOption = mkOption {
     default = "server";
     type = types.enum [ "workstation" "server" "paranoid" ];
-    description = lib.mdDoc ''
+    description = ''
       Set the logcheck level.
     '';
   };
@@ -68,7 +68,7 @@ let
       regex = mkOption {
         default = "";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Regex specifying which log lines to ignore.
         '';
       };
@@ -80,7 +80,7 @@ let
       user = mkOption {
         default = "root";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           User that runs the cronjob.
         '';
       };
@@ -88,7 +88,7 @@ let
       cmdline = mkOption {
         default = "";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Command line for the cron job. Will be turned into a regex for the logcheck ignore rule.
         '';
       };
@@ -97,7 +97,7 @@ let
         default = null;
         type = types.nullOr (types.str);
         example = "02 06 * * *";
-        description = lib.mdDoc ''
+        description = ''
           "min hr dom mon dow" crontab time args, to auto-create a cronjob too.
           Leave at null to not do this and just add a logcheck ignore rule.
         '';
@@ -109,12 +109,12 @@ in
 {
   options = {
     services.logcheck = {
-      enable = mkEnableOption (lib.mdDoc "logcheck cron job");
+      enable = mkEnableOption "logcheck cron job, to mail anomalies in the system logfiles to the administrator";
 
       user = mkOption {
         default = "logcheck";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Username for the logcheck user.
         '';
       };
@@ -123,7 +123,7 @@ in
         default = "*";
         example = "6";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Time of day to run logcheck. A logcheck will be scheduled at xx:02 each day.
           Leave default (*) to run every hour. Of course when nothing special was logged,
           logcheck will be silent.
@@ -134,7 +134,7 @@ in
         default = "root";
         example = "you@domain.com";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Email address to send reports to.
         '';
       };
@@ -142,7 +142,7 @@ in
       level = mkOption {
         default = "server";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Set the logcheck level. Either "workstation", "server", or "paranoid".
         '';
       };
@@ -150,7 +150,7 @@ in
       config = mkOption {
         default = "FQDN=1";
         type = types.lines;
-        description = lib.mdDoc ''
+        description = ''
           Config options that you would like in logcheck.conf.
         '';
       };
@@ -159,7 +159,7 @@ in
         default = [ "/var/log/messages" ];
         type = types.listOf types.path;
         example = [ "/var/log/messages" "/var/log/mail" ];
-        description = lib.mdDoc ''
+        description = ''
           Which log files to check.
         '';
       };
@@ -168,14 +168,14 @@ in
         default = [];
         example = [ "/etc/logcheck" ];
         type = types.listOf types.path;
-        description = lib.mdDoc ''
+        description = ''
           Directories with extra rules.
         '';
       };
 
       ignore = mkOption {
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           This option defines extra ignore rules.
         '';
         type = with types; attrsOf (submodule ignoreOptions);
@@ -183,7 +183,7 @@ in
 
       ignoreCron = mkOption {
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           This option defines extra ignore rules for cronjobs.
         '';
         type = with types; attrsOf (submodule ignoreCronOptions);
@@ -193,7 +193,7 @@ in
         default = [];
         type = types.listOf types.str;
         example = [ "postdrop" "mongodb" ];
-        description = lib.mdDoc ''
+        description = ''
           Extra groups for the logcheck user, for example to be able to use sendmail,
           or to access certain log files.
         '';
@@ -220,10 +220,16 @@ in
       logcheck = {};
     };
 
-    system.activationScripts.logcheck = ''
-      mkdir -m 700 -p /var/{lib,lock}/logcheck
-      chown ${cfg.user} /var/{lib,lock}/logcheck
-    '';
+    systemd.tmpfiles.settings.logcheck = {
+      "/var/lib/logcheck".d = {
+        mode = "700";
+        inherit (cfg) user;
+      };
+      "/var/lock/logcheck".d = {
+        mode = "700";
+        inherit (cfg) user;
+      };
+    };
 
     services.cron.systemCronJobs =
         let withTime = name: {timeArgs, ...}: timeArgs != null;

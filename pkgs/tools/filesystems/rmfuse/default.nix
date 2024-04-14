@@ -7,7 +7,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "rmfuse";
   version = "unstable-2021-06-06";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rschroll";
@@ -16,13 +16,15 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-W3kS6Kkmp8iWMOYFL7r1GyjSQvFotBXQCuTMK0vyHQ8=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'bidict = "^' 'bidict = ">='
-  '';
-
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "bidict"
+    "rmrl"
+    "xdg"
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -44,6 +46,7 @@ python3.pkgs.buildPythonApplication rec {
       in the reMarkable Cloud using the same tools you use on your local
       system.
     '';
-    maintainers = with lib.maintainers; [ adisbladis ];
+    maintainers = with lib.maintainers; [ ];
+    mainProgram = "rmfuse";
   };
 }

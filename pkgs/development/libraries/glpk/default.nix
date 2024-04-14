@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     # https://trac.sagemath.org/ticket/20710#comment:18
     (fetchpatch {
       name = "error_recovery.patch";
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/glpk/patches/error_recovery.patch?id=d3c1f607e32f964bf0cab877a63767c86fd00266";
+      url = "https://raw.githubusercontent.com/sagemath/sage/d3c1f607e32f964bf0cab877a63767c86fd00266/build/pkgs/glpk/patches/error_recovery.patch";
       sha256 = "sha256-2hNtUEoGTFt3JgUvLH3tPWnz+DZcXNhjXzS+/V89toA=";
     })
   ];

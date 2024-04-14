@@ -12,6 +12,7 @@
 , postgresql
 , protobuf
 , rustPlatform
+, rust-jemalloc-sys
 , Security
 , sqlite
 , stdenv
@@ -22,7 +23,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lighthouse";
-  version = "4.1.0";
+  version = "4.6.0";
 
   # lighthouse/common/deposit_contract/build.rs
   depositContractSpecVersion = "0.12.1";
@@ -32,11 +33,12 @@ rustPlatform.buildRustPackage rec {
     owner = "sigp";
     repo = "lighthouse";
     rev = "v${version}";
-    hash = "sha256-QVAFzV9sao8+eegI7bLfm+pPHyvDFhnADS80+nqqgtE=";
+    hash = "sha256-uMrVnVvYXcY2Axn3ycsf+Pwur3HYGoOYjjUkGS5c3l4=";
   };
 
   patches = [
     ./use-system-sqlite.patch
+    ./use-c-kzg-from-crates-io.patch
   ];
 
   postPatch = ''
@@ -46,15 +48,12 @@ rustPlatform.buildRustPackage rec {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "amcl-0.3.0" = "sha256-Mj4dXTlGVSleFfuTKgVDQ7S3jANMsdtVE5L90WGxA4U=";
-      "arbitrary-1.3.0" = "sha256-BMxcBfxBRf+Kb0Tz55jtFbwokSeD2GPtB+KV8Wbne0g=";
-      "beacon-api-client-0.1.0" = "sha256-fI8qST6HZrchg7yr/nVtRNrsW3f5ONSX+mGRYW+iiqA=";
-      "ethereum-consensus-0.1.1" = "sha256-aBrZ786Me0BWpnncxQc5MT3r+O0yLQhqGKFBiNTdqSA=";
+      "amcl-0.3.0" = "sha256-kc8k/ls4W0TwFBsRcyyotyz8ZBEjsZXHeJnJtsnW/LM=";
+      "discv5-0.4.0" = "sha256-GKAk9Du6fy0ldeBEwPueDbVPhyNxdKNROKpMJvR/OTc=";
+      "futures-bounded-0.2.3" = "sha256-/LbD+je9P1lPnXMJVDqRQHJziQPXPvSDmQadTfsQ5I8=";
       "libmdbx-0.1.4" = "sha256-NMsR/Wl1JIj+YFPyeMMkrJFfoS07iEAKEQawO89a+/Q=";
       "lmdb-rkv-0.14.0" = "sha256-sxmguwqqcyOlfXOZogVz1OLxfJPo+Q0+UjkROkbbOCk=";
-      "mev-rs-0.2.1" = "sha256-n3ns1oynw5fKQtp/CQHER41+C1EmLCVEBqggkHc3or4=";
-      "ssz-rs-0.8.0" = "sha256-k1JLu+jZrSqUyHou76gbJeA5CDWwdL0fPkek3Vzl4Gs=";
-      "warp-0.3.2" = "sha256-m9lkEgeSs0yEc+6N6DG7IfQY/evkUMoNyst2hMUR//c=";
+      "warp-0.3.6" = "sha256-knDt2aw/PJ0iabhKg+okwwnEzCY+vQVhE7HKCTM6QbE=";
     };
   };
 
@@ -69,6 +68,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
+    rust-jemalloc-sys
     sqlite
   ] ++ lib.optionals stdenv.isDarwin [
     CoreFoundation
@@ -100,11 +100,12 @@ rustPlatform.buildRustPackage rec {
   # All of these tests require network access and/or docker
   cargoTestFlags = [
     "--workspace"
+    "--exclude beacon_chain"
     "--exclude beacon_node"
     "--exclude http_api"
-    "--exclude beacon_chain"
     "--exclude lighthouse"
     "--exclude lighthouse_network"
+    "--exclude network"
     "--exclude slashing_protection"
     "--exclude watch"
     "--exclude web3signer_tests"
@@ -112,10 +113,21 @@ rustPlatform.buildRustPackage rec {
 
   # All of these tests require network access
   checkFlags = [
+    "--skip basic"
+    "--skip deposit_tree::cache_consistency"
+    "--skip deposit_tree::double_update"
+    "--skip deposit_tree::updating"
+    "--skip eth1_cache::big_skip"
+    "--skip eth1_cache::double_update"
+    "--skip eth1_cache::pruning"
+    "--skip eth1_cache::simple_scenario"
+    "--skip fast::deposit_cache_query"
+    "--skip http::incrementing_deposits"
+    "--skip persist::test_persist_caches"
     "--skip service::tests::tests::test_dht_persistence"
     "--skip time::test::test_reinsertion_updates_timeout"
-
   ] ++ lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [
+    "--skip subnet_service::tests::attestation_service::test_subscribe_same_subnet_several_slots_apart"
     "--skip subnet_service::tests::sync_committee_service::same_subscription_with_lower_until_epoch"
     "--skip subnet_service::tests::sync_committee_service::subscribe_and_unsubscribe"
   ];
@@ -134,10 +146,17 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
+  enableParallelBuilding = true;
+
+  # This is needed by the unit tests.
+  FORK_NAME = "capella";
+
   meta = with lib; {
     description = "Ethereum consensus client in Rust";
     homepage = "https://lighthouse.sigmaprime.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ centromere pmw ];
+    mainProgram = "lighthouse";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

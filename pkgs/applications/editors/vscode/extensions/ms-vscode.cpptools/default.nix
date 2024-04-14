@@ -30,14 +30,24 @@
 
 let
   gdbDefaultsTo = if gdbUseFixed then "${gdb}/bin/gdb" else "gdb";
+  supported = {
+    x86_64-linux = {
+      hash = "sha256-4mKCBqUCOndKEfsJqTIsfwEt+0CZI8QAhBj3Y4+wKlg=";
+      arch = "linux-x64";
+    };
+    aarch64-linux = {
+      hash = "sha256-Kjl8mEpayA1xMHEAMJ5k3Ctk3l48KlUBU5w3dL4pGWM=";
+      arch = "linux-arm64";
+    };
+  };
+
+  base = supported.${stdenv.system} or (throw "unsupported platform ${stdenv.system}");
 in
-vscode-utils.buildVscodeMarketplaceExtension rec {
-  mktplcRef = {
+vscode-utils.buildVscodeMarketplaceExtension {
+  mktplcRef = base // {
     name = "cpptools";
     publisher = "ms-vscode";
-    version = "1.11.0";
-    sha256 = "c0725d3914aeb2515627691727455cc27e7a75031fa02ca957be02cc210bd64d";
-    arch = "linux-x64";
+    version = "1.17.3";
   };
 
   nativeBuildInputs = [
@@ -85,6 +95,6 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     homepage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools";
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.jraygauthier lib.maintainers.stargate01 ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

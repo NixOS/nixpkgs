@@ -3,7 +3,6 @@
     (lib)
     concatMapStringsSep
     generators
-    mdDoc
     mkEnableOption
     mkIf
     mkOption
@@ -39,7 +38,7 @@ in {
     };
 
     settings = mkOption {
-      description = mdDoc "Typesense configuration. Refer to [the documentation](https://typesense.org/docs/0.24.1/api/server-configuration.html) for supported values.";
+      description = "Typesense configuration. Refer to [the documentation](https://typesense.org/docs/0.24.1/api/server-configuration.html) for supported values.";
       default = {};
       type = types.submodule {
         freeformType = settingsFormatIni.type;
@@ -47,18 +46,18 @@ in {
           data-dir = mkOption {
             type = types.str;
             default = "/var/lib/typesense";
-            description = mdDoc "Path to the directory where data will be stored on disk.";
+            description = "Path to the directory where data will be stored on disk.";
           };
 
           api-address = mkOption {
             type = types.str;
-            description = mdDoc "Address to which Typesense API service binds.";
+            description = "Address to which Typesense API service binds.";
           };
 
           api-port = mkOption {
             type = types.port;
             default = 8108;
-            description = mdDoc "Port on which the Typesense API service listens.";
+            description = "Port on which the Typesense API service listens.";
           };
         };
       };
@@ -83,12 +82,12 @@ in {
         Group = "typesense";
 
         StateDirectory = "typesense";
-        StateDirectoryMode = "0700";
+        StateDirectoryMode = "0750";
 
         # Hardening
         CapabilityBoundingSet = "";
         LockPersonality = true;
-        MemoryDenyWriteExecute = true;
+        # MemoryDenyWriteExecute = true; needed since 0.25.1
         NoNewPrivileges = true;
         PrivateUsers = true;
         PrivateTmp = true;

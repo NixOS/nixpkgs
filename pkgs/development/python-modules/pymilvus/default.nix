@@ -2,49 +2,57 @@
 , buildPythonPackage
 , environs
 , fetchFromGitHub
+, gitpython
 , grpcio
 , grpcio-testing
+, minio
 , mmh3
 , pandas
+, pyarrow
 , pytestCheckHook
-, python
 , pythonOlder
 , pythonRelaxDepsHook
+, requests
 , scikit-learn
 , setuptools-scm
 , ujson
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pymilvus";
-  version = "2.2.13";
-  format = "pyproject";
+  version = "2.3.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "milvus-io";
-    repo = pname;
+    repo = "pymilvus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-NTzdbmI2vNvNBFhN+xyZewH4b6l1BbKkDDE7rLNJ4IE=";
+    hash = "sha256-K7k3MTOEm9+HDwMps9C8Al0Jmp1ptJw3pN1LEBOUz0U=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   pythonRelaxDeps = [
+    "environs"
     "grpcio"
   ];
 
   nativeBuildInputs = [
+    gitpython
     pythonRelaxDepsHook
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
     environs
     grpcio
+    minio
     mmh3
     pandas
+    pyarrow
+    requests
     ujson
   ];
 

@@ -3,45 +3,59 @@
 , buildGoModule
 , buildPythonPackage
 , srht
-, asyncpg
 , aiosmtpd
+, asyncpg
 , pygit2
 , emailthreads
-, redis
 , python
 , unzip
+, pip
+, pythonOlder
+, setuptools
 }:
 
-buildPythonPackage rec {
-  pname = "listssrht";
-  version = "0.51.11";
+let
+  version = "0.57.18";
+  gqlgen = import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.45"; };
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "lists.sr.ht";
     rev = version;
-    sha256 = "sha256-Qb70oOazZfmHpC5r0oMYCFdvfAeKbq3mQA8+M56YYnY=";
+    hash = "sha256-l+QPocnwHTjrU+M0wnm4tBrbz8KmSb6DovC+skuAnLc=";
   };
 
   listssrht-api = buildGoModule ({
     inherit src version;
     pname = "listssrht-api";
     modRoot = "api";
-    vendorSha256 = "sha256-xnmMkRSokbhWD+kz0XQ9AinYdm6/50FRBISURPvlzD0=";
-  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
+    vendorHash = "sha256-UeVs/+uZNtv296bzXIBio2wcg3Uzu3fBM4APzF9O0hY=";
+  } // gqlgen);
+in
+buildPythonPackage rec {
+  inherit src version;
+  pname = "listssrht";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   postPatch = ''
     substituteInPlace Makefile \
       --replace "all: api" ""
   '';
 
+  nativeBuildInputs = [
+    pip
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     srht
-    pygit2
-    asyncpg
     aiosmtpd
+    asyncpg
+    pygit2
+    # Unofficial dependency
     emailthreads
-    redis
   ];
 
   preBuild = ''
@@ -59,6 +73,6 @@ buildPythonPackage rec {
     homepage = "https://git.sr.ht/~sircmpwn/lists.sr.ht";
     description = "Mailing list service for the sr.ht network";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ eadwu ];
+    maintainers = with maintainers; [ eadwu christoph-heiss ];
   };
 }

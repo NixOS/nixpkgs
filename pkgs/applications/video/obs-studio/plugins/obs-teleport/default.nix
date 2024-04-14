@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "obs-teleport";
-  version = "0.6.6";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "fzwoch";
     repo = "obs-teleport";
     rev = version;
-    sha256 = "sha256-fDLe1GbLZb/rXLiTtvcMqfQo2cG1guDCwLOEf3piPcU=";
+    sha256 = "sha256-vT5GhZQFunQURgnFI3RSGVlwvcWEW588MuJ+Ev7IZ7w=";
   };
 
-  vendorHash = "sha256-GhIFGnGnwDmuDobMlOWCRFpHTbQlRtJrqXSFwxFydG0=";
+  vendorHash = "sha256-Po7Oj+wdBOOFI2Ws9MLZQxk4N6mE58M+3q+qNlUrqOY=";
 
   buildInputs = [
     libjpeg
@@ -47,7 +47,7 @@ buildGoModule rec {
   meta = {
     description = "An OBS Studio plugin for an open NDI-like replacement";
     homepage = "https://github.com/fzwoch/obs-teleport";
-    maintainers = [ lib.maintainers.paveloom ];
+    maintainers = [ ];
     license = lib.licenses.gpl2Plus;
     platforms = obs-studio.meta.platforms;
   };

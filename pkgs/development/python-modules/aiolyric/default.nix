@@ -4,23 +4,28 @@
 , fetchFromGitHub
 , pythonOlder
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "aiolyric";
-  version = "1.0.10";
-  format = "setuptools";
+  version = "2.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "timmo001";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-yKeG0UCQ8haT1hvywoIwKQ519GK2wFg0wXaRTFeKYIk=";
+    repo = "aiolyric";
+    rev = "refs/tags/${version}";
+    hash = "sha256-FZhLjVrLzLv6CZz/ROlvbtBK9XnpO8pG48aSIoBxhCo=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     aiohttp
   ];
 
@@ -29,8 +34,8 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # AssertionError, https://github.com/timmo001/aiolyric/issues/5
-    "test_location"
+    # AssertionError, https://github.com/timmo001/aiolyric/issues/61
+    "test_priority"
   ];
 
   pythonImportsCheck = [

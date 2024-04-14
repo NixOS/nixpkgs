@@ -10,15 +10,16 @@
 , pandas
 , tabulate
 , click
-, pdfminer
+, pdfminer-six
 , pypdf
-, opencv3
+, opencv4
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "camelot-py";
   version = "0.11.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -27,16 +28,18 @@ buildPythonPackage rec {
     hash = "sha256-l6fZBtaF5AWaSlSaY646UfCrcqPIJlV/hEPGWhGB3+Y=";
   };
 
+  nativeBuildInputs = [ setuptools ];
+
   propagatedBuildInputs = [
     charset-normalizer
     chardet
     pandas
     tabulate
     click
-    pdfminer
+    pdfminer-six
     openpyxl
     pypdf
-    opencv3
+    opencv4
   ];
 
   doCheck = false;
@@ -47,6 +50,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python library to extract tabular data from PDFs";
+    mainProgram = "camelot";
     homepage = "http://camelot-py.readthedocs.io";
     changelog = "https://github.com/camelot-dev/camelot/blob/v${version}/HISTORY.md";
     license = licenses.mit;

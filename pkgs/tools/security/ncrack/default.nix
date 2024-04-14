@@ -21,10 +21,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # Our version is good; the check is bad.
+  configureFlags = [ "--without-zlib-version-check" ];
+
   buildInputs = [ openssl zlib ];
 
   meta = with lib; {
     description = "Network authentication tool";
+    mainProgram = "ncrack";
     homepage = "https://nmap.org/ncrack/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ siraben ];

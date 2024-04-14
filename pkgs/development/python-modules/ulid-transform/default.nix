@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "ulid-transform";
-  version = "0.8.0";
+  version = "0.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-UOAeIVjn3Z5zC4jZP0y+XH1HjYesxjGmFYpEknu8cag=";
+    hash = "sha256-r9uxPXpmQSsL1rX4d9TH87olFbZugdGdNG++Ygjie1I=";
   };
 
   nativeBuildInputs = [

@@ -23,7 +23,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ taglib zlib ];
-  vendorSha256 = "sha256-+PUKPqW+ER7mmZXrDIc0cE4opoTxA3po3WXSeZO+Xwo=";
+  vendorHash = "sha256-+PUKPqW+ER7mmZXrDIc0cE4opoTxA3po3WXSeZO+Xwo=";
 
   # TODO(Profpatsch): write a test for transcoding support,
   # since it is prone to break
@@ -51,5 +51,6 @@ buildGoModule rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
+    mainProgram = "gonic";
   };
 }

@@ -121,6 +121,7 @@ let
 
     meta = with lib; {
       license = licenses.gpl2Classpath;
+      sourceProvenance = with sourceTypes; [ binaryNativeCode binaryBytecode ];
       description = "${brand-name}, prebuilt OpenJDK binary";
       platforms = builtins.map (arch: arch + "-linux") providedCpuTypes;  # some inherit jre.meta.platforms
       maintainers = with maintainers; [ taku0 ];

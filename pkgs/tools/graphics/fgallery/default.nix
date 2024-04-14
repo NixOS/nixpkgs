@@ -10,15 +10,20 @@
 
 stdenv.mkDerivation rec {
   pname = "fgallery";
-  version = "1.8.2";
+  version = "1.9.1";
 
   src = fetchurl {
     url = "https://www.thregr.org/~wavexx/software/fgallery/releases/fgallery-${version}.zip";
-    sha256 = "18wlvqbxcng8pawimbc8f2422s8fnk840hfr6946lzsxr0ijakvf";
+    hash = "sha256-FvF0wkRe3wTPUG9/GEBxkaxvZ1B4wEd9kI9rURHKxn0=";
   };
 
   nativeBuildInputs = [ makeWrapper unzip ];
   buildInputs = (with perlPackages; [ perl ImageExifTool CpanelJSONXS ]);
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "/usr" $out
+  '';
 
   installPhase = ''
     mkdir -p "$out/bin"
@@ -44,5 +49,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];
+    mainProgram = "fgallery";
   };
 }

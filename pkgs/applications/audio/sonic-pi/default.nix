@@ -25,6 +25,7 @@
 , boost
 , aubio
 , jack2
+, jack-example-tools
 , supercollider-with-sc3-plugins
 , parallel
 
@@ -39,13 +40,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sonic-pi";
-  version = "4.4.0";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "sonic-pi-net";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-rXMCaI9zvWIXmT7ZqIArsvZmEkEEbs+5jYDYsSGeCXc=";
+    hash = "sha256-s9B3OBwiUdCJyxbeQXeidv38pzmvC442Byl+llabqp0=";
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
     pname = "mix-deps-${pname}";
     mixEnv = "test";
     src = "${src}/app/server/beam/tau";
-    hash = "sha256-YbYe+hljnoWFgV72OQ2YaUcnhucEtVb+TCLcMYzqUWU=";
+    hash = "sha256-7wqFI3f0CRVrXK2IUguqHNANwKMmTak/Xh9nr624TXc=";
   };
 
   strictDeps = true;
@@ -187,14 +188,14 @@ stdenv.mkDerivation rec {
   preFixup = ''
     # Wrap Qt GUI (distributed binary)
     wrapQtApp $out/bin/sonic-pi \
-      --prefix PATH : ${lib.makeBinPath [ ruby supercollider-with-sc3-plugins jack2 ]}
+      --prefix PATH : ${lib.makeBinPath [ ruby supercollider-with-sc3-plugins jack2 jack-example-tools ]}
 
     # If ImGui was built
     if [ -e $out/app/build/gui/imgui/sonic-pi-imgui ]; then
       # Wrap ImGui into bin
       makeWrapper $out/app/build/gui/imgui/sonic-pi-imgui $out/bin/sonic-pi-imgui \
         --inherit-argv0 \
-        --prefix PATH : ${lib.makeBinPath [ ruby supercollider-with-sc3-plugins jack2 ]}
+        --prefix PATH : ${lib.makeBinPath [ ruby supercollider-with-sc3-plugins jack2 jack-example-tools ]}
     fi
 
     # Remove runtime Erlang references

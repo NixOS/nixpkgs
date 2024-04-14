@@ -5,15 +5,15 @@
 , x11Support ? true, xorg
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bemenu";
-  version = "0.6.15";
+  version = "0.6.21";
 
   src = fetchFromGitHub {
     owner = "Cloudef";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-gdeNaqtxqxBtG9bkxozPE/DLQgLqCt1vh2A2WmgNn7w=";
+    repo = finalAttrs.pname;
+    rev = finalAttrs.version;
+    hash = "sha256-E/5wN7HpdBt//jFe9yAB8fuHKiFJ7D1UAJEvG8KBJ6k=";
   };
 
   strictDeps = true;
@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
     description = "Dynamic menu library and client program inspired by dmenu";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ lheckemann ];
+    mainProgram = "bemenu";
     platforms = with platforms; linux;
   };
-}
+})

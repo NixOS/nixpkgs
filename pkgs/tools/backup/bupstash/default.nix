@@ -29,5 +29,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ andrewchambers ];
+    mainProgram = "bupstash";
   };
 }
