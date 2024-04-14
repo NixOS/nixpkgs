@@ -8,7 +8,7 @@ let
 in
 {
   ###### interface
-  options.services.i2p.enable = mkEnableOption (lib.mdDoc "I2P router");
+  options.services.i2p.enable = mkEnableOption "I2P router";
 
   ###### implementation
   config = mkIf cfg.enable {

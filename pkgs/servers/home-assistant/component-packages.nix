@@ -949,7 +949,7 @@
     "digital_loggers" = ps: with ps; [
     ];
     "digital_ocean" = ps: with ps; [
-      digital-ocean
+      python-digitalocean
     ];
     "directv" = ps: with ps; [
       directv

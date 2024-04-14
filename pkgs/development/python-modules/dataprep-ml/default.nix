@@ -27,7 +27,7 @@ let
 in
 buildPythonPackage rec {
   pname = "dataprep-ml";
-  version = "0.0.22";
+  version = "0.0.23";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "dataprep_ml";
     inherit version;
-    hash = "sha256-umSL5E6yLwjFwhIprCySHNaPKeESwGGzgInZMPNBMcs=";
+    hash = "sha256-NYlKLdV2xZPODXpHvaFB8cRFTdCndl3UOd6bCfNbsZo=";
   };
 
   pythonRelaxDeps = [

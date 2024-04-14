@@ -21,15 +21,15 @@ let
     src = fetchFromGitHub {
       owner = "domenkozar";
       repo = "nix";
-      rev = "c5bbf14ecbd692eeabf4184cc8d50f79c2446549";
-      hash = "sha256-zvCqeUO2GLOm7jnU23G4EzTZR7eylcJN+HJ5svjmubI=";
+      rev = "ecd0af0c1f56de32cbad14daa1d82a132bf298f8";
+      hash = "sha256-92xq7eXlxIT5zFNccLpjiP7sdQqQI30Gyui2p/PfKZM=";
     };
     buildInputs = old.buildInputs ++ [ libgit2 ];
     doCheck = false;
     doInstallCheck = false;
   });
 
-  version = "1.0.3";
+  version = "1.0.4";
 in rustPlatform.buildRustPackage {
   pname = "devenv";
   inherit version;
@@ -38,10 +38,10 @@ in rustPlatform.buildRustPackage {
     owner = "cachix";
     repo = "devenv";
     rev = "v${version}";
-    hash = "sha256-fnJPqMFoWTYsPNEwbxTxO0h771vZKu+b5Ig4LJQcoRg=";
+    hash = "sha256-JODoFPcYKOr39dErx8JFSjeWKmO5PUsHJrF2VU6MFEg=";
   };
 
-  cargoHash = "sha256-Qckh7knX3sARMHgn+39ozQj8CnfyEQV4yjJPP2+v2SM=";
+  cargoHash = "sha256-//THEzW0OYEDSLrOELBaWnwjDbUc4jpwRDQfWJO/saA=";
 
   nativeBuildInputs = [ makeWrapper pkg-config ];
 

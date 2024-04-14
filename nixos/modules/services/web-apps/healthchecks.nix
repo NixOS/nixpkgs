@@ -26,8 +26,8 @@ let
 in
 {
   options.services.healthchecks = {
-    enable = mkEnableOption (lib.mdDoc "healthchecks") // {
-      description = lib.mdDoc ''
+    enable = mkEnableOption "healthchecks" // {
+      description = ''
         Enable healthchecks.
         It is expected to be run behind a HTTP reverse proxy.
       '';
@@ -38,7 +38,7 @@ in
     user = mkOption {
       default = defaultUser;
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         User account under which healthchecks runs.
 
         ::: {.note}
@@ -52,7 +52,7 @@ in
     group = mkOption {
       default = defaultUser;
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         Group account under which healthchecks runs.
 
         ::: {.note}
@@ -66,19 +66,19 @@ in
     listenAddress = mkOption {
       type = types.str;
       default = "localhost";
-      description = lib.mdDoc "Address the server will listen on.";
+      description = "Address the server will listen on.";
     };
 
     port = mkOption {
       type = types.port;
       default = 8000;
-      description = lib.mdDoc "Port the server will listen on.";
+      description = "Port the server will listen on.";
     };
 
     dataDir = mkOption {
       type = types.str;
       default = "/var/lib/healthchecks";
-      description = lib.mdDoc ''
+      description = ''
         The directory used to store all data for healthchecks.
 
         ::: {.note}
@@ -90,7 +90,7 @@ in
     };
 
     settings = lib.mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Environment variables which are read by healthchecks `(local)_settings.py`.
 
         Settings which are explicitly covered in options below, are type-checked and/or transformed
@@ -116,26 +116,26 @@ in
           ALLOWED_HOSTS = lib.mkOption {
             type = types.listOf types.str;
             default = [ "*" ];
-            description = lib.mdDoc "The host/domain names that this site can serve.";
+            description = "The host/domain names that this site can serve.";
             apply = lib.concatStringsSep ",";
           };
 
           SECRET_KEY_FILE = mkOption {
             type = types.path;
-            description = lib.mdDoc "Path to a file containing the secret key.";
+            description = "Path to a file containing the secret key.";
           };
 
           DEBUG = mkOption {
             type = types.bool;
             default = false;
-            description = lib.mdDoc "Enable debug mode.";
+            description = "Enable debug mode.";
             apply = boolToPython;
           };
 
           REGISTRATION_OPEN = mkOption {
             type = types.bool;
             default = false;
-            description = lib.mdDoc ''
+            description = ''
               A boolean that controls whether site visitors can create new accounts.
               Set it to false if you are setting up a private Healthchecks instance,
               but it needs to be publicly accessible (so, for example, your cloud
@@ -149,7 +149,7 @@ in
           DB = mkOption {
             type = types.enum [ "sqlite" "postgres" "mysql" ];
             default = "sqlite";
-            description = lib.mdDoc "Database engine to use.";
+            description = "Database engine to use.";
           };
 
           DB_NAME = mkOption {
@@ -163,7 +163,7 @@ in
               then "''${config.${opt.dataDir}}/healthchecks.sqlite"
               else "hc"
             '';
-            description = lib.mdDoc "Database name.";
+            description = "Database name.";
           };
         };
       });

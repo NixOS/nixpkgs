@@ -5301,6 +5301,12 @@
       fingerprint = "D245 D484 F357 8CB1 7FD6  DA6B 67DB 29BF F3C9 6757";
     }];
   };
+  dragonginger = {
+    email = "dragonginger10@gmail.com";
+    github = "dragonginger10";
+    githubId = 20759788;
+    name = "JP Lippold";
+  };
   dramaturg = {
     email = "seb@ds.ag";
     github = "dramaturg";
@@ -13973,6 +13979,10 @@
     githubId = 56316606;
     name = "Amneesh Singh";
   };
+  nayala = {
+    name = "Nia";
+    matrix = "@fly:asra.gr";
+  };
   nazarewk = {
     name = "Krzysztof Nazarewski";
     matrix = "@nazarewk:matrix.org";
@@ -19241,6 +19251,12 @@
     github = "suominen";
     githubId = 1939855;
     name = "Kimmo Suominen";
+  };
+  supa = {
+    email = "supa.codes@gmail.com";
+    github = "0Supa";
+    githubId = 36031171;
+    name = "Supa";
   };
   superbo = {
     email = "supernbo@gmail.com";

@@ -2973,8 +2973,6 @@ self: super: with self; {
 
   diffusers = callPackage ../development/python-modules/diffusers { };
 
-  digital-ocean = callPackage ../development/python-modules/digitalocean { };
-
   digi-xbee = callPackage ../development/python-modules/digi-xbee { };
 
   dill = callPackage ../development/python-modules/dill { };
@@ -9844,6 +9842,8 @@ self: super: with self; {
 
   pyhumps = callPackage ../development/python-modules/pyhumps { };
 
+  pyindego = callPackage ../development/python-modules/pyindego { };
+
   pyinstaller-versionfile = callPackage ../development/python-modules/pyinstaller-versionfile { };
 
   pyisemail = callPackage ../development/python-modules/pyisemail { };
@@ -12195,6 +12195,8 @@ self: super: with self; {
 
   python-didl-lite = callPackage ../development/python-modules/python-didl-lite { };
 
+  python-digitalocean = callPackage ../development/python-modules/python-digitalocean { };
+
   python-docx = callPackage ../development/python-modules/python-docx { };
 
   python-doi = callPackage ../development/python-modules/python-doi { };
@@ -13647,6 +13649,8 @@ self: super: with self; {
   setuptools-trial = callPackage ../development/python-modules/setuptools-trial { };
 
   seventeentrack = callPackage ../development/python-modules/seventeentrack { };
+
+  sev-snp-measure = callPackage ../development/python-modules/sev-snp-measure { };
 
   sexpdata = callPackage ../development/python-modules/sexpdata { };
 

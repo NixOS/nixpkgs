@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mdDoc mkEnableOption mkIf mkRenamedOptionModule teams;
+  inherit (lib) mkEnableOption mkIf mkRenamedOptionModule teams;
 in
 
 {
@@ -23,10 +23,10 @@ in
   ];
 
   options = {
-    services.gnome.gnome-browser-connector.enable = mkEnableOption (mdDoc ''
+    services.gnome.gnome-browser-connector.enable = mkEnableOption ''
       native host connector for the GNOME Shell browser extension, a DBus service
       allowing to install GNOME Shell extensions from a web browser
-    '');
+    '';
   };
 
   config = mkIf config.services.gnome.gnome-browser-connector.enable {

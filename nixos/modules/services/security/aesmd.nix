@@ -19,16 +19,16 @@ let
 in
 {
   options.services.aesmd = {
-    enable = mkEnableOption (lib.mdDoc "Intel's Architectural Enclave Service Manager (AESM) for Intel SGX");
+    enable = mkEnableOption "Intel's Architectural Enclave Service Manager (AESM) for Intel SGX";
     debug = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc "Whether to build the PSW package in debug mode.";
+      description = "Whether to build the PSW package in debug mode.";
     };
     environment = mkOption {
       type = with types; attrsOf str;
       default = { };
-      description = mdDoc "Additional environment variables to pass to the AESM service.";
+      description = "Additional environment variables to pass to the AESM service.";
       # Example environment variable for `sgx-azure-dcap-client` provider library
       example = {
         AZDCAP_COLLATERAL_VERSION = "v2";
@@ -39,23 +39,23 @@ in
       type = with types; nullOr path;
       default = null;
       example = literalExpression "pkgs.sgx-azure-dcap-client";
-      description = lib.mdDoc "Custom quote provider library to use.";
+      description = "Custom quote provider library to use.";
     };
     settings = mkOption {
-      description = lib.mdDoc "AESM configuration";
+      description = "AESM configuration";
       default = { };
       type = types.submodule {
         options.whitelistUrl = mkOption {
           type = with types; nullOr str;
           default = null;
           example = "http://whitelist.trustedservices.intel.com/SGX/LCWL/Linux/sgx_white_list_cert.bin";
-          description = lib.mdDoc "URL to retrieve authorized Intel SGX enclave signers.";
+          description = "URL to retrieve authorized Intel SGX enclave signers.";
         };
         options.proxy = mkOption {
           type = with types; nullOr str;
           default = null;
           example = "http://proxy_url:1234";
-          description = lib.mdDoc "HTTP network proxy.";
+          description = "HTTP network proxy.";
         };
         options.proxyType = mkOption {
           type = with types; nullOr (enum [ "default" "direct" "manual" ]);
@@ -64,7 +64,7 @@ in
             if (config.${opt.settings}.proxy != null) then "manual" else null
           '';
           example = "default";
-          description = lib.mdDoc ''
+          description = ''
             Type of proxy to use. The `default` uses the system's default proxy.
             If `direct` is given, uses no proxy.
             A value of `manual` uses the proxy from
@@ -75,7 +75,7 @@ in
           type = with types; nullOr (enum [ "ecdsa_256" "epid_linkable" "epid_unlinkable" ]);
           default = null;
           example = "ecdsa_256";
-          description = lib.mdDoc "Attestation quote type.";
+          description = "Attestation quote type.";
         };
       };
     };

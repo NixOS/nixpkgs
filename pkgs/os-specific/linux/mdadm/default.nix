@@ -12,6 +12,11 @@ stdenv.mkDerivation rec {
   patches = [
     ./no-self-references.patch
     ./fix-hardcoded-mapdir.patch
+    # Fixes build on musl
+    (fetchurl {
+      url = "https://raw.githubusercontent.com/void-linux/void-packages/e58d2b17d3c40faffc0d426aab00184f28d9dafa/srcpkgs/mdadm/patches/musl.patch";
+      hash = "sha256-TIcQs+8RM5Q6Z8MHkI50kaJd7f9WdS/EVI16F7b2+SA=";
+    })
   ];
 
   makeFlags = [

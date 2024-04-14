@@ -32,7 +32,7 @@ in {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enable Netbox.
 
         This module requires a reverse proxy that serves `/static` separately.
@@ -41,7 +41,7 @@ in {
     };
 
     settings = lib.mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Configuration options to set in `configuration.py`.
         See the [documentation](https://docs.netbox.dev/en/stable/configuration/) for more possible options.
       '';
@@ -55,7 +55,7 @@ in {
           ALLOWED_HOSTS = lib.mkOption {
             type = with lib.types; listOf str;
             default = ["*"];
-            description = lib.mdDoc ''
+            description = ''
               A list of valid fully-qualified domain names (FQDNs) and/or IP
               addresses that can be used to reach the NetBox service.
             '';
@@ -67,7 +67,7 @@ in {
     listenAddress = lib.mkOption {
       type = lib.types.str;
       default = "[::1]";
-      description = lib.mdDoc ''
+      description = ''
         Address the server will listen on.
       '';
     };
@@ -91,7 +91,7 @@ in {
         then pkgs.netbox_3_5
         else pkgs.netbox_3_3;
       '';
-      description = lib.mdDoc ''
+      description = ''
         NetBox package to use.
       '';
     };
@@ -99,7 +99,7 @@ in {
     port = lib.mkOption {
       type = lib.types.port;
       default = 8001;
-      description = lib.mdDoc ''
+      description = ''
         Port the server will listen on.
       '';
     };
@@ -110,7 +110,7 @@ in {
       defaultText = lib.literalExpression ''
         python3Packages: with python3Packages; [];
       '';
-      description = lib.mdDoc ''
+      description = ''
         List of plugin packages to install.
       '';
     };
@@ -118,14 +118,14 @@ in {
     dataDir = lib.mkOption {
       type = lib.types.str;
       default = "/var/lib/netbox";
-      description = lib.mdDoc ''
+      description = ''
         Storage path of netbox.
       '';
     };
 
     secretKeyFile = lib.mkOption {
       type = lib.types.path;
-      description = lib.mdDoc ''
+      description = ''
         Path to a file containing the secret key.
       '';
     };
@@ -133,7 +133,7 @@ in {
     extraConfig = lib.mkOption {
       type = lib.types.lines;
       default = "";
-      description = lib.mdDoc ''
+      description = ''
         Additional lines of configuration appended to the `configuration.py`.
         See the [documentation](https://docs.netbox.dev/en/stable/configuration/) for more possible options.
       '';
@@ -142,7 +142,7 @@ in {
     enableLdap = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enable LDAP-Authentication for Netbox.
 
         This requires a configuration file being pass through `ldapConfigPath`.
@@ -152,7 +152,7 @@ in {
     ldapConfigPath = lib.mkOption {
       type = lib.types.path;
       default = "";
-      description = lib.mdDoc ''
+      description = ''
         Path to the Configuration-File for LDAP-Authentication, will be loaded as `ldap_config.py`.
         See the [documentation](https://netbox.readthedocs.io/en/stable/installation/6-ldap/#configuration) for possible options.
       '';
@@ -185,7 +185,7 @@ in {
     keycloakClientSecret = lib.mkOption {
       type = with lib.types; nullOr path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         File that contains the keycloak client secret.
       '';
     };

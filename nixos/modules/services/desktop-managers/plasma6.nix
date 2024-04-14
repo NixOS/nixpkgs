@@ -20,13 +20,13 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Enable the Plasma 6 (KDE 6) desktop environment.";
+        description = "Enable the Plasma 6 (KDE 6) desktop environment.";
       };
 
       enableQt5Integration = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Enable Qt 5 integration (theming, etc). Disable for a pure Qt 6 system.";
+        description = "Enable Qt 5 integration (theming, etc). Disable for a pure Qt 6 system.";
       };
 
       notoPackage = mkPackageOptionMD pkgs "Noto fonts - used for UI by default" {
@@ -36,7 +36,7 @@ in {
     };
 
     environment.plasma6.excludePackages = mkOption {
-      description = lib.mdDoc "List of default packages to exclude from the configuration";
+      description = "List of default packages to exclude from the configuration";
       type = types.listOf types.package;
       default = [];
       example = literalExpression "[ pkgs.kdePackages.elisa ]";

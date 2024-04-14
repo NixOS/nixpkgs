@@ -48,7 +48,7 @@ in
       mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           This option enables Podman, a daemonless container engine for
           developing, managing, and running OCI Containers on your Linux System.
 
@@ -59,7 +59,7 @@ in
     dockerSocket.enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Make the Podman socket available in place of the Docker socket, so
         Docker tools can find the Podman socket.
 
@@ -73,7 +73,7 @@ in
     dockerCompat = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Create an alias mapping {command}`docker` to {command}`podman`.
       '';
     };
@@ -81,7 +81,7 @@ in
     enableNvidia = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         **Deprecated**, please use virtualisation.containers.cdi.dynamic.nvidia.enable instead.
 
         Enable use of NVidia GPUs from within podman containers.
@@ -96,7 +96,7 @@ in
           pkgs.gvisor
         ]
       '';
-      description = lib.mdDoc ''
+      description = ''
         Extra packages to be installed in the Podman wrapper.
       '';
     };
@@ -105,7 +105,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to periodically prune Podman resources. If enabled, a
           systemd timer will run `podman system prune -f`
           as specified by the `dates` option.
@@ -116,7 +116,7 @@ in
         type = types.listOf types.str;
         default = [];
         example = [ "--all" ];
-        description = lib.mdDoc ''
+        description = ''
           Any additional flags passed to {command}`podman system prune`.
         '';
       };
@@ -124,7 +124,7 @@ in
       dates = mkOption {
         default = "weekly";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Specification (in the format described by
           {manpage}`systemd.time(7)`) of the time at
           which the prune will occur.
@@ -136,7 +136,7 @@ in
       type = types.package;
       default = podmanPackage;
       internal = true;
-      description = lib.mdDoc ''
+      description = ''
         The final Podman package (including extra packages).
       '';
     };
@@ -145,7 +145,7 @@ in
       type = json.type;
       default = { };
       example = lib.literalExpression "{ dns_enabled = true; }";
-      description = lib.mdDoc ''
+      description = ''
         Settings for podman's default network.
       '';
     };

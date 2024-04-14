@@ -28,7 +28,7 @@ in
   };
 
   options.services.pretalx = {
-    enable = lib.mkEnableOption (lib.mdDoc "pretalx");
+    enable = lib.mkEnableOption "pretalx";
 
     package = lib.mkPackageOptionMD pkgs "pretalx" {};
 
@@ -56,7 +56,7 @@ in
         "--max-requests-jitter=50"
         "--log-level=info"
       ];
-      description = lib.mdDoc ''
+      description = ''
         Extra arguments to pass to gunicorn.
         See <https://docs.pretalx.org/administrator/installation.html#step-6-starting-pretalx-as-a-service> for details.
       '';
@@ -68,7 +68,7 @@ in
         type = lib.types.bool;
         default = true;
         example = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to set up celery as an asynchronous task runner.
         '';
       };
@@ -76,7 +76,7 @@ in
       extraArgs = lib.mkOption {
         type = with lib.types; listOf str;
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           Extra arguments to pass to celery.
 
           See <https://docs.celeryq.dev/en/stable/reference/cli.html#celery-worker> for more info.
@@ -90,7 +90,7 @@ in
         type = lib.types.bool;
         default = true;
         example = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to set up an nginx virtual host.
         '';
       };
@@ -98,7 +98,7 @@ in
       domain = lib.mkOption {
         type = lib.types.str;
         example = "talks.example.com";
-        description = lib.mdDoc ''
+        description = ''
           The domain name under which to set up the virtual host.
         '';
       };
@@ -108,7 +108,7 @@ in
       type = lib.types.bool;
       default = true;
       example = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to automatically set up the database on the local DBMS instance.
 
         Currently only supported for PostgreSQL. Not required for sqlite.
@@ -125,7 +125,7 @@ in
                 "postgresql"
               ];
               default = "postgresql";
-              description = lib.mdDoc ''
+              description = ''
                 Database backend to use.
 
                 Currently only PostgreSQL gets tested, and as such we don't support any other DBMS.
@@ -143,7 +143,7 @@ in
                 else if config.services.pretalx.settings.database.backend == "mysql" then "/run/mysqld/mysqld.sock"
                 else null
               '';
-              description = lib.mdDoc ''
+              description = ''
                 Database host or socket path.
               '';
             };
@@ -151,7 +151,7 @@ in
             name = lib.mkOption {
               type = lib.types.str;
               default = "pretalx";
-              description = lib.mdDoc ''
+              description = ''
                 Database name.
               '';
             };
@@ -159,7 +159,7 @@ in
             user = lib.mkOption {
               type = lib.types.str;
               default = "pretalx";
-              description = lib.mdDoc ''
+              description = ''
                 Database username.
               '';
             };
@@ -169,14 +169,14 @@ in
             data = lib.mkOption {
               type = lib.types.path;
               default = "/var/lib/pretalx";
-              description = lib.mdDoc ''
+              description = ''
                 Base path for all other storage paths.
               '';
             };
             logs = lib.mkOption {
               type = lib.types.path;
               default = "/var/log/pretalx";
-              description = lib.mdDoc ''
+              description = ''
                 Path to the log directory, that pretalx logs message to.
               '';
             };
@@ -185,7 +185,7 @@ in
               default = "${cfg.package.static}/";
               defaultText = lib.literalExpression "\${config.services.pretalx.package}.static}/";
               readOnly = true;
-              description = lib.mdDoc ''
+              description = ''
                 Path to the directory that contains static files.
               '';
             };
@@ -198,7 +198,7 @@ in
               defaultText = lib.literalExpression ''
                 optionalString config.services.pretalx.celery.enable "redis+socket://''${config.services.redis.servers.pretalx.unixSocket}?virtual_host=1"
               '';
-              description = lib.mdDoc ''
+              description = ''
                 URI to the celery backend used for the asynchronous job queue.
               '';
             };
@@ -209,7 +209,7 @@ in
               defaultText = lib.literalExpression ''
                 optionalString config.services.pretalx.celery.enable "redis+socket://''${config.services.redis.servers.pretalx.unixSocket}?virtual_host=2"
               '';
-              description = lib.mdDoc ''
+              description = ''
                 URI to the celery broker used for the asynchronous job queue.
               '';
             };
@@ -222,7 +222,7 @@ in
               defaultText = lib.literalExpression ''
                 "unix://''${config.services.redis.servers.pretalx.unixSocket}?db=0"
               '';
-              description = lib.mdDoc ''
+              description = ''
                 URI to the redis server, used to speed up locking, caching and session storage.
               '';
             };
@@ -231,7 +231,7 @@ in
               type = lib.types.bool;
               default = true;
               example = false;
-              description = lib.mdDoc ''
+              description = ''
                 Whether to use redis as the session storage.
               '';
             };
@@ -243,7 +243,7 @@ in
               default = "https://${cfg.nginx.domain}";
               defaultText = lib.literalExpression "https://\${config.services.pretalx.nginx.domain}";
               example = "https://talks.example.com";
-              description = lib.mdDoc ''
+              description = ''
                 The base URI below which your pretalx instance will be reachable.
               '';
             };
@@ -251,7 +251,7 @@ in
         };
       };
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         pretalx configuration as a Nix attribute set. All settings can also be passed
         from the environment.
 
