@@ -964,6 +964,7 @@ let
     "data_table" # fails to rename shared library before check
     "coMethDMR" # tries to connect to ExperimentHub
     "multiMiR" # tries to connect to DB
+    "snapcount" # tries to connect to snaptron.cs.jhu.edu
   ];
 
   # Packages which cannot be installed due to lack of dependencies or other reasons.
