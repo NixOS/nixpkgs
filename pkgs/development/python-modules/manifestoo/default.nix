@@ -35,7 +35,7 @@ buildPythonPackage rec {
     textual
     typer
   ]
-  ++ typer.passthru.optional-dependencies.all
+  ++ typer.passthru.optional-dependencies.standard
   ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   passthru.updateScript = nix-update-script { };
