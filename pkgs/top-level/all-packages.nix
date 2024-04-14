@@ -13105,8 +13105,6 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit Carbon CoreAudio CoreWLAN CoreVideo DisplayServices IOKit MediaRemote SkyLight;
   };
 
-  sketchybar-app-font = callPackage ../data/fonts/sketchybar-app-font { };
-
   skippy-xd = callPackage ../tools/X11/skippy-xd { };
 
   sks = callPackage ../servers/sks {
