@@ -41287,8 +41287,6 @@ with pkgs;
 
   sirikali = libsForQt5.callPackage ../tools/security/sirikali { };
 
-  wttrbar = callPackage ../applications/misc/wttrbar { };
-
   wpm = callPackage ../applications/misc/wpm { };
 
   weggli = callPackage ../tools/security/weggli { };
