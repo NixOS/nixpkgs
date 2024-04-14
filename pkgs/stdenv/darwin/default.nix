@@ -174,9 +174,6 @@ let
         overrides = self: super: (overrides self super) // {
           fetchurl = thisStdenv.fetchurlBoot;
           fetchpatch = super.fetchpatch.override { inherit (self) fetchurl; };
-          fetchgit = super.fetchgit.override {
-            git = super.git.override { curl = bootstrapTools; };
-          };
           fetchzip = super.fetchzip.override { inherit (self) fetchurl; };
         };
       };
@@ -505,7 +502,8 @@ in
       inherit (prevStage) ccWrapperStdenv
         coreutils gnugrep;
 
-      binutils-unwrapped = builtins.throw "nothing in the bootstrap should depend on GNU binutils";
+      binutils-unwrapped = builtins.throw "nothing in the Darwin bootstrap should depend on GNU binutils";
+      curl = builtins.throw "nothing in the Darwin bootstrap can depend on curl";
 
       # Use this stage’s CF to build CMake. It’s required but can’t be included in the stdenv.
       cmake = self.cmakeMinimal;
@@ -634,7 +632,7 @@ in
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
         autoconf automake bash binutils binutils-unwrapped bison brotli cmake cmakeMinimal
-        coreutils cpio cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu
+        coreutils cpio curl cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu
         libedit libffi libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4
         ncurses nghttp2 ninja openldap openssh openssl patchutils pbzx perl pkg-config
         python3Minimal scons sed serf sharutils sqlite subversion texinfo unzip which xz
@@ -727,7 +725,7 @@ in
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
         atf autoconf automake bash binutils binutils-unwrapped bison brotli cmake cmakeMinimal
-        cpio cyrus_sasl db ed expat flex gettext gmp groff icu kyua libedit libffi libiconv
+        cpio curl cyrus_sasl db ed expat flex gettext gmp groff icu kyua libedit libffi libiconv
         libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4 meson ncurses nghttp2 ninja
         openldap openssh openssl patchutils pbzx perl pkg-config python3 python3Minimal
         scons sed serf sharutils sqlite subversion sysctl texinfo unzip which xz zlib zstd;
@@ -830,7 +828,7 @@ in
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
         atf autoconf automake binutils-unwrapped bison brotli cmake cmakeMinimal coreutils
-        cpio cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu kyua libedit libffi
+        cpio curl cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu kyua libedit libffi
         libiconv libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4 meson ncurses nghttp2
         ninja openbsm openldap openpam openssh openssl patchutils pbzx perl pkg-config
         python3 python3Minimal scons serf sqlite subversion sysctl texinfo unzip which xz
@@ -931,7 +929,7 @@ in
 
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
-        atf autoconf automake bash bison brotli cmake cmakeMinimal coreutils cpio
+        atf autoconf automake bash bison brotli cmake cmakeMinimal coreutils cpio curl
         cyrus_sasl db ed expat flex gettext gmp gnugrep groff kyua libedit libidn2 libkrb5
         libssh2 libtool libunistring m4 meson ncurses nghttp2 ninja openbsm openldap openpam
         openssh openssl patchutils pbzx perl pkg-config python3 python3Minimal scons serf
@@ -1048,7 +1046,7 @@ in
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
         autoconf automake bash binutils binutils-unwrapped bison brotli cmake cmakeMinimal
-        coreutils cpio cyrus_sasl db ed expat flex gettext gmp gnugrep groff libedit
+        coreutils cpio curl cyrus_sasl db ed expat flex gettext gmp gnugrep groff libedit
         libidn2 libkrb5 libssh2 libtool libunistring m4 meson nghttp2 ninja openbsm openldap
         openpam openssh openssl patchutils pbzx perl pkg-config python3 python3Minimal scons
         sed serf sharutils sqlite subversion sysctl texinfo unzip which xz zstd
@@ -1129,7 +1127,7 @@ in
 
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
-        autoconf automake bash bison cmake cmakeMinimal cyrus_sasl db expat flex groff
+        autoconf automake bash bison cmake cmakeMinimal curl cyrus_sasl db expat flex groff
         libedit libtool m4 meson ninja openldap openssh patchutils perl pkg-config python3 scons
         serf sqlite subversion sysctl texinfo unzip which
 
@@ -1457,6 +1455,7 @@ in
     # Make sure these evaluate since they were disabled explicitly in the bootstrap.
     assert isBuiltByNixpkgsCompiler prevStage.binutils-unwrapped;
     assert            isFromNixpkgs prevStage.binutils-unwrapped.src;
+    assert isBuiltByNixpkgsCompiler prevStage.curl;
 
     { inherit (prevStage) config overlays stdenv; })
 ]
