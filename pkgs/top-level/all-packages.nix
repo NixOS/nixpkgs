@@ -36070,8 +36070,6 @@ with pkgs;
 
   sumokoin = callPackage ../applications/blockchains/sumokoin { };
 
-  solana-validator = callPackage ../applications/blockchains/solana-validator { };
-
   snarkos = callPackage ../applications/blockchains/snarkos {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
