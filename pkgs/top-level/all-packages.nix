@@ -19305,7 +19305,7 @@ with pkgs;
   modd = callPackage ../development/tools/modd { };
 
   mold = callPackage ../development/tools/mold {
-    stdenv = if stdenv.isDarwin then overrideLibcxx darwin.apple_sdk_11_0.llvmPackages_16.stdenv else stdenv;
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     tbb = tbb_2021_11;
   };
 
