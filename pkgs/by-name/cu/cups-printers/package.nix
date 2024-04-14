@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,27 +16,26 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-HTR9t9ElQmCzJfdWyu+JQ8xBfDNpXl8XtNsJxGSfBXk=";
   };
 
-  pythonRelaxDeps = [
-    "validators"
-  ];
+  pythonRelaxDeps = [ "validators" ];
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    pycups
-    typer
-    validators
-  ] ++ typer.optional-dependencies.standard;
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      pycups
+      typer
+      validators
+    ]
+    ++ typer.optional-dependencies.standard;
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "cups_printers"
-  ];
+  pythonImportsCheck = [ "cups_printers" ];
 
   meta = with lib; {
     description = "Tool for interacting with a CUPS server";
