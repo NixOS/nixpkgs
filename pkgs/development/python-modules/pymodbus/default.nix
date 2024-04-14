@@ -46,7 +46,7 @@ buildPythonPackage rec {
       prompt-toolkit
       pygments
       click
-    ] ++ typer.optional-dependencies.all;
+    ] ++ typer.optional-dependencies.standard;
     serial = [ pyserial ];
   };
 
