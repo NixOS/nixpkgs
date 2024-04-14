@@ -4,7 +4,6 @@
 , makeDesktopItem
 , copyDesktopItems
 , libsForQt5
-, imagemagick
 , acpica-tools
 }:
 
