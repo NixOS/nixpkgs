@@ -31,7 +31,7 @@ let
         inherit (meta) longDescription homepage;
         description = "Software to turn the RTL2832U into a SDR receiver";
         license = licenses.gpl2Plus;
-        maintainers = with maintainers; [ bjornfor skovati ];
+        maintainers = with maintainers; [ bjornfor skovati Tungsten842 ];
         platforms = platforms.unix;
         mainProgram = "rtl_sdr";
       };
