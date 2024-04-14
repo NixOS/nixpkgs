@@ -1781,10 +1781,6 @@ with pkgs;
 
   dysk = callPackage ../tools/filesystems/dysk { };
 
-  fastfetch = callPackage ../tools/misc/fastfetch {
-    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-  };
-
   fscan = callPackage ../tools/security/fscan { };
 
   copier = callPackage ../tools/misc/copier { };
