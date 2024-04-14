@@ -70,7 +70,7 @@ buildPythonPackage rec {
     pyjwt
     pytz
     typer
-  ] ++ typer.optional-dependencies.all
+  ] ++ typer.optional-dependencies.standard
   ++ lib.optionals (pythonOlder "3.11") [
     async-timeout
   ];
