@@ -328,12 +328,12 @@ in
     assert isBuiltByBootstrapFilesCompiler prevStage.patchelf;
     stageFun prevStage {
       name = "bootstrap-stage-xgcc";
-      overrides = final: prev: {
+      overrides = self: super: {
         inherit (prevStage) ccWrapperStdenv coreutils gnugrep gettext bison texinfo zlib gnum4 perl patchelf;
         ${localSystem.libc} = getLibc prevStage;
-        gmp      = prev.gmp.override { cxx = false; };
+        gmp = super.gmp.override { cxx = false; };
         gcc-unwrapped =
-          (prev.gcc-unwrapped.override (commonGccOverrides // {
+          (super.gcc-unwrapped.override (commonGccOverrides // {
             # The most logical name for this package would be something like
             # "gcc-stage1".  Unfortunately "stage" is already reserved for the
             # layers of stdenv, so using "stage" in the name of this package
@@ -376,7 +376,7 @@ in
             #
             configureFlags = (a.configureFlags or []) ++ [
               "--with-native-system-header-dir=/include"
-              "--with-build-sysroot=${lib.getDev final.stdenv.cc.libc}"
+              "--with-build-sysroot=${lib.getDev self.stdenv.cc.libc}"
             ];
 
             # This is a separate phase because gcc assembles its phase scripts
