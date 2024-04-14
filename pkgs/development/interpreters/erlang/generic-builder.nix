@@ -1,6 +1,8 @@
 { pkgs
+, pkgsBuildBuild
 , lib
 , stdenv
+, callPackage
 , fetchFromGitHub
 , makeWrapper
 , gawk
@@ -12,6 +14,7 @@
 , openssl
 , perl
 , autoconf
+, zlib
 , openjdk11 ? null # javacSupport
 , unixODBC ? null # odbcSupport
 , libGL ? null
@@ -82,6 +85,8 @@ let
   inherit (lib) optional optionals optionalAttrs optionalString;
   wxPackages2 = if stdenv.isDarwin then [ wxGTK ] else wxPackages;
 
+  isCross = stdenv.hostPlatform != stdenv.buildPlatform;
+  hipeSupport = !isCross && enableHipe;
 in
 stdenv.mkDerivation ({
   # name is used instead of pname to
@@ -94,9 +99,16 @@ stdenv.mkDerivation ({
 
   inherit src version;
 
-  nativeBuildInputs = [ autoconf makeWrapper perl gnum4 libxslt libxml2 ];
+  nativeBuildInputs = [
+    autoconf
+    makeWrapper
+    libxml2
+  ]
+    ++ optional hipeSupport gnum4;
 
-  buildInputs = [ ncurses opensslPackage ]
+  depsBuildBuild = [ perl libxslt ] ++ optional isCross pkgsBuildBuild.beam_minimal.interpreters.erlang;
+
+  buildInputs = [ ncurses opensslPackage zlib ]
     ++ optionals wxSupport wxPackages2
     ++ optionals odbcSupport odbcPackages
     ++ optionals javacSupport javacPackages
@@ -109,12 +121,16 @@ stdenv.mkDerivation ({
   enableParallelBuilding = parallelBuild;
 
   postPatch = ''
+    substituteInPlace lib/wx/c_src/wxe_impl.cpp \
+      --replace 'temp > NULL' 'temp != NULL'
+
     patchShebangs make
+  '' + optionalString isCross ''
+    substituteInPlace erts/emulator/Makefile.in \
+      --replace '`utils/find_cross_ycf`' '${pkgsBuildBuild.beam_minimal.interpreters.erlang}/lib/erlang/erts-*/bin/yielding_c_fun'
+  '' + postPatch;
 
-    ${postPatch}
-  '';
-
-  preConfigure = ''
+  preConfigure = optionals (lib.strings.versionOlder version "22.0") ''
     ./otp_build autoconf
   '';
 
@@ -123,7 +139,7 @@ stdenv.mkDerivation ({
     ++ optional enableThreads "--enable-threads"
     ++ optional enableSmpSupport "--enable-smp-support"
     ++ optional enableKernelPoll "--enable-kernel-poll"
-    ++ optional enableHipe "--enable-hipe"
+    ++ optional hipeSupport "--enable-hipe"
     ++ optional javacSupport "--with-javac"
     ++ optional odbcSupport "--with-odbc=${unixODBC}"
     ++ optional wxSupport "--enable-wx"
@@ -131,6 +147,7 @@ stdenv.mkDerivation ({
     ++ optional stdenv.isDarwin "--enable-darwin-64bit"
     # make[3]: *** [yecc.beam] Segmentation fault: 11
     ++ optional (stdenv.isDarwin && stdenv.isx86_64) "--disable-jit"
+    ++ optional isCross "erl_xcomp_sysroot=${stdenv.cc.libc}"
     ++ configureFlags;
 
   # install-docs will generate and install manpages and html docs
