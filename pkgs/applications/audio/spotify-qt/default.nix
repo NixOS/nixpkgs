@@ -15,7 +15,7 @@ mkDerivation rec {
       owner = "kraxarn";
       repo = pname;
       rev = "v${version}";
-      sha256 = "sha256-coPYYLKC4E8snHx/GgV3Oy79Y9yvs/TeUBDoQZxO9Gs=";
+      sha256 = "sha256-Dm+ELHtYZGSzJSrERtvpuuV5cVZ9ah9WQ0iTTJqGqVg=";
    };
 
    buildInputs = [ libxcb qtbase qtsvg ];
