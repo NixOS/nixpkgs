@@ -9,7 +9,7 @@
 
 mkDerivation rec {
    pname = "spotify-qt";
-   version = "3.9";
+   version = "3.11";
 
    src = fetchFromGitHub {
       owner = "kraxarn";
