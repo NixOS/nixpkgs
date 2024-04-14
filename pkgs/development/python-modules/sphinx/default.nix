@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, pythonAtLeast
 , pythonOlder
 , fetchFromGitHub
 , isPyPy
@@ -121,6 +122,9 @@ buildPythonPackage rec {
     "test_isattributedescriptor"
     "test_methoddescriptor"
     "test_partialfunction"
+  ] ++ lib.optionals (pythonAtLeast "3.12") [
+    # https://github.com/sphinx-doc/sphinx/issues/12202 (Fixed in 7.3)
+    "test_enum_class"
   ];
 
   meta = {
