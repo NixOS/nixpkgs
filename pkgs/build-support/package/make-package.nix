@@ -152,13 +152,21 @@ let
   layers.withDeps =
     f: this: old:
     let
-      spy = lib.setFunctionArgs (args: { inherit args; }) (lib.functionArgs f);
+      fargs = lib.functionArgs f;
+      spy = lib.setFunctionArgs (args: { inherit args; }) (
+        lib.mapAttrs (
+          _k: _v:
+          # say we have a default, so that unknown attrs aren't a problem and
+          # they can be defined by a subsequent layer.
+          true
+        ) fargs
+      );
       # TODO: make callPackage a parameter?
       values = (callPackage spy { }).args;
       old2 = old // {
         deps = old.deps or { } // values;
       };
-      r = f (lib.mapAttrs (name: value: this.deps.${name}) values);
+      r = f (lib.mapAttrs (name: value: this.deps.${name}) fargs);
       r' = if lib.isList r then lib.composeManyExtensions r else r;
     in
     old2 // r' this old2;
