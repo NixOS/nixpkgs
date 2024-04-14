@@ -1,6 +1,7 @@
 { lib, stdenv, fetchFromGitHub
 , cmake
 , brotli, libev, nghttp3, quictls
+, CoreServices
 , withJemalloc ? false, jemalloc
 , curlHTTP3
 }:
@@ -20,7 +21,14 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ brotli libev nghttp3 quictls ] ++ lib.optional withJemalloc jemalloc;
+  buildInputs = [
+    brotli
+    libev
+    nghttp3
+    quictls
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreServices
+  ] ++ lib.optional withJemalloc jemalloc;
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_STATIC_LIB" false)
