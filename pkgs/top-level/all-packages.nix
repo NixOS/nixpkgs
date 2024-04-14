@@ -32305,7 +32305,7 @@ with pkgs;
   kid3-qt = qt6Packages.callPackage ../applications/audio/kid3 { withCLI = true; withKDE = false; withQt = true; };
   kid3 = kid3-kde;
 
-  kile = libsForQt5.callPackage ../applications/editors/kile { };
+  kile = callPackage ../applications/editors/kile { };
 
   kitsas = libsForQt5.callPackage ../applications/office/kitsas { };
 
