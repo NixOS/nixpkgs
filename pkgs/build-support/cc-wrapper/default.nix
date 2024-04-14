@@ -117,10 +117,10 @@ let
 
   useGccForLibs = useCcForLibs
     && libcxx == null
-    && !stdenvNoCC.targetPlatform.isDarwin
-    && !(stdenvNoCC.targetPlatform.useLLVM or false)
-    && !(stdenvNoCC.targetPlatform.useAndroidPrebuilt or false)
-    && !(stdenvNoCC.targetPlatform.isiOS or false)
+    && !targetPlatform.isDarwin
+    && !(targetPlatform.useLLVM or false)
+    && !(targetPlatform.useAndroidPrebuilt or false)
+    && !(targetPlatform.isiOS or false)
     && gccForLibs != null;
   gccForLibs_solib = getLib gccForLibs
     + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
@@ -247,17 +247,17 @@ let
     then cc.hardeningUnsupportedFlagsByTargetPlatform targetPlatform
     else (cc.hardeningUnsupportedFlags or []);
 
-  darwinPlatformForCC = optionalString stdenvNoCC.targetPlatform.isDarwin (
+  darwinPlatformForCC = optionalString targetPlatform.isDarwin (
     if (targetPlatform.darwinPlatform == "macos" && isGNU) then "macosx"
     else targetPlatform.darwinPlatform
   );
 
-  darwinMinVersion = optionalString stdenvNoCC.targetPlatform.isDarwin (
-    stdenvNoCC.targetPlatform.darwinMinVersion
+  darwinMinVersion = optionalString targetPlatform.isDarwin (
+    targetPlatform.darwinMinVersion
   );
 
-  darwinMinVersionVariable = optionalString stdenvNoCC.targetPlatform.isDarwin
-    stdenvNoCC.targetPlatform.darwinMinVersionVariable;
+  darwinMinVersionVariable = optionalString targetPlatform.isDarwin
+    targetPlatform.darwinMinVersionVariable;
 in
 
 assert includeFortifyHeaders' -> fortify-headers != null;
@@ -477,8 +477,8 @@ stdenvNoCC.mkDerivation {
     # break `useLLVM` into.)
     + optionalString (isClang
                       && targetPlatform.isLinux
-                      && !(stdenvNoCC.targetPlatform.useAndroidPrebuilt or false)
-                      && !(stdenvNoCC.targetPlatform.useLLVM or false)
+                      && !(targetPlatform.useAndroidPrebuilt or false)
+                      && !(targetPlatform.useLLVM or false)
                       && gccForLibs != null) (''
       echo "--gcc-toolchain=${gccForLibs}" >> $out/nix-support/cc-cflags
 
@@ -687,7 +687,7 @@ stdenvNoCC.mkDerivation {
       done
     ''
 
-    + optionalString stdenvNoCC.targetPlatform.isDarwin ''
+    + optionalString targetPlatform.isDarwin ''
         echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/cc-cflags
     ''
 
