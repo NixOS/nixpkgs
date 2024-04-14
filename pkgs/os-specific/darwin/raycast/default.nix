@@ -36,18 +36,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru = {
-    updateScript = writeShellApplication {
-      name = "raycast-update-script";
-      runtimeInputs = [ curl jq common-updater-scripts ];
-      text = ''
-        set -eo pipefail
-        url=$(curl --silent "https://releases.raycast.com/releases/latest?build=universal")
-        version=$(echo "$url" | jq -r '.version')
-        update-source-version raycast "$version" --file=./pkgs/os-specific/darwin/raycast/default.nix
-      '';
-    };
-  };
+  passthru.updateScript = lib.getExe (writeShellApplication {
+    name = "raycast-update-script";
+    runtimeInputs = [ curl jq common-updater-scripts ];
+    text = ''
+      set -eo pipefail
+      url=$(curl --silent "https://releases.raycast.com/releases/latest?build=universal")
+      version=$(echo "$url" | jq -r '.version')
+      update-source-version raycast "$version" --file=./pkgs/os-specific/darwin/raycast/default.nix
+    '';
+  });
 
   meta = with lib; {
     description = "Control your tools with a few keystrokes";
