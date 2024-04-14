@@ -83,6 +83,8 @@ let
     "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
   ] ++ lib.optionals (!enableShared) [
     "-DLIBCXX_ENABLE_SHARED=OFF"
+  ] ++ lib.optionals (lib.versionAtLeast release_version "18") [
+    "-DLIBCXX_INSTALL_MODULES=ON"
   ];
 
   cmakeFlags = [
