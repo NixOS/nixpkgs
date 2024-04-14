@@ -15,6 +15,7 @@
   libxcrypt,
   icu,
   ncurses,
+  readline,
   openssl,
   pkg-config,
   tcsh,
@@ -25,22 +26,22 @@
 # To test this package, go to $NIXPKGS/nixos/tests and run:
 #   $ $(nix-build -A driverInteractive yottadb.nix)/bin/nixos-test-driver -I
 #   >>> test_script()
+#
+# Or non-interactive:
+#   $ $(nix-build -A driver yottadb.nix)/bin/nixos-test-driver
 
 stdenv.mkDerivation rec {
   pname = "yottadb";
-  version = "1.38";
+  version = "1.38-git-8c7f5808";
 
   src = fetchFromGitLab {
     owner = "YottaDB";
     repo = "DB/YDB";
-    rev = "r${version}";
+    # rev = "r${version}";
+    rev = "8c7f5808a019fc6a9de21a0739a02eb29b752188";
     leaveDotGit = true;
-    hash = "sha256-k6kAIdPW75cqdT+dXqjlS8TpT2NjQYBTceDzMvWD/oE=";
+    hash = "sha256-sXzHZJ8MXxZwiRT27FKVRrCx/jF4ZA78L/hnoGPIzDE=";
   };
-
-  patches = [
-    ./01-gtmsecshr-relocate.patch
-  ];
 
   NIX_CFLAGS_COMPILE = "-DYDB_EXTERNAL_SECSHR_PARENT_DIR=\"${ydbSecRunDir}\"";
 
@@ -52,6 +53,7 @@ stdenv.mkDerivation rec {
     icu.dev
     makeWrapper
     ncurses
+    readline
     pkg-config
     tcsh
     zlib
@@ -71,6 +73,18 @@ stdenv.mkDerivation rec {
   # and any code patching makes this version number dirty.
   # Do not modify the git repo in any way!
   dontFixCmake = true;
+
+  enableAsan = false;
+
+  asanOptions = lib.concatStringsSep ":"
+    (lib.mapAttrsToList (x: y: "${x}=${if y then "1" else "0"}") {
+      detect_leaks = false;
+      disable_coredump = false;
+      unmap_shadow_on_exit = true;
+      abort_on_error = true;
+    });
+
+  cmakeFlags = if enableAsan then [ "-DENABLE_ASAN=ON" ] else [];
 
   preConfigure = ''
     # The following cannot be passed to cmakeFlags directly due
@@ -120,6 +134,9 @@ stdenv.mkDerivation rec {
     # NOTE: In future, consider using a patched versions
     # of `ydbinstall` and `configure` scripts while
     # adding Nix-specific changes on top of that.
+
+    # Only applicable when built with enableAsan=true
+    export ASAN_OPTIONS="${asanOptions}"
 
     mkdir -p $out/bin $out/lib $out/dist/utf8
     mkdir -p $out/lib/pkgconfig $out/include
