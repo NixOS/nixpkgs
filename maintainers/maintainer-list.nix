@@ -17591,6 +17591,12 @@
     githubId = 47582;
     name = "Samir Talwar";
   };
+  samiser = {
+    email = "github@me.samiser.xyz";
+    github = "Samiser";
+    githubId = 32001364;
+    name = "Samiser";
+  };
   samlich = {
     email = "nixos@samli.ch";
     github = "samlich";
