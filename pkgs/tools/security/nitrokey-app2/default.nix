@@ -1,7 +1,11 @@
 { lib
+, stdenv
 , python3
 , fetchPypi
 , fetchFromGitHub
+, wrapQtAppsHook
+, qtbase
+, qtwayland
 }:
 
 let
@@ -19,7 +23,7 @@ let
   };
 in python.pkgs.buildPythonApplication rec {
   pname = "nitrokey-app2";
-  version = "2.1.5";
+  version = "2.2.2";
   pyproject = true;
 
   disabled = python.pythonOlder "3.9";
@@ -28,7 +32,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "Nitrokey";
     repo = "nitrokey-app2";
     rev = "v${version}";
-    hash = "sha256-mR13zUgCdNS09EnpGLrnOnoIn3p6ZM/0fHKg0OUMWj4=";
+    hash = "sha256-MiyfmsrKZRoe7YMEjR1LHPesfJh6+dcSydoEAgrALJ8=";
   };
 
   # https://github.com/Nitrokey/nitrokey-app2/issues/152
@@ -41,6 +45,11 @@ in python.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python.pkgs; [
     poetry-core
+    wrapQtAppsHook
+  ];
+
+  buildInputs = [ qtbase ] ++ lib.optionals stdenv.isLinux [
+    qtwayland
   ];
 
   propagatedBuildInputs = with python.pkgs; [
