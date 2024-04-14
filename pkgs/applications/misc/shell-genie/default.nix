@@ -33,7 +33,7 @@ buildPythonPackage rec {
     rich
     shellingham
     typer
-  ] ++ typer.optional-dependencies.all;
+  ] ++ typer.optional-dependencies.standard;
 
   # No tests available
   doCheck = false;
