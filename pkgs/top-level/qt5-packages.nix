@@ -293,9 +293,7 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   yuview = callPackage ../applications/video/yuview { };
 }) // lib.optionalAttrs pkgs.config.allowAliases {
-  # Convert to a throw on 01-01-2023.
-  # Warnings show up in various cli tool outputs, throws do not.
-  # Remove completely before 24.05
-  overrideScope' = lib.warn "libsForQt5 now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\"." self.overrideScope;
+  # Remove completely before 24.11
+  overrideScope' = builtins.throw "libsForQt5 now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\".";
 }));
 }
