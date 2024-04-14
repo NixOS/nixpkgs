@@ -1,13 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, Carbon
-, Cocoa
-, testers
-, nix-update-script
+{
+  lib,
+  overrideSDK,
+  stdenv,
+  darwin,
+  fetchFromGitHub,
+  testers,
+  nix-update-script,
 }:
+let
+  inherit (darwin.apple_sdk_11_0.frameworks) Carbon Cocoa;
 
-stdenv.mkDerivation (finalAttrs: {
+  stdenv' = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+in
+stdenv'.mkDerivation (finalAttrs: {
   pname = "skhd";
   version = "0.3.9";
 
@@ -23,9 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     Cocoa
   ];
 
-  makeFlags = [
-    "BUILD_PATH=$(out)/bin"
-  ];
+  makeFlags = [ "BUILD_PATH=$(out)/bin" ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
 
@@ -49,7 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/koekeishiya/skhd";
     license = lib.licenses.mit;
     mainProgram = "skhd";
-    maintainers = with lib.maintainers; [ cmacrae lnl7 periklis khaneliman ];
+    maintainers = with lib.maintainers; [
+      cmacrae
+      lnl7
+      periklis
+      khaneliman
+    ];
     platforms = lib.platforms.darwin;
   };
 })
