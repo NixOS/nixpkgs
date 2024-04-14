@@ -41,7 +41,7 @@ buildPythonPackage rec {
     torch
     tqdm
     typer
-  ] ++ typer.passthru.optional-dependencies.all;
+  ] ++ typer.optional-dependencies.standard;
 
   nativeCheckInputs = [ pytestCheckHook matplotlib parameterized ];
   disabledTests = [
