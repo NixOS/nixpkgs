@@ -21,6 +21,7 @@
 , nix-update-script
 , ocl-icd
 , opencl-headers
+, overrideSDK
 , pcre
 , pcre2
 , pkg-config
@@ -40,8 +41,10 @@
 , waylandSupport ? true
 , x11Support ? true
 }:
-
-stdenv.mkDerivation (finalAttrs: {
+let
+  stdenv' = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+in
+stdenv'.mkDerivation (finalAttrs: {
   pname = "fastfetch";
   version = "2.9.2";
 
