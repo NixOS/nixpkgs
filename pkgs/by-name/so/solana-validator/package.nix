@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , lib
 , rustPlatform
+, installShellFiles
 , pkg-config
 , darwin
 , udev
@@ -28,7 +29,9 @@
     "solana-net-shaper"
     "solana-validator"
     "cargo-build-bpf"
+    "cargo-build-sbf"
     "cargo-test-bpf"
+    "cargo-test-sbf"
     "solana-dos"
     "solana-install-init"
     "solana-stake-accounts"
@@ -73,7 +76,7 @@ rustPlatform.buildRustPackage rec {
   # weird errors. see https://github.com/NixOS/nixpkgs/issues/52447#issuecomment-852079285
   # LLVM_CONFIG_PATH = "${llvm}/bin/llvm-config";
 
-  nativeBuildInputs = [ pkg-config protobuf rustfmt perl rustPlatform.bindgenHook ];
+  nativeBuildInputs = [ installShellFiles pkg-config protobuf rustfmt perl rustPlatform.bindgenHook ];
   buildInputs =
     [ openssl zlib libclang hidapi ] ++ (lib.optionals stdenv.isLinux [ udev ])
     ++ lib.optionals stdenv.isDarwin [ Security System Libsystem libcxx ];
@@ -95,8 +98,21 @@ rustPlatform.buildRustPackage rec {
     LDFLAGS = "-L${lib.getLib libcxx}/lib";
   };
 
+  postInstall = ''
+    installShellCompletion --cmd solana \
+      --bash <($out/bin/solana completion --shell bash) \
+      --fish <($out/bin/solana completion --shell fish) \
+      --zsh  <($out/bin/solana completion --shell zsh)
+
+    mkdir -p $out/bin/sdk/bpf
+    cp -a ./sdk/bpf/* $out/bin/sdk/bpf/
+
+    mkdir -p $out/bin/sdk/sbf
+    cp -a ./sdk/sbf/* $out/bin/sdk/sbf/
+  '';
+
   meta = with lib; {
-    description = "Web-Scale Blockchain for fast, secure, scalable, decentralized apps and marketplaces. ";
+    description = "Web-Scale Blockchain for fast, secure, scalable, decentralized apps and marketplaces";
     homepage = "https://solana.com";
     license = licenses.asl20;
     maintainers = with maintainers; [ adjacentresearch ];
