@@ -389,6 +389,7 @@ stdenv.mkDerivation (rec {
   nativeBuildInputs = [
     perl autoconf automake m4 python3
     ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
+    bootPkgs.ghc-settings-edit
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     autoSignDarwinBinariesHook
   ] ++ lib.optionals enableDocs [
@@ -436,12 +437,15 @@ stdenv.mkDerivation (rec {
 
   postInstall = ''
     # Make the installed GHC use the host platform's tools.
-    sed -i $out/lib/${targetPrefix}${passthru.haskellCompilerName}/settings \
-      -e "s!$CC!${installCC}/bin/${installCC.targetPrefix}cc!g" \
-      -e "s!$CXX!${installCC}/bin/${installCC.targetPrefix}c++!g" \
-      -e "s!$LD!${installCC.bintools}/bin/${installCC.bintools.targetPrefix}ld${lib.optionalString useLdGold ".gold"}!g" \
-      -e "s!$AR!${installCC.bintools.bintools}/bin/${installCC.bintools.targetPrefix}ar!g" \
-      -e "s!$RANLIB!${installCC.bintools.bintools}/bin/${installCC.bintools.targetPrefix}ranlib!g"
+    ghc-settings-edit "$out/lib/${targetPrefix}${passthru.haskellCompilerName}/settings" \
+      "C compiler command" "${installCC}/bin/${installCC.targetPrefix}cc" \
+      "Haskell CPP command" "${installCC}/bin/${installCC.targetPrefix}cc" \
+      "C++ compiler command" "${installCC}/bin/${installCC.targetPrefix}c++" \
+      "ld command" "${installCC.bintools}/bin/${installCC.bintools.targetPrefix}ld${lib.optionalString useLdGold ".gold"}" \
+      "Merge objects command" "${installCC.bintools}/bin/${installCC.bintools.targetPrefix}ld${lib.optionalString useLdGold ".gold"}" \
+      "ar command" "${installCC.bintools}/bin/${installCC.bintools.targetPrefix}ar" \
+      "ranlib command" "${installCC.bintools}/bin/${installCC.bintools.targetPrefix}ranlib"
+    # TODO: otool/install_name_tool
 
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
