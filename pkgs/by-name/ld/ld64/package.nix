@@ -138,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     (lib.mesonOption "b_ndebug" "if-release")
     (lib.mesonOption "default_library" (if stdenv.hostPlatform.isStatic then "static" else "shared"))
+  ] ++ lib.optionals finalAttrs.doCheck [
     (lib.mesonBool "b_lto" true)
   ];
 
