@@ -6,7 +6,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "hashicorp";
-    repo = pname;
+    repo = "nomad-device-nvidia";
     rev = "v${version}";
     sha256 = "sha256-jWhESp/LrNPhWbmSa5z3hZtqgcm9kStXEqP3Twssd7w=";
   };
