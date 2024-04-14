@@ -48,7 +48,7 @@ let
     unset SDKROOT
   '';
 
-  bootstrapTools = derivation ({
+  bootstrapToolsFun = derivationArgTransform: derivation (derivationArgTransform ({
     inherit system;
 
     name = "bootstrap-tools";
@@ -62,12 +62,15 @@ let
     __contentAddressed = true;
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-  }) // { passthru.isFromBootstrapFiles = true; };
+  })) // { passthru.isFromBootstrapFiles = true; };
 
   stageFun = prevStage:
     { name, overrides ? (self: super: { }), extraNativeBuildInputs ? [ ], extraPreHook ? "" }:
 
     let
+
+      bootstrapTools = bootstrapToolsFun prevStage.stdenv.derivationArgTransform;
+
       cc = if prevStage.llvmPackages.clang-unwrapped == null
            then null else
            lib.makeOverridable (import ../../build-support/cc-wrapper) {
@@ -129,6 +132,7 @@ let
         targetPlatform = localSystem;
 
         inherit config extraNativeBuildInputs;
+        inherit (prevStage.stdenv) derivationArgTransform;
 
         extraBuildInputs = [ prevStage.darwin.CF ];
 
@@ -177,9 +181,8 @@ let
       stdenv = thisStdenv;
     };
 in
-  assert bootstrapTools.passthru.isFromBootstrapFiles or false;  # sanity check
 [
-  ({}: {
+  (prevStage: {
     __raw = true;
 
     coreutils = null;
@@ -205,6 +208,16 @@ in
       libcxx = null;
       compiler-rt = null;
     };
+
+    # This fake stdenv exists solely to inject derivationArgTransform
+    # into succeeding stages. It does not get passed to cc-wrapper as
+    # buildPackages since this stage lacks a non-null `llvmPackages.clang-unwrapped`.
+    # If that ceases to be the case the conditional in stageFun must be modified.
+    # Similar to the linux stdenv bootstrap, but with clang instead of gcc.
+    stdenv = {
+      # allows us to inject a derivationArgTransform via a preceding stage
+      derivationArgTransform = prevStage.stdenv.derivationArgTransform or lib.id;
+    };
   })
 
   # Create a stage with the bootstrap tools. This will be used to build the subsequent stages and
@@ -212,7 +225,12 @@ in
   #
   # Note: Each stage depends only on the the packages in `prevStage`. If a package is not to be
   # rebuilt, it should be passed through by inheriting it.
-  (prevStage: stageFun prevStage {
+  (prevStage:
+  let
+    bootstrapTools = bootstrapToolsFun prevStage.stdenv.derivationArgTransform;
+  in
+    assert bootstrapTools.passthru.isFromBootstrapFiles or false;  # sanity check
+    stageFun prevStage {
     name = "bootstrap-stage0";
 
     overrides = self: super: {
@@ -221,6 +239,8 @@ in
       # to refer to this stage directly, which violates the principle that each
       # stage should only access the stage that came before it.
       ccWrapperStdenv = self.stdenv;
+      # Do the same for bootstrap-tools
+      inherit bootstrapTools;
 
       bash = bootstrapTools;
 
@@ -414,7 +434,7 @@ in
     name = "bootstrap-stage1";
 
     overrides = self: super: {
-      inherit (prevStage) ccWrapperStdenv
+      inherit (prevStage) ccWrapperStdenv bootstrapTools
         coreutils gnugrep;
 
       # Use this stage’s CF to build CMake. It’s required but can’t be included in the stdenv.
@@ -528,7 +548,7 @@ in
     name = "bootstrap-stage1-sysctl";
 
     overrides = self: super: {
-      inherit (prevStage) ccWrapperStdenv
+      inherit (prevStage) ccWrapperStdenv bootstrapTools
         autoconf automake bash binutils binutils-unwrapped bison brotli cmake cmakeMinimal
         coreutils cpio curl cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu
         libedit libffi libiconv libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4
@@ -628,7 +648,7 @@ in
     name = "bootstrap-stage-xclang";
 
     overrides = self: super: {
-      inherit (prevStage) ccWrapperStdenv
+      inherit (prevStage) ccWrapperStdenv bootstrapTools
         autoconf automake bash binutils binutils-unwrapped bison brotli cmake cmakeMinimal
         cpio curl cyrus_sasl db ed expat flex gettext gmp groff icu libedit libffi libiconv
         libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4 ncurses nghttp2 ninja
@@ -720,7 +740,7 @@ in
     name = "bootstrap-stage2-Libsystem";
 
     overrides = self: super: {
-      inherit (prevStage) ccWrapperStdenv
+      inherit (prevStage) ccWrapperStdenv bootstrapTools
         autoconf automake binutils-unwrapped bison brotli cmake cmakeMinimal coreutils
         cpio curl cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu libedit libffi
         libiconv libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4 ncurses nghttp2
@@ -820,7 +840,7 @@ in
     name = "bootstrap-stage2-CF";
 
     overrides = self: super: {
-      inherit (prevStage) ccWrapperStdenv
+      inherit (prevStage) ccWrapperStdenv bootstrapTools
         autoconf automake bash bison brotli cmake cmakeMinimal coreutils cpio curl
         cyrus_sasl db ed expat flex gettext gmp gnugrep groff libedit libidn2 libkrb5
         libssh2 libtool libunistring m4 ncurses nghttp2 ninja openbsm openldap openpam
@@ -943,7 +963,7 @@ in
     name = "bootstrap-stage3";
 
     overrides = self: super: {
-      inherit (prevStage) ccWrapperStdenv
+      inherit (prevStage) ccWrapperStdenv bootstrapTools
         autoconf automake bash binutils binutils-unwrapped bison brotli cmake cmakeMinimal
         coreutils cpio curl cyrus_sasl db ed expat flex gettext gmp gnugrep groff libedit
         libidn2 libkrb5 libssh2 libtool libunistring m4 nghttp2 ninja openbsm openldap
@@ -1023,7 +1043,7 @@ in
     name = "bootstrap-stage4";
 
     overrides = self: super: {
-      inherit (prevStage) ccWrapperStdenv
+      inherit (prevStage) ccWrapperStdenv bootstrapTools
         autoconf automake bash bison cmake cmakeMinimal cyrus_sasl db expat flex groff
         libedit libtool m4 ninja openldap openssh patchutils perl pkg-config python3 scons
         serf sqlite subversion sysctl texinfo unzip which
@@ -1187,6 +1207,8 @@ in
       doSign = localSystem.isAarch64;
 
       cc = prevStage.llvmPackages.clang;
+
+      bootstrapTools = prevStage.bootstrapTools;
     in
     {
     inherit config overlays;
@@ -1217,7 +1239,7 @@ in
 
       shell = cc.shell;
 
-      inherit (prevStage.stdenv) fetchurlBoot;
+      inherit (prevStage.stdenv) fetchurlBoot derivationArgTransform;
 
       extraAttrs = {
         inherit bootstrapTools;

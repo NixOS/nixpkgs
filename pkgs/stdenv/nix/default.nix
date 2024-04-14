@@ -38,6 +38,8 @@ bootStages ++ [
 
       fetchurlBoot = prevStage.stdenv.fetchurlBoot;
 
+      derivationArgTransform = prevStage.stdenv.derivationArgTransform;
+
       overrides = self: super: {
         inherit cc;
         inherit (cc) binutils;
