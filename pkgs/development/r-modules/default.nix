@@ -651,7 +651,7 @@ let
     matchingMarkets = [ pkgs.zlib.dev ];
     methylKit = with pkgs; [ zlib.dev bzip2.dev xz.dev ];
     ndjson = [ pkgs.zlib.dev ];
-    podkat = [ pkgs.zlib.dev ];
+    podkat = with pkgs; [ zlib.dev xz.dev bzip2.dev ];
     qrqc = [ pkgs.zlib.dev ];
     rJPSGCS = [ pkgs.zlib.dev ];
     rhdf5filters = with pkgs; [ zlib.dev bzip2.dev ];
@@ -962,7 +962,9 @@ let
     "PhIPData" # tries to download something from a DB
     "pbdMPI"   # tries to run MPI processes
     "data_table" # fails to rename shared library before check
+    "coMethDMR" # tries to connect to ExperimentHub
     "multiMiR" # tries to connect to DB
+    "snapcount" # tries to connect to snaptron.cs.jhu.edu
   ];
 
   # Packages which cannot be installed due to lack of dependencies or other reasons.

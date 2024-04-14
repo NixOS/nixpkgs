@@ -89,6 +89,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ peterhoeg ];
+    mainProgram = "unar";
     platforms = platforms.unix;
   };
 }
