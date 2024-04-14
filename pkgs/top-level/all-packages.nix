@@ -25693,6 +25693,8 @@ with pkgs;
 
   asouldocs = callPackage ../servers/asouldocs { };
 
+  assetto-server = callPackage ../servers/assetto-server { };
+
   atlassian-bamboo = callPackage ../servers/atlassian/bamboo.nix { };
   atlassian-confluence = callPackage ../servers/atlassian/confluence.nix { };
   atlassian-crowd = callPackage ../servers/atlassian/crowd.nix { };
