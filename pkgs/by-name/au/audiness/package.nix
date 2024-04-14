@@ -29,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
       typer
       validators
     ]
-    ++ typer.optional-dependencies.all;
+    ++ typer.optional-dependencies.standard;
 
   pythonImportsCheck = [ "audiness" ];
 
