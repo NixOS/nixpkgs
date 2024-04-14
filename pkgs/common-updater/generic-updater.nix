@@ -1,4 +1,12 @@
-{ stdenv, writeScript, coreutils, gnugrep, gnused, common-updater-scripts, nix }:
+{ lib
+, stdenv
+, common-updater-scripts
+, coreutils
+, gnugrep
+, gnused
+, nix
+, writeScript
+}:
 
 { name ? null
 , pname ? null
@@ -14,6 +22,9 @@
 let
   # where to print git commands and debugging messages
   fileForGitCommands = "update-git-commits.txt";
+
+  grep = lib.getExe gnugrep;
+  sed = lib.getExe gnused;
 
   # shell script to update package
   updateScript = writeScript "generic-update-script.sh" ''
@@ -41,20 +52,20 @@ let
 
     function version_is_ignored() {
       local tag="$1"
-      [ -n "$ignored_versions" ] && grep -E "$ignored_versions" <<< "$tag"
+      [ -n "$ignored_versions" ] && ${grep} -E "$ignored_versions" <<< "$tag"
     }
 
     function version_is_unstable() {
       local tag="$1"
       local enforce="$2"
       if [ -n "$odd_unstable" -o -n "$enforce" ]; then
-        local minor=$(echo "$tag" | ${gnused}/bin/sed -rne 's,^[0-9]+\.([0-9]+).*,\1,p')
+        local minor=$(echo "$tag" | ${sed} -rne 's,^[0-9]+\.([0-9]+).*,\1,p')
         if [ $((minor % 2)) -eq 1 ]; then
           return 0
         fi
       fi
       if [ -n "$patchlevel_unstable" -o -n "$enforce" ]; then
-        local patchlevel=$(echo "$tag" | ${gnused}/bin/sed -rne 's,^[0-9]+\.[0-9]+\.([0-9]+).*$,\1,p')
+        local patchlevel=$(echo "$tag" | ${sed} -rne 's,^[0-9]+\.[0-9]+\.([0-9]+).*$,\1,p')
         if ((patchlevel >= 90)); then
           return 0
         fi
@@ -71,10 +82,10 @@ let
 
     # cut any revision prefix not used in the NixOS package version
     if [ -n "$rev_prefix" ]; then
-      tags=$(echo "$tags" | ${gnugrep}/bin/grep "^$rev_prefix")
-      tags=$(echo "$tags" | ${gnused}/bin/sed -e "s,^$rev_prefix,,")
+      tags=$(echo "$tags" | ${grep} "^$rev_prefix")
+      tags=$(echo "$tags" | ${sed} -e "s,^$rev_prefix,,")
     fi
-    tags=$(echo "$tags" | ${gnugrep}/bin/grep "^[0-9]")
+    tags=$(echo "$tags" | ${grep} "^[0-9]")
 
     # sort the tags in decreasing order
     tags=$(echo "$tags" | ${coreutils}/bin/sort --reverse --version-sort)
