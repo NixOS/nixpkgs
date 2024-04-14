@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aiooss2";
-  version = "0.2.10";
+  version = "0.2.11";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "karajan1001";
     repo = "aiooss2";
     rev = "refs/tags/${version}";
-    hash = "sha256-xlbOLqillSpN6DHYn7bqTL7qMlicYCXGxO30Z/tiKJY=";
+    hash = "sha256-6tkJG6Jjvo2OaN9cRbs/7ApcrKiZ5tGSPUfugAx7iJU=";
   };
 
   pythonRelaxDeps = [
