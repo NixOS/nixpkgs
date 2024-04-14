@@ -19,14 +19,31 @@ in
     let
       originalLuaDrv = lua.pkgs.${luaAttr};
 
+      extraConfig = ''
+        -- to create a flat hierarchy
+        lua_modules_path = "lua"
+      '';
+
       luaDrv = originalLuaDrv.overrideAttrs (oa: {
         version = attrs.version or oa.version;
         rockspecVersion = oa.rockspecVersion;
 
-        extraConfig = ''
-          -- to create a flat hierarchy
-          lua_modules_path = "lua"
-        '';
+        # the flat hierarchy needs to be applied to build backends,
+        # otherwise luarocks won't find them.
+        nativeBuildInputs = map (drv: drv.overrideAttrs (_: {
+          inherit extraConfig;
+        })) (oa.nativeBuildInputs or []);
+
+        # TODO: This should probably be applied recursively to luarocks packages
+        propagatedBuildInputs = map (drv: drv.overrideAttrs (oa': {
+          inherit extraConfig;
+          nativeBuildInputs = oa'.nativeBuildInputs or [] ++ [
+            lua.pkgs.luarocksMoveDataFolder
+          ];
+        })) (oa.propagatedBuildInputs or []);
+
+        inherit extraConfig;
+
       });
 
       finalDrv = toVimPlugin (luaDrv.overrideAttrs(oa: attrs // {
