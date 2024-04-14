@@ -8346,7 +8346,8 @@ with pkgs;
   })
     garage
       garage_0_8 garage_0_9
-      garage_0_8_7 garage_0_9_4;
+      garage_0_8_7 garage_0_9_4
+      garage_1_0_0 garage_1_x;
 
   garmintools = callPackage ../development/libraries/garmintools { };
 
