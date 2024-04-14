@@ -24471,6 +24471,8 @@ with pkgs;
 
   serf = callPackage ../development/libraries/serf { };
 
+  sev-snp-measure = with python3Packages; toPythonApplication sev-snp-measure;
+
   sfsexp = callPackage ../development/libraries/sfsexp { };
 
   shhmsg = callPackage ../development/libraries/shhmsg { };
