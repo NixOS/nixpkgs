@@ -11109,7 +11109,7 @@ with pkgs;
 
   nomad-autoscaler = callPackage ../applications/networking/cluster/nomad-autoscaler { };
 
-  nomad-device-nvidia = callPackage ../applications/networking/cluster/nomad-device-nvidia { };
+  nomad-device-nvidia = callPackage ../by-name/no/nomad-device-nvidia { };
 
   nomad-driver-podman = callPackage ../applications/networking/cluster/nomad-driver-podman { };
 
