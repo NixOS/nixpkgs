@@ -5,7 +5,7 @@
 { config, lib, pkgs }:
 
 let
-  inherit (pkgs) stdenv fetchurl fetchpatch pkg-config intltool glib fetchFromGitHub fetchFromGitLab;
+  inherit (pkgs) stdenv fetchurl fetchpatch fetchpatch2 pkg-config intltool glib fetchFromGitHub fetchFromGitLab;
 in
 
 lib.makeScope pkgs.newScope (self:
@@ -122,6 +122,23 @@ in
     };
 
     nativeBuildInputs = with pkgs; [autoreconfHook];
+
+    postUnpack = ''
+      tar -xf $sourceRoot/extern_libs/ffmpeg.tar.gz -C $sourceRoot/extern_libs
+    '';
+
+    postPatch = let
+      ffmpegPatch = fetchpatch2 {
+        name = "fix-ffmpeg-binutil-2.41.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/effadce6c756247ea8bae32dc13bb3e6f464f0eb";
+        hash = "sha256-vLSltvZVMcQ0CnkU0A29x6fJSywE8/aU+Mp9os8DZYY=";
+      };
+    in ''
+      patch -Np1 -i ${ffmpegPatch} -d extern_libs/ffmpeg
+      ffmpegSrc=$(realpath extern_libs/ffmpeg)
+    '';
+
+    configureFlags = ["--with-ffmpegsrcdir=${placeholder "ffmpegSrc"}"];
 
     hardeningDisable = [ "format" ];
 
