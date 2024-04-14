@@ -18,6 +18,7 @@
 # for passthru.tests
 , httpx
 , httpx-socks
+, respx
 }:
 
 buildPythonPackage rec {
@@ -74,7 +75,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   passthru.tests = {
-    inherit httpx httpx-socks;
+    inherit httpx httpx-socks respx;
   };
 
   meta = with lib; {
