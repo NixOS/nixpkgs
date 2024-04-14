@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  pname = "ananicy";
+stdenv.mkDerivation {
+  pname = "ananicy-rules-cachyos";
   version = "unstable-2024-04-10";
 
   src = fetchFromGitHub {
@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    runHook preBuild
+    runHook preInstall
     mkdir -p $out
     cp -r * $out
     rm $out/README.md
-    runHook postBuild
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "ananicy-cpp-rules for CachyOS ";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ artturin johnrtitor ];
+    maintainers = with maintainers; [ artturin johnrtitor diniamo ];
   };
 }
