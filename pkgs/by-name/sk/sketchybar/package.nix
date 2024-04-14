@@ -1,27 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, AppKit
-, Carbon
-, CoreAudio
-, CoreWLAN
-, CoreVideo
-, DisplayServices
-, IOKit
-, MediaRemote
-, SkyLight
-, testers
-, nix-update-script
+{
+  lib,
+  overrideSDK,
+  stdenv,
+  darwin,
+  fetchFromGitHub,
+  testers,
+  nix-update-script,
 }:
 
 let
   inherit (stdenv.hostPlatform) system;
-  target = {
-    "aarch64-darwin" = "arm64";
-    "x86_64-darwin" = "x86";
-  }.${system} or (throw "Unsupported system: ${system}");
+  inherit (darwin.apple_sdk_11_0.frameworks)
+    AppKit
+    Carbon
+    CoreAudio
+    CoreWLAN
+    CoreVideo
+    DisplayServices
+    IOKit
+    MediaRemote
+    SkyLight
+    ;
+
+  target =
+    {
+      "aarch64-darwin" = "arm64";
+      "x86_64-darwin" = "x86";
+    }
+    .${system} or (throw "Unsupported system: ${system}");
+
+  stdenv' = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv'.mkDerivation (finalAttrs: {
   pname = "sketchybar";
   version = "2.21.0";
 
@@ -44,9 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     SkyLight
   ];
 
-  makeFlags = [
-    target
-  ];
+  makeFlags = [ target ];
 
   installPhase = ''
     runHook preInstall
@@ -71,7 +79,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/FelixKratz/SketchyBar";
     license = lib.licenses.gpl3;
     mainProgram = "sketchybar";
-    maintainers = with lib.maintainers; [ azuwis khaneliman ];
+    maintainers = with lib.maintainers; [
+      azuwis
+      khaneliman
+    ];
     platforms = lib.platforms.darwin;
   };
 })
