@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "BIRD Internet Routing Daemon";
     homepage = "http://bird.network.cz";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [ herbetom ];
     platforms = platforms.linux;
   };
 }
