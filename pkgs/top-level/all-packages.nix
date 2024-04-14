@@ -442,8 +442,6 @@ with pkgs;
 
   catppuccin-plymouth = callPackage ../data/themes/catppuccin-plymouth { };
 
-  catppuccin-sddm-corners = callPackage ../data/themes/catppuccin-sddm-corners { };
-
   btdu = callPackage ../tools/misc/btdu { };
 
   ccal = callPackage ../tools/misc/ccal { };
