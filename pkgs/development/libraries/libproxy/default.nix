@@ -41,7 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
         "src/backend/plugins/config-gnome/config-gnome.c"
       ];
     })
-
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     # Disable schema presence detection, it would fail because it cannot be autopatched,
     # and it will be hardcoded by the next patch anyway.
     ./skip-gsettings-detection.patch
@@ -67,14 +68,17 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     duktape
   ] ++ (if stdenv.hostPlatform.isDarwin then (with darwin.apple_sdk.frameworks; [
-    CoreFoundation
-    SystemConfiguration
+    Foundation
   ]) else [
     glib
     gsettings-desktop-schemas
   ]);
 
-  doCheck = true;
+  mesonFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "-Dconfig-gnome=false"
+  ];
+
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   postPatch = ''
     # Fix running script that will try to install git hooks.

@@ -5019,6 +5019,12 @@
     github = "DimitarNestorov";
     githubId = 8790386;
   };
+  diniamo = {
+    name = "diniamo";
+    email = "diniamo53@gmail.com";
+    github = "diniamo";
+    githubId = 55629891;
+  };
   diogotcorreia = {
     name = "Diogo Correia";
     email = "me@diogotc.com";
@@ -8688,6 +8694,12 @@
     github = "ironpinguin";
     githubId = 137306;
     name = "Michele Catalano";
+  };
+  isabelroses = {
+    email = "isabel@isabelroses.com";
+    github = "isabelroses";
+    githubId = 71222764;
+    name = "Isabel Roses";
   };
   isaozler = {
     email = "isaozler@gmail.com";
