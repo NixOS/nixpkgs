@@ -3,8 +3,8 @@
 , willCite ? false }:
 
 symlinkJoin {
-  name = "parallel-full";
-  inherit (parallel) outputs;
+  name = "parallel-full-${parallel.version}";
+  inherit (parallel) pname version meta outputs;
   nativeBuildInputs = [ makeWrapper ];
   paths = [ parallel ];
   postBuild = ''
