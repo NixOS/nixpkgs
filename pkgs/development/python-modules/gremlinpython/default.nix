@@ -10,12 +10,13 @@
 , pythonOlder
 , mock
 , pyhamcrest
+, pyyaml
 , radish-bdd
 }:
 
 buildPythonPackage rec {
   pname = "gremlinpython";
-  version = "3.6.4";
+  version = "3.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "apache";
     repo = "tinkerpop";
     rev = "refs/tags/${version}";
-    hash = "sha256-SQ+LcHeHDB1Hd5wXGDJBZmBG4KEZ3NsV4+4X9WgPb9E=";
+    hash = "sha256-2viZXksHNFynOm6+1Vo2a8xrXl4pQcAxAVgehp5y6us=";
   };
 
   sourceRoot = "${src.name}/gremlin-python/src/main/python";
@@ -53,6 +54,7 @@ buildPythonPackage rec {
     pytestCheckHook
     mock
     pyhamcrest
+    pyyaml
     radish-bdd
   ];
 
@@ -66,13 +68,26 @@ buildPythonPackage rec {
   disabledTestPaths = [
     "tests/driver/test_client.py"
     "tests/driver/test_driver_remote_connection.py"
+    "tests/driver/test_driver_remote_connection_http.py"
     "tests/driver/test_driver_remote_connection_threaded.py"
+    "tests/driver/test_web_socket_client_behavior.py"
     "tests/process/test_dsl.py"
     "tests/structure/io/test_functionalityio.py"
   ];
-  pytestFlagsArray = [
+  pytestFlagsArray = let
+    fullDisabled = builtins.concatStringsSep " or " [
+      "test_transaction_commit"
+      "test_transaction_rollback"
+      "test_transaction_no_begin"
+      "test_multi_commit_transaction"
+      "test_multi_rollback_transaction"
+      "test_multi_commit_and_rollback"
+      "test_transaction_close_tx"
+      "test_transaction_close_tx_from_parent"
+    ];
+  in [
     # disabledTests doesn't quite allow us to be precise enough for this
-    "-k 'not (TestFunctionalGraphSONIO and (test_timestamp or test_datetime or test_uuid))'"
+    "-k 'not ((TestFunctionalGraphSONIO and (test_timestamp or test_datetime or test_uuid)) or ${fullDisabled})'"
   ];
 
   meta = with lib; {
