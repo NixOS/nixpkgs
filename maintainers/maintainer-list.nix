@@ -6427,6 +6427,12 @@
     githubId = 4246921;
     name = "Florian Beeres";
   };
+  fccapria = {
+    email = "francesco@capria.eu";
+    github = "fccapria";
+    githubId = 62179193;
+    name = "Francesco Carmelo Capria";
+  };
   fd = {
     email = "simon.menke@gmail.com";
     github = "fd";
