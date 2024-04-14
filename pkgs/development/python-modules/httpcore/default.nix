@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "httpcore";
-  version = "1.0.4";
+  version = "1.0.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "encode";
     repo = "httpcore";
     rev = "refs/tags/${version}";
-    hash = "sha256-DK5avYEtQcTFogpdEjw0NB4qkzDm5cZKPjAE8MC6Sng=";
+    hash = "sha256-05jYLrBiPRg1qQEz8mRvYJKHFsfneh7z9yHIXuYYa5o=";
   };
 
   nativeBuildInputs = [
