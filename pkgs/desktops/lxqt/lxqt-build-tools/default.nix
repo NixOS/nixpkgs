@@ -63,6 +63,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-build-tools";
     description = "Various packaging tools and scripts for LXQt applications";
+    mainProgram = "lxqt-transupdate";
     license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
     maintainers = teams.lxqt.members;

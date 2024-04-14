@@ -9,6 +9,7 @@
 , wayland
 , xorg
 , vulkan-loader
+, udev
 , jre_minimal
 , cairo
 , gtk3
@@ -20,13 +21,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ruffle";
-  version = "nightly-2024-02-09";
+  version = "nightly-2024-03-25";
 
   src = fetchFromGitHub {
     owner = "ruffle-rs";
     repo = pname;
     rev = version;
-    hash = "sha256-C4wfR5io0FBFmNfYHlE/v81jQAb0SEoaCzI6tenRYGg=";
+    hash = "sha256-3G5xSGdMl4ISQmb2BVGdKz1cXU5Mnl+VkVYpJ6P12og=";
   };
 
   nativeBuildInputs = [
@@ -52,6 +53,7 @@ rustPlatform.buildRustPackage rec {
     xorg.libxcb
     xorg.libXrender
     vulkan-loader
+    udev
   ];
 
   dontWrapGApps = true;
@@ -59,7 +61,8 @@ rustPlatform.buildRustPackage rec {
   preFixup = ''
     patchelf $out/bin/ruffle_desktop \
       --add-needed libxkbcommon-x11.so \
-      --add-rpath ${libxkbcommon}/lib
+      --add-needed libwayland-client.so \
+      --add-rpath ${libxkbcommon}/lib:${wayland}/lib
   '';
 
   postFixup = ''
@@ -83,10 +86,10 @@ rustPlatform.buildRustPackage rec {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "flash-lso-0.6.0" = "sha256-SHWIOVp3MGIATKDKAGNWG3B3jX3a0jDE2c8bt7NptrE=";
-      "h263-rs-0.1.0" = "sha256-Akf1SBjo8qikhiHI8NPvO3vJvVfm0dQBf2X9V7OdgQc=";
-      "jpegxr-0.3.0" = "sha256-jirUbse2MiUDCmwBO7ykWNKHgDgL/6ZM5o2HeDUhm0c=";
-      "nellymoser-rs-0.1.2" = "sha256-GykDQc1XwySOqfxW/OcSxkKCFJyVmwSLy/CEBcwcZJs=";
+      "flash-lso-0.6.0" = "sha256-sVe53VRtBEEI6eERWRv6aG6BBT31sSLvJ6CSCcif2Lo=";
+      "h263-rs-0.1.0" = "sha256-EBYZ00axaILGc2CtJoPQpewlf6+jlmml+cXZFyoxhHQ=";
+      "jpegxr-0.3.1" = "sha256-YbQMi86DXqdi7o0s5ajAv7/vFaxNpShz19cNa9MpOsA=";
+      "nellymoser-rs-0.1.2" = "sha256-66yt+CKaw/QFIPeNkZA2mb9ke64rKcAw/6k/pjNYY04=";
       "nihav_codec_support-0.1.0" = "sha256-HAJS4I6yyzQzCf+vmaFp1MWXpcUgFAHPxLhfMVXmN1c=";
     };
   };

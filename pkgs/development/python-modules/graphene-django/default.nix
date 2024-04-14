@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "graphene-django";
-  version = "3.2.0";
+  version = "3.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "graphql-python";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-SOLY3NogovwQ5gr2gnvOcROWpbk9p134wI2f9FKr+5M=";
+    hash = "sha256-wzU9U4mYvBf43qBQi20ewKtmw1eFskQk+nnsdaM7HQM=";
   };
 
   postPatch = ''
@@ -59,6 +59,11 @@ buildPythonPackage rec {
     pytest-django
     pytest-random-order
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    # pytest.PytestRemovedIn8Warning: Passing None has been deprecated.
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.11") [

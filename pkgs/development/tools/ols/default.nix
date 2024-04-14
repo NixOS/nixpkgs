@@ -43,6 +43,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     inherit (odin.meta) platforms;
     description = "Language server for the Odin programming language";
+    mainProgram = "ols";
     homepage = "https://github.com/DanielGavin/ols";
     license = licenses.mit;
     maintainers = with maintainers; [ astavie znaniye ];

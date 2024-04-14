@@ -1,6 +1,6 @@
 { lib
 , aiohttp
-, aresponses
+, aioresponses
 , buildPythonPackage
 , fetchFromGitHub
 , mashumaro
@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "aioelectricitymaps";
-  version = "0.4.0";
+  version = "1.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "jpbede";
     repo = "aioelectricitymaps";
     rev = "refs/tags/v${version}";
-    hash = "sha256-q06B40c0uvSuzH/3YCoxg4p9aNIOPrphsoESktF+B14=";
+    hash = "sha256-l6D5Cr2d89n+Ac5V5geBUY0sOiEO3sci9244K0MI+dc=";
   };
 
   postPatch = ''
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    aresponses
+    aioresponses
     pytest-asyncio
     pytestCheckHook
     syrupy

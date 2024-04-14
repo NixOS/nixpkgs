@@ -33,6 +33,7 @@ in
 
     meta = {
       description = "The `hibernate' script for swsusp and Tux-on-Ice";
+      mainProgram = "hibernate";
       longDescription = ''
         This package provides the `hibernate' script, a command-line utility
         that saves the computer's state to disk and switches it off, turning

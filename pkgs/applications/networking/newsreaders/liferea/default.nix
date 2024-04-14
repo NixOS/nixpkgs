@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchurl
-, fetchpatch
 , pkg-config
 , intltool
 , python3Packages
@@ -25,22 +24,12 @@
 
 stdenv.mkDerivation rec {
   pname = "liferea";
-  version = "1.15.5";
+  version = "1.15.6";
 
   src = fetchurl {
     url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-7lanrs63N6ZnqxvjcW/+cUZVDqUbML2gftQUc/sLr3Q=";
+    hash = "sha256-4P/0fwHofsRjZcLuFdkUKxWIp/9P5yXA2ED/zqTGd94=";
   };
-
-  patches = [
-    # Pull upstream fix for libxml2-2.12 compatibility:
-    #   https://github.com/lwindolf/liferea/pull/1329
-    (fetchpatch {
-      name = "libxml2-2.12.patch";
-      url = "https://github.com/lwindolf/liferea/commit/be8ef494586d9ef73c04ec4ca058a9a158ae3562.patch";
-      hash = "sha256-K1R7dJMm7ui6QKQqAHCo/ZrLCW3PhPU1EKRPEICtCsQ=";
-    })
-  ];
 
   nativeBuildInputs = [
     wrapGAppsHook

@@ -10,14 +10,14 @@
 
 let
   pname = "validator-nu";
-  version = "22.9.29";
+  version = "23.4.11-unstable-2023-12-18";
 
   src = fetchFromGitHub {
     owner = "validator";
     repo = "validator";
-    rev = version;
+    rev = "c3a401feb6555affdc891337f5a40af238f9ac2d";
     fetchSubmodules = true;
-    hash = "sha256-NH/OyaKGITAL2yttB1kmuKVuZuYzhVuS0Oohj1N4icI=";
+    hash = "sha256-pcA3HXduzFKzoOHhor12qvzbGSSvo3k3Bpy2MvvQlCI=";
   };
 
   deps = stdenvNoCC.mkDerivation {
@@ -61,7 +61,7 @@ stdenvNoCC.mkDerivation rec {
     description = "Helps you catch problems in your HTML/CSS/SVG";
     homepage = "https://validator.github.io/validator/";
     license = licenses.mit;
-    maintainers = with maintainers; [ andersk ];
+    maintainers = with maintainers; [ andersk ivan ];
     mainProgram = "vnu";
     sourceProvenance = with sourceTypes; [ binaryBytecode fromSource ];
   };

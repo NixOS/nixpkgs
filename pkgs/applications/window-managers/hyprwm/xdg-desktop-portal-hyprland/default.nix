@@ -70,6 +70,7 @@ stdenv.mkDerivation (self: {
   meta = with lib; {
     homepage = "https://github.com/hyprwm/xdg-desktop-portal-hyprland";
     description = "xdg-desktop-portal backend for Hyprland";
+    mainProgram = "hyprland-share-picker";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fufexan ];
     platforms = platforms.linux;

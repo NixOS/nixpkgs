@@ -27,6 +27,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "A virtual keyboard for X11 from the C Suite";
+    mainProgram = "corekeyboard";
     homepage = "https://gitlab.com/cubocore/coreapps/corekeyboard";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dan4ik605743 ];

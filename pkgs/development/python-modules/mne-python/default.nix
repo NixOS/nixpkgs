@@ -85,6 +85,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Magnetoencephelography and electroencephalography in Python";
+    mainProgram = "mne";
     homepage = "https://mne.tools";
     changelog = "https://mne.tools/stable/changes/v${version}.html";
     license = licenses.bsd3;

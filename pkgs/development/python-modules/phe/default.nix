@@ -24,6 +24,7 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "A library for Partially Homomorphic Encryption in Python";
+    mainProgram = "pheutil";
     homepage = "https://github.com/n1analytics/python-paillier";
     license = licenses.gpl3;
   };

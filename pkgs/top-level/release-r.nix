@@ -6,7 +6,13 @@
 */
 { supportedSystems ? [ "x86_64-linux" "aarch64-linux" ] }:
 
-with import ./release-lib.nix { inherit supportedSystems; };
+let
+  inherit (import ./release-lib.nix { inherit supportedSystems; })
+    mapTestOn
+    packagePlatforms
+    pkgs
+    ;
+in
 
 mapTestOn {
   rPackages = packagePlatforms pkgs.rPackages;

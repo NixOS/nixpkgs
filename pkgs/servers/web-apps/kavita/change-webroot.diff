@@ -1,39 +1,79 @@
 diff --git a/API/Controllers/FallbackController.cs b/API/Controllers/FallbackController.cs
-index 2f5d7fce..faaf128a 100644
+index 0c925476..c7b30f39 100644
 --- a/API/Controllers/FallbackController.cs
 +++ b/API/Controllers/FallbackController.cs
-@@ -1,4 +1,4 @@
--﻿using System;
-+using System;
- using System.IO;
- using API.Services;
- using Microsoft.AspNetCore.Authorization;
 @@ -22,7 +22,7 @@ public class FallbackController : Controller
  
-     public ActionResult Index()
+     public PhysicalFileResult Index()
      {
 -        return PhysicalFile(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "index.html"), "text/HTML");
-+        return PhysicalFile(Path.Combine("@web_root@", "index.html"), "text/HTML");
++        return PhysicalFile(Path.Combine("@webroot@", "index.html"), "text/HTML");
      }
  }
  
+diff --git a/API/Services/DirectoryService.cs b/API/Services/DirectoryService.cs
+index 15afddf9..aff1f230 100644
+--- a/API/Services/DirectoryService.cs
++++ b/API/Services/DirectoryService.cs
+@@ -113,7 +113,7 @@ public class DirectoryService : IDirectoryService
+         ExistOrCreate(SiteThemeDirectory);
+         FaviconDirectory = FileSystem.Path.Join(FileSystem.Directory.GetCurrentDirectory(), "config", "favicons");
+         ExistOrCreate(FaviconDirectory);
+-        LocalizationDirectory = FileSystem.Path.Join(FileSystem.Directory.GetCurrentDirectory(), "I18N");
++        LocalizationDirectory = FileSystem.Path.Join("@out@/lib/kavita-backend", "I18N");
+     }
+ 
+     /// <summary>
+diff --git a/API/Services/LocalizationService.cs b/API/Services/LocalizationService.cs
+index ab3ad3d8..ac813a69 100644
+--- a/API/Services/LocalizationService.cs
++++ b/API/Services/LocalizationService.cs
+@@ -52,8 +52,7 @@ public class LocalizationService : ILocalizationService
+         else
+         {
+             _localizationDirectoryUi = directoryService.FileSystem.Path.Join(
+-                directoryService.FileSystem.Directory.GetCurrentDirectory(),
+-                "wwwroot", "assets/langs");
++                "@webroot@", "assets/langs");
+         }
+ 
+         _cacheOptions = new MemoryCacheEntryOptions()
 diff --git a/API/Startup.cs b/API/Startup.cs
-index f84ef638..7eaeb05e 100644
+index 939bfb58..1adb9373 100644
 --- a/API/Startup.cs
 +++ b/API/Startup.cs
-@@ -33,6 +33,7 @@ using Microsoft.AspNetCore.ResponseCompression;
- using Microsoft.AspNetCore.StaticFiles;
+@@ -36,6 +36,7 @@ using Microsoft.AspNetCore.StaticFiles;
+ using Microsoft.EntityFrameworkCore;
  using Microsoft.Extensions.Configuration;
  using Microsoft.Extensions.DependencyInjection;
 +using Microsoft.Extensions.FileProviders;
  using Microsoft.Extensions.Hosting;
  using Microsoft.Extensions.Logging;
  using Microsoft.Net.Http.Headers;
-@@ -298,6 +299,7 @@ public class Startup
+@@ -298,9 +299,6 @@ public class Startup
+         app.UsePathBase(basePath);
+         if (!env.IsDevelopment())
+         {
+-            // We don't update the index.html in local as we don't serve from there
+-            UpdateBaseUrlInIndex(basePath);
+-
+             // Update DB with what's in config
+             var dataContext = serviceProvider.GetRequiredService<DataContext>();
+             var setting = dataContext.ServerSetting.SingleOrDefault(x => x.Key == ServerSettingKey.BaseUrl);
+@@ -333,6 +334,7 @@ public class Startup
  
          app.UseStaticFiles(new StaticFileOptions
          {
-+            FileProvider = new PhysicalFileProvider("@web_root@"),
++            FileProvider = new PhysicalFileProvider("@webroot@"),
              ContentTypeProvider = new FileExtensionContentTypeProvider(),
              HttpsCompression = HttpsCompressionMode.Compress,
              OnPrepareResponse = ctx =>
+@@ -394,7 +396,7 @@ public class Startup
+         try
+         {
+             var htmlDoc = new HtmlDocument();
+-            var indexHtmlPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "index.html");
++            var indexHtmlPath = Path.Combine("@webroot@", "index.html");
+             htmlDoc.Load(indexHtmlPath);
+ 
+             var baseNode = htmlDoc.DocumentNode.SelectSingleNode("/html/head/base");

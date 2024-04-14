@@ -69,13 +69,12 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "7.5.1";
-
+  version = "7.8.0";
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "calibre";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-FH9+MHJkHJYEaxoqTTlm6gJkq+RpdXoK5F2erZP+ECI=";
+    sha256 = "sha256-6wp3++DGWo9lEu4sHeGnYyBop2KPrhpxtkwraHNjsPI=";
   };
 
   patches = [

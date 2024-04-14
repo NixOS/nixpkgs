@@ -42,6 +42,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Mimikatz implementation in Python";
+    mainProgram = "pypykatz";
     homepage = "https://github.com/skelsec/pypykatz";
     changelog = "https://github.com/skelsec/pypykatz/releases/tag/${version}";
     license = with licenses; [ mit ];

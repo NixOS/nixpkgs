@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-6758ej7bTvwZPWifl239rQMazM8uw+Y4+3EbjE8XsTg=";
   };
 
-  sourceRoot = "source/server";
+  sourceRoot = "${src.name}/server";
 
   cargoLock = {
     lockFile = ./Cargo.lock;

@@ -13,37 +13,35 @@
 , voluptuous
 , websocket-client
 , xmltodict
-, wheel
 }:
 
 buildPythonPackage rec {
   pname = "hahomematic";
-  version = "2024.2.3";
+  version = "2024.4.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "danielperna84";
     repo = "hahomematic";
     rev = "refs/tags/${version}";
-    hash = "sha256-T2318TnVzvteRADOjoTP7ulIhTyeTbCFX1/KpwWXjlI=";
+    hash = "sha256-w+sSaadbbfc1cNCTx5YYIm8eAKRQxyqZZKK2QPFZv7Y=";
   };
 
   __darwinAllowLocalNetworking = true;
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "setuptools~=68.2" "setuptools" \
-      --replace "wheel~=0.41.2" "wheel"
+      --replace-fail "setuptools~=69.2.0" "setuptools" \
+      --replace-fail "wheel~=0.43.0" "wheel"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     orjson
     python-slugify
@@ -64,8 +62,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to interact with HomeMatic devices";
     homepage = "https://github.com/danielperna84/hahomematic";
-    changelog = "https://github.com/danielperna84/hahomematic/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/danielperna84/hahomematic/blob/${src.rev}/changelog.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda fab ];
   };
 }

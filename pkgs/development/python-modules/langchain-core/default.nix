@@ -1,21 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, poetry-core
-, anyio
-, jsonpatch
-, langsmith
-, packaging
-, pydantic
-, pyyaml
-, requests
-, tenacity
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  fetchPypi,
+  jsonpatch,
+  langsmith,
+  packaging,
+  poetry-core,
+  pydantic,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  pyyaml,
+  requests,
+  tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "0.1.16";
+  version = "0.1.42";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,14 +25,19 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "langchain_core";
     inherit version;
-    hash = "sha256-jLVG7tMYAJ7hqKOB0QgHTt3wOVrmHrJD2wDXbh4mXok=";
+    hash = "sha256-QHUb9g6l2OKy7+ZSkNtDRxfuODSHDAAuQOKBHwnYFOY=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
+  pythonRelaxDeps = [
+    "langsmith"
+    "packaging"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  dependencies = [
     anyio
     jsonpatch
     langsmith

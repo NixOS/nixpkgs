@@ -12,6 +12,7 @@
 # tests
 , pytest-timeout
 , pytestCheckHook
+, pytest_7
 }:
 
 buildPythonPackage rec {
@@ -41,7 +42,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-timeout
-    pytestCheckHook
+    (pytestCheckHook.override { pytest = pytest_7; })
   ];
 
   disabledTests = [

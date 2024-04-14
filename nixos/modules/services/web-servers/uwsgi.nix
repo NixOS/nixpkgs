@@ -75,13 +75,13 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Enable uWSGI";
+        description = "Enable uWSGI";
       };
 
       runDir = mkOption {
         type = types.path;
         default = "/run/uwsgi";
-        description = lib.mdDoc "Where uWSGI communication sockets can live";
+        description = "Where uWSGI communication sockets can live";
       };
 
       package = mkOption {
@@ -124,7 +124,7 @@ in {
             };
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           uWSGI configuration. It awaits an attribute `type` inside which can be either
           `normal` or `emperor`.
 
@@ -142,19 +142,19 @@ in {
       plugins = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = lib.mdDoc "Plugins used with uWSGI";
+        description = "Plugins used with uWSGI";
       };
 
       user = mkOption {
         type = types.str;
         default = "uwsgi";
-        description = lib.mdDoc "User account under which uWSGI runs.";
+        description = "User account under which uWSGI runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "uwsgi";
-        description = lib.mdDoc "Group account under which uWSGI runs.";
+        description = "Group account under which uWSGI runs.";
       };
 
       capabilities = mkOption {
@@ -167,7 +167,7 @@ in {
             "CAP_NET_RAW"          # open raw sockets
           ]
         '';
-        description = lib.mdDoc ''
+        description = ''
           Grant capabilities to the uWSGI instance. See the
           `capabilities(7)` for available values.
 

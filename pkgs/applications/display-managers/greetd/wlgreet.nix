@@ -18,6 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Raw wayland greeter for greetd, to be run under sway or similar";
+    mainProgram = "wlgreet";
     homepage = "https://git.sr.ht/~kennylevinsen/wlgreet";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ luc65r ];

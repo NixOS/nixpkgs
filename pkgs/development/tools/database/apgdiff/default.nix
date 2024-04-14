@@ -26,6 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Another PostgreSQL diff tool";
+    mainProgram = "apgdiff";
     homepage = "https://apgdiff.com";
     license = licenses.mit;
     inherit (jre.meta) platforms;

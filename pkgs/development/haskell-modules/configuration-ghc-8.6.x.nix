@@ -97,9 +97,6 @@ self: super: {
   # This became a core library in ghc 8.10., so we don’t have an "exception" attribute anymore.
   exceptions = self.exceptions_0_10_7;
 
-  # Older compilers need the latest ghc-lib to build this package.
-  hls-hlint-plugin = addBuildDepend self.ghc-lib super.hls-hlint-plugin;
-
   # vector 0.12.2 indroduced doctest checks that don’t work on older compilers
   vector = dontCheck super.vector;
 

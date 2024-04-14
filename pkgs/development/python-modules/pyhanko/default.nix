@@ -139,6 +139,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Sign and stamp PDF files";
+    mainProgram = "pyhanko";
     homepage = "https://github.com/MatthiasValvekens/pyHanko";
     changelog = "https://github.com/MatthiasValvekens/pyHanko/blob/v${version}/docs/changelog.rst";
     license = licenses.mit;

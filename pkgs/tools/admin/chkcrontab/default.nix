@@ -13,6 +13,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "A tool to detect crontab errors";
+    mainProgram = "chkcrontab";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
     homepage = "https://github.com/lyda/chkcrontab";

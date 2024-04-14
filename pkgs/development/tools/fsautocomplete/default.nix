@@ -1,8 +1,5 @@
 { lib, buildDotnetModule, fetchFromGitHub, dotnetCorePackages }:
 
-let
-  inherit (dotnetCorePackages) sdk_7_0;
-in
 buildDotnetModule rec {
   pname = "fsautocomplete";
   version = "0.69.0";
@@ -23,8 +20,8 @@ buildDotnetModule rec {
       --replace TargetFrameworks TargetFramework \
   '';
 
-  dotnet-sdk = sdk_7_0;
-  dotnet-runtime = sdk_7_0;
+  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_6_0 sdk_7_0 ];
+  dotnet-runtime = dotnetCorePackages.sdk_7_0;
 
   projectFile = "src/FsAutoComplete/FsAutoComplete.fsproj";
   executables = [ "fsautocomplete" ];
@@ -33,6 +30,7 @@ buildDotnetModule rec {
 
   meta = with lib; {
     description = "The FsAutoComplete project (FSAC) provides a backend service for rich editing or intellisense features for editors.";
+    mainProgram = "fsautocomplete";
     homepage = "https://github.com/fsharp/FsAutoComplete";
     changelog = "https://github.com/fsharp/FsAutoComplete/releases/tag/v${version}";
     license = licenses.asl20;

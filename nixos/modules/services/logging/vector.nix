@@ -6,14 +6,14 @@ let cfg = config.services.vector;
 in
 {
   options.services.vector = {
-    enable = mkEnableOption (lib.mdDoc "Vector");
+    enable = mkEnableOption "Vector, a high-performance observability data pipeline";
 
     package = mkPackageOption pkgs "vector" { };
 
     journaldAccess = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enable Vector to access journald.
       '';
     };
@@ -21,7 +21,7 @@ in
     settings = mkOption {
       type = (pkgs.formats.json { }).type;
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Specify the configuration for Vector in Nix.
       '';
     };

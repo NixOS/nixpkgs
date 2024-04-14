@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "axisregistry";
-  version = "0.4.5";
+  version = "0.4.9";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-elQUcl6Zh/3xXLduFKbiXZ6uQsDE8C6M3QnTEwaJlaA=";
+    hash = "sha256-obpjiX86fzokao7UWQUXgarKYRNdxplr6/r2D2d7DCI=";
   };
 
   propagatedBuildInputs = [

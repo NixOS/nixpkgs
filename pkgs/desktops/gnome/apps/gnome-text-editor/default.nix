@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-text-editor";
     description = "A Text Editor for GNOME";
+    mainProgram = "gnome-text-editor";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

@@ -45,7 +45,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "touchosc";
-  version = "1.2.7.190";
+  version = "1.3.0.202";
 
   suffix = {
     aarch64-linux = "linux-arm64";
@@ -56,9 +56,9 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://hexler.net/pub/${pname}/${pname}-${version}-${suffix}.deb";
     hash = {
-      aarch64-linux = "sha256-VUsT14miAkCjaGWwcsREBgd5uhKLOIHaH9/jfQECVZ4=";
-      armv7l-linux  = "sha256-x5zpeuIEfimiGmM9YWBSaXknIZdpO9RzQjE/bYMt16g=";
-      x86_64-linux  = "sha256-LdMDFNHIWBcaAf+q2JPOm8MqtkaQ+6Drrqkyrrpx6MM=";
+      aarch64-linux = "sha256-qsjZ/oo2V6mknrMktuTP188hp57oiPxO/iwp3G57JXU=";
+      armv7l-linux  = "sha256-33SnAYumfnZlxKms3fANt9wRJghaQHUstZbKqTxBF3Q=";
+      x86_64-linux  = "sha256-4SE2iw45sLyapYLCd31xT/aZMTmetsjmgfWFf0FrluI=";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 

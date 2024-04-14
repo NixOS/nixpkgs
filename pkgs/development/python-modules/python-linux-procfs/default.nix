@@ -18,6 +18,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python classes to extract information from the Linux kernel /proc files";
+    mainProgram = "pflags";
     homepage = "https://git.kernel.org/pub/scm/libs/python/python-linux-procfs/python-linux-procfs.git/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ elohmeier ];

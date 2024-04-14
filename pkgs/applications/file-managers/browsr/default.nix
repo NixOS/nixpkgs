@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "browsr";
-  version = "1.18.0";
+  version = "1.19.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "juftin";
     repo = "browsr";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ygqoz1rNQwhU1/8NsHwQsSCqQ8gYwHEaAuIaVMCtKKA=";
+    hash = "sha256-V5B+/zfUlpF0TMTHqzyjapW93/DoJKgbJkTMX2NZyIQ=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -27,6 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     pandas
     pillow
     pymupdf
+    pyperclip
     rich
     rich-click
     rich-pixels
@@ -75,10 +76,14 @@ python3.pkgs.buildPythonApplication rec {
     "test_github_screenshot"
     "test_github_screenshot_license"
     "test_textual_app_context_path_github"
+    "test_mkdocs_screenshot"
+    # Different output
+    "test_textual_app_context_path"
   ];
 
   meta = with lib; {
     description = "A file explorer in your terminal";
+    mainProgram = "browsr";
     homepage = "https://juftin.com/browsr";
     changelog = "https://github.com/juftin/browsr/releases/tag/${src.rev}";
     license = licenses.mit;

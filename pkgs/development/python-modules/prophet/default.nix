@@ -32,7 +32,7 @@ buildPythonPackage rec {
     hash = "sha256-liTg5Hm+FPpRQajBnnJKBh3JPGyu0Hflntf0isj1FiQ=";
   };
 
-  sourceRoot = "source/python";
+  sourceRoot = "${src.name}/python";
 
   env.PROPHET_REPACKAGE_CMDSTAN = "false";
 

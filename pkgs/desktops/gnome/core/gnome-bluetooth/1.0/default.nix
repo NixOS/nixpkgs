@@ -90,6 +90,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://help.gnome.org/users/gnome-bluetooth/stable/index.html.en";
     description = "Application that let you manage Bluetooth in the GNOME destkop";
+    mainProgram = "bluetooth-sendto";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

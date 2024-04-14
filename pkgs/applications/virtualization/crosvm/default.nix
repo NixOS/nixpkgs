@@ -5,18 +5,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "crosvm";
-  version = "121.3";
+  version = "123.0";
 
   src = fetchgit {
     url = "https://chromium.googlesource.com/chromiumos/platform/crosvm";
-    rev = "1e7125327a29b7b7a0593caf339d382728c55cf6";
-    sha256 = "Rjs46TtOhFZxqnEyqa4IyrRs7HnDZ/DJZ9DPEe7Oux0=";
+    # This is actually one commit before release 123, because the final
+    # commit breaks the build and gets reverted in future releases.
+    rev = "7c75ad6185893b4cc26676b6a0eb9fbdf9ed5b72";
+    hash = "sha256-1Jj8TAgYxIGLJeTtiZBcXw0n/mTbh/uC8EFM0IYD5VY=";
     fetchSubmodules = true;
   };
 
   separateDebugInfo = true;
 
-  cargoHash = "sha256-7nfeg/q8baLvB0CoRWKU60TRfLAaRkeRxGojPvKpOLs=";
+  cargoHash = "sha256-f3w+msG7m6valf/I1puMrpiVgk0J1bdyp+rw3KQ/7ys=";
 
   nativeBuildInputs = [
     pkg-config protobuf python3 rustPlatform.bindgenHook wayland-scanner
@@ -30,9 +32,10 @@ rustPlatform.buildRustPackage rec {
     patchShebangs third_party/minijail/tools/*.py
   '';
 
+  CROSVM_USE_SYSTEM_MINIGBM = true;
   CROSVM_USE_SYSTEM_VIRGLRENDERER = true;
 
-  buildFeatures = [ "default" "virgl_renderer" "virgl_renderer_next" ];
+  buildFeatures = [ "virgl_renderer" ];
 
   passthru.updateScript = ./update.py;
 

@@ -34,20 +34,21 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-warn "1.6.0" "${version}"
+      --replace-fail "1.6.0" "${version}"
   '';
 
   pythonRelaxDeps = [
     "cryptography"
+    "pyopenssl"
     "questionary"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     colorama
     cryptography

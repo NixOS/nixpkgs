@@ -34,6 +34,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Decoders for ascii-encoded executables for the Karton framework";
+    mainProgram = "karton-asciimagic";
     homepage = "https://github.com/CERT-Polska/karton-asciimagic";
     changelog = "https://github.com/CERT-Polska/karton-asciimagic/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];

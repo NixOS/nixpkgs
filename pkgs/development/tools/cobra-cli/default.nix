@@ -31,6 +31,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Cobra CLI tool to generate applications and commands";
+    mainProgram = "cobra-cli";
     homepage = "https://github.com/spf13/cobra-cli/";
     changelog = "https://github.com/spf13/cobra-cli/releases/tag/${version}";
     license = licenses.afl20;

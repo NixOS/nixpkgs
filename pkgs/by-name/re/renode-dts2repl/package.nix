@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "renode-dts2repl";
-  version = "unstable-2024-02-14";
+  version = "unstable-2024-03-24";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "antmicro";
     repo = "dts2repl";
-    rev = "b31d32ff4d02577f17bad214d8d7d17f0a5d0466";
-    hash = "sha256-BgbCS4wRoV4/Rt+nLPQGQh25YEnXMqIz3RXEbQEmZuE=";
+    rev = "b581d3b7e68f7822110bc4895f7826f3505be21c";
+    hash = "sha256-Syu5DC8FP9Lyc7CVmUp38Vr3K7FK2Pv/jodzgnSB3cE=";
   };
 
   nativeBuildInputs = [

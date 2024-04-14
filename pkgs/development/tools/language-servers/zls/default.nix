@@ -27,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Zig LSP implementation + Zig Language Server";
+    mainProgram = "zls";
     changelog = "https://github.com/zigtools/zls/releases/tag/${finalAttrs.version}";
     homepage = "https://github.com/zigtools/zls";
     license = lib.licenses.mit;

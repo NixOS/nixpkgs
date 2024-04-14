@@ -179,6 +179,10 @@ stdenv.mkDerivation (rec {
     substituteInPlace test/ExecutionEngine/Interpreter/intrinsics.ll \
       --replace "%roundeven32 = call float @llvm.roundeven.f32(float 0.000000e+00)" "" \
       --replace "%roundeven64 = call double @llvm.roundeven.f64(double 0.000000e+00)" ""
+
+    # fails when run in sandbox
+    substituteInPlace unittests/Support/VirtualFileSystemTest.cpp \
+      --replace "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
   '' + optionalString (stdenv.isDarwin && stdenv.hostPlatform.isx86) ''
     # This test fails on darwin x86_64 because `sw_vers` reports a different
     # macOS version than what LLVM finds by reading
@@ -210,10 +214,6 @@ stdenv.mkDerivation (rec {
     # TODO(@rrbutani): fix/follow-up
     substituteInPlace unittests/TargetParser/Host.cpp \
       --replace "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
-
-    # This test fails with a `dysmutil` crash; have not yet dug into what's
-    # going on here (TODO(@rrbutani)).
-    rm test/tools/dsymutil/ARM/obfuscated.test
   '' + ''
     # FileSystem permissions tests fail with various special bits
     substituteInPlace unittests/Support/CMakeLists.txt \
@@ -223,8 +223,12 @@ stdenv.mkDerivation (rec {
       --replace "PassBuilderCallbacksTest.cpp" ""
     rm unittests/IR/PassBuilderCallbacksTest.cpp
     rm test/tools/llvm-objcopy/ELF/mirror-permissions-unix.test
+
+    # Fails in the presence of anti-virus software or other intrusion-detection software that
+    # modifies the atime when run. See #284056.
+    rm test/tools/llvm-objcopy/ELF/strip-preserve-atime.test
   '' + optionalString stdenv.hostPlatform.isMusl ''
-    patch -p1 -i ${../../TLI-musl.patch}
+    patch -p1 -i ${../../common/llvm/TLI-musl.patch}
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "add_subdirectory(DynamicLibrary)" ""
     rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
@@ -289,6 +293,8 @@ stdenv.mkDerivation (rec {
 
   # E.g. mesa.drivers use the build-id as a cache key (see #93946):
   LDFLAGS = optionalString (enableSharedLibraries && !stdenv.isDarwin) "-Wl,--build-id=sha1";
+
+  hardeningDisable = [ "trivialautovarinit" ];
 
   cmakeBuildType = if debugVersion then "Debug" else "Release";
 
@@ -376,7 +382,6 @@ stdenv.mkDerivation (rec {
       --replace 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "'"$lib"'")'
   ''
   + optionalString (stdenv.isDarwin && enableSharedLibraries) ''
-    ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${shortVersion}.dylib
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
   ''
   + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''

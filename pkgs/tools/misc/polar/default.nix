@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
   buildInputs = [ gems ruby ];
 
-  # See: https://nixos.wiki/wiki/Packaging/Ruby
+  # See: https://wiki.nixos.org/wiki/Packaging/Ruby
   #
   # Put library content under lib/polar and the raw scripts under share/polar.
   # Then, wrap the scripts so that they use the correct ruby environment and put

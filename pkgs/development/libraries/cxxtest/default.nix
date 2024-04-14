@@ -40,6 +40,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "http://cxxtest.com";
     description = "Unit testing framework for C++";
+    mainProgram = "cxxtestgen";
     license = licenses.lgpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ juliendehos ];

@@ -66,6 +66,10 @@ buildPythonPackage rec {
     websocket-client
   ];
 
+  pytestFlagsArray = [
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   disabledTestPaths = [
     # Don't check the templates and the sample app
     "chalice/templates"
@@ -102,6 +106,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python Serverless Microframework for AWS";
+    mainProgram = "chalice";
     homepage = "https://github.com/aws/chalice";
     changelog = "https://github.com/aws/chalice/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;

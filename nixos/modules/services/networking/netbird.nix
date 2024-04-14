@@ -42,7 +42,7 @@ in
   meta.doc = ./netbird.md;
 
   options.services.netbird = {
-    enable = mkEnableOption (lib.mdDoc "Netbird daemon");
+    enable = mkEnableOption "Netbird daemon";
     package = mkPackageOption pkgs "netbird" { };
 
     tunnels = mkOption {

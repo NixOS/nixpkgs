@@ -40,6 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python interface for for Ezviz cameras";
+    mainProgram = "pyezviz";
     homepage = "https://github.com/baqs/pyEzviz/";
     changelog = "https://github.com/BaQs/pyEzviz/releases/tag/${version}";
     license = with licenses; [ asl20 ];

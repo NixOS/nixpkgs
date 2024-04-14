@@ -1,11 +1,11 @@
-{lib, ...}:
+{ lib, ... }:
 let
   inherit (lib) options types;
 in
 {
   options.generic.types = options.mkOption {
     type = types.attrsOf types.optionType;
-    default = {};
+    default = { };
     description = "A set of generic types.";
   };
   config.generic.types = {

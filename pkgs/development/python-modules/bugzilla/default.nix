@@ -31,6 +31,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/python-bugzilla/python-bugzilla";
     description = "Bugzilla XMLRPC access module";
+    mainProgram = "bugzilla";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ pierron ];

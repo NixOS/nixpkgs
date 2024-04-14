@@ -1,5 +1,5 @@
 /*
-  Manages /etc/nix.conf.
+  Manages /etc/nix/nix.conf.
 
   See also
    - ./nix-channel.nix
@@ -14,8 +14,10 @@ let
     concatStringsSep
     boolToString
     escape
+    filterAttrs
     floatToString
     getVersion
+    hasPrefix
     isBool
     isDerivation
     isFloat
@@ -95,14 +97,19 @@ let
 
       mkKeyValuePairs = attrs: concatStringsSep "\n" (mapAttrsToList mkKeyValue attrs);
 
+      isExtra = key: hasPrefix "extra-" key;
+
     in
     pkgs.writeTextFile {
       name = "nix.conf";
+      # workaround for https://github.com/NixOS/nix/issues/9487
+      # extra-* settings must come after their non-extra counterpart
       text = ''
         # WARNING: this file is generated from the nix.* options in
         # your NixOS configuration, typically
         # /etc/nixos/configuration.nix.  Do not edit it!
-        ${mkKeyValuePairs cfg.settings}
+        ${mkKeyValuePairs (filterAttrs (key: value: !(isExtra key)) cfg.settings)}
+        ${mkKeyValuePairs (filterAttrs (key: value: isExtra key) cfg.settings)}
         ${cfg.extraOptions}
       '';
       checkPhase = lib.optionalString cfg.checkConfig (
@@ -147,7 +154,7 @@ in
       checkConfig = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           If enabled, checks that Nix can parse the generated nix.conf.
         '';
       };
@@ -155,7 +162,7 @@ in
       checkAllErrors = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           If enabled, checks the nix.conf parsing for any kind of error. When disabled, checks only for unknown settings.
         '';
       };
@@ -167,7 +174,7 @@ in
           keep-outputs = true
           keep-derivations = true
         '';
-        description = lib.mdDoc "Additional text appended to {file}`nix.conf`.";
+        description = "Additional text appended to {file}`nix.conf`.";
       };
 
       settings = mkOption {
@@ -179,7 +186,7 @@ in
               type = types.either types.int (types.enum [ "auto" ]);
               default = "auto";
               example = 64;
-              description = lib.mdDoc ''
+              description = ''
                 This option defines the maximum number of jobs that Nix will try to
                 build in parallel. The default is auto, which means it will use all
                 available logical cores. It is recommend to set it to the total
@@ -192,7 +199,7 @@ in
               type = types.bool;
               default = false;
               example = true;
-              description = lib.mdDoc ''
+              description = ''
                 If set to true, Nix automatically detects files in the store that have
                 identical contents, and replaces them with hard links to a single copy.
                 This saves disk space. If set to false (the default), you can still run
@@ -204,7 +211,7 @@ in
               type = types.int;
               default = 0;
               example = 64;
-              description = lib.mdDoc ''
+              description = ''
                 This option defines the maximum number of concurrent tasks during
                 one build. It affects, e.g., -j option for make.
                 The special value 0 means that the builder should use all
@@ -217,7 +224,7 @@ in
             sandbox = mkOption {
               type = types.either types.bool (types.enum [ "relaxed" ]);
               default = true;
-              description = lib.mdDoc ''
+              description = ''
                 If set, Nix will perform builds in a sandboxed environment that it
                 will set up automatically for each build. This prevents impurities
                 in builds by disallowing access to dependencies outside of the Nix
@@ -240,7 +247,7 @@ in
               type = types.listOf types.str;
               default = [ ];
               example = [ "/dev" "/proc" ];
-              description = lib.mdDoc ''
+              description = ''
                 Directories from the host filesystem to be included
                 in the sandbox.
               '';
@@ -248,7 +255,7 @@ in
 
             substituters = mkOption {
               type = types.listOf types.str;
-              description = lib.mdDoc ''
+              description = ''
                 List of binary cache URLs used to obtain pre-built binaries
                 of Nix packages.
 
@@ -260,7 +267,7 @@ in
               type = types.listOf types.str;
               default = [ ];
               example = [ "https://hydra.nixos.org/" ];
-              description = lib.mdDoc ''
+              description = ''
                 List of binary cache URLs that non-root users can use (in
                 addition to those specified using
                 {option}`nix.settings.substituters`) by passing
@@ -271,7 +278,7 @@ in
             require-sigs = mkOption {
               type = types.bool;
               default = true;
-              description = lib.mdDoc ''
+              description = ''
                 If enabled (the default), Nix will only download binaries from binary caches if
                 they are cryptographically signed with any of the keys listed in
                 {option}`nix.settings.trusted-public-keys`. If disabled, signatures are neither
@@ -283,7 +290,7 @@ in
             trusted-public-keys = mkOption {
               type = types.listOf types.str;
               example = [ "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs=" ];
-              description = lib.mdDoc ''
+              description = ''
                 List of public keys used to sign binary caches. If
                 {option}`nix.settings.trusted-public-keys` is enabled,
                 then Nix will use a binary from a binary cache if and only
@@ -297,7 +304,7 @@ in
               type = types.listOf types.str;
               default = [ "root" ];
               example = [ "root" "alice" "@wheel" ];
-              description = lib.mdDoc ''
+              description = ''
                 A list of names of users that have additional rights when
                 connecting to the Nix daemon, such as the ability to specify
                 additional binary caches, or to import unsigned NARs. You
@@ -311,7 +318,7 @@ in
             system-features = mkOption {
               type = types.listOf types.str;
               example = [ "kvm" "big-parallel" "gccarch-skylake" ];
-              description = lib.mdDoc ''
+              description = ''
                 The set of features supported by the machine. Derivations
                 can express dependencies on system features through the
                 `requiredSystemFeatures` attribute.
@@ -326,7 +333,7 @@ in
               type = types.listOf types.str;
               default = [ "*" ];
               example = [ "@wheel" "@builders" "alice" "bob" ];
-              description = lib.mdDoc ''
+              description = ''
                 A list of names of users (separated by whitespace) that are
                 allowed to connect to the Nix daemon. As with
                 {option}`nix.settings.trusted-users`, you can specify groups by
@@ -345,10 +352,10 @@ in
             show-trace = true;
 
             system-features = [ "big-parallel" "kvm" "recursive-nix" ];
-            sandbox-paths = { "/bin/sh" = "''${pkgs.busybox-sandbox-shell.out}/bin/busybox"; };
+            sandbox-paths = [ "/bin/sh=''${pkgs.busybox-sandbox-shell.out}/bin/busybox" ];
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Configuration for Nix, see
           <https://nixos.org/manual/nix/stable/command-ref/conf-file.html> or
           {manpage}`nix.conf(5)` for available options.

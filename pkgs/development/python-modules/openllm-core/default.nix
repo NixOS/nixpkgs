@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "openllm-core";
-  version = "0.4.41";
+  version = "0.4.44";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -33,29 +33,33 @@ buildPythonPackage rec {
     owner = "bentoml";
     repo = "OpenLLM";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9mr6sw4/h5cYSmo1CDT2SKq4NVz1ZcoyqnYOwhlfaiQ=";
+    hash = "sha256-kRR715Vnt9ZAmxuWvtH0z093crH0JFrEKPtbjO3QMRc=";
   };
 
-  sourceRoot = "source/openllm-core";
+  sourceRoot = "${src.name}/openllm-core";
 
   nativeBuildInputs = [
-    hatch-fancy-pypi-readme
-    hatch-vcs
-    hatchling
     pythonRelaxDepsHook
   ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "hatch-vcs==0.3.0" "hatch-vcs" \
-      --replace "hatchling==1.18.0" "hatchling"
+      --replace-fail "hatch-vcs==0.3.0" "hatch-vcs" \
+      --replace-fail "hatchling==1.18.0" "hatchling" \
+      --replace-fail "hatch-fancy-pypi-readme==23.1.0" "hatch-fancy-pypi-readme"
   '';
 
   pythonRelaxDeps = [
     "cattrs"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    hatch-fancy-pypi-readme
+    hatch-vcs
+    hatchling
+  ];
+
+  dependencies = [
     attrs
     cattrs
     # not listed in pyproject.toml, but required at runtime
@@ -67,7 +71,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     vllm = [
       # vllm
     ];
@@ -83,10 +87,10 @@ buildPythonPackage rec {
       # trl
     ] ++ transformers.optional-dependencies.torch
       ++ transformers.optional-dependencies.tokenizers;
-    full = with passthru.optional-dependencies; (
+    full = with optional-dependencies; (
       vllm
       # use absolute path to disambiguate with derivbation argument
-      ++ passthru.optional-dependencies.bentoml
+      ++ optional-dependencies.bentoml
       ++ fine-tune );
   };
 

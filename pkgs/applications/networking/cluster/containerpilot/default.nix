@@ -17,6 +17,7 @@ buildGoPackage rec {
   meta = with lib; {
     homepage = "https://www.joyent.com/containerpilot";
     description = "An application centric micro-orchestrator.";
+    mainProgram = "containerpilot";
     platforms = platforms.unix;
     license = licenses.mpl20;
     maintainers = with maintainers; [ cpcloud ];

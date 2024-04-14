@@ -1,24 +1,26 @@
 { lib
 , buildPythonPackage
-, cython
+, cython_3
 , fetchPypi
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "lupa";
-  version = "2.0";
-  format = "setuptools";
+  version = "2.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rT/vSGvnrd3TSf6anDk3iQYTEs+Y68UztIm+NPSEy3k=";
+    hash = "sha256-dgAwcS1SczlvXpY92HMa77WsZdku/4v4/UEkwWMP6VA=";
   };
 
-  nativeBuildInputs = [
-    cython
+  build-system = [
+    cython_3
+    setuptools
   ];
 
   pythonImportsCheck = [

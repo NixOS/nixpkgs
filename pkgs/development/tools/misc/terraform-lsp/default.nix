@@ -20,6 +20,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Language Server Protocol for Terraform";
+    mainProgram = "terraform-lsp";
     homepage = "https://github.com/juliosueiras/terraform-lsp";
     license = licenses.mit;
     maintainers = with maintainers; [ marsam ];

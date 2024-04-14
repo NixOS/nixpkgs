@@ -9,16 +9,18 @@
 , isodate
 , pytest-aiohttp
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , requests
 , requests-oauthlib
+, setuptools
 , trio
 }:
 
 buildPythonPackage rec {
   pname = "msrest";
   version = "0.7.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -29,6 +31,10 @@ buildPythonPackage rec {
     rev = "2d8fd04f68a124d0f3df7b81584accc3270b1afc";
     hash = "sha256-1EXXXflhDeU+erdI+NsWxSX76ooDTl3+MyQwRzm2xV0=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     azure-core
@@ -56,6 +62,12 @@ buildPythonPackage rec {
     "test_conf_async_requests"
     "test_conf_async_requests"
     "test_conf_async_trio_requests"
+  ] ++ lib.optionals (pythonAtLeast "3.12") [
+    # AttributeError: 'TestAuthentication' object has no attribute...
+    "test_apikey_auth"
+    "test_cs_auth"
+    "test_eventgrid_auth"
+    "test_eventgrid_domain_auth"
   ];
 
   pythonImportsCheck = [

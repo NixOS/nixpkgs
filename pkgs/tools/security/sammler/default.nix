@@ -21,6 +21,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool to extract useful data from documents";
+    mainProgram = "sammler";
     homepage = "https://github.com/redcode-labs/Sammler";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ] ++ teams.redcodelabs.members;

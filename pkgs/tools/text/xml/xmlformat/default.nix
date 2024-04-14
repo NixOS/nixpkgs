@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "a configurable formatter (or 'pretty-printer') for XML documents";
+    mainProgram = "xmlformat";
     homepage = "http://www.kitebird.com/software/xmlformat/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;

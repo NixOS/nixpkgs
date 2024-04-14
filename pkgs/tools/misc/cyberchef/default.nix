@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cyberchef";
-  version = "10.7.0";
+  version = "10.15.1";
 
   src = fetchzip {
     url = "https://github.com/gchq/CyberChef/releases/download/v${version}/CyberChef_v${version}.zip";
-    sha256 = "sha256-/miIdPP00vIh3Em8BFDoxkYFpgU4Vty4V5RiCgqOKPo=";
+    sha256 = "sha256-IJ3Id/Pn6KVBQwRFBpECDkeEXQ9J2WRK4NgeSqZoP8w=";
     stripRoot = false;
   };
 

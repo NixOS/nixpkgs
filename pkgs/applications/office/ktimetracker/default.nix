@@ -25,6 +25,7 @@ kio knotifications kwindowsystem kxmlgui ktextwidgets
 
   meta = with lib; {
     description = "Todo management and time tracking application";
+    mainProgram = "ktimetracker";
     license = licenses.gpl2;
     homepage = "https://userbase.kde.org/KTimeTracker";
     maintainers = with maintainers; [ dtzWill ];

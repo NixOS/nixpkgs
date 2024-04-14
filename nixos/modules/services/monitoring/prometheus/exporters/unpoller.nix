@@ -1,4 +1,4 @@
-{ config, lib, pkgs, options }:
+{ config, lib, pkgs, options, ... }:
 
 with lib;
 
@@ -24,9 +24,9 @@ in {
     inherit (options.services.unpoller.unifi) controllers;
     inherit (options.services.unpoller) loki;
     log = {
-      debug = mkEnableOption (lib.mdDoc "debug logging including line numbers, high resolution timestamps, per-device logs");
-      quiet = mkEnableOption (lib.mdDoc "startup and error logs only");
-      prometheusErrors = mkEnableOption (lib.mdDoc "emitting errors to prometheus");
+      debug = mkEnableOption "debug logging including line numbers, high resolution timestamps, per-device logs";
+      quiet = mkEnableOption "startup and error logs only";
+      prometheusErrors = mkEnableOption "emitting errors to prometheus";
     };
   };
 

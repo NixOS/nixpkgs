@@ -32,7 +32,7 @@ TMP_FILE = "$(mktemp)"
 GENERATED_NIXFILE = "pkgs/development/lua-modules/generated-packages.nix"
 
 HEADER = """/* {GENERATED_NIXFILE} is an auto-generated file -- DO NOT EDIT!
-Regenerate it with: nix run nixpkgs#update-luarocks-packages
+Regenerate it with: nix run nixpkgs#luarocks-packages-updater
 You can customize the generated packages in pkgs/development/lua-modules/overrides.nix
 */
 """.format(

@@ -83,6 +83,9 @@ buildPythonPackage rec {
     "test_sync_download__directory"
     "test_sync_download__system_directory"
     "test_transformer_group__download_grids"
+
+    # proj-data grid required
+    "test_azimuthal_equidistant"
   ];
 
   pythonImportsCheck = [
@@ -103,6 +106,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python interface to PROJ library";
+    mainProgram = "pyproj";
     homepage = "https://github.com/pyproj4/pyproj";
     changelog = "https://github.com/pyproj4/pyproj/blob/${src.rev}/docs/history.rst";
     license = licenses.mit;

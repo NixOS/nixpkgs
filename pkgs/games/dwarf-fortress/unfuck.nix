@@ -19,9 +19,16 @@
 , pkg-config
 }:
 
-with lib;
-
 let
+  inherit (lib)
+    getAttr
+    hasAttr
+    licenses
+    maintainers
+    platforms
+    versionOlder
+    ;
+
   unfuck-releases = {
     "0.43.05" = {
       unfuckRelease = "0.43.05";
@@ -106,7 +113,7 @@ stdenv.mkDerivation {
     libGL
   ]
   # switched to gtk3 in 0.47.05
-  ++ (if lib.versionOlder release.unfuckRelease "0.47.05" then [
+  ++ (if versionOlder release.unfuckRelease "0.47.05" then [
     gtk2
   ] else [
     gtk3
@@ -124,7 +131,7 @@ stdenv.mkDerivation {
 
   passthru = { inherit dfVersion; };
 
-  meta = with lib; {
+  meta = {
     description = "Unfucked multimedia layer for Dwarf Fortress";
     homepage = "https://github.com/svenstaro/dwarf_fortress_unfuck";
     license = licenses.free;

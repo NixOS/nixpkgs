@@ -30,6 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A framework to generate file carving test data";
+    mainProgram = "woodblock";
     homepage = "https://github.com/fkie-cad/woodblock";
     license = licenses.mit;
     maintainers = [ ];

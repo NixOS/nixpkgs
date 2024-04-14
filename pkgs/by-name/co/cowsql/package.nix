@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libuv
-, raft-cowsql
-, sqlite
-, incus
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libuv,
+  raft-cowsql,
+  sqlite,
+  incus,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cowsql";
-  version = "1.15.4";
+  version = "1.15.6";
 
   src = fetchFromGitHub {
     owner = "cowsql";
     repo = "cowsql";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-JbLiwWXOrEhqCdM8tWwxl68O5Sga4T7NYCXzqP9+Dh0=";
+    hash = "sha256-cr6AT/n2/6DuGK53JvGLwCkMi4+fS128qxj3X9SJYuw=";
   };
 
   nativeBuildInputs = [
@@ -36,14 +37,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  outputs = [ "dev" "out" ];
+  outputs = [
+    "dev"
+    "out"
+  ];
 
   passthru = {
     inherit (incus) tests;
 
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

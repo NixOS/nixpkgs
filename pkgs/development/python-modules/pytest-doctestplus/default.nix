@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, gitMinimal
 , numpy
 , packaging
 , pytest
@@ -12,15 +13,20 @@
 
 buildPythonPackage rec {
   pname = "pytest-doctestplus";
-  version = "1.0.0";
+  version = "1.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9lBEDcrt4T7W19pzv7SsWF1AqAREujVC0+buzbJ11J8=";
+    hash = "sha256-xa12Oi+uXu5bZ4jPVedU1AQOxJsOIoj8ncmgFe+buTI=";
   };
+
+  postPatch = ''
+    substituteInPlace pytest_doctestplus/plugin.py \
+      --replace-fail '"git"' '"${lib.getExe gitMinimal}"'
+  '';
 
   nativeBuildInputs = [
     setuptools-scm

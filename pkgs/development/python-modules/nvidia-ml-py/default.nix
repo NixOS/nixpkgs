@@ -1,6 +1,8 @@
 { lib
 , fetchPypi
 , buildPythonPackage
+, substituteAll
+, addOpenGLRunpath
 }:
 
 buildPythonPackage rec {
@@ -15,7 +17,10 @@ buildPythonPackage rec {
   };
 
   patches = [
-    ./0001-locate-libnvidia-ml.so.1-on-NixOS.patch
+    (substituteAll {
+      src = ./0001-locate-libnvidia-ml.so.1-on-NixOS.patch;
+      inherit (addOpenGLRunpath) driverLink;
+    })
   ];
 
   # no tests

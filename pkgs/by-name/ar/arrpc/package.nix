@@ -3,15 +3,15 @@
 , fetchFromGitHub
 }: buildNpmPackage rec {
   pname = "arrpc";
-  version = "3.3.0";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "OpenAsar";
     repo = "arrpc";
     # Release commits are not tagged
     # release: 3.3.0
-    rev = "c6e23e7eb733ad396d3eebc328404cc656fed581";
-    hash = "sha256-OeEFNbmGp5SWVdJJwXZUkkNrei9jyuPc+4E960l8VRA=";
+    rev = "b4796fffe3bf1b1361cc4781024349f7a4f9400e";
+    hash = "sha256-iEfV85tRl2KyjodoaSxVHiqweBpLeiCAYWc8+afl/sA=";
   };
 
   npmDepsHash = "sha256-YlSUGncpY0MyTiCfZcPsfcNx3fR+SCtkOFWbjOPLUzk=";

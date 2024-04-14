@@ -14,6 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Sass reimplemented in rust with nom";
+    mainProgram = "rsass";
     homepage = "https://github.com/kaj/rsass";
     changelog = "https://github.com/kaj/rsass/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit /* or */ asl20 ];

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "simde";
-  version = "0.7.6";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "simd-everywhere";
     repo = "simde";
     rev = "v${version}";
-    hash = "sha256-pj+zaD5o9XYkTavezcQFzM6ao0IdQP1zjP9L4vcCyEY=";
+    hash = "sha256-hQtSxO8Uld6LT6V1ZhR6tbshTK1QTGgyQ99o3jOIbQk=";
   };
 
   nativeBuildInputs = [ meson ninja ];

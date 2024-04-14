@@ -7,7 +7,7 @@
 let derive2 = derive { biocVersion = "3.18"; };
 in with self; {
   AHCytoBands = derive2 { name="AHCytoBands"; version="0.99.1"; sha256="0svxxhj3mh5gqik45ikcxnlhnma8n1c0rv8pycj2034cb9ms1dbv"; depends=[]; };
-  AHEnsDbs = derive2 { name="AHEnsDbs"; version="1.1.10"; sha256="0mqginwp70rwsmqwdl64awj4jr78n17rbaxmik86sk4n98fgd4xf"; depends=[AnnotationHubData ensembldb]; };
+  AHEnsDbs = derive2 { name="AHEnsDbs"; version="1.1.11"; sha256="1mh8aji48a6fad6bd1333qmc3dw7b5hf4v7xw0zhmfbnld64gz0s"; depends=[AnnotationHubData ensembldb]; };
   AHLRBaseDbs = derive2 { name="AHLRBaseDbs"; version="1.7.0"; sha256="1nbgqv1c3nyhlniqvqdc5cf8kyys323z1ia5jw54hxwi1jdyclfg"; depends=[AnnotationHub]; };
   AHMeSHDbs = derive2 { name="AHMeSHDbs"; version="1.7.0"; sha256="0hxik2xzvbgv6a936mvax5kyv65drr36r9rf7rlv124jinlbxw82"; depends=[AnnotationHub]; };
   AHPathbankDbs = derive2 { name="AHPathbankDbs"; version="0.99.5"; sha256="10wcrglm521xcrfbzc39dkbjvg1pkz0zq70vgnh68akiwmdirp89"; depends=[AnnotationHub]; };
@@ -348,7 +348,7 @@ in with self; {
   excluderanges = derive2 { name="excluderanges"; version="0.99.8"; sha256="19pdwlhqlz420yss371bsqhkx8c7wxr0sv4wsycnc0mlplwq4bsf"; depends=[GenomicRanges]; };
   fitCons_UCSC_hg19 = derive2 { name="fitCons.UCSC.hg19"; version="3.7.1"; sha256="19isa4x8js0pdb4k8a11bw3bzmzv6jc4jphzrvav7piqkvrgykzx"; depends=[BSgenome GenomeInfoDb GenomicRanges GenomicScores IRanges S4Vectors]; };
   fly_db0 = derive2 { name="fly.db0"; version="3.18.0"; sha256="1pksr9jwdd5izf2yc7fb935pic84nvlxa458h0da9lryglc0w5rg"; depends=[AnnotationDbi]; };
-  geneplast_data = derive2 { name="geneplast.data"; version="0.99.8"; sha256="1dd7jbgr1binab11npc4qk6caa4n3hzcfdjbsi56f0xic73f8w1b"; depends=[ape BiocFileCache dplyr geneplast igraph purrr readr tibble treeio]; };
+  geneplast_data = derive2 { name="geneplast.data"; version="0.99.9"; sha256="1i31kx4kckfg965s9l3pilvmg847av3rpa05aql43259ccyng4hi"; depends=[ape BiocFileCache dplyr geneplast igraph purrr readr tibble tidyr treeio]; };
   geneplast_data_string_v91 = derive2 { name="geneplast.data.string.v91"; version="0.99.6"; sha256="0mc26d0sgmpmfmqsqinqv5k6vhg0hlc8hsjkcnvf369yav224nq1"; depends=[]; };
   genomewidesnp5Crlmm = derive2 { name="genomewidesnp5Crlmm"; version="1.0.6"; sha256="06dmwnjy3gb53y6nr02dmp22qzfl5d63wppazrabcqbzwimhnvp8"; depends=[]; };
   genomewidesnp6Crlmm = derive2 { name="genomewidesnp6Crlmm"; version="1.0.7"; sha256="16qcxa32fmbdcv5dck0grsnqyfcqql7wpxa1l6andv9hrvabv2jx"; depends=[]; };

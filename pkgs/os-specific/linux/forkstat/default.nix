@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Process fork/exec/exit monitoring tool";
+    mainProgram = "forkstat";
     homepage = "https://github.com/ColinIanKing/forkstat";
     license = licenses.gpl2;
     platforms = platforms.linux;

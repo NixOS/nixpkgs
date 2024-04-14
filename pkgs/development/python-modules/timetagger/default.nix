@@ -55,6 +55,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library to interact with TimeTagger";
+    mainProgram = "timetagger";
     homepage = "https://github.com/almarklein/timetagger";
     changelog = "https://github.com/almarklein/timetagger/releases/tag/v${version}";
     license = licenses.gpl3Only;

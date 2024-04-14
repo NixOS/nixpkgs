@@ -5,17 +5,18 @@
 , openssl
 , pkg-config
 , rustPlatform
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "crunchy-cli";
-  version = "3.2.5";
+  version = "3.3.4";
 
   src = fetchFromGitHub {
     owner = "crunchy-labs";
     repo = "crunchy-cli";
     rev = "v${version}";
-    hash = "sha256-hzmTwUd+bQwr+5UtXKMalJZUDxOC5nhXNTXbYZN8xtA=";
+    hash = "sha256-yhihHHanUYa6+UeNUKDCpr0Z0ad+A0iS1eUtouOZurA=";
   };
 
   cargoLock = {
@@ -39,11 +40,13 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = true;
   };
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Command-line downloader for Crunchyroll";
     homepage = "https://github.com/crunchy-labs/crunchy-cli";
-    license = licenses.mit;
-    maintainers = with maintainers; [ stepbrobd ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ stepbrobd ];
     mainProgram = "crunchy-cli";
   };
 }

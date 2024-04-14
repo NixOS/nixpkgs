@@ -67,9 +67,13 @@ let
     chapterskip = callPackage ./chapterskip.nix { };
     convert = callPackage ./convert.nix { };
     cutter = callPackage ./cutter.nix { };
+    dynamic-crop = callPackage ./dynamic-crop.nix { };
     inhibit-gnome = callPackage ./inhibit-gnome.nix { };
+    modernx = callPackage ./modernx.nix { };
+    modernx-zydezu = callPackage ./modernx-zydezu.nix { };
     mpris = callPackage ./mpris.nix { };
     mpv-cheatsheet = callPackage ./mpv-cheatsheet.nix { };
+    mpv-osc-modern = callPackage ./mpv-osc-modern.nix { };
     mpv-playlistmanager = callPackage ./mpv-playlistmanager.nix { };
     mpv-webm = callPackage ./mpv-webm.nix { };
     mpvacious = callPackage ./mpvacious.nix { };

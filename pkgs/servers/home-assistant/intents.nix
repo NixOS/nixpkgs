@@ -9,27 +9,24 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-intents";
-  version = "2024.2.2";
-  format = "pyproject";
+  version = "2024.4.3";
+  format = "wheel";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Tb9ZZvs5Wyzm2TS5INUSua4Y3/2H+kHEhjpfYWJi+d0=";
+    inherit version format;
+    pname = "home_assistant_intents";
+    dist = "py3";
+    python = "py3";
+    hash = "sha256-GraYVtioKIoKlPRBhhhzlbBfI6heXAaA1MQpUqAgEDQ=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace-fail \
-      'requires = ["setuptools~=62.3", "wheel~=0.37.1"]' \
-      'requires = ["setuptools"]'
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  # sdist does not ship tests
+  # sdist/wheel do not ship tests
   doCheck = false;
 
   pytestFlagsArray = [

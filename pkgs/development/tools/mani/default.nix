@@ -34,6 +34,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "CLI tool to help you manage multiple repositories";
+    mainProgram = "mani";
     longDescription = ''
       mani is a CLI tool that helps you manage multiple repositories. It's useful
       when you are working with microservices, multi-project systems, many

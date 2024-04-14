@@ -22,6 +22,7 @@ buildNimPackage {
   meta = with lib; {
     description =
       "Native messenger for Tridactyl, a vim-like Firefox webextension";
+    mainProgram = "native_main";
     homepage = "https://github.com/tridactyl/native_messenger";
     license = licenses.bsd2;
     platforms = platforms.all;

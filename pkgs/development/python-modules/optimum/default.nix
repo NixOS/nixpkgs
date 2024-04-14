@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "optimum";
-  version = "1.17.0";
+  version = "1.18.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "optimum";
     rev = "refs/tags/v${version}";
-    hash = "sha256-101QW6MgCcmSeQ0AefPZKmg5O6+2JlrekYN3fIkukuw=";
+    hash = "sha256-Y+KWvpd/ULthCOr18hQjP0REQPcs2Ql2aUi3DIKIOpQ=";
   };
 
   propagatedBuildInputs = [
@@ -107,6 +107,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Accelerate training and inference of 🤗 Transformers and 🤗 Diffusers with easy to use hardware optimization tools";
+    mainProgram = "optimum-cli";
     homepage = "https://github.com/huggingface/optimum";
     changelog = "https://github.com/huggingface/optimum/releases/tag/${src.rev}";
     license = licenses.asl20;

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "slib";
-  version = "3b7";
+  version = "3c1";
 
   src = fetchurl {
     url = "https://groups.csail.mit.edu/mac/ftpdir/scm/${pname}-${version}.zip";
-    hash = "sha256-9dXNrTNTlaWlqjfv/iiqgHiyFuo5kR9lGSlnjxrCKLY=";
+    hash = "sha256-wvjrmOYFMN9TIRmF1LQDtul6epaYM8Gm0b+DVh2gx4E=";
   };
 
   patches = [
@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "The SLIB Portable Scheme Library";
+    mainProgram = "slib";
 
     longDescription = ''
       SLIB is a portable library for the programming language Scheme.  It

@@ -64,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://github.com/CastXML/CastXML";
     description = "C-family Abstract Syntax Tree XML Output";
+    mainProgram = "castxml";
     license = licenses.asl20;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;

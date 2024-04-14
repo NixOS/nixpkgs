@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "fiona";
-  version = "1.9.5";
+  version = "1.9.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "Toblerity";
     repo = "Fiona";
     rev = "refs/tags/${version}";
-    hash = "sha256-fq/BuyzuK4iOxdpE4h+KRH0CxOEk/wdmbb9KgCfJ1cw=";
+    hash = "sha256-MboM3IwGF8cuz+jMQ3QVZFAHjpspQ6kVJincq7OEkCM=";
   };
 
   nativeBuildInputs = [
@@ -93,6 +93,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/Toblerity/Fiona/blob/${src.rev}/CHANGES.txt";
     description = "OGR's neat, nimble, no-nonsense API for Python";
+    mainProgram = "fio";
     homepage = "https://fiona.readthedocs.io/";
     license = licenses.bsd3;
     maintainers = teams.geospatial.members;

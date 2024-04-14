@@ -9,14 +9,14 @@
 
 buildPythonApplication rec {
   pname = "glances";
-  version = "3.4.0.3";
+  version = "3.4.0.5";
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TakQqyHKuiFdBL73JQzflNUMYmBINyY0flqitqoIpmg=";
+    hash = "sha256-Ho4vcmTEVja7rkgLSfNkXvnpopYupRxPL1UVlnmdGCg=";
   };
 
   # On Darwin this package segfaults due to mismatch of pure and impure
@@ -48,6 +48,7 @@ buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://nicolargo.github.io/glances/";
     description = "Cross-platform curses-based monitoring tool";
+    mainProgram = "glances";
     changelog = "https://github.com/nicolargo/glances/blob/v${version}/NEWS.rst";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ jonringer primeos koral ];

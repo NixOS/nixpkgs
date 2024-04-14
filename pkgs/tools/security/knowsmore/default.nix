@@ -47,6 +47,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool for pentesting Microsoft Active Directory";
+    mainProgram = "knowsmore";
     homepage = "https://github.com/helviojunior/knowsmore";
     changelog = "https://github.com/helviojunior/knowsmore/releases/tag/v${version}";
     license = licenses.gpl3Only;

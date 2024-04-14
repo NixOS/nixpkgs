@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scdoc";
-  version = "1.11.2-unstable-2023-03-08";
+  version = "1.11.3";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "scdoc";
-    rev = "afeda241f3f9b2c27e461f32d9c2a704ab82ef61";
-    hash = "sha256-jIYygjUXP/6o5d9drlZjdr25KjEQx8oy4TaQwQEu8fM=";
+    rev = finalAttrs.version;
+    hash = "sha256-MbLDhLn/JY6OcdOz9/mIPAQRp5TZ6IKuQ/FQ/R3wjGc=";
   };
 
   outputs = [ "out" "man" "dev" ];

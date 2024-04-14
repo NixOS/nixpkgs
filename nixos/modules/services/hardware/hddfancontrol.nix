@@ -8,12 +8,12 @@ in
 {
   options = {
 
-    services.hddfancontrol.enable = lib.mkEnableOption (lib.mdDoc "hddfancontrol daemon");
+    services.hddfancontrol.enable = lib.mkEnableOption "hddfancontrol daemon";
 
     services.hddfancontrol.disks = lib.mkOption {
       type = with types; listOf path;
       default = [];
-      description = lib.mdDoc ''
+      description = ''
         Drive(s) to get temperature from
       '';
       example = ["/dev/sda"];
@@ -22,7 +22,7 @@ in
     services.hddfancontrol.pwmPaths = lib.mkOption {
       type = with types; listOf path;
       default = [];
-      description = lib.mdDoc ''
+      description = ''
         PWM filepath(s) to control fan speed (under /sys)
       '';
       example = ["/sys/class/hwmon/hwmon2/pwm1"];
@@ -31,7 +31,7 @@ in
     services.hddfancontrol.smartctl = lib.mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Probe temperature using smartctl instead of hddtemp or hdparm
       '';
     };
@@ -39,7 +39,7 @@ in
     services.hddfancontrol.extraArgs = lib.mkOption {
       type = with types; listOf str;
       default = [];
-      description = lib.mdDoc ''
+      description = ''
         Extra commandline arguments for hddfancontrol
       '';
       example = ["--pwm-start-value=32"
@@ -60,6 +60,10 @@ in
       systemd.services.hddfancontrol = {
         wantedBy = [ "multi-user.target" ];
         environment.HDDFANCONTROL_ARGS = lib.escapeShellArgs args;
+        serviceConfig = {
+          # Hardening
+          PrivateNetwork = true;
+        };
       };
     }
   );

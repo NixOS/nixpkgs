@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "ariadne";
-  version = "0.22.0";
+  version = "0.23.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "mirumee";
     repo = "ariadne";
     rev = "refs/tags/${version}";
-    hash = "sha256-GMBtW2gZbF1m0BrKhYEkSaZYt5tIGmP/ipy6WC1H1pg=";
+    hash = "sha256-zdM6LKtrD6m3hWn90yAgsinCvaa86BaTdhgf/VzGDLA=";
   };
 
   patches = [

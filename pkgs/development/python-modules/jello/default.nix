@@ -38,6 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "CLI tool to filter JSON and JSON Lines data with Python syntax";
+    mainProgram = "jello";
     homepage = "https://github.com/kellyjonbrazil/jello";
     changelog = "https://github.com/kellyjonbrazil/jello/blob/${src.rev}/CHANGELOG";
     license = licenses.mit;

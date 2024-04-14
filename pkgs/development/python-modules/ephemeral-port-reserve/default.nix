@@ -37,6 +37,7 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "Find an unused port, reliably";
+    mainProgram = "ephemeral-port-reserve";
     homepage = "https://github.com/Yelp/ephemeral-port-reserve/";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];

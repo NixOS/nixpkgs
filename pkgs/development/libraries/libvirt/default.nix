@@ -271,7 +271,7 @@ stdenv.mkDerivation rec {
       "--sysconfdir=/var/lib"
       (cfg "install_prefix" (placeholder "out"))
       (cfg "localstatedir" "/var")
-      (cfg "runstatedir" "/run")
+      (cfg "runstatedir" (if isDarwin then "/var/run" else "/run"))
 
       (cfg "init_script" (if isDarwin then "none" else "systemd"))
       (cfg "qemu_datadir" (lib.optionalString isDarwin "${qemu}/share/qemu"))

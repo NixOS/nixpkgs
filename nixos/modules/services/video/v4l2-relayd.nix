@@ -18,19 +18,19 @@ let
 
   instanceOpts = { name, ... }: {
     options = {
-      enable = mkEnableOption (lib.mdDoc "this v4l2-relayd instance");
+      enable = mkEnableOption "this v4l2-relayd instance";
 
       name = mkOption {
         type = types.str;
         default = name;
-        description = lib.mdDoc ''
+        description = ''
           The name of the instance.
         '';
       };
 
       cardLabel = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           The name the camera will show up as.
         '';
       };
@@ -38,7 +38,7 @@ let
       extraPackages = mkOption {
         type = with types; listOf package;
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           Extra packages to add to {env}`GST_PLUGIN_PATH` for the instance.
         '';
       };
@@ -46,7 +46,7 @@ let
       input = {
         pipeline = mkOption {
           type = types.str;
-          description = lib.mdDoc ''
+          description = ''
             The gstreamer-pipeline to use for the input-stream.
           '';
         };
@@ -54,7 +54,7 @@ let
         format = mkOption {
           type = types.str;
           default = "YUY2";
-          description = lib.mdDoc ''
+          description = ''
             The video-format to read from input-stream.
           '';
         };
@@ -62,7 +62,7 @@ let
         width = mkOption {
           type = types.ints.positive;
           default = 1280;
-          description = lib.mdDoc ''
+          description = ''
             The width to read from input-stream.
           '';
         };
@@ -70,7 +70,7 @@ let
         height = mkOption {
           type = types.ints.positive;
           default = 720;
-          description = lib.mdDoc ''
+          description = ''
             The height to read from input-stream.
           '';
         };
@@ -78,7 +78,7 @@ let
         framerate = mkOption {
           type = types.ints.positive;
           default = 30;
-          description = lib.mdDoc ''
+          description = ''
             The framerate to read from input-stream.
           '';
         };
@@ -88,7 +88,7 @@ let
         format = mkOption {
           type = types.str;
           default = "YUY2";
-          description = lib.mdDoc ''
+          description = ''
             The video-format to write to output-stream.
           '';
         };
@@ -113,7 +113,7 @@ in
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         v4l2-relayd instances to be created.
       '';
     };

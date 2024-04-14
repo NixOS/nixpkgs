@@ -13,11 +13,13 @@ Once an Eclipse variant is installed, it can be run using the `eclipse` command,
 If you prefer to install plugins in a more declarative manner, then Nixpkgs also offer a number of Eclipse plugins that can be installed in an _Eclipse environment_. This type of environment is created using the function `eclipseWithPlugins` found inside the `nixpkgs.eclipses` attribute set. This function takes as argument `{ eclipse, plugins ? [], jvmArgs ? [] }` where `eclipse` is a one of the Eclipse packages described above, `plugins` is a list of plugin derivations, and `jvmArgs` is a list of arguments given to the JVM running the Eclipse. For example, say you wish to install the latest Eclipse Platform with the popular Eclipse Color Theme plugin and also allow Eclipse to use more RAM. You could then add:
 
 ```nix
-packageOverrides = pkgs: {
-  myEclipse = with pkgs.eclipses; eclipseWithPlugins {
-    eclipse = eclipse-platform;
-    jvmArgs = [ "-Xmx2048m" ];
-    plugins = [ plugins.color-theme ];
+{
+  packageOverrides = pkgs: {
+    myEclipse = with pkgs.eclipses; eclipseWithPlugins {
+      eclipse = eclipse-platform;
+      jvmArgs = [ "-Xmx2048m" ];
+      plugins = [ plugins.color-theme ];
+    };
   };
 }
 ```
@@ -33,32 +35,34 @@ If there is a need to install plugins that are not available in Nixpkgs then it 
 Expanding the previous example with two plugins using the above functions, we have:
 
 ```nix
-packageOverrides = pkgs: {
-  myEclipse = with pkgs.eclipses; eclipseWithPlugins {
-    eclipse = eclipse-platform;
-    jvmArgs = [ "-Xmx2048m" ];
-    plugins = [
-      plugins.color-theme
-      (plugins.buildEclipsePlugin {
-        name = "myplugin1-1.0";
-        srcFeature = fetchurl {
-          url = "http://…/features/myplugin1.jar";
-          hash = "sha256-123…";
-        };
-        srcPlugin = fetchurl {
-          url = "http://…/plugins/myplugin1.jar";
-          hash = "sha256-123…";
-        };
-      });
-      (plugins.buildEclipseUpdateSite {
-        name = "myplugin2-1.0";
-        src = fetchurl {
-          stripRoot = false;
-          url = "http://…/myplugin2.zip";
-          hash = "sha256-123…";
-        };
-      });
-    ];
+{
+  packageOverrides = pkgs: {
+    myEclipse = with pkgs.eclipses; eclipseWithPlugins {
+      eclipse = eclipse-platform;
+      jvmArgs = [ "-Xmx2048m" ];
+      plugins = [
+        plugins.color-theme
+        (plugins.buildEclipsePlugin {
+          name = "myplugin1-1.0";
+          srcFeature = fetchurl {
+            url = "http://…/features/myplugin1.jar";
+            hash = "sha256-123…";
+          };
+          srcPlugin = fetchurl {
+            url = "http://…/plugins/myplugin1.jar";
+            hash = "sha256-123…";
+          };
+        })
+        (plugins.buildEclipseUpdateSite {
+          name = "myplugin2-1.0";
+          src = fetchurl {
+            stripRoot = false;
+            url = "http://…/myplugin2.zip";
+            hash = "sha256-123…";
+          };
+        })
+      ];
+    };
   };
 }
 ```

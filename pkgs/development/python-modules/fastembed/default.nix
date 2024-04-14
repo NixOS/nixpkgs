@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "fastembed";
-  version = "0.1.2";
+  version = "0.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "qdrant";
     repo = "fastembed";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FW85xeRcrPL3euXcQ3dS40SapimFgpWtRu6XiIzdzSM=";
+    hash = "sha256-ufgco5wPBG19GM99rZV7LKQqEzzCv24I8026SMz0CH4=";
   };
 
   nativeBuildInputs = [

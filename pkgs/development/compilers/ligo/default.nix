@@ -15,29 +15,14 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "ligo";
-  version = "1.0.0";
+  version = "1.4.0";
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
     rev = version;
-    sha256 = "sha256-tHIIA1JE7mzDIf2v9IEZt1pjVQEA89zjTsmqhzTn3Wc=";
+    sha256 = "sha256-N2RkeKJ+lEyNJwpmF5sORmOkDhNmTYRYAgvyR7Pc5EI=";
     fetchSubmodules = true;
   };
-
-  postPatch = ''
-    substituteInPlace "vendors/tezos-ligo/dune-project" \
-      --replace \
-        "(using ctypes 0.1)" \
-        "(using ctypes 0.3)" \
-      --replace \
-        "(lang dune 3.0)" \
-        "(lang dune 3.7)"
-
-    substituteInPlace "src/coq/dune" \
-      --replace \
-        "(name ligo_coq)" \
-        "(name ligo_coq)(mode vo)"
-  '';
 
   # The build picks this up for ligo --version
   LIGO_VERSION = version;
@@ -68,6 +53,7 @@ ocamlPackages.buildDunePackage rec {
     ocamlgraph
     bisect_ppx
     decompress
+    fileutils
     ppx_deriving
     ppx_deriving_yojson
     ppx_yojson_conv
@@ -141,6 +127,7 @@ ocamlPackages.buildDunePackage rec {
     homepage = "https://ligolang.org/";
     downloadPage = "https://ligolang.org/docs/intro/installation";
     description = "A friendly Smart Contract Language for Tezos";
+    mainProgram = "ligo";
     license = licenses.mit;
     platforms = ocamlPackages.ocaml.meta.platforms;
     broken = stdenv.isLinux && stdenv.isAarch64;

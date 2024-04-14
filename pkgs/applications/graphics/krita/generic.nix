@@ -1,4 +1,4 @@
-{ mkDerivation, lib, stdenv, fetchpatch, makeWrapper, fetchurl, cmake, extra-cmake-modules
+{ mkDerivation, lib, stdenv, fetchpatch, fetchurl, cmake, extra-cmake-modules
 , karchive, kconfig, kwidgetsaddons, kcompletion, kcoreaddons
 , kguiaddons, ki18n, kitemmodels, kitemviews, kwindowsystem
 , kio, kcrash, breeze-icons
@@ -13,7 +13,7 @@
 }:
 
 mkDerivation rec {
-  pname = "krita";
+  pname = "krita-unwrapped";
   inherit version;
 
   src = fetchurl {
@@ -36,7 +36,7 @@ mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config python3Packages.sip makeWrapper ];
+  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config python3Packages.sip ];
 
   buildInputs = [
     karchive kconfig kwidgetsaddons kcompletion kcoreaddons kguiaddons
@@ -72,14 +72,11 @@ mkDerivation rec {
     "-DBUILD_KRITA_QT_DESIGNER_PLUGINS=ON"
   ];
 
-  preInstall = ''
-    qtWrapperArgs+=(--prefix PYTHONPATH : "$PYTHONPATH")
-  '';
-
   meta = with lib; {
     description = "A free and open source painting application";
     homepage = "https://krita.org/";
     maintainers = with maintainers; [ abbradar sifmelcara nek0 ];
+    mainProgram = "krita";
     platforms = platforms.linux;
     license = licenses.gpl3Only;
   };

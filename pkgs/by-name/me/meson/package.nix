@@ -18,13 +18,13 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
     repo = "meson";
     rev = "refs/tags/${version}";
-    hash = "sha256-KNNtHi3jx0MRiOgmluA4ucZJWB2WeIYdApfHuspbCqg=";
+    hash = "sha256-7M/El2snWsQi+gaZWPHnEr9gpJW3trqG1RbnT43M49s=";
   };
 
   patches = [
@@ -141,6 +141,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     homepage = "https://mesonbuild.com";
     description = "An open source, fast and friendly build system made in Python";
+    mainProgram = "meson";
     longDescription = ''
       Meson is an open source build system meant to be both extremely fast, and,
       even more importantly, as user friendly as possible.

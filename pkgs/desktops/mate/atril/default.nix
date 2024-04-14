@@ -3,16 +3,17 @@
 , fetchurl
 , pkg-config
 , gettext
+, caja
 , gtk3
 , glib
 , libxml2
 , libarchive
 , libsecret
 , poppler
+, mate-desktop
 , itstool
 , hicolor-icon-theme
 , texlive
-, mate
 , wrapGAppsHook
 , enableEpub ? true
 , webkitgtk_4_1
@@ -28,11 +29,11 @@
 
 stdenv.mkDerivation rec {
   pname = "atril";
-  version = "1.26.2";
+  version = "1.28.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "wwW51fVxP0Jiau4DggkTA0IrPXGlbd1lkyzNsjx86SY=";
+    sha256 = "ztRyX26bccTqY2dr/DzDvgnSnboIqnp6uXlk4LQ1UWI=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    caja
     gtk3
     glib
     itstool
@@ -49,8 +51,7 @@ stdenv.mkDerivation rec {
     libsecret
     libxml2
     poppler
-    mate.caja
-    mate.mate-desktop
+    mate-desktop
     hicolor-icon-theme
     texlive.bin.core # for synctex, used by the pdf back-end
   ]

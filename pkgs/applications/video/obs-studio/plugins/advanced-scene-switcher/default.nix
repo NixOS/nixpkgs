@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "advanced-scene-switcher";
-  version = "1.24.2";
+  version = "1.25.3";
 
   src = fetchFromGitHub {
     owner = "WarmUpTill";
     repo = "SceneSwitcher";
     rev = version;
-    hash = "sha256-J5Qcs2eoKMeO1O/MCsR5wfmfbtndRaZmHrbleEZqqOo=";
+    hash = "sha256-cVMeFAliP0srvnhJQkOhZB2hrald8RHFhBXwdGIu2uo=";
   };
 
   nativeBuildInputs = [
@@ -61,11 +61,7 @@ stdenv.mkDerivation rec {
     chmod -R +w $sourceRoot/deps/libremidi
   '';
 
-  postInstall = ''
-    mkdir $out/lib $out/share
-    mv $out/obs-plugins/64bit $out/lib/obs-plugins
-    mv $out/data $out/share/obs
-  '';
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=stringop-overflow";
 
   meta = with lib; {
     description = "An automated scene switcher for OBS Studio";

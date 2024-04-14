@@ -45,6 +45,7 @@ mkDerivation rec {
     broken = stdenv.isDarwin;
     homepage = "https://github.com/lxqt/compton-conf";
     description = "GUI configuration tool for compton X composite manager";
+    mainProgram = "compton-conf";
     license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
     maintainers = teams.lxqt.members;

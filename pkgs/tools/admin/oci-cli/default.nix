@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , fetchPypi
 , python3
+, installShellFiles
 }:
 
 let
@@ -46,6 +47,8 @@ buildPythonApplication rec {
     hash = "sha256-yooEZuSIw2EMJVyT/Z/x4hJi8a1F674CtsMMGkMAYLg=";
   };
 
+  nativeBuildInputs = [ installShellFiles ];
+
   propagatedBuildInputs = [
     arrow
     certifi
@@ -71,6 +74,24 @@ buildPythonApplication rec {
       --replace "prompt-toolkit==3.0.29" "prompt-toolkit" \
       --replace "terminaltables==3.1.0" "terminaltables" \
       --replace "oci==2.78.0" "oci"
+  '';
+
+  postInstall = ''
+    cat >oci.zsh <<EOF
+    #compdef oci
+    zmodload -i zsh/parameter
+    autoload -U +X bashcompinit && bashcompinit
+    if ! (( $+functions[compdef] )) ; then
+        autoload -U +X compinit && compinit
+    fi
+
+    EOF
+    cat src/oci_cli/bin/oci_autocomplete.sh >>oci.zsh
+
+    installShellCompletion \
+      --cmd oci \
+      --bash src/oci_cli/bin/oci_autocomplete.sh \
+      --zsh oci.zsh
   '';
 
   # https://github.com/oracle/oci-cli/issues/187

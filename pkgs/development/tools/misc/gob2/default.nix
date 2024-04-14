@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Preprocessor for making GObjects with inline C code";
+    mainProgram = "gob2";
     homepage = "https://www.jirka.org/gob.html";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;

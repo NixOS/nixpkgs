@@ -59,6 +59,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/Kozea/pygal/blob/${version}/docs/changelog.rst";
     downloadPage = "https://github.com/Kozea/pygal";
     description = "Sexy and simple python charting";
+    mainProgram = "pygal_gen.py";
     homepage = "http://www.pygal.org";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ ];

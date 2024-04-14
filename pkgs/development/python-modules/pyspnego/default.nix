@@ -59,6 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/jborean93/pyspnego/blob/v${version}/CHANGELOG.md";
     description = "Python SPNEGO authentication library";
+    mainProgram = "pyspnego-parse";
     homepage = "https://github.com/jborean93/pyspnego";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

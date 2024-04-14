@@ -36,16 +36,15 @@
 , withLinuxHeaders ? false
 , profilingLibraries ? false
 , withGd ? false
-, withLibcrypt ? false
 , extraBuildInputs ? []
 , extraNativeBuildInputs ? []
 , ...
 } @ args:
 
 let
-  version = "2.38";
-  patchSuffix = "-44";
-  sha256 = "sha256-+4KZiZiyspllRnvBtp0VLpwwfSzzAcnq+0VVt3DvP9I=";
+  version = "2.39";
+  patchSuffix = "-5";
+  sha256 = "sha256-93vUfPgXDFc2Wue/hmlsEYrbOxINMlnGTFAtPcHi2SY=";
 in
 
 assert withLinuxHeaders -> linuxHeaders != null;
@@ -59,14 +58,14 @@ stdenv.mkDerivation ({
   patches =
     [
       /* No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
-          $ git fetch --all -p && git checkout origin/release/2.38/master && git describe
-          glibc-2.38-44-gd37c2b20a4
-          $ git show --minimal --reverse glibc-2.38.. | gzip -9n --rsyncable - > 2.38-master.patch.gz
+          $ git fetch --all -p && git checkout origin/release/2.39/master && git describe
+          glibc-2.39-5-ge0910f1d32
+          $ git show --minimal --reverse glibc-2.39.. > 2.39-master.patch
 
          To compare the archive contents zdiff can be used.
-          $ zdiff -u 2.38-master.patch.gz ../nixpkgs/pkgs/development/libraries/glibc/2.38-master.patch.gz
+          $ diff -u 2.39-master.patch ../nixpkgs/pkgs/development/libraries/glibc/2.39-master.patch
        */
-      ./2.38-master.patch.gz
+      ./2.39-master.patch
 
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch
@@ -96,11 +95,6 @@ stdenv.mkDerivation ({
          & https://github.com/NixOS/nixpkgs/pull/188492#issuecomment-1233802991
       */
       ./reenable_DT_HASH.patch
-
-      /* Retrieved from https://salsa.debian.org/glibc-team/glibc/-/commit/662dbc4f9287139a0d9c91df328a5ba6cc6abee1#0f3c6d67cb8cf5bb35c421c20f828fea97b68edf
-         Qualys advisory: https://www.qualys.com/2024/01/30/qsort.txt
-       */
-      ./local-qsort-memory-corruption.patch
     ]
     /* NVCC does not support ARM intrinsics. Since <math.h> is pulled in by almost
        every HPC piece of software, without this patch CUDA compilation on ARM
@@ -177,8 +171,7 @@ stdenv.mkDerivation ({
       # so the glibc does not depend on its compiler store path
       "libc_cv_as_needed=no"
     ]
-    ++ lib.optional withGd "--with-gd"
-    ++ lib.optional withLibcrypt "--enable-crypt";
+    ++ lib.optional withGd "--with-gd";
 
   makeFlags = (args.makeFlags or []) ++ [
     "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"

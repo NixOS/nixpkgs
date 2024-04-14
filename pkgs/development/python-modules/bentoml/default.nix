@@ -69,7 +69,7 @@
 }:
 
 let
-  version = "1.1.11";
+  version = "1.2.5";
   aws = [ fs-s3fs ];
   grpc = [
     grpcio
@@ -105,7 +105,7 @@ buildPythonPackage {
     owner = "bentoml";
     repo = "BentoML";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2EjltGfmLalgPD9XNYYduYGzqbumqoglVVL+AbRzMJE=";
+    hash = "sha256-GBKxyjCs02mxYiMK4GhgFUATRCUSVf8mFbWjuPVD7SU=";
   };
 
   # https://github.com/bentoml/BentoML/pull/4227 should fix this test

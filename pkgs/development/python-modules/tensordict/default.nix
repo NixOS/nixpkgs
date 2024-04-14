@@ -10,11 +10,12 @@
 , numpy
 , h5py
 , pytestCheckHook
+, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "tensordict";
-  version = "0.3.0";
+  version = "0.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "pytorch";
     repo = "tensordict";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XTFUzPs/fqX3DPtu/qSE1hY+7r/HToPVPaTyVRzDT/E=";
+    hash = "sha256-eCx1r7goqOdGX/0mSGCiLhdGQTh4Swa5aFiLSsL56p0=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +52,18 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     h5py
     pytestCheckHook
+  ];
+
+  # RuntimeError: internal error
+  disabledTests = lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+    "test_add_scale_sequence"
+    "test_modules"
+    "test_setattr"
+  ];
+
+  # ModuleNotFoundError: No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
+  disabledTestPaths = lib.optionals stdenv.isDarwin [
+    "test/test_distributed.py"
   ];
 
   meta = with lib; {

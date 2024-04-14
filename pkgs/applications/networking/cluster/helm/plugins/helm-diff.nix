@@ -1,17 +1,17 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGo122Module, fetchFromGitHub, lib }:
 
-buildGoModule rec {
+buildGo122Module rec {
   pname = "helm-diff";
-  version = "3.9.4";
+  version = "3.9.5";
 
   src = fetchFromGitHub {
     owner = "databus23";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hDni0bAF4tp7upP/D5S6dGN//zaNHidWAYf/l6W9j28=";
+    hash = "sha256-6XkiGSbZzkYnqaHcoZQckADGVcWmSWL87MVzqb98lMQ=";
   };
 
-  vendorHash = "sha256-51xjHGU9TC4Nwa9keR0b7bgwpZcRmG7duT9R1JRr3Uw=";
+  vendorHash = "sha256-E0ERop/TBr36sfTKCD+DdZwHSkhYdGmvKoJF2gl3gwE=";
 
   ldflags = [ "-s" "-w" "-X github.com/databus23/helm-diff/v3/cmd.Version=${version}" ];
 

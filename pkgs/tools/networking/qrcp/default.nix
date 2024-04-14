@@ -42,7 +42,6 @@ buildGoModule rec {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ fgaz ];
-    broken = stdenv.isDarwin; # needs golang.org/x/sys bump
     mainProgram = "qrcp";
   };
 }

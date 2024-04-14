@@ -59,6 +59,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/mitmproxy/pdoc/blob/${src.rev}/CHANGELOG.md";
     homepage = "https://pdoc.dev/";
     description = "API Documentation for Python Projects";
+    mainProgram = "pdoc";
     license = licenses.unlicense;
     maintainers = with maintainers; [ pbsds ];
   };

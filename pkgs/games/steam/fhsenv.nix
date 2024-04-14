@@ -111,8 +111,7 @@ in buildFHSEnv rec {
     xorg.libXdamage
     xorg.libxshmfence
     xorg.libXxf86vm
-    libelf
-    (lib.getLib elfutils)
+    elfutils
 
     # Without these it silently fails
     xorg.libXinerama
@@ -305,11 +304,13 @@ in buildFHSEnv rec {
     then
       steam.meta // lib.optionalAttrs (!withGameSpecificLibraries) {
         description = steam.meta.description + " (without game specific libraries)";
+        mainProgram = "steam";
       }
     else {
       description = "Steam dependencies (dummy package, do not use)";
     };
 
+  passthru.steamargs = args;
   passthru.run = buildFHSEnv {
     name = "steam-run";
 

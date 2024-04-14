@@ -1,8 +1,11 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, ase
 , cython
 , glibcLocales
+, joblib
 , matplotlib
 , monty
 , networkx
@@ -12,10 +15,13 @@
 , plotly
 , pybtex
 , pydispatcher
+, pytestCheckHook
+, pytest-xdist
 , pythonOlder
 , requests
 , ruamel-yaml
 , scipy
+, seekpath
 , spglib
 , sympy
 , tabulate
@@ -24,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "pymatgen";
-  version = "2022.3.29";
+  version = "2024.2.23";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -33,7 +39,7 @@ buildPythonPackage rec {
     owner = "materialsproject";
     repo = "pymatgen";
     rev= "v${version}";
-    hash = "sha256-B2piRWx9TfKlGTPOAAGsq2GxyfHIRBVFpk6dxES0WF0=";
+    hash = "sha256-eswoup9ACj/PHVW3obcnZjD4tWemsmROZFtwGGigEYE=";
   };
 
   nativeBuildInputs = [
@@ -60,14 +66,37 @@ buildPythonPackage rec {
     uncertainties
   ];
 
-  # Tests are not detected by pytest
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-xdist
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  preCheck = ''
+    # hide from tests
+    mv pymatgen _pymatgen
+    # ensure tests can find these
+    export PMG_TEST_FILES_DIR="$(realpath ./tests/files)"
+    # some tests cover the command-line scripts
+    export PATH=$out/bin:$PATH
+  '';
+  disabledTests = [
+    # presumably won't work with our dir layouts
+    "test_egg_sources_txt_is_complete"
+    # borderline precision failure
+    "test_thermal_conductivity"
+  ];
+
+  passthru.optional-dependencies = {
+    ase = [ ase ];
+    joblib = [ joblib ];
+    seekpath = [ seekpath ];
+  };
 
   pythonImportsCheck = [
     "pymatgen"
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;  # tests segfault. that's bad.
     description = "A robust materials analysis code that defines core object representations for structures and molecules";
     homepage = "https://pymatgen.org/";
     license = licenses.mit;

@@ -27,6 +27,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/al45tair/mac_alias";
     description = "Generate or read binary Alias and Bookmark records from Python code";
+    mainProgram = "mac_alias";
     longDescription = ''
       mac_alias lets you generate or read binary Alias and Bookmark records from Python code.
 

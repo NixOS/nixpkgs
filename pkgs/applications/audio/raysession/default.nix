@@ -2,11 +2,11 @@
 
 buildPythonApplication rec {
   pname = "raysession";
-  version = "0.14.2";
+  version = "0.14.3";
 
   src = fetchurl {
     url = "https://github.com/Houston4444/RaySession/releases/download/v${version}/RaySession-${version}-source.tar.gz";
-    sha256 = "sha256-qEN3zBK/goRLIZaU06XXm8H5yj4Qjj/NH+bkHkjhLaw=";
+    sha256 = "sha256-3+g1zdjGkxNEpyuKuxzhr2p9gkEFjYAso4fPedbjmlY=";
   };
 
   postPatch = ''

@@ -128,7 +128,10 @@ in
 ++ optional (atLeast12 && stdenv.isDarwin && langAda) ./ada-cctools-as-detection-configure.patch
 
 # Use absolute path in GNAT dylib install names on Darwin
-++ optional (atLeast12 && stdenv.isDarwin && langAda) ./gnat-darwin-dylib-install-name.patch
+++ optionals (stdenv.isDarwin && langAda) ({
+  "13" = [ ./gnat-darwin-dylib-install-name-13.patch ];
+  "12" = [ ./gnat-darwin-dylib-install-name.patch ];
+}.${majorVersion} or [])
 
 # We only apply this patch when building a native toolchain for aarch64-darwin, as it breaks building
 # a foreign one: https://github.com/iains/gcc-12-branch/issues/18

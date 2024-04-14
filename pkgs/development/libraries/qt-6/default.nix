@@ -32,7 +32,10 @@ let
       callPackage = self.newScope ({
         inherit (self) qtModule;
         inherit srcs python3;
-        stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+        stdenv =
+          if stdenv.isDarwin
+          then overrideSDK stdenv { darwinMinVersion = "11.0"; darwinSdkVersion = "11.0"; }
+          else stdenv;
       });
     in
     {
@@ -42,7 +45,7 @@ let
       qtModule = callPackage ./qtModule.nix { };
 
       qtbase = callPackage ./modules/qtbase.nix {
-        withGtk3 = true;
+        withGtk3 = !stdenv.hostPlatform.isMinGW;
         inherit (srcs.qtbase) src version;
         inherit developerBuild;
         inherit (darwin.apple_sdk_11_0.frameworks)
@@ -51,14 +54,13 @@ let
           ./patches/0001-qtbase-qmake-always-use-libname-instead-of-absolute-.patch
           ./patches/0002-qtbase-qmake-fix-mkspecs-for-darwin.patch
           ./patches/0003-qtbase-qmake-fix-includedir-in-generated-pkg-config.patch
-          ./patches/0004-qtbase-deal-with-a-font-face-at-index-0-as-Regular-f.patch
-          ./patches/0005-qtbase-qt-cmake-always-use-cmake-from-path.patch
-          ./patches/0006-qtbase-find-tools-in-PATH.patch
-          ./patches/0007-qtbase-pass-to-qmlimportscanner-the-QML2_IMPORT_PATH.patch
-          ./patches/0008-qtbase-allow-translations-outside-prefix.patch
-          ./patches/0009-qtbase-find-qmlimportscanner-in-macdeployqt-via-envi.patch
-          ./patches/0010-qtbase-check-in-the-QML-folder-of-this-library-does-.patch
-          ./patches/0011-qtbase-derive-plugin-load-path-from-PATH.patch
+          ./patches/0004-qtbase-qt-cmake-always-use-cmake-from-path.patch
+          ./patches/0005-qtbase-find-tools-in-PATH.patch
+          ./patches/0006-qtbase-pass-to-qmlimportscanner-the-QML2_IMPORT_PATH.patch
+          ./patches/0007-qtbase-allow-translations-outside-prefix.patch
+          ./patches/0008-qtbase-find-qmlimportscanner-in-macdeployqt-via-envi.patch
+          ./patches/0009-qtbase-check-in-the-QML-folder-of-this-library-does-.patch
+          ./patches/0010-qtbase-derive-plugin-load-path-from-PATH.patch
           # Revert "macOS: Silence warning about supporting secure state restoration"
           # fix build with macOS sdk < 12.0
           (fetchpatch2 {
@@ -69,47 +71,49 @@ let
         ];
       };
       env = callPackage ./qt-env.nix { };
-      full = callPackage ({ env, qtbase }: env "qt-full-${qtbase.version}"
-      # `with self` is ok to use here because having these spliced is unnecessary
-      ( with self;[
-        qt3d
-        qt5compat
-        qtcharts
-        qtconnectivity
-        qtdatavis3d
-        qtdeclarative
-        qtdoc
-        qtgraphs
-        qtgrpc
-        qthttpserver
-        qtimageformats
-        qtlanguageserver
-        qtlocation
-        qtlottie
-        qtmultimedia
-        qtmqtt
-        qtnetworkauth
-        qtpositioning
-        qtsensors
-        qtserialbus
-        qtserialport
-        qtshadertools
-        qtspeech
-        qtquick3d
-        qtquick3dphysics
-        qtquickeffectmaker
-        qtquicktimeline
-        qtremoteobjects
-        qtsvg
-        qtscxml
-        qttools
-        qttranslations
-        qtvirtualkeyboard
-        qtwebchannel
-        qtwebengine
-        qtwebsockets
-        qtwebview
-      ] ++ lib.optionals (!stdenv.isDarwin) [ qtwayland libglvnd ])) { };
+      full = callPackage
+        ({ env, qtbase }: env "qt-full-${qtbase.version}"
+          # `with self` is ok to use here because having these spliced is unnecessary
+          (with self;[
+            qt3d
+            qt5compat
+            qtcharts
+            qtconnectivity
+            qtdatavis3d
+            qtdeclarative
+            qtdoc
+            qtgraphs
+            qtgrpc
+            qthttpserver
+            qtimageformats
+            qtlanguageserver
+            qtlocation
+            qtlottie
+            qtmultimedia
+            qtmqtt
+            qtnetworkauth
+            qtpositioning
+            qtsensors
+            qtserialbus
+            qtserialport
+            qtshadertools
+            qtspeech
+            qtquick3d
+            qtquick3dphysics
+            qtquickeffectmaker
+            qtquicktimeline
+            qtremoteobjects
+            qtsvg
+            qtscxml
+            qttools
+            qttranslations
+            qtvirtualkeyboard
+            qtwebchannel
+            qtwebengine
+            qtwebsockets
+            qtwebview
+          ] ++ lib.optionals (!stdenv.isDarwin) [ qtwayland libglvnd ]))
+        { };
 
       qt3d = callPackage ./modules/qt3d.nix { };
       qt5compat = callPackage ./modules/qt5compat.nix { };
@@ -162,11 +166,14 @@ let
           GameController ImageCaptureCore LocalAuthentication
           MediaAccessibility MediaPlayer MetalKit Network OpenDirectory Quartz
           ReplayKit SecurityInterface Vision;
-        qtModule = callPackage ({ qtModule }: qtModule.override {
-          stdenv = if stdenv.isDarwin
-            then overrideSDK stdenv { darwinMinVersion = "10.13"; darwinSdkVersion = "11.0"; }
-            else stdenv;
-        }) { };
+        qtModule = callPackage
+          ({ qtModule }: qtModule.override {
+            stdenv =
+              if stdenv.isDarwin
+              then overrideSDK stdenv { darwinMinVersion = "11.0"; darwinSdkVersion = "11.0"; }
+              else stdenv;
+          })
+          { };
         xcbuild = buildPackages.xcbuild.override {
           productBuildVer = "20A2408";
         };
@@ -176,21 +183,25 @@ let
         inherit (darwin.apple_sdk_11_0.frameworks) WebKit;
       };
 
-      wrapQtAppsHook = callPackage ({ makeBinaryWrapper }: makeSetupHook
-        {
-          name = "wrap-qt6-apps-hook";
-          propagatedBuildInputs = [ makeBinaryWrapper ];
-        } ./hooks/wrap-qt-apps-hook.sh) { };
+      wrapQtAppsHook = callPackage
+        ({ makeBinaryWrapper }: makeSetupHook
+          {
+            name = "wrap-qt6-apps-hook";
+            propagatedBuildInputs = [ makeBinaryWrapper ];
+          } ./hooks/wrap-qt-apps-hook.sh)
+        { };
 
-      qmake = callPackage ({ qtbase }: makeSetupHook
-        {
-          name = "qmake6-hook";
-          propagatedBuildInputs = [ qtbase.dev ];
-          substitutions = {
-            inherit debug;
-            fix_qmake_libtool = ./hooks/fix-qmake-libtool.sh;
-          };
-        } ./hooks/qmake-hook.sh) { };
+      qmake = callPackage
+        ({ qtbase }: makeSetupHook
+          {
+            name = "qmake6-hook";
+            propagatedBuildInputs = [ qtbase.dev ];
+            substitutions = {
+              inherit debug;
+              fix_qmake_libtool = ./hooks/fix-qmake-libtool.sh;
+            };
+          } ./hooks/qmake-hook.sh)
+        { };
     } // lib.optionalAttrs config.allowAliases {
       # Convert to a throw on 03-01-2023 and backport the change.
       # Warnings show up in various cli tool outputs, throws do not.
@@ -203,12 +214,13 @@ let
     f = addPackages;
   };
 
-  bootstrapScope = baseScope.overrideScope(final: prev: {
+  bootstrapScope = baseScope.overrideScope (final: prev: {
     qtbase = prev.qtbase.override { qttranslations = null; };
     qtdeclarative = null;
   });
 
-  finalScope = baseScope.overrideScope(final: prev: {
+  finalScope = baseScope.overrideScope (final: prev: {
     qttranslations = bootstrapScope.qttranslations;
   });
-in finalScope
+in
+finalScope

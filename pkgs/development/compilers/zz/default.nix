@@ -44,6 +44,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "ZetZ a zymbolic verifier and tranzpiler to bare metal C";
+    mainProgram = "zz";
     homepage = "https://github.com/zetzit/zz";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];

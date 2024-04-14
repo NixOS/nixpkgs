@@ -14,14 +14,14 @@
 let
   packaging = buildPythonPackage rec {
     pname = "packaging";
-    version = "23.2";
+    version = "24.0";
     pyproject = true;
 
     disabled = pythonOlder "3.7";
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-BI+w6UBQNlGOqvSKVZU8dQwR4aG2jg3RqdYu0MCSz8U=";
+      hash = "sha256-64LF4+ViCQdHZuaIW7BLjDigwBXQowA26+fs40yZiek=";
     };
 
     nativeBuildInputs = [

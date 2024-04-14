@@ -62,6 +62,7 @@ in
     (mkRemovedOptionModule [ "services" "fourStoreEndpoint" ] "The fourStoreEndpoint module has been removed")
     (mkRemovedOptionModule [ "services" "fprot" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "frab" ] "The frab module has been removed")
+    (mkRemovedOptionModule [ "services" "homeassistant-satellite"] "The `services.homeassistant-satellite` module has been replaced by `services.wyoming-satellite`.")
     (mkRemovedOptionModule [ "services" "ihatemoney" ] "The ihatemoney module has been removed for lack of downstream maintainer")
     (mkRemovedOptionModule [ "services" "kippo" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "mailpile" ] "The corresponding package was removed from nixpkgs.")
@@ -92,7 +93,7 @@ in
       The services.xserver.displayManager.auto module has been removed
       because it was only intended for use in internal NixOS tests, and gave the
       false impression of it being a special display manager when it's actually
-      LightDM. Please use the services.xserver.displayManager.autoLogin options
+      LightDM. Please use the services.displayManager.autoLogin options
       instead, or any other display manager in NixOS as they all support auto-login.
     '')
     (mkRemovedOptionModule [ "services" "xserver" "multitouch" ] ''

@@ -25,6 +25,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Compact high quality word embeddings for Russian language";
+    mainProgram = "navec-train";
     homepage = "https://github.com/natasha/navec";
     license = licenses.mit;
     maintainers = with maintainers; [ npatsakula ];

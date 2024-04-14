@@ -38,6 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Portable Lua kernel for Jupyter";
+    mainProgram = "ilua";
     homepage = "https://github.com/guysv/ilua";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ wolfangaukang ];

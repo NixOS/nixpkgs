@@ -15,6 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Prometheus exporter for PI-Hole's Raspberry PI ad blocker";
+    mainProgram = "pihole-exporter";
     homepage = "https://github.com/eko/pihole-exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

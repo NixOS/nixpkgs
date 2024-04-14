@@ -11,7 +11,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "PyQt5-stubs";
+  pname = "pyqt5-stubs";
   version = "5.15.6.0";
   format = "setuptools";
   disabled = pythonOlder "3.7";

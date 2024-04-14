@@ -67,13 +67,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "45.4";
+  version = "45.5";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    sha256 = "kRQIN74VWC8sdTvmYauOQtrVXUobDwZQvQssk/Ar16s=";
+    sha256 = "sha256-UcMyS4qXX5luWsaTqzhWPElubxQubNM1e0lQ0lAzSHQ=";
   };
 
   mesonFlags = [
@@ -201,6 +201,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "A window manager for GNOME";
+    mainProgram = "mutter";
     homepage = "https://gitlab.gnome.org/GNOME/mutter";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;

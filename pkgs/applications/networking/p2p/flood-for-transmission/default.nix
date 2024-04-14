@@ -6,13 +6,13 @@
 
 buildNpmPackage rec {
   pname = "flood-for-transmission";
-  version = "2024-01-24T16-52-06";
+  version = "2024-02-10T19-10-27";
 
   src = fetchFromGitHub {
     owner = "johman10";
     repo = pname;
     rev = version;
-    hash = "sha256-ZV/Gk9DlYkMh8j034YGvMVN7MeOJgFARyOr9Atrs3j4=";
+    hash = "sha256-JhUBtjHWtfFwjOScDu+WtjE42yhWYPA6KD+kJsltbsY=";
   };
 
   npmDepsHash = "sha256-VHWM0vxFKucrmoJiwYpjw7QqhBQw9rPPQVIIevp6Wn0=";

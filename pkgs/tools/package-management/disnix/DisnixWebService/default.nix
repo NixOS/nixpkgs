@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A SOAP interface and client for Disnix";
+    mainProgram = "disnix-soap-client";
     homepage = "https://github.com/svanderburg/DisnixWebService";
     changelog = "https://github.com/svanderburg/DisnixWebService/blob/DisnixWebService-${version}/NEWS.txt";
     license = lib.licenses.mit;

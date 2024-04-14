@@ -49,13 +49,13 @@ in
         type = types.bool;
         default = false;
         relatedPackages = [ "searx" ];
-        description = lib.mdDoc "Whether to enable Searx, the meta search engine.";
+        description = "Whether to enable Searx, the meta search engine.";
       };
 
       environmentFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Environment file (see `systemd.exec(5)`
           "EnvironmentFile=" section for the syntax) to define variables for
           Searx. This option can be used to safely include secret keys into the
@@ -66,7 +66,7 @@ in
       redisCreateLocally = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Configure a local Redis server for SearXNG. This is required if you
           want to enable the rate limiter and bot protection of SearXNG.
         '';
@@ -88,7 +88,7 @@ in
               };
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Searx settings. These will be merged with (taking precedence over)
           the default configuration. It's also possible to refer to
           environment variables
@@ -105,7 +105,7 @@ in
       settingsFile = mkOption {
         type = types.path;
         default = "${runDir}/settings.yml";
-        description = lib.mdDoc ''
+        description = ''
           The path of the Searx server settings.yml file. If no file is
           specified, a default file is used (default config file has debug mode
           enabled). Note: setting this options overrides
@@ -133,7 +133,7 @@ in
             ];
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Limiter settings for SearXNG.
 
           ::: {.note}
@@ -148,7 +148,7 @@ in
       runInUwsgi = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to run searx in uWSGI as a "vassal", instead of using its
           built-in HTTP server. This is the recommended mode for public or
           large instances, but is unnecessary for LAN or local-only use.
@@ -170,7 +170,7 @@ in
             chmod-socket = "660";             # allow the searx group to read/write to the socket
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Additional configuration of the uWSGI vassal running searx. It
           should notably specify on which interfaces and ports the vassal
           should listen.
@@ -213,7 +213,7 @@ in
       serviceConfig = {
         User  = "searx";
         Group = "searx";
-        ExecStart = "${cfg.package}/bin/searx-run";
+        ExecStart = lib.getExe cfg.package;
       } // optionalAttrs (cfg.environmentFile != null)
         { EnvironmentFile = builtins.toPath cfg.environmentFile; };
       environment = {

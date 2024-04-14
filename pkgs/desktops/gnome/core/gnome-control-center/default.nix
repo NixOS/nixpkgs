@@ -62,7 +62,7 @@
 , libepoxy
 , gnome-user-share
 , gnome-remote-desktop
-, wrapGAppsHook
+, wrapGAppsHook4
 , xvfb-run
 }:
 
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     shared-mime-info
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -208,6 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Utilities to configure the GNOME desktop";
+    mainProgram = "gnome-control-center";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

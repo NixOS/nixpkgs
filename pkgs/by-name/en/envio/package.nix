@@ -13,16 +13,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "envio";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "envio-cli";
     repo = "envio";
     rev = "v${version}";
-    hash = "sha256-HVu2Ua1iu7Z14RUbdDQ4ElOGnfYjZCekFvAolu2lM7w=";
+    hash = "sha256-KhjHd+1IeKdASeYP2rPtyTmtkPcBbaruylmOwTPtFgo=";
   };
 
-  cargoHash = "sha256-AVbAHaLARMKGf5ZIygyWWSkg4U1Xkfjwm9XPNZNtUsE=";
+  cargoHash = "sha256-qmJUARwsGln07RAX1Ab0cNDgJq7NkezuT0tZsyd48Mw=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -40,6 +40,7 @@ rustPlatform.buildRustPackage rec {
     homepage    = "https://envio-cli.github.io/home";
     changelog   = "https://github.com/envio-cli/envio/blob/${version}/CHANGELOG.md";
     description = "Modern and secure CLI tool for managing environment variables";
+    mainProgram = "envio";
     longDescription = ''
       Envio is a command-line tool that simplifies the management of
       environment variables across multiple profiles. It allows users to easily

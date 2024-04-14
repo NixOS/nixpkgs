@@ -40,6 +40,7 @@ qt5.mkDerivation {
 
   meta = with lib; {
     description = "A cmdline tool to control the r3 hackerspace lights";
+    mainProgram = "r3ctl";
     homepage = "https://github.com/0xfeedc0de64/r3ctl";
     maintainers = with maintainers; [ mkg20001 ];
     license = licenses.gpl3Only;

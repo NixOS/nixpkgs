@@ -103,6 +103,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/ZDoom/gzdoom";
     description = "Modder-friendly OpenGL and Vulkan source port based on the DOOM engine";
+    mainProgram = "gzdoom";
     longDescription = ''
       GZDoom is a feature centric port for all DOOM engine games, based on
       ZDoom, adding an OpenGL renderer and powerful scripting capabilities.

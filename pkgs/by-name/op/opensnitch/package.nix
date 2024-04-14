@@ -18,13 +18,13 @@
 
 buildGoModule rec {
   pname = "opensnitch";
-  version = "1.6.5";
+  version = "1.6.5.1";
 
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "opensnitch";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2HHyecgiodWhQkkn3eo0RJNroD7HaK6Je/+x9IqZfWE=";
+    hash = "sha256-IVrAAHzLS7A7cYhRk+IUx8/5TGKeqC7M/7iXOpPe2ZA=";
   };
 
   postPatch = ''
@@ -92,6 +92,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "An application firewall";
+    mainProgram = "opensnitchd";
     homepage = "https://github.com/evilsocket/opensnitch/wiki";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ onny ];

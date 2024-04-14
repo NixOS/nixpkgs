@@ -5,7 +5,6 @@
 , lib
 , autoPatchelfHook
 , libcxx
-, libcxxabi
 , libGL
 , gcc7
 }:
@@ -17,7 +16,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     autoPatchelfHook
     libcxx
-    libcxxabi
     libGL
     gcc7.cc.lib
   ];

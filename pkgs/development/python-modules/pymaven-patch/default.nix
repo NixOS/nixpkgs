@@ -11,12 +11,12 @@
 }:
 buildPythonPackage rec {
   pname = "pymaven-patch";
-  version = "0.3.0";
+  version = "0.3.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d55b29bd4aeef3510904a12885eb6856b5bd48f3e29925a123461429f9ad85c0";
+    sha256 = "sha256-DPfJPonwHwQI62Vu7FjLSiKMleA7PUfLc9MfiZBVzVA=";
   };
 
   propagatedBuildInputs = [

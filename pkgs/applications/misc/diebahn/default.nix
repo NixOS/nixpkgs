@@ -21,19 +21,19 @@
 
 stdenv.mkDerivation rec {
   pname = "diebahn";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchFromGitLab {
     owner = "schmiddi-on-mobile";
     repo = "railway";
     rev = version;
-    hash = "sha256-o1WJJslZLg3UlMLmHDeEozsP8CmMU9e7MqONpIKuq80=";
+    hash = "sha256-2iLxErEP0OG+BcG7fvJBzNjh95EkNoC3NC7rKxPLhYk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${src}";
     inherit src;
-    hash = "sha256-/DSbkZev9A7TqRgnCop3PDd8vzSvyOevvl+pBCk1ri0=";
+    hash = "sha256-TyafdFWCaZgLEW2yVfm9+9kXRKoiyCAbRndcb7XCVdI=";
   };
 
   nativeBuildInputs = [
@@ -74,6 +74,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/schmiddi-on-mobile/railway";
     license = lib.licenses.gpl3Plus;
     mainProgram = "diebahn";
-    maintainers = with lib.maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ dotlambda lilacious ];
   };
 }

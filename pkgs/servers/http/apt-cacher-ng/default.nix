@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A caching proxy specialized for Linux distribution files";
+    mainProgram = "apt-cacher-ng";
     homepage = "https://www.unix-ag.uni-kl.de/~bloch/acng/";
     license = licenses.bsdOriginal;
     platforms = platforms.linux;

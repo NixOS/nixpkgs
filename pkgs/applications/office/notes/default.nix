@@ -41,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "A fast and beautiful note-taking app";
+    mainProgram = "notes";
     downloadPage = "https://github.com/nuttyartist/notes";
     homepage = "https://www.get-notes.com";
     license = lib.licenses.mpl20;

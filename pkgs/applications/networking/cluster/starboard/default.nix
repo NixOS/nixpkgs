@@ -69,6 +69,7 @@ buildGoModule rec {
     homepage = "https://github.com/aquasecurity/starboard";
     changelog = "https://github.com/aquasecurity/starboard/releases/tag/v${version}";
     description = "Kubernetes-native security tool kit";
+    mainProgram = "starboard";
     longDescription = ''
       Starboard integrates security tools into the Kubernetes environment, so
       that users can find and view the risks that relate to different resources

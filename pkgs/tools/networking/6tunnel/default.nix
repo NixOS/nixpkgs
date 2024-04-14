@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tunnelling for application that don't speak IPv6";
+    mainProgram = "6tunnel";
     homepage = "https://github.com/wojtekka/6tunnel";
     license = licenses.gpl2;
     maintainers = with maintainers; [ Br1ght0ne ];

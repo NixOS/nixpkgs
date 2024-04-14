@@ -22,6 +22,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Utility tools for control groups of Linux";
+    mainProgram = "cgutil";
     maintainers = with maintainers; [ layus ];
     platforms = platforms.linux;
     license = licenses.gpl2;

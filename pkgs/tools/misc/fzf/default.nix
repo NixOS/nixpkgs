@@ -1,39 +1,26 @@
-{ stdenv
-, lib
+{ lib
 , buildGoModule
 , fetchFromGitHub
-, writeShellScriptBin
 , runtimeShell
 , installShellFiles
 , bc
 , ncurses
-, perl
 , testers
 , fzf
 }:
 
-let
-  # on Linux, wrap perl in the bash completion scripts with the glibc locales,
-  # so that using the shell completion (ctrl+r, etc) doesn't result in ugly
-  # warnings on non-nixos machines
-  ourPerl = if !stdenv.isLinux then perl else (
-    writeShellScriptBin "perl" ''
-      export PERL_BADLANG=0
-      exec ${perl}/bin/perl "$@"
-    '');
-in
 buildGoModule rec {
   pname = "fzf";
-  version = "0.46.1";
+  version = "0.49.0";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    hash = "sha256-gMSelLwIIYv/vkbdWi4Cw3FEy4lbC8P/5+T+c/e66+c=";
+    hash = "sha256-XecMHKi5JMWx3RHQRk2FqS3SjyR6KzWjfyQ5JCI45xM=";
   };
 
-  vendorHash = "sha256-8ojmIETUyZ3jDhrqkHYnxptRG8vdj0GADYvEpw0wi6w=";
+  vendorHash = "sha256-ZEwB2GKohmOx8xosj14VII6sQ4a82s7+h9r620MKEeU=";
 
   CGO_ENABLED = 0;
 
@@ -56,14 +43,9 @@ buildGoModule rec {
         exit 1
     fi
 
-    # Has a sneaky dependency on perl
-    # Include first args to make sure we're patching the right thing
-    substituteInPlace shell/key-bindings.bash \
-      --replace "command -v perl" "command -v ${ourPerl}/bin/perl" \
-      --replace " perl -n " " ${ourPerl}/bin/perl -n "
     # fzf-tmux depends on bc
-   substituteInPlace bin/fzf-tmux \
-     --replace "bc" "${bc}/bin/bc"
+    substituteInPlace bin/fzf-tmux \
+      --replace "bc" "${bc}/bin/bc"
   '';
 
   postInstall = ''

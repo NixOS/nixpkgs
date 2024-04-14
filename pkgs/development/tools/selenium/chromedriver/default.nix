@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
   version = upstream-info.version;
 
   src = fetchurl {
-    url = "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/${version}/${spec.system}/chromedriver-${spec.system}.zip";
+    url = "https://storage.googleapis.com/chrome-for-testing-public/${version}/${spec.system}/chromedriver-${spec.system}.zip";
     hash = spec.hash;
   };
 

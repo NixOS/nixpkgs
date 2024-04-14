@@ -51,5 +51,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     homepage = "https://easycrypt.info/";
     description = "Computer-Aided Cryptographic Proofs";
+    mainProgram = "easycrypt";
   };
 }

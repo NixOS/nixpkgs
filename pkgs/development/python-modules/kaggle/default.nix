@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "kaggle";
-  version = "1.6.3";
+  version = "1.6.11";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-J2FOzXJhO59Ya4cjE68WOK2MChfQx4rZ1KcYeb7NcuQ=";
+    sha256 = "sha256-oN3jld3SB5XZTqoM9mIj4bdgMuzOX6Rj3VQhbedvX1Y=";
   };
 
   propagatedBuildInputs = [
@@ -44,6 +44,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Official API for https://www.kaggle.com, accessible using a command line tool implemented in Python 3";
+    mainProgram = "kaggle";
     homepage = "https://github.com/Kaggle/kaggle-api";
     license = licenses.asl20;
     maintainers = with maintainers; [ mbalatsko ];

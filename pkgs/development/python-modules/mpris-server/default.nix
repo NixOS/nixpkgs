@@ -40,6 +40,10 @@ buildPythonPackage rec {
   # upstream has no tests
   doCheck = false;
 
+  # update doesn't support python311 and monophony, the only consumer requires
+  # 0.4.2
+  passthru.skipBulkUpdate = true;
+
   meta = with lib; {
     description = "Publish a MediaPlayer2 MPRIS device to D-Bus";
     homepage = "https://pypi.org/project/mpris-server/";

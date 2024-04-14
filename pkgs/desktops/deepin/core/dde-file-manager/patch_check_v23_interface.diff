@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8a8cfb079..34092aa57 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -31,7 +31,7 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+ endif()
+ 
+ #Indentify the version
+-if (${DEEPIN_OS_VERSION} MATCHES "23")
++if (${NIX_DEEPIN_VERSION} MATCHES "23")
+     add_definitions(-DCOMPILE_ON_V23)
+     set(COMPLIE_ON_V23 TRUE)
+     message("COMPILE ON v23")

@@ -4,10 +4,7 @@
 , lib
 , emptyDirectory
 , linkFarm
-, symlinkJoin
 , jam
-, libcxx
-, libcxxabi
 , openssl
 , xcbuild
 , CoreServices
@@ -33,10 +30,6 @@ let
       # cone-based Git sparse checkout, either.)
       { name = "contrib"; path = "${src}/contrib"; }
     ];
-  libcxxUnified = symlinkJoin {
-    inherit (libcxx) name;
-    paths = [ libcxx libcxxabi ];
-  };
 in
 stdenv.mkDerivation rec {
   pname = "p4";
@@ -70,7 +63,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin [
       "-sOSVER=1013"
       "-sMACOSX_SDK=${emptyDirectory}"
-      "-sLIBC++DIR=${libcxxUnified}/lib"
+      "-sLIBC++DIR=${lib.getLib stdenv.cc.libcxx}/lib"
     ];
 
   CCFLAGS =

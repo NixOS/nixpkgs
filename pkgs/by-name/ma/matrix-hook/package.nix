@@ -16,6 +16,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A simple webhook for matrix";
+    mainProgram = "matrix-hook";
     homepage = "https://github.com/pinpox/matrix-hook";
     license = licenses.gpl3;
     maintainers = with maintainers; [ pinpox mic92 zowoq ];

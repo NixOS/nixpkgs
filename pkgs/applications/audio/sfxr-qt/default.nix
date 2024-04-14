@@ -58,6 +58,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/agateau/sfxr-qt";
     description = "A sound effect generator, QtQuick port of sfxr";
+    mainProgram = "sfxr-qt";
     license = licenses.gpl2;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.linux;

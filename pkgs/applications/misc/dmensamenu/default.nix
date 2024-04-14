@@ -28,6 +28,7 @@ buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/dotlambda/dmensamenu";
     description = "Print German canteen menus using dmenu and OpenMensa";
+    mainProgram = "dmensamenu";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

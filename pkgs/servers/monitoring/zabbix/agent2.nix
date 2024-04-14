@@ -1,13 +1,13 @@
 { lib, buildGoModule, fetchurl, autoreconfHook, pkg-config, libiconv, openssl, pcre, zlib }:
 
-import ./versions.nix ({ version, sha256, vendorHash ? throw "unsupported version ${version} for zabbix-agent2", ... }:
+import ./versions.nix ({ version, hash, vendorHash ? throw "unsupported version ${version} for zabbix-agent2", ... }:
   buildGoModule {
     pname = "zabbix-agent2";
     inherit version;
 
     src = fetchurl {
       url = "https://cdn.zabbix.com/zabbix/sources/stable/${lib.versions.majorMinor version}/zabbix-${version}.tar.gz";
-      inherit sha256;
+      inherit hash;
     };
 
     modRoot = "src/go";
