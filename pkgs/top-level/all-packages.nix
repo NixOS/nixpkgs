@@ -15497,6 +15497,7 @@ with pkgs;
 
   fasmg = callPackage ../development/compilers/fasmg { };
 
+  # candidate
   fbc = if stdenv.hostPlatform.isDarwin then
     callPackage ../development/compilers/fbc/mac-bin.nix { }
   else
@@ -18084,11 +18085,23 @@ with pkgs;
     electron_29-bin
     electron_30-bin;
 
+  # Use the first package available on the current host platform
+  # and merge all meta.platforms in the resulting derivation.
+  firstAvailableOnHost = packages:
+    let platforms = lib.unique (lib.concatMap (p: p.meta.platforms) packages);
+    in let firstAvailable =
+         lib.findFirst (lib.meta.availableOn stdenv.hostPlatform)
+                       (let p = lib.head packages;
+                            name = p.pname or p.name;
+                        in (throw "${name} not supported on ${stdenv.hostPlatform.system}"))
+                       packages;
+       in lib.recursiveUpdate firstAvailable { meta.platforms = platforms; };
+
   electron_24 = electron_24-bin;
-  electron_27 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_27 then electron-source.electron_27 else electron_27-bin;
-  electron_28 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_28 then electron-source.electron_28 else electron_28-bin;
-  electron_29 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_29 then electron-source.electron_29 else electron_29-bin;
-  electron_30 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_30 then electron-source.electron_30 else electron_30-bin;
+  electron_27 = firstAvailableOnHost [ electron-source.electron_27 electron_27-bin ];
+  electron_28 = firstAvailableOnHost [ electron-source.electron_28 electron_28-bin ];
+  electron_29 = firstAvailableOnHost [ electron-source.electron_29 electron_29-bin ];
+  electron_30 = firstAvailableOnHost [ electron-source.electron_30 electron_30-bin ];
   electron = electron_29;
   electron-bin = electron_29-bin;
 
@@ -21622,6 +21635,7 @@ with pkgs;
 
   ip2location-c = callPackage ../development/libraries/ip2location-c { };
 
+  # candidate
   irrlicht = if !stdenv.isDarwin then
     callPackage ../development/libraries/irrlicht { }
   else callPackage ../development/libraries/irrlicht/mac.nix {
