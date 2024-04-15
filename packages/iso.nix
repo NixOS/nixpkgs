@@ -1,4 +1,4 @@
-{ inputs, ... }@flakeContext:
+{ inputs, sshPubKey ? "", ... }@flakeContext:
 let
   isoModule = { config, lib, pkgs, ... }: {
     config = {
@@ -39,10 +39,18 @@ let
       };
       users = {
         users = {
-          xnode = {
+          "xnode" = {
             isNormalUser = true;
             password = "xnode";
+            openssh.authorizedKeys.keys = [ sshPubKey ]; # Inject a key from environment or through --args
           };
+        };
+      };
+      services = {
+        openssh = {
+          enable = true;
+          settings.PasswordAuthentication = false;
+          settings.KbdInteractiveAuthentication = false;
         };
       };
     };
