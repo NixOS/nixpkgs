@@ -12,6 +12,8 @@
 , systemdLibs
 , dbusSupport ? stdenv.isLinux
 , systemdSupport ? stdenv.isLinux
+, udevSupport ? dbusSupport
+, libusb1
 , IOKit
 , testers
 , nix-update-script
@@ -45,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-ipcdir=/run/pcscd"
   ] ++ lib.optionals systemdSupport [
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+  ] ++ lib.optionals (!udevSupport) [
+    "--disable-libudev"
   ];
 
   makeFlags = [
@@ -78,7 +82,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals systemdSupport [ systemdLibs ]
     ++ lib.optionals stdenv.isDarwin [ IOKit ]
     ++ lib.optionals dbusSupport [ dbus ]
-    ++ lib.optionals polkitSupport [ polkit ];
+    ++ lib.optionals polkitSupport [ polkit ]
+    ++ lib.optionals (!udevSupport) [ libusb1 ];
 
   passthru = {
     tests = {
