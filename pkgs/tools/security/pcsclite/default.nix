@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "2.0.3";
+  version = "2.1.0";
 
   outputs = [ "out" "lib" "dev" "doc" "man" ];
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rousseau";
     repo = "PCSC";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-VDQh2PYAMFwgWvZFD20H3JxgKSFrSUoDLv/6fKEoy5Y=";
+    hash = "sha256-aJKI6pWrZJFmiTxZ9wgCuxKRWRMFVRAkzlo+tSqV8B4=";
   };
 
   configureFlags = [
@@ -50,8 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
   # see also: https://github.com/LudovicRousseau/PCSC/issues/25
   postPatch = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     substituteInPlace src/Makefile.am \
-      --replace "noinst_PROGRAMS = testpcsc pcsc-wirecheck pcsc-wirecheck-gen" \
-                "noinst_PROGRAMS = testpcsc"
+      --replace-fail "noinst_PROGRAMS = testpcsc pcsc-wirecheck pcsc-wirecheck-gen" \
+                     "noinst_PROGRAMS = testpcsc"
   '';
 
   postInstall = ''
@@ -75,20 +75,24 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals polkitSupport [ dbus polkit ];
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      command = "pcscd --version";
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "pcscd --version";
+      };
     };
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Middleware to access a smart card using SCard API (PC/SC)";
     homepage = "https://pcsclite.apdu.fr/";
     changelog = "https://salsa.debian.org/rousseau/PCSC/-/blob/${finalAttrs.version}/ChangeLog";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     mainProgram = "pcscd";
-    maintainers = [ maintainers.anthonyroussel ];
-    platforms = with platforms; unix;
+    maintainers = [ lib.maintainers.anthonyroussel ];
+    pkgConfigModules = [ "libpcsclite" ];
+    platforms = lib.platforms.unix;
   };
 })
