@@ -20269,6 +20269,11 @@
     githubId = 9853194;
     name = "Philipp Bartsch";
   };
+  toast = {
+    name = "Toast";
+    github = "toast003";
+    githubId = 39011842;
+  };
   toastal = {
     email = "toastal+nix@posteo.net";
     matrix = "@toastal:mozilla.org";
