@@ -667,6 +667,12 @@
       fingerprint = "B0D7 2955 235F 6AB5 ACFA  1619 8C7F F5BB 1ADE F191";
     }];
   };
+  aimpizza = {
+    email = "rickomo.us@gmail.com";
+    name = "Rick Omonsky";
+    github = "AimPizza";
+    githubId = 64905268;
+  };
   aiotter = {
     email = "git@aiotter.com";
     github = "aiotter";
