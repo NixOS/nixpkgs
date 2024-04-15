@@ -1758,11 +1758,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libpciaccess = callPackage ({ stdenv, pkg-config, fetchurl, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libpciaccess";
-    version = "0.18";
+    version = "0.18.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libpciaccess-0.18.tar.xz";
-      sha256 = "1ab2qbksf15jrpzd6x9ncri64d2bnhlw7aajdws58lj9gljv0qal";
+      url = "mirror://xorg/individual/lib/libpciaccess-0.18.1.tar.xz";
+      sha256 = "0xpslrjnfrc1a7y8f8qwnd3wq24ndpj2q77ds12mbnwand239x2a";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
