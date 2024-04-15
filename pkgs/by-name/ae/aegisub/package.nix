@@ -1,86 +1,84 @@
-{ lib
-, config
-, stdenv
-, fetchFromGitHub
-, boost179
-, cmake
-, expat
-, harfbuzz
-, ffmpeg
-, ffms
-, fftw
-, fontconfig
-, freetype
-, fribidi
-, glib
-, icu
-, intltool
-, libGL
-, libGLU
-, libX11
-, libass
-, libiconv
-, libuchardet
-, luajit
-, pcre
-, pkg-config
-, which
-, wrapGAppsHook
-, wxGTK
-, zlib
-
-, spellcheckSupport ? true
-, hunspell ? null
-
-, openalSupport ? false
-, openal ? null
-
-, alsaSupport ? stdenv.isLinux
-, alsa-lib ? null
-
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
-, libpulseaudio ? null
-
-, portaudioSupport ? false
-, portaudio ? null
-
-, useBundledLuaJIT ? false
-, darwin
+{
+  lib,
+  alsa-lib,
+  boost,
+  cmake,
+  config,
+  darwin,
+  expat,
+  fetchFromGitHub,
+  ffmpeg,
+  ffms,
+  fftw,
+  fontconfig,
+  freetype,
+  fribidi,
+  glib,
+  harfbuzz,
+  hunspell,
+  icu,
+  intltool,
+  libGL,
+  libGLU,
+  libX11,
+  libass,
+  libiconv,
+  libpulseaudio,
+  libuchardet,
+  luajit,
+  ninja,
+  openal,
+  pcre,
+  pkg-config,
+  portaudio,
+  stdenv,
+  which,
+  wrapGAppsHook,
+  wxGTK,
+  zlib,
+  # Boolean guard flags
+  alsaSupport ? stdenv.isLinux,
+  openalSupport ? true,
+  portaudioSupport ? true,
+  pulseaudioSupport ? config.pulseaudio or stdenv.isLinux,
+  spellcheckSupport ? true,
+  useBundledLuaJIT ? false,
 }:
 
-assert spellcheckSupport -> (hunspell != null);
-assert openalSupport -> (openal != null);
-assert alsaSupport -> (alsa-lib != null);
-assert pulseaudioSupport -> (libpulseaudio != null);
-assert portaudioSupport -> (portaudio != null);
-
 let
-  luajit52 = luajit.override { enable52Compat = true; };
-  inherit (lib) optional;
-  inherit (darwin.apple_sdk.frameworks) CoreText CoreFoundation AppKit Carbon IOKit Cocoa;
+  inherit (darwin.apple_sdk.frameworks)
+    AppKit
+    Carbon
+    Cocoa
+    CoreFoundation
+    CoreText
+    IOKit
+    OpenAL;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aegisub";
   version = "3.3.3";
 
   src = fetchFromGitHub {
     owner = "wangqr";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-oKhLv81EFudrJaaJ2ga3pVh4W5Hd2YchpjsoYoqRm78=";
+    repo = "aegisub";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-oKhLv81EFudrJaaJ2ga3pVh4W5Hd2YchpjsoYoqRm78=";
   };
 
   nativeBuildInputs = [
+    cmake
     intltool
-    luajit52
+    luajit
+    ninja
     pkg-config
     which
-    cmake
     wrapGAppsHook
+    wxGTK
   ];
 
   buildInputs = [
-    boost179
+    boost
     expat
     ffmpeg
     ffms
@@ -101,22 +99,21 @@ stdenv.mkDerivation rec {
     wxGTK
     zlib
   ]
+  ++ lib.optionals alsaSupport [ alsa-lib ]
+  ++ lib.optionals openalSupport [
+    (if stdenv.isDarwin then OpenAL else openal)
+  ]
+  ++ lib.optionals portaudioSupport [ portaudio ]
+  ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
+  ++ lib.optionals spellcheckSupport [ hunspell ]
   ++ lib.optionals stdenv.isDarwin [
-    CoreText
-    CoreFoundation
     AppKit
     Carbon
-    IOKit
     Cocoa
-  ]
-  ++ optional alsaSupport alsa-lib
-  ++ optional openalSupport openal
-  ++ optional portaudioSupport portaudio
-  ++ optional pulseaudioSupport libpulseaudio
-  ++ optional spellcheckSupport hunspell
-  ;
-
-  enableParallelBuilding = true;
+    CoreFoundation
+    CoreText
+    IOKit
+  ];
 
   hardeningDisable = [
     "bindnow"
@@ -124,7 +121,7 @@ stdenv.mkDerivation rec {
   ];
 
   patches = lib.optionals (!useBundledLuaJIT) [
-    ./remove-bundled-luajit.patch
+    ./000-remove-bundled-luajit.patch
   ];
 
   # error: unknown type name 'NSUInteger'
@@ -133,20 +130,22 @@ stdenv.mkDerivation rec {
       --replace "NSUInteger" "size_t"
   '';
 
-  env.NIX_CFLAGS_COMPILE = "-I${luajit52}/include";
-  NIX_CFLAGS_LINK = "-L${luajit52}/lib";
+  env = {
+    NIX_CFLAGS_COMPILE = "-I${lib.getDev luajit}/include";
+    NIX_CFLAGS_LINK = "-L${lib.getLib luajit}/lib";
+  };
 
-  configurePhase = ''
-    export FORCE_GIT_VERSION=${version}
-    # Workaround for a Nixpkgs bug; remove when the fix arrives
-    mkdir build-dir
-    cd build-dir
-    cmake -DCMAKE_INSTALL_PREFIX=$out ..
+  preConfigure = ''
+    export FORCE_GIT_VERSION=${finalAttrs.version}
   '';
 
-  meta = with lib; {
+  cmakeBuildDir = "build-directory";
+
+  strictDeps = true;
+
+  meta = {
     homepage = "https://github.com/wangqr/Aegisub";
-    description = "An advanced subtitle editor";
+    description = "An advanced subtitle editor; wangqr's fork";
     longDescription = ''
       Aegisub is a free, cross-platform open source tool for creating and
       modifying subtitles. Aegisub makes it quick and easy to time subtitles to
@@ -155,9 +154,11 @@ stdenv.mkDerivation rec {
     '';
     # The Aegisub sources are itself BSD/ISC, but they are linked against GPL'd
     # softwares - so the resulting program will be GPL
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ AndersonTorres wegank ];
-    platforms = platforms.unix;
+    license = with lib.licenses; [
+      bsd3
+    ];
     mainProgram = "aegisub";
+    maintainers = with lib.maintainers; [ AndersonTorres wegank ];
+    platforms = lib.platforms.unix;
   };
-}
+})
