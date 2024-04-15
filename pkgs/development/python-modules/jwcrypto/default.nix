@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , cryptography
 , deprecated
 , pythonOlder
@@ -17,6 +18,14 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-SLub9DN3cTYlNXnlK3X/4PmkpyHRM9AfRaC5HtX08a4=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2024-28102.patch";
+      url = "https://github.com/latchset/jwcrypto/commit/90477a3b6e73da69740e00b8161f53fea19b831f.patch";
+      hash = "sha256-0+zjHEXEcL1ZqRaxFi3lo9nAg+Ny/ERpNCclF+0SrYI=";
+    })
+  ];
 
   propagatedBuildInputs = [
     cryptography
