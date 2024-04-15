@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 
-, autoPatchelfHook
-, dpkg
-, makeBinaryWrapper
-, makeWrapper
-, undmg
-, wrapGAppsHook
+  autoPatchelfHook,
+  dpkg,
+  makeBinaryWrapper,
+  makeWrapper,
+  undmg,
+  wrapGAppsHook,
 
-, libappindicator
-, libnotify
-, libsecret
-, mpv-unwrapped
-, xdg-user-dirs
+  libappindicator,
+  libnotify,
+  libsecret,
+  mpv-unwrapped,
+  xdg-user-dirs,
 }:
 
 let
@@ -28,15 +29,20 @@ let
       as an audio source, eliminating the need for Spotify Premium
     '';
     downloadPage = "https://github.com/KRTirtho/spotube/releases";
-    homepage = "https://spotube.netlify.app/";
+    homepage = "https://spotube.krtirtho.dev/";
     license = lib.licenses.bsdOriginal;
     mainProgram = "spotube";
     maintainers = with lib.maintainers; [ tomasajt ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 
-  fetchArtifact = { filename, hash }:
+  fetchArtifact =
+    { filename, hash }:
     fetchurl {
       url = "https://github.com/KRTirtho/spotube/releases/download/v${version}/${filename}";
       inherit hash;
@@ -52,7 +58,10 @@ let
 
     sourceRoot = ".";
 
-    nativeBuildInputs = [ undmg makeBinaryWrapper ];
+    nativeBuildInputs = [
+      undmg
+      makeBinaryWrapper
+    ];
 
     installPhase = ''
       runHook preInstall
