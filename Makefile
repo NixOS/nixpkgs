@@ -4,7 +4,7 @@ clean:
 	rm -rf result
 
 iso:
-	nix build '.#iso'
+	nix --extra-experimental-features nix-command --extra-experimental-features flakes build '.#iso'
 
 install:
 	sudo cp result/iso/nixos.iso ~/Downloads/nixos.iso
