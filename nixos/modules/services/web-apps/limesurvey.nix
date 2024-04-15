@@ -2,7 +2,7 @@
 
 let
 
-  inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption;
+  inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption mkPackageOption;
   inherit (lib) literalExpression mapAttrs optional optionalString types;
 
   cfg = config.services.limesurvey;
@@ -11,8 +11,6 @@ let
   user = "limesurvey";
   group = config.services.httpd.group;
   stateDir = "/var/lib/limesurvey";
-
-  pkg = pkgs.limesurvey;
 
   configType = with types; oneOf [ (attrsOf configType) str int bool ] // {
     description = "limesurvey config type (str, int, bool or attribute set thereof)";
@@ -33,6 +31,8 @@ in
 
   options.services.limesurvey = {
     enable = mkEnableOption "Limesurvey web application";
+
+    package = mkPackageOption pkgs "limesurvey" { };
 
     encryptionKey = mkOption {
       type = types.str;
@@ -240,7 +240,7 @@ in
       adminAddr = mkDefault cfg.virtualHost.adminAddr;
       extraModules = [ "proxy_fcgi" ];
       virtualHosts.${cfg.virtualHost.hostName} = mkMerge [ cfg.virtualHost {
-        documentRoot = mkForce "${pkg}/share/limesurvey";
+        documentRoot = mkForce "${cfg.package}/share/limesurvey";
         extraConfig = ''
           Alias "/tmp" "${stateDir}/tmp"
           <Directory "${stateDir}">
@@ -256,7 +256,7 @@ in
             Options -Indexes
           </Directory>
 
-          <Directory "${pkg}/share/limesurvey">
+          <Directory "${cfg.package}/share/limesurvey">
             <FilesMatch "\.php$">
               <If "-f %{REQUEST_FILENAME}">
                 SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
@@ -277,7 +277,7 @@ in
       "d ${stateDir}/tmp/assets 0750 ${user} ${group} - -"
       "d ${stateDir}/tmp/runtime 0750 ${user} ${group} - -"
       "d ${stateDir}/tmp/upload 0750 ${user} ${group} - -"
-      "C ${stateDir}/upload 0750 ${user} ${group} - ${pkg}/share/limesurvey/upload"
+      "C ${stateDir}/upload 0750 ${user} ${group} - ${cfg.package}/share/limesurvey/upload"
     ];
 
     systemd.services.limesurvey-init = {
@@ -288,8 +288,8 @@ in
       environment.LIMESURVEY_CONFIG = limesurveyConfig;
       script = ''
         # update or install the database as required
-        ${pkgs.php81}/bin/php ${pkg}/share/limesurvey/application/commands/console.php updatedb || \
-        ${pkgs.php81}/bin/php ${pkg}/share/limesurvey/application/commands/console.php install admin password admin admin@example.com verbose
+        ${pkgs.php81}/bin/php ${cfg.package}/share/limesurvey/application/commands/console.php updatedb || \
+        ${pkgs.php81}/bin/php ${cfg.package}/share/limesurvey/application/commands/console.php install admin password admin admin@example.com verbose
       '';
       serviceConfig = {
         User = user;
