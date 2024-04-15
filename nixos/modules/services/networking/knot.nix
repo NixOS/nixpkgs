@@ -226,7 +226,7 @@ in {
       };
 
       settings = mkOption {
-        type = types.attrs;
+        type = types.submodule { freeformType = types.attrs; };
         default = {};
         description = ''
           Extra configuration as nix values.
