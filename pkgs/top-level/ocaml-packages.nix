@@ -1084,6 +1084,8 @@ let
 
     minttea = callPackage ../development/ocaml-modules/minttea { };
 
+    miou = callPackage ../development/ocaml-modules/miou { };
+
     mirage = callPackage ../development/ocaml-modules/mirage { };
 
     mirage-block = callPackage ../development/ocaml-modules/mirage-block { };
