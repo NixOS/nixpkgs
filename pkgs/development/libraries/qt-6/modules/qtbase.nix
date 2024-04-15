@@ -250,10 +250,7 @@ stdenv.mkDerivation rec {
     "-framework GSS"
   ]);
 
-  env.NIX_CFLAGS_COMPILE = "-DNIXPKGS_QT_PLUGIN_PREFIX=\"${qtPluginPrefix}\""
-    # These flags are in glib-2.0.pc but somehow don't get applied automatically.
-    + lib.optionalString (!stdenv.hostPlatform.isMinGW)
-      " -I${glib.dev}/include/glib-2.0 -I${glib.out}/lib/glib-2.0/include";
+  env.NIX_CFLAGS_COMPILE = "-DNIXPKGS_QT_PLUGIN_PREFIX=\"${qtPluginPrefix}\"";
 
   outputs = [ "out" "dev" ];
 
