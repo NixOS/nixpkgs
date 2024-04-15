@@ -2752,6 +2752,12 @@
     githubId = 150560585;
     name = "Dmitry Ivankov";
   };
+  bonsairobo = {
+    email = "duncanfairbanks6@gmail.com";
+    github = "bonsairobo";
+    githubId = 3229981;
+    name = "Duncan Fairbanks";
+  };
   booklearner = {
     name = "booklearner";
     email = "booklearner@proton.me";
@@ -5012,6 +5018,12 @@
     name = "Dimitar Nestorov";
     github = "DimitarNestorov";
     githubId = 8790386;
+  };
+  diniamo = {
+    name = "diniamo";
+    email = "diniamo53@gmail.com";
+    github = "diniamo";
+    githubId = 55629891;
   };
   diogotcorreia = {
     name = "Diogo Correia";
@@ -8682,6 +8694,12 @@
     github = "ironpinguin";
     githubId = 137306;
     name = "Michele Catalano";
+  };
+  isabelroses = {
+    email = "isabel@isabelroses.com";
+    github = "isabelroses";
+    githubId = 71222764;
+    name = "Isabel Roses";
   };
   isaozler = {
     email = "isaozler@gmail.com";
@@ -13318,6 +13336,12 @@
       fingerprint = "E90C BA34 55B3 6236 740C  038F 0D94 8CE1 9CF4 9C5F";
     }];
   };
+  mksafavi = {
+    name = "MK Safavi";
+    email = "mksafavi@gmail.com";
+    github = "mksafavi";
+    githubId = 50653293;
+  };
   mktip = {
     email = "mo.issa.ok+nix@gmail.com";
     github = "mktip";
@@ -17671,7 +17695,7 @@
     name = "Sanskar Gurdasani";
   };
   sarahec = {
-    email = "sarahec@nextquestion.net";
+    email = "seclark@nextquestion.net";
     github = "sarahec";
     githubId = 11277967;
     name = "Sarah Clark";

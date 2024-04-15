@@ -75,8 +75,8 @@ stdenv.mkDerivation rec {
     "-DUSE_CUDA=ON"
     # Their CMakeLists.txt does not respect CUDA_HOST_COMPILER, instead using the CXX compiler.
     # https://github.com/dmlc/xgboost/blob/ccf43d4ba0a94e2f0a3cc5a526197539ae46f410/CMakeLists.txt#L145
-    "-DCMAKE_C_COMPILER=${cudaPackages.cudatoolkit.cc}/bin/gcc"
-    "-DCMAKE_CXX_COMPILER=${cudaPackages.cudatoolkit.cc}/bin/g++"
+    "-DCMAKE_C_COMPILER=${cudaPackages.backendStdenv.cc}/bin/gcc"
+    "-DCMAKE_CXX_COMPILER=${cudaPackages.backendStdenv.cc}/bin/g++"
   ] ++ lib.optionals
     (cudaSupport
       && lib.versionAtLeast cudaPackages.cudatoolkit.version "11.4.0")

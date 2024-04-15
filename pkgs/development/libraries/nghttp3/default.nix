@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , cmake
+, CoreServices
 , curlHTTP3
 }:
 
@@ -18,6 +19,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [ cmake ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreServices
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_STATIC_LIB" false)
