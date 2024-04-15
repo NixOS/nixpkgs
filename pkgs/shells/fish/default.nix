@@ -1,9 +1,7 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , coreutils
-, which
 , gnused
 , gnugrep
 , groff
@@ -18,9 +16,6 @@
 , cmake
 , fishPlugins
 , procps
-
-# used to generate autocompletions from manpages and for configuration editing in the browser
-, usePython ? true
 
 , runCommand
 , writeText
@@ -270,14 +265,6 @@ let
           -i $out/share/fish/functions/{__fish_print_packages.fish,__fish_print_addresses.fish,__fish_describe_command.fish,__fish_complete_man.fish,__fish_complete_convert_options.fish} \
              $out/share/fish/completions/{cwebp,adb,ezjail-admin,grunt,helm,heroku,lsusb,make,p4,psql,rmmod,vim-addons}.fish
 
-    '' + optionalString usePython ''
-      cat > $out/share/fish/functions/__fish_anypython.fish <<EOF
-      function __fish_anypython
-          echo ${python3.interpreter}
-          return 0
-      end
-      EOF
-
     '' + optionalString stdenv.isLinux ''
       for cur in $out/share/fish/functions/*.fish; do
         sed -e "s|/usr/bin/getent|${getent}/bin/getent|" \
@@ -335,7 +322,7 @@ let
             ) | ${lib.getExe gnugrep} -q 'a href="http://localhost.*Start the Fish Web config'
           '';
           in
-          runCommand "test-web-config" { } ''
+          runCommand "test-web-config" { buildInputs = [ python3 ]; } ''
             HOME=$(mktemp -d)
             ${fish}/bin/fish ${fishScript} && touch $out
           '';
