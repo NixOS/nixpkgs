@@ -1,14 +1,20 @@
-{lib, stdenv, fetchurl, perl }:
+{ lib
+, stdenv
+, fetchurl
+, perl
+}:
 
 stdenv.mkDerivation rec {
   pname = "redo";
   version = "1.4";
   src = fetchurl {
-    url = "https://jdebp.eu./Repository/freebsd/${pname}-${version}.tar.gz";
-    sha256 = "1c8gr5h77v4fw78zkhbm9z9adqs3kd7xvxwnmci2zvlf4bqqk4jv";
+    url = "http://jdebp.info/Repository/freebsd/${pname}-${version}.tar.gz";
+    hash = "sha256-W5KJ8SKO7i8iq5b33U+bQ+Om0k91wfnR4Y7sc2DJD7E=";
   };
 
-  nativeBuildInputs = [ perl /* for pod2man */ ];
+  nativeBuildInputs = [
+    perl # for pod2man
+  ];
 
   sourceRoot = ".";
 
@@ -20,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "https://jdebp.eu./Softwares/redo/";
+    homepage = "http://jdebp.info/Softwares/redo/";
     description = "A system for building target files from source files";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.vrthra ];
