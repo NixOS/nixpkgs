@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/sstadick/hck";
     changelog = "https://github.com/sstadick/hck/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit /* or */ unlicense ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda gepbird ];
     mainProgram = "hck";
   };
 }
