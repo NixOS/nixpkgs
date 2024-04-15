@@ -33,6 +33,10 @@ let
       CPU_FREQ_DEFAULT_GOV_PERFORMANCE = lib.mkOverride 60 yes;
       CPU_FREQ_DEFAULT_GOV_SCHEDUTIL = lib.mkOverride 60 no;
 
+      # Full preemption
+      PREEMPT = lib.mkOverride 60 yes;
+      PREEMPT_VOLUNTARY = lib.mkOverride 60 no;
+
       # Google's BBRv3 TCP congestion Control
       TCP_CONG_BBR = yes;
       DEFAULT_BBR = yes;
