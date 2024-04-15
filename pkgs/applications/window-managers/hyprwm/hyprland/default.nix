@@ -49,13 +49,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + lib.optionalString debug "-debug";
-  version = "0.38.1";
+  version = "0.39.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-6y422rx8ScSkjR1dNYGYUxBmFewRYlCz9XZZ+XrVZng=";
+    hash = "sha256-piBUBQsQ8R20/lX9GMJjwdntal6yfJZMVCIi21XCZ8Y=";
   };
 
   patches = [
