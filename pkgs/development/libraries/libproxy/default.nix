@@ -55,6 +55,19 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  postPatch = ''
+    # Fix running script that will try to install git hooks.
+    # Though it will not do anything since we do not keep .git/ directory.
+    # https://github.com/libproxy/libproxy/issues/262
+    chmod +x data/install-git-hook.sh
+    patchShebangs data/install-git-hook.sh
+
+    # Fix include-path propagation in non-static builds.
+    # https://github.com/libproxy/libproxy/pull/239#issuecomment-2056620246
+    substituteInPlace src/libproxy/meson.build \
+      --replace-fail "requires_private: 'gobject-2.0'" "requires: 'gobject-2.0'"
+  '';
+
   nativeBuildInputs = [
     gi-docgen
     gobject-introspection
@@ -79,14 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
-
-  postPatch = ''
-    # Fix running script that will try to install git hooks.
-    # Though it will not do anything since we do not keep .git/ directory.
-    # https://github.com/libproxy/libproxy/issues/262
-    chmod +x data/install-git-hook.sh
-    patchShebangs data/install-git-hook.sh
-  '';
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.

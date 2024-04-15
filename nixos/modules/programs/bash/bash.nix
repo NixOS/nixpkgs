@@ -30,7 +30,7 @@ in
       /*
       enable = mkOption {
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whenever to configure Bash as an interactive shell.
           Note that this tries to make Bash the default
           {option}`users.defaultUserShell`,
