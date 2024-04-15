@@ -190,6 +190,18 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
     runHook postInstall
   '';
 
+  postFixup =
+    let
+      libPath = lib.makeLibraryPath [
+        libnotify
+      ];
+    in
+  base.postFixup + ''
+    patchelf \
+      --add-rpath "${libPath}" \
+      $out/libexec/electron/electron
+  '';
+
   requiredSystemFeatures = [ "big-parallel" ];
 
   passthru = {
