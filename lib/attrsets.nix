@@ -5,7 +5,7 @@
 
 let
   inherit (builtins) head length;
-  inherit (lib.trivial) mergeAttrs warn;
+  inherit (lib.trivial) isInOldestRelease mergeAttrs warn warnIf;
   inherit (lib.strings) concatStringsSep concatMapStringsSep escapeNixIdentifier sanitizeDerivationName;
   inherit (lib.lists) foldr foldl' concatMap elemAt all partition groupBy take foldl;
 in
@@ -885,15 +885,15 @@ rec {
     # Type
 
     ```
-    cartesianProductOfSets :: AttrSet -> [AttrSet]
+    cartesianProduct :: AttrSet -> [AttrSet]
     ```
 
     # Examples
     :::{.example}
-    ## `lib.attrsets.cartesianProductOfSets` usage example
+    ## `lib.attrsets.cartesianProduct` usage example
 
     ```nix
-    cartesianProductOfSets { a = [ 1 2 ]; b = [ 10 20 ]; }
+    cartesianProduct { a = [ 1 2 ]; b = [ 10 20 ]; }
     => [
          { a = 1; b = 10; }
          { a = 1; b = 20; }
@@ -904,7 +904,7 @@ rec {
 
     :::
   */
-  cartesianProductOfSets =
+  cartesianProduct =
     attrsOfLists:
     foldl' (listOfAttrs: attrName:
       concatMap (attrs:
@@ -1999,4 +1999,8 @@ rec {
   # DEPRECATED
   zip = warn
     "lib.zip is a deprecated alias of lib.zipAttrsWith." zipAttrsWith;
+
+  # DEPRECATED
+  cartesianProductOfSets = warnIf (isInOldestRelease 2405)
+    "lib.cartesianProductOfSets is a deprecated alias of lib.cartesianProduct." cartesianProduct;
 }
