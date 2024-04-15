@@ -19,7 +19,6 @@
 , ipython
 , matplotlib
 , numpy
-, oldest-supported-numpy
 , packaging
 , pytest-randomly
 , setuptools
@@ -58,7 +57,6 @@ buildPythonPackage rec {
     cython_3
     gdal
     numpy
-    oldest-supported-numpy
     setuptools
     wheel
   ];
