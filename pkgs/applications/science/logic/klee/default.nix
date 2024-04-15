@@ -1,10 +1,8 @@
 { lib
-, stdenv
+, llvmPackages
 , callPackage
 , fetchFromGitHub
 , cmake
-, clang
-, llvm
 , python3
 , z3
 , stp
@@ -30,19 +28,35 @@
 # Enable runtime asserts. Default false.
 , runtimeAsserts ? false
 
-# Extra klee-uclibc config.
+# Klee uclibc. Defaults to the bundled version.
+, kleeuClibc ? null
+
+# Extra klee-uclibc config for the default klee-uclibc.
 , extraKleeuClibcConfig ? {}
 }:
 
+# Klee supports these LLVM versions.
 let
+  llvmVersion = llvmPackages.llvm.version;
+  inherit (lib.strings) versionAtLeast versionOlder;
+in
+assert versionAtLeast llvmVersion "11" && versionOlder llvmVersion "17";
+
+let
+  # The chosen version of klee-uclibc.
+  chosenKleeuClibc =
+    if kleeuClibc == null then
+      callPackage ./klee-uclibc.nix {
+        llvmPackages = llvmPackages;
+        inherit extraKleeuClibcConfig debugRuntime runtimeAsserts;
+      }
+    else
+      kleeuClibc;
+
   # Python used for KLEE tests.
   kleePython = python3.withPackages (ps: with ps; [ tabulate ]);
-
-  # The klee-uclibc derivation.
-  kleeuClibc = callPackage ./klee-uclibc.nix {
-    inherit stdenv clang llvm extraKleeuClibcConfig debugRuntime runtimeAsserts;
-  };
-in stdenv.mkDerivation rec {
+in
+llvmPackages.stdenv.mkDerivation rec {
   pname = "klee";
   version = "3.1";
 
@@ -54,14 +68,16 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
+
   buildInputs = [
+    llvmPackages.llvm
     cryptominisat
     gperftools
-    llvm
     sqlite
     stp
     z3
   ];
+
   nativeCheckInputs = [
     gtest
 
@@ -77,10 +93,10 @@ in stdenv.mkDerivation rec {
     onOff = val: if val then "ON" else "OFF";
   in [
     "-DKLEE_RUNTIME_BUILD_TYPE=${if debugRuntime then "Debug" else "Release"}"
-    "-DLLVMCC=${clang}/bin/clang"
-    "-DLLVMCXX=${clang}/bin/clang++"
+    "-DLLVMCC=${llvmPackages.clang}/bin/clang"
+    "-DLLVMCXX=${llvmPackages.clang}/bin/clang++"
     "-DKLEE_ENABLE_TIMESTAMP=${onOff false}"
-    "-DKLEE_UCLIBC_PATH=${kleeuClibc}"
+    "-DKLEE_UCLIBC_PATH=${chosenKleeuClibc}"
     "-DENABLE_KLEE_ASSERTS=${onOff asserts}"
     "-DENABLE_POSIX_RUNTIME=${onOff true}"
     "-DENABLE_UNIT_TESTS=${onOff true}"
@@ -94,17 +110,21 @@ in stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = toString ["-Wno-macro-redefined"];
 
   prePatch = ''
-    patchShebangs .
+    patchShebangs --build .
   '';
 
   # https://github.com/klee/klee/issues/1690
   hardeningDisable = [ "fortify" ];
 
+  enableParallelBuilding = true;
   doCheck = true;
 
   passthru = {
-    # Let the user depend on `klee.uclibc` for klee-uclibc
-    uclibc = kleeuClibc;
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex" "v(\d\.\d)" ];
+    };
+    # Let the user access the chosen uClibc outside the derivation.
+    uclibc = chosenKleeuClibc;
   };
 
   meta = with lib; {
@@ -128,7 +148,7 @@ in stdenv.mkDerivation rec {
       that matches a computed test input, including setting up files, pipes,
       environment variables, and passing command line arguments.
     '';
-    homepage = "https://klee.github.io/";
+    homepage = "https://klee.github.io";
     license = licenses.ncsa;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ numinit ];
