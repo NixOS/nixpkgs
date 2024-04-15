@@ -94,7 +94,6 @@ let
   ];
 
   inherit doCheck extraConfig rockspecFilename knownRockspec externalDeps nativeCheckInputs;
-  inherit dontWrapLuaPrograms;
 
   buildInputs = let
     # example externalDeps': [ { name = "CRYPTO"; dep = pkgs.openssl; } ]
@@ -178,11 +177,9 @@ let
     runHook postBuild
   '';
 
-  fixupPhase = ''
-    runHook preFixup
-    ${lib.optionalString (!self.dontWrapLuaPrograms) "wrapLuaPrograms"}
-    runHook postFixup
-    '';
+  postFixup = lib.optionalString (!dontWrapLuaPrograms) ''
+    wrapLuaPrograms
+  '' + attrs.postFixup or "";
 
   installPhase = ''
     runHook preInstall
@@ -199,7 +196,6 @@ let
     # maybe we could reestablish dependency checking via passing --rock-trees
 
     nix_debug "ROCKSPEC $rockspecFilename"
-    # deps-mode=all tells luarocks to use every configured rocks_trees
     luarocks $LUAROCKS_EXTRA_ARGS make --deps-mode=all --tree=$out ''${rockspecFilename}
 
     runHook postInstall
