@@ -17,12 +17,13 @@
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testEqualContents
   # or doc/builders/testers.chapter.md
-  testEqualContents = {
+  testEqualContents = args@{
     assertion,
     actual,
     expected,
   }: runCommand "equal-contents-${lib.strings.toLower assertion}" {
     inherit assertion actual expected;
+    pos = builtins.unsafeGetAttrPos "assertion" args;
   } ''
     echo "Checking:"
     echo "$assertion"
