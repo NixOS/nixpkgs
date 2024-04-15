@@ -41,7 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     openssl
-    check
     zlib.dev
   ]
   ++ (if withApplePCSC then [ PCSC ] else [ pcsclite ]);
@@ -55,6 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   configureFlags = [ "--with-backend=${if withApplePCSC then "macscard" else "pcsc"}" ];
+
+  doCheck = true;
+
+  nativeCheckInputs = [ check ];
 
   passthru = {
     updateScript = nix-update-script {
