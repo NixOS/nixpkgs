@@ -48,5 +48,3 @@ buildGoModule rec {
     mainProgram = "goose";
   };
 }
-
-
