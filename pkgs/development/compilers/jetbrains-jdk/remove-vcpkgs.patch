@@ -1,0 +1,30 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index cd5463b..b026aaf 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -117,13 +117,13 @@ cmake_minimum_required(VERSION 3.19)
+ # Only generate Debug and Release configuration types.
+ set(CMAKE_CONFIGURATION_TYPES Debug Release)
+ 
+-include(cmake/vcpkg.cmake)
+-bring_vcpkg()
++# include(cmake/vcpkg.cmake)
++# bring_vcpkg()
+ 
+ # Project name.
+ project(jcef)
+ 
+-vcpkg_install_package(boost-filesystem boost-interprocess thrift)
++# vcpkg_install_package(boost-filesystem boost-interprocess thrift)
+ 
+ # Use folders in the resulting project files.
+ set_property(GLOBAL PROPERTY OS_FOLDERS ON)
+@@ -331,7 +331,7 @@ endif()
+ add_subdirectory(${CEF_LIBCEF_DLL_WRAPPER_PATH} libcef_dll_wrapper)
+ add_subdirectory(native)
+ 
+-add_subdirectory(remote)
++# add_subdirectory(remote)
+ 
+ 
+ #

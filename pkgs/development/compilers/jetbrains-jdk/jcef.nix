@@ -97,11 +97,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jcef-jetbrains";
-  rev = "9f8d4fb20b4658db6b2b6bc08e5dd0d8c7340290";
+  rev = "72b2597f4c88fe643b14b5ae619878457b842c74";
   # This is the commit number
   # Currently from the branch: https://github.com/JetBrains/jcef/tree/232
   # Run `git rev-list --count HEAD`
-  version = "675";
+  version = "766";
 
   nativeBuildInputs = [ cmake python3 jdk17 git rsync ant ninja strip-nondeterminism stripJavaArchivesHook ];
   buildInputs = [ libX11 libXdamage nss nspr ];
@@ -110,15 +110,15 @@ stdenv.mkDerivation rec {
     owner = "jetbrains";
     repo = "jcef";
     inherit rev;
-    hash = "sha256-8zsgcWl0lZtC1oud5IlkUdeXxJUlHoRfw8t0FrZUQec=";
+    hash = "sha256-/1OrKd4FhtollYwCV/9mYT018WttkovXV4C3B/N9zpk=";
   };
   cef-bin =
     let
       # `cef_binary_${CEF_VERSION}_linux64_minimal`, where CEF_VERSION is from $src/CMakeLists.txt
-      name = "cef_binary_111.2.1+g870da30+chromium-111.0.5563.64_${platform}_minimal";
+      name = "cef_binary_122.1.9+gd14e051+chromium-122.0.6261.94_${platform}_minimal";
       hash = {
-        "linuxarm64" = "sha256-gCDIfWsysXE8lHn7H+YM3Jag+mdbWwTQpJf0GKdXEVs=";
-        "linux64" = "sha256-r+zXTmDN5s/bYLvbCnHufYdXIqQmCDlbWgs5pdOpLTw=";
+        "linuxarm64" = "sha256-wABtvz0JHitlkkB748I7yr02Oxs5lXvqDfrBAQiKWHU=";
+        "linux64" = "sha256-qlutM0IsE1emcMe/3p7kwMIK7ou1rZGvpUkrSMVPnCc=";
       }.${platform};
       urlName = builtins.replaceStrings [ "+" ] [ "%2B" ] name;
     in
@@ -130,6 +130,10 @@ stdenv.mkDerivation rec {
     url = "https://storage.googleapis.com/chromium-clang-format/dd736afb28430c9782750fc0fd5f0ed497399263";
     hash = "sha256-4H6FVO9jdZtxH40CSfS+4VESAHgYgYxfCBFSMHdT0hE=";
   };
+
+  patches = [
+    ./remove-vcpkgs.patch
+  ];
 
   configurePhase = ''
     runHook preConfigure
