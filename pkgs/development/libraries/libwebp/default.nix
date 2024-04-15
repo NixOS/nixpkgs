@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.tests = {
-    inherit freeimage gd graphicsmagick imagemagick imlib2 libjxl opencv vips;
+    inherit gd graphicsmagick imagemagick imlib2 libjxl opencv vips;
     inherit (python3.pkgs) pillow imread;
     haskell-webp = haskellPackages.webp;
   };
