@@ -32,14 +32,14 @@ python3.pkgs.buildPythonApplication rec {
   # This package doesn't have upstream tests.
   doCheck = false;
 
-  # handheld-daemon contains a fork of the python module `hid`, so this hook
-  # is borrowed from the `hid` derivation.
-  # The generated udev rules point to /bin/chroot, which does not exist in NixOS
   postPatch = ''
+    # handheld-daemon contains a fork of the python module `hid`, so this hook
+    # is borrowed from the `hid` derivation.
     hidapi=${ hidapi }/lib/
     test -d $hidapi || { echo "ERROR: $hidapi doesn't exist, please update/fix this build expression."; exit 1; }
     sed -i -e "s|libhidapi|$hidapi/libhidapi|" src/hhd/controller/lib/hid.py
 
+    # The generated udev rules point to /bin/chroot, which does not exist in NixOS
     chmod=${ toybox }/bin/chmod
     sed -i -e "s|/bin/chmod|$chmod|" src/hhd/controller/lib/hide.py
   '';
