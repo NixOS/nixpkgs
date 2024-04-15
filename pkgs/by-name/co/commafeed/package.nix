@@ -5,6 +5,7 @@
   jre,
   maven,
   makeWrapper,
+  nixosTests,
   writeText,
 }:
 let
@@ -88,6 +89,8 @@ maven.buildMavenPackage {
       --replace-fail 'url: jdbc:h2:/commafeed/data/db;DEFRAG_ALWAYS=TRUE' \
         'url: jdbc:h2:./database/db;DEFRAG_ALWAYS=TRUE'
   '';
+
+  passthru.tests = nixosTests.commafeed;
 
   meta = {
     description = "Google Reader inspired self-hosted RSS reader";
