@@ -17213,5 +17213,17 @@ final: prev:
     meta.homepage = "https://github.com/jhradilek/vim-snippets/";
   };
 
+  gitignore-nvim = buildVimPlugin {
+    pname = "gitignore-nvim";
+    version = "2024-03-25";
+    src = fetchFromGitHub {
+      owner = "wintermute-cell";
+      repo = "gitignore.nvim";
+      rev = "2455191ec94da8ed222806a4fe3aa358eac1e558";
+      sha256 = "sha256-p6k0NP3Vne6Kl98YodzSruVmJwxyrXziJj8N7u79o1w=";
+    };
+    meta.homepage = "https://github.com/wintermute-cell/gitignore.nvim/";
+  };
+
 
 }
