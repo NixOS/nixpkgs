@@ -623,7 +623,7 @@ stdenv.mkDerivation {
     # For clang, this is handled in add-clang-cc-cflags-before.sh
 
     # TODO: aarch64-darwin has mcpu incompatible with gcc
-    + optionalString ((targetPlatform ? gcc.arch) && !isClang && !(stdenv.isDarwin && stdenv.isAarch64) &&
+    + optionalString ((targetPlatform ? gcc.arch) && !isClang && !(targetPlatform.isDarwin && targetPlatform.isAarch64) &&
                       isGccArchSupported targetPlatform.gcc.arch) ''
       echo "-march=${targetPlatform.gcc.arch}" >> $out/nix-support/cc-cflags-before
     ''
@@ -632,7 +632,7 @@ stdenv.mkDerivation {
     # instead of march. On all other platforms you should use mtune
     # and march instead.
     # TODO: aarch64-darwin has mcpu incompatible with gcc
-    + optionalString ((targetPlatform ? gcc.cpu) && (isClang || !(stdenv.isDarwin && stdenv.isAarch64))) ''
+    + optionalString ((targetPlatform ? gcc.cpu) && (isClang || !(targetPlatform.isDarwin && targetPlatform.isAarch64))) ''
       echo "-mcpu=${targetPlatform.gcc.cpu}" >> $out/nix-support/cc-cflags-before
     ''
 
