@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
-    substituteInPlace CMakeLists.txt --replace "-Werror" ""
+    substituteInPlace CMakeLists.txt --replace-fail "-Werror" ""
   '';
 
   nativeBuildInputs = [
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://developers.yubico.com/yubico-piv-tool/";
     changelog = "https://developers.yubico.com/yubico-piv-tool/Release_Notes.html";
     description = ''
@@ -83,9 +83,9 @@ stdenv.mkDerivation (finalAttrs: {
       certificates, and create certificate requests, and other operations.
       A shared library and a command-line tool is included.
     '';
-    license = licenses.bsd2;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ viraptor anthonyroussel ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ viraptor anthonyroussel ];
     mainProgram = "yubico-piv-tool";
     pkgConfigModules = [ "ykcs11" "ykpiv" ];
   };
