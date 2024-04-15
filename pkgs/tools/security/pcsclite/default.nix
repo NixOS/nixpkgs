@@ -10,6 +10,7 @@
 , dbus
 , polkit
 , systemdLibs
+, systemdSupport ? stdenv.isLinux
 , IOKit
 , testers
 , nix-update-script
@@ -35,10 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-confdir=/etc"
     # The OS should care on preparing the drivers into this location
     "--enable-usbdropdir=/var/lib/pcsc/drivers"
-    (lib.enableFeature stdenv.isLinux "libsystemd")
+    (lib.enableFeature systemdSupport "libsystemd")
     (lib.enableFeature polkitSupport "polkit")
     "--enable-ipcdir=/run/pcscd"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals systemdSupport [
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
   ];
 
@@ -70,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [ python3 ]
-    ++ lib.optionals stdenv.isLinux [ systemdLibs ]
+    ++ lib.optionals systemdSupport [ systemdLibs ]
     ++ lib.optionals stdenv.isDarwin [ IOKit ]
     ++ lib.optionals polkitSupport [ dbus polkit ];
 
