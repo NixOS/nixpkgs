@@ -4359,6 +4359,8 @@ with pkgs;
 
   libtensorflow = python3.pkgs.tensorflow.libtensorflow;
 
+  libtorch = with python3Packages; toPythonApplication torch;
+
   libtorch-bin = callPackage ../development/libraries/science/math/libtorch/bin.nix {
     inherit (config) cudaSupport;
   };
