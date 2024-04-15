@@ -25261,6 +25261,12 @@ with pkgs;
   # requires a newer Apple SDK
   zig_0_11 = darwin.apple_sdk_11_0.callPackage ../development/compilers/zig/0.11.nix {
     llvmPackages = llvmPackages_16;
+    inherit (darwin.apple_sdk_11_0) Libsystem;
+    inherit (darwin.apple_sdk_11_0.frameworks)
+      Foundation
+      CoreServices
+      CoreFoundation
+    ;
   };
   zig = zig_0_11;
 

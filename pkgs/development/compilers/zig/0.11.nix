@@ -3,7 +3,13 @@
 , fetchFromGitHub
 , cmake
 , llvmPackages
+, libcxx
+, CoreServices
+, CoreFoundation
+, Foundation
+, Libsystem
 , libxml2
+, xcbuild
 , zlib
 , coreutils
 , callPackage

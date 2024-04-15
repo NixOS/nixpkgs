@@ -4,6 +4,7 @@
 , cmake
 , llvmPackages
 , libxml2
+, xcbuild
 , zlib
 , coreutils
 , callPackage

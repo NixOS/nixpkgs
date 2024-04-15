@@ -3,7 +3,13 @@
 , fetchFromGitHub
 , cmake
 , llvmPackages
+, libcxx
+, CoreServices
+, CoreFoundation
+, Foundation
+, Libsystem
 , libxml2
+, xcbuild
 , zlib
 , coreutils
 , callPackage
@@ -25,7 +31,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     llvmPackages.llvm.dev
-  ];
+  ] ++ (lib.optionals stdenv.isDarwin [
+    xcbuild
+  ]);
 
   buildInputs = [
     libxml2
@@ -34,6 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
     libclang
     lld
     llvm
+  ]) ++ (lib.optionals stdenv.isDarwin [
+    Libsystem
+    CoreServices
+    CoreFoundation
+    Foundation
   ]);
 
   env.ZIG_GLOBAL_CACHE_DIR = "$TMPDIR/zig-cache";
@@ -43,7 +56,19 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace lib/std/zig/system/NativeTargetInfo.zig \
       --replace "/usr/bin/env" "${coreutils}/bin/env"
-  '';
+  ''
+  + (lib.optionalString stdenv.isDarwin ''
+    # To detect the SDK on Darwin, zig's build runs xcrun and xcode-select from /usr/bin instead of PATH
+    substituteInPlace lib/std/zig/system/darwin.zig \
+      --replace-fail "/usr/bin" "${xcbuild}/bin"
+
+    # C++ headers have to be included BEFORE the c standard library headers
+    export NIX_CFLAGS_COMPILE="-isystem ${lib.getDev llvmPackages.libcxx}/include/c++/v1 $NIX_CFLAGS_COMPILE"
+
+    # Framework search paths are missing by default, causing linker errors
+    # TODO: This doesn't actually fix them
+    export NIX_LDFLAGS+=" -F${CoreFoundation}/Library/Frameworks -F${CoreServices}/Library/Frameworks -F${Foundation}/Library/Frameworks"
+  '');
 
   doInstallCheck = true;
   installCheckPhase = ''
