@@ -33,7 +33,7 @@ let
     boolToString
     callPackagesWith
     callPackageWith
-    cartesianProductOfSets
+    cartesianProduct
     cli
     composeExtensions
     composeManyExtensions
@@ -1686,17 +1686,17 @@ runTests {
   };
 
   testCartesianProductOfEmptySet = {
-    expr = cartesianProductOfSets {};
+    expr = cartesianProduct {};
     expected = [ {} ];
   };
 
   testCartesianProductOfOneSet = {
-    expr = cartesianProductOfSets { a = [ 1 2 3 ]; };
+    expr = cartesianProduct { a = [ 1 2 3 ]; };
     expected = [ { a = 1; } { a = 2; } { a = 3; } ];
   };
 
   testCartesianProductOfTwoSets = {
-    expr = cartesianProductOfSets { a = [ 1 ]; b = [ 10 20 ]; };
+    expr = cartesianProduct { a = [ 1 ]; b = [ 10 20 ]; };
     expected = [
       { a = 1; b = 10; }
       { a = 1; b = 20; }
@@ -1704,12 +1704,12 @@ runTests {
   };
 
   testCartesianProductOfTwoSetsWithOneEmpty = {
-    expr = cartesianProductOfSets { a = [ ]; b = [ 10 20 ]; };
+    expr = cartesianProduct { a = [ ]; b = [ 10 20 ]; };
     expected = [ ];
   };
 
   testCartesianProductOfThreeSets = {
-    expr = cartesianProductOfSets {
+    expr = cartesianProduct {
       a = [   1   2   3 ];
       b = [  10  20  30 ];
       c = [ 100 200 300 ];
