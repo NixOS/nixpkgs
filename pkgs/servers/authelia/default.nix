@@ -72,7 +72,7 @@ buildGoModule rec {
       authentication.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ jk dit7ya ];
+    maintainers = with maintainers; [ jk dit7ya nicomem ];
     mainProgram = "authelia";
   };
 }
