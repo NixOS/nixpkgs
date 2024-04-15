@@ -8,8 +8,8 @@
 
 let
   version = "2.2.3";
-  sha256 = "12rrai56hl86213lsi8i4qrah0v7a36nks38g5373imyl9g497ym";
-  manifestsSha256 = "1hmzmzijpx49hh2ykv7vw3jp02dxr4qn3r1dma56g7b4nbk7aa8x";
+  sha256 = "sha256-1Z9EXqK+xnFGeWjoac1QZwOoMiYRRU1HEAZRaEpUOYs=";
+  manifestsSha256 = "sha256-HSl15rJknWeKqi3kYTHJvQlw5eD77OkFhIn0K+Ovv8I=";
 
   manifests = fetchzip {
     url =
