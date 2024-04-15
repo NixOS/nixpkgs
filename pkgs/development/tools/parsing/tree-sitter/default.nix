@@ -62,6 +62,7 @@ let
         };
       grammars' = import ./grammars { inherit lib; } // extraGrammars;
       grammars = grammars' //
+        { tree-sitter-latex = grammars'.tree-sitter-latex // { generate = true; }; } //
         { tree-sitter-ocaml = grammars'.tree-sitter-ocaml // { location = "grammars/ocaml"; }; } //
         { tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // { location = "grammars/interface"; }; } //
         { tree-sitter-org-nvim = grammars'.tree-sitter-org-nvim // { language = "org"; }; } //
