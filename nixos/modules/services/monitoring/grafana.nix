@@ -682,7 +682,7 @@ in
 
             # TODO Add "instrument_queries" option when upgrading to grafana 10.0
             # instrument_queries = mkOption {
-            #   description = lib.mdDoc "Set to `true` to add metrics and tracing for database queries.";
+            #   description = "Set to `true` to add metrics and tracing for database queries.";
             #   default = false;
             #   type = types.bool;
             # };
