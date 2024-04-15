@@ -22,13 +22,13 @@ callPackage ./generic.nix args {
   # IMPORTANT: Always use a tagged release candidate or commits from the
   # zfs-<version>-staging branch, because this is tested by the OpenZFS
   # maintainers.
-  version = "2.2.3-unstable-2024-04-09";
-  rev = "28520cad2500b60ce8653e431990e33f77ff08f7";
+  version = "2.2.3-unstable-2024-04-20";
+  rev = "72e4996a54fe54b93bf1e667a5e60099375fe08f";
 
   isUnstable = true;
   tests = [
     nixosTests.zfs.unstable
   ];
 
-  hash = "sha256-lGoiTmCWOxqACSYY0WA0gN6CN/1FyYhSVHmtYC1Izhg=";
+  hash = "sha256-p3Nmq4mvamwwzeraTiWhYIZOLMLI+dA+QrgX6ow7xlQ=";
 }
