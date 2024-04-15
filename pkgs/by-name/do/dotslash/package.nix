@@ -1,4 +1,6 @@
-{ lib, rustPlatform, fetchCrate }:
+{ lib, rustPlatform, fetchCrate
+, testers, nix-update-script, dotslash
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "dotslash";
@@ -11,6 +13,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-WkC+8epqCJWIU1f5kCLsqgGiSvWZH1mbZabQUnGVwB4=";
   doCheck = false; # http tests
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = testers.testVersion {
+      package = dotslash;
+    };
+  };
 
   meta = with lib; {
     homepage = "https://dotslash-cli.com";
