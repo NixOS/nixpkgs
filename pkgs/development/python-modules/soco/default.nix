@@ -1,23 +1,24 @@
 { lib
+, appdirs
 , buildPythonPackage
 , fetchFromGitHub
 , graphviz
-, appdirs
 , ifaddr
-, pythonOlder
 , lxml
 , mock
 , nix-update-script
 , pytestCheckHook
+, pythonOlder
 , requests
 , requests-mock
+, setuptools
 , xmltodict
 }:
 
 buildPythonPackage rec {
   pname = "soco";
   version = "0.30.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -28,7 +29,11 @@ buildPythonPackage rec {
     hash = "sha256-T5kZxwLtqdECuYNfI0z2kLuTPp8yuPsx+MQG27WUJYU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     appdirs
     ifaddr
     lxml
