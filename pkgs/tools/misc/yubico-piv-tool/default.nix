@@ -60,9 +60,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script {
       extraArgs = [ "--version-regex" "yubico-piv-tool-([0-9.]+)$" ];
     };
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      command = "yubico-piv-tool --version";
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "yubico-piv-tool --version";
+      };
     };
   };
 
@@ -84,5 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.all;
     maintainers = with maintainers; [ viraptor anthonyroussel ];
     mainProgram = "yubico-piv-tool";
+    pkgConfigModules = [ "ykcs11" "ykpiv" ];
   };
 })
