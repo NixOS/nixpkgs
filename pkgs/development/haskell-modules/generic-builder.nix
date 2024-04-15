@@ -110,6 +110,28 @@ in
   # build products from that prior build as a starting point for accelerating
   # this build
 , previousIntermediates ? null
+  # References to these store paths are forbidden in the produced output.
+, disallowedRequisites ? []
+  # Whether to allow the produced output to refer to `ghc`.
+  #
+  # This is used by `haskell.lib.justStaticExecutables` to help prevent static
+  # Haskell binaries from having erroneous dependencies on GHC.
+  #
+  # Generated `Paths_*` modules include paths for the runtime library
+  # directory (and similar) of the package being built. If the `Paths_*`
+  # module is imported, this creates a dependency from the static binary
+  # being built to the _library_ being built (which is dynamically linked
+  # and depends on the GHC used to build it).
+  #
+  # To avoid this:
+  # 1. Build the impacted derivation.
+  # 2. Run `strings` on the built binary of the impacted derivation to
+  #    locate the store paths it depends on.
+  # 3. Add `remove-references-to -t ${bad-store-path-in-binary}` to the
+  #    impacted derivation's `postInstall`.
+  #
+  # See: https://github.com/NixOS/nixpkgs/issues/164630
+, disallowGhcReference ? false
 , # Cabal 3.8 which is shipped by default for GHC >= 9.3 always calls
   # `pkg-config --libs --static` as part of the configure step. This requires
   # Requires.private dependencies of pkg-config dependencies to be present in
@@ -680,9 +702,17 @@ stdenv.mkDerivation ({
     runHook postInstallIntermediates
   '';
 
+  disallowedRequisites =
+    disallowedRequisites
+    ++ (
+      if disallowGhcReference
+      then [ghc]
+      else []
+    );
+
   passthru = passthru // rec {
 
-    inherit pname version;
+    inherit pname version disallowGhcReference;
 
     compiler = ghc;
 
