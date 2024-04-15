@@ -13,7 +13,7 @@
 , unzip
 , pkgs
 , pkgsBuildHost
-
+, pipewire
 , info
 }:
 
@@ -194,6 +194,7 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
     let
       libPath = lib.makeLibraryPath [
         libnotify
+        pipewire
       ];
     in
   base.postFixup + ''
