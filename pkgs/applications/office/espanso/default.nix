@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , rustPlatform
 , pkg-config
+, bash
 , extra-cmake-modules
 , dbus
 , libX11
@@ -79,6 +80,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
+    bash
     wxGTK32
   ] ++ lib.optionals stdenv.isLinux [
     openssl
@@ -127,8 +129,9 @@ rustPlatform.buildRustPackage rec {
     EXEC_PATH=$out/bin/espanso BUILD_ARCH=current ${stdenv.shell} ./scripts/create_bundle.sh
   '' else ''
     wrapProgram $out/bin/espanso \
-      --prefix PATH : ${lib.makeBinPath (
-        lib.optionals stdenv.isLinux [
+      --prefix PATH : ${lib.makeBinPath ([
+          bash
+        ] ++ lib.optionals stdenv.isLinux [
           libnotify
           setxkbmap
         ] ++ lib.optionals waylandSupport [
