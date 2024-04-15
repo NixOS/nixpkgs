@@ -20,8 +20,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  # Don't forget to update go.d.plugin.nix as well
-  version = "1.45.0";
+  version = "1.45.3";
   pname = "netdata";
 
   src = fetchFromGitHub {
@@ -29,8 +28,9 @@ stdenv.mkDerivation rec {
     repo = "netdata";
     rev = "v${version}";
     hash = if withCloudUi
-      then "sha256-AyhS5vwGZLnc+xmf9Qvk2v8rTzhHSUe7LpAbwRYjrKM="
-      else "sha256-11UHXPnXC4pzK/oXOZJ7f9X86EV9uHOvMtOCnxTV86U=";
+      then "sha256-QJqfKo5UFMoACHbVr1Dd9jMo0xkjrW3gUnF25tUvzk8="
+      # we delete the v2 GUI after fetching
+      else "sha256-JzCepVfuf6uu/GuGkwnTYeeW1TxmMuPkgS0203pG8YE=";
     fetchSubmodules = true;
 
     # Remove v2 dashboard distributed under NCUL1. Make sure an empty
