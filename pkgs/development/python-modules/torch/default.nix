@@ -462,6 +462,8 @@ in buildPythonPackage rec {
       $dev/share/cmake/Caffe2/Caffe2Targets-release.cmake \
       --replace \''${_IMPORT_PREFIX}/lib "$lib/lib"
 
+    ln -s $dev/include/torch/csrc/api/include/torch/* $dev/include/torch/
+
     mkdir $lib
     mv $out/${python.sitePackages}/torch/lib $lib/lib
     ln -s $lib/lib $out/${python.sitePackages}/torch/lib
