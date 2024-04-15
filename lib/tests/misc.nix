@@ -75,7 +75,6 @@ let
     matchAttrs
     mergeAttrs
     meta
-    mkOption
     mod
     nameValuePair
     optionalDrvAttr
@@ -118,7 +117,6 @@ let
     expr = (builtins.tryEval expr).success;
     expected = true;
   };
-  testingDeepThrow = expr: testingThrow (builtins.deepSeq expr expr);
 
   testSanitizeDerivationName = { name, expected }:
   let
@@ -1416,7 +1414,7 @@ runTests {
     };
 
   testToPrettyMultiline = {
-    expr = mapAttrs (const (generators.toPretty { })) rec {
+    expr = mapAttrs (const (generators.toPretty { })) {
       list = [ 3 4 [ false ] ];
       attrs = { foo = null; bar.foo = "baz"; };
       newlinestring = "\n";
@@ -1430,7 +1428,7 @@ runTests {
         there
         test'';
     };
-    expected = rec {
+    expected = {
       list = ''
         [
           3
@@ -1468,13 +1466,10 @@ runTests {
     expected  = "«foo»";
   };
 
-  testToPlist =
-    let
-      deriv = derivation { name = "test"; builder = "/bin/sh"; system = "aarch64-linux"; };
-    in {
+  testToPlist = {
     expr = mapAttrs (const (generators.toPlist { })) {
       value = {
-        nested.values = rec {
+        nested.values = {
           int = 42;
           float = 0.1337;
           bool = true;
