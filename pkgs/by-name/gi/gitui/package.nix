@@ -6,8 +6,7 @@
 , openssl
 , pkg-config
 , xclip
-, AppKit
-, Security
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,7 +26,11 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl ]
     ++ lib.optional stdenv.isLinux xclip
-    ++ lib.optionals stdenv.isDarwin [ libiconv Security AppKit ];
+    ++ lib.optionals stdenv.isDarwin [
+         libiconv
+         darwin.apple_sdk.frameworks.Security
+         darwin.apple_sdk.frameworks.AppKit
+       ];
 
   postPatch = ''
     # The cargo config overrides linkers for some targets, breaking the build
