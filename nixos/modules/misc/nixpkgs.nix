@@ -153,11 +153,10 @@ in
         '';
       type = configType;
       description = ''
-        The configuration of the Nix Packages collection.  (For
-        details, see the Nixpkgs documentation.)  It allows you to set
-        package configuration options.
+        Global configuration for Nixpkgs.
+        The complete list of [Nixpkgs configuration options](https://nixos.org/manual/nixpkgs/unstable/#sec-config-options-reference) is in the [Nixpkgs manual section on global configuration](https://nixos.org/manual/nixpkgs/unstable/#chap-packageconfig).
 
-        Ignored when `nixpkgs.pkgs` is set.
+        Ignored when {option}`nixpkgs.pkgs` is set.
       '';
     };
 
