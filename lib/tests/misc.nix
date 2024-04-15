@@ -72,6 +72,7 @@ let
     makeOverridable
     mapAttrs
     matchAttrs
+    matchAttrTag
     mergeAttrs
     meta
     mkOption
@@ -1107,6 +1108,37 @@ runTests {
   testAttrsToListsCanDealWithFunctions = testingEval (
     attrsToList { someFunc= a: a + 1;}
   );
+
+  testMatchAttrTagExample1 = {
+    expr = matchAttrTag "test" { n = 10; } {
+      n = number: "It's the number ${toString number}";
+      s = str: "It's the string ${str}";
+    };
+    expected = "It's the number 10";
+  };
+
+  testMatchAttrTagExample2 = {
+    expr = matchAttrTag "test" { s = "Paul"; } {
+      n = number: "It's the number ${toString number}";
+      s = str: "It's the string ${str}";
+    };
+    expected = "It's the string Paul";
+  };
+
+  testMatchAttrTagExample3 = testingThrow (
+    matchAttrTag "test" { unknown = null; } {
+      n = number: "It's the number ${toString number}";
+      s = str: "It's the string ${str}";
+    }
+  );
+
+  testMatchAttrTagExample4 = testingThrow (
+    matchAttrTag "test" { n = 10; s = "Paul"; } {
+      n = number: "It's the number ${toString number}";
+      s = str: "It's the string ${str}";
+    }
+  );
+
 
 # GENERATORS
 # these tests assume attributes are converted to lists

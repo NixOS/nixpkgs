@@ -84,7 +84,7 @@ let
       mapAttrs' mapAttrsToList attrsToList concatMapAttrs mapAttrsRecursive
       mapAttrsRecursiveCond genAttrs isDerivation toDerivation optionalAttrs
       zipAttrsWithNames zipAttrsWith zipAttrs recursiveUpdateUntil
-      recursiveUpdate matchAttrs mergeAttrsList overrideExisting showAttrPath getOutput
+      recursiveUpdate matchAttrs mergeAttrsList overrideExisting showAttrPath matchAttrTag getOutput
       getBin getLib getDev getMan chooseDevOutputs zipWithNames zip
       recurseIntoAttrs dontRecurseIntoAttrs cartesianProductOfSets
       updateManyAttrsByPath;

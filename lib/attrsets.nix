@@ -5,6 +5,8 @@
 
 let
   inherit (builtins) head length;
+  inherit (lib.asserts) assertMsg;
+  inherit (lib.generators) toPretty;
   inherit (lib.trivial) mergeAttrs warn;
   inherit (lib.strings) concatStringsSep concatMapStringsSep escapeNixIdentifier sanitizeDerivationName;
   inherit (lib.lists) foldr foldl' concatMap elemAt all partition groupBy take foldl;
@@ -1726,6 +1728,75 @@ rec {
     if path == [] then "<root attribute path>"
     else concatMapStringsSep "." escapeNixIdentifier path;
 
+  /**
+    Turns a list of strings into a human-readable description of those
+    strings represented as an attribute path. The result of this function is
+    not intended to be machine-readable.
+    Create a new attribute set with `value` set at the nested attribute location specified in `attrPath`.
+
+    # Inputs
+
+    `context` (String)
+
+    : The error context in case a tag doesn't have a handler or the value is not valid.
+
+    `value` (AttrsOf Any)
+
+    : The value to match.
+
+    `handlers` (AttrsOf (Any -> Any))
+
+    : An attribute set containing a handler function for each case.
+
+    # Type
+
+    ```
+    matchAttrTag :: String -> AttrsOf Any -> AttrsOf (Any -> Any) -> Any
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.matchAttrTag` usage example
+
+    ```nix
+    matchAttrTag "test" { n = 10; } {
+      n = number: "It's the number ${toString number}";
+      s = str: "It's the string ${str}";
+    }
+    => "It's the number 10"
+
+    matchAttrTag "test" { s = "Paul"; } {
+      n = number: "It's the number ${toString number}";
+      s = str: "It's the string ${str}";
+    }
+    => "It's the string Paul"
+
+    matchAttrTag "test" { unknown = null; } {
+      n = number: "It's the number ${toString number}";
+      s = str: "It's the string ${str}";
+    }
+    => error: test: No handler for tag "unknown"
+
+    matchAttrTag "test" { n = 10; s = "Paul"; } {
+      n = number: "It's the number ${toString number}";
+      s = str: "It's the string ${str}";
+    }
+    => error: test: Value has not exactly one tag: [ "n" "s" ]
+    ```
+
+    :::
+  */
+  matchAttrTag =
+    context: value: handlers:
+    let
+      tagList = attrNames value;
+      # `lib.types.attrTag` guarantees that the resulting value only has exactly one key
+      tag = head tagList;
+      handler = handlers.${tag} or (throw "${context}: No handler for tag \"${tag}\"");
+    in
+    assert assertMsg (length tagList == 1)
+      "${context}: Value has not exactly one tag: ${toPretty { multiline = false; } tagList}";
+    handler value.${tag};
 
   /**
     Get a package output.
