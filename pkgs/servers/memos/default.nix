@@ -13,15 +13,18 @@ let
     pname = "memos-web";
     inherit version;
 
-    src = "${src}/web";
+    src = "${src}";
 
     npmDepsHash = "sha256-uZwFgpAdD3xnXaimu5zGcKWSco4S4Z08+y1e3kPRGf4=";
 
     postPatch = ''
+      cd web
       cp ${./package-lock.json} package-lock.json
+      cp ${./package.json} package.json
     '';
 
     installPhase = ''
+      cd web
       cp -r dist $out
     '';
   };
