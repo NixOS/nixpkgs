@@ -13862,6 +13862,8 @@ with pkgs;
 
   vhdl-ls = callPackage ../development/tools/language-servers/vhdl-ls { };
 
+  vibrantlinux = qt6Packages.callPackage ../tools/X11/vibrantlinux {};
+
   video2midi = callPackage ../tools/audio/video2midi {
     pythonPackages = python3Packages;
   };
