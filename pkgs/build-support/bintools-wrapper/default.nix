@@ -49,7 +49,9 @@
     # Musl-based platforms will keep "pie", other platforms will not.
     # If you change this, make sure to update section `{#sec-hardening-in-nixpkgs}`
     # in the nixpkgs manual to inform users about the defaults.
-    targetPlatform.libc == "musl"
+
+    # static elf riscv32 nommu uclibc requires a ld.so file and pie for the static binary to work
+    ((targetPlatform.libc == "musl") || (targetPlatform.libc == "uclibc"))
     # Except when:
     #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
     #    - static armv7l, where compilation fails.
