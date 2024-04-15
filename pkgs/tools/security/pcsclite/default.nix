@@ -10,6 +10,7 @@
 , dbus
 , polkit
 , systemdLibs
+, dbusSupport ? stdenv.isLinux
 , systemdSupport ? stdenv.isLinux
 , IOKit
 , testers
@@ -17,6 +18,9 @@
 , pname ? "pcsclite"
 , polkitSupport ? false
 }:
+
+assert polkitSupport -> dbusSupport;
+assert systemdSupport -> dbusSupport;
 
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
@@ -73,7 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ python3 ]
     ++ lib.optionals systemdSupport [ systemdLibs ]
     ++ lib.optionals stdenv.isDarwin [ IOKit ]
-    ++ lib.optionals polkitSupport [ dbus polkit ];
+    ++ lib.optionals dbusSupport [ dbus ]
+    ++ lib.optionals polkitSupport [ polkit ];
 
   passthru = {
     tests = {
