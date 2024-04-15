@@ -21,6 +21,10 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-G9nA0F3KKl6mLgcpuMW1uikOyBcBsJ1qd2IlMhW4vhg=";
   };
 
+  patches = [
+    ./1.6.1-CVE-2024-3078.patch
+  ];
+
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
