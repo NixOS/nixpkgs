@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, buildPackages }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, buildPackages
+, ncurses
+}:
 
 stdenv.mkDerivation rec {
   pname = "oksh";
@@ -18,6 +23,8 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [ "--no-strip" ];
+
+  buildInputs = [ ncurses ];
 
   meta = with lib; {
     description = "Portable OpenBSD ksh, based on the Public Domain Korn Shell (pdksh)";
