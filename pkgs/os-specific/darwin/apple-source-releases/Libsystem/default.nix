@@ -59,7 +59,7 @@ appleDerivation' stdenv {
       (cd $dep/include && find . -name '*.h' | copyHierarchy $out/include)
     done
 
-    (cd ${lib.getDev buildPackages.darwin.cctools}/include/mach-o && find . -name '*.h' | copyHierarchy $out/include/mach-o)
+    (cd ${lib.getDev buildPackages.cctools}/include/mach-o && find . -name '*.h' | copyHierarchy $out/include/mach-o)
 
     for header in pthread.h pthread_impl.h pthread_spis.h sched.h; do
       ln -s "$out/include/pthread/$header" "$out/include/$header"
