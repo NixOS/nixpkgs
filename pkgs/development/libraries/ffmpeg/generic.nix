@@ -48,6 +48,8 @@
 , withDav1d ? withHeadlessDeps # AV1 decoder (focused on speed and correctness)
 , withDc1394 ? withFullDeps && !stdenv.isDarwin # IIDC-1394 grabbing (ieee 1394)
 , withDrm ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD) # libdrm support
+, withDvdnav ? withFullDeps && withGPL && lib.versionAtLeast version "7" # needed for DVD demuxing
+, withDvdread ? withFullDeps && withGPL && lib.versionAtLeast version "7" # needed for DVD demuxing
 , withFdkAac ? withFullDeps && (!withGPL || withUnfree) # Fraunhofer FDK AAC de/encoder
 , withFlite ? withFullDeps # Voice Synthesis
 , withFontconfig ? withHeadlessDeps # Needed for drawtext filter
@@ -228,6 +230,8 @@
 , libcaca
 , libdc1394
 , libdrm
+, libdvdnav
+, libdvdread
 , libGL
 , libGLU
 , libiconv
@@ -522,6 +526,10 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withDav1d "libdav1d")
     (enableFeature withDc1394 "libdc1394")
     (enableFeature withDrm "libdrm")
+  ] ++ optionals (versionAtLeast version "7") [
+    (enableFeature withDvdnav "libdvdnav")
+    (enableFeature withDvdread "libdvdread")
+  ] ++ [
     (enableFeature withFdkAac "libfdk-aac")
     (enableFeature withFlite "libflite")
     (enableFeature withFontconfig "fontconfig")
@@ -654,6 +662,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withDav1d [ dav1d ]
   ++ optionals withDc1394 [ libdc1394 libraw1394 ]
   ++ optionals withDrm [ libdrm ]
+  ++ optionals withDvdnav [ libdvdnav ]
+  ++ optionals withDvdread [ libdvdread ]
   ++ optionals withFdkAac [ fdk_aac ]
   ++ optionals withFlite [ flite ]
   ++ optionals withFontconfig [ fontconfig ]
