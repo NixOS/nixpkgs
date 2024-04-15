@@ -25,7 +25,8 @@ for ARCH in "${!ARCHS[@]}"; do
 
   # Fetch the new hash using nix-prefetch-url
   NEW_HASH=$(nix-prefetch-url --type sha256 $URL)
+  SRI_HASH=$(nix hash to-sri --type sha256 $NEW_HASH)
 
   # Update the Nix file with the new hash
-  sed -i "s|${ARCH} = \"sha256-.*\";|${ARCH} = \"sha256-${NEW_HASH}\";|" ./default.nix
+  sed -i "s|${ARCH} = \"sha256-.*\";|${ARCH} = \"${SRI_HASH}\";|" ./default.nix
 done
