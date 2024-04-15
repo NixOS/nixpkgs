@@ -1,18 +1,19 @@
-{ lib
-, appdirs
-, buildPythonPackage
-, fetchFromGitHub
-, graphviz
-, ifaddr
-, lxml
-, mock
-, nix-update-script
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
-, setuptools
-, xmltodict
+{
+  lib,
+  appdirs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  graphviz,
+  ifaddr,
+  lxml,
+  mock,
+  nix-update-script,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
+  setuptools,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
     hash = "sha256-QAF3f1JMGFFsgdZzoyo+RwKKMaLG+hy+lvZwCzceU/g=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     appdirs
@@ -48,9 +47,7 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  pythonImportsCheck = [
-    "soco"
-  ];
+  pythonImportsCheck = [ "soco" ];
 
   passthru.updateScript = nix-update-script { };
 
