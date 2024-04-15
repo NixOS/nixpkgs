@@ -7486,8 +7486,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
-  yottadb = callPackage ../development/yottadb { };
-
   ### DEVELOPMENT / TOOLS
 
   actiona = libsForQt5.callPackage ../applications/misc/actiona { };
