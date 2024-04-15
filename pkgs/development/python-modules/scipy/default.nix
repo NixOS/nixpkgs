@@ -76,6 +76,11 @@ in buildPythonPackage {
         "doc/source/dev/contributor/meson_advanced.rst"
       ];
     })
+    # Fix for https://github.com/scipy/scipy/issues/20300 until 1.13.1, based
+    # on: https://github.com/scipy/scipy/issues/20300 linked from there,
+    # couldn't use fetchpatch because it is a submodule of scipy, and
+    # extraPrefix doesn't fit this purpose.
+    ./pocketfft-aligned_alloc.patch
   ];
 
   # Upstream says in a comment in their pyproject.toml that building against
