@@ -73,7 +73,7 @@ buildNpmPackage' rec {
 
   postPatch = ''
     substituteInPlace scripts/build-electron.sh \
-      --replace 'if [ "$1" == "snap" ]; then' 'exit 0; if [ "$1" == "snap" ]; then'
+      --replace-fail 'if [ "$1" == "snap" ]; then' 'exit 0; if [ "$1" == "snap" ]; then'
   '';
 
   ELECTRON_SKIP_BINARY_DOWNLOAD=1;
@@ -94,8 +94,8 @@ buildNpmPackage' rec {
     find ./Electron.app -name 'Info.plist' | xargs -d '\n' chmod +rw
 
     substituteInPlace electron-builder-config.js \
-      --replace "identity: 'Anoop MD (W7LPPWA48L)'" 'identity: null' \
-      --replace "afterSign: 'notarize.js'," ""
+      --replace-fail "identity: 'Anoop MD (W7LPPWA48L)'" 'identity: null' \
+      --replace-fail "afterSign: 'notarize.js'," ""
 
     npm exec electron-builder -- \
       --dir \
