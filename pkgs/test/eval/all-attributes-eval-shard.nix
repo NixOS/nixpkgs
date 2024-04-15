@@ -47,7 +47,10 @@ let
         else
           # This could be extended, but make sure to avoid infinite structures
           # and use deepSeq so that the whole structure is covered by tryEval.
-          rawValue.outPath;
+          rawValue.drvPath or
+            # TODO: A derivation path would be preferable for diffing
+            #       https://github.com/NixOS/nixpkgs/pull/281536
+            rawValue.outPath;
     in
       if attempt.success
       then attempt.value

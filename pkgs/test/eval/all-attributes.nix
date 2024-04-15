@@ -8,7 +8,7 @@ let
       # or a fixed version, to cache evals when hacking
       # builtins.fetchGit {
       #   url = ../../..;
-      #   rev = "f70a4f73be98c64f4ea930f61bcc80df0f7487d7";
+      #   rev = ".....";
       # }
     else ../../..;
 in
@@ -74,13 +74,6 @@ let
 
     nix-store --init
 
-    # cp -r ${pkgs-path}/lib lib
-    # cp -r ${pkgs-path}/pkgs pkgs
-    # cp -r ${pkgs-path}/default.nix default.nix
-    # cp -r ${pkgs-path}/nixos nixos
-    # cp -r ${pkgs-path}/maintainers maintainers
-    # cp -r ${pkgs-path}/.version .version
-    # cp -r ${pkgs-path}/doc doc
     mkdir $out
     nix-instantiate --eval --strict --json ${./all-attributes-eval-shard.nix} \
         --arg shardIndex ${toString shardIndex} \
