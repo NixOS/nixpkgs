@@ -71,6 +71,7 @@ let
     makeIncludePath
     makeOverridable
     mapAttrs
+    mapCartesianProduct
     matchAttrs
     mergeAttrs
     meta
@@ -1751,6 +1752,30 @@ runTests {
       { a = 3; b = 30; c = 200; }
       { a = 3; b = 30; c = 300; }
     ];
+  };
+
+  testMapCartesianProductOfOneSet = {
+    expr = mapCartesianProduct ({a}: a * 2) { a = [ 1 2 3 ]; };
+    expected = [ 2 4 6 ];
+  };
+
+  testMapCartesianProductOfTwoSets = {
+    expr = mapCartesianProduct ({a,b}: a + b) { a = [ 1 ]; b = [ 10 20 ]; };
+    expected = [ 11 21 ];
+  };
+
+  testMapCartesianProcutOfTwoSetsWithOneEmpty = {
+    expr = mapCartesianProduct (x: x.a + x.b) { a = [ ]; b = [ 10 20 ]; };
+    expected = [ ];
+  };
+
+  testMapCartesianProductOfThreeSets = {
+    expr = mapCartesianProduct ({a,b,c}: a + b + c) {
+      a = [ 1 2 3 ];
+      b = [ 10 20 30 ];
+      c = [ 100 200 300 ];
+    };
+    expected = [ 111 211 311 121 221 321 131 231 331 112 212 312 122 222 322 132 232 332 113 213 313 123 223 323 133 233 333 ];
   };
 
   # The example from the showAttrPath documentation

@@ -914,6 +914,40 @@ rec {
 
 
   /**
+    Return the result of function f applied to the cartesian product of attribute set value combinations.
+    Equivalent to using cartesianProduct followed by map.
+
+    # Inputs
+
+    `f`
+
+    : A function, given an attribute set, it returns a new value.
+
+    `attrsOfLists`
+
+    : Attribute set with attributes that are lists of values
+
+    # Type
+
+    ```
+    mapCartesianProduct :: (AttrSet -> a) -> AttrSet -> [a]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.mapCartesianProduct` usage example
+
+    ```nix
+    mapCartesianProduct ({a, b}: "${a}-${b}") { a = [ "1" "2" ]; b = [ "3" "4" ]; }
+    => [ "1-3" "1-4" "2-3" "2-4" ]
+    ```
+
+    :::
+
+  */
+  mapCartesianProduct = f: attrsOfLists: map f (cartesianProduct attrsOfLists);
+
+  /**
     Utility function that creates a `{name, value}` pair as expected by `builtins.listToAttrs`.
 
 
