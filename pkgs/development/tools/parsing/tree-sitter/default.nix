@@ -2,6 +2,7 @@
 , stdenv
 , fetchgit
 , fetchFromGitHub
+, nix-update-script
 , runCommand
 , which
 , rustPlatform
@@ -158,6 +159,8 @@ rustPlatform.buildRustPackage {
       inherit update-all-grammars;
     };
     inherit grammars buildGrammar builtGrammars withPlugins allGrammars;
+
+    updateScript = nix-update-script { };
 
     tests = {
       # make sure all grammars build
