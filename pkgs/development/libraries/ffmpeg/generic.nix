@@ -95,6 +95,7 @@
 , withSvtav1 ? withHeadlessDeps && !stdenv.isAarch64 && !stdenv.hostPlatform.isMinGW # AV1 encoder/decoder (focused on speed and correctness)
 , withTensorflow ? false # Tensorflow dnn backend support
 , withTheora ? withHeadlessDeps # Theora encoder
+, withTorch ? withFullDeps && lib.versionAtLeast version "7" # Torch dnn backend support
 , withV4l2 ? withHeadlessDeps && stdenv.isLinux  # Video 4 Linux support
 , withV4l2M2m ? withV4l2
 , withVaapi ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD) # Vaapi hardware acceleration
@@ -245,6 +246,7 @@
 , libssh
 , libtensorflow
 , libtheora
+, libtorch
 , libv4l
 , libva
 , libva-minimal
@@ -578,6 +580,9 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withSvtav1 "libsvtav1")
     (enableFeature withTensorflow "libtensorflow")
     (enableFeature withTheora "libtheora")
+  ] ++ optionals (versionAtLeast version "7") [
+    (enableFeature withTorch "libtorch")
+  ] ++ [
     (enableFeature withV4l2 "libv4l2")
     (enableFeature withV4l2M2m "v4l2-m2m")
     (enableFeature withVaapi "vaapi")
@@ -699,6 +704,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withSvtav1 [ svt-av1 ]
   ++ optionals withTensorflow [ libtensorflow ]
   ++ optionals withTheora [ libtheora ]
+  ++ optionals withTorch [ libtorch ]
   ++ optionals withV4l2 [ libv4l ]
   ++ optionals withVaapi [ (if withSmallDeps then libva else libva-minimal) ]
   ++ optionals withVdpau [ libvdpau ]
