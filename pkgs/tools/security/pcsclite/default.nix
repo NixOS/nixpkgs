@@ -37,8 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-usbdropdir=/var/lib/pcsc/drivers"
     (lib.enableFeature stdenv.isLinux "libsystemd")
     (lib.enableFeature polkitSupport "polkit")
-  ] ++ lib.optionals stdenv.isLinux [
     "--enable-ipcdir=/run/pcscd"
+  ] ++ lib.optionals stdenv.isLinux [
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
   ];
 
