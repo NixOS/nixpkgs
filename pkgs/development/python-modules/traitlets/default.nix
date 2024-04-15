@@ -34,6 +34,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # https://github.com/ipython/traitlets/issues/902
+    "test_complete_custom_completers"
+  ];
+
   disabledTestPaths = [
     # requires mypy-testing
     "tests/test_typing.py"
