@@ -166,7 +166,7 @@ in {
       };
 
       settings = mkOption {
-        type = types.attrs;
+        type = types.submodule { freeformType = types.attrs; };
         default = {};
         description = lib.mdDoc ''
           Extra configuration as nix values.
