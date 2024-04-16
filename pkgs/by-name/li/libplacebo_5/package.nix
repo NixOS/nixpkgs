@@ -51,8 +51,6 @@ stdenv.mkDerivation rec {
     (mesonBool "demos" false) # Don't build and install the demo programs
     (mesonEnable "d3d11" false) # Disable the Direct3D 11 based renderer
     (mesonEnable "glslang" false) # rely on shaderc for GLSL compilation instead
-  ] ++ optionals stdenv.isDarwin [
-    (mesonEnable "unwind" false) # libplacebo doesn’t build with `darwin.libunwind`
   ];
 
   postPatch = ''
