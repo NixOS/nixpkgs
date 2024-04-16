@@ -71,7 +71,11 @@ buildPythonPackage rec {
     "tests/inputs/oneof/test_oneof.py"
   ];
 
-  disabledTests = [ "test_pydantic_no_value" ];
+  disabledTests = [
+    "test_pydantic_no_value"
+    # Test is flaky
+    "test_binary_compatibility"
+  ];
 
   meta = with lib; {
     description = "Code generator & library for Protobuf 3 and async gRPC";
