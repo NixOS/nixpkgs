@@ -11616,10 +11616,7 @@ with pkgs;
   osl = libsForQt5.callPackage ../development/compilers/osl {
     boost = boost179;
     libclang = llvmPackages_15.libclang;
-    clang =
-      if stdenv.cc.libcxx != null
-      then (overrideLibcxx llvmPackages_15.stdenv).cc
-      else clang_15;
+    clang = clang_15;
     llvm = llvm_15;
     openexr = openexr_3;
   };
