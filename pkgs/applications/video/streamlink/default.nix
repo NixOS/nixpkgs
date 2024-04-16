@@ -7,12 +7,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "6.7.2";
+  version = "6.7.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-enRwASn1wpwAYmDfU5djhDAJgcmv+dPVwut+kdPco1k=";
+    hash = "sha256-Da+J+NOXW+n55LvaPQw6XiRhJJQ4Pc4Z1p21qMym/Xw=";
   };
 
   patches = [

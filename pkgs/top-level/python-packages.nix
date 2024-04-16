@@ -6079,6 +6079,8 @@ self: super: with self; {
 
   jsondiff = callPackage ../development/python-modules/jsondiff { };
 
+  jsonfeed = callPackage ../development/python-modules/jsonfeed { };
+
   jsonfield = callPackage ../development/python-modules/jsonfield { };
 
   jsonlines = callPackage ../development/python-modules/jsonlines { };
@@ -6991,6 +6993,8 @@ self: super: with self; {
     inherit (pkgs) libxml2 libxslt zlib;
   };
 
+  lxml-html-clean = callPackage ../development/python-modules/lxml-html-clean { };
+
   lxml-stubs = callPackage ../development/python-modules/lxml-stubs { };
 
   lyricwikia = callPackage ../development/python-modules/lyricwikia { };
@@ -7430,29 +7434,48 @@ self: super: with self; {
   mizani = callPackage ../development/python-modules/mizani { };
 
   mkdocs = callPackage ../development/python-modules/mkdocs { };
+
   mkdocs-autolinks-plugin = callPackage ../development/python-modules/mkdocs-autolinks-plugin { };
+
   mkdocs-autorefs = callPackage ../development/python-modules/mkdocs-autorefs { };
+
   mkdocs-drawio-exporter = callPackage ../development/python-modules/mkdocs-drawio-exporter { };
+
   mkdocs-exclude = callPackage ../development/python-modules/mkdocs-exclude { };
-  mkdocs-jupyter = callPackage ../development/python-modules/mkdocs-jupyter { };
-  mkdocs-gitlab = callPackage ../development/python-modules/mkdocs-gitlab-plugin { };
+
   mkdocs-git-authors-plugin = callPackage ../development/python-modules/mkdocs-git-authors-plugin { };
+
   mkdocs-git-revision-date-localized-plugin = callPackage ../development/python-modules/mkdocs-git-revision-date-localized-plugin { };
+
+  mkdocs-gitlab = callPackage ../development/python-modules/mkdocs-gitlab-plugin { };
+
+  mkdocs-jupyter = callPackage ../development/python-modules/mkdocs-jupyter { };
+
   mkdocs-linkcheck = callPackage ../development/python-modules/mkdocs-linkcheck { };
+
   mkdocs-macros = callPackage ../development/python-modules/mkdocs-macros { };
+
   mkdocs-material = callPackage ../development/python-modules/mkdocs-material { };
+
   mkdocs-material-extensions = callPackage ../development/python-modules/mkdocs-material/mkdocs-material-extensions.nix { };
+
+  mkdocs-mermaid2-plugin = callPackage ../development/python-modules/mkdocs-mermaid2-plugin { };
+
   mkdocs-minify-plugin = callPackage ../development/python-modules/mkdocs-minify-plugin { };
+
   mkdocs-redirects = callPackage ../development/python-modules/mkdocs-redirects { };
+
   mkdocs-redoc-tag = callPackage ../development/python-modules/mkdocs-redoc-tag { };
+
+  mkdocs-rss-plugin = callPackage ../development/python-modules/mkdocs-rss-plugin { };
+
   mkdocs-simple-hooks = callPackage ../development/python-modules/mkdocs-simple-hooks { };
+
   mkdocs-swagger-ui-tag = callPackage ../development/python-modules/mkdocs-swagger-ui-tag { };
 
   mkdocstrings = callPackage ../development/python-modules/mkdocstrings { };
 
   mkdocstrings-python = callPackage ../development/python-modules/mkdocstrings-python { };
-
-  mkdocs-mermaid2-plugin = callPackage ../development/python-modules/mkdocs-mermaid2-plugin { };
 
   mkl-service = callPackage ../development/python-modules/mkl-service { };
 
@@ -16417,6 +16440,8 @@ self: super: with self; {
   vacuum-map-parser-roborock = callPackage ../development/python-modules/vacuum-map-parser-roborock { };
 
   validate-email = callPackage ../development/python-modules/validate-email { };
+
+  validator-collection = callPackage ../development/python-modules/validator-collection { };
 
   validators = callPackage ../development/python-modules/validators { };
 

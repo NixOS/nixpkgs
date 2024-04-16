@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
       - job control
     '';
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ AndersonTorres suominen ];
+    maintainers = with lib.maintainers; [ suominen ];
     platforms = lib.platforms.unix;
   };
 })

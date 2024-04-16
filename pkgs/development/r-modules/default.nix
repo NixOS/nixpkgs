@@ -343,6 +343,7 @@ let
     fftw = [ pkgs.fftw.dev ];
     fftwtools = with pkgs; [ fftw.dev pkg-config ];
     Formula = [ pkgs.gmp ];
+    gdalraster = [ pkgs.pkg-config ];
     gdtools = with pkgs; [ cairo.dev fontconfig.lib freetype.dev ];
     GeneralizedWendland = [ pkgs.gsl ];
     ggiraph = with pkgs; [ pkgs.libpng.dev ];
@@ -549,6 +550,7 @@ let
     coga = [ pkgs.gsl.dev ];
     deepSNV = with pkgs; [ xz.dev bzip2.dev zlib.dev ];
     epialleleR = with pkgs; [ xz.dev bzip2.dev zlib.dev ];
+    gdalraster = with pkgs; [ gdal proj.dev sqlite.dev ];
     gpg = [ pkgs.gpgme ];
     webp = [ pkgs.libwebp ];
     RMark = [ pkgs.which ];
@@ -583,6 +585,7 @@ let
     openssl = [ pkgs.pkg-config ];
     pdftools = [ pkgs.pkg-config ];
     qckitfastq = [ pkgs.zlib.dev ];
+    raer = with pkgs; [ zlib.dev xz.dev bzip2.dev ];
     RQuantLib = with pkgs; [ quantlib.dev boost.dev ];
     sf = with pkgs; [ pkg-config sqlite.dev proj.dev ];
     terra = with pkgs; [ pkg-config sqlite.dev proj.dev ];
@@ -595,6 +598,7 @@ let
     Cairo = [ pkgs.pkg-config ];
     CLVTools = [ pkgs.gsl ];
     excursions = [ pkgs.gsl ];
+    gpuMagic = [ pkgs.ocl-icd ];
     JMcmprsk = [ pkgs.gsl ];
     KSgeneral = [ pkgs.fftw.dev ];
     mashr = [ pkgs.gsl ];
@@ -639,7 +643,7 @@ let
     Rmmquant = [ pkgs.zlib.dev ];
     SICtools = with pkgs; [ zlib.dev ncurses.dev ];
     Signac = [ pkgs.zlib.dev ];
-    TransView = [ pkgs.zlib.dev ];
+    TransView = with pkgs; [ xz.dev bzip2.dev zlib.dev ];
     bigsnpr = [ pkgs.zlib.dev ];
     zlib = [ pkgs.zlib.dev ];
     divest = [ pkgs.zlib.dev ];
@@ -678,6 +682,7 @@ let
     crandep = [ pkgs.gsl ];
     catSurv = [ pkgs.gsl ];
     ccfindR = [ pkgs.gsl ];
+    screenCounter = [ pkgs.zlib.dev ];
     SPARSEMODr = [ pkgs.gsl ];
     RKHSMetaMod = [ pkgs.gsl ];
     LCMCR = [ pkgs.gsl ];
@@ -913,6 +918,7 @@ let
     "MSnID"
     "OmnipathR"
     "precommit"
+    "protGear"
     "PSCBS"
     "iemisc"
     "repmis"
@@ -957,9 +963,11 @@ let
   ];
 
   packagesToSkipCheck = [
+    "MsDataHub" # tries to connect to ExperimentHub
     "Rmpi"     # tries to run MPI processes
     "ReactomeContentService4R" # tries to connect to Reactome
     "PhIPData" # tries to download something from a DB
+    "RBioFormats" # tries to download jar during load test
     "pbdMPI"   # tries to run MPI processes
     "data_table" # fails to rename shared library before check
     "coMethDMR" # tries to connect to ExperimentHub

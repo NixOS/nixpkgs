@@ -10230,8 +10230,6 @@ with pkgs;
 
   ktailctl = kdePackages.callPackage ../applications/networking/ktailctl {};
 
-  iredis = callPackage ../tools/admin/iredis { };
-
   ispell = callPackage ../tools/text/ispell { };
 
   iodash = callPackage ../development/libraries/iodash { };

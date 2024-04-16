@@ -18,6 +18,9 @@ let
   cacheDir = "/var/cache/mediawiki";
   stateDir = "/var/lib/mediawiki";
 
+  # https://www.mediawiki.org/wiki/Compatibility
+  php = pkgs.php81;
+
   pkg = pkgs.stdenv.mkDerivation rec {
     pname = "mediawiki-full";
     inherit (src) version;
@@ -46,7 +49,7 @@ let
   } ''
     mkdir -p $out/bin
     for i in changePassword.php createAndPromote.php userOptions.php edit.php nukePage.php update.php; do
-      makeWrapper ${pkgs.php}/bin/php $out/bin/mediawiki-$(basename $i .php) \
+      makeWrapper ${php}/bin/php $out/bin/mediawiki-$(basename $i .php) \
         --set MEDIAWIKI_CONFIG ${mediawikiConfig} \
         --add-flags ${pkg}/share/mediawiki/maintenance/$i
     done
@@ -485,8 +488,7 @@ in
     services.phpfpm.pools.mediawiki = {
       inherit user group;
       phpEnv.MEDIAWIKI_CONFIG = "${mediawikiConfig}";
-      # https://www.mediawiki.org/wiki/Compatibility
-      phpPackage = pkgs.php81;
+      phpPackage = php;
       settings = (if (cfg.webserver == "apache") then {
         "listen.owner" = config.services.httpd.user;
         "listen.group" = config.services.httpd.group;
@@ -598,8 +600,8 @@ in
         fi
 
         echo "exit( wfGetDB( DB_MASTER )->tableExists( 'user' ) ? 1 : 0 );" | \
-        ${pkgs.php}/bin/php ${pkg}/share/mediawiki/maintenance/eval.php --conf ${mediawikiConfig} && \
-        ${pkgs.php}/bin/php ${pkg}/share/mediawiki/maintenance/install.php \
+        ${php}/bin/php ${pkg}/share/mediawiki/maintenance/eval.php --conf ${mediawikiConfig} && \
+        ${php}/bin/php ${pkg}/share/mediawiki/maintenance/install.php \
           --confpath /tmp \
           --scriptpath / \
           --dbserver ${lib.escapeShellArg dbAddr} \
@@ -613,7 +615,7 @@ in
           ${lib.escapeShellArg cfg.name} \
           admin
 
-        ${pkgs.php}/bin/php ${pkg}/share/mediawiki/maintenance/update.php --conf ${mediawikiConfig} --quick
+        ${php}/bin/php ${pkg}/share/mediawiki/maintenance/update.php --conf ${mediawikiConfig} --quick
       '';
 
       serviceConfig = {
