@@ -1577,7 +1577,9 @@ with pkgs;
 
   aefs = callPackage ../tools/filesystems/aefs { };
 
-  aegisub = callPackage ../applications/video/aegisub ({
+  aegisub = callPackage ../by-name/ae/aegisub/package.nix ({
+    boost = boost179;
+    luajit = luajit.override { enable52Compat = true; };
     wxGTK = wxGTK32;
   } // (config.aegisub or {}));
 
@@ -3634,7 +3636,7 @@ with pkgs;
 
   claws = callPackage ../tools/misc/claws { };
 
-  cloud-custodian = python3Packages.callPackage ../tools/networking/cloud-custodian  { };
+  cloud-custodian = callPackage ../tools/networking/cloud-custodian  { };
 
   coconut = with python3Packages; toPythonApplication coconut;
 
@@ -5248,8 +5250,6 @@ with pkgs;
   };
 
   facedetect = callPackage ../tools/graphics/facedetect { };
-
-  facter = callPackage ../tools/system/facter { };
 
   faketty = callPackage ../tools/misc/faketty { };
 
@@ -7820,10 +7820,7 @@ with pkgs;
 
   choose = callPackage ../tools/text/choose { };
 
-  d2 = callPackage ../tools/text/d2 {
-    # Failed tests
-    buildGoModule = buildGo121Module;
-  };
+  d2 = callPackage ../tools/text/d2 { };
 
   ddev = callPackage ../applications/virtualization/ddev { };
 
@@ -8343,7 +8340,8 @@ with pkgs;
   })
     garage
       garage_0_8 garage_0_9
-      garage_0_8_7 garage_0_9_4;
+      garage_0_8_7 garage_0_9_4
+      garage_1_0_0 garage_1_x;
 
   garmintools = callPackage ../development/libraries/garmintools { };
 
@@ -14048,8 +14046,6 @@ with pkgs;
 
   twitch-chat-downloader = python3Packages.callPackage ../applications/misc/twitch-chat-downloader { };
 
-  twitch-dl = callPackage ../tools/misc/twitch-dl { };
-
   twitterBootstrap = callPackage ../development/web/twitter-bootstrap { };
 
   twspace-crawler = callPackage ../tools/misc/twspace-crawler { };
@@ -19499,10 +19495,6 @@ with pkgs;
 
   pup = callPackage ../development/tools/pup { };
 
-  puppet-bolt = callPackage ../tools/admin/puppet/puppet-bolt { };
-
-  puppet-lint = callPackage ../development/tools/puppet/puppet-lint { };
-
   puppeteer-cli = callPackage ../tools/graphics/puppeteer-cli { };
 
   pyrseas = callPackage ../development/tools/database/pyrseas { };
@@ -19519,8 +19511,6 @@ with pkgs;
   };
 
   qxmledit = libsForQt5.callPackage ../applications/editors/qxmledit {} ;
-
-  r10k = callPackage ../tools/system/r10k { };
 
   radare2 = callPackage ../development/tools/analysis/radare2 ({
     lua = lua5;

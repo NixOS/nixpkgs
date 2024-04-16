@@ -667,6 +667,12 @@
       fingerprint = "B0D7 2955 235F 6AB5 ACFA  1619 8C7F F5BB 1ADE F191";
     }];
   };
+  aimpizza = {
+    email = "rickomo.us@gmail.com";
+    name = "Rick Omonsky";
+    github = "AimPizza";
+    githubId = 64905268;
+  };
   aiotter = {
     email = "git@aiotter.com";
     github = "aiotter";
@@ -1388,6 +1394,7 @@
     github = "anthonyroussel";
     githubId = 220084;
     name = "Anthony Roussel";
+    matrix = "@anthonyrsl:matrix.org";
     keys = [{
       fingerprint = "472D 368A F107 F443 F3A5  C712 9DC4 987B 1A55 E75E";
     }];
@@ -5462,6 +5469,12 @@
     githubId = 6689924;
     name = "David Terry";
   };
+  dylan-gonzalez = {
+    email = "dylcg10@gmail.com";
+    github = "dylan-gonzalez";
+    githubId = 45161987;
+    name = "Dylan Gonzalez";
+  };
   dylanmtaylor = {
     email = "dylan@dylanmtaylor.com";
     github = "dylanmtaylor";
@@ -8853,6 +8866,15 @@
     email = "github@j4m3s.eu";
     github = "j4m3s-s";
     githubId = 9413812;
+  };
+  ja1den = {
+    name = "Jaiden Douglas";
+    email = "contact@ja1den.me";
+    github = "ja1den";
+    githubId = 49811314;
+    keys = [{
+      fingerprint = "CC36 4CF4 32DD 443F 27FC  033C 3475 AA20 D72F 6A93";
+    }];
   };
   jab = {
     name = "Joshua Bronson";

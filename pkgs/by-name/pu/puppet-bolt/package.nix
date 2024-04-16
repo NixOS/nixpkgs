@@ -1,4 +1,11 @@
-{ lib, bundlerApp, makeWrapper, bundlerUpdateScript, puppet-bolt, testers }:
+{
+  bundlerApp,
+  bundlerUpdateScript,
+  lib,
+  makeWrapper,
+  puppet-bolt,
+  testers,
+}:
 
 bundlerApp {
   pname = "bolt";
@@ -26,11 +33,13 @@ bundlerApp {
     updateScript = bundlerUpdateScript "puppet-bolt";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Execute commands remotely over SSH and WinRM";
     homepage = "https://github.com/puppetlabs/bolt";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ uvnikita ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/puppetlabs/bolt/blob/main/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    mainProgram = "bolt";
+    maintainers = with lib.maintainers; [ uvnikita anthonyroussel ];
+    platforms = lib.platforms.unix;
   };
 }

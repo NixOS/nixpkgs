@@ -5724,6 +5724,8 @@ self: super: with self; {
 
   influxdb-client = callPackage ../development/python-modules/influxdb-client { };
 
+  influxdb3-python = callPackage ../development/python-modules/influxdb3-python { };
+
   inform = callPackage ../development/python-modules/inform { };
 
   iniconfig = callPackage ../development/python-modules/iniconfig { };
@@ -11314,6 +11316,8 @@ self: super: with self; {
   pynisher = callPackage ../development/python-modules/pynisher { };
 
   pynmea2 = callPackage ../development/python-modules/pynmea2 { };
+
+  pynmeagps = callPackage ../development/python-modules/pynmeagps { };
 
   pynput = callPackage ../development/python-modules/pynput { };
 
