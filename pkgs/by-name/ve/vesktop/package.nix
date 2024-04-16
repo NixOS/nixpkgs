@@ -8,15 +8,11 @@
 , copyDesktopItems
 , vencord
 , electron
-, pipewire
-, libpulseaudio
 , libicns
-, libnotify
 , jq
 , moreutils
 , cacert
 , nodePackages
-, speechd
 , withTTS ? true
   # Enables the use of vencord from nixpkgs instead of
   # letting vesktop manage it's own version
@@ -116,15 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   # this is consistent with other nixpkgs electron packages and upstream, as far as I am aware
   installPhase =
-    let
-      # this is mainly required for venmic
-      libPath = lib.makeLibraryPath ([
-        libpulseaudio
-        libnotify
-        pipewire
-        stdenv.cc.cc.lib
-      ] ++ lib.optional withTTS speechd);
-    in
     ''
       runHook preInstall
 
@@ -139,7 +126,6 @@ stdenv.mkDerivation (finalAttrs: {
       done
 
       makeWrapper ${electron}/bin/electron $out/bin/vesktop \
-        --prefix LD_LIBRARY_PATH : ${libPath} \
         --add-flags $out/opt/Vesktop/resources/app.asar \
         ${lib.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
