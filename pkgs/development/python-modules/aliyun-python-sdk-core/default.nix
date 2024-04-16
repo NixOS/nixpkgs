@@ -5,12 +5,13 @@
 , jmespath
 , pythonOlder
 , pythonRelaxDepsHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "aliyun-python-sdk-core";
   version = "2.15.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -19,19 +20,23 @@ buildPythonPackage rec {
     hash = "sha256-UYVQ0H9TfNOvrDtsk7XJl840QOTQwFTjrL2qgmHpCt8=";
   };
 
+  pythonRelaxDeps = true;
+
+  build-system = [
+    setuptools
+  ];
+
   nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cryptography
     jmespath
   ];
 
   # All components are stored in a mono repo
   doCheck = false;
-
-  pythonRelaxDeps = true;
 
   pythonImportsCheck = [
     "aliyunsdkcore"
