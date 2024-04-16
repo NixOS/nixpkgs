@@ -3,10 +3,10 @@
 {
   firefox = buildMozillaMach rec {
     pname = "firefox";
-    version = "124.0.2";
+    version = "125.0";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "8cf340de6e34812f8ae3363265859a263330af770d981c3dd1ca1e7e0cfe513604d3e68184d4aa1446569aefbdf359d561fbc200faf19a5ed020a1709d9ef10e";
+      sha512 = "c520070e5a8872f3df4f5e35b9a605eef95f61254f6242040f02b2b68d6c8eef993885a18144353326a7488ac27115fa4ad2ef5615885e5155ab3f8194a61977";
     };
 
     extraPatches = [
@@ -94,11 +94,11 @@
 
   firefox-esr-115 = buildMozillaMach rec {
     pname = "firefox-esr-115";
-    version = "115.9.1esr";
+    version = "115.10.0esr";
     applicationName = "Mozilla Firefox ESR";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "9ccaede2fcda13a07f98a2110bb8f99c7324601d66bff311f3070a669576a1598fe1d7de2d005d725d1f44dbe3934a9c0fd0b7950f60686047d4ce8d9d812310";
+      sha512 = "0626e2c68ce43f24dfc2b9216e2565537ad8781daf4195d53420e1b78d57d0f6360fbe56b0ddbedae3818546c72472c85c1ff2b208c123d32a0543e666f42b65";
     };
 
     meta = {
