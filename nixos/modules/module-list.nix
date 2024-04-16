@@ -690,6 +690,7 @@
   ./services/misc/clipmenu.nix
   ./services/misc/confd.nix
   ./services/misc/cpuminer-cryptonight.nix
+  ./services/misc/db-rest.nix
   ./services/misc/devmon.nix
   ./services/misc/dictd.nix
   ./services/misc/disnix.nix
