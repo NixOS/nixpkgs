@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, python3, qmake,
-  qtwebengine, qtxmlpatterns,
-  qttools, unzip }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  python3,
+  qmake,
+  qtwebengine,
+  qtxmlpatterns,
+  qttools,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "python-qt";
@@ -14,6 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # fix a -Werror=format-security. was merged upstream, so can be removed on next release.
     (fetchpatch {
       name = "fix-format-security.patch";
       url = "https://github.com/MeVisLab/pythonqt/pull/197/commits/c35d1efd00b83e0ebd826d7ed8454f3684ddffff.patch";
@@ -21,7 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = [ qmake qtwebengine qtxmlpatterns qttools unzip ];
+  nativeBuildInputs = [
+    qmake
+    qttools
+    qtxmlpatterns
+    qtwebengine
+  ];
 
   buildInputs = [ python3 ];
 
@@ -31,8 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   dontWrapQtApps = true;
-
-  unpackCmd = "unzip $src";
 
   installPhase = ''
     mkdir -p $out/include/PythonQt
