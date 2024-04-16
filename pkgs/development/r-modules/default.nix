@@ -641,7 +641,7 @@ let
     Rmmquant = [ pkgs.zlib.dev ];
     SICtools = with pkgs; [ zlib.dev ncurses.dev ];
     Signac = [ pkgs.zlib.dev ];
-    TransView = [ pkgs.zlib.dev ];
+    TransView = with pkgs; [ xz.dev bzip2.dev zlib.dev ];
     bigsnpr = [ pkgs.zlib.dev ];
     zlib = [ pkgs.zlib.dev ];
     divest = [ pkgs.zlib.dev ];
