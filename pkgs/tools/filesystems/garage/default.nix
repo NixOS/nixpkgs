@@ -49,13 +49,14 @@ let
     buildFeatures = [
       "kubernetes-discovery"
       "bundled-libs"
-    ] ++ lib.optional (lib.versionOlder version "1.0") "sled" ++ [
       "metrics"
       "k2v"
       "telemetry-otlp"
       "lmdb"
       "sqlite"
       "consul-discovery"
+    ] ++ lib.optionals (lib.versionOlder version "1.0") [
+      "sled"
     ];
 
     # To make integration tests pass, we include the optional k2v feature here,
@@ -65,9 +66,10 @@ let
       "k2v"
       "kubernetes-discovery"
       "bundled-libs"
-    ] ++ lib.optional (lib.versionOlder version "1.0") "sled" ++ [
       "lmdb"
       "sqlite"
+    ] ++ lib.optionals (lib.versionOlder version "1.0") [
+      "sled"
     ];
 
     disabledTests = [

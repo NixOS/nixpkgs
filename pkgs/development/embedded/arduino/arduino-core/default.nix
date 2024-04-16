@@ -39,12 +39,15 @@ let
     inherit (stdenv.hostPlatform) system;
   };
   # Some .so-files are later copied from .jar-s to $HOME, so patch them beforehand
-  patchelfInJars =
-    lib.optional (stdenv.hostPlatform.system == "aarch64-linux") { jar = "share/arduino/lib/jssc-2.8.0-arduino4.jar"; file = "libs/linux/libjSSC-2.8_aarch64.so"; }
-    ++ lib.optional (builtins.match "armv[67]l-linux" stdenv.hostPlatform.system != null) { jar = "share/arduino/lib/jssc-2.8.0-arduino4.jar"; file = "libs/linux/libjSSC-2.8_armhf.so"; }
-    ++ lib.optional (stdenv.hostPlatform.system == "x86_64-linux") { jar = "share/arduino/lib/jssc-2.8.0-arduino4.jar"; file = "libs/linux/libjSSC-2.8_x86_64.so"; }
-    ++ lib.optional (stdenv.hostPlatform.system == "i686-linux") { jar = "share/arduino/lib/jssc-2.8.0-arduino4.jar"; file = "libs/linux/libjSSC-2.8_x86.so"; }
-  ;
+  patchelfInJars = lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+    { jar = "share/arduino/lib/jssc-2.8.0-arduino4.jar"; file = "libs/linux/libjSSC-2.8_aarch64.so"; }
+  ] ++ lib.optionals (builtins.match "armv[67]l-linux" stdenv.hostPlatform.system != null) [
+    { jar = "share/arduino/lib/jssc-2.8.0-arduino4.jar"; file = "libs/linux/libjSSC-2.8_armhf.so"; }
+  ] ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
+    { jar = "share/arduino/lib/jssc-2.8.0-arduino4.jar"; file = "libs/linux/libjSSC-2.8_x86_64.so"; }
+  ] ++ lib.optionals (stdenv.hostPlatform.system == "i686-linux") [
+    { jar = "share/arduino/lib/jssc-2.8.0-arduino4.jar"; file = "libs/linux/libjSSC-2.8_x86.so"; }
+  ];
   # abiVersion 6 is default, but we need 5 for `avrdude_bin` executable
   ncurses5 = ncurses.override { abiVersion = "5"; };
   teensy_libpath = lib.makeLibraryPath [

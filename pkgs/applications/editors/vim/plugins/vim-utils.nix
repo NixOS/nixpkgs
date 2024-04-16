@@ -199,7 +199,7 @@ let
         ln -s ${python3Env}/${python3Env.sitePackages} $out/pack/${packageName}/start/__python3_dependencies/python3
       '';
     in
-      [ packdirStart packdirOpt ] ++ lib.optional (allPython3Dependencies python3.pkgs != []) python3link;
+      [ packdirStart packdirOpt ] ++ lib.optionals (allPython3Dependencies python3.pkgs != []) [ python3link ];
   in
     buildEnv {
       name = "vim-pack-dir";
@@ -266,12 +266,16 @@ let
 
       entries = [
         beforePlugins
-      ]
-      ++ lib.optional (vam != null) (lib.warn "'vam' attribute is deprecated. Use 'packages' instead in your vim configuration" vamImpl)
-      ++ lib.optional (packages != null && packages != []) (nativeImpl packages)
-      ++ lib.optional (pathogen != null) (throw "pathogen is now unsupported, replace `pathogen = {}` with `packages.home = { start = []; }`")
-      ++ lib.optional (plug != null) plugImpl
-      ++ [ customRC ];
+        customRC
+      ] ++ lib.optionals (vam != null) [
+        (lib.warn "'vam' attribute is deprecated. Use 'packages' instead in your vim configuration" vamImpl)
+      ] ++ lib.optionals (packages != null && packages != []) [
+        (nativeImpl packages)
+      ] ++ lib.optionals (pathogen != null) [
+        (throw "pathogen is now unsupported, replace `pathogen = {}` with `packages.home = { start = []; }`")
+      ] ++ lib.optionals (plug != null) [
+        plugImpl
+      ];
 
     in
       lib.concatStringsSep "\n" (lib.filter (x: x != null && x != "") entries);

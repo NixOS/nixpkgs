@@ -21,9 +21,12 @@ stdenv.mkDerivation rec {
      lib.optionals withQt [ qtbase ]
   ++ lib.optionals withCurses ncurses;
 
-  cmakeFlags =
-     lib.optional withQt [ "-DQT=ON" ]
-  ++ lib.optional withCurses [ "-DCURSES=ON" "-DQT=OFF"];
+  cmakeFlags = lib.optionals withQt [
+    "-DQT=ON"
+  ] ++ lib.optionals withCurses [
+    "-DCURSES=ON"
+    "-DQT=OFF"
+  ];
 
   preConfigure = ''
     mkdir -p $PWD/build/_deps

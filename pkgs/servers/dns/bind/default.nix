@@ -39,9 +39,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl pkg-config ];
   buildInputs = [ libidn2 libtool libxml2 openssl libuv nghttp2 jemalloc ]
-    ++ lib.optional stdenv.isLinux libcap
-    ++ lib.optional enableGSSAPI libkrb5
-    ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]));
+    ++ lib.optionals stdenv.isLinux [ libcap ]
+    ++ lib.optionals enableGSSAPI [ libkrb5 ]
+    ++ lib.optionals enablePython [ (python3.withPackages (ps: with ps; [ ply ])) ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 

@@ -232,38 +232,64 @@ let
           CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
           SKIP_PERF_SENSITIVE = 1;
 
-          configureFlags =
+          configureFlags = [
             # Disable all extensions
-            [ "--disable-all" ]
+            "--disable-all"
+            ]
 
             # PCRE
-            ++ [ "--with-external-pcre=${pcre2.dev}" ]
+            ++ [
+              "--with-external-pcre=${pcre2.dev}"
+            ]
 
             # Enable sapis
-            ++ lib.optional (!cgiSupport) "--disable-cgi"
-            ++ lib.optional (!cliSupport) "--disable-cli"
-            ++ lib.optional fpmSupport "--enable-fpm"
-            ++ lib.optionals pearSupport [ "--with-pear" "--enable-xml" "--with-libxml" ]
-            ++ lib.optional pharSupport "--enable-phar"
-            ++ lib.optional (!phpdbgSupport) "--disable-phpdbg"
+            ++ lib.optional (!cgiSupport) [
+                "--disable-cgi"
+            ] ++ lib.optionals (!cliSupport) [
+                "--disable-cli"
+            ] ++ lib.optionals fpmSupport [
+              "--enable-fpm"
+            ]
 
+            ++ lib.optionals pearSupport [
+              "--with-pear"
+              "--enable-xml"
+              "--with-libxml"
+            ] ++ lib.optionals pharSupport [
+              "--enable-phar"
+            ] ++ lib.optionals (!phpdbgSupport) [
+              "--disable-phpdbg"
+            ]
 
             # Misc flags
-            ++ lib.optional apxs2Support "--with-apxs2=${apacheHttpd.dev}/bin/apxs"
-            ++ lib.optional argon2Support "--with-password-argon2=${libargon2}"
-            ++ lib.optional cgotoSupport "--enable-re2c-cgoto"
-            ++ lib.optional embedSupport "--enable-embed${lib.optionalString staticSupport "=static"}"
-            ++ lib.optional (!ipv6Support) "--disable-ipv6"
-            ++ lib.optional systemdSupport "--with-fpm-systemd"
-            ++ lib.optional valgrindSupport "--with-valgrind=${valgrind.dev}"
-            ++ lib.optional ztsSupport "--enable-zts"
-            ++ lib.optional staticSupport "--enable-static"
-            ++ lib.optional (!zendSignalsSupport) ["--disable-zend-signals"]
-            ++ lib.optional zendMaxExecutionTimersSupport "--enable-zend-max-execution-timers"
-
+            ++ lib.optionals apxs2Support [
+              "--with-apxs2=${apacheHttpd.dev}/bin/apxs"
+            ] ++ lib.optionals argon2Support [
+              "--with-password-argon2=${libargon2}"
+            ] ++ lib.optionals cgotoSupport [
+              "--enable-re2c-cgoto"
+            ] ++ lib.optionals embedSupport [
+              "--enable-embed${lib.optionalString staticSupport "=static"}"
+            ] ++ lib.optionals (!ipv6Support) [
+              "--disable-ipv6"
+            ] ++ lib.optionals systemdSupport [
+              "--with-fpm-systemd"
+            ] ++ lib.optionals valgrindSupport [
+              "--with-valgrind=${valgrind.dev}"
+            ] ++ lib.optionals ztsSupport [
+              "--enable-zts"
+            ] ++ lib.optionals staticSupport [
+              "--enable-static"
+            ] ++ lib.optionals (!zendSignalsSupport) [
+              "--disable-zend-signals"
+            ] ++ lib.optionals zendMaxExecutionTimersSupport [
+              "--enable-zend-max-execution-timers"
+            ]
 
             # Sendmail
-            ++ [ "PROG_SENDMAIL=${system-sendmail}/bin/sendmail" ]
+            ++ [
+              "PROG_SENDMAIL=${system-sendmail}/bin/sendmail"
+            ]
           ;
 
           hardeningDisable = [ "bindnow" ];

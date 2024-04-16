@@ -6,7 +6,7 @@ stdenv.mkDerivation {
 
   src = looking-glass-client.src;
   sourceRoot = "${looking-glass-client.src.name}/module";
-  patches = lib.optional (kernel.kernelAtLeast "6.4") [
+  patches = lib.optionals (kernel.kernelAtLeast "6.4") [
     ./linux-6-4-compat.patch
   ];
   hardeningDisable = [ "pic" "format" ];

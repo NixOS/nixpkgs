@@ -27,7 +27,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ snappy ];
 
-  nativeBuildInputs = lib.optional stdenv.isDarwin fixDarwinDylibNames ++ [ cmake ];
+  nativeBuildInputs = [
+    cmake
+  ] ++ lib.optionals stdenv.isDarwin [
+    fixDarwinDylibNames
+  ];
 
   doCheck = true;
 

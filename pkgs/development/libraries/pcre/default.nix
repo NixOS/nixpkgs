@@ -19,11 +19,14 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "doc" "man" ];
 
   # Disable jit on Apple Silicon, https://github.com/zherczeg/sljit/issues/51
-  configureFlags = lib.optional (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) "--enable-jit=auto" ++ [
+  configureFlags = [
     "--enable-unicode-properties"
     "--disable-cpp"
-  ]
-    ++ lib.optional (variant != null) "--enable-${variant}";
+  ] ++ lib.optionals (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) [
+    "--enable-jit=auto"
+  ] ++ lib.optionals (variant != null) [
+    "--enable-${variant}"
+  ];
 
   # https://bugs.exim.org/show_bug.cgi?id=2173
   patches = [ ./stacksize-detection.patch ];

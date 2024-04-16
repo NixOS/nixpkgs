@@ -17,7 +17,7 @@ callPackage ../nginx/generic.nix args rec {
     hash = "sha256-g6PyuyulnltnZJWiZ01iYG1k6Lz5nO+gneb8M4q3WHo=";
   };
 
-  configureFlags = lib.optional withQuic [
+  configureFlags = lib.optionals withQuic [
     "--with-http_v3_module"
   ];
 

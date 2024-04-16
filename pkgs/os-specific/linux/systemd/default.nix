@@ -227,9 +227,9 @@ stdenv.mkDerivation (finalAttrs: {
     ./0015-tpm2_context_init-fix-driver-name-checking.patch
     ./0016-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
     ./0017-meson.build-do-not-create-systemdstatedir.patch
-  ] ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
     ./0018-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
-  ] ++ lib.optional (stdenv.hostPlatform.isPower || stdenv.hostPlatform.isRiscV || stdenv.hostPlatform.isMips) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isPower || stdenv.hostPlatform.isRiscV || stdenv.hostPlatform.isMips) [
     # Fixed upstream and included in the main and stable branches. Can be dropped
     # when bumping to >= v255.5.
     # https://github.com/systemd/systemd/issues/30448
@@ -461,28 +461,28 @@ stdenv.mkDerivation (finalAttrs: {
     ]
 
     ++ lib.optionals wantGcrypt [ libgcrypt libgpg-error ]
-    ++ lib.optional withTests glib
-    ++ lib.optional withAcl acl
-    ++ lib.optional withApparmor libapparmor
-    ++ lib.optional withAudit audit
-    ++ lib.optional wantCurl (lib.getDev curl)
+    ++ lib.optionals withTests [ glib ]
+    ++ lib.optionals withAcl [ acl ]
+    ++ lib.optionals withApparmor [ libapparmor ]
+    ++ lib.optionals withAudit [ audit ]
+    ++ lib.optionals wantCurl [ (lib.getDev curl) ]
     ++ lib.optionals withCompression [ zlib bzip2 lz4 xz zstd ]
-    ++ lib.optional withCoredump elfutils
-    ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
-    ++ lib.optional withKexectools kexec-tools
-    ++ lib.optional withKmod kmod
-    ++ lib.optional withLibidn2 libidn2
-    ++ lib.optional withLibseccomp libseccomp
-    ++ lib.optional withIptables iptables
-    ++ lib.optional withPam pam
-    ++ lib.optional withPCRE2 pcre2
-    ++ lib.optional withSelinux libselinux
+    ++ lib.optionals withCoredump [ elfutils ]
+    ++ lib.optionals withCryptsetup [ (lib.getDev cryptsetup.dev) ]
+    ++ lib.optionals withKexectools [ kexec-tools ]
+    ++ lib.optionals withKmod [ kmod ]
+    ++ lib.optionals withLibidn2 [ libidn2 ]
+    ++ lib.optionals withLibseccomp [ libseccomp ]
+    ++ lib.optionals withIptables [ iptables ]
+    ++ lib.optionals withPam [ pam ]
+    ++ lib.optionals withPCRE2 [ pcre2 ]
+    ++ lib.optionals withSelinux [ libselinux ]
     ++ lib.optionals withRemote [ libmicrohttpd gnutls ]
     ++ lib.optionals (withHomed || withCryptsetup) [ p11-kit ]
     ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
     ++ lib.optionals withLibBPF [ libbpf ]
-    ++ lib.optional withTpm2Tss tpm2-tss
-    ++ lib.optional withUkify (python3Packages.python.withPackages (ps: with ps; [ pefile ]))
+    ++ lib.optionals withTpm2Tss [ tpm2-tss ]
+    ++ lib.optionals withUkify [ (python3Packages.python.withPackages (ps: with ps; [ pefile ])) ]
     ++ lib.optionals withPasswordQuality [ libpwquality ]
     ++ lib.optionals withQrencode [ qrencode ]
   ;

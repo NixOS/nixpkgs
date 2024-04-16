@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     python
   ];
 
-  env.CXXFLAGS = toString (lib.optional stdenv.isDarwin [ "-faligned-allocation" "-fno-aligned-new" "-fvisibility=hidden" ]);
+  env.CXXFLAGS = toString (lib.optionals stdenv.isDarwin [ "-faligned-allocation" "-fno-aligned-new" "-fvisibility=hidden" ]);
 
   postBuild = ''
     pushd ../api/python

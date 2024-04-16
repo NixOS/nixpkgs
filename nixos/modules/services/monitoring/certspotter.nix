@@ -11,18 +11,18 @@ let
       name = "watchlist";
       path = pkgs.writeText "certspotter-watchlist" (builtins.concatStringsSep "\n" cfg.watchlist);
     }
-    ++ lib.optional (cfg.emailRecipients != [ ]) {
+    ++ lib.optionals (cfg.emailRecipients != [ ]) [{
       name = "email_recipients";
       path = pkgs.writeText "certspotter-email_recipients" (builtins.concatStringsSep "\n" cfg.emailRecipients);
-    }
+    }]
     # always generate hooks dir when no emails are provided to allow running cert spotter with no hooks/emails
-    ++ lib.optional (cfg.emailRecipients == [ ] || cfg.hooks != [ ]) {
+    ++ lib.optionals (cfg.emailRecipients == [ ] || cfg.hooks != [ ]) [{
       name = "hooks.d";
       path = pkgs.linkFarm "certspotter-hooks" (lib.imap1 (i: path: {
         inherit path;
         name = "hook${toString i}";
       }) cfg.hooks);
-    });
+    }]);
 in
 {
   options.services.certspotter = {

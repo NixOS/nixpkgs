@@ -151,11 +151,12 @@ in {
       startLimitBurst = 5;
       serviceConfig = {
         EnvironmentFile = cfg.environmentFiles;
-        ExecStartPre = lib.optional (cfg.environmentFiles != [])
+        ExecStartPre = lib.optionals (cfg.environmentFiles != []) [
           (pkgs.writeShellScript "pre-start" ''
             umask 077
             ${pkgs.envsubst}/bin/envsubst -i "${staticConfigFile}" > "${finalStaticConfigFile}"
-          '');
+          '')
+        ];
         ExecStart = "${cfg.package}/bin/traefik --configfile=${finalStaticConfigFile}";
         Type = "simple";
         User = "traefik";

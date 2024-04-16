@@ -56,7 +56,9 @@ let
       "systemd-udevd-kernel.socket"
       "systemd-udevd.service"
       "systemd-udev-settle.service"
-      ] ++ (optional (!config.boot.isContainer) "systemd-udev-trigger.service") ++ [
+      ] ++ lib.optionals (!config.boot.isContainer) [
+      "systemd-udev-trigger.service"
+      ] ++ [
       # hwdb.bin is managed by NixOS
       # "systemd-hwdb-update.service"
 
@@ -95,12 +97,16 @@ let
       "dev-hugepages.mount"
       "dev-mqueue.mount"
       "sys-fs-fuse-connections.mount"
-      ] ++ (optional (!config.boot.isContainer) "sys-kernel-config.mount") ++ [
+      ] ++ lib.optionals (!config.boot.isContainer) [
+        "sys-kernel-config.mount"
+      ] ++ [
       "sys-kernel-debug.mount"
 
       # Maintaining state across reboots.
       "systemd-random-seed.service"
-      ] ++ (optional cfg.package.withBootloader "systemd-boot-random-seed.service") ++ [
+      ] ++ lib.optionals cfg.package.withBootloader [
+        "systemd-boot-random-seed.service"
+      ] ++ [
       "systemd-backlight@.service"
       "systemd-rfkill.service"
       "systemd-rfkill.socket"
@@ -128,8 +134,9 @@ let
       "final.target"
       "kexec.target"
       "systemd-kexec.service"
-    ] ++ lib.optional cfg.package.withUtmp "systemd-update-utmp.service" ++ [
-
+    ] ++ lib.optionals cfg.package.withUtmp [
+      "systemd-update-utmp.service"
+    ] ++ [
       # Password entry.
       "systemd-ask-password-console.path"
       "systemd-ask-password-console.service"
@@ -166,13 +173,13 @@ let
       "systemd-update-done.service"
     ] ++ cfg.additionalUpstreamSystemUnits;
 
-  upstreamSystemWants =
-    [ "sysinit.target.wants"
-      "sockets.target.wants"
-      "local-fs.target.wants"
-      "multi-user.target.wants"
-      "timers.target.wants"
-    ];
+  upstreamSystemWants = [
+    "sysinit.target.wants"
+    "sockets.target.wants"
+    "local-fs.target.wants"
+    "multi-user.target.wants"
+    "timers.target.wants"
+  ];
 
   proxy_env = config.networking.proxy.envVars;
 
@@ -446,16 +453,12 @@ in
             restart = service.serviceConfig.Restart or "no";
             hasDeprecated = builtins.hasAttr "StartLimitInterval" service.serviceConfig;
           in
-            concatLists [
-              (optional (type == "oneshot" && (restart == "always" || restart == "on-success"))
-                "Service '${name}.service' with 'Type=oneshot' cannot have 'Restart=always' or 'Restart=on-success'"
-              )
-              (optional hasDeprecated
-                "Service '${name}.service' uses the attribute 'StartLimitInterval' in the Service section, which is deprecated. See https://github.com/NixOS/nixpkgs/issues/45786."
-              )
-              (optional (service.reloadIfChanged && service.reloadTriggers != [])
+            [] ++ lib.optionals (type == "oneshot" && (restart == "always" || restart == "on-success")) [
+              "Service '${name}.service' with 'Type=oneshot' cannot have 'Restart=always' or 'Restart=on-success'"
+            ] ++ lib.optionals hasDeprecated [
+              "Service '${name}.service' uses the attribute 'StartLimitInterval' in the Service section, which is deprecated. See https://github.com/NixOS/nixpkgs/issues/45786."
+            ] ++ lib.optionals (service.reloadIfChanged && service.reloadTriggers != []) [
                 "Service '${name}.service' has both 'reloadIfChanged' and 'reloadTriggers' set. This is probably not what you want, because 'reloadTriggers' behave the same whay as 'restartTriggers' if 'reloadIfChanged' is set."
-              )
             ]
         )
         cfg.services

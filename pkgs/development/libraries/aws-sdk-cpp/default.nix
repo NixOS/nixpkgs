@@ -81,14 +81,16 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_DEPS=OFF"
-  ] ++ lib.optional (!customMemoryManagement) "-DCUSTOM_MEMORY_MANAGEMENT=0"
-  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  ] ++ lib.optionals (!customMemoryManagement) [
+    "-DCUSTOM_MEMORY_MANAGEMENT=0"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "-DENABLE_TESTING=OFF"
     "-DCURL_HAS_H2=1"
     "-DCURL_HAS_TLS_PROXY=1"
     "-DTARGET_ARCH=${host_os}"
-  ] ++ lib.optional (apis != ["*"])
-    "-DBUILD_ONLY=${lib.concatStringsSep ";" apis}";
+  ] ++ lib.optionals (apis != ["*"]) [
+    "-DBUILD_ONLY=${lib.concatStringsSep ";" apis}"
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     # openssl 3 generates several deprecation warnings

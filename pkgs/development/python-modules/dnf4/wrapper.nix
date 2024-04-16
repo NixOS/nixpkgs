@@ -27,7 +27,10 @@ stdenv.mkDerivation {
     dnf4-unwrapped
   ] ++ plugins;
 
-  makeWrapperArgs = lib.optional (plugins != [ ]) ''--add-flags "--setopt=pluginpath=${lib.concatStringsSep "," pluginPaths}"'';
+  makeWrapperArgs = lib.optionals (plugins != [ ]) [
+    "--add-flags"
+    "--setopt=pluginpath=${lib.concatStringsSep "," pluginPaths}"
+  ];
 
   installPhase = ''
     runHook preInstall

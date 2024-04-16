@@ -97,9 +97,9 @@ in
           "--tun-name"
           "mycelium"
           "${utils.escapeSystemdExecArgs cfg.extraArgs}"
-        ] ++
-        (lib.optional (cfg.addHostedPublicNodes || cfg.peers != [ ]) "--peers")
-        ++ cfg.peers ++ (lib.optionals cfg.addHostedPublicNodes [
+        ] ++ lib.optionals (cfg.addHostedPublicNodes || cfg.peers != [ ]) [
+          "--peers"
+        ] ++ cfg.peers ++ (lib.optionals cfg.addHostedPublicNodes [
           "tcp://188.40.132.242:9651" # DE 01
           "tcp://[2a01:4f8:221:1e0b::2]:9651"
           "quic://188.40.132.242:9651"

@@ -599,7 +599,7 @@ in
       defaultListenAddresses = mkOption {
         type = types.listOf types.str;
         default = [ "0.0.0.0" ] ++ optional enableIPv6 "[::0]";
-        defaultText = literalExpression ''[ "0.0.0.0" ] ++ lib.optional config.networking.enableIPv6 "[::0]"'';
+        defaultText = literalExpression ''[ "0.0.0.0" ] ++ lib.optionals config.networking.enableIPv6 [ "[::0]" ]'';
         example = literalExpression ''[ "10.0.0.12" "[2002:a00:1::]" ]'';
         description = ''
           If vhosts do not specify listenAddresses, use these addresses by default.
@@ -1207,7 +1207,7 @@ in
     services.nginx.virtualHosts.localhost = mkIf cfg.statusPage {
       listenAddresses = lib.mkDefault ([
         "0.0.0.0"
-      ] ++ lib.optional enableIPv6 "[::]");
+      ] ++ lib.optionals enableIPv6 [ "[::]" ]);
       locations."/nginx_status" = {
         extraConfig = ''
           stub_status on;

@@ -56,7 +56,7 @@ buildPythonPackage rec {
     requests-toolbelt
     tqdm
     stevedore
-  ] ++ lib.optional stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     # See setup.py:24. These are required only on Linux. Darwin has its own set
     # of requirements.
     psutil

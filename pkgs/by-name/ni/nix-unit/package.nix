@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     # nlohmann_json can be only discovered via cmake files
     cmake
-  ] ++ lib.optional stdenv.cc.isClang [ clang-tools ];
+  ] ++ lib.optionals stdenv.cc.isClang [ clang-tools ];
 
   postInstall = ''
     wrapProgram "$out/bin/nix-unit" --prefix PATH : ${difftastic}/bin

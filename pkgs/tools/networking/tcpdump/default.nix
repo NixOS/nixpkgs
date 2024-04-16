@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     patchShebangs tests
   '';
 
-  nativeBuildInputs = lib.optional (stdenv.hostPlatform.isStatic) [ pkg-config ];
+  nativeBuildInputs = lib.optionals (stdenv.hostPlatform.isStatic) [ pkg-config ];
 
   nativeCheckInputs = [ perl ];
 

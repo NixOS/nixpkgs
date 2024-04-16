@@ -228,13 +228,15 @@ self = stdenv.mkDerivation {
     # Rusticl, new OpenCL frontend
     "-Dgallium-rusticl=true"
     "-Dclang-libdir=${llvmPackages.clang-unwrapped.lib}/lib"
-  ]  ++ lib.optionals (!withValgrind) [
+  ] ++ lib.optionals (!withValgrind) [
     "-Dvalgrind=disabled"
-  ]  ++ lib.optionals (!withLibunwind) [
+  ] ++ lib.optionals (!withLibunwind) [
     "-Dlibunwind=disabled"
-  ] ++ lib.optional enablePatentEncumberedCodecs
+  ] ++ lib.optionals enablePatentEncumberedCodecs [
     "-Dvideo-codecs=all"
-  ++ lib.optional (vulkanLayers != []) "-D vulkan-layers=${builtins.concatStringsSep "," vulkanLayers}";
+  ] ++ lib.optionals (vulkanLayers != []) [
+    "-D vulkan-layers=${builtins.concatStringsSep "," vulkanLayers}"
+  ];
 
   strictDeps = true;
 

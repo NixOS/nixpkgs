@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl # required for openssl-sys
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     libiconv
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];

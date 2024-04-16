@@ -1316,7 +1316,7 @@ in
         locale
         apple_sdk.sdkRoot
       ]
-      ++ lib.optional useAppleSDKLibs [ objc4 ]
+      ++ lib.optionals useAppleSDKLibs [ objc4 ]
       ++ lib.optionals doSign [ postLinkSignHook sigtool signingUtils ]);
 
       __stdenvImpureHostDeps = commonImpureHostDeps;
