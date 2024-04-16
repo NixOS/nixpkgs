@@ -18229,6 +18229,11 @@
     githubId = 6292;
     name = "Andrey Petrov";
   };
+  sheemap = {
+    github = "sheemap";
+    githubId = 1442292;
+    name = "Sheemap";
+  };
   sheenobu = {
     email = "sheena.artrip@gmail.com";
     github = "sheenobu";
