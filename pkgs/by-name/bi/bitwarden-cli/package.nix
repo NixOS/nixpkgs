@@ -4,7 +4,7 @@
 , nodejs_18
 , fetchFromGitHub
 , python3
-, darwin
+, cctools
 , nixosTests
 }:
 
@@ -26,7 +26,7 @@ buildNpmPackage rec {
   nativeBuildInputs = [
     python3
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.cctools
+    cctools
   ];
 
   makeCacheWritable = true;
