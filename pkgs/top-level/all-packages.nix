@@ -32585,7 +32585,7 @@ with pkgs;
 
   mac = callPackage ../development/libraries/mac { };
 
-  macdylibbundler = callPackage ../development/tools/misc/macdylibbundler { inherit (darwin) cctools; };
+  macdylibbundler = callPackage ../development/tools/misc/macdylibbundler { };
 
   magic-wormhole = with python3Packages; toPythonApplication magic-wormhole;
 
