@@ -27,9 +27,9 @@ buildPythonPackage rec {
     hash = "sha256-5lvdt1JbOmdts0CYU00bSmv0LsMQsOe//yUgyevBULE=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ ed25519 ];
+  dependencies = [ ed25519 ];
 
   passthru.optional-dependencies = {
     aiohttp = [ aiohttp ];
