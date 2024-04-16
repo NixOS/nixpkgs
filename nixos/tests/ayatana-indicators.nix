@@ -28,6 +28,7 @@ in {
       enable = true;
       packages = with pkgs; [
         ayatana-indicator-datetime
+        ayatana-indicator-keyboard
         ayatana-indicator-messages
         ayatana-indicator-session
       ] ++ (with pkgs.lomiri; [
