@@ -25,7 +25,7 @@ let
 in
 {
   options.services.scion.scion-daemon = {
-    enable = mkEnableOption (lib.mdDoc "the scion-daemon service");
+    enable = mkEnableOption "the scion-daemon service";
     settings = mkOption {
       default = { };
       type = toml.type;
@@ -39,7 +39,7 @@ in
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         scion-daemon configuration. Refer to
         <https://docs.scion.org/en/latest/manuals/common.html>
         for details on supported values.

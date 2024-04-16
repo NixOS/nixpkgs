@@ -4,16 +4,16 @@ let
   # comments with variant added for update script
   # ./update-zen.py zen
   zenVariant = {
-    version = "6.8.2"; #zen
-    suffix = "zen2"; #zen
-    sha256 = "0v8y7d7mn0y5g8bbw2nm89a7jsvdwfjg6d3zqyga9mpr16xpsssa"; #zen
+    version = "6.8.4"; #zen
+    suffix = "zen1"; #zen
+    sha256 = "0cbcij31gar4is5zcrl748ijn91jly74i2gggf43ndh8yrzdni85"; #zen
     isLqx = false;
   };
   # ./update-zen.py lqx
   lqxVariant = {
-    version = "6.7.11"; #lqx
+    version = "6.8.4"; #lqx
     suffix = "lqx1"; #lqx
-    sha256 = "180a39qrpldq4y2gn12pynhk62w46bzqi7zgciawznxyp8rr673x"; #lqx
+    sha256 = "1hv9hvx9nw51qki5wbhm4dgyvgw7jjwxl8fvslaazn3r0rqch7z2"; #lqx
     isLqx = true;
   };
   zenKernelsFor = { version, suffix, sha256, isLqx }: buildLinux (args // {
@@ -93,6 +93,8 @@ let
       RT_GROUP_SCHED = lib.mkForce (option no);
       SCHED_AUTOGROUP = lib.mkForce (option no);
       SCHED_CORE = lib.mkForce (option no);
+      UCLAMP_TASK = lib.mkForce (option no);
+      UCLAMP_TASK_GROUP = lib.mkForce (option no);
 
       # ERROR: modpost: "sched_numa_hop_mask" [drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko] undefined!
       MLX5_CORE = no;

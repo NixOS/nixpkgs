@@ -1,38 +1,34 @@
 {
     "testing": {
-        "version": "6.9-rc2",
-        "hash": "sha256:14yjrkd63qsd2hip53x146fsd42d261pxdh85fprcvsrg656c6gp"
+        "version": "6.9-rc3",
+        "hash": "sha256:0xavyh3xg23il3bm2x6fjji3s26z05cyv1lry6h5yd7jjj3qm7cc"
     },
     "6.1": {
-        "version": "6.1.84",
-        "hash": "sha256:0ykhl4i6yhryzgjkdbdz4pd3b1ghv84h6mpn7bdx0ra7w7mx55xg"
+        "version": "6.1.86",
+        "hash": "sha256:0nqiwcaln36drkcaav96dymd2y8rv7wj6a5xjl58f2hg9z2cilyk"
     },
     "5.15": {
-        "version": "5.15.153",
-        "hash": "sha256:1g44gjcwcdq5552vwinljqwiy90bxax72jjvdasp71x88khv3pfp"
+        "version": "5.15.155",
+        "hash": "sha256:1r16j5asd8v5hr5b0sb8z2wmp6say928pgm13k4iyv9fdnw5jn68"
     },
     "5.10": {
-        "version": "5.10.214",
-        "hash": "sha256:0n7m82hw2rkw5mhdqw0vvmq7kq0s43jalr53sbv09wl17vai9w20"
+        "version": "5.10.215",
+        "hash": "sha256:1af6h86flx96pszg006agpak2f9dkk2jqaazfykd7aafqdcs3747"
     },
     "5.4": {
-        "version": "5.4.273",
-        "hash": "sha256:0hs7af3mcnk5mmp3c5vjl187nva2kzsdx487nd12a8m7zb9wz84b"
+        "version": "5.4.274",
+        "hash": "sha256:1m4yyyv48mfkzhqms88dv1jf39zsfp88az5zpqynmm1wlhhv9iza"
     },
     "4.19": {
-        "version": "4.19.311",
-        "hash": "sha256:10dww3cyazcf3wjzh8igpa0frb8gvl6amnksh42zfkji4mskh2r6"
+        "version": "4.19.312",
+        "hash": "sha256:0jppa4p73pssd7m3jpc7i6rgnj9gawjcgk4wmqyy87ijzrgzm553"
     },
     "6.6": {
-        "version": "6.6.24",
-        "hash": "sha256:1xgni9daid8c01f29xnxvrzja4sw0b1d5hhdxcw96cg8v9wzi7iy"
-    },
-    "6.7": {
-        "version": "6.7.12",
-        "hash": "sha256:113rf3jqfpf3wcv637zbq5ww2hpaaf23y6dsmkds01l8jkipjabc"
+        "version": "6.6.27",
+        "hash": "sha256:14c229mcrd2rd2vjp0c3apzqifn6mkz0rcbw07nj73rw1q3517k3"
     },
     "6.8": {
-        "version": "6.8.3",
-        "hash": "sha256:11n9jsjg1wgffchpl6frk26pk4jx2m9m0w8cmizrmvhla1nvaznv"
+        "version": "6.8.6",
+        "hash": "sha256:158rb8x4qaig8ywbr6n2jnqpl9wgqha4ghs3y3mlbaq3sqr34wly"
     }
 }

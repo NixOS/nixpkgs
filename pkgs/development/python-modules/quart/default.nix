@@ -31,17 +31,17 @@
 
 buildPythonPackage rec {
   pname = "quart";
-  version = "0.19.4";
-  format = "pyproject";
+  version = "0.19.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "quart";
     rev = "refs/tags/${version}";
-    hash = "sha256-EgCZ0AXK2vGxo55BWAcDVv6zNUrWNbAYNnEXEBJk+84=";
+    hash = "sha256-T2+76AVvXrads7AbjNAExV0i4doQ2xIUEwekVB2JXAo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
@@ -50,7 +50,7 @@ buildPythonPackage rec {
       --replace "--no-cov-on-fail " ""
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiofiles
     blinker
     click
@@ -77,11 +77,6 @@ buildPythonPackage rec {
     py
     pytest-asyncio
     pytestCheckHook
-  ];
-
-  pytestFlagsArray = [
-    # pytest.PytestRemovedIn8Warning: Passing None has been deprecated.
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   meta = with lib; {

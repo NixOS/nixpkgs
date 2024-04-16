@@ -8,30 +8,37 @@
 , pytest-benchmark
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "pykakasi";
   version = "2.2.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "miurahr";
-    repo = pname;
+    repo = "pykakasi";
     rev = "refs/tags/v${version}";
     hash = "sha256-ivlenHPD00bxc0c9G368tfTEckOC3vqDB5kMQzHXbVM==";
   };
 
-  nativeBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail ', "klepto"' ""
+  '';
+
+  build-system = [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jaconv
     deprecated
+    setuptools
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];

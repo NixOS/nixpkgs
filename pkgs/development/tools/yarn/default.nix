@@ -1,4 +1,12 @@
-{ lib, fetchFromGitHub, fetchzip, nodejs, stdenvNoCC, testers }:
+{ lib
+, fetchFromGitHub
+, fetchzip
+, nodejs
+, stdenvNoCC
+, testers
+, gitUpdater
+, withNode ? true
+}:
 
 let
   completion = fetchFromGitHub {
@@ -17,7 +25,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sha256 = "sha256-kFa+kmnBerTB7fY/IvfAFy/4LWvrl9lrRHMOUdOZ+Wg=";
   };
 
-  buildInputs = [ nodejs ];
+  buildInputs = lib.optionals withNode [ nodejs ];
 
   installPhase = ''
     mkdir -p $out/{bin,libexec/yarn/,share/bash-completion/completions/}
@@ -27,7 +35,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ln -s ${completion}/yarn-completion.bash $out/share/bash-completion/completions/yarn.bash
   '';
 
-  passthru.tests = testers.testVersion { package = finalAttrs.finalPackage; };
+  passthru = {
+    tests.version = lib.optionalAttrs withNode (testers.testVersion {
+      package = finalAttrs.finalPackage;
+    });
+
+    updateScript = gitUpdater {
+      url = "https://github.com/yarnpkg/yarn.git";
+      rev-prefix = "v";
+    };
+  };
 
   meta = with lib; {
     description = "Fast, reliable, and secure dependency management for javascript";
@@ -35,7 +52,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     changelog = "https://github.com/yarnpkg/yarn/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = licenses.bsd2;
     maintainers = with maintainers; [ offline screendriver marsam ];
-    platforms = nodejs.meta.platforms;
+    platforms = platforms.all;
     mainProgram = "yarn";
   };
 })

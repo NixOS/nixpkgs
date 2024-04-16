@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stirling-pdf";
-  version = "0.22.3";
+  version = "0.22.8";
 
   src = fetchFromGitHub {
     owner = "Stirling-Tools";
     repo = "Stirling-PDF";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8zXTapFAXw4+KLLirxBeEBmqNw6ILFHtbsaBSP3Ehyg=";
+    hash = "sha256-wFxIMubZ6327iBRyHxeo/hsPyq572gk6K8waJ3KyMEw=";
   };
 
   patches = [
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-zUzKSa7zuIoXE77Hk/Xr5iMF4CEumV9horW2BTFRdtE=";
+    outputHash = "sha256-8suWAX1+GGMvMUaymZnze7cBL701P/381dGqnyfha7s=";
   };
 
   nativeBuildInputs = [

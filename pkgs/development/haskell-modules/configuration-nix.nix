@@ -1073,6 +1073,8 @@ self: super: builtins.intersectAttrs super {
     # very useful.
     # Flag added in Agda 2.6.4.1, was always enabled before
     (enableCabalFlag "debug")
+    # Split outputs to reduce closure size
+    enableSeparateBinOutput
   ];
 
   # ats-format uses cli-setup in Setup.hs which is quite happy to write
@@ -1331,4 +1333,6 @@ self: super: builtins.intersectAttrs super {
   # Test failure is related to a GHC implementation detail of primitives and doesn't
   # cause actual problems in dependent packages, see https://github.com/lehins/pvar/issues/4
   pvar = dontCheck super.pvar;
+
+  kmonad = enableSeparateBinOutput super.kmonad;
 }

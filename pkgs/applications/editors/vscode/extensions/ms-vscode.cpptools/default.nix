@@ -32,11 +32,11 @@ let
   gdbDefaultsTo = if gdbUseFixed then "${gdb}/bin/gdb" else "gdb";
   supported = {
     x86_64-linux = {
-      sha256 = "sha256-4mKCBqUCOndKEfsJqTIsfwEt+0CZI8QAhBj3Y4+wKlg=";
+      hash = "sha256-4mKCBqUCOndKEfsJqTIsfwEt+0CZI8QAhBj3Y4+wKlg=";
       arch = "linux-x64";
     };
     aarch64-linux = {
-      sha256 = "sha256-Kjl8mEpayA1xMHEAMJ5k3Ctk3l48KlUBU5w3dL4pGWM=";
+      hash = "sha256-Kjl8mEpayA1xMHEAMJ5k3Ctk3l48KlUBU5w3dL4pGWM=";
       arch = "linux-arm64";
     };
   };

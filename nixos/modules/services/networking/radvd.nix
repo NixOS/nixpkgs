@@ -21,8 +21,7 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description =
-        lib.mdDoc ''
+      description = ''
           Whether to enable the Router Advertisement Daemon
           ({command}`radvd`), which provides link-local
           advertisements of IPv6 router addresses and prefixes using
@@ -43,8 +42,7 @@ in
             prefix 2001:db8:1234:5678::/64 { };
           };
         '';
-      description =
-        lib.mdDoc ''
+      description = ''
           The contents of the radvd configuration file.
         '';
     };

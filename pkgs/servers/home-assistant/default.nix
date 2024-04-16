@@ -39,6 +39,15 @@ let
         };
       });
 
+      aioautomower = super.aioautomower.overridePythonAttrs (oldAttrs: rec {
+        version = "2024.3.4";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/${version}";
+          hash = "sha256-dk8HfIiQOKq7Ky+vYa3wKmTS78gTw6J0yyQT2Folpp0=";
+        };
+      });
+
       aioelectricitymaps = super.aioelectricitymaps.overridePythonAttrs (oldAttrs: rec {
         version = "0.4.0";
         src = fetchFromGitHub {
@@ -134,19 +143,6 @@ let
         ];
       });
 
-      bluecurrent-api = super.bluecurrent-api.overridePythonAttrs (oldAttrs: rec {
-        version = "1.0.6";
-        src = fetchPypi {
-          pname = "bluecurrent-api";
-          inherit version;
-          hash = "sha256-XHVdtkiG0ff/OY8g+W5iur7OAyhhk1UGA+XUfB2L8/o=";
-        };
-        build-system = oldAttrs.build-system ++ (with self; [
-          pythonRelaxDepsHook
-        ]);
-        pythonRemoveDeps = [ "asyncio" ];
-      });
-
       debugpy = super.debugpy.overridePythonAttrs (oldAttrs: {
         # tests are deadlocking too often
         # https://github.com/NixOS/nixpkgs/issues/262000
@@ -232,6 +228,15 @@ let
           pname = "jaraco.collections";
           inherit version;
           hash = "sha256-NE0Udp1xbnSWr4eaxxs8br3UarxkvZ7CHRUkg2WqOsk=";
+        };
+      });
+
+      jaraco-functools = super.jaraco-functools.overridePythonAttrs (oldAttrs: rec {
+        version = "3.9.0";
+        src = fetchPypi {
+          pname = "jaraco.functools";
+          inherit version;
+          hash = "sha256-ixN7D+rMF/70us7gTAEcnobyNBCZyHCh0S0743sypjg=";
         };
       });
 
@@ -424,26 +429,6 @@ let
         };
       });
 
-      pywaze = super.pywaze.overridePythonAttrs (oldAttrs: rec {
-        version = "0.5.1";
-        src = fetchFromGitHub {
-          owner = "eifinger";
-          repo = "pywaze";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-r7ROEdgHdjXkveVUbuALHtwCX4IO0lwx9Zo3u6R9I58=";
-        };
-      });
-
-      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.27";
-        src = fetchFromGitHub {
-          owner = "sqlalchemy";
-          repo = "sqlalchemy";
-          rev = "refs/tags/rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-          hash = "sha256-6R+A7rVq1olRXj1wMolHhEq418bpr5rsmH8RjxajmmQ=";
-        };
-      });
-
       tesla-powerwall = super.tesla-powerwall.overridePythonAttrs (oldAttrs: rec {
         version = "0.5.1";
         src = fetchFromGitHub {
@@ -541,7 +526,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2024.3.3";
+  hassVersion = "2024.4.2";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -559,13 +544,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-EutnNqENt1MTmbMe9vtSM+bM5PzvjsfMhpkwXdxWoeI=";
+    hash = "sha256-V6qvpPrhfSLINH99hYkAjvG8pfIN8AXGO3HuwiKgMPo=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-9i8snvozDKgvcEQfk9KTYfqHxQbDBluvArXYVVnNvnA=";
+    hash = "sha256-ZtTlLRDSXKUz+ZA+UctFL+d3wdKrcPdeROIUhS35qWU=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -625,6 +610,7 @@ in python.pkgs.buildPythonApplication rec {
     certifi
     ciso8601
     cryptography
+    fnv-hash-fast
     hass-nabucasa
     httpx
     home-assistant-bluetooth
@@ -633,12 +619,15 @@ in python.pkgs.buildPythonApplication rec {
     lru-dict
     orjson
     packaging
+    pillow
     pip
+    psutil-home-assistant
     pyopenssl
     pyjwt
     python-slugify
     pyyaml
     requests
+    sqlalchemy
     typing-extensions
     ulid-transform
     urllib3
@@ -737,6 +726,10 @@ in python.pkgs.buildPythonApplication rec {
       version = testers.testVersion {
         package = home-assistant;
         command = "hass --version";
+      };
+      withoutCheckDeps = home-assistant.overridePythonAttrs {
+        pname = "home-assistant-without-check-deps";
+        doCheck = false;
       };
     };
   };

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "atlas";
-  version = "0.21.0";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "ariga";
     repo = "atlas";
     rev = "v${version}";
-    hash = "sha256-YgZX06BbtI1zf2Z4boyLos6pARzmCtOgJhrQqSZzRS4=";
+    hash = "sha256-i0nqjlL22sM8eVXCD/SBJyNdy0l0Hq4rjW0Lr3CRZlE=";
   };
 
   modRoot = "cmd/atlas";

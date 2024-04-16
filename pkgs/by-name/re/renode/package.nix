@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, fetchFromGitHub
 , fetchurl
 , autoPatchelfHook
 , makeWrapper
@@ -17,7 +18,15 @@ let
     psutil
     pyyaml
     requests
-    robotframework
+
+    (robotframework.overrideDerivation (oldAttrs: {
+      src = fetchFromGitHub {
+        owner = "robotframework";
+        repo = "robotframework";
+        rev = "v6.0.2";
+        hash = "sha256-c7pPcDgqyqWQtiMbLQbQd0nAgx4TIFUFHrlBVDNdr8M=";
+      };
+    }))
   ];
 in
 stdenv.mkDerivation (finalAttrs: {

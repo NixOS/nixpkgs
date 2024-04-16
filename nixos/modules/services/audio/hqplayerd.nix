@@ -12,13 +12,13 @@ in
 {
   options = {
     services.hqplayerd = {
-      enable = mkEnableOption (lib.mdDoc "HQPlayer Embedded");
+      enable = mkEnableOption "HQPlayer Embedded";
 
       auth = {
         username = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             Username used for HQPlayer's WebUI.
 
             Without this you will need to manually create the credentials after
@@ -29,7 +29,7 @@ in
         password = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             Password used for HQPlayer's WebUI.
 
             Without this you will need to manually create the credentials after
@@ -41,7 +41,7 @@ in
       licenseFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Path to the HQPlayer license key file.
 
           Without this, the service will run in trial mode and restart every 30
@@ -52,7 +52,7 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Opens ports needed for the WebUI and controller API.
         '';
       };
@@ -60,7 +60,7 @@ in
       config = mkOption {
         type = types.nullOr types.lines;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           HQplayer daemon configuration, written to /etc/hqplayer/hqplayerd.xml.
 
           Refer to share/doc/hqplayerd/readme.txt in the hqplayerd derivation for possible values.

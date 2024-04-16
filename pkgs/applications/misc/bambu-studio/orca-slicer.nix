@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, makeDesktopItem, bambu-studio }:
 
 bambu-studio.overrideAttrs (finalAttrs: previousAttrs: {
-  version = "1.9.1";
+  version = "2.0.0";
   pname = "orca-slicer";
 
   # Don't inherit patches from bambu-studio
@@ -13,7 +13,7 @@ bambu-studio.overrideAttrs (finalAttrs: previousAttrs: {
     owner = "SoftFever";
     repo = "OrcaSlicer";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+JYUpyEr3xraJEb1wDkyle+jAQiNE+AMUTT1fhh4Clw=";
+    hash = "sha256-YlLDUH3ODIfax5QwnsVJi1JjZ9WtxP3ssqRP1C4d4bw=";
   };
 
   meta = with lib; {

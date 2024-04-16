@@ -1,7 +1,7 @@
 { lib
 , python3
 , fetchFromGitHub
-, wrapGAppsHook
+, wrapGAppsHook4
 , appstream-glib
 , desktop-file-utils
 , gettext
@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook4
     appstream-glib
     desktop-file-utils
     gettext

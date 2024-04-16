@@ -9,24 +9,24 @@ in
   port = 9103;
   extraOpts = {
     collectdBinary = {
-      enable = mkEnableOption (lib.mdDoc "collectd binary protocol receiver");
+      enable = mkEnableOption "collectd binary protocol receiver";
 
       authFile = mkOption {
         default = null;
         type = types.nullOr types.path;
-        description = lib.mdDoc "File mapping user names to pre-shared keys (passwords).";
+        description = "File mapping user names to pre-shared keys (passwords).";
       };
 
       port = mkOption {
         type = types.port;
         default = 25826;
-        description = lib.mdDoc "Network address on which to accept collectd binary network packets.";
+        description = "Network address on which to accept collectd binary network packets.";
       };
 
       listenAddress = mkOption {
         type = types.str;
         default = "0.0.0.0";
-        description = lib.mdDoc ''
+        description = ''
           Address to listen on for binary network packets.
           '';
       };
@@ -34,7 +34,7 @@ in
       securityLevel = mkOption {
         type = types.enum ["None" "Sign" "Encrypt"];
         default = "None";
-        description = lib.mdDoc ''
+        description = ''
           Minimum required security level for accepted packets.
         '';
       };
@@ -44,7 +44,7 @@ in
       type = types.enum [ "logfmt" "json" ];
       default = "logfmt";
       example = "json";
-      description = lib.mdDoc ''
+      description = ''
         Set the log format.
       '';
     };
@@ -52,7 +52,7 @@ in
     logLevel = mkOption {
       type = types.enum ["debug" "info" "warn" "error" "fatal"];
       default = "info";
-      description = lib.mdDoc ''
+      description = ''
         Only log messages with the given severity or above.
       '';
     };

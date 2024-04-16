@@ -10,7 +10,6 @@ let
   inherit (lib)
     escapeShellArgs
     mkOption
-    mdDoc
     mkEnableOption
     mkPackageOption
     types
@@ -28,19 +27,19 @@ in
 
     servers = mkOption {
       default = {};
-      description = mdDoc ''
+      description = ''
         Attribute set of faster-whisper instances to spawn.
       '';
       type = types.attrsOf (types.submodule (
         { ... }: {
           options = {
-            enable = mkEnableOption (mdDoc "Wyoming faster-whisper server");
+            enable = mkEnableOption "Wyoming faster-whisper server";
 
             model = mkOption {
               type = str;
               default = "tiny-int8";
               example = "Systran/faster-distil-whisper-small.en";
-              description = mdDoc ''
+              description = ''
                 Name of the voice model to use.
 
                 Check the [2.0.0 release notes](https://github.com/rhasspy/wyoming-faster-whisper/releases/tag/v2.0.0) for possible values.
@@ -50,7 +49,7 @@ in
             uri = mkOption {
               type = strMatching "^(tcp|unix)://.*$";
               example = "tcp://0.0.0.0:10300";
-              description = mdDoc ''
+              description = ''
                 URI to bind the wyoming server to.
               '';
             };
@@ -63,7 +62,7 @@ in
                 "auto"
               ];
               default = "cpu";
-              description = mdDoc ''
+              description = ''
                 Determines the platform faster-whisper is run on. CPU works everywhere, CUDA requires a compatible NVIDIA GPU.
               '';
             };
@@ -74,7 +73,7 @@ in
                 "auto" "af" "am" "ar" "as" "az" "ba" "be" "bg" "bn" "bo" "br" "bs" "ca" "cs" "cy" "da" "de" "el" "en" "es" "et" "eu" "fa" "fi" "fo" "fr" "gl" "gu" "ha" "haw" "he" "hi" "hr" "ht" "hu" "hy" "id" "is" "it" "ja" "jw" "ka" "kk" "km" "kn" "ko" "la" "lb" "ln" "lo" "lt" "lv" "mg" "mi" "mk" "ml" "mn" "mr" "ms" "mt" "my" "ne" "nl" "nn" "no" "oc" "pa" "pl" "ps" "pt" "ro" "ru" "sa" "sd" "si" "sk" "sl" "sn" "so" "sq" "sr" "su" "sv" "sw" "ta" "te" "tg" "th" "tk" "tl" "tr" "tt" "uk" "ur" "uz" "vi" "yi" "yo" "zh"
               ];
               example = "en";
-              description = mdDoc ''
+              description = ''
                 The language used to to parse words and sentences.
               '';
             };
@@ -83,7 +82,7 @@ in
               type = ints.unsigned;
               default = 1;
               example = 5;
-              description = mdDoc ''
+              description = ''
                 The number of beams to use in beam search.
               '';
               apply = toString;
@@ -92,7 +91,7 @@ in
             extraArgs = mkOption {
               type = listOf str;
               default = [ ];
-              description = mdDoc ''
+              description = ''
                 Extra arguments to pass to the server commandline.
               '';
               apply = escapeShellArgs;

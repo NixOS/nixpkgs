@@ -97,7 +97,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/pymc-devs/pytensor";
     changelog = "https://github.com/pymc-devs/pytensor/releases";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with maintainers; [ bcdarwin ferrine ];
     broken = (stdenv.isLinux && stdenv.isAarch64);
   };
 }

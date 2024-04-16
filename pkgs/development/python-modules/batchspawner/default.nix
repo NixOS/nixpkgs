@@ -1,32 +1,48 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
+, wheel
+, jinja2
 , jupyterhub
-, packaging
 , pythonOlder
+, pytest-asyncio
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "batchspawner";
-  version = "1.2.0";
-  format = "setuptools";
+  version = "1.3.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "batchspawner";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oyS47q+gsO7JmRsbVJXglZsSRfits5rS/nrHW5E7EV0=";
+    hash = "sha256-Z7kB8b7s11wokTachLI/N+bdUV+FfCRTemL1KYQpzio=";
   };
 
-  propagatedBuildInputs = [
-    jupyterhub
-    packaging
+  build-system = [
+    setuptools
+    wheel
   ];
 
-  # Tests require a job scheduler e.g. slurm, pbs, etc.
-  doCheck = false;
+  dependencies = [
+    jinja2
+    jupyterhub
+  ];
+
+  preCheck = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "--cov=batchspawner" ""
+  '';
+
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "batchspawner"

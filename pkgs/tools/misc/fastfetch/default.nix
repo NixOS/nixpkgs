@@ -8,6 +8,7 @@
 , dconf
 , ddcutil
 , glib
+, hwdata
 , imagemagick_light
 , libXrandr
 , libglvnd
@@ -20,7 +21,6 @@
 , nix-update-script
 , ocl-icd
 , opencl-headers
-, pciutils
 , pcre
 , pcre2
 , pkg-config
@@ -43,13 +43,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "2.8.10";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     rev = finalAttrs.version;
-    hash = "sha256-MIrjfd1KudtU+4X65M+qdPtWUPWQXBlE13Myp1u8hPM=";
+    hash = "sha256-FTZXfZhLplpjB6QQssz/5hXckNaR9KTdw8NRDLYOvaM=";
   };
 
   outputs = [ "out" "man" ];
@@ -73,13 +73,13 @@ stdenv.mkDerivation (finalAttrs: {
     dconf
     ddcutil
     glib
+    hwdata
     libpulseaudio
     libselinux
     libsepol
     networkmanager
     ocl-icd
     opencl-headers
-    pciutils
     util-linux
     zlib
   ] ++ lib.optionals rpmSupport [

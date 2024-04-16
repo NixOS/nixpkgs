@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "soundtracker";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchzip {
     # Past releases get moved to the "old releases" directory.
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Nonetheless, only the name of the file seems to affect which file is
     # downloaded, so this path should be fine both for old and current releases.
     url = "mirror://sourceforge/soundtracker/soundtracker-${finalAttrs.version}.tar.xz";
-    hash = "sha256-kNt0BSRaEQY+oa1xbuZ1l6nCqXhcktVugxzcC3ZDaX0=";
+    hash = "sha256-g96Z1SdFGMq7WFI6x+UtmAHPZF0C+tHUOjNhmK2ld8I=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -75,5 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
+    hydraPlatforms = platforms.linux; # sdl-config times out on darwin
   };
 })

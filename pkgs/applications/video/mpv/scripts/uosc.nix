@@ -9,14 +9,14 @@
 
 buildLua (finalAttrs: {
   pname = "uosc";
-  version = "5.1.1";
+  version = "5.2.0";
   scriptPath = "src/uosc";
 
   src = fetchFromGitHub {
     owner = "tomasklaen";
     repo = "uosc";
     rev = finalAttrs.version;
-    hash = "sha256-+4k8T1yX3IRXK3XkUShsuJSH9w1Zla7CaRENcIqX4iM=";
+    hash = "sha256-0GPDna9uOuhFDhA9A1fbkoKkgSB76qiDzJVQ9gjGcWo=";
   };
   passthru.updateScript = gitUpdater {};
 
@@ -25,15 +25,6 @@ buildLua (finalAttrs: {
     inherit (finalAttrs) version src;
     vendorHash = "sha256-nkY0z2GiDxfNs98dpe+wZNI3dAXcuHaD/nHiZ2XnZ1Y=";
   };
-
-  # Patch lua script to get the path to its `ziggy` binary form the environment
-  patches = [
-    # uosc#814: Support overriding `ziggy_path` via environment variable
-    (fetchpatch {
-      url = "https://github.com/tomasklaen/uosc/commit/4fdf68a1bcb510824d66f35ecc7672a6452a44b2.patch";
-      hash = "sha256-igUqFf8e7LVIIjGxACdIWAeZxjF/yqaCL4QRXrzNQXk=";
-    })
-  ];
 
   # the script uses custom "texture" fonts as the background for ui elements.
   # In order for mpv to find them, we need to adjust the fontconfig search path.

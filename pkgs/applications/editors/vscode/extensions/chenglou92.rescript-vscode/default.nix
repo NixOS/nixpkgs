@@ -13,7 +13,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     name = "rescript-vscode";
     publisher = "chenglou92";
     inherit version;
-    sha256 = "sha256-Dt7mqZQ/vEUFyUD5SsY6RGzg9kq19/Amksrwtfv0TuE=";
+    hash = "sha256-Dt7mqZQ/vEUFyUD5SsY6RGzg9kq19/Amksrwtfv0TuE=";
   };
   postPatch = ''
     rm -r ${analysisDir}

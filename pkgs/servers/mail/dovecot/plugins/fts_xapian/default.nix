@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, sqlite, pkg-config, dovecot, libtool, xapian, icu64 }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, sqlite, pkg-config, dovecot, xapian, icu }:
+
 stdenv.mkDerivation rec {
   pname = "dovecot-fts-xapian";
   version = "1.7.10";
@@ -7,16 +8,15 @@ stdenv.mkDerivation rec {
     owner = "grosjo";
     repo = "fts-xapian";
     rev = version;
-    sha256 = "sha256-Gzr0365lY9wAvmXeVungD2z44WHC+AI0a1xLWy3mCK4=";
+    hash = "sha256-Yd14kla33qAx4Hy0ZdE08javvki3t+hCEc3OTO6YfkQ=";
   };
 
-  buildInputs = [ dovecot xapian icu64 sqlite ];
+  buildInputs = [ xapian icu sqlite ];
 
-  nativeBuildInputs = [ autoconf automake libtool pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   preConfigure = ''
     export PANDOC=false
-    autoreconf -vi
   '';
 
   configureFlags = [

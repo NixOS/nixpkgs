@@ -87,9 +87,9 @@ rec {
     Nix has a [has attribute operator `?`](https://nixos.org/manual/nix/stable/language/operators#has-attribute), which is sufficient for such queries, as long as the number of attributes is static. For example:
 
     ```nix
-    (x?a.b) == hasAttryByPath ["a" "b"] x
+    (x?a.b) == hasAttrByPath ["a" "b"] x
     # and
-    (x?${f p}."example.com") == hasAttryByPath [ (f p) "example.com" ] x
+    (x?${f p}."example.com") == hasAttrByPath [ (f p) "example.com" ] x
     ```
 
     **Laws**:

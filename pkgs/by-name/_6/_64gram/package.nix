@@ -2,11 +2,12 @@
 , stdenv
 , fetchFromGitHub
 , telegram-desktop
+, nix-update-script
 }:
 
 telegram-desktop.overrideAttrs (old: rec {
   pname = "64gram";
-  version = "1.1.16";
+  version = "1.1.17";
 
   src = fetchFromGitHub {
     owner = "TDesktop-x64";
@@ -14,8 +15,10 @@ telegram-desktop.overrideAttrs (old: rec {
     rev = "v${version}";
 
     fetchSubmodules = true;
-    hash = "sha256-2IuNJleHtlkELcTHDwRT4pcDcDXSqM5YlLPGYiGT2TE=";
+    hash = "sha256-QWHC1NAAKpH9zU7cplCW2rNYckY87bpU7MEZ1ytSi58=";
   };
+
+  passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
     description = "An unofficial Telegram Desktop providing Windows 64bit build and extra features";

@@ -26,6 +26,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-9do7zL7yaZuqVjastySwjsByo5ja+KUP3590VjIyVnI=";
   };
 
+  # Upstream patch needed to fix NULL deref
+  patches = [
+    (fetchpatch {
+      url = "https://git.sr.ht/~adnano/wmenu/commit/2856dddcac861ddf248143e66ba164d7aa05a0bb.patch";
+      hash = "sha256-P7SEjMssA8unNAlrgrTHm0uW5pefjpupPb4s/u2fTAM=";
+    })
+  ];
+
   nativeBuildInputs = [ pkg-config meson ninja ];
   buildInputs = [ cairo pango wayland libxkbcommon wayland-protocols scdoc ];
 

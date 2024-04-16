@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Cross platform port of the macOS CoreFoundation";
     homepage = "https://github.com/gerickson/opencflite";
-    license = lib.licenses.apsl20;
+    license = lib.licenses.apple-psl20;
     maintainers = with lib.maintainers; [ wegank ];
     platforms = [ "x86_64-linux" ];
   };

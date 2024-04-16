@@ -20,13 +20,13 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Enable the Plasma 6 (KDE 6) desktop environment.";
+        description = "Enable the Plasma 6 (KDE 6) desktop environment.";
       };
 
       enableQt5Integration = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Enable Qt 5 integration (theming, etc). Disable for a pure Qt 6 system.";
+        description = "Enable Qt 5 integration (theming, etc). Disable for a pure Qt 6 system.";
       };
 
       notoPackage = mkPackageOptionMD pkgs "Noto fonts - used for UI by default" {
@@ -36,7 +36,7 @@ in {
     };
 
     environment.plasma6.excludePackages = mkOption {
-      description = lib.mdDoc "List of default packages to exclude from the configuration";
+      description = "List of default packages to exclude from the configuration";
       type = types.listOf types.package;
       default = [];
       example = literalExpression "[ pkgs.kdePackages.elisa ]";
@@ -170,7 +170,17 @@ in {
         breeze.qt5
         plasma-integration.qt5
         pkgs.plasma5Packages.kwayland-integration
-        pkgs.plasma5Packages.kio
+        (
+          # Only symlink the KIO plugins, so we don't accidentally pull any services
+          # like KCMs or kcookiejar
+          let
+            kioPluginPath = "${pkgs.plasma5Packages.qtbase.qtPluginPrefix}/kf5/kio";
+            inherit (pkgs.plasma5Packages) kio;
+          in pkgs.runCommand "kio5-plugins-only" {} ''
+            mkdir -p $out/${kioPluginPath}
+            ln -s ${kio}/${kioPluginPath}/* $out/${kioPluginPath}
+          ''
+        )
         kio-extras-kf5
       ]
       # Optional hardware support features
@@ -246,11 +256,11 @@ in {
     xdg.portal.configPackages = mkDefault [kdePackages.xdg-desktop-portal-kde];
     services.pipewire.enable = mkDefault true;
 
-    services.xserver.displayManager = {
+    services.displayManager = {
       sessionPackages = [kdePackages.plasma-workspace];
       defaultSession = mkDefault "plasma";
     };
-    services.xserver.displayManager.sddm = {
+    services.displayManager.sddm = {
       package = kdePackages.sddm;
       theme = mkDefault "breeze";
       wayland.compositor = "kwin";

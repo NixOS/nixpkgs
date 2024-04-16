@@ -9,35 +9,29 @@
 , poetry-core
 , pprintpp
 , pythonOlder
-, pythonRelaxDepsHook
 , rich
 , tomli
 }:
 
 buildPythonPackage rec {
   pname = "ward";
-  version = "0.67.0b0";
-  format = "pyproject";
+  version = "0.68.0b0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "darrenburns";
-    repo = pname;
+    repo = "ward";
     rev = "refs/tags/release%2F${version}";
     hash = "sha256-4dEMEEPySezgw3dIcYMl56HrhyaYlql9JvtamOn7Y8g=";
   };
 
-  pythonRelaxDeps = [
-    "rich"
-  ];
-
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     rich
     tomli
@@ -57,10 +51,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Test framework for Python";
-    mainProgram = "ward";
     homepage = "https://github.com/darrenburns/ward";
     changelog = "https://github.com/darrenburns/ward/releases/tag/release%2F${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "ward";
   };
 }

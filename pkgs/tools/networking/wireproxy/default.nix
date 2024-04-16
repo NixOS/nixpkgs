@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "wireproxy";
-  version = "1.0.7";
+  version = "1.0.8";
 
   src = fetchFromGitHub {
     owner = "pufferffish";
     repo = "wireproxy";
     rev = "v${version}";
-    hash = "sha256-lMTlocKtOg82dH8XU+bIgPhico3mueLAuTspAY88GFI=";
+    hash = "sha256-2gio+kyjIvaNjb/+M8M5YvbAPbQX+B9A/Qly2kyFZXw=";
   };
 
   ldflags = [
@@ -22,7 +22,7 @@ buildGoModule rec {
     "-X main.version=v${version}"
   ];
 
-  vendorHash = "sha256-V9W7Z8vgPdudNivfmGzJe1f6ebrZEqlG4AdIf2NNGrY=";
+  vendorHash = "sha256-u5/ppH+8mcR3AdPnA6vDFL4GwVzbUj679I4zBw80HU0=";
 
   passthru.tests.version = testers.testVersion {
     package = wireproxy;

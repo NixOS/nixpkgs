@@ -19,11 +19,8 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  # The change to minor version 18.20.0 breaks compatibility with ffi-napi
-  # This breaks the compilation of some nix packages.
-  # While this is investigated and fixed, do not upgrade the minor version.
-  version = "18.19.1";
-  sha256 = "sha256-CQ+WouzeCAtrOCxtZCvKXQvkcCp4y1Vb578CsgvRbe0=";
+  version = "18.20.2";
+  sha256 = "sha256-iq6nycfpJ/sJ2RSY2jEbbk0YIzOQ4jxyOlO4kfrUxz8=";
   patches = [
     ./disable-darwin-v8-system-instrumentation.patch
     ./bypass-darwin-xcrun-node16.patch

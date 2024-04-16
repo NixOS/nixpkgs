@@ -14,7 +14,7 @@ in {
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Whether to configure system to enable use of dmrconfig. This
           enables the required udev rules and installs the program.
         '';

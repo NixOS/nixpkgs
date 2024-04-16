@@ -12,6 +12,7 @@ let
     extraGSettingsOverrides = cfg.extraGSettingsOverrides;
   };
 
+  notExcluded = pkg: (!(lib.elem pkg config.environment.pantheon.excludePackages));
 in
 
 {
@@ -26,10 +27,10 @@ in
     services.pantheon = {
 
       contractor = {
-         enable = mkEnableOption (lib.mdDoc "contractor, a desktop-wide extension service used by Pantheon");
+         enable = mkEnableOption "contractor, a desktop-wide extension service used by Pantheon";
       };
 
-      apps.enable = mkEnableOption (lib.mdDoc "Pantheon default applications");
+      apps.enable = mkEnableOption "Pantheon default applications";
 
     };
 
@@ -37,14 +38,14 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Enable the pantheon desktop manager";
+        description = "Enable the pantheon desktop manager";
       };
 
       sessionPath = mkOption {
         default = [];
         type = types.listOf types.package;
         example = literalExpression "[ pkgs.gnome.gpaste ]";
-        description = lib.mdDoc ''
+        description = ''
           Additional list of packages to be added to the session search path.
           Useful for GSettings-conditional autostart.
 
@@ -55,28 +56,28 @@ in
       extraWingpanelIndicators = mkOption {
         default = null;
         type = with types; nullOr (listOf package);
-        description = lib.mdDoc "Indicators to add to Wingpanel.";
+        description = "Indicators to add to Wingpanel.";
       };
 
       extraSwitchboardPlugs = mkOption {
         default = null;
         type = with types; nullOr (listOf package);
-        description = lib.mdDoc "Plugs to add to Switchboard.";
+        description = "Plugs to add to Switchboard.";
       };
 
       extraGSettingsOverrides = mkOption {
         default = "";
         type = types.lines;
-        description = lib.mdDoc "Additional gsettings overrides.";
+        description = "Additional gsettings overrides.";
       };
 
       extraGSettingsOverridePackages = mkOption {
         default = [];
         type = types.listOf types.path;
-        description = lib.mdDoc "List of packages for which gsettings are overridden.";
+        description = "List of packages for which gsettings are overridden.";
       };
 
-      debug = mkEnableOption (lib.mdDoc "gnome-session debug messages");
+      debug = mkEnableOption "gnome-session debug messages";
 
     };
 
@@ -84,7 +85,7 @@ in
       default = [];
       example = literalExpression "[ pkgs.pantheon.elementary-camera ]";
       type = types.listOf types.package;
-      description = lib.mdDoc "Which packages pantheon should exclude from the default environment";
+      description = "Which packages pantheon should exclude from the default environment";
     };
 
   };
@@ -96,7 +97,7 @@ in
         pkgs.pantheon.pantheon-agent-geoclue2
       ] config.environment.pantheon.excludePackages;
 
-      services.xserver.displayManager.sessionPackages = [ pkgs.pantheon.elementary-session-settings ];
+      services.displayManager.sessionPackages = [ pkgs.pantheon.elementary-session-settings ];
 
       # Ensure lightdm is used when Pantheon is enabled
       # Without it screen locking will be nonfunctional because of the use of lightlocker
@@ -109,7 +110,7 @@ in
 
       # Without this, elementary LightDM greeter will pre-select non-existent `default` session
       # https://github.com/elementary/greeter/issues/368
-      services.xserver.displayManager.defaultSession = mkDefault "pantheon";
+      services.displayManager.defaultSession = mkDefault "pantheon";
 
       services.xserver.displayManager.sessionCommands = ''
         if test "$XDG_CURRENT_DESKTOP" = "Pantheon"; then
@@ -189,22 +190,6 @@ in
       systemd.user.targets."gnome-session-x11-services-ready".wants = [
         "org.gnome.SettingsDaemon.XSettings.service"
       ];
-
-      # https://github.com/elementary/gala/issues/1826#issuecomment-1890461298
-      systemd.user.services."io.elementary.gala.daemon@" = {
-        unitConfig = {
-          Description = "Gala Daemon";
-          BindsTo = "io.elementary.gala@.service";
-          After = "io.elementary.gala@.service";
-        };
-
-        serviceConfig = {
-          Type = "dbus";
-          BusName = "org.pantheon.gala.daemon";
-          ExecStart = "${pkgs.pantheon.gala}/bin/gala-daemon";
-          Slice = "session.slice";
-        };
-      };
 
       # Global environment
       environment.systemPackages = (with pkgs.pantheon; [
@@ -304,8 +289,8 @@ in
     })
 
     (mkIf serviceCfg.apps.enable {
-      programs.evince.enable = mkDefault true;
-      programs.file-roller.enable = mkDefault true;
+      programs.evince.enable = mkDefault (notExcluded pkgs.gnome.evince);
+      programs.file-roller.enable = mkDefault (notExcluded pkgs.gnome.file-roller);
 
       environment.systemPackages = utils.removePackagesByName ([
         pkgs.gnome.gnome-font-viewer

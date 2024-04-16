@@ -38,7 +38,6 @@
       --fish ${./completions/dotnet.fish}
   '';
 
-} // lib.optionalAttrs (type == "sdk") {
   passthru = {
     tests = let
       mkDotnetTest =
@@ -79,10 +78,13 @@
       '';
 
     in {
-      version = testers.testVersion {
+      version = testers.testVersion ({
         package = finalAttrs.finalPackage;
-      };
-
+      } // lib.optionalAttrs (type != "sdk") {
+        command = "dotnet --info";
+      });
+    }
+    // lib.optionalAttrs (type == "sdk") {
       console = mkDotnetTest {
         name = "console";
         template = "console";
@@ -106,7 +108,7 @@
       };
 
       web = mkDotnetTest {
-        name = "publish";
+        name = "web";
         template = "web";
         build = "dotnet publish -o $out";
         runInputs = [ expect curl ];

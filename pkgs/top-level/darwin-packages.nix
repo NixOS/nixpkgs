@@ -155,8 +155,6 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     propagatedBuildInputs = [ self.signingUtils ];
   } ../os-specific/darwin/signing-utils/auto-sign-hook.sh;
 
-  insert_dylib = callPackage ../os-specific/darwin/insert_dylib { };
-
   iosSdkPkgs = callPackage ../os-specific/darwin/xcode/sdk-pkgs.nix {
     buildIosSdk = buildPackages.darwin.iosSdkPkgs.sdk;
     targetIosSdkPkgs = targetPackages.darwin.iosSdkPkgs;

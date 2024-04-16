@@ -1,5 +1,8 @@
-{ stdenv
+{ config
+, callPackages
+, stdenv
 , lib
+, addDriverRunpath
 , fetchpatch
 , fetchFromGitHub
 , protobuf
@@ -12,8 +15,6 @@
 , pkg-config
 , buildGoModule
 , makeWrapper
-, runCommand
-, testers
 
   # apply feature parameter names according to
   # https://github.com/NixOS/rfcs/pull/169
@@ -21,17 +22,14 @@
   # CPU extensions
 , enable_avx ? true
 , enable_avx2 ? true
-, enable_avx512 ? false
+, enable_avx512 ? stdenv.hostPlatform.avx512Support
 , enable_f16c ? true
 , enable_fma ? true
-
-, with_tinydream ? false
-, ncnn
 
 , with_openblas ? false
 , openblas
 
-, with_cublas ? false
+, with_cublas ? config.cudaSupport
 , cudaPackages
 
 , with_clblas ? false
@@ -39,25 +37,19 @@
 , ocl-icd
 , opencl-headers
 
-, with_stablediffusion ? false
+, with_tinydream ? false # do not compile with cublas
+, ncnn
+
+, with_stablediffusion ? true
 , opencv
 
-, with_tts ? false
+, with_tts ? true
 , onnxruntime
 , sonic
 , spdlog
 , fmt
 , espeak-ng
 , piper-tts
-
-  # tests
-, fetchzip
-, fetchurl
-, writeText
-, writeTextFile
-, symlinkJoin
-, linkFarmFromDrvs
-, jq
 }:
 let
   BUILD_TYPE =
@@ -67,13 +59,7 @@ let
     else if with_clblas then "clblas"
     else "";
 
-  typedBuiltInputs =
-    lib.optionals with_cublas
-      [ cudaPackages.cudatoolkit cudaPackages.cuda_cudart ]
-    ++ lib.optionals with_clblas
-      [ clblast ocl-icd opencl-headers ]
-    ++ lib.optionals with_openblas
-      [ openblas.dev ];
+  inherit (cudaPackages) libcublas cuda_nvcc cuda_cccl cuda_cudart cudatoolkit;
 
   go-llama-ggml = effectiveStdenv.mkDerivation {
     name = "go-llama-ggml";
@@ -88,9 +74,18 @@ let
       "libbinding.a"
       "BUILD_TYPE=${BUILD_TYPE}"
     ];
-    buildInputs = typedBuiltInputs;
+
+    buildInputs = [ ]
+      ++ lib.optionals with_clblas [ clblast ocl-icd opencl-headers ]
+      ++ lib.optionals with_openblas [ openblas.dev ];
+
+    nativeBuildInputs = [ cmake ]
+      # backward compatiblity with nixos-23.11
+      # use cuda_nvcc after release of nixos-24.05
+      ++ lib.optionals with_cublas [ cudatoolkit ];
+
     dontUseCmakeConfigure = true;
-    nativeBuildInputs = [ cmake ];
+
     installPhase = ''
       mkdir $out
       tar cf - --exclude=build --exclude=CMakeFiles --exclude="*.o" . \
@@ -103,8 +98,8 @@ let
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "llama.cpp";
-      rev = "b06c16ef9f81d84da520232c125d4d8a1d273736";
-      hash = "sha256-t1AIx/Ir5RhasjblH4BSpGOXVvO84SJPSqa7rXWj6b4=";
+      rev = "1b67731e184e27a465b8c5476061294a4af668ea";
+      hash = "sha256-0WWbsklpW6HhFRkvWpYh8Lhi8VIansS/zmyIKNQRkIs=";
       fetchSubmodules = true;
     };
     postPatch = prev.postPatch + ''
@@ -166,7 +161,6 @@ let
     patches = [ ];
     nativeBuildInputs = [ cmake ];
     cmakeFlags = (self.cmakeFlags or [ ]) ++ [
-      # -DCMAKE_C_FLAGS="-D_FILE_OFFSET_BITS=64"
       (lib.cmakeBool "BUILD_SHARED_LIBS" true)
       (lib.cmakeBool "USE_ASYNC" false)
       (lib.cmakeBool "USE_MBROLA" false)
@@ -258,13 +252,20 @@ let
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "whisper.cpp";
-      rev = "1558ec5a16cb2b2a0bf54815df1d41f83dc3815b";
-      hash = "sha256-UAqWU3kvkHM+fV+T6gFVsAKuOG6N4FoFgTKGUptwjmE=";
+      rev = "8f253ef3af1c62c04316ba4afa7145fc4d701a8c";
+      hash = "sha256-yHHjhpQIn99A/hqFwAb7TfTf4Q9KnKat93zyXS70bT8=";
     };
-    nativeBuildInputs = [ cmake pkg-config ];
-    buildInputs = typedBuiltInputs;
+
+    nativeBuildInputs = [ cmake pkg-config ]
+      ++ lib.optionals with_cublas [ cuda_nvcc ];
+
+    buildInputs = [ ]
+      ++ lib.optionals with_cublas [ cuda_cccl cuda_cudart libcublas ]
+      ++ lib.optionals with_clblas [ clblast ocl-icd opencl-headers ]
+      ++ lib.optionals with_openblas [ openblas.dev ];
+
     cmakeFlags = [
-      (lib.cmakeBool "WHISPER_CUBLAS" with_cublas)
+      (lib.cmakeBool "WHISPER_CUDA" with_cublas)
       (lib.cmakeBool "WHISPER_CLBLAST" with_clblas)
       (lib.cmakeBool "WHISPER_OPENBLAS" with_openblas)
       (lib.cmakeBool "WHISPER_NO_AVX" (!enable_avx))
@@ -334,19 +335,19 @@ let
     ];
   });
 
-  go-tiny-dream = stdenv.mkDerivation {
+  go-tiny-dream = effectiveStdenv.mkDerivation {
     name = "go-tiny-dream";
     src = fetchFromGitHub {
       owner = "M0Rf30";
       repo = "go-tiny-dream";
-      rev = "772a9c0d9aaf768290e63cca3c904fe69faf677a";
-      hash = "sha256-r+wzFIjaI6cxAm/eXN3q8LRZZz+lE5EA4lCTk5+ZnIY=";
+      rev = "22a12a4bc0ac5455856f28f3b771331a551a4293";
+      hash = "sha256-DAVHD6E0OKHf4C2ldoI0Mm7813DIrmWFONUhSCQPCfc=";
       fetchSubmodules = true;
     };
     postUnpack = ''
       rm -rf source/ncnn
-      mkdir -p source/ncnn/build
-      cp -r --no-preserve=mode ${go-tiny-dream-ncnn} source/ncnn/build/install
+      mkdir -p source/ncnn/build/src
+      cp -r --no-preserve=mode ${go-tiny-dream-ncnn}/lib/. ${go-tiny-dream-ncnn}/include/. source/ncnn/build/src
     '';
     buildFlags = [ "libtinydream.a" ];
     installPhase = ''
@@ -370,18 +371,18 @@ let
       stdenv;
 
   pname = "local-ai";
-  version = "2.11.0";
+  version = "2.12.4";
   src = fetchFromGitHub {
     owner = "go-skynet";
     repo = "LocalAI";
     rev = "v${version}";
-    hash = "sha256-Sqo4NOggUNb1ZemT9TRknBmz8dThe/X43R+4JFfQJ4M=";
+    hash = "sha256-piu2B6u4ZfxiOd9SXrE7jiiiwL2SM8EqXo2s5qeKRl0=";
   };
 
   self = buildGoModule.override { stdenv = effectiveStdenv; } {
     inherit pname version src;
 
-    vendorHash = "sha256-3bOr8DnAjTzOpVDB5wmlPxECNteWw3tI0yc1f2Wt4y0=";
+    vendorHash = "sha256-8Hu1y/PK21twnB7D22ltslFFzRrsB8d1R2hkgIFB/XY=";
 
     env.NIX_CFLAGS_COMPILE = lib.optionalString with_stablediffusion " -isystem ${opencv}/include/opencv4";
 
@@ -407,11 +408,15 @@ let
       ''
     ;
 
-    buildInputs = typedBuiltInputs
-      ++ lib.optional with_stablediffusion go-stable-diffusion.buildInputs
-      ++ lib.optional with_tts go-piper.buildInputs;
+    buildInputs = [ ]
+      ++ lib.optionals with_cublas [ libcublas ]
+      ++ lib.optionals with_clblas [ clblast ocl-icd opencl-headers ]
+      ++ lib.optionals with_openblas [ openblas.dev ]
+      ++ lib.optionals with_stablediffusion go-stable-diffusion.buildInputs
+      ++ lib.optionals with_tts go-piper.buildInputs;
 
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ]
+      ++ lib.optionals with_cublas [ cuda_nvcc ];
 
     enableParallelBuilding = false;
 
@@ -431,7 +436,7 @@ let
       "VERSION=v${version}"
       "BUILD_TYPE=${BUILD_TYPE}"
     ]
-    ++ lib.optional with_cublas "CUDA_LIBPATH=${cudaPackages.cuda_cudart}/lib"
+    ++ lib.optional with_cublas "CUDA_LIBPATH=${cuda_cudart}/lib"
     ++ lib.optional with_tts "PIPER_CGO_CXXFLAGS=-DSPDLOG_FMT_EXTERNAL=1";
 
     buildPhase = ''
@@ -465,19 +470,19 @@ let
 
     # patching rpath with patchelf doens't work. The execuable
     # raises an segmentation fault
-    postFixup = ''
-      wrapProgram $out/bin/${pname} \
-    '' + lib.optionalString with_cublas ''
-      --prefix LD_LIBRARY_PATH : "${cudaPackages.libcublas}/lib:${cudaPackages.cuda_cudart}/lib:/run/opengl-driver/lib" \
-    '' + lib.optionalString with_clblas ''
-      --prefix LD_LIBRARY_PATH : "${clblast}/lib:${ocl-icd}/lib" \
-    '' + lib.optionalString with_openblas ''
-      --prefix LD_LIBRARY_PATH : "${openblas}/lib" \
-    '' + lib.optionalString with_tts ''
-      --prefix LD_LIBRARY_PATH : "${piper-phonemize}/lib" \
-    '' + ''
-      --prefix PATH : "${ffmpeg}/bin"
-    '';
+    postFixup =
+      let
+        LD_LIBRARY_PATH = [ ]
+          ++ lib.optionals with_cublas [ (lib.getLib libcublas) cuda_cudart addDriverRunpath.driverLink ]
+          ++ lib.optionals with_clblas [ clblast ocl-icd ]
+          ++ lib.optionals with_openblas [ openblas ]
+          ++ lib.optionals with_tts [ piper-phonemize ];
+      in
+      ''
+        wrapProgram $out/bin/${pname} \
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath LD_LIBRARY_PATH}" \
+        --prefix PATH : "${ffmpeg}/bin"
+      '';
 
     passthru.local-packages = {
       inherit
@@ -492,84 +497,7 @@ let
         with_tinydream with_clblas;
     };
 
-    passthru.tests = {
-      version = testers.testVersion {
-        package = self;
-        version = "v" + version;
-      };
-      health =
-        let
-          port = "8080";
-        in
-        testers.runNixOSTest {
-          name = pname + "-health";
-          nodes.machine = {
-            systemd.services.local-ai = {
-              wantedBy = [ "multi-user.target" ];
-              serviceConfig.ExecStart = "${self}/bin/local-ai --debug --localai-config-dir . --address :${port}";
-            };
-          };
-          testScript = ''
-            machine.wait_for_open_port(${port})
-            machine.succeed("curl -f http://localhost:${port}/readyz")
-          '';
-        };
-    }
-    // lib.optionalAttrs with_tts {
-      # https://localai.io/features/text-to-audio/#piper
-      tts =
-        let
-          port = "8080";
-          voice-en-us = fetchzip {
-            url = "https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-en-us-danny-low.tar.gz";
-            hash = "sha256-5wf+6H5HeQY0qgdqnAG1vSqtjIFM9lXH53OgouuPm0M=";
-            stripRoot = false;
-          };
-          ggml-tiny-en = fetchurl {
-            url = "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-tiny.en-q5_1.bin";
-            hash = "sha256-x3xXZvHO8JtrfUfyG1Rsvd1BV4hrO11tT3CekeZsfCs=";
-          };
-          whisper-en = {
-            name = "whisper-en";
-            backend = "whisper";
-            parameters.model = ggml-tiny-en.name;
-          };
-          models = symlinkJoin {
-            name = "models";
-            paths = [
-              voice-en-us
-              (linkFarmFromDrvs "whisper-en" [
-                (writeText "whisper-en.yaml" (builtins.toJSON whisper-en))
-                ggml-tiny-en
-              ])
-            ];
-          };
-        in
-        testers.runNixOSTest {
-          name = pname + "-tts";
-          nodes.machine = {
-            systemd.services.local-ai = {
-              wantedBy = [ "multi-user.target" ];
-              serviceConfig.ExecStart = "${self}/bin/local-ai --debug --models-path ${models} --localai-config-dir . --address :${port}";
-            };
-          };
-          testScript =
-            let
-              request = {
-                model = "en-us-danny-low.onnx";
-                backend = "piper";
-                input = "Hello, how are you?";
-              };
-            in
-            ''
-              machine.wait_for_open_port(${port})
-              machine.succeed("curl -f http://localhost:${port}/readyz")
-              machine.succeed("curl -f http://localhost:${port}/tts --json @${writeText "request.json" (builtins.toJSON request)} --output out.wav")
-              machine.succeed("curl -f http://localhost:${port}/v1/audio/transcriptions --header 'Content-Type: multipart/form-data' --form file=@out.wav --form model=${whisper-en.name} --output transcription.json")
-              machine.succeed("${jq}/bin/jq --exit-status 'debug | .segments | first.text == \"${request.input}\"' transcription.json")
-            '';
-        };
-    };
+    passthru.tests = callPackages ./tests.nix { inherit self; };
 
     meta = with lib; {
       description = "OpenAI alternative to run local LLMs, image and audio generation";

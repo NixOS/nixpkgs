@@ -6,17 +6,20 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "prowler";
-  version = "3.13.0";
+  version = "3.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "prowler-cloud";
     repo = "prowler";
     rev = "refs/tags/${version}";
-    hash = "sha256-19B6b+xR+f7dIu/6eINsxs7UxuV96QdsNncodC8/N3Q=";
+    hash = "sha256-7aWWaGdHTveFwXsFNj4+tjX5g83/nD77jLAOrDOw8JE=";
   };
 
   pythonRelaxDeps = [
+    "azure-keyvault-keys"
+    "azure-mgmt-compute"
+    "azure-mgmt-network"
     "azure-mgmt-security"
     "azure-storage-blob"
     "boto3"
@@ -24,8 +27,8 @@ python3.pkgs.buildPythonApplication rec {
     "google-api-python-client"
     "jsonschema"
     "pydantic"
-    "slack-sdk"
     "pydantic"
+    "slack-sdk"
   ];
 
   nativeBuildInputs = with python3.pkgs; [
@@ -40,14 +43,22 @@ python3.pkgs.buildPythonApplication rec {
     alive-progress
     awsipranges
     azure-identity
+    azure-keyvault-keys
     azure-mgmt-applicationinsights
     azure-mgmt-authorization
+    azure-mgmt-compute
+    azure-mgmt-containerservice
     azure-mgmt-cosmosdb
+    azure-mgmt-keyvault
+    azure-mgmt-monitor
+    azure-mgmt-network
     azure-mgmt-rdbms
+    azure-mgmt-resource
     azure-mgmt-security
     azure-mgmt-sql
     azure-mgmt-storage
     azure-mgmt-subscription
+    azure-mgmt-web
     azure-storage-blob
     boto3
     botocore

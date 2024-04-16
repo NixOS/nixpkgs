@@ -6,7 +6,7 @@ let
 in
 {
   options.hardware.cpu.intel.sgx.enableDcapCompat = mkOption {
-    description = lib.mdDoc ''
+    description = ''
       Whether to enable backward compatibility for SGX software build for the
       out-of-tree Intel SGX DCAP driver.
 
@@ -20,19 +20,19 @@ in
   };
 
   options.hardware.cpu.intel.sgx.provision = {
-    enable = mkEnableOption (lib.mdDoc "access to the Intel SGX provisioning device");
+    enable = mkEnableOption "access to the Intel SGX provisioning device";
     user = mkOption {
-      description = lib.mdDoc "Owner to assign to the SGX provisioning device.";
+      description = "Owner to assign to the SGX provisioning device.";
       type = types.str;
       default = "root";
     };
     group = mkOption {
-      description = lib.mdDoc "Group to assign to the SGX provisioning device.";
+      description = "Group to assign to the SGX provisioning device.";
       type = types.str;
       default = defaultPrvGroup;
     };
     mode = mkOption {
-      description = lib.mdDoc "Mode to set for the SGX provisioning device.";
+      description = "Mode to set for the SGX provisioning device.";
       type = types.str;
       default = "0660";
     };

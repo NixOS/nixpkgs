@@ -75,8 +75,8 @@ stdenv.mkDerivation rec {
     "-DUSE_CUDA=ON"
     # Their CMakeLists.txt does not respect CUDA_HOST_COMPILER, instead using the CXX compiler.
     # https://github.com/dmlc/xgboost/blob/ccf43d4ba0a94e2f0a3cc5a526197539ae46f410/CMakeLists.txt#L145
-    "-DCMAKE_C_COMPILER=${cudaPackages.cudatoolkit.cc}/bin/gcc"
-    "-DCMAKE_CXX_COMPILER=${cudaPackages.cudatoolkit.cc}/bin/g++"
+    "-DCMAKE_C_COMPILER=${cudaPackages.backendStdenv.cc}/bin/gcc"
+    "-DCMAKE_CXX_COMPILER=${cudaPackages.backendStdenv.cc}/bin/g++"
   ] ++ lib.optionals
     (cudaSupport
       && lib.versionAtLeast cudaPackages.cudatoolkit.version "11.4.0")
@@ -115,21 +115,15 @@ stdenv.mkDerivation rec {
     let libname = "libxgboost${stdenv.hostPlatform.extensions.sharedLibrary}";
     in ''
       runHook preInstall
-      mkdir -p $out
-      cp -r ../include $out
-      cp -r ../dmlc-core/include/dmlc $out/include
-      cp -r ../rabit/include/rabit $out/include
-    '' + lib.optionalString (!rLibrary) ''
-      install -Dm755 ../lib/${libname} $out/lib/${libname}
-      install -Dm755 ../xgboost $out/bin/xgboost
     ''
     # the R library option builds a completely different binary xgboost.so instead of
     # libxgboost.so, which isn't full featured for python and CLI
     + lib.optionalString rLibrary ''
-      mkdir $out/library
+      mkdir -p $out/library
       export R_LIBS_SITE="$out/library:$R_LIBS_SITE''${R_LIBS_SITE:+:}"
-      make install -l $out/library
     '' + ''
+      cmake --install .
+      cp -r ../rabit/include/rabit $out/include
       runHook postInstall
     '';
 

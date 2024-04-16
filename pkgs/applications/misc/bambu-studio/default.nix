@@ -38,7 +38,7 @@
 , pcre
 , qhull
 , systemd
-, tbb_2021_8
+, tbb_2021_11
 , webkitgtk
 , wxGTK31
 , xorg
@@ -53,7 +53,7 @@ let
     ];
   });
   openvdb_tbb_2021_8 = openvdb.overrideAttrs (old: rec {
-    buildInputs = [ openexr boost179 tbb_2021_8 jemalloc c-blosc ilmbase ];
+    buildInputs = [ openexr boost179 tbb_2021_11 jemalloc c-blosc ilmbase ];
   });
 in
 stdenv.mkDerivation rec {
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
     opencascade-occt
     openvdb_tbb_2021_8
     pcre
-    tbb_2021_8
+    tbb_2021_11
     webkitgtk
     wxGTK31'
     xorg.libX11

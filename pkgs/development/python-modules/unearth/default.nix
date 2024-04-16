@@ -2,12 +2,12 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, cached-property
 , packaging
 , pdm-backend
-, requests
+, httpx
 , flask
 , pytest-httpserver
+, pytest-mock
 , pytestCheckHook
 , requests-wsgi-adapter
 , trustme
@@ -15,23 +15,23 @@
 
 buildPythonPackage rec {
   pname = "unearth";
-  version = "0.14.0";
-  format = "pyproject";
+  version = "0.15.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-883fuUrA+GX7z5ZCMVVu9xgwEDecALASBVF6UMeKGG0=";
+    hash = "sha256-hj3rMznA1lpb4NCtLGfUbV9XSnmOdO8FUr8R0pijCrs=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     pdm-backend
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     packaging
-    requests
+    httpx
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -39,6 +39,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     flask
     pytest-httpserver
+    pytest-mock
     pytestCheckHook
     requests-wsgi-adapter
     trustme

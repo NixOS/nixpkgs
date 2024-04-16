@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    rake (13.2.0)
+    rake (13.2.1)
 
 PLATFORMS
   ruby

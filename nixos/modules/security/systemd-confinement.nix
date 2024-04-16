@@ -10,7 +10,7 @@ in {
       options.confinement.enable = lib.mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           If set, all the required runtime store paths for this service are
           bind-mounted into a `tmpfs`-based
           {manpage}`chroot(2)`.
@@ -20,7 +20,7 @@ in {
       options.confinement.fullUnit = lib.mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to include the full closure of the systemd unit file into the
           chroot, instead of just the dependencies for the executables.
 
@@ -39,7 +39,7 @@ in {
         default = [];
         description = let
           mkScOption = optName: "{option}`serviceConfig.${optName}`";
-        in lib.mdDoc ''
+        in ''
           Additional packages or strings with context to add to the closure of
           the chroot. By default, this includes all the packages from the
           ${lib.concatMapStringsSep ", " mkScOption [
@@ -63,7 +63,7 @@ in {
         default = toplevelConfig.environment.binsh;
         defaultText = lib.literalExpression "config.environment.binsh";
         example = lib.literalExpression ''"''${pkgs.dash}/bin/dash"'';
-        description = lib.mdDoc ''
+        description = ''
           The program to make available as {file}`/bin/sh` inside
           the chroot. If this is set to `null`, no
           {file}`/bin/sh` is provided at all.
@@ -76,7 +76,7 @@ in {
       options.confinement.mode = lib.mkOption {
         type = types.enum [ "full-apivfs" "chroot-only" ];
         default = "full-apivfs";
-        description = lib.mdDoc ''
+        description = ''
           The value `full-apivfs` (the default) sets up
           private {file}`/dev`, {file}`/proc`,
           {file}`/sys` and {file}`/tmp` file systems in a separate user

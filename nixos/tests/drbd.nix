@@ -31,11 +31,11 @@ import ./make-test-python.nix (
               }
 
               on drbd1 {
-                address ${nodes.drbd1.config.networking.primaryIPAddress}:${toString drbdPort};
+                address ${nodes.drbd1.networking.primaryIPAddress}:${toString drbdPort};
               }
 
               on drbd2 {
-                address ${nodes.drbd2.config.networking.primaryIPAddress}:${toString drbdPort};
+                address ${nodes.drbd2.networking.primaryIPAddress}:${toString drbdPort};
               }
             }
           '';
@@ -45,7 +45,7 @@ import ./make-test-python.nix (
   {
     name = "drbd";
     meta = with pkgs.lib.maintainers; {
-      maintainers = [ ryantm astro ];
+      maintainers = [ ryantm astro birkb ];
     };
 
     nodes.drbd1 = drbdConfig;

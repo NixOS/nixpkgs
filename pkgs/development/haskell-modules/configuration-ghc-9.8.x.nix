@@ -52,12 +52,14 @@ self: super: {
   #
   # Version upgrades
   #
-  th-abstraction = doDistribute self.th-abstraction_0_6_0_0;
+  th-abstraction = doDistribute self.th-abstraction_0_7_0_0;
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_8_2_20240223;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_8_0_2;
   ghc-lib = doDistribute self.ghc-lib_9_8_1_20231121;
   megaparsec = doDistribute self.megaparsec_9_6_1;
-  aeson = doDistribute self.aeson_2_2_1_0;
+  # TODO: remove when aeson updates or launches a revision
+  # see https://github.com/haskell/aeson/issues/1089 and https://github.com/haskell/aeson/pulls/1088
+  aeson = doJailbreak (doDistribute self.aeson_2_2_1_0);
   attoparsec-aeson = doDistribute self.attoparsec-aeson_2_2_0_1;
   xmonad = doDistribute self.xmonad_0_18_0;
   apply-refact = self.apply-refact_0_14_0_0;

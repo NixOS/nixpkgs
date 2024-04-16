@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, llama-index-core
-, llama-index-llms-openai
-, poetry-core
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  llama-index-core,
+  llama-index-llms-openai,
+  poetry-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-multi-modal-llms-openai";
-  version = "0.1.4";
+  version = "0.1.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,12 +18,10 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_multi_modal_llms_openai";
     inherit version;
-    hash = "sha256-al1lhMM6nRsGz1yHTGOvJgP8k7ZgveSBqMVH6HbG4sM=";
+    hash = "sha256-miN/T4htHiDCfpST6As+H4dThZSB/xtY/iW3qjmxmKI=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     llama-index-core
@@ -32,9 +31,7 @@ buildPythonPackage rec {
   # Tests are only available in the mono repo
   doCheck = false;
 
-  pythonImportsCheck = [
-    "llama_index.multi_modal_llms.openai"
-  ];
+  pythonImportsCheck = [ "llama_index.multi_modal_llms.openai" ];
 
   meta = with lib; {
     description = "LlamaIndex Multi-Modal-Llms Integration for OpenAI";

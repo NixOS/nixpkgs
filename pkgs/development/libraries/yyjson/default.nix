@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yyjson";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "ibireme";
     repo = "yyjson";
     rev = finalAttrs.version;
-    hash = "sha256-uAh/AUUDudQr+1+3YLkg9KxARgvKWxfDZlqo8388nFY=";
+    hash = "sha256-iRMjiaVnsTclcdzHjlFOTmJvX3VP4omJLC8AWA/EOZk=";
   };
 
   nativeBuildInputs = [
@@ -25,5 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/ibireme/yyjson/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ federicoschonborn ];
+    platforms = lib.platforms.all;
   };
 })

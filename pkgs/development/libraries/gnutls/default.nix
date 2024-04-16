@@ -38,6 +38,7 @@
 , knot-resolver
 , ngtcp2-gnutls
 , ocamlPackages
+, pkgsStatic
 , python3Packages
 , qemu
 , rsyslog
@@ -158,6 +159,7 @@ stdenv.mkDerivation rec {
     haskell-gnutls = haskellPackages.gnutls;
     python3-gnutls = python3Packages.python3-gnutls;
     rsyslog = rsyslog.override { withGnutls = true; };
+    static = pkgsStatic.gnutls;
   };
 
   meta = with lib; {

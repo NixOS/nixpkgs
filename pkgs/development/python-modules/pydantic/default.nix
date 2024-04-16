@@ -23,6 +23,7 @@
 , faker
 , pytestCheckHook
 , pytest-mock
+, eval-type-backport
 }:
 
 buildPythonPackage rec {
@@ -45,7 +46,7 @@ buildPythonPackage rec {
       name = "fix-pytest8-compatibility.patch";
       url = "https://github.com/pydantic/pydantic/commit/825a6920e177a3b65836c13c7f37d82b810ce482.patch";
       hash = "sha256-Dap5DtDzHw0jS/QUo5CRI9sLDJ719GRyC4ZNDWEdzus=";
-     })
+    })
   ];
 
   buildInputs = lib.optionals (pythonOlder "3.9") [
@@ -69,13 +70,16 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [
-    cloudpickle
-    dirty-equals
-    faker
-    pytest-mock
-    pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  nativeCheckInputs =
+    [
+      cloudpickle
+      dirty-equals
+      faker
+      pytest-mock
+      pytestCheckHook
+    ]
+    ++ lib.flatten (lib.attrValues passthru.optional-dependencies)
+    ++ lib.optionals (pythonOlder "3.10") [ eval-type-backport ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

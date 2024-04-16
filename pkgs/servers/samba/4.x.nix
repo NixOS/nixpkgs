@@ -1,6 +1,7 @@
 { lib, stdenv
 , buildPackages
 , fetchurl
+, fetchpatch
 , wafHook
 , pkg-config
 , bison
@@ -61,11 +62,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "samba";
-  version = "4.19.5";
+  version = "4.20.0";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
-    hash = "sha256-DiQFtM7CnQRZYh9DQKGnSvdx7Hz/7f9DJQytfx+HYF4=";
+    hash = "sha256-AmclQlEKxuXQyRwMFNkKtObsOXxwnpUsbaOm4LTVpC8=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -76,6 +77,12 @@ stdenv.mkDerivation rec {
     ./4.x-no-persistent-install-dynconfig.patch
     ./4.x-fix-makeflags-parsing.patch
     ./build-find-pre-built-heimdal-build-tools-in-case-of-.patch
+    (fetchpatch {
+      # workaround for https://github.com/NixOS/nixpkgs/issues/303436
+      name = "samba-reproducible-builds.patch";
+      url = "https://gitlab.com/raboof/samba/-/commit/9995c5c234ece6888544cdbe6578d47e83dea0b5.patch";
+      hash = "sha256-TVKK/7wGsfP1pVf8o1NwazobiR8jVJCCMj/FWji3f2A=";
+    })
   ];
 
   nativeBuildInputs = [

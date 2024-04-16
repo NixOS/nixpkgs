@@ -8,12 +8,14 @@
   libiconv,
   darwin,
   nix-update-script,
+  pkg-config,
+  openssl,
 }:
 let
   canRunGitGr = stdenv.hostPlatform.emulatorAvailable buildPackages;
   gitGr = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/git-gr";
   pname = "git-gr";
-  version = "1.0.3";
+  version = "1.4.1";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -22,18 +24,25 @@ rustPlatform.buildRustPackage {
     owner = "9999years";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-hvK4reFR60q9mw3EdNLav9VMr4H6Zabv1N1D/5AAKuQ=";
+    hash = "sha256-8Z4ZLejNS6KQ/MXmQuZ0Tq9VmuJ5Nhxo4TS0tOlg/R4=";
   };
 
   buildFeatures = [ "clap_mangen" ];
 
-  cargoHash = "sha256-efoRiPWugz955MflIS81Nie7Oq5Y4u5CI+/el8fJVl0=";
+  cargoHash = "sha256-REtY+UgtJCoTDgpI/+O341WsC4WJ4PS7/yFwWSVKKRo=";
+
+  OPENSSL_NO_VENDOR = true;
 
   nativeBuildInputs =
-    [ installShellFiles ]
+    [installShellFiles]
+    ++ lib.optional stdenv.isLinux pkg-config;
+
+  buildInputs =
+    lib.optional stdenv.isLinux openssl
     ++ lib.optionals stdenv.isDarwin [
       libiconv
       darwin.apple_sdk.frameworks.CoreServices
+      darwin.apple_sdk.frameworks.SystemConfiguration
     ];
 
   postInstall = lib.optionalString canRunGitGr ''

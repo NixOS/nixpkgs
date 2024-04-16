@@ -6,22 +6,34 @@
 , numpy
 , pytestCheckHook
 , pythonOlder
+, setuptools
+, setuptools-scm
 , scipy
 }:
 
 buildPythonPackage rec {
   pname = "sparse";
   version = "0.15.1";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-lzrcuIqNuOPYBHlTMx4m0/ZKVlf5tGprhZxHZjw+75k=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace pytest.ini \
+      --replace-fail "--cov-report term-missing --cov-report html --cov-report=xml --cov-report=term --cov sparse --cov-config .coveragerc --junitxml=junit/test-results.xml" ""
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     numba
     numpy
     scipy
@@ -34,6 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "sparse"
+  ];
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   meta = with lib; {

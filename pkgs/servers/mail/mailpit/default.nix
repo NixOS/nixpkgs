@@ -12,13 +12,13 @@
 }:
 
 let
-  version = "1.15.0";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "axllent";
     repo = "mailpit";
     rev = "v${version}";
-    hash = "sha256-Gu2LKuXzJSOvLZZrxOKwusALkMmNOnb3gyBqxbmZbfI=";
+    hash = "sha256-5QEn4sEZgtoFrVonZsAtvzhEkxYGDEWwhJOxqwWQJTk=";
   };
 
   # Separate derivation, because if we mix this in buildGoModule, the separate

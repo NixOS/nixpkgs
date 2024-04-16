@@ -12,13 +12,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "passky-desktop";
-  version = "8.1.1";
+  version = "8.1.2";
 
   src = fetchFromGitHub {
     owner = "Rabbit-Company";
     repo = "Passky-Desktop";
     rev = "refs/tags/v${version}";
-    sha256 = "1ma8s1bngjdzclcc4m5pcmavk38sidaskmz7dgfnv84y35si18dr";
+    sha256 = "sha256-QQ0+qIkDPNCHeWmcF6FkbDrrt/r3fIkNi0dv6XlV1rc=";
   };
 
   nativeBuildInputs = [

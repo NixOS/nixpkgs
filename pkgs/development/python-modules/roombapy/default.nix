@@ -1,20 +1,22 @@
 { lib
 , amqtt
 , buildPythonPackage
+, click
 , fetchFromGitHub
+, mashumaro
 , orjson
 , paho-mqtt
 , poetry-core
-, pydantic
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
 , pythonRelaxDepsHook
+, tabulate
 }:
 
 buildPythonPackage rec {
   pname = "roombapy";
-  version = "1.7.0";
+  version = "1.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -23,7 +25,7 @@ buildPythonPackage rec {
     owner = "pschmitt";
     repo = "roombapy";
     rev = "refs/tags/${version}";
-    hash = "sha256-vB6+cGqeHFthCbz4q75EwsHb8w1H2vPSaKdtvquh5Kc=";
+    hash = "sha256-1yfmaTzZ7cZW2+Yb3Zbo8+5TfD+H1sA0+SzC1c9MdsQ=";
   };
 
   nativeBuildInputs = [
@@ -36,9 +38,14 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    mashumaro
     orjson
     paho-mqtt
-    pydantic
+  ];
+
+  optional-dependencies.cli = [
+    click
+    tabulate
   ];
 
   nativeCheckInputs = [

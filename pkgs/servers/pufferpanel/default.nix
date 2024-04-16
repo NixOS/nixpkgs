@@ -58,7 +58,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper go-swag ];
 
-  vendorHash = "sha256-itiWROoIhnMbG9evH6X7kjClC4VdpX983d/SCwr4HbY=";
+  vendorHash = "sha256-1U7l7YW1fu5M0/pPHTLamLsTQdEltesRODUn21SuP8w=";
   proxyVendor = true;
 
   # Generate code for Swagger documentation endpoints (see web/swagger/docs.go).

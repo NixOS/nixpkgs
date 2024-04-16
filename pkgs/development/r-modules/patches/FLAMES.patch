@@ -1,0 +1,17 @@
+diff --git a/src/Makevars b/src/Makevars
+index 4f3fa42ce752..e48e45561292 100755
+--- a/src/Makevars
++++ b/src/Makevars
+@@ -24,12 +24,6 @@ FILES = $(CFILES) $(CPPFILES)
+ SOURCES = $(FILES)
+ OBJECTS = $(CPPFILES:.cpp=.o) $(CFILES:.c=.o)
+ 
+-strippedLib: $(SHLIB)
+-	if test -e "/usr/bin/strip" & test -e "/bin/uname" & [[ `uname` == "Linux" ]] ; then /usr/bin/strip --strip-debug $(SHLIB); fi
+-clean:
+-	rm $(OBJECTS)
+-.phony: strippedLib clean
+-
+ RHTSLIB_LIBS=$(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript" -e \
+     'Rhtslib::pkgconfig("PKG_LIBS")')
+ RHTSLIB_CPPFLAGS=$(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript" -e \

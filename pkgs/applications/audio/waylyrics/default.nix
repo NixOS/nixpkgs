@@ -9,19 +9,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "waylyrics";
-  version = "0.2.13";
+  version = "0.2.15";
 
   src = fetchFromGitHub {
     owner = "poly000";
     repo = "waylyrics";
     rev = "v${version}";
-    hash = "sha256-522NdpGj0oh2SbWa4GFCFpqNFRhqQxfZ1ZRuS9jUj7Y=";
+    hash = "sha256-dGtotQfS5Ve3rl6iSsqOzs0/dOePfoRZ9Wlg9zHCXSY=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "ncmapi-0.1.13" = "sha256-qu89qf4IPM14V+oE4QQr/SsXSTx3vQbyfzD+Pihcd3E=";
+      "ncmapi-0.1.13" = "sha256-gwFMmMzQywlsQC2GljgLwXoP2Cca0r24iEDmV0k/xG0=";
       "qqmusic-rs-0.1.0" = "sha256-woLsO0n+m3EBUI+PRLio7iLp0UPQSliWK0djCSZEaZc=";
     };
   };

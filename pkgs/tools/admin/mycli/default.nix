@@ -8,11 +8,11 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "mycli";
-  version = "1.27.0";
+  version = "1.27.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-px21vZwafQAG9PL/AVSM51Y30/UMo6fne5ULW0av980=";
+    sha256 = "sha256-0R2k5hRkAJbqgGZEPXWUb48oFxTKMKiQZckf3F+VC3I=";
   };
 
   propagatedBuildInputs = [

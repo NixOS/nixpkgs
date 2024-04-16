@@ -15,15 +15,26 @@ in python3Packages.buildPythonApplication {
     hash = "sha256-pve2f+XMfFokMCtW3KdeOJ9Ey330Gwv/dk1+WBtrBEQ=";
   };
 
+  nativeBuildInputs = [ copyDesktopItems qt5.wrapQtAppsHook ];
+
+  buildInputs = [
+    qt5.qtbase
+    qt5.qtwayland
+  ];
+
   propagatedBuildInputs = with python3Packages; [
     editdistance
     pyqt5
     translitcodec
   ];
 
-  doCheck = false;
+  dontWrapQtApps = true;
 
-  nativeBuildInputs = [ copyDesktopItems qt5.wrapQtAppsHook ];
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
+
+  doCheck = false;
 
   desktopItems = [
     (makeDesktopItem {

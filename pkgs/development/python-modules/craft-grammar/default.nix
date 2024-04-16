@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "craft-grammar";
-  version = "1.1.2";
+  version = "1.2.0";
 
   pyproject = true;
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-grammar";
     rev = "refs/tags/${version}";
-    hash = "sha256-23KLIO2yHXGe/zb3B8LirJsh+LY9z0c5ZGtF392Kszo";
+    hash = "sha256-YQpxgdmUxYLkhAXDLlkLAK6VpjIEycLFY3nsE/M4o2g=";
   };
 
   nativeBuildInputs = [

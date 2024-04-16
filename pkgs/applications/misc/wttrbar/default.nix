@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , rustPlatform
 , darwin
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,6 +20,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [ Security SystemConfiguration ]);
 
   cargoHash = "sha256-HxSyGME95FWR5VwodmrMUX0jPlfE9SJV0WBbICuuTok=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "A simple but detailed weather indicator for Waybar using wttr.in";
