@@ -1,34 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-
-# build-system
-, hatch-requirements-txt
-, hatch-nodejs-version
-, hatchling
-, trove-classifiers
-
-# dependencies
-, babel
-, colorama
-, jinja2
-, markdown
-, mkdocs
-, mkdocs-material-extensions
-, paginate
-, pygments
-, pymdown-extensions
-, pythonOlder
-, regex
-, requests
-
-# optional-dependencies
-, mkdocs-minify-plugin
-, mkdocs-redirects
-, mkdocs-rss-plugin
-, mkdocs-git-revision-date-localized-plugin
-, pillow
-, cairosvg
+{
+  lib,
+  babel,
+  buildPythonPackage,
+  cairosvg,
+  colorama,
+  fetchFromGitHub,
+  hatch-nodejs-version,
+  hatch-requirements-txt,
+  hatchling,
+  jinja2,
+  markdown,
+  mkdocs,
+  mkdocs-git-revision-date-localized-plugin,
+  mkdocs-material-extensions,
+  mkdocs-minify-plugin,
+  mkdocs-redirects,
+  mkdocs-rss-plugin,
+  paginate,
+  pillow,
+  pygments,
+  pymdown-extensions,
+  pythonOlder,
+  regex,
+  requests,
+  trove-classifiers,
 }:
 
 buildPythonPackage rec {
@@ -85,9 +80,7 @@ buildPythonPackage rec {
   # No tests for python
   doCheck = false;
 
-  pythonImportsCheck = [
-    "mkdocs"
-  ];
+  pythonImportsCheck = [ "mkdocs" ];
 
   meta = with lib; {
     changelog = "https://github.com/squidfunk/mkdocs-material/blob/${src.rev}/CHANGELOG";
