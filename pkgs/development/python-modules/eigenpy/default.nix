@@ -19,11 +19,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "stack-of-tasks";
     repo = "eigenpy";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/k5eltoeUW05FTjvStAOw+tguWLUaUced8TArrk4UDI=";
+    hash = "sha256-ar7KmlvWD2qoOonaH8YhVssZhpbTdHNvxY7rzvmhzc0=";
   };
 
   outputs = [
     "dev"
+    "doc"
     "out"
   ];
 
@@ -54,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Bindings between Numpy and Eigen using Boost.Python";
     homepage = "https://github.com/stack-of-tasks/eigenpy";
-    changelog = "https://github.com/stack-of-tasks/eigenpy/releases/tag/v${version}";
+    changelog = "https://github.com/stack-of-tasks/eigenpy/releases/tag/v${finalAttrs.version}";
     license = licenses.bsd2;
     maintainers = with maintainers; [
       nim65s
