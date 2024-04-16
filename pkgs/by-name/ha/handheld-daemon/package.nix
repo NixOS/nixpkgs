@@ -55,8 +55,8 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/hhd-dev/hhd/";
     description = "Linux support for handheld gaming devices like the Legion Go, ROG Ally, and GPD Win";
     platforms = platforms.linux;
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ appsforartists ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ appsforartists toast ];
     mainProgram = "hhd";
   };
 }

@@ -13,8 +13,8 @@ in
 {
   options.systemd.sysupdate = {
 
-    enable = lib.mkEnableOption (lib.mdDoc "systemd-sysupdate") // {
-      description = lib.mdDoc ''
+    enable = lib.mkEnableOption "systemd-sysupdate" // {
+      description = ''
         Atomically update the host OS, container images, portable service
         images or other sources.
 
@@ -29,7 +29,7 @@ in
 
     timerConfig = utils.systemdUtils.unitOptions.timerOptions.options.timerConfig // {
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         The timer configuration for performing the update.
 
         By default, the upstream configuration is used:
@@ -38,8 +38,8 @@ in
     };
 
     reboot = {
-      enable = lib.mkEnableOption (lib.mdDoc "automatically rebooting after an update") // {
-        description = lib.mdDoc ''
+      enable = lib.mkEnableOption "automatically rebooting after an update" // {
+        description = ''
           Whether to automatically reboot after an update.
 
           If set to `true`, the system will automatically reboot via a
@@ -58,7 +58,7 @@ in
 
       timerConfig = utils.systemdUtils.unitOptions.timerOptions.options.timerConfig // {
         default = { };
-        description = lib.mdDoc ''
+        description = ''
           The timer configuration for rebooting after an update.
 
           By default, the upstream configuration is used:
@@ -98,7 +98,7 @@ in
           };
         };
       };
-      description = lib.mdDoc ''
+      description = ''
         Specify transfers as a set of the names of the transfer files as the
         key and the configuration as its value. The configuration can use all
         upstream options. See

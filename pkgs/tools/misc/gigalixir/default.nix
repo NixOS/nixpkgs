@@ -7,12 +7,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gigalixir";
-  version = "1.11.1";
+  version = "1.12.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fWS13qyYwJUz42nDxWJCzYmZI2jLsD7gwxyIdKhpDbM=";
+    hash = "sha256-/ugvNObkr966jnnKNTJK3nzIWZmVc0ZtAkv0leiCdgw=";
   };
 
   postPatch = ''

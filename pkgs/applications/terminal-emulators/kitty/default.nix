@@ -31,20 +31,20 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.33.1";
+  version = "0.34.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "refs/tags/v${version}";
-    hash = "sha256-E6gFGgySXs2oCS4Ipevbr9aPWzF4tb4Arl4w+4lQ+wg=";
+    hash = "sha256-IP1CWMHiWnBSbt+78EQ6hfX2A9FDhlwt0KLthXtO4dA=";
   };
 
   goModules = (buildGo122Module {
     pname = "kitty-go-modules";
     inherit src version;
-    vendorHash = "sha256-ypSZHJpk9wTXLH9sbmaSQB28iOIpv2nDPlgweM0Ldhs=";
+    vendorHash = "sha256-HNE0MWjL0PH20Glzb0GV6+lQu/Lslx8k/+YvlLHbHww=";
   }).goModules;
 
   buildInputs = [

@@ -5,28 +5,28 @@ let
 in {
   options.programs.ccache = {
     # host configuration
-    enable = lib.mkEnableOption (lib.mdDoc "CCache, a compiler cache for fast recompilation of C/C++ code");
+    enable = lib.mkEnableOption "CCache, a compiler cache for fast recompilation of C/C++ code";
     cacheDir = lib.mkOption {
       type = lib.types.path;
-      description = lib.mdDoc "CCache directory";
+      description = "CCache directory";
       default = "/var/cache/ccache";
     };
     # target configuration
     packageNames = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      description = lib.mdDoc "Nix top-level packages to be compiled using CCache";
+      description = "Nix top-level packages to be compiled using CCache";
       default = [];
       example = [ "wxGTK32" "ffmpeg" "libav_all" ];
     };
     owner = lib.mkOption {
       type = lib.types.str;
       default = "root";
-      description = lib.mdDoc "Owner of CCache directory";
+      description = "Owner of CCache directory";
     };
     group = lib.mkOption {
       type = lib.types.str;
       default = "nixbld";
-      description = lib.mdDoc "Group owner of CCache directory";
+      description = "Group owner of CCache directory";
     };
   };
 

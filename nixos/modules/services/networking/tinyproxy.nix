@@ -28,10 +28,10 @@ in
 
   options = {
     services.tinyproxy = {
-      enable = mkEnableOption (lib.mdDoc "Tinyproxy daemon");
+      enable = mkEnableOption "Tinyproxy daemon";
       package = mkPackageOption pkgs "tinyproxy" {};
       settings = mkOption {
-        description = lib.mdDoc "Configuration for [tinyproxy](https://tinyproxy.github.io/).";
+        description = "Configuration for [tinyproxy](https://tinyproxy.github.io/).";
         default = { };
         example = literalExpression ''{
           Port 8888;
@@ -47,28 +47,28 @@ in
             Listen = mkOption {
               type = types.str;
               default = "127.0.0.1";
-              description = lib.mdDoc ''
+              description = ''
               Specify which address to listen to.
               '';
             };
             Port = mkOption {
               type = types.int;
               default = 8888;
-              description = lib.mdDoc ''
+              description = ''
               Specify which port to listen to.
               '';
             };
             Anonymous = mkOption {
               type = types.listOf types.str;
               default = [];
-              description = lib.mdDoc ''
+              description = ''
               If an `Anonymous` keyword is present, then anonymous proxying is enabled. The headers listed with `Anonymous` are allowed through, while all others are denied. If no Anonymous keyword is present, then all headers are allowed through. You must include quotes around the headers.
               '';
             };
             Filter = mkOption {
               type = types.nullOr types.path;
               default = null;
-              description = lib.mdDoc ''
+              description = ''
               Tinyproxy supports filtering of web sites based on URLs or domains. This option specifies the location of the file containing the filter rules, one rule per line.
               '';
             };

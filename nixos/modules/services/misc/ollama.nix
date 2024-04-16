@@ -40,14 +40,19 @@ in
         '';
       };
       acceleration = lib.mkOption {
-        type = types.nullOr (types.enum [ "rocm" "cuda" ]);
+        type = types.nullOr (types.enum [ false "rocm" "cuda" ]);
         default = null;
         example = "rocm";
         description = ''
           What interface to use for hardware acceleration.
 
-          - `rocm`: supported by modern AMD GPUs
-          - `cuda`: supported by modern NVIDIA GPUs
+          - `null`: default behavior
+            if `nixpkgs.config.rocmSupport` is enabled, uses `"rocm"`
+            if `nixpkgs.config.cudaSupport` is enabled, uses `"cuda"`
+            otherwise defaults to `false`
+          - `false`: disable GPU, only use CPU
+          - `"rocm"`: supported by most modern AMD GPUs
+          - `"cuda"`: supported by most modern NVIDIA GPUs
         '';
       };
       environmentVariables = lib.mkOption {

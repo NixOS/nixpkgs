@@ -10,20 +10,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "atuin";
-  version = "18.1.0";
+  version = "18.2.0";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "atuin";
     rev = "v${version}";
-    hash = "sha256-ddj8vHFTRBzeueSvY9kS1ZIcAID8k3MXrQkUVt04rQg=";
+    hash = "sha256-TTQ2XLqng7TMLnRsLDb/50yyHYuMSPZJ4H+7CEFWQQ0=";
   };
 
   # TODO: unify this to one hash because updater do not support this
   cargoHash =
     if stdenv.isLinux
-    then "sha256-LKHBXm9ZThX96JjxJb8d7cRdhWL1t/3aG3Qq1TYBC74="
-    else "sha256-RSkC062XB5zy3lmI0OQhJfJ6FqFWXhpMPNIIqbrrlso=";
+    then "sha256-KMH19Op7uyb3Z/cjT6bdmO+JEp1o2n6rWRNYmn1+0hE="
+    else "sha256-mBOyo6bKipMfmsowQujeUpog12jXAiqx5CtkwCxquRU=";
 
   # atuin's default features include 'check-updates', which do not make sense
   # for distribution builds. List all other default features.
@@ -60,6 +60,8 @@ rustPlatform.buildRustPackage rec {
     # PermissionDenied (Operation not permitted)
     "--skip=change_password"
     "--skip=multi_user_test"
+    # Tries to touch files
+    "--skip=build_aliases"
   ];
 
   meta = with lib; {

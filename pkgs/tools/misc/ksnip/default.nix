@@ -31,10 +31,6 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace src/CMakeLists.txt --replace-fail "kColorPicker::kColorPicker" "kColorPicker::kColorPicker-Qt5"
-  '';
-
   nativeBuildInputs = [
     cmake
     extra-cmake-modules

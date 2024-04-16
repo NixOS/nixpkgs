@@ -21,7 +21,7 @@ in {
 
     programs.file-roller = {
 
-      enable = mkEnableOption (lib.mdDoc "File Roller, an archive manager for GNOME");
+      enable = mkEnableOption "File Roller, an archive manager for GNOME";
 
       package = mkPackageOption pkgs [ "gnome" "file-roller" ] { };
 

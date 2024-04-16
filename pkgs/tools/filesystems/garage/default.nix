@@ -49,7 +49,7 @@ let
     buildFeatures = [
       "kubernetes-discovery"
       "bundled-libs"
-      "sled"
+    ] ++ lib.optional (lib.versionOlder version "1.0") "sled" ++ [
       "metrics"
       "k2v"
       "telemetry-otlp"
@@ -65,7 +65,7 @@ let
       "k2v"
       "kubernetes-discovery"
       "bundled-libs"
-      "sled"
+    ] ++ lib.optional (lib.versionOlder version "1.0") "sled" ++ [
       "lmdb"
       "sqlite"
     ];
@@ -110,7 +110,16 @@ rec {
     broken = stdenv.isDarwin;
   };
 
+  garage_1_0_0 = generic {
+    version = "1.0.0";
+    sha256 = "sha256-5W5cXylFCrDup+HOOUVPWBJUSphOp8szgtpvRIv82b8=";
+    cargoSha256 = "sha256-tXO+Vk6bYpayNWi/y4sMtkn2EQ9wiwSAfn79Zbt28q0=";
+    broken = stdenv.isDarwin;
+  };
+
   garage_0_9 = garage_0_9_4;
 
-  garage = garage_0_9;
+  garage_1_x = garage_1_0_0;
+
+  garage = garage_1_x;
 }

@@ -54,6 +54,7 @@
   ./hardware/corectrl.nix
   ./hardware/cpu/amd-microcode.nix
   ./hardware/cpu/amd-sev.nix
+  ./hardware/cpu/amd-ryzen-smu.nix
   ./hardware/cpu/intel-microcode.nix
   ./hardware/cpu/intel-sgx.nix
   ./hardware/cpu/x86-msr.nix
@@ -212,6 +213,8 @@
   ./programs/kbdlight.nix
   ./programs/kclock.nix
   ./programs/kdeconnect.nix
+  ./programs/lazygit.nix
+  ./programs/kubeswitch.nix
   ./programs/less.nix
   ./programs/liboping.nix
   ./programs/light.nix
@@ -230,6 +233,7 @@
   ./programs/neovim.nix
   ./programs/nethoscope.nix
   ./programs/nexttrace.nix
+  ./programs/nh.nix
   ./programs/nix-index.nix
   ./programs/nix-ld.nix
   ./programs/nm-applet.nix
@@ -251,6 +255,7 @@
   ./programs/regreet.nix
   ./programs/rog-control-center.nix
   ./programs/rust-motd.nix
+  ./programs/ryzen-monitor-ng.nix
   ./programs/screen.nix
   ./programs/seahorse.nix
   ./programs/sedutil.nix
@@ -685,6 +690,7 @@
   ./services/misc/clipmenu.nix
   ./services/misc/confd.nix
   ./services/misc/cpuminer-cryptonight.nix
+  ./services/misc/db-rest.nix
   ./services/misc/devmon.nix
   ./services/misc/dictd.nix
   ./services/misc/disnix.nix
@@ -1316,6 +1322,7 @@
   ./services/web-apps/cloudlog.nix
   ./services/web-apps/code-server.nix
   ./services/web-apps/convos.nix
+  ./services/web-apps/crabfit.nix
   ./services/web-apps/davis.nix
   ./services/web-apps/dex.nix
   ./services/web-apps/discourse.nix
@@ -1363,6 +1370,7 @@
   ./services/web-apps/miniflux.nix
   ./services/web-apps/monica.nix
   ./services/web-apps/moodle.nix
+  ./services/web-apps/movim.nix
   ./services/web-apps/netbox.nix
   ./services/web-apps/nextcloud.nix
   ./services/web-apps/nextcloud-notify_push.nix

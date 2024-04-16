@@ -10,11 +10,11 @@ let
 in {
   options.services.rspamd-trainer = {
 
-    enable = mkEnableOption (mdDoc "Spam/ham trainer for rspamd");
+    enable = mkEnableOption "Spam/ham trainer for rspamd";
 
     settings = mkOption {
       default = { };
-      description = mdDoc ''
+      description = ''
         IMAP authentication configuration for rspamd-trainer. For supplying
         the IMAP password, use the `secrets` option.
       '';
@@ -32,7 +32,7 @@ in {
 
     secrets = lib.mkOption {
       type = with types; listOf path;
-      description = lib.mdDoc ''
+      description = ''
         A list of files containing the various secrets. Should be in the
         format expected by systemd's `EnvironmentFile` directory. For the
         IMAP account password use `PASSWORD = mypassword`.

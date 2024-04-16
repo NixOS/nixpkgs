@@ -15,12 +15,12 @@ in
   ];
 
   options.services.kavita = {
-    enable = lib.mkEnableOption (lib.mdDoc "Kavita reading server");
+    enable = lib.mkEnableOption "Kavita reading server";
 
     user = lib.mkOption {
       type = lib.types.str;
       default = "kavita";
-      description = lib.mdDoc "User account under which Kavita runs.";
+      description = "User account under which Kavita runs.";
     };
 
     package = lib.mkPackageOption pkgs "kavita" { };
@@ -28,12 +28,12 @@ in
     dataDir = lib.mkOption {
       default = "/var/lib/kavita";
       type = lib.types.str;
-      description = lib.mdDoc "The directory where Kavita stores its state.";
+      description = "The directory where Kavita stores its state.";
     };
 
     tokenKeyFile = lib.mkOption {
       type = lib.types.path;
-      description = lib.mdDoc ''
+      description = ''
         A file containing the TokenKey, a secret with at 512+ bits.
         It can be generated with `head -c 64 /dev/urandom | base64 --wrap=0`.
       '';
@@ -41,7 +41,7 @@ in
 
     settings = lib.mkOption {
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Kavita configuration options, as configured in {file}`appsettings.json`.
       '';
       type = lib.types.submodule {
@@ -51,13 +51,13 @@ in
           Port = lib.mkOption {
             default = 5000;
             type = lib.types.port;
-            description = lib.mdDoc "Port to bind to.";
+            description = "Port to bind to.";
           };
 
           IpAddresses = lib.mkOption {
             default = "0.0.0.0,::";
             type = lib.types.commas;
-            description = lib.mdDoc ''
+            description = ''
               IP Addresses to bind to. The default is to bind to all IPv4 and IPv6 addresses.
             '';
           };

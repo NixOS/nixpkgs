@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hck";
-  version = "0.9.2";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "sstadick";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-KPpvai7+El2JA97EXDCstZ66FeyVCe7w+ERDDNRZ/h8=";
+    hash = "sha256-L/jad3T89VFub0JBC/o/xc4RI+/tF0hbhZdSxmSs+lo=";
   };
 
-  cargoHash = "sha256-TpwUO0BL8kambnxAUE9+l6YYkNL1WzmkTYn1YxjufdY=";
+  cargoHash = "sha256-9v3yZNKBZ0XQkA7J50GH/Z4JQUQ48HnjNXr90ZBHXgI=";
 
   nativeBuildInputs = [ cmake ];
 
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/sstadick/hck";
     changelog = "https://github.com/sstadick/hck/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit /* or */ unlicense ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda gepbird ];
     mainProgram = "hck";
   };
 }

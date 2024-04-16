@@ -6,14 +6,14 @@ let
   # NOTE: When updating these, please also take a look at the changes done to
   # kernel config in the xanmod version commit
   ltsVariant = {
-    version = "6.6.25";
-    hash = "sha256-f375jX0BTlccJoeEFDQ2ZaVWQhcnWqcSNYHzGjS2DQo=";
+    version = "6.6.27";
+    hash = "sha256-MYvt7QWRdUybbhva6B4MOYrwnJfuu/qvMlnaGKcO1Hw=";
     variant = "lts";
   };
 
   mainVariant = {
-    version = "6.7.12";
-    hash = "sha256-6CY38ofjv+4BkAViTONUjD8YfK/P8YfxZ5OfQA9rllg=";
+    version = "6.8.6";
+    hash = "sha256-7GsiIl3rcLm/u2zxrjpP6dTxn7w/6at22gaU//mLlzw=";
     variant = "main";
   };
 
@@ -32,6 +32,10 @@ let
       # CPUFreq governor Performance
       CPU_FREQ_DEFAULT_GOV_PERFORMANCE = lib.mkOverride 60 yes;
       CPU_FREQ_DEFAULT_GOV_SCHEDUTIL = lib.mkOverride 60 no;
+
+      # Full preemption
+      PREEMPT = lib.mkOverride 60 yes;
+      PREEMPT_VOLUNTARY = lib.mkOverride 60 no;
 
       # Google's BBRv3 TCP congestion Control
       TCP_CONG_BBR = yes;

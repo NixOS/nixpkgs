@@ -19,12 +19,12 @@ in {
 
   options.services.merecat = {
 
-    enable = mkEnableOption (lib.mdDoc "Merecat HTTP server");
+    enable = mkEnableOption "Merecat HTTP server";
 
     settings = mkOption {
       inherit (format) type;
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Merecat configuration. Refer to merecat(8) for details on supported values.
       '';
       example = {

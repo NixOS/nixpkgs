@@ -1,6 +1,6 @@
 { lowPrio, newScope, pkgs, lib, stdenv, cmake
 , preLibcCrossHeaders
-, libxml2, python3, fetchFromGitHub, overrideCC, wrapCCWith, wrapBintoolsWith
+, libxml2, python3, fetchFromGitHub, substitute, substituteAll, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 , targetLlvm
@@ -78,7 +78,7 @@ in let
     then tools.bintools
     else bootBintools;
 
-  in {
+  in rec {
 
     libllvm = callPackage ./llvm {
       inherit llvm_meta;
@@ -88,7 +88,17 @@ in let
     # we need to reintroduce `outputSpecified` to get the expected behavior e.g. of lib.get*
     llvm = tools.libllvm;
 
-    libclang = callPackage ./clang {
+    libclang = callPackage ../common/clang {
+      patches = [
+        ./clang/purity.patch
+        # https://reviews.llvm.org/D51899
+        ./clang/gnu-install-dirs.patch
+        ../common/clang/add-nostdlibinc-flag.patch
+        (substituteAll {
+          src = ../common/clang/clang-11-15-LLVMgold-path.patch;
+          libllvmLibdir = "${libllvm.lib}/lib";
+        })
+      ];
       inherit llvm_meta;
     };
 
@@ -136,7 +146,11 @@ in let
       extraBuildCommands = mkExtraBuildCommands cc;
     };
 
-    lld = callPackage ./lld {
+    lld = callPackage ../common/lld {
+      patches = [
+        ./lld/gnu-install-dirs.patch
+        ./lld/fix-root-src-dir.patch
+      ];
       inherit llvm_meta;
     };
 
@@ -266,14 +280,50 @@ in let
     callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake libxml2 python3 release_version version monorepoSrc; });
   in {
 
-    compiler-rt-libc = callPackage ./compiler-rt {
+    compiler-rt-libc = callPackage ../common/compiler-rt {
+      patches = [
+        ./compiler-rt/codesign.patch # Revert compiler-rt commit that makes codesign mandatory
+        ./compiler-rt/X86-support-extension.patch # Add support for i486 i586 i686 by reusing i386 config
+        ./compiler-rt/gnu-install-dirs.patch
+        # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
+        # extra `/`.
+        ./compiler-rt/normalize-var.patch
+        # Prevent a compilation error on darwin
+        ./compiler-rt/darwin-targetconditionals.patch
+        ../common/compiler-rt/darwin-plistbuddy-workaround.patch
+        ./compiler-rt/armv7l.patch
+        # Fix build on armv6l
+        ../common/compiler-rt/armv6-mcr-dmb.patch
+        ../common/compiler-rt/armv6-sync-ops-no-thumb.patch
+        ../common/compiler-rt/armv6-no-ldrexd-strexd.patch
+        ../common/compiler-rt/armv6-scudo-no-yield.patch
+        ../common/compiler-rt/armv6-scudo-libatomic.patch
+      ];
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
                else stdenv;
     };
 
-    compiler-rt-no-libc = callPackage ./compiler-rt {
+    compiler-rt-no-libc = callPackage ../common/compiler-rt {
+      patches = [
+        ./compiler-rt/codesign.patch # Revert compiler-rt commit that makes codesign mandatory
+        ./compiler-rt/X86-support-extension.patch # Add support for i486 i586 i686 by reusing i386 config
+        ./compiler-rt/gnu-install-dirs.patch
+        # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
+        # extra `/`.
+        ./compiler-rt/normalize-var.patch
+        # Prevent a compilation error on darwin
+        ./compiler-rt/darwin-targetconditionals.patch
+        ../common/compiler-rt/darwin-plistbuddy-workaround.patch
+        ./compiler-rt/armv7l.patch
+        # Fix build on armv6l
+        ../common/compiler-rt/armv6-mcr-dmb.patch
+        ../common/compiler-rt/armv6-sync-ops-no-thumb.patch
+        ../common/compiler-rt/armv6-no-ldrexd-strexd.patch
+        ../common/compiler-rt/armv6-scudo-no-yield.patch
+        ../common/compiler-rt/armv6-scudo-libatomic.patch
+      ];
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRt
@@ -289,17 +339,39 @@ in let
 
     libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
 
-    libcxx = callPackage ./libcxx {
+    libcxx = callPackage ../common/libcxx {
+      patches = [
+        (substitute {
+          src = ../common/libcxxabi/wasm.patch;
+          replacements = [
+            "--replace-fail" "/cmake/" "/llvm/cmake/"
+          ];
+        })
+      ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+        (substitute {
+          src = ../common/libcxx/libcxx-0001-musl-hacks.patch;
+          replacements = [
+            "--replace-fail" "/include/" "/libcxx/include/"
+          ];
+        })
+      ];
       inherit llvm_meta;
       stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
-    libunwind = callPackage ./libunwind {
+    libunwind = callPackage ../common/libunwind {
+      patches = [
+        ./libunwind/gnu-install-dirs.patch
+      ];
       inherit llvm_meta;
       stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
-    openmp = callPackage ./openmp {
+    openmp = callPackage ../common/openmp {
+      patches = [
+        ./openmp/gnu-install-dirs.patch
+        ./openmp/run-lit-directly.patch
+      ];
       inherit llvm_meta targetLlvm;
     };
   });

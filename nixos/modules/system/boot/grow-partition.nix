@@ -12,7 +12,7 @@ with lib;
   ];
 
   options = {
-    boot.growPartition = mkEnableOption (lib.mdDoc "growing the root partition on boot");
+    boot.growPartition = mkEnableOption "growing the root partition on boot";
   };
 
   config = mkIf config.boot.growPartition {

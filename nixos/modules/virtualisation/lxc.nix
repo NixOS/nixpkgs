@@ -16,8 +16,7 @@ in
       lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description =
-          lib.mdDoc ''
+        description = ''
             This enables Linux Containers (LXC), which provides tools
             for creating and managing system or application containers
             on Linux.
@@ -28,8 +27,7 @@ in
       lib.mkOption {
         type = lib.types.lines;
         default = "";
-        description =
-          lib.mdDoc ''
+        description = ''
             This is the system-wide LXC config. See
             {manpage}`lxc.system.conf(5)`.
           '';
@@ -39,8 +37,7 @@ in
       lib.mkOption {
         type = lib.types.lines;
         default = "";
-        description =
-          lib.mdDoc ''
+        description = ''
             Default config (default.conf) for new containers, i.e. for
             network config. See {manpage}`lxc.container.conf(5)`.
           '';
@@ -50,8 +47,7 @@ in
       lib.mkOption {
         type = lib.types.lines;
         default = "";
-        description =
-          lib.mdDoc ''
+        description = ''
             This is the config file for managing unprivileged user network
             administration access in LXC. See {manpage}`lxc-usernet(5)`.
           '';
