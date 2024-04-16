@@ -92,7 +92,7 @@ in {
         recommendedPythonPackages = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Whether to enable a set of recommended Python plugins
             by installing extra Python packages.
           '';
