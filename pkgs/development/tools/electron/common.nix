@@ -14,6 +14,7 @@
 , pkgs
 , pkgsBuildHost
 , pipewire
+, libsecret
 , info
 }:
 
@@ -196,6 +197,7 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
         libnotify
         pipewire
         stdenv.cc.cc.lib
+        libsecret
       ];
     in
   base.postFixup + ''

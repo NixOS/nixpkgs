@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, dpkg, makeWrapper, electron, libsecret
-, desktop-file-utils , callPackage }:
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, makeWrapper
+, electron
+, desktop-file-utils
+, callPackage
+}:
 
 let
 
@@ -33,8 +40,7 @@ stdenv.mkDerivation rec {
     cp -R opt/Standard\ Notes/resources/app.asar $out/share/standardnotes/
 
     makeWrapper ${electron}/bin/electron $out/bin/standardnotes \
-      --add-flags $out/share/standardnotes/app.asar \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret stdenv.cc.cc.lib ]}
+      --add-flags $out/share/standardnotes/app.asar
 
     ${desktop-file-utils}/bin/desktop-file-install --dir $out/share/applications \
       --set-key Exec --set-value standardnotes usr/share/applications/standard-notes.desktop
