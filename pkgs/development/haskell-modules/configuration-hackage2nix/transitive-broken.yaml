@@ -1012,7 +1012,7 @@ dont-distribute-packages:
  - cqrs-test
  - cqrs-testkit
  - crackNum
- - crackNum_3_10
+ - crackNum_3_12
  - craft
  - craftwerk-cairo
  - craftwerk-gtk
@@ -1483,6 +1483,7 @@ dont-distribute-packages:
  - fxpak
  - g2
  - g2q
+ - g3p-hash
  - gact
  - galois-fft
  - galois-field
@@ -2401,6 +2402,7 @@ dont-distribute-packages:
  - ixset-typed-conversions
  - iyql
  - j2hs
+ - jackpolynomials
  - java-bridge-extras
  - java-character
  - java-reflect
@@ -3088,6 +3090,8 @@ dont-distribute-packages:
  - persistable-record
  - persistable-types-HDBC-pg
  - persistent-audit
+ - persistent-event-source
+ - persistent-eventsource
  - persistent-hssqlppp
  - persistent-map
  - persistent-mysql-haskell
@@ -3341,6 +3345,7 @@ dont-distribute-packages:
  - razom-text-util
  - rbr
  - rc
+ - rdf4h-vocab-activitystreams
  - rdioh
  - react
  - react-flux-servant
@@ -3925,6 +3930,7 @@ dont-distribute-packages:
  - tbox
  - tccli
  - tdd-util
+ - tdlib
  - techlab
  - telegram-bot
  - telegram-raw-api
@@ -4284,6 +4290,7 @@ dont-distribute-packages:
  - wyvern
  - xcffib
  - xdcc
+ - xdg-basedir-compliant
  - xhb-atom-cache
  - xhb-ewmh
  - xml-catalog
@@ -4325,6 +4332,10 @@ dont-distribute-packages:
  - yaml-streamly
  - yarr-image-io
  - yavie
+ - yaya-containers
+ - yaya-hedgehog
+ - yaya-quickcheck
+ - yaya-unsafe
  - ycextra
  - yeamer
  - yeshql
