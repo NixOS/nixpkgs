@@ -11,18 +11,18 @@
 , pyjwt
 , pyopenssl
 , pytestCheckHook
+, pythonOlder
 , requests
 , rich
 , securesystemslib
 , sigstore-protobuf-specs
 , sigstore-rekor-types
 , tuf
-, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "sigstore-python";
-  version = "2.1.0";
+  version = "2.1.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "sigstore";
     repo = "sigstore-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WH6Pme8ZbfW5xqBT056eVJ3HZP1D/lAULtyN6k0uMaA=";
+    hash = "sha256-lqmrM4r1yPVCcvWNC9CKYMyryuIyliI2Y+TAYgAwA1Y=";
   };
 
   build-system = [
