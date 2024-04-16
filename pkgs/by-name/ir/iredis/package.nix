@@ -6,18 +6,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "iredis";
-  version = "1.14.1";
+  version = "1.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "laixintao";
     repo = "iredis";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ojS2wtxggZPp73n9SjPRAzBlnF1ScK/pNVGvAYKmQ5Y=";
+    rev = "v${version}";
+    hash = "sha256-wfjr/FVmKgkP8FMKxw6e8U+lfZQZ2q52REC0mU8Xp7Q=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace-fail 'packaging = "^23.0"' 'packaging = "*"' \
       --replace-fail 'wcwidth = "0.1.9"' 'wcwidth = "*"'
   '';
 
@@ -26,20 +27,21 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    pygments
     click
     configobj
     mistune
     packaging
-    pendulum
     prompt-toolkit
+    pygments
+    python-dateutil
     redis
     wcwidth
   ];
 
   nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
+    freezegun
     pexpect
+    pytestCheckHook
   ];
 
   pytestFlagsArray = [
@@ -50,7 +52,8 @@ python3.pkgs.buildPythonApplication rec {
     # Only execute unittests, because cli tests require a running Redis
     "tests/unittests/"
   ] ++ lib.optionals stdenv.isDarwin [
-    # Flaky test
+    # Flaky tests
+    "--deselect=tests/unittests/test_entry.py::test_command_shell_options_higher_priority"
     "--deselect=tests/unittests/test_utils.py::test_timer"
   ];
 
@@ -58,8 +61,8 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "A Terminal Client for Redis with AutoCompletion and Syntax Highlighting";
-    changelog = "https://github.com/laixintao/iredis/raw/${src.rev}/CHANGELOG.md";
-    homepage = "https://iredis.io/";
+    changelog = "https://github.com/laixintao/iredis/blob/${src.rev}/CHANGELOG.md";
+    homepage = "https://iredis.xbin.io/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ marsam ];
     mainProgram = "iredis";
