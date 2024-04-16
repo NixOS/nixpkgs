@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "flare-floss";
-  version = "3.0.1";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -14,18 +14,21 @@ python3.pkgs.buildPythonPackage rec {
     repo = "flare-floss";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true; # for tests
-    hash = "sha256-bmOWOFqyvOvSrNTbwLqo0WMq4IAZxZ0YYaWCdCrpziU=";
+    hash = "sha256-a20q7kavWwCsfnAW02+IY0jKERMxkJ+2nid/CwQxC9E=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
+    substituteInPlace pyproject.toml \
       --replace "==" ">="
 
     substituteInPlace floss/main.py \
       --replace 'sigs_path = os.path.join(get_default_root(), "sigs")' 'sigs_path = "'"$out"'/share/flare-floss/sigs"'
   '';
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = with python3.pkgs; [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies =
     with python3.pkgs;
@@ -34,7 +37,7 @@ python3.pkgs.buildPythonPackage rec {
       halo
       networkx
       pefile
-      pydantic_1
+      pydantic
       rich
       tabulate
       tqdm
