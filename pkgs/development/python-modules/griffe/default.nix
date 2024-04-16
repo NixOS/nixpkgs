@@ -24,11 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-W6aOhz8UxJUc2kNRc4JaCqFgIOXsY8ctyQ3xZ+YaD9k=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     pdm-backend
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     colorama
   ];
 
@@ -50,10 +50,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Signatures for entire Python programs";
-    mainProgram = "griffe";
     homepage = "https://github.com/mkdocstrings/griffe";
     changelog = "https://github.com/mkdocstrings/griffe/blob/${version}/CHANGELOG.md";
     license = licenses.isc;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "griffe";
   };
 }
