@@ -3,8 +3,8 @@
 , fetchFromGitHub
 , fetchYarnDeps
 , prefetch-yarn-deps
-, nodejs
-, nodejs-slim
+, nodejs_20
+, nodejs-slim_20
 , matrix-sdk-crypto-nodejs
 , nixosTests
 , nix-update-script
@@ -12,19 +12,19 @@
 
 let
   pname = "matrix-appservice-irc";
-  version = "1.0.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-wUbWvCa9xvot73nXZjF3/RawM98ffBCW5YR2+ZKzmEo=";
+    hash = "sha256-voZJVBggsuwmGw/imt2HYmqiYBkRYMpppt/Nemh6fsM=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     name = "${pname}-${version}-offline-cache";
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-P9u5sK9rIHWRE8kFMj05fVjv26jwsawvHBZgSn7j5BE=";
+    hash = "sha256-hapEbdjvvzeZHfrpYRW9W3vXkQVNyGZ0qydO34+mQqQ=";
   };
 
 in
@@ -35,9 +35,9 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     prefetch-yarn-deps
-    nodejs-slim
-    nodejs.pkgs.yarn
-    nodejs.pkgs.node-gyp-build
+    nodejs-slim_20
+    nodejs_20.pkgs.yarn
+    nodejs_20.pkgs.node-gyp-build
   ];
 
   configurePhase = ''
@@ -83,6 +83,7 @@ stdenv.mkDerivation {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
+    changelog = "https://github.com/matrix-org/matrix-appservice-irc/releases/tag/${version}";
     description = "Node.js IRC bridge for Matrix";
     maintainers = with maintainers; [ rhysmdnz ];
     homepage = "https://github.com/matrix-org/matrix-appservice-irc";
