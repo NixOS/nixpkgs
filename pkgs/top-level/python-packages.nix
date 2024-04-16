@@ -6409,6 +6409,8 @@ self: super: with self; {
 
   krfzf-py = callPackage ../development/python-modules/krfzf-py { };
 
+  kserve = callPackage ../development/python-modules/kserve { };
+
   kubernetes = callPackage ../development/python-modules/kubernetes { };
 
   kurbopy = callPackage ../development/python-modules/kurbopy { };
