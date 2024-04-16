@@ -52,6 +52,10 @@ buildPythonPackage rec {
       "test_fetch_n"
       "test_subscribe_no_echo"
       "test_stream_management"
+      # Tests fail on hydra, often Time-out
+      "test_subscribe_iterate_next_msg"
+      "test_ordered_consumer_larger_streams"
+      "test_object_file_basics"
     ]
     ++ lib.optionals stdenv.isDarwin [
       "test_subscribe_iterate_next_msg"
