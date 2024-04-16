@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hatchling
-, installShellFiles
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  installShellFiles,
+  pytestCheckHook,
+  pythonOlder,
 
-# for passthru.tests
-, django
-, django_4
-, django-silk
-, pgadmin4
+  # for passthru.tests
+  django,
+  django_4,
+  django-silk,
+  pgadmin4,
 }:
 
 buildPythonPackage rec {
@@ -25,24 +26,23 @@ buildPythonPackage rec {
     hash = "sha256-cU0KSTLAWdFhifWO9UEewih6Q2DxfN0O3S0J1MUIfJM=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postInstall = ''
     installManPage docs/sqlformat.1
   '';
 
   passthru.tests = {
-    inherit django django_4 django-silk pgadmin4;
+    inherit
+      django
+      django_4
+      django-silk
+      pgadmin4
+      ;
   };
 
   meta = with lib; {
