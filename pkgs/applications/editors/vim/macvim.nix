@@ -12,6 +12,7 @@
 , luajit
 , darwin
 , libiconv
+, libunwind
 , python3
 }:
 
@@ -127,7 +128,7 @@ stdenv.mkDerivation {
       --replace "PERL_CFLAGS	=" "PERL_CFLAGS	= -I${darwin.libutil}/include" \
       --replace " -L${stdenv.cc.libc}/lib" "" \
       --replace " -L${darwin.libobjc}/lib" "" \
-      --replace " -L${darwin.libunwind}/lib" "" \
+      --replace " -L${libunwind}/lib" "" \
       --replace " -L${libiconv}/lib" ""
 
     # All the libraries we stripped have -osx- in their name as of this time.
