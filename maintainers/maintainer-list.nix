@@ -14771,6 +14771,12 @@
     githubId = 127548;
     name = "Judson Lester";
   };
+  nyawox = {
+    name = "nyawox";
+    email = "nyawox.git@gmail.com";
+    github = "nyawox";
+    githubId = 93813719;
+  };
   nzbr = {
     email = "nixos@nzbr.de";
     github = "nzbr";
