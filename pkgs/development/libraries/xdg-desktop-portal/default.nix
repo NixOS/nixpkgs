@@ -117,6 +117,12 @@ stdenv.mkDerivation (finalAttrs: {
   preCheck = ''
     # For test_trash_file
     export HOME=$(mktemp -d)
+
+    # Upstream disables a few tests in CI upstream as they are known to
+    # be flaky. Let's disable those downstream as hydra exhibits similar
+    # flakes:
+    #   https://github.com/NixOS/nixpkgs/pull/270085#issuecomment-1840053951
+    export TEST_IN_CI=1
   '';
 
   passthru = {
