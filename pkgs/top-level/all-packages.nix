@@ -14400,7 +14400,6 @@ with pkgs;
 
   unicorn = callPackage ../development/libraries/unicorn {
     inherit (darwin.apple_sdk.frameworks) IOKit;
-    inherit (darwin) cctools;
   };
 
   unittest-cpp = callPackage ../development/libraries/unittest-cpp { };
