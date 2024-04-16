@@ -165,7 +165,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-system-bubblewrap=${bubblewrap}/bin/bwrap"
     "--with-system-dbus-proxy=${xdg-dbus-proxy}/bin/xdg-dbus-proxy"
     "--with-dbus-config-dir=${placeholder "out"}/share/dbus-1/system.d"
+    "--with-profile-dir=${placeholder "out"}/etc/profile.d"
     "--localstatedir=/var"
+    "--sysconfdir=/etc"
     "--enable-gtk-doc"
     "--enable-installed-tests"
   ];
