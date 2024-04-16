@@ -1,21 +1,22 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, pythonOlder
-, poetry-core
-, grpclib
-, python-dateutil
-, black
-, jinja2
-, isort
-, python
-, pydantic
-, pytestCheckHook
-, pytest-asyncio
-, pytest-mock
-, typing-extensions
-, tomlkit
-, grpcio-tools
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  pythonOlder,
+  poetry-core,
+  grpclib,
+  python-dateutil,
+  black,
+  jinja2,
+  isort,
+  python,
+  pydantic,
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-mock,
+  typing-extensions,
+  tomlkit,
+  grpcio-tools,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     hash = "sha256-ZuVq4WERXsRFUPNNTNp/eisWX1MyI7UtwqEI8X93wYI=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     grpclib
@@ -57,9 +56,7 @@ buildPythonPackage rec {
     tomlkit
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "betterproto"
-  ];
+  pythonImportsCheck = [ "betterproto" ];
 
   # The tests require the generation of code before execution. This requires
   # the protoc-gen-python_betterproto script from the package to be on PATH.
@@ -74,9 +71,7 @@ buildPythonPackage rec {
     "tests/inputs/oneof/test_oneof.py"
   ];
 
-  disabledTests = [
-    "test_pydantic_no_value"
-  ];
+  disabledTests = [ "test_pydantic_no_value" ];
 
   meta = with lib; {
     description = "Code generator & library for Protobuf 3 and async gRPC";
