@@ -16,7 +16,7 @@
 , extraTools ? [], extraPackages ? [], extraBuildCommands ? ""
 , nixSupport ? {}
 , isGNU ? false, isClang ? cc.isClang or false, isCcache ? cc.isCcache or false, gnugrep ? null
-, buildPackages ? {}
+, expand-response-params
 , libcxx ? null
 
 # Whether or not to add `-B` and `-L` to `nix-support/cc-{c,ld}flags`
@@ -112,9 +112,6 @@ let
   # adjusted to be a valid bash identifier. This should be considered an
   # unstable implementation detail, however.
   suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
-
-  expand-response-params =
-    optionalString ((buildPackages.stdenv.hasCC or false) && buildPackages.stdenv.cc != "/dev/null") (import ../expand-response-params { inherit (buildPackages) stdenv; });
 
   useGccForLibs = useCcForLibs
     && libcxx == null
@@ -298,6 +295,9 @@ stdenvNoCC.mkDerivation {
         '(${concatStringsSep " " (map (pkg: "\"${pkg}\"") pkgs)}))
     '';
 
+    # Expose expand-response-params we are /actually/ using. In stdenv
+    # bootstrapping, expand-response-params usually comes from an earlier stage,
+    # so it is important to expose this for reference checking.
     inherit expand-response-params;
 
     inherit nixSupport;
@@ -739,6 +739,7 @@ stdenvNoCC.mkDerivation {
     inherit isClang;
 
     # for substitution in utils.bash
+    # TODO(@sternenseemann): invent something cleaner than passing in "" in case of absence
     expandResponseParams = "${expand-response-params}/bin/expand-response-params";
     # TODO(@sternenseemann): rename env var via stdenv rebuild
     shell = getBin runtimeShell + runtimeShell.shellPath or "";
