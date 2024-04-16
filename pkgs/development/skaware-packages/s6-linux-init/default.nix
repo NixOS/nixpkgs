@@ -1,4 +1,11 @@
-{ lib, skawarePackages, skalibs, execline, s6 }:
+{ lib
+, stdenv
+, skawarePackages
+, skalibs
+, execline
+, s6
+, targetPackages
+}:
 
 skawarePackages.buildPackage {
   pname = "s6-linux-init";
@@ -24,6 +31,14 @@ skawarePackages.buildPackage {
     "--with-dynlib=${execline.lib}/lib"
     "--with-dynlib=${s6.out}/lib"
   ];
+
+  # See ../s6-rc/default.nix for an explanation
+  postConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.targetPlatform) ''
+    substituteInPlace src/init/s6-linux-init-maker.c \
+        --replace-fail '<execline/config.h>' '"${targetPackages.execline.dev}/include/execline/config.h"' \
+        --replace-fail '<s6/config.h>' '"${targetPackages.s6.dev}/include/s6/config.h"' \
+        --replace-fail '<s6-linux-init/config.h>' '"${targetPackages.s6-linux-init.dev}/include/s6-linux-init/config.h"'
+  '';
 
   postInstall = ''
     # remove all s6 executables from build directory
