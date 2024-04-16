@@ -22,11 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-CGMtzW7OKGVyBOmiVq1kNp/isOOF7UM0n5MvAH2J93Q=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     azure-common
     azure-core
     cryptography
