@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,19 +20,14 @@ buildPythonPackage rec {
     hash = "sha256-TXa7oQ8AyTIdaSK4SH+RN2bDPtVqNvofPvlqHPKaCx4=";
   };
 
-  build-system = [
-    setuptools
-  ];
-
+  build-system = [ setuptools ];
 
   checkPhase = ''
     export PYTHONPATH=$PYTHONPATH:$(pwd)/ifconfigparser:$(pwd)/ifconfigparser/tests
     python -m unittest -v test_ifconfig_parser.TestIfconfigParser
   '';
 
-  pythonImportsCheck = [
-    "ifconfigparser"
-  ];
+  pythonImportsCheck = [ "ifconfigparser" ];
 
   meta = with lib; {
     description = "Module for parsing raw output of ifconfig";
