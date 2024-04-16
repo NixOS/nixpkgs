@@ -7449,6 +7449,7 @@ self: super: with self; {
   mkdocs-redoc-tag = callPackage ../development/python-modules/mkdocs-redoc-tag { };
   mkdocs-simple-hooks = callPackage ../development/python-modules/mkdocs-simple-hooks { };
   mkdocs-swagger-ui-tag = callPackage ../development/python-modules/mkdocs-swagger-ui-tag { };
+  mkdocs-rss-plugin = callPackage ../development/python-modules/mkdocs-rss-plugin { };
 
   mkdocstrings = callPackage ../development/python-modules/mkdocstrings { };
 
