@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, nix-update-script
 , deprecated
 , importlib-metadata
 , pydantic_1
@@ -54,8 +53,6 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "A small helper library that adds some YAML capabilities to pydantic";
