@@ -253,7 +253,7 @@ in {
     with subtest("ayatana indicators work"):
         open_starter()
         machine.send_chars("Indicators\n")
-        machine.wait_for_text(r"(Indicators|Client|List|datetime|session)")
+        machine.wait_for_text(r"(Indicators|Client|List|datetime|session|keyboard)")
         machine.screenshot("indicators_open")
 
         # Element tab order within the indicator menus is not fully deterministic
@@ -268,7 +268,7 @@ in {
 
         machine.send_key("shift-tab")
         machine.send_key("ret")
-        machine.wait_for_text(r"(Indicators|Client|List|datetime|session)")
+        machine.wait_for_text(r"(Indicators|Client|List|datetime|session|keyboard)")
 
         with subtest("ayatana indicator session works"):
             # Select ayatana-indicator-session
@@ -277,5 +277,17 @@ in {
             machine.send_key("ret")
             machine.wait_for_text("Log Out")
             machine.screenshot("indicators_session")
+
+        machine.send_key("shift-tab")
+        machine.send_key("ret")
+        machine.wait_for_text(r"(Indicators|Client|List|datetime|session|keyboard)")
+
+        with subtest("ayatana indicator keyboard works"):
+            # Select ayatana-indicator-session
+            machine.send_key("tab")
+            machine.send_key("down")
+            machine.send_key("ret")
+            machine.wait_for_text(r"(English|Keyboard Settings)")
+            machine.screenshot("indicators_keyboard")
   '';
 })
