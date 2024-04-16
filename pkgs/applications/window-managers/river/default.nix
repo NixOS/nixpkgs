@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchFromGitea
 , libGL
 , libX11
 , libevdev
@@ -12,7 +12,7 @@
 , udev
 , wayland
 , wayland-protocols
-, wlroots_0_16
+, wlroots_0_17
 , xwayland
 , zig_0_11
 , withManpages ? true
@@ -21,16 +21,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "river";
-  version = "0.2.6";
+  version = "0.3.0";
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
-  src = fetchFromGitHub {
-    owner = "riverwm";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "river";
     repo = "river";
     rev = "refs/tags/v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-JPb8l5ANxYCqinWNoQK5PAyn4CaiSj0e9mAhZwd9HOw=";
+    hash = "sha256-6LZuWx0sC6bW0K7D0PR8hJlVW6i6NIzOOORdMu3Gk5U=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     pixman
     udev
     wayland-protocols
-    wlroots_0_16
+    wlroots_0_17
   ] ++ lib.optional xwaylandSupport libX11;
 
   dontConfigure = true;
@@ -64,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.providedSessions = [ "river" ];
 
   meta = {
-    homepage = "https://github.com/ifreund/river";
+    homepage = "https://codeberg.org/river/river";
     description = "A dynamic tiling wayland compositor";
     longDescription = ''
       River is a dynamic tiling Wayland compositor with flexible runtime
@@ -79,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
       - Scriptable configuration and control through a custom Wayland protocol
         and separate riverctl binary implementing it.
     '';
-    changelog = "https://github.com/ifreund/river/releases/tag/v${finalAttrs.version}";
+    changelog = "https://codeberg.org/river/river/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       adamcstephens
