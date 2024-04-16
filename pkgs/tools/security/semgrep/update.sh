@@ -95,6 +95,7 @@ update_core_platform() {
 }
 
 update_core_platform "x86_64-linux"
+update_core_platform "aarch64-linux"
 update_core_platform "x86_64-darwin"
 update_core_platform "aarch64-darwin"
 

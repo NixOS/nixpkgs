@@ -8,7 +8,7 @@
 
 buildDunePackage rec {
   pname = "otoml";
-  version = "1.0.4";
+  version = "1.0.5";
 
   minimalOCamlVersion = "4.08";
 
@@ -16,7 +16,7 @@ buildDunePackage rec {
     owner = "dmbaturin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-3bgeiwa0elisxZaWpwLqoKmeyTBKMW1IWdm6YdSIhSw=";
+    sha256 = "sha256-e9Bqd6KHorglLMzvsjakyYt/CLZR3yI/yZPl/rnbkDE=";
   };
 
   nativeBuildInputs = [ menhir ];

@@ -1,0 +1,26 @@
+Original from OpenBSD src/lib/libc/stdlib/reallocarray.c
+
+--- a/rs.c	2024-04-15 10:13:41
++++ b/rs.c	2024-04-15 10:15:20
+@@ -103,6 +103,21 @@
+ 		ep = getptrs(ep);	\
+ } while(0)
+ 
++#ifdef __APPLE__
++#define MUL_NO_OVERFLOW	((size_t)1 << (sizeof(size_t) * 4))
++
++void *
++reallocarray(void *optr, size_t nmemb, size_t size)
++{
++	if ((nmemb >= MUL_NO_OVERFLOW || size >= MUL_NO_OVERFLOW) &&
++	   nmemb > 0 && SIZE_MAX / nmemb < size) {
++		errno = ENOMEM;
++		return NULL;
++	}
++	return realloc(optr, size * nmemb);
++}
++#endif
++
+ int
+ main(int argc, char *argv[])
+ {
