@@ -7820,10 +7820,7 @@ with pkgs;
 
   choose = callPackage ../tools/text/choose { };
 
-  d2 = callPackage ../tools/text/d2 {
-    # Failed tests
-    buildGoModule = buildGo121Module;
-  };
+  d2 = callPackage ../tools/text/d2 { };
 
   ddev = callPackage ../applications/virtualization/ddev { };
 
@@ -10232,8 +10229,6 @@ with pkgs;
   keama = callPackage ../tools/networking/keama { };
 
   ktailctl = kdePackages.callPackage ../applications/networking/ktailctl {};
-
-  iredis = callPackage ../tools/admin/iredis { };
 
   ispell = callPackage ../tools/text/ispell { };
 
