@@ -24,16 +24,16 @@
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.19.0";
+  version = "2.20.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pytensor";
     rev = "refs/tags/rel-${version}";
-    hash = "sha256-epiagL+SH3ng2PdTNbQIR2Ffg7CklzVHcKtFpq3FDs4=";
+    hash = "sha256-bvkOMer+zYSsiU4a147eUEZjjUeTVpb9f/hepMZZ3sE=";
   };
 
   postPatch = ''
