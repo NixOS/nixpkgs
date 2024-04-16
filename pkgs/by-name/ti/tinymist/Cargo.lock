@@ -3595,7 +3595,7 @@ dependencies = [
 
 [[package]]
 name = "tests"
-version = "0.11.3"
+version = "0.11.4"
 dependencies = [
  "insta",
  "lsp-server",
@@ -3692,7 +3692,7 @@ dependencies = [
 
 [[package]]
 name = "tinymist"
-version = "0.11.3"
+version = "0.11.4"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -3743,7 +3743,7 @@ dependencies = [
 
 [[package]]
 name = "tinymist-query"
-version = "0.11.3"
+version = "0.11.4"
 dependencies = [
  "anyhow",
  "comemo 0.4.0",
@@ -3779,7 +3779,7 @@ dependencies = [
 
 [[package]]
 name = "tinymist-render"
-version = "0.11.3"
+version = "0.11.4"
 dependencies = [
  "base64 0.22.0",
  "log",
@@ -4370,9 +4370,9 @@ dependencies = [
 
 [[package]]
 name = "typstyle"
-version = "0.11.11"
+version = "0.11.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8556b6c8261a6d205674be583443714a9887911a392df630ea95c2900caf2710"
+checksum = "38f04e5495bff9deed2a9155dca07889ec0fe1c79f48eb2d9ea99fc272459499"
 dependencies = [
  "anyhow",
  "clap",
