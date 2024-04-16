@@ -41,9 +41,9 @@ python3.pkgs.buildPythonApplication rec {
     # handheld-daemon contains a fork of the python module `hid`, so this hook
     # is borrowed from the `hid` derivation.
     substituteInPlace src/hhd/controller/lib/hid.py \
-      --replace-fail libhidapi ${hidapi}/lib/libhidapi
-      
-    hidapi=${hidapi}/lib/
+    --replace-fail libhidapi ${hidapi}/lib/libhidapi
+
+        hidapi=${hidapi}/lib/
     test -d $hidapi || { echo "ERROR: $hidapi doesn't exist, please update/fix this build expression."; exit 1; }
   '';
 
