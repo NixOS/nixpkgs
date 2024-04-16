@@ -20,12 +20,12 @@
 
 buildGoModule rec {
   pname = "gitea";
-  version = "1.21.10";
+  version = "1.21.11";
 
   # not fetching directly from the git repo, because that lacks several vendor files for the web UI
   src = fetchurl {
     url = "https://dl.gitea.com/gitea/${version}/gitea-src-${version}.tar.gz";
-    hash = "sha256-g/aDRIAKaPi8AWWJL4N8CZt2N4HBEWK7xSBvjrcPDD8=";
+    hash = "sha256-TxysXw3lVdV/hlILztM+D7wIpeqXfglAy7Ak2AxnlEM=";
   };
 
   vendorHash = null;
