@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "stack-of-tasks";
     repo = "eigenpy";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/k5eltoeUW05FTjvStAOw+tguWLUaUced8TArrk4UDI=";
+    hash = "sha256-ar7KmlvWD2qoOonaH8YhVssZhpbTdHNvxY7rzvmhzc0=";
   };
 
   outputs = [
