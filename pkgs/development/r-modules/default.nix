@@ -954,6 +954,7 @@ let
     "paxtoolsr"
     "systemPipeShiny"
     "matlab2r"
+    "GNOSIS"
   ];
 
   packagesToSkipCheck = [
