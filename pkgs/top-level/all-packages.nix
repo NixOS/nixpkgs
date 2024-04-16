@@ -29917,8 +29917,6 @@ with pkgs;
 
   azpainter = callPackage ../applications/graphics/azpainter { };
 
-  ballista = callPackage ../by-name/ba/ballista/package.nix { };
-
   bambootracker = libsForQt5.callPackage ../applications/audio/bambootracker {
     stdenv = if stdenv.hostPlatform.isDarwin then
       darwin.apple_sdk_11_0.stdenv
