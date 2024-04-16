@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ayatana-indicator-keyboard";
-  version = "22.9.1";
+  version = "24.2.0";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-keyboard";
     rev = finalAttrs.version;
-    hash = "sha256-fZFONSfirMsCJv5u37gXJKkY4h75+8H1ObGQy6elc0A=";
+    hash = "sha256-yrBASpZlO6BEuFl31uR9z2ghuF+9HIkfdMsxzWbnRJA=";
   };
 
   postPatch = ''
