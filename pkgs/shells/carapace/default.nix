@@ -32,7 +32,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Multi-shell multi-command argument completer";
     homepage = "https://rsteube.github.io/carapace-bin/";
-    maintainers = with maintainers; [ star-szr ];
+    maintainers = with maintainers; [ ];
     license = licenses.mit;
     mainProgram = "carapace";
   };
