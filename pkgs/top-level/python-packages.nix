@@ -2264,6 +2264,8 @@ self: super: with self; {
 
   clldutils = callPackage ../development/python-modules/clldutils { };
 
+  cloudevents = callPackage ../development/python-modules/cloudevents { };
+
   cloudflare = callPackage ../development/python-modules/cloudflare { };
 
   cloudpathlib = callPackage ../development/python-modules/cloudpathlib { };
