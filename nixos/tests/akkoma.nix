@@ -1,12 +1,16 @@
 /*
-  End-to-end test for Akkoma.
+End-to-end test for Akkoma.
 
-  Based in part on nixos/tests/pleroma.
+Based in part on nixos/tests/pleroma.
 
-  TODO: Test federation.
+TODO: Test federation.
 */
-import ./make-test-python.nix ({ pkgs, package ? pkgs.akkoma, confined ? false, ... }:
-let
+import ./make-test-python.nix ({
+  pkgs,
+  package ? pkgs.akkoma,
+  confined ? false,
+  ...
+}: let
   userPassword = "4LKOrGo8SgbPm1a6NclVU5Wb";
 
   provisionUser = pkgs.writers.writeBashBin "provisionUser" ''
@@ -15,16 +19,17 @@ let
     pleroma_ctl user new jamy jamy@nixos.test --password '${userPassword}' --moderator --admin -y
   '';
 
-  tlsCert = pkgs.runCommand "selfSignedCerts" {
-    nativeBuildInputs = with pkgs; [ openssl ];
-  } ''
-    mkdir -p $out
-    openssl req -x509 \
-      -subj '/CN=akkoma.nixos.test/' -days 49710 \
-      -addext 'subjectAltName = DNS:akkoma.nixos.test' \
-      -keyout "$out/key.pem" -newkey ed25519 \
-      -out "$out/cert.pem" -noenc
-  '';
+  tlsCert =
+    pkgs.runCommand "selfSignedCerts" {
+      nativeBuildInputs = with pkgs; [openssl];
+    } ''
+      mkdir -p $out
+      openssl req -x509 \
+        -subj '/CN=akkoma.nixos.test/' -days 49710 \
+        -addext 'subjectAltName = DNS:akkoma.nixos.test' \
+        -keyout "$out/key.pem" -newkey ed25519 \
+        -out "$out/cert.pem" -noenc
+    '';
 
   sendToot = pkgs.writers.writeBashBin "sendToot" ''
     set -eu -o errtrace -o pipefail
@@ -40,7 +45,7 @@ let
 
     # Test file upload
     echo "y" | ${pkgs.toot}/bin/toot upload <(dd if=/dev/zero bs=1024 count=1024 status=none) \
-      | grep -F -q "https://akkoma.nixos.test/media"
+      | grep -F -q "https://akkoma.nixos.test:443/media"
   '';
 
   checkFe = pkgs.writers.writeBashBin "checkFe" ''
@@ -59,19 +64,28 @@ let
     ${nodes.akkoma.networking.primaryIPAddress} akkoma.nixos.test
     ${nodes.client.networking.primaryIPAddress} client.nixos.test
   '';
-in
-{
+in {
   name = "akkoma";
   nodes = {
-    client = { nodes, pkgs, config, ... }: {
-      security.pki.certificateFiles = [ "${tlsCert}/cert.pem" ];
+    client = {
+      nodes,
+      pkgs,
+      config,
+      ...
+    }: {
+      security.pki.certificateFiles = ["${tlsCert}/cert.pem"];
       networking.extraHosts = hosts nodes;
     };
 
-    akkoma = { nodes, pkgs, config, ... }: {
+    akkoma = {
+      nodes,
+      pkgs,
+      config,
+      ...
+    }: {
       networking.extraHosts = hosts nodes;
-      networking.firewall.allowedTCPPorts = [ 443 ];
-      environment.systemPackages = with pkgs; [ provisionUser ];
+      networking.firewall.allowedTCPPorts = [443];
+      environment.systemPackages = with pkgs; [provisionUser];
       systemd.services.akkoma.confinement.enable = confined;
 
       services.akkoma = {
@@ -94,6 +108,9 @@ in
             "Pleroma.Web.Endpoint" = {
               url.host = "akkoma.nixos.test";
             };
+            "Pleroma.Upload" = {
+              base_url = "https://akkoma.nixos.test:443/media/";
+            };
           };
         };
 
@@ -109,7 +126,7 @@ in
     };
   };
 
-  testScript = { nodes, ... }: ''
+  testScript = {nodes, ...}: ''
     start_all()
     akkoma.wait_for_unit('akkoma-initdb.service')
     akkoma.systemctl('restart akkoma-initdb.service')  # test repeated initialisation
@@ -121,4 +138,3 @@ in
     client.succeed('${checkFe}/bin/checkFe')
   '';
 })
-
