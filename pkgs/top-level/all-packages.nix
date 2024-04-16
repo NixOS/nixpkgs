@@ -656,6 +656,8 @@ with pkgs;
 
   evhz = callPackage ../tools/misc/evhz { };
 
+  expand-response-params = callPackage ../build-support/expand-response-params { };
+
   expressvpn = callPackage ../applications/networking/expressvpn { };
 
   faq = callPackage ../development/tools/faq { };

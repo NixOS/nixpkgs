@@ -185,9 +185,9 @@ let
           name = "${name}-gcc-wrapper";
           nativeTools = false;
           nativeLibc = false;
-          buildPackages = lib.optionalAttrs (prevStage ? stdenv) {
-            inherit (prevStage) stdenv;
-          };
+          expand-response-params = lib.optionalString
+            (prevStage.stdenv.hasCC or false && prevStage.stdenv.cc != "/dev/null")
+            prevStage.expand-response-params;
           cc = prevStage.gcc-unwrapped;
           bintools = prevStage.binutils;
           isGNU = true;
@@ -261,7 +261,7 @@ in
         name = "bootstrap-stage0-binutils-wrapper";
         nativeTools = false;
         nativeLibc = false;
-        buildPackages = { };
+        expand-response-params = "";
         libc = getLibc self;
         inherit lib;
         inherit (self) stdenvNoCC coreutils gnugrep;
@@ -557,9 +557,7 @@ in
       # Since this is the first fresh build of binutils since stage2, our own runtimeShell will be used.
       binutils = super.binutils.override {
         # Build expand-response-params with last stage like below
-        buildPackages = {
-          inherit (prevStage) stdenv;
-        };
+        inherit (prevStage) expand-response-params;
       };
 
       # To allow users' overrides inhibit dependencies too heavy for
@@ -570,9 +568,7 @@ in
         nativeTools = false;
         nativeLibc = false;
         isGNU = true;
-        buildPackages = {
-          inherit (prevStage) stdenv;
-        };
+        inherit (prevStage) expand-response-params;
         cc = prevStage.gcc-unwrapped;
         bintools = self.binutils;
         libc = getLibc self;
@@ -654,7 +650,9 @@ in
         # More complicated cases
         ++ (map (x: getOutput x (getLibc prevStage)) [ "out" "dev" "bin" ] )
         ++  [ linuxHeaders # propagated from .dev
-            binutils gcc gcc.cc gcc.cc.lib gcc.expand-response-params gcc.cc.libgcc glibc.passthru.libgcc
+              binutils gcc gcc.cc gcc.cc.lib
+              gcc.expand-response-params # != (prevStage.)expand-response-params
+              gcc.cc.libgcc glibc.passthru.libgcc
           ]
         ++ lib.optionals (localSystem.libc == "musl") [ fortify-headers ]
         ++ [ prevStage.updateAutotoolsGnuConfigScriptsHook prevStage.gnu-config ]
