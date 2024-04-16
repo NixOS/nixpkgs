@@ -24,6 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "dev"
+    "doc"
     "out"
   ];
 
@@ -54,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Bindings between Numpy and Eigen using Boost.Python";
     homepage = "https://github.com/stack-of-tasks/eigenpy";
-    changelog = "https://github.com/stack-of-tasks/eigenpy/releases/tag/v${version}";
+    changelog = "https://github.com/stack-of-tasks/eigenpy/releases/tag/v${finalAttrs.version}";
     license = licenses.bsd2;
     maintainers = with maintainers; [
       nim65s
