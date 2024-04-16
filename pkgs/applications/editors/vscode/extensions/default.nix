@@ -2287,8 +2287,8 @@ let
         mktplcRef = {
           name = "nix-ide";
           publisher = "jnoortheen";
-          version = "0.2.2";
-          hash = "sha256-jwOM+6LnHyCkvhOTVSTUZvgx77jAg6hFCCpBqY8AxIg=";
+          version = "0.3.1";
+          hash = "sha256-05oMDHvFM/dTXB6T3rcDK3EiNG2T0tBN9Au9b+Bk7rI=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/jnoortheen.nix-ide/changelog";
@@ -2653,10 +2653,9 @@ let
         mktplcRef = {
           name = "direnv";
           publisher = "mkhl";
-          version = "0.16.0";
-          hash = "sha256-u2AFjvhm3zio1ygW9yD9ZwbywLrEssd0O7/0AtfCvMo=";
+          version = "0.17.0";
+          hash = "sha256-9sFcfTMeLBGw2ET1snqQ6Uk//D/vcD9AVsZfnUNrWNg=";
         };
-
         meta = {
           description = "direnv support for Visual Studio Code";
           license = lib.licenses.bsd0;
@@ -4203,12 +4202,12 @@ let
         mktplcRef = {
           name = "errorlens";
           publisher = "usernamehw";
-          version = "3.14.0";
-          sha256 = "0k70f5f4hcv3jl3a04736ml8amx8w7wb3mb8f6l5gngnvq9fj528";
+          version = "3.16.0";
+          hash = "sha256-Y3M/A5rYLkxQPRIZ0BUjhlkvixDae+wIRUsBn4tREFw=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/usernamehw.errorlens/changelog";
-          description = "Improve highlighting of errors, warnings and other language diagnostics.";
+          description = "A Visual Studio Code extension that improves highlighting of errors, warnings and other language diagnostics";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens";
           homepage = "https://github.com/usernamehw/vscode-error-lens";
           license = lib.licenses.mit;
