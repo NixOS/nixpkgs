@@ -15053,6 +15053,8 @@ self: super: with self; {
 
   timezonefinder = callPackage ../development/python-modules/timezonefinder { };
 
+  timing-asgi = callPackage ../development/python-modules/timing-asgi { };
+
   timm = callPackage ../development/python-modules/timm { };
 
   tiny-cuda-nn = toPythonModule (pkgs.tiny-cuda-nn.override {
