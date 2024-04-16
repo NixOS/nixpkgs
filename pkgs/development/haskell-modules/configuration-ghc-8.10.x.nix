@@ -60,11 +60,14 @@ self: super: {
   system-cxx-std-lib = null;
 
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
+  # For GHC < 9.2, os-string is not required.
   primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
   hashable = addBuildDepends [
     self.data-array-byte
     self.base-orphans
-  ] super.hashable;
+  ] (super.hashable.override {
+    os-string = null;
+  });
 
   # Too strict lower bounds on base
   primitive-addr = doJailbreak super.primitive-addr;
