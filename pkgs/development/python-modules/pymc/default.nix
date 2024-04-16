@@ -3,28 +3,33 @@
 , buildPythonPackage
 , cachetools
 , cloudpickle
-, fastprogress
 , fetchFromGitHub
 , numpy
 , pytensor
 , pythonOlder
 , scipy
 , typing-extensions
+, setuptools
+, rich
 }:
 
 buildPythonPackage rec {
   pname = "pymc";
-  version = "5.12.0";
+  version = "5.13.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pymc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-m8PiEktvrfa5E71s6aPf42l9Iig0YBnand0F725dj2U=";
+    hash = "sha256-SSAn7nbKhXGeEvASKQITUs3+ix3j37u9JTkNiG+1tZ0=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -35,7 +40,7 @@ buildPythonPackage rec {
     arviz
     cachetools
     cloudpickle
-    fastprogress
+    rich
     numpy
     pytensor
     scipy
