@@ -1,9 +1,11 @@
-{ buildGoModule
+{ lib
+, buildGoModule
+, buildPackages
 , fetchFromGitHub
 , python3Packages
 }:
 let
-  mkBasePackage =
+  mkBasePackage = buildGoModule:
     { pname
     , src
     , version
@@ -15,8 +17,6 @@ let
       inherit pname src vendorHash version;
 
       sourceRoot = "${src.name}/provider";
-
-      subPackages = [ "cmd/${cmd}" ];
 
       doCheck = false;
 
@@ -86,10 +86,12 @@ in
 , hash
 , vendorHash
 , cmdGen
+, cmdGenArgs ? "schema"
 , cmdRes
 , extraLdflags
 , meta
 , fetchSubmodules ? false
+, terraformBridge ? false
 , ...
 }@args:
 let
@@ -98,14 +100,17 @@ let
     inherit owner repo rev hash fetchSubmodules;
   };
 
-  pulumi-gen = mkBasePackage rec {
+  pulumi-gen = mkBasePackage buildPackages.buildGoModule {
     inherit src version vendorHash extraLdflags;
 
     cmd = cmdGen;
     pname = cmdGen;
+
+    subPackages = [ "cmd/${cmdGen}" ]
+      ++ lib.optionals terraformBridge [ "cmd/${cmdRes}/generate.go" ];
   };
 in
-mkBasePackage ({
+mkBasePackage buildGoModule ({
   inherit meta src version vendorHash extraLdflags;
 
   pname = repo;
@@ -116,15 +121,19 @@ mkBasePackage ({
 
   cmd = cmdRes;
 
+  subPackages = [
+    "cmd/${cmdRes}"
+  ];
+
   postConfigure = ''
     pushd ..
-
-    chmod +w sdk/
-    ${cmdGen} schema
-
+    chmod +w sdk
+    ${cmdGen} ${cmdGenArgs}
     popd
-
-    VERSION=v${version} go generate cmd/${cmdRes}/main.go
+  '' + lib.optionalString terraformBridge ''
+    pushd cmd/${cmdRes}
+    VERSION=v${version} generate
+    popd
   '';
 
   passthru.sdks.python = mkPythonPackage {
