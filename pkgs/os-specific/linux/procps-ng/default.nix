@@ -15,6 +15,9 @@
   # exception is ‘watch’ which is portable enough to run on pretty much
   # any UNIX-compatible system.
 , watchOnly ? !(stdenv.isLinux || stdenv.isCygwin)
+
+, binlore
+, procps
 }:
 
 stdenv.mkDerivation rec {
@@ -60,6 +63,12 @@ stdenv.mkDerivation rec {
     install -m 0755 -D watch $out/bin/watch
     install -m 0644 -D watch.1 $out/share/man/man1/watch.1
   '';
+
+  # no obvious exec in documented arguments; haven't trawled source
+  # to figure out what exec binlore hits on
+  passthru.lore = (binlore.synthesize procps ''
+    execer cannot bin/{ps,top,free}
+  '');
 
   meta = with lib; {
     homepage = "https://gitlab.com/procps-ng/procps";
