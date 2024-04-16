@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, isPy3k
 , daemonize
 , dbus-python
 , fetchFromGitHub
@@ -10,6 +9,7 @@
 , pygobject3
 , pyudev
 , setproctitle
+, setuptools
 , wrapGAppsHook
 , notify2
 }:
@@ -20,17 +20,16 @@ in
 buildPythonPackage (common // {
   pname = "openrazer-daemon";
 
-  disabled = !isPy3k;
-
   outputs = [ "out" "man" ];
 
   sourceRoot = "${common.src.name}/daemon";
 
   postPatch = ''
-    substituteInPlace openrazer_daemon/daemon.py --replace "plugdev" "openrazer"
+    substituteInPlace openrazer_daemon/daemon.py \
+      --replace-fail "plugdev" "openrazer"
   '';
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     daemonize
