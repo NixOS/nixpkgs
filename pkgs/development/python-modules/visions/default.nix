@@ -14,8 +14,14 @@
 , pydot
 , pygraphviz
 , shapely
-,
 }:
+let
+  optional-dependencies = lib.fix (self: {
+    type-geometry = [ shapely ];
+    type-image-path = [ imagehash pillow ];
+    plotting = [ matplotlib pydot pygraphviz ];
+  });
+in
 buildPythonPackage rec {
   pname = "visions";
   version = "0.7.6";
@@ -26,17 +32,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dylan-profiler";
     repo = "visions";
-    rev =
-      "5fe9dd0c2a5ada0162a005c880bac5296686a5aa"; # no tagged release for 0.7.6
+    rev = "5fe9dd0c2a5ada0162a005c880bac5296686a5aa"; # no tagged release for 0.7.6
     hash = "sha256-SZzDXm+faAvrfSOT0fwwAf9IH7upNybwKxbjw1CrHj8=";
   };
 
   propagatedBuildInputs = [ attrs multimethod networkx numpy pandas ];
 
-  nativeCheckInputs = [ pytestCheckHook imagehash ]
-    ++ passthru.optional-dependencies.type-geometry
-    ++ passthru.optional-dependencies.type-image-path
-    ++ passthru.optional-dependencies.plotting;
+  nativeCheckInputs =
+    [ pytestCheckHook imagehash ]
+    ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   disabledTests = [
     "test_create_spark_session"
@@ -46,11 +50,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "visions" ];
 
-  passthru.optional-dependencies = {
-    type-geometry = [ shapely ];
-    type-image-path = [ imagehash pillow ];
-    plotting = [ matplotlib pydot pygraphviz ];
-  };
+  passthru.optional-dependencies = optional-dependencies;
 
   meta = with lib; {
     description = "Type system for data analysis in Python";
