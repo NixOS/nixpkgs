@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, aiohttp
-, buildPythonPackage
-, ed25519
-, fetchFromGitHub
-, nats-server
-, nkeys
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, uvloop
+{
+  lib,
+  stdenv,
+  aiohttp,
+  buildPythonPackage,
+  ed25519,
+  fetchFromGitHub,
+  nats-server,
+  nkeys,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  uvloop,
 }:
 
 buildPythonPackage rec {
@@ -26,21 +27,13 @@ buildPythonPackage rec {
     hash = "sha256-5lvdt1JbOmdts0CYU00bSmv0LsMQsOe//yUgyevBULE=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    ed25519
-  ];
+  propagatedBuildInputs = [ ed25519 ];
 
   passthru.optional-dependencies = {
-    aiohttp = [
-      aiohttp
-    ];
-    nkeys = [
-      nkeys
-    ];
+    aiohttp = [ aiohttp ];
+    nkeys = [ nkeys ];
     # fast_parse = [
     #   fast-mail-parser
     # ];
@@ -52,20 +45,20 @@ buildPythonPackage rec {
     uvloop
   ];
 
-  disabledTests = [
-    # AssertionError: assert 5 == 0
-    "test_pull_subscribe_limits"
-    "test_fetch_n"
-    "test_subscribe_no_echo"
-    "test_stream_management"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_subscribe_iterate_next_msg"
-    "test_buf_size_force_flush_timeout"
-  ];
+  disabledTests =
+    [
+      # AssertionError: assert 5 == 0
+      "test_pull_subscribe_limits"
+      "test_fetch_n"
+      "test_subscribe_no_echo"
+      "test_stream_management"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "test_subscribe_iterate_next_msg"
+      "test_buf_size_force_flush_timeout"
+    ];
 
-  pythonImportsCheck = [
-    "nats"
-  ];
+  pythonImportsCheck = [ "nats" ];
 
   meta = with lib; {
     description = "Python client for NATS.io";
