@@ -17591,7 +17591,7 @@ with pkgs;
   };
 
   inherit (callPackage ../development/interpreters/ruby {
-    inherit (darwin) libobjc libunwind;
+    inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   })
     mkRubyVersion
