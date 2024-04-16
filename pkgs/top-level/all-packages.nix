@@ -24095,9 +24095,7 @@ with pkgs;
 
   pylode = callPackage ../misc/pylode { };
 
-  python-qt = callPackage ../development/libraries/python-qt {
-    inherit (qt5) qmake qttools qtwebengine qtxmlpatterns;
-  };
+  python-qt = libsForQt5.callPackage ../development/libraries/python-qt { };
 
   pyotherside = libsForQt5.callPackage ../development/libraries/pyotherside { };
 
