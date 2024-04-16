@@ -772,6 +772,11 @@ in {
                     default = if lib.versionOlder config.system.stateVersion "24.05"
                               then "${httpConf.scheme}://${httpConf.host}:${builtins.toString httpConf.port}/media/"
                               else null;
+                    defaultText = literalExpression ''
+                      if lib.versionOlder config.system.stateVersion "24.05"
+                      then "$\{httpConf.scheme}://$\{httpConf.host}:$\{builtins.toString httpConf.port}/media/"
+                      else null;
+                    '';
                     description = ''
                       Base path which uploads will be stored at.
                       Whilst this can just be set to a subdirectory of the main domain, it is now recommended to use a different subdomain.
@@ -804,6 +809,7 @@ in {
                 enabled = mkOption {
                     type = types.bool;
                     default = false;
+                    defaultText = literalExpression "false";
                     description = ''
                       Whether to enable proxying of remote media through the instance's proxy.
                     '';
@@ -813,6 +819,11 @@ in {
                     default = if lib.versionOlder config.system.stateVersion "24.05"
                               then "${httpConf.scheme}://${httpConf.host}:${builtins.toString httpConf.port}/media/"
                               else null;
+                    defaultText = literalExpression ''
+                      if lib.versionOlder config.system.stateVersion "24.05"
+                      then "$\{httpConf.scheme}://$\{httpConf.host}:$\{builtins.toString httpConf.port}/media/"
+                      else null;
+                    '';
                     description = ''
                       Base path for the media proxy.
                       Whilst this can just be set to a subdirectory of the main domain, it is now recommended to use a different subdomain.
