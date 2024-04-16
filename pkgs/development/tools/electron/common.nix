@@ -15,6 +15,7 @@
 , pkgsBuildHost
 , pipewire
 , libsecret
+, libpulseaudio
 , info
 }:
 
@@ -198,6 +199,7 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
         pipewire
         stdenv.cc.cc.lib
         libsecret
+        libpulseaudio
       ];
     in
   base.postFixup + ''
