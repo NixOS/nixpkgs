@@ -325,8 +325,8 @@ let
           rm -r src/3rdparty/chromium/third_party/catapult
           cp -r ${srcs.catapult} src/3rdparty/chromium/third_party/catapult
         '';
-        inherit (darwin) cctools xnu;
-        inherit (darwin.apple_sdk_11_0) libpm libunwind;
+        inherit (darwin) xnu;
+        inherit (darwin.apple_sdk_11_0) libpm;
         inherit (darwin.apple_sdk_11_0.libs) sandbox;
         inherit (darwin.apple_sdk_11_0.frameworks) ApplicationServices AVFoundation Foundation ForceFeedback GameController AppKit
           ImageCaptureCore CoreBluetooth IOBluetooth CoreWLAN Quartz Cocoa LocalAuthentication
