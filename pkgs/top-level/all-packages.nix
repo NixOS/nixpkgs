@@ -1577,7 +1577,9 @@ with pkgs;
 
   aefs = callPackage ../tools/filesystems/aefs { };
 
-  aegisub = callPackage ../applications/video/aegisub ({
+  aegisub = callPackage ../by-name/ae/aegisub/package.nix ({
+    boost = boost179;
+    luajit = luajit.override { enable52Compat = true; };
     wxGTK = wxGTK32;
   } // (config.aegisub or {}));
 
@@ -14046,8 +14048,6 @@ with pkgs;
   };
 
   twitch-chat-downloader = python3Packages.callPackage ../applications/misc/twitch-chat-downloader { };
-
-  twitch-dl = callPackage ../tools/misc/twitch-dl { };
 
   twitterBootstrap = callPackage ../development/web/twitter-bootstrap { };
 

@@ -203,10 +203,8 @@ let
           } ./hooks/qmake-hook.sh)
         { };
     } // lib.optionalAttrs config.allowAliases {
-      # Convert to a throw on 03-01-2023 and backport the change.
-      # Warnings show up in various cli tool outputs, throws do not.
-      # Remove completely before 24.05
-      overrideScope' = lib.warnIf (lib.isInOldestRelease 2311) "qt6 now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\"." self.overrideScope;
+      # Remove completely before 24.11
+      overrideScope' = builtins.throw "qt6 now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\".";
     };
 
   baseScope = makeScopeWithSplicing' {

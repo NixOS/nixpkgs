@@ -18,7 +18,7 @@ buildGoModule rec {
   proxyVendor = true;
   vendorHash = "sha256-aoBxReKRk7dkFR/fJ5uHDZrJRGutLTU2BhDWCTBN2BA=";
 
-  # end-to-end tests require a docker daemon
+  # skipping: end-to-end tests require a docker daemon
   postPatch = ''
     rm -r tests/e2e
     rm -r tests/gomigrations
@@ -32,8 +32,10 @@ buildGoModule rec {
   ];
 
   checkFlags = [
-    # these also require a docker daemon
-    "-skip=TestClickUpDown|TestClickHouseFirstThree"
+    # NOTE:
+    # - skipping: these also require a docker daemon
+    # - these are for go tests that live outside of the /tests directory
+    "-skip=TestClickUpDown|TestClickHouseFirstThree|TestLockModeAdvisorySession|TestDialectStore|TestGoMigrationStats|TestPostgresSessionLocker"
   ];
 
   doCheck = !stdenv.isDarwin;
