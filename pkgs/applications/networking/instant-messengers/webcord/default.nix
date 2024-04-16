@@ -3,9 +3,6 @@
 , fetchFromGitHub
 , copyDesktopItems
 , python3
-, pipewire
-, libpulseaudio
-, libnotify
 , xdg-utils
 , electron_29
 , makeDesktopItem
