@@ -2,6 +2,7 @@
 , stdenv
 , buildPackages
 , fetchurl
+, gitUpdater
 , linuxHeaders
 , libiconvReal
 , extraConfig ? ""
@@ -58,11 +59,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "uclibc-ng";
-  version = "1.0.45";
+  version = "1.0.47";
 
   src = fetchurl {
     url = "https://downloads.uclibc-ng.org/releases/${finalAttrs.version}/uClibc-ng-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-wvTGtuGdfJwiaZKjdG79erkyBARjwV7gvI9BMrV3esQ=";
+    hash = "sha256-KaTWhKBto0TuPuCazCynZJ1ZKuP/hI9pgUXEbe8F78s=";
   };
 
   # 'ftw' needed to build acl, a coreutils dependency
@@ -112,6 +113,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Derivations may check for the existance of this attribute, to know what to
     # link to.
     libiconv = libiconvReal;
+
+    updateScript = gitUpdater {
+      url = "https://git.uclibc-ng.org/git/uclibc-ng.git";
+      rev-prefix = "v";
+    };
   };
 
   meta = {
