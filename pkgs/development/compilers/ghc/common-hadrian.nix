@@ -29,6 +29,7 @@
 , xattr
 , autoSignDarwinBinariesHook
 , bash
+, srcOnly
 
 , libiconv ? null, ncurses
 , glibcLocales ? null
@@ -145,18 +146,40 @@
         return $ verbosity >= Verbose
   ''
 
-, ghcSrc ? (if rev != null then fetchgit else fetchurl) ({
-    inherit url sha256;
-  } // lib.optionalAttrs (rev != null) {
-    inherit rev;
-  } // lib.optionalAttrs (postFetch != null) {
-    inherit postFetch;
-  })
+, ghcSrc ?
+    srcOnly {
+      name = "ghc-${version}"; # -source appended by srcOnly
+      src =
+        (if rev != null then fetchgit else fetchurl) ({
+          inherit url sha256;
+        } // lib.optionalAttrs (rev != null) {
+          inherit rev;
+        } // lib.optionalAttrs (postFetch != null) {
+          inherit postFetch;
+        });
+
+      patches =
+        [
+          # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
+          (if lib.versionAtLeast version "9.8"
+           then ./docs-sphinx-7-ghc98.patch
+           else ./docs-sphinx-7.patch )
+        ]
+        ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
+          # Prevent the paths module from emitting symbols that we don't use
+          # when building with separate outputs.
+          #
+          # These cause problems as they're not eliminated by GHC's dead code
+          # elimination on aarch64-darwin. (see
+          # https://github.com/NixOS/nixpkgs/issues/140774 for details).
+          ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
+        ]
+    }
 
   # GHC's build system hadrian built from the GHC-to-build's source tree
   # using our bootstrap GHC.
 , hadrian ? import ../../tools/haskell/hadrian/make-hadrian.nix { inherit bootPkgs lib; } {
-    ghcSrc = ghcSrc;
+    inherit ghcSrc;
     ghcVersion = version;
     userSettings = hadrianUserSettings;
     # Disable haddock generating pretty source listings to stay under 3GB on aarch64-linux
@@ -268,21 +291,6 @@ stdenv.mkDerivation ({
   src = ghcSrc;
 
   enableParallelBuilding = true;
-
-  patches = [
-    # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
-    (if lib.versionAtLeast version "9.8"
-      then ./docs-sphinx-7-ghc98.patch
-      else ./docs-sphinx-7.patch )
-  ] ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
-    # Prevent the paths module from emitting symbols that we don't use
-    # when building with separate outputs.
-    #
-    # These cause problems as they're not eliminated by GHC's dead code
-    # elimination on aarch64-darwin. (see
-    # https://github.com/NixOS/nixpkgs/issues/140774 for details).
-    ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
-  ];
 
   postPatch = ''
     patchShebangs --build .
