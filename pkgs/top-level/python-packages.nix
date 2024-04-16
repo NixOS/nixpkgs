@@ -16418,6 +16418,8 @@ self: super: with self; {
 
   validate-email = callPackage ../development/python-modules/validate-email { };
 
+  validator-collection = callPackage ../development/python-modules/validator-collection { };
+
   validators = callPackage ../development/python-modules/validators { };
 
   validobj = callPackage ../development/python-modules/validobj { };
