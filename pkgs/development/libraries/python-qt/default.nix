@@ -28,6 +28,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/MeVisLab/pythonqt/pull/197/commits/c35d1efd00b83e0ebd826d7ed8454f3684ddffff.patch";
       hash = "sha256-WJBLPdMemuKlZWoqYVU9TXldoDpaBm84RxkepIaocUQ=";
     })
+    # same for darwin. not yet merged upstream.
+    (fetchpatch {
+      name = "fix-format-security-darwin.patch";
+      url = "https://github.com/MeVisLab/pythonqt/pull/207/commits/4d5a742bccdc4e98ad862f028b96debe4c195906.patch";
+      hash = "sha256-u3aDi9ncv7CuKYrz5JC1s1Xjy4d9z07mEqQmobtdzKU=";
+    })
   ];
 
   nativeBuildInputs = [
