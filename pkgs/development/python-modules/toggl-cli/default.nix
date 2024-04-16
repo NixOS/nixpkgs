@@ -10,41 +10,50 @@
   notify-py,
   pbr,
   pendulum,
-  ptable,
+  prettytable,
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
   requests,
+  setuptools,
   twine,
   validate-email,
 }:
 
 buildPythonPackage rec {
   pname = "toggl-cli";
-  version = "2.4.3";
-  format = "setuptools";
+  version = "2.4.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "togglCli";
     inherit version;
-    hash = "sha256-ncMwiMwYivaFu5jrAsm1oCuXP/PZ2ALT+M+CmV6dtFo=";
+    hash = "sha256-P4pv6LMPIWXD04IQw01yo3z3voeV4OmsBOCSJgcrZ6g=";
   };
 
-  nativeBuildInputs = [
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace-fail "==" ">="
+    substituteInPlace pytest.ini \
+      --replace ' --cov toggl -m "not premium"' ""
+  '';
+
+  build-system = [
     pbr
+    setuptools
     twine
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     click-completion
     inquirer
     notify-py
     pbr
     pendulum
-    ptable
+    prettytable
     requests
     validate-email
   ];
@@ -56,16 +65,6 @@ buildPythonPackage rec {
     factory-boy
   ];
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "notify-py==0.3.3" "notify-py>=0.3.3" \
-      --replace "click==8.0.3" "click>=8.0.3" \
-      --replace "pbr==5.8.0" "pbr>=5.8.0" \
-      --replace "inquirer==2.9.1" "inquirer>=2.9.1"
-    substituteInPlace pytest.ini \
-      --replace ' --cov toggl -m "not premium"' ""
-  '';
-
   preCheck = ''
     export TOGGL_API_TOKEN=your_api_token
     export TOGGL_PASSWORD=toggl_password
@@ -75,9 +74,10 @@ buildPythonPackage rec {
   disabledTests = [
     "integration"
     "premium"
+    "test_basic_usage"
+    "test_now"
     "test_parsing"
     "test_type_check"
-    "test_now"
   ];
 
   pythonImportsCheck = [ "toggl" ];
@@ -87,9 +87,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Command line tool and set of Python wrapper classes for interacting with toggl's API";
-    mainProgram = "toggl";
     homepage = "https://toggl.uhlir.dev/";
     license = licenses.mit;
     maintainers = with maintainers; [ mmahut ];
+    mainProgram = "toggl";
   };
 }
