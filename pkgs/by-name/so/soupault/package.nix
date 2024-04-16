@@ -1,7 +1,9 @@
 { lib
+, darwin
 , fetchzip
 , ocamlPackages
 , soupault
+, stdenv
 , testers
 }:
 
@@ -22,6 +24,8 @@ ocamlPackages.buildDunePackage {
     ];
     hash = "sha256-vGTJUbAeYs/EYFykNSmCc4c9G66/Lz3BsUYnZQ8feFo=";
   };
+
+  nativeBuildInputs = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ darwin.sigtool ];
 
   buildInputs = with ocamlPackages; [
     base64
