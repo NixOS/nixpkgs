@@ -16,7 +16,7 @@
 , autoconf
 , automake
 , libtool
-, darwin
+, cctools
 , cacert
 , unzip
 , go
@@ -63,7 +63,7 @@ let
 
     nativeBuildInputs = lib.optionals stdenv.isDarwin [
       # Must come first so that it shadows the 'libtool' command but leaves 'libtoolize'
-      darwin.cctools
+      cctools
     ] ++ [
       installShellFiles
       cmake
