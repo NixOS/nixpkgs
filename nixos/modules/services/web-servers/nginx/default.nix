@@ -164,7 +164,7 @@ let
       ${commonHttpConfig}
 
       ${optionalString (cfg.resolver.addresses != []) ''
-        resolver ${toString cfg.resolver.addresses} ${optionalString (cfg.resolver.valid != "") "valid=${cfg.resolver.valid}"} ${optionalString (!cfg.resolver.ipv6) "ipv6=off"};
+        resolver ${toString cfg.resolver.addresses} ${optionalString (cfg.resolver.valid != "") "valid=${cfg.resolver.valid}"} ${optionalString (!cfg.resolver.ipv4) "ipv4=off"} ${optionalString (!cfg.resolver.ipv6) "ipv6=off"};
       ''}
       ${upstreamConfig}
 
@@ -978,6 +978,15 @@ in
                 An optional valid parameter allows overriding it
               '';
             };
+            ipv4 = mkOption {
+              type = types.bool;
+              default = true;
+              description = ''
+                By default, nginx will look up both IPv4 and IPv6 addresses while resolving.
+                If looking up of IPv4 addresses is not desired, the ipv4=off parameter can be
+                specified.
+              '';
+            };
             ipv6 = mkOption {
               type = types.bool;
               default = true;
@@ -1177,6 +1186,13 @@ in
         message = ''
           services.nginx.virtualHosts.<name>.enableACME requires a HTTP listener
           to answer to ACME requests.
+        '';
+      }
+
+      {
+        assertion = cfg.resolver.ipv4 || cfg.resolver.ipv6;
+        message = ''
+          At least one of services.nginx.resolver.ipv4 and services.nginx.resolver.ipv6 must be true.
         '';
       }
     ] ++ map (name: mkCertOwnershipAssertion {
