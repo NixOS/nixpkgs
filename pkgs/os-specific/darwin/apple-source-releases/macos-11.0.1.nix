@@ -31,7 +31,6 @@ libmalloc = applePackage' "libmalloc" "317.40.8" "macos-11.0.1" "sha256-Tdhb0mq3
 libplatform = applePackage' "libplatform" "254.40.4" "macos-11.0.1" "1qf3ri0yd8b1xjln1j1gyx7ks6k3a2jhd63blyvfby75y9s7flky" {};
 libpthread = applePackage' "libpthread" "454.40.3" "macos-11.0.1" "0zljbw8mpb80n1if65hhi9lkgwbgjr8vc9wvf7q1nl3mzyl35f8p" {};
 libresolv = applePackage' "libresolv" "68" "macos-11.0.1" "045ahh8nvaam9whryc2f5g5xagwp7d187r80kcff82snp5p66aq1" {};
-libunwind = applePackage' "libunwind" "200.10" "macos-11.0.1" "0wa4ssr7skn5j0ncm1rigd56qmbs982zvwr3qpjn28krwp8wvigd" {};
 libutil = applePackage' "libutil" "58.40.2" "macos-11.0.1" "11s0vizk7bg0k0yjx21j8vaji4j4vk57131qbp07i9lpksb3bcy4" {};
 mDNSResponder = applePackage' "mDNSResponder" "1310.40.42" "macos-11.0.1" "0xxrqqbqsf0pagfs1yzwfbwf7lhr0sns97k18y7kh4ri0p09h44c" {};
 network_cmds = applePackage' "network_cmds" "606.40.2" "macos-11.0.1" "1jsy13nraarafq6wmgh3wyir8wrwfra148xsjns7cw7q5xn40a1w" {};

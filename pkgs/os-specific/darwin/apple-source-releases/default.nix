@@ -26,7 +26,6 @@ let
       libplatform   = "126.50.8";
       mDNSResponder = "765.50.9";
       libutil       = "47.30.1";
-      libunwind     = "35.3";
       Libc          = "1158.50.2";
       dtrace        = "209.50.12";
       libpthread    = "218.60.3";
@@ -66,7 +65,6 @@ let
       IOKit         = "";
 
       libutil       = "43";
-      libunwind     = "35.3";
       Librpcsvc     = "26";
       developer_cmds= "62";
       network_cmds  = "481.20.1";
@@ -286,7 +284,6 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     libresolv       = applePackage "libresolv"         "osx-10.12.6"     "sha256-FtvwjJKSFX6j9APYPC8WLXVOjbHLZa1Gcoc8yxLy8qE=" {};
     Libsystem       = applePackage "Libsystem"         "osx-10.12.6"     "sha256-zvRdCP//TjKCGAqm/5nJXPppshU1cv2fg/L/yK/olGQ=" {};
     libutil         = applePackage "libutil"           "osx-10.12.6"     "sha256-4PFuk+CTLwvd/Ll9GLBkiIM0Sh/CVaiKwh5m1noheRs=" {};
-    libunwind       = applePackage "libunwind"         "osx-10.12.6"     "sha256-CC0sndP/mKYe3dZu3v7fjuDASV4V4w7dAcnWMvpoquE=" {};
     mDNSResponder   = applePackage "mDNSResponder"     "osx-10.12.6"     "sha256-ddZr6tropkpdMJhq/kUlm3OwO8b0yxtkrMpwec8R4FY=" {};
     objc4           = applePackage "objc4"             "osx-10.12.6"     "sha256-ZsxRpdsfv3Dxs7yBBCkjbKXKR6aXwkEpxc1XYXz7ueM=" {};
     ppp             = applePackage "ppp"               "osx-10.12.6"     "sha256-M1zoEjjeKIDUEP6ACbpUJk3OXjobw4g/qzUmxGdX1J0=" {};

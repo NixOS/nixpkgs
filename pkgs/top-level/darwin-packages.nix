@@ -64,7 +64,7 @@ makeScopeWithSplicing' {
       if useAppleSDKLibs
         then apple_sdk
         else appleSourcePackages
-    ) ["Libsystem" "LibsystemCross" "libcharset" "libunwind" "objc4" "configd" "IOKit"]
+    ) ["Libsystem" "LibsystemCross" "libcharset" "objc4" "configd" "IOKit"]
   ) // {
     inherit (
       if useAppleSDKLibs
