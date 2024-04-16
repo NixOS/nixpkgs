@@ -1,23 +1,24 @@
-{ lib
-, appdirs
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, flit-core
-, id
-, importlib-resources
-, pretend
-, pydantic
-, pyjwt
-, pyopenssl
-, pytestCheckHook
-, pythonOlder
-, requests
-, rich
-, securesystemslib
-, sigstore-protobuf-specs
-, sigstore-rekor-types
-, tuf
+{
+  lib,
+  appdirs,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  flit-core,
+  id,
+  importlib-resources,
+  pretend,
+  pydantic,
+  pyjwt,
+  pyopenssl,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  rich,
+  securesystemslib,
+  sigstore-protobuf-specs,
+  sigstore-rekor-types,
+  tuf,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     hash = "sha256-lqmrM4r1yPVCcvWNC9CKYMyryuIyliI2Y+TAYgAwA1Y=";
   };
 
-  build-system = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
   dependencies = [
     appdirs
@@ -63,9 +62,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  pythonImportsCheck = [
-    "sigstore"
-  ];
+  pythonImportsCheck = [ "sigstore" ];
 
   disabledTests = [
     # Tests require network access
