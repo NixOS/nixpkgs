@@ -7837,8 +7837,9 @@ with pkgs;
 
   fingerprintx = callPackage ../tools/security/fingerprintx { };
 
-  bsd-finger = callPackage ../tools/networking/bsd-finger { };
-  bsd-fingerd = bsd-finger.override({ buildClient = false; });
+  bsd-fingerd = bsd-finger.override({
+    buildProduct = "daemon";
+  });
 
   iprange = callPackage ../applications/networking/firehol/iprange.nix { };
 
