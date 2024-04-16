@@ -1,28 +1,17 @@
+# Before adding a new extension, read ./README.md
+
 { config
 , lib
 , fetchurl
 , callPackage
 , vscode-utils
-, asciidoctor
-, nodePackages
 , python3Packages
 , jdk
 , llvmPackages
 , llvmPackages_14
-, nixpkgs-fmt
 , protobuf
 , jq
-, shellcheck
 , moreutils
-, racket
-, clojure-lsp
-, alejandra
-, millet
-, craftos-pc
-, shfmt
-, tinymist
-, typst-lsp
-, typst-preview
 , autoPatchelfHook
 , zlib
 , stdenv
@@ -31,15 +20,6 @@
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
 
-  #
-  # Unless there is a good reason not to, we attempt to use the lowercase
-  # version of the extension's unique identifier. The unique identifier can be
-  # found on the marketplace extension page, and is the name under which the
-  # extension is installed by VSCode under `~/.vscode`.
-  #
-  # This means an extension should be located at
-  # ${lib.strings.toLower mktplcRef.publisher}.${lib.string.toLower mktplcRef.name}
-  #
   baseExtensions = self: lib.mapAttrs (_n: lib.recurseIntoAttrs)
     {
       "13xforever".language-x86-64-assembly = buildVscodeMarketplaceExtension {
@@ -368,27 +348,7 @@ let
         };
       };
 
-      asciidoctor.asciidoctor-vscode = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "asciidoctor-vscode";
-          publisher = "asciidoctor";
-          version = "2.8.9";
-          sha256 = "1xkxx5i3nhd0dzqhhdmx0li5jifsgfhv0p5h7xwsscz3gzgsdcyb";
-        };
-
-        postPatch = ''
-          substituteInPlace dist/src/text-parser.js \
-            --replace "get('asciidoctor_command', 'asciidoctor')" \
-                      "get('asciidoctor_command', '${asciidoctor}/bin/asciidoctor')"
-          substituteInPlace dist/src/commands/exportAsPDF.js \
-            --replace "get('asciidoctorpdf_command', 'asciidoctor-pdf')" \
-                      "get('asciidoctorpdf_command', '${asciidoctor}/bin/asciidoctor-pdf')"
-        '';
-
-        meta = {
-          license = lib.licenses.mit;
-        };
-      };
+      asciidoctor.asciidoctor-vscode = callPackage ./asciidoctor.asciidoctor-vscode { };
 
       asdine.cue = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -458,42 +418,9 @@ let
         };
       };
 
-      azdavis.millet = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "Millet";
-          publisher = "azdavis";
-          version = "0.13.5";
-          hash = "sha256-sWM7N+axgu1zOGWexR4JVupVmYhZrd4cZz3pmLxRj8Q=";
-        };
-        nativeBuildInputs = [ jq moreutils ];
-        postInstall = ''
-          cd "$out/$installPrefix"
-          jq '.contributes.configuration.properties."millet.server.path".default = "${millet}/bin/millet-ls"' package.json | sponge package.json
-        '';
-        meta = {
-          description = "Standard ML support for VS Code";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=azdavis.millet";
-          license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.smasher164 ];
-        };
-      };
+      azdavis.millet = callPackage ./azdavis.millet { };
 
-      b4dm4n.vscode-nixpkgs-fmt = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "nixpkgs-fmt";
-          publisher = "B4dM4n";
-          version = "0.0.1";
-          hash = "sha256-vz2kU36B1xkLci2QwLpl/SBEhfSWltIDJ1r7SorHcr8=";
-        };
-        nativeBuildInputs = [ jq moreutils ];
-        postInstall = ''
-          cd "$out/$installPrefix"
-          jq '.contributes.configuration.properties."nixpkgs-fmt.path".default = "${nixpkgs-fmt}/bin/nixpkgs-fmt"' package.json | sponge package.json
-        '';
-        meta = {
-          license = lib.licenses.mit;
-        };
-      };
+      b4dm4n.vscode-nixpkgs-fmt = callPackage ./b4dm4n.vscode-nixpkgs-fmt { };
 
       baccata.scaladex-search = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -595,24 +522,9 @@ let
         };
       };
 
-      betterthantomorrow.calva = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "calva";
-          publisher = "betterthantomorrow";
-          version = "2.0.374";
-          hash = "sha256-VwdHOkduSSIrcOvrcVf7K8DSp3N1u9fvbaCVDCxp+bk=";
-        };
-        nativeBuildInputs = [ jq moreutils ];
-        postInstall = ''
-          cd "$out/$installPrefix"
-          jq '.contributes.configuration[0].properties."calva.clojureLspPath".default = "${clojure-lsp}/bin/clojure-lsp"' package.json | sponge package.json
-        '';
-        meta = {
-          license = lib.licenses.mit;
-        };
-      };
+      betterthantomorrow.calva = callPackage ./betterthantomorrow.calva { };
 
-       bierner.docs-view = buildVscodeMarketplaceExtension {
+      bierner.docs-view = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "docs-view";
           publisher = "bierner";
@@ -1634,27 +1546,7 @@ let
         };
       };
 
-      eugleo.magic-racket = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "magic-racket";
-          publisher = "evzen-wybitul";
-          version = "0.6.4";
-          hash = "sha256-Hxa4VPm3QvJICzpDyfk94fGHu1hr+YN9szVBwDB8X4U=";
-        };
-        nativeBuildInputs = [ jq moreutils ];
-        postInstall = ''
-          cd "$out/$installPrefix"
-          jq '.contributes.configuration.properties."magicRacket.general.racketPath".default = "${racket}/bin/racket"' package.json | sponge package.json
-          jq '.contributes.configuration.properties."magicRacket.general.racoPath".default = "${racket}/bin/raco"' package.json | sponge package.json
-        '';
-        meta = {
-          changelog = "https://marketplace.visualstudio.com/items/evzen-wybitul.magic-racket/changelog";
-          description = "The best coding experience for Racket in VS Code";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=evzen-wybitul.magic-racket";
-          homepage = "https://github.com/Eugleo/magic-racket";
-          license = lib.licenses.agpl3Only;
-        };
-      };
+      eugleo.magic-racket = callPackage ./eugleo.magic-racket { };
 
       ExiaHuang.dictionary = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -1775,28 +1667,7 @@ let
         };
       };
 
-      foxundermoon.shell-format = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "shell-format";
-          publisher = "foxundermoon";
-          version = "7.2.5";
-          hash = "sha256-kfpRByJDcGY3W9+ELBzDOUMl06D/vyPlN//wPgQhByk=";
-        };
-
-        nativeBuildInputs = [ jq moreutils ];
-
-        postInstall = ''
-          cd "$out/$installPrefix"
-          jq '.contributes.configuration.properties."shellformat.path".default = "${shfmt}/bin/shfmt"' package.json | sponge package.json
-        '';
-
-        meta = {
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=foxundermoon.shell-format";
-          homepage = "https://github.com/foxundermoon/vs-shell-format";
-          license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.dbirks ];
-        };
-      };
+      foxundermoon.shell-format = callPackage ./foxundermoon.shell-format { };
 
       freebroccolo.reasonml = buildVscodeMarketplaceExtension {
         meta = {
@@ -2297,38 +2168,7 @@ let
         };
       };
 
-      jackmacwindows.craftos-pc = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "craftos-pc";
-          publisher = "jackmacwindows";
-          version = "1.2.2";
-          hash = "sha256-A+MNroXv0t9Mw/gr0Fyov3cXyF/GGzwRLKrIxQ2tKCE=";
-        };
-        nativeBuildInputs = [ jq moreutils ];
-        postInstall = ''
-          cd "$out/$installPrefix"
-
-          jq -e '
-            .contributes.configuration.properties."craftos-pc.executablePath.linux".default =
-              "${lib.meta.getExe craftos-pc}" |
-            .contributes.configuration.properties."craftos-pc.executablePath.mac".default =
-              "${lib.meta.getExe craftos-pc}" |
-            .contributes.configuration.properties."craftos-pc.executablePath.windows".default =
-              "${lib.meta.getExe craftos-pc}"
-          ' \
-          < package.json \
-          | sponge package.json
-        '';
-        meta = {
-          changelog = "https://marketplace.visualstudio.com/items/jackmacwindows.craftos-pc/changelog";
-          description = "A Visual Studio Code extension for opening a CraftOS-PC window";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=jackmacwindows.craftos-pc";
-          homepage = "https://www.craftos-pc.cc/docs/extension";
-          license = lib.licenses.mit;
-          maintainers = with lib.maintainers; [ tomodachi94 ];
-          platforms = craftos-pc.meta.platforms;
-        };
-      };
+      jackmacwindows.craftos-pc = callPackage ./jackmacwindows.craftos-pc { };
 
       james-yu.latex-workshop = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -2447,8 +2287,8 @@ let
         mktplcRef = {
           name = "nix-ide";
           publisher = "jnoortheen";
-          version = "0.2.2";
-          hash = "sha256-jwOM+6LnHyCkvhOTVSTUZvgx77jAg6hFCCpBqY8AxIg=";
+          version = "0.3.1";
+          hash = "sha256-05oMDHvFM/dTXB6T3rcDK3EiNG2T0tBN9Au9b+Bk7rI=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/jnoortheen.nix-ide/changelog";
@@ -2546,33 +2386,7 @@ let
         };
       };
 
-      kamadorueda.alejandra = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "alejandra";
-          publisher = "kamadorueda";
-          version = "1.0.0";
-          hash = "sha256-COlEjKhm8tK5XfOjrpVUDQ7x3JaOLiYoZ4MdwTL8ktk=";
-        };
-        nativeBuildInputs = [ jq moreutils ];
-        postInstall = ''
-          cd "$out/$installPrefix"
-
-          jq -e '
-            .contributes.configuration.properties."alejandra.program".default =
-              "${alejandra}/bin/alejandra" |
-            .contributes.configurationDefaults."alejandra.program" =
-              "${alejandra}/bin/alejandra"
-          ' \
-          < package.json \
-          | sponge package.json
-        '';
-        meta = {
-          description = "The Uncompromising Nix Code Formatter";
-          homepage = "https://github.com/kamadorueda/alejandra";
-          license = lib.licenses.unlicense;
-          maintainers = [ lib.maintainers.kamadorueda ];
-        };
-      };
+      kamadorueda.alejandra = callPackage ./kamadorueda.alejandra { };
 
       kamikillerto.vscode-colorize = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -2797,35 +2611,7 @@ let
         };
       };
 
-      # Keep pkgs/by-name/ty/typst-preview/package.nix in sync with this
-      # extension
-      mgt19937.typst-preview = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "typst-preview";
-          publisher = "mgt19937";
-          version = "0.11.4";
-          hash = "sha256-GwlzFphZmP87pLys01+PWTv13imcdGjunCMH6atz9xs=";
-        };
-
-        buildInputs = [
-          typst-preview
-        ];
-
-        nativeBuildInputs = [ jq moreutils ];
-
-        postInstall = ''
-          cd "$out/$installPrefix"
-          jq '.contributes.configuration.properties."typst-preview.executable".default = "${lib.getExe typst-preview}"' package.json | sponge package.json
-        '';
-
-        meta = {
-          description = "Typst Preview is an extension for previewing your Typst files in vscode instantly";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=mgt19937.typst-preview";
-          homepage = "https://github.com/Enter-tainer/typst-preview-vscode";
-          license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.drupol ];
-        };
-      };
+      mgt19937.typst-preview = callPackage ./mgt19937.typst-preview { };
 
       mhutchie.git-graph = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -2867,10 +2653,9 @@ let
         mktplcRef = {
           name = "direnv";
           publisher = "mkhl";
-          version = "0.16.0";
-          hash = "sha256-u2AFjvhm3zio1ygW9yD9ZwbywLrEssd0O7/0AtfCvMo=";
+          version = "0.17.0";
+          hash = "sha256-9sFcfTMeLBGw2ET1snqQ6Uk//D/vcD9AVsZfnUNrWNg=";
         };
-
         meta = {
           description = "direnv support for Visual Studio Code";
           license = lib.licenses.bsd0;
@@ -2979,25 +2764,7 @@ let
 
       ms-python.python = callPackage ./ms-python.python { };
 
-      ms-python.vscode-pylance = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "vscode-pylance";
-          publisher = "MS-python";
-          version = "2023.8.50";
-          hash = "sha256-xJU/j5r/Idp/0VorEfciT4SFKRBpMCv9Z0LKO/++1Gk=";
-        };
-
-        buildInputs = [ nodePackages.pyright ];
-
-        meta = {
-          changelog = "https://marketplace.visualstudio.com/items/ms-python.vscode-pylance/changelog";
-          description = "A performant, feature-rich language server for Python in VS Code";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance";
-          homepage = "https://github.com/microsoft/pylance-release";
-          license = lib.licenses.unfree;
-          maintainers = [ lib.maintainers.ericthemagician ];
-        };
-      };
+      ms-python.vscode-pylance = callPackage ./ms-python.vscode-pylance { };
 
       ms-toolsai.datawrangler = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -3269,36 +3036,7 @@ let
         };
       };
 
-      myriad-dreamin.tinymist = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "tinymist";
-          publisher = "myriad-dreamin";
-          # Please update the corresponding binary (tinymist) when updating
-          # this extension.
-          version = "0.11.3";
-          hash = "sha256-b5aD4gz4j+QAEPmYaNnaputbYTPoFxVFih76HmznUP8=";
-        };
-
-        nativeBuildInputs = [ jq moreutils ];
-
-        buildInputs = [
-          tinymist
-        ];
-
-        postInstall = ''
-          cd "$out/$installPrefix"
-          jq '.contributes.configuration.properties."tinymist.serverPath".default = "${lib.getExe tinymist}"' package.json | sponge package.json
-        '';
-
-        meta = {
-          changelog = "https://marketplace.visualstudio.com/items/myriad-dreamin.tinymist/changelog";
-          description = "A VSCode extension for providing an integration solution for Typst";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=myriad-dreamin.tinymist";
-          homepage = "https://github.com/myriad-dreamin/tinymist";
-          license = lib.licenses.asl20;
-          maintainers = [ lib.maintainers.drupol ];
-        };
-      };
+      myriad-dreamin.tinymist = callPackage ./myriad-dreamin.tinymist { };
 
       naumovs.color-highlight = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -3383,36 +3121,7 @@ let
         };
       };
 
-      nvarner.typst-lsp = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "typst-lsp";
-          publisher = "nvarner";
-          # Please update the corresponding binary (typst-lsp) when updating
-          # this extension.
-          version = "0.12.1";
-          hash = "sha256-JcfFaR1wU5XwapH8vnfVy7Cb7DfUWVeoLfBV3wEtCpE=";
-        };
-
-        nativeBuildInputs = [ jq moreutils ];
-
-        buildInputs = [
-          typst-lsp
-        ];
-
-        postInstall = ''
-          cd "$out/$installPrefix"
-          jq '.contributes.configuration.properties."typst-lsp.serverPath".default = "${lib.getExe typst-lsp}"' package.json | sponge package.json
-        '';
-
-        meta = {
-          changelog = "https://marketplace.visualstudio.com/items/nvarner.typst-lsp/changelog";
-          description = "A VSCode extension for providing a language server for Typst";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=nvarner.typst-lsp";
-          homepage = "https://github.com/nvarner/typst-lsp";
-          license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.drupol ];
-        };
-      };
+      nvarner.typst-lsp = callPackage ./nvarner.typst-lsp { };
 
       ocamllabs.ocaml-platform = buildVscodeMarketplaceExtension {
         meta = {
@@ -3901,6 +3610,23 @@ let
         };
       };
 
+      signageos.signageos-vscode-sops = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "signageos-vscode-sops";
+          publisher = "signageos";
+          version = "0.9.1";
+          hash = "sha256-b1Gp+tL5/e97xMuqkz4EvN0PxI7cJOObusEkcp+qKfM=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/signageos.signageos-vscode-sops/changelog";
+          description = "A Visual Studio Code extension for SOPS support";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=signageos.signageos-vscode-sops";
+          homepage = "https://github.com/signageos/vscode-sops";
+          license = lib.licenses.unfree;
+          maintainers = [ lib.maintainers.superherointj ];
+        };
+      };
+
       silofy.hackthebox = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "hackthebox";
@@ -4324,26 +4050,7 @@ let
         };
       };
 
-      timonwong.shellcheck = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "shellcheck";
-          publisher = "timonwong";
-          version = "0.37.0";
-          sha256 = "1d0blynn6c2hz4y9fk7b5wsa3x168gxyycr5d05zqp0rx520m5wc";
-        };
-        nativeBuildInputs = [ jq moreutils ];
-        postInstall = ''
-          cd "$out/$installPrefix"
-          jq '.contributes.configuration.properties."shellcheck.executablePath".default = "${shellcheck}/bin/shellcheck"' package.json | sponge package.json
-        '';
-        meta = {
-          description = "Integrates ShellCheck into VS Code, a linter for Shell scripts";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=timonwong.shellcheck";
-          homepage = "https://github.com/vscode-shellcheck/vscode-shellcheck";
-          license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.raroh73 ];
-        };
-      };
+      timonwong.shellcheck = callPackage ./timonwong.shellcheck { };
 
       tobiasalthoff.atom-material-theme = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -4495,12 +4202,12 @@ let
         mktplcRef = {
           name = "errorlens";
           publisher = "usernamehw";
-          version = "3.14.0";
-          sha256 = "0k70f5f4hcv3jl3a04736ml8amx8w7wb3mb8f6l5gngnvq9fj528";
+          version = "3.16.0";
+          hash = "sha256-Y3M/A5rYLkxQPRIZ0BUjhlkvixDae+wIRUsBn4tREFw=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/usernamehw.errorlens/changelog";
-          description = "Improve highlighting of errors, warnings and other language diagnostics.";
+          description = "A Visual Studio Code extension that improves highlighting of errors, warnings and other language diagnostics";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens";
           homepage = "https://github.com/usernamehw/vscode-error-lens";
           license = lib.licenses.mit;
