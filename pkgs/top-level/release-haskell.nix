@@ -610,6 +610,7 @@ let
             jobs.pandoc
             jobs.stack
             jobs.stylish-haskell
+            jobs.shellcheck
             # important haskell (library) packages
             jobs.haskellPackages.cabal-plan
             jobs.haskellPackages.distribution-nixpkgs
