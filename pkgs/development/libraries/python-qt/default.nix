@@ -60,6 +60,15 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r ./extensions $out/include/PythonQt
   '';
 
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -id \
+      $out/lib/libPythonQt-Qt5-Python3.${python3.sourceVersion.minor}.dylib \
+      $out/lib/libPythonQt-Qt5-Python3.${python3.sourceVersion.minor}.dylib
+    install_name_tool -id \
+      $out/lib/libPythonQt_QtAll-Qt5-Python3.${python3.sourceVersion.minor}.dylib \
+      $out/lib/libPythonQt_QtAll-Qt5-Python3.${python3.sourceVersion.minor}.dylib
+  '';
+
   meta = with lib; {
     description = "PythonQt is a dynamic Python binding for the Qt framework. It offers an easy way to embed the Python scripting language into your C++ Qt applications";
     homepage = "https://pythonqt.sourceforge.net/";
