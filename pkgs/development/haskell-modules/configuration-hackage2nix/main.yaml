@@ -28,6 +28,9 @@ default-package-overrides:
   - gi-gdkx11 < 4
   # 2021-11-09: ghc-bignum is bundled starting with 9.0.1; only 1.0 builds with GHCs prior to 9.2.1
   - ghc-bignum == 1.0
+  # Needs to be pinned to match jsaddle from Stackage LTS (9.8.*)
+  - jsaddle-dom < 0.9.9.0
+  - jsaddle-webkit2gtk < 0.9.9.0
 
 extra-packages:
   - Cabal-syntax == 3.6.*               # Dummy package that ensures packages depending on Cabal-syntax can work for Cabal < 3.8
