@@ -127,6 +127,12 @@ buildPythonPackage rec {
     "test_enum_class"
   ];
 
+  disabledTestPaths = [
+    # flaky test under load:
+    # (           index: line    2) broken    http://localhost:7777/#top - HTTPConnectionPool(host='localhost', port=7777): Read timed out. (read timeout=0.05)
+    "tests/test_build_linkcheck.py"
+  ];
+
   meta = {
     description = "Python documentation generator";
     longDescription = ''
