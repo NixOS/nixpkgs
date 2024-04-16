@@ -1,16 +1,17 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, certifi
-, faker
-, fetchFromGitHub
-, googleapis-common-protos
-, h2
-, multidict
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  certifi,
+  faker,
+  fetchFromGitHub,
+  googleapis-common-protos,
+  h2,
+  multidict,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-bCLyBfsNdIGdpz9l/r2iYIQ5TitKmsctekeOthIkXhw=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     h2
