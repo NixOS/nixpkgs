@@ -1396,9 +1396,10 @@ let
     });
 
     SICtools = old.SICtools.overrideAttrs (attrs: {
-      preConfigure = ''
-        substituteInPlace src/Makefile --replace "-lcurses" "-lncurses"
+      postPatch = ''
+        substituteInPlace src/Makefile --replace-fail "-lcurses" "-lncurses"
       '';
+      hardeningDisable = [ "format" ];
     });
 
     arrow = old.arrow.overrideAttrs (attrs: {
