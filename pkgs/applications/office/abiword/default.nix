@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   version = "3.0.5";
 
   src = fetchurl {
-    url = "https://www.abisource.com/downloads/abiword/${version}/source/${pname}-${version}.tar.gz";
+    url = "http://www.nl.abisource.com/downloads/abiword/${version}/source/${pname}-${version}.tar.gz";
     hash = "sha256-ElckfplwUI1tFFbT4zDNGQnEtCsl4PChvDJSbW86IbQ=";
   };
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Word processing program, similar to Microsoft Word";
     mainProgram = "abiword";
-    homepage = "https://www.abisource.com/";
+    homepage = "https://gitlab.gnome.org/World/AbiWord";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ylwghst sna ];

@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "LAPACK-compatible linear algebra library optimized for AMD CPUs";
-    homepage = "https://developer.amd.com/amd-aocl/blas-library/";
+    homepage = "https://www.amd.com/en/developer/aocl/dense.html";
     license = licenses.bsd3;
     maintainers = [ maintainers.markuskowa ];
     platforms = [ "x86_64-linux" ];
