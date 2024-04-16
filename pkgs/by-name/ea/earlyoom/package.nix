@@ -1,38 +1,64 @@
-{ lib, stdenv, fetchFromGitHub, pandoc, installShellFiles, withManpage ? false, nixosTests }:
+{
+  lib,
+  fetchFromGitHub,
+  installShellFiles,
+  pandoc,
+  stdenv,
+  nixosTests,
+  # Boolean flags
+  withManpage ? true,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "earlyoom";
   version = "1.7";
 
   src = fetchFromGitHub {
     owner = "rfjakob";
     repo = "earlyoom";
-    rev = "v${version}";
-    sha256 = "sha256-8YcT1TTlAet7F1U9Ginda4IApNqkudegOXqm8rnRGfc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-8YcT1TTlAet7F1U9Ginda4IApNqkudegOXqm8rnRGfc=";
   };
 
-  nativeBuildInputs = lib.optionals withManpage [ pandoc installShellFiles ];
+  outputs = [ "out" ] ++ lib.optionals withManpage [ "man" ];
 
-  patches = [ ./fix-dbus-path.patch ];
+  patches = [ ./0000-fix-dbus-path.patch ];
 
-  makeFlags = [ "VERSION=${version}" ];
+  nativeBuildInputs = lib.optionals withManpage [
+    installShellFiles
+    pandoc
+  ];
+
+  makeFlags = [
+    "VERSION=${finalAttrs.version}"
+  ];
 
   installPhase = ''
+    runHook preInstall
     install -D earlyoom $out/bin/earlyoom
   '' + lib.optionalString withManpage ''
     installManPage earlyoom.1
+  '' + ''
+    runHook postInstall
   '';
 
   passthru.tests = {
     inherit (nixosTests) earlyoom;
   };
 
-  meta = with lib; {
-    description = "Early OOM Daemon for Linux";
-    mainProgram = "earlyoom";
+  meta = {
     homepage = "https://github.com/rfjakob/earlyoom";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [];
+    description = "Early OOM Daemon for Linux";
+    longDescription = ''
+      earlyoom checks the amount of available memory and free swap up to 10
+      times a second (less often if there is a lot of free memory). By default
+      if both are below 10%, it will kill the largest process (highest
+      oom_score). The percentage value is configurable via command line
+      arguments.
+    '';
+    license = lib.licenses.mit;
+    mainProgram = "earlyoom";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
-}
+})
