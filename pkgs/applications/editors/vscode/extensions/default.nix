@@ -3712,6 +3712,8 @@ let
         meta.license = lib.licenses.lgpl3Only;
       };
 
+      sourcery.sourcery = callPackage ./sourcery.sourcery { };
+
       spywhere.guides = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "guides";
