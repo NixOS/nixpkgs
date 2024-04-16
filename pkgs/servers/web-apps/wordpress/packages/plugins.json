@@ -60,10 +60,10 @@
     "version": "1.4.0"
   },
   "gutenberg": {
-    "path": "gutenberg/tags/18.0.1",
-    "rev": "3067379",
-    "sha256": "008kz282jmxiw7ayycl4a1dnwfvzna0dax1nydbm27sdj9nzqzak",
-    "version": "18.0.1"
+    "path": "gutenberg/tags/18.1.0",
+    "rev": "3068196",
+    "sha256": "0ajkm54m4g6xg10263hjwdy2jigcaiqczg5dla7c457jqg8jv4nv",
+    "version": "18.1.0"
   },
   "hello-dolly": {
     "path": "hello-dolly/tags/1.7.2",
@@ -78,10 +78,10 @@
     "version": "3.0.2"
   },
   "jetpack": {
-    "path": "jetpack/tags/13.3",
-    "rev": "3063825",
-    "sha256": "1fv3dr993smlb8yd2ca7cd4w67a2sn2vbkc53w6hcjggkjn8bkkv",
-    "version": "13.3"
+    "path": "jetpack/tags/13.3.1",
+    "rev": "3068650",
+    "sha256": "0fwigf6xg5y5nqfkk2nv08qyqp97v96rnccx2a72p19a6dq6b97x",
+    "version": "13.3.1"
   },
   "jetpack-lite": {
     "path": "jetpack-lite/tags/3.0.3",
@@ -144,10 +144,10 @@
     "version": "1.2.3"
   },
   "webp-converter-for-media": {
-    "path": "webp-converter-for-media/tags/5.12.3",
-    "rev": "3054812",
-    "sha256": "16gfsx0378rhs133csyl1mblz4jvasjd146amrljgbrk9anj8cnx",
-    "version": "5.12.3"
+    "path": "webp-converter-for-media/tags/5.12.5",
+    "rev": "3071153",
+    "sha256": "03a53ssvbxhdi3j14vpzf3w4fzljk5hzy29d3g2mxrgbcbjcjrs1",
+    "version": "5.12.5"
   },
   "webp-express": {
     "path": "webp-express/tags/0.25.9",
@@ -156,10 +156,10 @@
     "version": "0.25.9"
   },
   "wordpress-seo": {
-    "path": "wordpress-seo/tags/22.4",
-    "rev": "3063381",
-    "sha256": "05p4i83q1w5gcp7ml08cihy50ksi4igpa7rrsfcr6pnid739s6lm",
-    "version": "22.4"
+    "path": "wordpress-seo/tags/22.5",
+    "rev": "3071371",
+    "sha256": "0jwkicd8zf6ggf2qf2r1ndgj2k208n9bwvjrd7k3gg09jwsccgab",
+    "version": "22.5"
   },
   "worker": {
     "path": "worker/tags/4.9.19",
@@ -192,10 +192,10 @@
     "version": "4.0.1"
   },
   "wp-statistics": {
-    "path": "wp-statistics/tags/14.5.2",
-    "rev": "3049813",
-    "sha256": "1x136m26l8nnx355q68cpi971zz37mxjwi1i3vgwfsmphn1gynlb",
-    "version": "14.5.2"
+    "path": "wp-statistics/tags/14.6.1",
+    "rev": "3070028",
+    "sha256": "0qrhfqbn51cgyr0y3v4hxpnkhsk829i62c3ccy6a34gf5fxhrjnl",
+    "version": "14.6.1"
   },
   "wp-swiper": {
     "path": "wp-swiper/trunk",
