@@ -1,4 +1,9 @@
-{ lib, fetchPypi, buildPythonPackage, pythonAtLeast }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonAtLeast,
+}:
 
 buildPythonPackage rec {
   pname = "ed25519";
