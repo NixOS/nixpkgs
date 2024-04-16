@@ -25,6 +25,7 @@
 # optional-dependencies
 , mkdocs-minify-plugin
 , mkdocs-redirects
+, mkdocs-rss-plugin
 , mkdocs-git-revision-date-localized-plugin
 , pillow
 , cairosvg
@@ -69,7 +70,7 @@ buildPythonPackage rec {
     recommended = [
       mkdocs-minify-plugin
       mkdocs-redirects
-      # TODO: mkdocs-rss-plugin
+      mkdocs-rss-plugin
     ];
     git = [
       # TODO: gmkdocs-git-committers-plugin
