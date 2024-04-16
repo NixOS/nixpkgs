@@ -1,13 +1,14 @@
-{ lib
-, azure-common
-, azure-core
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, isodate
-, pythonOlder
-, setuptools
-, typing-extensions
+{
+  lib,
+  azure-common,
+  azure-core,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  isodate,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-CGMtzW7OKGVyBOmiVq1kNp/isOOF7UM0n5MvAH2J93Q=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     azure-common
@@ -34,9 +33,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  pythonNamespaces = [
-    "azure.keyvault"
-  ];
+  pythonNamespaces = [ "azure.keyvault" ];
 
   # Tests require relative paths to utilities in the mono-repo
   doCheck = false;
