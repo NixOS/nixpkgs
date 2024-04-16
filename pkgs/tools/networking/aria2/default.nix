@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, autoreconfHook
 , gnutls, c-ares, libxml2, sqlite, zlib, libssh2
 , cppunit, sphinx
-, Security
+, Security, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
   doCheck = false; # needs the net
 
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    aria2 = nixosTests.aria2;
+  };
 
   meta = with lib; {
     homepage = "https://aria2.github.io";

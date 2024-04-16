@@ -129,6 +129,7 @@ in {
   appliance-repart-image = runTest ./appliance-repart-image.nix;
   apparmor = handleTest ./apparmor.nix {};
   archi = handleTest ./archi.nix {};
+  aria2 = handleTest ./aria2.nix {};
   armagetronad = handleTest ./armagetronad.nix {};
   atd = handleTest ./atd.nix {};
   atop = handleTest ./atop.nix {};
