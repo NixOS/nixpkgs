@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "grpclib";
-  version = "0.4.4";
+  version = "0.4.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "vmagamedov";
     repo = "grpclib";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bCLyBfsNdIGdpz9l/r2iYIQ5TitKmsctekeOthIkXhw=";
+    hash = "sha256-5221hVjD0TynCsTdruiUZkTsb7uOi49tZ8M/YqdWreE=";
   };
 
   build-system = [ setuptools ];
