@@ -39,6 +39,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-zTKO3qyS9qZl3p8yPJO3Eq8YWLwuDYjz9xAEaUcKG4o=";
   };
 
+  patches = lib.optionals stdenv.hostPlatform.isMusl [
+    # https://lists.gnu.org/archive/html/bug-coreutils/2024-03/msg00089.html
+    ./fix-test-failure-musl.patch
+  ];
+
   postPatch = ''
     # The test tends to fail on btrfs, f2fs and maybe other unusual filesystems.
     sed '2i echo Skipping dd sparse test && exit 77' -i ./tests/dd/sparse.sh
