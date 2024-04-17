@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , python3Packages
-, fetchPypi
+, fetchFromGitHub
 , installShellFiles
 , makeWrapper
 , sphinx
@@ -14,11 +14,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sshuttle";
-  version = "1.1.1";
+  version = "1.1.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-9aPtHlqxITx6bfhgr0HxqQOrLK+/73Hzcazc/yHmnuY=";
+  src = fetchFromGitHub {
+    owner = "sshuttle";
+    repo = "sshuttle";
+    rev = "v${version}";
+    hash = "sha256-7jiDTjtL4FiQ4GimSPtUDKPUA29l22a7XILN/s4/DQY=";
   };
 
   patches = [ ./sudo.patch ];

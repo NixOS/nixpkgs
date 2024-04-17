@@ -55,8 +55,7 @@ rustPlatform.buildRustPackage {
     inherit owner;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mNpZj8c+IHcW0StFzRPt7wcysADh01eLFcIK6fX/2KQ=";
-    leaveDotGit = true;
+    sha256 = "sha256-fZrYmsulKOvgW/WtsYL7r4Cby+m9ShgXozxj1ZQ5ZAY=";
   };
 
   # Upstream doesn't include the lockfile so we need to add it back
@@ -75,11 +74,10 @@ rustPlatform.buildRustPackage {
     git
   ];
 
+  # `cargo-llvm-cov` tests rely on `git ls-files.
   preCheck = ''
-    # `cargo-llvm-cov`'s tests rely on `git ls-files` so the staging area needs
-    # to not have everything staged as deleted, which is how `leaveDotGit` in
-    # `fetchFromGitHub` leaves the staging area for reproducibility reasons.
-    git restore --staged .
+    git init -b main
+    git add .
   '';
 
   meta = {
