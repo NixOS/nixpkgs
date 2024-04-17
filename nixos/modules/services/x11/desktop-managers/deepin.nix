@@ -61,7 +61,7 @@ in
       services.gnome.gnome-keyring.enable = mkDefault true;
       services.bamf.enable = mkDefault true;
 
-      services.xserver.libinput.enable = mkDefault true;
+      services.libinput.enable = mkDefault true;
       services.udisks2.enable = true;
       services.upower.enable = mkDefault config.powerManagement.enable;
       networking.networkmanager.enable = mkDefault true;
