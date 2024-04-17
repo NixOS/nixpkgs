@@ -27,13 +27,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zed";
-  version = "0.130.7";
+  version = "0.131.6";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "zed";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nGE4RjquH5tEz6vHR1f5F44TX4GtPwiPP3V3lWPpmxk=";
+    hash = "sha256-IhFOA+g2I5vb72CTSZ8WTa9K0ieYbPD/BMShGqaUb84=";
     fetchSubmodules = true;
   };
 
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "async-pipe-0.1.3" = "sha256-g120X88HGT8P6GNCrzpS5SutALx5H+45Sf4iSSxzctE=";
-      "blade-graphics-0.3.0" = "sha256-0TmunFnq9MBxm4TrAkI0PxB58qJEf7oWLWhHq5cVsQ8=";
+      "blade-graphics-0.4.0" = "sha256-S1PNdQ9YbJgLLsJU1mvDZ3feVDIrZGwU37JqIm+kfcE=";
       "bromberg_sl2-0.6.0" = "sha256-+bwdnk3EgYEAxQSP4KpEPicCfO+r2er1DRZjvfF4jSM=";
       "font-kit-0.11.0" = "sha256-+4zMzjFyMS60HfLMEXGfXqKn6P+pOngLA45udV09DM8=";
       "lsp-types-0.94.1" = "sha256-kplgPsafrgZFMI1D9pQCwmg+FKMn5HNWLbcgdXHUFVU=";
@@ -52,7 +52,6 @@ rustPlatform.buildRustPackage rec {
       "tree-sitter-bash-0.20.4" = "sha256-VP7rJfE/k8KV1XN1w5f0YKjCnDMYU1go/up0zj1mabM=";
       "tree-sitter-cpp-0.20.0" = "sha256-2QYEFkpwcRmh2kf4qEAL2a5lGSa316CetOhF73e7rEM=";
       "tree-sitter-css-0.19.0" = "sha256-5Qti/bFac2A1PJxqZEOuSLK3GGKYwPDKAp3OOassBxU=";
-      "tree-sitter-dart-0.0.1" = "sha256-FE6zXy0lAUWWayrM3urZFnQaEYBcnmaVANcUUnvw1q4=";
       "tree-sitter-elixir-0.1.0" = "sha256-hBHqQ3eBjknRPJjP+lQJU6NPFhUMtiv4FbKsTw28Bog=";
       "tree-sitter-elm-5.6.4" = "sha256-0LpuyebOB5ew9fULBcaw8aUbF7HM5sXQpv+Jroz4tXg=";
       "tree-sitter-glsl-0.1.4" = "sha256-TRuiT3ndCeDCsCFokAN8cosNKccB0NjWVRiBJuBJXZw=";
