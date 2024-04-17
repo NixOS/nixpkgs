@@ -10,6 +10,7 @@
   cups,
   firefox-unwrapped,
   libcanberra-gtk3,
+  libglvnd,
   libnotify,
   libva,
   mesa,
@@ -67,6 +68,7 @@ rustPlatform.buildRustPackage rec {
       libs =
         lib.optionals stdenv.isLinux [
           cups
+          libglvnd
           libnotify
           libva
           mesa
