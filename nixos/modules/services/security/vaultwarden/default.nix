@@ -139,13 +139,7 @@ in {
         As a concrete example, to make the Admin UI available
         (from which new users can be invited initially),
         the secret {env}`ADMIN_TOKEN` needs to be defined as described
-        [here](https://github.com/dani-garcia/vaultwarden/wiki/Enabling-admin-page).
-        Setting `environmentFile` to `/var/lib/vaultwarden.env`
-        and ensuring permissions with e.g.
-        `chown vaultwarden:vaultwarden /var/lib/vaultwarden.env`
-        (the `vaultwarden` user will only exist after activating with
-        `enable = true;` before this), we can set the contents of the file to have
-        contents such as:
+        [here](https://github.com/dani-garcia/vaultwarden/wiki/Enabling-admin-page):
 
         ```
         # Admin secret token, see
