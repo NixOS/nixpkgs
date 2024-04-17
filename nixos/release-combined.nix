@@ -168,7 +168,10 @@ in rec {
         (onFullSupported "nixpkgs.emacs")
         (onFullSupported "nixpkgs.jdk")
         (onSystems ["x86_64-linux"] "nixpkgs.mesa_i686") # i686 sanity check + useful
-        ["nixpkgs.tarball"]
+        [
+          "nixpkgs.tarball"
+          "nixpkgs.release-checks"
+        ]
       ];
     };
 }

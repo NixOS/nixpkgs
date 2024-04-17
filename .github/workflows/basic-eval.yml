@@ -26,4 +26,4 @@ jobs:
         name: nixpkgs-ci
         signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
     # explicit list of supportedSystems is needed until aarch64-darwin becomes part of the trunk jobset
-    - run: nix-build pkgs/top-level/release.nix -A tarball.nixpkgs-basic-release-checks --arg supportedSystems '[ "aarch64-darwin" "aarch64-linux" "x86_64-linux" "x86_64-darwin"  ]'
+    - run: nix-build pkgs/top-level/release.nix -A release-checks --arg supportedSystems '[ "aarch64-darwin" "aarch64-linux" "x86_64-linux" "x86_64-darwin"  ]'

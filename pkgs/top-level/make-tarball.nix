@@ -34,9 +34,6 @@ pkgs.releaseTools.sourceTarball {
 
   requiredSystemFeatures = [ "big-parallel" ]; # 1 thread but ~36G RAM (!) see #227945
 
-  nixpkgs-basic-release-checks = import ./nixpkgs-basic-release-checks.nix
-   { inherit nix pkgs nixpkgs supportedSystems; };
-
   dontBuild = false;
 
   doCheck = true;
