@@ -9781,14 +9781,7 @@ with pkgs;
   ldc = callPackage ../development/compilers/ldc { };
 
   ligo =
-    let ocaml_p = ocaml-ng.ocamlPackages_4_14_janeStreet_0_15.overrideScope (self: super: {
-      zarith = super.zarith.overrideAttrs (o: {
-        src = fetchzip {
-          url = "https://github.com/ocaml/Zarith/archive/refs/tags/release-1.12.tar.gz";
-          hash = "sha256-SQegsMc1+UIod8XeJDE+H5q1huNDQI8CUh7IsHOoVMs=";
-        };
-      });
-    }); in
+    let ocaml_p = ocaml-ng.ocamlPackages_4_14_janeStreet_0_15; in
     callPackage ../development/compilers/ligo {
     coq = coq_8_13.override {
       customOCamlPackages = ocaml_p;

@@ -2,6 +2,7 @@
 , fetchFromGitLab
 , buildDunePackage
 , ppx_hash
+, bigstringaf
 , either
 , ezjsonm
 , zarith
@@ -16,19 +17,12 @@
 
 buildDunePackage rec {
   pname = "data-encoding";
-  version = "0.7.1";
+  inherit (json-data-encoding) src version;
 
-  duneVersion = "3";
   minimalOCamlVersion = "4.10";
 
-  src = fetchFromGitLab {
-    owner = "nomadic-labs";
-    repo = "data-encoding";
-    rev = "v${version}";
-    hash = "sha256-V3XiCCtoU+srOI+KVSJshtaSJLBJ4m4o10GpBfdYKCU=";
-  };
-
   propagatedBuildInputs = [
+    bigstringaf
     either
     ezjsonm
     ppx_hash
@@ -39,13 +33,9 @@ buildDunePackage rec {
     json-data-encoding-bson
   ];
 
-  checkInputs = [
-    alcotest
-    crowbar
+  buildInputs = [
     ppx_expect
   ];
-
-  doCheck = true;
 
   meta = {
     homepage = "https://gitlab.com/nomadic-labs/data-encoding";
