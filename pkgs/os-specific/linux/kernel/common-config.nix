@@ -1053,6 +1053,17 @@ let
 
       NVME_MULTIPATH = yes;
 
+      NVME_AUTH = whenAtLeast "6.0" yes;
+      NVME_HOST_AUTH = whenAtLeast "6.7" yes;
+      NVME_TCP_TLS = whenAtLeast "6.7" yes;
+
+      NVME_TARGET = module;
+      NVME_TARGET_PASSTHROUGH = whenAtLeast "5.1" yes;
+      NVME_TARGET_AUTH = whenAtLeast "6.0" yes;
+      NVME_TARGET_TCP_TLS = whenAtLeast "6.7" yes;
+
+      PCI_P2PDMA = mkIf stdenv.hostPlatform.is64bit yes;
+
       PSI = whenAtLeast "4.20" yes;
 
       MOUSE_ELAN_I2C_SMBUS = yes;
