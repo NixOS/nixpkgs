@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/popcorn-official/popcorn-desktop/releases/download/v${version}/Popcorn-Time-${version}-linux64.zip";
-    hash = "sha256-tbWk/uxvG+C2/XlnDXObwfYnNDeMdlljTS4VLlHaKbM=";
+    hash = "sha256-lCsIioR252GWP/+wNwkTw5PLSal/M9x6mlR/EKOd/hs=";
   };
 
   nativeBuildInputs = [
