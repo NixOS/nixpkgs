@@ -1198,11 +1198,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXaw = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, xorgproto, libXmu, libXpm, libXt, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libXaw";
-    version = "1.0.15";
+    version = "1.0.16";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXaw-1.0.15.tar.xz";
-      sha256 = "0jkm2ards3nj08y7185k9jvjhhx78r46abrl3g3jrc4zvq7zfddb";
+      url = "mirror://xorg/individual/lib/libXaw-1.0.16.tar.xz";
+      sha256 = "13wwqfwaahm6dh35w0nkvw32x3li2s0glsks34ggh267ahmmf7bk";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
