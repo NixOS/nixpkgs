@@ -2,6 +2,7 @@
 , lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 
 # build-system
 , cython
@@ -33,6 +34,14 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-k9PUlv8ZZUcPmXfQXl7DN2+x5jsQ5P2l450jwtiWmjA=";
   };
+
+  patches = [
+    (fetchpatch { # included in >= 1.4.2
+      name = "test_standard_scaler_dtype.patch";
+      url = "https://github.com/jeremiedbb/scikit-learn/commit/87c32d35eeb8f6f7fec63dc3d97d9c416545f053.diff";
+      hash = "sha256-iOBOoWHuWChCTnZ5go7MobPcHRGMChROpCI7V/5ik1Y=";
+    })
+  ];
 
   buildInputs = [
     pillow
