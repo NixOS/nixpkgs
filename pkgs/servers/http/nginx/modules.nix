@@ -385,13 +385,7 @@ let self = {
 
     inputs = [ luajit_openresty ];
 
-    preConfigure = let
-      # fix compilation against nginx 1.23.0
-      nginx-1-23-patch = fetchpatch {
-        url = "https://github.com/openresty/lua-nginx-module/commit/b6d167cf1a93c0c885c28db5a439f2404874cb26.patch";
-        sha256 = "sha256-l7GHFNZXg+RG2SIBjYJO1JHdGUtthWnzLIqEORJUNr4=";
-      };
-    in ''
+    preConfigure = ''
       export LUAJIT_LIB="${luajit_openresty}/lib"
       export LUAJIT_INC="$(realpath ${luajit_openresty}/include/luajit-*)"
 
@@ -399,7 +393,6 @@ let self = {
       lua_src=$TMPDIR/lua-src
       cp -r "${src}/" "$lua_src"
       chmod -R +w "$lua_src"
-      patch -p1 -d $lua_src -i ${nginx-1-23-patch}
       export configureFlags="''${configureFlags//"${src}"/"$lua_src"}"
       unset lua_src
     '';
