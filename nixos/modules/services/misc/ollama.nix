@@ -85,7 +85,7 @@ in
       };
       serviceConfig = {
         ExecStart = "${lib.getExe ollamaPackage} serve";
-        WorkingDirectory = "%S/ollama";
+        WorkingDirectory = cfg.home;
         StateDirectory = [ "ollama" ];
         DynamicUser = true;
       };
