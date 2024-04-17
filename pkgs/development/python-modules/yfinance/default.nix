@@ -1,19 +1,20 @@
-{ lib
-, appdirs
-, beautifulsoup4
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, frozendict
-, html5lib
-, lxml
-, multitasking
-, numpy
-, pandas
-, peewee
-, pythonOlder
-, requests
-, setuptools
+{
+  lib,
+  appdirs,
+  beautifulsoup4,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  frozendict,
+  html5lib,
+  lxml,
+  multitasking,
+  numpy,
+  pandas,
+  peewee,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     hash = "sha256-ZGwtu2vLcE9pM73umhnFwSzjQnGjTOTtVF607ox7I6E=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     appdirs
@@ -51,9 +50,7 @@ buildPythonPackage rec {
   # Tests require internet access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "yfinance"
-  ];
+  pythonImportsCheck = [ "yfinance" ];
 
   meta = with lib; {
     description = "Module to doiwnload Yahoo! Finance market data";
