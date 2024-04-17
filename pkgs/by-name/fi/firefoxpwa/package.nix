@@ -150,6 +150,7 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mpl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [
+      adamcstephens
       camillemndn
       pasqui23
     ];
