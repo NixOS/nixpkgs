@@ -50,7 +50,7 @@ in
     '';
 
     meta = with lib; {
-      description = "A Rust package for inspecting Nix expressions";
+      description = "Interactive TUI for inspecting nix configs and other expressions";
       homepage = "https://github.com/bluskript/nix-inspect";
       license = licenses.mit;
       maintainers = with maintainers; [blusk];
