@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "clipman";
-  version = "1.6.2";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "chmouel";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lahya0w1bgcTnpxANxNT2MIWu5yVUdqQl19kQzwUdAw=";
+    sha256 = "sha256-htMApyGuDCjQR+2pgi6KPk+K+GbO63fJWFxl9GW8yfg=";
   };
 
   vendorHash = "sha256-Z/sVCJz/igPDdeczC6pemLub6X6z4ZGlBwBmRsEnXKI=";

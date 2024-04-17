@@ -1,4 +1,4 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript, defusedxml, kodi-six }:
+{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript, defusedxml, kodi-six }:
 
 buildKodiAddon rec {
   pname = "keymap";
@@ -6,7 +6,7 @@ buildKodiAddon rec {
   version = "1.1.5";
 
   src = fetchzip {
-    url = "https://mirrors.kodi.tv/addons/nexus/${namespace}/${namespace}-${version}.zip";
+    url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
     sha256 = "sha256-wSztipTEGIqw1icsz+ziNxYuRZOFt3C66T1Ifap/ta0=";
   };
 
