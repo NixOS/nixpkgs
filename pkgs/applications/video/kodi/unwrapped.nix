@@ -70,17 +70,17 @@ let
   };
 
   groovy = fetchzip {
-    url = "https://archive.apache.org/dist/groovy/4.0.16/distribution/apache-groovy-binary-4.0.16.zip";
+    url = "mirror://apache/groovy/4.0.16/distribution/apache-groovy-binary-4.0.16.zip";
     sha256 = "sha256-OfZBiMVrhw6VqHRHCSC7ZV3FiZ26n4+F8hsskk+L6yU=";
   };
 
   apache_commons_lang = fetchzip {
-    url = "https://dlcdn.apache.org//commons/lang/binaries/commons-lang3-3.14.0-bin.zip";
+    url = "mirror://apache/commons/lang/binaries/commons-lang3-3.14.0-bin.zip";
     sha512 = "sha512-eKF1IQ6PDtifb4pMHWQ2SYHIh0HbMi3qpc92lfbOo3uSsFJVR3n7JD0AdzrG17tLJQA4z5PGDhwyYw0rLeLsXw==";
   };
 
   apache_commons_text = fetchzip {
-    url = "https://dlcdn.apache.org//commons/text/binaries/commons-text-1.11.0-bin.zip";
+    url = "mirror://apache/commons/text/binaries/commons-text-1.11.0-bin.zip";
     sha512 = "sha512-P2IvnrHSYRF70LllTMI8aev43h2oe8lq6rrMYw450PEhEa7OuuCjh1Krnc/A4OqENUcidVAAX5dK1RAsZHh8Dg==";
   };
 
