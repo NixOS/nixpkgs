@@ -1,4 +1,4 @@
-use base64::prelude::{Engine, BASE64_STANDARD};
+use data_encoding::BASE64;
 use digest::{Digest, Update};
 use serde::{Deserialize, Serialize};
 use sha1::Sha1;
@@ -60,16 +60,18 @@ impl Cache {
         integrity: Option<String>,
     ) -> anyhow::Result<()> {
         let (algo, hash, integrity) = if let Some(integrity) = integrity {
-            let (algo, hash) = integrity.split_once('-').unwrap();
+            let (algo, hash) = integrity
+                .split_once('-')
+                .expect("hash should be SRI format");
 
-            (algo.to_string(), BASE64_STANDARD.decode(hash)?, integrity)
+            (algo.to_string(), BASE64.decode(hash.as_bytes())?, integrity)
         } else {
             let hash = Sha512::new().chain(data).finalize();
 
             (
                 String::from("sha512"),
                 hash.to_vec(),
-                format!("sha512-{}", BASE64_STANDARD.encode(hash)),
+                format!("sha512-{}", BASE64.encode(&hash)),
             )
         };
 
