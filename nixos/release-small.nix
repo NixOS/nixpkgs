@@ -103,6 +103,7 @@ in rec {
       [
         "nixos.channel"
         "nixpkgs.tarball"
+        "nixpkgs.release-checks"
       ]
       (map (onSystems [ "x86_64-linux" ]) [
         "nixos.tests.boot.biosCdrom"
