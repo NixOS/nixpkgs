@@ -15,16 +15,15 @@
 
 stdenv.mkDerivation rec {
   pname = "lnav";
-  version = "0.11.2";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "tstack";
     repo = "lnav";
     rev = "v${version}";
-    sha256 = "sha256-OuxxcXpdpSxrDdiUqRbEaXvCZBAcWvE4YwaMtLKSqCM=";
+    sha256 = "sha256-7KTnG8MSNBCRknCRPirvdZm+z/0JYuHnyjxryvB3vu4=";
   };
 
-  patches = [ ./0001-Forcefully-disable-docs-build.patch ];
   postPatch = ''
     substituteInPlace Makefile.am \
       --replace "SUBDIRS = tools src test" "SUBDIRS = tools src"
