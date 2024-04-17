@@ -1053,16 +1053,20 @@ let
 
       NVME_MULTIPATH = yes;
 
-      NVME_AUTH = whenAtLeast "6.0" yes;
+      NVME_AUTH = mkMerge [
+        (whenBetween "6.0" "6.7" yes)
+        (whenAtLeast "6.7" module)
+      ];
+
       NVME_HOST_AUTH = whenAtLeast "6.7" yes;
       NVME_TCP_TLS = whenAtLeast "6.7" yes;
 
       NVME_TARGET = module;
-      NVME_TARGET_PASSTHROUGH = whenAtLeast "5.1" yes;
+      NVME_TARGET_PASSTHRU = whenAtLeast "5.9" yes;
       NVME_TARGET_AUTH = whenAtLeast "6.0" yes;
       NVME_TARGET_TCP_TLS = whenAtLeast "6.7" yes;
 
-      PCI_P2PDMA = mkIf stdenv.hostPlatform.is64bit yes;
+      PCI_P2PDMA = mkIf (stdenv.hostPlatform.is64bit && versionAtLeast version "4.20") yes;
 
       PSI = whenAtLeast "4.20" yes;
 
