@@ -50,6 +50,7 @@ let
       };
       testScript = ''
         start_all()
+        router.systemctl("start network-online.target")
         router.wait_for_unit("network-online.target")
         client.wait_for_unit("NetworkManager.service")
 
@@ -77,6 +78,7 @@ let
       };
       testScript = ''
         start_all()
+        router.systemctl("start network-online.target")
         router.wait_for_unit("network-online.target")
         client.wait_for_unit("NetworkManager.service")
 
@@ -113,6 +115,7 @@ let
       };
       testScript = ''
         start_all()
+        router.systemctl("start network-online.target")
         router.wait_for_unit("network-online.target")
         dynamic.wait_for_unit("NetworkManager.service")
         static.wait_for_unit("NetworkManager.service")
