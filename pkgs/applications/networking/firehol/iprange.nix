@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "manage IP ranges";
+    mainProgram = "iprange";
     homepage = "https://github.com/firehol/iprange";
     license = licenses.gpl2;
     maintainers = with maintainers; [ oxzi ];

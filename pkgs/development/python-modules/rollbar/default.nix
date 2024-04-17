@@ -50,6 +50,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Error tracking and logging from Python to Rollbar";
+    mainProgram = "rollbar";
     homepage = "https://github.com/rollbar/pyrollbar";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

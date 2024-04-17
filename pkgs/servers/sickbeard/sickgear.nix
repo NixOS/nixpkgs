@@ -4,13 +4,13 @@ let
   pythonEnv = python3.withPackages(ps: with ps; [ cheetah3 lxml ]);
 in stdenv.mkDerivation rec {
   pname = "sickgear";
-  version = "3.30.10";
+  version = "3.30.17";
 
   src = fetchFromGitHub {
     owner = "SickGear";
     repo = "SickGear";
     rev = "release_${version}";
-    hash = "sha256-pTcetcZ62rHMcnplteTJQkuEIQrPUKdX+cSV5V4ZqA4=";
+    hash = "sha256-ITEKF/YPoozAaCH/8s7Jwlj2YUc+CLqIjtpDZ3b2J5w=";
   };
 
   patches = [
@@ -33,6 +33,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "The most reliable stable TV fork of the great Sick-Beard to fully automate TV enjoyment with innovation";
+    mainProgram = "sickgear";
     license     = licenses.gpl3;
     homepage    = "https://github.com/SickGear/SickGear";
     maintainers = with lib.maintainers; [ rembo10 ];

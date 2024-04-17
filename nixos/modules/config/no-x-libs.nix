@@ -10,7 +10,7 @@ with lib;
     environment.noXlibs = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Switch off the options in the default configuration that
         require X11 libraries. This includes client-side font
         configuration and SSH forwarding of X11 authentication
@@ -66,7 +66,7 @@ with lib;
       networkmanager-sstp = super.networkmanager-vpnc.override { withGnome = false; };
       networkmanager-vpnc = super.networkmanager-vpnc.override { withGnome = false; };
       pango = super.pango.override { x11Support = false; };
-      pinentry = super.pinentry.override { enabledFlavors = [ "curses" "tty" "emacs" ]; withLibsecret = false; };
+      pinentry-curses = super.pinentry-curses.override { withLibsecret = false; };
       pipewire = super.pipewire.override { vulkanSupport = false; x11Support = false; };
       pythonPackagesExtensions = super.pythonPackagesExtensions ++ [
         (python-final: python-prev: {

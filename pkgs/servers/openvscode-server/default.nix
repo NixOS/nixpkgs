@@ -60,13 +60,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvscode-server";
-  version = "1.84.0";
+  version = "1.88.0";
 
   src = fetchFromGitHub {
     owner = "gitpod-io";
     repo = "openvscode-server";
     rev = "openvscode-server-v${finalAttrs.version}";
-    hash = "sha256-kYKvJrHWKHDIqJsN0j1WFN3OBWwEyNgY5hjNHBg+kKQ=";
+    hash = "sha256-cZ/q8EUPZ4YqKpwH/XvXzE8pMHKGO93ADqhGHbqJBF8=";
   };
 
   yarnCache = stdenv.mkDerivation {
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-oW/JngHpXb8kscikscI7N9csSyZsZQgG75jOdWll6dw=";
+    outputHash = "sha256-Zy8YPY+vEF9Y5ol4xWk9UMkHUQ0hY8n+mcXfm8iVbys=";
   };
 
   nativeBuildInputs = [
@@ -116,6 +116,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Patch out remote download of nodejs from build script
     ./remove-node-download.patch
   ];
+
+  # Disable NAPI_EXPERIMENTAL to allow to build with Node.js≥18.20.0.
+  env.NIX_CFLAGS_COMPILE = "-DNODE_API_EXPERIMENTAL_NOGC_ENV_OPT_OUT";
 
   postPatch = ''
     export HOME=$PWD

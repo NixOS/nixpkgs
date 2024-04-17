@@ -29,6 +29,7 @@
 , buildDocs ? !(isMinimalBuild || (uiToolkits == []))
 , darwin
 , libsForQt5
+, gitUpdater
 }:
 
 let
@@ -46,11 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString isMinimalBuild "-minimal"
     + lib.optionalString cursesUI "-cursesUI"
     + lib.optionalString qt5UI "-qt5UI";
-  version = "3.28.2";
+  version = "3.28.3";
 
   src = fetchurl {
     url = "https://cmake.org/files/v${lib.versions.majorMinor finalAttrs.version}/cmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-FGb4ctwcIm83PPj7pCMO0hao8Qi9VLR3tczf2eotEko=";
+    hash = "sha256-crdXDlyFk95qxKtDO3PqsYxfsyiIBGDIbOMmCBQa1cE=";
   };
 
   patches = [
@@ -177,6 +178,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false; # fails
 
+  passthru.updateScript = gitUpdater {
+    url = "https://gitlab.kitware.com/cmake/cmake.git";
+    rev-prefix = "v";
+    ignoredVersions = "-"; # -rc1 and friends
+  };
+
   meta = {
     homepage = "https://cmake.org/";
     description = "Cross-platform, open-source build system generator";
@@ -191,6 +198,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ttuegel lnl7 AndersonTorres ];
     platforms = lib.platforms.all;
+    mainProgram = "cmake";
     broken = (qt5UI && stdenv.isDarwin);
   };
 })

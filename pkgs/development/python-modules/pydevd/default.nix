@@ -73,6 +73,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "PyDev.Debugger (used in PyDev, PyCharm and VSCode Python)";
+    mainProgram = "pydevd";
     homepage = "https://github.com/fabioz/PyDev.Debugger";
     license = licenses.epl10;
     maintainers = with maintainers; [ onny ];

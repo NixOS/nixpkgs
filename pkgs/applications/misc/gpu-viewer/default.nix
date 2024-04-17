@@ -9,7 +9,7 @@
 , gobject-introspection
 , vulkan-tools
 , python3
-, wrapGAppsHook
+, wrapGAppsHook4
 , gdk-pixbuf
 , lsb-release
 , glxinfo
@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     meson
     ninja
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [

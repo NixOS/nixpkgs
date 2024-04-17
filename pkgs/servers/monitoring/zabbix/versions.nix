@@ -1,13 +1,13 @@
 generic: {
   v60 = generic {
-    version = "6.0.21";
-    sha256 = "sha256-hdKPI5UEQvF/URH2eLWW32az3LMEse3UXIELOsfvwzk=";
+    version = "6.0.26";
+    hash = "sha256-MIOKe5hqfDecB1oWZKzbFmJCsQLuAGtp21l2WxxVG+g=";
     vendorHash = null;
   };
 
   v50 = generic {
-    version = "5.0.37";
-    sha256 = "sha256-+C5fI+eMJKsynVnVJIYj27x1iFQwaG9Fnho0BXgENQI=";
-    vendorHash = "sha256-oSZBzIUL1yHXk7PnkSAlhI0i89aGMFrFHmbMN9rDAJ0=";
+    version = "5.0.41";
+    hash = "sha256-pPvw0lPoK1IpsXc5c8Qu9zFhx2oHJz2bwiX80vrYa58=";
+    vendorHash = "sha256-qLDoNnEFiSrWXbLtYlmQaqY8Rv6JaG8WbMYBlry5Evc=";
   };
 }

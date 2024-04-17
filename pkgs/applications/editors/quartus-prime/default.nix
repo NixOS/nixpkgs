@@ -1,7 +1,8 @@
 { lib, buildFHSEnv, callPackage, makeDesktopItem, writeScript, runtimeShell
-, runCommand, quartus-prime-lite
+, runCommand, unstick, quartus-prime-lite
+, withQuesta ? true
 , supportedDevices ? [ "Arria II" "Cyclone V" "Cyclone IV" "Cyclone 10 LP" "MAX II/V" "MAX 10 FPGA" ]
-, unwrapped ? callPackage ./quartus.nix { inherit supportedDevices; }
+, unwrapped ? callPackage ./quartus.nix { inherit unstick supportedDevices withQuesta; }
 }:
 
 let
@@ -18,11 +19,12 @@ in buildFHSEnv rec {
   name = "quartus-prime-lite"; # wrapped
 
   targetPkgs = pkgs: with pkgs; [
-    (runCommand "ld-lsb-compat" {} ''
+    (runCommand "ld-lsb-compat" {} (''
       mkdir -p "$out/lib"
       ln -sr "${glibc}/lib/ld-linux-x86-64.so.2" "$out/lib/ld-lsb-x86-64.so.3"
+    '' + lib.optionalString withQuesta ''
       ln -sr "${pkgsi686Linux.glibc}/lib/ld-linux.so.2" "$out/lib/ld-lsb.so.3"
-    '')
+    ''))
     # quartus requirements
     glib
     xorg.libICE
@@ -37,11 +39,14 @@ in buildFHSEnv rec {
     # qsys requirements
     xorg.libXtst
     xorg.libXi
+    dejavu_fonts
+    gnumake
   ];
 
-  # Also support 32-bit executables.
-  multiArch = true;
+  # Also support 32-bit executables used by simulator.
+  multiArch = withQuesta;
 
+  # these libs are installed as 64 bit, plus as 32 bit when multiArch is true
   multiPkgs = pkgs: with pkgs; let
     # This seems ugly - can we override `libpng = libpng12` for all `pkgs`?
     freetype = pkgs.freetype.override { libpng = libpng12; };

@@ -58,6 +58,7 @@ in buildDunePackage rec {
 
   meta = with lib; {
     description = "Release dune packages in opam";
+    mainProgram = "dune-release";
     homepage = "https://github.com/ocamllabs/dune-release";
     changelog = "https://github.com/tarides/dune-release/blob/${version}/CHANGES.md";
     license = licenses.isc;

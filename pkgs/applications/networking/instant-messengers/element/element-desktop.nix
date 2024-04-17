@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , makeWrapper
 , makeDesktopItem
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , yarn
 , nodejs
 , fetchYarnDeps
@@ -16,6 +16,7 @@
 , AppKit
 , CoreServices
 , desktopToDarwinBundle
+, libnotify
 , useKeytar ? true
 }:
 
@@ -41,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     sha256 = desktopYarnHash;
   };
 
-  nativeBuildInputs = [ yarn prefetch-yarn-deps nodejs makeWrapper jq ]
+  nativeBuildInputs = [ yarn fixup-yarn-lock nodejs makeWrapper jq ]
     ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
 
   inherit seshat;
@@ -77,7 +78,13 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     runHook postBuild
   '';
 
-  installPhase = ''
+  installPhase =
+    let
+      libPath = lib.makeLibraryPath [
+        libnotify
+      ];
+    in
+  ''
     runHook preInstall
 
     # resources
@@ -104,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     # LD_PRELOAD workaround for sqlcipher not found: https://github.com/matrix-org/seshat/issues/102
     makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
       --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher.so \
+      --set LD_LIBRARY_PATH "${libPath}" \
       --add-flags "$out/share/element/electron" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 

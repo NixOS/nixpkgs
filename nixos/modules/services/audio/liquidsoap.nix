@@ -31,8 +31,7 @@ in
 
     services.liquidsoap.streams = mkOption {
 
-      description =
-        lib.mdDoc ''
+      description = ''
           Set of Liquidsoap streams to start,
           one systemd service per stream.
         '';

@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-tikz";
-  version = "0.4.16";
+  version = "0.4.18";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8f9FNx6WMopcqihUzNlQoPBGYoW2YkFi6W1iaFLD4qU=";
+    hash = "sha256-+IQV2uoKqAGQzq0te6z7vi+NnvQGZ0Sb7XjhdT05Tzo=";
   };
 
   postPatch = ''

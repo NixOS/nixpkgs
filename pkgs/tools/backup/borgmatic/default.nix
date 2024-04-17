@@ -13,14 +13,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
-  version = "1.8.1";
+  version = "1.8.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-XbihTQJtoiRRfwjMCP+XEPmbt7//zFPx1fIWOvn92Nc=";
+    sha256 = "sha256-YfDV2BJzi2DVi/eoWg3KeqmJjUv5+TrLpYdF8R7YuPY=";
   };
 
-  nativeCheckInputs = with python3Packages; [ flexmock pytestCheckHook pytest-cov ];
+  nativeCheckInputs = with python3Packages; [ flexmock pytestCheckHook pytest-cov ] ++ passthru.optional-dependencies.apprise;
 
   # - test_borgmatic_version_matches_news_version
   # The file NEWS not available on the pypi source, and this test is useless
@@ -39,6 +39,10 @@ python3Packages.buildPythonApplication rec {
     requests
     setuptools
   ];
+
+  passthru.optional-dependencies = {
+    apprise = with python3Packages; [ apprise ];
+  };
 
   postInstall = ''
     installShellCompletion --cmd borgmatic \

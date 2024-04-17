@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "carapace";
-  version = "0.30.2";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "rsteube";
     repo = "${pname}-bin";
     rev = "v${version}";
-    hash = "sha256-gYYNwDUL00b9orq1suxa9VtHBLUgRgntQcYw24vgncg=";
+    hash = "sha256-pyuehQZVg+f51r/oEH+FIpUUDTCKu4R9DmMaOffRfXA=";
   };
 
-  vendorHash = "sha256-RML1al1XlONzeCCkz34Ij1I/WDQSTVrm3P6RaOdyWKI=";
+  vendorHash = "sha256-HWczvkItE9SVGGQkddnb7/PBkTWrDAdKHjMOztlYV9M=";
 
   ldflags = [
     "-s"
@@ -32,7 +32,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Multi-shell multi-command argument completer";
     homepage = "https://rsteube.github.io/carapace-bin/";
-    maintainers = with maintainers; [ star-szr ];
+    maintainers = with maintainers; [ ];
     license = licenses.mit;
     mainProgram = "carapace";
   };

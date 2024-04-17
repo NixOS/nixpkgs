@@ -43,6 +43,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for communication with the Big Ass Fans i6 firmware";
+    mainProgram = "aiobafi6";
     homepage = "https://github.com/jfroy/aiobafi6";
     changelog = "https://github.com/jfroy/aiobafi6/releases/tag/0.8.2";
     license = licenses.asl20;

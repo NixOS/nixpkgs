@@ -1,11 +1,11 @@
 {
+  autoAddDriverRunpath,
   cmake,
   cudaPackages,
   lib,
 }:
 let
   inherit (cudaPackages)
-    autoAddOpenGLRunpathHook
     backendStdenv
     cuda_cccl
     cuda_cudart
@@ -29,20 +29,20 @@ backendStdenv.mkDerivation {
   nativeBuildInputs =
     [
       cmake
-      autoAddOpenGLRunpathHook
+      autoAddDriverRunpath
     ]
-    ++ lib.optionals (lib.versionOlder cudaVersion "11.4") [cudatoolkit]
-    ++ lib.optionals (lib.versionAtLeast cudaVersion "11.4") [cuda_nvcc];
+    ++ lib.optionals (lib.versionOlder cudaVersion "11.4") [ cudatoolkit ]
+    ++ lib.optionals (lib.versionAtLeast cudaVersion "11.4") [ cuda_nvcc ];
 
   buildInputs =
-    lib.optionals (lib.versionOlder cudaVersion "11.4") [cudatoolkit]
+    lib.optionals (lib.versionOlder cudaVersion "11.4") [ cudatoolkit ]
     ++ lib.optionals (lib.versionAtLeast cudaVersion "11.4") [
       (getDev libcublas)
       (getLib libcublas)
       (getOutput "static" libcublas)
       cuda_cudart
     ]
-    ++ lib.optionals (lib.versionAtLeast cudaVersion "12.0") [cuda_cccl];
+    ++ lib.optionals (lib.versionAtLeast cudaVersion "12.0") [ cuda_cccl ];
 
   cmakeFlags = [
     (lib.cmakeBool "CMAKE_VERBOSE_MAKEFILE" true)

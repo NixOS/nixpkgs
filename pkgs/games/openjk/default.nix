@@ -31,14 +31,14 @@ let
     categories = [ "Game" ];
   };
 in stdenv.mkDerivation {
-  pname = "OpenJK";
-  version = "0-unstable-2024-02-20";
+  pname = "openjk";
+  version = "0-unstable-2024-03-25";
 
   src = fetchFromGitHub {
     owner = "JACoders";
     repo = "OpenJK";
-    rev = "1e8a7998ca2fe434daebb41d586ac3cd5296433a";
-    sha256 = "sha256-TKJNaz+oWNYyReFZVefg1frPXyd3Yl96JDklp1qY1to=";
+    rev = "d2afcfefb5eb07d6f3787b48b947482160f27a1d";
+    hash = "sha256-dUXrFlzeLfah0xMXKeXHCXnmeTjRAy0/+aDCtPNw8a8=";
   };
 
   dontAddPrefix = true;

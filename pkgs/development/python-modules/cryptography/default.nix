@@ -25,21 +25,21 @@
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "42.0.2"; # Also update the hash in vectors.nix
+  version = "42.0.5"; # Also update the hash in vectors.nix
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4OxSujx/G32BPNUmSaWz7x/A1DMhncjJOCfFfqts+Ig=";
+    hash = "sha256-b+B+7JXf1HfrlTCu9b6tNP7IGbOq9sW9bSBWXaYHv+E=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-jw/FC5rQO77h6omtBp0Nc2oitkVbNElbkBUduyprTIc=";
+    hash = "sha256-Pw3ftpcDMfZr/w6US5fnnyPVsFSB9+BuIKazDocYjTU=";
   };
 
   patches = [
@@ -95,10 +95,6 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # save compute time by not running benchmarks
     "tests/bench"
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    # aarch64-darwin forbids W+X memory, but this tests depends on it:
-    # * https://cffi.readthedocs.io/en/latest/using.html#callbacks
-    "tests/hazmat/backends/test_openssl_memleak.py"
   ];
 
   meta = with lib; {

@@ -19,14 +19,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2024.2.0";
+  version = "2024.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-k8caA5Q4QcP7H1Nn5yvFsfExVwipAlFSb/DphkzYNtU=";
+    hash = "sha256-WeTajznndw01jXIEnOiSEy9psLuMeAC6j7UmHg0+Fys=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -59,8 +59,9 @@ python.pkgs.buildPythonApplication rec {
     colorama
     cryptography
     esphome-dashboard
-    kconfiglib
     icmplib
+    kconfiglib
+    packaging
     paho-mqtt
     pillow
     platformio
@@ -70,6 +71,7 @@ python.pkgs.buildPythonApplication rec {
     python-magic
     pyyaml
     requests
+    ruamel-yaml
     tornado
     tzdata
     tzlocal
@@ -96,13 +98,6 @@ python.pkgs.buildPythonApplication rec {
     pytest-asyncio
     pytest-mock
     pytestCheckHook
-  ];
-
-  disabledTestPaths = [
-    # requires hypothesis 5.49, we have 6.x
-    # ImportError: cannot import name 'ip_addresses' from 'hypothesis.provisional'
-    "tests/unit_tests/test_core.py"
-    "tests/unit_tests/test_helpers.py"
   ];
 
   postCheck = ''

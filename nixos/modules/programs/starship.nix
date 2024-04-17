@@ -12,7 +12,7 @@ let
       nativeBuildInputs = [ pkgs.yq ];
     } ''
     tomlq -s -t 'reduce .[] as $item ({}; . * $item)' \
-      ${lib.concatStringsSep " " (map (f: "${pkgs.starship}/share/starship/presets/${f}.toml") cfg.presets)} \
+      ${lib.concatStringsSep " " (map (f: "${cfg.package}/share/starship/presets/${f}.toml") cfg.presets)} \
       ${userSettingsFile} \
       > $out
   '';
@@ -26,23 +26,20 @@ let
 in
 {
   options.programs.starship = {
-    enable = lib.mkEnableOption (lib.mdDoc "the Starship shell prompt");
+    enable = lib.mkEnableOption "the Starship shell prompt";
 
-    interactiveOnly = lib.mkOption {
-      default = true;
-      example = false;
-      type = lib.types.bool;
-      description = lib.mdDoc ''
-        Whether to enable starship only when the shell is interactive.
-        Some plugins require this to be set to false to function correctly.
-      '';
-    };
+    package = lib.mkPackageOption pkgs "starship" { };
+
+    interactiveOnly = lib.mkEnableOption ''
+      starship only when the shell is interactive.
+      Some plugins require this to be set to false to function correctly
+    '' // { default = true; };
 
     presets = lib.mkOption {
       default = [ ];
       example = [ "nerd-font-symbols" ];
       type = with lib.types; listOf str;
-      description = lib.mdDoc ''
+      description = ''
         Presets files to be merged with settings in order.
       '';
     };
@@ -50,7 +47,7 @@ in
     settings = lib.mkOption {
       inherit (settingsFormat) type;
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Configuration included in `starship.toml`.
 
         See https://starship.rs/config/#prompt for documentation.
@@ -68,7 +65,7 @@ in
         if [[ ! -f "$HOME/.config/starship.toml" ]]; then
           export STARSHIP_CONFIG=${settingsFile}
         fi
-        eval "$(${pkgs.starship}/bin/starship init bash)"
+        eval "$(${cfg.package}/bin/starship init bash)"
       fi
     '';
 
@@ -81,7 +78,7 @@ in
         if not test -f "$HOME/.config/starship.toml";
           set -x STARSHIP_CONFIG ${settingsFile}
         end
-        eval (${pkgs.starship}/bin/starship init fish)
+        eval (${cfg.package}/bin/starship init fish)
       end
     '';
 
@@ -94,7 +91,7 @@ in
         if [[ ! -f "$HOME/.config/starship.toml" ]]; then
           export STARSHIP_CONFIG=${settingsFile}
         fi
-        eval "$(${pkgs.starship}/bin/starship init zsh)"
+        eval "$(${cfg.package}/bin/starship init zsh)"
       fi
     '';
   };

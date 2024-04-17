@@ -4,7 +4,7 @@
   fetchurl,
   jdk21,
   stdenv,
-  undmg
+  _7zz
 }:
 let
   pname = "nosql-workbench";
@@ -39,31 +39,12 @@ if stdenv.isDarwin then stdenv.mkDerivation {
 
   sourceRoot = ".";
 
-  buildInputs = [ jdk21 ];
-
   # DMG file is using APFS which is unsupported by "undmg".
-  # Fix found: https://discourse.nixos.org/t/help-with-error-only-hfs-file-systems-are-supported-on-ventura/25873/8
+  # Instead, use "7zz" to extract the contents.
   # "undmg" issue: https://github.com/matthewbauer/undmg/issues/4
-  unpackCmd = ''
-    echo "Creating temp directory"
-    mnt=$(TMPDIR=/tmp mktemp -d -t nix-XXXXXXXXXX)
+  nativeBuildInputs = [ _7zz ];
 
-    function finish {
-      echo "Ejecting temp directory"
-      /usr/bin/hdiutil detach $mnt -force
-      rm -rf $mnt
-    }
-    # Detach volume when receiving SIG "0"
-    trap finish EXIT
-
-    # Mount DMG file
-    echo "Mounting DMG file into \"$mnt\""
-    /usr/bin/hdiutil attach -nobrowse -mountpoint $mnt $curSrc
-
-    # Copy content to local dir for later use
-    echo 'Copying extracted content into "sourceRoot"'
-    cp -a $mnt/NoSQL\ Workbench.app $PWD/
-  '';
+  buildInputs = [ jdk21 ];
 
   installPhase = ''
     runHook preInstall

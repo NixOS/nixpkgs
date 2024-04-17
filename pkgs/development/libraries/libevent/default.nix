@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Event notification library";
+    mainProgram = "event_rpcgen.py";
     longDescription = ''
       The libevent API provides a mechanism to execute a callback function
       when a specific event occurs on a file descriptor or after a timeout

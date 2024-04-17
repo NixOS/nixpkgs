@@ -2,12 +2,12 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy-muse";
-  version = "0.0.30";
+  version = "0.0.33";
 
   src = fetchPypi {
     inherit version;
     pname = "Mopidy-Muse";
-    sha256 = "sha256-uFptv2niq8LVvEmMEteEN+RzghDiPC7z5EsAmxifDmw=";
+    sha256 = "sha256-CEPAPWtMrD+HljyqBB6EAyGVeOjzkvVoEywlE4XEJGs=";
   };
 
   propagatedBuildInputs = [

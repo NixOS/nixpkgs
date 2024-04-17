@@ -18,6 +18,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Automated authorization test tool";
+    mainProgram = "authz0";
     homepage = "https://github.com/hahwul/authz0";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

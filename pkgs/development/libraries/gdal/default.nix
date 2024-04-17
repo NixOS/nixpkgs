@@ -2,6 +2,7 @@
 , stdenv
 , callPackage
 , fetchFromGitHub
+, fetchpatch
 
 , useMinimalFeatures ? false
 , useTiledb ? (!useMinimalFeatures) && !(stdenv.isDarwin && stdenv.isx86_64)
@@ -79,14 +80,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal";
-  version = "3.8.4";
+  version = "3.8.5";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-R9VLof13OXPbWGHOG1Q4WZWSPoF739C6WuNWxoIwKTw=";
+    hash = "sha256-Z+mYlyOX9vJ772qwZMQfCbD/V7RL6+9JLHTzoZ55ot0=";
   };
+
+  patches = [
+    # bump java source option to fix build with JDK 21
+    (fetchpatch {
+      url = "https://github.com/OSGeo/gdal/commit/ca2eb4130750b0e6365f738a5f8ff77081f5c5bb.patch";
+      sha256 = "sha256-wShYm9yA7twJR72co+Tvf/IuYXqbI0OrjWl0uqC3bwo=";
+    })
+  ];
 
   nativeBuildInputs = [
     bison
@@ -225,18 +234,19 @@ stdenv.mkDerivation (finalAttrs: {
   '';
   nativeInstallCheckInputs = with python3.pkgs; [
     pytestCheckHook
+    pytest-benchmark
     pytest-env
     filelock
     lxml
+  ];
+  pytestFlagsArray = [
+    "--benchmark-disable"
   ];
   disabledTestPaths = [
     # tests that attempt to make network requests
     "gcore/vsis3.py"
     "gdrivers/gdalhttp.py"
     "gdrivers/wms.py"
-
-    # disable benchmarks
-    "benchmark/*"
   ];
   disabledTests = [
     # tests that attempt to make network requests

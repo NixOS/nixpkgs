@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "A free and open-source Touhou Project clone and fangame";
+    mainProgram = "taisei";
     longDescription = ''
       Taisei is an open clone of the Tōhō Project series. Tōhō is a one-man
       project of shoot-em-up games set in an isolated world full of Japanese

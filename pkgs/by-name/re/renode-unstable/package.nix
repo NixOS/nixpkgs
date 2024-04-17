@@ -1,16 +1,35 @@
 { renode
 , fetchurl
-, buildUnstable ? true
+, writeScript
 }:
 
-(renode.override {
-  inherit buildUnstable;
-}).overrideAttrs (finalAttrs: _: {
+renode.overrideAttrs (finalAttrs: _: {
   pname = "renode-unstable";
-  version = "1.14.0+20240222git83285cc63";
+  version = "1.15.0+20240404gitbfa16ba07";
 
   src = fetchurl {
     url = "https://builds.renode.io/renode-${finalAttrs.version}.linux-portable.tar.gz";
-    hash = "sha256-RFZdl2t1356h4Hvab6Gn3LZZnCWlQlK6C0otlXzVlMI=";
+    hash = "sha256-pXA6sGYBlLU2EnhFvUwRWkYirMi5BTgzyUbQ33sIMrg=";
   };
+
+  passthru.updateScript =
+    let
+      versionRegex = "[0-9\.\+]+[^\+]*.";
+    in
+    writeScript "${finalAttrs.pname}-updater" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p common-updater-scripts curl gnugrep gnused pup
+
+      latestVersion=$(
+        curl -sS https://builds.renode.io \
+          | pup 'a text{}' \
+          | egrep 'renode-${versionRegex}\.linux-portable\.tar\.gz' \
+          | head -n1 \
+          | sed -e 's,renode-\(.*\)\.linux-portable\.tar\.gz,\1,g'
+      )
+
+      update-source-version ${finalAttrs.pname} "$latestVersion" \
+        --file=pkgs/by-name/re/${finalAttrs.pname}/package.nix \
+        --system=x86_64-linux
+    '';
 })

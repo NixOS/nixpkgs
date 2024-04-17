@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     maintainers = [lib.maintainers.orbekk];
     platforms = lib.platforms.linux;
     description = "Tool to set battery charging thresholds on Lenovo Thinkpad";
+    mainProgram = "tpacpi-bat";
     license = lib.licenses.gpl3Plus;
   };
 }

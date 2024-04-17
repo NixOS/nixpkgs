@@ -30,7 +30,8 @@ wrapDotnetProgram() {
 dotnetFixupHook() {
     echo "Executing dotnetFixupPhase"
 
-    if [ "${executables-}" ]; then
+    # check if executables is declared (including empty values, in which case we generate no executables)
+    if declare -p executables &>/dev/null; then
         for executable in ${executables[@]}; do
             path="${installPath-$out/lib/$pname}/$executable"
 

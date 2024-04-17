@@ -17,7 +17,7 @@ buildPythonApplication rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-67CAR34VrMOzvNkukDeGRnUfoOLO66R37wsrRHjpp5E=";
   };
-  sourceRoot = "source/tools/mpremote";
+  sourceRoot = "${src.name}/tools/mpremote";
   format = "pyproject";
 
   nativeBuildInputs = [

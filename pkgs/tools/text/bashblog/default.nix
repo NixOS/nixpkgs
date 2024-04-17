@@ -54,6 +54,7 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A single Bash script to create blogs";
+    mainProgram = "bashblog";
     homepage = "https://github.com/cfenollosa/bashblog";
     license = licenses.gpl3Only;
     platforms = platforms.unix;

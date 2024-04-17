@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "rova";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "GidoHakvoort";
     repo = "rova";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6tICjph+ffS6OSMxzR4ANB4Q6sG1AKAgUN83DyEGpvo=";
+    hash = "sha256-y73Vf/E2xDy+2vnvZEllRUgsDfX33Q7AsL/UY2pR1sI=";
   };
 
   nativeBuildInputs = [

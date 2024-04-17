@@ -302,6 +302,9 @@ buildPythonPackage rec {
     "wandb"
   ];
 
+  # unmaintainable list of disabled tests
+  passthru.skipBulkUpdate = true;
+
   meta = with lib; {
     description = "A CLI and library for interacting with the Weights and Biases API";
     homepage = "https://github.com/wandb/wandb";

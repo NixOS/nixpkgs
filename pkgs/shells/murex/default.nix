@@ -20,6 +20,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Bash-like shell and scripting environment with advanced features designed for safety and productivity";
+    mainProgram = "murex";
     homepage = "https://murex.rocks";
     license = licenses.gpl2;
     maintainers = with maintainers; [ dit7ya kashw2 ];

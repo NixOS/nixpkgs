@@ -51,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/LedgerHQ/ledgerctl";
     description = "A library to control Ledger devices";
+    mainProgram = "ledgerctl";
     license = licenses.mit;
     maintainers = with maintainers; [ d-xo erdnaxe ];
   };

@@ -38,6 +38,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Prometheus exporter for machine metrics";
+    mainProgram = "node_exporter";
     homepage = "https://github.com/prometheus/node_exporter";
     changelog = "https://github.com/prometheus/node_exporter/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;

@@ -1,33 +1,28 @@
 { lib
 , python3
 , fetchFromGitHub
-, fetchpatch
 , nixosTests
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "radicale";
-  version = "3.1.8";
+  version = "3.1.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "Radicale";
     rev = "v${version}";
-    hash = "sha256-V0nqgxGUxcTRAYFuxpKUEVB/g/Mbvw+9OIcvAexXwuM=";
+    hash = "sha256-i4NQ1+ltRE0g8AoyGKKVcgZgSmLeppnobu6bf2+XmWY=";
   };
-
-  patches = [
-    # https://github.com/Kozea/Radicale/pull/1328
-    (fetchpatch {
-      name = "fix-python3.11-tests.patch";
-      url = "https://github.com/Kozea/Radicale/commit/110ec3a7885f523ce894a8c0e336c1a081dcd092.patch";
-      hash = "sha256-WEiwzJ+Vzv8PXmZUi1X7Qzs+oE6qgmpvHqm/xiOMrt0=";
-    })
-  ];
 
   postPatch = ''
     sed -i '/addopts/d' setup.cfg
   '';
+
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     defusedxml
@@ -44,12 +39,18 @@ python3.pkgs.buildPythonApplication rec {
     waitress
   ];
 
+  pytestFlagsArray = [
+    # pytest.PytestRemovedIn8Warning: Support for nose tests is deprecated and will be removed in a future release.
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   passthru.tests = {
     inherit (nixosTests) radicale;
   };
 
   meta = with lib; {
     homepage = "https://radicale.org/v3.html";
+    changelog = "https://github.com/Kozea/Radicale/blob/${src.rev}/CHANGELOG.md";
     description = "CalDAV and CardDAV server";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda erictapen ];

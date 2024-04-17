@@ -53,6 +53,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/adafruit/Adafruit_nRF52_nrfutil";
     description = "Modified version of Nordic's nrfutil 0.5.x for use with the Adafruit Feather nRF52";
+    mainProgram = "adafruit-nrfutil";
     license = licenses.bsd3;
     maintainers = with maintainers; [ stargate01 ];
   };

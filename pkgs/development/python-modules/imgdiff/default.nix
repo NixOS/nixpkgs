@@ -31,6 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Compare two images side-by-side";
+    mainProgram = "imgdiff";
     homepage = "https://github.com/mgedmin/imgdiff";
     changelog = "https://github.com/mgedmin/imgdiff/blob/${src.rev}/CHANGES.rst";
     license = licenses.mit;

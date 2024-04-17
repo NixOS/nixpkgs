@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "pykdtree";
-  version = "1.3.10";
+  version = "1.3.11";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QefF1mnK3CGIrMS7tLC03K9JLYRRLx5lF6erLRIskR0=";
+    hash = "sha256-bBI8e65SE68iPFKai0FhwH64VKb+QDizaVK62iEx68s=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,8 @@ buildPythonPackage rec {
 
   preCheck = ''
     # make sure we don't import pykdtree from the source tree
-    mv pykdtree tests
+    mv pykdtree/test_tree.py .
+    rm -rf pykdtree
   '';
 
   nativeCheckInputs = [

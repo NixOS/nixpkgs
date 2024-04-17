@@ -67,6 +67,7 @@ perlPackages.buildPerlPackage rec {
     description = ''
       Easy to use, lightweight front-end for ClamAV (Clam Antivirus).
     '';
+    mainProgram = "clamtk";
     license = licenses.gpl1Plus;
     homepage = "https://github.com/dave-theunsub/clamtk";
     platforms = platforms.linux;

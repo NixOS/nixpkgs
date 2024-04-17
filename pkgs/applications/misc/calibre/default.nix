@@ -32,11 +32,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "7.5.1";
+  version = "7.8.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-pGo9fWyeX5hpw5YOV05tWy/0YxHShStKN96LMPnqIiA=";
+    hash = "sha256-FxYuQzzuaWZihSsmeJc6ssG3VBr2YNEi3TkXyyymLUQ=";
   };
 
   patches = [

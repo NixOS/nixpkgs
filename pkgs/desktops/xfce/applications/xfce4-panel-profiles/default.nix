@@ -25,6 +25,7 @@ in mkXfceDerivation {
 
   meta = with lib; {
     description = "Simple application to manage Xfce panel layouts";
+    mainProgram = "xfce4-panel-profiles";
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

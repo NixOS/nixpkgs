@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ck";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "concurrencykit";
     repo = pname;
     rev = version;
-    sha256 = "sha256-HUC+8Vd0koAmumRZ8gS5u6LVa7fUfkIYRaxVv6/7Hgg=";
+    sha256 = "sha256-lxJ8WsZ3pBGf4sFYj5+tR37EYDZqpksaoohiIKA4pRI=";
   };
 
   postPatch = ''

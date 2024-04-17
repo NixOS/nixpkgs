@@ -29,13 +29,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "wofi-pass";
-  version = "23.1.4";
+  version = "24.0.2";
 
   src = fetchFromGitHub {
     owner = "schmidtandreas";
     repo = "wofi-pass";
     rev = "v${version}";
-    sha256 = "sha256-Ycu1NFHoglJdOzGuJ7yfmDo1+f+FMPkpQXJuz6nvtig=";
+    sha256 = "sha256-OtUz0YLKuEzA4kv+llrOll0L84nMTkYH6JPxrkQKB6I=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
-, nose
+, pynose
 , mock
 }:
 
@@ -20,13 +20,10 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  nativeCheckInputs = [ nose mock ];
+  nativeCheckInputs = [ pynose mock ];
 
-  patchPhase = ''
-    # Failing test: ERROR: statsd.tests.test_ipv6_resolution_udp
-    sed -i 's/test_ipv6_resolution_udp/noop/' statsd/tests.py
-    # well this is a noop, but so it was before
-    sed -i 's/assert_called_once()/called/' statsd/tests.py
+  checkPhase = ''
+    nosetests -sv
   '';
 
   meta = with lib; {

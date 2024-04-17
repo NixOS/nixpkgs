@@ -1,6 +1,6 @@
-{ lowPrio, newScope, pkgs, lib, stdenv, stdenvNoCC, cmake, ninja
-, gccForLibs, preLibcCrossHeaders
-, libxml2, python3, fetchFromGitHub, overrideCC, wrapCCWith, wrapBintoolsWith
+{ lowPrio, newScope, pkgs, lib, stdenv, cmake, ninja
+, preLibcCrossHeaders
+, libxml2, python3, fetchFromGitHub, substituteAll, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 , targetLlvm
@@ -17,15 +17,20 @@
     else pkgs.bintools
 , darwin
 # LLVM release information; specify one of these but not both:
-, gitRelease ? null
+, gitRelease ? {
+    version = "19.0.0-git";
+    rev = "cebf77fb936a7270c7e3fa5c4a7e76216321d385";
+    rev-version = "19.0.0-unstable-2024-04-07";
+    sha256 = "sha256-616tscgsiFgHQcXW4KzK5srrudYizQFnJVM6K0qRf+I=";
+}
   # i.e.:
   # {
   #   version = /* i.e. "15.0.0" */;
   #   rev = /* commit SHA */;
-  #   rev-version = /* human readable version; i.e. "unstable-2022-26-07" */;
+  #   rev-version = /* human readable version; i.e. "15.0.0-unstable-2022-07-26" */;
   #   sha256 = /* checksum for this release, can omit if specifying your own `monorepoSrc` */;
   # }
-, officialRelease ? { version = "18.1.0-rc3"; sha256 = "sha256-qRzY2kTLeRxXQCSuVP592Awafm5wjVeFY60d6082mSc="; }
+, officialRelease ? null
   # i.e.:
   # {
   #   version = /* i.e. "15.0.0" */;
@@ -41,12 +46,9 @@
 , monorepoSrc ? null
 }:
 
-assert let
-  int = a: if a then 1 else 0;
-  xor = a: b: ((builtins.bitXor (int a) (int b)) == 1);
-in
+assert
   lib.assertMsg
-    (xor
+    (lib.xor
       (gitRelease != null)
       (officialRelease != null))
     ("must specify `gitRelease` or `officialRelease`" +
@@ -83,7 +85,7 @@ in let
     then tools.bintools
     else bootBintools;
 
-  in {
+  in rec {
 
     libllvm = callPackage ./llvm {
       inherit llvm_meta;
@@ -93,7 +95,17 @@ in let
     # we need to reintroduce `outputSpecified` to get the expected behavior e.g. of lib.get*
     llvm = tools.libllvm;
 
-    libclang = callPackage ./clang {
+    libclang = callPackage ../common/clang {
+      patches = [
+        ./clang/purity.patch
+        # https://reviews.llvm.org/D51899
+        ./clang/gnu-install-dirs.patch
+        ../common/clang/add-nostdlibinc-flag.patch
+        (substituteAll {
+          src = ../common/clang/clang-at-least-16-LLVMgold-path.patch;
+          libllvmLibdir = "${libllvm.lib}/lib";
+        })
+      ];
       inherit llvm_meta;
     };
 
@@ -134,13 +146,15 @@ in let
       cc = tools.clang-unwrapped;
       libcxx = targetLlvmLibraries.libcxx;
       extraPackages = [
-        libcxx.cxxabi
         targetLlvmLibraries.compiler-rt
       ];
       extraBuildCommands = mkExtraBuildCommands cc;
     };
 
-    lld = callPackage ./lld {
+    lld = callPackage ../common/lld {
+      patches = [
+        ./lld/gnu-install-dirs.patch
+      ];
       inherit llvm_meta;
     };
 
@@ -199,7 +213,6 @@ in let
       libcxx = targetLlvmLibraries.libcxx;
       bintools = bintools';
       extraPackages = [
-        libcxx.cxxabi
         targetLlvmLibraries.compiler-rt
       ] ++ lib.optionals (!stdenv.targetPlatform.isWasm) [
         targetLlvmLibraries.libunwind
@@ -274,20 +287,46 @@ in let
       nixSupport.cc-cflags = [ "-fno-exceptions" ];
     });
 
+    # Has to be in tools despite mostly being a library,
+    # because we use a native helper executable from a
+    # non-cross build in cross builds.
+    libclc = callPackage ../common/libclc.nix {
+      inherit buildLlvmTools;
+    };
   });
 
   libraries = lib.makeExtensible (libraries: let
     callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake ninja libxml2 python3 release_version version monorepoSrc; });
   in {
 
-    compiler-rt-libc = callPackage ./compiler-rt {
+    compiler-rt-libc = callPackage ../common/compiler-rt {
+      patches = [
+        ./compiler-rt/X86-support-extension.patch # Add support for i486 i586 i686 by reusing i386 config
+        # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
+        # extra `/`.
+        ./compiler-rt/normalize-var.patch
+        # See: https://github.com/NixOS/nixpkgs/pull/186575
+        ../common/compiler-rt/darwin-plistbuddy-workaround.patch
+        # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
+        # ../common/compiler-rt/armv7l-15.patch
+      ];
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic)
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
                else stdenv;
     };
 
-    compiler-rt-no-libc = callPackage ./compiler-rt {
+    compiler-rt-no-libc = callPackage ../common/compiler-rt {
+      patches = [
+        ./compiler-rt/X86-support-extension.patch # Add support for i486 i586 i686 by reusing i386 config
+        # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
+        # extra `/`.
+        ./compiler-rt/normalize-var.patch
+        # See: https://github.com/NixOS/nixpkgs/pull/186575
+        ../common/compiler-rt/darwin-plistbuddy-workaround.patch
+        # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
+        # ../common/compiler-rt/armv7l-15.patch
+      ];
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRt
@@ -303,58 +342,28 @@ in let
 
     libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
 
-    libcxxabi = let
-      # CMake will "require" a compiler capable of compiling C++ programs
-      # cxx-header's build does not actually use one so it doesn't really matter
-      # what stdenv we use here, as long as CMake is happy.
-      cxx-headers = callPackage ./libcxx {
-        inherit llvm_meta;
-        # Note that if we use the regular stdenv here we'll get cycle errors
-        # when attempting to use this compiler in the stdenv.
-        #
-        # The final stdenv pulls `cxx-headers` from the package set where
-        # hostPlatform *is* the target platform which means that `stdenv` at
-        # that point attempts to use this toolchain.
-        #
-        # So, we use `stdenv_` (the stdenv containing `clang` from this package
-        # set, defined below) to sidestep this issue.
-        #
-        # Because we only use `cxx-headers` in `libcxxabi` (which depends on the
-        # clang stdenv _anyways_), this is okay.
-        stdenv = stdenv_;
-        headersOnly = true;
-      };
-
-      # `libcxxabi` *doesn't* need a compiler with a working C++ stdlib but it
-      # *does* need a relatively modern C++ compiler (see:
-      # https://releases.llvm.org/15.0.0/projects/libcxx/docs/index.html#platform-and-compiler-support).
-      #
-      # So, we use the clang from this LLVM package set, like libc++
-      # "boostrapping builds" do:
-      # https://releases.llvm.org/15.0.0/projects/libcxx/docs/BuildingLibcxx.html#bootstrapping-build
-      #
-      # We cannot use `clangNoLibcxx` because that contains `compiler-rt` which,
-      # on macOS, depends on `libcxxabi`, thus forming a cycle.
-      stdenv_ = overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc;
-    in callPackage ./libcxxabi {
-      stdenv = stdenv_;
-      inherit llvm_meta cxx-headers;
-    };
-
-    # Like `libcxxabi` above, `libcxx` requires a fairly modern C++ compiler,
+    # `libcxx` requires a fairly modern C++ compiler,
     # so: we use the clang from this LLVM package set instead of the regular
     # stdenv's compiler.
-    libcxx = callPackage ./libcxx {
+    libcxx = callPackage ../common/libcxx {
+      patches = lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
+        # https://github.com/llvm/llvm-project/issues/64226
+        ./libcxx/0001-darwin-10.12-mbstate_t-fix.patch
+      ];
       inherit llvm_meta;
       stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
-    libunwind = callPackage ./libunwind {
+    libunwind = callPackage ../common/libunwind {
       inherit llvm_meta;
       stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
-    openmp = callPackage ./openmp {
+    openmp = callPackage ../common/openmp {
+      patches = [
+        ./openmp/fix-find-tool.patch
+        ./openmp/run-lit-directly.patch
+      ];
       inherit llvm_meta targetLlvm;
     };
   });

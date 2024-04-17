@@ -44,6 +44,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Describe your shell commands in natural language";
+    mainProgram = "shell-genie";
     homepage = "https://github.com/dylanjcastillo/shell-genie";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];

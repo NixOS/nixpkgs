@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "loopy";
-  version = "2020.2.1";
+  version = "2024.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "inducer";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-GL2GY3fbP9yMEQYyuh4CRHpeN9DGnZxbMt6jC+O/C0g=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-R0Wry4r8Y7VKqsyrZ3odEOUy4T9di9rFQzq7BD0LG58=";
   };
 
   propagatedBuildInputs = [

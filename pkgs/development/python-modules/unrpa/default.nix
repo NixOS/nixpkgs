@@ -30,6 +30,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/Lattyware/unrpa";
     changelog = "https://github.com/Lattyware/unrpa/releases/tag/${version}";
     description = "A program to extract files from the RPA archive format";
+    mainProgram = "unrpa";
     license = licenses.gpl3;
     maintainers = with maintainers; [ leo60228 ];
   };

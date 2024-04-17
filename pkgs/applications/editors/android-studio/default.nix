@@ -10,16 +10,16 @@ let
     inherit tiling_wm;
   };
   stableVersion = {
-    version = "2023.1.1.28"; # "Android Studio Hedgehog | 2023.1.1 Patch 2"
-    sha256Hash = "sha256-E50Nu0kJNTto+/VcCbbTGjRRIESp1PAs4PGprMyhKPk=";
+    version = "2023.2.1.25"; # "Android Studio Iguana | 2023.2.1 Patch 2"
+    sha256Hash = "sha256-zWPq1GfckqCP9rNpXAHVfoApdvxkrN3NMc1qJCf/obw=";
   };
   betaVersion = {
-    version = "2023.2.1.22"; # "Android Studio Iguana | 2023.2.1 RC 2"
-    sha256Hash = "sha256-sy4Cfg+d4DuIUCrP4/Fp6mnsn5bWSy6PQ42kw3NpH/o=";
+    version = "2023.3.1.17"; # "Android Studio Jellyfish | 2023.3.1.1 RC 2"
+    sha256Hash = "sha256-zROBKzQiP4V2P67HgOIkHgn8q/M0zy5MkZozVSiQsWU=";
   };
   latestVersion = {
-    version = "2023.3.1.9"; # "Android Studio Jellyfish | 2023.3.1 Canary 9"
-    sha256Hash = "sha256-xn84sodpYcJgILwGBixuwhug9hZupqfizG98KYLSHsw=";
+    version = "2024.1.1.3"; # "Android Studio Koala | 2024.1.1 Canary 5"
+    sha256Hash = "sha256-JL2cloR0RhSnr8e62fHhxIzF286fT9sahTuv2OoQVRY=";
   };
 in {
   # Attributes are named by their corresponding release channels

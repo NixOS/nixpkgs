@@ -18,6 +18,7 @@ buildPythonApplication rec {
   meta = with lib; {
     homepage = "http://the-brannons.com/software/cligh.html";
     description = "A simple command-line interface to the facilities of Github";
+    mainProgram = "cligh";
     longDescription = ''
         Cligh is a simple command-line interface to the facilities of GitHub.
         It is written by Christopher Brannon chris@the-brannons.com. The

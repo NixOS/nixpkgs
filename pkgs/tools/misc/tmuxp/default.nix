@@ -2,12 +2,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "tmuxp";
-  version = "1.34.0";
-  format = "pyproject";
+  version = "1.46.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-G93YtgXo4li+tLWKgJFaxx4Ax4sK4F+vK6M3WTXIeiU=";
+    hash = "sha256-+aXpsB4mjw9sZLalv3knW8okP+mh2P/nbZCiCwa3UBU=";
   };
 
   nativeBuildInputs = [

@@ -10,9 +10,9 @@ in {
 
   options = {
     programs.dublin-traceroute = {
-      enable = mkEnableOption (mdDoc ''
+      enable = mkEnableOption ''
       dublin-traceroute, add it to the global environment and configure a setcap wrapper for it.
-      '');
+      '';
 
       package = mkPackageOption pkgs "dublin-traceroute" { };
     };

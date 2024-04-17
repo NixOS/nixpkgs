@@ -78,6 +78,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Karaoke, band and dancing game";
+    mainProgram = "performous";
     homepage = "https://performous.org/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ wegank ];

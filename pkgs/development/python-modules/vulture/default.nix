@@ -46,6 +46,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Finds unused code in Python programs";
+    mainProgram = "vulture";
     homepage = "https://github.com/jendrikseipp/vulture";
     changelog = "https://github.com/jendrikseipp/vulture/releases/tag/v${version}";
     license = licenses.mit;

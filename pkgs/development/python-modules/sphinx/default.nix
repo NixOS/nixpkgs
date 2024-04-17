@@ -31,6 +31,7 @@
 , filelock
 , html5lib
 , pytestCheckHook
+, pytest-xdist
 }:
 
 buildPythonPackage rec {
@@ -86,6 +87,7 @@ buildPythonPackage rec {
     filelock
     html5lib
     pytestCheckHook
+    pytest-xdist
   ];
 
   preCheck = ''
@@ -100,6 +102,12 @@ buildPythonPackage rec {
     "test_check_link_response_only"
     "test_anchors_ignored_for_url"
     "test_autodoc_default_options"
+    # racy with pytest-xdist
+    "test_domain_cpp_build_semicolon"
+    "test_class_alias"
+    "test_class_alias_having_doccomment"
+    "test_class_alias_for_imported_object_having_doccomment"
+    "test_decorators"
   ] ++ lib.optionals isPyPy [
     # PyPy has not __builtins__ which get asserted
     # https://doc.pypy.org/en/latest/cpython_differences.html#miscellaneous

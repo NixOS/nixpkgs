@@ -28,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://tools.suckless.org/slock";
     description = "Simple X display locker";
+    mainProgram = "slock";
     longDescription = ''
       Simple X display locker. This is the simplest X screen locker.
     '';

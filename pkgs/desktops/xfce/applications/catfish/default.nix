@@ -75,6 +75,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://docs.xfce.org/apps/catfish/start";
     description = "Handy file search tool";
+    mainProgram = "catfish";
     longDescription = ''
       Catfish is a handy file searching tool. The interface is
       intentionally lightweight and simple, using only GTK 3.

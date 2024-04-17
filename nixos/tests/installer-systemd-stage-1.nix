@@ -37,6 +37,9 @@
     clevisLuksFallback
     clevisZfs
     clevisZfsFallback
+    gptAutoRoot
+    clevisBcachefs
+    clevisBcachefsFallback
     ;
 
 }

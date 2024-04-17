@@ -16,10 +16,6 @@ buildGoModule rec {
 
   vendorHash = "sha256-KEW3ykEZvL6y1VacDIqtHW9B2RLHlHC29aqJjkEnRqQ=";
 
-  buildFlagArrays = [
-    "-trimpath"
-  ];
-
   CGO_ENABLED = 0;
 
   ldflags = [

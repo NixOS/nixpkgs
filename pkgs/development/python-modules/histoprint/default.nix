@@ -36,6 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pretty print histograms to the console";
+    mainProgram = "histoprint";
     homepage = "https://github.com/scikit-hep/histoprint";
     license = licenses.mit;
     maintainers = with maintainers; [ veprbl ];

@@ -2,21 +2,22 @@
 
 buildGoModule rec {
   pname = "gauge";
-  version = "1.6.2";
+  version = "1.6.6";
 
   src = fetchFromGitHub {
     owner = "getgauge";
     repo = "gauge";
     rev = "v${version}";
-    hash = "sha256-dCRuF1AYTcF2fKD7w7Gze2lE1hZYzpRz9u5p9uxqML0=";
+    hash = "sha256-u64LEDWktnBqGmey1TGdpVerjBsgyyRKJKeAJU3ysZs=";
   };
 
-  vendorHash = "sha256-j3FpQ48LjIVteN80zvz88FF3z+pYD2aHJW4VxT0z0vI=";
+  vendorHash = "sha256-RC3oS4nD291p8BSiWZUmsej/XuadaR7Xz1+bEfZL3Oc=";
 
   excludedPackages = [ "build" "man" ];
 
   meta = with lib; {
     description = "Light weight cross-platform test automation";
+    mainProgram = "gauge";
     homepage = "https://gauge.org";
     license = licenses.asl20;
     maintainers = [ maintainers.vdemeester ];

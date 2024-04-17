@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "conform";
-  version = "0.1.0-alpha.28";
+  version = "0.1.0-alpha.29";
 
   src = fetchFromGitHub {
     owner = "siderolabs";
     repo = "conform";
     rev = "v${version}";
-    hash = "sha256-qrMOybTjXql+cOggkgSMnK2MQhZr59e5Z4d+jBMUTko=";
+    hash = "sha256-5knN+lTedUdgWG8rb3zuJAxx9N0lt7LjJvmSJhdTSgw=";
   };
 
   vendorHash = "sha256-hDdNYXy5NIrlqT6yyOglFg2v7HOM9nE+oh7mx2kLdnQ=";

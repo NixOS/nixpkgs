@@ -11,12 +11,14 @@
 , solc
 , web3
 , withSolc ? false
+, testers
+, slither-analyzer
 }:
 
 buildPythonPackage rec {
   pname = "slither-analyzer";
-  version = "0.10.0";
-  format = "setuptools";
+  version = "0.10.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -24,18 +26,18 @@ buildPythonPackage rec {
     owner = "crytic";
     repo = "slither";
     rev = "refs/tags/${version}";
-    hash = "sha256-lyjHubnYIwGiA6uAt9erKlTr2sCRGHQy/ZkNByFrFgM=";
+    hash = "sha256-MjO2ZYFat+byH0DEt2v/wPXaYL2lmlESgQCZXD4Jpt0=";
   };
 
   nativeBuildInputs = [
     makeWrapper
+    setuptools
   ];
 
   propagatedBuildInputs = [
     crytic-compile
     packaging
     prettytable
-    setuptools
     web3
   ];
 
@@ -44,8 +46,37 @@ buildPythonPackage rec {
       --prefix PATH : "${lib.makeBinPath [ solc ]}"
   '';
 
+  # required for pythonImportsCheck
+  postInstall = ''
+    export HOME="$TEMP"
+  '';
+
+  pythonImportsCheck = [
+    "slither"
+    "slither.all_exceptions"
+    "slither.analyses"
+    "slither.core"
+    "slither.detectors"
+    "slither.exceptions"
+    "slither.formatters"
+    "slither.printers"
+    "slither.slither"
+    "slither.slithir"
+    "slither.solc_parsing"
+    "slither.utils"
+    "slither.visitors"
+    "slither.vyper_parsing"
+  ];
+
   # No Python tests
   doCheck = false;
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = slither-analyzer;
+      command = "HOME=$TMPDIR slither --version";
+    };
+  };
 
   meta = with lib; {
     description = "Static Analyzer for Solidity";
@@ -57,6 +88,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/trailofbits/slither";
     changelog = "https://github.com/crytic/slither/releases/tag/${version}";
     license = licenses.agpl3Plus;
+    mainProgram = "slither";
     maintainers = with maintainers; [ arturcygan fab hellwolf ];
   };
 }

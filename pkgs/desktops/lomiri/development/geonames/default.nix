@@ -99,6 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Parse and query the geonames database dump";
+    mainProgram = "geonames-demo";
     homepage = "https://gitlab.com/ubports/development/core/geonames";
     changelog = "https://gitlab.com/ubports/development/core/geonames/-/blob/${finalAttrs.version}/ChangeLog";
     license = licenses.gpl3Only;

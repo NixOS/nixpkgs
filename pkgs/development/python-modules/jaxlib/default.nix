@@ -4,6 +4,7 @@
 
   # Build-time dependencies:
 , addOpenGLRunpath
+, autoAddDriverRunpath
 , bazel_6
 , binutils
 , buildBazelPackage
@@ -51,7 +52,7 @@
 }@inputs:
 
 let
-  inherit (cudaPackagesGoogle) autoAddOpenGLRunpathHook cudaFlags cudaVersion cudnn nccl;
+  inherit (cudaPackagesGoogle) cudaFlags cudaVersion cudnn nccl;
 
   pname = "jaxlib";
   version = "0.4.24";
@@ -420,7 +421,7 @@ buildPythonPackage {
     done
   '';
 
-  nativeBuildInputs = lib.optionals cudaSupport [ autoAddOpenGLRunpathHook ];
+  nativeBuildInputs = lib.optionals cudaSupport [ autoAddDriverRunpath ];
 
   propagatedBuildInputs = [
     absl-py

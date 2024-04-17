@@ -33,6 +33,11 @@ buildPythonPackage rec {
     sybil
   ];
 
+  pytestFlagsArray = [
+    # TypeError: FixtureManager.getfixtureclosure() missing 1 required positional argument: 'ignore_args'
+    "--ignore=docs/using.rst"
+  ];
+
   postPatch = ''
     sed -i '/cov=public/d' pyproject.toml
   '';

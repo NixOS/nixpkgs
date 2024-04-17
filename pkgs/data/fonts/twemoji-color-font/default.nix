@@ -3,14 +3,14 @@
 , fetchurl
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "twemoji-color-font";
   version = "14.0.2";
 
   # We fetch the prebuilt font because building it takes 1.5 hours on hydra.
   # Relevant issue: https://github.com/NixOS/nixpkgs/issues/97871
   src = fetchurl {
-    url = "https://github.com/eosrei/twemoji-color-font/releases/download/v${version}/TwitterColorEmoji-SVGinOT-Linux-${version}.tar.gz";
+    url = "https://github.com/eosrei/twemoji-color-font/releases/download/v${finalAttrs.version}/TwitterColorEmoji-SVGinOT-Linux-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-aCbiHqCNxd8myIeuTlYEaYfg9JCd+MAsc94FcUoDU8E=";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     license = with licenses; [ cc-by-40 mit ];
     maintainers = [ maintainers.fgaz ];
   };
-}
+})

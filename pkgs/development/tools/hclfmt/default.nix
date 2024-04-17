@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "hclfmt";
-  version = "2.19.1";
+  version = "2.20.1";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "hcl";
     rev = "v${version}";
-    hash = "sha256-A7YfjXdblFGBABD/PeJMzh9WdPeIUWOWAr/UlD3ki28=";
+    hash = "sha256-+4K6k32azx/66eag9c6lUN8TUJ1ICx4Q8zpnTJWqgQ0=";
   };
 
-  vendorHash = "sha256-DA1IKaC+YSBzCfEMqHsHfwu1o5qvYFaFgDoGG0RZnoo=";
+  vendorHash = "sha256-L5OabeDUXbrwFOgWRhi9FPTWK+xbL54ZM7cYhS15Jis=";
 
   # The code repository includes other tools which are not useful. Only build
   # hclfmt.

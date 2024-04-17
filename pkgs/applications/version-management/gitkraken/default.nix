@@ -2,7 +2,7 @@
 , libXfixes, atk, gtk3, libXrender, pango, gnome, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchzip, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
-, makeDesktopItem, openssl, wrapGAppsHook, at-spi2-atk, at-spi2-core, libuuid
+, makeDesktopItem, openssl, wrapGAppsHook, makeShellWrapper, at-spi2-atk, at-spi2-core, libuuid
 , e2fsprogs, krb5, libdrm, mesa, unzip, copyDesktopItems, libxshmfence, libxkbcommon, git
 , libGL, zlib, cacert
 }:
@@ -11,24 +11,24 @@ with lib;
 
 let
   pname = "gitkraken";
-  version = "9.12.0";
+  version = "9.13.0";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchzip {
       url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
-      hash = "sha256-g2YcNFKt1/YBmEOH3Z5b0MPMMOWBIvXh+V2fzaGgCgQ=";
+      hash = "sha256-BBTa/MhfwTZ9YUJSGt8KocPn6f7m+W8G9yJr8I4NAtw=";
     };
 
     x86_64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin/GitKraken-v${version}.zip";
-      hash = "sha256-yy7BbtguQj/LVM7ivNTcG97XIImQUMQPKwTVDWGvvnQ=";
+      hash = "sha256-+1N4U5vV8XdHdtPeanjU38c8fzfY0uV0AA6exEe/FzQ=";
     };
 
     aarch64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin-arm64/GitKraken-v${version}.zip";
-      hash = "sha256-ihnTzQC7B0TdHZzXmrwcVSfxKvGoBBTdRq8ZJicaVDI=";
+      hash = "sha256-kNX8ptDL8vvFDhH3bDU24A2xN1D+tgpzsCj/zIGqctE=";
     };
   };
 
@@ -106,7 +106,7 @@ let
       comment = "Graphical Git client from Axosoft";
     }) ];
 
-    nativeBuildInputs = [ copyDesktopItems makeWrapper wrapGAppsHook ];
+    nativeBuildInputs = [ copyDesktopItems (wrapGAppsHook.override { makeWrapper = makeShellWrapper; }) ];
     buildInputs = [ gtk3 gnome.adwaita-icon-theme ];
 
     # avoid double-wrapping
@@ -122,6 +122,10 @@ let
       cp gitkraken.png $out/share/pixmaps/
 
       runHook postInstall
+    '';
+
+    preFixup = ''
+      gappsWrapperArgs+=(--add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}")
     '';
 
     postFixup = ''

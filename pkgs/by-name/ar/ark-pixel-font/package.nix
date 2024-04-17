@@ -1,24 +1,23 @@
 { lib
-, python3Packages
+, python312Packages
 , fetchFromGitHub
 , nix-update-script
-, ...
 }:
 
-python3Packages.buildPythonPackage rec {
+python312Packages.buildPythonPackage rec {
   pname = "ark-pixel-font";
-  version = "2023.11.26";
+  version = "2024.04.05";
 
   src = fetchFromGitHub {
     owner = "TakWolf";
     repo = pname;
     rev = version;
-    hash = "sha256-6a9wNmcXlEesPthpMt+GrWyO3x6WVtemVTXP8rbWmLk=";
+    hash = "sha256-G34cu/mSt/p8UPJt+Q1T2qy6d9LGgT1Jslt9syRz5eo=";
   };
 
   format = "other";
 
-  nativeBuildInputs = with python3Packages; [
+  nativeBuildInputs = with python312Packages; [
     pixel-font-builder
     unidata-blocks
     character-encoding-utils

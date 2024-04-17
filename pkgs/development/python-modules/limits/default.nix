@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "limits";
-  version = "3.7.0";
+  version = "3.10.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/limits/_version.py"
     '';
-    hash = "sha256-0h3ofungHkjycUvNJ3jf+VB/GSrshgUDECN2YoPGzzg=";
+    hash = "sha256-Ax0P9rYTPOrhtOw7FLElSNTGQ3WWCboM3FodTOGZWu8=";
   };
 
   postPatch = ''

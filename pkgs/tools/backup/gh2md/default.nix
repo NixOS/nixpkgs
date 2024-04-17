@@ -21,6 +21,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Export Github repository issues to markdown files";
+    mainProgram = "gh2md";
     homepage = "https://github.com/mattduck/gh2md";
     license = licenses.mit;
     maintainers = with maintainers; [ artturin ];

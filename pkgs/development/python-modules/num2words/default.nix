@@ -26,6 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Modules to convert numbers to words. 42 --> forty-two";
+    mainProgram = "num2words";
     homepage = "https://github.com/savoirfairelinux/num2words";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ jonringer ];

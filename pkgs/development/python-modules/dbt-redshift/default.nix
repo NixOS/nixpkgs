@@ -6,6 +6,7 @@
 , dbt-postgres
 , fetchFromGitHub
 , pytestCheckHook
+, pythonOlder
 , pythonRelaxDepsHook
 , redshift-connector
 , setuptools
@@ -13,27 +14,32 @@
 
 buildPythonPackage rec {
   pname = "dbt-redshift";
-  version = "1.7.3";
+  version = "1.7.6";
   pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-redshift";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3zj3wA1wxUjKSm1n7QE2g/VUuH3UuWlXCC68mOb2eso=";
+    hash = "sha256-p75WEozbkPXBThuW8i1tpJmca1nxBXTlGQR9U976mOs=";
   };
-
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools
-  ];
 
   pythonRelaxDeps = [
     "boto3"
     "redshift-connector"
   ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     agate
     boto3
     dbt-core

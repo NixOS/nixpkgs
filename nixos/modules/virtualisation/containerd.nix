@@ -19,11 +19,11 @@ in
 {
 
   options.virtualisation.containerd = with lib.types; {
-    enable = lib.mkEnableOption (lib.mdDoc "containerd container runtime");
+    enable = lib.mkEnableOption "containerd container runtime";
 
     configFile = lib.mkOption {
       default = null;
-      description = lib.mdDoc ''
+      description = ''
        Path to containerd config file.
        Setting this option will override any configuration applied by the settings option.
       '';
@@ -33,14 +33,14 @@ in
     settings = lib.mkOption {
       type = settingsFormat.type;
       default = {};
-      description = lib.mdDoc ''
+      description = ''
         Verbatim lines to add to containerd.toml
       '';
     };
 
     args = lib.mkOption {
       default = {};
-      description = lib.mdDoc "extra args to append to the containerd cmdline";
+      description = "extra args to append to the containerd cmdline";
       type = attrsOf str;
     };
   };

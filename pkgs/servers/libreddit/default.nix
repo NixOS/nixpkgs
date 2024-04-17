@@ -29,6 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Private front-end for Reddit";
+    mainProgram = "libreddit";
     homepage = "https://github.com/libreddit/libreddit";
     changelog = "https://github.com/libreddit/libreddit/releases/tag/v${version}";
     license = with licenses; [ agpl3Only ];

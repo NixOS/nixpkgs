@@ -1,34 +1,40 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, yajl
 , cffi
+, fetchPypi
 , pytestCheckHook
+, pythonOlder
+, setuptools
+, yajl
 }:
 
 buildPythonPackage rec {
   pname = "ijson";
   version = "3.2.3";
-  format = "setuptools";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-EClOm/ictxPaBbxHkL3/YWYQQy21YZZIJwdImOF0+Rc=";
   };
 
+  build-system = [
+    setuptools
+  ];
+
   buildInputs = [
     yajl
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cffi
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
   ];
-
-  doCheck = true;
 
   pythonImportsCheck = [
     "ijson"
@@ -39,5 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ICRAR/ijson";
     changelog = "https://github.com/ICRAR/ijson/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

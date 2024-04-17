@@ -29,6 +29,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Prometheus exporter for MySQL server metrics";
+    mainProgram = "mysqld_exporter";
     homepage = "https://github.com/prometheus/mysqld_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley globin ];

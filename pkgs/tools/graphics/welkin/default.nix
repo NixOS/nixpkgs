@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     ];
     hydraPlatforms = [];
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.free;
+    license = lib.licenses.bsd3;
     platforms = with lib.platforms; unix;
   };
 }

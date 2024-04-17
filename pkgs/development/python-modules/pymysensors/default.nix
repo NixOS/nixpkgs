@@ -59,6 +59,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python API for talking to a MySensors gateway";
+    mainProgram = "pymysensors";
     homepage = "https://github.com/theolind/pymysensors";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

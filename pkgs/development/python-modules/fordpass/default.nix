@@ -29,6 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module for the FordPass API";
+    mainProgram = "demo.py";
     homepage = "https://github.com/clarkd/fordpass-python";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

@@ -19,6 +19,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Automated Semantic Import Versioning Upgrades for Go";
+    mainProgram = "mod";
     longDescription = ''
       Command line tool to upgrade/downgrade Semantic Import Versioning in Go
       Modules.

@@ -49,6 +49,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Arcade-style fire fighting game";
+    mainProgram = "mrrescue";
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
     license = licenses.zlib;

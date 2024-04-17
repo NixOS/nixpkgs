@@ -51,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Graphical launcher of ZDoom and derivatives";
+    mainProgram = "DoomRunner";
     homepage = "https://github.com/Youda008/DoomRunner/";
     changelog = "https://github.com/Youda008/DoomRunner/blob/${finalAttrs.src.rev}/changelog.txt";
     license = licenses.gpl3Only;

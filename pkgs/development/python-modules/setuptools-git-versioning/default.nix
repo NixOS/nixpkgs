@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "setuptools-git-versioning";
-  version = "1.13.5";
+  version = "2.0.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dolfinus";
     repo = "setuptools-git-versioning";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MAHB6hMAcMo1+HCc6g7xQUD2sG+TLjM/6Oa/BKuXpRc=";
+    hash = "sha256-xugK/JOVA53nCK8bB0gPkhIREmy0+/OthsydfYRCYno=";
   };
 
   nativeBuildInputs = [
@@ -65,6 +65,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Use git repo data (latest tag, current commit hash, etc) for building a version number according PEP-440";
+    mainProgram = "setuptools-git-versioning";
     homepage = "https://github.com/dolfinus/setuptools-git-versioning";
     changelog = "https://github.com/dolfinus/setuptools-git-versioning/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.mit;

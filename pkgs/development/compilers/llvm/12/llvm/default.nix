@@ -184,6 +184,10 @@ in stdenv.mkDerivation (rec {
         --replace 'Starting llvm::' 'Starting {{.*}}' \
         --replace 'Finished llvm::' 'Finished {{.*}}'
     done
+  '' + ''
+    # gcc-13 fix
+    sed -i '/#include <string>/i#include <cstdint>' \
+      include/llvm/DebugInfo/Symbolize/DIPrinter.h
   '';
 
   preConfigure = ''
@@ -201,6 +205,8 @@ in stdenv.mkDerivation (rec {
 
   # E.g. mesa.drivers use the build-id as a cache key (see #93946):
   LDFLAGS = optionalString (enableSharedLibraries && !stdenv.isDarwin) "-Wl,--build-id=sha1";
+
+  hardeningDisable = [ "trivialautovarinit" ];
 
   cmakeBuildType = if debugVersion then "Debug" else "Release";
 

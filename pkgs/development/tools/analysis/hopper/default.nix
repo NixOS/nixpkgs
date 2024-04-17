@@ -68,7 +68,6 @@ stdenv.mkDerivation rec {
     description = "A macOS and Linux Disassembler";
     license = licenses.unfree;
     maintainers = with maintainers; [
-      luis
       Enteee
     ];
     platforms = platforms.linux;

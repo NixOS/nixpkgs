@@ -8,11 +8,11 @@
 
 appimageTools.wrapType2 rec {
   pname = "wootility";
-  version = "4.5.0";
+  version = "4.6.15";
 
   src = fetchurl {
     url = "https://s3.eu-west-2.amazonaws.com/wooting-update/wootility-lekker-linux-latest/wootility-lekker-${version}.AppImage";
-    sha256 = "sha256-5V1OpQZk234iKXOlpoXCbWPyixXkrWT8KkrGB92lPro=";
+    sha256 = "sha256-A/cjm9rhcgp68hbyjy7OfYPBKBcccl0OdD7MTdpEdPM=";
   };
 
   profile = ''

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , installShellFiles
 , rustPlatform
 , libiconv
@@ -11,29 +10,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "atuin";
-  version = "18.0.1";
+  version = "18.2.0";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "atuin";
     rev = "v${version}";
-    hash = "sha256-fuVSn1vhKn2+Tw5f6zBYHFW3QSL4eisZ6d5pxsj5hh4=";
+    hash = "sha256-TTQ2XLqng7TMLnRsLDb/50yyHYuMSPZJ4H+7CEFWQQ0=";
   };
-
-  patches = [
-    # atuin with bash-preexec wasn't recording history properly after searching,
-    # backport recent fix until next release
-    (fetchpatch {
-      url = "https://github.com/atuinsh/atuin/commit/cb11af25afddbad552d337a9c82e74ac4302feca.patch";
-      sha256 = "sha256-cG99aLKs5msatT7vXiX9Rn5xur2WUjQ/U33nOxuon7I=";
-    })
-  ];
 
   # TODO: unify this to one hash because updater do not support this
   cargoHash =
     if stdenv.isLinux
-    then "sha256-lHWgsVnjSeBmd7O4Fn0pUtTn4XbkBOAouaRHRozil50="
-    else "sha256-LxfpllzvgUu7ZuD97n3W+el3bdOt5QGXzJbDQ0w8seo=";
+    then "sha256-KMH19Op7uyb3Z/cjT6bdmO+JEp1o2n6rWRNYmn1+0hE="
+    else "sha256-mBOyo6bKipMfmsowQujeUpog12jXAiqx5CtkwCxquRU=";
 
   # atuin's default features include 'check-updates', which do not make sense
   # for distribution builds. List all other default features.
@@ -46,9 +36,9 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [
     libiconv
-    darwin.apple_sdk.frameworks.AppKit
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
+    darwin.apple_sdk_11_0.frameworks.AppKit
+    darwin.apple_sdk_11_0.frameworks.Security
+    darwin.apple_sdk_11_0.frameworks.SystemConfiguration
   ];
 
   postInstall = ''
@@ -70,6 +60,8 @@ rustPlatform.buildRustPackage rec {
     # PermissionDenied (Operation not permitted)
     "--skip=change_password"
     "--skip=multi_user_test"
+    # Tries to touch files
+    "--skip=build_aliases"
   ];
 
   meta = with lib; {

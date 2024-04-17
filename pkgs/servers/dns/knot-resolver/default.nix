@@ -53,6 +53,8 @@ unwrapped = stdenv.mkDerivation rec {
     echo 'os.exit(77)' > daemon/lua/trust_anchors.test/bootstrap.test.lua
     sed -E '/^[[:blank:]]*test_(dstaddr|headers),?$/d' -i \
       tests/config/doh2.test.lua modules/http/http_doh.test.lua
+  '' + /* FIXME: see PR #286822 */ ''
+    sed '/doh2\.test\.lua/d' -i tests/config/meson.build
   '';
 
   preConfigure = ''
@@ -118,7 +120,8 @@ wrapped-full = runCommand unwrapped.name
     allowSubstitutes = false;
     inherit (unwrapped) meta;
   }
-  (''
+  (assert false; # FIXME: the http module won't work; see PR #286822
+  ''
     mkdir -p "$out"/bin
     makeWrapper '${unwrapped}/bin/kresd' "$out"/bin/kresd \
       --set LUA_PATH  "$LUA_PATH" \

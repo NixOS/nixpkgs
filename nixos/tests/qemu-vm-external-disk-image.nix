@@ -69,5 +69,8 @@ in
     os.environ['NIX_DISK_IMAGE'] = tmp_disk_image.name
 
     machine.succeed("findmnt --kernel --source ${rootFsDevice} --target /")
+
+    # Make sure systemd boot didn't clobber this
+    machine.succeed("[ ! -e /homeless-shelter ]")
   '';
 }

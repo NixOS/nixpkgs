@@ -51,6 +51,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library to upgrade CWL syntax to a newer version";
+    mainProgram = "cwl-upgrader";
     homepage = "https://github.com/common-workflow-language/cwl-upgrader";
     changelog = "https://github.com/common-workflow-language/cwl-upgrader/releases/tag/v${version}";
     license = licenses.asl20;

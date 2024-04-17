@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Embedded C/C++ web server";
+    mainProgram = "civetweb";
     homepage = "https://github.com/civetweb/civetweb";
     license = [ lib.licenses.mit ];
   };

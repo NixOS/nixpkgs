@@ -36,6 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library and CLI for accurately querying username and email usage on online platforms";
+    mainProgram = "socialscan";
     homepage = "https://github.com/iojw/socialscan";
     changelog = "https://github.com/iojw/socialscan/releases/tag/v${version}";
     license = with licenses; [ mpl20 ];

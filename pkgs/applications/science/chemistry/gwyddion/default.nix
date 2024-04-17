@@ -1,5 +1,4 @@
 { lib, stdenv, fetchurl, gtk2, pkg-config, fftw, file,
-  pythonSupport ? false, python2Packages,
   gnome2,
   openexrSupport ? true, openexr,
   libzipSupport ? true, libzip,
@@ -14,10 +13,6 @@
   libpngSupport ? true, libpng,
   openglSupport ? !stdenv.isDarwin, libGL
 }:
-
-let
-    inherit (python2Packages) pygtk pygobject2 python;
-in
 
 stdenv.mkDerivation rec {
   pname = "gwyddion";
@@ -42,9 +37,6 @@ stdenv.mkDerivation rec {
     optional zlibSupport zlib ++
     optional libuniqueSupport libunique ++
     optional libzipSupport libzip;
-
-  propagatedBuildInputs = with lib;
-    optionals pythonSupport [ pygtk pygobject2 python gnome2.gtksourceview ];
 
   # This patch corrects problems with python support, but should apply cleanly
   # regardless of whether python support is enabled, and have no effects if

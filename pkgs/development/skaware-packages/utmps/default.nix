@@ -1,8 +1,6 @@
-{ skawarePackages }:
+{ skawarePackages, skalibs }:
 
-with skawarePackages;
-
-buildPackage {
+skawarePackages.buildPackage {
   pname = "utmps";
   version = "0.1.2.2";
   sha256 = "sha256-9/+jcUxllzu5X7zxUBwG/AR42TpRzqGzc+xoEcJCX1I=";

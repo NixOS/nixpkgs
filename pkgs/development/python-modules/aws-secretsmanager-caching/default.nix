@@ -1,33 +1,26 @@
 { lib
+, botocore
 , buildPythonPackage
-, pythonOlder
 , fetchPypi
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
 , setuptools
 , setuptools-scm
-, botocore
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  pname = "aws_secretsmanager_caching";
-  version = "1.1.1.5";
-  format = "setuptools";
+  pname = "aws-secretsmanager-caching";
+  version = "1.1.2";
+  pyprject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "5cee2762bb89b72f3e5123feee8e45fbe44ffe163bfca08b28f27b2e2b7772e1";
+    pname = "aws_secretsmanager_caching";
+    inherit version;
+    hash = "sha256-hhdo+I1yA/pLA+YFDFi8Ekrv27xQLpxiqXh1+4XqteA=";
   };
-
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
-
-  propagatedBuildInputs = [
-    botocore
-    setuptools  # Needs pkg_resources at runtime.
-  ];
 
   patches = [
     # Remove coverage tests from the pytest invocation in setup.cfg.
@@ -36,8 +29,17 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'pytest-runner'," ""
+      --replace-fail "'pytest-runner'," ""
   '';
+
+  build-system = [
+    setuptools-scm
+  ];
+
+  dependencies = [
+    botocore
+    setuptools  # Needs pkg_resources at runtime.
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -46,6 +48,21 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Integration tests require networking.
     "test/integ"
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # TypeError: 'float' object cannot be interpreted as an integer
+    "test_calls_hook_binary"
+    "test_calls_hook_string"
+    "test_get_secret_binary"
+    "test_get_secret_string"
+    "test_invalid_json"
+    "test_missing_key"
+    "test_string_with_additional_kwargs"
+    "test_string"
+    "test_valid_json_with_mixed_args"
+    "test_valid_json_with_no_secret_kwarg"
+    "test_valid_json"
   ];
 
   pythonImportsCheck = [

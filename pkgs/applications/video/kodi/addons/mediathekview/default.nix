@@ -1,4 +1,4 @@
-{ lib, buildKodiAddon, fetchFromGitHub, addonUpdateScript, myconnpy }:
+{ lib, buildKodiAddon, fetchFromGitHub, myconnpy }:
 
 buildKodiAddon rec {
   pname = "mediathekview";
@@ -15,10 +15,6 @@ buildKodiAddon rec {
   propagatedBuildInputs = [
     myconnpy
   ];
-
-  passthru.updateScript = addonUpdateScript {
-    attrPath = "kodi.packages.mediathekview";
-  };
 
   meta = with lib; {
     homepage = "https://github.com/mediathekview/plugin.video.mediathekview";

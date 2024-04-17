@@ -21,6 +21,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Asyncio implementation of an HTTP server";
+    mainProgram = "httpserver";
     homepage = "https://github.com/thomwiggers/httpserver";
     license = with lib.licenses; [ bsd3 ];
   };

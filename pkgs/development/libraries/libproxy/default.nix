@@ -78,5 +78,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21;
     homepage = "https://libproxy.github.io/libproxy/";
     description = "A library that provides automatic proxy configuration management";
+    mainProgram = "proxy";
   };
 }

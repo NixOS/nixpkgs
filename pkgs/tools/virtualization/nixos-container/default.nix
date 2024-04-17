@@ -35,4 +35,5 @@ substituteAll {
       mkdir -p $t
       cp ${./nixos-container-completion.sh} $t/nixos-container
     '';
+    meta.mainProgram = "nixos-container";
 }

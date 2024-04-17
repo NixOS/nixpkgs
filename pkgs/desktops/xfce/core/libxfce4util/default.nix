@@ -11,6 +11,7 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Extension library for Xfce";
+    mainProgram = "xfce4-kiosk-query";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };

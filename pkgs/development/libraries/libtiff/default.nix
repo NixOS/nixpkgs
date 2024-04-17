@@ -7,6 +7,7 @@
 , pkg-config
 , sphinx
 
+, lerc
 , libdeflate
 , libjpeg
 , xz
@@ -62,6 +63,10 @@ stdenv.mkDerivation (finalAttrs: {
   # sure cross-compilation works first!
   nativeBuildInputs = [ autoreconfHook pkg-config sphinx ];
 
+  buildInputs = [
+    lerc
+  ];
+
   # TODO: opengl support (bogus configure detection)
   propagatedBuildInputs = [
     libdeflate
@@ -90,7 +95,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://libtiff.gitlab.io/libtiff";
     changelog = "https://libtiff.gitlab.io/libtiff/v${finalAttrs.version}.html";
     license = licenses.libtiff;
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
     pkgConfigModules = [ "libtiff-4" ];
+    maintainers = teams.geospatial.members;
   };
 })

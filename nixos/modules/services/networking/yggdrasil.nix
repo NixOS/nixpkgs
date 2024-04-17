@@ -18,7 +18,7 @@ in
 
   options = with types; {
     services.yggdrasil = {
-      enable = mkEnableOption (lib.mdDoc "the yggdrasil system service");
+      enable = mkEnableOption "the yggdrasil system service";
 
       settings = mkOption {
         type = format.type;
@@ -32,7 +32,7 @@ in
             "tcp://0.0.0.0:xxxxx"
           ];
         };
-        description = lib.mdDoc ''
+        description = ''
           Configuration for yggdrasil, as a Nix attribute set.
 
           Warning: this is stored in the WORLD-READABLE Nix store!
@@ -61,7 +61,7 @@ in
         type = nullOr path;
         default = null;
         example = "/run/keys/yggdrasil.conf";
-        description = lib.mdDoc ''
+        description = ''
           A file which contains JSON or HJSON configuration for yggdrasil. See
           the {option}`settings` option for more information.
 
@@ -76,13 +76,13 @@ in
         type = types.nullOr types.str;
         default = null;
         example = "wheel";
-        description = lib.mdDoc "Group to grant access to the Yggdrasil control socket. If `null`, only root can access the socket.";
+        description = "Group to grant access to the Yggdrasil control socket. If `null`, only root can access the socket.";
       };
 
       openMulticastPort = mkOption {
         type = bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to open the UDP port used for multicast peer discovery. The
           NixOS firewall blocks link-local communication, so in order to make
           incoming local peering work you will also need to configure
@@ -98,7 +98,7 @@ in
         type = listOf str;
         default = [ ];
         example = [ "tap*" ];
-        description = lib.mdDoc ''
+        description = ''
           Disable the DHCP client for any interface whose name matches
           any of the shell glob patterns in this list.  Use this
           option to prevent the DHCP client from broadcasting requests
@@ -110,17 +110,17 @@ in
 
       package = mkPackageOption pkgs "yggdrasil" { };
 
-      persistentKeys = mkEnableOption (lib.mdDoc ''
+      persistentKeys = mkEnableOption ''
         persistent keys. If enabled then keys will be generated once and Yggdrasil
         will retain the same IPv6 address when the service is
         restarted. Keys are stored at ${keysPath}
-      '');
+      '';
 
       extraArgs = mkOption {
         type = listOf str;
         default = [ ];
         example = [ "-loglevel" "info" ];
-        description = lib.mdDoc "Extra command line arguments.";
+        description = "Extra command line arguments.";
       };
 
     };

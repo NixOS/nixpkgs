@@ -18,6 +18,7 @@
 , pytest-timeout
 , pytestCheckHook
 , pythonRelaxDepsHook
+, pythonAtLeast
 , pythonOlder
 , requests
 , setuptools
@@ -95,6 +96,9 @@ buildPythonPackage rec {
   disabledTests = [
     # https://github.com/postlund/pyatv/issues/2307
     "test_zeroconf_service_published"
+  ] ++ lib.optionals (pythonAtLeast "3.12") [
+    # https://github.com/postlund/pyatv/issues/2365
+    "test_simple_dispatch"
   ] ++ lib.optionals (stdenv.isDarwin) [
     # tests/protocols/raop/test_raop_functional.py::test_stream_retransmission[raop_properties2-2-True] - assert False
     "test_stream_retransmission"

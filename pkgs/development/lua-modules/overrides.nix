@@ -56,8 +56,22 @@
 }:
 
 final: prev:
-with prev;
+let
+  inherit (prev) luaOlder luaAtLeast lua isLuaJIT;
+in
 {
+  argparse = prev.argparse.overrideAttrs(oa: {
+
+    doCheck = true;
+    checkInputs = [ final.busted ];
+
+    checkPhase = ''
+      runHook preCheck
+      export LUA_PATH="src/?.lua;$LUA_PATH"
+      busted spec/
+      runHook postCheck
+    '';
+  });
   ##########################################3
   #### manual fixes for generated packages
   ##########################################3
@@ -164,10 +178,12 @@ with prev;
   });
 
   ldbus = prev.ldbus.overrideAttrs (oa: {
-    luarocksConfig.variables = {
-      DBUS_DIR = "${dbus.lib}";
-      DBUS_ARCH_INCDIR = "${dbus.lib}/lib/dbus-1.0/include";
-      DBUS_INCDIR = "${dbus.dev}/include/dbus-1.0";
+    luarocksConfig = oa.luarocksConfig // {
+      variables = {
+        DBUS_DIR = "${dbus.lib}";
+        DBUS_ARCH_INCDIR = "${dbus.lib}/lib/dbus-1.0/include";
+        DBUS_INCDIR = "${dbus.dev}/include/dbus-1.0";
+      };
     };
     buildInputs = [
       dbus
@@ -190,7 +206,7 @@ with prev;
     '';
     meta.broken = luaOlder "5.1" || luaAtLeast "5.3";
 
-    propagatedBuildInputs = with lib; oa.propagatedBuildInputs ++ optional (!isLuaJIT) luaffi;
+    propagatedBuildInputs = with lib; oa.propagatedBuildInputs ++ optional (!isLuaJIT) final.luaffi;
   });
 
   lgi = prev.lgi.overrideAttrs (oa: {
@@ -309,10 +325,13 @@ with prev;
   });
 
   luadbi-mysql = prev.luadbi-mysql.overrideAttrs (oa: {
-    luarocksConfig.variables = {
-      # Can't just be /include and /lib, unfortunately needs the trailing 'mysql'
-      MYSQL_INCDIR = "${libmysqlclient.dev}/include/mysql";
-      MYSQL_LIBDIR = "${libmysqlclient}/lib/mysql";
+
+    luarocksConfig = lib.recursiveUpdate oa.luarocksConfig {
+      variables = {
+        # Can't just be /include and /lib, unfortunately needs the trailing 'mysql'
+        MYSQL_INCDIR = "${libmysqlclient.dev}/include/mysql";
+        MYSQL_LIBDIR = "${libmysqlclient}/lib/mysql";
+      };
     };
     buildInputs = oa.buildInputs ++ [
       mariadb.client
@@ -334,7 +353,7 @@ with prev;
 
   luaevent = prev.luaevent.overrideAttrs (oa: {
     propagatedBuildInputs = oa.propagatedBuildInputs ++ [
-      luasocket
+      final.luasocket
     ];
     externalDeps = [
       { name = "EVENT"; dep = libevent; }
@@ -520,8 +539,8 @@ with prev;
     buildInputs = [ libuv ];
 
     # Use system libuv instead of building local and statically linking
-    luarocksConfig.variables = {
-      WITH_SHARED_LIBUV = "ON";
+    luarocksConfig = lib.recursiveUpdate oa.luarocksConfig {
+      variables = { WITH_SHARED_LIBUV = "ON"; };
     };
 
     # we unset the LUA_PATH since the hook erases the interpreter defaults (To fix)
@@ -642,6 +661,14 @@ with prev;
     '';
   });
 
+  tiktoken_core = prev.tiktoken_core.overrideAttrs (oa: {
+    cargoDeps = rustPlatform.fetchCargoTarball {
+      src = oa.src;
+      hash = "sha256-YApsOGfAw34zp069lyGR6FGjxty1bE23+Tic07f8zI4=";
+    };
+    nativeBuildInputs = oa.nativeBuildInputs ++ [ cargo rustPlatform.cargoSetupHook ];
+  });
+
   toml = prev.toml.overrideAttrs (oa: {
     patches = [ ./toml.patch ];
 
@@ -658,10 +685,18 @@ with prev;
 
     cargoDeps = rustPlatform.fetchCargoTarball {
       src = oa.src;
-      hash = "sha256-gvUqkLOa0WvAK4GcTkufr0lC2BOs2FQ2bgFpB0qa47k=";
+      hash = "sha256-2P+mokkjdj2PccQG/kAGnIoUPVnK2FqNfYpHPhsp8kw=";
     };
 
-    nativeBuildInputs = oa.nativeBuildInputs ++ [ cargo rustPlatform.cargoSetupHook ];
+    nativeBuildInputs = let
+      # HACK: luarocks-nix doesn't pick up rockspec build dependencies,
+      # so we have to pass the correct package in here.
+      lua = lib.head oa.propagatedBuildInputs;
+    in oa.nativeBuildInputs ++ [
+      cargo
+      rustPlatform.cargoSetupHook
+      lua.pkgs.luarocks-build-rust-mlua
+    ];
 
   });
 

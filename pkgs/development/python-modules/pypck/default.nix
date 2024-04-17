@@ -2,18 +2,16 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pytest-asyncio
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
 , setuptools
-, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pypck";
-  version = "0.7.17";
+  version = "0.7.19";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -22,21 +20,15 @@ buildPythonPackage rec {
     owner = "alengwenus";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Vlt4+fRULb9mB0ceRmc7MJ50DnF9DAJPHA8iCbNVvcE=";
+    hash = "sha256-D4uUR8A1mrT+mxUswS34hSRczjRkRro/pz9NbMUCPjM=";
   };
 
-  patches = [
-    # https://github.com/alengwenus/pypck/pull/109
-    (fetchpatch {
-      name = "relax-setuptools-dependency.patch";
-      url = "https://github.com/alengwenus/pypck/commit/17023ebe8082120b1eec086842ca809ec6e9df2b.patch";
-      hash = "sha256-kTu1+IwDrcdqelyK/vfhxw8MQBis5I1jag7YTytKQhs=";
-    })
-  ];
+  postPatch = ''
+    echo "${version}" > VERSION
+  '';
 
   nativeBuildInputs = [
     setuptools
-    wheel
   ];
 
   nativeCheckInputs = [

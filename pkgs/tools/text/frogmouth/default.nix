@@ -36,6 +36,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "A Markdown browser for your terminal";
+    mainProgram = "frogmouth";
     homepage = "https://github.com/Textualize/frogmouth";
     changelog = "https://github.com/Textualize/frogmouth/blob/${src.rev}/ChangeLog.md";
     license = licenses.mit;

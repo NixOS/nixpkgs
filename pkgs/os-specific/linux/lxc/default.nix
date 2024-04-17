@@ -61,8 +61,14 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  # https://github.com/NixOS/nixpkgs/issues/300635
+  postInstall = ''chmod -R u-s,g-s "$out"'';
+
   passthru = {
-    tests.incus = nixosTests.incus.container;
+    tests = {
+      incus-legacy-init = nixosTests.incus.container-legacy-init;
+      incus-systemd-init = nixosTests.incus.container-systemd-init;
+    };
     updateScript = nix-update-script {
       extraArgs = [
         "-vr"

@@ -40,6 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/ACEnglish/bwapy";
     description = "Python bindings to bwa mem aligner";
+    mainProgram = "bwamempy";
     license = licenses.mpl20;
     maintainers = with maintainers; [ ris ];
   };

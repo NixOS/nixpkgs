@@ -26,6 +26,7 @@ let
           rev = "refs/tags/${version}";
           hash = "sha256-IWTo/P9JRxBQlhtcH3JMJZZrwAA8EALF4dtHajWUc4w=";
         };
+        doCheck = false; # no tests
       });
 
       dataclasses-json = super.dataclasses-json.overridePythonAttrs (oldAttrs: rec {
@@ -117,6 +118,7 @@ python.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "GTK3 Subsonic/Airsonic client";
+    mainProgram = "sublime-music";
     homepage = "https://sublimemusic.app/";
     changelog = "https://github.com/sublime-music/sublime-music/blob/v${version}/CHANGELOG.rst";
     license = licenses.gpl3Plus;

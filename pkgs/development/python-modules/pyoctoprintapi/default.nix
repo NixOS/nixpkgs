@@ -14,7 +14,7 @@
 
 let
   pname = "pyoctoprintapi";
-  version = "0.1.12";
+  version = "0.1.14";
 in
 buildPythonPackage {
   inherit pname version;
@@ -26,7 +26,7 @@ buildPythonPackage {
     owner = "rfleming71";
     repo = "pyoctoprintapi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Jf/zYnBHVl3TYxFy9Chy6qNH/eCroZkmUOEWfd62RIo=";
+    hash = "sha256-DKqkT0Wyxf4grXBqei9IYBGMOgPxjzuo955M/nHDLo8=";
   };
 
   nativeBuildInputs = [

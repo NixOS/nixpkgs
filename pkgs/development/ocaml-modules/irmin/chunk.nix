@@ -4,7 +4,6 @@ buildDunePackage rec {
 
   pname = "irmin-chunk";
   inherit (irmin) version src strictDeps;
-  duneVersion = "3";
 
   propagatedBuildInputs = [ irmin fmt logs lwt ];
 

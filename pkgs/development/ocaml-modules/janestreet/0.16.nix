@@ -146,7 +146,7 @@ with self;
     hash = "sha256-83YKxvVb/JwBnQG4R/R1Ztik9T/hO4cbiNTfFnErpG4=";
     meta.description = "Async wrappers for SSL";
     buildInputs = [ dune-configurator ];
-    propagatedBuildInputs = [ async ctypes openssl ];
+    propagatedBuildInputs = [ async ctypes ctypes-foreign openssl ];
   };
 
   async_unix = janePackage {
@@ -1221,6 +1221,7 @@ with self;
     hash = "sha256-pmEKi24+22T76SzI3RpBmQF7ZrQwlngrpFYLoBdLwe0=";
     meta.description = "OCaml bindings for the Neovim API";
     propagatedBuildInputs = [ angstrom-async async_extra expect_test_helpers_async faraday jsonaf man_in_the_middle_debugger semantic_version ];
+    patches = [ ./vcaml.patch ];
   };
 
   virtual_dom = janePackage {

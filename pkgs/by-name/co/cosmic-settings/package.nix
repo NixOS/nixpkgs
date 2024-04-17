@@ -5,6 +5,7 @@
 , cmake
 , makeBinaryWrapper
 , cosmic-icons
+, cosmic-randr
 , just
 , pkg-config
 , libxkbcommon
@@ -14,34 +15,38 @@
 , wayland
 , expat
 , udev
+, util-linux
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-settings";
-  version = "unstable-2024-01-09";
+  version = "0-unstable-2024-02-15";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = pname;
-    rev = "f2148eed9a56ef1b5ba73db73e15486e188e01b7";
-    hash = "sha256-JUiUC/RNR1cqJouUEneHZotkN2M18vJhv+ATvGFrQxU=";
+    rev = "82ee8a693cb2e1f727aa600f62a24d5de5d685d6";
+    hash = "sha256-OGei48Eu0kBXlWwGQaRZULAOnKyrDjCXV8OuWdOmv8E=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "accesskit-0.11.0" = "sha256-xVhe6adUb8VmwIKKjHxwCwOo5Y1p3Or3ylcJJdLDrrE=";
+      "accesskit-0.12.2" = "sha256-ksaYMGT/oug7isQY8/1WD97XDUsX2ShBdabUzxWffYw=";
       "atomicwrites-0.4.2" = "sha256-QZSuGPrJXh+svMeFWqAXoqZQxLq/WfIiamqvjJNVhxA=";
-      "cosmic-bg-config-0.1.0" = "sha256-fdRFndhwISmbTqmXfekFqh+Wrtdjg3vSZut4IAQUBbA=";
-      "cosmic-comp-config-0.1.0" = "sha256-xN5VbxRO50BPU0VP1rSOkq3TS2WTiCGavJS8o05Jw50=";
-      "cosmic-config-0.1.0" = "sha256-/oAG5xu0Lnsw/CIGXrvoC3pKkj5aS0qubWIPozQDSsY=";
-      "cosmic-client-toolkit-0.1.0" = "sha256-AEgvF7i/OWPdEMi8WUaAg99igBwE/AexhAXHxyeJMdc=";
-      "cosmic-panel-config-0.1.0" = "sha256-SDqNLuj219FMqlO2devw/DD04RJfSBJLDLH/4ObRCl8=";
-      "glyphon-0.3.0" = "sha256-Uw1zbHVAjB3pUfUd8GnFUnske3Gxs+RktrbaFJfK430=";
-      "smithay-client-toolkit-0.18.0" = "sha256-9NwNrEC+csTVtmXrNQFvOgohTGUO2VCvqOME7SnDCOg=";
-      "softbuffer-0.3.3" = "sha256-eKYFVr6C1+X6ulidHIu9SP591rJxStxwL9uMiqnXx4k=";
+      "cosmic-bg-config-0.1.0" = "sha256-2P2NcgDmytvBCMbG8isfZrX+JirMwAz8qjW3BhfhebI=";
+      "cosmic-comp-config-0.1.0" = "sha256-btXMVpgf6CKSXuUeNydreibgrRvBwiljYucaoch6RKs=";
+      "cosmic-config-0.1.0" = "sha256-QDcU9kVRHJmr8yuHq5C0RahQz0xBMkmDboW9Y2Tsk5s=";
+      "cosmic-client-toolkit-0.1.0" = "sha256-vj7Wm1uJ5ULvGNEwKznNhujCZQiuntsWMyKQbIVaO/Q=";
+      "cosmic-panel-config-0.1.0" = "sha256-gPQ5BsLvhnopnnGeKbUizmgk0yhEEgSD0etX9YEWc5E=";
+      "cosmic-randr-shell-0.1.0" = "sha256-t1PM/uIM+lbBwgFsKnRiqPZnlb4dxZnN72MfnW0HU/0=";
+      "cosmic-text-0.11.2" = "sha256-EG0jERREWR4MBWKgFmE/t6SpTTQRXK76PPa7+/TAKOA=";
+      "d3d12-0.19.0" = "sha256-usrxQXWLGJDjmIdw1LBXtBvX+CchZDvE8fHC0LjvhD4=";
+      "glyphon-0.5.0" = "sha256-j1HrbEpUBqazWqNfJhpyjWuxYAxkvbXzRKeSouUoPWg=";
+      "smithay-client-toolkit-0.18.0" = "sha256-2WbDKlSGiyVmi7blNBr2Aih9FfF2dq/bny57hoA4BrE=";
+      "softbuffer-0.4.1" = "sha256-a0bUFz6O8CWRweNt/OxTvflnPYwO5nm6vsyc/WcXyNg=";
       "taffy-0.3.11" = "sha256-SCx9GEIJjWdoNVyq+RZAGn0N71qraKZxf9ZWhvyzLaI=";
-      "xdg-shell-wrapper-config-0.1.0" = "sha256-3Dc2fU8xBVUmAs0Q1zEdcdG7vlxpBO+UIlyM/kzGcC4=";
+      "xdg-shell-wrapper-config-0.1.0" = "sha256-PfuybCDLeRcVCkVxFK2T9BnL2uJz7C4EEPDZ9cWlPqk=";
     };
   };
 
@@ -50,7 +55,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   nativeBuildInputs = [ cmake just pkg-config makeBinaryWrapper ];
-  buildInputs = [ libxkbcommon libinput fontconfig freetype wayland expat udev ];
+  buildInputs = [ libxkbcommon libinput fontconfig freetype wayland expat udev util-linux ];
 
   dontUseJustBuild = true;
 
@@ -65,7 +70,8 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram "$out/bin/cosmic-settings" \
-      --suffix XDG_DATA_DIRS : "${cosmic-icons}/share"
+      --prefix PATH : ${lib.makeBinPath [ cosmic-randr ]} \
+      --suffix XDG_DATA_DIRS : "$out/share:${cosmic-icons}/share"
   '';
 
   meta = with lib; {

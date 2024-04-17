@@ -4,34 +4,17 @@
 , callPackage
 , fetchFromGitHub
 , makeWrapper
-, # re2c deps
-  autoreconfHook
 , # py-yajl deps
   git
 , # oil deps
-  file
-, pkgsBuildBuild
+  pkgsBuildBuild
+, re2c
+, file
 , six
 , typing
 }:
 
 rec {
-  re2c = stdenv.mkDerivation rec {
-    pname = "re2c";
-    version = "1.0.3";
-    sourceRoot = "${src.name}/re2c";
-    src = fetchFromGitHub {
-      owner = "skvadrik";
-      repo = "re2c";
-      rev = version;
-      sha256 = "0grx7nl9fwcn880v5ssjljhcb9c5p2a6xpwil7zxpmv0rwnr3yqi";
-    };
-    nativeBuildInputs = [ autoreconfHook ];
-    preCheck = ''
-      patchShebangs run_tests.sh
-    '';
-  };
-
   py-yajl = python27.pkgs.buildPythonPackage rec {
     pname = "oil-pyyajl-unstable";
     version = "2022-09-01";
@@ -103,7 +86,9 @@ rec {
       "--without-readline"
     ];
 
-    nativeBuildInputs = [ re2c file makeWrapper ];
+    depsBuildBuild = [ re2c ];
+
+    nativeBuildInputs = [ file makeWrapper ];
 
     propagatedBuildInputs = [ six typing py-yajl ];
 

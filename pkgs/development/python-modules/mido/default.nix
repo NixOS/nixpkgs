@@ -6,6 +6,7 @@
 , portmidi
 , python-rtmidi
 , pytestCheckHook
+, pythonRelaxDepsHook
 , pythonOlder
 , setuptools
 , setuptools-scm
@@ -33,6 +34,11 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     setuptools-scm
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "packaging"
   ];
 
   propagatedBuildInputs = [

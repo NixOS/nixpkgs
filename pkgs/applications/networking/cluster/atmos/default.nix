@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "atmos";
-  version = "1.64.0";
+  version = "1.69.0";
 
   src = fetchFromGitHub {
     owner = "cloudposse";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-wNsyZ0Y3siSZ+i/G3bH/S8wkrmK+FZ2sn5XByDkZ80c=";
+    sha256 = "sha256-H2RyxUeOgIiGpR50sDP6bjZ6BKRB47oLUpdtawSRnmo=";
   };
 
-  vendorHash = "sha256-i7m9YXPlWqHtvC4Df7v5bLWt2tqeT933t2+Xit5RQxg=";
+  vendorHash = "sha256-dJJPq2HcGZ+MqtJ848gsrvzD1rMVrwJQKwq+UpZsFB0=";
 
   ldflags = [ "-s" "-w" "-X github.com/cloudposse/atmos/cmd.Version=v${version}" ];
 
@@ -36,7 +36,8 @@ buildGoModule rec {
     homepage = "https://atmos.tools";
     changelog = "https://github.com/cloudposse/atmos/releases/tag/v${version}";
     description = "Universal Tool for DevOps and Cloud Automation (works with terraform, helm, helmfile, etc)";
+    mainProgram = "atmos";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rb ];
+    maintainers = with maintainers; [ ] ++ teams.cloudposse.members;
   };
 }

@@ -6,14 +6,14 @@ let
   # NOTE: When updating these, please also take a look at the changes done to
   # kernel config in the xanmod version commit
   ltsVariant = {
-    version = "6.6.17";
-    hash = "sha256-WSWI3UByuD2SrcFC6El3ao0DINeG0IgtrvazDiHaIR0=";
+    version = "6.6.27";
+    hash = "sha256-MYvt7QWRdUybbhva6B4MOYrwnJfuu/qvMlnaGKcO1Hw=";
     variant = "lts";
   };
 
   mainVariant = {
-    version = "6.7.5";
-    hash = "sha256-achx+rElMOdPUD0qU2TStrlJXZU71E89HVlM4tKf7WE=";
+    version = "6.8.6";
+    hash = "sha256-7GsiIl3rcLm/u2zxrjpP6dTxn7w/6at22gaU//mLlzw=";
     variant = "main";
   };
 
@@ -29,12 +29,17 @@ let
     };
 
     structuredExtraConfig = with lib.kernel; {
+      # CPUFreq governor Performance
+      CPU_FREQ_DEFAULT_GOV_PERFORMANCE = lib.mkOverride 60 yes;
+      CPU_FREQ_DEFAULT_GOV_SCHEDUTIL = lib.mkOverride 60 no;
+
+      # Full preemption
+      PREEMPT = lib.mkOverride 60 yes;
+      PREEMPT_VOLUNTARY = lib.mkOverride 60 no;
+
       # Google's BBRv3 TCP congestion Control
       TCP_CONG_BBR = yes;
       DEFAULT_BBR = yes;
-
-      # WineSync driver for fast kernel-backed Wine
-      WINESYNC = module;
 
       # Preemptive Full Tickless Kernel at 250Hz
       HZ = freeform "250";

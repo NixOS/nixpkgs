@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "kraftkit";
-  version = "0.7.3";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "unikraft";
     repo = "kraftkit";
     rev = "v${version}";
-    hash = "sha256-61eH2aFue/qJ7Xmu8ueQvsQ5moVpDkHe9p9bywqRwQY=";
+    hash = "sha256-or1UstxYbj3QvgnoQPT2vyQTVZDIKPMDMxRGtN0n0lk=";
   };
 
-  vendorHash = "sha256-4e7g79C6BofnPXPCuquIPfGL7C9TMSdmlIq2HSrz3eY=";
+  vendorHash = "sha256-UyDaEwXTMbyAUghvHS/LcT2Yzz7CJ2xGelF19kgRNec=";
 
   ldflags = [
     "-s"

@@ -5,7 +5,7 @@
 , requests
 , setuptools
 , hypothesis
-, nose
+, pynose
 , responses
 }:
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     hypothesis
-    nose
+    pynose
     responses
   ];
 
@@ -41,6 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Tools and library for Habitica restful API";
+    mainProgram = "habitipy";
     homepage = "https://github.com/ASMfreaK/habitipy";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

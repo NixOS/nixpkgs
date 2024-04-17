@@ -5,13 +5,14 @@
 }:
 
 buildPythonPackage rec {
-  pname = "LTpycld2";
+  pname = "ltpycld2";
   version = "0.42";
 
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "LTpycld2";
+    inherit version;
     sha256 = "948d0c1ab5518ab4efcbcc3cd73bb29f809f1dfb30f4d2fbd81b175a1ffeb516";
   };
 

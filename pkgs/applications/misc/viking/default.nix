@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GPS data editor and analyzer";
+    mainProgram = "viking";
     longDescription = ''
       Viking is a free/open source program to manage GPS data.  You
       can import and plot tracks and waypoints, show Openstreetmaps

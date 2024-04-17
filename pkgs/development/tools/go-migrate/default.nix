@@ -12,11 +12,11 @@ buildGoModule rec {
   };
 
   proxyVendor = true; # darwin/linux hash mismatch
-  vendorHash = "sha256-3otiRbswhENs/YvKKr+ZeodLWtK7fhCjEtlMDlkLOlY=";
+  vendorHash = "sha256-q8wShIcVHZtpnhvZfsxiI5FLq0xneA8IBMDWd/vpz/0=";
 
   subPackages = [ "cmd/migrate" ];
 
-  tags = [ "postgres" "mysql" "redshift" "cassandra" "spanner" "cockroachdb" "clickhouse" "mongodb" "sqlserver" "firebird" "neo4j" "pgx" ];
+  tags = [ "cassandra" "clickhouse" "cockroachdb" "crate" "firebird" "mongodb" "multistmt" "mysql" "neo4j" "pgx" "postgres" "ql" "redshift" "rqlite" "shell" "snowflake" "spanner" "sqlite3" "sqlserver" "stub" "testing" "yugabytedb" ];
 
   meta = with lib; {
     homepage = "https://github.com/golang-migrate/migrate";

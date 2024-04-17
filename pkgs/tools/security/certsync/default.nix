@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "certsync";
-  version = "unstable-2023-04-14";
-  format = "pyproject";
+  version = "1.5-unstable-2024-03-08";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zblurx";
     repo = "certsync";
-    rev = "f3c8b61f0967a6403d4c592dcbfa8921682452a6";
-    hash = "sha256-7Pzss83jf3zKmgQZki18R47OWn5VniZZ/d4N8JgZs+0=";
+    rev = "712e34c54a63537efd630561aa55dc9d35962c3f";
+    hash = "sha256-YkxEExeu3sBJ93WJGtU5oe3rDS0Ki88vAeGpE23xRwo=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -33,5 +33,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/zblurx/certsync";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "certsync";
   };
 }

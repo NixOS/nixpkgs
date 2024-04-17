@@ -1,22 +1,23 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytz
-, tzlocal
 , clickhouse-cityhash
-, zstd
-, lz4
+, cython_3
+, fetchFromGitHub
 , freezegun
+, lz4
 , mock
 , nose
 , pytestCheckHook
 , pytest-xdist
+, pytz
+, setuptools
+, tzlocal
+, zstd
 }:
 
 buildPythonPackage rec {
   pname = "clickhouse-driver";
-  version = "0.2.5";
+  version = "0.2.7";
   format = "setuptools";
 
   # pypi source doesn't contain tests
@@ -24,16 +25,20 @@ buildPythonPackage rec {
     owner = "mymarilyn";
     repo = "clickhouse-driver";
     rev = version;
-    hash = "sha256-o5v37jPKmvUW4GFVD742nHSdO0g0z2FA4FkacbaRfNA=";
+    hash = "sha256-l0YHWY25PMHgZG/sAZjtGhwmcxWdA8k96zlm9hbKcek=";
   };
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
+    cython_3
     setuptools
+  ];
+
+  propagatedBuildInputs = [
+    clickhouse-cityhash
+    lz4
     pytz
     tzlocal
-    clickhouse-cityhash
     zstd
-    lz4
   ];
 
   nativeCheckInputs = [

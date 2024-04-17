@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     description = "More command-line utilities for working with MINC files";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
-    license   = licenses.free;
+    license   = licenses.hpndUc;
   };
 }

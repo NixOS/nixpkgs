@@ -7,7 +7,7 @@ let
 in {
   options = {
     programs.flexoptix-app = {
-      enable = mkEnableOption (lib.mdDoc "FLEXOPTIX app + udev rules");
+      enable = mkEnableOption "FLEXOPTIX app + udev rules";
 
       package = mkPackageOption pkgs "flexoptix-app" { };
     };

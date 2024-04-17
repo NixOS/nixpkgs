@@ -60,6 +60,8 @@ buildPythonPackage rec {
     responses
   ];
 
+  passthru.skipBulkUpdate = true; # newer versions under the jsonschema-path name
+
   meta = with lib; {
     changelog = "https://github.com/p1c2u/jsonschema-spec/releases/tag/${version}";
     description = "JSONSchema Spec with object-oriented paths";

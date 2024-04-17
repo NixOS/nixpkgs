@@ -33,27 +33,21 @@ rec {
   stable = if stdenv.hostPlatform.system == "i686-linux" then legacy_390 else latest;
 
   production = generic {
-    version = "535.154.05";
-    sha256_64bit = "sha256-fpUGXKprgt6SYRDxSCemGXLrEsIA6GOinp+0eGbqqJg=";
-    sha256_aarch64 = "sha256-G0/GiObf/BZMkzzET8HQjdIcvCSqB1uhsinro2HLK9k=";
-    openSha256 = "sha256-wvRdHguGLxS0mR06P5Qi++pDJBCF8pJ8hr4T8O6TJIo=";
-    settingsSha256 = "sha256-9wqoDEWY4I7weWW05F4igj1Gj9wjHsREFMztfEmqm10=";
-    persistencedSha256 = "sha256-d0Q3Lk80JqkS1B54Mahu2yY/WocOqFFbZVBh+ToGhaE=";
-
-    patches = [ rcu_patch ];
+    version = "550.76";
+    sha256_64bit = "sha256-2/wAmBNiePhX74FsV7j21LnCaubxMC/kAYMmf8kQt1s=";
+    sha256_aarch64 = "sha256-LhiyYCUTFwqzUITK6CKIqxOQp62wG1RuKOuP0fTKoVk=";
+    openSha256 = "sha256-RWaUXIr/yCRmX4yIyUxvBxrKCLKRKSi4lQJAYvrd2Kg=";
+    settingsSha256 = "sha256-Lv95+0ahvU1+X/twzWWVqQH4nqq491ALigH9TVBn+YY=";
+    persistencedSha256 = "sha256-rbgI9kGdVzGlPNEvaoOq2zrAMx+H8D+XEBah2eqZzuI=";
   };
 
   latest = selectHighestVersion production (generic {
-    version = "545.29.06";
-    sha256_64bit = "sha256-grxVZ2rdQ0FsFG5wxiTI3GrxbMBMcjhoDFajDgBFsXs=";
-    sha256_aarch64 = "sha256-o6ZSjM4gHcotFe+nhFTePPlXm0+RFf64dSIDt+RmeeQ=";
-    openSha256 = "sha256-h4CxaU7EYvBYVbbdjiixBhKf096LyatU6/V6CeY9NKE=";
-    settingsSha256 = "sha256-YBaKpRQWSdXG8Usev8s3GYHCPqL8PpJeF6gpa2droWY=";
-    persistencedSha256 = "sha256-AiYrrOgMagIixu3Ss2rePdoL24CKORFvzgZY3jlNbwM=";
-
-    patches = [ rcu_patch ];
-
-    brokenOpen = kernel.kernelAtLeast "6.7";
+    version = "550.54.14";
+    sha256_64bit = "sha256-jEl/8c/HwxD7h1FJvDD6pP0m0iN7LLps0uiweAFXz+M=";
+    sha256_aarch64 = "sha256-sProBhYziFwk9rDAR2SbRiSaO7RMrf+/ZYryj4BkLB0=";
+    openSha256 = "sha256-F+9MWtpIQTF18F2CftCJxQ6WwpA8BVmRGEq3FhHLuYw=";
+    settingsSha256 = "sha256-m2rNASJp0i0Ez2OuqL+JpgEF0Yd8sYVCyrOoo/ln2a4=";
+    persistencedSha256 = "sha256-XaPN8jVTjdag9frLPgBtqvO/goB5zxeGzaTU0CdL6C4=";
   });
 
   beta = selectHighestVersion latest (generic {
@@ -70,16 +64,14 @@ rec {
   # Vulkan developer beta driver
   # See here for more information: https://developer.nvidia.com/vulkan-driver
   vulkan_beta = generic rec {
-    version = "535.43.28";
-    persistencedVersion = "535.98";
-    settingsVersion = "535.98";
-    sha256_64bit = "sha256-ic7r3MPp65fdEwqDRyc0WiKonL5eF6KZUpfD/C3vYaU=";
-    openSha256 = "sha256-a5iccyISHheOfTwpsrz6puqrVhgzYWFvNlykVG3+PVc=";
-    settingsSha256 = "sha256-jCRfeB1w6/dA27gaz6t5/Qo7On0zbAPIi74LYLel34s=";
-    persistencedSha256 = "sha256-WviDU6B50YG8dO64CGvU3xK8WFUX8nvvVYm/fuGyroM=";
+    version = "550.40.59";
+    persistencedVersion = "550.54.14";
+    settingsVersion = "550.54.14";
+    sha256_64bit = "sha256-hVwYC454vkxcK8I9bj1kp6iFS667em0c+Ral243C0J8=";
+    openSha256 = "sha256-/v1iVcmHhdvib54LDktNBHkcmgFxZVwQxwPdWSi0l/U=";
+    settingsSha256 = "sha256-m2rNASJp0i0Ez2OuqL+JpgEF0Yd8sYVCyrOoo/ln2a4=";
+    persistencedSha256 = "sha256-XaPN8jVTjdag9frLPgBtqvO/goB5zxeGzaTU0CdL6C4=";
     url = "https://developer.nvidia.com/downloads/vulkan-beta-${lib.concatStrings (lib.splitVersion version)}-linux";
-
-    patches = [ rcu_patch ];
   };
 
   # data center driver compatible with current default cudaPackages
@@ -117,13 +109,11 @@ rec {
 
   # Last one supporting Kepler architecture
   legacy_470 = generic {
-    version = "470.223.02";
-    sha256_64bit = "sha256-s2hi1TNsw+br6Ow6tPiFsYPaJY8d+x4FrkBrP2xNRPg=";
-    sha256_aarch64 = "sha256-CFkg2ARlGWqlFQKm8SlbwMH6eLidHKA/q5QGVOpPGuU=";
-    settingsSha256 = "sha256-r6DuIH/rnsCm/y51iRgPNi5/kz+EFMVABREdTjBneZ0=";
-    persistencedSha256 = "sha256-e71fpPBBv8S/aoeXxBXkzKy5bsMMbv8y024cSLc8DYc=";
-
-    patches = [ rcu_patch ];
+    version = "470.239.06";
+    sha256_64bit = "sha256-fXTKrBQKBDLXnr6OQzDceW85un3UCz/NYd92AYG/nMw=";
+    sha256_aarch64 = "sha256-NZj8OLQ0N7y3V7UBamLyJE8AbI3alZJD1weNjnssuNs=";
+    settingsSha256 = "sha256-2YTk6DaoB8Qvob9/ohtHXuDhxGO9O/SUwlXXbLSgJP0=";
+    persistencedSha256 = "sha256-wLrkfD8MQ8sMODE+yEnWg/1ETxYVWOqNsIj1dY+5yjc=";
   };
 
   # Last one supporting x86

@@ -6,18 +6,18 @@
 , jre
 , makeWrapper
 , copyDesktopItems
-, canonicalize-jars-hook
+, stripJavaArchivesHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dayon";
-  version = "13.0.2";
+  version = "14.0.0";
 
   src = fetchFromGitHub {
     owner = "RetGal";
     repo = "dayon";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-sKA50D+VYjfKzdZAppIGfU5uJqrCrZPEsk9EEMBxu3I=";
+    hash = "sha256-cUaWfOpR0sNq8cRghZVW9mTVhJ5us12/lzucxetiVkg=";
   };
 
   nativeBuildInputs = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     jdk
     makeWrapper
     copyDesktopItems
-    canonicalize-jars-hook
+    stripJavaArchivesHook
   ];
 
   buildPhase = ''

@@ -7,7 +7,6 @@
 | Package    | Aliases         | Interpreter |
 |------------|-----------------|-------------|
 | python27   | python2, python | CPython 2.7 |
-| python38   |                 | CPython 3.8 |
 | python39   |                 | CPython 3.9 |
 | python310  |                 | CPython 3.10 |
 | python311  | python3         | CPython 3.11 |
@@ -60,7 +59,6 @@ sets are
 
 * `pkgs.python27Packages`
 * `pkgs.python3Packages`
-* `pkgs.python38Packages`
 * `pkgs.python39Packages`
 * `pkgs.python310Packages`
 * `pkgs.python311Packages`
@@ -76,8 +74,9 @@ and the aliases
 
 #### `buildPythonPackage` function {#buildpythonpackage-function}
 
-The `buildPythonPackage` function is implemented in
-`pkgs/development/interpreters/python/mk-python-derivation.nix`
+The `buildPythonPackage` function has its name binding in
+`pkgs/development/interpreters/python/python-packages-base.nix` and is
+implemented in `pkgs/development/interpreters/python/mk-python-derivation.nix`
 using setup hooks.
 
 The following is an example:
@@ -132,12 +131,12 @@ buildPythonPackage rec {
     hypothesis
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
     description = "Framework for writing tests";
     homepage = "https://github.com/pytest-dev/pytest";
-    license = licenses.mit;
-    maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ domenkozar lovek323 madjar lsix ];
   };
 }
 ```
@@ -175,7 +174,7 @@ following are specific to `buildPythonPackage`:
   from `build-system.requires` to `build-system`. Note that the pyproject
   format falls back to using `setuptools`, so you can use `pyproject = true`
   even if the package only has a `setup.py`. When set to `false`, you can
-  use the existing [hooks](#setup-hooks0 or provide your own logic to build the
+  use the existing [hooks](#setup-hooks) or provide your own logic to build the
   package. This can be useful for packages that don't support the pyproject
   format. When unset, the legacy `setuptools` hooks are used for backwards
   compatibility.
@@ -255,17 +254,19 @@ The next example shows a non trivial overriding of the `blas` implementation to
 be used through out all of the Python package set:
 
 ```nix
-python3MyBlas = pkgs.python3.override {
-  packageOverrides = self: super: {
-    # We need toPythonModule for the package set to evaluate this
-    blas = super.toPythonModule(super.pkgs.blas.override {
-      blasProvider = super.pkgs.mkl;
-    });
-    lapack = super.toPythonModule(super.pkgs.lapack.override {
-      lapackProvider = super.pkgs.mkl;
-    });
+{
+  python3MyBlas = pkgs.python3.override {
+    packageOverrides = self: super: {
+      # We need toPythonModule for the package set to evaluate this
+      blas = super.toPythonModule(super.pkgs.blas.override {
+        blasProvider = super.pkgs.mkl;
+      });
+      lapack = super.toPythonModule(super.pkgs.lapack.override {
+        lapackProvider = super.pkgs.mkl;
+      });
+    };
   };
-};
+}
 ```
 
 This is particularly useful for numpy and scipy users who want to gain speed with other blas implementations.
@@ -314,7 +315,7 @@ python3Packages.buildPythonApplication rec {
     python-daemon
   ];
 
-  meta = with lib; {
+  meta = {
     # ...
   };
 }
@@ -323,7 +324,9 @@ python3Packages.buildPythonApplication rec {
 This is then added to `all-packages.nix` just as any other application would be.
 
 ```nix
-luigi = callPackage ../applications/networking/cluster/luigi { };
+{
+  luigi = callPackage ../applications/networking/cluster/luigi { };
+}
 ```
 
 Since the package is an application, a consumer doesn't need to care about
@@ -343,7 +346,9 @@ the attribute in `python-packages.nix`, and the `toPythonApplication` shall be
 applied to the reference:
 
 ```nix
-youtube-dl = with python3Packages; toPythonApplication youtube-dl;
+{
+  youtube-dl = with python3Packages; toPythonApplication youtube-dl;
+}
 ```
 
 #### `toPythonModule` function {#topythonmodule-function}
@@ -355,10 +360,12 @@ bindings should be made available from `python-packages.nix`. The
 modifications.
 
 ```nix
-opencv = toPythonModule (pkgs.opencv.override {
-  enablePython = true;
-  pythonPackages = self;
-});
+{
+  opencv = toPythonModule (pkgs.opencv.override {
+    enablePython = true;
+    pythonPackages = self;
+  });
+}
 ```
 
 Do pay attention to passing in the right Python version!
@@ -901,12 +908,12 @@ buildPythonPackage rec {
     "toolz.dicttoolz"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/pytoolz/toolz/releases/tag/${version}";
     homepage = "https://github.com/pytoolz/toolz";
     description = "List processing tools and functional utilities";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fridh ];
   };
 }
 ```
@@ -1036,12 +1043,12 @@ buildPythonPackage rec {
     pytest
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/blaze/datashape/releases/tag/${version}";
     homepage = "https://github.com/ContinuumIO/datashape";
     description = "A data description language";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fridh ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fridh ];
   };
 }
 ```
@@ -1086,12 +1093,12 @@ buildPythonPackage rec {
     libxslt
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/lxml/lxml/releases/tag/lxml-${version}";
     description = "Pythonic binding for the libxml2 and libxslt libraries";
     homepage = "https://lxml.de";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ sjourdois ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sjourdois ];
   };
 }
 ```
@@ -1157,12 +1164,12 @@ buildPythonPackage rec {
   # Tests cannot import pyfftw. pyfftw works fine though.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/pyFFTW/pyFFTW/releases/tag/v${version}";
     description = "A pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";
     homepage = "http://hgomersall.github.com/pyFFTW";
-    license = with licenses; [ bsd2 bsd3 ];
-    maintainers = with maintainers; [ fridh ];
+    license = with lib.licenses; [ bsd2 bsd3 ];
+    maintainers = with lib.maintainers; [ fridh ];
   };
 }
 ```
@@ -1198,7 +1205,8 @@ a good indication that the package is not in a valid state.
 Pytest is the most common test runner for python repositories. A trivial
 test run would be:
 
-```
+```nix
+{
   nativeCheckInputs = [ pytest ];
   checkPhase = ''
     runHook preCheck
@@ -1207,6 +1215,7 @@ test run would be:
 
     runHook postCheck
   '';
+}
 ```
 
 However, many repositories' test suites do not translate well to nix's build
@@ -1214,7 +1223,8 @@ sandbox, and will generally need many tests to be disabled.
 
 To filter tests using pytest, one can do the following:
 
-```
+```nix
+{
   nativeCheckInputs = [ pytest ];
   # avoid tests which need additional data or touch network
   checkPhase = ''
@@ -1224,6 +1234,7 @@ To filter tests using pytest, one can do the following:
 
     runHook postCheck
   '';
+}
 ```
 
 `--ignore` will tell pytest to ignore that file or directory from being
@@ -1249,7 +1260,8 @@ when a package may need many items disabled to run the test suite.
 
 Using the example above, the analogous `pytestCheckHook` usage would be:
 
-```
+```nix
+{
   nativeCheckInputs = [
     pytestCheckHook
   ];
@@ -1269,12 +1281,14 @@ Using the example above, the analogous `pytestCheckHook` usage would be:
   disabledTestPaths = [
     "tests/test_failing.py"
   ];
+}
 ```
 
 This is especially useful when tests need to be conditionally disabled,
 for example:
 
-```
+```nix
+{
   disabledTests = [
     # touches network
     "download"
@@ -1286,6 +1300,7 @@ for example:
     # can fail when building with other packages
     "socket"
   ];
+}
 ```
 
 Trying to concatenate the related strings to disable tests in a regular
@@ -1299,20 +1314,24 @@ all packages have test suites that can be run easily, and some have none at all.
 To help ensure the package still works, [`pythonImportsCheck`](#using-pythonimportscheck) can attempt to import
 the listed modules.
 
-```
+```nix
+{
   pythonImportsCheck = [
     "requests"
     "urllib"
   ];
+}
 ```
 
 roughly translates to:
 
-```
+```nix
+{
   postCheck = ''
     PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
     python -c "import requests; import urllib"
   '';
+}
 ```
 
 However, this is done in its own phase, and not dependent on whether [`doCheck = true;`](#var-stdenv-doCheck).
@@ -1343,7 +1362,8 @@ pkg3>=1.0,<=2.0
 
 we can do:
 
-```
+```nix
+{
   nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
@@ -1354,6 +1374,7 @@ we can do:
   pythonRemoveDeps = [
     "pkg2"
   ];
+}
 ```
 
 which would result in the following `requirements.txt` file:
@@ -1366,9 +1387,11 @@ pkg3
 Another option is to pass `true`, that will relax/remove all dependencies, for
 example:
 
-```
+```nix
+{
   nativeBuildInputs = [ pythonRelaxDepsHook ];
   pythonRelaxDeps = true;
+}
 ```
 
 which would result in the following `requirements.txt` file:
@@ -1393,7 +1416,8 @@ work with any of the [existing hooks](#setup-hooks).
 
 `unittestCheckHook` is a hook which will substitute the setuptools `test` command for a [`checkPhase`](#ssec-check-phase) which runs `python -m unittest discover`:
 
-```
+```nix
+{
   nativeCheckInputs = [
     unittestCheckHook
   ];
@@ -1401,6 +1425,7 @@ work with any of the [existing hooks](#setup-hooks).
   unittestFlagsArray = [
     "-s" "tests" "-v"
   ];
+}
 ```
 
 #### Using sphinxHook {#using-sphinxhook}
@@ -1410,7 +1435,8 @@ using the popular Sphinx documentation generator.
 It is setup to automatically find common documentation source paths and
 render them using the default `html` style.
 
-```
+```nix
+{
   outputs = [
     "out"
     "doc"
@@ -1419,13 +1445,15 @@ render them using the default `html` style.
   nativeBuildInputs = [
     sphinxHook
   ];
+}
 ```
 
 The hook will automatically build and install the artifact into the
 `doc` output, if it exists. It also provides an automatic diversion
 for the artifacts of the `man` builder into the `man` target.
 
-```
+```nix
+{
   outputs = [
     "out"
     "doc"
@@ -1437,14 +1465,17 @@ for the artifacts of the `man` builder into the `man` target.
     "singlehtml"
     "man"
   ];
+}
 ```
 
 Overwrite `sphinxRoot` when the hook is unable to find your
 documentation source root.
 
-```
+```nix
+{
   # Configure sphinxRoot for uncommon paths
   sphinxRoot = "weird/docs/path";
+}
 ```
 
 The hook is also available to packages outside the python ecosystem by
@@ -1532,12 +1563,12 @@ buildPythonPackage rec {
     wheel
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/pytoolz/toolz/releases/tag/${version}";
     homepage = "https://github.com/pytoolz/toolz/";
     description = "List processing tools and functional utilities";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fridh ];
   };
 }
 ```
@@ -1828,6 +1859,7 @@ folder and not downloaded again.
 If you need to change a package's attribute(s) from `configuration.nix` you could do:
 
 ```nix
+{
   nixpkgs.config.packageOverrides = super: {
     python3 = super.python3.override {
       packageOverrides = python-self: python-super: {
@@ -1842,6 +1874,7 @@ If you need to change a package's attribute(s) from `configuration.nix` you coul
       };
     };
   };
+}
 ```
 
 `python3Packages.twisted` is now globally overridden.
@@ -1854,11 +1887,13 @@ To modify only a Python package set instead of a whole Python derivation, use
 this snippet:
 
 ```nix
+{
   myPythonPackages = python3Packages.override {
     overrides = self: super: {
-      twisted = ...;
+      twisted = <...>;
     };
-  }
+  };
+}
 ```
 
 ### How to override a Python package using overlays? {#how-to-override-a-python-package-using-overlays}
@@ -1894,7 +1929,7 @@ final: prev: {
     (
       python-final: python-prev: {
         foo = python-prev.foo.overridePythonAttrs (oldAttrs: {
-          ...
+          # ...
         });
       }
     )
@@ -1921,7 +1956,7 @@ The Python interpreters are by default not built with optimizations enabled, bec
 the builds are in that case not reproducible. To enable optimizations, override the
 interpreter of interest, e.g using
 
-```
+```nix
 let
   pkgs = import ./. {};
   mypython = pkgs.python3.override {
@@ -1939,17 +1974,21 @@ Some packages define optional dependencies for additional features. With
 `extras-require`, while PEP 621 calls these `optional-dependencies`.
 
 ```nix
-optional-dependencies = {
-  complete = [ distributed ];
-};
+{
+  optional-dependencies = {
+    complete = [ distributed ];
+  };
+}
 ```
 
 and letting the package requiring the extra add the list to its dependencies
 
 ```nix
-dependencies = [
-  ...
-] ++ dask.optional-dependencies.complete;
+{
+  dependencies = [
+    # ...
+  ] ++ dask.optional-dependencies.complete;
+}
 ```
 
 This method is using `passthru`, meaning that changing `optional-dependencies` of a package won't cause it to rebuild.
@@ -2016,6 +2055,10 @@ example of such a situation is when `py.test` is used.
 
 * Tests that attempt to access `$HOME` can be fixed by using the following
   work-around before running tests (e.g. `preCheck`): `export HOME=$(mktemp -d)`
+* Compiling with Cython causes tests to fail with a `ModuleNotLoadedError`.
+  This can be fixed with two changes in the derivation: 1) replacing `pytest` with
+  `pytestCheckHook` and 2) adding a `preCheck` containing `cd $out` to run
+  tests within the built output.
 
 ## Contributing {#contributing}
 

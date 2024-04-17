@@ -2,45 +2,54 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, flit-core
+, setuptools
+, httpx
+, microsoft-kiota-abstractions
+, microsoft-kiota-authentication-azure
+ ,microsoft-kiota-http
 , requests
+, azure-identity
 , pytestCheckHook
 , responses
 }:
 
 buildPythonPackage rec {
   pname = "msgraph-core";
-  version = "0.2.2";
+  version = "1.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
-  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "microsoftgraph";
     repo = "msgraph-sdk-python-core";
-    rev = "v${version}";
-    hash = "sha256-eRRlG3GJX3WeKTNJVWgNTTHY56qiUGOlxtvEZ2xObLA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-VizjN7sXqPvo9VOSaaUnogTlUDJ1OA2COYNTcVRqhJA=";
   };
 
   nativeBuildInputs = [
-    flit-core
+    setuptools
   ];
 
   propagatedBuildInputs = [
+    httpx
+    microsoft-kiota-abstractions
+    microsoft-kiota-authentication-azure
+    microsoft-kiota-http
     requests
+
   ];
 
   nativeCheckInputs = [
+    azure-identity
     pytestCheckHook
     responses
   ];
 
-  disabledTestPaths = [
-    "tests/integration"
+  pythonImportsCheck = [
+    "msgraph_core"
   ];
-
-  pythonImportsCheck = [ "msgraph.core" ];
 
   meta = {
     description = "Core component of the Microsoft Graph Python SDK";

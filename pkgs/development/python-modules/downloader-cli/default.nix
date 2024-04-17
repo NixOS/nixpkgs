@@ -32,6 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Downloader with an awesome customizable progressbar";
+    mainProgram = "dw";
     homepage = "https://github.com/deepjyoti30/downloader-cli";
     changelog = "https://github.com/deepjyoti30/downloader-cli/releases/tag/${version}";
     license = licenses.mit;

@@ -25,7 +25,7 @@ to `true`, Nextcloud will automatically be configured to connect to it through
 socket.
 
 A very basic configuration may look like this:
-```
+```nix
 { pkgs, ... }:
 {
   services.nextcloud = {
@@ -130,7 +130,7 @@ settings `listen.owner` &amp; `listen.group` in the
 [corresponding `phpfpm` pool](#opt-services.phpfpm.pools).
 
 An exemplary configuration may look like this:
-```
+```nix
 { config, lib, pkgs, ... }: {
   services.nginx.enable = false;
   services.nextcloud = {
@@ -205,7 +205,7 @@ If major-releases will be abandoned by upstream, we should check first if those 
 in NixOS for a safe upgrade-path before removing those. In that case we should keep those
 packages, but mark them as insecure in an expression like this (in
 `<nixpkgs/pkgs/servers/nextcloud/default.nix>`):
-```
+```nix
 /* ... */
 {
   nextcloud17 = generic {

@@ -5,11 +5,20 @@
 , simdExtensions ? null
 }:
 
-with rec {
+let
+  inherit (lib)
+    head
+    licenses
+    maintainers
+    platforms
+    replaceStrings
+    toList
+    ;
+
   # SIMD instruction sets to compile for. If none are specified by the user,
   # an appropriate one is selected based on the detected host system
   isas = with stdenv.hostPlatform;
-    if simdExtensions != null then lib.toList simdExtensions
+    if simdExtensions != null then toList simdExtensions
     else if avx2Support then [ "AVX2" ]
     else if sse4_1Support then [ "SSE41" ]
     else if isx86_64 then [ "SSE2" ]
@@ -21,11 +30,11 @@ with rec {
   isaFlags = map ( isa: "-DASTCENC_ISA_${isa}=ON" ) isas;
 
   # The suffix of the binary to link as 'astcenc'
-  mainBinary = builtins.replaceStrings
+  mainBinary = replaceStrings
     [ "AVX2" "SSE41"  "SSE2" "NEON" "NONE" "NATIVE" ]
     [ "avx2" "sse4.1" "sse2" "neon" "none" "native" ]
-    ( builtins.head isas );
-};
+    ( head isas );
+in
 
 stdenv.mkDerivation rec {
   pname = "astc-encoder";
@@ -57,7 +66,7 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/astcenc-${mainBinary} $out/bin/astcenc
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ARM-software/astc-encoder";
     description = "An encoder for the ASTC texture compression format";
     longDescription = ''

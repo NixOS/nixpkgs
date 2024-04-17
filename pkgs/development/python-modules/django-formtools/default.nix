@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "django-formtools";
-  version = "2.4.1";
-  format = "setuptools";
+  version = "2.5.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IfjV2sc38eY2+ooKEJacHDL1JabfonwpWSgnunDZZDo=";
+    hash = "sha256-R8s0VSxu/KCIhj1pMoTQT8NuqvNQ6yHhodk14N9SPJM=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,11 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
+
     ${python.interpreter} -m django test --settings=tests.settings
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [
@@ -38,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A set of high-level abstractions for Django forms";
     homepage = "https://github.com/jazzband/django-formtools";
+    changelog = "https://github.com/jazzband/django-formtools/blob/master/docs/changelog.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ greizgh schmittlauch ];
   };

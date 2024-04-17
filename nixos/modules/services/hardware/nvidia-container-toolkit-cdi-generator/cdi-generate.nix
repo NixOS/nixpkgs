@@ -1,37 +1,58 @@
-{ config, lib, pkgs }: let
+{
+  addDriverRunpath,
+  glibc,
+  jq,
+  lib,
+  nvidia-container-toolkit,
+  nvidia-driver,
+  runtimeShell,
+  writeScriptBin,
+}:
+let
   mountOptions = { options = ["ro" "nosuid" "nodev" "bind"]; };
   mounts = [
-    { hostPath = "${lib.getBin config.hardware.nvidia.package}/bin/nvidia-cuda-mps-control";
+    # FIXME: Making /usr mounts optional
+    { hostPath = lib.getExe' nvidia-driver "nvidia-cuda-mps-control";
       containerPath = "/usr/bin/nvidia-cuda-mps-control"; }
-    { hostPath = "${lib.getBin config.hardware.nvidia.package}/bin/nvidia-cuda-mps-server";
+    { hostPath = lib.getExe' nvidia-driver "nvidia-cuda-mps-server";
       containerPath = "/usr/bin/nvidia-cuda-mps-server"; }
-    { hostPath = "${lib.getBin config.hardware.nvidia.package}/bin/nvidia-debugdump";
+    { hostPath = lib.getExe' nvidia-driver "nvidia-debugdump";
       containerPath = "/usr/bin/nvidia-debugdump"; }
-    { hostPath = "${lib.getBin config.hardware.nvidia.package}/bin/nvidia-powerd";
+    { hostPath = lib.getExe' nvidia-driver "nvidia-powerd";
       containerPath = "/usr/bin/nvidia-powerd"; }
-    { hostPath = "${lib.getBin config.hardware.nvidia.package}/bin/nvidia-smi";
+    { hostPath = lib.getExe' nvidia-driver "nvidia-smi";
       containerPath = "/usr/bin/nvidia-smi"; }
-    { hostPath = "${pkgs.nvidia-container-toolkit}/bin/nvidia-ctk";
+    { hostPath = lib.getExe' nvidia-container-toolkit "nvidia-ctk";
       containerPath = "/usr/bin/nvidia-ctk"; }
-    { hostPath = "${pkgs.glibc}/lib";
-      containerPath = "${pkgs.glibc}/lib"; }
-    { hostPath = "${pkgs.glibc}/lib64";
-      containerPath = "${pkgs.glibc}/lib64"; }
+    { hostPath = "${lib.getLib glibc}/lib";
+      containerPath = "${lib.getLib glibc}/lib"; }
+
+    # FIXME: use closureinfo
+    {
+      hostPath = addDriverRunpath.driverLink;
+      containerPath = addDriverRunpath.driverLink;
+    }
+    { hostPath = "${lib.getLib glibc}/lib";
+      containerPath = "${lib.getLib glibc}/lib"; }
+    { hostPath = "${lib.getLib glibc}/lib64";
+      containerPath = "${lib.getLib glibc}/lib64"; }
   ];
   jqAddMountExpression = ".containerEdits.mounts[.containerEdits.mounts | length] |= . +";
   mountsToJq = lib.concatMap
     (mount:
-      ["${pkgs.jq}/bin/jq '${jqAddMountExpression} ${builtins.toJSON (mount // mountOptions)}'"])
+      ["${lib.getExe jq} '${jqAddMountExpression} ${builtins.toJSON (mount // mountOptions)}'"])
     mounts;
-in ''
-#! ${pkgs.runtimeShell}
+in
+writeScriptBin "nvidia-cdi-generator"
+''
+#! ${runtimeShell}
 
 function cdiGenerate {
-  ${pkgs.nvidia-container-toolkit}/bin/nvidia-ctk cdi generate \
+  ${lib.getExe' nvidia-container-toolkit "nvidia-ctk"} cdi generate \
     --format json \
-    --ldconfig-path ${pkgs.glibc.bin}/bin/ldconfig \
-    --library-search-path ${config.hardware.nvidia.package}/lib \
-    --nvidia-ctk-path ${pkgs.nvidia-container-toolkit}/bin/nvidia-ctk
+    --ldconfig-path ${lib.getExe' glibc "ldconfig"} \
+    --library-search-path ${lib.getLib nvidia-driver}/lib \
+    --nvidia-ctk-path ${lib.getExe' nvidia-container-toolkit "nvidia-ctk"}
 }
 
 cdiGenerate | \

@@ -92,6 +92,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
+  pytestFlagsArray = [
+    # pytest.PytestRemovedIn8Warning: Support for nose tests is deprecated and will be removed in a future release.
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   pythonImportsCheck = [
     "kombu"
   ];

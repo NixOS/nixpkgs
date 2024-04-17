@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation rec {
     contemporary style and contains characteristics unique to
     the Ubuntu brand that convey a precise, reliable and free attitude.";
     homepage = "http://font.ubuntu.com/";
-    license = licenses.free;
+    license = licenses.ufl;
     platforms = platforms.all;
     maintainers = [ maintainers.antono ];
   };

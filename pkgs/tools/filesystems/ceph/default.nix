@@ -169,7 +169,28 @@ let
 
   # Watch out for python <> boost compatibility
   python = python310.override {
-    packageOverrides = self: super: let cryptographyOverrideVersion = "40.0.1"; in {
+    packageOverrides = self: super: let
+      cryptographyOverrideVersion = "40.0.1";
+      bcryptOverrideVersion = "4.0.1";
+    in {
+      # Ceph does not support `bcrypt` > 4.0 yet:
+      # * Upstream issue: https://tracker.ceph.com/issues/63529
+      #   > Python Sub-Interpreter Model Used by ceph-mgr Incompatible With Python Modules Based on PyO3
+      bcrypt = super.bcrypt.overridePythonAttrs (old: rec {
+        pname = "bcrypt";
+        version = bcryptOverrideVersion;
+        src = fetchPypi {
+          inherit pname version;
+          hash = "sha256-J9N1kDrIJhz+QEf2cJ0W99GNObHskqr3KvmJVSplDr0=";
+        };
+        cargoRoot = "src/_bcrypt";
+        cargoDeps = rustPlatform.fetchCargoTarball {
+          inherit src;
+          sourceRoot = "${pname}-${version}/${cargoRoot}";
+          name = "${pname}-${version}";
+          hash = "sha256-lDWX69YENZFMu7pyBmavUZaalGvFqbHSHfkwkzmDQaY=";
+        };
+      });
       # Ceph does not support `cryptography` > 40 yet:
       # * https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899358602
       # * Upstream issue: https://tracker.ceph.com/issues/63529
@@ -218,6 +239,9 @@ let
           inherit version;
           hash = "sha256-hBSYub7GFiOxtsR+u8AjZ8B9YODhlfGXkIF/EMyNsLc=";
         };
+        pytestFlagsArray = [
+          "-W" "ignore::pytest.PytestRemovedIn8Warning"
+        ];
       });
 
       # Ceph does not support `kubernetes` >= 19, see:

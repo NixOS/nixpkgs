@@ -2,11 +2,12 @@
 , requests, mock }:
 
 buildPythonPackage rec {
-  pname = "PyBrowserID";
+  pname = "pybrowserid";
   version = "0.14.0";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "PyBrowserID";
+    inherit version;
     sha256 = "1qvi79kfb8x9kxkm5lw2mp42hm82cpps1xknmsb5ghkwx1lpc8kc";
   };
 
@@ -21,4 +22,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ ];
   };
 }
-

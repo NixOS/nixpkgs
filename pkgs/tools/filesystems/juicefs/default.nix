@@ -1,10 +1,12 @@
 { lib
-, buildGoModule
+, buildGo121Module
 , fetchFromGitHub
 , stdenv
 }:
 
-buildGoModule rec {
+# JuiceFS 1.1.2 doesn't build with Go 1.22. Fixed in upstream. This can be
+# reverted in future releases. https://github.com/juicedata/juicefs/issues/4339
+buildGo121Module rec {
   pname = "juicefs";
   version = "1.1.2";
 

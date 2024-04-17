@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "2.0.1";
+  version = "2.0.3";
 
   outputs = [ "out" "lib" "dev" "doc" "man" ];
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rousseau";
     repo = "PCSC";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-7NGlU4byGxtGBticewg8K4FUiDSQZAiB7Q/y+LaqKPo=";
+    hash = "sha256-VDQh2PYAMFwgWvZFD20H3JxgKSFrSUoDLv/6fKEoy5Y=";
   };
 
   configureFlags = [

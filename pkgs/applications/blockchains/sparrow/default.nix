@@ -21,45 +21,47 @@
 
 let
   pname = "sparrow";
-  version = "1.8.1";
+  version = "1.8.4";
 
   src = fetchurl {
     url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-x86_64.tar.gz";
-    sha256 = "sha256-dpYGMclYMjxjUbIcSZ7V54I1LTVfHxAKH9+7CaprD4U=";
+    sha256 = "0w6z84w9spwfpqrf5m9bcq30xqp94c27jw3qzxfdyisp8n22xvd8";
   };
 
   launcher = writeScript "sparrow" ''
     #! ${bash}/bin/bash
     params=(
       --module-path @out@/lib:@jdkModules@/modules
-      --add-opens javafx.graphics/com.sun.javafx.css=org.controlsfx.controls
-      --add-opens javafx.graphics/javafx.scene=org.controlsfx.controls
-      --add-opens javafx.controls/com.sun.javafx.scene.control.behavior=org.controlsfx.controls
-      --add-opens javafx.controls/com.sun.javafx.scene.control.inputmap=org.controlsfx.controls
-      --add-opens javafx.graphics/com.sun.javafx.scene.traversal=org.controlsfx.controls
-      --add-opens javafx.base/com.sun.javafx.event=org.controlsfx.controls
-      --add-opens javafx.controls/javafx.scene.control.cell=com.sparrowwallet.sparrow
-      --add-opens org.controlsfx.controls/impl.org.controlsfx.skin=com.sparrowwallet.sparrow
-      --add-opens org.controlsfx.controls/impl.org.controlsfx.skin=javafx.fxml
-      --add-opens javafx.graphics/com.sun.javafx.tk=centerdevice.nsmenufx
-      --add-opens javafx.graphics/com.sun.javafx.tk.quantum=centerdevice.nsmenufx
-      --add-opens javafx.graphics/com.sun.glass.ui=centerdevice.nsmenufx
-      --add-opens javafx.controls/com.sun.javafx.scene.control=centerdevice.nsmenufx
-      --add-opens javafx.graphics/com.sun.javafx.menu=centerdevice.nsmenufx
-      --add-opens javafx.graphics/com.sun.glass.ui=com.sparrowwallet.sparrow
+      --add-opens=javafx.graphics/com.sun.javafx.css=org.controlsfx.controls
+      --add-opens=javafx.graphics/javafx.scene=org.controlsfx.controls
+      --add-opens=javafx.controls/com.sun.javafx.scene.control.behavior=org.controlsfx.controls
+      --add-opens=javafx.controls/com.sun.javafx.scene.control.inputmap=org.controlsfx.controls
+      --add-opens=javafx.graphics/com.sun.javafx.scene.traversal=org.controlsfx.controls
+      --add-opens=javafx.base/com.sun.javafx.event=org.controlsfx.controls
+      --add-opens=javafx.controls/javafx.scene.control.cell=com.sparrowwallet.sparrow
+      --add-opens=org.controlsfx.controls/impl.org.controlsfx.skin=com.sparrowwallet.sparrow
+      --add-opens=org.controlsfx.controls/impl.org.controlsfx.skin=javafx.fxml
+      --add-opens=javafx.graphics/com.sun.javafx.tk=centerdevice.nsmenufx
+      --add-opens=javafx.graphics/com.sun.javafx.tk.quantum=centerdevice.nsmenufx
+      --add-opens=javafx.graphics/com.sun.glass.ui=centerdevice.nsmenufx
+      --add-opens=javafx.controls/com.sun.javafx.scene.control=centerdevice.nsmenufx
+      --add-opens=javafx.graphics/com.sun.javafx.menu=centerdevice.nsmenufx
+      --add-opens=javafx.graphics/com.sun.glass.ui=com.sparrowwallet.sparrow
       --add-opens=javafx.graphics/javafx.scene.input=com.sparrowwallet.sparrow
-      --add-opens javafx.graphics/com.sun.javafx.application=com.sparrowwallet.sparrow
-      --add-opens java.base/java.net=com.sparrowwallet.sparrow
-      --add-opens java.base/java.io=com.google.gson
+      --add-opens=javafx.graphics/com.sun.javafx.application=com.sparrowwallet.sparrow
+      --add-opens=java.base/java.net=com.sparrowwallet.sparrow
+      --add-opens=java.base/java.io=com.google.gson
       --add-opens=java.smartcardio/sun.security.smartcardio=com.sparrowwallet.sparrow
-      --add-reads com.sparrowwallet.merged.module=java.desktop
-      --add-reads com.sparrowwallet.merged.module=java.sql
-      --add-reads com.sparrowwallet.merged.module=com.sparrowwallet.sparrow
-      --add-reads com.sparrowwallet.merged.module=logback.classic
-      --add-reads com.sparrowwallet.merged.module=com.fasterxml.jackson.databind
-      --add-reads com.sparrowwallet.merged.module=com.fasterxml.jackson.annotation
-      --add-reads com.sparrowwallet.merged.module=com.fasterxml.jackson.core
-      --add-reads com.sparrowwallet.merged.module=co.nstant.in.cbor
+      --add-reads=com.sparrowwallet.merged.module=java.desktop
+      --add-reads=com.sparrowwallet.merged.module=java.sql
+      --add-reads=com.sparrowwallet.merged.module=com.sparrowwallet.sparrow
+      --add-reads=com.sparrowwallet.merged.module=ch.qos.logback.classic
+      --add-reads=com.sparrowwallet.merged.module=org.slf4j
+      --add-reads=com.sparrowwallet.merged.module=com.fasterxml.jackson.databind
+      --add-reads=com.sparrowwallet.merged.module=com.fasterxml.jackson.annotation
+      --add-reads=com.sparrowwallet.merged.module=com.fasterxml.jackson.core
+      --add-reads=com.sparrowwallet.merged.module=co.nstant.in.cbor
+      --add-reads=kotlin.stdlib=kotlinx.coroutines.core
       -m com.sparrowwallet.sparrow
     )
 

@@ -53,7 +53,7 @@ in
     meta = with lib; {
       description = "Marlin auto bed leveling control, mesh correction, and z probe handling";
       homepage = "https://framagit.org/razer/Octoprint_ABL_Expert/";
-      license = licenses.agpl3;
+      license = licenses.agpl3Only;
       maintainers = with maintainers; [ WhittlesJr ];
     };
   };
@@ -72,7 +72,7 @@ in
     meta = with lib; {
       description = "Displays 3D mesh of bed topography report";
       homepage = "https://github.com/jneilliii/OctoPrint-BedLevelVisualizer";
-      license = licenses.agpl3;
+      license = licenses.mit;
       maintainers = with maintainers; [ lovesegfault ];
     };
   };
@@ -110,7 +110,7 @@ in
     meta = with lib; {
       description = "Plugin for slicing via Cura Legacy from within OctoPrint";
       homepage = "https://github.com/OctoPrint/OctoPrint-CuraEngineLegacy";
-      license = licenses.agpl3;
+      license = licenses.agpl3Only;
       maintainers = with maintainers; [ gebner ];
     };
   };
@@ -148,7 +148,7 @@ in
     meta = with lib; {
       description = "OctoPrint-Plugin that sends the current progress of a print via M117 command";
       homepage = "https://github.com/OllisGit/OctoPrint-DisplayLayerProgress";
-      license = licenses.agpl3;
+      license = licenses.agpl3Only;
       maintainers = with maintainers; [ j0hax ];
     };
   };
@@ -186,7 +186,7 @@ in
     meta = with lib; {
       description = "Edit gcode on OctoPrint";
       homepage = "https://github.com/ieatacid/OctoPrint-GcodeEditor";
-      license = licenses.agpl3;
+      license = licenses.agpl3Only;
       maintainers = with maintainers; [ WhittlesJr ];
     };
   };
@@ -205,7 +205,7 @@ in
     meta = with lib; {
       description = "Displays GCode documentation for Marlin in the Octoprint terminal command line";
       homepage = "https://github.com/costas-basdekis/MarlinGcodeDocumentation";
-      license = licenses.agpl3;
+      license = licenses.agpl3Only;
       maintainers = with maintainers; [ lovesegfault ];
     };
   };
@@ -226,7 +226,7 @@ in
     meta = with lib; {
       description = "Publish printer status MQTT";
       homepage = "https://github.com/OctoPrint/OctoPrint-MQTT";
-      license = licenses.agpl3;
+      license = licenses.agpl3Only;
       maintainers = with maintainers; [ peterhoeg ];
     };
   };
@@ -256,7 +256,7 @@ in
     meta = with lib; {
       description = "Better print time estimation for OctoPrint";
       homepage = "https://github.com/eyal0/OctoPrint-PrintTimeGenius";
-      license = licenses.agpl3;
+      license = licenses.agpl3Only;
       maintainers = with maintainers; [ gebner ];
     };
   };
@@ -284,7 +284,7 @@ in
     meta = with lib; {
       description = "OctoPrint plugin to control ATX/AUX power supply";
       homepage = "https://github.com/kantlivelong/OctoPrint-PSUControl";
-      license = licenses.agpl3;
+      license = licenses.agpl3Only;
       maintainers = with maintainers; [ gebner ];
     };
   };
@@ -303,7 +303,7 @@ in
     meta = with lib; {
       description = "A simple plugin that add an emergency stop buton on NavBar of OctoPrint";
       homepage = "https://github.com/Sebclem/OctoPrint-SimpleEmergencyStop";
-      license = licenses.agpl3;
+      license = licenses.agpl3Only;
       maintainers = with maintainers; [ WhittlesJr ];
     };
   };
@@ -322,7 +322,7 @@ in
     meta = with lib; {
       description = "A simple stl viewer tab for OctoPrint";
       homepage = "https://github.com/jneilliii/Octoprint-STLViewer";
-      license = licenses.agpl3;
+      license = licenses.agpl3Only;
       maintainers = with maintainers; [ abbradar ];
     };
   };
@@ -362,7 +362,7 @@ in
     meta = with lib; {
       description = "Beautiful themes for OctoPrint";
       homepage = "https://github.com/birkbjo/OctoPrint-Themeify";
-      license = licenses.agpl3;
+      license = licenses.agpl3Only;
       maintainers = with maintainers; [ lovesegfault ];
     };
   };
@@ -381,7 +381,7 @@ in
     meta = with lib; {
       description = "Show printers status in window title";
       homepage = "https://github.com/MoonshineSG/OctoPrint-TitleStatus";
-      license = licenses.agpl3;
+      license = licenses.agpl3Only;
       maintainers = with maintainers; [ abbradar ];
     };
   };
@@ -400,7 +400,7 @@ in
     meta = with lib; {
       description = "Touch friendly interface for a small TFT module or phone for OctoPrint";
       homepage = "https://github.com/BillyBlaze/OctoPrint-TouchUI";
-      license = licenses.agpl3;
+      license = licenses.agpl3Only;
       maintainers = with maintainers; [ gebner ];
     };
   };
@@ -419,7 +419,7 @@ in
     meta = with lib; {
       description = "A plugin for a better integration of Klipper into OctoPrint";
       homepage = "https://github.com/AliceGrey/OctoprintKlipperPlugin";
-      license = licenses.agpl3;
+      license = licenses.agpl3Only;
       maintainers = with maintainers; [ lovesegfault ];
     };
   };
@@ -473,7 +473,7 @@ in
     meta = with lib; {
       description = "A dashboard for Octoprint";
       homepage = "https://github.com/StefanCohen/OctoPrint-Dashboard";
-      license = licenses.agpl3;
+      license = licenses.agpl3Plus;
       maintainers = with maintainers; [ j0hax ];
     };
   };

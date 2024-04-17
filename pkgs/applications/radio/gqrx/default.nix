@@ -81,6 +81,7 @@ gnuradioMinimal.pkgs.mkDerivation rec {
 
   meta = with lib; {
     description = "Software defined radio (SDR) receiver";
+    mainProgram = "gqrx";
     longDescription = ''
       Gqrx is a software defined radio receiver powered by GNU Radio and the Qt
       GUI toolkit. It can process I/Q data from many types of input devices,

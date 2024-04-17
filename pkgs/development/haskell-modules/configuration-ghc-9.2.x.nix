@@ -4,6 +4,7 @@ with haskellLib;
 
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin;
+  inherit (pkgs) lib;
 in
 
 self: super: {
@@ -64,24 +65,33 @@ self: super: {
     algebraic-graphs = dontCheck self.algebraic-graphs_0_6_1;
   });
 
-  hls-cabal-plugin = super.hls-cabal-plugin.override {
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-  };
 
-  ormolu = self.ormolu_0_5_2_0.override {
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-  };
+  haskell-language-server = lib.pipe super.haskell-language-server [
+    (disableCabalFlag "fourmolu")
+    (disableCabalFlag "ormolu")
+    (disableCabalFlag "stylishHaskell")
+    (overrideCabal (drv: {
+      # Disabling the build flags isn't enough: `Setup configure` still configures
+      # every component for building and complains about missing dependencies.
+      # Thus we have to mark the undesired components as non-buildable.
+      postPatch = drv.postPatch or "" + ''
+        for lib in hls-ormolu-plugin hls-fourmolu-plugin; do
+          sed -i "/^library $lib/a\  buildable: False" haskell-language-server.cabal
+        done
+      '';
+    }))
+    (d: d.override {
+      ormolu = null;
+      fourmolu = null;
+    })
+  ];
 
-  stylish-haskell = doJailbreak super.stylish-haskell_0_14_4_0;
-
-  haskell-language-server = disableCabalFlag "fourmolu" (super.haskell-language-server.override {
-    hls-fourmolu-plugin = null;
-    # Not buildable if GHC > 9.2.3, so we ship no compatible GHC
-    hls-stan-plugin = null;
-  });
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
   hashable = addBuildDepends [ self.data-array-byte ] super.hashable;
   primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
+  primitive-unlifted = super.primitive-unlifted_0_1_3_1;
+  # Too strict lower bound on base
+  primitive-addr = doJailbreak super.primitive-addr;
 
   # Jailbreaks & Version Updates
   hashable-time = doJailbreak super.hashable-time;
@@ -110,9 +120,6 @@ self: super: {
   # https://github.com/clash-lang/clash-compiler/blob/f0f6275e19b8c672f042026c478484c5fd45191d/README.md#ghc-compatibility
   clash-prelude = dontDistribute (markBroken super.clash-prelude);
 
-  # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
-  hiedb = dontCheck super.hiedb;
-
   # Too strict upper bound on bytestring, relevant for GHC 9.2.6 specifically
   # https://github.com/protolude/protolude/issues/127#issuecomment-1428807874
   protolude = doJailbreak super.protolude;
@@ -127,4 +134,18 @@ self: super: {
 
   # Requires GHC < 9.4
   ghc-source-gen = doDistribute (unmarkBroken super.ghc-source-gen);
+
+  # Packages which need compat library for GHC < 9.6
+  inherit
+    (lib.mapAttrs
+      (_: addBuildDepends [ self.foldable1-classes-compat ])
+      super)
+    indexed-traversable
+    OneTuple
+    these
+  ;
+  base-compat-batteries = addBuildDepends [
+    self.foldable1-classes-compat
+    self.OneTuple
+  ] super.base-compat-batteries;
 }

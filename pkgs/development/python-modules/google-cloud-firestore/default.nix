@@ -17,21 +17,21 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-firestore";
-  version = "2.15.0";
+  version = "2.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WJzknGuNcxWiSDJ+ShJKRBQ/WlMU6naPfIUWYMIeYyE=";
+    hash = "sha256-5hrnAimm5TLkOcjRZEejICREfy7kojA/xNBUwljWh38=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     google-cloud-core
     proto-plus

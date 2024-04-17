@@ -14,4 +14,5 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     mv print-reexports $out/bin
   '';
+  meta.mainProgram = "print-reexports";
 }

@@ -9,7 +9,7 @@
       internal = true;
       visible = false;
       type = lib.types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Enable dynamic CDI configuration for NVidia devices by running
         nvidia-container-toolkit on boot.
       '';
@@ -26,9 +26,11 @@
       serviceConfig = {
         RuntimeDirectory = "cdi";
         RemainAfterExit = true;
-        ExecStart = let
-          script = (pkgs.writeScriptBin "nvidia-cdi-generator"
-            (import ./cdi-generate.nix { inherit config lib pkgs; })); in (lib.getExe script);
+        ExecStart =
+          let
+            script = pkgs.callPackage ./cdi-generate.nix { nvidia-driver = config.hardware.nvidia.package; };
+          in
+          lib.getExe script;
         Type = "oneshot";
       };
     };

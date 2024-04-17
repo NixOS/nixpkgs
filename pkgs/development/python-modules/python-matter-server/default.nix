@@ -2,9 +2,12 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, stdenvNoCC
+, substituteAll
 
 # build
 , setuptools
+, pythonRelaxDepsHook
 
 # propagates
 , aiohttp
@@ -27,9 +30,32 @@
 , pytestCheckHook
 }:
 
+let
+  paaCerts = stdenvNoCC.mkDerivation rec {
+    pname = "matter-server-paa-certificates";
+    version = "1.2.0.1";
+
+    src = fetchFromGitHub {
+      owner = "project-chip";
+      repo = "connectedhomeip";
+      rev = "refs/tags/v${version}";
+      hash = "sha256-p3P0n5oKRasYz386K2bhN3QVfN6oFndFIUWLEUWB0ss=";
+    };
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out
+      cp $src/credentials/development/paa-root-certs/* $out/
+
+      runHook postInstall
+    '';
+  };
+in
+
 buildPythonPackage rec {
   pname = "python-matter-server";
-  version = "5.5.3";
+  version = "5.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -38,16 +64,29 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "python-matter-server";
     rev = "refs/tags/${version}";
-    hash = "sha256-8daAABR5l8ZEX+PR4XrxRHlLllgnOVE4Q9yY/7UQXHw=";
+    hash = "sha256-O3AJ7vBjuwRGa4AMwWIdxn5m2F45rLCjCHeff18b/5E=";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./link-paa-root-certs.patch;
+      paacerts = paaCerts;
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"'
+      --replace 'version = "0.0.0"' 'version = "${version}"' \
+      --replace '--cov' ""
   '';
 
   nativeBuildInputs = [
     setuptools
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "home-assistant-chip-clusters"
   ];
 
   propagatedBuildInputs = [
@@ -90,6 +129,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/home-assistant-libs/python-matter-server/releases/tag/${version}";
     description = "Python server to interact with Matter";
+    mainProgram = "matter-server";
     homepage = "https://github.com/home-assistant-libs/python-matter-server";
     license = licenses.asl20;
     maintainers = teams.home-assistant.members;

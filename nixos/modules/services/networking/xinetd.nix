@@ -44,19 +44,19 @@ in
 
   options = {
 
-    services.xinetd.enable = mkEnableOption (lib.mdDoc "the xinetd super-server daemon");
+    services.xinetd.enable = mkEnableOption "the xinetd super-server daemon";
 
     services.xinetd.extraDefaults = mkOption {
       default = "";
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Additional configuration lines added to the default section of xinetd's configuration.
       '';
     };
 
     services.xinetd.services = mkOption {
       default = [];
-      description = lib.mdDoc ''
+      description = ''
         A list of services provided by xinetd.
       '';
 
@@ -67,51 +67,50 @@ in
           name = mkOption {
             type = types.str;
             example = "login";
-            description = lib.mdDoc "Name of the service.";
+            description = "Name of the service.";
           };
 
           protocol = mkOption {
             type = types.str;
             default = "tcp";
-            description =
-              lib.mdDoc "Protocol of the service.  Usually `tcp` or `udp`.";
+            description = "Protocol of the service.  Usually `tcp` or `udp`.";
           };
 
           port = mkOption {
             type = types.port;
             default = 0;
             example = 123;
-            description = lib.mdDoc "Port number of the service.";
+            description = "Port number of the service.";
           };
 
           user = mkOption {
             type = types.str;
             default = "nobody";
-            description = lib.mdDoc "User account for the service";
+            description = "User account for the service";
           };
 
           server = mkOption {
             type = types.str;
             example = "/foo/bin/ftpd";
-            description = lib.mdDoc "Path of the program that implements the service.";
+            description = "Path of the program that implements the service.";
           };
 
           serverArgs = mkOption {
             type = types.separatedString " ";
             default = "";
-            description = lib.mdDoc "Command-line arguments for the server program.";
+            description = "Command-line arguments for the server program.";
           };
 
           flags = mkOption {
             type = types.str;
             default = "";
-            description = lib.mdDoc "";
+            description = "";
           };
 
           unlisted = mkOption {
             type = types.bool;
             default = false;
-            description = lib.mdDoc ''
+            description = ''
               Whether this server is listed in
               {file}`/etc/services`.  If so, the port
               number can be omitted.
@@ -121,7 +120,7 @@ in
           extraConfig = mkOption {
             type = types.lines;
             default = "";
-            description = lib.mdDoc "Extra configuration-lines added to the section of the service.";
+            description = "Extra configuration-lines added to the section of the service.";
           };
 
         };

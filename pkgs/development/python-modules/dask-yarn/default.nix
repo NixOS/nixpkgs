@@ -65,6 +65,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Deploy dask on YARN clusters";
+    mainProgram = "dask-yarn";
     longDescription = ''Dask-Yarn deploys Dask on YARN clusters,
       such as are found in traditional Hadoop installations.
       Dask-Yarn provides an easy interface to quickly start,

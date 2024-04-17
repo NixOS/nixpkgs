@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, jinja2
 , ply
 , poetry-core
 , pythonOlder
@@ -9,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pysmi-lextudio";
-  version = "1.1.13";
+  version = "1.4.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "lextudio";
     repo = "pysmi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-P1uu1+EcqA7K+oJWFyHTyQqUvqZjZTU0owLKoxjaQhc=";
+    hash = "sha256-JrWVoK7fqESUIJeprjB28iaqOEWgsTpTqUEmSZp9XDk=";
   };
 
   nativeBuildInputs = [
@@ -26,6 +27,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    jinja2
     ply
     requests
   ];
@@ -40,7 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "SNMP MIB parser";
     homepage = "https://github.com/lextudio/pysmi";
-    changelog = "https://github.com/lextudio/pysmi/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/lextudio/pysmi/blob/v${version}/CHANGES.rst";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fab ];
   };

@@ -1,54 +1,64 @@
 { lib
-, buildPythonPackage
-, fetchPypi
 , attrs
 , boto3
+, buildPythonPackage
 , cryptography
-, setuptools
-, wrapt
+, fetchPypi
 , mock
-, pytest
 , pytest-mock
 , pytestCheckHook
+, pythonOlder
+, setuptools
+, wrapt
 }:
 
 buildPythonPackage rec {
   pname = "aws-encryption-sdk";
-  version = "3.1.1";
-  format = "setuptools";
+  version = "3.2.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jV+/AY/GjWscrL5N0Df9gFKWx3Nqn+RX62hNBT9/lWM=";
+    hash = "sha256-QwT8+M4qo/qYsaz/ejvzzQUowynAxDe1Xg9Fa79iNH4=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     attrs
     boto3
     cryptography
-    setuptools
     wrapt
   ];
 
-  doCheck = true;
-
   nativeCheckInputs = [
     mock
-    pytest
     pytest-mock
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   disabledTestPaths = [
-    # requires networking
+    # Tests require networking
     "examples"
     "test/integration"
   ];
 
+  pythonImportsCheck = [
+    "aws_encryption_sdk"
+  ];
+
   meta = with lib; {
+    description = "Python implementation of the AWS Encryption SDK";
     homepage = "https://aws-encryption-sdk-python.readthedocs.io/";
     changelog = "https://github.com/aws/aws-encryption-sdk-python/blob/v${version}/CHANGELOG.rst";
-    description = "Fully compliant, native Python implementation of the AWS Encryption SDK.";
     license = licenses.asl20;
     maintainers = with maintainers; [ anthonyroussel ];
   };

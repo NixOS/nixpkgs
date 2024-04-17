@@ -45,8 +45,8 @@ let
       }
     else
       {
-        version = "2024";
-        hash = "sha256-BNIm1SBmqLw6QuANYhPec3tOwpLiZwMGWST/AZVoAeI=";
+        version = "2024.1";
+        hash = "sha256-k32PEqNv/78q963XGtu1qlxVN4ktRsmnavvsqxqgqsc=";
       };
 
 in stdenv.mkDerivation rec {

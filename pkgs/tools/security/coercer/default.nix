@@ -41,6 +41,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool to automatically coerce a Windows server";
+    mainProgram = "coercer";
     homepage = "https://github.com/p0dalirius/Coercer";
     license = with licenses; [ gpl2Only ];
     maintainers = with maintainers; [ fab ];

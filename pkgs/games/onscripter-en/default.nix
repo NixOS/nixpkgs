@@ -29,6 +29,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "Japanese visual novel scripting engine";
+    mainProgram = "onscripter-en";
     homepage = "http://unclemion.com/onscripter/";
     license = licenses.gpl2;
     platforms = platforms.unix;

@@ -31,6 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Snapshot testing tool";
+    mainProgram = "turnt";
     homepage = "https://github.com/cucapra/turnt";
     license = licenses.mit;
     maintainers = with maintainers; [ leungbk ];

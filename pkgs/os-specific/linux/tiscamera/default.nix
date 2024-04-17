@@ -19,7 +19,8 @@
 , gobject-introspection
 , gst_all_1
 , wrapGAppsHook
-, withDoc ? true
+  # needs pkg_resources
+, withDoc ? false
 , sphinx
 , graphviz
 , withAravis ? true
@@ -32,20 +33,14 @@
 
 stdenv.mkDerivation rec {
   pname = "tiscamera";
-  version = "1.0.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "TheImagingSource";
-    repo = pname;
-    rev = "v-${pname}-${version}";
-    sha256 = "0msz33wvqrji11kszdswcvljqnjflmjpk0aqzmsv6i855y8xn6cd";
+    repo = "tiscamera";
+    rev = "v-tiscamera-${version}";
+    hash = "sha256-33U/8CbqNWIRwfDHXCZSN466WEQj9fip+Z5EJ7kIwRM=";
   };
-
-  patches = [
-    ./0001-tcamconvert-tcamsrc-add-missing-include-lib-dirs.patch
-    ./0001-udev-rules-fix-install-location.patch
-    ./0001-cmake-find-aravis-fix-pkg-cfg-include-dirs.patch
-  ];
 
   postPatch = ''
     cp ${catch2}/include/catch2/catch.hpp external/catch/catch.hpp
@@ -109,6 +104,8 @@ stdenv.mkDerivation rec {
     "-DTCAM_ARAVIS_USB_VISION=${if withAravis && withAravisUsbVision then "ON" else "OFF"}"
     "-DTCAM_INSTALL_FORCE_PREFIX=ON"
   ];
+
+  env.CXXFLAGS = "-include cstdint";
 
   doCheck = true;
 

@@ -9,8 +9,10 @@
 
 # dependencies
 , aiohappyeyeballs
+, async-interrupt
 , async-timeout
 , chacha20poly1305-reuseable
+, cryptography
 , noiseprotocol
 , protobuf
 , zeroconf
@@ -23,26 +25,28 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "21.0.2";
+  version = "23.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "esphome";
-    repo = pname;
+    repo = "aioesphomeapi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uNVf0wnqVntjTxkNTilvb0v6h3VBCjd91wbLQJ6q71g=";
+    hash = "sha256-GFQ87Ic0xHXs8ZgmzH7kOFbDSNmtj0hx+YHKnrz/sG0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     cython_3
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohappyeyeballs
+    async-interrupt
     chacha20poly1305-reuseable
+    cryptography
     noiseprotocol
     protobuf
     zeroconf
@@ -54,6 +58,11 @@ buildPythonPackage rec {
     mock
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # https://github.com/esphome/aioesphomeapi/issues/837
+    "test_reconnect_logic_stop_callback"
   ];
 
   pythonImportsCheck = [

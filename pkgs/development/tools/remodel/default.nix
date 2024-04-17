@@ -32,6 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Roblox file manipulation tool";
+    mainProgram = "remodel";
     longDescription = ''
       Remodel is a command line tool for manipulating Roblox files and the instances contained within them.
     '';

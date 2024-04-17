@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bluefish";
-  version = "2.2.14";
+  version = "2.2.15";
 
   src = fetchurl {
     url = "mirror://sourceforge/bluefish/bluefish-${version}.tar.bz2";
-    sha256 = "sha256-IszfnOTlyWIQY+bPfXOr+wc2q3pyvOCG0Gxc9e4SXt4=";
+    sha256 = "sha256-YUPlHGtVedWW86moXg8NhYDJ9Y+ChXWxGYgODKHZQbw=";
   };
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook ];

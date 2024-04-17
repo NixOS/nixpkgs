@@ -29,7 +29,7 @@
 , tarsum
 , util-linux
 , vmTools
-, writeReferencesToFile
+, writeClosure
 , writeScript
 , writeShellScriptBin
 , writeText
@@ -64,6 +64,8 @@ let
       # https://github.com/NixOS/nix/blob/9348f9291e5d9e4ba3c4347ea1b235640f54fd79/src/libutil/util.cc#L478
       export USER=nobody
       ${buildPackages.nix}/bin/nix-store --load-db < ${closureInfo {rootPaths = contentsList;}}/registration
+      # Reset registration times to make the image reproducible
+      ${buildPackages.sqlite}/bin/sqlite3 nix/var/nix/db/db.sqlite "UPDATE ValidPaths SET registrationTime = ''${SOURCE_DATE_EPOCH}"
 
       mkdir -p nix/var/nix/gcroots/docker/
       for i in ${lib.concatStringsSep " " contentsList}; do
@@ -515,13 +517,13 @@ rec {
 
   buildLayeredImage = lib.makeOverridable ({ name, compressor ? "gz", ... }@args:
     let
-      stream = streamLayeredImage args;
+      stream = streamLayeredImage (builtins.removeAttrs args ["compressor"]);
       compress = compressorForImage compressor name;
     in
     runCommand "${baseNameOf name}.tar${compress.ext}"
       {
         inherit (stream) imageName;
-        passthru = { inherit (stream) imageTag; };
+        passthru = { inherit (stream) imageTag; inherit stream; };
         nativeBuildInputs = compress.nativeInputs;
       } "${stream} | ${compress.compress} > $out"
   );
@@ -628,14 +630,14 @@ rec {
           imageName = lib.toLower name;
           imageTag = lib.optionalString (tag != null) tag;
           inherit fromImage baseJson;
-          layerClosure = writeReferencesToFile layer;
+          layerClosure = writeClosure [ layer ];
           passthru.buildArgs = args;
           passthru.layer = layer;
           passthru.imageTag =
             if tag != null
             then tag
             else
-              lib.head (lib.strings.splitString "-" (baseNameOf result.outPath));
+              lib.head (lib.strings.splitString "-" (baseNameOf (builtins.unsafeDiscardStringContext result.outPath)));
         } ''
         ${lib.optionalString (tag == null) ''
           outName="$(basename "$out")"
@@ -890,41 +892,26 @@ rec {
     })
   );
 
+  # Arguments are documented in ../../../doc/build-helpers/images/dockertools.section.md
   streamLayeredImage = lib.makeOverridable (
     {
-      # Image Name
       name
-    , # Image tag, the Nix's output hash will be used if null
-      tag ? null
-    , # Parent image, to append to.
-      fromImage ? null
-    , # Files to put on the image (a nix store path or list of paths).
-      contents ? [ ]
-    , # Docker config; e.g. what command to run on the container.
-      config ? { }
-    , # Image architecture, defaults to the architecture of the `hostPlatform` when unset
-      architecture ? defaultArchitecture
-    , # Time of creation of the image. Passing "now" will make the
-      # created date be the time of building.
-      created ? "1970-01-01T00:00:01Z"
-    , # Optional bash script to run on the files prior to fixturizing the layer.
-      extraCommands ? ""
-    , # Optional bash script to run inside fakeroot environment.
-      # Could be used for changing ownership of files in customisation layer.
-      fakeRootCommands ? ""
-    , # Whether to run fakeRootCommands in fakechroot as well, so that they
-      # appear to run inside the image, but have access to the normal Nix store.
-      # Perhaps this could be enabled on by default on pkgs.stdenv.buildPlatform.isLinux
-      enableFakechroot ? false
-    , # We pick 100 to ensure there is plenty of room for extension. I
-      # believe the actual maximum is 128.
-      maxLayers ? 100
-    , # Whether to include store paths in the image. You generally want to leave
-      # this on, but tooling may disable this to insert the store paths more
-      # efficiently via other means, such as bind mounting the host store.
-      includeStorePaths ? true
-    , # Passthru arguments for the underlying derivation.
-      passthru ? {}
+    , tag ? null
+    , fromImage ? null
+    , contents ? [ ]
+    , config ? { }
+    , architecture ? defaultArchitecture
+    , created ? "1970-01-01T00:00:01Z"
+    , uid ? 0
+    , gid ? 0
+    , uname ? "root"
+    , gname ? "root"
+    , maxLayers ? 100
+    , extraCommands ? ""
+    , fakeRootCommands ? ""
+    , enableFakechroot ? false
+    , includeStorePaths ? true
+    , passthru ? {}
     ,
     }:
       assert
@@ -1007,14 +994,14 @@ rec {
 
         conf = runCommand "${baseName}-conf.json"
           {
-            inherit fromImage maxLayers created;
+            inherit fromImage maxLayers created uid gid uname gname;
             imageName = lib.toLower name;
             preferLocalBuild = true;
             passthru.imageTag =
               if tag != null
               then tag
               else
-                lib.head (lib.strings.splitString "-" (baseNameOf conf.outPath));
+                lib.head (lib.strings.splitString "-" (baseNameOf (builtins.unsafeDiscardStringContext conf.outPath)));
             paths = buildPackages.referencesByPopularity overallClosure;
             nativeBuildInputs = [ jq ];
           } ''
@@ -1086,14 +1073,22 @@ rec {
               "store_layers": $store_layers[0],
               "customisation_layer", $customisation_layer,
               "repo_tag": $repo_tag,
-              "created": $created
+              "created": $created,
+              "uid": $uid,
+              "gid": $gid,
+              "uname": $uname,
+              "gname": $gname
             }
             ' --arg store_dir "${storeDir}" \
               --argjson from_image ${if fromImage == null then "null" else "'\"${fromImage}\"'"} \
               --slurpfile store_layers store_layers.json \
               --arg customisation_layer ${customisationLayer} \
               --arg repo_tag "$imageName:$imageTag" \
-              --arg created "$created" |
+              --arg created "$created" \
+              --arg uid "$uid" \
+              --arg gid "$gid" \
+              --arg uname "$uname" \
+              --arg gname "$gname" |
             tee $out
         '';
 
@@ -1205,6 +1200,7 @@ rec {
 
           # Root certificates for internet access
           SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+          NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
           # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1027-L1030
           # PATH = "/path-not-set";
@@ -1291,7 +1287,7 @@ rec {
   # Wrapper around streamNixShellImage to build an image from the result
   buildNixShellImage = { drv, compressor ? "gz", ... }@args:
     let
-      stream = streamNixShellImage args;
+      stream = streamNixShellImage (builtins.removeAttrs args ["compressor"]);
       compress = compressorForImage compressor drv.name;
     in
     runCommand "${drv.name}-env.tar${compress.ext}"

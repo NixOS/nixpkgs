@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
       detailed information.
     '';
 
+    mainProgram = "idn2";
     license = with lib.licenses; [ lgpl3Plus gpl2Plus gpl3Plus ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ fpletz ];

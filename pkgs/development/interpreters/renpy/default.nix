@@ -81,6 +81,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Visual Novel Engine";
+    mainProgram = "renpy";
     homepage = "https://renpy.org/";
     changelog = "https://renpy.org/doc/html/changelog.html";
     license = licenses.mit;

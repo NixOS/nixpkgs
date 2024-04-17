@@ -107,6 +107,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Seahorse";
     description = "Application for managing encryption keys and passwords in the GnomeKeyring";
+    mainProgram = "seahorse";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

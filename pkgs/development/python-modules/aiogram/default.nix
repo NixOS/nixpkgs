@@ -2,15 +2,17 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, pythonRelaxDepsHook
 , pytestCheckHook
 , aiohttp
 , aiohttp-socks
-, aioredis
 , aiofiles
 , aresponses
 , babel
 , certifi
 , magic-filter
+, pycryptodomex
+, pytest-aiohttp
 , pytest-asyncio
 , pytest-lazy-fixture
 , redis
@@ -36,6 +38,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     hatchling
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "pydantic"
   ];
 
   propagatedBuildInputs = [
@@ -49,8 +56,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aiohttp-socks
-    aioredis
     aresponses
+    pycryptodomex
+    pytest-aiohttp
     pytest-asyncio
     pytest-lazy-fixture
     pytestCheckHook
@@ -58,10 +66,9 @@ buildPythonPackage rec {
     redis
   ];
 
-  # import failures
-  disabledTests = [
-    "test_aiohtt_server"
-    "test_deep_linking"
+  pytestFlagsArray = [
+    "-W" "ignore::pluggy.PluggyTeardownRaisedWarning"
+    "-W" "ignore::pytest.PytestDeprecationWarning"
   ];
 
   pythonImportsCheck = [ "aiogram" ];

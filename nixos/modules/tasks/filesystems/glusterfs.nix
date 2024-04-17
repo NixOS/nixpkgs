@@ -3,7 +3,7 @@
 with lib;
 
 {
-  config = mkIf (any (fs: fs == "glusterfs") config.boot.supportedFilesystems) {
+  config = mkIf (config.boot.supportedFilesystems.glusterfs or false) {
 
     system.fsPackages = [ pkgs.glusterfs ];
 

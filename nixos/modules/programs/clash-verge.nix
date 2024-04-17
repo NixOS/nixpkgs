@@ -2,9 +2,10 @@
 
 {
   options.programs.clash-verge = {
-    enable = lib.mkEnableOption (lib.mdDoc "Clash Verge");
-    autoStart = lib.mkEnableOption (lib.mdDoc "Clash Verge auto launch");
-    tunMode = lib.mkEnableOption (lib.mdDoc "Clash Verge TUN mode");
+    enable = lib.mkEnableOption "Clash Verge";
+    package = lib.mkPackageOption pkgs "clash-verge" {};
+    autoStart = lib.mkEnableOption "Clash Verge auto launch";
+    tunMode = lib.mkEnableOption "Clash Verge TUN mode";
   };
 
   config =
@@ -14,10 +15,10 @@
     lib.mkIf cfg.enable {
 
       environment.systemPackages = [
-        pkgs.clash-verge
+        cfg.package
         (lib.mkIf cfg.autoStart (pkgs.makeAutostartItem {
           name = "clash-verge";
-          package = pkgs.clash-verge;
+          package = cfg.package;
         }))
       ];
 
@@ -25,7 +26,7 @@
         owner = "root";
         group = "root";
         capabilities = "cap_net_bind_service,cap_net_admin=+ep";
-        source = "${lib.getExe pkgs.clash-verge}";
+        source = "${lib.getExe cfg.package}";
       };
     };
 

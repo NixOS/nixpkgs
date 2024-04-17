@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/lsof-org/lsof";
     description = "A tool to list open files";
+    mainProgram = "lsof";
     longDescription = ''
       List open files. Can show what process has opened some file,
       socket (IPv6/IPv4/UNIX local), or partition (by opening a file

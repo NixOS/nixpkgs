@@ -7,14 +7,16 @@ Mosquitto is a MQTT broker often used for IoT or home automation data transport.
 A minimal configuration for Mosquitto is
 
 ```nix
-services.mosquitto = {
-  enable = true;
-  listeners = [ {
-    acl = [ "pattern readwrite #" ];
-    omitPasswordAuth = true;
-    settings.allow_anonymous = true;
-  } ];
-};
+{
+  services.mosquitto = {
+    enable = true;
+    listeners = [ {
+      acl = [ "pattern readwrite #" ];
+      omitPasswordAuth = true;
+      settings.allow_anonymous = true;
+    } ];
+  };
+}
 ```
 
 This will start a broker on port 1883, listening on all interfaces of the machine, allowing
@@ -25,37 +27,42 @@ full read access to a user `monitor` and restricted write access to a user `serv
 like
 
 ```nix
-services.mosquitto = {
-  enable = true;
-  listeners = [ {
-    users = {
-      monitor = {
-        acl = [ "read #" ];
-        password = "monitor";
+{
+  services.mosquitto = {
+    enable = true;
+    listeners = [ {
+      users = {
+        monitor = {
+          acl = [ "read #" ];
+          password = "monitor";
+        };
+        service = {
+          acl = [ "write service/#" ];
+          password = "service";
+        };
       };
-      service = {
-        acl = [ "write service/#" ];
-        password = "service";
-      };
-    };
-  } ];
-};
+    } ];
+  };
+}
 ```
 
 TLS authentication is configured by setting TLS-related options of the listener:
 
 ```nix
-services.mosquitto = {
-  enable = true;
-  listeners = [ {
-    port = 8883; # port change is not required, but helpful to avoid mistakes
-    # ...
-    settings = {
-      cafile = "/path/to/mqtt.ca.pem";
-      certfile = "/path/to/mqtt.pem";
-      keyfile = "/path/to/mqtt.key";
-    };
-  } ];
+{
+  services.mosquitto = {
+    enable = true;
+    listeners = [ {
+      port = 8883; # port change is not required, but helpful to avoid mistakes
+      # ...
+      settings = {
+        cafile = "/path/to/mqtt.ca.pem";
+        certfile = "/path/to/mqtt.pem";
+        keyfile = "/path/to/mqtt.key";
+      };
+    } ];
+  };
+}
 ```
 
 ## Configuration {#module-services-mosquitto-config}

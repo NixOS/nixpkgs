@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libfilezilla";
-  version = "0.45.0";
+  version = "0.47.0";
 
   src = fetchurl {
     url = "https://download.filezilla-project.org/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-PBRUvBWG0Xd29ix1BdQ6BtOr0uLjVkLMpHf6IvJ9mC8=";
+    hash = "sha256-YYpYa2E773EKYzxCv92mFmbLsPyKkq1JA2HQvJHFg0E=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

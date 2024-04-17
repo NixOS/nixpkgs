@@ -22,6 +22,7 @@
 , expat
 , libdrm
 , libxkbcommon
+, pipewire
 , gtk3
 , pango
 , cairo
@@ -32,6 +33,7 @@
 , libuuid
 , systemd
 , wayland
+, libGL
 
 # command line arguments which are always set e.g "--disable-gpu"
 , commandLineArgs ? ""
@@ -81,7 +83,7 @@ stdenv.mkDerivation rec {
         xorg.libxcb cups.lib dbus.lib expat libdrm
         xorg.libXcomposite xorg.libXdamage xorg.libXext
         xorg.libXfixes xorg.libXrandr libxkbcommon
-        gtk3 pango cairo gdk-pixbuf mesa
+        pipewire gtk3 pango cairo gdk-pixbuf mesa
         alsa-lib at-spi2-core xorg.libxshmfence systemd wayland
       ];
       naclHelper = lib.makeLibraryPath [
@@ -92,7 +94,7 @@ stdenv.mkDerivation rec {
         glib nss nspr
       ];
       libGLESv2 = lib.makeLibraryPath [
-        xorg.libX11 xorg.libXext xorg.libxcb wayland
+        xorg.libX11 xorg.libXext xorg.libxcb wayland libGL
       ];
       liboneauth = lib.makeLibraryPath [
         libuuid xorg.libX11

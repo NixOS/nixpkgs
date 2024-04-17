@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-shell";
-  version = "1.9.2";
+  version = "1.9.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JLQea7+qWjomlQ1cbYJMou7u1eGwHNKgzqiUIUT0otY=";
+    hash = "sha256-33TZcRsOWP8PBAXFHy9DQn20bVECwD2wv7hcaYl0E8Y=";
   };
 
   nativeBuildInputs = [

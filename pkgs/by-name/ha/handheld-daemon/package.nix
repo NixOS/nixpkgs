@@ -48,7 +48,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Linux support for handheld gaming devices like the Legion Go, ROG Ally, and GPD Win";
     platforms = platforms.linux;
     license = licenses.mit;
-    maintainers = with maintainers; [ appsforartists ];
+    maintainers = with maintainers; [ appsforartists toast ];
     mainProgram = "hhd";
   };
 }

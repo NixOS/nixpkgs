@@ -22,6 +22,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module for working with Fortran Namelists";
+    mainProgram = "f90nml";
     homepage = "https://f90nml.readthedocs.io";
     license = licenses.asl20;
     maintainers = with maintainers; [ loicreynier ];

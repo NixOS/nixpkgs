@@ -12,7 +12,7 @@
 let
   inherit (darwin.apple_sdk.frameworks) CoreServices;
   pname = "cargo-mobile2";
-  version = "0.10.2";
+  version = "0.11.1";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -20,14 +20,14 @@ rustPlatform.buildRustPackage {
     owner = "tauri-apps";
     repo = pname;
     rev = "cargo-mobile2-v${version}";
-    hash = "sha256-LRQfntEbY8K1kepgn2Gww1ixWmvKHuw6DPT9j9MG118=";
+    hash = "sha256-HLDuWEKLij1hTKxf3lrAb4d2DIHzzkj4kuiZXgQwH4Q=";
   };
 
   # Manually specify the sourceRoot since this crate depends on other crates in the workspace. Relevant info at
   # https://discourse.nixos.org/t/difficulty-using-buildrustpackage-with-a-src-containing-multiple-cargo-workspaces/10202
   # sourceRoot = "${src.name}/tooling/cli";
 
-  cargoHash = "sha256-yWkyIwZ3KPMhlVajCIAYonFveGFqzB5qBGO5WdzjxNs=";
+  cargoHash = "sha256-jCsP5xhNkqnwz8HocUzzf17omU8WDNrL/WVj/lP+51w=";
 
   preBuild = ''
     mkdir -p $out/share/

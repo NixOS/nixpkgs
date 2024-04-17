@@ -58,6 +58,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Plugin system for napari (the image visualizer)";
+    mainProgram = "npe2";
     homepage = "https://github.com/napari/npe2";
     license = licenses.bsd3;
     maintainers = with maintainers; [ SomeoneSerge ];

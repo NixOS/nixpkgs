@@ -30,6 +30,7 @@ buildGoModule rec {
     homepage = "https://buildpacks.io/";
     changelog = "https://github.com/buildpacks/pack/releases/tag/v${version}";
     description = "CLI for building apps using Cloud Native Buildpacks";
+    mainProgram = "pack";
     license = licenses.asl20;
     maintainers = [ maintainers.marsam ];
   };

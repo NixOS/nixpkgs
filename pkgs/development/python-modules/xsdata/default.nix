@@ -93,6 +93,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Naive XML & JSON bindings for Python";
+    mainProgram = "xsdata";
     homepage = "https://github.com/tefra/xsdata";
     changelog = "https://github.com/tefra/xsdata/blob/${src.rev}/CHANGES.md";
     license = lib.licenses.mit;

@@ -17,6 +17,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     platforms = platforms.unix;
     description = "Send commands to a running instance of xmonad";
+    mainProgram = "xmonadctl";
     homepage = "https://github.com/xmonad/xmonad-contrib";
     license = licenses.bsd3;
     maintainers = [ maintainers.ajgrf ];

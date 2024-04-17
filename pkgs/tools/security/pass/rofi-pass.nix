@@ -84,6 +84,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A script to make rofi work with password-store";
+    mainProgram = "rofi-pass";
     homepage = "https://github.com/carnager/rofi-pass";
     license = lib.licenses.gpl3;
     platforms = with lib.platforms; linux;

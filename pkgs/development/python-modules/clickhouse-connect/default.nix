@@ -23,7 +23,7 @@
 }:
 buildPythonPackage rec {
   pname = "clickhouse-connect";
-  version = "0.7.0";
+  version = "0.7.8";
 
   format = "setuptools";
 
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     repo = "clickhouse-connect";
     owner = "ClickHouse";
     rev = "refs/tags/v${version}";
-    hash = "sha256-RpuBKdjjSjJJ9UU7VW20gD9Rouj0oxv72sZZaUa/BfY=";
+    hash = "sha256-tdf9aYKAFpRyaqGGNxXs4bzmY6mdhKZ5toFBJRmD2VY=";
   };
 
   nativeBuildInputs = [ cython_3 ];

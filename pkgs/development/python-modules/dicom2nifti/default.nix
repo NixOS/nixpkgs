@@ -42,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/icometrix/dicom2nifti";
     description = "Library for converting dicom files to nifti";
+    mainProgram = "dicom2nifti";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };
