@@ -8,5 +8,6 @@ fetchzip ({
   url = "${url}/+archive/${rev}.tar.gz";
   stripRoot = false;
   meta.homepage = url;
+  meta.repository = [ url ];
 } // removeAttrs args [ "url" "rev" ]) // { inherit rev; }
 )
