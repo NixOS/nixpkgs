@@ -421,6 +421,10 @@ let
       orga = "mtoohey31";
       repo = "tree-sitter-koka";
     };
+    "tree-sitter-earthfile" = {
+      orga = "glehmann";
+      repo = "tree-sitter-earthfile";
+    };
   };
 
   allGrammars =
