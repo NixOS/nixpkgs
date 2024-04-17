@@ -75,6 +75,8 @@ let
         { from = "\${pkglibdir}/pkgdata.inc"; to = "${placeholder "dev"}/lib/icu/pkgdata.inc"; } # --incpkgdatafile
       ];
     in ''
+      rm $out/share/icu/${version}/install-sh $out/share/icu/${version}/mkinstalldirs # Avoid having a runtime dependency on bash
+
       substituteInPlace "$dev/bin/icu-config" \
         ${lib.concatMapStringsSep " " (r: "--replace '${r.from}' '${r.to}'") replacements}
     '');
