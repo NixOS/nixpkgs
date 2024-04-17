@@ -16858,6 +16858,8 @@ self: super: with self; {
 
   willow = callPackage ../development/python-modules/willow { };
 
+  win-inet-pton = callPackage ../development/python-modules/win-inet-pton { };
+
   winacl = callPackage ../development/python-modules/winacl { };
 
   winsspi = callPackage ../development/python-modules/winsspi { };
