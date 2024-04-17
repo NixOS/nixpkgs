@@ -22463,6 +22463,12 @@
     githubId = 1108325;
     name = "Théo Zimmermann";
   };
+  zlepper = {
+    name = "Rasmus Hansen";
+    github = "zlepper";
+    githubId = 1499810;
+    email = "hansen13579@gmail.com";
+  };
   zmitchell = {
     name = "Zach Mitchell";
     email = "zmitchell@fastmail.com";
