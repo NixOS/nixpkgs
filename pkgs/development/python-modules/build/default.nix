@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "pypa";
     repo = "build";
     rev = "refs/tags/${version}";
-    hash = "sha256-SGWpm+AGIfqKMpDfmz2aMYmcs+XVREbHIXSuU4R7U/k=";
+    hash = "sha256-qlt5+3XFesF9UuvJ+D4F/1KVZ3cov6sTitjufwAq73Q=";
   };
 
   postPatch = ''
