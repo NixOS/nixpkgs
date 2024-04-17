@@ -19,7 +19,7 @@
 , yarn
 , wasm-bindgen-cli
 , wasm-pack
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , nixosTests
 
 , withRdpClient ? true
@@ -80,7 +80,7 @@ let
       "-C linker=lld"
     ];
 
-    nativeBuildInputs = [ nodejs yarn prefetch-yarn-deps ] ++
+    nativeBuildInputs = [ nodejs yarn fixup-yarn-lock ] ++
       lib.optional (lib.versionAtLeast version "15") [
         binaryen
         cargo

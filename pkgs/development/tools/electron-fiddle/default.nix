@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , fetchYarnDeps
 , fetchurl
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , git
 , lib
 , makeDesktopItem
@@ -51,7 +51,7 @@ let
     pname = "${pname}-unwrapped";
     inherit version src;
 
-    nativeBuildInputs = [ prefetch-yarn-deps git nodejs util-linux yarn zip ];
+    nativeBuildInputs = [ fixup-yarn-lock git nodejs util-linux yarn zip ];
 
     configurePhase = ''
       export HOME=$TMPDIR

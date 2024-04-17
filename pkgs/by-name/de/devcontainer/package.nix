@@ -2,7 +2,7 @@
 , stdenv
 , fetchYarnDeps
 , fetchFromGitHub
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , nodejs
 , python3
 , makeWrapper
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Wy0UP8QaQzZ1par7W5UhnRLc5DF2PAif0JIZJtRokBk=";
   };
 
-  nativeBuildInputs = [ yarn prefetch-yarn-deps python3 makeWrapper ];
+  nativeBuildInputs = [ yarn fixup-yarn-lock python3 makeWrapper ];
 
   buildPhase = ''
     runHook preBuild
