@@ -268,11 +268,11 @@ in
 
           script =
             let
-              userScriptArgs = ''--user ${cfg.defaultUser} --password "$(cat ${cfg.passwordFile})"'';
-              updateUserScript = optionalString (cfg.authType == "form") ''
+              userScriptArgs = ''--user ${cfg.defaultUser} ${optionalString (cfg.authType == "form") ''--password "$(cat ${cfg.passwordFile})"''}'';
+              updateUserScript = optionalString (cfg.authType == "form" || cfg.authType == "none") ''
                 ./cli/update-user.php ${userScriptArgs}
               '';
-              createUserScript = optionalString (cfg.authType == "form") ''
+              createUserScript = optionalString (cfg.authType == "form" || cfg.authType == "none") ''
                 ./cli/create-user.php ${userScriptArgs}
               '';
             in
