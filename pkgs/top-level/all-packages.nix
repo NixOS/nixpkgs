@@ -13288,8 +13288,6 @@ with pkgs;
 
   stm32loader = with python3Packages; toPythonApplication stm32loader;
 
-  storcli = callPackage ../tools/misc/storcli { };
-
   stremio = qt5.callPackage ../applications/video/stremio { };
 
   sunwait = callPackage ../applications/misc/sunwait { };
