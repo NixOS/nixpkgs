@@ -98,6 +98,15 @@
         run = checkConsoleOutput "$src/test";
       };
 
+      self-contained = mkDotnetTest {
+        name = "self-contained";
+        template = "console";
+        usePackageSource = true;
+        build = "dotnet publish --use-current-runtime --sc -o $out";
+        runtime = null;
+        run = checkConsoleOutput "$src/test";
+      };
+
       single-file = mkDotnetTest {
         name = "single-file";
         template = "console";
