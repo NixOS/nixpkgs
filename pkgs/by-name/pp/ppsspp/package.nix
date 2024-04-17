@@ -1,25 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, cmake
-, copyDesktopItems
-, ffmpeg_4
-, glew
-, libffi
-, libsForQt5
-, libzip
-, makeDesktopItem
-, makeWrapper
-, pkg-config
-, python3
-, snappy
-, vulkan-loader
-, wayland
-, zlib
-, enableQt ? false
-, enableVulkan ? true
-, forceWayland ? false
+{
+  lib,
+  SDL2,
+  cmake,
+  copyDesktopItems,
+  fetchFromGitHub,
+  ffmpeg,
+  glew,
+  libffi,
+  libsForQt5,
+  libzip,
+  makeDesktopItem,
+  makeWrapper,
+  pkg-config,
+  python3,
+  snappy,
+  stdenv,
+  vulkan-loader,
+  wayland,
+  zlib,
+
+  enableQt ? false,
+  enableVulkan ? true,
+  forceWayland ? false,
+  useSystemFfmpeg? false,
+  useSystemSnappy? true,
 }:
 
 let
@@ -55,26 +59,33 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pkg-config
     python3
-  ] ++ lib.optionals enableQt [ wrapQtAppsHook ];
+  ]
+  ++ lib.optionals enableQt [ wrapQtAppsHook ];
 
   buildInputs = [
     SDL2
-    ffmpeg_4
-    (glew.override { enableEGL = forceWayland; })
+    glew
     libzip
-    snappy
     zlib
-  ] ++ lib.optionals enableQt [
+  ]
+  ++ lib.optionals useSystemFfmpeg [
+    ffmpeg
+  ]
+  ++ lib.optionals useSystemSnappy [
+    snappy
+  ]
+  ++ lib.optionals enableQt [
     qtbase
     qtmultimedia
-  ] ++ lib.optionals enableVulkan [ vulkan-loader ]
+  ]
+  ++ lib.optionals enableVulkan [ vulkan-loader ]
   ++ lib.optionals vulkanWayland [ wayland libffi ];
 
   cmakeFlags = [
     (lib.cmakeBool "HEADLESS" (!enableQt))
-    (lib.cmakeBool "USE_SYSTEM_FFMPEG" true)
+    (lib.cmakeBool "USE_SYSTEM_FFMPEG" useSystemFfmpeg)
     (lib.cmakeBool "USE_SYSTEM_LIBZIP" true)
-    (lib.cmakeBool "USE_SYSTEM_SNAPPY" true)
+    (lib.cmakeBool "USE_SYSTEM_SNAPPY" useSystemSnappy)
     (lib.cmakeBool "USE_WAYLAND_WSI" vulkanWayland)
     (lib.cmakeBool "USING_QT_UI" enableQt)
     (lib.cmakeFeature "OpenGL_GL_PREFERENCE" "GLVND")
@@ -91,33 +102,40 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  installPhase = let
-    vulkanPath = lib.makeLibraryPath [ vulkan-loader ];
-  in
-    ''
-      runHook preInstall
+  installPhase =
+    lib.concatStringsSep "\n" ([
+      ''runHook preInstall''
+    ]
+    ++ [
+      ''mkdir -p $out/share/{applications,ppsspp/bin,icons}''
+    ]
+    ++ (if enableQt then [
+      ''install -Dm555 PPSSPPQt $out/share/ppsspp/bin/''
+      ] else [
+        ''install -Dm555 PPSSPPHeadless $out/share/ppsspp/bin/''
+        ''makeWrapper $out/share/ppsspp/bin/PPSSPPHeadless $out/bin/ppsspp-headless''
+        ''install -Dm555 PPSSPPSDL $out/share/ppsspp/bin/''
+      ])
+    ++ [
+      ''mv assets $out/share/ppsspp''
+      ''mv ../icons/hicolor $out/share/icons''
+    ]
+    ++ [
+      ''runHook postInstall''
+    ]);
 
-      mkdir -p $out/share/{applications,ppsspp,icons}
-    ''
-    + (if enableQt then ''
-      install -Dm555 PPSSPPQt $out/bin/ppsspp
-      wrapProgram $out/bin/ppsspp \
-    '' else ''
-      install -Dm555 PPSSPPHeadless $out/bin/ppsspp-headless
-      install -Dm555 PPSSPPSDL $out/share/ppsspp/
-      makeWrapper $out/share/ppsspp/PPSSPPSDL $out/bin/ppsspp \
-        --set SDL_VIDEODRIVER ${if forceWayland then "wayland" else "x11"} \
-    '')
-    + lib.optionalString enableVulkan ''
-        --prefix LD_LIBRARY_PATH : ${vulkanPath} \
-    ''
-    + ''
-
-      mv assets $out/share/ppsspp
-      mv ../icons/hicolor $out/share/icons
-
-      runHook postInstall
-    '';
+  postFixup =
+    let
+      wrapperArgs =
+        lib.concatStringsSep " "
+          (lib.optionals enableVulkan [
+            "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}"
+          ] ++ lib.optionals (!enableQt) [
+            "--set SDL_VIDEODRIVER ${if forceWayland then "wayland" else "x11"}"
+          ]);
+      binToBeWrapped = if enableQt then "PPSSPPQt" else "PPSSPPSDL";
+    in
+      ''makeWrapper $out/share/ppsspp/bin/${binToBeWrapped} $out/bin/ppsspp ${wrapperArgs}'';
 
   meta = {
     homepage = "https://www.ppsspp.org/";
