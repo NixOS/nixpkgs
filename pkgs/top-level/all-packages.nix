@@ -14385,7 +14385,8 @@ with pkgs;
 
   wasm-tools = callPackage ../tools/misc/wasm-tools { };
 
-  wasmedge = darwin.apple_sdk_11_0.callPackage ../development/tools/wasmedge {
+  wasmedge = callPackage ../development/tools/wasmedge {
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else llvmPackages.stdenv;
     inherit (darwin.apple_sdk_11_0.frameworks) Foundation;
   };
 
@@ -34414,7 +34415,12 @@ with pkgs;
 
   rtl-ais = callPackage ../applications/radio/rtl-ais { };
 
-  rtl-sdr = callPackage ../applications/radio/rtl-sdr { };
+  inherit (callPackages ../applications/radio/rtl-sdr { })
+    rtl-sdr-librtlsdr
+    rtl-sdr-osmocom
+    rtl-sdr-blog;
+
+  rtl-sdr = rtl-sdr-blog;
 
   rubyripper = callPackage ../applications/audio/rubyripper { };
 
@@ -38919,9 +38925,7 @@ with pkgs;
 
   btor2tools = callPackage ../applications/science/logic/btor2tools { };
 
-  boolector = callPackage ../applications/science/logic/boolector {
-    stdenv = if stdenv.cc.isClang then overrideLibcxx llvmPackages_14.stdenv else stdenv;
-  };
+  boolector = callPackage ../applications/science/logic/boolector { };
 
   bitwuzla = callPackage ../applications/science/logic/bitwuzla { };
 

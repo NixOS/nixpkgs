@@ -19044,12 +19044,6 @@
     githubId = 2798728;
     name = "Filip Czaplicki";
   };
-  star-szr = {
-    email = "nixpkgs@szr.fastmail.com";
-    github = "star-szr";
-    githubId = 327943;
-    name = "Scott Zhu Reeves";
-  };
   starzation = {
     email = "nixpkgs@starzation.net";
     github = "starzation";
