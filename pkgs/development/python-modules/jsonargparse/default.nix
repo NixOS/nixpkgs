@@ -1,26 +1,27 @@
-{ lib
-, argcomplete
-, attrs
-, buildPythonPackage
-, docstring-parser
-, fetchFromGitHub
-, fsspec
-, jsonnet
-, jsonschema
-, omegaconf
-, pydantic
-, pytest-subtests
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, reconplogger
-, requests
-, responses
-, ruyaml
-, setuptools
-, types-pyyaml
-, types-requests
-, typeshed-client
+{
+  lib,
+  argcomplete,
+  attrs,
+  buildPythonPackage,
+  docstring-parser,
+  fetchFromGitHub,
+  fsspec,
+  jsonnet,
+  jsonschema,
+  omegaconf,
+  pydantic,
+  pytest-subtests,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  reconplogger,
+  requests,
+  responses,
+  ruyaml,
+  setuptools,
+  types-pyyaml,
+  types-requests,
+  typeshed-client,
 }:
 
 buildPythonPackage rec {
@@ -37,13 +38,9 @@ buildPythonPackage rec {
     hash = "sha256-iw6ntzFkvMg5baOgeUzf3qV1eGGqywINd7e6N781llQ=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    pyyaml
-  ];
+  dependencies = [ pyyaml ];
 
   passthru.optional-dependencies = {
     all = [
@@ -57,35 +54,21 @@ buildPythonPackage rec {
       typeshed-client
       requests
     ];
-    argcomplete = [
-      argcomplete
-    ];
-    fsspec = [
-      fsspec
-    ];
+    argcomplete = [ argcomplete ];
+    fsspec = [ fsspec ];
     jsonnet = [
       jsonnet
       # jsonnet-binary
     ];
-    jsonschema = [
-      jsonschema
-    ];
-    omegaconf = [
-      omegaconf
-    ];
-    reconplogger = [
-      reconplogger
-    ];
-    ruyaml = [
-      ruyaml
-    ];
+    jsonschema = [ jsonschema ];
+    omegaconf = [ omegaconf ];
+    reconplogger = [ reconplogger ];
+    ruyaml = [ ruyaml ];
     signatures = [
       docstring-parser
       typeshed-client
     ];
-    urls = [
-      requests
-    ];
+    urls = [ requests ];
   };
 
   nativeCheckInputs = [
@@ -95,9 +78,7 @@ buildPythonPackage rec {
     types-requests
   ];
 
-  pythonImportsCheck = [
-    "jsonargparse"
-  ];
+  pythonImportsCheck = [ "jsonargparse" ];
 
   meta = with lib; {
     description = "Module to mplement minimal boilerplate CLIs derived from various sources";
