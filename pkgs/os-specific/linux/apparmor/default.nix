@@ -1,4 +1,5 @@
 { stdenv, lib, fetchFromGitLab, fetchpatch, makeWrapper, autoreconfHook
+, autoconf-archive
 , pkg-config, which
 , flex, bison
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
@@ -22,7 +23,7 @@
 }:
 
 let
-  apparmor-version = "3.1.7";
+  apparmor-version = "4.0.1";
 
   apparmor-meta = component: with lib; {
     homepage = "https://apparmor.net/";
@@ -36,7 +37,7 @@ let
     owner = "apparmor";
     repo = "apparmor";
     rev = "v${apparmor-version}";
-    hash = "sha256-AzY05bcpNYXix2GL4Rhc9d3RBA1pd2fwOa7yoiwc2nQ=";
+    hash = "sha256-0S/P62wi3/aPATvJL6afu+SebjoSHsTMu/WV9m7E1OE=";
   };
 
   aa-teardown = writeShellScript "aa-teardown" ''
@@ -86,6 +87,7 @@ let
     strictDeps = false;
 
     nativeBuildInputs = [
+      autoconf-archive
       autoreconfHook
       bison
       flex
