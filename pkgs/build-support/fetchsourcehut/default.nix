@@ -58,5 +58,6 @@ let
 in cases.${fetcher}.fetch cases.${fetcher}.arguments // {
   inherit rev;
   meta.homepage = "${baseUrl}";
+  meta.repository = [ "${baseUrl}" ];
 }
 )
