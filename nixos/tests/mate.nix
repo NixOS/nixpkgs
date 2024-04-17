@@ -27,6 +27,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     hardware.pulseaudio.enable = true;
   };
 
+  interactive.nodes.machine = {
+    virtualisation.opengl = true;
+  };
+
   enableOCR = true;
 
   testScript = { nodes, ... }:

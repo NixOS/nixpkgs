@@ -36,8 +36,11 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
           };
         };
       };
-
     };
+
+  interactive.nodes.machine = {
+    virtualisation.opengl = true;
+  };
 
   testScript = { nodes, ... }: let
     # Keep line widths somewhat manageable
