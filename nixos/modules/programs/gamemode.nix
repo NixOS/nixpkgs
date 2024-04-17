@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.programs.gamemode;
   settingsFormat = pkgs.formats.ini { };
@@ -10,20 +8,20 @@ in
 {
   options = {
     programs.gamemode = {
-      enable = mkEnableOption "GameMode to optimise system performance on demand";
+      enable = lib.mkEnableOption "GameMode to optimise system performance on demand";
 
-      enableRenice = mkEnableOption "CAP_SYS_NICE on gamemoded to support lowering process niceness" // {
+      enableRenice = lib.mkEnableOption "CAP_SYS_NICE on gamemoded to support lowering process niceness" // {
         default = true;
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = settingsFormat.type;
         default = { };
         description = ''
           System-wide configuration for GameMode (/etc/gamemode.ini).
           See gamemoded(8) man page for available settings.
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             general = {
               renice = 10;
@@ -46,7 +44,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = [ pkgs.gamemode ];
       etc."gamemode.ini".source = configFile;
@@ -54,7 +52,7 @@ in
 
     security = {
       polkit.enable = true;
-      wrappers = mkIf cfg.enableRenice {
+      wrappers = lib.mkIf cfg.enableRenice {
         gamemoded = {
           owner = "root";
           group = "root";
@@ -77,14 +75,14 @@ in
         #
         # This uses a link farm to make sure other wrapped executables
         # aren't included in PATH.
-        environment.PATH = mkForce (pkgs.linkFarm "pkexec" [
+        environment.PATH = lib.mkForce (pkgs.linkFarm "pkexec" [
           {
             name = "pkexec";
             path = "${config.security.wrapperDir}/pkexec";
           }
         ]);
 
-        serviceConfig.ExecStart = mkIf cfg.enableRenice [
+        serviceConfig.ExecStart = lib.mkIf cfg.enableRenice [
           "" # Tell systemd to clear the existing ExecStart list, to prevent appending to it.
           "${config.security.wrapperDir}/gamemoded"
         ];
@@ -95,6 +93,6 @@ in
   };
 
   meta = {
-    maintainers = with maintainers; [ kira-bruneau ];
+    maintainers = with lib.maintainers; [ kira-bruneau ];
   };
 }

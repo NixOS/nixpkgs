@@ -1,15 +1,14 @@
 { config, lib, pkgs, ... }:
-with lib;
 let
 
   cfg = config.programs.proxychains;
 
   configFile = ''
     ${cfg.chain.type}_chain
-    ${optionalString (cfg.chain.type == "random")
+    ${lib.optionalString (cfg.chain.type == "random")
     "chain_len = ${builtins.toString cfg.chain.length}"}
-    ${optionalString cfg.proxyDNS "proxy_dns"}
-    ${optionalString cfg.quietMode "quiet_mode"}
+    ${lib.optionalString cfg.proxyDNS "proxy_dns"}
+    ${lib.optionalString cfg.quietMode "quiet_mode"}
     remote_dns_subnet ${builtins.toString cfg.remoteDNSSubnet}
     tcp_read_time_out ${builtins.toString cfg.tcpReadTimeOut}
     tcp_connect_time_out ${builtins.toString cfg.tcpConnectTimeOut}
@@ -22,20 +21,20 @@ let
 
   proxyOptions = {
     options = {
-      enable = mkEnableOption "this proxy";
+      enable = lib.mkEnableOption "this proxy";
 
-      type = mkOption {
-        type = types.enum [ "http" "socks4" "socks5" ];
+      type = lib.mkOption {
+        type = lib.types.enum [ "http" "socks4" "socks5" ];
         description = "Proxy type.";
       };
 
-      host = mkOption {
-        type = types.str;
+      host = lib.mkOption {
+        type = lib.types.str;
         description = "Proxy host or IP address.";
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         description = "Proxy port";
       };
     };
@@ -49,15 +48,15 @@ in {
 
     programs.proxychains = {
 
-      enable = mkEnableOption "proxychains configuration";
+      enable = lib.mkEnableOption "proxychains configuration";
 
-      package = mkPackageOption pkgs "proxychains" {
+      package = lib.mkPackageOption pkgs "proxychains" {
         example = "proxychains-ng";
       };
 
       chain = {
-        type = mkOption {
-          type = types.enum [ "dynamic" "strict" "random" ];
+        type = lib.mkOption {
+          type = lib.types.enum [ "dynamic" "strict" "random" ];
           default = "strict";
           description = ''
             `dynamic` - Each connection will be done via chained proxies
@@ -75,8 +74,8 @@ in {
             (or proxy chain, see {option}`programs.proxychains.chain.length`) from the list.
           '';
         };
-        length = mkOption {
-          type = types.nullOr types.int;
+        length = lib.mkOption {
+          type = lib.types.nullOr lib.types.int;
           default = null;
           description = ''
             Chain length for random chain.
@@ -84,47 +83,47 @@ in {
         };
       };
 
-      proxyDNS = mkOption {
-        type = types.bool;
+      proxyDNS = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = "Proxy DNS requests - no leak for DNS data.";
       };
 
-      quietMode = mkEnableOption "Quiet mode (no output from the library)";
+      quietMode = lib.mkEnableOption "Quiet mode (no output from the library)";
 
-      remoteDNSSubnet = mkOption {
-        type = types.enum [ 10 127 224 ];
+      remoteDNSSubnet = lib.mkOption {
+        type = lib.types.enum [ 10 127 224 ];
         default = 224;
         description = ''
           Set the class A subnet number to use for the internal remote DNS mapping, uses the reserved 224.x.x.x range by default.
         '';
       };
 
-      tcpReadTimeOut = mkOption {
-        type = types.int;
+      tcpReadTimeOut = lib.mkOption {
+        type = lib.types.int;
         default = 15000;
         description = "Connection read time-out in milliseconds.";
       };
 
-      tcpConnectTimeOut = mkOption {
-        type = types.int;
+      tcpConnectTimeOut = lib.mkOption {
+        type = lib.types.int;
         default = 8000;
         description = "Connection time-out in milliseconds.";
       };
 
-      localnet = mkOption {
-        type = types.str;
+      localnet = lib.mkOption {
+        type = lib.types.str;
         default = "127.0.0.0/255.0.0.0";
         description = "By default enable localnet for loopback address ranges.";
       };
 
-      proxies = mkOption {
-        type = types.attrsOf (types.submodule proxyOptions);
+      proxies = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.submodule proxyOptions);
         description = ''
           Proxies to be used by proxychains.
         '';
 
-        example = literalExpression ''
+        example = lib.literalExpression ''
           { myproxy =
             { type = "socks4";
               host = "127.0.0.1";
@@ -140,11 +139,11 @@ in {
 
   ###### implementation
 
-  meta.maintainers = with maintainers; [ sorki ];
+  meta.maintainers = with lib.maintainers; [ sorki ];
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    assertions = singleton {
+    assertions = lib.singleton {
       assertion = cfg.chain.type != "random" && cfg.chain.length == null;
       message = ''
         Option `programs.proxychains.chain.length`
@@ -152,9 +151,9 @@ in {
       '';
     };
 
-    programs.proxychains.proxies = mkIf config.services.tor.client.enable
+    programs.proxychains.proxies = lib.mkIf config.services.tor.client.enable
       {
-        torproxy = mkDefault {
+        torproxy = lib.mkDefault {
           enable = true;
           type = "socks4";
           host = "127.0.0.1";

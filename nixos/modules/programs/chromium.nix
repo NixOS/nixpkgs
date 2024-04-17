@@ -1,11 +1,9 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.programs.chromium;
 
-  defaultProfile = filterAttrs (k: v: v != null) {
+  defaultProfile = lib.filterAttrs (k: v: v != null) {
     HomepageLocation = cfg.homepageLocation;
     DefaultSearchProviderEnabled = cfg.defaultSearchProviderEnabled;
     DefaultSearchProviderSearchURL = cfg.defaultSearchProviderSearchURL;
@@ -19,14 +17,14 @@ in
 
   options = {
     programs.chromium = {
-      enable = mkEnableOption "{command}`chromium` policies";
+      enable = lib.mkEnableOption "{command}`chromium` policies";
 
-      enablePlasmaBrowserIntegration = mkEnableOption "Native Messaging Host for Plasma Browser Integration";
+      enablePlasmaBrowserIntegration = lib.mkEnableOption "Native Messaging Host for Plasma Browser Integration";
 
-      plasmaBrowserIntegrationPackage = mkPackageOption pkgs [ "plasma5Packages" "plasma-browser-integration" ] { };
+      plasmaBrowserIntegrationPackage = lib.mkPackageOption pkgs [ "plasma5Packages" "plasma-browser-integration" ] { };
 
-      extensions = mkOption {
-        type = with types; nullOr (listOf str);
+      extensions = lib.mkOption {
+        type = with lib.types; nullOr (listOf str);
         description = ''
           List of chromium extensions to install.
           For list of plugins ids see id in url of extensions on
@@ -38,7 +36,7 @@ in
           for additional details.
         '';
         default = null;
-        example = literalExpression ''
+        example = lib.literalExpression ''
           [
             "chlffgpmiacpedhhbkiomidkjlcfhogd" # pushbullet
             "mbniclmhobmnbdlbpiphghaielnnpgdp" # lightshot
@@ -48,36 +46,36 @@ in
         '';
       };
 
-      homepageLocation = mkOption {
-        type = types.nullOr types.str;
+      homepageLocation = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         description = "Chromium default homepage";
         default = null;
         example = "https://nixos.org";
       };
 
-      defaultSearchProviderEnabled = mkOption {
-        type = types.nullOr types.bool;
+      defaultSearchProviderEnabled = lib.mkOption {
+        type = lib.types.nullOr lib.types.bool;
         description = "Enable the default search provider.";
         default = null;
         example = true;
       };
 
-      defaultSearchProviderSearchURL = mkOption {
-        type = types.nullOr types.str;
+      defaultSearchProviderSearchURL = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         description = "Chromium default search provider url.";
         default = null;
         example = "https://encrypted.google.com/search?q={searchTerms}&{google:RLZ}{google:originalQueryForSuggestion}{google:assistedQueryStats}{google:searchFieldtrialParameter}{google:searchClient}{google:sourceId}{google:instantExtendedEnabledParameter}ie={inputEncoding}";
       };
 
-      defaultSearchProviderSuggestURL = mkOption {
-        type = types.nullOr types.str;
+      defaultSearchProviderSuggestURL = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         description = "Chromium default search provider url for suggestions.";
         default = null;
         example = "https://encrypted.google.com/complete/search?output=chrome&q={searchTerms}";
       };
 
-      extraOpts = mkOption {
-        type = types.attrs;
+      extraOpts = lib.mkOption {
+        type = lib.types.attrs;
         description = ''
           Extra chromium policy options. A list of available policies
           can be found in the Chrome Enterprise documentation:
@@ -85,7 +83,7 @@ in
           Make sure the selected policy is supported on Linux and your browser version.
         '';
         default = {};
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             "BrowserSignin" = 0;
             "SyncDisabled" = true;
@@ -99,8 +97,8 @@ in
         '';
       };
 
-      initialPrefs = mkOption {
-        type = types.attrs;
+      initialPrefs = lib.mkOption {
+        type = lib.types.attrs;
         description = ''
           Initial preferences are used to configure the browser for the first run.
           Unlike {option}`programs.chromium.extraOpts`, initialPrefs can be changed by users in the browser settings.
@@ -108,7 +106,7 @@ in
           <https://www.chromium.org/administrators/configuring-other-preferences/>
         '';
         default = {};
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             "first_run_tabs" = [
               "https://nixos.org/"

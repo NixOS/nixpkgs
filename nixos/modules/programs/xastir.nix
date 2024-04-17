@@ -1,17 +1,15 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.programs.xastir;
 in {
-  meta.maintainers = with maintainers; [ melling ];
+  meta.maintainers = with lib.maintainers; [ melling ];
 
   options.programs.xastir = {
-    enable = mkEnableOption "Xastir Graphical APRS client";
+    enable = lib.mkEnableOption "Xastir Graphical APRS client";
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ xastir ];
     security.wrappers.xastir = {
       source = "${pkgs.xastir}/bin/xastir";

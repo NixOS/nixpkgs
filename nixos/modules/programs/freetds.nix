@@ -2,8 +2,6 @@
 
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
 
   cfg = config.environment.freetds;
@@ -14,10 +12,10 @@ in
 
   options = {
 
-    environment.freetds = mkOption {
-      type = types.attrsOf types.str;
+    environment.freetds = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
       default = {};
-      example = literalExpression ''
+      example = lib.literalExpression ''
         { MYDATABASE = '''
             host = 10.0.2.100
             port = 1433
@@ -40,14 +38,14 @@ in
 
   ###### implementation
 
-  config = mkIf (length (attrNames cfg) > 0) {
+  config = lib.mkIf (builtins.length (builtins.attrNames cfg) > 0) {
 
     environment.variables.FREETDSCONF = "/etc/freetds.conf";
     environment.variables.FREETDS = "/etc/freetds.conf";
     environment.variables.SYBASE = "${pkgs.freetds}";
 
     environment.etc."freetds.conf" = { text =
-      (concatStrings (mapAttrsToList (name: value:
+      (lib.concatStrings (lib.mapAttrsToList (name: value:
         ''
         [${name}]
         ${value}

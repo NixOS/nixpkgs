@@ -2,8 +2,6 @@
 
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let cfg = config.programs.atop;
 
 in
@@ -14,31 +12,31 @@ in
 
     programs.atop = rec {
 
-      enable = mkEnableOption "Atop, a tool for monitoring system resources";
+      enable = lib.mkEnableOption "Atop, a tool for monitoring system resources";
 
-      package = mkPackageOption pkgs "atop" { };
+      package = lib.mkPackageOption pkgs "atop" { };
 
       netatop = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Whether to install and enable the netatop kernel module.
             Note: this sets the kernel taint flag "O" for loading out-of-tree modules.
           '';
         };
-        package = mkOption {
-          type = types.package;
+        package = lib.mkOption {
+          type = lib.types.package;
           default = config.boot.kernelPackages.netatop;
-          defaultText = literalExpression "config.boot.kernelPackages.netatop";
+          defaultText = lib.literalExpression "config.boot.kernelPackages.netatop";
           description = ''
             Which package to use for netatop.
           '';
         };
       };
 
-      atopgpu.enable = mkOption {
-        type = types.bool;
+      atopgpu.enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to install and enable the atopgpud daemon to get information about
@@ -46,8 +44,8 @@ in
         '';
       };
 
-      setuidWrapper.enable = mkOption {
-        type = types.bool;
+      setuidWrapper.enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to install a setuid wrapper for Atop. This is required to use some of
@@ -56,24 +54,24 @@ in
         '';
       };
 
-      atopService.enable = mkOption {
-        type = types.bool;
+      atopService.enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to enable the atop service responsible for storing statistics for
           long-term analysis.
         '';
       };
-      atopRotateTimer.enable = mkOption {
-        type = types.bool;
+      atopRotateTimer.enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to enable the atop-rotate timer, which restarts the atop service
           daily to make sure the data files are rotate.
         '';
       };
-      atopacctService.enable = mkOption {
-        type = types.bool;
+      atopacctService.enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to enable the atopacct service which manages process accounting.
@@ -81,8 +79,8 @@ in
           two refresh intervals.
         '';
       };
-      settings = mkOption {
-        type = types.attrs;
+      settings = lib.mkOption {
+        type = lib.types.attrs;
         default = { };
         example = {
           flags = "a1f";
@@ -95,7 +93,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable (
+  config = lib.mkIf cfg.enable (
     let
       atop =
         if cfg.atopgpu.enable then
@@ -104,11 +102,11 @@ in
           cfg.package;
     in
     {
-      environment.etc = mkIf (cfg.settings != { }) {
-        atoprc.text = concatStrings
-          (mapAttrsToList
+      environment.etc = lib.mkIf (cfg.settings != { }) {
+        atoprc.text = lib.concatStrings
+          (lib.mapAttrsToList
             (n: v: ''
-              ${n} ${toString v}
+              ${n} ${builtins.toString v}
             '')
             cfg.settings);
       };
@@ -122,8 +120,8 @@ in
               wantedBy = [ (if type == "services" then "multi-user.target" else if type == "timers" then "timers.target" else null) ];
             };
           };
-          mkService = mkSystemd "services";
-          mkTimer = mkSystemd "timers";
+          mkService = lib.mkSystemd "services";
+          mkTimer = lib.mkSystemd "timers";
         in
         {
           packages = [ atop (lib.mkIf cfg.netatop.enable cfg.netatop.package) ];

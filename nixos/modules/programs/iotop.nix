@@ -1,14 +1,12 @@
 { config, pkgs, lib, ... }:
 
-with lib;
-
 let
   cfg = config.programs.iotop;
 in {
   options = {
-    programs.iotop.enable = mkEnableOption "iotop + setcap wrapper";
+    programs.iotop.enable = lib.mkEnableOption "iotop + setcap wrapper";
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     security.wrappers.iotop = {
       owner = "root";
       group = "root";

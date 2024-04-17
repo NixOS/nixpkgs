@@ -4,13 +4,13 @@
   lib,
   ...
 }:
-with lib; let
+let
   cfg = config.programs.river;
 in {
   options.programs.river = {
-    enable = mkEnableOption "river, a dynamic tiling Wayland compositor";
+    enable = lib.mkEnableOption "river, a dynamic tiling Wayland compositor";
 
-    package = mkPackageOption pkgs "river" {
+    package = lib.mkPackageOption pkgs "river" {
       nullable = true;
       extraDescription = ''
         Set to `null` to not add any River package to your path.
@@ -18,17 +18,17 @@ in {
       '';
     };
 
-    extraPackages = mkOption {
-      type = with types; listOf package;
+    extraPackages = lib.mkOption {
+      type = with lib.types; listOf package;
       default = with pkgs; [
         swaylock
         foot
         dmenu
       ];
-      defaultText = literalExpression ''
+      defaultText = lib.literalExpression ''
         with pkgs; [ swaylock foot dmenu ];
       '';
-      example = literalExpression ''
+      example = lib.literalExpression ''
         with pkgs; [
           termite rofi light
         ]
@@ -42,15 +42,15 @@ in {
   };
 
   config =
-    mkIf cfg.enable (mkMerge [
+    lib.mkIf cfg.enable (lib.mkMerge [
       {
-        environment.systemPackages = optional (cfg.package != null) cfg.package ++ cfg.extraPackages;
+        environment.systemPackages = lib.optional (cfg.package != null) cfg.package ++ cfg.extraPackages;
 
         # To make a river session available if a display manager like SDDM is enabled:
-        services.displayManager.sessionPackages = optionals (cfg.package != null) [ cfg.package ];
+        services.displayManager.sessionPackages = lib.optionals (cfg.package != null) [ cfg.package ];
 
         # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1050913
-        xdg.portal.config.river.default = mkDefault [ "wlr" "gtk" ];
+        xdg.portal.config.river.default = lib.mkDefault [ "wlr" "gtk" ];
       }
       (import ./wayland-session.nix { inherit lib pkgs; })
     ]);

@@ -1,27 +1,25 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.programs.msmtp;
 
 in {
-  meta.maintainers = with maintainers; [ pacien ];
+  meta.maintainers = with lib.maintainers; [ pacien ];
 
   options = {
     programs.msmtp = {
-      enable = mkEnableOption "msmtp - an SMTP client";
+      enable = lib.mkEnableOption "msmtp - an SMTP client";
 
-      setSendmail = mkOption {
-        type = types.bool;
+      setSendmail = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to set the system sendmail to msmtp's.
         '';
       };
 
-      defaults = mkOption {
-        type = types.attrs;
+      defaults = lib.mkOption {
+        type = lib.types.attrs;
         default = {};
         example = {
           aliases = "/etc/aliases";
@@ -34,8 +32,8 @@ in {
         '';
       };
 
-      accounts = mkOption {
-        type = with types; attrsOf attrs;
+      accounts = lib.mkOption {
+        type = with lib.types; attrsOf attrs;
         default = {};
         example = {
           "default" = {
@@ -59,8 +57,8 @@ in {
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Extra lines to add to the msmtp configuration verbatim.
@@ -70,10 +68,10 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.msmtp ];
 
-    services.mail.sendmailSetuidWrapper = mkIf cfg.setSendmail {
+    services.mail.sendmailSetuidWrapper = lib.mkIf cfg.setSendmail {
       program = "sendmail";
       source = "${pkgs.msmtp}/bin/sendmail";
       setuid = false;
@@ -86,10 +84,10 @@ in {
       mkValueString = v:
         if v == true then "on"
         else if v == false then "off"
-        else generators.mkValueStringDefault {} v;
+        else lib.generators.mkValueStringDefault {} v;
       mkKeyValueString = k: v: "${k} ${mkValueString v}";
       mkInnerSectionString =
-        attrs: concatStringsSep "\n" (mapAttrsToList mkKeyValueString attrs);
+        attrs: builtins.concatStringsSep "\n" (lib.mapAttrsToList mkKeyValueString attrs);
       mkAccountString = name: attrs: ''
         account ${name}
         ${mkInnerSectionString attrs}
@@ -98,7 +96,7 @@ in {
       defaults
       ${mkInnerSectionString cfg.defaults}
 
-      ${concatStringsSep "\n" (mapAttrsToList mkAccountString cfg.accounts)}
+      ${builtins.concatStringsSep "\n" (lib.mapAttrsToList mkAccountString cfg.accounts)}
 
       ${cfg.extraConfig}
     '';
