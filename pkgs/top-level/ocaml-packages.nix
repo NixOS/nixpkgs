@@ -1763,6 +1763,8 @@ let
 
     tezos-base58 = callPackage ../development/ocaml-modules/tezos-base58 { };
 
+    tezt = callPackage ../development/ocaml-modules/tezt { };
+
     theora = callPackage ../development/ocaml-modules/theora { };
 
     thread-table = callPackage ../development/ocaml-modules/thread-table { };
