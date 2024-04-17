@@ -3,12 +3,13 @@
 , fetchPypi
 , cryptography
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "broadlink";
   version = "0.19.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -17,7 +18,11 @@ buildPythonPackage rec {
     hash = "sha256-ID5YpUjio68xChs6ZhTQBW995kqbmwsASRJKQ1a5M2U=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     cryptography
   ];
 
