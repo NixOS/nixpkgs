@@ -37,7 +37,7 @@
 buildPythonPackage rec {
   pname = "manim-slides";
   format = "pyproject";
-  version = "5.1.3";
+  version = "5.1.4";
 
   disabled = pythonOlder "3.9";
 
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     owner = "jeertmans";
     repo = "manim-slides";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WZR95swapT2Fbu6mbuHLjMu3Okq/wKFabzN7xpZw0/g=";
+    hash = "sha256-PvOJ9o+4hboQRhMcabb7QMjc25xcJpMV92sRqKzZIp8=";
   };
 
   nativeBuildInputs = [ pdm-backend pythonRelaxDepsHook ];
