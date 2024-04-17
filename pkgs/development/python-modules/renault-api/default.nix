@@ -1,19 +1,20 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, click
-, cryptography
-, dateparser
-, fetchFromGitHub
-, marshmallow-dataclass
-, poetry-core
-, pyjwt
-, pythonOlder
-, pytest-asyncio
-, pytestCheckHook
-, tabulate
-, typeguard
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  click,
+  cryptography,
+  dateparser,
+  fetchFromGitHub,
+  marshmallow-dataclass,
+  poetry-core,
+  pyjwt,
+  pythonOlder,
+  pytest-asyncio,
+  pytestCheckHook,
+  tabulate,
+  typeguard,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     hash = "sha256-FZ1VNO8gEH7HJRu9EVuKIwSQbceG720tCVqAPqHwISQ=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -59,13 +58,9 @@ buildPythonPackage rec {
     typeguard
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pytestFlagsArray = [
-    "--asyncio-mode=auto"
-  ];
+  pytestFlagsArray = [ "--asyncio-mode=auto" ];
 
-  pythonImportsCheck = [
-    "renault_api"
-  ];
+  pythonImportsCheck = [ "renault_api" ];
 
   meta = with lib; {
     description = "Python library to interact with the Renault API";
