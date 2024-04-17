@@ -11,6 +11,7 @@ use std::{
 };
 use url::Url;
 
+#[allow(clippy::struct_field_names)]
 #[derive(Serialize, Deserialize)]
 pub(super) struct Key {
     pub(super) key: String,
