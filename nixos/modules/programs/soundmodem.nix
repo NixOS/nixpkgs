@@ -11,7 +11,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to add Soundmodem to the global environment and configure a
           wrapper for 'soundmodemconfig' for users in the 'soundmodem' group.
         '';
@@ -21,7 +21,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ soundmodem ];
+    environment.systemPackages = [ cfg.package ];
     users.groups.soundmodem = { };
 
     security.wrappers.soundmodemconfig = {
