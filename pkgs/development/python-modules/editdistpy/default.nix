@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "editdistpy";
-  version = "0.1.3";
+  version = "0.1.4";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "mammothb";
     repo = "editdistpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4CtKadKpFmlZnz10NG0404oFl9DkdQwWwRSWgUPdh94=";
+    hash = "sha256-OSJXiuJtZ4w1IiRaZQZH2DDxA0AGoRHp0BKXdysff0Y=";
   };
 
   build-system = [
