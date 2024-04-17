@@ -1,5 +1,5 @@
 use backoff::{retry, ExponentialBackoff};
-use base64::prelude::{Engine, BASE64_STANDARD};
+use data_encoding::BASE64;
 use digest::Digest;
 use isahc::{
     config::{CaCertificate, Configurable, RedirectPolicy, SslOption},
@@ -79,8 +79,5 @@ pub fn make_sri_hash(path: &Path) -> Result<String, NarError> {
 
     io::copy(&mut encoder, &mut hasher)?;
 
-    Ok(format!(
-        "sha256-{}",
-        BASE64_STANDARD.encode(hasher.finalize())
-    ))
+    Ok(format!("sha256-{}", BASE64.encode(&hasher.finalize())))
 }

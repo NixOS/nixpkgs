@@ -8,7 +8,7 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.82"
 backoff = "0.4.0"
-base64 = "0.22.0"
+data-encoding = "2.5.0"
 digest = "0.10.7"
 env_logger = "0.11.3"
 isahc = { version = "1.7.2", default_features = false }
