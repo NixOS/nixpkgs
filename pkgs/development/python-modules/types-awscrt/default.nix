@@ -18,7 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-ZImKL0okaPZiM8uMKcX2bekHz4C6HvW7E1mu8vgbtSE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
