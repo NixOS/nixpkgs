@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, poetry-core
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -18,13 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-ZImKL0okaPZiM8uMKcX2bekHz4C6HvW7E1mu8vgbtSE=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  pythonImportsCheck = [
-    "awscrt-stubs"
-  ];
+  pythonImportsCheck = [ "awscrt-stubs" ];
 
   meta = with lib; {
     description = "Type annotations and code completion for awscrt";
