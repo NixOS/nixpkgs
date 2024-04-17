@@ -1,22 +1,37 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
+, libsForQt5
 , unstableGitUpdater
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "catppuccin-sddm-corners";
-  version = "unstable-2023-02-17";
+  version = "unstable-2023-05-30";
 
   src = fetchFromGitHub {
     owner = "khaneliman";
     repo = "catppuccin-sddm-corners";
-    rev = "7b7a86ee9a5a2905e7e6623d2af5922ce890ef79";
-    hash = "sha256-sTnt8RarNXz3RmYfmx4rD+nMlY8rr2n0EN3ntPzOurw=";
+    rev = "ffaad5c8964b52ccd92a80dfd3a7931c8b68c446";
+    hash = "sha256-CaCMrXlwt7JfSycB8WH3XCWUu+i7bPSfFv3duo7ZlZo=";
   };
 
   dontConfigure = true;
   dontBuild = true;
+  dontWrapQtApps = true;
+
+  propagatedBuildInputs = with libsForQt5.qt5; [
+    qtgraphicaleffects
+    qtquickcontrols2
+    qtsvg
+  ];
+
+  postFixup = ''
+    mkdir -p $out/nix-support
+    echo ${libsForQt5.qt5.qtgraphicaleffects}  >> $out/nix-support/propagated-user-env-packages
+    echo ${libsForQt5.qt5.qtquickcontrols2}  >> $out/nix-support/propagated-user-env-packages
+    echo ${libsForQt5.qt5.qtsvg}  >> $out/nix-support/propagated-user-env-packages
+  '';
 
   installPhase = ''
     runHook preInstall
