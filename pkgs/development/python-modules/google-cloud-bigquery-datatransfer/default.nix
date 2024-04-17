@@ -10,12 +10,13 @@
 , pytestCheckHook
 , pythonOlder
 , pytz
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery-datatransfer";
   version = "3.15.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -24,7 +25,11 @@ buildPythonPackage rec {
     hash = "sha256-oX4E3G3PB9qqCo5ZWt+p702oV5KUzlIdXNczthJ73Q0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     google-api-core
     libcst
     proto-plus
