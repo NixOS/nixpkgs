@@ -37,6 +37,6 @@ in rustPlatform.buildRustPackage {
     mainProgram = "mdbook-epub";
     homepage = "https://michael-f-bryan.github.io/mdbook-epub";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ yuu ];
+    maintainers = with maintainers; [ yuu matthiasbeyer ];
   };
 }
