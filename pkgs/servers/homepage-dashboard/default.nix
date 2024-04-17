@@ -6,8 +6,6 @@
 , cctools
 , IOKit
 , lib
-, fetchpatch
-, makeBinaryWrapper
 , nixosTests
 , enableLocalIcons ? false
 , nix-update-script
