@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  cmakeFlags = lib.optional stdenv.isDarwin "-DMOVIES=OFF";
+  cmakeFlags = lib.optional stdenv.isDarwin (lib.cmakeBool "MOVIES" false);
 
   meta = with lib; {
     description = "A presenter console with multi-monitor support for PDF files";
