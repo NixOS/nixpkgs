@@ -175,10 +175,10 @@ let
         "xscreensaver-command"      # Xscreensaver
         "xset"                      # generic-ish X
       ];
-      fix."$lockfile_command" = [ "lockfile" ];
       keep = {
         "$MV" = true;
         "$XPROP" = true;
+        "$lockfile_command" = true;
       };
       execer = [
         "cannot:${perl}/bin/perl"
