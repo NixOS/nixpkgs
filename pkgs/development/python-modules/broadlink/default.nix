@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "broadlink";
-  version = "0.18.3";
+  version = "0.19.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3+WKuMbH79v2i4wurObKQZowCmFbVsxlQp3aSk+eelg=";
+    hash = "sha256-ID5YpUjio68xChs6ZhTQBW995kqbmwsASRJKQ1a5M2U=";
   };
 
   propagatedBuildInputs = [
