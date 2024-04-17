@@ -62,8 +62,6 @@ rustPlatform.buildRustPackage rec {
     libglvnd # For libEGL
   ];
 
-  LIBCLANG_PATH = "${libclang.lib}/lib";
-
   passthru.providedSessions = ["niri"];
 
   postPatch = ''
