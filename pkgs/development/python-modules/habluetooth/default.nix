@@ -1,4 +1,5 @@
 { lib
+, async-interrupt
 , bleak
 , bleak-retry-connector
 , bluetooth-adapters
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "habluetooth";
-  version = "2.4.2";
+  version = "2.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -25,22 +26,26 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "habluetooth";
     rev = "refs/tags/v${version}";
-    hash = "sha256-IoVXmq9ShwLpGtoxVOtoirSirJJ1DqBI/mP7PmK7OUs=";
+    hash = "sha256-9Ccy21iIq3CfqModrU4lM914fWuOpfdpndfNOzXaEJY=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=habluetooth --cov-report=term-missing:skip-covered" ""
+      --replace-fail " --cov=habluetooth --cov-report=term-missing:skip-covered" ""
   '';
+
+  build-system = [
+    poetry-core
+  ];
 
   nativeBuildInputs = [
     cython
-    poetry-core
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    async-interrupt
     bleak
     bleak-retry-connector
     bluetooth-adapters
