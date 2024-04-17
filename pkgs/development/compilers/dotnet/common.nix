@@ -63,7 +63,7 @@
           '' + build);
         in
           if run == null
-            then build
+            then built
           else
             runCommand "${built.name}-run" { src = built; nativeBuildInputs = runInputs; } (
               lib.optionalString (runtime != null) ''
