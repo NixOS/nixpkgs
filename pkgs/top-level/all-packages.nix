@@ -2530,10 +2530,6 @@ with pkgs;
 
   gittyup = libsForQt5.callPackage ../applications/version-management/gittyup { };
 
-  gitui = callPackage ../applications/version-management/gitui {
-    inherit (darwin.apple_sdk.frameworks) Security AppKit;
-  };
-
   gitweb = callPackage ../applications/version-management/gitweb { };
 
   glab = callPackage ../applications/version-management/glab { };
@@ -13631,16 +13627,9 @@ with pkgs;
 
   telegraf = callPackage ../servers/monitoring/telegraf { };
 
-  teleport_12 = callPackage ../servers/teleport/12 {
+  inherit (callPackages ../servers/teleport {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
-  };
-  teleport_13 = callPackage ../servers/teleport/13 {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
-  };
-  teleport_14 = callPackage ../servers/teleport/14 {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
-  };
-  teleport = teleport_14;
+  }) teleport_13 teleport_14 teleport_15 teleport;
 
   telepresence = callPackage ../tools/networking/telepresence {
     pythonPackages = python3Packages;
