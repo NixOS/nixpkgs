@@ -8,7 +8,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   version = "1.5.4";
 
   src = fetchurl {
-    url = "https://archive.apache.org/dist/guacamole/${finalAttrs.version}/binary/guacamole-${finalAttrs.version}.war";
+    url = "mirror://apache/guacamole/${finalAttrs.version}/binary/guacamole-${finalAttrs.version}.war";
     hash = "sha256-Vyi1Y5Eb1kvOCguBx06ozLIZDReFv/NAMPxohagnPT4=";
   };
 
