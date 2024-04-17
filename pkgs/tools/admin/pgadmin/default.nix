@@ -7,7 +7,7 @@
 , postgresqlTestHook
 , postgresql
 , yarn
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , nodejs
 , stdenv
 , server-mode ? true
@@ -151,7 +151,7 @@ pythonPackages.buildPythonApplication rec {
     cp -v ../pkg/pip/setup_pip.py setup.py
   '';
 
-  nativeBuildInputs = with pythonPackages; [ cython pip sphinx yarn prefetch-yarn-deps nodejs ];
+  nativeBuildInputs = with pythonPackages; [ cython pip sphinx yarn fixup-yarn-lock nodejs ];
   buildInputs = [
     zlib
     pythonPackages.wheel

@@ -2,7 +2,7 @@
 , ruby_3_1, tzdata, git, nettools, nixosTests, nodejs, openssl
 , defaultGemConfig, buildRubyGem
 , gitlabEnterprise ? false, callPackage, yarn
-, prefetch-yarn-deps, replace, file, cacert, fetchYarnDeps, makeWrapper, pkg-config
+, fixup-yarn-lock, replace, file, cacert, fetchYarnDeps, makeWrapper, pkg-config
 , cargo, rustc, rustPlatform
 }:
 
@@ -94,7 +94,7 @@ let
       sha256 = data.yarn_hash;
     };
 
-    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert prefetch-yarn-deps ];
+    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert fixup-yarn-lock ];
 
     patches = [
       # Since version 12.6.0, the rake tasks need the location of git,
