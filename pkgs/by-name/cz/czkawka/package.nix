@@ -45,9 +45,10 @@ rustPlatform.buildRustPackage {
     glib
     gtk4
     pango
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
+    Foundation
+    AppKit
+  ]);
 
   nativeCheckInputs = [
     xvfb-run
