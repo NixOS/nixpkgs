@@ -21899,7 +21899,7 @@ with pkgs;
   lerc = callPackage ../development/libraries/lerc { };
 
   lib2geom = callPackage ../development/libraries/lib2geom {
-    stdenv = if stdenv.cc.isClang then overrideLibcxx llvmPackages_13.stdenv else stdenv;
+    stdenv = if stdenv.cc.isClang then llvmPackages_13.stdenv else stdenv;
   };
 
   lib3ds = callPackage ../development/libraries/lib3ds { };
