@@ -38,6 +38,8 @@
 
   sensi = callPackage ./sensi {};
 
+  smartir = callPackage ./smartir {};
+
   smartthinq-sensors = callPackage ./smartthinq-sensors {};
 
   waste_collection_schedule = callPackage ./waste_collection_schedule {};
