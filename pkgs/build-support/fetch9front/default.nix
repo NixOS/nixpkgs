@@ -29,7 +29,10 @@ lib.makeOverridable (
       passthru = {
         inherit gitRepoUrl;
       };
-    }) // passthruAttrs // { inherit name; };
+    })
+    // passthruAttrs
+    // { inherit name; }
+    // { meta.repository = [ gitRepoUrl ]; };
   in
 
   fetcher fetcherArgs // { inherit rev; }
