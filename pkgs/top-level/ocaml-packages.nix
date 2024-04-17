@@ -192,6 +192,8 @@ let
 
     cil = callPackage ../development/ocaml-modules/cil { };
 
+    clap = callPackage ../development/ocaml-modules/clap { };
+
     class_group_vdf = callPackage ../development/ocaml-modules/class_group_vdf { };
 
     cmarkit = callPackage ../development/ocaml-modules/cmarkit { };
