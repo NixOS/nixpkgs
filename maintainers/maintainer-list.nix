@@ -15083,6 +15083,13 @@
     githubId = 104593071;
     name = "Oliver Schmidt";
   };
+  osslate = {
+    email = "fionn@kelleher.email";
+    github = "osslate";
+    githubId = 773673;
+    matrix = "@osslate:fsfe.org";
+    name = "Fionn Kelleher";
+  };
   ostrolucky = {
     email = "gabriel.ostrolucky@gmail.com";
     github = "ostrolucky";
