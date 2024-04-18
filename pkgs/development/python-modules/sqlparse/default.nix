@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "sqlparse";
-  version = "0.4.4";
+  version = "0.5.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1EYYPoS4NJ+jBh8P5/BsqUumW0JpRv/r5uPoKVMyQgw=";
+    hash = "sha256-cU0KSTLAWdFhifWO9UEewih6Q2DxfN0O3S0J1MUIfJM=";
   };
 
   format = "pyproject";
