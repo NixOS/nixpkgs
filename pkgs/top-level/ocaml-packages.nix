@@ -127,6 +127,8 @@ let
       inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices;
     };
 
+    caldav = callPackage ../development/ocaml-modules/caldav { };
+
     calendar = callPackage ../development/ocaml-modules/calendar { };
 
     callipyge = callPackage ../development/ocaml-modules/callipyge { };
@@ -666,6 +668,8 @@ let
     hxd = callPackage ../development/ocaml-modules/hxd { };
 
     ### I ###
+
+    icalendar = callPackage ../development/ocaml-modules/icalendar { };
 
     imagelib = callPackage ../development/ocaml-modules/imagelib { };
 
