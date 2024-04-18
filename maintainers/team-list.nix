@@ -575,6 +575,9 @@ with lib.maintainers; {
       rrbutani
       sternenseemann
     ];
+    githubTeams = [
+      "llvm"
+    ];
     scope = "Maintain LLVM package sets and related packages";
     shortName = "LLVM";
     enableFeatureFreezePing = true;
