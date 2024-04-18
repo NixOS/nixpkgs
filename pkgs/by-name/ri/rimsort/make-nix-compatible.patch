@@ -1,0 +1,216 @@
+diff --git a/app/__main__.py b/app/__main__.py
+index cc8b561..9a3baef 100644
+--- a/app/__main__.py
++++ b/app/__main__.py
+@@ -11,7 +11,12 @@ from loguru import logger
+ 
+ from app.utils.app_info import AppInfo
+ 
+-if __name__ == "__main__":
++steam_appid_file = os.path.join(os.getcwd(), "steam_appid.txt")
++if not os.path.exists(steam_appid_file):
++    with open(steam_appid_file, "w") as f:
++        f.write("294100")
++
++if True:
+     # One-time initialization of AppInfo class (this must be done in __main__ so we can use __file__)
+     # Initialize as early as possible!
+     AppInfo(main_file=__file__)
+@@ -115,7 +120,7 @@ def main_thread() -> None:
+         sys.exit()
+ 
+ 
+-if __name__ == "__main__":
++if True:
+     # If RimSort is running from a --onefile Nuitka build, there are some nuances to consider:
+     # https://nuitka.net/doc/user-manual.html#onefile-finding-files
+     # You can override by passing --onefile-tempdir-spec to `nuitka`
+diff --git a/app/controllers/app_controller.py b/app/controllers/app_controller.py
+index d2210e1..ec4a8c1 100644
+--- a/app/controllers/app_controller.py
++++ b/app/controllers/app_controller.py
+@@ -24,7 +24,7 @@ class AppController(QObject):
+ 
+         self.app.setStyleSheet(  # Add style sheet for styling layouts and widgets
+             (
+-                (AppInfo().application_folder / "themes" / "RimPy" / "style.qss")
++                (AppInfo().theme_data_folder / "RimPy" / "style.qss")
+             ).read_text()
+         )
+ 
+diff --git a/app/utils/app_info.py b/app/utils/app_info.py
+index e98fc82..9a4d7e1 100644
+--- a/app/utils/app_info.py
++++ b/app/utils/app_info.py
+@@ -44,12 +44,6 @@ class AppInfo:
+         if main_file is None:
+             raise ValueError("AppInfo must be initialized once with __file__.")
+ 
+-        # Need to go one up if we are running from source
+-        self._application_folder = (
+-            Path(main_file).resolve().parent
+-            if "__compiled__" in globals()  # __compiled__ will be present if Nuitka has frozen this
+-            else Path(main_file).resolve().parent.parent
+-        )
+ 
+         # Application metadata
+ 
+@@ -61,16 +55,23 @@ class AppInfo:
+ 
+         platform_dirs = PlatformDirs(appname=self._app_name, appauthor=False)
+         self._app_storage_folder: Path = Path(platform_dirs.user_data_dir)
++        self._application_folder: Path = self._app_storage_folder / "app_data"
+         self._user_log_folder: Path = Path(platform_dirs.user_log_dir)
+ 
+         # Derive some secondary directory paths
+ 
+         self._databases_folder: Path = self._app_storage_folder / "dbs"
+-        self._theme_data_folder: Path = self._application_folder / "themes"
++
++        # in Nix $out/lib/python3.x/site-packages/app/__main__.py, we want $out
++        self._rimsort_path = Path(main_file).resolve().parent.parent.parent.parent.parent
++
++        # we won't be able to edit themes this way but can't think of a better way for now
++        self._theme_data_folder: Path = self._rimsort_path / "lib" / "themes"
+ 
+         # Make sure important directories exist
+ 
+         self._app_storage_folder.mkdir(parents=True, exist_ok=True)
++        self._application_folder.mkdir(parents=True, exist_ok=True)
+         self._user_log_folder.mkdir(parents=True, exist_ok=True)
+ 
+         self._databases_folder.mkdir(parents=True, exist_ok=True)
+@@ -141,6 +142,10 @@ class AppInfo:
+         """
+         return self._user_log_folder
+ 
++    @property
++    def rimsort_path(self) -> Path:
++        return self._rimsort_path
++
+     @property
+     def theme_data_folder(self) -> Path:
+         """
+diff --git a/app/utils/steam/steamcmd/wrapper.py b/app/utils/steam/steamcmd/wrapper.py
+index c4c7ca0..494120d 100644
+--- a/app/utils/steam/steamcmd/wrapper.py
++++ b/app/utils/steam/steamcmd/wrapper.py
+@@ -17,6 +17,7 @@ from app.models.dialogue import (
+     show_fatal_error,
+     show_warning,
+ )
++from app.utils.app_info import AppInfo
+ from app.windows.runner_panel import RunnerPanel
+ 
+ 
+@@ -43,17 +44,9 @@ class SteamcmdInterface:
+             self.system = platform.system()
+             self.validate_downloads = validate
+ 
+-            if self.system == "Darwin":
+-                self.steamcmd_url = "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_osx.tar.gz"
+-                self.steamcmd = str((Path(self.steamcmd_install_path) / "steamcmd.sh"))
+-            elif self.system == "Linux":
+-                self.steamcmd_url = "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz"
+-                self.steamcmd = str((Path(self.steamcmd_install_path) / "steamcmd.sh"))
+-            elif self.system == "Windows":
+-                self.steamcmd_url = (
+-                    "https://steamcdn-a.akamaihd.net/client/installer/steamcmd.zip"
+-                )
+-                self.steamcmd = str((Path(self.steamcmd_install_path) / "steamcmd.exe"))
++            if self.system in ["Linux", "Darwin"]:
++                self.steamcmd = AppInfo().rimsort_path / "bin" / "steamcmd"
++                self.steamcmd_url = None
+             else:
+                 show_fatal_error(
+                     "SteamcmdInterface",
+diff --git a/app/utils/steam/webapi/wrapper.py b/app/utils/steam/webapi/wrapper.py
+index 1afb06f..44571cf 100644
+--- a/app/utils/steam/webapi/wrapper.py
++++ b/app/utils/steam/webapi/wrapper.py
+@@ -536,7 +536,7 @@ class DynamicQuery(QObject):
+                 SteamworksAppDependenciesQuery(
+                     pfid_or_pfids=[eval(str_pfid) for str_pfid in chunk],
+                     interval=1,
+-                    _libs=str((AppInfo().application_folder / "libs")),
++                    _libs=str((AppInfo().rimsort_path / "lib")),
+                 )
+                 for chunk in list(
+                     chunks(
+diff --git a/app/utils/todds/wrapper.py b/app/utils/todds/wrapper.py
+index a757c3a..ee20fc7 100644
+--- a/app/utils/todds/wrapper.py
++++ b/app/utils/todds/wrapper.py
+@@ -68,7 +68,7 @@ class ToddsInterface:
+             todds_executable = "todds.exe"
+         else:
+             todds_executable = "todds"
+-        todds_exe_path = str(AppInfo().application_folder / "todds" / todds_executable)
++        todds_exe_path = str(AppInfo().rimsort_path / "bin" / todds_executable)
+         logger.info("Checking for todds...")
+         if os.path.exists(todds_exe_path):
+             logger.debug(f"Found todds executable at: {todds_exe_path}")
+diff --git a/app/views/main_content_panel.py b/app/views/main_content_panel.py
+index 2943135..2eee866 100644
+--- a/app/views/main_content_panel.py
++++ b/app/views/main_content_panel.py
+@@ -2018,7 +2018,7 @@ class MainContent(QObject):
+                     steamworks_api_process = SteamworksGameLaunch(
+                         game_install_path=instruction[1][0],
+                         args=instruction[1][1],
+-                        _libs=str((AppInfo().application_folder / "libs")),
++                        _libs=str((AppInfo().rimsort_path / "lib")),
+                     )
+                     # Start the Steamworks API Process
+                     steamworks_api_process.start()
+@@ -2055,7 +2055,7 @@ class MainContent(QObject):
+                                 action=instruction[0],
+                                 pfid_or_pfids=chunk,
+                                 interval=1,
+-                                _libs=str((AppInfo().application_folder / "libs")),
++                                _libs=str((AppInfo().rimsort_path / "lib")),
+                             )
+                             for chunk in pfids_chunked
+                         ]
+diff --git a/app/views/mods_panel.py b/app/views/mods_panel.py
+index a284413..6eacad2 100644
+--- a/app/views/mods_panel.py
++++ b/app/views/mods_panel.py
+@@ -10,6 +10,7 @@ from typing import List, Optional
+ from PySide6.QtCore import QEvent, QModelIndex, QObject, QRectF, QSize, Qt, Signal
+ from PySide6.QtGui import (
+     QAction,
++    QContextMenuEvent,
+     QCursor,
+     QDropEvent,
+     QFocusEvent,
+@@ -590,6 +591,7 @@ class ModListWidget(QListWidget):
+         :param event: the QEvent type
+         """
+         if event.type() == QEvent.ContextMenu and source_object is self:
++            event = QContextMenuEvent(event)
+             # Get the position of the right-click event
+             pos = QCursor.pos()
+             # Convert the global position to the list widget's coordinate system
+diff --git a/app/windows/runner_panel.py b/app/windows/runner_panel.py
+index 2f03d9e..b104c00 100644
+--- a/app/windows/runner_panel.py
++++ b/app/windows/runner_panel.py
+@@ -144,7 +144,7 @@ class RunnerPanel(QWidget):
+         self.destroy()
+ 
+     def eventFilter(self, obj, event):
+-        if event.type() == QEvent.KeyPress and event.key() == Qt.Key_Escape:
++        if event.type() == QEvent.KeyPress and hasattr(event, "key") and event.key() == Qt.Key_Escape:
+             self.close()
+             return True
+ 
+@@ -210,6 +210,7 @@ class RunnerPanel(QWidget):
+         additional:Optional, data to parse to the runner
+         """
+         logger.info("RunnerPanel subprocess initiating...")
++        command = str(command)
+         self.restart_process_button.show()
+         self.kill_process_button.show()
+         self.process_last_command = command
+
