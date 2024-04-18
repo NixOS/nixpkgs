@@ -39,7 +39,7 @@ let
     sourceTypes
     ;
 
-  inherit (backendStdenv) hostPlatform;
+  inherit (stdenv) hostPlatform;
 
   # Get the redist architectures for which package provides distributables.
   # These are used by meta.platforms.

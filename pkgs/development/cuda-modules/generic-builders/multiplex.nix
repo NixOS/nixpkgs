@@ -3,8 +3,6 @@
   lib,
   cudaVersion,
   flags,
-  # NOTE: We would use backendStdenv to get the hostPlatform, but it's not available in the callPackage context
-  # we're using to call this file (cudaPackages.callPackage).
   stdenv,
   # Expected to be passed by the caller
   mkVersionedPackageName,
