@@ -28,6 +28,7 @@
 , rtmpSupport ? true, rtmpdump
 , sambaSupport ? true, samba
 , udevSupport ? true, udev
+, opticalSupport ? true
 , usbSupport  ? false, libusb-compat-0_1
 , vdpauSupport ? true, libvdpau
 , waylandSupport ? false, wayland, wayland-protocols
@@ -40,10 +41,6 @@ assert usbSupport -> !udevSupport; # libusb-compat-0_1 won't be used if udev is 
 assert gbmSupport || waylandSupport || x11Support;
 
 let
-  kodiReleaseDate = "20240405";
-  kodiVersion = "21.0";
-  rel = "Omega";
-
   # see https://github.com/xbmc/xbmc/blob/${kodiVersion}-${rel}/tools/depends/target/ to get suggested versions for all dependencies
 
   # We can build these externally but FindLibDvd.cmake forces us to build it
@@ -88,16 +85,22 @@ let
     ++ lib.optional waylandSupport "wayland"
     ++ lib.optional x11Support "x11";
 
-in stdenv.mkDerivation {
+in stdenv.mkDerivation (finalAttrs: {
     pname = "kodi";
-    version = kodiVersion;
+    version = "21.0";
+    kodiReleaseName = "Omega";
 
     src = fetchFromGitHub {
       owner = "xbmc";
-      repo = "xbmc";
-      rev = "${kodiVersion}-${rel}";
-      hash = "sha256-xrFWqgwTkurEwt3/+/e4SCM6Uk9nxuW62SrCFWWqZO0=";
+      repo  = "xbmc";
+      rev   = "${finalAttrs.version}-${finalAttrs.kodiReleaseName}";
+      hash  = "sha256-xrFWqgwTkurEwt3/+/e4SCM6Uk9nxuW62SrCFWWqZO0=";
     };
+
+    # make  derivations declared in the let binding available here, so
+    # they can be overridden
+    inherit libdvdcss libdvdnav libdvdread groovy
+            apache_commons_lang apache_commons_text;
 
     buildInputs = [
       gnutls libidn2 libtasn1 nasm p11-kit
@@ -168,17 +171,20 @@ in stdenv.mkDerivation {
 
     cmakeFlags = [
       "-DAPP_RENDER_SYSTEM=${if gbmSupport then "gles" else "gl"}"
-      "-Dlibdvdcss_URL=${libdvdcss}"
-      "-Dlibdvdnav_URL=${libdvdnav}"
-      "-Dlibdvdread_URL=${libdvdread}"
-      "-Dgroovy_SOURCE_DIR=${groovy}"
-      "-Dapache-commons-lang_SOURCE_DIR=${apache_commons_lang}"
-      "-Dapache-commons-text_SOURCE_DIR=${apache_commons_text}"
-      "-DGIT_VERSION=${kodiReleaseDate}"
+      "-Dlibdvdcss_URL=${finalAttrs.libdvdcss}"
+      "-Dlibdvdnav_URL=${finalAttrs.libdvdnav}"
+      "-Dlibdvdread_URL=${finalAttrs.libdvdread}"
+      "-Dgroovy_SOURCE_DIR=${finalAttrs.groovy}"
+      "-Dapache-commons-lang_SOURCE_DIR=${finalAttrs.apache_commons_lang}"
+      "-Dapache-commons-text_SOURCE_DIR=${finalAttrs.apache_commons_text}"
+      # Upstream derives this from the git HEADs hash and date.
+      # LibreElec (minimal distro for kodi) uses the equivalent to this.
+      "-DGIT_VERSION=${finalAttrs.version}-${finalAttrs.kodiReleaseName}"
       "-DENABLE_EVENTCLIENTS=ON"
       "-DENABLE_INTERNAL_CROSSGUID=OFF"
       "-DENABLE_INTERNAL_RapidJSON=OFF"
-      "-DENABLE_OPTICAL=ON"
+      "-DENABLE_OPTICAL=${if opticalSupport then "ON" else "OFF"}"
+      "-DENABLE_VDPAU=${if vdpauSupport then "ON" else "OFF"}"
       "-DLIRC_DEVICE=/run/lirc/lircd"
       "-DSWIG_EXECUTABLE=${buildPackages.swig}/bin/swig"
       "-DFLATBUFFERS_FLATC_EXECUTABLE=${buildPackages.flatbuffers}/bin/flatc"
@@ -221,7 +227,8 @@ in stdenv.mkDerivation {
           --prefix PATH ":" "${lib.makeBinPath ([ python3Packages.python glxinfo ]
             ++ lib.optional x11Support xdpyinfo ++ lib.optional sambaSupport samba)}" \
           --prefix LD_LIBRARY_PATH ":" "${lib.makeLibraryPath
-              ([ curl systemd libmad libvdpau libcec libcec_platform libass ]
+              ([ curl systemd libmad libcec libcec_platform libass ]
+                 ++ lib.optional vdpauSupport libvdpau
                  ++ lib.optional nfsSupport libnfs
                  ++ lib.optional rtmpSupport rtmpdump)}"
       done
@@ -240,6 +247,7 @@ in stdenv.mkDerivation {
     passthru = {
       pythonPackages = python3Packages;
       ffmpeg = ffmpeg;
+      kodi = finalAttrs.finalPackage;
     };
 
     meta = with lib; {
@@ -249,4 +257,4 @@ in stdenv.mkDerivation {
       platforms   = platforms.linux;
       maintainers = teams.kodi.members;
     };
-}
+})
