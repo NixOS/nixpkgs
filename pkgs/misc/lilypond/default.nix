@@ -2,7 +2,7 @@
 , python3, gettext, flex, perl, bison, pkg-config, autoreconfHook, dblatex
 , fontconfig, freetype, pango, fontforge, help2man, zip, netpbm, groff
 , freefont_ttf, makeFontsConf
-, makeWrapper, t1utils, boehmgc, rsync
+, makeWrapper, t1utils, boehmgc, rsync, coreutils
 , texliveSmall, tex ? texliveSmall.withPackages (ps: with ps; [ lh metafont epsf fontinst ])
 }:
 
@@ -19,9 +19,10 @@ stdenv.mkDerivation rec {
     for f in "$out/bin/"*; do
         # Override default argv[0] setting so LilyPond can find
         # its Scheme libraries.
-        wrapProgram "$f" --set GUILE_AUTO_COMPILE 0 \
-                         --set PATH "${ghostscript}/bin" \
-                         --argv0 "$f"
+        wrapProgram "$f" \
+          --set GUILE_AUTO_COMPILE 0 \
+          --set PATH "${lib.makeBinPath [ ghostscript coreutils (placeholder "out") ]}" \
+          --argv0 "$f"
     done
   '';
 
