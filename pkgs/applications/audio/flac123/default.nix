@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, autoreconfHook, flac, libao, libogg, popt }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, flac, libao, libogg, popt }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flac123";
-  version = "0.0.12";
+  version = "2.1.1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/flac-tools/${pname}-${version}-release.tar.gz";
-    sha256 = "0zg4ahkg7v81za518x32wldf42g0rrvlrcqhrg9sv3li9bayyxhr";
+  src = fetchFromGitHub {
+    owner = "flac123";
+    repo = "flac123";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-LtL69t2r9TlIkpQWZLge8ib7NZ5rvLW6JllG2UM16Kw=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -19,4 +21,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     mainProgram = "flac123";
   };
-}
+})
