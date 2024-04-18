@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchFromGitHub
-, appdirs
-, consonance
-, protobuf
-, python-axolotl
-, six
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  isPy3k,
+  fetchFromGitHub,
+  appdirs,
+  consonance,
+  protobuf,
+  python-axolotl,
+  six,
+  pytestCheckHook,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +19,8 @@ buildPythonPackage rec {
 
   # The Python 2.x support of this package is incompatible with `six==1.11`:
   # https://github.com/tgalal/yowsup/issues/2416#issuecomment-365113486
-  disabled = !isPy3k;
+  # broken with Python 3.12; source not updated since Dec 2021
+  disabled = !isPy3k || pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "tgalal";
@@ -32,9 +35,7 @@ buildPythonPackage rec {
       --replace "==" ">=" \
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   propagatedBuildInputs = [
     appdirs
