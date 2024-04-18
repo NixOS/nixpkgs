@@ -10,6 +10,7 @@
 , stdenv
 , nixosTests
 , testers
+, util-linux
 , gns3-server
 }:
 
@@ -54,6 +55,9 @@ python3.pkgs.buildPythonApplication {
   postInstall = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
     rm $out/bin/gns3loopback
   '';
+
+  # util-linux (script program) is required for Docker support
+  makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ util-linux ]}" ];
 
   doCheck = true;
 
