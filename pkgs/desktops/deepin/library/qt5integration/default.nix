@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     qtsvg
     qtx11extras
     mtdev
-    lxqt.libqtxdg
+    lxqt.libqtxdg_3_12
     xorg.xcbutilrenderutil
     gtest
   ];
