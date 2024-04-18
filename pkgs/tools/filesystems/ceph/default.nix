@@ -270,7 +270,7 @@ let
     ceph-common
 
     # build time
-    cython
+    cython_0
 
     # debian/control
     bcrypt
