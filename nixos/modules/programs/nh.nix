@@ -17,6 +17,7 @@ in
     flake = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = null;
+      apply = toString;
       description = ''
         The path that will be used for the `FLAKE` environment variable.
 
