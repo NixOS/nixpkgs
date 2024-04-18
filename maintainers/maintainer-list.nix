@@ -17342,6 +17342,11 @@
     githubId = 19433256;
     name = "Radoslaw Sniezek";
   };
+  rster2002 = {
+    name = "Bjørn";
+    github = "rster2002";
+    githubId = 26026518;
+  };
   rsynnest = {
     email = "contact@rsynnest.com";
     github = "rsynnest";
