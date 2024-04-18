@@ -1,29 +1,30 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
-, pkg-config
-, qtbase
-, qttools
-, qtx11extras
-, qtsvg
-, kwindowsystem
-, libqtxdg
-, perl
-, xorg
 , autoPatchelfHook
 , gitUpdater
+, kwindowsystem
+, libXdmcp
+, libpthreadstubs
+, libqtxdg
+, perl
+, pkg-config
+, qtbase
+, qtsvg
+, qttools
+, wrapQtAppsHook
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "screengrab";
-  version = "2.7.0";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-mmN3BQum7X0GWTUYauEN2mAo3GWdmtkIl2i84g5cp78=";
+    hash = "sha256-PMe2NyIoc12n4l/oWPi3GL6pemuHyxL2HFBLTIyD690=";
   };
 
   nativeBuildInputs = [
@@ -32,16 +33,16 @@ mkDerivation rec {
     perl # needed by LXQtTranslateDesktop.cmake
     qttools
     autoPatchelfHook # fix libuploader.so and libextedit.so not found
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtx11extras
-    qtsvg
     kwindowsystem
+    libXdmcp
+    libpthreadstubs
     libqtxdg
-    xorg.libpthreadstubs
-    xorg.libXdmcp
+    qtbase
+    qtsvg
   ];
 
   passthru.updateScript = gitUpdater { };
