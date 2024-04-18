@@ -1,9 +1,4 @@
-{
-  lib,
-  # NOTE: We would use backendStdenv to get the hostPlatform, but it's not available in the callPackage context
-  # we're using to call this file.
-  stdenv,
-}:
+{ lib, stdenv }:
 let
   inherit (stdenv) hostPlatform;
 

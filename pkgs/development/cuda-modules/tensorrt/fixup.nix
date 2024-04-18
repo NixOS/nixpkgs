@@ -1,5 +1,4 @@
 {
-  backendStdenv,
   cudaVersion,
   final,
   lib,
@@ -7,6 +6,7 @@
   package,
   patchelf,
   requireFile,
+  stdenv,
   ...
 }:
 let
@@ -17,7 +17,7 @@ let
     strings
     versions
     ;
-  inherit (backendStdenv) hostPlatform;
+  inherit (stdenv) hostPlatform;
   # targetArch :: String
   targetArch = attrsets.attrByPath [ hostPlatform.system ] "unsupported" {
     x86_64-linux = "x86_64-linux-gnu";

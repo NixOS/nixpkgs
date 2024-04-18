@@ -17,8 +17,6 @@
   flags,
   lib,
   mkVersionedPackageName,
-  # NOTE: We would use backendStdenv to get the hostPlatform, but it's not available in the callPackage context
-  # we're using to call this file.
   stdenv,
 }:
 let

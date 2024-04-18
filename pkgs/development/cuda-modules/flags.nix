@@ -7,8 +7,6 @@
   cudaForwardCompat ? (config.cudaForwardCompat or true),
   lib,
   cudaVersion,
-  # NOTE: We cannot refer to backendStdenv as flags exists outside the fixed-point;
-  # otherwise, we would use that to get the hostPlatform.
   stdenv,
   # gpus :: List Gpu
   gpus,

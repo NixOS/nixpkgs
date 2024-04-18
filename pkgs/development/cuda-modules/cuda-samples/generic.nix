@@ -11,6 +11,7 @@
   hash,
   lib,
   pkg-config,
+  stdenv,
 }:
 let
   inherit (lib) lists strings;
@@ -63,7 +64,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 -t $out/bin bin/${backendStdenv.hostPlatform.parsed.cpu.name}/${backendStdenv.hostPlatform.parsed.kernel.name}/release/*
+    install -Dm755 -t $out/bin bin/${stdenv.hostPlatform.parsed.cpu.name}/${stdenv.hostPlatform.parsed.kernel.name}/release/*
 
     runHook postInstall
   '';
