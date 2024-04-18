@@ -37,14 +37,14 @@ let
 in
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.24.0";
+  version = "0.25.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/6CadKa/gbhPhhOQn7C+ruhHV0UBg6ei4LR7RVwMrF0=";
+    hash = "sha256-m0H1mTrSwOX2LQrMoyDsZX/bayosIrjHrtbK8VRHXE4=";
   };
 
   postPatch = ''
