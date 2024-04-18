@@ -112,6 +112,7 @@ nvim-nio,,,,,,mrcjkb
 pathlib.nvim,,,,,,
 penlight,,,,,,alerque
 plenary.nvim,https://raw.githubusercontent.com/nvim-lua/plenary.nvim/master/plenary.nvim-scm-1.rockspec,,,,5.1,
+psl,,,,0.3,,
 rapidjson,,,,,,
 rest.nvim,,,,,5.1,teto
 rocks.nvim,,,,,,mrcjkb
