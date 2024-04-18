@@ -2486,6 +2486,8 @@ self: super: with self; {
 
   craft-application-1 = callPackage ../development/python-modules/craft-application-1 { };
 
+  craft-application = callPackage ../development/python-modules/craft-application { };
+
   craft-archives = callPackage ../development/python-modules/craft-archives { };
 
   craft-cli = callPackage ../development/python-modules/craft-cli { };
