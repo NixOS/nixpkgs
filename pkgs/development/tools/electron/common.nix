@@ -5,7 +5,7 @@
 , python3
 , fetchYarnDeps
 , fetchNpmDeps
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , npmHooks
 , yarn
 , substituteAll
@@ -29,7 +29,7 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
   inherit (info) version;
   buildTargets = [ "electron:electron_dist_zip" ];
 
-  nativeBuildInputs = base.nativeBuildInputs ++ [ nodejs yarn prefetch-yarn-deps unzip npmHooks.npmConfigHook ];
+  nativeBuildInputs = base.nativeBuildInputs ++ [ nodejs yarn fixup-yarn-lock unzip npmHooks.npmConfigHook ];
   buildInputs = base.buildInputs ++ [ libnotify ];
 
   electronOfflineCache = fetchYarnDeps {
