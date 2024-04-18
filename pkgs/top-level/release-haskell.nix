@@ -319,6 +319,7 @@ let
         madlang
         mailctl
         matterhorn
+        mkjson
         mueval
         naproche
         niv
