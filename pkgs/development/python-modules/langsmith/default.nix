@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   attr,
   buildPythonPackage,
   fetchFromGitHub,
@@ -44,10 +45,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    attr
     freezegun
     pytest-asyncio
     pytestCheckHook
+  ] ++ lib.optionals stdenv.isLinux [
+    attr
   ];
 
   disabledTests = [
