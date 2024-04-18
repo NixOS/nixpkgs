@@ -2,6 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , libxcrypt
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -22,6 +23,10 @@ buildGoModule rec {
   vendorHash = "sha256-VUNvb7m1nnH+mXUsnIKyPKJEVSMXBAaS4ihi5DZeFiI=";
 
   ldflags = [ "-s" "-w" ];
+
+  passthru.tests = {
+    inherit (nixosTests) ssh3;
+  };
 
   meta = with lib; {
     description = "Revisit of the SSH protocol using QUIC + TLS 1.3 and HTTP authorization";
