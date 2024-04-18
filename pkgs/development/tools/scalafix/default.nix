@@ -47,6 +47,7 @@ stdenv.mkDerivation (
       homepage = "https://scalacenter.github.io/scalafix/";
       license = licenses.bsd3;
       maintainers = [maintainers.tomahna];
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
     };
   }
 )
