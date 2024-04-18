@@ -5,19 +5,20 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "trak";
-  version = "0.0.4";
+  version = "0.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lcfd";
     repo = "trak";
     rev = "v${version}";
-    hash = "sha256-Lc5/i/OuAwHoPo8SeBZe+JSstZov8K/ku7EMyb2I9Ng=";
+    hash = "sha256-YJMX7pNRWdNPyWNZ1HfpdYsKSStRWLcianLz6nScMa8=";
   };
 
   sourceRoot = "${src.name}/cli";
 
   propagatedBuildInputs = with python3Packages; [
+    questionary
     typer
   ] ++ typer.optional-dependencies.all;
 
