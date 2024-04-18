@@ -11,6 +11,7 @@ let
     libsysstat = callPackage ./libsysstat {};
     liblxqt = callPackage ./liblxqt {};
     qtxdg-tools = callPackage ./qtxdg-tools {};
+    libdbusmenu-lxqt = callPackage ./libdbusmenu-lxqt {};
 
     ### CORE 1
     libfm-qt = callPackage ./libfm-qt {};
@@ -62,6 +63,7 @@ let
       libsysstat
       liblxqt
       qtxdg-tools
+      libdbusmenu-lxqt
 
       ### CORE 1
       libfm-qt
