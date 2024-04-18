@@ -30,11 +30,11 @@ buildPythonPackage rec {
     hash = "sha256-MKtW6krGqnQ3hCmPgh4N5lRAGTe0DGDMegpUUoSpG0M=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     deprecated
     google-api-core
     google-cloud-core
