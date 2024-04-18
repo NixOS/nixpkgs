@@ -10909,6 +10909,13 @@
     github = "krzaczek";
     githubId = 5773701;
   };
+  ktemkin = {
+    email = "kate@ktemk.in";
+    github = "ktemkin";
+    githubId = 1298105;
+    name = "Kate Temkin";
+    matrix = "@ktemkin:katesiria.org";
+  };
   ktf = {
     email = "giulio.eulisse@cern.ch";
     github = "ktf";
