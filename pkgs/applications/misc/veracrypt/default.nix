@@ -14,6 +14,7 @@
 , btrfs-progs
 , pcsclite
 , wrapGAppsHook
+, withSudoRsPatch ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
       ntfs = "${ntfs3g}/bin/mkfs.ntfs";
       btrfs = "${btrfs-progs}/bin/mkfs.btrfs";
     })
-  ];
+  ] ++ lib.optional withSudoRsPatch (lib.singleton ./sudo-rs.patch);
 
   sourceRoot = "src";
 
