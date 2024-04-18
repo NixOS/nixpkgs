@@ -29,6 +29,7 @@
 , libiconv
 , libmpack
 , libmysqlclient
+, libpsl
 , libuuid
 , libuv
 , libxcrypt
@@ -615,6 +616,15 @@ in
       sed -i -e "1 s|.*|#\!${coreutils}/bin/env -S ${neovim-unwrapped}/bin/nvim -l|" "$out/bin/nlua"
       '';
     dontPatchShebangs = true;
+  });
+
+  psl = prev.psl.overrideAttrs (drv: {
+    buildInputs = drv.buildInputs or [ ] ++ [ libpsl ];
+
+    luarocksConfig.variables = drv.luarocksConfig.variables // {
+      PSL_INCDIR = lib.getDev libpsl + "/include";
+      PSL_DIR = lib.getLib libpsl;
+    };
   });
 
   rapidjson = prev.rapidjson.overrideAttrs (oa: {
