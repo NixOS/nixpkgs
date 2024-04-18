@@ -44,6 +44,8 @@ maven.buildMavenPackage rec {
   nativeBuildInputs = [ copyDesktopItems makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/share/java
 
@@ -53,6 +55,13 @@ maven.buildMavenPackage rec {
     makeWrapper ${jre}/bin/java $out/bin/${pname} \
       --add-flags "-classpath $out/share/java/${pname}-${version}.jar:''${classpath#:}" \
       --add-flags "-jar $out/share/java/Digital.jar"
+
+    install -Dm644 src/main/svg/icon.svg $out/share/icons/hicolor/scalable/apps/${pname}.svg
+    for size in 16 32 48 64 128; do
+      install -Dm644 src/main/resources/icons/icon"$size".png $out/share/icons/hicolor/"$size"x"$size"/apps/${pname}.png
+    done
+
+    runHook postInstall
   '';
 
   desktopItems = [ desktopItem ];
