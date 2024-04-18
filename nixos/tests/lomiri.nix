@@ -290,11 +290,12 @@ in {
     # There's a test app we could use that also displays their contents, but it's abit inconsistent.
     with subtest("ayatana indicators work"):
         mouse_click(735, 0) # the cog in the top-right, for the session indicator
-        machine.wait_for_text(r"(Notifications|Time|Date|System)")
+        machine.wait_for_text(r"(Notifications|Battery|Time|Date|System)")
         machine.screenshot("indicators_open")
 
         # Indicator order within the menus *should* be fixed based on per-indicator order setting
         # Session is the one we clicked, but the last we should test (logout). Go as far left as we can test.
+        machine.send_key("left")
         machine.send_key("left")
         machine.send_key("left")
         # Notifications are usually empty, nothing to check there
@@ -303,6 +304,11 @@ in {
             # We start on this, don't go right
             machine.wait_for_text(r"(Flight|Wi-Fi)")
             machine.screenshot("indicators_network")
+
+        with subtest("ayatana indicator power works"):
+            machine.send_key("right")
+            machine.wait_for_text(r"(Charge|Battery settings)")
+            machine.screenshot("indicators_power")
 
         with subtest("ayatana indicator datetime works"):
             machine.send_key("right")
