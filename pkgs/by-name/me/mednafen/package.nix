@@ -1,33 +1,39 @@
-{ lib
-, stdenv
-, fetchurl
-, SDL2
-, SDL2_net
-, alsa-lib
-, flac
-, freeglut
-, libGL
-, libGLU
-, libX11
-, libcdio
-, libjack2
-, libsamplerate
-, libsndfile
-, pkg-config
-, zlib
-, libiconv
+{
+  lib,
+  SDL2,
+  SDL2_net,
+  alsa-lib,
+  fetchurl,
+  flac,
+  freeglut,
+  libGL,
+  libGLU,
+  libX11,
+  libcdio,
+  libiconv,
+  libjack2,
+  libsamplerate,
+  libsndfile,
+  pkg-config,
+  stdenv,
+  zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mednafen";
   version = "1.29.0";
 
   src = fetchurl {
-    url = "https://mednafen.github.io/releases/files/${pname}-${version}.tar.xz";
+    url = "https://mednafen.github.io/releases/files/mednafen-${finalAttrs.version}.tar.xz";
     hash = "sha256-2j+88Ch3+b4PAov6XRy1npU6QEm5D+fjk4ijOG2fNi4=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  outputs = [ "out" "doc" ];
+
+  nativeBuildInputs = [
+    SDL2
+    pkg-config
+  ];
 
   buildInputs = [
     SDL2
@@ -48,16 +54,21 @@ stdenv.mkDerivation rec {
     libiconv
   ];
 
-  hardeningDisable = [ "pic" "format" ];
+  hardeningDisable = [
+    "format"
+    "pic"
+  ];
 
   enableParallelBuilding = true;
 
+  strictDeps = true;
+
   postInstall = ''
-    mkdir -p $out/share/doc
-    mv Documentation $out/share/doc/mednafen
+    mkdir -p $doc/share/doc
+    mv Documentation $doc/share/doc/mednafen
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mednafen.github.io/";
     description = "A portable, CLI-driven, SDL+OpenGL-based, multi-system emulator";
     longDescription = ''
@@ -91,9 +102,9 @@ stdenv.mkDerivation rec {
       - Sega Saturn (experimental, x86_64 only)
       - Sony PlayStation
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "mednafen";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-}
+})
