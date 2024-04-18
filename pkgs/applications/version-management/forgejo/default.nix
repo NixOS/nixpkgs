@@ -39,14 +39,14 @@ let
 in
 buildGoModule rec {
   pname = "forgejo";
-  version = "1.21.10-0";
+  version = "1.21.11-0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "forgejo";
     repo = "forgejo";
     rev = "v${version}";
-    hash = "sha256-uCRAT9RiU9S+tP9alNshSQwbUgLmU9wE5HIQ4FPmXVE=";
+    hash = "sha256-Cp+dN4nTIboin42NJR/YUkVXbBC7uufH8EE7NgIVFzY=";
     # Forgejo has multiple different version strings that need to be provided
     # via ldflags.  main.ForgejoVersion for example is a combination of a
     # hardcoded gitea compatibility version string (in the Makefile) and
@@ -65,7 +65,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-pgUSmM2CxYO8DralWoeR2groQxpxo9WtRcToYeaHXGk=";
+  vendorHash = "sha256-OuWNF+muWM6xqwkFxLIUsn/huqXj2VKg8BN9+JHVw58=";
 
   subPackages = [ "." ];
 
