@@ -1,29 +1,36 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
-, pkg-config
+, libXdmcp
+, libexif
+, libfm
+, libpthreadstubs
+, libxcb
 , lxqt-build-tools
 , lxqt-menu-data
-, pcre
-, libexif
-, xorg
-, libfm
 , menu-cache
-, qtx11extras
+, pcre
+, pkg-config
 , qttools
+, wrapQtAppsHook
 , gitUpdater
+, version ? "2.0.0"
+, qtx11extras ? null
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "libfm-qt";
-  version = "1.4.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "libfm-qt";
     rev = version;
-    hash = "sha256-QxPYSA7537K+/dRTxIYyg+Q/kj75rZOdzlUsmSdQcn4=";
+    hash = {
+      "1.4.0" = "sha256-QxPYSA7537K+/dRTxIYyg+Q/kj75rZOdzlUsmSdQcn4=";
+      "2.0.0" = "sha256-vWkuPdG5KaT6KMr1NJGt7JBUd1z3wROKY79otsrRsuI=";
+    }."${version}";
   };
 
   nativeBuildInputs = [
@@ -31,19 +38,20 @@ mkDerivation rec {
     pkg-config
     lxqt-build-tools
     qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    lxqt-menu-data
-    pcre
+    libXdmcp
     libexif
-    xorg.libpthreadstubs
-    xorg.libxcb
-    xorg.libXdmcp
-    qtx11extras
     libfm
+    libpthreadstubs
+    libxcb
+    lxqt-menu-data
     menu-cache
-  ];
+    pcre
+  ] ++ (lib.optionals (lib.versionAtLeast "2.0.0" version) [qtx11extras])
+  ;
 
   passthru.updateScript = gitUpdater { };
 
