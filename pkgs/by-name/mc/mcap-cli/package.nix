@@ -1,7 +1,7 @@
 { lib, buildGoModule, fetchFromGitHub, nix-update-script
 }:
 let
-  version = "0.0.42";
+  version = "0.0.43";
 in
 buildGoModule {
 
@@ -13,10 +13,10 @@ buildGoModule {
     repo = "mcap";
     owner = "foxglove";
     rev = "releases/mcap-cli/v${version}";
-    hash = "sha256-9fjzMUMWn5j8AJJq+tK+Hq0o8d3HpacitJZ5CfLiaLw=";
+    hash = "sha256-AWmPqymnNZxKbhxiQOO9djQXbP56mNh9Ucmty2jd+4Q=";
   };
 
-  vendorHash = "sha256-Gl0zLBTWscKGtVOS6rPRL/r8KHYHpZwoUDbEyCL4Ijk=";
+  vendorHash = "sha256-YFbfrqu2H7yU6vANH56MnxipDxaJLT76qZkvqLCFTTg=";
 
   modRoot = "go/cli/mcap";
 
