@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, llama-index-core
-, llama-index-embeddings-openai
-, llama-index-llms-openai
-, llama-index-vector-stores-chroma
-, poetry-core
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  llama-index-core,
+  llama-index-embeddings-openai,
+  llama-index-llms-openai,
+  llama-index-vector-stores-chroma,
+  poetry-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-PPH3BsPGnGsaqwf8p/qtOVnbFwmAjv1QSRtmnTiwtYA=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     llama-index-core
@@ -36,9 +35,7 @@ buildPythonPackage rec {
   # Tests are only available in the mono repo
   doCheck = false;
 
-  pythonImportsCheck = [
-    "llama_index.cli"
-  ];
+  pythonImportsCheck = [ "llama_index.cli" ];
 
   meta = with lib; {
     description = "LlamaIndex CLI";
@@ -46,5 +43,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
-
 }
