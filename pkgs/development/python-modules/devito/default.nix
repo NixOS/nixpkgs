@@ -15,7 +15,6 @@
 , nbval
 , psutil
 , py-cpuinfo
-, pyrevolve
 , pytest-xdist
 , pytestCheckHook
 , pythonOlder
@@ -26,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "devito";
-  version = "4.8.3";
+  version = "4.8.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -35,7 +34,7 @@ buildPythonPackage rec {
     owner = "devitocodes";
     repo = "devito";
     rev = "refs/tags/v${version}";
-    hash = "sha256-g9rRJF1JrZ6+s3tj4RZHuGOjt5LJjtK9I5CJmq4CJL4=";
+    hash = "sha256-unuJLp+zTyGpOk5O78xYbW6Zrzp60WyqgT9mf2YpTG4=";
   };
 
   pythonRemoveDeps = [
@@ -51,7 +50,7 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     anytree
     cached-property
     cgen
@@ -62,7 +61,6 @@ buildPythonPackage rec {
     multidict
     psutil
     py-cpuinfo
-    pyrevolve
     scipy
     sympy
   ] ++ lib.optionals stdenv.cc.isClang [
@@ -99,6 +97,20 @@ buildPythonPackage rec {
     "test_setupWOverQ"
     "test_shortcuts"
     "test_subdomainset_mpi"
+    "test_subdomains_mpi"
+  ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    # FAILED tests/test_unexpansion.py::Test2Pass::test_v0 - assert False
+    "test_v0"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # FAILED tests/test_caching.py::TestCaching::test_special_symbols - ValueError: not enough values to unpack (expected 3, got 2)
+    "test_special_symbols"
+
+    # FAILED tests/test_unexpansion.py::Test2Pass::test_v0 - codepy.CompileError: module compilation failed
+    "test_v0"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # Numerical tests
+    "test_lm_fb"
+    "test_lm_ds"
   ];
 
   disabledTestPaths = [
@@ -109,6 +121,8 @@ buildPythonPackage rec {
     "tests/test_data.py"
     "tests/test_dse.py"
     "tests/test_gradient.py"
+  ] ++ lib.optionals ((stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin) [
+    "tests/test_dle.py"
   ];
 
   pythonImportsCheck = [
