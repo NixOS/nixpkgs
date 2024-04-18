@@ -22,6 +22,7 @@
 , speechd
 , fontconfig
 , udev
+, withDebug ? false
 , withPlatform ? "linuxbsd"
 , withTarget ? "editor"
 , withPrecision ? "single"
@@ -115,6 +116,7 @@ stdenv.mkDerivation rec {
     platform = withPlatform;
     target = withTarget;
     precision = withPrecision; # Floating-point precision level
+    debug_symbols = withDebug;
 
     # Options from 'platform/linuxbsd/detect.py'
     pulseaudio = withPulseaudio; # Use PulseAudio
@@ -124,6 +126,8 @@ stdenv.mkDerivation rec {
     udev = withUdev; # Use udev for gamepad connection callbacks
     touch = withTouch; # Enable touch events
   };
+
+  dontStrip = withDebug;
 
   outputs = [ "out" "man" ];
 
