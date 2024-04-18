@@ -49,7 +49,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/daytonaio/daytona";
     license = lib.licenses.asl20;
     mainProgram = "daytona";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ osslate ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
