@@ -38,7 +38,7 @@ index 3c914a2..d9c2cf9 100644
 -                        details=error.details,
 -                    ) from error
 +            try:
-+                channel = "latest/edge" if snap.name == "rockcraft" else "latest/stable"
++                channel = "latest/beta"
 +                snap_installer.install_from_store(
 +                    executor=executor,
 +                    snap_name=snap.name,

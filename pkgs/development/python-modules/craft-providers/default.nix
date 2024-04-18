@@ -33,6 +33,11 @@ buildPythonPackage rec {
   };
 
   patches = [
+    # This lib will try to inject snaps *from the host system* into the build
+    # system. This patch short-circuits that logic and ensures that snaps are
+    # installed on the build system from the snap store - because there is no
+    # snapd on NixOS hosts that can be used for the injection. This patch will
+    # likely never be accepted upstream.
     ./inject-snaps.patch
   ];
 
