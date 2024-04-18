@@ -1,15 +1,15 @@
 { stdenv
 , lib
-, mkDerivation
 , fetchFromGitHub
 , cmake
 , qtbase
 , qttools
 , lxqt-build-tools
+, wrapQtAppsHook
 , gitUpdater
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qtermwidget";
   version = "1.4.0";
 
@@ -24,6 +24,7 @@ mkDerivation rec {
     cmake
     lxqt-build-tools
     qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
