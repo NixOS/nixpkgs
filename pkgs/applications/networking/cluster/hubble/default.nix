@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "hubble";
-  version = "0.13.2";
+  version = "0.13.3";
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0SCuQzRwluowF48lzyLxY+0rvTOyDbpkMI7Iwb6GHJo=";
+    sha256 = "sha256-tHkLUoccOUcUjODecy1QyeuDb/aXv67sK8JHJ1IspC8=";
   };
 
   vendorHash = null;
