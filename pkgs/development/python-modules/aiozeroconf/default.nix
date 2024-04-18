@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, netifaces
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  netifaces,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -18,17 +19,11 @@ buildPythonPackage rec {
     hash = "sha256-ENupazLlOqfwHugNLEgeTZjPOYxRgznuCKHpU5unlxw=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    netifaces
-  ];
+  dependencies = [ netifaces ];
 
-  pythonImportsCheck = [
-    "aiozeroconf"
-  ];
+  pythonImportsCheck = [ "aiozeroconf" ];
 
   meta = with lib; {
     description = "Implementation of multicast DNS service discovery";
