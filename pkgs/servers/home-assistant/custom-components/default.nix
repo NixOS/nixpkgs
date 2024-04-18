@@ -44,6 +44,8 @@
 
   waste_collection_schedule = callPackage ./waste_collection_schedule {};
 
+  xiaomi_gateway3 = callPackage ./xiaomi_gateway3 {};
+
   xiaomi_miot = callPackage ./xiaomi_miot {};
 
   yassi = callPackage ./yassi {};
