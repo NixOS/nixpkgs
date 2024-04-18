@@ -142,7 +142,7 @@
 # > the experience of Firefox users, you won't have any issues using the
 # > official branding.
 , enableOfficialBranding ? true
-}:
+}@args:
 
 assert stdenv.cc.libc or null != null;
 assert pipewireSupport -> !waylandSupport || !webrtcSupport -> throw "${pname}: pipewireSupport requires both wayland and webrtc support.";
@@ -150,12 +150,12 @@ assert pipewireSupport -> !waylandSupport || !webrtcSupport -> throw "${pname}: 
 let
   inherit (lib) enableFeature;
 
-  inherit (if lib.versionAtLeast version "125" then rustPackages_1_76 else rustPackages_1_73)
-    cargo rustc rustPlatform;
+  rustAttr = if lib.versionAtLeast version "125" then "rustPackages_1_76" else "rustPackages_1_73";
+  inherit (args.${rustAttr}) cargo rustc rustPlatform;
 
   # Target the LLVM version that rustc is built with for LTO.
   llvmPackages0 = rustc.llvmPackages;
-  llvmPackagesBuildBuild0 = pkgsBuildBuild.rustc.llvmPackages;
+  llvmPackagesBuildBuild0 = pkgsBuildBuild.${rustAttr}.rustc.llvmPackages;
 
   # Force the use of lld and other llvm tools for LTO
   llvmPackages = llvmPackages0.override {
