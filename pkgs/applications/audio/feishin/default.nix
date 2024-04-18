@@ -153,6 +153,9 @@ buildNpmPackage {
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     mainProgram = "feishin";
-    maintainers = with maintainers; [ onny ];
+    maintainers = with maintainers; [
+      onny
+      jlbribeiro
+    ];
   };
 }
