@@ -4,7 +4,7 @@
 }:
 
 { lib
-, python3
+, python3Packages
 , fetchFromGitHub
 , pkgsStatic
 , stdenv
@@ -14,7 +14,7 @@
 , gns3-server
 }:
 
-python3.pkgs.buildPythonApplication {
+python3Packages.buildPythonApplication {
   pname = "gns3-server";
   inherit version;
 
@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication {
     cp ${pkgsStatic.busybox}/bin/busybox gns3server/compute/docker/resources/bin/busybox
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python3Packages; [
     aiofiles
     aiohttp
     aiohttp-cors
@@ -67,7 +67,7 @@ python3.pkgs.buildPythonApplication {
     export HOME=$(mktemp -d)
   '';
 
-  checkInputs = with python3.pkgs; [
+  checkInputs = with python3Packages; [
     pytest-aiohttp
     pytest-rerunfailures
     (pytestCheckHook.override { pytest = pytest_7; })
