@@ -259,6 +259,24 @@ with pkgs;
 
   anime-downloader = callPackage ../applications/video/anime-downloader { };
 
+  ### TO-PYTHON-APPLICATION
+
+  certbot-full = certbot.withPlugins (cp: with cp; [
+    certbot-dns-cloudflare
+    certbot-dns-google
+    certbot-dns-ovh
+    certbot-dns-rfc2136
+    certbot-dns-route53
+  ]);
+
+  circus = callPackage ../by-name/ci/circus/package.nix {
+    python3Packages = python310Packages;
+  };
+
+  hydra-check = callPackage ../by-name/hy/hydra-check/package.nix {
+    python3Packages = python310Packages;
+  };
+
   aocd = with python3Packages; toPythonApplication aocd;
 
   aesfix = callPackage ../tools/security/aesfix { };
@@ -720,8 +738,6 @@ with pkgs;
   lshw-gui = lshw.override { withGUI = true; };
 
   kdePackages = callPackage ../kde { };
-
-  buildcatrust = with python3.pkgs; toPythonApplication buildcatrust;
 
   probe-rs = callPackage ../development/tools/rust/probe-rs {
     inherit (darwin.apple_sdk.frameworks) AppKit;
@@ -1534,8 +1550,6 @@ with pkgs;
   acquire = with python3Packages; toPythonApplication acquire;
 
   act = callPackage ../development/tools/misc/act { };
-
-  actdiag = with python3.pkgs; toPythonApplication actdiag;
 
   actkbd = callPackage ../tools/system/actkbd { };
 
@@ -3333,8 +3347,6 @@ with pkgs;
 
   authentik-outposts = recurseIntoAttrs (callPackages ../by-name/au/authentik/outposts.nix { });
 
-  autoflake = with python3.pkgs; toPythonApplication autoflake;
-
   autospotting = callPackage ../applications/misc/autospotting { };
 
   avfs = callPackage ../tools/filesystems/avfs { };
@@ -4275,8 +4287,6 @@ with pkgs;
     inherit (plasma5Packages) breeze-icons;
   };
 
-  beautysh = with python3.pkgs; toPythonApplication beautysh;
-
   bc = callPackage ../tools/misc/bc { };
 
   gavin-bc = callPackage ../tools/misc/gavin-bc { };
@@ -4315,8 +4325,6 @@ with pkgs;
   bibtex2html = callPackage ../tools/misc/bibtex2html { };
 
   bicon = callPackage ../applications/misc/bicon { };
-
-  biliass = with python3.pkgs; toPythonApplication biliass;
 
   bilibili = callPackage ../applications/video/bilibili { };
 
@@ -5107,15 +5115,6 @@ with pkgs;
 
   duperemove = callPackage ../tools/filesystems/duperemove { };
 
-  dvc = with python3.pkgs; toPythonApplication dvc;
-
-  dvc-with-remotes = dvc.override {
-    enableGoogle = true;
-    enableAWS = true;
-    enableAzure = true;
-    enableSSH = true;
-  };
-
   dynamic-colors = callPackage ../tools/misc/dynamic-colors { };
 
   dynamic-wallpaper = callPackage ../tools/graphics/dynamic-wallpaper { };
@@ -5137,8 +5136,6 @@ with pkgs;
   };
 
   easycrypt-runtest = callPackage ../applications/science/logic/easycrypt/runtest.nix { };
-
-  easyocr = with python3.pkgs; toPythonApplication easyocr;
 
   ecasound = callPackage ../applications/audio/ecasound { };
 
@@ -6759,8 +6756,6 @@ with pkgs;
 
   circleci-cli = callPackage ../development/tools/misc/circleci-cli { };
 
-  circus = with python310Packages; toPythonApplication circus;
-
   cirrus-cli = callPackage ../development/tools/continuous-integration/cirrus-cli { };
 
   cirrusgo = callPackage ../tools/security/cirrusgo { };
@@ -8345,8 +8340,6 @@ with pkgs;
   gau = callPackage ../tools/security/gau { };
 
   gauge = callPackage ../development/tools/gauge { };
-
-  gawd = python3Packages.toPythonApplication python3Packages.gawd;
 
   gawk = callPackage ../tools/text/gawk {
     inherit (darwin) locale;
@@ -17102,8 +17095,6 @@ with pkgs;
 
   vala-lint = callPackage ../development/tools/vala-lint { };
 
-  vcard = python3Packages.toPythonApplication python3Packages.vcard;
-
   inherit (callPackage ../development/compilers/vala { })
     vala_0_56
     vala;
@@ -18412,8 +18403,6 @@ with pkgs;
   libbpf = callPackage ../os-specific/linux/libbpf { };
   libbpf_0 = callPackage ../os-specific/linux/libbpf/0.x.nix { };
 
-  bundlewrap = with python3.pkgs; toPythonApplication bundlewrap;
-
   bpftools = callPackage ../os-specific/linux/bpftools { };
 
   bcc = callPackage ../os-specific/linux/bcc {
@@ -18728,8 +18717,6 @@ with pkgs;
   doit = with python3Packages; toPythonApplication doit;
 
   dolt = callPackage ../servers/sql/dolt { };
-
-  dot2tex = with python3.pkgs; toPythonApplication dot2tex;
 
   doxygen = darwin.apple_sdk_11_0.callPackage ../development/tools/documentation/doxygen {
     qt5 = null;
@@ -20064,8 +20051,6 @@ with pkgs;
 
   yodl = callPackage ../development/tools/misc/yodl { };
 
-  yq = python3.pkgs.toPythonApplication python3.pkgs.yq;
-
   yq-go = callPackage ../development/tools/yq-go { };
 
   ytt = callPackage ../development/tools/ytt { };
@@ -20167,8 +20152,6 @@ with pkgs;
   amrnb = callPackage ../development/libraries/amrnb { };
 
   amrwb = callPackage ../development/libraries/amrwb { };
-
-  ansi2html = with python3.pkgs; toPythonApplication ansi2html;
 
   antic = callPackage ../development/libraries/antic { };
 
@@ -20442,16 +20425,6 @@ with pkgs;
   celt_0_5_1 = callPackage ../development/libraries/celt/0.5.1.nix { };
 
   cegui = callPackage ../development/libraries/cegui { };
-
-  certbot = python3.pkgs.toPythonApplication python3.pkgs.certbot;
-
-  certbot-full = certbot.withPlugins (cp: with cp; [
-    certbot-dns-cloudflare
-    certbot-dns-google
-    certbot-dns-ovh
-    certbot-dns-rfc2136
-    certbot-dns-route53
-  ]);
 
   caf = callPackage ../development/libraries/caf { };
 
@@ -21622,8 +21595,6 @@ with pkgs;
   hydra-cli = callPackage ../development/tools/misc/hydra-cli { };
 
   hydraAntLogger = callPackage ../development/libraries/java/hydra-ant-logger { };
-
-  hydra-check = with python3.pkgs; toPythonApplication hydra-check;
 
   hyena = callPackage ../development/libraries/hyena { };
 
@@ -28450,8 +28421,6 @@ with pkgs;
 
   andika = callPackage ../data/fonts/andika { };
 
-  androguard = with python3.pkgs; toPythonApplication androguard;
-
   android-udev-rules = callPackage ../os-specific/linux/android-udev-rules { };
 
   andromeda-gtk-theme = libsForQt5.callPackage ../data/themes/andromeda-gtk-theme { };
@@ -33786,8 +33755,6 @@ with pkgs;
 
   libopenmpt-modplug = callPackage ../development/libraries/audio/libopenmpt-modplug { };
 
-  openrazer-daemon = python3Packages.toPythonApplication python3Packages.openrazer-daemon;
-
   opusfile = callPackage ../applications/audio/opusfile { };
 
   opustags = callPackage ../applications/audio/opustags { };
@@ -36452,10 +36419,6 @@ with pkgs;
   scaleft = callPackage ../applications/networking/scaleft { };
 
   scaleway-cli = callPackage ../tools/admin/scaleway-cli { };
-
-  beancount = with python3.pkgs; toPythonApplication beancount;
-
-  beancount-black = with python3.pkgs; toPythonApplication beancount-black;
 
   bean-add = callPackage ../applications/office/beancount/bean-add.nix { };
 
@@ -41268,8 +41231,6 @@ with pkgs;
   ali = callPackage ../tools/networking/ali { };
 
   udict = callPackage ../applications/misc/udict { };
-
-  duden = python3Packages.toPythonApplication python3Packages.duden;
 
   zf = callPackage ../tools/misc/zf { };
 
