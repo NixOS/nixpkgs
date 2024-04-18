@@ -10238,6 +10238,8 @@ with pkgs;
 
   jump = callPackage ../tools/system/jump { };
 
+  kernel-hardening-checker = callPackage ../tools/security/kernel-hardening-checker {};
+
   latex2html = callPackage ../tools/misc/latex2html { };
 
   lazycli = callPackage ../tools/misc/lazycli { };
