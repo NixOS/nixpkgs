@@ -3,17 +3,18 @@
 }:
 
 let
+  pname = "digital";
   pkgDescription = "A digital logic designer and circuit simulator.";
   version = "0.30";
   buildDate = "2023-02-03T08:00:56+01:00"; # v0.30 commit date
 
   desktopItem = makeDesktopItem {
     type = "Application";
-    name = "Digital";
-    desktopName = pkgDescription;
+    name = pname;
+    desktopName = "Digital";
     comment = "Easy-to-use digital logic designer and circuit simulator";
-    exec = "digital";
-    icon = "digital";
+    exec = pname;
+    icon = pname;
     categories = [ "Education" "Electronics" ];
     mimeTypes = [ "text/x-digital" ];
     terminal = false;
@@ -28,8 +29,7 @@ let
   mvnParameters = "-Pno-git-rev -Dgit.commit.id.describe=${version} -Dproject.build.outputTimestamp=${buildDate} -DbuildTimestamp=${buildDate}";
 in
 maven.buildMavenPackage rec {
-  pname = "digital";
-  inherit version jre;
+  inherit pname version jre;
 
   src = fetchFromGitHub {
     owner = "hneemann";
