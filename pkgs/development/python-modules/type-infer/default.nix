@@ -24,7 +24,7 @@ let
 in
 buildPythonPackage rec {
   pname = "type-infer";
-  version = "0.0.18";
+  version = "0.0.19";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "type_infer";
     inherit version;
-    hash = "sha256-nA5TlyHpCueFWqUggS7T/eKSLlffp0pIyGCouwXPZ28=";
+    hash = "sha256-7fWRM776lAyOncp6WZDLH9ouVBhVvV23105xvhw8V24=";
   };
 
   nativeBuildInputs = [
