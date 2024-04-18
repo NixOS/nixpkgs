@@ -111,6 +111,7 @@ in
         if modelines == { } then null else
         pkgs.edid-generator.overrideAttrs {
           clean = true;
+          passthru.config = modelines;
           modelines = lib.trivial.pipe modelines [
             (lib.mapAttrsToList (name: value:
               lib.throwIfNot (builtins.stringLength name <= 12) "Modeline name must be 12 characters or less"
