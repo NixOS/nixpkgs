@@ -179,6 +179,7 @@
   ./programs/environment.nix
   ./programs/evince.nix
   ./programs/extra-container.nix
+  ./programs/fcast-receiver.nix
   ./programs/feedbackd.nix
   ./programs/file-roller.nix
   ./programs/firefox.nix
