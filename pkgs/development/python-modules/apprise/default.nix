@@ -30,6 +30,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    babel
     installShellFiles
   ];
 
@@ -43,7 +44,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    babel
     gntp
     paho-mqtt
     pytest-mock
