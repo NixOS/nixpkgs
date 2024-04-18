@@ -927,7 +927,12 @@ rec {
       // {
         interpreter =
           if pythonPackages != pkgs.pypy2Packages || pythonPackages != pkgs.pypy3Packages then
-            if libraries == [ ] then python.interpreter else (python.withPackages (ps: libraries)).interpreter
+            if libraries == [ ] then
+              python.interpreter
+            else if (lib.isFunction libraries) then
+              (python.withPackages (ps: libraries ps)).interpreter
+            else
+              (python.withPackages (ps: libraries)).interpreter
           else
             python.interpreter;
         check = optionalString (python.isPy3k && doCheck) (
