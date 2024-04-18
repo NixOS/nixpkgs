@@ -4,13 +4,13 @@
 }:
 buildGoModule rec {
   pname = "nom";
-  version = "2.1.4";
+  version = "2.1.5";
 
   src = fetchFromGitHub {
     owner = "guyfedwards";
     repo = "nom";
     rev = "v${version}";
-    hash = "sha256-W0vfYAEQYixbnOQhA59sj2uSAcbqoS/OMiB3TfXsv/Y=";
+    hash = "sha256-N+FfwDpVW8WItLSqVWQwslPDYuafdmvtm3jFNRtrHNw=";
   };
 
   vendorHash = "sha256-fP6yxfIQoVaBC9hYcrCyo3YP3ntEVDbDTwKMO9TdyDI=";
