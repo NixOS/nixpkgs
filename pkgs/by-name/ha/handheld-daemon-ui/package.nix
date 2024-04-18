@@ -1,0 +1,36 @@
+{
+  lib,
+  appimageTools,
+  fetchurl,
+}:
+let
+  pname = "handheld-daemon-ui";
+  version = "2.2.3";
+
+  src = fetchurl {
+    url = "https://github.com/hhd-dev/hhd-ui/releases/download/v${version}/hhd-ui.Appimage";
+    hash = "sha256-3OWgi62eSuFkMd5BLZ34XAwqq5hoGnFRTEi+WkJw0hA=";
+  };
+  extractedFiles = appimageTools.extractType2 { inherit pname version src; };
+in
+appimageTools.wrapType2 {
+  inherit pname version src;
+
+  extraInstallCommands = ''
+    # Handheld-daemon expects the UI binary to be called hhd-ui
+    mv $out/bin/${pname}-${version} $out/bin/hhd-ui
+
+    mkdir -p $out/share/applications
+    substitute ${extractedFiles}/hhd-ui.desktop \
+      $out/share/applications/hhd-ui.desktop \
+      --replace-fail "Exec=AppRun" "Exec=hhd-ui"
+    cp ${extractedFiles}/usr/share/icons $out/share -r
+  '';
+
+  meta = with lib; {
+    description = "The main UI for the Handheld Daemon.";
+    homepage = "https://github.com/hhd-dev/hhd-ui";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ toast ];
+  };
+}
