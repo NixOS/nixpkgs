@@ -32,5 +32,8 @@ appimageTools.wrapType2 {
     homepage = "https://github.com/hhd-dev/hhd-ui";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ toast ];
+    mainProgram = "hhd-ui";
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }
