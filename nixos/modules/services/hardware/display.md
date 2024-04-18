@@ -1,10 +1,12 @@
 # Customizing display configuration {#module-hardware-display}
 
 This section describes how to customize display configuration using:
+
 - kernel modes
 - EDID files
 
 Example situations it can help you with:
+
 - display controllers (external hardware) not advertising EDID at all,
 - misbehaving graphics drivers,
 - loading custom display configuration before the Display Manager is running,
@@ -51,12 +53,14 @@ To make custom EDID binaries discoverable you should first create a derivation s
 ```
 
 There are 2 options significantly easing preparation of EDID files:
+
 - `hardware.display.edid.linuxhw`
 - `hardware.display.edid.modelines`
 
 ## Assigning EDID files to displays {#module-hardware-display-edid-assign}
 
-To assign available custom EDID binaries to your monitor (video output) use `hardware.display.outputs."<NAME>".edid` option.
+To assign available custom EDID binaries to your monitor (video output) use `hardware.display.outputs."<NAME>".edid`
+option.
 Under the hood it adds `drm.edid_firmware` entry to `boot.kernelParams` NixOS option for each configured output:
 
 ```nix
@@ -68,6 +72,25 @@ Under the hood it adds `drm.edid_firmware` entry to `boot.kernelParams` NixOS op
   */
 }
 ```
+
+### Assigning EDID files when kernel fails to apply {#module-hardware-display-edid-assign-fallback}
+
+In rare cases when kernel (usually temporarily) fails to apply EDID files by itself you can fall back to
+applying EDID files again on a fully booted system (before `graphical.target` and/or `multi-user.target`):
+
+```nix
+{
+  hardware.display.edid.applyAtRuntime = true;
+  hardware.display.outputs."VGA-1".edid = "custom1.bin";
+  hardware.display.outputs."VGA-2".edid = "custom2.bin";
+}
+```
+
+This will still configure `drm.edid_firmware=` in `boot.kernelParameters` and yield errors in `dmesg`, but
+it will try to apply the EDID configuration again on fully booted system again, before you have a chance to use it.
+
+You can fully disable `drm.edid_firmware=` (to get rid of error messages) by setting
+`hardware.display.edid.applyWithKernelParameters` to false.
 
 ## Pulling files from linuxhw/EDID database {#module-hardware-display-edid-linuxhw}
 
@@ -90,7 +113,6 @@ from https://github.com/linuxhw/EDID based on simple string/regexp search identi
 }
 ```
 
-
 ## Using XFree86 Modeline definitions {#module-hardware-display-edid-modelines}
 
 `hardware.display.edid.modelines` utilizes `pkgs.edid-generator` package allowing you to
@@ -102,6 +124,7 @@ conveniently use [`XFree86 Modeline`](https://en.wikipedia.org/wiki/XFree86_Mode
   hardware.display.edid.modelines."PG278Q_120" = "   497.75   2560 2608 2640 2720   1440 1443 1448 1525   +hsync -vsync";
 
   /* equals:
+  hardware.display.edid.enable = true;
   hardware.display.edid.packages = [
     (pkgs.edid-generator.overrideAttrs {
       clean = true;
@@ -117,7 +140,8 @@ conveniently use [`XFree86 Modeline`](https://en.wikipedia.org/wiki/XFree86_Mode
 
 ## Complete example for Asus PG278Q {#module-hardware-display-pg278q}
 
-And finally this is a complete working example for a 2014 (first) batch of [Asus PG278Q monitor with `amdgpu` drivers](https://gitlab.freedesktop.org/drm/amd/-/issues/615#note_1987392):
+And finally this is a complete working example for a 2014 (first) batch
+of [Asus PG278Q monitor with `amdgpu` drivers](https://gitlab.freedesktop.org/drm/amd/-/issues/615#note_1987392):
 
 ```nix
 {

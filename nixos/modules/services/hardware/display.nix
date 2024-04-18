@@ -1,6 +1,13 @@
 { config, lib, pkgs, ... }:
 let
   cfg = config.hardware.display;
+
+  edidKernelParams = lib.trivial.pipe cfg.outputs [
+    (lib.attrsets.filterAttrs (_: spec: spec.edid != null))
+    (lib.mapAttrsToList (output: spec: "${output}:edid/${spec.edid}"))
+    (builtins.concatStringsSep ",")
+    (p: lib.optional (p != "") "drm.edid_firmware=${p}")
+  ];
 in
 {
   meta.doc = ./display.md;
@@ -132,7 +139,7 @@ in
       description = ''
         Apply EDID files at runtime it addition to configuring kernel parameters.
 
-        It is a last resort fix when kernel parameters (temporarily) stop working.
+        It is a last resort fix when kernel parameters (hopefully temporarily) stop working.
         Implemented as oneshot `display-edid-apply.service`.
       '';
     };
@@ -185,30 +192,43 @@ in
 
   config = lib.mkMerge [
     {
+      # forcing video/fb modes
+      boot.kernelParams = lib.trivial.pipe cfg.outputs [
+        (lib.attrsets.filterAttrs (_: spec: spec.mode != null))
+        (lib.mapAttrsToList (output: spec: "video=${output}:${spec.mode}"))
+      ];
+    }
+    {
       hardware.display.edid.packages =
         lib.optional (cfg.edid.modelines != null) cfg.edid.modelines
         ++ lib.optional (cfg.edid.linuxhw != null) cfg.edid.linuxhw;
 
-      boot.kernelParams =
-        # forcing video modes
-        lib.trivial.pipe cfg.outputs [
-          (lib.attrsets.filterAttrs (_: spec: spec.mode != null))
-          (lib.mapAttrsToList (output: spec: "video=${output}:${spec.mode}"))
-        ]
-        ++
-        # selecting EDID for displays
-        lib.trivial.pipe cfg.outputs [
-          (lib.attrsets.filterAttrs (_: spec: spec.edid != null))
-          (lib.mapAttrsToList (output: spec: "${output}:edid/${spec.edid}"))
-          (builtins.concatStringsSep ",")
-          (p: lib.optional (p != "") "drm.edid_firmware=${p}")
-        ]
-      ;
+      # selecting EDID for displays
+      boot.kernelParams = lib.optionals cfg.edid.applyWithKernelParameters edidKernelParams;
     }
-    (lib.mkIf (cfg.edid.packages != null) {
+    (lib.mkIf (cfg.edid.enable && cfg.edid.packages != null) {
       # services.udev implements hardware.firmware option
       services.udev.enable = true;
       hardware.firmware = [ cfg.edid.packages ];
+    })
+    (lib.mkIf (cfg.edid.enable && cfg.edid.applyAtRuntime) {
+      systemd.services.display-edid-apply = {
+        before = [ "multi-user.target" ];
+        wantedBy = [ "multi-user.target" ];
+        enable = true;
+        serviceConfig.Type = "oneshot";
+        serviceConfig.RemainAfterExit = true;
+        environment.FIRMWARE_PATH = builtins.concatStringsSep ":" (
+          [ "/run/current-system/firmware" ]
+          ++ lib.optional (cfg.edid.modelines != null) "${cfg.edid.modelines}/lib/firmware"
+          ++ lib.optional (cfg.edid.linuxhw != null) "${cfg.edid.linuxhw}/lib/firmware"
+        );
+        serviceConfig.ExecStart = lib.escapeShellArgs (
+          [ (lib.getExe pkgs.edido) ]
+          ++ config.boot.kernelParams
+          ++ lib.optionals (!cfg.edid.applyWithKernelParameters) edidKernelParams
+        );
+      };
     })
   ];
 }
