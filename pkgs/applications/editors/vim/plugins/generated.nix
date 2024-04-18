@@ -5062,6 +5062,18 @@ final: prev:
     meta.homepage = "https://github.com/neoclide/jsonc.vim/";
   };
 
+  jsonfly-nvim = buildVimPlugin {
+    pname = "jsonfly.nvim";
+    version = "2024-04-12";
+    src = fetchFromGitHub {
+      owner = "Myzel394";
+      repo = "jsonfly.nvim";
+      rev = "539a0b79a5ea75d201e1e90cebfe9367154d04fc";
+      sha256 = "1v1i4x2px0zs65rxkf2yhnxn6clx33vdr54r9gaqq713qj5ddlfm";
+    };
+    meta.homepage = "https://github.com/Myzel394/jsonfly.nvim/";
+  };
+
   julia-vim = buildVimPlugin {
     pname = "julia-vim";
     version = "2023-12-15";

@@ -3,9 +3,7 @@
 , fetchFromGitHub
 , stdenv
 , pkg-config
-, AppKit
-, Cocoa
-, Security
+, darwin
 , installShellFiles
 , installShellCompletions ? stdenv.hostPlatform == stdenv.buildPlatform
 , installManPages ? stdenv.hostPlatform == stdenv.buildPlatform
@@ -16,26 +14,34 @@
 }:
 
 rustPlatform.buildRustPackage rec {
+  # Learn more about available cargo features at:
+  #  - <https://pimalaya.org/himalaya/cli/latest/installation.html#cargo>
   inherit buildNoDefaultFeatures buildFeatures;
 
   pname = "himalaya";
-  version = "1.0.0-beta.3";
+  version = "1.0.0-beta.4";
 
   src = fetchFromGitHub {
     owner = "soywod";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-B7eswDq4tKyg881i3pLd6h+HsObK0c2dQnYuvPAGJHk=";
+    hash = "sha256-NrWBg0sjaz/uLsNs8/T4MkUgHOUvAWRix1O5usKsw6o=";
   };
 
-  cargoSha256 = "jOzuCXsrtXp8dmJTBqrEq4nog6smEPbdsFAy+ruPtY8=";
+  cargoSha256 = "YS8IamapvmdrOPptQh2Ef9Yold0IK1XIeGs0kDIQ5b8=";
 
-  nativeBuildInputs = [ ]
+  NIX_LDFLAGS = lib.optionals stdenv.isDarwin [
+    "-F${darwin.apple_sdk.frameworks.AppKit}/Library/Frameworks"
+    "-framework"
+    "AppKit"
+  ];
+
+  nativeBuildInputs = [ pkg-config ]
     ++ lib.optional (builtins.elem "pgp-gpg" buildFeatures) pkg-config
     ++ lib.optional (installManPages || installShellCompletions) installShellFiles;
 
   buildInputs = [ ]
-    ++ lib.optionals stdenv.isDarwin [ AppKit Cocoa Security ]
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ AppKit Cocoa Security ])
     ++ lib.optional (builtins.elem "notmuch" buildFeatures) notmuch
     ++ lib.optional (builtins.elem "pgp-gpg" buildFeatures) gpgme;
 

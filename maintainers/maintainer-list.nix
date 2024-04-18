@@ -8432,6 +8432,12 @@
     github = "Icy-Thought";
     githubId = 53710398;
   };
+  id3v1669 = {
+    name = "id3v1669";
+    email = "id3v1669@gmail.com";
+    github = "id3v1669";
+    githubId = 57532211;
+  };
   idlip = {
     name = "Dilip";
     email = "igoldlip@gmail.com";
@@ -17342,6 +17348,11 @@
     github = "rsniezek";
     githubId = 19433256;
     name = "Radoslaw Sniezek";
+  };
+  rster2002 = {
+    name = "Bjørn";
+    github = "rster2002";
+    githubId = 26026518;
   };
   rsynnest = {
     email = "contact@rsynnest.com";
