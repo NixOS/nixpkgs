@@ -65,6 +65,7 @@ in {
       default = "";
       description = ''
         Extra lines to be added verbatim to the generated configuration file.
+        See upstream documentation <https://www.knot-resolver.cz/documentation/stable/config-overview.html> for more details.
       '';
     };
     listenPlain = mkOption {
