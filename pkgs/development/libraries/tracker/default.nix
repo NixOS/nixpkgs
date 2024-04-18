@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , gettext
 , meson
 , mesonEmulatorHook
@@ -41,6 +42,17 @@ stdenv.mkDerivation (finalAttrs: {
     url = with finalAttrs; "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "Ulks/hm6/9FtvkdHW+fadQ29C2Mz/XrLYPqp2lvEDfI=";
   };
+
+  patches = [
+    # sqlite-3.45.3 compatibility upstream fix:
+    #   https://gitlab.gnome.org/GNOME/tracker/-/merge_requests/665
+    # TODO: remove with a next release
+    (fetchpatch {
+      name = "sqlite-3.45.3.patch";
+      url = "https://gitlab.gnome.org/GNOME/tracker/-/commit/0c576af6df5af2f1b8df9841fbb566fa52a4e382.patch";
+      hash = "sha256-NYZ6xPbmkO283eboRl205OQ0C7NpL/zd2RcWGsMZfrc=";
+    })
+  ];
 
   strictDeps = true;
 
