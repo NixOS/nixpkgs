@@ -1,0 +1,9 @@
+--- a/setup.py
++++ b/setup.py
+@@ -10,7 +10,7 @@ working_directory = path.abspath(path.dirname(__file__))
+ with open(path.join(working_directory, 'steamworks/__init__.py'), encoding = 'utf-8') as f:
+     for line in f.readlines():
+         if '__version__' in line:
+-            version = line.split("'")[1]
++            version = line.split('"')[1]
+             break
