@@ -11,7 +11,10 @@ let
   isNonEmpty = s: (builtins.match "[ \t\n]*" s) == null;
   nonEmptyStr = addCheckDesc "non-empty" types.str isNonEmpty;
 
-  fileSystems' = toposort fsBefore (attrValues config.fileSystems);
+  enabledFileSystems = lib.filterAttrs (n: v: v.enable) config.fileSystems;
+  enabledSpecialFileSystems = lib.filterAttrs (n: v: v.enable) config.specialFileSystems;
+
+  fileSystems' = toposort fsBefore (attrValues enabledFileSystems);
 
   fileSystems = if fileSystems' ? result
                 then # use topologically sorted fileSystems everywhere
@@ -20,7 +23,7 @@ let
                      # but we fall back to the original order
                      # anyway so that other modules could check
                      # their assertions too
-                     (attrValues config.fileSystems);
+                     (attrValues enabledFileSystems);
 
   specialFSTypes = [ "proc" "sysfs" "tmpfs" "ramfs" "devtmpfs" "devpts" ];
 
@@ -30,6 +33,15 @@ let
   coreFileSystemOpts = { name, config, ... }: {
 
     options = {
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = lib.mdDoc ''
+          Whether this file system mount should be generated.  This
+          option allows specific file system mounts to be disabled.
+        '';
+      };
+
       mountPoint = mkOption {
         example = "/mnt/usb";
         type = nonEmptyWithoutTrailingSlash;
@@ -268,7 +280,7 @@ in
 
     # Export for use in other modules
     system.build.fileSystems = fileSystems;
-    system.build.earlyMountScript = makeSpecialMounts (toposort fsBefore (attrValues config.boot.specialFileSystems)).result;
+    system.build.earlyMountScript = makeSpecialMounts (toposort fsBefore (attrValues enabledSpecialFileSystems)).result;
 
     boot.supportedFilesystems = map (fs: fs.fsType) fileSystems;
 
