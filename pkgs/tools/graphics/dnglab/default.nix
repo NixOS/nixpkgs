@@ -4,16 +4,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "dnglab";
-  version = "0.5.2";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "dnglab";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-jkOkkcMFK1RLY8Hn/bMMuMZtyGwnwGdm0os8QKhcWqo=";
+    sha256 = "sha256-xiqUL35wY/nMHEiPMlmGOkfJENKBXrlElbDWZIw2600=";
   };
 
-  cargoSha256 = "sha256-qwhOJxFYRJC51dKB1pi/WVJs7H955jM6KmKbxsAScDI=";
+  cargoHash = "sha256-EUALrjSmDD/xqBdNlRhBk/67sNkwVOEs951Z980dwqc=";
 
   postInstall = ''
     rm $out/bin/benchmark $out/bin/identify
