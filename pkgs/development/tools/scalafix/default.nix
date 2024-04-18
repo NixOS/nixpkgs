@@ -6,6 +6,7 @@
   makeWrapper,
   installShellFiles,
   setJavaClassPath,
+  testers,
 }:
 stdenv.mkDerivation (
   finalAttrs: {
@@ -37,9 +38,12 @@ stdenv.mkDerivation (
         --zsh  <($out/bin/${finalAttrs.pname} --zsh)
     '';
 
-    installCheckPhase = ''
-      $out/bin/${finalAttrs.pname} --version | grep -q "${finalAttrs.version}"
-    '';
+    passthru.tests = {
+      testVersion = testers.testVersion {
+        program = "${finalAttrs.pname}";
+        version = "${finalAttrs.version}";
+      };
+    };
 
     meta = with lib; {
       description = "Refactoring and linting tool for Scala";
