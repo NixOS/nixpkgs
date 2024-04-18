@@ -2,7 +2,6 @@
 , fetchPypi
 , buildPythonPackage
 , pythonOlder
-, oldest-supported-numpy
 , setuptools
 , wheel
 , numpy
@@ -21,21 +20,21 @@ let
   mpi = hdf5.mpi;
   mpiSupport = hdf5.mpiSupport;
 in buildPythonPackage rec {
-  version = "3.10.0";
+  version = "3.11.0";
   pname = "h5py";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2TrcSM7rMzR+skpjT7eH78euRkTm6kunM9CZYFBFwEk=";
+    hash = "sha256-e36PeAcqLt7IfJg28l80ID/UkqRHVwmhi0F6M8+yH6k=";
   };
 
   # avoid strict pinning of numpy
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "mpi4py ==" "mpi4py >="
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy >=2.0.0rc1" "numpy"
   '';
 
   HDF5_DIR = "${hdf5}";
@@ -51,7 +50,7 @@ in buildPythonPackage rec {
 
   nativeBuildInputs = [
     cython_0
-    oldest-supported-numpy
+    numpy
     pkgconfig
     setuptools
     wheel
