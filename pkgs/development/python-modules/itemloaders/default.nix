@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "itemloaders";
-  version = "1.1.0";
+  version = "1.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "scrapy";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-jwxxKfr/SI1yfjSQbYqggWxBwusBZNYySHwZXHftgFs=";
+    hash = "sha256-DatHJnAIomVoN/GrDzM2fNnFHcXqo6zs3ucKCOCf9DU=";
   };
 
   propagatedBuildInputs = [
