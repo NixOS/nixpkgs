@@ -163,8 +163,10 @@ let
     inherit (go) GOOS GOARCH;
 
     GOFLAGS = GOFLAGS
-      ++ lib.optional (!proxyVendor) "-mod=vendor"
-      ++ lib.optional (!allowGoReference) "-trimpath";
+      ++ lib.warnIf (lib.any (lib.hasPrefix "-mod=") GOFLAGS) "use `proxyVendor` to control Go module/vendor behavior instead of setting `-mod=` in GOFLAGS"
+        (lib.optional (!proxyVendor) "-mod=vendor")
+      ++ lib.warnIf (builtins.elem "-trimpath" GOFLAGS) "`-trimpath` is added by default to GOFLAGS by buildGoModule when allowGoReference isn't set to true"
+        (lib.optional (!allowGoReference) "-trimpath");
     inherit CGO_ENABLED enableParallelBuilding GO111MODULE GOTOOLCHAIN;
 
     # If not set to an explicit value, set the buildid empty for reproducibility.
@@ -318,6 +320,4 @@ let
     } // meta;
   });
 in
-lib.warnIf (builtins.elem "-trimpath" GOFLAGS) "`-trimpath` is added by default to GOFLAGS by buildGoModule when allowGoReference isn't set to true"
-lib.warnIf (lib.any (lib.hasPrefix "-mod=") GOFLAGS) "use `proxyVendor` to control Go module/vendor behavior instead of setting `-mod=` in GOFLAGS"
-  package
+package
