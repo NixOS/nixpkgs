@@ -12184,6 +12184,8 @@ self: super: with self; {
 
   python3-openid = callPackage ../development/python-modules/python3-openid { };
 
+  python-apt = callPackage ../development/python-modules/python-apt { };
+
   python-arango = callPackage ../development/python-modules/python-arango { };
 
   python-awair = callPackage ../development/python-modules/python-awair { };
