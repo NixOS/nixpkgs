@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-cli";
-  version = "0.1.11";
+  version = "0.1.12";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_cli";
     inherit version;
-    hash = "sha256-XecH4SWqh31wxh2nDMRP6nKp9623f0E7Ufc7He/911A=";
+    hash = "sha256-PPH3BsPGnGsaqwf8p/qtOVnbFwmAjv1QSRtmnTiwtYA=";
   };
 
   build-system = [
