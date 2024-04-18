@@ -41316,4 +41316,6 @@ with pkgs;
   insulator2 = callPackage ../applications/misc/insulator2 {};
 
   animdl = python3Packages.callPackage ../applications/video/animdl { };
+
+  rippkgs = callPackage ../by-name/ri/rippkgs/package.nix { };
 }
