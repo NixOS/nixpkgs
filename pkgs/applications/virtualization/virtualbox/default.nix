@@ -210,6 +210,8 @@ in stdenv.mkDerivation {
         mkdir -p $out/share/icons/hicolor/$size/apps
         ln -s $libexec/icons/$size/*.png $out/share/icons/hicolor/$size/apps
       done
+      # Translation
+      ln -sv $libexec/nls "$out/share/virtualbox"
     ''}
 
     cp -rv out/linux.*/${buildType}/bin/src "$modsrc"
