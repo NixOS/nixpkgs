@@ -72,9 +72,7 @@ in stdenv.mkDerivation (finalAttrs: {
     "info" # Avoid `attribute 'info' missing` when using with wrapCC
   ];
 
-  patches = [
-    ./add-compression-to-clang-offload-bundler.patch
-  ] ++ extraPatches;
+  patches = extraPatches;
 
   src = fetchFromGitHub {
     owner = "ROCm";

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pydiscourse";
-  version = "1.6.1";
+  version = "1.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "pydiscourse";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-BvVKOfc/PiAnkEnH5jsd8/0owr+ZvJIz/tpZx6K0fP0=";
+    hash = "sha256-KqJ6ag4owG7US5Q4Ygjq263ds1o/JhEJ3bNa8YecYtE=";
   };
 
   propagatedBuildInputs = [

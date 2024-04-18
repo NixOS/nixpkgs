@@ -13,7 +13,7 @@
   src = fetchFromGitHub {
     owner = "bluskript";
     repo = "nix-inspect";
-    rev = "3d0fea2bb246130825548fce331093ee9cc9c20b";
+    rev = "74007c580b8282bd336130ddf354e71502b421a6";
     hash = "sha256-JichXRSfTLfy+7fhbTvA89rQLkqsY2eHgEAeAHWbA9s=";
   };
 
@@ -21,7 +21,7 @@
     inherit src;
 
     pname = "nix-inspect-worker";
-    version = "0.1.0";
+    version = "0.1.1";
     sourceRoot = "source/worker";
 
     nativeBuildInputs = [meson ninja pkg-config];
@@ -38,9 +38,9 @@ in
   rustPlatform.buildRustPackage {
     inherit src;
     pname = "nix-inspect";
-    version = "0.1.0";
+    version = "0.1.1";
 
-    cargoHash = "sha256-FdpHdw7bg/nEG4GjYhrdIDB4MJ4n5LoWnW4mTG2Lh5I=";
+    cargoHash = "sha256-l+R7BLgJvK9mQ89GVAdTyQX81VMoV11h5KFlMUqAH30=";
 
     buildInputs = [workerPackage];
 
@@ -50,7 +50,7 @@ in
     '';
 
     meta = with lib; {
-      description = "A Rust package for inspecting Nix expressions";
+      description = "Interactive TUI for inspecting nix configs and other expressions";
       homepage = "https://github.com/bluskript/nix-inspect";
       license = licenses.mit;
       maintainers = with maintainers; [blusk];

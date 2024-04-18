@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
       x86
       power
       mips
+      riscv
     ]);
   };
 }

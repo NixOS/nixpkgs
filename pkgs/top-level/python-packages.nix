@@ -2494,6 +2494,8 @@ self: super: with self; {
 
   craft-providers = callPackage ../development/python-modules/craft-providers { };
 
+  craft-store = callPackage ../development/python-modules/craft-store { };
+
   cram = callPackage ../development/python-modules/cram { };
 
   cramjam = callPackage ../development/python-modules/cramjam { };
@@ -6145,6 +6147,8 @@ self: super: with self; {
 
   jsonschema-specifications = callPackage ../development/python-modules/jsonschema-specifications { };
 
+  jsonslicer = callPackage ../development/python-modules/jsonslicer { };
+
   jsonstreams = callPackage ../development/python-modules/jsonstreams { };
 
   json-tricks = callPackage ../development/python-modules/json-tricks { };
@@ -7062,6 +7066,8 @@ self: super: with self; {
   rtmixer = callPackage ../development/python-modules/rtmixer { };
 
   regress = callPackage ../development/python-modules/regress { };
+
+  macaroonbakery = callPackage ../development/python-modules/macaroonbakery { };
 
   mail-parser = callPackage ../development/python-modules/mail-parser { };
 
