@@ -28,7 +28,7 @@ appimageTools.wrapType2 {
   '';
 
   meta = with lib; {
-    description = "The main UI for the Handheld Daemon.";
+    description = "The main UI for the Handheld Daemon";
     homepage = "https://github.com/hhd-dev/hhd-ui";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ toast ];
