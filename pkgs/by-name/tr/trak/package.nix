@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
 
   sourceRoot = "${src.name}/cli";
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     questionary
     typer
   ] ++ typer.optional-dependencies.all;
