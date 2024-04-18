@@ -14474,6 +14474,8 @@ self: super: with self; {
 
   steam = callPackage ../development/python-modules/steam { };
 
+  steamfiles = callPackage ../development/python-modules/steamfiles { };
+
   steamodd = callPackage ../development/python-modules/steamodd { };
 
   steamship = callPackage ../development/python-modules/steamship { };
