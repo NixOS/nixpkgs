@@ -38,6 +38,8 @@ in {
       ]);
     };
 
+    networking.networkmanager.enable = lib.mkDefault true;
+
     systemd.packages = with pkgs.lomiri; [
       hfd-service
       lomiri-download-manager
@@ -73,6 +75,8 @@ in {
         ayatana-indicator-session
       ]) ++ (with pkgs.lomiri; [
         telephony-service
+      ] ++ lib.optionals config.networking.networkmanager.enable [
+        lomiri-indicator-network
       ]);
     };
 
@@ -111,6 +115,8 @@ in {
       "/share/lomiri-app-launch"
       # TODO Try to get maliit stuff working
       "/share/maliit/plugins"
+      # At least the network indicator is still under the unity name, due to leftover Unity-isms
+      "/share/unity"
       # Data
       "/share/locale" # TODO LUITK hardcoded default locale path, fix individual apps to not rely on it
       "/share/sounds"
