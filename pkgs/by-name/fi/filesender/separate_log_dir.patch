@@ -1,0 +1,60 @@
+diff --git a/config/csrf-protector-config.php b/config/csrf-protector-config.php
+index 83759ca4..ea4a3173 100755
+--- a/config/csrf-protector-config.php
++++ b/config/csrf-protector-config.php
+@@ -40,7 +40,7 @@ return array(
+ 	 // The following should be set correctly from your config.php
+ 	 // information
+ 	"jsUrl" => $config['site_url'] . "/js/csrfprotector.js",
+-	"logDirectory" => FILESENDER_BASE.'/log/',
++	"logDirectory" => FILESENDER_LOG_DIR,
+ 
+         // I found that leaving this with the _ as default
+         // caused the implicit token to be stripped
+diff --git a/docs/v2.0/admin/configuration/index.md b/docs/v2.0/admin/configuration/index.md
+index 8f2a24b3..3351f046 100644
+--- a/docs/v2.0/admin/configuration/index.md
++++ b/docs/v2.0/admin/configuration/index.md
+@@ -2877,7 +2877,7 @@ This is only for old, existing transfers which have no roundtriptoken set.
+ * __description:__ defines where FileSender logging is sent.  You can sent logging to a file, to syslog or to the default PHP log facility (as configured through your webserver's PHP module).  The directive takes an array of one or more logging targets. Logging can be sent to multiple targets simultaneously.  Each logging target is a list containing the name of the logging target and a number of attributes which vary per log target.  See below for the exact definiation of each log target.
+ * __mandatory:__ no
+ * __type:__ array of log targets.  Each target has a type and a number of parameters
+-* __default:__  array('type' => 'file', 'path' => FILESENDER_BASE.'/log/', 'rotate' => 'hourly'))
++* __default:__  array('type' => 'file', 'path' => FILESENDER_LOG_DIR, 'rotate' => 'hourly'))
+ * __available:__ since version 2.0
+ * __1.x name:__
+ * __comment:__
+@@ -2960,7 +2960,7 @@ This will log everything to a file in log that is rotated every hour
+ $config['log_facilities'] =
+         array(array(
+             'type' => 'file',
+-            'path' => FILESENDER_BASE.'/log/',
++            'path' => FILESENDER_LOG_DIR,
+             'rotate' => 'hourly'
+         ));
+ </code></pre>
+diff --git a/includes/ConfigDefaults.php b/includes/ConfigDefaults.php
+index 3143d544..6b682008 100644
+--- a/includes/ConfigDefaults.php
++++ b/includes/ConfigDefaults.php
+@@ -224,7 +224,7 @@ $default = array(
+     'log_facilities' => array(
+         array(
+             'type' => 'file',
+-            'path' => FILESENDER_BASE.'/log/',
++            'path' => FILESENDER_LOG_DIR,
+             'rotate' => 'hourly'
+         )
+     ),
+diff --git a/includes/init.php b/includes/init.php
+index f2f51b8f..31812c54 100644
+--- a/includes/init.php
++++ b/includes/init.php
+@@ -36,6 +36,7 @@ if(PHP_INT_SIZE !== 8) {
+ 
+ define('FILESENDER_BASE', dirname( __DIR__ ));
+ define('FILESENDER_CONFIG_DIR', getenv('FILESENDER_CONFIG_DIR', true) ?: (FILESENDER_BASE.'/config'));
++define('FILESENDER_LOG_DIR', getenv('FILESENDER_LOG_DIR', true) ?: (FILESENDER_BASE.'/log'));
+ 
+ // Include classes autoloader
+ require_once(FILESENDER_BASE.'/classes/autoload.php');
