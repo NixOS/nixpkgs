@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mednaffe";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "AmatCoder";
     repo = "mednaffe";
     rev = finalAttrs.version;
-    hash = "sha256-zvSAt6CMcgdoPpTTA5sPlQaWUw9LUMsR2Xg9jM2UaWY=";
+    hash = "sha256-ZizW0EeY/Cc68m87cnbLAkx3G/ULyFT5b6Ku2ObzFRU=";
   };
 
   nativeBuildInputs = [
