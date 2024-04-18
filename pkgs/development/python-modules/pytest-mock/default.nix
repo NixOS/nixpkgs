@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-mock";
-  version = "3.12.0";
+  version = "3.14.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MaQPA4wiytMih7tDkyBURR/1WD/wlLym9nXfL4vBpuk=";
+    hash = "sha256-JxklWh7+zq28BW1r8989HFAVUw+0DPNHwPmvrIhBC9A=";
   };
 
   nativeBuildInputs = [
