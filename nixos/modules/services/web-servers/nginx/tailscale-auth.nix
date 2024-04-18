@@ -1,27 +1,28 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib)
+    genAttrs
+    maintainers
+    mkAliasOptionModule
+    mkEnableOption
+    mkIf
+    mkOption
+    types
+    ;
   cfg = config.services.nginx.tailscaleAuth;
+  cfgAuth = config.services.tailscaleAuth;
 in
 {
+  imports = [
+    (mkAliasOptionModule [ "services" "nginx" "tailscaleAuth" "package" ] [ "services" "tailscaleAuth" "package" ])
+    (mkAliasOptionModule [ "services" "nginx" "tailscaleAuth" "user" ] [ "services" "tailscaleAuth" "user" ])
+    (mkAliasOptionModule [ "services" "nginx" "tailscaleAuth" "group" ] [ "services" "tailscaleAuth" "group" ])
+    (mkAliasOptionModule [ "services" "nginx" "tailscaleAuth" "socketPath" ] [ "services" "tailscaleAuth" "socketPath" ])
+  ];
+
   options.services.nginx.tailscaleAuth = {
     enable = mkEnableOption "Enable tailscale.nginx-auth, to authenticate nginx users via tailscale.";
-
-    package = lib.mkPackageOptionMD pkgs "tailscale-nginx-auth" {};
-
-    user = mkOption {
-      type = types.str;
-      default = "tailscale-nginx-auth";
-      description = "User which runs tailscale-nginx-auth";
-    };
-
-    group = mkOption {
-      type = types.str;
-      default = "tailscale-nginx-auth";
-      description = "Group which runs tailscale-nginx-auth";
-    };
 
     expectedTailnet = mkOption {
       default = "";
@@ -30,14 +31,6 @@ in
       description = ''
         If you want to prevent node sharing from allowing users to access services
         across tailnets, declare your expected tailnets domain here.
-      '';
-    };
-
-    socketPath = mkOption {
-      default = "/run/tailscale-nginx-auth/tailscale-nginx-auth.sock";
-      type = types.path;
-      description = ''
-        Path of the socket listening to nginx authorization requests.
       '';
     };
 
@@ -51,67 +44,14 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.tailscale.enable = true;
+    services.tailscaleAuth.enable = true;
     services.nginx.enable = true;
 
-    users.users.${cfg.user} = {
-      isSystemUser = true;
-      inherit (cfg) group;
-    };
-    users.groups.${cfg.group} = { };
-    users.users.${config.services.nginx.user}.extraGroups = [ cfg.group ];
-    systemd.sockets.tailscale-nginx-auth = {
-      description = "Tailscale NGINX Authentication socket";
-      partOf = [ "tailscale-nginx-auth.service" ];
-      wantedBy = [ "sockets.target" ];
-      listenStreams = [ cfg.socketPath ];
-      socketConfig = {
-        SocketMode = "0660";
-        SocketUser = cfg.user;
-        SocketGroup = cfg.group;
-      };
-    };
-
+    users.users.${config.services.nginx.user}.extraGroups = [ cfgAuth.group ];
 
     systemd.services.tailscale-nginx-auth = {
-      description = "Tailscale NGINX Authentication service";
       after = [ "nginx.service" ];
       wants = [ "nginx.service" ];
-      requires = [ "tailscale-nginx-auth.socket" ];
-
-      serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package}";
-        RuntimeDirectory = "tailscale-nginx-auth";
-        User = cfg.user;
-        Group = cfg.group;
-
-        BindPaths = [ "/run/tailscale/tailscaled.sock" ];
-
-        CapabilityBoundingSet = "";
-        DeviceAllow = "";
-        LockPersonality = true;
-        MemoryDenyWriteExecute = true;
-        PrivateDevices = true;
-        PrivateUsers = true;
-        ProtectClock = true;
-        ProtectControlGroups = true;
-        ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        RestrictNamespaces = true;
-        RestrictAddressFamilies = [ "AF_UNIX" ];
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-
-        SystemCallArchitectures = "native";
-        SystemCallErrorNumber = "EPERM";
-        SystemCallFilter = [
-          "@system-service"
-          "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock" "~@obsolete" "~@privileged" "~@setuid"
-        ];
-      };
     };
 
     services.nginx.virtualHosts = genAttrs
@@ -121,7 +61,7 @@ in
           extraConfig = ''
             internal;
 
-            proxy_pass http://unix:${cfg.socketPath};
+            proxy_pass http://unix:${cfgAuth.socketPath};
             proxy_pass_request_body off;
 
             # Upstream uses $http_host here, but we are using gixy to check nginx configurations

@@ -1049,8 +1049,8 @@ let
         mktplcRef = {
           name = "vscode-markdownlint";
           publisher = "DavidAnson";
-          version = "0.54.0";
-          hash = "sha256-BrPFFRspJIz1U08hPbLziCmRUeZv2NhRrTCx6qvhOJw=";
+          version = "0.55.0";
+          hash = "sha256-slfHfRPcuRu+649n6kAr2bv9H6J+DvYVN/ysq1QpPQM=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DavidAnson.vscode-markdownlint/changelog";
@@ -2349,6 +2349,23 @@ let
         };
         meta = {
           license = lib.licenses.bsd3;
+        };
+      };
+
+      k--kato.intellij-idea-keybindings = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "intellij-idea-keybindings";
+          publisher = "k--kato";
+          version = "1.7.0";
+          hash = "sha256-mIcSZANZlj5iO2oLiJBUHn08rXVhu/9SKsRhlu/hcvI=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/k--kato.intellij-idea-keybindings/changelog";
+          description = "Visual Studio Code extension for IntelliJ IDEA keybindings";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=k--kato.intellij-idea-keybindings";
+          homepage = "https://github.com/kasecato/vscode-intellij-idea-keybindings";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.t4sm5n ];
         };
       };
 
