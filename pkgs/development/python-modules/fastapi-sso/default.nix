@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "fastapi-sso";
-  version = "0.14.0";
+  version = "0.14.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "tomasvotava";
     repo = "fastapi-sso";
     rev = "refs/tags/${version}";
-    hash = "sha256-JFIVmpKsTaL7SYwamW/8zMWaBampmCTweiNz7zcgbco=";
+    hash = "sha256-mkaQY+fIc4zw+ESe3ybxAMgMQOOpjCIJDv+dDj76oAg=";
   };
 
   postPatch = ''
