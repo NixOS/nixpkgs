@@ -24,15 +24,38 @@
 , webkitgtk
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+
+  esbuild-18-20 = let version = "0.18.20";
+  in esbuild.override {
+    buildGoModule = args:
+      buildGoModule (args // {
+        inherit version;
+        src = fetchFromGitHub {
+          owner = "evanw";
+          repo = "esbuild";
+          rev = "v${version}";
+          hash = "sha256-mED3h+mY+4H465m02ewFK/BgA1i/PQ+ksUNxBlgpUoI=";
+        };
+        vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+      });
+  };
+
+  wasm-bindgen-cli-2-92 = wasm-bindgen-cli.override {
+    version = "0.2.92";
+    hash = "sha256-1VwY8vQy7soKEgbki4LD+v259751kKxSxmo/gqE6yV0=";
+    cargoHash = "sha256-aACJ+lYNEU8FFBs158G1/JG8sc6Rq080PeKCMnwdpH0=";
+  };
+
+in stdenv.mkDerivation (finalAttrs: {
   pname = "surrealist";
-  version = "1.11.5";
+  version = "1.11.7";
 
   src = fetchFromGitHub {
     owner = "StarlaneStudios";
     repo = "Surrealist";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9hm45bTvOhDHYYFUs7nTdOkHOsDJUiqDv8F6wQqEdFs=";
+    hash = "sha256-1jTvbr7jFo2GOB79ClwtBVVnNQlSEkqY2eqbiZxWG74=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src-tauri";
@@ -47,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     cargoDeps = rustPlatform.fetchCargoTarball {
       inherit (finalAttrs) src;
       sourceRoot = "${finalAttrs.src.name}/src-embed";
-      hash = "sha256-sf1sn3lOKvUu5MXxdMohS1DJ8jP9icZGftJKhrWA/JE=";
+      hash = "sha256-0cAhaeoP8EPcE1230CyznQZZIKRs0lrI8XOXECgb8pg=";
     };
 
     nativeBuildInputs = [
@@ -56,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
       llvmPackages_15.clangNoLibc
       llvmPackages_15.lld
       rustPlatform.cargoSetupHook
-      wasm-bindgen-cli
+      wasm-bindgen-cli-2-92
     ];
 
     postBuild = ''
@@ -103,20 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     pname = "${finalAttrs.pname}-ui";
     dontFixup = true;
 
-    ESBUILD_BINARY_PATH = let version = "0.18.20";
-    in "${lib.getExe (esbuild.override {
-      buildGoModule = args:
-        buildGoModule (args // {
-          inherit version;
-          src = fetchFromGitHub {
-            owner = "evanw";
-            repo = "esbuild";
-            rev = "v${version}";
-            hash = "sha256-mED3h+mY+4H465m02ewFK/BgA1i/PQ+ksUNxBlgpUoI=";
-          };
-          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-        });
-    })}";
+    ESBUILD_BINARY_PATH = "${lib.getExe esbuild-18-20}";
 
     nativeBuildInputs = [ nodePackages.pnpm ];
 
