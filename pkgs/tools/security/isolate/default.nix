@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , asciidoc
 , libcap
+, systemdLibs
+, pkg-config
 , installShellFiles
 }:
 
@@ -20,21 +22,21 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     asciidoc
     installShellFiles
+    pkg-config
   ];
 
   buildInputs = [
     libcap.dev
-  ];
-
-  buildFlags = [
-    "isolate"
-    "isolate.1"
+    systemdLibs.dev
   ];
 
   installPhase = ''
     runHook preInstall
 
     install -Dm755 ./isolate $out/bin/isolate
+    install -Dm755 ./isolate-cg-keeper $out/bin/isolate-cg-keeper
+    install -Dm755 ./isolate-check-environment $out/bin/isolate-check-environment
+    install -Dm644 ./systemd/* -t $out/lib/systemd/system/
     installManPage isolate.1
 
     runHook postInstall
