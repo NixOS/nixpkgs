@@ -124,7 +124,7 @@ stdenv.mkDerivation (rec {
   # libc++.so.1 and libc++abi.so or the external cxxabi. ld-wrapper doesn't
   # support linker scripts so the external cxxabi needs to be symlinked in
   postInstall = lib.optionalString (cxxabi != null) ''
-    lndir ${lib.getDev cxxabi}/include $out/include/c++/v1
+    lndir ${lib.getDev cxxabi}/include $dev/include/c++/v1
     lndir ${lib.getLib cxxabi}/lib $out/lib
   '';
 
