@@ -11,7 +11,7 @@
 , polkit
 , systemdLibs
 , dbusSupport ? stdenv.isLinux
-, systemdSupport ? stdenv.isLinux
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs
 , udevSupport ? dbusSupport
 , libusb1
 , IOKit
