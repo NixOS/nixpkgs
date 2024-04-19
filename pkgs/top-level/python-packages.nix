@@ -6361,6 +6361,8 @@ self: super: with self; {
 
   kitchen = callPackage ../development/python-modules/kitchen { };
 
+  kiui = callPackage ../development/python-modules/kiui { };
+
   kivy = callPackage ../development/python-modules/kivy {
     inherit (pkgs) mesa;
     inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate ApplicationServices AVFoundation;
