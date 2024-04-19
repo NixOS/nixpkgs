@@ -298,7 +298,7 @@ nixos/modules/services/networking/networkmanager.nix @Janik-Haag
 
 # GNOME
 /pkgs/desktops/gnome                              @jtojnar
-/pkgs/desktops/gnome/extensions       @piegamesde @jtojnar
+/pkgs/desktops/gnome/extensions                   @jtojnar
 /pkgs/build-support/make-hardcode-gsettings-patch @jtojnar
 
 # Cinnamon
