@@ -3632,6 +3632,7 @@
     ];
     "openweathermap" = ps: with ps; [
       pyowm
+      setuptools
     ];
     "opnsense" = ps: with ps; [
       pyopnsense
