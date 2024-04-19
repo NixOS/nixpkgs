@@ -55,7 +55,7 @@ let
       longDescription = description;
       homepage = link;
       license = lib.licenses.gpl2Plus; # https://wiki.gnome.org/Projects/GnomeShell/Extensions/Review#Licensing
-      maintainers = with lib.maintainers; [ piegames ];
+      maintainers = with lib.maintainers; [ ];
     };
     passthru = {
       extensionPortalSlug = pname;
