@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 
 # build-system
 , setuptools
@@ -49,6 +50,19 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-8VFtKPaF0PqCjqFB+plFe1GjUno5j7j86+wxKhzByyw=";
   };
+
+  patches = [
+    # A pair of fixes with python 3.11.9, merged upstream;
+    # see https://github.com/dask/dask/issues/11038
+    (fetchpatch {
+      url = "https://github.com/dask/dask/pull/11035.diff";
+      hash = "sha256-aQTzas8gn7pCyp7L6VV3NpSYgqC1Ov7YN7YGnX0Vwmo=";
+    })
+    (fetchpatch {
+      url = "https://github.com/dask/dask/pull/11039.diff";
+      hash = "sha256-gvEEvnyhFlhiFvVaB6jwMy4auUOvECf49FbFJyjqQm4=";
+    })
+  ];
 
   nativeBuildInputs = [
     setuptools
