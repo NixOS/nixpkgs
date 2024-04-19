@@ -1438,11 +1438,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXmu = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, xorgproto, libXt, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libXmu";
-    version = "1.1.4";
+    version = "1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXmu-1.1.4.tar.xz";
-      sha256 = "0i42fng5gizablqziib25ipcwm5830jprl955ibq54rykjmy6391";
+      url = "mirror://xorg/individual/lib/libXmu-1.2.1.tar.xz";
+      sha256 = "1cp82iz7yki63iykvb3alwy4nwy01k2axi5rqpyfafca4j9pgcpw";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
