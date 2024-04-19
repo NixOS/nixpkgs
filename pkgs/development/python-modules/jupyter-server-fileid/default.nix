@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "jupyter-server-fileid";
-  version = "0.9.1";
+  version = "0.9.2";
 
   disables = pythonOlder "3.7";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "jupyter-server";
     repo = "jupyter_server_fileid";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rEjrfioAmqijyObiK7CMLWhLqVpfcmNYhjdjKjkMp6s=";
+    hash = "sha256-ApCDBVjJqpkC5FGEjU/LxwWBunTkL6i5Ki85M6MMLE0=";
   };
 
   nativeBuildInputs = [
