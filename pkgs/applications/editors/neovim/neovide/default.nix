@@ -113,7 +113,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     homepage = "https://github.com/neovide/neovide";
     changelog = "https://github.com/neovide/neovide/releases/tag/${version}";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ck3d multisn8 ];
+    maintainers = with maintainers; [ ck3d ];
     platforms = platforms.all;
   };
 }
