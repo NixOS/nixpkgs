@@ -9,8 +9,9 @@
 , flit-core
 
 # propagatedBuildInputs
-, babel
 , alabaster
+, babel
+, defusedxml
 , docutils
 , imagesize
 , importlib-metadata
@@ -36,7 +37,7 @@
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "7.2.6";
+  version = "7.3.7";
   format = "pyproject";
   disabled = pythonOlder "3.9";
 
@@ -49,9 +50,9 @@ buildPythonPackage rec {
       # filesystems, leading to different hashes on different platforms.
       cd "$out";
       mv tests/roots/test-images/{testimäge,testimæge}.png
-      sed -i 's/testimäge/testimæge/g' tests/{test_build*.py,roots/test-images/index.rst}
+      sed -i 's/testimäge/testimæge/g' tests/{test_builders/test_build_*.py,roots/test-images/index.rst}
     '';
-    hash = "sha256-IjpRGeGpGfzrEvwIKtuu2l1S74w8W+AbqDOGnWwtRck=";
+    hash = "sha256-4NqY1OvJuS4XfVOe3fKcu4bQ0Ch+Htk+lwXK2KpuZ1Y=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +61,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     alabaster
+    defusedxml
     babel
     docutils
     imagesize
@@ -85,8 +87,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     filelock
     html5lib
-    pytestCheckHook
     pytest-xdist
+    pytestCheckHook
   ];
 
   preCheck = ''
