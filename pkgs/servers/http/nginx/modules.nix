@@ -432,7 +432,7 @@ let self = {
     name = "modsecurity";
     src = fetchFromGitHub {
       name = "modsecurity-nginx";
-      owner = "SpiderLabs";
+      owner = "owasp-modsecurity";
       repo = "ModSecurity-nginx";
       rev = "v1.0.3";
       sha256 = "sha256-xp0/eqi5PJlzb9NaUbNnzEqNcxDPyjyNwZOwmlv1+ag=";
@@ -443,7 +443,7 @@ let self = {
 
     meta = with lib; {
       description = "Open source, cross platform web application firewall (WAF)";
-      homepage = "https://github.com/SpiderLabs/ModSecurity";
+      homepage = "https://github.com/owasp-modsecurity/ModSecurity";
       license = with licenses; [ asl20 ];
       maintainers = with maintainers; [ ];
     };
