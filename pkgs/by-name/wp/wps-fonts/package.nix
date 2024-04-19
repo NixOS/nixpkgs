@@ -5,7 +5,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "wps-fonts";
-  version = "2017-08-16";
+  version = "0-unstable-2017-08-16";
 
   src = fetchFromGitHub {
     owner = "dv-anomaly";
