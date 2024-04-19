@@ -16475,6 +16475,8 @@ self: super: with self; {
 
   varint = callPackage ../development/python-modules/varint { };
 
+  varname = callPackage ../development/python-modules/varname { };
+
   vat-moss = callPackage ../development/python-modules/vat-moss { };
 
   vcard = callPackage ../development/python-modules/vcard { };
