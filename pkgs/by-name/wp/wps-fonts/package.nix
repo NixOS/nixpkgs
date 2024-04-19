@@ -16,11 +16,15 @@ stdenvNoCC.mkDerivation rec {
 
 
   installPhase = ''
+    runHook preInstall
+
     FONT_PATH="$out/share/fonts/ttf-wps-fonts"
     mkdir -p $FONT_PATH
     cp *.ttf $FONT_PATH
     cp *.TTF $FONT_PATH
     chmod 644 $FONT_PATH/*
+
+    runHook postInstall
   '';
 
   meta = {
