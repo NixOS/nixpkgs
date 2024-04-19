@@ -1,19 +1,20 @@
-{ lib
-, awesomeversion
-, buildPythonPackage
-, envoy-utils
-, fetchFromGitHub
-, httpx
-, lxml
-, orjson
-, poetry-core
-, pyjwt
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, respx
-, syrupy
-, tenacity
+{
+  lib,
+  awesomeversion,
+  buildPythonPackage,
+  envoy-utils,
+  fetchFromGitHub,
+  httpx,
+  lxml,
+  orjson,
+  poetry-core,
+  pyjwt,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  respx,
+  syrupy,
+  tenacity,
 }:
 
 buildPythonPackage rec {
@@ -35,9 +36,7 @@ buildPythonPackage rec {
       --replace-fail " --cov=pyenphase --cov-report=term-missing:skip-covered" ""
   '';
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     awesomeversion
@@ -61,9 +60,7 @@ buildPythonPackage rec {
     "test_with_7_x_firmware"
   ];
 
-  pythonImportsCheck = [
-    "pyenphase"
-  ];
+  pythonImportsCheck = [ "pyenphase" ];
 
   meta = with lib; {
     description = "Library to control enphase envoy";
