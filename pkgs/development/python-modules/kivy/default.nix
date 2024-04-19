@@ -1,6 +1,6 @@
 { lib, stdenv
 , buildPythonPackage, fetchFromGitHub, fetchpatch
-, pkg-config, cython, docutils
+, pkg-config, cython_0, docutils
 , kivy-garden
 , mesa, mtdev, SDL2, SDL2_image, SDL2_ttf, SDL2_mixer
 , Accelerate, ApplicationServices, AVFoundation, libcxx
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pkg-config
-    cython
+    cython_0
     docutils
   ];
 

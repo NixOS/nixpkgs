@@ -5,7 +5,7 @@
 , fetchPypi
 , pari
 , gmp
-, cython_3
+, cython
 , cysignals
 }:
 
@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cysignals
-    cython_3
+    cython
   ];
 
   checkPhase = ''

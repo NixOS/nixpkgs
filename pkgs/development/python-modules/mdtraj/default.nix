@@ -5,7 +5,7 @@
 , fetchpatch
 , llvmPackages
 , zlib
-, cython
+, cython_0
 , oldest-supported-numpy
 , setuptools
 , wheel
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    cython
+    cython_0
     oldest-supported-numpy
     setuptools
     wheel

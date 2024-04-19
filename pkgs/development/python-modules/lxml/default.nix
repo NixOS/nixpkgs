@@ -4,7 +4,7 @@
 , fetchFromGitHub
 
 # build-system
-, cython_3
+, cython
 , setuptools
 
 # native dependencies
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     libxml2.dev
     libxslt.dev
-    cython_3
+    cython
     setuptools
    ] ++ lib.optionals stdenv.isDarwin [
     xcodebuild

@@ -26,6 +26,7 @@ buildPythonPackage rec {
 
   buildInputs = [ sqlite ];
 
+
   # Project uses custom test setup to exclude some tests by default, so using pytest
   # requires more maintenance
   # https://github.com/rogerbinns/apsw/issues/335
@@ -36,9 +37,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "apsw" ];
 
   meta = with lib; {
+    changelog = "https://github.com/rogerbinns/apsw/blob/${src.rev}/doc/changes.rst";
     description = "A Python wrapper for the SQLite embedded relational database engine";
     homepage = "https://github.com/rogerbinns/apsw";
-    changelog = "https://github.com/rogerbinns/apsw/releases/tag/${version}";
     license = licenses.zlib;
     maintainers = with maintainers; [ gador ];
   };

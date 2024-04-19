@@ -39,11 +39,6 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
-  pytestFlagsArray = [
-    # pytest.PytestRemovedIn8Warning: Passing None has been deprecated.
-    "-W ignore::pytest.PytestRemovedIn8Warning"
-  ];
-
   disabledTests = [
     # Test for Windows32
     "test_print_subprocess"

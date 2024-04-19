@@ -90,6 +90,8 @@ python3.pkgs.buildPythonApplication {
     export HOME=$TMPDIR
   '';
 
+  dontWrapPythonPrograms = true;
+
   passthru = {
     shellPath = "/bin/xonsh";
     python = python3; # To the wrapper

@@ -21,7 +21,7 @@ python3.pkgs.buildPythonPackage rec {
   ];
 
   nativeBuildInputs = with python3.pkgs; [
-    cython
+    cython_0
     numpy
     setuptools
     wheel

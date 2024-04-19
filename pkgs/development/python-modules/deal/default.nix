@@ -60,10 +60,6 @@ buildPythonPackage rec {
     vaa
   ];
 
-  pytestFlagsArray = [
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
-  ];
-
   disabledTests = [
     # Tests need internet access
     "test_smoke_has"

@@ -1,11 +1,10 @@
 { lib
 , buildPythonPackage
-, cython
+, cython_0
 , email-validator
 , fetchFromGitHub
 , pytest-mock
-, pytestCheckHook
-, pytest_7
+, pytest7CheckHook
 , python-dotenv
 , pythonAtLeast
 , pythonOlder
@@ -30,7 +29,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    cython
+    cython_0
   ];
 
   buildInputs = lib.optionals (pythonOlder "3.9") [
@@ -52,7 +51,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-mock
-    (pytestCheckHook.override { pytest = pytest_7; })
+    pytest7CheckHook
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   pytestFlagsArray = [

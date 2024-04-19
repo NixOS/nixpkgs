@@ -4,7 +4,7 @@
 , isPyPy
 
 # build-system
-, cython_3
+, cython
 , setuptools
 , setuptools-scm
 , packaging
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   ] ++ (if isPyPy then [
     cffi
   ] else [
-    cython_3
+    cython
   ]);
 
   buildInputs = [

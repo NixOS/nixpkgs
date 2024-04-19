@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  cython_3,
+  cython,
   expandvars,
   fetchPypi,
   libssh,
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    cython_3
+    cython
     expandvars
     setuptools
     setuptools-scm
