@@ -4,6 +4,7 @@
 , wayland, wayland-protocols
 , libXinerama, libnotify, pango, xorgproto, librsvg
 , testers, dunst
+, withX11 ? true, withWayland ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,10 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ perl pkg-config which systemd makeWrapper ];
 
   buildInputs = [
-    cairo dbus gdk-pixbuf glib libX11 libXScrnSaver
-    libXinerama libnotify pango xorgproto librsvg libXrandr
-    wayland wayland-protocols
-  ];
+    cairo dbus gdk-pixbuf glib
+    libnotify pango librsvg
+  ]
+  ++ lib.optionals withX11 [ libX11 libXScrnSaver libXinerama xorgproto libXrandr]
+  ++ lib.optionals withWayland [ wayland wayland-protocols ];
 
   outputs = [ "out" "man" ];
 
@@ -33,7 +35,9 @@ stdenv.mkDerivation (finalAttrs: {
     "SYSCONFDIR=$(out)/etc"
     "SERVICEDIR_DBUS=$(out)/share/dbus-1/services"
     "SERVICEDIR_SYSTEMD=$(out)/lib/systemd/user"
-  ];
+  ]
+  ++ lib.optional (!withX11) "X11=0"
+  ++ lib.optional (!withWayland) "WAYLAND=0";
 
   postInstall = ''
     wrapProgram $out/bin/dunst \
