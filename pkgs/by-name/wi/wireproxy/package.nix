@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "wireproxy";
-  version = "1.0.8";
+  version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "pufferffish";
     repo = "wireproxy";
     rev = "v${version}";
-    hash = "sha256-2gio+kyjIvaNjb/+M8M5YvbAPbQX+B9A/Qly2kyFZXw=";
+    hash = "sha256-VPIEgvUg0h80Cd611zXQ5mhamfJTQpaDK9kiUMy2G0A=";
   };
 
   ldflags = [
@@ -22,7 +22,7 @@ buildGoModule rec {
     "-X main.version=v${version}"
   ];
 
-  vendorHash = "sha256-u5/ppH+8mcR3AdPnA6vDFL4GwVzbUj679I4zBw80HU0=";
+  vendorHash = "sha256-DNTPzZSxcjkcv7RygTpOIgdYEQ8wBPkuJqfzZGt8ExI=";
 
   passthru.tests.version = testers.testVersion {
     package = wireproxy;
@@ -32,7 +32,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Wireguard client that exposes itself as a socks5 proxy";
-    homepage = "https://github.com/octeep/wireproxy";
+    homepage = "https://github.com/pufferffish/wireproxy";
     license = licenses.isc;
     maintainers = with maintainers; [ _3JlOy-PYCCKUi ];
     mainProgram = "wireproxy";
