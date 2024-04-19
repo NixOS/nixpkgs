@@ -11,7 +11,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wluma";
-  version = "4.3.0";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "maximbaz";
