@@ -4,7 +4,7 @@
 }:
 
 stdenvNoCC.mkDerivation rec {
-  pname = "wps-fonts";
+  pname = "ttf-wps-fonts";
   version = "0-unstable-2017-08-16";
 
   src = fetchFromGitHub {
@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation rec {
 
 
   installPhase = ''
-    FONT_PATH="$out/share/fonts/wps-fonts"
+    FONT_PATH="$out/share/fonts/ttf-wps-fonts"
     echo -e "\nFonts will be installed in: "$FONT_PATH
 
     if [ ! -d "$FONT_PATH" ]; then
