@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "typos";
-  version = "1.20.8";
+  version = "1.20.9";
 
   src = fetchFromGitHub {
     owner = "crate-ci";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ZigvL11M1bxc7cwDExgIdFhXnZE7LoHIu7oS4Ga2hWw=";
+    hash = "sha256-p9vw2BDfCb31nsHvkdW75fYgEV0Nd3xd7hibAvqL+MA=";
   };
 
-  cargoHash = "sha256-ZD56gy4untz5Ey/sopCFjFWsBiwMi+AZCdNch/aJD0c=";
+  cargoHash = "sha256-cLoTMzvJsjFhMZZRp24hacTdPRhWjcM5xc77obp8UGI=";
 
   meta = with lib; {
     description = "Source code spell checker";
