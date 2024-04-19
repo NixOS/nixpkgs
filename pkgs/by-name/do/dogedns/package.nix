@@ -43,5 +43,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Dj-Codeman/doge";
     license = licenses.eupl12;
     mainProgram = "doge";
+    maintainers = with maintainers; [ aktaboot ];
   };
 }
