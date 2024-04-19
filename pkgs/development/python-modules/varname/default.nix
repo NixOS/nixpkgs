@@ -12,7 +12,7 @@ pythonPackages.buildPythonPackage rec {
 
   src = pythonPackages.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ZOkFICn9TUloasZEOp7RgsLBSWhuQqzvaeuqOieBG+s=";
+    hash = "sha256-ZOkFICn9TUloasZEOp7RgsLBSWhuQqzvaeuqOieBG+s=";
   };
 
   propagatedBuildInputs = with pythonPackages; [
