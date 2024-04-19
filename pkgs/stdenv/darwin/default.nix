@@ -83,9 +83,9 @@ let
         nativeTools = false;
         nativeLibc = false;
 
-        buildPackages = lib.optionalAttrs (prevStage ? stdenv) {
-          inherit (prevStage) stdenv;
-        };
+        expand-response-params = lib.optionalString
+          (prevStage.stdenv.hasCC or false && prevStage.stdenv.cc != "/dev/null")
+          prevStage.expand-response-params;
 
         extraPackages = [
           prevStage.llvmPackages.compiler-rt
@@ -124,6 +124,7 @@ let
         inherit (prevStage) coreutils gnugrep;
 
         stdenvNoCC = prevStage.ccWrapperStdenv;
+        runtimeShell = prevStage.ccWrapperStdenv.shell;
       };
 
       bash = prevStage.bash or bootstrapTools;
@@ -253,11 +254,12 @@ in
           nativeTools = false;
           nativeLibc = false;
 
-          buildPackages = { };
+          expand-response-params = "";
           libc = selfDarwin.Libsystem;
 
           inherit lib;
           inherit (self) stdenvNoCC coreutils gnugrep;
+          runtimeShell = self.stdenvNoCC.shell;
 
           bintools = selfDarwin.binutils-unwrapped;
 
@@ -461,6 +463,8 @@ in
 
           bintools = selfDarwin.binutils-unwrapped;
           libc = selfDarwin.Libsystem;
+          # TODO(@sternenseemann): can this be removed?
+          runtimeShell = "${bootstrapTools}/bin/bash";
         };
 
         binutils-unwrapped = superDarwin.binutils-unwrapped.override {
@@ -853,9 +857,7 @@ in
 
         # Rewrap binutils so it uses the rebuilt Libsystem.
         binutils = superDarwin.binutils.override {
-          buildPackages = {
-            inherit (prevStage) stdenv;
-          };
+          inherit (prevStage) expand-response-params;
           libc = selfDarwin.Libsystem;
         } // {
           passthru = { inherit (prevStage.bintools.passthru) isFromBootstrapFiles; };
@@ -1068,11 +1070,7 @@ in
         };
 
         binutils = superDarwin.binutils.override {
-          shell = self.bash + "/bin/bash";
-
-          buildPackages = {
-            inherit (prevStage) stdenv;
-          };
+          inherit (prevStage) expand-response-params;
 
           bintools = selfDarwin.binutils-unwrapped;
           libc = selfDarwin.Libsystem;
@@ -1109,9 +1107,7 @@ in
               nativeTools = false;
               nativeLibc = false;
 
-              buildPackages = {
-                inherit (prevStage) stdenv;
-              };
+              inherit (prevStage) expand-response-params;
 
               extraPackages = [
                 self.llvmPackages.compiler-rt
@@ -1148,9 +1144,7 @@ in
               inherit (self.llvmPackages) libcxx;
 
               inherit lib;
-              inherit (self) stdenvNoCC coreutils gnugrep;
-
-              shell = self.bash + "/bin/bash";
+              inherit (self) stdenvNoCC coreutils gnugrep runtimeShell;
             };
           });
           libraries = super.llvmPackages.libraries.extend (_: _:{
