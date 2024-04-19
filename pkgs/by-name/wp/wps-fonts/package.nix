@@ -37,7 +37,9 @@ stdenvNoCC.mkDerivation rec {
   meta = {
     homepage = "https://github.com/dv-anomaly/wps-fonts";
     description = "Fonts required by WPS Office";
+    license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ cdunster ];
+    platforms = lib.platforms.all;
   };
 }
 
