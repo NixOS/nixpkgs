@@ -1,15 +1,16 @@
-{ lib
-, darwin
-, fetchurl
-, fetchpatch
-, openssl
-, stdenv
-, vlc
+{
+  lib,
+  darwin,
+  fetchpatch,
+  fetchurl,
+  openssl,
+  stdenv,
+  vlc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "live555";
-  version = "2024.03.08";
+  version = "2024.04.14";
 
   src = fetchurl {
     urls = [
@@ -18,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
       "https://download.videolan.org/contrib/live555/live.${finalAttrs.version}.tar.gz"
       "mirror://sourceforge/slackbuildsdirectlinks/live.${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-wWUC4EbxxfK+OxXiyNbNMGObVMZOqb+8jTG078pnDeU=";
+    hash = "sha256-mR5rKGKtTwMq3p+xAAGdo0DNNnIe4KHladLPlnhVhNY=";
   };
 
   patches = [
@@ -60,11 +61,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   configurePhase = let
-    platform = if stdenv.isLinux
-               then "linux"
-               else if stdenv.isDarwin
-               then "macosx-catalina"
-               else throw "Unsupported platform: ${stdenv.hostPlatform.system}";
+    platform =
+      if stdenv.isLinux then
+        "linux"
+      else if stdenv.isDarwin then
+        "macosx-catalina"
+      else
+        throw "Unsupported platform: ${stdenv.hostPlatform.system}";
   in ''
     runHook preConfigure
 
