@@ -5681,6 +5681,12 @@
     githubId = 1148549;
     name = "Eelco Dolstra";
   };
+  eflanagan0 = {
+    email = "lull@sent.com";
+    github = "eflanagan0";
+    githubId = 163922304;
+    name = "Eli Flanagan";
+  };
   ehegnes = {
     email = "eric.hegnes@gmail.com";
     github = "ehegnes";
