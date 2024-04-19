@@ -5,6 +5,7 @@
 , pysocks
 , pythonOlder
 , requests
+, setuptools
 , pytestCheckHook
 , pythonRelaxDepsHook
 }:
@@ -35,6 +36,7 @@ buildPythonPackage rec {
     geojson
     pysocks
     requests
+    setuptools
   ];
 
   nativeCheckInputs = [
