@@ -200,7 +200,6 @@
 , "purescript-psa"
 , "purs-tidy"
 , "purty"
-, "pyright"
 , "remod-cli"
 , "reveal.js"
 , "rimraf"

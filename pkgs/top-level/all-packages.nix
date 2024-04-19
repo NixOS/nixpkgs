@@ -656,6 +656,8 @@ with pkgs;
 
   evhz = callPackage ../tools/misc/evhz { };
 
+  expand-response-params = callPackage ../build-support/expand-response-params { };
+
   expressvpn = callPackage ../applications/networking/expressvpn { };
 
   faq = callPackage ../development/tools/faq { };
@@ -33445,8 +33447,6 @@ with pkgs;
   psi-notify = callPackage ../applications/misc/psi-notify { };
 
   ptex = callPackage ../development/libraries/ptex { };
-
-  pyright = nodePackages.pyright;
 
   qbec = callPackage ../applications/networking/cluster/qbec { };
 

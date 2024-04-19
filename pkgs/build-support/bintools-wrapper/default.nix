@@ -8,7 +8,8 @@
 { name ? ""
 , lib
 , stdenvNoCC
-, bintools ? null, libc ? null, coreutils ? null, shell ? stdenvNoCC.shell, gnugrep ? null
+, runtimeShell
+, bintools ? null, libc ? null, coreutils ? null, gnugrep ? null
 , netbsd ? null, netbsdCross ? null
 , sharedLibraryLoader ?
   if libc == null then
@@ -28,7 +29,7 @@
 , isGNU ? bintools.isGNU or false
 , isLLVM ? bintools.isLLVM or false
 , isCCTools ? bintools.isCCTools or false
-, buildPackages ? {}
+, expand-response-params
 , targetPackages ? {}
 , useMacosReexportHack ? false
 , wrapGas ? false
@@ -130,10 +131,6 @@ let
     else if targetPlatform.isFreeBSD                  then "/libexec/ld-elf.so.1"
     else if hasSuffix "pc-gnu" targetPlatform.config then "ld.so.1"
     else "";
-
-  expand-response-params =
-    optionalString (buildPackages ? stdenv && buildPackages.stdenv.hasCC && buildPackages.stdenv.cc != "/dev/null")
-    (import ../expand-response-params { inherit (buildPackages) stdenv; });
 
 in
 
@@ -418,8 +415,10 @@ stdenvNoCC.mkDerivation {
 
   env = {
     # for substitution in utils.bash
+    # TODO(@sternenseemann): invent something cleaner than passing in "" in case of absence
     expandResponseParams = "${expand-response-params}/bin/expand-response-params";
-    shell = getBin shell + shell.shellPath or "";
+    # TODO(@sternenseemann): rename env var via stdenv rebuild
+    shell = (getBin runtimeShell + runtimeShell.shellPath or "");
     gnugrep_bin = optionalString (!nativeTools) gnugrep;
     wrapperName = "BINTOOLS_WRAPPER";
     inherit dynamicLinker targetPrefix suffixSalt coreutils_bin;

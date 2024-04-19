@@ -15,9 +15,9 @@
 {
   cudaVersion,
   flags,
-  hostPlatform,
   lib,
   mkVersionedPackageName,
+  stdenv,
 }:
 let
   inherit (lib)
@@ -28,6 +28,8 @@ let
     strings
     trivial
     ;
+
+  inherit (stdenv) hostPlatform;
 
   redistName = "cutensor";
   pname = "libcutensor";
