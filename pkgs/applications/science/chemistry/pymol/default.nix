@@ -38,12 +38,12 @@ let
 in
 python3Packages.buildPythonApplication rec {
   inherit pname;
-  version = "2.5.0";
+  version = "3.0.0";
   src = fetchFromGitHub {
     owner = "schrodinger";
     repo = "pymol-open-source";
     rev = "v${version}";
-    sha256 = "sha256-JdsgcVF1w1xFPZxVcyS+GcWg4a1Bd4SvxFOuSdlz9SM=";
+    hash = "sha256-GhTHxacjGN7XklZ6gileBMRZAGq4Pp4JknNL+qGqrVE=";
   };
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
