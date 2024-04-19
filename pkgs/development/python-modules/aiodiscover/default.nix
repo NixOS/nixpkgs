@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "aiodiscover";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "aiodiscover";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7oeyuwirQ2mm0UQEOwTkAz126UnxkoMjg+DDu5DWY3E=";
+    hash = "sha256-+DcROb6jR0veD3oSKgyJHUi1VtCT54yBKvVqir5y+R4=";
   };
 
   nativeBuildInputs = [
