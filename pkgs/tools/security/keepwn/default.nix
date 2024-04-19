@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "keepwn";
-  version = "0.3";
+  version = "0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Orange-Cyberdefense";
     repo = "KeePwn";
     rev = "refs/tags/${version}";
-    hash = "sha256-haKWuoTtyC9vIise+gznruHEwMIDz1W6euihLLKnSdc=";
+    hash = "sha256-AkqBC65XrMt4V5KgzLepnQoqpdvbrtWLY3DmVuy8Zck=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
