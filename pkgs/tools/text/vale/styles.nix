@@ -25,6 +25,7 @@ let
 
       meta = {
         platforms = lib.platforms.all;
+        maintainers = with lib.maintainers; [ katexochen ];
       } // (args.meta or { });
     } // removeAttrs args [ "meta" "name" ]);
 in
