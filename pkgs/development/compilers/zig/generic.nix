@@ -40,7 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Zig's build looks at /usr/bin/env to find dynamic linking info. This doesn't
   # work in Nix's sandbox. Use env from our coreutils instead.
-  postPatch = ''
+  postPatch = if lib.versionAtLeast args.version "0.12" then ''
+    substituteInPlace lib/std/zig/system.zig \
+      --replace "/usr/bin/env" "${coreutils}/bin/env"
+  '' else ''
     substituteInPlace lib/std/zig/system/NativeTargetInfo.zig \
       --replace "/usr/bin/env" "${coreutils}/bin/env"
   '';

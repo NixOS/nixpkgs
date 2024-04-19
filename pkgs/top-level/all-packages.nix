@@ -25239,6 +25239,10 @@ with pkgs;
   zig_0_11 = darwin.apple_sdk_11_0.callPackage ../development/compilers/zig/0.11.nix {
     llvmPackages = llvmPackages_16;
   };
+  # requires a newer Apple SDK
+  zig_0_12 = darwin.apple_sdk_11_0.callPackage ../development/compilers/zig/0.12.nix {
+    llvmPackages = llvmPackages_17;
+  };
   zig = zig_0_11;
 
   zig-shell-completions = callPackage ../development/compilers/zig/shell-completions.nix { };
