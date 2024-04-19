@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "fastly-exporter";
-  version = "7.6.1";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "fastly";
     repo = "fastly-exporter";
     rev = "v${version}";
-    hash = "sha256-JUbjWAJ70iq0RCr6U2thbtZ3nmCic9wGtSf2ArRy4uA=";
+    hash = "sha256-3XIw9Sq7aQ6bs7kY0fYP3UGfJeq80gB2vXX69EEOtl4=";
   };
 
-  vendorHash = "sha256-lEaMhJL/sKNOXx0W+QHMG4QUUE6Pc4AqulhgyCMQQNY=";
+  vendorHash = "sha256-kiP9nL/fVnekIf1ABAbSNebszcrj/xkFw9NcuBr/wKQ=";
 
   passthru.tests = {
     inherit (nixosTests.prometheus-exporters) fastly;
