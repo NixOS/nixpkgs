@@ -548,6 +548,7 @@ let
     bayesWatch = [ pkgs.boost.dev ];
     clustermq = [  pkgs.pkg-config ];
     coga = [ pkgs.gsl.dev ];
+    mBvs = [ pkgs.gsl.dev ];
     deepSNV = with pkgs; [ xz.dev bzip2.dev zlib.dev ];
     epialleleR = with pkgs; [ xz.dev bzip2.dev zlib.dev ];
     gdalraster = with pkgs; [ gdal proj.dev sqlite.dev ];
