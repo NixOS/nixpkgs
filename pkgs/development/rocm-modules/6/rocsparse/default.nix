@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocsparse";
-  version = "6.0.2";
+  version = "6.1.0";
 
   outputs = [
     "out"
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocSPARSE";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-nTYnEHkTtq0jBeMj4HXpqkJu8LQc+Z6mpjhMP7tJAHQ=";
+    hash = "sha256-2hN/79dD40ogLnxOtCAnW1SUV3i4a7Z06w+/kN1mFkk=";
   };
 
   nativeBuildInputs = [
