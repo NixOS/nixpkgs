@@ -4,13 +4,13 @@
 
 callPackage ./generic.nix rec {
   pname = "rkpd2";
-  version = "2.0.5";
+  version = "2.0.6";
 
   src = fetchFromGitHub {
     owner = "Zrp200";
     repo = "rkpd2";
     rev = "v${version}";
-    hash = "sha256-VVqwgwDuIyRd5MU1/64Xz+8TbIOrXcHufs0XqD/Q4ls=";
+    hash = "sha256-jwH0nEsv3agUCZt5Mhuv1JSeELOKfrsj3cnmAJsV9sM=";
   };
 
   depsHash = "sha256-vihoR0bPh7590sRxeYJ1uuynNRxtRBuiFUrdmsRNUJc=";
