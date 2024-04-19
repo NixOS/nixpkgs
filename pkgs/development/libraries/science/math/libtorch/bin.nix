@@ -17,11 +17,11 @@ let
   # this derivation. However, we should ensure on version bumps
   # that the CUDA toolkit for `passthru.tests` is still
   # up-to-date.
-  version = "2.0.0";
+  version = "2.2.2";
   device = if cudaSupport then "cuda" else "cpu";
   srcs = import ./binary-hashes.nix version;
   unavailable = throw "libtorch is not available for this platform";
-  libcxx-for-libtorch = if stdenv.hostPlatform.system == "x86_64-darwin" then libcxx else stdenv.cc.cc.lib;
+  libcxx-for-libtorch = if stdenv.isDarwin then libcxx else stdenv.cc.cc.lib;
 in stdenv.mkDerivation {
   inherit version;
   pname = "libtorch";
@@ -99,6 +99,10 @@ in stdenv.mkDerivation {
     # https://www.intel.com/content/www/us/en/developer/articles/license/onemkl-license-faq.html
     license = licenses.bsd3;
     maintainers = with maintainers; [ junjihashimoto ];
-    platforms = platforms.unix;
+    platforms = [
+      "aarch64-darwin"
+      "x86_64-darwin"
+      "x86_64-linux"
+    ];
   };
 }
