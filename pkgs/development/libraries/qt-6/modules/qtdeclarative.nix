@@ -11,7 +11,7 @@
 
 qtModule {
   pname = "qtdeclarative";
-  strictDeps = true;
+  strictDeps = !stdenv.isDarwin; # fails to detect python3 otherwise
   propagatedBuildInputs = [ qtbase qtlanguageserver qtshadertools openssl ];
   nativeBuildInputs = [ python3 ];
   patches = [
