@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -17,16 +18,12 @@ buildPythonPackage rec {
     hash = "sha256-QRysmtKo5KXXAVcyQx2WwuwySUP8vAN/gqXWmgoOPmo=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "MailChecker"
-  ];
+  pythonImportsCheck = [ "MailChecker" ];
 
   meta = with lib; {
     description = "Module for temporary (disposable/throwaway) email detection";
