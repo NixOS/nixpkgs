@@ -253,22 +253,35 @@ in {
     with subtest("ayatana indicators work"):
         open_starter()
         machine.send_chars("Indicators\n")
-        machine.wait_for_text(r"(Indicators|Client|List|datetime|session)")
+        machine.wait_for_text(r"(Indicators|Client|List|network|datetime|session)")
         machine.screenshot("indicators_open")
 
         # Element tab order within the indicator menus is not fully deterministic
         # Only check that the indicators are listed & their items load
 
+        with subtest("lomiri indicator network works"):
+            # Select indicator-network
+            machine.send_key("tab")
+            # Don't go further down, first entry
+            machine.send_key("ret")
+            machine.wait_for_text(r"(Flight|Wi-Fi)")
+            machine.screenshot("indicators_network")
+
+        machine.send_key("shift-tab")
+        machine.send_key("ret")
+        machine.wait_for_text(r"(Indicators|Client|List|network|datetime|session)")
+
         with subtest("ayatana indicator datetime works"):
             # Select ayatana-indicator-datetime
             machine.send_key("tab")
+            machine.send_key("down")
             machine.send_key("ret")
             machine.wait_for_text("Time and Date Settings")
             machine.screenshot("indicators_timedate")
 
         machine.send_key("shift-tab")
         machine.send_key("ret")
-        machine.wait_for_text(r"(Indicators|Client|List|datetime|session)")
+        machine.wait_for_text(r"(Indicators|Client|List|network|datetime|session)")
 
         with subtest("ayatana indicator session works"):
             # Select ayatana-indicator-session

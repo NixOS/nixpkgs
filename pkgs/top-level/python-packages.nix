@@ -1932,6 +1932,8 @@ self: super: with self; {
     };
   };
 
+  catkin-pkg = callPackage ../development/python-modules/catkin-pkg { };
+
   catppuccin = callPackage ../development/python-modules/catppuccin { };
 
   cattrs = callPackage ../development/python-modules/cattrs { };
@@ -2483,6 +2485,8 @@ self: super: with self; {
   cpyparsing = callPackage ../development/python-modules/cpyparsing { };
 
   craft-application-1 = callPackage ../development/python-modules/craft-application-1 { };
+
+  craft-application = callPackage ../development/python-modules/craft-application { };
 
   craft-archives = callPackage ../development/python-modules/craft-archives { };
 
@@ -12185,6 +12189,8 @@ self: super: with self; {
   python3-gnutls = callPackage ../development/python-modules/python3-gnutls { };
 
   python3-openid = callPackage ../development/python-modules/python3-openid { };
+
+  python-apt = callPackage ../development/python-modules/python-apt { };
 
   python-arango = callPackage ../development/python-modules/python-arango { };
 

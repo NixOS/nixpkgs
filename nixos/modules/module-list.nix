@@ -1166,6 +1166,7 @@
   ./services/networking/syncthing-relay.nix
   ./services/networking/syncthing.nix
   ./services/networking/tailscale.nix
+  ./services/networking/tailscale-auth.nix
   ./services/networking/tayga.nix
   ./services/networking/tcpcrypt.nix
   ./services/networking/teamspeak3.nix

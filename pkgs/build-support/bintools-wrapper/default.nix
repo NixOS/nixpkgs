@@ -8,7 +8,8 @@
 { name ? ""
 , lib
 , stdenvNoCC
-, bintools ? null, libc ? null, coreutils ? null, shell ? stdenvNoCC.shell, gnugrep ? null
+, runtimeShell
+, bintools ? null, libc ? null, coreutils ? null, gnugrep ? null
 , netbsd ? null, netbsdCross ? null
 , sharedLibraryLoader ?
   if libc == null then
@@ -28,7 +29,7 @@
 , isGNU ? bintools.isGNU or false
 , isLLVM ? bintools.isLLVM or false
 , isCCTools ? bintools.isCCTools or false
-, buildPackages ? {}
+, expand-response-params
 , targetPackages ? {}
 , useMacosReexportHack ? false
 , wrapGas ? false
@@ -83,8 +84,7 @@ let
     replaceStrings
     ;
 
-  stdenv = stdenvNoCC;
-  inherit (stdenv) hostPlatform targetPlatform;
+  inherit (stdenvNoCC) hostPlatform targetPlatform;
 
   # Prefix for binaries. Customarily ends with a dash separator.
   #
@@ -132,13 +132,9 @@ let
     else if hasSuffix "pc-gnu" targetPlatform.config then "ld.so.1"
     else "";
 
-  expand-response-params =
-    optionalString (buildPackages ? stdenv && buildPackages.stdenv.hasCC && buildPackages.stdenv.cc != "/dev/null")
-    (import ../expand-response-params { inherit (buildPackages) stdenv; });
-
 in
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = targetPrefix
     + (if name != "" then name else "${bintoolsName}-wrapper");
   version = optionalString (bintools != null) bintoolsVersion;
@@ -346,7 +342,7 @@ stdenv.mkDerivation {
       done
     ''
 
-    + optionalString stdenv.targetPlatform.isDarwin ''
+    + optionalString targetPlatform.isDarwin ''
       echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/libc-ldflags
     ''
 
@@ -363,7 +359,7 @@ stdenv.mkDerivation {
     ###
     ### Remove certain timestamps from final binaries
     ###
-    + optionalString (stdenv.targetPlatform.isDarwin && !(bintools.isGNU or false)) ''
+    + optionalString (targetPlatform.isDarwin && !(bintools.isGNU or false)) ''
       echo "export ZERO_AR_DATE=1" >> $out/nix-support/setup-hook
     ''
 
@@ -380,9 +376,9 @@ stdenv.mkDerivation {
     ###
     ### Ensure consistent LC_VERSION_MIN_MACOSX
     ###
-    + optionalString stdenv.targetPlatform.isDarwin (
+    + optionalString targetPlatform.isDarwin (
       let
-        inherit (stdenv.targetPlatform)
+        inherit (targetPlatform)
           darwinPlatform darwinSdkVersion
           darwinMinVersion darwinMinVersionVariable;
       in ''
@@ -419,8 +415,10 @@ stdenv.mkDerivation {
 
   env = {
     # for substitution in utils.bash
+    # TODO(@sternenseemann): invent something cleaner than passing in "" in case of absence
     expandResponseParams = "${expand-response-params}/bin/expand-response-params";
-    shell = getBin shell + shell.shellPath or "";
+    # TODO(@sternenseemann): rename env var via stdenv rebuild
+    shell = (getBin runtimeShell + runtimeShell.shellPath or "");
     gnugrep_bin = optionalString (!nativeTools) gnugrep;
     wrapperName = "BINTOOLS_WRAPPER";
     inherit dynamicLinker targetPrefix suffixSalt coreutils_bin;
