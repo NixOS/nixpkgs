@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , kernel
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +30,10 @@ stdenv.mkDerivation rec {
   buildFlags = [ "modules" ];
   installFlags = [ "INSTALL_MOD_PATH=${placeholder "out"}" ];
   installTargets = [ "modules_install" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch=main" ];
+  };
 
   meta = with lib; {
     description = "Kernel module for the Nuvoton NCT6687-R chipset found on many B550/B650 motherboards from ASUS and MSI";
