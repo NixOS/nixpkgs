@@ -266,7 +266,7 @@ self = stdenv.mkDerivation {
       environments.
     '';
     homepage = "https://nixos.org/";
-    license = licenses.lgpl2Plus;
+    license = licenses.lgpl21Plus;
     inherit maintainers;
     platforms = platforms.unix;
     outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
