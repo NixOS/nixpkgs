@@ -425,8 +425,8 @@ stdenv.mkDerivation ({
     "--disable-large-address-space"
   ] ++ lib.optionals enableDwarf [
     "--enable-dwarf-unwind"
-    "--with-libdw-includes=${lib.getDev elfutils}/include"
-    "--with-libdw-libraries=${lib.getLib elfutils}/lib"
+    "--with-libdw-includes=${lib.getDev targetPackages.elfutils}/include"
+    "--with-libdw-libraries=${lib.getLib targetPackages.elfutils}/lib"
   ] ++ lib.optionals targetPlatform.isDarwin [
     # Darwin uses llvm-ar. GHC will try to use `-L` with `ar` when it is `llvm-ar`
     # but it doesn’t currently work because Cabal never uses `-L` on Darwin. See:
