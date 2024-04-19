@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl, perl, zlib, apr, aprutil, pcre2, libiconv, lynx, which, libxcrypt
+, fetchpatch
 , nixosTests
 , proxySupport ? true
 , sslSupport ? true, openssl
@@ -34,6 +35,17 @@ stdenv.mkDerivation rec {
     lib.optional libxml2Support libxml2 ++
     lib.optional http2Support nghttp2 ++
     lib.optional stdenv.isDarwin libiconv;
+
+
+  patches = lib.optionals (modTlsSupport && lib.versionOlder version "2.4.60") [
+    (fetchpatch {
+      # https://bz.apache.org/bugzilla/show_bug.cgi?id=67860
+      name = "support-rustls-ffi-0.13.0.patch";
+      url = "https://github.com/apache/httpd/commit/c8a9d21e0cce028ca1ad2a169ec99eb0c7a38090.patch";
+      hash = "sha256-KM7XYiClODN8nW6PQ9OLm4BTbAaJqCYpiseipUo/oqg=";
+      excludes = [ "test/travis_run_linux.sh" ".gitignore" ];
+    })
+  ];
 
   postPatch = ''
     sed -i config.layout -e "s|installbuilddir:.*|installbuilddir: $dev/share/build|"

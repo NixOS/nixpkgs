@@ -24151,10 +24151,6 @@ with pkgs;
 
   rustc-demangle = callPackage ../development/libraries/rustc-demangle { };
 
-  rustls-ffi = callPackage ../development/libraries/rustls-ffi {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   s2geometry = callPackage ../development/libraries/s2geometry { };
 
   safefile = callPackage ../development/libraries/safefile { };
