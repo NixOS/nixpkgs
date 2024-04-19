@@ -962,6 +962,7 @@ let
     "PhIPData" # tries to download something from a DB
     "pbdMPI"   # tries to run MPI processes
     "CTdata" # tries to connect to ExperimentHub
+    "rfaRm" # tries to connect to Ebi
     "data_table" # fails to rename shared library before check
     "coMethDMR" # tries to connect to ExperimentHub
     "multiMiR" # tries to connect to DB
