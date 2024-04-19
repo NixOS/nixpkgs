@@ -3326,6 +3326,12 @@
       fingerprint = "1127 A432 6524 BF02 737B  544E 0704 CD9E 550A 6BCD";
     }];
   };
+  ccatterina = {
+    email = "ccatterina@proton.me";
+    github = "ccatterina";
+    githubId = 9085116;
+    name = "Claudio Catterina";
+  };
   ccellado = {
     email = "annplague@gmail.com";
     github = "ccellado";
