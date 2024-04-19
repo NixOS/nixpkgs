@@ -39,18 +39,22 @@ let
 in
 buildGoModule rec {
   pname = "forgejo";
-  version = "1.20.6-1-unstable-2024-02-22";
+  version = "1.20.6-1-unstable-2024-04-18";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "forgejo";
     repo = "forgejo";
-    # latest commit from 1.20.x branch (2024-02-22) with 1.21.6-0's XSS fix backported.
+    # latest commit from 1.20.x branch (2024-04-18) with 1.21.6-0's and
+    # 1.21.11-0's security fixes backported.
     # coordinated with upstream in #forgejo-development:matrix.org :)
+    # https://codeberg.org/forgejo/forgejo/src/branch/v1.20/forgejo
     # https://codeberg.org/forgejo/forgejo/pulls/2443
     # https://codeberg.org/forgejo/forgejo/commit/2fe5f6f73283c2f6935ded62440a1f15ded12dcd
-    rev = "2fe5f6f73283c2f6935ded62440a1f15ded12dcd";
-    hash = "sha256-U80HfHDSOKN+MGOX9Tu85lgN+8KeEzjSjpZXVFGmLKQ=";
+    # https://codeberg.org/forgejo/forgejo/pulls/3319
+    # https://codeberg.org/forgejo/forgejo/commit/0c4a307ee2aeaaf464ed74521b1fdb12114fde60
+    rev = "0c4a307ee2aeaaf464ed74521b1fdb12114fde60";
+    hash = "sha256-S2aRSXJybrjgpN16/1vbV1CUoMc1IvUGBO2DXB1CTYE=";
     # Forgejo has multiple different version strings that need to be provided
     # via ldflags.  main.ForgejoVersion for example is a combination of a
     # hardcoded gitea compatibility version string (in the Makefile) and
@@ -69,7 +73,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-HDKirjQI4KvHvzDCqKe9nHvQUv3VNRl5tkr0rO7gcAY=";
+  vendorHash = "sha256-ao2CY6LmiDQIgv/i8okWt+xGa+clHzbCEHYFUrlwox0=";
 
   subPackages = [ "." ];
 
