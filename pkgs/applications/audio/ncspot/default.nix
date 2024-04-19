@@ -12,7 +12,7 @@
 , withPulseAudio ? true, libpulseaudio
 , withPortAudio ? false, portaudio
 , withMPRIS ? true, withNotify ? true, dbus
-, withCross ? true
+, withCrossterm ? true
 , nix-update-script
 , testers
 , ncspot
@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optional withPulseAudio "pulseaudio_backend"
     ++ lib.optional withPortAudio "portaudio_backend"
     ++ lib.optional withMPRIS "mpris"
-    ++ lib.optional withCross "crossterm_backend"
+    ++ lib.optional withCrossterm "crossterm_backend"
     ++ lib.optional withNotify "notify";
 
   postInstall = ''
