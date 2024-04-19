@@ -6,6 +6,9 @@ let
   # a stdenv out of something like this. With some care we can probably get rid of this, but for
   # now it's staying here.
   versions = {
+    "macos-14.4" = {
+      AvailabilityVersions = "140.1";
+    };
     "macos-14.3" = {
       system_cmds   = "970.0.4";
     };
@@ -246,6 +249,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
 
     inherit (adv_cmds-boot) ps locale;
     architecture    = applePackage "architecture"      "osx-10.11.6"     "sha256-cUKeMx6mOAxBSRHIdfzsrR65Qv86m7+20XvpKqVfwVI=" {};
+    AvailabilityVersions = applePackage "AvailabilityVersions" "macos-14.4" "sha256-O9/EOsbK5ZXxh6iDSTwGWWrY5GX/viUwdfG3tdvZwcQ=" {};
     bsdmake         = applePackage "bsdmake"           "dev-tools-3.2.6" "sha256-CW8zP5QZMhWTGp+rhrm8oHE/vSLsRlv1VRAGe1OUDmI=" {};
     CarbonHeaders   = applePackage "CarbonHeaders"     "osx-10.6.2"      "sha256-UNaHvxzYzEBnYYuoMLqWUVprZa6Wqn/3XleoSCco050=" {};
     CommonCrypto    = applePackage "CommonCrypto"      "osx-10.12.6"     "sha256-FLgODBrfv+XsGaAjddncYAm/BIJJYw6LcwX/z7ncKFM=" {};
