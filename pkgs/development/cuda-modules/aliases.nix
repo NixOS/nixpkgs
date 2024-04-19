@@ -6,7 +6,6 @@ let
     final.lib.warn "cudaPackages.${oldName} is deprecated, use ${newName} instead" newPkg;
 in
 {
-
   # Deprecated: an alias kept for compatibility. Consider removing after 24.05
   autoFixElfFiles = mkRenamed "autoFixElfFiles" "pkgs.autoFixElfFiles" final.pkgs.autoFixElfFiles; # Added 2024-03-30
   autoAddDriverRunpath =
@@ -18,7 +17,5 @@ in
   markForCudatoolkitRootHook =
     mkRenamed "markForCudatoolkitRootHook" "cudaPackages.markForCudatoolkitRoot"
       final.markForCudatoolkitRoot; # Added 2024-04-19
-  setupCudaHook =
-    mkRenamed "setupCudaHook" "cudaPackages.setupCuda"
-      final.setupCuda; # Added 2024-04-19
+  setupCudaHook = mkRenamed "setupCudaHook" "cudaPackages.setupCuda" final.setupCuda; # Added 2024-04-19
 }
