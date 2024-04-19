@@ -250,6 +250,6 @@ buildPythonApplication rec {
     ];
     platforms = platforms.darwin ++ platforms.linux;
     mainProgram = "kitty";
-    maintainers = with maintainers; [ tex rvolosatovs Luflosi adamcstephens kashw2 ];
+    maintainers = with maintainers; [ tex rvolosatovs Luflosi kashw2 ];
   };
 }
