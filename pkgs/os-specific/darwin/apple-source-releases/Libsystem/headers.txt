@@ -1,7 +1,9 @@
 AssertMacros.h
 Availability.h
 AvailabilityInternal.h
+AvailabilityInternalLegacy.h
 AvailabilityMacros.h
+AvailabilityVersions.h
 Block.h
 Block_private.h
 CommonCrypto/CommonBaseXX.h
