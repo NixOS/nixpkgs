@@ -48,12 +48,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Driver to support FANATEC input devices, in particular ForceFeedback of various wheel-bases";
     homepage = "https://github.com/gotzl/hid-fanatecff";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ theaninova ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ theaninova ];
+    platforms = lib.platforms.linux;
     broken = stdenv.isAarch64;
   };
 }

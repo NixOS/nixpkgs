@@ -67,6 +67,7 @@
   ./hardware/glasgow.nix
   ./hardware/gpgsmartcards.nix
   ./hardware/hackrf.nix
+  ./hardware/hid-fanatecff.nix
   ./hardware/i2c.nix
   ./hardware/infiniband.nix
   ./hardware/keyboard/qmk.nix
