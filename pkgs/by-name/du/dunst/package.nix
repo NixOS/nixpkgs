@@ -1,10 +1,31 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper
-, pkg-config, which, perl, jq, libXrandr, coreutils
-, cairo, dbus, systemd, gdk-pixbuf, glib, libX11, libXScrnSaver
-, wayland, wayland-protocols
-, libXinerama, libnotify, pango, xorgproto, librsvg
-, testers, dunst
-, withX11 ? true, withWayland ? true
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, pkg-config
+, which
+, perl
+, jq
+, libXrandr
+, coreutils
+, cairo
+, dbus
+, systemd
+, gdk-pixbuf
+, glib
+, libX11
+, libXScrnSaver
+, wayland
+, wayland-protocols
+, libXinerama
+, libnotify
+, pango
+, xorgproto
+, librsvg
+, testers
+, dunst
+, withX11 ? true
+, withWayland ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,14 +39,32 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-eiFvvavXGNcHZnEGwlTLxRqFNdkvEZMwNIkVyDn1V6o=";
   };
 
-  nativeBuildInputs = [ perl pkg-config which systemd makeWrapper ];
+  nativeBuildInputs = [
+    perl
+    pkg-config
+    which
+    systemd
+    makeWrapper
+  ];
 
   buildInputs = [
-    cairo dbus gdk-pixbuf glib
-    libnotify pango librsvg
-  ]
-  ++ lib.optionals withX11 [ libX11 libXScrnSaver libXinerama xorgproto libXrandr]
-  ++ lib.optionals withWayland [ wayland wayland-protocols ];
+    cairo
+    dbus
+    gdk-pixbuf
+    glib
+    libnotify
+    pango
+    librsvg
+  ] ++ lib.optionals withX11 [
+    libX11
+    libXScrnSaver
+    libXinerama
+    xorgproto
+    libXrandr
+  ] ++ lib.optionals withWayland [
+    wayland
+    wayland-protocols
+  ];
 
   outputs = [ "out" "man" ];
 
