@@ -2,7 +2,7 @@
 let
   versions =
     if stdenv.isLinux then {
-      stable = "0.0.49";
+      stable = "0.0.50";
       ptb = "0.0.78";
       canary = "0.0.346";
       development = "0.0.17";
@@ -17,7 +17,7 @@ let
     x86_64-linux = {
       stable = fetchurl {
         url = "https://dl.discordapp.net/apps/linux/${version}/discord-${version}.tar.gz";
-        hash = "sha256-rVSYAkTZTlurnbUeYJFCgsPcsCqjJ1bJneQQiyhmvwQ=";
+        hash = "sha256-6VXdVLk7Z8NGQMiSdgBRd8NIueUktkId6BXYKNABb+4=";
       };
       ptb = fetchurl {
         url = "https://dl-ptb.discordapp.net/apps/linux/${version}/discord-ptb-${version}.tar.gz";
