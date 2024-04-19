@@ -247,6 +247,7 @@ let
       passthru.buildCrystalPackage = callPackage ./build-package.nix {
         crystal = finalAttrs.finalPackage;
       };
+      passthru.llvmPackages = llvmPackages;
 
       meta = with lib; {
         inherit (binary.meta) platforms;
