@@ -90,7 +90,7 @@ let
     [
       (import ../development/cuda-modules/setup-hooks/extension.nix)
       (callPackage ../development/cuda-modules/cuda/extension.nix { inherit cudaVersion; })
-      (callPackage ../development/cuda-modules/cuda/overrides.nix { inherit cudaVersion; })
+      (import ../development/cuda-modules/cuda/overrides.nix)
       (callPackage ../development/cuda-modules/generic-builders/multiplex.nix {
         inherit cudaVersion flags mkVersionedPackageName;
         pname = "cudnn";
