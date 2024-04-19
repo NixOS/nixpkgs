@@ -68,6 +68,7 @@
 , withHarfbuzz ? withHeadlessDeps && lib.versionAtLeast version "6.1" # Needed for drawtext filter
 , withIconv ? withHeadlessDeps
 , withJack ? withFullDeps && !stdenv.isDarwin # Jack audio
+, withJxl ? withFullDeps && lib.versionAtLeast version "5" # JPEG XL de/encoding
 , withLadspa ? withFullDeps # LADSPA audio filtering
 , withLzma ? withHeadlessDeps # xz-utils
 , withMfx ? withFullDeps && (with stdenv.hostPlatform; isLinux && !isAarch) # Hardware acceleration via intel-media-sdk/libmfx
@@ -243,6 +244,7 @@
 , libGLU
 , libiconv
 , libjack2
+, libjxl
 , libmodplug
 , libmysofa
 , libogg
@@ -415,6 +417,13 @@ stdenv.mkDerivation (finalAttrs: {
         '';
       }
     ]
+    ++ (lib.optionals (lib.versionAtLeast version "5" && lib.versionOlder version "6") [
+      {
+        name = "fix_build_failure_due_to_libjxl_version_to_new";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/75b1a555a70c178a9166629e43ec2f6250219eb2";
+        hash = "sha256-+2kzfPJf5piim+DqEgDuVEEX5HLwRsxq0dWONJ4ACrU=";
+      }
+    ])
     ++ (lib.optionals (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2") [
       { # this can be removed post 6.1
         name = "fix_build_failure_due_to_PropertyKey_EncoderID";
@@ -560,6 +569,9 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ [
     (enableFeature withIconv "iconv")
     (enableFeature withJack "libjack")
+  ] ++ optionals (versionAtLeast finalAttrs.version "5.0") [
+    (enableFeature withJxl "libjxl")
+  ] ++ [
     (enableFeature withLadspa "ladspa")
     (enableFeature withLzma "lzma")
     (enableFeature withMfx "libmfx")
@@ -696,6 +708,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withHarfbuzz [ harfbuzz ]
   ++ optionals withIconv [ libiconv ] # On Linux this should be in libc, do we really need it?
   ++ optionals withJack [ libjack2 ]
+  ++ optionals withJxl [ libjxl ]
   ++ optionals withLadspa [ ladspaH ]
   ++ optionals withLzma [ xz ]
   ++ optionals withMfx [ intel-media-sdk ]
