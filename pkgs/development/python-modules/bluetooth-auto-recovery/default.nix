@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "bluetooth-auto-recovery";
-  version = "1.4.0";
+  version = "1.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "bluetooth-auto-recovery";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fXR7leW+eXaQZ22IyeVhpS5/MOnuAiunUGMdtfVrlos=";
+    hash = "sha256-4LgEb90QsjTMsVat6fe9B3b6f93bHTgJgQNsRbyti2M=";
   };
 
   postPatch = ''
@@ -30,11 +30,11 @@ buildPythonPackage rec {
       --replace-fail " --cov=bluetooth_auto_recovery --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     async-timeout
     bluetooth-adapters
     btsocket
