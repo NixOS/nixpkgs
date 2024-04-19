@@ -203,9 +203,12 @@ in
       apply = pkg: pkg.override {
         tesseract5 = pkg.tesseract5.override {
           # always enable detection modules
+          # tesseract fails to build when eng is not present
           enableLanguages = if cfg.settings ? PAPERLESS_OCR_LANGUAGE then
-            [ "equ" "osd" ]
+            lists.unique (
+              [ "equ" "osd" "eng" ]
               ++ lib.splitString "+" cfg.settings.PAPERLESS_OCR_LANGUAGE
+            )
           else null;
         };
       };
