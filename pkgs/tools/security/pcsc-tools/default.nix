@@ -7,7 +7,7 @@
 , makeWrapper
 , pkg-config
 , wrapGAppsHook
-, systemdSupport ? stdenv.isLinux, systemd
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 , dbusSupport ? stdenv.isLinux, dbus
 , pcsclite
 , PCSC
