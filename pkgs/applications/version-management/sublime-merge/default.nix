@@ -11,9 +11,9 @@ in
   } { };
 
   sublime-merge-dev = common {
-    buildVersion = "2094";
+    buildVersion = "2095";
     dev = true;
-    aarch64sha256 = "ZJgq971EPzq+BWxTQAoX6TgUmTfpf9sI4CHPcvgPTfI=";
-    x64sha256 = "6FLfszhP+BGHX5FrycMlznREmGDLyDyo6rgmqxhtCak=";
+    aarch64sha256 = "FmXz8VAWS7e0bB9NeXbihnhdhWMyNJJs6PNt+K2G0Bk=";
+    x64sha256 = "83Hw27RgGPgugpf4eMuWT6/MSQ2Q2VBCbaXoSGFtTPI=";
   } { };
 }
