@@ -17,21 +17,10 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase = ''
     FONT_PATH="$out/share/fonts/ttf-wps-fonts"
-    echo -e "\nFonts will be installed in: "$FONT_PATH
-
-    if [ ! -d "$FONT_PATH" ]; then
-      echo "Creating Font Directory..."
-      mkdir -p $FONT_PATH
-    fi
-
-    echo "Installing Fonts..."
+    mkdir -p $FONT_PATH
     cp *.ttf $FONT_PATH
     cp *.TTF $FONT_PATH
-
-    echo "Fixing Permissions..."
     chmod 644 $FONT_PATH/*
-
-    echo "Installation Finished."
   '';
 
   meta = {
