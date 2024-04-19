@@ -8958,7 +8958,7 @@ self: super: with self; {
   };
 
   objprint = callPackage ../development/python-modules/objprint { };
-  
+
   obspy = callPackage ../development/python-modules/obspy { };
 
   oca-port = callPackage ../development/python-modules/oca-port { };
