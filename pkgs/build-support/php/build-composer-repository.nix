@@ -83,6 +83,10 @@ let
         runHook postInstallCheck
       '';
 
+      passthru = (previousAttrs.passthru or {}) // {
+        php = phpDrv;
+      };
+
       env = {
         COMPOSER_CACHE_DIR = "/dev/null";
         COMPOSER_MIRROR_PATH_REPOS = "1";

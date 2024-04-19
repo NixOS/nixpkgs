@@ -1,11 +1,13 @@
 { callPackage, stdenvNoCC, lib, writeTextDir, php, makeBinaryWrapper, fetchFromGitHub, fetchurl }:
 
 let
+  initialArgs = {
+    inherit php;
+  };
   buildComposerProjectOverride = finalAttrs: previousAttrs:
 
     let
-      phpDrv = finalAttrs.php or php;
-      composer = finalAttrs.composer or phpDrv.packages.composer;
+      composer = finalAttrs.composer or finalAttrs.php.composer;
       composer-local-repo-plugin = callPackage ./pkgs/composer-local-repo-plugin.nix { };
     in
     {
@@ -18,12 +20,12 @@ let
       nativeBuildInputs = (previousAttrs.nativeBuildInputs or [ ]) ++ [
         composer
         composer-local-repo-plugin
-        phpDrv
-        phpDrv.composerHooks.composerInstallHook
+        finalAttrs.php
+        finalAttrs.php.composerHooks.composerInstallHook
       ];
 
       buildInputs = (previousAttrs.buildInputs or [ ]) ++ [
-        phpDrv
+        finalAttrs.php
       ];
 
       patches = previousAttrs.patches or [ ];
@@ -62,10 +64,11 @@ let
         runHook postInstallCheck
       '';
 
-      composerRepository = phpDrv.mkComposerRepository {
+      composerRepository = finalAttrs.php.mkComposerRepository {
         inherit composer composer-local-repo-plugin;
         inherit (finalAttrs) patches pname src vendorHash version;
 
+        php = finalAttrs.php;
         composerLock = previousAttrs.composerLock or null;
         composerNoDev = previousAttrs.composerNoDev or true;
         composerNoPlugins = previousAttrs.composerNoPlugins or true;
@@ -84,4 +87,4 @@ let
       };
     };
 in
-args: (stdenvNoCC.mkDerivation args).overrideAttrs buildComposerProjectOverride
+args: (stdenvNoCC.mkDerivation (initialArgs // args)).overrideAttrs buildComposerProjectOverride
