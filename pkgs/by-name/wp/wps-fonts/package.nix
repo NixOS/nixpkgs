@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "dv-anomaly";
-    repo = "wps-fonts";
+    repo = "ttf-wps-fonts";
     rev = "b3e935355afcfb5240bac5a99707ffecc35772a2";
     hash = "sha256-oRVREnE3qsk4gl1W0yFC11bHr+cmuOJe9Ah+0Csplq8=";
   };
