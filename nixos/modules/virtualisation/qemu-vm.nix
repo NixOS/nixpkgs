@@ -477,7 +477,7 @@ in
             options.securityModel = mkOption {
               type = types.enum [ "passthrough" "mapped-xattr" "mapped-file" "none" ];
               default = "mapped-xattr";
-              description = lib.mdDoc ''
+              description = ''
                 The security model to use for this share:
 
                 - `passthrough`: files are stored using the same credentials as they are created on the guest (this requires QEMU to run as root)
