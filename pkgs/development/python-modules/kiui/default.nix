@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "ashawkey";
     repo = "kiuikit";
     rev = "refs/tags/${version}";
-    hash = "sha256-ubxi7Ri+VYG0cCrKtgzAp7g8JG74i3SAo7no7CYjNVk="; # SHA256 hash of the source
+    hash = "sha256-ubxi7Ri+VYG0cCrKtgzAp7g8JG74i3SAo7no7CYjNVk=";
   };
 
   nativeBuildInputs = [
