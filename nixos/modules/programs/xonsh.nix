@@ -1,48 +1,46 @@
-# This module defines global configuration for the xonsh.
-
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-
   cfg = config.programs.xonsh;
-
 in
 
 {
-
-  options = {
-
-    programs.xonsh = {
-
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to configure xonsh as an interactive shell.
-        '';
-        type = types.bool;
-      };
-
-      package = mkPackageOption pkgs "xonsh" {
-        example = "xonsh.override { extraPackages = ps: [ ps.requests ]; }";
-      };
-
-      config = mkOption {
-        default = "";
-        description = "Control file to customize your shell behavior.";
-        type = types.lines;
-      };
-
-    };
-
+  meta = {
+    maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 
-  config = mkIf cfg.enable {
+  options = {
+    programs.xonsh = {
+      enable = lib.mkEnableOption "xonsh";
 
+      package = lib.mkPackageOption pkgs "xonsh" {
+        example = ''
+          let
+            python3Packages = pkgs.python312Packages;
+            xonsh = pkgs.xonsh.override { inherit python3Packages; };
+          in xonsh.wrapper.override {
+            inherit xonsh;
+            extraPackages = ps: with ps; [ requests ];
+          }
+        '';
+      };
+
+      config = lib.mkOption {
+        default = "";
+        description = "Control file to customize your shell behavior.";
+        type = lib.types.lines;
+      };
+    };
+  };
+
+  config = lib.mkIf cfg.enable {
     environment.etc."xonsh/xonshrc".text = ''
-      # /etc/xonsh/xonshrc: DO NOT EDIT -- this file has been generated automatically.
-
+      # /etc/xonsh/xonshrc: machine-generated - DO NOT EDIT!
 
       if not ''${...}.get('__NIXOS_SET_ENVIRONMENT_DONE'):
           # The NixOS environment and thereby also $PATH
@@ -63,17 +61,14 @@ in
               aliases['ls'] = _ls_alias
           del _ls_alias
 
-
       ${cfg.config}
     '';
 
     environment.systemPackages = [ cfg.package ];
 
-    environment.shells =
-      [ "/run/current-system/sw/bin/xonsh"
-        "${cfg.package}/bin/xonsh"
-      ];
-
+    environment.shells = [
+      "/run/current-system/sw/bin/xonsh"
+      "${lib.getExe cfg.package}"
+    ];
   };
-
 }
