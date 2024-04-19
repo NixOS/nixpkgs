@@ -51,6 +51,9 @@ buildPythonPackage rec {
 
   disabledTests = lib.optionals (pythonAtLeast "3.12") [
     "test_change"
+  ] ++ [
+    # Attempts to open a file which doesn't exist in sandbox
+    "test_piped"
   ];
 
   meta = with lib; {
