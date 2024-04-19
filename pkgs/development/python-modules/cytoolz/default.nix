@@ -4,6 +4,7 @@
 , isPyPy
 , pytestCheckHook
 , cython
+, setuptools
 , toolz
 , python
 , isPy27
@@ -12,7 +13,8 @@
 buildPythonPackage rec {
   pname = "cytoolz";
   version = "0.12.3";
-  format = "setuptools";
+  pyproject = true;
+
   disabled = isPy27 || isPyPy;
 
   src = fetchPypi {
@@ -20,7 +22,10 @@ buildPythonPackage rec {
     hash = "sha256-RQPcWfTO1TpUZDJyxh3DBdHbv719a98paUjenzTDooI=";
   };
 
-  nativeBuildInputs = [ cython ];
+  nativeBuildInputs = [
+    cython
+    setuptools
+  ];
 
   propagatedBuildInputs = [ toolz ];
 
@@ -30,6 +35,11 @@ buildPythonPackage rec {
     cd cytoolz
     export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
   '';
+
+  disabledTests = [
+    # https://github.com/pytoolz/cytoolz/issues/200
+    "test_inspect_wrapped_property"
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
