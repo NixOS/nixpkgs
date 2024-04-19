@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd3;
     # NOTE: 'unix' or even 'all' COULD work too, I'm not sure
     platforms = platforms.linux;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [ domenkozar gepbird ];
     mainProgram = "dunst";
   };
 })
