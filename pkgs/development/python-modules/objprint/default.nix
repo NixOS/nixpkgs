@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "gaogaotiantian";
     repo = "objprint";
     rev = "${version}";
-    sha256 = "sha256-IGYjDdi3JzYk53ITVOhVnm9EDsa+4HXSVtVUE3wQWTo=";
+    hash = "sha256-IGYjDdi3JzYk53ITVOhVnm9EDsa+4HXSVtVUE3wQWTo=";
   };
 
   # Extract the specific subdirectory within the repository
