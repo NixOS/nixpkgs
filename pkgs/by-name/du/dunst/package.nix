@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dunst";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "dunst-project";
     repo = "dunst";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-6smFUdWqOuYB0btsDgHtIpDBfHhkpIQfjyZ8wtRg1bQ=";
+    hash = "sha256-eiFvvavXGNcHZnEGwlTLxRqFNdkvEZMwNIkVyDn1V6o=";
   };
 
   nativeBuildInputs = [ perl pkg-config which systemd makeWrapper ];
@@ -42,10 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/dunstctl \
       --prefix PATH : "${lib.makeBinPath [ coreutils dbus ]}"
 
-    install -D contrib/_dunst.zshcomp $out/share/zsh/site-functions/_dunst
-    install -D contrib/_dunstctl.zshcomp $out/share/zsh/site-functions/_dunstctl
-    substituteInPlace $out/share/zsh/site-functions/_dunstctl \
-      --replace "jq -M" "${jq}/bin/jq -M"
+    substituteInPlace $out/share/zsh/site-functions/_dunstctl $out/share/fish/vendor_completions.d/{dunstctl,dunstify} \
+      --replace-fail "jq" "${lib.getExe jq}"
   '';
 
   passthru.tests.version = testers.testVersion { package = dunst; };
