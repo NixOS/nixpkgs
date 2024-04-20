@@ -1,10 +1,15 @@
 {
   lib,
+  buildPackages,
   rustPlatform,
+  stdenv,
   fetchFromGitHub,
   installShellFiles,
 }:
 
+let
+  canExecuteHost = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+in
 rustPlatform.buildRustPackage rec {
   pname = "argc";
   version = "1.14.0";
@@ -18,14 +23,18 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-D1T9FWTvwKtAYoqFlR2OmLRLGWhPJ9D8J7lq/QKcBoM=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optional (!canExecuteHost) buildPackages.argc;
 
   postInstall = ''
+    ARGC=${if canExecuteHost then ''''${!outputBin}/bin/argc'' else "argc"}
+
     installShellCompletion --cmd argc \
-      --bash <($out/bin/argc --argc-completions bash) \
-      --fish <($out/bin/argc --argc-completions fish) \
-      --zsh <($out/bin/argc --argc-completions zsh)
+      --bash <("$ARGC" --argc-completions bash) \
+      --fish <("$ARGC" --argc-completions fish) \
+      --zsh <("$ARGC" --argc-completions zsh)
   '';
+
+  disallowedReferences = lib.optional (!canExecuteHost) buildPackages.argc;
 
   meta = with lib; {
     description = "Command-line options, arguments and sub-commands parser for bash";
