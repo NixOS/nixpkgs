@@ -18,7 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-EztaCoUVbV9pIoba4X4liqPRZiZB6F65PB9cdb/eA+A=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
@@ -32,9 +32,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module designed to provide detailed insights into the zip structure of APK files";
-    mainProgram = "apkInspector";
     homepage = "https://github.com/erev0s/apkInspector";
+    changelog = "https://github.com/erev0s/apkInspector/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "apkInspector";
   };
 }
