@@ -27713,7 +27713,8 @@ with pkgs;
   nu_scripts = callPackage ../shells/nushell/nu_scripts { };
 
   nushellPlugins = recurseIntoAttrs (callPackage ../shells/nushell/plugins {
-    inherit (darwin.apple_sdk_11_0.frameworks) IOKit CoreFoundation Foundation Security;
+    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk_11_0.frameworks) IOKit CoreFoundation Foundation;
   });
 
   nettools = if stdenv.isLinux
@@ -37928,7 +37929,7 @@ with pkgs;
   lxqt = recurseIntoAttrs (import ../desktops/lxqt {
     inherit pkgs;
     inherit (lib) makeScope;
-    inherit qt5 libsForQt5;
+    inherit kdePackages;
   });
 
   mate = recurseIntoAttrs (callPackage ../desktops/mate { });

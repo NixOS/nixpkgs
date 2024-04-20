@@ -2,18 +2,19 @@
 , rustPlatform
 , fetchFromGitHub
 , stdenv
+, openssl
 , darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mycelium";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "threefoldtech";
     repo = "mycelium";
     rev = "v${version}";
-    hash = "sha256-K82LHVXbSMIJQlQ/qUpdCBVlAEZWyMMG2eUt2FzNwRE=";
+    hash = "sha256-x3XqFKcOLwKhgF/DKo8Qp3QLyaE2hdCTjfLSE8K3ifQ=";
   };
 
   cargoLock = {
@@ -27,6 +28,12 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
+
+  env = {
+    OPENSSL_NO_VENDOR = 1;
+    OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
+    OPENSSL_DIR = "${lib.getDev openssl}";
+  };
 
   meta = with lib; {
     description = "End-2-end encrypted IPv6 overlay network";
