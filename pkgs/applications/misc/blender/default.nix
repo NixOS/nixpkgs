@@ -16,7 +16,8 @@
   cudaSupport ? config.cudaSupport,
   dbus,
   embree,
-  fetchurl,
+  fetchFromGitea,
+  fetchgit,
   fetchzip,
   ffmpeg,
   fftw,
@@ -101,10 +102,30 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "blender";
   version = "4.1.0";
 
-  src = fetchurl {
-    url = "https://download.blender.org/source/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-3AAtguPDQMk4VcZoRzDQGAG2aaKbHMa3XuuZC6aecj8=";
-  };
+  srcs = [
+    (fetchgit {
+      name = "source";
+      url = "https://projects.blender.org/blender/blender.git";
+      rev = "v${finalAttrs.version}";
+      hash = "sha256-4LtBOufcaUJP49QxT9/EcFVjNbyvGf/gYFoVtljod1Y=";
+      fetchLFS = true;
+    })
+    (fetchFromGitea {
+      name = "addons";
+      domain = "projects.blender.org";
+      owner = "blender";
+      repo = "blender-addons";
+      rev = "v${finalAttrs.version}";
+      hash = "sha256-OHEUtGiubZNf3nsT4LfHuGyOhfVPk2H3osZ1lWJL4jI=";
+    })
+  ];
+
+  sourceRoot = "source";
+
+  prePatch = ''
+    mkdir scripts/addons
+    cp -Rv --no-preserve=all ../addons/* scripts/addons
+  '';
 
   patches = [ ./draco.patch ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
 
