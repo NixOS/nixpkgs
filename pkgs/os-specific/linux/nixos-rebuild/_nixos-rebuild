@@ -58,6 +58,7 @@ _nixos-rebuild() {
     --no-registries
     --no-update-lock-file
     --no-write-lock-file
+    --accept-flake-config
 
     # Nix-copy options
     --use-substitutes --substitute-on-destination -s
@@ -71,7 +72,14 @@ _nixos-rebuild() {
     --keep-going -k
     --max-jobs -j # number
     --log-format # format
+    --quiet
+    --print-build-logs -L
+    --no-build-output -Q
+    --fallback
+    --refresh
+    --repair
     -I # NIX_PATH
+    --offline # --no-net not suggested, deprecated
   )
 
   local all_subcommands=(
@@ -84,6 +92,7 @@ _nixos-rebuild() {
     edit
     list-generations
     switch
+    repl
     test
   )
 
