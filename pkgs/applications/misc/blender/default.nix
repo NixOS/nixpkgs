@@ -99,11 +99,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "4.1.0";
+  version = "4.1.1";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-3AAtguPDQMk4VcZoRzDQGAG2aaKbHMa3XuuZC6aecj8=";
+    hash = "sha256-T7s69k0/hN9ccQN0hFQibBiFwawu1Tc9DOoegOgsCEg=";
   };
 
   patches = [ ./draco.patch ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
