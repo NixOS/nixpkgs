@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, icu
-, meson
-, ninja
-, pkg-config
-, python3
-, xapian
-, xz
-, zstd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  icu,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  xapian,
+  xz,
+  zstd,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "openzim";
-    repo = pname;
+    repo = "libzim";
     rev = "refs/tags/${version}";
     hash = "sha256-WAbNSrgm/lTARD7Ml4vVLChQLNR23vEZtyE4MXnhnB4=";
   };
