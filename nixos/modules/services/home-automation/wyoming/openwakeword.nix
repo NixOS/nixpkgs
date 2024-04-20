@@ -12,7 +12,6 @@ let
     concatMapStringsSep
     escapeShellArgs
     mkOption
-    mdDoc
     mkEnableOption
     mkIf
     mkPackageOption
@@ -34,7 +33,7 @@ in
   meta.buildDocsInSandbox = false;
 
   options.services.wyoming.openwakeword = with types; {
-    enable = mkEnableOption (mdDoc "Wyoming openWakeWord server");
+    enable = mkEnableOption "Wyoming openWakeWord server";
 
     package = mkPackageOption pkgs "wyoming-openwakeword" { };
 
@@ -42,7 +41,7 @@ in
       type = strMatching "^(tcp|unix)://.*$";
       default = "tcp://0.0.0.0:10400";
       example = "tcp://192.0.2.1:5000";
-      description = mdDoc ''
+      description = ''
         URI to bind the wyoming server to.
       '';
     };
@@ -50,7 +49,7 @@ in
     customModelsDirectories = mkOption {
       type = listOf types.path;
       default = [];
-      description = lib.mdDoc ''
+      description = ''
         Paths to directories with custom wake word models (*.tflite model files).
       '';
     };
@@ -68,7 +67,7 @@ in
         "hey_rhasspy"
         "ok_nabu"
       ];
-      description = mdDoc ''
+      description = ''
         List of wake word models to preload after startup.
       '';
     };
@@ -76,7 +75,7 @@ in
     threshold = mkOption {
       type = float;
       default = 0.5;
-      description = mdDoc ''
+      description = ''
         Activation threshold (0-1), where higher means fewer activations.
 
         See trigger level for the relationship between activations and
@@ -88,7 +87,7 @@ in
     triggerLevel = mkOption {
       type = int;
       default = 1;
-      description = mdDoc ''
+      description = ''
         Number of activations before a detection is registered.
 
         A higher trigger level means fewer detections.
@@ -99,7 +98,7 @@ in
     extraArgs = mkOption {
       type = listOf str;
       default = [ ];
-      description = mdDoc ''
+      description = ''
         Extra arguments to pass to the server commandline.
       '';
       apply = escapeShellArgs;

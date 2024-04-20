@@ -9,13 +9,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "waylyrics";
-  version = "0.2.15";
+  version = "0.2.19";
 
   src = fetchFromGitHub {
     owner = "poly000";
     repo = "waylyrics";
     rev = "v${version}";
-    hash = "sha256-dGtotQfS5Ve3rl6iSsqOzs0/dOePfoRZ9Wlg9zHCXSY=";
+    hash = "sha256-y8FBZ/BvCj7CBfQlNE1Ay2nuP41WC14dfTeOJhTbHYs=";
   };
 
   cargoLock = {

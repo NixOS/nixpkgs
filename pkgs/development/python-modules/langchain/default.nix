@@ -51,7 +51,7 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.1.15";
+  version = "0.1.16";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -60,7 +60,7 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SjuIt3pyFOqBlWObs/sHeWvwKs1wkZsowKd74HXLiAo=";
+    hash = "sha256-Xv8juma/1qGC2Rb659dJBvRzRh5W+zU+O8W6peElFGc=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";

@@ -8,20 +8,20 @@ in
 
   options.services = {
     lanraragi = {
-      enable = lib.mkEnableOption (lib.mdDoc "LANraragi");
+      enable = lib.mkEnableOption "LANraragi";
       package = lib.mkPackageOption pkgs "lanraragi" { };
 
       port = lib.mkOption {
         type = lib.types.port;
         default = 3000;
-        description = lib.mdDoc "Port for LANraragi's web interface.";
+        description = "Port for LANraragi's web interface.";
       };
 
       passwordFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/run/keys/lanraragi-password";
-        description = lib.mdDoc ''
+        description = ''
           A file containing the password for LANraragi's admin interface.
         '';
       };
@@ -30,13 +30,13 @@ in
         port = lib.mkOption {
           type = lib.types.port;
           default = 6379;
-          description = lib.mdDoc "Port for LANraragi's Redis server.";
+          description = "Port for LANraragi's Redis server.";
         };
         passwordFile = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
           default = null;
           example = "/run/keys/redis-lanraragi-password";
-          description = lib.mdDoc ''
+          description = ''
             A file containing the password for LANraragi's Redis server.
           '';
         };

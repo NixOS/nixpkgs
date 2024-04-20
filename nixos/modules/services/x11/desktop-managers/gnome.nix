@@ -137,25 +137,25 @@ in
   options = {
 
     services.gnome = {
-      core-os-services.enable = mkEnableOption (lib.mdDoc "essential services for GNOME3");
-      core-shell.enable = mkEnableOption (lib.mdDoc "GNOME Shell services");
-      core-utilities.enable = mkEnableOption (lib.mdDoc "GNOME core utilities");
-      core-developer-tools.enable = mkEnableOption (lib.mdDoc "GNOME core developer tools");
-      games.enable = mkEnableOption (lib.mdDoc "GNOME games");
+      core-os-services.enable = mkEnableOption "essential services for GNOME3";
+      core-shell.enable = mkEnableOption "GNOME Shell services";
+      core-utilities.enable = mkEnableOption "GNOME core utilities";
+      core-developer-tools.enable = mkEnableOption "GNOME core developer tools";
+      games.enable = mkEnableOption "GNOME games";
     };
 
     services.xserver.desktopManager.gnome = {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Enable GNOME desktop manager.";
+        description = "Enable GNOME desktop manager.";
       };
 
       sessionPath = mkOption {
         default = [];
         type = types.listOf types.package;
         example = literalExpression "[ pkgs.gnome.gpaste ]";
-        description = lib.mdDoc ''
+        description = ''
           Additional list of packages to be added to the session search path.
           Useful for GNOME Shell extensions or GSettings-conditional autostart.
 
@@ -173,44 +173,44 @@ in
             favorite-apps=[ 'firefox.desktop', 'org.gnome.Calendar.desktop' ]
           '''
         '';
-        description = lib.mdDoc "List of desktop files to put as favorite apps into gnome-shell. These need to be installed somehow globally.";
+        description = "List of desktop files to put as favorite apps into gnome-shell. These need to be installed somehow globally.";
       };
 
       extraGSettingsOverrides = mkOption {
         default = "";
         type = types.lines;
-        description = lib.mdDoc "Additional gsettings overrides.";
+        description = "Additional gsettings overrides.";
       };
 
       extraGSettingsOverridePackages = mkOption {
         default = [];
         type = types.listOf types.path;
-        description = lib.mdDoc "List of packages for which gsettings are overridden.";
+        description = "List of packages for which gsettings are overridden.";
       };
 
-      debug = mkEnableOption (lib.mdDoc "gnome-session debug messages");
+      debug = mkEnableOption "gnome-session debug messages";
 
       flashback = {
-        enableMetacity = mkEnableOption (lib.mdDoc "the standard GNOME Flashback session with Metacity");
+        enableMetacity = mkEnableOption "the standard GNOME Flashback session with Metacity";
 
         customSessions = mkOption {
           type = types.listOf (types.submodule {
             options = {
               wmName = mkOption {
                 type = types.strMatching "[a-zA-Z0-9_-]+";
-                description = lib.mdDoc "A unique identifier for the window manager.";
+                description = "A unique identifier for the window manager.";
                 example = "xmonad";
               };
 
               wmLabel = mkOption {
                 type = types.str;
-                description = lib.mdDoc "The name of the window manager to show in the session chooser.";
+                description = "The name of the window manager to show in the session chooser.";
                 example = "XMonad";
               };
 
               wmCommand = mkOption {
                 type = types.str;
-                description = lib.mdDoc "The executable of the window manager to use.";
+                description = "The executable of the window manager to use.";
                 example = literalExpression ''"''${pkgs.haskellPackages.xmonad}/bin/xmonad"'';
               };
 
@@ -218,19 +218,19 @@ in
                 type = types.bool;
                 default = true;
                 example = false;
-                description = lib.mdDoc "Whether to enable the GNOME panel in this session.";
+                description = "Whether to enable the GNOME panel in this session.";
               };
             };
           });
           default = [];
-          description = lib.mdDoc "Other GNOME Flashback sessions to enable.";
+          description = "Other GNOME Flashback sessions to enable.";
         };
 
         panelModulePackages = mkOption {
           default = [ pkgs.gnome.gnome-applets ];
           defaultText = literalExpression "[ pkgs.gnome.gnome-applets ]";
           type = types.listOf types.package;
-          description = lib.mdDoc ''
+          description = ''
             Packages containing modules that should be made available to `gnome-panel` (usually for applets).
 
             If you're packaging something to use here, please install the modules in `$out/lib/gnome-panel/modules`.
@@ -243,7 +243,7 @@ in
       default = [];
       example = literalExpression "[ pkgs.gnome.totem ]";
       type = types.listOf types.package;
-      description = lib.mdDoc "Which packages gnome should exclude from the default environment";
+      description = "Which packages gnome should exclude from the default environment";
     };
 
   };

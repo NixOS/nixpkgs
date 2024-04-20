@@ -1,46 +1,38 @@
 { pkgs, config, lib, ... }:
 
-with lib;
-
 let
   cfg = config.programs.fzf;
-
 in
 {
-  imports = [
-    (lib.mkRemovedOptionModule [ "programs" "fzf" "keybindings" ] ''
-      Use "programs.fzf.enable" instead, due to fzf upstream-change it's not possible to load shell-completion and keybindings separately.
-      If you want to change/disable certain keybindings please check the fzf-documentation.
-    '')
-    (lib.mkRemovedOptionModule [ "programs" "fzf" "fuzzyCompletion" ] ''
-      Use "programs.fzf.enable" instead, due to fzf upstream-change it's not possible to load shell-completion and keybindings separately.
-      If you want to change/disable certain keybindings please check the fzf-documentation.
-    '')
-  ];
-
   options = {
-    programs.fzf.enable = mkEnableOption (mdDoc "fuzzy completion with fzf and keybindings");
-  };
-
-  config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.fzf ];
-
-    programs.bash.interactiveShellInit = ''
-      eval "$(${getExe pkgs.fzf} --bash)"
-    '';
-
-    programs.fish.interactiveShellInit = ''
-      ${getExe pkgs.fzf} --fish | source
-    '';
-
-    programs.zsh = {
-      interactiveShellInit = optionalString (!config.programs.zsh.ohMyZsh.enable) ''
-        eval "$(${getExe pkgs.fzf} --zsh)"
-      '';
-
-      ohMyZsh.plugins = mkIf (config.programs.zsh.ohMyZsh.enable) [ "fzf" ];
+    programs.fzf = {
+      fuzzyCompletion = lib.mkEnableOption "fuzzy completion with fzf";
+      keybindings = lib.mkEnableOption "fzf keybindings";
     };
   };
 
-  meta.maintainers = with maintainers; [ laalsaas ];
+  config = lib.mkIf (cfg.keybindings || cfg.fuzzyCompletion) {
+    environment.systemPackages = lib.mkIf (cfg.keybindings || cfg.fuzzyCompletion) [ pkgs.fzf ];
+
+    programs = {
+      bash.interactiveShellInit = lib.optionalString cfg.fuzzyCompletion ''
+        source ${pkgs.fzf}/share/fzf/completion.bash
+      '' + lib.optionalString cfg.keybindings ''
+        source ${pkgs.fzf}/share/fzf/key-bindings.bash
+      '';
+
+      zsh = {
+        interactiveShellInit = lib.optionalString (!config.programs.zsh.ohMyZsh.enable)
+        (lib.optionalString cfg.fuzzyCompletion ''
+          source ${pkgs.fzf}/share/fzf/completion.zsh
+        '' + lib.optionalString cfg.keybindings ''
+          source ${pkgs.fzf}/share/fzf/key-bindings.zsh
+        '');
+
+        ohMyZsh.plugins = lib.mkIf config.programs.zsh.ohMyZsh.enable [ "fzf" ];
+      };
+    };
+  };
+
+  meta.maintainers = with lib.maintainers; [ laalsaas ];
 }

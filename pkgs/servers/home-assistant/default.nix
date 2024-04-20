@@ -39,6 +39,15 @@ let
         };
       });
 
+      aioautomower = super.aioautomower.overridePythonAttrs (oldAttrs: rec {
+        version = "2024.3.4";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/${version}";
+          hash = "sha256-dk8HfIiQOKq7Ky+vYa3wKmTS78gTw6J0yyQT2Folpp0=";
+        };
+      });
+
       aioelectricitymaps = super.aioelectricitymaps.overridePythonAttrs (oldAttrs: rec {
         version = "0.4.0";
         src = fetchFromGitHub {
@@ -222,6 +231,15 @@ let
         };
       });
 
+      jaraco-functools = super.jaraco-functools.overridePythonAttrs (oldAttrs: rec {
+        version = "3.9.0";
+        src = fetchPypi {
+          pname = "jaraco.functools";
+          inherit version;
+          hash = "sha256-ixN7D+rMF/70us7gTAEcnobyNBCZyHCh0S0743sypjg=";
+        };
+      });
+
       lmcloud = super.lmcloud.overridePythonAttrs (oldAttrs: rec {
         version = "0.4.35";
         src = fetchFromGitHub {
@@ -244,7 +262,7 @@ let
         };
 
         nativeBuildInputs = with self; [
-          cython_3
+          cython
           setuptools
           libxml2.dev
           libxslt.dev
@@ -508,7 +526,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2024.4.1";
+  hassVersion = "2024.4.2";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -526,13 +544,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-fVuScSfXFQJjHLBD7w1KsswZ4yebOzPTvXffeMlWrmo=";
+    hash = "sha256-V6qvpPrhfSLINH99hYkAjvG8pfIN8AXGO3HuwiKgMPo=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-nMzB0qQrYRxJA1p4L4OZW25WRQBQ2hq/yZs5f3AcdAU=";
+    hash = "sha256-ZtTlLRDSXKUz+ZA+UctFL+d3wdKrcPdeROIUhS35qWU=";
   };
 
   nativeBuildInputs = with python.pkgs; [

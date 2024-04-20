@@ -45,25 +45,25 @@ in
         type = lib.types.lines;
         default = "";
         example = "rm -f /var/log/my-display-manager.log";
-        description = lib.mdDoc "Script executed before the display manager is started.";
+        description = "Script executed before the display manager is started.";
       };
 
       execCmd = lib.mkOption {
         type = lib.types.str;
         example = lib.literalExpression ''"''${pkgs.lightdm}/bin/lightdm"'';
-        description = lib.mdDoc "Command to start the display manager.";
+        description = "Command to start the display manager.";
       };
 
       environment = lib.mkOption {
         type = with lib.types; attrsOf unspecified;
         default = {};
-        description = lib.mdDoc "Additional environment variables needed by the display manager.";
+        description = "Additional environment variables needed by the display manager.";
       };
 
       hiddenUsers = lib.mkOption {
         type = with lib.types; listOf str;
         default = [ "nobody" ];
-        description = lib.mdDoc ''
+        description = ''
           A list of users which will not be shown in the display manager.
         '';
       };
@@ -71,7 +71,7 @@ in
       logToFile = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether the display manager redirects the output of the
           session script to {file}`~/.xsession-errors`.
         '';
@@ -80,7 +80,7 @@ in
       logToJournal = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether the display manager redirects the output of the
           session script to the systemd journal.
         '';
@@ -94,7 +94,7 @@ in
               type = lib.types.bool;
               default = config.user != null;
               defaultText = lib.literalExpression "config.${options.user} != null";
-              description = lib.mdDoc ''
+              description = ''
                 Automatically log in as {option}`autoLogin.user`.
               '';
             };
@@ -102,7 +102,7 @@ in
             user = lib.mkOption {
               type = with lib.types; nullOr str;
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 User to be used for the automatic login.
               '';
             };
@@ -110,7 +110,7 @@ in
         });
 
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           Auto login configuration attrset.
         '';
       };
@@ -134,7 +134,7 @@ in
           Taken from display manager settings or window manager settings, if either is set.
         '';
         example = "gnome";
-        description = lib.mdDoc ''
+        description = ''
           Graphical session to pre-select in the session chooser (only effective for GDM, LightDM and SDDM).
 
           On GDM, LightDM and SDDM, it will also be used as a session for auto-login.
@@ -142,7 +142,7 @@ in
       };
 
       sessionData = lib.mkOption {
-        description = lib.mdDoc "Data exported for display managers’ convenience";
+        description = "Data exported for display managers’ convenience";
         internal = true;
         default = {};
       };
@@ -163,7 +163,7 @@ in
            '';
         });
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           A list of packages containing x11 or wayland session files to be passed to the display manager.
         '';
       };
@@ -173,11 +173,14 @@ in
   imports = [
     (lib.mkRenamedOptionModule [ "services" "xserver" "displayManager" "autoLogin" ] [ "services" "displayManager" "autoLogin" ])
     (lib.mkRenamedOptionModule [ "services" "xserver" "displayManager" "defaultSession" ] [ "services" "displayManager" "defaultSession" ])
+    (lib.mkRenamedOptionModule [ "services" "xserver" "displayManager" "hiddenUsers" ] [ "services" "displayManager" "hiddenUsers" ])
     (lib.mkRenamedOptionModule [ "services" "xserver" "displayManager" "job" "environment" ] [ "services" "displayManager" "environment" ])
     (lib.mkRenamedOptionModule [ "services" "xserver" "displayManager" "job" "execCmd" ] [ "services" "displayManager" "execCmd" ])
     (lib.mkRenamedOptionModule [ "services" "xserver" "displayManager" "job" "logToFile" ] [ "services" "displayManager" "logToFile" ])
     (lib.mkRenamedOptionModule [ "services" "xserver" "displayManager" "job" "logToJournal" ] [ "services" "displayManager" "logToJournal" ])
     (lib.mkRenamedOptionModule [ "services" "xserver" "displayManager" "job" "preStart" ] [ "services" "displayManager" "preStart" ])
+    (lib.mkRenamedOptionModule [ "services" "xserver" "displayManager" "sessionData" ] [ "services" "displayManager" "sessionData" ])
+    (lib.mkRenamedOptionModule [ "services" "xserver" "displayManager" "sessionPackages" ] [ "services" "displayManager" "sessionPackages" ])
   ];
 
   config = lib.mkIf cfg.enable {

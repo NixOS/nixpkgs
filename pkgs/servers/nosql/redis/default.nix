@@ -85,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests.redis = nixosTests.redis;
+  passthru.serverBin = "redis-server";
 
   meta = with lib; {
     homepage = "https://redis.io";

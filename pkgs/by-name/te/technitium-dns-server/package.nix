@@ -1,39 +1,60 @@
 {
   lib,
-  stdenvNoCC,
-  fetchurl,
-  makeWrapper,
-  dotnet-sdk_8,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
   nixosTests,
 }:
-stdenvNoCC.mkDerivation rec {
+let
+  technitium-library = buildDotnetModule rec {
+    pname = "TechnitiumLibrary";
+    version = "40a7bc7a52cf5d2c371215ea7f5f6fdf71dc1d9c";
+
+    src = fetchFromGitHub {
+      owner = "TechnitiumSoftware";
+      repo = "TechnitiumLibrary";
+      rev = version;
+      hash = "sha256-FNCZH8LZXYyrz5SRIV8P7MruN+t6Qvl96Aa73q3InMI=";
+      name = "${pname}-${version}";
+    };
+
+    dotnet-sdk = dotnetCorePackages.sdk_8_0;
+
+    nugetDeps = ./library-nuget-deps.nix;
+
+    projectFile = [
+      "TechnitiumLibrary.ByteTree/TechnitiumLibrary.ByteTree.csproj"
+      "TechnitiumLibrary.Net/TechnitiumLibrary.Net.csproj"
+    ];
+  };
+in
+buildDotnetModule rec {
   pname = "technitium-dns-server";
   version = "12.1";
 
-  src = fetchurl {
-    url = "https://download.technitium.com/dns/archive/${version}/DnsServerPortable.tar.gz";
-    hash = "sha256-G0M2xuYBZA3XXXaPs4pLrJmzAMbVJhiqISAvuCw3iZo=";
+  src = fetchFromGitHub {
+    owner = "TechnitiumSoftware";
+    repo = "DnsServer";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TfVWGomvKV7QeJUyFMNDAnHKY3YTEwWPxTlW6RhmsR4=";
+    name = "${pname}-${version}";
   };
 
-  sourceRoot = ".";
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nugetDeps = ./nuget-deps.nix;
 
-  installPhase = ''
-    runHook preInstall
+  projectFile = [ "DnsServerApp/DnsServerApp.csproj" ];
 
-    mkdir -p $out/{bin,share/${pname}-${version}}
-    cp -r * $out/share/${pname}-${version}/.
-    rm $out/share/${pname}-${version}/start.{sh,bat}
-    rm $out/share/${pname}-${version}/DnsServerApp.exe
-    rm $out/share/${pname}-${version}/env-vars
-    # Remove systemd.service in favor of a separate module (including firewall configuration).
-    rm $out/share/${pname}-${version}/systemd.service
+  # move dependencies from TechnitiumLibrary to the expected directory
+  preBuild = ''
+    mkdir -p ../TechnitiumLibrary/bin
+    cp -r ${technitium-library}/lib/TechnitiumLibrary/* ../TechnitiumLibrary/bin/
+  '';
 
-    makeWrapper "${dotnet-sdk_8}/bin/dotnet" $out/bin/technitium-dns-server \
-      --add-flags "$out/share/${pname}-${version}/DnsServerApp.dll"
-
-    runHook postInstall
+  postFixup = ''
+    mv $out/bin/DnsServerApp $out/bin/technitium-dns-server
   '';
 
   passthru.tests = {
@@ -47,6 +68,6 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     mainProgram = "technitium-dns-server";
     maintainers = with lib.maintainers; [ fabianrig ];
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    platforms = lib.platforms.linux;
   };
 }

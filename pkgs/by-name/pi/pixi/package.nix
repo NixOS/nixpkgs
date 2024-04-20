@@ -13,21 +13,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pixi";
-  version = "0.17.1";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "prefix-dev";
     repo = "pixi";
     rev = "v${version}";
-    hash = "sha256-wYk77i/33J+VJeT+Bi3L8DJv9quP7VJkcq3voA6U/1s=";
+    hash = "sha256-rCnW2Ghh6SN1G9u4ybk0jUUFYevH6FozeSjXZfJhW8s=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "async_zip-0.0.16" = "sha256-M94ceTCtyQc1AtPXYrVGplShQhItqZZa/x5qLiL+gs0=";
-      "cache-key-0.0.1" = "sha256-CvaYXtgd8eqzPNoXukjPwaoT/QOlUVKYNzD8Db6on9Q=";
-      "pubgrub-0.2.1" = "sha256-1teDXUkXPbL7LZAYrlm2w5CEyb8g0bDqNhg5Jn0/puc=";
+      "cache-key-0.0.1" = "sha256-XsBTfe2+J5CGdjYZjhgxiP20OA7+VTCvD9JniLOjhKs=";
+      "pubgrub-0.2.1" = "sha256-SdgxoJ37cs+XwWRCFX4uKhJ9Juu9R/jENb6tzUMam4k=";
     };
   };
 
@@ -65,7 +65,9 @@ rustPlatform.buildRustPackage rec {
     "--skip=add_pypi_functionality"
     "--skip=test_alias"
     "--skip=test_cwd"
+    "--skip=test_compressed_mapping_catch_missing_package"
     "--skip=test_incremental_lock_file"
+    "--skip=test_purl_are_added_for_pypi"
   ];
 
   postInstall = ''

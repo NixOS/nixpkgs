@@ -3,7 +3,7 @@
 , buildPythonPackage
 
 # build-system
-, cython_3
+, cython
 , git
 , pkgconfig
 , setuptools
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
     git
     pkgconfig
     setuptools

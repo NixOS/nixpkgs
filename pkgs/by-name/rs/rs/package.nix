@@ -16,6 +16,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  patches = [
+    # add an implementation of reallocarray() from openbsd (not available on darwin)
+    ./macos-reallocarray.patch
+  ];
+
   buildInputs = [ libbsd ];
 
   buildPhase = ''
@@ -63,5 +68,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
+    broken = stdenv.isx86_64 && stdenv.isDarwin; # missing strtonum()
   };
 }

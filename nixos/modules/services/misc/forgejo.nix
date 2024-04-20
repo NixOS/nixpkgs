@@ -14,7 +14,6 @@ let
 
   inherit (lib)
     literalExpression
-    mdDoc
     mkChangedOptionModule
     mkDefault
     mkEnableOption
@@ -55,14 +54,14 @@ in
 
   options = {
     services.forgejo = {
-      enable = mkEnableOption (mdDoc "Forgejo, a software forge");
+      enable = mkEnableOption "Forgejo, a software forge";
 
       package = mkPackageOption pkgs "forgejo" { };
 
       useWizard = mkOption {
         default = false;
         type = types.bool;
-        description = mdDoc ''
+        description = ''
           Whether to use the built-in installation wizard instead of
           declaratively managing the {file}`app.ini` config file in nix.
         '';
@@ -71,14 +70,14 @@ in
       stateDir = mkOption {
         default = "/var/lib/forgejo";
         type = types.str;
-        description = mdDoc "Forgejo data directory.";
+        description = "Forgejo data directory.";
       };
 
       customDir = mkOption {
         default = "${cfg.stateDir}/custom";
         defaultText = literalExpression ''"''${config.${opt.stateDir}}/custom"'';
         type = types.str;
-        description = mdDoc ''
+        description = ''
           Base directory for custom templates and other options.
 
           If {option}`${opt.useWizard}` is disabled (default), this directory will also
@@ -89,13 +88,13 @@ in
       user = mkOption {
         type = types.str;
         default = "forgejo";
-        description = mdDoc "User account under which Forgejo runs.";
+        description = "User account under which Forgejo runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "forgejo";
-        description = mdDoc "Group under which Forgejo runs.";
+        description = "Group under which Forgejo runs.";
       };
 
       database = {
@@ -103,13 +102,13 @@ in
           type = types.enum [ "sqlite3" "mysql" "postgres" ];
           example = "mysql";
           default = "sqlite3";
-          description = mdDoc "Database engine to use.";
+          description = "Database engine to use.";
         };
 
         host = mkOption {
           type = types.str;
           default = "127.0.0.1";
-          description = mdDoc "Database host address.";
+          description = "Database host address.";
         };
 
         port = mkOption {
@@ -120,26 +119,26 @@ in
             then 3306
             else 5432
           '';
-          description = mdDoc "Database host port.";
+          description = "Database host port.";
         };
 
         name = mkOption {
           type = types.str;
           default = "forgejo";
-          description = mdDoc "Database name.";
+          description = "Database name.";
         };
 
         user = mkOption {
           type = types.str;
           default = "forgejo";
-          description = mdDoc "Database user.";
+          description = "Database user.";
         };
 
         passwordFile = mkOption {
           type = types.nullOr types.path;
           default = null;
           example = "/run/keys/forgejo-dbpassword";
-          description = mdDoc ''
+          description = ''
             A file containing the password corresponding to
             {option}`${opt.database.user}`.
           '';
@@ -150,31 +149,31 @@ in
           default = if (cfg.database.createDatabase && usePostgresql) then "/run/postgresql" else if (cfg.database.createDatabase && useMysql) then "/run/mysqld/mysqld.sock" else null;
           defaultText = literalExpression "null";
           example = "/run/mysqld/mysqld.sock";
-          description = mdDoc "Path to the unix socket file to use for authentication.";
+          description = "Path to the unix socket file to use for authentication.";
         };
 
         path = mkOption {
           type = types.str;
           default = "${cfg.stateDir}/data/forgejo.db";
           defaultText = literalExpression ''"''${config.${opt.stateDir}}/data/forgejo.db"'';
-          description = mdDoc "Path to the sqlite3 database file.";
+          description = "Path to the sqlite3 database file.";
         };
 
         createDatabase = mkOption {
           type = types.bool;
           default = true;
-          description = mdDoc "Whether to create a local database automatically.";
+          description = "Whether to create a local database automatically.";
         };
       };
 
       dump = {
-        enable = mkEnableOption (mdDoc "periodic dumps via the [built-in {command}`dump` command](https://forgejo.org/docs/latest/admin/command-line/#dump)");
+        enable = mkEnableOption "periodic dumps via the [built-in {command}`dump` command](https://forgejo.org/docs/latest/admin/command-line/#dump)";
 
         interval = mkOption {
           type = types.str;
           default = "04:31";
           example = "hourly";
-          description = mdDoc ''
+          description = ''
             Run a Forgejo dump at this interval. Runs by default at 04:31 every day.
 
             The format is described in
@@ -186,19 +185,19 @@ in
           type = types.str;
           default = "${cfg.stateDir}/dump";
           defaultText = literalExpression ''"''${config.${opt.stateDir}}/dump"'';
-          description = mdDoc "Path to the directory where the dump archives will be stored.";
+          description = "Path to the directory where the dump archives will be stored.";
         };
 
         type = mkOption {
           type = types.enum [ "zip" "tar" "tar.sz" "tar.gz" "tar.xz" "tar.bz2" "tar.br" "tar.lz4" "tar.zst" ];
           default = "zip";
-          description = mdDoc "Archive format used to store the dump file.";
+          description = "Archive format used to store the dump file.";
         };
 
         file = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = mdDoc "Filename to be used for the dump. If `null` a default name is chosen by forgejo.";
+          description = "Filename to be used for the dump. If `null` a default name is chosen by forgejo.";
           example = "forgejo-dump";
         };
       };
@@ -207,14 +206,14 @@ in
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = mdDoc "Enables git-lfs support.";
+          description = "Enables git-lfs support.";
         };
 
         contentDir = mkOption {
           type = types.str;
           default = "${cfg.stateDir}/data/lfs";
           defaultText = literalExpression ''"''${config.${opt.stateDir}}/data/lfs"'';
-          description = mdDoc "Where to store LFS files.";
+          description = "Where to store LFS files.";
         };
       };
 
@@ -222,19 +221,19 @@ in
         type = types.str;
         default = "${cfg.stateDir}/repositories";
         defaultText = literalExpression ''"''${config.${opt.stateDir}}/repositories"'';
-        description = mdDoc "Path to the git repositories.";
+        description = "Path to the git repositories.";
       };
 
       mailerPasswordFile = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "/run/keys/forgejo-mailpw";
-        description = mdDoc "Path to a file containing the SMTP password.";
+        description = "Path to a file containing the SMTP password.";
       };
 
       settings = mkOption {
         default = { };
-        description = mdDoc ''
+        description = ''
           Free-form settings written directly to the `app.ini` configfile file.
           Refer to <https://forgejo.org/docs/latest/admin/config-cheat-sheet/> for supported values.
         '';
@@ -267,12 +266,12 @@ in
                 default = "${cfg.stateDir}/log";
                 defaultText = literalExpression ''"''${config.${opt.stateDir}}/log"'';
                 type = types.str;
-                description = mdDoc "Root path for log files.";
+                description = "Root path for log files.";
               };
               LEVEL = mkOption {
                 default = "Info";
                 type = types.enum [ "Trace" "Debug" "Info" "Warn" "Error" "Critical" ];
-                description = mdDoc "General log level.";
+                description = "General log level.";
               };
             };
 
@@ -280,33 +279,33 @@ in
               PROTOCOL = mkOption {
                 type = types.enum [ "http" "https" "fcgi" "http+unix" "fcgi+unix" ];
                 default = "http";
-                description = mdDoc ''Listen protocol. `+unix` means "over unix", not "in addition to."'';
+                description = ''Listen protocol. `+unix` means "over unix", not "in addition to."'';
               };
 
               HTTP_ADDR = mkOption {
                 type = types.either types.str types.path;
                 default = if lib.hasSuffix "+unix" cfg.settings.server.PROTOCOL then "/run/forgejo/forgejo.sock" else "0.0.0.0";
                 defaultText = literalExpression ''if lib.hasSuffix "+unix" cfg.settings.server.PROTOCOL then "/run/forgejo/forgejo.sock" else "0.0.0.0"'';
-                description = mdDoc "Listen address. Must be a path when using a unix socket.";
+                description = "Listen address. Must be a path when using a unix socket.";
               };
 
               HTTP_PORT = mkOption {
                 type = types.port;
                 default = 3000;
-                description = mdDoc "Listen port. Ignored when using a unix socket.";
+                description = "Listen port. Ignored when using a unix socket.";
               };
 
               DOMAIN = mkOption {
                 type = types.str;
                 default = "localhost";
-                description = mdDoc "Domain name of your server.";
+                description = "Domain name of your server.";
               };
 
               ROOT_URL = mkOption {
                 type = types.str;
                 default = "http://${cfg.settings.server.DOMAIN}:${toString cfg.settings.server.HTTP_PORT}/";
                 defaultText = literalExpression ''"http://''${config.services.forgejo.settings.server.DOMAIN}:''${toString config.services.forgejo.settings.server.HTTP_PORT}/"'';
-                description = mdDoc "Full public URL of Forgejo server.";
+                description = "Full public URL of Forgejo server.";
               };
 
               STATIC_ROOT_PATH = mkOption {
@@ -314,20 +313,20 @@ in
                 default = cfg.package.data;
                 defaultText = literalExpression "config.${opt.package}.data";
                 example = "/var/lib/forgejo/data";
-                description = mdDoc "Upper level of template and static files path.";
+                description = "Upper level of template and static files path.";
               };
 
               DISABLE_SSH = mkOption {
                 type = types.bool;
                 default = false;
-                description = mdDoc "Disable external SSH feature.";
+                description = "Disable external SSH feature.";
               };
 
               SSH_PORT = mkOption {
                 type = types.port;
                 default = 22;
                 example = 2222;
-                description = mdDoc ''
+                description = ''
                   SSH port displayed in clone URL.
                   The option is required to configure a service when the external visible port
                   differs from the local listening port i.e. if port forwarding is used.
@@ -339,7 +338,7 @@ in
               COOKIE_SECURE = mkOption {
                 type = types.bool;
                 default = false;
-                description = mdDoc ''
+                description = ''
                   Marks session cookies as "secure" as a hint for browsers to only send
                   them via HTTPS. This option is recommend, if Forgejo is being served over HTTPS.
                 '';

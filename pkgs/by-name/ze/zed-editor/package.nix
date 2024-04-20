@@ -27,13 +27,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zed";
-  version = "0.129.2";
+  version = "0.131.6";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "zed";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5VNPgZR1E/s5mpwU46zG640KucdyS+vnieveMzVdPNs=";
+    hash = "sha256-IhFOA+g2I5vb72CTSZ8WTa9K0ieYbPD/BMShGqaUb84=";
     fetchSubmodules = true;
   };
 
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "async-pipe-0.1.3" = "sha256-g120X88HGT8P6GNCrzpS5SutALx5H+45Sf4iSSxzctE=";
-      "blade-graphics-0.3.0" = "sha256-0TmunFnq9MBxm4TrAkI0PxB58qJEf7oWLWhHq5cVsQ8=";
+      "blade-graphics-0.4.0" = "sha256-S1PNdQ9YbJgLLsJU1mvDZ3feVDIrZGwU37JqIm+kfcE=";
       "bromberg_sl2-0.6.0" = "sha256-+bwdnk3EgYEAxQSP4KpEPicCfO+r2er1DRZjvfF4jSM=";
       "font-kit-0.11.0" = "sha256-+4zMzjFyMS60HfLMEXGfXqKn6P+pOngLA45udV09DM8=";
       "lsp-types-0.94.1" = "sha256-kplgPsafrgZFMI1D9pQCwmg+FKMn5HNWLbcgdXHUFVU=";
@@ -50,11 +50,8 @@ rustPlatform.buildRustPackage rec {
       "taffy-0.3.11" = "sha256-0hXOEj6IjSW8e1t+rvxBFX6V9XRum3QO2Des1XlHJEw=";
       "tree-sitter-0.20.100" = "sha256-k8au4++UJyaOCNo0cqokaQ5Is3BmIiCBSxiUkbrzhFQ=";
       "tree-sitter-bash-0.20.4" = "sha256-VP7rJfE/k8KV1XN1w5f0YKjCnDMYU1go/up0zj1mabM=";
-      "tree-sitter-c-sharp-0.20.0" = "sha256-DlnGIky33CuRKkVVS+tOTBLVOVzASXqdaUrZawh6LZc=";
-      "tree-sitter-clojure-0.0.9" = "sha256-H0OEnsoJxcDqlJ32ac7KCS2stT02XKrZ/v4mGMoN2EI=";
       "tree-sitter-cpp-0.20.0" = "sha256-2QYEFkpwcRmh2kf4qEAL2a5lGSa316CetOhF73e7rEM=";
       "tree-sitter-css-0.19.0" = "sha256-5Qti/bFac2A1PJxqZEOuSLK3GGKYwPDKAp3OOassBxU=";
-      "tree-sitter-dart-0.0.1" = "sha256-FE6zXy0lAUWWayrM3urZFnQaEYBcnmaVANcUUnvw1q4=";
       "tree-sitter-elixir-0.1.0" = "sha256-hBHqQ3eBjknRPJjP+lQJU6NPFhUMtiv4FbKsTw28Bog=";
       "tree-sitter-elm-5.6.4" = "sha256-0LpuyebOB5ew9fULBcaw8aUbF7HM5sXQpv+Jroz4tXg=";
       "tree-sitter-glsl-0.1.4" = "sha256-TRuiT3ndCeDCsCFokAN8cosNKccB0NjWVRiBJuBJXZw=";
@@ -72,11 +69,9 @@ rustPlatform.buildRustPackage rec {
       "tree-sitter-proto-0.0.2" = "sha256-W0diP2ByAXYrc7Mu/sbqST6lgVIyHeSBmH7/y/X3NhU=";
       "tree-sitter-racket-0.0.1" = "sha256-ie64no94TtAWsSYaBXmic4oyRAA01fMl97+JWcFU1E8=";
       "tree-sitter-scheme-0.2.0" = "sha256-K3+zmykjq2DpCnk17Ko9LOyGQTBZb1/dgVXIVynCYd4=";
-      "tree-sitter-toml-0.5.1" = "sha256-5nLNBxFeOGE+gzbwpcrTVnuL1jLUA0ZLBVw2QrOLsDQ=";
       "tree-sitter-typescript-0.20.2" = "sha256-cpOAtfvlffS57BrXaoa2xa9NUYw0AsHxVI8PrcpgZCQ=";
       "tree-sitter-vue-0.0.1" = "sha256-8v2e03A/Uj6zCJTH4j6TPwDQcNFeze1jepMADT6UVis=";
       "tree-sitter-yaml-0.0.1" = "sha256-S59jLlipBI2kwFuZDMmpv0TOZpGyXpbAizN3yC6wJ5I=";
-      "tree-sitter-zig-0.0.1" = "sha256-a3W7eBUN4V3HD3YPr1+3tpuWQfIQy1Wu8qxCQx0hEnI=";
     };
   };
 
@@ -144,6 +139,9 @@ rustPlatform.buildRustPackage rec {
   checkFlags = lib.optionals stdenv.hostPlatform.isLinux [
     # Fails with "On 2823 Failed to find test1:A"
     "--skip=test_base_keymap"
+    # Fails with "called `Result::unwrap()` on an `Err` value: Invalid keystroke `cmd-k`"
+    # https://github.com/zed-industries/zed/issues/10427
+    "--skip=test_disabled_keymap_binding"
   ];
 
   postInstall = ''
@@ -203,5 +201,7 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "zed";
     platforms = platforms.all;
+    # Currently broken on darwin: https://github.com/NixOS/nixpkgs/pull/303233#issuecomment-2048650618
+    broken = stdenv.isDarwin;
   };
 }

@@ -40,32 +40,32 @@ let
 
 in {
   options.programs.firejail = {
-    enable = mkEnableOption (lib.mdDoc "firejail, a sandboxing tool for Linux");
+    enable = mkEnableOption "firejail, a sandboxing tool for Linux";
 
     wrappedBinaries = mkOption {
       type = types.attrsOf (types.either types.path (types.submodule {
         options = {
           executable = mkOption {
             type = types.path;
-            description = lib.mdDoc "Executable to run sandboxed";
+            description = "Executable to run sandboxed";
             example = literalExpression ''"''${lib.getBin pkgs.firefox}/bin/firefox"'';
           };
           desktop = mkOption {
             type = types.nullOr types.path;
             default = null;
-            description = lib.mdDoc ".desktop file to modify. Only necessary if it uses the absolute path to the executable.";
+            description = ".desktop file to modify. Only necessary if it uses the absolute path to the executable.";
             example = literalExpression ''"''${pkgs.firefox}/share/applications/firefox.desktop"'';
           };
           profile = mkOption {
             type = types.nullOr types.path;
             default = null;
-            description = lib.mdDoc "Profile to use";
+            description = "Profile to use";
             example = literalExpression ''"''${pkgs.firejail}/etc/firejail/firefox.profile"'';
           };
           extraArgs = mkOption {
             type = types.listOf types.str;
             default = [];
-            description = lib.mdDoc "Extra arguments to pass to firejail";
+            description = "Extra arguments to pass to firejail";
             example = [ "--private=~/.firejail_home" ];
           };
         };
@@ -83,7 +83,7 @@ in {
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Wrap the binaries in firejail and place them in the global path.
       '';
     };

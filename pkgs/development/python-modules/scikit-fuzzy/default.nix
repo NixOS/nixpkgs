@@ -1,22 +1,24 @@
 { lib
 , buildPythonPackage
-, pythonOlder
 , fetchFromGitHub
 , fetchpatch
+, pythonAtLeast
+, setuptools
 , matplotlib
 , networkx
 , nose
 , numpy
 , scipy
-, pytestCheckHook
+, pytest7CheckHook
 }:
 
 buildPythonPackage rec {
   pname = "scikit-fuzzy";
   version = "unstable-2022-11-07";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  # code depends on distutils
+  disabled = pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = pname;
@@ -44,11 +46,20 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ networkx numpy scipy ];
-  nativeCheckInputs = [ matplotlib nose pytestCheckHook ];
+  build-system = [
+    setuptools
+  ];
 
-  pytestFlagsArray = [
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  propagatedBuildInputs = [
+    networkx
+    numpy
+    scipy
+  ];
+
+  nativeCheckInputs = [
+    matplotlib
+    nose
+    pytest7CheckHook
   ];
 
   pythonImportsCheck = [ "skfuzzy" ];

@@ -37,14 +37,14 @@ in
 
   options.xdg.portal = {
     enable =
-      mkEnableOption (lib.mdDoc ''[xdg desktop integration](https://github.com/flatpak/xdg-desktop-portal)'') // {
+      mkEnableOption ''[xdg desktop integration](https://github.com/flatpak/xdg-desktop-portal)'' // {
         default = false;
       };
 
     extraPortals = mkOption {
       type = types.listOf types.package;
       default = [ ];
-      description = lib.mdDoc ''
+      description = ''
         List of additional portals to add to path. Portals allow interaction
         with system, like choosing files or taking screenshots. At minimum,
         a desktop portal implementation should be listed. GNOME and KDE already
@@ -58,7 +58,7 @@ in
       type = types.bool;
       visible = false;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Sets environment variable `GTK_USE_PORTAL` to `1`.
         This will force GTK-based programs ran outside Flatpak to respect and use XDG Desktop Portals
         for features like file chooser but it is an unsupported hack that can easily break things.
@@ -69,7 +69,7 @@ in
     xdgOpenUsePortal = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Sets environment variable `NIXOS_XDG_OPEN_USE_PORTAL` to `1`
         This will make `xdg-open` use the portal to open programs, which resolves bugs involving
         programs opening inside FHS envs or with unexpected env vars set from wrappers.
@@ -92,7 +92,7 @@ in
           default = [ "gtk" ];
         };
       };
-      description = lib.mdDoc ''
+      description = ''
         Sets which portal backend should be used to provide the implementation
         for the requested interface. For details check {manpage}`portals.conf(5)`.
 
@@ -106,7 +106,7 @@ in
       type = types.listOf types.package;
       default = [ ];
       example = lib.literalExpression "[ pkgs.gnome.gnome-session ]";
-      description = lib.mdDoc ''
+      description = ''
         List of packages that provide XDG desktop portal configuration, usually in
         the form of `share/xdg-desktop-portal/$desktop-portals.conf`.
 

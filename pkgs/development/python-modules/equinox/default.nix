@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "equinox";
-  version = "0.11.3";
+  version = "0.11.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "patrick-kidger";
     repo = "equinox";
     rev = "refs/tags/v${version}";
-    hash = "sha256-la3gPfwQ2pxfZoEikn9uG+Pc3PKafgEgxZ8oVQEm9YM=";
+    hash = "sha256-3OwHND1YEdg/SppqiB7pCdp6v+lYwTbtX07tmyEMWDo=";
   };
 
   nativeBuildInputs = [

@@ -11,7 +11,7 @@ in
     nutServer = mkOption {
       type = types.str;
       default = "127.0.0.1";
-      description = lib.mdDoc ''
+      description = ''
         Hostname or address of the NUT server
       '';
     };
@@ -19,7 +19,7 @@ in
       type = types.str;
       default = "";
       example = "nut";
-      description = lib.mdDoc ''
+      description = ''
         The user to log in into NUT server. If set, passwordPath should
         also be set.
 
@@ -31,7 +31,7 @@ in
       type = types.nullOr types.path;
       default = null;
       apply = final: if final == null then null else toString final;
-      description = lib.mdDoc ''
+      description = ''
         A run-time path to the nutUser password file, which should be
         provisioned outside of Nix store.
       '';

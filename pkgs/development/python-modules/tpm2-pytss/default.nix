@@ -1,4 +1,6 @@
 { lib
+, stdenv
+, substituteAll
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -17,6 +19,9 @@
 , swtpm
 }:
 
+let
+  isCross = (stdenv.buildPlatform != stdenv.hostPlatform);
+in
 buildPythonPackage rec {
   pname = "tpm2-pytss";
   version = "2.2.1";
@@ -32,6 +37,18 @@ buildPythonPackage rec {
   patches = [
     # Fix hardcoded `fapi-config.json` configuration path
     ./fapi-config.patch
+  ] ++ lib.optionals isCross [
+    # pytss will regenerate files from headers of tpm2-tss.
+    # Those headers are fed through a compiler via pycparser. pycparser expects `cpp`
+    # to be in the path.
+    # This is put in the path via stdenv when not cross-compiling, but this is absent
+    # when cross-compiling is turned on.
+    # This patch changes the call to pycparser.preprocess_file to provide the name
+    # of the cross-compiling cpp
+    (substituteAll {
+      src = ./cross.patch;
+      crossPrefix = stdenv.hostPlatform.config;
+    })
   ];
 
   postPatch = ''

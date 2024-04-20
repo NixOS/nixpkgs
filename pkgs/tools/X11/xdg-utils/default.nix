@@ -175,11 +175,14 @@ let
         "xscreensaver-command"      # Xscreensaver
         "xset"                      # generic-ish X
       ];
-      fix."$lockfile_command" = [ "lockfile" ];
       keep = {
         "$MV" = true;
         "$XPROP" = true;
+        "$lockfile_command" = true;
       };
+      execer = [
+        "cannot:${perl}/bin/perl"
+      ];
       prologue = "${writeText "xdg-screensaver-prologue" ''
         export PERL5LIB=${with perlPackages; makePerlPath [ NetDBus XMLTwig XMLParser X11Protocol ]}
         export PATH=$PATH:${coreutils}/bin

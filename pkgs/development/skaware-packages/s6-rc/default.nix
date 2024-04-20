@@ -50,9 +50,9 @@ skawarePackages.buildPackage {
   # system we're cross-compiling for.
   postConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.targetPlatform) ''
     substituteInPlace src/s6-rc/s6-rc-compile.c \
-        --replace '<execline/config.h>' '"${targetPackages.execline.dev}/include/execline/config.h"' \
-        --replace '<s6/config.h>' '"${targetPackages.s6.dev}/include/s6/config.h"' \
-        --replace '<s6-rc/config.h>' '"${targetPackages.s6-rc.dev}/include/s6-rc/config.h"'
+        --replace-fail '<execline/config.h>' '"${targetPackages.execline.dev}/include/execline/config.h"' \
+        --replace-fail '<s6/config.h>' '"${targetPackages.s6.dev}/include/s6/config.h"' \
+        --replace-fail '<s6-rc/config.h>' '"${targetPackages.s6-rc.dev}/include/s6-rc/config.h"'
   '';
 
   postInstall = ''

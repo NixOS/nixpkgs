@@ -14,7 +14,7 @@
 </p>
 
 [Nixpkgs](https://github.com/nixos/nixpkgs) is a collection of over
-80,000 software packages that can be installed with the
+100,000 software packages that can be installed with the
 [Nix](https://nixos.org/nix/) package manager. It also implements
 [NixOS](https://nixos.org/nixos/), a purely-functional Linux distribution.
 

@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "zapzap";
-  version = "5.2.1";
+  version = "5.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "zapzap-linux";
     repo = "zapzap";
     rev = "refs/tags/${version}";
-    hash = "sha256-Jswt/SWsrrXdJtaT3FAOuOCkrwlpy+lSJa6/gquMiwY=";
+    hash = "sha256-KUWkpdT0v4Y85ga8NsF3fbiSjfhWXC+WpHESTPCW+oE=";
   };
 
   nativeBuildInputs = with python3Packages; [

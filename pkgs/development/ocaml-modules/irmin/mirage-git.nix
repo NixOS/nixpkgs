@@ -6,7 +6,7 @@
 buildDunePackage {
   pname = "irmin-mirage-git";
 
-  inherit (irmin-mirage) version src strictDeps;
+  inherit (irmin-mirage) version src;
 
   propagatedBuildInputs = [
     irmin-mirage

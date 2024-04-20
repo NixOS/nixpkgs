@@ -148,6 +148,10 @@ in rec {
     optional (attr ? ${name} && !(min <= attr.${name} && max >= attr.${name}))
       "Systemd ${group} field `${name}' is outside the range [${toString min},${toString max}]";
 
+  assertRangeOrOneOf = name: min: max: values: group: attr:
+    optional (attr ? ${name} && !((min <= attr.${name} && max >= attr.${name}) || elem attr.${name} values))
+      "Systemd ${group} field `${name}' is not a value in range [${toString min},${toString max}], or one of ${toString values}";
+
   assertMinimum = name: min: group: attr:
     optional (attr ? ${name} && attr.${name} < min)
       "Systemd ${group} field `${name}' must be greater than or equal to ${toString min}";

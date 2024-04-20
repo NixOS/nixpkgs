@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "zlint";
-  version = "3.6.1";
+  version = "3.6.2";
 
   src = fetchFromGitHub {
     owner = "zmap";
     repo = "zlint";
     rev = "v${version}";
-    hash = "sha256-8iZUEUU+HY8cJrBwiGNE4e6hXQvNwAt0cPnBjAVDcHo=";
+    hash = "sha256-UwtWYDWbln64nE4KDV+gWIhhdbyvlrs0fM96otnfqfE=";
   };
 
   modRoot = "v3";

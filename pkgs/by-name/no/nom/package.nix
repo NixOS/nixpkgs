@@ -1,16 +1,17 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 buildGoModule rec {
   pname = "nom";
-  version = "2.1.4";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "guyfedwards";
     repo = "nom";
     rev = "v${version}";
-    hash = "sha256-W0vfYAEQYixbnOQhA59sj2uSAcbqoS/OMiB3TfXsv/Y=";
+    hash = "sha256-AAgkxBbGH45n140jm28+J3hqYxzUIL6IVLGWD9oBexo=";
   };
 
   vendorHash = "sha256-fP6yxfIQoVaBC9hYcrCyo3YP3ntEVDbDTwKMO9TdyDI=";

@@ -2,8 +2,8 @@
 
 let
   base = callPackage ./generic.nix ((removeAttrs _args [ "fetchpatch" ]) // {
-    version = "8.1.27";
-    hash = "sha256-oV/XPqRPLfMLB9JHhuB9GUiw6j7tC4uEVzXVANwov/E=";
+    version = "8.1.28";
+    hash = "sha256-i+RQCW4BU8R9dThOfdWVzIl/HVPOAGBwjOlYm8wxQe4=";
     extraPatches = [
       # Fix build with libxml 2.12+.
       # Patch from https://github.com/php/php-src/commit/0a39890c967aa57225bb6bdf4821aff7a3a3c082

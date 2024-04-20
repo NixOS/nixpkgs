@@ -8,7 +8,7 @@
 , pytest-asyncio
 , pytest-benchmark
 , pytest-mock
-, pytestCheckHook
+, pytest7CheckHook
 , pythonOlder
 , pytz
 , snapshottest
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pytest7CheckHook
     pytest-asyncio
     pytest-benchmark
     pytest-mock
@@ -49,7 +49,6 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "--benchmark-disable"
-    "-W ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   pythonImportsCheck = [

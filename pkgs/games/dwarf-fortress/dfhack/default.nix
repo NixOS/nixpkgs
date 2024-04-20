@@ -1,20 +1,27 @@
 { stdenv
-, buildEnv
 , lib
 , fetchFromGitHub
 , fetchpatch
 , cmake
+, ninja
 , writeScriptBin
 , perl
 , XMLLibXML
 , XMLLibXSLT
+, makeWrapper
 , zlib
-, ruby
 , enableStoneSense ? false
 , allegro5
 , libGLU
 , libGL
 , SDL
+, SDL2
+, coreutils
+, util-linux
+, ncurses
+, strace
+, binutils
+, gnused
 , dfVersion
 }:
 
@@ -28,48 +35,60 @@ let
     optional
     optionals
     optionalString
-    platforms
     versionOlder
+    versionAtLeast
     ;
 
   dfhack-releases = {
     "0.44.10" = {
       dfHackRelease = "0.44.10-r2";
-      sha256 = "19bxsghxzw3bilhr8sm4axz7p7z8lrvbdsd1vdjf5zbg04rs866i";
+      hash = "sha256-0RikMwFv/eJk26Hptnam6J97flekapQhjWvw3+HTfaU=";
       xmlRev = "321bd48b10c4c3f694cc801a7dee6be392c09b7b";
-      prerelease = false;
     };
     "0.44.11" = {
       dfHackRelease = "0.44.11-beta2.1";
-      sha256 = "1jgwcqg9m1ybv3szgnklp6zfpiw5mswla464dlj2gfi5v82zqbv2";
+      hash = "sha256-Yi/8BdoluickbcQQRbmuhcfrvrl02vf12MuHmh5m/Mk=";
       xmlRev = "f27ebae6aa8fb12c46217adec5a812cd49a905c8";
       prerelease = true;
     };
     "0.44.12" = {
       dfHackRelease = "0.44.12-r1";
-      sha256 = "0j03lq6j6w378z6cvm7jspxc7hhrqm8jaszlq0mzfvap0k13fgyy";
+      hash = "sha256-3j83wgRXbfcrwPRrJVHFGcLD+tXy1M3MR2dwIw2mA0g=";
       xmlRev = "23500e4e9bd1885365d0a2ef1746c321c1dd5094";
-      prerelease = false;
     };
     "0.47.02" = {
       dfHackRelease = "0.47.02-alpha0";
-      sha256 = "19lgykgqm0si9vd9hx4zw8b5m9188gg8r1a6h25np2m2ziqwbjj9";
+      hash = "sha256-ScrFcfyiimuLgEaFjN5DKKRaFuKfdJjaTlGDit/0j6Y=";
       xmlRev = "23500e4e9bd1885365d0a2ef1746c321c1dd509a";
       prerelease = true;
     };
     "0.47.04" = {
       dfHackRelease = "0.47.04-r5";
-      sha256 = "sha256-0s+/LKbqsS/mrxKPDeniqykE5+Gy3ZzCa8yEDzMyssY=";
+      hash = "sha256-0s+/LKbqsS/mrxKPDeniqykE5+Gy3ZzCa8yEDzMyssY=";
       xmlRev = "be0444cc165a1abff053d5893dc1f780f06526b7";
-      prerelease = false;
     };
     "0.47.05" = {
       dfHackRelease = "0.47.05-r7";
-      sha256 = "sha256-vBKUTSjfCnalkBzfjaIKcxUuqsGGOTtoJC1RHJIDlNc=";
+      hash = "sha256-vBKUTSjfCnalkBzfjaIKcxUuqsGGOTtoJC1RHJIDlNc=";
       xmlRev = "f5019a5c6f19ef05a28bd974c3e8668b78e6e2a4";
-      prerelease = false;
     };
-
+    "50.10" = {
+      dfHackRelease = "50.10-r1.1";
+      hash = "sha256-k2j8G4kJ/RYE8W0YDOxcsRb5qjjn4El+rigf0v3AqZU=";
+      xmlRev = "041493b221e0799c106abeac1f86df4535ab80d3";
+      needsPatches = true;
+    };
+    "50.11" = {
+      dfHackRelease = "50.11-r7";
+      hash = "sha256-3KsFc0i4XkzoeRvcl5GUlx/fJB1HyqfZm+xL6T4oT/A=";
+      xmlRev = "cca87907c1cbfcf4af957b0bea3a961a345b1581";
+      needsPatches = true;
+    };
+    "50.12" = {
+      dfHackRelease = "50.12-r3";
+      hash = "sha256-2mO8DpNmZRCV7IRY0arf3SMvlO4Pxs61Kxfh3q3k3HU=";
+      xmlRev = "980b1af13acc31660dce632f913c968f52e2b275";
+    };
   };
 
   release =
@@ -80,6 +99,8 @@ let
     else throw "[DFHack] Unsupported Dwarf Fortress version: ${dfVersion}";
 
   version = release.dfHackRelease;
+  isAtLeast50 = versionAtLeast version "50.0";
+  needs50Patches = isAtLeast50 && (release.needsPatches or false);
 
   # revision of library/xml submodule
   xmlRev = release.xmlRev;
@@ -119,7 +140,7 @@ in
       owner = "DFHack";
       repo = "dfhack";
       rev = release.dfHackRelease;
-      sha256 = release.sha256;
+      inherit (release) hash;
       fetchSubmodules = true;
     };
 
@@ -133,6 +154,14 @@ in
       name = "fix-protobuf.patch";
       url = "https://github.com/DFHack/dfhack/commit/7bdf958518d2892ee89a7173224a069c4a2190d8.patch";
       hash = "sha256-p+mKhmYbnhWKNiGPMjbYO505Gcg634n0nudqH0NX3KY=";
+    }) ++ optional needs50Patches (fetchpatch {
+      name = "use-system-sdl2.patch";
+      url = "https://github.com/DFHack/dfhack/commit/734fb730d72e53ebe67f4a041a24dd7c50307ee3.patch";
+      hash = "sha256-uLX0gdVSzKEVibyUc1UxcQzdYkRm6D8DF+1eSOxM+qU=";
+    }) ++ optional needs50Patches (fetchpatch {
+      name = "rename-lerp.patch";
+      url = "https://github.com/DFHack/dfhack/commit/389dcf5cfcdb8bfb8deeb05fa5756c9f4f5709d1.patch";
+      hash = "sha256-QuDtGURhP+nM+x+8GIKO5LrMcmBkl9JSHHIeqzqGIPQ=";
     });
 
     # gcc 11 fix
@@ -150,27 +179,71 @@ in
       sed -i 's@cached_path = path_string.*@cached_path = getenv("DF_DIR");@' library/Process-linux.cpp
     '';
 
-    nativeBuildInputs = [ cmake perl XMLLibXML XMLLibXSLT fakegit ];
+    nativeBuildInputs = [ cmake ninja perl XMLLibXML XMLLibXSLT makeWrapper fakegit ];
+
     # We don't use system libraries because dfhack needs old C++ ABI.
-    buildInputs = [ zlib SDL ]
+    buildInputs = [ zlib ]
+      ++ optional isAtLeast50 SDL2
+      ++ optional (!isAtLeast50) SDL
       ++ optionals enableStoneSense [ allegro5 libGLU libGL ];
 
     preConfigure = ''
-      # Trick build system into believing we have .git
+      # Trick the build system into believing we have .git.
       mkdir -p .git/modules/library/xml
       touch .git/index .git/modules/library/xml/index
     '';
 
-    cmakeFlags = [ "-DDFHACK_BUILD_ARCH=${arch}" "-DDOWNLOAD_RUBY=OFF" ]
-      ++ optionals enableStoneSense [ "-DBUILD_STONESENSE=ON" "-DSTONESENSE_INTERNAL_SO=OFF" ];
+    cmakeFlags = [
+      # Race condition in `Generating codegen.out.xml and df/headers` that is fixed when using Ninja.
+      "-GNinja"
+      "-DDFHACK_BUILD_ARCH=${arch}"
 
-    # dfhack expects an unversioned libruby.so to be present in the hack
-    # subdirectory for ruby plugins to function.
-    postInstall = ''
-      ln -s ${ruby}/lib/libruby-*.so $out/hack/libruby.so
+      # Don't download anything.
+      "-DDOWNLOAD_RUBY=OFF"
+      "-DUSE_SYSTEM_SDL2=ON"
+
+      # Ruby support with dfhack is very spotty and was removed in version 50.
+      "-DBUILD_RUBY=OFF"
+    ] ++ optionals enableStoneSense [ "-DBUILD_STONESENSE=ON" "-DSTONESENSE_INTERNAL_SO=OFF" ];
+
+    NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-enum-enum-conversion" ]
+      ++ optionals (versionOlder version "0.47") [ "-fpermissive" ];
+
+    preFixup = ''
+      # Wrap dfhack scripts.
+      if [ -f $out/dfhack ]; then
+        wrapProgram $out/dfhack \
+          --inherit-argv0 \
+          --set-default SteamAppId 0 \
+          --set-default DFHACK_NO_RENAME_LIBSTDCXX 1 \
+          --suffix PATH : ${lib.makeBinPath [
+            coreutils util-linux strace gnused binutils ncurses
+          ]}
+      fi
+
+      if [ -f $out/dfhack-run ]; then
+        wrapProgram $out/dfhack-run \
+          --inherit-argv0 \
+          --suffix PATH : ${lib.makeBinPath [
+            coreutils
+          ]}
+      fi
+
+      # Create a dfhackrc that changes to the correct home directory.
+      cat <<EOF > $out/.dfhackrc
+      #!/usr/bin/env bash
+      # nixpkgs dfhackrc helper
+      if [ -d "\$NIXPKGS_DF_HOME" ]; then
+        cd "\$NIXPKGS_DF_HOME"
+        DF_DIR="\$NIXPKGS_DF_HOME"
+      fi
+      export DF_DIR
+      EOF
     '';
 
-    passthru = { inherit dfVersion; };
+    passthru = {
+      inherit dfVersion;
+    };
 
     meta = {
       description = "Memory hacking library for Dwarf Fortress and a set of tools that use it";

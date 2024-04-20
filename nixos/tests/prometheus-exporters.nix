@@ -227,6 +227,54 @@ let
       '';
     };
 
+    dnssec = {
+      exporterConfig = {
+        enable = true;
+        configuration = {
+          records = [
+            {
+              zone = "example.com";
+              record = "@";
+              type = "SOA";
+            }
+          ];
+        };
+        resolvers = [ "127.0.0.1:53" ];
+      };
+      metricProvider = {
+        services.knot = {
+          enable = true;
+          settingsFile = pkgs.writeText "knot.conf" ''
+            server:
+              listen: 127.0.0.1@53
+            template:
+              - id: default
+                storage: ${pkgs.buildEnv {
+                  name = "zones";
+                  paths = [(pkgs.writeTextDir "example.com.zone" ''
+                    @ SOA ns1.example.com. noc.example.com. 2024032401 86400 7200 3600000 172800
+                    @       NS      ns1
+                    ns1     A       192.168.0.1
+                  '')];
+                }}
+                zonefile-load: difference
+                zonefile-sync: -1
+            zone:
+              - domain: example.com
+                file: example.com.zone
+                dnssec-signing: on
+          '';
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("knot.service")
+        wait_for_open_port(53)
+        wait_for_unit("prometheus-dnssec-exporter.service")
+        wait_for_open_port(9204)
+        succeed("curl -sSf http://localhost:9204/metrics | grep 'example.com'")
+      '';
+    };
+
     # Access to WHOIS server is required to properly test this exporter, so
     # just perform basic sanity check that the exporter is running and returns
     # a failure.

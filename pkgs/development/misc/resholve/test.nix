@@ -18,6 +18,7 @@
 , gettext
 , rSrc
 , runDemo ? false
+, fetchpatch
 , binlore
 , sqlite
 , unixtools
@@ -121,6 +122,21 @@ rec {
   cli = stdenv.mkDerivation {
     name = "resholve-test";
     src = rSrc;
+
+    # TODO: should be removable on next resholve update--just
+    # temporarily work around test breaks caused by changes in
+    # bats 1.10.0. Since this is just about fixing tests, I'm
+    # patching test source to avoid going through staging.
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/abathur/resholve/commit/e1d6ccbc9cd5ec26122997610954dcb7d826f652.patch";
+        hash = "sha256-XA9KUc/OAD2S8Vpt+C7KcjTP44rnZ4FLdgnnRqVWdWY=";
+      })
+      (fetchpatch {
+        url = "https://github.com/abathur/resholve/commit/50db1a6a97baa7d7543a8abe33dddda62b487c65.patch";
+        hash = "sha256-m1dKaLI02Wag7uacG4BkcdCXw30Kn6J4ydTqPd7bsak=";
+      })
+    ];
 
     dontBuild = true;
 

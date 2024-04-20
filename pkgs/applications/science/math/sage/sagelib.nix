@@ -48,7 +48,7 @@
 , cvxopt
 , cypari2
 , cysignals
-, cython_3
+, cython
 , fpylll
 , gmpy2
 , importlib-metadata
@@ -153,7 +153,7 @@ buildPythonPackage rec {
     cvxopt
     cypari2
     cysignals
-    cython_3
+    cython
     fpylll
     gmpy2
     importlib-metadata

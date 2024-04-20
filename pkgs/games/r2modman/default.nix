@@ -2,7 +2,7 @@
 , stdenv
 , yarn
 , fetchYarnDeps
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , nodejs
 , electron
 , fetchFromGitHub
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     yarn
-    prefetch-yarn-deps
+    fixup-yarn-lock
     nodejs
     makeWrapper
     copyDesktopItems

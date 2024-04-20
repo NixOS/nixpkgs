@@ -15,6 +15,7 @@
 , libwebp
 , libxml2
 , nukeReferences
+, pkg-config
 , quantumdepth ? 8
 , runCommand
 , stdenv
@@ -50,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nukeReferences
+    pkg-config
     xz
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 

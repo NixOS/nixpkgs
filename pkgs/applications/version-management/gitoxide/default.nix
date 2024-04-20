@@ -18,16 +18,16 @@ let
   gix = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/gix";
 in rustPlatform.buildRustPackage rec {
   pname = "gitoxide";
-  version = "0.34.0";
+  version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "Byron";
     repo = "gitoxide";
     rev = "v${version}";
-    hash = "sha256-CHlLValZnO5Jd7boMWnK9bYCSjjM4Dj6xvn6tBlvP8c=";
+    hash = "sha256-Sl7nNYoiCdTZ50tIfJcq5x9KOBkgJsb5bq09chWbyQc=";
   };
 
-  cargoHash = "sha256-7nc6eIuY08nTeHMVwKukOdd0zP6xbUPo7NcZ8EEGUNI=";
+  cargoHash = "sha256-G1NWRkhcmFrcHaIxQ7nzvRejPZUuZQDiNonZykkt4qM=";
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles ];
 

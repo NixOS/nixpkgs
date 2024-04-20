@@ -1,38 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-
-# build-system
-, hatch-requirements-txt
-, hatch-nodejs-version
-, hatchling
-, trove-classifiers
-
-# dependencies
-, babel
-, colorama
-, jinja2
-, markdown
-, mkdocs
-, mkdocs-material-extensions
-, paginate
-, pygments
-, pymdown-extensions
-, pythonOlder
-, regex
-, requests
-
-# optional-dependencies
-, mkdocs-minify-plugin
-, mkdocs-redirects
-, mkdocs-git-revision-date-localized-plugin
-, pillow
-, cairosvg
+{
+  lib,
+  babel,
+  buildPythonPackage,
+  cairosvg,
+  colorama,
+  fetchFromGitHub,
+  hatch-nodejs-version,
+  hatch-requirements-txt,
+  hatchling,
+  jinja2,
+  markdown,
+  mkdocs,
+  mkdocs-git-revision-date-localized-plugin,
+  mkdocs-material-extensions,
+  mkdocs-minify-plugin,
+  mkdocs-redirects,
+  mkdocs-rss-plugin,
+  paginate,
+  pillow,
+  pygments,
+  pymdown-extensions,
+  pythonOlder,
+  regex,
+  requests,
+  trove-classifiers,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs-material";
-  version = "9.5.17";
+  version = "9.5.18";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -41,7 +37,7 @@ buildPythonPackage rec {
     owner = "squidfunk";
     repo = "mkdocs-material";
     rev = "refs/tags/${version}";
-    hash = "sha256-r+w3Nf7mAfWiDUeOelO+ykizeqxRiKWBnbUjakXov3U=";
+    hash = "sha256-5FCIDAWRY6YfZi4QbcEpJMFfbJ17vudxlUYx4czDxrY=";
   };
 
   nativeBuildInputs = [
@@ -69,7 +65,7 @@ buildPythonPackage rec {
     recommended = [
       mkdocs-minify-plugin
       mkdocs-redirects
-      # TODO: mkdocs-rss-plugin
+      mkdocs-rss-plugin
     ];
     git = [
       # TODO: gmkdocs-git-committers-plugin
@@ -84,9 +80,7 @@ buildPythonPackage rec {
   # No tests for python
   doCheck = false;
 
-  pythonImportsCheck = [
-    "mkdocs"
-  ];
+  pythonImportsCheck = [ "mkdocs" ];
 
   meta = with lib; {
     changelog = "https://github.com/squidfunk/mkdocs-material/blob/${src.rev}/CHANGELOG";

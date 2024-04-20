@@ -26,7 +26,7 @@
 , mock
 , py
 , pytest-asyncio
-, pytestCheckHook
+, pytest7CheckHook
 }:
 
 buildPythonPackage rec {
@@ -76,7 +76,7 @@ buildPythonPackage rec {
     mock
     py
     pytest-asyncio
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
   meta = with lib; {

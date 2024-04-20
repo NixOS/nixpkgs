@@ -385,13 +385,7 @@ let self = {
 
     inputs = [ luajit_openresty ];
 
-    preConfigure = let
-      # fix compilation against nginx 1.23.0
-      nginx-1-23-patch = fetchpatch {
-        url = "https://github.com/openresty/lua-nginx-module/commit/b6d167cf1a93c0c885c28db5a439f2404874cb26.patch";
-        sha256 = "sha256-l7GHFNZXg+RG2SIBjYJO1JHdGUtthWnzLIqEORJUNr4=";
-      };
-    in ''
+    preConfigure = ''
       export LUAJIT_LIB="${luajit_openresty}/lib"
       export LUAJIT_INC="$(realpath ${luajit_openresty}/include/luajit-*)"
 
@@ -399,7 +393,6 @@ let self = {
       lua_src=$TMPDIR/lua-src
       cp -r "${src}/" "$lua_src"
       chmod -R +w "$lua_src"
-      patch -p1 -d $lua_src -i ${nginx-1-23-patch}
       export configureFlags="''${configureFlags//"${src}"/"$lua_src"}"
       unset lua_src
     '';
@@ -786,8 +779,8 @@ let self = {
       name = "spnego-http-auth";
       owner = "stnoonan";
       repo = "spnego-http-auth-nginx-module";
-      rev = "72c8ee04c81f929ec84d5a6d126f789b77781a8c";
-      sha256 = "05rw3a7cv651951li995r5l1yzz6kwkm2xpbd59jsfzd74bw941i";
+      rev = "3575542b3147bd03a6c68a750c3662b0d72ed94e";
+      hash = "sha256-s0m5h7m7dsPD5o2SvBb9L2kB57jwXZK5SkdkGuOmlgs=";
     };
 
     inputs = [ libkrb5 ];
@@ -796,7 +789,7 @@ let self = {
       description = "SPNEGO HTTP Authentication Module";
       homepage = "https://github.com/stnoonan/spnego-http-auth-nginx-module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = teams.deshaw.members;
     };
   };
 

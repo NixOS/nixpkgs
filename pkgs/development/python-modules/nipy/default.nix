@@ -3,7 +3,7 @@
 , fetchPypi
 
 # build-system
-, cython_3
+, cython
 , meson-python
 , ninja
 , setuptools
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    cython_3
+    cython
     meson-python
     setuptools
     ninja

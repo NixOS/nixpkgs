@@ -21,7 +21,7 @@ buildGoModule rec {
   # avoid finding test and development commands
   modRoot = "kustomize";
   proxyVendor = true;
-  vendorHash = "sha256-6+8cwRH37lkQvnHBUlSqyNrZMfDpKbeUNJS4YMflBq0=";
+  vendorHash = "sha256-inCBDIVdvkEdDJEwX7vdoWANk+f01VxhBGPKxrjR6Ao=";
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "whirlpool-sixth-sense";
-  version = "0.18.7";
+  version = "0.18.8";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "abmantis";
     repo = "whirlpool-sixth-sense";
     rev = "refs/tags/${version}";
-    hash = "sha256-M4qOdxR97VhquB85IgimYKZqix2WoRIZcLSIlVK1xDY=";
+    hash = "sha256-Nmjw6b1k5M4H23tJxUPPJ3JIkuK5ylqEeFp18cGz9pA=";
   };
 
   build-system = [ setuptools ];

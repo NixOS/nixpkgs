@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, packaging
 , python-socketio
 , pythonOlder
 }:
@@ -19,6 +20,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    packaging
     python-socketio
     python-socketio.optional-dependencies.client
   ];

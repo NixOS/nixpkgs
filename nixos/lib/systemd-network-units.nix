@@ -25,6 +25,9 @@ in {
     commonMatchText def + ''
       [NetDev]
       ${attrsToSection def.netdevConfig}
+    '' + optionalString (def.bridgeConfig != { }) ''
+      [Bridge]
+      ${attrsToSection def.bridgeConfig}
     '' + optionalString (def.vlanConfig != { }) ''
       [VLAN]
       ${attrsToSection def.vlanConfig}

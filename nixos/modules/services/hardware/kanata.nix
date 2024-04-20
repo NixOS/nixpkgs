@@ -11,7 +11,7 @@ let
         type = types.listOf types.str;
         default = [ ];
         example = [ "/dev/input/by-id/usb-0000_0000-event-kbd" ];
-        description = mdDoc ''
+        description = ''
           Paths to keyboard devices.
 
           An empty list, the default value, lets kanata detect which
@@ -39,7 +39,7 @@ let
             ;; tap within 100ms for capslk, hold more than 100ms for lctl
             cap (tap-hold 100 100 caps lctl))
         '';
-        description = mdDoc ''
+        description = ''
           Configuration other than `defcfg`.
 
           See [example config files](https://github.com/jtroo/kanata)
@@ -50,7 +50,7 @@ let
         type = types.lines;
         default = "";
         example = "danger-enable-cmd yes";
-        description = mdDoc ''
+        description = ''
           Configuration of `defcfg` other than `linux-dev` (generated
           from the devices option) and
           `linux-continue-if-no-devs-found` (hardcoded to be yes).
@@ -62,13 +62,13 @@ let
       extraArgs = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        description = mdDoc "Extra command line arguments passed to kanata.";
+        description = "Extra command line arguments passed to kanata.";
       };
       port = mkOption {
         type = types.nullOr types.port;
         default = null;
         example = 6666;
-        description = mdDoc ''
+        description = ''
           Port to run the TCP server on. `null` will not run the server.
         '';
       };
@@ -151,7 +151,7 @@ let
 in
 {
   options.services.kanata = {
-    enable = mkEnableOption (mdDoc "kanata, a tool to improve keyboard comfort and usability with advanced customization");
+    enable = mkEnableOption "kanata, a tool to improve keyboard comfort and usability with advanced customization";
     package = mkPackageOption pkgs "kanata" {
       example = "kanata-with-cmd";
       extraDescription = ''
@@ -164,7 +164,7 @@ in
     keyboards = mkOption {
       type = types.attrsOf (types.submodule keyboard);
       default = { };
-      description = mdDoc "Keyboard configurations.";
+      description = "Keyboard configurations.";
     };
   };
 

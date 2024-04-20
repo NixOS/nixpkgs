@@ -308,13 +308,14 @@ let
     FactoMineR = [ self.car ];
     pander = [ self.codetools ];
     rmsb = [ self.rstantools ];
+    interactiveDisplay = [ self.BiocManager ];
   };
 
   packagesWithNativeBuildInputs = {
     adbcpostgresql = [ pkgs.postgresql ];
-    arrow = [ pkgs.pkg-config pkgs.arrow-cpp ];
     adimpro = [ pkgs.imagemagick ];
     animation = [ pkgs.which ];
+    arrow = with pkgs; [ pkg-config cmake ] ++ lib.optionals stdenv.isDarwin [ intltool ];
     audio = [ pkgs.portaudio ];
     BayesSAE = [ pkgs.gsl ];
     BayesVarSel = [ pkgs.gsl ];
@@ -331,7 +332,7 @@ let
     Cairo = with pkgs; [ libtiff libjpeg cairo.dev xorg.libXt.dev fontconfig.lib ];
     Cardinal = [ pkgs.which ];
     chebpol = [ pkgs.fftw.dev ];
-    ChemmineOB = with pkgs; [ openbabel pkg-config ];
+    ChemmineOB = [ pkgs.pkg-config ];
     curl = [ pkgs.curl.dev ];
     CytoML = [ pkgs.libxml2.dev ];
     data_table = with pkgs; [ pkg-config zlib.dev ] ++ lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
@@ -342,6 +343,7 @@ let
     fftw = [ pkgs.fftw.dev ];
     fftwtools = with pkgs; [ fftw.dev pkg-config ];
     Formula = [ pkgs.gmp ];
+    gdalraster = [ pkgs.pkg-config ];
     gdtools = with pkgs; [ cairo.dev fontconfig.lib freetype.dev ];
     GeneralizedWendland = [ pkgs.gsl ];
     ggiraph = with pkgs; [ pkgs.libpng.dev ];
@@ -355,7 +357,7 @@ let
     gslnls = [ pkgs.gsl ];
     gert = [ pkgs.libgit2 ];
     haven = with pkgs; [ zlib.dev ];
-    h5vc = [ pkgs.zlib.dev ];
+    h5vc = with pkgs; [ zlib.dev bzip2.dev xz.dev ];
     highs = [ pkgs.which pkgs.cmake ];
     rbedrock = [ pkgs.zlib.dev pkgs.which pkgs.cmake ];
     HiCseg = [ pkgs.gsl ];
@@ -547,6 +549,8 @@ let
     clustermq = [  pkgs.pkg-config ];
     coga = [ pkgs.gsl.dev ];
     deepSNV = with pkgs; [ xz.dev bzip2.dev zlib.dev ];
+    epialleleR = with pkgs; [ xz.dev bzip2.dev zlib.dev ];
+    gdalraster = with pkgs; [ gdal proj.dev sqlite.dev ];
     gpg = [ pkgs.gpgme ];
     webp = [ pkgs.libwebp ];
     RMark = [ pkgs.which ];
@@ -580,6 +584,8 @@ let
     odbc = [ pkgs.pkg-config ];
     openssl = [ pkgs.pkg-config ];
     pdftools = [ pkgs.pkg-config ];
+    qckitfastq = [ pkgs.zlib.dev ];
+    raer = with pkgs; [ zlib.dev xz.dev bzip2.dev ];
     RQuantLib = with pkgs; [ quantlib.dev boost.dev ];
     sf = with pkgs; [ pkg-config sqlite.dev proj.dev ];
     terra = with pkgs; [ pkg-config sqlite.dev proj.dev ];
@@ -592,6 +598,7 @@ let
     Cairo = [ pkgs.pkg-config ];
     CLVTools = [ pkgs.gsl ];
     excursions = [ pkgs.gsl ];
+    gpuMagic = [ pkgs.ocl-icd ];
     JMcmprsk = [ pkgs.gsl ];
     KSgeneral = [ pkgs.fftw.dev ];
     mashr = [ pkgs.gsl ];
@@ -615,6 +622,7 @@ let
     vcfR = with pkgs; [ zlib.dev ];
     bio3d = with pkgs; [ zlib.dev ];
     arrangements = with pkgs; [ gmp.dev ];
+    gfilogisreg = [ pkgs.gmp.dev ];
     spp = with pkgs; [ zlib.dev ];
     bamsignals = with pkgs; [ zlib.dev xz.dev bzip2 ];
     Rbowtie = with pkgs; [ zlib.dev ];
@@ -635,7 +643,7 @@ let
     Rmmquant = [ pkgs.zlib.dev ];
     SICtools = with pkgs; [ zlib.dev ncurses.dev ];
     Signac = [ pkgs.zlib.dev ];
-    TransView = [ pkgs.zlib.dev ];
+    TransView = with pkgs; [ xz.dev bzip2.dev zlib.dev ];
     bigsnpr = [ pkgs.zlib.dev ];
     zlib = [ pkgs.zlib.dev ];
     divest = [ pkgs.zlib.dev ];
@@ -647,7 +655,7 @@ let
     matchingMarkets = [ pkgs.zlib.dev ];
     methylKit = with pkgs; [ zlib.dev bzip2.dev xz.dev ];
     ndjson = [ pkgs.zlib.dev ];
-    podkat = [ pkgs.zlib.dev ];
+    podkat = with pkgs; [ zlib.dev xz.dev bzip2.dev ];
     qrqc = [ pkgs.zlib.dev ];
     rJPSGCS = [ pkgs.zlib.dev ];
     rhdf5filters = with pkgs; [ zlib.dev bzip2.dev ];
@@ -662,7 +670,7 @@ let
     rGEDI = with pkgs; [ libgeotiff.dev libaec zlib.dev hdf5.dev ];
     rawrr = [ pkgs.mono ];
     HDF5Array = [ pkgs.zlib.dev ];
-    FLAMES = [ pkgs.zlib.dev ];
+    FLAMES = with pkgs; [ zlib.dev bzip2.dev xz.dev ];
     ncdfFlow = [ pkgs.zlib.dev ];
     proj4 = [ pkgs.proj.dev ];
     rtmpt = [ pkgs.gsl ];
@@ -674,6 +682,7 @@ let
     crandep = [ pkgs.gsl ];
     catSurv = [ pkgs.gsl ];
     ccfindR = [ pkgs.gsl ];
+    screenCounter = [ pkgs.zlib.dev ];
     SPARSEMODr = [ pkgs.gsl ];
     RKHSMetaMod = [ pkgs.gsl ];
     LCMCR = [ pkgs.gsl ];
@@ -702,6 +711,7 @@ let
     ragg = with pkgs; [ freetype.dev libpng.dev libtiff.dev zlib.dev libjpeg.dev bzip2.dev ] ++ lib.optional stdenv.isDarwin lerc.dev;
     qqconf = [ pkgs.fftw.dev ];
     vapour = with pkgs; [ proj.dev gdal ];
+    ChemmineOB = [ pkgs.eigen ];
   };
 
   packagesRequiringX = [
@@ -908,6 +918,7 @@ let
     "MSnID"
     "OmnipathR"
     "precommit"
+    "protGear"
     "PSCBS"
     "iemisc"
     "repmis"
@@ -917,6 +928,7 @@ let
     "R_rsp"
     "salso"
     "scholar"
+    "SpatialDecon"
     "stepR"
     "styler"
     "teal_code"
@@ -948,14 +960,20 @@ let
     "paxtoolsr"
     "systemPipeShiny"
     "matlab2r"
+    "GNOSIS"
   ];
 
   packagesToSkipCheck = [
+    "MsDataHub" # tries to connect to ExperimentHub
     "Rmpi"     # tries to run MPI processes
     "ReactomeContentService4R" # tries to connect to Reactome
+    "PhIPData" # tries to download something from a DB
+    "RBioFormats" # tries to download jar during load test
     "pbdMPI"   # tries to run MPI processes
     "data_table" # fails to rename shared library before check
+    "coMethDMR" # tries to connect to ExperimentHub
     "multiMiR" # tries to connect to DB
+    "snapcount" # tries to connect to snaptron.cs.jhu.edu
   ];
 
   # Packages which cannot be installed due to lack of dependencies or other reasons.
@@ -995,10 +1013,32 @@ let
     "muscData"
     "org_Mxanthus_db"
     "scpdata"
+    "signatureSearch"
     "nullrangesData"
   ];
 
   otherOverrides = old: new: {
+    # it can happen that the major version of arrow-cpp is ahead of the
+    # rPackages.arrow that would be built from CRAN sources; therefore, to avoid
+    # build failures and manual updates of the hash, we use the R source at
+    # the GitHub release state of libarrow (arrow-cpp) in Nixpkgs. This may
+    # not exactly represent the CRAN sources, but because patching of the
+    # CRAN R package is mostly done to meet special CRAN build requirements,
+    # this is a straightforward approach. Example where patching was necessary
+    # -> arrow 14.0.0.2 on CRAN; was lagging behind libarrow release:
+    #   https://github.com/apache/arrow/issues/39698 )
+    arrow = old.arrow.overrideAttrs (attrs: {
+      src = pkgs.arrow-cpp.src;
+      name = "r-arrow-${pkgs.arrow-cpp.version}";
+      prePatch = "cd r";
+      postPatch = ''
+        patchShebangs configure
+      '';
+      buildInputs = attrs.buildInputs ++ [
+        pkgs.arrow-cpp
+      ];
+    });
+
     gifski = old.gifski.overrideAttrs (attrs: {
       cargoDeps = pkgs.rustPlatform.fetchCargoTarball {
         src = attrs.src;
@@ -1072,6 +1112,10 @@ let
       patchPhase = "patchShebangs configure";
     });
 
+    SpliceWiz = old.SpliceWiz.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
     data_table = old.data_table.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -fopenmp";
@@ -1106,6 +1150,23 @@ let
       env = (attrs.env or { }) // {
         NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + lib.optionalString stdenv.isDarwin " -fopenmp";
       };
+    });
+
+    rawrr = old.rawrr.overrideAttrs (attrs: {
+      postPatch = ''
+        substituteInPlace "R/zzz.R" "R/dotNetAssembly.R" --replace-warn \
+          "Sys.which('mono')" "'${lib.getBin pkgs.mono}/bin/mono'"
+
+        substituteInPlace "R/dotNetAssembly.R" --replace-warn \
+          "Sys.which(\"xbuild\")" "\"${lib.getBin pkgs.mono}/bin/xbuild\""
+
+        substituteInPlace "R/dotNetAssembly.R" --replace-warn \
+          "cmd <- ifelse(Sys.which(\"msbuild\") != \"\", \"msbuild\", \"xbuild\")" \
+          "cmd <- \"${lib.getBin pkgs.mono}/bin/xbuild\""
+
+        substituteInPlace "R/rawrr.R" --replace-warn \
+          "Sys.which(\"mono\")" "\"${lib.getBin pkgs.mono}/bin/mono\""
+      '';
     });
 
     rpf = old.rpf.overrideAttrs (attrs: {
@@ -1215,6 +1276,10 @@ let
       patches = [ ./patches/spMC.patch ];
     });
 
+    FLAMES = old.FLAMES.overrideAttrs (attrs: {
+      patches = [ ./patches/FLAMES.patch ];
+    });
+
     openssl = old.openssl.overrideAttrs (attrs: {
       preConfigure = ''
         patchShebangs configure
@@ -1288,6 +1353,10 @@ let
         '';
     });
 
+    rgoslin = old.rgoslin.overrideAttrs (attrs: {
+      patches = [ ./patches/rgoslin.patch ];
+    });
+
     rpanel = old.rpanel.overrideAttrs (attrs: {
       preConfigure = ''
         export TCLLIBPATH="${pkgs.bwidget}/lib/bwidget${pkgs.bwidget.version}"
@@ -1337,6 +1406,31 @@ let
         '';
       PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include -I${pkgs.cyrus_sasl.dev}/include -I${pkgs.zlib.dev}/include";
       PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -L${pkgs.cyrus_sasl.out}/lib -L${pkgs.zlib.out}/lib -lssl -lcrypto -lsasl2 -lz";
+    });
+
+    ChemmineOB = let
+      # R package doesn't compile with the latest (unstable) version.
+      # Override from nixpkgs-23.11
+      openbabel3 = pkgs.openbabel.overrideAttrs (attrs: {
+        version = "3.1.1";
+        src = pkgs.fetchFromGitHub {
+          owner = "openbabel";
+          repo = "openbabel";
+          rev = "openbabel-${lib.replaceStrings ["."] ["-"] attrs.version}";
+          sha256 = "sha256-wQpgdfCyBAoh4pmj9j7wPTlMtraJ62w/EShxi/olVMY=";
+        };
+      });
+    in
+    old.ChemmineOB.overrideAttrs (attrs: {
+      # pkg-config knows openbabel-3 without the .0
+      # Eigen3 is also looked for in the wrong location
+      postPatch = ''
+        substituteInPlace configure \
+          --replace-fail openbabel-3.0 openbabel-3
+        substituteInPlace src/Makevars.in \
+          --replace-fail "-I/usr/include/eigen3" "-I${pkgs.eigen}/include/eigen3"
+      '';
+      buildInputs = attrs.buildInputs ++ [openbabel3];
     });
 
     ps = old.ps.overrideAttrs (attrs: {
@@ -1403,15 +1497,10 @@ let
     });
 
     SICtools = old.SICtools.overrideAttrs (attrs: {
-      preConfigure = ''
-        substituteInPlace src/Makefile --replace "-lcurses" "-lncurses"
+      postPatch = ''
+        substituteInPlace src/Makefile --replace-fail "-lcurses" "-lncurses"
       '';
-    });
-
-    arrow = old.arrow.overrideAttrs (attrs: {
-      preConfigure = ''
-        patchShebangs configure
-      '';
+      hardeningDisable = [ "format" ];
     });
 
     ROracle = old.ROracle.overrideAttrs (attrs: {

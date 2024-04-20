@@ -30,11 +30,11 @@ in
   options = {
     services.armagetronad = {
       servers = mkOption {
-        description = lib.mdDoc "Armagetron server definitions.";
+        description = "Armagetron server definitions.";
         default = { };
         type = types.attrsOf (types.submodule {
           options = {
-            enable = mkEnableOption (lib.mdDoc "armagetronad");
+            enable = mkEnableOption "armagetronad";
 
             package = lib.mkPackageOptionMD pkgs "armagetronad-dedicated" {
               example = ''
@@ -48,25 +48,25 @@ in
             host = mkOption {
               type = types.str;
               default = "0.0.0.0";
-              description = lib.mdDoc "Host to listen on. Used for SERVER_IP.";
+              description = "Host to listen on. Used for SERVER_IP.";
             };
 
             port = mkOption {
               type = types.port;
               default = 4534;
-              description = lib.mdDoc "Port to listen on. Used for SERVER_PORT.";
+              description = "Port to listen on. Used for SERVER_PORT.";
             };
 
             dns = mkOption {
               type = types.nullOr types.str;
               default = null;
-              description = lib.mdDoc "DNS address to use for this server. Optional.";
+              description = "DNS address to use for this server. Optional.";
             };
 
             openFirewall = mkOption {
               type = types.bool;
               default = true;
-              description = lib.mdDoc "Set to true to open the configured UDP port for Armagetron Advanced.";
+              description = "Set to true to open the configured UDP port for Armagetron Advanced.";
             };
 
             name = mkOption {
@@ -77,7 +77,7 @@ in
             settings = mkOption {
               type = settingsFormat.type;
               default = { };
-              description = lib.mdDoc ''
+              description = ''
                 Armagetron Advanced server rules configuration. Refer to:
                 <https://wiki.armagetronad.org/index.php?title=Console_Commands>
                 or `armagetronad-dedicated --doc` for a list.
@@ -95,7 +95,7 @@ in
             roundSettings = mkOption {
               type = settingsFormat.type;
               default = { };
-              description = lib.mdDoc ''
+              description = ''
                 Armagetron Advanced server per-round configuration. Refer to:
                 <https://wiki.armagetronad.org/index.php?title=Console_Commands>
                 or `armagetronad-dedicated --doc` for a list.

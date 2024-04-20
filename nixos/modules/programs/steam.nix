@@ -24,7 +24,7 @@ let
     '').overrideAttrs (_: { passthru.providedSessions = [ "steam" ]; });
 in {
   options.programs.steam = {
-    enable = mkEnableOption (lib.mdDoc "steam");
+    enable = mkEnableOption "steam";
 
     package = mkOption {
       type = types.package;
@@ -62,7 +62,7 @@ in {
           bubblewrap = "${config.security.wrapperDir}/..";
         };
       });
-      description = lib.mdDoc ''
+      description = ''
         The Steam package to use. Additional libraries are added from the system
         configuration to ensure graphics work properly.
 
@@ -79,7 +79,7 @@ in {
           proton-ge-bin
         ]
       '';
-      description = lib.mdDoc ''
+      description = ''
         Extra packages to be used as compatibility tools for Steam on Linux. Packages will be included
         in the `STEAM_EXTRA_COMPAT_TOOLS_PATHS` environmental variable. For more information see
         https://github.com/ValveSoftware/steam-for-linux/issues/6310.
@@ -91,7 +91,7 @@ in {
     remotePlay.openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Open ports in the firewall for Steam Remote Play.
       '';
     };
@@ -99,7 +99,7 @@ in {
     dedicatedServer.openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Open ports in the firewall for Source Dedicated Server.
       '';
     };
@@ -107,21 +107,21 @@ in {
     localNetworkGameTransfers.openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Open ports in the firewall for Steam Local Network Game Transfers.
       '';
     };
 
     gamescopeSession = mkOption {
-      description = mdDoc "Run a GameScope driven Steam session from your display-manager";
+      description = "Run a GameScope driven Steam session from your display-manager";
       default = {};
       type = types.submodule {
         options = {
-          enable = mkEnableOption (mdDoc "GameScope Session");
+          enable = mkEnableOption "GameScope Session";
           args = mkOption {
             type = types.listOf types.str;
             default = [ ];
-            description = mdDoc ''
+            description = ''
               Arguments to be passed to GameScope for the session.
             '';
           };
@@ -129,7 +129,7 @@ in {
           env = mkOption {
             type = types.attrsOf types.str;
             default = { };
-            description = mdDoc ''
+            description = ''
               Environmental variables to be passed to GameScope for the session.
             '';
           };
@@ -137,10 +137,10 @@ in {
       };
     };
 
-    extest.enable = mkEnableOption (lib.mdDoc ''
+    extest.enable = mkEnableOption ''
       Load the extest library into Steam, to translate X11 input events to
       uinput events (e.g. for using Steam Input on Wayland)
-    '');
+    '';
   };
 
   config = mkIf cfg.enable {

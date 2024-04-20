@@ -14,7 +14,7 @@ in {
     telemetryPath = lib.mkOption {
       type = lib.types.str;
       default = "/metrics";
-      description = lib.mdDoc ''
+      description = ''
         Path under which to expose metrics.
       '';
     };

@@ -37,8 +37,11 @@ let
   # https://github.com/NixOS/nixpkgs/issues/298719
   # https://github.com/paperless-ngx/paperless-ngx/issues/5494
   python = python3.override {
-    packageOverrides = self: super: {
-      uvicorn = super.uvicorn.overridePythonAttrs (oldAttrs: {
+    packageOverrides = final: prev: {
+      # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
+      ocrmypdf = prev.ocrmypdf.override { tesseract = tesseract5; };
+
+      uvicorn = prev.uvicorn.overridePythonAttrs (_: {
         version = "0.25.0";
         src = fetchFromGitHub {
           owner = "encode";
@@ -245,7 +248,7 @@ python.pkgs.buildPythonApplication rec {
   doCheck = !stdenv.isDarwin;
 
   passthru = {
-    inherit python path frontend;
+    inherit python path frontend tesseract5;
     nltkData = with nltk-data; [ punkt snowball_data stopwords ];
     tests = { inherit (nixosTests) paperless; };
   };

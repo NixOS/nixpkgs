@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "bip-utils";
-  version = "2.9.2";
+  version = "2.9.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "ebellocchia";
     repo = "bip_utils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qK1jSVfkebB9JM0sZjOu7ABc7xMrcybu1r7oQOw3bJo=";
+    hash = "sha256-3G37n/mfI+3JVIkmJWzbB1qPPTE6NJJlFZWdE0fIIWA=";
   };
 
   nativeBuildInputs = [

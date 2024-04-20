@@ -31,6 +31,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = if pythonAtLeast "3.12" then [
+    # https://github.com/agronholm/exceptiongroup/issues/116
+    "test_deep_split"
+    "test_deep_subgroup"
+  ] else null;
+
   pythonImportsCheck = [
     "exceptiongroup"
   ];

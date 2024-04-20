@@ -140,25 +140,25 @@ in
         internal = true;
         default = "${xorg.xauth}/bin/xauth";
         defaultText = literalExpression ''"''${pkgs.xorg.xauth}/bin/xauth"'';
-        description = lib.mdDoc "Path to the {command}`xauth` program used by display managers.";
+        description = "Path to the {command}`xauth` program used by display managers.";
       };
 
       xserverBin = mkOption {
         type = types.path;
-        description = lib.mdDoc "Path to the X server used by display managers.";
+        description = "Path to the X server used by display managers.";
       };
 
       xserverArgs = mkOption {
         type = types.listOf types.str;
         default = [];
         example = [ "-ac" "-logverbose" "-verbose" "-nolisten tcp" ];
-        description = lib.mdDoc "List of arguments for the X server.";
+        description = "List of arguments for the X server.";
       };
 
       setupCommands = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Shell commands executed just after the X server has started.
 
           This option is only effective for display managers for which this feature
@@ -173,7 +173,7 @@ in
           ''
             xmessage "Hello World!" &
           '';
-        description = lib.mdDoc ''
+        description = ''
           Shell commands executed just before the window or desktop manager is
           started. These commands are not currently sourced for Wayland sessions.
         '';
@@ -193,7 +193,7 @@ in
               }
             ]
           '';
-        description = lib.mdDoc ''
+        description = ''
           List of sessions supported with the command used to start each
           session.  Each session script can set the
           {var}`waitPID` shell variable to make this script
@@ -212,7 +212,7 @@ in
       importedVariables = mkOption {
         type = types.listOf (types.strMatching "[a-zA-Z_][a-zA-Z0-9_]*");
         visible = false;
-        description = lib.mdDoc ''
+        description = ''
           Environment variables to import into the systemd user environment.
         '';
       };
@@ -284,7 +284,7 @@ in
       in
         # We will generate every possible pair of WM and DM.
         concatLists (
-            builtins.map
+            lib.mapCartesianProduct
             ({dm, wm}: let
               sessionName = "${dm.name}${optionalString (wm.name != "none") ("+" + wm.name)}";
               script = xsession dm wm;
@@ -312,7 +312,7 @@ in
                   providedSessions = [ sessionName ];
                 })
             )
-            (cartesianProductOfSets { dm = dms; wm = wms; })
+            { dm = dms; wm = wms; }
           );
   };
 

@@ -18,7 +18,7 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-BSb+8p5+RJMfcYc2+BuT4YbhCWCbcYOt9upesD11Ytw=";
+  vendorHash = "sha256-veduD0K3Onkqvyg9E5v854a6/8UIRQZEH098lUepRNU=";
 
   nativeCheckInputs = [
     swtpm

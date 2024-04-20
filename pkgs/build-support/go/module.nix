@@ -84,6 +84,7 @@ let
     preBuild = args.preBuild or "";
     postBuild = args.modPostBuild or "";
     sourceRoot = args.sourceRoot or "";
+    env = args.env or { };
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
       "GIT_PROXY_COMMAND"

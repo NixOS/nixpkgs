@@ -685,10 +685,18 @@ in
 
     cargoDeps = rustPlatform.fetchCargoTarball {
       src = oa.src;
-      hash = "sha256-gvUqkLOa0WvAK4GcTkufr0lC2BOs2FQ2bgFpB0qa47k=";
+      hash = "sha256-2P+mokkjdj2PccQG/kAGnIoUPVnK2FqNfYpHPhsp8kw=";
     };
 
-    nativeBuildInputs = oa.nativeBuildInputs ++ [ cargo rustPlatform.cargoSetupHook ];
+    nativeBuildInputs = let
+      # HACK: luarocks-nix doesn't pick up rockspec build dependencies,
+      # so we have to pass the correct package in here.
+      lua = lib.head oa.propagatedBuildInputs;
+    in oa.nativeBuildInputs ++ [
+      cargo
+      rustPlatform.cargoSetupHook
+      lua.pkgs.luarocks-build-rust-mlua
+    ];
 
   });
 

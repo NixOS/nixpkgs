@@ -81,8 +81,12 @@ stdenvNoCC.mkDerivation rec {
     cp -a *.png $art/data/art/
   '';
 
+  passthru = {
+    inherit dfVersion;
+  };
+
   meta = {
-    description = "A plugin for Dwarf Fortress / DFHack that improves various aspects the game interface";
+    description = "A plugin for Dwarf Fortress / DFHack that improves various aspects of the game interface";
     maintainers = with maintainers; [ Baughn numinit ];
     license = licenses.mit;
     platforms = platforms.linux;

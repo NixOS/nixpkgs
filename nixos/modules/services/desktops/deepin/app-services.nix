@@ -14,7 +14,7 @@ with lib;
 
     services.deepin.app-services = {
 
-      enable = mkEnableOption (lib.mdDoc "service collection of DDE applications, including dconfig-center");
+      enable = mkEnableOption "service collection of DDE applications, including dconfig-center";
 
     };
 

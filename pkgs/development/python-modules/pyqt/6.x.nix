@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchurl
 , pkg-config
 , dbus
 , lndir
@@ -23,15 +23,17 @@
 
 buildPythonPackage rec {
   pname = "pyqt6";
-  version = "6.6.1";
+  version = "6.7.0.dev2404081550";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    pname = "PyQt6";
-    inherit version;
-    hash = "sha256-nxWKop0gUULFbw810HeEuN8L4oN40gqXvNqL1k/9A3k=";
+  src = fetchurl {
+    urls = [
+      "https://riverbankcomputing.com/pypi/packages/PyQt6/PyQt6-${version}.tar.gz"
+      "http://web.archive.org/web/20240411124842if_/https://riverbankcomputing.com/pypi/packages/PyQt6/PyQt6-${version}.tar.gz"
+    ];
+    hash = "sha256-H5qZ/rnruGh+UVSXLZyTSvjagmmli/iYq+7BaIzl1YQ=";
   };
 
   patches = [
@@ -44,11 +46,15 @@ buildPythonPackage rec {
   ];
 
   # be more verbose
+  # and normalize version
   postPatch = ''
     cat >> pyproject.toml <<EOF
     [tool.sip.project]
     verbose = true
     EOF
+
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "${version}"' 'version = "${lib.versions.pad 3 version}"'
   '';
 
   enableParallelBuilding = true;

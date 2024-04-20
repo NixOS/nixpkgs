@@ -18,8 +18,8 @@ in
 
 {
   options.virtualisation.virtualbox.host = {
-    enable = mkEnableOption (lib.mdDoc "VirtualBox") // {
-      description = lib.mdDoc ''
+    enable = mkEnableOption "VirtualBox" // {
+      description = ''
         Whether to enable VirtualBox.
 
         ::: {.note}
@@ -29,8 +29,8 @@ in
       '';
     };
 
-    enableExtensionPack = mkEnableOption (lib.mdDoc "VirtualBox extension pack") // {
-      description = lib.mdDoc ''
+    enableExtensionPack = mkEnableOption "VirtualBox extension pack" // {
+      description = ''
         Whether to install the Oracle Extension Pack for VirtualBox.
 
         ::: {.important}
@@ -45,7 +45,7 @@ in
     addNetworkInterface = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Automatically set up a vboxnet0 host-only network interface.
       '';
     };
@@ -53,7 +53,7 @@ in
     enableHardening = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Enable hardened VirtualBox, which ensures that only the binaries in the
         system path get access to the devices exposed by the kernel modules
         instead of all users in the vboxusers group.
@@ -68,7 +68,7 @@ in
     headless = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Use VirtualBox installation without GUI and Qt dependency. Useful to enable on servers
         and when virtual machines are controlled only via SSH.
       '';
@@ -77,7 +77,7 @@ in
     enableWebService = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Build VirtualBox web service tool (vboxwebsrv) to allow managing VMs via other webpage frontend tools. Useful for headless servers.
       '';
     };
@@ -85,7 +85,7 @@ in
     enableKvm = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enable KVM support for VirtualBox. This increases compatibility with Linux kernel versions, because the VirtualBox kernel modules
         are not required.
 

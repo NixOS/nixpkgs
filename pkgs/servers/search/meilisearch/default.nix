@@ -6,9 +6,10 @@
 , SystemConfiguration
 , nixosTests
 , nix-update-script
+, libclang
 }:
 
-let version = "1.7.3";
+let version = "1.7.6";
 in
 rustPlatform.buildRustPackage {
   pname = "meilisearch";
@@ -18,7 +19,7 @@ rustPlatform.buildRustPackage {
     owner = "meilisearch";
     repo = "MeiliSearch";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2kwogur6hS7/xjUhH9aRJevWbtgg5xQkvB/aIj7wyJ8=";
+    hash = "sha256-LsJM7zkoiu5LZb/rhnZaAS/wVNH8b6YZ+vNEE1wVIIk=";
   };
 
   cargoBuildFlags = [
@@ -42,6 +43,8 @@ rustPlatform.buildRustPackage {
   buildInputs = lib.optionals stdenv.isDarwin [
     Security SystemConfiguration
   ];
+
+  env.LIBCLANG_PATH = "${libclang.lib}/lib";
 
   passthru = {
     updateScript = nix-update-script { };

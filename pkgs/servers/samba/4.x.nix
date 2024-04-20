@@ -1,6 +1,7 @@
 { lib, stdenv
 , buildPackages
 , fetchurl
+, fetchpatch
 , wafHook
 , pkg-config
 , bison
@@ -34,6 +35,7 @@
 , python3Packages
 , nixosTests
 , libiconv
+, testers
 
 , enableLDAP ? false, openldap
 , enablePrinting ? false, cups
@@ -59,12 +61,12 @@ let
     inherit python;
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "samba";
   version = "4.20.0";
 
   src = fetchurl {
-    url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
+    url = "mirror://samba/pub/samba/stable/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     hash = "sha256-AmclQlEKxuXQyRwMFNkKtObsOXxwnpUsbaOm4LTVpC8=";
   };
 
@@ -76,6 +78,12 @@ stdenv.mkDerivation rec {
     ./4.x-no-persistent-install-dynconfig.patch
     ./4.x-fix-makeflags-parsing.patch
     ./build-find-pre-built-heimdal-build-tools-in-case-of-.patch
+    (fetchpatch {
+      # workaround for https://github.com/NixOS/nixpkgs/issues/303436
+      name = "samba-reproducible-builds.patch";
+      url = "https://gitlab.com/raboof/samba/-/commit/9995c5c234ece6888544cdbe6578d47e83dea0b5.patch";
+      hash = "sha256-TVKK/7wGsfP1pVf8o1NwazobiR8jVJCCMj/FWji3f2A=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -232,8 +240,15 @@ stdenv.mkDerivation rec {
     lib.optionals (buildPackages.python3Packages.python != python3Packages.python)
       [ buildPackages.python3Packages.python ];
 
-  passthru = {
-    tests.samba = nixosTests.samba;
+  passthru.tests = {
+    samba = nixosTests.samba;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+    version = testers.testVersion {
+      command = "${finalAttrs.finalPackage}/bin/smbd -V";
+      package = finalAttrs.finalPackage;
+    };
   };
 
   meta = with lib; {
@@ -243,5 +258,20 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     broken = enableGlusterFS;
     maintainers = with maintainers; [ aneeshusa ];
+    pkgConfigModules = [
+      "dcerpc_samr"
+      "dcerpc"
+      "ndr_krb5pac"
+      "ndr_nbt"
+      "ndr_standard"
+      "ndr"
+      "netapi"
+      "samba-credentials"
+      "samba-hostconfig"
+      "samba-util"
+      "samdb"
+      "smbclient"
+      "wbclient"
+    ];
   };
-}
+})

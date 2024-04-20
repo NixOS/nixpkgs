@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   postFixup = ''
-    mkdir $out/lib $out/share
+    mkdir -p $out/lib $out/share/obs/obs-plugins
     mv $out/${pname}/bin/64bit $out/lib/obs-plugins
-    mv $out/${pname}/data $out/share/obs
+    mv $out/${pname}/data $out/share/obs/obs-plugins/${pname}
     rm -rf $out/${pname}
   '';
 

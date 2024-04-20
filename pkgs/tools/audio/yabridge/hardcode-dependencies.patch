@@ -11,6 +11,21 @@ index c602c5ad..a52e20a1 100644
  endif
  
  # These are all headers-only libraries, and thus won't require separate 32-bit
+diff --git a/src/common/notifications.cpp b/src/common/notifications.cpp
+index 66e08527..685c54af 100644
+--- a/src/common/notifications.cpp
++++ b/src/common/notifications.cpp
+@@ -29,8 +29,8 @@
+ #include "process.h"
+ #include "utils.h"
+ 
+-constexpr char libdbus_library_name[] = "libdbus-1.so.3";
+-constexpr char libdbus_library_fallback_name[] = "libdbus-1.so";
++constexpr char libdbus_library_name[] = "@libdbus@/lib/libdbus-1.so.3";
++constexpr char libdbus_library_fallback_name[] = "@libdbus@/lib/libdbus-1.so";
+ 
+ std::atomic<void*> libdbus_handle = nullptr;
+ std::mutex libdbus_mutex;
 diff --git a/src/plugin/utils.cpp b/src/plugin/utils.cpp
 index 82db99a5..491f005d 100644
 --- a/src/plugin/utils.cpp

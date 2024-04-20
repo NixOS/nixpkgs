@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, runtimeShell
 , installShellFiles
 , bc
 , ncurses
@@ -10,16 +11,16 @@
 
 buildGoModule rec {
   pname = "fzf";
-  version = "0.49.0";
+  version = "0.50.0";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    hash = "sha256-XecMHKi5JMWx3RHQRk2FqS3SjyR6KzWjfyQ5JCI45xM=";
+    hash = "sha256-b8B05aj0+c620K6ftCXx1EGUt8mdqQYTE0D9aPU+/wA=";
   };
 
-  vendorHash = "sha256-ZEwB2GKohmOx8xosj14VII6sQ4a82s7+h9r620MKEeU=";
+  vendorHash = "sha256-Ho2jVD/U/2BFt3BF5w+KHp5nSVmukx0o2l3ISDGDSt0=";
 
   CGO_ENABLED = 0;
 
@@ -55,6 +56,23 @@ buildGoModule rec {
     install -D plugin/* -t $out/share/vim-plugins/${pname}/plugin
     mkdir -p $out/share/nvim
     ln -s $out/share/vim-plugins/${pname} $out/share/nvim/site
+
+    # Install shell integrations
+    install -D shell/* -t $out/share/fzf/
+    install -D shell/key-bindings.fish $out/share/fish/vendor_functions.d/fzf_key_bindings.fish
+    mkdir -p $out/share/fish/vendor_conf.d
+    cat << EOF > $out/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
+      status is-interactive; or exit 0
+      fzf_key_bindings
+    EOF
+
+    cat <<SCRIPT > $out/bin/fzf-share
+    #!${runtimeShell}
+    # Run this script to find the fzf shared folder where all the shell
+    # integration scripts are living.
+    echo $out/share/fzf
+    SCRIPT
+    chmod +x $out/bin/fzf-share
   '';
 
   passthru.tests.version = testers.testVersion {

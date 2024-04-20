@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     llvm
     zlib
     zstd
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
     elfutils
   ];
 

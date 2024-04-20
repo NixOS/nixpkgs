@@ -1,20 +1,20 @@
 { lib, rustPlatform, fetchpatch, fetchFromGitHub }:
 rustPlatform.buildRustPackage rec {
   pname = "mini-calc";
-  version = "2.12.2";
+  version = "2.12.3";
 
   src = fetchFromGitHub {
     owner = "coco33920";
     repo = "calc";
     rev = version;
-    hash = "sha256-MKMZVRjqwNQUNkuduvgVvsp53E48JPI68Lq/6ooLcFc=";
+    hash = "sha256-/aTfh3d63wwk3xai2F/D1fMJiDO4mg+OeLIanV4vSuA=";
   };
 
-  cargoHash = "sha256-A9t7i9mw4dzCWUAObZ81BSorCrzx6wEjYXiRWIBzM9M=";
+  cargoHash = "sha256-BfaOhEAKZmTYkzz6rvcSmDPufyQMJFtQO6CRksgA/2U=";
   cargoPatches = [
     (fetchpatch {
-      url = "https://github.com/coco33920/calc/commit/0bd12cbf3e13e447725e22cc70df72e559d21c94.patch";
-      sha256 = "sha256-1QN18LQFh8orh9DvgLBGAHimW/b/8HxbwtVD9s7mQaI=";
+      url = "https://github.com/coco33920/calc/commit/a010c72b5c06c75b7f644071f2861394dd5c74b8.patch";
+      sha256 = "sha256-ceyxfgiXHS+oOJ4apM8+cSjMICwGlQHMKjFICATmKTU=";
     })
   ];
 

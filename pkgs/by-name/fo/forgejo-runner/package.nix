@@ -3,6 +3,7 @@
 , fetchFromGitea
 , testers
 , forgejo-runner
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -27,9 +28,12 @@ buildGoModule rec {
 
   doCheck = false; # Test try to lookup code.forgejo.org.
 
-  passthru.tests.version = testers.testVersion {
-    package = forgejo-runner;
-    version = src.rev;
+  passthru.tests = {
+    inherit (nixosTests.forgejo) sqlite3;
+    version = testers.testVersion {
+      package = forgejo-runner;
+      version = src.rev;
+    };
   };
 
   meta = with lib; {

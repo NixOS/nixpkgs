@@ -21,6 +21,7 @@
 , squashfsTools
 , setuptools
 , setuptools-scm
+, stdenv
 }:
 
 buildPythonPackage rec {
@@ -103,6 +104,10 @@ buildPythonPackage rec {
     "tests/unit/packages/test_apt_cache.py"
     "tests/unit/packages/test_deb.py"
     "tests/unit/packages/test_chisel.py"
+  ] ++ lib.optionals stdenv.isAarch64 [
+    # These tests have hardcoded "amd64" strings which fail on aarch64
+    "tests/unit/executor/test_environment.py"
+    "tests/unit/features/overlay/test_executor_environment.py"
   ];
 
   passthru.updateScript = nix-update-script { };

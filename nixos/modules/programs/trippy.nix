@@ -7,7 +7,7 @@ in
 {
   options = {
     programs.trippy = {
-      enable = lib.mkEnableOption (lib.mdDoc "trippy, a network diagnostic tool");
+      enable = lib.mkEnableOption "trippy, a network diagnostic tool";
     };
   };
 

@@ -46,6 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-d32lcJq24MXeIWbNbo6putWaol5kF2io6cz4ZuL+DbE=";
   };
 
+  patches = [
+    ./0001-set-__STDC_CONSTANT_MACROS-to-make-rocAL-compile.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     rocm-cmake

@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gmqcc";
-  version = "unstable-2021-07-09";
+  version = "0-unstable-2023-05-05";
 
   src = fetchFromGitHub {
     owner = "graphitemaster";
     repo = "gmqcc";
-    rev = "297eab9e5e2c9cc4f41201b68821593a5cf9a725";
-    sha256 = "1hl2qn7402ia03kjkblj4q4wfypxkil99sivsyk2vrnwwpdp4nzx";
+    rev = "2fe0af00e78d55edecd7ca7ee1808c4ea946b05f";
+    hash = "sha256-AyuwsUIt+P/D4ABuIXGJxpp0TMAbnDg+R2iNMy6WjRw=";
   };
 
   installPhase = ''

@@ -86,7 +86,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Mount `/etc` as an overlayfs instead of generating it via a perl script.
 
           Note: This is currently experimental. Only enable this option if you're
@@ -97,7 +97,7 @@ in
       mutable = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to mount `/etc` mutably (i.e. read-write) or immutably (i.e. read-only).
 
           If this is false, only the immutable lowerdir is mounted. If it is
@@ -116,7 +116,7 @@ in
           "default/useradd".text = "GROUP=100 ...";
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Set of files that have to be linked in {file}`/etc`.
       '';
 
@@ -127,7 +127,7 @@ in
             enable = mkOption {
               type = types.bool;
               default = true;
-              description = lib.mdDoc ''
+              description = ''
                 Whether this /etc file should be generated.  This
                 option allows specific /etc files to be disabled.
               '';
@@ -135,7 +135,7 @@ in
 
             target = mkOption {
               type = types.str;
-              description = lib.mdDoc ''
+              description = ''
                 Name of symlink (relative to
                 {file}`/etc`).  Defaults to the attribute
                 name.
@@ -145,19 +145,19 @@ in
             text = mkOption {
               default = null;
               type = types.nullOr types.lines;
-              description = lib.mdDoc "Text of the file.";
+              description = "Text of the file.";
             };
 
             source = mkOption {
               type = types.path;
-              description = lib.mdDoc "Path of the source file.";
+              description = "Path of the source file.";
             };
 
             mode = mkOption {
               type = types.str;
               default = "symlink";
               example = "0600";
-              description = lib.mdDoc ''
+              description = ''
                 If set to something else than `symlink`,
                 the file is copied instead of symlinked, with the given
                 file mode.
@@ -167,7 +167,7 @@ in
             uid = mkOption {
               default = 0;
               type = types.int;
-              description = lib.mdDoc ''
+              description = ''
                 UID of created file. Only takes effect when the file is
                 copied (that is, the mode is not 'symlink').
                 '';
@@ -176,7 +176,7 @@ in
             gid = mkOption {
               default = 0;
               type = types.int;
-              description = lib.mdDoc ''
+              description = ''
                 GID of created file. Only takes effect when the file is
                 copied (that is, the mode is not 'symlink').
               '';
@@ -185,7 +185,7 @@ in
             user = mkOption {
               default = "+${toString config.uid}";
               type = types.str;
-              description = lib.mdDoc ''
+              description = ''
                 User name of created file.
                 Only takes effect when the file is copied (that is, the mode is not 'symlink').
                 Changing this option takes precedence over `uid`.
@@ -195,7 +195,7 @@ in
             group = mkOption {
               default = "+${toString config.gid}";
               type = types.str;
-              description = lib.mdDoc ''
+              description = ''
                 Group name of created file.
                 Only takes effect when the file is copied (that is, the mode is not 'symlink').
                 Changing this option takes precedence over `gid`.

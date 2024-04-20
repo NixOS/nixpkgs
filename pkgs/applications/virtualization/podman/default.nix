@@ -17,9 +17,12 @@
 , makeWrapper
 , runtimeShell
 , symlinkJoin
+, substituteAll
 , extraPackages ? [ ]
 , runc
 , crun
+, gvisor
+, youki
 , conmon
 , slirp4netns
 , fuse-overlayfs
@@ -30,6 +33,7 @@
 , gvproxy
 , aardvark-dns
 , netavark
+, passt
 , testers
 , podman
 }:
@@ -37,9 +41,6 @@ let
   # do not add qemu to this wrapper, store paths get written to the podman vm config and break when GCed
 
   binPath = lib.makeBinPath (lib.optionals stdenv.isLinux [
-    runc
-    crun
-    conmon
     fuse-overlayfs
     util-linux
     iptables
@@ -57,23 +58,29 @@ let
       catatonit # added here for the pause image and also set in `containersConf` for `init_path`
       netavark
       slirp4netns
+      passt
     ];
   };
 in
 buildGoModule rec {
   pname = "podman";
-  version = "4.9.3";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    hash = "sha256-PdAXcXtc/Jl3ttWWB6TciiOwWescJ51Glhf2ZhOw550=";
+    hash = "sha256-8Swqwyzu/WI9mG21bLF81Kk4kS2Ltg0GV9G3EcG/FnU=";
   };
 
   patches = [
     # we intentionally don't build and install the helper so we shouldn't display messages to users about it
     ./rm-podman-mac-helper-msg.patch
+  ] ++ lib.optionals stdenv.isLinux [
+    (substituteAll {
+      src = ./hardcode-paths.patch;
+      inherit crun runc gvisor youki conmon;
+    })
   ];
 
   vendorHash = null;

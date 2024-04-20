@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , cryptography
-, cython_3
+, cython
 , fetchPypi
 , pythonOlder
 , setuptools
@@ -10,18 +10,18 @@
 
 buildPythonPackage rec {
   pname = "oracledb";
-  version = "2.1.1";
+  version = "2.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4ugXz6bf82xxMXNvNOKq7HXXJv040ZENgxgGGieCKPo=";
+    hash = "sha256-MFS8wpXXN4g0unpazrhlmF6VSRX5sHqEPqhMOCTGoLI=";
   };
 
   build-system = [
-    cython_3
+    cython
     setuptools
     wheel
   ];

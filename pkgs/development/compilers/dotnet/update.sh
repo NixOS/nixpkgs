@@ -1,8 +1,10 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=../../../../. -i bash -p curl jq nix gnused
+#!nix-shell -I nixpkgs=./. -i bash -p curl jq nix gnused
 # shellcheck shell=bash
 
 set -Eeuo pipefail
+
+cd "$(dirname "${BASH_SOURCE[0]}")"
 
 release () {
   local content="$1"

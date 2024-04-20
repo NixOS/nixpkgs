@@ -27,7 +27,13 @@ let
 
     cargoHash = "sha256-e/Jki/4pCs0qzaBVR4iiUhdBFmWlTZYREQkuFSoWYFo=";
 
+    buildInputs = lib.optionals stdenv.isDarwin [ lldb ];
+
     nativeBuildInputs = [ makeWrapper ];
+
+    env = lib.optionalAttrs stdenv.isDarwin {
+      NIX_LDFLAGS = "-llldb -lc++abi";
+    };
 
     buildAndTestSubdir = "adapter";
 
@@ -89,6 +95,15 @@ let
     '';
   };
 
+  # debugservers on macOS require the 'com.apple.security.cs.debugger'
+  # entitlement which nixpkgs' lldb-server does not yet provide; see
+  # <https://github.com/NixOS/nixpkgs/pull/38624> for details
+  lldbServer =
+    if stdenv.isDarwin then
+      "/Applications/Xcode.app/Contents/SharedFrameworks/LLDB.framework/Versions/A/Resources/debugserver"
+    else
+      "${lldb.out}/bin/lldb-server";
+
 in stdenv.mkDerivation {
   pname = "vscode-extension-${publisher}-${pname}";
   inherit src version vscodeExtUniqueId vscodeExtPublisher vscodeExtName;
@@ -107,6 +122,9 @@ in stdenv.mkDerivation {
 
   postConfigure = ''
     cp -r ${nodeDeps}/lib/node_modules .
+  '' + lib.optionalString stdenv.isDarwin ''
+    export HOME="$TMPDIR/home"
+    mkdir $HOME
   '';
 
   cmakeFlags = [
@@ -129,7 +147,8 @@ in stdenv.mkDerivation {
     mv -t $ext vsix-extracted/extension/*
     cp -t $ext/ -r ${adapter}/share/*
     wrapProgram $ext/adapter/codelldb \
-      --set-default LLDB_DEBUGSERVER_PATH "${lldb.out}/bin/lldb-server"
+      --prefix LD_LIBRARY_PATH : "$ext/lldb/lib" \
+      --set-default LLDB_DEBUGSERVER_PATH "${lldbServer}"
     # Mark that all components are installed.
     touch $ext/platform.ok
 

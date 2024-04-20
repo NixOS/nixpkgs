@@ -1,34 +1,40 @@
 { lib, stdenv, fetchFromGitHub
 , cmake
-, cunit, ncurses
-, libev, nghttp3, quictls
+, brotli, libev, nghttp3, quictls
+, CoreServices
 , withJemalloc ? false, jemalloc
 , curlHTTP3
 }:
 
 stdenv.mkDerivation rec {
   pname = "ngtcp2";
-  version = "1.2.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-/lHsHkSySKyZZdjTTYCo0a6cwcMcbOWNvAEcO36/kEw=";
+    hash = "sha256-te/kFt7/09QpmkHZ7dJxyKvvxP+mHtIQIgESkJATR38=";
+    fetchSubmodules = true;
   };
 
   outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [ cmake ];
-  nativeCheckInputs = [ cunit ncurses ];
-  buildInputs = [ libev nghttp3 quictls ] ++ lib.optional withJemalloc jemalloc;
+  buildInputs = [
+    brotli
+    libev
+    nghttp3
+    quictls
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreServices
+  ] ++ lib.optional withJemalloc jemalloc;
 
   cmakeFlags = [
-    "-DENABLE_STATIC_LIB=OFF"
+    (lib.cmakeBool "ENABLE_STATIC_LIB" false)
   ];
 
   doCheck = true;
-  enableParallelBuilding = true;
 
   passthru.tests = {
     inherit curlHTTP3;

@@ -4247,6 +4247,18 @@ final: prev:
     meta.homepage = "https://github.com/liuchengxu/graphviz.vim/";
   };
 
+  grapple-nvim = buildVimPlugin {
+    pname = "grapple.nvim";
+    version = "2024-04-11";
+    src = fetchFromGitHub {
+      owner = "cbochs";
+      repo = "grapple.nvim";
+      rev = "12172536620464f8cc124e07c6e3ccd306ea3c5c";
+      sha256 = "0rpiq47zb0ms6bbbd3c1ywmq5vc88132xcqwfnbfn3d2hrvbz8d1";
+    };
+    meta.homepage = "https://github.com/cbochs/grapple.nvim/";
+  };
+
   gruber-darker-nvim = buildVimPlugin {
     pname = "gruber-darker.nvim";
     version = "2024-01-08";
@@ -5048,6 +5060,18 @@ final: prev:
       sha256 = "1z2zi951xgssq1d343b0rhcj1xn4qwvv1b2wzvy8jg7ak9pgrl1a";
     };
     meta.homepage = "https://github.com/neoclide/jsonc.vim/";
+  };
+
+  jsonfly-nvim = buildVimPlugin {
+    pname = "jsonfly.nvim";
+    version = "2024-04-12";
+    src = fetchFromGitHub {
+      owner = "Myzel394";
+      repo = "jsonfly.nvim";
+      rev = "539a0b79a5ea75d201e1e90cebfe9367154d04fc";
+      sha256 = "1v1i4x2px0zs65rxkf2yhnxn6clx33vdr54r9gaqq713qj5ddlfm";
+    };
+    meta.homepage = "https://github.com/Myzel394/jsonfly.nvim/";
   };
 
   julia-vim = buildVimPlugin {
@@ -11097,6 +11121,18 @@ final: prev:
       sha256 = "1jq607an49n1lhclqjdbmaqa0609vmdsr2pvq9w2vwmxci6v3rks";
     };
     meta.homepage = "https://github.com/Pocco81/true-zen.nvim/";
+  };
+
+  trust-vim = buildVimPlugin {
+    pname = "trust.vim";
+    version = "2022-04-14";
+    src = fetchFromGitHub {
+      owner = "tesaguri";
+      repo = "trust.vim";
+      rev = "3e17b29ff13f862eeda269d7ce0260571dab6cb7";
+      sha256 = "1zvxjgyzzhnza2gv528dvyp7m1nvsz5gjn0qp65jn0k7y4gh3nnl";
+    };
+    meta.homepage = "https://github.com/tesaguri/trust.vim/";
   };
 
   tslime-vim = buildVimPlugin {
@@ -17175,6 +17211,18 @@ final: prev:
       sha256 = "1wpn6gfw1r89232d779lz8wy19asrribindlcsaikrsqvml3a0hr";
     };
     meta.homepage = "https://github.com/jhradilek/vim-snippets/";
+  };
+
+  gitignore-nvim = buildVimPlugin {
+    pname = "gitignore-nvim";
+    version = "2024-03-25";
+    src = fetchFromGitHub {
+      owner = "wintermute-cell";
+      repo = "gitignore.nvim";
+      rev = "2455191ec94da8ed222806a4fe3aa358eac1e558";
+      sha256 = "sha256-p6k0NP3Vne6Kl98YodzSruVmJwxyrXziJj8N7u79o1w=";
+    };
+    meta.homepage = "https://github.com/wintermute-cell/gitignore.nvim/";
   };
 
 

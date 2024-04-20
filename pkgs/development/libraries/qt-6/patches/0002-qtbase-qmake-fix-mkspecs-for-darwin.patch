@@ -1,19 +1,19 @@
-From a804a9b1efdab0a71b9947e5c2bf9f6f5e316e0e Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Nick Cao <nickcao@nichi.co>
 Date: Fri, 14 Apr 2023 21:43:04 +0800
-Subject: [PATCH 02/11] qtbase: qmake: fix mkspecs for darwin
+Subject: [PATCH] qtbase: qmake: fix mkspecs for darwin
 
 ---
  mkspecs/common/mac.conf               |   2 +-
- mkspecs/features/mac/default_post.prf | 263 --------------------------
+ mkspecs/features/mac/default_post.prf | 264 --------------------------
  mkspecs/features/mac/default_pre.prf  |  58 ------
  mkspecs/features/mac/sdk.mk           |  27 ---
  mkspecs/features/mac/sdk.prf          |  61 ------
  mkspecs/features/mac/toolchain.prf    |   5 -
- 6 files changed, 1 insertion(+), 415 deletions(-)
+ 6 files changed, 1 insertion(+), 416 deletions(-)
 
 diff --git a/mkspecs/common/mac.conf b/mkspecs/common/mac.conf
-index 61bea952b2..9909dae726 100644
+index 61bea952b22..9909dae7260 100644
 --- a/mkspecs/common/mac.conf
 +++ b/mkspecs/common/mac.conf
 @@ -23,7 +23,7 @@ QMAKE_INCDIR_OPENGL     = \
@@ -26,7 +26,7 @@ index 61bea952b2..9909dae726 100644
  
  QMAKE_LFLAGS_REL_RPATH  =
 diff --git a/mkspecs/features/mac/default_post.prf b/mkspecs/features/mac/default_post.prf
-index 0b64a586b9..3b40328304 100644
+index 0b64a586b93..3b40328304d 100644
 --- a/mkspecs/features/mac/default_post.prf
 +++ b/mkspecs/features/mac/default_post.prf
 @@ -1,9 +1,5 @@
@@ -311,7 +311,7 @@ index 0b64a586b9..3b40328304 100644
      generate_xcode_project.commands = @$(QMAKE) -spec macx-xcode \"$(EXPORT__PRO_FILE_)\" $$QMAKE_ARGS
      generate_xcode_project.target = xcodeproj
 diff --git a/mkspecs/features/mac/default_pre.prf b/mkspecs/features/mac/default_pre.prf
-index e3534561a5..3b01424e67 100644
+index e3534561a56..3b01424e67b 100644
 --- a/mkspecs/features/mac/default_pre.prf
 +++ b/mkspecs/features/mac/default_pre.prf
 @@ -1,60 +1,2 @@
@@ -376,7 +376,7 @@ index e3534561a5..3b01424e67 100644
 -xcode_copy_phase_strip_setting.value = NO
 -QMAKE_MAC_XCODE_SETTINGS += xcode_copy_phase_strip_setting
 diff --git a/mkspecs/features/mac/sdk.mk b/mkspecs/features/mac/sdk.mk
-index a32ceacb6c..e69de29bb2 100644
+index a32ceacb6ce..e69de29bb2d 100644
 --- a/mkspecs/features/mac/sdk.mk
 +++ b/mkspecs/features/mac/sdk.mk
 @@ -1,27 +0,0 @@
@@ -408,7 +408,7 @@ index a32ceacb6c..e69de29bb2 100644
 -    endif
 -endif
 diff --git a/mkspecs/features/mac/sdk.prf b/mkspecs/features/mac/sdk.prf
-index 3a9c2778bb..e69de29bb2 100644
+index 3a9c2778bbe..e69de29bb2d 100644
 --- a/mkspecs/features/mac/sdk.prf
 +++ b/mkspecs/features/mac/sdk.prf
 @@ -1,61 +0,0 @@
@@ -474,7 +474,7 @@ index 3a9c2778bb..e69de29bb2 100644
 -    cache($$tool_variable, set stash, $$tool)
 -}
 diff --git a/mkspecs/features/mac/toolchain.prf b/mkspecs/features/mac/toolchain.prf
-index df191eb13c..e69de29bb2 100644
+index df191eb13c4..e69de29bb2d 100644
 --- a/mkspecs/features/mac/toolchain.prf
 +++ b/mkspecs/features/mac/toolchain.prf
 @@ -1,5 +0,0 @@

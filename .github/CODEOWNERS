@@ -185,17 +185,17 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /lib/licenses.nix @alyssais
 
 # Qt
-/pkgs/development/libraries/qt-5 @NixOS/qt-kde
-/pkgs/development/libraries/qt-6 @NixOS/qt-kde
+/pkgs/development/libraries/qt-5 @K900 @NickCao @SuperSandro2000 @ttuegel
+/pkgs/development/libraries/qt-6 @K900 @NickCao @SuperSandro2000 @ttuegel
 
 # KDE / Plasma 5
-/pkgs/applications/kde @NixOS/qt-kde
-/pkgs/desktops/plasma-5 @NixOS/qt-kde
-/pkgs/development/libraries/kde-frameworks @NixOS/qt-kde
+/pkgs/applications/kde @K900 @NickCao @SuperSandro2000 @ttuegel
+/pkgs/desktops/plasma-5 @K900 @NickCao @SuperSandro2000 @ttuegel
+/pkgs/development/libraries/kde-frameworks @K900 @NickCao @SuperSandro2000 @ttuegel
 
 # KDE / Plasma 6
-/pkgs/kde @NixOS/qt-kde
-/maintainers/scripts/kde @NixOS/qt-kde
+/pkgs/kde @K900 @NickCao @SuperSandro2000 @ttuegel
+/maintainers/scripts/kde @K900 @NickCao @SuperSandro2000 @ttuegel
 
 # PostgreSQL and related stuff
 /pkgs/servers/sql/postgresql @thoughtpolice @marsam
@@ -232,10 +232,12 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/modules/services/networking/babeld.nix @mweinelt
 /nixos/modules/services/networking/kea.nix @mweinelt
 /nixos/modules/services/networking/knot.nix @mweinelt
+nixos/modules/services/networking/networkmanager.nix @Janik-Haag
 /nixos/modules/services/monitoring/prometheus/exporters/kea.nix @mweinelt
 /nixos/tests/babeld.nix @mweinelt
 /nixos/tests/kea.nix @mweinelt
 /nixos/tests/knot.nix @mweinelt
+/nixos/tests/networking/* @Janik-Haag
 
 # Web servers
 /doc/packages/nginx.section.md @raitobezarius
@@ -296,7 +298,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 
 # GNOME
 /pkgs/desktops/gnome                              @jtojnar
-/pkgs/desktops/gnome/extensions       @piegamesde @jtojnar
+/pkgs/desktops/gnome/extensions                   @jtojnar
 /pkgs/build-support/make-hardcode-gsettings-patch @jtojnar
 
 # Cinnamon
@@ -359,3 +361,16 @@ pkgs/development/tools/continuous-integration/buildbot @Mic92 @zowoq
 pkgs/by-name/pr/pretix/ @mweinelt
 nixos/modules/services/web-apps/pretix.nix @mweinelt
 nixos/tests/web-apps/pretix.nix @mweinelt
+
+# incus/lxc/lxd
+nixos/maintainers/scripts/lxd/          @adamcstephens
+nixos/modules/virtualisation/incus.nix  @adamcstephens
+nixos/modules/virtualisation/lxc*       @adamcstephens
+nixos/modules/virtualisation/lxd*       @adamcstephens
+nixos/tests/incus/                      @adamcstephens
+nixos/tests/lxd/                        @adamcstephens
+pkgs/by-name/in/incus/                  @adamcstephens
+pkgs/by-name/lx/lxc*                    @adamcstephens
+pkgs/by-name/lx/lxd*                    @adamcstephens
+pkgs/os-specific/linux/lxc/             @adamcstephens
+

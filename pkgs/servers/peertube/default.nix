@@ -6,7 +6,7 @@
 , fetchYarnDeps
 , nixosTests
 , brotli
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , jq
 , nodejs
 , which
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "cli" "runner" ];
 
-  nativeBuildInputs = [ brotli prefetch-yarn-deps jq which yarn ];
+  nativeBuildInputs = [ brotli fixup-yarn-lock jq which yarn ];
 
   buildInputs = [ nodejs ];
 

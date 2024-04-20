@@ -125,6 +125,11 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace plugins/language/{PageComponent,SpellChecking,ThemeValues}.qml plugins/language/onscreenkeyboard-plugin.cpp plugins/sound/PageComponent.qml \
       --replace-fail 'com.lomiri.keyboard.maliit' 'org.maliit.keyboard.maliit'
 
+    # Gets list of available localisations from current system, but later drops any language that doesn't cover LSS
+    # So just give it its own prefix
+    substituteInPlace plugins/language/language-plugin.cpp \
+      --replace-fail '/usr/share/locale' '${placeholder "out"}/share/locale'
+
     # Decide which entries should be visible based on the current system
     substituteInPlace plugins/*/*.settings \
       --replace-warn '/etc' '/run/current-system/sw/etc'

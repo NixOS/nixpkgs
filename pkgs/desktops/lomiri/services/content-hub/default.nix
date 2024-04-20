@@ -161,6 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
       moveToOutput share/applications/$exampleExe.desktop $examples
     done
     moveToOutput share/icons $examples
+    moveToOutput share/content-hub/peers $examples
   '';
 
   postFixup = ''

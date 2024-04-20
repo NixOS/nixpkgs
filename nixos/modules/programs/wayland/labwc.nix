@@ -7,7 +7,7 @@ in
   meta.maintainers = with lib.maintainers; [ AndersonTorres ];
 
   options.programs.labwc = {
-    enable = lib.mkEnableOption (lib.mdDoc "labwc");
+    enable = lib.mkEnableOption "labwc";
     package = lib.mkPackageOption pkgs "labwc" { };
   };
 

@@ -12,14 +12,12 @@ let param = {
   "0.8.1" = {
     sha256 = "sha256-pct57oO7qAMEtlvEfymFOCvviWaLG0b5/7NzTC8vdSE=";
     max_version = "4.10";
-    useDune2 = false;
     OMP = [ ocaml-migrate-parsetree ];
   };
   "0.13.0" = {
     sha256 = "sha256-geHz0whQDg5/YQjVsN2iuHlkClwh7z3Eqb2QOBzuOdk=";
     min_version = "4.07";
     max_version = "4.11";
-    useDune2 = false;
     OMP = [ ocaml-migrate-parsetree ];
   };
   "0.15.0" = {
@@ -79,8 +77,6 @@ else
 buildDunePackage rec {
   pname = "ppxlib";
   inherit version;
-
-  duneVersion = if param.useDune2 or true then "3" else "1";
 
   src = fetchurl {
     url = "https://github.com/ocaml-ppx/ppxlib/releases/download/${version}/ppxlib-${version}.tbz";

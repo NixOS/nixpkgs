@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, cython_3
+, cython
 , fetchPypi
 , pythonOlder
 , setuptools
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    cython_3
+    cython
     setuptools
   ];
 

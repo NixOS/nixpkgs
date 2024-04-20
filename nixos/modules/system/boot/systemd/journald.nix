@@ -13,13 +13,13 @@ in {
     services.journald.console = mkOption {
       default = "";
       type = types.str;
-      description = lib.mdDoc "If non-empty, write log messages to the specified TTY device.";
+      description = "If non-empty, write log messages to the specified TTY device.";
     };
 
     services.journald.rateLimitInterval = mkOption {
       default = "30s";
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         Configures the rate limiting interval that is applied to all
         messages generated on the system. This rate limiting is applied
         per-service, so that two services which log do not interfere with
@@ -35,7 +35,7 @@ in {
     services.journald.storage = mkOption {
       default = "persistent";
       type = types.enum [ "persistent" "volatile" "auto" "none" ];
-      description = mdDoc ''
+      description = ''
         Controls where to store journal data. See
         {manpage}`journald.conf(5)` for further information.
       '';
@@ -44,7 +44,7 @@ in {
     services.journald.rateLimitBurst = mkOption {
       default = 10000;
       type = types.int;
-      description = lib.mdDoc ''
+      description = ''
         Configures the rate limiting burst limit (number of messages per
         interval) that is applied to all messages generated on the system.
         This rate limiting is applied per-service, so that two services
@@ -71,7 +71,7 @@ in {
       default = "";
       type = types.lines;
       example = "Storage=volatile";
-      description = lib.mdDoc ''
+      description = ''
         Extra config options for systemd-journald. See man journald.conf
         for available options.
       '';
@@ -81,7 +81,7 @@ in {
       default = config.services.rsyslogd.enable || config.services.syslog-ng.enable;
       defaultText = literalExpression "services.rsyslogd.enable || services.syslog-ng.enable";
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Whether to forward log messages to syslog.
       '';
     };

@@ -3,9 +3,6 @@
 , fetchFromGitHub
 , copyDesktopItems
 , python3
-, pipewire
-, libpulseaudio
-, libnotify
 , xdg-utils
 , electron_29
 , makeDesktopItem
@@ -42,11 +39,6 @@ buildNpmPackage rec {
   # override installPhase so we can copy the only folders that matter
   installPhase =
     let
-      libPath = lib.makeLibraryPath [
-        libpulseaudio
-        pipewire
-        libnotify
-      ];
       binPath = lib.makeBinPath [ xdg-utils ];
     in
   ''
@@ -62,7 +54,6 @@ buildNpmPackage rec {
 
     # Add xdg-utils to path via suffix, per PR #181171
     makeWrapper '${lib.getExe electron_29}' $out/bin/webcord \
-      --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/webcord \
       --suffix PATH : "${binPath}" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
       --add-flags $out/lib/node_modules/webcord/

@@ -10,7 +10,7 @@
 , mock
 , mypy-extensions
 , pip
-, pytestCheckHook
+, pytest7CheckHook
 , pythonOlder
 , pyyaml
 , requests
@@ -61,13 +61,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     hypothesis
     mock
-    pytestCheckHook
+    pytest7CheckHook
     requests
     websocket-client
-  ];
-
-  pytestFlagsArray = [
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   disabledTestPaths = [

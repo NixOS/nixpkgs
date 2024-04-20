@@ -12,13 +12,13 @@ rustPlatform.buildRustPackage rec {
   pname = "libsignal-ffi";
   # must match the version used in mautrix-signal
   # see https://github.com/mautrix/signal/issues/401
-  version = "0.41.0";
+  version = "0.44.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "libsignal";
     rev = "v${version}";
-    hash = "sha256-U/Wy7nzRQJLdc/dGmYR418Nt1KV70HbcgnDHmYxKytg=";
+    hash = "sha256-HqnxemAPjjKl/l4dVjEUIIvgW3ibNtQWnA10QYcd8Os=";
   };
 
   nativeBuildInputs = [ protobuf ] ++ lib.optionals stdenv.isDarwin [ xcodebuild ];

@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, pytestCheckHook
 , setuptools-scm
 , nipreps-versions
 , pybids

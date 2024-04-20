@@ -13,7 +13,7 @@ let
     maintainers
     ;
 
-  version = "0.2.1";
+  version = "0.2.2";
 in
 rustPlatform.buildRustPackage {
   pname = "git-instafix";
@@ -23,10 +23,10 @@ rustPlatform.buildRustPackage {
     owner = "quodlibetor";
     repo = "git-instafix";
     rev = "v${version}";
-    hash = "sha256-rWHiaZji3GECsiMqvEGC/tF+K29ZLlY6+TCNxtixHQo=";
+    hash = "sha256-cwScEEijhMgBdTeYuOOxW13x4ZpyrUouZvAiD17dOog=";
   };
 
-  cargoHash = "sha256-t5vlr3YxjRPqMHwPqVjWul4RdSg0hiTWUQxcJmGKiTQ=";
+  cargoHash = "sha256-o4oIDqr+vRvfICtZbIuD2kBEneLJrvyPVr5FPLlYGv8=";
 
   buildInputs = [ libgit2 ];
   nativeCheckInputs = [ git ];

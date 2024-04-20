@@ -6,7 +6,7 @@
 , setuptools
 , nodejs
 , yarn
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , fetchYarnDeps
 
 , flask
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     setuptools
     nodejs
     yarn
-    prefetch-yarn-deps
+    fixup-yarn-lock
   ];
 
   yarnOfflineCache = fetchYarnDeps {

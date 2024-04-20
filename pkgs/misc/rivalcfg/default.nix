@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "rivalcfg";
-  version = "4.12.0";
+  version = "4.13.0";
 
   src = fetchFromGitHub {
     owner = "flozz";
     repo = "rivalcfg";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-fkZvEaJJIfzyVyXhlb7Jlv5dASNKyclDIlyXU0uu5wo=";
+    sha256 = "sha256-zZQkfi84NE3mpGv7+Z6AnUXEj0y9SoBmbbtRiTDPS/8=";
   };
 
   propagatedBuildInputs = with python3Packages; [ hidapi setuptools ];

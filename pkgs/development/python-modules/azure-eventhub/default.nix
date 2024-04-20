@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "azure-eventhub";
-  version = "5.11.6";
+  version = "5.11.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-89Q1o/cnR64i4Jblypx2w1BTTyrZk5l9EvTO+ZMq58E=";
+    hash = "sha256-C0Ywon7jrAxEjD8jdSHV3K71qKGnJBQjUGwEY3oKRLA=";
   };
 
   nativeBuildInputs = [

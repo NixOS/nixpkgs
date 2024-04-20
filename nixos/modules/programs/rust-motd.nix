@@ -24,11 +24,11 @@ let
     '';
 in {
   options.programs.rust-motd = {
-    enable = mkEnableOption (lib.mdDoc "rust-motd, a Message Of The Day (MOTD) generator");
+    enable = mkEnableOption "rust-motd, a Message Of The Day (MOTD) generator";
     enableMotdInSSHD = mkOption {
       default = true;
       type = types.bool;
-      description = mdDoc ''
+      description = ''
         Whether to let `openssh` print the
         result when entering a new `ssh`-session.
         By default either nothing or a static file defined via
@@ -39,7 +39,7 @@ in {
     refreshInterval = mkOption {
       default = "*:0/5";
       type = types.str;
-      description = mdDoc ''
+      description = ''
         Interval in which the {manpage}`motd(5)` file is refreshed.
         For possible formats, please refer to {manpage}`systemd.time(7)`.
       '';
@@ -48,7 +48,7 @@ in {
       type = types.listOf types.str;
       default = attrNames cfg.settings;
       defaultText = literalExpression "attrNames cfg.settings";
-      description = mdDoc ''
+      description = ''
         The order of the sections in [](#opt-programs.rust-motd.settings).
         By default they are ordered alphabetically.
 
@@ -81,7 +81,7 @@ in {
     };
     settings = mkOption {
       type = types.attrsOf format.type;
-      description = mdDoc ''
+      description = ''
         Settings on what to generate. Please read the
         [upstream documentation](https://github.com/rust-motd/rust-motd/blob/main/README.md#configuration)
         for further information.

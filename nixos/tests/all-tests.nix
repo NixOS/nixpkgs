@@ -227,6 +227,7 @@ in {
   corerad = handleTest ./corerad.nix {};
   coturn = handleTest ./coturn.nix {};
   couchdb = handleTest ./couchdb.nix {};
+  crabfit = handleTest ./crabfit.nix {};
   cri-o = handleTestOn ["aarch64-linux" "x86_64-linux"] ./cri-o.nix {};
   cups-pdf = handleTest ./cups-pdf.nix {};
   curl-impersonate = handleTest ./curl-impersonate.nix {};
@@ -235,6 +236,7 @@ in {
   darling = handleTest ./darling.nix {};
   dae = handleTest ./dae.nix {};
   davis = handleTest ./davis.nix {};
+  db-rest = handleTest ./db-rest.nix {};
   dconf = handleTest ./dconf.nix {};
   deconz = handleTest ./deconz.nix {};
   deepin = handleTest ./deepin.nix {};
@@ -306,6 +308,7 @@ in {
   ferm = handleTest ./ferm.nix {};
   ferretdb = handleTest ./ferretdb.nix {};
   filesystems-overlayfs = runTest ./filesystems-overlayfs.nix;
+  firefly-iii = handleTest ./firefly-iii.nix {};
   firefox = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox; };
   firefox-beta = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-beta; };
   firefox-devedition = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-devedition; };
@@ -328,6 +331,7 @@ in {
   freshrss-sqlite = handleTest ./freshrss-sqlite.nix {};
   freshrss-pgsql = handleTest ./freshrss-pgsql.nix {};
   freshrss-http-auth = handleTest ./freshrss-http-auth.nix {};
+  freshrss-none-auth = handleTest ./freshrss-none-auth.nix {};
   frigate = handleTest ./frigate.nix {};
   frp = handleTest ./frp.nix {};
   frr = handleTest ./frr.nix {};
@@ -502,6 +506,7 @@ in {
   lxd = pkgs.recurseIntoAttrs (handleTest ./lxd { inherit handleTestOn; });
   lxd-image-server = handleTest ./lxd-image-server.nix {};
   #logstash = handleTest ./logstash.nix {};
+  lomiri = handleTest ./lomiri.nix {};
   lomiri-system-settings = handleTest ./lomiri-system-settings.nix {};
   lorri = handleTest ./lorri/default.nix {};
   maddy = discoverTests (import ./maddy { inherit handleTest; });
@@ -593,8 +598,9 @@ in {
   nimdow = handleTest ./nimdow.nix {};
   neo4j = handleTest ./neo4j.nix {};
   netdata = handleTest ./netdata.nix {};
-  networking.networkd = handleTest ./networking.nix { networkd = true; };
-  networking.scripted = handleTest ./networking.nix { networkd = false; };
+  networking.scripted = handleTest ./networking/networkd-and-scripted.nix { networkd = false; };
+  networking.networkd = handleTest ./networking/networkd-and-scripted.nix { networkd = true; };
+  networking.networkmanager = handleTest ./networking/networkmanager.nix {};
   netbox_3_6 = handleTest ./web-apps/netbox.nix { netbox = pkgs.netbox_3_6; };
   netbox_3_7 = handleTest ./web-apps/netbox.nix { netbox = pkgs.netbox_3_7; };
   netbox-upgrade = handleTest ./web-apps/netbox-upgrade.nix {};
@@ -852,6 +858,7 @@ in {
   stunnel = handleTest ./stunnel.nix {};
   sudo = handleTest ./sudo.nix {};
   sudo-rs = handleTest ./sudo-rs.nix {};
+  sunshine = handleTest ./sunshine.nix {};
   suwayomi-server = handleTest ./suwayomi-server.nix {};
   swap-file-btrfs = handleTest ./swap-file-btrfs.nix {};
   swap-partition = handleTest ./swap-partition.nix {};
@@ -898,6 +905,7 @@ in {
   systemd-lock-handler = runTestOn ["aarch64-linux" "x86_64-linux"] ./systemd-lock-handler.nix;
   systemd-machinectl = handleTest ./systemd-machinectl.nix {};
   systemd-networkd = handleTest ./systemd-networkd.nix {};
+  systemd-networkd-bridge = handleTest ./systemd-networkd-bridge.nix {};
   systemd-networkd-dhcpserver = handleTest ./systemd-networkd-dhcpserver.nix {};
   systemd-networkd-dhcpserver-static-leases = handleTest ./systemd-networkd-dhcpserver-static-leases.nix {};
   systemd-networkd-ipv6-prefix-delegation = handleTest ./systemd-networkd-ipv6-prefix-delegation.nix {};

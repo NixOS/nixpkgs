@@ -21,17 +21,17 @@ in
 
   options.services = {
     castopod = {
-      enable = lib.mkEnableOption (lib.mdDoc "Castopod, a hosting platform for podcasters");
+      enable = lib.mkEnableOption "Castopod, a hosting platform for podcasters";
       package = lib.mkOption {
         type = lib.types.package;
         default = pkgs.castopod;
         defaultText = lib.literalMD "pkgs.castopod";
-        description = lib.mdDoc "Which Castopod package to use.";
+        description = "Which Castopod package to use.";
       };
       dataDir = lib.mkOption {
         type = lib.types.path;
         default = "/var/lib/castopod";
-        description = lib.mdDoc ''
+        description = ''
           The path where castopod stores all data. This path must be in sync
           with the castopod package (where it is hardcoded during the build in
           accordance with its own `dataDir` argument).
@@ -41,30 +41,30 @@ in
         createLocally = lib.mkOption {
           type = lib.types.bool;
           default = true;
-          description = lib.mdDoc ''
+          description = ''
             Create the database and database user locally.
           '';
         };
         hostname = lib.mkOption {
           type = lib.types.str;
           default = "localhost";
-          description = lib.mdDoc "Database hostname.";
+          description = "Database hostname.";
         };
         name = lib.mkOption {
           type = lib.types.str;
           default = "castopod";
-          description = lib.mdDoc "Database name.";
+          description = "Database name.";
         };
         user = lib.mkOption {
           type = lib.types.str;
           default = user;
-          description = lib.mdDoc "Database user.";
+          description = "Database user.";
         };
         passwordFile = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
           default = null;
           example = "/run/keys/castopod-dbpassword";
-          description = lib.mdDoc ''
+          description = ''
             A file containing the password corresponding to
             [](#opt-services.castopod.database.user).
 
@@ -81,7 +81,7 @@ in
           "email.SMTPUser" = "myuser";
           "email.fromEmail" = "castopod@example.com";
         };
-        description = lib.mdDoc ''
+        description = ''
           Environment variables used for Castopod.
           See [](https://code.castopod.org/adaures/castopod/-/blob/main/.env.example)
           for available environment variables.
@@ -91,7 +91,7 @@ in
         type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/run/keys/castopod-env";
-        description = lib.mdDoc ''
+        description = ''
           Environment file to inject e.g. secrets into the configuration.
           See [](https://code.castopod.org/adaures/castopod/-/blob/main/.env.example)
           for available environment variables.
@@ -102,12 +102,12 @@ in
       configureNginx = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = lib.mdDoc "Configure nginx as a reverse proxy for CastoPod.";
+        description = "Configure nginx as a reverse proxy for CastoPod.";
       };
       localDomain = lib.mkOption {
         type = lib.types.str;
         example = "castopod.example.org";
-        description = lib.mdDoc "The domain serving your CastoPod instance.";
+        description = "The domain serving your CastoPod instance.";
       };
       poolSettings = lib.mkOption {
         type = with lib.types; attrsOf (oneOf [ str int bool ]);
@@ -119,14 +119,14 @@ in
           "pm.max_spare_servers" = "4";
           "pm.max_requests" = "500";
         };
-        description = lib.mdDoc ''
+        description = ''
           Options for Castopod's PHP pool. See the documentation on `php-fpm.conf` for details on configuration directives.
         '';
       };
       maxUploadSize = lib.mkOption {
         type = lib.types.str;
         default = "512M";
-        description = lib.mdDoc ''
+        description = ''
           Maximum supported size for a file upload in. Maximum HTTP body
           size is set to this value for nginx and PHP (because castopod doesn't
           support chunked uploads yet:

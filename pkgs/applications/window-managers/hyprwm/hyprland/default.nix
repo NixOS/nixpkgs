@@ -49,13 +49,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + lib.optionalString debug "-debug";
-  version = "0.37.1";
+  version = "0.38.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-W+34KhCnqscRXN/IkvuJMiVx0Fa64RcYn8H4sZjzceI=";
+    hash = "sha256-6y422rx8ScSkjR1dNYGYUxBmFewRYlCz9XZZ+XrVZng=";
   };
 
   patches = [
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "@HASH@" '${finalAttrs.src.rev}' \
       --replace "@BRANCH@" "" \
       --replace "@MESSAGE@" "" \
-      --replace "@DATE@" "2024-03-16" \
+      --replace "@DATE@" "2024-04-06" \
       --replace "@TAG@" "" \
       --replace "@DIRTY@" ""
   '';

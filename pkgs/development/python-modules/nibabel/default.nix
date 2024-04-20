@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonAtLeast
 , pythonOlder
 , hatchling
 , hatch-vcs
@@ -15,7 +16,7 @@
 , pytest-doctestplus
 , pytest-httpserver
 , pytest-xdist
-, pytestCheckHook
+, pytest7CheckHook
 }:
 
 buildPythonPackage rec {
@@ -70,12 +71,17 @@ buildPythonPackage rec {
     pytest-doctestplus
     pytest-httpserver
     pytest-xdist
-    pytestCheckHook
+    pytest7CheckHook
   ] ++ passthru.optional-dependencies.all;
 
   preCheck = ''
     export PATH=$out/bin:$PATH
   '';
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [
+    # uses distutils
+    "nisext/tests/test_sexts.py"
+  ];
 
   meta = with lib; {
     homepage = "https://nipy.org/nibabel";

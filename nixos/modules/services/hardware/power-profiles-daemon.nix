@@ -15,7 +15,7 @@ in
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable power-profiles-daemon, a DBus daemon that allows
           changing system behavior based upon user-selected power profiles.
         '';

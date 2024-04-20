@@ -6,17 +6,18 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "oelint-adv";
-  version = "4.4.5";
+  version = "5.1.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "oelint_adv";
-    hash = "sha256-NRTfWHtItwjZi3O26MzH8GtetCkj7egZa3OArs+Q2SY=";
+    hash = "sha256-Jo3Z5hhZH0tzu4+RL+ElaenlWCRoIYANWGx5U2u9xy8=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
     anytree
+    argcomplete
     colorama
     oelint-parser
     urllib3

@@ -28,10 +28,10 @@
 }:
 
 let
-  defaultVersion = "2024.01";
+  defaultVersion = "2024.04";
   defaultSrc = fetchurl {
     url = "https://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    hash = "sha256-uZYR8e0je/NUG9yENLaMlqbgWWcGH5kkQ8swqr6+9bM=";
+    hash = "sha256-GKhT/jn6160DqQzC1Cda6u1tppc13vrDSSuAUIhD3Uo=";
   };
 
   # Dependencies for the tools need to be included as either native or cross,
@@ -386,12 +386,6 @@ in {
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
     ROCKCHIP_TPL = rkbin.TPL_RK3588;
-
-    # FIXME: applied upstream, remove in 2024.04
-    extraConfig = ''
-      CONFIG_ROCKCHIP_SPI_IMAGE=y
-    '';
-
     filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" "u-boot-rockchip-spi.bin" ];
   };
 
@@ -611,6 +605,14 @@ in {
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
     SCP = "/dev/null";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
+  ubootTuringRK1 = buildUBoot {
+    defconfig = "turing-rk1-rk3588_defconfig";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
+    ROCKCHIP_TPL = rkbin.TPL_RK3588;
+    filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" ];
   };
 
   ubootUtilite = buildUBoot {

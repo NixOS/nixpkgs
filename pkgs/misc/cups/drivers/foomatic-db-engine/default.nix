@@ -24,8 +24,8 @@ perlPackages.buildPerlPackage rec {
     # but it gets deleted quickly and would provoke 404 errors
     owner = "OpenPrinting";
     repo = "foomatic-db-engine";
-    rev = "fa91bdfd87da9005591ac2ef2c9c7b8ecdd19511";
-    hash = "sha256-Ufy9BtYMD7sUUVfraTmO5e8+nZ4C4up5a5GXeGTtejg=";
+    rev = "a2b12271e145fe3fd34c3560d276a57e928296cb";
+    hash = "sha256-qM12qtGotf9C0cjO9IkmzlW9GWCkT2Um+6dU3mZm3DU=";
   };
 
   outputs = [ "out" ];
@@ -37,9 +37,10 @@ perlPackages.buildPerlPackage rec {
   ];
 
   buildInputs =
+       [ curl ]
        # provide some "cups-*" commands to `foomatic-{configure,printjob}`
        # so that they can manage a local cups server (add queues, add jobs...)
-       lib.optionals withCupsAccess [ cups cups-filters curl ]
+    ++ lib.optionals withCupsAccess [ cups cups-filters ]
        # the commands `foomatic-{configure,getpjloptions}` need
        # netcat if they are used to query or alter a network
        # printer via AppSocket/HP JetDirect protocol
