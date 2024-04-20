@@ -41,7 +41,7 @@ ecmPostHook() {
     cmakeFlags+=" -DKDE_INSTALL_KCONFUPDATEDIR=${!outputBin}/share/kconf_update"
     cmakeFlags+=" -DKDE_INSTALL_KAPPTEMPLATESDIR=${!outputDev}/share/kdevappwizard/templates"
     cmakeFlags+=" -DKDE_INSTALL_KFILETEMPLATESDIR=${!outputDev}/share/kdevfiletemplates/templates"
-    cmakeFlags+=" -DKDE_INSTALL_KXMLGUIDIR=${!outputBin}/share/kxmlgui6"
+    cmakeFlags+=" -DKDE_INSTALL_KXMLGUIDIR=${!outputBin}/share/kxmlgui5"  # Yes, this needs to be 5 and not 6. Don't ask.
     cmakeFlags+=" -DKDE_INSTALL_KNOTIFYRCDIR=${!outputBin}/share/knotifications6"
     cmakeFlags+=" -DKDE_INSTALL_ICONDIR=${!outputBin}/share/icons"
     cmakeFlags+=" -DKDE_INSTALL_LOCALEDIR=${!outputLib}/share/locale"
