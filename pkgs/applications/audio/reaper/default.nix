@@ -28,13 +28,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "reaper";
-  version = "7.09";
+  version = "7.14";
 
   src = fetchurl {
     url = url_for_platform version stdenv.hostPlatform.qemuArch;
-    hash = if stdenv.isDarwin then "sha256-MztA9Azj20tyg/nFtXmvojeABNX11HCkmIcgMhNYyMQ=" else {
-      x86_64-linux = "sha256-Mo7k8XbKLUkBvo2A73qeqHgDtXD/fBVtSVv74k/WGRo=";
-      aarch64-linux = "sha256-ttNHMC8Ouin2fNnIb5X5pnKwGrAML192oZdg/Q8SFlg=";
+    hash = if stdenv.isDarwin then "sha256-cPxHriUNIG1EUmvOoW00V2Y0j+7BuxSIEbPy+qy5ZEM=" else {
+      x86_64-linux = "sha256-RgKteq157r4r088mr9wvPPa/rhmX88/lmVJ7mS17px4=";
+      aarch64-linux = "sha256-Qnb6ZoDIkfRct6dvqXKeYHgXyyEFLSj9R0hwa2bUiXo=";
     }.${stdenv.hostPlatform.system};
   };
 

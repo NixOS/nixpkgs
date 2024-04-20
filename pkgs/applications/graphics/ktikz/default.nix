@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Editor for the TikZ language";
+    mainProgram = "qtikz";
     homepage = "https://github.com/fhackenberger/ktikz";
     license = licenses.gpl2;
     platforms = platforms.linux;

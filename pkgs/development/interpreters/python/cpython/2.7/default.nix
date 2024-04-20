@@ -131,6 +131,12 @@ let
       # * https://github.com/python/cpython/commit/e6b247c8e524
       ../3.7/no-win64-workaround.patch
 
+      # fix openssl detection by reverting irrelevant change for us, to enable hashlib which is required by pip
+      (fetchpatch {
+        url = "https://github.com/ActiveState/cpython/pull/35/commits/20ea5b46aaf1e7bdf9d6905ba8bece2cc73b05b0.patch";
+        revert = true;
+        hash = "sha256-Lp5fGlcfJJ6p6vKmcLckJiAA2AZz4prjFE0aMEJxotw=";
+      })
     ] ++ lib.optionals (x11Support && stdenv.isDarwin) [
       ./use-correct-tcl-tk-on-darwin.patch
 

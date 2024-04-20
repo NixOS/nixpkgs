@@ -211,8 +211,14 @@ let
         url = "https://github.com/qtwebkit/qtwebkit/commit/5c272a21e621a66862821d3ae680f27edcc64c19.patch";
         sha256 = "9hjqLyABz372QDgoq7nXXXQ/3OXBGcYN1/92ekcC3WE=";
       })
+      (fetchpatch {
+        name = "qtwebkit-libxml2-api-change.patch";
+        url = "https://github.com/WebKit/WebKit/commit/1bad176b2496579d760852c80cff3ad9fb7c3a4b.patch";
+        sha256 = "WZEj+UuKhgJBM7auhND3uddk1wWdTY728jtiWVe7CSI=";
+      })
       ./qtwebkit.patch
       ./qtwebkit-icu68.patch
+      ./qtwebkit-cstdint.patch
     ] ++ lib.optionals stdenv.isDarwin [
       ./qtwebkit-darwin-no-readline.patch
       ./qtwebkit-darwin-no-qos-classes.patch

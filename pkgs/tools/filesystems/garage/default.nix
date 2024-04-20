@@ -49,7 +49,7 @@ let
     buildFeatures = [
       "kubernetes-discovery"
       "bundled-libs"
-      "sled"
+    ] ++ lib.optional (lib.versionOlder version "1.0") "sled" ++ [
       "metrics"
       "k2v"
       "telemetry-otlp"
@@ -65,9 +65,14 @@ let
       "k2v"
       "kubernetes-discovery"
       "bundled-libs"
-      "sled"
+    ] ++ lib.optional (lib.versionOlder version "1.0") "sled" ++ [
       "lmdb"
       "sqlite"
+    ];
+
+    disabledTests = [
+      # Upstream told us this test is flakey.
+      "k2v::poll::test_poll_item"
     ];
 
     passthru.tests = nixosTests.garage;
@@ -89,22 +94,32 @@ rec {
   # we have to keep all the numbers in the version to handle major/minor/patch level.
   # for <1.0.
 
-  garage_0_8_5 = generic {
-    version = "0.8.5";
-    sha256 = "sha256-YRxkjETSmI1dcHP9qTPLcOMqXx9B2uplVR3bBjJWn3I=";
-    cargoSha256 = "sha256-VOcymlvqqQRdT1MFzRcMuD+Xo3fc3XTuRA12tW7ZjdI=";
+  garage_0_8_7 = generic {
+    version = "0.8.7";
+    sha256 = "sha256-2QGbR6YvMQeMxN3n1MMJ5qfBcEJ5hjXARUOfEn+m4Jc=";
+    cargoSha256 = "sha256-Q0QyBNPEDrlhgIHD4q7Qb1Pu3xBvzlLOSW7LSWWdoIo=";
     broken = stdenv.isDarwin;
   };
 
-  garage_0_8 = garage_0_8_5;
+  garage_0_8 = garage_0_8_7;
 
-  garage_0_9_1 = generic {
-    version = "0.9.1";
-    sha256 = "sha256-AXLaifVmZU4j5D/wKn/0TzhjHZBzZW1+tMyhsAo2eBU=";
-    cargoSha256 = "sha256-4/+OsM73TroBB1TGqare2xASO5KhqVyNkkss0Y0JZXg=";
+  garage_0_9_4 = generic {
+    version = "0.9.4";
+    sha256 = "sha256-2ZaxenwaVGYYUjUJaGgnGpZNQprQV9+Jns2sXM6cowk=";
+    cargoSha256 = "sha256-Cssls9csn6qribF+pAAagBydX9e9WTq4K/ehaLCWOOA=";
+    broken = stdenv.isDarwin;
   };
 
-  garage_0_9 = garage_0_9_1;
+  garage_1_0_0 = generic {
+    version = "1.0.0";
+    sha256 = "sha256-5W5cXylFCrDup+HOOUVPWBJUSphOp8szgtpvRIv82b8=";
+    cargoSha256 = "sha256-tXO+Vk6bYpayNWi/y4sMtkn2EQ9wiwSAfn79Zbt28q0=";
+    broken = stdenv.isDarwin;
+  };
 
-  garage = garage_0_9;
+  garage_0_9 = garage_0_9_4;
+
+  garage_1_x = garage_1_0_0;
+
+  garage = garage_1_x;
 }

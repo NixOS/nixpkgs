@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "cbor2";
-  version = "5.5.1";
+  version = "5.6.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+eGS9GGp+PYILfKMA1sAbRU5BCE9yGQL7Ypy1yu8lHU=";
+    hash = "sha256-t1E8LeqIaJkfrX74iZiQ68+LGZubRGHDwR160670gg0=";
   };
 
   postPatch = ''
@@ -44,15 +44,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # https://github.com/agronholm/cbor2/issues/99
-  disabledTests = lib.optionals stdenv.is32bit [
-    "test_huge_truncated_bytes"
-    "test_huge_truncated_string"
-  ];
-
   meta = with lib; {
     changelog = "https://github.com/agronholm/cbor2/releases/tag/${version}";
     description = "Python CBOR (de)serializer with extensive tag support";
+    mainProgram = "cbor2";
     homepage = "https://github.com/agronholm/cbor2";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

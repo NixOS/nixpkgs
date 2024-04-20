@@ -10,18 +10,21 @@
 , paramiko
 , requests
 , s3fs
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "textual-universal-directorytree";
-  version = "1.0.2";
-  format = "pyproject";
+  version = "1.1.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "juftin";
     repo = "textual-universal-directorytree";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FL2bwPGqBmDn33Rhj7+VEpuqB4znEAw+GGAODTs25oo=";
+    hash = "sha256-ncQ3IRaZaCv1rMUWT9dkUKo6OAEC5pziMCM7adIBGWo=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +47,9 @@ buildPythonPackage rec {
     ];
   };
 
-  pythonImportsCheck = [ "textual_universal_directorytree" ];
+  pythonImportsCheck = [
+    "textual_universal_directorytree"
+  ];
 
   meta = with lib; {
     description = "Textual plugin for a DirectoryTree compatible with remote filesystems";

@@ -10,33 +10,36 @@
 , pytest-asyncio
 , pytestCheckHook
 , requests-mock
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "oauthenticator";
-  version = "16.2.1";
-  format = "setuptools";
+  version = "16.3.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qJrreq2GhJxrX9keZOYVzjihs0RCymad+MGErW5ecPc=";
+    hash = "sha256-QMddGJUfafXoBxMCjlx1lH45a4Bab3AP4j8Px7JxYaQ=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=oauthenticator" ""
+      --replace-fail " --cov=oauthenticator" ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     jupyterhub
+    pyjwt
   ];
 
   passthru.optional-dependencies = {
-    azuread = [
-      pyjwt
-    ];
     googlegroups = [
       google-api-python-client
       google-auth-oauthlib
@@ -56,6 +59,16 @@ buildPythonPackage rec {
     # Tests are outdated, https://github.com/jupyterhub/oauthenticator/issues/432
     "test_azuread"
     "test_mediawiki"
+    # Tests require network access
+    "test_allowed"
+    "test_auth0"
+    "test_bitbucket"
+    "test_cilogon"
+    "test_github"
+    "test_gitlab"
+    "test_globus"
+    "test_google"
+    "test_openshift"
   ];
 
   pythonImportsCheck = [
@@ -67,5 +80,6 @@ buildPythonPackage rec {
     homepage =  "https://github.com/jupyterhub/oauthenticator";
     changelog = "https://github.com/jupyterhub/oauthenticator/blob/${version}/docs/source/reference/changelog.md";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

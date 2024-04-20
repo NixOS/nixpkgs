@@ -6,20 +6,22 @@ modern and open source discussion platform.
 ## Basic usage {#module-services-discourse-basic-usage}
 
 A minimal configuration using Let's Encrypt for TLS certificates looks like this:
-```
-services.discourse = {
-  enable = true;
-  hostname = "discourse.example.com";
-  admin = {
-    email = "admin@example.com";
-    username = "admin";
-    fullName = "Administrator";
-    passwordFile = "/path/to/password_file";
+```nix
+{
+  services.discourse = {
+    enable = true;
+    hostname = "discourse.example.com";
+    admin = {
+      email = "admin@example.com";
+      username = "admin";
+      fullName = "Administrator";
+      passwordFile = "/path/to/password_file";
+    };
+    secretKeyBaseFile = "/path/to/secret_key_base_file";
   };
-  secretKeyBaseFile = "/path/to/secret_key_base_file";
-};
-security.acme.email = "me@example.com";
-security.acme.acceptTerms = true;
+  security.acme.email = "me@example.com";
+  security.acme.acceptTerms = true;
+}
 ```
 
 Provided a proper DNS setup, you'll be able to connect to the
@@ -34,20 +36,22 @@ the [](#opt-services.discourse.sslCertificate)
 and [](#opt-services.discourse.sslCertificateKey)
 options:
 
-```
-services.discourse = {
-  enable = true;
-  hostname = "discourse.example.com";
-  sslCertificate = "/path/to/ssl_certificate";
-  sslCertificateKey = "/path/to/ssl_certificate_key";
-  admin = {
-    email = "admin@example.com";
-    username = "admin";
-    fullName = "Administrator";
-    passwordFile = "/path/to/password_file";
+```nix
+{
+  services.discourse = {
+    enable = true;
+    hostname = "discourse.example.com";
+    sslCertificate = "/path/to/ssl_certificate";
+    sslCertificateKey = "/path/to/ssl_certificate_key";
+    admin = {
+      email = "admin@example.com";
+      username = "admin";
+      fullName = "Administrator";
+      passwordFile = "/path/to/password_file";
+    };
+    secretKeyBaseFile = "/path/to/secret_key_base_file";
   };
-  secretKeyBaseFile = "/path/to/secret_key_base_file";
-};
+}
 ```
 
 ## Database access {#module-services-discourse-database}
@@ -80,27 +84,29 @@ A basic setup which assumes you want to use your configured
 [hostname](#opt-services.discourse.hostname) as
 email domain can be done like this:
 
-```
-services.discourse = {
-  enable = true;
-  hostname = "discourse.example.com";
-  sslCertificate = "/path/to/ssl_certificate";
-  sslCertificateKey = "/path/to/ssl_certificate_key";
-  admin = {
-    email = "admin@example.com";
-    username = "admin";
-    fullName = "Administrator";
-    passwordFile = "/path/to/password_file";
+```nix
+{
+  services.discourse = {
+    enable = true;
+    hostname = "discourse.example.com";
+    sslCertificate = "/path/to/ssl_certificate";
+    sslCertificateKey = "/path/to/ssl_certificate_key";
+    admin = {
+      email = "admin@example.com";
+      username = "admin";
+      fullName = "Administrator";
+      passwordFile = "/path/to/password_file";
+    };
+    mail.outgoing = {
+      serverAddress = "smtp.emailprovider.com";
+      port = 587;
+      username = "user@emailprovider.com";
+      passwordFile = "/path/to/smtp_password_file";
+    };
+    mail.incoming.enable = true;
+    secretKeyBaseFile = "/path/to/secret_key_base_file";
   };
-  mail.outgoing = {
-    serverAddress = "smtp.emailprovider.com";
-    port = 587;
-    username = "user@emailprovider.com";
-    passwordFile = "/path/to/smtp_password_file";
-  };
-  mail.incoming.enable = true;
-  secretKeyBaseFile = "/path/to/secret_key_base_file";
-};
+}
 ```
 
 This assumes you have set up an MX record for the address you've
@@ -162,44 +168,46 @@ The following example sets the title and description of the
 Discourse instance and enables
 GitHub login in the site settings,
 and changes a few request limits in the backend settings:
-```
-services.discourse = {
-  enable = true;
-  hostname = "discourse.example.com";
-  sslCertificate = "/path/to/ssl_certificate";
-  sslCertificateKey = "/path/to/ssl_certificate_key";
-  admin = {
-    email = "admin@example.com";
-    username = "admin";
-    fullName = "Administrator";
-    passwordFile = "/path/to/password_file";
-  };
-  mail.outgoing = {
-    serverAddress = "smtp.emailprovider.com";
-    port = 587;
-    username = "user@emailprovider.com";
-    passwordFile = "/path/to/smtp_password_file";
-  };
-  mail.incoming.enable = true;
-  siteSettings = {
-    required = {
-      title = "My Cats";
-      site_description = "Discuss My Cats (and be nice plz)";
+```nix
+{
+  services.discourse = {
+    enable = true;
+    hostname = "discourse.example.com";
+    sslCertificate = "/path/to/ssl_certificate";
+    sslCertificateKey = "/path/to/ssl_certificate_key";
+    admin = {
+      email = "admin@example.com";
+      username = "admin";
+      fullName = "Administrator";
+      passwordFile = "/path/to/password_file";
     };
-    login = {
-      enable_github_logins = true;
-      github_client_id = "a2f6dfe838cb3206ce20";
-      github_client_secret._secret = /run/keys/discourse_github_client_secret;
+    mail.outgoing = {
+      serverAddress = "smtp.emailprovider.com";
+      port = 587;
+      username = "user@emailprovider.com";
+      passwordFile = "/path/to/smtp_password_file";
     };
+    mail.incoming.enable = true;
+    siteSettings = {
+      required = {
+        title = "My Cats";
+        site_description = "Discuss My Cats (and be nice plz)";
+      };
+      login = {
+        enable_github_logins = true;
+        github_client_id = "a2f6dfe838cb3206ce20";
+        github_client_secret._secret = /run/keys/discourse_github_client_secret;
+      };
+    };
+    backendSettings = {
+      max_reqs_per_ip_per_minute = 300;
+      max_reqs_per_ip_per_10_seconds = 60;
+      max_asset_reqs_per_ip_per_10_seconds = 250;
+      max_reqs_per_ip_mode = "warn+block";
+    };
+    secretKeyBaseFile = "/path/to/secret_key_base_file";
   };
-  backendSettings = {
-    max_reqs_per_ip_per_minute = 300;
-    max_reqs_per_ip_per_10_seconds = 60;
-    max_asset_reqs_per_ip_per_10_seconds = 250;
-    max_reqs_per_ip_mode = "warn+block";
-  };
-  secretKeyBaseFile = "/path/to/secret_key_base_file";
-};
+}
 ```
 
 In the resulting site settings file, the
@@ -253,34 +261,36 @@ and [discourse-solved](https://github.com/discourse/discourse-solved)
 plugins, and disable `discourse-spoiler-alert`
 by default:
 
-```
-services.discourse = {
-  enable = true;
-  hostname = "discourse.example.com";
-  sslCertificate = "/path/to/ssl_certificate";
-  sslCertificateKey = "/path/to/ssl_certificate_key";
-  admin = {
-    email = "admin@example.com";
-    username = "admin";
-    fullName = "Administrator";
-    passwordFile = "/path/to/password_file";
-  };
-  mail.outgoing = {
-    serverAddress = "smtp.emailprovider.com";
-    port = 587;
-    username = "user@emailprovider.com";
-    passwordFile = "/path/to/smtp_password_file";
-  };
-  mail.incoming.enable = true;
-  plugins = with config.services.discourse.package.plugins; [
-    discourse-spoiler-alert
-    discourse-solved
-  ];
-  siteSettings = {
-    plugins = {
-      spoiler_enabled = false;
+```nix
+{
+  services.discourse = {
+    enable = true;
+    hostname = "discourse.example.com";
+    sslCertificate = "/path/to/ssl_certificate";
+    sslCertificateKey = "/path/to/ssl_certificate_key";
+    admin = {
+      email = "admin@example.com";
+      username = "admin";
+      fullName = "Administrator";
+      passwordFile = "/path/to/password_file";
     };
+    mail.outgoing = {
+      serverAddress = "smtp.emailprovider.com";
+      port = 587;
+      username = "user@emailprovider.com";
+      passwordFile = "/path/to/smtp_password_file";
+    };
+    mail.incoming.enable = true;
+    plugins = with config.services.discourse.package.plugins; [
+      discourse-spoiler-alert
+      discourse-solved
+    ];
+    siteSettings = {
+      plugins = {
+        spoiler_enabled = false;
+      };
+    };
+    secretKeyBaseFile = "/path/to/secret_key_base_file";
   };
-  secretKeyBaseFile = "/path/to/secret_key_base_file";
-};
+}
 ```

@@ -159,6 +159,8 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # tries to access the net
 
+  passthru.shellPath = "/bin/ash";
+
   meta = with lib; {
     description = "Tiny versions of common UNIX utilities in a single small executable";
     homepage = "https://busybox.net/";

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, options }:
+{ config, lib, pkgs, options, ... }:
 
 with lib;
 
@@ -10,7 +10,7 @@ in
   extraOpts = {
     configFile = mkOption {
       type = types.path;
-      description = lib.mdDoc ''
+      description = ''
         Path to configuration file.
       '';
     };

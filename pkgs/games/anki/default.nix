@@ -12,7 +12,7 @@
 , nixosTests
 , nodejs
 , nodejs-slim
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , protobuf
 , python3
 , qt6
@@ -103,7 +103,7 @@ let
 
     nativeBuildInputs = [
       nodejs-slim
-      prefetch-yarn-deps
+      fixup-yarn-lock
       yarn
     ];
 
@@ -138,7 +138,7 @@ python3.pkgs.buildPythonApplication {
   nativeBuildInputs = [
     fakeGit
     offlineYarn
-    prefetch-yarn-deps
+    fixup-yarn-lock
 
     cargo
     installShellFiles
@@ -277,6 +277,7 @@ python3.pkgs.buildPythonApplication {
 
   meta = with lib; {
     description = "Spaced repetition flashcard program";
+    mainProgram = "anki";
     longDescription = ''
       Anki is a program which makes remembering things easy. Because it is a lot
       more efficient than traditional study methods, you can either greatly

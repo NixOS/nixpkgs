@@ -18,6 +18,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Automatically generated zsh completion function for Python's option parser modules";
+    mainProgram = "genzshcomp";
     homepage = "https://bitbucket.org/hhatto/genzshcomp/";
     license = licenses.bsd0;
   };

@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A user interface for the connman network connection manager";
+    mainProgram = "econnman-bin";
     homepage = "https://enlightenment.org/";
     license = licenses.lgpl3;
     platforms = platforms.linux;

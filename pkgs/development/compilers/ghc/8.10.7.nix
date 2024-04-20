@@ -103,7 +103,7 @@ let
     Stage1Only = ${if targetPlatform.system == hostPlatform.system then "NO" else "YES"}
     CrossCompilePrefix = ${targetPrefix}
   '' + lib.optionalString (!enableProfiledLibs) ''
-    GhcLibWays = "v dyn"
+    BUILD_PROF_LIBS = NO
   '' + lib.optionalString enableRelocatedStaticLibs ''
     GhcLibHcOpts += -fPIC
     GhcRtsHcOpts += -fPIC

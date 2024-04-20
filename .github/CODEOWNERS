@@ -55,7 +55,7 @@
 /pkgs/pkgs-lib/formats/hocon                     @h7x4
 
 # pkgs/by-name
-/pkgs/test/nixpkgs-check-by-name @infinisil
+/pkgs/test/check-by-name @infinisil
 /pkgs/by-name/README.md @infinisil
 /pkgs/top-level/by-name-overlay.nix @infinisil
 /.github/workflows/check-by-name.yml @infinisil
@@ -131,13 +131,13 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius @ma27
 /pkgs/development/interpreters/python/hooks                 @FRidh @jonringer
 
 # Haskell
-/doc/languages-frameworks/haskell.section.md  @cdepillabout @sternenseemann @maralorn @ncfavier
-/maintainers/scripts/haskell                  @cdepillabout @sternenseemann @maralorn @ncfavier
-/pkgs/development/compilers/ghc               @cdepillabout @sternenseemann @maralorn @ncfavier
-/pkgs/development/haskell-modules             @cdepillabout @sternenseemann @maralorn @ncfavier
-/pkgs/test/haskell                            @cdepillabout @sternenseemann @maralorn @ncfavier
-/pkgs/top-level/release-haskell.nix           @cdepillabout @sternenseemann @maralorn @ncfavier
-/pkgs/top-level/haskell-packages.nix          @cdepillabout @sternenseemann @maralorn @ncfavier
+/doc/languages-frameworks/haskell.section.md  @sternenseemann @maralorn @ncfavier
+/maintainers/scripts/haskell                  @sternenseemann @maralorn @ncfavier
+/pkgs/development/compilers/ghc               @sternenseemann @maralorn @ncfavier
+/pkgs/development/haskell-modules             @sternenseemann @maralorn @ncfavier
+/pkgs/test/haskell                            @sternenseemann @maralorn @ncfavier
+/pkgs/top-level/release-haskell.nix           @sternenseemann @maralorn @ncfavier
+/pkgs/top-level/haskell-packages.nix          @sternenseemann @maralorn @ncfavier
 
 # Perl
 /pkgs/development/interpreters/perl @stigtsp @zakame @dasJ
@@ -159,7 +159,6 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius @ma27
 
 # C compilers
 /pkgs/development/compilers/gcc
-/pkgs/development/compilers/llvm @RaitoBezarius
 /pkgs/development/compilers/emscripten @raitobezarius
 /doc/languages-frameworks/emscripten.section.md @raitobezarius
 
@@ -185,11 +184,18 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 # Licenses
 /lib/licenses.nix @alyssais
 
-# Qt / KDE
-/pkgs/applications/kde @ttuegel
-/pkgs/desktops/plasma-5 @ttuegel
-/pkgs/development/libraries/kde-frameworks @ttuegel
-/pkgs/development/libraries/qt-5 @ttuegel
+# Qt
+/pkgs/development/libraries/qt-5 @K900 @NickCao @SuperSandro2000 @ttuegel
+/pkgs/development/libraries/qt-6 @K900 @NickCao @SuperSandro2000 @ttuegel
+
+# KDE / Plasma 5
+/pkgs/applications/kde @K900 @NickCao @SuperSandro2000 @ttuegel
+/pkgs/desktops/plasma-5 @K900 @NickCao @SuperSandro2000 @ttuegel
+/pkgs/development/libraries/kde-frameworks @K900 @NickCao @SuperSandro2000 @ttuegel
+
+# KDE / Plasma 6
+/pkgs/kde @K900 @NickCao @SuperSandro2000 @ttuegel
+/maintainers/scripts/kde @K900 @NickCao @SuperSandro2000 @ttuegel
 
 # PostgreSQL and related stuff
 /pkgs/servers/sql/postgresql @thoughtpolice @marsam
@@ -226,10 +232,12 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/modules/services/networking/babeld.nix @mweinelt
 /nixos/modules/services/networking/kea.nix @mweinelt
 /nixos/modules/services/networking/knot.nix @mweinelt
+nixos/modules/services/networking/networkmanager.nix @Janik-Haag
 /nixos/modules/services/monitoring/prometheus/exporters/kea.nix @mweinelt
 /nixos/tests/babeld.nix @mweinelt
 /nixos/tests/kea.nix @mweinelt
 /nixos/tests/knot.nix @mweinelt
+/nixos/tests/networking/* @Janik-Haag
 
 # Web servers
 /doc/packages/nginx.section.md @raitobezarius
@@ -267,13 +275,13 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/applications/editors/vscode/extensions   @jonringer
 
 # PHP interpreter, packages, extensions, tests and documentation
-/doc/languages-frameworks/php.section.md          @aanderse @drupol @etu @globin @ma27 @talyz
-/nixos/tests/php                                  @aanderse @drupol @etu @globin @ma27 @talyz
-/pkgs/build-support/php/build-pecl.nix            @aanderse @drupol @etu @globin @ma27 @talyz
-/pkgs/build-support/php                                     @drupol @etu
-/pkgs/development/interpreters/php       @jtojnar @aanderse @drupol @etu @globin @ma27 @talyz
-/pkgs/development/php-packages                    @aanderse @drupol @etu @globin @ma27 @talyz
-/pkgs/top-level/php-packages.nix         @jtojnar @aanderse @drupol @etu @globin @ma27 @talyz
+/doc/languages-frameworks/php.section.md          @aanderse @drupol @globin @ma27 @talyz
+/nixos/tests/php                                  @aanderse @drupol @globin @ma27 @talyz
+/pkgs/build-support/php/build-pecl.nix            @aanderse @drupol @globin @ma27 @talyz
+/pkgs/build-support/php                                     @drupol
+/pkgs/development/interpreters/php       @jtojnar @aanderse @drupol @globin @ma27 @talyz
+/pkgs/development/php-packages                    @aanderse @drupol @globin @ma27 @talyz
+/pkgs/top-level/php-packages.nix         @jtojnar @aanderse @drupol @globin @ma27 @talyz
 
 # Docker tools
 /pkgs/build-support/docker                   @roberth
@@ -290,7 +298,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 
 # GNOME
 /pkgs/desktops/gnome                              @jtojnar
-/pkgs/desktops/gnome/extensions       @piegamesde @jtojnar
+/pkgs/desktops/gnome/extensions                   @jtojnar
 /pkgs/build-support/make-hardcode-gsettings-patch @jtojnar
 
 # Cinnamon
@@ -348,3 +356,21 @@ nixos/tests/zfs.nix                       @raitobezarius
 nixos/modules/services/continuous-integration/buildbot @Mic92 @zowoq
 nixos/tests/buildbot.nix                               @Mic92 @zowoq
 pkgs/development/tools/continuous-integration/buildbot @Mic92 @zowoq
+
+# Pretix
+pkgs/by-name/pr/pretix/ @mweinelt
+nixos/modules/services/web-apps/pretix.nix @mweinelt
+nixos/tests/web-apps/pretix.nix @mweinelt
+
+# incus/lxc/lxd
+nixos/maintainers/scripts/lxd/          @adamcstephens
+nixos/modules/virtualisation/incus.nix  @adamcstephens
+nixos/modules/virtualisation/lxc*       @adamcstephens
+nixos/modules/virtualisation/lxd*       @adamcstephens
+nixos/tests/incus/                      @adamcstephens
+nixos/tests/lxd/                        @adamcstephens
+pkgs/by-name/in/incus/                  @adamcstephens
+pkgs/by-name/lx/lxc*                    @adamcstephens
+pkgs/by-name/lx/lxd*                    @adamcstephens
+pkgs/os-specific/linux/lxc/             @adamcstephens
+

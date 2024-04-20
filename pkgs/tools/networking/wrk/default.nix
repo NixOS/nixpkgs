@@ -41,5 +41,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ ragge ];
     platforms = platforms.unix;
+    mainProgram = "wrk";
   };
 }

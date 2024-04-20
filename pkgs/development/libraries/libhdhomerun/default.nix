@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Implements the libhdhomerun protocol for use with Silicondust HDHomeRun TV tuners";
+    mainProgram = "hdhomerun_config";
     homepage = "https://www.silicondust.com/support/linux";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ sielicki titanous ];

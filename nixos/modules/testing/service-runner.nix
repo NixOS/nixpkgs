@@ -107,7 +107,7 @@ let
   opts = { config, name, ... }: {
     options.runner = mkOption {
     internal = true;
-    description = lib.mdDoc ''
+    description = ''
         A script that runs the service outside of systemd,
         useful for testing or for using NixOS services outside
         of NixOS.

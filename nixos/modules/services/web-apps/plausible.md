@@ -11,7 +11,7 @@ $ openssl rand -base64 64
 ```
 
 After that, `plausible` can be deployed like this:
-```
+```nix
 {
   services.plausible = {
     enable = true;

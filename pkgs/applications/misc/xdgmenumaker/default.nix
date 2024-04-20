@@ -56,6 +56,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Command line tool that generates XDG menus for several window managers";
+    mainProgram = "xdgmenumaker";
     homepage = "https://github.com/gapan/xdgmenumaker";
     license = licenses.gpl3Plus;
     # NOTE: exclude darwin from platforms because Travis reports hash mismatch

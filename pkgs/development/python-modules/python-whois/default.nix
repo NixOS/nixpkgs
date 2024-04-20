@@ -1,37 +1,53 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, future
-, nose
+, pynose
 , pytestCheckHook
+, python-dateutil
+, pythonOlder
+, setuptools
 , simplejson
 }:
 
 buildPythonPackage rec {
   pname = "python-whois";
-  version = "0.8.0";
-  format = "setuptools";
+  version = "0.9.3";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3TNtNRfqzip2iUBtt7uWraPF50MnQjFRru4+ZCJfYiA=";
+    hash = "sha256-jdoscMD4nw+PxIpCNweJMyv/9nm1+kYgSIhBUdJso84=";
   };
 
-  propagatedBuildInputs = [ future ];
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
+    python-dateutil
+  ];
 
   nativeCheckInputs = [
-    nose
+    pynose
     pytestCheckHook
     simplejson
   ];
 
-  # Exclude tests that require network access
   disabledTests = [
+    # Exclude tests that require network access
     "test_dk_parse"
     "test_ipv4"
     "test_ipv6"
+    "test_choose_server"
+    "test_simple_ascii_domain"
+    "test_simple_unicode_domain"
   ];
-  pythonImportsCheck = [ "whois" ];
+
+  pythonImportsCheck = [
+    "whois"
+  ];
 
   meta = with lib; {
     description = "Python module to produce parsed WHOIS data";

@@ -10,24 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.1.15";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DzdzMO9PEwf4HmpG8SxRJTmdrmkXuQ8RsIchvsKstH8=";
+    hash = "sha256-VTFwuNoqh0RLk0AHTPWEwrja0/aErmUlz82MnCc58jA=";
   };
 
-  # The following specific substitution is not working as the current directory is `/build/source` and thus has no mention of `ruff` in it.
-  # https://github.com/astral-sh/ruff/blob/866bea60a5de3c59d2537b0f3a634ae0ac9afd94/crates/ruff/tests/show_settings.rs#L12
-  # -> Just patch it so that it expects the actual current directory and not `"[BASEPATH]"`.
-  postPatch = ''
-    substituteInPlace crates/ruff/tests/snapshots/show_settings__display_default_settings.snap \
-      --replace '"[BASEPATH]"' '"'$PWD'"'
-  '';
-
-  cargoHash = "sha256-MpiWdNUs66OGYfOJo1kJQTCqjrk/DAYecaLf6GUUKew=";
+  cargoHash = "sha256-COZGGmc6v3WGh8NICoRZ5iYrVs0tML8gG2b1LqWbJs0=";
 
   nativeBuildInputs = [
     installShellFiles

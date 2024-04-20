@@ -44,6 +44,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Check python packages from requirement.txt and report issues";
+    mainProgram = "liccheck";
     homepage = "https://github.com/dhatim/python-license-check";
     changelog = "https://github.com/dhatim/python-license-check/releases/tag/${version}";
     license = licenses.asl20;

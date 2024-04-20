@@ -36,6 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Finds the libpython associated with your environment, wherever it may be hiding";
+    mainProgram = "find_libpython";
     changelog = "https://github.com/ktbarrett/find_libpython/releases/tag/v${version}";
     homepage = "https://github.com/ktbarrett/find_libpython";
     license = licenses.mit;

@@ -41,6 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Infer file type and MIME type of any file/buffer";
+    mainProgram = "filetype";
     homepage = "https://github.com/h2non/filetype.py";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

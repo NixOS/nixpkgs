@@ -2,36 +2,49 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, setuptools-scm
-, toml
+, poetry-core
+, poetry-dynamic-versioning
+, typing-extensions
 , pytestCheckHook
 , pytest-benchmark
-, hatch-vcs
-, hatchling
+, pytest-cov
+, pydantic
 }:
 
 buildPythonPackage rec {
   pname = "pure-protobuf";
-  version = "2.3.0";  # Komikku not launching w/ 3.0.0, #280551
+  version = "3.0.1";
 
   format = "pyproject";
-  disabled = pythonOlder "3.7";
+  # < 3.10 requires get-annotations which isn't packaged yet
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "eigenein";
     repo = "protobuf";
     rev = "refs/tags/${version}";
-    hash = "sha256-nJ3F8dUrqMeWqTV9ErGqrMvofJwBKwNUDfxWIqFh4nY=";
+    hash = "sha256-sGKnta+agrpJkQB0twFkqRreD5WB2O/06g75N0ic4mc=";
   };
 
-  nativeBuildInputs = [
-    hatch-vcs
-    hatchling
+  build-system = [
+    poetry-core
+    poetry-dynamic-versioning
+    typing-extensions
   ];
 
-  checkInputs = [
+  dependencies = [
+    typing-extensions
+  ];
+
+  nativeCheckInputs = [
+    pydantic
     pytestCheckHook
     pytest-benchmark
+    pytest-cov
+  ];
+
+  pytestFlagsArray = [
+    "--benchmark-disable"
   ];
 
   pythonImportsCheck = [

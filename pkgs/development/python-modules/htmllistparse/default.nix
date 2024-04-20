@@ -31,6 +31,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/gumblex/htmllisting-parser";
     description = "Python parser for Apache/nginx-style HTML directory listing";
+    mainProgram = "rehttpfs";
     license = licenses.mit;
     maintainers = with maintainers; [ hexchen ];
   };

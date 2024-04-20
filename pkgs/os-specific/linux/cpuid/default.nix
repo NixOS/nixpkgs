@@ -1,27 +1,24 @@
-{ lib
-, stdenv
-, fetchurl
-, perl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
 }:
 
 stdenv.mkDerivation rec {
   pname = "cpuid";
-  version = "20230614";
+  version = "20240324";
 
   src = fetchurl {
     url = "http://etallen.com/cpuid/${pname}-${version}.src.tar.gz";
-    sha256 = "sha256-scgwRe/CYHYwd1HgZi1YAnf1+b+JzwJyMaeBIAPDpOg=";
+    sha256 = "sha256-3fvFudgBUbsEl16d7BMFEDQZeY0i7/LiRJCD3AhiGEw=";
   };
 
   # For pod2man during the build process.
-  nativeBuildInputs = [
-    perl
-  ];
+  nativeBuildInputs = [ perl ];
 
   # As runtime dependency for cpuinfo2cpuid.
-  buildInputs = [
-    perl
-  ];
+  buildInputs = [ perl ];
 
   # The Makefile hardcodes $(BUILDROOT)/usr as installation
   # destination. Just nuke all mentions of /usr to get the right
@@ -50,6 +47,9 @@ stdenv.mkDerivation rec {
     homepage = "http://etallen.com/cpuid.html";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ blitz ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
   };
 }

@@ -37,6 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/chardet/chardet/releases/tag/${version}";
     description = "Universal encoding detector";
+    mainProgram = "chardetect";
     homepage = "https://github.com/chardet/chardet";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ domenkozar ];

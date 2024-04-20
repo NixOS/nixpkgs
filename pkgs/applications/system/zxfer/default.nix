@@ -82,5 +82,6 @@ resholve.mkDerivation rec {
     changelog = "https://github.com/allanjude/zxfer/releases/tag/v${version}";
     license = licenses.bsd2;
     maintainers = with lib.maintainers; [ urandom ];
+    mainProgram = "zxfer";
   };
 }

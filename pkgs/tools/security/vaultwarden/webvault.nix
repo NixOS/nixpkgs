@@ -4,16 +4,17 @@
 , git
 , nixosTests
 , python3
+, vaultwarden
 }:
 
 let
-  version = "2024.1.2";
+  version = "2024.3.1";
 
   bw_web_builds = fetchFromGitHub {
     owner = "dani-garcia";
     repo = "bw_web_builds";
     rev = "v${version}";
-    hash = "sha256-XpFGLZpX5BeP6cEZfGlNnh94aS6As0eCnllVyHLrOWo=";
+    hash = "sha256-oi0H8TIQwtpzxKoQGnKaOY0bcWu7avTtrY+NgNRiq8k=";
   };
 
 in buildNpmPackage rec {
@@ -24,10 +25,10 @@ in buildNpmPackage rec {
     owner = "bitwarden";
     repo = "clients";
     rev = "web-v${lib.removeSuffix "b" version}";
-    hash = "sha256-hzAkVzaCjwoZ/PMnsnSmsqUBWLhqfPWuWVujChy0V38=";
+    hash = "sha256-JBEP4dNGL4rYKl2qNyhB2y/wZunikaGFltGVXLxgMWI=";
   };
 
-  npmDepsHash = "sha256-KTqPf8jy8cgGz0+1GssSzEfPVSSQlLenLPgHggNoGfc=";
+  npmDepsHash = "sha256-vNudSHIMmF7oXGz+ZymQahyHebs/CBDc6Oy1g0A5nqA=";
 
   postPatch = ''
     ln -s ${bw_web_builds}/{patches,resources} ..
@@ -69,6 +70,6 @@ in buildNpmPackage rec {
     changelog = "https://github.com/dani-garcia/bw_web_builds/releases/tag/v${version}";
     platforms = platforms.all;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda msteen mic92 ];
+    inherit (vaultwarden.meta) maintainers;
   };
 }

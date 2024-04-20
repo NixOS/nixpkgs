@@ -26,6 +26,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Qt-based slow-scan TV and fax";
+    mainProgram = "qsstv";
     homepage = "http://users.telenet.be/on4qz/";
     platforms = platforms.linux;
     license = lib.licenses.gpl3;

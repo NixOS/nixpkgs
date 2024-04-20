@@ -41,6 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "JSONPath implementation";
+    mainProgram = "jsonpath_ng";
     homepage = "https://github.com/h2non/jsonpath-ng";
     changelog = "https://github.com/h2non/jsonpath-ng/blob/v${version}/History.md";
     license = with licenses; [ asl20 ];

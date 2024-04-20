@@ -78,6 +78,7 @@ buildBazelPackage rec {
   meta = with lib; {
     isIbusEngine = true;
     description = "Japanese input method from Google";
+    mainProgram = "mozc_emacs_helper";
     homepage = "https://github.com/google/mozc";
     license = licenses.free;
     platforms = platforms.linux;

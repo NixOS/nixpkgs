@@ -75,6 +75,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Clocks";
     description = "Clock application designed for GNOME 3";
+    mainProgram = "gnome-clocks";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

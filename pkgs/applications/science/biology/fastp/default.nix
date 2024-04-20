@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Ultra-fast all-in-one FASTQ preprocessor";
+    mainProgram = "fastp";
     license = licenses.mit;
     homepage = "https://github.com/OpenGene/fastp";
     maintainers = with maintainers; [ jbedo ];

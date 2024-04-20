@@ -20,7 +20,7 @@
 , python3
 , webkitgtk_6_0
 , blueprint-compiler
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     blueprint-compiler
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -82,6 +82,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Run web apps on your desktop";
+    mainProgram = "re.sonny.Tangram";
     homepage = "https://github.com/sonnyp/Tangram";
     license = licenses.gpl3Only;
     platforms = platforms.linux;

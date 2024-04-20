@@ -28,5 +28,6 @@ stdenv.mkDerivation {
     '';
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ zalakain ];
+    mainProgram = "metar";
   };
 }

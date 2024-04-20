@@ -5,8 +5,8 @@
 , fastparquet
 , fetchPypi
 , fsspec
+, hatchling
 , pandas
-, poetry-core
 , pyarrow
 , pythonOlder
 , sqlalchemy
@@ -15,18 +15,18 @@
 
 buildPythonPackage rec {
   pname = "pyathena";
-  version = "3.1.0";
-  format = "pyproject";
+  version = "3.6.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cOTkKKeNzHcqRDfZaXR0CrL75SgH5102H89tuF4L9M4=";
+    hash = "sha256-2jf7mw/cTS5xW3GLZYk60uULUIIlk01on4942Ow2rwY=";
   };
 
   nativeBuildInputs = [
-    poetry-core
+    hatchling
   ];
 
   propagatedBuildInputs = [

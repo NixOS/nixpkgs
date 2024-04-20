@@ -8,6 +8,7 @@
 , aemu
 , gfxstream
 , libdrm
+, libiconv
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,10 +30,19 @@ stdenv.mkDerivation (finalAttrs: {
       decode = "base64 -d";
       hash = "sha256-Ji1bK7jnRlg0OpDfCLcTHfPSiz3zYcdgsWL4n3EoIYI=";
     })
+    # Fix error in Makefile where it uses eight spaces instead of a tab
+    # https://chromium-review.googlesource.com/c/crosvm/crosvm/+/4863380
+    (fetchpatch {
+      url = "https://chromium.googlesource.com/crosvm/crosvm/+/fc415bccc43d36f63a2fd4c28878591bb1053450%5E%21/?format=TEXT";
+      decode = "base64 -d";
+      hash = "sha256-SLzlZ4o1+R2bGTPvA0a5emq97hOIIIHrubFhcQjqYwg=";
+    })
+    # Install the dylib on Darwin.
+    ./darwin-install.patch
   ];
 
   nativeBuildInputs = [ cargo pkg-config rustPlatform.cargoSetupHook ];
-  buildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform gfxstream) ([
+  buildInputs = [ libiconv ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform gfxstream) ([
     aemu
     gfxstream
   ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libdrm) [

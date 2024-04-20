@@ -62,12 +62,12 @@ let
 in
 {
   options.programs.firefox = {
-    enable = mkEnableOption (mdDoc "the Firefox web browser");
+    enable = mkEnableOption "the Firefox web browser";
 
     package = mkOption {
       type = types.package;
       default = pkgs.firefox;
-      description = mdDoc "Firefox package to use.";
+      description = "Firefox package to use.";
       defaultText = literalExpression "pkgs.firefox";
       relatedPackages = [
         "firefox"
@@ -81,13 +81,13 @@ in
     wrapperConfig = mkOption {
       type = types.attrs;
       default = {};
-      description = mdDoc "Arguments to pass to Firefox wrapper";
+      description = "Arguments to pass to Firefox wrapper";
     };
 
     policies = mkOption {
       type = policyFormat.type;
       default = { };
-      description = mdDoc ''
+      description = ''
         Group policies to install.
 
         See [Mozilla's documentation](https://mozilla.github.io/policy-templates/)
@@ -103,7 +103,7 @@ in
     preferences = mkOption {
       type = with types; attrsOf (oneOf [ bool int str ]);
       default = { };
-      description = mdDoc ''
+      description = ''
         Preferences to set from `about:config`.
 
         Some of these might be able to be configured more ergonomically
@@ -116,7 +116,7 @@ in
     preferencesStatus = mkOption {
       type = types.enum [ "default" "locked" "user" "clear" ];
       default = "locked";
-      description = mdDoc ''
+      description = ''
         The status of `firefox.preferences`.
 
         `status` can assume the following values:
@@ -230,7 +230,7 @@ in
         "zh-TW"
       ]));
       default = [ ];
-      description = mdDoc ''
+      description = ''
         The language packs to install.
       '';
     };
@@ -238,7 +238,7 @@ in
     autoConfig = mkOption {
       type = types.lines;
       default = "";
-      description = mdDoc ''
+      description = ''
         AutoConfig files can be used to set and lock preferences that are not covered
         by the policies.json for Mac and Linux. This method can be used to automatically
         change user preferences or prevent the end user from modifiying specific
@@ -250,11 +250,11 @@ in
       packages = mkOption {
         type = types.listOf types.package;
         default = [];
-        description = mdDoc ''
+        description = ''
           Additional packages containing native messaging hosts that should be made available to Firefox extensions.
         '';
       };
-    }) // (mapAttrs (k: v: mkEnableOption (mdDoc "${v.name} support")) nmhOptions);
+    }) // (mapAttrs (k: v: mkEnableOption "${v.name} support") nmhOptions);
   };
 
   config = let

@@ -13,7 +13,7 @@
 , trampoline
 
 # tests
-, pytestCheckHook
+, pytest7CheckHook
 }:
 
 buildPythonPackage rec {
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "torchsde" ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
   disabledTests = [

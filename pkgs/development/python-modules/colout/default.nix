@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Color Up Arbitrary Command Output";
+    mainProgram = "colout";
     homepage = "https://github.com/nojhan/colout";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ badele ];

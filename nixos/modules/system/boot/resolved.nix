@@ -15,7 +15,7 @@ in
     services.resolved.enable = mkOption {
       default = false;
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable the systemd DNS resolver daemon, `systemd-resolved`.
 
         Search for `services.resolved` to see all options.
@@ -26,7 +26,7 @@ in
       default = null;
       example = [ "8.8.8.8" "2001:4860:4860::8844" ];
       type = types.nullOr (types.listOf types.str);
-      description = lib.mdDoc ''
+      description = ''
         A list of IPv4 and IPv6 addresses to use as the fallback DNS servers.
         If this option is null, a compiled-in list of DNS servers is used instead.
         Setting this option to an empty list will override the built-in list to an empty list, disabling fallback.
@@ -38,7 +38,7 @@ in
       defaultText = literalExpression "config.networking.search";
       example = [ "example.com" ];
       type = types.listOf types.str;
-      description = lib.mdDoc ''
+      description = ''
         A list of domains. These domains are used as search suffixes
         when resolving single-label host names (domain names which
         contain no dot), in order to qualify them into fully-qualified
@@ -55,7 +55,7 @@ in
       default = "true";
       example = "false";
       type = types.enum [ "true" "resolve" "false" ];
-      description = lib.mdDoc ''
+      description = ''
         Controls Link-Local Multicast Name Resolution support
         (RFC 4795) on the local host.
 
@@ -70,7 +70,7 @@ in
       default = "false";
       example = "true";
       type = types.enum [ "true" "allow-downgrade" "false" ];
-      description = lib.mdDoc ''
+      description = ''
         If set to
         - `"true"`:
             all DNS lookups are DNSSEC-validated locally (excluding
@@ -99,7 +99,7 @@ in
       default = "false";
       example = "true";
       type = types.enum [ "true" "opportunistic" "false" ];
-      description = lib.mdDoc ''
+      description = ''
         If set to
         - `"true"`:
             all DNS lookups will be encrypted. This requires
@@ -121,7 +121,7 @@ in
     services.resolved.extraConfig = mkOption {
       default = "";
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Extra config to append to resolved.conf.
       '';
     };

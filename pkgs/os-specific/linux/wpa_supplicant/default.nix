@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
     CONFIG_INTERNETWORKING=y
     CONFIG_L2_PACKET=linux
     CONFIG_LIBNL32=y
+    CONFIG_MESH=y
     CONFIG_OWE=y
     CONFIG_P2P=y
     CONFIG_SAE_PK=y

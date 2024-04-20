@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "gcal-sync";
-  version = "6.0.3";
+  version = "6.0.4";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "allenporter";
     repo = "gcal_sync";
     rev = "refs/tags/${version}";
-    hash = "sha256-i5K4kJcieugPkXIuDje8tk5TEX6EwDywUB6MByLmukA=";
+    hash = "sha256-ufoe9+4zhlixcSGMAhuhJx2Y2vrN036N8UvyP3xuTRQ=";
   };
 
   nativeBuildInputs = [

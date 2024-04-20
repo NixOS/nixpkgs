@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lean4";
-  version = "4.5.0";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "lean4";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-KTCTk4Fpbmm7FsUo03tAvenC6HuB3zJGax6iGTwLaXM=";
+    hash = "sha256-jHY8BhDotfGcMS0Xzl5iawqCaug3dDEKuD5Y1WcM06I=";
   };
 
   postPatch = ''
@@ -49,11 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DUSE_GITHASH=OFF"
     "-DINSTALL_LICENSE=OFF"
   ];
-
-  # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  };
 
   passthru.tests = {
     version = testers.testVersion {

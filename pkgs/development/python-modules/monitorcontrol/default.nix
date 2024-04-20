@@ -41,6 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python monitor controls using DDC-CI";
+    mainProgram = "monitorcontrol";
     homepage = "https://github.com/newAM/monitorcontrol";
     changelog = "https://github.com/newAM/monitorcontrol/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

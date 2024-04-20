@@ -1,4 +1,4 @@
-{ config, lib, pkgs, options }:
+{ config, lib, pkgs, options, ... }:
 
 with lib;
 
@@ -10,7 +10,7 @@ in
   extraOpts = {
     metrics-file = mkOption {
       type = types.path;
-      description = lib.mdDoc ''
+      description = ''
         Path to the JSON file with the metric definitions
       '';
     };

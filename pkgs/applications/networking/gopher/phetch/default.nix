@@ -37,6 +37,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A quick lil gopher client for your terminal, written in rust";
+    mainProgram = "phetch";
     longDescription = ''
       phetch is a terminal client designed to help you quickly navigate the gophersphere.
       - <1MB executable for Linux, Mac, and NetBSD

@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-nature";
-  version = "0.7.1";
+  version = "0.7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-RspjHEFYdu1k6azmifbpd57tH+SxPeepw5EQzWP/Yc8=";
+    hash = "sha256-SVzg3McB885RMyAp90Kr6/iVKw3Su9ucTob2jBckBo0=";
   };
 
   nativeBuildInputs = [

@@ -8,22 +8,24 @@
 , wheel
 , aiohttp
 , diskcache
+, fastapi
 , gptcache
 , msal
-, nest-asyncio
 , numpy
 , openai
 , ordered-set
 , platformdirs
+, protobuf
 , pyformlang
 , requests
 , tiktoken
 , torch
+, uvicorn
 }:
 
 buildPythonPackage rec {
   pname = "guidance";
-  version = "0.1.6";
+  version = "0.1.11";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,28 +34,33 @@ buildPythonPackage rec {
     owner = "guidance-ai";
     repo = "guidance";
     rev = "refs/tags/${version}";
-    hash = "sha256-Z3EuHAQPPXf/i0HnbDhGv5KBUBP0aZDHTwpff7g2E3g=";
+    hash = "sha256-dvIJeSur3DdNBhrEPNPghxqmDEEig59Iz83LWksim6U=";
   };
 
   nativeBuildInputs = [
     pybind11
+  ];
+
+  build-system = [
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     diskcache
+    fastapi
     gptcache
     msal
-    nest-asyncio
     numpy
     openai
     ordered-set
     platformdirs
+    protobuf
     pyformlang
     requests
     tiktoken
+    uvicorn
   ];
 
   nativeCheckInputs = [
@@ -85,6 +92,8 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "guidance" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "A guidance language for controlling large language models";

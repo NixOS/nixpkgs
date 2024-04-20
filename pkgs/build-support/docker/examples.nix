@@ -480,6 +480,22 @@ rec {
     layerC = layerOnTopOf layerB "c";
   in layerC;
 
+  bashUncompressed = pkgs.dockerTools.buildImage {
+    name = "bash-uncompressed";
+    tag = "latest";
+    compressor = "none";
+    # Not recommended. Use `buildEnv` between copy and packages to avoid file duplication.
+    copyToRoot = pkgs.bashInteractive;
+  };
+
+  bashZstdCompressed = pkgs.dockerTools.buildImage {
+    name = "bash-zstd";
+    tag = "latest";
+    compressor = "zstd";
+    # Not recommended. Use `buildEnv` between copy and packages to avoid file duplication.
+    copyToRoot = pkgs.bashInteractive;
+  };
+
   # buildImage without explicit tag
   bashNoTag = pkgs.dockerTools.buildImage {
     name = "bash-no-tag";
@@ -493,7 +509,23 @@ rec {
     contents = pkgs.bashInteractive;
   };
 
-  # buildImage without explicit tag
+  # buildLayeredImage without compression
+  bashLayeredUncompressed = pkgs.dockerTools.buildLayeredImage {
+    name = "bash-layered-uncompressed";
+    tag = "latest";
+    compressor = "none";
+    contents = pkgs.bashInteractive;
+  };
+
+  # buildLayeredImage with zstd compression
+  bashLayeredZstdCompressed = pkgs.dockerTools.buildLayeredImage {
+    name = "bash-layered-zstd";
+    tag = "latest";
+    compressor = "zstd";
+    contents = pkgs.bashInteractive;
+  };
+
+  # streamLayeredImage without explicit tag
   bashNoTagStreamLayered = pkgs.dockerTools.streamLayeredImage {
     name = "bash-no-tag-stream-layered";
     contents = pkgs.bashInteractive;
@@ -614,6 +646,12 @@ rec {
     layeredImageWithFakeRootCommands
   ];
 
+  mergeVaryingCompressor = pkgs.dockerTools.mergeImages [
+    redis
+    bashUncompressed
+    bashZstdCompressed
+  ];
+
   helloOnRoot = pkgs.dockerTools.streamLayeredImage {
     name = "hello";
     tag = "latest";
@@ -637,6 +675,20 @@ rec {
     ];
     config.Cmd = [ "hello" ];
     includeStorePaths = false;
+  };
+
+  helloOnRootNoStoreFakechroot = pkgs.dockerTools.streamLayeredImage {
+    name = "hello";
+    tag = "latest";
+    contents = [
+      (pkgs.buildEnv {
+        name = "hello-root";
+        paths = [ pkgs.hello ];
+      })
+    ];
+    config.Cmd = [ "hello" ];
+    includeStorePaths = false;
+    enableFakechroot = true;
   };
 
   etc =

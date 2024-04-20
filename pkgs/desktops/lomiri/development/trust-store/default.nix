@@ -44,12 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # pkg-config patching hook expects prefix variable
     substituteInPlace data/trust-store.pc.in \
-      --replace 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
+      --replace-fail 'libdir=''${exec_prefix}' 'libdir=''${prefix}' \
+      --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
 
     substituteInPlace src/core/trust/terminal_agent.h \
-      --replace '/bin/whiptail' '${lib.getExe' newt "whiptail"}'
+      --replace-fail '/bin/whiptail' '${lib.getExe' newt "whiptail"}'
   '' + lib.optionalString (!finalAttrs.doCheck) ''
-    sed -i CMakeLists.txt -e '/add_subdirectory(tests)/d'
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'add_subdirectory(tests)' ""
   '';
 
   strictDeps = true;

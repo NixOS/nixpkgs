@@ -66,6 +66,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "portable archive file manager";
+    mainProgram = "patool";
     homepage = "https://wummel.github.io/patool/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ marius851000 ];

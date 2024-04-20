@@ -8,6 +8,7 @@
   # purposes of the index.
   packageOverrides = super: with super; lib.mapAttrs (_: set: recurseIntoAttrs set) {
     inherit (super)
+      agdaPackages
       apacheHttpdPackages
       fdbPackages
       fusePackages
@@ -24,7 +25,6 @@
       sourceHanPackages
       steamPackages
       ut2004Packages
-      zabbix40
       zabbix50
       zabbix60
       zeroadPackages

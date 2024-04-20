@@ -87,7 +87,7 @@ in
     configuration = mkOption {
       internal = true;
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         The NixOS module that `nixos-generate-config`
         saves to `/etc/nixos/configuration.nix`.
 
@@ -104,7 +104,7 @@ in
       internal = true;
       type = types.listOf types.lines;
       default = [];
-      description = lib.mdDoc ''
+      description = ''
         Text to preseed the desktop configuration that `nixos-generate-config`
         saves to `/etc/nixos/configuration.nix`.
 
@@ -122,7 +122,7 @@ in
     internal = true;
     type = types.bool;
     default = false;
-    description = lib.mdDoc ''
+    description = ''
       Disable nixos-rebuild, nixos-generate-config, nixos-installer
       and other NixOS tools. This is useful to shrink embedded,
       read-only systems which are not expected to be rebuild or
@@ -177,8 +177,12 @@ in
         # services.printing.enable = true;
 
         # Enable sound.
-        # sound.enable = true;
         # hardware.pulseaudio.enable = true;
+        # OR
+        # services.pipewire = {
+        #   enable = true;
+        #   pulse.enable = true;
+        # };
 
         # Enable touchpad support (enabled default in most desktopManager).
         # services.xserver.libinput.enable = true;

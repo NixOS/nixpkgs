@@ -20,6 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Create licenses for your projects right from your terminal";
+    mainProgram = "gen-license";
     homepage = "https://github.com/nexxeln/license-generator";
     license = licenses.mit;
     maintainers = [ maintainers.ryanccn ];

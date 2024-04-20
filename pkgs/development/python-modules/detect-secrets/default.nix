@@ -5,7 +5,7 @@
 , mock
 , pkgs
 , pyahocorasick
-, pytestCheckHook
+, pytest7CheckHook
 , pythonOlder
 , pyyaml
 , requests
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
-    pytestCheckHook
+    pytest7CheckHook
     responses
     unidiff
     pkgs.gitMinimal

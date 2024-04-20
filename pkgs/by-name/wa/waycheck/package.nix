@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waycheck";
-  version = "1.0.0";
+  version = "1.1.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "serebit";
     repo = "waycheck";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-oGpiFwbPBQHF0wRHliltU8B+QmClcoFfbjpAYzOFPqs=";
+    hash = "sha256-kwkdTMA15oJHz9AXEkBGeuzYdEUpNuv/xnhzoKOHCE4=";
   };
 
   nativeBuildInputs = [
@@ -47,12 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "update-desktop-database -q" "update-desktop-database $out/share/applications"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple GUI that displays the protocols implemented by a Wayland compositor";
     homepage = "https://gitlab.freedesktop.org/serebit/waycheck";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ julienmalka federicoschonborn ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ julienmalka federicoschonborn ];
     mainProgram = "waycheck";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

@@ -29,6 +29,7 @@ buildDotnetModule rec {
 
   meta = with lib; {
     description = "Compiler for ink, inkle's scripting language";
+    mainProgram = "inklecate";
     longDescription = ''
       Inklecate is a command-line compiler for ink, inkle's open source
       scripting language for writing interactive narrative

@@ -41,6 +41,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Cloud agnostic IAM permissions enumerator";
+    mainProgram = "cliam";
     homepage = "https://github.com/securisec/cliam";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];

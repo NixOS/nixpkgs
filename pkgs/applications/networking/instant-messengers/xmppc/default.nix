@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Command Line Interface Tool for XMPP";
+    mainProgram = "xmppc";
     homepage = "https://codeberg.org/Anoxinon_e.V./xmppc";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

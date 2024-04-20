@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pyngrok";
-  version = "7.1.1";
+  version = "7.1.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UanhPx92E8mR6ertGKIGm1HAbiFXf4ATJonvPjNdFS0=";
+    hash = "sha256-BcD8pjQJE2WKvdxiOgpTknrO2T4n/++AHSSBS8sYDqo=";
   };
 
   nativeBuildInputs = [

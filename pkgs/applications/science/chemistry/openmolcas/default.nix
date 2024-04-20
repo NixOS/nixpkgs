@@ -13,7 +13,7 @@
 , libxc
 , makeWrapper
 , gsl
-, boost175
+, boost180
 , autoPatchelfHook
   # Note that the CASPT2 module is broken with MPI
   # See https://gitlab.com/Molcas/OpenMolcas/-/issues/169
@@ -41,16 +41,15 @@ let
   };
 
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "openmolcas";
-  version = "23.10";
+  version = "24.02";
 
   src = fetchFromGitLab {
     owner = "Molcas";
     repo = "OpenMolcas";
-    # The tag keeps moving, fix a hash instead
-    rev = "c74317e68572d1da82fdce4210b005c2c1b1de53"; # 2023-09-25
-    hash = "sha256-wBrASZ6YFsWsu/TreEZ6Q+VxNQwCwMpyPC8AOqmNxos=";
+    rev = "v${version}";
+    hash = "sha256-4Ek0cnaRfLEbj1Nj31rRp9b2sois4rIFTcpOUq9h2mw=";
   };
 
   patches = [
@@ -59,9 +58,6 @@ stdenv.mkDerivation {
 
     # Required for a local QCMaquis build
     ./qcmaquis.patch
-
-    # PyParsing >= 3.11 compatibility, can be removed on next release
-    ./pyparsing.patch
   ];
 
   postPatch = ''
@@ -93,7 +89,7 @@ stdenv.mkDerivation {
     armadillo
     libxc
     gsl.dev
-    boost175
+    boost180
   ] ++ lib.optionals enableMpi [
     mpi
     globalarrays
@@ -155,7 +151,7 @@ stdenv.mkDerivation {
     homepage = "https://gitlab.com/Molcas/OpenMolcas";
     maintainers = [ maintainers.markuskowa ];
     license = with licenses; [ lgpl21Only bsd3 ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "aarch64-linux" "x86_64-linux" ];
     mainProgram = "pymolcas";
   };
 }

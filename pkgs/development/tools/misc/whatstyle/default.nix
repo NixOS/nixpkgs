@@ -22,6 +22,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Find a code format style that fits given source files";
+    mainProgram = "whatstyle";
     homepage = "https://github.com/mikr/whatstyle";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];

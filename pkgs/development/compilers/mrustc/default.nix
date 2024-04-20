@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Mutabah's Rust Compiler";
+    mainProgram = "mrustc";
     longDescription = ''
       In-progress alternative rust compiler, written in C++.
       Capable of building a fully-working copy of rustc,

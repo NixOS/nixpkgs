@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , wrapQtAppsHook
 , pkg-config
@@ -129,7 +128,7 @@ in stdenv'.mkDerivation (finalAttrs: {
     mkdir -p "$out/Applications"
     mv "$out/mscore.app" "$out/Applications/mscore.app"
     mkdir -p $out/bin
-    ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore.
+    ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore
   '';
 
   # Don't run bundled upstreams tests, as they require a running X window system.
@@ -142,9 +141,7 @@ in stdenv'.mkDerivation (finalAttrs: {
     homepage = "https://musescore.org/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ vandenoever doronbehar ];
-    # on aarch64-linux:
-    # error: cannot convert '<brace-enclosed initializer list>' to 'float32x4_t' in assignment
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     mainProgram = "mscore";
+    platforms = platforms.unix;
   };
 })

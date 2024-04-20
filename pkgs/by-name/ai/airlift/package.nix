@@ -10,11 +10,11 @@ python3.pkgs.buildPythonApplication rec {
 
   pname = "airlift";
   pyproject = true;
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1LE3fpfX4NExJdUdSjt4BXvxQTLJ8zrRkGHkxo/6Pb8=";
+    hash = "sha256-EAt3xxr9jtMaOugAV+ySjhorO8SrhBn00PZ84ZG80oI=";
   };
 
   postPatch = ''

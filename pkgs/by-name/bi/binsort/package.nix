@@ -27,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Sort files by binary similarity";
+    mainProgram = "binsort";
     homepage = "http://neoscientists.org/~tmueller/binsort/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ numinit ];

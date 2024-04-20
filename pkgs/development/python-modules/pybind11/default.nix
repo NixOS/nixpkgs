@@ -4,6 +4,8 @@
 , pythonOlder
 , fetchFromGitHub
 , cmake
+, ninja
+, setuptools
 , boost
 , eigen
 , python
@@ -37,23 +39,29 @@
     else python.stdenv;
 in buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.11.1";
-  format = "setuptools";
+  version = "2.12.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pybind";
-    repo = pname;
+    repo = "pybind11";
     rev = "v${version}";
-    hash = "sha256-sO/Fa+QrAKyq2EYyYMcjPrYI+bdJIrDoj6L3JHoDo3E=";
+    hash = "sha256-DVkI5NxM5uME9m3PFYVpJOOa2j+yjL6AJn76fCTv2nE=";
   };
 
   postPatch = ''
-    sed -i "/^timeout/d" pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace-fail "timeout=300" ""
   '';
 
-  nativeBuildInputs = [ cmake ];
+  build-system = [
+    cmake
+    ninja
+    setuptools
+  ];
+
   buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
-  propagatedBuildInputs = [ setupHook ];
+  propagatedNativeBuildInputs = [ setupHook ];
 
   stdenv = stdenv';
 
@@ -115,6 +123,7 @@ in buildPythonPackage rec {
     homepage = "https://github.com/pybind/pybind11";
     changelog = "https://github.com/pybind/pybind11/blob/${src.rev}/docs/changelog.rst";
     description = "Seamless operability between C++11 and Python";
+    mainProgram = "pybind11-config";
     longDescription = ''
       Pybind11 is a lightweight header-only library that exposes
       C++ types in Python and vice versa, mainly to create Python

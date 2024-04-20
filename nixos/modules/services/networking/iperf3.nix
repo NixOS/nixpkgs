@@ -3,56 +3,56 @@ let
   cfg = config.services.iperf3;
 
   api = {
-    enable = mkEnableOption (lib.mdDoc "iperf3 network throughput testing server");
+    enable = mkEnableOption "iperf3 network throughput testing server";
     port = mkOption {
       type        = types.ints.u16;
       default     = 5201;
-      description = lib.mdDoc "Server port to listen on for iperf3 client requests.";
+      description = "Server port to listen on for iperf3 client requests.";
     };
     affinity = mkOption {
       type        = types.nullOr types.ints.unsigned;
       default     = null;
-      description = lib.mdDoc "CPU affinity for the process.";
+      description = "CPU affinity for the process.";
     };
     bind = mkOption {
       type        = types.nullOr types.str;
       default     = null;
-      description = lib.mdDoc "Bind to the specific interface associated with the given address.";
+      description = "Bind to the specific interface associated with the given address.";
     };
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc "Open ports in the firewall for iperf3.";
+      description = "Open ports in the firewall for iperf3.";
     };
     verbose = mkOption {
       type        = types.bool;
       default     = false;
-      description = lib.mdDoc "Give more detailed output.";
+      description = "Give more detailed output.";
     };
     forceFlush = mkOption {
       type        = types.bool;
       default     = false;
-      description = lib.mdDoc "Force flushing output at every interval.";
+      description = "Force flushing output at every interval.";
     };
     debug = mkOption {
       type        = types.bool;
       default     = false;
-      description = lib.mdDoc "Emit debugging output.";
+      description = "Emit debugging output.";
     };
     rsaPrivateKey = mkOption {
       type        = types.nullOr types.path;
       default     = null;
-      description = lib.mdDoc "Path to the RSA private key (not password-protected) used to decrypt authentication credentials from the client.";
+      description = "Path to the RSA private key (not password-protected) used to decrypt authentication credentials from the client.";
     };
     authorizedUsersFile = mkOption {
       type        = types.nullOr types.path;
       default     = null;
-      description = lib.mdDoc "Path to the configuration file containing authorized users credentials to run iperf tests.";
+      description = "Path to the configuration file containing authorized users credentials to run iperf tests.";
     };
     extraFlags = mkOption {
       type        = types.listOf types.str;
       default     = [ ];
-      description = lib.mdDoc "Extra flags to pass to iperf3(1).";
+      description = "Extra flags to pass to iperf3(1).";
     };
   };
 

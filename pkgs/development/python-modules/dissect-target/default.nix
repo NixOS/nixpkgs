@@ -39,7 +39,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-target";
-  version = "3.15";
+  version = "3.16";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.target";
     rev = "refs/tags/${version}";
-    hash = "sha256-1uWKlp0t1mVtt3lbjl4U1TMxE2YHN/GzGs8OuoVTRqc=";
+    hash = "sha256-2c8OFwbgSc7zwbjQm2g8y1ZyiYM0KPFjTEUrk06c174=";
   };
 
   postPatch = ''
@@ -107,6 +107,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    "test_cpio"
     # Test requires rdump
     "test_exec_target_command"
     # Issue with tar file
@@ -127,7 +128,11 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Tests are using Windows paths
-    "tests/plugins/apps/browser/test_browser.py"
+    "tests/plugins/apps/browser/"
+    # ValueError: Invalid Locate file magic. Expected /x00LOCATE02/x00
+    "tests/plugins/os/unix/locate/"
+    # Missing plugin support
+    "tests/tools/test_reg.py"
   ];
 
   meta = with lib; {

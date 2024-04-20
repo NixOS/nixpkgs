@@ -34,11 +34,6 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
 
-  # Workaround for https://github.com/NixOS/nixpkgs/issues/166205
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  };
-
   meta = with lib; {
     description = "A tool to determine which gc-roots take space in your nix store";
     homepage = "https://github.com/symphorien/nix-du";

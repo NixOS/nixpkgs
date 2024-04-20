@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GTK-based frontend for mednafen emulator";
+    mainProgram = "mednaffe";
     homepage = "https://github.com/AmatCoder/mednaffe";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ sheenobu yana AndersonTorres ];

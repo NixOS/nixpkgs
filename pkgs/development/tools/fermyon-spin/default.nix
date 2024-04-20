@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchzip
+, fetchurl
 , autoPatchelfHook
 , gcc-unwrapped
 , zlib
@@ -17,21 +17,25 @@ let
   }.${system} or (throw "Unsupported system: ${system}");
 
   packageHash = {
-    x86_64-linux = "sha256-Y0Inew0PncpnEpdLWtl/85t93eGSRewKh5mvGnn+yck=";
-    aarch64-linux = "sha256-HEm3TaLeaws8G73CU9BmxeplQdeF9nQbBSnbctaVhqI=";
-    x86_64-darwin = "sha256-mlshpN/4Od4qrXiqIEYo7G84Dtb+tp2nK2VnrRG2rto=";
-    aarch64-darwin = "sha256-aJH/vOidj0vbkttGDgelaAC/dMYguQPLjxl+V3pOVzI=";
+    x86_64-linux = "sha256-LHiLkZ+VN+wPnq6OukXozQWKh7ewNaFor1ndCUlCBtU=";
+    aarch64-linux = "sha256-1+rLGnm+LhbYigYUcmuLICLFXUk3wjOkmxuCuuI+Xqc=";
+    x86_64-darwin = "sha256-mJA3VXfNr6578Q2xw0xOZccloQpeCIsjn3dVdlsnTVs=";
+    aarch64-darwin = "sha256-FNl3UefJWA8yJ2B44GUEK6py7DLikJrygIwsqdIjW9c=";
   }.${system} or (throw "Unsupported system: ${system}");
 
 in stdenv.mkDerivation rec {
   pname = "fermyon-spin";
-  version = "2.2.0";
+  version = "2.4.2";
 
-  src = fetchzip {
+  # Use fetchurl rather than fetchzip as these tarballs are built by the project
+  # and not by GitHub (and thus are stable) - this simplifies the update script
+  # by allowing it to use the output of `nix store prefetch-file`.
+  src = fetchurl {
     url = "https://github.com/fermyon/spin/releases/download/v${version}/spin-v${version}-${platform}.tar.gz";
-    stripRoot = false;
     hash = packageHash;
   };
+
+  sourceRoot = ".";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [
     autoPatchelfHook
@@ -46,7 +50,7 @@ in stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/bin
-    cp $src/* $out/bin
+    cp ./spin $out/bin
 
     runHook postInstall
   '';

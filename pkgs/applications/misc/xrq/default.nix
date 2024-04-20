@@ -24,5 +24,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/arianon/xrq";
     license = lib.licenses.mit;
     platforms = with lib.platforms; unix;
+    mainProgram = "xrq";
   };
 }

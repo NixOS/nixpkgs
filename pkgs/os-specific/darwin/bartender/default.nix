@@ -1,17 +1,17 @@
 { lib
 , stdenvNoCC
 , fetchurl
-, undmg
+, _7zz
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bartender";
-  version = "4.2.21";
+  version = "5.0.49";
 
   src = fetchurl {
-    name = "Bartender 4.dmg";
-    url = "https://www.macbartender.com/B2/updates/${builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version}/Bartender%204.dmg";
-    hash = "sha256-KL4Wy8adGiYmxaDkhGJjwobU5szpW2j7ObgHyp02Dow=";
+    name = "Bartender ${lib.versions.major finalAttrs.version}.dmg";
+    url = "https://www.macbartender.com/B2/updates/${builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version}/Bartender%20${lib.versions.major finalAttrs.version}.dmg";
+    hash = "sha256-DOQLtdbwYFyRri3GBdjLfFNII65QJMvAQu9Be4ATBx0=";
   };
 
   dontPatch = true;
@@ -19,15 +19,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontBuild = true;
   dontFixup = true;
 
-  nativeBuildInputs = [ undmg ];
+  nativeBuildInputs = [ _7zz ];
 
-  sourceRoot = "Bartender 4.app";
+  sourceRoot = "Bartender ${lib.versions.major finalAttrs.version}.app";
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/Applications/Bartender\ 4.app
-    cp -R . $out/Applications/Bartender\ 4.app
+    mkdir -p "$out/Applications/${finalAttrs.sourceRoot}"
+    cp -R . "$out/Applications/${finalAttrs.sourceRoot}"
 
     runHook postInstall
   '';
@@ -39,7 +39,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       Bartender improves your workflow with quick reveal, search, custom hotkeys and triggers, and lots more.
     '';
     homepage = "https://www.macbartender.com";
-    changelog = "https://www.macbartender.com/Bartender4/release_notes";
+    changelog = "https://www.macbartender.com/Bartender${lib.versions.major finalAttrs.version}/release_notes/";
     license = with licenses; [ unfree ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ stepbrobd ];

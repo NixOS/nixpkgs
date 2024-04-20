@@ -34,6 +34,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Find the vendor for a given MAC address";
+    mainProgram = "mac_vendor_lookup";
     homepage = "https://github.com/bauerj/mac_vendor_lookup";
     license = licenses.asl20;
     maintainers = with maintainers; [ hexa ];

@@ -54,5 +54,6 @@ stdenv.mkDerivation {
     license = licenses.lgpl21Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mkg20001 ];
+    mainProgram = "netifd";
   };
 }

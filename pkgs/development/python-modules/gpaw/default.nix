@@ -29,8 +29,8 @@ let
     text = ''
       # Compiler
       compiler = 'gcc'
-      mpicompiler = '${mpi}/bin/mpicc'
-      mpilinker = '${mpi}/bin/mpicc'
+      mpicompiler = '${lib.getDev mpi}/bin/mpicc'
+      mpilinker = '${lib.getDev mpi}/bin/mpicc'
 
       # BLAS
       libraries += ['blas']

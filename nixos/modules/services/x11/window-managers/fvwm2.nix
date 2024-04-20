@@ -19,12 +19,12 @@ in
 
   options = {
     services.xserver.windowManager.fvwm2 = {
-      enable = mkEnableOption (lib.mdDoc "Fvwm2 window manager");
+      enable = mkEnableOption "Fvwm2 window manager";
 
       gestures = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc "Whether or not to enable libstroke for gesture support";
+        description = "Whether or not to enable libstroke for gesture support";
       };
     };
   };

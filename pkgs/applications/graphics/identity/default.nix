@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A program for comparing multiple versions of an image or video";
+    mainProgram = "identity";
     homepage = "https://gitlab.gnome.org/YaLTeR/identity";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

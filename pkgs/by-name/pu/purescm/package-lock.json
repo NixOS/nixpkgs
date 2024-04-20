@@ -1,0 +1,20 @@
+{
+  "name": "purescm",
+  "lockfileVersion": 3,
+  "requires": true,
+  "packages": {
+    "": {
+      "dependencies": {
+        "purescm": "1.8.2"
+      }
+    },
+    "node_modules/purescm": {
+      "version": "1.8.2",
+      "resolved": "https://registry.npmjs.org/purescm/-/purescm-1.8.2.tgz",
+      "integrity": "sha512-r+iaiRagOO2rHxGIke391l+pMlpE85vOVpQA32pdftJTdKeUVGIYy0UAs1nOkQSNxdHMXsNIkrskAwOSiyX3PA==",
+      "bin": {
+        "purescm": "index.js"
+      }
+    }
+  }
+}

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "sq";
-  version = "0.46.1";
+  version = "0.48.3";
 
   src = fetchFromGitHub {
     owner = "neilotoole";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-TjJ3XDyHHZWMAYV5bJQffH4a9AheZWraov3d4HB/yno=";
+    hash = "sha256-22N8DEaLmGBA3Rx6VzxplUK9UAydo/gx4EsQzzaRHNE=";
   };
 
-  vendorHash = "sha256-DIYSUIUHEiRv+pPZ2hE/2X4GmT3lvdWd/mkl1wbjID4=";
+  vendorHash = "sha256-p0r7TuWFpV81Rnxqdj+UJec60EmvVQISURe43SpOpw0=";
 
   proxyVendor = true;
 
@@ -42,6 +42,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Swiss army knife for data";
+    mainProgram = "sq";
     homepage = "https://sq.io/";
     license = licenses.mit;
     platforms = platforms.all;

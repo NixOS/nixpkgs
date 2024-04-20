@@ -25,7 +25,7 @@
 , bzip2, flac, speex, libopus
 , libevent, expat, libjpeg, snappy
 , libcap
-, xdg-utils, minizip, libwebp
+, minizip, libwebp
 , libusb1, re2
 , ffmpeg, libxslt, libxml2
 , nasm
@@ -102,7 +102,14 @@ let
     "flac"
     "libjpeg"
     "libpng"
+  ] ++ lib.optionals (!chromiumVersionAtLeast "124") [
+    # Use the vendored libwebp for M124+ until we figure out how to solve:
+    # Running phase: configurePhase
+    # ERROR Unresolved dependencies.
+    # //third_party/libavif:libavif_enc(//build/toolchain/linux/unbundle:default)
+    #   needs //third_party/libwebp:libwebp_sharpyuv(//build/toolchain/linux/unbundle:default)
     "libwebp"
+  ] ++ [
     "libxslt"
     # "opus"
   ];
@@ -184,9 +191,6 @@ let
       bzip2 flac speex opusWithCustomModes
       libevent expat libjpeg snappy
       libcap
-    ] ++ lib.optionals (!xdg-utils.meta.broken) [
-      xdg-utils
-    ] ++ [
       minizip libwebp
       libusb1 re2
       ffmpeg libxslt libxml2
@@ -219,6 +223,9 @@ let
       # (we currently package 1.26 in Nixpkgs while Chromium bundles 1.21):
       # Source: https://bugs.chromium.org/p/angleproject/issues/detail?id=7582#c1
       ./patches/angle-wayland-include-protocol.patch
+      # Chromium reads initial_preferences from its own executable directory
+      # This patch modifies it to read /etc/chromium/initial_preferences
+      ./patches/chromium-initial-prefs.patch
     ] ++ lib.optionals (chromiumVersionAtLeast "120") [
       # We need to revert this patch to build M120+ with LLVM 17:
       ./patches/chromium-120-llvm-17.patch
@@ -241,6 +248,15 @@ let
       # Partial revert of https://github.com/chromium/chromium/commit/3687976b0c6d36cf4157419a24a39f6770098d61
       # allowing us to use our rustc and our clang.
       ./patches/chromium-121-rust.patch
+    ] ++ lib.optionals (chromiumVersionAtLeast "124" && !chromiumVersionAtLeast "125") [
+      # M124 shipped with broken --ozone-platform-hint flag handling, which we rely on
+      # for our NIXOS_OZONE_WL (wayland) environment variable.
+      # See <https://issues.chromium.org/issues/329678163>.
+      # This is the commit for the fix that landed in M125, which applies clean on M124.
+      (githubPatch {
+        commit = "c7f4c58f896a651eba80ad805ebdb49d19ebdbd4";
+        hash = "sha256-6nYWT2zN+j73xAIXLdGYT2eC71vGnGfiLCB0OwT0CAI=";
+      })
     ];
 
     postPatch = ''
@@ -294,10 +310,6 @@ let
         --replace \
           '/usr/share/locale/' \
           '${glibc}/share/locale/'
-
-    '' + lib.optionalString (!xdg-utils.meta.broken) ''
-      sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg-utils}/bin/xdg-@' \
-        chrome/browser/shell_integration_linux.cc
 
     '' + lib.optionalString systemdSupport ''
       sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
@@ -483,6 +495,10 @@ let
       for chromiumBinary in "$libExecPath/$packageName" "$libExecPath/libGLESv2.so"; do
         patchelf --set-rpath "${lib.makeLibraryPath [ libGL vulkan-loader pciutils ]}:$(patchelf --print-rpath "$chromiumBinary")" "$chromiumBinary"
       done
+
+      # replace bundled vulkan-loader
+      rm "$libExecPath/libvulkan.so.1"
+      ln -s -t "$libExecPath" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
     '';
 
     passthru = {

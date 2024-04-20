@@ -19,6 +19,7 @@
 , vala
 , gobject-introspection
 , dbus
+, bash
 }:
 
 stdenv.mkDerivation rec {
@@ -39,6 +40,8 @@ stdenv.mkDerivation rec {
     ./no-dummy-dirs-in-sysconfdir.patch
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     meson
     ninja
@@ -47,6 +50,7 @@ stdenv.mkDerivation rec {
     gettext
     pkg-config
     libxslt
+    python3
   ];
 
   buildInputs = [
@@ -60,6 +64,7 @@ stdenv.mkDerivation rec {
     systemd
     bash-completion
     dbus
+    bash # shebangs in share/ModemManager/fcc-unlock.available.d/
   ];
 
   nativeInstallCheckInputs = [

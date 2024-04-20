@@ -1,31 +1,35 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , gprbuild
 , gnat
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "alire";
-  version = "1.2.2";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "alire-project";
     repo = "alire";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rwNiSXOIIQR1I8wwp1ROVOfEChT6SCa5c6XnTRqekDc=";
+    hash = "sha256-fJXt3mM/v87hWumML6L3MH1O/uKkzmpE58B9nDRohzM=";
 
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ gprbuild gnat ];
 
-  # on HEAD (roughly 2c4e5a3), alire provides a dev/build.sh script. for now,
-  # just use gprbuild.
+  postPatch = ''
+    patchShebangs ./dev/build.sh
+  '';
+
   buildPhase = ''
     runHook preBuild
 
-    gprbuild -j$NIX_BUILD_CORES -P alr_env
+    export ALIRE_BUILD_JOBS="$NIX_BUILD_CORES"
+    ./dev/build.sh
 
     runHook postBuild
   '';

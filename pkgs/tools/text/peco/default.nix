@@ -17,6 +17,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Simplistic interactive filtering tool";
+    mainProgram = "peco";
     homepage = "https://github.com/peco/peco";
     changelog = "https://github.com/peco/peco/blob/v${version}/Changes";
     license = licenses.mit;

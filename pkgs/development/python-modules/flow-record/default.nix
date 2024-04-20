@@ -5,7 +5,7 @@
 , fetchFromGitHub
 , lz4
 , msgpack
-, pytestCheckHook
+, pytest7CheckHook
 , pythonOlder
 , setuptools
 , setuptools-scm
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pytest7CheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [

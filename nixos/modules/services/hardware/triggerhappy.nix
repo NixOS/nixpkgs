@@ -22,18 +22,18 @@ let
 
       keys = mkOption {
         type = types.listOf types.str;
-        description = lib.mdDoc "List of keys to match.  Key names as defined in linux/input-event-codes.h";
+        description = "List of keys to match.  Key names as defined in linux/input-event-codes.h";
       };
 
       event = mkOption {
         type = types.enum ["press" "hold" "release"];
         default = "press";
-        description = lib.mdDoc "Event to match.";
+        description = "Event to match.";
       };
 
       cmd = mkOption {
         type = types.str;
-        description = lib.mdDoc "What to run.";
+        description = "What to run.";
       };
 
     };
@@ -52,7 +52,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the {command}`triggerhappy` hotkey daemon.
         '';
       };
@@ -61,7 +61,7 @@ in
         type = types.str;
         default = "nobody";
         example = "root";
-        description = lib.mdDoc ''
+        description = ''
           User account under which {command}`triggerhappy` runs.
         '';
       };
@@ -72,7 +72,7 @@ in
         example = lib.literalExpression ''
           [ { keys = ["PLAYPAUSE"];  cmd = "''${pkgs.mpc-cli}/bin/mpc -q toggle"; } ]
         '';
-        description = lib.mdDoc ''
+        description = ''
           Key bindings for {command}`triggerhappy`.
         '';
       };
@@ -80,7 +80,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Literal contents to append to the end of {command}`triggerhappy` configuration file.
         '';
       };

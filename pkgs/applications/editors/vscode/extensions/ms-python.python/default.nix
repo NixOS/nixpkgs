@@ -21,7 +21,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     name = "python";
     publisher = "ms-python";
     version = "2023.1.10091012";
-    sha256 = "sha256-JosFv6ngJmw1XRILwTZMVxlGIdWFLFQjj4olfnVwAIM=";
+    hash = "sha256-JosFv6ngJmw1XRILwTZMVxlGIdWFLFQjj4olfnVwAIM=";
   };
 
   buildInputs = [ icu ];
@@ -72,7 +72,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
       tmp=$(mktemp)
       curl -sLo $tmp $(echo ${(import ../mktplcExtRefToFetchArgs.nix mktplcRef).url} | sed "s|${mktplcRef.version}|$version|")
       hash=$(nix hash file --type sha256 --base32 --sri $tmp)
-      sed -i -e "s|${mktplcRef.sha256}|$hash|" -e "s|${mktplcRef.version}|$version|" pkgs/applications/editors/vscode/extensions/python/default.nix
+      sed -i -e "s|${mktplcRef.hash}|$hash|" -e "s|${mktplcRef.version}|$version|" pkgs/applications/editors/vscode/extensions/ms-python.python/default.nix
     fi
   '';
 

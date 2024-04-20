@@ -1,4 +1,7 @@
-{ pkgs, lib, ... }: let
+{ config, lib, ... }: let
+
+  pkgs = config.node.pkgs;
+
   commonConfig = ./common/acme/client;
 
   dnsServerIP = nodes: nodes.dnsserver.networking.primaryIPAddress;

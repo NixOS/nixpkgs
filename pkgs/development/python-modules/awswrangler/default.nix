@@ -19,14 +19,15 @@
 , pyparsing
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , redshift-connector
 , requests-aws4auth
 }:
 
 buildPythonPackage rec {
   pname = "awswrangler";
-  version = "3.5.2";
-  format = "pyproject";
+  version = "3.7.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -34,14 +35,19 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "aws-sdk-pandas";
     rev = "refs/tags/${version}";
-    hash = "sha256-lIEitS/pyOq4RjyUqPzfKOcNtAIWp14sQcLfQ1FwEoE=";
+    hash = "sha256-1eb2oTiRNxA2XTpkScA5WJutN5P6FX96jC4Ra9VdonI=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "packaging"
+  ];
+
+  dependencies = [
     boto3
     gremlinpython
     jsonpath-ng

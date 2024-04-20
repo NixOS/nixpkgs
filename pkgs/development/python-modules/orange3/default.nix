@@ -4,7 +4,10 @@
 , buildPythonPackage
 , chardet
 , copyDesktopItems
+, pythonRelaxDepsHook
 , cython
+, catboost
+, xgboost
 , fetchFromGitHub
 , fetchurl
 , httpx
@@ -45,7 +48,7 @@ let
   self = buildPythonPackage rec {
     pname = "orange3";
     version = "3.36.2";
-    format = "setuptools";
+    pyproject = true;
 
     disabled = pythonOlder "3.7";
 
@@ -58,15 +61,17 @@ let
 
     postPatch = ''
       substituteInPlace pyproject.toml \
-        --replace "setuptools>=41.0.0,<50.0" "setuptools"
-      sed -i 's;\(scikit-learn\)[^$]*;\1;g' requirements-core.txt
-      sed -i 's;pyqtgraph[^$]*;;g' requirements-gui.txt # TODO: remove after bump with a version greater than 0.13.1
+          --replace-fail 'cython>=3.0' 'cython'
+
+      # disable update checking
+      echo -e "def check_for_updates():\n\tpass" >> Orange/canvas/__main__.py
     '';
 
     nativeBuildInputs = [
       copyDesktopItems
-      cython
+      pythonRelaxDepsHook
       oldest-supported-numpy
+      cython
       qt5.wrapQtAppsHook
       recommonmark
       setuptools
@@ -76,13 +81,18 @@ let
 
     enableParallelBuilding = true;
 
+    pythonRelaxDeps = [ "scikit-learn" ];
+
     propagatedBuildInputs = [
       numpy
       scipy
       chardet
+      catboost
+      xgboost
       openpyxl
       opentsne
       qtconsole
+      setuptools
       bottleneck
       matplotlib
       joblib
@@ -106,6 +116,9 @@ let
 
     # FIXME: ImportError: cannot import name '_variable' from partially initialized module 'Orange.data' (most likely due to a circular import) (/build/source/Orange/data/__init__.py)
     doCheck = false;
+
+    # FIXME: pythonRelaxDeps is not relaxing the scikit-learn version constraint, had to disable this
+    dontCheckRuntimeDeps = true;
 
     pythonImportsCheck = [ "Orange" "Orange.data._variable" ];
 

@@ -5,24 +5,31 @@
 , packaging
 , poetry-core
 , pydantic
+, pythonRelaxDepsHook
 , redis
 , structlog
 }:
 
 buildPythonPackage rec {
   pname = "diffsync";
-  version = "1.10.0";
+  version = "2.0.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "networktocode";
     repo = "diffsync";
     rev = "refs/tags/v${version}";
-    hash = "sha256-p7aML6dTDkF4hx67bwI29nhEHi7LIEZ5RlHPgtyQMbo=";
+    hash = "sha256-4LS18FPrnGE1tM0pFzAw0+ajDaw9g7MCgIwS2ptrX9c=";
   };
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "packaging"
+    "structlog"
   ];
 
   propagatedBuildInputs = [

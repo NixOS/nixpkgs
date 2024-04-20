@@ -93,12 +93,12 @@ in mkLicense lset) ({
     url = "https://aomedia.org/license/patent-license/";
   };
 
-  apsl10 = {
+  apple-psl10 = {
     spdxId = "APSL-1.0";
     fullName = "Apple Public Source License 1.0";
   };
 
-  apsl20 = {
+  apple-psl20 = {
     spdxId = "APSL-2.0";
     fullName = "Apple Public Source License 2.0";
   };
@@ -392,6 +392,12 @@ in mkLicense lset) ({
     fullName = "Common Public Attribution License 1.0";
   };
 
+  commons-clause = {
+    fullName = "Commons Clause License";
+    url = "https://commonsclause.com/";
+    free = false;
+  };
+
   cpl10 = {
     spdxId = "CPL-1.0";
     fullName = "Common Public License 1.0";
@@ -410,6 +416,11 @@ in mkLicense lset) ({
   drl10 = {
     spdxId = "DRL-1.0";
     fullName = "Detection Rule License 1.0";
+  };
+
+  dtoa = {
+    spdxId = "dtoa";
+    fullName = "dtoa License";
   };
 
   eapl = {
@@ -594,6 +605,11 @@ in mkLicense lset) ({
     url = "https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception";
   };
 
+  giftware = {
+    spdxId = "Giftware";
+    fullName = "Giftware License";
+  };
+
   hpnd = {
     spdxId = "HPND";
     fullName = "Historic Permission Notice and Disclaimer";
@@ -602,6 +618,11 @@ in mkLicense lset) ({
   hpndSellVariant = {
     fullName = "Historical Permission Notice and Disclaimer - sell variant";
     spdxId = "HPND-sell-variant";
+  };
+
+  hpndUc = {
+    spdxId = "HPND-UC";
+    fullName = "Historical Permission Notice and Disclaimer - University of California variant";
   };
 
   # Intel's license, seems free
@@ -854,6 +875,11 @@ in mkLicense lset) ({
     fullName = "Mozilla Public License 2.0";
   };
 
+  mplus = {
+    spdxId = "mplus";
+    fullName = "M+ Font License";
+  };
+
   mspl = {
     spdxId = "MS-PL";
     fullName = "Microsoft Public License";
@@ -882,6 +908,11 @@ in mkLicense lset) ({
     free = false;
     redistributable = true; # Only if used in Netdata products.
     url = "https://raw.githubusercontent.com/netdata/netdata/master/web/gui/v2/LICENSE.md";
+  };
+
+  nistSoftware = {
+    spdxId = "NIST-Software";
+    fullName = "NIST Software License";
   };
 
   nlpl = {
@@ -1061,6 +1092,11 @@ in mkLicense lset) ({
     url = "https://sources.debian.org/copyright/license/debianutils/4.9.1/";
   };
 
+  smlnj = {
+    spdxId = "SMLNJ";
+    fullName = "Standard ML of New Jersey License";
+  };
+
   sspl = {
     shortName = "SSPL";
     fullName = "Server Side Public License";
@@ -1210,6 +1246,11 @@ in mkLicense lset) ({
     url = "https://mcj.sourceforge.net/authors.html#xfig";
   };
 
+  xinetd = {
+    spdxId = "xinetd";
+    fullName = "xinetd License";
+  };
+
   zlib = {
     spdxId = "Zlib";
     fullName = "zlib License";
@@ -1224,11 +1265,23 @@ in mkLicense lset) ({
     spdxId = "ZPL-2.1";
     fullName = "Zope Public License 2.1";
   };
+
+  xskat = {
+    spdxId = "XSkat";
+    fullName = "XSkat License";
+  };
 } // {
   # TODO: remove legacy aliases
-  agpl3 = {
-    spdxId = "AGPL-3.0";
-    fullName = "GNU Affero General Public License v3.0";
+  apsl10 = {
+    # deprecated for consistency with `apple-psl20`; use `apple-psl10`
+    spdxId = "APSL-1.0";
+    fullName = "Apple Public Source License 1.0";
+    deprecated = true;
+  };
+  apsl20 = {
+    # deprecated due to confusion with Apache-2.0; use `apple-psl20`
+    spdxId = "APSL-2.0";
+    fullName = "Apple Public Source License 2.0";
     deprecated = true;
   };
   gpl2 = {

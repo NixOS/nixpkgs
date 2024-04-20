@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , libusb1
 , gtk3
@@ -28,13 +27,6 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-hlFI2xpZ4ldMcxZbg/T5/4JuFFdO9THLcU0DQKSFqrw=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/stlink-org/stlink/commit/468b1d2daa853b975c33ab69876c486734f2c6a7.diff";
-      sha256 = "sha256-ueSi/zc7xbOATl0yBtCL4U64IQ/yqu6sMYDOiPl1JBI=";
-    })
-  ];
-
   buildInputs = [
     libusb1'
   ] ++ lib.optionals withGUI [
@@ -55,8 +47,8 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "In-circuit debug and programming for ST-Link devices";
     license = licenses.bsd3;
-    # upstream says windows, linux/unix but dropped support for macOS in 1.8.0
-    platforms = platforms.linux; # not sure how to express unix without darwin
+    platforms = platforms.unix;
+    badPlatforms = platforms.darwin;
     maintainers = [ maintainers.bjornfor maintainers.rongcuid ];
   };
 }

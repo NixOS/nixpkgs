@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab-lsp";
-  version = "5.0.2";
+  version = "5.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JmiGhOkHUPjvikFimgpAUOc26IFVWqFBP7Xah54GNfE=";
+    hash = "sha256-rqyECTrabSDvV64Ol4EcxXlqDKtyN7Mvjt35k8C7A1Y=";
   };
 
   nativeBuildInputs = [

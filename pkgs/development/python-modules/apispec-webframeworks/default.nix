@@ -1,4 +1,5 @@
 { lib
+, aiohttp
 , apispec
 , bottle
 , buildPythonPackage
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "apispec-webframeworks";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "marshmallow-code";
     repo = "apispec-webframeworks";
     rev = "refs/tags/${version}";
-    hash = "sha256-zrsqIZ5ZogZsK1ZOL2uy8igS4T8a+19IwL5dMhKw7OA=";
+    hash = "sha256-qepiaRW36quIgxBtEHMF3HN0wO6jp2uGAHgg5fJoMUY=";
   };
 
   nativeBuildInputs = [
@@ -34,6 +35,7 @@ buildPythonPackage rec {
   ] ++ apispec.optional-dependencies.yaml;
 
   nativeCheckInputs = [
+    aiohttp
     bottle
     flask
     mock

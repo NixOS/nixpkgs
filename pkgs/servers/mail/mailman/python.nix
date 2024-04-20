@@ -18,15 +18,6 @@ python3.override {
         [1] 72a14ea563a3f5bf85db659349a533fe75a8b0ce
         [2] f931bc81d63f5cfda55ac73d754c87b3fd63b291
       */
-      # https://gitlab.com/mailman/hyperkitty/-/merge_requests/541
-      mistune = super.mistune.overridePythonAttrs (old: rec {
-        version = "2.0.5";
-        src = fetchPypi {
-          inherit (old) pname;
-          inherit version;
-          hash = "sha256-AkYRPLJJLbh1xr5Wl0p8iTMzvybNkokchfYxUc7gnTQ=";
-        };
-      });
 
       # django-q tests fail with redis 5.0.0.
       # https://gitlab.com/mailman/hyperkitty/-/issues/493

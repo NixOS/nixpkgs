@@ -30,5 +30,6 @@ buildGoModule rec {
   meta = {
     inherit (hasura-graphql-engine.meta) license homepage maintainers;
     description = "Hasura GraphQL Engine CLI";
+    mainProgram = "hasura";
   };
 }

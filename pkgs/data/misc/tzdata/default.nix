@@ -46,8 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
-  # everything except for check_web, because that needs curl and wants to talk to https://validator.w3.org
-  checkTarget = "check_back check_character_set check_white_space check_links check_name_lengths check_now check_slashed_abbrs check_sorted check_tables check_ziguard check_zishrink check_tzs";
+  # everything except for:
+  # - check_web, because that needs curl and wants to talk to https://validator.w3.org
+  # - check_now, because that depends on the current time
+  checkTarget = "check_back check_character_set check_white_space check_links check_name_lengths check_slashed_abbrs check_sorted check_tables check_ziguard check_zishrink check_tzs";
 
   installFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "zic=${buildPackages.tzdata.bin}/bin/zic"

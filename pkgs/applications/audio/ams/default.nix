@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Realtime modular synthesizer for ALSA";
+    mainProgram = "ams";
     homepage = "https://alsamodular.sourceforge.net";
     license = licenses.gpl2;
     platforms = platforms.linux;

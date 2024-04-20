@@ -15,6 +15,7 @@ assertExecutable() {
 #                          (if unset or empty, defaults to EXECUTABLE)
 # --inherit-argv0        : the executable inherits argv0 from the wrapper.
 #                          (use instead of --argv0 '$0')
+# --resolve-argv0        : if argv0 doesn't include a / character, resolve it against PATH
 # --set          VAR VAL : add VAR with value VAL to the executable's environment
 # --set-default  VAR VAL : like --set, but only adds VAR if not already set in
 #                          the environment
@@ -177,6 +178,9 @@ makeShellWrapper() {
         elif [[ "$p" == "--inherit-argv0" ]]; then
             # Whichever comes last of --argv0 and --inherit-argv0 wins
             argv0='$0'
+        elif [[ "$p" == "--resolve-argv0" ]]; then
+            # this is noop in shell wrappers, since bash will always resolve $0
+            resolve_argv0=1
         else
             die "makeWrapper doesn't understand the arg $p"
         fi

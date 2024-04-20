@@ -23,6 +23,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Single-packet UDP scanner";
+    mainProgram = "udpx";
     homepage = "https://github.com/nullt3r/udpx";
     changelog = "https://github.com/nullt3r/udpx/releases/tag/v${version}";
     license = licenses.mit;

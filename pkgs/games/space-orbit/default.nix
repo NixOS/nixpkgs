@@ -40,6 +40,7 @@ EOF
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "A space combat simulator";
+    mainProgram = "space-orbit";
     license = licenses.gpl2;
     platforms = platforms.all;
   };

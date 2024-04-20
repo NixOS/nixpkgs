@@ -12,12 +12,12 @@ in {
   meta.maintainers = with maintainers; [ das_j ];
 
   options.services.icingaweb2 = with types; {
-    enable = mkEnableOption (lib.mdDoc "the icingaweb2 web interface");
+    enable = mkEnableOption "the icingaweb2 web interface";
 
     pool = mkOption {
       type = str;
       default = poolName;
-      description = lib.mdDoc ''
+      description = ''
          Name of existing PHP-FPM pool that is used to run Icingaweb2.
          If not specified, a pool will automatically created with default values.
       '';
@@ -26,7 +26,7 @@ in {
     libraryPaths = mkOption {
       type = attrsOf package;
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Libraries to add to the Icingaweb2 library path.
         The name of the attribute is the name of the library, the value
         is the package to add.
@@ -36,7 +36,7 @@ in {
     virtualHost = mkOption {
       type = nullOr str;
       default = "icingaweb2";
-      description = lib.mdDoc ''
+      description = ''
         Name of the nginx virtualhost to use and setup. If null, no virtualhost is set up.
       '';
     };
@@ -45,15 +45,15 @@ in {
       type = str;
       default = "UTC";
       example = "Europe/Berlin";
-      description = lib.mdDoc "PHP-compliant timezone specification";
+      description = "PHP-compliant timezone specification";
     };
 
     modules = {
-      doc.enable = mkEnableOption (lib.mdDoc "the icingaweb2 doc module");
-      migrate.enable = mkEnableOption (lib.mdDoc "the icingaweb2 migrate module");
-      setup.enable = mkEnableOption (lib.mdDoc "the icingaweb2 setup module");
-      test.enable = mkEnableOption (lib.mdDoc "the icingaweb2 test module");
-      translation.enable = mkEnableOption (lib.mdDoc "the icingaweb2 translation module");
+      doc.enable = mkEnableOption "the icingaweb2 doc module";
+      migrate.enable = mkEnableOption "the icingaweb2 migrate module";
+      setup.enable = mkEnableOption "the icingaweb2 setup module";
+      test.enable = mkEnableOption "the icingaweb2 test module";
+      translation.enable = mkEnableOption "the icingaweb2 translation module";
     };
 
     modulePackages = mkOption {
@@ -64,7 +64,7 @@ in {
           "snow" = icingaweb2Modules.theme-snow;
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Name-package attrset of Icingaweb 2 modules packages to enable.
 
         If you enable modules manually (e.g. via the web ui), they will not be touched.
@@ -84,7 +84,7 @@ in {
           level = "CRITICAL";
         };
       };
-      description = lib.mdDoc ''
+      description = ''
         config.ini contents.
         Will automatically be converted to a .ini file.
         If you don't set global.module_path, the module will take care of it.
@@ -108,7 +108,7 @@ in {
           dbname = "icingaweb2";
         };
       };
-      description = lib.mdDoc ''
+      description = ''
         resources.ini contents.
         Will automatically be converted to a .ini file.
 
@@ -127,7 +127,7 @@ in {
           resource = "icingaweb_db";
         };
       };
-      description = lib.mdDoc ''
+      description = ''
         authentication.ini contents.
         Will automatically be converted to a .ini file.
 
@@ -145,7 +145,7 @@ in {
           resource = "icingaweb_db";
         };
       };
-      description = lib.mdDoc ''
+      description = ''
         groups.ini contents.
         Will automatically be converted to a .ini file.
 
@@ -163,7 +163,7 @@ in {
           permissions = "*";
         };
       };
-      description = lib.mdDoc ''
+      description = ''
         roles.ini contents.
         Will automatically be converted to a .ini file.
 

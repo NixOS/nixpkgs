@@ -44,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://gitlab.com/mailman/mailman-web";
     description = "Django project for Mailman 3 web interface";
+    mainProgram = "mailman-web";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ qyliss m1cr0man ];
   };

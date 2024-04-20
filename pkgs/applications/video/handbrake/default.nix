@@ -26,7 +26,7 @@
 , numactl
 , writeText
   # Processing, video codecs, containers
-, ffmpeg_5-full
+, ffmpeg-full
 , nv-codec-headers
 , libogg
 , x264
@@ -69,6 +69,10 @@
   # for now we disable GTK GUI support on Darwin. (It may be possible to remove
   # this restriction later.)
 , useGtk ? !stdenv.isDarwin
+, bzip2
+, desktop-file-utils
+, meson
+, ninja
 , wrapGAppsHook
 , intltool
 , glib
@@ -86,62 +90,68 @@
 }:
 
 let
-  version = "1.6.1";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "HandBrake";
     repo = "HandBrake";
     rev = version;
-    sha256 = "sha256-0MJ1inMNA6s8l2S0wnpM2c7FxOoOHxs9u4E/rgKfjJo=";
+    hash = "sha256-4Q//UU/CPgWvhtpROfNPLzBvZlB02hbFe9Z9FA7mX04=";
   };
 
   # Handbrake maintains a set of ffmpeg patches. In particular, these
   # patches are required for subtitle timing to work correctly. See:
   # https://github.com/HandBrake/HandBrake/issues/4029
-  ffmpeg-version = "5.1.2";
-  ffmpeg-hb = ffmpeg_5-full.overrideAttrs (old: {
+  # base ffmpeg version is specified in:
+  # https://github.com/HandBrake/HandBrake/blob/master/contrib/ffmpeg/module.defs
+  ffmpeg-version = "6.1";
+  ffmpeg-hb = ffmpeg-full.overrideAttrs (old: {
     version = ffmpeg-version;
     src = fetchurl {
       url = "https://www.ffmpeg.org/releases/ffmpeg-${ffmpeg-version}.tar.bz2";
-      hash = "sha256-OaC8yNmFSfFsVwYkZ4JGpqxzbAZs69tAn5UC6RWyLys=";
+      hash = "sha256-632j3n3TzkiplGq0R6c0a9EaOoXm77jyws5jfn9UdhE=";
     };
-    patches = old.patches or [ ] ++ [
-      "${src}/contrib/ffmpeg/A01-qsv-libavfilter-qsvvpp-change-the-output-frame-s-width-a.patch"
-      "${src}/contrib/ffmpeg/A02-qsv-configure-ensure-enable-libmfx-uses-libmfx-1.x.patch"
-      "${src}/contrib/ffmpeg/A03-qsv-configure-fix-the-check-for-MFX_CODEC_VP9.patch"
-      "${src}/contrib/ffmpeg/A04-qsv-remove-mfx-prefix-from-mfx-headers.patch"
-      "${src}/contrib/ffmpeg/A05-qsv-load-user-plugin-for-MFX_VERSION-2.0.patch"
-      "${src}/contrib/ffmpeg/A06-qsv-build-audio-related-code-when-MFX_VERSION-2.0.patch"
-      "${src}/contrib/ffmpeg/A07-qsvenc-support-multi-frame-encode-when-MFX_VERSION-2.patch"
-      "${src}/contrib/ffmpeg/A08-qsvenc-support-MFX_RATECONTROL_LA_EXT-when-MFX_VERSI.patch"
-      "${src}/contrib/ffmpeg/A09-qsv-support-OPAQUE-memory-when-MFX_VERSION-2.0.patch"
-      "${src}/contrib/ffmpeg/A10-qsv-configure-add-enable-libvpl-option.patch"
-      "${src}/contrib/ffmpeg/A11-qsv-use-a-new-method-to-create-mfx-session-when-usin.patch"
-      "${src}/contrib/ffmpeg/A12-qsv-fix-decode-10bit-hdr.patch"
-      "${src}/contrib/ffmpeg/A13-mov-read-name-track-tag-written-by-movenc.patch"
-      "${src}/contrib/ffmpeg/A14-movenc-write-3gpp-track-titl-tag.patch"
-      "${src}/contrib/ffmpeg/A15-mov-read-3gpp-udta-tags.patch"
-      "${src}/contrib/ffmpeg/A16-movenc-write-3gpp-track-names-tags-for-all-available.patch"
-      "${src}/contrib/ffmpeg/A17-FFmpeg-devel-amfenc-Add-support-for-pict_type-field.patch"
-      "${src}/contrib/ffmpeg/A18-dvdsubdec-fix-processing-of-partial-packets.patch"
-      "${src}/contrib/ffmpeg/A19-ccaption_dec-return-number-of-bytes-used.patch"
-      "${src}/contrib/ffmpeg/A20-dvdsubdec-return-number-of-bytes-used.patch"
-      "${src}/contrib/ffmpeg/A21-dvdsubdec-use-pts-of-initial-packet.patch"
-      "${src}/contrib/ffmpeg/A22-matroskaenc-aac-extradata-updated.patch"
-      "${src}/contrib/ffmpeg/A23-ccaption_dec-fix-pts-in-real_time-mode.patch"
-      "${src}/contrib/ffmpeg/A24-fix-eac3-dowmix.patch"
-      "${src}/contrib/ffmpeg/A25-enable-truehd-pass.patch"
-      "${src}/contrib/ffmpeg/A26-Update-the-min-version-to-1.4.23.0-for-AMF-SDK.patch"
-      "${src}/contrib/ffmpeg/A27-avcodec-amfenc-Fixes-the-color-information-in-the-ou.patch"
-      "${src}/contrib/ffmpeg/A28-avcodec-amfenc-HDR-metadata.patch"
-      # This patch is not applying since ffmpeg 5.1.1, probably it was backported by upstream
-      # "${src}/contrib/ffmpeg/A30-svt-av1-backports.patch"
-      (fetchpatch {
-        name = "vulkan-remove-extensions.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/commitdiff_plain/eb0455d64690";
-        hash = "sha256-qvLrb7b+9/bel8A2lZuSmBiJtHXsABw0Lvgn1ggnmCU=";
-      })
+    patches = (old.patches or [ ]) ++ [
+      "${src}/contrib/ffmpeg/A01-mov-read-name-track-tag-written-by-movenc.patch"
+      "${src}/contrib/ffmpeg/A02-movenc-write-3gpp-track-titl-tag.patch"
+      "${src}/contrib/ffmpeg/A03-mov-read-3gpp-udta-tags.patch"
+      "${src}/contrib/ffmpeg/A04-movenc-write-3gpp-track-names-tags-for-all-available.patch"
+      "${src}/contrib/ffmpeg/A05-dvdsubdec-fix-processing-of-partial-packets.patch"
+      "${src}/contrib/ffmpeg/A06-dvdsubdec-return-number-of-bytes-used.patch"
+      "${src}/contrib/ffmpeg/A07-dvdsubdec-use-pts-of-initial-packet.patch"
+      "${src}/contrib/ffmpeg/A08-ccaption_dec-fix-pts-in-real_time-mode.patch"
+      "${src}/contrib/ffmpeg/A09-matroskaenc-aac-extradata-updated.patch"
+      "${src}/contrib/ffmpeg/A10-amfenc-Add-support-for-pict_type-field.patch"
+      "${src}/contrib/ffmpeg/A11-amfenc-Fixes-the-color-information-in-the-ou.patch"
+      "${src}/contrib/ffmpeg/A12-amfenc-HDR-metadata.patch"
+      "${src}/contrib/ffmpeg/A13-libavcodec-amfenc-Fix-issue-with-missing-headers-in-.patch"
+      "${src}/contrib/ffmpeg/A14-avcodec-add-ambient-viewing-environment-packet-side-.patch"
+      "${src}/contrib/ffmpeg/A15-avformat-mov-add-support-for-amve-ambient-viewing-en.patch"
+      "${src}/contrib/ffmpeg/A16-videotoolbox-dec-h264.patch"
+
+      # patch to fix <https://github.com/HandBrake/HandBrake/issues/5011>
+      # commented out because it causes ffmpeg's filter-pixdesc-p010le test to fail.
+      # "${src}/contrib/ffmpeg/A17-libswscale-fix-yuv420p-to-p01xle-color-conversion-bu.patch"
+
+      "${src}/contrib/ffmpeg/A18-qsv-fix-decode-10bit-hdr.patch"
+      "${src}/contrib/ffmpeg/A19-ffbuild-common-use-gzip-n-flag-for-cuda.patch"
     ];
+  });
+
+  x265-hb = x265.overrideAttrs (old: {
+    # nixpkgs' x265 sourceRoot is x265-.../source whereas handbrake's x265 patches
+    # are written with respect to the parent directory instead of that source directory.
+    # patches which don't cleanly apply are commented out.
+    postPatch = (old.postPatch or "") + ''
+      pushd ..
+      # patch -p1 < ${src}/contrib/x265/A00-crosscompile-fix.patch
+      patch -p1 < ${src}/contrib/x265/A01-threads-priority.patch
+      patch -p1 < ${src}/contrib/x265/A02-threads-pool-adjustments.patch
+      patch -p1 < ${src}/contrib/x265/A03-sei-length-crash-fix.patch
+      patch -p1 < ${src}/contrib/x265/A04-ambient-viewing-enviroment-sei.patch
+      # patch -p1 < ${src}/contrib/x265/A05-memory-leaks.patch
+      popd
+    '';
   });
 
   versionFile = writeText "version.txt" ''
@@ -189,6 +199,17 @@ let
       # Use the Nix-provided libxml2 instead of the system-provided one.
       substituteInPlace libhb/module.defs \
         --replace /usr/include/libxml2 ${libxml2.dev}/include/libxml2
+    '' + optionalString useGtk ''
+      substituteInPlace gtk/module.rules \
+        --replace-fail '$(MESON.exe)' 'meson' \
+        --replace-fail '$(NINJA.exe)' 'ninja' \
+      # Force using nixpkgs dependencies
+      substituteInPlace gtk/meson.build \
+        --replace-fail "cc.find_library('bz2', dirs: hb_libdirs)" "cc.find_library('bz2')" \
+        --replace-fail "cc.find_library('mp3lame', dirs: hb_libdirs)" "cc.find_library('mp3lame')" \
+        --replace-fail \
+          "hb_incdirs = include_directories(hb_dir / 'libhb', hb_dir / 'contrib/include')" \
+          "hb_incdirs = include_directories(hb_dir / 'libhb')" \
     '';
 
     nativeBuildInputs = [
@@ -199,7 +220,7 @@ let
       pkg-config
       python3
     ]
-    ++ optionals useGtk [ intltool wrapGAppsHook ];
+    ++ optionals useGtk [ desktop-file-utils intltool meson ninja wrapGAppsHook ];
 
     buildInputs = [
       a52dec
@@ -228,12 +249,13 @@ let
       speex
       svt-av1
       x264
-      x265
+      x265-hb
       xz
       zimg
     ]
     ++ optional (!stdenv.isDarwin) numactl
     ++ optionals useGtk [
+      bzip2
       dbus-glib
       glib
       gst_all_1.gst-plugins-base
@@ -254,7 +276,6 @@ let
     configureFlags = [
       "--disable-df-fetch"
       "--disable-df-verify"
-      "--disable-gtk-update-checks"
     ]
     ++ optional (!useGtk) "--disable-gtk"
     ++ optional useFdk "--enable-fdk-aac"
@@ -264,10 +285,19 @@ let
     # NOTE: 2018-12-27: Check NixOS HandBrake test if changing
     NIX_LDFLAGS = [ "-lx265" ];
 
+    # meson/ninja are used only for the subprojects, not the toplevel
+    dontUseMesonConfigure = true;
+    dontUseMesonInstall = true;
+    dontUseNinjaBuild = true;
+    dontUseNinjaInstall = true;
+
     makeFlags = [ "--directory=build" ];
 
-    passthru.tests = {
-      basic-conversion =
+    passthru = {
+      # for convenience
+      inherit ffmpeg-hb x265-hb;
+
+      tests.basic-conversion =
         let
           # Big Buck Bunny example, licensed under CC Attribution 3.0.
           testMkv = fetchurl {
@@ -283,7 +313,8 @@ let
           HandBrakeCLI -i ${testMkv} -o test.mkv -e x264 -q 20 -B 160
           test -e test.mkv
         '';
-      version = testers.testVersion { package = self; command = "HandBrakeCLI --version"; };
+
+      tests.version = testers.testVersion { package = self; command = "HandBrakeCLI --version"; };
     };
 
     meta = with lib; {
@@ -300,7 +331,7 @@ let
       license = licenses.gpl2Only;
       maintainers = with maintainers; [ Anton-Latukha wmertens ];
       platforms = with platforms; unix;
-      broken = stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13";
+      broken = stdenv.isDarwin;  # https://github.com/NixOS/nixpkgs/pull/297984#issuecomment-2016503434
     };
   };
 in

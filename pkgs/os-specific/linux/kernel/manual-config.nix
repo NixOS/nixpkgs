@@ -59,6 +59,33 @@ let
 
   drvAttrs = config_: kernelConf: kernelPatches: configfile:
     let
+      # Folding in `ubootTools` in the default nativeBuildInputs is problematic, as
+      # it makes updating U-Boot cumbersome, since it will go above the current
+      # threshold of rebuilds
+      #
+      # To prevent these needless rounds of staging for U-Boot builds, we can
+      # limit the inclusion of ubootTools to target platforms where uImage *may*
+      # be produced.
+      #
+      # This command lists those (kernel-named) platforms:
+      #     .../linux $ grep -l uImage ./arch/*/Makefile | cut -d'/' -f3 | sort
+      #
+      # This is still a guesstimation, but since none of our cached platforms
+      # coincide in that list, this gives us "perfect" decoupling here.
+      linuxPlatformsUsingUImage = [
+        "arc"
+        "arm"
+        "csky"
+        "mips"
+        "powerpc"
+        "sh"
+        "sparc"
+        "xtensa"
+      ];
+      needsUbootTools =
+        lib.elem stdenv.hostPlatform.linuxArch linuxPlatformsUsingUImage
+      ;
+
       config = let attrName = attr: "CONFIG_" + attr; in {
         isSet = attr: hasAttr (attrName attr) config;
 
@@ -106,7 +133,8 @@ let
       inherit src;
 
       depsBuildBuild = [ buildPackages.stdenv.cc ];
-      nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr zstd python3Minimal kmod ubootTools ]
+      nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr zstd python3Minimal kmod ]
+                          ++ optional  needsUbootTools ubootTools
                           ++ optional  (lib.versionOlder version "5.8") libelf
                           ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
                           ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]

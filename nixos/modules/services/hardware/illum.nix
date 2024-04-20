@@ -13,7 +13,7 @@ in {
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Enable illum, a daemon for controlling screen brightness with brightness buttons.
         '';
       };

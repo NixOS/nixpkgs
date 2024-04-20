@@ -1,10 +1,11 @@
 { lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
-  pname = "CJKwrap";
+  pname = "cjkwrap";
   version = "2.2";
   src = fetchPypi {
-    inherit pname version;
+    pname = "CJKwrap";
+    inherit version;
     sha256 = "1b603sg6c2gv9vmlxwr6r1qvhadqk3qp6vifmijris504zjx5ix2";
   };
 

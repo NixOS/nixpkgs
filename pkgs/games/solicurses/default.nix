@@ -33,6 +33,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A version of Solitaire written in C++ using the ncurses library";
+    mainProgram = "solicurses";
     homepage = "https://github.com/KaylaPP/SoliCurses";
     maintainers = with maintainers; [ laalsaas ];
     license = licenses.gpl3Only;

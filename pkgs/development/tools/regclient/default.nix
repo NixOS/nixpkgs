@@ -1,4 +1,12 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub }:
+{ stdenv
+, lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, lndir
+, testers
+, regclient
+}:
 
 let bins = [ "regbot" "regctl" "regsync" ]; in
 
@@ -20,22 +28,48 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.VCSTag=${tag}"
+    "-X github.com/regclient/regclient/internal/version.vcsTag=${tag}"
   ];
 
-  postInstall =
-    lib.concatStringsSep "\n" (
-      map (bin: ''
-        mkdir -p ''$${bin}/bin &&
-        mv $out/bin/${bin} ''$${bin}/bin/ &&
-        ln -s ''$${bin}/bin/${bin} $out/bin/
-      '') bins
-    );
+  nativeBuildInputs = [ installShellFiles lndir ];
+
+  postInstall = lib.concatMapStringsSep "\n"
+    (bin: ''
+      export bin=''$${bin}
+      export outputBin=bin
+
+      mkdir -p $bin/bin
+      mv $out/bin/${bin} $bin/bin
+
+      installShellCompletion --cmd ${bin} \
+        --bash <($bin/bin/${bin} completion bash) \
+        --fish <($bin/bin/${bin} completion fish) \
+        --zsh <($bin/bin/${bin} completion zsh)
+
+      lndir -silent $bin $out
+
+      unset bin outputBin
+    '')
+    bins;
+
+  passthru.tests = lib.mergeAttrsList (
+    map
+      (bin: {
+        "${bin}Version" = testers.testVersion {
+          package = regclient;
+          command = "${bin} version";
+          version = tag;
+        };
+      })
+      bins
+  );
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Docker and OCI Registry Client in Go and tooling using those libraries";
     homepage = "https://github.com/regclient/regclient";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ maxbrunet ];
   };
 }

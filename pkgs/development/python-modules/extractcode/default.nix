@@ -76,6 +76,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Universal archive extractor using z7zip, libarchive, other libraries and the Python standard library";
+    mainProgram = "extractcode";
     homepage = "https://github.com/nexB/extractcode";
     changelog = "https://github.com/nexB/extractcode/releases/tag/v${version}";
     license = licenses.asl20;

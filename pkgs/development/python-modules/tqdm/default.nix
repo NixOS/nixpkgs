@@ -17,12 +17,12 @@
 
 buildPythonPackage rec {
   pname = "tqdm";
-  version = "4.66.1";
+  version = "4.66.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2I5lH5242FUaYlVtPP+eMDQnTKXWbpMZfPJJDi3Lacc=";
+    hash = "sha256-bNUs3w/vDg9UMpnPyW/skNe4p+iHRfQR7DPrRNXtNTE=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +48,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "-W" "ignore::FutureWarning"
+    "-W" "ignore::DeprecationWarning"
   ];
 
   # Remove performance testing.
@@ -62,6 +63,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Fast, Extensible Progress Meter";
+    mainProgram = "tqdm";
     homepage = "https://github.com/tqdm/tqdm";
     changelog = "https://tqdm.github.io/releases/";
     license = with licenses; [ mit ];

@@ -15,6 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "The periodic table on the command line";
+    mainProgram = "element";
     homepage = "https://github.com/gennaro-tedesco/element";
     license = licenses.asl20;
     maintainers = [ maintainers.j0hax ];

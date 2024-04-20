@@ -1,23 +1,28 @@
 { lib
-, stdenv
-, callPackage
-, fetchurl
+, pkgs
 }:
 
+lib.makeScope pkgs.newScope (self:
 {
-  buildGraalvm = callPackage ./buildGraalvm.nix;
+  stdenv =
+    if pkgs.stdenv.isDarwin then
+      pkgs.darwin.apple_sdk_11_0.stdenv
+    else
+      pkgs.stdenv;
 
-  buildGraalvmProduct = callPackage ./buildGraalvmProduct.nix;
+  buildGraalvm = self.callPackage ./buildGraalvm.nix;
 
-  graalvm-ce = callPackage ./graalvm-ce { };
+  buildGraalvmProduct = self.callPackage ./buildGraalvmProduct.nix;
 
-  graalvm-ce-musl = callPackage ./graalvm-ce { useMusl = true; };
+  graalvm-ce = self.callPackage ./graalvm-ce { };
 
-  graaljs = callPackage ./graaljs { };
+  graalvm-ce-musl = self.callPackage ./graalvm-ce { useMusl = true; };
 
-  graalnodejs = callPackage ./graalnodejs { };
+  graaljs = self.callPackage ./graaljs { };
 
-  graalpy = callPackage ./graalpy { };
+  graalnodejs = self.callPackage ./graalnodejs { };
 
-  truffleruby = callPackage ./truffleruby { };
-}
+  graalpy = self.callPackage ./graalpy { };
+
+  truffleruby = self.callPackage ./truffleruby { };
+})

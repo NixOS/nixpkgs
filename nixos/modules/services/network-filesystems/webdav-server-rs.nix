@@ -14,30 +14,30 @@ in
 {
   options = {
     services.webdav-server-rs = {
-      enable = mkEnableOption (lib.mdDoc "WebDAV server");
+      enable = mkEnableOption "WebDAV server";
 
       user = mkOption {
         type = types.str;
         default = "webdav";
-        description = lib.mdDoc "User to run under when setuid is not enabled.";
+        description = "User to run under when setuid is not enabled.";
       };
 
       group = mkOption {
         type = types.str;
         default = "webdav";
-        description = lib.mdDoc "Group to run under when setuid is not enabled.";
+        description = "Group to run under when setuid is not enabled.";
       };
 
       debug = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Enable debug mode.";
+        description = "Enable debug mode.";
       };
 
       settings = mkOption {
         type = format.type;
         default = { };
-        description = lib.mdDoc ''
+        description = ''
           Attrset that is converted and passed as config file. Available
           options can be found at
           [here](https://github.com/miquels/webdav-server-rs/blob/master/webdav-server.toml).
@@ -79,7 +79,7 @@ in
         type = types.path;
         default = format.generate "webdav-server.toml" settings;
         defaultText = "Config file generated from services.webdav-server-rs.settings";
-        description = lib.mdDoc ''
+        description = ''
           Path to config file. If this option is set, it will override any
           configuration done in services.webdav-server-rs.settings.
         '';

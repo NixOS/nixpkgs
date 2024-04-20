@@ -1,0 +1,11 @@
+diff -up qtwebkit-5.212.0-alpha4/Source/ThirdParty/ANGLE/src/common/mathutil.h.me qtwebkit-5.212.0-alpha4/Source/ThirdParty/ANGLE/src/common/mathutil.h
+--- qtwebkit-5.212.0-alpha4/Source/ThirdParty/ANGLE/src/common/mathutil.h.me	2023-02-20 15:40:04.045911245 +0100
++++ qtwebkit-5.212.0-alpha4/Source/ThirdParty/ANGLE/src/common/mathutil.h	2023-02-20 15:40:39.038549787 +0100
+@@ -16,6 +16,7 @@
+ #include <algorithm>
+ #include <string.h>
+ #include <stdlib.h>
++#include <cstdint>
+ 
+ namespace gl
+ {

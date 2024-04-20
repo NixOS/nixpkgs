@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Hot patching executables on Linux using .so file injection";
+    mainProgram = "hotpatcher";
     homepage = src.meta.homepage;
     license = licenses.bsd3;
     maintainers = [ ];

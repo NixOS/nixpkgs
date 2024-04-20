@@ -96,8 +96,9 @@ buildPythonApplication rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Projects/Orca";
+    homepage = "https://orca.gnome.org/";
     description = "Screen reader";
+    mainProgram = "orca";
     longDescription = ''
       A free, open source, flexible and extensible screen reader that provides
       access to the graphical desktop via speech and refreshable braille.

@@ -28,6 +28,7 @@ in
 
     meta = with lib; {
       description = "Resource efficient UPnP/DLNA renderer, optimal for Raspberry Pi, CuBox or a general MediaServer";
+      mainProgram = "gmediarender";
       homepage = "https://github.com/hzeller/gmrender-resurrect";
       license = licenses.gpl2Plus;
       platforms = platforms.linux;

@@ -44,7 +44,7 @@ let
       lowerdir = lib.mkOption {
         type = with lib.types; nullOr (nonEmptyListOf (either str pathInStore));
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           The list of path(s) to the lowerdir(s).
 
           To create a writable overlay, you MUST provide an upperdir and a
@@ -58,7 +58,7 @@ let
       upperdir = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           The path to the upperdir.
 
           If this is null, a read-only overlay is created using the lowerdir.
@@ -70,7 +70,7 @@ let
       workdir = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           The path to the workdir.
 
           This MUST be set if you set `upperdir`.

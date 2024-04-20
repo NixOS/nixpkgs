@@ -76,6 +76,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "High-level dynamically typed, multi-paradigm, interpreted programming language";
+    mainProgram = "dictu";
     homepage = "https://dictu-lang.com";
     license = licenses.mit;
     maintainers = with maintainers; [ luc65r ];

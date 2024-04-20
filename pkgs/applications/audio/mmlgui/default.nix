@@ -95,5 +95,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.all;
+    mainProgram = "mmlgui";
   };
 }

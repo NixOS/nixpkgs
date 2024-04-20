@@ -30,6 +30,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Predictable, passphrase-based PGP key generator";
+    mainProgram = "passphrase2pgp";
     homepage = "https://github.com/skeeto/passphrase2pgp";
     license = licenses.unlicense;
     maintainers = with maintainers; [ kaction ];

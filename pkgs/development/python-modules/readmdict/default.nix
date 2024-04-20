@@ -43,6 +43,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Read mdx/mdd files (repacking of readmdict from mdict-analysis)";
+    mainProgram = "readmdict";
     homepage = "https://github.com/ffreemt/readmdict";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

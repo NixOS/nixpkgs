@@ -46,7 +46,8 @@ symlinkJoin {
   + ''
     makeWrapper ${lib.getBin tectonic-unwrapped}/bin/tectonic $out/bin/tectonic \
       --prefix PATH : "${lib.getBin biber-for-tectonic}/bin" \
-      --add-flags "--web-bundle ${tectonic.passthru.bundleUrl}"
+      --add-flags "--web-bundle ${tectonic.passthru.bundleUrl}" \
+      --inherit-argv0 ## make sure binary name e.g. `nextonic` is passed along
     ln -s $out/bin/tectonic $out/bin/nextonic
   '';
 

@@ -16,6 +16,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "CLI utility that helps calculating page table indices from a virtual address";
+    mainProgram = "paging-calculator";
     longDescription = ''
       paging-calculator is a CLI utility written in Rust that helps you finding the indices that a
       virtual address will have into the page tables on different architectures.

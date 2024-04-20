@@ -159,6 +159,7 @@ stdenv.mkDerivation rec {
     # See https://gitlab.com/libvirt/libvirt/-/merge_requests/235
     sed -i "s/not supported_cc_flags.contains('-fsemantic-interposition')/false/" meson.build
     sed -i '/qemufirmwaretest/d' tests/meson.build
+    sed -i '/qemuhotplugtest/d' tests/meson.build
     sed -i '/qemuvhostusertest/d' tests/meson.build
     sed -i '/qemuxml2xmltest/d' tests/meson.build
   '';
@@ -270,7 +271,7 @@ stdenv.mkDerivation rec {
       "--sysconfdir=/var/lib"
       (cfg "install_prefix" (placeholder "out"))
       (cfg "localstatedir" "/var")
-      (cfg "runstatedir" "/run")
+      (cfg "runstatedir" (if isDarwin then "/var/run" else "/run"))
 
       (cfg "init_script" (if isDarwin then "none" else "systemd"))
       (cfg "qemu_datadir" (lib.optionalString isDarwin "${qemu}/share/qemu"))

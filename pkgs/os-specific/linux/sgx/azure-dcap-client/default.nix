@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, fetchpatch
 , lib
 , curl
 , nlohmann_json
@@ -42,6 +43,16 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-q0dI4WdA1ue4sw+QfSherh31Ldf9gnhoft66o3E9gnU=";
   };
+
+  patches = [
+    # Fix gcc-13 build:
+    #   https://github.com/microsoft/Azure-DCAP-Client/pull/197
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/microsoft/Azure-DCAP-Client/commit/fbcae7b3c8f1155998248cf5b5f4c1df979483f5.patch";
+      hash = "sha256-ezEuQql3stn58N1ZPKMlhPpUOBkDpCcENpGwFAmWtHc=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config

@@ -37,6 +37,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Run embedded programs just like native ones";
+    mainProgram = "probe-run";
     homepage = "https://github.com/knurling-rs/probe-run";
     changelog = "https://github.com/knurling-rs/probe-run/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];

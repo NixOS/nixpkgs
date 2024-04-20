@@ -30,6 +30,22 @@ let
     patches = [
       # Unconditionally look for translation files in $out/share/locale
       ./locale-path.patch
+      # Fixes for failing build with GCC 13, remove on updating next release after 0.G
+      (fetchpatch {
+        url = "https://sources.debian.org/data/main/c/cataclysm-dda/0.G-4/debian/patches/gcc13-dangling-reference-warning.patch";
+        hash = "sha256-9nPbyz49IYBOVHqr7jzCIyS8z/SQgpK4EjEz1fruIPE=";
+      })
+      (fetchpatch {
+        url = "https://sources.debian.org/data/main/c/cataclysm-dda/0.G-4/debian/patches/gcc13-cstdint.patch";
+        hash = "sha256-8IBW2OzAHVgEJZoViQ490n37sl31hA55ePuqDL/lil0=";
+      })
+      (fetchpatch {
+        url = "https://sources.debian.org/data/main/c/cataclysm-dda/0.G-4/debian/patches/gcc13-keyword-requires.patch";
+        hash = "sha256-8yvHh0YKC7AC/qzia7AZAfMewMC0RiSepMXpOkMXRd8=";
+      })
+      # Fix build w/ glibc-2.39
+      # From https://github.com/BrettDong/Cataclysm-DDA/commit/9b206e2dc969ad79345596e03c3980bd155d2f48
+      ./glibc-2.39.diff
     ];
 
     makeFlags = common.makeFlags ++ [

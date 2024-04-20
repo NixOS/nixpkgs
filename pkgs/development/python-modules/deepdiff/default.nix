@@ -68,6 +68,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Deep Difference and Search of any Python object/data";
+    mainProgram = "deep";
     homepage = "https://github.com/seperman/deepdiff";
     changelog = "https://github.com/seperman/deepdiff/releases/tag/${version}";
     license = licenses.mit;

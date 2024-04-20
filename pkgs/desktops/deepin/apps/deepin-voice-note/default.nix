@@ -78,6 +78,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Simple memo software with texts and voice recordings";
+    mainProgram = "deepin-voice-note";
     homepage = "https://github.com/linuxdeepin/deepin-voice-note";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

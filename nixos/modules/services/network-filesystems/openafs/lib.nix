@@ -17,13 +17,13 @@ in {
       type = types.str;
       default = "";
       example = "1.2.3.4";
-      description = lib.mdDoc "IP Address of a database server";
+      description = "IP Address of a database server";
     };
     dnsname = mkOption {
       type = types.str;
       default = "";
       example = "afs.example.org";
-      description = lib.mdDoc "DNS full-qualified domain name of a database server";
+      description = "DNS full-qualified domain name of a database server";
     };
   };
 

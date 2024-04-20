@@ -48,6 +48,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "General simulation data file format";
+    mainProgram = "gsd";
     homepage = "https://github.com/glotzerlab/gsd";
     changelog = "https://github.com/glotzerlab/gsd/blob/v${version}/CHANGELOG.rst";
     license = licenses.bsd2;

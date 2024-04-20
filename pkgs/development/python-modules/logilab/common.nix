@@ -45,6 +45,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python packages and modules used by Logilab ";
+    mainProgram = "logilab-pytest";
     homepage = "https://logilab-common.readthedocs.io/";
     changelog = "https://forge.extranet.logilab.fr/open-source/logilab-common/-/blob/branch/default/CHANGELOG.md";
     license = licenses.lgpl21Plus;

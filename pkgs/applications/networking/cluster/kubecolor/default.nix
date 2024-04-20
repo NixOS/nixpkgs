@@ -17,6 +17,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Colorizes kubectl output";
+    mainProgram = "kubecolor";
     homepage = "https://github.com/kubecolor/kubecolor";
     changelog = "https://github.com/kubecolor/kubecolor/releases/tag/v${version}";
     license = licenses.mit;

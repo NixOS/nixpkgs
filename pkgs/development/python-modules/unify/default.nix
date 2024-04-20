@@ -45,6 +45,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Modifies strings to all use the same quote where possible";
+    mainProgram = "unify";
     homepage = "https://github.com/myint/unify";
     license = licenses.mit;
     maintainers = with maintainers; [ FlorianFranzen ];

@@ -42,6 +42,7 @@ in stdenv.mkDerivation rec {
 
   meta = src.meta // {
     description = "Real-time interactive fractal zoomer";
+    mainProgram = "xaos";
     homepage = "https://xaos-project.github.io/";
     license = lib.licenses.gpl2Plus;
     platforms = [ "x86_64-linux" ];

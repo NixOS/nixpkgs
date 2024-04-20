@@ -38,6 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "ULID implementation for Python";
+    mainProgram = "ulid";
     homepage = "https://github.com/mdomke/python-ulid";
     changelog = "https://github.com/mdomke/python-ulid/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.mit;

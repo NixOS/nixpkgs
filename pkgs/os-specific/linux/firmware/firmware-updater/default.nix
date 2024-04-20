@@ -36,6 +36,7 @@ flutter.buildFlutterApplication rec {
 
   meta = with lib; {
     description = "Firmware Updater for Linux";
+    mainProgram = "firmware-updater";
     homepage = "https://github.com/canonical/firmware-updater";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ mkg20001 ];

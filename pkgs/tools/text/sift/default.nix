@@ -31,6 +31,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A fast and powerful alternative to grep";
+    mainProgram = "sift";
     homepage = "https://sift-tool.org";
     maintainers = with maintainers; [ viraptor ];
     license = licenses.gpl3;

@@ -26,6 +26,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Plot your repository stars over time";
+    mainProgram = "starcharts";
     homepage = "https://github.com/caarlos0/starcharts";
     changelog = "https://github.com/caarlos0/starcharts/releases/tag/${src.rev}";
     license = licenses.mit;

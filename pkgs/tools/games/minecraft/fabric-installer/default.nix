@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://fabricmc.net/";
     description = "A lightweight, experimental modding toolchain for Minecraft";
+    mainProgram = "fabric-installer";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     maintainers = [ maintainers.ivar ];

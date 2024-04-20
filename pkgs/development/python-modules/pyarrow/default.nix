@@ -8,7 +8,7 @@
 , cffi
 , cloudpickle
 , cmake
-, cython
+, cython_0
 , fsspec
 , hypothesis
 , numpy
@@ -37,11 +37,15 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace pyproject.toml setup.py \
       --replace "setuptools_scm < 8.0.0" "setuptools_scm"
+  '' + lib.optionalString (pythonAtLeast "3.12") ''
+    substituteInPlace ./cmake_modules/FindPython3Alt.cmake --replace-fail \
+      "from distutils import sysconfig" \
+      "import sysconfig"
   '';
 
   nativeBuildInputs = [
     cmake
-    cython
+    cython_0
     pkg-config
     setuptools
     setuptools-scm

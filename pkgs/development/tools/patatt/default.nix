@@ -17,6 +17,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://git.kernel.org/pub/scm/utils/patatt/patatt.git/about/";
     license = licenses.mit0;
     description = "Add cryptographic attestation to patches sent via email";
+    mainProgram = "patatt";
     longDescription = ''
       This utility allows an easy way to add end-to-end cryptographic
       attestation to patches sent via mail.  It does so by adapting the

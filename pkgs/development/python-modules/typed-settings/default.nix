@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "typed-settings";
-  version = "23.1.1";
+  version = "24.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "typed_settings";
     inherit version;
-    hash = "sha256-0esWiZ0dVnIJ+TDSD+0+zq63I1JcKH3iVe34pFRQX9U=";
+    hash = "sha256-luUfVsN6uNYZkXfcAUc5P6Y+WYpfAdU6D01kgQMNniw=";
   };
 
   nativeBuildInputs = [

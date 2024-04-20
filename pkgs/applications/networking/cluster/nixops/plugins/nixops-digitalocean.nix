@@ -4,13 +4,16 @@
 , unstableGitUpdater
 , poetry-core
 , nixops
-, digital-ocean
+, python-digitalocean
+, pythonOlder
 }:
 
 buildPythonPackage {
   pname = "nixops-digitalocean";
   version = "unstable-2022-08-14";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nix-community";
@@ -34,7 +37,7 @@ buildPythonPackage {
   ];
 
   propagatedBuildInputs = [
-    digital-ocean
+    python-digitalocean
   ];
 
   pythonImportsCheck = [ "nixops_digitalocean" ];

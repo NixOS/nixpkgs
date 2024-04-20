@@ -38,6 +38,7 @@ let
 
         meta = with lib; {
           description = "Easiest way to get a production Kubernetes up and running";
+          mainProgram = "kops";
           homepage = "https://github.com/kubernetes/kops";
           changelog = "https://github.com/kubernetes/kops/tree/master/docs/releases";
           license = licenses.asl20;

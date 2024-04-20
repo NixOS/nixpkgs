@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , mock
-, nose
+, pynose
 , pyserial
 , pytestCheckHook
 , pythonOlder
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
-    nose
+    pynose
     pytestCheckHook
   ];
 
@@ -43,6 +43,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library for Jeelink LaCrosse";
+    mainProgram = "pylacrosse";
     homepage = "https://github.com/hthiery/python-lacrosse";
     license = with licenses; [ lgpl2Plus ];
     maintainers = with maintainers; [ fab ];

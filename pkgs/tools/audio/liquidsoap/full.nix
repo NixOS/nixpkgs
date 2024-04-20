@@ -7,7 +7,7 @@
 
 let
   pname = "liquidsoap";
-  version = "2.2.3";
+  version = "2.2.4";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     owner = "savonet";
     repo = "liquidsoap";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oCMSdmdU3oHrq3QFEDQLdb3CLFYcWylxTqKWtGOoQW8=";
+    hash = "sha256-aAW3PeobTRVi5mV321MHZ6RymvOY4DbZITjwcMwGwFo=";
   };
 
   postPatch = ''
@@ -76,6 +76,7 @@ stdenv.mkDerivation {
     ocamlPackages.camomile
     ocamlPackages.uri
     ocamlPackages.fileutils
+    ocamlPackages.magic-mime
     ocamlPackages.menhir # liquidsoap-lang
     ocamlPackages.menhirLib
     ocamlPackages.metadata
@@ -99,7 +100,6 @@ stdenv.mkDerivation {
     ocamlPackages.frei0r
     ocamlPackages.gd4o
     ocamlPackages.graphics
-    ocamlPackages.gstreamer
     ocamlPackages.imagelib
     ocamlPackages.inotify
     ocamlPackages.ladspa
@@ -108,7 +108,6 @@ stdenv.mkDerivation {
     ocamlPackages.lilv
     ocamlPackages.lo
     ocamlPackages.mad
-    ocamlPackages.magic
     ocamlPackages.ogg
     ocamlPackages.opus
     ocamlPackages.portaudio
@@ -132,6 +131,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Swiss-army knife for multimedia streaming";
+    mainProgram = "liquidsoap";
     homepage = "https://www.liquidsoap.info/";
     maintainers = with maintainers; [ dandellion ehmry ];
     license = licenses.gpl2Plus;

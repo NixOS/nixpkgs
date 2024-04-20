@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     inherit (mlton.meta) platforms;
 
     description = "Manipulate INI files from the command line";
+    mainProgram = "initool";
     homepage = "https://github.com/dbohdan/initool";
     license = licenses.mit;
     maintainers = with maintainers; [ e1mo ];

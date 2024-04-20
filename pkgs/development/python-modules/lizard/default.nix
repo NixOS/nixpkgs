@@ -39,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/terryyin/lizard/blob/${version}/CHANGELOG.md";
     description = "Code analyzer without caring the C/C++ header files";
+    mainProgram = "lizard";
     downloadPage = "https://github.com/terryyin/lizard";
     homepage = "http://www.lizard.ws";
     license = licenses.mit;

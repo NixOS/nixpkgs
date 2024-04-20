@@ -35,7 +35,7 @@ let
       src = fetchurl {
         url = "mirror://apache/hadoop/common/hadoop-${finalAttrs.version}/hadoop-${finalAttrs.version}"
               + optionalString stdenv.isAarch64 "-aarch64" + ".tar.gz";
-        inherit (platformAttrs.${stdenv.system}) hash;
+        inherit (platformAttrs.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}")) hash;
       };
       doCheck = true;
 

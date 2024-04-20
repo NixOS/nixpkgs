@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
@@ -16,24 +17,29 @@
 , pytest-mock
 , pytest-benchmark
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "flask-restx";
   version = "1.3.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   # Tests not included in PyPI tarball
   src = fetchFromGitHub {
     owner = "python-restx";
-    repo = pname;
+    repo = "flask-restx";
     rev = "refs/tags/${version}";
     hash = "sha256-CBReP/u96fsr28lMV1BfLjjdBMXEvsD03wvsxkIcteI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     aniso8601
     flask
     importlib-resources
@@ -58,6 +64,8 @@ buildPythonPackage rec {
     "--deselect=tests/test_inputs.py::URLTest::test_check"
     "--deselect=tests/test_inputs.py::EmailTest::test_valid_value_check"
     "--deselect=tests/test_logging.py::LoggingTest::test_override_app_level"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "--deselect=tests/test_inputs.py::EmailTest::test_invalid_values_check"
   ];
 
   disabledTests = [

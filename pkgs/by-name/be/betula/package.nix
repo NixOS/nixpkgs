@@ -20,6 +20,7 @@
 
   meta = with lib; {
     description = "Single-user self-hosted bookmarking software";
+    mainProgram = "betula";
     homepage = "https://betula.mycorrhiza.wiki/";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ GoldsteinE ];

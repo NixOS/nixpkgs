@@ -7,7 +7,7 @@ let
 in
 {
   options.services.fanout = {
-    enable = lib.mkEnableOption (lib.mdDoc "fanout");
+    enable = lib.mkEnableOption "fanout";
     fanoutDevices = lib.mkOption {
       type = lib.types.int;
       default = 1;

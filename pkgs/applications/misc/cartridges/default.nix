@@ -13,13 +13,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cartridges";
-  version = "2.7.2";
+  version = "2.7.4";
 
   src = fetchFromGitHub {
     owner = "kra-mo";
     repo = "cartridges";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+18TWtxKT87CZ8vTtYac9aQ0wIbhJEXbXFZrSj5BmjI=";
+    hash = "sha256-AfO+vLJSWdaMqqbzRZWrY94nu/9BM7mqdad9rkiq1pg=";
   };
 
   pythonPath = with python3Packages; [
@@ -28,6 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
     pyyaml
     requests
   ];
+
+  # TODO: remove this when #286814 hits master
+  mesonFlags = [ "-Dtiff_compression=jpeg" ];
 
   buildInputs = [
     libadwaita
@@ -57,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "A GTK4 + Libadwaita game launcher";
+    mainProgram = "cartridges";
     longDescription = ''
       A simple game launcher for all of your games.
       It has support for importing games from Steam, Lutris, Heroic

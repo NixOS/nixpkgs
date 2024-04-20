@@ -1,23 +1,24 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "gickup";
-  version = "0.10.26";
+  version = "0.10.29";
 
   src = fetchFromGitHub {
     owner = "cooperspencer";
     repo = "gickup";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GYYmoGNYiwarMZw1w8tdH8zKl19XQ2R+EaJFK8iacwI=";
+    hash = "sha256-Y03SdmO/GJx1gans58IW/Q9N7spRswvjyNbzYLdkD80=";
   };
 
-  vendorHash = "sha256-vyDzGho9vcdCmBP7keccp5w3tXWHlSaFoncS1hqnBoc=";
+  vendorHash = "sha256-XxDsEmi945CduurQRsH7rjFAEu/SMX3rSd63Dwq2r8A=";
 
-  ldflags = ["-X main.version=${version}"];
+  ldflags = [ "-X main.version=${version}" ];
 
   passthru.updateScript = nix-update-script { };
 

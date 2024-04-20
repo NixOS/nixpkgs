@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Manage DBus service on Deepin";
+    mainProgram = "deepin-service-manager";
     homepage = "https://github.com/linuxdeepin/deepin-service-manager";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

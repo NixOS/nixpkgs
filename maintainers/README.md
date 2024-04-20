@@ -87,8 +87,8 @@ checks should be performed:
       keys = [{
         fingerprint = "0000 0000 2A70 6423 0AED  3C11 F04F 7A19 AAA6 3AFE";
       }];
-    }
-  };
+    };
+  }
   ```
 
   First receive their key from a keyserver:
@@ -133,8 +133,8 @@ checks should be performed:
       name = "Example User";
       github = "ghost";
       githubId = 10137;
-    }
-  };
+    };
+  }
   ```
 
   First, make sure that the listed GitHub handle matches the author of

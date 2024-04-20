@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Server software for streaming multimedia";
+    mainProgram = "icecast";
 
     longDescription = ''
       Icecast is a streaming media server which currently supports

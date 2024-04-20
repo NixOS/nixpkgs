@@ -83,6 +83,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Minimal PyPI server for use with pip/easy_install";
+    mainProgram = "pypi-server";
     homepage = "https://github.com/pypiserver/pypiserver";
     changelog = "https://github.com/pypiserver/pypiserver/releases/tag/v${version}";
     license = with licenses; [ mit zlib ];

@@ -26,6 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Get image width and height given a file path using minimal dependencies";
+    mainProgram = "get-image-size";
     license = licenses.mit;
     homepage = "https://github.com/opsdroid/image_size";
     maintainers = with maintainers; [ globin ];

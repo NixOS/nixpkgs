@@ -10,16 +10,30 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "awscli";
-  version = "1.31.6"; # N.B: if you change this, change botocore and boto3 to a matching version too
+  version = "1.32.58"; # N.B: if you change this, change botocore and boto3 to a matching version too
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PINiNkP2vopPgc9bH0x7mifeUt7gdXi3/i2Ye96RANg=";
+    hash = "sha256-dffY/BKsQ7vztW2sGn+WaZB0fXnqwwVjA4nkVwRZ1js=";
   };
+
+  nativeBuildInputs = [
+    python3.pkgs.pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "colorama"
+    "docutils"
+    "rsa"
+  ];
+
+  build-system = [
+    python3.pkgs.setuptools
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     botocore
-    bcdoc
     s3transfer
     colorama
     docutils

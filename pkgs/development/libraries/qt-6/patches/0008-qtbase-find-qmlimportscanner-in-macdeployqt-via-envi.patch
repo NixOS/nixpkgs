@@ -1,0 +1,32 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Juan=20Pedro=20Bol=C3=ADvar=20Puente?= <raskolnikov@gnu.org>
+Date: Wed, 9 Aug 2023 16:16:21 +0200
+Subject: [PATCH] qtbase: find qmlimportscanner in macdeployqt via environment
+
+The qmlimportscanner tool is provided by qtdeclarative. Because of the
+modularized installation in Nix, it can not be found via the usual
+mechanisms.  Also, hard-coding it like we do for Qt5 would also not
+work, as it would require making qtbase depend on qtdeclarative.
+
+Here we add an option to provide its location via the environment.
+While this means macdeployqt does not work out of the box, it provides
+a workaround for users.
+---
+ src/tools/macdeployqt/shared/shared.cpp | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/tools/macdeployqt/shared/shared.cpp b/src/tools/macdeployqt/shared/shared.cpp
+index 57b68627eba..2b972a76c49 100644
+--- a/src/tools/macdeployqt/shared/shared.cpp
++++ b/src/tools/macdeployqt/shared/shared.cpp
+@@ -1280,6 +1280,10 @@ bool deployQmlImports(const QString &appBundlePath, DeploymentInfo deploymentInf
+     if (!QFile::exists(qmlImportScannerPath))
+         qmlImportScannerPath = QCoreApplication::applicationDirPath() + "/qmlimportscanner";
+ 
++    // Fallback: Pass qml import scanner via environment variable
++    if (!QFile::exists(qmlImportScannerPath))
++        qmlImportScannerPath = ::qgetenv("NIX_QMLIMPORTSCANNER");
++
+     // Verify that we found a qmlimportscanner binary
+     if (!QFile::exists(qmlImportScannerPath)) {
+         LogError() << "qmlimportscanner not found at" << qmlImportScannerPath;

@@ -40,5 +40,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/TritonDataCenter/node-triton";
     license = licenses.mpl20;
     maintainers = with maintainers; [ teutat3s ];
+    mainProgram = "triton";
   };
 }

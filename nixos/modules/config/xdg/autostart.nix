@@ -10,7 +10,7 @@ with lib;
     xdg.autostart.enable = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to install files to support the
         [XDG Autostart specification](https://specifications.freedesktop.org/autostart-spec/autostart-spec-latest.html).
       '';

@@ -4,13 +4,13 @@
 }:
 
 let
-  version = "2.7.3";
+  version = "2.7.4";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influx-cli";
     rev = "v${version}";
-    sha256 = "sha256-hRv7f2NeURsgLQ1zNgAhZvTjS0ei4+5lqokIu0iN+aI=";
+    sha256 = "sha256-g/3hakOTRjRA6DU0DT5A+ChUF6ED/sdg3p4ZB5nbbU0=";
   };
 
 in buildGoModule {
@@ -18,7 +18,7 @@ in buildGoModule {
   version = version;
   inherit src;
 
-  vendorHash = "sha256-QNhL5RPkNLTXoQ0NqcZuKec3ZBc3CDTc/XTWvjy55wk=";
+  vendorHash = "sha256-Ov0TPoMm0qi7kkWUUni677sCP1LwkT9+n3KHcAlQkDA=";
   subPackages = [ "cmd/influx" ];
 
   ldflags = [ "-X main.commit=v${version}" "-X main.version=${version}" ];

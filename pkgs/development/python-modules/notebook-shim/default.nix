@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "notebook-shim";
-  version = "0.2.3";
+  version = "0.2.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "notebook_shim";
     rev = "refs/tags/v${version}";
-    hash = "sha256-eAYZuNYqOMKC6joDbbKk4Q4nrfdbO7b+yZeSvMdWWrI=";
+    hash = "sha256-CWnXOKE1xvr+a/qWNY6XCTB5+G/fg2O/glgeLzYD+Zc=";
   };
 
   nativeBuildInputs = [ hatchling ];

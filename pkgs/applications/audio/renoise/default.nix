@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
     releasePath
   else
     let
-      platform = platforms.${stdenv.system};
+      platform = platforms.${stdenv.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
       urlVersion = lib.replaceStrings [ "." ] [ "_" ] version;
     in fetchurl {
       url =

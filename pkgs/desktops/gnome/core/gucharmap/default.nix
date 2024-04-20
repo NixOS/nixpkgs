@@ -105,6 +105,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GNOME Character Map, based on the Unicode Character Database";
+    mainProgram = "gucharmap";
     homepage = "https://wiki.gnome.org/Apps/Gucharmap";
     license = licenses.gpl3;
     maintainers = teams.gnome.members;

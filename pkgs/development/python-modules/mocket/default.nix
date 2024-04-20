@@ -23,6 +23,7 @@
 , fastapi
 , gevent
 , httpx
+, psutil
 , pytest-asyncio
 , pytestCheckHook
 , redis
@@ -34,12 +35,12 @@
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.12.2";
+  version = "3.12.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BN9S5/mku+HT1vglyobgHZPWsY0yvbfQfpMRUKrnJQQ=";
+    hash = "sha256-O+IRX59Z4D188XEmiSCT8H3sg1jhtaboHS3QINEnE0s=";
   };
 
   nativeBuildInputs = [
@@ -67,6 +68,7 @@ buildPythonPackage rec {
     fastapi
     gevent
     httpx
+    psutil
     pytest-asyncio
     pytestCheckHook
     redis
@@ -95,6 +97,8 @@ buildPythonPackage rec {
     "test_truesendall_with_dump_from_recording"
     "test_asyncio_record_replay"
     "test_gethostbyname"
+    # httpx read failure
+    "test_no_dangling_fds"
   ];
 
   disabledTestPaths = lib.optionals stdenv.isDarwin [

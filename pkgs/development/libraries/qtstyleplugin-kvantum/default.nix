@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , fetchpatch
+, cmake
 , qmake
 , qtbase
 , qtsvg
@@ -14,23 +15,24 @@
 , wrapQtAppsHook
 , gitUpdater
 
-, qt5Kvantum ? null
+, qt6Kvantum ? null
 }:
 let
-  isQt6 = lib.versionAtLeast qtbase.version "6";
+  isQt5 = lib.versionOlder qtbase.version "6";
 in
-stdenv.mkDerivation rec {
-  pname = "qtstyleplugin-kvantum${lib.optionalString isQt6 "6"}";
-  version = "1.0.10";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "qtstyleplugin-kvantum${lib.optionalString isQt5 "5"}";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "tsujan";
     repo = "Kvantum";
-    rev = "V${version}";
-    sha256 = "48Blio8qHLmXSKG0c1tphXSfiwQXs0Xqwxe187nM3Ro=";
+    rev = "V${finalAttrs.version}";
+    hash = "sha256-i+QjVPSzWNPVQmQkB+u/3Wrvqqoz5OIjRdyZKXzxZh4=";
   };
 
   nativeBuildInputs = [
+    cmake
     qmake
     qttools
     wrapQtAppsHook
@@ -41,10 +43,11 @@ stdenv.mkDerivation rec {
     qtsvg
     libX11
     libXext
-  ] ++ lib.optionals (!isQt6) [ qtx11extras kwindowsystem ]
-    ++ lib.optional isQt6 qtwayland;
+    kwindowsystem
+  ] ++ lib.optionals isQt5 [ qtx11extras ]
+    ++ lib.optionals (!isQt5) [ qtwayland ];
 
-  sourceRoot = "${src.name}/Kvantum";
+  sourceRoot = "${finalAttrs.src.name}/Kvantum";
 
   patches = [
     (fetchpatch {
@@ -56,15 +59,19 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    # Fix plugin dir
-    substituteInPlace style/style.pro \
-      --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
+    substituteInPlace style/CMakeLists.txt \
+      --replace-fail '"''${_Qt6_PLUGIN_INSTALL_DIR}/' "\"$out/$qtPluginPrefix/" \
+      --replace-fail '"''${_Qt5_PLUGIN_INSTALL_DIR}/' "\"$out/$qtPluginPrefix/"
   '';
 
-  postInstall = lib.optionalString isQt6 ''
-    # make default Kvantum themes available for Qt 6 apps
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_QT5" isQt5)
+  ];
+
+  postInstall = lib.optionalString isQt5 ''
+    # make default Kvantum themes available for Qt 5 apps
     mkdir -p "$out/share"
-    ln -s "${qt5Kvantum}/share/Kvantum" "$out/share/Kvantum"
+    ln -s "${qt6Kvantum}/share/Kvantum" "$out/share/Kvantum"
   '';
 
   passthru.updateScript = gitUpdater {
@@ -78,4 +85,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo Scrumplex ];
   };
-}
+})

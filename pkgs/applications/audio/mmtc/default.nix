@@ -28,5 +28,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/figsoda/mmtc/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "mmtc";
   };
 }

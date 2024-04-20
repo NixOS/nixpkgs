@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A screensaver service developed by deepin";
+    mainProgram = "deepin-screensaver";
     homepage = "https://github.com/linuxdeepin/deepin-screensaver";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

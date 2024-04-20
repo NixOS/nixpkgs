@@ -25,6 +25,7 @@ buildGoPackage rec {
 
   meta = {
     description = "PDF report generator from a Grafana dashboard";
+    mainProgram = "grafana-reporter";
     homepage = "https://github.com/IzakMarais/reporter";
     license = licenses.mit;
     maintainers = with maintainers; [ disassembler ];

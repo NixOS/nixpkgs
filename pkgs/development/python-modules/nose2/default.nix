@@ -48,6 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/nose-devs/nose2/blob/${version}/docs/changelog.rst";
     description = "Test runner for Python";
+    mainProgram = "nose2";
     homepage = "https://github.com/nose-devs/nose2";
     license = licenses.bsd0;
     maintainers = with maintainers; [ ];

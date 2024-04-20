@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Modern \"Jedi Engine\" replacement supporting Dark Forces, mods, and in the future, Outlaws";
+    mainProgram = "theforceengine";
     homepage = "https://theforceengine.github.io";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ devusb ];

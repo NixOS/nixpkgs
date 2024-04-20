@@ -98,6 +98,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "High-performance, pure-Python HTTP";
+    mainProgram = "cheroot";
     homepage = "https://github.com/cherrypy/cheroot";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

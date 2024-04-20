@@ -38,7 +38,7 @@
 , pcre
 , qhull
 , systemd
-, tbb_2021_8
+, tbb_2021_11
 , webkitgtk
 , wxGTK31
 , xorg
@@ -53,18 +53,18 @@ let
     ];
   });
   openvdb_tbb_2021_8 = openvdb.overrideAttrs (old: rec {
-    buildInputs = [ openexr boost179 tbb_2021_8 jemalloc c-blosc ilmbase ];
+    buildInputs = [ openexr boost179 tbb_2021_11 jemalloc c-blosc ilmbase ];
   });
 in
 stdenv.mkDerivation rec {
   pname = "bambu-studio";
-  version = "01.08.04.51";
+  version = "01.09.00.70";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
     rev = "v${version}";
-    hash = "sha256-rqD1+3Q4ZUBgS57iCItuLX6ZMP7VQuedaJmgKB1szgs=";
+    hash = "sha256-RBctBhKo7mjxsP7OJhGfoU1eIiGVuMiAqwwSU+gsMds=";
   };
 
   nativeBuildInputs = [
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
     opencascade-occt
     openvdb_tbb_2021_8
     pcre
-    tbb_2021_8
+    tbb_2021_11
     webkitgtk
     wxGTK31'
     xorg.libX11
@@ -113,6 +113,8 @@ stdenv.mkDerivation rec {
   patches = [
     # Fix for webkitgtk linking
     ./0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
+    # Fix build with cgal-5.6.1+
+    ./meshboolean-const.patch
   ];
 
   doCheck = true;
@@ -164,10 +166,20 @@ stdenv.mkDerivation rec {
     )
   '';
 
+  # needed to prevent collisions between the LICENSE.txt files of
+  # bambu-studio and orca-slicer.
+  postInstall = ''
+    mkdir -p $out/share/doc
+    mv $out/LICENSE.txt $out/share/doc/LICENSE.txt
+    if [ -f $out/README.md ]; then
+      mv $out/README.md $out/share/doc/README.md
+    fi
+  '';
+
   meta = with lib; {
     description = "PC Software for BambuLab's 3D printers";
     homepage = "https://github.com/bambulab/BambuStudio";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [ zhaofengli ];
     mainProgram = "bambu-studio";
     platforms = platforms.linux;

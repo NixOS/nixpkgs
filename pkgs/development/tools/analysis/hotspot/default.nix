@@ -68,6 +68,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "A GUI for Linux perf";
+    mainProgram = "hotspot";
     longDescription = ''
       hotspot is a GUI replacement for `perf report`.
       It takes a perf.data file, parses and evaluates its contents and

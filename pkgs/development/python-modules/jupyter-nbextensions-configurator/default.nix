@@ -60,6 +60,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A jupyter notebook serverextension providing config interfaces for nbextensions";
+    mainProgram = "jupyter-nbextensions_configurator";
     homepage = "https://github.com/jupyter-contrib/jupyter_nbextensions_configurator";
     license = licenses.bsd3;
     maintainers = with maintainers; [ GaetanLepage ];

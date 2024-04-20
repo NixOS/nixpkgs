@@ -50,25 +50,25 @@ let
 in {
   options = {
     services.netdata = {
-      enable = mkEnableOption (lib.mdDoc "netdata");
+      enable = mkEnableOption "netdata";
 
       package = mkPackageOption pkgs "netdata" { };
 
       user = mkOption {
         type = types.str;
         default = "netdata";
-        description = lib.mdDoc "User account under which netdata runs.";
+        description = "User account under which netdata runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "netdata";
-        description = lib.mdDoc "Group under which netdata runs.";
+        description = "Group under which netdata runs.";
       };
 
       configText = mkOption {
         type = types.nullOr types.lines;
-        description = lib.mdDoc "Verbatim netdata.conf, cannot be combined with config.";
+        description = "Verbatim netdata.conf, cannot be combined with config.";
         default = null;
         example = ''
           [global]
@@ -82,7 +82,7 @@ in {
         enable = mkOption {
           type = types.bool;
           default = true;
-          description = lib.mdDoc ''
+          description = ''
             Whether to enable python-based plugins
           '';
         };
@@ -97,7 +97,7 @@ in {
               ps.dnspython
             ]
           '';
-          description = lib.mdDoc ''
+          description = ''
             Extra python packages available at runtime
             to enable additional python plugins.
           '';
@@ -110,7 +110,7 @@ in {
         example = literalExpression ''
           [ "/path/to/plugins.d" ]
         '';
-        description = lib.mdDoc ''
+        description = ''
           Extra paths to add to the netdata global "plugins directory"
           option.  Useful for when you want to include your own
           collection scripts.
@@ -125,7 +125,7 @@ in {
       config = mkOption {
         type = types.attrsOf types.attrs;
         default = {};
-        description = lib.mdDoc "netdata.conf configuration as nix attributes. cannot be combined with configText.";
+        description = "netdata.conf configuration as nix attributes. cannot be combined with configText.";
         example = literalExpression ''
           global = {
             "debug log" = "syslog";
@@ -138,7 +138,7 @@ in {
       configDir = mkOption {
         type = types.attrsOf types.path;
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           Complete netdata config directory except netdata.conf.
           The default configuration is merged with changes
           defined in this option.
@@ -158,7 +158,7 @@ in {
       claimTokenFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           If set, automatically registers the agent using the given claim token
           file.
         '';
@@ -167,7 +167,7 @@ in {
       enableAnalyticsReporting = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable reporting of anonymous usage statistics to Netdata Inc. via either
           Google Analytics (in versions prior to 1.29.4), or Netdata Inc.'s
           self-hosted PostHog (in versions 1.29.4 and later).
@@ -178,7 +178,7 @@ in {
       deadlineBeforeStopSec = mkOption {
         type = types.int;
         default = 120;
-        description = lib.mdDoc ''
+        description = ''
           In order to detect when netdata is misbehaving, we run a concurrent task pinging netdata (wait-for-netdata-up)
           in the systemd unit.
 

@@ -1,7 +1,7 @@
 { stdenv, lib, substituteAll, fetchPypi, buildPythonPackage, SDL2, SDL2_ttf, SDL2_image, SDL2_gfx, SDL2_mixer }:
 
 buildPythonPackage rec {
-  pname = "PySDL2";
+  pname = "pysdl2";
   version = "0.9.16";
 
   # The tests use OpenGL using find_library, which would have to be
@@ -12,7 +12,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "sdl2" ];
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "PySDL2";
+    inherit version;
     hash = "sha256-ECdAa62+zdMP5W6AClp2rX1ycaOuwLes94DuJqAPLUA=";
   };
 

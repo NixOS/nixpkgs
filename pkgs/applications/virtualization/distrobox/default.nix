@@ -2,22 +2,19 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "distrobox";
-  version = "1.6.0.1";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "89luca89";
     repo = "distrobox";
     rev = finalAttrs.version;
-    hash = "sha256-UWrXpb20IHcwadPpwbhSjvOP1MBXic5ay+nP+OEVQE4=";
+    hash = "sha256-mSka8QyoLjnaVEP23TtyzbPTBHDlnrSomVZdfw4PPng=";
   };
 
   dontConfigure = true;
   dontBuild = true;
 
   nativeBuildInputs = [ makeWrapper ];
-
-  # https://github.com/89luca89/distrobox/pull/1080
-  patches = [ ./always-mount-nix.patch ];
 
   installPhase = ''
     runHook preInstall

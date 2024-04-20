@@ -1,39 +1,43 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, prompt-toolkit
-, pygments
-, pyserial
-, pytest-asyncio
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, redis
-, setuptools
-, sqlalchemy
-, twisted
-, typer
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  prompt-toolkit,
+  pygments,
+  pyserial,
+  pytest-asyncio,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  setuptools,
+  sqlalchemy,
+  twisted,
+  typer,
 }:
 
 buildPythonPackage rec {
   pname = "pymodbus";
-  version = "3.6.4";
+  version = "3.6.8";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pymodbus-dev";
-    repo = pname;
+    repo = "pymodbus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SYdjM3wFZD+bAOd0vRFe6N5UwF+1Wv97ooihJjKV8K0=";
+    hash = "sha256-6Rt5fbuaeAgbW5KKse1zZIJyq/p2P2MjXGwA7q0C7wA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "--cov-report html " ""
+  '';
+
+  build-system = [ setuptools ];
 
   passthru.optional-dependencies = {
     repl = [
@@ -43,9 +47,7 @@ buildPythonPackage rec {
       pygments
       click
     ] ++ typer.optional-dependencies.all;
-    serial = [
-      pyserial
-    ];
+    serial = [ pyserial ];
   };
 
   nativeCheckInputs = [
@@ -65,18 +67,18 @@ buildPythonPackage rec {
     popd
   '';
 
-  pythonImportsCheck = [
-    "pymodbus"
-  ];
+  pythonImportsCheck = [ "pymodbus" ];
 
-  disabledTests = [
-    # Tests often hang
-    "test_connected"
-  ] ++ lib.optionals (lib.versionAtLeast aiohttp.version "3.9.0") [
-    "test_split_serial_packet"
-    "test_serial_poll"
-    "test_simulator"
-  ];
+  disabledTests =
+    [
+      # Tests often hang
+      "test_connected"
+    ]
+    ++ lib.optionals (lib.versionAtLeast aiohttp.version "3.9.0") [
+      "test_split_serial_packet"
+      "test_serial_poll"
+      "test_simulator"
+    ];
 
   meta = with lib; {
     description = "Python implementation of the Modbus protocol";
@@ -90,5 +92,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/pymodbus-dev/pymodbus/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "pymodbus.simulator";
   };
 }

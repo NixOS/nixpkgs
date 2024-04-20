@@ -1,4 +1,4 @@
-{ config, lib, pkgs, options }:
+{ config, lib, pkgs, options, ... }:
 
 with lib;
 
@@ -9,6 +9,7 @@ in
   port = 9121;
   serviceOpts = {
     serviceConfig = {
+      RestrictAddressFamilies = [ "AF_UNIX" ];
       ExecStart = ''
         ${pkgs.prometheus-redis-exporter}/bin/redis_exporter \
           -web.listen-address ${cfg.listenAddress}:${toString cfg.port} \

@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "twine";
-  version = "4.0.2";
+  version = "5.0.0";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nhAu9f3VogZh64j61GM4gGw70yzx23KWA/42l7G8g8g=";
+    hash = "sha256-ibDMfTcKS2ZCHMYQLyaaqRD+DxhhwST1c88t3tvBDPQ=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -46,6 +46,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Collection of utilities for interacting with PyPI";
+    mainProgram = "twine";
     homepage = "https://github.com/pypa/twine";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fridh ];

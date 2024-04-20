@@ -15,8 +15,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Table of contents for mdbook (in sidebar)";
+    mainProgram = "mdbook-pagetoc";
     homepage = "https://github.com/slowsage/mdbook-pagetoc";
     license = licenses.mit;
-    maintainers = with maintainers; [ blaggacao ];
+    maintainers = with maintainers; [ blaggacao matthiasbeyer ];
   };
 }

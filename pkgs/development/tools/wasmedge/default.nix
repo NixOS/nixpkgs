@@ -1,6 +1,7 @@
 { lib
+, stdenv
 , fetchFromGitHub
-, llvmPackages_12
+, llvmPackages
 , boost
 , cmake
 , spdlog
@@ -10,10 +11,6 @@
 , testers
 }:
 
-let
-  llvmPackages = llvmPackages_12;
-  stdenv = llvmPackages.stdenv;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "wasmedge";
   version = "0.13.5";

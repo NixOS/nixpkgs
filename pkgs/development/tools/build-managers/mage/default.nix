@@ -23,6 +23,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A Make/Rake-like Build Tool Using Go";
+    mainProgram = "mage";
     homepage = "https://magefile.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ swdunlop ];

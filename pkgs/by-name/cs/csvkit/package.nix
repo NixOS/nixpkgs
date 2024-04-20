@@ -5,7 +5,7 @@
 
 let
   pname = "csvkit";
-  version = "1.3.0";
+  version = "1.5.0";
   pythonEnv = python3;
 in
 pythonEnv.pkgs.buildPythonApplication {
@@ -14,7 +14,7 @@ pythonEnv.pkgs.buildPythonApplication {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uC5q4tK7QWUXEA7Lro1dhWoN/65CtxIIiBSityAeGvg=";
+    hash = "sha256-lnqL6PxY7fViEiW1pqaXsOhzC5YupoCFkWqRhgsiIRw=";
   };
 
   propagatedBuildInputs = with pythonEnv.pkgs; [

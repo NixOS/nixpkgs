@@ -4,6 +4,7 @@
   sway-unwrapped,
   stdenv,
   systemd,
+  wlroots_0_16,
   # Used by the NixOS module:
   isNixOS ? false,
   enableXWayland ? true,
@@ -18,6 +19,8 @@
     systemdSupport
     trayEnabled
     ;
+
+  wlroots = wlroots_0_16;
 }).overrideAttrs (oldAttrs: rec {
   pname = "swayfx-unwrapped";
   version = "0.3.2";
@@ -28,18 +31,6 @@
     rev = version;
     sha256 = "sha256-Gwewb0yDVhEBrefSSGDf1hLtpWcntzifPCPJQhqLqI0=";
   };
-
-  # This patch was backported into SwayFX
-  # remove when next release is rebased on Sway 1.9
-  patches =
-    let
-      removePatches = [
-        "LIBINPUT_CONFIG_ACCEL_PROFILE_CUSTOM.patch"
-      ];
-    in
-    builtins.filter
-      (patch: !builtins.elem (patch.name or null) removePatches)
-      (oldAttrs.patches or [ ]);
 
   meta = with lib; {
     description = "Sway, but with eye candy!";

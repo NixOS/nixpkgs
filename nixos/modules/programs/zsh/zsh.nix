@@ -44,7 +44,7 @@ in
 
       enable = mkOption {
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to configure zsh as an interactive shell. To enable zsh for
           a particular user, use the {option}`users.users.<name?>.shell`
           option for that user. To enable zsh system-wide use the
@@ -55,7 +55,7 @@ in
 
       shellAliases = mkOption {
         default = { };
-        description = lib.mdDoc ''
+        description = ''
           Set of aliases for zsh shell, which overrides {option}`environment.shellAliases`.
           See {option}`environment.shellAliases` for an option format description.
         '';
@@ -64,7 +64,7 @@ in
 
       shellInit = mkOption {
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Shell script code called during zsh shell initialisation.
         '';
         type = types.lines;
@@ -72,7 +72,7 @@ in
 
       loginShellInit = mkOption {
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Shell script code called during zsh login shell initialisation.
         '';
         type = types.lines;
@@ -80,7 +80,7 @@ in
 
       interactiveShellInit = mkOption {
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Shell script code called during interactive zsh shell initialisation.
         '';
         type = types.lines;
@@ -94,7 +94,7 @@ in
           # a lot of different prompt variables.
           autoload -U promptinit && promptinit && prompt suse && setopt prompt_sp
         '';
-        description = lib.mdDoc ''
+        description = ''
           Shell script code used to initialise the zsh prompt.
         '';
         type = types.lines;
@@ -102,7 +102,7 @@ in
 
       histSize = mkOption {
         default = 2000;
-        description = lib.mdDoc ''
+        description = ''
           Change history size.
         '';
         type = types.int;
@@ -110,7 +110,7 @@ in
 
       histFile = mkOption {
         default = "$HOME/.zsh_history";
-        description = lib.mdDoc ''
+        description = ''
           Change history file.
         '';
         type = types.str;
@@ -124,7 +124,7 @@ in
           "HIST_FCNTL_LOCK"
         ];
         example = [ "EXTENDED_HISTORY" "RM_STAR_WAIT" ];
-        description = lib.mdDoc ''
+        description = ''
           Configure zsh options. See
           {manpage}`zshoptions(1)`.
         '';
@@ -132,7 +132,7 @@ in
 
       enableCompletion = mkOption {
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Enable zsh completion for all interactive zsh shells.
         '';
         type = types.bool;
@@ -140,7 +140,7 @@ in
 
       enableBashCompletion = mkOption {
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable compatibility with bash's programmable completion system.
         '';
         type = types.bool;
@@ -149,7 +149,7 @@ in
       enableGlobalCompInit = mkOption {
         default = cfg.enableCompletion;
         defaultText = literalExpression "config.${opt.enableCompletion}";
-        description = lib.mdDoc ''
+        description = ''
           Enable execution of compinit call for all interactive zsh shells.
 
           This option can be disabled if the user wants to extend its
@@ -161,7 +161,7 @@ in
 
       enableLsColors = mkOption {
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Enable extra colors in directory listings (used by `ls` and `tree`).
         '';
         type = types.bool;

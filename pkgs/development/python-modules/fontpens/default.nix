@@ -1,11 +1,12 @@
 { lib, buildPythonPackage, fetchPypi, fonttools }:
 
 buildPythonPackage rec {
-  pname = "fontPens";
+  pname = "fontpens";
   version = "0.2.4";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "fontPens";
+    inherit version;
     sha256 = "1za15dzsnymq6d9x7xdfqwgw4a3003wj75fn2crhyidkfd2s3nd6";
     extension = "zip";
   };

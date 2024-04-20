@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;
+    mainProgram = "unipicker";
    };
 }

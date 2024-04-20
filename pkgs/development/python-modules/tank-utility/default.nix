@@ -45,6 +45,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for the Tank Utility API";
+    mainProgram = "tank-utility";
     homepage = "https://github.com/krismolendyke/tank-utility";
     changelog = "https://github.com/krismolendyke/tank-utility/blob/${version}/HISTORY.rst";
     license = licenses.mit;

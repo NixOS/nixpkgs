@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "filezilla";
-  version = "3.66.4";
+  version = "3.67.0";
 
   src = fetchurl {
     url = "https://download.filezilla-project.org/client/FileZilla_${version}_src.tar.xz";
-    hash = "sha256-pA8E4C76rntQ0VFe4cNsSw5EWBhWbEUORAv9bHDpsgM=";
+    hash = "sha256-5drcgH25mc60ZJhPl00+9ZtWLFlUZlgFfpsgEYOtr5o=";
   };
 
   configureFlags = [

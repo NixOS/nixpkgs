@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pg_squeeze";
-  version = "1.5.2";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "cybertec-postgresql";
     repo = "pg_squeeze";
-    rev = finalAttrs.version;
-    hash = "sha256-Sa5mVaUhuRHUjbcORVXe+3uwI1RxfsL6zaZixtU0BcU=";
+    rev = "REL${builtins.replaceStrings ["."] ["_"] finalAttrs.version}";
+    hash = "sha256-YS13iIpQ4NJe0N6bRVa2RDxEMwEzBc2mjNYM5/Vqjn8=";
   };
 
   buildInputs = [

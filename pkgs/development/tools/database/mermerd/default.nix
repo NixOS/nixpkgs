@@ -37,6 +37,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Create Mermaid-Js ERD diagrams from existing tables";
+    mainProgram = "mermerd";
     homepage = "https://github.com/KarnerTh/mermerd";
     changelog = "https://github.com/KarnerTh/mermerd/releases/tag/v${version}";
     license = licenses.mit;

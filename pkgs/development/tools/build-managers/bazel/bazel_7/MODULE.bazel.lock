@@ -2158,7 +2158,7 @@
   "moduleExtensions": {
     "//:extensions.bzl%bazel_android_deps": {
       "general": {
-        "bzlTransitiveDigest": "PjK+f/kxkhda9tRFlKVdGfNszPoXs7CDXZUi+ZGWGYU=",
+        "bzlTransitiveDigest": "rjB9TSLGt3ZwbECWtF/HMgfqMsfEnDLK6fGIe65ZyfE=",
         "accumulatedFileDigests": {},
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -2177,9 +2177,9 @@
     },
     "//:extensions.bzl%bazel_build_deps": {
       "general": {
-        "bzlTransitiveDigest": "PjK+f/kxkhda9tRFlKVdGfNszPoXs7CDXZUi+ZGWGYU=",
+        "bzlTransitiveDigest": "rjB9TSLGt3ZwbECWtF/HMgfqMsfEnDLK6fGIe65ZyfE=",
         "accumulatedFileDigests": {
-          "@@//src/test/tools/bzlmod:MODULE.bazel.lock": "10b96bd3c1eb194b0efe3a13fd06f2051abf36efb33414ad92048883ba471c7f",
+          "@@//src/test/tools/bzlmod:MODULE.bazel.lock": "4e2a1386686aae6d7be071ef615438178fdb93104b5b84cf8a372b6a944b27cd",
           "@@//:MODULE.bazel": "63625ac7809ba5bc83e0814e16f223ac28a98df884897ddd5bfbd69fd4e3ddbf"
         },
         "envVariables": {},
@@ -2428,7 +2428,7 @@
     },
     "//:extensions.bzl%bazel_test_deps": {
       "general": {
-        "bzlTransitiveDigest": "PjK+f/kxkhda9tRFlKVdGfNszPoXs7CDXZUi+ZGWGYU=",
+        "bzlTransitiveDigest": "rjB9TSLGt3ZwbECWtF/HMgfqMsfEnDLK6fGIe65ZyfE=",
         "accumulatedFileDigests": {},
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -2478,7 +2478,7 @@
     },
     "//tools/android:android_extensions.bzl%remote_android_tools_extensions": {
       "general": {
-        "bzlTransitiveDigest": "iz3RFYDcsjupaT10sdSPAhA44WL3eDYkTEnYThllj1w=",
+        "bzlTransitiveDigest": "4x/FXzwoadac6uV9ItZ4eGOyCculGHHrKUhLFNWo3lA=",
         "accumulatedFileDigests": {},
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -2505,7 +2505,7 @@
     },
     "//tools/test:extensions.bzl%remote_coverage_tools_extension": {
       "general": {
-        "bzlTransitiveDigest": "cizrA62cv8WUgb0cCmx5B6PRijtr/I4TAWxg/4caNGU=",
+        "bzlTransitiveDigest": "y48q5zUu2oMiYv7yUyi7rFB0wt14eqiF/RQcWT6vP7I=",
         "accumulatedFileDigests": {},
         "envVariables": {},
         "generatedRepoSpecs": {

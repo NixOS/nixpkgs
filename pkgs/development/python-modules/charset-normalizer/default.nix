@@ -38,6 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module for encoding and language detection";
+    mainProgram = "normalizer";
     homepage = "https://charset-normalizer.readthedocs.io/";
     changelog = "https://github.com/Ousret/charset_normalizer/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

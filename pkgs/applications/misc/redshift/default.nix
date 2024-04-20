@@ -24,6 +24,8 @@ let
         ./575.patch
       ];
 
+      strictDeps = true;
+
       nativeBuildInputs = [
         autoconf
         automake
@@ -34,6 +36,7 @@ let
         wrapGAppsHook
         wrapPython
         gobject-introspection
+        python
       ];
 
       configureFlags = [
@@ -49,7 +52,6 @@ let
 
       buildInputs = [
         gtk3
-        python
       ] ++ lib.optional  withRandr        libxcb
         ++ lib.optional  withGeoclue      geoclue
         ++ lib.optional  withDrm          libdrm

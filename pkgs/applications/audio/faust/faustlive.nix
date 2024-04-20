@@ -86,6 +86,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A standalone just-in-time Faust compiler";
+    mainProgram = "FaustLive";
     longDescription = ''
       FaustLive is a standalone just-in-time Faust compiler. It tries to bring
       together the convenience of a standalone interpreted language with the

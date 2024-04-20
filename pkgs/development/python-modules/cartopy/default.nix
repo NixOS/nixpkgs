@@ -83,6 +83,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Process geospatial data to create maps and perform analyses";
+    mainProgram = "feature_download";
     license = licenses.lgpl3Plus;
     homepage = "https://scitools.org.uk/cartopy/docs/latest/";
     maintainers = with maintainers; [ mredaelli ];

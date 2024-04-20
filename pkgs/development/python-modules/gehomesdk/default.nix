@@ -48,6 +48,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python SDK for GE smart appliances";
+    mainProgram = "gehome-appliance-data";
     homepage = "https://github.com/simbaja/gehome";
     changelog = "https://github.com/simbaja/gehome/blob/master/CHANGELOG.md";
     license = licenses.mit;

@@ -5,6 +5,7 @@
 , nixosTests
 , pkgsCross
 , fetchFromGitHub
+, fetchpatch
 , fetchzip
 , buildPackages
 , makeBinaryWrapper
@@ -149,6 +150,10 @@
 , withUserDb ? true
 , withUtmp ? !stdenv.hostPlatform.isMusl
 , withVmspawn ? true
+  # kernel-install shouldn't usually be used on NixOS, but can be useful, e.g. for
+  # building disk images for non-NixOS systems. To save users from trying to use it
+  # on their live NixOS system, we disable it by default.
+, withKernelInstall ? false
   # tests assume too much system access for them to be feasible for us right now
 , withTests ? false
   # build only libudev and libsystemd
@@ -175,7 +180,7 @@ assert withBootloader -> withEfi;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "255.2";
+  version = "255.4";
 
   # Use the command below to update `releaseTimestamp` on every (major) version
   # change. More details in the commentary at mesonFlags.
@@ -193,7 +198,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    hash = "sha256-8SfJY/pcH4yrDeJi0GfIUpetTbpMwyswvSu+RSfgqfY=";
+    hash = "sha256-P1mKq+ythrv8MU7y2CuNtEx6qCDacugzfsPRZL+NPys=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -224,6 +229,15 @@ stdenv.mkDerivation (finalAttrs: {
     ./0017-meson.build-do-not-create-systemdstatedir.patch
   ] ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
     ./0018-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
+  ] ++ lib.optional (stdenv.hostPlatform.isPower || stdenv.hostPlatform.isRiscV || stdenv.hostPlatform.isMips) [
+    # Fixed upstream and included in the main and stable branches. Can be dropped
+    # when bumping to >= v255.5.
+    # https://github.com/systemd/systemd/issues/30448
+    # https://github.com/NixOS/nixpkgs/pull/282607
+    (fetchpatch {
+      url = "https://github.com/systemd/systemd/commit/8040fa55a1cbc34dede3205a902095ecd26c21e3.patch";
+      sha256 = "0c6z7bsndbkb8m130jnjpsl138sfv3q171726n5vkyl2n9ihnavk";
+    })
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
@@ -403,6 +417,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   outputs = [ "out" "dev" ] ++ (lib.optional (!buildLibsOnly) "man");
+
+  hardeningDisable = [
+    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111523
+    "trivialautovarinit"
+  ];
 
   nativeBuildInputs =
     [
@@ -613,6 +632,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "efi" withEfi)
     (lib.mesonBool "utmp" withUtmp)
     (lib.mesonBool "log-trace" withLogTrace)
+    (lib.mesonBool "kernel-install" withKernelInstall)
     (lib.mesonBool "quotacheck" false)
     (lib.mesonBool "ldconfig" false)
     (lib.mesonBool "install-sysconfdir" false)
@@ -804,7 +824,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
 
     rm -rf $out/etc/rpm
-
+  '' + lib.optionalString (!withKernelInstall) ''
     # "kernel-install" shouldn't be used on NixOS.
     find $out -name "*kernel-install*" -exec rm {} \;
   '' + lib.optionalString (!withDocumentation) ''
@@ -851,8 +871,8 @@ stdenv.mkDerivation (finalAttrs: {
     # needed - and therefore `interfaceVersion` should be incremented.
     interfaceVersion = 2;
 
-    inherit withCryptsetup withHostnamed withImportd withKmod withLocaled
-      withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
+    inherit withBootloader withCryptsetup withEfi withHostnamed withImportd withKmod
+      withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
 
     tests = {
       inherit (nixosTests)

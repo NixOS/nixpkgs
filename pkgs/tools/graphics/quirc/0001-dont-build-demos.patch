@@ -4,8 +4,8 @@ index 2d5b745..ecef988 100644
 +++ b/Makefile
 @@ -37,7 +37,7 @@ DEMO_UTIL_OBJ = \
  
- OPENCV_CFLAGS != pkg-config --cflags opencv4
- OPENCV_LIBS != pkg-config --libs opencv4
+ OPENCV_CFLAGS := $(shell pkg-config --cflags opencv4 2>&1)
+ OPENCV_LIBS = $(shell pkg-config --libs opencv4)
 -QUIRC_CXXFLAGS = $(QUIRC_CFLAGS) $(OPENCV_CFLAGS) --std=c++17
 +QUIRC_CXXFLAGS = $(QUIRC_CFLAGS) --std=c++17
  

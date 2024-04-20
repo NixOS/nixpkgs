@@ -33,6 +33,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Cargo x Buttplug.io";
+    mainProgram = "cargo-vibe";
     homepage = "https://github.com/shadlock0133/cargo-vibe";
     license = licenses.mit;
     maintainers = with maintainers; [ _999eagle ];

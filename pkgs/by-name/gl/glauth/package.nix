@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "glauth";
-  version = "2.3.0";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "glauth";
     repo = "glauth";
     rev = "v${version}";
-    hash = "sha256-XYNNR3bVLNtAl+vbGRv0VhbLf+em8Ay983jqcW7KDFU=";
+    hash = "sha256-FOhtL8nIm5kuKRxFtkrDyUU2z1K22ZdHaes3GY0KmfQ=";
   };
 
-  vendorHash = "sha256-SFmGgxDokIbVl3ANDPMCqrB0ck8Wyva2kSV2mgNRogo=";
+  vendorHash = "sha256-MfauZRufl3kxr1fqatxTmiIvLJ+5JhbpSnbTHiujME8=";
 
   nativeCheckInputs = [
     oath-toolkit
@@ -27,10 +27,6 @@ buildGoModule rec {
 
   # Disable go workspaces to fix build.
   env.GOWORK = "off";
-
-  # Fix this build error:
-  #   main module (github.com/glauth/glauth/v2) does not contain package github.com/glauth/glauth/v2/vendored/toml
-  excludedPackages = [ "vendored/toml" ];
 
   # Based on ldflags in <glauth>/Makefile.
   ldflags = [

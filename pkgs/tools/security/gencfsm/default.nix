@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.libertyzero.com/GEncfsM/";
     downloadPage = "https://launchpad.net/gencfsm/";
     description = "EncFS manager and mounter with GNOME3 integration";
+    mainProgram = "gnome-encfs-manager";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.spacefrogg ];

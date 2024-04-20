@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libgig";
-  version = "4.4.0";
+  version = "4.4.1";
 
   src = fetchurl {
     url = "https://download.linuxsampler.org/packages/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-ZwQMrK8da12lFz7UAY2i+eW3rzPFhngdUfeV3hW65iI=";
+    sha256 = "sha256-/cie+rH5BhKObFRymWdXfo0EYgFwGLwSVRJX313+OqQ=";
   };
 
   nativeBuildInputs = [ autoconf automake libtool pkg-config ];

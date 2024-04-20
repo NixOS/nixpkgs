@@ -74,6 +74,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Client for devpi, a pypi index server and packaging meta tool";
+    mainProgram = "devpi";
     homepage = "http://doc.devpi.net";
     changelog = "https://github.com/devpi/devpi/blob/client-${version}/client/CHANGELOG";
     license = licenses.mit;

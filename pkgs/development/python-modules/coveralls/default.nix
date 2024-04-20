@@ -56,6 +56,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Show coverage stats online via coveralls.io";
+    mainProgram = "coveralls";
     homepage = "https://github.com/coveralls-clients/coveralls-python";
     license = lib.licenses.mit;
   };

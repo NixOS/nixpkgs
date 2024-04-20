@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Qt frontend for nmap";
+    mainProgram = "nmapsi4";
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];
     inherit (src.meta) homepage;

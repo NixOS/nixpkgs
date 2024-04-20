@@ -5,11 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Twiggy";
+  pname = "twiggy";
   version = "0.5.1";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "Twiggy";
+    inherit version;
     sha256 = "7938840275972f6ce89994a5bdfb0b84f0386301a043a960af6364952e78ffe4";
   };
 

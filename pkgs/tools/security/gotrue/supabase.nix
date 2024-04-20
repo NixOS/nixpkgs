@@ -36,6 +36,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/supabase/gotrue";
     description = "A JWT based API for managing users and issuing JWT tokens";
+    mainProgram = "gotrue";
     changelog = "https://github.com/supabase/gotrue/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ urandom ];

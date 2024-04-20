@@ -12,16 +12,17 @@
 , exfat
 , ntfs3g
 , btrfs-progs
+, pcsclite
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "veracrypt";
-  version = "1.25.9";
+  version = "1.26.7";
 
   src = fetchurl {
     url = "https://launchpad.net/${pname}/trunk/${lib.toLower version}/+download/VeraCrypt_${version}_Source.tar.bz2";
-    sha256 = "sha256-drbhgYS8IaQdKUn/Y9ch1JBUpxbO/zpL13tcNRC3lK8=";
+    sha256 = "sha256-920nsYJBTg1P2ba1n76iiyXbb6afK7z/ouwmmxqGX2U=";
   };
 
   patches = [
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
   sourceRoot = "src";
 
   nativeBuildInputs = [ makeself pkg-config yasm wrapGAppsHook ];
-  buildInputs = [ fuse lvm2 wxGTK ];
+  buildInputs = [ fuse lvm2 wxGTK pcsclite ];
 
   enableParallelBuilding = true;
 

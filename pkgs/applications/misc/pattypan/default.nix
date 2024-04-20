@@ -7,7 +7,7 @@
 , wrapGAppsHook
 , makeDesktopItem
 , copyDesktopItems
-, canonicalize-jars-hook
+, stripJavaArchivesHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     wrapGAppsHook
     copyDesktopItems
-    canonicalize-jars-hook
+    stripJavaArchivesHook
   ];
 
   dontWrapGApps = true;

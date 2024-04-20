@@ -36,7 +36,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the syslog-ng daemon.
         '';
       };
@@ -44,7 +44,7 @@ in {
       extraModulePaths = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           A list of paths that should be included in syslog-ng's
           `--module-path` option. They should usually
           end in `/lib/syslog-ng`
@@ -53,7 +53,7 @@ in {
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Configuration added to the end of `syslog-ng.conf`.
         '';
       };
@@ -63,7 +63,7 @@ in {
           @version: 4.4
           @include "scl.conf"
         '';
-        description = lib.mdDoc ''
+        description = ''
           The very first lines of the configuration file. Should usually contain
           the syslog-ng version header.
         '';

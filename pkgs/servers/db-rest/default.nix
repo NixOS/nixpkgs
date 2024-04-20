@@ -4,6 +4,7 @@
 , nodejs_18
 , nix-update-script
 , fetchpatch
+, nixosTests
 }:
 buildNpmPackage rec {
   pname = "db-rest";
@@ -25,6 +26,9 @@ buildNpmPackage rec {
   '';
 
   passthru.updateScript = nix-update-script { };
+  passthru.tests = {
+    inherit (nixosTests) db-rest;
+  };
 
   meta = {
     description = "A clean REST API wrapping around the Deutsche Bahn API";

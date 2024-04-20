@@ -45,6 +45,7 @@
 
   meta = with lib; {
     description = "A UAVCAN DSDL template engine";
+    mainProgram = "nnvg";
     longDescription = ''
       It exposes a pydsdl abstract syntax tree to Jinja2 templates allowing
       authors to generate code, schemas, metadata, documentation, etc.

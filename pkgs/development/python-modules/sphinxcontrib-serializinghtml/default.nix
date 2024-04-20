@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-serializinghtml";
-  version = "1.1.9";
+  version = "1.1.10";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "sphinxcontrib_serializinghtml";
     inherit version;
-    hash = "sha256-DGT/iYM54frCmr0r9fEQePPsQTz+nARtMSDXymVTC1Q=";
+    hash = "sha256-k/P13EWLkbGS/hDDl+Mk8mLPFj158ygsFY6ENqLEUR8=";
   };
 
   nativeBuildInputs = [

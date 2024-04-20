@@ -70,6 +70,7 @@ buildGoModule rec {
     homepage = "https://waypointproject.io";
     changelog = "https://github.com/hashicorp/waypoint/blob/v${version}/CHANGELOG.md";
     description = "A tool to build, deploy, and release any application on any platform";
+    mainProgram = "waypoint";
     longDescription = ''
       Waypoint allows developers to define their application build, deploy, and
       release lifecycle as code, reducing the time to deliver deployments

@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-WMTTYYgpCIM86a6Jw8iah/YVXN9T5youzEieWL/d+Bc=";
   };
 
+  patches = [ ./upgrade-to-cpp-14.patch ];
+
   nativeBuildInputs = [ cmake ninja pkg-config ];
 
   outputs = [ "out" "dev" ];

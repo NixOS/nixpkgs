@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "3.2.24";
+  version = "3.2.25";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Django";
     inherit version;
-    hash = "sha256-qu6fsPtOvUMRUgiHrS4zMT02iEZgf4KpoO1GHNTDWxg=";
+    hash = "sha256-fKOKeGVK7nI3hZTWPlFjbAS44oV09VBd/2MIlbVHJ3c=";
   };
 
   patches = [

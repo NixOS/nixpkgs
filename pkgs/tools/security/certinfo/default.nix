@@ -22,6 +22,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Print x509 certificate info";
+    mainProgram = "certinfo";
     homepage = "https://github.com/pete911/certinfo";
     license = licenses.mit;
     maintainers = with maintainers; [ jakuzure ];

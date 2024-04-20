@@ -9,7 +9,7 @@
 
 let
   pname = "xonsh";
-  version = "0.14.4";
+  version = "0.15.1";
 in
 python3.pkgs.buildPythonApplication {
   inherit pname version;
@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication {
     owner = "xonsh";
     repo = "xonsh";
     rev = "refs/tags/${version}";
-    hash = "sha256-7qOEc4RSdOO059LietKnrxY7cy9MfgmfJjdqZZ5ENLU=";
+    hash = "sha256-mHOCkUGiSSPmkIQ4tgRZIaCTLgnx39SMwug5EIx/jrU=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -89,6 +89,8 @@ python3.pkgs.buildPythonApplication {
   preCheck = ''
     export HOME=$TMPDIR
   '';
+
+  dontWrapPythonPrograms = true;
 
   passthru = {
     shellPath = "/bin/xonsh";

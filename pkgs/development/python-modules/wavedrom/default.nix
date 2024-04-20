@@ -51,6 +51,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "WaveDrom compatible Python command line";
+    mainProgram = "wavedrompy";
     homepage = "https://github.com/wallento/wavedrompy";
     license = licenses.mit;
     maintainers = with maintainers; [ airwoodix ];

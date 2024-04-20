@@ -1,43 +1,64 @@
 { lib }:
 
 rec {
-  /* Automatically convert an attribute set to command-line options.
+  /**
+    Automatically convert an attribute set to command-line options.
 
-     This helps protect against malformed command lines and also to reduce
-     boilerplate related to command-line construction for simple use cases.
+    This helps protect against malformed command lines and also to reduce
+    boilerplate related to command-line construction for simple use cases.
 
-     `toGNUCommandLine` returns a list of nix strings.
-     `toGNUCommandLineShell` returns an escaped shell string.
+    `toGNUCommandLine` returns a list of nix strings.
 
-     Example:
-       cli.toGNUCommandLine {} {
-         data = builtins.toJSON { id = 0; };
-         X = "PUT";
-         retry = 3;
-         retry-delay = null;
-         url = [ "https://example.com/foo" "https://example.com/bar" ];
-         silent = false;
-         verbose = true;
-       }
-       => [
-         "-X" "PUT"
-         "--data" "{\"id\":0}"
-         "--retry" "3"
-         "--url" "https://example.com/foo"
-         "--url" "https://example.com/bar"
-         "--verbose"
-       ]
+    `toGNUCommandLineShell` returns an escaped shell string.
 
-       cli.toGNUCommandLineShell {} {
-         data = builtins.toJSON { id = 0; };
-         X = "PUT";
-         retry = 3;
-         retry-delay = null;
-         url = [ "https://example.com/foo" "https://example.com/bar" ];
-         silent = false;
-         verbose = true;
-       }
-       => "'-X' 'PUT' '--data' '{\"id\":0}' '--retry' '3' '--url' 'https://example.com/foo' '--url' 'https://example.com/bar' '--verbose'";
+
+    # Inputs
+
+    `options`
+
+    : 1\. Function argument
+
+    `attrs`
+
+    : 2\. Function argument
+
+
+    # Examples
+    :::{.example}
+    ## `lib.cli.toGNUCommandLineShell` usage example
+
+    ```nix
+    cli.toGNUCommandLine {} {
+      data = builtins.toJSON { id = 0; };
+      X = "PUT";
+      retry = 3;
+      retry-delay = null;
+      url = [ "https://example.com/foo" "https://example.com/bar" ];
+      silent = false;
+      verbose = true;
+    }
+    => [
+      "-X" "PUT"
+      "--data" "{\"id\":0}"
+      "--retry" "3"
+      "--url" "https://example.com/foo"
+      "--url" "https://example.com/bar"
+      "--verbose"
+    ]
+
+    cli.toGNUCommandLineShell {} {
+      data = builtins.toJSON { id = 0; };
+      X = "PUT";
+      retry = 3;
+      retry-delay = null;
+      url = [ "https://example.com/foo" "https://example.com/bar" ];
+      silent = false;
+      verbose = true;
+    }
+    => "'-X' 'PUT' '--data' '{\"id\":0}' '--retry' '3' '--url' 'https://example.com/foo' '--url' 'https://example.com/bar' '--verbose'";
+    ```
+
+    :::
   */
   toGNUCommandLineShell =
     options: attrs: lib.escapeShellArgs (toGNUCommandLine options attrs);

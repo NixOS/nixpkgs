@@ -1,4 +1,4 @@
-{ lib, stdenv, gcc10StdenvCompat, pkgs, mkCoqDerivation, coq, trakt, veriT, zchaff, fetchurl, version ? null }:
+{ lib, stdenv, pkgs, mkCoqDerivation, coq, trakt, veriT, zchaff, fetchurl, cvc5, version ? null }:
 
 let
   # version of veriT that works with SMTCoq
@@ -9,32 +9,35 @@ let
     };
     meta.broken = false;
   });
-  cvc4 = pkgs.callPackage ./cvc4.nix {
-    stdenv = gcc10StdenvCompat;
-  };
 in
 
 mkCoqDerivation {
   pname = "smtcoq";
   owner = "smtcoq";
 
-  release."2021-09-17".rev    = "f36bf11e994cc269c2ec92b061b082e3516f472f";
-  release."2021-09-17".sha256 = "sha256-bF7ES+tXraaAJwVEwAMx3CUESpNlAUerQjr4d2eaGJQ=";
+  release."SMTCoq-2.1+8.16".rev    = "4996c00b455bfe98400e96c954839ceea93efdf7";
+  release."SMTCoq-2.1+8.16".sha256 = "sha256-k53e+frUjwq+ZZKbbOKd/EfVC40QeAzB2nCsGkCKnHA=";
+  release."SMTCoq-2.1+8.14".rev    = "e11d9b424b0113f32265bcef0ddc962361da4dae";
+  release."SMTCoq-2.1+8.14".sha256 = "sha256-4a01/CRHUon2OfpagAnMaEVkBFipPX3MCVmSFS1Bnt4=";
+  release."SMTCoq-2.1+8.13".rev    = "d02269c43739f4559d83873563ca00daad9faaf1";
+  release."SMTCoq-2.1+8.13".sha256 = "sha256-VZetGghdr5uJWDwZWSlhYScoNEoRHIbwqwJKSQyfKKg=";
 
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.version [
-    { case = isEq "8.13"; out = "2021-09-17"; }
+    { case = isEq "8.16"; out = "SMTCoq-2.1+8.16"; }
+    { case = isEq "8.14"; out = "SMTCoq-2.1+8.14"; }
+    { case = isEq "8.13"; out = "SMTCoq-2.1+8.13"; }
   ] null;
 
-  propagatedBuildInputs = [ trakt cvc4 veriT' zchaff ] ++ (with coq.ocamlPackages; [ num zarith ]);
+  propagatedBuildInputs = [ trakt cvc5 veriT' zchaff ] ++ (with coq.ocamlPackages; [ num zarith ]);
   mlPlugin = true;
   nativeBuildInputs = (with pkgs; [ gnumake42 ]) ++ (with coq.ocamlPackages; [ ocamlbuild ]);
 
-  # This is meant to ease future troubleshooting of cvc4 build failures
-  passthru = { inherit cvc4; };
+  # This is meant to ease future troubleshooting of cvc5 build failures
+  passthru = { inherit cvc5; };
 
   meta = with lib; {
-    description = "Communication between Coq and SAT/SMT solvers ";
+    description = "Communication between Coq and SAT/SMT solvers";
     maintainers = with maintainers; [ siraben ];
     license = licenses.cecill-b;
     platforms = platforms.unix;

@@ -24,6 +24,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/adammck/terraform-inventory";
     description = "Terraform state to ansible inventory adapter";
+    mainProgram = "terraform-inventory";
     license = licenses.mit;
     maintainers = with maintainers; [ htr ];
   };

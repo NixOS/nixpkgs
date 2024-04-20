@@ -23,6 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A utility for mapping events from Linux event devices";
+    mainProgram = "evsieve";
     homepage = "https://github.com/KarsMulder/evsieve";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ tsowell ];

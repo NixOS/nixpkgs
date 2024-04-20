@@ -62,5 +62,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];
+    mainProgram = "lazpaint";
   };
 }

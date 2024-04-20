@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An interface description language used by DirectFB";
+    mainProgram = "fluxcomp";
     homepage = "https://github.com/deniskropp/flux";
     license = licenses.mit;
   };

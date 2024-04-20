@@ -49,6 +49,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Browser based viewer for profiling data";
+    mainProgram = "snakeviz";
     homepage = "https://jiffyclub.github.io/snakeviz";
     changelog = "https://github.com/jiffyclub/snakeviz/blob/v${version}/CHANGES.rst";
     license = licenses.bsd3;

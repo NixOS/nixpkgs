@@ -25,6 +25,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://github.com/thefloweringash/rewrite-tbd/";
     description = "Rewrite filepath in .tbd to Nix applicable format";
+    mainProgram = "rewrite-tbd";
     platforms = platforms.unix;
     license = licenses.mit;
   };

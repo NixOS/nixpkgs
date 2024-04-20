@@ -1,4 +1,4 @@
-{ config, lib, pkgs, options, type }:
+{ config, lib, pkgs, options, type, ... }:
 
 let
   cfg = config.services.prometheus.exporters."exportarr-${type}";
@@ -16,7 +16,7 @@ in
     url = lib.mkOption {
       type = lib.types.str;
       default = "http://127.0.0.1";
-      description = lib.mdDoc ''
+      description = ''
         The full URL to Sonarr, Radarr, or Lidarr.
       '';
     };
@@ -24,7 +24,7 @@ in
     apiKeyFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         File containing the api-key.
       '';
     };
@@ -34,7 +34,7 @@ in
     environment = lib.mkOption {
       type = lib.types.attrsOf lib.types.str;
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         See [the configuration guide](https://github.com/onedr0p/exportarr#configuration) for available options.
       '';
       example = {

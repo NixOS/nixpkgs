@@ -31,6 +31,7 @@ buildGoModule {
 
   meta = with lib; {
     description = "Live reload for Go apps";
+    mainProgram = "wgo";
     homepage = "https://github.com/bokwoon95/wgo";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

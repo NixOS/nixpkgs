@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A 'keep it simple and clean bare metal SAT solver' written in C";
+    mainProgram = "kissat";
     longDescription = ''
       Kissat is a "keep it simple and clean bare metal SAT solver" written in C.
       It is a port of CaDiCaL back to C with improved data structures,

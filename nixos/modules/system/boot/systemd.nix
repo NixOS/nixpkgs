@@ -47,6 +47,9 @@ let
       "rescue.target"
       "rescue.service"
 
+      # systemd-debug-generator
+      "debug-shell.service"
+
       # Udev.
       "systemd-tmpfiles-setup-dev-early.service"
       "systemd-udevd-control.socket"
@@ -97,6 +100,7 @@ let
 
       # Maintaining state across reboots.
       "systemd-random-seed.service"
+      ] ++ (optional cfg.package.withBootloader "systemd-boot-random-seed.service") ++ [
       "systemd-backlight@.service"
       "systemd-rfkill.service"
       "systemd-rfkill.socket"
@@ -667,7 +671,6 @@ in
 
     # Don't bother with certain units in containers.
     systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";
-    systemd.services.systemd-random-seed.unitConfig.ConditionVirtualization = "!container";
 
     # Increase numeric PID range (set directly instead of copying a one-line file from systemd)
     # https://github.com/systemd/systemd/pull/12226

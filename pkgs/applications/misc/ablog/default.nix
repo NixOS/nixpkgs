@@ -41,6 +41,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "ABlog for blogging with Sphinx";
+    mainProgram = "ablog";
     homepage = "https://ablog.readthedocs.io/en/latest/";
     license = licenses.mit;
     maintainers = with maintainers; [ rgrinberg ];

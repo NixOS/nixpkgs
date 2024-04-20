@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "RTS without micromanagement";
+    mainProgram = "glob2";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = licenses.gpl3;

@@ -32,5 +32,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/kdheepak/taskwarrior-tui";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ matthiasbeyer ];
+    mainProgram = "taskwarrior-tui";
   };
 }

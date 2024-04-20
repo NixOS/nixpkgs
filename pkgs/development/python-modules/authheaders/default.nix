@@ -51,6 +51,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library for the generation of email authentication headers";
+    mainProgram = "dmarc-policy-find";
     homepage = "https://github.com/ValiMail/authentication-headers";
     changelog = "https://github.com/ValiMail/authentication-headers/blob${version}/CHANGES";
     license = licenses.mit;

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , stdenvNoCC
-, gcc13Stdenv
 , fetchFromGitHub
 , substituteAll
 , makeWrapper
@@ -25,13 +24,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "Vencord";
     repo = "Vesktop";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-27998q9wbaNP1xYY+KHTBeJRfR6Q/K0LNdbRb3YHC6c=";
+    hash = "sha256-OyAGzlwwdEKBbJJ7h3glwx/THy2VvUn/kA/Df3arWQU=";
   };
 
   # NOTE: This requires pnpm 8.10.0 or newer
@@ -78,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       dontBuild = true;
       dontFixup = true;
       outputHashMode = "recursive";
-      outputHash = "sha256-cnk+KFdvsgG1wGDib7zgIS6/RkrR5EYAHtHcrFSU0Es=";
+      outputHash = "sha256-JLjJZYFMH4YoIFuyXbGUp6lIy+VlYZtmwk2+oUwtTxQ=";
     };
 
   nativeBuildInputs = [
@@ -123,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
         libpulseaudio
         libnotify
         pipewire
-        gcc13Stdenv.cc.cc.lib
+        stdenv.cc.cc.lib
       ] ++ lib.optional withTTS speechd);
     in
     ''

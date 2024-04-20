@@ -31,6 +31,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A background process that saves uncommitted changes on git";
+    mainProgram = "dura";
     longDescription = ''
       Dura is a background process that watches your Git repositories and
       commits your uncommitted changes without impacting HEAD, the current

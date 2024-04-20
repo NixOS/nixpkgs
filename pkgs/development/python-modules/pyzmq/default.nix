@@ -4,7 +4,7 @@
 , isPyPy
 
 # build-system
-, cython_3
+, cython
 , setuptools
 , setuptools-scm
 , packaging
@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "pyzmq";
-  version = "25.1.1";
+  version = "25.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JZwiSFtxq6zfqL95cgzXvPS50SizDqVU8BrnH9v9qiM=";
+    hash = "sha256-k/GqMR6LuRLjTwBM8YZAek6Q7sTw7MDv0mBWv37aAiY=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   ] ++ (if isPyPy then [
     cffi
   ] else [
-    cython_3
+    cython
   ]);
 
   buildInputs = [

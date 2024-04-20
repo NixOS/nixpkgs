@@ -41,6 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Tool for automatically reordering python imports";
+    mainProgram = "reorder-python-imports";
     homepage = "https://github.com/asottile/reorder_python_imports";
     license = licenses.mit;
     maintainers = with maintainers; [ gador ];

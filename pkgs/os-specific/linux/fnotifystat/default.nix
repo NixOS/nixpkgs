@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "File activity monitoring tool";
+    mainProgram = "fnotifystat";
     homepage = "https://github.com/ColinIanKing/fnotifystat";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

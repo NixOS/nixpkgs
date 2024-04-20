@@ -64,6 +64,7 @@ buildPythonPackage rec {
       An open source facility for XBRL, the eXtensible Business Reporting
       Language supporting various standards, exposed through a Python or
       REST API'' + lib.optionalString gui " and a graphical user interface";
+    mainProgram = "arelle";
     homepage = "http://arelle.org/";
     license = licenses.asl20;
     platforms = platforms.all;

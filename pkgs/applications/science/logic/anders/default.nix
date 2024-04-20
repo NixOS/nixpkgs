@@ -20,6 +20,7 @@ ocamlPackages.buildDunePackage rec {
 
   meta = with lib; {
     description = "Modal Homotopy Type System";
+    mainProgram = "anders";
     homepage = "https://homotopy.dev/";
     license = licenses.isc;
     maintainers = [ maintainers.suhr ];

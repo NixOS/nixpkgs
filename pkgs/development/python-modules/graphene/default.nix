@@ -2,15 +2,13 @@
 , aniso8601
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , graphql-core
 , graphql-relay
-, promise
-, py
 , pytest-asyncio
 , pytest-benchmark
 , pytest-mock
-, pytestCheckHook
-, pythonAtLeast
+, pytest7CheckHook
 , pythonOlder
 , pytz
 , snapshottest
@@ -19,7 +17,7 @@
 buildPythonPackage rec {
   pname = "graphene";
   version = "3.3.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -30,16 +28,18 @@ buildPythonPackage rec {
     hash = "sha256-DGxicCXZp9kW/OFkr0lAWaQ+GaECx+HD8+X4aW63vgQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     aniso8601
     graphql-core
     graphql-relay
   ];
 
   nativeCheckInputs = [
-    promise
-    py
-    pytestCheckHook
+    pytest7CheckHook
     pytest-asyncio
     pytest-benchmark
     pytest-mock

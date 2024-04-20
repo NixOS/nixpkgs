@@ -47,6 +47,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Qt based FM / Dab tuner";
+    mainProgram = "guglielmo";
     homepage = "https://github.com/marcogrecopriolo/guglielmo";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.markuskowa ];

@@ -15,19 +15,19 @@ let
     inherit jdk;
   };
 
-  version = "3.7.7";
+  version = "3.7.9";
   src = fetchFromGitHub {
     owner = "openrefine";
     repo = "openrefine";
     rev = version;
-    hash = "sha256-/Txx+r+eFizxaTV5u/nOJwum8nJW6jsR6kYA0YbRsJs=";
+    hash = "sha256-wtg0BOGr/aJPZeFQbJSBHtTVfpcSCSHP++8AnpS8pgQ=";
   };
 
   npmPkg = buildNpmPackage {
     inherit src version;
 
     pname = "openrefine-npm";
-    sourceRoot = "source/main/webapp";
+    sourceRoot = "${src.name}/main/webapp";
 
     npmDepsHash = "sha256-8GhcL4tohQ5u2HeYN6JyTMMobUOqAL8ETCLiP1SoDSk=";
 

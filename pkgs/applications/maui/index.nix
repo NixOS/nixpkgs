@@ -40,6 +40,7 @@ mkDerivation {
 
   meta = with lib; {
     description = "Multi-platform file manager";
+    mainProgram = "index";
     homepage = "https://invent.kde.org/maui/index-fm";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];

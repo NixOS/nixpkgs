@@ -105,6 +105,8 @@ let
     # conflicting LLVM modules.
     objc4 = stdenv.objc4 or (callPackage ./libobjc.nix { });
 
+    sdkRoot = pkgs.callPackage ../apple-sdk/sdkRoot.nix { sdkVersion = "11.0"; };
+
     # questionable aliases
     configd = pkgs.darwin.apple_sdk.frameworks.SystemConfiguration;
     inherit (pkgs.darwin.apple_sdk.frameworks) IOKit;
@@ -143,5 +145,16 @@ let
       });
       xcbuild = xcodebuild;
     }));
+
+    darwin-stubs = stdenvNoCC.mkDerivation {
+      pname = "darwin-stubs";
+      inherit (MacOSX-SDK) version;
+
+      buildCommand = ''
+        mkdir -p "$out"
+        ln -s ${MacOSX-SDK}/System "$out/System"
+        ln -s ${MacOSX-SDK}/usr "$out/usr"
+      '';
+    };
   };
 in packages

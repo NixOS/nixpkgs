@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Modular, cross-platform and multi-threaded benchmark tool";
+    mainProgram = "sysbench";
     longDescription = ''
       sysbench is a scriptable multi-threaded benchmark tool based on LuaJIT.
       It is most frequently used for database benchmarks, but can also be used

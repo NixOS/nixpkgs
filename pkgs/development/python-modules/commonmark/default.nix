@@ -22,6 +22,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python parser for the CommonMark Markdown spec";
+    mainProgram = "cmark";
     homepage = "https://github.com/rolandshoemaker/CommonMark-py";
     license = licenses.bsd3;
   };

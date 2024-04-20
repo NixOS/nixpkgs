@@ -72,6 +72,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Applets for use with the GNOME panel";
+    mainProgram = "cpufreq-selector";
     homepage = "https://wiki.gnome.org/Projects/GnomeApplets";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;

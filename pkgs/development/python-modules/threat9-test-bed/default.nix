@@ -56,6 +56,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module for adding unittests.mock as view functions";
+    mainProgram = "test-bed";
     homepage = "https://github.com/threat9/threat9-test-bed";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];

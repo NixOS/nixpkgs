@@ -10,7 +10,7 @@ in {
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         If enabled, FireQOS will be launched with the specified
         configuration given in `config`.
       '';
@@ -28,7 +28,7 @@ in {
           class web commit 50kbit
             match tcp ports 80,443
       '';
-      description = lib.mdDoc ''
+      description = ''
         The FireQOS configuration goes here.
       '';
     };

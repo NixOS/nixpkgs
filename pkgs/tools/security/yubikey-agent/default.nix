@@ -37,6 +37,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A seamless ssh-agent for YubiKeys";
+    mainProgram = "yubikey-agent";
     license = licenses.bsd3;
     homepage = "https://filippo.io/yubikey-agent";
     maintainers = with lib.maintainers; [ philandstuff rawkode ];

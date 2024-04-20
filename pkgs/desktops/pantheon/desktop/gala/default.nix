@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pkg-config
 , meson
@@ -39,6 +40,13 @@ stdenv.mkDerivation rec {
     # We look for plugins in `/run/current-system/sw/lib/` because
     # there are multiple plugin providers (e.g. gala and wingpanel).
     ./plugins-dir.patch
+
+    # Start gala-daemon internally (needed for systemd managed gnome-session)
+    # https://github.com/elementary/gala/pull/1844
+    (fetchpatch {
+      url = "https://github.com/elementary/gala/commit/351722c5a4fded46992b725e03dc94971c5bd31f.patch";
+      hash = "sha256-RvdVHQjCUNmLrROBZTF+m1vE2XudtQZjk/YW28P/vKc=";
+    })
   ];
 
   nativeBuildInputs = [

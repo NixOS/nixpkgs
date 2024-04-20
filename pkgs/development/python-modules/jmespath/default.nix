@@ -23,6 +23,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/jmespath/jmespath.py";
     description = "JMESPath allows you to declaratively specify how to extract elements from a JSON document";
+    mainProgram = "jp.py";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

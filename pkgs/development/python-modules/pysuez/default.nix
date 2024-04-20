@@ -44,6 +44,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module to get water consumption data from Suez";
+    mainProgram = "pysuez";
     homepage = "https://github.com/ooii/pySuez";
     changelog = "https://github.com/ooii/pySuez/releases/tag/v${version}";
     license = licenses.asl20;

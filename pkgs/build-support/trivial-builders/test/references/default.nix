@@ -12,7 +12,7 @@
 , cleanSamples ? lib.filterAttrs (n: lib.isStringLike)
   # Test targets
 , writeDirectReferencesToFile
-, writeReferencesToFile
+, writeClosure
 }:
 
 # -------------------------------------------------------------------------- #
@@ -46,8 +46,9 @@ let
   samplesToString = attrs:
     lib.concatMapStringsSep " " (name: "[${name}]=${lib.escapeShellArg "${attrs.${name}}"}") (builtins.attrNames attrs);
 
-  references = lib.mapAttrs (n: v: writeReferencesToFile v) samples;
+  closures = lib.mapAttrs (n: v: writeClosure [ v ]) samples;
   directReferences = lib.mapAttrs (n: v: writeDirectReferencesToFile v) samples;
+  collectiveClosure = writeClosure (lib.attrValues samples);
 
   testScriptBin = stdenvNoCC.mkDerivation (finalAttrs: {
     name = "references-test";
@@ -61,8 +62,9 @@ let
       mkdir -p "$out/bin"
       substitute "$src" "$out/bin/${finalAttrs.meta.mainProgram}" \
         --replace "@SAMPLES@" ${lib.escapeShellArg (samplesToString samples)} \
-        --replace "@REFERENCES@" ${lib.escapeShellArg (samplesToString references)} \
-        --replace "@DIRECT_REFS@" ${lib.escapeShellArg (samplesToString directReferences)}
+        --replace "@CLOSURES@" ${lib.escapeShellArg (samplesToString closures)} \
+        --replace "@DIRECT_REFS@" ${lib.escapeShellArg (samplesToString directReferences)} \
+        --replace "@COLLECTIVE_CLOSURE@" ${lib.escapeShellArg collectiveClosure}
       runHook postInstall
       chmod +x "$out/bin/${finalAttrs.meta.mainProgram}"
     '';
@@ -79,8 +81,9 @@ let
 
     passthru = {
       inherit
+        collectiveClosure
         directReferences
-        references
+        closures
         samples
         ;
     };
@@ -109,8 +112,9 @@ testers.nixosTest {
     '';
   passthru = {
     inherit
+      collectiveClosure
       directReferences
-      references
+      closures
       samples
       testScriptBin
       ;

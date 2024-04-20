@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Z80 / 8080 / Z180 assembler (for unix-style OS)";
+    mainProgram = "zasm";
     homepage = "https://k1.spdns.de/Develop/Projects/zasm/Distributions/";
     license = licenses.bsd2;
     maintainers = [ maintainers.turbomack ];

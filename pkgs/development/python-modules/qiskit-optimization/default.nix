@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-optimization";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "qiskit";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-vVSFvLVjptSgGocGR6i1Fp0BSRaT3uBBxf0OrFaF9EQ=";
+    hash = "sha256-kzEuICajlV8mgD0YLhwFJaDQVxYZo9jv3sr/r/P0VG0=";
   };
 
   postPatch = ''

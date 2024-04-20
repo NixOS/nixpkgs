@@ -23,6 +23,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A library to parse Ruby Gemfile, .gemspec and Cocoapod .podspec file using Python";
+    mainProgram = "parsegemfile";
     homepage = "https://github.com/gemfileparser/gemfileparser";
     license = with licenses; [ gpl3Plus /* or */ mit ];
     maintainers = [ ];

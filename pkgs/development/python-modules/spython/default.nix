@@ -51,6 +51,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Streamlined singularity python client (spython) for singularity";
+    mainProgram = "spython";
     homepage = "https://github.com/singularityhub/singularity-cli";
     changelog = "https://github.com/singularityhub/singularity-cli/blob/${version}/CHANGELOG.md";
     license = licenses.mpl20;

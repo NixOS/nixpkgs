@@ -30,7 +30,7 @@
 
 let
   pname = "pynitrokey";
-  version = "0.4.45";
+  version = "0.4.47";
   mainProgram = "nitropy";
 in
 
@@ -40,7 +40,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iY4ThrmXP7pEjTYYU4lePVAbuJGTdHX3iKswXzuf7W8=";
+    hash = "sha256-WOHDskGAZGhiU48JGV0yDhWIpFELFLHhn9g5sbchKKg=";
   };
 
   propagatedBuildInputs = [
@@ -101,7 +101,7 @@ buildPythonPackage {
     homepage = "https://github.com/Nitrokey/pynitrokey";
     changelog = "https://github.com/Nitrokey/pynitrokey/releases/tag/v${version}";
     license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ frogamic ];
+    maintainers = with maintainers; [ frogamic raitobezarius ];
     inherit mainProgram;
   };
 }

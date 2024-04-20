@@ -21,15 +21,15 @@ let
   }.${stdenv.hostPlatform.system} or unsupported;
 
   hash = {
-    aarch64-darwin = "sha256-l2HS1/HoKYf93qKxfMU80J3QOXjMRtX2A9hJm8E2Kh4=";
-    aarch64-linux = "sha256-ab5xavO2TVL1j9vqNv97bgAmQLZQJxnbam08DzdgDVE=";
-    x86_64-darwin = "sha256-nXas2i2eq7qdTFV0S+F5sPuqzSwE4qeJ+ms4fcJgZmQ=";
-    x86_64-linux = "sha256-HltmiQSJSwoW5+iEiXlJiCWwKRmuxDBcPbvOkJwLQXA=";
+    aarch64-darwin = "sha256-ImivrfKromlA4753KUJIJCZr3yFYm/fWEqK6veEJBfw=";
+    aarch64-linux = "sha256-6UvjzheFkIRE1m0Wglhuch8oL5mmZoVMd9mtS7Gz7JQ=";
+    x86_64-darwin = "sha256-SvdMYwTcSm+Ozs2eBgTtjgMcUpgHK+VfQqmhPwD7VIk=";
+    x86_64-linux = "sha256-9yGQ7f28hTo+WKr6wqrSqMUqMTeRuq1cBs9e2INQfqM=";
   }.${stdenv.hostPlatform.system} or unsupported;
 
 in stdenv.mkDerivation rec {
   inherit pname;
-  version = "1.10.5.4116";
+  version = "1.15.0.4361";
 
   src = fetchurl {
     url = "https://github.com/Prowlarr/Prowlarr/releases/download/v${version}/Prowlarr.master.${version}.${os}-core-${arch}.tar.gz";

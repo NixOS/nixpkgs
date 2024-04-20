@@ -3,7 +3,6 @@
 
 { fetchNuGet }: [
   (fetchNuGet { pname = "FosterFramework"; version = "0.1.18-alpha"; sha256 = "0jglck1ffdyp48sqmadlsxdddlyq45ydfzlxbrqdhszzi92ipq7a"; })
-  (fetchNuGet { pname = "Microsoft.NET.ILLink.Tasks"; version = "8.0.1"; sha256 = "1drbgqdcvbpisjn8mqfgba1pwb6yri80qc4mfvyczqwrcsj5k2ja"; })
   (fetchNuGet { pname = "SharpGLTF.Core"; version = "1.0.0-alpha0031"; sha256 = "0ln78mkhbcxqvwnf944hbgg24vbsva2jpih6q3x82d3h7rl1pkh6"; })
   (fetchNuGet { pname = "SharpGLTF.Runtime"; version = "1.0.0-alpha0031"; sha256 = "0lvb3asi3v0n718qf9y367km7qpkb9wci38y880nqvifpzllw0jg"; })
   (fetchNuGet { pname = "Sledge.Formats"; version = "1.2.2"; sha256 = "1y0l66m9rym0p1y4ifjlmg3j9lsmhkvbh38frh40rpvf1axn2dyh"; })

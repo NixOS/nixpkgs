@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     description = "Daemon that wires button presses to screen backlight level";
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.dancek ];
-    license = lib.licenses.agpl3;
+    license = lib.licenses.agpl3Plus;
     mainProgram = "illum-d";
   };
 }

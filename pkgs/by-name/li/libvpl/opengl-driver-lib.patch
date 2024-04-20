@@ -1,0 +1,19 @@
+--- a/libvpl/src/mfx_dispatcher_vpl_loader.cpp
++++ b/libvpl/src/mfx_dispatcher_vpl_loader.cpp
+@@ -548,6 +548,16 @@ mfxStatus LoaderCtxVPL::BuildListOfCandidateLibs() {
+         it++;
+     }
+
++    // fourth priority
++    searchDirList.clear();
++    searchDirList.push_back("@driverLink@/lib");
++    it = searchDirList.begin();
++    while (it != searchDirList.end()) {
++        STRING_TYPE nextDir = (*it);
++        sts                 = SearchDirForLibs(nextDir, m_libInfoList, LIB_PRIORITY_05);
++        it++;
++    }
++
+     // lowest priority: legacy MSDK installation
+     searchDirList.clear();
+     GetSearchPathsLegacy(searchDirList);

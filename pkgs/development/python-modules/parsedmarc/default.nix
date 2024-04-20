@@ -40,14 +40,14 @@ let
 in
 buildPythonPackage rec {
   pname = "parsedmarc";
-  version = "8.6.4";
+  version = "8.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ibxSp1M85WngQKdjlRC4JvLxn0rEn9oVkid/V4iD6zY=";
+    hash = "sha256-tK/cxOw50awcDAGRDTQ+Nxb9aJl2+zLZHuJq88xNmXM=";
   };
 
   postPatch = ''

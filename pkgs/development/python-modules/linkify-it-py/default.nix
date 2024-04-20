@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "linkify-it-py";
-  version = "2.0.2";
+  version = "2.0.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "tsutsu3";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-e3k2RblqvzWSSIrJL6ib2dxFw7T5vXlN8DrCV1qEr6w=";
+    hash = "sha256-BLwIityUZDVdSbvTpLf6QUlZUavWzG/45Nfffn18/vU=";
   };
 
   nativeBuildInputs = [

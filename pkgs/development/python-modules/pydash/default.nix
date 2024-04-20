@@ -1,10 +1,9 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , invoke
 , mock
-, pytestCheckHook
+, pytest7CheckHook
 , pythonOlder
 , setuptools
 , sphinx-rtd-theme
@@ -41,7 +40,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     invoke
     mock
-    pytestCheckHook
+    pytest7CheckHook
     sphinx-rtd-theme
   ];
 

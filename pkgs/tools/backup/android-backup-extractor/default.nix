@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Utility to extract and repack Android backups created with adb backup";
+    mainProgram = "abe";
     homepage = "https://github.com/nelenkov/android-backup-extractor";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;

@@ -7,17 +7,17 @@
 
 let
   pname = "mqttx";
-  version = "1.9.8";
+  version = "1.9.9";
 
   suffixedUrl = suffix: "https://github.com/emqx/MQTTX/releases/download/v${version}/MQTTX-${version}${suffix}.AppImage";
   sources = {
     "aarch64-linux" = fetchurl {
       url = suffixedUrl "-arm64";
-      hash = "sha256-pdR9LwWgFdO0Dtn7ByyYKpLrfoBnl75TzQ31aIAJ/gs=";
+      hash = "sha256-mCCRvLS6diKoKYZNUMsyiWyFWmyYYB0pAxNT0yriJHI=";
     };
     "x86_64-linux" = fetchurl {
       url = suffixedUrl "";
-      hash = "sha256-XHAroiFuUcK0aUleNDskI1bfVX7HfTvIvSup9gKJj1w=";
+      hash = "sha256-InGfGiT3c5M8ueFZl5/hFmYRPeXnwSCUPhAqmz0jsU8=";
     };
   };
 

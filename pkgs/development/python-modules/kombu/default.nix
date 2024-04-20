@@ -15,7 +15,7 @@
 , pycurl
 , pymongo
   #, pyro4
-, pytestCheckHook
+, pytest7CheckHook
 , pythonOlder
 , pyyaml
 , redis
@@ -89,7 +89,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     case
     hypothesis
-    pytestCheckHook
+    pytest7CheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [

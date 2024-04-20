@@ -67,6 +67,7 @@ buildPythonApplication {
     homepage = "https://kryogenix.org/code/hushboard/";
     license = licenses.mit;
     description = "Mute your microphone while typing";
+    mainProgram = "hushboard";
     platforms = platforms.linux;
     maintainers = with maintainers; [ sersorrel ];
   };

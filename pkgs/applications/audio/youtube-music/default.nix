@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, buildNpmPackage
 , makeWrapper
 , electron
 , python3
@@ -14,20 +13,16 @@
 , makeDesktopItem
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "youtube-music";
-  version = "3.1.0";
+  version = "3.3.5";
 
   src = fetchFromGitHub {
     owner = "th-ch";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-6ZiftpdCwxCkJzcHryVrUKzM+mM1eQpdLNFl0Dja59Q=";
+    repo = "youtube-music";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-JOmcfe7xrKRaxJwj2No3e99HBYbX+ROTjHl5Frc2P9Q=";
   };
-
-in
-stdenv.mkDerivation (finalAttrs: {
-  inherit pname version src;
 
   pnpmDeps = stdenvNoCC.mkDerivation {
     pname = "${finalAttrs.pname}-pnpm-deps";
@@ -51,17 +46,15 @@ stdenv.mkDerivation (finalAttrs: {
     dontBuild = true;
     dontFixup = true;
     outputHashMode = "recursive";
-    outputHashAlgo = "sha256";
     outputHash = {
-      x86_64-linux = "sha256-Oy11V7FXfVhLUR9gX0sjQEFuVPFpbaVdT518oOSLcvA=";
-      aarch64-linux = "sha256-6nXemaGiQjp2stjjKItPJ62VcH5Q5pRf63qKtl2haXI=";
-      x86_64-darwin = "sha256-jSMAw+AMD63vqPckZjblw4EDngA4E8h0WlsZu3hUShY=";
-      aarch64-darwin = "sha256-zujXURpIcw7IOw63AW167h6cywYXydhHZMzA2apGZAs=";
-    }.${stdenv.system} or (throw "Unsupported platform");
+      x86_64-linux = "sha256-K2yJdoi+bJpz0Xf2MHlFzQXbP+H3uVE2hYfkzoB7vBE=";
+      aarch64-linux = "sha256-ZiA6XKPnkoAl9m2vEJth2wyDxj61Efye4cUk+76znnM=";
+      x86_64-darwin = "sha256-wh5Y47c5qD2PctROP9AWqLDs7H5S2/8X0zxkSMkr1xQ=";
+      aarch64-darwin = "sha256-e2h4bLVnSEtZcHERsfkNmawgxQHQXxgXrNlFKB+IRTw=";
+    }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
   };
 
-  nativeBuildInputs =
-    [ makeWrapper python3 nodePackages.pnpm nodePackages.nodejs ]
+  nativeBuildInputs = [ makeWrapper python3 nodePackages.pnpm nodePackages.nodejs ]
     ++ lib.optionals (!stdenv.isDarwin) [ copyDesktopItems ];
 
 

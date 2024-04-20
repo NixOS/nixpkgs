@@ -199,7 +199,8 @@ def main() -> None:
                         size=os.stat(source).st_size,
                         filetype=FileType.file,
                         mode=mode,
-                        payload=target,
+                        # payload needs to be relative path in this case
+                        payload=target.lstrip("/"),
                     )
             paths[target] = composefs_path
             add_leading_directories(target, attrs, paths)

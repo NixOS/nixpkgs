@@ -32,7 +32,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python bindings for Oracle Berkeley DB";
     homepage = "https://www.jcea.es/programacion/pybsddb.htm";
-    license = with licenses; [ agpl3 ]; # License changed from bsd3 to agpl3 since 6.x
+    license = with licenses; [ agpl3Only ]; # License changed from bsd3 to agpl3 since 6.x
     maintainers = [ ];
   };
 

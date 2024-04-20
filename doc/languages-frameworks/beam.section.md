@@ -117,6 +117,7 @@ If there are git dependencies.
 - From the mix_deps.nix file, remove the dependencies that had git versions and pass them as an override to the import function.
 
 ```nix
+{
   mixNixDeps = import ./mix.nix {
     inherit beamPackages lib;
     overrides = (final: prev: {
@@ -138,8 +139,9 @@ If there are git dependencies.
         # you can re-use the same beamDeps argument as generated
         beamDeps = with final; [ prometheus ];
       };
-  });
-};
+    });
+  };
+}
 ```
 
 You will need to run the build process once to fix the hash to correspond to your new git src.
@@ -153,11 +155,13 @@ Practical steps
 - start with the following argument to mixRelease
 
 ```nix
+{
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version;
     hash = lib.fakeHash;
   };
+}
 ```
 
 The first build will complain about the hash value, you can replace with the suggested value after that.

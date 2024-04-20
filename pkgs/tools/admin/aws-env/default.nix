@@ -21,5 +21,6 @@ buildGoPackage rec {
     homepage = "https://github.com/Droplr/aws-env";
     license = licenses.mit;
     maintainers = with maintainers; [ srhb ];
+    mainProgram = "aws-env";
   };
 }

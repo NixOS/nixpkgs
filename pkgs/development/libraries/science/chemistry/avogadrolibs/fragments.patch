@@ -1,0 +1,13 @@
+diff --git a/avogadro/qtplugins/templatetool/CMakeLists.txt b/avogadro/qtplugins/templatetool/CMakeLists.txt
+index 3f68e6dd..822de4e5 100644
+--- a/avogadro/qtplugins/templatetool/CMakeLists.txt
++++ b/avogadro/qtplugins/templatetool/CMakeLists.txt
+@@ -24,7 +24,7 @@ avogadro_plugin(TemplateTool
+ )
+ 
+ # Install the fragments
+-set(_fragments "${AvogadroLibs_SOURCE_DIR}/../fragments")
++set(_fragments "${AvogadroLibs_SOURCE_DIR}/fragments")
+ 
+ # Look in parallel directory for the molecule fragment repository
+ if(NOT EXISTS "${_fragments}")

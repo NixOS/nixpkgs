@@ -29,6 +29,7 @@ in stdenv.mkDerivation (final: {
 
   meta = with lib; {
     description = "Modern C++17 Unicode library";
+    mainProgram = "unicode-query";
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ moni ];

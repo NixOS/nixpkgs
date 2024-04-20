@@ -53,6 +53,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Gnuradio block for ais";
+    mainProgram = "ais_rx";
     homepage = "https://github.com/bistromath/gr-ais";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

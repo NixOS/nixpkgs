@@ -25,6 +25,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Templating system/generator for distributions";
+    mainProgram = "dg";
     license = licenses.gpl2Plus;
     homepage = "https://distgen.readthedocs.io/";
     maintainers = with maintainers; [ bachp ];

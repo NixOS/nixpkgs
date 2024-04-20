@@ -15,6 +15,7 @@ buildNpmPackage rec {
 
   meta = with lib; {
     description = "Git hooks made easy 🐶 woof!";
+    mainProgram = "husky";
     homepage = "https://github.com/typicode/husky";
     changelog = "https://github.com/typicode/husky/releases/tag/v${version}";
     license = licenses.mit;

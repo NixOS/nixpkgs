@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A free, open-source Japanese dictionary and kanji lookup tool";
+    mainProgram = "tagainijisho";
     homepage = "https://www.tagaini.net/";
     license = with licenses; [
       /* program */

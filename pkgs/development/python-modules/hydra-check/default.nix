@@ -33,6 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "check hydra for the build status of a package";
+    mainProgram = "hydra-check";
     homepage = "https://github.com/nix-community/hydra-check";
     license = licenses.mit;
     maintainers = with maintainers; [ makefu artturin ];

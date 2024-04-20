@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.xnec2c.org/";
     description = "Graphical antenna simulation";
+    mainProgram = "xnec2c";
     license = licenses.gpl3;
     maintainers = with maintainers; [ mvs ];
     platforms = platforms.unix;

@@ -1,0 +1,29 @@
+diff --git a/meson_options.txt b/meson_options.txt
+index d5a0bd22..7d69d3d2 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -22,6 +22,12 @@ option(
+   value: true,
+   description: 'Whether to build and run unit tests'
+ )
++option(
++  'installed_test_prefix',
++  type: 'string',
++  value: '',
++  description: 'Prefix for installed tests'
++)
+ option(
+   'fuse',
+   type: 'combo',
+diff --git a/tests/meson.build b/tests/meson.build
+index 6ec405d1..f43c165c 100644
+--- a/tests/meson.build
++++ b/tests/meson.build
+@@ -1,5 +1,5 @@
+-installed_testdir = get_option('prefix') / get_option('libexecdir') / 'installed-tests' / 'flatpak-builder'
+-installed_tests_metadir = get_option('prefix') / get_option('datadir') / 'installed-tests' / 'flatpak-builder'
++installed_testdir = get_option('installed_test_prefix') / get_option('libexecdir') / 'installed-tests' / 'flatpak-builder'
++installed_tests_metadir = get_option('installed_test_prefix') / get_option('datadir') / 'installed-tests' / 'flatpak-builder'
+
+ test_env = environment()
+ test_env.set('FLATPAK_TESTS_DEBUG', '1')

@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "more-itertools";
-  version = "10.1.0";
+  version = "10.2.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ymw2n6DrN7rAKRvOglmzMv1ZrHkvpUl7WYNzCc1bEUo=";
+    hash = "sha256-j8y0gMQ9PpmgAIdjTAbdArDVD78IizgN5aQaAV7COeE=";
   };
 
   nativeBuildInputs = [

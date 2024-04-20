@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/yoyz/picoloop";
     platforms = platforms.linux;
     license = licenses.bsd3;
+    mainProgram = "picoloop";
   };
 }

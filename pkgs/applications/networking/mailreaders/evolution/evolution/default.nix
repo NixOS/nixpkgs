@@ -44,11 +44,11 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution";
-  version = "3.50.3";
+  version = "3.50.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-s1SjsFzRmWSjya2k7m4RsCzI25JtiB7ww30FmzAd/KQ=";
+    sha256 = "sha256-4PlVyhTfsbLhaC/PoYFqA8EUuBYZmPls+daBpqOEJpg=";
   };
 
   nativeBuildInputs = [
@@ -128,6 +128,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Evolution";
     description = "Personal information management application that provides integrated mail, calendaring and address book functionality";
+    mainProgram = "evolution";
     maintainers = teams.gnome.members;
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
