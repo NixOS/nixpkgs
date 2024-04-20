@@ -13152,8 +13152,6 @@ with pkgs;
 
   smug = callPackage ../tools/misc/smug { };
 
-  smpq = callPackage ../applications/misc/smpq { };
-
   snabb = callPackage ../tools/networking/snabb { };
 
   snallygaster = callPackage ../tools/security/snallygaster { };
