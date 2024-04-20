@@ -1,0 +1,15 @@
+--- a/Makefile	2024-04-20 11:39:47.012491481 +0300
++++ b/Makefile	2024-04-20 11:43:19.950786808 +0300
+@@ -6,8 +6,10 @@
+ 	shards build --release -Dpreview_mt $(CR_FLAGS) -s
+ 
+ configure:
+-	shards install
+-	./bin/gi-crystal
++	mkdir bin/
++	cd lib/gi-crystal && shards build -Dpreview_mt --release --no-debug
++	cd ../..
++	cp lib/gi-crystal/bin/gi-crystal bin/ && ./bin/gi-crystal
+ 
+ test:
+ 	# Some tests need en_US locale to pass on string to float convertions: "1.23" vs "1,23".
