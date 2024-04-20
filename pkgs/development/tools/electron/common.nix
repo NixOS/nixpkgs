@@ -13,7 +13,10 @@
 , unzip
 , pkgs
 , pkgsBuildHost
-
+, pipewire
+, libsecret
+, libpulseaudio
+, speechd
 , info
 }:
 
@@ -188,6 +191,23 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
     unzip -d $libExecPath out/Release/dist.zip
 
     runHook postInstall
+  '';
+
+  postFixup =
+    let
+      libPath = lib.makeLibraryPath [
+        libnotify
+        pipewire
+        stdenv.cc.cc.lib
+        libsecret
+        libpulseaudio
+        speechd
+      ];
+    in
+  base.postFixup + ''
+    patchelf \
+      --add-rpath "${libPath}" \
+      $out/libexec/electron/electron
   '';
 
   requiredSystemFeatures = [ "big-parallel" ];
