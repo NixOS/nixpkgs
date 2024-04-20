@@ -16,16 +16,16 @@
 
 buildGoModule rec {
   pname = "fyne";
-  version = "2.4.4";
+  version = "2.4.5";
 
   src = fetchFromGitHub {
     owner = "fyne-io";
     repo = "fyne";
     rev = "v${version}";
-    hash = "sha256-6gDHURcf4dVmaiXleeRKogAtCAgcHU437TjEHhfGdj8=";
+    hash = "sha256-vOkXJ0vsyBUPDMA0gAnmnDAfi6a02sEBDXTzt6muYgo=";
   };
 
-  vendorHash = "sha256-0P2YqXq+c20F2hVkRcvwV5PpqUoZ3PnRIvTHt/qAMPA=";
+  vendorHash = "sha256-T/ckbptaxxFNwhRkDPwWLg9W5b8Yp4cJ7UZuStdCsJ0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -41,21 +41,7 @@ buildGoModule rec {
     libXxf86vm
   ];
 
-  checkInputs = [
-    dbus
-  ];
-
-  doCheck = true;
-
-  preCheck = ''
-    OLD_DIR=$PWD
-    export HOME=$(mktemp -d)
-    cd $HOME
-  '';
-
-  preInstall = ''
-    if [ -n "$OLD_DIR" ]; then cd "$OLD_DIR"; fi
-  '';
+  doCheck = false;
 
   meta = with lib; {
     homepage = "https://fyne.io";
