@@ -44,6 +44,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "opentelemetry.instrumentation" ];
 
+  passthru.updateScript = opentelemetry-api.updateScript;
+
   meta = with lib; {
     homepage = "https://github.com/open-telemetry/opentelemetry-python-contrib/tree/main/opentelemetry-instrumentation";
     description = "Instrumentation Tools & Auto Instrumentation for OpenTelemetry Python";
