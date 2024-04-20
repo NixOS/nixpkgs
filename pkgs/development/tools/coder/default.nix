@@ -12,14 +12,14 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "coder";
-  version = "2.9.1";
+  version = "2.9.3";
 
   src = fetchurl {
     hash = {
-      x86_64-linux = "sha256-r4+u/s/dOn2GhyhEROu8i03QY3VA/bIyO/Yj7KSqicY=";
-      x86_64-darwin = "sha256-uShCmMvb5OcinqP0CmrlP9QAJkjfG3g1QuHE4JRDOjE=";
-      aarch64-linux = "sha256-tvpzfJ95YYfCY5V4iayjAmY5PDw+1uHUhY5F3pv/2Uk=";
-      aarch64-darwin = "sha256-sP9HnB2DzAU9IvL3+QPmIFLvRkGkoxSoa68uXGQrNkw=";
+      x86_64-linux = "sha256-6VS21x2egWBV6eJqRCBGG7mEGPIDFtY9GN6Ry4ilC70=";
+      x86_64-darwin = "sha256-UBUGjA+jUkT6p9714l8IvDDI/qhWNctVFOvcA2S5kQU=";
+      aarch64-linux = "sha256-2QAahqcM2gi3lT+18q2Nm9GNqVsqzX3RajBsTn+KB1c=";
+      aarch64-darwin = "sha256-uEH7Y7c9BcU/Q/jwx/inFMvUrgm2dUruID+FJL+rA6Y=";
     }.${system};
 
     url =
