@@ -1,4 +1,5 @@
 { lib
+, channel ? "stable"
 , fetchurl
 , installShellFiles
 , makeBinaryWrapper
@@ -9,18 +10,33 @@
 
 let
   inherit (stdenvNoCC.hostPlatform) system;
+
+  channels = {
+    stable = {
+      version = "2.9.3";
+      hash = {
+        x86_64-linux = "sha256-6VS21x2egWBV6eJqRCBGG7mEGPIDFtY9GN6Ry4ilC70=";
+        x86_64-darwin = "sha256-UBUGjA+jUkT6p9714l8IvDDI/qhWNctVFOvcA2S5kQU=";
+        aarch64-linux = "sha256-2QAahqcM2gi3lT+18q2Nm9GNqVsqzX3RajBsTn+KB1c=";
+        aarch64-darwin = "sha256-uEH7Y7c9BcU/Q/jwx/inFMvUrgm2dUruID+FJL+rA6Y=";
+      };
+    };
+    mainline = {
+      version = "2.10.1";
+      hash = {
+        x86_64-linux = "sha256-jNPL30e5xvyajlIqivtEpSb3cRhfgFhLFlC+CaLY2IM=";
+        x86_64-darwin = "sha256-U1eQaYwnm/mdQoZ8YxK/+s3HboVfMIAtdI7aQnCiDM8=";
+        aarch64-linux = "sha256-YtSyKZYG8vdubZUfo2FjEoVwSF82TXzeLJjPpHqgFDk=";
+        aarch64-darwin = "sha256-aQSiXK7voP5/mPFIscfTnSc4Ae5/f+WW8MR6ZtuC/eY=";
+      };
+    };
+  };
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "coder";
-  version = "2.9.1";
-
+  version = channels.${channel}.version;
   src = fetchurl {
-    hash = {
-      x86_64-linux = "sha256-r4+u/s/dOn2GhyhEROu8i03QY3VA/bIyO/Yj7KSqicY=";
-      x86_64-darwin = "sha256-uShCmMvb5OcinqP0CmrlP9QAJkjfG3g1QuHE4JRDOjE=";
-      aarch64-linux = "sha256-tvpzfJ95YYfCY5V4iayjAmY5PDw+1uHUhY5F3pv/2Uk=";
-      aarch64-darwin = "sha256-sP9HnB2DzAU9IvL3+QPmIFLvRkGkoxSoa68uXGQrNkw=";
-    }.${system};
+    hash = (channels.${channel}.hash).${system};
 
     url =
       let
