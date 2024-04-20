@@ -1,27 +1,36 @@
-{ lib, stdenv, fetchurl, cmake, stormlib }:
+{
+  lib,
+  cmake,
+  fetchurl,
+  stdenv,
+  stormlib,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "smpq";
   version = "1.6";
 
   src = fetchurl {
-    url = "https://launchpad.net/smpq/trunk/${version}/+download/${pname}_${version}.orig.tar.gz";
-    sha256 = "1jqq5x3b17jy66x3kkf5hs5l322dx2v14djxxrqrnqp8bn5drlmm";
+    url = "https://launchpad.net/smpq/trunk/${finalAttrs.version}/+download/smpq_${finalAttrs.version}.orig.tar.gz";
+    hash = "sha256-tdLcil3oYptx7l02ErboTYhBi4bFzTm6MV6esEYvGMs=";
   };
 
   cmakeFlags = [
-    "-DWITH_KDE=OFF"
+    (lib.cmakeBool "WITH_KDE" false)
   ];
 
   nativeBuildInputs = [ cmake ];
+
   buildInputs = [ stormlib ];
 
-  meta = with lib; {
-    description = "StormLib MPQ archiving utility";
+  strictDeps = true;
+
+  meta = {
     homepage = "https://launchpad.net/smpq";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ aanderse karolchmist ];
+    description = "StormLib MPQ archiving utility";
+    license = lib.licenses.gpl3Only;
     mainProgram = "smpq";
+    maintainers = with lib.maintainers; [ aanderse karolchmist ];
+    platforms = lib.platforms.all;
   };
-}
+})
