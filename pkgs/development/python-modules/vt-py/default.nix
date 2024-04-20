@@ -18,21 +18,21 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
-    repo = pname;
+    repo = "vt-py";
     rev = "refs/tags/${version}";
     hash = "sha256-QEe/ZoKM0uVH7Yqpgo7V17Odn4xqdEgdQeMVB+57xbA=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "pytest-runner" ""
+      --replace-fail "pytest-runner" ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
   ];
 
