@@ -4,13 +4,12 @@
 , pulsectl
 , pythonOlder
 , setuptools
-, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pulsectl-asyncio";
   version = "1.2.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,12 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-WqUO4eERJkRg6O+gCmjqfdVbBT/3TVVBUUduoIxcPNQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pulsectl
   ];
 
