@@ -10,7 +10,7 @@
 }:
 
 buildPythonPackage {
-  pname = "smpp.pdu";
+  pname = "smpp-pdu";
   version = "unstable-2022-09-02";
   format = "pyproject";
 
