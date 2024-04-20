@@ -13,14 +13,14 @@
 buildPythonPackage rec {
   pname = "pyowm";
   version = "3.3.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "csparpa";
-    repo = pname;
-    rev = version;
+    repo = "pyowm";
+    rev = "refs/tags/${version}";
     hash = "sha256-cSOhm3aDksLBChZzgw1gjUjLQkElR2/xGFMOb9K9RME=";
   };
 
@@ -28,11 +28,15 @@ buildPythonPackage rec {
     "geojson"
   ];
 
+  build-system = [
+    setuptools
+  ];
+
   nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     geojson
     pysocks
     requests
@@ -55,6 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python wrapper around the OpenWeatherMap web API";
     homepage = "https://pyowm.readthedocs.io/";
+    changelog = "https://github.com/csparpa/pyowm/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
