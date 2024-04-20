@@ -111,6 +111,11 @@ in stdenv.mkDerivation (finalAttrs: {
       --replace "install(PROGRAMS \''${HIPCC_BIN_DIR}/hipcc.bat DESTINATION bin)" "" \
       --replace "install(PROGRAMS \''${HIPCC_BIN_DIR}/hipconfig.bat DESTINATION bin)" ""
 
+    # Workaround to Cmake 3.29.1, which removed PACKAGE_PREFIX_DIR.
+    # Remove after https://github.com/NixOS/nixpkgs/pull/304111 lands in master
+    substituteInPlace hipamd/hip-config-amd.cmake \
+      --replace-fail "\''${_IMPORT_PREFIX}/include" '${placeholder "out"}/include'
+
     substituteInPlace hipamd/src/hip_embed_pch.sh \
       --replace "\''$LLVM_DIR/bin/clang" "${clang}/bin/clang"
   '';
