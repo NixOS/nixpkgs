@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gobject-introspection
-, gtk3
-, imagemagick
-, keyring
-, librsvg
-, pulseaudio
-, pytest-asyncio
-, pytest-lazy-fixture
-, pytestCheckHook
-, qtile
-, requests
-, setuptools-scm
-, xorgserver
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gobject-introspection,
+  gtk3,
+  imagemagick,
+  keyring,
+  librsvg,
+  pulseaudio,
+  pytest-asyncio,
+  pytest-lazy-fixture,
+  pytestCheckHook,
+  qtile,
+  requests,
+  setuptools-scm,
+  xorgserver,
 }:
 
 buildPythonPackage rec {
@@ -28,13 +29,9 @@ buildPythonPackage rec {
     hash = "sha256-OYzSKOVg4D5gKxaEreclYq3D16dl8ddLipSdifokDNY=";
   };
 
-  build-system = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  dependencies = [
-    gtk3
-  ];
+  dependencies = [ gtk3 ];
 
   nativeCheckInputs = [
     gobject-introspection
