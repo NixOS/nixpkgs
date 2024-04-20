@@ -815,7 +815,7 @@ self: super: with self; {
 
   aspy-refactor-imports = callPackage ../development/python-modules/aspy-refactor-imports { };
 
-  aspy-yaml = callPackage ../development/python-modules/aspy.yaml { };
+  aspy-yaml = callPackage ../development/python-modules/aspy-yaml { };
 
   assay = callPackage ../development/python-modules/assay { };
 
@@ -13950,7 +13950,7 @@ self: super: with self; {
 
   smpplib = callPackage ../development/python-modules/smpplib { };
 
-  smpp-pdu = callPackage ../development/python-modules/smpp.pdu { };
+  smpp-pdu = callPackage ../development/python-modules/smpp-pdu { };
 
   smtpdfix = callPackage ../development/python-modules/smtpdfix { };
 
