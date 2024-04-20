@@ -1161,6 +1161,7 @@
   ./services/networking/strongswan.nix
   ./services/networking/stubby.nix
   ./services/networking/stunnel.nix
+  ./services/networking/sunshine.nix
   ./services/networking/supplicant.nix
   ./services/networking/supybot.nix
   ./services/networking/syncplay.nix
