@@ -1738,11 +1738,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libfontenc = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, zlib, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libfontenc";
-    version = "1.1.7";
+    version = "1.1.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libfontenc-1.1.7.tar.xz";
-      sha256 = "1hpy7kvppzy36fl8gbnzbv0cvglpdqk9jpdgvcfma1pfza8nkly0";
+      url = "mirror://xorg/individual/lib/libfontenc-1.1.8.tar.xz";
+      sha256 = "1ihlznj4m49jn1887cr86qqhrrlghvbfj7bbh230svi30pac60kv";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
