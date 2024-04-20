@@ -274,6 +274,85 @@ rec {
 
   };
 
+  # Format for defining configuration of some PHP services, that use "config.php" approach.
+  php = {finalVariable}: let
+    phpLib = {
+      phpFile = x: "<?php\n" + x;
+      buildPhpExpression = x:
+        let
+          type = builtins.typeOf x;
+          value =
+            if type == "int"
+            then "${toString x}"
+            else if type == "bool"
+            then
+              if x
+              then "true"
+              else "false"
+            else if type == "string"
+            then "\"${x}\""
+            else if type == "list"
+            then
+              "array("
+              + lib.pipe x [
+                (map phpLib.buildPhpExpression)
+                (lib.concatStringsSep ", ")
+              ]
+              + ")"
+            else if type == "set"
+            then
+              if builtins.hasAttr "_secret" x
+              then "eval(file_get_contents(\"${x._secret}\"))"
+              else if builtins.hasAttr "" x && builtins.typeOf x."" == "list"
+              then
+                "array("
+                + lib.pipe x."" [
+                  (map phpLib.buildPhpExpression)
+                  (lib.concatStringsSep ", ")
+                ]
+                + ", "
+                + lib.pipe x [
+                  (lib.filterAttrs (k: v: k != ""))
+                  (lib.mapAttrsToList (k: v: "${phpLib.buildPhpExpression k} => ${phpLib.buildPhpExpression v}"))
+                  (lib.concatStringsSep ", ")
+                ]
+                + ")"
+              else
+                "array("
+                + lib.pipe x [
+                  (lib.mapAttrsToList (k: v: "${phpLib.buildPhpExpression k} => ${phpLib.buildPhpExpression v}"))
+                  (lib.concatStringsSep ", ")
+                ]
+                + ")"
+            else throw "incompatible php value: ${toString x}";
+        in
+        value;
+    };
+
+    type = with lib.types;
+      nullOr (oneOf [
+        bool
+        int
+        float
+        str
+        (attrsOf type)
+        (listOf type)
+      ])
+      // {
+        description = "PHP value";
+      };
+  in {
+
+    inherit type;
+    lib = phpLib;
+
+    generate = name: value: pkgs.writeTextFile {
+      name = "config.php";
+      text = phpLib.phpFile "${finalVariable} = ${phpLib.buildPhpExpression value };";
+    };
+
+  };
+
   /* For configurations of Elixir project, like config.exs or runtime.exs
 
     Most Elixir project are configured using the [Config] Elixir DSL
