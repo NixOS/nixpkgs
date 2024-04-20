@@ -9673,6 +9673,8 @@ self: super: with self; {
 
   pypemicro = callPackage ../development/python-modules/pypemicro { };
 
+  pymeshlab = toPythonModule (pkgs.libsForQt5.callPackage ../applications/graphics/pymeshlab { });
+
   pyprecice = callPackage ../development/python-modules/pyprecice { };
 
   pyprobables = callPackage ../development/python-modules/pyprobables { };
