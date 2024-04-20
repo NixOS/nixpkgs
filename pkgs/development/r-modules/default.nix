@@ -1353,6 +1353,10 @@ let
         '';
     });
 
+    rgoslin = old.rgoslin.overrideAttrs (attrs: {
+      patches = [ ./patches/rgoslin.patch ];
+    });
+
     rpanel = old.rpanel.overrideAttrs (attrs: {
       preConfigure = ''
         export TCLLIBPATH="${pkgs.bwidget}/lib/bwidget${pkgs.bwidget.version}"

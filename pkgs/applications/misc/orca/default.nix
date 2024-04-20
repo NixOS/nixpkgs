@@ -96,7 +96,7 @@ buildPythonApplication rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Projects/Orca";
+    homepage = "https://orca.gnome.org/";
     description = "Screen reader";
     mainProgram = "orca";
     longDescription = ''
