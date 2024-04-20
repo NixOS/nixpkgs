@@ -8,16 +8,16 @@
 
 buildPythonPackage rec {
   pname = "asteval";
-  version = "0.9.31";
+  version = "0.9.32";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "lmfit";
     repo = "asteval";
     rev = "refs/tags/${version}";
-    hash = "sha256-XIRDm/loZOOPQ7UO/XAo86TzhtHHRrnWFU7MNI4f1vM=";
+    hash = "sha256-3eML5lEKEUlp3Fwdgvk31an83x8no5ichskKvzYJDsE=";
   };
 
   postPatch = ''
