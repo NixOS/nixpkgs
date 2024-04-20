@@ -3,9 +3,10 @@ from pathlib import Path
 import collections
 import sys
 import os
-from typing import Dict, List, Tuple
+from typing import Dict, List, Set, Tuple
 do_abort: bool = False
 packages: Dict[str, Dict[str, List[Dict[str, List[str]]]]] = collections.defaultdict(list)
+found_paths: Set[Path] = set()
 out_path: Path = Path(os.getenv("out"))
 version: Tuple[int, int] = sys.version_info
 site_packages_path: str = f'lib/python{version[0]}.{version[1]}/site-packages'
@@ -45,6 +46,12 @@ def add_entry(name: str, version: str, store_path: str, parents: List[str]) -> N
 def find_packages(store_path: Path, site_packages_path: str, parents: List[str]) -> None:
     site_packages: Path = (store_path / site_packages_path)
     propagated_build_inputs: Path = (store_path / "nix-support/propagated-build-inputs")
+
+    # only visit each path once, to avoid exponential complexity with highly
+    # connected dependency graphs
+    if store_path in found_paths:
+        return
+    found_paths.add(store_path)
 
     # add the current package to the list
     if site_packages.exists():
