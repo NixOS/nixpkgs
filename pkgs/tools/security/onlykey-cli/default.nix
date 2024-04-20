@@ -10,9 +10,12 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-ZmQnyZx9YlIIxMMdZ0U2zb+QANfcwrtG7iR1LpgzmBQ=";
   };
 
+  build-system = with python3Packages; [
+    cython
+  ];
+
   propagatedBuildInputs = with python3Packages; [
     aenum
-    cython
     ecdsa
     hidapi
     onlykey-solo-python

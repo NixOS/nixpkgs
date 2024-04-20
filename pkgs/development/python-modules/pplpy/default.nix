@@ -5,7 +5,7 @@
 , mpfr
 , libmpc
 , ppl
-, cython_3
+, cython
 , cysignals
 , gmpy2
 , sphinx
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    cython_3
+    cython
     cysignals
     gmpy2
   ];

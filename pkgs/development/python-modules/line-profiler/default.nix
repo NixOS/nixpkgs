@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, cython_3
+, cython
 , isPyPy
 , ipython
 , scikit-build
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
     cmake
     scikit-build
   ];

@@ -75,7 +75,7 @@ let
         Whether to expose old attribute names for compatibility.
 
         The recommended setting is to enable this, as it
-        improves backward compatibity, easing updates.
+        improves backward compatibility, easing updates.
 
         The only reason to disable aliases is for continuous
         integration purposes. For instance, Nixpkgs should

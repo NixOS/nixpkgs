@@ -8,7 +8,7 @@
 , python3
 , python3Packages
 , libffi
-, enableGoldPlugin ? true
+, enableGoldPlugin ? libbfd.hasPluginAPI
 , libbfd
 , libpfm
 , libxml2

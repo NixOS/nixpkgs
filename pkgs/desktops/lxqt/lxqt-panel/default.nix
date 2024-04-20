@@ -1,14 +1,19 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
 , pkg-config
 , alsa-lib
+, libdbusmenu-lxqt
 , kguiaddons
 , kwindowsystem
+, layer-shell-qt
 , libXdamage
+, libXdmcp
+, libXtst
 , libdbusmenu
 , liblxqt
+, libpthreadstubs
 , libpulseaudio
 , libqtxdg
 , libstatgrab
@@ -17,26 +22,26 @@
 , lxqt-build-tools
 , lxqt-globalkeys
 , lxqt-menu-data
-, gitUpdater
 , menu-cache
 , pcre
 , qtbase
 , qtsvg
 , qttools
-, qtx11extras
+, qtwayland
 , solid
-, xorg
+, wrapQtAppsHook
+, gitUpdater
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "lxqt-panel";
-  version = "1.4.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-LQq1XOA0dGXXORVr2H/gI+axvCAd4P3nB4zCFYWgagc=";
+    hash = "sha256-2I7I3AiLptKbBXiTPbbpcj16zuIx0e9SQnvbalpoFvM=";
   };
 
   nativeBuildInputs = [
@@ -44,15 +49,21 @@ mkDerivation rec {
     pkg-config
     lxqt-build-tools
     qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
     alsa-lib
+    libdbusmenu-lxqt
     kguiaddons
     kwindowsystem
+    layer-shell-qt
     libXdamage
+    libXdmcp
+    libXtst
     libdbusmenu
     liblxqt
+    libpthreadstubs
     libpulseaudio
     libqtxdg
     libstatgrab
@@ -64,11 +75,8 @@ mkDerivation rec {
     pcre
     qtbase
     qtsvg
-    qtx11extras
+    qtwayland
     solid
-    xorg.libXdmcp
-    xorg.libXtst
-    xorg.libpthreadstubs
   ];
 
   passthru.updateScript = gitUpdater { };

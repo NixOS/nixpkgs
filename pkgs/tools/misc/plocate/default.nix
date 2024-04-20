@@ -33,9 +33,6 @@ stdenv.mkDerivation rec {
     "-Ddbpath=locatedb"
   ];
 
-  # https://github.com/NixOS/nixpkgs/issues/300635
-  postInstall = ''chmod -R u-s,g-s "$out"'';
-
   meta = with lib; {
     description = "Much faster locate";
     homepage = "https://plocate.sesse.net/";

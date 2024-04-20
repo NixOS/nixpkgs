@@ -71,7 +71,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = with python3.pkgs; [
-    (pytestCheckHook.override { pytest = pytest_7; })
+    pytest7CheckHook
     httpretty
     dmidecode
     # needed for tests; at runtime we rather want the setuid wrapper

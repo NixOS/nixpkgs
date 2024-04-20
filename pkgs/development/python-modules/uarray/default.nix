@@ -8,7 +8,7 @@
 , numpy
 , astunparse
 , typing-extensions
-, pytestCheckHook
+, pytest7CheckHook
 , pytest-cov
 }:
 
@@ -25,14 +25,32 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools setuptools-scm ];
-  nativeCheckInputs = [ pytestCheckHook pytest-cov ];
-  propagatedBuildInputs = [ matchpy numpy astunparse typing-extensions ];
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
+    astunparse
+    matchpy
+    numpy
+    typing-extensions
+  ];
+
+  nativeCheckInputs = [
+    pytest7CheckHook
+    pytest-cov
+  ];
 
   # Tests must be run from outside the source directory
   preCheck = ''
     cd $TMP
   '';
-  pytestFlagsArray = ["--pyargs" "uarray" "-W" "ignore::pytest.PytestRemovedIn8Warning" ];
+
+  pytestFlagsArray = [
+    "--pyargs"
+    "uarray"
+  ];
+
   pythonImportsCheck = [ "uarray" ];
 
   meta = with lib; {

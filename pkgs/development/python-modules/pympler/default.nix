@@ -8,11 +8,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Pympler";
+  pname = "pympler";
   version = "1.0.1";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "Pympler";
+    inherit version;
     sha256 = "993f1a3599ca3f4fcd7160c7545ad06310c9e12f70174ae7ae8d4e25f6c5d3fa";
   };
 
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     # (see https://github.com/pympler/pympler/issues/148)
     # https://github.com/pympler/pympler/pull/149
     (fetchpatch {
-      name = "${pname}-python-3.11-compat.patch";
+      name = "Pympler-python-3.11-compat.patch";
       url = "https://github.com/pympler/pympler/commit/0fd8ad8da39207bd0dcb28bdac0407e04744c965.patch";
       hash = "sha256-6MK0AuhVhQkUzlk29HUh1+mSbfsVTBJ1YBtYNIFhh7U=";
     })
