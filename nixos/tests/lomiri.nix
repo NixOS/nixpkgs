@@ -290,7 +290,7 @@ in {
     # There's a test app we could use that also displays their contents, but it's abit inconsistent.
     with subtest("ayatana indicators work"):
         mouse_click(735, 0) # the cog in the top-right, for the session indicator
-        machine.wait_for_text(r"(Notifications|Battery|Sound|Time|Date|System)")
+        machine.wait_for_text(r"(Notifications|Rotation|Battery|Sound|Time|Date|System)")
         machine.screenshot("indicators_open")
 
         # Indicator order within the menus *should* be fixed based on per-indicator order setting
@@ -299,10 +299,16 @@ in {
         machine.send_key("left")
         machine.send_key("left")
         machine.send_key("left")
+        machine.send_key("left")
         # Notifications are usually empty, nothing to check there
 
-        with subtest("lomiri indicator network works"):
+        with subtest("ayatana indicator display works"):
             # We start on this, don't go right
+            machine.wait_for_text("Lock")
+            machine.screenshot("indicators_display")
+
+        with subtest("lomiri indicator network works"):
+            machine.send_key("right")
             machine.wait_for_text(r"(Flight|Wi-Fi)")
             machine.screenshot("indicators_network")
 
