@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     qttools
     pkg-config
     wrapQtAppsHook
-    lxqt.lxqt-build-tools
+    lxqt.lxqt-build-tools_0_13
   ];
 
   buildInputs = [
