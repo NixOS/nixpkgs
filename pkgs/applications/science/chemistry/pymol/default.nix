@@ -72,6 +72,42 @@ python3Packages.buildPythonApplication rec {
     cp -r "${desktopItem}/share/applications/" "$out/share/"
   '';
 
+  pythonImportsCheck = [
+    "pymol"
+  ];
+
+  nativeCheckInputs = with python3Packages; [
+    python3Packages.msgpack
+    pillow
+    pytestCheckHook
+  ];
+
+  # some tests hang for some reason
+  doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+
+  disabledTestPaths = [
+    # require biopython which is broken as of 2024-04-20
+    "tests/api/seqalign.py"
+  ];
+
+  disabledTests = [
+    # the output image does not exactly match
+    "test_commands"
+    # touch the network
+    "testFetch"
+    # requires collada2gltf which is not included in nixpkgs
+    "testglTF"
+    # require mmtf-cpp which does not support darwin
+    "testMMTF"
+    "testSave_symmetry__mmtf"
+  ];
+
+  preCheck = ''
+    cd testing
+  '';
+
+  __darwinAllowLocalNetworking = true;
+
   preFixup = ''
     wrapQtApp "$out/bin/pymol"
   '';
