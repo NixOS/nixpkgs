@@ -10191,6 +10191,8 @@ self: super: with self; {
 
   portend = callPackage ../development/python-modules/portend { };
 
+  portolan = callPackage ../development/python-modules/portolan { };
+
   port-for = callPackage ../development/python-modules/port-for { };
 
   portpicker = callPackage ../development/python-modules/portpicker { };
