@@ -8421,8 +8421,6 @@ with pkgs;
 
   ghz = callPackage ../tools/networking/ghz { };
 
-  gi-crystal = callPackage ../development/tools/gi-crystal { };
-
   gibberish-detector = with python3Packages; toPythonApplication gibberish-detector;
 
   gibo = callPackage ../tools/misc/gibo { };
