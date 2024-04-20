@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -16,9 +17,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-AkqBC65XrMt4V5KgzLepnQoqpdvbrtWLY3DmVuy8Zck=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
     chardet
@@ -37,9 +36,7 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "keepwn"
-  ];
+  pythonImportsCheck = [ "keepwn" ];
 
   meta = with lib; {
     description = "Tool to automate KeePass discovery and secret extraction";
