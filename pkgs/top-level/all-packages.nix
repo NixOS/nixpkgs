@@ -34633,7 +34633,7 @@ with pkgs;
 
   maestral = with python3Packages; toPythonApplication maestral;
 
-  maestral-gui = qt6.callPackage ../applications/networking/maestral-qt { };
+  maestral-gui = qt6Packages.callPackage ../applications/networking/maestral-qt { };
 
   maestro = callPackage ../development/mobile/maestro { };
 
