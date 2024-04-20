@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "qtconsole";
-  version = "5.4.4";
+  version = "5.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-t/+1PXTyPO4p9M21Xdb6vI7DEtlPPEa6OOHd5FhpPfs=";
+    hash = "sha256-oOgGxpUduUkGKOTfgMrslmm2UUnHukD5vwM8AlpbVrw=";
   };
 
   propagatedBuildInputs = [
@@ -51,6 +51,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Jupyter Qt console";
+    mainProgram = "jupyter-qtconsole";
     homepage = "https://qtconsole.readthedocs.io/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fridh ];

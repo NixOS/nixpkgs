@@ -1,21 +1,44 @@
 { lib
 , python3
+, fetchPypi
+, rustPlatform
 , fetchFromGitHub
-, wrapQtAppsHook
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      # https://github.com/nxp-mcuxpresso/spsdk/issues/64
+      cryptography = super.cryptography.overridePythonAttrs (old: rec {
+        version = "41.0.7";
+        src = fetchPypi {
+          inherit (old) pname;
+          inherit version;
+          hash = "sha256-E/k86b6oAWwlOzSvxr1qdZk+XEBnLtVAWpyDLw1KALw=";
+        };
+        cargoDeps = rustPlatform.fetchCargoTarball {
+          inherit src;
+          sourceRoot = "${old.pname}-${version}/${old.cargoRoot}";
+          name = "${old.pname}-${version}";
+          hash = "sha256-VeZhKisCPDRvmSjGNwCgJJeVj65BZ0Ge+yvXbZw86Rw=";
+        };
+        patches = [ ];
+        doCheck = false; # would require overriding cryptography-vectors
+      });
+    };
+  };
+in python.pkgs.buildPythonApplication rec {
   pname = "nitrokey-app2";
-  version = "2.1.4";
+  version = "2.1.5";
   pyproject = true;
 
-  disabled = python3.pythonOlder "3.9";
+  disabled = python.pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-app2";
     rev = "v${version}";
-    hash = "sha256-loOCa6XlLx1YEfqR0SUUalVIEPCoYsNEHFo2MIKexeA=";
+    hash = "sha256-mR13zUgCdNS09EnpGLrnOnoIn3p6ZM/0fHKg0OUMWj4=";
   };
 
   # https://github.com/Nitrokey/nitrokey-app2/issues/152
@@ -23,35 +46,19 @@ python3.pkgs.buildPythonApplication rec {
   # pythonRelaxDepsHook does not work here, because it runs in postBuild and
   # only modifies the dependencies in the built distribution.
   postPatch = ''
-    substituteInPlace pyproject.toml --replace "pynitrokey ==" "pynitrokey >="
+    substituteInPlace pyproject.toml --replace 'pynitrokey = "' 'pynitrokey = ">='
   '';
 
-  # The pyproject.toml file seems to be incomplete and does not generate
-  # resources (i.e. run pyrcc5 and pyuic5) but the Makefile does.
-  preBuild = ''
-    make build-ui
-  '';
-
-  nativeBuildInputs = with python3.pkgs; [
-    flit-core
-    pyqt5
-    wrapQtAppsHook
+  nativeBuildInputs = with python.pkgs; [
+    poetry-core
   ];
 
-  dontWrapQtApps = true;
-
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python.pkgs; [
     pynitrokey
     pyudev
-    pyqt5
-    pyqt5-stubs
+    pyside6
     qt-material
   ];
-
-  preFixup = ''
-    wrapQtApp "$out/bin/nitrokeyapp" \
-      --set-default CRYPTOGRAPHY_OPENSSL_NO_LEGACY 1
-  '';
 
   pythonImportsCheck = [
     "nitrokeyapp"

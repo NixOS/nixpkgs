@@ -1,12 +1,15 @@
-{ lib
-, fetchurl
-, stdenv
-, autoreconfHook
-, dbus
-, libxml2
-, pam
-, pkg-config
-, systemd
+{
+  autoreconfHook,
+  dbus,
+  fetchpatch,
+  fetchurl,
+  lib,
+  libxml2,
+  nixosTests,
+  pam,
+  pkg-config,
+  stdenv,
+  systemd,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,34 +17,36 @@ stdenv.mkDerivation rec {
   version = "0.34.7";
 
   src = fetchurl {
-     url = "https://pagure.io/oddjob/archive/${pname}-${version}/oddjob-${pname}-${version}.tar.gz";
-     hash = "sha256-SUOsMH55HtEsk5rX0CXK0apDObTj738FGOaL5xZRnIM=";
+    url = "https://pagure.io/oddjob/archive/${pname}-${version}/oddjob-${pname}-${version}.tar.gz";
+    hash = "sha256-SUOsMH55HtEsk5rX0CXK0apDObTj738FGOaL5xZRnIM=";
   };
+
+  patches = [
+    # Define SystemD service location using `with-systemdsystemunitdir` configure flag
+    (fetchpatch {
+      url = "https://pagure.io/oddjob/c/f63287a35107385dcb6e04a4c742077c9d1eab86.patch";
+      hash = "sha256-2mmw4pJhrIk4/47FM8zKH0dTQJWnntHPNmq8VAUWqJI=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
   ];
 
-  buildInputs =[
-    libxml2
+  buildInputs = [
     dbus
+    libxml2
     pam
     systemd
   ];
-
-  postPatch = ''
-    substituteInPlace configure.ac \
-      --replace 'SYSTEMDSYSTEMUNITDIR=`pkg-config --variable=systemdsystemunitdir systemd 2> /dev/null`' "SYSTEMDSYSTEMUNITDIR=${placeholder "out"}" \
-      --replace 'SYSTEMDSYSTEMUNITDIR=`pkg-config --variable=systemdsystemunitdir systemd`' "SYSTEMDSYSTEMUNITDIR=${placeholder "out"}"
-  '';
 
   configureFlags = [
     "--prefix=${placeholder "out"}"
     "--sysconfdir=${placeholder "out"}/etc"
     "--with-selinux-acls=no"
     "--with-selinux-labels=no"
-    "--disable-systemd"
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
   ];
 
   postConfigure = ''
@@ -49,12 +54,19 @@ stdenv.mkDerivation rec {
       --replace "globals.selinux_enabled" "FALSE"
   '';
 
-  meta = with lib; {
+  # Requires a dbus-daemon environment
+  doCheck = false;
+
+  passthru.tests = {
+    inherit (nixosTests) oddjobd;
+  };
+
+  meta = {
+    changelog = "https://pagure.io/oddjob/blob/oddjob-${version}/f/ChangeLog";
     description = "Odd Job Daemon";
     homepage = "https://pagure.io/oddjob";
-    changelog = "https://pagure.io/oddjob/blob/oddjob-${version}/f/ChangeLog";
-    license = licenses.bsd0;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ SohamG ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ SohamG ];
+    platforms = lib.platforms.linux;
   };
 }

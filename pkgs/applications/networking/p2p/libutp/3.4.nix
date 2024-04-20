@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "uTorrent Transport Protocol library";
+    mainProgram = "ucat";
     homepage = "https://github.com/transmission/libutp";
     license = licenses.mit;
     maintainers = with maintainers; [ emilytrau ];

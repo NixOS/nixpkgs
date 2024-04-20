@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "cf-xarray";
-  version = "0.8.6";
+  version = "0.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "xarray-contrib";
     repo = "cf-xarray";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qcoHz/yZoPVu0uBKKx4AV7MOokiuXSCaWPD/92VlRFk=";
+    hash = "sha256-MlI5Wx0GOcXPRb/p0sPyAtbf84g3LQKVxCZLBfEIGLo=";
   };
 
   nativeBuildInputs = [

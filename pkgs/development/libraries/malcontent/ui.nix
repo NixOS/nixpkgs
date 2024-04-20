@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "UI components for parental controls library";
+    mainProgram = "malcontent-control";
     homepage = "https://gitlab.freedesktop.org/pwithnall/malcontent";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jtojnar ];

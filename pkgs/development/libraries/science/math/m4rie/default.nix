@@ -21,6 +21,9 @@ stdenv.mkDerivation rec {
     m4ri
   ];
 
+  # does not compile correctly with -O2 on LLVM clang; see
+  # https://bitbucket.org/malb/m4rie/issues/23/trying-to-compile-on-apple-m1
+  makeFlags = [] ++ lib.optionals stdenv.isDarwin [ "CFLAGS=-O0" ];
   nativeBuildInputs = [
     autoreconfHook
   ];
@@ -35,7 +38,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = teams.sage.members;
     platforms = platforms.unix;
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

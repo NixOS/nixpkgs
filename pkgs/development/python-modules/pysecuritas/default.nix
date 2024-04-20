@@ -33,6 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python client to access Securitas Direct Mobile API";
+    mainProgram = "pysecuritas";
     homepage = "https://github.com/Cebeerre/pysecuritas";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

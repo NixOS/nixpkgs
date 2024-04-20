@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitHub
 , fetchFromSourcehut
+, fetchpatch
 , SDL2
 , alsa-lib
 , appstream
@@ -63,7 +64,7 @@
 , sratom
 , texi2html
 , vamp-plugin-sdk
-, wrapGAppsHook
+, wrapGAppsHook4
 , xdg-utils
 , xxHash
 , zix
@@ -111,7 +112,7 @@ stdenv.mkDerivation rec {
     python3.pkgs.sphinx
     sassc
     texi2html
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -168,6 +169,15 @@ stdenv.mkDerivation rec {
     xxHash
     zix
     zstd
+  ];
+
+  patches = [
+    # Fix gcc-13 build failure
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://gitlab.zrythm.org/zrythm/zrythm/-/commit/cbc2b3715b939718479631841f2d9703fb28e6da.diff";
+      hash = "sha256-2ZTSaCtSO3yynJVFe5B1AEjWhjRa5YyA26ergAfdL5Y=";
+    })
   ];
 
   # Zrythm uses meson to build, but requires cmake for dependency detection.

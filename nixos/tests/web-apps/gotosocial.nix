@@ -1,7 +1,7 @@
 { lib, ... }:
 {
   name = "gotosocial";
-  meta.maintainers = with lib.maintainers; [ misuzu ];
+  meta.maintainers = with lib.maintainers; [ misuzu blakesmith ];
 
   nodes.machine = { pkgs, ... }: {
     environment.systemPackages = [ pkgs.jq ];

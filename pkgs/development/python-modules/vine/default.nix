@@ -23,6 +23,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTestPaths = [
+    # https://github.com/celery/vine/issues/106
+    "t/unit/test_synchronization.py"
+  ];
+
   pythonImportsCheck = [
     "vine"
   ];

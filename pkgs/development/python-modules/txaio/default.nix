@@ -6,7 +6,7 @@
 , pytestCheckHook
 , pythonOlder
 , twisted
-, zope_interface
+, zope-interface
 }:
 
 buildPythonPackage rec {
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     twisted
-    zope_interface
+    zope-interface
   ];
 
   nativeCheckInputs = [

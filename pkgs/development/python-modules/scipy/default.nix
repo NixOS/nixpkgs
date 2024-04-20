@@ -10,11 +10,13 @@
 , cython
 , gfortran
 , meson-python
+, nukeReferences
 , pkg-config
 , pythran
 , wheel
-, nose
-, pytestCheckHook
+, setuptools
+, hypothesis
+, pytest7CheckHook
 , pytest-xdist
 , numpy
 , pybind11
@@ -32,8 +34,8 @@ let
   #     nix-shell maintainers/scripts/update.nix --argstr package python3.pkgs.scipy
   #
   # The update script uses sed regexes to replace them with the updated hashes.
-  version = "1.11.3";
-  srcHash = "sha256-swxRfFjTcKjKQv6GFdWNR6IKhdJQYhZSR7UWLtcnrXw=";
+  version = "1.13.0";
+  srcHash = "sha256-HaYk92hOREHMOXppK+Bs9DrBu9KUVUsZ0KV+isTofUo=";
   datasetsHashes = {
     ascent = "1qjp35ncrniq9rhzb14icwwykqg2208hcssznn3hz27w39615kh3";
     ecg = "1bwbjp43b7znnwha5hv6wiz3g0bhwrpqpi75s12zidxrbwvd62pj";
@@ -74,24 +76,32 @@ in buildPythonPackage {
         "doc/source/dev/contributor/meson_advanced.rst"
       ];
     })
+    # Fix for https://github.com/scipy/scipy/issues/20300 until 1.13.1 is
+    # released. Patch is based upon:
+    # https://github.com/scipy/pocketfft/commit/9367142748fcc9696a1c9e5a99b76ed9897c9daa
+    # Couldn't use fetchpatch because it is a submodule of scipy, and
+    # extraPrefix doesn't fit this purpose.
+    ./pocketfft-aligned_alloc.patch
   ];
 
-  # Relax deps a bit
+  # Upstream says in a comment in their pyproject.toml that building against
+  # both numpy 2 and numpy 1 should work, but they seem to worry about numpy
+  # incompatibilities that we here with Nixpkgs' Python ecosystem, shouldn't
+  # experience.
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'meson-python>=0.12.1,<0.14.0' 'meson-python' \
-      --replace 'numpy==' 'numpy>=' \
-      --replace "pybind11>=2.10.4,<2.11.1" "pybind11>=2.10.4,<2.12.0" \
-      --replace 'wheel<0.41.0' 'wheel'
+      --replace-fail 'numpy>=2.0.0rc1,' 'numpy' \
   '';
 
   nativeBuildInputs = [
     cython
     gfortran
     meson-python
+    nukeReferences
     pythran
     pkg-config
     wheel
+    setuptools
   ];
 
   buildInputs = [
@@ -109,8 +119,9 @@ in buildPythonPackage {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    nose
-    pytestCheckHook
+    hypothesis
+    # Failed: DID NOT WARN. No warnings of type (<class 'DeprecationWarning'>, <class 'PendingDeprecationWarning'>, <class 'FutureWarning'>) were emitted.
+    pytest7CheckHook
     pytest-xdist
   ];
 
@@ -159,42 +170,15 @@ in buildPythonPackage {
   #
   hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
 
-  checkPhase = ''
-    runHook preCheck
+  # remove references to dev dependencies
+  postInstall = ''
+    nuke-refs $out/${python.sitePackages}/scipy/__config__.py
+    rm $out/${python.sitePackages}/scipy/__pycache__/__config__.*.opt-1.pyc
+  '';
 
-    # Adapted from pytestCheckHook because scipy uses a custom check phase.
-    # It needs to pass `$args` as a Python list to `scipy.test` rather than as
-    # arguments to pytest on the command-line.
-    args=""
-    if [ -n "$disabledTests" ]; then
-      disabledTestsString=$(_pytestComputeDisabledTestsString "''${disabledTests[@]}")
-      args+="'-k','$disabledTestsString'"
-    fi
-
-    if [ -n "''${disabledTestPaths-}" ]; then
-        eval "disabledTestPaths=($disabledTestPaths)"
-    fi
-
-    for path in ''${disabledTestPaths[@]}; do
-      if [ ! -e "$path" ]; then
-        echo "Disabled tests path \"$path\" does not exist. Aborting"
-        exit 1
-      fi
-      args+="''${args:+,}'--ignore=\"$path\"'"
-    done
-    args+="''${args:+,}$(printf \'%s\', "''${pytestFlagsArray[@]}")"
-    args=''${args%,}
-
-    pushd "$out"
+  preCheck = ''
     export OMP_NUM_THREADS=$(( $NIX_BUILD_CORES / 4 ))
-    ${python.interpreter} -c "import scipy, sys; sys.exit(scipy.test(
-        'fast',
-        verbose=10,
-        extra_argv=[$args],
-        parallel=$NIX_BUILD_CORES
-    ) != True)"
-    popd
-    runHook postCheck
+    cd $out
   '';
 
   requiredSystemFeatures = [ "big-parallel" ]; # the tests need lots of CPU time
@@ -214,6 +198,7 @@ in buildPythonPackage {
   SCIPY_USE_G77_ABI_WRAPPER = 1;
 
   meta = with lib; {
+    changelog = "https://github.com/scipy/scipy/releases/tag/v${version}";
     description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering";
     downloadPage = "https://github.com/scipy/scipy";
     homepage = "https://www.scipy.org/";

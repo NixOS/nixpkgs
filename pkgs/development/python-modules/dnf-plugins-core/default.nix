@@ -4,7 +4,7 @@
 
   # dependencies
 , cmake
-, dateutil
+, python-dateutil
 , dbus-python
 , dnf4
 , gettext
@@ -22,7 +22,7 @@ in
 
 buildPythonPackage rec {
   pname = "dnf-plugins-core";
-  version = "4.4.3";
+  version = "4.6.0";
   format = "other";
 
   outputs = [ "out" "man" ];
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "dnf-plugins-core";
-    rev = version;
-    hash = "sha256-YEw8REvK2X7mBg9HDI6V2p8QtZ3TJh4Dzn8Uuhfbrgo=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-7LaI5EungJrOPgxDzK/pi4X+D3PPsrbIjYdCknKIiHA=";
   };
 
   patches = [
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    dateutil
+    python-dateutil
     dbus-python
     dnf4.py
     libcomps

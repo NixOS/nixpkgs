@@ -10,12 +10,12 @@ in {
 
   options = {
     networking.rxe = {
-      enable = mkEnableOption (lib.mdDoc "RDMA over converged ethernet");
+      enable = mkEnableOption "RDMA over converged ethernet";
       interfaces = mkOption {
         type = types.listOf types.str;
         default = [ ];
         example = [ "eth0" ];
-        description = lib.mdDoc ''
+        description = ''
           Enable RDMA on the listed interfaces. The corresponding virtual
           RDMA interfaces will be named rxe_\<interface\>.
           UDP port 4791 must be open on the respective ethernet interfaces.
@@ -33,7 +33,7 @@ in {
 
       wantedBy = [ "multi-user.target" ];
       after = [ "systemd-modules-load.service" "network-online.target" ];
-      wants = [ "network-pre.target" ];
+      wants = [ "network-pre.target" "network-online.target" ];
 
       serviceConfig = {
         Type = "oneshot";

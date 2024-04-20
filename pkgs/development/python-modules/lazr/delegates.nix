@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
-, zope_interface
+, zope-interface
 , pytestCheckHook
 }:
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    zope_interface
+    zope-interface
   ];
 
   pythonImportsCheck = [

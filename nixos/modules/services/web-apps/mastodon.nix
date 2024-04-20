@@ -4,7 +4,8 @@ let
   cfg = config.services.mastodon;
   opt = options.services.mastodon;
 
-  # We only want to create a database if we're actually going to connect to it.
+  # We only want to create a Redis and PostgreSQL databases if we're actually going to connect to it local.
+  redisActuallyCreateLocally = cfg.redis.createLocally && (cfg.redis.host == "127.0.0.1" || cfg.redis.enableUnixSocket);
   databaseActuallyCreateLocally = cfg.database.createLocally && cfg.database.host == "/run/postgresql";
 
   env = {
@@ -33,6 +34,7 @@ let
 
     TRUSTED_PROXY_IP = cfg.trustedProxy;
   }
+  // lib.optionalAttrs (cfg.redis.createLocally && cfg.redis.enableUnixSocket) { REDIS_URL = "unix://${config.services.redis.servers.mastodon.unixSocket}"; }
   // lib.optionalAttrs (cfg.database.host != "/run/postgresql" && cfg.database.port != null) { DB_PORT = toString cfg.database.port; }
   // lib.optionalAttrs cfg.smtp.authenticate { SMTP_LOGIN  = cfg.smtp.user; }
   // lib.optionalAttrs (cfg.elasticsearch.host != null) { ES_HOST = cfg.elasticsearch.host; }
@@ -116,9 +118,11 @@ let
       threads = toString (if processCfg.threads == null then cfg.sidekiqThreads else processCfg.threads);
     in {
       after = [ "network.target" "mastodon-init-dirs.service" ]
+        ++ lib.optional redisActuallyCreateLocally "redis-mastodon.service"
         ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
         ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
       requires = [ "mastodon-init-dirs.service" ]
+        ++ lib.optional redisActuallyCreateLocally "redis-mastodon.service"
         ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
         ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
       description = "Mastodon sidekiq${jobClassLabel}";
@@ -133,6 +137,7 @@ let
         RestartSec = 20;
         EnvironmentFile = [ "/var/lib/mastodon/.secrets_env" ] ++ cfg.extraEnvFiles;
         WorkingDirectory = cfg.package;
+        LimitNOFILE = "1024000";
         # System Call Filtering
         SystemCallFilter = [ ("~" + lib.concatStringsSep " " systemCallsList) "@chown" "pipe" "pipe2" ];
       } // cfgService;
@@ -145,9 +150,11 @@ let
         name = "mastodon-streaming-${toString i}";
         value = {
           after = [ "network.target" "mastodon-init-dirs.service" ]
+            ++ lib.optional redisActuallyCreateLocally "redis-mastodon.service"
             ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
             ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
           requires = [ "mastodon-init-dirs.service" ]
+            ++ lib.optional redisActuallyCreateLocally "redis-mastodon.service"
             ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
             ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
           wantedBy = [ "mastodon.target" "mastodon-streaming.target" ];
@@ -180,10 +187,10 @@ in {
 
   options = {
     services.mastodon = {
-      enable = lib.mkEnableOption (lib.mdDoc "Mastodon, a federated social network server");
+      enable = lib.mkEnableOption "Mastodon, a federated social network server";
 
       configureNginx = lib.mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Configure nginx as a reverse proxy for mastodon.
           Note that this makes some assumptions on your setup, and sets settings that will
           affect other virtualHosts running on your nginx instance, if any.
@@ -206,7 +213,7 @@ in {
       };
 
       user = lib.mkOption {
-        description = lib.mdDoc ''
+        description = ''
           User under which mastodon runs. If it is set to "mastodon",
           that user will be created, otherwise it should be set to the
           name of a user created elsewhere.
@@ -219,7 +226,7 @@ in {
       };
 
       group = lib.mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Group under which mastodon runs.
         '';
         type = lib.types.str;
@@ -227,7 +234,7 @@ in {
       };
 
       streamingProcesses = lib.mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Number of processes used by the mastodon-streaming service.
           Please define this explicitly, recommended is the amount of your CPU cores minus one.
         '';
@@ -236,44 +243,44 @@ in {
       };
 
       webPort = lib.mkOption {
-        description = lib.mdDoc "TCP port used by the mastodon-web service.";
+        description = "TCP port used by the mastodon-web service.";
         type = lib.types.port;
         default = 55001;
       };
       webProcesses = lib.mkOption {
-        description = lib.mdDoc "Processes used by the mastodon-web service.";
+        description = "Processes used by the mastodon-web service.";
         type = lib.types.int;
         default = 2;
       };
       webThreads = lib.mkOption {
-        description = lib.mdDoc "Threads per process used by the mastodon-web service.";
+        description = "Threads per process used by the mastodon-web service.";
         type = lib.types.int;
         default = 5;
       };
 
       sidekiqPort = lib.mkOption {
-        description = lib.mdDoc "TCP port used by the mastodon-sidekiq service.";
+        description = "TCP port used by the mastodon-sidekiq service.";
         type = lib.types.port;
         default = 55002;
       };
 
       sidekiqThreads = lib.mkOption {
-        description = lib.mdDoc "Worker threads used by the mastodon-sidekiq-all service. If `sidekiqProcesses` is configured and any processes specify null `threads`, this value is used.";
+        description = "Worker threads used by the mastodon-sidekiq-all service. If `sidekiqProcesses` is configured and any processes specify null `threads`, this value is used.";
         type = lib.types.int;
         default = 25;
       };
 
       sidekiqProcesses = lib.mkOption {
-        description = lib.mdDoc "How many Sidekiq processes should be used to handle background jobs, and which job classes they handle. *Read the [upstream documentation](https://docs.joinmastodon.org/admin/scaling/#sidekiq) before configuring this!*";
+        description = "How many Sidekiq processes should be used to handle background jobs, and which job classes they handle. *Read the [upstream documentation](https://docs.joinmastodon.org/admin/scaling/#sidekiq) before configuring this!*";
         type = with lib.types; attrsOf (submodule {
           options = {
             jobClasses = lib.mkOption {
               type = listOf (enum [ "default" "push" "pull" "mailers" "scheduler" "ingress" ]);
-              description = lib.mdDoc "If not empty, which job classes should be executed by this process. *Only one process should handle the 'scheduler' class. If left empty, this process will handle the 'scheduler' class.*";
+              description = "If not empty, which job classes should be executed by this process. *Only one process should handle the 'scheduler' class. If left empty, this process will handle the 'scheduler' class.*";
             };
             threads = lib.mkOption {
               type = nullOr int;
-              description = lib.mdDoc "Number of threads this process should use for executing jobs. If null, the configured `sidekiqThreads` are used.";
+              description = "Number of threads this process should use for executing jobs. If null, the configured `sidekiqThreads` are used.";
             };
           };
         });
@@ -304,7 +311,7 @@ in {
       };
 
       vapidPublicKeyFile = lib.mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Path to file containing the public key used for Web Push
           Voluntary Application Server Identification.  A new keypair can
           be generated by running:
@@ -319,13 +326,13 @@ in {
       };
 
       localDomain = lib.mkOption {
-        description = lib.mdDoc "The domain serving your Mastodon instance.";
+        description = "The domain serving your Mastodon instance.";
         example = "social.example.org";
         type = lib.types.str;
       };
 
       secretKeyBaseFile = lib.mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Path to file containing the secret key base.
           A new secret key base can be generated by running:
 
@@ -338,7 +345,7 @@ in {
       };
 
       otpSecretFile = lib.mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Path to file containing the OTP secret.
           A new OTP secret can be generated by running:
 
@@ -351,7 +358,7 @@ in {
       };
 
       vapidPrivateKeyFile = lib.mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Path to file containing the private key used for Web Push
           Voluntary Application Server Identification.  A new keypair can
           be generated by running:
@@ -366,7 +373,7 @@ in {
       };
 
       trustedProxy = lib.mkOption {
-        description = lib.mdDoc ''
+        description = ''
           You need to set it to the IP from which your reverse proxy sends requests to Mastodon's web process,
           otherwise Mastodon will record the reverse proxy's own IP as the IP of all requests, which would be
           bad because IP addresses are used for important rate limits and security functions.
@@ -376,7 +383,7 @@ in {
       };
 
       enableUnixSocket = lib.mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Instead of binding to an IP address like 127.0.0.1, you may bind to a Unix socket. This variable
           is process-specific, e.g. you need different values for every process, and it works for both web (Puma)
           processes and streaming API (Node.js) processes.
@@ -387,27 +394,40 @@ in {
 
       redis = {
         createLocally = lib.mkOption {
-          description = lib.mdDoc "Configure local Redis server for Mastodon.";
+          description = "Configure local Redis server for Mastodon.";
           type = lib.types.bool;
           default = true;
         };
 
         host = lib.mkOption {
-          description = lib.mdDoc "Redis host.";
+          description = "Redis host.";
           type = lib.types.str;
           default = "127.0.0.1";
         };
 
         port = lib.mkOption {
-          description = lib.mdDoc "Redis port.";
+          description = "Redis port.";
           type = lib.types.port;
           default = 31637;
+        };
+
+        passwordFile = lib.mkOption {
+          description = "A file containing the password for Redis database.";
+          type = lib.types.nullOr lib.types.path;
+          default = null;
+          example = "/run/keys/mastodon-redis-password";
+        };
+
+        enableUnixSocket = lib.mkOption {
+          description = "Use Unix socket";
+          type = lib.types.bool;
+          default = true;
         };
       };
 
       database = {
         createLocally = lib.mkOption {
-          description = lib.mdDoc "Configure local PostgreSQL database server for Mastodon.";
+          description = "Configure local PostgreSQL database server for Mastodon.";
           type = lib.types.bool;
           default = true;
         };
@@ -416,7 +436,7 @@ in {
           type = lib.types.str;
           default = "/run/postgresql";
           example = "192.168.23.42";
-          description = lib.mdDoc "Database host address or unix socket.";
+          description = "Database host address or unix socket.";
         };
 
         port = lib.mkOption {
@@ -427,26 +447,26 @@ in {
             then null
             else 5432
           '';
-          description = lib.mdDoc "Database host port.";
+          description = "Database host port.";
         };
 
         name = lib.mkOption {
           type = lib.types.str;
           default = "mastodon";
-          description = lib.mdDoc "Database name.";
+          description = "Database name.";
         };
 
         user = lib.mkOption {
           type = lib.types.str;
           default = "mastodon";
-          description = lib.mdDoc "Database user.";
+          description = "Database user.";
         };
 
         passwordFile = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
           default = null;
           example = "/var/lib/mastodon/secrets/db-password";
-          description = lib.mdDoc ''
+          description = ''
             A file containing the password corresponding to
             {option}`database.user`.
           '';
@@ -455,31 +475,31 @@ in {
 
       smtp = {
         createLocally = lib.mkOption {
-          description = lib.mdDoc "Configure local Postfix SMTP server for Mastodon.";
+          description = "Configure local Postfix SMTP server for Mastodon.";
           type = lib.types.bool;
           default = true;
         };
 
         authenticate = lib.mkOption {
-          description = lib.mdDoc "Authenticate with the SMTP server using username and password.";
+          description = "Authenticate with the SMTP server using username and password.";
           type = lib.types.bool;
           default = false;
         };
 
         host = lib.mkOption {
-          description = lib.mdDoc "SMTP host used when sending emails to users.";
+          description = "SMTP host used when sending emails to users.";
           type = lib.types.str;
           default = "127.0.0.1";
         };
 
         port = lib.mkOption {
-          description = lib.mdDoc "SMTP port used when sending emails to users.";
+          description = "SMTP port used when sending emails to users.";
           type = lib.types.port;
           default = 25;
         };
 
         fromAddress = lib.mkOption {
-          description = lib.mdDoc ''"From" address used when sending Emails to users.'';
+          description = ''"From" address used when sending Emails to users.'';
           type = lib.types.str;
         };
 
@@ -487,14 +507,14 @@ in {
           type = lib.types.nullOr lib.types.str;
           default = null;
           example = "mastodon@example.com";
-          description = lib.mdDoc "SMTP login name.";
+          description = "SMTP login name.";
         };
 
         passwordFile = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
           default = null;
           example = "/var/lib/mastodon/secrets/smtp-password";
-          description = lib.mdDoc ''
+          description = ''
             Path to file containing the SMTP password.
           '';
         };
@@ -502,7 +522,7 @@ in {
 
       elasticsearch = {
         host = lib.mkOption {
-          description = lib.mdDoc ''
+          description = ''
             Elasticsearch host.
             If it is not null, Elasticsearch full text search will be enabled.
           '';
@@ -511,13 +531,13 @@ in {
         };
 
         port = lib.mkOption {
-          description = lib.mdDoc "Elasticsearch port.";
+          description = "Elasticsearch port.";
           type = lib.types.port;
           default = 9200;
         };
 
         preset = lib.mkOption {
-          description = lib.mdDoc ''
+          description = ''
             It controls the ElasticSearch indices configuration (number of shards and replica).
           '';
           type = lib.types.enum [ "single_node_cluster" "small_cluster" "large_cluster" ];
@@ -526,14 +546,14 @@ in {
         };
 
         user = lib.mkOption {
-          description = lib.mdDoc "Used for optionally authenticating with Elasticsearch.";
+          description = "Used for optionally authenticating with Elasticsearch.";
           type = lib.types.nullOr lib.types.str;
           default = null;
           example = "elasticsearch-mastodon";
         };
 
         passwordFile = lib.mkOption {
-          description = lib.mdDoc ''
+          description = ''
             Path to file containing password for optionally authenticating with Elasticsearch.
           '';
           type = lib.types.nullOr lib.types.path;
@@ -546,13 +566,13 @@ in {
         type = lib.types.package;
         default = pkgs.mastodon;
         defaultText = lib.literalExpression "pkgs.mastodon";
-        description = lib.mdDoc "Mastodon package to use.";
+        description = "Mastodon package to use.";
       };
 
       extraConfig = lib.mkOption {
         type = lib.types.attrs;
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           Extra environment variables to pass to all mastodon services.
         '';
       };
@@ -560,7 +580,7 @@ in {
       extraEnvFiles = lib.mkOption {
         type = with lib.types; listOf path;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           Extra environment files to pass to all mastodon services. Useful for passing down environmental secrets.
         '';
         example = [ "/etc/mastodon/s3config.env" ];
@@ -569,7 +589,7 @@ in {
       automaticMigrations = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Do automatic database migrations.
         '';
       };
@@ -579,7 +599,7 @@ in {
           type = lib.types.bool;
           default = true;
           example = false;
-          description = lib.mdDoc ''
+          description = ''
             Automatically remove remote media attachments and preview cards older than the configured amount of days.
 
             Recommended in https://docs.joinmastodon.org/admin/setup/.
@@ -590,7 +610,7 @@ in {
           type = lib.types.str;
           default = "daily";
           example = "hourly";
-          description = lib.mdDoc ''
+          description = ''
             How often to remove remote media.
 
             The format is described in {manpage}`systemd.time(7)`.
@@ -601,7 +621,7 @@ in {
           type = lib.types.int;
           default = 30;
           example = 14;
-          description = lib.mdDoc ''
+          description = ''
             How old remote media needs to be in order to be removed.
           '';
         };
@@ -611,6 +631,13 @@ in {
 
   config = lib.mkIf cfg.enable (lib.mkMerge [{
     assertions = [
+      {
+        assertion = redisActuallyCreateLocally -> (!cfg.redis.enableUnixSocket || cfg.redis.passwordFile == null);
+        message = ''
+          <option>services.mastodon.redis.enableUnixSocket</option> needs to be disabled if
+            <option>services.mastodon.redis.passwordFile</option> is used.
+        '';
+      }
       {
         assertion = databaseActuallyCreateLocally -> (cfg.user == cfg.database.user && cfg.database.user == cfg.database.name);
         message = ''
@@ -688,6 +715,8 @@ in {
         OTP_SECRET="$(cat ${cfg.otpSecretFile})"
         VAPID_PRIVATE_KEY="$(cat ${cfg.vapidPrivateKeyFile})"
         VAPID_PUBLIC_KEY="$(cat ${cfg.vapidPublicKeyFile})"
+      '' + lib.optionalString (cfg.redis.passwordFile != null)''
+        REDIS_PASSWORD="$(cat ${cfg.redis.passwordFile})"
       '' + lib.optionalString (cfg.database.passwordFile != null) ''
         DB_PASS="$(cat ${cfg.database.passwordFile})"
       '' + lib.optionalString cfg.smtp.authenticate ''
@@ -713,11 +742,16 @@ in {
         umask 077
         export PGPASSWORD="$(cat '${cfg.database.passwordFile}')"
       '' + ''
-        if [ `psql -c \
-                "select count(*) from pg_class c \
-                join pg_namespace s on s.oid = c.relnamespace \
-                where s.nspname not in ('pg_catalog', 'pg_toast', 'information_schema') \
-                and s.nspname not like 'pg_temp%';" | sed -n 3p` -eq 0 ]; then
+        result="$(psql -t --csv -c \
+            "select count(*) from pg_class c \
+            join pg_namespace s on s.oid = c.relnamespace \
+            where s.nspname not in ('pg_catalog', 'pg_toast', 'information_schema') \
+            and s.nspname not like 'pg_temp%';")" || error_code=$?
+        if [ "''${error_code:-0}" -ne 0 ]; then
+          echo "Failure checking if database is seeded. psql gave exit code $error_code"
+          exit "$error_code"
+        fi
+        if [ "$result" -eq 0 ]; then
           echo "Seeding database"
           SAFETY_ASSURED=1 rails db:schema:load
           rails db:seed
@@ -750,9 +784,11 @@ in {
 
     systemd.services.mastodon-web = {
       after = [ "network.target" "mastodon-init-dirs.service" ]
+        ++ lib.optional redisActuallyCreateLocally "redis-mastodon.service"
         ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
         ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
       requires = [ "mastodon-init-dirs.service" ]
+        ++ lib.optional redisActuallyCreateLocally "redis-mastodon.service"
         ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
         ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
       wantedBy = [ "mastodon.target" ];
@@ -833,11 +869,14 @@ in {
       enable = true;
       hostname = lib.mkDefault "${cfg.localDomain}";
     };
-    services.redis.servers.mastodon = lib.mkIf (cfg.redis.createLocally && cfg.redis.host == "127.0.0.1") {
-      enable = true;
-      port = cfg.redis.port;
-      bind = "127.0.0.1";
-    };
+    services.redis.servers.mastodon = lib.mkIf redisActuallyCreateLocally (lib.mkMerge [
+      {
+        enable = true;
+      }
+      (lib.mkIf (!cfg.redis.enableUnixSocket) {
+        port = cfg.redis.port;
+      })
+    ]);
     services.postgresql = lib.mkIf databaseActuallyCreateLocally {
       enable = true;
       ensureUsers = [
@@ -858,6 +897,7 @@ in {
         };
       })
       (lib.attrsets.setAttrByPath [ cfg.user "packages" ] [ cfg.package pkgs.imagemagick ])
+      (lib.mkIf (cfg.redis.createLocally && cfg.redis.enableUnixSocket) {${config.services.mastodon.user}.extraGroups = [ "redis-mastodon" ];})
     ];
 
     users.groups.${cfg.group}.members = lib.optional cfg.configureNginx config.services.nginx.user;

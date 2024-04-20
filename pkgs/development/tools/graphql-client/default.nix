@@ -21,6 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A GraphQL tool for Rust projects";
+    mainProgram = "graphql-client";
     homepage = "https://github.com/graphql-rust/graphql-client";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ bbigras ];

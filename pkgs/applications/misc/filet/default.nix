@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     license = licenses.mpl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ buffet ];
+    mainProgram = "filet";
   };
 }

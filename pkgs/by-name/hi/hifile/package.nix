@@ -1,20 +1,19 @@
 { lib, appimageTools, fetchurl }:
 
 let
-  version = "0.9.9.6";
+  version = "0.9.9.11";
   pname = "hifile";
 
   src = fetchurl {
     url = "https://www.hifile.app/files/HiFile-${version}.AppImage";
-    hash = "sha256-qfBV4w4nChH2wUAHdcUFwVs+3OeqcKqMJ8WUucn31q4=";
+    hash = "sha256-T/ig5Tfo58+yMp+kOEa96+QvABg6gTaIbdy53jWucvM=";
   };
 
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;
   };
 
-in
-appimageTools.wrapType2 rec {
+in appimageTools.wrapType2 rec {
   inherit pname version src;
 
   extraInstallCommands = ''
@@ -23,7 +22,7 @@ appimageTools.wrapType2 rec {
     install -m 444 -D ${appimageContents}/HiFile.desktop $out/share/applications/HiFile.desktop
     install -m 444 -D ${appimageContents}/HiFile.png $out/share/icons/hicolor/512x512/apps/HiFile.png
     substituteInPlace $out/share/applications/HiFile.desktop \
-      --replace 'Exec=HiFile' 'Exec=${pname}'
+      --replace-fail 'Exec=HiFile' 'Exec=${pname}'
   '';
 
   meta = with lib; {
@@ -36,6 +35,7 @@ appimageTools.wrapType2 rec {
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ ymstnt ];
+    mainProgram = "hifile";
     platforms = [ "x86_64-linux" ];
   };
 }

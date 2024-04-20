@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, installShellFiles
 }:
 
 buildGoModule rec {
@@ -20,12 +21,22 @@ buildGoModule rec {
     "-w"
     "-s"
   ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+  postInstall = ''
+    installShellCompletion --cmd goverview \
+      --bash <($out/bin/goverview completion bash) \
+      --fish <($out/bin/goverview completion fish) \
+      --zsh <($out/bin/goverview completion zsh)
+  '';
 
   # Tests require network access
   doCheck = false;
 
   meta = with lib; {
     description = "Tool to get an overview of the list of URLs";
+    mainProgram = "goverview";
     homepage = "https://github.com/j3ssie/goverview";
     changelog = "https://github.com/j3ssie/goverview/releases/tag/v${version}";
     license = licenses.mit;

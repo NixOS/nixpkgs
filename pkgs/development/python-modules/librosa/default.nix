@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
@@ -106,6 +107,11 @@ buildPythonPackage rec {
     "test_example"
     "test_example_info"
     "test_load_resample"
+    # does not converge
+    "test_nnls_vector"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # https://github.com/librosa/librosa/pull/1808
+    "test_pyin_multi_center"
   ];
 
   meta = with lib; {

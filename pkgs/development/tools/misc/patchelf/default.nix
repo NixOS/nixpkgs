@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/NixOS/patchelf";
     license = licenses.gpl3Plus;
     description = "A small utility to modify the dynamic linker and RPATH of ELF executables";
+    mainProgram = "patchelf";
     maintainers = [ maintainers.eelco ];
     platforms = platforms.all;
   };

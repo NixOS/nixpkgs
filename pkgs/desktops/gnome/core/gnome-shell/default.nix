@@ -19,6 +19,7 @@
 , unzip
 , shared-mime-info
 , libgweather
+, libjxl
 , librsvg
 , webp-pixbuf-loader
 , geoclue2
@@ -67,13 +68,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell";
-  version = "45.2";
+  version = "45.5";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major finalAttrs.version}/gnome-shell-${finalAttrs.version}.tar.xz";
-    sha256 = "igz7+HKxp2JpbIbhPe/p82dekteVFOup0AC1thHCaiM=";
+    sha256 = "sha256-vVw9PQKNRyM+QgUiPwrAKsmpc7aZvCd0OQlNQaeNarA=";
   };
 
   patches = [
@@ -188,10 +189,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
-    # Pull in WebP support for gnome-backgrounds.
+    # Pull in WebP and JXL support for gnome-backgrounds.
     # In postInstall to run before gappsWrapperArgsHook.
     export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
       extraLoaders = [
+        libjxl
         librsvg
         webp-pixbuf-loader
       ];

@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "resvg";
-  version = "0.37.0";
+  version = "0.41.0";
 
   src = fetchFromGitHub {
     owner = "RazrFalcon";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-IRIyxQk0BqFufZafq7klUHAW1lculqbcH67kf3jtjwo=";
+    hash = "sha256-plZiyEiBWeV2mwTsNK5Je8Axs/hcHH8aV2VpOix6QCY=";
   };
 
-  cargoHash = "sha256-yKQRjY+aEXU5C3LhAyavtX8PazbAvAHQ7fykmK7LAQ8=";
+  cargoHash = "sha256-U7xzb9e9wh9XbLvlYQ0ofIjH8FuSzVcrXnrehQmZgww=";
 
   cargoBuildFlags = [
     "--package=resvg"
@@ -29,5 +29,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/RazrFalcon/resvg/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = [ maintainers.marsam ];
+    mainProgram = "resvg";
   };
 }

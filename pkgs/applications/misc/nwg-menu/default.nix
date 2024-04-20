@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "nwg-menu";
-  version = "0.1.1";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-menu";
     rev = "v${version}";
-    sha256 = "sha256-M948RGU9/PwUtFRmf1Po7KlrGxqRPiOZKfS1Vv3vqW8=";
+    sha256 = "sha256-PMW5QUUZcdWNOMexJVy0hYXx+y2AopT3WL29iWb9MbM=";
   };
 
-  vendorHash = "sha256-HyrjquJ91ddkyS8JijHd9HjtfwSQykXCufa2wzl8RNk=";
+  vendorHash = "sha256-PJvHDmyqE+eIELGRD8QHsZgZ7L0DKc2FYOvfvurzlhs=";
 
   doCheck = false;
 
@@ -39,6 +39,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/nwg-piotr/nwg-menu";
     description = "MenuStart plugin for nwg-panel";
+    mainProgram = "nwg-menu";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ berbiche ];

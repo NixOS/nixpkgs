@@ -47,6 +47,7 @@ buildPythonPackage rec {
   meta = {
     changelog = "https://github.com/faust-streaming/cChardet/blob/${src.rev}/CHANGES.rst";
     description = "High-speed universal character encoding detector";
+    mainProgram = "cchardetect";
     homepage = "https://github.com/faust-streaming/cChardet";
     license = lib.licenses.mpl11;
     maintainers = with lib.maintainers; [ dotlambda ivan ];

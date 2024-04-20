@@ -1,6 +1,7 @@
 { lib
 , buildLua
 , fetchFromGitHub
+, gitUpdater
 , curl
 , wl-clipboard
 , xclip
@@ -8,13 +9,16 @@
 
 buildLua rec {
   pname = "mpvacious";
-  version = "0.25";
+  version = "0.27";
 
   src = fetchFromGitHub {
     owner = "Ajatt-Tools";
     repo = "mpvacious";
     rev = "v${version}";
-    sha256 = "sha256-XTnib4cguWFEvZtmsLfkesbjFbkt2YoyYLT587ajyUM=";
+    sha256 = "sha256-pn6hNEhOzKiU+zQJKj/rF0GLXaEe+XBpHp0RlzsNIio=";
+  };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
   };
 
   postPatch = ''

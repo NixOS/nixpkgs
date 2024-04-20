@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper, which, coreutils, rrdtool, perlPackages
-, python3, ruby, jre, nettools, bc
+, python3, ruby, jre8, nettools, bc
 }:
 
 stdenv.mkDerivation rec {
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     perlPackages.DBDPg
     python3
     ruby
-    jre
+    jre8
     # tests
     perlPackages.TestLongString
     perlPackages.TestDifferences
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
     "PERL=${perlPackages.perl.outPath}/bin/perl"
     "PYTHON=${python3.interpreter}"
     "RUBY=${ruby.outPath}/bin/ruby"
-    "JAVARUN=${jre.outPath}/bin/java"
+    "JAVARUN=${jre8.outPath}/bin/java"
     "PLUGINUSER=munin"
   ];
 

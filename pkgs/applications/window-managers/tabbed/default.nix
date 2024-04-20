@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tabbed";
-  version = "0.7";
+  version = "0.8";
 
   src = fetchgit {
     url = "https://git.suckless.org/tabbed";
     rev = finalAttrs.version;
-    hash = "sha256-Y1MgPwqMUoa2Rr4HmqjtPaQegUmQJWYkcbyFcJHAOBI=";
+    hash = "sha256-KpMWBnnoF4AGRKrG30NQsVt0CFfJXVdlXLLag0Dq0sU=";
   };
 
   inherit patches;

@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/DanielOgorchock/joycond";
     description = "Userspace daemon to combine joy-cons from the hid-nintendo kernel driver";
+    mainProgram = "joycond";
     license = licenses.gpl3Only;
     maintainers = [ maintainers.ivar ];
     platforms = platforms.linux;

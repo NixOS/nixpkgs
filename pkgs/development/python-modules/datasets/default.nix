@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "datasets";
-  version = "2.14.5";
+  version = "2.18.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -30,8 +30,14 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-oLB6laY/Si071mBKoWlZpd1fqr/wNtAnhRvBKLjeEuE=";
+    hash = "sha256-mLiIE1RYUNUhh8nhG7TBr7XUdWlJzeWDuUNvoBk0eyw=";
   };
+
+  # remove pyarrow<14.0.1 vulnerability fix
+  postPatch = ''
+    substituteInPlace src/datasets/features/features.py \
+      --replace "import pyarrow_hotfix" "#import pyarrow_hotfix"
+  '';
 
   propagatedBuildInputs = [
     aiohttp
@@ -63,6 +69,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Open-access datasets and evaluation metrics for natural language processing";
+    mainProgram = "datasets-cli";
     homepage = "https://github.com/huggingface/datasets";
     changelog = "https://github.com/huggingface/datasets/releases/tag/${version}";
     license = licenses.asl20;

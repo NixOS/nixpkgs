@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-jinja2";
-  version = "1.5.1";
+  version = "1.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jRSbKlfZH3lLM6OU6lvGa1Z/OMdKWmqUd6/CRQ8QXAE=";
+    hash = "sha256-o6f/UmTlvKUuiuVHu/0HYbcklSMNQ40FtsCRW+YZsOI=";
   };
 
   propagatedBuildInputs = [

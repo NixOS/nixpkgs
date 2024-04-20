@@ -29,6 +29,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Command line radio player";
+    mainProgram = "curseradio";
     homepage = "https://github.com/chronitis/curseradio";
     license = licenses.mit;
     maintainers = [ maintainers.eyjhb ];

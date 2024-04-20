@@ -29,8 +29,8 @@ let
     text = ''
       # Compiler
       compiler = 'gcc'
-      mpicompiler = '${mpi}/bin/mpicc'
-      mpilinker = '${mpi}/bin/mpicc'
+      mpicompiler = '${lib.getDev mpi}/bin/mpicc'
+      mpilinker = '${lib.getDev mpi}/bin/mpicc'
 
       # BLAS
       libraries += ['blas']
@@ -74,14 +74,14 @@ let
 
 in buildPythonPackage rec {
   pname = "gpaw";
-  version = "23.9.1";
+  version = "24.1.0";
   format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "gpaw";
     repo = pname;
     rev = version;
-    hash = "sha256-9nnK4ksTFATO6HexnxfMiih/yoY/noyJZXZOaDG/2kc=";
+    hash = "sha256-8eX50F124R46dGN2rJS/dDvPeDmEm7XpVyTiOAjMKyI=";
   };
 
   # `inetutils` is required because importing `gpaw`, as part of

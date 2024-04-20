@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mlib";
-  version = "0.7.0";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "P-p-H-d";
     repo = pname;
     rev = "V${version}";
-    hash = "sha256-obQD3TWuGCAs5agnaiJF5Rasn8J283H/cdvKCCAzcB8=";
+    hash = "sha256-wt/wLtvAZ19ZiLIjPrKbqVztLyXEa8hy6cEkaCO+tuY=";
   };
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "PREFIX=$(out)" ];

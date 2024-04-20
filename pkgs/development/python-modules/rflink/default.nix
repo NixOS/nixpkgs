@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "rflink";
-  version = "0.0.65";
+  version = "0.0.66";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "aequitas";
     repo = "python-rflink";
     rev = "refs/tags/${version}";
-    hash = "sha256-DUnhuA84nkmYkREa7vUiyLg7JUdEEeLewg3vFFlcar8=";
+    hash = "sha256-n6VLa0xX1qewMS7Kv+kiitezWRbRvDJRNuOmA7IV6u0=";
   };
 
   propagatedBuildInputs = [

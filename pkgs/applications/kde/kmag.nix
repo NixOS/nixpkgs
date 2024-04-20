@@ -5,6 +5,7 @@ mkDerivation {
   meta = with lib; {
     homepage = "https://kde.org/applications/en/utilities/org.kde.kmag";
     description = "A small Linux utility to magnify a part of the screen";
+    mainProgram = "kmag";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

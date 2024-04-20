@@ -1,8 +1,8 @@
 { fetchFromGitHub, gperf, openssl, readline, zlib, cmake, lib, stdenv }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tdlib";
-  version = "1.8.22";
+  version = "1.8.27";
 
   src = fetchFromGitHub {
     owner = "tdlib";
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     # The tdlib authors do not set tags for minor versions, but
     # external programs depending on tdlib constrain the minor
     # version, hence we set a specific commit with a known version.
-    rev = "24893faf75d84b2b885f3f7aeb9d5a3c056fa7be";
-    hash = "sha256-4cfnre71+rQSuPrtFJMzIEPYVCZH/W142b4Pn2NxvqI=";
+    rev = "efc6bd553b61dea0ae8c0436695e8d2539bf03f9";
+    hash = "sha256-AHfuT+bLkc8Lm1B96E/kwUx1ZKStQbv/skH8woRITRk=";
   };
 
   buildInputs = [ gperf openssl readline zlib ];

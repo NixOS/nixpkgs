@@ -45,6 +45,7 @@
         url = "https://github.com/SideQuestVR/SideQuest/releases/download/v${version}/SideQuest-${version}.tar.xz";
         sha256 = "8ac3d97400a8e3ce86902b5bea7b8d042a092acd888d20e5139490a38507f995";
       };
+      dontUnpack = true;
 
       nativeBuildInputs = [ makeWrapper ];
 
@@ -105,6 +106,7 @@
         license = licenses.mit;
         maintainers = with maintainers; [ joepie91 rvolosatovs ];
         platforms = [ "x86_64-linux" ];
+        mainProgram = "SideQuest";
       };
     };
 

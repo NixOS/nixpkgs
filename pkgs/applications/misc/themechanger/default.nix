@@ -53,6 +53,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/ALEX11BR/ThemeChanger";
     description = "A theme changing utility for Linux";
+    mainProgram = "themechanger";
     longDescription = ''
       This app is a theme changing utility for Linux, BSDs, and whatnots.
       It lets the user change GTK 2/3/4, Kvantum, icon and cursor themes, edit GTK CSS with live preview, and set some related options.

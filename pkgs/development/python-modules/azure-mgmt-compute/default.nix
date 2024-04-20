@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-compute";
-  version = "30.4.0";
+  version = "30.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-C3Qo/YvRXHy9fGa5uwEOClyzeoBs7x9JSNkHGRV2kzQ=";
+    hash = "sha256-TYDXI+xtTLlYNhfr7AcW59dLJzKsuu0CPtLjzHBT0A4=";
   };
 
   propagatedBuildInputs = [

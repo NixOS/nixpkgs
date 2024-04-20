@@ -20,11 +20,11 @@ in
 {
   options = {
     services.salt.master = {
-      enable = mkEnableOption (lib.mdDoc "Salt master service");
+      enable = mkEnableOption "Salt configuration management system master service";
       configuration = mkOption {
         type = types.attrs;
         default = {};
-        description = lib.mdDoc "Salt master configuration as Nix attribute set.";
+        description = "Salt master configuration as Nix attribute set.";
       };
     };
   };

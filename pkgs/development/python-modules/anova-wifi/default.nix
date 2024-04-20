@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "anova-wifi";
-  version = "0.10.3";
+  version = "0.11.7";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Lash-L";
     repo = "anova_wifi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tCmvp29KSCkc+g0w0odcB7vGjtDx6evac7XsHEF0syM=";
+    hash = "sha256-G87lNPyFnMO0YWKtLv/RgSZ0j0exFro24erwYv87V90=";
   };
 
   postPatch = ''

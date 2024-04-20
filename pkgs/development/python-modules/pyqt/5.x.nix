@@ -9,7 +9,7 @@
 , lndir
 , dbus-python
 , sip
-, pyqt5_sip
+, pyqt5-sip
 , pyqt-builder
 , libsForQt5
 , enableVerbose ? true
@@ -26,14 +26,15 @@
 }:
 
 buildPythonPackage rec {
-  pname = "PyQt5";
+  pname = "pyqt5";
   version = "5.15.9";
   format = "pyproject";
 
   disabled = isPy27;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "PyQt5";
+    inherit version;
     hash = "sha256-3EHoQBqQ3D4raStBG9VJKrVZrieidCTu1L05FVZOxMA=";
   };
 
@@ -41,7 +42,7 @@ buildPythonPackage rec {
     # Fix some wrong assumptions by ./project.py
     # TODO: figure out how to send this upstream
     ./pyqt5-fix-dbus-mainloop-support.patch
-    # confirm license when installing via pyqt5_sip
+    # confirm license when installing via pyqt5-sip
     ./pyqt5-confirm-license.patch
   ];
 
@@ -158,11 +159,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     dbus-python
-    pyqt5_sip
+    pyqt5-sip
   ];
 
   passthru = {
-    inherit sip pyqt5_sip;
+    inherit sip pyqt5-sip;
     multimediaEnabled = withMultimedia;
     webKitEnabled = withWebKit;
     WebSocketsEnabled = withWebSockets;

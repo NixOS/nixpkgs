@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "i2pd";
-  version = "2.49.0";
+  version = "2.51.0";
 
   src = fetchFromGitHub {
     owner = "PurpleI2P";
     repo = pname;
     rev = version;
-    sha256 = "sha256-y2+V+p/EZS90cwNl/gavclJ1TyJa/CdNnjKLMuwe7q0=";
+    sha256 = "sha256-qMdlB7SyiYZcZL1DBDKXNUXlPnHcAxkAxUFpFrLs1go=";
   };
 
   buildInputs = [ boost zlib openssl ]
@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ edwtjo ];
     platforms = platforms.unix;
+    mainProgram = "i2pd";
   };
 }

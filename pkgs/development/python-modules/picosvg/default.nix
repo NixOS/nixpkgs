@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Tool to simplify SVGs";
+    mainProgram = "picosvg";
     homepage = "https://github.com/googlefonts/picosvg";
     license = licenses.asl20;
     maintainers = with maintainers; [ _999eagle ];

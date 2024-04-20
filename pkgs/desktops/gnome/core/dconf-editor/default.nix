@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GSettings editor for GNOME";
+    mainProgram = "dconf-editor";
     homepage = "https://wiki.gnome.org/Apps/DconfEditor";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;

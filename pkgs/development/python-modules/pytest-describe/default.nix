@@ -11,7 +11,7 @@
 
 let
   pname = "pytest-describe";
-  version = "2.1.0";
+  version = "2.2.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -19,7 +19,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BjDJWsSUKrjc2OdmI2+GQ2tJhIltsMBZ/CNP72b+lzI=";
+    hash = "sha256-ObsF65DySX2co0Lvmgt/pbraflhQWuwz9m1mHWMZVbc=";
   };
 
   buildInputs = [

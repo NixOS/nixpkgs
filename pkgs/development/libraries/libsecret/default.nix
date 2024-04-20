@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libsecret";
-  version = "0.21.1";
+  version = "0.21.4";
 
   outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Z09RMjpfdOTLfjJ32mi1r93TM+yiW8n9LYIKkpcvkLE=";
+    hash = "sha256-Fj0I14O+bUq5qXnOtaT+y8HZZg08NBaMWBMBzVORKyA=";
   };
 
   depsBuildBuild = [

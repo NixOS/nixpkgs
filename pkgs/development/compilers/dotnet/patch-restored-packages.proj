@@ -1,0 +1,8 @@
+<Project>
+  <Target Name="PatchIlasm" AfterTargets="ResolveIlToolPaths">
+    <Exec Command="patch-nupkgs $(NUGET_PACKAGES) 2>&amp;1"/>
+  </Target>
+  <Target Name="PatchCrossgen" AfterTargets="Restore;_PrepareForReadyToRunCompilation;PrepareForCrossGen">
+    <Exec Command="patch-nupkgs $(NUGET_PACKAGES) 2>&amp;1"/>
+  </Target>
+</Project>

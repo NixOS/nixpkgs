@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rocksndiamonds";
-  version = "4.3.8.0";
+  version = "4.3.8.2";
 
   src = fetchurl {
     url = "https://www.artsoft.org/RELEASES/linux/${pname}/${pname}-${version}-linux.tar.gz";
-    hash = "sha256-6RHQEcO9/tngZZqSTin74HkZflnRLh+dfvvxczpdcGU=";
+    hash = "sha256-e/aYjjnEM6MP14FGX+N92U9fRNEjIaDfE1znl6A+4As=";
   };
 
   desktopItem = makeDesktopItem {
@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Scrolling tile-based arcade style puzzle game";
+    mainProgram = "rocksndiamonds";
     homepage = "https://www.artsoft.org/rocksndiamonds/";
     license = licenses.gpl2;
     platforms = platforms.linux;

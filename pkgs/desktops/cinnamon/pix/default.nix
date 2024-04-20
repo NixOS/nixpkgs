@@ -10,15 +10,12 @@
 , libtiff
 , gst_all_1
 , libraw
-, libsoup
 , libsecret
 , glib
 , gtk3
 , gsettings-desktop-schemas
 , librsvg
 , libwebp
-, json-glib
-, webkitgtk
 , lcms2
 , bison
 , flex
@@ -33,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pix";
-  version = "3.2.1";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ufm8f0mR35fGFOAL89MH6z88n3ZHG0IcQzIFrUjSQ1c=";
+    sha256 = "sha256-tRndJjUw/k5mJPFTBMfW88Mvp2wZtC3RUzyS8bBO1jc=";
   };
 
   nativeBuildInputs = [
@@ -65,17 +62,14 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
     gtk3
-    json-glib
     lcms2
     libheif
     libjpeg
     libraw
     librsvg
     libsecret
-    libsoup
     libtiff
     libwebp
-    webkitgtk
     xapp
   ];
 
@@ -89,12 +83,17 @@ stdenv.mkDerivation rec {
       pix/make-authors-tab.py
   '';
 
+  # Avoid direct dependency on webkit2gtk-4.0
+  # https://fedoraproject.org/wiki/Changes/Remove_webkit2gtk-4.0_API_Version
+  mesonFlags = [ "-Dwebservices=false" ];
+
   preFixup = ''
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
   '';
 
   meta = with lib; {
     description = "A generic image viewer from Linux Mint";
+    mainProgram = "pix";
     homepage = "https://github.com/linuxmint/pix";
     license = licenses.gpl2Only;
     platforms = platforms.linux;

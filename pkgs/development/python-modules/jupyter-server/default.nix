@@ -34,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "jupyter-server";
-  version = "2.12.1";
-  format = "pyproject";
+  version = "2.14.0";
+  pyproject = true;
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "jupyter_server";
     inherit version;
-    hash = "sha256-3He33MX8BUesuisoRPAXmACGZyAe6ifGMZ/5JX1wCm0=";
+    hash = "sha256-ZZFUzqUSCDQ0/XyTt/4Il696L9C53UdJKCtC6qxK5nc=";
   };
 
   nativeBuildInputs = [
@@ -70,6 +70,9 @@ buildPythonPackage rec {
     overrides
   ];
 
+  # https://github.com/NixOS/nixpkgs/issues/299427
+  stripExclude = lib.optionals stdenv.isDarwin [ "favicon.ico" ];
+
   nativeCheckInputs = [
     ipykernel
     pytestCheckHook
@@ -93,11 +96,11 @@ buildPythonPackage rec {
     "test_cull_idle"
     "test_server_extension_list"
     "test_subscribe_websocket"
+    # test is presumable broken in sandbox
+    "test_authorized_requests"
   ] ++ lib.optionals stdenv.isDarwin [
     # attempts to use trashcan, build env doesn't allow this
     "test_delete"
-    # test is presumable broken in sandbox
-    "test_authorized_requests"
     # Insufficient access privileges for operation
     "test_regression_is_hidden"
   ] ++ lib.optionals stdenv.isLinux [
@@ -118,6 +121,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/jupyter-server/jupyter_server/blob/v${version}/CHANGELOG.md";
     description = "The backend—i.e. core services, APIs, and REST endpoints—to Jupyter web applications";
+    mainProgram = "jupyter-server";
     homepage = "https://github.com/jupyter-server/jupyter_server";
     license = licenses.bsdOriginal;
     maintainers = lib.teams.jupyter.members;

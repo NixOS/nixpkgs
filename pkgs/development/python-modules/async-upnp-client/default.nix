@@ -1,22 +1,29 @@
 { lib
 , stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+
+# build-system
+, setuptools
+
+# dependencies
 , aiohttp
 , async-timeout
-, buildPythonPackage
 , defusedxml
-, fetchFromGitHub
+, python-didl-lite
+, voluptuous
+
+# tests
 , pytest-aiohttp
 , pytest-asyncio
 , pytestCheckHook
-, python-didl-lite
-, pythonOlder
-, voluptuous
 }:
 
 buildPythonPackage rec {
   pname = "async-upnp-client";
-  version = "0.36.2";
-  format = "setuptools";
+  version = "0.38.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -24,10 +31,14 @@ buildPythonPackage rec {
     owner = "StevenLooman";
     repo = "async_upnp_client";
     rev = "refs/tags/${version}";
-    hash = "sha256-f3x5adxLHT/C5dXfdBH6stKv0y2nuhbpe8jkJex1DKU=";
+    hash = "sha256-RmpQOVZ/s3Zv2e+iS7LTI5Wh/g0yy0Xv0M8ppsbYZPg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     aiohttp
     async-timeout
     defusedxml
@@ -45,20 +56,6 @@ buildPythonPackage rec {
     # socket.gaierror: [Errno -2] Name or service not known
     "test_async_get_local_ip"
     "test_get_local_ip"
-    # OSError: [Errno 101] Network is unreachable
-    "test_auto_resubscribe_fail"
-    "test_init"
-    "test_on_notify_dlna_event"
-    "test_on_notify_upnp_event"
-    "test_server_init"
-    "test_server_start"
-    "test_start_server"
-    "test_subscribe"
-    "test_subscribe_auto_resubscribe"
-    "test_subscribe_fail"
-    "test_subscribe_manual_resubscribe"
-    "test_subscribe_renew"
-    "test_unsubscribe"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_deferred_callback_url"
   ];
@@ -78,5 +75,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/StevenLooman/async_upnp_client/blob/${version}/CHANGES.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ hexa ];
+    mainProgram = "upnp-client";
   };
 }

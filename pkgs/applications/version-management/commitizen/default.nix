@@ -11,7 +11,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "commitizen";
-  version = "3.13.0";
+  version = "3.22.0";
   format = "pyproject";
 
   disabled = python3.pythonOlder "3.8";
@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "commitizen-tools";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-6Zo+d1OuaHYVf/KX8hKlyp/YS/1tHFmpNK6ssnxg7h0=";
+    hash = "sha256-wDxhhPYElNPimVa+wX6AnTZrZOhWjuMzNJ6urn0wruk=";
   };
 
   pythonRelaxDeps = [
@@ -55,7 +55,7 @@ python3.pkgs.buildPythonApplication rec {
     pytest-freezer
     pytest-mock
     pytest-regressions
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
   doCheck = true;

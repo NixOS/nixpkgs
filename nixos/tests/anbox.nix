@@ -15,7 +15,7 @@
     test-support.displayManager.auto.user = "alice";
 
     virtualisation.anbox.enable = true;
-    boot.kernelPackages = pkgs.linuxPackages_5_15;
+    boot.kernelPackages = pkgs.linuxKernel.packages.linux_5_15;
     virtualisation.memorySize = 2500;
   };
 

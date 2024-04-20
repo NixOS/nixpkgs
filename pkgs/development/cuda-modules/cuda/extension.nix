@@ -1,4 +1,4 @@
-{cudaVersion, lib}:
+{ cudaVersion, lib }:
 let
   inherit (lib) attrsets modules trivial;
   redistName = "cuda";
@@ -63,23 +63,21 @@ let
             featureRelease
             ;
         }).overrideAttrs
-          (
-            prevAttrs: {
-              # Add the package-specific license.
-              meta = prevAttrs.meta // {
-                license =
-                  let
-                    licensePath =
-                      if redistribRelease.license_path != null then
-                        redistribRelease.license_path
-                      else
-                        "${pname}/LICENSE.txt";
-                    url = "https://developer.download.nvidia.com/compute/cuda/redist/${licensePath}";
-                  in
-                  lib.licenses.nvidiaCudaRedist // {inherit url;};
-              };
-            }
-          );
+          (prevAttrs: {
+            # Add the package-specific license.
+            meta = prevAttrs.meta // {
+              license =
+                let
+                  licensePath =
+                    if redistribRelease.license_path != null then
+                      redistribRelease.license_path
+                    else
+                      "${pname}/LICENSE.txt";
+                  url = "https://developer.download.nvidia.com/compute/cuda/redist/${licensePath}";
+                in
+                lib.licenses.nvidiaCudaRedist // { inherit url; };
+            };
+          });
     in
     drv;
 

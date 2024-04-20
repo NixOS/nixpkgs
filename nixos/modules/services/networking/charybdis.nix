@@ -18,11 +18,11 @@ in
 
     services.charybdis = {
 
-      enable = mkEnableOption (lib.mdDoc "Charybdis IRC daemon");
+      enable = mkEnableOption "Charybdis IRC daemon";
 
       config = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Charybdis IRC daemon configuration file.
         '';
       };
@@ -30,7 +30,7 @@ in
       statedir = mkOption {
         type = types.path;
         default = "/var/lib/charybdis";
-        description = lib.mdDoc ''
+        description = ''
           Location of the state directory of charybdis.
         '';
       };
@@ -38,7 +38,7 @@ in
       user = mkOption {
         type = types.str;
         default = "ircd";
-        description = lib.mdDoc ''
+        description = ''
           Charybdis IRC daemon user.
         '';
       };
@@ -46,7 +46,7 @@ in
       group = mkOption {
         type = types.str;
         default = "ircd";
-        description = lib.mdDoc ''
+        description = ''
           Charybdis IRC daemon group.
         '';
       };
@@ -54,7 +54,7 @@ in
       motd = mkOption {
         type = types.nullOr types.lines;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Charybdis MOTD text.
 
           Charybdis will read its MOTD from /etc/charybdis/ircd.motd .
@@ -81,9 +81,9 @@ in
         gid = config.ids.gids.ircd;
       };
 
-      systemd.tmpfiles.rules = [
-        "d ${cfg.statedir} - ${cfg.user} ${cfg.group} - -"
-      ];
+      systemd.tmpfiles.settings."10-charybdis".${cfg.statedir}.d = {
+        inherit (cfg) user group;
+      };
 
       environment.etc."charybdis/ircd.conf".source = configFile;
 

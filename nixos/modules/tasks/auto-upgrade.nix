@@ -13,7 +13,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to periodically upgrade NixOS to the latest
           version. If enabled, a systemd timer will run
           `nixos-rebuild switch --upgrade` once a
@@ -25,7 +25,7 @@ in {
         type = types.enum ["switch" "boot"];
         default = "switch";
         example = "boot";
-        description = lib.mdDoc ''
+        description = ''
           Whether to run
           `nixos-rebuild switch --upgrade` or run
           `nixos-rebuild boot --upgrade`
@@ -36,7 +36,7 @@ in {
         type = types.nullOr types.str;
         default = null;
         example = "github:kloenk/nix";
-        description = lib.mdDoc ''
+        description = ''
           The Flake URI of the NixOS configuration to build.
           Disables the option {option}`system.autoUpgrade.channel`.
         '';
@@ -46,7 +46,7 @@ in {
         type = types.nullOr types.str;
         default = null;
         example = "https://nixos.org/channels/nixos-14.12-small";
-        description = lib.mdDoc ''
+        description = ''
           The URI of the NixOS channel to use for automatic
           upgrades. By default, this is the channel set using
           {command}`nix-channel` (run `nix-channel --list`
@@ -64,7 +64,7 @@ in {
           "extra-binary-caches"
           "http://my-cache.example.org/"
         ];
-        description = lib.mdDoc ''
+        description = ''
           Any additional flags passed to {command}`nixos-rebuild`.
 
           If you are using flakes and use a local repo you can add
@@ -77,7 +77,7 @@ in {
         type = types.str;
         default = "04:40";
         example = "daily";
-        description = lib.mdDoc ''
+        description = ''
           How often or when upgrade occurs. For most desktop and server systems
           a sufficient upgrade frequency is once a day.
 
@@ -89,7 +89,7 @@ in {
       allowReboot = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Reboot the system into the new generation instead of a switch
           if the new generation uses a different kernel, kernel modules
           or initrd than the booted system.
@@ -101,7 +101,7 @@ in {
         default = "0";
         type = types.str;
         example = "45min";
-        description = lib.mdDoc ''
+        description = ''
           Add a randomized delay before each automatic upgrade.
           The delay will be chosen between zero and this value.
           This value must be a time span in the format specified by
@@ -109,8 +109,19 @@ in {
         '';
       };
 
+      fixedRandomDelay = mkOption {
+        default = false;
+        type = types.bool;
+        example = true;
+        description = ''
+          Make the randomized delay consistent between runs.
+          This reduces the jitter between automatic upgrades.
+          See {option}`randomizedDelaySec` for configuring the randomized delay.
+        '';
+      };
+
       rebootWindow = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Define a lower and upper time value (in HH:MM format) which
           constitute a time window during which reboots are allowed after an upgrade.
           This option only has an effect when {option}`allowReboot` is enabled.
@@ -121,13 +132,13 @@ in {
         type = with types; nullOr (submodule {
           options = {
             lower = mkOption {
-              description = lib.mdDoc "Lower limit of the reboot window";
+              description = "Lower limit of the reboot window";
               type = types.strMatching "[[:digit:]]{2}:[[:digit:]]{2}";
               example = "01:00";
             };
 
             upper = mkOption {
-              description = lib.mdDoc "Upper limit of the reboot window";
+              description = "Upper limit of the reboot window";
               type = types.strMatching "[[:digit:]]{2}:[[:digit:]]{2}";
               example = "05:00";
             };
@@ -139,7 +150,7 @@ in {
         default = true;
         type = types.bool;
         example = false;
-        description = lib.mdDoc ''
+        description = ''
           Takes a boolean argument. If true, the time when the service
           unit was last triggered is stored on disk. When the timer is
           activated, the service unit is triggered immediately if it
@@ -253,6 +264,7 @@ in {
     systemd.timers.nixos-upgrade = {
       timerConfig = {
         RandomizedDelaySec = cfg.randomizedDelaySec;
+        FixedRandomDelay = cfg.fixedRandomDelay;
         Persistent = cfg.persistent;
       };
     };

@@ -13,7 +13,6 @@
 , gmp
 , gfan
 , python3
-, flintqs
 , eclib
 , ntl
 , ecm
@@ -40,7 +39,6 @@ let
     gfan
     maxima
     eclib
-    flintqs
     ntl
     ecm
   ];
@@ -79,7 +77,7 @@ let
     "zope.interface"
     "node_three"
   ] [
-    "zope_interface"
+    "zope-interface"
     "threejs"
   ];
   # spkg names (this_is_a_package-version) of all transitive deps

@@ -72,6 +72,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "CleverCSV is a Python package for handling messy CSV files";
+    mainProgram = "clevercsv";
     longDescription = ''
       CleverCSV is a Python package for handling messy CSV files. It provides
       a drop-in replacement for the builtin CSV module with improved dialect

@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchgit
-, fetchpatch
 , autoreconfHook
 , pkg-config
 , ell
@@ -14,22 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "iwd";
-  version = "2.11";
+  version = "2.17";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     rev = version;
-    hash = "sha256-kE9GBVTKNpgEuE9jQ7k85OhEAN3VWgjmAgifvZfq46I=";
+    hash = "sha256-o/Q8vUtB4Yiz1x+/6+8LUKUQNtiAmwcdh++/tTUN4mM=";
   };
-
-  patches = [
-    # Fix unit/test-dpp on aarch64.
-    (fetchpatch {
-      name = "size_t-vararg.patch";
-      url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git/patch/?id=688d27700833258a139a6fbd5661334bd2c9fa98";
-      hash = "sha256-g3gG1c25o6ODFfHL4a0HcnNJBBOKRbdo+ZuVbzoxCLs=";
-    })
-  ];
 
   outputs = [ "out" "man" "doc" ]
     ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "test";
@@ -91,9 +81,9 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace $out/share/dbus-1/system-services/net.connman.ead.service \
-      --replace /bin/false ${coreutils}/bin/false
+      --replace-fail /bin/false ${coreutils}/bin/false
     substituteInPlace $out/share/dbus-1/system-services/net.connman.iwd.service \
-      --replace /bin/false ${coreutils}/bin/false
+      --replace-fail /bin/false ${coreutils}/bin/false
   '';
 
   enableParallelBuilding = true;

@@ -11,12 +11,12 @@ let
 in
 {
   options.services.earlyoom = {
-    enable = mkEnableOption (lib.mdDoc "early out of memory killing");
+    enable = mkEnableOption "early out of memory killing";
 
     freeMemThreshold = mkOption {
       type = types.ints.between 1 100;
       default = 10;
-      description = lib.mdDoc ''
+      description = ''
         Minimum available memory (in percent).
 
         If the available memory falls below this threshold (and the analog is true for
@@ -32,7 +32,7 @@ in
     freeMemKillThreshold = mkOption {
       type = types.nullOr (types.ints.between 1 100);
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Minimum available memory (in percent) before sending SIGKILL.
         If unset, this defaults to half of {option}`freeMemThreshold`.
 
@@ -43,7 +43,7 @@ in
     freeSwapThreshold = mkOption {
       type = types.ints.between 1 100;
       default = 10;
-      description = lib.mdDoc ''
+      description = ''
         Minimum free swap space (in percent) before sending SIGTERM.
 
         See the description of [](#opt-services.earlyoom.freeMemThreshold).
@@ -53,7 +53,7 @@ in
     freeSwapKillThreshold = mkOption {
       type = types.nullOr (types.ints.between 1 100);
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Minimum free swap space (in percent) before sending SIGKILL.
         If unset, this defaults to half of {option}`freeSwapThreshold`.
 
@@ -64,7 +64,7 @@ in
     enableDebugInfo = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enable debugging messages.
       '';
     };
@@ -72,7 +72,7 @@ in
     enableNotifications = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Send notifications about killed processes via the system d-bus.
 
         WARNING: enabling this option (while convenient) should *not* be done on a
@@ -95,7 +95,7 @@ in
           echo "Process $EARLYOOM_NAME ($EARLYOOM_PID) was killed" >> /path/to/log
         '''
       '';
-      description = lib.mdDoc ''
+      description = ''
         An absolute path to an executable to be run for each process killed.
         Some environment variables are available, see
         [README](https://github.com/rfjakob/earlyoom#notifications) and
@@ -108,14 +108,14 @@ in
       type = types.int;
       default = 3600;
       example = 0;
-      description = lib.mdDoc "Interval (in seconds) at which a memory report is printed (set to 0 to disable).";
+      description = "Interval (in seconds) at which a memory report is printed (set to 0 to disable).";
     };
 
     extraArgs = mkOption {
       type = types.listOf types.str;
       default = [];
       example = [ "-g" "--prefer '(^|/)(java|chromium)$'" ];
-      description = lib.mdDoc "Extra command-line arguments to be passed to earlyoom.";
+      description = "Extra command-line arguments to be passed to earlyoom.";
     };
   };
 

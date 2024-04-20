@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://czmq.zeromq.org/";
     description = "High-level C Binding for ZeroMQ";
+    mainProgram = "zmakecert";
     license = licenses.mpl20;
     platforms = platforms.all;
   };

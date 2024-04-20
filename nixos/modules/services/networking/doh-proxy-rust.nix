@@ -10,13 +10,13 @@ in {
 
   options.services.doh-proxy-rust = {
 
-    enable = mkEnableOption (lib.mdDoc "doh-proxy-rust");
+    enable = mkEnableOption "doh-proxy-rust";
 
     flags = mkOption {
       type = types.listOf types.str;
       default = [];
       example = [ "--server-address=9.9.9.9:53" ];
-      description = lib.mdDoc ''
+      description = ''
         A list of command-line flags to pass to doh-proxy. For details on the
         available options, see <https://github.com/jedisct1/doh-server#usage>.
       '';

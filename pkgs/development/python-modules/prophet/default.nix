@@ -32,7 +32,7 @@ buildPythonPackage rec {
     hash = "sha256-liTg5Hm+FPpRQajBnnJKBh3JPGyu0Hflntf0isj1FiQ=";
   };
 
-  sourceRoot = "source/python";
+  sourceRoot = "${src.name}/python";
 
   env.PROPHET_REPACKAGE_CMDSTAN = "false";
 
@@ -66,6 +66,5 @@ buildPythonPackage rec {
     homepage = "https://facebook.github.io/prophet/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomasajt ];
-    platforms = lib.platforms.linux; # cmdstanpy doesn't currently build on darwin
   };
 }

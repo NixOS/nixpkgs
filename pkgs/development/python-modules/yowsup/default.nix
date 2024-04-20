@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , isPy3k
 , fetchFromGitHub
 , appdirs
@@ -7,6 +8,7 @@
 , protobuf
 , python-axolotl
 , six
+, pyasyncore
 , pytestCheckHook
 }:
 
@@ -42,11 +44,15 @@ buildPythonPackage rec {
     protobuf
     python-axolotl
     six
+  ]
+  ++ lib.optionals (!pythonOlder "3.12") [
+    pyasyncore
   ];
 
   meta = with lib; {
     homepage = "https://github.com/tgalal/yowsup";
     description = "The python WhatsApp library";
+    mainProgram = "yowsup-cli";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];
   };

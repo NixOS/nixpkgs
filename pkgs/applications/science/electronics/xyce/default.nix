@@ -32,21 +32,21 @@
 assert withMPI -> trilinos.withMPI;
 
 let
-  version = "7.7.0";
+  version = "7.8.0";
 
   # useing fetchurl or fetchFromGitHub doesn't include the manuals
   # due to .gitattributes files
   xyce_src = fetchgit {
     url = "https://github.com/Xyce/Xyce.git";
     rev = "Release-${version}";
-    sha256 = "sha256-F0kO86eliD1AfUUjeVllxJ231ZElXkfBfGJ3jhT0s9w=";
+    sha256 = "sha256-+aNy2bGuFQ517FZUvU0YqN0gmChRpVuFEmFGTCx9AgY=";
   };
 
   regression_src = fetchFromGitHub {
     owner = "Xyce";
     repo = "Xyce_Regression";
     rev = "Release-${version}";
-    sha256 = "sha256-iDxm0Vcn3JuuREciCt3/b7q94E8GhXoIUD/BCx0mW6Q=";
+    sha256 = "sha256-Fxi/NpXXIw/bseWaLi2iQ4sg4S9Z+othGgSvQoxyJ9c=";
   };
 in
 
@@ -82,11 +82,13 @@ stdenv.mkDerivation rec {
     libtool_2
   ] ++ lib.optionals enableDocs [
     (texliveMedium.withPackages (ps: with ps; [
+        enumitem
         koma-script
         optional
         framed
         enumitem
         multirow
+        newtx
         preprint
       ]))
   ];

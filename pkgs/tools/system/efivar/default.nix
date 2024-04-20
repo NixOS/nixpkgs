@@ -29,6 +29,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/rhboot/efivar/commit/cece3ffd5be2f8641eb694513f2b73e5eb97ffd3.patch";
       sha256 = "7/E0gboU0A45/BY6jGPLuvds6qKtNjzpgKgdNTaVaZQ=";
     })
+
+    # Fix build against gcc-13: https://github.com/rhboot/efivar/pull/242
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/rhboot/efivar/commit/52fece47d4f3ebd588bd85598bfc7a0142365f7e.patch";
+      hash = "sha256-tOmxbY7kD6kzbBZ2RhQ5gCCpHtu+2gRNa7VUAWdCKu0=";
+    })
   ];
 
   nativeBuildInputs = [ pkg-config mandoc ];

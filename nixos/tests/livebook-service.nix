@@ -9,20 +9,22 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
 
       services.livebook = {
         enableUserService = true;
-        port = 20123;
-        environmentFile = pkgs.writeText "livebook.env" ''
-          LIVEBOOK_PASSWORD = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
-        '';
-        options = {
-          cookie = "chocolate chip";
+        environment = {
+          LIVEBOOK_PORT = 20123;
+          LIVEBOOK_COOKIE = "chocolate chip";
+          LIVEBOOK_TOKEN_ENABLED = true;
+
         };
+        environmentFile = pkgs.writeText "livebook.env" ''
+          LIVEBOOK_PASSWORD = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        '';
       };
     };
   };
 
   testScript = { nodes, ... }:
     let
-      user = nodes.machine.config.users.users.alice;
+      user = nodes.machine.users.users.alice;
       sudo = lib.concatStringsSep " " [
         "XDG_RUNTIME_DIR=/run/user/${toString user.uid}"
         "sudo"

@@ -4,17 +4,17 @@
 , pythonOlder
 , setuptools
 , zope-i18nmessageid
-, zope_interface
-, zope_schema
+, zope-interface
+, zope-schema
 , pytestCheckHook
 , zope-testing
-, zope_testrunner
+, zope-testrunner
 , manuel
 }:
 
 buildPythonPackage rec {
   pname = "zope-configuration";
-  version = "5.0";
+  version = "5.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "zope.configuration";
     inherit version;
-    hash = "sha256-I0tKGMcfazub9rzyJSZLrgFJrGjeoHsHLw9pmkzsJuc=";
+    hash = "sha256-81h36tXpmANjhdLdxGkZ6ryZjmmcBZh5ZPFxrY3ZJxs=";
   };
 
   nativeBuildInputs = [
@@ -33,13 +33,13 @@ buildPythonPackage rec {
     manuel
     pytestCheckHook
     zope-testing
-    zope_testrunner
+    zope-testrunner
   ];
 
   propagatedBuildInputs = [
     zope-i18nmessageid
-    zope_interface
-    zope_schema
+    zope-interface
+    zope-schema
   ];
 
   # Need to investigate how to run the tests with zope-testrunner

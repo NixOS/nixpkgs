@@ -21,6 +21,7 @@
 , exempi
 , shared-mime-info
 , wrapGAppsHook
+, libjxl
 , librsvg
 , webp-pixbuf-loader
 , libheif
@@ -31,13 +32,13 @@
 
 stdenv.mkDerivation rec {
   pname = "eog";
-  version = "45.1";
+  version = "45.3";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-wX+GcExyKzbAGhaPHlFDm+C7J58sZkb0i2bp0POiTNI=";
+    sha256 = "sha256-hlD2YtSSHYOnkE9rucokW69zX3F7R/rFs38NkOXokag=";
   };
 
   patches = [
@@ -81,10 +82,11 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    # Pull in WebP support for gnome-backgrounds.
+    # Pull in WebP and JXL support for gnome-backgrounds.
     # In postInstall to run before gappsWrapperArgsHook.
     export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
       extraLoaders = [
+        libjxl
         librsvg
         webp-pixbuf-loader
         libheif.out
@@ -96,6 +98,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(
       # Thumbnailers
       --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
+      --prefix XDG_DATA_DIRS : "${libjxl}/share"
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     )
@@ -119,5 +122,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;
+    mainProgram = "eog";
   };
 }

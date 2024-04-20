@@ -36,10 +36,6 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     wrapGAppsHook4
-    # Prevents “error: Package `libadwaita-1' not found in specified Vala API
-    # directories or GObject-Introspection GIR directories” with strictDeps,
-    # even though it should only be a runtime dependency.
-    libadwaita
   ];
 
   buildInputs = [
@@ -58,6 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Graphical application to analyse disk usage in any GNOME environment";
+    mainProgram = "baobab";
     homepage = "https://wiki.gnome.org/Apps/DiskUsageAnalyzer";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;

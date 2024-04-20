@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sov";
-  version = "0.93";
+  version = "0.94";
 
   src = fetchFromGitHub {
     owner = "milgra";
     repo = "sov";
     rev = finalAttrs.version;
-    hash = "sha256-Oc25ixrl0QX0jBBMV34BPAixyBikvevXJ1JNGZymPhg=";
+    hash = "sha256-JgLah21ye3G9jE3UTZu8r+nanwBDIQXmqv9iP1C+aUw=";
   };
 
   patches = [

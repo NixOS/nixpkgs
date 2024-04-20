@@ -6,11 +6,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Genshi";
+  pname = "genshi";
   version = "0.7.7";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "Genshi";
+    inherit version;
     hash = "sha256-wQBSCGLNaQhdEO4ah+kSief1n2s9m9Yiv1iygE5rmqs=";
   };
 

@@ -27,18 +27,18 @@ With these expressions the Nix package manager can build binary packages.
 Packages, including the Nix packages collection, are distributed through
 [channels](https://nixos.org/nix/manual/#sec-channels). The collection is
 distributed for users of Nix on non-NixOS distributions through the channel
-`nixpkgs`. Users of NixOS generally use one of the `nixos-*` channels, e.g.
-`nixos-22.11`, which includes all packages and modules for the stable NixOS
+`nixpkgs-unstable`. Users of NixOS generally use one of the `nixos-*` channels,
+e.g. `nixos-22.11`, which includes all packages and modules for the stable NixOS
 22.11. Stable NixOS releases are generally only given
 security updates. More up to date packages and modules are available via the
 `nixos-unstable` channel.
 
-Both `nixos-unstable` and `nixpkgs` follow the `master` branch of the Nixpkgs
-repository, although both do lag the `master` branch by generally
+Both `nixos-unstable` and `nixpkgs-unstable` follow the `master` branch of the
+nixpkgs repository, although both do lag the `master` branch by generally
 [a couple of days](https://status.nixos.org/). Updates to a channel are
 distributed as soon as all tests for that channel pass, e.g.
 [this table](https://hydra.nixos.org/job/nixpkgs/trunk/unstable#tabs-constituents)
-shows the status of tests for the `nixpkgs` channel.
+shows the status of tests for the `nixpkgs-unstable` channel.
 
 The tests are conducted by a cluster called [Hydra](https://nixos.org/hydra/),
 which also builds binary packages from the Nix expressions in Nixpkgs for
@@ -46,5 +46,5 @@ which also builds binary packages from the Nix expressions in Nixpkgs for
 The binaries are made available via a [binary cache](https://cache.nixos.org).
 
 The current Nix expressions of the channels are available in the
-[`nixpkgs`](https://github.com/NixOS/nixpkgs) repository in branches
+[nixpkgs repository](https://github.com/NixOS/nixpkgs) in branches
 that correspond to the channel names (e.g. `nixos-22.11-small`).

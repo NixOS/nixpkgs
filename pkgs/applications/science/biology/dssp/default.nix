@@ -51,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Calculate the most likely secondary structure assignment given the 3D structure of a protein";
+    mainProgram = "mkdssp";
     homepage = "https://github.com/PDB-REDO/dssp";
     changelog = "https://github.com/PDB-REDO/libcifpp/releases/tag/${finalAttrs.src.rev}";
     license = licenses.bsd2;

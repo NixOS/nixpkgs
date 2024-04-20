@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "fioctl";
-  version = "0.38";
+  version = "0.41";
 
   src = fetchFromGitHub {
     owner = "foundriesio";
     repo = "fioctl";
     rev = "v${version}";
-    sha256 = "sha256-MA7mMGZyRbQ4165qB+Q6/gQZP/yaUoZmMCVrPCPZoj4=";
+    sha256 = "sha256-N+bLW1Gf0lr5FKgd1lr84HVrhdjB+npaeS3nzYXoVl0=";
   };
 
-  vendorHash = "sha256-OmukK6ecaiCRnK6fL238GhkxW4A4yrcR/xelBZzVwqI=";
+  vendorHash = "sha256-cu1TwCWdDQi2ZR96SvEeH/LIP7sZOVZoly3VczKZfRw=";
 
   ldflags = [
     "-s" "-w"
@@ -38,5 +38,6 @@ buildGoModule rec {
     homepage = "https://github.com/foundriesio/fioctl";
     license = licenses.asl20;
     maintainers = with maintainers; [ nixinator matthewcroughan ];
+    mainProgram = "fioctl";
   };
 }

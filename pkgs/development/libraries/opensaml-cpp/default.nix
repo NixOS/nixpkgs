@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage    = "https://shibboleth.net/products/opensaml-cpp.html";
     description = "A low-level library written in C++ that provides support for producing and consuming SAML messages";
+    mainProgram = "samlsign";
     platforms   = platforms.unix;
     license     = licenses.asl20;
     maintainers = [ ];

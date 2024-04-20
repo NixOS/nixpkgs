@@ -21,8 +21,6 @@ buildPythonPackage rec {
     hash = "sha256-aJbbfNnQvmmYPXVOO+xx7ADetsxE+jnVQOVDzV5jUp8=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     setuptools-scm
   ];
@@ -45,6 +43,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library to capitalize strings as specified by the New York Times";
+    mainProgram = "titlecase";
     homepage = "https://github.com/ppannuto/python-titlecase";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

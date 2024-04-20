@@ -26,6 +26,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/olofk/ipyxact";
     description = "IP-XACT parser";
+    mainProgram = "ipxact2v";
     maintainers = with maintainers; [ genericnerdyusername ];
     license = licenses.mit;
   };

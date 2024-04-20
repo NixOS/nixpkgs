@@ -69,6 +69,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "LaTeX editor written in Python with Gtk";
+    mainProgram = "setzer";
     homepage = src.meta.homepage;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];

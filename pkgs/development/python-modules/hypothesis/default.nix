@@ -2,6 +2,7 @@
 , buildPythonPackage
 , isPyPy
 , fetchFromGitHub
+, setuptools
 , attrs
 , exceptiongroup
 , pexpect
@@ -21,9 +22,8 @@
 
 buildPythonPackage rec {
   pname = "hypothesis";
-  version = "6.84.3";
-  outputs = [ "out" ];
-  format = "setuptools";
+  version = "6.99.12";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "HypothesisWorks";
     repo = "hypothesis";
     rev = "hypothesis-python-${version}";
-    hash = "sha256-wymZ/tJBGcP57B3BuDlBT7kbUxNwW4/SSmvwLSa5PvM=";
+    hash = "sha256-0nzjRDv4L3bxxnC0lBY5S7FP9CFhyzHzNchWXoX91Zg=";
   };
 
   # I tried to package sphinx-selective-exclude, but it throws
@@ -48,6 +48,10 @@ buildPythonPackage rec {
   '';
 
   postUnpack = "sourceRoot=$sourceRoot/hypothesis-python";
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     attrs
@@ -74,6 +78,14 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     "tests/cover"
   ];
+
+  disabledTests = if (pythonOlder "3.10") then [
+    # not sure why these tests fail with only 3.9
+    # FileNotFoundError: [Errno 2] No such file or directory: 'git'
+    "test_observability"
+    "test_assume_has_status_reason"
+    "test_observability_captures_stateful_reprs"
+  ] else null;
 
   pythonImportsCheck = [
     "hypothesis"
@@ -105,6 +117,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for property based testing";
+    mainProgram = "hypothesis";
     homepage = "https://github.com/HypothesisWorks/hypothesis";
     changelog = "https://hypothesis.readthedocs.io/en/latest/changes.html#v${lib.replaceStrings [ "." ] [ "-" ] version}";
     license = licenses.mpl20;

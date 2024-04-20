@@ -24,6 +24,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     master.wait_for_unit("postgresql")
     master.sleep(10)  # Hopefully this is long enough!!
     master.succeed("sudo -u postgres psql -c 'CREATE EXTENSION postgis;'")
+    master.succeed("sudo -u postgres psql -c 'CREATE EXTENSION postgis_raster;'")
     master.succeed("sudo -u postgres psql -c 'CREATE EXTENSION postgis_topology;'")
   '';
 })

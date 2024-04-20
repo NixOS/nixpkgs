@@ -72,6 +72,13 @@ CTAN and the various mirrors) and that the build recipe continues to produce
 the same output. Should those assumptions not hold, remove the previous fixed
 hashes for the relevant package, or for all packages.
 
+### Upgrading the ConTeXt binaries
+
+The LuaMetaTeX sources required for ConTeXt are distributed separately from the
+TeX Live tarballs and must be updated manually (see `texlive.bin.context`). You
+must use the latest tarball at https://tug.org/svn/texlive/trunk/Master/source/
+whose revision number is less than or equal to that of the package `context`.
+
 ### Updating the licensing information
 
 The license of each package in texlive is automatically extracted from texlive's

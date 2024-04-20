@@ -1,33 +1,42 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, dill
 , freezegun
 , pytestCheckHook
 , python-utils
 , pythonOlder
+, setuptools
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "progressbar2";
-  version = "4.2.0";
-  format = "setuptools";
+  version = "4.4.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-E5OSL8tkWYlErUV1afvrSzrBie9Qta25zvMoTofjlM4=";
+    hash = "sha256-P9ouDGBpNgCmWFp4TJ07xOHaxX6Z4TP4wPXIzz3zdKI=";
   };
 
   postPatch = ''
     sed -i "/-cov/d" pytest.ini
   '';
 
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
   propagatedBuildInputs = [
     python-utils
   ];
 
   nativeCheckInputs = [
+    dill
     freezegun
     pytestCheckHook
   ];

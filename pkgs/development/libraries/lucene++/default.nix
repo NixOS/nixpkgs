@@ -29,9 +29,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # Don't use the built in gtest - but the nixpkgs one requires C++14.
   postPatch = ''
     substituteInPlace src/test/CMakeLists.txt \
       --replace "add_subdirectory(gtest)" ""
+    substituteInPlace CMakeLists.txt \
+      --replace "set(CMAKE_CXX_STANDARD 11)" "set(CMAKE_CXX_STANDARD 14)"
   '';
 
   doCheck = true;

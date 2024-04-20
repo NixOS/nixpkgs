@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyhamcrest";
-  version = "2.0.4";
+  version = "2.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "hamcrest";
     repo = "PyHamcrest";
     rev = "refs/tags/V${version}";
-    hash = "sha256-CIkttiijbJCR0zdmwM5JvFogQKYuHUXHJhdyWonHcGk=";
+    hash = "sha256-VkfHRo4k8g9/QYG4r79fXf1NXorVdpUKUgVrbV2ELMU=";
   };
 
   postPatch = ''

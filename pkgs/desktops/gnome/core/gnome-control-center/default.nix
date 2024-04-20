@@ -31,6 +31,7 @@
 , libgudev
 , libadwaita
 , libkrb5
+, libjxl
 , libpulseaudio
 , libpwquality
 , librsvg
@@ -62,17 +63,17 @@
 , libepoxy
 , gnome-user-share
 , gnome-remote-desktop
-, wrapGAppsHook
+, wrapGAppsHook4
 , xvfb-run
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-control-center";
-  version = "45.2";
+  version = "45.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-control-center/${lib.versions.major finalAttrs.version}/gnome-control-center-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-DPo8My1u2stz0GxrJv/KEHjob/WerIGbKTHglndT33A=";
+    sha256 = "sha256-selJxOhsBiTsam7Q3wnJ+uKyKYPB3KYO2GrsjvCyQAQ=";
   };
 
   patches = [
@@ -93,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     shared-mime-info
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -173,10 +174,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
-    # Pull in WebP support for gnome-backgrounds.
+    # Pull in WebP and JXL support for gnome-backgrounds.
     # In postInstall to run before gappsWrapperArgsHook.
     export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
       extraLoaders = [
+        libjxl
         librsvg
         webp-pixbuf-loader
       ];
@@ -208,6 +210,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Utilities to configure the GNOME desktop";
+    mainProgram = "gnome-control-center";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

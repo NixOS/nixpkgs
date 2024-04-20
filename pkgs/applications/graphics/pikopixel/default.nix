@@ -1,14 +1,10 @@
 { lib
+, clangStdenv
 , fetchurl
 , gnustep
-, llvmPackages_9
 }:
 
-let
-  # Earlier llvm than 9 segfaults
-  gnustep' = gnustep.override { llvmPackages = llvmPackages_9; };
-
-in gnustep'.gsmakeDerivation rec {
+clangStdenv.mkDerivation rec {
   pname = "pikopixel";
   version = "1.0-b10";
 
@@ -19,10 +15,15 @@ in gnustep'.gsmakeDerivation rec {
 
   sourceRoot = "PikoPixel.Sources.${version}/PikoPixel";
 
+  nativeBuildInputs = [
+    gnustep.make
+    gnustep.wrapGNUstepAppsHook
+  ];
+
   buildInputs = [
-    gnustep'.base
-    gnustep'.gui
-    gnustep'.back
+    gnustep.base
+    gnustep.gui
+    gnustep.back
   ];
 
   # Fix the Exec and Icon paths in the .desktop file, and save the file in the
@@ -38,9 +39,10 @@ in gnustep'.gsmakeDerivation rec {
 
   meta = with lib; {
     description = "Application for drawing and editing pixel-art images";
+    mainProgram = "PikoPixel";
     homepage = "https://twilightedge.com/mac/pikopixel/";
     downloadPage = "https://twilightedge.com/mac/pikopixel/";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
   };

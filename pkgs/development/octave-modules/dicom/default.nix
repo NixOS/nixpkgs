@@ -7,11 +7,11 @@
 
 buildOctavePackage rec {
   pname = "dicom";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-0qNqjpJWWBA0N5IgjV0e0SPQlCvbzIwnIgaWo+2wKw0=";
+    sha256 = "sha256-CFspqPJDSU1Pg+o6dub1/+g+mPDps9sPlus6keDj6h0=";
   };
 
   nativeBuildInputs = [

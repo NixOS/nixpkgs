@@ -138,12 +138,12 @@ let
     };
     erlfmt = builder {
       name = "erlfmt";
-      version = "git";
+      version = "1.3.0";
       src = fetchFromGitHub {
-        owner = "gomoripeti";
+        owner = "WhatsApp";
         repo = "erlfmt";
-        rev = "d4422d1fd79a73ef534c2bcbe5b5da4da5338833";
-        sha256 = "07jp4g6a41w7318lh8ndsvgivkj0ahz3spnrsnx4cqkdb97yjaid";
+        sha256 = "sha256-fVjEVmCnoofnfcxwBk0HI4adO0M6QOshP3uZrecZ9vM=";
+        rev = "v1.3.0";
       };
       beamDeps = [ ];
     };

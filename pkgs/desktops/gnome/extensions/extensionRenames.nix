@@ -68,9 +68,6 @@
   "true-color-invert@jackkenney" = "true-color-invert";
   "true-color-window-invert@lynet101" = "true-color-window-invert";
 
-  "SomaFm-Radio@alireza6677.gmail.com" = "somafm-internet-radio";
-  "SomaFm-Radio@cajhne.gmail.com" = "somafm-internet-radio-2";
-
   # ####### GNOME 41 #######
 
   "floatingDock@sun.wxg@gmail.com" = "floating-dock-2";

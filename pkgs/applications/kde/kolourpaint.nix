@@ -19,6 +19,7 @@ mkDerivation {
   meta = {
     homepage = "https://apps.kde.org/kolourpaint/";
     description = "Paint program";
+    mainProgram = "kolourpaint";
     maintainers = [ lib.maintainers.fridh ];
     license = with lib.licenses; [ gpl2 ];
   };

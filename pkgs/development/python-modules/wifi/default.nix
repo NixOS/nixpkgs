@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Provides a command line wrapper for iwlist and /etc/network/interfaces";
+    mainProgram = "wifi";
     homepage = "https://github.com/rockymeza/wifi";
     maintainers = with maintainers; [ rhoriguchi ];
     license = licenses.bsd2;

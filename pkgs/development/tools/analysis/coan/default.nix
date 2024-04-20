@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "The C preprocessor chainsaw";
+    mainProgram = "coan";
     longDescription = ''
       A software engineering tool for analysing preprocessor-based
       configurations of C or C++ source code. Its principal use is to simplify

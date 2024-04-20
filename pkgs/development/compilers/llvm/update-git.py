@@ -43,7 +43,7 @@ def get_current_revision():
     """Get the current revision of llvmPackages_git."""
     with open(DEFAULT_NIX) as f:
         for line in f:
-            rev = re.search(r'^  rev = "(.*)";', line)
+            rev = re.search(r'^    rev = "(.*)";', line)
             if rev:
                 return rev.group(1)
     sys.exit(1)
@@ -75,11 +75,11 @@ hash = nix_prefetch_url(f'https://github.com/llvm/llvm-project/archive/{commit["
 print('Updating default.nix...')
 with fileinput.FileInput(DEFAULT_NIX, inplace=True) as f:
     for line in f:
-        if match := re.search(r'^  rev-version = "unstable-(.+)";', line):
+        if match := re.search(r'^    rev-version = "unstable-(.+)";', line):
                 old_date = match.group(1)
-        result = re.sub(r'^  release_version = ".+";', f'  release_version = "{release_version}";', line)
-        result = re.sub(r'^  rev = ".*";', f'  rev = "{commit["sha"]}";', result)
-        result = re.sub(r'^  rev-version = ".+";', f'  rev-version = "{version}";', result)
+        result = re.sub(r'^    version = ".+";', f'    version = "{release_version}";', line)
+        result = re.sub(r'^    rev = ".*";', f'    rev = "{commit["sha"]}";', result)
+        result = re.sub(r'^    rev-version = ".+";', f'    rev-version = "{version}";', result)
         result = re.sub(r'^    sha256 = ".+";', f'    sha256 = "{hash}";', result)
         print(result, end='')
 # Commit the result:

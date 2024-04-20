@@ -18,10 +18,6 @@ makeScopeWithSplicing' {
 
       mkXfceDerivation = callPackage ./mkXfceDerivation.nix { };
 
-      automakeAddFlags = pkgs.makeSetupHook {
-        name = "xfce-automake-add-flags-hook";
-      } ./automakeAddFlags.sh;
-
       #### CORE
 
       exo = callPackage ./core/exo { };
@@ -31,6 +27,8 @@ makeScopeWithSplicing' {
       libxfce4ui = callPackage ./core/libxfce4ui { };
 
       libxfce4util = callPackage ./core/libxfce4util { };
+
+      libxfce4windowing = callPackage ./core/libxfce4windowing { };
 
       thunar = callPackage ./core/thunar {
         thunarPlugins = [ ];
@@ -166,6 +164,8 @@ makeScopeWithSplicing' {
 
     } // lib.optionalAttrs config.allowAliases {
       #### ALIASES
+
+      automakeAddFlags = throw "xfce.automakeAddFlags has been removed: this setup-hook is no longer used in Nixpkgs"; # added 2024-03-24
 
       xinitrc = self.xfce4-session.xinitrc; # added 2019-11-04
 

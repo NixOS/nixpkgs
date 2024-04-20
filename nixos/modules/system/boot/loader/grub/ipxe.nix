@@ -27,8 +27,7 @@ in
   options =
     { boot.loader.grub.ipxe = mkOption {
         type = types.attrsOf (types.either types.path types.str);
-        description =
-          lib.mdDoc ''
+        description = ''
             Set of iPXE scripts available for
             booting from the GRUB boot menu.
           '';

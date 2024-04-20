@@ -3,7 +3,7 @@
 , pythonOlder
 , pytestCheckHook
 , buildPythonPackage
-, cython
+, cython_0
 , mecab
 , setuptools-scm
 , ipadic
@@ -24,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-4i7Q+TtXTQNSJ1EIcS8KHrVPdCJAgZh86Y6lB8772XU=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [ cython mecab setuptools-scm ];
+  nativeBuildInputs = [ cython_0 mecab setuptools-scm ];
 
   nativeCheckInputs = [ ipadic pytestCheckHook ]
     ++ passthru.optional-dependencies.unidic-lite;

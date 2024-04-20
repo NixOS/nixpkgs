@@ -1,0 +1,22 @@
+diff --git a/Jambase b/Jambase
+--- a/Jambase
++++ b/Jambase
+@@ -4247,7 +4247,7 @@
+
+ actions GenFileND1
+ {
+-	$(>)
++	@emulator@ $(>)
+ }
+
+ actions GenFileNND1
+@@ -4410,7 +4410,7 @@
+ 	actions GenFile1
+ 	{
+ 		PATH="$PATH:."
+-		$(>[1]) $(<) $(>[2-])
++		@emulator@ $(>[1]) $(<) $(>[2-])
+ 	}
+
+ 	actions CreateCatFile_
+

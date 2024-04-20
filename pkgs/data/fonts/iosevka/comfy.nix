@@ -4,21 +4,21 @@ let
   sets = [
     # Family                  | Shapes | Spacing | Style      | Ligatures |
     # ------------------------+--------+---------+------------+-----------|
-    "comfy"                   # Sans   | Compact | Monospaced | Yes       |
-    "comfy-fixed"             # Sans   | Compact | Monospaced | No        |
-    "comfy-duo"               # Sans   | Compact | Duospaced  | Yes       |
+    "comfy" #                 | Sans   | Compact | Monospaced | Yes       |
+    "comfy-fixed" #           | Sans   | Compact | Monospaced | No        |
+    "comfy-duo" #             | Sans   | Compact | Duospaced  | Yes       |
     # ------------------------+--------+---------+------------+-----------|
-    "comfy-motion"            # Slab   | Compact | Monospaced | Yes       |
-    "comfy-motion-fixed"      # Slab   | Compact | Monospaced | No        |
-    "comfy-motion-duo"        # Slab   | Compact | Duospaced  | Yes       |
+    "comfy-motion" #          | Slab   | Compact | Monospaced | Yes       |
+    "comfy-motion-fixed" #    | Slab   | Compact | Monospaced | No        |
+    "comfy-motion-duo" #      | Slab   | Compact | Duospaced  | Yes       |
     # ------------------------+--------+---------+------------+-----------|
-    "comfy-wide"              # Sans   | Wide    | Monospaced | Yes       |
-    "comfy-wide-fixed"        # Sans   | Wide    | Monospaced | No        |
-    "comfy-wide-duo"          # Sans   | Wide    | Duospaced  | Yes       |
+    "comfy-wide" #            | Sans   | Wide    | Monospaced | Yes       |
+    "comfy-wide-fixed" #      | Sans   | Wide    | Monospaced | No        |
+    "comfy-wide-duo" #        | Sans   | Wide    | Duospaced  | Yes       |
     # ------------------------+--------+---------+------------+-----------|
-    "comfy-wide-motion"       # Slab   | Wide    | Monospaced | Yes       |
+    "comfy-wide-motion" #     | Slab   | Wide    | Monospaced | Yes       |
     "comfy-wide-motion-fixed" # Slab   | Wide    | Monospaced | No        |
-    "comfy-wide-motion-duo"   # Slab   | Wide    | Duospaced  | Yes       |
+    "comfy-wide-motion-duo" # | Slab   | Wide    | Duospaced  | Yes       |
   ];
   version = "1.4.0";
   src = fetchFromGitHub {
@@ -34,6 +34,7 @@ let
       inherit set privateBuildPlan;
       buildNpmPackage = args: superBuildNpmPackage
         (args // {
+          pname = "iosevka-${set}";
           inherit version;
 
           src = fetchFromGitHub {
@@ -44,6 +45,14 @@ let
           };
 
           npmDepsHash = "sha256-c+ltdh5e3+idclYfqp0Xh9IUwoj7XYP1uzJG6+a5gFU=";
+
+          installPhase = ''
+            runHook preInstall
+            fontdir="$out/share/fonts/truetype"
+            install -d "$fontdir"
+            install "dist/$pname/ttf"/* "$fontdir"
+            runHook postInstall
+          '';
 
           meta = with lib; {
             inherit (src.meta) homepage;

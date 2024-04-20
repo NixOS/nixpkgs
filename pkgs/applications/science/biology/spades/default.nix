@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${pname}-${version}/src";
 
+  env.CXXFLAGS = toString [
+    # GCC 13: error: 'uint32_t' does not name a type
+    "-include cstdint"
+  ];
+
   meta = with lib; {
     description = "St. Petersburg genome assembler: assembly toolkit containing various assembly pipelines";
     license = licenses.gpl2Only;

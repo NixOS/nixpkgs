@@ -79,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Performance portable programming model for machine learning tensor operators";
+    mainProgram = "ckProfiler";
     homepage = "https://github.com/ROCm/composable_kernel";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;

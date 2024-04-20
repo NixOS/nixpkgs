@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , aiohttp
 , ciso8601
 , async-timeout
@@ -14,8 +15,8 @@
 
 buildPythonPackage rec {
   pname = "sense-energy";
-  version = "0.12.2";
-  format = "setuptools";
+  version = "0.12.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -23,13 +24,17 @@ buildPythonPackage rec {
     owner = "scottbonline";
     repo = "sense";
     rev = "refs/tags/${version}";
-    hash = "sha256-OVFRM31LwHNeJUx+s/TN/1o4wvjMQEKaZEPI+y+S64s=";
+    hash = "sha256-aAPDYg5ttOAkKF5c1ft2apIQoReh4t22+78PtmLZNlI=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "{{VERSION_PLACEHOLDER}}" "${version}"
+      --replace-fail "{{VERSION_PLACEHOLDER}}" "${version}"
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp

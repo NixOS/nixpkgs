@@ -14,6 +14,8 @@ let
     postPatch = ''
       # remove addons already included in the base kodi package
       rm -r addons/game.controller.default
+      rm -r addons/game.controller.keyboard
+      rm -r addons/game.controller.mouse
       rm -r addons/game.controller.snes
     '';
 

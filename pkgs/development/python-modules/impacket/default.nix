@@ -4,19 +4,21 @@
 , dsinternals
 , fetchPypi
 , flask
+, ldap3
 , ldapdomaindump
 , pyasn1
 , pycryptodomex
 , pyopenssl
 , pythonOlder
 , setuptools
+, pytestCheckHook
 , six
 }:
 
 buildPythonPackage rec {
   pname = "impacket";
   version = "0.11.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -25,10 +27,15 @@ buildPythonPackage rec {
     hash = "sha256-7kA5tNKu3o9fZEeLxZ+qyGA2eWviTeqNwY8An7CQXko=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     charset-normalizer
     dsinternals
     flask
+    ldap3
     ldapdomaindump
     pyasn1
     pycryptodomex
@@ -37,11 +44,18 @@ buildPythonPackage rec {
     six
   ];
 
-  # RecursionError: maximum recursion depth exceeded
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "impacket"
+  ];
+
+  disabledTestPaths = [
+    # Skip all RPC related tests
+    "tests/dcerpc/"
+    "tests/SMB_RPC/"
   ];
 
   meta = with lib; {

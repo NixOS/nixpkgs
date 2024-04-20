@@ -1,4 +1,4 @@
-From de122af5382d8017cae63bdee946206c6c6c23ab Mon Sep 17 00:00:00 2001
+From 47c3503938c863d55c835463d8815b5fa4ab8326 Mon Sep 17 00:00:00 2001
 From: Jan Tojnar <jtojnar@gmail.com>
 Date: Sat, 24 Dec 2022 20:19:27 +0100
 Subject: [PATCH 3/4] libbacktrace: Support multiple build id directories
@@ -16,7 +16,7 @@ to debug data installed using distribution’s package manager.
  1 file changed, 36 insertions(+), 21 deletions(-)
 
 diff --git a/elf.c b/elf.c
-index 8b1189c..65c647a 100644
+index 21fbe4f..ccffa95 100644
 --- a/elf.c
 +++ b/elf.c
 @@ -865,12 +865,12 @@ elf_readlink (struct backtrace_state *state, const char *filename,
@@ -34,7 +34,7 @@ index 8b1189c..65c647a 100644
    const size_t prefix_len = strlen (prefix);
    const char * const suffix = ".debug";
    const size_t suffix_len = strlen (suffix);
-@@ -6936,27 +6936,42 @@ elf_add (struct backtrace_state *state, const char *filename, int descriptor,
+@@ -6947,27 +6947,42 @@ elf_add (struct backtrace_state *state, const char *filename, int descriptor,
    if (buildid_data != NULL)
      {
        int d;
@@ -53,9 +53,9 @@ index 8b1189c..65c647a 100644
 -	    elf_release_view (state, &debuglink_view, error_callback, data);
 -	  if (debugaltlink_view_valid)
 -	    elf_release_view (state, &debugaltlink_view, error_callback, data);
--	  ret = elf_add (state, "", d, NULL, 0, base_address, error_callback,
--			 data, fileline_fn, found_sym, found_dwarf, NULL, 0,
--			 1, NULL, 0);
+-	  ret = elf_add (state, "", d, NULL, 0, base_address, opd,
+-			 error_callback, data, fileline_fn, found_sym,
+-			 found_dwarf, NULL, 0, 1, NULL, 0);
 -	  if (ret < 0)
 -	    backtrace_close (d, error_callback, data);
 -	  else if (descriptor >= 0)
@@ -81,9 +81,9 @@ index 8b1189c..65c647a 100644
 +              elf_release_view (state, &debuglink_view, error_callback, data);
 +            if (debugaltlink_view_valid)
 +              elf_release_view (state, &debugaltlink_view, error_callback, data);
-+            ret = elf_add (state, "", d, NULL, 0, base_address, error_callback,
-+                           data, fileline_fn, found_sym, found_dwarf, NULL, 0,
-+                           1, NULL, 0);
++            ret = elf_add (state, "", d, NULL, 0, base_address, opd,
++                           error_callback, data, fileline_fn, found_sym,
++                           found_dwarf, NULL, 0, 1, NULL, 0);
 +            if (ret < 0)
 +              backtrace_close (d, error_callback, data);
 +            else if (descriptor >= 0)
@@ -97,5 +97,5 @@ index 8b1189c..65c647a 100644
  
    if (buildid_view_valid)
 -- 
-2.38.1
+2.43.1
 

@@ -190,6 +190,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Sound editor with graphical UI";
+    mainProgram = "audacity";
     homepage = "https://www.audacityteam.org";
     changelog = "https://github.com/audacity/audacity/releases";
     license = with licenses; [

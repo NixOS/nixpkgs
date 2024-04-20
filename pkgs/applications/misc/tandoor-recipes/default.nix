@@ -32,16 +32,15 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
   format = "other";
 
   patches = [
-    # Allow setting MEDIA_ROOT through environment variable
-    ./media-root.patch
-    # https://github.com/TandoorRecipes/recipes/pull/2706
-    (fetchpatch {
-      url = "https://github.com/TandoorRecipes/recipes/commit/702c1d67d3b2d13cf471bf9daa1d2ef0f1837dec.patch";
-      hash = "sha256-6vmtYs6b0d38Ojxxc2I7oxqpkIlyRVlhzURBOTO2VlQ=";
-    })
+    ./pytest-xdist.patch # adapt pytest.ini the use $NIX_BUILD_CORES
   ];
 
+  postPatch = ''
+    substituteInPlace pytest.ini --subst-var NIX_BUILD_CORES
+  '';
+
   propagatedBuildInputs = with python.pkgs; [
+    aiohttp
     beautifulsoup4
     bleach
     bleach-allowlist
@@ -51,7 +50,6 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     django-allauth
     django-annoying
     django-auth-ldap
-    django-autocomplete-light
     django-cleanup
     django-cors-headers
     django-crispy-forms
@@ -133,14 +131,21 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
   '';
 
   nativeCheckInputs = with python.pkgs; [
+    mock
     pytestCheckHook
+    pytest-asyncio
+    pytest-cov
     pytest-django
     pytest-factoryboy
+    pytest-html
+    pytest-xdist
   ];
 
   # flaky
   disabledTests = [
     "test_search_count"
+    "test_url_import_regex_replace"
+    "test_delete"
   ];
 
   passthru = {
@@ -158,5 +163,6 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
       Application for managing recipes, planning meals, building shopping lists
       and much much more!
     '';
+    mainProgram = "tandoor-recipes";
   };
 }

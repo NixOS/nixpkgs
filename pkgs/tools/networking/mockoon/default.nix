@@ -5,11 +5,11 @@
 
 let
   pname = "mockoon";
-  version = "5.1.0";
+  version = "6.1.0";
 
   src = fetchurl {
     url = "https://github.com/mockoon/mockoon/releases/download/v${version}/mockoon-${version}.AppImage";
-    hash = "sha256-FF2F16ulKerNnwgumaz2Theff7pRN4Up3FooCNW8kbg=";
+    hash = "sha256-harZU3TTIzfJoY/jAQI0dm7YSOr24Y9xk9L5ZaBLdD8=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -36,5 +36,6 @@ appimageTools.wrapType2 {
     homepage = "https://mockoon.com";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];
+    mainProgram = "mockoon";
   };
 }

@@ -28,8 +28,6 @@ buildPythonPackage rec {
     hash = "sha256-Le/gABaUxMmSW2SjgucsBKqjxOq1h9UCAWl5YyUsCPk=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace " --cov" ""
@@ -92,6 +90,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for interacting with WebDAV";
+    mainProgram = "dav";
     homepage = "https://skshetry.github.io/webdav4/";
     changelog = "https://github.com/skshetry/webdav4/releases/tag/v${version}";
     license = with licenses; [ mit ];

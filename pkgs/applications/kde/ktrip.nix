@@ -39,6 +39,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Public transport trip planner";
+    mainProgram = "ktrip";
     homepage = "https://apps.kde.org/ktrip/";
     # GPL-2.0-or-later
     license = licenses.gpl2Plus;

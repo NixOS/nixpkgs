@@ -9,9 +9,8 @@ let
     palette = [ "Frappe" "Latte" "Macchiato" "Mocha" ];
     color = [ "Blue" "Dark" "Flamingo" "Green" "Lavender" "Light" "Maroon" "Mauve" "Peach" "Pink" "Red" "Rosewater" "Sapphire" "Sky" "Teal" "Yellow" ];
   };
-  product = lib.attrsets.cartesianProductOfSets dimensions;
   variantName = { palette, color }: (lib.strings.toLower palette) + color;
-  variants = map variantName product;
+  variants = lib.mapCartesianProduct variantName dimensions;
 in
 stdenvNoCC.mkDerivation rec {
   pname = "catppuccin-cursors";
@@ -61,6 +60,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/catppuccin/cursors";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ PlayerNameHere ];
+    maintainers = with maintainers; [ dixslyf ];
   };
 }

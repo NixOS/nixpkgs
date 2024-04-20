@@ -128,9 +128,7 @@ import ../make-test-python.nix ({ pkgs, lib, k3s, ... }:
       };
     };
 
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ euank ];
-    };
+    meta.maintainers = k3s.meta.maintainers;
 
     testScript = ''
       machines = [server, server2, agent]

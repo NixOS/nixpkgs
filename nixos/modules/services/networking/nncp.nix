@@ -39,7 +39,7 @@ in {
           '';
           listenStreams = mkOption {
             type = with types; listOf str;
-            description = lib.mdDoc ''
+            description = ''
               TCP sockets to bind to.
               See [](#opt-systemd.sockets._name_.listenStreams).
             '';

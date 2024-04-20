@@ -28,8 +28,6 @@ buildPythonPackage rec {
     manifestoo-core
   ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   passthru.updateScript = nix-update-script { };
 
   pythonImportsCheck = [ "click_odoo_contrib" ];

@@ -35,6 +35,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A python library to read and edit nbt data";
+    mainProgram = "nbt";
     homepage = "https://github.com/vberlier/nbtlib";
     changelog = "https://github.com/vberlier/nbtlib/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

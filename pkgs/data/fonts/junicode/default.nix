@@ -1,15 +1,25 @@
-{ lib, stdenvNoCC, fetchzip }:
+{ lib, stdenvNoCC, fetchzip, texlive, callPackage }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "junicode";
-  version = "2.203";
+  version = "2.206";
 
   src = fetchzip {
     url = "https://github.com/psb1558/Junicode-font/releases/download/v${version}/Junicode_${version}.zip";
-    hash = "sha256-RG12veiZXqjfK2gONmauhGReuLEkqxbQ4h4PEwaih/U=";
+    hash = "sha256-oOKg85Yz5/2/pvwjVqeQXE8xE7X+QJvPYwYN+E18oEc=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "doc" "tex" ];
+
+  patches = [ ./tex-font-path.patch ];
+
+  postPatch = ''
+    substituteInPlace TeX/junicode.sty \
+      --replace '@@@opentype_path@@@' "$out/share/fonts/opentype/" \
+      --replace '@@@truetype_path@@@' "$out/share/fonts/truetype/"
+    substituteInPlace TeX/junicodevf.sty \
+      --replace '@@@truetype_path@@@' "$out/share/fonts/truetype/"
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -20,8 +30,17 @@ stdenvNoCC.mkDerivation rec {
 
     install -Dm 444 -t $doc/share/doc/${pname}-${version} docs/*.pdf
 
+    install -Dm 444 -t $tex/tex/latex/junicode TeX/junicode.sty
+    install -Dm 444 -t $tex/tex/latex/junicodevf TeX/junicodevf.{sty,lua}
+
     runHook postInstall
   '';
+
+  passthru = {
+    tlDeps = with texlive; [ xkeyval fontspec ];
+
+    tests = callPackage ./tests.nix { };
+  };
 
   meta = {
     homepage = "https://github.com/psb1558/Junicode-font";

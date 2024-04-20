@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A gopher daemon for Linux/BSD";
+    mainProgram = "geomyidae";
     homepage = "gopher://bitreich.org/1/scm/geomyidae";
     license = licenses.mit;
     maintainers = [ maintainers.athas ];

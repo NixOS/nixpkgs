@@ -4,19 +4,20 @@
 , python3Packages
 , poetry-core
 , tkinter
+, typing-extensions
 , pythonRelaxDepsHook
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "async-tkinter-loop";
-  version = "0.9.2";
+  version = "0.9.3";
   format = "pyproject";
 
   src = fetchPypi {
     inherit version;
     pname = "async_tkinter_loop";
-    hash = "sha256-YwmW+zXAx9TAxgoRLEr7/3o1rrO4eSNScuoTh3ud2Vo=";
+    hash = "sha256-UJxBgTmEe8suR6WmttJKLi3KKQvEaNrWtrgCnoqGW/0=";
   };
 
   nativeBuildInputs = [
@@ -26,6 +27,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     tkinter
+    typing-extensions
   ];
 
   pythonRemoveDeps = [

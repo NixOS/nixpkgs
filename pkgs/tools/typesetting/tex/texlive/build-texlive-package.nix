@@ -82,8 +82,9 @@ let
     outputSpecified = true;
     inherit tex;
   } // lib.optionalAttrs (args ? deps) { tlDeps = args.deps; }
+  // lib.optionalAttrs (args ? fontMaps) { inherit (args) fontMaps; }
   // lib.optionalAttrs (args ? formats) { inherit (args) formats; }
-  // lib.optionalAttrs hasHyphens { inherit hasHyphens; }
+  // lib.optionalAttrs (args ? hyphenPatterns) { inherit (args) hyphenPatterns; }
   // lib.optionalAttrs (args ? postactionScript) { inherit (args) postactionScript; }
   // lib.optionalAttrs hasDocfiles { texdoc = texdoc; }
   // lib.optionalAttrs hasSource { texsource = texsource; }
@@ -99,14 +100,12 @@ let
       # tlpkg is not a true container but a subfolder of the run container
       urlName = pname + (lib.optionalString (tlType != "run" && tlType != "tlpkg") ".${tlType}");
       urls = map (up: "${up}/archive/${urlName}.r${toString revision}.tar.xz") mirrors;
-      # TODO switch to simpler "${name}-${tlOutputName}" (requires new fixed hashes)
-      container = runCommand "texlive-${pname}${lib.optionalString (tlType != "run") ".${tlType}"}-${version}${extraVersion}"
+      container = runCommand "${name}-${tlOutputName}"
         ({
           src = fetchurl { inherit urls sha512; };
-          # save outputName as fixed output derivations cannot change nor override outputName
-          passthru = passthru // { inherit tlOutputName; };
-          # TODO remove tlType from derivation (requires a rebuild)
-          inherit meta stripPrefix tlType;
+          inherit passthru;
+          # save outputName, since fixed output derivations cannot change nor override outputName
+          inherit meta stripPrefix tlOutputName;
         } // lib.optionalAttrs (fixedHash != null) {
           outputHash = fixedHash;
           outputHashAlgo = "sha256";
@@ -114,7 +113,7 @@ let
         })
         (''
           mkdir "$out"
-          if [[ "$tlType"  == "tlpkg" ]]; then
+          if [[ "$tlOutputName"  == "tlpkg" ]]; then
             tar -xf "$src" \
               --strip-components=1 \
               -C "$out" --anchored --exclude=tlpkg/tlpobj --keep-old-files \
@@ -154,8 +153,7 @@ let
     tlu = texliveBinaries.luatex;
   };
 
-  # TODO switch to simpler "${name}" (requires a rebuild)
-  bin = runCommand "texlive-${pname}.bin-${version}"
+  bin = runCommand "${name}"
     {
       inherit meta;
       passthru = passthru // { tlOutputName = "out"; };
@@ -168,7 +166,7 @@ let
         ++ (lib.attrVals (args.scriptExts or [ ]) extToInput);
       nativeBuildInputs = extraNativeBuildInputs;
       # absolute scripts folder
-      scriptsFolder = lib.optionalString (tex ? outPath) (tex.outPath + "/scripts/" + args.scriptsFolder or pname);
+      scriptsFolder = lib.optionals (tex ? outPath) (builtins.map (f: tex.outPath + "/scripts/" + f) (lib.toList args.scriptsFolder or pname));
       # binaries info
       inherit (args) binfiles;
       binlinks = builtins.attrNames (args.binlinks or { });
@@ -183,8 +181,7 @@ let
     '';
 
   # build man, info containers
-  # TODO switch to simpler "${name}-man" (requires a rebuild)
-  man = builtins.removeAttrs (runCommand "texlive-${pname}.man-${version}${extraVersion}"
+  man = builtins.removeAttrs (runCommand "${name}-man"
     {
       inherit meta texdoc;
       passthru = passthru // { tlOutputName = "man"; };
@@ -194,8 +191,7 @@ let
       ln -s {"$texdoc"/doc,"$out"/share}/man
     '') [ "out" ] // lib.optionalAttrs hasBinfiles { out = bin; };
 
-  # TODO switch to simpler "${name}-info" (requires a rebuild)
-  info = builtins.removeAttrs (runCommand "texlive-${pname}.info-${version}${extraVersion}"
+  info = builtins.removeAttrs (runCommand "${name}-info"
     {
       inherit meta texdoc;
       passthru = passthru // { tlOutputName = "info"; };

@@ -9,7 +9,7 @@
 , CoreGraphics
 , CoreVideo
 , cymem
-, cython
+, cython_0
 , fetchPypi
 , hypothesis
 , mock
@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "8.2.1";
+  version = "8.2.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zX/bPYg6FeaQYlTn+wFi9ph46czdH4UZ22/7/ka/b0k=";
+    hash = "sha256-9a/FIikSqAvai9zslYNiorpTjXAn3I22FUhF0oWdynY=";
   };
 
   postPatch = ''
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    cython
+    cython_0
   ] ++ lib.optionals stdenv.isDarwin [
     Accelerate
     CoreFoundation

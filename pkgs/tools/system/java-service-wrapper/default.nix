@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "java-service-wrapper";
-  version = "3.5.54";
+  version = "3.5.56";
 
   src = fetchurl {
     url = "https://wrapper.tanukisoftware.com/download/${version}/wrapper_${version}_src.tar.gz";
-    hash = "sha256-t16i1WqvDqr4J5sDldeUk6+DAyN/6oWGV6eME5yj+i4=";
+    hash = "sha256-zZfJP/uf78D/6G51Km1bNRRIv5i8x69Xw+imho4/ZpQ=";
   };
 
   strictDeps = true;
@@ -55,8 +55,12 @@ stdenv.mkDerivation rec {
     homepage = "https://wrapper.tanukisoftware.com/";
     changelog = "https://wrapper.tanukisoftware.com/doc/english/release-notes.html#${version}";
     license = licenses.gpl2Only;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
     maintainers = [ maintainers.suhr ];
     mainProgram = "wrapper";
+    # Broken for Musl at 2024-01-17. Errors as:
+    # logger.c:81:12: fatal error: gnu/libc-version.h: No such file or directory
+    # Tracking issue: https://github.com/NixOS/nixpkgs/issues/281557
+    broken = stdenv.hostPlatform.isMusl;
   };
 }

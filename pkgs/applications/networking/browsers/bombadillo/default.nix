@@ -22,6 +22,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Non-web client for the terminal, supporting Gopher, Gemini and more";
+    mainProgram = "bombadillo";
     homepage = "https://bombadillo.colorfield.space/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ehmry ];

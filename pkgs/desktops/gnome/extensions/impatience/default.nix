@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, glib }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-impatience";
-  version = "unstable-2023-04-04";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "timbertson";
     repo = "gnome-shell-impatience";
-    rev = "0f961b860040ba0f7bbb51ebbaece7db29787313";
-    hash = "sha256-c15zZC9xc0nq8NdnP0gjayMmnD8GyHFV8oZaD4LyR7w=";
+    rev = "refs/tags/version-${version}";
+    hash = "sha256-yBRnhdCDeA0bL+kkrmnIqyXAlhZzO2Vthc4Dnba80j4=";
   };
 
   buildInputs = [

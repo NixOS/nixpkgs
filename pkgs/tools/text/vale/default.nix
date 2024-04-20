@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "vale";
-  version = "2.30.0";
+  version = "3.4.1";
 
   subPackages = [ "cmd/vale" ];
   outputs = [ "out" "data" ];
@@ -11,10 +11,10 @@ buildGoModule rec {
     owner = "errata-ai";
     repo = "vale";
     rev = "v${version}";
-    hash = "sha256-XTbm1wWm8+nBDN2G1Bm+FUFDV/21deGptMN5XrckMHA=";
+    hash = "sha256-fD2KBKDfKTNYuzP/zKkAx9h/HMxOlAyiWtp9EsWxop8=";
   };
 
-  vendorHash = "sha256-FnzuumOIvjpoDr+yBaRc8UjMDNW8mgrJiz1ZyzNW0Ts=";
+  vendorHash = "sha256-HMzFLSmO6sBDNU89UoIvHcPPd3ubpti2ii4sFMKUDmI=";
 
   postInstall = ''
     mkdir -p $data/share/vale
@@ -30,6 +30,7 @@ buildGoModule rec {
     description = "A syntax-aware linter for prose built with speed and extensibility in mind";
     homepage = "https://vale.sh/";
     changelog = "https://github.com/errata-ai/vale/releases/tag/v${version}";
+    mainProgram = "vale";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
   };

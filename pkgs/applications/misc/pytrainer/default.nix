@@ -91,6 +91,7 @@ in python.pkgs.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/pytrainer/pytrainer";
     description = "Application for logging and graphing sporting excursions";
+    mainProgram = "pytrainer";
     maintainers = with maintainers; [ rycee dotlambda ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

@@ -5,16 +5,16 @@
 }:
 buildGoModule rec {
   pname = "gci";
-  version = "0.12.0";
+  version = "0.13.4";
 
   src = fetchFromGitHub {
     owner = "daixiang0";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-75ye/624fDcWCn+H0gAYHRPcVUh+JJm3vU6T4w1T0jM=";
+    sha256 = "sha256-nJyRgvMVmNmmxigsdDcKzUuTQg5lXa8JnmwVyQwyWxA=";
   };
 
-  vendorHash = "sha256-bPRcOvwbWEpcJUlIqQNeoYME4ky0YE5LlyWhSTWCIHQ=";
+  vendorHash = "sha256-/8fggERlHySyimrGOHkDERbCPZJWqojycaifNPF6MjE=";
 
   meta = with lib; {
     description = "Controls golang package import order and makes it always deterministic";

@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "skytemple";
-  version = "1.6.0";
+  version = "1.6.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-AQ8Wxks7TTHP2h9Tc1LYG4neQ2uWebFIFoCOd3A6KB8=";
+    hash = "sha256-yfXu1sboKi8STPiX5FUD9q+1U9GfhOyEKDRvU9rgdfI=";
   };
 
   buildInputs = [
@@ -65,6 +65,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/SkyTemple/skytemple";
     description = "ROM hacking tool for Pokémon Mystery Dungeon Explorers of Sky";
+    mainProgram = "skytemple";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ xfix marius851000 ];
   };

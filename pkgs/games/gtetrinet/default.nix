@@ -33,6 +33,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Client for Tetrinet, a multiplayer online Tetris game";
+    mainProgram = "gtetrinet";
     longDescription = ''
       GTetrinet is a client program for Tetrinet, a multiplayer tetris game
       that is played over the internet.

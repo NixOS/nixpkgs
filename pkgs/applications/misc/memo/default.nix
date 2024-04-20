@@ -48,5 +48,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.mrVanDalo ];
     platforms = lib.platforms.all;
+    mainProgram = "memo";
   };
 }

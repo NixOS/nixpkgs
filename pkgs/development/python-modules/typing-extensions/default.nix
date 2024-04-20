@@ -2,21 +2,20 @@
 , buildPythonPackage
 , fetchPypi
 , flit-core
-, python
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "typing-extensions";
-  version = "4.7.1";
-  format = "pyproject";
+  version = "4.10.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "typing_extensions";
     inherit version;
-    hash = "sha256-t13cJk8LpWFdt7ohfa65lwGtKVNTxF+elZYzN87u/7I=";
+    hash = "sha256-sKvXyJ6PuW+Y2xjYYQb/HZCraSAE63Rs9u2iaC+Rs8s=";
   };
 
   nativeBuildInputs = [

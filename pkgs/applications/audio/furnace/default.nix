@@ -27,14 +27,14 @@
 
 stdenv.mkDerivation rec {
   pname = "furnace";
-  version = "0.6";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "tildearrow";
     repo = "furnace";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-8we7vKyGWjM9Rx0MJjSKLJcKBHiHt5vjuy17HHx/pP8=";
+    hash = "sha256-Pv9Sx+bdoy8uV5o9i1rUSuokwQVA8EPYFkZXM8Fynmk=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -116,5 +116,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.all;
+    mainProgram = "furnace";
   };
 }

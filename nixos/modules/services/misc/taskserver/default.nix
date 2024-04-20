@@ -10,7 +10,7 @@ let
   mkManualPkiOption = desc: mkOption {
     type = types.nullOr types.path;
     default = null;
-    description = lib.mdDoc ''
+    description = ''
       ${desc}
 
       ::: {.note}
@@ -37,7 +37,7 @@ let
     '';
   };
 
-  mkAutoDesc = preamble: lib.mdDoc ''
+  mkAutoDesc = preamble: ''
     ${preamble}
 
     ::: {.note}
@@ -91,7 +91,7 @@ let
       type = types.uniq (types.listOf types.str);
       default = [];
       example = [ "alice" "bob" ];
-      description = lib.mdDoc ''
+      description = ''
         A list of user names that belong to the organization.
       '';
     };
@@ -100,7 +100,7 @@ let
       type = types.listOf types.str;
       default = [];
       example = [ "workers" "slackers" ];
-      description = lib.mdDoc ''
+      description = ''
         A list of group names that belong to the organization.
       '';
     };
@@ -142,7 +142,7 @@ in {
         default = false;
         description = let
           url = "https://nixos.org/manual/nixos/stable/index.html#module-services-taskserver";
-        in lib.mdDoc ''
+        in ''
           Whether to enable the Taskwarrior server.
 
           More instructions about NixOS in conjunction with Taskserver can be
@@ -153,19 +153,19 @@ in {
       user = mkOption {
         type = types.str;
         default = "taskd";
-        description = lib.mdDoc "User for Taskserver.";
+        description = "User for Taskserver.";
       };
 
       group = mkOption {
         type = types.str;
         default = "taskd";
-        description = lib.mdDoc "Group for Taskserver.";
+        description = "Group for Taskserver.";
       };
 
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/taskserver";
-        description = lib.mdDoc "Data directory for Taskserver.";
+        description = "Data directory for Taskserver.";
       };
 
       ciphers = mkOption {
@@ -174,7 +174,7 @@ in {
         example = "NORMAL:-VERS-SSL3.0";
         description = let
           url = "https://gnutls.org/manual/html_node/Priority-Strings.html";
-        in lib.mdDoc ''
+        in ''
           List of GnuTLS ciphers to use. See the GnuTLS documentation about
           priority strings at <${url}> for full details.
         '';
@@ -186,7 +186,7 @@ in {
         example.myShinyOrganisation.users = [ "alice" "bob" ];
         example.myShinyOrganisation.groups = [ "staff" "outsiders" ];
         example.yetAnotherOrganisation.users = [ "foo" "bar" ];
-        description = lib.mdDoc ''
+        description = ''
           An attribute set where the keys name the organisation and the values
           are a set of lists of {option}`users` and
           {option}`groups`.
@@ -196,7 +196,7 @@ in {
       confirmation = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Determines whether certain commands are confirmed.
         '';
       };
@@ -204,7 +204,7 @@ in {
       debug = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Logs debugging information.
         '';
       };
@@ -212,7 +212,7 @@ in {
       extensions = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Fully qualified path of the Taskserver extension scripts.
           Currently there are none.
         '';
@@ -221,7 +221,7 @@ in {
       ipLog = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Logs the IP addresses of incoming requests.
         '';
       };
@@ -229,7 +229,7 @@ in {
       queueSize = mkOption {
         type = types.int;
         default = 10;
-        description = lib.mdDoc ''
+        description = ''
           Size of the connection backlog, see {manpage}`listen(2)`.
         '';
       };
@@ -237,7 +237,7 @@ in {
       requestLimit = mkOption {
         type = types.int;
         default = 1048576;
-        description = lib.mdDoc ''
+        description = ''
           Size limit of incoming requests, in bytes.
         '';
       };
@@ -246,7 +246,7 @@ in {
         type = with types; either str (listOf str);
         default = [];
         example = [ "[Tt]ask [2-9]+" ];
-        description = lib.mdDoc ''
+        description = ''
           A list of regular expressions that are matched against the reported
           client id (such as `task 2.3.0`).
 
@@ -260,7 +260,7 @@ in {
         type = with types; either str (listOf str);
         default = [];
         example = [ "[Tt]ask [2-9]+" ];
-        description = lib.mdDoc ''
+        description = ''
           A list of regular expressions that are matched against the reported
           client id (such as `task 2.3.0`).
 
@@ -274,7 +274,7 @@ in {
         type = types.str;
         default = "localhost";
         example = "::";
-        description = lib.mdDoc ''
+        description = ''
           The address (IPv4, IPv6 or DNS) to listen on.
         '';
       };
@@ -282,7 +282,7 @@ in {
       listenPort = mkOption {
         type = types.int;
         default = 53589;
-        description = lib.mdDoc ''
+        description = ''
           Port number of the Taskserver.
         '';
       };
@@ -290,7 +290,7 @@ in {
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to open the firewall for the specified Taskserver port.
         '';
       };
@@ -298,7 +298,7 @@ in {
       fqdn = mkOption {
         type = types.str;
         default = "localhost";
-        description = lib.mdDoc ''
+        description = ''
           The fully qualified domain name of this server, which is also used
           as the common name in the certificates.
         '';
@@ -307,7 +307,7 @@ in {
       trust = mkOption {
         type = types.enum [ "allow all" "strict" ];
         default = "strict";
-        description = lib.mdDoc ''
+        description = ''
           Determines how client certificates are validated.
 
           The value `allow all` performs no client
@@ -323,7 +323,7 @@ in {
       config = mkOption {
         type = types.attrs;
         example.client.cert = "/tmp/debugging.cert";
-        description = lib.mdDoc ''
+        description = ''
           Configuration options to pass to Taskserver.
 
           The options here are the same as described in

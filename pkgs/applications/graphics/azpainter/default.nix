@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dtzWill ];
     platforms = with platforms; linux ++ darwin;
+    mainProgram = "azpainter";
   };
 }

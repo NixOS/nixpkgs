@@ -60,23 +60,23 @@
 
 buildPythonPackage rec {
   pname = "scancode-toolkit";
-  version = "32.0.8";
+  version = "32.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-W6Ev1MV8cZU4bauAfmuZsBzMJKz7xpw8siO3Afn5mc8=";
+    hash = "sha256-WjVtE+3KtFdtBLqNUzFwDrWAUQLblE+DNGjABH+5zWc=";
   };
 
   dontConfigure = true;
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     beautifulsoup4
     bitarray

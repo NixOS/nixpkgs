@@ -9,20 +9,26 @@ in
   ###### interface
   options = {
     services.thermald = {
-      enable = mkEnableOption (lib.mdDoc "thermald, the temperature management daemon");
+      enable = mkEnableOption "thermald, the temperature management daemon";
 
       debug = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable debug logging.
         '';
+      };
+
+     ignoreCpuidCheck = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to ignore the cpuid check to allow running on unsupported platforms";
       };
 
       configFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc "the thermald manual configuration file.";
+        description = "the thermald manual configuration file.";
       };
 
       package = mkPackageOption pkgs "thermald" { };
@@ -42,6 +48,7 @@ in
           ${cfg.package}/sbin/thermald \
             --no-daemon \
             ${optionalString cfg.debug "--loglevel=debug"} \
+            ${optionalString cfg.ignoreCpuidCheck "--ignore-cpuid-check"} \
             ${optionalString (cfg.configFile != null) "--config-file ${cfg.configFile}"} \
             --dbus-enable \
             --adaptive

@@ -70,6 +70,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     version = "4.7.49.0";
     sha256 = "0rpfyvcggm881ynvgr17kbx5hvj7ivlms0bmskmb2zyjlpddx036";
     outputFiles = [ "tools/*" ];
+    meta.mainProgram = "stylecopsettingseditor";
   };
 
   StyleCopPlusMSBuild = fetchNuGet {

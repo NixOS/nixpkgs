@@ -5,12 +5,12 @@
 
 let
   pname = "wtfis";
-  version = "0.7.1";
+  version = "0.8.0";
   src = fetchFromGitHub {
     owner = "pirxthepilot";
     repo = "wtfis";
     rev = "refs/tags/v${version}";
-    hash = "sha256-X3e0icyhNPg8P6+N9k6a9WwBJ8bXRPdo3fj4cj+yY6w=";
+    hash = "sha256-eSmvyDr8PbB15UWIl67Qp2qHeOq+dmnP8eMsvcGypVw=";
   };
 in python3.pkgs.buildPythonApplication {
   inherit pname version src;
@@ -41,6 +41,7 @@ in python3.pkgs.buildPythonApplication {
   meta = {
     homepage = "https://github.com/pirxthepilot/wtfis";
     description = "Passive hostname, domain and IP lookup tool for non-robots";
+    mainProgram = "wtfis";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.AndersonTorres ];
   };

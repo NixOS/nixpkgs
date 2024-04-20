@@ -53,6 +53,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "A Gui editor (gtk) to configure applications launching on a fluxbox session";
+    mainProgram = "fluxboxlauncher";
     homepage = "https://github.com/mothsART/fluxboxlauncher";
     maintainers = with maintainers; [ mothsart ];
     license = licenses.bsdOriginal;

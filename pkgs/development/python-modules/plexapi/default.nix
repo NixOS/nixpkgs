@@ -1,16 +1,17 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 , requests
+, setuptools
 , tqdm
 , websocket-client
-, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "plexapi";
-  version = "4.15.6";
-  format = "setuptools";
+  version = "4.15.12";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -18,10 +19,14 @@ buildPythonPackage rec {
     owner = "pkkid";
     repo = "python-plexapi";
     rev = "refs/tags/${version}";
-    hash = "sha256-VU1HVAxAOraTd4VQIqG/MLkw77xciCICIh1zbzGn/dQ=";
+    hash = "sha256-i+Vg1SWxDKprZu+crf0iallaAIApDpidJ//2mivAn18=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     requests
     tqdm
     websocket-client

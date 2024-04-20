@@ -5,6 +5,7 @@
 , cmake
 , gtest
 , doCheck ? true
+, autoAddDriverRunpath
 , cudaSupport ? config.cudaSupport
 , ncclSupport ? false
 , rLibrary ? false
@@ -14,7 +15,7 @@
 , rPackages
 }@inputs:
 
-assert ncclSupport -> cudaSupport;
+assert ncclSupport -> (cudaSupport && !cudaPackages.nccl.meta.unsupported);
 # Disable regular tests when building the R package
 # because 1) the R package runs its own tests and
 # 2) the R package creates a different binary shared
@@ -45,19 +46,19 @@ stdenv.mkDerivation rec {
   #   in \
   #   rWrapper.override{ packages = [ xgb ]; }"
   pname = lib.optionalString rLibrary "r-" + pnameBase;
-  version = "2.0.1";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "dmlc";
     repo = pnameBase;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-tRx6kJwIoVSN701ppuyZpIFUQIFy4LBMFyirLtwApjA=";
+    hash = "sha256-LWco3A6zwdnAf8blU4qjW7PFEeZaTcJlVTwVrs7nwWM=";
   };
 
   nativeBuildInputs = [ cmake ]
     ++ lib.optionals stdenv.isDarwin [ llvmPackages.openmp ]
-    ++ lib.optionals cudaSupport [ cudaPackages.autoAddOpenGLRunpathHook ]
+    ++ lib.optionals cudaSupport [ autoAddDriverRunpath ]
     ++ lib.optionals rLibrary [ R ];
 
   buildInputs = [ gtest ] ++ lib.optional cudaSupport cudaPackages.cudatoolkit
@@ -74,8 +75,8 @@ stdenv.mkDerivation rec {
     "-DUSE_CUDA=ON"
     # Their CMakeLists.txt does not respect CUDA_HOST_COMPILER, instead using the CXX compiler.
     # https://github.com/dmlc/xgboost/blob/ccf43d4ba0a94e2f0a3cc5a526197539ae46f410/CMakeLists.txt#L145
-    "-DCMAKE_C_COMPILER=${cudaPackages.cudatoolkit.cc}/bin/gcc"
-    "-DCMAKE_CXX_COMPILER=${cudaPackages.cudatoolkit.cc}/bin/g++"
+    "-DCMAKE_C_COMPILER=${cudaPackages.backendStdenv.cc}/bin/gcc"
+    "-DCMAKE_CXX_COMPILER=${cudaPackages.backendStdenv.cc}/bin/g++"
   ] ++ lib.optionals
     (cudaSupport
       && lib.versionAtLeast cudaPackages.cudatoolkit.version "11.4.0")
@@ -114,21 +115,15 @@ stdenv.mkDerivation rec {
     let libname = "libxgboost${stdenv.hostPlatform.extensions.sharedLibrary}";
     in ''
       runHook preInstall
-      mkdir -p $out
-      cp -r ../include $out
-      cp -r ../dmlc-core/include/dmlc $out/include
-      cp -r ../rabit/include/rabit $out/include
-    '' + lib.optionalString (!rLibrary) ''
-      install -Dm755 ../lib/${libname} $out/lib/${libname}
-      install -Dm755 ../xgboost $out/bin/xgboost
     ''
     # the R library option builds a completely different binary xgboost.so instead of
     # libxgboost.so, which isn't full featured for python and CLI
     + lib.optionalString rLibrary ''
-      mkdir $out/library
+      mkdir -p $out/library
       export R_LIBS_SITE="$out/library:$R_LIBS_SITE''${R_LIBS_SITE:+:}"
-      make install -l $out/library
     '' + ''
+      cmake --install .
+      cp -r ../rabit/include/rabit $out/include
       runHook postInstall
     '';
 
@@ -143,6 +138,7 @@ stdenv.mkDerivation rec {
       "Scalable, Portable and Distributed Gradient Boosting (GBDT, GBRT or GBM) Library";
     homepage = "https://github.com/dmlc/xgboost";
     license = licenses.asl20;
+    mainProgram = "xgboost";
     platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar nviets ];
   };

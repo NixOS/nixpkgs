@@ -29,5 +29,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/NilsIrl/MozWire";
     license = licenses.gpl3;
     maintainers = with maintainers; [ siraben nilsirl ];
+    mainProgram = "mozwire";
   };
 }

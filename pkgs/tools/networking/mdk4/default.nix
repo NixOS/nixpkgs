@@ -29,5 +29,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/aircrack-ng/mdk4";
     maintainers = with maintainers; [ moni ];
     license = licenses.gpl2Plus;
+    mainProgram = "mdk4";
   };
 }

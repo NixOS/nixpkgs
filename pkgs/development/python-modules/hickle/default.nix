@@ -1,34 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, h5py
-, numpy
-, dill
-, astropy
-, scipy
-, pandas
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  h5py,
+  numpy,
+  dill,
+  astropy,
+  scipy,
+  pandas,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "hickle";
-  version = "5.0.2";
-  format = "setuptools";
+  version = "5.0.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2+7OF/a89jK/zLhbk/Q2A+zsKnfRbq3YMKGycEWsLEQ=";
+    hash = "sha256-An5RzK0nnRaBI6JEUl5shLrA22RgWzEbC9NJiRvgxT4=";
   };
 
   postPatch = ''
     substituteInPlace tox.ini \
-      --replace "--cov=./hickle" ""
+      --replace-fail "--cov=./hickle" ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     dill
     h5py
     numpy
@@ -41,9 +45,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  pythonImportsCheck = [
-    "hickle"
-  ];
+  pythonImportsCheck = [ "hickle" ];
 
   disabledTests = [
     # broken in 5.0.2 with recent NumPy

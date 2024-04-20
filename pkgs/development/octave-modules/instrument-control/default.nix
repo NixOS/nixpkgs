@@ -5,11 +5,11 @@
 
 buildOctavePackage rec {
   pname = "instrument-control";
-  version = "0.9.1";
+  version = "0.9.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-CyNix+UAGiiogoA63NPyNtaz9z7LTspyOw2V9oDAj2Q=";
+    sha256 = "sha256-5ZufEs761qz0nKt0YYikJccqEtK+Qs9UcnJlRsW8VCM=";
   };
 
   meta = with lib; {

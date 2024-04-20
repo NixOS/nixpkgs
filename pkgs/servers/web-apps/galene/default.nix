@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "galene";
-  version = "0.7.2";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "jech";
     repo = "galene";
     rev = "galene-${version}";
-    hash = "sha256-9jFloYrAQXmhmRoJxGp1UUxzFEkzB32iohStbb39suU=";
+    hash = "sha256-CeyxeZPvClKxjEU5GYqZzV2SCyHNAktHNQbmN9wUa+4=";
   };
 
-  vendorHash = "sha256-+itNqxEy0S2g5UGpUIthJE2ILQzToISref/8F4zTmYg=";
+  vendorHash = "sha256-NT6bNVoh26I4z/QUSJWwF5YDuzf3LUc/7OQgtslc4ME=";
 
   ldflags = [ "-s" "-w" ];
   preCheck = "export TZ=UTC";

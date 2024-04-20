@@ -16,6 +16,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "An ncurses-based console Atom/RSS feed reader";
+    mainProgram = "canto-curses";
     longDescription = ''
       Canto is an Atom/RSS feed reader for the console that is meant to be
       quick, concise, and colorful. It's meant to allow you to crank through

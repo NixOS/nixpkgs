@@ -12,7 +12,6 @@ let
     mkDefault
     mkIf
     mkOption
-    stringAfter
     types
     ;
 
@@ -24,7 +23,7 @@ in
     nix = {
       channel = {
         enable = mkOption {
-          description = lib.mdDoc ''
+          description = ''
             Whether the `nix-channel` command and state files are made available on the machine.
 
             The following files are initialized when enabled:
@@ -58,7 +57,7 @@ in
           ]
           else [];
         '';
-        description = lib.mdDoc ''
+        description = ''
           The default Nix expression search path, used by the Nix
           evaluator to look up paths enclosed in angle brackets
           (e.g. `<nixpkgs>`).
@@ -71,7 +70,7 @@ in
         internal = true;
         type = types.str;
         default = "https://nixos.org/channels/nixos-unstable";
-        description = lib.mdDoc "Default NixOS channel to which the root user is subscribed.";
+        description = "Default NixOS channel to which the root user is subscribed.";
       };
     };
   };

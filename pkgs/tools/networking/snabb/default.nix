@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "snabb";
-  version = "2023.06";
+  version = "2023.10";
 
   src = fetchFromGitHub {
     owner = "snabbco";
     repo = "snabb";
     rev = "v${version}";
-    sha256 = "sha256-MLEBT1UpyFiIGqI9W2bw2I2j4JanJ0MAV8nwcL/1QBM=";
+    sha256 = "sha256-oCHPRqJ1zm2Ple3Ck9nMyRC7PgKaF1RuswzdGBVU2C8=";
   };
 
   installPhase = ''
@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     license = licenses.asl20;
     maintainers = [ maintainers.lukego ];
+    mainProgram = "snabb";
   };
 }

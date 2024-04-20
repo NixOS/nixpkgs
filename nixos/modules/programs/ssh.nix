@@ -12,6 +12,7 @@ let
     ''
       #! ${pkgs.runtimeShell} -e
       export DISPLAY="$(systemctl --user show-environment | ${pkgs.gnused}/bin/sed 's/^DISPLAY=\(.*\)/\1/; t; d')"
+      export XAUTHORITY="$(systemctl --user show-environment | ${pkgs.gnused}/bin/sed 's/^XAUTHORITY=\(.*\)/\1/; t; d')"
       export WAYLAND_DISPLAY="$(systemctl --user show-environment | ${pkgs.gnused}/bin/sed 's/^WAYLAND_DISPLAY=\(.*\)/\1/; t; d')"
       exec ${cfg.askPassword} "$@"
     '';
@@ -39,20 +40,20 @@ in
         type = types.bool;
         default = config.services.xserver.enable;
         defaultText = literalExpression "config.services.xserver.enable";
-        description = lib.mdDoc "Whether to configure SSH_ASKPASS in the environment.";
+        description = "Whether to configure SSH_ASKPASS in the environment.";
       };
 
       askPassword = mkOption {
         type = types.str;
         default = "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
         defaultText = literalExpression ''"''${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass"'';
-        description = lib.mdDoc "Program used by SSH to ask for passwords.";
+        description = "Program used by SSH to ask for passwords.";
       };
 
       forwardX11 = mkOption {
         type = with lib.types; nullOr bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to request X11 forwarding on outgoing connections by default.
           If set to null, the option is not set at all.
           This is useful for running graphical programs on the remote machine and have them display to your local X11 server.
@@ -66,7 +67,7 @@ in
 
       setXAuthLocation = mkOption {
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Whether to set the path to {command}`xauth` for X11-forwarded connections.
           This causes a dependency on X11 packages.
         '';
@@ -76,7 +77,7 @@ in
         type = types.listOf types.str;
         default = [];
         example = [ "ssh-ed25519" "ssh-rsa" ];
-        description = lib.mdDoc ''
+        description = ''
           Specifies the key types that will be used for public key authentication.
         '';
       };
@@ -85,7 +86,7 @@ in
         type = types.listOf types.str;
         default = [];
         example = [ "ssh-ed25519" "ssh-rsa" ];
-        description = lib.mdDoc ''
+        description = ''
           Specifies the host key algorithms that the client wants to use in order of preference.
         '';
       };
@@ -93,7 +94,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra configuration text prepended to {file}`ssh_config`. Other generated
           options will be added after a `Host *` pattern.
           See {manpage}`ssh_config(5)`
@@ -104,7 +105,7 @@ in
       startAgent = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to start the OpenSSH agent when you log in.  The OpenSSH agent
           remembers private keys for you so that you don't have to type in
           passphrases every time you make an SSH connection.  Use
@@ -116,7 +117,7 @@ in
         type = types.nullOr types.str;
         default = null;
         example = "1h";
-        description = lib.mdDoc ''
+        description = ''
           How long to keep the private keys in memory. Use null to keep them forever.
         '';
       };
@@ -125,7 +126,7 @@ in
         type = types.nullOr types.str;
         default = null;
         example = literalExpression ''"''${pkgs.opensc}/lib/opensc-pkcs11.so"'';
-        description = lib.mdDoc ''
+        description = ''
           A pattern-list of acceptable paths for PKCS#11 shared libraries
           that may be used with the -s option to ssh-add.
         '';
@@ -140,7 +141,7 @@ in
             certAuthority = mkOption {
               type = types.bool;
               default = false;
-              description = lib.mdDoc ''
+              description = ''
                 This public key is an SSH certificate authority, rather than an
                 individual host's key.
               '';
@@ -149,7 +150,7 @@ in
               type = types.listOf types.str;
               default = [ name ] ++ config.extraHostNames;
               defaultText = literalExpression "[ ${name} ] ++ config.${options.extraHostNames}";
-              description = lib.mdDoc ''
+              description = ''
                 A list of host names and/or IP numbers used for accessing
                 the host's ssh service. This list includes the name of the
                 containing `knownHosts` attribute by default
@@ -162,7 +163,7 @@ in
             extraHostNames = mkOption {
               type = types.listOf types.str;
               default = [];
-              description = lib.mdDoc ''
+              description = ''
                 A list of additional host names and/or IP numbers used for
                 accessing the host's ssh service. This list is ignored if
                 `hostNames` is set explicitly.
@@ -172,7 +173,7 @@ in
               default = null;
               type = types.nullOr types.str;
               example = "ecdsa-sha2-nistp521 AAAAE2VjZHN...UEPg==";
-              description = lib.mdDoc ''
+              description = ''
                 The public key data for the host. You can fetch a public key
                 from a running SSH server with the {command}`ssh-keyscan`
                 command. The public key should not include any host names, only
@@ -182,7 +183,7 @@ in
             publicKeyFile = mkOption {
               default = null;
               type = types.nullOr types.path;
-              description = lib.mdDoc ''
+              description = ''
                 The path to the public key file for the host. The public
                 key file is read at build time and saved in the Nix store.
                 You can fetch a public key file from a running SSH server
@@ -195,7 +196,7 @@ in
             };
           };
         }));
-        description = lib.mdDoc ''
+        description = ''
           The set of system-wide known SSH hosts. To make simple setups more
           convenient the name of an attribute in this set is used as a host name
           for the entry. This behaviour can be disabled by setting
@@ -221,7 +222,7 @@ in
       knownHostsFiles = mkOption {
         default = [];
         type = with types; listOf path;
-        description = lib.mdDoc ''
+        description = ''
           Files containing SSH host keys to set as global known hosts.
           `/etc/ssh/ssh_known_hosts` (which is
           generated by {option}`programs.ssh.knownHosts`) is
@@ -243,7 +244,7 @@ in
         type = types.nullOr (types.listOf types.str);
         default = null;
         example = [ "curve25519-sha256@libssh.org" "diffie-hellman-group-exchange-sha256" ];
-        description = lib.mdDoc ''
+        description = ''
           Specifies the available KEX (Key Exchange) algorithms.
         '';
       };
@@ -252,7 +253,7 @@ in
         type = types.nullOr (types.listOf types.str);
         default = null;
         example = [ "chacha20-poly1305@openssh.com" "aes256-gcm@openssh.com" ];
-        description = lib.mdDoc ''
+        description = ''
           Specifies the ciphers allowed and their order of preference.
         '';
       };
@@ -261,7 +262,7 @@ in
         type = types.nullOr (types.listOf types.str);
         default = null;
         example = [ "hmac-sha2-512-etm@openssh.com" "hmac-sha1" ];
-        description = lib.mdDoc ''
+        description = ''
           Specifies the MAC (message authentication code) algorithms in order of preference. The MAC algorithm is used
           for data integrity protection.
         '';

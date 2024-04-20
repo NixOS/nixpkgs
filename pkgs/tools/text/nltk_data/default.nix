@@ -48,6 +48,11 @@ lib.makeScope newScope (self: {
     location = "taggers";
     hash = "sha256-ilTs4HWPUoHxQb4kWEy3wJ6QsE/98+EQya44gtV2inw=";
   });
+  snowball_data = makeNltkDataPackage ({
+    pname = "snowball_data";
+    location = "stemmers";
+    hash = "sha256-Y6LERPtaRbCtWmJCvMAd2xH02xdrevZBFNYvP9N4+3s=";
+  });
   stopwords = makeNltkDataPackage ({
     pname = "stopwords";
     location = "corpora";

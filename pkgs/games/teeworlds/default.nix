@@ -95,6 +95,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Retro multiplayer shooter game";
+    mainProgram = "teeworlds_srv";
 
     longDescription = ''
       Teeworlds is a free online multiplayer game, available for all

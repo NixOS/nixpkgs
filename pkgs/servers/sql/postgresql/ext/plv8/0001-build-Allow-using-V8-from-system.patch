@@ -5,7 +5,7 @@ index 38879cc..6e78eeb 100644
 @@ -20,6 +20,7 @@ OBJS = $(SRCS:.cc=.o)
  MODULE_big = plv8-$(PLV8_VERSION)
  EXTENSION = plv8
- PLV8_DATA = plv8.control plv8--$(PLV8_VERSION).sql $(wildcard upgrade/*.sql)
+ PLV8_DATA = plv8.control plv8--$(PLV8_VERSION).sql
 +USE_SYSTEM_V8 = 0
  
  

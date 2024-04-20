@@ -4,7 +4,7 @@
 , setuptools
 , importlib-metadata
 , numpy
-, rpyc
+, rpyc4
 , scipy
 , appdirs
 , callPackage
@@ -12,17 +12,17 @@
 
 buildPythonPackage rec {
   pname = "linien-common";
-  version = "1.0.0";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "linien-org";
     repo = "linien";
-    rev = "v${version}";
-    hash = "sha256-BMYFi1HsNKWHmYdrnX/mAehke7UxQZlruFmpaAvxWvQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-V6oo0a4cNlvn4pIwzchvCTOu7qtUGS+Pc0qpbEsvGZo=";
   };
 
-  sourceRoot = "source/linien-common";
+  sourceRoot = "${src.name}/linien-common";
 
   preBuild = ''
     export HOME=$(mktemp -d)
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     importlib-metadata
     numpy
-    rpyc
+    rpyc4
     scipy
     appdirs
   ];

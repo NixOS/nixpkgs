@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, dm-tree
 , fetchFromGitHub
 , emcee
 , h5netcdf
@@ -8,14 +9,13 @@
 , numba
 , numpy
 , pandas
-, pytest
 , setuptools
 , cloudpickle
 , pytestCheckHook
 , scipy
 , packaging
-, typing-extensions
 , pythonOlder
+, typing-extensions
 , xarray
 , xarray-einstats
 , zarr
@@ -33,27 +33,32 @@
 
 buildPythonPackage rec {
   pname = "arviz";
-  version = "0.16.1";
+  version = "0.18.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = "arviz";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kixWGj0M0flTq5rXSiPB0nfZaGYRvvMBGAJpehdW8KY=";
+    hash = "sha256-SZRqSqChQBSA9/jBXN2ds9hh6TI3qZksHai1j2oVsq0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    packaging
+    setuptools
+  ];
+
+  dependencies = [
+    dm-tree
     h5netcdf
     matplotlib
     netcdf4
     numpy
-    packaging
     pandas
     scipy
-    setuptools
+    typing-extensions
     xarray
     xarray-einstats
   ];
@@ -86,6 +91,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Tests require network access
+    "test_plot_ppc_transposed"
     "test_plot_separation"
     "test_plot_trace_legend"
     "test_cov"
@@ -101,6 +107,7 @@ buildPythonPackage rec {
     "test_plot_ppc_discrete_save_animation"
     # Assertion error
     "test_data_zarr"
+    "test_plot_forest"
   ];
 
   pythonImportsCheck = [

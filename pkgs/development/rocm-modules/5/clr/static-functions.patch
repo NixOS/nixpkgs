@@ -1,0 +1,31 @@
+From 77c581a3ebd47b5e2908973b70adea66891159ee Mon Sep 17 00:00:00 2001
+From: Jatin Chaudhary <JatinJaikishan.Chaudhary@amd.com>
+Date: Mon, 4 Dec 2023 17:21:39 +0000
+Subject: [PATCH] SWDEV-435702 - the functions in bf16 header need to be static
+
+If the compiler decides not to inline these functions, we might break ODR (one definition rule) due to this file being included in multiple files and being linked together
+
+Change-Id: Iacbfdabb53f5b4e5db8c690b23f3730ec9af16c0
+---
+ hipamd/include/hip/amd_detail/amd_hip_bf16.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/hipamd/include/hip/amd_detail/amd_hip_bf16.h b/hipamd/include/hip/amd_detail/amd_hip_bf16.h
+index 836e090eb..204269a84 100644
+--- a/hipamd/include/hip/amd_detail/amd_hip_bf16.h
++++ b/hipamd/include/hip/amd_detail/amd_hip_bf16.h
+@@ -94,12 +94,12 @@
+ #include "math_fwd.h"              // ocml device functions
+ 
+ #if defined(__HIPCC_RTC__)
+-#define __HOST_DEVICE__ __device__
++#define __HOST_DEVICE__ __device__ static
+ #else
+ #include <algorithm>
+ #include <climits>
+ #include <cmath>
+-#define __HOST_DEVICE__ __host__ __device__ inline
++#define __HOST_DEVICE__ __host__ __device__ static inline
+ #endif
+ 
+ #define HIPRT_ONE_BF16 __float2bfloat16(1.0f)

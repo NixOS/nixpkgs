@@ -7,24 +7,22 @@
 , coreutils
 , git
 , pkg-config
-, qtbase
-, qtsvg
-, qttools
+, qt6
 , snapper
 , util-linux
-, wrapQtAppsHook
 , enableSnapper ? true
+, nix-update-script
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "btrfs-assistant";
-  version = "1.8";
+  version = "2.0";
 
   src = fetchFromGitLab {
     owner = "btrfs-assistant";
     repo = "btrfs-assistant";
     rev = finalAttrs.version;
-    hash = "sha256-Ay2wxDVue+tG09RgAo4Zg2ktlq6dk7GdIwAlbuVULB4=";
+    hash = "sha256-nE8Vsc0leXWhbrjMgJDef6jl9MqdojRniGcvUmrQNUQ=";
   };
 
   nativeBuildInputs = [
@@ -35,12 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     btrfs-progs
-    qtbase
-    qtsvg
-    qttools
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qttools
+    qt6.qtwayland
   ];
 
-  propagatedBuildInputs = [ wrapQtAppsHook ];
+  propagatedBuildInputs = [ qt6.wrapQtAppsHook ];
 
   prePatch = ''
     substituteInPlace src/util/System.cpp \
@@ -77,6 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     [
       "--prefix PATH : ${runtimeDeps}"
     ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "A GUI management tool to make managing a Btrfs filesystem easier";

@@ -9,7 +9,7 @@ in {
   options = {
     services.navidrome = {
 
-      enable = mkEnableOption (lib.mdDoc "Navidrome music server");
+      enable = mkEnableOption "Navidrome music server";
 
       package = mkPackageOption pkgs "navidrome" { };
 
@@ -23,7 +23,7 @@ in {
         example = {
           MusicFolder = "/mnt/music";
         };
-        description = lib.mdDoc ''
+        description = ''
           Configuration for Navidrome, see <https://www.navidrome.org/docs/usage/configuration-options/> for supported values.
         '';
       };
@@ -31,7 +31,7 @@ in {
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether to open the TCP port in the firewall";
+        description = "Whether to open the TCP port in the firewall";
       };
     };
   };
@@ -53,6 +53,7 @@ in {
         RuntimeDirectory = "navidrome";
         RootDirectory = "/run/navidrome";
         ReadWritePaths = "";
+        BindPaths = lib.optional (cfg.settings ? DataFolder) cfg.settings.DataFolder;
         BindReadOnlyPaths = [
           # navidrome uses online services to download additional album metadata / covers
           "${config.environment.etc."ssl/certs/ca-certificates.crt".source}:/etc/ssl/certs/ca-certificates.crt"

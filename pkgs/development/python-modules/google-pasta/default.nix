@@ -14,6 +14,11 @@ buildPythonPackage rec {
     sha256 = "0vm1r1jlaiagj0l9yf7j6zn9w3733dr2169911c0svgrr3gwiwn9";
   };
 
+  postPatch = ''
+    substituteInPlace pasta/augment/inline_test.py \
+      --replace-fail assertRaisesRegexp assertRaisesRegex
+  '';
+
   propagatedBuildInputs = [
     six
   ];

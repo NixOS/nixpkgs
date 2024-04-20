@@ -13,6 +13,7 @@
 , elementary-default-settings
 , gnome-settings-daemon
 , runtimeShell
+, systemd
 , writeText
 , meson
 , ninja
@@ -71,7 +72,7 @@ let
     export XDG_DATA_DIRS=@out@/share:$XDG_DATA_DIRS
 
     # Start pantheon session. Keep in sync with upstream
-    exec ${gnome-session}/bin/gnome-session --builtin --session=pantheon "$@"
+    exec ${gnome-session}/bin/gnome-session --session=pantheon "$@"
   '';
 
   # Absolute path patched version of the upstream xsession
@@ -90,13 +91,16 @@ in
 
 stdenv.mkDerivation rec {
   pname = "elementary-session-settings";
-  version = "6.0.0";
+  version = "6.0.0-unstable-2024-03-29";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "session-settings";
-    rev = version;
-    sha256 = "1faglpa7q3a4335gnd074a3lnsdspyjdnskgy4bfnf6xmwjx7kjx";
+    # For systemd managed gnome-session support.
+    # https://github.com/NixOS/nixpkgs/issues/228946
+    # nixpkgs-update: no auto update
+    rev = "53bf57e5b32936befc3003a0f99c5b3a69349c76";
+    sha256 = "sha256-TX9V6gZiuPEKSHQoSD4+5QptuqEvuErCJ8OF2KFRf9k=";
   };
 
   nativeBuildInputs = [
@@ -111,6 +115,7 @@ stdenv.mkDerivation rec {
     gnome-settings-daemon
     onboard
     orca
+    systemd
   ];
 
   mesonFlags = [

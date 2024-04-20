@@ -60,7 +60,7 @@ python3Packages.buildPythonApplication rec {
     mygpoclient
     requests
     pygobject3
-    eyeD3
+    eyed3
     podcastparser
     html5lib
     mutagen

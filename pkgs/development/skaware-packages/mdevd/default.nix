@@ -1,8 +1,6 @@
-{ lib, skawarePackages }:
+{ lib, skawarePackages, skalibs }:
 
-with skawarePackages;
-
-buildPackage {
+skawarePackages.buildPackage {
   pname = "mdevd";
   version = "0.1.6.3";
   sha256 = "9uzw73zUjQTvx1rLLa2WfYULyIFb2wCY8cnvBDOU1DA=";

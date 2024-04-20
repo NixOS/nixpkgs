@@ -1,0 +1,34 @@
+cabal-version: 2.2
+
+-- This file has been generated from package.yaml by hpack version 0.36.0.
+--
+-- see: https://github.com/sol/hpack
+
+name:           julia-top-n
+version:        0.1.0.0
+author:         Tom McLaughlin
+maintainer:     tom@codedown.io
+license:        BSD-3-Clause
+build-type:     Simple
+
+executable julia-top-n-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_julia_top_n
+  autogen-modules:
+      Paths_julia_top_n
+  hs-source-dirs:
+      app
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , bytestring
+    , filepath
+    , optparse-applicative
+    , sandwich
+    , text
+    , unliftio
+    , vector
+    , yaml
+  default-language: Haskell2010

@@ -1,33 +1,47 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
 , click
 , dateutils
+, dbt-postgres
+, fetchFromGitHub
 , hatchling
+, pythonRelaxDepsHook
+, hypothesis
 , importlib-metadata
 , jinja2
 , jsonschema
 , more-itertools
 , pydantic
+, pytestCheckHook
+, pythonOlder
 , pyyaml
 , typing-extensions
-, hypothesis
 }:
 
 buildPythonPackage rec {
   pname = "dbt-semantic-interfaces";
-  version = "0.2.2";
+  version = "0.4.4";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-pnhmfj349uMjSsmdr53dY1Xur6huRKHiXWI7DXYK1gE=";
+    repo = "dbt-semantic-interfaces";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-uvwcnOKjwxEmA+/QRGSRofpoE4jZzmE02mGSDLINrJw=";
   };
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "importlib-metadata"
+  ];
+
+  build-system = [
+    hatchling
+    pythonRelaxDepsHook
+  ];
+
+  dependencies = [
     click
     dateutils
     importlib-metadata
@@ -37,10 +51,6 @@ buildPythonPackage rec {
     pydantic
     pyyaml
     typing-extensions
-  ];
-
-  nativeBuildInputs = [
-    hatchling
   ];
 
   nativeCheckInputs = [
@@ -53,9 +63,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/dbt-labs/dbt-semantic-interfaces/releases/tag/v${version}";
-    description = "shared interfaces used by dbt-core and MetricFlow projects";
+    description = "Shared interfaces used by dbt-core and MetricFlow projects";
     homepage = "https://github.com/dbt-labs/dbt-semantic-interfaces";
+    changelog = "https://github.com/dbt-labs/dbt-semantic-interfaces/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ pbsds ];
   };

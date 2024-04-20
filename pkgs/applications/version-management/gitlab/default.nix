@@ -1,7 +1,9 @@
 { stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
 , ruby_3_1, tzdata, git, nettools, nixosTests, nodejs, openssl
+, defaultGemConfig, buildRubyGem
 , gitlabEnterprise ? false, callPackage, yarn
-, prefetch-yarn-deps, replace, file, cacert, fetchYarnDeps, makeWrapper, pkg-config
+, fixup-yarn-lock, replace, file, cacert, fetchYarnDeps, makeWrapper, pkg-config
+, cargo, rustc, rustPlatform
 }:
 
 let
@@ -19,19 +21,58 @@ let
     name = "gitlab-env-${version}";
     ruby = ruby_3_1;
     gemdir = ./rubyEnv;
-    gemset =
-      let x = import (gemdir + "/gemset.nix") src;
-      in x // {
-        gpgme = x.gpgme // {
+    gemset = import (gemdir + "/gemset.nix") src;
+    gemConfig = defaultGemConfig // {
+        gpgme = attrs: {
           nativeBuildInputs = [ pkg-config ];
         };
         # the openssl needs the openssl include files
-        openssl = x.openssl // {
+        openssl = attrs: {
           buildInputs = [ openssl ];
         };
-        ruby-magic = x.ruby-magic // {
+        ruby-magic = attrs: {
           buildInputs = [ file ];
           buildFlags = [ "--enable-system-libraries" ];
+        };
+        gitlab-glfm-markdown = attrs: {
+          cargoDeps = rustPlatform.fetchCargoTarball {
+            src = stdenv.mkDerivation {
+              inherit (buildRubyGem { inherit (attrs) gemName version source; })
+                name
+                src
+                unpackPhase
+                nativeBuildInputs
+              ;
+              dontBuilt = true;
+              installPhase = ''
+                cp -R ext/glfm_markdown $out
+                cp Cargo.lock $out
+              '';
+            };
+            hash = "sha256-7q2xWAsFkXHxkYNzIjPwJRy72xMXF278cpVzqGLt/9Y=";
+          };
+
+          dontBuild = false;
+
+          nativeBuildInputs = [
+            cargo
+            rustc
+            rustPlatform.cargoSetupHook
+            rustPlatform.bindgenHook
+          ];
+
+          disallowedReferences = [
+            rustc.unwrapped
+          ];
+
+          preInstall = ''
+            export CARGO_HOME="$PWD/../.cargo/"
+          '';
+
+          postInstall = ''
+            mv -v $GEM_HOME/gems/${attrs.gemName}-${attrs.version}/lib/{glfm_markdown/glfm_markdown.so,}
+            find $out -type f -name .rustc_info.json -delete
+          '';
         };
       };
     groups = [
@@ -53,7 +94,7 @@ let
       sha256 = data.yarn_hash;
     };
 
-    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert prefetch-yarn-deps ];
+    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert fixup-yarn-lock ];
 
     patches = [
       # Since version 12.6.0, the rake tasks need the location of git,
@@ -70,6 +111,8 @@ let
     # of rake tasks fails.
     GITLAB_LOG_PATH = "log";
     FOSS_ONLY = !gitlabEnterprise;
+
+    SKIP_YARN_INSTALL = 1;
 
     configurePhase = ''
       runHook preConfigure
@@ -101,11 +144,7 @@ let
     buildPhase = ''
       runHook preBuild
 
-      bundle exec rake gettext:po_to_json RAILS_ENV=production NODE_ENV=production
-      bundle exec rake rake:assets:precompile RAILS_ENV=production NODE_ENV=production
-      bundle exec rake gitlab:assets:compile RAILS_ENV=production NODE_ENV=production
-      bundle exec rake gitlab:assets:fix_urls RAILS_ENV=production NODE_ENV=production
-      bundle exec rake gitlab:assets:check_page_bundle_mixins_css_for_sideeffects RAILS_ENV=production NODE_ENV=production
+      bundle exec rake gitlab:assets:compile RAILS_ENV=production NODE_ENV=production SKIP_YARN_INSTALL=true
 
       runHook postBuild
     '';

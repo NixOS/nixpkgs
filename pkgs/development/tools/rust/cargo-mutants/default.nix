@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-mutants";
-  version = "23.12.2";
+  version = "24.3.0";
 
   src = fetchFromGitHub {
     owner = "sourcefrog";
     repo = "cargo-mutants";
     rev = "v${version}";
-    hash = "sha256-TFVk8uq+wBfCmwU5klqapxp6IeJNnvoH6pDKC8NJuao=";
+    hash = "sha256-FlD2bSCNToyXLiMb4c2tJYJxHN4QORMJPeFPuFpjMEM=";
   };
 
-  cargoHash = "sha256-cN7mgyKzuYZT+g8j04Ncqb4s2mwyTsNib5RssrEa2F8=";
+  cargoHash = "sha256-GJFUSOAY6F0ZmqF/9SHOGMNFssfHUdFIcsgz6JwZuqE=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
@@ -27,6 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A mutation testing tool for Rust";
+    mainProgram = "cargo-mutants";
     homepage = "https://github.com/sourcefrog/cargo-mutants";
     changelog = "https://github.com/sourcefrog/cargo-mutants/releases/tag/${src.rev}";
     license = licenses.mit;

@@ -33,6 +33,7 @@ in rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Simple and convenient dependency pinning for Nix";
+    mainProgram = "npins";
     homepage = "https://github.com/andir/npins";
     license = licenses.eupl12;
     maintainers = with maintainers; [ piegames ];

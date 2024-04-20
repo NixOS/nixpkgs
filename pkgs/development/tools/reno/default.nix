@@ -52,6 +52,7 @@ with python3Packages; buildPythonApplication rec {
 
   meta = with lib; {
     description = "Release Notes Manager";
+    mainProgram = "reno";
     homepage = "https://docs.openstack.org/reno/latest";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger guillaumekoenig ];

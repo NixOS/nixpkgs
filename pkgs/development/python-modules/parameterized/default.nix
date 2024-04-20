@@ -20,10 +20,12 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    # broken with pytest 7
+    # broken with pytest 7 and python 3.12
     # https://github.com/wolever/parameterized/issues/167
+    # https://github.com/wolever/parameterized/pull/162
     substituteInPlace parameterized/test.py \
-      --replace 'assert_equal(missing, [])' ""
+      --replace 'assert_equal(missing, [])' "" \
+      --replace "assertRaisesRegexp" "assertRaisesRegex"
   '';
 
   nativeBuildInputs = [

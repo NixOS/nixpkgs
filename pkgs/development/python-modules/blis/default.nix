@@ -2,11 +2,12 @@
 , buildPythonPackage
 , fetchFromGitHub
 , setuptools
-, cython
+, cython_0
 , hypothesis
 , numpy
 , pytestCheckHook
 , pythonOlder
+, gitUpdater
 }:
 
 buildPythonPackage rec {
@@ -37,7 +38,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    cython
+    cython_0
   ];
 
   propagatedBuildInputs = [
@@ -57,6 +58,10 @@ buildPythonPackage rec {
     # Do not update to BLIS 0.9.x until the following issue is resolved:
     # https://github.com/explosion/thinc/issues/771#issuecomment-1255825935
     skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+      ignoredVersions = "0\.9\..*";
+    };
   };
 
   meta = with lib; {

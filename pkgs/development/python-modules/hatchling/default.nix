@@ -20,13 +20,13 @@
 
 buildPythonPackage rec {
   pname = "hatchling";
-  version = "1.18.0";
+  version = "1.22.4";
   format = "pyproject";
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UOmcMRDOCvw/e9ut/xxxwXdY5HZzHCdgeUDPpmhkico=";
+    hash = "sha256-ii3OyW1/uEg4LvWEjlrEP9rmQfNaCKP6tRFr1JXzQW4=";
   };
 
   # listed in backend/pyproject.toml
@@ -67,6 +67,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Modern, extensible Python build backend";
+    mainProgram = "hatchling";
     homepage = "https://hatch.pypa.io/latest/";
     changelog = "https://github.com/pypa/hatch/releases/tag/hatchling-v${version}";
     license = licenses.mit;

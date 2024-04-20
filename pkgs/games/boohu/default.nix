@@ -15,6 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A new coffee-break roguelike game";
+    mainProgram = "boohu";
     longDescription = ''
       Break Out Of Hareka's Underground (Boohu) is a roguelike game mainly
       inspired from DCSS and its tavern, with some ideas from Brogue, but

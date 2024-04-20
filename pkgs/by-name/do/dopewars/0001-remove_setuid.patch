@@ -1,0 +1,13 @@
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 4b0c466..ce008fa 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -54,7 +54,7 @@
+ 	@chgrp games ${DOPEBIN} || chgrp wheel ${DOPEBIN} || \
+ 	  ( echo "WARNING: Cannot change group of dopewars binary - the high"; \
+ 	    echo "score file may be unreadable or unwriteable by some users" )
+-	chmod 2755 ${DOPEBIN}
++	chmod 755 ${DOPEBIN}
+ 
+ install-data-local:
+ 	${mkinstalldirs} ${PIXDIR}

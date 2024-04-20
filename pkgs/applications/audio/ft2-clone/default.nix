@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ft2-clone";
-  version = "1.74";
+  version = "1.82";
 
   src = fetchFromGitHub {
     owner = "8bitbubsy";
     repo = "ft2-clone";
     rev = "v${version}";
-    hash = "sha256-plr5vmtYL0adeocY4/3hRI2RQ7lDkLvBbQPq2Jw6MvU=";
+    hash = "sha256-qEwPKrgmWYMIwIdgKozG9kghCYp4aoYTX28GqKbuDu4=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     # From HOW-TO-COMPILE.txt:
     # > This code is NOT big-endian compatible
     platforms = platforms.littleEndian;
+    mainProgram = "ft2-clone";
   };
 }

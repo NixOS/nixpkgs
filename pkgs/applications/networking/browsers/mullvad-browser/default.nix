@@ -90,7 +90,7 @@ let
       ++ lib.optionals mediaSupport [ ffmpeg ]
   );
 
-  version = "13.0.6";
+  version = "13.0.14";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -102,7 +102,7 @@ let
         "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-+CLMAXdyqp0HLe68lzp7p54n2HGZQPwZGckwVxOg4Pw=";
+      hash = "sha256-z7fZtq+jnoAi6G8RNahGtP1LXeOXU/2wYz5ha2ddAeM=";
     };
   };
 
@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
   allowSubstitutes = false;
 
   desktopItems = [(makeDesktopItem {
-    name = "mullvadbrowser";
+    name = "mullvad-browser";
     exec = "mullvad-browser %U";
     icon = "mullvad-browser";
     desktopName = "Mullvad Browser";
@@ -256,6 +256,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Privacy-focused browser made in a collaboration between The Tor Project and Mullvad";
+    mainProgram = "mullvad-browser";
     homepage = "https://mullvad.net/en/browser";
     platforms = attrNames sources;
     maintainers = with maintainers; [ felschr panicgh ];

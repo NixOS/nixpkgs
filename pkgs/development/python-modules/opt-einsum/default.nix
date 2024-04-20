@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
+, fetchpatch
 , fetchPypi
+, setuptools
 , numpy
 , pytestCheckHook
 , pythonOlder
@@ -9,7 +11,7 @@
 buildPythonPackage rec {
   version = "3.3.0";
   pname = "opt-einsum";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -18,6 +20,19 @@ buildPythonPackage rec {
     inherit version;
     hash = "sha256-WfZHX3e7w33PfNdIUZwOxgci6R5jyhFOaIIcDFSkZUk=";
   };
+
+  patches = [
+    # https://github.com/dgasmith/opt_einsum/pull/208
+    (fetchpatch {
+      name = "python312-compatibility.patch";
+      url = "https://github.com/dgasmith/opt_einsum/commit/0beacf96923bbb2dd1939a9c59398a38ce7a11b1.patch";
+      hash = "sha256-dmmEzhy17huclo1wOubpBUDc2L7vqEU5b/6a5loM47A=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     numpy

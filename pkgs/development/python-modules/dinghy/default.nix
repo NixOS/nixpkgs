@@ -57,6 +57,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A GitHub activity digest tool";
+    mainProgram = "dinghy";
     homepage = "https://github.com/nedbat/dinghy";
     changelog = "https://github.com/nedbat/dinghy/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;

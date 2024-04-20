@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nemo";
-  version = "6.0.1";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-3iGwpHuZrRBd35nAa3x1Lu/KDS1L42y5u8A4vM41b0Q=";
+    sha256 = "sha256-vSLFp0sgqGsZtcXdv82PVH0HcBbmcxrMySLFCBrLJpA=";
   };
 
   patches = [
@@ -66,6 +66,13 @@ stdenv.mkDerivation rec {
     # use locales from cinnamon-translations
     "--localedir=${cinnamon-translations}/share/locale"
   ];
+
+  postInstall = ''
+    # This fixes open as root and handles nemo-with-extensions well.
+    # https://github.com/NixOS/nixpkgs/issues/297570
+    substituteInPlace $out/share/polkit-1/actions/org.nemo.root.policy \
+      --replace-fail "$out/bin/nemo" "/run/current-system/sw/bin/nemo"
+  '';
 
   preFixup = ''
     # Used for some non-fd.o icons (e.g. xapp-text-case-symbolic)

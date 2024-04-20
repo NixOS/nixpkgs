@@ -26,8 +26,6 @@ buildPythonPackage rec {
     hash = "sha256-0YSjMf2gDdrvkDaT77iwfCkiDDXKHnZyI8d7JmBSuCg=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     setuptools-scm
   ];
@@ -58,6 +56,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module for adding unittests.mock as view functions";
+    mainProgram = "test-bed";
     homepage = "https://github.com/threat9/threat9-test-bed";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];

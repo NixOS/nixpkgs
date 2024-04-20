@@ -9,13 +9,13 @@ in
 
 {
   options.services.lldpd = {
-    enable = mkEnableOption (lib.mdDoc "Link Layer Discovery Protocol Daemon");
+    enable = mkEnableOption "Link Layer Discovery Protocol Daemon";
 
     extraArgs = mkOption {
       type = types.listOf types.str;
       default = [];
       example = [ "-c" "-k" "-I eth0" ];
-      description = lib.mdDoc "List of command line parameters for lldpd";
+      description = "List of command line parameters for lldpd";
     };
   };
 

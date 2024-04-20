@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , sudachidict
 , setuptools
+, sudachipy
 }:
 
 buildPythonPackage rec {
@@ -16,7 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-xJ/iPywOZA2kzHaVU43Bc8TUboj3OpDg1kLFMIc/T90=";
   };
 
-  sourceRoot = "source/python";
+  sourceRoot = "${src.name}/python";
 
   # setup script tries to get data from the network but we use the nixpkgs' one
   postPatch = ''
@@ -31,6 +32,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+  ];
+
+  propagatedBuildInputs = [
+    sudachipy
   ];
 
   # we need to prepare some files before the build

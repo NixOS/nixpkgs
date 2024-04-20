@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wxmacmolplt";
-  version = "7.7.2";
+  version = "7.7.3";
 
   src = fetchFromGitHub {
     owner = "brettbode";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-sNxCjIEJUrDWtcUqBQqvanNfgNQ7T4cabYy+x9D1U+Q=";
+    hash = "sha256-gFGstyq9bMmBaIS4QE6N3EIC9GxRvyJYUr8DUvwRQBc=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Graphical user interface for GAMESS-US";
+    mainProgram = "wxmacmolplt";
     homepage = "https://brettbode.github.io/wxmacmolplt/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

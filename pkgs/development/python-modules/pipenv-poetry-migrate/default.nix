@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pipenv-poetry-migrate";
-  version = "0.5.1";
+  version = "0.5.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "yhino";
     repo = "pipenv-poetry-migrate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-b1ONVJzwvpuLKAtv2Rk3uUNt85mMChfGrlM+CpPACUw=";
+    hash = "sha256-6K8rTfASpK7OvBwUy40X6xzgpfWL7lIJvpfRiGfBK6U=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "This is simple migration script, migrate pipenv to poetry";
+    mainProgram = "pipenv-poetry-migrate";
     homepage = "https://github.com/yhino/pipenv-poetry-migrate";
     changelog = "https://github.com/yhino/pipenv-poetry-migrate/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;

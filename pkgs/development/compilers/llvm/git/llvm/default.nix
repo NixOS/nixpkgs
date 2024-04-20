@@ -8,8 +8,7 @@
 , python3
 , python3Packages
 , libffi
-# TODO: Gold plugin on LLVM16 has a severe memory corruption bug: https://github.com/llvm/llvm-project/issues/61350.
-, enableGoldPlugin ? false
+, enableGoldPlugin ? libbfd.hasPluginAPI
 , libbfd
 , libpfm
 , libxml2
@@ -66,8 +65,8 @@ let
   else python3;
 
 in
-  assert (lib.assertMsg (!enableGoldPlugin) "Gold plugin cannot be enabled on LLVM16 due to a upstream issue: https://github.com/llvm/llvm-project/issues/61350");
-  stdenv.mkDerivation (rec {
+
+stdenv.mkDerivation (rec {
   pname = "llvm";
   inherit version;
 
@@ -87,10 +86,14 @@ in
 
   nativeBuildInputs = [ cmake ninja python ]
     ++ optionals enableManpages [
-      # Note: we intentionally use `python3Packages` instead of `python3.pkgs`;
-      # splicing does *not* work with the latter. (TODO: fix)
-      python3Packages.sphinx python3Packages.recommonmark
-    ];
+    # Note: we intentionally use `python3Packages` instead of `python3.pkgs`;
+    # splicing does *not* work with the latter. (TODO: fix)
+    python3Packages.sphinx
+  ] ++ optionals (lib.versionOlder version "18" && enableManpages) [
+    python3Packages.recommonmark
+  ] ++ optionals (lib.versionAtLeast version "18" && enableManpages) [
+    python3Packages.myst-parser
+  ];
 
   buildInputs = [ libxml2 libffi ]
     ++ optional enablePFM libpfm; # exegesis
@@ -176,6 +179,10 @@ in
     substituteInPlace test/ExecutionEngine/Interpreter/intrinsics.ll \
       --replace "%roundeven32 = call float @llvm.roundeven.f32(float 0.000000e+00)" "" \
       --replace "%roundeven64 = call double @llvm.roundeven.f64(double 0.000000e+00)" ""
+
+    # fails when run in sandbox
+    substituteInPlace unittests/Support/VirtualFileSystemTest.cpp \
+      --replace "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
   '' + optionalString (stdenv.isDarwin && stdenv.hostPlatform.isx86) ''
     # This test fails on darwin x86_64 because `sw_vers` reports a different
     # macOS version than what LLVM finds by reading
@@ -207,10 +214,6 @@ in
     # TODO(@rrbutani): fix/follow-up
     substituteInPlace unittests/TargetParser/Host.cpp \
       --replace "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
-
-    # This test fails with a `dysmutil` crash; have not yet dug into what's
-    # going on here (TODO(@rrbutani)).
-    rm test/tools/dsymutil/ARM/obfuscated.test
   '' + ''
     # FileSystem permissions tests fail with various special bits
     substituteInPlace unittests/Support/CMakeLists.txt \
@@ -220,8 +223,12 @@ in
       --replace "PassBuilderCallbacksTest.cpp" ""
     rm unittests/IR/PassBuilderCallbacksTest.cpp
     rm test/tools/llvm-objcopy/ELF/mirror-permissions-unix.test
+
+    # Fails in the presence of anti-virus software or other intrusion-detection software that
+    # modifies the atime when run. See #284056.
+    rm test/tools/llvm-objcopy/ELF/strip-preserve-atime.test
   '' + optionalString stdenv.hostPlatform.isMusl ''
-    patch -p1 -i ${../../TLI-musl.patch}
+    patch -p1 -i ${../../common/llvm/TLI-musl.patch}
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "add_subdirectory(DynamicLibrary)" ""
     rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
@@ -287,6 +294,8 @@ in
   # E.g. mesa.drivers use the build-id as a cache key (see #93946):
   LDFLAGS = optionalString (enableSharedLibraries && !stdenv.isDarwin) "-Wl,--build-id=sha1";
 
+  hardeningDisable = [ "trivialautovarinit" ];
+
   cmakeBuildType = if debugVersion then "Debug" else "Release";
 
   cmakeFlags = with stdenv; let
@@ -325,12 +334,12 @@ in
     "-DSPHINX_OUTPUT_MAN=ON"
     "-DSPHINX_OUTPUT_HTML=OFF"
     "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-  ] ++ optionals (false) [
+  ] ++ optionals enableGoldPlugin [
     "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
   ] ++ optionals isDarwin [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ optionals ((stdenv.hostPlatform != stdenv.buildPlatform) && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
     "-DCMAKE_CROSSCOMPILING=True"
     "-DLLVM_TABLEGEN=${buildLlvmTools.llvm}/bin/llvm-tblgen"
     (
@@ -373,7 +382,6 @@ in
       --replace 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "'"$lib"'")'
   ''
   + optionalString (stdenv.isDarwin && enableSharedLibraries) ''
-    ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${shortVersion}.dylib
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
   ''
   + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''

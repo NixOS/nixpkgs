@@ -19,21 +19,23 @@ be run behind a HTTP proxy on `fediverse.example.com`.
 
 
 ```nix
-services.akkoma.enable = true;
-services.akkoma.config = {
-  ":pleroma" = {
-    ":instance" = {
-      name = "My Akkoma instance";
-      description = "More detailed description";
-      email = "admin@example.com";
-      registration_open = false;
-    };
+{
+  services.akkoma.enable = true;
+  services.akkoma.config = {
+    ":pleroma" = {
+      ":instance" = {
+        name = "My Akkoma instance";
+        description = "More detailed description";
+        email = "admin@example.com";
+        registration_open = false;
+      };
 
-    "Pleroma.Web.Endpoint" = {
-      url.host = "fediverse.example.com";
+      "Pleroma.Web.Endpoint" = {
+        url.host = "fediverse.example.com";
+      };
     };
   };
-};
+}
 ```
 
 Please refer to the [configuration cheat sheet](https://docs.akkoma.dev/stable/configuration/cheatsheet/)
@@ -55,19 +57,21 @@ Although it is possible to expose Akkoma directly, it is common practice to oper
 HTTP reverse proxy such as nginx.
 
 ```nix
-services.akkoma.nginx = {
-  enableACME = true;
-  forceSSL = true;
-};
+{
+  services.akkoma.nginx = {
+    enableACME = true;
+    forceSSL = true;
+  };
 
-services.nginx = {
-  enable = true;
+  services.nginx = {
+    enable = true;
 
-  clientMaxBodySize = "16m";
-  recommendedTlsSettings = true;
-  recommendedOptimisation = true;
-  recommendedGzipSettings = true;
-};
+    clientMaxBodySize = "16m";
+    recommendedTlsSettings = true;
+    recommendedOptimisation = true;
+    recommendedGzipSettings = true;
+  };
+}
 ```
 
 Please refer to [](#module-security-acme) for details on how to provision an SSL/TLS certificate.
@@ -78,51 +82,53 @@ Without the media proxy function, Akkoma does not store any remote media like pi
 locally, and clients have to fetch them directly from the source server.
 
 ```nix
-# Enable nginx slice module distributed with Tengine
-services.nginx.package = pkgs.tengine;
+{
+  # Enable nginx slice module distributed with Tengine
+  services.nginx.package = pkgs.tengine;
 
-# Enable media proxy
-services.akkoma.config.":pleroma".":media_proxy" = {
-  enabled = true;
-  proxy_opts.redirect_on_failure = true;
-};
-
-# Adjust the persistent cache size as needed:
-#  Assuming an average object size of 128 KiB, around 1 MiB
-#  of memory is required for the key zone per GiB of cache.
-# Ensure that the cache directory exists and is writable by nginx.
-services.nginx.commonHttpConfig = ''
-  proxy_cache_path /var/cache/nginx/cache/akkoma-media-cache
-    levels= keys_zone=akkoma_media_cache:16m max_size=16g
-    inactive=1y use_temp_path=off;
-'';
-
-services.akkoma.nginx = {
-  locations."/proxy" = {
-    proxyPass = "http://unix:/run/akkoma/socket";
-
-    extraConfig = ''
-      proxy_cache akkoma_media_cache;
-
-      # Cache objects in slices of 1 MiB
-      slice 1m;
-      proxy_cache_key $host$uri$is_args$args$slice_range;
-      proxy_set_header Range $slice_range;
-
-      # Decouple proxy and upstream responses
-      proxy_buffering on;
-      proxy_cache_lock on;
-      proxy_ignore_client_abort on;
-
-      # Default cache times for various responses
-      proxy_cache_valid 200 1y;
-      proxy_cache_valid 206 301 304 1h;
-
-      # Allow serving of stale items
-      proxy_cache_use_stale error timeout invalid_header updating;
-    '';
+  # Enable media proxy
+  services.akkoma.config.":pleroma".":media_proxy" = {
+    enabled = true;
+    proxy_opts.redirect_on_failure = true;
   };
-};
+
+  # Adjust the persistent cache size as needed:
+  #  Assuming an average object size of 128 KiB, around 1 MiB
+  #  of memory is required for the key zone per GiB of cache.
+  # Ensure that the cache directory exists and is writable by nginx.
+  services.nginx.commonHttpConfig = ''
+    proxy_cache_path /var/cache/nginx/cache/akkoma-media-cache
+      levels= keys_zone=akkoma_media_cache:16m max_size=16g
+      inactive=1y use_temp_path=off;
+  '';
+
+  services.akkoma.nginx = {
+    locations."/proxy" = {
+      proxyPass = "http://unix:/run/akkoma/socket";
+
+      extraConfig = ''
+        proxy_cache akkoma_media_cache;
+
+        # Cache objects in slices of 1 MiB
+        slice 1m;
+        proxy_cache_key $host$uri$is_args$args$slice_range;
+        proxy_set_header Range $slice_range;
+
+        # Decouple proxy and upstream responses
+        proxy_buffering on;
+        proxy_cache_lock on;
+        proxy_ignore_client_abort on;
+
+        # Default cache times for various responses
+        proxy_cache_valid 200 1y;
+        proxy_cache_valid 206 301 304 1h;
+
+        # Allow serving of stale items
+        proxy_cache_use_stale error timeout invalid_header updating;
+      '';
+    };
+  };
+}
 ```
 
 #### Prefetch remote media {#modules-services-akkoma-prefetch-remote-media}
@@ -132,10 +138,12 @@ fetches all media associated with a post through the media proxy, as soon as the
 received by the instance.
 
 ```nix
-services.akkoma.config.":pleroma".":mrf".policies =
-  map (pkgs.formats.elixirConf { }).lib.mkRaw [
-    "Pleroma.Web.ActivityPub.MRF.MediaProxyWarmingPolicy"
-];
+{
+  services.akkoma.config.":pleroma".":mrf".policies =
+    map (pkgs.formats.elixirConf { }).lib.mkRaw [
+      "Pleroma.Web.ActivityPub.MRF.MediaProxyWarmingPolicy"
+  ];
+}
 ```
 
 #### Media previews {#modules-services-akkoma-media-previews}
@@ -143,11 +151,13 @@ services.akkoma.config.":pleroma".":mrf".policies =
 Akkoma can generate previews for media.
 
 ```nix
-services.akkoma.config.":pleroma".":media_preview_proxy" = {
-  enabled = true;
-  thumbnail_max_width = 1920;
-  thumbnail_max_height = 1080;
-};
+{
+  services.akkoma.config.":pleroma".":media_preview_proxy" = {
+    enabled = true;
+    thumbnail_max_width = 1920;
+    thumbnail_max_height = 1080;
+  };
+}
 ```
 
 ## Frontend management {#modules-services-akkoma-frontend-management}
@@ -160,29 +170,31 @@ The following example overrides the primary frontend’s default configuration u
 derivation.
 
 ```nix
-services.akkoma.frontends.primary.package = pkgs.runCommand "akkoma-fe" {
-  config = builtins.toJSON {
-    expertLevel = 1;
-    collapseMessageWithSubject = false;
-    stopGifs = false;
-    replyVisibility = "following";
-    webPushHideIfCW = true;
-    hideScopeNotice = true;
-    renderMisskeyMarkdown = false;
-    hideSiteFavicon = true;
-    postContentType = "text/markdown";
-    showNavShortcuts = false;
-  };
-  nativeBuildInputs = with pkgs; [ jq xorg.lndir ];
-  passAsFile = [ "config" ];
-} ''
-  mkdir $out
-  lndir ${pkgs.akkoma-frontends.akkoma-fe} $out
+{
+  services.akkoma.frontends.primary.package = pkgs.runCommand "akkoma-fe" {
+    config = builtins.toJSON {
+      expertLevel = 1;
+      collapseMessageWithSubject = false;
+      stopGifs = false;
+      replyVisibility = "following";
+      webPushHideIfCW = true;
+      hideScopeNotice = true;
+      renderMisskeyMarkdown = false;
+      hideSiteFavicon = true;
+      postContentType = "text/markdown";
+      showNavShortcuts = false;
+    };
+    nativeBuildInputs = with pkgs; [ jq xorg.lndir ];
+    passAsFile = [ "config" ];
+  } ''
+    mkdir $out
+    lndir ${pkgs.akkoma-frontends.akkoma-fe} $out
 
-  rm $out/static/config.json
-  jq -s add ${pkgs.akkoma-frontends.akkoma-fe}/static/config.json ${config} \
-    >$out/static/config.json
-'';
+    rm $out/static/config.json
+    jq -s add ${pkgs.akkoma-frontends.akkoma-fe}/static/config.json ${config} \
+      >$out/static/config.json
+  '';
+}
 ```
 
 ## Federation policies {#modules-services-akkoma-federation-policies}
@@ -198,28 +210,30 @@ of the fediverse and providing a pleasant experience to the users of an instance
 
 
 ```nix
-services.akkoma.config.":pleroma" = with (pkgs.formats.elixirConf { }).lib; {
-  ":mrf".policies = map mkRaw [
-    "Pleroma.Web.ActivityPub.MRF.SimplePolicy"
-  ];
+{
+  services.akkoma.config.":pleroma" = with (pkgs.formats.elixirConf { }).lib; {
+    ":mrf".policies = map mkRaw [
+      "Pleroma.Web.ActivityPub.MRF.SimplePolicy"
+    ];
 
-  ":mrf_simple" = {
-    # Tag all media as sensitive
-    media_nsfw = mkMap {
-      "nsfw.weird.kinky" = "Untagged NSFW content";
-    };
+    ":mrf_simple" = {
+      # Tag all media as sensitive
+      media_nsfw = mkMap {
+        "nsfw.weird.kinky" = "Untagged NSFW content";
+      };
 
-    # Reject all activities except deletes
-    reject = mkMap {
-      "kiwifarms.cc" = "Persistent harassment of users, no moderation";
-    };
+      # Reject all activities except deletes
+      reject = mkMap {
+        "kiwifarms.cc" = "Persistent harassment of users, no moderation";
+      };
 
-    # Force posts to be visible by followers only
-    followers_only = mkMap {
-      "beta.birdsite.live" = "Avoid polluting timelines with Twitter posts";
+      # Force posts to be visible by followers only
+      followers_only = mkMap {
+        "beta.birdsite.live" = "Avoid polluting timelines with Twitter posts";
+      };
     };
   };
-};
+}
 ```
 
 ## Upload filters {#modules-services-akkoma-upload-filters}
@@ -228,12 +242,14 @@ This example strips GPS and location metadata from uploads, deduplicates them an
 the file name.
 
 ```nix
-services.akkoma.config.":pleroma"."Pleroma.Upload".filters =
-  map (pkgs.formats.elixirConf { }).lib.mkRaw [
-    "Pleroma.Upload.Filter.Exiftool"
-    "Pleroma.Upload.Filter.Dedupe"
-    "Pleroma.Upload.Filter.AnonymizeFilename"
-  ];
+{
+  services.akkoma.config.":pleroma"."Pleroma.Upload".filters =
+    map (pkgs.formats.elixirConf { }).lib.mkRaw [
+      "Pleroma.Upload.Filter.Exiftool"
+      "Pleroma.Upload.Filter.Dedupe"
+      "Pleroma.Upload.Filter.AnonymizeFilename"
+    ];
+}
 ```
 
 ## Migration from Pleroma {#modules-services-akkoma-migration-pleroma}
@@ -286,9 +302,11 @@ To re‐use the Pleroma data in place, disable Pleroma and enable Akkoma, pointi
 Pleroma database and upload directory.
 
 ```nix
-# Adjust these settings according to the database name and upload directory path used by Pleroma
-services.akkoma.config.":pleroma"."Pleroma.Repo".database = "pleroma";
-services.akkoma.config.":pleroma".":instance".upload_dir = "/var/lib/pleroma/uploads";
+{
+  # Adjust these settings according to the database name and upload directory path used by Pleroma
+  services.akkoma.config.":pleroma"."Pleroma.Repo".database = "pleroma";
+  services.akkoma.config.":pleroma".":instance".upload_dir = "/var/lib/pleroma/uploads";
+}
 ```
 
 Please keep in mind that after the Akkoma service has been started, any migrations applied by
@@ -304,7 +322,9 @@ details.
 The Akkoma systemd service may be confined to a chroot with
 
 ```nix
-services.systemd.akkoma.confinement.enable = true;
+{
+  services.systemd.akkoma.confinement.enable = true;
+}
 ```
 
 Confinement of services is not generally supported in NixOS and therefore disabled by default.

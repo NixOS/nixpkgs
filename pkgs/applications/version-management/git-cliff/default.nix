@@ -3,26 +3,27 @@
 , fetchFromGitHub
 , rustPlatform
 , Security
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "git-cliff";
-  version = "1.4.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "git-cliff";
     rev = "v${version}";
-    hash = "sha256-OK2eoWlqlpf/X8EGMnWTv9Gs5FkYvW5rmQDB/Mkbp60=";
+    hash = "sha256-FRcreSnSO65m9h9+SUg4qdFELvpVX1+HkWH3dI2RR/M=";
   };
 
-  cargoHash = "sha256-gtkpZKOaG5p79uJ9cbbGdiOX57bDFTf2/Bd8+WToJrw=";
+  cargoHash = "sha256-RlcZvyFi7fc8eJYB5X64axAnNp8Z1h0WOV4hM1SLoRk=";
 
   # attempts to run the program on .git in src which is not deterministic
   doCheck = false;
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    Security
+    Security SystemConfiguration
   ];
 
   meta = with lib; {

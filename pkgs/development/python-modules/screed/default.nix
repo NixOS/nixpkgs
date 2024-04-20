@@ -18,7 +18,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools-scm ];
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   pythonImportsCheck = [ "screed" ];
   checkInputs = [ pytestCheckHook ];
@@ -33,6 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A simple read-only sequence database, designed for short reads";
+    mainProgram = "screed";
     homepage = "https://pypi.org/project/screed/";
     maintainers = with maintainers; [ luizirber ];
     license = licenses.bsd3;

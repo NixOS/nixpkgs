@@ -53,6 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/pypa/flit/blob/${version}/doc/history.rst";
     description = "A simple packaging tool for simple packages";
+    mainProgram = "flit";
     homepage = "https://github.com/pypa/flit";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fridh ];

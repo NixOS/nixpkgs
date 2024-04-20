@@ -9,23 +9,25 @@
 , wayland
 , xorg
 , vulkan-loader
+, udev
 , jre_minimal
 , cairo
 , gtk3
 , wrapGAppsHook
 , gsettings-desktop-schemas
 , glib
+, libxkbcommon
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ruffle";
-  version = "nightly-2023-04-10";
+  version = "nightly-2024-03-25";
 
   src = fetchFromGitHub {
     owner = "ruffle-rs";
     repo = pname;
     rev = version;
-    sha256 = "sha256-u5Ri9KnYzE3JedUP9fGgYeG8G9uxrL6/zt3KPiKjhU0=";
+    hash = "sha256-3G5xSGdMl4ISQmb2BVGdKz1cXU5Mnl+VkVYpJ6P12og=";
   };
 
   nativeBuildInputs = [
@@ -51,9 +53,17 @@ rustPlatform.buildRustPackage rec {
     xorg.libxcb
     xorg.libXrender
     vulkan-loader
+    udev
   ];
 
   dontWrapGApps = true;
+
+  preFixup = ''
+    patchelf $out/bin/ruffle_desktop \
+      --add-needed libxkbcommon-x11.so \
+      --add-needed libwayland-client.so \
+      --add-rpath ${libxkbcommon}/lib:${wayland}/lib
+  '';
 
   postFixup = ''
     # This name is too generic
@@ -73,29 +83,23 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "--workspace" ];
 
-  # Currently, buildRustPackage can't handle having both the Crates.io dasp-0.11
-  # and the git dasp-0.11, as it tries to symlink both to the same place. For
-  # now, unify both dasp versions to the (newer) Git version.
-  # Related issues: #22177, #183344
-  cargoPatches = [ ./unify-dasp-version.patch ];
-
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "dasp-0.11.0" = "sha256-CZNgTLL4IG7EJR2xVp9X9E5yre8foY6VX2hUMRawxiI=";
-      "flash-lso-0.5.0" = "sha256-9uH3quxRzLtmHJs5WF/GRxWkXL/KFyOl182HKcHNnuc=";
-      "gc-arena-0.2.2" = "sha256-/H9VcTesBD+IA7bUf208b0HQ/cIUDAz9TJBBywf6akA=";
-      "h263-rs-0.1.0" = "sha256-4kBg09VHyiQTvUbvcTb5g/BVcOpRFZ1fVEuRWXv5XwE=";
-      "nellymoser-rs-0.1.2" = "sha256-GykDQc1XwySOqfxW/OcSxkKCFJyVmwSLy/CEBcwcZJs=";
-      "nihav_codec_support-0.1.0" = "sha256-rE9AIiQr+PnHC9xfDQULndSfFHSX4sqKkCAQYVNaJcQ=";
+      "flash-lso-0.6.0" = "sha256-sVe53VRtBEEI6eERWRv6aG6BBT31sSLvJ6CSCcif2Lo=";
+      "h263-rs-0.1.0" = "sha256-EBYZ00axaILGc2CtJoPQpewlf6+jlmml+cXZFyoxhHQ=";
+      "jpegxr-0.3.1" = "sha256-YbQMi86DXqdi7o0s5ajAv7/vFaxNpShz19cNa9MpOsA=";
+      "nellymoser-rs-0.1.2" = "sha256-66yt+CKaw/QFIPeNkZA2mb9ke64rKcAw/6k/pjNYY04=";
+      "nihav_codec_support-0.1.0" = "sha256-HAJS4I6yyzQzCf+vmaFp1MWXpcUgFAHPxLhfMVXmN1c=";
     };
   };
 
   meta = with lib; {
-    description = "An Adobe Flash Player emulator written in the Rust programming language.";
+    description = "An Adobe Flash Player emulator written in the Rust programming language";
     homepage = "https://ruffle.rs/";
     license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ govanify ];
+    maintainers = with maintainers; [ govanify jchw ];
     platforms = platforms.linux;
+    mainProgram = "ruffle_desktop";
   };
 }

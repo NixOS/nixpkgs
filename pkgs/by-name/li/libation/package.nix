@@ -19,19 +19,19 @@
 
 buildDotnetModule rec {
   pname = "libation";
-  version = "11.1.0";
+  version = "11.3.6";
 
   src = fetchFromGitHub {
     owner = "rmcrackan";
     repo = "Libation";
     rev = "v${version}";
-    hash = "sha256-NxG1H8lj+aBpgKj03CDpX/tLT0SxDS3pnZGQ2ultBnQ=";
+    hash = "sha256-LH8p14oMjqo648h0TYClutPx19v5cWa9ffUlxuPWX5o=";
   };
 
   sourceRoot = "${src.name}/Source";
 
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
-  dotnet-runtime = dotnetCorePackages.runtime_7_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   nugetDeps = ./deps.nix;
 

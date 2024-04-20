@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "setuptools-gettext";
-  version = "0.1.5";
+  version = "0.1.11";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "breezy-team";
     repo = "setuptools-gettext";
     rev = "refs/tags/v${version}";
-    hash = "sha256-16kzKB0xq3ApQlGQYp12oB7K99QCQMUwqpP54QiI3gg=";
+    hash = "sha256-yLKn4wwGgRdlsISAT71lD2vkIefsTJRB+OEA030adZY=";
   };
 
   propagatedBuildInputs = [

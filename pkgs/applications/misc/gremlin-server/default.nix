@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = [ maintainers.jrpotter ];
     platforms = platforms.all;
+    mainProgram = "gremlin-server";
   };
 }

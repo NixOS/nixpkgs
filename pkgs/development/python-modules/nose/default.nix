@@ -4,14 +4,17 @@
 , isPy3k
 , isPyPy
 , python
+ ,pythonAtLeast
 , coverage
-, buildPackages
 }:
 
 buildPythonPackage rec {
   version = "1.3.7";
   format = "setuptools";
   pname = "nose";
+
+  # unmaintained, relies on the imp module
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
@@ -44,6 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     broken = isPyPy; # missing 2to3 conversion utility
     description = "A unittest-based testing framework for python that makes writing and running tests easier";
+    mainProgram = "nosetests";
     homepage = "https://nose.readthedocs.io/";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ ];

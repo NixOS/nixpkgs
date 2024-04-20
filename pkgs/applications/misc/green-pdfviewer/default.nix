@@ -34,5 +34,6 @@ stdenv.mkDerivation {
     platforms = platforms.unix;
     license  = licenses.gpl3;
     maintainers = [ maintainers.vrthra ];
+    mainProgram = "green";
   };
 }

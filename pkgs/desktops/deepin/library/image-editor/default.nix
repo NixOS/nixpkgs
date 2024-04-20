@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "image-editor";
-  version = "1.0.35";
+  version = "1.0.41";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-Xr4tueipQbRHyKLStTWeUcVbX7Baiz0YooaaVk65Y+U=";
+    hash = "sha256-9V9B0YSUTWv/4IbTRtKJSVrZx6j8jqJxIIR9TwUZ0U0=";
   };
 
   postPatch = ''

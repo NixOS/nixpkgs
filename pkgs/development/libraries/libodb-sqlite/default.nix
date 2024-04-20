@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "libodb-sqlite";
-  version = "2.5.0-b.23";
+  version = "2.5.0-b.25";
 
   outputs = [ "out" "dev" "doc" ];
 
   src = fetchurl {
     url = "https://pkg.cppget.org/1/beta/odb/libodb-sqlite-${version}.tar.gz";
-    sha256 = "sha256-HjEFfNDXduHOexNm82S+vqKRQM3SwgEYiDBZcPXsr/w=";
+    hash = "sha256-Ko40WZErbL77B4eoJ5FFko/gTFYhADGlBzxPLuy8Wqc=";
   };
 
   nativeBuildInputs = [

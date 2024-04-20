@@ -18,17 +18,19 @@
 , indilib
 , libnova
 , qttools
+, exiv2
+, nlopt
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stellarium";
-  version = "23.3";
+  version = "24.1";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
-    rev = "v${version}";
-    hash = "sha256-bYvGmYu9jMHk2IUICz2kCVh56Ymz8JHqurdWV+xEdJY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-t3eFmiG9X2cmnjc/PQwZ2bw1SCHaNRA83wiT1cPbKJc=";
   };
 
   patches = [
@@ -66,12 +68,14 @@ stdenv.mkDerivation rec {
     qxlsx
     indilib
     libnova
+    exiv2
+    nlopt
   ] ++ lib.optionals stdenv.isLinux [
     qtwayland
   ];
 
   preConfigure = ''
-    export SOURCE_DATE_EPOCH=$(date -d 20${lib.versions.major version}0101 +%s)
+    export SOURCE_DATE_EPOCH=$(date -d 20${lib.versions.major finalAttrs.version}0101 +%s)
   '' + lib.optionalString stdenv.isDarwin ''
     export LC_ALL=en_US.UTF-8
   '';
@@ -89,11 +93,12 @@ stdenv.mkDerivation rec {
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta =  {
     description = "Free open-source planetarium";
+    mainProgram = "stellarium";
     homepage = "https://stellarium.org/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ kilianar ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ kilianar ];
   };
-}
+})

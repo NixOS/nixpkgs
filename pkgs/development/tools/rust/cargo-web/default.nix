@@ -20,6 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A Cargo subcommand for the client-side Web";
+    mainProgram = "cargo-web";
     homepage = "https://github.com/koute/cargo-web";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ kevincox ];

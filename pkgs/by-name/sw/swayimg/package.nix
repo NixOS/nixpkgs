@@ -19,19 +19,20 @@
 , libpng
 , libjxl
 , libexif
+, libavif
 , openexr_3
 , bash-completion
 , testers
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "swayimg";
-  version = "1.12";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "artemsen";
     repo = "swayimg";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-aKDt4lPh4w0AOucN7VrA7mo8SHI9eJqdrpJF+hG93gI=";
+    hash = "sha256-CTl1hlRE4MnA6WdQaR4VG5G/wop/9xK7thRiCY7teYU=";
   };
 
   strictDeps = true;
@@ -62,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libjxl
     libexif
+    libavif
     openexr_3
   ];
 

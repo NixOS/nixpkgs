@@ -40,7 +40,7 @@ in
 
     services.firebird = {
 
-      enable = mkEnableOption (lib.mdDoc "the Firebird super server");
+      enable = mkEnableOption "the Firebird super server";
 
       package = mkPackageOption pkgs "firebird" {
         example = "firebird_3";
@@ -52,7 +52,7 @@ in
       port = mkOption {
         default = 3050;
         type = types.port;
-        description = lib.mdDoc ''
+        description = ''
           Port Firebird uses.
         '';
       };
@@ -60,7 +60,7 @@ in
       user = mkOption {
         default = "firebird";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           User account under which firebird runs.
         '';
       };
@@ -68,7 +68,7 @@ in
       baseDir = mkOption {
         default = "/var/lib/firebird";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Location containing data/ and system/ directories.
           data/ stores the databases, system/ stores the password database security2.fdb.
         '';
@@ -143,7 +143,7 @@ in
       # ConnectionTimeout = 180
 
       #RemoteServiceName = gds_db
-      RemoteServicePort = ${cfg.port}
+      RemoteServicePort = ${toString cfg.port}
 
       # randomly choose port for server Event Notification
       #RemoteAuxPort = 0

@@ -31,13 +31,13 @@ pkgs.runCommand "all-attrs-eval-under-tryEval" {
 
   nix-store --init
 
-  cp -r ${pkgs-path + "/lib"} lib
-  cp -r ${pkgs-path + "/pkgs"} pkgs
-  cp -r ${pkgs-path + "/default.nix"} default.nix
-  cp -r ${pkgs-path + "/nixos"} nixos
-  cp -r ${pkgs-path + "/maintainers"} maintainers
-  cp -r ${pkgs-path + "/.version"} .version
-  cp -r ${pkgs-path + "/doc"} doc
+  cp -r ${pkgs-path}/lib lib
+  cp -r ${pkgs-path}/pkgs pkgs
+  cp -r ${pkgs-path}/default.nix default.nix
+  cp -r ${pkgs-path}/nixos nixos
+  cp -r ${pkgs-path}/maintainers maintainers
+  cp -r ${pkgs-path}/.version .version
+  cp -r ${pkgs-path}/doc doc
   echo "Running pkgs/top-level/release-attrpaths-superset.nix"
   nix-instantiate --eval --strict --json pkgs/top-level/release-attrpaths-superset.nix -A names > /dev/null
 

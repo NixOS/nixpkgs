@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "meson-python";
-  version = "0.14.0";
+  version = "0.15.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit version;
     pname = "meson_python";
-    hash = "sha256-uWhmaQMmVE3+RSWDdTrD9DMTIn6f2UFnAajfkK8hIjQ=";
+    hash = "sha256-/dtz7s1J6JwcQch5N82JwtC2WhxjuigjhoHUvZSE0m8=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "Meson Python build backend (PEP 517)";
     homepage = "https://github.com/mesonbuild/meson-python";
     license = [ lib.licenses.mit ];
-    maintainers = [ lib.maintainers.fridh ];
+    maintainers = with lib.maintainers; [ fridh doronbehar ];
   };
 }

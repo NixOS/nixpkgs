@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, coreutils, ocaml-ng, zlib, pcre, neko, mbedtls_2, Security }:
+{ lib, stdenv, fetchFromGitHub, coreutils, ocaml-ng, zlib, pcre, pcre2, neko, mbedtls_2, Security }:
 
 let
   ocamlDependencies = version:
@@ -37,7 +37,8 @@ let
       pname = "haxe";
       inherit version;
 
-      buildInputs = [ zlib pcre neko ]
+      buildInputs = [ zlib neko ]
+        ++ (if lib.versionAtLeast version "4.3" then [pcre2] else [pcre])
         ++ lib.optional (lib.versionAtLeast version "4.1") mbedtls_2
         ++ lib.optional (lib.versionAtLeast version "4.1" && stdenv.isDarwin) Security
         ++ ocamlDependencies version;
@@ -124,8 +125,8 @@ in {
     version = "4.1.5";
     sha256 = "0rns6d28qzkbai6yyws08yzbyvxfn848nj0fsji7chdi0y7pzzj0";
   };
-  haxe_4_2 = generic {
-    version = "4.2.5";
-    sha256 = "sha256-Y0gx6uOQX4OZgg8nK4GJxRR1rKh0S2JUjZQFVQ4cfTs=";
+  haxe_4_3 = generic {
+    version = "4.3.3";
+    sha256 = "sha256-sMklqQkVbWCYCKpOU23AjkuxzcVV7Aa8ljlFpruam9Y=";
   };
 }

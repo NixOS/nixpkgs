@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     inherit (src.meta) homepage;
     description = "Library of Assorted Spiffy Things";
+    mainProgram = "libast-config";
     license = licenses.bsd2;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.unix;

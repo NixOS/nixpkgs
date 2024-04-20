@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchpatch, barcode, gnome, autoreconfHook
 , gtk3, gtk-doc, libxml2, librsvg , libtool, libe-book, gsettings-desktop-schemas
-, intltool, itstool, makeWrapper, pkg-config, yelp-tools
+, intltool, itstool, makeWrapper, pkg-config, yelp-tools, qrencode
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     barcode gtk3 gtk-doc yelp-tools
     gnome.gnome-common gsettings-desktop-schemas
-    itstool libxml2 librsvg libe-book libtool
+    itstool libxml2 librsvg libe-book libtool qrencode
   ];
 
   preFixup = ''

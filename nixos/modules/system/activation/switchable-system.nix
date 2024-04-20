@@ -12,7 +12,7 @@ in
     system.switch.enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to include the capability to switch configurations.
 
         Disabling this makes the system unable to be reconfigured via `nixos-rebuild`.

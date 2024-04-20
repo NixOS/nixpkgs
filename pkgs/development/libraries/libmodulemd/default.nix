@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "C Library for manipulating module metadata files";
+    mainProgram = "modulemd-validator";
     homepage = "https://github.com/fedora-modularity/libmodulemd";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

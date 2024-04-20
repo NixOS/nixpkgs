@@ -12,7 +12,6 @@
 , glib
 , gtksourceview5
 , wrapGAppsHook4
-, gobject-introspection
 , gnome
 , mpfr
 , gmp
@@ -40,7 +39,6 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     wrapGAppsHook4
-    gobject-introspection # for finding vapi files
   ];
 
   buildInputs = [

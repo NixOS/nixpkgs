@@ -5,11 +5,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "libsamplerate";
-  version = "0.1.9";
+  version = "0.2.2";
 
   src = fetchurl {
-    url = "http://www.mega-nerd.com/SRC/${pname}-${version}.tar.gz";
-    sha256 = "1ha46i0nbibq0pl0pjwcqiyny4hj8lp1bnl4dpxm64zjw9lb2zha";
+    url = "https://github.com/libsndfile/libsamplerate/releases/download/${version}/libsamplerate-${version}.tar.xz";
+    hash = "sha256-MljaKAUR0ktJ1rCGFbvoJNDKzJhCsOTK8RxSzysEOJM=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -18,19 +18,17 @@ in stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-fftw" ];
 
-  outputs = [ "bin" "dev" "out" ];
+  outputs = [ "dev" "out" ];
 
   postConfigure = optionalString stdenv.isDarwin ''
     # need headers from the Carbon.framework in /System/Library/Frameworks to
     # compile this on darwin -- not sure how to handle
     NIX_CFLAGS_COMPILE+=" -I${Carbon}/Library/Frameworks/Carbon.framework/Headers"
-
-    substituteInPlace examples/Makefile --replace "-fpascal-strings" ""
   '';
 
   meta = with lib; {
     description = "Sample Rate Converter for audio";
-    homepage    = "http://www.mega-nerd.com/SRC/index.html";
+    homepage    = "https://libsndfile.github.io/libsamplerate/";
     license     = licenses.bsd2;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.all;

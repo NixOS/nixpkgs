@@ -42,7 +42,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    # # .so files link to this
+    cairo
     glib
   ] ++ lib.optionals stdenv.isDarwin [
     ncurses
@@ -50,7 +50,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pycairo
-    cairo
   ];
 
   mesonFlags = [

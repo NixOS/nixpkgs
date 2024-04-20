@@ -34,13 +34,13 @@
 
 buildPythonApplication rec {
   pname = "orca";
-  version = "45.1";
+  version = "45.2";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "v8wGv0vEe70CwVaNHkZL8Wox5iv3A7SaoTsI2zihqMo=";
+    sha256 = "8PLFeaW+7f5WU7x/4kSBxNaqxd0fccHnoghZXzx473Y=";
   };
 
   patches = [
@@ -96,8 +96,9 @@ buildPythonApplication rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Projects/Orca";
+    homepage = "https://orca.gnome.org/";
     description = "Screen reader";
+    mainProgram = "orca";
     longDescription = ''
       A free, open source, flexible and extensible screen reader that provides
       access to the graphical desktop via speech and refreshable braille.

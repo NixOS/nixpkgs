@@ -40,15 +40,13 @@ rustPlatform.buildRustPackage rec {
     zstd
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   env = {
     SYMBOLICATOR_GIT_VERSION = src.rev;
     SYMBOLICATOR_RELEASE = version;
     ZSTD_SYS_USE_PKG_CONFIG = true;
-  } // lib.optionalAttrs stdenv.cc.isClang {
-    # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
   };
 
   # tests require network access

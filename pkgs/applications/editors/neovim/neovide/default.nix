@@ -6,6 +6,7 @@
 , fetchgit
 , runCommand
 , gn
+, neovim
 , ninja
 , makeWrapper
 , pkg-config
@@ -25,16 +26,16 @@
 
 rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   pname = "neovide";
-  version = "0.12.0";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "neovide";
     repo = "neovide";
     rev = version;
-    sha256 = "sha256-m3ZdzdmkW69j1sZ9h7M1m5fDNnJ7BM7nwYPx7QhsIso=";
+    sha256 = "sha256-M19LKNjUmC0WkVGm4t7vjxgMMe0FdMTmB1mLcG33OUg=";
   };
 
-  cargoSha256 = "sha256-AAHMx4xxbC/JdmAPE2bub7qdF5sFNWjqXI1nuCUxsZA=";
+  cargoHash = "sha256-2fPprZVT7V+Ot8aCpWj6WTdyFylmzlujFdTJCrtE0rk=";
 
   SKIA_SOURCE_DIR =
     let
@@ -67,11 +68,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     removeReferencesTo
   ] ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
-  # All tests passes but at the end cargo prints for unknown reason:
-  #   error: test failed, to rerun pass '--bin neovide'
-  # Increasing the loglevel did not help. In a nix-shell environment
-  # the failure do not occure.
-  doCheck = false;
+  nativeCheckInputs = [ neovim ];
 
   buildInputs = [
     SDL2
@@ -112,11 +109,11 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
 
   meta = with lib; {
     description = "This is a simple graphical user interface for Neovim.";
+    mainProgram = "neovide";
     homepage = "https://github.com/neovide/neovide";
     changelog = "https://github.com/neovide/neovide/releases/tag/${version}";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ck3d multisn8 ];
+    maintainers = with maintainers; [ ck3d ];
     platforms = platforms.all;
-    badPlatforms = platforms.darwin;
   };
 }

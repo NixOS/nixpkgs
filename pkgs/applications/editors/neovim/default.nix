@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gettext, msgpack-c, libtermkey, libiconv
+{ lib, stdenv, fetchFromGitHub, removeReferencesTo, cmake, gettext, msgpack-c, libtermkey, libiconv
 , libuv, lua, ncurses, pkg-config
 , unibilium, gperf
 , libvterm-neovim
@@ -12,11 +12,10 @@
 
 # now defaults to false because some tests can be flaky (clipboard etc), see
 # also: https://github.com/neovim/neovim/issues/16233
-, doCheck ? false
 , nodejs ? null, fish ? null, python3 ? null
 }:
-
-let
+stdenv.mkDerivation (finalAttrs:
+  let
   nvim-lpeg-dylib = luapkgs: if stdenv.isDarwin
     then (luapkgs.lpeg.overrideAttrs (oa: {
       preConfigure = ''
@@ -42,7 +41,7 @@ let
     (nvim-lpeg-dylib ps)
     luabitop
     mpack
-  ] ++ lib.optionals doCheck [
+  ] ++ lib.optionals finalAttrs.doCheck [
     luv
     coxpcall
     busted
@@ -64,18 +63,18 @@ let
         in deterministicLuajit.withPackages(ps: [ ps.mpack (nvim-lpeg-dylib ps) ])
       else lua.luaOnBuild;
 
-  pyEnv = python3.withPackages(ps: with ps; [ pynvim msgpack ]);
 
-in
-  stdenv.mkDerivation rec {
+in {
     pname = "neovim-unwrapped";
-    version = "0.9.4";
+    version = "0.9.5";
+
+    __structuredAttrs = true;
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
-      rev = "v${version}";
-      hash = "sha256-Lyo98cAs7Zhx23N4s4f3zpWFKYJMmXleWpt3wiVDQZo=";
+      rev = "v${finalAttrs.version}";
+      hash = "sha256-CcaBqA0yFCffNPmXOJTo8c9v1jrEBiqAl8CG5Dj5YxE=";
     };
 
     patches = [
@@ -87,7 +86,7 @@ in
 
     dontFixCmake = true;
 
-    inherit lua;
+    inherit lua treesitter-parsers;
 
     buildInputs = [
       gperf
@@ -105,25 +104,30 @@ in
       tree-sitter
       unibilium
     ] ++ lib.optionals stdenv.isDarwin [ libiconv CoreServices ]
-      ++ lib.optionals doCheck [ glibcLocales procps ]
+      ++ lib.optionals finalAttrs.doCheck [ glibcLocales procps ]
     ;
 
-    inherit doCheck;
+    doCheck = false;
 
     # to be exhaustive, one could run
     # make oldtests too
     checkPhase = ''
+      runHook preCheck
       make functionaltest
+      runHook postCheck
     '';
 
     nativeBuildInputs = [
       cmake
       gettext
       pkg-config
+      removeReferencesTo
     ];
 
     # extra programs test via `make functionaltest`
-    nativeCheckInputs = [
+    nativeCheckInputs = let
+      pyEnv = python3.withPackages(ps: with ps; [ pynvim msgpack ]);
+    in [
       fish
       nodejs
       pyEnv      # for src/clint.py
@@ -138,8 +142,11 @@ in
       sed -i src/nvim/po/CMakeLists.txt \
         -e "s|\$<TARGET_FILE:nvim|\${stdenv.hostPlatform.emulator buildPackages} &|g"
     '';
+    postInstall = ''
+      find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
+    '';
     # check that the above patching actually works
-    disallowedReferences = [ stdenv.cc ] ++ lib.optional (lua != codegenLua) codegenLua;
+    disallowedRequisites = [ stdenv.cc ] ++ lib.optional (lua != codegenLua) codegenLua;
 
     cmakeFlags = [
       # Don't use downloaded dependencies. At the end of the configurePhase one
@@ -166,11 +173,11 @@ in
         ln -s \
           ${tree-sitter.buildGrammar {
             inherit language src;
-            version = "neovim-${version}";
+            version = "neovim-${finalAttrs.version}";
           }}/parser \
           $out/lib/nvim/parser/${language}.so
       '')
-      treesitter-parsers);
+      finalAttrs.treesitter-parsers);
 
     shellHook=''
       export VIMRUNTIME=$PWD/runtime
@@ -199,4 +206,4 @@ in
       maintainers = with maintainers; [ manveru rvolosatovs ];
       platforms   = platforms.unix;
     };
-  }
+  })

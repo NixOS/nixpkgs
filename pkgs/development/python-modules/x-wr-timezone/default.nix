@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , icalendar
 , pytz
 , pytestCheckHook
@@ -10,16 +11,19 @@
 
 buildPythonPackage rec {
   pname = "x-wr-timezone";
-  version = "0.0.6";
-
-  format = "setuptools";
+  version = "0.0.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "niccokunzmann";
     repo = "x-wr-timezone";
     rev = "v${version}";
-    hash = "sha256-9B1gXabpZsJSHYUHLu6bBGidO3C5m/I0oOc5U/mbX0I=";
+    hash = "sha256-itqsVYYUcpbKTh0BM6IHk6F9xhB+pAQnnJsnZAVpNL4=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     icalendar
@@ -36,8 +40,10 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  # https://github.com/niccokunzmann/x-wr-timezone/issues/8
-  doCheck = false;
+  disabledTests = [
+    "test_input_to_output"
+    "test_output_stays_the_same"
+  ];
 
   pythonImportsCheck = [ "x_wr_timezone" ];
 

@@ -242,6 +242,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Open-source electronics prototyping platform";
+    mainProgram = "arduino";
     homepage = "https://www.arduino.cc/";
     license = if withTeensyduino then licenses.unfreeRedistributable else licenses.gpl2;
     sourceProvenance = with sourceTypes; [

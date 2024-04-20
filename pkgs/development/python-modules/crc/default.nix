@@ -8,16 +8,16 @@
 
 buildPythonPackage rec {
   pname = "crc";
-  version = "6.0.0";
-  format = "pyproject";
+  version = "6.1.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Nicoretti";
-    repo = pname;
+    repo = "crc";
     rev = "refs/tags/${version}";
-    hash = "sha256-bQa+hkWRXRlyvX3/RL3DAjh9V/kTNg8C7/6viLLKtpk=";
+    hash = "sha256-d946yBMrOIgMXGOr2ej5bvn59D5iAGMese24qdv8l/Y=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/Nicoretti/crc/releases/tag/${version}";
     description = "Python module for calculating and verifying predefined & custom CRC's";
+    mainProgram = "crc";
     homepage = "https://nicoretti.github.io/crc/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ jleightcap ];

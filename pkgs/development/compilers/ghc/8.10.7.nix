@@ -44,12 +44,9 @@
 
 , #  Whether to build sphinx documentation.
   enableDocs ? (
-    # Docs disabled for musl and cross because it's a large task to keep
-    # all `sphinx` dependencies building in those environments.
-    # `sphinx` pulls in among others:
-    # Ruby, Python, Perl, Rust, OpenGL, Xorg, gtk, LLVM.
-    (stdenv.targetPlatform == stdenv.hostPlatform)
-    && !stdenv.hostPlatform.isMusl
+    # Docs disabled if we are building on musl because it's a large task to keep
+    # all `sphinx` dependencies building in this environment.
+    !stdenv.buildPlatform.isMusl
   )
 
 , enableHaddockProgram ?
@@ -106,7 +103,7 @@ let
     Stage1Only = ${if targetPlatform.system == hostPlatform.system then "NO" else "YES"}
     CrossCompilePrefix = ${targetPrefix}
   '' + lib.optionalString (!enableProfiledLibs) ''
-    GhcLibWays = "v dyn"
+    BUILD_PROF_LIBS = NO
   '' + lib.optionalString enableRelocatedStaticLibs ''
     GhcLibHcOpts += -fPIC
     GhcRtsHcOpts += -fPIC

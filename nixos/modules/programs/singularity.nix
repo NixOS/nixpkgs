@@ -7,8 +7,8 @@ in
 {
 
   options.programs.singularity = {
-    enable = mkEnableOption (mdDoc "singularity") // {
-      description = mdDoc ''
+    enable = mkEnableOption "singularity" // {
+      description = ''
         Whether to install Singularity/Apptainer with system-level overriding such as SUID support.
       '';
     };
@@ -18,7 +18,7 @@ in
     packageOverriden = mkOption {
       type = types.nullOr types.package;
       default = null;
-      description = mdDoc ''
+      description = ''
         This option provides access to the overridden result of `programs.singularity.package`.
 
         For example, the following configuration makes all the Nixpkgs packages use the overridden `singularity`:
@@ -43,7 +43,7 @@ in
       type = types.bool;
       default = true;
       example = false;
-      description = mdDoc ''
+      description = ''
         Whether to use top-level directories as LOCALSTATEDIR
         instead of the store path ones.
         This affects the SESSIONDIR of Apptainer/Singularity.
@@ -55,15 +55,20 @@ in
       type = types.bool;
       default = true;
       example = false;
-      description = mdDoc ''
+      description = ''
         Whether to enable the `--fakeroot` support of Singularity/Apptainer.
       '';
     };
     enableSuid = mkOption {
       type = types.bool;
-      default = true;
+      # SingularityCE requires SETUID for most things. Apptainer prefers user
+      # namespaces, e.g. `apptainer exec --nv` would fail if built
+      # `--with-suid`:
+      # > `FATAL: nvidia-container-cli not allowed in setuid mode`
+      default = cfg.package.projectName != "apptainer";
+      defaultText = literalExpression ''config.services.singularity.package.projectName != "apptainer"'';
       example = false;
-      description = mdDoc ''
+      description = ''
         Whether to enable the SUID support of Singularity/Apptainer.
       '';
     };

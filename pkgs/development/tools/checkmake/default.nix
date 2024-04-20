@@ -48,6 +48,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Experimental tool for linting and checking Makefiles";
+    mainProgram = "checkmake";
     homepage = "https://github.com/mrtazz/checkmake";
     changelog = "https://github.com/mrtazz/checkmake/releases/tag/${src.rev}";
     license = licenses.mit;

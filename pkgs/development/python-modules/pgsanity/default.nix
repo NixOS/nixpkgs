@@ -22,6 +22,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/markdrago/pgsanity";
     description = "Checks the syntax of Postgresql SQL files";
+    mainProgram = "pgsanity";
     longDescription = ''
       PgSanity checks the syntax of Postgresql SQL files by
       taking a file that has a list of bare SQL in it,

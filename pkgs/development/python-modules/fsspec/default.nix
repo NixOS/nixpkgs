@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "fsspec";
-  version = "2023.10.0";
+  version = "2024.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "fsspec";
     repo = "filesystem_spec";
     rev = "refs/tags/${version}";
-    hash = "sha256-cLkCQQbb/AakDSz1NTrVlHh8LdgoqtjX8OPT+Nb1NA4=";
+    hash = "sha256-C+47BcIELZTEARXW8fAMHMjyKUWxU1tNKWGoPPtt/fQ=";
   };
 
   propagatedBuildInputs = [
@@ -126,6 +126,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
   __darwinAllowLocalNetworking = true;
 
   disabledTests = [
@@ -144,6 +148,8 @@ buildPythonPackage rec {
     # this two tests however, assume nanosecond resolution
     "test_modified"
     "test_touch"
+    # tries to access /home, ignores $HOME
+    "test_directories"
   ];
 
   disabledTestPaths = [

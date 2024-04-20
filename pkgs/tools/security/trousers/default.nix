@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Trusted computing software stack";
+    mainProgram = "tcsd";
     homepage    = "https://trousers.sourceforge.net/";
     license     = licenses.bsd3;
     maintainers = [ maintainers.ak ];

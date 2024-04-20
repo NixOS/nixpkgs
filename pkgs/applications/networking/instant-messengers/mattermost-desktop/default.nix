@@ -1,24 +1,24 @@
 { lib
 , stdenv
 , fetchurl
-, electron_26
+, electron_28
 , makeWrapper
 }:
 
 let
 
   pname = "mattermost-desktop";
-  version = "5.5.0";
+  version = "5.7.0";
 
   srcs = {
     "x86_64-linux" = {
       url = "https://releases.mattermost.com/desktop/${version}/${pname}-${version}-linux-x64.tar.gz";
-      hash = "sha256-htjKGO16Qs1RVE4U47DdN8bNpUH4JD/LkMOeoIRmLPI=";
+      hash = "sha256-1xfU9+VzjhSVWsP1AYizphhQ2010GbQBgQ4dxvY3TBU=";
     };
 
     "aarch64-linux" = {
       url = "https://releases.mattermost.com/desktop/${version}/${pname}-${version}-linux-arm64.tar.gz";
-      hash = "sha256-LQhMSIrWDZTXBnJfLKph5e6txHGvQSqEu+P1j1zOiTg=";
+      hash = "sha256-RrH+R9IuokKK+zfmCmOt38hD1HvWJbKqmxTFhQ3RcqQ=";
     };
   };
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation {
     substituteInPlace $out/share/applications/Mattermost.desktop \
       --replace /share/mattermost-desktop/mattermost-desktop /bin/mattermost-desktop
 
-    makeWrapper ${electron_26}/bin/electron $out/bin/${pname} \
+    makeWrapper '${lib.getExe electron_28}' $out/bin/${pname} \
       --add-flags $out/share/${pname}/app.asar
 
     runHook postInstall
@@ -60,6 +60,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Mattermost Desktop client";
+    mainProgram = "mattermost-desktop";
     homepage = "https://about.mattermost.com/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;

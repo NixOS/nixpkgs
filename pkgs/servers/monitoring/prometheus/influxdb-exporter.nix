@@ -32,9 +32,10 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Prometheus exporter that accepts InfluxDB metrics";
+    mainProgram = "influxdb_exporter";
     homepage = "https://github.com/prometheus/influxdb_exporter";
     changelog = "https://github.com/prometheus/influxdb_exporter/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

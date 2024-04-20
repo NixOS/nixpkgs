@@ -18,5 +18,6 @@ buildGoModule rec {
     description = "Shows a message when your battery is discharging ";
     maintainers = with maintainers; [ ];
     license = licenses.mit;
+    mainProgram = "swaynag-battery";
   };
 }

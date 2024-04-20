@@ -2,6 +2,8 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, fetchpatch2
+, pythonAtLeast
 , pythonOlder
 , substituteAll
 
@@ -41,15 +43,16 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Django";
-  version = "4.2.7";
+  pname = "django";
+  version = "4.2.11";
   format = "pyproject";
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-jg8cLCeGtcDjn+GvziTJJgQPrUfI6orTCq8RiN8p/EE=";
+    pname = "Django";
+    inherit version;
+    hash = "sha256-bm/z2y2N0MmGtO7IVUyOT5GbXB/2KltDkMF6/y7W5cQ=";
   };
 
   patches = [
@@ -60,6 +63,14 @@ buildPythonPackage rec {
     # make sure the tests don't remove packages from our pythonpath
     # and disable failing tests
     ./django_4_tests.patch
+
+    (fetchpatch2 {
+      # https://github.com/django/django/pull/17979
+      name = "django-mime-utf8-surrogates.patch";
+      url = "https://github.com/django/django/commit/0d3ddcaf2c74638a32781f361d467af572ced95f.patch";
+      hash = "sha256-AoIFvehBsXIrzIlCsqOZ++RqtDFl/H+zXqA25OMQr7g=";
+    })
+
   ] ++ lib.optionals withGdal [
     (substituteAll {
       src = ./django_4_set_geos_gdal_lib.patch;
@@ -72,6 +83,11 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace tests/utils_tests/test_autoreload.py \
       --replace "/usr/bin/python" "${python.interpreter}"
+  '' + lib.optionalString (pythonAtLeast "3.12" && stdenv.hostPlatform.system == "aarch64-linux") ''
+    # Test regression after xz was reverted from 5.6.0 to 5.4.6
+    # https://hydra.nixos.org/build/254630990
+    substituteInPlace tests/view_tests/tests/test_debug.py \
+      --replace-fail "test_files" "dont_test_files"
   '';
 
   nativeBuildInputs = [
@@ -136,6 +152,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://docs.djangoproject.com/en/${lib.versions.majorMinor version}/releases/${version}/";
     description = "A high-level Python Web framework that encourages rapid development and clean, pragmatic design.";
+    mainProgram = "django-admin";
     homepage = "https://www.djangoproject.com";
     license = licenses.bsd3;
     maintainers = with maintainers; [ hexa ];

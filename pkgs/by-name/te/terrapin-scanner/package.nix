@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "terrapin-scanner";
-  version = "1.1.0";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "RUB-NDS";
     repo = "Terrapin-Scanner";
     rev = "refs/tags/v${version}";
-    hash = "sha256-d0aAs9dT74YQkzDQnmeEo+p/RnPHeG2+SgCCF/t1F+w=";
+    hash = "sha256-PmKfHvad+YAwLcdoiDSOBMQFgOKzJ6NbGbt4v570gyI=";
   };
 
-  vendorHash = "sha256-skYMlL9SbBoC89tFCTIzyRViEJaviXENASEqr6zSvoo=";
+  vendorHash = "sha256-x3fzs/TNGRo+u+RufXzzjDCeQayEZIKlgokdEQJRNaI=";
 
   ldflags = [
     "-s"

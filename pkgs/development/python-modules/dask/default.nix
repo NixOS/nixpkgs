@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 
 # build-system
 , setuptools
@@ -38,7 +39,7 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2023.12.0";
+  version = "2024.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -47,8 +48,21 @@ buildPythonPackage rec {
     owner = "dask";
     repo = "dask";
     rev = "refs/tags/${version}";
-    hash = "sha256-LMd55s8LT4m6Ym+LmXb4TKPnZ0jMkNBfcPJxmgruMDM=";
+    hash = "sha256-8VFtKPaF0PqCjqFB+plFe1GjUno5j7j86+wxKhzByyw=";
   };
+
+  patches = [
+    # A pair of fixes with python 3.11.9, merged upstream;
+    # see https://github.com/dask/dask/issues/11038
+    (fetchpatch {
+      url = "https://github.com/dask/dask/pull/11035.diff";
+      hash = "sha256-aQTzas8gn7pCyp7L6VV3NpSYgqC1Ov7YN7YGnX0Vwmo=";
+    })
+    (fetchpatch {
+      url = "https://github.com/dask/dask/pull/11039.diff";
+      hash = "sha256-gvEEvnyhFlhiFvVaB6jwMy4auUOvECf49FbFJyjqQm4=";
+    })
+  ];
 
   nativeBuildInputs = [
     setuptools
@@ -98,7 +112,9 @@ buildPythonPackage rec {
     # from panda[test]
     hypothesis
     pytest-asyncio
-  ] ++ lib.optionals (!arrow-cpp.meta.broken) [ # support is sparse on aarch64
+  ]
+  ++ passthru.optional-dependencies.dataframe
+  ++ lib.optionals (!arrow-cpp.meta.broken) [ # support is sparse on aarch64
     pyarrow
   ];
 
@@ -167,6 +183,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Minimal task scheduling abstraction";
+    mainProgram = "dask";
     homepage = "https://dask.org/";
     changelog = "https://docs.dask.org/en/latest/changelog.html";
     license = licenses.bsd3;

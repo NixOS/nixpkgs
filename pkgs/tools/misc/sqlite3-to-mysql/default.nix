@@ -4,13 +4,12 @@
 , nixosTests
 , testers
 , sqlite3-to-mysql
-, fetchPypi
 , mysql80
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "sqlite3-to-mysql";
-  version = "2.1.1";
+  version = "2.1.8";
   format = "pyproject";
 
   disabled = python3Packages.pythonOlder "3.8";
@@ -19,11 +18,12 @@ python3Packages.buildPythonApplication rec {
     owner = "techouse";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-g3W6ts5Mk//l6E4Yg49rf9dmu+yzgH+mCjz+vPW9ZRQ=";
+    hash = "sha256-j9AjgLwEqt+PI4LKc3gPjXW95zAKmRjIzPFnOB0n6MM=";
   };
 
   nativeBuildInputs = with python3Packages; [
     hatchling
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -40,6 +40,10 @@ python3Packages.buildPythonApplication rec {
     unidecode
     packaging
     mysql80
+  ];
+
+  pythonRelaxDeps = [
+    "mysql-connector-python"
   ];
 
   # tests require a mysql server instance

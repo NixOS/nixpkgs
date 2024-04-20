@@ -27,5 +27,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/MindFlavor/prometheus_wireguard_exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ ma27 globin ];
+    mainProgram = "prometheus_wireguard_exporter";
   };
 }

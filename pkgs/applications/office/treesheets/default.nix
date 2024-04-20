@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "treesheets";
-  version = "unstable-2023-11-13";
+  version = "unstable-2024-04-11";
 
   src = fetchFromGitHub {
     owner = "aardappel";
     repo = "treesheets";
-    rev = "cbc18fe9910c6f10a9f2c2b8838ed047e00a5415";
-    sha256 = "uzb6gboWEu5GL92OFvcdeoaXYTU7jhzCmpI8LwhNVk0=";
+    rev = "5e9e95a34221d4bda584d2130586177e29ee8fe7";
+    sha256 = "X0aB0rJZd9G8S+QWviSAdB/YQMT4lVV3yiELzZs+P3g=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Free Form Data Organizer";
+    mainProgram = "treesheets";
 
     longDescription = ''
       The ultimate replacement for spreadsheets, mind mappers, outliners,
@@ -61,7 +62,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://strlen.com/treesheets/";
-    maintainers = with maintainers; [ obadz avery ];
+    maintainers = with maintainers; [ obadz ];
     platforms = platforms.unix;
     license = licenses.zlib;
   };

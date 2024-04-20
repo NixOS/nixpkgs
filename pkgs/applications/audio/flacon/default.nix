@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, cmake, libuchardet, pkg-config, shntool, flac
-, opusTools, vorbis-tools, mp3gain, lame, taglib, wavpack, vorbisgain, gtk3, qtbase
-, qttools, wrapQtAppsHook }:
+, opusTools, vorbis-tools, mp3gain, lame, taglib, wavpack, vorbisgain
+, monkeysAudio, sox, gtk3, qtbase, qttools, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "flacon";
@@ -24,7 +24,9 @@ stdenv.mkDerivation rec {
     mp3gain
     lame
     wavpack
+    monkeysAudio
     vorbisgain
+    sox
   ];
 
   postInstall = ''
@@ -36,6 +38,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description =
       "Extracts audio tracks from an audio CD image to separate tracks";
+    mainProgram = "flacon";
     homepage = "https://flacon.github.io/";
     license = licenses.lgpl21;
     platforms = platforms.linux;

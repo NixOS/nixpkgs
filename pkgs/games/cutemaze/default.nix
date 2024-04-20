@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cutemaze";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchurl {
-    url = "https://gottcode.org/cutemaze/${pname}-${version}.tar.bz2";
-    hash = "sha256-hjDlY18O+VDJR68vwrIZwsQAa40xU+V3bCAA4GFHJEQ=";
+    url = "https://gottcode.org/cutemaze/cutemaze-${version}.tar.bz2";
+    hash = "sha256-WvbeA1zgaGx5Hw5JeYrYX72MJw3Ou1VnAbB6R6Y0Rpw=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     changelog = "https://github.com/gottcode/cutemaze/blob/v${version}/ChangeLog";
     description = "Simple, top-down game in which mazes are randomly generated";
+    mainProgram = "cutemaze";
     homepage = "https://gottcode.org/cutemaze/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];

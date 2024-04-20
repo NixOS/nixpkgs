@@ -12,13 +12,15 @@
 , withSssd ? false
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sudo";
-  version = "1.9.15p4";
+  # be sure to check if nixos/modules/security/sudo.nix needs updating when bumping
+  # e.g. links to man pages, value constraints etc.
+  version = "1.9.15p5";
 
   src = fetchurl {
-    url = "https://www.sudo.ws/dist/${pname}-${version}.tar.gz";
-    hash = "sha256-LiDsmGXu7qExbG9J7GrEZ4hptonU2QtEJDv0iH1t1TI=";
+    url = "https://www.sudo.ws/dist/sudo-${finalAttrs.version}.tar.gz";
+    hash = "sha256-VY0QuaGZH7O5+n+nsH7EQFt677WzywsIcdvIHjqI5Vg=";
   };
 
   prePatch = ''
@@ -85,5 +87,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ sudo bsd2 bsd3 zlib ];
     maintainers = with maintainers; [ delroth ];
     platforms = platforms.linux;
+    mainProgram = "sudo";
   };
-}
+})

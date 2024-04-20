@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , makeWrapper
 , makeDesktopItem
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , yarn
 , nodejs
 , fetchYarnDeps
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     sha256 = desktopYarnHash;
   };
 
-  nativeBuildInputs = [ yarn prefetch-yarn-deps nodejs makeWrapper jq ]
+  nativeBuildInputs = [ yarn fixup-yarn-lock nodejs makeWrapper jq ]
     ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
 
   inherit seshat;
@@ -77,7 +77,8 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     runHook postBuild
   '';
 
-  installPhase = ''
+  installPhase =
+  ''
     runHook preInstall
 
     # resources
@@ -120,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     genericName = "Matrix Client";
     comment = finalAttrs.meta.description;
     categories = [ "Network" "InstantMessaging" "Chat" ];
-    startupWMClass = "element";
+    startupWMClass = "Element";
     mimeTypes = [ "x-scheme-handler/element" ];
   };
 

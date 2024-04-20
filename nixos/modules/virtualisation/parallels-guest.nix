@@ -14,7 +14,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           This enables Parallels Tools for Linux guests, along with provided
           video, mouse and other hardware drivers.
         '';
@@ -23,7 +23,7 @@ in
       autoMountShares = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Control prlfsmountd service. When this service is running, shares can not be manually
           mounted through `mount -t prl_fs ...` as this service will remount and trample any set options.
           Recommended to enable for simple file sharing, but extended share use such as for code should
@@ -36,7 +36,7 @@ in
         default = config.boot.kernelPackages.prl-tools;
         defaultText = "config.boot.kernelPackages.prl-tools";
         example = literalExpression "config.boot.kernelPackages.prl-tools";
-        description = lib.mdDoc ''
+        description = ''
           Defines which package to use for prl-tools. Override to change the version.
         '';
       };

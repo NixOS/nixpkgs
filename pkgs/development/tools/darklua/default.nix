@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "darklua";
-  version = "0.11.1";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "seaofvoices";
     repo = "darklua";
     rev = "v${version}";
-    hash = "sha256-9ukhKAhN4dD36Em90Eox8o+7W1eXboG2xAE8+oPlhaI=";
+    hash = "sha256-FF0UEvylHFrGYgE3ASs0IwnYrh7gIClZUREtXjyVsPM=";
   };
 
-  cargoHash = "sha256-hi9kzCwsw8c1tcvSsFV0do/jQ/KyDz3TcTEfOqHNxyw=";
+  cargoHash = "sha256-XrWhOosQM+BaqViIju7urCi1B8+6kq8Taxe5T8LFzVE=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
@@ -30,6 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A command line tool that transforms Lua code";
+    mainProgram = "darklua";
     homepage = "https://darklua.com";
     changelog = "https://github.com/seaofvoices/darklua/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

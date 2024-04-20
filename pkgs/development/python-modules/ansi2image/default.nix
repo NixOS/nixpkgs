@@ -40,6 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module to convert ANSI text to an image";
+    mainProgram = "ansi2image";
     homepage = "https://github.com/helviojunior/ansi2image";
     changelog = "https://github.com/helviojunior/ansi2image/blob/${version}/CHANGELOG";
     license = licenses.gpl3Only;

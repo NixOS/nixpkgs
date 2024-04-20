@@ -27,5 +27,6 @@ buildGoModule rec {
     homepage = "https://cointop.sh";
     maintainers = [ maintainers.marsam ];
     license = licenses.asl20;
+    mainProgram = "cointop";
   };
 }

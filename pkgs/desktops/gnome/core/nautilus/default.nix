@@ -19,6 +19,7 @@
 , shared-mime-info
 , libnotify
 , libexif
+, libjxl
 , libseccomp
 , librsvg
 , webp-pixbuf-loader
@@ -106,6 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     gappsWrapperArgs+=(
       # Thumbnailers
       --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
+      --prefix XDG_DATA_DIRS : "${libjxl}/share"
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
       --prefix XDG_DATA_DIRS : "${webp-pixbuf-loader}/share"
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
@@ -130,5 +132,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.gnome.members;
+    mainProgram = "nautilus";
   };
 })

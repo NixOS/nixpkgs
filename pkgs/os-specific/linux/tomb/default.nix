@@ -1,4 +1,4 @@
-{ stdenv
+{ stdenvNoCC
 , lib
 , fetchFromGitHub
 , substituteAll
@@ -20,7 +20,7 @@
 , nix-update-script
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "tomb";
   version = "2.10";
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # if not, it shows .tomb-wrapped when running
     substituteInPlace tomb \
-      --replace 'TOMBEXEC=$0' 'TOMBEXEC=tomb'
+      --replace-fail 'TOMBEXEC=$0' 'TOMBEXEC=tomb'
   '';
 
   installPhase = ''

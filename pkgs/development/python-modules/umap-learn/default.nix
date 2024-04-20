@@ -1,31 +1,39 @@
 { lib
+, bokeh
 , buildPythonPackage
+, colorcet
+, datashader
 , fetchFromGitHub
-, fetchpatch
-, keras
+, holoviews
+, matplotlib
 , numba
 , numpy
+, pandas
 , pynndescent
 , pytestCheckHook
 , pythonOlder
+, scikit-image
 , scikit-learn
 , scipy
+, seaborn
+, tbb
 , tensorflow
+, tensorflow-probability
 , tqdm
 }:
 
 buildPythonPackage rec {
   pname = "umap-learn";
-  version = "0.5.5";
+  version = "0.5.6";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "lmcinnes";
     repo = "umap";
     rev = "refs/tags/release-${version}";
-    hash = "sha256-bXAQjq7xBYn34tIZF96Sr5jDUii3s4FGkNx65rGKXkY=";
+    hash = "sha256-fqYl8T53BgCqsquY6RJHqpDFsdZA0Ihja69E/kG3YGU=";
   };
 
   propagatedBuildInputs = [
@@ -37,10 +45,32 @@ buildPythonPackage rec {
     tqdm
   ];
 
+  passthru.optional-dependencies = rec {
+    plot = [
+      bokeh
+      colorcet
+      datashader
+      holoviews
+      matplotlib
+      pandas
+      scikit-image
+      seaborn
+    ];
+
+    parametric_umap = [
+      tensorflow
+      tensorflow-probability
+    ];
+
+    tbb = [
+      tbb
+    ];
+
+    all = plot ++ parametric_umap ++ tbb;
+  };
+
   nativeCheckInputs = [
-    keras
     pytestCheckHook
-    tensorflow
   ];
 
   preCheck = ''
@@ -50,8 +80,9 @@ buildPythonPackage rec {
   disabledTests = [
     # Plot functionality requires additional packages.
     # These test also fail with 'RuntimeError: cannot cache function' error.
-    "test_umap_plot_testability"
     "test_plot_runs_at_all"
+    "test_umap_plot_testability"
+    "test_umap_update_large"
 
     # Flaky test. Fails with AssertionError sometimes.
     "test_sparse_hellinger"

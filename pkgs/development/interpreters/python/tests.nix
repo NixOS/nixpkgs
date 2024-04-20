@@ -38,8 +38,10 @@ let
         is_nixenv = "False";
         is_virtualenv = "False";
       };
-    } // lib.optionalAttrs (!python.isPyPy) {
+    } // lib.optionalAttrs (!python.isPyPy && !stdenv.isDarwin) {
       # Use virtualenv from a Nix env.
+      # Fails on darwin with
+      #   virtualenv: error: argument dest: the destination . is not write-able at /nix/store
       nixenv-virtualenv = rec {
         env = runCommand "${python.name}-virtualenv" {} ''
           ${pythonVirtualEnv.interpreter} -m virtualenv venv
@@ -125,6 +127,9 @@ let
     extension = self: super: {
       foobar = super.numpy;
     };
+    # `pythonInterpreters.pypy39_prebuilt` does not expose an attribute
+    # name (is not present in top-level `pkgs`).
+    is_prebuilt = python: python.pythonAttr == null;
   in lib.optionalAttrs (python.isPy3k) ({
     test-packageOverrides = let
       myPython = let
@@ -138,7 +143,10 @@ let
     # test-overrideScope = let
     #  myPackages = python.pkgs.overrideScope extension;
     # in assert myPackages.foobar == myPackages.numpy; myPackages.python.withPackages(ps: with ps; [ foobar ]);
-  } // lib.optionalAttrs (python ? pythonAttr) {
+    #
+    # Have to skip prebuilt python as it's not present in top-level
+    # `pkgs` as an attribute.
+  } // lib.optionalAttrs (python ? pythonAttr && !is_prebuilt python) {
     # Test applying overrides using pythonPackagesOverlays.
     test-pythonPackagesExtensions = let
       pkgs_ = pkgs.extend(final: prev: {

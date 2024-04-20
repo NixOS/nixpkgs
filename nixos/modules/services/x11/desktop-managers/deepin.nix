@@ -15,31 +15,31 @@ in
   options = {
 
     services.xserver.desktopManager.deepin = {
-      enable = mkEnableOption (lib.mdDoc "Deepin desktop manager");
+      enable = mkEnableOption "Deepin desktop manager";
       extraGSettingsOverrides = mkOption {
         default = "";
         type = types.lines;
-        description = lib.mdDoc "Additional gsettings overrides.";
+        description = "Additional gsettings overrides.";
       };
       extraGSettingsOverridePackages = mkOption {
         default = [ ];
         type = types.listOf types.path;
-        description = lib.mdDoc "List of packages for which gsettings are overridden.";
+        description = "List of packages for which gsettings are overridden.";
       };
     };
 
     environment.deepin.excludePackages = mkOption {
       default = [ ];
       type = types.listOf types.package;
-      description = lib.mdDoc "List of default packages to exclude from the configuration";
+      description = "List of default packages to exclude from the configuration";
     };
 
   };
 
   config = mkIf cfg.enable
     {
-      services.xserver.displayManager.sessionPackages = [ pkgs.deepin.dde-session ];
-      services.xserver.displayManager.defaultSession = mkDefault "dde-x11";
+      services.displayManager.sessionPackages = [ pkgs.deepin.dde-session ];
+      services.displayManager.defaultSession = mkDefault "dde-x11";
 
       # Update the DBus activation environment after launching the desktop manager.
       services.xserver.displayManager.sessionCommands = ''
@@ -66,6 +66,7 @@ in
       services.upower.enable = mkDefault config.powerManagement.enable;
       networking.networkmanager.enable = mkDefault true;
       programs.dconf.enable = mkDefault true;
+      programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-qt;
 
       fonts.packages = with pkgs; [ noto-fonts ];
       xdg.mime.enable = true;
@@ -96,18 +97,10 @@ in
         "/share/dde-daemon"
         "/share/dsg"
         "/share/deepin-themes"
+        "/share/deepin"
       ];
 
       environment.etc = {
-        "distribution.info".text = ''
-          [Distribution]
-          Name=NixOS
-          WebsiteName=www.nixos.org
-          Website=https://www.nixos.org
-          Logo=${pkgs.nixos-icons}/share/icons/hicolor/96x96/apps/nix-snowflake.png
-          LogoLight=${pkgs.nixos-icons}/share/icons/hicolor/32x32/apps/nix-snowflake.png
-          LogoTransparent=${pkgs.deepin.deepin-desktop-base}/share/pixmaps/distribution_logo_transparent.svg
-        '';
         "deepin-installer.conf".text = ''
           system_info_vendor_name="Copyright (c) 2003-2023 NixOS contributors"
         '';
@@ -156,6 +149,7 @@ in
             deepin-sound-theme
             deepin-gtk-theme
             deepin-wallpapers
+            deepin-desktop-base
 
             startdde
             dde-dock
@@ -180,19 +174,20 @@ in
           ];
           optionalPackages = [
             onboard # dde-dock plugin
-            deepin-camera
             deepin-calculator
             deepin-compressor
             deepin-editor
             deepin-picker
             deepin-draw
-            deepin-album
-            deepin-image-viewer
             deepin-music
             deepin-movie-reborn
             deepin-system-monitor
-            deepin-screen-recorder
             deepin-shortcut-viewer
+            # freeimage has knownVulnerabilties, don't install packages using freeiamge by default
+            # deepin-album
+            # deepin-camera
+            # deepin-image-viewer
+            # deepin-screen-recorder
           ];
         in
         requiredPackages

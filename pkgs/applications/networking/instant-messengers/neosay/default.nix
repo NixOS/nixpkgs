@@ -20,6 +20,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Pipe stdin to matrix";
+    mainProgram = "neosay";
     homepage = "https://github.com/donuts-are-good/neosay";
     license = licenses.mit;
     maintainers = with maintainers; [ janik ];

@@ -66,7 +66,7 @@ python3.pkgs.buildPythonApplication {
   checkInputs = with python3.pkgs; [
     pytest-aiohttp
     pytest-rerunfailures
-    pytestCheckHook
+    (pytestCheckHook.override { pytest = pytest_7; })
   ];
 
   pytestFlagsArray = [

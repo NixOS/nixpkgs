@@ -104,6 +104,8 @@ in {
       featuresInfo
       python
     ;
+    gnuradioOlder = lib.versionOlder versionAttr.major;
+    gnuradioAtLeast = lib.versionAtLeast versionAttr.major;
   } // lib.optionalAttrs (hasFeature "gr-qtgui") {
     inherit qt;
   } // lib.optionalAttrs (hasFeature "gnuradio-companion") {
@@ -123,6 +125,7 @@ in {
 
   meta = with lib; {
     description = "Software Defined Radio (SDR) software";
+    mainProgram = "gnuradio-config-info";
     longDescription = ''
       GNU Radio is a free & open-source software development toolkit that
       provides signal processing blocks to implement software radios. It can be

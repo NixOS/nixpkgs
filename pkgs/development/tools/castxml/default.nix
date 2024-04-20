@@ -17,13 +17,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "castxml";
-  version = "0.6.2";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "CastXML";
     repo = "CastXML";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-x27koa0q+rDqPmfHMf7v7KTx3bfDgqS/FkPAX5auqaw=";
+    hash = "sha256-r9Emh2KHjANrg+oWeY8Ags3Gd8k3W68J88bAud+AH6I=";
   };
 
   nativeBuildInputs = [
@@ -64,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://github.com/CastXML/CastXML";
     description = "C-family Abstract Syntax Tree XML Output";
+    mainProgram = "castxml";
     license = licenses.asl20;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;

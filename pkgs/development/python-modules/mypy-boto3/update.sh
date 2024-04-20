@@ -1,13 +1,11 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p nix-update
+#!nix-shell -i bash -p curl jq nixpkgs-fmt nix-update xmlstarlet
 
 set -eu -o pipefail
 
 source_file=pkgs/development/python-modules/mypy-boto3/default.nix
 
-version="1.33.0"
-
-nix-update python311Packages.botocore-stubs --commit --build
+nix-update python312Packages.botocore-stubs --commit --build
 
 packages=(
   mypy-boto3-accessanalyzer
@@ -142,7 +140,7 @@ packages=(
   mypy-boto3-frauddetector
   mypy-boto3-fsx
   mypy-boto3-gamelift
-  mypy-boto3-gamesparks
+#  mypy-boto3-gamesparks
   mypy-boto3-glacier
   mypy-boto3-globalaccelerator
   mypy-boto3-glue
@@ -212,7 +210,7 @@ packages=(
   mypy-boto3-lookoutvision
   mypy-boto3-m2
   mypy-boto3-machinelearning
-  mypy-boto3-macie
+  #mypy-boto3-macie
   mypy-boto3-macie2
   mypy-boto3-managedblockchain
   mypy-boto3-managedblockchain-query
@@ -367,18 +365,27 @@ packages=(
   mypy-boto3-xray)
 
 for package in "${packages[@]}"; do
-  echo "Updating ${package}"
+  echo "Updating ${package} ..."
 
-  url="https://pypi.io/packages/source/m/${package}/${package}-${version}.tar.gz"
-  hash=$(nix-prefetch-url --type sha256 $url)
-  sri_hash="$(nix hash to-sri --type sha256 $hash)"
+  old_version=$(awk -v pkg="$package" -F'"' '$1 ~ pkg " = " {print $4}' ${source_file})
+  version=$(curl -s https://pypi.org/pypi/${package}/json | jq -r '.info.version')
 
-  awk -i inplace -v package="$package" -v new_version="$version" -v new_sha256="$sri_hash" '
-    $1 == package {
-      $5 = "\"" new_version "\"";
-      $6 = "\"" new_sha256 "\"";
-    }
-    {print}
-  ' $source_file
+  if [ "${version}" != "${old_version}" ]; then
+    url="https://pypi.io/packages/source/m/${package}/${package}-${version}.tar.gz"
+    hash=$(nix-prefetch-url --type sha256 $url)
+    sri_hash="$(nix hash to-sri --type sha256 $hash)"
+
+    awk -i inplace -v package="$package" -v new_version="$version" -v new_sha256="$sri_hash" '
+      $1 == package {
+        $5 = "\"" new_version "\"";
+        $6 = "\"" new_sha256 "\";";
+      }
+      {print}
+    ' $source_file
+
+    nixpkgs-fmt ${source_file}
+
+    git commit ${source_file} -m "python312Packages.${package}: ${old_version} -> ${version}"
+  fi
 
 done

@@ -9,22 +9,22 @@
 
 stdenv.mkDerivation rec {
   pname = "waveform";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     fetchSubmodules = true;
     owner = "phandasm";
     repo = "waveform";
     rev = "v${version}";
-    sha256 = "sha256-DR3+ZBbWoGybUvDwVXLvarp+IGsTPl9Y0mFe739Ar8E=";
+    sha256 = "sha256-NcBtj+5X9tPH853a6oXzQCBH26hx8Yt17WjP9ryvgmc=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
 
   postFixup = ''
-    mkdir $out/lib $out/share
+    mkdir -p $out/lib $out/share/obs/obs-plugins
     mv $out/${pname}/bin/64bit $out/lib/obs-plugins
-    mv $out/${pname}/data $out/share/obs
+    mv $out/${pname}/data $out/share/obs/obs-plugins/${pname}
     rm -rf $out/${pname}
   '';
 

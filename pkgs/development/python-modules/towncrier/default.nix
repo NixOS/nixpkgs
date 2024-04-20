@@ -62,6 +62,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Utility to produce useful, summarised news files";
+    mainProgram = "towncrier";
     homepage = "https://github.com/twisted/towncrier/";
     changelog = "https://github.com/twisted/towncrier/blob/${version}/NEWS.rst";
     license = licenses.mit;

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl }:
 
 let
-  version = "28-1ubuntu4"; # impish 2021-06-24
+  version = "30+20230519-1ubuntu3"; # mantic 2023-08-26
 
 in stdenv.mkDerivation {
   pname = "kmod-blacklist";
@@ -9,7 +9,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://launchpad.net/ubuntu/+archive/primary/+files/kmod_${version}.debian.tar.xz";
-    sha256 = "sha256-K8tWpaLmCm3Jcxw3OZ+D7Koiug7epooRn1YMfqjGAiw=";
+    hash = "sha256-VGw1/rUjl9/j6026ut0dvC0/8maAAz8umb0D3YGf8p4=";
   };
 
   installPhase = ''
@@ -22,7 +22,6 @@ in stdenv.mkDerivation {
     done
 
     substituteInPlace "$out"/modprobe.conf \
-      --replace "blacklist bochs-drm" "" \
       --replace /sbin/lsmod /run/booted-system/sw/bin/lsmod \
       --replace /sbin/rmmod /run/booted-system/sw/bin/rmmod \
       --replace /sbin/modprobe /run/booted-system/sw/bin/modprobe \

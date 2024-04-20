@@ -5,6 +5,7 @@
 , mock
 , flit-core
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , sqlalchemy
 }:
@@ -41,6 +42,11 @@ buildPythonPackage rec {
     "test_session_scoping_changing"
     # https://github.com/pallets-eco/flask-sqlalchemy/issues/1084
     "test_persist_selectable"
+  ];
+
+  pytestFlagsArray = lib.optionals (pythonAtLeast "3.12") [
+    # datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version.
+    "-W" "ignore::DeprecationWarning"
   ];
 
   pythonImportsCheck = [

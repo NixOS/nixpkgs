@@ -48,12 +48,9 @@
 
 , #  Whether to build sphinx documentation.
   enableDocs ? (
-    # Docs disabled for musl and cross because it's a large task to keep
-    # all `sphinx` dependencies building in those environments.
-    # `sphinx` pulls in among others:
-    # Ruby, Python, Perl, Rust, OpenGL, Xorg, gtk, LLVM.
-    (stdenv.targetPlatform == stdenv.hostPlatform)
-    && !stdenv.hostPlatform.isMusl
+    # Docs disabled if we are building on musl because it's a large task to keep
+    # all `sphinx` dependencies building in this environment.
+    !stdenv.buildPlatform.isMusl
   )
 
 , enableHaddockProgram ?
@@ -110,7 +107,7 @@ let
     Stage1Only = ${if targetPlatform.system == hostPlatform.system then "NO" else "YES"}
     CrossCompilePrefix = ${targetPrefix}
   '' + lib.optionalString (!enableProfiledLibs) ''
-    GhcLibWays = "v dyn"
+    BUILD_PROF_LIBS = NO
   '' +
   # -fexternal-dynamic-refs apparently (because it's not clear from the documentation)
   # makes the GHC RTS able to load static libraries, which may be needed for TemplateHaskell.
@@ -211,7 +208,7 @@ stdenv.mkDerivation (rec {
     # These cause problems as they're not eliminated by GHC's dead code
     # elimination on aarch64-darwin. (see
     # https://github.com/NixOS/nixpkgs/issues/140774 for details).
-    ./Cabal-3.6-3.8-paths-fix-cycle-aarch64-darwin.patch
+    ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
   ];
 
   postPatch = "patchShebangs .";

@@ -37,5 +37,6 @@ buildGoModule rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ panaeon lom ];
+    mainProgram = "noisetorch";
   };
 }

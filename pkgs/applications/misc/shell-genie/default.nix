@@ -8,7 +8,7 @@ with python3.pkgs;
 buildPythonPackage rec {
   pname = "shell-genie";
   version = "0.2.10";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "shell_genie";
@@ -17,15 +17,19 @@ buildPythonPackage rec {
   };
 
   pythonRelaxDeps = [
+    "openai"
     "typer"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
+  ];
+
+  nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     colorama
     openai
     pyperclip
@@ -46,5 +50,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dylanjcastillo/shell-genie";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];
+    mainProgram = "shell-genie";
   };
 }

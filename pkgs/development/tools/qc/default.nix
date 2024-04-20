@@ -36,6 +36,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "QOwnNotes command-line snippet manager";
+    mainProgram = "qc";
     homepage = "https://github.com/qownnotes/qc";
     license = licenses.mit;
     maintainers = with maintainers; [ pbek totoroot ];

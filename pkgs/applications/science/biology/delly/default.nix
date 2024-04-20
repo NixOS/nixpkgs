@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "delly";
-  version = "1.1.8";
+  version = "1.2.6";
 
   src = fetchFromGitHub {
     owner = "dellytools";
     repo = "delly";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IxZPbcM52E1bzy6msGmka6Ykgc+OLWTMhWBCn0E4mFI=";
+    hash = "sha256-OO5nnaIcfNAV8pc03Z8YS5kE96bFOrJXA9QTiLi7vPc=";
   };
 
   buildInputs = [
@@ -54,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Structural variant caller for mapped DNA sequenced data";
+    mainProgram = "delly";
     license = licenses.bsd3;
     maintainers = with maintainers; [ scalavision ];
     platforms = platforms.unix;

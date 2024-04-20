@@ -35,8 +35,9 @@ buildPythonPackage rec {
     "test_07_non_posix_shell"
     # doctest that assumes /tmp is writeable, awkward to patch
     "test_03_usage"
-    # AssertionError: 4 != 0
+    # Test is assuming $CURRENT_YEAR is not a leap year
     "test_19_frequency_at_month"
+    "test_20_frequency_at_year"
   ];
 
   pythonImportsCheck = [

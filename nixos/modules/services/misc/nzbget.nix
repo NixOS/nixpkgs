@@ -25,24 +25,24 @@ in
 
   options = {
     services.nzbget = {
-      enable = mkEnableOption (lib.mdDoc "NZBGet");
+      enable = mkEnableOption "NZBGet, for downloading files from news servers";
 
       user = mkOption {
         type = types.str;
         default = "nzbget";
-        description = lib.mdDoc "User account under which NZBGet runs";
+        description = "User account under which NZBGet runs";
       };
 
       group = mkOption {
         type = types.str;
         default = "nzbget";
-        description = lib.mdDoc "Group under which NZBGet runs";
+        description = "Group under which NZBGet runs";
       };
 
       settings = mkOption {
         type = with types; attrsOf (oneOf [ bool int str ]);
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           NZBGet configuration, passed via command line using switch -o. Refer to
           <https://github.com/nzbget/nzbget/blob/master/nzbget.conf>
           for details on supported values.

@@ -18,7 +18,7 @@ A complete list of options for the Athens module may be found
 ## Basic usage for a caching proxy configuration {#opt-services-development-athens-caching-proxy}
 
 A very basic configuration for Athens that acts as a caching and forwarding HTTP proxy is:
-```
+```nix
 {
     services.athens = {
       enable = true;
@@ -28,7 +28,7 @@ A very basic configuration for Athens that acts as a caching and forwarding HTTP
 
 If you want to prevent Athens from writing to disk, you can instead configure it to cache modules only in memory:
 
-```
+```nix
 {
     services.athens = {
       enable = true;
@@ -39,10 +39,10 @@ If you want to prevent Athens from writing to disk, you can instead configure it
 
 To use the local proxy in Go builds, you can set the proxy as environment variable:
 
-```
+```nix
 {
   environment.variables = {
-    GOPROXY = "http://localhost:3000"
+    GOPROXY = "http://localhost:3000";
   };
 }
 ```

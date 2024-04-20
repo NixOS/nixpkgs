@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rqbit";
-  version = "5.4.0";
+  version = "5.6.0";
 
   src = fetchFromGitHub {
     owner = "ikatson";
     repo = "rqbit";
     rev = "v${version}";
-    hash = "sha256-sZb3DYk2gycANRZGtSQAo3G+fo7dxGF48PwC8kJOfio=";
+    hash = "sha256-KpwKSbj9B/O/RBO1PLkcYguZiuxrGcYyX3Wt4sQhe2o=";
   };
 
   cargoLock = {

@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python -p "python3.withPackages (ps: [ps.pygithub])" git gnupg
+#! nix-shell -i python -p "python3.withPackages (ps: [ps.pygithub ps.packaging])" git gnupg
 
 # This is automatically called by ../update.sh.
 
@@ -27,6 +27,8 @@ from typing import (
 from github import Github
 from github.GitRelease import GitRelease
 
+from packaging.version import parse as parse_version, Version
+
 VersionComponent = Union[int, str]
 Version = List[VersionComponent]
 
@@ -37,6 +39,11 @@ Patch = TypedDict("Patch", {
     "version": str,
     "sha256": str,
 })
+
+
+def read_min_kernel_branch() -> List[str]:
+    with open(NIXPKGS_KERNEL_PATH / "kernels-org.json") as f:
+        return list(parse_version(sorted(json.load(f).keys())[0]).release)
 
 
 @dataclass
@@ -51,7 +58,7 @@ NIXPKGS_PATH = HERE.parents[4]
 HARDENED_GITHUB_REPO = "anthraxx/linux-hardened"
 HARDENED_TRUSTED_KEY = HERE / "anthraxx.asc"
 HARDENED_PATCHES_PATH = HERE / "patches.json"
-MIN_KERNEL_VERSION: Version = [4, 14]
+MIN_KERNEL_VERSION: Version = read_min_kernel_branch()
 
 
 def run(*args: Union[str, Path]) -> subprocess.CompletedProcess[bytes]:

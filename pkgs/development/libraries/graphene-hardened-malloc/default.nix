@@ -83,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://github.com/GrapheneOS/hardened_malloc";
     description = "Hardened allocator designed for modern systems";
+    mainProgram = "preload-hardened-malloc";
     longDescription = ''
       This is a security-focused general purpose memory allocator providing the malloc API
       along with various extensions. It provides substantial hardening against heap

@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.terraspace.co.uk/uasm.html";
     description = "A free MASM-compatible assembler based on JWasm";
+    mainProgram = "uasm";
     platforms = platforms.unix;
     maintainers = with maintainers; [ thiagokokada ];
     license = licenses.watcom;

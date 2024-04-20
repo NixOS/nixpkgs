@@ -15,6 +15,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://src.anomalous.eu/cgiserver/about/";
     description = "Lightweight web server for sandboxing CGI applications";
+    mainProgram = "cgiserver";
     maintainers = with maintainers; [ qyliss ];
     license = licenses.osl3;
   };

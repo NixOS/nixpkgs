@@ -30,6 +30,7 @@ appimageTools.wrapType2 rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ onny ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "sonixd";
   };
 }
 

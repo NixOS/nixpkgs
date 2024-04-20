@@ -39,5 +39,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/rozgo/anevicon";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "anevicon";
   };
 }

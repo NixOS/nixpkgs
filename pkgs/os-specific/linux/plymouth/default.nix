@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitLab
 , writeText
+, substituteAll
 , meson
 , pkg-config
 , ninja
@@ -16,11 +17,12 @@
 , pango
 , systemd
 , xorg
+, fontconfig
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "plymouth";
-  version = "23.356.9";
+  version = "24.004.60";
 
   outputs = [ "out" "dev" ];
 
@@ -29,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "plymouth";
     repo = "plymouth";
     rev = finalAttrs.version;
-    hash = "sha256-71QMhQqWpa4FID9vPEL2QuOaGxuk7+sXKRynCa1n2tw=";
+    hash = "sha256-9JmZCm8bjteJTQrMSJeL4x2CAI6RpKowFUDSCcMS4MM=";
   };
 
   patches = [
@@ -37,6 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./dont-create-broken-symlink.patch
     # add support for loading plugins from /run to assist NixOS module
     ./add-runtime-plugin-path.patch
+    # fix FHS hardcoded paths
+    (substituteAll {
+      src = ./fix-paths.patch;
+      fcmatch = "${fontconfig}/bin/fc-match";
+    })
   ];
 
   strictDeps = true;

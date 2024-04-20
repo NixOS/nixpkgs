@@ -82,6 +82,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "File watching and code reload";
+    mainProgram = "watchfiles";
     homepage = "https://watchfiles.helpmanual.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

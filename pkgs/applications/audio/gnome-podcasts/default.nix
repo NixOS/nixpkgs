@@ -32,8 +32,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-LPwCYgAFgUMFQZ0i4ldiuGYGMMWcMqYct3/o7eTIhmU=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit pname version src;
+    hash = "sha256-n3ZcUhqn1rvvgkBKSKvH0b8wbOCqcBGwpb2OqMe8h0s=";
   };
 
   nativeBuildInputs = [
@@ -67,6 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Listen to your favorite podcasts";
+    mainProgram = "gnome-podcasts";
     homepage = "https://wiki.gnome.org/Apps/Podcasts";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;

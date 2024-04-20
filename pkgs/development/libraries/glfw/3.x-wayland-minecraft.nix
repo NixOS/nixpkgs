@@ -43,6 +43,15 @@ stdenv.mkDerivation {
 
     substituteInPlace src/wl_init.c \
       --replace "libdecor-0.so.0" "${lib.getLib libdecor}/lib/libdecor-0.so.0"
+
+    substituteInPlace src/wl_init.c \
+      --replace "libwayland-client.so.0" "${lib.getLib wayland}/lib/libwayland-client.so.0"
+
+    substituteInPlace src/wl_init.c \
+      --replace "libwayland-cursor.so.0" "${lib.getLib wayland}/lib/libwayland-cursor.so.0"
+
+    substituteInPlace src/wl_init.c \
+      --replace "libwayland-egl.so.1" "${lib.getLib wayland}/lib/libwayland-egl.so.1"
   '';
 
   meta = with lib; {

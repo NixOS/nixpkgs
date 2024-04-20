@@ -11,10 +11,7 @@ rec {
   extraConfigureFlags = [
     "--with-app-name=librewolf"
     "--with-app-basename=LibreWolf"
-    "--with-branding=browser/branding/librewolf"
-    "--with-distribution-id=io.gitlab.librewolf-community"
     "--with-unsigned-addon-scopes=app,system"
-    "--allow-addon-sideload"
   ];
 
   extraPostPatch = ''

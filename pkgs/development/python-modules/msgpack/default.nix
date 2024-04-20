@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "msgpack";
-  version = "1.0.5";
+  version = "1.0.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wHVUQoTq3Fzdxw9HVzMdmdy8FrK71ISdFfiq5M820xw=";
+    hash = "sha256-lcArDifnBuSNDlQm0XEMp44PBijW6J1bWluRpfEidPM=";
   };
 
   nativeBuildInputs = [

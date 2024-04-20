@@ -1,14 +1,15 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, rns
 , pythonOlder
+, rns
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "lxmf";
-  version = "0.3.8";
-  format = "setuptools";
+  version = "0.4.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -16,10 +17,14 @@ buildPythonPackage rec {
     owner = "markqvist";
     repo = "lxmf";
     rev = "refs/tags/${version}";
-    hash = "sha256-tse2Hgu50KfxWLBkzyV4VpDj2YHgxIc5izgvwJAJ/7k=";
+    hash = "sha256-8Usu2fecSnyVfGrEJED4qMBO5RwJjTq5c7svCTu445Q=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     rns
   ];
 
@@ -36,5 +41,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/markqvist/LXMF/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "lxmd";
   };
 }

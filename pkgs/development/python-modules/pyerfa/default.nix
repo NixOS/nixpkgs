@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , jinja2
 , oldest-supported-numpy
 , setuptools-scm
@@ -16,20 +15,12 @@
 buildPythonPackage rec {
   pname = "pyerfa";
   format = "pyproject";
-  version = "2.0.0.3";
+  version = "2.0.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-13+7+lg1DBlMy5nl2TqgXTwrFNWq2LZi2Txq2f/0Hzk=";
+    hash = "sha256-26x07409Ow8i7wrTu72zCyqeEFcLH6Wpi+NMe+Nsmms=";
   };
-
-  patches = [
-    # Sort of helps maybe for https://github.com/liberfa/pyerfa/issues/112
-    (fetchpatch {
-      url = "https://github.com/liberfa/pyerfa/commit/4866342b94c5e7344711146f1186a4c3e7534da8.patch";
-      hash = "sha256-uPFFdLYfRweQdeEApBAw6Ulqh31NTQwwmnaU+x/M+C0=";
-    })
-  ];
 
   nativeBuildInputs = [
     jinja2

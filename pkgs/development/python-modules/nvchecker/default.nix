@@ -1,12 +1,10 @@
 { lib
-, aiohttp
 , platformdirs
 , buildPythonPackage
 , docutils
 , fetchFromGitHub
 , flaky
 , installShellFiles
-, packaging
 , pycurl
 , pytest-asyncio
 , pytest-httpbin
@@ -16,35 +14,42 @@
 , structlog
 , tomli
 , tornado
+, awesomeversion
+, packaging
+, lxml
 }:
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "2.12";
-  format = "pyproject";
+  version = "2.14";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "lilydjwg";
-    repo = pname;
+    repo = "nvchecker";
     rev = "v${version}";
-    hash = "sha256-6mhVDC2jpIIOZeoKz4AxxU7jj8dqPVBKRWupbuY/T7E=";
+    hash = "sha256-QqfF8PGY8sULv1x0blu21ucWxqhOpQ7jyLuRCzDIpco=";
   };
 
+  postPatch = ''
+    # Fix try/except syntax. Remove with the next release
+    substituteInPlace tests/test_jq.py \
+      --replace-warn "except jq" "except ImportError"
+  '';
+
   nativeBuildInputs = [
+    setuptools
     docutils
     installShellFiles
   ];
 
   propagatedBuildInputs = [
-    aiohttp
-    platformdirs
-    packaging
-    pycurl
-    setuptools
     structlog
+    platformdirs
     tornado
+    pycurl
   ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
   ];
@@ -74,6 +79,13 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     "-m 'not needs_net'"
   ];
+
+  optional-dependencies = {
+    # vercmp = [ pyalpm ];
+    awesomeversion = [ awesomeversion ];
+    pypi = [ packaging ];
+    htmlparser = [ lxml ];
+  };
 
   meta = with lib; {
     description = "New version checker for software";

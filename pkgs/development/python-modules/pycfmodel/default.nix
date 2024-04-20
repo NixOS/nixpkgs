@@ -5,21 +5,26 @@
 , pydantic
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pycfmodel";
-  version = "0.21.1";
-  format = "setuptools";
+  version = "0.22.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Skyscanner";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-nQIZ9fwk8CdqJawYsU5qiu9xxhi9X0IxhlPohHUDTL8=";
+    repo = "pycfmodel";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-NLi94W99LhrBXNFItMfJczV9EZlgvmvkavrfDQJs0YU=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     pydantic
@@ -46,7 +51,9 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Model for Cloud Formation scripts";
     homepage = "https://github.com/Skyscanner/pycfmodel";
+    changelog = "https://github.com/Skyscanner/pycfmodel/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    broken = versionAtLeast pydantic.version "2";
   };
 }

@@ -26,12 +26,12 @@ let
         inherit hash;
       };
 
-      ldflags = [ "-s" "-w" ];
+      ldflags = [ "-s" "-w" "-X 'github.com/hashicorp/terraform/version.dev=no'" ];
 
       postConfigure = ''
         # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
         substituteInPlace vendor/github.com/bgentry/speakeasy/speakeasy_unix.go \
-          --replace "/bin/stty" "${coreutils}/bin/stty"
+          --replace-fail "/bin/stty" "${coreutils}/bin/stty"
       '';
 
       nativeBuildInputs = [ installShellFiles ];
@@ -167,9 +167,9 @@ rec {
   mkTerraform = attrs: pluggable (generic attrs);
 
   terraform_1 = mkTerraform {
-    version = "1.6.6";
-    hash = "sha256-fYFmHypzSbSgut9Wij6Sz8xR97DVOwPLQap6pan7IRA=";
-    vendorHash = "sha256-fQsxTX1v8HsMDIkofeCVfNitJAaTWHwppC7DniXlvT4=";
+    version = "1.8.1";
+    hash = "sha256-q/r1KK0svdK/5Za4bqU6bGgTcWmG+YZFJUFRKqPAWSw=";
+    vendorHash = "sha256-xpgGceAA+kvwUp4T0m9rnbPoZ3uJHU2KIRsrcGr8dRo=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = {
       inherit plugins;

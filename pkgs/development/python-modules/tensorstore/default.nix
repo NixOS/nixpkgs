@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , lib
+, ml-dtypes
 , numpy
 , python
 , stdenv
@@ -14,15 +15,17 @@ let
     "aarch64-darwin" = "macosx_11_0_arm64";
   };
   hashes = {
-    "310-x86_64-linux" = "sha256-Zuy2zBLV950CMbdtpLNpIWqnXHw2jkjrZG48eGtm42w=";
-    "311-x86_64-linux" = "sha256-Bg5j8QB5z8Ju4bEQsZDojJHTJ4UoQF1pkd4ma83Sc/s=";
-    "310-aarch64-darwin" = "sha256-6Tta4ru1TnobFa4FXWz8fm9rAxF0G09Y2Pj/KaQPVnE=";
-    "311-aarch64-darwin" = "sha256-Sb0tv9ZPQJ4n9b0ybpjJWpreQPZvSC5Sd7CXuUwHCn0=";
+    "310-x86_64-linux" = "sha256-1b6w9wgT6fffTTpJ3MxdPSrFD7Xaby6prQYFljVn4x4=";
+    "311-x86_64-linux" = "sha256-8+HlzaxH30gB5N+ZKR0Oq+yswhq5gjiSF9jVsg8U22E=";
+    "312-x86_64-linux" = "sha256-e8iEQzB4D3RSXgrcPC4me/vsFKoXf1QFNZfQ7968zQE=";
+    "310-aarch64-darwin" = "sha256-2C60yJk/Pbx2woV7hzEmWGzNKWWnySDfTPm247PWIRA=";
+    "311-aarch64-darwin" = "sha256-rdLB7l/8ZYjV589qKtORiyu1rC7W30wzrsz1uihNRpk=";
+    "312-aarch64-darwin" = "sha256-DpbYMIbqceQeiL7PYwnvn9jLtv8EmfHXmxvPfZCw914=";
   };
 in
 buildPythonPackage rec {
   pname = "tensorstore";
-  version = "0.1.40";
+  version = "0.1.53";
   format = "wheel";
 
   # The source build involves some wonky Bazel stuff.
@@ -38,7 +41,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
-  propagatedBuildInputs = [ numpy ];
+  propagatedBuildInputs = [
+    ml-dtypes
+    numpy
+  ];
 
   pythonImportsCheck = [ "tensorstore" ];
 

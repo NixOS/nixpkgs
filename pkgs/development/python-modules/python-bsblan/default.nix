@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "python-bsblan";
-  version = "0.5.16";
+  version = "0.5.18";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "liudger";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-m80lnNd1ANddV0d/w3S7+QWzIPRklDZsWMO2g1hgEoQ=";
+    hash = "sha256-SJUIJhsVn4LZiUx9h3Q2uWoeaQiKoIRrijTfPgCHnAA=";
   };
 
   postPatch = ''

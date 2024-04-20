@@ -11,7 +11,10 @@
 , python3
 , ninja
 , perl
-, autoconf
+# autoconf-2.71 fails on problematic configure:
+#   checking curl version... 7.84.0
+#   ./configure: line 6713: syntax error near unexpected token `;;'
+, autoconf269
 , automake
 , libtool
 , darwin
@@ -25,13 +28,13 @@
 let
   makeCurlImpersonate = { name, target }: stdenv.mkDerivation rec {
     pname = "curl-impersonate-${name}";
-    version = "0.5.4";
+    version = "0.6.1";
 
     src = fetchFromGitHub {
       owner = "lwthiker";
       repo = "curl-impersonate";
       rev = "v${version}";
-      hash = "sha256-LBGWFal2szqgURIBCLB84kHWpdpt5quvBBZu6buGj2A=";
+      hash = "sha256-ExmEhjJC8FPzx08RuKOhRxKgJ4Dh+ElEl+OUHzRCzZc=";
     };
 
     patches = [
@@ -39,6 +42,10 @@ let
       # (can't just patchShebangs since makefile unpacks it)
       ./curl-impersonate-0.5.2-fix-shebangs.patch
     ];
+
+    # Disable blanket -Werror to fix build on `gcc-13` related to minor
+    # warnings on `boringssl`.
+    env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
     strictDeps = true;
 
@@ -52,7 +59,7 @@ let
       python3.pkgs.gyp
       ninja
       perl
-      autoconf
+      autoconf269
       automake
       libtool
       unzip
@@ -138,7 +145,7 @@ let
         inherit (passthru.deps."boringssl.zip") name;
 
         src = passthru.deps."boringssl.zip";
-        vendorHash = "sha256-ISmRdumckvSu7hBXrjvs5ZApShDiGLdD3T5B0fJ1x2Q=";
+        vendorHash = "sha256-SNUsBiKOGWmkRdTVABVrlbLAVMfu0Q9IgDe+kFC5vXs=";
 
         nativeBuildInputs = [ unzip ];
 

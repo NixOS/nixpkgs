@@ -13,7 +13,9 @@
 , Security
 , nghttp2
 , libgit2
-, doCheck ? true
+# string interpolation dependends on a date that is erroring out
+# this will be fixed in releases after 0.90.1
+, doCheck ? false
 , withDefaultFeatures ? true
 , additionalFeatures ? (p: p)
 , testers
@@ -22,7 +24,7 @@
 }:
 
 let
-  version = "0.88.1";
+  version = "0.92.1";
 in
 
 rustPlatform.buildRustPackage {
@@ -33,10 +35,10 @@ rustPlatform.buildRustPackage {
     owner = "nushell";
     repo = "nushell";
     rev = version;
-    hash = "sha256-UuKXonAEMX57pZwP37N1FuUtkRE+3xB6Oj30yxSpJk4=";
+    hash = "sha256-itr/n8fodi9EvED6j4UMGFUaF42UVhgkGws8A5JqBA8=";
   };
 
-  cargoHash = "sha256-oc2Coo5bwX6ASRhXJ4KtzDKhPLBe+ApIpTwsOznOASs=";
+  cargoHash = "sha256-s2O/6g3+fAkiqZwq3PUDpaFtG+uj/3pSs3eZbCbAcuQ=";
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optionals (withDefaultFeatures && stdenv.isLinux) [ python3 ]
@@ -71,7 +73,7 @@ rustPlatform.buildRustPackage {
     description = "A modern shell written in Rust";
     homepage = "https://www.nushell.sh/";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne johntitor marsam ];
+    maintainers = with maintainers; [ Br1ght0ne johntitor marsam joaquintrinanes ];
     mainProgram = "nu";
   };
 }

@@ -49,6 +49,12 @@
   name = "${name}-npm-deps";
   hash = npmDepsHash;
 }
+  # Custom npmConfigHook
+, npmConfigHook ? null
+  # Custom npmBuildHook
+, npmBuildHook ? null
+  # Custom npmInstallHook
+, npmInstallHook ? null
 , ...
 } @ args:
 
@@ -57,14 +63,19 @@ let
   npmHooks = buildPackages.npmHooks.override {
     inherit nodejs;
   };
-
-  inherit (npmHooks) npmConfigHook npmBuildHook npmInstallHook;
 in
 stdenv.mkDerivation (args // {
   inherit npmDeps npmBuildScript;
 
   nativeBuildInputs = nativeBuildInputs
-    ++ [ nodejs npmConfigHook npmBuildHook npmInstallHook nodejs.python ]
+    ++ [
+      nodejs
+      # Prefer passed hooks
+      (if npmConfigHook != null then npmConfigHook else npmHooks.npmConfigHook)
+      (if npmBuildHook != null then npmBuildHook else npmHooks.npmBuildHook)
+      (if npmInstallHook != null then npmInstallHook else npmHooks.npmInstallHook)
+      nodejs.python
+    ]
     ++ lib.optionals stdenv.isDarwin [ darwin.cctools ];
   buildInputs = buildInputs ++ [ nodejs ];
 

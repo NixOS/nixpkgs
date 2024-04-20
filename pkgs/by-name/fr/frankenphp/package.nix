@@ -3,6 +3,7 @@
 , buildGoModule
 , fetchFromGitHub
 , php
+, brotli
 , testers
 , frankenphp
 , darwin
@@ -25,23 +26,23 @@ let
   pieBuild = stdenv.hostPlatform.isMusl;
 in buildGoModule rec {
   pname = "frankenphp";
-  version = "1.0.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "dunglas";
     repo = "frankenphp";
     rev = "v${version}";
-    hash = "sha256-FDOD/YA1f16mykrjbgNKw3H091xTCWteZEkEknmF6uM=";
+    hash = "sha256-r6BMlcjvRbVnBHsfRhJyMiyZzH2Z+FLOYz6ik4I8p+A=";
   };
 
-  sourceRoot = "source/caddy";
+  sourceRoot = "${src.name}/caddy";
 
   # frankenphp requires C code that would be removed with `go mod tidy`
   # https://github.com/golang/go/issues/26366
   proxyVendor = true;
-  vendorHash = "sha256-cocLeZZ037LgvfYwFD1hIOlU0XARD9G1rh8B3/hK/ZQ=";
+  vendorHash = "sha256-gxBD2KPkWtAM0MsaQ9Ed4QDjJCg1uJQpXvnCOnAsZTw=";
 
-  buildInputs = [ phpUnwrapped ] ++ phpUnwrapped.buildInputs;
+  buildInputs = [ phpUnwrapped brotli ] ++ phpUnwrapped.buildInputs;
   nativeBuildInputs = [ makeBinaryWrapper ] ++ lib.optionals stdenv.isDarwin [ pkg-config darwin.cctools darwin.autoSignDarwinBinariesHook ];
 
   subPackages = [ "frankenphp" ];

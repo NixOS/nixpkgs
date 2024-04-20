@@ -4,6 +4,7 @@
 , pythonOlder
 , isPyPy
 , fetchFromGitHub
+, setuptools
 , setuptools-scm
 , fs
 , lxml
@@ -14,38 +15,42 @@
 , lz4
 , scipy
 , munkres
+, pycairo
 , matplotlib
 , sympy
 , xattr
 , skia-pathops
 , uharfbuzz
-, pytestCheckHook
+, pytest7CheckHook
 }:
 
 buildPythonPackage rec {
   pname = "fonttools";
-  version = "4.42.1";
-  format = "setuptools";
+  version = "4.49.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-fcFFJi9Hr0m74LwFIhhhm/bMfxepAvg4/ymU53MmsPg=";
+    hash = "sha256-8xQVuAnIS/mwYKwI+ow0YArIP8wFTKWGLZ+NCgIFYok=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  passthru.optional-dependencies = let
+  optional-dependencies = let
     extras = {
       ufo = [ fs ];
       lxml = [ lxml ];
       woff = [ (if isPyPy then brotlicffi else brotli) zopfli ];
       unicode = lib.optional (pythonOlder "3.11") unicodedata2;
       graphite = [ lz4 ];
-      interpolatable = [ (if isPyPy then munkres else scipy) ];
+      interpolatable = [ pycairo (if isPyPy then munkres else scipy) ];
       plot = [ matplotlib ];
       symfont = [ sympy ];
       type1 = lib.optional stdenv.isDarwin xattr;
@@ -57,16 +62,18 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    pytestCheckHook
+    # test suite fails with pytest>=8.0.1
+    # https://github.com/fonttools/fonttools/issues/3458
+    pytest7CheckHook
   ] ++ lib.concatLists (lib.attrVals ([
     "woff"
-    "interpolatable"
+    # "interpolatable" is not included because it only contains 2 tests at the time of writing but adds 270 extra dependencies
     "ufo"
   ] ++ lib.optionals (!skia-pathops.meta.broken) [
     "pathops" # broken
   ] ++ [
     "repacker"
-  ]) passthru.optional-dependencies);
+  ]) optional-dependencies);
 
   pythonImportsCheck = [ "fontTools" ];
 
@@ -89,11 +96,17 @@ buildPythonPackage rec {
     "Tests/misc/plistlib_test.py"
     "Tests/pens"
     "Tests/ufoLib"
+
+    # test suite fails with pytest>=8.0.1
+    # https://github.com/fonttools/fonttools/issues/3458
+    "Tests/ttLib/woff2_test.py"
+    "Tests/ttx/ttx_test.py"
   ];
 
   meta = with lib; {
     homepage = "https://github.com/fonttools/fonttools";
     description = "A library to manipulate font files from Python";
+    changelog = "https://github.com/fonttools/fonttools/blob/${version}/NEWS.rst";
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann ];
   };

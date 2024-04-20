@@ -50,6 +50,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Parse wheel filenames";
+    mainProgram = "wheel-filename";
     homepage = "https://github.com/jwodder/wheel-filename";
     license = with licenses; [ mit ];
     maintainers = with lib.maintainers; [ ayazhafiz ];

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "platformdirs";
-  version = "3.10.0";
+  version = "4.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,10 +20,8 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Ytilbs29oxuwLfoKTXNQxlh8qBF39F2ZRK8imd57A1w=";
+    hash = "sha256-DjRqOIkyhkA3Z1gl2o78R4kp23qJBj+pRmDBld8AbDI=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     hatchling

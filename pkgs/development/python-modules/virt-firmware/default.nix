@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "virt-firmware";
-  version = "23.10";
+  version = "24.2";
 
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-orTIduS4KVH4nTSRcOnn2+Tqeyd4OMnnN2+AK5p1xtM=";
+    hash = "sha256-bvk3MIgPY6DJ+y0eKQHLffClNjPAEP7AJ15rFObiMig=";
   };
 
   pythonImportsCheck = [ "virt.firmware.efi" ];
@@ -30,6 +30,7 @@ buildPythonPackage rec {
   pytestFlagsArray = ["tests/tests.py"];
 
   propagatedBuildInputs = [
+    setuptools
     cryptography
     pefile
   ];

@@ -24,12 +24,12 @@ let
       options = {
         address = mkOption {
           type = types.str;
-          description = lib.mdDoc "IPv${toString v} address.";
+          description = "IPv${toString v} address.";
         };
 
         prefixLength = mkOption {
           type = types.addCheck types.int (n: n >= 0 && n <= (if v == 4 then 32 else 128));
-          description = lib.mdDoc ''
+          description = ''
             Subnet mask of the interface, specified as the number of
             bits in the prefix ("${if v == 4 then "24" else "64"}").
           '';
@@ -42,19 +42,19 @@ let
       router = {
         address = mkOption {
           type = types.str;
-          description = lib.mdDoc "The IPv${toString v} address of the router.";
+          description = "The IPv${toString v} address of the router.";
         };
       };
 
       address = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc "The source IPv${toString v} address of the TAYGA server.";
+        description = "The source IPv${toString v} address of the TAYGA server.";
       };
 
       pool = mkOption {
         type = with types; nullOr (submodule (addrOpts v));
-        description = lib.mdDoc "The pool of IPv${toString v} addresses which are used for translation.";
+        description = "The pool of IPv${toString v} addresses which are used for translation.";
       };
     };
   };
@@ -62,13 +62,13 @@ in
 {
   options = {
     services.tayga = {
-      enable = mkEnableOption (lib.mdDoc "Tayga");
+      enable = mkEnableOption "Tayga";
 
       package = mkPackageOption pkgs "tayga" { };
 
       ipv4 = mkOption {
         type = types.submodule (versionOpts 4);
-        description = lib.mdDoc "IPv4-specific configuration.";
+        description = "IPv4-specific configuration.";
         example = literalExpression ''
           {
             address = "192.0.2.0";
@@ -85,7 +85,7 @@ in
 
       ipv6 = mkOption {
         type = types.submodule (versionOpts 6);
-        description = lib.mdDoc "IPv6-specific configuration.";
+        description = "IPv6-specific configuration.";
         example = literalExpression ''
           {
             address = "2001:db8::1";
@@ -103,13 +103,13 @@ in
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/tayga";
-        description = lib.mdDoc "Directory for persistent data";
+        description = "Directory for persistent data";
       };
 
       tunDevice = mkOption {
         type = types.str;
         default = "nat64";
-        description = lib.mdDoc "Name of the nat64 tun device";
+        description = "Name of the nat64 tun device";
       };
     };
   };

@@ -59,6 +59,9 @@ in {
     with subtest("git daemon starts"):
         server.wait_for_unit("git-daemon.service")
 
+
+    server.systemctl("start network-online.target")
+    client.systemctl("start network-online.target")
     server.wait_for_unit("network-online.target")
     client.wait_for_unit("network-online.target")
 

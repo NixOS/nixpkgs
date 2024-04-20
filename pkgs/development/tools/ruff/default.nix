@@ -5,22 +5,21 @@
 , stdenv
 , darwin
 , rust-jemalloc-sys
-  # tests
 , ruff-lsp
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.1.8";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zf2280aSmGstcgxoU/IWtdtdWExvdKLBNh4Cn5tC1vU=";
+    hash = "sha256-VTFwuNoqh0RLk0AHTPWEwrja0/aErmUlz82MnCc58jA=";
   };
 
-  cargoHash = "sha256-UC47RXgvjHInJuHVYmnAAb7SACRqt4d59k9/Cl9+x4Q=";
+  cargoHash = "sha256-COZGGmc6v3WGh8NICoRZ5iYrVs0tML8gG2b1LqWbJs0=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -31,9 +30,6 @@ rustPlatform.buildRustPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
   ];
-
-  cargoBuildFlags = [ "--package=ruff_cli" ];
-  cargoTestFlags = cargoBuildFlags;
 
   # tests expect no colors
   preCheck = ''

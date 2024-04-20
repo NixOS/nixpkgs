@@ -8,13 +8,13 @@
 
 buildDotnetModule rec {
   pname = "Dafny";
-  version = "4.4.0";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "dafny-lang";
     repo = "dafny";
     rev = "v${version}";
-    hash = "sha256-rnPZms60vRtefEV+3IeVXoZJU9WMjVxPVioRaEcyw/o=";
+    hash = "sha256-3t0drxM7PZzrLbxBKYa6Gja2u6GK6Pc+ejoswag3P3k=";
   };
 
   postPatch = ''

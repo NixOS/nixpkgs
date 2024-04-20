@@ -21,6 +21,7 @@ gccStdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A terminal calculator for programmers";
+    mainProgram = "pcalc";
     longDescription = ''
       Terminal calculator made for programmers working with multiple number
       representations, sizes, and overall close to the bits

@@ -5,6 +5,7 @@
 , jsonschema
 , pytestCheckHook
 , python-dateutil
+, pythonRelaxDepsHook
 , setuptools
 , wheel
 }:
@@ -31,6 +32,7 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     setuptools
     wheel
   ];
@@ -42,6 +44,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  pythonRelaxDeps = [
+    "python-dateutil"
   ];
 
   pythonImportsCheck = [

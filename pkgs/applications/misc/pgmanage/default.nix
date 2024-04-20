@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/pgManage/pgManage";
     license = licenses.postgresql;
     maintainers = [ maintainers.basvandijk ];
+    mainProgram = "pgmanage";
   };
 }

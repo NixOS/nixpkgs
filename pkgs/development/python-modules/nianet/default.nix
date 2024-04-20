@@ -9,26 +9,27 @@
 , pythonOlder
 , scikit-learn
 , toml-adapt
+, tomli
 , torch
 }:
 
 buildPythonPackage rec {
   pname = "nianet";
   version = "1.1.4";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "SasoPavlic";
-    repo = pname;
-    rev = "version_${version}";
+    repo = "nianet";
+    rev = "refs/tags/version_${version}";
     sha256 = "sha256-FZipl6Z9AfiL6WH0kvUn8bVxt8JLdDVlmTSqnyxe0nY=";
   };
 
   nativeBuildInputs = [
-    toml-adapt
     poetry-core
+    toml-adapt
   ];
 
   propagatedBuildInputs = [
@@ -44,8 +45,9 @@ buildPythonPackage rec {
     toml-adapt -path pyproject.toml -a change -dep torch -ver X
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+    tomli
   ];
 
   pythonImportsCheck = [

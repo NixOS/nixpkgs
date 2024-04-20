@@ -4,6 +4,7 @@
 , v8
 , perl
 , postgresql
+, jitSupport
 # For test
 , runCommand
 , coreutils
@@ -12,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "plv8";
-  version = "3.1.5";
+  version = "3.1.10";
 
   src = fetchFromGitHub {
     owner = "plv8";
     repo = "plv8";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-LodC2eQJSm5fLckrjm2RuejZhmOyQMJTv9b0iPCnzKQ=";
+    hash = "sha256-g1A/XPC0dX2360Gzvmo9/FSQnM6Wt2K4eR0pH0p9fz4=";
   };
 
   patches = [
@@ -138,6 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ marsam ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     license = licenses.postgresql;
-    broken = postgresql.jitSupport;
+    broken = jitSupport;
   };
 })

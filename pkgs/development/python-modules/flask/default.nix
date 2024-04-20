@@ -1,18 +1,28 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, asgiref
+, pythonOlder
+
+# build-system
+, flit-core
+
+# dependencies
 , blinker
 , click
-, flit-core
 , importlib-metadata
 , itsdangerous
 , jinja2
-, python-dotenv
 , werkzeug
+
+# optional-dependencies
+, asgiref
+, python-dotenv
+
+# tests
+, greenlet
 , pytestCheckHook
-, pythonOlder
-  # used in passthru.tests
+
+# reverse dependencies
 , flask-limiter
 , flask-restful
 , flask-restx
@@ -21,12 +31,12 @@
 
 buildPythonPackage rec {
   pname = "flask";
-  version = "2.3.3";
+  version = "3.0.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CcNHqSqn/0qOfzIGeV8w2CZlS684uHPQdEzVccpgnvw=";
+    hash = "sha256-giwD9LeZIEJQp+6Ese3cQGZTlTM5c9+53uv+Ql/vy30=";
   };
 
   nativeBuildInputs = [
@@ -39,23 +49,34 @@ buildPythonPackage rec {
     itsdangerous
     jinja2
     werkzeug
-  ] ++ lib.optional (pythonOlder "3.10") importlib-metadata;
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
+  ];
+
+  passthru.optional-dependencies = {
+    async = [
+      asgiref
+    ];
+    dotenv = [
+      python-dotenv
+    ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    greenlet
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   passthru.tests = {
     inherit flask-limiter flask-restful flask-restx moto;
   };
-  passthru.optional-dependencies = {
-    dotenv = [ python-dotenv ];
-    async = [ asgiref ];
-  };
 
   meta = with lib; {
+    changelog = "https://flask.palletsprojects.com/en/${versions.majorMinor version}.x/changes/#version-${replaceStrings [ "." ] [ "-" ] version}";
     homepage = "https://flask.palletsprojects.com/";
     description = "The Python micro framework for building web applications";
+    mainProgram = "flask";
     longDescription = ''
       Flask is a lightweight WSGI web application framework. It is
       designed to make getting started quick and easy, with the ability

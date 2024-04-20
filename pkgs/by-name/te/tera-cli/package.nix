@@ -5,16 +5,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "tera-cli";
-  version = "0.2.5";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "chevdor";
     repo = "tera-cli";
     rev = "v${version}";
-    hash = "sha256-W+pcVLxOlikwAGvx0twm23GyCMzdqnHY0YBNtcsSB5I=";
+    hash = "sha256-Fzrlt6p4bVtJvGg8SaMdS/+2wzABtBkj9ERcg3/bwcQ=";
   };
 
-  cargoHash = "sha256-A01mok8KQk1FV8P7E4svdBCW6xqpduHy1XuUcdDFjfc=";
+  cargoHash = "sha256-aPN7rbU/BSgNAoq0g8JrzsXk3pbenrJZxqrm5f4zYn8=";
 
   meta = with lib; {
     description = "A command line utility to render templates from json|toml|yaml and ENV, using the tera templating engine";

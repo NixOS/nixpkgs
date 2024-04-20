@@ -2,7 +2,7 @@
 , stdenvNoCC
 , version, src
 , fetchYarnDeps
-, prefetch-yarn-deps, yarn, nodejs
+, fixup-yarn-lock, yarn, nodejs
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -10,11 +10,11 @@ stdenvNoCC.mkDerivation rec {
 
   inherit src version;
 
-  nativeBuildInputs = [ prefetch-yarn-deps yarn nodejs ];
+  nativeBuildInputs = [ fixup-yarn-lock yarn nodejs ];
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/web/yarn.lock";
-    hash = "sha256-UTxglGn3eIgahZg4kxolg2f2MTReCL4r/GyWNg4105E=";
+    hash = "sha256-0JpoAQKRmU7P1bzYNR/vqtPjOOSw8wSlNjXl2f6uBrw=";
   };
 
   configurePhase = ''

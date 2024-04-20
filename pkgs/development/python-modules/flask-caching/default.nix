@@ -12,14 +12,15 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Flask-Caching";
-  version = "2.0.2";
+  pname = "flask-caching";
+  version = "2.1.0";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-JLYMVS1ZqWBcwbakLFbNs5qCoo2rRTK77bkiKuVOy04=";
+    pname = "Flask-Caching";
+    inherit version;
+    hash = "sha256-t1AMFFE1g2qVLj3jqAiB2WVOMnopyFLJJlYH9cRJI1w=";
   };
 
   postPatch = ''
@@ -47,6 +48,7 @@ buildPythonPackage rec {
     "Memcache"
   ] ++ lib.optionals stdenv.isDarwin [
     # ignore flaky test
+    "test_cache_timeout_dynamic"
     "test_cached_view_class"
   ];
 

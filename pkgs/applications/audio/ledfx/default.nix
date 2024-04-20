@@ -1,43 +1,49 @@
-{ lib
-, fetchPypi
-, python3
+{
+  lib,
+  fetchPypi,
+  python3,
 }:
 
 python3.pkgs.buildPythonPackage rec {
   pname = "ledfx";
-  version = "2.0.80";
-  pyproject= true;
+  version = "2.0.96";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vwLk3EpXqUSAwzY2oX0ZpXrmH2cT0GdYdL/Mifav6mU=";
+    hash = "sha256-nvPHAnoD5j1rneeuMufQkXj8YWXau2zJYug+Avpe87I=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'rpi-ws281x>=4.3.0; platform_system == \"Linux\"'," "" \
-      --replace "sentry-sdk==1.14.0" "sentry-sdk" \
-      --replace "~=" ">="
-  '';
+  pythonRelaxDeps = true;
 
-  nativeBuildInputs = with python3.pkgs; [
+  pythonRemoveDeps = [
+    # not packaged
+    "rpi-ws281x"
+  ];
+
+  build-system = with python3.pkgs; [
+    cython
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
+
+  dependencies = with python3.pkgs; [
     aiohttp
     aiohttp-cors
     aubio
     certifi
-    cython
     flux-led
+    python-dotenv
     icmplib
+    mss
     multidict
     numpy
     openrgb-python
     paho-mqtt
     pillow
     psutil
+    pybase64
     pyserial
     pystray
     python-mbedtls
@@ -48,13 +54,15 @@ python3.pkgs.buildPythonPackage rec {
     sacn
     samplerate
     sentry-sdk
+    setuptools
     sounddevice
+    stupidartnet
     uvloop
     voluptuous
     zeroconf
   ];
 
-  # has no tests
+  # Project has no tests
   doCheck = false;
 
   meta = with lib; {

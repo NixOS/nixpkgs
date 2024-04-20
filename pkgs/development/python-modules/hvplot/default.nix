@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "hvplot";
-  version = "0.9.0";
+  version = "0.9.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BkxnV90QxJjQYqN0DdjGbjPmNDaDN9hUBjO7nQte7eg=";
+    hash = "sha256-moyekkkTmqo97l8c6g+TzzY3TReemGcF/N3CuSxHB5M=";
   };
 
   propagatedBuildInputs = [

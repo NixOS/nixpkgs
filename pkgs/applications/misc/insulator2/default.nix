@@ -94,6 +94,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/andrewinci/insulator2";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ tc-kaluza ];
+    mainProgram = "insulator-2";
   };
 
 }

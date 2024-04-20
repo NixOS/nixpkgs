@@ -16,6 +16,7 @@ let
       ];
       sha256 = "sha256-v0q2MhySayij7+qBTE5q01IOq/DyUcWnjpbzB/AV34c=";
     })
+    ./meshboolean-const.patch
   ];
 
   versions = {
@@ -30,8 +31,8 @@ let
       inherit patches;
     };
     beta = {
-      version = "2.5.59.3";
-      sha256 = "sha256-chHKEEMN0Dllebk7zQDg7mf2BU441RlSyXvXgiCmgA4=";
+      version = "2.5.59.6";
+      sha256 = "sha256-4ivhkcvVw5NlPsDz3J840aWc0qnp/XzCnTTCICwi3/c=";
       inherit patches;
     };
   };
@@ -81,7 +82,7 @@ let
     meta = with lib; {
       inherit description;
       homepage = "https://github.com/supermerill/SuperSlicer";
-      license = licenses.agpl3;
+      license = licenses.agpl3Plus;
       maintainers = with maintainers; [ cab404 moredread tmarkus ];
       mainProgram = "superslicer";
     };

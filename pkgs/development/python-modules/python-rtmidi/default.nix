@@ -7,7 +7,7 @@
 , CoreMIDI
 , CoreServices
 , Foundation
-, cython_3
+, cython
 , fetchPypi
 , flake8
 , libjack2
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
     meson-python
     ninja
     pkg-config
@@ -66,6 +66,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/SpotlightKid/python-rtmidi";
     changelog = "https://github.com/SpotlightKid/python-rtmidi/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

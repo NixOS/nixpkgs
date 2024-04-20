@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "prr";
-  version = "0.11.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "danobi";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-mPFnMoYlOU0oJcasrCEHO+Ze1YuwJ0ap7+p2Fs75pcY=";
+    hash = "sha256-siQZ3rDKv2lnn1bmisRsexWwfvmMhK+z4GZGPsrfPgc=";
   };
 
-  cargoHash = "sha256-HDNJ17SB9XdqDAAmEBJz/P52/QJcuV6sVsgxBVWKIRg=";
+  cargoHash = "sha256-vCZjgmBYO+I6MZLCOMp50bWEeHwLbZsxSz5gRmBykvI=";
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security

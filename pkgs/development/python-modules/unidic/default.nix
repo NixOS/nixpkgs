@@ -35,8 +35,6 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   propagatedBuildInputs = [ requests tqdm wasabi plac platformdirs ];
 
   nativeBuildInputs = [ cython mecab setuptools-scm ];

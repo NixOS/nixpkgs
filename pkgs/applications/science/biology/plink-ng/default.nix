@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
   meta = {
     broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "A comprehensive update to the PLINK association analysis toolset";
+    mainProgram = "plink";
     homepage = "https://www.cog-genomics.org/plink2";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;

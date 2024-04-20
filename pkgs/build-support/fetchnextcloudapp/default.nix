@@ -1,6 +1,7 @@
 { stdenv, fetchzip, applyPatches, lib, ... }:
 { url
-, sha256
+, hash ? ""
+, sha256 ? ""
 , appName ? null
 , appVersion ? null
 , license
@@ -11,7 +12,7 @@
 applyPatches ({
   inherit patches;
   src = fetchzip {
-    inherit url sha256;
+    inherit url hash sha256;
     postFetch = ''
       pushd $out &>/dev/null
       if [ ! -f ./appinfo/info.xml ]; then

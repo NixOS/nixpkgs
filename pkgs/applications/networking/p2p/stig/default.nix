@@ -62,6 +62,8 @@ python310Packages.buildPythonApplication rec {
     description = "TUI and CLI for the BitTorrent client Transmission";
     homepage = "https://github.com/rndusr/stig";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ doronbehar ];
+    # Too many broken tests, and it fails to launch
+    broken = true;
+    maintainers = with maintainers; [  ];
   };
 }

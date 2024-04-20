@@ -23,8 +23,6 @@ buildPythonPackage rec {
     hash = "sha256-N1NkpI8inGJCf0xuc+FFmVX85CS7vqzoNddxZ9kqEk0=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   pythonRelaxDeps = [
     "aiooss2"
     "fsspec"

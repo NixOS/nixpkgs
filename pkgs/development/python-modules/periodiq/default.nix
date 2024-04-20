@@ -26,6 +26,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace 'pendulum = "^2.0"' 'pendulum = "*"' \
       --replace 'poetry>=0.12' 'poetry-core' \
       --replace 'poetry.masonry.api' 'poetry.core.masonry.api'
   '';
@@ -48,6 +49,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Simple Scheduler for Dramatiq Task Queue";
+    mainProgram = "periodiq";
     homepage = "https://pypi.org/project/periodiq/";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ traxys ];

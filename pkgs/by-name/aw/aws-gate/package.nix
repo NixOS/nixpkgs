@@ -26,14 +26,25 @@ python3Packages.buildPythonApplication rec {
   '';
 
   nativeBuildInputs = [
+    installShellFiles
+    python3Packages.pythonRelaxDepsHook
     python3Packages.setuptools
     python3Packages.wheel
-    installShellFiles
   ];
 
-  propagatedBuildInputs = [ ssm-session-manager-plugin ] ++ builtins.attrValues {
-    inherit (python3Packages) marshmallow boto3 pyyaml wrapt cryptography;
-  };
+  pythonRelaxDeps = true;
+
+  propagatedBuildInputs = [
+    python3Packages.boto3
+    python3Packages.cryptography
+    python3Packages.marshmallow
+    python3Packages.packaging
+    python3Packages.pyyaml
+    python3Packages.requests
+    python3Packages.unix-ar
+    python3Packages.wrapt
+    ssm-session-manager-plugin
+  ];
 
   postInstall = ''
     installShellCompletion --bash completions/bash/aws-gate

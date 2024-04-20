@@ -62,6 +62,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module for AWS IAM security assessment";
+    mainProgram = "cloudsplaining";
     homepage = "https://github.com/salesforce/cloudsplaining";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];

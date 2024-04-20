@@ -20,13 +20,13 @@ let
 in
 maven.buildMavenPackage rec {
   pname = "ns-usbloader";
-  version = "7.0";
+  version = "7.1";
 
   src = fetchFromGitHub {
     owner = "developersu";
     repo = "ns-usbloader";
     rev = "v${version}";
-    sha256 = "sha256-x4zGwsDUVUHI4AUMPSqgnZVyZx+pWQA5xvtrFE8U3QU=";
+    sha256 = "sha256-gSf5SCIhcUEYGsYssXVGjUweVU+guxOI+lzD3ANr96w=";
   };
 
   patches = [ ./no-launch4j.patch ./make-deterministic.patch ];
@@ -100,5 +100,6 @@ maven.buildMavenPackage rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ soupglasses ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
+    mainProgram = "ns-usbloader";
   };
 }

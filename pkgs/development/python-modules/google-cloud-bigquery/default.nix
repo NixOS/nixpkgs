@@ -1,44 +1,48 @@
-{ lib
-, buildPythonPackage
-, db-dtypes
-, fetchPypi
-, freezegun
-, google-api-core
-, google-cloud-bigquery-storage
-, google-cloud-core
-, google-cloud-datacatalog
-, google-cloud-storage
-, google-cloud-testutils
-, google-resumable-media
-, grpcio
-, ipython
-, mock
-, pandas
-, proto-plus
-, protobuf
-, psutil
-, pyarrow
-, pytest-xdist
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, requests
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  db-dtypes,
+  fetchPypi,
+  freezegun,
+  google-api-core,
+  google-cloud-bigquery-storage,
+  google-cloud-core,
+  google-cloud-datacatalog,
+  google-cloud-storage,
+  google-cloud-testutils,
+  google-resumable-media,
+  grpcio,
+  ipython,
+  mock,
+  pandas,
+  proto-plus,
+  protobuf,
+  psutil,
+  pyarrow,
+  pytest-xdist,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  requests,
+  setuptools,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery";
-  version = "3.11.4";
-  format = "setuptools";
+  version = "3.21.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aX3xFyQaIoO8u5OyHhC63BTlHJqQgA0qfho+HH2EKXQ=";
+    hash = "sha256-YmXDn51b31DxHLganCoGBdKF3zSsE53g0jM7ElCt0P8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     grpcio
     google-api-core
     google-cloud-core
@@ -61,12 +65,8 @@ buildPythonPackage rec {
       pandas
       pyarrow
     ];
-    tqdm = [
-      tqdm
-    ];
-    ipython = [
-      ipython
-    ];
+    tqdm = [ tqdm ];
+    ipython = [ ipython ];
   };
 
   nativeCheckInputs = [
@@ -78,8 +78,7 @@ buildPythonPackage rec {
     google-cloud-storage
     pytestCheckHook
     pytest-xdist
-  ] ++ passthru.optional-dependencies.pandas
-  ++ passthru.optional-dependencies.ipython;
+  ] ++ passthru.optional-dependencies.pandas ++ passthru.optional-dependencies.ipython;
 
   # prevent google directory from shadowing google imports
   preCheck = ''
@@ -127,8 +126,6 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    # Not compatible with pyarrow13 yet.
-    broken = true;
     description = "Google BigQuery API client library";
     homepage = "https://github.com/googleapis/python-bigquery";
     changelog = "https://github.com/googleapis/python-bigquery/blob/v${version}/CHANGELOG.md";

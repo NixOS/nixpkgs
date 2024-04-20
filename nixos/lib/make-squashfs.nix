@@ -14,6 +14,7 @@
 
 let
   pseudoFilesArgs = lib.concatMapStrings (f: ''-p "${f}" '') pseudoFiles;
+  compFlag = if comp == null then "-no-compression" else "-comp ${comp}";
 in
 stdenv.mkDerivation {
   name = "${fileName}.img";
@@ -39,7 +40,7 @@ stdenv.mkDerivation {
 
       # Generate the squashfs image.
       mksquashfs nix-path-registration $(cat $closureInfo/store-paths) $out ${pseudoFilesArgs} \
-        -no-hardlinks ${lib.optionalString noStrip "-no-strip"} -keep-as-directory -all-root -b 1048576 -comp ${comp} \
+        -no-hardlinks ${lib.optionalString noStrip "-no-strip"} -keep-as-directory -all-root -b 1048576 ${compFlag} \
         -processors $NIX_BUILD_CORES
     '';
 }

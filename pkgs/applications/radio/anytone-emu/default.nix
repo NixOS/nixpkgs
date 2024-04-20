@@ -38,5 +38,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ janik ];
     platforms = platforms.linux;
+    mainProgram = "anytone-emu";
   };
 }

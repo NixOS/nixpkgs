@@ -40,7 +40,7 @@
 
 stdenv.mkDerivation rec {
   pname = "muffin";
-  version = "6.0.0";
+  version = "6.0.1";
 
   outputs = [ "out" "dev" "man" ];
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-17B2C3SW9smTgLBBGJc9LwFpXoP9WidZEGgI2hbJTH8=";
+    hash = "sha256-yd23naaPIa6xrdf7ipOvVZKqkr7/CMxNqDZ3CQ2QH+Y=";
   };
 
   patches = [
@@ -115,6 +115,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/linuxmint/muffin";
     description = "The window management library for the Cinnamon desktop (libmuffin) and its sample WM binary (muffin)";
+    mainProgram = "muffin";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;

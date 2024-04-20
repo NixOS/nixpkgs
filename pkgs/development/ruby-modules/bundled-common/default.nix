@@ -28,9 +28,18 @@
 
 assert name == null -> pname != null;
 
-with  import ./functions.nix { inherit lib gemConfig; };
-
 let
+  functions = import ./functions.nix { inherit lib gemConfig; };
+
+  inherit (functions)
+    applyGemConfigs
+    bundlerFiles
+    composeGemAttrs
+    filterGemset
+    genStubsScript
+    pathDerivation
+    ;
+
   gemFiles = bundlerFiles args;
 
   importedGemset = if builtins.typeOf gemFiles.gemset != "set"
@@ -117,9 +126,10 @@ let
 
     meta = { platforms = ruby.meta.platforms; } // meta;
 
-    passthru = rec {
-      inherit ruby bundler gems confFiles envPaths;
+    passthru = (lib.optionalAttrs (pname != null) {
       inherit (gems.${pname}) gemType;
+    } // rec {
+      inherit ruby bundler gems confFiles envPaths;
 
       wrappedRuby = stdenv.mkDerivation {
         name = "wrapped-ruby-${pname'}";
@@ -172,7 +182,7 @@ let
             exit 1
           '';
         };
-    };
+    });
   };
 
   basicEnv =

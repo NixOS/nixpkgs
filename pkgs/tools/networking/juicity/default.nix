@@ -1,19 +1,19 @@
 { lib
 , fetchFromGitHub
-, buildGo121Module
+, buildGoModule
 }:
-buildGo121Module rec {
+buildGoModule rec {
   pname = "juicity";
-  version = "0.3.0";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "juicity";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-UKEmPb5Kn2GlTriXFOavQ5o8bU9VqMzQZx4iyG5W7a0=";
+    hash = "sha256-JC4VGM7aY+fYo0F9yAkgTbZA56ztyeoIx9PARlBjkh4=";
   };
 
-  vendorHash = "sha256-KLyGgkZqkM8jn+Sqa4IjauvfL9QXp9W/eUcViDTGDtw=";
+  vendorHash = "sha256-SM5ZrTtuqenPsGjphkCM9JHzucw0/qBmevD+3/kyF6k=";
 
   proxyVendor = true;
 

@@ -9,16 +9,16 @@
 , pytestCheckHook
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "proton-vpn-connection";
-  version = "0.11.0-unstable-2023-09-05";
+  version = "0.11.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-connection";
-    rev = "747ccacb5350ad59f2a09953b8d20c5c161aab54";
-    hash = "sha256-WyMG0kmwBKoWc0mHnaop9E0upPAYHFwS/A9I1//WwlY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-RuLnc/olI8S09WFG126N2xZgW4gf+DDpRstcelqMhs4=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ buildPythonPackage {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov=proton.vpn.connection --cov-report html --cov-report term" ""
+      --replace-fail "--cov=proton.vpn.connection --cov-report html --cov-report term" ""
   '';
 
   pythonImportsCheck = [ "proton.vpn.connection" ];

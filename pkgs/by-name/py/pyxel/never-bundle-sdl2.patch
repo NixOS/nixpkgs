@@ -1,0 +1,13 @@
+diff --git a/crates/pyxel-platform/build.rs b/crates/pyxel-platform/build.rs
+index 35cdeef5..68a93ed9 100644
+--- a/crates/pyxel-platform/build.rs
++++ b/crates/pyxel-platform/build.rs
+@@ -30,7 +30,7 @@ impl SDL2BindingsBuilder {
+     }
+ 
+     fn should_bundle_sdl2(&self) -> bool {
+-        self.target_os.contains("windows") || self.target_os == "darwin"
++        false
+     }
+ 
+     fn download_sdl2(&self) {

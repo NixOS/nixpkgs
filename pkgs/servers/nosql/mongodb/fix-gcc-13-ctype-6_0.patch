@@ -1,0 +1,12 @@
+diff --git a/src/mongo/util/ctype.h b/src/mongo/util/ctype.h
+index a3880e2..78ee57e 100644
+--- a/src/mongo/util/ctype.h
++++ b/src/mongo/util/ctype.h
+@@ -67,6 +67,7 @@
+ #pragma once
+
+ #include <array>
++#include <cstdint>
+
+ namespace mongo::ctype {
+ namespace detail {

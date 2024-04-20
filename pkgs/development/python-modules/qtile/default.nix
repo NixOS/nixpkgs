@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "qtile";
-  version = "0.23.0";
+  version = "0.25.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "qtile";
     repo = "qtile";
-    rev = "v${version}";
-    hash = "sha256-WxnpkKqYGGEsFTt/1iCSiCzdESJP6HFJ6BztaMsMbYo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-j5hpXfUSDUT9nBr6CafIzqdTYQxSWok+ZlQA7bGdVvk=";
   };
 
   patches = [
@@ -57,8 +57,6 @@ buildPythonPackage rec {
         --replace /usr/include/pixman-1 ${lib.getDev pixman}/include \
         --replace /usr/include/libdrm ${lib.getDev libdrm}/include/libdrm
   '';
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     pkg-config
@@ -97,7 +95,8 @@ buildPythonPackage rec {
     homepage = "http://www.qtile.org/";
     license = licenses.mit;
     description = "A small, flexible, scriptable tiling window manager written in Python";
+    mainProgram = "qtile";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ kamilchm arjan-s ];
+    maintainers = with maintainers; [ arjan-s ];
   };
 }

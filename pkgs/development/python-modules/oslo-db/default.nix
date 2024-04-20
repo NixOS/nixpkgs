@@ -2,13 +2,17 @@
 , buildPythonPackage
 , fetchPypi
 , alembic
+, debtcollector
 , oslo-config
 , oslo-context
+, oslo-i18n
 , oslo-utils
 , oslotest
 , pbr
+, psycopg2
+, setuptools
 , sqlalchemy
-, sqlalchemy-migrate
+, stevedore
 , stestr
 , testresources
 , testscenarios
@@ -16,31 +20,37 @@
 
 buildPythonPackage rec {
   pname = "oslo-db";
-  version = "14.0.0";
-  format = "setuptools";
+  version = "15.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "oslo.db";
     inherit version;
-    hash = "sha256-nAipzYOOv/rSHrMBL64AKg93v5Vpb6RNBbG2OiJ+n8E=";
+    hash = "sha256-6QJDUgX1xQtw7mNYY8i06lS9Hr4ABpXAZeMN1C2Xb/o=";
   };
 
-  nativeBuildInputs = [ pbr ];
+  nativeBuildInputs = [
+    pbr
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     alembic
+    debtcollector
     oslo-config
-    oslo-context
+    oslo-i18n
     oslo-utils
     sqlalchemy
-    sqlalchemy-migrate
-    testresources
-    testscenarios
+    stevedore
   ];
 
   nativeCheckInputs = [
+    oslo-context
     oslotest
     stestr
+    psycopg2
+    testresources
+    testscenarios
   ];
 
   checkPhase = ''

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "hatch-requirements-txt";
-  version = "0.4.0";
+  version = "0.4.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "repo-helper";
     repo = "hatch-requirements-txt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qk+70o/41BLxCuz3SOXkGYSEmUZOG1oLYcFUmlarqmY=";
+    hash = "sha256-Kd3rDfTBn/t/NiSJMPkHRWD5solUF7MAN8EiZokxHrk=";
   };
 
   nativeBuildInputs = [

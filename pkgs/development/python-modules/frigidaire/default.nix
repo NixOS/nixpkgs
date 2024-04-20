@@ -6,27 +6,32 @@
 , idna
 , pythonOlder
 , requests
+, setuptools
 , urllib3
 }:
 
 buildPythonPackage rec {
   pname = "frigidaire";
-  version = "0.18.13";
-  format = "setuptools";
+  version = "0.18.16";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bm1549";
-    repo = pname;
+    repo = "frigidaire";
     rev = "refs/tags/${version}";
-    hash = "sha256-FikBV4KjutQfupGPXcVT1h+BfQ099WRrmbrEJOaVCQI=";
+    hash = "sha256-PQrQM9AuudDmmsmMcZJjBm+rLA/juDgr3+SORuVurqQ=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'version = "SNAPSHOT"' 'version = "${version}"'
+      --replace-warn 'version = "SNAPSHOT"' 'version = "${version}"'
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     certifi

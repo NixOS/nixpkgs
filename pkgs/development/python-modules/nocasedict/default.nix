@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytestCheckHook
+, pytest7CheckHook
 , six
 }:
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
   pythonImportsCheck = [

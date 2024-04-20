@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "dramatiq";
-  version = "1.15.0";
+  version = "1.16.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "Bogdanp";
     repo = "dramatiq";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uhradhLIyfHf1meAr7ChuGnvm62mX/lkQQ2Pe7hBWtY=";
+    hash = "sha256-gC1vWnG3zDuFT61i2VgDrP/qIwmGN5GkGv6EVxqUf4U=";
   };
 
   propagatedBuildInputs = [

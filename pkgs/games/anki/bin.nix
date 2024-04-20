@@ -1,24 +1,24 @@
-{ fetchurl, stdenv, lib, buildFHSEnv, appimageTools, writeShellScript, anki, undmg, zstd, commandLineArgs ? [] }:
+{ fetchurl, stdenv, lib, buildFHSEnv, appimageTools, writeShellScript, anki, undmg, zstd, cacert, commandLineArgs ? [] }:
 
 let
   pname = "anki-bin";
   # Update hashes for both Linux and Darwin!
-  version = "23.10.1";
+  version = "24.04";
 
   sources = {
     linux = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-linux-qt6.tar.zst";
-      sha256 = "sha256-Kv0SH+bLnBSM/tYHe2kEJc4n7izZTBNWQs2nm/teLEU=";
+      sha256 = "sha256-mIQ448ecBDrMo3qspXVOBJM/0LebJ9lA1JIwz70Uqhc=";
     };
 
     # For some reason anki distributes completely separate dmg-files for the aarch64 version and the x86_64 version
     darwin-x86_64 = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac-intel-qt6.dmg";
-      sha256 = "sha256-MSlKsEv4N/H7G1bUOBlPBXerpHIW32P6Va02aRq1+54=";
+      sha256 = "sha256-ab8cc+QMt3ZJp1NZmAwz2VNZwWQK0DBPKnz2fGmC7Fs=";
     };
     darwin-aarch64 = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac-apple-qt6.dmg";
-      sha256 = "sha256-jEm9WJBXx77KpldzBuxK1Pu6VGiARZPnRmMhEjZdm1I=";
+      sha256 = "sha256-bRpPVOXpDRq+EXwW1yWiAgzkcdLhLnMrHo/t9Jgzth0=";
     };
   };
 
@@ -54,8 +54,15 @@ let
     inherit pname version;
     name = null; # Appimage sets it to "appimage-env"
 
+    profile = ''
+      # anki vendors QT and mixing QT versions usually causes crashes
+      unset QT_PLUGIN_PATH
+      # anki uses the system ssl cert, without it plugins do not download/update
+      export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
+    '';
+
     # Dependencies of anki
-    targetPkgs = pkgs: (with pkgs; [ xorg.libxkbfile xcb-util-cursor-HEAD krb5 ]);
+    targetPkgs = pkgs: (with pkgs; [ xorg.libxkbfile xcb-util-cursor-HEAD krb5 zstd ]);
 
     runScript = writeShellScript "anki-wrapper.sh" ''
       exec ${unpacked}/bin/anki ${ lib.strings.escapeShellArgs commandLineArgs } "$@"

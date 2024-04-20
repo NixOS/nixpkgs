@@ -26,5 +26,6 @@ buildGoModule rec {
     changelog = "https://github.com/projectdiscovery/chaos-client/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "chaos";
   };
 }

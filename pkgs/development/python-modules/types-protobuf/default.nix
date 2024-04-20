@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "types-protobuf";
-  version = "4.24.0.4";
+  version = "4.24.0.20240311";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-V6tCyxcd/bosdLtbUMJQR4U4zDxe2VuLNokprQyfkKU=";
+    hash = "sha256-yAQm+fubIa7lFGkelqsypc1pSoLirAeWSzUsPn4Bgrw=";
   };
 
   propagatedBuildInputs = [

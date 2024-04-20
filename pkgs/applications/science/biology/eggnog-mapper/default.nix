@@ -8,13 +8,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "eggnog-mapper";
-  version = "2.1.10";
+  version = "2.1.12";
 
   src = fetchFromGitHub {
     owner = "eggnogdb";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-6R2gl2l2Cl/eva0g+kxDLBI2+5T9cFTgaGMsEfeDVU0=";
+    hash = "sha256-+luxXQmtGufYrA/9Ak3yKzbotOj2HM3vhIoOxE+Ty1U=";
   };
 
   postPatch = ''

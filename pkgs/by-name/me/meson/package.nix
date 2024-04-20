@@ -1,11 +1,11 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , installShellFiles
 , coreutils
 , darwin
 , libxcrypt
+, openldap
 , ninja
 , pkg-config
 , python3
@@ -14,17 +14,17 @@
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation OpenGL;
+  inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation LDAP OpenAL OpenGL;
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.2.3";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
     repo = "meson";
     rev = "refs/tags/${version}";
-    hash = "sha256-dgYYz3tQDG6Z4eE77WO2dXdardxVzzGaFLQ5znPcTlw=";
+    hash = "sha256-hRTmKO2E6SIdvAhO7OJtV8dcsGm39c51H+2ZGEkdcFY=";
   };
 
   patches = [
@@ -66,15 +66,9 @@ python3.pkgs.buildPythonApplication rec {
     # Nixpkgs cctools does not have bitcode support.
     ./006-disable-bitcode.patch
 
-    # Fix passing multiple --define-variable arguments to pkg-config.
-    # https://github.com/mesonbuild/meson/pull/10670
-    (fetchpatch {
-      url = "https://github.com/mesonbuild/meson/commit/d5252c5d4cf1c1931fef0c1c98dd66c000891d21.patch";
-      hash = "sha256-GiUNVul1N5Fl8mfqM7vA/r1FdKqImiDYLXMVDt77gvw=";
-      excludes = [
-        "docs/yaml/objects/dep.yaml"
-      ];
-    })
+    # Fix cross-compilation of proc-macro (and mesa)
+    # https://github.com/mesonbuild/meson/issues/12973
+    ./0001-Revert-rust-recursively-pull-proc-macro-dependencies.patch
   ];
 
   buildInputs = lib.optionals (python3.pythonOlder "3.9") [
@@ -95,7 +89,10 @@ python3.pkgs.buildPythonApplication rec {
     AppKit
     Cocoa
     Foundation
+    LDAP
+    OpenAL
     OpenGL
+    openldap
   ];
 
   checkPhase = lib.concatStringsSep "\n" ([
@@ -104,6 +101,7 @@ python3.pkgs.buildPythonApplication rec {
       patchShebangs 'test cases'
       substituteInPlace \
         'test cases/native/8 external program shebang parsing/script.int.in' \
+        'test cases/common/273 customtarget exe for test/generate.py' \
           --replace /usr/bin/env ${coreutils}/bin/env
     ''
   ]
@@ -149,6 +147,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     homepage = "https://mesonbuild.com";
     description = "An open source, fast and friendly build system made in Python";
+    mainProgram = "meson";
     longDescription = ''
       Meson is an open source build system meant to be both extremely fast, and,
       even more importantly, as user friendly as possible.

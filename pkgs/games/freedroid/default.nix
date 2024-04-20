@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A clone of the classic game 'Paradroid' on Commodore 64";
+    mainProgram = "freedroid";
     homepage    = "https://github.com/ReinhardPrix/FreedroidClassic";
     license     = licenses.gpl2Only;
     maintainers = with maintainers; [ iblech ];

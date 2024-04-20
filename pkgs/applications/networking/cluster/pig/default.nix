@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://pig.apache.org/";
     description = "High-level language for Apache Hadoop";
+    mainProgram = "pig";
     license = licenses.asl20;
 
     longDescription = ''

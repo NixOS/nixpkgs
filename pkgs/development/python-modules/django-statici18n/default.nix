@@ -1,25 +1,37 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+
+# build-system
+, setuptools
+
+# dependencies
 , django
 , django-appconf
+
+# tests
 , pytest-django
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "django-statici18n";
-  version = "2.3.1";
-  format = "setuptools";
+  version = "2.4.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zyegfryed";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-2fFJJNdF0jspS7djDL8sToPTetzNR6pfNp5ohCNa30I=";
+    repo = "django-statici18n";
+    # https://github.com/zyegfryed/django-statici18n/issues/59
+    rev = "9b83a8f0f2e625dd5f56d53cfe4e07aca9479ab6";
+    hash = "sha256-KrIlWmN7um9ad2avfANOza579bjYkxTo9F0UFpvLu3A=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     django
     django-appconf
   ];
@@ -28,7 +40,7 @@ buildPythonPackage rec {
     "statici18n"
   ];
 
-  DJANGO_SETTINGS_MODULE = "tests.test_project.project.settings";
+  env.DJANGO_SETTINGS_MODULE = "tests.test_project.project.settings";
 
   nativeCheckInputs = [
     pytest-django

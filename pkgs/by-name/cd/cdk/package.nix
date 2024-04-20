@@ -21,6 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Curses development kit";
+    mainProgram = "cdk5-config";
     homepage = "https://invisible-island.net/cdk/";
     changelog = "https://invisible-island.net/cdk/CHANGES.html";
     license = lib.licenses.mit;

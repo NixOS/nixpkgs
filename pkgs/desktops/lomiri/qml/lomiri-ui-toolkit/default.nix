@@ -3,6 +3,7 @@
 , fetchFromGitLab
 , fetchpatch
 , gitUpdater
+, substituteAll
 , testers
 , dbus-test-runner
 , dpkg
@@ -22,6 +23,7 @@
 , qtsvg
 , qtsystems
 , suru-icon-theme
+, validatePkgConfig
 , wrapQtAppsHook
 , xvfb-run
 }:
@@ -33,13 +35,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-ui-toolkit";
-  version = "1.3.5011";
+  version = "1.3.5012";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-ui-toolkit";
     rev = finalAttrs.version;
-    hash = "sha256-z/EEmC9LjQtBx5MRDLeImxpRrzH4w6v6o+NmqX+L4dw=";
+    hash = "sha256-Azz2IOm/7XRvDbyIKaYxrkR47evSB17ejtssuEJayPc=";
   };
 
   outputs = [ "out" "dev" ];
@@ -57,23 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-x8Zk7+VBSlM16a3V1yxJqIB63796H0lsS+F4dvR/z80=";
     })
 
-    # Small fixes to statesaver & tst_imageprovider.11.qml tests
-    # Remove when version > 1.3.5011
-    (fetchpatch {
-      name = "0003-lomiri-ui-toolkit-tests-Minor-fixes.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/commit/a8324d670b813a48ac7d48aa0bc013773047a01d.patch";
-      hash = "sha256-W6q3LuQqWmUVSBzORcJsTPoLfbWwytABMDR6JITHrDI=";
-    })
-
-    # Fix Qt 5.15.11 compatibility
-    # Remove when version > 1.3.5011
-    (fetchpatch {
-      name = "0004-lomiri-ui-toolkit-Fix-compilation-with-Qt-5.15.11.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/commit/4f999077dc6bc5591bdfede64fd21cb3acdcaac1.patch";
-      hash = "sha256-5VCQFOykxgspNBxH94XYuBpdHsH9a3+8FwV6xQE55Xc=";
-    })
-
     ./2001-Mark-problematic-tests.patch
+    (substituteAll {
+      src = ./2002-Nixpkgs-versioned-QML-path.patch.in;
+      name = "2002-Nixpkgs-versioned-QML-path.patch";
+      qtVersion = lib.versions.major qtbase.version;
+    })
   ];
 
   postPatch = ''
@@ -130,6 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     qmake
+    validatePkgConfig
     wrapQtAppsHook
   ];
 
@@ -242,6 +234,7 @@ stdenv.mkDerivation (finalAttrs: {
         - localisation through gettext
     '';
     homepage = "https://gitlab.com/ubports/development/core/lomiri-ui-toolkit";
+    changelog = "https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/blob/${finalAttrs.version}/ChangeLog";
     license = with licenses; [ gpl3Only cc-by-sa-30 ];
     maintainers = teams.lomiri.members;
     platforms = platforms.linux;

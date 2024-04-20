@@ -12,6 +12,7 @@
 , flac
 , freetype
 , gamemode
+, gitUpdater
 , libdrm
 , libGL
 , libGLU
@@ -46,12 +47,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "retroarch-bare";
-  version = "1.16.0.3";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    hash = "sha256-BT+LzRDoQF03aNT2Kg7YaSWhK74CvOOiHUeHDtFpe9s=";
+    hash = "sha256-uOnFkLrLQlBbUlIFA8wrOkQdVIvO7Np7fvi+sPJPtHE=";
     rev = "v${version}";
   };
 
@@ -122,7 +123,12 @@ stdenv.mkDerivation rec {
     rm $out/share/man/man6/retroarch-cg2glsl.6*
   '';
 
-  passthru.tests = nixosTests.retroarch;
+  passthru = {
+    tests = nixosTests.retroarch;
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
+  };
 
   meta = with lib; {
     homepage = "https://libretro.com";

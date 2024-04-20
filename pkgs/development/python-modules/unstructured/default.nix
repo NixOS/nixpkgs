@@ -56,7 +56,7 @@
 , grpcio
 }:
 let
-  version = "0.11.6";
+  version = "0.13.2";
   optional-dependencies = {
     huggingflace = [
       langdetect
@@ -90,7 +90,7 @@ buildPythonPackage {
     owner = "Unstructured-IO";
     repo = "unstructured";
     rev = "refs/tags/${version}";
-    hash = "sha256-ZZVd7WIQA79bzclE8BhDhJJi3RF0ODSj+6mqGSHgKv0=";
+    hash = "sha256-6pR/tewHWstgIqqD8Jwj+AQutdhXU5aufm6RiEpXr9s=";
   };
 
   propagatedBuildInputs = [
@@ -137,6 +137,7 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "Open source libraries and APIs to build custom preprocessing pipelines for labeling, training, or production machine learning pipelines";
+    mainProgram = "unstructured-ingest";
     homepage = "https://github.com/Unstructured-IO/unstructured";
     changelog = "https://github.com/Unstructured-IO/unstructured/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;

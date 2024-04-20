@@ -16,24 +16,14 @@
   passthruFun = import ./passthrufun.nix args;
 
   sources = {
-    python310 = {
-      sourceVersion = {
-        major = "3";
-        minor = "10";
-        patch = "13";
-        suffix = "";
-      };
-      hash = "sha256-XIiEhmhkDT4VKzW0U27xwjsspL0slX7x7LsFP1cd0/Y=";
-    };
-
     python311 = {
       sourceVersion = {
         major = "3";
         minor = "11";
-        patch = "6";
+        patch = "9";
         suffix = "";
       };
-      hash = "sha256-D6t4+n8TP084IQxiYNkNfA1ccZhEZBnOBX7HrC5vXzg=";
+      hash = "sha256-mx6JZSP8UQaREmyGRAbZNgo9Hphqy9pZzaV7Wr2kW4c=";
     };
   };
 
@@ -45,22 +35,9 @@ in {
       major = "2";
       minor = "7";
       patch = "18";
-      suffix = ".7"; # ActiveState's Python 2 extended support
+      suffix = ".8"; # ActiveState's Python 2 extended support
     };
-    hash = "sha256-zcjAoSq6491ePiDySBCKrLIyYoO/5fdH6aBTNg/NH8s=";
-    inherit (darwin) configd;
-    inherit passthruFun;
-  };
-
-  python38 = callPackage ./cpython {
-    self = __splicedPackages.python38;
-    sourceVersion = {
-      major = "3";
-      minor = "8";
-      patch = "18";
-      suffix = "";
-    };
-    hash = "sha256-P/txzTSaMmunsvrcfn34a6V33ZxJF+UqhAGtvadAXj8=";
+    hash = "sha256-HUOzu3uJbtd+3GbmGD35KOk/CDlwL4S7hi9jJGRFiqI=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -70,19 +47,26 @@ in {
     sourceVersion = {
       major = "3";
       minor = "9";
-      patch = "18";
+      patch = "19";
       suffix = "";
     };
-    hash = "sha256-AVl9sBMsHPezMe/2iuCbWiNaPDyqnJRMKcrH0cTEwAo=";
+    hash = "sha256-1Iks0WGPZFjLhRIIwDDfFIJ3lgnQ85OZkb04GE+MZ54=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
 
-  python310 = callPackage ./cpython ({
+  python310 = callPackage ./cpython {
     self = __splicedPackages.python310;
+    sourceVersion = {
+      major = "3";
+      minor = "10";
+      patch = "14";
+      suffix = "";
+    };
+    hash = "sha256-nFBIH6qMKDIym6D8iGjQpgamgPxPYOxI0mzo4HZ1H9o=";
     inherit (darwin) configd;
     inherit passthruFun;
-  } // sources.python310);
+  };
 
   python311 = callPackage ./cpython ({
     self = __splicedPackages.python311;
@@ -95,10 +79,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "12";
-      patch = "1";
+      patch = "3";
       suffix = "";
     };
-    hash = "sha256-jfuPQm/NImZX+eK9Xx6W5TJkllF2+hfTJljoc1ka6yE=";
+    hash = "sha256-Vr/vH9/BIhzmcg5DpmHj60F4XdkUzplpjYx4lq9L2qE=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -109,9 +93,9 @@ in {
       major = "3";
       minor = "13";
       patch = "0";
-      suffix = "a2";
+      suffix = "a6";
     };
-    hash = "sha256-ttRrRBkMTAJCHraaBC0WsMVUgb3agYxsQW3CRBE6nC0=";
+    hash = "sha256-S+85PXKygaz4HTnXRV8AA26GYZPfohpO05cP0PTLoEg=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -125,8 +109,8 @@ in {
     readline = null;
     ncurses = null;
     gdbm = null;
-    sqlite = null;
     configd = null;
+    sqlite = null;
     tzdata = null;
     libffi = libffiBoot; # without test suite
     stripConfig = true;
@@ -206,7 +190,7 @@ in {
 
   pypy39_prebuilt = callPackage ./pypy/prebuilt.nix {
     # Not included at top-level
-    self = __splicedPackages.pythonInterpreters.pypy38_prebuilt;
+    self = __splicedPackages.pythonInterpreters.pypy39_prebuilt;
     sourceVersion = {
       major = "7";
       minor = "3";

@@ -19,7 +19,7 @@ let
   baseUrl = "https://${githubBase}/${owner}/${repo}";
   newMeta = meta // {
     homepage = meta.homepage or baseUrl;
-
+  } // lib.optionalAttrs (position != null) {
     # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
     position = "${position.file}:${toString position.line}";
   };
@@ -28,7 +28,11 @@ let
   useFetchGit = fetchSubmodules || (leaveDotGit == true) || deepClone || forceFetchGit || (sparseCheckout != []);
   # We prefer fetchzip in cases we don't need submodules as the hash
   # is more stable in that case.
-  fetcher = if useFetchGit then fetchgit else fetchzip;
+  fetcher =
+    if useFetchGit then fetchgit
+    # fetchzip may not be overridable when using external tools, for example nix-prefetch
+    else if fetchzip ? override then fetchzip.override { withUnzip = false; }
+    else fetchzip;
   privateAttrs = lib.optionalAttrs private {
     netrcPhase = ''
       if [ -z "''$${varBase}USERNAME" -o -z "''$${varBase}PASSWORD" ]; then

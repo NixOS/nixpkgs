@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sameboy";
-  version = "0.16";
+  version = "0.16.3";
 
   src = fetchFromGitHub {
     owner = "LIJI32";
     repo = "SameBoy";
     rev = "v${version}";
-    sha256 = "sha256-sQVTCHOSc2N+Qs/rl0DfsUzg7P5Egws2UuNBQ9fpkoQ=";
+    sha256 = "sha256-sQWmuF1dQgvW9WyOxgxaupTUcde3KzzYiGv+v1N5ssk=";
   };
 
   enableParallelBuilding = true;
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://sameboy.github.io";
     description = "Game Boy, Game Boy Color, and Super Game Boy emulator";
+    mainProgram = "sameboy";
 
     longDescription = ''
       SameBoy is a user friendly Game Boy, Game Boy Color and Super

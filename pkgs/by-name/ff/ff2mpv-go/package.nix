@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchgit
+, makeWrapper
 , mpv
 }:
 buildGoModule rec {
@@ -13,15 +14,19 @@ buildGoModule rec {
     hash = "sha256-e/AuOA3isFTyBf97Zwtr16yo49UdYzvktV5PKB/eH/s=";
   };
 
-  vendorHash = null;
+  nativeBuildInputs = [
+    makeWrapper
+  ];
 
-  postPatch = ''
-    substituteInPlace ff2mpv.go --replace '"mpv"' '"${lib.getExe mpv}"'
-  '';
+  vendorHash = null;
 
   postInstall = ''
     mkdir -p "$out/lib/mozilla/native-messaging-hosts"
     $out/bin/ff2mpv-go --manifest > "$out/lib/mozilla/native-messaging-hosts/ff2mpv.json"
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/ff2mpv-go --suffix PATH ":" ${lib.makeBinPath [ mpv ]}
   '';
 
   meta = with lib; {

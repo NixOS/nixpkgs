@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ccid";
-  version = "1.5.4";
+  version = "1.5.5";
 
   src = fetchurl {
     url = "https://ccid.apdu.fr/files/${pname}-${version}.tar.bz2";
-    hash = "sha256-boMq3Bcuzc/e4rVvMxRGhIgsvpctr/GTjnqcc6ZPiL8=";
+    hash = "sha256-GUcI91/jadRd18Feiz6Kfbi0nPxVV1dMoqLnbvEsoMo=";
   };
 
   postPatch = ''

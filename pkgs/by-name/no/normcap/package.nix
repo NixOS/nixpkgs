@@ -25,7 +25,7 @@ in
 
 ps.buildPythonApplication rec {
   pname = "normcap";
-  version = "0.4.4";
+  version = "0.5.4";
   format = "pyproject";
 
   disabled = ps.pythonOlder "3.9";
@@ -34,20 +34,32 @@ ps.buildPythonApplication rec {
     owner = "dynobo";
     repo = "normcap";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dShtmoqS9TC3PHuwq24OEOhYfBHGhDCma8Du8QCkFuI=";
+    hash = "sha256-bYja05U/JBwSij1J2LxN+c5Syrb4qzWSZY5+HNmC9Zo=";
   };
 
+  postPatch = ''
+    # disable coverage testing
+    substituteInPlace pyproject.toml \
+      --replace "addopts = [" "addopts_ = ["
+  '';
+
   pythonRemoveDeps = [
-    "PySide6-Essentials"
+    "pyside6-essentials"
+  ];
+
+  pythonRelaxDeps = [
+    "shiboken6"
   ];
 
   nativeBuildInputs = [
     ps.pythonRelaxDepsHook
-    ps.poetry-core
+    ps.hatchling
+    ps.babel
   ];
 
   propagatedBuildInputs = [
     ps.pyside6
+    ps.jeepney
   ];
 
   preFixup = ''
@@ -78,6 +90,7 @@ ps.buildPythonApplication rec {
 
   postCheck = lib.optionalString stdenv.isLinux ''
     # cleanup the virtual x11 display
+    sleep 0.5
     kill $xvfb_pid
   '';
 
@@ -90,11 +103,20 @@ ps.buildPythonApplication rec {
     "test_urls_reachable"
     # requires xdg
     "test_synchronized_capture"
+    # flaky
+    "test_normcap_ocr_testcases"
   ] ++ lib.optionals stdenv.isDarwin [
     # requires impure pbcopy
     "test_get_copy_func_with_pbcopy"
     "test_get_copy_func_without_pbcopy"
     "test_perform_pbcopy"
+    # NSXPCSharedListener endpointForReply:withListenerName:replyErrorCode:
+    # while obtaining endpoint 'ClientCallsAuxiliary': Connection interrupted
+    # since v5.0.0
+    "test_introduction_initialize_checkbox_state"
+    "test_introduction_checkbox_sets_return_code"
+    "test_introduction_toggle_checkbox_changes_return_code"
+    "test_show_introduction"
   ];
 
   disabledTestPaths = [
@@ -105,6 +127,9 @@ ps.buildPythonApplication rec {
   ] ++ lib.optionals stdenv.isDarwin [
     # requires a display
     "tests/integration/test_normcap.py"
+    "tests/integration/test_tray_menu.py"
+    # failure unknown, crashes in first test with `.show()`
+    "tests/tests_gui/test_loading_indicator.py"
   ];
 
   meta = with lib; {
@@ -113,5 +138,6 @@ ps.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ cafkafk pbsds ];
     mainProgram = "normcap";
+    broken = stdenv.isDarwin;
   };
 }

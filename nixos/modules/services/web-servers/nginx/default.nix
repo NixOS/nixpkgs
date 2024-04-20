@@ -164,7 +164,7 @@ let
       ${commonHttpConfig}
 
       ${optionalString (cfg.resolver.addresses != []) ''
-        resolver ${toString cfg.resolver.addresses} ${optionalString (cfg.resolver.valid != "") "valid=${cfg.resolver.valid}"} ${optionalString (!cfg.resolver.ipv6) "ipv6=off"};
+        resolver ${toString cfg.resolver.addresses} ${optionalString (cfg.resolver.valid != "") "valid=${cfg.resolver.valid}"} ${optionalString (!cfg.resolver.ipv4) "ipv4=off"} ${optionalString (!cfg.resolver.ipv6) "ipv6=off"};
       ''}
       ${upstreamConfig}
 
@@ -334,8 +334,8 @@ let
           + optionalString vhost.default "default_server "
           + optionalString vhost.reuseport "reuseport "
           + optionalString (extraParameters != []) (concatStringsSep " "
-            (let inCompatibleParameters = [ "ssl" "proxy_protocol" "http2" ];
-                isCompatibleParameter = param: !(any (p: p == param) inCompatibleParameters);
+            (let inCompatibleParameters = [ "accept_filter" "backlog" "deferred" "fastopen" "http2" "proxy_protocol" "so_keepalive" "ssl" ];
+                isCompatibleParameter = param: !(any (p: lib.hasPrefix p param) inCompatibleParameters);
             in filter isCompatibleParameter extraParameters))
           + ";"))
           + "
@@ -352,18 +352,21 @@ let
 
         # The acme-challenge location doesn't need to be added if we are not using any automated
         # certificate provisioning and can also be omitted when we use a certificate obtained via a DNS-01 challenge
-        acmeLocation = optionalString (vhost.enableACME || (vhost.useACMEHost != null && config.security.acme.certs.${vhost.useACMEHost}.dnsProvider == null)) ''
+        acmeLocation = optionalString (vhost.enableACME || (vhost.useACMEHost != null && config.security.acme.certs.${vhost.useACMEHost}.dnsProvider == null))
           # Rule for legitimate ACME Challenge requests (like /.well-known/acme-challenge/xxxxxxxxx)
           # We use ^~ here, so that we don't check any regexes (which could
           # otherwise easily override this intended match accidentally).
+        ''
           location ^~ /.well-known/acme-challenge/ {
             ${optionalString (vhost.acmeFallbackHost != null) "try_files $uri @acme-fallback;"}
             ${optionalString (vhost.acmeRoot != null) "root ${vhost.acmeRoot};"}
             auth_basic off;
+            auth_request off;
           }
           ${optionalString (vhost.acmeFallbackHost != null) ''
             location @acme-fallback {
               auth_basic off;
+              auth_request off;
               proxy_pass http://${vhost.acmeFallbackHost};
             }
           ''}
@@ -375,10 +378,11 @@ let
             ${concatMapStringsSep "\n" listenString redirectListen}
 
             server_name ${vhost.serverName} ${concatStringsSep " " vhost.serverAliases};
-            ${acmeLocation}
+
             location / {
               return ${toString vhost.redirectCode} https://$host$request_uri;
             }
+            ${acmeLocation}
           }
         ''}
 
@@ -391,13 +395,6 @@ let
           ${optionalString (hasSSL && vhost.quic) ''
             http3 ${if vhost.http3 then "on" else "off"};
             http3_hq ${if vhost.http3_hq then "on" else "off"};
-          ''}
-          ${acmeLocation}
-          ${optionalString (vhost.root != null) "root ${vhost.root};"}
-          ${optionalString (vhost.globalRedirect != null) ''
-            location / {
-              return ${toString vhost.redirectCode} http${optionalString hasSSL "s"}://${vhost.globalRedirect}$request_uri;
-            }
           ''}
           ${optionalString hasSSL ''
             ssl_certificate ${vhost.sslCertificate};
@@ -413,14 +410,16 @@ let
             ssl_conf_command Options KTLS;
           ''}
 
-          ${optionalString (hasSSL && vhost.quic && vhost.http3)
-            # Advertise that HTTP/3 is available
-          ''
-            add_header Alt-Svc 'h3=":$server_port"; ma=86400';
-          ''}
-
           ${mkBasicAuth vhostName vhost}
 
+          ${optionalString (vhost.root != null) "root ${vhost.root};"}
+
+          ${optionalString (vhost.globalRedirect != null) ''
+            location / {
+              return ${toString vhost.redirectCode} http${optionalString hasSSL "s"}://${vhost.globalRedirect}$request_uri;
+            }
+          ''}
+          ${acmeLocation}
           ${mkLocations vhost.locations}
 
           ${vhost.extraConfig}
@@ -472,18 +471,18 @@ let
 
   mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
 
-  oldHTTP2 = versionOlder cfg.package.version "1.25.1";
+  oldHTTP2 = (versionOlder cfg.package.version "1.25.1" && !(cfg.package.pname == "angie" || cfg.package.pname == "angieQuic"));
 in
 
 {
   options = {
     services.nginx = {
-      enable = mkEnableOption (lib.mdDoc "Nginx Web Server");
+      enable = mkEnableOption "Nginx Web Server";
 
       statusPage = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Enable status page reachable from localhost on http://127.0.0.1/nginx_status.
         '';
       };
@@ -491,7 +490,7 @@ in
       recommendedTlsSettings = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Enable recommended TLS settings.
         '';
       };
@@ -499,7 +498,7 @@ in
       recommendedOptimisation = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Enable recommended optimisation settings.
         '';
       };
@@ -507,7 +506,7 @@ in
       recommendedBrotliSettings = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Enable recommended brotli settings.
           Learn more about compression in Brotli format [here](https://github.com/google/ngx_brotli/).
 
@@ -518,7 +517,7 @@ in
       recommendedGzipSettings = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Enable recommended gzip settings.
           Learn more about compression in Gzip format [here](https://docs.nginx.com/nginx/admin-guide/web-server/compression/).
         '';
@@ -527,7 +526,7 @@ in
       recommendedZstdSettings = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Enable recommended zstd settings.
           Learn more about compression in Zstd format [here](https://github.com/tokers/zstd-nginx-module).
 
@@ -538,7 +537,7 @@ in
       recommendedProxySettings = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable recommended proxy settings if a vhost does not specify the option manually.
         '';
       };
@@ -547,7 +546,7 @@ in
         type = types.str;
         default = "60s";
         example = "20s";
-        description = lib.mdDoc ''
+        description = ''
           Change the proxy related timeouts in recommendedProxySettings.
         '';
       };
@@ -557,26 +556,26 @@ in
           options = {
             addr = mkOption {
               type = str;
-              description = lib.mdDoc "IP address.";
+              description = "IP address.";
             };
             port = mkOption {
               type = nullOr port;
-              description = lib.mdDoc "Port number.";
+              description = "Port number.";
               default = null;
             };
             ssl  = mkOption {
               type = nullOr bool;
               default = null;
-              description = lib.mdDoc "Enable SSL.";
+              description = "Enable SSL.";
             };
             proxyProtocol = mkOption {
               type = bool;
-              description = lib.mdDoc "Enable PROXY protocol.";
+              description = "Enable PROXY protocol.";
               default = false;
             };
             extraParameters = mkOption {
               type = listOf str;
-              description = lib.mdDoc "Extra parameters of this listen directive.";
+              description = "Extra parameters of this listen directive.";
               default = [ ];
               example = [ "backlog=1024" "deferred" ];
             };
@@ -590,7 +589,7 @@ in
             { addr = "[::0]"; }
           ]
         '';
-        description = lib.mdDoc ''
+        description = ''
           If vhosts do not specify listen, use these addresses by default.
           This option takes precedence over {option}`defaultListenAddresses` and
           other listen-related defaults options.
@@ -602,7 +601,7 @@ in
         default = [ "0.0.0.0" ] ++ optional enableIPv6 "[::0]";
         defaultText = literalExpression ''[ "0.0.0.0" ] ++ lib.optional config.networking.enableIPv6 "[::0]"'';
         example = literalExpression ''[ "10.0.0.12" "[2002:a00:1::]" ]'';
-        description = lib.mdDoc ''
+        description = ''
           If vhosts do not specify listenAddresses, use these addresses by default.
           This is akin to writing `defaultListen = [ { addr = "0.0.0.0" } ]`.
         '';
@@ -612,7 +611,7 @@ in
         type = types.port;
         default = 80;
         example = 8080;
-        description = lib.mdDoc ''
+        description = ''
           If vhosts do not specify listen.port, use these ports for HTTP by default.
         '';
       };
@@ -621,7 +620,7 @@ in
         type = types.port;
         default = 443;
         example = 8443;
-        description = lib.mdDoc ''
+        description = ''
           If vhosts do not specify listen.port, use these ports for SSL by default.
         '';
       };
@@ -631,7 +630,7 @@ in
         default = "${pkgs.mailcap}/etc/nginx/mime.types";
         defaultText = literalExpression "$''{pkgs.mailcap}/etc/nginx/mime.types";
         example = literalExpression "$''{pkgs.nginx}/conf/mime.types";
-        description = lib.mdDoc ''
+        description = ''
           Default MIME types for NGINX, as MIME types definitions from NGINX are very incomplete,
           we use by default the ones bundled in the mailcap package, used by most of the other
           Linux distributions.
@@ -645,7 +644,7 @@ in
         apply = p: p.override {
           modules = lib.unique (p.modules ++ cfg.additionalModules);
         };
-        description = lib.mdDoc ''
+        description = ''
           Nginx package to use. This defaults to the stable version. Note
           that the nginx team recommends to use the mainline version which
           available in nixpkgs as `nginxMainline`.
@@ -658,7 +657,7 @@ in
         default = [];
         type = types.listOf (types.attrsOf types.anything);
         example = literalExpression "[ pkgs.nginxModules.echo ]";
-        description = lib.mdDoc ''
+        description = ''
           Additional [third-party nginx modules](https://www.nginx.com/resources/wiki/modules/)
           to install. Packaged modules are available in `pkgs.nginxModules`.
         '';
@@ -667,7 +666,7 @@ in
       logError = mkOption {
         default = "stderr";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Configures logging.
           The first parameter defines a file that will store the log. The
           special value stderr selects the standard error file. Logging to
@@ -684,7 +683,7 @@ in
       preStart =  mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Shell commands executed before the service's nginx is started.
         '';
       };
@@ -692,7 +691,7 @@ in
       config = mkOption {
         type = types.str;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Verbatim {file}`nginx.conf` configuration.
           This is mutually exclusive to any other config option for
           {file}`nginx.conf` except for
@@ -708,7 +707,7 @@ in
       appendConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Configuration lines appended to the generated Nginx
           configuration file. Commonly used by different modules
           providing http snippets. {option}`appendConfig`
@@ -728,7 +727,7 @@ in
                               '"$request" $status $body_bytes_sent '
                               '"$http_referer" "$http_user_agent"';
         '';
-        description = lib.mdDoc ''
+        description = ''
           With nginx you must provide common http context definitions before
           they are used, e.g. log_format, resolver, etc. inside of server
           or location contexts. Use this attribute to set these definitions
@@ -739,7 +738,7 @@ in
       httpConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Configuration lines to be set inside the http block.
           This is mutually exclusive with the structured configuration
           via virtualHosts and the recommendedXyzSettings configuration
@@ -757,7 +756,7 @@ in
             proxy_pass 192.168.0.1:53535;
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Configuration lines to be set inside the stream block.
         '';
       };
@@ -765,7 +764,7 @@ in
       eventsConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Configuration lines to be set inside the events block.
         '';
       };
@@ -773,7 +772,7 @@ in
       appendHttpConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Configuration lines to be appended to the generated http block.
           This is mutually exclusive with using config and httpConfig for
           specifying the whole http block verbatim.
@@ -783,7 +782,7 @@ in
       enableReload = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Reload nginx when configuration file changes (instead of restart).
           The configuration file is exposed at {file}`/etc/nginx/nginx.conf`.
           See also `systemd.services.*.restartIfChanged`.
@@ -793,7 +792,7 @@ in
       enableQuicBPF = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Enables routing of QUIC packets using eBPF. When enabled, this allows
           to support QUIC connection migration. The directive is only supported
           on Linux 5.7+.
@@ -806,52 +805,52 @@ in
       user = mkOption {
         type = types.str;
         default = "nginx";
-        description = lib.mdDoc "User account under which nginx runs.";
+        description = "User account under which nginx runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "nginx";
-        description = lib.mdDoc "Group account under which nginx runs.";
+        description = "Group account under which nginx runs.";
       };
 
       serverTokens = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Show nginx version in headers and error pages.";
+        description = "Show nginx version in headers and error pages.";
       };
 
       clientMaxBodySize = mkOption {
         type = types.str;
         default = "10m";
-        description = lib.mdDoc "Set nginx global client_max_body_size.";
+        description = "Set nginx global client_max_body_size.";
       };
 
       sslCiphers = mkOption {
         type = types.nullOr types.str;
         # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
         default = "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384";
-        description = lib.mdDoc "Ciphers to choose from when negotiating TLS handshakes.";
+        description = "Ciphers to choose from when negotiating TLS handshakes.";
       };
 
       sslProtocols = mkOption {
         type = types.str;
         default = "TLSv1.2 TLSv1.3";
         example = "TLSv1 TLSv1.1 TLSv1.2 TLSv1.3";
-        description = lib.mdDoc "Allowed TLS protocol versions.";
+        description = "Allowed TLS protocol versions.";
       };
 
       sslDhparam = mkOption {
         type = types.nullOr types.path;
         default = null;
         example = "/path/to/dhparams.pem";
-        description = lib.mdDoc "Path to DH parameters file.";
+        description = "Path to DH parameters file.";
       };
 
       proxyResolveWhileRunning = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Resolves domains of proxyPass targets at runtime
           and not only at start, you have to set
           services.nginx.resolver, too.
@@ -861,7 +860,7 @@ in
       mapHashBucketSize = mkOption {
         type = types.nullOr (types.enum [ 32 64 128 ]);
         default = null;
-        description = lib.mdDoc ''
+        description = ''
             Sets the bucket size for the map variables hash tables. Default
             value depends on the processor’s cache line size.
           '';
@@ -870,7 +869,7 @@ in
       mapHashMaxSize = mkOption {
         type = types.nullOr types.ints.positive;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
             Sets the maximum size of the map variables hash tables.
           '';
       };
@@ -878,7 +877,7 @@ in
       serverNamesHashBucketSize = mkOption {
         type = types.nullOr types.ints.positive;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
             Sets the bucket size for the server names hash tables. Default
             value depends on the processor’s cache line size.
           '';
@@ -887,7 +886,7 @@ in
       serverNamesHashMaxSize = mkOption {
         type = types.nullOr types.ints.positive;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
             Sets the maximum size of the server names hash tables.
           '';
       };
@@ -895,27 +894,27 @@ in
       proxyCachePath = mkOption {
         type = types.attrsOf (types.submodule ({ ... }: {
           options = {
-            enable = mkEnableOption (lib.mdDoc "this proxy cache path entry");
+            enable = mkEnableOption "this proxy cache path entry";
 
             keysZoneName = mkOption {
               type = types.str;
               default = "cache";
               example = "my_cache";
-              description = lib.mdDoc "Set name to shared memory zone.";
+              description = "Set name to shared memory zone.";
             };
 
             keysZoneSize = mkOption {
               type = types.str;
               default = "10m";
               example = "32m";
-              description = lib.mdDoc "Set size to shared memory zone.";
+              description = "Set size to shared memory zone.";
             };
 
             levels = mkOption {
               type = types.str;
               default = "1:2";
               example = "1:2:2";
-              description = lib.mdDoc ''
+              description = ''
                 The levels parameter defines structure of subdirectories in cache: from
                 1 to 3, each level accepts values 1 or 2. Сan be used any combination of
                 1 and 2 in these formats: x, x:x and x:x:x.
@@ -926,7 +925,7 @@ in
               type = types.bool;
               default = false;
               example = true;
-              description = lib.mdDoc ''
+              description = ''
                 Nginx first writes files that are destined for the cache to a temporary
                 storage area, and the use_temp_path=off directive instructs Nginx to
                 write them to the same directories where they will be cached. Recommended
@@ -939,7 +938,7 @@ in
               type = types.str;
               default = "10m";
               example = "1d";
-              description = lib.mdDoc ''
+              description = ''
                 Cached data that has not been accessed for the time specified by
                 the inactive parameter is removed from the cache, regardless of
                 its freshness.
@@ -950,12 +949,12 @@ in
               type = types.str;
               default = "1g";
               example = "2048m";
-              description = lib.mdDoc "Set maximum cache size";
+              description = "Set maximum cache size";
             };
           };
         }));
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           Configure a proxy cache path entry.
           See <https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_path> for documentation.
         '';
@@ -968,21 +967,30 @@ in
               type = types.listOf types.str;
               default = [];
               example = literalExpression ''[ "[::1]" "127.0.0.1:5353" ]'';
-              description = lib.mdDoc "List of resolvers to use";
+              description = "List of resolvers to use";
             };
             valid = mkOption {
               type = types.str;
               default = "";
               example = "30s";
-              description = lib.mdDoc ''
+              description = ''
                 By default, nginx caches answers using the TTL value of a response.
                 An optional valid parameter allows overriding it
+              '';
+            };
+            ipv4 = mkOption {
+              type = types.bool;
+              default = true;
+              description = ''
+                By default, nginx will look up both IPv4 and IPv6 addresses while resolving.
+                If looking up of IPv4 addresses is not desired, the ipv4=off parameter can be
+                specified.
               '';
             };
             ipv6 = mkOption {
               type = types.bool;
               default = true;
-              description = lib.mdDoc ''
+              description = ''
                 By default, nginx will look up both IPv4 and IPv6 addresses while resolving.
                 If looking up of IPv6 addresses is not desired, the ipv6=off parameter can be
                 specified.
@@ -990,7 +998,7 @@ in
             };
           };
         };
-        description = lib.mdDoc ''
+        description = ''
           Configures name servers used to resolve names of upstream servers into addresses
         '';
         default = {};
@@ -1006,14 +1014,14 @@ in
                   backup = mkOption {
                     type = types.bool;
                     default = false;
-                    description = lib.mdDoc ''
+                    description = ''
                       Marks the server as a backup server. It will be passed
                       requests when the primary servers are unavailable.
                     '';
                   };
                 };
               });
-              description = lib.mdDoc ''
+              description = ''
                 Defines the address and other parameters of the upstream servers.
                 See [the documentation](https://nginx.org/en/docs/http/ngx_http_upstream_module.html#server)
                 for the available parameters.
@@ -1024,13 +1032,13 @@ in
             extraConfig = mkOption {
               type = types.lines;
               default = "";
-              description = lib.mdDoc ''
+              description = ''
                 These lines go to the end of the upstream verbatim.
               '';
             };
           };
         });
-        description = lib.mdDoc ''
+        description = ''
           Defines a group of servers to use as proxy target.
         '';
         default = {};
@@ -1071,7 +1079,7 @@ in
             };
           };
         '';
-        description = lib.mdDoc "Declarative vhost config";
+        description = "Declarative vhost config";
       };
     };
   };
@@ -1130,14 +1138,6 @@ in
       }
 
       {
-        assertion = any (host: host.kTLS) (attrValues virtualHosts) -> versionAtLeast cfg.package.version "1.21.4";
-        message = ''
-          services.nginx.virtualHosts.<name>.kTLS requires nginx version
-          1.21.4 or above; see the documentation for services.nginx.package.
-        '';
-      }
-
-      {
         assertion = all (host: !(host.enableACME && host.useACMEHost != null)) (attrValues virtualHosts);
         message = ''
           Options services.nginx.service.virtualHosts.<name>.enableACME and
@@ -1186,6 +1186,13 @@ in
         message = ''
           services.nginx.virtualHosts.<name>.enableACME requires a HTTP listener
           to answer to ACME requests.
+        '';
+      }
+
+      {
+        assertion = cfg.resolver.ipv4 || cfg.resolver.ipv6;
+        message = ''
+          At least one of services.nginx.resolver.ipv4 and services.nginx.resolver.ipv6 must be true.
         '';
       }
     ] ++ map (name: mkCertOwnershipAssertion {
@@ -1344,6 +1351,8 @@ in
     users.groups = optionalAttrs (cfg.group == "nginx") {
       nginx.gid = config.ids.gids.nginx;
     };
+
+    boot.kernelModules = optional (versionAtLeast config.boot.kernelPackages.kernel.version "4.17") "tls";
 
     # do not delete the default temp directories created upon nginx startup
     systemd.tmpfiles.rules = [

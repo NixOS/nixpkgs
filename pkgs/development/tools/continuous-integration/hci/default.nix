@@ -1,8 +1,8 @@
-{ haskell, haskellPackages, lib, makeWrapper, runc, stdenv, emptyDirectory }:
+{ crun, haskell, haskellPackages, lib, makeWrapper, stdenv, emptyDirectory }:
 let
   inherit (haskell.lib.compose) overrideCabal addBuildTools justStaticExecutables appendConfigureFlags;
   inherit (lib) makeBinPath;
-  bundledBins = lib.optional stdenv.isLinux runc;
+  bundledBins = lib.optional stdenv.isLinux crun;
 
   overrides = old: {
     hercules-ci-agent =

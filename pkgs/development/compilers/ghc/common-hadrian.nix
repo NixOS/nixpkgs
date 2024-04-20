@@ -5,7 +5,7 @@
     if rev != null
     then "https://gitlab.haskell.org/ghc/ghc.git"
     else "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz"
-
+, postFetch ? null
 }:
 
 { lib
@@ -146,6 +146,8 @@
     inherit url sha256;
   } // lib.optionalAttrs (rev != null) {
     inherit rev;
+  } // lib.optionalAttrs (postFetch != null) {
+    inherit postFetch;
   })
 
   # GHC's build system hadrian built from the GHC-to-build's source tree
@@ -162,13 +164,11 @@
   }
 
 , #  Whether to build sphinx documentation.
+  # TODO(@sternenseemann): Hadrian ignores the --docs flag if finalStage = Stage1
   enableDocs ? (
-    # Docs disabled for musl and cross because it's a large task to keep
-    # all `sphinx` dependencies building in those environments.
-    # `sphinx` pulls in among others:
-    # Ruby, Python, Perl, Rust, OpenGL, Xorg, gtk, LLVM.
-    (stdenv.targetPlatform == stdenv.hostPlatform)
-    && !stdenv.hostPlatform.isMusl
+    # Docs disabled if we are building on musl because it's a large task to keep
+    # all `sphinx` dependencies building in this environment.
+    !stdenv.buildPlatform.isMusl
   )
 
 , # Whether to disable the large address space allocator
@@ -271,7 +271,16 @@ stdenv.mkDerivation ({
     (if lib.versionAtLeast version "9.8"
       then ./docs-sphinx-7-ghc98.patch
       else ./docs-sphinx-7.patch )
+  ] ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
+    # Prevent the paths module from emitting symbols that we don't use
+    # when building with separate outputs.
+    #
+    # These cause problems as they're not eliminated by GHC's dead code
+    # elimination on aarch64-darwin. (see
+    # https://github.com/NixOS/nixpkgs/issues/140774 for details).
+    ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
   ];
+
   postPatch = ''
     patchShebangs --build .
   '';
@@ -343,10 +352,10 @@ stdenv.mkDerivation ({
                     '*-android*|*-gnueabi*|*-musleabi*)'
       done
   ''
-  # Need to make writable EM_CACHE for emscripten
+  # Need to make writable EM_CACHE for emscripten. The path in EM_CACHE must be absolute.
   # https://gitlab.haskell.org/ghc/ghc/-/wikis/javascript-backend#configure-fails-with-sub-word-sized-atomic-operations-not-available
   + lib.optionalString targetPlatform.isGhcjs ''
-    export EM_CACHE="$(mktemp -d emcache.XXXXXXXXXX)"
+    export EM_CACHE="$(realpath $(mktemp -d emcache.XXXXXXXXXX))"
     cp -Lr ${targetCC /* == emscripten */}/share/emscripten/cache/* "$EM_CACHE/"
     chmod u+rwX -R "$EM_CACHE"
   ''
@@ -507,6 +516,10 @@ stdenv.mkDerivation ({
 
     # Expose hadrian used for bootstrapping, for debugging purposes
     inherit hadrian;
+
+    # TODO(@sternenseemann): there's no stage0:exe:haddock target by default,
+    # so haddock isn't available for GHC cross-compilers. Can we fix that?
+    hasHaddock = stdenv.hostPlatform == stdenv.targetPlatform;
   };
 
   meta = {
@@ -517,6 +530,10 @@ stdenv.mkDerivation ({
     ] ++ lib.teams.haskell.members;
     timeout = 24 * 3600;
     inherit (ghc.meta) license platforms;
+    # https://github.com/NixOS/nixpkgs/issues/208959
+    broken =
+      (lib.versionAtLeast version "9.6" && lib.versionOlder version "9.8")
+      && stdenv.targetPlatform.isStatic;
   };
 
   dontStrip = targetPlatform.useAndroidPrebuilt || targetPlatform.isWasm;

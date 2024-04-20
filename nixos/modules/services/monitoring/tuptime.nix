@@ -10,19 +10,19 @@ in {
 
   options.services.tuptime = {
 
-    enable = mkEnableOption (lib.mdDoc "the total uptime service");
+    enable = mkEnableOption "the total uptime service";
 
     timer = {
       enable = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Whether to regularly log uptime to detect bad shutdowns.";
+        description = "Whether to regularly log uptime to detect bad shutdowns.";
       };
 
       period = mkOption {
         type = types.str;
         default = "*:0/5";
-        description = lib.mdDoc "systemd calendar event";
+        description = "systemd calendar event";
       };
     };
   };

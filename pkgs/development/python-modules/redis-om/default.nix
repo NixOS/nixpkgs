@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, pythonRelaxDepsHook
 , unasync
 , poetry-core
 , python
@@ -20,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "redis-om";
-  version = "0.2.1";
+  version = "0.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,15 +30,21 @@ buildPythonPackage rec {
     owner = "redis";
     repo = "redis-om-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jQS0VTYZeAj3+OVFy+JP4mUFBPo+a5D/kdJKagFraaA=";
+    hash = "sha256-E11wpTrE+HIT+jgn1zMC8L7RGas83DAJd1R0WWHp7Jc=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    pythonRelaxDepsHook
     unasync
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  # it has not been maintained at all for a half year and some dependencies are outdated
+  # https://github.com/redis/redis-om-python/pull/554
+  # https://github.com/redis/redis-om-python/pull/577
+  pythonRelaxDeps = true;
+
+  dependencies = [
     click
     hiredis
     more-itertools
@@ -77,6 +84,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Object mapping, and more, for Redis and Python";
+    mainProgram = "migrate";
     homepage = "https://github.com/redis/redis-om-python";
     changelog = "https://github.com/redis/redis-om-python/releases/tag/${src.rev}";
     license = licenses.mit;

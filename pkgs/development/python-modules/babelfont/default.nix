@@ -10,7 +10,7 @@
 , orjson
 , poetry-core
 , pytestCheckHook
-, ufoLib2
+, ufolib2
 }:
 
 buildPythonPackage rec {
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     glyphslib
     openstep-plist
     orjson
-    ufoLib2
+    ufolib2
   ];
   nativeBuildInputs = [
     poetry-core
@@ -48,6 +48,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library to load, examine, and save fonts in a variety of formats";
+    mainProgram = "babelfont";
     homepage = "https://github.com/simoncozens/babelfont";
     license = licenses.bsd3;
     maintainers = with maintainers; [ danc86 ];

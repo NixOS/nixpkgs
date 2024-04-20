@@ -15,6 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Enrich `go test` outputs with text decorations";
+    mainProgram = "richgo";
     homepage = "https://github.com/kyoh86/richgo";
     license = licenses.mit;
     maintainers = with maintainers; [ rvolosatovs ];

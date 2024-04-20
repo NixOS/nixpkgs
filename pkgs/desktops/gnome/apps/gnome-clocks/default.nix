@@ -9,7 +9,6 @@
 , itstool
 , desktop-file-utils
 , vala
-, gobject-introspection
 , libxml2
 , gtk4
 , glib
@@ -43,7 +42,6 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
     desktop-file-utils
     libxml2
-    gobject-introspection # for finding vapi files
   ];
 
   buildInputs = [
@@ -77,6 +75,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Clocks";
     description = "Clock application designed for GNOME 3";
+    mainProgram = "gnome-clocks";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

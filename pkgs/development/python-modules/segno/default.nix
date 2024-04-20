@@ -1,9 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 
 # build-system
-, setuptools
+, flit-core
+
+# dependencies
+, importlib-metadata
 
 # tests
 , pytestCheckHook
@@ -13,24 +17,33 @@
 
 buildPythonPackage rec {
   pname = "segno";
-  version = "1.5.3";
+  version = "1.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "heuer";
     repo = "segno";
-    rev = version;
-    hash = "sha256-j7DUCeMoYziu19WfJu/9YiIMa2ysOPYfqW8AMcE5LaU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-5CDrQhbgUydz1ORp4ktZwhcgbJxQq1snKIAA0v4mZ00=";
   };
 
   nativeBuildInputs = [
-    setuptools
+    flit-core
+  ];
+
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pypng
     pyzbar
+  ];
+
+  disabledTests = [
+    # https://github.com/heuer/segno/issues/132
+    "test_plugin"
   ];
 
   pythonImportsCheck = [
@@ -40,6 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/heuer/segno/releases/tag/${version}";
     description = "QR Code and Micro QR Code encoder";
+    mainProgram = "segno";
     homepage = "https://github.com/heuer/segno/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ phaer ];

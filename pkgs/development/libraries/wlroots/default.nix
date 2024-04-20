@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -17,6 +16,7 @@
 , xorg
 , libpng
 , ffmpeg_4
+, ffmpeg
 , hwdata
 , seatd
 , vulkan-loader
@@ -57,7 +57,6 @@ let
         ++ extraNativeBuildInputs;
 
       buildInputs = [
-        ffmpeg_4
         libGL
         libcap
         libinput
@@ -113,11 +112,6 @@ let
 
 in
 rec {
-  wlroots_0_15 = generic {
-    version = "0.15.1";
-    hash = "sha256-MFR38UuB/wW7J9ODDUOfgTzKLse0SSMIRYTpEaEdRwM=";
-  };
-
   wlroots_0_16 = generic {
     version = "0.16.2";
     hash = "sha256-JeDDYinio14BOl6CbzAPnJDOnrk4vgGNMN++rcy2ItQ=";
@@ -125,22 +119,19 @@ rec {
       substituteInPlace backend/drm/meson.build \
         --replace /usr/share/hwdata/ ${hwdata}/share/hwdata/
     '';
+    extraBuildInputs = [
+      ffmpeg_4
+    ];
   };
 
   wlroots_0_17 = generic {
-    version = "0.17.0";
-    hash = "sha256-VUrnSG4UAAH0cBy15lG0w8RernwegD6lkOdLvWU3a4c=";
+    version = "0.17.2";
+    hash = "sha256-Of9qykyVnBURc5A2pvCMm7sLbnuuG7OPWLxodQLN2Xg=";
     extraBuildInputs = [
+      ffmpeg
       hwdata
       libliftoff
       libdisplay-info
-    ];
-    patches = [
-      (fetchpatch {
-        name = "tinywl-fix-wlroots-dependency-constraint-in-Makefile.patch";
-        url = "https://gitlab.freedesktop.org/wlroots/wlroots/-/commit/fe53ec693789afb44c899cad8c2df70c8f9f9023.patch";
-        hash = "sha256-wU62hXgmsAyT5j/bWeCFBkvM9cYjUntdCycQt5HAhb8=";
-      })
     ];
   };
 

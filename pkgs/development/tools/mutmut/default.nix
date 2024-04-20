@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
 , python3
+, testers
 }:
 
 let self = with python3.pkgs; buildPythonApplication rec {
@@ -28,6 +29,7 @@ let self = with python3.pkgs; buildPythonApplication rec {
 
   meta = with lib; {
     description = "mutation testing system for Python, with a strong focus on ease of use";
+    mainProgram = "mutmut";
     homepage = "https://github.com/boxed/mutmut";
     changelog = "https://github.com/boxed/mutmut/blob/${version}/HISTORY.rst";
     license = licenses.bsd3;

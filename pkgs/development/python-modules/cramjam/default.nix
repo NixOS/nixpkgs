@@ -4,34 +4,30 @@
 , rustPlatform
 , stdenv
 , libiconv
-, brotli
 , hypothesis
-, lz4
-, memory-profiler
 , numpy
-, py
-, pytest-benchmark
+, pytest-xdist
 , pytestCheckHook
-, python-snappy
-, zstd
 }:
 
 buildPythonPackage rec {
   pname = "cramjam";
-  version = "2.6.2.post1";
-  format = "pyproject";
+  version = "2.8.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "milesgranger";
     repo = "pyrus-cramjam";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KU1JVNEQJadXNiIWTvI33N2NSq994xoKxcAGGezFjaI=";
+    hash = "sha256-BO35s7qOW4+l968I9qn9L1m2BtgRFNYUNlA7W1sctT8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    hash = "sha256-w1bEf+etLgR/YOyLmC3lFtO9fqAx8z2aul/XIKUQb5k=";
+    hash = "sha256-YWXf+ZDJLq6VxI5sa9G63fCPz2377BVSTmPM0mQSu8M=";
   };
+
+  buildAndTestSubdir = "cramjam-python";
 
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
@@ -41,24 +37,18 @@ buildPythonPackage rec {
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   nativeCheckInputs = [
-    brotli
     hypothesis
-    lz4
-    memory-profiler
     numpy
-    py
-    pytest-benchmark
+    pytest-xdist
     pytestCheckHook
-    python-snappy
-    zstd
   ];
 
   pytestFlagsArray = [
-    "--benchmark-disable"
+    "cramjam-python/tests"
   ];
 
   disabledTestPaths = [
-    "benchmarks/test_bench.py"
+    "cramjam-python/benchmarks/test_bench.py"
   ];
 
   pythonImportsCheck = [

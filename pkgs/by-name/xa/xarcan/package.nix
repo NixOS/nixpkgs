@@ -107,6 +107,7 @@ stdenv.mkDerivation (finalPackages: {
   meta =  {
     homepage = "https://github.com/letoram/letoram";
     description = "Patched Xserver that bridges connections to Arcan";
+    mainProgram = "Xarcan";
     longDescription = ''
       xarcan is a patched X server with a KDrive backend that uses the
       arcan-shmif to map Xlib/Xcb/X clients to a running arcan instance. It

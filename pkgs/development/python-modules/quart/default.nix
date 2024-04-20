@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 
 # build-system
 , poetry-core
@@ -9,6 +10,7 @@
 , aiofiles
 , blinker
 , click
+, flask
 , hypercorn
 , importlib-metadata
 , itsdangerous
@@ -24,22 +26,22 @@
 , mock
 , py
 , pytest-asyncio
-, pytestCheckHook
+, pytest7CheckHook
 }:
 
 buildPythonPackage rec {
   pname = "quart";
-  version = "0.18.4";
-  format = "pyproject";
+  version = "0.19.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "quart";
     rev = "refs/tags/${version}";
-    hash = "sha256-iT/pePUtH1hwNIOG8Y/YbqCVseNXVOKC0nrXfB2RTlQ=";
+    hash = "sha256-T2+76AVvXrads7AbjNAExV0i4doQ2xIUEwekVB2JXAo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
@@ -48,19 +50,21 @@ buildPythonPackage rec {
       --replace "--no-cov-on-fail " ""
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiofiles
     blinker
     click
+    flask
     hypercorn
-    importlib-metadata
     itsdangerous
     jinja2
     markupsafe
     pydata-sphinx-theme
     python-dotenv
-    typing-extensions
     werkzeug
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
+    typing-extensions
   ];
 
   pythonImportsCheck = [
@@ -72,16 +76,12 @@ buildPythonPackage rec {
     mock
     py
     pytest-asyncio
-    pytestCheckHook
-  ];
-
-  disabledTestPaths = [
-    # remove after 0.18.4
-    "tests/test_signals.py"
+    pytest7CheckHook
   ];
 
   meta = with lib; {
     description = "An async Python micro framework for building web applications";
+    mainProgram = "quart";
     homepage = "https://github.com/pallets/quart/";
     changelog = "https://github.com/pallets/quart/blob/${src.rev}/CHANGES.rst";
     license = licenses.mit;

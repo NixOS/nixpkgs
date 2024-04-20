@@ -25,31 +25,31 @@ let
 in {
   options = {
     services.nifi = {
-      enable = lib.mkEnableOption (lib.mdDoc "Apache NiFi");
+      enable = lib.mkEnableOption "Apache NiFi";
 
       package = lib.mkOption {
         type = lib.types.package;
         default = pkgs.nifi;
         defaultText = lib.literalExpression "pkgs.nifi";
-        description = lib.mdDoc "Apache NiFi package to use.";
+        description = "Apache NiFi package to use.";
       };
 
       user = lib.mkOption {
         type = lib.types.str;
         default = "nifi";
-        description = lib.mdDoc "User account where Apache NiFi runs.";
+        description = "User account where Apache NiFi runs.";
       };
 
       group = lib.mkOption {
         type = lib.types.str;
         default = "nifi";
-        description = lib.mdDoc "Group account where Apache NiFi runs.";
+        description = "Group account where Apache NiFi runs.";
       };
 
       enableHTTPS = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = lib.mdDoc "Enable HTTPS protocol. Don`t use in production.";
+        description = "Enable HTTPS protocol. Don`t use in production.";
       };
 
       listenHost = lib.mkOption {
@@ -60,7 +60,7 @@ in {
           then "0.0.0.0"
           else "127.0.0.1"
         '';
-        description = lib.mdDoc "Bind to an ip for Apache NiFi web-ui.";
+        description = "Bind to an ip for Apache NiFi web-ui.";
       };
 
       listenPort = lib.mkOption {
@@ -71,7 +71,7 @@ in {
           then "8443"
           else "8000"
         '';
-        description = lib.mdDoc "Bind to a port for Apache NiFi web-ui.";
+        description = "Bind to a port for Apache NiFi web-ui.";
       };
 
       proxyHost = lib.mkOption {
@@ -82,7 +82,7 @@ in {
           then "0.0.0.0"
           else null
         '';
-        description = lib.mdDoc "Allow requests from a specific host.";
+        description = "Allow requests from a specific host.";
       };
 
       proxyPort = lib.mkOption {
@@ -93,34 +93,34 @@ in {
           then "8443"
           else null
         '';
-        description = lib.mdDoc "Allow requests from a specific port.";
+        description = "Allow requests from a specific port.";
       };
 
       initUser = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = null;
-        description = lib.mdDoc "Initial user account for Apache NiFi. Username must be at least 4 characters.";
+        description = "Initial user account for Apache NiFi. Username must be at least 4 characters.";
       };
 
       initPasswordFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/run/keys/nifi/password-nifi";
-        description = lib.mdDoc "nitial password for Apache NiFi. Password must be at least 12 characters.";
+        description = "nitial password for Apache NiFi. Password must be at least 12 characters.";
       };
 
       initJavaHeapSize = lib.mkOption {
         type = lib.types.nullOr lib.types.int;
         default = null;
         example = 1024;
-        description = lib.mdDoc "Set the initial heap size for the JVM in MB.";
+        description = "Set the initial heap size for the JVM in MB.";
       };
 
       maxJavaHeapSize = lib.mkOption {
         type = lib.types.nullOr lib.types.int;
         default = null;
         example = 2048;
-        description = lib.mdDoc "Set the initial heap size for the JVM in MB.";
+        description = "Set the initial heap size for the JVM in MB.";
       };
     };
   };
@@ -163,10 +163,15 @@ in {
       Please do not disable HTTPS mode in production. In this mode, access to the nifi is opened without authentication.
     '';
 
-    systemd.tmpfiles.rules = [
-      "d '/var/lib/nifi/conf' 0750 ${cfg.user} ${cfg.group}"
-      "L+ '/var/lib/nifi/lib' - - - - ${cfg.package}/lib"
-    ];
+    systemd.tmpfiles.settings."10-nifi" = {
+      "/var/lib/nifi/conf".d = {
+        inherit (cfg) user group;
+        mode = "0750";
+      };
+      "/var/lib/nifi/lib"."L+" = {
+        argument = "${cfg.package}/lib";
+      };
+    };
 
 
     systemd.services.nifi = {

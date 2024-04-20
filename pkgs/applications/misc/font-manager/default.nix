@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://fontmanager.github.io/";
     description = "Simple font management for GTK desktop environments";
+    mainProgram = "font-manager";
     longDescription = ''
       Font Manager is intended to provide a way for average users to
       easily manage desktop fonts, without having to resort to command

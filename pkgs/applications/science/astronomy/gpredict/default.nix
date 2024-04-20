@@ -29,6 +29,7 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Real time satellite tracking and orbit prediction";
+    mainProgram = "gpredict";
     longDescription = ''
       Gpredict is a real time satellite tracking and orbit prediction program
       written using the GTK widgets. Gpredict is targetted mainly towards ham radio

@@ -8,58 +8,76 @@
 , setuptools
 
 # Runtime dependencies
-, appnope
-, backcall
 , decorator
 , exceptiongroup
 , jedi
 , matplotlib-inline
 , pexpect
-, pickleshare
 , prompt-toolkit
 , pygments
 , stack-data
 , traitlets
 , typing-extensions
 
+# Optional dependencies
+, ipykernel
+, ipyparallel
+, ipywidgets
+, matplotlib
+, nbconvert
+, nbformat
+, notebook
+, qtconsole
+
 # Test dependencies
-, pytestCheckHook
+, pickleshare
+, pytest-asyncio
+, pytest7CheckHook
 , testpath
 }:
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "8.15.0";
-  format = "pyproject";
-  disabled = pythonOlder "3.8";
+  version = "8.23.0";
+  pyproject = true;
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-K661vmlJ7uv1MhUPgXRvgzPizM4C3hx+7d4/I+1enx4=";
+    hash = "sha256-dGjtr09t4+G5EuV/ZsJB5v08cJny7CE24jnhQugAJ00=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    backcall
+  dependencies = [
     decorator
     jedi
     matplotlib-inline
     pexpect
-    pickleshare
     prompt-toolkit
     pygments
     stack-data
     traitlets
   ] ++ lib.optionals (pythonOlder "3.11") [
     exceptiongroup
-  ] ++ lib.optionals (pythonOlder "3.10") [
+  ] ++ lib.optionals (pythonOlder "3.12") [
     typing-extensions
-  ] ++ lib.optionals stdenv.isDarwin [
-    appnope
   ];
+
+  optional-dependencies = {
+    kernel = [ ipykernel ];
+    nbconvert = [ nbconvert ];
+    nbformat = [ nbformat ];
+    notebook = [
+      ipywidgets
+      notebook
+    ];
+    parallel = [ ipyparallel ];
+    qtconsole = [ qtconsole ];
+    matplotlib = [ matplotlib ];
+  };
 
   pythonImportsCheck = [
     "IPython"
@@ -74,7 +92,9 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pickleshare
+    pytest-asyncio
+    pytest7CheckHook
     testpath
   ];
 

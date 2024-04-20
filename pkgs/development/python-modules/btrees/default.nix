@@ -2,16 +2,16 @@
 , fetchPypi
 , buildPythonPackage
 , persistent
-, zope_interface
+, zope-interface
 , transaction
-, zope_testrunner
+, zope-testrunner
 , python
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "btrees";
-  version = "5.1";
+  version = "5.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,17 +19,17 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "BTrees";
     inherit version;
-    hash = "sha256-raDzHpMloEeV0dJOAn7ZsrZdpNZqz/i4eVWzUo1/w2k=";
+    hash = "sha256-bkoK8BpLvslan5Mbr1xUWXn0NBoTp2Yf+KSXr089g4E=";
   };
 
   propagatedBuildInputs = [
     persistent
-    zope_interface
+    zope-interface
   ];
 
   nativeCheckInputs = [
     transaction
-    zope_testrunner
+    zope-testrunner
   ];
 
   checkPhase = ''

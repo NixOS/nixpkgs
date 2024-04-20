@@ -97,6 +97,7 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Integration Services for running NixOS under HyperV";
+    mainProgram = "lsvmbus";
     longDescription = ''
       This packages contains the daemons that are used by the Hyper-V hypervisor
       on the host.

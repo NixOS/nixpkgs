@@ -38,7 +38,7 @@ in
         internal = true;
         default = [];
         example = literalExpression ''[ lib.maintainers.all ]'';
-        description = lib.mdDoc ''
+        description = ''
           List of maintainers of each module.  This option should be defined at
           most once per module.
         '';
@@ -48,7 +48,7 @@ in
         type = docFile;
         internal = true;
         example = "./meta.chapter.md";
-        description = lib.mdDoc ''
+        description = ''
           Documentation prologue for the set of options of each module.  This
           option should be defined at most once per module.
         '';
@@ -60,7 +60,7 @@ in
         };
         internal = true;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to include this module in the split options doc build.
           Disable if the module references `config`, `pkgs` or other module
           arguments that cannot be evaluated as constants.

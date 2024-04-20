@@ -19,6 +19,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Cross platform chewing user phrase editor";
+    mainProgram = "chewing-editor";
     longDescription = ''
       chewing-editor is a cross platform chewing user phrase editor. It provides a easy way to manage user phrase. With it, user can customize their user phrase to increase input performance.
     '';

@@ -1,8 +1,8 @@
 { version, hash }:
 
-{ lib, stdenv, fetchurl }:
+{ lib, stdenvNoCC, fetchurl }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "jetty";
 
   inherit version;

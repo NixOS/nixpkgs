@@ -8,19 +8,19 @@
 , pango
 , python310Packages
 , wrapGAppsHook
-, hyprlandSupport ? false
+, hyprlandSupport ? true
 , wlr-randr
 }:
 
 python310Packages.buildPythonApplication rec {
   pname = "nwg-displays";
-  version = "0.3.8";
+  version = "0.3.16";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-displays";
-    rev = "v${version}";
-    hash = "sha256-9v5TQTliUEnynoGDf1UXsQ9Ym7x2gPmx4QiRJH5BId4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-rnaBYDGEsc8oGw4yZ60NQFbNf+L0tmHYDYf+UDoDmSI=";
   };
 
   nativeBuildInputs = [

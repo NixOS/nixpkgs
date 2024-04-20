@@ -13,7 +13,7 @@ let
   self = beam;
 
   # Aliases added 2023-03-21
-  versionLoop = f: lib.lists.foldr (version: acc: (f version) // acc) { } [ "26" "25" "24" "23" ];
+  versionLoop = f: lib.lists.foldr (version: acc: (f version) // acc) { } [ "26" "25" "24" ];
 
   interpretersAliases = versionLoop (version: {
     "erlangR${version}" = self.interpreters."erlang_${version}";
@@ -40,6 +40,15 @@ in
     erlang_odbc_javac = self.interpreters."${self.latestVersion}_odbc_javac";
 
     # Standard Erlang versions, using the generic builder.
+
+    erlang_27-rc2 = self.beamLib.callErlang ../development/interpreters/erlang/27-rc2.nix {
+      wxGTK = wxGTK32;
+      parallelBuild = true;
+      autoconf = buildPackages.autoconf269;
+      exdocSupport = true;
+      exdoc = self.packages.erlang_26.ex_doc;
+      inherit wxSupport systemdSupport;
+    };
 
     erlang_26 = self.beamLib.callErlang ../development/interpreters/erlang/26.nix {
       wxGTK = wxGTK32;

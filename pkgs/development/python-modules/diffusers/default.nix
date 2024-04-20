@@ -21,6 +21,7 @@
 , jax
 , jaxlib
 , jinja2
+, peft
 , protobuf
 , tensorboard
 , torch
@@ -38,7 +39,7 @@
 
 buildPythonPackage rec {
   pname = "diffusers";
-  version = "0.24.0";
+  version = "0.27.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -47,7 +48,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "diffusers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ccWF8hQzPhFY/kqRum2tbanI+cQiT25MmvPZN+hGadc=";
+    hash = "sha256-aRnbU3jN40xaCsoMFyRt1XB+hyIYMJP2b/T1yZho90c=";
   };
 
   nativeBuildInputs = [
@@ -80,6 +81,7 @@ buildPythonPackage rec {
       accelerate
       datasets
       jinja2
+      peft
       protobuf
       tensorboard
     ];
@@ -145,6 +147,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "State-of-the-art diffusion models for image and audio generation in PyTorch";
+    mainProgram = "diffusers-cli";
     homepage = "https://github.com/huggingface/diffusers";
     changelog = "https://github.com/huggingface/diffusers/releases/tag/${src.rev}";
     license = licenses.asl20;

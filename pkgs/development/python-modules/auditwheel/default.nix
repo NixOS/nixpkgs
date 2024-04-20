@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "auditwheel";
-  version = "5.4.0";
+  version = "6.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qvgVOreinMmaZjziSYgE2vGIfqG3oyMboNP+5oo8zxk=";
+    hash = "sha256-ZCLEq2Qh0j41XJHplGkmzVMrn99G8rX/2vGr/p7inmc=";
   };
 
   nativeBuildInputs = [

@@ -43,6 +43,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://github.com/Cease-and-DeSwitch/fusee-launcher";
     description = "Work-in-progress launcher for one of the Tegra X1 bootROM exploits";
+    mainProgram = "fusee-launcher";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pneumaticat ];
   };

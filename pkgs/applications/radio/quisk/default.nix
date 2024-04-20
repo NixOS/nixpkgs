@@ -8,11 +8,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "quisk";
-  version = "4.2.27";
+  version = "4.2.31";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-7pI9K7VOksQREbDFa02w48tcvanehBQ+5d/XYUD/gSo=";
+    sha256 = "sha256-WzB/KAkjJ6zPPfOe35kbT3HbbCNQjm44GL0hInk3TH8=";
   };
 
   buildInputs = [
@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     pyusb
-    wxPython_4_2
+    wxpython
   ];
 
   doCheck = false;

@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://sourceforge.net/projects/checkbaskisms/";
     description = "Check shell scripts for non-portable syntax";
+    mainProgram = "checkbashisms";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ kaction ];
     platforms = lib.platforms.unix;

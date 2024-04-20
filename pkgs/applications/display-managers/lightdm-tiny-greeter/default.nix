@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A tiny multi user lightdm greeter";
+    mainProgram = "lightdm-tiny-greeter";
     homepage = "https://github.com/off-world/lightdm-tiny-greeter";
     license = licenses.bsd3;
     maintainers = with maintainers; [ edwtjo ];
