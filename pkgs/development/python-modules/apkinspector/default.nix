@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "apkinspector";
-  version = "1.2.2";
+  version = "1.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6n5WCQ6V63kbWT6b7t9PEFbrJpxEg1WOE9XV70tHnGA=";
+    hash = "sha256-EztaCoUVbV9pIoba4X4liqPRZiZB6F65PB9cdb/eA+A=";
   };
 
   nativeBuildInputs = [
