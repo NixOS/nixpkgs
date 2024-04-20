@@ -58,6 +58,7 @@ stdenv.mkDerivation {
     # The platforms on that the Liminine binary and helper tools can run, not
     # necessarily the platforms for that bootable images can be created.
     platforms = platforms.unix;
+    badPlatforms = platforms.darwin;
     maintainers = [
       maintainers._48cf
       maintainers.phip1611
