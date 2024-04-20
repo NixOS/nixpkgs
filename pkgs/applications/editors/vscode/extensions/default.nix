@@ -144,6 +144,23 @@ let
         };
       };
 
+      adzero.vscode-sievehighlight = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-sievehighlight";
+          publisher = "adzero";
+          version = "1.0.6";
+          hash = "sha256-8Ompv792eI2kIH+5+KPL9jAf88xsMGQewHEQwi8BhoQ=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/adzero.vscode-sievehighlight/changelog";
+          description = "A Visual Studio Code extension to enable syntax highlight support for Sieve mail filtering language";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=adzero.vscode-sievehighlight";
+          homepage = "https://github.com/adzero/vscode-sievehighlight";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.sebtm ];
+        };
+      };
+
       alanz.vscode-hie-server = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-hie-server";
