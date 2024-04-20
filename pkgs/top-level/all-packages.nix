@@ -14407,8 +14407,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  wireproxy = callPackage ../tools/networking/wireproxy { };
-
   wiringpi = callPackage ../os-specific/linux/wiringpi { };
 
   wg-friendly-peer-names = callPackage ../tools/networking/wg-friendly-peer-names { };
@@ -24707,6 +24705,8 @@ with pkgs;
 
   streamlink = callPackage ../applications/video/streamlink { };
   streamlink-twitch-gui-bin = callPackage ../applications/video/streamlink-twitch-gui/bin.nix { };
+
+  structuresynth = libsForQt5.callPackage ../development/libraries/structuresynth { };
 
   sub-batch = callPackage ../applications/video/sub-batch { };
 
@@ -39989,7 +39989,7 @@ with pkgs;
   alejandra = callPackage ../tools/nix/alejandra { };
 
   nixci = callPackage ../tools/nix/nixci {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration IOKit;
   };
 
   nixfmt-classic = haskellPackages.nixfmt.bin;
