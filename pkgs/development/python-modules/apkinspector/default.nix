@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
   pythonOlder,
@@ -14,16 +14,16 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-EztaCoUVbV9pIoba4X4liqPRZiZB6F65PB9cdb/eA+A=";
+  src = fetchFromGitHub {
+    owner = "erev0s";
+    repo = "apkInspector";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-n6uVyN5XBEM/nuN7mvhNRwMUgUT5abOsh3CbhKK6ifY=";
   };
 
   build-system = [ poetry-core ];
 
-  # Tests are not available
-  # https://github.com/erev0s/apkInspector/issues/21
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "apkInspector" ];
 
