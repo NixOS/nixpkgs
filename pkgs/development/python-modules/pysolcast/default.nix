@@ -30,12 +30,15 @@ buildPythonPackage rec {
     "responses"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
+  ];
+
+  nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     anyconfig
     isodate
     pyyaml
