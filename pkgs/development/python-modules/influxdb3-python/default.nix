@@ -25,11 +25,11 @@ buildPythonPackage rec {
     hash = "sha256-qFcXqbYsjn27BPeKxTsWxKJdF6y8Oz3VBrmSyO0vCGo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     certifi
     pyarrow
     python-dateutil
