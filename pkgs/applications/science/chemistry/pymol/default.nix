@@ -117,6 +117,6 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "pymol";
     homepage = "https://www.pymol.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ samlich ];
+    maintainers = with maintainers; [ natsukium samlich ];
   };
 }
