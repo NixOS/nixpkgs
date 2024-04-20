@@ -1,13 +1,14 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-httpserver
-, pytestCheckHook
-, pythonRelaxDepsHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytest-httpserver,
+  pytestCheckHook,
+  pythonRelaxDepsHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -29,21 +30,13 @@ buildPythonPackage rec {
       --replace-fail "pytest-runner" ""
   '';
 
-  pythonRelaxDeps = [
-    "aiohttp"
-  ];
+  pythonRelaxDeps = [ "aiohttp" ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
-  dependencies = [
-    aiohttp
-  ];
+  dependencies = [ aiohttp ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -51,9 +44,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "vt"
-  ];
+  pythonImportsCheck = [ "vt" ];
 
   meta = with lib; {
     description = "Python client library for VirusTotal";
