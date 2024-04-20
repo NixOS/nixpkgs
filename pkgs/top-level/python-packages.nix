@@ -14854,6 +14854,8 @@ self: super: with self; {
 
   sphinxcontrib-log-cabinet = callPackage ../development/python-modules/sphinxcontrib-log-cabinet { };
 
+  sphinxcontrib-moderncmakedomain = callPackage ../development/python-modules/sphinxcontrib-moderncmakedomain { };
+
   sphinxcontrib-nwdiag = callPackage ../development/python-modules/sphinxcontrib-nwdiag { };
 
   sphinxcontrib-newsfeed = callPackage ../development/python-modules/sphinxcontrib-newsfeed { };
