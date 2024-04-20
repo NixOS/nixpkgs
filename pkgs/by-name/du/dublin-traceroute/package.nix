@@ -37,5 +37,6 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ baloo ];
     platforms = platforms.unix;
     mainProgram = "dublin-traceroute";
+    broken = stdenv.isDarwin;
   };
 }
