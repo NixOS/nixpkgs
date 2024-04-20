@@ -24,6 +24,13 @@
 .Op Fl -no-flake
 .Op Fl -override-input Ar input-name flake-uri
 .br
+.Op Fl -commit-lock-file
+.Op Fl -recreate-lock-file
+.Op Fl -update-input
+.Op Fl -no-registries
+.Op Fl -no-update-lock-file
+.Op Fl -no-write-lock-file
+.br
 .Op Fl -profile-name | p Ar name
 .Op Fl -specialisation | c Ar name
 .br
@@ -31,14 +38,26 @@
 .Op Fl -target-host Va host
 .Op Fl -use-remote-sudo
 .br
+.Op Fl -use-substitutes | -substitute-on-destination | s
+.br
 .Op Fl -show-trace
 .Op Fl I Va NIX_PATH
+.Op Fl -no-build-output | Q
+.Op Fl L
+.Op Fl -refresh
+.Op Fl -offline
 .Op Fl -verbose | v
 .Op Fl -accept-flake-config
 .Op Fl -impure
+.Op Fl -fallback
+.Op Fl -repair
 .Op Fl -max-jobs | j Va number
 .Op Fl -keep-failed | K
 .Op Fl -keep-going | k
+.Op Fl -option Ar name Ar value
+.Op Fl -quiet
+.Op Fl -print-build-logs | L
+.Op Fl -log-format Ar format
 .
 .
 .
@@ -351,7 +370,7 @@ target host. Hence the
 .Va nixpkgs.crossSystem
 setting has to match the target platform or else activation will fail.
 .
-.It Fl -use-substitutes
+.It Fl -use-substitutes , Fl s
 When set, nixos-rebuild will add
 .Fl -use-substitutes
 to each invocation of nix-copy-closure. This will only affect the behavior of
@@ -394,11 +413,25 @@ accepts various Nix-related flags, including
 .Fl -max-jobs Ns ,
 .Fl j Ns ,
 .Fl I Ns ,
+.Fl L Ns ,
 .Fl -accept-flake-config Ns ,
 .Fl -show-trace Ns ,
 .Fl -keep-failed Ns ,
+.Fl K Ns ,
 .Fl -keep-going Ns ,
+.Fl k Ns ,
 .Fl -impure Ns ,
+.Fl -fallback Ns ,
+.Fl -repair Ns ,
+.Fl -no-build-output Ns ,
+.Fl Q Ns ,
+.Fl -refresh Ns ,
+.Fl -offline Ns ,
+.Fl -option Ns ,
+.Fl -quiet Ns ,
+.Fl -print-build-logs Ns ,
+.Fl L Ns ,
+.Fl -log-format Ns ,
 .Fl -verbose Ns , and
 .Fl v Ns
 \&. See the Nix manual for details.
@@ -423,7 +456,6 @@ nixpkgs=./my-nixpkgs
 Additional options to be passed to
 .Ic ssh
 on the command line.
-.Ed
 .
 .It Ev NIXOS_SWITCH_USE_DIRTY_ENV
 Expose the the current environment variables to post activation scripts. Will
