@@ -1,7 +1,8 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,7 +32,11 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "argc";
     homepage = "https://github.com/sigoden/argc";
     changelog = "https://github.com/sigoden/argc/releases/tag/v${version}";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [
+      mit
+      # or
+      asl20
+    ];
     maintainers = with maintainers; [ figsoda ];
   };
 }
