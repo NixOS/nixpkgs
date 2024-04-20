@@ -81,6 +81,7 @@ in rec {
       php
       postgresql
       python
+      release-checks
       rsyslog
       stdenv
       subversion
