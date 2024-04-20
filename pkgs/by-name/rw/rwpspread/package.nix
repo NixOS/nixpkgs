@@ -8,15 +8,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rwpspread";
-  version = "0.2.5";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "0xk1f0";
     repo = "rwpspread";
     rev = "v${version}";
-    hash = "sha256-kISC3fYtwgjNRWCFniIzNaaNLnvlFL+y5J14PdcZ7fQ=";
+    hash = "sha256-6pYMKBm3f0kH+KD6yWy7/H/bg8v7hNm81KAKHp02HY8=";
   };
-  cargoHash = "sha256-2SjgY9YIHOUXL0+Njkh/peXUWJGlyI0fW8DVvdJXWV8=";
+  cargoHash = "sha256-/SjSwjrqODx9imtVxmOCrG4KwhXymHokyQ8FSC1SOd8=";
 
   nativeBuildInputs = [ pkg-config ];
 
