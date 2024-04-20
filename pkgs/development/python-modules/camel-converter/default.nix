@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pydantic
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pydantic,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -26,23 +27,15 @@ buildPythonPackage rec {
       --replace-fail "--cov=camel_converter --cov-report term-missing --no-cov-on-fail" ""
   '';
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   passthru.optional-dependencies = {
-    pydantic = [
-      pydantic
-    ];
+    pydantic = [ pydantic ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.pydantic;
+  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.pydantic;
 
-  pythonImportsCheck = [
-    "camel_converter"
-  ];
+  pythonImportsCheck = [ "camel_converter" ];
 
   disabledTests = [
     # AttributeError: 'Test' object has no attribute 'model_dump'
