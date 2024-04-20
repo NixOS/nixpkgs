@@ -1,13 +1,13 @@
 { stdenv, lib, fetchFromGitHub, cmake, msgpack } :
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mmtf-cpp";
   version = "1.1.0";
 
   src = fetchFromGitHub  {
     owner = "rcsb";
-    repo = pname;
-    rev = "v${version}";
+    repo = "mmtf-cpp";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8JrNobvekMggS8L/VORKA32DNUdXiDrYMObjd29wQmc=";
   };
 
@@ -22,4 +22,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = [ maintainers.sheepforce ];
   };
-}
+})
