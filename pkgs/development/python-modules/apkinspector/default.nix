@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, poetry-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -18,17 +19,13 @@ buildPythonPackage rec {
     hash = "sha256-EztaCoUVbV9pIoba4X4liqPRZiZB6F65PB9cdb/eA+A=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   # Tests are not available
   # https://github.com/erev0s/apkInspector/issues/21
   doCheck = false;
 
-  pythonImportsCheck = [
-    "apkInspector"
-  ];
+  pythonImportsCheck = [ "apkInspector" ];
 
   meta = with lib; {
     description = "Module designed to provide detailed insights into the zip structure of APK files";
