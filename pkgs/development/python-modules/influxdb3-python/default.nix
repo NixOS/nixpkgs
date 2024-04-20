@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, certifi
-, fetchFromGitHub
-, pyarrow
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, reactivex
-, setuptools
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  pyarrow,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  reactivex,
+  setuptools,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-qFcXqbYsjn27BPeKxTsWxKJdF6y8Oz3VBrmSyO0vCGo=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     certifi
