@@ -335,6 +335,16 @@ let
       '';
     };
 
+    github = {
+      # Minimal configuration without Github API queries to avoid error scenarios resulting from a possible rate limit.
+      exporterConfig.enable = true;
+      exporterTest = ''
+        wait_for_unit("prometheus-github-exporter.service")
+        wait_for_open_port(9171)
+        succeed("curl -sSf http://localhost:9171/metrics")
+      '';
+    };
+
     graphite = {
       exporterConfig = {
         enable = true;

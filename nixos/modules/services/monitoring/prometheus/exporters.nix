@@ -38,6 +38,7 @@ let
     "flow"
     "fritz"
     "fritzbox"
+    "github"
     "graphite"
     "idrac"
     "imap-mailstat"
