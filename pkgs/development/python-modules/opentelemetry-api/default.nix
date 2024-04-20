@@ -9,6 +9,7 @@
 , setuptools
 , pytestCheckHook
 , pythonRelaxDepsHook
+, writeScript
 }:
 
 let
@@ -55,8 +56,18 @@ let
 
     doCheck = false;
 
-    # Enable tests via passthru to avoid cyclic dependency with opentelemetry-test-utils.
-    passthru.tests.${self.pname} = self.overridePythonAttrs { doCheck = true; };
+    passthru = {
+      updateScript = writeScript "update.sh" ''
+        #!/usr/bin/env nix-shell
+        #!nix-shell -i bash -p nix-update
+
+        set -eu -o pipefail
+        nix-update --version-regex 'v(.*)' python3Packages.opentelemetry-api
+        nix-update python3Packages.opentelemetry-instrumentation
+      '';
+      # Enable tests via passthru to avoid cyclic dependency with opentelemetry-test-utils.
+      tests.${self.pname} = self.overridePythonAttrs { doCheck = true; };
+    };
 
     meta = with lib; {
       homepage = "https://github.com/open-telemetry/opentelemetry-python/tree/main/opentelemetry-api";
