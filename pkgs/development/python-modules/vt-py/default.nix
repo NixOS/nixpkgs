@@ -5,13 +5,14 @@
 , pytest-asyncio
 , pytest-httpserver
 , pytestCheckHook
+, pythonRelaxDepsHook
 , pythonOlder
 , setuptools
 }:
 
 buildPythonPackage rec {
   pname = "vt-py";
-  version = "0.18.0";
+  version = "0.18.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "VirusTotal";
     repo = "vt-py";
     rev = "refs/tags/${version}";
-    hash = "sha256-QEe/ZoKM0uVH7Yqpgo7V17Odn4xqdEgdQeMVB+57xbA=";
+    hash = "sha256-rWzANh7tkayFR6V3JaF3BLhIjUlnrPMmEmI36Ncqz2M=";
   };
 
   postPatch = ''
@@ -28,8 +29,16 @@ buildPythonPackage rec {
       --replace-fail "pytest-runner" ""
   '';
 
+  pythonRelaxDeps = [
+    "aiohttp"
+  ];
+
   build-system = [
     setuptools
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
   ];
 
   dependencies = [
