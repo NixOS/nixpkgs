@@ -58,7 +58,7 @@ def find_packages(store_path: Path, site_packages_path: str, parents: List[str])
     # recursively add dependencies
     if propagated_build_inputs.exists():
         with open(propagated_build_inputs, "r") as f:
-            build_inputs: List[str] = f.read().strip().split(" ")
+            build_inputs: List[str] = f.read().split()
             for build_input in build_inputs:
                 find_packages(Path(build_input), site_packages_path, parents + [build_input])
 
