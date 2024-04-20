@@ -19,6 +19,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-6dhM+FzuLtKtRp2mpE9nlpT+0PBcgGqvBa9vqs6Rs7s=";
 
+  postPatch = ''
+    substituteInPlace src/lib.rs \
+      --replace "#![deny(dead_code)]" "#![warn(dead_code)]"
+  '';
+
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
