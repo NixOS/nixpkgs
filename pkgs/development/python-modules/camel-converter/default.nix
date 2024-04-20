@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov=camel_converter --cov-report term-missing --no-cov-on-fail" ""
+      --replace-fail "--cov=camel_converter --cov-report term-missing --no-cov-on-fail" ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
