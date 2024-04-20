@@ -117,6 +117,9 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius @ma27
 /nixos/modules/installer/cd-dvd/            @samueldr
 /nixos/modules/installer/sd-card/           @samueldr
 
+# nixos-rebuild command
+pkgs/os-specific/linux/nixos-rebuild/ @samueldr # Mainly for bash completion
+
 # Updaters
 ## update.nix
 /maintainers/scripts/update.nix   @jtojnar
