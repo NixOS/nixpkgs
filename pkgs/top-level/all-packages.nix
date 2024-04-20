@@ -39989,7 +39989,7 @@ with pkgs;
   alejandra = callPackage ../tools/nix/alejandra { };
 
   nixci = callPackage ../tools/nix/nixci {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration IOKit;
   };
 
   nixfmt-classic = haskellPackages.nixfmt.bin;
