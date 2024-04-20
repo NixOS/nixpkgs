@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , makeWrapper
 , rustPlatform
@@ -26,9 +27,13 @@ rustPlatform.buildRustPackage {
 
   buildInputs = [ openssl ];
 
-  # The following tests are reaching to the network.
   checkFlags = [
+    # The following tests are reaching to the network.
     "--skip=vale::tests"
+  ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    # This test does not account for the existence of aarch64-linux machines,
+    # despite upstream shipping artifacts for that architecture
+    "--skip=utils::tests::arch"
   ];
 
   env.OPENSSL_NO_VENDOR = true;
