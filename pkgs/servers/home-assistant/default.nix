@@ -566,6 +566,7 @@ in python.pkgs.buildPythonApplication rec {
     "hass-nabucasa"
     "httpx"
     "orjson"
+    "pillow"
     "pyopenssl"
     "typing-extensions"
     "urllib3"
