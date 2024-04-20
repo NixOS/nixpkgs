@@ -6,12 +6,12 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "ledfx";
-  version = "2.0.96";
+  version = "2.0.98";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nvPHAnoD5j1rneeuMufQkXj8YWXau2zJYug+Avpe87I=";
+    hash = "sha256-mSeMth75+3/UFg5go1mYR873XrB1a3LEVL08Iu8fgtg=";
   };
 
   pythonRelaxDeps = true;
@@ -58,6 +58,7 @@ python3.pkgs.buildPythonPackage rec {
     sounddevice
     stupidartnet
     uvloop
+    vnoise
     voluptuous
     zeroconf
   ];
