@@ -16,19 +16,19 @@ callPackage ./generic.nix args {
   # check the release notes for compatible kernels
   kernelCompatible = kernel.kernelOlder "6.9";
 
-  latestCompatibleLinuxPackages = linuxKernel.packages.linux_6_6;
+  latestCompatibleLinuxPackages = linuxKernel.packages.linux_6_8;
 
   # this package should point to a version / git revision compatible with the latest kernel release
   # IMPORTANT: Always use a tagged release candidate or commits from the
   # zfs-<version>-staging branch, because this is tested by the OpenZFS
   # maintainers.
-  version = "2.2.3-unstable-2024-04-09";
-  rev = "28520cad2500b60ce8653e431990e33f77ff08f7";
+  version = "2.2.3-unstable-2024-04-20";
+  rev = "f4f156157de3f61e55db0429b10c63d02226e115";
 
   isUnstable = true;
   tests = [
     nixosTests.zfs.unstable
   ];
 
-  hash = "sha256-lGoiTmCWOxqACSYY0WA0gN6CN/1FyYhSVHmtYC1Izhg=";
+  hash = "sha256-MdkZtj9G6Wvjt69jOg1IJAcUH+N/rEs0DPO/j6fC3KA=";
 }
