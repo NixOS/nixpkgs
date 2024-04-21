@@ -1782,6 +1782,8 @@ self: super: with self; {
 
   btsocket = callPackage ../development/python-modules/btsocket { };
 
+  bubop = callPackage ../development/python-modules/bubop { };
+
   bucketstore = callPackage ../development/python-modules/bucketstore { };
 
   bugsnag = callPackage ../development/python-modules/bugsnag { };
@@ -5904,6 +5906,8 @@ self: super: with self; {
   isoweek = callPackage ../development/python-modules/isoweek { };
 
   itanium-demangler = callPackage ../development/python-modules/itanium-demangler { };
+
+  item-synchronizer = callPackage ../development/python-modules/item-synchronizer { };
 
   itemadapter = callPackage ../development/python-modules/itemadapter { };
 
@@ -14676,6 +14680,8 @@ self: super: with self; {
   tasklib = callPackage ../development/python-modules/tasklib { };
 
   taskw = callPackage ../development/python-modules/taskw { };
+
+  taskw-ng = callPackage ../development/python-modules/taskw-ng { };
 
   tatsu = callPackage ../development/python-modules/tatsu { };
 
