@@ -741,14 +741,6 @@ self: super: builtins.intersectAttrs super {
     executableSystemDepends = runtimeExecDeps;
     enableSharedExecutables = false;
 
-    # This is an instance of https://github.com/NixOS/nix/pull/1085
-    # Fails with:
-    #   gpg: can't connect to the agent: File name too long
-    postPatch = pkgs.lib.optionalString pkgs.stdenv.isDarwin ''
-      substituteInPlace Test.hs \
-        --replace ', testCase "crypto" test_crypto' ""
-    '' + (drv.postPatch or "");
-
     preConfigure = drv.preConfigure or "" + ''
       export HOME=$TEMPDIR
       patchShebangs .
