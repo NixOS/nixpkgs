@@ -346,6 +346,7 @@ in
                 violates the privacy of users and is not recommended.
               '';
             };
+            UsePAM = mkEnableOption "PAM authentication" // { default = true; };
             UseDns = mkOption {
               type = types.bool;
               # apply if cfg.useDns then "yes" else "no"
@@ -622,7 +623,7 @@ in
 
     networking.firewall.allowedTCPPorts = optionals cfg.openFirewall cfg.ports;
 
-    security.pam.services.sshd =
+    security.pam.services.sshd = lib.mkIf cfg.settings.UsePAM
       { startSession = true;
         showMotd = true;
         unixAuth = cfg.settings.PasswordAuthentication;
@@ -638,8 +639,6 @@ in
 
     services.openssh.extraConfig = mkOrder 0
       ''
-        UsePAM yes
-
         Banner ${if cfg.banner == null then "none" else pkgs.writeText "ssh_banner" cfg.banner}
 
         AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
