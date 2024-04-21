@@ -61,4 +61,9 @@ in
     version = "7.4.3";
     hash = "sha256-655DUH+Dbu8uMoAtRt08+S7KPVR7pLZA/aWbQHzbG4g=";
   };
+  # EOL 2025-03-15
+  varnish75 = common {
+    version = "7.5.0";
+    hash = "sha256-/KYbmDE54arGHEVG0SoaOrmAfbsdgxRXHjFIyT/3K10=";
+  };
 }
