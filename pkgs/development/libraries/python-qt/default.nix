@@ -12,29 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "python-qt";
-  version = "3.5.0";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "MeVisLab";
     repo = "pythonqt";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Yz7w5Gs0W3ilrZXjkC+wXLCCXWTKkhCpWXbg+PshXKI=";
+    hash = "sha256-IED6UFk8UTle7g/yPC0nXOEgJwrs6sB/Dk3OTyVgHPo=";
   };
-
-  patches = [
-    # fix a -Werror=format-security. was merged upstream, so can be removed on next release.
-    (fetchpatch {
-      name = "fix-format-security.patch";
-      url = "https://github.com/MeVisLab/pythonqt/pull/197/commits/c35d1efd00b83e0ebd826d7ed8454f3684ddffff.patch";
-      hash = "sha256-WJBLPdMemuKlZWoqYVU9TXldoDpaBm84RxkepIaocUQ=";
-    })
-    # same for darwin. not yet merged upstream.
-    (fetchpatch {
-      name = "fix-format-security-darwin.patch";
-      url = "https://github.com/MeVisLab/pythonqt/pull/207/commits/4d5a742bccdc4e98ad862f028b96debe4c195906.patch";
-      hash = "sha256-u3aDi9ncv7CuKYrz5JC1s1Xjy4d9z07mEqQmobtdzKU=";
-    })
-  ];
 
   nativeBuildInputs = [
     qmake
