@@ -10,7 +10,6 @@
 , pytest-xdist
 , pytestCheckHook
 , pythonOlder
-, pythonRelaxDepsHook
 , typing-extensions
 }:
 
@@ -28,10 +27,6 @@ buildPythonPackage rec {
     hash = "sha256-uxXRDavp5c3e1MOZR2B4wUxEHh6K81avTeaIVsOdup8=";
   };
 
-  pythonRelaxDeps = [
-    "hishel"
-  ];
-
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "--cov=githubkit --cov-append --cov-report=term-missing" ""
@@ -39,7 +34,6 @@ buildPythonPackage rec {
 
   build-system = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   dependencies = [
