@@ -1,9 +1,9 @@
 {
   lib,
   buildGoModule,
+  buildNpmPackage,
   fetchFromGitHub,
   pkg-config,
-  moreutils,
   libGL,
   libX11,
   libXcursor,
@@ -16,18 +16,17 @@
   freetype,
   stdenv,
   darwin,
-  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "gcs";
-  version = "5.20.4";
+  version = "5.21.0";
 
   src = fetchFromGitHub {
     owner = "richardwilkes";
     repo = "gcs";
     rev = "v${version}";
-    hash = "sha256-aoU2wRz2XB6+3e6am/dLjRbcDmWTjtDtTBwc6c4n3DE=";
+    hash = "sha256-mes1aXh4R1re4sW3xYDWtSIcW7lwkWoAxbcbdyT/W+o=";
   };
 
   modPostBuild = ''
@@ -35,12 +34,29 @@ buildGoModule rec {
     sed -i 's|-lmupdf[^ ]* |-lmupdf |g' vendor/github.com/richardwilkes/pdf/pdf.go
   '';
 
-  vendorHash = "sha256-ee6qvwnUXtsBcovPOORfVpdndICtIUYe4GrP52V/P3k=";
+  vendorHash = "sha256-H5GCrrqmDwpCneXawu7kZsRfrQ8hcsbqhpAAG6FCawg=";
 
-  nativeBuildInputs = [
-    pkg-config
-    moreutils
-  ];
+  frontend = buildNpmPackage {
+    name = "${pname}-${version}-frontend";
+
+    inherit src;
+    sourceRoot = "${src.name}/server/frontend";
+
+    npmDepsHash = "sha256-wP6sjdcjljzmTs0GUMbF2BPo83LKpfdn15sUuMEIn6E=";
+
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out
+      cp -r dist $out/dist
+      runHook postInstall
+    '';
+  };
+
+  postPatch = ''
+    cp -r ${frontend}/dist server/frontend/dist
+  '';
+
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs =
     [
@@ -74,8 +90,6 @@ buildGoModule rec {
     install -Dm755 $GOPATH/bin/gcs -t $out/bin
     runHook postInstall
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/richardwilkes/gcs/releases/tag/${src.rev}";
