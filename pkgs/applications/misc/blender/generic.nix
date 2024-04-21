@@ -78,6 +78,9 @@
   waylandSupport ? stdenv.isLinux,
   zlib,
   zstd,
+
+  version,
+  hash,
 }:
 
 let
@@ -99,11 +102,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "4.1.1";
+  inherit version;
 
   src = fetchurl {
     url = "https://download.blender.org/source/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-T7s69k0/hN9ccQN0hFQibBiFwawu1Tc9DOoegOgsCEg=";
+    inherit hash;
   };
 
   patches = [ ./draco.patch ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
@@ -377,6 +380,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       goibhniu
       veprbl
+      hubble
     ];
     mainProgram = "blender";
   };
