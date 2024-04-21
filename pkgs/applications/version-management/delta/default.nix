@@ -44,6 +44,11 @@ rustPlatform.buildRustPackage rec {
       etc/completion/completion.{bash,fish,zsh}
   '';
 
+  # test_env_parsing_with_pager_set_to_bat sets environment variables,
+  # which can be flaky with multiple threads:
+  # https://github.com/dandavison/delta/issues/1660
+  dontUseCargoParallelTests = true;
+
   checkFlags = lib.optionals stdenv.isDarwin [
     "--skip=test_diff_same_non_empty_file"
   ];
