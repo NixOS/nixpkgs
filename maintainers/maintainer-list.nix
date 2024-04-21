@@ -18163,6 +18163,11 @@
     githubId = 863807;
     name = "Serge Guelton";
   };
+  sergioribera = {
+    github = "SergioRibera";
+    githubId = 56278796;
+    name = "Sergio Ribera";
+  };
   sersorrel = {
     email = "ash@sorrel.sh";
     github = "sersorrel";

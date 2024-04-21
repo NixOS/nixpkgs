@@ -315,6 +315,7 @@
   # D DUB
   dub = [
     "https://code.dlang.org/packages/"
+    "https://codemirror.dlang.org/packages/"
   ];
 
   # Haskell Hackage
