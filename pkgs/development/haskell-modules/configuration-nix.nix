@@ -719,7 +719,28 @@ self: super: builtins.intersectAttrs super {
       })
       (addBuildTools (with pkgs.buildPackages; [makeWrapper python3Packages.sphinx]) super.futhark);
 
-  git-annex = overrideCabal (drv: {
+  git-annex = let
+    # Executables git-annex needs at runtime. git-annex detects these at configure
+    # time and expects to be able to execute them. This means that cross-compiling
+    # git-annex is not possible and strictDeps must be false (runtimeExecDeps go
+    # into executableSystemDepends/buildInputs).
+    runtimeExecDeps = [
+      pkgs.bup
+      pkgs.curl
+      pkgs.git
+      pkgs.gnupg
+      pkgs.lsof
+      pkgs.openssh
+      pkgs.perl
+      pkgs.rsync
+      pkgs.wget
+      pkgs.which
+    ];
+  in
+  overrideCabal (drv: {
+    executableSystemDepends = runtimeExecDeps;
+    enableSharedExecutables = false;
+
     # This is an instance of https://github.com/NixOS/nix/pull/1085
     # Fails with:
     #   gpg: can't connect to the agent: File name too long
@@ -727,6 +748,42 @@ self: super: builtins.intersectAttrs super {
       substituteInPlace Test.hs \
         --replace ', testCase "crypto" test_crypto' ""
     '' + (drv.postPatch or "");
+
+    preConfigure = drv.preConfigure or "" + ''
+      export HOME=$TEMPDIR
+      patchShebangs .
+    '';
+
+    # git-annex ships its test suite as part of the final executable instead of
+    # using a Cabal test suite.
+    checkPhase = ''
+      runHook preCheck
+
+      # Setup PATH for the actual tests
+      ln -sf dist/build/git-annex/git-annex git-annex
+      ln -sf git-annex git-annex-shell
+      PATH+=":$PWD"
+
+      echo checkFlags: $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
+
+      # Doesn't use Cabal's test mechanism
+      git-annex test $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
+
+      runHook postCheck
+    '';
+
+    # Use default installPhase of pkgs/stdenv/generic/setup.sh. We need to set
+    # the environment variables it uses via the preInstall hook since the Haskell
+    # generic builder doesn't accept them as arguments.
+    preInstall = drv.preInstall or "" + ''
+      installTargets="install install-completions"
+      installFlagsArray+=(
+        "BUILDER=:"
+        "PREFIX="
+        "DESTDIR=$out"
+      )
+    '';
+    installPhase = null;
 
     # Ensure git-annex uses the exact same coreutils it saw at build-time.
     # This is especially important on Darwin but also in Linux environments
