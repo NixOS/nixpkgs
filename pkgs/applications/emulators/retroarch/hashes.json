@@ -85,10 +85,10 @@
         "src": {
             "owner": "libretro",
             "repo": "beetle-psx-libretro",
-            "rev": "9c9b44a7b9b373f2d8f9a3f16bc8373d6469cf98",
-            "hash": "sha256-XQ7EVPj0Eprs94yjqaUGCphHteRdbcv2nqp3gojYjzc="
+            "rev": "ab39d37f868ba8ff3982ce52c4ec22c162888dd7",
+            "hash": "sha256-Ay3wI9WToSsJNjkNFnHXTt9JUQ6nt+S9jI378E/kK8U="
         },
-        "version": "unstable-2024-04-12"
+        "version": "unstable-2024-04-19"
     },
     "beetle-saturn": {
         "fetcher": "fetchFromGitHub",
