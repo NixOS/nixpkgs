@@ -1,6 +1,7 @@
 {
   lib,
   buildPackages,
+  pkgsCross,
   rustPlatform,
   stdenv,
   fetchFromGitHub,
@@ -35,6 +36,20 @@ rustPlatform.buildRustPackage rec {
   '';
 
   disallowedReferences = lib.optional (!canExecuteHost) buildPackages.argc;
+
+  passthru = {
+    tests = {
+      cross =
+        (
+          if stdenv.hostPlatform.isDarwin then
+            if stdenv.hostPlatform.isAarch64 then pkgsCross.x86_64-darwin else pkgsCross.aarch64-darwin
+          else if stdenv.hostPlatform.isAarch64 then
+            pkgsCross.gnu64
+          else
+            pkgsCross.aarch64-multiplatform
+        ).argc;
+    };
+  };
 
   meta = with lib; {
     description = "Command-line options, arguments and sub-commands parser for bash";
