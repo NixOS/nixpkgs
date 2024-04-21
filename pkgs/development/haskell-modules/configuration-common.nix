@@ -411,6 +411,13 @@ self: super: {
         rm -r $out/doc/?ndroid*
       '';
     };
+
+    patches = drv.patches or [ ] ++ [
+      # Prevent .desktop files from being installed to $out/usr/share.
+      # TODO(@sternenseemann): submit upstreamable patch resolving this
+      # (this should be possible by also taking PREFIX into account).
+      ./patches/git-annex-no-usr-prefix.patch
+    ];
   }) super.git-annex;
 
   # Too strict bounds on servant
