@@ -1,4 +1,10 @@
-{ pkgs, nixpkgs ? { }, libsets }:
+{ pkgs,
+  nixpkgs ? { },
+  # Metadata about the structure of the library in the form of a list of sub-libraries
+  libsets,
+  # An instance of the library, as one may use it. This is used for retrieving the locations with `builtins.unsafeGetAttrPos`.
+  library,
+}:
 let
   revision = pkgs.lib.trivial.revisionWithDefault (nixpkgs.rev or "master");
 
@@ -44,7 +50,7 @@ let
     builtins.filter
       (elem: elem.value != null)
       (nixpkgsLib.lists.flatten
-        (locatedlibsets nixpkgsLib));
+        (locatedlibsets library));
 
   fnLocationRelative = { name, value }:
     {
