@@ -1294,8 +1294,10 @@ mapAliases ({
   vte_290 = throw "'vte_290' has been renamed to/replaced by 'vte'"; # Added 2023-01-05
   varnish72 = throw "varnish 7.2 is EOL. Either use the LTS or upgrade."; # Added 2023-10-09
   varnish73 = throw "varnish 7.3 is EOL. Either use the LTS or upgrade."; # Added 2023-10-09
+  varnish74 = throw "varnish 7.4 has been dropped from nixpkgs. Either use the LTS or upgrade."; # Added 2024-04-21
   varnish72Packages = throw "varnish 7.2 is EOL. Either use the LTS or upgrade."; # Added 2023-10-09
   varnish73Packages = throw "varnish 7.3 is EOL. Either use the LTS or upgrade."; # Added 2023-10-09
+  varnish74Packages = throw "varnish 7.4 has been dropped from nixpkgs. Either use the LTS or upgrade."; # Added 2024-04-21
   inherit (libsForQt5.mauiPackages) vvave; # added 2022-05-17
   volatility = throw "'volatility' has been removed, as it was broken and unmaintained"; # Added 2023-12-10
 
