@@ -1,16 +1,17 @@
-{ lib
-, aiohttp
-, aioresponses
-, aqipy-atmotech
-, buildPythonPackage
-, dacite
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-error-for-skips
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, syrupy
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  aqipy-atmotech,
+  buildPythonPackage,
+  dacite,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytest-error-for-skips,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  syrupy,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-aiJoY+6sNfBmE1057UuMjV80hjVJ29t2X16IIe6dxWs=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
@@ -45,9 +44,7 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pythonImportsCheck = [
-    "nettigo_air_monitor"
-  ];
+  pythonImportsCheck = [ "nettigo_air_monitor" ];
 
   meta = with lib; {
     description = "Python module to get air quality data from Nettigo Air Monitor devices";
