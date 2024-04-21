@@ -102,13 +102,15 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
           test2.psk = "@PSK_SPECIAL@";            # should be replaced
           test3.psk = "@PSK_MISSING@";            # should not be replaced
           test4.psk = "P@ssowrdWithSome@tSymbol"; # should not be replaced
+          test5.psk = "@PSK_AWK_REGEX@";          # should be replaced
         };
 
         # secrets
         environmentFile = pkgs.writeText "wpa-secrets" ''
           PSK_VALID="S0m3BadP4ssw0rd";
           # taken from https://github.com/minimaxir/big-list-of-naughty-strings
-          PSK_SPECIAL=",./;'[]\-= <>?:\"{}|_+ !@#$%^\&*()`~";
+          PSK_SPECIAL=",./;'[]\/\-= <>?:\"{}|_+ !@#$%^&*()`~";
+          PSK_AWK_REGEX="PassowrdWith&symbol";
         '';
       };
     };
@@ -186,6 +188,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
           basic.fail(f"grep -q @PSK_SPECIAL@ {config_file}")
           basic.succeed(f"grep -q @PSK_MISSING@ {config_file}")
           basic.succeed(f"grep -q P@ssowrdWithSome@tSymbol {config_file}")
+          basic.succeed(f"grep -q 'PassowrdWith&symbol' {config_file}")
 
       with subtest("WPA2 fallbacks have been generated"):
           assert int(basic.succeed(f"grep -c sae-only {config_file}")) == 1
