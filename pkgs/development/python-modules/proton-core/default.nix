@@ -10,16 +10,16 @@
 , pytestCheckHook
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "proton-core";
-  version = "0.1.15-unstable-2023-10-24";
+  version = "0.1.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-core";
-    rev = "5e795e04094dff67c03c56f2f3de03ff43514cc4";
-    hash = "sha256-hchwrolc65tVmSe2IzxwH2zDU2JZzXrCMzWaETWcMDI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-072XuHvgWludlFwp/tqLpuAU89vzifFhwQ01FuiCoL8=";
   };
 
   nativeBuildInputs = [

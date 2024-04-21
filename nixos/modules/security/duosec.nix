@@ -200,7 +200,8 @@ in
       unitConfig.DefaultDependencies = false;
       script = ''
         if test -f "${cfg.secretKeyFile}"; then
-          mkdir -m 0755 -p /etc/duo
+          mkdir -p /etc/duo
+          chmod 0755 /etc/duo
 
           umask 0077
           conf="$(mktemp)"
@@ -222,7 +223,8 @@ in
       unitConfig.DefaultDependencies = false;
       script = ''
         if test -f "${cfg.secretKeyFile}"; then
-          mkdir -m 0755 -p /etc/duo
+          mkdir -p /etc/duo
+          chmod 0755 /etc/duo
 
           umask 0077
           conf="$(mktemp)"

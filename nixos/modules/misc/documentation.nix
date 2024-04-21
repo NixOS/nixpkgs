@@ -101,6 +101,7 @@ let
           libPath = filter (pkgs.path + "/lib");
           pkgsLibPath = filter (pkgs.path + "/pkgs/pkgs-lib");
           nixosPath = filter (pkgs.path + "/nixos");
+          NIX_ABORT_ON_WARN = warningsAreErrors;
           modules =
             "[ "
             + concatMapStringsSep " " (p: ''"${removePrefix "${modulesPath}/" (toString p)}"'') docModules.lazy
