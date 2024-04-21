@@ -12,13 +12,13 @@
 let
   thunderbird-unwrapped = thunderbirdPackages.thunderbird-115;
 
-  version = "115.4.2";
+  version = "115.9.0";
   majVer = lib.versions.major version;
 
   betterbird-patches = fetchFromGitHub {
     owner = "Betterbird";
     repo = "thunderbird-patches";
-    rev = "${version}-bb17";
+    rev = "${version}-bb26-build2";
     postFetch = ''
       echo "Retrieving external patches"
 
@@ -36,7 +36,7 @@ let
       . ./external.sh
       rm external.sh
     '';
-    hash = "sha256-hfM1VzYD0TsjZik0MLXBAkD5ecyvbg7jn2pKdrzMEfo=";
+    hash = "sha256-0RlI30zxiueeXdLEXPZevc8QyKr667juHk0bTcqBB1w=";
   };
 in ((buildMozillaMach {
   pname = "betterbird";
@@ -44,12 +44,13 @@ in ((buildMozillaMach {
 
   applicationName = "Betterbird";
   binaryName = "betterbird";
+  branding = "comm/mail/branding/betterbird";
   inherit (thunderbird-unwrapped) application extraPatches;
 
   src = fetchurl {
     # https://download.cdn.mozilla.net/pub/thunderbird/releases/
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    hash = "sha256-PAjj7FvIA7uB0yngkL4KYKZoYU1CF2qQTF5+sG2VLtI=";
+    hash = "sha256-Kut3ynA43289MG+cPSpOphWvDtzw9ykCFcpfMMEpDlc=";
   };
 
   extraPostPatch = thunderbird-unwrapped.extraPostPatch or "" + /* bash */ ''
@@ -77,6 +78,11 @@ in ((buildMozillaMach {
         continue
       fi
 
+      # requires vendored icu, fails to link with our icu
+      if [[ $patch == 14-feature-regexp-searchterm.patch || $patch == 14-feature-regexp-searchterm-m-c.patch ]]; then
+        continue
+      fi
+
       echo Applying patch $patch.
       if [[ $patch == *-m-c.patch ]]; then
         git apply -p1 -v < $patches/$patch
@@ -90,11 +96,6 @@ in ((buildMozillaMach {
 
   extraBuildInputs = [
     libdbusmenu-gtk3
-  ];
-
-  extraConfigureFlags = [
-    "--enable-application=comm/mail"
-    "--with-branding=comm/mail/branding/betterbird"
   ];
 
   meta = with lib; {
