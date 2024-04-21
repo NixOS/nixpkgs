@@ -4183,8 +4183,6 @@ with pkgs;
 
   aptdec = callPackage ../development/libraries/aptdec { };
 
-  argc = callPackage ../development/tools/argc { };
-
   aria2 = callPackage ../tools/networking/aria2 {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
