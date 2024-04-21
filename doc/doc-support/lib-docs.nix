@@ -5,4 +5,5 @@ import ./generate-function-docs.nix {
   library = pkgs.lib;
   src = ../../lib;
   name = "nixpkgs-lib-docs";
+  prefix = "lib";
 }
