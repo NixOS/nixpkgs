@@ -9,7 +9,6 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
-, setuptools
 , syrupy
 }:
 
@@ -34,12 +33,11 @@ buildPythonPackage rec {
       --replace-fail "--cov" ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
-    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     mashumaro
     pyjwt
