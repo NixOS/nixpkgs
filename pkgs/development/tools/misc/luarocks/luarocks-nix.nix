@@ -1,4 +1,9 @@
-{ luarocks, fetchFromGitHub, unstableGitUpdater }:
+{ luarocks
+, fetchFromGitHub
+, unstableGitUpdater
+, nurl
+, file
+}:
 
 luarocks.overrideAttrs (old: {
   pname = "luarocks-nix";
@@ -10,6 +15,11 @@ luarocks.overrideAttrs (old: {
     rev = "4240b25b95d7165cde66fc2acaf5a0f9ad40fd0c";
     sha256 = "sha256-dqFFYehBgK0RqH0/1GtZXq7XLGCcc3Kfadq8ICYNCWk=";
   };
+
+  propagatedBuildInputs = old.propagatedBuildInputs ++ [
+    file
+    nurl
+  ];
 
   patches = [ ];
 

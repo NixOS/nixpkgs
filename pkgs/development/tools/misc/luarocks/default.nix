@@ -1,14 +1,11 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , curl
 , makeWrapper
 , which
 , unzip
 , lua
-, file
-, nix-prefetch-git
   # for 'luarocks pack'
 , zip
 , nix-update-script
@@ -81,8 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
               --suffix LUA_PATH ";" "$(echo "$out"/share/lua/*/)?/init.lua" \
               --suffix LUA_CPATH ";" "$(echo "$out"/lib/lua/*/)?.so" \
               --suffix LUA_CPATH ";" "$(echo "$out"/share/lua/*/)?/init.lua" \
-              --suffix PATH : ${lib.makeBinPath ([ unzip ] ++
-                lib.optionals (finalAttrs.pname == "luarocks-nix") [ file nix-prefetch-git ])}
+              --suffix PATH : ${lib.makeBinPath finalAttrs.propagatedBuildInputs}
         }
     done
   '';
