@@ -304,6 +304,29 @@ let
         };
       });
 
+      # pinned due to API changes in 2.0.0
+      paho-mqtt = super.paho-mqtt.overridePythonAttrs (old: rec {
+        version = "1.6.1";
+
+        src = fetchFromGitHub {
+          owner = "eclipse";
+          repo = "paho.mqtt.python";
+          rev = "v${version}";
+          hash = "sha256-9nH6xROVpmI+iTKXfwv2Ar1PAmWbEunI3HO0pZyK6Rg=";
+        };
+
+        build-system = with self; [
+          setuptools
+        ];
+
+        nativeCheckInputs = with self; [
+          pytestCheckHook
+          six
+        ];
+
+        preCheck = "";
+      });
+
       # Pinned due to API changes in 0.1.0
       poolsense = super.poolsense.overridePythonAttrs (oldAttrs: rec {
         version = "0.0.8";
