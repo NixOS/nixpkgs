@@ -30,6 +30,9 @@ stdenv.mkDerivation rec {
     systemdLibs.dev
   ];
 
+  patches = [
+    ./take-config-file-from-env.patch
+  ];
 
   installPhase = ''
     runHook preInstall
