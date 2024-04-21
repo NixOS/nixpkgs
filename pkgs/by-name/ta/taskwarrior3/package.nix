@@ -15,15 +15,15 @@
   darwin,
 }:
 stdenv.mkDerivation rec {
-    pname = "taskwarrior";
-    version = "3.0.0-unstable-2024-04-07";
-    src = fetchFromGitHub {
-      owner = "GothenburgBitFactory";
-      repo = "taskwarrior";
-      rev = "fd306712b85dda3ea89de4e617aebeb98b2ede80";
-      fetchSubmodules = true;
-      sha256 = "sha256-vzfHq/LHfnTx6CVGFCuO6W5aSqj1jVqldMdmyciSDDk=";
-    };
+  pname = "taskwarrior";
+  version = "3.0.1";
+  src = fetchFromGitHub {
+    owner = "GothenburgBitFactory";
+    repo = "taskwarrior";
+    rev = "v3.0.1";
+    hash = "sha256-S6aKFzdz7q06AtEc+QS9pXtjcExFqdvnTIs6mIOdXs8=";
+    fetchSubmodules = true;
+  };
 
   postPatch = ''
     substituteInPlace src/commands/CmdNews.cpp \
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     name = "${pname}-${version}-cargo-deps";
     inherit src;
     sourceRoot = src.name;
-    hash = "sha256-zQca/1tI/GUCekKhrg2iSL+h69SH6Ttsj3MqwDKj8HQ=";
+    hash = "sha256-frWr0NwcJxdHFuRGZuHFOvbNp8Vd55fsBzj50dyWjk8=";
   };
   cargoRoot = "./";
   preConfigure = ''
