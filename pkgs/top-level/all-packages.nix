@@ -14666,7 +14666,7 @@ with pkgs;
   inherit (callPackages ../servers/varnish/packages.nix { })
     varnish60Packages varnish74Packages varnish75Packages;
 
-  varnishPackages = varnish74Packages;
+  varnishPackages = varnish75Packages;
   varnish = varnishPackages.varnish;
 
   hitch = callPackage ../servers/hitch { };
