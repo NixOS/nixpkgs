@@ -776,7 +776,7 @@ self: super: builtins.intersectAttrs super {
     # the environment variables it uses via the preInstall hook since the Haskell
     # generic builder doesn't accept them as arguments.
     preInstall = drv.preInstall or "" + ''
-      installTargets="install install-completions"
+      installTargets="install"
       installFlagsArray+=(
         "BUILDER=:"
         "PREFIX="
@@ -801,13 +801,6 @@ self: super: builtins.intersectAttrs super {
     # `git-annex-shell` by making `shell = haskellPackages.git-annex`.
     # https://git-annex.branchable.com/git-annex-shell/
     passthru.shellPath = "/bin/git-annex-shell";
-
-    # Install man pages which is no longer done by Setup.hs
-    # TODO(@sternenseemann): figure out why install-desktops wants to create /usr
-    # and run that, too.
-    postInstall = drv.postInstall or "" + ''
-      make install-mans "DESTDIR=$out" PREFIX=
-    '';
   }) (super.git-annex.override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
