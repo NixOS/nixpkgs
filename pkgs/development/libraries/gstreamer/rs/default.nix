@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchFromGitHub
 , fetchpatch
 , rustPlatform
 , meson
@@ -80,7 +81,19 @@ let
     # video
     cdg = [ ];
     closedcaption = [ pango ];
-    dav1d = [ dav1d ];
+    dav1d = [
+      # Only dav1d < 1.3 is supported for now.
+      # https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/merge_requests/1393
+      (dav1d.overrideAttrs rec {
+        version = "1.2.1";
+        src = fetchFromGitHub {
+          owner = "videolan";
+          repo = "dav1d";
+          rev = version;
+          hash = "sha256-RrEim3HXXjx2RUU7K3wPH3QbhNTRN9ZX/oAcyE9aV8I=";
+        };
+      })
+    ];
     ffv1 = [ ];
     gif = [ ];
     gtk4 = [ gtk4 ];
@@ -129,7 +142,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-rs";
-  version = "0.11.3";
+  version = "0.12.4";
 
   outputs = [ "out" "dev" ];
 
@@ -138,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gstreamer";
     repo = "gst-plugins-rs";
     rev = finalAttrs.version;
-    hash = "sha256-0N8duv9E21S1l6G/GAJq8NHDePRqca4Jl9fW9PBDmuw=";
+    hash = "sha256-Qnp+e1Vww2kWjDG0x2tcigwDdG67I4xnm8+QrBI+o08=";
     # TODO: temporary workaround for case-insensitivity problems with color-name crate - https://github.com/annymosse/color-name/pull/2
     postFetch = ''
       sedSearch="$(cat <<\EOF | sed -ze 's/\n/\\n/g'
@@ -163,12 +176,12 @@ stdenv.mkDerivation (finalAttrs: {
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "cairo-rs-0.18.4" = "sha256-HK2DEfFSXxFBq3s4ekWsDJetIoSlmQmb49XUWvA81r0=";
+      "cairo-rs-0.19.3" = "sha256-TjVXdnlYEfPLbUx1pC84rCC2MlNecECMK2Yo9XKwz9M=";
       "color-name-1.1.0" = "sha256-RfMStbe2wX5qjPARHIFHlSDKjzx8DwJ+RjzyltM5K7A=";
       "ffv1-0.0.0" = "sha256-af2VD00tMf/hkfvrtGrHTjVJqbl+VVpLaR0Ry+2niJE=";
       "flavors-0.2.0" = "sha256-zBa0X75lXnASDBam9Kk6w7K7xuH9fP6rmjWZBUB5hxk=";
-      "gdk4-0.7.3" = "sha256-2uJvefWqEregygbJwDue8hXgfq4g6UL4syC6Q2NoMn4=";
-      "gstreamer-0.21.2" = "sha256-pgSoTcvwMvLugbW7jCnI5lAOB69pl9uV6qBkRJhqad0=";
+      "gdk4-0.8.1" = "sha256-VPmegFZ/bC8x1vkl3YU208jQ8FCEKLwe6ZDatz4mIvM=";
+      "gstreamer-0.22.4" = "sha256-r5+wOEhTVztDMEu6t47yJ9HIlbXyjdvswUND4l7kPl8=";
     };
   };
 
