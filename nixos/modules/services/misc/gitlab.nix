@@ -1168,7 +1168,7 @@ in {
         set -eu
 
         PSQL() {
-            psql --port=${toString pgsql.port} "$@"
+            psql --port=${toString pgsql.settings.port} "$@"
         }
 
         PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${cfg.databaseName}'" | grep -q 1 || PSQL -tAc 'CREATE DATABASE "${cfg.databaseName}" OWNER "${cfg.databaseUsername}"'
