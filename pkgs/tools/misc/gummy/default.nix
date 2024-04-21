@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchFromGitea
 , substituteAll
 , testers
 , gummy
@@ -20,13 +20,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gummy";
-  version = "0.5.4";
+  version = "0.6.0";
 
-  src = fetchFromGitHub {
-    owner = "fushko";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "fusco";
     repo = "gummy";
     rev = version;
-    sha256 = "sha256-cRYmBeHvTpw+cwAZzw5qjMRFPINRa7xRXixZzPKwE84=";
+    hash = "sha256-kATieFf+dEpcYgSEPoETacP7R+u2dOrg7rOhIkNQ1uE=";
   };
 
   nativeBuildInputs = [
@@ -51,21 +52,10 @@ stdenv.mkDerivation rec {
     "-DUDEV_RULES_DIR=${placeholder "out"}/lib/udev/rules.d"
   ];
 
-  patches = [
-    # prevent CMake from trying to get libraries on the Internet
-    (substituteAll {
-      src = ./cmake_no_fetch.patch;
-      nlohmann_json_src = nlohmann_json.src;
-      fmt_src = fmt.src;
-      spdlog_src = spdlog.src;
-      cli11_src = cli11.src;
-    })
-  ];
-
   # Fixes the "gummy start" command, without this it cannot find the binary.
   # Setting this through cmake does not seem to work.
   postPatch = ''
-    substituteInPlace gummy/gummyd/gummyd/api.cpp \
+    substituteInPlace gummyd/gummyd/api.cpp \
       --replace "CMAKE_INSTALL_DAEMON_PATH" "\"${placeholder "out"}/libexec/gummyd\""
   '';
 
@@ -79,7 +69,7 @@ stdenv.mkDerivation rec {
   passthru.tests.version = testers.testVersion { package = gummy; };
 
   meta = with lib; {
-    homepage = "https://github.com/Fushko/gummy";
+    homepage = "https://codeberg.org/fusco/gummy";
     description = "Brightness and temperature manager for X11";
     longDescription = ''
       CLI screen manager for X11 that allows automatic and manual brightness/temperature adjustments,
