@@ -10,20 +10,21 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, syrupy
 }:
 
 buildPythonPackage rec {
   pname = "nettigo-air-monitor";
-  version = "2.2.2";
+  version = "3.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "nettigo-air-monitor";
     rev = "refs/tags/${version}";
-    hash = "sha256-Z88IkXQi9Uqc+HX++Cp5nj4S0puwMfToqXzBCnbG59g=";
+    hash = "sha256-aiJoY+6sNfBmE1057UuMjV80hjVJ29t2X16IIe6dxWs=";
   };
 
   build-system = [
@@ -41,6 +42,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-error-for-skips
     pytestCheckHook
+    syrupy
   ];
 
   pythonImportsCheck = [
