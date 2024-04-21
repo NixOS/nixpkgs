@@ -84,6 +84,7 @@ crystal.buildCrystalPackage rec {
     description = "Dash/docset reader with built in documentation for Crystal and GTK APIs";
     homepage = "https://github.com/hugopl/rtfm/";
     license = licenses.mit;
+    mainProgram = "rtfm";
     maintainers = with maintainers; [ sund3RRR ];
   };
 }
