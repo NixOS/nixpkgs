@@ -16423,7 +16423,9 @@ with pkgs;
 
   knightos-mktiupgrade = callPackage ../development/tools/knightos/mktiupgrade { };
 
-  knightos-scas = callPackage ../development/tools/knightos/scas { };
+  knightos-scas = callPackage ../development/tools/knightos/scas {
+    stdenv = if stdenv.cc.isClang then llvmPackages_15.stdenv else stdenv;
+  };
 
   knightos-z80e = callPackage ../development/tools/knightos/z80e { };
 
