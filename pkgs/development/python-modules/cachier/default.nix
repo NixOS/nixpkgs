@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   preCheck = ''
     substituteInPlace pyproject.toml \
-      --replace  \
+      --replace-fail  \
         '"--cov' \
         '#"--cov'
   '';

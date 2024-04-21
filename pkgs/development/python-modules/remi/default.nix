@@ -23,19 +23,19 @@ buildPythonPackage rec {
   preCheck = ''
     # for some reason, REMI already deal with these using try blocks, but they fail
     substituteInPlace test/test_widget.py \
-      --replace \
+      --replace-fail \
         "from html_validator import " \
         "from .html_validator import "
     substituteInPlace test/test_examples_app.py \
-      --replace \
+      --replace-fail \
         "from mock_server_and_request import " \
         "from .mock_server_and_request import " \
-      --replace \
+      --replace-fail \
         "from html_validator import " \
         "from .html_validator import "
     # Halves number of warnings
     substituteInPlace test/test_*.py \
-      --replace \
+      --replace-quiet \
         "self.assertEquals(" \
         "self.assertEqual("
   '';
