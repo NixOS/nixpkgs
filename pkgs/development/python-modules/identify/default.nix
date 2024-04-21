@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "identify";
-  version = "2.5.35";
+  version = "2.5.36";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "pre-commit";
     repo = "identify";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kUBAq9ttIdTLApJ0yW8Yk/NIXpmllApQGpR24wm0PHA=";
+    hash = "sha256-CO+qP0FIUdPFXy6/7FgrKZbUp48XbgqqGV2GAX9ogMY=";
   };
 
   nativeBuildInputs = [
