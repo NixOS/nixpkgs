@@ -113,6 +113,21 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
       };
     };
 
+    imperative = { ... }: {
+      imports = [ ../modules/profiles/minimal.nix ];
+
+      # add a virtual wlan interface
+      boot.kernelModules = [ "mac80211_hwsim" ];
+
+      # wireless client
+      networking.wireless = {
+        enable = lib.mkOverride 0 true;
+        userControlled.enable = true;
+        allowAuxiliaryImperativeNetworks = true;
+        interfaces = [ "wlan1" ];
+      };
+    };
+
     # Test connecting to the SAE-only hotspot using SAE
     machineSae = machineWithHostapd {
       networking.wireless = {
@@ -184,6 +199,15 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
           status = basic.succeed("wpa_cli -i wlan1 status")
           assert "Failed to connect" not in status, \
                  "Failed to connect to the daemon"
+
+      with subtest("Daemon can be configured imperatively"):
+          imperative.wait_for_unit("wpa_supplicant-wlan1.service")
+          imperative.wait_until_succeeds("wpa_cli -i wlan1 status")
+          imperative.succeed("wpa_cli -i wlan1 add_network")
+          imperative.succeed("wpa_cli -i wlan1 set_network 0 ssid '\"nixos-test\"'")
+          imperative.succeed("wpa_cli -i wlan1 set_network 0 psk '\"reproducibility\"'")
+          imperative.succeed("wpa_cli -i wlan1 save_config")
+          imperative.succeed("grep -q nixos-test /etc/wpa_supplicant.conf")
 
       machineSae.wait_for_unit("hostapd.service")
       machineSae.copy_from_vm("/run/hostapd/wlan0.hostapd.conf")
