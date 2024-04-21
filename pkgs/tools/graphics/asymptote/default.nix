@@ -37,13 +37,13 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
     cmake
     pkg-config
+    (texliveSmall.withPackages (ps: with ps; [ epsf cm-super ps.texinfo media9 ocgx2 collection-latexextra ]))
   ];
 
   buildInputs = [
     ghostscriptX imagemagick fftw eigen
     boehmgc ncurses readline gsl libsigsegv
     zlib perl curl qtbase qtsvg boost
-    (texliveSmall.withPackages (ps: with ps; [ epsf cm-super ps.texinfo media9 ocgx2 collection-latexextra ]))
     (python3.withPackages (ps: with ps; [ cson numpy pyqt5 ]))
   ] ++ lib.optionals stdenv.isLinux [ libtirpc ];
 
