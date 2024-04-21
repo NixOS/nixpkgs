@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aioautomower";
-  version = "2024.4.0";
+  version = "2024.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -24,13 +24,14 @@ buildPythonPackage rec {
     owner = "Thomas55555";
     repo = "aioautomower";
     rev = "refs/tags/${version}";
-    hash = "sha256-W6aZdvg+EZKv0pmIaPOBaJaWipq3AENTVAVon/lFuI4=";
+    hash = "sha256-3m20G8X21FeLpB1HZ1ZT0c2e+BHdcW8qCkwIIgSv1Hg=";
   };
 
   postPatch = ''
     # Upstream doesn't set a version
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"' \
+      --replace-fail "--cov" ""
   '';
 
   nativeBuildInputs = [
