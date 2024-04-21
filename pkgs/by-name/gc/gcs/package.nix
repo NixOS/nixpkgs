@@ -1,21 +1,22 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, pkg-config
-, moreutils
-, libGL
-, libX11
-, libXcursor
-, libXrandr
-, libXinerama
-, libXi
-, libXxf86vm
-, mupdf
-, fontconfig
-, freetype
-, stdenv
-, darwin
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  moreutils,
+  libGL,
+  libX11,
+  libXcursor,
+  libXrandr,
+  libXinerama,
+  libXi,
+  libXxf86vm,
+  mupdf,
+  fontconfig,
+  freetype,
+  stdenv,
+  darwin,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -36,28 +37,37 @@ buildGoModule rec {
 
   vendorHash = "sha256-ee6qvwnUXtsBcovPOORfVpdndICtIUYe4GrP52V/P3k=";
 
-  nativeBuildInputs = [ pkg-config moreutils ];
-
-  buildInputs = [
-    libGL
-    libX11
-    libXcursor
-    libXrandr
-    libXinerama
-    libXi
-    libXxf86vm
-    mupdf
-    fontconfig
-    freetype
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.Carbon
-    darwin.apple_sdk_11_0.frameworks.Cocoa
-    darwin.apple_sdk_11_0.frameworks.Kernel
+  nativeBuildInputs = [
+    pkg-config
+    moreutils
   ];
+
+  buildInputs =
+    [
+      libGL
+      libX11
+      libXcursor
+      libXrandr
+      libXinerama
+      libXi
+      libXxf86vm
+      mupdf
+      fontconfig
+      freetype
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk_11_0.frameworks.Carbon
+      darwin.apple_sdk_11_0.frameworks.Cocoa
+      darwin.apple_sdk_11_0.frameworks.Kernel
+    ];
 
   # flags are based on https://github.com/richardwilkes/gcs/blob/master/build.sh
   flags = [ "-a" ];
-  ldflags = [ "-s" "-w" "-X github.com/richardwilkes/toolbox/cmdline.AppVersion=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/richardwilkes/toolbox/cmdline.AppVersion=${version}"
+  ];
 
   installPhase = ''
     runHook preInstall
