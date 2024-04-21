@@ -325,6 +325,7 @@
   ./security/duosec.nix
   ./security/google_oslogin.nix
   ./security/ipa.nix
+  ./security/isolate.nix
   ./security/krb5
   ./security/lock-kernel-modules.nix
   ./security/misc.nix
