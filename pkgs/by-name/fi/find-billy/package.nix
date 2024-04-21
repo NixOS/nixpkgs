@@ -65,5 +65,6 @@ stdenv.mkDerivation rec {
     homepage = "https://codeberg.org/annaaurora/Find-Billy";
     license = licenses.gpl3Plus;
     platforms = [ "x86_64-linux" ];
+    maintainers = [ maintainers.annaaurora ];
   };
 }
