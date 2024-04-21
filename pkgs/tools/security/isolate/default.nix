@@ -6,6 +6,7 @@
 , pkg-config
 , systemdLibs
 , installShellFiles
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -44,6 +45,10 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    isolate = nixosTests.isolate;
+  };
 
   meta = {
     description = "Sandbox for securely executing untrusted programs";
