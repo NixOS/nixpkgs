@@ -33,11 +33,11 @@ rustPlatform.buildRustPackage rec {
   # requires unstable rust features
   RUSTC_BOOTSTRAP = 1;
 
-  meta = with lib; {
+  meta = {
     description = "ElKowars wacky widgets";
     homepage = "https://github.com/elkowar/eww";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda lom coffeeispower ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda lom coffeeispower ];
     mainProgram = "eww";
     broken = stdenv.isDarwin;
   };
