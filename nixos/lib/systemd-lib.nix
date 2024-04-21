@@ -14,10 +14,12 @@ let
     elem
     filter
     filterAttrs
+    flatten
     flip
     head
     isInt
     isList
+    isPath
     length
     makeBinPath
     makeSearchPathOutput
@@ -28,6 +30,7 @@ let
     optional
     optionalAttrs
     optionalString
+    pipe
     range
     replaceStrings
     reverseList
@@ -366,9 +369,17 @@ in rec {
         // optionalAttrs (config.requisite != [])
           { Requisite = toString config.requisite; }
         // optionalAttrs (config ? restartTriggers && config.restartTriggers != [])
-          { X-Restart-Triggers = "${pkgs.writeText "X-Restart-Triggers-${name}" (toString config.restartTriggers)}"; }
+          { X-Restart-Triggers = "${pkgs.writeText "X-Restart-Triggers-${name}" (pipe config.restartTriggers [
+              flatten
+              (map (x: if isPath x then "${x}" else x))
+              toString
+            ])}"; }
         // optionalAttrs (config ? reloadTriggers && config.reloadTriggers != [])
-          { X-Reload-Triggers = "${pkgs.writeText "X-Reload-Triggers-${name}" (toString config.reloadTriggers)}"; }
+          { X-Reload-Triggers = "${pkgs.writeText "X-Reload-Triggers-${name}" (pipe config.reloadTriggers [
+              flatten
+              (map (x: if isPath x then "${x}" else x))
+              toString
+            ])}"; }
         // optionalAttrs (config.description != "") {
           Description = config.description; }
         // optionalAttrs (config.documentation != []) {
