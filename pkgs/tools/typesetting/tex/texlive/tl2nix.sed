@@ -47,7 +47,8 @@ $a}
     s/"bsd4"/"bsdOriginal"/g
     s/"collection"/"free"/g   # used for collections of individual packages with distinct licenses. As TeXlive only contains free software, we can use "free" as a catchall
     s/"fdl"/"fdl13Only"/g
-    s/"gpl1?"/"gpl1Only"/g
+    s/"gpl"/"gpl1Only"/g
+    s/"gpl([1-3])"/"gpl\1Only"/g
     s/"gpl2\+"/"gpl2Plus"/g
     s/"gpl3\+"/"gpl3Plus"/g
     s/"lgpl"/"lgpl2"/g
