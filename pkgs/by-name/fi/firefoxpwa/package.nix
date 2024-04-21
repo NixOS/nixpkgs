@@ -1,22 +1,26 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, makeWrapper
-, pkg-config
-, installShellFiles
-, firefox-unwrapped
-, openssl
-, stdenv
-, udev
-, libva
-, mesa
-, libnotify
-, xorg
-, cups
-, pciutils
-, libcanberra-gtk3
-, extraLibs ? [ ]
-, nixosTests
+{
+  extraLibs ? [ ],
+
+  lib,
+  fetchFromGitHub,
+  installShellFiles,
+  makeWrapper,
+  rustPlatform,
+
+  cups,
+  firefox-unwrapped,
+  libcanberra-gtk3,
+  libglvnd,
+  libnotify,
+  libva,
+  mesa,
+  nixosTests,
+  openssl,
+  pciutils,
+  pkg-config,
+  stdenv,
+  udev,
+  xorg,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -47,7 +51,11 @@ rustPlatform.buildRustPackage rec {
     sed -i $'s;DISTRIBUTION_VERSION = \'0.0.0\';DISTRIBUTION_VERSION = \'${version}\';' userchrome/profile/chrome/pwa/chrome.jsm
   '';
 
-  nativeBuildInputs = [ makeWrapper pkg-config installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+    pkg-config
+  ];
   buildInputs = [ openssl ];
 
   FFPWA_EXECUTABLES = ""; # .desktop entries generated without any store path references
@@ -55,7 +63,23 @@ rustPlatform.buildRustPackage rec {
   completions = "target/${stdenv.targetPlatform.config}/release/completions";
 
   gtk_modules = map (x: x + x.gtkModule) [ libcanberra-gtk3 ];
-  libs = let libs = lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils ] ++ gtk_modules ++ extraLibs; in lib.makeLibraryPath libs + ":" + lib.makeSearchPathOutput "lib" "lib64" libs;
+  libs =
+    let
+      libs =
+        lib.optionals stdenv.isLinux [
+          cups
+          libglvnd
+          libnotify
+          libva
+          mesa
+          pciutils
+          udev
+          xorg.libXScrnSaver
+        ]
+        ++ gtk_modules
+        ++ extraLibs;
+    in
+    lib.makeLibraryPath libs + ":" + lib.makeSearchPathOutput "lib" "lib64" libs;
 
   postInstall = ''
     # Runtime
@@ -127,7 +151,11 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/filips123/PWAsForFirefox/releases/tag/v${version}";
     license = licenses.mpl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ camillemndn pasqui23 ];
+    maintainers = with maintainers; [
+      adamcstephens
+      camillemndn
+      pasqui23
+    ];
     mainProgram = "firefoxpwa";
   };
 }

@@ -1,5 +1,5 @@
---- a/src/doc2dash/doc_set_builder.cr	2023-07-19 14:00:06.864770147 +0300
-+++ b/src/doc2dash/doc_set_builder.cr	2023-07-19 13:59:35.440707740 +0300
+--- a/src/doc2dash/docset_builder.cr	2024-04-20 10:45:32.000673168 +0300
++++ b/src/doc2dash/docset_builder.cr	2024-04-20 10:45:56.072895349 +0300
 @@ -44,6 +44,7 @@
        real_dest = @html_dest.join(dest || source)
        Dir.mkdir_p(Path.new(real_dest).dirname)

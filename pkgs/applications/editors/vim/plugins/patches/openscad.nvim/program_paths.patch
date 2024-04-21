@@ -21,7 +21,7 @@ index d6d4b4c..9853877 100644
  	else
  		call v:lua.vim.health.ok("htop is installed")
 diff --git a/lua/openscad.lua b/lua/openscad.lua
-index 7475f29..832c895 100644
+index 0a26d08..1264989 100644
 --- a/lua/openscad.lua
 +++ b/lua/openscad.lua
 @@ -101,7 +101,7 @@ end
@@ -33,12 +33,12 @@ index 7475f29..832c895 100644
  end
  
  function M.help()
-@@ -125,7 +125,7 @@ function M.exec_openscad()
- 		jobCommand = '/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD ' .. vim.fn.expand('%:p')
+@@ -126,7 +126,7 @@ function M.exec_openscad()
+ 		jobCommand = '/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD ' .. filename
  	else
  		-- TODO: What about Windows?
--		jobCommand = 'openscad ' .. vim.fn.expand('%:p')
-+		jobCommand = '@openscad@ ' .. vim.fn.expand('%:p')
+-		jobCommand = 'openscad ' .. filename
++		jobCommand = '@openscad@ ' .. filename
  	end
  
  	vim.fn.jobstart(jobCommand)
