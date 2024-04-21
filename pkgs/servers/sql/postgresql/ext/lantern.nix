@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "lantern";
+  pname = "postgresql-lantern";
   version = "0.2.4";
 
   src = fetchFromGitHub {
