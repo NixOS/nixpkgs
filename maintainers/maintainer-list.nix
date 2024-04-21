@@ -23018,6 +23018,16 @@
       fingerprint = "1127 F188 280A E312 3619  3329 87E1 7EEF 9B18 B6C9";
     }];
   };
+  zeorin = {
+    name = "Xandor Schiefer";
+    email = "me@xandor.co.za";
+    matrix = "@zeorin:matrix.org";
+    github = "zeorin";
+    githubId = 1187078;
+    keys = [{
+      fingerprint = "863F 093A CF82 D2C8 6FD7  FB74 5E1C 0971 FE4F 665A";
+    }];
+  };
   zeratax = {
     email = "mail@zera.tax";
     github = "zeratax";
