@@ -45,22 +45,22 @@ in
         {
           include = mkOption {
             default = null;
-            description = mdDoc "File to include additional settings for this provider from.";
+            description = "File to include additional settings for this provider from.";
             type = nullOr path;
           };
           ssl = mkOption {
             default = true;
-            description = mdDoc "Whether to use HTTPS for this DDNS provider.";
+            description = "Whether to use HTTPS for this DDNS provider.";
             type = bool;
           };
           username = mkOption {
             default = null;
-            description = mdDoc "Username for this DDNS provider.";
+            description = "Username for this DDNS provider.";
             type = nullOr str;
           };
           password = mkOption {
             default = null;
-            description = mdDoc ''
+            description = ''
               Password for this DDNS provider.
 
               WARNING: This will be world-readable in the nix store.
@@ -71,19 +71,19 @@ in
           hostname = mkOption {
             default = "*";
             example = "your.cool-domain.com";
-            description = mdDoc "Hostname alias(es).";
+            description = "Hostname alias(es).";
             type = either str (listOf str);
           };
         };
     in
     {
-      enable = mkEnableOption (mdDoc ''
+      enable = mkEnableOption (''
         synchronise your machine's IP address with a dynamic DNS provider using inadyn
       '');
       user = mkOption {
         default = "inadyn";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           User account under which inadyn runs.
 
           ::: {.note}
@@ -96,7 +96,7 @@ in
       group = mkOption {
         default = "inadyn";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Group account under which inadyn runs.
 
           ::: {.note}
@@ -108,7 +108,7 @@ in
       };
       interval = mkOption {
         default = "*-*-* *:*:00";
-        description = mdDoc ''
+        description = ''
           How often to check the current IP.
           Uses the format described in {manpage}`systemd.time(7)`";
         '';
@@ -117,7 +117,7 @@ in
       logLevel = lib.mkOption {
         type = lib.types.enum [ "none" "err" "warning" "info" "notice" "debug" ];
         default = "notice";
-        description = lib.mdDoc "Set inadyn's log level.";
+        description = "Set inadyn's log level.";
       };
       settings = mkOption {
         default = { };
@@ -128,17 +128,17 @@ in
             allow-ipv6 = mkOption {
               default = config.networking.enableIPv6;
               defaultText = "`config.networking.enableIPv6`";
-              description = mdDoc "Whether to get IPv6 addresses from interfaces.";
+              description = "Whether to get IPv6 addresses from interfaces.";
               type = bool;
             };
             forced-update = mkOption {
               default = 2592000;
-              description = mdDoc "Duration (in seconds) after which an update is forced.";
+              description = "Duration (in seconds) after which an update is forced.";
               type = ints.positive;
             };
             provider = mkOption {
               default = { };
-              description = mdDoc ''
+              description = ''
                 Settings for DDNS providers built-in to inadyn.
 
                 For a list of built-in providers, see `inadyn.conf (5)`.
@@ -150,18 +150,18 @@ in
             };
             custom = mkOption {
               default = { };
-              description = mdDoc ''
+              description = ''
                 Settings for custom DNS providers.
               '';
               type = attrsOf (submodule {
                 freeformType = attrs;
                 options = providerOptions // {
                   ddns-server = mkOption {
-                    description = mdDoc "DDNS server name.";
+                    description = "DDNS server name.";
                     type = str;
                   };
                   ddns-path = mkOption {
-                    description = mdDoc ''
+                    description = ''
                       DDNS server path.
 
                       See `inadnyn.conf (5)` for a list for format specifiers that can be used.
@@ -177,7 +177,7 @@ in
       };
       configFile = mkOption {
         default = null;
-        description = mdDoc ''
+        description = ''
           Configuration file for inadyn.
 
           Setting this will override all other configuration options.

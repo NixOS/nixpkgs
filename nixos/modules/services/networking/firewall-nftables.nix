@@ -50,7 +50,7 @@ in
         type = types.lines;
         default = "";
         example = "fib daddr . mark . iif type local accept";
-        description = lib.mdDoc ''
+        description = ''
           Additional nftables rules to be appended to the rpfilter-allow
           chain.
 
