@@ -6,7 +6,7 @@
 , callPackage
 , addOpenGLRunpath
 , electron
-, withTetrioPlus ? true
+, withTetrioPlus ? false
 , tetrio-plus ? null
 }:
 

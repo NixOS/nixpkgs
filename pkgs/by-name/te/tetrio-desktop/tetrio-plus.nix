@@ -17,13 +17,13 @@
 }:
 
 let
-  version = "unstable-2024-03-31";
+  version = "unstable-2024-04-20";
 
   src = fetchFromGitLab {
     owner = "UniQMG";
     repo = "tetrio-plus";
-    rev = "b13d476a162a2aec4ca0def29eb7a4ada9ebf523";
-    hash = "sha256-bZwx0r2lu4Ed/pYRvNog6IIok/HMoK+UeDIQctggUEs=";
+    rev = "8091b969cddbff32254eaebf8088efb63f4c519a";
+    hash = "sha256-ow9DrS3jWNtTbz8Obj4l8Zdr3u9m7f9V3dYUE2H3thk=";
     fetchSubmodules = true;
 
     # tetrio-plus uses this info for displaying its version,
@@ -52,7 +52,7 @@ let
 
     sourceRoot = "${src.name}/tpsecore";
 
-    cargoHash = "sha256-14UjPSlfiuf696cqy8+fz3SmfmFoGQlEDg9obP0EKXg=";
+    cargoHash = "sha256-r5Qcu2u/ju0b/1PWz9tE5jNlNS3PfzS79Gm1XSKA3W4=";
 
     nativeBuildInputs = [
       wasm-pack
@@ -81,8 +81,8 @@ let
   };
 
   offlineCache = fetchYarnDeps {
-    yarnLock = ./yarn.lock;
-    hash = "sha256-VYUh9y6PRc1OTLELkqCxP89Xbesv3Nu+eUq6fkuoQHE=";
+    yarnLock = "${src}/resources/desktop-ci/yarn.lock";
+    hash = "sha256-LfUC2bkUX+sFq3vMMOC1YVYbpDxUSnLO9GiKdoQBdAw=";
   };
 
 in
@@ -107,8 +107,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Install custom package.json/yarn.lock that describe the additional node
     # dependencies that tetrio-plus needs to run, and install them in our output
-    install -m644 ${./package.json} package.json
-    install -m644 ${./yarn.lock} yarn.lock
+    cp ../resources/desktop-ci/yarn.lock .
+    patch package.json ../resources/desktop-ci/package.json.diff
 
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror ${offlineCache}
