@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
       license = licenses.unfreeRedistributable // {
         url = "https://github.com/snes9xgit/snes9x/blob/${version}/LICENSE";
       };
-      maintainers = with maintainers; [ qknight xfix thiagokokada ];
+      maintainers = with maintainers; [ qknight thiagokokada ];
       platforms = platforms.unix;
       broken = (withGtk && stdenv.isDarwin);
       mainProgram = "snes9x";
