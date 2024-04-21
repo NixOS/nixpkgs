@@ -1,16 +1,17 @@
-{ lib
-, anyio
-, buildPythonPackage
-, fetchFromGitHub
-, hishel
-, httpx
-, poetry-core
-, pydantic
-, pyjwt
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, typing-extensions
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hishel,
+  httpx,
+  poetry-core,
+  pydantic,
+  pyjwt,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
       --replace-fail "--cov=githubkit --cov-append --cov-report=term-missing" ""
   '';
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     hishel
@@ -48,15 +47,9 @@ buildPythonPackage rec {
       anyio
       pyjwt
     ];
-    jwt = [
-      pyjwt
-    ];
-    auth-app = [
-      pyjwt
-    ];
-    auth-oauth-device = [
-      anyio
-    ];
+    jwt = [ pyjwt ];
+    auth-app = [ pyjwt ];
+    auth-oauth-device = [ anyio ];
     auth = [
       anyio
       pyjwt
@@ -68,9 +61,7 @@ buildPythonPackage rec {
     pytest-xdist
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "githubkit"
-  ];
+  pythonImportsCheck = [ "githubkit" ];
 
   disabledTests = [
     # Tests require network access
