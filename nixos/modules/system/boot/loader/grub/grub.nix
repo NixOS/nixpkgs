@@ -6,7 +6,6 @@ let
     concatMap
     concatMapStrings
     concatStrings
-    concatStringsSep
     escapeShellArg
     flip
     foldr
@@ -491,10 +490,10 @@ in
 
       theme = mkOption {
         type = types.nullOr types.path;
-        example = literalExpression "pkgs.nixos-grub2-theme";
+        example = literalExpression ''"''${pkgs.libsForQt5.breeze-grub}/grub/themes/breeze"'';
         default = null;
         description = ''
-          Grub theme to be used.
+          Path to the grub theme to be used.
         '';
       };
 
