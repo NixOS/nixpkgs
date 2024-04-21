@@ -1,29 +1,30 @@
-{ config
-, lib
-, fetchurl
-, callPackage
-, vscode-utils
-, asciidoctor
-, nodePackages
-, python3Packages
-, jdk
-, llvmPackages
-, llvmPackages_14
-, nixpkgs-fmt
-, protobuf
-, jq
-, shellcheck
-, moreutils
-, racket
-, clojure-lsp
-, alejandra
-, millet
-, shfmt
-, typst-lsp
-, typst-preview
-, autoPatchelfHook
-, zlib
-, stdenv
+{
+  alejandra,
+  asciidoctor,
+  autoPatchelfHook,
+  callPackage,
+  clojure-lsp,
+  config,
+  fetchurl,
+  jdk,
+  jq,
+  lib,
+  llvmPackages,
+  llvmPackages_14,
+  millet,
+  moreutils,
+  nixpkgs-fmt,
+  nodePackages,
+  protobuf,
+  python3Packages,
+  racket,
+  shellcheck,
+  shfmt,
+  stdenv,
+  typst-lsp,
+  typst-preview,
+  vscode-utils,
+  zlib,
 }:
 
 let
