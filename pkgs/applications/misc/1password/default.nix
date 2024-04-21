@@ -63,6 +63,8 @@ stdenv.mkDerivation {
     $out/bin/${mainProgram} --version
   '';
 
+  passthru.updateScript = ./update.sh;
+
   passthru.tests.version = testers.testVersion {
     package = _1password;
   };
