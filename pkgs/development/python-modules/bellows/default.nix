@@ -4,6 +4,7 @@
 , click
 , click-log
 , fetchFromGitHub
+, fetchpatch2
 , pure-pcapy3
 , pyserial-asyncio
 , pytest-asyncio
@@ -28,6 +29,13 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-oxPzjDb+FdHeHsgeGKH3SVvKb0vCB9dIhT7lGzhDcBw=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/zigpy/bellows/commit/7833647083f27f55b7ad345f4aaa7dffaa369abc.patch";
+      hash = "sha256-v+BOPqikWoyNtZ1qRWe3RwraG6nQnfZqoV6yj9PpGX8=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
