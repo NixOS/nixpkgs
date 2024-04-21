@@ -520,23 +520,23 @@ xindy = stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace xindy-*/user-commands/xindy.in \
       --replace-fail "our \$clisp = ( \$is_windows ? 'clisp.exe' : 'clisp' ) ;" \
-                     "our \$clisp = '$(type -P clisp)';"
+                     "our \$clisp = '$(type -P clisp)';" \
+      --replace-fail 'die "$cmd: Cannot locate xindy modules directory";' \
+                     '$modules_dir = "${texlive.pkgs.xindy.tex}/xindy/modules"; die "$cmd: Cannot locate xindy modules directory" unless -d $modules_dir;'
   '';
 
   nativeBuildInputs = [
     pkg-config perl
-    (texlive.combine { inherit (texlive) scheme-basic cyrillic ec; })
   ];
   buildInputs = [ clisp libiconv perl ];
 
-  configureFlags = [ "--with-clisp-runtime=system" "--disable-xindy-docs" ];
+  configureFlags = [ "--with-clisp-runtime=system" "--disable-xindy-docs" "--disable-xindy-rules" ];
 
   preInstall = ''mkdir -p "$out/bin" '';
   # fixup various file-location errors of: lib/xindy/{xindy.mem,modules/}
   postInstall = ''
     mkdir -p "$out/lib/xindy"
     mv "$out"/{bin/xindy.mem,lib/xindy/}
-    ln -s ../../share/texmf-dist/xindy/modules "$out/lib/xindy/"
   '';
 };
 
