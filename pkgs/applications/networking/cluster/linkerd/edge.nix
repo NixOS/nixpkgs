@@ -2,7 +2,7 @@
 
 (callPackage ./generic.nix { }) {
   channel = "edge";
-  version = "24.4.2";
-  sha256 = "0apwhbcnghy7b9kwalbhcgvgcrwv6s55gzlgax55qaa5lxm6r6yz";
+  version = "24.4.4";
+  sha256 = "07p4cgl4myv7kv9pxvxrvsqnl3vkd9ay5hngx5g6xds2sc8va306";
   vendorHash = "sha256-bLTummNoDfGMYvtfSLxICgCFZEymPJcRWkQyWOSzKR8=";
 }

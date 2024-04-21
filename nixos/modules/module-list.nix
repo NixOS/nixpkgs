@@ -1161,6 +1161,7 @@
   ./services/networking/strongswan.nix
   ./services/networking/stubby.nix
   ./services/networking/stunnel.nix
+  ./services/networking/sunshine.nix
   ./services/networking/supplicant.nix
   ./services/networking/supybot.nix
   ./services/networking/syncplay.nix
@@ -1224,6 +1225,7 @@
   ./services/search/elasticsearch-curator.nix
   ./services/search/elasticsearch.nix
   ./services/search/hound.nix
+  ./services/search/manticore.nix
   ./services/search/meilisearch.nix
   ./services/search/opensearch.nix
   ./services/search/qdrant.nix

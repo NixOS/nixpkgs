@@ -5,6 +5,7 @@
 , autoAddDriverRunpath
 , makeWrapper
 , buildNpmPackage
+, nixosTests
 , cmake
 , avahi
 , libevdev
@@ -185,7 +186,10 @@ stdenv'.mkDerivation rec {
     install -Dm644 ../packaging/linux/${pname}.desktop $out/share/applications/${pname}.desktop
   '';
 
-  passthru.updateScript = ./updater.sh;
+  passthru = {
+    tests.sunshine = nixosTests.sunshine;
+    updateScript = ./updater.sh;
+  };
 
   meta = with lib; {
     description = "Sunshine is a Game stream host for Moonlight";
