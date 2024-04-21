@@ -226,10 +226,10 @@
         "src": {
             "owner": "libretro",
             "repo": "dolphin",
-            "rev": "2f4b0f7902257d40a054f60b2c670d6e314f2a04",
-            "hash": "sha256-9WYWbLehExYbPmGJpguhVFXqFJ9aR6VxzFVChd4QOEg="
+            "rev": "89a4df725d4eb24537728f7d655cddb1add25c18",
+            "hash": "sha256-f9O3//EuoCSPQC7GWmf0EzAEpjoKof30kIDBCDw0dbs="
         },
-        "version": "unstable-2022-12-17"
+        "version": "unstable-2024-04-19"
     },
     "dosbox": {
         "fetcher": "fetchFromGitHub",
