@@ -8,12 +8,13 @@
 , pytest-error-for-skips
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "nextdns";
   version = "2.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
@@ -24,7 +25,11 @@ buildPythonPackage rec {
     hash = "sha256-haw6t7pepMN77LFVgDFBbV4StRqcRMvnCaup8K38kEg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     aiohttp
     orjson
   ];
