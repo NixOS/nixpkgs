@@ -5,8 +5,12 @@ let
 
   common = import ./common.nix;
 
-  lib-docs = import ./doc-support/lib-docs.nix {
+  lib-docs = import ./doc-support/generate-function-docs.nix {
     inherit pkgs nixpkgs;
+    library = pkgs.lib;
+    src = ../lib;
+    name = "nixpkgs-lib-docs";
+    prefix = "lib";
     libsets = [
       { name = "asserts"; description = "assertion functions"; }
       { name = "attrsets"; description = "attribute set functions"; }
