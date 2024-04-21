@@ -800,6 +800,12 @@
     githubId = 20405311;
     name = "Aksh Gupta";
   };
+  aktaboot = {
+    email = "akhtaboo@protonmail.com";
+    github = "aktaboot";
+    githubId = 120214979;
+    name = "aktaboot";
+  };
   al3xtjames = {
     email = "nix@alextjam.es";
     github = "al3xtjames";
@@ -6455,6 +6461,12 @@
     github = "cideM";
     githubId = 4246921;
     name = "Florian Beeres";
+  };
+  fccapria = {
+    email = "francesco@capria.eu";
+    github = "fccapria";
+    githubId = 62179193;
+    name = "Francesco Carmelo Capria";
   };
   fd = {
     email = "simon.menke@gmail.com";
@@ -14810,6 +14822,12 @@
     githubId = 127548;
     name = "Judson Lester";
   };
+  nyawox = {
+    name = "nyawox";
+    email = "nyawox.git@gmail.com";
+    github = "nyawox";
+    githubId = 93813719;
+  };
   nzbr = {
     email = "nixos@nzbr.de";
     github = "nzbr";
@@ -16694,6 +16712,12 @@
     github = "rawkode";
     githubId = 145816;
     name = "David McKay";
+  };
+  raylas = {
+    email = "r@raymond.sh";
+    github = "raylas";
+    githubId = 8099415;
+    name = "Raymond Douglas";
   };
   rayslash = {
     email = "stevemathewjoy@tutanota.com";

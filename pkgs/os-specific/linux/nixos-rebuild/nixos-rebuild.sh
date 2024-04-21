@@ -793,7 +793,13 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
     else
         cmd+=("$pathToConfig/specialisation/$specialisation/bin/switch-to-configuration")
 
-        if [[ ! -f "${cmd[-1]}" ]]; then
+        if [ -z "$targetHost" ]; then
+            specialisationExists=$(test -f "${cmd[-1]}")
+        else
+            specialisationExists=$(targetHostCmd test -f "${cmd[-1]}")
+        fi
+
+        if ! $specialisationExists; then
             log "error: specialisation not found: $specialisation"
             exit 1
         fi

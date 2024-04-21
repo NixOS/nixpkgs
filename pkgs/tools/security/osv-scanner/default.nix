@@ -4,18 +4,19 @@
 , testers
 , osv-scanner
 }:
+
 buildGoModule rec {
   pname = "osv-scanner";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "google";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-JlTD8el4hXVYI76+cxGNemkUu0n2QxCqisr6R9aPqdI=";
+    repo = "osv-scanner";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-UE6iCvv/ByODZX+FoLvIw+EeyISWFkHb4xK5L33w1hU=";
   };
 
-  vendorHash = "sha256-J5qLs4EirBOfjnLv8eQBSd9w9nzpxBW5GS28CgQMsN8=";
+  vendorHash = "sha256-c/Wjhpa7upSRMaU+rheGF9dbvK0MQe3ZmPLpR5bRiUI=";
 
   subPackages = [
     "cmd/osv-scanner"
@@ -24,9 +25,9 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/google/osv-scanner/internal/version.OSVVersion=${version}"
-    "-X main.commit=n/a"
-    "-X main.date=1970-01-01T00:00:00Z"
+    "-X=github.com/google/osv-scanner/internal/version.OSVVersion=${version}"
+    "-X=main.commit=n/a"
+    "-X=main.date=1970-01-01T00:00:00Z"
   ];
 
   # Tests require network connectivity to query https://api.osv.dev.
