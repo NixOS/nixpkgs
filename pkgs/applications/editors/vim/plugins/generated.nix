@@ -4319,6 +4319,18 @@ final: prev:
     meta.homepage = "https://github.com/sainnhe/gruvbox-material/";
   };
 
+  gruvbox-material-nvim = buildVimPlugin {
+    pname = "gruvbox-material.nvim";
+    version = "2024-04-19";
+    src = fetchFromGitHub {
+      owner = "f4z3r";
+      repo = "gruvbox-material.nvim";
+      rev = "9143e172617e708d6588f424772ef20340877dd9";
+      sha256 = "0ad1s2l7vd9h2ycva5wwxisadsiqlr55pfjas23cra8gw5ngn9cj";
+    };
+    meta.homepage = "https://github.com/f4z3r/gruvbox-material.nvim/";
+  };
+
   gruvbox-nvim = buildVimPlugin {
     pname = "gruvbox.nvim";
     version = "2024-01-29";

@@ -1,14 +1,14 @@
 { lib, stdenv, fetchurl, common-updater-scripts, coreutils, git, gnused
-, makeWrapper, nix, nixfmt-classic, openjdk, writeScript, nixosTests, jq, cacert, curl
-}:
+, makeWrapper, nix, nixfmt-classic, openjdk, writeScript, nixosTests, jq, cacert
+, curl }:
 
 stdenv.mkDerivation rec {
   pname = "jenkins";
-  version = "2.440.2";
+  version = "2.440.3";
 
   src = fetchurl {
     url = "https://get.jenkins.io/war-stable/${version}/jenkins.war";
-    hash = "sha256-gSZijp4vjuL4B9SJ7ApuN/yfXWuoT6jzcY5/PionMS4=";
+    hash = "sha256-+NR9v9WTWVUa6tg4j6StcAXtp8R84hxmTJlhDKBK42c=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

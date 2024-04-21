@@ -24917,6 +24917,8 @@ with pkgs;
 
   vale = callPackage ../tools/text/vale { };
 
+  valeStyles = recurseIntoAttrs (callPackages ../tools/text/vale/styles.nix { });
+
   valhalla = callPackage ../development/libraries/valhalla {
     boost = boost.override { enablePython = true; python = python3; };
     protobuf = protobuf_21.override {
