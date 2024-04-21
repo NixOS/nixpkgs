@@ -1,8 +1,8 @@
 { lib, stdenv, appimageTools, desktop-file-utils, fetchurl }:
 
 let
+  pname = "p3x-onenote";
   version = "2023.4.117";
-  name = "p3x-onenote-${version}";
 
   plat = {
     aarch64-linux = "-arm64";
@@ -22,18 +22,17 @@ let
   };
 
   appimageContents = appimageTools.extractType2 {
-    inherit name src;
+    inherit pname version src;
   };
 in
 appimageTools.wrapType2 rec {
-  inherit name src;
+  inherit pname version src;
 
   extraInstallCommands = ''
     mkdir -p $out/share/pixmaps $out/share/licenses/p3x-onenote
     cp ${appimageContents}/p3x-onenote.png $out/share/pixmaps/
     cp ${appimageContents}/p3x-onenote.desktop $out
     cp ${appimageContents}/LICENSE.electron.txt $out/share/licenses/p3x-onenote/LICENSE
-    mv $out/bin/${name} $out/bin/p3x-onenote
 
     ${desktop-file-utils}/bin/desktop-file-install --dir $out/share/applications \
       --set-key Exec --set-value $out/bin/p3x-onenote \
