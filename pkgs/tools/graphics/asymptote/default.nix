@@ -11,28 +11,19 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.88";
+  version = "2.89";
   pname = "asymptote";
 
   outputs = [ "out" "man" "info" "doc" "tex" ];
 
   src = fetchurl {
     url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
-    hash = "sha256-DecadD+m7pORuH3Sdcs/5M3vUbN6rhSkFoNN0Soq9bs=";
+    hash = "sha256-9k5itO5PhfGnhkDE8eim+Y6R9U7ayrGXJ8fKvpSlf1s=";
   };
 
   # override with TeX Live containers to avoid building sty, docs from source
   texContainer = null;
   texdocContainer = null;
-
-  patches = [
-    (fetchpatch {
-      # partial fix for macOS XDR/V3D support (LDFLAGS change seems like an unrelated bugfix)
-      name = "restore-LDFLAGS-dont-look-for-tirpc-under-MacOS.patch";
-      url = "https://github.com/vectorgraphics/asymptote/commit/7e17096b22d18d133d1bc5916b6e32c0cb24ad10.patch";
-      hash = "sha256-olCFzqfZwWOAjqlB5lDPXYRHU9i3VQNgoR0cO5TmW98=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
