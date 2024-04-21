@@ -714,11 +714,7 @@ in
       hash = "sha256-2P+mokkjdj2PccQG/kAGnIoUPVnK2FqNfYpHPhsp8kw=";
     };
 
-    nativeBuildInputs = let
-      # HACK: luarocks-nix doesn't pick up rockspec build dependencies,
-      # so we have to pass the correct package in here.
-      lua = lib.head oa.propagatedBuildInputs;
-    in oa.nativeBuildInputs ++ [
+    nativeBuildInputs = oa.nativeBuildInputs ++ [
       cargo
       rustPlatform.cargoSetupHook
       lua.pkgs.luarocks-build-rust-mlua
