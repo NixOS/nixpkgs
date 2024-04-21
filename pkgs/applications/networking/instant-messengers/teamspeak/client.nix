@@ -90,11 +90,8 @@ stdenv.mkDerivation rec {
       cp pluginsdk/docs/client_html/images/logo.png $out/share/icons/hicolor/64x64/apps/teamspeak.png
       cp ${desktopItem}/share/applications/* $out/share/applications/
 
-      # Make a symlink to the binary from bin.
       mkdir -p $out/bin/
-      ln -s $out/lib/teamspeak/ts3client $out/bin/ts3client
-
-      wrapProgram $out/bin/ts3client \
+      makeWrapper $out/lib/teamspeak/ts3client $out/bin/ts3client \
         --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
         --set QT_PLUGIN_PATH "${qtbase}/${qtbase.qtPluginPrefix}" \
     '' /* wayland is currently broken, remove when TS3 fixes that */ + ''
