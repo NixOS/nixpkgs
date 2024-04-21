@@ -4068,8 +4068,8 @@ let
         mktplcRef = {
           name = "vscode-nushell-lang";
           publisher = "thenuprojectcontributors";
-          version = "1.1.0";
-          hash = "sha256-7v4q0OEqv7q2ejHp4lph2Dsqg0GWE65pxyz9goQEm8g=";
+          version = "1.9.0";
+          hash = "sha256-E9CK/GChd/yZT+P3ttROjL2jHtKPJ0KZzc32/nbuE4w=";
         };
         meta.license = lib.licenses.mit;
       };
