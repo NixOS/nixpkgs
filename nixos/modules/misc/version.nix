@@ -25,7 +25,7 @@ let
       VERSION = "${cfg.release} (${cfg.codeName})";
       VERSION_CODENAME = toLower cfg.codeName;
       VERSION_ID = cfg.release;
-      BUILD_ID = cfg.version;
+      BUILD_ID = cfg.versionSuffix;
       PRETTY_NAME = "${cfg.distroName} ${cfg.release} (${cfg.codeName})";
       LOGO = "nix-snowflake";
       HOME_URL = optionalString isNixos "https://nixos.org/";
