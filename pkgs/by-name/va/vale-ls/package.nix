@@ -5,6 +5,7 @@
 , rustPlatform
 , pkg-config
 , openssl
+, darwin
 , vale
 }:
 
@@ -25,7 +26,11 @@ rustPlatform.buildRustPackage {
     makeWrapper
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    SystemConfiguration
+  ]);
 
   checkFlags = [
     # The following tests are reaching to the network.
@@ -38,7 +43,7 @@ rustPlatform.buildRustPackage {
 
   env.OPENSSL_NO_VENDOR = true;
 
-  cargoHash = "sha256-JDsveGMQaDLFOba6oKYdm14IYDUf4+FIG4dPm09zWog=";
+  cargoHash = "sha256-ifKdSTmVWfDZF5Kn9b5JpzDxa160oRTfzjvxeL9POBg=";
 
   postInstall = ''
     wrapProgram $out/bin/vale-ls \
@@ -51,7 +56,6 @@ rustPlatform.buildRustPackage {
     license = licenses.mit;
     mainProgram = "vale-ls";
     maintainers = with maintainers; [ foo-dogsquared jansol ];
-    platforms = platforms.unix;
   };
 }
 
