@@ -280,6 +280,16 @@ in
         contents = [ hello cowsay ];
         singularity = finalAttrs.finalPackage;
       };
+      image-mpich-samples = callPackage
+        ({ singularity-tools, mpich }:
+          singularity-tools.buildImage {
+            name = mpich.tests.samples.name;
+            contents = [ mpich.tests.samples ];
+            memSize = 4096;
+            diskSize = 4096;
+            singularity = finalAttrs.finalPackage;
+          })
+        { };
     };
     gpuChecks = lib.optionalAttrs (projectName == "apptainer") {
       # Should be in tests, but Ofborg would skip image-hello-cowsay because
