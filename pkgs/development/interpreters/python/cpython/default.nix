@@ -70,8 +70,7 @@
 , enableNoSemanticInterposition ? true
 
 # enabling LTO on 32bit arch causes downstream packages to fail when linking
-# enabling LTO on *-darwin causes python3 to fail when linking.
-, enableLTO ? stdenv.is64bit && stdenv.isLinux
+, enableLTO ? stdenv.is64bit && (stdenv.isLinux || stdenv.isDarwin)
 
 # enable asserts to ensure the build remains reproducible
 , reproducibleBuild ? false
