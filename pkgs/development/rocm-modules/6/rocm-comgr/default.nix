@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , rocmUpdateScript
 , cmake
 , rocm-cmake
@@ -34,6 +35,15 @@ in stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     rocm-device-libs
     libxml2
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "comgr-support-compressed-device-binaries.patch";
+      url = "https://github.com/GZGavinZhao/ROCm-CompilerSupport/commit/3f86eb4e1818b28f05a3b927b34cf7b4f5e02f9c.patch";
+      hash = "sha256-A8m8EIMYVgVv7CZL24JZK16qdcmkfDYqPrnZxksmY2A=";
+      stripLen = 2;
+    })
   ];
 
   cmakeFlags = [ "-DLLVM_TARGETS_TO_BUILD=AMDGPU;X86" ];
