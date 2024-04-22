@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  dbus,
   docbook2x,
   libapparmor,
   libcap,
@@ -9,22 +10,22 @@
   libselinux,
   meson,
   ninja,
-  nix-update-script,
   nixosTests,
   openssl,
   pkg-config,
   systemd,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lxc";
-  version = "5.0.3";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxc";
-    rev = "refs/tags/lxc-${version}";
-    hash = "sha256-lnLmLgWXt3pI2S+4OeHRlPP5gui7S7ZXXClFt+n/8sY=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-D994gekFgW/1Q4iVFM/3Zi0JXKn9Ghfd3UcjckVfoFY=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    dbus
     libapparmor
     libcap
     libseccomp
@@ -44,17 +46,19 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-     # make build more nix compatible
-    ./add-meson-options.patch
-
     # fix docbook2man version detection
     ./docbook-hack.patch
+
+    # fix linking
+    ./4428.diff
   ];
 
   mesonFlags = [
     "-Dinstall-init-files=false"
     "-Dinstall-state-dirs=false"
     "-Dspecfile=false"
+    # re-enable when fixed https://github.com/lxc/lxc/issues/4427
+    # "-Dtools-multicall=true"
   ];
 
   enableParallelBuilding = true;
@@ -65,11 +69,13 @@ stdenv.mkDerivation rec {
     tests = {
       incus-legacy-init = nixosTests.incus.container-legacy-init;
       incus-systemd-init = nixosTests.incus.container-systemd-init;
+      lxd = nixosTests.lxd.container;
     };
+
     updateScript = nix-update-script {
       extraArgs = [
-        "-vr"
-        "lxc-(.*)"
+        "--version-regex"
+        "v(6.0.*)"
       ];
     };
   };
@@ -88,4 +94,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = lib.teams.lxc.members;
   };
-}
+})
