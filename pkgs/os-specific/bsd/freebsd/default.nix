@@ -25,16 +25,11 @@ in makeScopeWithSplicing' {
       sha256 = "BpHqJfnGOeTE7tkFJBx0Wk8ryalmf4KNTit/Coh026E=";
     };
 
-    # Why do we have splicing and yet do `nativeBuildInputs = with self; ...`?
-    # See note in ../netbsd/default.nix.
-
     compatIfNeeded = lib.optional (!stdenvNoCC.hostPlatform.isFreeBSD) self.compat;
-
     freebsd-lib = import ./lib { inherit version; };
 
-    # Overridden arguments avoid cross package-set splicing issues,
-    # otherwise would just use implicit
-    # `lib.packagesFromDirectoryRecursive` auto-call.
+    # The manual callPackages below should in principle be unnecessary, but are
+    # necessary. See note in ../netbsd/default.nix
 
     compat = self.callPackage ./pkgs/compat/package.nix {
       inherit stdenv;

@@ -7,7 +7,7 @@ let
   fpm = config.services.phpfpm.pools.roundcube;
   localDB = cfg.database.host == "localhost";
   user = cfg.database.username;
-  phpWithPspell = pkgs.php81.withExtensions ({ enabled, all }: [ all.pspell ] ++ enabled);
+  phpWithPspell = pkgs.php83.withExtensions ({ enabled, all }: [ all.pspell ] ++ enabled);
 in
 {
   options.services.roundcube = {

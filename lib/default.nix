@@ -47,7 +47,7 @@ let
     # misc
     asserts = callLibs ./asserts.nix;
     debug = callLibs ./debug.nix;
-    misc = callLibs ./deprecated.nix;
+    misc = callLibs ./deprecated/misc.nix;
 
     # domain-specific
     fetchers = callLibs ./fetchers.nix;
