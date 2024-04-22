@@ -21898,12 +21898,6 @@
     githubId = 36407913;
     name = "Uli Baum";
   };
-  xfix = {
-    email = "kamila@borowska.pw";
-    github = "KamilaBorowska";
-    githubId = 1297598;
-    name = "Kamila Borowska";
-  };
   xfnw = {
     email = "xfnw+nixos@riseup.net";
     github = "xfnw";

@@ -73,6 +73,6 @@ buildPythonPackage rec {
     description = "SkyTemple Script Engine Debugger Emulator Backend";
     homepage = "https://github.com/SkyTemple/skytemple-ssb-emulator";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ marius851000 xfix ];
+    maintainers = with maintainers; [ marius851000 ];
   };
 }
