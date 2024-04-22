@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A terminal gopher client";
+    mainProgram = "sacc";
     homepage = "gopher://bitreich.org/1/scm/sacc";
     license = licenses.isc;
     maintainers = [ maintainers.sternenseemann ];

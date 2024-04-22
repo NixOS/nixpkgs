@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "zarr";
-  version = "2.16.1";
+  version = "2.17.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QnbPS0plNDEELNU/8igrxNKSpoQkEeiFKZZFBPsHMoY=";
+    hash = "sha256-Vks6oHISJUb+aaD6IXNvRmsg+tQXVDNLYmGfCIzkYmE=";
   };
 
   nativeBuildInputs = [

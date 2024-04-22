@@ -35,6 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/PyCQA/pycodestyle/blob/${version}/CHANGES.txt";
     description = "Python style guide checker";
+    mainProgram = "pycodestyle";
     homepage = "https://pycodestyle.pycqa.org/";
     license = licenses.mit;
     maintainers = with maintainers; [

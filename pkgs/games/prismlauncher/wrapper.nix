@@ -18,11 +18,13 @@
 , openal
 , jdk8
 , jdk17
+, jdk21
 , gamemode
 , flite
 , mesa-demos
 , pciutils
 , udev
+, vulkan-loader
 , libusb1
 
 , msaClientID ? null
@@ -39,7 +41,7 @@
   # itself can take slightly longer to start
 , withWaylandGLFW ? false
 
-, jdks ? [ jdk17 jdk8 ]
+, jdks ? [ jdk21 jdk17 jdk8 ]
 , additionalLibs ? [ ]
 , additionalPrograms ? [ ]
 }:
@@ -99,6 +101,7 @@ symlinkJoin {
         glfw
         openal
         stdenv.cc.cc.lib
+        vulkan-loader # VulkanMod's lwjgl
 
         # oshi
         udev

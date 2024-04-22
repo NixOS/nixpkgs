@@ -21,8 +21,8 @@ in {
     services.xserver = {
       enable = true;
       desktopManager.mate.enable = true;
-      displayManager.defaultSession = lib.mkForce "mate";
     };
+    services.displayManager.defaultSession = lib.mkForce "mate";
 
     services.ayatana-indicators = {
       enable = true;

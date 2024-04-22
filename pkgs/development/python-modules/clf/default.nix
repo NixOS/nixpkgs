@@ -24,6 +24,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/ncrocfer/clf";
     description = "Command line tool to search snippets on Commandlinefu.com";
+    mainProgram = "clf";
     license = licenses.mit;
     maintainers = with maintainers; [ koral ];
   };

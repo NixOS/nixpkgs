@@ -36,7 +36,7 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enable to run Hercules CI Agent as a system service.
 
         [Hercules CI](https://hercules-ci.com) is a
@@ -47,7 +47,7 @@ in
     };
     package = mkPackageOption pkgs "hercules-ci-agent" { };
     settings = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         These settings are written to the `agent.toml` file.
 
         Not all settings are listed as options, can be set nonetheless.
@@ -67,7 +67,7 @@ in
       type = types.path;
       internal = true;
       defaultText = lib.literalMD "generated `hercules-ci-agent.toml`";
-      description = lib.mdDoc ''
+      description = ''
         The fully assembled config file.
       '';
     };

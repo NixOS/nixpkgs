@@ -3,6 +3,7 @@
 , pythonOlder
 , fetchFromGitHub
 , poetry-core
+, pythonRelaxDepsHook
 , pathable
 , pyyaml
 , referencing
@@ -31,6 +32,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "referencing"
   ];
 
   propagatedBuildInputs = [

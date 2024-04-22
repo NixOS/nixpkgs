@@ -88,6 +88,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Engineering and scientific problems algorithms";
+    mainProgram = "nvcc_wrapper";
     longDescription = ''
       The Trilinos Project is an effort to develop algorithms and enabling
       technologies within an object-oriented software framework for the

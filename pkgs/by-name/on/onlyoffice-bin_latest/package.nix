@@ -187,6 +187,7 @@ buildFHSEnv {
 
   meta = with lib; {
     description = "Office suite that combines text, spreadsheet and presentation editors allowing to create, view and edit local documents";
+    mainProgram = "onlyoffice-desktopeditors";
     longDescription = ''
       This version is broken on wlroots environments (e.g. Hyprland, Sway).
       If you are using one of these environments, please use `onlyoffice-bin` instead.

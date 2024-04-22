@@ -7,40 +7,24 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "oil";
-  version = "0.20.0";
+  version = "0.21.0";
 
   src = fetchurl {
-    url = "https://www.oilshell.org/download/oils-for-unix-${version}.tar.gz";
-    hash = "sha256-d4BIRj8bPyd7awZyJPlZYBwr+o82IKGh4y4/urOYOxc=";
+    url = "https://www.oilshell.org/download/oil-${version}.tar.xz";
+    hash = "sha256-eoImAByJFtAEaPYn02XerR/0+dXO8IdhnTEDCMKmlJI=";
   };
 
   postPatch = ''
-    patchShebangs _build
+    patchShebangs build
   '';
 
   preInstall = ''
     mkdir -p $out/bin
   '';
 
-  buildPhase = ''
-    runHook preBuild
-
-    _build/oils.sh
-
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    ./install
-
-    runHook postInstall
-  '';
-
   strictDeps = true;
   buildInputs = lib.optional withReadline readline;
-  # As of 0.19.0 the build generates an error on MacOS (using clang version 16.0.6 in the builder),
+  # As of 0.20.0 the build generates an error on MacOS (using clang version 16.0.6 in the builder),
   # whereas running it outside of Nix with clang version 15.0.0 generates just a warning. The shell seems to
   # work just fine though, so we disable the error here.
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
@@ -55,7 +39,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   meta = {
-    description = "A new unix shell";
+    description = "A new unix shell - Python version";
     homepage = "https://www.oilshell.org/";
 
     license = with lib.licenses; [
@@ -64,7 +48,7 @@ stdenv.mkDerivation rec {
     ];
 
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ lheckemann alva mkg20001 ];
+    maintainers = with lib.maintainers; [ lheckemann alva melkor333 ];
     changelog = "https://www.oilshell.org/release/${version}/changelog.html";
   };
 

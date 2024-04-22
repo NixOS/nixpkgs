@@ -1,9 +1,0 @@
-- Because pkgs/by-name/fo/foo exists, the attribute `pkgs.foo` must be defined like
-
-    foo = callPackage ./pkgs/by-name/fo/foo/package.nix { /* ... */ };
-
-  However, in this PR, a different `callPackage` is used. See the definition in all-packages.nix:5:
-
-    foo = self.alt.callPackage ({ }: self.someDrv) { };
-
-This PR introduces the problems listed above. Please fix them before merging, otherwise the base branch would break.

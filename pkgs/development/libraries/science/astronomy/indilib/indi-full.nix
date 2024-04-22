@@ -6,7 +6,7 @@ let
     owner = "indilib";
     repo = "indi-3rdparty";
     rev = "v${version}";
-    hash = "sha256-KNoyYldZWsXB9ubu0EYDgckRtpQgSCmzKlx7Erx4MRQ=";
+    hash = "sha256-u5UpI6ll2TnI02xWSaZRC5v6BOT0EHaQ2md5iY/Ymjs=";
   };
   indi-firmware = callPackage ./indi-firmware.nix {
     inherit version;

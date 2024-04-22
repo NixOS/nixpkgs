@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An extensible shell with higher order functions";
+    mainProgram = "es";
     longDescription =
       ''
         Es is an extensible shell. The language was derived

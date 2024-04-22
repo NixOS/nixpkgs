@@ -3,16 +3,20 @@
 , lib
 }:
 
-ffmpeg_6-full.overrideAttrs (old: rec {
-  pname = "jellyfin-ffmpeg";
-  version = "6.0.1-3";
+let
+  version = "6.0.1-5";
+in
 
-  src = fetchFromGitHub {
+(ffmpeg_6-full.override {
+  inherit version; # Important! This sets the ABI.
+  source = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-ffmpeg";
     rev = "v${version}";
-    hash = "sha256-UINiXO61nB/AL0HJJy7G7emujakk/mQv81aUioyJz0Y=";
+    hash = "sha256-y/J4iBbqtyyMnTb6R3lTVSOQD8oPo8liyVA5GQ5BvmM=";
   };
+}).overrideAttrs (old: {
+  pname = "jellyfin-ffmpeg";
 
   # Clobber upstream patches as they don't apply to the Jellyfin fork
   patches = [];

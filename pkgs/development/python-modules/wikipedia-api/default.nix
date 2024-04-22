@@ -6,7 +6,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Wikipedia-API";
+  pname = "wikipedia-api";
   version = "0.6.0";
   format = "setuptools";
 

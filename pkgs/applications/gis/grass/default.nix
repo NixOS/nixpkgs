@@ -23,7 +23,6 @@
 , pkg-config
 , postgresql
 , proj
-, proj-datumgrid
 , python3Packages
 , readline
 , sqlite
@@ -71,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     pdal
     postgresql
     proj
-    proj-datumgrid
     readline
     sqlite
     wxGTK32

@@ -29,7 +29,7 @@ compcert = mkCoqDerivation {
   releaseRev = v: "v${v}";
 
   defaultVersion =  with lib.versions; lib.switch coq.version [
-      { case = range "8.14" "8.17"; out = "3.13.1"; }
+      { case = range "8.14" "8.19"; out = "3.13.1"; }
       { case = isEq "8.13"        ; out = "3.10"; }
       { case = isEq "8.12"       ; out = "3.9"; }
       { case = range "8.8" "8.11"; out = "3.8"; }
@@ -170,12 +170,27 @@ compcert.overrideAttrs (o:
           })
         ];
       }
-      { cases = [ (isEq "8.17") (isEq "3.13") ];
+      { cases = [ (range "8.17" "8.19") (isEq "3.13") ];
         out = [
           # Support for Coq 8.17.0 & Coq 8.17.1
           (fetchpatch {
-            url = "https://github.com/AbsInt/CompCert/commit/030a0fafe6a1a315bb13c5276e0af536e4f713ce.patch";
-            hash = "sha256-iRdmgYuun1wp6chRoDy99KKmFyvY79NGWzrltyQaW1o=";
+            url = "https://github.com/AbsInt/CompCert/commit/2e04d986bdae578186e40330842878559a550402.patch";
+            hash = "sha256-2ZRAjUUSScJI8ogWFTnukCUnJdLWGvyOPyfIVlHL4ig=";
+          })
+          # Support for Coq 8.18.0
+          (fetchpatch {
+            url = "https://github.com/AbsInt/CompCert/commit/28218c5663cba36c6078ca342335d4e55c412bd7.patch";
+            hash = "sha256-aAatUMO26oZwFYGh1BXYWxbTuyOgU8BAKMGDS5796hM=";
+          })
+          # MenhirLib update
+          (fetchpatch {
+            url = "https://github.com/AbsInt/CompCert/commit/9f3d7b6eb99377ad4689cd57563c484c57baa457.patch";
+            hash = "sha256-paofdSBxP/JFoBSiO1OI+mjKRI3UCanXRh/drzYt93E=";
+          })
+          # Support for Coq 8.19.0 & Coq 8.19.1
+          (fetchpatch {
+            url = "https://github.com/AbsInt/CompCert/commit/a2e4ed62fc558d565366845f9d135bd7db5e23c4.patch";
+            hash = "sha256-ufk0bokuayLfkSvK3cK4E9iXU5eZpp9d/ETSa/zCfMg=";
           })
         ];
       }

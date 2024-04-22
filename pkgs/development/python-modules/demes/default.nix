@@ -5,7 +5,7 @@
 , ruamel-yaml
 , attrs
 , pythonOlder
-, pytestCheckHook
+, pytest7CheckHook
 , pytest-xdist
 , numpy
 }:
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pytest7CheckHook
     pytest-xdist
     numpy
   ];
@@ -51,6 +51,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Tools for describing and manipulating demographic models";
+    mainProgram = "demes";
     homepage = "https://github.com/popsim-consortium/demes-python";
     license = licenses.isc;
     maintainers = with maintainers; [ alxsimon ];

@@ -8,7 +8,7 @@ set -eu -o pipefail
 # (should be capitalized like the display name)
 SOLVER=LTS
 # Stackage solver verson, if any. Use latest if empty
-VERSION=21
+VERSION=
 TMP_TEMPLATE=update-stackage.XXXXXXX
 readonly SOLVER
 readonly VERSION

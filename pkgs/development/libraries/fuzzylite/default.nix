@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A fuzzy logic control library in C++";
+    mainProgram = "fuzzylite";
     homepage = "https://fuzzylite.com";
     changelog = "https://github.com/fuzzylite/fuzzylite/${src.rev}/release/CHANGELOG";
     license = licenses.gpl3Only;

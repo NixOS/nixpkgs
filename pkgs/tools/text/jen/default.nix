@@ -22,6 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A simple CLI generation tool for creating large datasets";
+    mainProgram = "jen";
     homepage = "https://github.com/whitfin/jen";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/eneshecan/whatsapp-for-linux";
     description = "Whatsapp desktop messaging app";
+    mainProgram = "whatsapp-for-linux";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ bartuka ];
     platforms = [ "x86_64-linux" ];

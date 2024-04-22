@@ -79,6 +79,7 @@ let
       }.${system} or throwSystem;
       browsers-chromium = browsers-linux {};
     };
+    meta.mainProgram = "playwright";
   });
 
   browsers-mac = stdenv.mkDerivation {

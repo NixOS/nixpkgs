@@ -95,6 +95,7 @@ python.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/Nike-Inc/gimme-aws-creds";
     changelog = "https://github.com/Nike-Inc/gimme-aws-creds/releases";
     description = "A CLI that utilizes Okta IdP via SAML to acquire temporary AWS credentials";
+    mainProgram = "gimme-aws-creds";
     license = licenses.asl20;
     maintainers = with maintainers; [ jbgosselin ];
   };

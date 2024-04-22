@@ -39,7 +39,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable syslogd.  Note that systemd also logs
           syslog messages, so you normally don't need to run syslogd.
         '';
@@ -48,7 +48,7 @@ in
       tty = mkOption {
         type = types.str;
         default = "tty10";
-        description = lib.mdDoc ''
+        description = ''
           The tty device on which syslogd will print important log
           messages. Leave this option blank to disable tty logging.
         '';
@@ -57,7 +57,7 @@ in
       defaultConfig = mkOption {
         type = types.lines;
         default = defaultConf;
-        description = lib.mdDoc ''
+        description = ''
           The default {file}`syslog.conf` file configures a
           fairly standard setup of log files, which can be extended by
           means of {var}`extraConfig`.
@@ -67,7 +67,7 @@ in
       enableNetworkInput = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Accept logging through UDP. Option -r of syslogd(8).
         '';
       };
@@ -76,7 +76,7 @@ in
         type = types.lines;
         default = "";
         example = "news.* -/var/log/news";
-        description = lib.mdDoc ''
+        description = ''
           Additional text appended to {file}`syslog.conf`,
           i.e. the contents of {var}`defaultConfig`.
         '';
@@ -86,7 +86,7 @@ in
         type = types.listOf types.str;
         default = [ ];
         example = [ "-m 0" ];
-        description = lib.mdDoc ''
+        description = ''
           Additional parameters passed to {command}`syslogd`.
         '';
       };

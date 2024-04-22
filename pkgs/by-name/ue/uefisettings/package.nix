@@ -5,19 +5,25 @@
 
 rustPlatform.buildRustPackage {
   name = "uefisettings";
-  version = "unstable-2024-02-20";
+  version = "0-unstable-2024-03-26";
 
   src = fetchFromGitHub {
     owner = "linuxboot";
     repo = "uefisettings";
-    rev = "eae8b8b622b7ac3c572eeb3b3513ed623e272fcc";
-    hash = "sha256-zLgrxYBj5bEMZRw5sKWqKuV3jQOJ6dnzbzpoqE0OhKs=";
+    rev = "f90aed759b9c2217bea336e37ab5282616ece390";
+    hash = "sha256-Cik8uVdzhMmgXfx23axkUJBg8zd5afMgYvluN0BJsdo=";
   };
 
   cargoHash = "sha256-FCQ/1E6SZyVOOAlpqyaDWEZx0y0Wk3Caosvr48VamAA=";
 
-  # Tests expect filesystem access to directories like /proc
-  doCheck = false;
+  checkFlags = [
+    # Expects filesystem access to /proc and rootfs
+    "--skip=hii::efivarfs::tests::test_get_current_mount_flags_for_proc"
+    "--skip=hii::efivarfs::tests::test_get_current_mount_flags_for_root"
+    # Expects FHS
+    "--skip=ilorest::blobstore::Transport"
+    "--skip=ilorest::chif::IloRestChif"
+  ];
 
   meta = with lib; {
     description = "CLI tool to read/get/extract and write/change/modify BIOS/UEFI settings.";

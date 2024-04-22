@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Microsoft EMF to SVG conversion library";
+    mainProgram = "emf2svg-conv";
     homepage = "https://github.com/kakwa/libemf2svg";
     maintainers = with maintainers; [ erdnaxe ];
     license = licenses.gpl2Only;

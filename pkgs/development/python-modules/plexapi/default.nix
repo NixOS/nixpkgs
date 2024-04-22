@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "plexapi";
-  version = "4.15.10";
+  version = "4.15.12";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,14 +19,14 @@ buildPythonPackage rec {
     owner = "pkkid";
     repo = "python-plexapi";
     rev = "refs/tags/${version}";
-    hash = "sha256-3qvAf3oray3Fm3No6ixv/D1mY4lipt5pixgpyXNCRoc=";
+    hash = "sha256-i+Vg1SWxDKprZu+crf0iallaAIApDpidJ//2mivAn18=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     requests
     tqdm
     websocket-client

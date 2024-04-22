@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, rustPlatform
-, quil
-, pytest-asyncio
-, pytestCheckHook
-, syrupy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  quil,
+  rustPlatform,
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "qcs-sdk-python";
-  version = "0.16.3";
+  version = "0.17.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,26 +21,24 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = "qcs-sdk-rust";
     rev = "python/v${version}";
-    hash = "sha256-Q2PCARxaWqgVVnr2O+zhGcNHghC4gr31bxkv6+Rf/EQ=";
+    hash = "sha256-Z/NK+xnugFieJqAbvGaVvxUaz9RC1vpWb4ydZTVbZeU=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "quil-rs-0.22.5" = "sha256-HUp41mOBjyAavhjFO5IJXHh2dVPcpFuDJ03nyRRuCCk=";
+      "quil-rs-0.23.0" = "sha256-l9wj1j7PJ5L497dPlkEpJ4ctAfjUIada5Vbn2h5ioVE=";
     };
   };
 
   buildAndTestSubdir = "crates/python";
 
-  nativeBuildInputs = [
+  build-system = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
 
-  propagatedBuildInputs = [
-    quil
-  ];
+  dependencies = [ quil ];
 
   nativeCheckInputs = [
     pytest-asyncio

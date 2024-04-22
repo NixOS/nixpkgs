@@ -25,13 +25,13 @@
 
 mkDerivation rec {
   pname = "bitcoin" + lib.optionalString (!withGui) "d" + "-abc";
-  version = "0.28.11";
+  version = "0.29.1";
 
   src = fetchFromGitHub {
     owner = "bitcoin-ABC";
     repo = "bitcoin-abc";
     rev = "v${version}";
-    hash = "sha256-JOAEaz9b89qIpHOJ+aHMu8RVpEvzuVtFv8plUMKcmlM=";
+    hash = "sha256-QEuOMl1sbVdB2nRwBO/2adqj/NIQGbwrBqML39fymM0=";
   };
 
   nativeBuildInputs = [ pkg-config cmake ];

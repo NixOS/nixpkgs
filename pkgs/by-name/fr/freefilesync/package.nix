@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freefilesync";
-  version = "13.4";
+  version = "13.5";
 
   src = fetchurl {
     url = "https://freefilesync.org/download/FreeFileSync_${finalAttrs.version}_Source.zip";
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
       rm -f $out
       tryDownload "$url"
     '';
-    hash = "sha256-0c4HYlah9aHsMMyCz/TjgA59pTce4hogz5n6Xf9Myho=";
+    hash = "sha256-8At8QobAQR2mQnFjFSPTkEuxmP9M8gINP0qH28J3ynY=";
   };
 
   sourceRoot = ".";

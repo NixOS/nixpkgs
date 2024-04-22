@@ -16,7 +16,7 @@ let
 in
 
 buildPythonPackage rec {
-  version = "2.0.7";
+  version = "2.0.9";
   pname = "pyscard";
   pyproject = true;
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "LudovicRousseau";
     repo = "pyscard";
     rev = "refs/tags/${version}";
-    hash = "sha256-nkDI1OPQ4SsNhWkg53ZTsG7j0+mvpkJI7dsyaOl1a/8=";
+    hash = "sha256-DO4Ea+mlrWPpOLI8Eki+03UnsOXEhN2PAl0+gdN5sTo=";
   };
 
   nativeBuildInputs = [

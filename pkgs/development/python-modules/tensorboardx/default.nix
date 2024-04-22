@@ -68,6 +68,9 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # we are not interested in linting errors
     "tests/test_lint.py"
+    # ImportError: cannot import name 'mock_s3' from 'moto'
+    "tests/test_embedding.py"
+    "tests/test_record_writer.py"
   ];
 
   meta = with lib; {

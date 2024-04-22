@@ -3,7 +3,7 @@
 , fetchurl
 , lib
 , genericUpdater
-, go
+, go_1_21
 , perl
 , stdenv
 , writeShellScript
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    go
+    go_1_21
   ];
 
   # Build parameters

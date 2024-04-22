@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , openssl
 , nettle
 , expat
@@ -51,17 +50,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unbound";
-  version = "1.19.1";
+  version = "1.19.3";
 
   src = fetchurl {
     url = "https://nlnetlabs.nl/downloads/unbound/unbound-${finalAttrs.version}.tar.gz";
-    hash = "sha256-vB1Xbz3YRqBzmtxB/6pwJATGdn0rYILeufL5fLsko6k=";
+    hash = "sha256-OuMivn3C+DFgPksDkUNVM61YYcIyLjSnYAap+2XrVrk=";
   };
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
 
   nativeBuildInputs =
     lib.optionals withMakeWrapper [ makeWrapper ]
+    ++ lib.optionals withDNSTAP [ protobufc ]
     ++ [ pkg-config ]
     ++ lib.optionals withPythonModule [ swig ];
 
@@ -97,7 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-libsodium=${symlinkJoin { name = "libsodium-full"; paths = [ libsodium.dev libsodium.out ]; }}"
   ] ++ lib.optionals withDNSTAP [
     "--enable-dnstap"
-    "--with-protobuf-c=${protobufc}"
   ] ++ lib.optionals withTFO [
     "--enable-tfo-client"
     "--enable-tfo-server"

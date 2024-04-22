@@ -11,6 +11,7 @@ mkDerivation {
   meta = {
     homepage = "https://apps.kde.org/kdebugsettings/";
     description = "KDE debug settings";
+    mainProgram = "kdebugsettings";
     license = with lib.licenses; [ gpl2 ];
     maintainers = [ ];
   };

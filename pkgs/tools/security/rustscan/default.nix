@@ -29,6 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Faster Nmap Scanning with Rust";
+    mainProgram = "rustscan";
     homepage = "https://github.com/RustScan/RustScan";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ figsoda ];

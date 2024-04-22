@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitLab
+, fetchpatch
 , gitUpdater
 , testers
 , cmake
@@ -27,16 +28,30 @@ stdenv.mkDerivation (finalAttrs: {
     "examples"
   ];
 
+  patches = [
+    # Fixes some issues with the pkg-config file
+    # Remove when https://gitlab.com/ubports/development/core/u1db-qt/-/merge_requests/7 merged & in release
+    (fetchpatch {
+      name = "0001-u1db-qt-Fix-pkg-config-files-includedir-variable.patch";
+      url = "https://gitlab.com/ubports/development/core/u1db-qt/-/commit/ddafbfadfad6dfc508a866835354a4701dda1fe1.patch";
+      hash = "sha256-entwjU9TiHuSuht7Cdl0k1v0cP7350a04/FXgTVhGmk=";
+    })
+  ];
+
   postPatch = ''
     patchShebangs tests/strict-qmltestrunner.sh
 
-    # QMake query response is broken
+    # QMake query response is broken, just hardcode the expected location
     substituteInPlace modules/U1db/CMakeLists.txt \
-      --replace "\''${QT_IMPORTS_DIR}" "$out/$qtQmlPrefix"
+      --replace-fail 'exec_program(''${QMAKE_EXECUTABLE} ARGS "-query QT_INSTALL_QML"' 'exec_program(echo ARGS "''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"'
+
+    # For our automatic pkg-config output patcher to work, prefix must be used here
+    substituteInPlace libu1db-qt.pc.in \
+      --replace-fail 'libdir=''${exec_prefix}/lib' 'libdir=''${prefix}/lib'
   '' + lib.optionalString (!finalAttrs.doCheck) ''
     # Other locations add dependencies to custom check target from tests
     substituteInPlace CMakeLists.txt \
-      --replace 'add_subdirectory(tests)' 'add_custom_target(check COMMAND "echo check dummy")'
+      --replace-fail 'add_subdirectory(tests)' 'add_custom_target(check COMMAND "echo check dummy")'
   '';
 
   strictDeps = true;
@@ -57,8 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    # Needs qdoc
-    "-DBUILD_DOCS=OFF"
+    # Needs qdoc, see https://github.com/NixOS/nixpkgs/pull/245379
+    (lib.cmakeBool "BUILD_DOCS" false)
   ];
 
   dontWrapQtApps = true;

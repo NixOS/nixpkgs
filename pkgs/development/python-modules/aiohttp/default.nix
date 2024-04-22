@@ -21,7 +21,7 @@
 , freezegun
 , gunicorn
 , pytest-mock
-, pytestCheckHook
+, pytest7CheckHook
 , python-on-whales
 , re-assert
 , trustme
@@ -82,7 +82,7 @@ buildPythonPackage rec {
     freezegun
     gunicorn
     pytest-mock
-    pytestCheckHook
+    pytest7CheckHook
     python-on-whales
     re-assert
   ] ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [

@@ -96,6 +96,7 @@ buildPythonPackage rec {
 
   meta = with lib;{
     description = "Data visualization toolchain based on aggregating into a grid";
+    mainProgram = "datashader";
     homepage = "https://datashader.org";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];

@@ -7,27 +7,28 @@
 , python3
 , setuptools
 , zstandard
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "nuitka";
-  version = "1.8.4";
+  version = "2.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Nuitka";
     repo = "Nuitka";
     rev = version;
-    hash = "sha256-spa3V9KEjqmwnHSuxLLIu9hJk5PrRwNyOw72sfxBVKo=";
+    hash = "sha256-bV5zTYwhR/3dTM1Ij+aC6TbcPODZ5buwQi7xN8axZi0=";
   };
 
   # default lto off for darwin
   patches = [ ./darwin-lto.patch ];
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools wheel ];
   nativeCheckInputs = [ ccache  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ordered-set
     zstandard
   ];

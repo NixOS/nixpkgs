@@ -1,6 +1,6 @@
 {
   "name": "meshcentral",
-  "version": "1.1.21",
+  "version": "1.1.22",
   "keywords": [
     "Remote Device Management",
     "Remote Device Monitoring",
@@ -37,7 +37,7 @@
     "sample-config-advanced.json"
   ],
   "dependencies": {
-    "archiver": "5.3.2",
+    "archiver": "7.0.0",
     "body-parser": "1.20.2",
     "cbor": "5.2.0",
     "compression": "1.7.4",
@@ -67,14 +67,11 @@
     "passport-twitter": "*",
     "passport-google-oauth20": "*",
     "passport-github2": "*",
-    "passport-reddit": "*",
     "passport-azure-oauth2": "*",
     "jwt-simple": "*",
-    "@mstrhakr/passport-openidconnect": "*",
     "openid-client": "*",
-    "connect-flash": "*",
     "passport-saml": "*",
-    "archiver": "5.3.2",
+    "archiver": "7.0.0",
     "body-parser": "1.20.2",
     "cbor": "5.2.0",
     "compression": "1.7.4",

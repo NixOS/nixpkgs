@@ -40,6 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "MCUboot's image signing and key management";
+    mainProgram = "imgtool";
     homepage = "https://github.com/mcu-tools/mcuboot";
     license = licenses.asl20;
     maintainers = with maintainers; [ samueltardieu ];

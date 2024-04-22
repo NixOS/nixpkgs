@@ -1,8 +1,6 @@
 { lib
-, stdenv
 , python3
 , fetchFromGitHub
-, fetchpatch
 , fetchPypi
 , nix-update-script
 , runtimeShell
@@ -35,41 +33,46 @@ in
 with python.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
-  version = "2.12.4";
+  version = "2.13.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0Eh3Ni+Vz5/8HSw4uFH2k3BuSSiEDkiYauV22tV0FJY=";
+    hash = "sha256-4oK/HK8KCD/A+16JrW9518V5/1LHu1juhYfqPVu54Uo=";
   };
 
   nativeBuildInputs = [
-    pdm-backend
     installShellFiles
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    pdm-backend
+  ];
+
+  dependencies = [
     blinker
-    certifi
-    cachecontrol
     dep-logic
+    filelock
     findpython
+    hishel
+    httpx
     installer
+    msgpack
     packaging
+    pbs-installer
     platformdirs
     pyproject-hooks
     python-dotenv
-    requests-toolbelt
     resolvelib
     rich
     shellingham
     tomlkit
     unearth
     virtualenv
-  ]
-  ++ cachecontrol.optional-dependencies.filecache
+  ] ++ httpx.optional-dependencies.socks
+  ++ pbs-installer.optional-dependencies.install
   ++ lib.optionals (pythonOlder "3.11") [
     tomli
   ]
@@ -100,7 +103,6 @@ buildPythonApplication rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
-    pytest-rerunfailures
     pytest-xdist
     pytest-httpserver
   ] ++ lib.optional stdenv.isLinux first;
@@ -120,7 +122,9 @@ buildPythonApplication rec {
     "test_convert_setup_py_project"
     # pythonfinder isn't aware of nix's python infrastructure
     "test_use_wrapper_python"
-    "test_use_invalid_wrapper_python"
+
+    # touches the network
+    "test_find_candidates_from_find_links"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -134,7 +138,7 @@ buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://pdm-project.org";
     changelog = "https://github.com/pdm-project/pdm/releases/tag/${version}";
-    description = "A modern Python package manager with PEP 582 support";
+    description = "A modern Python package and dependency manager supporting the latest PEP standards";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
     mainProgram = "pdm";

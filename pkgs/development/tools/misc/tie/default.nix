@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.ctan.org/tex-archive/web/tie";
     description = "Allow multiple web change files";
+    mainProgram = "tie";
     platforms = platforms.all;
     maintainers = with maintainers; [ vrthra ];
     license = licenses.abstyles;

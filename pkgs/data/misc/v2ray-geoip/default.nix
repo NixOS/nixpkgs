@@ -1,5 +1,6 @@
 { lib
 , stdenvNoCC
+, fetchpatch
 , fetchFromGitHub
 , pkgsBuildBuild
 , jq
@@ -8,18 +9,18 @@
 }:
 
 let
-  generator = pkgsBuildBuild.buildGo120Module {
+  generator = pkgsBuildBuild.buildGoModule rec {
     pname = "v2ray-geoip";
-    version = "unstable-2023-10-11";
+    version = "202403140037";
 
     src = fetchFromGitHub {
       owner = "v2fly";
       repo = "geoip";
-      rev = "3182dda7b38c900f28505b91a44b09ec486e6f36";
-      hash = "sha256-KSRgof78jScwnUeMtryj34J0mBsM/x9hFE4H9WtZUuM=";
+      rev = version;
+      hash = "sha256-nqobjgeDvD5RYvCVVd14XC/tb/+SVfvdQUFZ3gfeDrI=";
     };
 
-    vendorHash = "sha256-rlRazevKnWy/Ig143s8TZgV3JlQMlHID9rnncLYhQDc=";
+    vendorHash = "sha256-cuKcrYAzjIt6Z4wYg5R6JeL413NDwTub2fZndXEKdTo=";
 
     meta = with lib; {
       description = "GeoIP for V2Ray";

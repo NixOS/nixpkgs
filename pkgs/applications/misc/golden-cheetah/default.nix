@@ -16,13 +16,13 @@ let
   };
 in mkDerivation rec {
   pname = "golden-cheetah";
-  version = "3.6";
+  version = "3.7-DEV2404";
 
   src = fetchFromGitHub {
     owner = "GoldenCheetah";
     repo = "GoldenCheetah";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ntim1/ZPaTPCHQ5p8xF5LWpqq8+OgkPfaQqqysv9j/c=";
+    hash = "sha256-u2igcnOulgJGZT46/Z3vSsce9mr3VsxkD3mTeQPvUOg=";
   };
 
   buildInputs = [
@@ -76,6 +76,7 @@ in mkDerivation rec {
 
   meta = {
     description = "Performance software for cyclists, runners and triathletes. Built from source and without API tokens";
+    mainProgram = "GoldenCheetah";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ adamcstephens ];
     license = lib.licenses.gpl2Plus;

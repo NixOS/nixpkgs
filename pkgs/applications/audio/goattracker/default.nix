@@ -58,7 +58,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
     convert goattrk2.bmp goattracker.png
     install -Dm644 goattracker.png $out/share/icons/hicolor/32x32/apps/goattracker.png
-    install -Dm644 ../linux/goattracker.1 -t $out/share/man/man1/goattracker.1
+    ${lib.optionalString (!isStereo) "install -Dm644 ../linux/goattracker.1 $out/share/man/man1/goattracker.1"}
 
     runHook postInstall
   '';

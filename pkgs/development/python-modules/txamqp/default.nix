@@ -5,11 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "txAMQP";
+  pname = "txamqp";
   version = "0.8.2";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "txAMQP";
+    inherit version;
     sha256 = "0jd9864k3csc06kipiwzjlk9mq4054s8kzk5q1cfnxj8572s4iv4";
   };
 

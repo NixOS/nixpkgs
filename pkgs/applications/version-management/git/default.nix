@@ -29,7 +29,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.43.2";
+  version = "2.44.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
 in
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    hash = "sha256-9hLBq8Y1V9UK04SYY/yRCWcBOfyZAeV0Rg7HbgURrbk=";
+    hash = "sha256-41hzjctbXqNAzpAKABXAOuhugE5/9k5HqkYx3e5oHeM=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -318,24 +318,19 @@ stdenv.mkDerivation (finalAttrs: {
     disable_test t0001-init 'shared overrides system'
     disable_test t0001-init 'init honors global core.sharedRepository'
     disable_test t1301-shared-repo
-    # git-completion.bash: line 405: compgen: command not found:
-    disable_test t9902-completion 'option aliases are shown with GIT_COMPLETION_SHOW_ALL'
+    # /build/git-2.44.0/contrib/completion/git-completion.bash: line 452: compgen: command not found
+    disable_test t9902-completion
 
     # Our patched gettext never fallbacks
     disable_test t0201-gettext-fallbacks
-
-    ${lib.optionalString (!sendEmailSupport) ''
-      # Disable sendmail tests
-      disable_test t9001-send-email
-    ''}
-
+  '' + lib.optionalString (!sendEmailSupport) ''
+    # Disable sendmail tests
+    disable_test t9001-send-email
+  '' + ''
     # XXX: I failed to understand why this one fails.
     # Could someone try to re-enable it on the next release ?
     # Tested to fail: 2.18.0 and 2.19.0
     disable_test t1700-split-index "null sha1"
-
-    # Tested to fail: 2.18.0
-    disable_test t9902-completion "sourcing the completion script clears cached --options"
 
     # Flaky tests:
     disable_test t5319-multi-pack-index
@@ -345,12 +340,11 @@ stdenv.mkDerivation (finalAttrs: {
     disable_test t0021-conversion
     disable_test t3910-mac-os-precompose
 
-    ${lib.optionalString (!perlSupport) ''
-      # request-pull is a Bash script that invokes Perl, so it is not available
-      # when NO_PERL=1, and the test should be skipped, but the test suite does
-      # not check for the Perl prerequisite.
-      disable_test t5150-request-pull
-    ''}
+  '' + lib.optionalString (!perlSupport) ''
+    # request-pull is a Bash script that invokes Perl, so it is not available
+    # when NO_PERL=1, and the test should be skipped, but the test suite does
+    # not check for the Perl prerequisite.
+    disable_test t5150-request-pull
   '' + lib.optionalString stdenv.isDarwin ''
     # XXX: Some tests added in 2.24.0 fail.
     # Please try to re-enable on the next release.
@@ -358,8 +352,6 @@ stdenv.mkDerivation (finalAttrs: {
     # fail (as of 2.33.0)
     #===(   18623;1208  8/?  224/?  2/? )= =fatal: Not a valid object name refs/tags/signed-empty
     disable_test t6300-for-each-ref
-    #===(   22665;1651  9/?  1/?  0/?  0/? )= =/private/tmp/nix-build-git-2.33.0.drv-2/git-2.33.0/t/../contrib/completion/git-completion.bash: line 405: compgen: command not found
-    disable_test t9902-completion
     # not ok 1 - populate workdir (with 2.33.1 on x86_64-darwin)
     disable_test t5003-archive-zip
   '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''

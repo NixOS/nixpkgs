@@ -29,6 +29,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Web application scanner";
+    mainProgram = "zgrab2";
     homepage = "https://github.com/zmap/zgrab2";
     license = with licenses; [ asl20 isc ];
     maintainers = with maintainers; [ fab juliusrickert ];

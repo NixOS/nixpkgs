@@ -40,6 +40,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "DynamoDB CLI written in Rust";
+    mainProgram = "dy";
     homepage = "https://github.com/awslabs/dynein";
     license = licenses.asl20;
     platforms = platforms.unix;

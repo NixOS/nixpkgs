@@ -21,6 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python curses command line CSV and tabular data viewer";
+    mainProgram = "tabview";
     homepage = "https://github.com/TabViewer/tabview";
     changelog = "https://github.com/TabViewer/tabview/blob/main/CHANGELOG.rst";
     license = licenses.mit;

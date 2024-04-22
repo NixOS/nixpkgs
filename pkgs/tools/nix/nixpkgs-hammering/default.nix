@@ -5,16 +5,17 @@
 , makeWrapper
 , python3
 , nix
+, unstableGitUpdater
 }:
 
 let
-  version = "unstable-2023-11-06";
+  version = "unstable-2024-03-25";
 
   src = fetchFromGitHub {
     owner = "jtojnar";
     repo = "nixpkgs-hammering";
-    rev = "8e33fc1e7b3b311ce3ba9c5c8c9e7cf89041b893";
-    hash = "sha256-D9c6EZMHy0aldzMxj4Ivw1YXNuG6MzyoEQlehEcxMBI=";
+    rev = "6851ecea8c6da45870b7c06d6495cba3fb2d7c7c";
+    hash = "sha256-kr3zMr7aWt4W/+Jcol5Ctiq0KjXSxViPhGtyqvX9dqE=";
   };
 
   meta = with lib; {
@@ -28,7 +29,7 @@ let
     pname = "nixpkgs-hammering-rust-checks";
     inherit version src meta;
     sourceRoot = "${src.name}/rust-checks";
-    cargoHash = "sha256-GIheha/AYH0uD61ck6TcpDz1gh1o5UxL/ojeZ/kHI8E=";
+    cargoHash = "sha256-QrtAalZClNc0ZN6iNqN9rFRQ7w68lEZPV5e25uXYToA=";
   };
 in
 
@@ -55,6 +56,8 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = meta // {
     mainProgram = "nixpkgs-hammer";

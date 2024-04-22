@@ -14,24 +14,33 @@
 , cairo
 , pango
 , npm-lockfile-fix
+, overrideSDK
+, darwin
 }:
 
-buildNpmPackage rec {
+let
+  # fix for: https://github.com/NixOS/nixpkgs/issues/272156
+  buildNpmPackage' =
+    buildNpmPackage.override {
+      stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+    };
+in
+buildNpmPackage' rec {
   pname = "bruno";
-  version = "1.8.0";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     rev = "v${version}";
-    hash = "sha256-STWGZzFtU3UpctgNz3m96JyfSRzHy2ZZQPr8R+zpDgM=";
+    hash = "sha256-fVbwHmJ/5OtMM0lkOIo6zPXkAa8mIK+WRHCTXJ1XEIw=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-0Uac4Q3EYiTkg6RFuwR+saXiVm7jISyZBjkN30uYnnE=";
+  npmDepsHash = "sha256-D90y6NaiR9zpgtjfm9QgLxBVbHa09OMSi+fvgwqSjgY=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
@@ -46,6 +55,8 @@ buildNpmPackage rec {
     pixman
     cairo
     pango
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.CoreText
   ];
 
   desktopItems = [
@@ -62,7 +73,7 @@ buildNpmPackage rec {
 
   postPatch = ''
     substituteInPlace scripts/build-electron.sh \
-      --replace 'if [ "$1" == "snap" ]; then' 'exit 0; if [ "$1" == "snap" ]; then'
+      --replace-fail 'if [ "$1" == "snap" ]; then' 'exit 0; if [ "$1" == "snap" ]; then'
   '';
 
   ELECTRON_SKIP_BINARY_DOWNLOAD=1;
@@ -83,8 +94,8 @@ buildNpmPackage rec {
     find ./Electron.app -name 'Info.plist' | xargs -d '\n' chmod +rw
 
     substituteInPlace electron-builder-config.js \
-      --replace "identity: 'Anoop MD (W7LPPWA48L)'" 'identity: null' \
-      --replace "afterSign: 'notarize.js'," ""
+      --replace-fail "identity: 'Anoop MD (W7LPPWA48L)'" 'identity: null' \
+      --replace-fail "afterSign: 'notarize.js'," ""
 
     npm exec electron-builder -- \
       --dir \
@@ -140,7 +151,7 @@ buildNpmPackage rec {
     homepage = "https://www.usebruno.com";
     inherit (electron.meta) platforms;
     license = licenses.mit;
-    maintainers = with maintainers; [ water-sucks lucasew kashw2 mattpolzin ];
+    maintainers = with maintainers; [ gepbird kashw2 lucasew mattpolzin water-sucks ];
     mainProgram = "bruno";
   };
 }

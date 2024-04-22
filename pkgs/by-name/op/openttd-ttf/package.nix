@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "openttd-ttf";
-  version = "0.5";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "zephyris";
     repo = "openttd-ttf";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-GjtfwM268i3bUAX8Pw5/Og9029AuD1OZuJ2VIlFTogY=";
+    hash = "sha256-Nr3oLiCEdpUhB/IczCEoLM8kb1hGDH/d6WYWRbjgOi8=";
   };
 
   nativeBuildInputs = [
@@ -25,6 +25,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   postPatch = ''
     chmod a+x build.sh
+    # Test requires openttd source and an additional python module, doesn't seem worth it
+    substituteInPlace build.sh \
+      --replace-fail "python3 checkOpenTTDStrings.py ../openttd/src/lang" ""
     patchShebangs --build build.sh
   '';
 

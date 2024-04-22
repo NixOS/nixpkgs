@@ -5,7 +5,7 @@
     if rev != null
     then "https://gitlab.haskell.org/ghc/ghc.git"
     else "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz"
-
+, postFetch ? null
 }:
 
 { lib
@@ -146,6 +146,8 @@
     inherit url sha256;
   } // lib.optionalAttrs (rev != null) {
     inherit rev;
+  } // lib.optionalAttrs (postFetch != null) {
+    inherit postFetch;
   })
 
   # GHC's build system hadrian built from the GHC-to-build's source tree
@@ -350,10 +352,10 @@ stdenv.mkDerivation ({
                     '*-android*|*-gnueabi*|*-musleabi*)'
       done
   ''
-  # Need to make writable EM_CACHE for emscripten
+  # Need to make writable EM_CACHE for emscripten. The path in EM_CACHE must be absolute.
   # https://gitlab.haskell.org/ghc/ghc/-/wikis/javascript-backend#configure-fails-with-sub-word-sized-atomic-operations-not-available
   + lib.optionalString targetPlatform.isGhcjs ''
-    export EM_CACHE="$(mktemp -d emcache.XXXXXXXXXX)"
+    export EM_CACHE="$(realpath $(mktemp -d emcache.XXXXXXXXXX))"
     cp -Lr ${targetCC /* == emscripten */}/share/emscripten/cache/* "$EM_CACHE/"
     chmod u+rwX -R "$EM_CACHE"
   ''
@@ -528,6 +530,10 @@ stdenv.mkDerivation ({
     ] ++ lib.teams.haskell.members;
     timeout = 24 * 3600;
     inherit (ghc.meta) license platforms;
+    # https://github.com/NixOS/nixpkgs/issues/208959
+    broken =
+      (lib.versionAtLeast version "9.6" && lib.versionOlder version "9.8")
+      && stdenv.targetPlatform.isStatic;
   };
 
   dontStrip = targetPlatform.useAndroidPrebuilt || targetPlatform.isWasm;

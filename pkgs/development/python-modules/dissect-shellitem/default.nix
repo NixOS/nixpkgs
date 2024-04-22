@@ -43,6 +43,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Dissect module implementing a parser for the Shellitem structures";
+    mainProgram = "parse-lnk";
     homepage = "https://github.com/fox-it/dissect.shellitem";
     changelog = "https://github.com/fox-it/dissect.shellitem/releases/tag/${version}";
     license = licenses.agpl3Only;

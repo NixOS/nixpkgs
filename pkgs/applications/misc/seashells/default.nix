@@ -16,6 +16,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://seashells.io/";
     description = "Pipe command-line programs to seashells.io";
+    mainProgram = "seashells";
     longDescription = ''
       Official cient for seashells.io, which allows you to view
       command-line output on the web, in real-time.

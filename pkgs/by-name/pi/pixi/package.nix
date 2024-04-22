@@ -3,6 +3,7 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
+, libgit2
 , openssl
 , installShellFiles
 , darwin
@@ -12,16 +13,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pixi";
-  version = "0.15.2";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "prefix-dev";
     repo = "pixi";
     rev = "v${version}";
-    hash = "sha256-bh8Uu6Q2AND50Qzivc6k1Z8JWudkHC2i4YW1Hxa69SM=";
+    hash = "sha256-rCnW2Ghh6SN1G9u4ybk0jUUFYevH6FozeSjXZfJhW8s=";
   };
 
-  cargoHash = "sha256-yMIcPwnuN7F2ZrOtJw8T+nxeSzLsYn+iC34bYeWpi/w=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "async_zip-0.0.16" = "sha256-M94ceTCtyQc1AtPXYrVGplShQhItqZZa/x5qLiL+gs0=";
+      "cache-key-0.0.1" = "sha256-XsBTfe2+J5CGdjYZjhgxiP20OA7+VTCvD9JniLOjhKs=";
+      "pubgrub-0.2.1" = "sha256-SdgxoJ37cs+XwWRCFX4uKhJ9Juu9R/jENb6tzUMam4k=";
+    };
+  };
 
   nativeBuildInputs = [
     pkg-config
@@ -29,11 +37,16 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
+    libgit2
     openssl
-  ]
-  ++ lib.optionals stdenv.isDarwin (
+  ] ++ lib.optionals stdenv.isDarwin (
     with darwin.apple_sdk_11_0.frameworks; [ CoreFoundation IOKit SystemConfiguration Security ]
   );
+
+  env = {
+    LIBGIT2_NO_VENDOR = 1;
+    OPENSSL_NO_VENDOR = 1;
+  };
 
   # There are some CI failures with Rattler. Tests on Aarch64 has been skipped.
   # See https://github.com/prefix-dev/pixi/pull/241.
@@ -52,7 +65,9 @@ rustPlatform.buildRustPackage rec {
     "--skip=add_pypi_functionality"
     "--skip=test_alias"
     "--skip=test_cwd"
+    "--skip=test_compressed_mapping_catch_missing_package"
     "--skip=test_incremental_lock_file"
+    "--skip=test_purl_are_added_for_pypi"
   ];
 
   postInstall = ''

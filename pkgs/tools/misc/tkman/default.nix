@@ -67,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Graphical, hypertext manual page and Texinfo browser for UNIX";
+    mainProgram = "tkman";
     longDescription = ''
       TkMan is a graphical, hypertext manual page and Texinfo browser for UNIX.
       TkMan boasts hypertext links, unmatched online text formatting and display

@@ -46,6 +46,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Sphinx Doxygen renderer";
+    mainProgram = "breathe-apidoc";
     homepage = "https://github.com/michaeljones/breathe";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];

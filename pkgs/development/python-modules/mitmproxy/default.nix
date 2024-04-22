@@ -45,7 +45,7 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "10.2.4";
+  version = "10.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     owner = "mitmproxy";
     repo = "mitmproxy";
     rev = "refs/tags/${version}";
-    hash = "sha256-6TPhxprrP6Bgc1yAhN3pBdr98WpvfGnVNvkNtFxROgE=";
+    hash = "sha256-YjvGsnpQQ8GWLyKmnd3lOxesnr+F2xCNXyahZh0JQnc=";
   };
 
   nativeBuildInputs = [
@@ -122,7 +122,9 @@ buildPythonPackage rec {
     "test_commands_exist"
     "test_contentview_flowview"
     "test_flowview"
+    "test_get_hex_editor"
     "test_integration"
+    "test_spawn_editor"
     "test_statusbar"
     # FileNotFoundError: [Errno 2] No such file or directory
     # likely wireguard is also not working in the sandbox

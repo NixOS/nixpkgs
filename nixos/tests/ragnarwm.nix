@@ -8,7 +8,7 @@ import ./make-test-python.nix ({ lib, ...} : {
   nodes.machine = { pkgs, lib, ... }: {
     imports = [ ./common/x11.nix ./common/user-account.nix ];
     test-support.displayManager.auto.user = "alice";
-    services.xserver.displayManager.defaultSession = lib.mkForce "ragnar";
+    services.displayManager.defaultSession = lib.mkForce "ragnar";
     services.xserver.windowManager.ragnarwm.enable = true;
 
     # Setup the default terminal of Ragnar

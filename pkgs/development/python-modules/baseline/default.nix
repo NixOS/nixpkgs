@@ -17,6 +17,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Easy String Baseline";
+    mainProgram = "baseline";
     longDescription = ''
       This tool streamlines creation and maintenance of tests which compare
       string output against a baseline.

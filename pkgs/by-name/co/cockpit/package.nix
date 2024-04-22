@@ -44,13 +44,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "cockpit";
-  version = "311";
+  version = "315";
 
   src = fetchFromGitHub {
     owner = "cockpit-project";
     repo = "cockpit";
     rev = "refs/tags/${version}";
-    hash = "sha256-RsOLYvwLu0eNmSZJoCi1dcB2a3JqMbus/gOyL74kCB4=";
+    hash = "sha256-N6MDqhYQky80r9wSiDIPusg6iOpDh4S52pf337nojyY=";
     fetchSubmodules = true;
   };
 
@@ -217,6 +217,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Web-based graphical interface for servers";
+    mainProgram = "cockpit-bridge";
     homepage = "https://cockpit-project.org/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ lucasew ];

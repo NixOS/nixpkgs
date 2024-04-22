@@ -18,6 +18,7 @@ buildGoModule {
 
   meta = with lib; {
     description = "Packaging helper for Nextcloud apps";
+    mainProgram = "nc4nix";
     homepage = "https://github.com/helsinki-systems/nc4nix";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];

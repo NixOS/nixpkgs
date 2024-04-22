@@ -31,11 +31,11 @@ with lib; let
 in {
   options = {
     security.ipa = {
-      enable = mkEnableOption (lib.mdDoc "FreeIPA domain integration");
+      enable = mkEnableOption "FreeIPA domain integration";
 
       certificate = mkOption {
         type = types.package;
-        description = lib.mdDoc ''
+        description = ''
           IPA server CA certificate.
 
           Use `nix-prefetch-url http://$server/ipa/config/ca.crt` to
@@ -52,64 +52,64 @@ in {
       domain = mkOption {
         type = types.str;
         example = "example.com";
-        description = lib.mdDoc "Domain of the IPA server.";
+        description = "Domain of the IPA server.";
       };
 
       realm = mkOption {
         type = types.str;
         example = "EXAMPLE.COM";
-        description = lib.mdDoc "Kerberos realm.";
+        description = "Kerberos realm.";
       };
 
       server = mkOption {
         type = types.str;
         example = "ipa.example.com";
-        description = lib.mdDoc "IPA Server hostname.";
+        description = "IPA Server hostname.";
       };
 
       basedn = mkOption {
         type = types.str;
         example = "dc=example,dc=com";
-        description = lib.mdDoc "Base DN to use when performing LDAP operations.";
+        description = "Base DN to use when performing LDAP operations.";
       };
 
       offlinePasswords = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Whether to store offline passwords when the server is down.";
+        description = "Whether to store offline passwords when the server is down.";
       };
 
       cacheCredentials = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Whether to cache credentials.";
+        description = "Whether to cache credentials.";
       };
 
       ifpAllowedUids = mkOption {
         type = types.listOf types.str;
         default = ["root"];
-        description = lib.mdDoc "A list of users allowed to access the ifp dbus interface.";
+        description = "A list of users allowed to access the ifp dbus interface.";
       };
 
       dyndns = {
         enable = mkOption {
           type = types.bool;
           default = true;
-          description = lib.mdDoc "Whether to enable FreeIPA automatic hostname updates.";
+          description = "Whether to enable FreeIPA automatic hostname updates.";
         };
 
         interface = mkOption {
           type = types.str;
           example = "eth0";
           default = "*";
-          description = lib.mdDoc "Network interface to perform hostname updates through.";
+          description = "Network interface to perform hostname updates through.";
         };
       };
 
       chromiumSupport = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Whether to whitelist the FreeIPA domain in Chromium.";
+        description = "Whether to whitelist the FreeIPA domain in Chromium.";
       };
     };
   };

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "protonmail-bridge";
-  version = "3.9.1";
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = "ProtonMail";
     repo = "proton-bridge";
     rev = "v${version}";
-    hash = "sha256-osQIx67KWEraVlB+J6HmC44uDTF1HKUytBS6eilp4jI=";
+    hash = "sha256-xjpySIbt7f86PRR/9F1DXMc0G+pBq3/75STW6Zw6IhE=";
   };
 
-  vendorHash = "sha256-5XU/qyYdk8nufyQbyjkjUEWzt+RTVYzsdyKU77qrgHc=";
+  vendorHash = "sha256-cgQcI6yrnc5BUuyOkaYu24GzCaGe+BgXOC2zdt1Z1Lg=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -37,17 +37,14 @@ buildGoModule rec {
 
   postInstall = ''
     mv $out/bin/Desktop-Bridge $out/bin/protonmail-bridge # The cli is named like that in other distro packages
-    install -Dm444 dist/proton-bridge.desktop -t $out/share/applications
-    install -Dm444 dist/bridge.svg $out/share/icons/hicolor/scalable/apps/protonmail-bridge.svg
   '';
 
-  meta = with lib; {
-    homepage = "https://github.com/ProtonMail/proton-bridge";
+  meta = {
     changelog = "https://github.com/ProtonMail/proton-bridge/blob/${src.rev}/Changelog.md";
-    downloadPage = "https://github.com/ProtonMail/proton-bridge/releases";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mrfreezeex ];
     description = "Use your ProtonMail account with your local e-mail client";
+    downloadPage = "https://github.com/ProtonMail/proton-bridge/releases";
+    homepage = "https://github.com/ProtonMail/proton-bridge";
+    license = lib.licenses.gpl3Plus;
     longDescription = ''
       An application that runs on your computer in the background and seamlessly encrypts
       and decrypts your mail as it enters and leaves your computer.
@@ -55,5 +52,6 @@ buildGoModule rec {
       To work, use secret-service freedesktop.org API (e.g. Gnome keyring) or pass.
     '';
     mainProgram = "protonmail-bridge";
+    maintainers = with lib.maintainers; [ mrfreezeex daniel-fahey ];
   };
 }

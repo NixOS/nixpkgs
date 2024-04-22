@@ -18,21 +18,21 @@
 , xmltodict
 
 # optional-dependencies
+, antlr4-python3-runtime
 , aws-xray-sdk
 , cfn-lint
-, docker
-, ecdsa
 , flask
 , flask-cors
+, docker
 , graphql-core
+, joserfc
+, jsonpath-ng
 , jsondiff
 , multipart
 , openapi-spec-validator
 , py-partiql-parser
 , pyparsing
-, python-jose
 , pyyaml
-, sshpubkeys
 
 # tests
 , freezegun
@@ -43,17 +43,17 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "4.2.13";
+  version = "5.0.5";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Aa72pImnJcjXJb09xvcP8b7a7j4mQXUuS0cf8O3ktNc=";
+    hash = "sha256-Lqyi33dY9oaN9CC/ByXNC5PZhwlgbx+4sjQ7W9yCLZE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
@@ -72,23 +72,26 @@ buildPythonPackage rec {
   passthru.optional-dependencies = {
     # non-exhaustive list of extras, that was cobbled together for testing
     all = [
+      antlr4-python3-runtime
       aws-xray-sdk
       cfn-lint
       docker
-      ecdsa
       flask
       flask-cors
       graphql-core
+      joserfc
       jsondiff
+      jsonpath-ng
       multipart
       openapi-spec-validator
-      py-partiql-parser
       pyparsing
-      python-jose
+      py-partiql-parser
       pyyaml
       setuptools
-      sshpubkeys
-    ] ++ python-jose.optional-dependencies.cryptography;
+    ];
+    cognitoidp = [
+      joserfc
+    ];
   };
 
   __darwinAllowLocalNetworking = true;
@@ -120,6 +123,11 @@ buildPythonPackage rec {
     # Fails at resolving google.com
     "--deselect=tests/test_firehose/test_firehose_put.py::test_put_record_http_destination"
     "--deselect=tests/test_firehose/test_firehose_put.py::test_put_record_batch_http_destination"
+
+    # Fails at resolving s3.amazonaws.com
+    "--deselect=tests/test_core/test_request_passthrough.py::test_passthrough_calls_for_wildcard_urls"
+    "--deselect=tests/test_core/test_request_passthrough.py::test_passthrough_calls_for_specific_url"
+    "--deselect=tests/test_core/test_request_passthrough.py::test_passthrough_calls_for_entire_service"
 
     # Download recordings returns faulty JSON
     "--deselect=tests/test_moto_api/recorder/test_recorder.py::TestRecorder::test_ec2_instance_creation_recording_on"

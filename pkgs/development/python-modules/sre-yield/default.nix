@@ -27,6 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library to efficiently generate all values that can match a given regular expression";
+    mainProgram = "demo_sre_yield";
     homepage = "https://github.com/sre-yield/sre-yield";
     license = licenses.asl20;
     maintainers = with maintainers; [ danc86 ];

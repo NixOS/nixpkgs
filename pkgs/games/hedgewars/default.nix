@@ -1,4 +1,4 @@
-{ stdenv, SDL2_image_2_6, SDL2_ttf, SDL2_net, fpc, ghcWithPackages, ffmpeg_4, freeglut
+{ stdenv, SDL2_image_2_6, SDL2_ttf, SDL2_net, fpc, haskell, ffmpeg_4, freeglut
 , lib, fetchurl, cmake, pkg-config, lua5_1, SDL2, SDL2_mixer
 , zlib, libpng, libGL, libGLU, physfs
 , qtbase, qttools, wrapQtAppsHook
@@ -7,7 +7,7 @@
 }:
 
 let
-  ghc = ghcWithPackages (pkgs: with pkgs; [
+  ghc = haskell.packages.ghc94.ghcWithPackages (pkgs: with pkgs; [
           SHA bytestring entropy hslogger network pkgs.zlib random
           regex-tdfa sandi utf8-string vector
         ]);

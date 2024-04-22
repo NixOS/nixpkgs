@@ -8,15 +8,11 @@
 , copyDesktopItems
 , vencord
 , electron
-, pipewire
-, libpulseaudio
 , libicns
-, libnotify
 , jq
 , moreutils
 , cacert
 , nodePackages
-, speechd
 , withTTS ? true
   # Enables the use of vencord from nixpkgs instead of
   # letting vesktop manage it's own version
@@ -24,13 +20,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "Vencord";
     repo = "Vesktop";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-27998q9wbaNP1xYY+KHTBeJRfR6Q/K0LNdbRb3YHC6c=";
+    hash = "sha256-OyAGzlwwdEKBbJJ7h3glwx/THy2VvUn/kA/Df3arWQU=";
   };
 
   # NOTE: This requires pnpm 8.10.0 or newer
@@ -77,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
       dontBuild = true;
       dontFixup = true;
       outputHashMode = "recursive";
-      outputHash = "sha256-cnk+KFdvsgG1wGDib7zgIS6/RkrR5EYAHtHcrFSU0Es=";
+      outputHash = "sha256-JLjJZYFMH4YoIFuyXbGUp6lIy+VlYZtmwk2+oUwtTxQ=";
     };
 
   nativeBuildInputs = [
@@ -116,15 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   # this is consistent with other nixpkgs electron packages and upstream, as far as I am aware
   installPhase =
-    let
-      # this is mainly required for venmic
-      libPath = lib.makeLibraryPath ([
-        libpulseaudio
-        libnotify
-        pipewire
-        stdenv.cc.cc.lib
-      ] ++ lib.optional withTTS speechd);
-    in
     ''
       runHook preInstall
 
@@ -139,7 +126,6 @@ stdenv.mkDerivation (finalAttrs: {
       done
 
       makeWrapper ${electron}/bin/electron $out/bin/vesktop \
-        --prefix LD_LIBRARY_PATH : ${libPath} \
         --add-flags $out/opt/Vesktop/resources/app.asar \
         ${lib.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"

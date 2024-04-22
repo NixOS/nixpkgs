@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "ndindex";
-  version = "1.7";
+  version = "1.8";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Quansight-Labs";
     repo = "ndindex";
     rev = "refs/tags/${version}";
-    hash = "sha256-JP0cEuxXfPTWc1EIUtMsy5Hx6eIo9vDzD0IUXm1lFME=";
+    hash = "sha256-F52ly3NkrZ0H9XoomMqmWfLl+8X0z26Yx67DB8DUqyU=";
   };
 
   nativeBuildInputs = [
@@ -48,11 +48,6 @@ buildPythonPackage rec {
     pytest-cov # uses cov markers
     pytestCheckHook
   ] ++ passthru.optional-dependencies.arrays;
-
-  pytestFlagsArray = [
-    # pytest.PytestRemovedIn8Warning: Passing None has been deprecated.
-    "--deselect=ndindex/tests/test_ndindex.py::test_ndindex_invalid"
-  ];
 
   meta = with lib; {
     description = "";

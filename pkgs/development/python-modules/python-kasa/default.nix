@@ -73,6 +73,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python API for TP-Link Kasa Smarthome products";
+    mainProgram = "kasa";
     homepage = "https://python-kasa.readthedocs.io/";
     changelog = "https://github.com/python-kasa/python-kasa/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;

@@ -1,5 +1,17 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, boost, nix, pkg-config }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, boost
+, nix
+, pkg-config
+# Whether to build the nix-doc plugin for Nix
+, withPlugin ? true
+}:
 
+let
+  packageFlags = [ "-p" "nix-doc" ] ++ lib.optionals withPlugin [ "-p" "nix-doc-plugin" ];
+in
 rustPlatform.buildRustPackage rec {
   pname = "nix-doc";
   version = "0.6.5";
@@ -12,17 +24,20 @@ rustPlatform.buildRustPackage rec {
   };
 
   doCheck = true;
-  buildInputs = [ boost nix ];
+  buildInputs = lib.optionals withPlugin [ boost nix ];
 
-  nativeBuildInputs = [ pkg-config nix ];
+  nativeBuildInputs = lib.optionals withPlugin [ pkg-config nix ];
+
+  cargoBuildFlags = packageFlags;
+  cargoTestFlags = packageFlags;
 
   # Packaging support for making the nix-doc plugin load cleanly as a no-op on
   # the wrong Nix version (disabling bindnow permits loading libraries
   # requiring unavailable symbols if they are unreached)
-  hardeningDisable = [ "bindnow" ];
+  hardeningDisable = lib.optionals withPlugin [ "bindnow" ];
   # Due to a Rust bug, setting -Z relro-level to anything including "off" on
   # macOS will cause link errors
-  env = lib.optionalAttrs stdenv.isLinux {
+  env = lib.optionalAttrs (withPlugin && stdenv.isLinux) {
     # nix-doc does not use nightly features, however, there is no other way to
     # set relro-level
     RUSTC_BOOTSTRAP = 1;

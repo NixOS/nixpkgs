@@ -18,6 +18,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Python based serial dump and timing program";
+    mainProgram = "grabserial";
     homepage = "https://github.com/tbird20d/grabserial";
     license = licenses.gpl2;
     maintainers = with maintainers; [ vmandela ];

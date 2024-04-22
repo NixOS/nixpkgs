@@ -7,20 +7,21 @@
 , proton-vpn-logger
 , proton-vpn-killswitch
 , proton-vpn-session
+, sentry-sdk
 , distro
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "proton-vpn-api-core";
-  version = "0.20.3";
+  version = "0.22.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-api-core";
     rev = "refs/tags/v${version}";
-    hash = "sha256-acck0Nc/15soTJBC/4y83ID9fjF/q4vrYr6SsLAAVRY=";
+    hash = "sha256-BGei6tw6VTKkHmaIWa2VJfKOL5cRUbauOQ7zp1RY9Bo=";
   };
 
   nativeBuildInputs = [
@@ -34,6 +35,7 @@ buildPythonPackage rec {
     proton-vpn-logger
     proton-vpn-killswitch
     proton-vpn-session
+    sentry-sdk
   ];
 
   postPatch = ''

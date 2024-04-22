@@ -23,7 +23,7 @@
 # tests
 , pip
 , pytest-cov
-, pytestCheckHook
+, pytest7CheckHook
 , setuptools
 }:
 
@@ -67,7 +67,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pip
     pytest-cov
-    pytestCheckHook
+    # Failed: DID NOT WARN. No warnings of type (<class 'UserWarning'>,) were emitted.
+    pytest7CheckHook
     setuptools
   ]
   ++ passthru.optional-dependencies.networkx

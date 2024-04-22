@@ -119,6 +119,15 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +w doc/reference/html/*
   '';
 
+  # Indicators that talk to it may issue requests to parse desktop files, which needs binaries in Exec on PATH
+  # messaging_menu_app_set_desktop_id -> g_desktop_app_info_new -...-> g_desktop_app_info_load_from_keyfile -> g_find_program_for_path
+  # When launched via systemd, PATH is very narrow
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --suffix PATH : '/run/current-system/sw/bin'
+    )
+  '';
+
   passthru = {
     ayatana-indicators = [
       "ayatana-indicator-messages"

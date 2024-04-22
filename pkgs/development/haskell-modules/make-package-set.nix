@@ -199,12 +199,16 @@ in package-set { inherit pkgs lib callPackage; } self // {
     # for any version that has been released on hackage as opposed to only
     # versions released before whatever version of all-cabal-hashes you happen
     # to be currently using.
-    callHackageDirect = {pkg, ver, sha256}:
+    callHackageDirect = {pkg, ver, sha256, rev ? { revision = null; sha256 = null; }}: args:
       let pkgver = "${pkg}-${ver}";
-      in self.callCabal2nix pkg (pkgs.fetchzip {
-           url = "mirror://hackage/${pkgver}/${pkgver}.tar.gz";
-           inherit sha256;
-         });
+          firstRevision = self.callCabal2nix pkg (pkgs.fetchzip {
+            url = "mirror://hackage/${pkgver}/${pkgver}.tar.gz";
+            inherit sha256;
+          }) args;
+      in overrideCabal (orig: {
+        revision = rev.revision;
+        editedCabalFile = rev.sha256;
+      }) firstRevision;
 
     # Creates a Haskell package from a source package by calling cabal2nix on the source.
     callCabal2nixWithOptions = name: src: extraCabal2nixOptions: args:
@@ -635,7 +639,7 @@ in package-set { inherit pkgs lib callPackage; } self // {
 
       Type: drv -> drv
     */
-    forceLlvmCodegenBackend = haskellLib.overrideCabal (drv: {
+    forceLlvmCodegenBackend = overrideCabal (drv: {
       configureFlags = drv.configureFlags or [ ] ++ [ "--ghc-option=-fllvm" ];
       buildTools = drv.buildTools or [ ] ++ [ self.llvmPackages.llvm ];
     });

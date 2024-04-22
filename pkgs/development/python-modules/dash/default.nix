@@ -6,7 +6,7 @@
 , setuptools
 , nodejs
 , yarn
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , fetchYarnDeps
 
 , flask
@@ -36,28 +36,28 @@
 
 buildPythonPackage rec {
   pname = "dash";
-  version = "2.15.0";
+  version = "2.16.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "dash";
     rev = "refs/tags/v${version}";
-    hash = "sha256-38BOw/CrauT/usVWCI735J0zRf9wzScUgbfGTy5B7ng=";
+    hash = "sha256-IPyGQXrC2FTTSIC4IFGwKTceyzPYAe4jwDoO5C9YeF0=";
   };
 
   nativeBuildInputs = [
     setuptools
     nodejs
     yarn
-    prefetch-yarn-deps
+    fixup-yarn-lock
   ];
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/@plotly/dash-jupyterlab/yarn.lock";
-    hash = "sha256-mkiyrA0jGiP0zbabSjgHFLEUX3f+LZdJ8eARI5QA8CU=";
+    hash = "sha256-L/or8jO6uEypI5krwy/ElIxa6jJrXGsCRZ9mh+0kcGA=";
   };
 
   preBuild = ''

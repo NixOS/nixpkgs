@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/ingydotnet/git-subrepo";
     description = "Git submodule alternative";
+    mainProgram = "git-subrepo";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ryantrinkle ];

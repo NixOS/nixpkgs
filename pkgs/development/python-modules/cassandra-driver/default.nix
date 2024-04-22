@@ -2,7 +2,7 @@
 , stdenv
 , buildPythonPackage
 , cryptography
-, cython
+, cython_0
 , eventlet
 , fetchFromGitHub
 , geomet
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    cython
+    cython_0
   ];
 
   buildInputs = [

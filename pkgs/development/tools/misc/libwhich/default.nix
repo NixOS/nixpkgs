@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Like `which`, for dynamic libraries";
+    mainProgram = "libwhich";
     homepage = "https://github.com/vtjnash/libwhich";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];

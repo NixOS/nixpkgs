@@ -6,15 +6,16 @@
 , libev
 , openssl
 }:
+
 stdenv.mkDerivation {
   pname = "mbidled";
-  version = "unstable-2022-10-30";
+  version = "unstable-2023-09-30";
 
   src = fetchFromGitHub {
     owner = "zsugabubus";
     repo = "mbidled";
-    rev = "b06152f015a470876b042e538804ebb1ac247c09";
-    sha256 = "sha256-eHm10onJ7v6fhvJiGXZhuN3c9cj+NoVIW2XQb2fdmuA=";
+    rev = "c724a34cc01b829b19a60655fc1652a378db7f27";
+    sha256 = "sha256-XQXLPjEEesBd+bATsKE2nvoNcuqtRA1JIsV7306CssA=";
   };
 
   preConfigure = ''
@@ -22,11 +23,13 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [
-    meson ninja
+    meson
+    ninja
   ];
 
   buildInputs = [
-    libev openssl
+    libev
+    openssl
   ];
 
   meta = with lib; {

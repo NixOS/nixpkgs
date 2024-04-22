@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Graphical companion application for various bridges like LinVst, etc";
+    mainProgram = "linvstmanager";
     homepage = "https://github.com/Goli4thus/linvstmanager";
     license = with licenses; [ gpl3 ];
     platforms = platforms.linux;

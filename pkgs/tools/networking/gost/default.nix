@@ -2,24 +2,24 @@
 
 buildGoModule rec {
   pname = "gost";
-  version = "2.11.5";
+  version = "2.11.5-unstable-2024-02-02";
 
   src = fetchFromGitHub {
     owner = "ginuerzh";
     repo = "gost";
-    rev = "v${version}";
-    sha256 = "sha256-UBjrWeBw9+qKQ/+1T1W/3e0vrigp540URIyM2d9iCE8=";
+    rev = "fd57e80709aba9581757b1cd63b7d8f75e2385d2";
+    sha256 = "sha256-GkXsiUcH5hppgkkt4ddVMLm5riUDORVhjWBGHZXti5A=";
   };
 
   patches = [
-    # Add go1.20 support. Remove with the next release.
+    # Bump quic-go to v0.41.0 for go 1.22 compatibility.
     (fetchpatch {
-      url = "https://github.com/ginuerzh/gost/commit/0f7376bd10c913c7e6b1e7e02dd5fd7769975d78.patch";
-      hash = "sha256-pQNCvl7/huNrkM3+XHkGnvLYCzdjbMV6nef1KcMnKEw=";
+      url = "https://github.com/ginuerzh/gost/pull/1016/commits/c2e3f7e493bbb6ff1bc348f36e1a148d9d0c16ad.patch";
+      hash = "sha256-9OtuPIzzCymMAVbrDuhhPcxcac69gjAUm4ykXbH/pbo=";
     })
   ];
 
-  vendorHash = "sha256-wAdNfhSPj9JUcI6Gcja6nRy68bVhV8B4PARR0WS9rjQ=";
+  vendorHash = "sha256-mq95eHyW8XkqyLApSqVB3bv5VFSu6FuPap/mTQj8a9M=";
 
   postPatch = ''
     substituteInPlace http2_test.go \

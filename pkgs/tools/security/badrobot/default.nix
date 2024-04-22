@@ -31,6 +31,7 @@ buildGoModule rec {
     homepage = "https://github.com/controlplaneio/badrobot";
     changelog = "https://github.com/controlplaneio/badrobot/blob/v${version}/CHANGELOG.md";
     description = "Operator Security Audit Tool";
+    mainProgram = "badrobot";
     longDescription = ''
       Badrobot is a Kubernetes Operator audit tool. It statically analyses
       manifests for high risk configurations such as lack of security

@@ -41,13 +41,4 @@ self: super: {
   # cabal2nix --maintainer roberth https://github.com/hercules-ci/optparse-applicative.git > pkgs/development/misc/haskell/hercules-ci-optparse-applicative.nix
   hercules-ci-optparse-applicative = self.callPackage ../misc/haskell/hercules-ci-optparse-applicative.nix {};
 
-  # Hotfixes
-  hercules-ci-agent = self.callPackage ./hotfixes/hercules-ci-agent.nix {};
-  hercules-ci-api = self.callPackage ./hotfixes/hercules-ci-api.nix {};
-  hercules-ci-api-agent = self.callPackage ./hotfixes/hercules-ci-api-agent.nix {};
-  hercules-ci-api-core = self.callPackage ./hotfixes/hercules-ci-api-core.nix {};
-  hercules-ci-cli = self.callPackage ./hotfixes/hercules-ci-cli.nix {};
-  hercules-ci-cnix-expr = self.callPackage ./hotfixes/hercules-ci-cnix-expr.nix {};
-  hercules-ci-cnix-store = self.callPackage ./hotfixes/hercules-ci-cnix-store.nix {};
-  openapi3 = self.callPackage ./hotfixes/openapi3.nix {};
 }

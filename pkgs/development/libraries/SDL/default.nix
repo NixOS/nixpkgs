@@ -127,6 +127,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A cross-platform multimedia library";
+    mainProgram = "sdl-config";
     homepage    = "http://www.libsdl.org/";
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;

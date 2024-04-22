@@ -6,15 +6,15 @@
 , unstableGitUpdater
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "btcdeb";
-  version = "0.3.20-unstable-2024-02-06";
+  version = "0.3.20-unstable-2024-03-26";
 
   src = fetchFromGitHub {
     owner = "bitcoin-core";
     repo = "btcdeb";
-    rev = "b9288fc3371eb1d9be0cae2549be25de66659be8";
-    hash = "sha256-IieLNMA3m6g2Kn7g3iewmUL9c+meMR4hrrwVYqNZoh8=";
+    rev = "675b7820f0eec8a76f68ade7ea35974a561d49dd";
+    hash = "sha256-J9E0edRbFONMut1/ZFaUqgWAtEUifc+pmGypeUQ0m4c=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];

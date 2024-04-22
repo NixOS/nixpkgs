@@ -8,7 +8,7 @@
 , atk
 , gdk-pixbuf
 , gtk4
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [

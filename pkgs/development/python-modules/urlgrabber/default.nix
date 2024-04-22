@@ -16,6 +16,7 @@ buildPythonPackage rec {
     homepage = "http://urlgrabber.baseurl.org";
     license = licenses.lgpl2Plus;
     description = "Python module for downloading files";
+    mainProgram = "urlgrabber";
     maintainers = with maintainers; [ qknight ];
   };
 }

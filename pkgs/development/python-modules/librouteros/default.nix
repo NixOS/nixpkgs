@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytest-xdist
-, pytestCheckHook
+, pytest7CheckHook
 , pythonOlder
 , setuptools
 }:
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-xdist
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
   disabledTests = [

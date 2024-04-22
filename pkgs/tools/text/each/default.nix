@@ -18,6 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = " A better way of working with structured data on the command line";
+    mainProgram = "each";
     homepage = "https://github.com/arraypad/each";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ thiagokokada ];

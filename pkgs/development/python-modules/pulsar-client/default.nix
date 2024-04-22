@@ -93,12 +93,12 @@ let
       "3.12-aarch64-darwin" = getSrcFromPypi {
         platform = "macosx_10_15_universal2";
         dist = "cp312";
-        hash = "sha256-9/jw/wr1oUD9pOadVAaMRL081iVMUXwVgnUMcG1UNvE=";
+        hash = "sha256-Hgd6SDm+Pq094/BbTCRCadyi3wf0fOoLkFRMfp3BZC8=";
       };
       "3.12-x86_64-darwin" = getSrcFromPypi {
         platform = "macosx_10_15_universal2";
         dist = "cp312";
-        hash = "sha256-9/jw/wr1oUD9pOadVAaMRL081iVMUXwVgnUMcG1UNvE=";
+        hash = "sha256-Hgd6SDm+Pq094/BbTCRCadyi3wf0fOoLkFRMfp3BZC8=";
       };
     };
 
@@ -108,7 +108,8 @@ in buildPythonPackage {
 
   format = "wheel";
 
-  src = Srcs."${pythonVersion}-${stdenv.hostPlatform.system}";
+  src = Srcs."${pythonVersion}-${stdenv.hostPlatform.system}"
+    or (throw "Unsupported '${pythonVersion}-${stdenv.hostPlatform.system}' target");
 
   meta = with lib; {
     description = "Client for pulsar";

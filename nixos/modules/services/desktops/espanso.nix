@@ -6,7 +6,7 @@ in {
   meta = { maintainers = with lib.maintainers; [ numkem ]; };
 
   options = {
-    services.espanso = { enable = options.mkEnableOption (lib.mdDoc "Espanso"); };
+    services.espanso = { enable = options.mkEnableOption "Espanso"; };
   };
 
   config = mkIf cfg.enable {

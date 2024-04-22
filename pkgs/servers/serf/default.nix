@@ -33,6 +33,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Service orchestration and management tool";
+    mainProgram = "serf";
     longDescription = ''
       Serf is a decentralized solution for service discovery and orchestration
       that is lightweight, highly available, and fault tolerant.

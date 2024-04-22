@@ -36,6 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Audio Activity Detection tool that can process online data as well as audio files";
+    mainProgram = "auditok";
     homepage = "https://github.com/amsehili/auditok/";
     changelog = "https://github.com/amsehili/auditok/blob/v${version}/CHANGELOG";
     license = licenses.mit;

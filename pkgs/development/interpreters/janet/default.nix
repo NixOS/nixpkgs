@@ -57,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Janet programming language";
+    mainProgram = "janet";
     homepage = "https://janet-lang.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ andrewchambers peterhoeg ];

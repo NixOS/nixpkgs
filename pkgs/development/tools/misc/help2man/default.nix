@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Generate man pages from `--help' output";
+    mainProgram = "help2man";
     longDescription = ''
       help2man produces simple manual pages from the ‘--help’ and ‘--version’ output of other commands.
     '';

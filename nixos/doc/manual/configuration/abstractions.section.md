@@ -47,9 +47,9 @@ You can write a `let` wherever an expression is allowed. Thus, you also could ha
 ```nix
 {
   services.httpd.virtualHosts =
-    let commonConfig = ...; in
-    { "blog.example.org" = (commonConfig // { ... })
-      "wiki.example.org" = (commonConfig // { ... })
+    let commonConfig = { /* ... */ }; in
+    { "blog.example.org" = (commonConfig // { /* ... */ });
+      "wiki.example.org" = (commonConfig // { /* ... */ });
     };
 }
 ```

@@ -6,16 +6,16 @@
 , pytestCheckHook
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "proton-keyring-linux-secretservice";
-  version = "0.0.1-unstable-2023-04-14";
+  version = "0.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-keyring-linux-secretservice";
-    rev = "973d2646ec4d04bc270df53058df892950244e70";
-    hash = "sha256-JlhvJBpbewT2c8k31CPMUlvvo/orWW1qfylFZLnDxeY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-IZPT2bL/1YD2TH/djwIQHUE1RRbYMTkQDacjjoqDQWo=";
   };
 
   nativeBuildInputs = [

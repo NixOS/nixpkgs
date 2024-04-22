@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "iceportal";
-  version = "1.1.2";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,14 +20,14 @@ buildPythonPackage rec {
     owner = "home-assistant-ecosystem";
     repo = "python-iceportal";
     rev = "refs/tags/${version}";
-    hash = "sha256-s+jEpxKsa3eIV4a/Ltso51jqZC4jzsvPLTjDFMV9FIA=";
+    hash = "sha256-kpAUgGi2fAHzQYuZAaQW9wdrYjwbduRsoTwSuzcjJa8=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
   ];
 

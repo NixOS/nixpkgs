@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "pillow-heif";
-  version = "0.15.0";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bigcat88";
     repo = "pillow_heif";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zSPbOb7+U45Vmad6IwNtkunLXdT3ledKAE4QWlSeP0g=";
+    hash = "sha256-TpK6VK2YoOtc4ueag33m5n1umcUWOUgcda/MZEEOR7g=";
   };
 
   postPatch = ''
@@ -75,7 +75,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = [
+    # Time based
+    "test_decode_threads"
+  ] ++ lib.optionals stdenv.isDarwin [
     # https://github.com/bigcat88/pillow_heif/issues/89
     # not reproducible in nixpkgs
     "test_opencv_crash"

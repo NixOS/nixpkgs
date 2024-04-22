@@ -60,20 +60,11 @@ rustPlatform.buildRustPackage rec {
     inherit hash;
   };
 
-  # fix build with rust 1.70+
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/solana-labs/solana/commit/9e703f85de4184f577f22a1c72a0d33612f2feb1.patch";
-      hash = "sha256-bAKTIQ6FhTk6bIddYULwLfdH5kzNPw1ltXJEfawtAXg=";
-      includes = [ "sdk/program/src/account_info.rs" ];
-    })
-  ];
-
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "crossbeam-epoch-0.9.5" = "sha256-Jf0RarsgJiXiZ+ddy0vp4jQ59J9m0k3sgXhWhCdhgws=";
-      "ntapi-0.3.7" = "sha256-G6ZCsa3GWiI/FeGKiK9TWkmTxen7nwpXvm5FtjNtjWU=";
+      "tokio-1.29.1" = "sha256-Z/kewMCqkPVTXdoBcSaFKG5GSQAdkdpj3mAzLLCjjGk=";
     };
   };
 

@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Chip support package for Cypress EZ-USB FX2 series microcontrollers";
+    mainProgram = "fx2tool";
     homepage = "https://github.com/whitequark/libfx2";
     license = licenses.bsd0;
     maintainers = with maintainers; [ emily ];

@@ -83,6 +83,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "High-level performance-oriented dynamical language for technical computing";
+    mainProgram = "julia";
     homepage = "https://julialang.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ nickcao joshniemela thomasjm ];

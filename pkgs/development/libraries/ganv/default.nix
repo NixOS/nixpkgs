@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An interactive Gtk canvas widget for graph-based interfaces";
+    mainProgram = "ganv_bench";
     homepage = "http://drobilla.net";
     license = licenses.gpl3;
     maintainers = [ maintainers.goibhniu ];

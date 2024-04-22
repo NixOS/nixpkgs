@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "In-application debugger for ARM Cortex microcontrollers";
+    mainProgram = "blackmagic";
     longDescription = ''
       The Black Magic Probe is a modern, in-application debugging tool
       for embedded microprocessors. It allows you to see what is going

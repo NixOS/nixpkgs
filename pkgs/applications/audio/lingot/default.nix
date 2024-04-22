@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Not a Guitar-Only tuner";
+    mainProgram = "lingot";
     homepage = "https://www.nongnu.org/lingot/";
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; linux;

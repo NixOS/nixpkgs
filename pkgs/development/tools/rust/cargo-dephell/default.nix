@@ -49,6 +49,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A tool to analyze the third-party dependencies imported by a rust crate or rust workspace";
+    mainProgram = "cargo-dephell";
     homepage = "https://github.com/mimoo/cargo-dephell";
     license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ figsoda matthiasbeyer ];

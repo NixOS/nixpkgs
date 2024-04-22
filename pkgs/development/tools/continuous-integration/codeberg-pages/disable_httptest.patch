@@ -1,12 +1,13 @@
 diff --git a/server/handler/handler_test.go b/server/handler/handler_test.go
 deleted file mode 100644
-index 626564a..0000000
+index 6521633..0000000
 --- a/server/handler/handler_test.go
 +++ /dev/null
-@@ -1,49 +0,0 @@
+@@ -1,52 +0,0 @@
 -package handler
 -
 -import (
+-	"net/http"
 -	"net/http/httptest"
 -	"testing"
 -	"time"
@@ -24,13 +25,15 @@ index 626564a..0000000
 -		"https://docs.codeberg.org/pages/raw-content/",
 -		[]string{"/.well-known/acme-challenge/"},
 -		[]string{"raw.codeberg.org", "fonts.codeberg.org", "design.codeberg.org"},
+-		[]string{"pages"},
+-		cache.NewKeyValueCache(),
 -		cache.NewKeyValueCache(),
 -		cache.NewKeyValueCache(),
 -	)
 -
 -	testCase := func(uri string, status int) {
 -		t.Run(uri, func(t *testing.T) {
--			req := httptest.NewRequest("GET", uri, nil)
+-			req := httptest.NewRequest("GET", uri, http.NoBody)
 -			w := httptest.NewRecorder()
 -
 -			log.Printf("Start: %v\n", time.Now())

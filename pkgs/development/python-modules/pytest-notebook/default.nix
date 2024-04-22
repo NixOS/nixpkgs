@@ -70,6 +70,10 @@ buildPythonPackage rec {
     "test_diff_to_string"
     "test_execute_notebook_with_coverage"
     "test_regression_coverage"
+    "test_collection"
+    "test_setup_with_skip_meta"
+    "test_run_fail"
+    "test_run_pass_with_meta"
   ];
 
   meta = {

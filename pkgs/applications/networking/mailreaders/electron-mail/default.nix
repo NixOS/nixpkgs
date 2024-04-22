@@ -29,6 +29,7 @@ in appimageTools.wrapType2 {
 
   meta = with lib; {
     description = "ElectronMail is an Electron-based unofficial desktop client for ProtonMail";
+    mainProgram = "electron-mail";
     homepage = "https://github.com/vladimiry/ElectronMail";
     license = licenses.gpl3;
     maintainers = [ maintainers.princemachiavelli ];

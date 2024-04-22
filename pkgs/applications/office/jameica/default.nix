@@ -4,6 +4,7 @@
 , makeDesktopItem
 , makeWrapper
 , wrapGAppsHook
+, stripJavaArchivesHook
 , ant
 , jdk
 , jre
@@ -46,13 +47,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-MSVSd5DyVL+dcfTDv1M99hxickPwT2Pt6QGNsu6DGZI=";
   };
 
-  postPatch = ''
-    # Fix jar timestamps for reproducibility
-    substituteInPlace build/build.xml \
-        --replace-fail '<jar ' '<jar modificationtime="0" '
-  '';
-
-  nativeBuildInputs = [ ant jdk wrapGAppsHook makeWrapper ];
+  nativeBuildInputs = [ ant jdk wrapGAppsHook makeWrapper stripJavaArchivesHook ];
   buildInputs = lib.optionals stdenv.isLinux [ gtk2 glib libXtst ]
     ++ lib.optional stdenv.isDarwin Cocoa;
 

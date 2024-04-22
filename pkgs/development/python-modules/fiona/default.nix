@@ -2,7 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, cython_3
+, cython
 , gdal
 , oldest-supported-numpy
 , setuptools
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
     gdal # for gdal-config
     oldest-supported-numpy
     setuptools
@@ -93,6 +93,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/Toblerity/Fiona/blob/${src.rev}/CHANGES.txt";
     description = "OGR's neat, nimble, no-nonsense API for Python";
+    mainProgram = "fio";
     homepage = "https://fiona.readthedocs.io/";
     license = licenses.bsd3;
     maintainers = teams.geospatial.members;

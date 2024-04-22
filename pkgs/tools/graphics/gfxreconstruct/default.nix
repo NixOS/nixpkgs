@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gfxreconstruct";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "LunarG";
     repo = "gfxreconstruct";
     rev = "v${version}";
-    hash = "sha256-4jFHnDiLO2BrfXzxKXU3FGhvcmkUXCT2k/7A+DJPz90=";
+    hash = "sha256-4qNAMPswsYtzHmTKr+waDLoWa9xex5hvX1Og/KibiBg=";
     fetchSubmodules = true;
   };
 

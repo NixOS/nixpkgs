@@ -20,18 +20,18 @@
 }:
 buildPythonPackage rec {
   pname = "skytemple-ssb-emulator";
-  version = "1.6.1.post1";
+  version = "1.6.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FEQnQPIathtrP03Dncz560K0lhKW4+HI/Oyo7qsEpFw=";
+    hash = "sha256-qGRfX7Bwr19KJnIdhwuSVBZzXxMJyEgyBuy91aLhEj4=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "skytemple_rust-1.6.0" = "sha256-4glBo1VKCSwSSeQU6Ojhc0Cbaikxy101V1fU4rgcczg=";
+      "skytemple_rust-1.6.4" = "sha256-t7P3F1zes7bgDu2JGqb5DgxlDCiztWtmViy4QY9CzT0=";
     };
   };
 
@@ -73,6 +73,6 @@ buildPythonPackage rec {
     description = "SkyTemple Script Engine Debugger Emulator Backend";
     homepage = "https://github.com/SkyTemple/skytemple-ssb-emulator";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ marius851000 xfix ];
+    maintainers = with maintainers; [ marius851000 ];
   };
 }

@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-dist";
-  version = "0.11.1";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "axodotdev";
     repo = "cargo-dist";
     rev = "v${version}";
-    hash = "sha256-SnwTfRHa/1iVG5tcypFQXUTHEOTiXkICzyjdKNYXQcM=";
+    hash = "sha256-sD3Y/FFfUgMtvBoSP0BBhS5aCZy+TkyO8S28q8Hoc5I=";
   };
 
-  cargoHash = "sha256-Z3usfwxUQzrxAoINUZnM6Gffj1GEVaRNOg+XW5g8PH8=";
+  cargoHash = "sha256-efVhaL1yUEpOgNZ4Bog1OB37lT1yQHJVE9M938jnGeE=";
 
   nativeBuildInputs = [
     pkg-config
@@ -55,6 +55,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A tool for building final distributable artifacts and uploading them to an archive";
+    mainProgram = "cargo-dist";
     homepage = "https://github.com/axodotdev/cargo-dist";
     changelog = "https://github.com/axodotdev/cargo-dist/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ asl20 mit ];

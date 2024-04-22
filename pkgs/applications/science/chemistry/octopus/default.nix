@@ -1,6 +1,9 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, cmake
+, pkg-config
+, ninja
 , gfortran
 , which
 , perl
@@ -14,15 +17,12 @@
 , gsl
 , netcdf
 , arpack
-, autoreconfHook
+, spglib
+, metis
 , scalapack
 , mpi
 , enableMpi ? true
 , python3
-, enableFma ? stdenv.hostPlatform.fmaSupport
-, enableFma4 ? stdenv.hostPlatform.fma4Support
-, enableAvx ? stdenv.hostPlatform.avx2Support
-, enableAvx512 ? stdenv.hostPlatform.avx512Support
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -30,21 +30,23 @@ assert (blas.isILP64 == arpack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "octopus";
-  version = "13.0";
+  version = "14.0";
 
   src = fetchFromGitLab {
     owner = "octopus-code";
     repo = "octopus";
     rev = version;
-    sha256 = "sha256-CZ+Qmv6aBQ6w11mLvTP6QAJzaGs+vmmXuNGnSyAqVDU=";
+    sha256 = "sha256-wQ2I+10ZHLKamW3j6AUtq2KZVm6d29+JxYgwvBKz9DU=";
   };
 
   nativeBuildInputs = [
     which
     perl
     procps
-    autoreconfHook
+    cmake
     gfortran
+    pkg-config
+    ninja
   ];
 
   buildInputs = [
@@ -57,33 +59,19 @@ stdenv.mkDerivation rec {
     netcdf
     arpack
     libvdwxc
+    spglib
+    metis
     (python3.withPackages (ps: [ ps.pyyaml ]))
   ] ++ lib.optional enableMpi scalapack;
 
   propagatedBuildInputs = lib.optional enableMpi mpi;
   propagatedUserEnvPkgs = lib.optional enableMpi mpi;
 
-  configureFlags = with lib; [
-    "--with-yaml-prefix=${lib.getDev libyaml}"
-    "--with-blas=-lblas"
-    "--with-lapack=-llapack"
-    "--with-fftw-prefix=${lib.getDev fftw}"
-    "--with-gsl-prefix=${lib.getDev gsl}"
-    "--with-libxc-prefix=${lib.getDev libxc}"
-    "--with-libvdwxc"
-    "--enable-openmp"
-  ]
-  ++ optional enableFma "--enable-fma3"
-  ++ optional enableFma4 "--enable-fma4"
-  ++ optional enableAvx "--enable-avx"
-  ++ optional enableAvx512 "--enable-avx512"
-  ++ optionals enableMpi [
-    "--enable-mpi"
-    "--with-scalapack=-lscalapack"
-    "CC=mpicc"
-    "FC=mpif90"
+  cmakeFlags = [
+    (lib.cmakeBool "OCTOPUS_MPI" enableMpi)
+    (lib.cmakeBool "OCTOPUS_ScaLAPACK" enableMpi)
+    (lib.cmakeBool "OCTOPUS_OpenMP" true)
   ];
-
 
   nativeCheckInputs = lib.optional.enableMpi mpi;
   doCheck = false;

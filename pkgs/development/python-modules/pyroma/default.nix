@@ -59,6 +59,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Test your project's packaging friendliness";
+    mainProgram = "pyroma";
     homepage = "https://github.com/regebro/pyroma";
     license = licenses.mit;
     maintainers = with maintainers; [ kamadorueda ];

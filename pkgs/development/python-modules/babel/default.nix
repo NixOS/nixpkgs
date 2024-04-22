@@ -58,6 +58,7 @@ buildPythonPackage rec {
     homepage = "https://babel.pocoo.org/";
     changelog = "https://github.com/python-babel/babel/releases/tag/v${version}";
     description = "Collection of internationalizing tools";
+    mainProgram = "pybabel";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };

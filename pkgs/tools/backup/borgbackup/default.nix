@@ -2,54 +2,46 @@
 , stdenv
 , acl
 , e2fsprogs
+, fetchFromGitHub
 , libb2
 , lz4
 , openssh
 , openssl
-, python3Packages
+, python3
 , xxHash
 , zstd
 , installShellFiles
 , nixosTests
-, fetchPypi
 }:
 
 let
-  python = python3Packages.python.override {
-    packageOverrides = self: super: {
-      msgpack = super.msgpack.overrideAttrs (oldAttrs: rec {
-        version ="1.0.4";
-
-        src = fetchPypi {
-          pname = "msgpack";
-          inherit version;
-          hash = "sha256-9dhpwY8DAgLrQS8Iso0q/upVPWYTruieIA16yn7wH18=";
-        };
-      });
-    };
-  };
+  python = python3;
 in
 python.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.2.7";
-  format = "pyproject";
+  version = "1.2.8";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-9j8oozg8BBlxzsh7BhyjmoFbX9RF2ySqgXLKxBfZQRo=";
+  src = fetchFromGitHub {
+    owner = "borgbackup";
+    repo = "borg";
+    rev = "refs/tags/${version}";
+    hash = "sha256-+FHqOVuHlY9QUjCrYVnrMBZPMFH9Z2U7eZ6eUSINSrw=";
   };
 
   postPatch = ''
     # sandbox does not support setuid/setgid/sticky bits
     substituteInPlace src/borg/testsuite/archiver.py \
-      --replace "0o4755" "0o0755"
+      --replace-fail "0o4755" "0o0755"
   '';
 
-  nativeBuildInputs = with python.pkgs; [
+  build-system = with python.pkgs; [
     cython
     setuptools-scm
     pkgconfig
+  ];
 
+  nativeBuildInputs = with python.pkgs; [
     # docs
     sphinxHook
     guzzle-sphinx-theme
@@ -70,7 +62,7 @@ python.pkgs.buildPythonApplication rec {
     acl
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  dependencies = with python.pkgs; [
     msgpack
     packaging
     (if stdenv.isLinux then pyfuse3 else llfuse)
@@ -130,7 +122,7 @@ python.pkgs.buildPythonApplication rec {
   outputs = [ "out" "doc" "man" ];
 
   meta = with lib; {
-    changelog = "https://github.com/borgbackup/borg/blob/${version}/docs/changes.rst";
+    changelog = "https://github.com/borgbackup/borg/blob/${src.rev}/docs/changes.rst";
     description = "Deduplicating archiver with compression and encryption";
     homepage = "https://www.borgbackup.org";
     license = licenses.bsd3;

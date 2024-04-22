@@ -37,7 +37,7 @@ in
       description = "Request backlog for IRC channels.";
       homepage = "https://github.com/fruitiex/znc-backlog/";
       license = licenses.asl20;
-      maintainers = with maintainers; [ infinisil ];
+      maintainers = [ ];
     };
   };
 
@@ -57,7 +57,7 @@ in
       description = "ZNC module for client specific buffers";
       homepage = "https://github.com/CyberShadow/znc-clientbuffer";
       license = licenses.asl20;
-      maintainers = with maintainers; [ hrdinka szlend ];
+      maintainers = with maintainers; [ hrdinka szlend cybershadow ];
     };
   };
 

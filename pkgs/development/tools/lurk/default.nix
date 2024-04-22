@@ -18,6 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A simple and pretty alternative to strace";
+    mainProgram = "lurk";
     homepage = "https://github.com/jakwai01/lurk";
     changelog = "https://github.com/jakwai01/lurk/releases/tag/${src.rev}";
     license = licenses.agpl3Only;

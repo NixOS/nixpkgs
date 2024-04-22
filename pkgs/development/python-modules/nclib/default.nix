@@ -25,6 +25,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module that provides netcat features";
+    mainProgram = "serve-stdio";
     homepage = "https://nclib.readthedocs.io/";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

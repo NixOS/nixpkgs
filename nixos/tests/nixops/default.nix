@@ -93,23 +93,5 @@ let
 
   inherit (import ../ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
 
-  /*
-    Return a store path with a closure containing everything including
-    derivations and all build dependency outputs, all the way down.
-  */
-  allDrvOutputs = pkg:
-    let name = "allDrvOutputs-${pkg.pname or pkg.name or "unknown"}";
-    in
-    pkgs.runCommand name { refs = pkgs.writeReferencesToFile pkg.drvPath; } ''
-      touch $out
-      while read ref; do
-        case $ref in
-          *.drv)
-            cat $ref >>$out
-            ;;
-        esac
-      done <$refs
-    '';
-
 in
 tests

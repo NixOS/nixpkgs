@@ -130,6 +130,13 @@ def main():
             continue
 
         if old_version is None:
+            if kernel.eol:
+                print(
+                    f"{kernel.branch} is EOL, not adding...",
+                    file=sys.stderr
+                )
+                continue
+
             message = f"linux_{nixpkgs_branch}: init at {kernel.version}"
         else:
             message = f"linux_{nixpkgs_branch}: {old_version} -> {kernel.version}"

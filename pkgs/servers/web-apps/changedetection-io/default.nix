@@ -5,19 +5,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "changedetection-io";
-  version = "0.45.14";
+  version = "0.45.20";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dgtlmoon";
     repo = "changedetection.io";
-    rev = version;
-    hash = "sha256-O+kWivVc/FZmIDjOE/fsUccrOyHrQ8GakjulEnm4w88=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-wnJz/yVOSBTgOfGxmrO4JXifZxoTk8bjqGKqKsbwXAI=";
   };
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "apprise~=1.7.1" "apprise" \
+      --replace "apprise~=1.7.4" "apprise" \
       --replace "cryptography~=3.4" "cryptography" \
       --replace "dnspython~=2.4" "dnspython" \
       --replace "pytest ~=7.2" "" \
@@ -37,6 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     feedgen
     flask
     flask-compress
+    flask-cors
     flask-expects-json
     flask-login
     flask-paginate
@@ -52,6 +53,8 @@ python3.pkgs.buildPythonApplication rec {
     paho-mqtt
     pillow
     playwright
+    pyee
+    pyppeteer
     pytz
     requests
     selenium

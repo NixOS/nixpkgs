@@ -57,6 +57,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Copy/extract/patch android apk signatures & compare APKs";
+    mainProgram = "apksigcopier";
     longDescription = ''
       apksigcopier is a tool for copying android APK signatures from a signed
       APK to an unsigned one (in order to verify reproducible builds).

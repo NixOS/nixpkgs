@@ -38,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Magic Another Game Engine";
+    mainProgram = "xmage";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer abueide ];

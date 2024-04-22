@@ -78,14 +78,14 @@ let
     urllib3
   ];
 in mkDerivation rec {
-  version = "3.36.0";
+  version = "3.36.2";
   pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-uO9Bu+7n8xzsjumbp0t/yYQNvyDgRH1bdfqpX9oLoTY=";
+    hash = "sha256-/8mpzl/6UpjrMVjae2nqpS2DBRCq86rE+B3INzoRz8g=";
   };
 
   passthru = {
@@ -98,9 +98,9 @@ in mkDerivation rec {
     wrapGAppsHook
     wrapQtAppsHook
 
+    bison
     cmake
     flex
-    bison
     ninja
   ];
 

@@ -21,6 +21,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Markdown defined task runner";
+    mainProgram = "xc";
     homepage = "https://xcfile.dev/";
     changelog = "https://github.com/joerdav/xc/releases/tag/${src.rev}";
     license = licenses.mit;

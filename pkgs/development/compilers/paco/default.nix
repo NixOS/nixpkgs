@@ -27,6 +27,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A simple compiled programming language";
+    mainProgram = "paco";
     homepage = "https://github.com/pacolang/paco";
     license = licenses.mit;
     maintainers = with maintainers; [ hugolgst ];

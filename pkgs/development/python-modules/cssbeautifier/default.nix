@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "CSS unobfuscator and beautifier";
+    mainProgram = "css-beautify";
     homepage = "https://github.com/beautifier/js-beautify";
     changelog = "https://github.com/beautifier/js-beautify/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

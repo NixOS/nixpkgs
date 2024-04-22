@@ -26,7 +26,7 @@ let
     owner = "rust-lang";
     repo = "rust-analyzer";
     rev = releaseTag;
-    sha256 = "sha256-Oj/RPMridKpYt3eRqUIPg9YNrj6npG8THIGuWjsamnE=";
+    hash = "sha256-Oj/RPMridKpYt3eRqUIPg9YNrj6npG8THIGuWjsamnE=";
   };
 
   build-deps = nodePackages."rust-analyzer-build-deps-../../applications/editors/vscode/extensions/rust-lang.rust-analyzer/build-deps";

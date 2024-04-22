@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 
 # build-system
 , setuptools
@@ -9,24 +8,13 @@
 
 buildPythonPackage rec {
   pname = "future";
-  version = "0.18.3";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NKF0Nu0elml6hvnePRWjsL4B2LyN6cHf/Vn7gjTtUwc=";
+    hash = "sha256-vSloMJMHhh7a4UWKT4pPNZjAO+Q7l1IQdq6/XZTAewU=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/PythonCharmers/python-future/commit/1901c1c347bcad603e8404b64656994eb2cc0439.patch";
-      hash = "sha256-wUSWVs7+KTsTmEM4OkpViAjDGWqx5h0SLPIacMZCpWU=";
-      excludes = [
-        "build.sh"
-        "docs/whatsnew.rst"
-      ];
-    })
-  ];
 
   nativeBuildInputs = [
     setuptools

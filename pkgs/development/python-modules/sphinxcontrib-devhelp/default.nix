@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-devhelp";
-  version = "1.0.5";
+  version = "1.0.6";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "sphinxcontrib_devhelp";
     inherit version;
-    hash = "sha256-Y7QeDTggfKQOu+q89NjlH3bAPnjNYavhGM9ENcc9QhI=";
+    hash = "sha256-mJP9P5BQa8S5e9uXfOuPvYI5ifQxayjDhB7BKFRDctM=";
   };
 
   nativeBuildInputs = [

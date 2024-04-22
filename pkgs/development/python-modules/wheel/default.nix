@@ -34,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/pypa/wheel";
     description = "A built-package format for Python";
+    mainProgram = "wheel";
     longDescription = ''
       This library is the reference implementation of the Python wheel packaging standard,
       as defined in PEP 427.

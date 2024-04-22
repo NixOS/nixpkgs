@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Emulator for IBM PC computers and clones";
+    mainProgram = "pcem";
     homepage = "https://pcem-emulator.co.uk/";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.terin ];

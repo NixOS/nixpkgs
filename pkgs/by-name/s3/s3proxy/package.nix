@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , jre
 , makeWrapper
@@ -20,6 +21,8 @@ maven.buildMavenPackage {
     hash = "sha256-GhZPvo8wlXInHwg8rSmpwMMkZVw5SMpnZyKqFUYLbrE=";
   };
 
+  mvnParameters = lib.optionalString stdenv.isDarwin "-DskipTests";
+
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
@@ -31,6 +34,7 @@ maven.buildMavenPackage {
 
   meta = with lib; {
     description = "Access other storage backends via the S3 API";
+    mainProgram = "s3proxy";
     homepage = "https://github.com/gaul/s3proxy";
     changelog = "https://github.com/gaul/s3proxy/releases/tag/s3proxy-${version}";
     license = licenses.asl20;

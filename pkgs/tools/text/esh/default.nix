@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Simple templating engine based on shell";
+    mainProgram = "esh";
     homepage = "https://github.com/jirutka/esh";
     license = licenses.mit;
     maintainers = with maintainers; [ mnacamura ];

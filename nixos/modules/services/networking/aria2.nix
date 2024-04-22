@@ -31,7 +31,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether or not to enable the headless Aria2 daemon service.
 
           Aria2 daemon can be controlled via the RPC interface using
@@ -44,7 +44,7 @@ in
       openPorts = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Open listen and RPC ports found in listenPortRange and rpcListenPort
           options in the firewall.
         '';
@@ -52,26 +52,26 @@ in
       downloadDir = mkOption {
         type = types.path;
         default = downloadDir;
-        description = lib.mdDoc ''
+        description = ''
           Directory to store downloaded files.
         '';
       };
       listenPortRange = mkOption {
         type = types.listOf types.attrs;
         default = [ { from = 6881; to = 6999; } ];
-        description = lib.mdDoc ''
+        description = ''
           Set UDP listening port range used by DHT(IPv4, IPv6) and UDP tracker.
         '';
       };
       rpcListenPort = mkOption {
         type = types.int;
         default = 6800;
-        description = lib.mdDoc "Specify a port number for JSON-RPC/XML-RPC server to listen to. Possible Values: 1024-65535";
+        description = "Specify a port number for JSON-RPC/XML-RPC server to listen to. Possible Values: 1024-65535";
       };
       rpcSecretFile = mkOption {
         type = types.path;
         example = "/run/secrets/aria2-rpc-token.txt";
-        description = lib.mdDoc ''
+        description = ''
           A file containing the RPC secret authorization token.
           Read https://aria2.github.io/manual/en/html/aria2c.html#rpc-auth to know how this option value is used.
         '';
@@ -80,7 +80,7 @@ in
         type = types.separatedString " ";
         example = "--rpc-listen-all --remote-time=true";
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Additional arguments to be passed to Aria2.
         '';
       };

@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python based ingestor for BloodHound, based on Impacket";
+    mainProgram = "bloodhound-python";
     homepage = "https://github.com/dirkjanm/BloodHound.py";
     license = licenses.mit;
     maintainers = with maintainers; [ exploitoverload ];

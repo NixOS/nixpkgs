@@ -50,6 +50,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Java Property file parser and writer for Python";
+    mainProgram = "propconv";
     homepage = "https://github.com/Tblue/python-jproperties";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];

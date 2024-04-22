@@ -4,11 +4,11 @@
 # downloads at https://vivaldi.com/download/
 stdenv.mkDerivation rec {
   pname = "chromium-codecs-ffmpeg-extra";
-  version = "111306";
+  version = "114023";
 
   src = fetchurl {
-    url = "https://api.snapcraft.io/api/v1/snaps/download/XXzVIXswXKHqlUATPqGCj2w2l7BxosS8_34.snap";
-    sha256 = "sha256-Dna9yFgP7JeQLAeZWvSZ+eSMX2yQbX2/+mX0QC22lYY=";
+    url = "https://api.snapcraft.io/api/v1/snaps/download/XXzVIXswXKHqlUATPqGCj2w2l7BxosS8_37.snap";
+    hash = "sha256-l1eHTAJvpkWof7Yj7M5uaa3YdLWw9F+/QvIUAfBx3ow=";
   };
 
   buildInputs = [ squashfsTools ];

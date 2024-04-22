@@ -34,6 +34,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "ASCII transliterations of Unicode text";
+    mainProgram = "unidecode";
     homepage = "https://github.com/avian2/unidecode";
     changelog = "https://github.com/avian2/unidecode/blob/unidecode-${version}/ChangeLog";
     license = licenses.gpl2Plus;

@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Zephyr RTOS meta tool";
+    mainProgram = "west";
     longDescription = ''
       West lets you manage multiple Git repositories under a single directory using a single file,
       called the west manifest file, or manifest for short.

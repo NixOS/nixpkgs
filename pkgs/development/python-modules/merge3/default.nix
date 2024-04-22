@@ -28,6 +28,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python implementation of 3-way merge";
+    mainProgram = "merge3";
     homepage = "https://github.com/breezy-team/merge3";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ marsam ];

@@ -1,30 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, google-generativeai
-, llama-index-core
-, poetry-core
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-generativeai,
+  llama-index-core,
+  poetry-core,
+  pythonOlder,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-embeddings-google";
-
-  inherit (llama-index-core) version src meta;
-
+  version = "0.1.5";
   pyproject = true;
 
-  sourceRoot = "${src.name}/llama-index-integrations/embeddings/${pname}";
+  disabled = pythonOlder "3.8";
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  src = fetchPypi {
+    pname = "llama_index_embeddings_google";
+    inherit version;
+    hash = "sha256-mJ+H4klmGlpTGXLErlLNWH5IUpGyXnbAhNsgT5fwCHs=";
+  };
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "google-generativeai" ];
+
+  build-system = [ poetry-core ];
+
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  dependencies = [
     google-generativeai
     llama-index-core
   ];
 
-  pythonImportsCheck = [
-    "llama_index.embeddings.google"
-  ];
+  # Tests are only available in the mono repo
+  doCheck = false;
+
+  pythonImportsCheck = [ "llama_index.embeddings.google" ];
+
+  meta = with lib; {
+    description = "LlamaIndex Embeddings Integration for Google";
+    homepage = "https://github.com/run-llama/llama_index/tree/main/llama-index-integrations/embeddings/llama-index-embeddings-google";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+  };
 }

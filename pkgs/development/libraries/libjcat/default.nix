@@ -70,6 +70,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Library for reading and writing Jcat files";
+    mainProgram = "jcat-tool";
     homepage = "https://github.com/hughsie/libjcat";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ ];

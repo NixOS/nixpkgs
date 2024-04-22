@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, opentelemetry-api
-, opentelemetry-sdk
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, std-uritemplate
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  opentelemetry-api,
+  opentelemetry-sdk,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  std-uritemplate,
 }:
 
 buildPythonPackage rec {
   pname = "microsoft-kiota-abstractions";
-  version = "1.3.1";
+  version = "1.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,14 +23,12 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "kiota-abstractions-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AsJHKoA50JZBDQ7vob4lI0gEmfhRUELKtgq17tHegUY=";
+    hash = "sha256-n9Erm21slKm+zDblhSHA5Cwxkyrcyx0w09ua3bUc5XI=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     opentelemetry-api
     opentelemetry-sdk
     std-uritemplate
@@ -41,9 +40,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "kiota_abstractions"
-  ];
+  pythonImportsCheck = [ "kiota_abstractions" ];
 
   meta = with lib; {
     description = "Abstractions library for Kiota generated Python clients";

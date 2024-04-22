@@ -1,29 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "types-docutils";
-  version = "0.20.0.20240309";
+  version = "0.20.0.20240406";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zVFHAoE7pBPJATT+2tlBayy46viAFot2mnB9b80VnwU=";
+    hash = "sha256-6OxKWhJdBthjK7qsihH76hih7fqU35xRKdxFmAkVuEs=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   # Module doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "docutils-stubs"
-  ];
+  pythonImportsCheck = [ "docutils-stubs" ];
 
   meta = with lib; {
     description = "Typing stubs for docutils";

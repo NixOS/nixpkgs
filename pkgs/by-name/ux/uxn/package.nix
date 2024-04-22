@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uxn";
-  version = "1.0-unstable-2024-03-08";
+  version = "unstable-2024-04-15";
 
   src = fetchFromSourcehut {
     owner = "~rabbits";
     repo = "uxn";
-    rev = "b1549867e4a58e8ed0ac107bdf841bc879fa293f";
-    hash = "sha256-P2EekvFbRtLDwPXOhu40S9LL4ZOWerJs8z8Of2QM418=";
+    rev = "b0bfb38dccff4ff7b0fa6d384651f7847a76fd1f";
+    hash = "sha256-OLrIIrcIfFI96+Q2fc0JSqJHBMcoN9+LL5E/YCN21Kc=";
   };
 
   outputs = [ "out" "projects" ];

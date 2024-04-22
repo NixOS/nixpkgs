@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/connections";
     description = "A remote desktop client for the GNOME desktop environment";
+    mainProgram = "gnome-connections";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

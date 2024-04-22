@@ -8,7 +8,7 @@ with lib; let
   cfg = config.programs.river;
 in {
   options.programs.river = {
-    enable = mkEnableOption (lib.mdDoc "river, a dynamic tiling Wayland compositor");
+    enable = mkEnableOption "river, a dynamic tiling Wayland compositor";
 
     package = mkPackageOption pkgs "river" {
       nullable = true;
@@ -33,7 +33,7 @@ in {
           termite rofi light
         ]
       '';
-      description = lib.mdDoc ''
+      description = ''
         Extra packages to be installed system wide. See
         [Common X11 apps used on i3 with Wayland alternatives](https://github.com/swaywm/sway/wiki/i3-Migration-Guide#common-x11-apps-used-on-i3-with-wayland-alternatives)
         for a list of useful software.
@@ -47,7 +47,7 @@ in {
         environment.systemPackages = optional (cfg.package != null) cfg.package ++ cfg.extraPackages;
 
         # To make a river session available if a display manager like SDDM is enabled:
-        services.xserver.displayManager.sessionPackages = optionals (cfg.package != null) [ cfg.package ];
+        services.displayManager.sessionPackages = optionals (cfg.package != null) [ cfg.package ];
 
         # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1050913
         xdg.portal.config.river.default = mkDefault [ "wlr" "gtk" ];

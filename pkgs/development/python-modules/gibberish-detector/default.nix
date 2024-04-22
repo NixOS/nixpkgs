@@ -26,6 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module to detect gibberish strings";
+    mainProgram = "gibberish-detector";
     homepage = "https://github.com/domanchi/gibberish-detector";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

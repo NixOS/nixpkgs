@@ -35,6 +35,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/PyCQA/pyflakes";
     changelog = "https://github.com/PyCQA/pyflakes/blob/${src.rev}/NEWS.rst";
     description = "A simple program which checks Python source files for errors";
+    mainProgram = "pyflakes";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

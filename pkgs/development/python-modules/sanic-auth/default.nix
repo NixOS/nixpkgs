@@ -7,12 +7,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Sanic-Auth";
+  pname = "sanic-auth";
   version = "0.3.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "Sanic-Auth";
+    inherit version;
     sha256 = "0dc24ynqjraqwgvyk0g9bj87zgpq4xnssl24hnsn7l5vlkmk8198";
   };
 

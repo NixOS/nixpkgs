@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "azure-batch";
-  version = "14.1.0";
+  version = "14.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lhayyqYpx0ABItaF1VfrzQF5famImQgxj5pUdIQ5es0=";
+    hash = "sha256-x5Jn1sPT/hShakIqtbv6vL1o7QtYtrvN+gyDRcTHhTI=";
   };
 
   nativeBuildInputs = [

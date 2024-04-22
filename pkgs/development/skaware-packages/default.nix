@@ -10,7 +10,6 @@ lib.makeScope pkgs.newScope (self:
 
   # execline
   execline = callPackage ./execline { };
-  execline-man-pages = callPackage ./execline-man-pages { };
 
   # servers & tools
   mdevd = callPackage ./mdevd { };
@@ -32,8 +31,10 @@ lib.makeScope pkgs.newScope (self:
   s6-portable-utils = callPackage ./s6-portable-utils { };
   s6-rc = callPackage ./s6-rc { };
 
-  s6-man-pages = callPackage ./s6-man-pages { };
-  s6-networking-man-pages = callPackage ./s6-networking-man-pages { };
-  s6-portable-utils-man-pages = callPackage ./s6-portable-utils-man-pages { };
-  s6-rc-man-pages = callPackage ./s6-rc-man-pages { };
+  # manpages (DEPRECATED, they are added directly to the packages now)
+  execline-man-pages = self.execline.passthru.manpages;
+  s6-man-pages = self.s6.passthru.manpages;
+  s6-networking-man-pages = self.s6-networking.passthru.manpages;
+  s6-portable-utils-man-pages = self.s6-portable-utils.passthru.manpages;
+  s6-rc-man-pages = self.s6-rc.passthru.manpages;
 })

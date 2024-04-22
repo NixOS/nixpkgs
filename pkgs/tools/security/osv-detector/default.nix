@@ -48,6 +48,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Auditing tool for detecting vulnerabilities";
+    mainProgram = "osv-detector";
     homepage = "https://github.com/G-Rath/osv-detector";
     changelog = "https://github.com/G-Rath/osv-detector/releases/tag/v${version}";
     license = licenses.mit;

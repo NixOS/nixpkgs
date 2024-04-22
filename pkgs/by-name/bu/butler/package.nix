@@ -31,11 +31,17 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-CtBwc5mcgLvl2Bvg5gI+ULJMQEEibx1aN3IpmRNUtwE=";
+  vendorHash = "sha256-GvUUCQ2BPW0HlXZljBWJ2Wyys9OEIM55dEWAa6J19Zg=";
 
   doCheck = false;
 
   meta = with lib; {
+    # butler cannot be build with Go >=1.21
+    # See https://github.com/itchio/butler/issues/256
+    # and https://github.com/itchio/dmcunrar-go/issues/1
+    # The dependency causing the issue is marked as 'no maintainence intended'.
+    # Last butler release is from 05/2021.
+    broken = true;
     description = "Command-line itch.io helper";
     homepage = "https://github.com/itchio/butler";
     license = licenses.mit;

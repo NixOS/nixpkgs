@@ -8,7 +8,7 @@
   discount,
   alpaka,
   # provided as callPackage input to enable easier overrides through overlays
-  cargoHash ? "sha256-z2W2TxyN6Ye+KUaqz5nPAG5zxeABu/UXWuz+XpDpNfc=",
+  cargoHash ? "sha256-Yt1Gxw9Q1Q108YRJoUIpeNZlGjZ7yabLW3bRO4+x6Vo=",
 }:
 mkKdeDerivation rec {
   pname = "kdepim-addons";
@@ -28,8 +28,9 @@ mkKdeDerivation rec {
   extraNativeBuildInputs = [
     rustPlatform.cargoSetupHook
     cargo
+    corrosion
     rustc
   ];
 
-  extraBuildInputs = [corrosion discount alpaka];
+  extraBuildInputs = [discount alpaka];
 }

@@ -75,6 +75,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Simple library for keyword extraction";
+    mainProgram = "extract";
 
     longDescription =
       '' GNU libextractor is a library used to extract meta-data from files

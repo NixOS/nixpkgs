@@ -25,20 +25,20 @@ buildPythonPackage rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2024.3.10";
+  version = "2024.4.9";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "yt_dlp";
-    hash = "sha256-bnTLFKadvrhyyO9OC4u+0u6EbsYzUTzzEkp0wfrtwHs=";
+    hash = "sha256-fukFcrTTE7WCuZyJ5OzPd5tX/1TtwzGHPGs/unf6qLA=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     brotli
     certifi
     mutagen
@@ -86,6 +86,7 @@ buildPythonPackage rec {
       youtube-dl is released to the public domain, which means
       you can modify it, redistribute it or use it however you like.
     '';
+    changelog = "https://github.com/yt-dlp/yt-dlp/releases/tag/${version}";
     license = licenses.unlicense;
     maintainers = with maintainers; [ mkg20001 SuperSandro2000 marsam ];
     mainProgram = "yt-dlp";

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pysmi-lextudio";
-  version = "1.3.3";
+  version = "1.4.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "lextudio";
     repo = "pysmi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GApjr7KUd7KkdxsbLTzFNdWWol7b/8udrY9q/lls2ro=";
+    hash = "sha256-JrWVoK7fqESUIJeprjB28iaqOEWgsTpTqUEmSZp9XDk=";
   };
 
   nativeBuildInputs = [

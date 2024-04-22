@@ -27,6 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library for replicating your class";
+    mainProgram = "syncobj_admin";
     homepage = "https://github.com/bakwc/PySyncObj";
     changelog = "https://github.com/bakwc/PySyncObj/releases/tag/${version}";
     license = with licenses; [ mit ];

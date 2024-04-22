@@ -28,6 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Cargo subcommand to run kcov to get coverage report on Linux";
+    mainProgram = "cargo-kcov";
     homepage = "https://github.com/kennytm/cargo-kcov";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ saschagrunert matthiasbeyer ];

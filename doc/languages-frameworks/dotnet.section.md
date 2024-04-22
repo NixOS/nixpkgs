@@ -134,7 +134,7 @@ Here is an example `default.nix`, using some of the previously discussed argumen
 { lib, buildDotnetModule, dotnetCorePackages, ffmpeg }:
 
 let
-  referencedProject = import ../../bar { ... };
+  referencedProject = import ../../bar { /* ... */ };
 in buildDotnetModule rec {
   pname = "someDotnetApplication";
   version = "0.1";
@@ -236,7 +236,7 @@ the packages inside the `out` directory.
 $ nuget-to-nix out > deps.nix
 ```
 Which `nuget-to-nix` will generate an output similar to below
-```
+```nix
 { fetchNuGet }: [
   (fetchNuGet { pname = "FosterFramework"; version = "0.1.15-alpha"; sha256 = "0pzsdfbsfx28xfqljcwy100xhbs6wyx0z1d5qxgmv3l60di9xkll"; })
   (fetchNuGet { pname = "Microsoft.AspNetCore.App.Runtime.linux-x64"; version = "8.0.1"; sha256 = "1gjz379y61ag9whi78qxx09bwkwcznkx2mzypgycibxk61g11da1"; })

@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
-, cython
+, cython_0
 , openems
 , csxcad
 , boost
@@ -20,7 +19,7 @@ buildPythonPackage rec {
   sourceRoot = "${src.name}/python";
 
   nativeBuildInputs = [
-    cython
+    cython_0
     boost
   ];
 

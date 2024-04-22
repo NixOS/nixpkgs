@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Check the health, capacity, fragmentation, and other things for use with Nagios monitoring";
+    mainProgram = "check_zfs";
     homepage = "https://github.com/zlacelle/nagios_check_zfs_linux";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ mariaa144 ];

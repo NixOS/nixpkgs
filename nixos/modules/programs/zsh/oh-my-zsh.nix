@@ -41,7 +41,7 @@ in
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Enable oh-my-zsh.
           '';
         };
@@ -51,7 +51,7 @@ in
         plugins = mkOption {
           default = [];
           type = types.listOf(types.str);
-          description = lib.mdDoc ''
+          description = ''
             List of oh-my-zsh plugins
           '';
         };
@@ -59,7 +59,7 @@ in
         custom = mkOption {
           default = null;
           type = with types; nullOr str;
-          description = lib.mdDoc ''
+          description = ''
             Path to a custom oh-my-zsh package to override config of oh-my-zsh.
             (Can't be used along with `customPkgs`).
           '';
@@ -68,7 +68,7 @@ in
         customPkgs = mkOption {
           default = [];
           type = types.listOf types.package;
-          description = lib.mdDoc ''
+          description = ''
             List of custom packages that should be loaded into `oh-my-zsh`.
           '';
         };
@@ -76,7 +76,7 @@ in
         theme = mkOption {
           default = "";
           type = types.str;
-          description = lib.mdDoc ''
+          description = ''
             Name of the theme to be used by oh-my-zsh.
           '';
         };
@@ -84,7 +84,7 @@ in
         cacheDir = mkOption {
           default = "$HOME/.cache/oh-my-zsh";
           type = types.str;
-          description = lib.mdDoc ''
+          description = ''
             Cache directory to be used by `oh-my-zsh`.
             Without this option it would default to the read-only nix store.
           '';

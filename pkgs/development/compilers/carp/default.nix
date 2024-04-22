@@ -56,6 +56,8 @@ haskellPackages.mkDerivation rec {
   homepage    = "https://github.com/carp-lang/Carp";
   license     = lib.licenses.asl20;
   maintainers = with lib.maintainers; [ jluttine ];
+  # Not actively maintained at the moment
+  broken      = true;
 
   # Windows not (yet) supported.
   platforms   = with lib.platforms; unix ++ darwin;

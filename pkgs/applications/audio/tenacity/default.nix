@@ -150,6 +150,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Sound editor with graphical UI";
+    mainProgram = "tenacity";
     homepage = "https://tenacityaudio.org/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ irenes lheckemann ];

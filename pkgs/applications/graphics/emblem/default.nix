@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Generate project icons and avatars from a symbolic icon";
+    mainProgram = "emblem";
     homepage = "https://gitlab.gnome.org/World/design/emblem";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

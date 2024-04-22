@@ -79,6 +79,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module that implements the HomeKit protocol";
+    mainProgram = "aiohomekitctl";
     longDescription = ''
       This Python library implements the HomeKit protocol for controlling
       Homekit accessories.

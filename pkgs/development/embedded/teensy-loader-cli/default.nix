@@ -39,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Firmware uploader for the Teensy microcontroller boards";
+    mainProgram = "teensy-loader-cli";
     homepage = "https://www.pjrc.com/teensy/";
     license = licenses.gpl3Only;
     platforms = platforms.unix;

@@ -65,6 +65,12 @@ python.pkgs.buildPythonApplication rec {
       url = "https://github.com/blakeblackshear/frigate/commit/56bdacc1c661eff8a323e033520e75e2ba0a3842.patch";
       hash = "sha256-s/goUJxIbjq/woCEOEZECdcZoJDoWc1eM63sd60cxeY=";
     })
+    (fetchpatch2 {
+      # https://github.com/blakeblackshear/frigate/pull/10967
+      name = "frigate-wsdl-path.patch";
+      url = "https://github.com/blakeblackshear/frigate/commit/b65656fa8733c1c2f3d944f716d2e9493ae7c99f.patch";
+      hash = "sha256-taPWFV4PldBGUKAwFMKag4W/3TLMSGdKLYG8bj1Y5mU=";
+    })
   ];
 
   postPatch = ''

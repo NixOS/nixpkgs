@@ -5,29 +5,31 @@
 , fetchFromGitHub
 , substituteAll
 , gdb
-, django
-, flask
-, gevent
-, psutil
-, pytest-timeout
-, pytest-xdist
+, lldb
 , pytestCheckHook
+, pytest-xdist
+, pytest-timeout
+, importlib-metadata
+, psutil
+, django
 , requests
-, llvmPackages
+, gevent
+, numpy
+, flask
 }:
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.8.0";
+  version = "1.8.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "debugpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FW1RDmj4sDBS0q08C82ErUd16ofxJxgVaxfykn/wVBA=";
+    hash = "sha256-2TkieSQYxnlUroSD9wNKNaHUTLRksFWL/6XmSNGTCA4=";
   };
 
   patches = [
@@ -46,6 +48,12 @@ buildPythonPackage rec {
     # To avoid this issue, debugpy should be installed using python.withPackages:
     # python.withPackages (ps: with ps; [ debugpy ])
     ./fix-test-pythonpath.patch
+
+    # Attach pid tests are disabled by default on windows & macos,
+    # but are also flaky on linux:
+    # - https://github.com/NixOS/nixpkgs/issues/262000
+    # - https://github.com/NixOS/nixpkgs/issues/251045
+    ./skip-attach-pid-tests.patch
   ] ++ lib.optionals stdenv.isLinux [
     # Hard code GDB path (used to attach to process)
     (substituteAll {
@@ -56,7 +64,7 @@ buildPythonPackage rec {
     # Hard code LLDB path (used to attach to process)
     (substituteAll {
       src = ./hardcode-lldb.patch;
-      inherit (llvmPackages) lldb;
+      inherit lldb;
     })
   ];
 
@@ -66,24 +74,31 @@ buildPythonPackage rec {
     set -x
     cd src/debugpy/_vendored/pydevd/pydevd_attach_to_process
     rm *.so *.dylib *.dll *.exe *.pdb
-    ${stdenv.cc}/bin/c++ linux_and_mac/attach.cpp -Ilinux_and_mac -fPIC -nostartfiles ${{
+    $CXX linux_and_mac/attach.cpp -Ilinux_and_mac -std=c++11 -fPIC -nostartfiles ${{
       "x86_64-linux"   = "-shared -o attach_linux_amd64.so";
       "i686-linux"     = "-shared -o attach_linux_x86.so";
       "aarch64-linux"  = "-shared -o attach_linux_arm64.so";
-      "x86_64-darwin"  = "-std=c++11 -lc -D_REENTRANT -dynamiclib -o attach_x86_64.dylib";
-      "i686-darwin"    = "-std=c++11 -lc -D_REENTRANT -dynamiclib -o attach_x86.dylib";
-      "aarch64-darwin" = "-std=c++11 -lc -D_REENTRANT -dynamiclib -o attach_arm64.dylib";
+      "x86_64-darwin"  = "-D_REENTRANT -dynamiclib -lc -o attach_x86_64.dylib";
+      "i686-darwin"    = "-D_REENTRANT -dynamiclib -lc -o attach_x86.dylib";
+      "aarch64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach_arm64.dylib";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")}
   )'';
 
   nativeCheckInputs = [
+    ## Used to run the tests:
+    pytestCheckHook
+    pytest-xdist
+    pytest-timeout
+
+    ## Used by test helpers:
+    importlib-metadata
+    psutil
+
+    ## Used in Python code that is run/debugged by the tests:
     django
     flask
     gevent
-    psutil
-    pytest-timeout
-    pytest-xdist
-    pytestCheckHook
+    numpy
     requests
   ];
 
@@ -106,13 +121,6 @@ buildPythonPackage rec {
 
   # Fixes hanging tests on Darwin
   __darwinAllowLocalNetworking = true;
-
-  disabledTests = [
-    # testsuite gets stuck at this one
-    "test_attach_pid_client"
-  ];
-  # TODO? https://github.com/NixOS/nixpkgs/issues/262000
-  doCheck = !stdenv.isLinux;
 
   pythonImportsCheck = [
     "debugpy"

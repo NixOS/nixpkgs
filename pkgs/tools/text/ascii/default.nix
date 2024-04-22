@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Interactive ASCII name and synonym chart";
+    mainProgram = "ascii";
     homepage = "http://www.catb.org/~esr/ascii/";
     license = licenses.bsd3;
     platforms = platforms.all;

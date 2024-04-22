@@ -83,6 +83,7 @@ buildGoModule rec {
     homepage = "https://github.com/ossf/scorecard";
     changelog = "https://github.com/ossf/scorecard/releases/tag/v${version}";
     description = "Security health metrics for Open Source";
+    mainProgram = "scorecard";
     license = licenses.asl20;
     maintainers = with maintainers; [ jk developer-guy ];
   };

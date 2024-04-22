@@ -1,15 +1,15 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, nose
 , numba
 , numpy
+, pynose
 , pytestCheckHook
 , pythonOlder
-, torchvision
 , scikit-learn
 , scipy
 , setuptools
+, torchvision
 , tqdm
 }:
 
@@ -31,11 +31,11 @@ buildPythonPackage rec {
     sed -i '/"nose"/d' setup.py
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numba
     numpy
     scipy
@@ -43,10 +43,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    nose
+    pynose
     pytestCheckHook
-    torchvision
     scikit-learn
+    torchvision
   ];
 
   pythonImportsCheck = [

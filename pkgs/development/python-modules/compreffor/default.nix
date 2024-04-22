@@ -51,6 +51,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "CFF table subroutinizer for FontTools";
+    mainProgram = "compreffor";
     homepage = "https://github.com/googlefonts/compreffor";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];

@@ -11,7 +11,7 @@
 , boto3
 , psutil
 , pydantic
-, pytestCheckHook
+, pytest7CheckHook
 , pytest-cases
 , pytest-cov
 , pytest-xdist
@@ -65,7 +65,7 @@ buildPythonPackage rec {
     google-cloud-storage
     psutil
     pydantic
-    pytestCheckHook
+    pytest7CheckHook
     pytest-cases
     pytest-cov
     pytest-xdist

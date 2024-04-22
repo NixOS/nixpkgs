@@ -18,6 +18,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool to fetch URLs from HTML attributes";
+    mainProgram = "galer";
     homepage = "https://github.com/dwisiswant0/galer";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

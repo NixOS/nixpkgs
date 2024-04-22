@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "EDID and DisplayID library";
+    mainProgram = "di-edid-decode";
     homepage = "https://gitlab.freedesktop.org/emersion/libdisplay-info";
     license = licenses.mit;
     platforms = platforms.linux;

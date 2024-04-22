@@ -25,9 +25,7 @@ import ../make-test-python.nix ({ pkgs, lib, k3s, ... }:
   in
   {
     name = "${k3s.name}-single-node";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ euank ];
-    };
+    meta.maintainers = k3s.meta.maintainers;
 
     nodes.machine = { pkgs, ... }: {
       environment.systemPackages = with pkgs; [ k3s gzip ];

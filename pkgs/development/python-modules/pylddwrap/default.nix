@@ -52,6 +52,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python wrapper around ldd *nix utility to determine shared libraries of a program";
+    mainProgram = "pylddwrap";
     homepage = "https://github.com/Parquery/pylddwrap";
     changelog = "https://github.com/Parquery/pylddwrap/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;

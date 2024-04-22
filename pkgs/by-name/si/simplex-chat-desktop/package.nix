@@ -38,6 +38,7 @@ in appimageTools.wrapType2 {
 
   meta = with lib; {
     description = "Desktop application for SimpleX Chat";
+    mainProgram = "simplex-chat-desktop";
     homepage = "https://simplex.chat";
     changelog = "https://github.com/simplex-chat/simplex-chat/releases/tag/v${version}";
     license = licenses.agpl3Only;

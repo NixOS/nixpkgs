@@ -19,6 +19,7 @@ mkDerivation rec {
 
   meta = {
     description = "Offline conference schedule viewer";
+    mainProgram = "confclerk";
     homepage = "http://www.toastfreeware.priv.at/confclerk";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ ehmry ];

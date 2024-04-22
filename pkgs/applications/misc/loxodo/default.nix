@@ -33,6 +33,7 @@ python3.pkgs.buildPythonApplication {
 
   meta = with lib; {
     description = "A Password Safe V3 compatible password vault";
+    mainProgram = "loxodo";
     homepage = "https://www.christoph-sommer.de/loxodo/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

@@ -31,6 +31,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/mbrubeck/agate";
     changelog = "https://github.com/mbrubeck/agate/blob/master/CHANGELOG.md";
     description = "Very simple server for the Gemini hypertext protocol";
+    mainProgram = "agate";
     longDescription = ''
       Agate is a server for the Gemini network protocol, built with the Rust
       programming language. Agate has very few features, and can only serve

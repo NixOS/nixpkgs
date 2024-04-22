@@ -78,6 +78,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Asynchronous RDP protocol implementation";
+    mainProgram = "ardpscan";
     homepage = "https://github.com/skelsec/aardwolf";
     changelog = "https://github.com/skelsec/aardwolf/releases/tag/${version}";
     license = with licenses; [ mit ];

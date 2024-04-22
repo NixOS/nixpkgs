@@ -2,15 +2,15 @@
 
 # To make use of this derivation, use the `programs.zsh.enableSyntaxHighlighting` option
 
-stdenv.mkDerivation rec {
-  version = "0.7.1";
+stdenv.mkDerivation (finalAttrs: {
+  version = "0.8.0";
   pname = "zsh-syntax-highlighting";
 
   src = fetchFromGitHub {
     owner = "zsh-users";
     repo = "zsh-syntax-highlighting";
-    rev = version;
-    sha256 = "03r6hpb5fy4yaakqm3lbf4xcvd408r44jgpv4lnzl9asp4sb9qc0";
+    rev = finalAttrs.version;
+    hash = "sha256-iJdWopZwHpSyYl5/FQXEW7gl/SrKaYDEtTH9cGP7iPo=";
   };
 
   strictDeps = true;
@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/zsh-users/zsh-syntax-highlighting";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = [ maintainers.loskutov ];
+    maintainers = with maintainers; [ gepbird loskutov ];
   };
-}
+})

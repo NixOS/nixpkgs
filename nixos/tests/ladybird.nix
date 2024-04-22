@@ -21,7 +21,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     ''
       machine.wait_for_x()
       machine.succeed("echo '<!DOCTYPE html><html><body><h1>Hello world</h1></body></html>' > page.html")
-      machine.execute("ladybird file://$(pwd)/page.html >&2 &")
+      machine.execute("Ladybird file://$(pwd)/page.html >&2 &")
       machine.wait_for_window("Ladybird")
       machine.sleep(5)
       machine.wait_for_text("Hello world")

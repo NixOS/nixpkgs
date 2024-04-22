@@ -23,6 +23,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Extracts plain text from docx files";
+    mainProgram = "catdocx";
     homepage = "https://github.com/jncraton/catdocx";
     license = with licenses; [ bsd3 ];
     maintainers = [ maintainers.michalrus ];

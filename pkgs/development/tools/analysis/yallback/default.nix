@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Callbacks for YARA rule matches";
+    mainProgram = "yallback";
     homepage = "https://github.com/abathur/yallback";
     license = licenses.mit;
     maintainers = with maintainers; [ abathur ];

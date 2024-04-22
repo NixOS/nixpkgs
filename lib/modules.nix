@@ -136,7 +136,7 @@ let
             # TODO: Change the type of this option to a submodule with a
             # freeformType, so that individual arguments can be documented
             # separately
-            description = lib.mdDoc ''
+            description = ''
               Additional arguments passed to each module in addition to ones
               like `lib`, `config`,
               and `pkgs`, `modulesPath`.
@@ -187,14 +187,14 @@ let
             type = types.bool;
             internal = true;
             default = true;
-            description = lib.mdDoc "Whether to check whether all option definitions have matching declarations.";
+            description = "Whether to check whether all option definitions have matching declarations.";
           };
 
           _module.freeformType = mkOption {
             type = types.nullOr types.optionType;
             internal = true;
             default = null;
-            description = lib.mdDoc ''
+            description = ''
               If set, merge all definitions that don't have an associated option
               together using this type. The result then gets combined with the
               values of all declared options to produce the final `
@@ -209,7 +209,7 @@ let
           _module.specialArgs = mkOption {
             readOnly = true;
             internal = true;
-            description = lib.mdDoc ''
+            description = ''
               Externally provided module arguments that can't be modified from
               within a configuration, but can be used in module imports.
             '';
@@ -1378,7 +1378,6 @@ let
       inherit
         applyModuleArgsIfFunction
         dischargeProperties
-        evalOptionValue
         mergeModules
         mergeModules'
         pushDownProperties
@@ -1399,6 +1398,7 @@ private //
     defaultPriority
     doRename
     evalModules
+    evalOptionValue  # for use by lib.types
     filterOverrides
     filterOverrides'
     fixMergeModules

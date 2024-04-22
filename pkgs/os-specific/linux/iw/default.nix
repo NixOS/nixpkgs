@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Tool to use nl80211";
+    mainProgram = "iw";
     longDescription = ''
       iw is a new nl80211 based CLI configuration utility for wireless devices.
       It supports all new drivers that have been added to the kernel recently.

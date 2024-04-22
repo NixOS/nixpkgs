@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , pkg-config
 , vala
 , glib
@@ -33,22 +32,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-online-accounts";
-  version = "3.48.0";
+  version = "3.48.1";
 
   outputs = [ "out" "dev" ] ++ lib.optionals enableBackend [ "man" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-online-accounts/${lib.versions.majorMinor finalAttrs.version}/gnome-online-accounts-${finalAttrs.version}.tar.xz";
-    hash = "sha256-QYu5/P/b1yqYIFrTZRN2F/weNVGlTedPapjUXSZhdb8=";
+    hash = "sha256-PqDHEIS/WVzOXKo3zv8uhT0OyWRLsB/UZDMArblRf4o=";
   };
-
-  patches = [
-    # Fix crash with EWS and libxml2.12.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-online-accounts/-/commit/b9638e2418408be4906752297e700506766dcf20.patch";
-      hash = "sha256-l9+qS9WF3RuG9NtQQzSjpFSLNJV4FkXxOsLKYbINqrQ=";
-    })
-  ];
 
   mesonFlags = [
     "-Dfedora=false" # not useful in NixOS or for NixOS users.

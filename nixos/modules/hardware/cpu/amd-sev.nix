@@ -5,19 +5,19 @@ let
   cfgSevGuest = config.hardware.cpu.amd.sevGuest;
 
   optionsFor = device: group: {
-    enable = mkEnableOption (lib.mdDoc "access to the AMD ${device} device");
+    enable = mkEnableOption "access to the AMD ${device} device";
     user = mkOption {
-      description = lib.mdDoc "Owner to assign to the ${device} device.";
+      description = "Owner to assign to the ${device} device.";
       type = types.str;
       default = "root";
     };
     group = mkOption {
-      description = lib.mdDoc "Group to assign to the ${device} device.";
+      description = "Group to assign to the ${device} device.";
       type = types.str;
       default = group;
     };
     mode = mkOption {
-      description = lib.mdDoc "Mode to set for the ${device} device.";
+      description = "Mode to set for the ${device} device.";
       type = types.str;
       default = "0660";
     };

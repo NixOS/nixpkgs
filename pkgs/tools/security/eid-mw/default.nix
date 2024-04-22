@@ -16,6 +16,7 @@
 , openssl
 , p11-kit
 , pcsclite
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
 
-  nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config makeWrapper ];
+  nativeBuildInputs = [ wrapGAppsHook autoreconfHook autoconf-archive pkg-config makeWrapper ];
   buildInputs = [ curl gtk3 libassuan libbsd libproxy libxml2 openssl p11-kit pcsclite ];
 
   preConfigure = ''

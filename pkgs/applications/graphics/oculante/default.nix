@@ -22,16 +22,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "oculante";
-  version = "0.8.13";
+  version = "0.8.18";
 
   src = fetchFromGitHub {
     owner = "woelper";
     repo = "oculante";
     rev = version;
-    hash = "sha256-RbRvV3OkRZXc0n7qGzqbBtbU81wFc+/Ohg9pbVqdsw4=";
+    hash = "sha256-TLY6ydYeRuT93jjUeE7EaFNNllwla4h563UhXAxSyko=";
   };
 
-  cargoHash = "sha256-qt4bHCHpiP6yOce9hquVVlLFF906ADwhss4xAP9E0fA=";
+  cargoHash = "sha256-RKJE09Z4XxRLWQ95Om3tru4rI2TD7XmxoHhPHFirREo=";
 
   nativeBuildInputs = [
     cmake

@@ -35,6 +35,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Fork of the language identification tool langid.py, featuring a modernized codebase and faster execution times";
+    mainProgram = "langid";
     homepage = "https://github.com/adbar/py3langid";
     changelog = "https://github.com/adbar/py3langid/blob/v${version}/HISTORY.rst";
     license = licenses.bsd3;

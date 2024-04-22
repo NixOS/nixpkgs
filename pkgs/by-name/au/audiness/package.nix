@@ -1,33 +1,37 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "audiness";
-  version = "0.3.1";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "audiusGmbH";
     repo = "audiness";
     rev = "refs/tags/${version}";
-    hash = "sha256-r+xWwXRKuTp5ifUUlF1K6BIVWh67hNLMBKBB7wnLLAM=";
+    hash = "sha256-vc2k3oEMTgzm/C6z6BieRrT3cSP0IkY+D3RXkNGaZTE=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  pythonRelaxDeps = [ "validators" ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    pytenable
-    typer
-    validators
-  ] ++ typer.optional-dependencies.all;
+  build-system = with python3.pkgs; [ poetry-core ];
 
-  pythonImportsCheck = [
-    "audiness"
-  ];
+  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
+
+  dependencies =
+    with python3.pkgs;
+    [
+      pytenable
+      typer
+      validators
+    ]
+    ++ typer.optional-dependencies.all;
+
+  pythonImportsCheck = [ "audiness" ];
 
   meta = with lib; {
     description = "CLI tool to interact with Nessus";

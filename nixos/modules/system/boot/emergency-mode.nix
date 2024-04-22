@@ -11,7 +11,7 @@ with lib;
     systemd.enableEmergencyMode = mkOption {
       default = true;
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable emergency mode, which is an
         {command}`sulogin` shell started on the console if
         mounting a filesystem fails.  Since some machines (like EC2

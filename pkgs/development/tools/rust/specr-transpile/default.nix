@@ -16,6 +16,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Converts Specr lang code to Rust";
+    mainProgram = "specr-transpile";
     homepage = "https://github.com/RalfJung/minirust-tooling";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ figsoda ];

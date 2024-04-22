@@ -56,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Guide a worm around a maze";
+    mainProgram = "gnome-nibbles";
     homepage = "https://wiki.gnome.org/Apps/Nibbles";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;

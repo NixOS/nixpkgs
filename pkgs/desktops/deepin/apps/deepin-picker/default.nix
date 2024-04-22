@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-picker";
-  version = "6.0.0";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-DkSgeMALhwGeU5sDHuerpPpiN3/3m19jmwtwOjZvOVo=";
+    hash = "sha256-vChSlP+lGufurvLkYbljAhc8qqqbc1bxQ2UIROreK2o=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Color picker application";
+    mainProgram = "deepin-picker";
     homepage = "https://github.com/linuxdeepin/deepin-picker";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

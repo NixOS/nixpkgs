@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "git-releaser";
-  version = "0.1.6";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "git-releaser";
     repo = "git-releaser";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nKmHTqnpWoWMyXxsD/+pk+uSeqZSG18h2T6sJ/wEr/w=";
+    hash = "sha256-bXW2/FpZnYV/zZ/DlaW2pUe2RUHLElPwqHm/J5gKJZI=";
   };
 
   vendorHash = "sha256-RROA+nvdZnGfkUuB+ksUWGG16E8tqdyMQss2z/XWGd8=";

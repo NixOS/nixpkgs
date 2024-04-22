@@ -21,7 +21,7 @@ paths = os.environ.pop('NIX_PYTHONPATH', None)
 if paths:
     functools.reduce(lambda k, p: site.addsitedir(p, k), paths.split(':'), site._init_pathinfo())
 
-# Check whether we are in a venv or virtualenv. 
+# Check whether we are in a venv or virtualenv.
 # For Python 3 we check whether our `base_prefix` is different from our current `prefix`.
 # For Python 2 we check whether the non-standard `real_prefix` is set.
 # https://stackoverflow.com/questions/1871549/determine-if-python-is-running-inside-virtualenv

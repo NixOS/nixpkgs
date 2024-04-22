@@ -20,7 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-av1pVPDsO2dto5fhBK74jKfVsVY2ChyUE5NNja2B1Qw=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     flit-core
   ];
 

@@ -2,7 +2,7 @@
 
 let
 
-  inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption;
+  inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption mkPackageOption;
   inherit (lib) literalExpression mapAttrs optional optionalString types;
 
   cfg = config.services.limesurvey;
@@ -11,8 +11,6 @@ let
   user = "limesurvey";
   group = config.services.httpd.group;
   stateDir = "/var/lib/limesurvey";
-
-  pkg = pkgs.limesurvey;
 
   configType = with types; oneOf [ (attrsOf configType) str int bool ] // {
     description = "limesurvey config type (str, int, bool or attribute set thereof)";
@@ -32,12 +30,14 @@ in
   # interface
 
   options.services.limesurvey = {
-    enable = mkEnableOption (lib.mdDoc "Limesurvey web application");
+    enable = mkEnableOption "Limesurvey web application";
+
+    package = mkPackageOption pkgs "limesurvey" { };
 
     encryptionKey = mkOption {
       type = types.str;
       default = "E17687FC77CEE247F0E22BB3ECF27FDE8BEC310A892347EC13013ABA11AA7EB5";
-      description = lib.mdDoc ''
+      description = ''
         This is a 32-byte key used to encrypt variables in the database.
         You _must_ change this from the default value.
       '';
@@ -46,7 +46,7 @@ in
     encryptionNonce = mkOption {
       type = types.str;
       default = "1ACC8555619929DB91310BE848025A427B0F364A884FFA77";
-      description = lib.mdDoc ''
+      description = ''
         This is a 24-byte nonce used to encrypt variables in the database.
         You _must_ change this from the default value.
       '';
@@ -57,45 +57,45 @@ in
         type = types.enum [ "mysql" "pgsql" "odbc" "mssql" ];
         example = "pgsql";
         default = "mysql";
-        description = lib.mdDoc "Database engine to use.";
+        description = "Database engine to use.";
       };
 
       dbEngine = mkOption {
         type = types.enum [ "MyISAM" "InnoDB" ];
         default = "InnoDB";
-        description = lib.mdDoc "Database storage engine to use.";
+        description = "Database storage engine to use.";
       };
 
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = lib.mdDoc "Database host address.";
+        description = "Database host address.";
       };
 
       port = mkOption {
         type = types.port;
         default = if cfg.database.type == "pgsql" then 5442 else 3306;
         defaultText = literalExpression "3306";
-        description = lib.mdDoc "Database host port.";
+        description = "Database host port.";
       };
 
       name = mkOption {
         type = types.str;
         default = "limesurvey";
-        description = lib.mdDoc "Database name.";
+        description = "Database name.";
       };
 
       user = mkOption {
         type = types.str;
         default = "limesurvey";
-        description = lib.mdDoc "Database user.";
+        description = "Database user.";
       };
 
       passwordFile = mkOption {
         type = types.nullOr types.path;
         default = null;
         example = "/run/keys/limesurvey-dbpassword";
-        description = lib.mdDoc ''
+        description = ''
           A file containing the password corresponding to
           {option}`database.user`.
         '';
@@ -109,14 +109,14 @@ in
           else null
         ;
         defaultText = literalExpression "/run/mysqld/mysqld.sock";
-        description = lib.mdDoc "Path to the unix socket file to use for authentication.";
+        description = "Path to the unix socket file to use for authentication.";
       };
 
       createLocally = mkOption {
         type = types.bool;
         default = cfg.database.type == "mysql";
         defaultText = literalExpression "true";
-        description = lib.mdDoc ''
+        description = ''
           Create the database and database user locally.
           This currently only applies if database type "mysql" is selected.
         '';
@@ -133,7 +133,7 @@ in
           enableACME = true;
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Apache configuration can be done by adapting `services.httpd.virtualHosts.<name>`.
         See [](#opt-services.httpd.virtualHosts) for further information.
       '';
@@ -149,7 +149,7 @@ in
         "pm.max_spare_servers" = 4;
         "pm.max_requests" = 500;
       };
-      description = lib.mdDoc ''
+      description = ''
         Options for the LimeSurvey PHP pool. See the documentation on `php-fpm.conf`
         for details on configuration directives.
       '';
@@ -158,7 +158,7 @@ in
     config = mkOption {
       type = configType;
       default = {};
-      description = lib.mdDoc ''
+      description = ''
         LimeSurvey configuration. Refer to
         <https://manual.limesurvey.org/Optional_settings>
         for details on supported values.
@@ -240,7 +240,7 @@ in
       adminAddr = mkDefault cfg.virtualHost.adminAddr;
       extraModules = [ "proxy_fcgi" ];
       virtualHosts.${cfg.virtualHost.hostName} = mkMerge [ cfg.virtualHost {
-        documentRoot = mkForce "${pkg}/share/limesurvey";
+        documentRoot = mkForce "${cfg.package}/share/limesurvey";
         extraConfig = ''
           Alias "/tmp" "${stateDir}/tmp"
           <Directory "${stateDir}">
@@ -256,7 +256,7 @@ in
             Options -Indexes
           </Directory>
 
-          <Directory "${pkg}/share/limesurvey">
+          <Directory "${cfg.package}/share/limesurvey">
             <FilesMatch "\.php$">
               <If "-f %{REQUEST_FILENAME}">
                 SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
@@ -277,7 +277,7 @@ in
       "d ${stateDir}/tmp/assets 0750 ${user} ${group} - -"
       "d ${stateDir}/tmp/runtime 0750 ${user} ${group} - -"
       "d ${stateDir}/tmp/upload 0750 ${user} ${group} - -"
-      "C ${stateDir}/upload 0750 ${user} ${group} - ${pkg}/share/limesurvey/upload"
+      "C ${stateDir}/upload 0750 ${user} ${group} - ${cfg.package}/share/limesurvey/upload"
     ];
 
     systemd.services.limesurvey-init = {
@@ -288,8 +288,8 @@ in
       environment.LIMESURVEY_CONFIG = limesurveyConfig;
       script = ''
         # update or install the database as required
-        ${pkgs.php81}/bin/php ${pkg}/share/limesurvey/application/commands/console.php updatedb || \
-        ${pkgs.php81}/bin/php ${pkg}/share/limesurvey/application/commands/console.php install admin password admin admin@example.com verbose
+        ${pkgs.php81}/bin/php ${cfg.package}/share/limesurvey/application/commands/console.php updatedb || \
+        ${pkgs.php81}/bin/php ${cfg.package}/share/limesurvey/application/commands/console.php install admin password admin admin@example.com verbose
       '';
       serviceConfig = {
         User = user;

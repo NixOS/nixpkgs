@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "whenever";
-  version = "0.3.4";
+  version = "0.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ariebovenberg";
     repo = "whenever";
-    rev = version;
-    hash = "sha256-pVbR9KYothEPJUhvFA3hDnLcKp7hvU8ntxvkYrKxQfQ=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-RH2614M91zYULNTQsr6JoKfxlnGyAJsCkB7oeiz7urs=";
   };
 
   postPatch = ''
@@ -31,23 +31,25 @@ buildPythonPackage rec {
       --replace-fail '--benchmark-disable' '#--benchmark-disable'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     tzdata
   ] ++ lib.optionals (pythonOlder "3.9") [
     backports-zoneinfo
   ];
-
-  pythonImportsCheck = [ "whenever" ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mypy-plugins
     hypothesis
     freezegun
+  ];
+
+  pythonImportsCheck = [
+    "whenever"
   ];
 
   # early TDD, many tests are failing

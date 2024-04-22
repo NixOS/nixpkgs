@@ -30,6 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python bindings to the Google search engine";
+    mainProgram = "google";
     homepage = "https://pypi.org/project/google/";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];

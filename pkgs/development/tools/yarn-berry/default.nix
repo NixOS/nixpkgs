@@ -1,13 +1,13 @@
-{ fetchFromGitHub, lib, nodejs, stdenv, yarn }:
+{ fetchFromGitHub, lib, nodejs, stdenv, testers, yarn }:
 
-stdenv.mkDerivation rec {
-  name = "yarn-berry";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "yarn-berry";
   version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "yarnpkg";
     repo = "berry";
-    rev = "@yarnpkg/cli/${version}";
+    rev = "@yarnpkg/cli/${finalAttrs.version}";
     hash = "sha256-75bERA1uZeywMjYznFDyk4+AtVDLo7eIajVtWdAD/RA=";
   };
 
@@ -35,6 +35,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+  };
+
   meta = with lib; {
     homepage = "https://yarnpkg.com/";
     description = "Fast, reliable, and secure dependency management.";
@@ -43,4 +49,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     mainProgram = "yarn";
   };
-}
+})

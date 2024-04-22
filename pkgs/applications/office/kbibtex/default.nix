@@ -70,6 +70,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Bibliography editor for KDE";
+    mainProgram = "kbibtex";
     homepage = "https://userbase.kde.org/KBibTeX";
     changelog = "https://invent.kde.org/office/kbibtex/-/raw/v${version}/ChangeLog";
     license = licenses.gpl2Plus;

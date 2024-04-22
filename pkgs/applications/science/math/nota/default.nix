@@ -37,4 +37,5 @@ mkDerivation rec {
   homepage = "https://kary.us/nota";
   license = lib.licenses.mpl20;
   maintainers = with lib.maintainers; [ dtzWill ];
+  mainProgram = "nota";
 }

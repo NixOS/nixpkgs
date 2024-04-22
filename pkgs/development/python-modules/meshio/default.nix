@@ -41,6 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/nschloe/meshio";
     description = "I/O for mesh files.";
+    mainProgram = "meshio";
     license = licenses.mit;
     maintainers = with maintainers; [ wd15 ];
   };

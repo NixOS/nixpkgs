@@ -23,6 +23,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A License Classifier";
+    mainProgram = "identify_license";
     longDescription = ''
       The license classifier can analyze text to determine what type of license
       it contains. It searches for license texts in a file and compares them to

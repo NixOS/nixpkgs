@@ -8,10 +8,10 @@ let
 in
 {
   options.services.goeland = {
-    enable = mkEnableOption (mdDoc "goeland");
+    enable = mkEnableOption "goeland, an alternative to rss2email";
 
     settings = mkOption {
-      description = mdDoc ''
+      description = ''
         Configuration of goeland.
         See the [example config file](https://github.com/slurdge/goeland/blob/master/cmd/asset/config.default.toml) for the available options.
       '';
@@ -22,12 +22,12 @@ in
       type = types.str;
       default = "12h";
       example = "Mon, 00:00:00";
-      description = mdDoc "How often to run goeland, in systemd time format.";
+      description = "How often to run goeland, in systemd time format.";
     };
     stateDir = mkOption {
       type = types.path;
       default = "/var/lib/goeland";
-      description = mdDoc ''
+      description = ''
         The data directory for goeland where the database will reside if using the unseen filter.
         If left as the default value this directory will automatically be created before the goeland
         server starts, otherwise you are responsible for ensuring the directory exists with

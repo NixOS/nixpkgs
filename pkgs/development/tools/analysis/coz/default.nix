@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/plasma-umass/coz";
     description = "Profiler based on casual profiling";
+    mainProgram = "coz";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ zimbatm ];
   };

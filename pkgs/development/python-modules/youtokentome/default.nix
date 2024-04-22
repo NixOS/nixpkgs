@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Unsupervised text tokenizer";
+    mainProgram = "yttm";
     homepage = "https://github.com/VKCOM/YouTokenToMe";
     changelog = "https://github.com/VKCOM/YouTokenToMe/releases/tag/v${version}";
     license = licenses.mit;

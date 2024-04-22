@@ -1,37 +1,37 @@
-{ lib
-, buildPythonPackage
-, deprecated
-, fetchFromGitHub
-, importlib-metadata
-, ipython
-, lark
-, matplotlib-inline
-, nest-asyncio
-, networkx
-, numpy
-, packaging
-, poetry-core
-, pydantic
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, pythonRelaxDepsHook
-, qcs-sdk-python
-, respx
-, rpcq
-, scipy
-, syrupy
-, tenacity
-, types-deprecated
-, types-python-dateutil
-, types-retry
+{
+  lib,
+  buildPythonPackage,
+  deprecated,
+  fetchFromGitHub,
+  importlib-metadata,
+  ipython,
+  lark,
+  matplotlib-inline,
+  nest-asyncio,
+  networkx,
+  numpy,
+  packaging,
+  poetry-core,
+  pydantic,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  qcs-sdk-python,
+  respx,
+  rpcq,
+  scipy,
+  syrupy,
+  tenacity,
+  types-deprecated,
+  types-python-dateutil,
+  types-retry,
 }:
 
 buildPythonPackage rec {
   pname = "pyquil";
-  version = "4.6.1";
+  version = "4.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -40,24 +40,21 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = "pyquil";
     rev = "refs/tags/v${version}";
-    hash = "sha256-93dHujgGEh9/r9epAiUcUCiFCG7SFTAFoQbjQwwKhN0=";
+    hash = "sha256-MGI+R3oteqDWsXP+SlAGSRGiQiAj44YG6V7o90A4Krc=";
   };
-
-  patches = [
-    ./pydantic.patch
-  ];
 
   pythonRelaxDeps = [
     "lark"
     "networkx"
+    "packaging"
+    "qcs-sdk-python"
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  dependencies = [
     deprecated
     lark
     matplotlib-inline
@@ -72,9 +69,7 @@ buildPythonPackage rec {
     types-deprecated
     types-python-dateutil
     types-retry
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   nativeCheckInputs = [
     nest-asyncio
@@ -89,9 +84,7 @@ buildPythonPackage rec {
   # tests hang
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyquil"
-  ];
+  pythonImportsCheck = [ "pyquil" ];
 
   meta = with lib; {
     description = "Python library for creating Quantum Instruction Language (Quil) programs";

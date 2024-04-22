@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fortran API to manipulate netcdf files";
+    mainProgram = "nf-config";
     homepage = "https://www.unidata.ucar.edu/software/netcdf/";
     license = licenses.free;
     maintainers = [ maintainers.bzizou ];

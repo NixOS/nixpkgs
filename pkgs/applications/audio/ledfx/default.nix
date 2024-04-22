@@ -1,16 +1,17 @@
-{ lib
-, fetchPypi
-, python3
+{
+  lib,
+  fetchPypi,
+  python3,
 }:
 
 python3.pkgs.buildPythonPackage rec {
   pname = "ledfx";
-  version = "2.0.94";
+  version = "2.0.96";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-l498NXt3Ib9QLTWoJcpngAwkbY6JqLbVLKhTWQye7Fs=";
+    hash = "sha256-nvPHAnoD5j1rneeuMufQkXj8YWXau2zJYug+Avpe87I=";
   };
 
   pythonRelaxDeps = true;
@@ -20,13 +21,14 @@ python3.pkgs.buildPythonPackage rec {
     "rpi-ws281x"
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     cython
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
+
+  dependencies = with python3.pkgs; [
     aiohttp
     aiohttp-cors
     aubio

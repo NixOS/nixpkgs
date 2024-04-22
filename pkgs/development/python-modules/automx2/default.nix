@@ -6,21 +6,26 @@
 , ldap3
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "automx2";
-  version = "unstable-2023-08-23";
-  format = "setuptools";
+  version = "2024.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rseichter";
-    repo = pname;
-    rev = "f3e3fc8e769c3799361001d51b7d9335a6a9d1a8";
-    hash = "sha256-NkeazjjGDYUXfoydvEfww6e7SkSZ8rMRlML+oOaf374=";
+    repo = "automx2";
+    rev = version;
+    hash = "sha256-s/kd9A/d3SPMZC9+B4DdcXVi77WLH/SBwXIdaKHUj34=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     flask

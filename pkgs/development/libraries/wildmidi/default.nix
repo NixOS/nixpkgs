@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Software MIDI player and library";
+    mainProgram = "wildmidi";
     longDescription = ''
       WildMIDI is a simple software midi player which has a core softsynth
       library that can be use with other applications.

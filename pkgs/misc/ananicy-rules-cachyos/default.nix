@@ -1,32 +1,32 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  pname = "ananicy";
-  version = "unstable-2023-10-11";
+stdenvNoCC.mkDerivation {
+  pname = "ananicy-rules-cachyos";
+  version = "unstable-2024-04-16";
 
   src = fetchFromGitHub {
     owner = "CachyOS";
     repo = "ananicy-rules";
-    rev = "3dafc3eb667b6ed7024359de78bf961c7248954d";
-    sha256 = "sha256-bMwM/2R6jdgrQ6C0JnHyMp9L4OWI6KVGcninrr7wLQ8=";
+    rev = "7abaddd5cac23d9fd7a0f0aeccb7a0287456802b";
+    hash = "sha256-06q9dYLdg+AhT8L2OeoDsG7hHlmx/uf/RIwblODiSnE=";
   };
 
   dontConfigure = true;
   dontBuild = true;
 
   installPhase = ''
-    runHook preBuild
-    mkdir -p $out
-    cp -r * $out
-    rm $out/README.md
-    runHook postBuild
+    runHook preInstall
+    mkdir -p $out/etc/ananicy.d
+    rm README.md LICENSE
+    cp -r * $out/etc/ananicy.d
+    runHook postInstall
   '';
 
   meta = with lib; {
     homepage = "https://github.com/CachyOS/ananicy-rules";
-    description = "ananicy-cpp-rules for CachyOS ";
+    description = "CachyOS' ananicy-rules meant to be used with ananicy-cpp";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ artturin ];
+    maintainers = with maintainers; [ artturin johnrtitor diniamo ];
   };
 }

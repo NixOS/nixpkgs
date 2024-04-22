@@ -18,6 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A stupid simple graphical login manager";
+    mainProgram = "dlm";
     homepage = "https://git.sr.ht/~kennylevinsen/dlm";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ luc65r ];

@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "nu-plugin-net";
-  version = "unstable-2023-11-15";
+  version = "unstable-2024-04-05";
 
   src = fetchFromGitHub {
     owner = "fennewald";
     repo = "nu_plugin_net";
-    rev = "20a0a18be0e11650f453d6f186d99d3691a1cd6a";
-    hash = "sha256-GHUis38mz9sI5s+E/eLyA0XPyuNpPoS1TyhU3pMEsvs=";
+    rev = "a84d72290f513397a359581b9447a4e638ce60c9";
+    hash = "sha256-uKLYTRR2tThSvwWbvEePOLZ9ehNPfCYruZxTKSIxpEA=";
   };
 
-  cargoHash = "sha256-T5kUVtJty8pfPihtkJqCgF3AUFcBuu2cwX4cVGM8n5U=";
+  cargoHash = "sha256-2A9RalZhXigLq/6w738G6PnkV3FyK+3HHXPDQRHTIm0=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook

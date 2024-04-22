@@ -109,6 +109,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://getpolarized.io/";
     description = "Personal knowledge repository for PDF and web content supporting incremental reading and document annotation";
+    mainProgram = "polar-bookshelf";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.dansbandit ];
     platforms = lib.platforms.linux;

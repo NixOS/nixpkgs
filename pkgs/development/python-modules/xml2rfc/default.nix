@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "xml2rfc";
-  version = "3.20.0";
+  version = "3.20.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "ietf-tools";
     repo = "xml2rfc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-w4wmjY+yA5Nc1roAXBRTqQxqaSI1vzdMhK9hGkbv7Rk=";
+    hash = "sha256-JDJZegJR34aaIzMdq/GYzOpIBH7epe9yHnUaI7OzRes=";
   };
 
   postPatch = ''
@@ -87,6 +87,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Tool generating IETF RFCs and drafts from XML sources";
+    mainProgram = "xml2rfc";
     homepage = "https://github.com/ietf-tools/xml2rfc";
     changelog = "https://github.com/ietf-tools/xml2rfc/blob/v${version}/CHANGELOG.md";
     # Well, parts might be considered unfree, if being strict; see:

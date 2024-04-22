@@ -142,6 +142,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "High-level web crawling and web scraping framework";
+    mainProgram = "scrapy";
     longDescription = ''
       Scrapy is a fast high-level web crawling and web scraping framework, used to crawl
       websites and extract structured data from their pages. It can be used for a wide

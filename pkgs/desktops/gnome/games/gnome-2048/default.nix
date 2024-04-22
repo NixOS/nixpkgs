@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/2048";
     description = "Obtain the 2048 tile";
+    mainProgram = "gnome-2048";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

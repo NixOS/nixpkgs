@@ -12,7 +12,7 @@ npmInstallHook() {
         local dest="$packageOut/$(dirname "$file")"
         mkdir -p "$dest"
         cp "${npmWorkspace-.}/$file" "$dest"
-    done < <(@jq@ --raw-output '.[0].files | map(.path) | join("\n")' <<< "$(npm_config_cache="$HOME/.npm" npm pack --json --dry-run --loglevel=warn --no-foreground-scripts ${npmWorkspace+--workspace=$npmWorkspace} $npmPackFlags "${npmPackFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}")")
+    done < <(@jq@ --raw-output '.[0].files | map(.path | select(. | startswith("node_modules/") | not)) | join("\n")' <<< "$(npm_config_cache="$HOME/.npm" npm pack --json --dry-run --loglevel=warn --no-foreground-scripts ${npmWorkspace+--workspace=$npmWorkspace} $npmPackFlags "${npmPackFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}")")
 
     # Based on code from Python's buildPythonPackage wrap.sh script, for
     # supporting both the case when makeWrapperArgs is an array and a

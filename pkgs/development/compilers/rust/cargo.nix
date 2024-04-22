@@ -72,6 +72,7 @@ rustPlatform.buildRustPackage.override {
   meta = with lib; {
     homepage = "https://crates.io";
     description = "Downloads your Rust project's dependencies and builds your project";
+    mainProgram = "cargo";
     maintainers = teams.rust.members;
     license = [ licenses.mit licenses.asl20 ];
     platforms = platforms.unix;

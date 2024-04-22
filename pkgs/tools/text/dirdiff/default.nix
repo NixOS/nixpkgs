@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Graphical directory tree diff and merge tool";
+    mainProgram = "dirdiff";
     longDescription = ''
       Dirdiff is a graphical tool for displaying the differences between
       directory trees and for merging changes from one tree into another.

@@ -40,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Pixel-oriented paint program, modelled on Deluxe Paint";
+    mainProgram = "evilpixie";
     homepage = "https://github.com/bcampbell/evilpixie"; # http://evilpixie.scumways.com/ is gone
     downloadPage = "https://github.com/bcampbell/evilpixie/releases";
     license = licenses.gpl3Only;

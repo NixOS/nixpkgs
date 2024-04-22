@@ -36,5 +36,6 @@ glibc.overrideAttrs (oldAttrs: {
 
   meta = oldAttrs.meta // {
     description = "Perl script used to interpret and provide human readable output of the trace log contained in the file mtracedata, whose contents were produced by mtrace(3).";
+    mainProgram = "mtrace";
   };
 })

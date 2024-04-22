@@ -28,6 +28,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Generate random names";
+    mainProgram = "names";
     homepage = "https://github.com/treyhunner/names";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [

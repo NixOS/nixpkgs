@@ -42,6 +42,7 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Alternate application launcher for Xfce";
+    mainProgram = "xfce4-popup-whiskermenu";
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

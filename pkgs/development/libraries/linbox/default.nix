@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , givaro
 , pkg-config
@@ -23,6 +24,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-mW84a98KPLqcHMjX3LIYTmVe0ngUdz6RJLpoDaAqKU8=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/linbox-team/linbox/commit/4be26e9ef0eaf36a9909e5008940e8bf7dc625b6.patch";
+      sha256 = "PX0Tik7blXOV2vHUq92xMxaADkNoNGiax4qrjQyGK6U=";
+    })
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
@@ -37,7 +45,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-blas-libs=-lblas"
-    "--disable-optimization"
+    "--without-archnative"
   ] ++ lib.optionals stdenv.isx86_64 [
     # disable SIMD instructions (which are enabled *when available* by default)
     "--${if stdenv.hostPlatform.sse3Support   then "enable" else "disable"}-sse3"
@@ -61,6 +69,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "C++ library for exact, high-performance linear algebra";
+    mainProgram = "linbox-config";
     license = licenses.lgpl21Plus;
     maintainers = teams.sage.members;
     platforms = platforms.unix;

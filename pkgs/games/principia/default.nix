@@ -59,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     changelog = "https://principia-web.se/wiki/Changelog#${lib.replaceStrings ["."] ["-"] finalAttrs.version}";
     description = "Physics-based sandbox game";
+    mainProgram = "principia";
     homepage = "https://principia-web.se/";
     downloadPage = "https://principia-web.se/download";
     license = licenses.bsd3;

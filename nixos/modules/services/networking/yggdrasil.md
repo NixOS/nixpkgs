@@ -12,7 +12,7 @@ self-arranging IPv6 network.
 ### Simple ephemeral node {#module-services-networking-yggdrasil-configuration-simple}
 
 An annotated example of a simple configuration:
-```
+```nix
 {
   services.yggdrasil = {
     enable = true;
@@ -39,7 +39,7 @@ An annotated example of a simple configuration:
 ### Persistent node with prefix {#module-services-networking-yggdrasil-configuration-prefix}
 
 A node with a fixed address that announces a prefix:
-```
+```nix
 let
   address = "210:5217:69c0:9afc:1b95:b9f:8718:c3d2";
   prefix = "310:5217:69c0:9afc";
@@ -90,7 +90,7 @@ in {
 
 A NixOS container attached to the Yggdrasil network via a node running on the
 host:
-```
+```nix
 let
   yggPrefix64 = "310:5217:69c0:9afc";
     # Again, taken from the output of "yggdrasilctl getself".

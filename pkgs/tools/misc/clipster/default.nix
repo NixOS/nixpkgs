@@ -43,7 +43,7 @@ stdenv.mkDerivation  rec {
       - Option to ignore clipboard updates form certain applications. (filter_classes)
       - Ability to delete items in clipboard history.
     '';
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     homepage = "https://github.com/mrichar1/clipster";
     platforms = platforms.linux;
     maintainers = [ maintainers.magnetophon ];

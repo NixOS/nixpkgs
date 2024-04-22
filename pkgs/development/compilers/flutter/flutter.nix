@@ -82,6 +82,10 @@ let
           "dartSdkVersion": "${dart.version}"
         }
         EOF
+
+        # Suppress a small error now that `.gradle`'s location changed.
+        # Location changed because of the patch "gradle-flutter-tools-wrapper.patch".
+        mkdir -p "$out/packages/flutter_tools/gradle/.gradle"
       '';
 
       installPhase = ''

@@ -82,6 +82,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/Keruspe/GPaste";
     description = "Clipboard management system with GNOME 3 integration";
+    mainProgram = "gpaste-client";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = teams.gnome.members;

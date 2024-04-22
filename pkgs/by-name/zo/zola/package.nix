@@ -47,6 +47,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A fast static site generator with everything built-in";
+    mainProgram = "zola";
     homepage = "https://www.getzola.org/";
     changelog = "https://github.com/getzola/zola/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;

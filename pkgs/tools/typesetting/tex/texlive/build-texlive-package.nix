@@ -82,8 +82,9 @@ let
     outputSpecified = true;
     inherit tex;
   } // lib.optionalAttrs (args ? deps) { tlDeps = args.deps; }
+  // lib.optionalAttrs (args ? fontMaps) { inherit (args) fontMaps; }
   // lib.optionalAttrs (args ? formats) { inherit (args) formats; }
-  // lib.optionalAttrs hasHyphens { inherit hasHyphens; }
+  // lib.optionalAttrs (args ? hyphenPatterns) { inherit (args) hyphenPatterns; }
   // lib.optionalAttrs (args ? postactionScript) { inherit (args) postactionScript; }
   // lib.optionalAttrs hasDocfiles { texdoc = texdoc; }
   // lib.optionalAttrs hasSource { texsource = texsource; }

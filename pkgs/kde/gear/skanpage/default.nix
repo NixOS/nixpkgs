@@ -11,4 +11,5 @@ mkKdeDerivation {
     (tesseract5.override {enableLanguages = tesseractLanguages;})
     leptonica
   ];
+  meta.mainProgram = "skanpage";
 }

@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , angr
 , buildPythonPackage
 , cmd2
@@ -8,28 +7,34 @@
 , pygments
 , pytestCheckHook
 , pythonOlder
+, setuptools
+, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "angrcli";
   version = "1.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "fmagin";
     repo = "angr-cli";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-a5ajUBQwt3xUNkeSOeGOAFf47wd4UVk+LcuAHGqbq4s=";
   };
 
   postPatch = ''
     substituteInPlace tests/test_derefs.py \
-      --replace "/bin/ls" "${coreutils}/bin/ls"
+      --replace-fail "/bin/ls" "${coreutils}/bin/ls"
   '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     angr
     cmd2
     pygments

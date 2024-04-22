@@ -1,11 +1,12 @@
 { lib, buildPythonPackage, fetchPypi, isPy3k }:
 
 buildPythonPackage rec {
-  pname = "HeapDict";
+  pname = "heapdict";
   version = "1.0.1";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "HeapDict";
+    inherit version;
     sha256 = "8495f57b3e03d8e46d5f1b2cc62ca881aca392fd5cc048dc0aa2e1a6d23ecdb6";
   };
 

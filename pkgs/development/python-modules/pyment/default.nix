@@ -17,6 +17,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/dadadel/pyment";
     description = "Create, update or convert docstrings in existing Python files, managing several styles";
+    mainProgram = "pyment";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jethro ];
   };

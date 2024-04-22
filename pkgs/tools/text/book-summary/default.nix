@@ -16,6 +16,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Book auto-summary for gitbook and mdBook";
+    mainProgram = "book-summary";
     homepage = "https://github.com/dvogt23/book-summary";
     license = licenses.mit;
     maintainers = with teams; iog.members;

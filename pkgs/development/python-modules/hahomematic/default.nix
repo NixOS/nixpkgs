@@ -2,7 +2,6 @@
 , aiohttp
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , freezegun
 , orjson
 , pydevccu
@@ -14,47 +13,35 @@
 , voluptuous
 , websocket-client
 , xmltodict
-, wheel
 }:
 
 buildPythonPackage rec {
   pname = "hahomematic";
-  version = "2024.3.0";
+  version = "2024.4.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "danielperna84";
     repo = "hahomematic";
     rev = "refs/tags/${version}";
-    hash = "sha256-zSGzdj51StlLMmFZzprQUn6Ry9ahJPUq/Z9hVlKn8oA=";
+    hash = "sha256-w+sSaadbbfc1cNCTx5YYIm8eAKRQxyqZZKK2QPFZv7Y=";
   };
-
-  patches = [
-    # Update pydevccu, extend ruff usage
-    # https://github.com/danielperna84/hahomematic/pull/1454
-    (fetchpatch {
-      url = "https://github.com/danielperna84/hahomematic/commit/81a9a1c9291e2271ac0b995e7dd4725cfe99c7fe.patch";
-      includes = [ "tests/test_central_pydevccu.py" ];
-      hash = "sha256-l/wNK0/nOZHyrFp+in3ozmMyN5ifo514esGPJVZlb1g=";
-    })
-  ];
 
   __darwinAllowLocalNetworking = true;
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools~=69.1.0" "setuptools" \
-      --replace-fail "wheel~=0.42.0" "wheel"
+      --replace-fail "setuptools~=69.2.0" "setuptools" \
+      --replace-fail "wheel~=0.43.0" "wheel"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     orjson
     python-slugify
@@ -75,8 +62,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to interact with HomeMatic devices";
     homepage = "https://github.com/danielperna84/hahomematic";
-    changelog = "https://github.com/danielperna84/hahomematic/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/danielperna84/hahomematic/blob/${src.rev}/changelog.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda fab ];
   };
 }

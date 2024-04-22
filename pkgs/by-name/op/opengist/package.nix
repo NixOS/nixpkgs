@@ -62,6 +62,7 @@ buildGoModule {
 
   meta = {
     description = "Self-hosted pastebin powered by Git";
+    mainProgram = "opengist";
     homepage = "https://github.com/thomiceli/opengist";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ lf- ];

@@ -28,12 +28,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nixos-anywhere";
-  version = "1.1.1";
+  version = "1.1.2";
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "nixos-anywhere";
     rev = finalAttrs.version;
-    hash = "sha256-GN0G3g3QEzb2ZG3zSzbRaRBsmQsWJu81CZy9mIofRZ0=";
+    hash = "sha256-JzgZnHQ4Bknh1ebE4iMVzR3cWZG+8k7MRy0X7cNSnBE=";
   };
   nativeBuildInputs = [ makeWrapper ];
   installPhase = ''

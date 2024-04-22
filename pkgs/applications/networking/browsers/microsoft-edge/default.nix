@@ -1,20 +1,20 @@
 {
   beta = import ./browser.nix {
     channel = "beta";
-    version = "122.0.2365.59";
+    version = "124.0.2478.39";
     revision = "1";
-    hash = "sha256-hs6NHAdqji5Cg1ReGWqalFHv6wyRlyclssyc0cxM+ZU=";
+    hash = "sha256-0KQU/JS6hlv2SLMB8RKyITUiodByBUstrhcwIefn3Yw=";
   };
   dev = import ./browser.nix {
     channel = "dev";
-    version = "123.0.2420.6";
+    version = "125.0.2518.0";
     revision = "1";
-    hash = "sha256-fX6lxhJstz2cZZODu7xRe1fez8WTXqlYNgsMhIVTLaU=";
+    hash = "sha256-q4TVpO0SxSSLMv/NtmJIOzClT2WqUss2qfE5vgj4O7E=";
   };
   stable = import ./browser.nix {
     channel = "stable";
-    version = "122.0.2365.59";
+    version = "123.0.2420.97";
     revision = "1";
-    hash = "sha256-LbyipfA5TZWSZu1jeUykGZ2FXwt9rZ7ak7mmryXRnMQ=";
+    hash = "sha256-q7Pcbi0JQr/wvKIrgueD9f2Z6v1DMoD2bcRJKGqDYjs=";
   };
 }

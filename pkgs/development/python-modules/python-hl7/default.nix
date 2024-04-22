@@ -28,6 +28,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A simple library for parsing messages of Health Level 7 (HL7) version 2.x into Python objects";
+    mainProgram = "mllp_send";
     homepage = "https://python-hl7.readthedocs.org";
     changelog = "https://python-hl7.readthedocs.io/en/latest/changelog.html";
     license = licenses.bsd3;

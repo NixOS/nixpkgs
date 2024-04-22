@@ -1,21 +1,22 @@
-{ lib
-, anyio
-, buildPythonPackage
-, fetchFromGitHub
-, hishel
-, httpx
-, poetry-core
-, pydantic
-, pyjwt
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, typing-extensions
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hishel,
+  httpx,
+  poetry-core,
+  pydantic,
+  pyjwt,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "githubkit";
-  version = "0.11.1";
+  version = "0.11.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,24 +25,17 @@ buildPythonPackage rec {
     owner = "yanyongyu";
     repo = "githubkit";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nPXs6thXAshDojgHSNyEeBN/jNJkfFECSuY5f51Zozo=";
+    hash = "sha256-uxXRDavp5c3e1MOZR2B4wUxEHh6K81avTeaIVsOdup8=";
   };
-
-  pythonRelaxDeps = [
-    "hishel"
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov=githubkit --cov-append --cov-report=term-missing" ""
+      --replace-fail "--cov=githubkit --cov-append --cov-report=term-missing" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     hishel
     httpx
     pydantic
@@ -53,15 +47,9 @@ buildPythonPackage rec {
       anyio
       pyjwt
     ];
-    jwt = [
-      pyjwt
-    ];
-    auth-app = [
-      pyjwt
-    ];
-    auth-oauth-device = [
-      anyio
-    ];
+    jwt = [ pyjwt ];
+    auth-app = [ pyjwt ];
+    auth-oauth-device = [ anyio ];
     auth = [
       anyio
       pyjwt
@@ -70,11 +58,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-xdist
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "githubkit"
-  ];
+  pythonImportsCheck = [ "githubkit" ];
 
   disabledTests = [
     # Tests require network access

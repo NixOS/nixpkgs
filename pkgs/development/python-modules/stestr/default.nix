@@ -56,6 +56,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A parallel Python test runner built around subunit";
+    mainProgram = "stestr";
     homepage = "https://github.com/mtreinish/stestr";
     license = licenses.asl20;
     maintainers = teams.openstack.members;

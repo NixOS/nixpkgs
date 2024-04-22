@@ -38,7 +38,8 @@ python3.pkgs.buildPythonApplication rec {
     python-dateutil
     rich
     trio
-  ];
+    packaging
+  ] ++ httpx.optional-dependencies.http2;
 
   # Project has no tests
   doCheck = false;
@@ -49,6 +50,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Offensive Google framework";
+    mainProgram = "ghunt";
     homepage = "https://github.com/mxrch/ghunt";
     changelog = "https://github.com/mxrch/GHunt/releases/tag/v${version}";
     license = licenses.agpl3Only;

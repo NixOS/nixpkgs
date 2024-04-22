@@ -11,8 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-OIWykfFbVskrkPG/zSmZtZjc+W956KSfIzK7f5QOqpI=";
   };
 
-  buildInputs = [ postgresql openssl zlib readline libkrb5 ]
-    ++ lib.optionals (stdenv.isLinux && lib.versionOlder postgresql.version "13") [ libxcrypt ];
+  buildInputs = postgresql.buildInputs ++ [ postgresql ];
 
   installPhase = ''
     install -D -t $out/bin src/bin/pg_autoctl/pg_autoctl
@@ -23,11 +22,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "PostgreSQL extension and service for automated failover and high-availability";
+    mainProgram = "pg_autoctl";
     homepage = "https://github.com/citusdata/pg_auto_failover";
     changelog = "https://github.com/citusdata/pg_auto_failover/blob/v${version}/CHANGELOG.md";
     maintainers = [ maintainers.marsam ];
     platforms = postgresql.meta.platforms;
     license = licenses.postgresql;
-    broken = versionOlder postgresql.version "10";
   };
 }

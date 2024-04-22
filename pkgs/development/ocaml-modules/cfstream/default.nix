@@ -4,7 +4,7 @@ buildDunePackage rec {
   pname = "cfstream";
   version = "1.3.2";
 
-  minimalOCamlVersion = "4.04.1";
+  minimalOCamlVersion = "4.07";
 
   src = fetchFromGitHub {
     owner = "biocaml";

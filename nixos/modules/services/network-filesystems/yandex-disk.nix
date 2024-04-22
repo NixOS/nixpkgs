@@ -23,7 +23,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable Yandex-disk client. See https://disk.yandex.ru/
         '';
       };
@@ -31,7 +31,7 @@ in
       username = mkOption {
         default = "";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Your yandex.com login name.
         '';
       };
@@ -39,7 +39,7 @@ in
       password = mkOption {
         default = "";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Your yandex.com password. Warning: it will be world-readable in /nix/store.
         '';
       };
@@ -47,7 +47,7 @@ in
       user = mkOption {
         default = null;
         type = types.nullOr types.str;
-        description = lib.mdDoc ''
+        description = ''
           The user the yandex-disk daemon should run as.
         '';
       };
@@ -55,14 +55,14 @@ in
       directory = mkOption {
         type = types.path;
         default = "/home/Yandex.Disk";
-        description = lib.mdDoc "The directory to use for Yandex.Disk storage";
+        description = "The directory to use for Yandex.Disk storage";
       };
 
       excludes = mkOption {
         default = "";
         type = types.commas;
         example = "data,backup";
-        description = lib.mdDoc ''
+        description = ''
           Comma-separated list of directories which are excluded from synchronization.
         '';
       };

@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "youtube-music";
-  version = "3.3.1";
+  version = "3.3.5";
 
   src = fetchFromGitHub {
     owner = "th-ch";
     repo = "youtube-music";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-N6TzDTKvMyasksE0qcEGKeNjGAD08OzxpmpoQ11/ZW4=";
+    hash = "sha256-JOmcfe7xrKRaxJwj2No3e99HBYbX+ROTjHl5Frc2P9Q=";
   };
 
   pnpmDeps = stdenvNoCC.mkDerivation {
@@ -47,10 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
     dontFixup = true;
     outputHashMode = "recursive";
     outputHash = {
-      x86_64-linux = "sha256-V6CSawxBWFbXmAPbck0xCXqRlANpqFAoqSAB4Duf8qM=";
-      aarch64-linux = "sha256-cqBn35soV14CmobKt0napRELio4HKKA8Iw3QSWTxzP8=";
-      x86_64-darwin = "sha256-DY9T1N8Hxr57/XisYT+u2+hQvYMIiyQ3UHeTuA6BhSY=";
-      aarch64-darwin = "sha256-3Zk0SyhVKaz5QdO69/xzWFZj9ueJS6GLWhfW7odWvHc=";
+      x86_64-linux = "sha256-K2yJdoi+bJpz0Xf2MHlFzQXbP+H3uVE2hYfkzoB7vBE=";
+      aarch64-linux = "sha256-ZiA6XKPnkoAl9m2vEJth2wyDxj61Efye4cUk+76znnM=";
+      x86_64-darwin = "sha256-wh5Y47c5qD2PctROP9AWqLDs7H5S2/8X0zxkSMkr1xQ=";
+      aarch64-darwin = "sha256-e2h4bLVnSEtZcHERsfkNmawgxQHQXxgXrNlFKB+IRTw=";
     }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
   };
 

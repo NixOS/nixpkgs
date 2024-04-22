@@ -3,7 +3,7 @@
 , fetchurl
 , cmake
 , removeReferencesTo
-, cppSupport ? false
+, cppSupport ? true
 , fortranSupport ? false
 , fortran
 , zlibSupport ? true
@@ -13,6 +13,7 @@
 , mpiSupport ? false
 , mpi
 , enableShared ? !stdenv.hostPlatform.isStatic
+, enableStatic ? stdenv.hostPlatform.isStatic
 , javaSupport ? false
 , jdk
 , usev110Api ? false
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
       ;
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "bin" ];
 
   nativeBuildInputs = [ removeReferencesTo cmake ]
     ++ optional fortranSupport fortran;
@@ -72,6 +73,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DHDF5_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake"
+    "-DBUILD_STATIC_LIBS=${lib.boolToString enableStatic}"
   ] ++ lib.optional stdenv.isDarwin "-DHDF5_BUILD_WITH_INSTALL_NAME=ON"
     ++ lib.optional cppSupport "-DHDF5_BUILD_CPP_LIB=ON"
     ++ lib.optional fortranSupport "-DHDF5_BUILD_FORTRAN=ON"
@@ -85,10 +87,22 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
+    moveToOutput 'bin/' "''${!outputBin}"
     moveToOutput 'bin/h5cc' "''${!outputDev}"
     moveToOutput 'bin/h5c++' "''${!outputDev}"
     moveToOutput 'bin/h5fc' "''${!outputDev}"
     moveToOutput 'bin/h5pcc' "''${!outputDev}"
+    moveToOutput 'bin/h5hlcc' "''${!outputDev}"
+    moveToOutput 'bin/h5hlc++' "''${!outputDev}"
+  '' + lib.optionalString enableShared
+  # The shared build creates binaries with -shared suffixes,
+  # so we remove these suffixes.
+  ''
+    pushd ''${!outputBin}/bin
+    for file in *-shared; do
+      mv "$file" "''${file%%-shared}"
+    done
+    popd
   '';
 
   enableParallelBuilding = true;

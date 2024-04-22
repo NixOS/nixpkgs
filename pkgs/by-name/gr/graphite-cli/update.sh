@@ -22,7 +22,7 @@ sed -i 's#hash = "[^"]*"#hash = "'"$src_hash"'"#' package.nix
 rm -f package-lock.json package.json *.tgz
 wget "$url"
 tar xf "$tarball" --strip-components=1 package/package.json
-npm i --package-lock-only
+npm i --package-lock-only --ignore-scripts
 npm_hash=$(prefetch-npm-deps package-lock.json)
 sed -i 's#npmDepsHash = "[^"]*"#npmDepsHash = "'"$npm_hash"'"#' package.nix
 rm -f package.json *.tgz

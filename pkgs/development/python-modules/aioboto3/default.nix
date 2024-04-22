@@ -1,7 +1,6 @@
 { lib
 , aiobotocore
 , aiofiles
-, boto3
 , buildPythonPackage
 , chalice
 , cryptography
@@ -13,6 +12,7 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , requests
 }:
 
@@ -33,6 +33,11 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     poetry-core
     poetry-dynamic-versioning
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "aiobotocore"
   ];
 
   propagatedBuildInputs = [

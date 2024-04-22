@@ -15,7 +15,7 @@ let
       sha256 = "sha256-EuWGbn6qggi8/9Rci8iaXfuVKE+QXb1BHEYDvotR/q4=";
     };
   };
-  src = srcs.${stdenv.hostPlatform.system};
+  src = srcs.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
 
   contents = appimageTools.extract { inherit name src; };
 
@@ -77,6 +77,7 @@ let
     maintainers = with maintainers; [ d-xo ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    broken = stdenv.isLinux; # last successful build 2023-04-11
   };
 in
 if stdenv.isDarwin

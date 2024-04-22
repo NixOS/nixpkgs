@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "(upper layers of) HomeNodeB";
+    mainProgram = "osmo-hnodeb";
     homepage = "https://osmocom.org/projects/osmo-hnodeb";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ janik ];

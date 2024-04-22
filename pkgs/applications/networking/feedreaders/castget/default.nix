@@ -42,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "A simple, command-line based RSS enclosure downloader";
+    mainProgram = "castget";
     longDescription = ''
       castget is a simple, command-line based RSS enclosure downloader. It is
       primarily intended for automatic, unattended downloading of podcasts.

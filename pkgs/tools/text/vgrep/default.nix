@@ -25,6 +25,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "User-friendly pager for grep/git-grep/ripgrep";
+    mainProgram = "vgrep";
     homepage = "https://github.com/vrothberg/vgrep";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ SuperSandro2000 ];

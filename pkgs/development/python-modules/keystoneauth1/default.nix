@@ -25,12 +25,12 @@
 
 buildPythonPackage rec {
   pname = "keystoneauth1";
-  version = "5.4.0";
+  version = "5.6.0";
   pyproject= true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GsE0FRzrAuULaK143smCG/if5TvTb8hlhQHEewfL31M=";
+    hash = "sha256-7LfzR1nr4QPbNyqwlTwLghkp3dSX8zKqaz72yqz/7Yg=";
   };
 
   postPatch = ''

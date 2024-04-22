@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libmatekbd";
-  version = "1.26.1";
+  version = "1.28.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Y5ONkSUpRe7qiP2DdNEjG9g9As2WXGu6F8GF7bOXvO0=";
+    sha256 = "XS5YSDwrI9M1A9JMiPi5CijMAYnX5AAbPic6YE9v6A4=";
   };
 
   nativeBuildInputs = [

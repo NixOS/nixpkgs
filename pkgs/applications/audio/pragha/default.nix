@@ -95,6 +95,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "A lightweight GTK+ music manager - fork of Consonance Music Manager";
+    mainProgram = "pragha";
     homepage = "https://pragha-music-player.github.io/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mbaeten ];

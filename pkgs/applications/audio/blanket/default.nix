@@ -59,6 +59,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/rafaelmardojai/blanket";
     description = "Listen to different sounds";
+    mainProgram = "blanket";
     maintainers = with maintainers; [ onny ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

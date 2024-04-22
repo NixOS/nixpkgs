@@ -76,6 +76,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://luakit.github.io/";
     description = "Fast, small, webkit-based browser framework extensible in Lua";
+    mainProgram = "luakit";
     longDescription = ''
       Luakit is a highly configurable browser framework based on the WebKit web
       content engine and the GTK+ toolkit. It is very fast, extensible with Lua,

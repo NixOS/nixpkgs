@@ -113,7 +113,7 @@ runCommand "test-nixos-rebuild-repl" {
 
   # cat -n ~/flake.nix
 
-  expect ${writeText "test-nixos-rebuild-repl-expect" ''
+  expect ${writeText "test-nixos-rebuild-repl-absolute-path-expect" ''
     ${expectSetup}
     spawn sh -c "nixos-rebuild repl --fast --flake path:\$HOME#testconf"
 
@@ -138,6 +138,19 @@ runCommand "test-nixos-rebuild-repl" {
     send "lib?nixos\n"
     expect_simple "true"
   ''}
+
+  pushd "$HOME"
+  expect ${writeText "test-nixos-rebuild-repl-relative-path-expect" ''
+    ${expectSetup}
+    spawn sh -c "nixos-rebuild repl --fast --flake .#testconf"
+
+    expect_simple "nix-repl>"
+
+    send "config.networking.hostName\n"
+    expect_simple "itsme"
+  ''}
+  popd
+
   echo
 
   #########

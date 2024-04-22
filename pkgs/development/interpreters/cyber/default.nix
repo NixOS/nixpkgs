@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A fast, efficient, and concurrent scripting language";
+    mainProgram = "cyber";
     homepage = "https://github.com/fubark/cyber";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

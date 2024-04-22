@@ -58,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "A digital pass manager";
+    mainProgram = "passes";
     homepage = "https://github.com/pablo-s/passes";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fgaz ];

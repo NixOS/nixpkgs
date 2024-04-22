@@ -85,6 +85,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Automatic extraction of relevant features from time series";
+    mainProgram = "run_tsfresh";
     homepage = "https://github.com/blue-yonder/tsfresh";
     changelog = "https://github.com/blue-yonder/tsfresh/blob/${src.rev}/CHANGES.rst";
     license = licenses.mit;

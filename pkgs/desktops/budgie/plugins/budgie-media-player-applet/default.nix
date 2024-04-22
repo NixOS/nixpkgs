@@ -7,15 +7,15 @@
 , python3Packages
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-media-player-applet";
-  version = "1.0.0-unstable-2023-12-31";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "zalesyc";
     repo = "budgie-media-player-applet";
-    rev = "24500be1e0a1f92968df80f8befdf896723ba8ee";
-    hash = "sha256-jQgkE6vv8PIcB0MJgfsQvzMRkkMU51Gqefoa2G6YJCw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-E4aD7/SJNvWe6B3iX8fUZeZj14+uxjn0s+30BhU0dxE=";
   };
 
   nativeBuildInputs = [
@@ -31,8 +31,8 @@ stdenv.mkDerivation {
   ];
 
   postPatch = ''
-    substituteInPlace meson.build --replace "/usr" "$out"
-    substituteInPlace meson_post_install.py --replace '"/", "usr"' "\"$out\""
+    substituteInPlace meson.build --replace-fail "/usr" "$out"
+    substituteInPlace meson_post_install.py --replace-fail '"/", "usr"' "\"$out\""
   '';
 
   postFixup = ''
@@ -45,6 +45,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/zalesyc/budgie-media-player-applet";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ federicoschonborn ];
+    maintainers = lib.teams.budgie.members;
   };
-}
+})

@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     changelog = "https://github.com/fenrus75/powertop/releases/tag/v${version}";
     description = "Analyze power consumption on Intel-based laptops";
+    mainProgram = "powertop";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ fpletz anthonyroussel ];
     platforms = platforms.linux;

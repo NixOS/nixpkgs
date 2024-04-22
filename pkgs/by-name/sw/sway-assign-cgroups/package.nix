@@ -25,6 +25,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Place GUI applications into systemd scopes for systemd-oomd compatibility.";
+    mainProgram = "assign-cgroups.py";
     longDescription = ''
       Automatically assign a dedicated systemd scope to the GUI applications
       launched in the same cgroup as the compositor. This could be helpful for

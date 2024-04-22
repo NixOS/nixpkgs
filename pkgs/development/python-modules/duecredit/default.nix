@@ -36,6 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/duecredit/duecredit";
     description = "Simple framework to embed references in code";
+    mainProgram = "duecredit";
     changelog = "https://github.com/duecredit/duecredit/releases/tag/${version}";
     license = licenses.bsd2;
     maintainers = with maintainers; [ bcdarwin ];

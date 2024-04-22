@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchpatch, xorg, ncurses, freetype, fontconfig
 , pkg-config, makeWrapper, nixosTests, gitUpdater
-, nixfmt, nix, gnused, coreutils, enableDecLocator ? true }:
+, nix, gnused, coreutils, enableDecLocator ? true }:
 
 stdenv.mkDerivation rec {
   pname = "xterm";

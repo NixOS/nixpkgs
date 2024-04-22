@@ -47,6 +47,7 @@ When an application uses icons, an icon theme should be available in `XDG_DATA_D
 In the rare case you need to use icons from dependencies (e.g. when an app forces an icon theme), you can use the following to pick them up:
 
 ```nix
+{
   buildInputs = [
     pantheon.elementary-icon-theme
   ];
@@ -56,6 +57,7 @@ In the rare case you need to use icons from dependencies (e.g. when an app force
       --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
     )
   '';
+}
 ```
 
 To avoid costly file system access when locating icons, GTK, [as well as Qt](https://woboq.com/blog/qicon-reads-gtk-icon-cache-in-qt57.html), can rely on `icon-theme.cache` files from the themes' top-level directories. These files are generated using `gtk-update-icon-cache`, which is expected to be run whenever an icon is added or removed to an icon theme (typically an application icon into `hicolor` theme) and some programs do indeed run this after icon installation. However, since packages are installed into their own prefix by Nix, this would lead to conflicts. For that reason, `gtk3` provides a [setup hook](#ssec-gnome-hooks-gtk-drop-icon-theme-cache) that will clean the file from installation. Since most applications only ship their own icon that will be loaded on start-up, it should not affect them too much. On the other hand, icon themes are much larger and more widely used so we need to cache them. Because we recommend installing icon themes globally, we will generate the cache files from all packages in a profile using a NixOS module. You can enable the cache generation using `gtk.iconCache.enable` option if your desktop environment does not already do that.
@@ -85,22 +87,26 @@ If your application uses [GStreamer](https://gstreamer.freedesktop.org/) or [Gri
 Given the requirements above, the package expression would become messy quickly:
 
 ```nix
-preFixup = ''
-  for f in $(find $out/bin/ $out/libexec/ -type f -executable); do
-    wrapProgram "$f" \
-      --prefix GIO_EXTRA_MODULES : "${getLib dconf}/lib/gio/modules" \
-      --prefix XDG_DATA_DIRS : "$out/share" \
-      --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${name}" \
-      --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}" \
-      --prefix XDG_DATA_DIRS : "${hicolor-icon-theme}/share" \
-      --prefix GI_TYPELIB_PATH : "${lib.makeSearchPath "lib/girepository-1.0" [ pango json-glib ]}"
-  done
-'';
+{
+  preFixup = ''
+    for f in $(find $out/bin/ $out/libexec/ -type f -executable); do
+      wrapProgram "$f" \
+        --prefix GIO_EXTRA_MODULES : "${getLib dconf}/lib/gio/modules" \
+        --prefix XDG_DATA_DIRS : "$out/share" \
+        --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${name}" \
+        --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}" \
+        --prefix XDG_DATA_DIRS : "${hicolor-icon-theme}/share" \
+        --prefix GI_TYPELIB_PATH : "${lib.makeSearchPath "lib/girepository-1.0" [ pango json-glib ]}"
+    done
+  '';
+}
 ```
 
-Fortunately, there is [`wrapGAppsHook`]{#ssec-gnome-hooks-wrapgappshook}. It works in conjunction with other setup hooks that populate environment variables, and it will then wrap all executables in `bin` and `libexec` directories using said variables.
+Fortunately, there is [`wrapGAppsHook`]{#ssec-gnome-hooks-wrapgappshook}. It works in conjunction with other setup hooks that populate environment variables, and it will then wrap all executables in `bin` and `libexec` directories using said variables. For convenience, it also adds `dconf.lib` for a GIO module implementing a GSettings backend using `dconf`, `gtk3` for GSettings schemas, and `librsvg` for GdkPixbuf loader to the closure.
 
-For convenience, it also adds `dconf.lib` for a GIO module implementing a GSettings backend using `dconf`, `gtk3` for GSettings schemas, and `librsvg` for GdkPixbuf loader to the closure. There is also [`wrapGAppsHook4`]{#ssec-gnome-hooks-wrapgappshook4}, which replaces GTK 3 with GTK 4. And in case you are packaging a program without a graphical interface, you might want to use [`wrapGAppsNoGuiHook`]{#ssec-gnome-hooks-wrapgappsnoguihook}, which runs the same script as `wrapGAppsHook` but does not bring `gtk3` and `librsvg` into the closure.
+There is also [`wrapGAppsHook4`]{#ssec-gnome-hooks-wrapgappshook4}, which replaces GTK 3 with GTK 4. Instead of `wrapGAppsHook`, this should be used for all GTK4 applications.
+
+In case you are packaging a program without a graphical interface, you might want to use [`wrapGAppsNoGuiHook`]{#ssec-gnome-hooks-wrapgappsnoguihook}, which runs the same script as `wrapGAppsHook` but does not bring `gtk3` and `librsvg` into the closure.
 
 - `wrapGAppsHook` itself will add the package’s `share` directory to `XDG_DATA_DIRS`.
 
@@ -121,14 +127,16 @@ For convenience, it also adds `dconf.lib` for a GIO module implementing a GSetti
 You can also pass additional arguments to `makeWrapper` using `gappsWrapperArgs` in `preFixup` hook:
 
 ```nix
-preFixup = ''
-  gappsWrapperArgs+=(
-    # Thumbnailers
-    --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
-    --prefix XDG_DATA_DIRS : "${librsvg}/share"
-    --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
-  )
-'';
+{
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # Thumbnailers
+      --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
+      --prefix XDG_DATA_DIRS : "${librsvg}/share"
+      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+    )
+  '';
+}
 ```
 
 ## Updating GNOME packages {#ssec-gnome-updating}
@@ -159,7 +167,7 @@ python3.pkgs.buildPythonApplication {
   nativeBuildInputs = [
     wrapGAppsHook
     gobject-introspection
-    ...
+    # ...
   ];
 
   dontWrapGApps = true;
@@ -181,7 +189,7 @@ mkDerivation {
   nativeBuildInputs = [
     wrapGAppsHook
     qmake
-    ...
+    # ...
   ];
 
   dontWrapGApps = true;

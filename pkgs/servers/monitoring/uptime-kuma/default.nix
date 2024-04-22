@@ -25,6 +25,9 @@ buildNpmPackage rec {
 
   postInstall = ''
     cp -r dist $out/lib/node_modules/uptime-kuma/
+
+    # remove references to nodejs source
+    rm -r $out/lib/node_modules/uptime-kuma/node_modules/@louislam/sqlite3/build-tmp-napi-v6
   '';
 
   postFixup = ''
@@ -37,6 +40,7 @@ buildNpmPackage rec {
 
   meta = with lib; {
     description = "A fancy self-hosted monitoring tool";
+    mainProgram = "uptime-kuma-server";
     homepage = "https://github.com/louislam/uptime-kuma";
     changelog = "https://github.com/louislam/uptime-kuma/releases/tag/${version}";
     license = licenses.mit;

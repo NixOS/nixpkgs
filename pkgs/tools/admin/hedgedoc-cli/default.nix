@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Hedgedoc CLI";
     homepage = "https://github.com/hedgedoc/cli";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ drupol ];
   };
 }

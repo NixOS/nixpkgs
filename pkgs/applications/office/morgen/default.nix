@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       --replace '/opt/Morgen' $out/bin
 
     makeWrapper ${electron}/bin/electron $out/bin/morgen \
-      --add-flags $out/opt/Morgen/resources/app.asar
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer}} $out/opt/Morgen/resources/app.asar"
 
     runHook postInstall
   '';

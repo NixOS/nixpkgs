@@ -34,6 +34,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python modules to access HDMI CEC devices";
+    mainProgram = "pycec";
     homepage = "https://github.com/konikvranik/pycec/";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

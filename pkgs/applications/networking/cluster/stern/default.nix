@@ -31,6 +31,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Multi pod and container log tailing for Kubernetes";
+    mainProgram = "stern";
     homepage = "https://github.com/stern/stern";
     license = licenses.asl20;
     maintainers = with maintainers; [ mbode preisschild ];

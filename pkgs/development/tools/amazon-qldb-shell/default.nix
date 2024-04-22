@@ -38,6 +38,8 @@ let
       license = licenses.asl20;
       maintainers = [ maintainers.terlar ];
       mainProgram = "qldb";
+      # See https://hydra.nixos.org/build/255146098/log.
+      broken = true; # Added 2024-04-06
     };
   };
 in

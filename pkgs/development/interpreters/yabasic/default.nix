@@ -28,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "http://2484.de/yabasic/";
     description = "Yet another BASIC";
+    mainProgram = "yabasic";
     longDescription = ''
       Yabasic is a traditional basic-interpreter. It comes with goto and various
       loops and allows to define subroutines and libraries. It does simple

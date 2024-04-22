@@ -18,4 +18,5 @@ mkKdeDerivation {
     taglib
     libvlc
   ];
+  meta.mainProgram = "kasts";
 }

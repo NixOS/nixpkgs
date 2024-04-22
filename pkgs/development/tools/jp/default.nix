@@ -15,6 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A command line interface to the JMESPath expression language for JSON";
+    mainProgram = "jp";
     homepage = "https://github.com/jmespath/jp";
     maintainers = with maintainers; [ cransom ];
     license = licenses.asl20;

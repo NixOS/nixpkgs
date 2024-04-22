@@ -58,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     broken = stdenv.isDarwin;
     homepage = "http://www.drpetter.se/project_sfxr.html";
     description = "A videogame sound effect generator";
+    mainProgram = "sfxr";
     license = licenses.mit;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.unix;

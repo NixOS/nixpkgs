@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "New user interface for spim, a MIPS simulator";
+    mainProgram = "qtspim";
     homepage = "https://spimsimulator.sourceforge.net/";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ emilytrau ];

@@ -1,15 +1,15 @@
 { lib, fetchurl, jdk, buildFHSEnv, unzip, makeDesktopItem, proEdition ? false }:
 let
-  version = "2023.10.2.4";
+  version = "2024.1.1.4";
 
   product = if proEdition then {
     productName = "pro";
     productDesktop = "Burp Suite Professional Edition";
-    hash = "sha256-H5/nxVvAoGzRIAOchv9tAYyFgrodh7XugCTn2oUV9Tw=";
+    hash = "sha256-jJUTsNF7Jy2VbFBIW7ha/ty9ZwVyVX1cTKNZJgD7zg4=";
   } else {
     productName = "community";
     productDesktop = "Burp Suite Community Edition";
-    hash = "sha256-en+eay+XL09Vk6H011fYvxGluMAndedtqCo4dQZvbBM=";
+    hash = "sha256-VkrI1M4lCdCuQypHSd2W5X6LyqLUhnbKZKMVj0w4THE=";
   };
 
   src = fetchurl {
@@ -48,6 +48,7 @@ buildFHSEnv {
     expat
     glib
     gtk3
+    libcanberra-gtk3
     libdrm
     libudev0-shim
     libxkbcommon
@@ -55,6 +56,7 @@ buildFHSEnv {
     nspr
     nss
     pango
+    gtk3-x11
     xorg.libX11
     xorg.libxcb
     xorg.libXcomposite

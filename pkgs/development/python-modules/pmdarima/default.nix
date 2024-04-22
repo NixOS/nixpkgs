@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , cython
 , joblib
+, matplotlib
 , numpy
 , pandas
 , scikit-learn
@@ -11,7 +12,7 @@
 , urllib3
 , pythonOlder
 , python
-, pytestCheckHook
+, pytest7CheckHook
 }:
 
 buildPythonPackage rec {
@@ -46,7 +47,11 @@ buildPythonPackage rec {
     cd $out/${python.sitePackages}
   '';
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    matplotlib
+    pytest7CheckHook
+  ];
+
   disabledTests= [
     # touches internet
     "test_load_from_web"

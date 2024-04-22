@@ -34,6 +34,7 @@ buildNpmPackage rec {
 
   meta = {
     description = "Get beautiful reveal.js presentations from your Markdown files";
+    mainProgram = "reveal-md";
     homepage = "https://github.com/webpro/reveal-md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sagikazarmark ];

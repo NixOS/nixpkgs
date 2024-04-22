@@ -50,6 +50,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "LIN Description File parser written in Python";
+    mainProgram = "ldfparser";
     homepage = "https://github.com/c4deszes/ldfparser";
     changelog = "https://github.com/c4deszes/ldfparser/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

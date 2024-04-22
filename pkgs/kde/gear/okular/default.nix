@@ -27,4 +27,5 @@ mkKdeDerivation {
     ebook_tools
     discount
   ];
+  meta.mainProgram = "okular";
 }

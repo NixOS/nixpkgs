@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "duckduckgo-search";
-  version = "3.9.9";
+  version = "5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "deedy5";
     repo = "duckduckgo_search";
     rev = "refs/tags/v${version}";
-    hash = "sha256-swuMCobYF5u41O1Qp5Gx/n8BIgSEnhRVZ5Owk3IPbeI=";
+    hash = "sha256-OZFkSFyXC2MFP2MbKwF/qR8zvCFzPKgLmX+nuIztOpw=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +48,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python CLI and library for searching for words, documents, images, videos, news, maps and text translation using the DuckDuckGo.com search engine";
+    mainProgram = "ddgs";
     homepage = "https://github.com/deedy5/duckduckgo_search";
     changelog = "https://github.com/deedy5/duckduckgo_search/releases/tag/v${version}";
     license = licenses.mit;

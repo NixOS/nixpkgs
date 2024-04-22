@@ -27,6 +27,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Minimalist thrilling shoot 'em up game";
+    mainProgram = "brutalmaze";
     homepage = "https://brutalmaze.rtfd.io";
     license = licenses.agpl3Plus;
     maintainers = [ maintainers.McSinyx ];

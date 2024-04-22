@@ -77,7 +77,7 @@ in
     environment.memoryAllocator.provider = mkOption {
       type = types.enum ([ "libc" ] ++ attrNames providers);
       default = "libc";
-      description = lib.mdDoc ''
+      description = ''
         The system-wide memory allocator.
 
         Briefly, the system-wide memory allocator providers are:

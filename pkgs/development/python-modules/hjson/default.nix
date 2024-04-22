@@ -31,6 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A user interface for JSON";
+    mainProgram = "hjson";
     homepage = "https://github.com/hjson/hjson-py";
     license = licenses.mit;
     maintainers = with maintainers; [ bhipple ];

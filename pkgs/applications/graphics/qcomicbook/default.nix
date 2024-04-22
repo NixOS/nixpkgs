@@ -27,6 +27,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/stolowski/QComicBook";
     description = "Comic book reader in Qt5";
+    mainProgram = "qcomicbook";
     license = licenses.gpl2;
 
     longDescription = ''

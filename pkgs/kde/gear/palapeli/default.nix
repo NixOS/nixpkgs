@@ -8,4 +8,5 @@ mkKdeDerivation {
 
   extraNativeBuildInputs = [shared-mime-info];
   extraBuildInputs = [qtsvg];
+  meta.mainProgram = "palapeli";
 }

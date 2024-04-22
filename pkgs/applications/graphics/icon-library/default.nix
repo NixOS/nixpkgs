@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/design/icon-library";
     description = "Symbolic icons for your apps";
+    mainProgram = "icon-library";
     maintainers = with maintainers; [ qyliss ];
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

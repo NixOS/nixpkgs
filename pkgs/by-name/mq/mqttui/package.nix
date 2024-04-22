@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mqttui";
-  version = "0.20.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "EdJoPaTo";
     repo = "mqttui";
     rev = "refs/tags/v${version}";
-    hash = "sha256-NfRPuZFZMZl1ulEGD5oQkS25oJdBVyLiN3QCQWrDej8=";
+    hash = "sha256-aIvT1js+xY1rauZYVCkl71JLfIDjIEGy3W8WdIaTyxY=";
   };
 
   cargoLock = {
@@ -34,7 +35,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/EdJoPaTo/mqttui";
     changelog = "https://github.com/EdJoPaTo/mqttui/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab sikmir ];
+    maintainers = with maintainers; [
+      fab
+      sikmir
+    ];
     mainProgram = "mqttui";
   };
 }

@@ -92,6 +92,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module to view JSON in a TUI";
+    mainProgram = "pyfx";
     homepage = "https://github.com/cielong/pyfx";
     changelog = "https://github.com/cielong/pyfx/releases/tag/v${version}";
     license = with licenses; [ mit ];

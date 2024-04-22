@@ -1,4 +1,4 @@
-{ config, lib, pkgs, options }:
+{ config, lib, pkgs, options, ... }:
 
 with lib;
 
@@ -18,7 +18,7 @@ in
           { name = "{{.Matches.Wrapped}} {{ .Matches.Args }}"; cmdline = [ "^/nix/store[^ ]*/(?P<Wrapped>[^ /]*) (?P<Args>.*)" ]; }
         ]
       '';
-      description = lib.mdDoc ''
+      description = ''
         All settings expressed as an Nix attrset.
 
         Check the official documentation for the corresponding YAML

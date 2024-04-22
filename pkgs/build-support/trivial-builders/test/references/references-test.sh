@@ -33,16 +33,17 @@ set -euo pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")"  # nixpkgs root
 
-  # Injected by Nix (to avoid evaluating in a derivation)
-  # turn them into arrays
-  # shellcheck disable=SC2206 # deliberately unquoted
-  declare -A samples=( @SAMPLES@ )
-  # shellcheck disable=SC2206 # deliberately unquoted
-  declare -A directRefs=( @DIRECT_REFS@ )
-  # shellcheck disable=SC2206 # deliberately unquoted
-  declare -A references=( @REFERENCES@ )
+  # Inject the path to compare from the Nix expression
 
-echo >&2 Testing direct references...
+  # Associative Arrays
+  declare -A samples=( @SAMPLES@ )
+  declare -A directRefs=( @DIRECT_REFS@ )
+  declare -A closures=( @CLOSURES@ )
+
+  # Path string
+  collectiveClosure=@COLLECTIVE_CLOSURE@
+
+echo >&2 Testing direct closures...
 for i in "${!samples[@]}"; do
   echo >&2 Checking "$i" "${samples[$i]}" "${directRefs[$i]}"
   diff -U3 \
@@ -52,10 +53,16 @@ done
 
 echo >&2 Testing closure...
 for i in "${!samples[@]}"; do
-  echo >&2 Checking "$i" "${samples[$i]}" "${references[$i]}"
+  echo >&2 Checking "$i" "${samples[$i]}" "${closures[$i]}"
   diff -U3 \
-    <(sort <"${references[$i]}") \
+    <(sort <"${closures[$i]}") \
     <(nix-store -q --requisites "${samples[$i]}" | sort)
 done
+
+echo >&2 Testing mixed closures...
+echo >&2 Checking all samples "(${samples[*]})" "$collectiveClosure"
+diff -U3 \
+  <(sort <"$collectiveClosure") \
+  <(nix-store -q --requisites "${samples[@]}" | sort)
 
 echo 'OK!'

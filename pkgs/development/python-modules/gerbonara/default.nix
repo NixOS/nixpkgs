@@ -46,6 +46,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pythonic library for reading/modifying/writing Gerber/Excellon/IPC-356 files";
+    mainProgram = "gerbonara";
     homepage = "https://github.com/jaseg/gerbonara";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ wulfsta ];

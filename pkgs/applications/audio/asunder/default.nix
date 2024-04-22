@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A graphical Audio CD ripper and encoder for Linux";
+    mainProgram = "asunder";
     homepage = "http://littlesvr.ca/asunder/index.php";
     license = licenses.gpl2;
     maintainers = with maintainers; [ mudri ];

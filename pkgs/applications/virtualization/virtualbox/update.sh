@@ -24,20 +24,25 @@ if [ ! "$oldVersion" = "$latestVersion" ]; then
 
   virtualBoxShaSum=$(fileShaSum "$shaSums" "VirtualBox-$latestVersion.tar.bz2")
   extpackShaSum=$(fileShaSum "$shaSums" "Oracle_VM_VirtualBox_Extension_Pack-$latestVersion.vbox-extpack")
-  guestAdditionsShaSum=$(fileShaSum "$shaSums" "*VBoxGuestAdditions_$latestVersion.iso")
+  guestAdditionsIsoShaSum=$(fileShaSum "$shaSums" "*VBoxGuestAdditions_$latestVersion.iso")
 
   virtualboxNixFile=$(nixFile ${attr})
   extpackNixFile=$(nixFile ${attr}Extpack)
-  guestAdditionsNixFile=$(nixFile linuxPackages.${attr}GuestAdditions)
+  guestAdditionsIsoNixFile="pkgs/applications/virtualization/virtualbox/guest-additions-iso/default.nix"
+  virtualboxGuestAdditionsNixFile="pkgs/applications/virtualization/virtualbox/guest-additions/builder.nix"
 
+  virtualBoxOldShaSum=$(oldHash ${attr}Extpack)
   extpackOldShaSum=$(oldHash ${attr}Extpack)
-  guestAdditionsOldShaSum=$(oldHash linuxPackages.${attr}GuestAdditions.src)
 
   update-source-version $attr $latestVersion $virtualBoxShaSum
   sed -i -e 's|value = "'$extpackOldShaSum'"|value = "'$extpackShaSum'"|' $extpackNixFile
-  sed -i -e 's|sha256 = "'$guestAdditionsOldShaSum'"|sha256 = "'$guestAdditionsShaSum'"|' $guestAdditionsNixFile
+  sed -e "s/sha256 =.*;/sha256 = \"$guestAdditionsIsoShaSum\";/g" \
+      -i $guestAdditionsIsoNixFile
+  sed -e "s/version =.*;/version = \"$latestVersion\";/g" \
+      -e "s/sha256 =.*;/sha256 = \"$virtualBoxShaSum\";/g" \
+      -i $virtualboxGuestAdditionsNixFile
 
-  git add $virtualboxNixFile $extpackNixFile $guestAdditionsNixFile
+  git add $virtualboxNixFile $extpackNixFile $guestAdditionsIsoNixFile $virtualboxGuestAdditionsNixFile
   git commit -m "$attr: ${oldVersion} -> ${latestVersion}"
 else
   echo "$attr is already up-to-date"

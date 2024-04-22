@@ -1,11 +1,11 @@
 { lib, stdenv
 , cairo
+, elfutils
 , fetchFromGitHub
 , glib
 , gobject-introspection
 , gtksourceview3
 , json-glib
-, libelf
 , makeWrapper
 , pango
 , pkg-config
@@ -48,7 +48,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     json-glib
-    libelf
     util-linux
   ] ++ lib.optionals withGui [
     cairo
@@ -57,6 +56,8 @@ stdenv.mkDerivation rec {
     polkit
     python3
     python3.pkgs.pygobject3
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+    elfutils
   ];
 
   prePatch = ''

@@ -2,7 +2,9 @@
 , lib
 , fetchFromGitHub
 , gfortran
-, cmake
+, meson
+, ninja
+, pkg-config
 , test-drive
 }:
 
@@ -17,21 +19,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-+cac4rUNpd2w3yBdH1XoCKdJ9IgOHZioZg8AhzGY0FE=";
   };
 
-  nativeBuildInputs = [ gfortran cmake ];
+  nativeBuildInputs = [ gfortran meson ninja pkg-config ];
 
   buildInputs = [ test-drive ];
 
   outputs = [ "out" "dev" ];
-
-  # Fix the Pkg-Config files for doubled store paths
-  postPatch = ''
-    substituteInPlace config/template.pc \
-      --replace "\''${prefix}/" ""
-  '';
-
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
-  ];
 
   doCheck = true;
 
@@ -39,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "TOML parser implementation for data serialization and deserialization in Fortran";
     license = with licenses; [ asl20 mit ];
     homepage = "https://github.com/toml-f/toml-f";
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
     maintainers = [ maintainers.sheepforce ];
   };
 }

@@ -35,7 +35,7 @@
 , icu
 , fetchYarnDeps
 , yarn
-, fixup_yarn_lock
+, fixup-yarn-lock
 , nodePackages
 , nodejs_18
 , jq
@@ -186,7 +186,7 @@ let
             # available for aarch64. It has to be called
             # libpsl.x86_64.so or it isn't found.
             postPatch = ''
-              cp $(readlink -f ${libpsl}/lib/libpsl.so) vendor/libpsl.x86_64.so
+              cp $(readlink -f ${lib.getLib libpsl}/lib/libpsl.so) vendor/libpsl.x86_64.so
             '';
           };
         };
@@ -215,6 +215,7 @@ let
       nodejs_18
       jq
       moreutils
+      fixup-yarn-lock
     ];
 
     outputs = [ "out" "javascripts" ];
@@ -252,7 +253,7 @@ let
       yarn config --offline set yarn-offline-mirror $yarnOfflineCache
 
       # Fixup "resolved"-entries in yarn.lock to match our offline cache
-      ${fixup_yarn_lock}/bin/fixup_yarn_lock app/assets/javascripts/yarn.lock
+      fixup-yarn-lock app/assets/javascripts/yarn.lock
 
       export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
 

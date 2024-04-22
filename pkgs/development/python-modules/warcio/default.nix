@@ -63,6 +63,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Streaming WARC/ARC library for fast web archive IO";
+    mainProgram = "warcio";
     homepage = "https://github.com/webrecorder/warcio";
     changelog = "https://github.com/webrecorder/warcio/blob/master/CHANGELIST.rst";
     license = licenses.asl20;

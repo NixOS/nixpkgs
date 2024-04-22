@@ -96,6 +96,15 @@ with lib.maintainers; {
     shortName = "Blockchains";
   };
 
+  budgie = {
+    members = [
+      bobby285271
+      federicoschonborn
+    ];
+    scope = "Maintain Budgie desktop environment";
+    shortName = "Budgie";
+  };
+
   buildbot = {
     members = [
       lopsided98
@@ -134,6 +143,15 @@ with lib.maintainers; {
     ];
     scope = "Maintain Cinnamon desktop environment and applications made by the Linux Mint team.";
     shortName = "Cinnamon";
+    enableFeatureFreezePing = true;
+  };
+
+  cloudposse = {
+    members = [
+      dudymas
+    ];
+    scope = "Maintain atmos and applications made by the Cloud Posse team.";
+    shortName = "CloudPosse";
     enableFeatureFreezePing = true;
   };
 
@@ -248,7 +266,6 @@ with lib.maintainers; {
 
   docs = {
     members = [
-      asymmetric
       ryantm
     ];
     scope = "Maintain nixpkgs/NixOS documentation and tools for building it.";
@@ -303,6 +320,8 @@ with lib.maintainers; {
       dpausp
       frlan
       leona
+      osnyx
+      ma27
     ];
     scope = "Team for Flying Circus employees who collectively maintain packages.";
     shortName = "Flying Circus employees";
@@ -341,6 +360,7 @@ with lib.maintainers; {
   geospatial = {
     members = [
       imincik
+      l0b0
       nh2
       nialov
       sikmir
@@ -431,6 +451,7 @@ with lib.maintainers; {
     # Verify additions to this team with at least one already existing member of the team.
     members = [
       das_j
+      conni2461
     ];
     scope = "Group registration for packages maintained by Helsinki Systems";
     shortName = "Helsinki Systems employees";
@@ -464,6 +485,7 @@ with lib.maintainers; {
       ryantm
       lassulus
       yayayayaka
+      asymmetric
     ];
     scope = "Maintain Jitsi.";
     shortName = "Jitsi";
@@ -496,6 +518,7 @@ with lib.maintainers; {
       cpages
       dschrempf
       edwtjo
+      kazenyuk
       minijackson
       peterhoeg
       sephalon
@@ -548,9 +571,12 @@ with lib.maintainers; {
       ericson2314
       lovek323
       qyliss
-      raitobezarius
+      RossComputerGuy
       rrbutani
       sternenseemann
+    ];
+    githubTeams = [
+      "llvm"
     ];
     scope = "Maintain LLVM package sets and related packages";
     shortName = "LLVM";
@@ -869,6 +895,7 @@ with lib.maintainers; {
     members = [
       Madouura
       Flakebi
+      mschwaig
     ];
     githubTeams = [
       "rocm-maintainers"

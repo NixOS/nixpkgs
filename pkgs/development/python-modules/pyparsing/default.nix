@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyparsing";
-  version = "3.1.1";
+  version = "3.1.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pyparsing";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-54XMw5ahMZH4cevTFg2GXhgSu0QX1mfITWFezWirt1E=";
+    hash = "sha256-0B8DjO4kLgvt4sYsk8CZI+5icdKy73XE2tWeqVLqO5A=";
   };
 
   nativeBuildInputs = [

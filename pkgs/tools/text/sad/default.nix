@@ -1,21 +1,22 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  python3,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sad";
-  version = "0.4.23";
+  version = "0.4.28";
 
   src = fetchFromGitHub {
     owner = "ms-jpq";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-LNMc+3pXx7VyNq0dws+s13ZA3+f8aJzgbAxzI71NKx0=";
+    repo = "sad";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-9zsNYUYUQ3RmJQN7uf+YQjywr7rRAIx5zz6EYkbN8/o=";
   };
 
-  cargoHash = "sha256-UjXJmH4UI5Vey2rBy57CI1r13bpGYhIozEoOoyoRDLQ=";
+  cargoHash = "sha256-OSVG1sFSLKkVsgI0I2mYTszcPGlfOL1Md/aCpMf6Eow=";
 
   nativeBuildInputs = [ python3 ];
 
@@ -28,7 +29,9 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "CLI tool to search and replace";
     homepage = "https://github.com/ms-jpq/sad";
+    changelog = "https://github.com/ms-jpq/sad/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "sad";
   };
 }

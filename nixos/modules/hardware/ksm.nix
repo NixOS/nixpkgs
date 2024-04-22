@@ -11,11 +11,11 @@ in {
   ];
 
   options.hardware.ksm = {
-    enable = mkEnableOption (lib.mdDoc "Kernel Same-Page Merging");
+    enable = mkEnableOption "Linux kernel Same-Page Merging";
     sleep = mkOption {
       type = types.nullOr types.int;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         How many milliseconds ksmd should sleep between scans.
         Setting it to `null` uses the kernel's default time.
       '';

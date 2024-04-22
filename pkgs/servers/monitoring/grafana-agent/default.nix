@@ -2,11 +2,11 @@
 , buildGoModule
 , fetchFromGitHub
 , fetchYarnDeps
+, fixup-yarn-lock
 , grafana-agent
 , nix-update-script
 , nixosTests
 , nodejs
-, prefetch-yarn-deps
 , stdenv
 , systemd
 , testers
@@ -15,16 +15,16 @@
 
 buildGoModule rec {
   pname = "grafana-agent";
-  version = "0.40.2";
+  version = "0.40.4";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "agent";
     rev = "v${version}";
-    hash = "sha256-muSgFBg+/XWx2f9EGYYLQ0wUzZ7AxEC2F19A5Qs5cgw=";
+    hash = "sha256-TWA+anmiKFgK6nb8ipoqRF+HdPMf2JDSU2DeA8fpDlQ=";
   };
 
-  vendorHash = "sha256-ekFl+aSmyUvgv4pkpS86HwPMfqtDaJEaZhWiwHjHp9g=";
+  vendorHash = "sha256-xsFD5eAHIWcwayTm5BUAnOHX4AvZXOSJuxvBwCTToeE=";
   proxyVendor = true; # darwin/linux hash mismatch
 
   frontendYarnOfflineCache = fetchYarnDeps {
@@ -44,7 +44,7 @@ buildGoModule rec {
     "-X ${prefix}.BuildDate=1980-01-01T00:00:00Z"
   ];
 
-  nativeBuildInputs = [ prefetch-yarn-deps nodejs yarn ];
+  nativeBuildInputs = [ fixup-yarn-lock nodejs yarn ];
 
   tags = [
     "builtinassets"

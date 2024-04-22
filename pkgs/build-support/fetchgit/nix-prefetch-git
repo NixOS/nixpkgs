@@ -120,7 +120,7 @@ init_remote(){
         git config remote.origin.partialclonefilter "blob:none"
         echo "$sparseCheckout" | git sparse-checkout set --stdin ${nonConeMode:+--no-cone}
     fi
-    ( [ -n "$http_proxy" ] && clean_git config http.proxy "$http_proxy" ) || true
+    ( [ -n "$http_proxy" ] && clean_git config --global http.proxy "$http_proxy" ) || true
 }
 
 # Return the reference of an hash if it exists on the remote repository.

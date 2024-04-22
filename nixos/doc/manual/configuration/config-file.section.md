@@ -5,7 +5,7 @@ The NixOS configuration file generally looks like this:
 ```nix
 { config, pkgs, ... }:
 
-{ option definitions
+{ /* option definitions */
 }
 ```
 
@@ -80,7 +80,9 @@ Strings
 :   Strings are enclosed in double quotes, e.g.
 
     ```nix
-    networking.hostName = "dexter";
+    {
+      networking.hostName = "dexter";
+    }
     ```
 
     Special characters can be escaped by prefixing them with a backslash
@@ -89,11 +91,13 @@ Strings
     Multi-line strings can be enclosed in *double single quotes*, e.g.
 
     ```nix
-    networking.extraHosts =
-      ''
-        127.0.0.2 other-localhost
-        10.0.0.1 server
-      '';
+    {
+      networking.extraHosts =
+        ''
+          127.0.0.2 other-localhost
+          10.0.0.1 server
+        '';
+    }
     ```
 
     The main difference is that it strips from each line a number of
@@ -108,8 +112,10 @@ Booleans
 :   These can be `true` or `false`, e.g.
 
     ```nix
-    networking.firewall.enable = true;
-    networking.firewall.allowPing = false;
+    {
+      networking.firewall.enable = true;
+      networking.firewall.allowPing = false;
+    }
     ```
 
 Integers
@@ -117,7 +123,9 @@ Integers
 :   For example,
 
     ```nix
-    boot.kernel.sysctl."net.ipv4.tcp_keepalive_time" = 60;
+    {
+      boot.kernel.sysctl."net.ipv4.tcp_keepalive_time" = 60;
+    }
     ```
 
     (Note that here the attribute name `net.ipv4.tcp_keepalive_time` is
@@ -132,11 +140,13 @@ Sets
     braces, as in the option definition
 
     ```nix
-    fileSystems."/boot" =
-      { device = "/dev/sda1";
-        fsType = "ext4";
-        options = [ "rw" "data=ordered" "relatime" ];
-      };
+    {
+      fileSystems."/boot" =
+        { device = "/dev/sda1";
+          fsType = "ext4";
+          options = [ "rw" "data=ordered" "relatime" ];
+        };
+    }
     ```
 
 Lists
@@ -145,13 +155,17 @@ Lists
     separated by whitespace, like this:
 
     ```nix
-    boot.kernelModules = [ "fuse" "kvm-intel" "coretemp" ];
+    {
+      boot.kernelModules = [ "fuse" "kvm-intel" "coretemp" ];
+    }
     ```
 
     List elements can be any other type, e.g. sets:
 
     ```nix
-    swapDevices = [ { device = "/dev/disk/by-label/swap"; } ];
+    {
+      swapDevices = [ { device = "/dev/disk/by-label/swap"; } ];
+    }
     ```
 
 Packages
@@ -161,12 +175,14 @@ Packages
     argument `pkgs`. Typical uses:
 
     ```nix
-    environment.systemPackages =
-      [ pkgs.thunderbird
-        pkgs.emacs
-      ];
+    {
+      environment.systemPackages =
+        [ pkgs.thunderbird
+          pkgs.emacs
+        ];
 
-    services.postgresql.package = pkgs.postgresql_14;
+      services.postgresql.package = pkgs.postgresql_14;
+    }
     ```
 
     The latter option definition changes the default PostgreSQL package

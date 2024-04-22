@@ -9,6 +9,8 @@
 , glxinfo
 , polkit
 , procps
+, pugixml
+, spdlog
 , util-linux
 , vulkan-tools
 , qtbase
@@ -23,13 +25,13 @@
 
 stdenv.mkDerivation rec{
   pname = "corectrl";
-  version = "1.3.10";
+  version = "1.4.0";
 
   src = fetchFromGitLab {
     owner = "corectrl";
     repo = "corectrl";
     rev = "v${version}";
-    sha256 = "sha256-fN4dX0Ya2DvPEkuwtKIw1zT+JEbC2zyJKtcGwLVdAUs=";
+    sha256 = "sha256-zTH7iSPN7VIhXvWFndOulvGnfUZ+uGWnW53WcnSW+e4=";
   };
   patches = [
     ./polkit-dir.patch
@@ -47,6 +49,8 @@ stdenv.mkDerivation rec{
     glxinfo
     polkit
     procps
+    pugixml
+    spdlog
     util-linux
     vulkan-tools
     qtbase

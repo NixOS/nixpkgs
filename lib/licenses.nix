@@ -93,12 +93,12 @@ in mkLicense lset) ({
     url = "https://aomedia.org/license/patent-license/";
   };
 
-  apsl10 = {
+  apple-psl10 = {
     spdxId = "APSL-1.0";
     fullName = "Apple Public Source License 1.0";
   };
 
-  apsl20 = {
+  apple-psl20 = {
     spdxId = "APSL-2.0";
     fullName = "Apple Public Source License 2.0";
   };
@@ -392,6 +392,12 @@ in mkLicense lset) ({
     fullName = "Common Public Attribution License 1.0";
   };
 
+  commons-clause = {
+    fullName = "Commons Clause License";
+    url = "https://commonsclause.com/";
+    free = false;
+  };
+
   cpl10 = {
     spdxId = "CPL-1.0";
     fullName = "Common Public License 1.0";
@@ -599,6 +605,11 @@ in mkLicense lset) ({
     url = "https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception";
   };
 
+  giftware = {
+    spdxId = "Giftware";
+    fullName = "Giftware License";
+  };
+
   hpnd = {
     spdxId = "HPND";
     fullName = "Historic Permission Notice and Disclaimer";
@@ -607,6 +618,11 @@ in mkLicense lset) ({
   hpndSellVariant = {
     fullName = "Historical Permission Notice and Disclaimer - sell variant";
     spdxId = "HPND-sell-variant";
+  };
+
+  hpndUc = {
+    spdxId = "HPND-UC";
+    fullName = "Historical Permission Notice and Disclaimer - University of California variant";
   };
 
   # Intel's license, seems free
@@ -892,6 +908,11 @@ in mkLicense lset) ({
     free = false;
     redistributable = true; # Only if used in Netdata products.
     url = "https://raw.githubusercontent.com/netdata/netdata/master/web/gui/v2/LICENSE.md";
+  };
+
+  nistSoftware = {
+    spdxId = "NIST-Software";
+    fullName = "NIST Software License";
   };
 
   nlpl = {
@@ -1251,9 +1272,16 @@ in mkLicense lset) ({
   };
 } // {
   # TODO: remove legacy aliases
-  agpl3 = {
-    spdxId = "AGPL-3.0";
-    fullName = "GNU Affero General Public License v3.0";
+  apsl10 = {
+    # deprecated for consistency with `apple-psl20`; use `apple-psl10`
+    spdxId = "APSL-1.0";
+    fullName = "Apple Public Source License 1.0";
+    deprecated = true;
+  };
+  apsl20 = {
+    # deprecated due to confusion with Apache-2.0; use `apple-psl20`
+    spdxId = "APSL-2.0";
+    fullName = "Apple Public Source License 2.0";
     deprecated = true;
   };
   gpl2 = {

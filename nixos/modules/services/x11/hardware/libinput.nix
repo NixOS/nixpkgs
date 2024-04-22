@@ -11,8 +11,7 @@ let cfg = config.services.xserver.libinput;
         type = types.nullOr types.str;
         default = null;
         example = "/dev/input/event0";
-        description =
-          lib.mdDoc ''
+        description = ''
             Path for ${deviceType} device.  Set to `null` to apply to any
             auto-detected ${deviceType}.
           '';
@@ -22,8 +21,7 @@ let cfg = config.services.xserver.libinput;
         type = types.enum [ "flat" "adaptive" ];
         default = "adaptive";
         example = "flat";
-        description =
-          lib.mdDoc ''
+        description = ''
             Sets the pointer acceleration profile to the given profile.
             Permitted values are `adaptive`, `flat`.
             Not all devices support this option or all profiles.
@@ -39,15 +37,14 @@ let cfg = config.services.xserver.libinput;
         type = types.nullOr types.str;
         default = null;
         example = "-0.5";
-        description = lib.mdDoc "Cursor acceleration (how fast speed increases from minSpeed to maxSpeed).";
+        description = "Cursor acceleration (how fast speed increases from minSpeed to maxSpeed).";
       };
 
       buttonMapping = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "1 6 3 4 5 0 7";
-        description =
-          lib.mdDoc ''
+        description = ''
             Sets the logical button mapping for this device, see XSetPointerMapping(3). The string  must
             be  a  space-separated  list  of  button mappings in the order of the logical buttons on the
             device, starting with button 1.  The default mapping is "1 2 3 ... 32". A mapping of 0 deac‐
@@ -61,8 +58,7 @@ let cfg = config.services.xserver.libinput;
         type = types.nullOr types.str;
         default = null;
         example = "0.5 0 0 0 0.8 0.1 0 0 1";
-        description =
-          lib.mdDoc ''
+        description = ''
             A string of 9 space-separated floating point numbers. Sets the calibration matrix to the
             3x3 matrix where the first row is (abc), the second row is (def) and the third row is (ghi).
           '';
@@ -72,8 +68,7 @@ let cfg = config.services.xserver.libinput;
         type = types.nullOr (types.enum [ "none" "buttonareas" "clickfinger" ]);
         default = null;
         example = "buttonareas";
-        description =
-          lib.mdDoc ''
+        description = ''
             Enables a click method. Permitted values are `none`,
             `buttonareas`, `clickfinger`.
             Not all devices support all methods, if an option is unsupported,
@@ -84,14 +79,13 @@ let cfg = config.services.xserver.libinput;
       leftHanded = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Enables left-handed button orientation, i.e. swapping left and right buttons.";
+        description = "Enables left-handed button orientation, i.e. swapping left and right buttons.";
       };
 
       middleEmulation = mkOption {
         type = types.bool;
         default = true;
-        description =
-          lib.mdDoc ''
+        description = ''
             Enables middle button emulation. When enabled, pressing the left and right buttons
             simultaneously produces a middle mouse button click.
           '';
@@ -100,15 +94,14 @@ let cfg = config.services.xserver.libinput;
       naturalScrolling = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Enables or disables natural scrolling behavior.";
+        description = "Enables or disables natural scrolling behavior.";
       };
 
       scrollButton = mkOption {
         type = types.nullOr types.int;
         default = null;
         example = 1;
-        description =
-          lib.mdDoc ''
+        description = ''
             Designates a button as scroll button. If the ScrollMethod is button and the button is logically
             held down, x/y axis movement is converted into scroll events.
           '';
@@ -118,8 +111,7 @@ let cfg = config.services.xserver.libinput;
         type = types.enum [ "twofinger" "edge" "button" "none" ];
         default = "twofinger";
         example = "edge";
-        description =
-          lib.mdDoc ''
+        description = ''
             Specify the scrolling method: `twofinger`, `edge`,
             `button`, or `none`
           '';
@@ -128,8 +120,7 @@ let cfg = config.services.xserver.libinput;
       horizontalScrolling = mkOption {
         type = types.bool;
         default = true;
-        description =
-          lib.mdDoc ''
+        description = ''
             Enables or disables horizontal scrolling. When disabled, this driver will discard any
             horizontal scroll events from libinput. This does not disable horizontal scroll events
             from libinput; it merely discards the horizontal axis from any scroll events.
@@ -140,8 +131,7 @@ let cfg = config.services.xserver.libinput;
         type = types.enum [ "disabled" "enabled" "disabled-on-external-mouse" ];
         default = "enabled";
         example = "disabled";
-        description =
-          lib.mdDoc ''
+        description = ''
             Sets the send events mode to `disabled`, `enabled`,
             or `disabled-on-external-mouse`
           '';
@@ -150,8 +140,7 @@ let cfg = config.services.xserver.libinput;
       tapping = mkOption {
         type = types.bool;
         default = true;
-        description =
-          lib.mdDoc ''
+        description = ''
             Enables or disables tap-to-click behavior.
           '';
       };
@@ -159,7 +148,7 @@ let cfg = config.services.xserver.libinput;
       tappingButtonMap = mkOption {
         type = types.nullOr (types.enum [ "lrm" "lmr" ]);
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Set the button mapping for 1/2/3-finger taps to left/right/middle or left/middle/right, respectively.
         '';
       };
@@ -167,8 +156,7 @@ let cfg = config.services.xserver.libinput;
       tappingDragLock = mkOption {
         type = types.bool;
         default = true;
-        description =
-          lib.mdDoc ''
+        description = ''
             Enables or disables drag lock during tapping behavior. When enabled, a finger up during tap-
             and-drag will not immediately release the button. If the finger is set down again within the
             timeout, the dragging process continues.
@@ -179,7 +167,7 @@ let cfg = config.services.xserver.libinput;
         type = types.nullOr types.str;
         default = null;
         example = "0.5 0 0 0 0.8 0.1 0 0 1";
-        description = lib.mdDoc ''
+        description = ''
           A string of 9 space-separated floating point numbers. Sets the transformation matrix to
           the 3x3 matrix where the first row is (abc), the second row is (def) and the third row is (ghi).
         '';
@@ -188,8 +176,7 @@ let cfg = config.services.xserver.libinput;
       disableWhileTyping = mkOption {
         type = types.bool;
         default = false;
-        description =
-          lib.mdDoc ''
+        description = ''
             Disable input method while typing.
           '';
       };
@@ -201,7 +188,7 @@ let cfg = config.services.xserver.libinput;
         ''
           Option "DragLockButtons" "L1 B1 L2 B2"
         '';
-        description = lib.mdDoc ''
+        description = ''
           Additional options for libinput ${deviceType} driver. See
           {manpage}`libinput(4)`
           for available options.";
@@ -260,7 +247,7 @@ in {
   options = {
 
     services.xserver.libinput = {
-      enable = mkEnableOption (lib.mdDoc "libinput") // {
+      enable = mkEnableOption "libinput" // {
         default = config.services.xserver.enable;
         defaultText = lib.literalExpression "config.services.xserver.enable";
       };

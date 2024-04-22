@@ -2,12 +2,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "FanFicFare";
-  version = "4.32.3";
+  version = "4.33.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Qfe24Ees3LLnSuU4kjn+dwtKjLBSYgF22U1YAtpw1po=";
+    hash = "sha256-1s3YeI4deej+lkDXtFzfBOtATY+jx+KB7JAnLUDZK8w=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -30,6 +30,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool for making eBooks from fanfiction web sites";
+    mainProgram = "fanficfare";
     homepage = "https://github.com/JimmXinu/FanFicFare";
     license = licenses.gpl3;
     platforms = platforms.unix;

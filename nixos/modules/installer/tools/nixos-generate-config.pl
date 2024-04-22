@@ -257,7 +257,7 @@ foreach my $path (glob "/sys/class/{block,mmc_host}/*") {
 
 # Add bcache module, if needed.
 my @bcacheDevices = glob("/dev/bcache*");
-@bcacheDevices = grep(!qr#dev/bcachefs.*#, @bcacheDevices);
+@bcacheDevices = grep(!m#dev/bcachefs.*#, @bcacheDevices);
 if (scalar @bcacheDevices > 0) {
     push @initrdAvailableKernelModules, "bcache";
 }
@@ -450,6 +450,17 @@ EOF
                 die "Btrfs did not return a path for the subvolume at $mountPoint\n";
             }
             push @extraOptions, "subvol=$paths[0]";
+        }
+    }
+
+    # Preserve umask (fmask, dmask) settings for vfat filesystems.
+    # (The default is to mount these world-readable, but that's a security risk
+    # for the EFI System Partition.)
+    if ($fsType eq "vfat") {
+        for (@superOptions) {
+            if ($_ =~ /fmask|dmask/) {
+                push @extraOptions, $_;
+            }
         }
     }
 

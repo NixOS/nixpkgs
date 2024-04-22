@@ -36,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Library for polynomial system solving through algebraic methods";
+    mainProgram = "msolve";
     homepage = "https://msolve.lip6.fr";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ wegank ];

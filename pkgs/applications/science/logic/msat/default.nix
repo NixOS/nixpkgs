@@ -9,5 +9,6 @@ with ocamlPackages; buildDunePackage {
 
   meta = msat.meta // {
     description = "SAT solver binary based on the msat library";
+    mainProgram = "msat";
   };
 }

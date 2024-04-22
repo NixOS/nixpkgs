@@ -32,15 +32,15 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
   format = "other";
 
   patches = [
-    # Allow setting MEDIA_ROOT through environment variable
-    # https://github.com/TandoorRecipes/recipes/pull/2931
-    (fetchpatch {
-      url = "https://github.com/TandoorRecipes/recipes/commit/abf981792057481f1d5b7473eb1090b3901ef8fa.patch";
-      hash = "sha256-3AFf0K/BpVwPQ2NGLUsefj6HvW7ej3szd3WaxFoqMiQ=";
-    })
+    ./pytest-xdist.patch # adapt pytest.ini the use $NIX_BUILD_CORES
   ];
 
+  postPatch = ''
+    substituteInPlace pytest.ini --subst-var NIX_BUILD_CORES
+  '';
+
   propagatedBuildInputs = with python.pkgs; [
+    aiohttp
     beautifulsoup4
     bleach
     bleach-allowlist
@@ -50,7 +50,6 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     django-allauth
     django-annoying
     django-auth-ldap
-    django-autocomplete-light
     django-cleanup
     django-cors-headers
     django-crispy-forms
@@ -132,15 +131,21 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
   '';
 
   nativeCheckInputs = with python.pkgs; [
+    mock
     pytestCheckHook
+    pytest-asyncio
+    pytest-cov
     pytest-django
     pytest-factoryboy
+    pytest-html
+    pytest-xdist
   ];
 
   # flaky
   disabledTests = [
     "test_search_count"
     "test_url_import_regex_replace"
+    "test_delete"
   ];
 
   passthru = {

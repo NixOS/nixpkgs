@@ -27,7 +27,7 @@ with lib;
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable GNOME Keyring daemon, a service designed to
           take care of the user's security credentials,
           such as user names and passwords.

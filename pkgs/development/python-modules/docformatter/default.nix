@@ -56,6 +56,7 @@ buildPythonPackage rec {
   meta = {
     changelog = "https://github.com/PyCQA/docformatter/blob/${src.rev}/CHANGELOG.md";
     description = "Formats docstrings to follow PEP 257";
+    mainProgram = "docformatter";
     homepage = "https://github.com/myint/docformatter";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];

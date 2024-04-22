@@ -1,6 +1,8 @@
 { lib, fetchFromGitHub, nix-update-script, ocamlPackages }:
 
-with ocamlPackages;
+let
+  inherit (ocamlPackages) buildDunePackage camomile;
+in
 
 buildDunePackage rec {
   pname = "headache";
@@ -22,6 +24,7 @@ buildDunePackage rec {
   meta = with lib; {
     homepage = "https://github.com/frama-c/${pname}";
     description = "Lightweight tool for managing headers in source code files";
+    mainProgram = "headache";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ niols ];
   };

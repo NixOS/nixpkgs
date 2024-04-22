@@ -3,18 +3,23 @@
 , fetchFromGitHub
 , ocl-icd
 , openssl
+, re2
+, libevent
+, git
+, zlib
+, expat
 , scons
 , stdenv
 , extraPkgs ? [ ]
 }:
 let
-  version = "8.3.1";
+  version = "8.3.7";
 
   cbangSrc = fetchFromGitHub {
     owner = "cauldrondevelopmentllc";
     repo = "cbang";
     rev = "bastet-v${version}";
-    hash = "sha256-cuyfJG5aDJ6e2SllxwKTViG0j8FWHvjcTaaBBtkgEdU=";
+    sha256 = "sha256-acAImItdkgo6PBFL6Vu/caIdcnvp/3VEW2lgVDgKy9g=";
   };
 
   fah-client = stdenv.mkDerivation {
@@ -25,10 +30,10 @@ let
       owner = "FoldingAtHome";
       repo = "fah-client-bastet";
       rev = "v${version}";
-      hash = "sha256-Ztc2im4Xmk8f6GotGRgA5zDkcyQFnodUvroJVl+ApT4=";
+      sha256 = "sha256-d+LY/R4TAko+2e2W76KEBQ8fXj0hzzmBOm+c4tksXMA=";
     };
 
-    nativeBuildInputs = [ scons ];
+    nativeBuildInputs = [ scons re2 libevent git ];
 
     buildInputs = [ openssl ];
 
@@ -63,7 +68,7 @@ in
 buildFHSEnv {
   name = fah-client.name;
 
-  targetPkgs = _: [ fah-client ocl-icd ] ++ extraPkgs;
+  targetPkgs = _: [ fah-client ocl-icd zlib expat ] ++ extraPkgs;
 
   runScript = "/bin/fah-client";
 

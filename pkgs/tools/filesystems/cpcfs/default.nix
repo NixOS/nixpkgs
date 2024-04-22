@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Manipulating CPC dsk images and files";
+    mainProgram = "cpcfs";
     homepage = "https://github.com/derikz/cpcfs/" ;
     license = licenses.bsd2;
     maintainers = [ ];

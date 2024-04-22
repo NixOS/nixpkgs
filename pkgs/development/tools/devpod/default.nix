@@ -34,6 +34,7 @@ let
 
   meta = with lib; {
     description = "Codespaces but open-source, client-only and unopinionated: Works with any IDE and lets you use any cloud, kubernetes or just localhost docker";
+    mainProgram = "devpod";
     homepage = "https://devpod.sh";
     license = licenses.mpl20;
     maintainers = with maintainers; [ maxbrunet ];

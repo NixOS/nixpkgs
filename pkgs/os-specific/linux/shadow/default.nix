@@ -17,13 +17,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "shadow";
-  version = "4.14.5";
+  version = "4.14.6";
 
   src = fetchFromGitHub {
     owner = "shadow-maint";
     repo = pname;
     rev = version;
-    hash = "sha256-ogkPp6dxWHdvJvWcb5iauH81CVTH7BbonFXG1gGysUE=";
+    hash = "sha256-+klU1a0cSgHPwZkDnbCSjKnBUKIm2Z3OGUvR/zrqQxo=";
   };
 
   outputs = [ "out" "su" "dev" "man" ];

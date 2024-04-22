@@ -2,7 +2,7 @@
 , buildPythonPackage
 , pythonAtLeast
 , fetchPypi
-, cython_3
+, cython
 , numpy
 , setuptools
 , wheel
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
     numpy
     setuptools
     wheel

@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, pythonRelaxDepsHook
 , pytestCheckHook
 , aiohttp
 , aiohttp-socks
@@ -37,6 +38,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     hatchling
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "pydantic"
   ];
 
   propagatedBuildInputs = [

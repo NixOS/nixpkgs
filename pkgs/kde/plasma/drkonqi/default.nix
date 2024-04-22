@@ -5,7 +5,6 @@
   gdb,
   python3,
   substituteAll,
-  coreutils,
 }: let
   gdb' = gdb.override {
     hostCpuOnly = true;
@@ -25,11 +24,6 @@ in
         gdb = "${gdb'}/bin/gdb";
       })
     ];
-
-    postPatch = ''
-      substituteInPlace src/coredump/processor/drkonqi-coredump-pickup.service.cmake \
-        --replace /usr/bin/sleep ${coreutils}/bin/sleep
-    '';
 
     extraNativeBuildInputs = [pkg-config];
     extraBuildInputs = [systemd];

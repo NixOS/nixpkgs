@@ -19,7 +19,7 @@ in
 {
 
   options = {
-    security.pki.installCACerts = mkEnableOption "Add CA certificates to system" // {
+    security.pki.installCACerts = mkEnableOption "installing CA certificates to the system" // {
       default = true;
       internal = true;
     };
@@ -39,7 +39,7 @@ in
       type = types.listOf types.path;
       default = [];
       example = literalExpression ''[ "''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt" ]'';
-      description = lib.mdDoc ''
+      description = ''
         A list of files containing trusted root certificates in PEM
         format. These are concatenated to form
         {file}`/etc/ssl/certs/ca-certificates.crt`, which is
@@ -63,7 +63,7 @@ in
           '''
         ]
       '';
-      description = lib.mdDoc ''
+      description = ''
         A list of trusted root certificates in PEM format.
       '';
     };
@@ -76,7 +76,7 @@ in
         "CA WoSign ECC Root"
         "Certification Authority of WoSign G2"
       ];
-      description = lib.mdDoc ''
+      description = ''
         A list of blacklisted CA certificate names that won't be imported from
         the Mozilla Trust Store into
         {file}`/etc/ssl/certs/ca-certificates.crt`. Use the

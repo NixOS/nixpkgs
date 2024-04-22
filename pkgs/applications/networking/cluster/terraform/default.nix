@@ -31,7 +31,7 @@ let
       postConfigure = ''
         # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
         substituteInPlace vendor/github.com/bgentry/speakeasy/speakeasy_unix.go \
-          --replace "/bin/stty" "${coreutils}/bin/stty"
+          --replace-fail "/bin/stty" "${coreutils}/bin/stty"
       '';
 
       nativeBuildInputs = [ installShellFiles ];
@@ -167,9 +167,9 @@ rec {
   mkTerraform = attrs: pluggable (generic attrs);
 
   terraform_1 = mkTerraform {
-    version = "1.7.4";
-    hash = "sha256-LF8lFDZtDowHqa0z/TCVKznxn15Msha/af8p/w0bI1k=";
-    vendorHash = "sha256-DI4YTjdFFvfby8ExEY3KoK4J9YKK5LPpMbelzFMDVVs=";
+    version = "1.8.1";
+    hash = "sha256-q/r1KK0svdK/5Za4bqU6bGgTcWmG+YZFJUFRKqPAWSw=";
+    vendorHash = "sha256-xpgGceAA+kvwUp4T0m9rnbPoZ3uJHU2KIRsrcGr8dRo=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = {
       inherit plugins;

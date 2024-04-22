@@ -69,6 +69,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Google Play Downloader via Command line";
+    mainProgram = "gplaycli";
     homepage = "https://github.com/matlink/gplaycli";
     changelog = "https://github.com/matlink/gplaycli/releases/tag/${version}";
     license = licenses.agpl3Plus;

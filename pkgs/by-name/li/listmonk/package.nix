@@ -48,9 +48,10 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "High performance, self-hosted, newsletter and mailing list manager with a modern dashboard.";
+    mainProgram = "listmonk";
     homepage = "https://github.com/knadh/listmonk";
     changelog = "https://github.com/knadh/listmonk/releases/tag/v${version}";
     maintainers = with maintainers; [ raitobezarius ];
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
   };
 }

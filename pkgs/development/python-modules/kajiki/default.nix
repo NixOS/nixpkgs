@@ -36,6 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module provides fast well-formed XML templates";
+    mainProgram = "kajiki";
     homepage = "https://github.com/nandoflorestan/kajiki";
     changelog = "https://github.com/jackrosenthal/kajiki/releases/tag/v${version}";
     license = licenses.mit;

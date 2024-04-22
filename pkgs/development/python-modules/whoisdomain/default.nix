@@ -32,6 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module to perform whois lookups";
+    mainProgram = "whoisdomain";
     homepage = "https://github.com/mboot-github/WhoisDomain";
     changelog = "https://github.com/mboot-github/WhoisDomain/releases/tag/${version}";
     license = licenses.mit;

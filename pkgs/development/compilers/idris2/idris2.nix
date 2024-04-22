@@ -89,6 +89,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "A purely functional programming language with first class types";
+    mainProgram = "idris2";
     homepage = "https://github.com/idris-lang/Idris2";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fabianhjr wchresta mattpolzin ];

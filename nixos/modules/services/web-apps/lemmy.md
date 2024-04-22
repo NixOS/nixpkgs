@@ -7,13 +7,15 @@ Lemmy is a federated alternative to reddit in rust.
 the minimum to start lemmy is
 
 ```nix
-services.lemmy = {
-  enable = true;
-  settings = {
-    hostname = "lemmy.union.rocks";
-    database.createLocally = true;
+{
+  services.lemmy = {
+    enable = true;
+    settings = {
+      hostname = "lemmy.union.rocks";
+      database.createLocally = true;
+    };
+    caddy.enable = true;
   };
-  caddy.enable = true;
 }
 ```
 

@@ -21,6 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Googletrans is python library to interact with Google Translate API";
+    mainProgram = "translate";
     homepage = "https://py-googletrans.readthedocs.io";
     license = licenses.mit;
     maintainers = with maintainers; [ unode ];

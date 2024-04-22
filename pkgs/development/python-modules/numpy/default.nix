@@ -8,7 +8,7 @@
 , writeTextFile
 
 # build-system
-, cython_3
+, cython
 , gfortran
 , meson-python
 , mesonEmulatorHook
@@ -91,7 +91,7 @@ in buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    cython_3
+    cython
     gfortran
     meson-python
     pkg-config
@@ -183,6 +183,7 @@ in buildPythonPackage rec {
   meta = {
     changelog = "https://github.com/numpy/numpy/releases/tag/v${version}";
     description = "Scientific tools for Python";
+    mainProgram = "f2py";
     homepage = "https://numpy.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];

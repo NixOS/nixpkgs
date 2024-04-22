@@ -68,6 +68,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Gnome Diagram drawing software";
+    mainProgram = "dia";
     homepage = "http://live.gnome.org/Dia";
     maintainers = with maintainers; [ raskin ];
     license = licenses.gpl2;

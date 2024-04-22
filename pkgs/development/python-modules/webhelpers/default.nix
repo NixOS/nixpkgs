@@ -8,11 +8,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "WebHelpers";
+  pname = "webhelpers";
   version = "1.3";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "WebHelpers";
+    inherit version;
     sha256 = "ea86f284e929366b77424ba9a89341f43ae8dee3cbeb8702f73bcf86058aa583";
   };
 

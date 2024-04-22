@@ -31,6 +31,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool to migrate workloads to IMDSv2";
+    mainProgram = "imdshift";
     homepage = "https://github.com/ayushpriya10/IMDShift";
     changelog = "https://github.com/ayushpriya10/IMDShift/releases/tag/v${version}";
     license = licenses.gpl3Only;

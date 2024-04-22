@@ -37,6 +37,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Domain name permutation engine for detecting homograph phishing attacks";
+    mainProgram = "dnstwist";
     homepage = "https://github.com/elceef/dnstwist";
     changelog = "https://github.com/elceef/dnstwist/releases/tag/${version}";
     license = with licenses; [ gpl3Only ];

@@ -27,16 +27,16 @@
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.35.1";
+  version = "0.37.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "encode";
-    repo = pname;
+    repo = "starlette";
     rev = "refs/tags/${version}";
-    hash = "sha256-ynT1KowVJ1QdKLSOXYWVe5Q/PrYEWQDUbj395ebfk6Y=";
+    hash = "sha256-GiCN1sfhLu9i19d2OcLZrlY8E64DFrFh+ITRSvLaxdE=";
   };
 
   nativeBuildInputs = [
@@ -77,7 +77,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    changelog = "https://github.com/encode/starlette/releases/tag/${version}";
+    changelog = "https://www.starlette.io/release-notes/#${lib.replaceStrings [ "." ] [ "" ] version}";
     downloadPage = "https://github.com/encode/starlette";
     homepage = "https://www.starlette.io/";
     description = "The little ASGI framework that shines";

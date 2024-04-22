@@ -56,9 +56,15 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "ZBAR" withZbar)
   ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = ''
+    # Binary is looking for .qm files in share/merkaartor
+    mv $out/share/merkaartor/{translations/*.qm,}
+    rm -r $out/share/merkaartor/translations
+  '' + lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/{Applications,bin}
     mv $out/merkaartor.app $out/Applications
+    # Prevent wrapping, otherwise plugins will not be loaded
+    chmod -x $out/Applications/merkaartor.app/Contents/plugins/background/*.dylib
     makeWrapper $out/{Applications/merkaartor.app/Contents/MacOS,bin}/merkaartor
   '';
 

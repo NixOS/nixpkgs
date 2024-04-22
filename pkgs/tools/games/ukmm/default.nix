@@ -71,6 +71,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A new mod manager for The Legend of Zelda: Breath of the Wild";
+    mainProgram = "ukmm";
     homepage = "https://github.com/NiceneNerd/ukmm";
     changelog = "https://github.com/NiceneNerd/ukmm/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl3Plus;

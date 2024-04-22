@@ -114,6 +114,7 @@ let
 
         meta = with lib; {
           description = "A real-time web analytics application";
+          mainProgram = "matomo-console";
           license = licenses.gpl3Plus;
           homepage = "https://matomo.org/";
           platforms = platforms.all;

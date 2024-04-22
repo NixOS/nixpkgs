@@ -1,15 +1,15 @@
 { lib, stdenv, fetchgit, curl, gnunet, jansson, libgcrypt, libmicrohttpd
 , qrencode, libsodium, libtool, libunistring, pkg-config, postgresql
-, autoreconfHook, python39, recutils, wget, jq, gettext, texinfo
+, autoreconfHook, python3, recutils, wget, jq, gettext, texinfo
 }:
 
 let
-  version = "0.9.3";
+  version = "0.10.1";
 
   taler-wallet-core = fetchgit {
     url = "https://git.taler.net/wallet-core.git";
     rev = "v${version}";
-    sha256 = "sha256-oL8vi8gxPjKxRpioMs0GLvkzlTkrm1kyvhsXOgrtvVQ=";
+    hash = "sha256-sgiJd1snN9JDqS7IUeORKL60Gcm7XwL/JCX3sNRDTdY=";
   };
 
   taler-exchange = stdenv.mkDerivation {
@@ -20,7 +20,7 @@ let
       url = "https://git.taler.net/exchange.git";
       rev = "v${version}";
       fetchSubmodules = true;
-      sha256 = "sha256-NgDZF6LNeJI4ZuXEwoRdFG6g0S9xNTVhszzlfAnzVOs=";
+      hash = "sha256-SKnMep8bMQaJt4r3u0SrzwYSuFbzv4RnflbutSqwtPg=";
 
       # When fetching submodules without the .git folder we get the following error:
       # "Server does not allow request for unadvertised object"
@@ -45,14 +45,20 @@ let
       gettext
       texinfo # Fix 'makeinfo' is missing on your system.
       libunistring
-      python39.pkgs.jinja2
+      python3.pkgs.jinja2
       # jq is necessary for some tests and is checked by configure script
       jq
     ];
     propagatedBuildInputs = [ gnunet ];
 
-    preConfigure = ''
+    # From ./bootstrap
+    preAutoreconf = ''
       ./contrib/gana-generate.sh
+      pushd contrib
+      find wallet-core/aml-backoffice/ -type f -printf '  %p \\\n' | sort > Makefile.am.ext
+      truncate -s -2 Makefile.am.ext
+      cat Makefile.am.in Makefile.am.ext >> Makefile.am
+      popd
     '';
 
     enableParallelBuilding = true;
@@ -87,7 +93,7 @@ let
       url = "https://git.taler.net/merchant.git";
       rev = "v${version}";
       fetchSubmodules = true;
-      sha256 = "sha256-HewCqyO/7nnIQY9Tgva0k1nTk2LuwLyGK/UUxvx9BG0=";
+      hash = "sha256-8VpoyloLpd/HckSIRU6IclWUXQyEHqlcNdoJI9U3t0Y=";
     };
     postUnpack = ''
       ln -s ${taler-wallet-core}/spa.html $sourceRoot/contrib/
@@ -104,11 +110,11 @@ let
 
     # From ./bootstrap
     preAutoreconf = ''
-      cd contrib
+      pushd contrib
       find wallet-core/backoffice/ -type f -printf '  %p \\\n' | sort > Makefile.am.ext
       truncate -s -2 Makefile.am.ext
       cat Makefile.am.in Makefile.am.ext >> Makefile.am
-      cd ..
+      popd
     '';
     configureFlags = [
       "--with-gnunet=${gnunet}"

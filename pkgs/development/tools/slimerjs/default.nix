@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Gecko-based programmatically-driven browser";
+    mainProgram = "slimerjs";
     license = licenses.mpl20;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

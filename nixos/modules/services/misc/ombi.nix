@@ -7,40 +7,42 @@ let cfg = config.services.ombi;
 in {
   options = {
     services.ombi = {
-      enable = mkEnableOption (lib.mdDoc ''
-        Ombi.
+      enable = mkEnableOption ''
+        Ombi, a web application that automatically gives your shared Plex or
+        Emby users the ability to request content by themselves!
+
         Optionally see <https://docs.ombi.app/info/reverse-proxy>
         on how to set up a reverse proxy
-      '');
+      '';
 
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/ombi";
-        description = lib.mdDoc "The directory where Ombi stores its data files.";
+        description = "The directory where Ombi stores its data files.";
       };
 
       port = mkOption {
         type = types.port;
         default = 5000;
-        description = lib.mdDoc "The port for the Ombi web interface.";
+        description = "The port for the Ombi web interface.";
       };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Open ports in the firewall for the Ombi web interface.";
+        description = "Open ports in the firewall for the Ombi web interface.";
       };
 
       user = mkOption {
         type = types.str;
         default = "ombi";
-        description = lib.mdDoc "User account under which Ombi runs.";
+        description = "User account under which Ombi runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "ombi";
-        description = lib.mdDoc "Group under which Ombi runs.";
+        description = "Group under which Ombi runs.";
       };
     };
   };

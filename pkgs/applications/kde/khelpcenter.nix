@@ -21,6 +21,7 @@ mkDerivation {
   meta = with lib; {
     homepage = "https://apps.kde.org/help/";
     description = "Help center";
+    mainProgram = "khelpcenter";
     license = licenses.gpl2Plus;
   };
 }

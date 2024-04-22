@@ -9,7 +9,7 @@ in
 
 {
   options.services.xserver.windowManager.qtile = {
-    enable = mkEnableOption (lib.mdDoc "qtile");
+    enable = mkEnableOption "qtile";
 
     package = mkPackageOption pkgs "qtile-unwrapped" { };
 
@@ -17,7 +17,7 @@ in
       type = with types; nullOr path;
       default = null;
       example = literalExpression "./your_config.py";
-      description = lib.mdDoc ''
+      description = ''
           Path to the qtile configuration file.
           If null, $XDG_CONFIG_HOME/qtile/config.py will be used.
       '';
@@ -26,7 +26,7 @@ in
     backend = mkOption {
       type = types.enum [ "x11" "wayland" ];
       default = "x11";
-      description = lib.mdDoc ''
+      description = ''
           Backend to use in qtile: `x11` or `wayland`.
       '';
     };
@@ -37,7 +37,7 @@ in
         defaultText = literalExpression ''
           python3Packages: with python3Packages; [];
         '';
-        description = lib.mdDoc ''
+        description = ''
           Extra Python packages available to Qtile.
           An example would be to include `python3Packages.qtile-extras`
           for additional unofficial widgets.

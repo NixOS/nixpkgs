@@ -9,7 +9,7 @@
 , pkg-config
 , perl
 , python3
-, libiconv, zlib, libffi, pcre2, libelf, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45, libxslt
+, libiconv, zlib, libffi, pcre2, elfutils, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45, libxslt
 # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
 , util-linuxMinimal ? null
 , buildPackages
@@ -110,11 +110,12 @@ stdenv.mkDerivation (finalAttrs: {
   setupHook = ./setup-hook.sh;
 
   buildInputs = [
-    libelf
     finalAttrs.setupHook
     pcre2
   ] ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
     bash gnum4 # install glib-gettextize and m4 macros for other apps to use
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+    elfutils
   ] ++ lib.optionals stdenv.isLinux [
     libselinux
     util-linuxMinimal # for libmount
@@ -158,6 +159,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dgtk_doc=${lib.boolToString buildDocs}"
     "-Dnls=enabled"
     "-Ddevbindir=${placeholder "dev"}/bin"
+  ] ++ lib.optionals (!lib.meta.availableOn stdenv.hostPlatform elfutils) [
+    "-Dlibelf=disabled"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "-Dman=true"                # broken on Darwin
   ] ++ lib.optionals stdenv.isFreeBSD [

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "dbt-bigquery";
-  version = "1.7.6";
+  version = "1.7.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,19 +24,19 @@ buildPythonPackage rec {
     owner = "dbt-labs";
     repo = "dbt-bigquery";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bF2++Bs4pvqA3GW2xJkRNa1HkqnHBbMnKHHjo1TWboM=";
+    hash = "sha256-+UF49ReSxKQ8ouutOv1b9JcU/6CNk7Yw8f1/tlRvwnU=";
   };
-
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools
-  ];
 
   pythonRelaxDeps = [
     "agate"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    pythonRelaxDepsHook
+    setuptools
+  ];
+
+  dependencies = [
     agate
     dbt-core
     google-cloud-bigquery

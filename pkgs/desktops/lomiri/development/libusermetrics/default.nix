@@ -43,6 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Not submitted yet, waiting for decision on how CMake testing should be handled
     ./2001-Remove-custom-check-target.patch
+
+    # Due to https://gitlab.com/ubports/development/core/libusermetrics/-/issues/8, we require knowledge about AppArmor availability at launch time
+    # Custom patch to launch a module-defined service that can handle this
+    ./2002-Launch-module-created-systemd-service.patch
   ];
 
   postPatch = ''
@@ -91,6 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "GSETTINGS_LOCALINSTALL" true)
     (lib.cmakeBool "GSETTINGS_COMPILE" true)
+    (lib.cmakeBool "ENABLE_CLICK" true)
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (lib.concatStringsSep ";" [
       # Exclude tests

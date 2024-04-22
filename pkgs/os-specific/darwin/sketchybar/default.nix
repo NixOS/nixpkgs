@@ -11,6 +11,7 @@
 , MediaRemote
 , SkyLight
 , testers
+, nix-update-script
 }:
 
 let
@@ -22,13 +23,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sketchybar";
-  version = "2.20.1";
+  version = "2.21.0";
 
   src = fetchFromGitHub {
     owner = "FelixKratz";
     repo = "SketchyBar";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dyo4J3Qszq7SSXdAXmgm7xFhWE5Eqtr7yZpNGmtuphY=";
+    hash = "sha256-hTfQQjx6ai83zYFfccsz/KaoZUIj5Dfz4ENe59gS02E=";
   };
 
   buildInputs = [
@@ -56,9 +57,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    version = "sketchybar-v${finalAttrs.version}";
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      version = "sketchybar-v${finalAttrs.version}";
+    };
+
+    updateScript = nix-update-script { };
   };
 
   meta = {

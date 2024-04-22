@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "outlines";
-  version = "0.0.34";
+  version = "0.0.38";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "outlines-dev";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-iIlthrhmCm3n0PwUSa1n7CL04sDc1Cs+rVboPY4nH78=";
+    hash = "sha256-kOd2J6PV2idWaltkGUVNXfB+1dNU1f8vbnHQ5i1WxG8=";
   };
 
   nativeBuildInputs = [

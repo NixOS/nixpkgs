@@ -188,7 +188,7 @@ stdenv.mkDerivation rec {
       operations in the PostScript language, and (iii) a wide variety
       of output drivers for various file formats and printers.
     '';
-    license = lib.licenses.agpl3;
+    license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.viric ];
     mainProgram = "gs";

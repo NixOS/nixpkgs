@@ -1,18 +1,18 @@
 { lib, stdenvNoCC, fetchurl, makeBinaryWrapper, jre, version, hash }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "papermc";
-  inherit version;
+  inherit version hash;
 
   src =
     let
-      version-split = lib.strings.splitString "-" version;
+      version-split = lib.strings.splitString "-" finalAttrs.version;
       mcVersion = builtins.elemAt version-split 0;
       buildNum = builtins.elemAt version-split 1;
     in
     fetchurl {
-      url = "https://papermc.io/api/v2/projects/paper/versions/${mcVersion}/builds/${buildNum}/downloads/paper-${version}.jar";
-      inherit hash;
+      url = "https://papermc.io/api/v2/projects/paper/versions/${mcVersion}/builds/${buildNum}/downloads/paper-${mcVersion}-${buildNum}.jar";
+      inherit (finalAttrs) hash;
     };
 
   installPhase = ''
@@ -47,4 +47,4 @@ stdenvNoCC.mkDerivation {
     maintainers = with lib.maintainers; [ aaronjanse neonfuz MayNiklas ];
     mainProgram = "minecraft-server";
   };
-}
+})

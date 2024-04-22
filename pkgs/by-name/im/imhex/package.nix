@@ -23,14 +23,14 @@
 }:
 
 let
-  version = "1.32.2";
-  patterns_version = "1.32.2";
+  version = "1.33.2";
+  patterns_version = "1.33.2";
 
   patterns_src = fetchFromGitHub {
     owner = "WerWolv";
     repo = "ImHex-Patterns";
     rev = "ImHex-v${patterns_version}";
-    hash = "sha256-K+LiQvykCrOwhEVy37lh7VSf5YJyBQtLz8AGFsuRznQ=";
+    hash = "sha256-5a6aFT8R8vMzPS+Y+fcDV5+olhioEpLjdMqa7qOyGsw=";
   };
 
 in
@@ -43,18 +43,8 @@ stdenv.mkDerivation rec {
     owner = "WerWolv";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-MYOZHQMYbbP01z0FyoCgTzwY1/71eUCmJYYfYvN9+so=";
+    hash = "sha256-8Ehpk0TjE4itQ7D9Nx74plYwABVufuYmxfxyuSqak1c=";
   };
-
-  patches = [
-    # Backport fixes (and fix to fix) for default plugin not being loaded.
-    (fetchpatch {
-      url = "https://github.com/WerWolv/PatternLanguage/compare/ImHex-v1.32.2..1adcdd358d3772681242267ddd3459c9d0913796.patch";
-      stripLen = 1;
-      extraPrefix = "lib/external/pattern_language/";
-      hash = "sha256-aGvt7vQ6PtFE3sw4rAXUP7Pq8cL29LEKyC0rJKkxOZI=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake llvm python3 perl pkg-config rsync ];
 
@@ -93,7 +83,7 @@ stdenv.mkDerivation rec {
     description = "Hex Editor for Reverse Engineers, Programmers and people who value their retinas when working at 3 AM";
     homepage = "https://github.com/WerWolv/ImHex";
     license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ luis kashw2 cafkafk ];
+    maintainers = with maintainers; [ kashw2 cafkafk ];
     platforms = platforms.linux;
   };
 }

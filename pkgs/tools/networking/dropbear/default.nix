@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl, glibc, zlib, libxcrypt
-, enableStatic ? stdenv.hostPlatform.isStatic
+{ lib, stdenv, fetchurl, zlib, libxcrypt
 , enableSCP ? false
 , sftpPath ? "/run/current-system/sw/libexec/sftp-server"
 }:
@@ -22,9 +21,6 @@ stdenv.mkDerivation rec {
     url = "https://matt.ucc.asn.au/dropbear/releases/dropbear-${version}.tar.bz2";
     sha256 = "sha256-vFoSH/vJS1FxrV6+Ab5CdG1Qqnl8lUmkY5iUoWdJRDs=";
   };
-
-  dontDisableStatic = enableStatic;
-  configureFlags = lib.optional enableStatic "LDFLAGS=-static";
 
   CFLAGS = lib.pipe (lib.attrNames dflags) [
     (builtins.map (name: "-D${name}=\\\"${dflags.${name}}\\\""))
@@ -49,7 +45,7 @@ stdenv.mkDerivation rec {
     ./pass-path.patch
   ];
 
-  buildInputs = [ zlib libxcrypt ] ++ lib.optionals enableStatic [ glibc.static zlib.static ];
+  buildInputs = [ zlib libxcrypt ];
 
   meta = with lib; {
     description = "A small footprint implementation of the SSH 2 protocol";

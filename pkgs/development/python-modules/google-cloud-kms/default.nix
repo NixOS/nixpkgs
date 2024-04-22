@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-kms";
-  version = "2.21.2";
+  version = "2.21.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8GrZ38gBVE+6EYN4i5ZPawF0g6Zgkapoa1Gr0HSAbIQ=";
+    hash = "sha256-XofVp7fY9bXJ8PZI81KniGlRqLTHJwPrnOe6gHb8JTM=";
   };
 
   nativeBuildInputs = [

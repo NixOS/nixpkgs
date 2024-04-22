@@ -2,7 +2,10 @@
 , xorgproto, libX11, libXext, libXrandr, libxcrypt
 # default header can be obtained from
 # https://git.suckless.org/slock/tree/config.def.h
-, conf ? null }:
+, conf ? null
+# update script dependencies
+, gitUpdater
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "slock";
@@ -25,14 +28,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "CC:=$(CC)" ];
 
+  passthru.updateScript = gitUpdater {
+    url = "git://git.suckless.org/slock";
+  };
+
   meta = with lib; {
     homepage = "https://tools.suckless.org/slock";
     description = "Simple X display locker";
+    mainProgram = "slock";
     longDescription = ''
       Simple X display locker. This is the simplest X screen locker.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ astsmtl ];
+    maintainers = with maintainers; [ astsmtl qusic ];
     platforms = platforms.linux;
   };
 })

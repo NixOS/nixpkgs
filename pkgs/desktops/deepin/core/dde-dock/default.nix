@@ -81,6 +81,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Deepin desktop-environment - dock module";
+    mainProgram = "dde-dock";
     homepage = "https://github.com/linuxdeepin/dde-dock";
     platforms = platforms.linux;
     license = licenses.lgpl3Plus;

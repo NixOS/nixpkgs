@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "tplink-omada-client";
-  version = "1.3.11";
+  version = "1.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -18,14 +18,14 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "tplink_omada_client";
     inherit version;
-    hash = "sha256-/mH9VqdF1l89qtAhug+ii4PCRO0PxKDr7LzvevjuZgc=";
+    hash = "sha256-P7kb8gzPjRwl6KpKbh/k7QqjGU6m+HVBbMCuoabG+5M=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     awesomeversion
   ];
@@ -43,5 +43,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/MarkGodwin/tplink-omada-api/releases/tag/release%2Fv${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "omada";
   };
 }

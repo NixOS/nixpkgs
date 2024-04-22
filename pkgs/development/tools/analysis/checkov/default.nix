@@ -1,23 +1,22 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "checkov";
-  version = "3.2.35";
+  version = "3.2.72";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "checkov";
     rev = "refs/tags/${version}";
-    hash = "sha256-Wjci5jGkakL75TtUzf1Hq2EzGgQD3jtbCdwoA69zjVA=";
+    hash = "sha256-DcheCxZ21/wEwC0dYoL546wXyp1yIIfLkWbjkS0iKC0=";
   };
 
-  patches = [
-    ./flake8-compat-5.x.patch
-  ];
+  patches = [ ./flake8-compat-5.x.patch ];
 
   pythonRelaxDeps = [
     "boto3"
@@ -29,6 +28,8 @@ python3.pkgs.buildPythonApplication rec {
     "license-expression"
     "networkx"
     "openai"
+    "packageurl-python"
+    "packaging"
     "pycep-parser"
     "termcolor"
   ];
@@ -38,12 +39,15 @@ python3.pkgs.buildPythonApplication rec {
     "pycep-parser"
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
+  build-system = with python3.pkgs; [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with python3.pkgs; [
+    pythonRelaxDepsHook
+  ];
+
+  dependencies = with python3.pkgs; [
     aiodns
     aiohttp
     aiomultiprocess
@@ -144,9 +148,7 @@ python3.pkgs.buildPythonApplication rec {
     "dogfood_tests/test_checkov_dogfood.py"
   ];
 
-  pythonImportsCheck = [
-    "checkov"
-  ];
+  pythonImportsCheck = [ "checkov" ];
 
   postInstall = ''
     chmod +x $out/bin/checkov
@@ -161,6 +163,9 @@ python3.pkgs.buildPythonApplication rec {
       Kubernetes, Serverless framework and other infrastructure-as-code-languages.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ anhdle14 fab ];
+    maintainers = with maintainers; [
+      anhdle14
+      fab
+    ];
   };
 }

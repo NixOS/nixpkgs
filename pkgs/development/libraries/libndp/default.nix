@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://libndp.org/";
     description = "Library for Neighbor Discovery Protocol";
+    mainProgram = "ndptool";
     platforms = platforms.linux;
     maintainers = [ ];
     license = licenses.lgpl21;

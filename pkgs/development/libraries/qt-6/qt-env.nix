@@ -4,7 +4,7 @@ buildEnv {
   inherit name;
   paths = [ qtbase ] ++ paths;
 
-  pathsToLink = [ "/bin" "/mkspecs" "/include" "/lib" "/share" "/libexec" ];
+  pathsToLink = [ "/metatypes" "/bin" "/mkspecs" "/include" "/lib" "/share" "/libexec" ];
   extraOutputsToInstall = [ "out" "dev" ];
 
   postBuild = ''

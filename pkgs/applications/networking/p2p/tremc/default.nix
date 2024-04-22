@@ -54,6 +54,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Curses interface for transmission";
+    mainProgram = "tremc";
     homepage = "https://github.com/tremc/tremc";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kashw2 ];

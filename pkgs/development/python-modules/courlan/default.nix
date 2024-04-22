@@ -47,6 +47,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Clean, filter and sample URLs to optimize data collection";
+    mainProgram = "courlan";
     homepage = "https://github.com/adbar/courlan";
     changelog = "https://github.com/adbar/courlan/blob/v${version}/HISTORY.md";
     license = licenses.asl20;

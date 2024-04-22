@@ -5,38 +5,38 @@ let
 in
 {
   options.services.sitespeed-io = {
-    enable = lib.mkEnableOption (lib.mdDoc "Sitespeed.io");
+    enable = lib.mkEnableOption "Sitespeed.io";
 
     user = lib.mkOption {
       type = lib.types.str;
       default = "sitespeed-io";
-      description = lib.mdDoc "User account under which sitespeed-io runs.";
+      description = "User account under which sitespeed-io runs.";
     };
 
     package = lib.mkOption {
       type = lib.types.package;
       default = pkgs.sitespeed-io;
       defaultText = "pkgs.sitespeed-io";
-      description = lib.mdDoc "Sitespeed.io package to use.";
+      description = "Sitespeed.io package to use.";
     };
 
     dataDir = lib.mkOption {
       default = "/var/lib/sitespeed-io";
       type = lib.types.str;
-      description = lib.mdDoc "The base sitespeed-io data directory.";
+      description = "The base sitespeed-io data directory.";
     };
 
     period = lib.mkOption {
       type = lib.types.str;
       default = "hourly";
-      description = lib.mdDoc ''
+      description = ''
         Systemd calendar expression when to run. See {manpage}`systemd.time(7)`.
       '';
     };
 
     runs = lib.mkOption {
       default = [ ];
-      description = lib.mdDoc ''
+      description = ''
         A list of run configurations. The service will call sitespeed-io once
         for every run listed here. This lets you examine different websites
         with different sitespeed-io settings.
@@ -46,7 +46,7 @@ in
           urls = lib.mkOption {
             type = with lib.types; listOf str;
             default = [];
-            description = lib.mdDoc ''
+            description = ''
               URLs the service should monitor.
             '';
           };
@@ -57,7 +57,7 @@ in
               options = { };
             };
             default = { };
-            description = lib.mdDoc ''
+            description = ''
               Configuration for sitespeed-io, see
               <https://www.sitespeed.io/documentation/sitespeed.io/configuration/>
               for available options. The value here will be directly transformed to
@@ -68,7 +68,7 @@ in
           extraArgs = lib.mkOption {
             type = with lib.types; listOf str;
             default = [];
-            description = lib.mdDoc ''
+            description = ''
               Extra command line arguments to pass to the program.
             '';
           };

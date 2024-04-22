@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://mmonit.com/monit/";
     description = "Monitoring system";
-    license = lib.licenses.agpl3;
+    license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ raskin wmertens ryantm ];
     platforms = with lib; platforms.linux ++ platforms.darwin;
     mainProgram = "monit";

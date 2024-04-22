@@ -3,7 +3,7 @@
 , buildPythonPackage
 , substituteAll
 , fetchPypi
-, cython_3
+, cython
 , fontconfig
 , freetype-py
 , hsluv
@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "vispy";
-  version = "0.14.1";
+  version = "0.14.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JJpQl5/ACotlEJKDNU3PEs9BXBpdz5gh4RP25ZC5uTw=";
+    hash = "sha256-7ti0TW9ch70pWySqmi4OTm3GqQXM7gGy1ByPvwp2ez0=";
   };
 
   patches = [
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    cython_3
+    cython
     oldest-supported-numpy
     setuptools
     setuptools-scm

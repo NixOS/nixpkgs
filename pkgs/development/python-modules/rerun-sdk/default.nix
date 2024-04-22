@@ -4,6 +4,7 @@
   rustPlatform,
   stdenv,
   attrs,
+  darwin,
   numpy,
   pillow,
   pyarrow,
@@ -12,6 +13,7 @@
   typing-extensions,
   pytestCheckHook,
   python,
+  libiconv,
 }:
 
 buildPythonPackage {
@@ -25,6 +27,13 @@ buildPythonPackage {
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
+  ];
+
+  buildInputs = [
+    libiconv # No-op on Linux, necessary on Darwin.
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk.frameworks.AppKit
+    darwin.apple_sdk.frameworks.CoreServices
   ];
 
   propagatedBuildInputs = [

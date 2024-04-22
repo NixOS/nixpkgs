@@ -15,11 +15,13 @@ let
   atLeast210 = lib.versionAtLeast version "2.10pre";
   atLeast213 = lib.versionAtLeast version "2.13pre";
   atLeast214 = lib.versionAtLeast version "2.14pre";
+  atLeast219 = lib.versionAtLeast version "2.19pre";
   atLeast220 = lib.versionAtLeast version "2.20pre";
   atLeast221 = lib.versionAtLeast version "2.21pre";
   # Major.minor versions unaffected by CVE-2024-27297
   unaffectedByFodSandboxEscape = [
     "2.3"
+    "2.16"
     "2.18"
     "2.19"
     "2.20"
@@ -146,6 +148,7 @@ self = stdenv.mkDerivation {
 
   installCheckInputs = lib.optionals atLeast221 [
     git
+  ] ++ lib.optionals atLeast219 [
     man
   ];
 
@@ -263,7 +266,7 @@ self = stdenv.mkDerivation {
       environments.
     '';
     homepage = "https://nixos.org/";
-    license = licenses.lgpl2Plus;
+    license = licenses.lgpl21Plus;
     inherit maintainers;
     platforms = platforms.unix;
     outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";

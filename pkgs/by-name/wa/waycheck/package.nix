@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waycheck";
-  version = "1.1.1";
+  version = "1.2.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "serebit";
     repo = "waycheck";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-kwkdTMA15oJHz9AXEkBGeuzYdEUpNuv/xnhzoKOHCE4=";
+    hash = "sha256-82jOYWhgD9JNDn24eCAeMm63R5BTy20lQVpiAwhDIOk=";
   };
 
   nativeBuildInputs = [
@@ -38,21 +38,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapGApps = true;
 
+  postPatch = ''
+    substituteInPlace scripts/mesonPostInstall.sh \
+      --replace-fail "#!/usr/bin/env sh" "#!${stdenv.shell}" \
+      --replace-fail "update-desktop-database -q" "update-desktop-database $out/share/applications"
+  '';
+
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  preInstall = ''
-    substituteInPlace ../scripts/mesonPostInstall.sh \
-      --replace "update-desktop-database -q" "update-desktop-database $out/share/applications"
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Simple GUI that displays the protocols implemented by a Wayland compositor";
     homepage = "https://gitlab.freedesktop.org/serebit/waycheck";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ julienmalka federicoschonborn ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ julienmalka federicoschonborn ];
     mainProgram = "waycheck";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

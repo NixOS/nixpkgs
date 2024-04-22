@@ -8,7 +8,7 @@
 , jsonschema
 , jupyterlab-widgets
 , lib
-, pytestCheckHook
+, pytest7CheckHook
 , pytz
 , traitlets
 , widgetsnbextension
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     ipykernel
     jsonschema
-    pytestCheckHook
+    pytest7CheckHook
     pytz
   ];
 

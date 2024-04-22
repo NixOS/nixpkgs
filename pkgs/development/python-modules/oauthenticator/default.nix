@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "oauthenticator";
-  version = "16.2.1";
+  version = "16.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qJrreq2GhJxrX9keZOYVzjihs0RCymad+MGErW5ecPc=";
+    hash = "sha256-QMddGJUfafXoBxMCjlx1lH45a4Bab3AP4j8Px7JxYaQ=";
   };
 
   postPatch = ''
@@ -30,18 +30,16 @@ buildPythonPackage rec {
       --replace-fail " --cov=oauthenticator" ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jupyterhub
+    pyjwt
   ];
 
   passthru.optional-dependencies = {
-    azuread = [
-      pyjwt
-    ];
     googlegroups = [
       google-api-python-client
       google-auth-oauthlib

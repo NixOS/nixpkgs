@@ -7,14 +7,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "systemctl-tui";
-  version = "0.2.4";
+  version = "0.3.3";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-SZmOCx9S5WWz9fSlicvT/glZKj5AsFDRnxmHbGxM9Ms=";
+    hash = "sha256-oFXLxWS2G+CkG0yuJLkA34SqoGGcXU/eZmFMRYw+Gzo=";
   };
 
-  cargoHash = "sha256-zUc6RchoGtJB+gnJNwNu93to775fdM5JDJ4qYwRdJn0=";
+  cargoHash = "sha256-MKxeRQupgAxA2ui8qSK8BvhxqqgjJarD8pY9wmk8MvA=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.AppKit

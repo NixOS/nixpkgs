@@ -163,7 +163,7 @@ beamPackages.mixRelease rec {
   meta = with lib; {
     description = "ActivityPub microblogging server";
     homepage = "https://git.pleroma.social/pleroma/pleroma";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ picnoir yuka kloenk yayayayaka ];
     platforms = platforms.unix;
   };

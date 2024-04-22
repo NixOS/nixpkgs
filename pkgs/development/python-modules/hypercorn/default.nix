@@ -15,14 +15,14 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Hypercorn";
+  pname = "hypercorn";
   version = "0.14.3";
   disabled = pythonOlder "3.7";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pgjones";
-    repo = pname;
+    repo = "Hypercorn";
     rev = version;
     hash = "sha256-ECREs8UwqTWUweUrwnUwpVotCII2v4Bz7ZCk3DSAd8I=";
   };
@@ -49,6 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/pgjones/hypercorn";
     description = "The ASGI web server inspired by Gunicorn";
+    mainProgram = "hypercorn";
     license = licenses.mit;
     maintainers = with maintainers; [ dgliwka ];
   };

@@ -40,15 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
         let
           nativeCC = pkgsBuildBuild.stdenv.cc;
           nativeBintools = nativeCC.bintools.bintools;
-          nativeLibcxxabi = lib.getLib pkgsBuildBuild.libcxxabi;
           nativeToolchainFlags = [
             "-DCMAKE_C_COMPILER=${nativeCC}/bin/${nativeCC.targetPrefix}cc"
             "-DCMAKE_CXX_COMPILER=${nativeCC}/bin/${nativeCC.targetPrefix}c++"
             "-DCMAKE_AR=${nativeBintools}/bin/${nativeBintools.targetPrefix}ar"
             "-DCMAKE_STRIP=${nativeBintools}/bin/${nativeBintools.targetPrefix}strip"
             "-DCMAKE_RANLIB=${nativeBintools}/bin/${nativeBintools.targetPrefix}ranlib"
-            "-DCMAKE_EXE_LINKER_FLAGS=-L${nativeLibcxxabi}/lib"
-            "-DCMAKE_SHARED_LINKER_FLAGS=-L${nativeLibcxxabi}/lib"
           ];
         in "-DCROSS_TOOLCHAIN_FLAGS_NATIVE:list=${lib.concatStringsSep ";" nativeToolchainFlags}"
       )
@@ -70,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Replaces the Mach-O Dynamic Library Stub files in Apple's SDKs to reduce the size";
+    mainProgram = "tapi";
     homepage = "https://github.com/tpoechtrager/apple-libtapi";
     license = licenses.ncsa;
     maintainers = with maintainers; [ matthewbauer ];

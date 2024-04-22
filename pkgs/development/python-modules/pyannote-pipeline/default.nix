@@ -45,6 +45,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Tunable pipelines";
+    mainProgram = "pyannote-pipeline";
     homepage = "https://github.com/pyannote/pyannote-pipeline";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

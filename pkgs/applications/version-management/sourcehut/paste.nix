@@ -12,21 +12,21 @@
 }:
 
 let
-  version = "0.15.2";
-  gqlgen = import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.20"; };
+  version = "0.15.4";
+  gqlgen = import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.45"; };
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "paste.sr.ht";
     rev = version;
-    hash = "sha256-ZZzcd14Jbo1MfET7B56X/fl9xWXpCJ8TuKrGVgJwZfQ=";
+    hash = "sha256-M38hAMRdMzcqxJv7j7foOIYEImr/ZYz/lbYOF9R9g2M=";
   };
 
   pastesrht-api = buildGoModule ({
     inherit src version;
     pname = "pastesrht-api";
     modRoot = "api";
-    vendorHash = "sha256-jiE73PUPSHxtWp7XBdH4mJw95pXmZjCl4tk2wQUf2M4=";
+    vendorHash = "sha256-vt5nSPcx+Y/SaWcqjV38DTL3ZtzmdjbkJYMv5Fhhnq4=";
   } // gqlgen);
 in
 buildPythonPackage rec {

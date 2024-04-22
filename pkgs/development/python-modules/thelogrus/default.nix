@@ -45,6 +45,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python 3 version of logrus";
+    mainProgram = "human-time";
     homepage = "https://github.com/unixorn/thelogrus";
     changelog = "https://github.com/unixorn/thelogrus/blob/${version}/ChangeLog.md";
     license = licenses.asl20;

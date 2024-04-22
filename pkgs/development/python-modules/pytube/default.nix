@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python 3 library for downloading YouTube Videos";
+    mainProgram = "pytube";
     homepage = "https://github.com/nficano/pytube";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

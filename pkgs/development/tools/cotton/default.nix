@@ -28,6 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A package manager for JavaScript projects";
+    mainProgram = "cotton";
     homepage = "https://github.com/danielhuang/cotton";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ dit7ya figsoda ];

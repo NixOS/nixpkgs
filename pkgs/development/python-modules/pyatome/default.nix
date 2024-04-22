@@ -35,6 +35,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module to get energy consumption data from Atome";
+    mainProgram = "pyatome";
     homepage = "https://github.com/baqs/pyAtome";
     license = licenses.asl20;
     maintainers = with maintainers; [ uvnikita ];

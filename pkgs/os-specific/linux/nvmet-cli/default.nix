@@ -18,6 +18,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "NVMe target CLI";
+    mainProgram = "nvmetcli";
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ hoverbear ];

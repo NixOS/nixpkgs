@@ -27,7 +27,13 @@ let
 
     cargoHash = "sha256-e/Jki/4pCs0qzaBVR4iiUhdBFmWlTZYREQkuFSoWYFo=";
 
+    buildInputs = lib.optionals stdenv.isDarwin [ lldb ];
+
     nativeBuildInputs = [ makeWrapper ];
+
+    env = lib.optionalAttrs stdenv.isDarwin {
+      NIX_LDFLAGS = "-llldb -lc++abi";
+    };
 
     buildAndTestSubdir = "adapter";
 
@@ -39,15 +45,17 @@ let
     ];
 
     postFixup = ''
-      mkdir -p $out/share
+      mkdir -p $out/share/{adapter,formatters}
       # codelldb expects libcodelldb.so to be in the same
       # directory as the executable, and can't find it in $out/lib.
       # To make codelldb executable as a standalone,
       # we put all files in $out/share, and then wrap the binary in $out/bin.
-      mv $out/bin/* $out/share
-      cp $out/lib/* $out/share
-      ln -s ${lldb.lib} $out/lldb
-      makeWrapper $out/share/codelldb $out/bin/codelldb \
+      mv $out/bin/* $out/share/adapter
+      cp $out/lib/* $out/share/adapter
+      cp -r adapter/scripts $out/share/adapter
+      cp -t $out/share/formatters formatters/*.py
+      ln -s ${lldb.lib} $out/share/lldb
+      makeWrapper $out/share/adapter/codelldb $out/bin/codelldb \
         --set-default LLDB_DEBUGSERVER_PATH "${lldb.out}/bin/lldb-server"
     '';
 
@@ -87,6 +95,15 @@ let
     '';
   };
 
+  # debugservers on macOS require the 'com.apple.security.cs.debugger'
+  # entitlement which nixpkgs' lldb-server does not yet provide; see
+  # <https://github.com/NixOS/nixpkgs/pull/38624> for details
+  lldbServer =
+    if stdenv.isDarwin then
+      "/Applications/Xcode.app/Contents/SharedFrameworks/LLDB.framework/Versions/A/Resources/debugserver"
+    else
+      "${lldb.out}/bin/lldb-server";
+
 in stdenv.mkDerivation {
   pname = "vscode-extension-${publisher}-${pname}";
   inherit src version vscodeExtUniqueId vscodeExtPublisher vscodeExtName;
@@ -105,6 +122,9 @@ in stdenv.mkDerivation {
 
   postConfigure = ''
     cp -r ${nodeDeps}/lib/node_modules .
+  '' + lib.optionalString stdenv.isDarwin ''
+    export HOME="$TMPDIR/home"
+    mkdir $HOME
   '';
 
   cmakeFlags = [
@@ -125,12 +145,10 @@ in stdenv.mkDerivation {
 
     mkdir -p $ext/{adapter,formatters}
     mv -t $ext vsix-extracted/extension/*
-    cp -t $ext/adapter ${adapter}/share/*
-    cp -r ../adapter/scripts $ext/adapter
+    cp -t $ext/ -r ${adapter}/share/*
     wrapProgram $ext/adapter/codelldb \
-      --set-default LLDB_DEBUGSERVER_PATH "${lldb.out}/bin/lldb-server"
-    cp -t $ext/formatters ../formatters/*.py
-    ln -s ${lldb.lib} $ext/lldb
+      --prefix LD_LIBRARY_PATH : "$ext/lldb/lib" \
+      --set-default LLDB_DEBUGSERVER_PATH "${lldbServer}"
     # Mark that all components are installed.
     touch $ext/platform.ok
 

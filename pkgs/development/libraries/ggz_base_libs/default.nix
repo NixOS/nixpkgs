@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GGZ Gaming zone libraries";
+    mainProgram = "ggz-config";
     maintainers = with maintainers;
     [
       raskin

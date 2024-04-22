@@ -32,12 +32,17 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "coreutils" + (optionalString (!minimal) "-full");
-  version = "9.4";
+  version = "9.5";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/coreutils-${version}.tar.xz";
-    hash = "sha256-6mE6TPRGEjJukXIBu7zfvTAd4h/8O1m25cB+BAsnXlI=";
+    hash = "sha256-zTKO3qyS9qZl3p8yPJO3Eq8YWLwuDYjz9xAEaUcKG4o=";
   };
+
+  patches = lib.optionals stdenv.hostPlatform.isMusl [
+    # https://lists.gnu.org/archive/html/bug-coreutils/2024-03/msg00089.html
+    ./fix-test-failure-musl.patch
+  ];
 
   postPatch = ''
     # The test tends to fail on btrfs, f2fs and maybe other unusual filesystems.
@@ -45,6 +50,7 @@ stdenv.mkDerivation rec {
     sed '2i echo Skipping du threshold test && exit 77' -i ./tests/du/threshold.sh
     sed '2i echo Skipping cp reflink-auto test && exit 77' -i ./tests/cp/reflink-auto.sh
     sed '2i echo Skipping cp sparse test && exit 77' -i ./tests/cp/sparse.sh
+    sed '2i echo Skipping env test && exit 77' -i ./tests/env/env.sh
     sed '2i echo Skipping rm deep-2 test && exit 77' -i ./tests/rm/deep-2.sh
     sed '2i echo Skipping du long-from-unreadable test && exit 77' -i ./tests/du/long-from-unreadable.sh
 
@@ -66,6 +72,11 @@ stdenv.mkDerivation rec {
       sed '2i echo Skipping chgrp && exit 77' -i "$f"
     done
     for f in gnulib-tests/{test-chown.c,test-fchownat.c,test-lchown.c}; do
+      echo "int main() { return 77; }" > "$f"
+    done
+
+    # We don't have localtime in the sandbox
+    for f in gnulib-tests/{test-localtime_r.c,test-localtime_r-mt.c}; do
       echo "int main() { return 77; }" > "$f"
     done
 

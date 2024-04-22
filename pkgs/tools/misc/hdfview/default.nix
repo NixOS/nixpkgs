@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ant, jdk, hdf4, hdf5, makeDesktopItem, copyDesktopItems }:
+{ lib, stdenv, fetchurl, ant, jdk, hdf4, hdf5, makeDesktopItem, copyDesktopItems, strip-nondeterminism, stripJavaArchivesHook }:
 
 stdenv.mkDerivation rec {
   pname = "hdfview";
@@ -14,12 +14,16 @@ stdenv.mkDerivation rec {
     ./0001-Hardcode-isUbuntu-false-to-avoid-hostname-dependency.patch
     # Disable signing on macOS
     ./disable-mac-signing.patch
+    # Remove timestamp comment from generated versions.properties file
+    ./remove-properties-timestamp.patch
   ];
 
   nativeBuildInputs = [
     ant
     jdk
     copyDesktopItems
+    strip-nondeterminism
+    stripJavaArchivesHook
   ];
 
   HDFLIBS = (hdf4.override { javaSupport = true; }).out;
@@ -62,6 +66,11 @@ stdenv.mkDerivation rec {
     cp -a build/dist/HDFView.app $out/Applications/
   '' + ''
     runHook postInstall
+  '';
+
+  preFixup = ''
+    # Remove build timestamp from javadoc files
+    find $out/lib/app{,/mods}/doc/javadocs -name "*.html" -exec strip-nondeterminism --type javadoc {} +
   '';
 
   meta = {

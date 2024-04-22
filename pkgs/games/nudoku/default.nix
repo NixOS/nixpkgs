@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An ncurses based sudoku game";
+    mainProgram = "nudoku";
     homepage = "http://jubalh.github.io/nudoku/";
     license = licenses.gpl3;
     platforms = platforms.all;

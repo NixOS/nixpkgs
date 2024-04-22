@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Addons related to Chinese, including IME previous bundled inside fcitx4";
+    mainProgram = "scel2org5";
     homepage = "https://github.com/fcitx/fcitx5-chinese-addons";
     license = with licenses; [ gpl2Plus lgpl21Plus ];
     maintainers = with maintainers; [ poscat ];

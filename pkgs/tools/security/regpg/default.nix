@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GPG wrapper utility for storing secrets in VCS";
+    mainProgram = "regpg";
     homepage = "https://dotat.at/prog/regpg";
     license = licenses.gpl3;
     platforms = platforms.all;

@@ -32,6 +32,7 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "Build Outscale cloud diagrams";
+    mainProgram = "osc-diagram";
     homepage = "https://github.com/outscale-mgo/osc-diagram";
     license = licenses.free;
     maintainers = with maintainers; [ nicolas-goudry ];

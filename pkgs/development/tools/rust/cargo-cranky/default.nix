@@ -18,6 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "An easy to configure wrapper for Rust's clippy";
+    mainProgram = "cargo-cranky";
     homepage = "https://github.com/ericseppanen/cargo-cranky";
     changelog = "https://github.com/ericseppanen/cargo-cranky/releases/tag/${src.rev}";
     license = with licenses; [ asl20 mit ];

@@ -72,6 +72,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Core library for ActivityWatch";
+    mainProgram = "aw-cli";
     homepage = "https://github.com/ActivityWatch/aw-core";
     maintainers = with maintainers; [ huantian ];
     license = licenses.mpl20;

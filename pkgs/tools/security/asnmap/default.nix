@@ -26,6 +26,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool to gather network ranges using ASN information";
+    mainProgram = "asnmap";
     homepage = "https://github.com/projectdiscovery/asnmap";
     changelog = "https://github.com/projectdiscovery/asnmap/releases/tag/v${version}";
     license = licenses.mit;

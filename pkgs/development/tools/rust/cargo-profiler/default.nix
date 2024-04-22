@@ -26,6 +26,7 @@ in buildRustPackage rec {
 
   meta = with lib; {
     description = "Cargo subcommand for profiling Rust binaries";
+    mainProgram = "cargo-profiler";
     homepage = "https://github.com/svenstaro/cargo-profiler";
     license = licenses.mit;
     maintainers = with maintainers; [ lucperkins ];

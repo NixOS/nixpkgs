@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Gnote";
     description = "A note taking application";
+    mainProgram = "gnote";
     maintainers = with maintainers; [ jfvillablanca ];
     license = licenses.gpl3Only;
     platforms = platforms.linux;

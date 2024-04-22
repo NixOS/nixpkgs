@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
       A reimplementation of the Fourmilab/John Walker random number test program
       ent with several improvements
     '';
+    mainProgram = "djent";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ orichter thillux ];

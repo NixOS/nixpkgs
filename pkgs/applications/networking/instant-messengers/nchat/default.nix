@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Terminal-based chat client with support for Telegram and WhatsApp";
+    mainProgram = "nchat";
     homepage = "https://github.com/d99kris/nchat";
     license = licenses.mit;
     maintainers = with maintainers; [ sikmir ];

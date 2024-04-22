@@ -14,13 +14,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lan-mouse";
-  version = "0.6.0";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "feschber";
     repo = "lan-mouse";
     rev = "v${version}";
-    hash = "sha256-98n0Y9oL/ll90NKHJC/25wkav9K+eVqrO7PlrJMoGmY=";
+    hash = "sha256-W4TCA8umcr2hCIc50GFdvDVZaJGSNRNi7iDe8DJ5PHs=";
   };
 
   nativeBuildInputs = [
@@ -40,9 +40,6 @@ rustPlatform.buildRustPackage rec {
 
   cargoLock = {
     lockFile = ./Cargo.lock;
-    outputHashes = {
-      "reis-0.1.0" = "sha256-sRZqm6QdmgqfkTjEENV8erQd+0RL5z1+qjdmY18W3bA=";
-    };
   };
 
   meta = {

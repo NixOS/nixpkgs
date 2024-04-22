@@ -17,13 +17,15 @@ activation script will take these dependencies into account and order the
 snippets accordingly. As a simple example:
 
 ```nix
-system.activationScripts.my-activation-script = {
-  deps = [ "etc" ];
-  # supportsDryActivation = true;
-  text = ''
-    echo "Hallo i bims"
-  '';
-};
+{
+  system.activationScripts.my-activation-script = {
+    deps = [ "etc" ];
+    # supportsDryActivation = true;
+    text = ''
+      echo "Hallo i bims"
+    '';
+  };
+}
 ```
 
 This example creates an activation script snippet that is run after the `etc`

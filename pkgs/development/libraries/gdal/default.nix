@@ -80,13 +80,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal";
-  version = "3.8.4";
+  version = "3.8.5";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-R9VLof13OXPbWGHOG1Q4WZWSPoF739C6WuNWxoIwKTw=";
+    hash = "sha256-Z+mYlyOX9vJ772qwZMQfCbD/V7RL6+9JLHTzoZ55ot0=";
   };
 
   patches = [
@@ -234,18 +234,19 @@ stdenv.mkDerivation (finalAttrs: {
   '';
   nativeInstallCheckInputs = with python3.pkgs; [
     pytestCheckHook
+    pytest-benchmark
     pytest-env
     filelock
     lxml
+  ];
+  pytestFlagsArray = [
+    "--benchmark-disable"
   ];
   disabledTestPaths = [
     # tests that attempt to make network requests
     "gcore/vsis3.py"
     "gdrivers/gdalhttp.py"
     "gdrivers/wms.py"
-
-    # disable benchmarks
-    "benchmark/*"
   ];
   disabledTests = [
     # tests that attempt to make network requests

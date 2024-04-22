@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Web server scanner";
+    mainProgram = "nikto";
     license = licenses.gpl2Plus;
     homepage = "https://cirt.net/Nikto2";
     changelog = "https://github.com/sullo/nikto/releases/tag/${version}";

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-harvest";
-  version = "1.10.4";
+  version = "1.10.5";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "smarie";
     repo = "python-pytest-harvest";
     rev = "refs/tags/${version}";
-    hash = "sha256-ebzE63d7zt9G9HgbLHaE/USZZpUd3y3vd0kNdT/wWw0=";
+    hash = "sha256-s8QiuUFRTTRhSpLa0DHScKFC9xdu+w2rssWCg8sIjsg=";
   };
 
   # create file, that is created by setuptools_scm

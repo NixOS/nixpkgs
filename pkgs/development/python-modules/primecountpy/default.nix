@@ -2,7 +2,7 @@
 , fetchPypi
 , buildPythonPackage
 , primecount
-, cython_3
+, cython
 , cysignals
 }:
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   buildInputs = [ primecount ];
 
-  propagatedBuildInputs = [ cython_3 cysignals ];
+  propagatedBuildInputs = [ cython cysignals ];
 
   # depends on pytest-cython for "pytest --doctest-cython"
   doCheck = false;

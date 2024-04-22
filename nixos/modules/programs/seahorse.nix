@@ -20,7 +20,7 @@ with lib;
 
     programs.seahorse = {
 
-      enable = mkEnableOption (lib.mdDoc "Seahorse, a GNOME application for managing encryption keys and passwords in the GNOME Keyring");
+      enable = mkEnableOption "Seahorse, a GNOME application for managing encryption keys and passwords in the GNOME Keyring";
 
     };
 

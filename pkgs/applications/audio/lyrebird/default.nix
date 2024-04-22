@@ -55,6 +55,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Simple and powerful voice changer for Linux, written in GTK 3";
+    mainProgram = "lyrebird";
     homepage = "https://github.com/chxrlt/lyrebird";
     license = licenses.mit;
     maintainers = with maintainers; [ OPNA2608 ];

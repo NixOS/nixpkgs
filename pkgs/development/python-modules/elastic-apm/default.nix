@@ -1,37 +1,39 @@
-{ lib
-, stdenv
-, aiohttp
-, blinker
-, buildPythonPackage
-, certifi
-, ecs-logging
-, fetchFromGitHub
-, httpx
-, jinja2
-, jsonschema
-, logbook
-, mock
-, pytest-asyncio
-, pytest-bdd
-, pytest-localserver
-, pytest-mock
-, pytest-random-order
-, pytestCheckHook
-, pythonOlder
-, sanic
-, sanic-testing
-, setuptools
-, starlette
-, structlog
-, tornado
-, urllib3
-, webob
-, wrapt
+{
+  lib,
+  stdenv,
+  aiohttp,
+  blinker,
+  buildPythonPackage,
+  certifi,
+  ecs-logging,
+  fetchFromGitHub,
+  httpx,
+  jinja2,
+  jsonschema,
+  logbook,
+  mock,
+  pytest-asyncio,
+  pytest-bdd,
+  pytest-localserver,
+  pytest-mock,
+  pytest-random-order,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  sanic,
+  sanic-testing,
+  setuptools,
+  starlette,
+  structlog,
+  tornado,
+  urllib3,
+  webob,
+  wrapt,
 }:
 
 buildPythonPackage rec {
   pname = "elastic-apm";
-  version = "6.21.3";
+  version = "6.22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,14 +42,16 @@ buildPythonPackage rec {
     owner = "elastic";
     repo = "apm-agent-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ejix31cMyHOc/IGe4bRp/Nchm9Ps1cRYE8jIaIYlJjs=";
+    hash = "sha256-VuVx+QUiV4M/ebyv2uF/YZwfvcaPDJAEi55fXfoIttU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  pythonRelaxDeps = [ "wrapt" ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  dependencies = [
     aiohttp
     blinker
     certifi
@@ -76,21 +80,19 @@ buildPythonPackage rec {
     webob
   ];
 
-  disabledTests = [
-    "elasticapm_client"
-  ];
+  disabledTests = [ "elasticapm_client" ];
 
-  disabledTestPaths = [
-    # Exclude tornado tests
-    "tests/contrib/asyncio/tornado/tornado_tests.py"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # Flaky tests on Darwin
-    "tests/utils/threading_tests.py"
-  ];
+  disabledTestPaths =
+    [
+      # Exclude tornado tests
+      "tests/contrib/asyncio/tornado/tornado_tests.py"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # Flaky tests on Darwin
+      "tests/utils/threading_tests.py"
+    ];
 
-  pythonImportsCheck = [
-    "elasticapm"
-  ];
+  pythonImportsCheck = [ "elasticapm" ];
 
   meta = with lib; {
     description = "Python agent for the Elastic APM";

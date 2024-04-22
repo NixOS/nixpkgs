@@ -97,6 +97,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Checks installed dependencies for known vulnerabilities";
+    mainProgram = "safety";
     homepage = "https://github.com/pyupio/safety";
     changelog = "https://github.com/pyupio/safety/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

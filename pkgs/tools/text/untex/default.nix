@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A utility which removes LaTeX commands from input";
+    mainProgram = "untex";
     homepage = "https://www.ctan.org/pkg/untex";
     license = licenses.gpl1Only;
     maintainers = with maintainers; [ joachifm ];

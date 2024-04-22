@@ -1,47 +1,90 @@
 { lib, systemdUtils, pkgs }:
 
-with systemdUtils.lib;
-with systemdUtils.unitOptions;
-with lib;
+let
+  inherit (systemdUtils.lib)
+    automountConfig
+    makeUnit
+    mountConfig
+    stage1ServiceConfig
+    stage2ServiceConfig
+    unitConfig
+    ;
+
+  inherit (systemdUtils.unitOptions)
+    concreteUnitOptions
+    stage1AutomountOptions
+    stage1CommonUnitOptions
+    stage1MountOptions
+    stage1PathOptions
+    stage1ServiceOptions
+    stage1SliceOptions
+    stage1SocketOptions
+    stage1TimerOptions
+    stage2AutomountOptions
+    stage2CommonUnitOptions
+    stage2MountOptions
+    stage2PathOptions
+    stage2ServiceOptions
+    stage2SliceOptions
+    stage2SocketOptions
+    stage2TimerOptions
+    ;
+
+  inherit (lib)
+    mkDefault
+    mkDerivedConfig
+    mkEnableOption
+    mkIf
+    mkOption
+    ;
+
+  inherit (lib.types)
+    attrsOf
+    lines
+    listOf
+    nullOr
+    path
+    submodule
+    ;
+in
 
 rec {
-  units = with types;
-    attrsOf (submodule ({ name, config, ... }: {
-      options = concreteUnitOptions;
-      config = { unit = mkDefault (systemdUtils.lib.makeUnit name config); };
-    }));
+  units = attrsOf (submodule ({ name, config, ... }: {
+    options = concreteUnitOptions;
+    config = { unit = mkDefault (makeUnit name config); };
+  }));
 
-  services = with types; attrsOf (submodule [ stage2ServiceOptions unitConfig stage2ServiceConfig ]);
-  initrdServices = with types; attrsOf (submodule [ stage1ServiceOptions unitConfig stage1ServiceConfig ]);
+  services = attrsOf (submodule [ stage2ServiceOptions unitConfig stage2ServiceConfig ]);
+  initrdServices = attrsOf (submodule [ stage1ServiceOptions unitConfig stage1ServiceConfig ]);
 
-  targets = with types; attrsOf (submodule [ stage2CommonUnitOptions unitConfig ]);
-  initrdTargets = with types; attrsOf (submodule [ stage1CommonUnitOptions unitConfig ]);
+  targets = attrsOf (submodule [ stage2CommonUnitOptions unitConfig ]);
+  initrdTargets = attrsOf (submodule [ stage1CommonUnitOptions unitConfig ]);
 
-  sockets = with types; attrsOf (submodule [ stage2SocketOptions unitConfig ]);
-  initrdSockets = with types; attrsOf (submodule [ stage1SocketOptions unitConfig ]);
+  sockets = attrsOf (submodule [ stage2SocketOptions unitConfig ]);
+  initrdSockets = attrsOf (submodule [ stage1SocketOptions unitConfig ]);
 
-  timers = with types; attrsOf (submodule [ stage2TimerOptions unitConfig ]);
-  initrdTimers = with types; attrsOf (submodule [ stage1TimerOptions unitConfig ]);
+  timers = attrsOf (submodule [ stage2TimerOptions unitConfig ]);
+  initrdTimers = attrsOf (submodule [ stage1TimerOptions unitConfig ]);
 
-  paths = with types; attrsOf (submodule [ stage2PathOptions unitConfig ]);
-  initrdPaths = with types; attrsOf (submodule [ stage1PathOptions unitConfig ]);
+  paths = attrsOf (submodule [ stage2PathOptions unitConfig ]);
+  initrdPaths = attrsOf (submodule [ stage1PathOptions unitConfig ]);
 
-  slices = with types; attrsOf (submodule [ stage2SliceOptions unitConfig ]);
-  initrdSlices = with types; attrsOf (submodule [ stage1SliceOptions unitConfig ]);
+  slices = attrsOf (submodule [ stage2SliceOptions unitConfig ]);
+  initrdSlices = attrsOf (submodule [ stage1SliceOptions unitConfig ]);
 
-  mounts = with types; listOf (submodule [ stage2MountOptions unitConfig mountConfig ]);
-  initrdMounts = with types; listOf (submodule [ stage1MountOptions unitConfig mountConfig ]);
+  mounts = listOf (submodule [ stage2MountOptions unitConfig mountConfig ]);
+  initrdMounts = listOf (submodule [ stage1MountOptions unitConfig mountConfig ]);
 
-  automounts = with types; listOf (submodule [ stage2AutomountOptions unitConfig automountConfig ]);
-  initrdAutomounts = with types; attrsOf (submodule [ stage1AutomountOptions unitConfig automountConfig ]);
+  automounts = listOf (submodule [ stage2AutomountOptions unitConfig automountConfig ]);
+  initrdAutomounts = attrsOf (submodule [ stage1AutomountOptions unitConfig automountConfig ]);
 
-  initrdContents = types.attrsOf (types.submodule ({ config, options, name, ... }: {
+  initrdContents = attrsOf (submodule ({ config, options, name, ... }: {
     options = {
-      enable = mkEnableOption (lib.mdDoc "copying of this file and symlinking it") // { default = true; };
+      enable = (mkEnableOption "copying of this file and symlinking it") // { default = true; };
 
       target = mkOption {
-        type = types.path;
-        description = lib.mdDoc ''
+        type = path;
+        description = ''
           Path of the symlink.
         '';
         default = name;
@@ -49,13 +92,13 @@ rec {
 
       text = mkOption {
         default = null;
-        type = types.nullOr types.lines;
-        description = lib.mdDoc "Text of the file.";
+        type = nullOr lines;
+        description = "Text of the file.";
       };
 
       source = mkOption {
-        type = types.path;
-        description = lib.mdDoc "Path of the source file.";
+        type = path;
+        description = "Path of the source file.";
       };
     };
 

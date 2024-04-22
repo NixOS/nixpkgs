@@ -89,6 +89,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GTK toolkit providing widgets for embedded maps";
+    mainProgram = "shumate-demo";
     homepage = "https://gitlab.gnome.org/GNOME/libshumate";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;

@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "rfc";
-  version = "0.2.6";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "bfontaine";
     repo = "rfc";
     rev = "v${version}";
-    hash = "sha256-dfaeTdJiJuKp8/k6LBP+RC60gTRHfHR5hhLD4ZWJufE=";
+    hash = "sha256-zN+MQtHh69PkzbrfceHFpBYCPmTg9qrOf/ML2efq6Xk=";
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];

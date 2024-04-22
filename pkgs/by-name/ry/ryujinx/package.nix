@@ -19,19 +19,20 @@
 , fontconfig
 , glew
 , libGL
+, udev
 , SDL2
 , SDL2_mixer
 }:
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.1.1217"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
+  version = "1.1.1281"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "bc4d99a0786dbcbfde62d3bdeb98ed3d12c94852";
-    sha256 = "00qvwhl18f09lgs94b66kzxyf0pbhwdkcyrsc7vjyv5dl88f5120";
+    rev = "8884d1fd732c9ba788f0ab711e6a9f507d934ac8";
+    sha256 = "0g4x10whiybckvx8hhpdrpa8mbypwmpq1av6cjk53zc7iwkhvigw";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
@@ -49,6 +50,7 @@ buildDotnetModule rec {
     pulseaudio
     vulkan-loader
     ffmpeg
+    udev
 
     # Avalonia UI
     libICE

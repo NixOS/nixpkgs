@@ -22,6 +22,7 @@ buildNpmPackage rec {
 
   meta = with lib; {
     description = "Check for outdated, incorrect, and unused dependencies";
+    mainProgram = "npm-check";
     homepage = "https://github.com/dylang/npm-check";
     changelog = "https://github.com/dylang/npm-check/releases/tag/v${version}";
     license = licenses.mit;

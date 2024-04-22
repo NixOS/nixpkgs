@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GUI for molecular phylogeny";
+    mainProgram = "seaview";
     longDescription = ''
       SeaView is a multiplatform, graphical user interface for multiple sequence alignment and molecular phylogeny.
         - SeaView reads and writes various file formats (NEXUS, MSF, CLUSTAL, FASTA, PHYLIP, MASE, Newick) of DNA and protein sequences and of phylogenetic trees.

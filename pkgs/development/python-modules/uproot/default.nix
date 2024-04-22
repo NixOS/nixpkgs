@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "uproot";
-  version = "5.3.1";
+  version = "5.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = "uproot5";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cZVdsemaA3ni6xFfrkyLJA+12B7vyURj9OYVuOhqTXU=";
+    hash = "sha256-dq362pevqgLx5KwZ19zQ6aOn5NCyiqynPCF7YdI6tkw=";
   };
 
   nativeBuildInputs = [
@@ -59,13 +59,16 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Tests that try to download files
+    "test_descend_into_path_classname_of"
     "test_fallback"
     "test_file"
     "test_fsspec_cache_http"
     "test_fsspec_cache_http_directory"
     "test_fsspec_chunks"
     "test_fsspec_globbing_http"
+    "test_fsspec_writing_http"
     "test_fsspec_writing_memory"
+    "test_fsspec_writing_ssh"
     "test_http"
     "test_http_fallback"
     "test_http_multipart"
@@ -74,9 +77,11 @@ buildPythonPackage rec {
     "test_http_size_port"
     "test_issue_1054_filename_colons"
     "test_no_multipart"
-    "test_open_fsspec_http"
     "test_open_fsspec_github"
+    "test_open_fsspec_http"
+    "test_open_fsspec_ss"
     "test_pickle_roundtrip_http"
+    "test_split_ranges_if_large_file_in_http"
     # Cyclic dependency with dask-awkward
     "test_decompression_executor_for_dask"
   ];

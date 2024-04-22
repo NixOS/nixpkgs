@@ -284,7 +284,6 @@ in stdenv.mkDerivation {
     patch -p1 -d swift -i ${./patches/swift-linux-fix-libc-paths.patch}
     patch -p1 -d swift -i ${./patches/swift-linux-fix-linking.patch}
     patch -p1 -d swift -i ${./patches/swift-darwin-libcxx-flags.patch}
-    patch -p1 -d swift -i ${./patches/swift-darwin-link-cxxabi.patch}
     patch -p1 -d swift -i ${substituteAll {
       src = ./patches/swift-darwin-plistbuddy-workaround.patch;
       inherit swiftArch;

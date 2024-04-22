@@ -24,12 +24,12 @@ let
     hash = "sha256-AVaKcRjF5ZiSR8aPSLBzSTeWVwGWW/aSyQJcN0Yhza0=";
   };
   caf' = caf.overrideAttrs (old: {
-    version = "unstable-2022-11-17-zeek";
+    version = "unstable-2024-01-07-zeek";
     src = fetchFromGitHub {
       owner = "zeek";
       repo = "actor-framework";
-      rev = "4f580d89f35ae4d475505101623c8b022c0c6aa6";
-      hash = "sha256-8KGXg072lZiq/rC5ZuThDGRjeYvVVFBd3ea8yhUHOYY=";
+      rev = "e3048cdd13e085c97870a55eb1f9de04e25320f3";
+      hash = "sha256-uisoYXiZbFQa/TfWGRrCJ23MX4bg8Ds86ffC8sZSRNQ=";
     };
     cmakeFlags = old.cmakeFlags ++ [
       "-DCAF_ENABLE_TESTING=OFF"
@@ -39,7 +39,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "zeek-broker";
-  version = "2.7.0";
+  version = "6.2.0";
   outputs = [ "out" "py" ];
 
   strictDeps = true;
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     owner = "zeek";
     repo = "broker";
     rev = "v${version}";
-    hash = "sha256-fwLqw7PPYUDm+eJxDpCtY/W6XianqBDPHOhzDQoooYo=";
+    hash = "sha256-SG5TzozKvYc7qcEPJgiEtsxgzdZbbJt90lmuUbCPyv0=";
   };
   postUnpack = ''
     rmdir $sourceRoot/cmake $sourceRoot/3rdparty
@@ -82,6 +82,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Zeek's Messaging Library";
+    mainProgram = "broker-benchmark";
     homepage = "https://github.com/zeek/broker";
     license = licenses.bsd3;
     platforms = platforms.unix;

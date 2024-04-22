@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-sensors-plugin";
     description = "A panel plug-in for different sensors using acpi, lm_sensors and hddtemp";
+    mainProgram = "xfce4-sensors";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ] ++ teams.xfce.members;

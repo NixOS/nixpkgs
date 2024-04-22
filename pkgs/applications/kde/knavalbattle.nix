@@ -5,6 +5,7 @@ mkDerivation {
   meta = with lib; {
     homepage = "https://kde.org/applications/en/games/org.kde.knavalbattle";
     description = "Naval Battle is a ship sinking game";
+    mainProgram = "knavalbattle";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

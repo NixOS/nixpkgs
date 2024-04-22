@@ -24,6 +24,7 @@ buildGoModule rec {
   meta = with lib; {
     inherit (src.meta) homepage;
     description = "Simple iDRAC exporter for Prometheus";
+    mainProgram = "idrac_exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ codec ];
   };

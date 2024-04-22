@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "shazamio";
-  version = "0.4.0.1";
+  version = "0.5.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dotX12";
     repo = "ShazamIO";
-    rev = version;
-    hash = "sha256-dfrdfbGkLYNjlS6Qv9Rnywv6nqiKrNXCICLSuAXpQBU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-nzKvEoh1DrZegoRNqOCh9Qm+7B7uQ9dEH75mVueGxZI=";
   };
 
   patches = [

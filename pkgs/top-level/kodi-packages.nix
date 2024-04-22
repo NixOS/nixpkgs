@@ -26,7 +26,7 @@ let
   self = {
     addonDir = "/share/kodi/addons";
 
-    rel = "Nexus";
+    rel = kodi.kodiReleaseName;
 
     inherit callPackage kodi hasKodiAddon requiredKodiAddons;
 
@@ -78,6 +78,8 @@ let
     libretro-nestopia = callPackage ../applications/video/kodi/addons/libretro-nestopia { inherit nestopia; };
 
     libretro-snes9x = callPackage ../applications/video/kodi/addons/libretro-snes9x { inherit snes9x; };
+
+    jellycon = callPackage ../applications/video/kodi/addons/jellycon { };
 
     jellyfin = callPackage ../applications/video/kodi/addons/jellyfin { };
 

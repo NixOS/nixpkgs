@@ -4,21 +4,26 @@
 , pytestCheckHook
 , pythonOlder
 , requests
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "sunweg";
-  version = "2.1.0";
-  format = "setuptools";
+  version = "2.1.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rokam";
-    repo = pname;
+    repo = "sunweg";
     rev = "refs/tags/${version}";
-    hash = "sha256-E5dwFfFzOMyYLAqoTdp22/qIS3+IXD6jkVUVZIumk6Y=";
+    hash = "sha256-fgNtxCBIuNulCfuDaEsM7kL1WpwNE9O+JQ1DMZrz5jA=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     requests

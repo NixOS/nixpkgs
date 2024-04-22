@@ -45,6 +45,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A lean and mean Atmel AVR simulator";
+    mainProgram = "simavr";
     homepage    = "https://github.com/buserror/simavr";
     license     = licenses.gpl3;
     platforms   = platforms.unix;

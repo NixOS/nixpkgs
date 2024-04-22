@@ -70,6 +70,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Accerciser";
     description = "Interactive Python accessibility explorer";
+    mainProgram = "accerciser";
     maintainers = teams.gnome.members;
     license = licenses.bsd3;
     platforms = platforms.linux;

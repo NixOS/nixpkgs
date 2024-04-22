@@ -807,7 +807,7 @@ rec {
     meta = with lib; {
       description = "Hunspell dictionary for Dutch (Netherlands) from OpenTaal";
       homepage = "https://www.opentaal.org/";
-      license = with licenses; [ bsd3 ]; # and/or cc-by-nc-30
+      license = with licenses; [ bsd3 /* or */ cc-by-30 ];
       maintainers = with maintainers; [ artturin ];
     };
   };

@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libspelling";
-  version = "0.2.0";
+  version = "0.2.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "chergert";
     repo = "libspelling";
     rev = version;
-    hash = "sha256-OOSQgdtnEx6/5yKwavCGdY/5L0Mr3XW0Srmd42ZTdUk=";
+    hash = "sha256-0OGcwPGWtYYf0XmvzXEaQgebBOW/6JWcDuF4MlQjCZQ=";
   };
 
   nativeBuildInputs = [

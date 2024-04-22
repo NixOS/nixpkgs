@@ -27,7 +27,7 @@ let
     options = {
       fingerprint = mkOption {
         type = types.attrsOf types.str;
-        description = lib.mdDoc ''
+        description = ''
           Output name to EDID mapping.
           Use `autorandr --fingerprint` to get current setup values.
         '';
@@ -36,13 +36,13 @@ let
 
       config = mkOption {
         type = types.attrsOf configModule;
-        description = lib.mdDoc "Per output profile configuration.";
+        description = "Per output profile configuration.";
         default = { };
       };
 
       hooks = mkOption {
         type = hooksModule;
-        description = lib.mdDoc "Profile hook scripts.";
+        description = "Profile hook scripts.";
         default = { };
       };
     };
@@ -52,54 +52,54 @@ let
     options = {
       enable = mkOption {
         type = types.bool;
-        description = lib.mdDoc "Whether to enable the output.";
+        description = "Whether to enable the output.";
         default = true;
       };
 
       crtc = mkOption {
         type = types.nullOr types.ints.unsigned;
-        description = lib.mdDoc "Output video display controller.";
+        description = "Output video display controller.";
         default = null;
         example = 0;
       };
 
       primary = mkOption {
         type = types.bool;
-        description = lib.mdDoc "Whether output should be marked as primary";
+        description = "Whether output should be marked as primary";
         default = false;
       };
 
       position = mkOption {
         type = types.str;
-        description = lib.mdDoc "Output position";
+        description = "Output position";
         default = "";
         example = "5760x0";
       };
 
       mode = mkOption {
         type = types.str;
-        description = lib.mdDoc "Output resolution.";
+        description = "Output resolution.";
         default = "";
         example = "3840x2160";
       };
 
       rate = mkOption {
         type = types.str;
-        description = lib.mdDoc "Output framerate.";
+        description = "Output framerate.";
         default = "";
         example = "60.00";
       };
 
       gamma = mkOption {
         type = types.str;
-        description = lib.mdDoc "Output gamma configuration.";
+        description = "Output gamma configuration.";
         default = "";
         example = "1.0:0.909:0.833";
       };
 
       rotate = mkOption {
         type = types.nullOr (types.enum [ "normal" "left" "right" "inverted" ]);
-        description = lib.mdDoc "Output rotate configuration.";
+        description = "Output rotate configuration.";
         default = null;
         example = "left";
       };
@@ -114,7 +114,7 @@ let
             [ 0.0 0.0 1.0 ]
           ]
         '';
-        description = lib.mdDoc ''
+        description = ''
           Refer to
           {manpage}`xrandr(1)`
           for the documentation of the transform matrix.
@@ -123,7 +123,7 @@ let
 
       dpi = mkOption {
         type = types.nullOr types.ints.positive;
-        description = lib.mdDoc "Output DPI configuration.";
+        description = "Output DPI configuration.";
         default = null;
         example = 96;
       };
@@ -133,23 +133,23 @@ let
           options = {
             method = mkOption {
               type = types.enum [ "factor" "pixel" ];
-              description = lib.mdDoc "Output scaling method.";
+              description = "Output scaling method.";
               default = "factor";
               example = "pixel";
             };
 
             x = mkOption {
               type = types.either types.float types.ints.positive;
-              description = lib.mdDoc "Horizontal scaling factor/pixels.";
+              description = "Horizontal scaling factor/pixels.";
             };
 
             y = mkOption {
               type = types.either types.float types.ints.positive;
-              description = lib.mdDoc "Vertical scaling factor/pixels.";
+              description = "Vertical scaling factor/pixels.";
             };
           };
         });
-        description = lib.mdDoc ''
+        description = ''
           Output scale configuration.
 
           Either configure by pixels or a scaling factor. When using pixel method the
@@ -178,19 +178,19 @@ let
     options = {
       postswitch = mkOption {
         type = types.attrsOf hookType;
-        description = lib.mdDoc "Postswitch hook executed after mode switch.";
+        description = "Postswitch hook executed after mode switch.";
         default = { };
       };
 
       preswitch = mkOption {
         type = types.attrsOf hookType;
-        description = lib.mdDoc "Preswitch hook executed before mode switch.";
+        description = "Preswitch hook executed before mode switch.";
         default = { };
       };
 
       predetect = mkOption {
         type = types.attrsOf hookType;
-        description = lib.mdDoc ''
+        description = ''
           Predetect hook executed before autorandr attempts to run xrandr.
         '';
         default = { };
@@ -242,12 +242,12 @@ in {
   options = {
 
     services.autorandr = {
-      enable = mkEnableOption (lib.mdDoc "handling of hotplug and sleep events by autorandr");
+      enable = mkEnableOption "handling of hotplug and sleep events by autorandr";
 
       defaultTarget = mkOption {
         default = "default";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Fallback if no monitor layout can be detected. See the docs
           (https://github.com/phillipberndt/autorandr/blob/v1.0/README.md#how-to-use)
           for further reference.
@@ -257,12 +257,18 @@ in {
       ignoreLid = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc "Treat outputs as connected even if their lids are closed";
+        description = "Treat outputs as connected even if their lids are closed";
+      };
+
+      matchEdid = mkOption {
+        default = false;
+        type = types.bool;
+        description = "Match displays based on edid instead of name";
       };
 
       hooks = mkOption {
         type = hooksModule;
-        description = lib.mdDoc "Global hook scripts";
+        description = "Global hook scripts";
         default = { };
         example = literalExpression ''
           {
@@ -292,7 +298,7 @@ in {
       };
       profiles = mkOption {
         type = types.attrsOf profileModule;
-        description = lib.mdDoc "Autorandr profiles specification.";
+        description = "Autorandr profiles specification.";
         default = { };
         example = literalExpression ''
           {
@@ -351,7 +357,8 @@ in {
             --batch \
             --change \
             --default ${cfg.defaultTarget} \
-            ${optionalString cfg.ignoreLid "--ignore-lid"}
+            ${optionalString cfg.ignoreLid "--ignore-lid"} \
+            ${optionalString cfg.matchEdid "--match-edid"}
         '';
         Type = "oneshot";
         RemainAfterExit = false;

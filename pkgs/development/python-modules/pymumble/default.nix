@@ -48,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/azlux/pymumble";
     changelog = "https://github.com/azlux/pymumble/releases/tag/${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ thelegy infinisil ];
+    maintainers = with maintainers; [ thelegy ];
   };
 }

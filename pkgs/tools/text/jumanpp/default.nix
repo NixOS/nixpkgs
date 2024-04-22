@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A Japanese morphological analyser using a recurrent neural network language model (RNNLM)";
+    mainProgram = "jumanpp";
     longDescription = ''
       JUMAN++ is a new morphological analyser that considers semantic
       plausibility of word sequences by using a recurrent neural network

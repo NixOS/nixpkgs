@@ -78,6 +78,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://en.wikipedia.org/wiki/Sushi_(software)";
     description = "A quick previewer for Nautilus";
+    mainProgram = "sushi";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

@@ -18,6 +18,7 @@ buildPythonPackage rec {
     homepage =  "https://github.com/kilink/ghdiff";
     license = licenses.mit;
     description = "Generate Github-style HTML for unified diffs.";
+    mainProgram = "ghdiff";
     maintainers = [ maintainers.mic92 ];
   };
 }

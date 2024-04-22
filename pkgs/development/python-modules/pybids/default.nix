@@ -67,6 +67,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python tools for querying and manipulating BIDS datasets";
+    mainProgram = "pybids";
     homepage = "https://github.com/bids-standard/pybids";
     changelog = "https://github.com/bids-standard/pybids/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;

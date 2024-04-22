@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sqlx-cli";
-  version = "0.7.3";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "launchbadge";
     repo = "sqlx";
     rev = "v${version}";
-    hash = "sha256-AKVNyuV9jwzmsy6tHkGkLj1fhVT8XYvEn2Ip2wCKDxI=";
+    hash = "sha256-q1o2pNKfvenpRwiYgIKkOYNcajgIhrhCjFC7bbEyLE4=";
   };
 
-  cargoHash = "sha256-F3FLu/n57F8psk+d0Hf+HnqV/DvEFQwRefu/4C8A1sU=";
+  cargoHash = "sha256-sMyK1v4pJmmlN47mvgUkpLBjcpmT346VSp984IpvVWY=";
 
   # Prepare the Cargo.lock for offline use.
   # See https://github.com/NixOS/nixpkgs/issues/261412

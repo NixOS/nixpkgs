@@ -5,12 +5,12 @@
 
 appimageTools.wrapType2 rec {
   pname = "miru";
-  version = "4.5.10";
+  version = "5.0.3";
 
   src = fetchurl {
     url = "https://github.com/ThaUnknown/miru/releases/download/v${version}/linux-Miru-${version}.AppImage";
     name = "${pname}-${version}.AppImage";
-    sha256 = "sha256-ptaviLwr0X/MuF517YLW7i9+rtnktcpgHVqMHn+tXWg=";
+    sha256 = "sha256-vKV1Scd+YiJMIV8EWx4udoOxTXW9NA7k/CxRVNRqrjk=";
   };
 
   extraInstallCommands =
@@ -29,7 +29,7 @@ appimageTools.wrapType2 rec {
 
   meta = with lib; {
     description = "Stream anime torrents, real-time with no waiting for downloads";
-    homepage = "https://github.com/ThaUnknown/miru#readme";
+    homepage = "https://miru.watch";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.d4ilyrun ];
     mainProgram = "miru";

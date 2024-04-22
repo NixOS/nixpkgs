@@ -3,12 +3,11 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
-, cython
+, cython_0
 , certifi
 , CFNetwork
 , cmake
 , CoreFoundation
-, libcxxabi
 , openssl
 , Security
 , pytestCheckHook
@@ -69,7 +68,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cmake
-    cython
+    cython_0
   ];
 
   buildInputs = [
@@ -82,10 +81,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     certifi
-  ];
-
-  LDFLAGS = lib.optionals stdenv.isDarwin [
-    "-L${lib.getLib libcxxabi}/lib"
   ];
 
   dontUseCmakeConfigure = true;

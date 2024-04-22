@@ -88,22 +88,21 @@ autoPatchelf() {
         --extra-args "${patchelfFlagsArray[@]}"
 }
 
-# XXX: This should ultimately use fixupOutputHooks but we currently don't have
-# a way to enforce the order. If we have $runtimeDependencies set, the setup
-# hook of patchelf is going to ruin everything and strip out those additional
-# RPATHs.
-#
-# So what we do here is basically run in postFixup and emulate the same
-# behaviour as fixupOutputHooks because the setup hook for patchelf is run in
-# fixupOutput and the postFixup hook runs later.
-#
-# shellcheck disable=SC2016
-# (Expressions don't expand in single quotes, use double quotes for that.)
-postFixupHooks+=('
-    if [ -z "${dontAutoPatchelf-}" ]; then
+autoPatchelfPostFixup() {
+    # XXX: This should ultimately use fixupOutputHooks but we currently don't have
+    # a way to enforce the order. If we have $runtimeDependencies set, the setup
+    # hook of patchelf is going to ruin everything and strip out those additional
+    # RPATHs.
+    #
+    # So what we do here is basically run in postFixup and emulate the same
+    # behaviour as fixupOutputHooks because the setup hook for patchelf is run in
+    # fixupOutput and the postFixup hook runs later.
+    if [[ -z "${dontAutoPatchelf-}" ]]; then
         autoPatchelf -- $(for output in $(getAllOutputNames); do
             [ -e "${!output}" ] || continue
             echo "${!output}"
         done)
     fi
-')
+}
+
+postFixupHooks+=(autoPatchelfPostFixup)

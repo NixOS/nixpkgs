@@ -40,8 +40,5 @@ stdenvNoCC.mkDerivation rec {
     priority = 6; # give precedence to kernel firmware
   };
 
-  passthru = {
-    inherit version;
-    updateScript = ./update.sh;
-  };
+  passthru.updateScript = ./update.sh;
 }

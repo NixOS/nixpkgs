@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "moderngl-window";
-  version = "2.4.5";
+  version = "2.4.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "moderngl";
     repo = "moderngl_window";
     rev = "refs/tags/${version}";
-    hash = "sha256-OfvIxezeZyuv5LLbe+4o1X2UCGnXT2DNvAF7t2Isw6Y=";
+    hash = "sha256-zTygSXU/vQZaFCuHbRBpO9/BYYA2UOid+wvhyc2bWMI=";
   };
 
   pythonRelaxDeps = [

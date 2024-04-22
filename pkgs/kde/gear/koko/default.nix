@@ -43,4 +43,5 @@ in
       kirigami-addons
       kquickimageeditor
     ];
+    meta.mainProgram = "koko";
   }

@@ -26,11 +26,12 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Bitcoin command line tool";
+    mainProgram = "bx";
     homepage = "https://github.com/libbitcoin/libbitcoin-explorer";
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ asymmetric ];
 
     # AGPL with a lesser clause
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
   };
 }

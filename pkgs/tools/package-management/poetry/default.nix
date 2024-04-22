@@ -30,6 +30,7 @@ let
     poetry-audit-plugin = callPackage ./plugins/poetry-audit-plugin.nix { };
     poetry-plugin-export = callPackage ./plugins/poetry-plugin-export.nix { };
     poetry-plugin-up = callPackage ./plugins/poetry-plugin-up.nix { };
+    poetry-plugin-poeblix = callPackage ./plugins/poetry-plugin-poeblix.nix { };
   };
 
   # selector is a function mapping pythonPackages to a list of plugins

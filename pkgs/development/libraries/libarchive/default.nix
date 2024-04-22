@@ -44,6 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/libarchive/libarchive/commit/3bd918d92f8c34ba12de9c6604d96f9e262a59fc.patch";
       hash = "sha256-RM3xFM6S2DkM5DJ0kAba8eLzEXuY5/7AaU06maHJ6rM=";
     })
+    (fetchpatch {
+      name = "fix-suspicious-commit-from-known-bad-actor.patch";
+      url = "https://github.com/libarchive/libarchive/commit/6110e9c82d8ba830c3440f36b990483ceaaea52c.patch";
+      hash = "sha256-/j6rJ0xWhtXU0YCu1LOokxxNppy5Of6Q0XyO4U6la7M=";
+    })
   ];
 
   outputs = [ "out" "lib" "dev" ];
@@ -59,6 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
       # access-time-related tests flakey on some systems
       "cpio/test/test_option_a.c"
       "cpio/test/test_option_t.c"
+    ] ++ lib.optionals (stdenv.isAarch64 && stdenv.isLinux) [
+      # only on some aarch64-linux systems?
+      "cpio/test/test_basic.c"
+      "cpio/test/test_format_newc.c"
     ];
     removeTest = testPath: ''
       substituteInPlace Makefile.am --replace "${testPath}" ""

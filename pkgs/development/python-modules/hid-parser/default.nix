@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
-, pytestCheckHook
+, pytest7CheckHook
 , hypothesis
 }:
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pytest7CheckHook
     hypothesis
   ];
 

@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "ionoscloud";
-  version = "6.1.8";
+  version = "6.1.9";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash= "sha256-QQNDqKZ+X+w5vHFXr793QqRjShNBZ182DyD3fUUxqkc=";
+    hash= "sha256-IpDhuZ8KrqT8g3UKgdEmjzKRlK1SXq1fgrTDFy/fvpU=";
   };
 
   nativeBuildInputs = [ setuptools ];

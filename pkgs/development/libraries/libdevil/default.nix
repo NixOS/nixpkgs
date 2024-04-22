@@ -69,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://openil.sourceforge.net/";
     description = "An image library which can can load, save, convert, manipulate, filter and display a wide variety of image formats";
+    mainProgram = "ilur";
     license = licenses.lgpl2;
     pkgConfigModules = [ "IL" ];
     platforms = platforms.mesaPlatforms;

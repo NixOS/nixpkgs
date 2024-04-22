@@ -54,6 +54,15 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           machine.wait_for_text('(Applications|Places|System)')
           machine.wait_for_text('(Computer|Home|Trash)')
 
+      with subtest("Check if various environment variables are set"):
+          machine.succeed("xargs --null --max-args=1 echo < /proc/$(pgrep -xf marco)/environ | grep 'XDG_CURRENT_DESKTOP' | grep 'MATE'")
+          # From mate-panel-with-applets packaging
+          machine.succeed("xargs --null --max-args=1 echo < /proc/$(pgrep -xf mate-panel)/environ | grep 'MATE_PANEL_APPLETS_DIR' | grep '${pkgs.mate.mate-panel-with-applets.pname}'")
+
+      with subtest("Check if applets are built with in-process support"):
+          # This is needed for Wayland support
+          machine.fail("pgrep -fa clock-applet")
+
       with subtest("Lock the screen"):
           machine.wait_until_succeeds("su - ${user.name} -c '${env} mate-screensaver-command -q' | grep 'The screensaver is inactive'")
           machine.succeed("su - ${user.name} -c '${env} mate-screensaver-command -l >&2 &'")

@@ -26,22 +26,22 @@
 , mock
 , py
 , pytest-asyncio
-, pytestCheckHook
+, pytest7CheckHook
 }:
 
 buildPythonPackage rec {
   pname = "quart";
-  version = "0.19.4";
-  format = "pyproject";
+  version = "0.19.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "quart";
     rev = "refs/tags/${version}";
-    hash = "sha256-EgCZ0AXK2vGxo55BWAcDVv6zNUrWNbAYNnEXEBJk+84=";
+    hash = "sha256-T2+76AVvXrads7AbjNAExV0i4doQ2xIUEwekVB2JXAo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
@@ -50,7 +50,7 @@ buildPythonPackage rec {
       --replace "--no-cov-on-fail " ""
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiofiles
     blinker
     click
@@ -76,11 +76,12 @@ buildPythonPackage rec {
     mock
     py
     pytest-asyncio
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
   meta = with lib; {
     description = "An async Python micro framework for building web applications";
+    mainProgram = "quart";
     homepage = "https://github.com/pallets/quart/";
     changelog = "https://github.com/pallets/quart/blob/${src.rev}/CHANGES.rst";
     license = licenses.mit;

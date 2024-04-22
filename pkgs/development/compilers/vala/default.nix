@@ -14,15 +14,10 @@ let
     # https://github.com/openembedded/openembedded-core/blob/a5440d4288e09d3e/meta/recipes-devtools/vala/vala/disable-graphviz.patch
     graphvizPatch =
       {
-        "0.48" = ./disable-graphviz-0.46.1.patch;
-
-        "0.54" = ./disable-graphviz-0.46.1.patch;
-
         "0.56" = ./disable-graphviz-0.56.8.patch;
-
       }.${lib.versions.majorMinor version} or (throw "no graphviz patch for this version of vala");
 
-    disableGraphviz = lib.versionAtLeast version "0.38" && !withGraphviz;
+    disableGraphviz = !withGraphviz;
 
   in stdenv.mkDerivation rec {
     pname = "vala";
@@ -55,14 +50,14 @@ let
 
     nativeBuildInputs = [
       pkg-config flex bison libxslt
-    ] ++ lib.optional (stdenv.isDarwin && (lib.versionAtLeast version "0.38")) expat
+    ] ++ lib.optional (stdenv.isDarwin) expat
       ++ lib.optional disableGraphviz autoreconfHook # if we changed our ./configure script, need to reconfigure
       ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ vala ]
       ++ extraNativeBuildInputs;
 
     buildInputs = [
       glib libiconv libintl
-    ] ++ lib.optional (lib.versionAtLeast version "0.38" && withGraphviz) graphviz
+    ] ++ lib.optional (withGraphviz) graphviz
       ++ extraBuildInputs;
 
     enableParallelBuilding = true;
@@ -90,16 +85,6 @@ let
   });
 
 in rec {
-  vala_0_48 = generic {
-    version = "0.48.25";
-    sha256 = "UMs8Xszdx/1DaL+pZBSlVgReedKxWmiRjHJ7jIOxiiQ=";
-  };
-
-  vala_0_54 = generic {
-    version = "0.54.9";
-    sha256 = "hXLA6Nd9eMFZfVFgCPBUDH50leA10ou0wlzJk+U85LQ=";
-  };
-
   vala_0_56 = generic {
     version = "0.56.14";
     sha256 = "k4LCaMqb3AKq7cgVKpgYvzk1JzBB9inFbeQQ42Cj9Vc=";

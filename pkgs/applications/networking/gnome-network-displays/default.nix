@@ -8,7 +8,7 @@
 , gettext
 , desktop-file-utils
 , appstream-glib
-, wrapGAppsHook
+, wrapGAppsHook4
 , python3
 # Not native
 , gst_all_1
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     desktop-file-utils
     appstream-glib
-    wrapGAppsHook
+    wrapGAppsHook4
     python3
   ];
 

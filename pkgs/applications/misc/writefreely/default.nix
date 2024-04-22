@@ -2,16 +2,20 @@
 
 buildGoModule rec {
   pname = "writefreely";
-  version = "0.14.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "writefreely";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vOoTAr33FMQaHIwpwIX0g/KJWQvDn3oVJg14kEY6FIQ=";
+    sha256 = "sha256-7KTNimthtfmQCgyXevAEj+CZ2MS+uOby73OO1fGNXfs=";
   };
 
-  vendorHash = "sha256-xTo/zbz9pSjvNntr5dnytiJ7oRAdtEuyiu4mJZgwHTc=";
+  vendorHash = "sha256-6RTshhxX+w/gdK53wCHVMpm6EkkRtEJ2/Fe7MfZ0WvY=";
+
+  patches = [
+    ./fix-go-version-error.patch
+  ];
 
   ldflags = [ "-s" "-w" "-X github.com/writefreely/writefreely.softwareVer=${version}" ];
 

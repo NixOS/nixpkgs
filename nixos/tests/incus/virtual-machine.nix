@@ -57,5 +57,14 @@ in
 
     with subtest("lxd-agent has a valid path"):
         machine.succeed("incus exec ${instance-name} -- bash -c 'true'")
+
+    with subtest("guest supports cpu hotplug"):
+        machine.succeed("incus config set ${instance-name} limits.cpu=1")
+        count = int(machine.succeed("incus exec ${instance-name} -- nproc").strip())
+        assert count == 1, f"Wrong number of CPUs reported, want: 1, got: {count}"
+
+        machine.succeed("incus config set ${instance-name} limits.cpu=2")
+        count = int(machine.succeed("incus exec ${instance-name} -- nproc").strip())
+        assert count == 2, f"Wrong number of CPUs reported, want: 2, got: {count}"
   '';
 })

@@ -45,6 +45,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Asynchronous FTP server library";
+    mainProgram = "ftpbench";
     homepage = "https://github.com/giampaolo/pyftpdlib/";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

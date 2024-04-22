@@ -51,7 +51,7 @@ buildGoModule rec {
     '';
     homepage = "https://brig.readthedocs.io";
     changelog = "https://github.com/sahib/brig/releases/tag/${src.rev}";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ offline ];
     mainProgram = "brig";
   };

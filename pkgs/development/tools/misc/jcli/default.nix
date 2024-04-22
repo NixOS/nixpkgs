@@ -21,6 +21,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Jenkins CLI allows you to manage your Jenkins in an easy way";
+    mainProgram = "jcli";
     homepage = "https://jcli.jenkins-zh.cn/";
     license = licenses.mit;
     maintainers = with maintainers; [ sikmir ];
