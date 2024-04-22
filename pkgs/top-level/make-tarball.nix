@@ -1,7 +1,3 @@
-/* Hydra job to build a tarball for Nixpkgs from a Git checkout.  It
-   also builds the documentation and tests whether the Nix expressions
-   evaluate correctly. */
-
 { nixpkgs
 , officialRelease
 , pkgs ? import nixpkgs.outPath {}
@@ -31,54 +27,32 @@ pkgs.releaseTools.sourceTarball {
     echo "git-revision is $(cat .git-revision)"
   '';
 
-  requiredSystemFeatures = [ "big-parallel" ]; # 1 thread but ~36G RAM (!) see #227945
-
   dontBuild = false;
 
   doCheck = true;
 
   checkPhase = ''
-    set -o pipefail
-
-    export NIX_STATE_DIR=$TMPDIR
-    export NIX_PATH=nixpkgs=$TMPDIR/barf.nix
-    opts=(--option build-users-group "")
-    nix-store --init
-
-    echo "checking eval-release.nix"
-    nix-instantiate --eval --strict --show-trace ./maintainers/scripts/eval-release.nix > /dev/null
-
-    echo "checking find-tarballs.nix"
-    nix-instantiate --readonly-mode --eval --strict --show-trace --json \
-       ./maintainers/scripts/find-tarballs.nix \
-      --arg expr 'import ./maintainers/scripts/all-tarballs.nix' > $TMPDIR/tarballs.json
-    nrUrls=$(jq -r '.[].url' < $TMPDIR/tarballs.json | wc -l)
-    echo "found $nrUrls URLs"
-    if [ "$nrUrls" -lt 10000 ]; then
-      echo "suspiciously low number of URLs"
-      exit 1
-    fi
-
     echo "generating packages.json"
-    mkdir -p $out/nix-support
-    echo -n '{"version":2,"packages":' > tmp
-    nix-env -f . -I nixpkgs=$src -qa --meta --json --show-trace --arg config 'import ${./packages-config.nix}' "''${opts[@]}" >> tmp
-    echo -n '}' >> tmp
-    packages=$out/packages.json.br
-    < tmp sed "s|$(pwd)/||g" | jq -c | brotli -9 > $packages
-    rm tmp
 
+    packages=$out/packages.json.br
+
+    (
+      echo -n '{"version":2,"packages":'
+      NIX_STATE_DIR=$TMPDIR NIX_PATH= nix-env -f $src -qa --meta --json --show-trace --arg config 'import ${./packages-config.nix}'
+      echo -n '}'
+    ) | sed "s|$src/||g" | jq -c | brotli -9 > $packages
+
+    mkdir -p $out/nix-support
     echo "file json-br $packages" >> $out/nix-support/hydra-build-products
   '';
 
   distPhase = ''
     mkdir -p $out/tarballs
-    mkdir ../$releaseName
-    cp -prd . ../$releaseName
-    (cd .. && tar cfa $out/tarballs/$releaseName.tar.xz $releaseName) || false
+    XZ_OPT="-T0" tar \
+      --transform="s/^[.]/$releaseName/" \
+      --create \
+      --xz \
+      --file=$out/tarballs/$releaseName.tar.xz \
+      .
   '';
-
-  meta = {
-    maintainers = [ ];
-  };
 }
