@@ -10,12 +10,19 @@
 , dbus
 , polkit
 , systemdLibs
+, dbusSupport ? stdenv.isLinux
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs
+, udevSupport ? dbusSupport
+, libusb1
 , IOKit
 , testers
 , nix-update-script
 , pname ? "pcsclite"
 , polkitSupport ? false
 }:
+
+assert polkitSupport -> dbusSupport;
+assert systemdSupport -> dbusSupport;
 
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
@@ -35,11 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-confdir=/etc"
     # The OS should care on preparing the drivers into this location
     "--enable-usbdropdir=/var/lib/pcsc/drivers"
-    (lib.enableFeature stdenv.isLinux "libsystemd")
+    (lib.enableFeature systemdSupport "libsystemd")
     (lib.enableFeature polkitSupport "polkit")
-  ] ++ lib.optionals stdenv.isLinux [
     "--enable-ipcdir=/run/pcscd"
+  ] ++ lib.optionals systemdSupport [
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+  ] ++ lib.optionals (!udevSupport) [
+    "--disable-libudev"
   ];
 
   makeFlags = [
@@ -70,9 +79,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [ python3 ]
-    ++ lib.optionals stdenv.isLinux [ systemdLibs ]
+    ++ lib.optionals systemdSupport [ systemdLibs ]
     ++ lib.optionals stdenv.isDarwin [ IOKit ]
-    ++ lib.optionals polkitSupport [ dbus polkit ];
+    ++ lib.optionals dbusSupport [ dbus ]
+    ++ lib.optionals polkitSupport [ polkit ]
+    ++ lib.optionals (!udevSupport) [ libusb1 ];
 
   passthru = {
     tests = {
