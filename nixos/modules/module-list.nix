@@ -944,6 +944,7 @@
   ./services/networking/charybdis.nix
   ./services/networking/chisel-server.nix
   ./services/networking/cjdns.nix
+  ./services/networking/clatd.nix
   ./services/networking/cloudflare-dyndns.nix
   ./services/networking/cloudflared.nix
   ./services/networking/cntlm.nix
