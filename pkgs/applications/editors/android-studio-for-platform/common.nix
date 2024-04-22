@@ -1,6 +1,8 @@
-{ bash
+{ channel, pname, version, sha256Hash }:
+
+{ android-tools
+, bash
 , buildFHSEnv
-, cacert
 , coreutils
 , dpkg
 , e2fsprogs
@@ -12,6 +14,7 @@
 , gnutar
 , gtk2, gnome_vfs, glib, GConf
 , gzip
+, fontsConf
 , fontconfig
 , freetype
 , libX11
@@ -24,7 +27,6 @@
 , makeWrapper
 , ncurses5
 , openssl
-, pkgsi686Linux
 , ps
 , python3
 , lib
@@ -41,38 +43,24 @@
 }:
 
 let
-  pname = "android-studio-for-platform";
-  version = "2023.2.1.20";
-
-  drvName = "android-studio-for-platform-${version}";
+  drvName = "${pname}-${version}";
   filename = "asfp-${version}-linux.deb";
-
-  fontsConf = makeFontsConf {
-    fontDirectories = [];
-  };
 
   androidStudioForPlatform = stdenv.mkDerivation {
     name = "${drvName}-unwrapped";
 
     src = fetchurl {
       url = "https://dl.google.com/android/asfp/${filename}";
-      sha256 = "sha256-cM/pkSghqLUUvJVF/OVLDOxVBJlJLH8ge1bfZtDUegY=";
+      sha256 = sha256Hash;
     };
 
     nativeBuildInputs = [
       dpkg
-      unzip
       makeWrapper
     ];
 
-    dontUnpack = true;
-
-    # Causes the shebangs in interpreter scripts deployed to mobile devices to be patched, which Android does not understand
-    dontPatchShebangs = true;
-
     installPhase = ''
-      dpkg -x $src .
-      cp -r ./opt/android-studio-for-platform/ $out
+      cp -r "./opt/${pname}/" $out
       wrapProgram $out/bin/studio.sh \
         --set-default JAVA_HOME "$out/jbr" \
         --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
@@ -95,6 +83,7 @@ let
           git
           ps
           usbutils
+          android-tools
 
           # For Soong sync
           openssl
@@ -132,7 +121,7 @@ let
     name = pname;
     exec = pname;
     icon = pname;
-    desktopName = "Android Studio for Platform";
+    desktopName = "Android Studio for Platform (${channel} channel)";
     comment = "The official Android IDE for Android platform development";
     categories = [ "Development" "IDE" ];
     startupNotify = true;

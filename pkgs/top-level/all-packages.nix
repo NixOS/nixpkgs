@@ -30413,7 +30413,9 @@ with pkgs;
     (callPackage ../applications/editors/android-studio { });
   android-studio = androidStudioPackages.stable;
 
-  android-studio-for-platform = callPackage ../by-name/an/android-studio-for-platform/package.nix { inherit (gnome2) GConf gnome_vfs; };
+  androidStudioForPlatformPackages = recurseIntoAttrs
+    (callPackage ../applications/editors/android-studio-for-platform { });
+  android-studio-for-platform = androidStudioForPlatformPackages.stable;
 
   antfs-cli = callPackage ../applications/misc/antfs-cli { };
 
