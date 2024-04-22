@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, django
-, pytestCheckHook
-, pythonOlder
-, pytest-django
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  django,
+  pytestCheckHook,
+  pythonOlder,
+  pytest-django,
 }:
 
 buildPythonPackage rec {
@@ -22,22 +23,16 @@ buildPythonPackage rec {
     hash = "sha256-mf6NV7r/9kDCRlszx/QGtfEsC1O/SATd6+EX+w7ptEQ=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  dependencies = [
-    django
-  ];
+  dependencies = [ django ];
 
   nativeCheckInputs = [
     pytest-django
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "model_bakery"
-  ];
+  pythonImportsCheck = [ "model_bakery" ];
 
   meta = with lib; {
     description = "Object factory for Django";
