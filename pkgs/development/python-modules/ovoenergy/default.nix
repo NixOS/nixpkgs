@@ -1,12 +1,13 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, incremental
-, pythonOlder
-, setuptools
-, typer
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  incremental,
+  pythonOlder,
+  setuptools,
+  typer,
 }:
 
 buildPythonPackage rec {
@@ -23,13 +24,9 @@ buildPythonPackage rec {
     hash = "sha256-ZcTSf7UejEUqQo0qEXP3fWjZYRx0a3ZBNVkwS2dL3Yk=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    incremental
-  ];
+  nativeBuildInputs = [ incremental ];
 
   dependencies = [
     aiohttp
@@ -40,9 +37,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "ovoenergy"
-  ];
+  pythonImportsCheck = [ "ovoenergy" ];
 
   meta = with lib; {
     description = "Python client for getting data from OVO's API";
