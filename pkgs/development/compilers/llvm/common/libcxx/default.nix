@@ -123,7 +123,12 @@ stdenv.mkDerivation (rec {
   # libc++.so is a linker script which expands to multiple libraries,
   # libc++.so.1 and libc++abi.so or the external cxxabi. ld-wrapper doesn't
   # support linker scripts so the external cxxabi needs to be symlinked in
+  #
+  # Older versions (at least 12) install the headers in $out. They will be
+  # moved to $dev eventually either way, but we move them now so the lndir
+  # invocation succeeds.
   postInstall = lib.optionalString (cxxabi != null) ''
+    moveToOutput include "$dev"
     lndir ${lib.getDev cxxabi}/include $dev/include/c++/v1
     lndir ${lib.getLib cxxabi}/lib $out/lib
   '';
