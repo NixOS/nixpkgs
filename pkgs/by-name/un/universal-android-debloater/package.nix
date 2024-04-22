@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation";
     license = licenses.gpl3Only;
     mainProgram = "uad-ng";
-    maintainers = with maintainers; [ xfix ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

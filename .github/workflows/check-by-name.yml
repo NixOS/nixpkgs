@@ -107,6 +107,10 @@ jobs:
           # Adds a result symlink as a GC root
           nix-store --realise "$toolPath" --add-root result
       - name: Running nixpkgs-check-by-name
+        env:
+          # Force terminal colors to be enabled. The library that
+          # nixpkgs-check-by-name uses respects: https://bixense.com/clicolors/
+          CLICOLOR_FORCE: 1
         run: |
           if result/bin/nixpkgs-check-by-name --base "$base" .; then
             exit 0
