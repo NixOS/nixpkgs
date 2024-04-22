@@ -26,6 +26,7 @@ in
 { lib
 , buildGoModule
 , runCommandLocal
+, substituteAll
   # Native build inputs
 , addDriverRunpath
 , makeWrapper
@@ -52,6 +53,7 @@ in
 , squashfuse
   # Test dependencies
 , singularity-tools
+, writeShellScriptBin
 , cowsay
 , hello
   # Overridable configurations
@@ -70,7 +72,6 @@ in
   # Whether to compile with SUID support
 , enableSuid ? false
 , starterSuidPath ? null
-, substituteAll
   # newuidmapPath and newgidmapPath are to support --fakeroot
   # where those SUID-ed executables are unavailable from the FHS system PATH.
   # Path to SUID-ed newuidmap executable
@@ -279,6 +280,18 @@ in
         name = "hello-cowsay";
         contents = [ hello cowsay ];
         singularity = finalAttrs.finalPackage;
+      };
+      # Run the packages to test. E.g.
+      # nix run .#apptainer.manualTests.run-image-hello-cowsay
+      manualTests = lib.recurseIntoAttrs {
+        run-image-hello-cowsay =
+          let
+            image = finalAttrs.finalPackage.passthru.tests.image-hello-cowsay;
+            exe = lib.getExe finalAttrs.finalPackage;
+          in
+          writeShellScriptBin "test-run-image-hello-cowsay" ''
+            ${exe} exec ${image} hello | ${exe} exec ${image} cowsay
+          '';
       };
     };
     gpuChecks = lib.optionalAttrs (projectName == "apptainer") {
