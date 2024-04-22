@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, buildPackages
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, testers
-, trivy
+{
+  lib,
+  stdenv,
+  buildPackages,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  trivy,
 }:
 
 buildGoModule rec {
@@ -14,7 +15,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
-    repo = pname;
+    repo = "trivy";
     rev = "refs/tags/v${version}";
     hash = "sha256-0FV67+m09PCkPZfnkepkvBA4mFYIkJSMT5v0tDwalW8=";
   };
@@ -39,7 +40,11 @@ buildGoModule rec {
 
   postInstall =
     let
-      trivy = if stdenv.buildPlatform.canExecute stdenv.hostPlatform then placeholder "out" else buildPackages.trivy;
+      trivy =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          placeholder "out"
+        else
+          buildPackages.trivy;
     in
     ''
       installShellCompletion --cmd trivy \
@@ -69,6 +74,9 @@ buildGoModule rec {
     '';
     mainProgram = "trivy";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab jk ];
+    maintainers = with maintainers; [
+      fab
+      jk
+    ];
   };
 }
