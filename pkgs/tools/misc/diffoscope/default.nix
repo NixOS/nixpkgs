@@ -121,11 +121,12 @@ python3.pkgs.buildPythonApplication rec {
   # lipo
   # otool
   # Other tools:
-  # docx2txt <- makes tests broken:
+  # docx2txt, diffoscope expects another script named docx2txt that works differently
   # > FAILED tests/comparators/test_docx.py::test_diff - IndexError: list index out of range
   # > FAILED tests/comparators/test_docx.py::test_compare_non_existing - AssertionError
   #
   # We filter automatically all packages for the host platform (some dependencies are not supported on Darwin, aarch64, etc.).
+  # Packages which are marked broken for a platform are not automatically filtered to avoid accidentally removing them without noticing it.
   pythonPath = lib.filter (lib.meta.availableOn stdenv.hostPlatform) ([
     acl
     binutils-unwrapped-all-targets
@@ -215,7 +216,6 @@ python3.pkgs.buildPythonApplication rec {
       guestfs
       h5py
       pdfminer-six
-      # docx2txt, breaks the tests.
     ])
     # oggvideotools is broken on Darwin, please put it back when it will be fixed?
     ++ lib.optionals stdenv.isLinux [ oggvideotools ]
