@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "model-bakery";
   version = "1.18.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -22,11 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-mf6NV7r/9kDCRlszx/QGtfEsC1O/SATd6+EX+w7ptEQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
   ];
 
