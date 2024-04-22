@@ -12,10 +12,9 @@ rustPlatform.buildRustPackage rec {
   };
 
   postPatch = ''
-    # unknown lint: `ffi_unwind_calls`
-    # note: the `ffi_unwind_calls` lint is unstable
-    substituteInPlace src/main.rs src/{config,core,display,input,git,runtime,todo_file,testutils,view}/src/lib.rs \
-      --replace "ffi_unwind_calls," ""
+    # error: lint `unused_tuple_struct_fields` has been renamed to `dead_code`
+    substituteInPlace scripts/data/lints.rs src/main.rs src/{config,core,display,git,input,runtime,testutils,todo_file,view}/src/lib.rs \
+      --replace-fail "unused_tuple_struct_fields," ""
   '';
 
   cargoLock = {

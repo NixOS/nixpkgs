@@ -1028,8 +1028,6 @@ with pkgs;
     prefetch-yarn-deps
     fetchYarnDeps;
 
-  find-billy = callPackage ../games/find-billy { };
-
   find-cursor = callPackage ../tools/X11/find-cursor { };
 
   flare-floss = callPackage ../tools/security/flare-floss { };
@@ -1614,10 +1612,6 @@ with pkgs;
 
   afio = callPackage ../tools/archivers/afio { };
 
-  afl = callPackage ../tools/security/afl {
-    stdenv = clangStdenv;
-  };
-
   honggfuzz = callPackage ../tools/security/honggfuzz {
     clang = clang_16;
     llvm = llvm_16;
@@ -1632,7 +1626,7 @@ with pkgs;
 
   ledfx = callPackage ../applications/audio/ledfx { };
 
-  libdislocator = callPackage ../tools/security/afl/libdislocator.nix { };
+  libdislocator = callPackage ../tools/security/aflplusplus/libdislocator.nix { };
 
   afpfs-ng = callPackage ../tools/filesystems/afpfs-ng { };
 
