@@ -17640,6 +17640,8 @@ with pkgs;
 
   pypi-mirror = callPackage ../development/tools/pypi-mirror { };
 
+  structurizr-lite = callPackage ../tools/graphics/structurizr-lite { };
+
   svg2tikz = with python3.pkgs; toPythonApplication svg2tikz;
 
   svg2pdf = callPackage ../tools/graphics/svg2pdf { };
