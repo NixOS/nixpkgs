@@ -134,6 +134,7 @@
           expect <<"EOF"
             set status 1
             spawn $env(src)/test
+            proc abort { } { exit 2 }
             expect_before default abort
             expect -re {Now listening on: ([^\r]+)\r} {
               set url $expect_out(1,string)
@@ -145,6 +146,8 @@
               exit 1
             }
             send \x03
+            expect_before timeout abort
+            expect eof
             catch wait result
             exit [lindex $result 3]
           EOF
