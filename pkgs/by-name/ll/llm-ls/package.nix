@@ -1,13 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-}:
+{ lib, stdenv, darwin, rustPlatform, fetchFromGitHub }:
 
 let
   pname = "llm-ls";
   version = "0.4.0";
-in
-rustPlatform.buildRustPackage {
+in rustPlatform.buildRustPackage {
   inherit pname version;
 
   src = fetchFromGitHub {
@@ -19,13 +15,19 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-Z6BO4kDtlIrVdDk1fiwyelpu1rj7e4cibgFZRsl1pfA=";
 
+  buildInputs =
+    lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+
+  NIX_CFLAGS_COMPILE = lib.optionals (stdenv.cc.isClang && stdenv.isDarwin) [
+    "-fno-lto" # work around https://github.com/NixOS/nixpkgs/issues/19098
+  ];
+
   meta = with lib; {
     description = "LSP server leveraging LLMs for code completion (and more?)";
     homepage = "https://github.com/huggingface/llm-ls";
     license = licenses.asl20;
     maintainers = with maintainers; [ jfvillablanca ];
     platforms = platforms.all;
-    badPlatforms = platforms.darwin;
     mainProgram = "llm-ls";
   };
 }
