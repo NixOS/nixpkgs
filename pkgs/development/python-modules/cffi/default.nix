@@ -12,6 +12,9 @@
   pythonAtLeast,
 }:
 
+let
+  ccVersion = lib.getVersion stdenv.cc;
+in
 if isPyPy then
   null
 else
@@ -39,9 +42,9 @@ else
         #
         ./darwin-use-libffi-closures.diff
       ]
-      ++ lib.optionals (stdenv.cc.isClang && lib.versionAtLeast (lib.getVersion stdenv.cc) "13") [
+      ++ lib.optionals (stdenv.cc.isClang && (ccVersion == "boot" || lib.versionAtLeast (lib.getVersion stdenv.cc) "13")) [
         # -Wnull-pointer-subtraction is enabled with -Wextra. Suppress it to allow the following tests
-        # to run and pass when cffi is built with newer versions of clang:
+        # to run and pass when cffi is built with newer versions of clang (including the bootstrap tools clang on Darwin):
         # - testing/cffi1/test_verify1.py::test_enum_usage
         # - testing/cffi1/test_verify1.py::test_named_pointer_as_argument
         ./clang-pointer-substraction-warning.diff
