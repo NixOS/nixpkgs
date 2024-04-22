@@ -7,7 +7,6 @@
 , gi-docgen
 , docbook-xsl-nons
 , gettext
-, libxml2
 , desktop-file-utils
 , wrapGAppsHook4
 , gtk4
@@ -39,13 +38,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nautilus";
-  version = "45.2.1";
+  version = "46.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/nautilus/${lib.versions.major finalAttrs.version}/nautilus-${finalAttrs.version}.tar.xz";
-    sha256 = "ul1T3zmhVVYt+XHvXjHoJwdJBdDEjqseskIaEChLmQ0=";
+    hash = "sha256-zBpf3x3XL5Lp4/PHrSY3CaDeU5Golb6TRPamf0OIe9c=";
   };
 
   patches = [
@@ -63,7 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     desktop-file-utils
     gettext
     gobject-introspection
-    libxml2
     meson
     ninja
     pkg-config
