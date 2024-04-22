@@ -65,7 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
       artemist
       benley
       shamilton
-      xfix
     ];
     platforms = lib.platforms.linux;
   };
