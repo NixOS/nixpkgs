@@ -1,0 +1,12 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c952008..f4afb47 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -181,6 +181,7 @@ ENDIF()
+ 
+ SET(USE_QT_LIBRARIES
+     Core Gui Widgets LinguistTools Network Test
++    ${WEBKIT_NAME} ${WEBKIT_WIDGETS_NAME}
+     )
+ 
+ IF (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
