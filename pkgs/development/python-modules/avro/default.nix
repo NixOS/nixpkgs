@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , pythonOlder
+, pythonAtLeast
 , fetchPypi
 , typing-extensions
 , pytestCheckHook
@@ -11,7 +12,8 @@ buildPythonPackage rec {
   version = "1.11.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  # distutils usage: https://github.com/search?q=repo%3Aapache%2Favro%20distutils&type=code
+  disabled = pythonOlder "3.6" || pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
