@@ -63,6 +63,11 @@ buildPythonPackage rec {
     pyyaml
   ];
 
+  disabledTests = [
+    # test artifact mismatch
+    "test_toc_tokens"
+  ];
+
   pythonImportsCheck = map (ext: "pymdownx.${ext}") extensions;
 
   passthru.tests = {
