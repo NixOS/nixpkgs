@@ -97,7 +97,8 @@
       airtouch4pyapi
     ];
     "airtouch5" = ps: with ps; [
-    ]; # missing inputs: airtouch5py
+      airtouch5py
+    ];
     "airvisual" = ps: with ps; [
       pyairvisual
     ];
