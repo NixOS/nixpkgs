@@ -19,11 +19,15 @@ let
   # uses of this variable would immediately result in an unrecoverable
   # error where there should be a deprecation warning.
   printDeprecationWarning =
-    if builtins.getEnv "NIX_ABORT_ON_WARN" != "" then
+    if 2405 <= oldestSupportedRelease && builtins.getEnv "NIX_ABORT_ON_WARN" != "" then
       builtins.trace
         "[1;31mwarning: NIX_ABORT_ON_WARN has been renamed to NIXPKGS_ABORT_ON_WARN. NIX_ABORT_ON_WARN is still honored, but deprecated and will be removed from nixpkgs after the 24.11 release.[0m"
     else
       a: a;
+
+  # Temporarily moved here to prevent lib.trivial from referencing itself.
+  # See the `inherit oldestSupportedRelease' further down.
+  oldestSupportedRelease = 2311;
 
 in printDeprecationWarning {
 
@@ -390,9 +394,8 @@ in printDeprecationWarning {
     This release number allows deprecation warnings to be implemented such that
     they take effect as soon as the oldest release reaches end of life.
   */
-  oldestSupportedRelease =
     # Update on master only. Do not backport.
-    2311;
+  inherit oldestSupportedRelease;
 
   /**
     Whether a feature is supported in all supported releases (at the time of
