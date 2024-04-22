@@ -623,9 +623,9 @@ in
     networking.firewall.allowedTCPPorts = optionals cfg.openFirewall cfg.ports;
 
     security.pam.services.sshd =
-      { startSession = true;
-        showMotd = true;
-        unixAuth = cfg.settings.PasswordAuthentication;
+      { startSession = mkDefault true;
+        showMotd = mkDefault true;
+        unixAuth = mkDefault (cfg.settings.PasswordAuthentication || cfg.settings.KbdInteractiveAuthentication);
       };
 
     # These values are merged with the ones defined externally, see:
