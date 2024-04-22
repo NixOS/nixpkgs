@@ -36,6 +36,7 @@ let
     withFirstboot = true;
     withEfi = true;
     withUkify = true;
+    withKernelInstall = true;
   };
 
   python3pefile = python3.withPackages (ps: with ps; [
