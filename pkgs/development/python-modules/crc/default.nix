@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "crc";
-  version = "6.1.2";
+  version = "7.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "Nicoretti";
     repo = "crc";
     rev = "refs/tags/${version}";
-    hash = "sha256-d946yBMrOIgMXGOr2ej5bvn59D5iAGMese24qdv8l/Y=";
+    hash = "sha256-y30tnGG+G9dWBO8MUFYm2IGHiGIPbv4kB2VwhV0/C74=";
   };
 
   nativeBuildInputs = [
