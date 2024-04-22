@@ -1113,10 +1113,12 @@ in
       shared = {
         source = ''"''${SHARED_DIR:-$TMPDIR/xchg}"'';
         target = "/tmp/shared";
+        securityModel = "none";
       };
       certs = mkIf cfg.useHostCerts {
         source = ''"$TMPDIR"/certs'';
         target = "/etc/ssl/certs";
+        securityModel = "none";
       };
     };
 
