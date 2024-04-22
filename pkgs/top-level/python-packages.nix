@@ -12287,6 +12287,8 @@ self: super: with self; {
 
   python-hglib = callPackage ../development/python-modules/python-hglib { };
 
+  python-homeassistant-analytics = callPackage ../development/python-modules/python-homeassistant-analytics { };
+
   python-homewizard-energy = callPackage ../development/python-modules/python-homewizard-energy { };
 
   python-hosts = callPackage ../development/python-modules/python-hosts { };
