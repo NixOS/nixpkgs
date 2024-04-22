@@ -93,6 +93,7 @@ stdenv.mkDerivation rec {
       available upon request).
     '';
     homepage = "https://www.joypixels.com/fonts";
+    hydraPlatforms = []; # Just a binary file download, nothing to cache.
     license =
       let
         free-license = joypixels-free-license;
@@ -105,5 +106,8 @@ stdenv.mkDerivation rec {
         free = false;
       };
     maintainers = with maintainers; [ toonn jtojnar ];
+    # Not quite accurate since it's a font, not a program, but clearly
+    # indicates we're not actually building it from source.
+    sourceProvenance = sourceTypes.binaryNativeCode;
   };
 }
