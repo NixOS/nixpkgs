@@ -14,13 +14,24 @@
 , glslang
 , intltool
 , jdupes
+, libX11
+, libXdamage
+, libXext
+, libXfixes
+, libXrandr
+, libXt
+, libXvMC
+, libXxf86vm
 , libdrm
 , libffi
 , libglvnd
 , libomxil-bellagio
+, libpthreadstubs
 , libunwind
 , libva-minimal
 , libvdpau
+, libxcb
+, libxshmfence
 , llvmPackages
 , lm_sensors
 , meson
@@ -39,8 +50,9 @@
 , wayland
 , wayland-protocols
 , wayland-scanner
-, xorg
+, xorgproto
 , zstd
+# Boolean flags
 , withValgrind ?
   lib.meta.availableOn stdenv.hostPlatform valgrind-light
   && !valgrind-light.meta.broken
@@ -49,7 +61,7 @@
 , enableOSMesa ? stdenv.isLinux
 , enableOpenCL ? stdenv.isLinux && stdenv.isx86_64
 , enablePatentEncumberedCodecs ? true
-
+# Configurable options
 , galliumDrivers ?
   if stdenv.isLinux
   then [
@@ -276,27 +288,26 @@ self = stdenv.mkDerivation {
 
   strictDeps = true;
 
-  buildInputs = with xorg; [
+  buildInputs = [
     expat
     glslang
-    libffi
-    libglvnd
-    libvdpau
-    llvmPackages.libllvm
-    openssl
-    zstd
-  ] ++ (with xorg; [
     libX11
     libXext
     libXfixes
     libXrandr
     libXt
     libXvMC
+    libffi
+    libglvnd
     libpthreadstubs
+    libvdpau
     libxcb
     libxshmfence
+    llvmPackages.libllvm
+    openssl
     xorgproto
-  ]) ++ lib.optionals withLibunwind [
+    zstd
+  ] ++ lib.optionals withLibunwind [
     libunwind
   ] ++ [
     python3Packages.python # for shebang
@@ -354,10 +365,10 @@ self = stdenv.mkDerivation {
     wayland-scanner
   ];
 
-  propagatedBuildInputs = (with xorg; [
+  propagatedBuildInputs = [
     libXdamage
     libXxf86vm
-  ]) ++ lib.optionals withLibdrm [
+  ] ++ lib.optionals withLibdrm [
     libdrm
   ] ++ lib.optionals stdenv.isDarwin [
     OpenGL
