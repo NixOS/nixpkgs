@@ -28,6 +28,7 @@
 , xcbutilwm
 , xcffib
 , xkbcommon
+, nixosTests
 }:
 
 buildPythonPackage rec {
@@ -89,7 +90,11 @@ buildPythonPackage rec {
     xcbutilwm
   ];
 
-  doCheck = false; # Requires X server #TODO this can be worked out with the existing NixOS testing infrastructure.
+  doCheck = false;
+  passthru = {
+    tests.qtile = nixosTests.qtile;
+    providedSessions = [ "qtile" ];
+  };
 
   meta = with lib; {
     homepage = "http://www.qtile.org/";
