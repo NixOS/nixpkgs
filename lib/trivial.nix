@@ -12,7 +12,20 @@ let
     version
     versionSuffix
     warn;
-in {
+
+  # We have to use builtins here in place of lib.warn, as otherwise its
+  # definition would depend on itself. Further, we do not want this to
+  # actually abort even if NIX_ABORT_ON_WARN is set, as otherwise legacy
+  # uses of this variable would immediately result in an unrecoverable
+  # error where there should be a deprecation warning.
+  printDeprecationWarning =
+    if builtins.getEnv "NIX_ABORT_ON_WARN" != "" then
+      builtins.trace
+        "[1;31mwarning: NIX_ABORT_ON_WARN has been renamed to NIXPKGS_ABORT_ON_WARN. NIX_ABORT_ON_WARN is still honored, but deprecated and will be removed from nixpkgs after the 24.11 release.[0m"
+    else
+      a: a;
+
+in printDeprecationWarning {
 
   ## Simple (higher order) functions
 
@@ -698,8 +711,10 @@ in {
     ```
   */
   warn =
-    if lib.elem (builtins.getEnv "NIX_ABORT_ON_WARN") ["1" "true" "yes"]
-    then msg: builtins.trace "[1;31mwarning: ${msg}[0m" (abort "NIX_ABORT_ON_WARN=true; warnings are treated as unrecoverable errors.")
+    if lib.elem (builtins.getEnv "NIXPKGS_ABORT_ON_WARN") [ "1" "true" "yes" ]
+    # this latter clause is deprecated. When removing, also remove printDeprecationWarning above.
+    || lib.elem (builtins.getEnv "NIX_ABORT_ON_WARN") [ "1" "true" "yes" ]
+    then msg: builtins.trace "[1;31mwarning: ${msg}[0m" (abort "NIXPKGS_ABORT_ON_WARN=true; warnings are treated as unrecoverable errors.")
     else msg: builtins.trace "[1;31mwarning: ${msg}[0m";
 
   /**
