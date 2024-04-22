@@ -768,6 +768,12 @@
     github = "akgrant43";
     githubId = 2062166;
   };
+  akhilmhdh = {
+    email = "akhilmhdh@infisical.com";
+    github = "akhilmhdh";
+    githubId = 31166322;
+    name = "Akhil Mohan";
+  };
   akho = {
     name = "Alexander Khodyrev";
     email = "a@akho.name";
