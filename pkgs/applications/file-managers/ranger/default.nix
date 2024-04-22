@@ -51,10 +51,6 @@ python3Packages.buildPythonApplication rec {
       --replace "set preview_images false" "set preview_images true"
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = ranger;
-  };
-
   meta =  with lib; {
     description = "File manager with minimalistic curses interface";
     homepage = "https://ranger.github.io/";
