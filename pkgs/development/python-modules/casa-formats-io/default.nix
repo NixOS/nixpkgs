@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "casa-formats-io";
-  version = "0.2.2";
+  version = "0.3.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EOX+tal9nrON2K7mHVYSTTxja6mu2k3Bag8bhL3JHJs=";
+    hash = "sha256-FpQj0XeZ7vvOzUM/+5qG6FRwNXl3gzoUBItYdQ1M4m4=";
   };
 
   nativeBuildInputs = [

@@ -5,6 +5,7 @@
 , fetchFromGitHub
 , substituteAll
 , llhttp
+, python
 # build_requires
 , cython
 , setuptools
@@ -29,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.9.4";
+  version = "3.9.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,7 +39,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "aiohttp";
     rev = "refs/tags/v${version}";
-    hash = "sha256-coONsU2p7+A93O0I1YYFunwMIvKuuI5az3gJbb/Qgv0=";
+    hash = "sha256-FRtirmwgU8v+ee3db7rOFsmy0rNW8A7+yRZC5d6uYNA=";
   };
 
   patches = [
@@ -76,6 +77,11 @@ buildPythonPackage rec {
     aiodns
     brotli
   ];
+
+  postInstall = ''
+    # remove source code file with reference to dev dependencies
+    rm $out/${python.sitePackages}/aiohttp/_cparser.pxd{,.orig}
+  '';
 
   # NOTE: pytest-xdist cannot be added because it is flaky. See https://github.com/NixOS/nixpkgs/issues/230597 for more info.
   nativeCheckInputs = [

@@ -40,6 +40,11 @@ buildPythonPackage rec {
     readthedocs-sphinx-ext
   ];
 
+  disabledTests = [
+    # docutils 0.21 compat
+    "test_basic"
+  ];
+
   pythonRelaxDeps = [
     "docutils"
     "sphinxcontrib-jquery"

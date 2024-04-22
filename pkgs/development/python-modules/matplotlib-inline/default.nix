@@ -1,4 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
 , traitlets
 
 # tests
@@ -7,15 +11,23 @@
 
 buildPythonPackage rec {
   pname = "matplotlib-inline";
-  version = "0.1.6";
-  format = "setuptools";
+  version = "0.1.7";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-+Ifl8Qupjo0rFQ3c9HAsHl+LOiAAXrD3S/29Ng7m8wQ=";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "ipython";
+    repo = "matplotlib-inline";
+    rev = "refs/tags/${version}";
+    hash = "sha256-y7T8BshNa8NVWzH8oLS4dTAyhG+YmkkYQJFAyMXsJFA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     traitlets
   ];
 

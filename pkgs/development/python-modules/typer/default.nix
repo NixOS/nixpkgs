@@ -4,9 +4,8 @@
 , click
 , colorama
 , coverage
-, fetchpatch
 , fetchPypi
-, flit-core
+, pdm-backend
 , pytest-sugar
 , pytest-xdist
 , pytestCheckHook
@@ -18,27 +17,18 @@
 
 buildPythonPackage rec {
   pname = "typer";
-  version = "0.9.0";
+  version = "0.12.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UJIv15rqL0dRqOBAj/ENJmK9DIu/qEdVppnzutopeLI=";
+    hash = "sha256-SecxMUgdgEKI72JZjZehzu8wWJBapTahE0+QiRujVII=";
   };
 
-  patches = [
-    # https://github.com/tiangolo/typer/pull/651
-    (fetchpatch {
-      name = "unpin-flit-core-dependency.patch";
-      url = "https://github.com/tiangolo/typer/commit/78a0ee2eec9f54ad496420e177fdaad84984def1.patch";
-      hash = "sha256-VVUzFvF2KCXXkCfCU5xu9acT6OLr+PlQQPeVGONtU4A=";
-    })
-  ];
-
   nativeBuildInputs = [
-    flit-core
+    pdm-backend
   ];
 
   propagatedBuildInputs = [

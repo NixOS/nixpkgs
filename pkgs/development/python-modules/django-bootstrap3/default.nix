@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "django-bootstrap3";
-  version = "23.6";
+  version = "24.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "zostera";
     repo = "django-bootstrap3";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qqG9w0bQYoQgWXCks/WwwQVoh2DhIMLaFXDQ4z6D84g=";
+    hash = "sha256-5nBJ5vfsoGoaG1s3K1hCHcSnGf51ZirYYg+uJGsBmG8=";
   };
 
   nativeBuildInputs = [

@@ -7,6 +7,7 @@
 , oldest-supported-numpy
 , setuptools
 , wheel
+, certifi
 , numpy
 , zlib
 , netcdf
@@ -19,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "netcdf4";
-  version = "1.6.2";
+  version = "1.6.5";
   format = "pyproject";
 
   disabled = isPyPy;
@@ -27,7 +28,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "netCDF4";
     inherit version;
-    hash = "sha256-A4KwL/aiiEGfb/7IXexA9FH0G4dVVHFUxXXd2fD0rlM=";
+    hash = "sha256-gkiB0KrP3lvZgtat7dhXQlnIVVN4HnuD4M6CuJC/oO8=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +39,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    certifi
     cftime
     numpy
     zlib

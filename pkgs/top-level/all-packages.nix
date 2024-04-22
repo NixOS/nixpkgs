@@ -18698,15 +18698,7 @@ with pkgs;
 
   doclifter = callPackage ../development/tools/misc/doclifter { };
 
-  docutils = with python3Packages; toPythonApplication (
-    docutils.overridePythonAttrs (attrs: rec {
-      version = "0.20.1";
-      src = attrs.src.override {
-        inherit version;
-        hash = "sha256-8IpOJ2w6FYOobc4+NKuj/gTQK7ot1R7RYQYkToqSPjs=";
-      };
-    })
-  );
+  docutils = with python3Packages; toPythonApplication docutils;
 
   doctl = callPackage ../development/tools/doctl { };
 
@@ -27230,9 +27222,7 @@ with pkgs;
 
   fatrace = callPackage ../os-specific/linux/fatrace { };
 
-  ffado = libsForQt5.callPackage ../os-specific/linux/ffado {
-    inherit (linuxPackages) kernel;
-  };
+  ffado = libsForQt5.callPackage ../os-specific/linux/ffado { };
   libffado = ffado;
 
   fbterm = callPackage ../os-specific/linux/fbterm { };
