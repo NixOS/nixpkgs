@@ -35,10 +35,11 @@ in {
 
       package = lib.mkPackageOption pkgs "lxd-lts" { };
 
-      lxcPackage = lib.mkPackageOption pkgs "lxc" {
-        extraDescription = ''
-          Required for AppArmor profiles.
-        '';
+      lxcPackage = lib.mkOption {
+        type = lib.types.package;
+        default = config.virtualisation.lxc.package;
+        defaultText = lib.literalExpression "config.virtualisation.lxc.package";
+        description = "The lxc package to use.";
       };
 
       zfsSupport = lib.mkOption {
