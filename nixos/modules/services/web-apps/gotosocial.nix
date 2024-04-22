@@ -27,7 +27,7 @@ let
 in
 {
   meta.doc = ./gotosocial.md;
-  meta.maintainers = with lib.maintainers; [ misuzu blakesmith ];
+  meta.maintainers = with lib.maintainers; [ blakesmith ];
 
   options.services.gotosocial = {
     enable = lib.mkEnableOption "ActivityPub social network server";
