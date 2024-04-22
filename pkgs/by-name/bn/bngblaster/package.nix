@@ -1,24 +1,24 @@
-{ stdenv
-, lib
-, fetchFromGitHub
+{ lib
+, stdenv
 , cmake
 , cmocka
-, libdict
-, ncurses
+, fetchFromGitHub
 , jansson
-, openssl
+, libdict
 , libpcap
+, ncurses
+, openssl
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bngblaster";
-  version = "0.8.44";
+  version = "0.8.47";
 
   src = fetchFromGitHub {
     owner = "rtbrick";
     repo = "bngblaster";
     rev = finalAttrs.version;
-    hash = "sha256-kKzrXw6HQ2917RBArj2BxixXXH0mIvC4IeEU2JY4F9s=";
+    hash = "sha256-ad2vVBXN5hUCaFnq4WYc7UTKvyLg4HY+l+PGlc5ylmw=";
   };
 
   nativeBuildInputs = [
@@ -43,9 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   meta = with lib; {
+    description = "Network tester for access and routing protocols";
     homepage = "https://github.com/rtbrick/bngblaster/";
     changelog = "https://github.com/rtbrick/bngblaster/releases/tag/${finalAttrs.version}";
-    description = "network tester for access and routing protocols";
     license = licenses.bsd3;
     maintainers = teams.wdz.members;
     badPlatforms = platforms.darwin;
