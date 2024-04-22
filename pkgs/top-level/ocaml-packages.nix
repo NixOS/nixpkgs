@@ -830,16 +830,6 @@ let
       ppx_bap = callPackage ../development/ocaml-modules/ppx_bap { };
     })).overrideScope liftJaneStreet;
 
-    janeStreet_0_9_0 = import ../development/ocaml-modules/janestreet/old.nix {
-      self = self.janeStreet_0_9_0;
-      super = self // {
-        janePackage = callPackage ../development/ocaml-modules/janestreet/janePackage.nix {
-          defaultVersion = "0.9.0";
-        };
-      };
-      inherit (pkgs) stdenv lib openssl;
-    };
-
     javalib = callPackage ../development/ocaml-modules/javalib { };
 
     jingoo = callPackage ../development/ocaml-modules/jingoo { };

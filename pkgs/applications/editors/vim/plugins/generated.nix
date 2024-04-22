@@ -689,6 +689,18 @@ final: prev:
     meta.homepage = "https://github.com/vim-scripts/argtextobj.vim/";
   };
 
+  arrow-nvim = buildVimPlugin {
+    pname = "arrow.nvim";
+    version = "2024-04-19";
+    src = fetchFromGitHub {
+      owner = "otavioschwanck";
+      repo = "arrow.nvim";
+      rev = "37f32c94cf6e01826af5d96337c70d2f9be0a280";
+      sha256 = "0v23gw86rmciaqbi27ifd3f5mw0vknm2482yznb30dpq3pk53327";
+    };
+    meta.homepage = "https://github.com/otavioschwanck/arrow.nvim/";
+  };
+
   astrotheme = buildVimPlugin {
     pname = "astrotheme";
     version = "2024-04-10";
