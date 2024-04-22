@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "pv-migrate";
-  version = "1.7.1";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "utkuozdemir";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-xbg32ckxAUQkkN/yumHz4v1U4FvUcmx5ftd3+4zc3/c=";
+    sha256 = "sha256-HeK8/IZTqkrJxfmNIYOm8/jY3Fbof8t7/emdHONvMZo=";
   };
 
   subPackages = [ "cmd/pv-migrate" ];
 
-  vendorHash = "sha256-AqR9Gy8sAX4wrKGPnQUj33juBOfhUn0BR8OyJPiDrO0=";
+  vendorHash = "sha256-q8/Rb26ZY/Rn3FnESnAvPr+LrIvFFlSJnN6c0k8+sHg=";
 
   ldflags = [
     "-s"
