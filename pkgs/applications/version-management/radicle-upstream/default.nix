@@ -74,13 +74,13 @@ let
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "A decentralized app for code collaboration";
     homepage = "https://radicle.xyz/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ d-xo ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ d-xo ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 in
 if stdenv.isDarwin
