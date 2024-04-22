@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nixd";
-  version = "1.2.3";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nixd";
     rev = version;
-    hash = "sha256-i/z5VnsWPWloQfdk48i+a4XaGnTMPJ6QougChkT9IWw=";
+    hash = "sha256-K6atInl+/58nzMj4JJHds//HY7luBRmX79g+Arj6iUw=";
   };
 
   mesonBuildType = "release";
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
     # Disable nixd regression tests, because it uses some features provided by
     # nix, and does not correctly work in the sandbox
-    meson test --print-errorlogs server regression/nix-ast-dump
+    meson test --print-errorlogs  unit/libnixf/Basic unit/libnixf/Parse unit/libnixt
     runHook postCheck
   '';
 
