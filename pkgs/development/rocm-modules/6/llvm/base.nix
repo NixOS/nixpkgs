@@ -2,6 +2,7 @@
 , stdenv
 , gcc12Stdenv
 , fetchFromGitHub
+, fetchpatch
 , rocmUpdateScript
 , pkg-config
 , cmake
@@ -9,6 +10,7 @@
 , git
 , doxygen
 , sphinx
+, graphviz
 , lit
 , libxml2
 , libxcrypt
@@ -72,7 +74,23 @@ in stdenv.mkDerivation (finalAttrs: {
     "info" # Avoid `attribute 'info' missing` when using with wrapCC
   ];
 
-  patches = extraPatches;
+  patches = [
+    (fetchpatch {
+      name = "llvm-support-compressing-device-binary.patch";
+      url = "https://github.com/GZGavinZhao/llvm-project/commit/fae9d73436c8fb71fdd16a078f485c9cbe99be27.patch";
+      hash = "sha256-wISQTE73cjtWOJ46idN6mn06jm2ML4B3fJJWmfzi0as=";
+    })
+    (fetchpatch {
+      name = "clang-support-compressing-device-binary.patch";
+      url = "https://github.com/GZGavinZhao/llvm-project/commit/baff627c21febe8080d534b96406c95b29100144.patch";
+      hash = "sha256-ZiJ7Gi+Ly2WK1G9y4noeKGvWGVL/cdK+c5W+EzPI2cw=";
+    })
+    (fetchpatch {
+      name = "add-file-size-to-ccob-header.patch";
+      url = "https://github.com/GZGavinZhao/llvm-project/commit/8b04ffc2353b1d3d8900f76fb52ff65ed2a20d80.patch";
+      hash = "sha256-AsO2RVkOsT6UUEjSYAaWDY9BmHrTnupWNpZqxoQ8sXo=";
+    })
+  ] ++ extraPatches;
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -88,11 +106,11 @@ in stdenv.mkDerivation (finalAttrs: {
     git
     python3Packages.python
   ] ++ lib.optionals (buildDocs || buildMan) [
-    doxygen
     sphinx
     python3Packages.recommonmark
   ] ++ lib.optionals (buildTests && !finalAttrs.passthru.isLLVM) [
     lit
+    graphviz
   ] ++ extraNativeBuildInputs;
 
   buildInputs = [
@@ -149,6 +167,9 @@ in stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace-fail "Path.cpp" ""
+
+    substituteInPlace test/Other/ChangePrinters/DotCfg/lit.local.cfg \
+      --replace-fail "/usr/bin/dot" "${graphviz}/bin/dot"
   '' + extraPostPatch;
 
   doCheck = buildTests;

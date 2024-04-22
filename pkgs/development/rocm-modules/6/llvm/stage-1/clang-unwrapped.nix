@@ -1,4 +1,6 @@
 { stdenv
+, lib
+, fetchpatch
 , callPackage
 , rocmUpdateScript
 , llvm
@@ -42,6 +44,11 @@ callPackage ../base.nix rec {
   extraPostInstall = ''
     mv bin/clang-tblgen $out/bin
   '';
+
+  extraPatches = [
+  ];
+
+  buildTests = false;
 
   requiredSystemFeatures = [ "big-parallel" ];
 }
