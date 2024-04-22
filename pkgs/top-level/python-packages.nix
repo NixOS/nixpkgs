@@ -12662,6 +12662,8 @@ self: super: with self; {
 
   pywaterkotte = callPackage ../development/python-modules/pywaterkotte { };
 
+  pywavefront = callPackage ../development/python-modules/pywavefront { };
+
   pywavelets = callPackage ../development/python-modules/pywavelets { };
 
   pywayland = callPackage ../development/python-modules/pywayland { };
