@@ -20,8 +20,8 @@ let
   };
 
   joypixels-free-license = with systemSpecific; {
-    spdxId = "LicenseRef-JoyPixels-Free-6.0";
-    fullName = "JoyPixels Free License Agreement 6.0";
+    spdxId = "LicenseRef-JoyPixels-Free-6.5";
+    fullName = "JoyPixels Free License Agreement 6.5";
     url = "https://cdn.joypixels.com/distributions/${systemTag}/license/free-license.pdf";
     free = false;
   };
@@ -58,15 +58,15 @@ in
 
 stdenv.mkDerivation rec {
   pname = "joypixels";
-  version = "6.6.0";
+  version = "8.0.0";
 
   src = assert !acceptLicense -> throwLicense;
     with systemSpecific; fetchurl {
       name = fontFile;
       url = "https://cdn.joypixels.com/distributions/${systemTag}/font/${version}/${fontFile}";
       sha256 = {
-        darwin = "0qcmb2vn2nykyikzgnlma627zhks7ksy1vkgvpcmqwyxq4bd38d7";
-      }.${kernel.name} or "17gjaz7353zyprmds64p01qivy2r8pwf88nvvhi57idas2qd604n";
+        darwin = "0kj4nck6k91avhan9iy3n8hhk47xr44rd1lzljjx3w2yzw1w9zvv";
+      }.${kernel.name} or "1bkyclgmvl6ppbdvidc5xr1g6f215slf0glnh5p6fsfbxc5h95bw";
     };
 
   dontUnpack = true;
@@ -82,9 +82,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "The finest emoji you can use legally (formerly EmojiOne)";
     longDescription = ''
-      Updated for 2021! JoyPixels 6.6 includes 3,559 originally crafted icon
-      designs and is 100% Unicode 13.1 compatible. We offer the largest
-      selection of files ranging from png, svg, iconjar, sprites, and fonts.
+      Updated for 2023! JoyPixels 8.0 includes 3,702 originally crafted icon
+      designs and is 100% Unicode 15.0 compatible. We offer the largest
+      selection of files ranging from png, svg, iconjar, and fonts (sprites
+      available upon request).
     '';
     homepage = "https://www.joypixels.com/fonts";
     license =
@@ -92,7 +93,7 @@ stdenv.mkDerivation rec {
         free-license = joypixels-free-license;
         appendix = joypixels-license-appendix;
       in with systemSpecific; {
-        spdxId = "LicenseRef-JoyPixels-Free-6.0-with-${capitalized}-Appendix";
+        spdxId = "LicenseRef-JoyPixels-Free-6.5-with-${capitalized}-Appendix";
         fullName = "${free-license.fullName} with ${appendix.fullName}";
         url = free-license.url;
         appendixUrl = appendix.url;
