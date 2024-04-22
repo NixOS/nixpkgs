@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ranger";
-  version = "unstable-2023-08-23";
+  version = "1.9.3-unstable-2023-08-23";
 
   src = fetchFromGitHub {
     owner = "ranger";
