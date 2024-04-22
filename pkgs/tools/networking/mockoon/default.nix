@@ -1,15 +1,16 @@
 { lib
 , appimageTools
 , fetchurl
+, nix-update-script
 }:
 
 let
   pname = "mockoon";
-  version = "6.1.0";
+  version = "8.0.0";
 
   src = fetchurl {
-    url = "https://github.com/mockoon/mockoon/releases/download/v${version}/mockoon-${version}.AppImage";
-    hash = "sha256-harZU3TTIzfJoY/jAQI0dm7YSOr24Y9xk9L5ZaBLdD8=";
+    url = "https://github.com/mockoon/mockoon/releases/download/v${version}/mockoon-${version}.x86_64.AppImage";
+    hash = "sha256-mhUjV8yFXS76kJDj28VeIv4/PlnKos/Ugo9k3RHnRaM=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -29,6 +30,8 @@ appimageTools.wrapType2 {
     substituteInPlace $out/share/applications/${pname}.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
+
+  passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
     description = "The easiest and quickest way to run mock APIs locally";
