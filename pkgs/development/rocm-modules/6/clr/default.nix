@@ -121,6 +121,11 @@ in stdenv.mkDerivation (finalAttrs: {
       url = "https://salsa.debian.org/rocm-team/rocm-hipamd/-/raw/d6d20142c37e1dff820950b16ff8f0523241d935/debian/patches/0025-improve-rocclr-isa-compatibility-check.patch";
       hash = "sha256-8eowuRiOAdd9ucKv4Eg9FPU7c6367H3eP3fRAGfXc6Y=";
     })
+    (fetchpatch {
+      name = "clr-support-compressed-device-binaries.patch";
+      url = "https://github.com/GZGavinZhao/clr/commit/17e701c0f4217c8b7313d67e15f59a1854d22048.patch";
+      hash = "sha256-FPoLAXQjNlqwya6l5QIVQPgb1r6/HbB49xU5aDat3Ds=";
+    })
   ];
 
   postPatch = ''
@@ -134,10 +139,6 @@ in stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace hipamd/src/hip_embed_pch.sh \
       --replace "\''$LLVM_DIR/bin/clang" "${clang}/bin/clang"
-
-    # https://lists.debian.org/debian-ai/2024/02/msg00178.html
-    substituteInPlace rocclr/utils/flags.hpp \
-      --replace-fail "HIP_USE_RUNTIME_UNBUNDLER, false" "HIP_USE_RUNTIME_UNBUNDLER, true"
 
     substituteInPlace opencl/khronos/icd/loader/icd_platform.h \
       --replace-fail '#define ICD_VENDOR_PATH "/etc/OpenCL/vendors/";' \
