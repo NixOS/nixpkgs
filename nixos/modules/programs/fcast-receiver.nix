@@ -11,11 +11,11 @@ in
   };
 
   options.programs.fcast-receiver = {
-    enable = mkEnableOption (lib.mdDoc "FCast Receiver");
+    enable = mkEnableOption "FCast Receiver";
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Open ports needed for the functionality of the program.
       '';
     };

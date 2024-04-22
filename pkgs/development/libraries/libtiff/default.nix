@@ -28,9 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libtiff";
   version = "4.6.0";
 
-  # if you update this, please consider adding patches and/or
-  # setting `knownVulnerabilities` in libtiff `4.5.nix`
-
   src = fetchFromGitLab {
     owner = "libtiff";
     repo = "libtiff";
@@ -93,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Library and utilities for working with the TIFF image file format";
     homepage = "https://libtiff.gitlab.io/libtiff";
-    changelog = "https://libtiff.gitlab.io/libtiff/v${finalAttrs.version}.html";
+    changelog = "https://libtiff.gitlab.io/libtiff/releases/v${finalAttrs.version}.html";
     license = licenses.libtiff;
     platforms = platforms.unix ++ platforms.windows;
     pkgConfigModules = [ "libtiff-4" ];

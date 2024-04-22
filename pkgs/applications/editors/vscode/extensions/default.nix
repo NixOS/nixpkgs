@@ -3365,13 +3365,18 @@ let
         mktplcRef = {
           name = "java";
           publisher = "redhat";
-          version = "1.17.2023032504";
-          hash = "sha256-ni1jzCPjwtcdJTEORn0vYzLRbQ/wseTZmrETJ8QPW58=";
+          version = "1.30.2024041908";
+          hash = "sha256-2VaB7duzDmoQYxLHIuC9yghJvmVnWJIBfH75xq5ljPg=";
         };
         buildInputs = [ jdk ];
         meta = {
+          description = "Java language support for VS Code via the Eclipse JDT Language Server";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=redhat.java";
+          homepage = "https://github.com/redhat-developer/vscode-java";
+          changelog = "https://marketplace.visualstudio.com/items/redhat.java/changelog";
           license = lib.licenses.epl20;
-          broken = lib.versionOlder jdk.version "11";
+          maintainers = [ lib.maintainers.wackbyte ];
+          broken = lib.versionOlder jdk.version "17";
         };
       };
 
@@ -4063,8 +4068,8 @@ let
         mktplcRef = {
           name = "vscode-nushell-lang";
           publisher = "thenuprojectcontributors";
-          version = "1.1.0";
-          hash = "sha256-7v4q0OEqv7q2ejHp4lph2Dsqg0GWE65pxyz9goQEm8g=";
+          version = "1.9.0";
+          hash = "sha256-E9CK/GChd/yZT+P3ttROjL2jHtKPJ0KZzc32/nbuE4w=";
         };
         meta.license = lib.licenses.mit;
       };

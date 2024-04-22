@@ -57,6 +57,7 @@ mapAliases ({
   Babel = babel; # added 2022-05-06
   backports_csv = throw "backports_csv has been removed, since we no longer need to backport to python2"; # added 2023-07-28
   backports_functools_lru_cache = throw "backports_functools_lru_cache has been removed, since we no longer need to backport to python3.2"; # added 2023-07-28
+  backports_shutil_get_terminal_size = backports-shutil-get-terminal-size; # added 2024-04-21
   backports_tempfile = throw "backports_tempfile has been removed, since we no longer need to backport to python3.3"; # added 2023-07-28
   backports_unittest-mock = throw "backports_unittest-mock has been removed, since we no longer need to backport to python3.2"; # added 2023-07-28
   backports_weakref = throw "backports_weakref has been removed, since we no longer need to backport to python3.3"; # added 2023-07-28
@@ -476,6 +477,7 @@ mapAliases ({
   smpp_pdu = smpp-pdu; # added 2024-03-05
   somecomfort = throw "somecomfort was removed because Home Assistant switched to aiosomecomfort"; # added 2023-02-01
   sorl_thumbnail = sorl-thumbnail; # added 2023-11-12
+  spacy_models = spacy-models; # added 2024-04-21
   SPARQLWrapper = sparqlwrapper;
   spark_parser = spark-parser; # added 2024-01-07
   sphinx-jquery = sphinxcontrib-jquery; # added 2023-02-24

@@ -16,7 +16,6 @@ in
 
 buildGoModule {
   inherit
-    meta
     patches
     pname
     src
@@ -39,4 +38,8 @@ buildGoModule {
 
   # don't run the full incus test suite
   doCheck = false;
+
+  meta = meta // {
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+  };
 }
