@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     # we don't limit this action to only NixOS repo since the checks are cheap and useful developer feedback
     steps:
-    - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
+    - uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4.1.3
     - uses: cachix/install-nix-action@8887e596b4ee1134dae06b98d573bd674693f47c # v26
     - uses: cachix/cachix-action@18cf96c7c98e048e10a83abd92116114cd8504be # v14
       with:
