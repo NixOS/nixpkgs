@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.magewell.com/files/drivers/ProCaptureForLinux_${subVersion}.tar.gz";
-    sha256 = "sha256-HOVAR9auc8ulENPLoI0scdCMZoSbDYkTaCLgZoFG7eU=";
+    sha256 = "sha256-a2cU7PYQh1KR5eeMhMNx2Sc3HHd7QvCG9+BoJyVPp1Y=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
