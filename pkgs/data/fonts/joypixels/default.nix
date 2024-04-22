@@ -43,11 +43,16 @@ let
     unfree licenses.
 
     configuration.nix:
-      nixpkgs.config.allowUnfree = true;
+      nixpkgs.config.allowUnfreePredicate = pkg:
+        builtins.elem (lib.getName pkg) [
+          "joypixels"
+        ];
       nixpkgs.config.joypixels.acceptLicense = true;
 
     config.nix:
-      allowUnfree = true;
+      allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+        "joypixels"
+      ];
       joypixels.acceptLicense = true;
 
     [1]: ${joypixels-free-license.url}
