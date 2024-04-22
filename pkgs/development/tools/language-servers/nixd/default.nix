@@ -17,14 +17,14 @@
 , pkg-config
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nixd";
   version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nixd";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-K6atInl+/58nzMj4JJHds//HY7luBRmX79g+Arj6iUw=";
   };
 
@@ -83,10 +83,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Nix language server";
     homepage = "https://github.com/nix-community/nixd";
-    changelog = "https://github.com/nix-community/nixd/releases/tag/${version}";
+    changelog = "https://github.com/nix-community/nixd/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ inclyc Ruixi-rebirth marsam ];
     mainProgram = "nixd";
     platforms = lib.platforms.unix;
   };
-}
+})
