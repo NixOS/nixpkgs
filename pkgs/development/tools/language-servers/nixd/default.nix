@@ -15,6 +15,7 @@
 , nix
 , nixpkgs-fmt
 , pkg-config
+, testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -79,6 +80,16 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = nix-update-script { };
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      moduleNames = [ "libnixf" "libnixt" ];
+    };
+  };
 
   meta = {
     description = "Nix language server";
