@@ -17,16 +17,21 @@
   python311,
   scons,
   which,
+  withMixer ? false,
   wrapQtAppsHook,
 }:
 
 let
-  python = python311.withPackages (
-    pkgs: with pkgs; [
-      pyqt5
-      dbus-python
-    ]
-  );
+  python =
+    if withMixer then
+      python311.withPackages (
+        pkgs: with pkgs; [
+          pyqt5
+          dbus-python
+        ]
+      )
+    else
+      python311;
 in
 mkDerivation rec {
   pname = "ffado";
@@ -48,21 +53,24 @@ mkDerivation rec {
       --replace /lib/modules/ "/run/booted-system/kernel-modules/lib/modules/"
   '';
 
-  nativeBuildInputs = [
-    (scons.override { python3Packages = python311.pkgs; })
-    pkg-config
-    which
-    python
-    python.pkgs.pyqt5
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs =
+    [
+      (scons.override { python3Packages = python311.pkgs; })
+      pkg-config
+      which
+    ]
+    ++ lib.optionals withMixer [
+      python
+      python.pkgs.pyqt5
+      wrapQtAppsHook
+    ];
 
   prefixKey = "PREFIX=";
   sconsFlags = [
     "DEBUG=False"
     "ENABLE_ALL=True"
     "BUILD_TESTS=True"
-    "BUILD_MIXER=True"
+    "BUILD_MIXER=${if withMixer then "True" else "False"}"
     "UDEVDIR=${placeholder "out"}/lib/udev/rules.d"
     "PYPKGDIR=${placeholder "out"}/${python.sitePackages}"
     "BINDIR=${placeholder "bin"}/bin"
@@ -94,8 +102,8 @@ mkDerivation rec {
     echo 'See `nix-store --query --tree ${placeholder "out"}`.' > $out/lib/libffado/static_info.txt
   '';
 
-  preFixup = ''
-    wrapQtApp $bin/bin/ffado-mixer
+  preFixup = lib.optionalString withMixer ''
+    wrapQtApp "$bin/bin/ffado-mixer"
   '';
 
   meta = with lib; {
