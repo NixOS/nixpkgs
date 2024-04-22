@@ -13,21 +13,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pixi";
-  version = "0.19.1";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "prefix-dev";
     repo = "pixi";
     rev = "v${version}";
-    hash = "sha256-rCnW2Ghh6SN1G9u4ybk0jUUFYevH6FozeSjXZfJhW8s=";
+    hash = "sha256-7ah5u3E9nodo/0YSuaswRY07zz8EQgvttbVKjw/USCc=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "async_zip-0.0.16" = "sha256-M94ceTCtyQc1AtPXYrVGplShQhItqZZa/x5qLiL+gs0=";
-      "cache-key-0.0.1" = "sha256-XsBTfe2+J5CGdjYZjhgxiP20OA7+VTCvD9JniLOjhKs=";
-      "pubgrub-0.2.1" = "sha256-SdgxoJ37cs+XwWRCFX4uKhJ9Juu9R/jENb6tzUMam4k=";
+      "async_zip-0.0.17" = "sha256-Q5fMDJrQtob54CTII3+SXHeozy5S5s3iLOzntevdGOs=";
+      "cache-key-0.0.1" = "sha256-qGFjI/LNf2p11BOgacYHU0hoXvCEjjnyAcAAIcD7YTo=";
+      "pubgrub-0.2.1" = "sha256-sqC7R2mtqymYFULDW0wSbM/MKCZc8rP7Yy/gaQpjYEI=";
     };
   };
 
@@ -68,6 +68,8 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_compressed_mapping_catch_missing_package"
     "--skip=test_incremental_lock_file"
     "--skip=test_purl_are_added_for_pypi"
+
+    "--skip=test_task_with_env" # `/usr/bin/env` required
   ];
 
   postInstall = ''
