@@ -9,18 +9,18 @@
 buildPythonPackage rec {
   pname = "pick";
   version = "2.3.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "wong2";
-    repo = pname;
+    repo = "pick";
     rev = "refs/tags/v${version}";
     hash = "sha256-1CDwnPvu64zHu+MML0KssPxI5CH7ng8lYZXQzmeSOCw=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
