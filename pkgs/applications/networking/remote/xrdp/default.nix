@@ -22,7 +22,7 @@
 }:
 
 let
-  version = "0.9.25.1";
+  version = "0.10.0-beta.3";
   patchedXrdpSrc = applyPatches {
     patches = [ ./dynamic_config.patch ];
     name = "xrdp-patched-${version}";
@@ -31,19 +31,19 @@ let
       repo = "xrdp";
       rev = "v${version}";
       fetchSubmodules = true;
-      hash = "sha256-oAs0oWkCyj3ObdJuHLfT25ZzkTrxNAXDiFU64OOP4Ow=";
+      hash = "sha256-S5Jm/zPQIA8zWOhjB7bJgNcaXUZvvjJB5+aYJF72fO8=";
     };
   };
 
   xorgxrdp = stdenv.mkDerivation rec {
     pname = "xorgxrdp";
-    version = "0.9.20";
+    version = "0.10.1";
 
     src = fetchFromGitHub {
       owner = "neutrinolabs";
       repo = "xorgxrdp";
       rev = "v${version}";
-      hash = "sha256-cAAWk/GqR5zJmh7EAzX3qJiYNl/RrDWdncdFeqsFIaU=";
+      hash = "sha256-HT8fqcqpKLfNoi9CVqGOP12gA3ZelRvD+lKgxu3LQiQ=";
     };
 
     nativeBuildInputs = [ pkg-config autoconf automake which libtool nasm ];
@@ -62,7 +62,7 @@ let
 
     preConfigure = "./bootstrap";
 
-    configureFlags = [ "XRDP_CFLAGS=-I${patchedXrdpSrc}/common"  ];
+    configureFlags = [ "XRDP_CFLAGS=-I${patchedXrdpSrc}/common" ];
 
     enableParallelBuilding = true;
   };
@@ -158,4 +158,5 @@ let
       platforms = platforms.linux;
     };
   };
-in xrdp
+in
+xrdp
