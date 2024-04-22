@@ -5,7 +5,7 @@
 , pkg-config
 , bzip2
 , lz4
-, rocksdb_6_23
+, rocksdb_7_10
 , snappy
 , zeromq
 , zlib
@@ -13,18 +13,18 @@
 }:
 
 let
-  rocksdb = rocksdb_6_23;
+  rocksdb = rocksdb_7_10;
 in
 buildGoModule rec {
   pname = "blockbook";
-  version = "0.3.6";
+  version = "0.4.0";
   commit = "5f8cf45";
 
   src = fetchFromGitHub {
     owner = "trezor";
     repo = "blockbook";
     rev = "v${version}";
-    hash = "sha256-WwphMHFEuF5PavaPv+uc/k3DKT3P77Tr1WsOD1lJYck=";
+    hash = "sha256-98tp3QYaHfhVIiJ4xkA3bUanXwK1q05t+YNroFtBUxE=";
   };
 
   vendorHash = "sha256-KJ92WztrtKjibvGBYRdnRag4XeZS4d7kyskJqD4GLPE=";
@@ -39,7 +39,7 @@ buildGoModule rec {
     "-X github.com/trezor/blockbook/common.buildDate=unknown"
   ];
 
-  tags = [ "rocksdb_6_16" ];
+  tags = [ "rocksdb_7_10" ];
 
   preBuild = lib.optionalString stdenv.isDarwin ''
     ulimit -n 8192
