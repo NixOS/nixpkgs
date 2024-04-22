@@ -40,6 +40,7 @@
 , withAss ? withHeadlessDeps && stdenv.hostPlatform == stdenv.buildPlatform # (Advanced) SubStation Alpha subtitle rendering
 , withAudioToolbox ? withHeadlessDeps && stdenv.isDarwin # Apple AudioToolbox
 , withAvFoundation ? withHeadlessDeps && stdenv.isDarwin # Apple AVFoundation framework
+, withAvisynth ? withFullDeps # AviSynth script files reading
 , withBluray ? withFullDeps # BluRay reading
 , withBs2b ? withFullDeps # bs2b DSP library
 , withBzlib ? withHeadlessDeps
@@ -213,6 +214,7 @@
  *  External libraries options
  */
 , alsa-lib
+, avisynthplus
 , bzip2
 , celt
 , chromaprint
@@ -538,6 +540,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withAss "libass")
     (enableFeature withAudioToolbox "audiotoolbox")
     (enableFeature withAvFoundation "avfoundation")
+    (enableFeature withAvisynth "avisynth")
     (enableFeature withBluray "libbluray")
     (enableFeature withBs2b "libbs2b")
     (enableFeature withBzlib "bzlib")
@@ -686,6 +689,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withAss [ libass ]
   ++ optionals withAudioToolbox [ AudioToolbox ]
   ++ optionals withAvFoundation [ AVFoundation ]
+  ++ optionals withAvisynth [ avisynthplus ]
   ++ optionals withBluray [ libbluray ]
   ++ optionals withBs2b [ libbs2b ]
   ++ optionals withBzlib [ bzip2 ]
