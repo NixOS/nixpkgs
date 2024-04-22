@@ -46,6 +46,7 @@
 , withCaca ? withFullDeps # Textual display (ASCII art)
 , withCelt ? withFullDeps # CELT decoder
 , withChromaprint ? withFullDeps # Audio fingerprinting
+, withCodec2 ? withFullDeps # codec2 en/decoding
 , withCoreImage ? withHeadlessDeps && stdenv.isDarwin # Apple CoreImage framework
 , withCuda ? withFullDeps && withNvcodec
 , withCudaLLVM ? withFullDeps
@@ -215,6 +216,7 @@
 , bzip2
 , celt
 , chromaprint
+, codec2
 , clang
 , dav1d
 , fdk_aac
@@ -542,6 +544,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withCaca "libcaca")
     (enableFeature withCelt "libcelt")
     (enableFeature withChromaprint "chromaprint")
+    (enableFeature withCodec2 "libcodec2")
     (enableFeature withCoreImage "coreimage")
     (enableFeature withCuda "cuda")
     (enableFeature withCudaLLVM "cuda-llvm")
@@ -689,6 +692,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withCaca [ libcaca ]
   ++ optionals withCelt [ celt ]
   ++ optionals withChromaprint [ chromaprint ]
+  ++ optionals withCodec2 [ codec2 ]
   ++ optionals withCoreImage [ CoreImage ]
   ++ optionals withDav1d [ dav1d ]
   ++ optionals withDc1394 [ libdc1394 libraw1394 ]
