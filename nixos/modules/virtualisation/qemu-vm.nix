@@ -1108,7 +1108,6 @@ in
       xchg = {
         source = ''"$TMPDIR"/xchg'';
         securityModel = "none";
-        securityModel = "none";
         target = "/tmp/xchg";
       };
       shared = {
