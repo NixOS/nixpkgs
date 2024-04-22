@@ -27,8 +27,11 @@ let
     buildInputs = [ libgcc zlib ];
 
     installPhase = ''
-      mkdir -p $out/bin/
-      install -Dm755 ${contents}/resources/git-remote-rad $out/bin/git-remote-rad
+      runHook preInstall
+
+      install -Dm555 resources/git-remote-rad -t $out/bin
+
+      runHook postInstall
     '';
   };
 
@@ -46,7 +49,7 @@ let
       # desktop item
       install -m 444 -D ${contents}/${pname}.desktop $out/share/applications/${pname}.desktop
       substituteInPlace $out/share/applications/${pname}.desktop \
-        --replace 'Exec=AppRun' 'Exec=${pname}'
+        --replace-fail 'Exec=AppRun' 'Exec=${pname}'
 
       # icon
       install -m 444 -D ${contents}/${pname}.png \
@@ -62,8 +65,12 @@ let
     sourceRoot = ".";
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/Applications
       cp -r *.app $out/Applications
+
+      runHook postInstall
     '';
   };
 
@@ -74,7 +81,6 @@ let
     maintainers = with maintainers; [ d-xo ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    broken = stdenv.isLinux; # last successful build 2023-04-11
   };
 in
 if stdenv.isDarwin
