@@ -3207,7 +3207,6 @@ broken-packages:
   - joy-rewrite # failure in job https://hydra.nixos.org/build/233201002 at 2023-09-02
   - jpeg # failure in job https://hydra.nixos.org/build/233204056 at 2023-09-02
   - jsaddle-clib # failure in job https://hydra.nixos.org/build/233203899 at 2023-09-02
-  - jsaddle-warp # failure in job https://hydra.nixos.org/build/233252373 at 2023-09-02
   - jsaddle-wkwebview # failure in job https://hydra.nixos.org/build/233242986 at 2023-09-02
   - js-good-parts # failure in job https://hydra.nixos.org/build/233198958 at 2023-09-02
   - json2 # failure in job https://hydra.nixos.org/build/233242447 at 2023-09-02
