@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pick";
-  version = "2.2.0";
+  version = "2.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "wong2";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Py+D03bXnVsIwvYwjl0IMeH33ZPJW5TuJ3tU79MMsCw=";
+    hash = "sha256-1CDwnPvu64zHu+MML0KssPxI5CH7ng8lYZXQzmeSOCw=";
   };
 
   nativeBuildInputs = [
