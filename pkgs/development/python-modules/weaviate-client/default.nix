@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "weaviate-client";
-  version = "4.5.1";
+  version = "4.5.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gElboFIwEMiwN6HhpPPT+tcmh0pMiDjq7R8TG2eMMKI=";
+    hash = "sha256-aZBliOjtoKMHrSxbPHx+CuS52AICpcyXvdKvFSk5d+M=";
   };
 
   postPatch = ''

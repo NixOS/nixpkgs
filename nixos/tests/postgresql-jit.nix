@@ -1,6 +1,7 @@
 { system ? builtins.currentSystem
 , config ? {}
 , pkgs ? import ../.. { inherit system config; }
+, package ? null
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -9,14 +10,17 @@ let
   inherit (pkgs) lib;
   packages = builtins.attrNames (import ../../pkgs/servers/sql/postgresql pkgs);
 
-  mkJitTest = packageName: makeTest {
-    name = "${packageName}";
+  mkJitTestFromName = name:
+    mkJitTest pkgs.${name};
+
+  mkJitTest = package: makeTest {
+    name = package.name;
     meta.maintainers = with lib.maintainers; [ ma27 ];
     nodes.machine = { pkgs, lib, ... }: {
       services.postgresql = {
+        inherit package;
         enable = true;
         enableJIT = true;
-        package = pkgs.${packageName};
         initialScript = pkgs.writeText "init.sql" ''
           create table demo (id int);
           insert into demo (id) select generate_series(1, 5);
@@ -45,4 +49,7 @@ let
     '';
   };
 in
-lib.genAttrs packages mkJitTest
+if package == null then
+  lib.genAttrs packages mkJitTestFromName
+else
+  mkJitTest package

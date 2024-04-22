@@ -12,7 +12,7 @@
 
 import ./generic.nix (rec {
   pname = "pillow";
-  version = "10.2.0";
+  version = "10.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ import ./generic.nix (rec {
   src = fetchPypi {
     pname = "pillow";
     inherit version;
-    hash = "sha256-6H8LLHgVfhLXaGsn1jwHD9ZdmU6N2ubzKODc9KDNAH4=";
+    hash = "sha256-nSRV+/RMkUhAx5PomqgtDhdjoUJToAB0NxmuWUaBSy0=";
   };
 
   passthru.tests = {

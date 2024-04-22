@@ -4,6 +4,7 @@
 , fetchpatch
 , flit-core
 , pythonOlder
+, defusedxml
 , docutils
 , jinja2
 , markdown-it-py
@@ -16,6 +17,7 @@
 , pytest-regressions
 , sphinx-pytest
 , pytestCheckHook
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
@@ -40,7 +42,10 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ flit-core ];
+  nativeBuildInputs = [
+    flit-core
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = [
     docutils
@@ -54,6 +59,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     beautifulsoup4
+    defusedxml
     pytest-param-files
     pytest-regressions
     sphinx-pytest
@@ -64,6 +70,10 @@ buildPythonPackage rec {
     "myst_parser"
   ];
 
+  pythonRelaxDeps = [
+    "docutils"
+  ];
+
   disabledTests = [
     # AssertionError due to different files
     "test_basic"
@@ -72,6 +82,9 @@ buildPythonPackage rec {
     "test_fieldlist_extension"
     # docutils 0.19 expectation mismatches
     "test_docutils_roles"
+    # sphinx 7.0 expectation mismatches
+    "test_heading_slug_func"
+    "test_references_singlehtml"
     # sphinx 6.0 expectation mismatches
     "test_sphinx_directives"
     # sphinx 5.3 expectation mismatches

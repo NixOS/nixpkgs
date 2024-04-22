@@ -62,7 +62,7 @@
 
 buildPythonPackage rec {
   pname = "gradio";
-  version = "4.22.0";
+  version = "4.27.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -71,7 +71,7 @@ buildPythonPackage rec {
   # and upstream has stopped tagging releases since 3.41.0
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nhrT509xB3+R+HF6TF5AQGnfufT6iNmzjxZgcVL7fBo=";
+    hash = "sha256-617zutFhS8NGO4+fcALH8aKbk+reGC65DNWKVVKiWEw=";
   };
 
   # fix packaging.ParserSyntaxError, which can't handle comments

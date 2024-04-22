@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "ufo2ft";
-  version = "3.1.0";
+  version = "3.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5EUrML1Yd88tVEP+Kd9TmXm+5Ejk/XIH/USYBakK/wQ=";
+    hash = "sha256-/n6oEwr1s0AS09deJYRRhzRJNHgqXACfZJsKTuEHxf8=";
   };
 
   nativeBuildInputs = [

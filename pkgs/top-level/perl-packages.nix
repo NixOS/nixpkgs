@@ -3312,6 +3312,9 @@ with self; {
       "-Wno-error=implicit-int"
       "-Wno-error=int-conversion"
     ]);
+    postPatch = ''
+      substituteInPlace Makefile.PL --replace pkg-config $PKG_CONFIG
+    '';
     NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.pcsclite}/lib -lpcsclite";
     # tests fail; look unfinished
     doCheck = false;

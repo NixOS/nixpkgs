@@ -1,6 +1,6 @@
 { lowPrio, newScope, pkgs, lib, stdenv, cmake
 , preLibcCrossHeaders
-, libxml2, python3, fetchFromGitHub, substitute, substituteAll, overrideCC, wrapCCWith, wrapBintoolsWith
+, libxml2, python3, fetchFromGitHub, substitute, substituteAll, fetchpatch, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 , targetLlvm
@@ -80,7 +80,26 @@ in let
 
   in {
 
-    libllvm = callPackage ./llvm {
+    libllvm = callPackage ../common/llvm {
+      patches = [
+        ./llvm/gnu-install-dirs.patch
+
+        # Fix musl build.
+        (fetchpatch {
+          url = "https://github.com/llvm/llvm-project/commit/5cd554303ead0f8891eee3cd6d25cb07f5a7bf67.patch";
+          relative = "llvm";
+          hash = "sha256-XPbvNJ45SzjMGlNUgt/IgEvM2dHQpDOe6woUJY+nUYA=";
+        })
+        # fix RuntimeDyld usage on aarch64-linux (e.g. python312Packages.numba tests)
+        (fetchpatch {
+          url = "https://github.com/llvm/llvm-project/commit/2e1b838a889f9793d4bcd5dbfe10db9796b77143.patch";
+          relative = "llvm";
+          hash = "sha256-Ot45P/iwaR4hkcM3xtLwfryQNgHI6pv6ADjv98tgdZA=";
+        })
+      ];
+      pollyPatches = [
+        ./llvm/gnu-install-dirs-polly.patch
+      ];
       inherit llvm_meta;
     };
 
