@@ -188,7 +188,7 @@ index 61e9e403..0466f61a 100644
  #include "log.h"
  #include "string_calls.h"
 +#include <string.h>
- #include "chansrv/chansrv_common.h"
+ //#include "chansrv/chansrv_common.h"
  
  /***************************************************************************//**
 @@ -47,11 +48,10 @@
