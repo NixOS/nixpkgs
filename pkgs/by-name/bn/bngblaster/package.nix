@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, cmake
-, cmocka
-, fetchFromGitHub
-, jansson
-, libdict
-, libpcap
-, ncurses
-, openssl
+{
+  lib,
+  stdenv,
+  cmake,
+  cmocka,
+  fetchFromGitHub,
+  jansson,
+  libdict,
+  libpcap,
+  ncurses,
+  openssl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,9 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ad2vVBXN5hUCaFnq4WYc7UTKvyLg4HY+l+PGlc5ylmw=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     libdict
@@ -31,9 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     jansson
     openssl
     cmocka
-  ] ++ lib.optionals finalAttrs.doCheck [
-    libpcap
-  ];
+  ] ++ lib.optionals finalAttrs.doCheck [ libpcap ];
 
   cmakeFlags = [
     "-DBNGBLASTER_TESTS=${if finalAttrs.doCheck then "ON" else "OFF"}"
