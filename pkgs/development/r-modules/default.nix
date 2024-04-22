@@ -915,6 +915,7 @@ let
     "connections"
     "csodata"
     "DiceView"
+    "margaret"
     "MSnID"
     "OmnipathR"
     "precommit"
