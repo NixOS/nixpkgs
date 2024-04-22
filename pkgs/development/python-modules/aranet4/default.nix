@@ -1,11 +1,12 @@
-{ lib
-, bleak
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
-, setuptools
+{
+  lib,
+  bleak,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -22,22 +23,16 @@ buildPythonPackage rec {
     hash = "sha256-j53d2Ki9xVWGHWkAu1wkjYE56Xq7kfMmqQrQiKrBg2I=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bleak
     requests
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "aranet4"
-  ];
+  pythonImportsCheck = [ "aranet4" ];
 
   disabledTests = [
     # Test compares rendered output
@@ -46,9 +41,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module to interact with Aranet4 devices";
-    mainProgram = "aranetctl";
     homepage = "https://github.com/Anrijs/Aranet4-Python";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "aranetctl";
   };
 }
