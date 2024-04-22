@@ -135,8 +135,8 @@ index 8fa34aea..da94cf95 100644
 -    LOG(LOG_LEVEL_DEBUG, "keyboard_cfg_file %s", keyboard_cfg_file);
 +    LOG(LOG_LEVEL_DEBUG, "keyboard_cfg_file %s", client_info->xrdp_keyboard_ini_file);
  
--    fd = g_file_open(keyboard_cfg_file);
-+    fd = g_file_open(client_info->xrdp_keyboard_ini_file);
+-    fd = g_file_open_ro(keyboard_cfg_file);
++    fd = g_file_open_ro(client_info->xrdp_keyboard_ini_file);
  
      if (fd >= 0)
      {
@@ -179,10 +179,10 @@ index 8fa34aea..da94cf95 100644
                  list_delete(items);
                  list_delete(values);
                  return 1;
-diff --git a/sesman/config.c b/sesman/config.c
+diff --git a/sesman/libsesman/sesman_config.c b/sesman/libsesman/sesman_config.c
 index 61e9e403..0466f61a 100644
---- a/sesman/config.c
-+++ b/sesman/config.c
+--- a/sesman/libsesman/sesman_config.c
++++ b/sesman/libsesman/sesman_config.c
 @@ -34,6 +34,7 @@
  #include "sesman.h"
  #include "log.h"
