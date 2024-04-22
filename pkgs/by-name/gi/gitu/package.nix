@@ -12,21 +12,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gitu";
-  version = "0.17.1";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "altsem";
     repo = "gitu";
     rev = "v${version}";
-    hash = "sha256-9OY6zBW7UA4lTH+NI61xuil5p2ChQESXrG2zTxdJblE=";
+    hash = "sha256-SQubZazI6ZOQFTAdsfHd/GbdXcCOEX7gvipKduQ5Nr0=";
   };
 
-  cargoHash = "sha256-gVmoKneAtC5dJh5Z+3aXwxCixrPZTRcxQRpoSh4S1e4=";
+  cargoHash = "sha256-RunJw5UIVq/L3cCZIJqe3B4TEhMk3xYkUgvuqyMeJ1g=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
+  # TODO:
+  #   - unvendor tree-sitter (added in 0.18.0)
   buildInputs = [
     libgit2
     openssl
