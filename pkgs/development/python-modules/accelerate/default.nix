@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "accelerate";
-  version = "0.27.0";
+  version = "0.29.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-7rnI8UXyAql8fLMKoSRrWzVw5CnyYVE2o6dJOzSgWxw=";
+    hash = "sha256-oQGb/hlMN8JfwEyWufBvMk2Z1FMSl1lsdIbgZ3ZMdF8=";
   };
 
   nativeBuildInputs = [ setuptools ];
