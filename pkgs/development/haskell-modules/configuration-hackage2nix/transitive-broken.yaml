@@ -1834,6 +1834,7 @@ dont-distribute-packages:
  - gtkrsync
  - guarded-rewriting
  - guess-combinator
+ - h3spec
  - hArduino
  - hOff-display
  - hPDB
@@ -3000,6 +3001,7 @@ dont-distribute-packages:
  - olwrapper
  - om-kubernetes
  - om-legion
+ - one-time-password
  - online-csv
  - oops-examples
  - opc-xml-da-client

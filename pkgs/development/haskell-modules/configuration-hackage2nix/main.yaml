@@ -249,22 +249,22 @@ package-maintainers:
   libjared:
     - sensei
   maralorn:
+    - bluefin
     - cabal-fmt
-    - clay
     - eventlog2html
+    - falsify
     - generic-optics
     - ghc-debug-brick
     - ghc-debug-stub
     - ghcid
     - graphql-client
     - haskell-language-server
-    - hedgehog
     - hledger
     - hledger-ui
     - hledger-web
     - hlint
-    - hmatrix
     - hspec-discover
+    - jsaddle-warp
     - matrix-client
     - optics
     - pandoc
@@ -273,9 +273,9 @@ package-maintainers:
     - postgresql-simple
     - purebred-email
     - reflex-dom
-    - releaser
     - replace-megaparsec
     - req
+    - say
     - shake-bench
     - shh
     - shh-extras
@@ -283,7 +283,9 @@ package-maintainers:
     - stm-containers
     - streamly
     - streamly-bytestring
+    - string-interpolate
     - taskwarrior
+    - tasty
     - threadscope
     - tz
     - weeder
