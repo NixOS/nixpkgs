@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "2.14";
+  version = "2.14.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,14 +30,8 @@ buildPythonPackage rec {
     owner = "lilydjwg";
     repo = "nvchecker";
     rev = "v${version}";
-    hash = "sha256-QqfF8PGY8sULv1x0blu21ucWxqhOpQ7jyLuRCzDIpco=";
+    hash = "sha256-V2lTGeaiwUsh8IONbZ5GQrqevJMhjeuFLTDF8UdWg8Q=";
   };
-
-  postPatch = ''
-    # Fix try/except syntax. Remove with the next release
-    substituteInPlace tests/test_jq.py \
-      --replace-warn "except jq" "except ImportError"
-  '';
 
   nativeBuildInputs = [
     setuptools
