@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gtranslator";
-  version = "46.0";
+  version = "46.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-CjC/D9gtiPmiBmWei19Z6qk/uA9nUwu/lGHFv2ocC+s=";
+    hash = "sha256-tK8xhIkUkf2JwaBGVlIxAVbAfRVraiThwH86TPdXlWg=";
   };
 
   nativeBuildInputs = [
