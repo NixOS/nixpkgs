@@ -35,6 +35,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pip
+    setuptools
   ];
 
   passthru.optional-dependencies = {
