@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "influxdb";
-  version = "5.3.1";
+  version = "5.3.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ymjv322mv6y424fmpd70f87152w55mbwwj6i7p3sjzf0ixmxy26";
+    sha256 = "sha256-WMZH9gQ3Et2G6a7hLrTM+7tUFUZ7yZEKSKqMdMEQiXA=";
   };
 
   postPatch = ''
