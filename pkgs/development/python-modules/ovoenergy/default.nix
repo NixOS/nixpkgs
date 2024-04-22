@@ -4,38 +4,36 @@
 , click
 , fetchFromGitHub
 , incremental
-, pydantic
 , pythonOlder
+, setuptools
 , typer
 }:
 
 buildPythonPackage rec {
   pname = "ovoenergy";
   version = "2.0.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "timmo001";
-    repo = pname;
+    repo = "ovoenergy";
     rev = "refs/tags/${version}";
     hash = "sha256-ZcTSf7UejEUqQo0qEXP3fWjZYRx0a3ZBNVkwS2dL3Yk=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   nativeBuildInputs = [
     incremental
   ];
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "typer==0.6.1" "typer"
-  '';
-
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     click
-    pydantic
     typer
   ];
 
