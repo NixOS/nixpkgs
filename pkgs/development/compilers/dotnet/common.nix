@@ -50,13 +50,17 @@
           runtime ? finalAttrs.finalPackage,
           runInputs ? [],
           run ? null,
+          runAllowNetworking ? false,
         }:
         let
           sdk = finalAttrs.finalPackage;
           built = runCommand "dotnet-test-${name}" {
             buildInputs = [ sdk ];
             # make sure ICU works in a sandbox
-            propagatedSandboxProfile = toString sdk.__propagatedSandboxProfile;
+            propagatedSandboxProfile = toString sdk.__propagatedSandboxProfile + ''
+              (allow network-inbound (local ip))
+              (allow mach-lookup (global-name "com.apple.FSEvents"))
+            '';
           } (''
             HOME=$PWD/.home
             dotnet new nugetconfig
@@ -70,10 +74,16 @@
           if run == null
             then built
           else
-            runCommand "${built.name}-run" {
+            runCommand "${built.name}-run" ({
               src = built;
               nativeBuildInputs = [ built ] ++ runInputs;
-            } (lib.optionalString (runtime != null) ''
+            } // lib.optionalAttrs (stdenv.isDarwin && runAllowNetworking) {
+              sandboxProfile = ''
+                (allow network-inbound (local ip))
+                (allow mach-lookup (global-name "com.apple.FSEvents"))
+              '';
+              __darwinAllowLocalNetworking = true;
+            }) (lib.optionalString (runtime != null) ''
               # TODO: use runtime here
               export DOTNET_ROOT=${runtime}
             '' + run);
@@ -153,6 +163,7 @@
           EOF
           touch $out
         '';
+        runAllowNetworking = true;
       };
     } // args.passthru.tests or {};
   } // args.passthru or {};
