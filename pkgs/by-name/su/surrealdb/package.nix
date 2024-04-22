@@ -4,13 +4,16 @@
 , fetchFromGitHub
 , pkg-config
 , openssl
-, rocksdb
+, rocksdb_8_3
 , testers
 , surrealdb
 , darwin
 , protobuf
 }:
 
+let
+  rocksdb = rocksdb_8_3;
+in
 rustPlatform.buildRustPackage rec {
   pname = "surrealdb";
   version = "1.3.1";
