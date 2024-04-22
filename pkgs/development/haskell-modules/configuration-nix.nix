@@ -886,6 +886,9 @@ self: super: builtins.intersectAttrs super {
 
       # Overly strict upper bound on text
       doJailbreak
+
+      # Generate shell completion for spago
+      (self.generateOptparseApplicativeCompletions [ "spago" ])
     ];
 
   # checks SQL statements at compile time, and so requires a running PostgreSQL

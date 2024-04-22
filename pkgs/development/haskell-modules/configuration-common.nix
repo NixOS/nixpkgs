@@ -1333,9 +1333,6 @@ self: super: {
   # https://github.com/haskell/hoopl/issues/50
   hoopl = dontCheck super.hoopl;
 
-  # Generate shell completion for spago
-  spago = self.generateOptparseApplicativeCompletions [ "spago" ] super.spago;
-
   # https://github.com/DanielG/cabal-helper/pull/123
   cabal-helper = doJailbreak super.cabal-helper;
 
