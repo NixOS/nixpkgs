@@ -6413,6 +6413,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  tcmu-runner = callPackage ../os-specific/linux/tcmu-runner { };
+
   xlogo = callPackage ../tools/X11/xlogo { };
 
   xmlbeans = callPackage ../tools/misc/xmlbeans { };
