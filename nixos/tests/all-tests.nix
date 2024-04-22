@@ -991,6 +991,7 @@ in {
   vaultwarden = handleTest ./vaultwarden.nix {};
   vector = handleTest ./vector.nix {};
   vengi-tools = handleTest ./vengi-tools.nix {};
+  verity-protected-root = runTest ./verity-protected-root.nix;
   victoriametrics = handleTest ./victoriametrics.nix {};
   vikunja = handleTest ./vikunja.nix {};
   virtualbox = handleTestOn ["x86_64-linux"] ./virtualbox.nix {};
