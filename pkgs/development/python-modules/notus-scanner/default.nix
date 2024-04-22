@@ -15,13 +15,13 @@
 buildPythonPackage rec {
   pname = "notus-scanner";
   version = "22.6.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "greenbone";
-    repo = pname;
+    repo = "notus-scanner";
     rev = "refs/tags/v${version}";
     hash = "sha256-LYYof/s0OvXMbEH7jyFIymUVrWYUd/6lychIzfPlylc=";
   };
@@ -31,8 +31,11 @@ buildPythonPackage rec {
     "python-gnupg"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
+  ];
+
+  nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
 
