@@ -25,9 +25,9 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.27.4";
-    rev = "9134d6a65e5c2c714d503807eb31a8490471fc5f";
-    hash = "sha256-yM+KafKYHnyMED0/Ajc+E81ECPmmyqBSkjluvb/9880=";
+    version = "1.27.5";
+    rev = "be4f1cfd31c79fc05651efa2f88429b3c03d1d9e";
+    hash = "sha256-+sjNqq91YfyW83aq/8WoSo7Jl5QZUmtWtsajnLLMgDc=";
   };
 
   # these need to be updated for any changes to fetchAttrs
@@ -179,8 +179,13 @@ buildBazelPackage {
     #       |         ^
     "--define=tcmalloc=disabled"
   ]);
+
   bazelFetchFlags = [
     "--define=wasm=${wasmRuntime}"
+
+    # https://github.com/bazelbuild/rules_go/issues/3844
+    "--repo_env=GOPROXY=https://proxy.golang.org,direct"
+    "--repo_env=GOSUMDB=sum.golang.org"
   ];
 
   passthru.tests = {
