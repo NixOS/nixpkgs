@@ -10,15 +10,17 @@
   mpfr,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mathemagix";
   version = "11126";
 
   src = fetchsvn {
     url = "https://subversion.renater.fr/anonscm/svn/mmx/";
-    rev = 11126;
+    rev = finalAttrs.version;
     hash = "sha256-AFnYd5oFg/wgaHPjfZmqXNljEpoFW4h6f3UG+KZauEs=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     readline
@@ -42,4 +44,4 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ drupol ];
     platforms = lib.platforms.linux;
   };
-}
+})
