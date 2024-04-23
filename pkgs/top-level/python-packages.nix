@@ -7506,8 +7506,6 @@ self: super: with self; {
 
   mkdocs-rss-plugin = callPackage ../development/python-modules/mkdocs-rss-plugin { };
 
-  mkdocs-simple-hooks = callPackage ../development/python-modules/mkdocs-simple-hooks { };
-
   mkdocs-swagger-ui-tag = callPackage ../development/python-modules/mkdocs-swagger-ui-tag { };
 
   mkdocstrings = callPackage ../development/python-modules/mkdocstrings { };
