@@ -2,30 +2,37 @@
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
+, powershell
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , xmldiff
 }:
 
 buildPythonPackage rec {
   pname = "psrpcore";
-  version = "0.2.2";
-  format = "pyproject";
+  version = "0.3.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jborean93";
-    repo = pname;
+    repo = "psrpcore";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6d5HQJEH/x+V0rpmQkprMlH1n151KyUF6d4tM9W5TFs=";
+    hash = "sha256-YThumRHMOTyhP6/EmNEew47v/X4Y1aYg1nvgZJz2XUg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     cryptography
   ];
 
   nativeCheckInputs = [
+    powershell
     pytestCheckHook
     xmldiff
   ];
