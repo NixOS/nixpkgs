@@ -89,6 +89,7 @@ A common usage of the `version` attribute is to specify `version = "v${version}"
 
 By default, the executable name is derived from the package's `meta.mainProgram` or, failing that, `pname` or `name`. It can be explicitly declared using the `executable` parameter.
 The command ran to test the version can be fully customised via the `command` parameter. This voids the effect of `executable` and `parameter`.
+The version check only succeeds if the command ran exits with exit code 0. The `exitCode` parameter can be customised in case the program returns a different exit code when ran with the version parameter.
 
 :::
 

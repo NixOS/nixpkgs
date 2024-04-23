@@ -61,8 +61,14 @@
       executable ? package.meta.mainProgram or package.pname or package.name,
       command ? "${executable} ${parameter}",
       version ? package.version,
+      exitCode ? 0,
     }: runCommand "${package.name}-test-version" { nativeBuildInputs = [ package ]; meta.timeout = 60; } ''
-      if output=$(${command} 2>&1); then
+      set +e
+      output=$(${command} 2>&1)
+      exitCode=$?
+      set -e
+
+      if [ $exitCode == ${toString exitCode} ]; then
         if grep -Fw -- "${version}" - <<< "$output"; then
           echo "$output" > $out
         else
