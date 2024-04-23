@@ -7,8 +7,20 @@ let
 
   efi = config.boot.loader.efi;
 
+  # We check the source code in a derivation that does not depend on the
+  # system configuration so that most users don't have to redo the check and require
+  # the necessary dependencies.
+  checkedSource = pkgs.runCommand "systemd-boot" { } ''
+    install -m755 -D ${./systemd-boot-builder.py} $out
+    ${lib.getExe pkgs.buildPackages.mypy} \
+      --no-implicit-optional \
+      --disallow-untyped-calls \
+      --disallow-untyped-defs \
+      $out
+  '';
+
   systemdBootBuilder = pkgs.substituteAll rec {
-    src = ./systemd-boot-builder.py;
+    src = checkedSource;
 
     isExecutable = true;
 
@@ -66,19 +78,9 @@ let
     '';
   };
 
-  checkedSystemdBootBuilder = pkgs.runCommand "systemd-boot" { } ''
-    mkdir -p $out/bin
-    install -m755 ${systemdBootBuilder} $out/bin/systemd-boot-builder
-    ${lib.getExe pkgs.buildPackages.mypy} \
-      --no-implicit-optional \
-      --disallow-untyped-calls \
-      --disallow-untyped-defs \
-      $out/bin/systemd-boot-builder
-  '';
-
   finalSystemdBootBuilder = pkgs.writeScript "install-systemd-boot.sh" ''
     #!${pkgs.runtimeShell}
-    ${checkedSystemdBootBuilder}/bin/systemd-boot-builder "$@"
+    ${systemdBootBuilder} "$@"
     ${cfg.extraInstallCommands}
   '';
 in {
