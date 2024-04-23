@@ -104,12 +104,12 @@ rec {
             if [ ! -e bin/sh ]; then
               ln -s ${runtimeShell} bin/sh
             fi
-            mkdir -p .${projectName}.d
-            ln -s ${runScriptFile} .${projectName}.d/runscript
+            mkdir -p .singularity.d
+            ln -s ${runScriptFile} .singularity.d/runscript
 
-            # Fill out .${projectName}.d
-            mkdir -p .${projectName}.d/env
-            touch .${projectName}.d/env/94-appsbase.sh
+            # Fill out .singularity.d
+            mkdir -p .singularity.d/env
+            touch .singularity.d/env/94-appsbase.sh
 
             cd ..
             mkdir -p /var/lib/${projectName}/mnt/session
