@@ -20,11 +20,11 @@ let
 
     nativeBuildInputs = [
       makeWrapper
-      (lua.pkgs.lua-setup-hook lua.LuaPathSearchPaths lua.LuaCPathSearchPaths)
     ];
 
     # we create wrapper for the binaries in the different packages
     postBuild = ''
+      source ${lua}/nix-support/utils.sh
       if [ -L "$out/bin" ]; then
           unlink "$out/bin"
       fi

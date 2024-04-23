@@ -168,6 +168,7 @@ let
   buildPhase = ''
     runHook preBuild
 
+    source ${lua}/nix-support/utils.sh
     nix_debug "Using LUAROCKS_CONFIG=$LUAROCKS_CONFIG"
 
     LUAROCKS_EXTRA_ARGS=""
