@@ -14,13 +14,14 @@
 , pytest-xdist
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , urllib3
 }:
 
 buildPythonPackage rec {
-  version = "0.21.7";
   pname = "dulwich";
-  format = "setuptools";
+  version = "0.21.7";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -29,9 +30,11 @@ buildPythonPackage rec {
     hash = "sha256-qenGaDPOpYDDrBKSfkuXEZhddq/KmNqXFAXUFN5g6Wg=";
   };
 
-  LC_ALL = "en_US.UTF-8";
+  build-system = [
+    setuptools
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     certifi
     urllib3
   ];
