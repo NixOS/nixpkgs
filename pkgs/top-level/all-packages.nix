@@ -1861,7 +1861,9 @@ with pkgs;
 
   goflow = callPackage ../tools/networking/goflow { };
 
-  goflow2 = callPackage ../tools/networking/goflow2 { };
+  goflow2-1_x = callPackage ../tools/networking/goflow2/1.x.nix { };
+  goflow2-2_x = callPackage ../tools/networking/goflow2 { };
+  goflow2 = goflow2-1_x;
 
   gofu = callPackage ../applications/misc/gofu { };
 
@@ -1982,6 +1984,8 @@ with pkgs;
   mymcplus = python3Packages.callPackage ../tools/games/mymcplus { };
 
   near-cli = callPackage ../tools/misc/near-cli { };
+
+  netmeta = callPackage ../tools/networking/netmeta { };
 
   networkd-notify = python3Packages.callPackage ../tools/networking/networkd-notify {
     systemd = pkgs.systemd;
@@ -25729,6 +25733,10 @@ with pkgs;
   clickhouse = callPackage ../servers/clickhouse {
     llvmPackages = llvmPackages_16;
   };
+  clickhouse-23_3_x = callPackage ../servers/clickhouse/23.3.nix {
+    llvmPackages = llvmPackages_16;
+  };
+  clickhouse-lts = clickhouse-23_3_x;
 
   clickhouse-cli = with python3Packages; toPythonApplication clickhouse-cli;
 
