@@ -9,6 +9,7 @@
 , shadow
 , procps
 , nixosTests
+, fetchpatch
 }:
 
 let
@@ -25,6 +26,15 @@ buildGoModule {
     hash = "sha256-4GA31P0UIUI33AMDSVweaEDflPtCV5ZHCqyIcXShTj0=";
   };
   vendorHash = "sha256-pYeHqYd2cCOVQlD1r2lh//KC+732H0lj1fPDBr+W8qA=";
+
+  patches = [
+    # Reverts "cmd/tailscaled/tailscaled.service: revert recent hardening"
+    (fetchpatch {
+      url = "https://github.com/tailscale/tailscale/commit/2889fabaefc50040507ead652d6d2b212f476c2b.patch";
+      hash = "sha256-DPBrv7kjSVXhmptUGGzOkaP4iXi/Bym3lvqy4otL9HE=";
+      revert = true;
+    })
+  ];
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ];
 
