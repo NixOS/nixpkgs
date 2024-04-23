@@ -47,8 +47,8 @@ stdenv.mkDerivation rec {
   version = "7.0.0-beta";
 
   src = fetchurl {
-    url = "https://download.zotero.org/client/beta/${version}.65%2Bb047f3d90/Zotero-${version}.65%2Bb047f3d90_linux-x86_64.tar.bz2";
-    hash = "sha256-e7T/hvb8bFb4hkouihBkgqUu4ugYoUMHNVKxh0r/WUM=";
+    url = "https://download.zotero.org/client/beta/${version}.76%2B91054acfe/Zotero-${version}.76%2B91054acfe_linux-x86_64.tar.bz2";
+    hash = "sha256-z4jKT4bGDR3rWCcexxyWxb6ruJIFvzoKmltrgfFMHTg=";
   };
 
   nativeBuildInputs = [
