@@ -307,8 +307,8 @@ in {
   };
 
   ruby_3_3 = generic {
-    version = rubyVersion "3" "3" "0" "";
-    hash = "sha256-llGIFNmDK+zpKoVBWoGdSJOzB9tZIa4fD3Uamomla30=";
+    version = rubyVersion "3" "3" "1" "";
+    hash = "sha256-jcKvKALMcAzRgtVDByY4jM+IWz8KFPzWoPIf8knJqpk=";
     cargoHash = "sha256-GeelTMRFIyvz1QS2L+Q3KAnyQy7jc0ejhx3TdEFVEbk=";
   };
 
