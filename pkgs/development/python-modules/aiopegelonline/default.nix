@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aiopegelonline";
-  version = "0.0.9";
+  version = "0.0.10";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "mib1185";
     repo = "aiopegelonline";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/k0TR0oUYZigi/2xRVLPFAIMAmXoLnE0NRlvEZrWylo=";
+    hash = "sha256-nKuqAzT1O5n9X/fEUm+M2RdB4u7moUGQzFA7knSEpBs=";
   };
 
   nativeBuildInputs = [
