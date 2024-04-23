@@ -556,6 +556,7 @@ let
     RMark = [ pkgs.which ];
     RPushbullet = [ pkgs.which ];
     stpphawkes = [ pkgs.gsl ];
+    registr = with pkgs; [ icu.dev zlib.dev bzip2.dev xz.dev ];
     RCurl = [ pkgs.curl.dev ];
     R2SWF = [ pkgs.pkg-config ];
     rDEA = [ pkgs.glpk ];
