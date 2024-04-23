@@ -912,6 +912,7 @@ let
     "aroma_affymetrix"
     "aroma_cn"
     "aroma_core"
+    "ceramic"
     "connections"
     "csodata"
     "DiceView"
