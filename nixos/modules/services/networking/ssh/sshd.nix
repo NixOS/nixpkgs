@@ -490,6 +490,8 @@ in
                 {manpage}`sshd_config(5)` for details.
               '';
             };
+            # Disabled by default, since pam_motd handles this.
+            PrintMotd = mkEnableOption "printing /etc/motd when a user logs in interactively";
           };
         });
       };
@@ -656,7 +658,6 @@ in
         ${optionalString cfg.allowSFTP ''
           Subsystem sftp ${cfg.sftpServerExecutable} ${concatStringsSep " " cfg.sftpFlags}
         ''}
-        PrintMotd no # handled by pam_motd
         AuthorizedKeysFile ${toString cfg.authorizedKeysFiles}
         ${optionalString (cfg.authorizedKeysCommand != "none") ''
           AuthorizedKeysCommand ${cfg.authorizedKeysCommand}
