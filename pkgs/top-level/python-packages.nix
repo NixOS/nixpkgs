@@ -4790,6 +4790,8 @@ self: super: with self; {
 
   gitpython = callPackage ../development/python-modules/gitpython { };
 
+  git-versioner = callPackage ../development/python-modules/git-versioner { };
+
   glad =  callPackage ../development/python-modules/glad { };
 
   glad2 =  callPackage ../development/python-modules/glad2 { };
@@ -9776,6 +9778,8 @@ self: super: with self; {
   pip-tools = callPackage ../development/python-modules/pip-tools { };
 
   pip-requirements-parser = callPackage ../development/python-modules/pip-requirements-parser { };
+
+  pip-system-certs = callPackage ../development/python-modules/pip-system-certs { };
 
   pipx = callPackage ../development/python-modules/pipx { };
 
