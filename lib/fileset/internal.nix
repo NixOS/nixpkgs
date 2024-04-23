@@ -825,11 +825,11 @@ rec {
   _fileFilter = predicate: root:
     let
       # Check the predicate for a single file
-      # Type: String -> String -> filesetTree
-      fromFile = name: type:
+      # Type: Path -> String -> String -> filesetTree
+      fromFile = dir: name: type:
         if
           predicate {
-            inherit name type;
+            inherit dir name type;
             hasExt = ext: hasSuffix ".${ext}" name;
 
             # To ensure forwards compatibility with more arguments being added in the future,
@@ -848,7 +848,7 @@ rec {
           if type == "directory" then
             fromDir (path + "/${name}")
           else
-            fromFile name type
+            fromFile path name type
         ) (readDir path);
 
       rootType = pathType root;

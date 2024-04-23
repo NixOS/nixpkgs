@@ -668,6 +668,8 @@ in {
 
       - `name` (String): The name of the file
 
+      - `dir` (Path): The path of the directory containing the file.
+
       - `type` (String, one of `"regular"`, `"symlink"` or `"unknown"`): The type of the file.
         This matches result of calling [`builtins.readFileType`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-readFileType) on the file's path.
 
