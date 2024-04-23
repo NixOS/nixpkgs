@@ -26,7 +26,7 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ kanielrkirby ];
     mainProgram = "goread";
-    descriptionLong = ''
+    longDescription = ''
       goread is an RSS/Atom feed reader for the terminal. It allows you to categorize and follow feeds and read articles right in the commandline! It's accompanied by a beautiful TUI made with bubble tea. Features include:
       - Categorizing feeds
       - Downloading articles for later use
