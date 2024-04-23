@@ -296,8 +296,8 @@ in {
   mkRuby = generic;
 
   ruby_3_1 = generic {
-    version = rubyVersion "3" "1" "4" "";
-    hash = "sha256-o9VYeaDfqx1xQf3xDSKgfb+OXNxEFdob3gYSfVzDx7Y=";
+    version = rubyVersion "3" "1" "5" "";
+    hash = "sha256-NoXFHu7hNSwx6gOXBtcZdvU9AKttdzEt5qoauvXNosU=";
   };
 
   ruby_3_2 = generic {
