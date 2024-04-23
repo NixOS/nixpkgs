@@ -31,13 +31,13 @@ assert lib.assertMsg (stdenv.isLinux || !gamemodeSupport) "gamemodeSupport is on
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "prismlauncher-unwrapped";
-  version = "8.2";
+  version = "8.3";
 
   src = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "PrismLauncher";
     rev = finalAttrs.version;
-    hash = "sha256-4VsoxZzi/EfEsnDvvwzg2xhj7j5B+k3gvaSqwJFDweE=";
+    hash = "sha256-1YGzCgNdzscnOVeNlHMFJa0RbMo6C2qQjtBOeDxHakI=";
   };
 
   nativeBuildInputs = [ extra-cmake-modules cmake jdk17 ninja stripJavaArchivesHook ];
