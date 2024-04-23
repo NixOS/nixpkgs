@@ -74,27 +74,16 @@ let
     rev = "0.10.1";
     hash = "sha256-iIYKvpOWafPJB5XhDOSIW9Mb4I3A4pcgIIPQdQYEqUw=";
   };
-
-  wireplumber_0_4 = wireplumber.overrideAttrs (attrs: rec {
-    version = "0.4.17";
-    src = fetchFromGitLab {
-      domain = "gitlab.freedesktop.org";
-      owner = "pipewire";
-      repo = "wireplumber";
-      rev = version;
-      hash = "sha256-vhpQT67+849WV1SFthQdUeFnYe/okudTQJoL3y+wXwI=";
-    };
-  });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "waybar";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "Alexays";
     repo = "Waybar";
     rev = finalAttrs.version;
-    hash = "sha256-p1VRrKT2kTDy48gDXPMHlLbfcokAOFeTZXGzTeO1SAE=";
+    hash = "sha256-xDeY0Bnwr+jCS0IpseWNgryQ3yV7RJ1VNNbOkT/xl5c=";
   };
 
   postUnpack = lib.optional cavaSupport ''
@@ -151,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional traySupport libdbusmenu-gtk3
   ++ lib.optional udevSupport udev
   ++ lib.optional upowerSupport upower
-  ++ lib.optional wireplumberSupport wireplumber_0_4
+  ++ lib.optional wireplumberSupport wireplumber
   ++ lib.optional (cavaSupport || pipewireSupport) pipewire
   ++ lib.optional (!stdenv.isLinux) libinotify-kqueue;
 
