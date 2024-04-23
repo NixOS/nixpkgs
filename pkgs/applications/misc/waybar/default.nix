@@ -2,7 +2,7 @@
 , stdenv
 , bash
 , fetchFromGitHub
-, fetchFromGitLab
+, fetchpatch
 , SDL2
 , alsa-lib
 , catch2_3
@@ -74,17 +74,6 @@ let
     rev = "0.10.1";
     hash = "sha256-iIYKvpOWafPJB5XhDOSIW9Mb4I3A4pcgIIPQdQYEqUw=";
   };
-
-  wireplumber_0_4 = wireplumber.overrideAttrs (attrs: rec {
-    version = "0.4.17";
-    src = fetchFromGitLab {
-      domain = "gitlab.freedesktop.org";
-      owner = "pipewire";
-      repo = "wireplumber";
-      rev = version;
-      hash = "sha256-vhpQT67+849WV1SFthQdUeFnYe/okudTQJoL3y+wXwI=";
-    };
-  });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "waybar";
@@ -96,6 +85,15 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-p1VRrKT2kTDy48gDXPMHlLbfcokAOFeTZXGzTeO1SAE=";
   };
+
+  patches = [
+    # Update Wireplumber API to 0.5
+    # https://github.com/Alexays/Waybar/pull/2919
+    (fetchpatch {
+      url = "https://github.com/Alexays/Waybar/commit/9d95eaaac41c3286a6a400275d0da3eb0ba52c43.patch";
+      hash = "sha256-34ZDqvJi9Bf+i5jI7lbNk6vFrH/olIvhZ2lBE3lPcHo=";
+    })
+  ];
 
   postUnpack = lib.optional cavaSupport ''
     pushd "$sourceRoot"
@@ -151,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional traySupport libdbusmenu-gtk3
   ++ lib.optional udevSupport udev
   ++ lib.optional upowerSupport upower
-  ++ lib.optional wireplumberSupport wireplumber_0_4
+  ++ lib.optional wireplumberSupport wireplumber
   ++ lib.optional (cavaSupport || pipewireSupport) pipewire
   ++ lib.optional (!stdenv.isLinux) libinotify-kqueue;
 
