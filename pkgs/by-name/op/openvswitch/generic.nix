@@ -131,8 +131,9 @@ stdenv.mkDerivation rec {
     homepage = "https://www.openvswitch.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [
-      netixx
+      adamcstephens
       kmcopper
+      netixx
     ];
     platforms = platforms.linux;
   };
