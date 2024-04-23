@@ -1,49 +1,50 @@
-{ stdenv
-, lib
-, openexr
-, jemalloc
-, c-blosc
-, binutils
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapGAppsHook
-, boost179
-, cereal
-, cgal_5
-, curl
-, dbus
-, eigen
-, expat
-, gcc-unwrapped
-, glew
-, glfw
-, glib
-, glib-networking
-, gmp
-, gstreamer
-, gst-plugins-base
-, gst-plugins-bad
-, gst-plugins-good
-, gtest
-, gtk3
-, hicolor-icon-theme
-, ilmbase
-, libpng
-, mesa
-, mpfr
-, nlopt
-, opencascade-occt
-, openvdb
-, pcre
-, qhull
-, systemd
-, tbb_2021_11
-, webkitgtk
-, wxGTK31
-, xorg
-, fetchpatch
-, withSystemd ? stdenv.isLinux
+{
+  stdenv,
+  lib,
+  openexr,
+  jemalloc,
+  c-blosc,
+  binutils,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapGAppsHook,
+  boost179,
+  cereal,
+  cgal_5,
+  curl,
+  dbus,
+  eigen,
+  expat,
+  gcc-unwrapped,
+  glew,
+  glfw,
+  glib,
+  glib-networking,
+  gmp,
+  gstreamer,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-plugins-good,
+  gtest,
+  gtk3,
+  hicolor-icon-theme,
+  ilmbase,
+  libpng,
+  mesa,
+  mpfr,
+  nlopt,
+  opencascade-occt,
+  openvdb,
+  pcre,
+  qhull,
+  systemd,
+  tbb_2021_11,
+  webkitgtk,
+  wxGTK31,
+  xorg,
+  fetchpatch,
+  withSystemd ? stdenv.isLinux,
 }:
 let
   wxGTK31' = wxGTK31.overrideAttrs (old: {
@@ -53,7 +54,14 @@ let
     ];
   });
   openvdb_tbb_2021_8 = openvdb.overrideAttrs (old: rec {
-    buildInputs = [ openexr boost179 tbb_2021_11 jemalloc c-blosc ilmbase ];
+    buildInputs = [
+      openexr
+      boost179
+      tbb_2021_11
+      jemalloc
+      c-blosc
+      ilmbase
+    ];
   });
 in
 stdenv.mkDerivation rec {
@@ -106,9 +114,7 @@ stdenv.mkDerivation rec {
     webkitgtk
     wxGTK31'
     xorg.libX11
-  ] ++ lib.optionals withSystemd [
-    systemd
-  ] ++ checkInputs;
+  ] ++ lib.optionals withSystemd [ systemd ] ++ checkInputs;
 
   patches = [
     # Fix for webkitgtk linking
