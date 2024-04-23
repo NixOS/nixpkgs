@@ -36,6 +36,9 @@ buildGoModule rec {
       wrapProgram "$out/bin/vale" \
         --set VALE_STYLES_PATH "$out/share/vale/styles/"
     '';
+    meta = {
+      inherit (vale.meta) mainProgram;
+    };
   };
 
   meta = with lib; {
