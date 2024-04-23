@@ -29,38 +29,9 @@ let
       patches = previousAttrs.patches or [ ];
       strictDeps = previousAttrs.strictDeps or true;
 
-      # Should we keep these empty phases?
-      configurePhase = previousAttrs.configurePhase or ''
-        runHook preConfigure
-
-        runHook postConfigure
-      '';
-
-      buildPhase = previousAttrs.buildPhase or ''
-        runHook preBuild
-
-        runHook postBuild
-      '';
-
       doCheck = previousAttrs.doCheck or true;
-      checkPhase = previousAttrs.checkPhase or ''
-        runHook preCheck
-
-        runHook postCheck
-      '';
-
-      installPhase = previousAttrs.installPhase or ''
-        runHook preInstall
-
-        runHook postInstall
-      '';
 
       doInstallCheck = previousAttrs.doInstallCheck or false;
-      installCheckPhase = previousAttrs.installCheckPhase or ''
-        runHook preInstallCheck
-
-        runHook postInstallCheck
-      '';
 
       composerRepository = phpDrv.mkComposerRepository {
         inherit composer composer-local-repo-plugin;

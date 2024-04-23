@@ -46,42 +46,9 @@ let
         phpDrv.composerHooks.composerRepositoryHook
       ];
 
-      buildInputs = previousAttrs.buildInputs or [ ];
-
-      strictDeps = previousAttrs.strictDeps or true;
-
-      # Should we keep these empty phases?
-      configurePhase = previousAttrs.configurePhase or ''
-        runHook preConfigure
-
-        runHook postConfigure
-      '';
-
-      buildPhase = previousAttrs.buildPhase or ''
-        runHook preBuild
-
-        runHook postBuild
-      '';
-
       doCheck = previousAttrs.doCheck or true;
-      checkPhase = previousAttrs.checkPhase or ''
-        runHook preCheck
-
-        runHook postCheck
-      '';
-
-      installPhase = previousAttrs.installPhase or ''
-        runHook preInstall
-
-        runHook postInstall
-      '';
 
       doInstallCheck = previousAttrs.doInstallCheck or false;
-      installCheckPhase = previousAttrs.installCheckPhase or ''
-        runHook preInstallCheck
-
-        runHook postInstallCheck
-      '';
 
       COMPOSER_CACHE_DIR = "/dev/null";
       COMPOSER_MIRROR_PATH_REPOS = "1";
