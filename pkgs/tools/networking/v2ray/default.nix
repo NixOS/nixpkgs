@@ -6,18 +6,18 @@
 
 buildGoModule rec {
   pname = "v2ray-core";
-  version = "5.15.1";
+  version = "5.15.3";
 
   src = fetchFromGitHub {
     owner = "v2fly";
     repo = "v2ray-core";
     rev = "v${version}";
-    hash = "sha256-EENeJQfIKHtbh5dmWeUtnVepIGsBsXMs6Yhi/QzeRRs=";
+    hash = "sha256-45VS+Hrl7egIS2PBrgmDsKgX6vKirEFyQUKy2TBxY4U=";
   };
 
   # `nix-update` doesn't support `vendorHash` yet.
   # https://github.com/Mic92/nix-update/pull/95
-  vendorHash = "sha256-SQ7DcrKYf4Wclp/HG8e7q5YPvVNj/kHV/pGmEyOU/BY=";
+  vendorHash = "sha256-Z3jD7auUixTgrY9Cm0LoNRHIyEFbStMYpumTCqKv+x0=";
 
   ldflags = [ "-s" "-w" ];
 
