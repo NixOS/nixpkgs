@@ -13,6 +13,9 @@
 , moreutils
 , cacert
 , nodePackages
+, pipewire
+, libpulseaudio
+, autoPatchelfHook
 , withTTS ? true
   # Enables the use of vencord from nixpkgs instead of
   # letting vesktop manage it's own version
@@ -81,6 +84,13 @@ stdenv.mkDerivation (finalAttrs: {
     nodePackages.pnpm
     nodePackages.nodejs
     makeWrapper
+    autoPatchelfHook
+  ];
+
+  buildInputs = [
+    pipewire
+    libpulseaudio
+    stdenv.cc.cc.lib
   ];
 
   patches = [
@@ -106,6 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     # using `pnpm exec` here apparently makes it ignore ELECTRON_SKIP_BINARY_DOWNLOAD
     ./node_modules/.bin/electron-builder \
       --dir \
+      -c.asarUnpack="**/*.node" \
       -c.electronDist=${electron}/libexec/electron \
       -c.electronVersion=${electron.version}
   '';
@@ -115,8 +126,8 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       runHook preInstall
 
-      mkdir -p $out/opt/Vesktop/resources
-      cp dist/linux-*unpacked/resources/app.asar $out/opt/Vesktop/resources
+      mkdir -p $out/opt/Vesktop
+      cp -r dist/linux-*unpacked/resources $out/opt/Vesktop/
 
       pushd build
       ${libicns}/bin/icns2png -x icon.icns
