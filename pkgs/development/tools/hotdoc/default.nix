@@ -1,9 +1,9 @@
 { lib
 , stdenv
 , buildPythonApplication
+, fetchpatch
 , fetchPypi
 , pytestCheckHook
-, python
 , pkg-config
 , cmake
 , flex
@@ -28,13 +28,21 @@
 
 buildPythonApplication rec {
   pname = "hotdoc";
-  version = "0.16";
+  version = "0.15";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rxhW1U+d0j4FOKfcRCO2nSndf1Sk/m40hEYGq1Gj6rM=";
+    hash = "sha256-sfQ/iBd1Z+YqnaOg8j32rC2iucdiiK3Tff9NfYFnQyc=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-test-hotdoc.patch";
+      url = "https://github.com/hotdoc/hotdoc/commit/d2415a520e960a7b540742a0695b699be9189540.patch";
+      hash = "sha256-9ORZ91c+/oRqEp2EKXjKkz7u8mLnWCq3uPsc3G4NB9E=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -78,7 +86,7 @@ buildPythonApplication rec {
   ];
 
   # Run the tests by package instead of current dir
-  pytestFlagsArray = [ "${builtins.placeholder "out"}/${python.sitePackages}" "--pyargs" "hotdoc" ];
+  pytestFlagsArray = [ "--pyargs" "hotdoc" ];
 
   disabledTests = [
     # Test does not correctly handle path normalization for test comparison
@@ -91,11 +99,10 @@ buildPythonApplication rec {
   # Hardcode libclang paths
   postPatch = ''
     substituteInPlace hotdoc/extensions/c/c_extension.py \
-      --replace-fail "shutil.which('llvm-config')" 'True' \
-      --replace-fail "$(echo -e "subprocess.check_output(\n            ['clang', '--print-resource-dir']).strip().decode()")" '""' \
-      --replace-fail "$(echo -e "subprocess.check_output(\n        ['llvm-config', '--version']).strip().decode()")" '"${lib.versions.major llvmPackages.libclang.version}"' \
-      --replace-fail "$(echo -e "subprocess.check_output(\n        ['llvm-config', '--prefix']).strip().decode()")" '"${llvmPackages.libclang.lib}"' \
-      --replace-fail "subprocess.check_output(['llvm-config', '--libdir']).strip().decode()" '"${llvmPackages.libclang.lib}/lib"'
+      --replace "shutil.which('llvm-config')" 'True' \
+      --replace "subprocess.check_output(['llvm-config', '--version']).strip().decode()" '"${lib.versions.major llvmPackages.libclang.version}"' \
+      --replace "subprocess.check_output(['llvm-config', '--prefix']).strip().decode()" '"${llvmPackages.libclang.lib}"' \
+      --replace "subprocess.check_output(['llvm-config', '--libdir']).strip().decode()" '"${llvmPackages.libclang.lib}/lib"'
   '';
 
   # Make pytest run from a temp dir to have it pick up installed package for cmark
