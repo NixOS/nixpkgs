@@ -328,6 +328,7 @@ let
     CellBarcode = [ pkgs.zlib ];
     cld3 = [ pkgs.protobuf ];
     bnpmr = [ pkgs.gsl ];
+    caviarpd = [ pkgs.cargo ];
     cairoDevice = [ pkgs.gtk2.dev ];
     Cairo = with pkgs; [ libtiff libjpeg cairo.dev xorg.libXt.dev fontconfig.lib ];
     Cardinal = [ pkgs.which ];
