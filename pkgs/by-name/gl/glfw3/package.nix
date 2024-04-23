@@ -1,13 +1,16 @@
 { stdenv, lib, fetchFromGitHub, cmake
 , libGL, libXrandr, libXinerama, libXcursor, libX11, libXi, libXext
-, Carbon, Cocoa, Kernel, fixDarwinDylibNames
+, darwin, fixDarwinDylibNames
 , extra-cmake-modules, wayland
 , wayland-scanner, wayland-protocols, libxkbcommon, libdecor
+, withMinecraftPatch ? false
 }:
-
-stdenv.mkDerivation rec {
+let
   version = "3.4";
-  pname = "glfw";
+in
+stdenv.mkDerivation {
+  pname = "glfw${lib.optionalString withMinecraftPatch "-minecraft"}";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "glfw";
@@ -17,16 +20,20 @@ stdenv.mkDerivation rec {
   };
 
   # Fix linkage issues on X11 (https://github.com/NixOS/nixpkgs/issues/142583)
-  patches = ./x11.patch;
+  patches = [
+    ./x11.patch
+  ] ++ lib.optionals withMinecraftPatch [
+    ./0009-Defer-setting-cursor-position-until-the-cursor-is-lo.patch
+  ];
 
   propagatedBuildInputs = [ libGL ];
 
   nativeBuildInputs = [ cmake extra-cmake-modules ]
-    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames
+    ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ]
     ++ lib.optionals stdenv.isLinux [ wayland-scanner ];
 
   buildInputs =
-    lib.optionals stdenv.isDarwin [ Carbon Cocoa Kernel ]
+    lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Carbon Cocoa Kernel ])
     ++ lib.optionals stdenv.isLinux [
       wayland
       wayland-protocols
@@ -64,7 +71,7 @@ stdenv.mkDerivation rec {
     description = "Multi-platform library for creating OpenGL contexts and managing input, including keyboard, mouse, joystick and time";
     homepage = "https://www.glfw.org/";
     license = licenses.zlib;
-    maintainers = with maintainers; [ marcweber twey ];
+    maintainers = with maintainers; [ marcweber Scrumplex twey ];
     platforms = platforms.unix ++ platforms.windows;
   };
 }
