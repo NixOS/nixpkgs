@@ -39,12 +39,15 @@ buildPythonPackage rec {
     hash = "sha256-gm6ieteW+NcY+AOLcMZLUPcSi2Z/Mo27rzd1i9imp5I=";
   };
 
+  pythonRelaxDeps = [ "packaging" ];
+
   build-system = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [ "packaging" ];
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
 
   dependencies = [
     boto3
@@ -61,10 +64,19 @@ buildPythonPackage rec {
     requests-aws4auth
   ];
 
+  passthru.optional-dependencies = {
+    sqlserver = [ pyodbc ];
+    sparql = [ sparqlwrapper ];
+  };
+
   nativeCheckInputs = [
     moto
     pyparsing
     pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "awswrangler"
   ];
 
   pytestFlagsArray = [
@@ -75,11 +87,6 @@ buildPythonPackage rec {
     "tests/unit/test_utils.py"
     "tests/unit/test_moto.py"
   ];
-
-  passthru.optional-dependencies = {
-    sqlserver = [ pyodbc ];
-    sparql = [ sparqlwrapper ];
-  };
 
   meta = with lib; {
     description = "Pandas on AWS";
