@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "emcee";
-  version = "3.1.4";
+  version = "3.1.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "dfm";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-K2cPSbR7jnl9Vzf2sEiPZqk2vTwgChNWAf6CAerhZCg=";
+    hash = "sha256-JVZK3kvDwWENho0OxZ9OxATcm3XpGmX+e7alPclRsHY=";
   };
 
   nativeBuildInputs = [
