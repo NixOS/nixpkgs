@@ -541,6 +541,12 @@ else let
         "The ‘env’ attribute set can only contain derivation, string, boolean or integer attributes. The ‘${n}’ attribute is of type ${builtins.typeOf v}."; v)
       env;
 
+  # Fixed-output derivations may not reference other paths, which means that
+  # for a fixed-output derivation, the corresponding inputDerivation should
+  # *not* be fixed-output. To achieve this we simply delete the attributes that
+  # would make it fixed-output.
+  deleteFixedOutputRelatedAttrs = lib.flip builtins.removeAttrs [ "outputHashAlgo" "outputHash" "outputHashMode" ];
+
 in
 
 extendDerivation
@@ -551,7 +557,7 @@ extendDerivation
      # This allows easy building and distributing of all derivations
      # needed to enter a nix-shell with
      #   nix-build shell.nix -A inputDerivation
-     inputDerivation = derivation (derivationArg // {
+     inputDerivation = derivation (deleteFixedOutputRelatedAttrs derivationArg // {
        # Add a name in case the original drv didn't have one
        name = derivationArg.name or "inputDerivation";
        # This always only has one output
