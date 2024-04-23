@@ -38686,8 +38686,6 @@ with pkgs;
 
   cbmc = callPackage ../applications/science/logic/cbmc { };
 
-  cbmc-viewer = callPackage ../applications/science/logic/cbmc-viewer { };
-
   cadical = callPackage ../applications/science/logic/cadical { };
 
   inherit (callPackage ./coq-packages.nix {
