@@ -19038,6 +19038,12 @@
     githubId = 8904314;
     name = "Konstantin Nick";
   };
+  sqlazer = {
+    email = "me@sqlazer.com";
+    github = "sdellysse";
+    githubId = 293035;
+    name = "sqlazer";
+  };
   squalus = {
     email = "squalus@squalus.net";
     github = "squalus";
