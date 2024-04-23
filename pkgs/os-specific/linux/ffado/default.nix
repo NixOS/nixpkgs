@@ -1,31 +1,43 @@
-{ lib
-, stdenv
-, mkDerivation
-, argp-standalone
-, dbus
-, dbus_cplusplus
-, desktop-file-utils
-, fetchurl
-, fetchpatch
-, glibmm
-, libavc1394
-, libconfig
-, libiec61883
-, libraw1394
-, libxmlxx3
-, pkg-config
-, python3
-, scons
-, which
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  argp-standalone,
+  dbus,
+  dbus_cplusplus,
+  desktop-file-utils,
+  fetchurl,
+  fetchpatch,
+  glibmm,
+  libavc1394,
+  libconfig,
+  libiec61883,
+  libraw1394,
+  libxmlxx3,
+  pkg-config,
+  python3,
+  scons,
+  which,
+  wrapQtAppsHook,
 }:
 
 let
-  python = python3.withPackages (pkgs: with pkgs; [ pyqt5 dbus-python ]);
+  python = python3.withPackages (
+    pkgs: with pkgs; [
+      pyqt5
+      dbus-python
+    ]
+  );
 in
 mkDerivation rec {
   pname = "ffado";
   version = "2.4.8";
+
+  outputs = [
+    "out"
+    "bin"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "http://www.ffado.org/files/libffado-${version}.tgz";
@@ -48,8 +60,6 @@ mkDerivation rec {
       hash = "sha256-iWeYnb5J69Uvo1lftc7MWg7WrLa+CGZyOwJPOe8/PKg=";
     })
   ];
-
-  outputs = [ "out" "bin" "dev" ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -114,7 +124,10 @@ mkDerivation rec {
     homepage = "http://www.ffado.org";
     description = "FireWire audio drivers";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ goibhniu michojel ];
+    maintainers = with maintainers; [
+      goibhniu
+      michojel
+    ];
     platforms = platforms.linux;
   };
 }
