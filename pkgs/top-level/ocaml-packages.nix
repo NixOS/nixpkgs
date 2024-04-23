@@ -835,7 +835,6 @@ let
       phylogenetics = let
         angstrom = self.angstrom.override { inherit ppx_let; };
       in callPackage ../development/ocaml-modules/phylogenetics {
-        inherit biocaml;
         ppx_deriving = self.ppx_deriving.override { inherit (jsDeps) ppxlib; };
         angstrom-unix = self.angstrom-unix.override { inherit angstrom; };
       };
