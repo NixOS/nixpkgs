@@ -88,6 +88,8 @@ let
 
     biniou = callPackage ../development/ocaml-modules/biniou { };
 
+    binning = callPackage ../development/ocaml-modules/binning { };
+
     biocaml = janeStreet_0_15.biocaml;
 
     bisect_ppx = callPackage ../development/ocaml-modules/bisect_ppx { };
