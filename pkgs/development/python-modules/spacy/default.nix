@@ -135,5 +135,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/explosion/spaCy/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
+    # Cython.Compiler.Errors.CompileError: spacy/ml/parser_model.pyx
+    broken = true;
   };
 }
