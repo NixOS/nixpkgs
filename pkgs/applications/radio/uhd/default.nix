@@ -8,12 +8,6 @@
 , boost
 , ncurses
 , enableCApi ? true
-# Although we handle the Python API's dependencies in pythonEnvArg, this
-# feature is currently disabled as upstream attempts to run `python setup.py
-# install` by itself, and it fails because the Python's environment's prefix is
-# not a writable directly. Adding support for this feature would require using
-# python's pypa/build nad pypa/install hooks directly, and currently it is hard
-# to do that because it all happens after a long buildPhase of the C API.
 , enablePythonApi ? false
 , python3
 , buildPackages
@@ -138,6 +132,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Disable tests that fail in the sandbox
     ./no-adapter-tests.patch
+    # Fix for python module failing to install
+    ./python-api.patch
   ];
 
   postPhases = [ "installFirmware" "removeInstalledTests" ]
