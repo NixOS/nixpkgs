@@ -24071,16 +24071,7 @@ with pkgs;
 
   pylode = callPackage ../misc/pylode { };
 
-  python-qt = (callPackage ../development/libraries/python-qt {
-    python = python3;
-    inherit (builtins.mapAttrs (_: pkg: pkg.override (previousArgs: lib.optionalAttrs (previousArgs ? stdenv) { stdenv = gcc12Stdenv; })) qt5)
-      qmake qttools qtwebengine qtxmlpatterns;
-    stdenv = gcc12Stdenv;
-  })
-  .overrideAttrs(previousAttrs: {
-    NIX_CFLAGS_COMPILE = "-w";
-    meta = previousAttrs.meta // { broken = true; };
-  });
+  python-qt = libsForQt5.callPackage ../development/libraries/python-qt { };
 
   pyotherside = libsForQt5.callPackage ../development/libraries/pyotherside { };
 
@@ -30344,9 +30335,7 @@ with pkgs;
 
   csound-manual = callPackage ../applications/audio/csound/csound-manual { };
 
-  csound-qt = libsForQt5.callPackage ../applications/audio/csound/csound-qt {
-    python = python3;
-  };
+  csound-qt = libsForQt5.callPackage ../applications/audio/csound/csound-qt { };
 
   codeblocks = callPackage ../applications/editors/codeblocks { };
   codeblocksFull = codeblocks.override { contribPlugins = true; };

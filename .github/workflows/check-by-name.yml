@@ -84,7 +84,7 @@ jobs:
             exit 1
           fi
           echo "mergedSha=$mergedSha" >> "$GITHUB_ENV"
-      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
+      - uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4.1.3
         with:
           # pull_request_target checks out the base branch by default
           ref: ${{ env.mergedSha }}
@@ -107,6 +107,10 @@ jobs:
           # Adds a result symlink as a GC root
           nix-store --realise "$toolPath" --add-root result
       - name: Running nixpkgs-check-by-name
+        env:
+          # Force terminal colors to be enabled. The library that
+          # nixpkgs-check-by-name uses respects: https://bixense.com/clicolors/
+          CLICOLOR_FORCE: 1
         run: |
           if result/bin/nixpkgs-check-by-name --base "$base" .; then
             exit 0

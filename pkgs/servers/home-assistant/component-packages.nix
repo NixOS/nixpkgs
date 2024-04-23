@@ -97,7 +97,8 @@
       airtouch4pyapi
     ];
     "airtouch5" = ps: with ps; [
-    ]; # missing inputs: airtouch5py
+      airtouch5py
+    ];
     "airvisual" = ps: with ps; [
       pyairvisual
     ];
@@ -162,7 +163,8 @@
       sqlalchemy
     ];
     "analytics_insights" = ps: with ps; [
-    ]; # missing inputs: python-homeassistant-analytics
+      python-homeassistant-analytics
+    ];
     "android_ip_webcam" = ps: with ps; [
       pydroid-ipcam
     ];
@@ -5956,6 +5958,7 @@
     "ambiclimate"
     "ambient_station"
     "analytics"
+    "analytics_insights"
     "android_ip_webcam"
     "androidtv"
     "androidtv_remote"

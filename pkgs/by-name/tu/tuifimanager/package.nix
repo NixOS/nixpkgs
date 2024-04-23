@@ -5,29 +5,24 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "tuifimanager";
-  version = "3.3.5";
+  version = "4.0.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "GiorgosXou";
     repo = "TUIFIManager";
-    rev = "refs/tags/v.${version}";
-    hash = "sha256-O4cAHFurgF6QzpeAMoipX2/JywU1drZOTw/Ob9Pa8WQ=";
+    rev = "v${version}";
+    hash = "sha256-bv/+x2xppUK9i3HOm93FIQRu1xlB4wCKZzAapkVlrM0=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "Send2Trash == 1.8.0" "Send2Trash >= 1.8.0"
-  '';
 
   nativeBuildInputs = [
     python3.pkgs.setuptools
     python3.pkgs.setuptools-scm
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    send2trash
-    unicurses
+  propagatedBuildInputs = [
+    python3.pkgs.send2trash
+    python3.pkgs.unicurses
   ];
   pythonImportsCheck = [ "TUIFIManager" ];
 
