@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, msgpack
-, pandas
-, pynose
-, pytestCheckHook
-, python-dateutil
-, pytz
-, requests
-, requests-mock
-, setuptools
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  msgpack,
+  pandas,
+  pynose,
+  pytestCheckHook,
+  python-dateutil,
+  pytz,
+  requests,
+  requests-mock,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
     done
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     msgpack
