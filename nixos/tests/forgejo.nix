@@ -141,9 +141,9 @@ let
         assert "BEGIN PGP PUBLIC KEY BLOCK" in server.succeed("curl http://localhost:3000/api/v1/signing-key.gpg")
 
         api_version = json.loads(server.succeed("curl http://localhost:3000/api/forgejo/v1/version")).get("version")
-        assert "development" != api_version and "-gitea-" in api_version, (
+        assert "development" != api_version and "${pkgs.forgejo.version}+gitea-" in api_version, (
             "/api/forgejo/v1/version should not return 'development' "
-            + f"but should contain a gitea compatibility version string. Got '{api_version}' instead."
+            + f"but should contain a forgejo+gitea compatibility version string. Got '{api_version}' instead."
         )
 
         server.succeed(
@@ -152,7 +152,7 @@ let
         )
         server.succeed(
             "su -l forgejo -c 'GITEA_WORK_DIR=/var/lib/forgejo gitea admin user create "
-            + "--username test --password totallysafe --email test@localhost'"
+            + "--username test --password totallysafe --email test@localhost --must-change-password=false'"
         )
 
         api_token = server.succeed(

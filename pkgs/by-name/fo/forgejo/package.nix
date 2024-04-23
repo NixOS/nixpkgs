@@ -24,7 +24,7 @@ let
     pname = "forgejo-frontend";
     inherit (forgejo) src version;
 
-    npmDepsHash = "sha256-uMPy4cqMDNZTpF+pk7YibXEJO1zxVfwlCeFzGgJBiU0=";
+    npmDepsHash = "sha256-BffoEbIzTU61bw3ECEm5eDHcav4S27MB5jQKsMprkcw=";
 
     patches = [
       ./package-json-npm-build-frontend.patch
@@ -39,33 +39,17 @@ let
 in
 buildGoModule rec {
   pname = "forgejo";
-  version = "1.21.11-1";
+  version = "7.0.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "forgejo";
     repo = "forgejo";
     rev = "v${version}";
-    hash = "sha256-7oYsoZpZcNIUw3iXSi1Q5So2yYgKnT5U7GHQ4NVqVdc=";
-    # Forgejo has multiple different version strings that need to be provided
-    # via ldflags.  main.ForgejoVersion for example is a combination of a
-    # hardcoded gitea compatibility version string (in the Makefile) and
-    # git describe and is easiest to get by invoking the Makefile.
-    # So we do that, store it the src FOD to then extend the ldflags array
-    # in preConfigure.
-    # The `echo -e >> Makefile` is temporary and already part of the next
-    # major release.  Furthermore, the ldflags will change next major release
-    # and need to be updated accordingly.
-    leaveDotGit = true;
-    postFetch = ''
-      cd "$out"
-      echo -e 'show-version-full:\n\t@echo ''${FORGEJO_VERSION}' >> Makefile
-      make show-version-full > FULL_VERSION
-      find "$out" -name .git -print0 | xargs -0 rm -rf
-    '';
+    hash = "sha256-oIx1aPrHgOWx13ocA3t7N5UdTgr+64tgC0XcEnhA/eE=";
   };
 
-  vendorHash = "sha256-OuWNF+muWM6xqwkFxLIUsn/huqXj2VKg8BN9+JHVw58=";
+  vendorHash = "sha256-UcjaMi/4XYLdaJhi2j3UWqHqkpTbZBo6EwNXxdRIKLw=";
 
   subPackages = [ "." ];
 
@@ -93,7 +77,7 @@ buildGoModule rec {
   ];
 
   preConfigure = ''
-    export ldflags+=" -X code.gitea.io/gitea/routers/api/forgejo/v1.ForgejoVersion=$(cat FULL_VERSION) -X main.ForgejoVersion=$(cat FULL_VERSION)"
+    export ldflags+=" -X main.ForgejoVersion=$(GITEA_VERSION=${version} make show-version-api)"
   '';
 
   preBuild = ''
