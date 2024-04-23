@@ -77,13 +77,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "waybar";
-  version = "0.10.1";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "Alexays";
     repo = "Waybar";
     rev = finalAttrs.version;
-    hash = "sha256-xDeY0Bnwr+jCS0IpseWNgryQ3yV7RJ1VNNbOkT/xl5c=";
+    hash = "sha256-xinTLjZJhL4048jpAbN3i6nSxKAqnbesbK/GBX+1CkE=";
   };
 
   postUnpack = lib.optional cavaSupport ''
