@@ -5,6 +5,7 @@
   mock,
   ply,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
   setuptools,
   six,
@@ -15,7 +16,8 @@ buildPythonPackage rec {
   version = "3.3.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  # distutils removal, https://github.com/dropbox/stone/issues/323
+  disabled = pythonOlder "3.7" || pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "dropbox";
