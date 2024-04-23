@@ -27,10 +27,7 @@ let
     {
       version = "10";
       # Nixpkgs cudaPackages_10 doesn't have redist packages broken out.
-      pkgSet = [
-        cudaPackages_10_2.cudatoolkit
-        cudaPackages_10_2.cudatoolkit.lib
-      ];
+      pkgSet = [ cudaPackages_10_2.cudatoolkit ];
     }
     {
       version = "11";
@@ -68,7 +65,7 @@ let
       };
       # The combined package above breaks the build for some reason so we just configure
       # each package's library path.
-      libs = lib.concatMapStringsSep " " (x: ''"${x}/lib"'') pkgSet;
+      libs = lib.concatMapStringsSep " " (pkg: "${pkg.lib or pkg}/lib") pkgSet;
     in ''
       list(APPEND Cuda${version}_INCLUDE_PATHS "${combined}/include")
       list(APPEND Cuda${version}_LIB_PATHS ${libs})

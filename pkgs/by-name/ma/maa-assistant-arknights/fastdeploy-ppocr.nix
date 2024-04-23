@@ -13,6 +13,7 @@
 
 let
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
+  inherit (cudaPackages.flags) cmakeCudaArchitecturesString;
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "fastdeploy-ppocr";
@@ -54,14 +55,12 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       ]
     );
 
-  cmakeFlags =
-    [
-      (lib.cmakeFeature "CMAKE_BUILD_TYPE" "None")
-      (lib.cmakeBool "BUILD_SHARED_LIBS" true)
-    ]
-    ++ lib.optionals cudaSupport [
-      (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
-    ];
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "None")
+    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
+  ] ++ lib.optionals cudaSupport [
+    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cmakeCudaArchitecturesString)
+  ];
 
   postInstall = ''
     mkdir $cmake

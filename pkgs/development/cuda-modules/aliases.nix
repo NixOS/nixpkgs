@@ -1,8 +1,8 @@
 # Packages which have been deprecated or removed from cudaPackages
-final: prev:
+final:
 let
-  inherit (prev.lib) warn;
-  inherit (builtins) mapAttrs;
+  inherit (final.lib.attrsets) mapAttrs;
+  inherit (final.lib.trivial) warn;
 
   mkRenamed =
     oldName:

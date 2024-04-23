@@ -6850,30 +6850,53 @@ with pkgs;
 
   snooze = callPackage ../tools/system/snooze { };
 
-  cudaPackages_10_0 = callPackage ./cuda-packages.nix { cudaVersion = "10.0"; };
-  cudaPackages_10_1 = callPackage ./cuda-packages.nix { cudaVersion = "10.1"; };
-  cudaPackages_10_2 = callPackage ./cuda-packages.nix { cudaVersion = "10.2"; };
-  cudaPackages_10 = recurseIntoAttrs cudaPackages_10_2;
+  # Allows us to evaluate the modules responsile for generating the CUDA package sets just once, rather than once for
+  # each version of the package set we want to produce.
+  inherit
+    ((lib.modules.evalModules {
+      specialArgs = {
+        inherit pkgs;
+      };
+      modules = [ ../development/cuda-modules ];
+    }).config.packageSets
+    )
+    # CUDA 10.x
+    cudaPackages_10_0
+    cudaPackages_10_1
+    cudaPackages_10_2
 
-  cudaPackages_11_0 = callPackage ./cuda-packages.nix { cudaVersion = "11.0"; };
-  cudaPackages_11_1 = callPackage ./cuda-packages.nix { cudaVersion = "11.1"; };
-  cudaPackages_11_2 = callPackage ./cuda-packages.nix { cudaVersion = "11.2"; };
-  cudaPackages_11_3 = callPackage ./cuda-packages.nix { cudaVersion = "11.3"; };
-  cudaPackages_11_4 = callPackage ./cuda-packages.nix { cudaVersion = "11.4"; };
-  cudaPackages_11_5 = callPackage ./cuda-packages.nix { cudaVersion = "11.5"; };
-  cudaPackages_11_6 = callPackage ./cuda-packages.nix { cudaVersion = "11.6"; };
-  cudaPackages_11_7 = callPackage ./cuda-packages.nix { cudaVersion = "11.7"; };
-  cudaPackages_11_8 = callPackage ./cuda-packages.nix { cudaVersion = "11.8"; };
-  cudaPackages_11 = recurseIntoAttrs cudaPackages_11_8;
+    # CUDA 11.x
+    cudaPackages_11_0
+    cudaPackages_11_1
+    cudaPackages_11_2
+    cudaPackages_11_3
+    cudaPackages_11_4
+    cudaPackages_11_5
+    cudaPackages_11_6
+    cudaPackages_11_7
+    cudaPackages_11_8
 
-  cudaPackages_12_0 = callPackage ./cuda-packages.nix { cudaVersion = "12.0"; };
-  cudaPackages_12_1 = callPackage ./cuda-packages.nix { cudaVersion = "12.1"; };
-  cudaPackages_12_2 = callPackage ./cuda-packages.nix { cudaVersion = "12.2"; };
-  cudaPackages_12_3 = callPackage ./cuda-packages.nix { cudaVersion = "12.3"; };
-  cudaPackages_12_4 = callPackage ./cuda-packages.nix { cudaVersion = "12.4"; };
-  cudaPackages_12 = cudaPackages_12_4; # Latest supported by cudnn
+    # CUDA 12.x
+    cudaPackages_12_0
+    cudaPackages_12_1
+    cudaPackages_12_2
+    cudaPackages_12_3
+    cudaPackages_12_4
+    cudaPackages_12_5
+    ;
 
-  cudaPackages = recurseIntoAttrs cudaPackages_12;
+  # NOTE: Each package set marked with recurseIntoAttrs will be built by
+  #       nixpkgs-review when running with `cudaSupport = true;` as they are
+  #       never cached by Hydra. To avoid an explosion of packages during
+  #       nixpkgs-review runs, only the latest major version of the package set
+  #       is marked with recurseIntoAttrs.
+  # TODO(@connorbaker): Temporarily set recurseIntoAttrs on all package sets
+  # (via pkgs/development/cuda-modules/package-sets.nix) to verify; revert when
+  # ready.
+  cudaPackages_10 = cudaPackages_10_2;
+  cudaPackages_11 = cudaPackages_11_8;
+  cudaPackages_12 = cudaPackages_12_5;
+  cudaPackages = cudaPackages_12;
 
   # TODO: move to alias
   cudatoolkit = cudaPackages.cudatoolkit;

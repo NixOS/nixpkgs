@@ -50,6 +50,9 @@ in stdenv.mkDerivation rec {
 
   preConfigure = ''
     cd cpp/
+  '' + lib.optionalString (backend == "cuda") ''
+    export CUDNN_INCLUDE_DIR="${cudaPackages.cudnn.dev}"
+    export CUDNN_LIBRARY="${cudaPackages.cudnn.lib}"
   '' + lib.optionalString (backend == "cuda" || backend == "tensorrt") ''
     export CUDA_PATH="${cudaPackages.cudatoolkit}"
     export EXTRA_LDFLAGS="-L/run/opengl-driver/lib"

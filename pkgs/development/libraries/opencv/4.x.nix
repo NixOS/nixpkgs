@@ -246,8 +246,7 @@ let
   #https://github.com/OpenMathLib/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
   openblas_ = blas.provider.override { singleThreaded = true; };
 
-  inherit (cudaPackages) cudaFlags cudaVersion;
-  inherit (cudaFlags) cudaCapabilities;
+  inherit (cudaPackages.cudaFlags) cudaCapabilities;
 
 in
 
@@ -512,7 +511,7 @@ effectiveStdenv.mkDerivation {
   # see https://github.com/NixOS/nixpkgs/issues/276691
   + lib.optionalString (!enableCuda) ''
     mkdir -p "$cxxdev/nix-support"
-    echo "''${!outputDev}" >> "$cxxdev/nix-support/propagated-build-inputs"
+    printWords "''${!outputDev}" >> "$cxxdev/nix-support/propagated-build-inputs"
   ''
   # install python distribution information, so other packages can `import opencv`
   + lib.optionalString enablePython ''

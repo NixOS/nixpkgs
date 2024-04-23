@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     ./autogen.sh
   '' + lib.optionalString enableCuda ''
-    configureFlagsArray+=( "--with-nvcc-gencode=${builtins.concatStringsSep " " cudaPackages.cudaFlags.gencode}" )
+    configureFlagsArray+=( "--with-nvcc-gencode=${cudaPackages.flags.gencodeString}" )
   '';
   configureFlags = [ ]
    ++ lib.optional enableSse41 "--with-sse41"

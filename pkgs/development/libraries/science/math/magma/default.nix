@@ -11,7 +11,7 @@ args@{ callPackage
 # }
 
 let
-  inherit (lib) lists strings trivial;
+  inherit (lib) lists strings;
 
   computeName = version: "magma_${strings.replaceStrings [ "." ] [ "_" ] version}";
 
