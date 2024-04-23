@@ -1,21 +1,22 @@
-{ lib
-, aiohttp
-, aiomqtt
-, buildPythonPackage
-, cachetools
-, defusedxml
-, docker
-, fetchFromGitHub
-, numpy
-, pillow
-, pycountry
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-scm
-, svg-py
-, testfixtures
+{
+  lib,
+  aiohttp,
+  aiomqtt,
+  buildPythonPackage,
+  cachetools,
+  defusedxml,
+  docker,
+  fetchFromGitHub,
+  numpy,
+  pillow,
+  pycountry,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  svg-py,
+  testfixtures,
 }:
 
 buildPythonPackage rec {
@@ -55,9 +56,7 @@ buildPythonPackage rec {
     testfixtures
   ];
 
-  pythonImportsCheck = [
-    "deebot_client"
-  ];
+  pythonImportsCheck = [ "deebot_client" ];
 
   disabledTests = [
     # Tests require running container
