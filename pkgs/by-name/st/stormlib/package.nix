@@ -1,41 +1,61 @@
-{ lib, stdenv, fetchFromGitHub, cmake, bzip2, libtomcrypt, zlib, darwin }:
+{
+  lib,
+  bzip2,
+  cmake,
+  darwin,
+  fetchFromGitHub,
+  libtomcrypt,
+  stdenv,
+  zlib,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stormlib";
-  version = "9.22";
+  version = "9.23";
 
   src = fetchFromGitHub {
     owner = "ladislav-zezula";
     repo = "StormLib";
-    rev = "v${version}";
-    sha256 = "1rcdl6ryrr8fss5z5qlpl4prrw8xpbcdgajg2hpp0i7fpk21ymcc";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-8JDMqZ5BWslH4+Mfo5lnWTmD2QDaColwBOLzcuGZciY=";
   };
 
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace "FRAMEWORK DESTINATION /Library/Frameworks" "FRAMEWORK DESTINATION Library/Frameworks"
-  '';
-
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DWITH_LIBTOMCRYPT=ON"
+  nativeBuildInputs = [
+    cmake
   ];
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ bzip2 libtomcrypt zlib ] ++
-    lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Carbon ];
+  buildInputs = [
+    bzip2
+    libtomcrypt
+    zlib
+  ]
+  ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Carbon
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "WITH_LIBTOMCRYPT" true)
+  ];
+
+  strictDeps = true;
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
     "-Wno-implicit-function-declaration"
     "-Wno-int-conversion"
   ]);
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace "FRAMEWORK DESTINATION /Library/Frameworks" "FRAMEWORK DESTINATION Library/Frameworks"
+  '';
+
+  meta = {
     homepage = "https://github.com/ladislav-zezula/StormLib";
-    license = licenses.mit;
     description = "An open-source project that can work with Blizzard MPQ archives";
-    mainProgram = "storm_test";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ aanderse karolchmist ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aanderse karolchmist ];
+    platforms = lib.platforms.all;
+    broken = stdenv.isDarwin; # installation directory mismatch
   };
-}
+})

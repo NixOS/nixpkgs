@@ -13150,7 +13150,17 @@ with pkgs;
 
   smug = callPackage ../tools/misc/smug { };
 
-  smpq = callPackage ../applications/misc/smpq { };
+  smpq = callPackage ../by-name/sm/smpq/package.nix {
+    stormlib = stormlib.overrideAttrs (old: {
+      version = "9.22";
+      src = fetchFromGitHub {
+        owner = "ladislav-zezula";
+        repo = "StormLib";
+        rev = "v9.22";
+        hash = "sha256-jFUfxLzuRHAvFE+q19i6HfGcL6GX4vKL1g7l7LOhjeU=";
+      };
+    });
+  };
 
   snabb = callPackage ../tools/networking/snabb { };
 
@@ -18057,7 +18067,7 @@ with pkgs;
 
   nixd = callPackage ../development/tools/language-servers/nixd {
     llvmPackages = llvmPackages_16;
-    nix = nixVersions.nix_2_16;
+    nix = nixVersions.nix_2_19;
   };
 
   openscad-lsp = callPackage ../development/tools/language-servers/openscad-lsp { };
