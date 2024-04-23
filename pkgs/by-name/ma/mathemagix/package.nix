@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   configureFlags = [ "--prefix=${placeholder "out"}" ];
 
   meta = {
-    description = "Mathemagix is a free computer algebra and analysis system. It consists of a high level language with a compiler and a series of mathematical libraries, some of which are written in C++.";
+    description = "A free computer algebra and analysis system consisting of a high level language with a compiler and a series of mathematical libraries";
     homepage = "http://www.mathemagix.org/";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ drupol ];
