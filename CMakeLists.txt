@@ -2,6 +2,11 @@ cmake_minimum_required(VERSION 3.18)
 
 project(wfs-tools)
 
+option(BUILD_TESTS "Build the unit tests" OFF)
+if(BUILD_TESTS)
+    enable_testing()
+endif()
+
 add_subdirectory(wfslib)
 
 add_subdirectory(wfs-extract)

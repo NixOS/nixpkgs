@@ -21,8 +21,8 @@ jobs:
             configure_preset: "static"
             build_preset: "static-release"
             release_name: "linux-x86-64"
-            cc: "gcc-13"
-            cxx: "g++-13"
+            cc: "gcc-14"
+            cxx: "g++-14"
 
           - platform: windows-latest
             configure_preset: "windows-static"
@@ -58,7 +58,12 @@ jobs:
           vcpkgJsonGlob: "vcpkg.json"
 
       - name: Install requirements
-        run: sudo apt install libfuse-dev gcc-13 g++-13
+        run: |
+          # Temporary until gcc-14 is officialy released and available on the runner
+          sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu/ noble main universe"
+          sudo apt update
+          sudo apt install gcc-14 g++-14
+          sudo apt install libfuse-dev
         if: matrix.platform == 'ubuntu-latest'
 
       - name: Install requirements (MacOS)
@@ -90,7 +95,7 @@ jobs:
         shell: bash
         if: matrix.cc != ''
 
-      - name: Run cmake
+      - name: Build
         uses: lukka/run-cmake@v10
         with:
           configurePreset: ${{matrix.configure_preset}}

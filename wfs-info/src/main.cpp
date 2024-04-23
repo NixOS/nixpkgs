@@ -15,34 +15,29 @@
 #include <vector>
 
 #include <wfslib/wfslib.h>
-#include "../../wfslib/src/area.h"              // TOOD: Public header?
-#include "../../wfslib/src/free_blocks_tree.h"  // TOOD: Public header?
+#include "../../wfslib/src/free_blocks_tree.h"   // TOOD: Public header?
+#include "../../wfslib/src/quota_area.h"         // TOOD: Public header?
+#include "../../wfslib/src/transactions_area.h"  // TOOD: Public header?
 
 std::string inline prettify_path(const std::filesystem::path& path) {
   return "/" + path.generic_string();
 }
 
-void dumpArea(int depth, const std::filesystem::path& path, const std::shared_ptr<Area>& area) {
+void quotaInfo(int depth, const std::filesystem::path& path, const std::shared_ptr<QuotaArea>& quota) {
   std::string padding(depth, '\t');
-  std::cout << std::format("{}Area {} [0x{:08x}-0x{:08x}]:\n", padding, prettify_path(path), area->BlockNumber(),
-                           area->AbsoluteBlockNumber(area->BlocksCount()));
+  std::cout << std::format("{}Area {} [0x{:08x}-0x{:08x}]:\n", padding, prettify_path(path),
+                           quota->device_block_number(), quota->to_area_block_number(quota->blocks_count()));
 
   padding += '\t';
-  std::shared_ptr<FreeBlocksAllocator> allocator = throw_if_error(area->GetFreeBlocksAllocator());
+  std::shared_ptr<FreeBlocksAllocator> allocator = throw_if_error(quota->GetFreeBlocksAllocator());
   FreeBlocksTree tree(allocator.get());
   auto* allocator_header = EPTree(allocator.get()).extra_header();
 
   std::cout << std::format("{}Free blocks: 0x{:08x}\n", padding, allocator_header->free_blocks_count.value());
   std::cout << std::format("{}Free metadata blocks: 0x{:08x}\n", padding,
-                           allocator_header->free_metadata_blocks_count.value());
+                           quota->to_device_block_number(allocator_header->free_blocks_cache_count.value()));
   std::cout << std::format("{}Free metadata block: 0x{:08x}\n", padding,
-                           area->AbsoluteBlockNumber(allocator_header->free_metadata_block.value()));
-
-  if (depth == 0) {
-    auto transactions_area = throw_if_error(area->GetTransactionsArea1());
-    std::cout << std::format("{}Transactions area [0x{:08x}-0x{:08x}]\n", padding, transactions_area->BlockNumber(),
-                             transactions_area->AbsoluteBlockNumber(transactions_area->BlocksCount()));
-  }
+                           quota->to_device_block_number(allocator_header->free_blocks_cache_count.value()));
 
   std::vector<FreeBlocksRangeInfo> ranges;
   for (const auto& extent : tree) {
@@ -55,22 +50,22 @@ void dumpArea(int depth, const std::filesystem::path& path, const std::shared_pt
   std::cout << std::format("{}Free ranges:\n", padding);
   padding += '\t';
   for (const auto& range : ranges) {
-    std::cout << std::format("{}[0x{:08x}-0x{:08x}]\n", padding, area->AbsoluteBlockNumber(range.block_number),
-                             area->AbsoluteBlockNumber(range.block_number + range.blocks_count));
+    std::cout << std::format("{}[0x{:08x}-0x{:08x}]\n", padding, quota->to_device_block_number(range.block_number),
+                             quota->to_device_block_number(range.block_number + range.blocks_count));
   }
 }
 
-void dumpdir(int depth, const std::shared_ptr<Directory>& dir, const std::filesystem::path& path) {
-  if (dir->IsQuota()) {
-    dumpArea(depth, path, dir->area());
+void dirInfo(int depth, const std::shared_ptr<Directory>& dir, const std::filesystem::path& path) {
+  if (dir->is_quota()) {
+    quotaInfo(depth, path, dir->quota());
     depth += 1;
   }
   for (auto [name, item_or_error] : *dir) {
     auto const npath = path / name;
     try {
       auto item = throw_if_error(item_or_error);
-      if (item->IsDirectory())
-        dumpdir(depth, std::dynamic_pointer_cast<Directory>(item), npath);
+      if (item->is_directory())
+        dirInfo(depth, std::dynamic_pointer_cast<Directory>(item), npath);
     } catch (const WfsException& e) {
       std::cout << std::format("Error: Failed to dump {} ({})\n", prettify_path(npath), e.what());
     }
@@ -156,8 +151,12 @@ int main(int argc, char* argv[]) {
         throw WfsException(*detection_result);
       return 1;
     }
+    auto wfs_device = throw_if_error(WfsDevice::Open(device, key));
     std::cout << "Allocator state:" << std::endl;
-    dumpdir(0, throw_if_error(Wfs(device, key).GetRootArea()->GetRootDirectory()), {});
+    auto transactions_area = throw_if_error(wfs_device->GetTransactionsArea());
+    std::cout << std::format("Transactions area [0x{:08x}-0x{:08x}]\n", transactions_area->device_block_number(),
+                             transactions_area->to_device_blocks_count(transactions_area->blocks_count()));
+    dirInfo(0, throw_if_error(wfs_device->GetRootDirectory()), {});
     std::cout << "Done!" << std::endl;
   } catch (std::exception& e) {
     std::cerr << "Error: " << e.what() << std::endl;

@@ -40,9 +40,9 @@ void dumpdir(const std::filesystem::path& target,
       auto item = throw_if_error(item_or_error);
       if (verbose)
         std::cout << "Dumping /" << npath.generic_string() << std::endl;
-      if (item->IsDirectory()) {
+      if (item->is_directory()) {
         dumpdir(target, std::dynamic_pointer_cast<Directory>(item), npath, verbose);
-      } else if (item->IsFile()) {
+      } else if (item->is_file()) {
         auto file = std::dynamic_pointer_cast<File>(item);
         std::ofstream output_file((target / npath).string(), std::ios::binary | std::ios::out);
         size_t to_read = file->Size();
@@ -151,7 +151,7 @@ int main(int argc, char* argv[]) {
 
     // Recovery mode
     if (dump_usr_dir) {
-      auto wfs_with_usr_dir = Recovery::OpenUsrDirectoryWithoutWfsHeader(device, key);
+      auto wfs_with_usr_dir = Recovery::OpenUsrDirectoryWithoutWfsDeviceHeader(device, key);
       if (!wfs_with_usr_dir.has_value()) {
         if (wfs_with_usr_dir.error() == WfsError::kInvalidWfsVersion) {
           std::cerr
@@ -192,7 +192,7 @@ int main(int argc, char* argv[]) {
         throw WfsException(*detection_result);
       return 1;
     }
-    auto dir = Wfs(device, key).GetDirectory(dump_path);
+    auto dir = throw_if_error(WfsDevice::Open(device, key))->GetDirectory(dump_path);
     if (!dir) {
       std::cerr << "Error: Didn't find directory " << dump_path << " in wfs" << std::endl;
       return 1;

@@ -11,7 +11,7 @@
 #include <mutex>
 #include <string>
 
-static std::shared_ptr<Wfs> wfs;
+static std::shared_ptr<WfsDevice> wfs_device;
 
 struct locked_stream {
   std::unique_ptr<File::stream> stream;
@@ -21,17 +21,17 @@ struct locked_stream {
 static int wfs_getattr(const char* path, struct stat* stbuf) {
   memset(stbuf, 0, sizeof(struct stat));
 
-  auto item = wfs->GetObject(path);
+  auto item = wfs_device->GetObject(path);
   if (!item)
     return -ENOENT;
-  if (item->IsDirectory()) {
+  if (item->is_directory()) {
     stbuf->st_mode = S_IFDIR | 0755;
     stbuf->st_nlink = 2 + std::dynamic_pointer_cast<Directory>(item)->Size();
-  } else if (item->IsLink()) {
+  } else if (item->is_link()) {
     stbuf->st_mode = S_IFLNK | 0777;
     stbuf->st_nlink = 1;
     stbuf->st_size = 0;  // TODO
-  } else if (item->IsFile()) {
+  } else if (item->is_file()) {
     stbuf->st_mode = S_IFREG | 0444;
     stbuf->st_nlink = 1;
     stbuf->st_size = std::dynamic_pointer_cast<File>(item)->Size();
@@ -47,8 +47,8 @@ static int wfs_readdir(const char* path, void* buf, fuse_fill_dir_t filler, off_
   (void)offset;
   (void)fi;
 
-  auto item = wfs->GetObject(path);
-  if (!item || !item->IsDirectory())
+  auto item = wfs_device->GetObject(path);
+  if (!item || !item->is_directory())
     return -ENOENT;
 
   filler(buf, ".", NULL, 0);
@@ -62,8 +62,8 @@ static int wfs_readdir(const char* path, void* buf, fuse_fill_dir_t filler, off_
 }
 
 static int wfs_open(const char* path, struct fuse_file_info* fi) {
-  auto item = wfs->GetObject(path);
-  if (!item->IsFile())
+  auto item = wfs_device->GetObject(path);
+  if (!item->is_file())
     return -ENOENT;
 
   if ((fi->flags & O_ACCMODE) != O_RDONLY)
@@ -96,8 +96,8 @@ static int wfs_read(const char* path, char* buf, size_t size, off_t offset, stru
 
 int wfs_readlink(const char* path, [[maybe_unused]] char* buf, [[maybe_unused]] size_t size) {
   // TODO
-  auto item = wfs->GetObject(path);
-  if (!item || !item->IsLink())
+  auto item = wfs_device->GetObject(path);
+  if (!item || !item->is_link())
     return -ENOENT;
 
   // TODO
@@ -229,7 +229,7 @@ int main(int argc, char* argv[]) {
         throw WfsException(*detection_result);
       return 1;
     }
-    wfs.reset(new Wfs(device, key));
+    wfs_device = throw_if_error(WfsDevice::Open(device, key));
   } catch (std::exception& e) {
     std::cerr << "Error: " << e.what() << std::endl;
     return 1;

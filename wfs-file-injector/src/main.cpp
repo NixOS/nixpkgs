@@ -114,7 +114,7 @@ int main(int argc, char* argv[]) {
         throw WfsException(*detection_result);
       return 1;
     }
-    auto file = Wfs(device, key).GetFile(inject_path);
+    auto file = throw_if_error(WfsDevice::Open(device, key))->GetFile(inject_path);
     if (!file) {
       std::cerr << "Error: Didn't find file " << inject_path << " in wfs" << std::endl;
       return 1;

@@ -6,6 +6,7 @@
     "boost-dynamic-bitset",
     "boost-iostreams",
     "boost-program-options",
+    "catch2",
     "cryptopp"
   ]
 }

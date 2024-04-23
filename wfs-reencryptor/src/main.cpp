@@ -17,9 +17,9 @@
 #include <wfslib/blocks_device.h>
 #include <wfslib/wfslib.h>
 // TOOD: Public header?
-#include "../../wfslib/src/area.h"
 #include "../../wfslib/src/device_encryption.h"
 #include "../../wfslib/src/free_blocks_tree.h"
+#include "../../wfslib/src/quota_area.h"
 
 class ReencryptorBlocksDevice final : public BlocksDevice {
  public:
@@ -74,11 +74,11 @@ std::string inline prettify_path(const std::filesystem::path& path) {
 }
 
 void exploreDir(const std::shared_ptr<Directory>& dir, const std::filesystem::path& path, bool shadow = false) {
-  if (!shadow && dir->IsQuota()) {
+  if (!shadow && dir->is_quota()) {
     // It is an area, iterate its allocator
-    auto area = dir->area();
+    auto quota = dir->quota();
     try {
-      auto allocator = throw_if_error(area->GetFreeBlocksAllocator());
+      auto allocator = throw_if_error(quota->GetFreeBlocksAllocator());
       FreeBlocksTree tree(allocator.get());
       for ([[maybe_unused]] const auto& extent : tree) {
       }
@@ -87,33 +87,23 @@ void exploreDir(const std::shared_ptr<Directory>& dir, const std::filesystem::pa
                                e.what());
     }
     try {
-      exploreDir(throw_if_error(area->GetShadowDirectory1()), path / ".shadow_dir_1", true);
+      exploreDir(throw_if_error(quota->GetShadowDirectory1()), path / ".shadow_dir_1", true);
     } catch (const WfsException& e) {
       std::cout << std::format("Error: Failed to explore {} shadow dir 12 ({})\n", prettify_path(path), e.what());
     }
     try {
-      exploreDir(throw_if_error(area->GetShadowDirectory2()), path / ".shadow_dir_2", true);
+      exploreDir(throw_if_error(quota->GetShadowDirectory2()), path / ".shadow_dir_2", true);
     } catch (const WfsException& e) {
       std::cout << std::format("Error: Failed to explore {} shadow dir 2 ({})\n", prettify_path(path), e.what());
-    }
-    try {
-      throw_if_error(area->GetTransactionsArea1());
-    } catch (const WfsException& e) {
-      std::cout << std::format("Error: Failed to explore {} transactions area 1 ({})\n", prettify_path(path), e.what());
-    }
-    try {
-      throw_if_error(area->GetTransactionsArea2());
-    } catch (const WfsException& e) {
-      std::cout << std::format("Error: Failed to explore {} transactions area 2 ({})\n", prettify_path(path), e.what());
     }
   }
   for (auto [name, item_or_error] : *dir) {
     auto const npath = path / name;
     try {
       auto item = throw_if_error(item_or_error);
-      if (item->IsDirectory())
+      if (item->is_directory())
         exploreDir(std::dynamic_pointer_cast<Directory>(item), npath);
-      else if (item->IsFile()) {
+      else if (item->is_file()) {
         auto file = std::dynamic_pointer_cast<File>(item);
         size_t to_read = file->Size();
         File::stream stream(file);
@@ -131,6 +121,19 @@ void exploreDir(const std::shared_ptr<Directory>& dir, const std::filesystem::pa
     } catch (const WfsException& e) {
       std::cout << std::format("Error: Failed to explore {} ({})\n", prettify_path(npath), e.what());
     }
+  }
+}
+
+void exploreTransactions(const std::shared_ptr<WfsDevice>& wfs_device) {
+  try {
+    throw_if_error(wfs_device->GetTransactionsArea(false));
+  } catch (const WfsException& e) {
+    std::cout << std::format("Error: Failed to explore transactions area 1 ({})\n", e.what());
+  }
+  try {
+    throw_if_error(wfs_device->GetTransactionsArea(true));
+  } catch (const WfsException& e) {
+    std::cout << std::format("Error: Failed to explore transactions area 2 ({})\n", e.what());
   }
 }
 
@@ -247,7 +250,10 @@ int main(int argc, char* argv[]) {
 
     std::cout << "Exploring blocks..." << std::endl;
     auto reencryptor = std::make_shared<ReencryptorBlocksDevice>(input_device, input_key);
-    exploreDir(throw_if_error(Wfs(reencryptor).GetRootArea()->GetRootDirectory()), {});
+
+    auto wfs_device = throw_if_error(WfsDevice::Open(reencryptor));
+    exploreTransactions(wfs_device);
+    exploreDir(throw_if_error(wfs_device->GetRootDirectory()), {});
     std::cout << std::format("Found {} blocks! Reencrypting...\n", reencryptor->blocks().size());
     reencryptor->Reencrypt(std::make_shared<ReencryptorBlocksDevice>(output_device, output_key));
     std::cout << "Done!" << std::endl;
