@@ -8184,6 +8184,18 @@ final: prev:
     meta.homepage = "https://github.com/ishan9299/nvim-solarized-lua/";
   };
 
+  nvim-sops = buildVimPlugin {
+    pname = "nvim-sops";
+    version = "2023-07-31";
+    src = fetchFromGitHub {
+      owner = "lucidph3nx";
+      repo = "nvim-sops";
+      rev = "cb2209562d00ef8c6c88bdec836d9edb8fbb96ef";
+      sha256 = "0fvxnx5ji3d4kgsxl2ssqs7s567ibk4h38mz70m3nhs3sxk696lj";
+    };
+    meta.homepage = "https://github.com/lucidph3nx/nvim-sops/";
+  };
+
   nvim-spectre = buildVimPlugin {
     pname = "nvim-spectre";
     version = "2024-04-17";
