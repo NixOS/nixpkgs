@@ -26,8 +26,7 @@ rustPlatform.buildRustPackage rec {
   env.YAZI_GEN_COMPLETIONS = true;
 
   nativeBuildInputs = [ installShellFiles ];
-  buildInputs = lib.optionals stdenv.isDarwin [Foundation]
-                ++ lib.optionals (!stdenv.isDarwin) [rust-jemalloc-sys];
+  buildInputs = [ rust-jemalloc-sys ] ++ lib.optionals stdenv.isDarwin [ Foundation ];
 
   postInstall = ''
     installShellCompletion --cmd yazi \
