@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,21 +21,13 @@ buildPythonPackage rec {
     hash = "sha256-y30tnGG+G9dWBO8MUFYm2IGHiGIPbv4kB2VwhV0/C74=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "crc"
-  ];
+  pythonImportsCheck = [ "crc" ];
 
-  disabledTestPaths = [
-    "test/bench"
-  ];
+  disabledTestPaths = [ "test/bench" ];
 
   meta = with lib; {
     description = "Python module for calculating and verifying predefined & custom CRC's";
