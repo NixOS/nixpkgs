@@ -40657,8 +40657,6 @@ with pkgs;
     languages = lib.importJSON ../servers/web-apps/wordpress/packages/languages.json;
   });
 
-  world-wall-clock = callPackage ../applications/misc/world-wall-clock { };
-
   wprecon = callPackage ../tools/security/wprecon { };
 
   wraith = callPackage ../applications/networking/irc/wraith {
