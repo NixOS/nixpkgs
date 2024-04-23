@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bluez";
-  version = "5.72";
+  version = "5.75";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/bluez-${finalAttrs.version}.tar.xz";
-    hash = "sha256-SZ1/o0WplsG7ZQ9cZ0nh2SkRH6bs4L4OmGh/7mEkU24=";
+    hash = "sha256-mIyzxFUfbjpmdwilePXKn5P8iWUI+Y8IcJvk+KsDPC8=";
   };
 
   patches =
@@ -50,7 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     docutils
     pkg-config
-    python3.pkgs.pygments
     python3.pkgs.wrapPython
   ];
 
@@ -138,7 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ../libexec/bluetooth/obexd $out/sbin/obexd
 
     # Add extra configuration
-    mkdir $out/etc/bluetooth
+    rm $out/etc/bluetooth/{main,input,network}.conf
     ln -s /etc/bluetooth/main.conf $out/etc/bluetooth/main.conf
 
     # https://github.com/NixOS/nixpkgs/issues/204418
