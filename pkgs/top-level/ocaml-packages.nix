@@ -1715,6 +1715,8 @@ let
     stog_asy = callPackage ../applications/misc/stog/asy.nix { };
     stog_markdown = callPackage ../applications/misc/stog/markdown.nix { };
 
+    streaming = callPackage ../development/ocaml-modules/streaming { };
+
     stringext = callPackage ../development/ocaml-modules/stringext { };
 
     syslog = callPackage ../development/ocaml-modules/syslog { };
