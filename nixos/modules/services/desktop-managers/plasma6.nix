@@ -154,6 +154,7 @@ in {
         plasma-browser-integration
         konsole
         (lib.getBin qttools) # Expose qdbus in PATH
+        qtimageformats # Support optional image formats such as .webp and .avif
 
         ark
         elisa
