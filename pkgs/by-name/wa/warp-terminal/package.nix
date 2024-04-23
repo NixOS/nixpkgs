@@ -65,9 +65,9 @@ linux = stdenv.mkDerivation (finalAttrs:  {
     mkdir $out
     cp -r opt usr/* $out
 
-  '' ++ lib.optionalString waylandSupport ''
+  '' + lib.optionalString waylandSupport ''
     wrapProgram $out/bin/warp-terminal --set WARP_ENABLE_WAYLAND 1
-  '' ++ ''
+  '' + ''
     runHook postInstall
   '';
 });
