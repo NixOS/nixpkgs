@@ -937,6 +937,7 @@ let
     "ACNE"
     "APAlyzer"
     "EstMix"
+    "Patterns"
     "PECA"
     "Quartet"
     "ShinyQuickStarter"
