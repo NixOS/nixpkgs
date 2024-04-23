@@ -795,6 +795,7 @@ let
     "likeLTD"
     "logmult"
     "loon"
+    "loon_ggplot"
     "LS2Wstat"
     "MareyMap"
     "memgene"
