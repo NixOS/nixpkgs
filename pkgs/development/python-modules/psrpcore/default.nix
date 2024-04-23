@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, powershell
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, xmldiff
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  powershell,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  xmldiff,
 }:
 
 buildPythonPackage rec {
@@ -23,13 +24,9 @@ buildPythonPackage rec {
     hash = "sha256-YThumRHMOTyhP6/EmNEew47v/X4Y1aYg1nvgZJz2XUg=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    cryptography
-  ];
+  dependencies = [ cryptography ];
 
   nativeCheckInputs = [
     powershell
@@ -37,9 +34,7 @@ buildPythonPackage rec {
     xmldiff
   ];
 
-  pythonImportsCheck = [
-    "psrpcore"
-  ];
+  pythonImportsCheck = [ "psrpcore" ];
 
   meta = with lib; {
     description = "Library for the PowerShell Remoting Protocol (PSRP)";
