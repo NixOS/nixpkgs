@@ -525,7 +525,7 @@ let
   # Ensure that we are using a consistent package set
   extraBuildInputs = extraPackages python.pkgs;
 
-  # Don't forget to run parse-requirements.py after updating
+  # Don't forget to run update-component-packages.py after updating
   hassVersion = "2024.4.3";
 
 in python.pkgs.buildPythonApplication rec {
