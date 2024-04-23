@@ -22,11 +22,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
+  buildInputs = [
     readline
     ncurses
-    bison
     libtool
+  ];
+
+  nativeBuildInputs = [
+    bison
     gmp
     mpfr
   ];
@@ -34,8 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     export HOME="$PWD"
   '';
-
-  configureFlags = [ "--prefix=${placeholder "out"}" ];
 
   meta = {
     description = "A free computer algebra and analysis system consisting of a high level language with a compiler and a series of mathematical libraries";
