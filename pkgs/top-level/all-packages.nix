@@ -7998,8 +7998,6 @@ with pkgs;
 
   flip-link = callPackage ../development/tools/flip-link { };
 
-  flips = callPackage ../tools/compression/flips { };
-
   flowblade = callPackage ../applications/video/flowblade { };
 
   fontforge = lowPrio (callPackage ../tools/misc/fontforge {
