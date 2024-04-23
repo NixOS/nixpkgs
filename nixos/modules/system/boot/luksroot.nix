@@ -331,6 +331,8 @@ let
             else
                 opened=false
                 echo "Authentication failed!"
+                # ask for a different passphrase
+                rm -f /crypt-ramfs/passphrase
             fi
         done
 
