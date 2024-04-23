@@ -17,6 +17,7 @@
   # Enables the use of vencord from nixpkgs instead of
   # letting vesktop manage it's own version
 , withSystemVencord ? true
+, withWaylandIME ? false
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
@@ -128,6 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
       makeWrapper ${electron}/bin/electron $out/bin/vesktop \
         --add-flags $out/opt/Vesktop/resources/app.asar \
         ${lib.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
+        ${lib.optionalString withWaylandIME "--add-flags \"--enable-wayland-ime\""} \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 
       runHook postInstall
