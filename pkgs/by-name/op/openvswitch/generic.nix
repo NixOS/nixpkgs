@@ -1,32 +1,35 @@
-{ version
-, hash
-, updateScriptArgs ? ""
+{
+  version,
+  hash,
+  updateScriptArgs ? "",
 }:
 
-{ lib
-, stdenv
-, fetchurl
-, autoconf
-, automake
-, installShellFiles
-, iproute2
-, kernel ? null
-, libcap_ng
-, libtool
-, openssl
-, perl
-, pkg-config
-, procps
-, python3
-, sphinxHook
-, util-linux
-, which
-, writeScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoconf,
+  automake,
+  installShellFiles,
+  iproute2,
+  kernel ? null,
+  libcap_ng,
+  libtool,
+  openssl,
+  perl,
+  pkg-config,
+  procps,
+  python3,
+  sphinxHook,
+  util-linux,
+  which,
+  writeScript,
 }:
 
 let
   _kernel = kernel;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "openvswitch";
   inherit version;
 
@@ -56,9 +59,7 @@ in stdenv.mkDerivation rec {
     sphinxHook
   ];
 
-  sphinxBuilders = [
-    "man"
-  ];
+  sphinxBuilders = [ "man" ];
 
   sphinxRoot = "./Documentation";
 
@@ -78,7 +79,7 @@ in stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sharedstatedir=/var"
     "--sbindir=$(out)/bin"
-  ] ++ (lib.optionals (_kernel != null) ["--with-linux"]);
+  ] ++ (lib.optionals (_kernel != null) [ "--with-linux" ]);
 
   # Leave /var out of this!
   installFlags = [
@@ -102,13 +103,13 @@ in stdenv.mkDerivation rec {
     patchShebangs tests/
   '';
 
-  nativeCheckInputs = [
-    iproute2
-  ] ++ (with python3.pkgs; [
-    netaddr
-    pyparsing
-    pytest
-  ]);
+  nativeCheckInputs =
+    [ iproute2 ]
+    ++ (with python3.pkgs; [
+      netaddr
+      pyparsing
+      pytest
+    ]);
 
   passthru.updateScript = writeScript "ovs-update.nu" ''
     ${./update.nu} ${updateScriptArgs}
@@ -129,7 +130,10 @@ in stdenv.mkDerivation rec {
     '';
     homepage = "https://www.openvswitch.org/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ netixx kmcopper ];
+    maintainers = with maintainers; [
+      netixx
+      kmcopper
+    ];
     platforms = platforms.linux;
   };
 }
