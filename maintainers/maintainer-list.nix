@@ -9857,6 +9857,11 @@
     github = "jpagex";
     githubId = 635768;
   };
+  jpaju = {
+    name = "Jaakko Paju";
+    github = "jpaju";
+    githubId = 36770267;
+  };
   jpas = {
     name = "Jarrod Pas";
     email = "jarrod@jarrodpas.com";

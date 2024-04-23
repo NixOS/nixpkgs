@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     description = "Language server for Scala";
     mainProgram = "metals";
-    maintainers = with maintainers; [ fabianhjr tomahna ];
+    maintainers = with maintainers; [ fabianhjr jpaju tomahna ];
   };
 }
