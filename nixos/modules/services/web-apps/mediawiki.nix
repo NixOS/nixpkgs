@@ -246,7 +246,9 @@ in
 
       passwordFile = mkOption {
         type = types.path;
-        description = "A file containing the initial password for the admin user.";
+        description = ''
+          A file containing the initial password for the administrator account "admin".
+        '';
         example = "/run/keys/mediawiki-password";
       };
 

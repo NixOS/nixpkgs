@@ -14,14 +14,13 @@
 , numba
 , numpy
 , openai-triton
-, scipy
 , tiktoken
 , torch
 , tqdm
-, transformers
 
 # tests
 , pytestCheckHook
+, scipy
 }:
 
 buildPythonPackage rec {
@@ -45,6 +44,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+    scipy
   ];
 
   propagatedBuildInputs = [
@@ -52,11 +52,9 @@ buildPythonPackage rec {
     numba
     numpy
     openai-triton
-    scipy
     tiktoken
     torch
     tqdm
-    transformers
   ];
 
   preCheck = ''

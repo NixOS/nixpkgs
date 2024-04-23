@@ -12546,6 +12546,8 @@ with pkgs;
 
   recoll = libsForQt5.callPackage ../applications/search/recoll { };
 
+  recoll-nox = recoll.override { withGui = false; };
+
   redoc-cli = callPackage ../development/tools/redoc-cli { };
 
   reflex = callPackage ../development/tools/reflex { };
@@ -39910,7 +39912,7 @@ with pkgs;
   dnadd = callPackage ../tools/nix/dnadd { };
 
   nix-eval-jobs = callPackage ../tools/package-management/nix-eval-jobs {
-    nix = nixVersions.nix_2_19;
+    nix = nixVersions.nix_2_21;
   };
 
   nix-doc = callPackage ../tools/package-management/nix-doc { };

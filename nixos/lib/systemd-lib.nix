@@ -1,4 +1,4 @@
-{ config, lib, pkgs }:
+{ config, lib, pkgs, utils }:
 
 let
   inherit (lib)
@@ -396,8 +396,41 @@ in rec {
     };
   };
 
-  serviceConfig = { config, ... }: {
-    config.environment.PATH = mkIf (config.path != []) "${makeBinPath config.path}:${makeSearchPathOutput "bin" "sbin" config.path}";
+  serviceConfig = { name, config, ... }: {
+    config = {
+      name = "${name}.service";
+      environment.PATH = mkIf (config.path != []) "${makeBinPath config.path}:${makeSearchPathOutput "bin" "sbin" config.path}";
+    };
+  };
+
+  pathConfig = { name, config, ... }: {
+    config = {
+      name = "${name}.path";
+    };
+  };
+
+  socketConfig = { name, config, ... }: {
+    config = {
+      name = "${name}.socket";
+    };
+  };
+
+  sliceConfig = { name, config, ... }: {
+    config = {
+      name = "${name}.slice";
+    };
+  };
+
+  targetConfig = { name, config, ... }: {
+    config = {
+      name = "${name}.target";
+    };
+  };
+
+  timerConfig = { name, config, ... }: {
+    config = {
+      name = "${name}.timer";
+    };
   };
 
   stage2ServiceConfig = {
@@ -416,6 +449,7 @@ in rec {
 
   mountConfig = { config, ... }: {
     config = {
+      name = "${utils.escapeSystemdPath config.where}.mount";
       mountConfig =
         { What = config.what;
           Where = config.where;
@@ -429,6 +463,7 @@ in rec {
 
   automountConfig = { config, ... }: {
     config = {
+      name = "${utils.escapeSystemdPath config.where}.automount";
       automountConfig =
         { Where = config.where;
         };
@@ -444,8 +479,8 @@ in rec {
       WantedBy=${concatStringsSep " " def.wantedBy}
     '';
 
-  targetToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy upheldBy enable overrideStrategy;
+  targetToUnit = def:
+    { inherit (def) name aliases wantedBy requiredBy upheldBy enable overrideStrategy;
       text =
         ''
           [Unit]
@@ -453,8 +488,8 @@ in rec {
         '';
     };
 
-  serviceToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy upheldBy enable overrideStrategy;
+  serviceToUnit = def:
+    { inherit (def) name aliases wantedBy requiredBy upheldBy enable overrideStrategy;
       text = commonUnitText def (''
         [Service]
       '' + (let env = cfg.globalEnvironment // def.environment;
@@ -463,7 +498,7 @@ in rec {
             "Environment=${toJSON "${n}=${env.${n}}"}\n";
           # systemd max line length is now 1MiB
           # https://github.com/systemd/systemd/commit/e6dde451a51dc5aaa7f4d98d39b8fe735f73d2af
-          in if stringLength s >= 1048576 then throw "The value of the environment variable ‘${n}’ in systemd service ‘${name}.service’ is too long." else s) (attrNames env))
+          in if stringLength s >= 1048576 then throw "The value of the environment variable ‘${n}’ in systemd service ‘${def.name}.service’ is too long." else s) (attrNames env))
       + (if def ? reloadIfChanged && def.reloadIfChanged then ''
         X-ReloadIfChanged=true
       '' else if (def ? restartIfChanged && !def.restartIfChanged) then ''
@@ -474,8 +509,8 @@ in rec {
       '' + attrsToSection def.serviceConfig);
     };
 
-  socketToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy upheldBy enable overrideStrategy;
+  socketToUnit = def:
+    { inherit (def) name aliases wantedBy requiredBy upheldBy enable overrideStrategy;
       text = commonUnitText def ''
         [Socket]
         ${attrsToSection def.socketConfig}
@@ -484,40 +519,40 @@ in rec {
       '';
     };
 
-  timerToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy upheldBy enable overrideStrategy;
+  timerToUnit = def:
+    { inherit (def) name aliases wantedBy requiredBy upheldBy enable overrideStrategy;
       text = commonUnitText def ''
         [Timer]
         ${attrsToSection def.timerConfig}
       '';
     };
 
-  pathToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy upheldBy enable overrideStrategy;
+  pathToUnit = def:
+    { inherit (def) name aliases wantedBy requiredBy upheldBy enable overrideStrategy;
       text = commonUnitText def ''
         [Path]
         ${attrsToSection def.pathConfig}
       '';
     };
 
-  mountToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy upheldBy enable overrideStrategy;
+  mountToUnit = def:
+    { inherit (def) name aliases wantedBy requiredBy upheldBy enable overrideStrategy;
       text = commonUnitText def ''
         [Mount]
         ${attrsToSection def.mountConfig}
       '';
     };
 
-  automountToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy upheldBy enable overrideStrategy;
+  automountToUnit = def:
+    { inherit (def) name aliases wantedBy requiredBy upheldBy enable overrideStrategy;
       text = commonUnitText def ''
         [Automount]
         ${attrsToSection def.automountConfig}
       '';
     };
 
-  sliceToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy upheldBy enable overrideStrategy;
+  sliceToUnit = def:
+    { inherit (def) name aliases wantedBy requiredBy upheldBy enable overrideStrategy;
       text = commonUnitText def ''
         [Slice]
         ${attrsToSection def.sliceConfig}

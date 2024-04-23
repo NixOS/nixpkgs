@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "zha";
-  version = "0.0.5";
+  version = "0.0.8";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zha";
     rev = "refs/tags/${version}";
-    hash = "sha256-47dlWMzY1vPmHIDCy8a0xzk2G+OPq6vEK5OpP1c8vw4=";
+    hash = "sha256-xOaqwgL8NqB3pHNa6U/wextntI5aMivHLaIhSRqvgRU=";
   };
 
   postPatch = ''
@@ -48,8 +48,6 @@ buildPythonPackage rec {
     "universal-silabs-flasher"
     "zha-quirks"
   ];
-
-
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
@@ -94,6 +92,7 @@ buildPythonPackage rec {
     "test_check_available_unsuccessful"
     "test_device_counter_sensors"
     "test_device_tracker"
+    "test_device_unavailable_skips_entity_polling"
     "test_elec_measurement_sensor_polling"
     "test_electrical_measurement_init"
     "test_group_member_assume_state"
