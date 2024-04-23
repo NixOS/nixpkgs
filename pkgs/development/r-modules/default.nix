@@ -697,6 +697,7 @@ let
     PoissonMultinomial = [ pkgs.fftw.dev ];
     rrd = [ pkgs.rrdtool ];
     flowWorkspace = [ pkgs.zlib.dev ];
+    RITCH = [ pkgs.zlib.dev ];
     RcppMeCab = [ pkgs.mecab ];
     PING = [ pkgs.gsl ];
     RcppAlgos = [ pkgs.gmp.dev ];
