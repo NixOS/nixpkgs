@@ -27,6 +27,8 @@ pkgs.releaseTools.sourceTarball {
     echo "git-revision is $(cat .git-revision)"
   '';
 
+  dontUnpack = true;
+
   dontBuild = false;
 
   doCheck = true;
@@ -47,19 +49,21 @@ pkgs.releaseTools.sourceTarball {
     fi
 
     packages=$out/packages.json.br
-    brotli -9 < packages.json > $packages
 
     mkdir -p $out/nix-support
+    brotli -9 < packages.json > $packages
     echo "file json-br $packages" >> $out/nix-support/hydra-build-products
   '';
 
   distPhase = ''
     mkdir -p $out/tarballs
     XZ_OPT="-T0" tar \
-      --transform="s/^[.]/$releaseName/" \
+      --absolute-names \
+      --transform="s|^$src|$releaseName|g" \
+      --transform="s|^$(pwd)|$releaseName|g" \
       --create \
       --xz \
       --file=$out/tarballs/$releaseName.tar.xz \
-      .
+      $src $(pwd)/{.version-suffix,.git-revision}
   '';
 }
