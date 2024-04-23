@@ -70,11 +70,19 @@ in
   # Whether to compile with SUID support
   enableSuid ? false,
   starterSuidPath ? null,
-  # newuidmapPath and newgidmapPath are to support --fakeroot
-  # where those SUID-ed executables are unavailable from the FHS system PATH.
+  # Extra system-wide /**/bin paths to prefix,
+  # useful to specify directories containing binaries with SUID bit set.
+  # The paths take higher precedence over the FHS system PATH specified
+  # inside the upstream source code.
+  # Include "/run/wrappers/bin" by default for the convenience of NixOS users.
+  systemBinPaths ? [ "/run/wrappers/bin" ],
   # Path to SUID-ed newuidmap executable
+  # Deprecated in favour of systemBinPaths
+  # TODO(@ShamrockLee): Remove after Nixpkgs 24.05 branch-off
   newuidmapPath ? null,
   # Path to SUID-ed newgidmap executable
+  # Deprecated in favour of systemBinPaths
+  # TODO(@ShamrockLee): Remove after Nixpkgs 24.05 branch-off
   newgidmapPath ? null,
   # External LOCALSTATEDIR
   externalLocalStateDir ? null,
@@ -99,18 +107,26 @@ in
   vendorHash ? _defaultGoVendorArgs.vendorHash,
   deleteVendor ? _defaultGoVendorArgs.deleteVendor,
   proxyVendor ? _defaultGoVendorArgs.proxyVendor,
-}:
+}@args:
 
 let
+  # Backward compatibility for privileged-un-utils.
+  # TODO(@ShamrockLee): Remove after Nixpkgs 24.05 branch-off.
   privileged-un-utils =
     if ((newuidmapPath == null) && (newgidmapPath == null)) then
       null
     else
-      (runCommandLocal "privileged-un-utils" { } ''
+      runCommandLocal "privileged-un-utils" { } ''
         mkdir -p "$out/bin"
         ln -s ${lib.escapeShellArg newuidmapPath} "$out/bin/newuidmap"
         ln -s ${lib.escapeShellArg newgidmapPath} "$out/bin/newgidmap"
-      '');
+      '';
+
+  # Backward compatibility for privileged-un-utils.
+  # TODO(@ShamrockLee): Remove after Nixpkgs 24.05 branch-off.
+  systemBinPaths =
+    lib.optional (privileged-un-utils != null) (lib.makeBinPath [ privileged-un-utils ])
+    ++ args.systemBinPaths or [ "/run/wrappers/bin" ];
 
   concatMapStringAttrsSep =
     sep: f: attrs:
@@ -207,7 +223,6 @@ in
     fuse2fs # Mount ext3 filesystems
     go
     mount # mount
-    privileged-un-utils
     squashfsTools # mksquashfs unsquashfs # Make / unpack squashfs image
     squashfuse # squashfuse_ll squashfuse # Mount (without unpacking) a squashfs image without privileges
   ] ++ lib.optional enableNvidiaContainerCli nvidia-docker;
@@ -229,7 +244,7 @@ in
             lib.concatStringsSep " " [
               "--replace-fail"
               (addShellDoubleQuotes (lib.escapeShellArg originalDefaultPath))
-              (addShellDoubleQuotes ''${lib.escapeShellArg originalDefaultPath}''${inputsDefaultPath:+:}$inputsDefaultPath'')
+              (addShellDoubleQuotes ''$systemDefaultPath''${systemDefaultPath:+:}${lib.escapeShellArg originalDefaultPath}''${inputsDefaultPath:+:}$inputsDefaultPath'')
             ]
           ) originalDefaultPaths
         }
@@ -271,6 +286,7 @@ in
     # Respect PATH from the environment/the user.
     # Fallback to bin paths provided by Nixpkgs packages.
     wrapProgram "$out/bin/${projectName}" \
+      --suffix PATH : "$systemDefaultPath" \
       --suffix PATH : "$inputsDefaultPath"
     # Make changes in the config file
     ${lib.optionalString forceNvcCli ''
@@ -329,6 +345,7 @@ in
 }).overrideAttrs
   (
     finalAttrs: prevAttrs: {
+      systemDefaultPath = lib.concatStringsSep ":" systemBinPaths;
       inputsDefaultPath = lib.makeBinPath finalAttrs.defaultPathInputs;
       passthru = prevAttrs.passthru or { } // {
         inherit sourceFilesWithDefaultPaths;
