@@ -10,6 +10,8 @@
   pygments,
   pytestCheckHook,
   pythonOlder,
+  testers,
+  jc,
 }:
 
 buildPythonPackage rec {
@@ -49,6 +51,8 @@ buildPythonPackage rec {
 
   # tests require timezone to set America/Los_Angeles
   doCheck = false;
+
+  passthru.tests.version = testers.testVersion { package = jc; };
 
   meta = with lib; {
     description = "This tool serializes the output of popular command line tools and filetypes to structured JSON output";
