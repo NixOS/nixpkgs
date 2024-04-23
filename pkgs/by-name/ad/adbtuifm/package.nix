@@ -1,7 +1,6 @@
 {
   buildGoModule,
   fetchFromGitHub,
-  android-tools,
   lib,
 }:
 buildGoModule rec {
@@ -14,9 +13,6 @@ buildGoModule rec {
     hash = "sha256-TK93O9XwMrsrQT3EG0969HYMtYkK0a4PzG9FSTqHxAY=";
   };
   vendorHash = "sha256-voVoowjM90OGWXF4REEevO8XEzT7azRYiDay4bnGBks=";
-  buildInputs = [
-    android-tools
-  ];
   meta = with lib; {
     description = "adbtuifm is a TUI-based file manager for the Android Debug Bridge, to make transfers between the device and client easier";
     homepage = "https://github.com/darkhz/adbtuifm";
