@@ -1,8 +1,8 @@
 { lib
 , stdenvNoCC
 , version, src
-, fetchYarnDeps
-, fixup-yarn-lock, yarn, nodejs
+, yarn-berry, callPackage
+, nodejs
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -10,11 +10,16 @@ stdenvNoCC.mkDerivation rec {
 
   inherit src version;
 
-  nativeBuildInputs = [ fixup-yarn-lock yarn nodejs ];
+  nativeBuildInputs = [ yarn-berry nodejs ];
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${src}/web/yarn.lock";
-    hash = "sha256-0JpoAQKRmU7P1bzYNR/vqtPjOOSw8wSlNjXl2f6uBrw=";
+  /*
+  Introduced as a temporary hack until 'fetchYarnDeps' is fixed to
+  accommodate yarn berry lockfiles:
+  https://github.com/NixOS/nixpkgs/issues/254369
+  */
+  yarnOfflineCache = callPackage ./yarn.nix {
+    inherit src;
+    hash = "sha256-Z5sTVFyfSVw5soLj7mGjYMWT+51KVqjeaVqKsVD5IUg=";
   };
 
   configurePhase = ''
@@ -24,11 +29,12 @@ stdenvNoCC.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-    yarn config --offline set yarn-offline-mirror $yarnOfflineCache
-
     cd web
-    fixup-yarn-lock yarn.lock
-    yarn install --offline --frozen-lockfile --ignore-engines
+
+    export YARN_ENABLE_TELEMETRY=0
+    ln -sf $yarnOfflineCache /build/source/web/.yarn/cache
+    yarn install --immutable --immutable-cache
+
     patchShebangs node_modules
     export PATH=$PWD/node_modules/.bin:$PATH
     ./node_modules/.bin/react-scripts build
