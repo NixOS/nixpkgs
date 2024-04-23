@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   # Fix linkage issues on X11 (https://github.com/NixOS/nixpkgs/issues/142583)
-  patches = ./x11.patch;
+  patches = [ ./x11.patch ];
 
   propagatedBuildInputs =
     lib.optionals stdenv.isDarwin [ OpenGL ]
