@@ -6,14 +6,6 @@ Date:   Wed Jan 31 02:12:43 2024 +0100
     
     Signed-off-by: Andreas K. Hüttel <dilfridge@gentoo.org>
 
-diff --git a/ADVISORIES b/ADVISORIES
-new file mode 100644
-index 0000000000..d4e33f2df3
---- /dev/null
-+++ b/ADVISORIES
-@@ -0,0 +1,2 @@
-+For the GNU C Library Security Advisories, see the git master branch:
-+https://sourceware.org/git/?p=glibc.git;a=tree;f=advisories;hb=HEAD
 diff --git a/advisories/GLIBC-SA-2023-0001 b/advisories/GLIBC-SA-2023-0001
 deleted file mode 100644
 index 3d19c91b6a..0000000000
