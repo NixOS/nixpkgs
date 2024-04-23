@@ -1,10 +1,11 @@
-{ lib
-, azure-core
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, typing-extensions
+{
+  lib,
+  azure-core,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-2uxqwgHGRzsJK2Ku5x44G+62w6jcNhJJgytwSMTwYeI=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     azure-core
@@ -33,9 +32,7 @@ buildPythonPackage rec {
   # Requires an active Azure Cosmos service
   doCheck = false;
 
-  pythonImportsCheck = [
-    "azure.cosmos"
-  ];
+  pythonImportsCheck = [ "azure.cosmos" ];
 
   meta = with lib; {
     description = "Azure Cosmos DB API";
