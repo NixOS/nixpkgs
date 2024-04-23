@@ -32,13 +32,13 @@ let
   ];
 in stdenv.mkDerivation (finalAttrs: {
   pname = "gjs";
-  version = "1.78.4";
+  version = "1.80.2";
 
   outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor finalAttrs.version}/gjs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-mux6uHLCBQQEkHrpTwrnq+yKVL2ciU3bXC0PUekyuaE=";
+    hash = "sha256-E145xaxZEJYjPlV8/ld9ZAk/UFRBHUfLLiFLrX1Bmb0=";
   };
 
   patches = [
@@ -47,6 +47,10 @@ in stdenv.mkDerivation (finalAttrs: {
 
     # Allow installing installed tests to a separate output.
     ./installed-tests-path.patch
+
+    # Disable introspection test in installed tests
+    # (minijasmine:1317): GLib-GIO-WARNING **: 17:33:39.556: Error creating IO channel for /proc/self/mountinfo: No such file or directory (g-io-error-quark, 1)
+    ./disable-introspection-test.patch
   ];
 
   nativeBuildInputs = [

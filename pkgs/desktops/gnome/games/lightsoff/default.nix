@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lightsoff";
-  version = "40.0.1";
+  version = "46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/lightsoff/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "1aziy64g15bm83zfn3ifs20z9yvscdvsxbx132xnq77i0r3qvlxc";
+    hash = "sha256-ZysVMuBkX64C8oN6ltU57c/Uw7pPcuWR3HP+R567i5I=";
   };
 
   nativeBuildInputs = [

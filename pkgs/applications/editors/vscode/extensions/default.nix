@@ -2073,6 +2073,22 @@ let
         };
       };
 
+      hiukky.flate = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "flate";
+          publisher = "hiukky";
+          version = "0.7.0";
+          hash = "sha256-6ouYQk7mHCJdGrcutM1EXolJAT7/Sp1hi+Bu0983GKw=";
+        };
+        meta = {
+          description = "Colorful dark themes for VS Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=hiukky.flate";
+          homepage = "https://github.com/hiukky/flate";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.stunkymonkey ];
+        };
+      };
+
       hookyqr.beautify = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "beautify";

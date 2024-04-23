@@ -13,7 +13,6 @@
 , miniupnpc
 , zeromq
 , zlib
-, db48
 , sqlite
 , qrencode
 , qtbase ? null
@@ -51,7 +50,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withGui [ wrapQtAppsHook ];
 
   buildInputs = [ boost libevent miniupnpc zeromq zlib ]
-    ++ lib.optionals withWallet [ db48 sqlite ]
+    ++ lib.optionals withWallet [ sqlite ]
     ++ lib.optionals withGui [ qrencode qtbase qttools ];
 
   postInstall = ''
