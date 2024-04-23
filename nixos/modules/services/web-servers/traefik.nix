@@ -137,6 +137,15 @@ in {
         will be substituted into the static configuration file using envsubst.
       '';
     };
+
+    environment = mkOption {
+      default = {};
+      type = types.attrsOf types.str;
+      example = { CLOUDFLARE_EMAIL_FILE = "/run/secrets/cloudflare-email"; };
+      description = ''
+        Extra environment variables passed to traefik.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -149,6 +158,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       startLimitIntervalSec = 86400;
       startLimitBurst = 5;
+      environment = {} // cfg.environment;
       serviceConfig = {
         EnvironmentFile = cfg.environmentFiles;
         ExecStartPre = lib.optional (cfg.environmentFiles != [])
