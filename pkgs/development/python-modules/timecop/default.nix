@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -18,22 +19,16 @@ buildPythonPackage rec {
     hash = "sha256-jYcA3gByT5RydMU8eK+PUnWe9TrRQ/chw+F6wTUqcX0=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   # test_epoch fails, see https://github.com/bluekelp/pytimecop/issues/4
   preCheck = ''
     sed -i 's/test_epoch/_test_epoch/' timecop/tests/test_freeze.py
   '';
 
-  pythonImportsCheck = [
-    "timecop"
-  ];
+  pythonImportsCheck = [ "timecop" ];
 
   meta = with lib; {
     description = "A port of the most excellent TimeCop Ruby Gem for Python";
