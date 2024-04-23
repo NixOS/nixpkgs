@@ -46,6 +46,16 @@ in stdenv.mkDerivation {
       $READELF -d ./atomics.so | grep libatomic.so && echo "ok" >&2 || echo "failed" >&2
     ''}
 
+    ${lib.optionalString isCxx ''
+      echo "checking whether can link with libc++... " >&2
+      $CXX ${./cxx-main.cc} -c -o cxx-main.o
+      $CC cxx-main.o -lc++ -o cxx-main
+      $CC cxx-main.o -l:libc++.a -o cxx-main-static
+      ${emulator} ./cxx-main
+      ${emulator} ./cxx-main-static
+      rm cxx-main{,-static,.o}
+    ''}
+
     ${lib.optionalString (stdenv.isDarwin && stdenv.cc.isClang) ''
       echo "checking whether compiler can build with CoreFoundation.framework... " >&2
       mkdir -p foo/lib
