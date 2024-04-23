@@ -32,12 +32,12 @@ buildPythonPackage rec {
     hash = "sha256-RlLWC1TLjrwQ7t727WpjePJA1zGj4460Ioj6efm/jSw=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     aiomqtt
     cachetools
