@@ -8,6 +8,9 @@
 , python3
 , qtbase
 , qtsvg
+, qtwayland
+, wayland
+, waylandSupport ? stdenv.isLinux
 , wrapGAppsHook
 }:
 
@@ -33,6 +36,9 @@ mkDerivationWith python3.pkgs.buildPythonApplication {
 
   buildInputs = [
     gtk3
+  ] ++ lib.optionals waylandSupport [
+    qtwayland
+    wayland
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
