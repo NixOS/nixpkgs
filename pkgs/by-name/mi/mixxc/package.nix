@@ -6,13 +6,12 @@
   libpulseaudio,
   gtk4-layer-shell,
   gtk4,
-  mold,
-  clang,
-  patchelf,
+  libxcb,
   installShellFiles,
-  features ? ["X11" "Wayland" "Sass"],
+  enableWayland ? false,
+  enableSass ? false,
+  enableX11 ? false,
 }:
-lib.checkListOfEnum "mixxc: features" ["X11" "Wayland" "Sass"] features
 rustPlatform.buildRustPackage rec {
   pname = "mixxc";
   version = "0.2.2";
@@ -25,22 +24,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-l9inqqUiLObrqd/8pNobwBbLaiPJD39YK/38CWfDh+Q=";
   outputs = ["out" "man"];
-  cargoBuildFlags = [
-    "--locked"
-    ("--features=" + builtins.concatStringsSep "," features)
-  ];
+  cargoBuildFlags = with lib;
+    ["--locked"]
+    ++ optionals enableWayland ["--features Wayland"]
+    ++ optionals enableX11 ["--features X11"]
+    ++ optionals enableSass ["--features Sass"];
 
   nativeBuildInputs = [pkg-config installShellFiles];
 
-  buildInputs = [
-    pkg-config
-    libpulseaudio.dev
-    gtk4-layer-shell.dev
-    gtk4.dev
-    mold
-    patchelf
-    clang
-  ];
+  buildInputs = with lib;
+    [libpulseaudio gtk4]
+    ++ optionals enableWayland [gtk4-layer-shell]
+    ++ optionals enableX11 [libxcb];
+
   postInstall = ''
     installManPage $src/doc/mixxc.1
   '';
