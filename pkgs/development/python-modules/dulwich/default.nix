@@ -3,7 +3,7 @@
 , buildPythonPackage
 , certifi
 , fastimport
-, fetchPypi
+, fetchFromGitHub
 , gevent
 , geventhttpclient
 , git
@@ -15,23 +15,27 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, setuptools-rust
 , urllib3
 }:
 
 buildPythonPackage rec {
   pname = "dulwich";
-  version = "0.21.7";
+  version = "0.22.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-qenGaDPOpYDDrBKSfkuXEZhddq/KmNqXFAXUFN5g6Wg=";
+  src = fetchFromGitHub {
+    owner = "jelmer";
+    repo = "dulwich";
+    rev = "refs/tags/${version}";
+    hash = "sha256-bf3ZUMX4afpdTBpFnx0HMyzCNG6V/p4eOl36djxGbtk=";
   };
 
   build-system = [
     setuptools
+    setuptools-rust
   ];
 
   dependencies = [
@@ -59,26 +63,15 @@ buildPythonPackage rec {
     glibcLocales
     pytest-xdist
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.fastimport
-  ++ passthru.optional-dependencies.pgp
-  ++ passthru.optional-dependencies.paramiko;
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   doCheck = !stdenv.isDarwin;
 
-  disabledTests = [
-    # OSError: [Errno 84] Invalid or incomplete multibyte or wide character: b'/build/tmpsqwlbpd1/\xc0'
-    "test_no_decode_encode"
-    # OSError: [Errno 84] Invalid or incomplete multibyte or wide character: b'/build/tmpwmtfyvo2/refs.git/refs/heads/\xcd\xee\xe2\xe0\xff\xe2\xe5\xf2\xea\xe01'
-    "test_cyrillic"
-    # OSError: [Errno 84] Invalid or incomplete multibyte or wide character: b'/build/tmpfseetobk/test/\xc0'
-    "test_commit_no_encode_decode"
-  ];
-
   disabledTestPaths = [
-    # missing test inputs
-    "dulwich/contrib/test_swift_smoke.py"
-    # flaky on high core count >4
-    "dulwich/tests/compat/test_client.py"
+    # Missing test inputs
+    "tests/contrib/test_swift_smoke.py"
+    # Import issue
+    "tests/test_greenthreads.py"
   ];
 
   pythonImportsCheck = [
