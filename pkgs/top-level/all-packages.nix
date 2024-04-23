@@ -18069,7 +18069,7 @@ with pkgs;
 
   nixd = callPackage ../development/tools/language-servers/nixd {
     llvmPackages = llvmPackages_16;
-    nix = nixVersions.nix_2_16;
+    nix = nixVersions.nix_2_19;
   };
 
   openscad-lsp = callPackage ../development/tools/language-servers/openscad-lsp { };
