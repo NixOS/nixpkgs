@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "stone";
-  version = "3.3.1";
+  version = "3.3.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,15 +20,12 @@ buildPythonPackage rec {
     owner = "dropbox";
     repo = "stone";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0FWdYbv+paVU3Wj6g9OrSNUB0pH8fLwTkhVIBPeFB/U=";
+    hash = "sha256-l86j2fd6x57bKt/TFGiyg+ZFjZFFCo43rE48MoPvXWc=";
   };
 
   postPatch = ''
-    # https://github.com/dropbox/stone/issues/288
-    substituteInPlace stone/frontend/ir_generator.py \
-      --replace-fail "inspect.getargspec" "inspect.getfullargspec"
     substituteInPlace setup.py \
-      --replace-fail "'pytest-runner == 5.2.0'," ""
+      --replace-fail "'pytest-runner == 5.3.2'," ""
   '';
 
   build-system = [
