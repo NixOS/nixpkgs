@@ -74,6 +74,7 @@ in {
         kguiaddons # provides geo URL handlers
         kiconthemes # provides Qt plugins
         kimageformats # provides Qt plugins
+        qtimageformats # provides optional image formats such as .webp and .avif
         kio # provides helper service + a bunch of other stuff
         kpackage # provides kpackagetool tool
         kservice # provides kbuildsycoca6 tool
