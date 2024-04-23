@@ -17,6 +17,7 @@ stdenv.mkDerivation {
     mkdir -p $out/include $out/lib
     cp ../src/cxxabi.h $out/include
     cp lib/libcxxrt${stdenv.hostPlatform.extensions.library} $out/lib
+    cp lib/libcxxrt.a $out/lib
   '';
 
   passthru = {
