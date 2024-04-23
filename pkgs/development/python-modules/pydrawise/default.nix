@@ -18,7 +18,7 @@
 buildPythonPackage rec {
   pname = "pydrawise";
   version = "2024.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
@@ -29,12 +29,12 @@ buildPythonPackage rec {
     hash = "sha256-krePSrMMrMgKDHQSjzH7hSNnRmwyRe0qTDXc0r0+CPU=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     apischema
     gql
