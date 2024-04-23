@@ -25,11 +25,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "wasabiwallet";
-  version = "2.0.6";
+  version = "2.0.7.1";
 
   src = fetchurl {
     url = "https://github.com/zkSNACKs/WalletWasabi/releases/download/v${version}/Wasabi-${version}.tar.gz";
-    sha256 = "sha256-VxtQZFsiUEeCMEWkdnmE9xXFoa7fWfOWC2UxnZZAia0=";
+    sha256 = "sha256-u/QDdGLdD5+8j3r8pZQwcG3iTToFJEvzzV7Rl4ggvtM=";
   };
 
   dontBuild = true;
