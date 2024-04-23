@@ -48,6 +48,9 @@ stdenv.mkDerivation rec {
   patches = [
     # 8: vsctl-bashcomp - argument completion FAILED (completion.at:664)
     ./patches/disable-bash-arg-completion-test.patch
+
+    # https://github.com/openvswitch/ovs/commit/9185793e75435d890f18d391eaaeab0ade6f1415
+    ./patches/fix-python313.patch
   ];
 
   nativeBuildInputs = [
