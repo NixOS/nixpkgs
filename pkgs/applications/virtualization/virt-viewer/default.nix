@@ -31,11 +31,12 @@
 , spiceSupport ? true
 , vte
 , wrapGAppsHook3
+, testers
 }:
 
 with lib;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "virt-viewer";
   version = "11.0";
 
@@ -99,6 +100,10 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/post_install.py
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+  };
+
   meta = {
     description = "A viewer for remote virtual machines";
     maintainers = with maintainers; [ raskin atemu ];
@@ -110,4 +115,4 @@ stdenv.mkDerivation rec {
       downloadPage = "https://virt-manager.org/download.html";
     };
   };
-}
+})
