@@ -5,6 +5,7 @@
 , autoconf
 , makeDesktopItem
 , nixosTests
+, testers
 , vte
 , harfbuzz # can be replaced with libotf
 , fribidi
@@ -204,7 +205,13 @@ in stdenv.mkDerivation (finalAttrs: {
   };
 
   passthru = {
-    tests.test = nixosTests.terminal-emulators.mlterm;
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        exitCode = 1; # it exit(1)s for some reason
+      };
+      test = nixosTests.terminal-emulators.mlterm;
+    };
     inherit
       enableTypeEngines
       enableTools
