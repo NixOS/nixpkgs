@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "wheezy.template";
-  version = "3.1.0";
+  version = "3.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4RAHysczaNzhKZjjS2bEdgFrtGFHH/weTVboQALslg8=";
+    hash = "sha256-hknPXHGPPNjRAr0TYVosPaTntsjwQjOKZBCU+qFlIHw=";
   };
 
   pythonImportsCheck = [ "wheezy.template" ];
