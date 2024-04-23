@@ -166,14 +166,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-Ddocumentation=true" # gvariant specification can be built without gi-docgen
     "-Dnls=enabled"
     "-Ddevbindir=${placeholder "dev"}/bin"
-  ] ++ lib.optionals (!lib.meta.availableOn stdenv.hostPlatform elfutils) [
-    "-Dlibelf=disabled"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    "-Dman=true"                # broken on Darwin
     (lib.mesonEnable "introspection" withIntrospection)
     # FIXME: Fails when linking target glib/tests/libconstructor-helper.so
     # relocation R_X86_64_32 against hidden symbol `__TMC_END__' can not be used when making a shared object
     "-Dtests=${lib.boolToString (!stdenv.hostPlatform.isStatic)}"
+  ] ++ lib.optionals (!lib.meta.availableOn stdenv.hostPlatform elfutils) [
+    "-Dlibelf=disabled"
   ] ++ lib.optionals stdenv.isFreeBSD [
     "-Db_lundef=false"
     "-Dxattr=false"

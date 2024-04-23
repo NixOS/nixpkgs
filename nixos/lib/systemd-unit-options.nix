@@ -65,6 +65,14 @@ in rec {
       '';
     };
 
+    name = lib.mkOption {
+      type = lib.types.str;
+      description = ''
+        The name of this systemd unit, including its extension.
+        This can be used to refer to this unit from other systemd units.
+      '';
+    };
+
     overrideStrategy = mkOption {
       default = "asDropinIfExists";
       type = types.enum [ "asDropinIfExists" "asDropin" ];

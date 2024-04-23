@@ -45,6 +45,7 @@
 , flite
 , gsm
 , json-glib
+, libajantv2
 , libaom
 , libdc1394
 , libde265
@@ -152,7 +153,7 @@ stdenv.mkDerivation rec {
     liblc3
     libass
     libkate
-    webrtc-audio-processing_1 # required by isac
+    webrtc-audio-processing_1
     libbs2b
     libmodplug
     openjpeg
@@ -220,6 +221,7 @@ stdenv.mkDerivation rec {
 
     chromaprint
     flite
+    libajantv2
     libdrm
     libgudev
     sbc
@@ -263,7 +265,7 @@ stdenv.mkDerivation rec {
     "-Damfcodec=disabled" # Windows-only
     "-Davtp=disabled"
     "-Ddirectshow=disabled" # Windows-only
-    "-Dqt6d3d11=disabled"
+    "-Dqt6d3d11=disabled" # Windows-only
     "-Ddts=disabled" # required `libdca` library not packaged in nixpkgs as of writing, and marked as "BIG FAT WARNING: libdca is still in early development"
     "-Dzbar=${if enableZbar then "enabled" else "disabled"}"
     "-Dfaac=${if faacSupport then "enabled" else "disabled"}"
@@ -283,7 +285,6 @@ stdenv.mkDerivation rec {
     "-Dmusepack=disabled"
     "-Dopenni2=disabled" # not packaged in nixpkgs as of writing
     "-Dopensles=disabled" # not packaged in nixpkgs as of writing
-    "-Dsvtav1=disabled" # not packaged in nixpkgs as of writing
     "-Dsvthevcenc=disabled" # required `SvtHevcEnc` library not packaged in nixpkgs as of writing
     "-Dteletext=disabled" # required `zvbi` library not packaged in nixpkgs as of writing
     "-Dtinyalsa=disabled" # not packaged in nixpkgs as of writing
@@ -307,8 +308,8 @@ stdenv.mkDerivation rec {
     "-Dva=disabled" # see comment on `libva` in `buildInputs`
   ] ++ lib.optionals (!stdenv.isLinux || !guiSupport) [
     "-Ddirectfb=disabled"
-  ]
-  ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-Daja=disabled"
     "-Dchromaprint=disabled"
     "-Dflite=disabled"
     "-Dkms=disabled" # renders to libdrm output
@@ -317,6 +318,7 @@ stdenv.mkDerivation rec {
     "-Dspandsp=disabled"
     "-Ddvb=disabled"
     "-Dfbdev=disabled"
+    "-Duvcgadget=disabled" # requires gudev
     "-Duvch264=disabled" # requires gudev
     "-Dv4l2codecs=disabled" # requires gudev
     "-Dladspa=disabled" # requires lrdf
@@ -324,7 +326,7 @@ stdenv.mkDerivation rec {
     "-Dqsv=disabled" # Linux (and Windows) x86 only
   ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
     "-Dgl=disabled"
-  ] ++ lib.optionals (!gst-plugins-base.waylandEnabled) [
+  ] ++ lib.optionals (!gst-plugins-base.waylandEnabled || !guiSupport) [
     "-Dgtk3=disabled" # Wayland-based GTK sink
     "-Dwayland=disabled"
   ] ++ lib.optionals (!gst-plugins-base.glEnabled) [

@@ -7,7 +7,7 @@ index 11718b8..d4144c1 100644
  
    module = g_module_open (filename, G_MODULE_BIND_LAZY);
 +
-+  if (module == NULL) {
++  if (module == nullptr) {
 +    module = g_module_open ("@driverLink@/lib/" CUDA_LIBNAME, G_MODULE_BIND_LAZY);
 +  }
 +
