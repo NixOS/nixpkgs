@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, certifi
-, fastimport
-, fetchFromGitHub
-, gevent
-, geventhttpclient
-, git
-, glibcLocales
-, gnupg
-, gpgme
-, paramiko
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-rust
-, urllib3
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  certifi,
+  fastimport,
+  fetchFromGitHub,
+  gevent,
+  geventhttpclient,
+  git,
+  glibcLocales,
+  gnupg,
+  gpgme,
+  paramiko,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-rust,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -44,16 +45,12 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    fastimport = [
-      fastimport
-    ];
+    fastimport = [ fastimport ];
     pgp = [
       gpgme
       gnupg
     ];
-    paramiko = [
-      paramiko
-    ];
+    paramiko = [ paramiko ];
   };
 
   nativeCheckInputs = [
@@ -74,9 +71,7 @@ buildPythonPackage rec {
     "tests/test_greenthreads.py"
   ];
 
-  pythonImportsCheck = [
-    "dulwich"
-  ];
+  pythonImportsCheck = [ "dulwich" ];
 
   meta = with lib; {
     description = "Implementation of the Git file formats and protocols";
@@ -86,7 +81,10 @@ buildPythonPackage rec {
     '';
     homepage = "https://www.dulwich.io/";
     changelog = "https://github.com/jelmer/dulwich/blob/dulwich-${version}/NEWS";
-    license = with licenses; [ asl20 gpl2Plus ];
+    license = with licenses; [
+      asl20
+      gpl2Plus
+    ];
     maintainers = with maintainers; [ koral ];
   };
 }
