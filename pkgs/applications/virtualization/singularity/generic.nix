@@ -196,8 +196,9 @@ in
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
-  # Packages to prefix to the Apptainer/Singularity container runtime default PATH
-  # Use overrideAttrs to override
+  # Packages to provide fallback bin paths
+  # to the Apptainer/Singularity container runtime default PATHs.
+  # Override with `<pkg>.overrideAttrs`.
   defaultPathInputs = [
     bash
     coreutils
@@ -228,7 +229,7 @@ in
             lib.concatStringsSep " " [
               "--replace-fail"
               (addShellDoubleQuotes (lib.escapeShellArg originalDefaultPath))
-              (addShellDoubleQuotes ''$inputsDefaultPath''${inputsDefaultPath:+:}${lib.escapeShellArg originalDefaultPath}'')
+              (addShellDoubleQuotes ''${lib.escapeShellArg originalDefaultPath}''${inputsDefaultPath:+:}$inputsDefaultPath'')
             ]
           ) originalDefaultPaths
         }
@@ -267,8 +268,10 @@ in
   postFixup = ''
     substituteInPlace "$out/bin/run-singularity" \
       --replace "/usr/bin/env ${projectName}" "$out/bin/${projectName}"
+    # Respect PATH from the environment/the user.
+    # Fallback to bin paths provided by Nixpkgs packages.
     wrapProgram "$out/bin/${projectName}" \
-      --prefix PATH : "$inputsDefaultPath"
+      --suffix PATH : "$inputsDefaultPath"
     # Make changes in the config file
     ${lib.optionalString forceNvcCli ''
       substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
