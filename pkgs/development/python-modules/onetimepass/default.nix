@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, six
-, timecop
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  six,
+  timecop,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,22 +23,16 @@ buildPythonPackage rec {
     hash = "sha256-cHJg3vdUpWp5+HACIeTGrqkHKUDS//aQICSjPKgwu3I=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    six
-  ];
+  dependencies = [ six ];
 
   nativeCheckInputs = [
     timecop
     unittestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "onetimepass"
-  ];
+  pythonImportsCheck = [ "onetimepass" ];
 
   meta = with lib; {
     description = "One-time password library for HMAC-based (HOTP) and time-based (TOTP) passwords";
