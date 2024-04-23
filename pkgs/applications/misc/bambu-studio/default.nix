@@ -175,11 +175,8 @@ stdenv.mkDerivation rec {
   # needed to prevent collisions between the LICENSE.txt files of
   # bambu-studio and orca-slicer.
   postInstall = ''
-    mkdir -p $out/share/doc
-    mv $out/LICENSE.txt $out/share/doc/LICENSE.txt
-    if [ -f $out/README.md ]; then
-      mv $out/README.md $out/share/doc/README.md
-    fi
+    mv $out/LICENSE.txt $out/share/BambuStudio/LICENSE.txt
+    mv $out/README.md $out/share/BambuStudio/README.md
   '';
 
   meta = with lib; {
