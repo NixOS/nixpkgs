@@ -4,20 +4,21 @@
 , mock
 , ply
 , pytestCheckHook
-, six
 , pythonOlder
+, setuptools
+, six
 }:
 
 buildPythonPackage rec {
   pname = "stone";
   version = "3.3.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dropbox";
-    repo = pname;
+    repo = "stone";
     rev = "refs/tags/v${version}";
     hash = "sha256-0FWdYbv+paVU3Wj6g9OrSNUB0pH8fLwTkhVIBPeFB/U=";
   };
@@ -25,12 +26,16 @@ buildPythonPackage rec {
   postPatch = ''
     # https://github.com/dropbox/stone/issues/288
     substituteInPlace stone/frontend/ir_generator.py \
-      --replace "inspect.getargspec" "inspect.getfullargspec"
+      --replace-fail "inspect.getargspec" "inspect.getfullargspec"
     substituteInPlace setup.py \
-      --replace "'pytest-runner == 5.2.0'," ""
+      --replace-fail "'pytest-runner == 5.2.0'," ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     ply
     six
   ];
@@ -50,10 +55,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Official Api Spec Language for Dropbox";
-    mainProgram = "stone";
     homepage = "https://github.com/dropbox/stone";
     changelog = "https://github.com/dropbox/stone/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
+    mainProgram = "stone";
   };
 }
