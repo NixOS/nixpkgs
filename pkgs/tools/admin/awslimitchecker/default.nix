@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -20,9 +21,7 @@ python3.pkgs.buildPythonApplication rec {
     ./version.patch
   ];
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
     boto3
@@ -51,9 +50,7 @@ python3.pkgs.buildPythonApplication rec {
     "awslimitchecker/tests/test_version.py"
   ];
 
-  pythonImportsCheck = [
-    "awslimitchecker.checker"
-  ];
+  pythonImportsCheck = [ "awslimitchecker.checker" ];
 
   meta = with lib; {
     description = "A script and python package to check your AWS service limits and usage via boto3";
