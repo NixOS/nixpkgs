@@ -1946,8 +1946,6 @@ self: super: with self; {
 
   cbor2 = callPackage ../development/python-modules/cbor2 { };
 
-  cbor = callPackage ../development/python-modules/cbor { };
-
   cccolutils = callPackage ../development/python-modules/cccolutils { };
 
   cdcs = callPackage ../development/python-modules/cdcs { };
