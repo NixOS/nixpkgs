@@ -123,9 +123,30 @@ stdenv.mkDerivation (rec {
   # libc++.so is a linker script which expands to multiple libraries,
   # libc++.so.1 and libc++abi.so or the external cxxabi. ld-wrapper doesn't
   # support linker scripts so the external cxxabi needs to be symlinked in
-  postInstall = lib.optionalString (cxxabi != null) ''
+  postInstall = ''
+    libcxxabi=$out/lib/libc++abi.a
+  '' + lib.optionalString (cxxabi != null) ''
     lndir ${lib.getDev cxxabi}/include $dev/include/c++/v1
     lndir ${lib.getLib cxxabi}/lib $out/lib
+    libcxxabi=$out/lib/lib${cxxabi.libName}.a
+  ''
+  # LIBCXX_STATICALLY_LINK_ABI_IN_STATIC_LIBRARY=ON doesn't work for LLVM < 16 or
+  # external cxxabi libraries so merge libc++abi.a into libc++.a ourselves.
+  + ''
+    if [[ -f $out/lib/libc++.a && -e $libcxxabi ]]; then
+      scratch="$(mktemp -d)"
+      mv $out/lib/libc++.a $scratch/libcxx.a
+      cp -d $libcxxabi $scratch/libcxxabi.a
+      $AR -M <<MRI
+      create libcxx.a
+      addlib $scratch/libcxx.a
+      addlib $scratch/libcxxabi.a
+      save
+      end
+    MRI
+      mv libcxx.a $out/lib/libc++.a
+      rm -rf $scratch
+    fi
   '';
 
   passthru = {
