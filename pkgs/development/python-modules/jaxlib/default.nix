@@ -53,7 +53,7 @@
 
 let
   inherit (cudaPackages)
-    cudaFlags
+    flags
     cudaVersion
     nccl
     ;
@@ -323,7 +323,7 @@ let
         build --action_env TF_CUDA_PATHS="${cuda_build_deps_joined},${cudnnMerged},${lib.getDev nccl}"
         build --action_env TF_CUDA_VERSION="${lib.versions.majorMinor cudaVersion}"
         build --action_env TF_CUDNN_VERSION="${lib.versions.major cudaPackages.cudnn.version}"
-        build:cuda --action_env TF_CUDA_COMPUTE_CAPABILITIES="${builtins.concatStringsSep "," cudaFlags.realArches}"
+        build:cuda --action_env TF_CUDA_COMPUTE_CAPABILITIES="${builtins.concatStringsSep "," flags.realArches}"
       ''
       +
         # Note that upstream conditions this on `wheel_cpu == "x86_64"`. We just

@@ -39,7 +39,7 @@ assert enablePython -> pythonPackages != null;
 
 let
   inherit (cudaPackages) backendStdenv cudatoolkit;
-  inherit (cudaPackages.cudaFlags) cudaCapabilities;
+  inherit (cudaPackages.flags) cudaCapabilities;
 
   version = "3.4.18";
 

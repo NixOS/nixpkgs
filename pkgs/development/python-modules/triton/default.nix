@@ -60,23 +60,19 @@ buildPythonPackage rec {
 
   postPatch =
     let
+      # Bash was getting weird without linting,
+      # but basically upstream contains [cc, ..., "-lcuda", ...]
+      # and we replace it with [..., "-lcuda", "-L/run/opengl-driver/lib", "-L$stubs", ...]
+      old = [ "-lcuda" ];
+      new = [
+        "-lcuda"
+        "-L${addDriverRunpath.driverLink}"
+        "-L${cudaPackages.cuda_cudart.stubs}/lib/stubs/"
+      ];
+
       quote = x: ''"${x}"'';
-      subs.ldFlags =
-        let
-          # Bash was getting weird without linting,
-          # but basically upstream contains [cc, ..., "-lcuda", ...]
-          # and we replace it with [..., "-lcuda", "-L/run/opengl-driver/lib", "-L$stubs", ...]
-          old = [ "-lcuda" ];
-          new = [
-            "-lcuda"
-            "-L${addDriverRunpath.driverLink}"
-            "-L${cudaPackages.cuda_cudart}/lib/stubs/"
-          ];
-        in
-        {
-          oldStr = lib.concatMapStringsSep ", " quote old;
-          newStr = lib.concatMapStringsSep ", " quote new;
-        };
+      oldStr = lib.concatMapStringsSep ", " quote old;
+      newStr = lib.concatMapStringsSep ", " quote new;
     in
     ''
       # Use our `cmakeFlags` instead and avoid downloading dependencies
@@ -91,16 +87,11 @@ buildPythonPackage rec {
       substituteInPlace unittest/CMakeLists.txt \
         --replace "include (\''${CMAKE_CURRENT_SOURCE_DIR}/googletest.cmake)" ""\
         --replace "include(GoogleTest)" "find_package(GTest REQUIRED)"
-
-      cat << \EOF >> python/triton/common/build.py
-      def libcuda_dirs():
-          return [ "${addDriverRunpath.driverLink}/lib" ]
-      EOF
     ''
     + lib.optionalString cudaSupport ''
       # Use our linker flags
       substituteInPlace python/triton/common/build.py \
-        --replace '${subs.ldFlags.oldStr}' '${subs.ldFlags.newStr}'
+        --replace '${oldStr}' '${newStr}'
     '';
 
   nativeBuildInputs = [

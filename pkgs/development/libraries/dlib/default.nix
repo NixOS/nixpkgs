@@ -38,7 +38,11 @@
     (lib.cmakeBool "USE_AVX_INSTRUCTIONS" avxSupport)
     (lib.cmakeBool "DLIB_USE_CUDA" cudaSupport)
   ] ++ lib.optionals cudaSupport [
-    (lib.cmakeFeature "DLIB_USE_CUDA_COMPUTE_CAPABILITIES" (builtins.concatStringsSep "," (with cudaPackages.flags; map dropDot cudaCapabilities)))
+    (
+      lib.cmakeFeature
+      "DLIB_USE_CUDA_COMPUTE_CAPABILITIES"
+      (lib.replaceStrings [";"] [","] cudaPackages.flags.cmakeCudaArchitecturesString)
+    )
   ];
 
   nativeBuildInputs = [

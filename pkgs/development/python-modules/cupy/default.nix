@@ -17,7 +17,7 @@
 }:
 
 let
-  inherit (cudaPackages) cudnn cutensor nccl;
+  inherit (cudaPackages) cudnn libcutensor nccl;
   outpaths = with cudaPackages; [
       cuda_cccl # <nv/target>
       cuda_cudart
@@ -84,7 +84,7 @@ buildPythonPackage rec {
   buildInputs = [
     cudatoolkit-joined
     cudnn
-    cutensor
+    libcutensor
     nccl
   ];
 
