@@ -60,6 +60,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/sagemath/sage/commit/1c3f991b9d3c5778e409e5414c6cfcd456113f19.diff";
       hash = "sha256-uCXchYx26DdxTjR1k2748KCEHPnekKS2fAM7SpyhNvM=";
     })
+
+    # https://github.com/sagemath/sage/pull/37763
+    (fetchpatch {
+      name = "scipy-fault-tolerance.patch";
+      url = "https://github.com/sagemath/sage/commit/547d502ed56f9fd44eb5d9b4ee0824746c60fef7.diff";
+      hash = "sha256-PR4przrZ3ieHaW2nSY7l7VhNfrUupu9yCIrXpeyoAgg=";
+    })
   ];
 
   # Patches needed because of package updates. We could just pin the versions of
