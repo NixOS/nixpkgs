@@ -9764,6 +9764,8 @@ self: super: with self; {
 
   pipdeptree = callPackage ../development/python-modules/pipdeptree { };
 
+  pipe = callPackage ../development/python-modules/pipe { };
+
   pipenv-poetry-migrate = callPackage ../development/python-modules/pipenv-poetry-migrate { };
 
   piper-phonemize = callPackage ../development/python-modules/piper-phonemize {
