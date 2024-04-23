@@ -81,11 +81,14 @@ A common usage of the `version` attribute is to specify `version = "v${version}"
 
   passthru.tests.version = testers.testVersion {
     package = leetcode-cli;
-    command = "leetcode -V";
+    parameter = "-V";
     version = "leetcode ${version}";
   };
 }
 ```
+
+By default, the executable name is derived from the package's `meta.mainProgram` or, failing that, `pname` or `name`. It can be explicitly declared using the `executable` parameter.
+The command ran to test the version can be fully customised via the `command` parameter. This voids the effect of `executable` and `parameter`.
 
 :::
 

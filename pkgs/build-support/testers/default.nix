@@ -57,7 +57,9 @@
   # or doc/builders/testers.chapter.md
   testVersion =
     { package,
-      command ? "${package.meta.mainProgram or package.pname or package.name} --version",
+      parameter ? "--version",
+      executable ? package.meta.mainProgram or package.pname or package.name,
+      command ? "${executable} ${parameter}",
       version ? package.version,
     }: runCommand "${package.name}-test-version" { nativeBuildInputs = [ package ]; meta.timeout = 60; } ''
       if output=$(${command} 2>&1); then
