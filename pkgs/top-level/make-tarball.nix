@@ -58,12 +58,19 @@ pkgs.releaseTools.sourceTarball {
   distPhase = ''
     mkdir -p $out/tarballs
     XZ_OPT="-T0" tar \
-      --absolute-names \
-      --transform="s|^$src|$releaseName|g" \
-      --transform="s|^$(pwd)|$releaseName|g" \
       --create \
       --xz \
       --file=$out/tarballs/$releaseName.tar.xz \
+      --absolute-names \
+      --transform="s|^$src|$releaseName|g" \
+      --transform="s|^$(pwd)|$releaseName|g" \
+      --owner=0 \
+      --group=0 \
+      --numeric-owner \
+      --format=gnu \
+      --sort=name \
+      --mtime="@$SOURCE_DATE_EPOCH" \
+      --mode=ug+w \
       $src $(pwd)/{.version-suffix,.git-revision}
   '';
 }
