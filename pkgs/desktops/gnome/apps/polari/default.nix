@@ -13,6 +13,7 @@
 , desktop-file-utils
 , pkg-config
 , gtk4
+, tracker
 , libadwaita
 , gtk3
 , glib
@@ -20,10 +21,8 @@
 , libsoup_3
 , webkitgtk_4_1
 , gobject-introspection
-, appstream-glib
 , gnome
 , wrapGAppsHook4
-, telepathy-logger
 , gspell
 , gsettings-desktop-schemas
 }:
@@ -46,7 +45,6 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [
     telepathy-idle
-    telepathy-logger
   ];
 
   nativeBuildInputs = [
@@ -59,17 +57,16 @@ stdenv.mkDerivation rec {
     libxml2
     desktop-file-utils
     gobject-introspection
-    appstream-glib
   ];
 
   buildInputs = [
     gtk4
+    tracker
     libadwaita
     gtk3 # for thumbnailer
     glib
     gsettings-desktop-schemas
     telepathy-glib
-    telepathy-logger
     gjs
     gspell
     gdk-pixbuf
