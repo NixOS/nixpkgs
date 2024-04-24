@@ -12,6 +12,9 @@ let
     version
     versionSuffix
     warn;
+  inherit (lib)
+    isString
+    ;
 in {
 
   ## Simple (higher order) functions
@@ -698,9 +701,18 @@ in {
     ```
   */
   warn =
-    if lib.elem (builtins.getEnv "NIX_ABORT_ON_WARN") ["1" "true" "yes"]
-    then msg: builtins.trace "[1;31mwarning: ${msg}[0m" (abort "NIX_ABORT_ON_WARN=true; warnings are treated as unrecoverable errors.")
-    else msg: builtins.trace "[1;31mwarning: ${msg}[0m";
+    # Since https://github.com/NixOS/nix/pull/10592
+    builtins.warn or (
+      let mustAbort = lib.elem (builtins.getEnv "NIX_ABORT_ON_WARN") ["1" "true" "yes"];
+      in
+        # Do not eta reduce v, so that we have the same strictness as `builtins.warn`.
+        msg: v:
+          # `builtins.warn` requires a string message, so we enforce that in our implementation, so that callers aren't accidentally incompatible with newer Nix versions.
+          assert isString msg;
+          if mustAbort
+          then builtins.trace "[1;31mwarning: ${msg}[0m" (abort "NIX_ABORT_ON_WARN=true; warnings are treated as unrecoverable errors.")
+          else builtins.trace "[1;31mwarning: ${msg}[0m" v
+    );
 
   /**
     Like warn, but only warn when the first argument is `true`.
