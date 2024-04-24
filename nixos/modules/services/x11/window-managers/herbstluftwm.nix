@@ -36,7 +36,7 @@ in
         in ''
           ${cfg.package}/bin/herbstluftwm ${configFileClause} &
           waitPID=$!
-          '';
+        '';
     };
     environment.systemPackages = [ cfg.package ];
   };
