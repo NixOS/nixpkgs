@@ -21,8 +21,11 @@ buildGoModule rec {
     installShellFiles
   ];
 
+  postBuild = ''
+    go run . --help-man > cert-viewer.1
+  '';
+
   postInstall = ''
-    $out/bin/cert-viewer --help-man > cert-viewer.1
     installManPage cert-viewer.1
   '';
 
