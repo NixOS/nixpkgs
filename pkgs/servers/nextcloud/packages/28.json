@@ -10,9 +10,9 @@
     ]
   },
   "calendar": {
-    "sha256": "18hlk6j3dzpcd61sgn8r8zmcc9d1bklq030kwyn4mzr20dcf75w5",
-    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.6.7/calendar-v4.6.7.tar.gz",
-    "version": "4.6.7",
+    "sha256": "10sxr8xczq29a3c5a7n074hpx80a21m6v7a2xhz0yhv9q80yv5gz",
+    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.7.0/calendar-v4.7.0.tar.gz",
+    "version": "4.7.0",
     "description": "The Calendar app is a user interface for Nextcloud's CalDAV server. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Contacts - more to come.\n* 🌐 **WebCal Support!** Want to see your favorite team’s matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚️ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 Search! Find your events at ease\n* ☑️ Tasks! See tasks with a due date directly in the calendar\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
     "homepage": "https://github.com/nextcloud/calendar/",
     "licenses": [
@@ -70,9 +70,9 @@
     ]
   },
   "forms": {
-    "sha256": "0iqkwnadhi6i1gnx7wiqny862g25kfiqi2mgkaf5cyiig3rispa0",
-    "url": "https://github.com/nextcloud-releases/forms/releases/download/v4.1.1/forms-v4.1.1.tar.gz",
-    "version": "4.1.1",
+    "sha256": "0ca627nyrs61k5990j3m1l7vxavsh8x8rrhfvk01pdl9f1556jmf",
+    "url": "https://github.com/nextcloud-releases/forms/releases/download/v4.2.3/forms-v4.2.3.tar.gz",
+    "version": "4.2.3",
     "description": "**Simple surveys and questionnaires, self-hosted!**\n\n- **📝 Simple design:** No mass of options, only the essentials. Works well on mobile of course.\n- **📊 View & export results:** Results are visualized and can also be exported as CSV in the same format used by Google Forms.\n- **🔒 Data under your control!** Unlike in Google Forms, Typeform, Doodle and others, the survey info and responses are kept private on your instance.\n- **🧑‍💻 Connect to your software:** Easily integrate Forms into your service with our full-fledged [REST-API](https://github.com/nextcloud/forms/blob/main/docs/API.md).\n- **🙋 Get involved!** We have lots of stuff planned like more question types, collaboration on forms, [and much more](https://github.com/nextcloud/forms/milestones)!",
     "homepage": "https://github.com/nextcloud/forms",
     "licenses": [
@@ -90,9 +90,9 @@
     ]
   },
   "groupfolders": {
-    "sha256": "0cg81d75dg96zp09jy4yzg65v14wf99c2snnj304v4dia410c8a3",
-    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v16.0.5/groupfolders-v16.0.5.tar.gz",
-    "version": "16.0.5",
+    "sha256": "06lbv04byc08zqfws2hbxqdg05d25sfps80y21xahzcrv74z4ngl",
+    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v16.0.6/groupfolders-v16.0.6.tar.gz",
+    "version": "16.0.6",
     "description": "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported.",
     "homepage": "https://github.com/nextcloud/groupfolders",
     "licenses": [
@@ -110,19 +110,19 @@
     ]
   },
   "integration_openai": {
-    "sha256": "0v8bpd74mvkc87jbqjkxcfhb728l0r85fsqjn1ahaj2g9xql07f6",
-    "url": "https://github.com/nextcloud-releases/integration_openai/releases/download/v1.2.1/integration_openai-v1.2.1.tar.gz",
-    "version": "1.2.1",
-    "description": "This app includes 3 custom smart pickers for Nextcloud:\n* ChatGPT-like answers\n* Image generation (with DALL·E 2 or LocalAI)\n* Whisper dictation\n\nIt also implements\n\n* A Translation provider (using any available language model)\n* A SpeechToText provider (using Whisper)\n\nInstead of connecting to the OpenAI API for these, you can also connect to a self-hosted [LocalAI](https://localai.io) instance.\n\n## Ethical AI Rating\n### Rating for Text generation using ChatGPT via OpenAI API: 🔴\n\nNegative:\n* the software for training and inference of this model is proprietary, limiting running it locally or training by yourself\n* the trained model is not freely available, so the model can not be run on-premises\n* the training data is not freely available, limiting the ability of external parties to check and correct for bias or optimise the model's performance and CO2 usage.\n\n\n### Rating for Translation using ChatGPT via OpenAI API: 🔴\n\nNegative:\n* the software for training and inference of this model is proprietary, limiting running it locally or training by yourself\n* the trained model is not freely available, so the model can not be run on-premises\n* the training data is not freely available, limiting the ability of external parties to check and correct for bias or optimise the model's performance and CO2 usage.\n\n### Rating for Image generation using DALL·E via OpenAI API: 🔴\n\nNegative:\n* the software for training and inferencing of this model is proprietary, limiting running it locally or training by yourself\n* the trained model is not freely available, so the model can not be ran on-premises\n* the training data is not freely available, limiting the ability of external parties to check and correct for bias or optimise the model’s performance and CO2 usage.\n\n\n### Rating for Speech-To-Text using Whisper via OpenAI API: 🟡\n\nPositive:\n* the software for training and inferencing of this model is open source\n* The trained model is freely available, and thus can run on-premise\n\nNegative:\n* the training data is not freely available, limiting the ability of external parties to check and correct for bias or optimise the model’s performance and CO2 usage.\n\n### Rating for Text generation via LocalAI: 🟢\n\nPositive:\n* the software for training and inferencing of this model is open source\n* the trained model is freely available, and thus can be ran on-premises\n* the training data is freely available, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n\n### Rating for Image generation using Stable Diffusion via LocalAI : 🟡\n\nPositive:\n* the software for training and inferencing of this model is open source\n* the trained model is freely available, and thus can be ran on-premises\n\nNegative:\n* the training data is not freely available, limiting the ability of external parties to check and correct for bias or optimise the model’s performance and CO2 usage.\n\n\n### Rating for Speech-To-Text using Whisper via LocalAI: 🟡\n\nPositive:\n* the software for training and inferencing of this model is open source\n* the trained model is freely available, and thus can be ran on-premises\n\nNegative:\n* the training data is not freely available, limiting the ability of external parties to check and correct for bias or optimise the model’s performance and CO2 usage.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
+    "sha256": "1x9w13xljh8h8n7hic4ffxsk7y63x9yghr1450ng2p68y6vjsg4g",
+    "url": "https://github.com/nextcloud-releases/integration_openai/releases/download/v2.0.0/integration_openai-v2.0.0.tar.gz",
+    "version": "2.0.0",
+    "description": "⚠️ The smart pickers have been removed from this app\nas they are now included in the [Assistant app](https://apps.nextcloud.com/apps/assistant).\n\nThis app implements:\n\n* Text generation providers: Free prompt, Summarize, Headline and Reformulate (using any available large language model)\n* A Translation provider (using any available language model)\n* A SpeechToText provider (using Whisper)\n* An image generation provider\n\nInstead of connecting to the OpenAI API for these, you can also connect to a self-hosted [LocalAI](https://localai.io) instance\nor to any service that implements an API similar to the OpenAI one, for example: [Plusserver](https://www.plusserver.com/en/ai-platform/).\n\n## Ethical AI Rating\n### Rating for Text generation using ChatGPT via OpenAI API: 🔴\n\nNegative:\n* the software for training and inference of this model is proprietary, limiting running it locally or training by yourself\n* the trained model is not freely available, so the model can not be run on-premises\n* the training data is not freely available, limiting the ability of external parties to check and correct for bias or optimise the model's performance and CO2 usage.\n\n\n### Rating for Translation using ChatGPT via OpenAI API: 🔴\n\nNegative:\n* the software for training and inference of this model is proprietary, limiting running it locally or training by yourself\n* the trained model is not freely available, so the model can not be run on-premises\n* the training data is not freely available, limiting the ability of external parties to check and correct for bias or optimise the model's performance and CO2 usage.\n\n### Rating for Image generation using DALL·E via OpenAI API: 🔴\n\nNegative:\n* the software for training and inferencing of this model is proprietary, limiting running it locally or training by yourself\n* the trained model is not freely available, so the model can not be ran on-premises\n* the training data is not freely available, limiting the ability of external parties to check and correct for bias or optimise the model’s performance and CO2 usage.\n\n\n### Rating for Speech-To-Text using Whisper via OpenAI API: 🟡\n\nPositive:\n* the software for training and inferencing of this model is open source\n* The trained model is freely available, and thus can run on-premise\n\nNegative:\n* the training data is not freely available, limiting the ability of external parties to check and correct for bias or optimise the model’s performance and CO2 usage.\n\n### Rating for Text generation via LocalAI: 🟢\n\nPositive:\n* the software for training and inferencing of this model is open source\n* the trained model is freely available, and thus can be ran on-premises\n* the training data is freely available, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n\n### Rating for Image generation using Stable Diffusion via LocalAI : 🟡\n\nPositive:\n* the software for training and inferencing of this model is open source\n* the trained model is freely available, and thus can be ran on-premises\n\nNegative:\n* the training data is not freely available, limiting the ability of external parties to check and correct for bias or optimise the model’s performance and CO2 usage.\n\n\n### Rating for Speech-To-Text using Whisper via LocalAI: 🟡\n\nPositive:\n* the software for training and inferencing of this model is open source\n* the trained model is freely available, and thus can be ran on-premises\n\nNegative:\n* the training data is not freely available, limiting the ability of external parties to check and correct for bias or optimise the model’s performance and CO2 usage.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/integration_openai",
     "licenses": [
       "agpl"
     ]
   },
   "mail": {
-    "sha256": "122qyz6d9771ivpl771g5wi3lxsd2g3v64n9cp5clm8p662msjfi",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.5.7/mail-v3.5.7.tar.gz",
-    "version": "3.5.7",
+    "sha256": "1m48zdh7jjmgw7r9y9irp7z22wjippjswy7r60yvsdxbac765n14",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.6.0/mail-v3.6.0.tar.gz",
+    "version": "3.6.0",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n\n### Priority Inbox\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n### Thread Summaries (opt-in)\n\n**Rating:** 🟢/🟡/🟠/🔴\n\nThe rating depends on the installed text processing backend. See [the rating overview](https://docs.nextcloud.com/server/latest/admin_manual/ai/index.html) for details.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
@@ -130,9 +130,9 @@
     ]
   },
   "maps": {
-    "sha256": "0rs5cqn2saip7fmj71ww879iqsmmigf0fi6fdbqmdxmrmvsnl9l6",
-    "url": "https://github.com/nextcloud/maps/releases/download/v1.3.1/maps-1.3.1.tar.gz",
-    "version": "1.3.1",
+    "sha256": "18gln06hgljgnr90ki95nl7b8986ivf3cymr6hajilszlr77hk22",
+    "url": "https://github.com/nextcloud/maps/releases/download/v1.4.0-1-nightly/maps-1.4.0-1-nightly.tar.gz",
+    "version": "1.4.0",
     "description": "**The whole world fits inside your cloud!**\n\n- **🗺 Beautiful map:** Using [OpenStreetMap](https://www.openstreetmap.org) and [Leaflet](https://leafletjs.com), you can choose between standard map, satellite, topographical, dark mode or even watercolor! 🎨\n- **⭐ Favorites:** Save your favorite places, privately! Sync with [GNOME Maps](https://github.com/nextcloud/maps/issues/30) and mobile apps is planned.\n- **🧭 Routing:** Possible using either [OSRM](http://project-osrm.org), [GraphHopper](https://www.graphhopper.com) or [Mapbox](https://www.mapbox.com).\n- **🖼 Photos on the map:** No more boring slideshows, just show directly where you were!\n- **🙋 Contacts on the map:** See where your friends live and plan your next visit.\n- **📱 Devices:** Lost your phone? Check the map!\n- **〰 Tracks:** Load GPS tracks or past trips. Recording with [PhoneTrack](https://f-droid.org/en/packages/net.eneiluj.nextcloud.phonetrack/) or [OwnTracks](https://owntracks.org) is planned.",
     "homepage": "https://github.com/nextcloud/maps",
     "licenses": [
@@ -140,9 +140,9 @@
     ]
   },
   "memories": {
-    "sha256": "0638120x6byp35gslcr2yg4rswihjjdssnjw87fxx7q41sd02vsz",
-    "url": "https://github.com/pulsejet/memories/releases/download/v7.0.2/memories.tar.gz",
-    "version": "7.0.2",
+    "sha256": "02l9rq117x7x4nra1f50fkn7yr3cpbjnsq9nlr7rnsn9qsf5rrw9",
+    "url": "https://github.com/pulsejet/memories/releases/download/v7.2.0/memories.tar.gz",
+    "version": "7.2.0",
     "description": "# Memories: Photo Management for Nextcloud\n\nMemories is a *batteries-included* photo management solution for Nextcloud with advanced features including:\n\n- **📸 Timeline**: Sort photos and videos by date taken, parsed from Exif data.\n- **⏪ Rewind**: Jump to any time in the past instantly and relive your memories.\n- **🤖 AI Tagging**: Group photos by people and objects, powered by [recognize](https://github.com/nextcloud/recognize) and [facerecognition](https://github.com/matiasdelellis/facerecognition).\n- **🖼️ Albums**: Create albums to group photos and videos together. Then share these albums with others.\n- **🫱🏻‍🫲🏻 External Sharing**: Share photos and videos with people outside of your Nextcloud instance.\n- **📱 Mobile Support**: Work from any device, of any shape and size through the web app.\n- **✏️ Edit Metadata**: Edit dates and other metadata on photos quickly and in bulk.\n- **📦 Archive**: Store photos you don't want to see in your timeline in a separate folder.\n- **📹 Video Transcoding**: Transcode videos and use HLS for maximal performance.\n- **🗺️ Map**: View your photos on a map, tagged with accurate reverse geocoding.\n- **📦 Migration**: Migrate easily from Nextcloud Photos and Google Takeout.\n- **⚡️ Performance**: Do all this very fast.\n\n## 🚀 Installation\n\n1. Install the app from the Nextcloud app store (try a demo [here](https://demo.memories.gallery/apps/memories/)).\n1. Perform the recommended [configuration steps](https://memories.gallery/config/).\n1. Run `php occ memories:index` to generate metadata indices for existing photos.\n1. Open the 📷 Memories app in Nextcloud and set the directory containing your photos.",
     "homepage": "https://memories.gallery",
     "licenses": [
@@ -150,9 +150,9 @@
     ]
   },
   "music": {
-    "sha256": "1afjqvmcim1r22bs5vpp2b2wd01df5xdchw6ifqf57vgb7nzzkbs",
-    "url": "https://github.com/owncloud/music/releases/download/v1.10.0/music_1.10.0_for_nextcloud.tar.gz",
-    "version": "1.10.0",
+    "sha256": "04dh6vzriiiqnn02pjbwn9rv0q427njbx558jl504jp91b8qd2wn",
+    "url": "https://github.com/owncloud/music/releases/download/v1.11.0/music_1.11.0_for_nextcloud.tar.gz",
+    "version": "1.11.0",
     "description": "A stand-alone music player app and a \"lite\" player for the Files app\n\n- On modern browsers, supports audio types .mp3, .ogg, .m4a, .m4b, .flac, .wav, and more\n- Playlist support with import from m3u, m3u8, and pls files\n- Browse by artists, albums, genres, or folders\n- Gapless play\n- Filter the shown content with the search function\n- Play internet radio and podcast channels\n- Setup Last.fm connection to see background information on artists, albums, and songs\n- Control with media control keys on the keyboard or OS\n- The app can handle libraries consisting of thousands of albums and tens of thousands of songs\n- Includes a server backend compatible with the Subsonic and Ampache protocols, allowing playback and browsing of your library on various external apps e.g. on Android or iPhone",
     "homepage": "https://github.com/owncloud/music",
     "licenses": [
@@ -160,9 +160,9 @@
     ]
   },
   "notes": {
-    "sha256": "1ii3ii2062wklss3mxsfbvqi4hvi96a20i20lbwm6z2x6q7fqqi3",
-    "url": "https://github.com/nextcloud-releases/notes/releases/download/v4.9.4/notes-v4.9.4.tar.gz",
-    "version": "4.9.4",
+    "sha256": "0j9bwbfvwwdaabyc79i514sp36cm4i9z02l8bkxlqr9fvim73nn9",
+    "url": "https://github.com/nextcloud-releases/notes/releases/download/v4.10.0/notes.tar.gz",
+    "version": "4.10.0",
     "description": "The Notes app is a distraction free notes taking app for [Nextcloud](https://www.nextcloud.com/). It provides categories for better organization and supports formatting using [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax. Notes are saved as files in your Nextcloud, so you can view and edit them with every Nextcloud client. Furthermore, a separate [REST API](https://github.com/nextcloud/notes/blob/master/docs/api/README.md) allows for an easy integration into third-party apps (currently, there are notes apps for [Android](https://github.com/nextcloud/notes-android), [iOS](https://github.com/nextcloud/notes-ios) and the [console](https://git.danielmoch.com/nncli/about) which allow convenient access to your Nextcloud notes). Further features include marking notes as favorites.",
     "homepage": "https://github.com/nextcloud/notes",
     "licenses": [
@@ -180,9 +180,9 @@
     ]
   },
   "onlyoffice": {
-    "sha256": "14vqyr7yq95kiwkb2q25qa5kxfx0mri12bbyy2fpm94kk2y2km37",
-    "url": "https://github.com/ONLYOFFICE/onlyoffice-nextcloud/releases/download/v9.0.0/onlyoffice.tar.gz",
-    "version": "9.0.0",
+    "sha256": "1hg6cs8rbvy00w541pd1qcr5l6xqnjz816pm2jyxqxm8dm5kag7a",
+    "url": "https://github.com/ONLYOFFICE/onlyoffice-nextcloud/releases/download/v9.1.2/onlyoffice.tar.gz",
+    "version": "9.1.2",
     "description": "ONLYOFFICE connector allows you to view, edit and collaborate on text documents, spreadsheets and presentations within Nextcloud using ONLYOFFICE Docs. This will create a new Edit in ONLYOFFICE action within the document library for Office documents. This allows multiple users to co-author documents in real time from the familiar web interface and save the changes back to your file storage.",
     "homepage": "https://www.onlyoffice.com",
     "licenses": [
@@ -200,9 +200,9 @@
     ]
   },
   "polls": {
-    "sha256": "0gym2sx9lx6nvyby9pj1xml4n9fa7q91rl1i33kb70fclv622ca3",
-    "url": "https://github.com/nextcloud/polls/releases/download/v7.0.0/polls.tar.gz",
-    "version": "7.0.0",
+    "sha256": "1crs6fks9ywywyi3pnji49dxnry5vpcmd1x29y8anyp32ji2a35r",
+    "url": "https://github.com/nextcloud/polls/releases/download/v7.0.3/polls.tar.gz",
+    "version": "7.0.3",
     "description": "A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "homepage": "https://github.com/nextcloud/polls",
     "licenses": [
@@ -210,9 +210,9 @@
     ]
   },
   "previewgenerator": {
-    "sha256": "08f0ivxqa2b54w2q4lycb3p5ngqyk92n2qll54pmpj54pfn1sj3m",
-    "url": "https://github.com/nextcloud-releases/previewgenerator/releases/download/v5.4.0/previewgenerator-v5.4.0.tar.gz",
-    "version": "5.4.0",
+    "sha256": "0505kg4pxa6dqylniwa5ip6h5bama8cp0ng2y7prhb93mnhgr051",
+    "url": "https://github.com/nextcloud-releases/previewgenerator/releases/download/v5.5.0/previewgenerator-v5.5.0.tar.gz",
+    "version": "5.5.0",
     "description": "The Preview Generator app allows admins to pre-generate previews. The app listens to edit events and stores this information. Once a cron job is triggered it will generate start preview generation. This means that you can better utilize your system by pre-generating previews when your system is normally idle and thus putting less load on your machine when the requests are actually served.\n\nThe app does not replace on demand preview generation so if a preview is requested before it is pre-generated it will still be shown.\nThe first time you install this app, before using a cron job, you properly want to generate all previews via:\n**./occ preview:generate-all -vvv**\n\n**Important**: To enable pre-generation of previews you must add **php /var/www/nextcloud/occ preview:pre-generate** to a system cron job that runs at times of your choosing.",
     "homepage": "https://github.com/nextcloud/previewgenerator",
     "licenses": [
@@ -220,9 +220,9 @@
     ]
   },
   "qownnotesapi": {
-    "sha256": "1pyr4b3w6gsy83ci6cy0wfv870qm2v957nl4w6xk989iyknk4ana",
-    "url": "https://github.com/pbek/qownnotesapi/releases/download/v23.12.0/qownnotesapi-nc.tar.gz",
-    "version": "23.12.0",
+    "sha256": "0y4cv4hagmax4nkdfzysd5fg2h2xak4m87waf3b0ci5f1bwdxdxx",
+    "url": "https://github.com/pbek/qownnotesapi/releases/download/v24.4.0/qownnotesapi-nc.tar.gz",
+    "version": "24.4.0",
     "description": "QOwnNotesAPI is the Nextcloud/ownCloud API for [QOwnNotes](http://www.qownnotes.org), the open source notepad for Linux, macOS and Windows, that works together with the notes application of Nextcloud/ownCloud.\n\nThe only purpose of this App is to provide API access to your Nextcloud/ownCloud server for your QOwnNotes desktop installation, you cannot use this App for anything else, if you don't have QOwnNotes installed on your desktop computer!",
     "homepage": "https://github.com/pbek/qownnotesapi",
     "licenses": [
@@ -240,10 +240,10 @@
     ]
   },
   "spreed": {
-    "sha256": "1irkfcyv07ij564aigsrrg1glw78v9lm09126qwmbs6fbz1acxl2",
-    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v18.0.5/spreed-v18.0.5.tar.gz",
-    "version": "18.0.5",
-    "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat integration!** Nextcloud Talk comes with a simple text chat. Allowing you to share files from your Nextcloud and mentioning other participants.\n* 👥 **Private, group, public and password protected calls!** Just invite somebody, a whole group or send a public link to invite to a call.\n* 💻 **Screen sharing!** Share your screen with participants of your call. You just need to use Firefox version 66 (or newer), latest Edge or Chrome 72 (or newer, also possible using Chrome 49 with this [Chrome extension](https://chrome.google.com/webstore/detail/screensharing-for-nextclo/kepnpjhambipllfmgmbapncekcmabkol)).\n* 🚀 **Integration with other Nextcloud apps** like Files, Contacts and Deck. More to come.\n\nAnd in the works for the [coming versions](https://github.com/nextcloud/spreed/milestones/):\n* ✋ [Federated calls](https://github.com/nextcloud/spreed/issues/21), to call people on other Nextclouds",
+    "sha256": "1d6y473xnlc2n3k9hqb2n2zk780pran77k4frbgfyikinbadd1ci",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v18.0.7/spreed-v18.0.7.tar.gz",
+    "version": "18.0.7",
+    "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat** Nextcloud Talk comes with a simple text chat, allowing you to share or upload files from your Nextcloud Files app or local device and mention other participants.\n* 👥 **Private, group, public and password protected calls!** Invite someone, a whole group or send a public link to invite to a call.\n* 🌐 **Federated chats** Chat with other Nextcloud users on their servers\n* 💻 **Screen sharing!** Share your screen with the participants of your call.\n* 🚀 **Integration with other Nextcloud apps** like Files, Calendar, User status, Dashboard, Flow, Maps, Smart picker, Contacts, Deck, and many more.\n* 🌉 **Sync with other chat solutions** With [Matterbridge](https://github.com/42wim/matterbridge/) being integrated in Talk, you can easily sync a lot of other chat solutions to Nextcloud Talk and vice-versa.",
     "homepage": "https://github.com/nextcloud/spreed",
     "licenses": [
       "agpl"
@@ -279,6 +279,16 @@
       "agpl"
     ]
   },
+  "unroundedcorners": {
+    "sha256": "16h8zg7k18r01yx2a72bn22nmvbafrs3ksyy23fbrnirzgwcaaqf",
+    "url": "https://github.com/OliverParoczai/nextcloud-unroundedcorners/releases/download/v1.1.3/unroundedcorners-v1.1.3.tar.gz",
+    "version": "1.1.3",
+    "description": "# Unrounded Corners\nA Nextcloud app that restores the corners of buttons and widgets to their original looks by unrounding them.",
+    "homepage": "https://github.com/OliverParoczai/nextcloud-unroundedcorners",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "user_oidc": {
     "sha256": "0nl716c8jx6hhpkxjdpbldlnqhh6jsm6xx1zmcmvkzkdr9pjkggj",
     "url": "https://github.com/nextcloud-releases/user_oidc/releases/download/v5.0.2/user_oidc-v5.0.2.tar.gz",
@@ -290,9 +300,9 @@
     ]
   },
   "user_saml": {
-    "sha256": "112nmngl99vfiqx39zbz6n8ajaifr02y5p0kcd5iz60qnf8za3kk",
-    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v6.1.2/user_saml-v6.1.2.tar.gz",
-    "version": "6.1.2",
+    "sha256": "1dw5mwzzlhfwarnnpsij3l6153psl83qkjmgm0bnipy4v8wkkqvj",
+    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v6.1.3/user_saml-v6.1.3.tar.gz",
+    "version": "6.1.3",
     "description": "Using the SSO & SAML app of your Nextcloud you can make it easily possible to integrate your existing Single-Sign-On solution with Nextcloud. In addition, you can use the Nextcloud LDAP user provider to keep the convenience for users. (e.g. when sharing)\nThe following providers are supported and tested at the moment:\n\n* **SAML 2.0**\n\t* OneLogin\n\t* Shibboleth\n\t* Active Directory Federation Services (ADFS)\n\n* **Authentication via Environment Variable**\n\t* Kerberos (mod_auth_kerb)\n\t* Any other provider that authenticates using the environment variable\n\nWhile theoretically any other authentication provider implementing either one of those standards is compatible, we like to note that they are not part of any internal test matrix.",
     "homepage": "https://github.com/nextcloud/user_saml",
     "licenses": [
