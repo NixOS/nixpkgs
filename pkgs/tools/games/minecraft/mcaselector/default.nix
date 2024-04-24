@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp $src $out/lib/mcaselector/mcaselector.jar
     makeWrapper ${jre}/bin/java $out/bin/mcaselector \
       --add-flags "-jar $out/lib/mcaselector/mcaselector.jar" \
-      ${gappsWrapperArgs[@]}
+      ''${gappsWrapperArgs[@]}
 
     runHook postInstall
   '';
