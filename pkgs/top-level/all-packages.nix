@@ -4076,8 +4076,6 @@ with pkgs;
 
   wiimms-iso-tools = callPackage ../tools/filesystems/wiimms-iso-tools { };
 
-  waypoint = callPackage ../applications/networking/cluster/waypoint { };
-
   xc = callPackage ../development/tools/xc { };
 
   ios-webkit-debug-proxy = callPackage ../development/mobile/ios-webkit-debug-proxy { };
