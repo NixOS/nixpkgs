@@ -8,13 +8,15 @@
 , pydantic
 , pytestCheckHook
 , pythonOlder
+, toolz
 , typing-extensions
 , wrapt
+, attrs
 }:
 
 buildPythonPackage rec {
   pname = "psygnal";
-  version = "0.9.0";
+  version = "0.11.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -23,10 +25,8 @@ buildPythonPackage rec {
     owner = "pyapp-kit";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-9rYG0XqwFJQojnvM5ygm1RVu9NbeFASns0llOGKaP+4=";
+    hash = "sha256-LZkYlqplapV2jD5yV5Co8zhGdHP0dqkIAoIj1AFETbA=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   buildInputs = [
     hatch-vcs
@@ -42,7 +42,9 @@ buildPythonPackage rec {
     numpy
     pydantic
     pytestCheckHook
+    toolz
     wrapt
+    attrs
   ];
 
   pythonImportsCheck = [

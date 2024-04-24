@@ -11,12 +11,13 @@ buildGoModule rec {
     sha256 = "sha256-vcRHriFCT5b8SKjtRSg+kZDcCAKySC1cKVq+FMZb+9M=";
   };
 
-  vendorSha256 = "sha256-p77mLvGtohmC8J+bqqkM5kqc1pMPcFx7GhXOZ4q4jeM=";
+  vendorHash = "sha256-p77mLvGtohmC8J+bqqkM5kqc1pMPcFx7GhXOZ4q4jeM=";
 
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     description = "Remove unnecessary type conversions from Go source";
+    mainProgram = "unconvert";
     homepage = "https://github.com/mdempsky/unconvert";
     license = licenses.bsd3;
     maintainers = with maintainers; [ kalbasit ];

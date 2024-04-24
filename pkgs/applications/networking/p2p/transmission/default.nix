@@ -32,17 +32,14 @@
 , apparmorRulesFromClosure
 }:
 
-let
-  version = "3.00";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "transmission";
-  inherit version;
+  version = "3.00";
 
   src = fetchFromGitHub {
     owner = "transmission";
     repo = "transmission";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0ccg0km54f700x9p0jsnncnwvfnxfnxf7kcm7pcx1cj0vw78924z";
     fetchSubmodules = true;
   };
@@ -129,6 +126,7 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "A fast, easy and free BitTorrent client";
+    mainProgram = if enableQt then "transmission-qt" else if enableGTK3 then "transmission-gtk" else "transmission-cli";
     longDescription = ''
       Transmission is a BitTorrent client which features a simple interface
       on top of a cross-platform back-end.
@@ -146,4 +144,4 @@ in stdenv.mkDerivation {
     platforms = lib.platforms.unix;
   };
 
-}
+})

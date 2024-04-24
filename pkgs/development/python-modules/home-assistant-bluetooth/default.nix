@@ -2,25 +2,32 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+
+# build-system
 , cython
 , poetry-core
 , setuptools
+
+# dependencies
+, habluetooth
+
+# tests
 , bleak
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "home-assistant-bluetooth";
-  version = "1.10.2";
-  format = "pyproject";
+  version = "1.12.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
-    repo = pname;
+    repo = "home-assistant-bluetooth";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zNhqiWYZ3tv6lwYgmi6Yue+mFcgk7Y1dDMbzWlsvVJM=";
+    hash = "sha256-KTaZ3xbZpBIN5zP73YdJW6QeCQThGdqejnfWwvL+0R8=";
   };
 
   postPatch = ''
@@ -35,7 +42,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    bleak
+    habluetooth
   ];
 
   pythonImportsCheck = [
@@ -43,6 +50,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    bleak
     pytestCheckHook
   ];
 

@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "getjump";
-  version = "2.4.0";
-  format = "pyproject";
+  version = "2.4.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gu6h9Yb0xdfvdmoeZGQPFCJhBJxuQ4iWlQquig1ljnY=";
+    hash = "sha256-WSLfhVCqP+N+2Rs2PUXOknnlNx3UtWdFYrK1lTW1fqQ=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +32,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "getjump"
   ];
+
+  # all the tests talk to the internet
+  doCheck = false;
 
   meta = with lib; {
     description = "Get and save images from jump web viewer";

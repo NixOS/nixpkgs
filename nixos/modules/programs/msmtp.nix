@@ -10,12 +10,12 @@ in {
 
   options = {
     programs.msmtp = {
-      enable = mkEnableOption (lib.mdDoc "msmtp - an SMTP client");
+      enable = mkEnableOption "msmtp - an SMTP client";
 
       setSendmail = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to set the system sendmail to msmtp's.
         '';
       };
@@ -28,7 +28,7 @@ in {
           port = 587;
           tls = true;
         };
-        description = lib.mdDoc ''
+        description = ''
           Default values applied to all accounts.
           See msmtp(1) for the available options.
         '';
@@ -45,7 +45,7 @@ in {
             passwordeval = "cat /secrets/password.txt";
           };
         };
-        description = lib.mdDoc ''
+        description = ''
           Named accounts and their respective configurations.
           The special name "default" allows a default account to be defined.
           See msmtp(1) for the available options.
@@ -62,7 +62,7 @@ in {
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra lines to add to the msmtp configuration verbatim.
           See msmtp(1) for the syntax and available options.
         '';

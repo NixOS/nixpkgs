@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bpftune";
-  version = "unstable-2023-08-02";
+  version = "unstable-2023-12-20";
 
   src = fetchFromGitHub {
-    owner = "oracle-samples";
+    owner = "oracle";
     repo = "bpftune";
-    rev = "f7e051a011d581a3c667b7f7b769862407d85f04";
-    hash = "sha256-1tfr2vB/XRnpGJVwo2NQkXomz+J6AzvpS1P3rcAyAyI=";
+    rev = "0e6bca2e5880fcbaac6478c4042f5f9314e61463";
+    hash = "sha256-y9WQrQb9U5YdzKAR63FzC8V1+jZL027pzAmQPpgM3jM=";
   };
 
   postPatch = ''
@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
     substituteInPlace include/bpftune/libbpftune.h \
       --replace /usr/lib64/bpftune/       "$out/lib/bpftune/" \
       --replace /usr/local/lib64/bpftune/ "$out/lib/bpftune/"
+    substituteInPlace src/libbpftune.c \
+      --replace /lib/modules /run/booted-system/kernel-modules/lib/modules
 
     substituteInPlace src/Makefile sample_tuner/Makefile \
       --replace 'BPF_INCLUDE := /usr/include' 'BPF_INCLUDE := ${lib.getDev libbpf}/include' \
@@ -68,6 +70,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "BPF-based auto-tuning of Linux system parameters";
+    mainProgram = "bpftune";
     homepage = "https://github.com/oracle-samples/bpftune";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ nickcao ];

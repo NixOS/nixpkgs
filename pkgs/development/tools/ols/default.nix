@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "ols";
-  version = "nightly-2023-07-09";
+  version = "0-unstable-2024-04-15";
 
   src = fetchFromGitHub {
     owner = "DanielGavin";
     repo = "ols";
-    rev = "255ad5958026dc3a3116f621eaebd501b8b26a22";
-    hash = "sha256-XtlIZToNvmU4GhUJAxuVmKvKwnPebaxjv7jp/AgE/uM=";
+    rev = "aa1aabda1cce68a6038c48429cc759f09ad2ebab";
+    hash = "sha256-yM+Syx8hWiSZatWfFFGz8lUJTOCozkZWPdPUhRW0/Ow=";
   };
 
   nativeBuildInputs = [
@@ -34,18 +34,18 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    cp ols $out/bin
+    install -Dm755 ols -t $out/bin/
     wrapProgram $out/bin/ols --set-default ODIN_ROOT ${odin}/share
 
     runHook postInstall
   '';
 
   meta = with lib; {
+    inherit (odin.meta) platforms;
     description = "Language server for the Odin programming language";
+    mainProgram = "ols";
     homepage = "https://github.com/DanielGavin/ols";
     license = licenses.mit;
-    maintainers = with maintainers; [ astavie ];
-    platforms = odin.meta.platforms;
+    maintainers = with maintainers; [ astavie znaniye ];
   };
 }

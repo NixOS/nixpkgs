@@ -1,23 +1,23 @@
-{ lib, stdenv, fetchurl, fetchzip, autoPatchelfHook, installShellFiles, cpio, xar }:
+{ lib, stdenv, fetchurl, fetchzip, autoPatchelfHook, installShellFiles, cpio, xar, _1password, testers }:
 
 let
   inherit (stdenv.hostPlatform) system;
-  fetch = srcPlatform: sha256: extension:
+  fetch = srcPlatform: hash: extension:
     let
       args = {
         url = "https://cache.agilebits.com/dist/1P/op2/pkg/v${version}/op_${srcPlatform}_v${version}.${extension}";
-        inherit sha256;
+        inherit hash;
       } // lib.optionalAttrs (extension == "zip") { stripRoot = false; };
     in
     if extension == "zip" then fetchzip args else fetchurl args;
 
   pname = "1password-cli";
-  version = "2.19.0";
+  version = "2.27.0";
   sources = rec {
-    aarch64-linux = fetch "linux_arm64" "sha256-/sP5Z52fWkRcv+Wj45HTV1Ckve+jA92m91kGGJwdC6s=" "zip";
-    i686-linux = fetch "linux_386" "sha256-UGPWk0I/nCaqWWz/rwG/TSDie0/tarKroGi+7Ge7kE4=" "zip";
-    x86_64-linux = fetch "linux_amd64" "sha256-rSZM0GuroSqVokhkjPtk3+2+C9w5/Tkh2cvB+kShyHY=" "zip";
-    aarch64-darwin = fetch "apple_universal" "sha256-3zVD8LUdxhzroLlnQCiCVELEQMPmCriRff85ZlfgSKI=" "pkg";
+    aarch64-linux = fetch "linux_arm64" "sha256-yutS8xSTRABt12+mEyU99R4eCHvuAwWdO40SZlUrtdc=" "zip";
+    i686-linux = fetch "linux_386" "sha256-juP//g9quhd7GRq5TNm3qAq+rOegGJ9u9F+fmGbfmbw=" "zip";
+    x86_64-linux = fetch "linux_amd64" "sha256-cFQ3lsHBV9fDoNK5ujTummIXA4591meP43KbiyWcbQk=" "zip";
+    aarch64-darwin = fetch "apple_universal" "sha256-fUwiEJxn4JdsViBQU2Odrw+Focp0ngH/RmfmW2Uu0Bo=" "pkg";
     x86_64-darwin = aarch64-darwin;
   };
   platforms = builtins.attrNames sources;
@@ -62,6 +62,12 @@ stdenv.mkDerivation {
   installCheckPhase = ''
     $out/bin/${mainProgram} --version
   '';
+
+  passthru.updateScript = ./update.sh;
+
+  passthru.tests.version = testers.testVersion {
+    package = _1password;
+  };
 
   meta = with lib; {
     description = "1Password command-line tool";

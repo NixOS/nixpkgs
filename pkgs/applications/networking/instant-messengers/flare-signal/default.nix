@@ -7,8 +7,10 @@
 , pkg-config
 , gst_all_1
 , protobuf
+, libspelling
 , libsecret
 , libadwaita
+, gtksourceview5
 , rustPlatform
 , rustc
 , appstream-glib
@@ -19,23 +21,23 @@
 
 stdenv.mkDerivation rec {
   pname = "flare";
-  version = "0.9.1";
+  version = "0.13.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "schmiddi-on-mobile";
-    repo = pname;
+    repo = "flare";
     rev = version;
-    hash = "sha256-RceCVn2OmrHyY2DWT+5XeOc+HlQGVdtOmfo3+2r9hKs=";
+    hash = "sha256-WfW2xUlF1vCaYFVP6ds06+niULKZgMMxgAOm66LK2xQ=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "curve25519-dalek-3.2.1" = "sha256-0hFRhn920tLBpo6ZNCl6DYtTMHMXY/EiDvuhOPVjvC0=";
-      "libsignal-protocol-0.1.0" = "sha256-VQwrGTNZnlDK5p8ZleAZYtbzDiVTHxc93/CRlCUjWtE=";
-      "libsignal-service-0.1.0" = "sha256-azXQGC008rcqF2C8yHy5CM2NU1Hvwv2I3Kr8aI6URS8=";
-      "presage-0.6.0-dev" = "sha256-MNd4CvBv6htZQj2g2a3JcQ1r/kk4UPSBLFezEnRK+60=";
+      "curve25519-dalek-4.0.0" = "sha256-KUXvYXeVvJEQ/+dydKzXWCZmA2bFa2IosDzaBL6/Si0=";
+      "libsignal-protocol-0.1.0" = "sha256-FCrJO7porlY5FrwZ2c67UPd4tgN7cH2/3DTwfPjihwM=";
+      "libsignal-service-0.1.0" = "sha256-XkCb83IvlnmvhHD8Vi9D5fNuBOoR9yX0/Vlb+YhrDz8=";
+      "presage-0.6.0-dev" = "sha256-zot92dlGtB7B423BU74oqpPzQKvLm2Dw9P8lCWkbsoE=";
     };
   };
 
@@ -53,8 +55,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gtksourceview5
     libadwaita
     libsecret
+    libspelling
     protobuf
 
     # To reproduce audio messages
@@ -67,6 +71,7 @@ stdenv.mkDerivation rec {
   meta = {
     changelog = "https://gitlab.com/schmiddi-on-mobile/flare/-/blob/${src.rev}/CHANGELOG.md";
     description = "An unofficial Signal GTK client";
+    mainProgram = "flare";
     homepage = "https://gitlab.com/schmiddi-on-mobile/flare";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];

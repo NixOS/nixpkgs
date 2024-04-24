@@ -10,7 +10,7 @@
 
 # propagated
 , inflection
-, factory_boy
+, factory-boy
 , typing-extensions
 
 # tests
@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-factoryboy";
-  version = "2.5.1";
+  version = "2.6.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-factoryboy";
     rev = version;
-    sha256 = "sha256-zxgezo2PRBKs0mps0qdKWtBygunzlaxg8s9BoBaU1Ig=";
+    sha256 = "sha256-GYqYwtbmMWVqImVPPBbZNRJJGcbksUPsIbi6QuPRMco=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    factory_boy
+    factory-boy
     inflection
     typing-extensions
   ];

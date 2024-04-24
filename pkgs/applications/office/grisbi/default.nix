@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A personnal accounting application";
+    mainProgram = "grisbi";
     longDescription = ''
       Grisbi is an application written by French developers, so it perfectly
       respects French accounting rules. Grisbi can manage multiple accounts,

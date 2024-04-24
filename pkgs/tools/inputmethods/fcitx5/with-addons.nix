@@ -4,7 +4,8 @@
 , fcitx5
 , withConfigtool ? true
 , fcitx5-configtool
-, fcitx5-qt
+, libsForQt5
+, qt6Packages
 , fcitx5-gtk
 , addons ? [ ]
 }:
@@ -14,7 +15,8 @@ symlinkJoin {
 
   paths = [
     fcitx5
-    fcitx5-qt
+    libsForQt5.fcitx5-qt
+    qt6Packages.fcitx5-qt
     fcitx5-gtk
   ] ++ lib.optionals withConfigtool [
     fcitx5-configtool
@@ -29,7 +31,7 @@ symlinkJoin {
       --suffix PATH : "$out/bin" \
       --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath (lib.flatten (map (x: x.extraLdLibraries or []) addons))}"
 
-    ${lib.optionals withConfigtool ''
+    ${lib.optionalString withConfigtool ''
       # Configtool call libexec/fcitx5-qt5-gui-wrapper for gui addons in FCITX_ADDON_DIRS
       wrapProgram $out/bin/fcitx5-config-qt --prefix FCITX_ADDON_DIRS : "$out/lib/fcitx5"
     ''}

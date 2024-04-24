@@ -25,6 +25,7 @@ python.pkgs.buildPythonApplication rec {
     flask
     psutil
     requests
+    setuptools
   ];
 
   postPatch = ''

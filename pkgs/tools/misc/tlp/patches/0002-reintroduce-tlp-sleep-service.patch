@@ -13,17 +13,15 @@ systemd itself to not use the hook scripts. As per the manual:
 > they should rather use the Inhibitor interface[1].
 ---
  Makefile             |  6 +++---
- tlp-sleep            | 11 -----------
  tlp-sleep.service.in | 19 +++++++++++++++++++
- 3 files changed, 22 insertions(+), 14 deletions(-)
- delete mode 100644 tlp-sleep
+ 2 files changed, 22 insertions(+), 3 deletions(-)
  create mode 100644 tlp-sleep.service.in
 
 diff --git a/Makefile b/Makefile
-index ab05720..075b42f 100644
+index 1c436ad..fd5211b 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -76,6 +76,7 @@ INFILES = \
+@@ -84,6 +84,7 @@ INFILES = \
  	tlp.rules \
  	tlp-readconfs \
  	tlp-run-on \
@@ -31,15 +29,15 @@ index ab05720..075b42f 100644
  	tlp.service \
  	tlp-stat \
  	tlp.upstart \
-@@ -106,7 +107,6 @@ SHFILES = \
+@@ -115,7 +116,6 @@ SHFILES = \
  	tlp-rdw-udev.in \
  	tlp-rf.in \
  	tlp-run-on.in \
 -	tlp-sleep \
  	tlp-sleep.elogind \
  	tlp-stat.in \
- 	tlp-usb-udev.in
-@@ -159,7 +159,7 @@ ifneq ($(TLP_NO_INIT),1)
+ 	tlp-usb-udev.in \
+@@ -172,7 +172,7 @@ ifneq ($(TLP_NO_INIT),1)
  endif
  ifneq ($(TLP_WITH_SYSTEMD),0)
  	install -D -m 644 tlp.service $(_SYSD)/tlp.service
@@ -48,7 +46,7 @@ index ab05720..075b42f 100644
  endif
  ifneq ($(TLP_WITH_ELOGIND),0)
  	install -D -m 755 tlp-sleep.elogind $(_ELOD)/49-tlp-sleep
-@@ -216,7 +216,7 @@ uninstall-tlp:
+@@ -240,7 +240,7 @@ uninstall-tlp:
  	rm $(_ULIB)/rules.d/85-tlp.rules
  	rm -f $(_SYSV)/tlp
  	rm -f $(_SYSD)/tlp.service
@@ -83,5 +81,5 @@ index 0000000..79c202c
 +[Install]
 +WantedBy=sleep.target
 -- 
-2.33.0
+2.41.0
 

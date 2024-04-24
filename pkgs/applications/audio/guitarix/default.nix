@@ -1,6 +1,6 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
+{ lib
+, stdenv
+, fetchFromGitHub
 , avahi
 , bluez
 , boost
@@ -41,14 +41,19 @@ let
   inherit (lib) optional;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guitarix";
-  version = "0.44.1";
+  version = "0.46.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/guitarix/guitarix2-${version}.tar.xz";
-    sha256 = "d+g9dU9RrDjFQj847rVd5bPiYSjmC1EbAtLe/PNubBg=";
+  src = fetchFromGitHub {
+    owner = "brummer10";
+    repo = "guitarix";
+    rev = "V${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-AftC6fQEDzG/3C/83YbK/++bRgP7vPD0E2X6KEWpowc=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/trunk";
 
   nativeBuildInputs = [
     gettext
@@ -101,6 +106,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A virtual guitar amplifier for Linux running with JACK";
+    mainProgram = "guitarix";
     longDescription = ''
         guitarix is a virtual guitar amplifier for Linux running with
       JACK (Jack Audio Connection Kit). It is free as in speech and
@@ -123,9 +129,9 @@ stdenv.mkDerivation rec {
       clean-sounds, nice overdrive, fat distortion and a diversity of
       crazy sounds never heard before.
     '';
-    homepage = "http://guitarix.sourceforge.net/";
+    homepage = "https://github.com/brummer10/guitarix";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ astsmtl goibhniu ];
+    maintainers = with maintainers; [ astsmtl goibhniu lord-valen ];
     platforms = platforms.linux;
   };
-}
+})

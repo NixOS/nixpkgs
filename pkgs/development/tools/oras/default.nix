@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "oras";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "oras-project";
     repo = "oras";
     rev = "v${version}";
-    hash = "sha256-Q+KTT7wIsakE79WJpP8uUhOEh+sJfcxC4Od8z92gX6Q=";
+    hash = "sha256-oWDxrxCrBU0quSpRLXZ0w1COuImVj4FzAmv8574x76o=";
   };
 
-  vendorHash = "sha256-NhgppD2sYgdM3cAmtij/1Sd5Wq/my8nguHjUfv7wOaY=";
+  vendorHash = "sha256-51keQmj1eGT3rJysnfTWIl8xoHfz3NPL/qXegc3wwNc=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -51,6 +51,7 @@ buildGoModule rec {
     homepage = "https://oras.land/";
     changelog = "https://github.com/oras-project/oras/releases/tag/v${version}";
     description = "The ORAS project provides a way to push and pull OCI Artifacts to and from OCI Registries";
+    mainProgram = "oras";
     license = licenses.asl20;
     maintainers = with maintainers; [ jk developer-guy ];
   };

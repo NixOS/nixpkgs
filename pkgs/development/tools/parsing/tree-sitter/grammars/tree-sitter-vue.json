@@ -4,6 +4,7 @@
   "date": "2021-04-04T11:51:48+08:00",
   "path": "/nix/store/9bw35fa56xli7r2k3b3bzzlm7vkpxzcy-tree-sitter-vue",
   "sha256": "0l0kqy9ajm5izqcywd39aavgmc281s8qrhmjkbwl6r8arfj8vsrm",
+  "hash": "sha256-NeuNpMsKZUP5mrLCjJEOSLD6tlJpNO4Z/rFUqZLHE1A=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

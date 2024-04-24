@@ -42,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/yutto-dev/biliass";
     description = "Convert Bilibili XML/protobuf danmaku to ASS subtitle";
+    mainProgram = "biliass";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ linsui ];
   };

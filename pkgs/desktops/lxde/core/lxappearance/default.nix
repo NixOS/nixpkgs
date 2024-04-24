@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Lightweight program for configuring the theme and fonts of gtk applications";
+    mainProgram = "lxappearance";
     homepage = "https://lxde.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

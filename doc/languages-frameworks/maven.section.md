@@ -34,13 +34,13 @@ maven.buildMavenPackage rec {
       --add-flags "-jar $out/share/jd-cli/jd-cli.jar"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple command line wrapper around JD Core Java Decompiler project";
     homepage = "https://github.com/intoolswetrust/jd-cli";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ majiir ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ majiir ];
   };
-}:
+}
 ```
 
 This package calls `maven.buildMavenPackage` to do its work. The primary difference from `stdenv.mkDerivation` is the `mvnHash` variable, which is a hash of all of the Maven dependencies.
@@ -53,7 +53,7 @@ After setting `maven.buildMavenPackage`, we then do standard Java `.jar` install
 
 Maven defines default versions for its core plugins, e.g. `maven-compiler-plugin`. If your project does not override these versions, an upgrade of Maven will change the version of the used plugins, and therefore the derivation and hash.
 
-When `maven` is upgraded, `mvnHash` for the derivation must be updated as well: otherwise, the project will simply be built on the derivation of old plugins, and fail because the requested plugins are missing.
+When `maven` is upgraded, `mvnHash` for the derivation must be updated as well: otherwise, the project will be built on the derivation of old plugins, and fail because the requested plugins are missing.
 
 This clearly prevents automatic upgrades of Maven: a manual effort must be made throughout nixpkgs by any maintainer wishing to push the upgrades.
 

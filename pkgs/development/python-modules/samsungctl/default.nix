@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "samsungctl";
   version = "0.7.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -29,6 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Remote control Samsung televisions via a TCP/IP connection";
+    mainProgram = "samsungctl";
     homepage = "https://github.com/Ape/samsungctl";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];

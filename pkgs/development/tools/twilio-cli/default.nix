@@ -1,15 +1,15 @@
-{ lib, stdenvNoCC, nodejs, fetchzip, testers }:
+{ lib, stdenvNoCC, nodejs-slim, fetchzip, testers }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "twilio-cli";
-  version = "5.12.0";
+  version = "5.19.4";
 
   src = fetchzip {
     url = "https://twilio-cli-prod.s3.amazonaws.com/twilio-v${finalAttrs.version}/twilio-v${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-K8SMUT2f8pgxCP5JGFyo/gLm60t0OeCt/1fYAw2HQX0=";
+    hash = "sha256-dSM3B9C+H0sTnxCkElDXKWUxNtctW1Jgh/nRFWEXc2A=";
   };
 
-  buildInputs = [ nodejs ];
+  buildInputs = [ nodejs-slim ];
 
   installPhase = ''
     runHook preInstall
@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     changelog = "https://github.com/twilio/twilio-cli/blob/${finalAttrs.version}/CHANGES.md";
     license = licenses.mit;
     maintainers = with maintainers; [ marsam ];
-    platforms = nodejs.meta.platforms;
+    platforms = nodejs-slim.meta.platforms;
     mainProgram = "twilio";
   };
 })

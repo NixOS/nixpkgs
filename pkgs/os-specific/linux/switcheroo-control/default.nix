@@ -6,11 +6,10 @@
 , libgudev
 , pkg-config
 , glib
-, python3
-, gobject-introspection
+, python3Packages
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "switcheroo-control";
   version = "2.6";
 
@@ -19,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "hadess";
-    repo = pname;
+    repo = "switcheroo-control";
     rev = version;
     hash = "sha256-F+5HhMxM8pcnAGmVBARKWNCL0rIEzHW/jsGHHqYZJug=";
   };
@@ -28,18 +27,16 @@ python3.pkgs.buildPythonApplication rec {
     ninja
     meson
     pkg-config
-
-    # needed for glib-compile-resources
-    glib
   ];
 
   buildInputs = [
     systemd
     libgudev
+    glib
   ];
 
   propagatedBuildInputs = [
-    python3.pkgs.pygobject3
+    python3Packages.pygobject3
   ];
 
   mesonFlags = [
@@ -49,6 +46,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "D-Bus service to check the availability of dual-GPU";
+    mainProgram = "switcherooctl";
     homepage = "https://gitlab.freedesktop.org/hadess/switcheroo-control/";
     changelog = "https://gitlab.freedesktop.org/hadess/switcheroo-control/-/blob/${version}/NEWS";
     license = licenses.gpl3Plus;

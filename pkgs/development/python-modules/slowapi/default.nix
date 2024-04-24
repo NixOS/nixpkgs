@@ -5,41 +5,31 @@
 , limits
 , mock
 , hiro
+, httpx
 , poetry-core
 , pytestCheckHook
 , pythonAtLeast
 , pythonOlder
-, pythonRelaxDepsHook
 , redis
 , starlette
 }:
 
 buildPythonPackage rec {
   pname = "slowapi";
-  version = "0.1.8";
-  format = "pyproject";
+  version = "0.1.9";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "laurentS";
-    repo = pname;
+    repo = "slowapi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xgHz8b95SXf/GwzKPfQ/RHbUNJfCx6+7a2HB8+6hjsw=";
+    hash = "sha256-R/Mr+Qv22AN7HCDGmAUVh4efU8z4gMIyhC0AuKmxgdE=";
   };
-
-  pythonRelaxDeps = [
-    "limits"
-  ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '["redis^3.4.1"]' '["redis"]'
-  '';
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -50,6 +40,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     fastapi
     hiro
+    httpx
     mock
     pytestCheckHook
     starlette

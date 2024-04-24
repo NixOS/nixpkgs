@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, dbus-glib, libxml2, sqlite, telepathy-glib, python3, pkg-config
 , dconf, makeWrapper, intltool, libxslt, gobject-introspection, dbus
-, fetchpatch
+, fetchpatch, darwin
 }:
 
 stdenv.mkDerivation rec {
@@ -26,6 +26,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     dbus-glib libxml2 sqlite telepathy-glib
     dbus
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.AppKit
+    darwin.apple_sdk.frameworks.Foundation
   ];
 
   configureFlags = [ "--enable-call" ];
@@ -39,8 +42,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Logger service for Telepathy framework";
     homepage = "https://telepathy.freedesktop.org/components/telepathy-logger/";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ ];
-    platforms = platforms.gnu ++ platforms.linux; # Arbitrary choice
+    platforms = platforms.unix;
   };
 }

@@ -58,6 +58,37 @@ in {
       '');
 
       specialisation = rec {
+        brokenInitInterface.configuration.config.system.extraSystemBuilderCmds = ''
+          echo "systemd 0" > $out/init-interface-version
+        '';
+
+        modifiedSystemConf.configuration.systemd.extraConfig = ''
+          # Hello world!
+        '';
+
+        addedMount.configuration.virtualisation.fileSystems."/test" = {
+          device = "tmpfs";
+          fsType = "tmpfs";
+        };
+
+        addedMountOptsModified.configuration = {
+          imports = [ addedMount.configuration ];
+          virtualisation.fileSystems."/test".options = [ "x-test" ];
+        };
+
+        addedMountDevModified.configuration = {
+          imports = [ addedMountOptsModified.configuration ];
+          virtualisation.fileSystems."/test".device = lib.mkForce "ramfs";
+        };
+
+        storeMountModified.configuration = {
+          virtualisation.fileSystems."/".device = lib.mkForce "auto";
+        };
+
+        swap.configuration.swapDevices = lib.mkVMOverride [
+          { device = "/swapfile"; size = 1; }
+        ];
+
         simpleService.configuration = {
           systemd.services.test = {
             wantedBy = [ "multi-user.target" ];
@@ -450,12 +481,25 @@ in {
           ];
         };
 
-        mountModified.configuration = {
+        mountOptionsModified.configuration = {
           systemd.mounts = [
             {
               description = "Testmount";
               what = "tmpfs";
               type = "tmpfs";
+              where = "/testmount";
+              options = "size=10M";
+              wantedBy = [ "local-fs.target" ];
+            }
+          ];
+        };
+
+        mountModified.configuration = {
+          systemd.mounts = [
+            {
+              description = "Testmount";
+              what = "ramfs";
+              type = "ramfs";
               where = "/testmount";
               options = "size=10M";
               wantedBy = [ "local-fs.target" ];
@@ -630,6 +674,97 @@ in {
 
         # test and dry-activate actions are tested further down below
 
+        # invalid action fails the script
+        switch_to_specialisation("${machine}", "", action="broken-action", fail=True)
+        # no action fails the script
+        assert "Usage:" in machine.fail("${machine}/bin/switch-to-configuration 2>&1")
+
+    with subtest("init interface version"):
+        # Do not try to switch to an invalid init interface version
+        assert "incompatible" in switch_to_specialisation("${machine}", "brokenInitInterface", fail=True)
+
+    with subtest("systemd restarts"):
+        # systemd is restarted when its system.conf changes
+        out = switch_to_specialisation("${machine}", "modifiedSystemConf")
+        assert_contains(out, "restarting systemd...")
+
+    with subtest("continuing from an aborted switch"):
+        # An aborted switch will write into a file what it tried to start
+        # and a second switch should continue from this
+        machine.succeed("echo dbus-broker.service > /run/nixos/start-list")
+        out = switch_to_specialisation("${machine}", "modifiedSystemConf")
+        assert_contains(out, "starting the following units: dbus-broker.service\n")
+
+    with subtest("fstab mounts"):
+        switch_to_specialisation("${machine}", "")
+        # add a mountpoint
+        out = switch_to_specialisation("${machine}", "addedMount")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_contains(out, "the following new units were started: test.mount\n")
+        # modify the mountpoint's options
+        out = switch_to_specialisation("${machine}", "addedMountOptsModified")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_contains(out, "reloading the following units: test.mount\n")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        # modify the device
+        out = switch_to_specialisation("${machine}", "addedMountDevModified")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_contains(out, "\nrestarting the following units: test.mount\n")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        # modify both
+        out = switch_to_specialisation("${machine}", "addedMount")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_contains(out, "\nrestarting the following units: test.mount\n")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        # remove the mount
+        out = switch_to_specialisation("${machine}", "")
+        assert_contains(out, "stopping the following units: test.mount\n")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_contains(out, "reloading the following units: dbus-broker.service\n")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        # change something about the / mount
+        out = switch_to_specialisation("${machine}", "storeMountModified")
+        assert_lacks(out, "stopping the following units:")
+        assert_contains(out, "NOT restarting the following changed units: -.mount")
+        assert_contains(out, "reloading the following units: dbus-broker.service\n")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+
+    with subtest("swaps"):
+        switch_to_specialisation("${machine}", "")
+        # add a swap
+        out = switch_to_specialisation("${machine}", "swap")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_contains(out, "reloading the following units: dbus-broker.service\n")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_contains(out, "the following new units were started: swapfile.swap")
+        # remove it
+        out = switch_to_specialisation("${machine}", "")
+        assert_contains(out, "stopping swap device: /swapfile")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_contains(out, "reloading the following units: dbus-broker.service\n")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+
     with subtest("services"):
         switch_to_specialisation("${machine}", "")
         # Nothing happens when nothing is changed
@@ -646,7 +781,7 @@ in {
         assert_lacks(out, "installing dummy bootloader")  # test does not install a bootloader
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
-        assert_contains(out, "reloading the following units: dbus.service\n")  # huh
+        assert_contains(out, "reloading the following units: dbus-broker.service\n")  # huh
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_contains(out, "the following new units were started: test.service\n")
@@ -723,7 +858,7 @@ in {
         assert_lacks(out, "installing dummy bootloader")  # test does not install a bootloader
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
-        assert_contains(out, "reloading the following units: dbus.service\n")  # huh
+        assert_contains(out, "reloading the following units: dbus-broker.service\n")  # huh
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_contains(out, "the following new units were started: test.service\n")
@@ -1137,7 +1272,8 @@ in {
         switch_to_specialisation("${machine}", "mount")
         out = machine.succeed("mount | grep 'on /testmount'")
         assert_contains(out, "size=1024k")
-        out = switch_to_specialisation("${machine}", "mountModified")
+        # Changing options reloads the unit
+        out = switch_to_specialisation("${machine}", "mountOptionsModified")
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
         assert_contains(out, "reloading the following units: testmount.mount\n")
@@ -1147,6 +1283,17 @@ in {
         # It changed
         out = machine.succeed("mount | grep 'on /testmount'")
         assert_contains(out, "size=10240k")
+        # Changing anything but `Options=` restarts the unit
+        out = switch_to_specialisation("${machine}", "mountModified")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_contains(out, "\nrestarting the following units: testmount.mount\n")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        # It changed
+        out = machine.succeed("mount | grep 'on /testmount'")
+        assert_contains(out, "ramfs")
 
     with subtest("timers"):
         switch_to_specialisation("${machine}", "timer")

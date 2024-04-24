@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , directx-shader-compiler
 , libGLU
@@ -24,6 +25,12 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-bjjeTdbQDWTibSrIWhCnr6F0Ef17efLgWGQAAwezjUw=";
     fetchSubmodules = true;
+  };
+
+  patches = fetchpatch {
+    name = "replace-HLSL-ternary-operators.patch";
+    url = "https://github.com/RobertBeckebans/RBDOOM-3-BFG/commit/feffa4a4dd9a2a5f3c608f720cde41bea37797d3.patch";
+    hash = "sha256-aR1eoWZL3+ps7P7yFXFvGsMFxpUSBDiyBsja/ISin4I=";
   };
 
   postPatch = ''
@@ -74,6 +81,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/RobertBeckebans/RBDOOM-3-BFG";
     description = "Doom 3 BFG Edition with modern engine features";
+    mainProgram = "RBDoom3BFG";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ Zaechus ];
     platforms = platforms.unix;

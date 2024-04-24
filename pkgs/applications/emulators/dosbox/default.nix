@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , autoreconfHook
 , SDL
 , SDL_net
@@ -23,6 +24,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-wNE91+0u02O2jeYVR1eB6JHNWC6BYrXDZpE3UCIiJgo=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/joncampbell123/dosbox-x/commit/006d5727d36d1ec598e387f2f1a3c521e3673dcb.patch";
+      includes = [ "src/gui/render_templates_sai.h" ];
+      hash = "sha256-HSO29/LgZRKQ3HQBA0QF5henG8pCSoe1R2joYNPcUcE=";
+    })
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     copyDesktopItems
@@ -40,6 +49,9 @@ stdenv.mkDerivation rec {
     libGL
     libGLU
   ]);
+
+  # Tests for SDL_net.h for modem & IPX support, not automatically picked up due to being in SDL subdirectory
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL_net}/include/SDL";
 
   hardeningDisable = [ "format" ];
 

@@ -13,12 +13,12 @@ in
   ];
 
   options.virtualisation.vmware.guest = {
-    enable = mkEnableOption (lib.mdDoc "VMWare Guest Support");
+    enable = mkEnableOption "VMWare Guest Support";
     headless = mkOption {
       type = types.bool;
       default = !config.services.xserver.enable;
       defaultText = "!config.services.xserver.enable";
-      description = lib.mdDoc "Whether to disable X11-related features.";
+      description = "Whether to disable X11-related features.";
     };
   };
 

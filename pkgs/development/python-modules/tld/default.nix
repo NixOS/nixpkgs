@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, factory_boy
+, factory-boy
 , faker
 , fetchPypi
 , pytestCheckHook
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    factory_boy
+    factory-boy
     faker
   ];
 
@@ -45,6 +45,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Extracts the top level domain (TLD) from the URL given";
+    mainProgram = "update-tld-names";
     homepage = "https://github.com/barseghyanartur/tld";
     changelog = "https://github.com/barseghyanartur/tld/blob/${version}/CHANGELOG.rst";
     # https://github.com/barseghyanartur/tld/blob/master/README.rst#license

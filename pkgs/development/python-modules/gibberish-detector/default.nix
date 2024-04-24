@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "gibberish-detector";
   version = "0.1.1";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchFromGitHub {
@@ -25,6 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module to detect gibberish strings";
+    mainProgram = "gibberish-detector";
     homepage = "https://github.com/domanchi/gibberish-detector";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

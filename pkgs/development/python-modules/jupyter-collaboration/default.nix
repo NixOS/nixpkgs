@@ -5,75 +5,81 @@
 , hatch-jupyter-builder
 , hatch-nodejs-version
 , hatchling
-, pythonRelaxDepsHook
+, jsonschema
 , jupyter-events
 , jupyter-server
 , jupyter-server-fileid
 , jupyter-ydoc
-, ypy-websocket
-, pytest-asyncio
+, jupyterlab
+, pycrdt-websocket
 , pytest-jupyter
 , pytestCheckHook
+, websockets
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-collaboration";
-  version = "1.0.1";
+  version = "2.0.11";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
-
-  format = "pyproject";
 
   src = fetchPypi {
     pname = "jupyter_collaboration";
     inherit version;
-    hash = "sha256-cf7BpF6WSoHQJQW0IXdpCAGTdkX9RNWZ4JovTHvcPho=";
+    hash = "sha256-K7HN5yzadY5Sb6Sfn/K/QCzu14AcDEGHq+TSHkLhgTY=";
   };
 
   postPatch = ''
     sed -i "/^timeout/d" pyproject.toml
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-jupyter-builder
     hatch-nodejs-version
     hatchling
-    pythonRelaxDepsHook
+    jupyterlab
   ];
 
-  pythonRelaxDeps = [
-    "ypy-websocket"
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
+    jsonschema
     jupyter-events
     jupyter-server
     jupyter-server-fileid
     jupyter-ydoc
-    ypy-websocket
+    pycrdt-websocket
   ];
-
-  pythonImportsCheck = [ "jupyter_collaboration" ];
 
   nativeCheckInputs = [
-    pytest-asyncio
     pytest-jupyter
     pytestCheckHook
+    websockets
   ];
 
-  pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
+  pythonImportsCheck = [
+    "jupyter_collaboration"
   ];
 
   preCheck = ''
     export HOME=$TEMP
   '';
 
-  meta = {
-    changelog = "https://github.com/jupyterlab/jupyter_collaboration/blob/v${version}/CHANGELOG.md";
+  pytestFlagsArray = [
+    "-Wignore::DeprecationWarning"
+  ];
+
+  disabledTests = [
+    # ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+    "test_dirty"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  meta = with lib; {
     description = "JupyterLab Extension enabling Real-Time Collaboration";
     homepage = "https://github.com/jupyterlab/jupyter_collaboration";
-    license = lib.licenses.bsd3;
-    maintainers = lib.teams.jupyter.members;
+    changelog = "https://github.com/jupyterlab/jupyter_collaboration/blob/v${version}/CHANGELOG.md";
+    license = licenses.bsd3;
+    maintainers = teams.jupyter.members;
   };
 }

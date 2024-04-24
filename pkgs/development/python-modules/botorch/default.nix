@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , gpytorch
-, linear_operator
+, linear-operator
 , multipledispatch
 , pyro-ppl
 , setuptools
@@ -11,21 +11,23 @@
 , torch
 , scipy
 , pytestCheckHook
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "botorch";
-  version = "0.9.2";
+  version = "0.10.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-8obS+qMQwepKUxPkMbufR/SaacYekl6FA6t6XW6llA4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-IaFtQWrgOhVHDOiPQ4oG8l+Q0igWamYVWEReGccbVoI=";
   };
 
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     setuptools
     setuptools-scm
     wheel
@@ -33,14 +35,16 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     gpytorch
-    linear_operator
+    linear-operator
     multipledispatch
     pyro-ppl
     scipy
     torch
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  pythonRelaxDeps = [
+    "linear-operator"
+  ];
 
   checkInputs = [
     pytestCheckHook

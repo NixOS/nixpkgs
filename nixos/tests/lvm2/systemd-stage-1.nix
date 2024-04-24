@@ -1,4 +1,4 @@
-{ kernelPackages ? null, flavour }: let
+{ kernelPackages ? null, flavour, mkXfsFlags ? "" }: let
   preparationCode = {
     raid = ''
       machine.succeed("vgcreate test_vg /dev/vdb /dev/vdc")
@@ -54,9 +54,9 @@
     '';
   }.${flavour};
 
-in import ../make-test-python.nix ({ pkgs, ... }: {
+in import ../make-test-python.nix ({ pkgs, lib, ... }: {
   name = "lvm2-${flavour}-systemd-stage-1";
-  meta.maintainers = with pkgs.lib.maintainers; [ das_j ];
+  meta.maintainers = lib.teams.helsinki-systems.members;
 
   nodes.machine = { pkgs, lib, ... }: {
     imports = [ extraConfig ];
@@ -71,7 +71,7 @@ in import ../make-test-python.nix ({ pkgs, ... }: {
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
 
-    environment.systemPackages = with pkgs; [ e2fsprogs ]; # for mkfs.ext4
+    environment.systemPackages = with pkgs; [ xfsprogs ];
     boot = {
       initrd.systemd = {
         enable = true;
@@ -88,7 +88,7 @@ in import ../make-test-python.nix ({ pkgs, ... }: {
     machine.wait_for_unit("multi-user.target")
     # Create a VG for the root
     ${preparationCode}
-    machine.succeed("mkfs.ext4 /dev/test_vg/test_lv")
+    machine.succeed("mkfs.xfs ${mkXfsFlags} /dev/test_vg/test_lv")
     machine.succeed("mkdir -p /mnt && mount /dev/test_vg/test_lv /mnt && echo hello > /mnt/test && umount /mnt")
 
     # Boot from LVM

@@ -1,0 +1,307 @@
+--- a/src/main.rs	2024-01-17 23:44:21.346253718 +0100
++++ b/src/main.rs	2024-01-17 23:48:54.536921610 +0100
+@@ -15,7 +15,6 @@
+ use crate::utils::*;
+ use crate::vpn::*;
+ use std::fs;
+-use std::path::Path;
+ use std::process::Command;
+ 
+ #[tokio::main]
+@@ -44,16 +43,6 @@
+             eprintln!("Error creating folder: {}", err);
+         }
+     }
+-    
+-    // Create HTB config file if not existing
+-    let htb_config = format!("{}/.htb.conf", home);
+-
+-    let file = Path::new(&htb_config);
+-    if !file.exists() {
+-        let lines = ["# HTB configuration file.\n\n", "# Enable/Disable shell prompt change\n", "prompt_change=true\n"];
+-        fs::write(&htb_config, lines.join(""))
+-            .expect("Failed to create HTB config file");
+-    }
+ 
+     // Initialize Xorg in WSL for secret-tool popup window
+     if is_wsl() && is_display_zero() {
+@@ -104,13 +93,6 @@
+                 let _ = play_machine(&args[2]).await;
+             }
+         }
+-        "-p" => {
+-            if args.len() < 3 || (args[2] != "true" && args[2] != "false") {
+-                println!("Usage: {} -p <true|false>", args[0]);
+-            } else {
+-                prompt_setting(&args[2]);
+-            }
+-        }
+         "-r" => {
+             reset_machine().await;
+         }
+--- a/src/manage.rs	2024-01-17 22:50:22.450368210 +0100
++++ b/src/manage.rs	2024-01-17 23:49:21.143071918 +0100
+@@ -77,19 +77,14 @@
+     if machine_info.ip.is_empty() { //Starting Point case because SP IP address is assigned only after spawn of the machine
+         machine_info.ip = active_machine.ip;
+     }
+-    let mut user_info = PlayingUser::get_playinguser(&appkey).await;
+ 
+     // SP Machines change IP address when reset, so need to ask to write /etc/hosts
+     if machine_info.sp_flag {
+         let _ = add_hosts(&machine_info);
+     }
+-
+-    change_shell(&mut machine_info, &mut user_info);
+ }
+ 
+ pub async fn stop_machine() {
+-    let htb_path = format!("{}/.htb.conf", env::var("HOME").unwrap());
+-    let htbconfig = HTBConfig::get_current_config(&htb_path);
+     let appkey = get_appkey();
+     let active_machine = ActiveMachine::get_active(&appkey).await;
+ 
+@@ -126,31 +121,9 @@
+ 
+         // Await the result of the blocking task
+         blocking_task.await.expect("Blocking task failed");
+-
+-        if htbconfig.promptchange { //If the prompt is set to change during the playing, when you stop the machine, it should restore the original shell
+-            restore_shell();
+-        }
+     }
+ }
+ 
+-pub fn prompt_setting(option: &str) {
+-    let home = env::var("HOME").unwrap_or_default();
+-    let htb_config = format!("{}/.htb.conf", home);
+-
+-    let content = fs::read_to_string(&htb_config)
+-        .expect("Failed to read HTB config file");
+-
+-    let re = Regex::new(r"prompt_change=\w+")
+-        .expect("Failed to create regular expression");
+-
+-    let new_content = re.replace(&content, format!("prompt_change={}", option));
+-
+-    fs::write(&htb_config, new_content.to_string())
+-        .expect("Failed to write updated content to HTB config file");
+-
+-    println!("Prompt setting updated to: {}", option);
+-}
+-
+ pub async fn update_machines() -> io::Result<()> {
+ 
+     println!("Retrieving updated data from Hack The Box... Gimme some time hackerzzz...");
+--- a/src/play.rs	2024-01-17 22:50:25.709380651 +0100
++++ b/src/play.rs	2024-01-17 23:39:08.715395211 +0100
+@@ -4,7 +4,6 @@
+ use crate::types::*;
+ use crate::utils::*;
+ use crate::vpn::*;
+-use std::env;
+ use std::io::{self,Write};
+ use reqwest::Client;
+ use serde::Serialize;
+@@ -29,8 +28,6 @@
+ pub async fn play_machine(machine_name: &str) -> Result<(), Box<dyn std::error::Error>> {
+     let appkey = get_appkey();
+     let appkey_clone = appkey.clone(); // Clone the necessary data to avoid borrowed value error
+-    let htb_path = format!("{}/.htb.conf", env::var("HOME").unwrap());
+-    let htbconfig = HTBConfig::get_current_config(&htb_path);
+     
+     let mut machine_info = PlayingMachine::get_machine(machine_name, &appkey).await;
+ 
+@@ -103,7 +100,7 @@
+     
+     machine_info.ip = get_ip(&appkey_clone).await; // For Starting Point machines and VIP and VIP+ VPNs, if I call the play API two times on the same machine, the old IP address associated to the machine can still live for some seconds providing a wrong IP related to the new same machine. For this reason, it is better to compute always the IP address (no problems for free VPNs because they associate always the same IP address to the same machine)
+ 
+-    let mut user_info = PlayingUser::get_playinguser(&appkey_clone).await; // Before this it is needed to run HTB VPN to take the Attacker IP address
++    let user_info = PlayingUser::get_playinguser(&appkey_clone).await; // Before this it is needed to run HTB VPN to take the Attacker IP address
+ 
+     let _ = print_banner();
+ 
+@@ -115,10 +112,6 @@
+         println!("{}Hey! You have already found the Root Flag! Keep it up!{}", BGREEN, RESET);
+     }
+ 
+-    if htbconfig.promptchange { //If the prompt is set to change during the playing...
+-        change_shell(&mut machine_info, &mut user_info);
+-    }
+-
+     // Writing /etc/hosts
+     let _ = add_hosts(&machine_info);
+ 
+--- a/src/types.rs	2024-01-17 23:40:14.341769452 +0100
++++ b/src/types.rs	2024-01-17 23:43:14.159871196 +0100
+@@ -2,7 +2,6 @@
+ use crate::colors::*;
+ use crate::utils::get_interface_ip;
+ use core::time::Duration;
+-use std::fs;
+ use std::process;
+ use std::thread::sleep;
+ 
+@@ -485,37 +484,4 @@
+             ip: userip,
+         }
+     }
+-}
+-
+-pub struct HTBConfig {
+-    pub promptchange: bool,
+-}
+-
+-impl HTBConfig {
+-
+-    pub fn get_current_config(htb_config: &str) -> Self {
+-        HTBConfig {
+-            promptchange: Self::get_prompt_change(htb_config),
+-        }
+-    }
+-
+-    fn get_prompt_change(htb_config: &str) -> bool {
+-        let prompt_change = fs::read_to_string(htb_config).expect("Failed to read htconfig.");
+-
+-        let change_prompt = prompt_change.lines()
+-            .find(|line| line.starts_with("prompt_change="))
+-            .map(|line| line.split('=').nth(1).unwrap_or_default())
+-            .unwrap_or_default();
+-
+-        // Convert the change_prompt string to a bool
+-        
+-        match change_prompt {
+-            "true" => true,
+-            "false" => false,
+-            _ => {
+-                // Handle other cases if needed, e.g., return a default value
+-                false
+-            }
+-        }
+-    }
+ }
+\ No newline at end of file
+--- a/src/utils.rs	2024-01-17 23:29:49.215407440 +0100
++++ b/src/utils.rs	2024-01-17 23:46:20.681009209 +0100
+@@ -5,7 +5,6 @@
+ use crate::types::*;
+ use crate::vpn::*;
+ use pnet::datalink;
+-use regex::Regex;
+ use reqwest::Client;
+ use std::fs;
+ use std::net::IpAddr;
+@@ -13,96 +12,6 @@
+ use tokio::io::{AsyncWriteExt, BufWriter};
+ use tokio::sync::mpsc;
+ 
+-pub fn change_shell(machine_info: &mut PlayingMachine, user_info: &mut PlayingUser) {
+-    let result = std::env::var("SHELL").unwrap_or_default();
+-    let mut file_bak = String::new();
+-    let mut file = String::new();
+-    let mut prompt = String::new();
+-    let mut prompt_field = "";
+-
+-    if result.contains("bash") {
+-        file_bak = format!("{}/.bashrc.htb.bak", std::env::var("HOME").unwrap_or_default());
+-        file = format!("{}/.bashrc", std::env::var("HOME").unwrap_or_default());
+-        prompt = format!(
+-            "PS1=\"\\e[32m\\]┌──[Target:{}🚀🌐IP:{}🔥\\e[34m\\]Attacker:{}📡IP:{}\\e[32m\\]🏅Prize:{} points]\\n└──╼[👾]\\\\[\\e[36m\\]\\$(pwd) $ \\[\\e[0m\\]\"",
+-            machine_info.machine.name,
+-            machine_info.ip,
+-            user_info.user.name,
+-            get_interface_ip("tun0").expect("Error on getting tun0 IP address"),
+-            machine_info.machine.points
+-        );
+-        prompt_field = "PS1=.*";
+-    } else if result.contains("fish") {
+-        file_bak = format!("{}/.config/fish/functions/fish_prompt.fish.htb.bak", std::env::var("HOME").unwrap_or_default());
+-        file = format!("{}/.config/fish/functions/fish_prompt.fish", std::env::var("HOME").unwrap_or_default());
+-        prompt = format!(
+-            r#"function fish_prompt
+-    set_color 00ff00
+-    echo -n "┌──[Target:{}🚀🌐IP:{}"
+-    set_color ff00d7
+-    echo -n "🔥Attacker:{}📡IP:{}"
+-    set_color 00ff00
+-    echo "🏅Prize:{} points]"
+-    set_color 00ff00
+-    echo -n "└──╼[👾]"
+-    set_color 00ffff
+-    echo (pwd) '$' (set_color normal)
+-end"#,
+-            machine_info.machine.name,
+-            machine_info.ip,
+-            user_info.user.name,
+-            get_interface_ip("tun0").expect("Error on getting tun0 IP address"),
+-            machine_info.machine.points
+-        );
+-    } else if result.contains("zsh") {
+-        file_bak = format!("{}/.zshrc.htb.bak", std::env::var("HOME").unwrap_or_default());
+-        file = format!("{}/.zshrc", std::env::var("HOME").unwrap_or_default());
+-        prompt = format!(
+-            "PROMPT=\"%F{{46}}┌──[Target:{}🚀🌐IP:{}🔥%F{{201}}Attacker:{}📡IP:{}%F{{46}}🏅Prize:{} points]\"$'\\n'\"└──╼[👾]%F{{44}}%~ $%f \"" ,
+-            machine_info.machine.name,
+-            machine_info.ip,
+-            user_info.user.name,
+-            get_interface_ip("tun0").expect("Error on getting tun0 IP address"),
+-            machine_info.machine.points
+-        );
+-        prompt_field = "PROMPT=.*";
+-    }
+-
+-    if !std::path::Path::new(&file_bak).exists() {
+-        std::fs::copy(&file, &file_bak).unwrap_or_default();
+-    }
+-    
+-    if result.contains("bash") || result.contains("zsh") {
+-        let file_content = std::fs::read_to_string(&file).unwrap_or_default();
+-        let regex = Regex::new(prompt_field).unwrap();
+-        let new_file_content = regex.replace_all(&file_content, prompt);
+-        std::fs::write(&file, new_file_content.as_ref()).unwrap_or_default();
+-    } else if result.contains("fish") {
+-        std::fs::write(&file, &prompt).unwrap_or_default();
+-    }
+-}
+-
+-pub fn restore_shell() {
+-    let result = env::var("SHELL").unwrap_or_default();
+-    let mut file_bak = String::new();
+-    let mut file = String::new();
+-
+-    if result.contains("bash") {
+-        file_bak = format!("{}/.bashrc.htb.bak", env::var("HOME").unwrap());
+-        file = format!("{}/.bashrc", env::var("HOME").unwrap());
+-    } else if result.contains("fish") {
+-        file_bak = format!("{}/.config/fish/functions/fish_prompt.fish.htb.bak", env::var("HOME").unwrap());
+-        file = format!("{}/.config/fish/functions/fish_prompt.fish", env::var("HOME").unwrap());
+-    } else if result.contains("zsh") {
+-        file_bak = format!("{}/.zshrc.htb.bak", env::var("HOME").unwrap());
+-        file = format!("{}/.zshrc", env::var("HOME").unwrap());
+-    }
+-    if fs::metadata(&file).is_ok() && std::path::Path::new(&file_bak).exists() {
+-        //Restore the prompt file from the backup
+-        fs::copy(&file_bak, &file).expect("Failed to copy file");
+-    }
+-}
+-
+ pub fn display_target_info(machine_info: &PlayingMachine, user_info: &PlayingUser) {
+     println!();
+     println!("{}Our secret agent gathered some information about the target:{}", BYELLOW, RESET);
+@@ -184,7 +93,7 @@
+     println!("Play Hack The Box machines directly on your system.");
+     println!();
+     std::thread::sleep(std::time::Duration::from_secs(2)); //Showing the description for some secs before showing the help message
+-    println!("{} [-h] [-a] [-f] [-k] <set|reset|delete> [-m] <machine-name> [-l] <free|retired|starting> [-p] <true|false> [-r] [-s] [-u] [-v] <vpn-name>", env::args().next().unwrap());
++    println!("{} [-h] [-a] [-f] [-k] <set|reset|delete> [-m] <machine-name> [-l] <free|retired|starting> [-r] [-s] [-u] [-v] <vpn-name>", env::args().next().unwrap());
+     println!();
+     println!("Options:");
+     println!("-a                            Print information about the current active machine.");
+@@ -193,7 +102,6 @@
+     println!("-k <set|reset|delete>         Set, reset or delete the Hack The Box App Key.");
+     println!("-m <machine-name>             Specify the machine name to play.");
+     println!("-l <free|retired|starting>    List free, retired or starting point machines.");
+-    println!("-p <true|false>               Set if the shell prompt should be changed.");
+     println!("-r                            Reset the playing machine.");
+     println!("-s                            Stop the playing machine.");
+     println!("-u                            Update free machines in the Red Team menu.");

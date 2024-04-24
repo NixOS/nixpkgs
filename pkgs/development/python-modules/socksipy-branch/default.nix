@@ -4,11 +4,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "SocksiPy-branch";
+  pname = "socksipy-branch";
   version = "1.01";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "SocksiPy-branch";
+    inherit version;
     sha256 = "01l41v4g7fy9fzvinmjxy6zcbhgqaif8dhdqm4w90fwcw9h51a8p";
   };
 

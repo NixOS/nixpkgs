@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation {
   pname = "uclient";
-  version = "unstable-2022-02-24";
+  version = "unstable-2023-04-13";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/uclient.git";
-    rev = "644d3c7e13c6a64bf5cb628137ee5bd4dada4b74";
-    sha256 = "0vy4whs64699whp92d1zl7a8kh16yrfywqq0yp2y809l9z19sw22";
+    rev = "007d945467499f43656b141171d31f5643b83a6c";
+    hash = "sha256-A47dyVc2MtOL6aImZ0b3SMWH2vzjfAXzRAOF4nfH6S0=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

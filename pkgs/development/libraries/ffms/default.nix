@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/FFMS/ffms2/";
     description = "FFmpeg based source library for easy frame accurate access";
+    mainProgram = "ffmsindex";
     license = licenses.mit;
     maintainers = with maintainers; [ tadeokondrak ];
     platforms = platforms.unix;

@@ -48,8 +48,8 @@ in stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    ln -s $out/lib/libblis.so.3 $out/lib/libblas.so.3
-    ln -s $out/lib/libblis.so.3 $out/lib/libcblas.so.3
+    ln -s $out/lib/libblis.so.4 $out/lib/libblas.so.3
+    ln -s $out/lib/libblis.so.4 $out/lib/libcblas.so.3
     ln -s $out/lib/libblas.so.3 $out/lib/libblas.so
     ln -s $out/lib/libcblas.so.3 $out/lib/libcblas.so
   '';
@@ -58,7 +58,7 @@ in stdenv.mkDerivation rec {
     description = "BLAS-compatible linear algebra library";
     homepage = "https://github.com/flame/blis";
     license = licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with maintainers; [ stephen-huan ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -22,6 +22,7 @@
 , speechd
 , fontconfig
 , udev
+, withDebug ? false
 , withPlatform ? "linuxbsd"
 , withTarget ? "editor"
 , withPrecision ? "single"
@@ -42,15 +43,15 @@ let
     else "${k}=${builtins.toJSON v}");
 in
 stdenv.mkDerivation rec {
-  pname = "godot";
-  version = "4.1.1";
-  commitHash = "bd6af8e0ea69167dd0627f3bd54f9105bda0f8b5";
+  pname = "godot4";
+  version = "4.2.2-stable";
+  commitHash = "15073afe3856abd2aa1622492fe50026c7d63dc1";
 
   src = fetchFromGitHub {
     owner = "godotengine";
     repo = "godot";
     rev = commitHash;
-    hash = "sha256-0CErsMTrBC/zYcabAtjYn8BWAZ1HxgozKdgiqdsn3q8=";
+    hash = "sha256-anJgPEeHIW2qIALMfPduBVgbYYyz1PWCmPsZZxS9oHI=";
   };
 
   nativeBuildInputs = [
@@ -115,6 +116,7 @@ stdenv.mkDerivation rec {
     platform = withPlatform;
     target = withTarget;
     precision = withPrecision; # Floating-point precision level
+    debug_symbols = withDebug;
 
     # Options from 'platform/linuxbsd/detect.py'
     pulseaudio = withPulseaudio; # Use PulseAudio
@@ -124,6 +126,8 @@ stdenv.mkDerivation rec {
     udev = withUdev; # Use udev for gamepad connection callbacks
     touch = withTouch; # Enable touch events
   };
+
+  dontStrip = withDebug;
 
   outputs = [ "out" "man" ];
 
@@ -142,12 +146,12 @@ stdenv.mkDerivation rec {
     cp icon.png "$out/share/icons/godot.png"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://godotengine.org";
     description = "Free and Open Source 2D and 3D game engine";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ twey shiryel ];
+    maintainers = with lib.maintainers; [ shiryel superherointj ];
     mainProgram = "godot4";
   };
 }

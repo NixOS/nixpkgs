@@ -1,53 +1,58 @@
 { lib
 , stdenv
-, callPackage
 , buildPythonPackage
-, fetchPypi
+, callPackage
 , cargo
+, certifi
 , cffi
-, hypothesis
-, iso8601
+, cryptography-vectors ? (callPackage ./vectors.nix { })
+, fetchPypi
+, fetchpatch2
 , isPyPy
 , libiconv
 , libxcrypt
 , openssl
 , pkg-config
 , pretend
-, py
+, pytest-xdist
 , pytestCheckHook
-, pytest-subtests
 , pythonOlder
-, pytz
 , rustc
 , rustPlatform
 , Security
 , setuptoolsRustBuildHook
 }:
 
-let
-  cryptography-vectors = callPackage ./vectors.nix { };
-in
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "41.0.2"; # Also update the hash in vectors.nix
-  format = "pyproject";
+  version = "42.0.5"; # Also update the hash in vectors.nix
+  pyproject = true;
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fSML+FYWTeFk7LYVzMFMf8beaQbd1bSR86+Q01FMklw=";
+    hash = "sha256-b+B+7JXf1HfrlTCu9b6tNP7IGbOq9sW9bSBWXaYHv+E=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-hkuoICa/suMXlr4u95JbMlFzi27lJqJRmWnX3nZfzKU=";
+    hash = "sha256-Pw3ftpcDMfZr/w6US5fnnyPVsFSB9+BuIKazDocYjTU=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # skip overflowing tests on 32 bit; https://github.com/pyca/cryptography/pull/10366
+      url = "https://github.com/pyca/cryptography/commit/d741901dddd731895346636c0d3556c6fa51fbe6.patch";
+      hash = "sha256-eC+MZg5O8Ia5CbjRE4y+JhaFs3Q5c62QtPHr3x9T+zw=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--benchmark-disable" ""
+      --replace-fail "--benchmark-disable" ""
   '';
 
   cargoRoot = "src/rust";
@@ -62,23 +67,25 @@ buildPythonPackage rec {
     cffi
   ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security libiconv ]
-    ++ lib.optionals (pythonOlder "3.9") [ libxcrypt ];
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
+    libiconv
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    libxcrypt
+  ];
 
   propagatedBuildInputs = lib.optionals (!isPyPy) [
     cffi
   ];
 
   nativeCheckInputs = [
+    certifi
     cryptography-vectors
-    hypothesis
-    iso8601
     pretend
-    py
     pytestCheckHook
-    pytest-subtests
-    pytz
+    pytest-xdist
   ];
 
   pytestFlagsArray = [
@@ -88,10 +95,6 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # save compute time by not running benchmarks
     "tests/bench"
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    # aarch64-darwin forbids W+X memory, but this tests depends on it:
-    # * https://cffi.readthedocs.io/en/latest/using.html#callbacks
-    "tests/hazmat/backends/test_openssl_memleak.py"
   ];
 
   meta = with lib; {

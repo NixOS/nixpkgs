@@ -1,24 +1,31 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , pytestCheckHook
 , pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "beartype";
-  version = "0.14.0";
+  version = "0.17.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VG5ujc3aHW2fkG6k6xUYqgHJxfWkQOSVkXstr1PL1Zg=";
+    hash = "sha256-6RHhrn3kvM0VdF92Q2CdhzL2TeXC+4ROicu+0cWo1JU=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    typing-extensions
   ];
 
   pythonImportsCheck = [

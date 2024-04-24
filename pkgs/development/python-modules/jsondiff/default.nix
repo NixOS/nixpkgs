@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "jsondiff";
   version = "2.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -21,6 +22,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Diff JSON and JSON-like structures in Python";
+    mainProgram = "jdiff";
     homepage = "https://github.com/ZoomerAnalytics/jsondiff";
     license = lib.licenses.mit;
   };

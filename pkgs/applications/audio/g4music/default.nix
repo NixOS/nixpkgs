@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitLab
 , desktop-file-utils
+, gitUpdater
 , gobject-introspection
 , gst_all_1
 , gtk4
@@ -14,14 +15,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "g4music";
-  version = "3.2";
+  version = "3.5.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "neithern";
     repo = "g4music";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-BlHOYD4sOmJPNMzM5QA97Ah1N9tIat0Y6qxN6c5pmsw=";
+    hash = "sha256-4UM1CspevlDHpuyvSekMM73XyxVqpdUDtJ7im7hnxHY=";
   };
 
   nativeBuildInputs = [
@@ -44,8 +45,13 @@ stdenv.mkDerivation (finalAttrs: {
     gstreamer
   ]);
 
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
+
   meta = with lib; {
     description = "A beautiful, fast, fluent, light weight music player written in GTK4";
+    mainProgram = "g4music";
     homepage = "https://gitlab.gnome.org/neithern/g4music";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ magnouvean ];

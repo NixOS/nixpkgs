@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pg_net";
-  version = "0.7.2";
+  version = "0.8.0";
 
   buildInputs = [ curl postgresql ];
 
@@ -10,13 +10,15 @@ stdenv.mkDerivation rec {
     owner  = "supabase";
     repo   = pname;
     rev    = "refs/tags/v${version}";
-    hash   = "sha256-9Ki3fyinHTYrfckxAY0fCTlzJd9l+n7QRUV7mIWrqmc=";
+    hash   = "sha256-ZPsRPWV1G3lMM2mT+H139Wvgoy8QnmeUbzEnGeDJmZA=";
   };
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   installPhase = ''
     mkdir -p $out/{lib,share/postgresql/extension}
 
-    cp *.so      $out/lib
+    cp *${postgresql.dlSuffix} $out/lib
     cp sql/*.sql $out/share/postgresql/extension
     cp *.control $out/share/postgresql/extension
   '';
@@ -24,6 +26,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Async networking for Postgres";
     homepage    = "https://github.com/supabase/pg_net";
+    changelog   = "https://github.com/supabase/pg_net/releases/tag/v${version}";
     maintainers = with maintainers; [ thoughtpolice ];
     platforms   = postgresql.meta.platforms;
     license     = licenses.postgresql;

@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "python-louvain";
   version = "0.16";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -34,6 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/taynaud/python-louvain";
     description = "Louvain Community Detection";
+    mainProgram = "community";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };

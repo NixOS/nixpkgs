@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "bottombar";
-  version = "1.0";
+  version = "2.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "evalf";
     repo = "bottombar";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/3m34HcYmmEf92H3938dYV1Q6k44KaCb9TDx9nDNPnM=";
+    hash = "sha256-W+Cbcgb664nVT/nsFdDruT688JWG2NZnF5hDDezTgnw=";
   };
 
   nativeBuildInputs = [

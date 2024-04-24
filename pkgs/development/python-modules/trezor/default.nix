@@ -24,13 +24,14 @@
 
 buildPythonPackage rec {
   pname = "trezor";
-  version = "0.13.7";
+  version = "0.13.8";
+  format = "setuptools";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dodeWIYBfclPUbu0Efkn8QO9nj7L8HVNXkSjU4mBSeA=";
+    hash = "sha256-Y01O3fNWAyV8MhYY2FSMajWyc4Rle2XjsL261jWlfP8=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -79,6 +80,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library for communicating with Trezor Hardware Wallet";
+    mainProgram = "trezorctl";
     homepage = "https://github.com/trezor/trezor-firmware/tree/master/python";
     license = licenses.gpl3;
     maintainers = with maintainers; [ np prusnak mmahut ];

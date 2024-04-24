@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "sympy";
   version = "1.12";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -28,6 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python library for symbolic mathematics";
+    mainProgram = "isympy";
     homepage    = "https://www.sympy.org/";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ lovek323 ] ++ teams.sage.members;

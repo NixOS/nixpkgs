@@ -10,13 +10,13 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Installs flashrom and configures udev rules for programmers
         used by flashrom. Grants access to users in the "flashrom"
         group.
       '';
     };
-    package = mkPackageOptionMD pkgs "flashrom" { };
+    package = mkPackageOption pkgs "flashrom" { };
   };
 
   config = mkIf cfg.enable {

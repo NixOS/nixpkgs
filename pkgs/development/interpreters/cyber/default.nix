@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cyber";
-  version = "unstable-2023-08-11";
+  version = "unstable-2023-09-19";
 
   src = fetchFromGitHub {
     owner = "fubark";
     repo = "cyber";
-    rev = "242ba2573cbac2acecc8c06878a8d754dd7a8716";
-    hash = "sha256-jArkFdvWnHNouNGsTn8O2lbU7eZdLbPD0xEfkrFH5Aw=";
+    rev = "f95cd189cf090d26542a87b1d2ced461e75fa1a7";
+    hash = "sha256-ctEd8doXMKq3L9/T+jOcWqlBQN0pVhsu9DjBXsg/u/4=";
   };
 
   nativeBuildInputs = [
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A fast, efficient, and concurrent scripting language";
+    mainProgram = "cyber";
     homepage = "https://github.com/fubark/cyber";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

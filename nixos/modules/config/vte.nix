@@ -1,5 +1,3 @@
-# VTE
-
 { config, pkgs, lib, ... }:
 
 with lib;
@@ -9,7 +7,7 @@ let
   vteInitSnippet = ''
     # Show current working directory in VTE terminals window title.
     # Supports both bash and zsh, requires interactive shell.
-    . ${pkgs.vte}/etc/profile.d/vte.sh
+    . ${pkgs.vte.override { gtkVersion = null; }}/etc/profile.d/vte.sh
   '';
 
 in
@@ -25,7 +23,7 @@ in
     programs.bash.vteIntegration = mkOption {
       default = false;
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable Bash integration for VTE terminals.
         This allows it to preserve the current directory of the shell
         across terminals.
@@ -35,7 +33,7 @@ in
     programs.zsh.vteIntegration = mkOption {
       default = false;
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable Zsh integration for VTE terminals.
         This allows it to preserve the current directory of the shell
         across terminals.

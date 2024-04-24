@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , numpy
@@ -7,7 +6,7 @@
 , matplotlib
 , pyparsing
 , tables
-, cython
+, cython_0
 , python
 , sympy
 , meshio
@@ -22,6 +21,7 @@
 buildPythonPackage rec {
   pname = "sfepy";
   version = "2023.1";
+  format = "setuptools";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy
-    cython
+    cython_0
     scipy
     matplotlib
     pyparsing

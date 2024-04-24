@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , meson, pkg-config, ninja
-, wayland, wayland-scanner, wlroots, wlr-protocols, gtk3, glib
+, wayland, wayland-scanner, wlr-protocols, gtk3, glib
 }:
 
 stdenv.mkDerivation rec {
@@ -16,12 +16,14 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ meson pkg-config ninja glib wayland-scanner ];
-  buildInputs = [ wayland wlroots gtk3 ];
+  buildInputs = [ wayland gtk3 ];
 
   postUnpack = ''
     rmdir source/wlr-protocols
     ln -s ${wlr-protocols}/share/wlr-protocols source
   '';
+
+  patches = [ ./dont-need-wlroots.diff ];
 
   postPatch = ''
     substituteInPlace meson.build --replace "git = find_program('git')" "git = 'false'"
@@ -37,5 +39,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ lodi ];
+    mainProgram = "wl-gammactl";
   };
 }

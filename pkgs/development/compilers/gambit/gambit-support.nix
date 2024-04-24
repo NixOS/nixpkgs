@@ -13,16 +13,17 @@ rec {
         --replace "$(grep '^PACKAGE_VERSION=.*$' configure)" 'PACKAGE_VERSION="v${git-version}"' \
         --replace "$(grep '^PACKAGE_STRING=.*$' configure)" 'PACKAGE_STRING="Gambit v${git-version}"' ;
       substituteInPlace include/makefile.in \
-        --replace "echo > stamp.h;" "(echo '#define ___STAMP_VERSION \"${git-version}\"'; echo '#define ___STAMP_YMD ${toString stampYmd}'; echo '#define ___STAMP_HMS ${toString stampHms}';) > stamp.h;";
+        --replace "\$\$(\$(GIT) describe --tag --always | sed 's/-bootstrap\$\$//')" "v${git-version}" \
+        --replace "echo > stamp.h;" "(echo '#define ___STAMP_VERSION \"v${git-version}\"'; echo '#define ___STAMP_YMD ${toString stampYmd}'; echo '#define ___STAMP_HMS ${toString stampHms}';) > stamp.h;";
+      grep -i ' version=\|echo..#define ___STAMP_VERSION' include/makefile.in # XXX DEBUG -- REMOVE ME
     '';
     modules = true;
-    #extraOptions = [];
-    extraOptions = ["--enable-trust-c-tco" "CFLAGS=-foptimize-sibling-calls"];
+    extraOptions = ["CFLAGS=-foptimize-sibling-calls"];
   };
 
   unstable-params = stable-params // {
     stable = false;
-    extraOptions = ["--enable-trust-c-tco"]; # "CFLAGS=-foptimize-sibling-calls" not necessary in latest unstable
+    extraOptions = []; # "CFLAGS=-foptimize-sibling-calls" not necessary in latest unstable
   };
 
   export-gambopt = params : "export GAMBOPT=${params.buildRuntimeOptions} ;";

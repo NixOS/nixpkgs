@@ -20,5 +20,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/DomesticMoth/aaa";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ asciimoth ];
+    mainProgram = "aaa";
   };
 }

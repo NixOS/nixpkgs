@@ -18,5 +18,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/rbardini/resumed";
     license = licenses.mit;
     maintainers = with maintainers; [ ambroisie ];
+    mainProgram = "resumed";
   };
 }

@@ -12,7 +12,7 @@ buildGoModule rec {
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-xNM4qmpv+wcoiGrQ585N3VoKW6tio0cdHmUHRl2Pvio=";
+  vendorHash = "sha256-/qZB/GGEkoqRoNhEmZw9Q2lsUPZRg5/xVxWgdBZTMLk=";
 
   ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
 
@@ -22,5 +22,6 @@ buildGoModule rec {
     changelog = "https://github.com/charmbracelet/skate/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda penguwin ];
+    mainProgram = "skate";
   };
 }

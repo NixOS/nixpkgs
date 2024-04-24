@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "jaraco-itertools";
-  version = "6.2.1";
+  version = "6.4.1";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "jaraco.itertools";
     inherit version;
-    hash = "sha256-YJjts3xrgCPzeU1CWIoTv3WyygK0D/l5XIRry+DBtGw=";
+    hash = "sha256-MU/OVi67RepIIqmLvXsi5f6sfVEY28Gk8ess0Ea/+kc=";
   };
 
   pythonNamespaces = [ "jaraco" ];

@@ -24,10 +24,10 @@ buildGoModule rec {
     owner = "trezor";
     repo = "blockbook";
     rev = "v${version}";
-    sha256 = "1jb195chy3kbspmv9vyg7llw6kgykkmvz3znd97mxf24f4q622jv";
+    hash = "sha256-WwphMHFEuF5PavaPv+uc/k3DKT3P77Tr1WsOD1lJYck=";
   };
 
-  vendorSha256 = "1w9c0qzah2f9rbjdxqajwrfkia25cwbn30gidviaid3b7ddpd7r8";
+  vendorHash = "sha256-KJ92WztrtKjibvGBYRdnRag4XeZS4d7kyskJqD4GLPE=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -64,8 +64,9 @@ buildGoModule rec {
   meta = with lib; {
     description = "Trezor address/account balance backend";
     homepage = "https://github.com/trezor/blockbook";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ mmahut _1000101 ];
     platforms = platforms.unix;
+    mainProgram = "blockbook";
   };
 }

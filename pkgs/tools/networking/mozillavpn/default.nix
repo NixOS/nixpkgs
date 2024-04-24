@@ -16,6 +16,7 @@
 , qtnetworkauth
 , qtsvg
 , qttools
+, qtwayland
 , qtwebsockets
 , rustPlatform
 , rustc
@@ -26,13 +27,13 @@
 
 let
   pname = "mozillavpn";
-  version = "2.16.1";
+  version = "2.21.0";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-UMWBn3DoEU1fG7qh6F0GOhOqod+grPwp15wSSdP0eCo=";
+    hash = "sha256-XBvKSgMuWgMuV+is2G028UNQ4hID7tKiHFuMdPOZcsI=";
   };
   patches = [ ];
 
@@ -46,19 +47,19 @@ let
     inherit src patches;
     name = "${pname}-${version}-extension-bridge";
     preBuild = "cd extension/bridge";
-    hash = "sha256-1wYTRc+NehiHwAd/2CmsJNv/TV6wH5wXwNiUdjzEUIk=";
+    hash = "sha256-1BXlp9AC9oQo/UzCtgNWVv8Er2ERoDLKdlTYXLzodMQ=";
   };
   signatureDeps = rustPlatform.fetchCargoTarball {
     inherit src patches;
     name = "${pname}-${version}-signature";
     preBuild = "cd signature";
-    hash = "sha256-oaKkQWMYkAy1c2biVt+GyjHBeYb2XkuRvFrWQJJIdPw=";
+    hash = "sha256-GtkDkeFdPsLuTpZh5UqIhFMpzW3HMkbz7npryOQkkGw=";
   };
   qtgleanDeps = rustPlatform.fetchCargoTarball {
     inherit src patches;
     name = "${pname}-${version}-qtglean";
     preBuild = "cd qtglean";
-    hash = "sha256-cqfiOBS8xFC2BbYp6BJWK6NHIU0tILSgu4eo3Ik4YqY=";
+    hash = "sha256-HFmRcfxCcc83IPPIovbf3jNftp0olKQ6RzV8vPpCYAM=";
   };
 
 in
@@ -74,6 +75,7 @@ stdenv.mkDerivation {
     qtbase
     qtnetworkauth
     qtsvg
+    qtwayland
     qtwebsockets
   ];
   nativeBuildInputs = [
@@ -110,7 +112,7 @@ stdenv.mkDerivation {
   dontCargoSetupPostUnpack = true;
 
   postPatch = ''
-    substituteInPlace src/apps/vpn/cmake/linux.cmake \
+    substituteInPlace src/cmake/linux.cmake \
       --replace '/etc/xdg/autostart' "$out/etc/xdg/autostart" \
       --replace '/usr/share/dbus-1' "$out/share/dbus-1" \
       --replace '${"$"}{SYSTEMD_UNIT_DIR}' "$out/lib/systemd/system"
@@ -147,6 +149,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Client for the Mozilla VPN service";
+    mainProgram = "mozillavpn";
     homepage = "https://vpn.mozilla.org/";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ andersk ];

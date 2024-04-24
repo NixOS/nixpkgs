@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , enableMultilib
+, targetConfig
 }:
 
 let
@@ -196,6 +197,13 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
     mkdir -p "$out/''${targetConfig}/lib"
     mkdir -p "''${!outputLib}/''${targetConfig}/lib"
   '' +
+  # if cross-compiling, link from $lib/lib to $lib/${targetConfig}.
+  # since native-compiles have $lib/lib as a directory (not a
+  # symlink), this ensures that in every case we can assume that
+  # $lib/lib contains the .so files
+  lib.optionalString (with stdenv; targetPlatform.config != hostPlatform.config) ''
+    ln -Ts "''${!outputLib}/''${targetConfig}/lib" $lib/lib
+  '' +
   # Make `lib64` symlinks to `lib`.
   lib.optionalString (!enableMultilib && stdenv.hostPlatform.is64bit && !stdenv.hostPlatform.isMips64n32) ''
     ln -s lib "$out/''${targetConfig}/lib64"
@@ -219,6 +227,7 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
     moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.la"  "''${!outputLib}"
     moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.dylib" "''${!outputLib}"
     moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.dll.a" "''${!outputLib}"
+    moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.dll" "''${!outputLib}"
     moveToOutput "share/gcc-*/python" "''${!outputLib}"
 
     if [ -z "$enableShared" ]; then
@@ -233,6 +242,8 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
         moveToOutput "''${targetConfig+$targetConfig/}lib64/lib*.so*" "''${!outputLib}"
         moveToOutput "''${targetConfig+$targetConfig/}lib64/lib*.la"  "''${!outputLib}"
         moveToOutput "''${targetConfig+$targetConfig/}lib64/lib*.dylib" "''${!outputLib}"
+        moveToOutput "''${targetConfig+$targetConfig/}lib64/lib*.dll.a" "''${!outputLib}"
+        moveToOutput "''${targetConfig+$targetConfig/}lib64/lib*.dll" "''${!outputLib}"
 
         for i in "''${!outputLib}/''${targetConfig}"/lib64/*.{la,py}; do
             substituteInPlace "$i" --replace "$out" "''${!outputLib}"

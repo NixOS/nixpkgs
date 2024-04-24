@@ -7,15 +7,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "trust-dns";
-  version = "0.22.1";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
-    owner = "bluejekyll";
-    repo = "trust-dns";
+    owner = "hickory-dns";
+    repo = "hickory-dns";
     rev = "v${version}";
-    sha256 = "sha256-YjwzU/mYKiHL2xB/oczkP/4i5XYIvSNyqDLmmrRQPhM=";
+    hash = "sha256-szq21RuRmkhAfHlzhGQYpwjiIRkavFCPETOt+6TxhP4=";
   };
-  cargoHash = "sha256-uAmszVOlRttmn6b3Rv2Y5ZuP3qBIVjIFJ42BJro+K8s=";
+  cargoHash = "sha256-zGn5vHwsHgpkgOr30QiyScqnfXjH55LQIVtxoUUox64=";
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
@@ -29,5 +29,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ colinsane ];
     platforms = platforms.linux;
     license = with licenses; [ asl20 mit ];
+    mainProgram = "hickory-dns";
   };
 }

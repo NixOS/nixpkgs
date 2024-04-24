@@ -1,7 +1,9 @@
-{ stdenv, fetchFromGitHub, cmake, pkg-config
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config
 , qttools, packagekit }:
 
-stdenv.mkDerivation rec {
+let
+  isQt6 = lib.versions.major qttools.version == "6";
+in stdenv.mkDerivation rec {
   pname = "packagekit-qt";
   version = "1.1.1";
 
@@ -15,6 +17,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ packagekit ];
 
   nativeBuildInputs = [ cmake pkg-config qttools ];
+
+  cmakeFlags = [ (lib.cmakeBool "BUILD_WITH_QT6" isQt6) ];
 
   dontWrapQtApps = true;
 

@@ -2,6 +2,8 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, fetchpatch
+, pythonAtLeast
 , stdenv
 
 # build-system
@@ -20,15 +22,23 @@
 
 buildPythonPackage rec {
   pname = "joblib";
-  version = "1.3.1";
+  version = "1.3.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-H5N5Bt9lMpupgBPclpL+IqTF5KZIES3lAFCLGKIbQeM=";
+    hash = "sha256-kvhl5iHhd4TnlVCAttBCSJ47jilJScxExurDBPWXcrE=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "suppress-deprecation-warnings-with-python312.patch";
+      url = "https://github.com/joblib/joblib/commit/05caf0772d605799e5d2337018fd32ac829b37aa.patch";
+      hash = "sha256-bfqxCLFkCnuWMIkIbcjh+nCTv38A8jxvyCHeJPxoZwg=";
+    })
+  ];
 
   nativeBuildInputs = [
     setuptools
@@ -54,6 +64,10 @@ buildPythonPackage rec {
     "test_nested_parallel_warnings" # tests is flaky under load
   ] ++ lib.optionals stdenv.isDarwin [
     "test_dispatch_multiprocessing" # test_dispatch_multiprocessing is broken only on Darwin.
+  ] ++ lib.optionals (pythonAtLeast "3.12") [
+    # deprecation warnings with python3.12 https://github.com/joblib/joblib/issues/1478
+    "test_main_thread_renamed_no_warning"
+    "test_background_thread_parallelism"
   ];
 
   meta = with lib; {

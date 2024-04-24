@@ -29,9 +29,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    dbus-python
+    dbus-python.out # don't propagate dev output
     manimpango
-    pygobject3 # not listed in setup.py
+    pygobject3.out # not listed in setup.py, don't propagate dev output
     setproctitle
   ];
 
@@ -53,6 +53,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Modern emoji picker for Linux";
+    mainProgram = "emote";
     homepage = "https://github.com/tom-james-watson/emote";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ emilytrau SuperSandro2000 ];

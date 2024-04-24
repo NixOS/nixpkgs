@@ -20,30 +20,28 @@ for binname in $binfiles ; do
 
   output="$out/bin/$binname"
 
-  # look for existing binary from bin.core or bin.${pname}
-  for folder in $binfolders ; do
-    target="$folder"/bin/"$binname"
-    if [[ -f "$target" && -x "$target" ]] ; then
-      ln -s "$(realpath "$target")" "$output"
-      continue 2
-    fi
-  done
+  # look for existing binary from bin.*
+  target="$(PATH="$HOST_PATH" command -v "$binname" || :)"
+  if [[ -n "$target" && -x "$target" ]] ; then
+    ln -s "$(realpath "$target")" "$output"
+    continue
+  fi
 
   # look for scripts
   # the explicit list of extensions avoid non-scripts such as $binname.cmd, $binname.jar, $binname.pm
   # the order is relevant: $binname.sh is preferred to other $binname.*
-  if [[ -n "$scriptsFolder" ]] ; then
-    for script in "$scriptsFolder/$binname"{,.sh,.lua,.pl,.py,.rb,.sno,.tcl,.texlua,.tlu}; do
+  for folder in $scriptsFolder ; do
+    for script in "$folder/$binname"{,.sh,.lua,.pl,.py,.rb,.sno,.tcl,.texlua,.tlu}; do
       if [[ -f "$script" ]] ; then
         sed -f patch-scripts.sed \
           -e 's/^scriptname=`basename "\$0"`$/'"scriptname='$(basename "$binname")'/" \
           -e 's/^scriptname=`basename "\$0" .sh`$'"/scriptname='$(basename "$binname" .sh)'/" \
           "$script" > "$output"
         chmod +x "$output"
-        continue 2
+        continue 3
       fi
     done
-  fi
+  done
 
   echo "error: could not find source for 'bin/$binname'" >&2
   exit 1

@@ -22,11 +22,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "clightning";
-  version = "23.05.2";
+  version = "24.02.2";
 
   src = fetchurl {
     url = "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip";
-    sha256 = "sha256-Tj5ybVaxpk5wmOw85LkeU4pgM9NYl6SnmDG2gyXrTHw=";
+    sha256 = "sha256-KQS/4VmUxJkNpvPcxL5Up9f25leiPzvi2AiKuzRQmDo=";
   };
 
   # when building on darwin we need dawin.cctools to provide the correct libtool
@@ -50,11 +50,21 @@ stdenv.mkDerivation rec {
     substituteInPlace external/libwally-core/configure.ac --replace gsed sed
   '';
 
-  configureFlags = [ "--disable-developer" "--disable-valgrind" ];
+  configureFlags = [ "--disable-valgrind" ];
 
   makeFlags = [ "VERSION=v${version}" ];
 
   enableParallelBuilding = true;
+
+  # workaround for build issue, happens only x86_64-darwin, not aarch64-darwin
+  # ccan/ccan/fdpass/fdpass.c:16:8: error: variable length array folded to constant array as an extension [-Werror,-Wgnu-folding-constant]
+  #                 char buf[CMSG_SPACE(sizeof(fd))];
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) "-Wno-error=gnu-folding-constant";
+
+  # The `clnrest` plugin requires a Python environment to run
+  postInstall = ''
+    rm -r $out/libexec/c-lightning/plugins/clnrest
+  '';
 
   meta = with lib; {
     description = "A Bitcoin Lightning Network implementation in C";

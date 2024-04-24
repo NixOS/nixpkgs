@@ -12,31 +12,27 @@
 , lz4
 , attr
 , udev
-, valgrind
 , nixosTests
 , fuse3
 , cargo
 , rustc
-, coreutils
 , rustPlatform
 , makeWrapper
+, writeScript
+, python3
 , fuseSupport ? false
 }:
-let
-  rev = "cfa816bf3f823a3bedfedd8e214ea929c5c755fe";
-in stdenv.mkDerivation {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  version = "unstable-2023-06-28";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
-    inherit rev;
-    hash = "sha256-XgXUwyZV5N8buYTuiu1Y1ZU3uHXjZ/OZ1kbZ9d6Rt5I=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-+KqTiIp9dIJWG2KvgvPwXC7p754XfgvKHjvwjCdbvCs=";
   };
-
-  # errors on fsck_err function. Maybe miss-detection?
-  NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
 
   nativeBuildInputs = [
     pkg-config
@@ -69,29 +65,51 @@ in stdenv.mkDerivation {
     udev
   ] ++ lib.optional fuseSupport fuse3;
 
+  # FIXME: Try enabling this once the default linux kernel is at least 6.7
   doCheck = false; # needs bcachefs module loaded on builder
   checkFlags = [ "BCACHEFS_TEST_USE_VALGRIND=no" ];
-  nativeCheckInputs = [ valgrind ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-    "VERSION=${lib.strings.substring 0 7 rev}"
+    "VERSION=${finalAttrs.version}"
     "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
+    "BCACHEFS_FUSE=${toString fuseSupport}"
   ];
 
-  preCheck = lib.optionalString fuseSupport ''
+  preCheck = lib.optionalString (!fuseSupport) ''
     rm tests/test_fuse.py
   '';
 
-  passthru.tests = {
-    smoke-test = nixosTests.bcachefs;
-    inherit (nixosTests.installer) bcachefsSimple bcachefsEncrypted bcachefsMulti;
-  };
+  # Tries to install to the 'systemd-minimal' and 'udev' nix installation paths
+  installFlags = [
+    "PKGCONFIG_SERVICEDIR=$(out)/lib/systemd/system"
+    "PKGCONFIG_UDEVDIR=$(out)/lib/udev"
+  ];
 
-  postFixup = ''
-    wrapProgram $out/bin/mount.bcachefs \
-      --prefix PATH : ${lib.makeBinPath [ coreutils ]}
+  postInstall = ''
+    substituteInPlace $out/libexec/bcachefsck_all \
+      --replace "/usr/bin/python3" "${python3}/bin/python3"
   '';
+
+  passthru = {
+    tests = {
+      smoke-test = nixosTests.bcachefs;
+      inherit (nixosTests.installer) bcachefsSimple bcachefsEncrypted bcachefsMulti;
+    };
+
+    updateScript = writeScript "update-bcachefs-tools-and-cargo-lock.sh" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl jq common-updater-scripts
+      res="$(curl ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
+        -sL "https://api.github.com/repos/${finalAttrs.src.owner}/${finalAttrs.src.repo}/tags?per_page=1")"
+
+      version="$(echo $res | jq '.[0].name | split("v") | .[1]' --raw-output)"
+      update-source-version ${finalAttrs.pname} "$version" --ignore-same-hash
+
+      curl "https://raw.githubusercontent.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}/v$version/rust-src/Cargo.lock" > \
+        "$(git rev-parse --show-toplevel)/pkgs/tools/filesystems/bcachefs-tools/Cargo.lock"
+    '';
+  };
 
   enableParallelBuilding = true;
 
@@ -102,4 +120,4 @@ in stdenv.mkDerivation {
     maintainers = with maintainers; [ davidak Madouura ];
     platforms = platforms.linux;
   };
-}
+})

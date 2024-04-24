@@ -28,6 +28,7 @@ buildNpmPackage rec {
   meta = {
     changelog = "https://github.com/FlamingTempura/bibtex-tidy/blob/${src.rev}/CHANGELOG.md";
     description = "Cleaner and Formatter for BibTeX files";
+    mainProgram = "bibtex-tidy";
     homepage = "https://github.com/FlamingTempura/bibtex-tidy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bertof ];

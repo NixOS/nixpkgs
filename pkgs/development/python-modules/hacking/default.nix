@@ -10,11 +10,12 @@
 
 buildPythonPackage rec {
   pname = "hacking";
-  version = "5.0.0";
+  version = "6.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qzWyCK8/FHpvlZUnMxw4gK5BrCHMzra/1oqE9OtW4CY=";
+    hash = "sha256-3lBqMSQDThi046acld5JjDRgvLxJwWQ9MXjRW8barBQ=";
   };
 
   postPatch = ''

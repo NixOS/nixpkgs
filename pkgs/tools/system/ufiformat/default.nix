@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.amarshall ];
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
+    mainProgram = "ufiformat";
   };
 }

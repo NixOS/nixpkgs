@@ -2,8 +2,11 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
+, setuptools
 , autoreconfHook
 , pkg-config
+, mpiCheckPhaseHook
 , gfortran
 , mpi
 , blas
@@ -32,16 +35,22 @@ assert !lapack.isILP64;
 
 buildPythonPackage rec {
   pname = "meep";
-  version = "1.25.0";
+  version = "1.28.0";
 
   src = fetchFromGitHub {
     owner = "NanoComp";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-4rIz2RXLSWzZbRuv8d4nidOa0ULYc4QHIdaYrGu1WkI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-o/Xrd/Gn1RsbB+ZfggGH6/ugdsGtfTe2RgaHdpY5AyE=";
   };
 
   format = "other";
+
+  # https://github.com/NanoComp/meep/issues/2819
+  postPatch = lib.optionalString (!pythonOlder "3.12") ''
+    substituteInPlace configure.ac doc/docs/setup.py python/visualization.py \
+      --replace-fail "distutils" "setuptools._distutils"
+  '';
 
   # MPI is needed in nativeBuildInputs too, otherwise MPI libs will be missing
   # at runtime
@@ -75,6 +84,9 @@ buildPythonPackage rec {
     cython
     autograd
     mpi4py
+  ]
+  ++ lib.optionals (!pythonOlder "3.12") [
+      setuptools # used in python/visualization.py
   ];
 
   propagatedUserEnvPkgs = [ mpi ];
@@ -108,15 +120,11 @@ buildPythonPackage rec {
   errors can be caught.
   */
   doCheck = true;
+  nativeCheckInputs = [ mpiCheckPhaseHook openssh ];
   checkPhase = ''
-    export PATH=$PATH:${openssh}/bin
-    export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+    runHook preCheck
 
-    export OMP_NUM_THREADS=1
-
-    # Fix to make mpich run in a sandbox
-    export HYDRA_IFACE=lo
-    export OMPI_MCA_rmaps_base_oversubscribe=1
+    export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
 
     # Generate a python test script
     cat > test.py << EOF
@@ -139,6 +147,8 @@ buildPythonPackage rec {
     EOF
 
     ${mpi}/bin/mpiexec -np 2 python3 test.py
+
+    runHook postCheck
   '';
 
   meta = with lib; {

@@ -14,7 +14,7 @@ buildGoModule rec {
     hash = "sha256-KMVD7uH3Yg9ThnwKKzo6jom0ctFywt2vu7kNdfjiMCs=";
   };
 
-  vendorSha256 = "sha256-j6qXUQ/Tu3VNQL5xBOHloRn5DH3KG/znCLi1s8RIoL8=";
+  vendorHash = "sha256-j6qXUQ/Tu3VNQL5xBOHloRn5DH3KG/znCLi1s8RIoL8=";
 
   subPackages = [ "cmd/sloth" ];
 
@@ -24,5 +24,6 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nrhtr ];
     platforms = lib.platforms.unix;
+    mainProgram = "sloth";
   };
 }

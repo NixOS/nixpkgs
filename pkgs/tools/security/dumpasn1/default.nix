@@ -28,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Display and debug ASN.1 data";
     homepage = "https://github.com/katexochen/dumpasn1";
     license = licenses.bsd2;
+    mainProgram = "dumpasn1";
     maintainers = with maintainers; [ katexochen ];
     platforms = platforms.linux ++ platforms.darwin;
   };

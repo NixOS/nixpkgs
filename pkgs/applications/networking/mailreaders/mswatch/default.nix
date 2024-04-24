@@ -8,7 +8,7 @@
 , glib
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mswatch";
   # Stable release won't compile successfully
   version = "unstable-2018-11-21";
@@ -35,4 +35,4 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     maintainers = with maintainers; [ doronbehar ];
   };
-}
+})

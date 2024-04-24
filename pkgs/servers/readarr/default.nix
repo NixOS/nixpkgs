@@ -8,13 +8,13 @@ let
     x86_64-darwin = "x64";
   }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   hash = {
-    x64-linux_hash = "sha256-46BfIsJEgtZMKQdiCqSFdM2whaYRwRLycv0pmY2InDk=";
-    arm64-linux_hash = "sha256-zTDqbQz966RYV3FSBxmtN9JMe0j0AA21GCz4f0+NnHw=";
-    x64-osx_hash = "sha256-EKy8vOvCHCcC5PheIdKyr5tWZ18Q+XeKh3mCrqcG7oA=";
+    x64-linux_hash = "sha256-heduuPx0lnbkB1c4tgbDO9wsGnyAzTPyW0ZEvYFwjd0=";
+    arm64-linux_hash = "sha256-vfy0pVIacnf0lW1VwUolbE/P+aBB9uQsm3enhGkjgXg=";
+    x64-osx_hash = "sha256-JW+9PRW1Wu+wu+QPh7INXkq87oRSuoOqNEqj0P2Stto=";
   }."${arch}-${os}_hash";
 in stdenv.mkDerivation rec {
   pname = "readarr";
-  version = "0.2.4.1999";
+  version = "0.3.23.2506";
 
   src = fetchurl {
     url = "https://github.com/Readarr/Readarr/releases/download/v${version}/Readarr.develop.${version}.${os}-core-${arch}.tar.gz";
@@ -46,6 +46,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://readarr.com";
     license = licenses.gpl3;
     maintainers = [ maintainers.jocelynthode ];
+    mainProgram = "Readarr";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
   };

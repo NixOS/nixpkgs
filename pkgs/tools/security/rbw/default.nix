@@ -6,6 +6,7 @@
 , pkg-config
 , installShellFiles
 , darwin
+, bash
 
   # rbw-fzf
 , withFzf ? false
@@ -24,22 +25,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rbw";
-  version = "1.8.3";
+  version = "1.10.0";
 
   src = fetchzip {
     url = "https://git.tozt.net/rbw/snapshot/rbw-${version}.tar.gz";
-    sha256 = "sha256-dC/x+ihH1POIFN/8pbk967wATXKU4YVBGI0QCo8d+SY=";
+    hash = "sha256-uJ1QLEaab/Vb5GiAmbwjve3Y/3SM2XbNTRTvl2vPDYc=";
   };
 
-  cargoHash = "sha256-nI1Pf7gREbAk+JVF3Gn2j8OqprexCQ5fVvECtq2aBPM=";
+  cargoHash = "sha256-tDgkANbUmNLe3us+05gD9IS0f+RTQBXTGvuz2cr2zYY=";
 
   nativeBuildInputs = [
     installShellFiles
   ] ++ lib.optionals stdenv.isLinux [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.AppKit
+  buildInputs = [ bash ] # for git-credential-rbw
+  ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.Security
+    darwin.apple_sdk_11_0.frameworks.AppKit
   ];
 
   preConfigure = lib.optionalString stdenv.isLinux ''

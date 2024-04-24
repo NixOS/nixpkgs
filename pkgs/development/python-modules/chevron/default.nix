@@ -7,6 +7,7 @@
 buildPythonPackage {
   pname = "chevron";
   version = "0.13.1";
+  format = "setuptools";
 
   # No tests available in the PyPI tarball
   src = fetchFromGitHub {
@@ -23,6 +24,7 @@ buildPythonPackage {
   meta = with lib; {
     homepage = "https://github.com/noahmorrison/chevron";
     description = "A python implementation of the mustache templating language";
+    mainProgram = "chevron";
     license = licenses.mit;
     maintainers = with maintainers; [ dhkl ];
   };

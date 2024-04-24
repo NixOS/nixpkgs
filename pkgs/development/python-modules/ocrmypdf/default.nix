@@ -9,6 +9,7 @@
 , jbig2enc
 , packaging
 , pdfminer-six
+, pillow-heif
 , pikepdf
 , pillow
 , pluggy
@@ -18,23 +19,21 @@
 , pythonOlder
 , rich
 , reportlab
-, setuptools
 , setuptools-scm
 , substituteAll
 , tesseract
 , tqdm
-, typing-extensions
 , unpaper
 , installShellFiles
 }:
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "14.4.0";
+  version = "16.2.0";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ocrmypdf";
@@ -46,49 +45,46 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-i1ZUBKR8dJXZkALUFwkzYcjtZ5Li66DfD2fupCGRQC4=";
+    hash = "sha256-sqhuQ+no6UymxbVtDtWiYQK8kKpO1y37NxLDmRT1LEQ=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   patches = [
+    ./use-pillow-heif.patch
     (substituteAll {
       src = ./paths.patch;
-      gs = "${lib.getBin ghostscript}/bin/gs";
-      jbig2 = "${lib.getBin jbig2enc}/bin/jbig2";
-      pngquant = "${lib.getBin pngquant}/bin/pngquant";
-      tesseract = "${lib.getBin tesseract}/bin/tesseract";
-      unpaper = "${lib.getBin unpaper}/bin/unpaper";
+      gs = lib.getExe ghostscript;
+      jbig2 = lib.getExe jbig2enc;
+      pngquant = lib.getExe pngquant;
+      tesseract = lib.getExe tesseract;
+      unpaper = lib.getExe unpaper;
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
+  build-system = [
     setuptools-scm
+  ];
+
+  nativeBuildInputs = [
     installShellFiles
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     deprecation
     img2pdf
     packaging
     pdfminer-six
+    pillow-heif
     pikepdf
     pillow
     pluggy
-    reportlab
     rich
-    tqdm
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    typing-extensions
   ];
 
   nativeCheckInputs = [
     hypothesis
     pytest-xdist
     pytestCheckHook
+    reportlab
   ];
 
   pythonImportsCheck = [
@@ -107,5 +103,6 @@ buildPythonPackage rec {
     license = with licenses; [ mpl20 mit ];
     maintainers = with maintainers; [ kiwi dotlambda ];
     changelog = "https://github.com/ocrmypdf/OCRmyPDF/blob/${src.rev}/docs/release_notes.rst";
+    mainProgram = "ocrmypdf";
   };
 }

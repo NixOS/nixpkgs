@@ -95,9 +95,10 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Cross-platform Developer GUI for Redis";
+    mainProgram = "resp";
     homepage = "https://resp.app/";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -26,13 +26,13 @@ let
     else throw "unsupported platform";
 in stdenv.mkDerivation (finalAttrs: {
   pname = "pixelorama";
-  version = "0.11.1";
+  version = "0.11.4";
 
   src = fetchFromGitHub {
     owner = "Orama-Interactive";
     repo = "Pixelorama";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-+gPkuVzQ86MzHQ0AjnPDdyk2p7eIxtggq+KJ43KVbk8=";
+    sha256 = "sha256-VEQjZ9kDqXz1hoT4PrsBtzoi1TYWyN+YcPMyf9qJMRE=";
   };
 
   nativeBuildInputs = [
@@ -90,5 +90,6 @@ in stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit;
     platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ felschr ];
+    mainProgram = "pixelorama";
   };
 })

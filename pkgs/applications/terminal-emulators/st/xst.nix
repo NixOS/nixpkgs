@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/gnotclub/xst";
     description = "Simple terminal fork that can load config from Xresources";
+    mainProgram = "xst";
     license = licenses.mit;
     maintainers = [ maintainers.vyp ];
     platforms = platforms.linux;

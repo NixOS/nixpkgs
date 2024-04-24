@@ -4,21 +4,23 @@
 , rustPlatform
 , pkg-config
 , openssl
+, CoreServices
 , Security
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "twitch-tui";
-  version = "2.4.1";
+  version = "2.6.6";
 
   src = fetchFromGitHub {
     owner = "Xithrius";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-+dKS9lp5M8vh0V4VGyWAozozdsyCPpCZR4CQK5s51Ds=";
+    hash = "sha256-71VpLTPOqSEosLt3noiWhsFPpIp7n3S3BHhIzWYGwkI=";
   };
 
-  cargoHash = "sha256-CzrOsLUTfZ2uEIj/AHFmdfZniwlQ6fIkL2pbBHF8YkU=";
+  cargoHash = "sha256-2SWYKqZfIN+Ghryuoh77eDiM7cqJcLihdWpEhOGpLZg=";
 
   nativeBuildInputs = [
     pkg-config
@@ -27,7 +29,9 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
+    CoreServices
     Security
+    SystemConfiguration
   ];
 
   meta = with lib; {
@@ -36,5 +40,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/Xithrius/twitch-tui/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = [ maintainers.taha ];
+    mainProgram = "twt";
   };
 }

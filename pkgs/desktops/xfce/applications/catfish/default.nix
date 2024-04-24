@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    python3Packages.distutils_extra
+    python3Packages.distutils-extra
     file
     which
     intltool
@@ -64,11 +64,18 @@ python3Packages.buildPythonApplication rec {
   # Disable check because there is no test in the source distribution
   doCheck = false;
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   passthru.updateScript = gitUpdater { rev-prefix = "${pname}-"; };
 
   meta = with lib; {
     homepage = "https://docs.xfce.org/apps/catfish/start";
     description = "Handy file search tool";
+    mainProgram = "catfish";
     longDescription = ''
       Catfish is a handy file searching tool. The interface is
       intentionally lightweight and simple, using only GTK 3.

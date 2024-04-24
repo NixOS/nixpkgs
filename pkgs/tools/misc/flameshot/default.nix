@@ -7,6 +7,7 @@
 , qtsvg
 , nix-update-script
 , fetchpatch
+, kguiaddons
 }:
 
 mkDerivation rec {
@@ -33,8 +34,12 @@ mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+  cmakeFlags = [
+    (lib.cmakeBool "USE_WAYLAND_CLIPBOARD" true)
+  ];
+
   nativeBuildInputs = [ cmake qttools qtsvg ];
-  buildInputs = [ qtbase ];
+  buildInputs = [ qtbase kguiaddons ];
 
   meta = with lib; {
     description = "Powerful yet simple to use screenshot software";

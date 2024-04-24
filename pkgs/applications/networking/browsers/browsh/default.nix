@@ -38,6 +38,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A fully-modern text-based browser, rendering to TTY and browsers";
+    mainProgram = "browsh";
     homepage = "https://www.brow.sh/";
     maintainers = with maintainers; [ kalbasit siraben ];
     license = lib.licenses.lgpl21;

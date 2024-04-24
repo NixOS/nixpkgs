@@ -27,7 +27,7 @@ with lib;
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable Tracker miners, indexing services for Tracker
           search engine and metadata storage system.
         '';

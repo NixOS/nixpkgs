@@ -22,7 +22,7 @@
 , tensorboard
 , config
 , cudaSupport ? config.cudaSupport
-, cudaPackages ? {}
+, cudaPackagesGoogle
 , zlib
 , python
 , keras-applications
@@ -43,14 +43,11 @@ assert ! (stdenv.isDarwin && cudaSupport);
 
 let
   packages = import ./binary-hashes.nix;
-  inherit (cudaPackages) cudatoolkit cudnn;
+  inherit (cudaPackagesGoogle) cudatoolkit cudnn;
 in buildPythonPackage {
   pname = "tensorflow" + lib.optionalString cudaSupport "-gpu";
   inherit (packages) version;
   format = "wheel";
-
-  # Python 3.11 still unsupported
-  disabled = pythonAtLeast "3.11";
 
   src = let
     pyVerNoDot = lib.strings.stringAsChars (x: lib.optionalString (x != ".") x) python.pythonVersion;
@@ -149,17 +146,28 @@ in buildPythonPackage {
       rrPathArr=(
         "$out/${python.sitePackages}/tensorflow/"
         "$out/${python.sitePackages}/tensorflow/core/kernels"
+        "$out/${python.sitePackages}/tensorflow/compiler/mlir/stablehlo/"
         "$out/${python.sitePackages}/tensorflow/compiler/tf2tensorrt/"
         "$out/${python.sitePackages}/tensorflow/compiler/tf2xla/ops/"
+        "$out/${python.sitePackages}/tensorflow/include/external/ml_dtypes/"
         "$out/${python.sitePackages}/tensorflow/lite/experimental/microfrontend/python/ops/"
+        "$out/${python.sitePackages}/tensorflow/lite/python/analyzer_wrapper/"
         "$out/${python.sitePackages}/tensorflow/lite/python/interpreter_wrapper/"
+        "$out/${python.sitePackages}/tensorflow/lite/python/metrics/"
         "$out/${python.sitePackages}/tensorflow/lite/python/optimize/"
         "$out/${python.sitePackages}/tensorflow/python/"
-        "$out/${python.sitePackages}/tensorflow/python/framework/"
         "$out/${python.sitePackages}/tensorflow/python/autograph/impl/testing"
+        "$out/${python.sitePackages}/tensorflow/python/client"
         "$out/${python.sitePackages}/tensorflow/python/data/experimental/service"
         "$out/${python.sitePackages}/tensorflow/python/framework"
+        "$out/${python.sitePackages}/tensorflow/python/grappler"
+        "$out/${python.sitePackages}/tensorflow/python/lib/core"
+        "$out/${python.sitePackages}/tensorflow/python/lib/io"
+        "$out/${python.sitePackages}/tensorflow/python/platform"
         "$out/${python.sitePackages}/tensorflow/python/profiler/internal"
+        "$out/${python.sitePackages}/tensorflow/python/saved_model"
+        "$out/${python.sitePackages}/tensorflow/python/util"
+        "$out/${python.sitePackages}/tensorflow/tsl/python/lib/core"
         "${rpath}"
       )
 
@@ -192,7 +200,7 @@ in buildPythonPackage {
   ];
 
   passthru = {
-    inherit cudaPackages;
+    cudaPackages = cudaPackagesGoogle;
   };
 
   meta = with lib; {

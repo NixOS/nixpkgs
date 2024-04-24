@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "avro3k";
   version = "1.7.7-SNAPSHOT";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchPypi {
@@ -20,6 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A serialization and RPC framework";
+    mainProgram = "avro";
     homepage = "https://pypi.python.org/pypi/avro3k/";
   };
 }

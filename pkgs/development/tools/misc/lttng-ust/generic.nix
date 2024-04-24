@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
+  hardeningDisable = [ "trivialautovarinit" ];
+
   configureFlags = [ "--disable-examples" ];
 
   propagatedBuildInputs = [ liburcu ];
@@ -39,6 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "LTTng Userspace Tracer libraries";
+    mainProgram = "lttng-gen-tp";
     homepage = "https://lttng.org/";
     license = with licenses; [ lgpl21Only gpl2Only mit ];
     platforms = platforms.linux;

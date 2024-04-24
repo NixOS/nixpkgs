@@ -28,27 +28,22 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether to enable the OpenSMTPD server.";
+        description = "Whether to enable the OpenSMTPD server.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.opensmtpd;
-        defaultText = literalExpression "pkgs.opensmtpd";
-        description = lib.mdDoc "The OpenSMTPD package to use.";
-      };
+      package = mkPackageOption pkgs "opensmtpd" { };
 
       setSendmail = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Whether to set the system sendmail to OpenSMTPD's.";
+        description = "Whether to set the system sendmail to OpenSMTPD's.";
       };
 
       extraServerArgs = mkOption {
         type = types.listOf types.str;
         default = [];
         example = [ "-v" "-P mta" ];
-        description = lib.mdDoc ''
+        description = ''
           Extra command line arguments provided when the smtpd process
           is started.
         '';
@@ -60,7 +55,7 @@ in {
           listen on lo
           accept for any deliver to lmtp localhost:24
         '';
-        description = lib.mdDoc ''
+        description = ''
           The contents of the smtpd.conf configuration file. See the
           OpenSMTPD documentation for syntax information.
         '';
@@ -69,7 +64,7 @@ in {
       procPackages = mkOption {
         type = types.listOf types.package;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           Packages to search for filters, tables, queues, and schedulers.
 
           Add OpenSMTPD-extras here if you want to use the filters, etc. from

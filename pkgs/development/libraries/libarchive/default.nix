@@ -23,23 +23,33 @@
 , cmake
 , nix
 , samba
-, buildPackages
 }:
 
-let
-  autoreconfHook = buildPackages.autoreconfHook269;
-in
 assert xarSupport -> libxml2 != null;
-(stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libarchive";
-  version = "3.6.2";
+  version = "3.7.2";
 
   src = fetchFromGitHub {
     owner = "libarchive";
     repo = "libarchive";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-wQbA6vlXH8pnpY7LJLkjrRFEBpcaPR1SqxnK71UVwxg=";
+    hash = "sha256-p2JgJ/rvqaQ6yyXSh+ehScUH565ud5bQncl+lOnsWfc=";
   };
+
+  patches = [
+    # Pull fix for test failure on 32-bit systems:
+    (fetchpatch {
+      name = "32-bit-tests-fix.patch";
+      url = "https://github.com/libarchive/libarchive/commit/3bd918d92f8c34ba12de9c6604d96f9e262a59fc.patch";
+      hash = "sha256-RM3xFM6S2DkM5DJ0kAba8eLzEXuY5/7AaU06maHJ6rM=";
+    })
+    (fetchpatch {
+      name = "fix-suspicious-commit-from-known-bad-actor.patch";
+      url = "https://github.com/libarchive/libarchive/commit/6110e9c82d8ba830c3440f36b990483ceaaea52c.patch";
+      hash = "sha256-/j6rJ0xWhtXU0YCu1LOokxxNppy5Of6Q0XyO4U6la7M=";
+    })
+  ];
 
   outputs = [ "out" "lib" "dev" ];
 
@@ -54,6 +64,10 @@ assert xarSupport -> libxml2 != null;
       # access-time-related tests flakey on some systems
       "cpio/test/test_option_a.c"
       "cpio/test/test_option_t.c"
+    ] ++ lib.optionals (stdenv.isAarch64 && stdenv.isLinux) [
+      # only on some aarch64-linux systems?
+      "cpio/test/test_basic.c"
+      "cpio/test/test_format_newc.c"
     ];
     removeTest = testPath: ''
       substituteInPlace Makefile.am --replace "${testPath}" ""
@@ -119,16 +133,4 @@ assert xarSupport -> libxml2 != null;
   passthru.tests = {
     inherit cmake nix samba;
   };
-})).overrideAttrs(previousAttrs:
-  assert previousAttrs.version == "3.6.2";
-  lib.optionalAttrs stdenv.hostPlatform.isStatic {
-    patches = [
-      # fixes static linking; upstream in releases after 3.6.2
-      # https://github.com/libarchive/libarchive/pull/1825 merged upstream
-      (fetchpatch {
-        name = "001-only-add-iconv-to-pc-file-if-needed.patch";
-        url = "https://github.com/libarchive/libarchive/commit/1f35c466aaa9444335a1b854b0b7223b0d2346c2.patch";
-        hash = "sha256-lb+zwWSH6/MLUIROvu9I/hUjSbb2jOWO755WC/r+lbY=";
-      })
-    ];
-  })
+})

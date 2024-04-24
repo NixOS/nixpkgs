@@ -14,24 +14,26 @@
 , pyproject-metadata
 , pytest-subprocess
 , pytestCheckHook
+, setuptools
 , tomli
+, virtualenv
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "scikit-build-core";
-  version = "0.4.8";
-  format = "pyproject";
+  version = "0.8.2";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "scikit_build_core";
     inherit version;
-    hash = "sha256-n6wcrBo4uhFoGQt72Y9irs8GzUbbcYXsjCeyfg2krUs=";
+    hash = "sha256-UOwkuVaMmqbicjPe6yl4kyvHmFYhKzBXXL+kBJZVxDY=";
   };
 
-  postPatch = ''
+  postPatch = lib.optionalString (pythonOlder "3.11") ''
     substituteInPlace pyproject.toml \
-      --replace 'minversion = "7.2"' "" \
-      --replace '"error",' '"error", "ignore::DeprecationWarning", "ignore::UserWarning",'
+      --replace '"error",' '"error", "ignore::UserWarning",'
   '';
 
   nativeBuildInputs = [
@@ -62,6 +64,9 @@ buildPythonPackage rec {
     ninja
     pytest-subprocess
     pytestCheckHook
+    setuptools
+    virtualenv
+    wheel
   ] ++ passthru.optional-dependencies.pyproject;
 
   disabledTestPaths = [
@@ -72,6 +77,8 @@ buildPythonPackage rec {
     "tests/test_pyproject_pep660.py"
     "tests/test_setuptools_pep517.py"
     "tests/test_setuptools_pep518.py"
+    # store permissions issue in Nix:
+    "tests/test_editable.py"
   ];
 
   pythonImportsCheck = [

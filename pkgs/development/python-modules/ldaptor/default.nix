@@ -6,7 +6,7 @@
 , pyparsing
 , service-identity
 , six
-, zope_interface
+, zope-interface
 , pythonOlder
 , python
 }:
@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "ldaptor";
   version = "21.2.0";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     pyparsing
     six
     twisted
-    zope_interface
+    zope-interface
   ] ++ twisted.optional-dependencies.tls;
 
   nativeCheckInputs = [

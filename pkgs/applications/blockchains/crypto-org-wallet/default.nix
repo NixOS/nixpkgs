@@ -29,5 +29,6 @@ in appimageTools.wrapType2 rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ th0rgal ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "chain-desktop-wallet";
   };
 }

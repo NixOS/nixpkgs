@@ -13,19 +13,19 @@
 , trampoline
 
 # tests
-, pytestCheckHook
+, pytest7CheckHook
 }:
 
 buildPythonPackage rec {
   pname = "torchsde";
-  version = "0.2.4";
+  version = "0.2.6";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "google-research";
     repo = "torchsde";
-    rev = "v${version}";
-    hash = "sha256-qQ7oswm0qTdq1xpQElt5cd3K0zskH+H/lgyEnxbCqsI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-D0p2tL/VvkouXrXfRhMuCq8wMtzeoBTppWEG5vM1qCo=";
   };
 
   postPatch = ''
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "torchsde" ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
   disabledTests = [

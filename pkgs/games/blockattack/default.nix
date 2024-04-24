@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://blockattack.net/";
     description = "An open source clone of Panel de Pon (aka Tetris Attack)";
+    mainProgram = "blockattack";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;

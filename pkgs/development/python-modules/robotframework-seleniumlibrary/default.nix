@@ -1,8 +1,7 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, python
+, setuptools
 , robotframework
 , robotframework-pythonlibcore
 , selenium
@@ -13,16 +12,21 @@
 }:
 
 buildPythonPackage rec {
-  version = "6.1.0";
   pname = "robotframework-seleniumlibrary";
+  version = "6.2.0";
+  pyproject = true;
 
   # no tests included in PyPI tarball
   src = fetchFromGitHub {
     owner = "robotframework";
     repo = "SeleniumLibrary";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-iCZU+9xFUPoyucdQ/26dgxAm8jRf92P3JyA2KqV8bYI=";
+    sha256 = "sha256-lvtu6z/PD2Ckj70SgDF69BwrhaoA36SDrAvj0XJsmCc=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     robotframework
@@ -37,24 +41,9 @@ buildPythonPackage rec {
     robotstatuschecker
   ];
 
-  disabledTestPaths = [
-    # https://github.com/robotframework/SeleniumLibrary/issues/1804
-    "utest/test/keywords/test_webdrivercache.py"
-  ];
-
-  disabledTests = [
-    "test_create_opera_executable_path_not_set"
-    "test_create_opera_executable_path_set"
-    "test_create_opera_with_options"
-    "test_create_opera_with_service_log_path_real_path"
-    "test_get_executable_path"
-    "test_get_ff_profile_instance_FirefoxProfile"
-    "test_has_options"
-    "test_importer"
-    "test_log_file_with_index_exist"
-    "test_opera"
-    "test_single_method"
-  ];
+  preCheck = ''
+    mkdir utest/output_dir
+  '';
 
   meta = with lib; {
     changelog = "https://github.com/robotframework/SeleniumLibrary/blob/${src.rev}/docs/SeleniumLibrary-${version}.rst";

@@ -22,14 +22,14 @@
 
 stdenv.mkDerivation rec {
   pname = "pan";
-  version = "0.154";
+  version = "0.157";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-o+JFUraSoQ0HDmldHvTX+X7rl2L4n4lJmI4UFZrsfkQ=";
+    hash = "sha256-+zzAnppP6ICIhhlqXGVF4h/yIDa6oE1lxenmzcr2BQo=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config gettext intltool itstool libxml2 makeWrapper ];
@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A GTK-based Usenet newsreader good at both text and binaries";
+    mainProgram = "pan";
     homepage = "http://pan.rebelbase.com/";
     maintainers = [ maintainers.eelco ];
     platforms = platforms.linux;

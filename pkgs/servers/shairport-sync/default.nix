@@ -40,13 +40,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "shairport-sync";
-  version = "4.2";
+  version = "4.3.2";
 
   src = fetchFromGitHub {
     repo = "shairport-sync";
     owner = "mikebrady";
     rev = "refs/tags/${version}";
-    hash = "sha256-ru2iaXSgS+w2ktqGLGC9SiYztkmmOQVzHaeLwMqvMzk=";
+    hash = "sha256-M7bJO8KVxP2H27aB0qJcsaN9uHADWeOYPdNo8Xfg9gc=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +58,8 @@ stdenv.mkDerivation rec {
     # To achieve this, we coerce the output to a string to prevent
     # mkDerivation's splicing logic from kicking in.
     "${glib.dev}"
+  ] ++ optional enableAirplay2 [
+    unixtools.xxd
   ];
 
   makeFlags = [
@@ -83,7 +85,6 @@ stdenv.mkDerivation rec {
     libgcrypt
     libuuid
     ffmpeg
-    unixtools.xxd
   ]
   ++ optional stdenv.isLinux glib;
 
@@ -116,11 +117,12 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mikebrady/shairport-sync";
     description = "Airtunes server and emulator with multi-room capabilities";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lnl7 jordanisaacs ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    mainProgram = "shairport-sync";
+    maintainers = with lib.maintainers; [ lnl7 jordanisaacs ];
+    platforms = lib.platforms.unix;
   };
 }

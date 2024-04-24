@@ -13,13 +13,13 @@
 
 let
   pname = "iaito";
-  version = "5.8.6";
+  version = "5.9.0";
 
   main_src = fetchFromGitHub rec {
     owner = "radareorg";
     repo = pname;
     rev = version;
-    hash = "sha256-rl8bOIR0oS6YvZA5pr8oSj7HcKK4YeCjAEi7saVdvk8=";
+    hash = "sha256-Ep3Cbi0qjY4PKG0urr12y0DgX/l/Tsq8w1qlyH0lu3s=";
     name = repo;
   };
 
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     install -m755 -Dt $out/bin iaito
     install -m644 -Dt $out/share/metainfo ../org.radare.iaito.appdata.xml
     install -m644 -Dt $out/share/applications ../org.radare.iaito.desktop
-    install -m644 -Dt $out/share/pixmaps ../img/iaito-o.svg
+    install -m644 -Dt $out/share/pixmaps ../img/org.radare.iaito.svg
 
     pushd ../../../${translations_src.name}
     make install -j$NIX_BUILD_CORES PREFIX=$out
@@ -87,6 +87,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An official graphical interface of radare2";
+    mainProgram = "iaito";
     longDescription = ''
       iaito is the official graphical interface of radare2. It's the
       continuation of Cutter for radare2 after the Rizin fork.

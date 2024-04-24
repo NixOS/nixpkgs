@@ -26,19 +26,24 @@
 , oslotest
 , bash
 , python
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "tempest";
-  version = "35.0.0";
-  format = "setuptools";
+  version = "38.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TKGgOAOqa+1f3yXIkWxt2bVx4UT/IfQpc9rNB4fLkw0=";
+    hash = "sha256-2WmSN4NrH5/y5iAuYaaVuZkuh1ym14jFj7OXw8Jfxtc=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     pbr

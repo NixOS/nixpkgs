@@ -28,6 +28,7 @@ mkDerivation {
   meta = {
     homepage = "https://yakuake.kde.org";
     description = "Quad-style terminal emulator for KDE";
+    mainProgram = "yakuake";
     maintainers = with lib.maintainers; [ fridh ];
     license = lib.licenses.gpl2;
   };

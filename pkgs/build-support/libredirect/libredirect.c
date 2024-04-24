@@ -70,9 +70,12 @@ static void init()
 
 }
 
-static const char * rewrite(const char * path, char * buf)
+static const char * rewrite(const char * volatile path, char * buf)
 {
+    // Marking the path volatile is needed so the the following check isn't
+    // optimized away by the compiler.
     if (path == NULL) return path;
+
     for (int n = 0; n < nrRedirects; ++n) {
         int len = strlen(from[n]);
         if (strncmp(path, from[n], len) != 0) continue;

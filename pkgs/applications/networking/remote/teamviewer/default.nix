@@ -1,5 +1,6 @@
 { mkDerivation
 , lib
+, stdenv
 , fetchurl
 , autoPatchelfHook
 , makeWrapper
@@ -8,6 +9,7 @@
 , qtbase
 , qtwebengine
 , qtx11extras
+, qtquickcontrols2
 , getconf
 , glibc
 , libXrandr
@@ -26,12 +28,22 @@ mkDerivation rec {
   pname = "teamviewer";
   # teamviewer itself has not development files but the dev output removes propagated other dev outputs from runtime
   outputs = [ "out" "dev" ];
-  version = "15.38.3";
+  version = "15.49.2";
 
-  src = fetchurl {
-    url = "https://dl.tvcdn.de/download/linux/version_${lib.versions.major version}x/teamviewer_${version}_amd64.deb";
-    sha256 = "sha256-+GGpGV8rl15VQvPRA2PWngQI4VoxCrZ0ArEm9FgdOVE=";
-  };
+  src =
+    let
+       base_url = "https://dl.tvcdn.de/download/linux/version_${lib.versions.major version}x";
+    in
+      {
+       x86_64-linux = fetchurl {
+          url = "${base_url}/teamviewer_${version}_amd64.deb";
+          sha256 = "sha256-Ag41RQD4lp4Sxuz6wZwiFzVxUalV+M3Zwa2Cug4iNSM=";
+       };
+       aarch64-linux = fetchurl {
+          url = "${base_url}/teamviewer_${version}_arm64.deb";
+          sha256 = "sha256-JGSmFq4q8TQJVIrS6qQxIxZPNKgor+pFetextLJPHtg=";
+       };
+      }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   unpackPhase = ''
     ar x $src
@@ -39,7 +51,7 @@ mkDerivation rec {
   '';
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper wrapQtAppsHook ];
-  buildInputs = [ qtbase qtwebengine qtx11extras icu63 ];
+  buildInputs = [ qtbase qtwebengine qtx11extras qtquickcontrols2 icu63 ];
 
   installPhase = ''
     mkdir -p $out/share/teamviewer $out/bin $out/share/applications

@@ -29,6 +29,16 @@ buildPythonPackage rec {
     trustme
   ];
 
+  disabledTests = [
+    # incompatible with urllib3 2.0
+    "test_dump_response"
+    "test_dump_all"
+    "test_prepared_request_override_base"
+    "test_prepared_request_with_base"
+    "test_request_override_base"
+    "test_request_with_base"
+  ];
+
   pythonImportsCheck = [
     "requests_toolbelt"
   ];

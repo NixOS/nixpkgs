@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.3.12";
 
   src = fetchurl {
-    url = "mirror://gentoo/distfiles/mtx-${version}.tar.gz";
+    url = "mirror://sourceforge/${pname}/${pname}-stable/${version}/${pname}-${version}.tar.gz";
     sha256 = "0261c5e90b98b6138cd23dadecbc7bc6e2830235145ed2740290e1f35672d843";
   };
 

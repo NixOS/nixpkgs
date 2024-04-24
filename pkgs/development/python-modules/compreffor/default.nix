@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "compreffor";
-  version = "0.5.4";
+  version = "0.5.5";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MGulQEUGPrQ30T3VYzwRRlvzvWkFqNzqsNzAjtjX9xU=";
+    hash = "sha256-9NMmIJC8Q4hRC/H2S7OrgoWSQ9SRIPHxHvZpPrPCvHo=";
   };
 
   patches = [
@@ -51,6 +51,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "CFF table subroutinizer for FontTools";
+    mainProgram = "compreffor";
     homepage = "https://github.com/googlefonts/compreffor";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];

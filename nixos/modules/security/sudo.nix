@@ -6,8 +6,6 @@ let
 
   cfg = config.security.sudo;
 
-  inherit (pkgs) sudo;
-
   toUserString = user: if (isInt user) then "#${toString user}" else "${user}";
   toGroupString = group: if (isInt group) then "%#${toString group}" else "%${group}";
 
@@ -30,41 +28,41 @@ in
 
   ###### interface
 
-  options = {
+  options.security.sudo = {
 
-    security.sudo.enable = mkOption {
+    defaultOptions = mkOption {
+      type = with types; listOf str;
+      default = [ "SETENV" ];
+      description = ''
+        Options used for the default rules, granting `root` and the
+        `wheel` group permission to run any command as any user.
+      '';
+    };
+
+    enable = mkOption {
       type = types.bool;
       default = true;
-      description =
-        lib.mdDoc ''
+      description = ''
           Whether to enable the {command}`sudo` command, which
           allows non-root users to execute commands as root.
         '';
     };
 
-    security.sudo.package = mkOption {
-      type = types.package;
-      default = pkgs.sudo;
-      defaultText = literalExpression "pkgs.sudo";
-      description = lib.mdDoc ''
-        Which package to use for `sudo`.
-      '';
-    };
+    package = mkPackageOption pkgs "sudo" { };
 
-    security.sudo.wheelNeedsPassword = mkOption {
+    wheelNeedsPassword = mkOption {
       type = types.bool;
       default = true;
-      description =
-        lib.mdDoc ''
-          Whether users of the `wheel` group must
-          provide a password to run commands as super user via {command}`sudo`.
-        '';
+      description = ''
+        Whether users of the `wheel` group must
+        provide a password to run commands as super user via {command}`sudo`.
+      '';
       };
 
-    security.sudo.execWheelOnly = mkOption {
+    execWheelOnly = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Only allow members of the `wheel` group to execute sudo by
         setting the executable's permissions accordingly.
         This prevents users that are not members of `wheel` from
@@ -72,19 +70,18 @@ in
       '';
     };
 
-    security.sudo.configFile = mkOption {
+    configFile = mkOption {
       type = types.lines;
       # Note: if syntax errors are detected in this file, the NixOS
       # configuration will fail to build.
-      description =
-        lib.mdDoc ''
-          This string contains the contents of the
-          {file}`sudoers` file.
-        '';
+      description = ''
+        This string contains the contents of the
+        {file}`sudoers` file.
+      '';
     };
 
-    security.sudo.extraRules = mkOption {
-      description = lib.mdDoc ''
+    extraRules = mkOption {
+      description = ''
         Define specific rules to be in the {file}`sudoers` file.
         More specific rules should come after more general ones in order to
         yield the expected behavior. You can use mkBefore/mkAfter to ensure
@@ -114,7 +111,7 @@ in
         options = {
           users = mkOption {
             type = with types; listOf (either str int);
-            description = lib.mdDoc ''
+            description = ''
               The usernames / UIDs this rule should apply for.
             '';
             default = [];
@@ -122,7 +119,7 @@ in
 
           groups = mkOption {
             type = with types; listOf (either str int);
-            description = lib.mdDoc ''
+            description = ''
               The groups / GIDs this rule should apply for.
             '';
             default = [];
@@ -131,7 +128,7 @@ in
           host = mkOption {
             type = types.str;
             default = "ALL";
-            description = lib.mdDoc ''
+            description = ''
               For what host this rule should apply.
             '';
           };
@@ -139,7 +136,7 @@ in
           runAs = mkOption {
             type = with types; str;
             default = "ALL:ALL";
-            description = lib.mdDoc ''
+            description = ''
               Under which user/group the specified command is allowed to run.
 
               A user can be specified using just the username: `"foo"`.
@@ -149,7 +146,7 @@ in
           };
 
           commands = mkOption {
-            description = lib.mdDoc ''
+            description = ''
               The commands for which the rule should apply.
             '';
             type = with types; listOf (either str (submodule {
@@ -157,7 +154,7 @@ in
               options = {
                 command = mkOption {
                   type = with types; str;
-                  description = lib.mdDoc ''
+                  description = ''
                     A command being either just a path to a binary to allow any arguments,
                     the full command with arguments pre-set or with `""` used as the argument,
                     not allowing arguments to the command at all.
@@ -165,9 +162,9 @@ in
                 };
 
                 options = mkOption {
-                  type = with types; listOf (enum [ "NOPASSWD" "PASSWD" "NOEXEC" "EXEC" "SETENV" "NOSETENV" "LOG_INPUT" "NOLOG_INPUT" "LOG_OUTPUT" "NOLOG_OUTPUT" ]);
-                  description = lib.mdDoc ''
-                    Options for running the command. Refer to the [sudo manual](https://www.sudo.ws/man/1.7.10/sudoers.man.html).
+                  type = with types; listOf (enum [ "NOPASSWD" "PASSWD" "NOEXEC" "EXEC" "SETENV" "NOSETENV" "LOG_INPUT" "NOLOG_INPUT" "LOG_OUTPUT" "NOLOG_OUTPUT" "MAIL" "NOMAIL" "FOLLOW" "NOFLLOW" "INTERCEPT" "NOINTERCEPT"]);
+                  description = ''
+                    Options for running the command. Refer to the [sudo manual](https://www.sudo.ws/docs/man/1.9.15/sudoers.man/#Tag_Spec).
                   '';
                   default = [];
                 };
@@ -179,10 +176,10 @@ in
       });
     };
 
-    security.sudo.extraConfig = mkOption {
+    extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = lib.mdDoc ''
+      description = ''
         Extra configuration text appended to {file}`sudoers`.
       '';
     };
@@ -192,40 +189,55 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    assertions = [ {
+      assertion = cfg.package.pname != "sudo-rs";
+      message = ''
+        NixOS' `sudo` module does not support `sudo-rs`; see `security.sudo-rs` instead.
+      '';
+    } ];
 
-    # We `mkOrder 600` so that the default rule shows up first, but there is
-    # still enough room for a user to `mkBefore` it.
-    security.sudo.extraRules = mkOrder 600 [
-      { groups = [ "wheel" ];
-        commands = [ { command = "ALL"; options = (if cfg.wheelNeedsPassword then [ "SETENV" ] else [ "NOPASSWD" "SETENV" ]); } ];
-      }
-    ];
+    security.sudo.extraRules =
+      let
+        defaultRule = { users ? [], groups ? [], opts ? [] }: [ {
+          inherit users groups;
+          commands = [ {
+            command = "ALL";
+            options = opts ++ cfg.defaultOptions;
+          } ];
+        } ];
+      in mkMerge [
+        # This is ordered before users' `mkBefore` rules,
+        # so as not to introduce unexpected changes.
+        (mkOrder 400 (defaultRule { users = [ "root" ]; }))
 
-    security.sudo.configFile =
+        # This is ordered to show before (most) other rules, but
+        # late-enough for a user to `mkBefore` it.
+        (mkOrder 600 (defaultRule {
+          groups = [ "wheel" ];
+          opts = (optional (!cfg.wheelNeedsPassword) "NOPASSWD");
+        }))
+      ];
+
+    security.sudo.configFile = concatStringsSep "\n" (filter (s: s != "") [
       ''
         # Don't edit this file. Set the NixOS options ‘security.sudo.configFile’
         # or ‘security.sudo.extraRules’ instead.
-
-        # Keep SSH_AUTH_SOCK so that pam_ssh_agent_auth.so can do its magic.
-        Defaults env_keep+=SSH_AUTH_SOCK
-
-        # "root" is allowed to do anything.
-        root        ALL=(ALL:ALL) SETENV: ALL
-
-        # extraRules
-        ${concatStringsSep "\n" (
-          lists.flatten (
-            map (
-              rule: optionals (length rule.commands != 0) [
-                (map (user: "${toUserString user}	${rule.host}=(${rule.runAs})	${toCommandsString rule.commands}") rule.users)
-                (map (group: "${toGroupString group}	${rule.host}=(${rule.runAs})	${toCommandsString rule.commands}") rule.groups)
-              ]
-            ) cfg.extraRules
-          )
-        )}
-
+      ''
+      (pipe cfg.extraRules [
+        (filter (rule: length rule.commands != 0))
+        (map (rule: [
+          (map (user: "${toUserString user}     ${rule.host}=(${rule.runAs})    ${toCommandsString rule.commands}") rule.users)
+          (map (group: "${toGroupString group}  ${rule.host}=(${rule.runAs})    ${toCommandsString rule.commands}") rule.groups)
+        ]))
+        flatten
+        (concatStringsSep "\n")
+      ])
+      "\n"
+      (optionalString (cfg.extraConfig != "") ''
+        # extraConfig
         ${cfg.extraConfig}
-      '';
+      '')
+    ]);
 
     security.wrappers = let
       owner = "root";
@@ -243,7 +255,7 @@ in
       };
     };
 
-    environment.systemPackages = [ sudo ];
+    environment.systemPackages = [ cfg.package ];
 
     security.pam.services.sudo = { sshAgentAuth = true; usshAuth = true; };
 

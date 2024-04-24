@@ -2,14 +2,16 @@
 , buildPythonPackage
 , fetchPypi
 , h5py
-, nose
+, numpy
+, pynose
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "annoy";
   version = "1.17.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -18,12 +20,22 @@ buildPythonPackage rec {
     hash = "sha256-nL/r7+Cl+EPropxr5MhNYB9PQa1N7QSG8biMOwdznBU=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "'nose>=1.0'" ""
+  '';
+
+  build-system = [
+    setuptools
+  ];
+
   nativeBuildInputs = [
     h5py
   ];
 
   nativeCheckInputs = [
-    nose
+    numpy
+    pynose
   ];
 
   pythonImportsCheck = [

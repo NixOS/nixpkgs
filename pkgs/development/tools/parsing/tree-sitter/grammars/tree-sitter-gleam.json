@@ -1,0 +1,12 @@
+{
+  "url": "https://github.com/gleam-lang/tree-sitter-gleam",
+  "rev": "2012f294baacf30e7a62414754021284377366c6",
+  "date": "2024-03-04T16:19:15-05:00",
+  "path": "/nix/store/2ms5f9sylr9v23pgw428dr8gqap4859m-tree-sitter-gleam",
+  "sha256": "06xlh4al14h81qr88n60ndy54sfnj0wh20cm3x5pha6llg3dzqsv",
+  "hash": "sha256-W+PfxqPUKHhLH5UBATmQ1mlSfLPAWIQyDgiSQBWBtBs=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

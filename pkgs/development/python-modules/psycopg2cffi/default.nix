@@ -1,8 +1,17 @@
-{ buildPythonPackage, cffi, fetchFromGitHub, lib, postgresql, pytestCheckHook, six }:
+{ buildPythonPackage
+, cffi
+, fetchFromGitHub
+, lib
+, postgresql
+, postgresqlTestHook
+, pytestCheckHook
+, six
+}:
 
 buildPythonPackage rec {
   pname = "psycopg2cffi";
   version = "2.8.1";
+  format = "setuptools";
 
   # NB: This is a fork.
   # The original repo exists at https://github.com/chtd/psycopg2cffi, however
@@ -21,12 +30,19 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ postgresql ];
-  propagatedBuildInputs = [ six cffi ];
-  nativeCheckInputs = [ pytestCheckHook ];
 
-  # NB: The tests need a postgres instance running to test against, and so we
-  # disable them.
-  doCheck = false;
+  propagatedBuildInputs = [ six cffi ];
+
+  nativeCheckInputs = [ postgresqlTestHook pytestCheckHook ];
+
+  disabledTests = [
+    # AssertionError: '{}' != []
+    "testEmptyArray"
+  ];
+
+  env = {
+    PGDATABASE = "psycopg2_test";
+  };
 
   pythonImportsCheck = [ "psycopg2cffi" ];
 

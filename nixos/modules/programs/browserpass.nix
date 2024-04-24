@@ -4,7 +4,7 @@ with lib;
 
 {
 
-  options.programs.browserpass.enable = mkEnableOption (lib.mdDoc "Browserpass native messaging host");
+  options.programs.browserpass.enable = mkEnableOption "Browserpass native messaging host";
 
   config = mkIf config.programs.browserpass.enable {
     environment.etc = let
@@ -27,6 +27,6 @@ with lib;
       "opt/brave/native-messaging-hosts/${appId}".source = source "hosts/chromium";
       "opt/brave/policies/managed/${appId}".source = source "policies/chromium";
     };
-    nixpkgs.config.firefox.enableBrowserpass = true;
+    programs.firefox.nativeMessagingHosts.packages = [ pkgs.browserpass ];
   };
 }

@@ -18,13 +18,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "accerciser";
-  version = "3.40.0";
+  version = "3.42.0";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "U3VF1kgTwtKxSne2TiQBABXpl3z1+zz4qmXbzgHqNiU=";
+    sha256 = "d2m9T09j3ImhQ+hs3ET+rr1/jJab6lwfWoaskxGQL0g=";
   };
 
   nativeBuildInputs = [
@@ -51,8 +51,13 @@ python3.pkgs.buildPythonApplication rec {
     pycairo
     pygobject3
     setuptools
-    xlib
   ];
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -65,6 +70,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Accerciser";
     description = "Interactive Python accessibility explorer";
+    mainProgram = "accerciser";
     maintainers = teams.gnome.members;
     license = licenses.bsd3;
     platforms = platforms.linux;

@@ -14,7 +14,7 @@
 , libXtst
 , zlib
 , maven
-, webkitgtk_4_1
+, webkitgtk
 , glib-networking
 }:
 
@@ -53,7 +53,7 @@ mavenJdk17.buildMavenPackage rec {
     libXtst
     zlib
   ] ++ lib.optionals stdenv.isLinux [
-    webkitgtk_4_1
+    webkitgtk
     glib-networking
   ];
 
@@ -109,7 +109,7 @@ mavenJdk17.buildMavenPackage rec {
 
       makeWrapper $out/dbeaver/dbeaver $out/bin/dbeaver \
         --prefix PATH : ${jdk17}/bin \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk3 libXtst webkitgtk_4_1 glib-networking ])} \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk3 libXtst webkitgtk glib-networking ])} \
         --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
 

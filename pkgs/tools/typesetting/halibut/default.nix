@@ -17,5 +17,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; unix;
+    mainProgram = "halibut";
   };
 }

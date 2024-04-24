@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "kexec-tools";
-  version = "2.0.26";
+  version = "2.0.28";
 
   src = fetchurl {
     urls = [
       "mirror://kernel/linux/utils/kernel/kexec/${pname}-${version}.tar.xz"
       "http://horms.net/projects/kexec/kexec-tools/${pname}-${version}.tar.xz"
     ];
-    sha256 = "sha256-f+NqBkEBzVxRXkGyvjk9zjyoitzlnW7maOCvfAxFcM0=";
+    sha256 = "sha256-0vDvhy854v5LGwH+tisAATgyByObn4BB+YqVVkFh0FM=";
   };
 
   patches = [
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     description = "Tools related to the kexec Linux feature";
     platforms = platforms.linux;
     badPlatforms = [
+      "microblaze-linux" "microblazeel-linux"
       "riscv64-linux" "riscv32-linux"
       "sparc-linux" "sparc64-linux"
     ];

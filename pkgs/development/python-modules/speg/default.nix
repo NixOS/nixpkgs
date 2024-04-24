@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "speg";
   version = "0.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -14,7 +15,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  pythonImportChecks = [ "speg" ];
+  pythonImportsCheck = [ "speg" ];
 
   # checks fail for seemingly spurious reasons
   doCheck = false;

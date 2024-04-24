@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "xvfbwrapper";
   version = "0.2.9";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

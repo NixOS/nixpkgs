@@ -1,0 +1,47 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index af077f6..fed17ff 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -58,6 +58,7 @@ option(USE_SHARED_TINYXML "Use your installed copy of tinyxml" off)
+ option(USE_SHARED_PIXMAN  "Use your installed copy of pixman" off)
+ option(USE_SHARED_FREETYPE "Use shared FreeType library" off)
+ option(USE_SHARED_HARFBUZZ "Use shared HarfBuzz library" off)
++option(USE_SHARED_WEBP    "Use your installed copy of webp" off)
+ option(ENABLE_ASEPRITE_EXE "Compile main Aseprite executable" on)
+ option(ENABLE_MEMLEAK      "Enable memory-leaks detector (only for developers)" off)
+ option(ENABLE_NEWS         "Enable the news in Home tab" on)
+@@ -328,14 +351,17 @@ add_subdirectory(laf)
+ # libwebp
+ if(ENABLE_WEBP)
+   # Use libwebp from Skia
+-  if(LAF_BACKEND STREQUAL "skia")
++  if(USE_SHARED_WEBP)
++    find_library(WEBP_LIBRARY NAMES webp)
++    find_library(WEBPDEMUX_LIBRARY NAMES webpdemux)
++    find_library(WEBPMUX_LIBRARY NAMES webpmux)
++    set(WEBP_LIBRARIES ${WEBP_LIBRARY} ${WEBPDEMUX_LIBRARY} ${WEBPMUX_LIBRARY})
++    find_path(WEBP_INCLUDE_DIRS NAMES decode.h PATH_SUFFIXES webp)
++  else()
+     find_library(WEBP_LIBRARIES webp
+       NAMES libwebp # required for Windows
+       PATHS "${SKIA_LIBRARY_DIR}" NO_DEFAULT_PATH)
+     set(WEBP_INCLUDE_DIR "${SKIA_DIR}/third_party/externals/libwebp/src")
+-  else()
+-    set(WEBP_LIBRARIES webp webpdemux libwebpmux)
+-    set(WEBP_INCLUDE_DIR ${LIBWEBP_DIR}/src)
+   endif()
+   include_directories(${WEBP_INCLUDE_DIR})
+ endif()
+diff --git a/third_party/CMakeLists.txt b/third_party/CMakeLists.txt
+index 4839d4097c..e8c3e83cbc 100644
+--- a/third_party/CMakeLists.txt
++++ b/third_party/CMakeLists.txt
+@@ -32,7 +32,7 @@ if(NOT USE_SHARED_GIFLIB)
+   add_subdirectory(giflib)
+ endif()
+ 
+-if(ENABLE_WEBP AND NOT LAF_BACKEND STREQUAL "skia")
++if(ENABLE_WEBP AND NOT LAF_BACKEND STREQUAL "skia" AND NOT USE_SHARED_WEBP)
+   set(WEBP_BUILD_EXTRAS OFF CACHE BOOL "Build extras.")
+   add_subdirectory(libwebp)
+ endif()

@@ -5,6 +5,7 @@
 , ant
 , jdk
 , makeWrapper
+, stripJavaArchivesHook
 , callPackage
 }:
 
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-dmNfI6T0MU7UtMH+C/2hiAeDwZlFCB4JofQViZezoqI=";
   };
 
-  nativeBuildInputs = [ ant jdk makeWrapper ];
+  nativeBuildInputs = [ ant jdk makeWrapper stripJavaArchivesHook ];
 
   buildPhase = ''
     runHook preBuild
@@ -75,7 +76,8 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode fromSource ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jfrankenau yarny ];
+    mainProgram = "tvbrowser";
+    maintainers = with maintainers; [ yarny ];
     longDescription = ''
       TV-Browser shows TV program data arranged like in printed
       TV programs after downloading it from the internet.

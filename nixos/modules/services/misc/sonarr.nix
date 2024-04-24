@@ -8,18 +8,18 @@ in
 {
   options = {
     services.sonarr = {
-      enable = mkEnableOption (lib.mdDoc "Sonarr");
+      enable = mkEnableOption "Sonarr";
 
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/sonarr/.config/NzbDrone";
-        description = lib.mdDoc "The directory where Sonarr stores its data files.";
+        description = "The directory where Sonarr stores its data files.";
       };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Open ports in the firewall for the Sonarr web interface
         '';
       };
@@ -27,23 +27,16 @@ in
       user = mkOption {
         type = types.str;
         default = "sonarr";
-        description = lib.mdDoc "User account under which Sonaar runs.";
+        description = "User account under which Sonaar runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "sonarr";
-        description = lib.mdDoc "Group under which Sonaar runs.";
+        description = "Group under which Sonaar runs.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.sonarr;
-        defaultText = literalExpression "pkgs.sonarr";
-        description = lib.mdDoc ''
-          Sonarr package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "sonarr" { };
     };
   };
 

@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "pkginfo2";
   version = "30.0.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -28,6 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Query metadatdata from sdists, bdists or installed packages";
+    mainProgram = "pkginfo2";
     homepage = "https://github.com/nexB/pkginfo2";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

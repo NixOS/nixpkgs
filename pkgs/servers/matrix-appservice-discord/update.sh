@@ -36,7 +36,7 @@ curl -O "$src/package.json"
 cat > pin.json << EOF
 {
   "version": "$(echo $tag | grep -P '(\d|\.)+' -o)",
-  "srcSha256": "$src_hash",
+  "srcHash": "$src_hash",
   "yarnSha256": "$yarn_sha256"
 }
 EOF

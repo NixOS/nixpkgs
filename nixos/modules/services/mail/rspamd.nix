@@ -13,24 +13,24 @@ let
       socket = mkOption {
         type = types.str;
         example = "localhost:11333";
-        description = lib.mdDoc ''
+        description = ''
           Socket for this worker to listen on in a format acceptable by rspamd.
         '';
       };
       mode = mkOption {
         type = types.str;
         default = "0644";
-        description = lib.mdDoc "Mode to set on unix socket";
+        description = "Mode to set on unix socket";
       };
       owner = mkOption {
         type = types.str;
         default = "${cfg.user}";
-        description = lib.mdDoc "Owner to set on unix socket";
+        description = "Owner to set on unix socket";
       };
       group = mkOption {
         type = types.str;
         default = "${cfg.group}";
-        description = lib.mdDoc "Group to set on unix socket";
+        description = "Group to set on unix socket";
       };
       rawEntry = mkOption {
         type = types.str;
@@ -52,18 +52,18 @@ let
       enable = mkOption {
         type = types.nullOr types.bool;
         default = null;
-        description = lib.mdDoc "Whether to run the rspamd worker.";
+        description = "Whether to run the rspamd worker.";
       };
       name = mkOption {
         type = types.nullOr types.str;
         default = name;
-        description = lib.mdDoc "Name of the worker";
+        description = "Name of the worker";
       };
       type = mkOption {
         type = types.nullOr (types.enum [
           "normal" "controller" "fuzzy" "rspamd_proxy" "lua" "proxy"
         ]);
-        description = lib.mdDoc ''
+        description = ''
           The type of this worker. The type `proxy` is
           deprecated and only kept for backwards compatibility and should be
           replaced with `rspamd_proxy`.
@@ -77,7 +77,7 @@ let
       bindSockets = mkOption {
         type = types.listOf (types.either types.str (types.submodule bindSocketOpts));
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           List of sockets to listen, in format acceptable by rspamd
         '';
         example = [{
@@ -94,21 +94,21 @@ let
       count = mkOption {
         type = types.nullOr types.int;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Number of worker instances to run
         '';
       };
       includes = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           List of files to include in configuration
         '';
       };
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc "Additional entries to put verbatim into worker section of rspamd config file.";
+        description = "Additional entries to put verbatim into worker section of rspamd config file.";
       };
     };
     config = mkIf (name == "normal" || name == "controller" || name == "fuzzy" || name == "rspamd_proxy") {
@@ -186,7 +186,7 @@ let
       enable = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether this file ${prefix} should be generated.  This
           option allows specific ${prefix} files to be disabled.
         '';
@@ -195,12 +195,12 @@ let
       text = mkOption {
         default = null;
         type = types.nullOr types.lines;
-        description = lib.mdDoc "Text of the file.";
+        description = "Text of the file.";
       };
 
       source = mkOption {
         type = types.path;
-        description = lib.mdDoc "Path of the source file.";
+        description = "Path of the source file.";
       };
     };
     config = {
@@ -227,18 +227,18 @@ in
 
     services.rspamd = {
 
-      enable = mkEnableOption (lib.mdDoc "rspamd, the Rapid spam filtering system");
+      enable = mkEnableOption "rspamd, the Rapid spam filtering system";
 
       debug = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether to run the rspamd daemon in debug mode.";
+        description = "Whether to run the rspamd daemon in debug mode.";
       };
 
       locals = mkOption {
         type = with types; attrsOf (submodule (configFileModule "locals"));
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           Local configuration files, written into {file}`/etc/rspamd/local.d/{name}`.
         '';
         example = literalExpression ''
@@ -251,7 +251,7 @@ in
       overrides = mkOption {
         type = with types; attrsOf (submodule (configFileModule "overrides"));
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           Overridden configuration files, written into {file}`/etc/rspamd/override.d/{name}`.
         '';
         example = literalExpression ''
@@ -264,7 +264,7 @@ in
       localLuaRules = mkOption {
         default = null;
         type = types.nullOr types.path;
-        description = lib.mdDoc ''
+        description = ''
           Path of file to link to {file}`/etc/rspamd/rspamd.local.lua` for local
           rules written in Lua
         '';
@@ -272,7 +272,7 @@ in
 
       workers = mkOption {
         type = with types; attrsOf (submodule workerOpts);
-        description = lib.mdDoc ''
+        description = ''
           Attribute set of workers to start.
         '';
         default = {
@@ -301,7 +301,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra configuration to add at the end of the rspamd configuration
           file.
         '';
@@ -310,7 +310,7 @@ in
       user = mkOption {
         type = types.str;
         default = "rspamd";
-        description = lib.mdDoc ''
+        description = ''
           User to use when no root privileges are required.
         '';
       };
@@ -318,7 +318,7 @@ in
       group = mkOption {
         type = types.str;
         default = "rspamd";
-        description = lib.mdDoc ''
+        description = ''
           Group to use when no root privileges are required.
         '';
       };
@@ -327,12 +327,12 @@ in
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc "Add rspamd milter to postfix main.conf";
+          description = "Add rspamd milter to postfix main.conf";
         };
 
         config = mkOption {
           type = with types; attrsOf (oneOf [ bool str (listOf str) ]);
-          description = lib.mdDoc ''
+          description = ''
             Addon to postfix configuration
           '';
           default = {

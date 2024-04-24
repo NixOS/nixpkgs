@@ -10,7 +10,7 @@
 , setuptools
 , six
 , testtools
-, zope_interface
+, zope-interface
 }:
 
 buildPythonPackage rec {
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     pyrsistent
     setuptools
     six
-    zope_interface
+    zope-interface
   ];
 
   nativeCheckInputs = [
@@ -58,6 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://eliot.readthedocs.io";
     description = "Logging library that tells you why it happened";
+    mainProgram = "eliot-prettyprint";
     license = licenses.asl20;
     maintainers = with maintainers; [ dpausp ];
   };

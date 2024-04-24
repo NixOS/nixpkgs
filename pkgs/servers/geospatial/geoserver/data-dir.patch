@@ -1,0 +1,18 @@
+--- a/bin/startup.sh
++++ b/bin/startup.sh
+@@ -66,12 +66,9 @@ fi
+ 
+ #Find the configuration directory: GEOSERVER_DATA_DIR
+ if [ -z "${GEOSERVER_DATA_DIR:-}" ]; then
+-    if [ -r "${GEOSERVER_HOME}/data_dir" ]; then
+-        export GEOSERVER_DATA_DIR="${GEOSERVER_HOME}/data_dir"
+-    else
+-        echo "No GEOSERVER_DATA_DIR found, using application defaults"
+-	      GEOSERVER_DATA_DIR=""
+-    fi
++  echo "GEOSERVER_DATA_DIR is not provided. Using $(pwd)/geoserver/data_dir directory"
++  mkdir -p "$(pwd)"/geoserver/data_dir
++  GEOSERVER_DATA_DIR="$(pwd)/geoserver/data_dir"
+ fi
+ 
+ cd "${GEOSERVER_HOME}" || exit 1

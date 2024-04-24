@@ -2,24 +2,24 @@
 
 stdenv.mkDerivation rec {
   pname = "man-pages";
-  version = "5.13";
+  version = "6.7";
 
   src = fetchurl {
     url = "mirror://kernel/linux/docs/man-pages/${pname}-${version}.tar.xz";
-    sha256 = "sha256-YU2uPv59/UgJhnY6KiqBeSFQMqWkUmwL5eiZol8Ja4s=";
+    hash = "sha256-gkA61LwXqtuST2hji3nWkwssvVUVMSSKepaId52077I=";
   };
 
-  makeFlags = [ "prefix=$(out)" ];
-  postInstall = ''
-    # conflict with shadow-utils
-    rm $out/share/man/man5/passwd.5 \
-       $out/share/man/man3/getspnam.3
+  makeFlags = [
+    # Clobber /usr/bin/env with the one in PATH.
+    "SHELL=env"
+    "prefix=${placeholder "out"}"
+  ];
 
-    # The manpath executable looks up manpages from PATH. And this package won't
-    # appear in PATH unless it has a /bin folder
-    mkdir -p $out/bin
-  '';
+  dontBuild = true;
+
   outputDocdev = "out";
+
+  enableParallelInstalling = true;
 
   meta = with lib; {
     description = "Linux development manual pages";

@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A Gnome CD Ripper";
+    mainProgram = "sound-juicer";
     homepage = "https://wiki.gnome.org/Apps/SoundJuicer";
     maintainers = [ maintainers.bdimcheff ];
     license = licenses.gpl2Plus;

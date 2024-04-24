@@ -9,7 +9,8 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 let
   packages = with pkgs; {
     "default" = teleport;
-    "11" = teleport_11;
+    "13" = teleport_13;
+    "14" = teleport_14;
   };
 
   minimal = package: {

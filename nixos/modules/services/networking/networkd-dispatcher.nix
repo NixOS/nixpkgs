@@ -11,11 +11,11 @@ in {
   options = {
     services.networkd-dispatcher = {
 
-      enable = mkEnableOption (mdDoc ''
+      enable = mkEnableOption ''
         Networkd-dispatcher service for systemd-networkd connection status
         change. See [https://gitlab.com/craftyguy/networkd-dispatcher](upstream instructions)
         for usage.
-      '');
+      '';
 
       rules = mkOption {
         default = {};
@@ -33,7 +33,7 @@ in {
             };
           };
         '';
-        description = lib.mdDoc ''
+        description = ''
           Declarative configuration of networkd-dispatcher rules. See
           [https://gitlab.com/craftyguy/networkd-dispatcher](upstream instructions)
           for an introduction and example scripts.
@@ -46,7 +46,7 @@ in {
                 "configuring" "configured"
               ]);
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 List of names of the systemd-networkd operational states which
                 should trigger the script. See <https://www.freedesktop.org/software/systemd/man/networkctl.html>
                 for a description of the specific state type.
@@ -54,7 +54,7 @@ in {
             };
             script = mkOption {
               type = types.lines;
-              description = lib.mdDoc ''
+              description = ''
                 Shell commands executed on specified operational states.
               '';
             };

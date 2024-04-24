@@ -5,6 +5,7 @@
 , ninja
 , pkg-config
 , libhandy
+, libsecret
 , modemmanager
 , gtk3
 , gom
@@ -33,7 +34,7 @@
 
 stdenv.mkDerivation rec {
   pname = "calls";
-  version = "43.3";
+  version = "46.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-GNICAk9SPrLc+zm3tHVwkQdiS20j4MVktGIbNWEEMHs=";
+    hash = "sha256-ZUVMK0Ex77EQKTGM0gBDHt8W9l4rHspihYduMcwMGho=";
   };
 
   outputs = [ "out" "devdoc" ];
@@ -63,6 +64,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     modemmanager
     libhandy
+    libsecret
     evolution-data-server
     folks
     gom
@@ -110,5 +112,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ craigem lheckemann tomfitzhenry ];
     platforms = platforms.linux;
+    mainProgram = "gnome-calls";
   };
 }

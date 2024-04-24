@@ -1,36 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pick";
-  version = "2.2.0";
-  format = "pyproject";
+  version = "2.3.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "wong2";
-    repo = pname;
+    repo = "pick";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Py+D03bXnVsIwvYwjl0IMeH33ZPJW5TuJ3tU79MMsCw=";
+    hash = "sha256-1CDwnPvu64zHu+MML0KssPxI5CH7ng8lYZXQzmeSOCw=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pick"
-  ];
+  pythonImportsCheck = [ "pick" ];
 
   meta = with lib; {
     description = "Module to create curses-based interactive selection list in the terminal";

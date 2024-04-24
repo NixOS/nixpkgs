@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cfitsio";
-  version = "4.3.0";
+  version = "4.4.0";
 
   src = fetchurl {
     url = "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-${finalAttrs.version}.tar.gz";
-    hash = "sha256-/a3AHQnPn1QlOALF7IfrEN5RzkEwQRQVrojDCUBiG4s=";
+    hash = "sha256-lZAM+VrnYIOefLlninsvrQhY1qwSI0+TS9HLa/wka6k=";
   };
 
   patches = [

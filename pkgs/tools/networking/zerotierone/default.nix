@@ -2,10 +2,8 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-
 , buildPackages
 , cargo
-, iproute2
 , lzo
 , openssl
 , pkg-config
@@ -16,13 +14,13 @@
 
 let
   pname = "zerotierone";
-  version = "1.10.6";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "zerotier";
     repo = "ZeroTierOne";
     rev = version;
-    sha256 = "sha256-mapFKeF+8jMGkxSuHaw5oUdTdSQgAdxEwF/S6iyVLbY=";
+    sha256 = "sha256-p0zrYgbHTLefj5GTrMnYLytCXZ/nRuqTL+6dEeC+uVw=";
   };
 
 in stdenv.mkDerivation {
@@ -62,8 +60,6 @@ in stdenv.mkDerivation {
     lzo
     openssl
     zlib
-  ] ++ lib.optional stdenv.isLinux [
-    iproute2
   ];
 
   enableParallelBuilding = true;

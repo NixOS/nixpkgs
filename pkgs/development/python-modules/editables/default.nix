@@ -1,17 +1,23 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, flit-core
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "editables";
-  version = "0.3";
+  version = "0.5";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FnUk43c1jtHxN05hwmjw16S/fb0EbGVve0EM3hYWGxo=";
+    hash = "sha256-MJYn2bXErcDmaNjG+nusG6fIxdQVwtJ/YPCB+OgNHeI=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

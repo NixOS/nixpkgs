@@ -1,26 +1,36 @@
-{ fetchurl, lib, stdenv, libxml2, freetype, libGLU, libGL, glew
-, qtbase, wrapQtAppsHook, python3
-, cmake, libjpeg }:
+{ lib, stdenv, fetchurl, libxml2, freetype, libGLU, libGL, glew
+, qtbase, wrapQtAppsHook, autoPatchelfHook, python3
+, cmake, libjpeg, llvmPackages }:
 
 stdenv.mkDerivation rec {
   pname = "tulip";
-  version = "5.6.1";
+  version = "5.7.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/auber/${pname}-${version}_src.tar.gz";
-    sha256 = "1fy3nvgxv3igwc1d23zailcgigj1d0f2kkh7a5j24c0dyqz5zxmw";
+    url = "mirror://sourceforge/auber/tulip-${version}_src.tar.gz";
+    hash = "sha256-arpC+FsDYGMf47phtSzyjjvDg/UYZS+akOe5CYfajdU=";
   };
 
-  buildInputs = [ libxml2 freetype glew libGLU libGL libjpeg qtbase python3 ];
-  nativeBuildInputs = [ cmake wrapQtAppsHook ];
+  nativeBuildInputs = [ cmake wrapQtAppsHook ]
+    ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+
+  buildInputs = [ libxml2 freetype glew libjpeg qtbase python3 ]
+    ++ lib.optionals stdenv.isDarwin [ llvmPackages.openmp ]
+    ++ lib.optionals stdenv.isLinux [ libGLU libGL ];
 
   qtWrapperArgs = [ ''--prefix PATH : ${lib.makeBinPath [ python3 ]}'' ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin (toString [
+    # fatal error: 'Python.h' file not found
+    "-I${python3}/include/${python3.libPrefix}"
+    # error: format string is not a string literal (potentially insecure)
+    "-Wno-format-security"
+  ]);
 
   # FIXME: "make check" needs Docbook's DTD 4.4, among other things.
   doCheck = false;
 
   meta = {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "A visualization framework for the analysis and visualization of relational data";
 
     longDescription =
@@ -36,6 +46,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
 
     maintainers = [ ];
-    platforms = lib.platforms.gnu ++ lib.platforms.linux;  # arbitrary choice
+    platforms = lib.platforms.all;
   };
 }

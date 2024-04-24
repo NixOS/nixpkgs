@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Shell front end for the duplicity backup tool";
+    mainProgram = "duply";
     longDescription = ''
       Duply is a shell front end for the duplicity backup tool
       https://www.nongnu.org/duplicity. It greatly simplifies its usage by

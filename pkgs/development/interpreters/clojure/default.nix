@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clojure";
-  version = "1.11.1.1386";
+  version = "1.11.2.1446";
 
   src = fetchurl {
     # https://github.com/clojure/brew-install/releases
     url = "https://github.com/clojure/brew-install/releases/download/${finalAttrs.version}/clojure-tools-${finalAttrs.version}.tar.gz";
-    hash = "sha256-e5RLnsydCZKRv6P/yC8FxK5AgK0Gj6YJw7E41neGYsM=";
+    hash = "sha256-qn7/sPyVDfjZPLeWxlUBBljAW/d8cCw6lEm3/deS73E=";
   };
 
   nativeBuildInputs = [
@@ -61,11 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
     #!nix-shell -i bash -p curl common-updater-scripts jq
 
     set -euo pipefail
+    shopt -s inherit_errexit
 
     # `jq -r '.[0].name'` results in `v0.0`
-    readonly latest_version="$(curl \
+    latest_version="$(curl \
       ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
-      -s "https://api.github.com/repos/clojure/brew-install/tags" \
+      -fsL "https://api.github.com/repos/clojure/brew-install/tags" \
       | jq -r '.[1].name')"
 
     update-source-version clojure "$latest_version"

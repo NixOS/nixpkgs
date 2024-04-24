@@ -10,25 +10,20 @@ in
 
 {
   options.services.ntfy-sh = {
-    enable = mkEnableOption (mdDoc "[ntfy-sh](https://ntfy.sh), a push notification service");
+    enable = mkEnableOption "[ntfy-sh](https://ntfy.sh), a push notification service";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.ntfy-sh;
-      defaultText = literalExpression "pkgs.ntfy-sh";
-      description = mdDoc "The ntfy.sh package to use.";
-    };
+    package = mkPackageOption pkgs "ntfy-sh" { };
 
     user = mkOption {
       default = "ntfy-sh";
       type = types.str;
-      description = lib.mdDoc "User the ntfy-sh server runs under.";
+      description = "User the ntfy-sh server runs under.";
     };
 
     group = mkOption {
       default = "ntfy-sh";
       type = types.str;
-      description = lib.mdDoc "Primary group of ntfy-sh user.";
+      description = "Primary group of ntfy-sh user.";
     };
 
     settings = mkOption {
@@ -38,7 +33,7 @@ in
           base-url = mkOption {
             type = types.str;
             example = "https://ntfy.example";
-            description = lib.mdDoc ''
+            description = ''
               Public facing base URL of the service
 
               This setting is required for any of the following features:
@@ -60,7 +55,7 @@ in
         }
       '';
 
-      description = mdDoc ''
+      description = ''
         Configuration for ntfy.sh, supported values are [here](https://ntfy.sh/docs/config/#config-options).
       '';
     };
@@ -83,12 +78,6 @@ in
         attachment-cache-dir = mkDefault "/var/lib/ntfy-sh/attachments";
         cache-file = mkDefault "/var/lib/ntfy-sh/cache-file.db";
       };
-
-      systemd.tmpfiles.rules = [
-        "f ${cfg.settings.auth-file} 0600 ${cfg.user} ${cfg.group} - -"
-        "d ${cfg.settings.attachment-cache-dir} 0700 ${cfg.user} ${cfg.group} - -"
-        "f ${cfg.settings.cache-file} 0600 ${cfg.user} ${cfg.group} - -"
-      ];
 
       systemd.services.ntfy-sh = {
         description = "Push notifications server";

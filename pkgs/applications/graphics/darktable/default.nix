@@ -10,7 +10,6 @@
 , ninja
 , curl
 , perl
-, llvm_13
 , desktop-file-utils
 , exiv2
 , glib
@@ -53,20 +52,19 @@
 , libheif
 , libaom
 , portmidi
-, fetchpatch
 , lua
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.4.2";
+  version = "4.6.1";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    sha256 = "c11d28434fdf2e9ce572b9b1f9bc4e64dcebf6148e25080b4c32eb51916cfa98";
+    sha256 = "sha256-Fu3AoHApPi082k6hDkm9qb3pMuI/nmLi+i56x0rPev0=";
   };
 
-  nativeBuildInputs = [ cmake ninja llvm_13 pkg-config intltool perl desktop-file-utils wrapGAppsHook ];
+  nativeBuildInputs = [ cmake ninja llvmPackages.llvm pkg-config intltool perl desktop-file-utils wrapGAppsHook ];
 
   buildInputs = [
     cairo

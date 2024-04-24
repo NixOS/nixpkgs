@@ -1,56 +1,70 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-
-# propagates
 , allpairspy
 , approval-utilities
 , beautifulsoup4
+, buildPythonPackage
 , empty-files
+, fetchFromGitHub
+, fetchpatch2
+, mock
 , mrjob
+, numpy
 , pyperclip
 , pytest
-, typing-extensions
-
-# tests
-, numpy
+, pytest-asyncio
 , pytestCheckHook
+, pythonOlder
+, setuptools
+, testfixtures
+, typing-extensions
 }:
 
 buildPythonPackage rec {
-  version = "8.3.1";
   pname = "approvaltests";
-  format = "setuptools";
+  version = "11.1.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  # no tests included in PyPI tarball
   src = fetchFromGitHub {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FyYT+w4CX+CdUg0uGwyjw98H8Z+HMVecgMBW/ytrtFU=";
+    hash = "sha256-VqE2Oj3b+ZfKT+fhJ9DxBClfa8Wz8w/puAnAotN3eG4=";
   };
 
-  propagatedBuildInputs = [
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/approvals/ApprovalTests.Python/commit/dac7c8a8aa62f31dca7a687d4dbf08158351d5e1.patch";
+      hash = "sha256-TMyfXNtzpGci6tdFRhxiKJRjCWRD5LkaffPY8EVj53E=";
+    })
+  ];
+
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     allpairspy
     approval-utilities
     beautifulsoup4
     empty-files
+    mock
     mrjob
     pyperclip
     pytest
+    testfixtures
     typing-extensions
   ];
 
   nativeCheckInputs = [
     numpy
+    pytest-asyncio
     pytestCheckHook
   ];
 
   disabledTests = [
-    # tests expects paths below ApprovalTests.Python directory
+    # Tests expect paths below ApprovalTests.Python directory
     "test_received_filename"
     "test_pytest_namer"
   ];
@@ -63,7 +77,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Assertion/verification library to aid testing";
     homepage = "https://github.com/approvals/ApprovalTests.Python";
+    changelog = "https://github.com/approvals/ApprovalTests.Python/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ marsam ];
   };
 }

@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , autoreconfHook
+, wrapGAppsHook
 , pkg-config
 , which
 , gtk3
@@ -20,12 +21,18 @@ stdenv.mkDerivation rec {
     hash = "sha256-6Yrx6LkJjfnMA/kJUDWLhGzGopZeecARSrcR++UScsU=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config which ];
+  nativeBuildInputs = [
+    autoreconfHook
+    wrapGAppsHook
+    pkg-config
+    which
+  ];
   buildInputs = [ gtk3 blas lapack ];
 
   meta = with lib; {
     homepage = "https://www.xnec2c.org/";
     description = "Graphical antenna simulation";
+    mainProgram = "xnec2c";
     license = licenses.gpl3;
     maintainers = with maintainers; [ mvs ];
     platforms = platforms.unix;

@@ -1,24 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, requests
-, shapely
-, python-dateutil
-, pytz
-, importlib-metadata
-, numpy
-, dateparser
-, remotezip
-, pytestCheckHook
-, requests-mock
-, defusedxml
+{
+  lib,
+  buildPythonPackage,
+  dateparser,
+  defusedxml,
+  fetchFromGitHub,
+  importlib-metadata,
+  numpy,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  pytz,
+  remotezip,
+  requests-mock,
+  requests,
+  setuptools-scm,
+  shapely,
+  tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "asf-search";
-  version = "6.3.1";
-  format = "setuptools";
+  version = "7.0.9";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -26,37 +30,39 @@ buildPythonPackage rec {
     owner = "asfadmin";
     repo = "Discovery-asf_search";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9mhb8PEpRdFjbPBZ/B8he/UcRSLryBQU0Dgjcii7LGY=";
+    hash = "sha256-CD9Up4h23dplTt51zif+4ZdW0qczRUz2hCOwUOOlS24=";
   };
 
-  propagatedBuildInputs = [
-    requests
-    shapely
-    python-dateutil
-    pytz
+  pythonRelaxDeps = [ "tenacity" ];
+
+  build-system = [ setuptools-scm ];
+
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  dependencies = [
+    dateparser
     importlib-metadata
     numpy
-    dateparser
+    python-dateutil
+    pytz
     remotezip
+    requests
+    shapely
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  checkInputs = [
-    requests-mock
     defusedxml
+    pytestCheckHook
+    requests-mock
+    tenacity
   ];
 
-  pythonImportsCheck = [
-    "asf_search"
-  ];
+  pythonImportsCheck = [ "asf_search" ];
 
   meta = with lib; {
-    changelog = "https://github.com/asfadmin/Discovery-asf_search/blob/${src.rev}/CHANGELOG.md";
     description = "Python wrapper for the ASF SearchAPI";
     homepage = "https://github.com/asfadmin/Discovery-asf_search";
+    changelog = "https://github.com/asfadmin/Discovery-asf_search/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bzizou ];
   };

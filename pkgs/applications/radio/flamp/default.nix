@@ -10,12 +10,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flamp";
-  version = "2.2.07";
+  version = "2.2.11";
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/fldigi/flamp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-BnKL1iwaw1iJC5qcGCvdMr461n0BSYxk61dbAnhpz2c=";
+    hash = "sha256-QYfTkciSbBLy49rF6xABMw8TXZ/0QyQ/yhJ2nuM7f/c=";
   };
 
   nativeBuildInputs = [
@@ -37,5 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ stteague ];
     platforms = platforms.unix;
     broken = stdenv.system == "x86_64-darwin";
+    mainProgram = "flamp";
   };
 })

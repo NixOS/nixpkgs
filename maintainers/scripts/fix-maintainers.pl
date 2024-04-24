@@ -13,12 +13,15 @@ STDOUT->autoflush(1);
 
 my $ua = LWP::UserAgent->new();
 
+if (!defined $ENV{GH_TOKEN}) {
+    die "Set GH_TOKEN before running this script";
+}
+
 keys %$maintainers_json; # reset the internal iterator so a prior each() doesn't affect the loop
 while(my($k, $v) = each %$maintainers_json) {
     my $current_user = %$v{'github'};
     if (!defined $current_user) {
         print "$k has no github handle\n";
-        next;
     }
     my $github_id = %$v{'githubId'};
     if (!defined $github_id) {
@@ -37,13 +40,16 @@ while(my($k, $v) = each %$maintainers_json) {
         sleep($ratelimit_reset - time() + 5);
     }
     if ($resp->code != 200) {
-        print $current_user . " likely deleted their github account\n";
+        print "$k likely deleted their github account\n";
         next;
     }
     my $resp_json = from_json($resp->content);
     my $api_user = %$resp_json{"login"};
-    if (lc($current_user) ne lc($api_user)) {
-        print $current_user . " is now known on github as " . $api_user . ". Editing maintainer-list.nix…\n";
+    if (!defined $current_user) {
+        print "$k is known on github as $api_user.\n";
+    }
+    elsif (lc($current_user) ne lc($api_user)) {
+        print "$k is now known on github as $api_user. Editing maintainer-list.nix…\n";
         my $file = path($maintainers_list_nix);
         my $data = $file->slurp_utf8;
         $data =~ s/github = "$current_user";$/github = "$api_user";/m;

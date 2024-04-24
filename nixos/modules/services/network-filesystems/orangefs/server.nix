@@ -74,45 +74,45 @@ in {
 
   options = {
     services.orangefs.server = {
-      enable = mkEnableOption (lib.mdDoc "OrangeFS server");
+      enable = mkEnableOption "OrangeFS server";
 
       logType = mkOption {
         type = with types; enum [ "file" "syslog" ];
         default = "syslog";
-        description = lib.mdDoc "Destination for log messages.";
+        description = "Destination for log messages.";
       };
 
       dataStorageSpace = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "/data/storage";
-        description = lib.mdDoc "Directory for data storage.";
+        description = "Directory for data storage.";
       };
 
       metadataStorageSpace = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "/data/meta";
-        description = lib.mdDoc "Directory for meta data storage.";
+        description = "Directory for meta data storage.";
       };
 
       BMIModules = mkOption {
         type = with types; listOf str;
         default = [ "bmi_tcp" ];
         example = [ "bmi_tcp" "bmi_ib"];
-        description = lib.mdDoc "List of BMI modules to load.";
+        description = "List of BMI modules to load.";
       };
 
       extraDefaults = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc "Extra config for `<Defaults>` section.";
+        description = "Extra config for `<Defaults>` section.";
       };
 
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc "Extra config for the global section.";
+        description = "Extra config for the global section.";
       };
 
       servers = mkOption {
@@ -122,11 +122,11 @@ in {
           node1 = "tcp://node1:3334";
           node2 = "tcp://node2:3334";
         };
-        description = lib.mdDoc "URLs for storage server including port. The attribute names define the server alias.";
+        description = "URLs for storage server including port. The attribute names define the server alias.";
       };
 
       fileSystems = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           These options will create the `<FileSystem>` sections of config file.
         '';
         default = { orangefs = {}; };
@@ -146,37 +146,37 @@ in {
             id = mkOption {
               type = types.int;
               default = 1;
-              description = lib.mdDoc "File system ID (must be unique within configuration).";
+              description = "File system ID (must be unique within configuration).";
             };
 
             rootHandle = mkOption {
               type = types.int;
               default = 3;
-              description = lib.mdDoc "File system root ID.";
+              description = "File system root ID.";
             };
 
             extraConfig = mkOption {
               type = types.lines;
               default = "";
-              description = lib.mdDoc "Extra config for `<FileSystem>` section.";
+              description = "Extra config for `<FileSystem>` section.";
             };
 
             troveSyncMeta = mkOption {
               type = types.bool;
               default = true;
-              description = lib.mdDoc "Sync meta data.";
+              description = "Sync meta data.";
             };
 
             troveSyncData = mkOption {
               type = types.bool;
               default = false;
-              description = lib.mdDoc "Sync data.";
+              description = "Sync data.";
             };
 
             extraStorageHints = mkOption {
               type = types.lines;
               default = "";
-              description = lib.mdDoc "Extra config for `<StorageHints>` section.";
+              description = "Extra config for `<StorageHints>` section.";
             };
           };
         }));
@@ -192,7 +192,7 @@ in {
     # orangefs daemon will run as user
     users.users.orangefs = {
       isSystemUser = true;
-      group = "orangfs";
+      group = "orangefs";
     };
     users.groups.orangefs = {};
 

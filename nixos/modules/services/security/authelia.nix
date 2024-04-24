@@ -12,39 +12,34 @@ let
 
   autheliaOpts = with lib; { name, ... }: {
     options = {
-      enable = mkEnableOption (mdDoc "Authelia instance");
+      enable = mkEnableOption "Authelia instance";
 
       name = mkOption {
         type = types.str;
         default = name;
-        description = mdDoc ''
+        description = ''
           Name is used as a suffix for the service name, user, and group.
           By default it takes the value you use for `<instance>` in:
           {option}`services.authelia.<instance>`
         '';
       };
 
-      package = mkOption {
-        default = pkgs.authelia;
-        type = types.package;
-        defaultText = literalExpression "pkgs.authelia";
-        description = mdDoc "Authelia derivation to use.";
-      };
+      package = mkPackageOption pkgs "authelia" { };
 
       user = mkOption {
         default = "authelia-${name}";
         type = types.str;
-        description = mdDoc "The name of the user for this authelia instance.";
+        description = "The name of the user for this authelia instance.";
       };
 
       group = mkOption {
         default = "authelia-${name}";
         type = types.str;
-        description = mdDoc "The name of the group for this authelia instance.";
+        description = "The name of the group for this authelia instance.";
       };
 
       secrets = mkOption {
-        description = mdDoc ''
+        description = ''
           It is recommended you keep your secrets separate from the configuration.
           It's especially important to keep the raw secrets out of your nix configuration,
           as the values will be preserved in your nix store.
@@ -58,7 +53,7 @@ let
             manual = mkOption {
               default = false;
               example = true;
-              description = mdDoc ''
+              description = ''
                 Configuring authelia's secret files via the secrets attribute set
                 is intended to be convenient and help catch cases where values are required
                 to run at all.
@@ -71,7 +66,7 @@ let
             jwtSecretFile = mkOption {
               type = types.nullOr types.path;
               default = null;
-              description = mdDoc ''
+              description = ''
                 Path to your JWT secret used during identity verificaton.
               '';
             };
@@ -79,7 +74,7 @@ let
             oidcIssuerPrivateKeyFile = mkOption {
               type = types.nullOr types.path;
               default = null;
-              description = mdDoc ''
+              description = ''
                 Path to your private key file used to encrypt OIDC JWTs.
               '';
             };
@@ -87,7 +82,7 @@ let
             oidcHmacSecretFile = mkOption {
               type = types.nullOr types.path;
               default = null;
-              description = mdDoc ''
+              description = ''
                 Path to your HMAC secret used to sign OIDC JWTs.
               '';
             };
@@ -95,7 +90,7 @@ let
             sessionSecretFile = mkOption {
               type = types.nullOr types.path;
               default = null;
-              description = mdDoc ''
+              description = ''
                 Path to your session secret. Only used when redis is used as session storage.
               '';
             };
@@ -104,7 +99,7 @@ let
             storageEncryptionKeyFile = mkOption {
               type = types.nullOr types.path;
               default = null;
-              description = mdDoc ''
+              description = ''
                 Path to your storage encryption key.
               '';
             };
@@ -114,7 +109,7 @@ let
 
       environmentVariables = mkOption {
         type = types.attrsOf types.str;
-        description = mdDoc ''
+        description = ''
           Additional environment variables to provide to authelia.
           If you are providing secrets please consider the options under {option}`services.authelia.<instance>.secrets`
           or make sure you use the `_FILE` suffix.
@@ -125,7 +120,7 @@ let
       };
 
       settings = mkOption {
-        description = mdDoc ''
+        description = ''
           Your Authelia config.yml as a Nix attribute set.
           There are several values that are defined and documented in nix such as `default_2fa_method`,
           but additional items can also be included.
@@ -148,14 +143,14 @@ let
               type = types.enum [ "light" "dark" "grey" "auto" ];
               default = "light";
               example = "dark";
-              description = mdDoc "The theme to display.";
+              description = "The theme to display.";
             };
 
             default_2fa_method = mkOption {
               type = types.enum [ "" "totp" "webauthn" "mobile_push" ];
               default = "";
               example = "webauthn";
-              description = mdDoc ''
+              description = ''
                 Default 2FA method for new users and fallback for preferred but disabled methods.
               '';
             };
@@ -165,13 +160,13 @@ let
                 type = types.str;
                 default = "localhost";
                 example = "0.0.0.0";
-                description = mdDoc "The address to listen on.";
+                description = "The address to listen on.";
               };
 
               port = mkOption {
                 type = types.port;
                 default = 9091;
-                description = mdDoc "The port to listen on.";
+                description = "The port to listen on.";
               };
             };
 
@@ -180,28 +175,28 @@ let
                 type = types.enum [ "info" "debug" "trace" ];
                 default = "debug";
                 example = "info";
-                description = mdDoc "Level of verbosity for logs: info, debug, trace.";
+                description = "Level of verbosity for logs: info, debug, trace.";
               };
 
               format = mkOption {
                 type = types.enum [ "json" "text" ];
                 default = "json";
                 example = "text";
-                description = mdDoc "Format the logs are written as.";
+                description = "Format the logs are written as.";
               };
 
               file_path = mkOption {
                 type = types.nullOr types.path;
                 default = null;
                 example = "/var/log/authelia/authelia.log";
-                description = mdDoc "File path where the logs will be written. If not set logs are written to stdout.";
+                description = "File path where the logs will be written. If not set logs are written to stdout.";
               };
 
               keep_stdout = mkOption {
                 type = types.bool;
                 default = false;
                 example = true;
-                description = mdDoc "Whether to also log to stdout when a `file_path` is defined.";
+                description = "Whether to also log to stdout when a `file_path` is defined.";
               };
             };
 
@@ -211,14 +206,14 @@ let
                   type = types.bool;
                   default = false;
                   example = true;
-                  description = mdDoc "Enable Metrics.";
+                  description = "Enable Metrics.";
                 };
 
                 address = mkOption {
                   type = types.str;
                   default = "tcp://127.0.0.1:9959";
                   example = "tcp://0.0.0.0:8888";
-                  description = mdDoc "The address to listen on for metrics. This should be on a different port to the main `server.port` value.";
+                  description = "The address to listen on for metrics. This should be on a different port to the main `server.port` value.";
                 };
               };
             };
@@ -230,7 +225,7 @@ let
         type = types.listOf types.path;
         default = [ ];
         example = [ "/etc/authelia/config.yml" "/etc/authelia/access-control.yml" "/etc/authelia/config/" ];
-        description = mdDoc ''
+        description = ''
           Here you can provide authelia with configuration files or directories.
           It is possible to give authelia multiple files and use the nix generated configuration
           file set via {option}`services.authelia.<instance>.settings`.
@@ -243,7 +238,7 @@ in
   options.services.authelia.instances = with lib; mkOption {
     default = { };
     type = types.attrsOf (types.submodule autheliaOpts);
-    description = mdDoc ''
+    description = ''
       Multi-domain protection currently requires multiple instances of Authelia.
       If you don't require multiple instances of Authelia you can define just the one.
 

@@ -11,25 +11,24 @@
 , pytestCheckHook
 , cairo
 , cffi
+, flit-core
 , numpy
 , withXcffib ? false
 , xcffib
 , glib
 , gdk-pixbuf
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "cairocffi";
-  version = "1.5.1";
+  version = "1.6.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  format = "pyproject";
-
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Bxq3ty41MzALC/1VpSBWtP/cHtbmVneeKs7Ztwm4opU=";
+    hash = "sha256-eOa75HNXZAxFPQvpKfpJzQXM4uEobz0qHKnL2n79uLc=";
   };
 
   patches = [
@@ -45,10 +44,8 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    setuptools
+    flit-core
   ];
-
-  propagatedNativeBuildInputs = [ cffi ];
 
   propagatedBuildInputs = [ cairo cffi ]
     ++ lib.optional withXcffib xcffib;
@@ -57,6 +54,10 @@ buildPythonPackage rec {
     numpy
     pikepdf
     pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "cairocffi"
   ];
 
   meta = with lib; {

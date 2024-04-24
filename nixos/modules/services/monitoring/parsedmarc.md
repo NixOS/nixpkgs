@@ -11,15 +11,17 @@ email address and saves them to a local Elasticsearch instance looks
 like this:
 
 ```nix
-services.parsedmarc = {
-  enable = true;
-  settings.imap = {
-    host = "imap.example.com";
-    user = "alice@example.com";
-    password = "/path/to/imap_password_file";
+{
+  services.parsedmarc = {
+    enable = true;
+    settings.imap = {
+      host = "imap.example.com";
+      user = "alice@example.com";
+      password = "/path/to/imap_password_file";
+    };
+    provision.geoIp = false; # Not recommended!
   };
-  provision.geoIp = false; # Not recommended!
-};
+}
 ```
 
 Note that GeoIP provisioning is disabled in the example for
@@ -37,16 +39,18 @@ configured in the domain's dmarc policy is
 `dmarc@monitoring.example.com`.
 
 ```nix
-services.parsedmarc = {
-  enable = true;
-  provision = {
-    localMail = {
-      enable = true;
-      hostname = monitoring.example.com;
+{
+  services.parsedmarc = {
+    enable = true;
+    provision = {
+      localMail = {
+        enable = true;
+        hostname = monitoring.example.com;
+      };
+      geoIp = false; # Not recommended!
     };
-    geoIp = false; # Not recommended!
   };
-};
+}
 ```
 
 ## Grafana and GeoIP {#module-services-parsedmarc-grafana-geoip}
@@ -58,55 +62,57 @@ is automatically added as a Grafana datasource, and the dashboard is
 added to Grafana as well.
 
 ```nix
-services.parsedmarc = {
-  enable = true;
-  provision = {
-    localMail = {
-      enable = true;
-      hostname = url;
+{
+  services.parsedmarc = {
+    enable = true;
+    provision = {
+      localMail = {
+        enable = true;
+        hostname = url;
+      };
+      grafana = {
+        datasource = true;
+        dashboard = true;
+      };
     };
-    grafana = {
-      datasource = true;
-      dashboard = true;
+  };
+
+  # Not required, but recommended for full functionality
+  services.geoipupdate = {
+    settings = {
+      AccountID = 000000;
+      LicenseKey = "/path/to/license_key_file";
     };
   };
-};
 
-# Not required, but recommended for full functionality
-services.geoipupdate = {
-  settings = {
-    AccountID = 000000;
-    LicenseKey = "/path/to/license_key_file";
+  services.grafana = {
+    enable = true;
+    addr = "0.0.0.0";
+    domain = url;
+    rootUrl = "https://" + url;
+    protocol = "socket";
+    security = {
+      adminUser = "admin";
+      adminPasswordFile = "/path/to/admin_password_file";
+      secretKeyFile = "/path/to/secret_key_file";
+    };
   };
-};
 
-services.grafana = {
-  enable = true;
-  addr = "0.0.0.0";
-  domain = url;
-  rootUrl = "https://" + url;
-  protocol = "socket";
-  security = {
-    adminUser = "admin";
-    adminPasswordFile = "/path/to/admin_password_file";
-    secretKeyFile = "/path/to/secret_key_file";
+  services.nginx = {
+    enable = true;
+    recommendedTlsSettings = true;
+    recommendedOptimisation = true;
+    recommendedGzipSettings = true;
+    recommendedProxySettings = true;
+    upstreams.grafana.servers."unix:/${config.services.grafana.socket}" = {};
+    virtualHosts.${url} = {
+      root = config.services.grafana.staticRootPath;
+      enableACME = true;
+      forceSSL = true;
+      locations."/".tryFiles = "$uri @grafana";
+      locations."@grafana".proxyPass = "http://grafana";
+    };
   };
-};
-
-services.nginx = {
-  enable = true;
-  recommendedTlsSettings = true;
-  recommendedOptimisation = true;
-  recommendedGzipSettings = true;
-  recommendedProxySettings = true;
-  upstreams.grafana.servers."unix:/${config.services.grafana.socket}" = {};
-  virtualHosts.${url} = {
-    root = config.services.grafana.staticRootPath;
-    enableACME = true;
-    forceSSL = true;
-    locations."/".tryFiles = "$uri @grafana";
-    locations."@grafana".proxyPass = "http://grafana";
-  };
-};
-users.users.nginx.extraGroups = [ "grafana" ];
+  users.users.nginx.extraGroups = [ "grafana" ];
+}
 ```

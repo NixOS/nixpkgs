@@ -1,26 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, netifaces
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  netifaces,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiozeroconf";
   version = "0.1.8";
-  disabled = isPy27;
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "074plydm7sd113p3k0siihwwz62d3r42q3g83vqaffp569msknqh";
+    hash = "sha256-ENupazLlOqfwHugNLEgeTZjPOYxRgznuCKHpU5unlxw=";
   };
 
-  propagatedBuildInputs = [ netifaces ];
+  build-system = [ setuptools ];
+
+  dependencies = [ netifaces ];
+
+  pythonImportsCheck = [ "aiozeroconf" ];
 
   meta = with lib; {
-    description = "A pure python implementation of multicast DNS service discovery";
+    description = "Implementation of multicast DNS service discovery";
     homepage = "https://github.com/jstasiak/python-zeroconf";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Only;
     maintainers = with maintainers; [ obadz ];
+    mainProgram = "aiozeroconf";
   };
 }

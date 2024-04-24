@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://fungi.yuggoth.org/weather";
     description = "Quick access to current weather conditions and forecasts";
+    mainProgram = "weather";
     license = licenses.isc;
     maintainers = [ maintainers.matthiasbeyer ];
     platforms = platforms.unix;

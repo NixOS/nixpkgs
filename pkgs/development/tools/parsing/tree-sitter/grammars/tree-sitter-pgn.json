@@ -4,6 +4,7 @@
   "date": "2021-08-25T17:57:38-04:00",
   "path": "/nix/store/fj882ab2hl3qrz45zvq366na6d2gqv8v-tree-sitter-pgn",
   "sha256": "1c4602jmq3p7p7splzip76863l1z3rgbjlbksqv0diqjxp7c42gq",
+  "hash": "sha256-+AnCzu0SxwY21nNRuV4eP9BhkDk3fnr1uecOXKUAhrA=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

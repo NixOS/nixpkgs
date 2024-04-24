@@ -3,11 +3,13 @@
 , rustPlatform
 , fetchFromGitHub
 , Security
+, SystemConfiguration
 , nixosTests
 , nix-update-script
+, libclang
 }:
 
-let version = "1.3.1";
+let version = "1.7.6";
 in
 rustPlatform.buildRustPackage {
   pname = "meilisearch";
@@ -17,7 +19,7 @@ rustPlatform.buildRustPackage {
     owner = "meilisearch";
     repo = "MeiliSearch";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jttT4qChoqwTnjjoW0Zc15ZieZN7KD1Us64Tk0eDG3Y=";
+    hash = "sha256-LsJM7zkoiu5LZb/rhnZaAS/wVNH8b6YZ+vNEE1wVIIk=";
   };
 
   cargoBuildFlags = [
@@ -28,9 +30,10 @@ rustPlatform.buildRustPackage {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "actix-web-static-files-3.0.5" = "sha256-2BN0RzLhdykvN3ceRLkaKwSZtel2DBqZ+uz4Qut+nII=";
-      "heed-0.12.7" = "sha256-mthHMaTqmNae8gpe4ZnozABKBrgFQdn9KWCvIzJJ+u4=";
-      "lmdb-rkv-sys-0.15.1" = "sha256-zLHTprwF7aa+2jaD7dGYmOZpJYFijMTb4I3ODflNUII=";
-      "nelson-0.1.0" = "sha256-eF672quU576wmZSisk7oDR7QiDafuKlSg0BTQkXnzqY=";
+      "candle-core-0.3.3" = "sha256-umWvG+82B793PQtY9VeHjPTtTVmSPdts25buw4v4TQc=";
+      "candle-kernels-0.3.1" = "sha256-KlkjTUcbnP+uZoA0fDZlEPT5qKC2ogMAuR8X14xRFgA=";
+      "hf-hub-0.3.2" = "sha256-tsn76b+/HRvPnZ7cWd8SBcEdnMPtjUEIRJipOJUbz54=";
+      "tokenizers-0.14.1" = "sha256-cq7dQLttNkV5UUhXujxKKMuzhD7hz+zTTKxUKlvz1s0=";
     };
   };
 
@@ -38,8 +41,10 @@ rustPlatform.buildRustPackage {
   buildNoDefaultFeatures = true;
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    Security
+    Security SystemConfiguration
   ];
+
+  env.LIBCLANG_PATH = "${libclang.lib}/lib";
 
   passthru = {
     updateScript = nix-update-script { };
@@ -53,6 +58,7 @@ rustPlatform.buildRustPackage {
 
   meta = with lib; {
     description = "Powerful, fast, and an easy to use search engine";
+    mainProgram = "meilisearch";
     homepage = "https://docs.meilisearch.com/";
     changelog = "https://github.com/meilisearch/meilisearch/releases/tag/v${version}";
     license = licenses.mit;

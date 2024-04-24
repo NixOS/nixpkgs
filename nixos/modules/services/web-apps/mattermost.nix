@@ -100,25 +100,20 @@ in
 {
   options = {
     services.mattermost = {
-      enable = mkEnableOption (lib.mdDoc "Mattermost chat server");
+      enable = mkEnableOption "Mattermost chat server";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.mattermost;
-        defaultText = lib.literalExpression "pkgs.mattermost";
-        description = lib.mdDoc "Mattermost derivation to use.";
-      };
+      package = mkPackageOption pkgs "mattermost" { };
 
       statePath = mkOption {
         type = types.str;
         default = "/var/lib/mattermost";
-        description = lib.mdDoc "Mattermost working directory";
+        description = "Mattermost working directory";
       };
 
       siteUrl = mkOption {
         type = types.str;
         example = "https://chat.example.com";
-        description = lib.mdDoc ''
+        description = ''
           URL this Mattermost instance is reachable under, without trailing slash.
         '';
       };
@@ -126,14 +121,14 @@ in
       siteName = mkOption {
         type = types.str;
         default = "Mattermost";
-        description = lib.mdDoc "Name of this Mattermost site.";
+        description = "Name of this Mattermost site.";
       };
 
       listenAddress = mkOption {
         type = types.str;
         default = ":8065";
         example = "[::1]:8065";
-        description = lib.mdDoc ''
+        description = ''
           Address and port this Mattermost instance listens to.
         '';
       };
@@ -141,7 +136,7 @@ in
       mutableConfig = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether the Mattermost config.json is writeable by Mattermost.
 
           Most of the settings can be edited in the system console of
@@ -158,7 +153,7 @@ in
       preferNixConfig = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           If both mutableConfig and this option are set, the Nix configuration
           will take precedence over any settings configured in the server
           console.
@@ -168,7 +163,7 @@ in
       extraConfig = mkOption {
         type = types.attrs;
         default = { };
-        description = lib.mdDoc ''
+        description = ''
           Additional configuration options as Nix attribute set in config.json schema.
         '';
       };
@@ -177,7 +172,7 @@ in
         type = types.listOf (types.oneOf [types.path types.package]);
         default = [];
         example = "[ ./com.github.moussetc.mattermost.plugin.giphy-2.0.0.tar.gz ]";
-        description = lib.mdDoc ''
+        description = ''
           Plugins to add to the configuration. Overrides any installed if non-null.
           This is a list of paths to .tar.gz files or derivations evaluating to
           .tar.gz files.
@@ -186,7 +181,7 @@ in
       environmentFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Environment file (see {manpage}`systemd.exec(5)`
           "EnvironmentFile=" section for the syntax) which sets config options
           for mattermost (see [the mattermost documentation](https://docs.mattermost.com/configure/configuration-settings.html#environment-variables)).
@@ -203,7 +198,7 @@ in
       localDatabaseCreate = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Create a local PostgreSQL database for Mattermost automatically.
         '';
       };
@@ -211,7 +206,7 @@ in
       localDatabaseName = mkOption {
         type = types.str;
         default = "mattermost";
-        description = lib.mdDoc ''
+        description = ''
           Local Mattermost database name.
         '';
       };
@@ -219,7 +214,7 @@ in
       localDatabaseUser = mkOption {
         type = types.str;
         default = "mattermost";
-        description = lib.mdDoc ''
+        description = ''
           Local Mattermost database username.
         '';
       };
@@ -227,7 +222,7 @@ in
       localDatabasePassword = mkOption {
         type = types.str;
         default = "mmpgsecret";
-        description = lib.mdDoc ''
+        description = ''
           Password for local Mattermost database user.
         '';
       };
@@ -235,7 +230,7 @@ in
       user = mkOption {
         type = types.str;
         default = "mattermost";
-        description = lib.mdDoc ''
+        description = ''
           User which runs the Mattermost service.
         '';
       };
@@ -243,24 +238,19 @@ in
       group = mkOption {
         type = types.str;
         default = "mattermost";
-        description = lib.mdDoc ''
+        description = ''
           Group which runs the Mattermost service.
         '';
       };
 
       matterircd = {
-        enable = mkEnableOption (lib.mdDoc "Mattermost IRC bridge");
-        package = mkOption {
-          type = types.package;
-          default = pkgs.matterircd;
-          defaultText = lib.literalExpression "pkgs.matterircd";
-          description = lib.mdDoc "matterircd derivation to use.";
-        };
+        enable = mkEnableOption "Mattermost IRC bridge";
+        package = mkPackageOption pkgs "matterircd" { };
         parameters = mkOption {
           type = types.listOf types.str;
           default = [ ];
           example = [ "-mmserver chat.example.com" "-bind [::]:6667" ];
-          description = lib.mdDoc ''
+          description = ''
             Set commandline parameters to pass to matterircd. See
             https://github.com/42wim/matterircd#usage for more information.
           '';
@@ -287,9 +277,7 @@ in
 
       # The systemd service will fail to execute the preStart hook
       # if the WorkingDirectory does not exist
-      system.activationScripts.mattermost = ''
-        mkdir -p "${cfg.statePath}"
-      '';
+      systemd.tmpfiles.settings."10-mattermost".${cfg.statePath}.d = { };
 
       systemd.services.mattermost = {
         description = "Mattermost chat service";

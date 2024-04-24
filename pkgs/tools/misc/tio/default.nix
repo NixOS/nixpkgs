@@ -1,19 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, inih, bash-completion }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, inih, lua, bash-completion, darwin }:
 
 stdenv.mkDerivation rec {
   pname = "tio";
-  version = "2.6";
+  version = "2.8";
 
   src = fetchFromGitHub {
     owner = "tio";
     repo = "tio";
     rev = "v${version}";
-    hash = "sha256-cYCkf9seaWcjrW0aDz+5FexfnTtiO3KQ1aX4OgG62Ug=";
+    hash = "sha256-BBfLmRhbDeymXXlYp71XTwbAab7h7gJ842fzZJNb6kU=";
   };
 
   strictDeps = true;
 
-  buildInputs = [ inih ];
+  buildInputs = [ inih lua ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ darwin.apple_sdk.frameworks.IOKit ];
 
   nativeBuildInputs = [ meson ninja pkg-config bash-completion ];
 
@@ -23,5 +24,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ yana ];
     platforms = platforms.unix;
+    mainProgram = "tio";
   };
 }

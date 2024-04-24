@@ -2,19 +2,22 @@
 
 buildGoModule rec {
   pname = "nali";
-  version = "0.7.3";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "zu1k";
     repo = "nali";
     rev = "v${version}";
-    sha256 = "sha256-ZKLxsq7ybom96NKWkioROAVXUoY20zFBZn7ksk4XvT4=";
+    hash = "sha256-5AI8TAKYFqjgLVKob9imrf7yVmXmAPq/zHh1bDfC5r0=";
   };
 
-  vendorHash = "sha256-l3Fs1Hd0kXI56uotic1407tb4ltkCSMzqqozFpvobH8=";
+  vendorHash = "sha256-wIp/ShUddz+RIcsEuKWUfxsV/wNB2X1jZtIltBZ0ROM=";
   subPackages = [ "." ];
 
   nativeBuildInputs = [ installShellFiles ];
+
+  CGO_ENABLED = 0;
+  ldflags = [ "-s" "-w" "-X github.com/zu1k/nali/internal/constant.Version=${version}" ];
 
   postInstall = ''
     installShellCompletion --cmd nali \
@@ -28,5 +31,6 @@ buildGoModule rec {
     homepage = "https://github.com/zu1k/nali";
     license = licenses.mit;
     maintainers = with maintainers; [ diffumist xyenon ];
+    mainProgram = "nali";
   };
 }

@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation rec {
   pname = "mediastreamer2";
-  version = "5.2.16";
+  version = "5.2.111";
 
   dontWrapQtApps = true;
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    hash = "sha256-K4EBZC3zuLKF9Qw4i24f0hYKlOgRM7MR4Ck2ZoTYi6I=";
+    hash = "sha256-Le52tsyzOpepmvb+GOGCPwwTriPUjhYpa6GM+y/6USA=";
   };
 
   patches = [

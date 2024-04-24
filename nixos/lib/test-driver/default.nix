@@ -4,19 +4,21 @@
 , qemu_pkg ? qemu_test
 , coreutils
 , imagemagick_light
-, libtiff
 , netpbm
 , qemu_test
 , socat
+, ruff
 , tesseract4
 , vde2
 , extraPythonPackages ? (_ : [])
+, nixosTests
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "nixos-test-driver";
   version = "1.1";
   src = ./.;
+  pyproject = true;
 
   propagatedBuildInputs = [
     coreutils
@@ -30,15 +32,22 @@ python3Packages.buildPythonApplication rec {
     ++ (lib.optionals enableOCR [ imagemagick_light tesseract4 ])
     ++ extraPythonPackages python3Packages;
 
+  nativeBuildInputs = [
+    python3Packages.setuptools
+  ];
+
+  passthru.tests = {
+    inherit (nixosTests.nixos-test-driver) driver-timeout;
+  };
+
   doCheck = true;
-  nativeCheckInputs = with python3Packages; [ mypy pylint black ];
+  nativeCheckInputs = with python3Packages; [ mypy ruff black ];
   checkPhase = ''
-    mypy --disallow-untyped-defs \
-          --no-implicit-optional \
-          --pretty \
-          --no-color-output \
-          --ignore-missing-imports ${src}/test_driver
-    pylint --errors-only --enable=unused-import ${src}/test_driver
-    black --check --diff ${src}/test_driver
+    echo -e "\x1b[32m## run mypy\x1b[0m"
+    mypy test_driver extract-docstrings.py
+    echo -e "\x1b[32m## run ruff\x1b[0m"
+    ruff .
+    echo -e "\x1b[32m## run black\x1b[0m"
+    black --check --diff .
   '';
 }

@@ -1,4 +1,4 @@
-{ python3, lib, overlay ? (_: _: {}) }:
+{ python3, fetchPypi, lib, overlay ? (_: _: {}) }:
 
 python3.override {
   packageOverrides = lib.composeExtensions
@@ -12,12 +12,23 @@ python3.override {
         to arise again. Since we don't want to clutter the python package-set
         itself with version overrides and don't want to change the APIs
         in here back and forth every time this comes up (and as a result
-        force users to change their code accordingly), this empty overlay
-        is kept on purpose.
+        force users to change their code accordingly), this overlay
+        is kept on purpose, even when empty.
 
         [1] 72a14ea563a3f5bf85db659349a533fe75a8b0ce
         [2] f931bc81d63f5cfda55ac73d754c87b3fd63b291
       */
+
+      # django-q tests fail with redis 5.0.0.
+      # https://gitlab.com/mailman/hyperkitty/-/issues/493
+      redis = super.redis.overridePythonAttrs ({ pname, ... }: rec {
+        version = "4.6.0";
+        src = fetchPypi {
+          inherit pname version;
+          hash = "sha256-WF3FFrnrBCphnvCjnD19Vf6BvbTfCaUsnN3g0Hvxqn0=";
+        };
+      });
     })
+
     overlay;
 }

@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Video and audio player along the lines of mplayer";
+    mainProgram = "rage";
     homepage = "https://enlightenment.org/";
     license = licenses.bsd2;
     platforms = platforms.linux;

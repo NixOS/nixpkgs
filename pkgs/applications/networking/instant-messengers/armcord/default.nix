@@ -3,7 +3,7 @@
 , fetchurl
 , autoPatchelfHook
 , dpkg
-, makeWrapper
+, makeBinaryWrapper
 , wrapGAppsHook
 , alsa-lib
 , at-spi2-atk
@@ -20,7 +20,6 @@
 , glib
 , gtk3
 , libappindicator-gtk3
-, libdbusmenu
 , libdrm
 , libnotify
 , libpulseaudio
@@ -39,7 +38,7 @@
 
 stdenv.mkDerivation rec {
   pname = "armcord";
-  version = "3.2.3";
+  version = "3.2.6";
 
   src =
     let
@@ -48,15 +47,15 @@ stdenv.mkDerivation rec {
       {
         x86_64-linux = fetchurl {
           url = "${base}/v${version}/ArmCord_${version}_amd64.deb";
-          hash = "sha256-d8Xv9ecXxkUAIqCS82VKlLNne56hESYvYtSDvNvGul0=";
+          hash = "sha256-9AcxqCxhLAjYclaw6lri06R0PgQQeRHTbLJLEdhDCWU=";
         };
         aarch64-linux = fetchurl {
           url = "${base}/v${version}/ArmCord_${version}_arm64.deb";
-          hash = "sha256-yqZ4hl+E4IEEEuKhfyDYY1Lyz5/Nekrf8uxoJr1B8w8=";
+          hash = "sha256-/uk2slpNF1sSTW6z319Yg9yx/s45fJPvJQJpY11ULVw=";
         };
       }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ autoPatchelfHook dpkg makeBinaryWrapper wrapGAppsHook ];
 
   dontWrapGApps = true;
 
@@ -115,7 +114,7 @@ stdenv.mkDerivation rec {
     chmod -R g-w "$out"
 
     # Wrap the startup command
-    makeWrapper $out/opt/ArmCord/armcord $out/bin/armcord \
+    makeBinaryWrapper $out/opt/ArmCord/armcord $out/bin/armcord \
       "''${gappsWrapperArgs[@]}" \
       --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=UseOzonePlatform --enable-features=WebRTCPipeWireCapturer }}" \

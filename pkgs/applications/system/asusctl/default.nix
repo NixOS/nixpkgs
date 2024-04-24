@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitLab
-, e2fsprogs
 , systemd
 , coreutils
 , pkg-config
@@ -9,26 +8,26 @@
 , fontconfig
 , gtk3
 , libappindicator
+, libGL
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "asusctl";
-  version = "4.7.0";
+  version = "5.0.10";
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "asusctl";
     rev = version;
-    hash = "sha256-SZijR9PotN0O72laj+FBSCVMXLXadmLRhCSD4XqobD0=";
+    hash = "sha256-H8x3nfOFRv9DkbDkFw+LO1tdHiVyU3SzetqED4twPSk=";
   };
 
-  cargoHash = "";
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "ecolor-0.21.0" = "sha256-m7eHX6flwO21umtx3dnIuVUnNsEs3ZCyOk5Vvp/lVfI=";
       "notify-rust-4.6.0" = "sha256-jhCgisA9f6AI9e9JQUYRtEt47gQnDv5WsdRKFoKvHJs=";
-      "supergfxctl-5.1.1" = "sha256-H00QHNILEjOtavXdj4Jd+rdLprJpVSlSVV3qkTeknzQ=";
+      "supergfxctl-5.1.2" = "sha256-WDbUgvWExk5cs2cpjo88CiROdEbc01o2DELhRi9gju4=";
     };
   };
 
@@ -43,8 +42,6 @@ rustPlatform.buildRustPackage rec {
     for file in $files; do
       substituteInPlace $file --replace /usr/share $out/share
     done
-
-    substituteInPlace asusd/src/ctrl_platform.rs --replace /usr/bin/chattr ${e2fsprogs}/bin/chattr
 
     substituteInPlace data/asusd.rules --replace systemctl ${systemd}/bin/systemctl
     substituteInPlace data/asusd.service \
@@ -67,7 +64,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postFixup = ''
-    patchelf --add-rpath "${libappindicator}/lib" "$out/bin/rog-control-center"
+    patchelf --add-rpath "${libappindicator}/lib:${libGL}/lib" "$out/bin/rog-control-center"
   '';
 
   meta = with lib; {

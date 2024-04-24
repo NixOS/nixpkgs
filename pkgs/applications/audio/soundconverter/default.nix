@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = [
     python3Packages.gst-python
-    python3Packages.distutils_extra
+    python3Packages.distutils-extra
     python3Packages.setuptools
     python3Packages.pygobject3
   ];
@@ -73,6 +73,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://soundconverter.org/";
     description = "Leading audio file converter for the GNOME Desktop";
+    mainProgram = "soundconverter";
     longDescription = ''
       SoundConverter reads anything the GStreamer library can read,
       and writes WAV, FLAC, MP3, AAC and Ogg Vorbis files.

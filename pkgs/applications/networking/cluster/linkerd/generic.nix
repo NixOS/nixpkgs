@@ -1,10 +1,10 @@
 { lib, fetchFromGitHub, buildGoModule, installShellFiles }:
 
-{ channel, version, sha256, vendorSha256 }:
+{ channel, version, sha256, vendorHash }:
 
 buildGoModule rec {
   pname = "linkerd-${channel}";
-  inherit version vendorSha256;
+  inherit version vendorHash;
 
   src = fetchFromGitHub {
     owner = "linkerd";
@@ -55,6 +55,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A simple Kubernetes service mesh that improves security, observability and reliability";
+    mainProgram = "linkerd";
     downloadPage = "https://github.com/linkerd/linkerd2/";
     homepage = "https://linkerd.io/";
     license = licenses.asl20;

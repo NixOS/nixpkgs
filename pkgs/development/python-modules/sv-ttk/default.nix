@@ -2,11 +2,12 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, tkinter
 }:
 
 buildPythonPackage rec {
   pname = "sv-ttk";
-  version = "2.4.5";
+  version = "2.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -14,11 +15,15 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "sv_ttk";
-    hash = "sha256-ysRhRxrml+wmluH8F5AE7vZYXrTNUg5ZzI+26jwpOpc=";
+    hash = "sha256-P9RAOWyV4w6I9ob88ovkJUgPcyDWvzRvnOpdb1ZwLMI=";
   };
 
   # No tests available
   doCheck = false;
+
+  propagatedBuildInputs = [
+    tkinter
+  ];
 
   pythonImportsCheck = [
     "sv_ttk"

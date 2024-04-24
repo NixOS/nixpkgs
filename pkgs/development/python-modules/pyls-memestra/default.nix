@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "pyls-memestra";
   version = "0.0.16";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

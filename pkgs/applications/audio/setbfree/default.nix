@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, alsa-lib, freetype, ftgl, libjack2, libX11, lv2
+{ lib, stdenv, fetchFromGitHub, fetchpatch, alsa-lib, freetype, ftgl, libjack2, libX11, lv2
 , libGLU, libGL, pkg-config, ttf_bitstream_vera
 }:
 
@@ -10,8 +10,17 @@ stdenv.mkDerivation  rec {
     owner = "pantherb";
     repo = "setBfree";
     rev = "v${version}";
-    sha256 = "sha256-e/cvD/CtT8dY1lYcsZ21DC8pNqKXqKfC/eRXX8k01eI=";
+    hash = "sha256-e/cvD/CtT8dY1lYcsZ21DC8pNqKXqKfC/eRXX8k01eI=";
   };
+
+  patches = [
+    # link with -lGL can remove on next update
+    (fetchpatch {
+      name = "ui-add-lGL.patch";
+      url = "https://github.com/pantherb/setBfree/commit/756437db43fbf5481f101d8fc695f8b11192047f.patch";
+      hash = "sha256-49PYTayD4TchAApfFvj3DLc4EBTxH8LYx48TtdSRwwA=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace common.mak \

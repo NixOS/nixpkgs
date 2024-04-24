@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , pkg-config
 , python3
@@ -16,37 +15,31 @@
 # for passthru.tests
 , libgit2-glib
 , python3Packages
+, gitstatus
 }:
 
 stdenv.mkDerivation rec {
   pname = "libgit2";
-  version = "1.7.0";
+  version = "1.7.2";
   # also check the following packages for updates: python3Packages.pygit2 and libgit2-glib
+
+  outputs = ["lib" "dev" "out"];
 
   src = fetchFromGitHub {
     owner = "libgit2";
     repo = "libgit2";
     rev = "v${version}";
-    hash = "sha256-3ZVBGd2T5DQKsDEc5a7pS0yz01+rDCszU9ZK0zxvfyQ=";
+    hash = "sha256-fVPY/byE2/rxmv/bUykcAbmUFMlF3UZogVuTzjOXJUU=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "darwin-errSSLNetworkTimeout.patch";
-      url = "https://github.com/libgit2/libgit2/commit/3e15292d8863da316a57be23fede04f443460686.patch";
-      hash = "sha256-N314YK7osO9L3hCXb+FcMoDM8iBW9Bt8D5O2Szdz7YA=";
-    })
-    (fetchpatch {
-      name = "missing-git_oidarray.patch";
-      url = "https://github.com/libgit2/libgit2/commit/085a169c1d73e02888708652d7772b3bc1f1b28b.diff";
-      hash = "sha256-l6q1TLuOloyk0Jqvo5Npv4grU/oxlg+RFLa43qENaLI=";
-    })
-  ];
 
   cmakeFlags = [
     "-DUSE_HTTP_PARSER=system"
     "-DUSE_SSH=ON"
     "-DBUILD_SHARED_LIBS=${if staticBuild then "OFF" else "ON"}"
+  ] ++ lib.optionals stdenv.hostPlatform.isWindows [
+    "-DDLLTOOL=${stdenv.cc.bintools.targetPrefix}dlltool"
+    # For ws2_32, refered to by a `*.pc` file
+    "-DCMAKE_LIBRARY_PATH=${stdenv.cc.libc}/lib"
   ];
 
   nativeBuildInputs = [ cmake python3 pkg-config ];
@@ -56,15 +49,32 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = lib.optional (!stdenv.isLinux) libiconv;
 
-  doCheck = false; # hangs. or very expensive?
+  doCheck = true;
+  checkPhase = ''
+    testArgs=(-v -xonline)
+
+    # slow
+    testArgs+=(-xclone::nonetwork::bad_urls)
+
+    # failed to set permissions on ...: Operation not permitted
+    testArgs+=(-xrepo::init::extended_1)
+    testArgs+=(-xrepo::template::extended_with_template_and_shared_mode)
+
+    (
+      set -x
+      ./libgit2_tests ''${testArgs[@]}
+    )
+  '';
 
   passthru.tests = {
     inherit libgit2-glib;
     inherit (python3Packages) pygit2;
+    inherit gitstatus;
   };
 
   meta = with lib; {
     description = "Linkable library implementation of Git that you can use in your application";
+    mainProgram = "git2";
     homepage = "https://libgit2.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.all;

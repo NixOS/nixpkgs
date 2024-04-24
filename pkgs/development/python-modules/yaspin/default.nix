@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
+, pytest-xdist
 , pytestCheckHook
 , pythonOlder
 , termcolor
@@ -9,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "yaspin";
-  version = "2.3.0";
+  version = "3.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "pavdmyt";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-TURfjhEqkg8TT7dsoIOn2iAeD7+lX8+s9hItritf1GU=";
+    hash = "sha256-cYTCJyHZ9yNg6BfpZ+g3P0yMWFhYUxgYtlbANNgfohQ=";
   };
 
   nativeBuildInputs = [
@@ -30,13 +31,13 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-xdist
     pytestCheckHook
   ];
 
-  postPatch = ''
-    # https://github.com/pavdmyt/yaspin/pull/212
-    substituteInPlace pyproject.toml \
-      --replace 'termcolor-whl = "1.1.2"' 'termcolor = "*"'
+  # tests assert for \033 which gets turned off in termcolor when TERM dumb is used which is used by nix
+  preCheck = ''
+    export FORCE_COLOR=1
   '';
 
   pythonImportsCheck = [

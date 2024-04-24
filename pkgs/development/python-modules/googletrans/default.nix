@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "googletrans";
   version = "2.4.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ssut";
@@ -20,6 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Googletrans is python library to interact with Google Translate API";
+    mainProgram = "translate";
     homepage = "https://py-googletrans.readthedocs.io";
     license = licenses.mit;
     maintainers = with maintainers; [ unode ];

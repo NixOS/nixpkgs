@@ -1,4 +1,5 @@
-# Functions for working with paths, see ./path.md
+/* Functions for working with path values. */
+# See ./README.md for internal docs
 { lib }:
 let
 
@@ -8,6 +9,7 @@ let
     split
     match
     typeOf
+    storeDir
     ;
 
   inherit (lib.lists)
@@ -22,6 +24,8 @@ let
     take
     drop
     ;
+
+  listHasPrefix = lib.lists.hasPrefix;
 
   inherit (lib.strings)
     concatStringsSep
@@ -118,6 +122,28 @@ let
         if base == dirOf base then { root = base; inherit components; }
         else recurse ([ (baseNameOf base) ] ++ components) (dirOf base);
     in recurse [];
+
+  # The components of the store directory, typically [ "nix" "store" ]
+  storeDirComponents = splitRelPath ("./" + storeDir);
+  # The number of store directory components, typically 2
+  storeDirLength = length storeDirComponents;
+
+  # Type: [ String ] -> Bool
+  #
+  # Whether path components have a store path as a prefix, according to
+  # https://nixos.org/manual/nix/stable/store/store-path.html#store-path.
+  componentsHaveStorePathPrefix = components:
+    # path starts with the store directory (typically /nix/store)
+    listHasPrefix storeDirComponents components
+    # is not the store directory itself, meaning there's at least one extra component
+    && storeDirComponents != components
+    # and the first component after the store directory has the expected format.
+    # NOTE: We could change the hash regex to be [0-9a-df-np-sv-z],
+    # because these are the actual ASCII characters used by Nix's base32 implementation,
+    # but this is not fully specified, so let's tie this too much to the currently implemented concept of store paths.
+    # Similar reasoning applies to the validity of the name part.
+    # We care more about discerning store path-ness on realistic values. Making it airtight would be fragile and slow.
+    && match ".{32}-.+" (elemAt components storeDirLength) != null;
 
 in /* No rec! Add dependencies on this file at the top. */ {
 
@@ -319,6 +345,62 @@ in /* No rec! Add dependencies on this file at the top. */ {
       root = deconstructed.root;
       subpath = joinRelPath deconstructed.components;
     };
+
+  /*
+    Whether a [path](https://nixos.org/manual/nix/stable/language/values.html#type-path)
+    has a [store path](https://nixos.org/manual/nix/stable/store/store-path.html#store-path)
+    as a prefix.
+
+    :::{.note}
+    As with all functions of this `lib.path` library, it does not work on paths in strings,
+    which is how you'd typically get store paths.
+
+    Instead, this function only handles path values themselves,
+    which occur when Nix files in the store use relative path expressions.
+    :::
+
+    Type:
+      hasStorePathPrefix :: Path -> Bool
+
+    Example:
+      # Subpaths of derivation outputs have a store path as a prefix
+      hasStorePathPrefix /nix/store/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo/bar/baz
+      => true
+
+      # The store directory itself is not a store path
+      hasStorePathPrefix /nix/store
+      => false
+
+      # Derivation outputs are store paths themselves
+      hasStorePathPrefix /nix/store/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo
+      => true
+
+      # Paths outside the Nix store don't have a store path prefix
+      hasStorePathPrefix /home/user
+      => false
+
+      # Not all paths under the Nix store are store paths
+      hasStorePathPrefix /nix/store/.links/10gg8k3rmbw8p7gszarbk7qyd9jwxhcfq9i6s5i0qikx8alkk4hq
+      => false
+
+      # Store derivations are also store paths themselves
+      hasStorePathPrefix /nix/store/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo.drv
+      => true
+  */
+  hasStorePathPrefix = path:
+    let
+      deconstructed = deconstructPath path;
+    in
+    assert assertMsg
+      (isPath path)
+      "lib.path.hasStorePathPrefix: Argument is of type ${typeOf path}, but a path was expected";
+    assert assertMsg
+      # This function likely breaks or needs adjustment if used with other filesystem roots, if they ever get implemented.
+      # Let's try to error nicely in such a case, though it's unclear how an implementation would work even and whether this could be detected.
+      # See also https://github.com/NixOS/nix/pull/6530#discussion_r1422843117
+      (deconstructed.root == /. && toString deconstructed.root == "/")
+      "lib.path.hasStorePathPrefix: Argument has a filesystem root (${toString deconstructed.root}) that's not /, which is currently not supported.";
+    componentsHaveStorePathPrefix deconstructed.components;
 
   /*
     Whether a value is a valid subpath string.

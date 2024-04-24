@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21;
     platforms = platforms.unix;
     maintainers = with maintainers; [ romildo ];
+    mainProgram = "uget-gtk";
   };
 }

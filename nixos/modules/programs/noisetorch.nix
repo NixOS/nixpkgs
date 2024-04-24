@@ -6,16 +6,9 @@ let cfg = config.programs.noisetorch;
 in
 {
   options.programs.noisetorch = {
-    enable = mkEnableOption (lib.mdDoc "noisetorch + setcap wrapper");
+    enable = mkEnableOption "noisetorch (+ setcap wrapper), a virtual microphone device with noise suppression";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.noisetorch;
-      defaultText = literalExpression "pkgs.noisetorch";
-      description = lib.mdDoc ''
-        The noisetorch package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "noisetorch" { };
   };
 
   config = mkIf cfg.enable {

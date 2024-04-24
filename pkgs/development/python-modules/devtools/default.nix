@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "devtools";
-  version = "0.11.0";
+  version = "0.12.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "samuelcolvin";
     repo = "python-${pname}";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ogogXZnuSFkWktCin+cyefjqIbGFRBVIeOrZJAa3hOE=";
+    hash = "sha256-1HFbNswdKa/9cQX0Gf6lLW1V5Kt/N4X6/5kQDdzp1Wo=";
   };
 
   nativeBuildInputs = [
@@ -37,11 +37,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
-  ];
-
-  pytestFlagsArray = [
-    # pytest.PytestRemovedIn8Warning: Passing None has been deprecated.
-    "-W ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   disabledTests = [

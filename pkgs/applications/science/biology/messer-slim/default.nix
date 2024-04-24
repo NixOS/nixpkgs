@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, cmake, gcc, gcc-unwrapped }:
 
 stdenv.mkDerivation rec {
-  version = "4.0.1";
+  version = "4.2.1";
   pname = "messer-slim";
 
   src = fetchFromGitHub {
     owner = "MesserLab";
     repo = "SLiM";
     rev = "v${version}";
-    sha256 = "sha256-KC9MbIJi//ZYreoRS+DED8eQW7e4IPvGT+rLI+f7Zrk=";
+    sha256 = "sha256-ba5I/bsDNAhDb1Kq0lWTC6YgpZ1PpeHPmB/vXx/JRK0=";
   };
 
   nativeBuildInputs = [ cmake gcc gcc-unwrapped ];

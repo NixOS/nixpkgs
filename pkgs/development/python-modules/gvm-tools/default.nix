@@ -10,17 +10,19 @@
 
 buildPythonPackage rec {
   pname = "gvm-tools";
-  version = "23.4.0";
-  format = "pyproject";
+  version = "24.3.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "greenbone";
-    repo = pname;
+    repo = "gvm-tools";
     rev = "refs/tags/v${version}";
-    hash = "sha256-L7GR50nlcm2EQ6YxLAfieQJ+vPUrCrj72KNSY73LFko=";
+    hash = "sha256-LLXMdT1q6IWsbsRjflpGN5pcjUCXWzdFK3gMw4mBm0U=";
   };
+
+  __darwinAllowLocalNetworking = true;
 
   nativeBuildInputs = [
     poetry-core

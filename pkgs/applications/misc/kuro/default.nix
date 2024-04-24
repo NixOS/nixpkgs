@@ -1,28 +1,35 @@
 { lib
 , fetchFromGitHub
+, fetchYarnDeps
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
 , mkYarnPackage
-, electron
+, electron_29
 }:
 
+let
+  electron = electron_29;
+in
 mkYarnPackage rec {
   pname = "kuro";
   version = "9.0.0";
 
   src = fetchFromGitHub {
     owner = "davidsmorais";
-    repo = pname;
+    repo = "kuro";
     rev = "v${version}";
-    sha256 = "sha256-9Z/r5T5ZI5aBghHmwiJcft/x/wTRzDlbIupujN2RFfU=";
+    hash = "sha256-9Z/r5T5ZI5aBghHmwiJcft/x/wTRzDlbIupujN2RFfU=";
   };
 
   packageJSON = ./package.json;
-  yarnLock = ./yarn.lock;
-  yarnNix = ./yarn.nix;
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  offlineCache = fetchYarnDeps {
+    yarnLock = "${src}/yarn.lock";
+    hash = "sha256-GTiNv7u1QK/wjQgpka7REuoLn2wjZG59kYJQaZZPycI=";
+  };
+
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   nativeBuildInputs = [
     makeWrapper
@@ -34,7 +41,7 @@ mkYarnPackage rec {
 
     yarn --offline run electron-builder \
       --dir \
-      -c.electronDist=${electron}/lib/electron \
+      -c.electronDist=${electron}/libexec/electron \
       -c.electronVersion=${electron.version}
 
     popd
@@ -64,21 +71,23 @@ mkYarnPackage rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
-      exec = pname;
-      icon = pname;
+      name = "kuro";
+      exec = "kuro";
+      icon = "kuro";
       desktopName = "Kuro";
       genericName = "Microsoft To-Do Client";
       comment = meta.description;
       categories = [ "Office" ];
-      startupWMClass = pname;
+      startupWMClass = "kuro";
     })
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/davidsmorais/kuro/releases/tag/${src.rev}";
     description = "An unofficial, featureful, open source, community-driven, free Microsoft To-Do app";
     homepage = "https://github.com/davidsmorais/kuro";
     license = licenses.mit;
+    mainProgram = "kuro";
     maintainers = with maintainers; [ ChaosAttractor ];
     inherit (electron.meta) platforms;
   };

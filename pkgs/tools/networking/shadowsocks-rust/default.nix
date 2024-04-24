@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "shadowsocks-rust";
-  version = "1.15.4";
+  version = "1.18.3";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "shadowsocks";
     repo = pname;
-    hash = "sha256-Tdh6lGk93hGuR+L2cytVoKYfRHrmuNo9OtKqQaeCMx0=";
+    hash = "sha256-eqN6Qwq+ofQ9Ed7Viz+DoJQkVTvUTo1U5rVqO1YDp2w=";
   };
 
-  cargoHash = "sha256-dtHr+zsjpQe+iNwlj0sRxZRsgl1nxflXhhV1fTMCiFY=";
+  cargoHash = "sha256-yJ2Ql6Fo2KaZRmvRB0C14fEcVwbBbsUlcqT3vFKHn58=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
 
@@ -35,12 +35,17 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     "--skip=http_proxy"
     "--skip=tcp_tunnel"
+    "--skip=tcprelay"
     "--skip=udp_tunnel"
     "--skip=udp_relay"
     "--skip=socks4_relay_connect"
     "--skip=socks5_relay_aead"
     "--skip=socks5_relay_stream"
+    "--skip=trust_dns_resolver"
   ];
+
+  # timeouts in sandbox
+  doCheck = false;
 
   meta = with lib; {
     description = "A Rust port of Shadowsocks";

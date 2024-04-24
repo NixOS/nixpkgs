@@ -7,12 +7,12 @@
 
 mkDerivation rec {
   pname = "calamares";
-  version = "3.2.62";
+  version = "3.3.3";
 
   # release including submodule
   src = fetchurl {
     url = "https://github.com/calamares/calamares/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-oPvOwqQ4aTdT/BdCIDVhGa1624orGcMXUYqhywJdbdA=";
+    sha256 = "sha256-XCp2Qc2y9eF2Z0BqfTtzUkf6860KzHl1lZE7kiHZbQM=";
   };
 
   patches = lib.optionals nixos-extensions [
@@ -51,7 +51,6 @@ mkDerivation rec {
     "-DPYTHON_LIBRARY=${python}/lib/lib${python.libPrefix}.so"
     "-DPYTHON_INCLUDE_DIR=${python}/include/${python.libPrefix}"
     "-DCMAKE_VERBOSE_MAKEFILE=True"
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DWITH_PYTHONQT:BOOL=ON"
   ];
 
@@ -94,5 +93,6 @@ mkDerivation rec {
     license = with licenses; [ gpl3Plus bsd2 cc0 ];
     maintainers = with maintainers; [ manveru vlinkz ];
     platforms = platforms.linux;
+    mainProgram = "calamares";
   };
 }

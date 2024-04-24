@@ -20,16 +20,18 @@
 , gnome-desktop
 , gnome-online-accounts
 , gnome-settings-daemon
+, gnome-tecla
 , gnome
 , gsettings-desktop-schemas
 , gsound
+, gst_all_1
 , gtk4
 , ibus
-, libgnomekbd
 , libgtop
 , libgudev
 , libadwaita
 , libkrb5
+, libjxl
 , libpulseaudio
 , libpwquality
 , librsvg
@@ -49,6 +51,7 @@
 , polkit
 , python3
 , samba
+, setxkbmap
 , shadow
 , shared-mime-info
 , sound-theme-freedesktop
@@ -60,23 +63,24 @@
 , libepoxy
 , gnome-user-share
 , gnome-remote-desktop
-, wrapGAppsHook
+, wrapGAppsHook4
+, xvfb-run
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-control-center";
-  version = "44.3";
+  version = "45.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-BmplBS/D7ProYAJehfeX5qsrh6WMT4q5xm7CBxioDHo=";
+    url = "mirror://gnome/sources/gnome-control-center/${lib.versions.major finalAttrs.version}/gnome-control-center-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-selJxOhsBiTsam7Q3wnJ+uKyKYPB3KYO2GrsjvCyQAQ=";
   };
 
   patches = [
     (substituteAll {
       src = ./paths.patch;
       gcm = gnome-color-manager;
-      inherit glibc libgnomekbd tzdata shadow;
+      inherit glibc tzdata shadow;
       inherit cups networkmanagerapplet;
     })
   ];
@@ -90,7 +94,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     shared-mime-info
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -109,6 +113,7 @@ stdenv.mkDerivation rec {
     gnome-online-accounts
     gnome-remote-desktop # optional, sharing panel
     gnome-settings-daemon
+    gnome-tecla
     gnome-user-share # optional, sharing panel
     gsettings-desktop-schemas
     gsound
@@ -134,18 +139,46 @@ stdenv.mkDerivation rec {
     tracker-miners # for search locations dialog
     udisks2
     upower
+  ] ++ (with gst_all_1; [
+    # For animations in Mouse panel.
+    gst-plugins-base
+    gst-plugins-good
+  ]);
+
+  nativeCheckInputs = [
+    python3.pkgs.python-dbusmock
+    setxkbmap
+    xvfb-run
   ];
+
+  doCheck = true;
 
   preConfigure = ''
     # For ITS rules
     addToSearchPath "XDG_DATA_DIRS" "${polkit.out}/share"
   '';
 
+  checkPhase = ''
+    runHook preCheck
+
+    testEnvironment=(
+      # Basically same as https://github.com/NixOS/nixpkgs/pull/141299
+      "ADW_DISABLE_PORTAL=1"
+      "XDG_DATA_DIRS=${glib.getSchemaDataDirPath gsettings-desktop-schemas}"
+    )
+
+    env "''${testEnvironment[@]}" xvfb-run \
+      meson test --print-errorlogs
+
+    runHook postCheck
+  '';
+
   postInstall = ''
-    # Pull in WebP support for gnome-backgrounds.
+    # Pull in WebP and JXL support for gnome-backgrounds.
     # In postInstall to run before gappsWrapperArgsHook.
     export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
       extraLoaders = [
+        libjxl
         librsvg
         webp-pixbuf-loader
       ];
@@ -170,15 +203,16 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "gnome-control-center";
+      attrPath = "gnome.gnome-control-center";
     };
   };
 
   meta = with lib; {
     description = "Utilities to configure the GNOME desktop";
+    mainProgram = "gnome-control-center";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
-}
+})

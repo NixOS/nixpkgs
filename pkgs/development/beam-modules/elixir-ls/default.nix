@@ -4,16 +4,16 @@
 
 let
   pname = "elixir-ls";
-  version = "0.15.1";
+  version = "0.20.0";
   src = fetchFromGitHub {
     owner = "elixir-lsp";
     repo = "elixir-ls";
     rev = "v${version}";
-    hash = "sha256-bWR5wKOVE9qPQyFjiaBumsWwG7vv9pFCVvXO4N8a3HA=";
+    hash = "sha256-LVMwDoGR516rwNhhvibu7g4EsaG2O8WOb+Ja+nCQA+k=";
     fetchSubmodules = true;
   };
 in
-mixRelease  {
+mixRelease {
   inherit pname version src elixir;
 
   stripDebug = true;
@@ -21,7 +21,7 @@ mixRelease  {
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version elixir;
-    hash = "sha256-7AE6RUD7DLo5uTxPMiUDm9MIBYcrNatrIuILK9jinNk=";
+    hash = "sha256-yq2shufOZsTyg8iBGsRrAs6bC3iAa9vtUeS96c5xJl0=";
   };
 
   # elixir-ls is an umbrella app
@@ -37,7 +37,7 @@ mixRelease  {
   # of the no-deps-check requirement
   buildPhase = ''
     runHook preBuild
-    mix do compile --no-deps-check, elixir_ls.release
+    mix do compile --no-deps-check, elixir_ls.release${lib.optionalString (lib.versionAtLeast elixir.version "1.16.0") "2"}
     runHook postBuild
   '';
 
@@ -49,6 +49,10 @@ mixRelease  {
     substitute release/language_server.sh $out/bin/elixir-ls \
       --replace 'exec "''${dir}/launch.sh"' "exec $out/lib/launch.sh"
     chmod +x $out/bin/elixir-ls
+
+    substitute release/debug_adapter.sh $out/bin/elixir-debug-adapter \
+      --replace 'exec "''${dir}/launch.sh"' "exec $out/lib/launch.sh"
+    chmod +x $out/bin/elixir-debug-adapter
     # prepare the launcher
     substituteInPlace $out/lib/launch.sh \
       --replace "ERL_LIBS=\"\$SCRIPTPATH:\$ERL_LIBS\"" \
@@ -70,6 +74,7 @@ mixRelease  {
     '';
     license = licenses.asl20;
     platforms = platforms.unix;
+    mainProgram = "elixir-ls";
     maintainers = teams.beam.members;
   };
   passthru.updateScript = nix-update-script { };

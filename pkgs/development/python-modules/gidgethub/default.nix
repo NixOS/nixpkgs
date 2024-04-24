@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, flit
 , uritemplate
 , pyjwt
 , pytestCheckHook
@@ -15,7 +16,7 @@
 buildPythonPackage rec {
   pname = "gidgethub";
   version = "5.3.0";
-  format = "flit";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
@@ -23,6 +24,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-ns59N/vOuBm4BWDn7Vj5NuSKZdN+xfVtt5FFFWtCaiU=";
   };
+
+  nativeBuildInputs = [
+    flit
+  ];
 
   propagatedBuildInputs = [
     uritemplate

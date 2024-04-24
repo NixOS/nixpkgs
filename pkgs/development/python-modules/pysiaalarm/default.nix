@@ -7,13 +7,14 @@
 , setuptools-scm
 , pytest-asyncio
 , pytest-cases
-, pytestCheckHook
+, pytest7CheckHook
 , pytz
 }:
 
 buildPythonPackage rec {
   pname = "pysiaalarm";
   version = "3.1.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
@@ -42,7 +43,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytest-cases
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
   pythonImportsCheck = [

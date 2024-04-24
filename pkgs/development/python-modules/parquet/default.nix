@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "parquet";
   version = "1.3.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jcrobak";
@@ -36,6 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python implementation of the parquet columnar file format";
+    mainProgram = "parquet";
     homepage = "https://github.com/jcrobak/parquet-python";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fab ];

@@ -1,322 +1,322 @@
 {
   "abstract_ring" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_1/abstract_ring.tar.gz";
-    sha = "133gifr4571b14ci44jmm49j91yhq785yx4b3h6yvx0188liibr2";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/abstract_ring.tar.gz";
+    sha = "0hfrzm974nm8f237vzlyjjh4pikva3n7fqr1p7jmx04g857g4rjq";
   };
   "abstract_ring_alt" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_1/abstract_ring_alt.tar.gz";
-    sha = "157yg2y4vfwjfly2paq2xn1p6h2wrbvvzwy4lbpbhlmhyhrymjvj";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/abstract_ring_alt.tar.gz";
+    sha = "0gx6l6w9d9z6am3x99igp6v1kykpwd39sjhalfsl21x1ah2cfmbh";
   };
   "alienware" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_1/alienware.tar.gz";
-    sha = "1i3i0gj927drbgivcx3fqj6fqdwm2gqy0wrwfkdqdjyqzq1286a5";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/alienware.tar.gz";
+    sha = "0pq9zdhdz5vg97zfzsj9kh63szsm9qww2j7bgp2w4z6pg42xcswh";
   };
   "angular" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_1/angular.tar.gz";
-    sha = "06n3ix7k8zpraqc75wy4fnk1bzcyhfajjxjq9kyy470wgsjrw6p4";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/angular.tar.gz";
+    sha = "15rsljiv1nhgcsgjiwsb2jiwah1ghxa95dbj3hlddx8d337nxljc";
   };
   "angular_alt" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_1/angular_alt.tar.gz";
-    sha = "1l1iy9p0k4a8mcdps30avscjp6wfv20m9zy376r18y7xwcz19qbj";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/angular_alt.tar.gz";
+    sha = "12v4d7yjd81vch6cm2jphkb24gnc5d2kncfi4lsan6vhamija49f";
   };
   "black_hud" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_1/black_hud.tar.gz";
-    sha = "13y32zxcshnfyjxs0r7f1sz010sr6brsaap90im2cb4rlvp0ajsz";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/black_hud.tar.gz";
+    sha = "07iy216xij19m6jy76z2rafmjm8mv4k7mwpp145xayz52zhs66s8";
   };
   "blockchain" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_1/blockchain.tar.gz";
-    sha = "1f60nvrk506bqw47g90wzbvn3bp5h1gbi0ll5f3bd6wj77qfk05i";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/blockchain.tar.gz";
+    sha = "1w0hz1fyj4p9qxwdhib9c7gxx582wb9fz2dyd77l9xqjkps78fjx";
   };
   "circle" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_1/circle.tar.gz";
-    sha = "04085lkh4i5diszpr1w5xnhnngp8ba1ckalcjj5s8hm8lk6wd4nc";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/circle.tar.gz";
+    sha = "16xrz3v85kpxc4palm8flc7lhscfl6psm1dz999r802yivxl5ikg";
   };
   "circle_alt" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_1/circle_alt.tar.gz";
-    sha = "0awbjrd31fv2cb0q7n58h5iji29di8n550bmpz5qdg6xn55baqqx";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/circle_alt.tar.gz";
+    sha = "0hsia8rq059kyxrnikr6brwmg7pa5kbm3j9gj4ky1a83dwpx18lg";
   };
   "circle_flow" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_1/circle_flow.tar.gz";
-    sha = "0ffxgjmx5la55dn3nyqgxi8fyd1ci4wckmvfaa6s1kyd7xsk8785";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/circle_flow.tar.gz";
+    sha = "109m9hdirrr9a6gxgqpq80yz0lx4s7bv7nihdfjzg7rhl0icgw93";
   };
   "circle_hud" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_1/circle_hud.tar.gz";
-    sha = "0sd28d0ac7wvkwmbrnvg42bccz6y4iyl2wp1pg7awwjxvag0azlf";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/circle_hud.tar.gz";
+    sha = "1xmc30z5k583zrknx2g7rmq41vw9chyxhdacpxvxzyvnp0828z0j";
   };
   "circuit" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_1/circuit.tar.gz";
-    sha = "1jzlr6c47n3zs0f1cafgjy92sks5060d1gs0774kxc0c96bysypg";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/circuit.tar.gz";
+    sha = "0linpkxhx01v7q2s3c7z8py0h697z7a4jhwbs2gp47p2923xggij";
   };
   "colorful" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_1/colorful.tar.gz";
-    sha = "18lbyffvhdav5cjh0xnidf09amryf5dcj5rizl9z7ghxpz2z57pr";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/colorful.tar.gz";
+    sha = "0m89prph31a0r0rxax989n72wdk3d5ywl8h3lygas8k7g908xr3p";
   };
   "colorful_loop" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_1/colorful_loop.tar.gz";
-    sha = "0qcn19gxl9w2q0w7lihi8wnlwlh8h3k0ddbp3ww9wcw1q0wsy1vi";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/colorful_loop.tar.gz";
+    sha = "0nbdh6v8zn1xxm44sgr1904wik8pv0yrqjg84dym10k7hvfnb1af";
   };
   "colorful_sliced" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_1/colorful_sliced.tar.gz";
-    sha = "0d9lafg76w2y77ywj1f1p5n1ci2q9jnfqfd16akf6f28h0iz1f9r";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/colorful_sliced.tar.gz";
+    sha = "1yadpyiwiixxily7wzhd8myxnrvhzdc9m6lj7g4ll3hlwygw7rz1";
   };
   "connect" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_1/connect.tar.gz";
-    sha = "1a0z59l391xv795d8mhcwa816wlmzyl75pwiizvvra2a0i8g6wz0";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/connect.tar.gz";
+    sha = "0gwd27vlr23zbf0mw34gd55f3s32a70q1s03z36dsf01bbyrvwz5";
   };
   "cross_hud" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_1/cross_hud.tar.gz";
-    sha = "188wj6hkvryawmw4r3bwcsvqxx52h10jb4ddq3jx7sh2rz1kpvwa";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/cross_hud.tar.gz";
+    sha = "1j79c99n3r94vrf6f8n2a42jjfywaf7vf6q34awdqcl188hc3qzi";
   };
   "cubes" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_1/cubes.tar.gz";
-    sha = "0bydagjwfkvbhgr7sv903a7pjkrmrdz6vh22i4qjx5rhzw2wvvsk";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/cubes.tar.gz";
+    sha = "11r6q9f4vz64rxz8wshhhpyp7knwn2klw50z98bn3qbmwl3zfh8c";
   };
   "cuts" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_1/cuts.tar.gz";
-    sha = "0znz82zzgyqkfprvzhkzv974amcnxqdg38ajsm4d7wlagc52zs0d";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/cuts.tar.gz";
+    sha = "1bf8yrwha2bibnpf8abc0bxsj0g9sg3m1fpagxcpr61m0cl4i3vq";
   };
   "cuts_alt" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_1/cuts_alt.tar.gz";
-    sha = "1bgs4v5kkh96m1xh29wjmdxinfsxh4g7lg9fk1nqj87igdg7wwss";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/cuts_alt.tar.gz";
+    sha = "00yrhfnfnmirzij5wd592cfn90crw3774a6wdxq4s538wrpmzhik";
   };
   "cyanide" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_2/cyanide.tar.gz";
-    sha = "04aklg9il310iv7zjpan6z4ha7gvh1b0yzgwi91679vm38cg0593";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/cyanide.tar.gz";
+    sha = "0bbrqg77m0655l9x90334b8yn60kni062p17h4rf6kp9qbi86gg0";
   };
   "cybernetic" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_2/cybernetic.tar.gz";
-    sha = "0ad75fcra24bjzs4pqn89l19wb4rcjph63j71lv60m0rz75vgjfb";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/cybernetic.tar.gz";
+    sha = "0chk52pfl81npffda6hy1pag6n8l5ssq61mc0qaa4nqfwpyvqqvw";
   };
   "dark_planet" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_2/dark_planet.tar.gz";
-    sha = "03i2knrfi56f8lbc8hs8rqa4jg432nsmjn74wibb04ppmvm8f47j";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/dark_planet.tar.gz";
+    sha = "1bbwdzgmvrdxkd379r1w2rkl0r5ixlh56xn59c47bmfbjl19927d";
   };
   "darth_vader" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_2/darth_vader.tar.gz";
-    sha = "0mlxy17l1hjf3nq390wc26n4x3c45n5hmks75zkzjz3l5ac1fah6";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/darth_vader.tar.gz";
+    sha = "1czq929j87zila0v49kikjqdw8bmssmn5cp573i3qb9kry5xdlm7";
   };
   "deus_ex" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_2/deus_ex.tar.gz";
-    sha = "1mllj0xj9g1nn01vcq0xsfcwd0qnmk1s3vj5d03f9qp513k8qzdl";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/deus_ex.tar.gz";
+    sha = "1la8rlvy9gh593vx2w9wjq2hmsp58fd2gx9l9g2222mmzpk1hmcc";
   };
   "dna" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_2/dna.tar.gz";
-    sha = "0xcf4vxd99w3d44bhrdk1yqsfcakix6cd7hdpjsgccgs1jd02hi1";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/dna.tar.gz";
+    sha = "1mkq23khwsbnz8spf00amk48fx5vnk3rpzapx37rpx1klgxpm89q";
   };
   "double" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_2/double.tar.gz";
-    sha = "07gxkzqrp0cfisdkq0wqfiai37m2yr2fhcpdpazmzkkxnm4qf25y";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/double.tar.gz";
+    sha = "11grxa2wblii4yxxrwfbbmwlwk26sm6mw9y00wfadijx2iyx30i1";
   };
   "dragon" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_2/dragon.tar.gz";
-    sha = "0ypr1vyl6zilfzncymlh2s1ivxr7n88kfaygmz2y83l332asjs66";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/dragon.tar.gz";
+    sha = "1hlvr2s8zhlf8mg9pskwby94kh15g8icxn3833cdqqhmgvc0d7l5";
   };
   "flame" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_2/flame.tar.gz";
-    sha = "0kvly5rgp47a4lby3blb1dird9xwy9y9c8a0wg17qfvz3zr69r0g";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/flame.tar.gz";
+    sha = "1yszmhmmjgdkjvqpij3gjwz8vxjhmklf7clbpz947254zgwxyn5g";
   };
   "glitch" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_2/glitch.tar.gz";
-    sha = "0s0kmrw01wj9i7qd7zbwvmfbbh7r3jfkc4522jv44m4rl6r4h84c";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/glitch.tar.gz";
+    sha = "15gwhfnrn0p80wdaymnlvrcig5cjb4m5qz56hbhg4jdwcjdlppbd";
   };
   "glowing" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_2/glowing.tar.gz";
-    sha = "19nkbk2cw6j763idz5z7l71lx529xcgyx1dcd9qd356x9ifdw206";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/glowing.tar.gz";
+    sha = "09h7dn805lrg04j5lp30l3qc6kb8xxilibdg0pxfadwyljblwl1f";
   };
   "green_blocks" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_2/green_blocks.tar.gz";
-    sha = "0x8pgsyfbchy7z6d4rijsk2nml6fl1xwba0f0h3lw9i6359k7j3j";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/green_blocks.tar.gz";
+    sha = "09xx5fbnby567s9s8hmryalm9k9vs520lymiprw06nig49rmy4v2";
   };
   "green_loader" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_2/green_loader.tar.gz";
-    sha = "00rdpy1gbc4ikxx487w3k27z622z2rjcsi0d18i23s5p3xqd1l3a";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/green_loader.tar.gz";
+    sha = "09vw6c9albsv28y4bdlp54csq5bl0vrd20yjph00jxhvhizffk3k";
   };
   "hexagon" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_2/hexagon.tar.gz";
-    sha = "0yk47hs5qfv09q5df4x6j82ivrxfxh1bxsw8p8x7hcmlb08dh6g6";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/hexagon.tar.gz";
+    sha = "17api8ndiqjxyj7prxz0bv1dpq0h0wvphnll4lb2dlhxp61bjmj3";
   };
   "hexagon_2" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_2/hexagon_2.tar.gz";
-    sha = "175im23q769s2if3xi8j669r0b5y0dagz8rsbvq7kghznzw4abc2";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/hexagon_2.tar.gz";
+    sha = "030yr5nb6q7bw1f1dh9kcdmd87x25f1fn60v45vmk7k07y1s10c8";
   };
   "hexagon_alt" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_2/hexagon_alt.tar.gz";
-    sha = "1ayhw1gzrb98hf7f77b6ka5wi19ymp3mljhhgm5lx8w8pwawsxnb";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/hexagon_alt.tar.gz";
+    sha = "1f6i8signlscp0av3kcmdw0xm13pf2dy2lz3c6wq9d9203ibry1p";
   };
   "hexagon_dots" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_2/hexagon_dots.tar.gz";
-    sha = "0pdw9ih9fsxvv394yc5vfj7nlq7mca9w05y0s631gnsdzgqxsyd6";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/hexagon_dots.tar.gz";
+    sha = "13mi9f8saw9zk8zdxp003ipigyd4y26iydn0pd1c0vr5fbz483rq";
   };
   "hexagon_dots_alt" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_2/hexagon_dots_alt.tar.gz";
-    sha = "0aff3bgpva41b4jk4mp0fxdvli286x4pk3q9ysvps7z7srw4fvvn";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/hexagon_dots_alt.tar.gz";
+    sha = "1gkzh5i84cwv64f3r8rgpzyj8h1kpn92m4syf67kn5sdhqykvqkz";
   };
   "hexagon_hud" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_2/hexagon_hud.tar.gz";
-    sha = "0wpmsffdp59dy2g5ggprgr7l50rf131c7v8pbgpir230lpn10xzi";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/hexagon_hud.tar.gz";
+    sha = "17k5378fsydvcps9rxd117rfqlijnrsj1ggyqx445a5yrwy6rx55";
   };
   "hexagon_red" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_2/hexagon_red.tar.gz";
-    sha = "0fgmma5j6fnjykpwplji4rm57d07l9shfpay079gz1nhbhnq3rkl";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/hexagon_red.tar.gz";
+    sha = "0x8i1k54qff7agwq9gqi2z59lww8qglck105bv87ylgy5z6150sx";
   };
   "hexa_retro" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_3/hexa_retro.tar.gz";
-    sha = "1cbyhqhv2ysx9w8cpbfidrm0w70wssp4fld0q1g01fgcbg93b7mf";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/hexa_retro.tar.gz";
+    sha = "0bwx2nvvr6bkqnmnv2kh9slbi11lv0h3hnzql99d9llr3vlid5ip";
   };
   "hud" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_3/hud.tar.gz";
-    sha = "0s01p1n75ckwa69iy5v2z2cg85ipzgx356n4yvdyi1jh9pnl22k9";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/hud.tar.gz";
+    sha = "0zng0rn4lacxf9v1azndzv5v7pl84f0amschccdlnymilyy564ck";
   };
   "hud_2" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_3/hud_2.tar.gz";
-    sha = "1bvkl5f0fwi7xzy23pj3p7c98fbz2zk8abz7frxr0pp0xj3ql87i";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/hud_2.tar.gz";
+    sha = "14ldw37gpysnw3k1cssh8q1hgxnrh954pgq5x5xhrlv2w6rsbfzq";
   };
   "hud_3" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_3/hud_3.tar.gz";
-    sha = "1n5qqkp0qb4mlpp7g20hpvazgwxw4gjb2p0ys0q2bglb3amzc2xr";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/hud_3.tar.gz";
+    sha = "0lc3x51gjfc58y45yzfnpy2i07vk9vdzbjl5yawv3wh97jy5x6x7";
   };
   "hud_space" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_3/hud_space.tar.gz";
-    sha = "0dhajnica048smn5wpwc13ij0n9g6c10a0qxgi4rwiczr7p9vajj";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/hud_space.tar.gz";
+    sha = "13ipj1l737bs9rnhh5vviq6bm5hdghpyq6s5hc1fhg2cgldfnq0i";
   };
   "ibm" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_3/ibm.tar.gz";
-    sha = "0xri6x716ma3y7d59yn9vm7skw5y53kn6s2ivfrvlfsac9n1zj4m";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/ibm.tar.gz";
+    sha = "0acs1f468xfpsvzy400f8ba7890n3pp69c9b20lb8slamm9l4swd";
   };
   "infinite_seal" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_3/infinite_seal.tar.gz";
-    sha = "0r9plydfdc35s2is1zi3pbx3s0bs5hqkim3laiav8fv3rzq0f3lq";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/infinite_seal.tar.gz";
+    sha = "07g4qmkfc9yqjpbs0yr277ij3pbhc1p51gzpnnbc3viwm1zzrs6p";
   };
   "ironman" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_3/ironman.tar.gz";
-    sha = "0af6qfdqj0n5qgsxg6nnrs2k8xas6cd18jw96mrwfcckpfz091cm";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/ironman.tar.gz";
+    sha = "0w5z22529jrgd2ab7fqibm2sd57740qxyqqrzhyvgd4l5axn1yzd";
   };
   "liquid" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_3/liquid.tar.gz";
-    sha = "0ghavh6nj68kwcgvrnwbabkzn44zq0m2ic1b2cl278d2vffzqv87";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/liquid.tar.gz";
+    sha = "01lwzb2yid7hb1f2nc0jycll9kvq89jcz7s7w81vqirx4by8p8n8";
   };
   "loader" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_3/loader.tar.gz";
-    sha = "1zlba3mra45ii0gahlw8v1vq1j7nbfjq62pcjn43vb40zcc1j873";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/loader.tar.gz";
+    sha = "0vx66kb56n6dy74k6yjk5w8apc8q1hmr8mrpgl420lzdqm4ggrgz";
   };
   "loader_2" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_3/loader_2.tar.gz";
-    sha = "1yw4n9bw483pl7m3ks2ajgfldslgyc4gb1kw61fszfp5x4l3k4rg";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/loader_2.tar.gz";
+    sha = "0rir3gfi8bq4m8s0xhbd2ppny6q60b42wq9vs826axk2g58jczrw";
   };
   "loader_alt" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_3/loader_alt.tar.gz";
-    sha = "1pi97pfhg13wq5s8hai4fd31s6bcfq09r969fl216yxksj8h69wj";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/loader_alt.tar.gz";
+    sha = "0pfg304xmgc46ai9d5m51p05i7zbvhfzfsscn7yk6kiw09b21fpz";
   };
   "lone" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_3/lone.tar.gz";
-    sha = "0413mxr8lqlznbps5c4qgbhm0zpz8dlkbdj67r9gvzi9v020qjgl";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/lone.tar.gz";
+    sha = "0xx959215w8qcpbzn9w3ip4shq3ib7dcni43z4m9jwa28aa3v7y8";
   };
   "metal_ball" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_3/metal_ball.tar.gz";
-    sha = "129q23q992fxfi976px5r68sf8wqbac3zby4yjh97s48zm83rzb5";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/metal_ball.tar.gz";
+    sha = "18nbikv736yd1q4qf9nq0fzspmxlkq1z6kl0jzady8ifkny1kvlw";
   };
   "motion" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_3/motion.tar.gz";
-    sha = "0g84ac8ps69ihic2z7gr4nlwib9ra86il2fdl7rl7w5nc8xzhx1y";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/motion.tar.gz";
+    sha = "0nbvgsgkpkdx83v45fb4z6ywiz3cpdmbsx8jcxhaa0cpywvq40bh";
   };
   "optimus" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_3/optimus.tar.gz";
-    sha = "1l4bmbiqqypwqvyhcd561nnxhrq5zif8pmkyk2hdwscbq6rlbc7r";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/optimus.tar.gz";
+    sha = "0zxv3b21mxkl0dvhs6nzd94vlsphc8h1zzvkcgng6cqg9n1c206p";
   };
   "owl" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_3/owl.tar.gz";
-    sha = "03gqqcvp4320qy1d3az1k2a8rj97alk8qzgkz6xg4akz9ccd731y";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/owl.tar.gz";
+    sha = "1ylkpydmy65xilqzkdps18kr0yyqggkxaysmmik3sz01qs6xjrz6";
   };
   "pie" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_3/pie.tar.gz";
-    sha = "1j479l428gq1b2g0g2ybkf81jzad69n59kphm0ns5gfv6khx10ga";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/pie.tar.gz";
+    sha = "1x834k0qsa8c7z3ds0vk6cw2r1f4ydmyk8yz1hdw8lxys17n9rj8";
   };
   "pixels" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_3/pixels.tar.gz";
-    sha = "13rfdd9v7h0k2wbwr428h2w8dv5vhhbw03wvirlmafsbhmgjz5xs";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/pixels.tar.gz";
+    sha = "072ag60r2n3jjj64r1nzsj5p97gjcfrvd72axm1z741rz5xaigki";
   };
   "polaroid" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_3/polaroid.tar.gz";
-    sha = "096iz34hpmicixrdrqaxmx8m83vggm90xqz4zyy5vkpcy3vl60mf";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/polaroid.tar.gz";
+    sha = "0m748kj5qps9vwwww44i1lj64r0mg0hqnfkg7dhqrf7nl0saw4da";
   };
   "red_loader" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_4/red_loader.tar.gz";
-    sha = "0n2jmfy558rma6knraskb7rgccvnayxh7csl0jaarx2xl9zxzzay";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/red_loader.tar.gz";
+    sha = "18vvlknnp3kiviacmp0cbmagrqzbhli6qv6vbzw362cv2mxhid85";
   };
   "rings" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_4/rings.tar.gz";
-    sha = "1g9p2cdn1w7dmy2z017xdkv6rm50gdb5qqd8a0y0662fzph5adg0";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/rings.tar.gz";
+    sha = "0xhwnxr5hcxqr64vr45lkvwzbbcpzxfbdlad006r16m480ncripw";
   };
   "rings_2" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_4/rings_2.tar.gz";
-    sha = "07v4mq1lpw9vfzg0rfxmkyfhyhz3nv5zab5kf10bjjgpjq8c9fi3";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/rings_2.tar.gz";
+    sha = "0vdjby6kyazxy042ljyv59pg4zfsvzzssf20w4r7ircfyiqypajs";
   };
   "rog" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_4/rog.tar.gz";
-    sha = "13lcrsdk1v1xn7fxn54xbk1jkh55kmsf813q1v7x8a2l8p9pl0hp";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/rog.tar.gz";
+    sha = "0az3vxndzym39w7357mmr6zyzfy32pg036v6jim895z10093b0y0";
   };
   "rog_2" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_4/rog_2.tar.gz";
-    sha = "0cgc1y1jrb689h9wd7jf3wvf9r996k4ik965v4wclmp9wra5gflk";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/rog_2.tar.gz";
+    sha = "13yfqb06ihzma80lfsb0mlsaq0j6qakqx607pr5rmhl6765bz116";
   };
   "seal" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_4/seal.tar.gz";
-    sha = "0ip23x69ljdj1bwxlhvz3fbg3ia47m2aw6d122v2rqhwqasmy40n";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/seal.tar.gz";
+    sha = "14k98v41ng3had7n6q1z513yc53zzkji7gm4n2jpjj5rd1jd2xr8";
   };
   "seal_2" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_4/seal_2.tar.gz";
-    sha = "1fc91n6ys2fl8xbzdj0ywck87xnyn1gp4jvjk307w49jmkpdzs15";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/seal_2.tar.gz";
+    sha = "0kwn7njj7anci9ihf8aqs7k7qv2vsnqc81sj5db672qn4hxpy50v";
   };
   "seal_3" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_4/seal_3.tar.gz";
-    sha = "1l2jlxhhaf5whbvbdf31ypcasalx4fsd4yn90xybmjq7b27bz5b2";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/seal_3.tar.gz";
+    sha = "0pjqq7qlmb0mf0xnm001b1f5jcbfzd3a3hzsf0jysacb5wmpzspp";
   };
   "sliced" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_4/sliced.tar.gz";
-    sha = "0363lwq3rwdcz3fg47f6kch150vxspvpjdqzg87aahli30kkjfdi";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/sliced.tar.gz";
+    sha = "1xrlhg1glykj73x9spq609y4ygfy3xw4azk3npjfh3ky5l0jqxjg";
   };
   "sphere" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_4/sphere.tar.gz";
-    sha = "1zjlwign7f2zd70qkg25adbbmq8ndm9b44gc4pa0ls64i6yfd6fz";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/sphere.tar.gz";
+    sha = "1nav61fr7wba1vbas8wci3fpyx0pidgiv9wm4zxdrw7hqw8akkpn";
   };
   "spin" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_4/spin.tar.gz";
-    sha = "0hwjc4i69zmzw7cpmsrhmx00w5k5y46m317m1imw2ycmhm0jicm5";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/spin.tar.gz";
+    sha = "1yb39jmvifb1ijh5i804d06c97samhf8w4p0w1xwxq29j6ihsvw9";
   };
   "spinner_alt" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_4/spinner_alt.tar.gz";
-    sha = "1ifs9xxd1cxvgjcnqjfw2zxkcapssv10hvchjrlf9nl60ayyp4m4";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/spinner_alt.tar.gz";
+    sha = "136nhpxlc2kar9jwz4pdxpg30b66n7bqy5mk9lm4v90pwf5m3kbs";
   };
   "splash" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_4/splash.tar.gz";
-    sha = "12l8hwzmi68mjqgl384wf1fscvnzwp4a3vmlsb2zcbfwhrs5q717";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/splash.tar.gz";
+    sha = "1wnmqqm07yrbd5ha31dd2iihmrjr555hd8fgra9fy9zh2pw9wgf2";
   };
   "square" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_4/square.tar.gz";
-    sha = "1mpyrivchsj2gr8flwj0g45vb792fvjjb5jmkn9xz1glrxxs7zww";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/square.tar.gz";
+    sha = "1wkixypxchsi11d8qfackcbvcjhifys9xlsc61rd7hfgz2nwjmww";
   };
   "square_hud" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_4/square_hud.tar.gz";
-    sha = "1lvv00r5rg8yjwibfqncka1s0p59fnpklhz3v6ifbs7ynlyp0kag";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/square_hud.tar.gz";
+    sha = "13bbzxv4gq66z0h801m8fi3n2rk41212nhapa5xb3xgh7v23my04";
   };
   "target" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_4/target.tar.gz";
-    sha = "1ipsd3rjclmwzg2l4bxpj0mgfl5bwxs1ihf498660zhm0bqqpgpr";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/target.tar.gz";
+    sha = "0vk8abdxhs93bj9l21db2ai7w945z472rwwn1m4070vrhs2fvzn4";
   };
   "target_2" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_4/target_2.tar.gz";
-    sha = "16lipy5c0pyyb1idwj1zchfr8g0cy6qr46c87b8g1kv2g96n5cn6";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/target_2.tar.gz";
+    sha = "0n6f1lnmry5zv3y592gp0r2rn297h806zhcgd7yfp0z2zgay67nz";
   };
   "tech_a" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_4/tech_a.tar.gz";
-    sha = "0fn8aib05kmjxnp7j2bmgrs3avaj6bn06kxz55bw8fdg8ihxnxg0";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/tech_a.tar.gz";
+    sha = "13gdq6h3m7skryr95vi0a30ylrapxg1nkc8cv8vn025gj6bafa83";
   };
   "tech_b" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_4/tech_b.tar.gz";
-    sha = "03i8jcvql76mhcq0dqaj2wygfza72fc7c22vfcyp38cx1lm6ilbv";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/tech_b.tar.gz";
+    sha = "1l383plabzlkccqjhf8x02jskykr4wkj2wy6knk9kg6qrq8w870l";
   };
   "unrap" = {
-    url = "https://github.com/adi1090x/files/raw/1f8b8d834eb0978d8b0260ffd161e9997b3ee0a2/plymouth-themes/themes/pack_4/unrap.tar.gz";
-    sha = "08gqwb11539kz5178ga6f96jv82xmyyzv44q6d05ajcw3pxk5j4c";
+    url = "https://github.com/adi1090x/plymouth-themes/releases/download/v1.0/unrap.tar.gz";
+    sha = "0571pvnhmny9642rfg7sw6csrz7bka2424zfryg858c0hg6aqrnk";
   };
 }

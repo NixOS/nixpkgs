@@ -62,7 +62,7 @@ in
 
     services.gnome.gnome-initial-setup = {
 
-      enable = mkEnableOption (lib.mdDoc "GNOME Initial Setup, a Simple, easy, and safe way to prepare a new system");
+      enable = mkEnableOption "GNOME Initial Setup, a Simple, easy, and safe way to prepare a new system";
 
     };
 
@@ -93,6 +93,9 @@ in
       "gnome-initial-setup.service"
     ];
 
+    programs.dconf.profiles.gnome-initial-setup.databases = [
+      "${pkgs.gnome.gnome-initial-setup}/share/gnome-initial-setup/initial-setup-dconf-defaults"
+    ];
   };
 
 }

@@ -36,9 +36,14 @@ lib.listToAttrs (
     lib.flip lib.concatMap kernelVersionsToTest (version:
       let
         v' = lib.replaceStrings [ "." ] [ "_" ] version;
+        mkXfsFlags = lib.optionalString (lib.versionOlder version "5.10") " -m bigtime=0 -m inobtcount=0 "
+                     + lib.optionalString (lib.versionOlder version "5.19") " -i nrext64=0 ";
       in
       lib.flip lib.mapAttrsToList tests (name: t:
-        lib.nameValuePair "lvm-${name}-linux-${v'}" (lib.optionalAttrs (builtins.elem version (t.kernelFilter kernelVersionsToTest)) (t.test ({ kernelPackages = pkgs."linuxPackages_${v'}"; } // builtins.removeAttrs t [ "test" "kernelFilter" ])))
+        lib.nameValuePair "lvm-${name}-linux-${v'}" (lib.optionalAttrs (builtins.elem version (t.kernelFilter kernelVersionsToTest)) (t.test ({
+          kernelPackages = pkgs."linuxPackages_${v'}";
+          inherit mkXfsFlags;
+        } // builtins.removeAttrs t [ "test" "kernelFilter" ])))
       )
     )
   )

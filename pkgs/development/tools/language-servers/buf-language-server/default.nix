@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-UHsWrWDOC/f3YS2g533CgUkuUmz4MUQRunClQiY/YPQ=";
   };
 
-  vendorSha256 = "sha256-ORzCOmBx6k1GZj6pYLhqPsdneCc7Tt1yHpI5mw5ruFU=";
+  vendorHash = "sha256-ORzCOmBx6k1GZj6pYLhqPsdneCc7Tt1yHpI5mw5ruFU=";
 
   ldflags = [
     "-s"
@@ -20,6 +20,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Language server for protocol buffers";
+    mainProgram = "bufls";
     homepage = "https://github.com/bufbuild/buf-language-server";
     license = licenses.asl20;
     maintainers = with maintainers; [ svrana ];

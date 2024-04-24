@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "google-fonts";
-  version = "unstable-2022-11-14";
+  version = "unstable-2023-10-20";
 
   # Adobe Blank is split out in a separate output,
   # because it causes crashes with `libfontconfig`.
@@ -16,8 +16,8 @@ stdenvNoCC.mkDerivation {
   src = fetchFromGitHub {
     owner = "google";
     repo = "fonts";
-    rev = "83e116a566eda04a2469a11ee562cef1d7b33e4f";
-    sha256 = "sha256-sSabk+VWkoXj1Nzv9ufgIU/nkfKf4XkZU1SO+j+eSPA=";
+    rev = "990be3ed8f77e31c26bf07b148d6a74b8e6241cf";
+    sha256 = "sha256-ffLXzaniHkWxGQpvlJpiO6/SAdbI3FONgTaq8Xu+WY0=";
   };
 
   postPatch = ''
@@ -29,6 +29,7 @@ stdenvNoCC.mkDerivation {
     rm -rv ofl/cabincondensed \
       ofl/signikanegative \
       ofl/signikanegativesc \
+      ofl/*_todelist \
       axisregistry/tests/data
 
     if find . -name "*.ttf" | sed 's|.*/||' | sort | uniq -c | sort -n | grep -v '^.*1 '; then
@@ -39,12 +40,10 @@ stdenvNoCC.mkDerivation {
 
   dontBuild = true;
 
-  # The font files are in the fonts directory and use two naming schemes:
-  # FamilyName-StyleName.ttf and FamilyName[param1,param2,...].ttf
-  # This installs all fonts if fonts is empty and otherwise only
-  # the specified fonts by FamilyName. To do this, it invokes
-  # `find` 2 times for every font, anyone is free to do this
-  # in a more efficient way.
+  # The font files are in the fonts directory and use three naming schemes:
+  # FamilyName-StyleName.ttf, FamilyName[param1,param2,...].ttf, and
+  # FamilyName.ttf. This installs all fonts if fonts is empty and otherwise
+  # only the specified fonts by FamilyName.
   fonts = map (font: builtins.replaceStrings [" "] [""] font) fonts;
   installPhase = ''
     adobeBlankDest=$adobeBlank/share/fonts/truetype
@@ -55,8 +54,7 @@ stdenvNoCC.mkDerivation {
     find . -name '*.ttf' -exec install -m 444 -Dt $dest '{}' +
   '' else ''
     for font in $fonts; do
-      find . -name "$font-*.ttf" -exec install -m 444 -Dt $dest '{}' +
-      find . -name "$font[*.ttf" -exec install -m 444 -Dt $dest '{}' +
+      find . \( -name "$font-*.ttf" -o -name "$font[*.ttf" -o -name "$font.ttf" \) -exec install -m 444 -Dt $dest '{}' +
     done
   '');
 
@@ -67,5 +65,6 @@ stdenvNoCC.mkDerivation {
     platforms = platforms.all;
     hydraPlatforms = [];
     maintainers = with maintainers; [ manveru ];
+    sourceProvenance = [ sourceTypes.binaryBytecode ];
   };
 }

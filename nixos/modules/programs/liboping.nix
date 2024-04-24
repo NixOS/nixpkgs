@@ -6,7 +6,7 @@ let
   cfg = config.programs.liboping;
 in {
   options.programs.liboping = {
-    enable = mkEnableOption (lib.mdDoc "liboping");
+    enable = mkEnableOption "liboping";
   };
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ liboping ];

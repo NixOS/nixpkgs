@@ -11,29 +11,24 @@ in {
   options.programs.nncp = {
 
     enable =
-      mkEnableOption (lib.mdDoc "NNCP (Node to Node copy) utilities and configuration");
+      mkEnableOption "NNCP (Node to Node copy) utilities and configuration";
 
     group = mkOption {
       type = types.str;
       default = "uucp";
-      description = lib.mdDoc ''
+      description = ''
         The group under which NNCP files shall be owned.
         Any member of this group may access the secret keys
         of this NNCP node.
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.nncp;
-      defaultText = literalExpression "pkgs.nncp";
-      description = lib.mdDoc "The NNCP package to use system-wide.";
-    };
+    package = mkPackageOption pkgs "nncp" { };
 
     secrets = mkOption {
       type = with types; listOf str;
       example = [ "/run/keys/nncp.hjson" ];
-      description = lib.mdDoc ''
+      description = ''
         A list of paths to NNCP configuration files that should not be
         in the Nix store. These files are layered on top of the values at
         [](#opt-programs.nncp.settings).
@@ -42,7 +37,7 @@ in {
 
     settings = mkOption {
       type = settingsFormat.type;
-      description = lib.mdDoc ''
+      description = ''
         NNCP configuration, see
         <http://www.nncpgo.org/Configuration.html>.
         At runtime these settings will be overlayed by the contents of

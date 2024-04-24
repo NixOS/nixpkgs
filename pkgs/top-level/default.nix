@@ -61,10 +61,22 @@ in let
   localSystem = lib.systems.elaborate args.localSystem;
 
   # Condition preserves sharing which in turn affects equality.
+  #
+  # See `lib.systems.equals` documentation for more details.
+  #
+  # Note that it is generally not possible to compare systems as given in
+  # parameters, e.g. if systems are initialized as
+  #
+  #   localSystem = { system = "x86_64-linux"; };
+  #   crossSystem = { config = "x86_64-unknown-linux-gnu"; };
+  #
+  # Both systems are semantically equivalent as the same vendor and ABI are
+  # inferred from the system double in `localSystem`.
   crossSystem =
-    if crossSystem0 == null || crossSystem0 == args.localSystem
+    let system = lib.systems.elaborate crossSystem0; in
+    if crossSystem0 == null || lib.systems.equals system localSystem
     then localSystem
-    else lib.systems.elaborate crossSystem0;
+    else system;
 
   # Allow both:
   # { /* the config */ } and

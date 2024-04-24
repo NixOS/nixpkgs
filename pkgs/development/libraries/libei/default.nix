@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , fetchFromGitLab
-, attr
 , libevdev
 , libxkbcommon
 , meson
@@ -10,9 +9,8 @@
 , pkg-config
 , protobuf
 , protobufc
-, python3
-, python3Packages
 , systemd
+, buildPackages
 }:
 let
   munit = fetchFromGitHub {
@@ -24,14 +22,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libei";
-  version = "1.0.0";
+  version = "1.2.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "libinput";
     repo = "libei";
     rev = version;
-    hash = "sha256-Xt4mhZMAohdQWsqfZCaP3+Tsauxv3GhlceiqgxdfNWo=";
+    hash = "sha256-8n/C0rBlyhY8SaxkwU+tDskwSQObLRrR+utk4Ktgb7U=";
   };
 
   buildInputs = [
@@ -42,19 +40,18 @@ stdenv.mkDerivation rec {
     systemd
   ];
   nativeBuildInputs = [
-    attr
     meson
     ninja
     pkg-config
-    python3
-  ] ++
-  (with python3Packages; [
-    jinja2
-    pytest
-    python-dbusmock
-    strenum
-    structlog
-  ]);
+    (buildPackages.python3.withPackages (ps: with ps; [
+      attrs
+      jinja2
+      pytest
+      python-dbusmock
+      strenum
+      structlog
+    ]))
+  ];
 
   postPatch = ''
     ln -s "${munit}" ./subprojects/munit
@@ -63,6 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Library for Emulated Input";
+    mainProgram = "ei-debug-events";
     homepage = "https://gitlab.freedesktop.org/libinput/libei";
     license = licenses.mit;
     maintainers = [ maintainers.pedrohlc ];

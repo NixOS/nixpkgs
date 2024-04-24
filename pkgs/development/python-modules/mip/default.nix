@@ -8,6 +8,9 @@
 , numpy
 , pytestCheckHook
 , pythonOlder
+, setuptools
+, setuptools-scm
+, wheel
 , gurobi
 , gurobipy
 # Enable support for the commercial Gurobi solver (requires a license)
@@ -20,9 +23,9 @@
 buildPythonPackage rec {
   pname = "mip";
   version = "1.15.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
-  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
@@ -30,7 +33,14 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [ matplotlib networkx numpy pytestCheckHook ];
-  nativeBuildInputs = [ dos2unix ];
+
+  nativeBuildInputs = [
+    dos2unix
+    setuptools
+    setuptools-scm
+    wheel
+  ];
+
   propagatedBuildInputs = [
     cffi
   ] ++ lib.optionals gurobiSupport ([
@@ -52,8 +62,8 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    # Allow cffi versions with a different patch level to be used
-    substituteInPlace pyproject.toml --replace "cffi==1.15.0" "cffi==1.15.*"
+    # Allow newer cffi versions to be used
+    substituteInPlace pyproject.toml --replace "cffi==1.15.*" "cffi>=1.15"
   '';
 
   # Make MIP use the Gurobi solver, if configured to do so

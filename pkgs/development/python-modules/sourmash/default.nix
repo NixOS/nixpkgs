@@ -20,19 +20,19 @@
 
 buildPythonPackage rec {
   pname = "sourmash";
-  version = "4.8.3";
+  version = "4.8.4";
   format = "pyproject";
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LIMpL9cLafytRFyPam/FBNi757j1v6o1FG/K2JknDQY=";
+    hash = "sha256-Q1hMESwzEHGXcd4XW4nLqU8cLTCxrqRgAOr1qB77roo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-mcJzFRYkdxuqqXH+ryg5v+9tQtuN1hkEeW2DF+wEJ/w=";
+    hash = "sha256-HisWvJgx15OfYoMzzqYm1JyY1/jmGXBSZZmuNaKTDjI=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -70,6 +70,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Quickly search, compare, and analyze genomic and metagenomic data sets";
+    mainProgram = "sourmash";
     homepage = "https://sourmash.bio";
     changelog = "https://github.com/sourmash-bio/sourmash/releases/tag/v${version}";
     maintainers = with maintainers; [ luizirber ];

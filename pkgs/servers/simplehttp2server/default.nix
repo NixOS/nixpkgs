@@ -20,6 +20,7 @@ buildGoPackage rec {
      description = "HTTP/2 server for development purposes";
      license = licenses.asl20;
      maintainers = with maintainers; [ yrashk ];
+     mainProgram = "simplehttp2server";
   };
 
 }

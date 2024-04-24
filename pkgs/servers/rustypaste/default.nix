@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustypaste";
-  version = "0.12.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-AdcoyBtPgTK94VDBsCGozPU5enqCquY7r5IuEm3oW/g=";
+    sha256 = "sha256-mDNWIqA3t8AGNTqryiH2q8Tvg4k5d0II3EBkf7tdoNo=";
   };
 
-  cargoHash = "sha256-VJjXwvMDSnDedcxJTjg6tVjPUxjRGTSOnx2nXgXCdzI=";
+  cargoHash = "sha256-ZmlA6O/9ZVLHvBHMkY+hpb6Eb0o0RxfXpwop6BLCdWc=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
@@ -33,5 +33,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/orhun/rustypaste/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda seqizz ];
+    mainProgram = "rustypaste";
   };
 }

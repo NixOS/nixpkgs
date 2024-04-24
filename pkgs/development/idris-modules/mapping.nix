@@ -16,7 +16,7 @@ build-idris-package  {
   meta = {
     description = "Idris mapping library";
     homepage = "https://github.com/zaoqi/Mapping.idr";
-    license = lib.licenses.agpl3;
+    license = lib.licenses.agpl3Plus;
     maintainers = [ lib.maintainers.brainrape ];
   };
 }

@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fw";
-  version = "2.17.1";
+  version = "2.19.1";
 
   src = fetchFromGitHub {
     owner = "brocode";
     repo = "fw";
     rev = "v${version}";
-    hash = "sha256-8Jq7VjTKwq8n9lrwTzazkkrq8/mNacFTwz/M+eAwBWM=";
+    hash = "sha256-fG1N/3Er7BvXOJTMGooaIMa5I9iNwnH+1om2jcWkI68=";
   };
 
-  cargoHash = "sha256-tIrACx4KRjfxLyxTiP32PpdN8NegaHBIkINsPGgygVQ=";
+  cargoHash = "sha256-1d2uX/A1HZAmAI3d0iet1NkG0IFuJpVnhWxpY0jVVUI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
     openssl
     zlib
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   env = {
@@ -43,5 +43,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/brocode/fw";
     license = licenses.wtfpl;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "fw";
   };
 }

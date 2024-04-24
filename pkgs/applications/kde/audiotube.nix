@@ -4,12 +4,15 @@
 , extra-cmake-modules
 , wrapGAppsHook
 
+, futuresql
 , gst_all_1
 , kcoreaddons
 , kcrash
 , ki18n
 , kirigami2
 , kirigami-addons
+, kpurpose
+, qcoro
 , qtimageformats
 , qtmultimedia
 , qtquickcontrols2
@@ -27,11 +30,14 @@ mkDerivation rec {
   ];
 
   buildInputs = [
+    futuresql
     kcoreaddons
     kcrash
     ki18n
     kirigami2
     kirigami-addons
+    kpurpose
+    qcoro
     qtimageformats
     qtmultimedia
     qtquickcontrols2
@@ -56,6 +62,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Client for YouTube Music";
+    mainProgram = "audiotube";
     homepage = "https://invent.kde.org/plasma-mobile/audiotube";
     # https://invent.kde.org/plasma-mobile/audiotube/-/tree/c503d0607a3386112beaa9cf990ab85fe33ef115/LICENSES
     license = with licenses; [ bsd2 cc0 gpl2Only gpl3Only ];

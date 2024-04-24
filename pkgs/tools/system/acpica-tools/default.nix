@@ -1,17 +1,19 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , bison
 , flex
 }:
 
 stdenv.mkDerivation rec {
   pname = "acpica-tools";
-  version = "20230331";
+  version = "20240322";
 
-  src = fetchurl {
-    url = "https://acpica.org/sites/acpica/files/acpica-unix-${version}.tar.gz";
-    hash = "sha256-DF1pXWBaqmFwnzxj9XoambiQIpFyOZhEawgTtXrDEOI=";
+  src = fetchFromGitHub {
+    owner = "acpica";
+    repo = "acpica";
+    rev = "refs/tags/G${version}";
+    hash = "sha256-k5rDaRKYPwdP4SmEXlrqsA2NLZDlqXBclz1Lwmufa2M=";
   };
 
   nativeBuildInputs = [ bison flex ];
@@ -29,9 +31,6 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = toString ([
     "-O3"
-  ] ++ lib.optionals (stdenv.cc.isGNU) [
-    # Needed with GCC 12
-    "-Wno-dangling-pointer"
   ]);
 
   enableParallelBuilding = true;
@@ -51,7 +50,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.acpica.org/";
     description = "ACPICA Tools";
     license = with licenses; [ iasl gpl2Only bsd3 ];
-    maintainers = with maintainers; [ tadfisher ];
+    maintainers = with maintainers; [ delroth tadfisher ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "pycapnp";
   version = "1.1.0";
+  format = "setuptools";
   disabled = isPyPy || isPy27;
 
   src = fetchFromGitHub {
@@ -31,7 +32,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://capnproto.github.io/pycapnp/";
-    maintainers = with maintainers; [ cstrahan lukeadams ];
+    maintainers = with maintainers; [ ];
     license = licenses.bsd2;
+    # No support for capnproto 1.0 yet
+    # https://github.com/capnproto/pycapnp/issues/323
+    broken = lib.versionAtLeast capnproto.version "1.0";
   };
 }

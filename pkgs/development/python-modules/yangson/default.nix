@@ -1,27 +1,33 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, pyxb
+, fetchFromGitHub
+, poetry-core
+, elementpath
+, pyyaml
+, setuptools
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "yangson";
-  version = "1.4.16";
-  format = "setuptools";
+  version = "1.5.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-P447JnQ8zhalcg9k8prW1QQE3h5PqY155hFtvLvBVSI=";
+  src = fetchFromGitHub {
+    owner = "CZ-NIC";
+    repo = "yangson";
+    rev = "refs/tags/${version}";
+    hash = "sha256-c/UWyfJdVz6wSluL1Ej9cSV3EpDUTkP0GTeHPYfAduE=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
+  build-system = [
+    poetry-core
   ];
 
-  propagatedBuildInputs = [
-    pyxb
+  dependencies = [
+    elementpath
+    pyyaml
+    setuptools
   ];
 
   nativeCheckInputs = [
@@ -34,11 +40,12 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for working with data modelled in YANG";
+    mainProgram = "yangson";
     homepage = "https://github.com/CZ-NIC/yangson";
     license = with licenses; [
       gpl3Plus
       lgpl3Plus
     ];
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

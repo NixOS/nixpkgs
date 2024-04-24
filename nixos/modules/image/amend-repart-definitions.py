@@ -53,7 +53,7 @@ def add_closure_to_definition(
 
             source = Path(line.strip())
             target = str(source.relative_to("/nix/store/"))
-            target = f":{target}" if strip_nix_store_prefix else ""
+            target = f":/{target}" if strip_nix_store_prefix else ""
 
             copy_files_lines.append(f"CopyFiles={source}{target}\n")
 
@@ -102,7 +102,7 @@ def main() -> None:
         add_contents_to_definition(definition, contents)
 
         closure = config.get("closure")
-        strip_nix_store_prefix = config.get("stripStorePaths")
+        strip_nix_store_prefix = config.get("stripNixStorePrefix")
         add_closure_to_definition(definition, closure, strip_nix_store_prefix)
 
     print(target_dir.absolute())

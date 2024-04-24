@@ -7,16 +7,16 @@
 , python
 , pythonOlder
 , buildPythonPackage
-, pypaBuildHook
-, pipInstallHook
 , cython
 , gfortran
 , meson-python
+, nukeReferences
 , pkg-config
 , pythran
 , wheel
-, nose
-, pytest
+, setuptools
+, hypothesis
+, pytest7CheckHook
 , pytest-xdist
 , numpy
 , pybind11
@@ -33,11 +33,9 @@ let
   #
   #     nix-shell maintainers/scripts/update.nix --argstr package python3.pkgs.scipy
   #
-  # Even if you do update these hashes manually, don't change their base
-  # (base16 or base64), because the update script uses sed regexes to replace
-  # them with the updated hashes.
-  version = "1.11.1";
-  srcHash = "sha256-bgnYXe3EhzL7+Gfriz1cXCl2eYQJ8zF+rcIwHyZR8bQ=";
+  # The update script uses sed regexes to replace them with the updated hashes.
+  version = "1.13.0";
+  srcHash = "sha256-HaYk92hOREHMOXppK+Bs9DrBu9KUVUsZ0KV+isTofUo=";
   datasetsHashes = {
     ascent = "1qjp35ncrniq9rhzb14icwwykqg2208hcssznn3hz27w39615kh3";
     ecg = "1bwbjp43b7znnwha5hv6wiz3g0bhwrpqpi75s12zidxrbwvd62pj";
@@ -59,7 +57,7 @@ let
   '';
 in buildPythonPackage {
   inherit pname version;
-  format = "other";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "scipy";
@@ -78,14 +76,33 @@ in buildPythonPackage {
         "doc/source/dev/contributor/meson_advanced.rst"
       ];
     })
+    # Fix for https://github.com/scipy/scipy/issues/20300 until 1.13.1 is
+    # released. Patch is based upon:
+    # https://github.com/scipy/pocketfft/commit/9367142748fcc9696a1c9e5a99b76ed9897c9daa
+    # Couldn't use fetchpatch because it is a submodule of scipy, and
+    # extraPrefix doesn't fit this purpose.
+    ./pocketfft-aligned_alloc.patch
   ];
 
+  # Upstream says in a comment in their pyproject.toml that building against
+  # both numpy 2 and numpy 1 should work, but they seem to worry about numpy
+  # incompatibilities that we here with Nixpkgs' Python ecosystem, shouldn't
+  # experience.
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "pybind11>=2.10.4,<2.11.0" "pybind11>=2.10.4,<2.12.0"
+      --replace-fail 'numpy>=2.0.0rc1,' 'numpy' \
   '';
 
-  nativeBuildInputs = [ pypaBuildHook pipInstallHook cython gfortran meson-python pythran pkg-config wheel ];
+  nativeBuildInputs = [
+    cython
+    gfortran
+    meson-python
+    nukeReferences
+    pythran
+    pkg-config
+    wheel
+    setuptools
+  ];
 
   buildInputs = [
     blas
@@ -99,14 +116,29 @@ in buildPythonPackage {
 
   propagatedBuildInputs = [ numpy ];
 
-  nativeCheckInputs = [ nose pytest pytest-xdist ];
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    hypothesis
+    # Failed: DID NOT WARN. No warnings of type (<class 'DeprecationWarning'>, <class 'PendingDeprecationWarning'>, <class 'FutureWarning'>) were emitted.
+    pytest7CheckHook
+    pytest-xdist
+  ];
+
+  # The following tests are broken on aarch64-darwin with newer compilers and library versions.
+  # See https://github.com/scipy/scipy/issues/18308
+  disabledTests = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    "test_a_b_neg_int_after_euler_hypergeometric_transformation"
+    "test_dst4_definition_ortho"
+    "test_load_mat4_le"
+    "hyp2f1_test_case47"
+    "hyp2f1_test_case3"
+    "test_uint64_max"
+  ];
 
   doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);
 
   preConfigure = ''
-    # Relax deps a bit
-    substituteInPlace pyproject.toml \
-      --replace 'numpy==' 'numpy>='
     # Helps parallelization a bit
     export NPY_NUM_BUILD_JOBS=$NIX_BUILD_CORES
     # We download manually the datasets and this variable tells the pooch
@@ -138,13 +170,15 @@ in buildPythonPackage {
   #
   hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
 
-  checkPhase = ''
-    runHook preCheck
-    pushd "$out"
+  # remove references to dev dependencies
+  postInstall = ''
+    nuke-refs $out/${python.sitePackages}/scipy/__config__.py
+    rm $out/${python.sitePackages}/scipy/__pycache__/__config__.*.opt-1.pyc
+  '';
+
+  preCheck = ''
     export OMP_NUM_THREADS=$(( $NIX_BUILD_CORES / 4 ))
-    ${python.interpreter} -c "import scipy, sys; sys.exit(scipy.test('fast', verbose=10, parallel=$NIX_BUILD_CORES) != True)"
-    popd
-    runHook postCheck
+    cd $out
   '';
 
   requiredSystemFeatures = [ "big-parallel" ]; # the tests need lots of CPU time
@@ -164,7 +198,9 @@ in buildPythonPackage {
   SCIPY_USE_G77_ABI_WRAPPER = 1;
 
   meta = with lib; {
+    changelog = "https://github.com/scipy/scipy/releases/tag/v${version}";
     description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering";
+    downloadPage = "https://github.com/scipy/scipy";
     homepage = "https://www.scipy.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fridh doronbehar ];

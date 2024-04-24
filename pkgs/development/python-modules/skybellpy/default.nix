@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "skybellpy";
   version = "0.6.3";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -38,6 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python wrapper for the Skybell alarm API";
+    mainProgram = "skybellpy";
     homepage = "https://github.com/MisterWil/skybellpy";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

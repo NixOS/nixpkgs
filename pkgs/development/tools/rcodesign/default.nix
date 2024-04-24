@@ -35,6 +35,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A cross-platform CLI interface to interact with Apple code signing.";
+    mainProgram = "rcodesign";
     longDescription = ''
       rcodesign provides various commands to interact with Apple signing,
       including signing and notarizing binaries, generating signing

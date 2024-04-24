@@ -1,11 +1,13 @@
 { stdenv
 , lib
+, pythonAtLeast
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
 , cargo
 , rustPlatform
 , rustc
+, libiconv
   # Python requirements
 , dill
 , numpy
@@ -33,7 +35,7 @@
 , seaborn
   # Crosstalk-adaptive layout pass
 , withCrosstalkPass ? false
-, z3
+, z3-solver
   # test requirements
 , ddt
 , hypothesis
@@ -53,28 +55,31 @@ let
     pylatexenc
     seaborn
   ];
-  crosstalkPackages = [ z3 ];
+  crosstalkPackages = [ z3-solver ];
 in
 
 buildPythonPackage rec {
   pname = "qiskit-terra";
-  version = "0.21.0";
+  version = "0.25.1";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.7" || pythonAtLeast "3.11";
 
   src = fetchFromGitHub {
     owner = "qiskit";
     repo = pname;
-    rev = version;
-    hash = "sha256-imktzBpgP+lq6FsVWIUK82+t76gKTgt53kPfKOnsseQ=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-4/LVKDNxKsRztCtU/mMfKMVHHJqfadZXmxeOlnlz9Tc=";
   };
 
   nativeBuildInputs = [ setuptools-rust rustc cargo rustPlatform.cargoSetupHook ];
 
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-SXC0UqWjWqLlZvKCRBylSX73r4Vale130KzS0zM8gjQ=";
+    hash = "sha256-f5VLNxv9DKwfRy5zacydfz4Zrkbiee7JecOAbVelSto=";
   };
 
   propagatedBuildInputs = [
@@ -116,6 +121,8 @@ buildPythonPackage rec {
     "test/randomized/"
     # These tests consistently fail on GitHub Actions build
     "test/python/quantum_info/operators/test_random.py"
+    # Too many floating point arithmetic errors
+    "test/visual/mpl/circuit/test_circuit_matplotlib_drawer.py"
   ];
   pytestFlagsArray = [ "--durations=10" ];
   disabledTests = [
@@ -124,6 +131,11 @@ buildPythonPackage rec {
     "TestMatplotlibDrawer"
     "TestGraphMatplotlibDrawer"
     "test_copy" # assertNotIn doesn't seem to work as expected w/ pytest vs unittest
+
+    "test_bound_pass_manager" # AssertionError: 0 != 2
+    "test_complex_parameter_bound_to_real" # qiskit.circuit.exceptions.CircuitError: "Invalid param type <class 'complex'> for gate rx."
+    "test_expressions_of_parameter_with_constant" # Floating point arithmetic error
+    "test_handle_measurement" # AssertionError: The two circuits are not equal
 
     # Flaky tests
     "test_pulse_limits" # Fails on GitHub Actions, probably due to minor floating point arithmetic error.
@@ -195,7 +207,6 @@ buildPythonPackage rec {
 
 
   meta = with lib; {
-    broken = true; # tests segfault python
     description = "Provides the foundations for Qiskit.";
     longDescription = ''
       Allows the user to write quantum circuits easily, and takes care of the constraints of real hardware.

@@ -96,6 +96,7 @@ stdenv.mkDerivation rec {
     outputsToInstall = [ "bin" "out" "man" ];
 
     description = "Parental controls library";
+    mainProgram = "malcontent-client";
     homepage = "https://gitlab.freedesktop.org/pwithnall/malcontent";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jtojnar ];

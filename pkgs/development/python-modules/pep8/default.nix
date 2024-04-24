@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "pep8";
   version = "1.7.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -18,6 +19,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://pep8.readthedocs.org/";
     description = "Python style guide checker";
+    mainProgram = "pep8";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

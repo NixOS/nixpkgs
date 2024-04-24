@@ -1,8 +1,7 @@
 { lib
-, callPackage
 , gcc11Stdenv
 , fetchFromGitHub
-, addOpenGLRunpath
+, autoAddDriverRunpath
 , catch2
 , cmake
 , cudaPackages_10_2
@@ -87,13 +86,13 @@ let
 # C.f. https://github.com/NVIDIA/DCGM/blob/7e1012302679e4bb7496483b32dcffb56e528c92/dcgmbuild/build.sh#L22
 in gcc11Stdenv.mkDerivation rec {
   pname = "dcgm";
-  version = "3.1.8";
+  version = "3.2.5"; # N.B: If you change this, be sure prometheus-dcgm-exporter supports this version.
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "DCGM";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OXqXkP2ZUNPzafGIgJ0MKa39xB84keVFFYl+JsHgnks=";
+    hash = "sha256-iMyYOr3dSpdRV2S/TlB/tEOAWYhK09373ZRbd5vzogQ=";
   };
 
   # Add our paths to the CUDA paths so FindCuda.cmake can find them.
@@ -107,10 +106,10 @@ in gcc11Stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [
-    # autoAddOpenGLRunpathHook does not actually depend on or incur any dependency
+    # autoAddDriverRunpath does not actually depend on or incur any dependency
     # of cudaPackages. It merely adds an impure, non-Nix PATH to the RPATHs of
     # executables that need to use cuda at runtime.
-    cudaPackages_12.autoAddOpenGLRunpathHook
+    autoAddDriverRunpath
 
     cmake
     git

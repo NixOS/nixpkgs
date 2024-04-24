@@ -27,7 +27,7 @@ with lib;
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable at-spi2-core, a service for the Assistive Technologies
           available on the GNOME platform.
 
@@ -51,7 +51,7 @@ with lib;
     })
 
     (mkIf (!config.services.gnome.at-spi2-core.enable) {
-      environment.variables = {
+      environment.sessionVariables = {
         NO_AT_BRIDGE = "1";
         GTK_A11Y = "none";
       };

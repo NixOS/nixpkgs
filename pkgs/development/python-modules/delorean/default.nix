@@ -9,12 +9,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Delorean";
+  pname = "delorean";
   version = "1.0.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "Delorean";
+    inherit version;
     hash = "sha256-/md4bhIzhSOEi+xViKZYxNQl4S1T61HP74cL7I9XYTQ=";
   };
 

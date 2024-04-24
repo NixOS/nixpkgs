@@ -21,6 +21,7 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "gixy";
   version = "0.1.20";
+  format = "setuptools";
 
   # package is only compatible with python 2.7 and 3.5+
   disabled = with python.pkgs; !(pythonAtLeast "3.5" || isPy27);
@@ -42,13 +43,14 @@ python.pkgs.buildPythonApplication rec {
     configargparse
     pyparsing
     jinja2
-    nose
+    nose3
     setuptools
     six
   ];
 
   meta = with lib; {
     description = "Nginx configuration static analyzer";
+    mainProgram = "gixy";
     longDescription = ''
       Gixy is a tool to analyze Nginx configuration.
       The main goal of Gixy is to prevent security misconfiguration and automate flaw detection.

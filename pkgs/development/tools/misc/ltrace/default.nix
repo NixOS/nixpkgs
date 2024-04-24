@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Library call tracer";
+    mainProgram = "ltrace";
     homepage = "https://www.ltrace.org/";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;

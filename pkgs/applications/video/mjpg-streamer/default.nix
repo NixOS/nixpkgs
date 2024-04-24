@@ -28,5 +28,6 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = with maintainers; [ gebner ];
+    mainProgram = "mjpg_streamer";
   };
 }

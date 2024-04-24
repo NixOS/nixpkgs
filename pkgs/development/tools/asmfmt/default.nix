@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-YxIVqPGsqxvOY0Qz4Jw5FuO9IbplCICjChosnHrSCgc=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   # This package comes with its own version of goimports, gofmt and goreturns
   # but these binaries are outdated and are offered by other packages.
@@ -27,6 +27,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Go assembler formatter";
+    mainProgram = "asmfmt";
     longDescription = ''
       This will format your assembler code in a similar way that gofmt formats
       your Go code.

@@ -2,14 +2,14 @@
 
 buildDunePackage rec {
   pname = "higlo";
-  version = "0.8";
-  duneVersion = "3";
+  version = "0.9";
+
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "zoggy";
     repo = "higlo";
     rev = version;
-    sha256 = "sha256:09hsbwy5asacgh4gdj0vjpy4kzfnq3qji9szbsbyswsf1nbyczir";
+    hash = "sha256-SaFFzp4FCjVLdMLH6mNIv3HzJbkXJ5Ojbku258LCfLI=";
   };
 
   propagatedBuildInputs = [ sedlex xtmpl ];

@@ -1,4 +1,4 @@
-{ pkgs, lib, stdenv, fetchzip }:
+{ pkgs, lib, stdenv, fetchzip, nixosTests }:
 
 let
 
@@ -55,12 +55,17 @@ let
       longDescription = description;
       homepage = link;
       license = lib.licenses.gpl2Plus; # https://wiki.gnome.org/Projects/GnomeShell/Extensions/Review#Licensing
-      maintainers = with lib.maintainers; [ piegames ];
+      platforms = lib.platforms.linux;
+      maintainers = with lib.maintainers; [ ];
     };
     passthru = {
       extensionPortalSlug = pname;
       # Store the extension's UUID, because we might need it at some places
       extensionUuid = uuid;
+
+      tests = {
+        gnome-extensions = nixosTests.gnome-extensions;
+      };
     };
   };
 in

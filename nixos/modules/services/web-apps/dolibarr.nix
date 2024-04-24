@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 let
-  inherit (lib) any boolToString concatStringsSep isBool isString mapAttrsToList mkDefault mkEnableOption mkIf mkMerge mkOption optionalAttrs types;
+  inherit (lib) any boolToString concatStringsSep isBool isString mapAttrsToList mkDefault mkEnableOption mkIf mkMerge mkOption optionalAttrs types mkPackageOption;
 
-  package = pkgs.dolibarr.override { inherit (cfg) stateDir; };
+  package = cfg.package.override { inherit (cfg) stateDir; };
 
   cfg = config.services.dolibarr;
   vhostCfg = lib.optionalAttrs (cfg.nginx != null) config.services.nginx.virtualHosts."${cfg.domain}";
@@ -48,12 +48,14 @@ in
 {
   # interface
   options.services.dolibarr = {
-    enable = mkEnableOption (lib.mdDoc "dolibarr");
+    enable = mkEnableOption "dolibarr";
+
+    package = mkPackageOption pkgs "dolibarr" { };
 
     domain = mkOption {
       type = types.str;
       default = "localhost";
-      description = lib.mdDoc ''
+      description = ''
         Domain name of your server.
       '';
     };
@@ -61,7 +63,7 @@ in
     user = mkOption {
       type = types.str;
       default = "dolibarr";
-      description = lib.mdDoc ''
+      description = ''
         User account under which dolibarr runs.
 
         ::: {.note}
@@ -75,7 +77,7 @@ in
     group = mkOption {
       type = types.str;
       default = "dolibarr";
-      description = lib.mdDoc ''
+      description = ''
         Group account under which dolibarr runs.
 
         ::: {.note}
@@ -89,7 +91,7 @@ in
     stateDir = mkOption {
       type = types.str;
       default = "/var/lib/dolibarr";
-      description = lib.mdDoc ''
+      description = ''
         State and configuration directory dolibarr will use.
       '';
     };
@@ -98,40 +100,40 @@ in
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = lib.mdDoc "Database host address.";
+        description = "Database host address.";
       };
       port = mkOption {
         type = types.port;
         default = 3306;
-        description = lib.mdDoc "Database host port.";
+        description = "Database host port.";
       };
       name = mkOption {
         type = types.str;
         default = "dolibarr";
-        description = lib.mdDoc "Database name.";
+        description = "Database name.";
       };
       user = mkOption {
         type = types.str;
         default = "dolibarr";
-        description = lib.mdDoc "Database username.";
+        description = "Database username.";
       };
       passwordFile = mkOption {
         type = with types; nullOr path;
         default = null;
         example = "/run/keys/dolibarr-dbpassword";
-        description = lib.mdDoc "Database password file.";
+        description = "Database password file.";
       };
       createLocally = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Create the database and database user locally.";
+        description = "Create the database and database user locally.";
       };
     };
 
     settings = mkOption {
       type = with types; (attrsOf (oneOf [ bool int str ]));
       default = { };
-      description = lib.mdDoc "Dolibarr settings, see <https://github.com/Dolibarr/dolibarr/blob/develop/htdocs/conf/conf.php.example> for details.";
+      description = "Dolibarr settings, see <https://github.com/Dolibarr/dolibarr/blob/develop/htdocs/conf/conf.php.example> for details.";
     };
 
     nginx = mkOption {
@@ -155,7 +157,7 @@ in
           enableACME = false;
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
           With this option, you can customize an nginx virtual host which already has sensible defaults for Dolibarr.
           Set to {} if you do not need any customization to the virtual host.
           If enabled, then by default, the {option}`serverName` is
@@ -175,7 +177,7 @@ in
         "pm.max_spare_servers" = 4;
         "pm.max_requests" = 500;
       };
-      description = lib.mdDoc ''
+      description = ''
         Options for the Dolibarr PHP pool. See the documentation on [`php-fpm.conf`](https://www.php.net/manual/en/install.fpm.configuration.php)
         for details on configuration directives.
       '';

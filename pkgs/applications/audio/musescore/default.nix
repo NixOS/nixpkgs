@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , wrapQtAppsHook
 , pkg-config
@@ -46,37 +45,16 @@ let
       Carbon
     ;
   } else portaudio;
-in stdenv'.mkDerivation rec {
+in stdenv'.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.1.1";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
-    rev = "v${version}";
-    sha256 = "sha256-jXievVIA0tqLdKLy6oPaOHPIbDoFstveEQBri9M0Aoo=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-YCeO/ijxA+tZxNviqmlIBkAdjPTrKoOoo1QyMIOqhWU=";
   };
-  patches = [
-    # Upstream from some reason wants to install qml files from qtbase in
-    # installPhase, this patch removes this behavior. See:
-    # https://github.com/musescore/MuseScore/issues/18665
-    (fetchpatch {
-      url = "https://github.com/doronbehar/MuseScore/commit/f48448a3ede46f5a7ef470940072fbfb6742487c.patch";
-      hash = "sha256-UEc7auscnW0KMfWkLKQtm+UstuTNsuFeoNJYIidIlwM=";
-    })
-    # Upstream removed the option to use system freetype library in v4.1.0,
-    # causing the app to crash on systems when the outdated bundled freetype
-    # tries to load the Noto Sans font. For more info on the crash itself,
-    # see #244409 and https://github.com/musescore/MuseScore/issues/18795.
-    # For now, re-add the option ourselves. The fix has been merged upstream,
-    # so we can remove this patch with the next version. In the future, we
-    # may replace the other bundled thirdparty libs with system libs, see
-    # https://github.com/musescore/MuseScore/issues/11572.
-    (fetchpatch {
-      url = "https://github.com/musescore/MuseScore/commit/9ab6b32b1c3b990cfa7bb172ee8112521dc2269c.patch";
-      hash = "sha256-5GA29Z+o3I/uDTTDbkauZ8/xSdCE6yY93phMSY0ea7s=";
-    })
-  ];
 
   cmakeFlags = [
     "-DMUSESCORE_BUILD_MODE=release"
@@ -150,7 +128,7 @@ in stdenv'.mkDerivation rec {
     mkdir -p "$out/Applications"
     mv "$out/mscore.app" "$out/Applications/mscore.app"
     mkdir -p $out/bin
-    ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore.
+    ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore
   '';
 
   # Don't run bundled upstreams tests, as they require a running X window system.
@@ -163,9 +141,7 @@ in stdenv'.mkDerivation rec {
     homepage = "https://musescore.org/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ vandenoever doronbehar ];
-    # on aarch64-linux:
-    # error: cannot convert '<brace-enclosed initializer list>' to 'float32x4_t' in assignment
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     mainProgram = "mscore";
+    platforms = platforms.unix;
   };
-}
+})

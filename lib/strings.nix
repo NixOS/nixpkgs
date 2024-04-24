@@ -95,8 +95,7 @@ rec {
         concatStringsSep "/" ["usr" "local" "bin"]
         => "usr/local/bin"
   */
-  concatStringsSep = builtins.concatStringsSep or (separator: list:
-    lib.foldl' (x: y: x + y) "" (intersperse separator list));
+  concatStringsSep = builtins.concatStringsSep;
 
   /* Maps a function over a list of strings and then concatenates the
      result with the specified separator interspersed between
@@ -143,6 +142,20 @@ rec {
        => "foo\nbar\n"
   */
   concatLines = concatMapStrings (s: s + "\n");
+
+  /*
+    Replicate a string n times,
+    and concatenate the parts into a new string.
+
+    Type: replicate :: int -> string -> string
+
+    Example:
+      replicate 3 "v"
+      => "vvv"
+      replicate 5 "hello"
+      => "hellohellohellohellohello"
+  */
+  replicate = n: s: concatStrings (lib.lists.replicate n s);
 
   /* Construct a Unix-style, colon-separated search path consisting of
      the given `subDir` appended to each of the given paths.
@@ -192,6 +205,18 @@ rec {
        => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r/lib:/nix/store/wwh7mhwh269sfjkm6k5665b5kgp7jrk2-zlib-1.2.8/lib"
   */
   makeLibraryPath = makeSearchPathOutput "lib" "lib";
+
+  /* Construct an include search path (such as C_INCLUDE_PATH) containing the
+     header files for a set of packages or paths.
+
+     Example:
+       makeIncludePath [ "/usr" "/usr/local" ]
+       => "/usr/include:/usr/local/include"
+       pkgs = import <nixpkgs> { }
+       makeIncludePath [ pkgs.openssl pkgs.zlib ]
+       => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-dev/include:/nix/store/wwh7mhwh269sfjkm6k5665b5kgp7jrk2-zlib-1.2.8-dev/include"
+  */
+  makeIncludePath = makeSearchPathOutput "dev" "include";
 
   /* Construct a binary search path (such as $PATH) containing the
      binaries for a set of packages.
@@ -547,7 +572,7 @@ rec {
     ["&quot;" "&apos;" "&lt;" "&gt;" "&amp;"];
 
   # warning added 12-12-2022
-  replaceChars = lib.warn "replaceChars is a deprecated alias of replaceStrings, replace usages of it with replaceStrings." builtins.replaceStrings;
+  replaceChars = lib.warn "lib.replaceChars is a deprecated alias of lib.replaceStrings." builtins.replaceStrings;
 
   # Case conversion utilities.
   lowerChars = stringToCharacters "abcdefghijklmnopqrstuvwxyz";
@@ -701,12 +726,12 @@ rec {
        getName pkgs.youtube-dl
        => "youtube-dl"
   */
-  getName = x:
-   let
-     parse = drv: (parseDrvName drv).name;
-   in if isString x
-      then parse x
-      else x.pname or (parse x.name);
+  getName = let
+    parse = drv: (parseDrvName drv).name;
+  in x:
+    if isString x
+    then parse x
+    else x.pname or (parse x.name);
 
   /* This function takes an argument that's either a derivation or a
      derivation's "name" attribute and extracts the version part from that
@@ -718,12 +743,12 @@ rec {
        getVersion pkgs.youtube-dl
        => "2016.01.01"
   */
-  getVersion = x:
-   let
-     parse = drv: (parseDrvName drv).version;
-   in if isString x
-      then parse x
-      else x.version or (parse x.name);
+  getVersion = let
+    parse = drv: (parseDrvName drv).version;
+  in x:
+    if isString x
+    then parse x
+    else x.version or (parse x.name);
 
   /* Extract name with version from URL. Ask for separator which is
      supposed to start extension.
@@ -740,6 +765,65 @@ rec {
       filename = lib.last components;
       name = head (splitString sep filename);
     in assert name != filename; name;
+
+  /* Create a "-D<feature>:<type>=<value>" string that can be passed to typical
+     CMake invocations.
+
+    Type: cmakeOptionType :: string -> string -> string -> string
+
+     @param feature The feature to be set
+     @param type The type of the feature to be set, as described in
+                 https://cmake.org/cmake/help/latest/command/set.html
+                 the possible values (case insensitive) are:
+                 BOOL FILEPATH PATH STRING INTERNAL
+     @param value The desired value
+
+     Example:
+       cmakeOptionType "string" "ENGINE" "sdl2"
+       => "-DENGINE:STRING=sdl2"
+  */
+  cmakeOptionType = let
+    types = [ "BOOL" "FILEPATH" "PATH" "STRING" "INTERNAL" ];
+  in type: feature: value:
+    assert (elem (toUpper type) types);
+    assert (isString feature);
+    assert (isString value);
+    "-D${feature}:${toUpper type}=${value}";
+
+  /* Create a -D<condition>={TRUE,FALSE} string that can be passed to typical
+     CMake invocations.
+
+    Type: cmakeBool :: string -> bool -> string
+
+     @param condition The condition to be made true or false
+     @param flag The controlling flag of the condition
+
+     Example:
+       cmakeBool "ENABLE_STATIC_LIBS" false
+       => "-DENABLESTATIC_LIBS:BOOL=FALSE"
+  */
+  cmakeBool = condition: flag:
+    assert (lib.isString condition);
+    assert (lib.isBool flag);
+    cmakeOptionType "bool" condition (lib.toUpper (lib.boolToString flag));
+
+  /* Create a -D<feature>:STRING=<value> string that can be passed to typical
+     CMake invocations.
+     This is the most typical usage, so it deserves a special case.
+
+    Type: cmakeFeature :: string -> string -> string
+
+     @param condition The condition to be made true or false
+     @param flag The controlling flag of the condition
+
+     Example:
+       cmakeFeature "MODULES" "badblock"
+       => "-DMODULES:STRING=badblock"
+  */
+  cmakeFeature = feature: value:
+    assert (lib.isString feature);
+    assert (lib.isString value);
+    cmakeOptionType "string" feature value;
 
   /* Create a -D<feature>=<value> string that can be passed to typical Meson
      invocations.
@@ -796,7 +880,7 @@ rec {
     assert (lib.isBool flag);
     mesonOption feature (if flag then "enabled" else "disabled");
 
-  /* Create an --{enable,disable}-<feat> string that can be passed to
+  /* Create an --{enable,disable}-<feature> string that can be passed to
      standard GNU Autoconf scripts.
 
      Example:
@@ -805,11 +889,12 @@ rec {
        enableFeature false "shared"
        => "--disable-shared"
   */
-  enableFeature = enable: feat:
-    assert isString feat; # e.g. passing openssl instead of "openssl"
-    "--${if enable then "enable" else "disable"}-${feat}";
+  enableFeature = flag: feature:
+    assert lib.isBool flag;
+    assert lib.isString feature; # e.g. passing openssl instead of "openssl"
+    "--${if flag then "enable" else "disable"}-${feature}";
 
-  /* Create an --{enable-<feat>=<value>,disable-<feat>} string that can be passed to
+  /* Create an --{enable-<feature>=<value>,disable-<feature>} string that can be passed to
      standard GNU Autoconf scripts.
 
      Example:
@@ -818,9 +903,10 @@ rec {
        enableFeatureAs false "shared" (throw "ignored")
        => "--disable-shared"
   */
-  enableFeatureAs = enable: feat: value: enableFeature enable feat + optionalString enable "=${value}";
+  enableFeatureAs = flag: feature: value:
+    enableFeature flag feature + optionalString flag "=${value}";
 
-  /* Create an --{with,without}-<feat> string that can be passed to
+  /* Create an --{with,without}-<feature> string that can be passed to
      standard GNU Autoconf scripts.
 
      Example:
@@ -829,11 +915,11 @@ rec {
        withFeature false "shared"
        => "--without-shared"
   */
-  withFeature = with_: feat:
-    assert isString feat; # e.g. passing openssl instead of "openssl"
-    "--${if with_ then "with" else "without"}-${feat}";
+  withFeature = flag: feature:
+    assert isString feature; # e.g. passing openssl instead of "openssl"
+    "--${if flag then "with" else "without"}-${feature}";
 
-  /* Create an --{with-<feat>=<value>,without-<feat>} string that can be passed to
+  /* Create an --{with-<feature>=<value>,without-<feature>} string that can be passed to
      standard GNU Autoconf scripts.
 
      Example:
@@ -842,7 +928,8 @@ rec {
        withFeatureAs false "shared" (throw "ignored")
        => "--without-shared"
   */
-  withFeatureAs = with_: feat: value: withFeature with_ feat + optionalString with_ "=${value}";
+  withFeatureAs = flag: feature: value:
+    withFeature flag feature + optionalString flag "=${value}";
 
   /* Create a fixed width string with additional prefix to match
      required width.
@@ -902,9 +989,11 @@ rec {
      Many types of value are coercible to string this way, including int, float,
      null, bool, list of similarly coercible values.
   */
-  isConvertibleWithToString = x:
+  isConvertibleWithToString = let
+    types = [ "null" "int" "float" "bool" ];
+  in x:
     isStringLike x ||
-    elem (typeOf x) [ "null" "int" "float" "bool" ] ||
+    elem (typeOf x) types ||
     (isList x && lib.all isConvertibleWithToString x);
 
   /* Check whether a value can be coerced to a string.
@@ -961,22 +1050,24 @@ rec {
        toInt "3.14"
        => error: floating point JSON numbers are not supported
   */
-  toInt = str:
+  toInt =
+    let
+      matchStripInput = match "[[:space:]]*(-?[[:digit:]]+)[[:space:]]*";
+      matchLeadingZero = match "0[[:digit:]]+";
+    in
+    str:
     let
       # RegEx: Match any leading whitespace, possibly a '-', one or more digits,
       # and finally match any trailing whitespace.
-      strippedInput = match "[[:space:]]*(-?[[:digit:]]+)[[:space:]]*" str;
+      strippedInput = matchStripInput str;
 
       # RegEx: Match a leading '0' then one or more digits.
-      isLeadingZero = match "0[[:digit:]]+" (head strippedInput) == [];
+      isLeadingZero = matchLeadingZero (head strippedInput) == [];
 
       # Attempt to parse input
       parsedInput = fromJSON (head strippedInput);
 
       generalError = "toInt: Could not convert ${escapeNixString str} to int.";
-
-      octalAmbigError = "toInt: Ambiguity in interpretation of ${escapeNixString str}"
-      + " between octal and zero padded integer.";
 
     in
       # Error on presence of non digit characters.
@@ -984,7 +1075,7 @@ rec {
       then throw generalError
       # Error on presence of leading zero/octal ambiguity.
       else if isLeadingZero
-      then throw octalAmbigError
+      then throw "toInt: Ambiguity in interpretation of ${escapeNixString str} between octal and zero padded integer."
       # Error if parse function fails.
       else if !isInt parsedInput
       then throw generalError
@@ -1012,15 +1103,20 @@ rec {
        toIntBase10 "3.14"
        => error: floating point JSON numbers are not supported
   */
-  toIntBase10 = str:
+  toIntBase10 =
+    let
+      matchStripInput = match "[[:space:]]*0*(-?[[:digit:]]+)[[:space:]]*";
+      matchZero = match "0+";
+    in
+    str:
     let
       # RegEx: Match any leading whitespace, then match any zero padding,
       # capture possibly a '-' followed by one or more digits,
       # and finally match any trailing whitespace.
-      strippedInput = match "[[:space:]]*0*(-?[[:digit:]]+)[[:space:]]*" str;
+      strippedInput = matchStripInput str;
 
       # RegEx: Match at least one '0'.
-      isZero = match "0+" (head strippedInput) == [];
+      isZero = matchZero (head strippedInput) == [];
 
       # Attempt to parse input
       parsedInput = fromJSON (head strippedInput);
@@ -1055,7 +1151,7 @@ rec {
             "/prefix/nix-profiles-library-paths.patch"
             "/prefix/compose-search-path.patch" ]
   */
-  readPathsFromFile = lib.warn "lib.readPathsFromFile is deprecated, use a list instead"
+  readPathsFromFile = lib.warn "lib.readPathsFromFile is deprecated, use a list instead."
     (rootPath: file:
       let
         lines = lib.splitString "\n" (readFile file);

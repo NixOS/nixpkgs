@@ -30,6 +30,7 @@ appimageTools.wrapType2 {
 
   meta = with lib; {
     description = "Open source desktop news reader with flexible settings to optimize your experience";
+    mainProgram = "raven-reader";
     homepage = "https://ravenreader.app/";
     license = licenses.mit;
     maintainers = with maintainers; [ wolfangaukang ];

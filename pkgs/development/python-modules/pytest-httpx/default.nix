@@ -7,24 +7,28 @@
 , pytestCheckHook
 , pythonOlder
 , pythonRelaxDepsHook
+, setuptools
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "pytest-httpx";
-  version = "0.22.0";
-  format = "setuptools";
+  version = "0.30.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Colin-b";
     repo = "pytest_httpx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-J5Y5G3/8d9hAtDFqweqA73amnXUpPbmb0uTrCslpl9k=";
+    hash = "sha256-JfyqeOCHNHO4IEHVrh47TdWvb8lcy/1Prqnfphs0ufM=";
   };
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
+    setuptools
+    setuptools-scm
   ];
 
   buildInputs = [

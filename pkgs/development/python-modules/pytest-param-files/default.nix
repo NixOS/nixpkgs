@@ -2,30 +2,38 @@
 , buildPythonPackage
 , fetchFromGitHub
 , flit-core
+, ruamel-yaml
 , pytest
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pytest-param-files";
-  version = "0.3.4";
+  version = "0.6.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "chrisjsewell";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Q7wWoggJN2w2a2umQHx5TsVcugqpovBEtOKruNMZQ8A=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-hgEEfKf9Kmah5WDNHoFWQJKLOs9Z5BDHiebXCdDc1zE=";
   };
 
-  format = "flit";
-
-  nativeBuildInputs = [ flit-core ];
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   buildInputs = [
     pytest
   ];
 
-  pythonImportsCheck = [ "pytest_param_files" ];
+  propagatedBuildInputs = [
+    ruamel-yaml
+  ];
+
+  pythonImportsCheck = [
+    "pytest_param_files"
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

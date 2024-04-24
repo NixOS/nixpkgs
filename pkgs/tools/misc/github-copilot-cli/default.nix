@@ -2,14 +2,14 @@
 
 buildNpmPackage rec {
   pname = "github-copilot-cli";
-  version = "0.1.33";
+  version = "0.1.36";
 
   src = fetchzip {
     url = "https://registry.npmjs.org/@githubnext/${pname}/-/${pname}-${version}.tgz";
-    hash = "sha256-uTv6Z/AzvINinMiIfaaqRZDCmsAQ7tOE5SpuecpzGug=";
+    hash = "sha256-7n+7sN61OrqMVGaKll85+HwX7iGG9M/UW5lf2Pd5sRU=";
   };
 
-  npmDepsHash = "sha256-VIg9a63GH246SbmK4Q8CwA2jdaaOwNUXoJkuDVwy5jE=";
+  npmDepsHash = "sha256-h0StxzGbl3ZeOQ4Jy1BgJ5sJ0pAbubMCRsiIOYpU04w=";
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
@@ -20,9 +20,10 @@ buildNpmPackage rec {
   meta = with lib; {
     description = "A CLI experience for letting GitHub Copilot help you on the command line";
     homepage = "https://githubnext.com/projects/copilot-cli/";
-    license = licenses.free;
+    license = licenses.unfree; # upstream has no license
     maintainers = [ maintainers.malo ];
     platforms = platforms.all;
+    mainProgram = "github-copilot-cli";
   };
 }
 

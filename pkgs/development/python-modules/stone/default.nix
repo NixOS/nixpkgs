@@ -50,6 +50,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Official Api Spec Language for Dropbox";
+    mainProgram = "stone";
     homepage = "https://github.com/dropbox/stone";
     changelog = "https://github.com/dropbox/stone/releases/tag/v${version}";
     license = licenses.mit;

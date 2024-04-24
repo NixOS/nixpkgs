@@ -5,6 +5,7 @@ let
     attrValues
     literalExpression
     mkEnableOption
+    mkPackageOption
     mkIf
     mkOption
     types
@@ -19,20 +20,14 @@ in
 
     services.metricbeat = {
 
-      enable = mkEnableOption (lib.mdDoc "metricbeat");
+      enable = mkEnableOption "metricbeat";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.metricbeat;
-        defaultText = literalExpression "pkgs.metricbeat";
-        example = literalExpression "pkgs.metricbeat7";
-        description = lib.mdDoc ''
-          The metricbeat package to use
-        '';
+      package = mkPackageOption pkgs "metricbeat" {
+        example = "metricbeat7";
       };
 
       modules = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Metricbeat modules are responsible for reading metrics from the various sources.
 
           This is like `services.metricbeat.settings.metricbeat.modules`,
@@ -51,7 +46,7 @@ in
             module = mkOption {
               type = types.str;
               default = name;
-              description = lib.mdDoc ''
+              description = ''
                 The name of the module.
 
                 Look for the value after `module:` on the individual
@@ -80,7 +75,7 @@ in
             name = mkOption {
               type = types.str;
               default = "";
-              description = lib.mdDoc ''
+              description = ''
                 Name of the beat. Defaults to the hostname.
                 See <https://www.elastic.co/guide/en/beats/metricbeat/current/configuration-general-options.html#_name>.
               '';
@@ -89,7 +84,7 @@ in
             tags = mkOption {
               type = types.listOf types.str;
               default = [];
-              description = lib.mdDoc ''
+              description = ''
                 Tags to place on the shipped metrics.
                 See <https://www.elastic.co/guide/en/beats/metricbeat/current/configuration-general-options.html#_tags_2>.
               '';
@@ -99,7 +94,7 @@ in
               type = types.listOf settingsFormat.type;
               default = [];
               internal = true;
-              description = lib.mdDoc ''
+              description = ''
                 The metric collecting modules. Use [](#opt-services.metricbeat.modules) instead.
 
                 See <https://www.elastic.co/guide/en/beats/metricbeat/current/metricbeat-modules.html>.
@@ -108,7 +103,7 @@ in
           };
         };
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           Configuration for metricbeat. See <https://www.elastic.co/guide/en/beats/metricbeat/current/configuring-howto-metricbeat.html> for supported values.
         '';
       };

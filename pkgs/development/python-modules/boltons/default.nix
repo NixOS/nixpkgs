@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "boltons";
-  version = "23.0.0";
+  version = "24.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "mahmoud";
     repo = "boltons";
     rev = "refs/tags/${version}";
-    hash = "sha256-NqlCu0W/BQkLiaLYs9DB1RrEya6KGPfNtpAzKXxoRD0=";
+    hash = "sha256-Ie5CPT2u/2/hAIhDzXT6CPzJwmbgt3B6q3oxqKYb27o=";
   };
 
   nativeCheckInputs = [

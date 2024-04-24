@@ -1,9 +1,9 @@
-{ config, pkgs, lib, options, ... }:
+{ config, pkgs, lib, options, utils, ... }:
 
 let
   inherit (lib) concatStrings foldl foldl' genAttrs literalExpression maintainers
-                mapAttrsToList mkDefault mkEnableOption mkIf mkMerge mkOption
-                optional types mkOptionDefault flip attrNames;
+    mapAttrs mapAttrsToList mkDefault mkEnableOption mkIf mkMerge mkOption
+    optional types mkOptionDefault flip attrNames;
 
   cfg = config.services.prometheus.exporters;
 
@@ -20,7 +20,7 @@ let
   #  systemd service must be provided by specifying either
   #  `serviceOpts.script` or `serviceOpts.serviceConfig.ExecStart`
 
-  exporterOpts = genAttrs [
+  exporterOpts = (genAttrs [
     "apcupsd"
     "artifactory"
     "bind"
@@ -31,16 +31,20 @@ let
     "collectd"
     "dmarc"
     "dnsmasq"
+    "dnssec"
     "domain"
     "dovecot"
     "fastly"
+    "flow"
+    "fritz"
     "fritzbox"
     "graphite"
     "idrac"
+    "imap-mailstat"
     "influxdb"
     "ipmi"
-    "json"
     "jitsi"
+    "json"
     "junos-czerwonk"
     "kea"
     "keylight"
@@ -50,29 +54,35 @@ let
     "mikrotik"
     "minio"
     "modemmanager"
+    "mongodb"
+    "mysqld"
+    "nats"
     "nextcloud"
     "nginx"
     "nginxlog"
     "node"
     "nut"
     "openldap"
-    "openvpn"
+    "pgbouncer"
     "php-fpm"
     "pihole"
+    "ping"
     "postfix"
     "postgres"
     "process"
     "pve"
     "py-air-control"
     "redis"
+    "restic"
     "rspamd"
     "rtl_433"
+    "sabnzbd"
     "scaphandre"
     "script"
     "shelly"
-    "snmp"
     "smartctl"
     "smokeping"
+    "snmp"
     "sql"
     "statsd"
     "surfboard"
@@ -84,39 +94,68 @@ let
     "v2ray"
     "varnish"
     "wireguard"
-    "flow"
     "zfs"
-  ] (name:
-    import (./. + "/exporters/${name}.nix") { inherit config lib pkgs options; }
+  ]
+    (name:
+      import (./. + "/exporters/${name}.nix") { inherit config lib pkgs options utils; }
+    )) // (mapAttrs
+    (name: params:
+      import (./. + "/exporters/${params.name}.nix") { inherit config lib pkgs options utils; type = params.type ; })
+    {
+      exportarr-bazarr = {
+        name = "exportarr";
+        type = "bazarr";
+      };
+      exportarr-lidarr = {
+        name = "exportarr";
+        type = "lidarr";
+      };
+      exportarr-prowlarr = {
+        name = "exportarr";
+        type = "prowlarr";
+      };
+      exportarr-radarr = {
+        name = "exportarr";
+        type = "radarr";
+      };
+      exportarr-readarr = {
+        name = "exportarr";
+        type = "readarr";
+      };
+      exportarr-sonarr = {
+        name = "exportarr";
+        type = "sonarr";
+      };
+    }
   );
 
   mkExporterOpts = ({ name, port }: {
-    enable = mkEnableOption (lib.mdDoc "the prometheus ${name} exporter");
+    enable = mkEnableOption "the prometheus ${name} exporter";
     port = mkOption {
       type = types.port;
       default = port;
-      description = lib.mdDoc ''
+      description = ''
         Port to listen on.
       '';
     };
     listenAddress = mkOption {
       type = types.str;
       default = "0.0.0.0";
-      description = lib.mdDoc ''
+      description = ''
         Address to listen on.
       '';
     };
     extraFlags = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = lib.mdDoc ''
+      description = ''
         Extra commandline options to pass to the ${name} exporter.
       '';
     };
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Open port in firewall for incoming connections.
       '';
     };
@@ -126,23 +165,34 @@ let
       example = literalExpression ''
         "-i eth0 -p tcp -m tcp --dport ${toString port}"
       '';
-      description = lib.mdDoc ''
+      description = ''
         Specify a filter for iptables to use when
         {option}`services.prometheus.exporters.${name}.openFirewall`
         is true. It is used as `ip46tables -I nixos-fw firewallFilter -j nixos-fw-accept`.
       '';
     };
+    firewallRules = mkOption {
+      type = types.nullOr types.lines;
+      default = null;
+      example = literalExpression ''
+        iifname "eth0" tcp dport ${toString port} counter accept
+      '';
+      description = ''
+        Specify rules for nftables to add to the input chain
+        when {option}`services.prometheus.exporters.${name}.openFirewall` is true.
+      '';
+    };
     user = mkOption {
       type = types.str;
       default = "${name}-exporter";
-      description = lib.mdDoc ''
+      description = ''
         User name under which the ${name} exporter shall be run.
       '';
     };
     group = mkOption {
       type = types.str;
       default = "${name}-exporter";
-      description = lib.mdDoc ''
+      description = ''
         Group under which the ${name} exporter shall be run.
       '';
     };
@@ -157,6 +207,7 @@ let
         } // extraOpts);
       } ({ config, ... }: mkIf config.openFirewall {
         firewallFilter = mkDefault "-p tcp -m tcp --dport ${toString config.port}";
+        firewallRules = mkDefault ''tcp dport ${toString config.port} accept comment "${name}-exporter"'';
       })];
       internal = true;
       default = {};
@@ -175,6 +226,7 @@ let
   mkExporterConf = { name, conf, serviceOpts }:
     let
       enableDynamicUser = serviceOpts.serviceConfig.DynamicUser or true;
+      nftables = config.networking.nftables.enable;
     in
     mkIf conf.enable {
       warnings = conf.warnings or [];
@@ -186,10 +238,11 @@ let
       users.groups = (mkIf (conf.group == "${name}-exporter" && !enableDynamicUser) {
         "${name}-exporter" = {};
       });
-      networking.firewall.extraCommands = mkIf conf.openFirewall (concatStrings [
+      networking.firewall.extraCommands = mkIf (conf.openFirewall && !nftables) (concatStrings [
         "ip46tables -A nixos-fw ${conf.firewallFilter} "
         "-m comment --comment ${name}-exporter -j nixos-fw-accept"
       ]);
+      networking.firewall.extraInputRules = mkIf (conf.openFirewall && nftables) conf.firewallRules;
       systemd.services."prometheus-${name}-exporter" = mkMerge ([{
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
@@ -242,7 +295,7 @@ in
         (lib.mkRenamedOptionModule [ "unifi-poller" ] [ "unpoller" ])
       ];
     };
-    description = lib.mdDoc "Prometheus exporter configuration";
+    description = "Prometheus exporter configuration";
     default = {};
     example = literalExpression ''
       {
@@ -297,6 +350,39 @@ in
           or 'services.prometheus.exporters.mail.configFile'.
       '';
     } {
+      assertion = cfg.mysqld.runAsLocalSuperUser -> config.services.mysql.enable;
+      message = ''
+        The exporter is configured to run as 'services.mysql.user', but
+          'services.mysql.enable' is set to false.
+      '';
+    } {
+      assertion = cfg.nextcloud.enable -> (
+        (cfg.nextcloud.passwordFile == null) != (cfg.nextcloud.tokenFile == null)
+      );
+      message = ''
+        Please specify either 'services.prometheus.exporters.nextcloud.passwordFile' or
+          'services.prometheus.exporters.nextcloud.tokenFile'
+      '';
+    } {
+      assertion =  cfg.pgbouncer.enable -> (
+        (cfg.pgbouncer.connectionStringFile != null || cfg.pgbouncer.connectionString != "")
+      );
+        message = ''
+          PgBouncer exporter needs either connectionStringFile or connectionString configured"
+        '';
+    } {
+      assertion = cfg.pgbouncer.enable -> (
+        config.services.pgbouncer.ignoreStartupParameters != null && builtins.match ".*extra_float_digits.*" config.services.pgbouncer.ignoreStartupParameters != null
+        );
+        message = ''
+          Prometheus PgBouncer exporter requires including `extra_float_digits` in services.pgbouncer.ignoreStartupParameters
+
+          Example:
+          services.pgbouncer.ignoreStartupParameters = extra_float_digits;
+
+          See https://github.com/prometheus-community/pgbouncer_exporter#pgbouncer-configuration
+        '';
+    } {
       assertion = cfg.sql.enable -> (
         (cfg.sql.configFile == null) != (cfg.sql.configuration == null)
       );
@@ -334,12 +420,24 @@ in
         `openFirewall' is set to `true'!
       '';
     })) ++ config.services.prometheus.exporters.assertions;
-    warnings = [(mkIf (config.services.prometheus.exporters.idrac.enable && config.services.prometheus.exporters.idrac.configurationPath != null) ''
-        Configuration file in `services.prometheus.exporters.idrac.configurationPath` may override
-        `services.prometheus.exporters.idrac.listenAddress` and/or `services.prometheus.exporters.idrac.port`.
-        Consider using `services.prometheus.exporters.idrac.configuration` instead.
-      ''
-    )] ++ config.services.prometheus.exporters.warnings;
+    warnings = [
+      (mkIf (config.services.prometheus.exporters.idrac.enable && config.services.prometheus.exporters.idrac.configurationPath != null) ''
+          Configuration file in `services.prometheus.exporters.idrac.configurationPath` may override
+          `services.prometheus.exporters.idrac.listenAddress` and/or `services.prometheus.exporters.idrac.port`.
+          Consider using `services.prometheus.exporters.idrac.configuration` instead.
+        ''
+      )
+      (mkIf
+        (cfg.pgbouncer.enable && cfg.pgbouncer.connectionString != "") ''
+          config.services.prometheus.exporters.pgbouncer.connectionString is insecure. Use connectionStringFile instead.
+        ''
+      )
+      (mkIf
+        (cfg.pgbouncer.enable && config.services.pgbouncer.authType != "any") ''
+          Admin user (with password or passwordless) MUST exist in the services.pgbouncer.authFile if authType other than any is used.
+        ''
+      )
+    ] ++ config.services.prometheus.exporters.warnings;
   }] ++ [(mkIf config.services.minio.enable {
     services.prometheus.exporters.minio.minioAddress  = mkDefault "http://localhost:9000";
     services.prometheus.exporters.minio.minioAccessKey = mkDefault config.services.minio.accessKey;

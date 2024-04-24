@@ -43,7 +43,7 @@ in rec {
         login
         misc
         nat
-        nfs3
+        nfs4
         openssh
         php
         predictable-interface-names
@@ -81,6 +81,7 @@ in rec {
       php
       postgresql
       python
+      release-checks
       rsyslog
       stdenv
       subversion
@@ -103,6 +104,7 @@ in rec {
       [
         "nixos.channel"
         "nixpkgs.tarball"
+        "nixpkgs.release-checks"
       ]
       (map (onSystems [ "x86_64-linux" ]) [
         "nixos.tests.boot.biosCdrom"
@@ -125,7 +127,7 @@ in rec {
         "nixos.tests.misc"
         "nixos.tests.nat.firewall"
         "nixos.tests.nat.standalone"
-        "nixos.tests.nfs3.simple"
+        "nixos.tests.nfs4.simple"
         "nixos.tests.openssh"
         "nixos.tests.php.fpm"
         "nixos.tests.php.pcre"

@@ -5,7 +5,7 @@
   kcompletion, kconfig, kcoreaddons, kdbusaddons,
   kfilemetadata, ki18n, kiconthemes, kinit, kio, knewstuff, knotifications,
   kparts, ktexteditor, kwindowsystem, phonon, solid,
-  kuserfeedback, wayland, qtwayland, qtx11extras
+  kuserfeedback, wayland, qtwayland, qtx11extras, qtimageformats
 }:
 
 mkDerivation {
@@ -26,6 +26,7 @@ mkDerivation {
     kuserfeedback
     wayland qtwayland
     qtx11extras
+    qtimageformats
   ];
   outputs = [ "out" "dev" ];
 }

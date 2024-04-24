@@ -1,44 +1,76 @@
 { lib
 , stdenv
 , git
-, runtimeShell
 , fetchurl
 , wrapGAppsHook
+, alsa-lib
+, at-spi2-atk
+, cairo
+, cups
+, dbus
+, expat
+, gdk-pixbuf
 , glib
 , gtk3
-, atomEnv
+, mesa
+, nss
+, nspr
 , xorg
+, libdrm
+, libsecret
 , libxkbcommon
-, hunspell
+, pango
+, systemd
 , hunspellDicts
 , useHunspell ? true
 , languages ? [ "en_US" ]
 , withNemoAction ? true
 , makeDesktopItem
 , copyDesktopItems
-, makeWrapper
-, nodePackages
+, asar
 , python3
 }:
 
 let
   pname = "pulsar";
-  version = "1.107.1";
+  version = "1.114.0";
 
   sourcesPath = {
     x86_64-linux.tarname = "Linux.${pname}-${version}.tar.gz";
-    x86_64-linux.hash = "sha256-stY/sutbFVWQuN6C/tkT/G5MMVypgm3Um78jk8RHF6k=";
+    x86_64-linux.hash = "sha256-O//dowoMgQfS3hq088IKr5aJd5St9zpT/ypfuswnyv0=";
     aarch64-linux.tarname = "ARM.Linux.${pname}-${version}-arm64.tar.gz";
-    aarch64-linux.hash = "sha256-umL60+FJKT8ThnzxgzzVzsY0nhJwsNF4YvrKoruxz7U=";
+    aarch64-linux.hash = "sha256-EzCTB1Ib9cTbslEdXPsS5gehHr1qd5v4iZgOqpxhUmA=";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  additionalLibs = lib.makeLibraryPath [
+  newLibpath = lib.makeLibraryPath [
+    alsa-lib
+    at-spi2-atk
+    cairo
+    cups
+    dbus
+    expat
+    gdk-pixbuf
+    glib
+    gtk3
+    libsecret
+    mesa
+    nss
+    nspr
+    libdrm
+    xorg.libX11
+    xorg.libxcb
+    xorg.libXcomposite
+    xorg.libXdamage
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXrandr
     xorg.libxshmfence
     libxkbcommon
     xorg.libxkbfile
+    pango
     stdenv.cc.cc.lib
+    systemd
   ];
-  newLibpath = "${atomEnv.libPath}:${additionalLibs}";
 
   # Hunspell
   hunspellDirs = builtins.map (lang: "${hunspellDicts.${lang}}/share/hunspell") languages;
@@ -60,7 +92,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     wrapGAppsHook
     copyDesktopItems
-    nodePackages.asar
+    asar
   ];
 
   buildInputs = [
@@ -105,7 +137,7 @@ stdenv.mkDerivation rec {
       --set-rpath "${newLibpath}" \
       $opt/resources/app/ppm/bin/node
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      $opt/resources/app.asar.unpacked/node_modules/symbols-view/vendor/ctags-linux
+      $opt/resources/app.asar.unpacked/node_modules/symbol-provider-ctags/vendor/ctags-linux
 
   '' + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
     # Replace the bundled git with the one from nixpkgs
@@ -176,6 +208,15 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ colamaroro ];
+    maintainers = with maintainers; [ colamaroro bryango ];
+    knownVulnerabilities = [
+      "CVE-2023-5217"
+      "CVE-2022-21718"
+      "CVE-2022-29247"
+      "CVE-2022-29257"
+      "CVE-2022-36077"
+      "CVE-2023-29198"
+      "CVE-2023-39956"
+    ];
   };
 }

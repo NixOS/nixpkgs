@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "pyuseragents";
   version = "1.0.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Animenosekai";

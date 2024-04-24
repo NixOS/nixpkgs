@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation {
   pname = "libnl-tiny";
-  version = "unstable-2022-12-13";
+  version = "unstable-2023-12-05";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/libnl-tiny.git";
-    rev = "f5d9b7e4f534a69cbd35c3f150fa6d57b9d631e4";
-    sha256 = "0c5ycsdas8rr5c33gd0mnmm515dq631fmdjn5mp2j1m0j1bk7hc0";
+    rev = "965c4bf49658342ced0bd6e7cb069571b4a1ddff";
+    hash = "sha256-kegTV7FXMERW7vjRZo/Xp4cbSBZmynBgge2lK71Fx94=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -23,6 +23,6 @@ stdenv.mkDerivation {
     homepage = "https://git.openwrt.org/?p=project/libnl-tiny.git;a=summary";
     license = licenses.isc;
     maintainers = with maintainers; [ mkg20001 ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }

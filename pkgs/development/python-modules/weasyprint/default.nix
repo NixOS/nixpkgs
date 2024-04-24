@@ -24,15 +24,15 @@
 
 buildPythonPackage rec {
   pname = "weasyprint";
-  version = "59.0";
+  version = "61.2";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version;
     pname = "weasyprint";
-    hash = "sha256-Ijp2Y2s3ROqkq4oohfUM9Gz467GsuZtSdtAv7M9QdJI=";
+    hash = "sha256-R99s/u/4xsKM8uTK+DfN4XcV7+RicIradLqi6zkbYFk=";
   };
 
   patches = [
@@ -79,9 +79,9 @@ buildPythonPackage rec {
 
   FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 
-  # Fontconfig error: Cannot load default config file: No such file: (null)
+  # Set env variable explicitly for Darwin, but allow overriding when invoking directly
   makeWrapperArgs = [
-    "--set FONTCONFIG_FILE ${FONTCONFIG_FILE}"
+    "--set-default FONTCONFIG_FILE ${FONTCONFIG_FILE}"
   ];
 
   postPatch = ''
@@ -100,6 +100,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Converts web documents to PDF";
+    mainProgram = "weasyprint";
     homepage = "https://weasyprint.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ elohmeier ];

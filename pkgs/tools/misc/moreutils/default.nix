@@ -9,16 +9,17 @@
 , makeWrapper
 , perl # for pod2man
 , darwin
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "moreutils";
-  version = "0.67";
+  version = "0.69";
 
   src = fetchgit {
     url = "git://git.joeyh.name/moreutils";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-8Mu7L3KqOsW9OmidMkWB+q9TofHd1P1sbsNrtE4MUoA=";
+    hash = "sha256-hVvRAIXlG8+pAD2v/Ma9Z6EUL/1xIRz7Gx1fOxoQyi0=";
   };
 
   preBuild = ''
@@ -38,6 +39,11 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/chronic --prefix PERL5LIB : $PERL5LIB
     wrapProgram $out/bin/ts --prefix PERL5LIB : $PERL5LIB
   '';
+
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "git://git.joeyh.name/moreutils";
+  };
 
   meta = with lib; {
     description = "Growing collection of the unix tools that nobody thought to write long ago when unix was young";

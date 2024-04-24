@@ -8,14 +8,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glslls";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "glsl-language-server";
     rev = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-UgQXxme0uySKYhhVMOO7+EZ4BL2s8nmq9QxC2SFQqRg=";
+    hash = "sha256-wi1QiqaWRh1DmIhwmu94lL/4uuMv6DnB+whM61Jg1Zs=";
   };
 
   nativeBuildInputs = [
@@ -26,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "A language server implementation for GLSL";
+    mainProgram = "glslls";
     homepage = "https://github.com/svenstaro/glsl-language-server";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ declan ];

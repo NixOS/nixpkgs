@@ -6,13 +6,14 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , zigpy
 }:
 
 buildPythonPackage rec {
   pname = "zigpy-deconz";
-  version = "0.21.0";
-  format = "setuptools";
+  version = "0.23.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -20,8 +21,18 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-/XsCQt3JHiPrXJH8w2zDmaMQBLWgcmkbj9RooVYuFw0=";
+    hash = "sha256-10EyT3IGdAtF9OUbfZ5OtP+Ot35O0SfMDtsyw5FQ+/8=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace ', "setuptools-git-versioning<2"' "" \
+      --replace 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     pyserial

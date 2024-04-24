@@ -1,38 +1,60 @@
-{ fetchurl, lib, stdenv, ant, jdk, runtimeShell }:
+{ lib
+, stdenv
+, fetchurl
+, ant
+, jdk
+, jre
+, makeWrapper
+, stripJavaArchivesHook
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fop";
   version = "2.8";
 
   src = fetchurl {
-    url = "mirror://apache/xmlgraphics/fop/source/${pname}-${version}-src.tar.gz";
-    sha256 = "sha256-b7Av17wu6Ar/npKOiwYqzlvBFSIuXTpqTacM1sxtBvc=";
+    url = "mirror://apache/xmlgraphics/fop/fop-${finalAttrs.version}-src.tar.gz";
+    hash = "sha256-b7Av17wu6Ar/npKOiwYqzlvBFSIuXTpqTacM1sxtBvc=";
   };
 
-  buildInputs = [ ant jdk ];
+  nativeBuildInputs = [
+    ant
+    jdk
+    makeWrapper
+    stripJavaArchivesHook
+  ];
 
-  # build only the "package" target, which generates the fop command.
+  # Note: not sure if this is needed anymore
+  env.JAVA_TOOL_OPTIONS = "-Dfile.encoding=UTF8";
+
   buildPhase = ''
-     export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF8"
-     ant -f fop/build.xml package
+    runHook preBuild
+
+    # build only the "package" target, which generates the fop command.
+    ant -f fop/build.xml package
+
+    runHook postBuild
   '';
 
   installPhase = ''
-    mkdir -p $out/bin $out/lib $out/share/doc/fop
+    runHook preInstall
+
+    mkdir -p $out/lib $out/share/doc/fop
     cp fop/build/*.jar fop/lib/*.jar $out/lib/
     cp -r README fop/examples/ $out/share/doc/fop/
 
     # There is a fop script in the source archive, but it has many impurities.
     # Instead of patching out 90 % of the script, we write our own.
-    cat > "$out/bin/fop" <<EOF
-    #!${runtimeShell}
-    java_exec_args="-Djava.awt.headless=true"
-    exec ${jdk.jre}/bin/java \$java_exec_args -classpath "$out/lib/*" org.apache.fop.cli.Main "\$@"
-    EOF
-    chmod a+x $out/bin/fop
+    makeWrapper ${jre}/bin/java $out/bin/fop \
+        --add-flags "-Djava.awt.headless=true" \
+        --add-flags "-classpath $out/lib/\*" \
+        --add-flags "org.apache.fop.cli.Main"
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://xmlgraphics.apache.org/fop/changes.html";
     description = "XML formatter driven by XSL Formatting Objects (XSL-FO)";
     longDescription = ''
       FOP is a Java application that reads a formatting object tree and then
@@ -47,12 +69,13 @@ stdenv.mkDerivation rec {
       This package contains the fop command line tool.
     '';
     homepage = "https://xmlgraphics.apache.org/fop/";
-    license = licenses.asl20;
-    sourceProvenance = with sourceTypes; [
+    license = lib.licenses.asl20;
+    mainProgram = "fop";
+    maintainers = with lib.maintainers; [ bjornfor tomasajt ];
+    platforms = jre.meta.platforms;
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
-      binaryBytecode  # source bundles dependencies as jars
+      binaryBytecode # source bundles dependencies as jars
     ];
-    platforms = platforms.all;
-    maintainers = with maintainers; [ bjornfor ];
   };
-}
+})

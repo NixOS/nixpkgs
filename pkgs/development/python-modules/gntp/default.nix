@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "gntp";
   version = "1.0.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -17,6 +18,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/kfdm/gntp/";
     description = "Python library for working with the Growl Notification Transport Protocol";
+    mainProgram = "gntp";
     license = licenses.mit;
     maintainers = [ maintainers.jfroche ];
   };

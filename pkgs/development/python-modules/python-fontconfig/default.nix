@@ -5,11 +5,12 @@ let
     fontDirectories = [ freefont_ttf ];
   };
 in buildPythonPackage rec {
-  pname = "Python-fontconfig";
+  pname = "python-fontconfig";
   version = "0.5.1";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "Python-fontconfig";
+    inherit version;
     sha256 = "154rfd0ygcbj9y8m32n537b457yijpfx9dvmf76vi0rg4ikf7kxp";
   };
 
@@ -17,7 +18,7 @@ in buildPythonPackage rec {
   nativeBuildInputs = [ cython ];
 
   preBuild = ''
-    ${python.pythonForBuild.interpreter} setup.py build_ext -i
+    ${python.pythonOnBuildForHost.interpreter} setup.py build_ext -i
   '';
 
   checkPhase = ''

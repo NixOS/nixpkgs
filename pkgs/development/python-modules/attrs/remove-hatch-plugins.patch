@@ -1,0 +1,78 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 1c72fc2..ae45740 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: MIT
+ 
+ [build-system]
+-requires = ["hatchling", "hatch-vcs", "hatch-fancy-pypi-readme>=23.2.0"]
++requires = ["hatchling"]
+ build-backend = "hatchling.build"
+ 
+ 
+@@ -26,7 +26,8 @@ classifiers = [
+   "Typing :: Typed",
+ ]
+ dependencies = ["importlib_metadata;python_version<'3.8'"]
+-dynamic = ["version", "readme"]
++dynamic = ["readme"]
++version = "@version@"
+ 
+ [project.optional-dependencies]
+ tests-mypy = [
+@@ -70,54 +71,9 @@ Funding = "https://github.com/sponsors/hynek"
+ Tidelift = "https://tidelift.com/subscription/pkg/pypi-attrs?utm_source=pypi-attrs&utm_medium=pypi"
+ 
+ 
+-[tool.hatch.version]
+-source = "vcs"
+-raw-options = { local_scheme = "no-local-version" }
+-
+ [tool.hatch.build.targets.wheel]
+ packages = ["src/attr", "src/attrs"]
+ 
+-[tool.hatch.metadata.hooks.fancy-pypi-readme]
+-content-type = "text/markdown"
+-
+-# PyPI doesn't support the <picture> tag.
+-[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+-text = """<p align="center">
+-  <a href="https://www.attrs.org/">
+-    <img src="https://raw.githubusercontent.com/python-attrs/attrs/main/docs/_static/attrs_logo.svg" width="35%" alt="attrs" />
+-  </a>
+-</p>
+-"""
+-
+-[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+-path = "README.md"
+-start-after = "<!-- teaser-begin -->"
+-
+-[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+-text = """
+-
+-## Release Information
+-
+-"""
+-
+-[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+-path = "CHANGELOG.md"
+-pattern = "\n(###.+?\n)## "
+-
+-[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+-text = """
+-
+----
+-
+-[Full changelog](https://www.attrs.org/en/stable/changelog.html)
+-"""
+-
+-# Point sponsor image URLs to versions.
+-[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
+-pattern = '\/latest\/_static/sponsors'
+-replacement = '/$HFPR_VERSION/_static/sponsors'
+-
+-
+ [tool.pytest.ini_options]
+ addopts = ["-ra", "--strict-markers", "--strict-config"]
+ xfail_strict = true

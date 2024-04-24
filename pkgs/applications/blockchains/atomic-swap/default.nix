@@ -1,7 +1,8 @@
 { lib, buildGoModule, fetchFromGitHub, nix-update-script, makeWrapper, monero-cli }:
+
 let
   pname = "atomic-swap";
-  version = "0.4.1";
+  version = "0.4.3";
 in
 buildGoModule {
   inherit pname version;
@@ -10,10 +11,10 @@ buildGoModule {
     owner = "AthanorLabs";
     repo = "atomic-swap";
     rev = "v${version}";
-    hash = "sha256-CYqYRYLMfvPX8TqyFSRg4ookeIfYGc0HDzu/Ip9Ecsg=";
+    hash = "sha256-MOylUZ6BrvlxUrsZ5gg3JzW9ROG5UXeGhq3YoPZKdHs=";
   };
 
-  vendorHash = "sha256-igHuklt76r7MDxz8TAaFgFdQS7L3DJkMYarAMNVYTC4=";
+  vendorHash = "sha256-fGQ6MI+3z7wRL0y7AUERVtN0V2rcRa+vqeB8+3FMzzc=";
 
   subPackages = [
     "cmd/swapcli"

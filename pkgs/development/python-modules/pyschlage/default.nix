@@ -11,8 +11,8 @@
 
 buildPythonPackage rec {
   pname = "pyschlage";
-  version = "2023.8.1";
-  format = "pyproject";
+  version = "2024.2.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -20,10 +20,8 @@ buildPythonPackage rec {
     owner = "dknowles2";
     repo = "pyschlage";
     rev = "refs/tags/${version}";
-    hash = "sha256-PTkuVGUdqRcvgcIL7yoVWNLQcWyDpXXHLxb7CoD8J1s=";
+    hash = "sha256-kjAV7VHKp7WpT6dNjuzYMTlcXbyIB2MNZQXOckDLWF8=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools

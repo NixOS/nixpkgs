@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Userspace logging daemon for netfilter/iptables";
+    mainProgram = "ulogd";
 
     longDescription = ''
       Logging daemon that reads event messages coming from the Netfilter

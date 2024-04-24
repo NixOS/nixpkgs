@@ -31,7 +31,7 @@ let
         attrs = mkOption {
           type = types.attrsOf ldapValueType;
           default = {};
-          description = lib.mdDoc "Attributes of the parent entry.";
+          description = "Attributes of the parent entry.";
         };
         children = mkOption {
           # Hide the child attributes, to avoid infinite recursion in e.g. documentation
@@ -40,7 +40,7 @@ let
             hiddenOptions = lib.mapAttrs (name: attr: attr // { visible = false; }) options;
           in types.attrsOf (types.submodule { options = hiddenOptions; });
           default = {};
-          description = lib.mdDoc "Child entries of the current entry, with recursively the same structure.";
+          description = "Child entries of the current entry, with recursively the same structure.";
           example = lib.literalExpression ''
             {
                 "cn=schema" = {
@@ -59,7 +59,7 @@ let
         includes = mkOption {
           type = types.listOf types.path;
           default = [];
-          description = lib.mdDoc ''
+          description = ''
             LDIF files to include after the parent's attributes but before its children.
           '';
         };
@@ -88,16 +88,11 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether to enable the ldap server.";
+        description = "Whether to enable the ldap server.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.openldap;
-        defaultText = literalExpression "pkgs.openldap";
-        description = lib.mdDoc ''
-          OpenLDAP package to use.
-
+      package = mkPackageOption pkgs "openldap" {
+        extraDescription = ''
           This can be used to, for example, set an OpenLDAP package
           with custom overrides to enable modules or other
           functionality.
@@ -107,25 +102,25 @@ in {
       user = mkOption {
         type = types.str;
         default = "openldap";
-        description = lib.mdDoc "User account under which slapd runs.";
+        description = "User account under which slapd runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "openldap";
-        description = lib.mdDoc "Group account under which slapd runs.";
+        description = "Group account under which slapd runs.";
       };
 
       urlList = mkOption {
         type = types.listOf types.str;
         default = [ "ldap:///" ];
-        description = lib.mdDoc "URL list slapd should listen on.";
+        description = "URL list slapd should listen on.";
         example = [ "ldaps:///" ];
       };
 
       settings = mkOption {
         type = ldapAttrsType;
-        description = lib.mdDoc "Configuration for OpenLDAP, in OLC format";
+        description = "Configuration for OpenLDAP, in OLC format";
         example = lib.literalExpression ''
           {
             attrs.olcLogLevel = [ "stats" ];
@@ -173,7 +168,7 @@ in {
       configDir = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Use this config directory instead of generating one from the
           `settings` option. Overrides all NixOS settings.
         '';
@@ -183,7 +178,7 @@ in {
       mutableConfig = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to allow writable on-line configuration. If
           `true`, the NixOS settings will only be used to
           initialize the OpenLDAP configuration if it does not exist, and are
@@ -194,7 +189,7 @@ in {
       declarativeContents = mkOption {
         type = with types; attrsOf lines;
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           Declarative contents for the LDAP database, in LDIF format by suffix.
 
           All data will be erased when starting the LDAP server. Modifications
@@ -299,6 +294,7 @@ in {
         "man:slapd-mdb"
       ];
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       serviceConfig = {
         User = cfg.user;

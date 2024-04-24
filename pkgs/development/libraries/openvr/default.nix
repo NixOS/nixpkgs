@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvr";
-  version = "1.26.7";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "openvr";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-verVIRyDdpF8lIjjjG8GllDJG7nhqByIfs/8O5TMOyc=";
+    hash = "sha256-Dpl88Te+EoVasoCtwERGrYt3xK8o03h15r8IVxxPPCw=";
   };
 
   patches = [
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "An API and runtime that allows access to VR hardware from multiple vendors without requiring that applications have specific knowledge of the hardware they are targeting";
     homepage = "https://github.com/ValveSoftware/openvr";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ pedrohlc Scrumplex ];
+    maintainers = with lib.maintainers; [ Scrumplex ];
     platforms = lib.platforms.unix;
   };
 })

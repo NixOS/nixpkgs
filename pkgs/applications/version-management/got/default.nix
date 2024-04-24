@@ -1,28 +1,41 @@
-{ lib, stdenv, fetchurl
-, pkg-config, openssl, libbsd, libevent, libuuid, libossp_uuid, libmd, zlib, ncurses, bison
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, openssl
+, libbsd
+, libevent
+, libuuid
+, libossp_uuid
+, libmd
+, zlib
+, ncurses
+, bison
 , autoPatchelfHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "got";
-  version = "0.91";
+  version = "0.97";
 
   src = fetchurl {
-    url = "https://gameoftrees.org/releases/portable/got-portable-${version}.tar.gz";
-    hash = "sha256-ebFetQhgEBjy3aq3TfK9veeevbmSAEv9kaUohsnsrlU=";
+    url = "https://gameoftrees.org/releases/portable/got-portable-${finalAttrs.version}.tar.gz";
+    hash = "sha256-4HpIlKRYUDoymCBH8GS8DDXaY0nYiVvotpBkwglOO3I=";
   };
 
   nativeBuildInputs = [ pkg-config bison ]
     ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
   buildInputs = [ openssl libbsd libevent libuuid libmd zlib ncurses ]
-  ++ lib.optionals stdenv.isDarwin [ libossp_uuid ];
+    ++ lib.optionals stdenv.isDarwin [ libossp_uuid ];
+
+  configureFlags = [ "--enable-gotd" ];
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
-    # The configure script assumes dependencies on Darwin are install via
+    # The configure script assumes dependencies on Darwin are installed via
     # Homebrew or MacPorts and hardcodes assumptions about the paths of
     # dependencies which fails the nixpkgs configurePhase.
-    substituteInPlace configure --replace 'xdarwin' 'xhomebrew'
+    substituteInPlace configure --replace-fail 'xdarwin' 'xhomebrew'
   '';
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
@@ -36,11 +49,12 @@ stdenv.mkDerivation rec {
 
   installCheckPhase = ''
     runHook preInstallCheck
-    test "$($out/bin/got --version)" = '${pname} ${version}'
+    test "$($out/bin/got --version)" = "got ${finalAttrs.version}"
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://gameoftrees.org/releases/CHANGES";
     description = "A version control system which prioritizes ease of use and simplicity over flexibility";
     longDescription = ''
       Game of Trees (Got) is a version control system which prioritizes
@@ -52,8 +66,9 @@ stdenv.mkDerivation rec {
       on the same repository.
     '';
     homepage = "https://gameoftrees.org";
-    license = licenses.isc;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ abbe afh ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ abbe afh ];
+    mainProgram = "got";
+    platforms = with lib.platforms; darwin ++ linux;
   };
-}
+})

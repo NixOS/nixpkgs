@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     "TUNE=${
       if tune then
         "auto"
-      else if stdenv.targetPlatform.isx86 then
+      else if stdenv.hostPlatform.isx86 then
         "x86" # "chooses options that should be well suited for most x86 platforms"
       else
         "generic" # "chooses options that should be OK for most platforms"

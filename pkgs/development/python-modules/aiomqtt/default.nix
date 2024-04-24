@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "aiomqtt";
-  version = "1.1.0";
+  version = "2.0.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sbtinstruments";
     repo = "aiomqtt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8f3opbvN/hmT6AEMD7Co5n5IqdhP0higbaDGUBWJRzU=";
+    hash = "sha256-bV1elEO1518LVLwNDN5pzjxRgcG34K1XUsK7fTw8h+8=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "The idiomatic asyncio MQTT client, wrapped around paho-mqtt";
     homepage = "https://github.com/sbtinstruments/aiomqtt";
-    changelog = "https://github.com/sbtinstruments/aiomqtt/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/sbtinstruments/aiomqtt/blob/${src.rev}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };

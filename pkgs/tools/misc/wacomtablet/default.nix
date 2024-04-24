@@ -24,6 +24,7 @@ mkDerivation rec {
 
   meta = {
     description = "KDE Configuration Module for Wacom Graphics Tablets";
+    mainProgram = "kde_wacom_tabletfinder";
     longDescription = ''
       This module implements a GUI for the Wacom Linux Drivers and extends it
       with profile support to handle different button / pen layouts per profile.

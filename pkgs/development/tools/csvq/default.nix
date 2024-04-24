@@ -15,6 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "SQL-like query language for CSV";
+    mainProgram = "csvq";
     homepage = "https://mithrandie.github.io/csvq/";
     changelog = "https://github.com/mithrandie/csvq/releases/tag/v${version}";
     license = licenses.mit;

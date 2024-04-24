@@ -1,24 +1,31 @@
-{ lib
-, stdenv
-, bash
-, buildPythonPackage
-, fetchFromGitHub
-, gnumake
-, httpx
-, openssl
-, paramiko
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, typing-extensions
+{
+  lib,
+  stdenv,
+  bash,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  gnumake,
+  h2,
+  hpack,
+  httpx,
+  hyperframe,
+  openssl,
+  paramiko,
+  pytest-asyncio,
+  pytest-mock,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools-scm,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "proxy-py";
-  version = "2.4.3";
-  format = "pyproject";
+  version = "2.4.4rc5";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -26,34 +33,37 @@ buildPythonPackage rec {
     owner = "abhinavsingh";
     repo = "proxy.py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dA7a9RicBFCSf6IoGX/CdvI8x/xMOFfNtyuvFn9YmHI=";
+    hash = "sha256-ngIskWzN6699C0WjSX/ZbHxV3Eb8ikQPNYZFzfzt7xU=";
   };
 
   postPatch = ''
     substituteInPlace Makefile \
     --replace "SHELL := /bin/bash" "SHELL := ${bash}/bin/bash"
     substituteInPlace pytest.ini \
-      --replace "-p pytest_cov" "" \
-      --replace "--no-cov-on-fail" ""
+      --replace-fail "-p pytest_cov" "" \
+      --replace-fail "--no-cov-on-fail" ""
     sed -i "/--cov/d" pytest.ini
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     paramiko
     typing-extensions
   ];
 
   nativeCheckInputs = [
-    httpx
-    openssl
     gnumake
+    h2
+    hpack
+    httpx
+    hyperframe
+    openssl
     pytest-asyncio
     pytest-mock
+    pytest-xdist
     pytestCheckHook
+    requests
   ];
 
   preCheck = ''
@@ -62,14 +72,17 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Test requires network access
-    "test_http2_via_proxy"
+    "http"
+    "http2"
+    "proxy"
+    "web_server"
+    # Location is not writable
+    "test_gen_csr"
     # Tests run into a timeout
     "integration"
   ];
 
-  pythonImportsCheck = [
-    "proxy"
-  ];
+  pythonImportsCheck = [ "proxy" ];
 
   meta = with lib; {
     description = "Python proxy framework";

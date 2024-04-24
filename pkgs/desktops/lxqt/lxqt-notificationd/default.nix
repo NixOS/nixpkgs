@@ -1,42 +1,46 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
-, lxqt-build-tools
-, qtbase
-, qttools
-, qtsvg
 , kwindowsystem
+, layer-shell-qt
 , liblxqt
 , libqtxdg
-, qtx11extras
+, lxqt-build-tools
+, qtbase
+, qtsvg
+, qttools
+, qtwayland
+, wrapQtAppsHook
 , gitUpdater
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "lxqt-notificationd";
-  version = "1.3.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "zfoTc+O8eYpUc13vzHUuk71q+MATNGEGtiYhQmFldtw=";
+    hash = "sha256-zEoTjDD65bBJBbvAZVtov8HyiN1G6CqYkmcPH4T8Jhc=";
   };
 
   nativeBuildInputs = [
     cmake
     lxqt-build-tools
+    qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qttools
-    qtsvg
     kwindowsystem
+    layer-shell-qt
     liblxqt
     libqtxdg
-    qtx11extras
+    qtbase
+    qtsvg
+    qtwayland
   ];
 
   passthru.updateScript = gitUpdater { };

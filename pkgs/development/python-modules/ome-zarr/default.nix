@@ -2,7 +2,6 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, fetchpatch
 , pytestCheckHook
 , aiohttp
 , dask
@@ -17,14 +16,15 @@
 
 buildPythonPackage rec {
   pname = "ome-zarr";
-  version = "0.8.0";
+  version = "0.8.3";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ome";
     repo = "ome-zarr-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DMBTrDyUmNsrjOsFKrqukJNZ1f/mAjz4aunNUcwVMKg=";
+    hash = "sha256-JuNXVse/n/lFbNaLwMcir8NBHiRxcbYvtbxePwI6YoY=";
   };
 
   propagatedBuildInputs = [

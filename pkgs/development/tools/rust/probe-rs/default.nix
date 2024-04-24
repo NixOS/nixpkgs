@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , rustPlatform
-, fetchCrate
+, fetchFromGitHub
 , pkg-config
 , libusb1
 , openssl
@@ -11,14 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "probe-rs";
-  version = "0.20.0";
+  version = "0.23.0";
 
-  src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-IjeQPsHDHmKmS0UeivgmM8dQyhwak1PBIBw31KlVu64=";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-5V7eLnukVAcOSX52myvaTlDbemGp6mDaWrQc3w4P5MI=";
   };
 
-  cargoHash = "sha256-BkYidZzqiI7EIgEuYbeGC7qeVvhC1GARFC4EZpDdBmg=";
+  cargoHash = "sha256-sZl4FhaKIMJe7v5AAIM2w7M8Ev7vCht3owkvt0UhOu8=";
 
   cargoBuildFlags = [ "--features=cli" ];
 

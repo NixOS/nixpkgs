@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , buildPythonPackage
 , pythonOlder
-, pytestCheckHook
+, pytest7CheckHook
 , numpy
 , pandas
 , pytz
@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "json-tricks";
-  version = "3.17.2";
+  version = "3.17.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,14 +19,14 @@ buildPythonPackage rec {
     owner = "mverleg";
     repo = "pyjson_tricks";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7AT4h+f3FDTITfVZyLTimZlDGuAxKwe0kFYBEFGv51s=";
+    hash = "sha256-xddMc4PvVI+mqB3eeVqECZmdeSKAURsdbOnUAXahqM0=";
   };
 
   nativeCheckInputs = [
     numpy
     pandas
     pytz
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
   pythonImportsCheck = [

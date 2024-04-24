@@ -39,7 +39,7 @@
 , dia
 , tetex ? null
 , ghostscript ? null
-, texlive ? null
+, texliveMedium ? null
 
   # generates python bindings
 , pythonSupport ? true
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   # ncurses is a hidden dependency of waf when checking python
   buildInputs = lib.optionals pythonSupport [ castxml ncurses ]
     ++ lib.optionals enableDoxygen [ doxygen graphviz imagemagick ]
-    ++ lib.optionals withManual [ dia tetex ghostscript imagemagick texlive.combined.scheme-medium ]
+    ++ lib.optionals withManual [ dia tetex ghostscript imagemagick texliveMedium ]
     ++ [
     libxml2
     pythonEnv
@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
     "-DPython3_EXECUTABLE=${pythonEnv}/bin/python"
     "-DNS3_PYTHON_BINDINGS=ON"
     "-DNS3_DES_METRICS=ON"
-    "-DNS3_BINDINGS_INSTALL_DIR=lib/${pythonEnv.libPrefix}/site-packages"
+    "-DNS3_BINDINGS_INSTALL_DIR=${pythonEnv.sitePackages}"
     "-DNS3_LOG=ON"
     "-DNS3_ASSERT=ON"
     "-DNS3_GTK3=ON"

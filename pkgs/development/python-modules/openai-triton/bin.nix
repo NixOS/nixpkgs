@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "triton";
-  version = "2.0.0";
+  version = "2.1.0";
   format = "wheel";
 
   src =
@@ -62,7 +62,7 @@ buildPythonPackage rec {
     newStr = lib.concatMapStringsSep ", " quote new;
   in
     ''
-      substituteInPlace $out/${python.sitePackages}/triton/compiler.py \
+      substituteInPlace $out/${python.sitePackages}/triton/common/build.py \
         --replace '${oldStr}' '${newStr}'
     '');
 

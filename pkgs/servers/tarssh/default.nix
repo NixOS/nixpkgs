@@ -19,5 +19,6 @@ rustPlatform.buildRustPackage rec {
     license = [ licenses.mit ];
     maintainers = with maintainers; [ sohalt ];
     platforms = platforms.unix ;
+    mainProgram = "tarssh";
   };
 }

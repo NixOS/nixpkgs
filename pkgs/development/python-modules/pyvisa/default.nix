@@ -10,7 +10,8 @@
 
 buildPythonPackage rec {
   pname = "pyvisa";
-  version = "1.13.0";
+  version = "1.14.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -18,16 +19,16 @@ buildPythonPackage rec {
     owner = "pyvisa";
     repo = "pyvisa";
     rev = "refs/tags/${version}";
-    hash = "sha256-TBu3Xko0IxFBT2vzrsOxqEG3y4XfPzISEtbkWkIaCvM=";
+    hash = "sha256-GKrgUK2nSZi+8oJoS45MjpU9+INEgcla9Kaw6ceNVp0=";
   };
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 
   propagatedBuildInputs = [
     typing-extensions
-    setuptools
   ];
 
   nativeCheckInputs = [
@@ -38,10 +39,6 @@ buildPythonPackage rec {
   disabledTests = [
     "test_visa_info"
   ];
-
-  postConfigure = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="v${version}"
-  '';
 
   meta = with lib; {
     description = "Python package for support of the Virtual Instrument Software Architecture (VISA)";

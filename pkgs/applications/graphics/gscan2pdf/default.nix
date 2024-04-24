@@ -1,4 +1,4 @@
-{ lib, fetchurl, perlPackages, wrapGAppsHook,
+{ lib, fetchurl, perlPackages, wrapGAppsHook, fetchpatch,
   # libs
   librsvg, sane-backends, sane-frontends,
   # runtime dependencies
@@ -16,6 +16,17 @@ perlPackages.buildPerlPackage rec {
     url = "mirror://sourceforge/gscan2pdf/gscan2pdf-${version}.tar.xz";
     hash = "sha256-NGz6DUa7TdChpgwmD9pcGdvYr3R+Ft3jPPSJpybCW4Q=";
   };
+
+  patches = [
+    # fixes warnings during tests. See https://sourceforge.net/p/gscan2pdf/bugs/421
+    (fetchpatch {
+      name = "0001-Remove-given-and-when-keywords-and-operator.patch";
+      url = "https://sourceforge.net/p/gscan2pdf/bugs/_discuss/thread/602a7cedfd/1ea4/attachment/0001-Remove-given-and-when-keywords-and-operator.patch";
+      hash = "sha256-JtrHUkfEKnDhWfEVdIdYVlr5b/xChTzsrrPmruLaJ5M=";
+    })
+    # fixes an error with utf8 file names. See https://sourceforge.net/p/gscan2pdf/bugs/400
+    ./image-utf8-fix.patch
+  ];
 
   nativeBuildInputs = [ wrapGAppsHook ];
 
@@ -130,12 +141,6 @@ perlPackages.buildPerlPackage rec {
     #   Non-zero wait status: 139
     rm t/0601_Dialog_Scan.t
 
-    # Disable a test which failed due to convert returning an exit value of 1
-    # convert: negative or zero image size `/build/KL5kTVnNCi/YfgegFM53e.pnm' @ error/resize.c/ResizeImage/3743.
-    # *** unhandled exception in callback:
-    # ***   "convert" unexpectedly returned exit value 1 at t/357_unpaper_rtl.t line 63.
-    rm t/357_unpaper_rtl.t
-
     xvfb-run -s '-screen 0 800x600x24' \
       make test
   '';
@@ -145,5 +150,6 @@ perlPackages.buildPerlPackage rec {
     homepage = "https://gscan2pdf.sourceforge.net/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ pacien ];
+    mainProgram = "gscan2pdf";
   };
 }

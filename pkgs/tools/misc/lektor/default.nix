@@ -1,14 +1,27 @@
 { lib
 , fetchFromGitHub
 , fetchNpmDeps
+, fetchPypi
 , nodejs
 , npmHooks
 , python3
 }:
 
 let
-  python = python3;
-in python.pkgs.buildPythonApplication rec {
+  python = python3.override {
+    packageOverrides = self: super: {
+      mistune = super.mistune.overridePythonAttrs (old: rec {
+        version = "2.0.5";
+        src = fetchPypi {
+          inherit (old) pname;
+          inherit version;
+          hash = "sha256-AkYRPLJJLbh1xr5Wl0p8iTMzvybNkokchfYxUc7gnTQ=";
+        };
+      });
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "lektor";
   version = "3.4.0b8";
   format = "pyproject";
@@ -34,8 +47,6 @@ in python.pkgs.buildPythonApplication rec {
     npmHooks.npmConfigHook
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   propagatedBuildInputs = with python.pkgs; [
     babel
     click
@@ -60,6 +71,11 @@ in python.pkgs.buildPythonApplication rec {
     pytest-click
     pytest-mock
     pytestCheckHook
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "werkzeug"
   ];
 
   postInstall = ''

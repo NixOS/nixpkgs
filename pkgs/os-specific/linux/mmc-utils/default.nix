@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation {
   pname = "mmc-utils";
-  version = "unstable-2023-08-07";
+  version = "unstable-2024-03-07";
 
   src = fetchzip rec {
     url = "https://git.kernel.org/pub/scm/utils/mmc/mmc-utils.git/snapshot/mmc-utils-${passthru.rev}.tar.gz";
-    passthru.rev = "613495ecaca97a19fa7f8f3ea23306472b36453c";
-    sha256 = "zOjm/YDxqU6bu6GMyQTuzuZbrCfaU4FBodRWLb8GTdE=";
+    passthru.rev = "e1281d4de9166b7254ba30bb58f9191fc2c9e7fb";
+    sha256 = "/lkcZ/ArdBAStV9usavrbfjULXenqb+h2rbDJzxZjJk=";
   };
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "prefix=$(out)" ];
@@ -28,6 +28,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Configure MMC storage devices from userspace";
+    mainProgram = "mmc";
     homepage = "https://git.kernel.org/pub/scm/utils/mmc/mmc-utils.git/";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.dezgeg ];

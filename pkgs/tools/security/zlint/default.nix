@@ -7,18 +7,18 @@
 
 buildGoModule rec {
   pname = "zlint";
-  version = "3.5.0";
+  version = "3.6.2";
 
   src = fetchFromGitHub {
     owner = "zmap";
     repo = "zlint";
     rev = "v${version}";
-    hash = "sha256-PpCA7BeamXWWRIXcoIGg2gufpqrzI6goXxQhJaH04cA=";
+    hash = "sha256-UwtWYDWbln64nE4KDV+gWIhhdbyvlrs0fM96otnfqfE=";
   };
 
   modRoot = "v3";
 
-  vendorHash = "sha256-MDg09cjJ/vSLjXm4l5S4v/r2YQPV4enH8V3ByBtDVfM=";
+  vendorHash = "sha256-LP7I7NY/Am6zWfVSvwJanCFwiLfcHKA3Fb9RIMD76a0=";
 
   postPatch = ''
     # Remove a package which is not declared in go.mod.

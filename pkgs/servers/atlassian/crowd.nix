@@ -1,13 +1,7 @@
 { lib, stdenv, fetchurl, home ? "/var/lib/crowd"
 , port ? 8092, proxyUrl ? null, openidPassword ? "WILL_NEVER_BE_SET" }:
 
-let
-  optionalWarning = cond: msg:
-    if cond then lib.warn msg
-    else lib.id;
-in
-
-optionalWarning (openidPassword != "WILL_NEVER_BE_SET") "Using `crowdProperties` is deprecated!"
+lib.warnIf (openidPassword != "WILL_NEVER_BE_SET") "Using `crowdProperties` is deprecated!"
 (stdenv.mkDerivation rec {
   pname = "atlassian-crowd";
   version = "5.0.1";
@@ -51,6 +45,6 @@ optionalWarning (openidPassword != "WILL_NEVER_BE_SET") "Using `crowdProperties`
     description = "Single sign-on and identity management tool";
     homepage = "https://www.atlassian.com/software/crowd";
     license = licenses.unfree;
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [ ];
   };
 })

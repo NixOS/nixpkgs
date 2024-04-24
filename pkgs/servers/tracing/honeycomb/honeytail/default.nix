@@ -3,7 +3,7 @@ import ./versions.nix ({version, sha256}:
   buildGoModule {
   pname = "honeytail";
   inherit version;
-  vendorSha256 = "sha256-LtiiLGLjhbfT49A6Fw5CbSbnmTHMxtcUssr+ayCVrvY=";
+  vendorHash = "sha256-LtiiLGLjhbfT49A6Fw5CbSbnmTHMxtcUssr+ayCVrvY=";
 
   src = fetchFromGitHub {
     owner = "honeycombio";

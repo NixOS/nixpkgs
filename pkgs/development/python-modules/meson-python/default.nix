@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "meson-python";
-  version = "0.13.1";
+  version = "0.15.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit version;
     pname = "meson_python";
-    hash = "sha256-Y7MXAAFCXEL6TP7a25BRy9KJJf+O7XxA02ugCZ48dhg=";
+    hash = "sha256-/dtz7s1J6JwcQch5N82JwtC2WhxjuigjhoHUvZSE0m8=";
   };
 
   nativeBuildInputs = [
@@ -43,18 +43,11 @@ buildPythonPackage rec {
     ./add-build-flags.sh
   ];
 
-  # Ugly work-around. Drop ninja dependency.
-  # We already have ninja, but it comes without METADATA.
-  # Building ninja-python-distributions is the way to go.
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace "'ninja'," ""
-  '';
-
   meta = {
     changelog = "https://github.com/mesonbuild/meson-python/blob/${version}/CHANGELOG.rst";
     description = "Meson Python build backend (PEP 517)";
     homepage = "https://github.com/mesonbuild/meson-python";
     license = [ lib.licenses.mit ];
-    maintainers = [ lib.maintainers.fridh ];
+    maintainers = with lib.maintainers; [ fridh doronbehar ];
   };
 }

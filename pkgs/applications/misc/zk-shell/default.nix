@@ -25,6 +25,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "A powerful & scriptable shell for Apache ZooKeeper";
+    mainProgram = "zk-shell";
     homepage = "https://github.com/rgs1/zk_shell";
     license = licenses.asl20;
     maintainers = [ maintainers.mahe ];

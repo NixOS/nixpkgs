@@ -49,8 +49,8 @@ let
 
   src = fetchFromSavannah {
     repo = "grub";
-    rev = "grub-2.12-rc1";
-    hash = "sha256-DrNFzi2o7ZUfL3bMdG63xivZIjcTgv8RODJz7hLJ3WY=";
+    rev = "grub-2.12";
+    hash = "sha256-lathsBb2f7urh8R86ihpTdwo3h1hAHnRiHd5gCLVpBc=";
   };
 
   # HACK: the translations are stored on a different server,
@@ -61,7 +61,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-bQPQ65gAcuUQ8ELB2hKywuXZ0kdC2bBCsUII/b4FkvQ=";
+    outputHash = "sha256-XzW2e7Xe7Pi297eV/fD2B/6uONEz9UjL2EHDCY0huTA=";
   }
   ''
     mkdir -p po
@@ -77,20 +77,12 @@ assert !(efiSupport && xenSupport);
 
 stdenv.mkDerivation rec {
   pname = "grub";
-  version = "2.12-rc1";
+  version = "2.12";
   inherit src;
 
   patches = [
     ./fix-bash-completion.patch
     ./add-hidden-menu-entries.patch
-
-    # Revert upstream commit that breaks reading XFS filesystems
-    # FIXME: remove when fixed upstream
-    (fetchpatch {
-      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=ef7850c757fb3dd2462a512cfa0ff19c89fcc0b1";
-      revert = true;
-      hash = "sha256-p8Kcv9d7ri4eJU6Fgqyzdj0hV5MHSe50AF02FPDJx2Y=";
-    })
   ];
 
   postPatch = if kbdcompSupport then ''

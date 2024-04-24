@@ -14,13 +14,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ zlib libpng libjpeg giflib libtiff ];
 
+  env = lib.optionalAttrs stdenv.isDarwin {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
   doCheck = true;
 
   outputs = [ "out" "dev" "doc" ];
 
   installPhase = ''
     mkdir -p $out/lib
-    for path in *.so *.so.* *.o *.o.*; do
+    for path in *.dylib *.so *.so.* *.o *.o.*; do
       mv $path $out/lib/
     done
     mkdir -p $dev/include
@@ -39,5 +43,6 @@ stdenv.mkDerivation rec {
       "https://sourceforge.net/p/pslib/git/ci/master/tree/pslib/ChangeLog";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ShamrockLee ];
+    platforms = platforms.unix;
   };
 }

@@ -22,6 +22,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Fast HTTP enumerator";
+    mainProgram = "monsoon";
     longDescription = ''
       A fast HTTP enumerator that allows you to execute a large number of HTTP
       requests, filter the responses and display them in real-time.

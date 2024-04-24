@@ -71,6 +71,7 @@ perlPackages.buildPerlPackage rec {
   meta = with lib; {
     homepage = "https://github.com/trizen/fbmenugen";
     description = "Simple menu generator for the Fluxbox Window Manager";
+    mainProgram = "fbmenugen";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];

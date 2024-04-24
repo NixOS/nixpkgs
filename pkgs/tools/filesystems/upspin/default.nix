@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-1pFDJSCUDKn4CTAg3wdB8oYPyrmd8B62zNl3m5YAqVM=";
   };
 
-  vendorSha256 = "sha256-Jl++FvKyqz5WFa/Eoly+UnFsoC9Qwdaizhkq6LyJ+XQ=";
+  vendorHash = "sha256-Jl++FvKyqz5WFa/Eoly+UnFsoC9Qwdaizhkq6LyJ+XQ=";
 
   # No upstream tests
   doCheck = false;

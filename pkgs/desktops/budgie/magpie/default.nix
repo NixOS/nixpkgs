@@ -46,7 +46,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "magpie";
-  version = "0.9.2";
+  version = "0.9.3";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "BuddiesOfBudgie";
     repo = "magpie";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-GoilHdESFgpwt8+Uqzrnf8jBpeaSak1uHTlkNcQdgtk=";
+    hash = "sha256-A8FmW2o2p5B5pxTZ6twwufyhfppuMXjnMKopZRD+XdE=";
   };
 
   patches = [
@@ -70,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-Degl_device=true"
     "-Dprofiler=true"
     "-Ddocs=true"
-    "-Dwith_shared_components=true"
   ];
 
   propagatedBuildInputs = [
@@ -124,8 +123,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs src/backends/native/gen-default-modes.py
-    # Magpie doesn't install any .desktop files
-    substituteInPlace meson/meson-postinstall.sh --replace "update-desktop-database" "# update-desktop-database"
+    # Magpie does not install any .desktop files
+    substituteInPlace scripts/mesonPostInstall.sh --replace "update-desktop-database" "# update-desktop-database"
+
+    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/3187
+    substituteInPlace meson.build \
+      --replace "dependency('sysprof-4')" "dependency('sysprof-6')"
   '';
 
   postFixup = ''
@@ -153,11 +156,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Softish fork of Mutter 43.x";
     homepage = "https://github.com/BuddiesOfBudgie/magpie";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ federicoschonborn ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = lib.teams.budgie.members;
+    platforms = lib.platforms.linux;
   };
 })

@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchbzr
+, fetchFromGitLab
 , testers
 , cmake
 , cmake-extras
@@ -17,22 +17,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libqtdbusmock";
-  version = "unstable-2017-03-16";
+  version = "0.9.1";
 
-  src = fetchbzr {
-    url = "lp:libqtdbusmock";
-    rev = "49";
-    sha256 = "sha256-q3jL8yGLgcNxXHPh9M9cTVtUvonrBUPNxuPJIvu7Q/s=";
+  src = fetchFromGitLab {
+    owner = "ubports";
+    repo = "development/core/libqtdbusmock";
+    rev = finalAttrs.version;
+    hash = "sha256-hVw2HnIHlA7vvt0Sr6F2qVhvBZ33aCeqb9vgbu3rgBo=";
   };
 
   postPatch = ''
-    # Look for the new(?) name
-    substituteInPlace CMakeLists.txt \
-      --replace 'NetworkManager' 'libnm'
-
     # Workaround for "error: expected unqualified-id before 'public'" on "**signals"
     sed -i -e '/add_definitions/a -DQT_NO_KEYWORDS' CMakeLists.txt
-  '' + lib.optionalString (!finalAttrs.doCheck) ''
+  '' + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     # Don't build tests when we're not running them
     sed -i -e '/add_subdirectory(tests)/d' CMakeLists.txt
   '';

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "karabiner-elements";
-  version = "14.11.0";
+  version = "14.13.0";
 
   src = fetchurl {
     url = "https://github.com/pqrs-org/Karabiner-Elements/releases/download/v${version}/Karabiner-Elements-${version}.dmg";
-    sha256 = "sha256-InuSfXbaSYsncq8jVO15LbQmDTguRHlOiE/Pj5EfX5c=";
+    sha256 = "sha256-gmJwoht/Tfm5qMecmq1N6PSAIfWOqsvuHU8VDJY8bLw=";
   };
 
   outputs = [ "out" "driver" ];

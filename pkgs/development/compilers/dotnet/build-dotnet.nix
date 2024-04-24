@@ -24,6 +24,8 @@ assert if type == "sdk" then packages != null else true;
 , runCommand
 , writeShellScript
 , mkNugetDeps
+, callPackage
+, dotnetCorePackages
 }:
 
 let
@@ -41,13 +43,12 @@ let
     sdk = ".NET SDK ${version}";
   };
 
-  packageDeps = if type == "sdk" then mkNugetDeps {
-    name = "${pname}-${version}-deps";
-    nugetDeps = packages;
-  } else null;
+  mkCommon = callPackage ./common.nix {};
+
+  targetRid = dotnetCorePackages.systemToDotnetRid stdenv.targetPlatform.system;
 
 in
-stdenv.mkDerivation (finalAttrs: rec {
+mkCommon type rec {
   inherit pname version;
 
   # Some of these dependencies are `dlopen()`ed.
@@ -88,46 +89,34 @@ stdenv.mkDerivation (finalAttrs: rec {
     runHook postInstall
   '';
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/dotnet --info
-  '';
-
   # Tell autoPatchelf about runtime dependencies.
   # (postFixup phase is run before autoPatchelfHook.)
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.targetPlatform.isLinux ''
     patchelf \
       --add-needed libicui18n.so \
       --add-needed libicuuc.so \
       $out/shared/Microsoft.NETCore.App/*/libcoreclr.so \
       $out/shared/Microsoft.NETCore.App/*/*System.Globalization.Native.so \
-      $out/packs/Microsoft.NETCore.App.Host.linux-x64/*/runtimes/linux-x64/native/singlefilehost
+      $out/packs/Microsoft.NETCore.App.Host.${targetRid}/*/runtimes/${targetRid}/native/*host
     patchelf \
       --add-needed libgssapi_krb5.so \
       $out/shared/Microsoft.NETCore.App/*/*System.Net.Security.Native.so \
-      $out/packs/Microsoft.NETCore.App.Host.linux-x64/*/runtimes/linux-x64/native/singlefilehost
+      $out/packs/Microsoft.NETCore.App.Host.${targetRid}/*/runtimes/${targetRid}/native/*host
     patchelf \
       --add-needed libssl.so \
       $out/shared/Microsoft.NETCore.App/*/*System.Security.Cryptography.Native.OpenSsl.so \
-      $out/packs/Microsoft.NETCore.App.Host.linux-x64/*/runtimes/linux-x64/native/singlefilehost
-  '';
-
-  setupHook = writeText "dotnet-setup-hook" ''
-    if [ ! -w "$HOME" ]; then
-      export HOME=$(mktemp -d) # Dotnet expects a writable home directory for its configuration files
-    fi
-
-    export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 # Dont try to expand NuGetFallbackFolder to disk
-    export DOTNET_NOLOGO=1 # Disables the welcome message
-    export DOTNET_CLI_TELEMETRY_OPTOUT=1
+      $out/packs/Microsoft.NETCore.App.Host.${targetRid}/*/runtimes/${targetRid}/native/*host
   '';
 
   passthru = {
     inherit icu;
-    packages = packageDeps;
+  } // lib.optionalAttrs (type == "sdk") {
+    packages = mkNugetDeps {
+      name = "${pname}-${version}-deps";
+      nugetDeps = packages;
+    };
 
     updateScript =
-      if type == "sdk" then
       let
         majorVersion =
           with lib;
@@ -136,24 +125,7 @@ stdenv.mkDerivation (finalAttrs: rec {
       writeShellScript "update-dotnet-${majorVersion}" ''
         pushd pkgs/development/compilers/dotnet
         exec ${./update.sh} "${majorVersion}"
-      '' else null;
-
-    tests = {
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-      };
-
-      smoke-test = runCommand "dotnet-sdk-smoke-test" {
-        nativeBuildInputs = [ finalAttrs.finalPackage ];
-      } ''
-        HOME=$(pwd)/fake-home
-        dotnet new console
-        dotnet build
-        output="$(dotnet run)"
-        # yes, older SDKs omit the comma
-        [[ "$output" =~ Hello,?\ World! ]] && touch "$out"
       '';
-    };
   };
 
   meta = with lib; {
@@ -164,4 +136,4 @@ stdenv.mkDerivation (finalAttrs: rec {
     mainProgram = "dotnet";
     platforms = attrNames srcs;
   };
-})
+}

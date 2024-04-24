@@ -1,31 +1,32 @@
 { lib
 , stdenv
 , buildPythonPackage
-, pythonOlder
 , fetchPypi
-, cython
+, pytestCheckHook
+, pythonOlder
+
+, cython_0
 , geos
+, numpy
 , oldest-supported-numpy
 , setuptools
 , wheel
-, numpy
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "shapely";
-  version = "2.0.1";
-  format = "pyproject";
+  version = "2.0.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Zqaxo+cuzpf8hVNqKBR2+bd5TeLmRsqKRRfi48FEaJM=";
+    hash = "sha256-Xcc2En+scACbjTCaDut08+CJeeUwz3AX8vUH72Lmz7g=";
   };
 
   nativeBuildInputs = [
-    cython
+    cython_0
     geos # for geos-config
     oldest-supported-numpy
     setuptools
@@ -44,8 +45,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  # Fix a ModuleNotFoundError. Investigated at:
+  # https://github.com/NixOS/nixpkgs/issues/255262
   preCheck = ''
-    rm -r shapely # prevent import of local shapely
+    cd $out
   '';
 
   disabledTests = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cctz";
-  version = "2.3";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "cctz";
     rev = "v${version}";
-    sha256 = "0254xfwscfkjc3fbvx6qgifr3pwkc2rb03z8pbvvqy098di9alhr";
+    sha256 = "sha256-F4h8nT1karymV16FFHC0ldSbdOOx5AMstqi4Bc5m3UQ=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optional stdenv.isDarwin Foundation;
 
   installTargets = [ "install_hdrs" ]
-    ++ lib.optional (!stdenv.targetPlatform.isStatic) "install_shared_lib"
-    ++ lib.optional stdenv.targetPlatform.isStatic "install_lib";
+    ++ lib.optional (!stdenv.hostPlatform.isStatic) "install_shared_lib"
+    ++ lib.optional stdenv.hostPlatform.isStatic "install_lib";
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     install_name_tool -id $out/lib/libcctz.so $out/lib/libcctz.so

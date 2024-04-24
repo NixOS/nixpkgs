@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A challenging 2D motocross platform game, where physics play an important role";
+    mainProgram = "xmoto";
     longDescription = ''
       X-Moto is a challenging 2D motocross platform game, where physics plays an all important role in the gameplay.
       You need to control your bike to its limits, if you want to have a chance to finish the most difficult challenges.

@@ -25,6 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A functional programming language and proof assistant";
+    mainProgram = "kind2";
     homepage = "https://github.com/higherorderco/kind";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

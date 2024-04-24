@@ -1,23 +1,38 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, poetry-core
 , pycryptodomex
 , pythonOlder
+, pythonRelaxDepsHook
 , requests
 }:
 
 buildPythonPackage rec {
-  version = "1.0.2";
   pname = "gpsoauth";
+  version = "1.1.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-68rnLrMlp/BsvqlbnV5kvsJTcDEtsV6OLkbE1U5ynno=";
+    hash = "sha256-BA+2aFxpFpi6cWGl4yepba7s7BmZ1ijvSBhtS23v3QM=";
   };
 
-  propagatedBuildInputs = [ pycryptodomex requests ];
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+    poetry-core
+  ];
+
+  propagatedBuildInputs = [
+    pycryptodomex
+    requests
+  ];
+
+  pythonRelaxDeps = [
+    "urllib3"
+  ];
 
   # upstream tests are not very comprehensive
   doCheck = false;

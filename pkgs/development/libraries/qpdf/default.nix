@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qpdf";
-  version = "11.5.0";
+  version = "11.9.0";
 
   src = fetchFromGitHub {
     owner = "qpdf";
     repo = "qpdf";
     rev = "v${version}";
-    hash = "sha256-lojvsCgBsT7wVRLWfkeOduEYUG7ztI/uryM0WueWiL0=";
+    hash = "sha256-HD7+2TBDLBIt+VaPO5WgnDjNZOj8naltFmYdYzOIn+4=";
   };
 
   nativeBuildInputs = [ cmake perl ];

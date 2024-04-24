@@ -20,7 +20,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "bcc";
-  version = "0.28.0";
+  version = "0.30.0";
 
   disabled = !stdenv.isLinux;
 
@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "iovisor";
     repo = "bcc";
     rev = "v${version}";
-    sha256 = "sha256-+ecSaVroDC2bWbio4JsuwEvHQdCMpxLt7hIkeREMJs8=";
+    hash = "sha256-ngGLGfLv2prnjhgaRPf8ea3oyy4129zGodR0Yz1QtCw=";
   };
   format = "other";
 

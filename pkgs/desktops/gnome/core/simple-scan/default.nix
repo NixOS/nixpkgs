@@ -72,6 +72,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Simple scanning utility";
+    mainProgram = "simple-scan";
     longDescription = ''
       A really easy way to scan both documents and photos. You can crop out the
       bad parts of a photo and rotate it if it is the wrong way round. You can

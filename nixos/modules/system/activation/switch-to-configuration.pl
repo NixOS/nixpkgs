@@ -22,6 +22,7 @@ use JSON::PP;
 use IPC::Cmd;
 use Sys::Syslog qw(:standard :macros);
 use Cwd qw(abs_path);
+use Fcntl ':flock';
 
 ## no critic(ControlStructures::ProhibitDeepNests)
 ## no critic(ErrorHandling::RequireCarping)
@@ -74,7 +75,7 @@ if ("@localeArchive@" ne "") {
 
 if (!defined($action) || ($action ne "switch" && $action ne "boot" && $action ne "test" && $action ne "dry-activate")) {
     print STDERR <<"EOF";
-Usage: $0 [switch|boot|test]
+Usage: $0 [switch|boot|test|dry-activate]
 
 switch:       make the configuration the boot default and activate now
 boot:         make the configuration the boot default
@@ -91,6 +92,8 @@ if (!-f "/etc/NIXOS" && (read_file("/etc/os-release", err_mode => "quiet") // ""
 }
 
 make_path("/run/nixos", { mode => oct(755) });
+open(my $stc_lock, '>>', '/run/nixos/switch-to-configuration.lock') or die "Could not open lock - $!";
+flock($stc_lock, LOCK_EX) or die "Could not acquire lock - $!";
 openlog("nixos", "", LOG_USER);
 
 # Install or update the bootloader.
@@ -313,7 +316,8 @@ sub unrecord_unit {
 # needs to be restarted or reloaded. If the units differ, the service
 # is restarted unless the only difference is `X-Reload-Triggers` in the
 # `Unit` section. If this is the only modification, the unit is reloaded
-# instead of restarted.
+# instead of restarted. If the only difference is `Options` in the
+# `[Mount]` section, the unit is reloaded rather than restarted.
 # Returns:
 # - 0 if the units are equal
 # - 1 if the units are different and a restart action is required
@@ -390,6 +394,11 @@ sub compare_units { ## no critic(Subroutines::ProhibitExcessComplexity)
                         next;
                     }
                 }
+                # If this is a mount unit, check if it was only `Options`
+                if ($section_name eq "Mount" and $ini_key eq "Options") {
+                    $ret = 2;
+                    next;
+                }
                 return 1;
             }
         }
@@ -440,10 +449,18 @@ sub handle_modified_unit { ## no critic(Subroutines::ProhibitManyArgs, Subroutin
         # properties (resource limits and inotify watches)
         # seem to get applied on daemon-reload.
     } elsif ($unit =~ /\.mount$/msx) {
-        # Reload the changed mount unit to force a remount.
-        # FIXME: only reload when Options= changed, restart otherwise
-        $units_to_reload->{$unit} = 1;
-        record_unit($reload_list_file, $unit);
+        # Just restart the unit. We wouldn't have gotten into this subroutine
+        # if only `Options` was changed, in which case the unit would be reloaded.
+        # The only exception is / and /nix because it's very unlikely we can safely
+        # unmount them so we reload them instead. This means that we may not get
+        # all changes into the running system but it's better than crashing it.
+        if ($unit eq "-.mount" or $unit eq "nix.mount") {
+            $units_to_reload->{$unit} = 1;
+            record_unit($reload_list_file, $unit);
+        } else {
+            $units_to_restart->{$unit} = 1;
+            record_unit($restart_list_file, $unit);
+        }
     } elsif ($unit =~ /\.socket$/msx) {
         # FIXME: do something?
         # Attempt to fix this: https://github.com/NixOS/nixpkgs/pull/141192
@@ -585,7 +602,9 @@ while (my ($unit, $state) = each(%{$active_cur})) {
                     $units_to_start{$unit} = 1;
                     record_unit($start_list_file, $unit);
                     # Don't spam the user with target units that always get started.
-                    $units_to_filter{$unit} = 1;
+                    if (($ENV{"STC_DISPLAY_ALL_UNITS"} // "") ne "1") {
+                        $units_to_filter{$unit} = 1;
+                    }
                 }
             }
 
@@ -647,10 +666,20 @@ foreach my $mount_point (keys(%{$cur_fss})) {
         # Filesystem entry disappeared, so unmount it.
         $units_to_stop{$unit} = 1;
     } elsif ($cur->{fsType} ne $new->{fsType} || $cur->{device} ne $new->{device}) {
-        # Filesystem type or device changed, so unmount and mount it.
-        $units_to_stop{$unit} = 1;
-        $units_to_start{$unit} = 1;
-        record_unit($start_list_file, $unit);
+        if ($mount_point eq '/' or $mount_point eq '/nix') {
+            if ($cur->{options} ne $new->{options}) {
+                # Mount options changed, so remount it.
+                $units_to_reload{$unit} = 1;
+                record_unit($reload_list_file, $unit);
+            } else {
+                # Don't unmount / or /nix if the device changed
+                $units_to_skip{$unit} = 1;
+            }
+        } else {
+            # Filesystem type or device changed, so unmount and mount it.
+            $units_to_restart{$unit} = 1;
+            record_unit($restart_list_file, $unit);
+        }
     } elsif ($cur->{options} ne $new->{options}) {
         # Mount options changes, so remount it.
         $units_to_reload{$unit} = 1;
@@ -860,9 +889,15 @@ while (my $f = <$list_active_users>) {
 
 close($list_active_users) || die("Unable to close the file handle to loginctl");
 
-# Set the new tmpfiles
-print STDERR "setting up tmpfiles\n";
-system("$new_systemd/bin/systemd-tmpfiles", "--create", "--remove", "--exclude-prefix=/dev") == 0 or $res = 3;
+# Restart sysinit-reactivation.target.
+# This target only exists to restart services ordered before sysinit.target. We
+# cannot use X-StopOnReconfiguration to restart sysinit.target because then ALL
+# services of the system would be restarted since all normal services have a
+# default dependency on sysinit.target. sysinit-reactivation.target ensures
+# that services ordered BEFORE sysinit.target get re-started in the correct
+# order. Ordering between these services is respected.
+print STDERR "restarting sysinit-reactivation.target\n";
+system("$new_systemd/bin/systemctl", "restart", "sysinit-reactivation.target") == 0 or $res = 4;
 
 # Before reloading we need to ensure that the units are still active. They may have been
 # deactivated because one of their requirements got stopped. If they are inactive
@@ -959,4 +994,5 @@ if ($res == 0) {
     syslog(LOG_ERR, "switching to system configuration $toplevel failed (status $res)");
 }
 
+close($stc_lock) or die "Could not close lock - $!";
 exit($res);

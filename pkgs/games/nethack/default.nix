@@ -2,6 +2,7 @@
 , less
 , buildPackages
 , x11Mode ? false, qtMode ? false, libXaw, libXext, libXpm, bdftopcf, mkfontdir, pkg-config, qt5
+, copyDesktopItems, makeDesktopItem
 }:
 
 let
@@ -12,7 +13,7 @@ let
     if x11Mode then "linux-x11"
     else if qtMode then "linux-qt4"
     else if stdenv.hostPlatform.isLinux  then "linux"
-    else if stdenv.hostPlatform.isDarwin then "macosx10.10"
+    else if stdenv.hostPlatform.isDarwin then "macosx10.14"
     # We probably want something different for Darwin
     else "unix";
   userDir = "~/.config/nethack";
@@ -33,7 +34,7 @@ in stdenv.mkDerivation rec {
                 ++ lib.optionals x11Mode [ libXaw libXext libXpm ]
                 ++ lib.optionals qtMode [ gzip qt5.qtbase.bin qt5.qtmultimedia.bin ];
 
-  nativeBuildInputs = [ flex bison ]
+  nativeBuildInputs = [ flex bison copyDesktopItems ]
                       ++ lib.optionals x11Mode [ mkfontdir bdftopcf ]
                       ++ lib.optionals qtMode [
                            pkg-config mkfontdir qt5.qtbase.dev
@@ -60,11 +61,12 @@ in stdenv.mkDerivation rec {
       -e 's,^WINTTYLIB=.*,WINTTYLIB=-lncurses,' \
       -i sys/unix/hints/linux
     sed \
+      -e 's,^#WANT_WIN_CURSES=1$,WANT_WIN_CURSES=1,' \
       -e 's,^CC=.*$,CC=${stdenv.cc.targetPrefix}cc,' \
       -e 's,^HACKDIR=.*$,HACKDIR=\$(PREFIX)/games/lib/\$(GAME)dir,' \
       -e 's,^SHELLDIR=.*$,SHELLDIR=\$(PREFIX)/games,' \
       -e 's,^CFLAGS=-g,CFLAGS=,' \
-      -i sys/unix/hints/macosx10.10
+      -i sys/unix/hints/macosx10.14
     sed -e '/define CHDIR/d' -i include/config.h
     ${lib.optionalString qtMode ''
     sed \
@@ -98,7 +100,8 @@ in stdenv.mkDerivation rec {
     popd
   '';
 
-  enableParallelBuilding = true;
+  # https://github.com/NixOS/nixpkgs/issues/294751
+  enableParallelBuilding = false;
 
   preFixup = lib.optionalString qtMode ''
     wrapQtApp "$out/games/nethack"
@@ -144,11 +147,26 @@ in stdenv.mkDerivation rec {
     ${lib.optionalString (!(x11Mode || qtMode)) "install -Dm 555 util/dlb -t $out/libexec/nethack/"}
   '';
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "NetHack";
+      exec =
+         if x11Mode then "nethack-x11"
+         else if qtMode then "nethack-qt"
+         else "nethack";
+      icon = "nethack";
+      desktopName = "NetHack";
+      comment = "NetHack is a single player dungeon exploration game";
+      categories = [ "Game" "ActionGame" ];
+    })
+  ];
+
   meta = with lib; {
     description = "Rogue-like game";
     homepage = "http://nethack.org/";
     license = "nethack";
     platforms = if x11Mode then platforms.linux else platforms.unix;
     maintainers = with maintainers; [ abbradar ];
+    mainProgram = "nethack";
   };
 }

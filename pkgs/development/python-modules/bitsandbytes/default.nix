@@ -3,19 +3,16 @@
 , fetchFromGitHub
 , python
 , pythonOlder
-, pytestCheckHook
 , setuptools
 , wheel
 , torch
-, einops
-, lion-pytorch
 , scipy
 , symlinkJoin
 }:
 
 let
   pname = "bitsandbytes";
-  version = "0.41.0";
+  version = "0.42.0";
 
   inherit (torch) cudaCapabilities cudaPackages cudaSupport;
   inherit (cudaPackages) backendStdenv cudaVersion;
@@ -46,15 +43,15 @@ let
 in
 buildPythonPackage {
   inherit pname version;
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "TimDettmers";
-    repo = pname;
+    repo = "bitsandbytes";
     rev = "refs/tags/${version}";
-    hash = "sha256-e6SK2ylITookO6bhpfdRp/V4y2S9rk6Lo1PD3xXrcmM=";
+    hash = "sha256-PZxsFJ6WpfeQqRQrRRBZfZfNY6/TfJFLBeknX24OXcU=";
   };
 
   postPatch = ''
@@ -76,8 +73,16 @@ buildPythonPackage {
   else
     ''make CUDA_VERSION=CPU cpuonly'';
 
-  nativeBuildInputs = [ setuptools wheel ] ++ lib.optionals torch.cudaSupport [ cuda-native-redist ];
-  buildInputs = lib.optionals torch.cudaSupport [ cuda-redist ];
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ] ++ lib.optionals torch.cudaSupport [
+    cuda-native-redist
+  ];
+
+  buildInputs = lib.optionals torch.cudaSupport [
+    cuda-redist
+  ];
 
   propagatedBuildInputs = [
     scipy
@@ -85,15 +90,15 @@ buildPythonPackage {
   ];
 
   doCheck = false;  # tests require CUDA and also GPU access
-  nativeCheckInputs = [ pytestCheckHook einops lion-pytorch ];
 
   pythonImportsCheck = [
     "bitsandbytes"
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/TimDettmers/bitsandbytes";
     description = "8-bit CUDA functions for PyTorch";
+    homepage = "https://github.com/TimDettmers/bitsandbytes";
+    changelog = "https://github.com/TimDettmers/bitsandbytes/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };

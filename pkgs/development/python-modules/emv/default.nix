@@ -50,6 +50,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Implementation of the EMV chip-and-pin smartcard protocol";
+    mainProgram = "emvtool";
     homepage = "https://github.com/russss/python-emv";
     license = licenses.mit;
     maintainers = with maintainers; [ lukegb ];

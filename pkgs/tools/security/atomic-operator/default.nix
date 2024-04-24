@@ -52,6 +52,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool to execute Atomic Red Team tests (Atomics)";
+    mainProgram = "atomic-operator";
     homepage = "https://www.atomic-operator.com/";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

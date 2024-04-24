@@ -11,7 +11,6 @@
 , libxml2
 , vala
 , sqlite
-, webkitgtk_4_1
 , pkg-config
 , gnome
 , gst_all_1
@@ -38,13 +37,13 @@
 
 # for dependencies see https://wiki.gnome.org/Apps/Shotwell/BuildingAndInstalling
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shotwell";
-  version = "0.32.2";
+  version = "0.32.6";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-pd5T6HMhbfj1mWyWgnvtlj1sY1TgReF5bf0ybGGIwmM=";
+    url = "mirror://gnome/sources/shotwell/${lib.versions.majorMinor finalAttrs.version}/shotwell-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-dZek/6yR4YzYFEsS8tCDE6P0Bbs2gkOnMmgm99kqcLY=";
   };
 
   nativeBuildInputs = [
@@ -67,7 +66,6 @@ stdenv.mkDerivation rec {
     libsoup_3
     libxml2
     sqlite
-    webkitgtk_4_1
     gst_all_1.gstreamer
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-base
@@ -91,16 +89,17 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "shotwell";
       versionPolicy = "odd-unstable";
     };
   };
 
   meta = with lib; {
     description = "Popular photo organizer for the GNOME desktop";
+    mainProgram = "shotwell";
     homepage = "https://wiki.gnome.org/Apps/Shotwell";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [];
     platforms = platforms.linux;
   };
-}
+})

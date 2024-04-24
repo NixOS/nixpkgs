@@ -36,8 +36,6 @@ buildPythonPackage rec {
   # required to make tests deterministic
   env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   propagatedBuildInputs = [
     crc32c
     numpy
@@ -70,6 +68,9 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # we are not interested in linting errors
     "tests/test_lint.py"
+    # ImportError: cannot import name 'mock_s3' from 'moto'
+    "tests/test_embedding.py"
+    "tests/test_record_writer.py"
   ];
 
   meta = with lib; {

@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "html-text";
   version = "0.5.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "TeamHG-Memex";

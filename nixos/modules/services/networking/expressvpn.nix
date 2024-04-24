@@ -5,7 +5,7 @@ with lib;
   options.services.expressvpn.enable = mkOption {
     type = types.bool;
     default = false;
-    description = lib.mdDoc ''
+    description = ''
       Enable the ExpressVPN daemon.
     '';
   };
@@ -21,6 +21,7 @@ with lib;
         RestartSec = 5;
       };
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network.target" "network-online.target" ];
     };
   };

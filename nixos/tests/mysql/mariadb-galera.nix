@@ -17,8 +17,8 @@ let
     galeraPackage ? pkgs.mariadb-galera
   }: makeTest {
     name = "${name}-galera-mariabackup";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ izorkin ajs124 das_j ];
+    meta = {
+      maintainers = with lib.maintainers; [ izorkin ] ++ lib.teams.helsinki-systems.members;
     };
 
     # The test creates a Galera cluster with 3 nodes and is checking if mariabackup-based SST works. The cluster is tested by creating a DB and an empty table on one node,

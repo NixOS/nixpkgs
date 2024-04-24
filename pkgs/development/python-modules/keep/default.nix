@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "keep";
   version = "2.10.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/orkohunter/keep";
     description = "A Meta CLI toolkit: Personal shell command keeper and snippets manager";
+    mainProgram = "keep";
     platforms = platforms.all;
     license = licenses.mit;
     maintainers = with maintainers; [ ris ];

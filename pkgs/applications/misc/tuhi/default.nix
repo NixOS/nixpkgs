@@ -56,6 +56,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "DBus daemon to access Wacom SmartPad devices";
+    mainProgram = "tuhi";
     homepage = "https://github.com/tuhiproject/tuhi";
     license = licenses.gpl2;
     platforms = platforms.linux;

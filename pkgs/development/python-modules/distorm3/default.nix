@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "distorm3";
   version = "3.5.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.5";
 

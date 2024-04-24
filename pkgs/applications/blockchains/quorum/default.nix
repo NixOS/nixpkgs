@@ -1,41 +1,35 @@
-{ lib, fetchFromGitHub, buildGoPackage, git, which, removeReferencesTo, go }:
+{ lib, fetchFromGitHub, buildGoModule }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "quorum";
-  version = "2.5.0";
-
-  goPackagePath = "github.com/jpmorganchase/quorum";
+  version = "23.4.0";
 
   src = fetchFromGitHub {
-    owner = "jpmorganchase";
+    owner = "Consensys";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0xfdaqp9bj5dkw12gy19lxj73zh7w80j051xclsvnd41sfah86ll";
+    hash = "sha256-N8MlDHo6LQ/m9xFUeOCm6bqDtjnCc86i/s4ebFLjUT0=";
   };
 
-  buildInputs = [ git which ];
+  vendorHash = "sha256-dTYKGFqVaAnspvKhfBU10bpSzhtQHGTm6KxnNKUVAIg=";
 
-  buildPhase = ''
-    cd "go/src/$goPackagePath"
-    make geth bootnode swarm
-  '';
+  patches = [
+    # Add missing requirements
+    ./go.mod.patch
+  ];
 
-  installPhase = ''
-    mkdir -pv $out/bin
-    cp -v build/bin/geth build/bin/bootnode build/bin/swarm $out/bin
-  '';
+  subPackages = [
+    "cmd/geth"
+    "cmd/bootnode"
+  ];
 
-  # fails with `GOFLAGS=-trimpath`
-  allowGoReference = true;
-  preFixup = ''
-    find $out -type f -exec ${removeReferencesTo}/bin/remove-references-to -t ${go} '{}' +
-  '';
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     description = "A permissioned implementation of Ethereum supporting data privacy";
-    homepage = "https://www.goquorum.com/";
+    homepage = "https://consensys.net/quorum/";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ mmahut ];
-    platforms = subtractLists ["aarch64-linux"] platforms.linux;
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

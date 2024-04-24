@@ -3,29 +3,45 @@
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
+
+# build-system
+, cython
 , gfortran
-, glibcLocales
 , numpy
 , scipy
+, setuptools
+, wheel
+
+# native dependencies
+, glibcLocales
+, llvmPackages
 , pytestCheckHook
 , pytest-xdist
 , pillow
-, cython
 , joblib
-, llvmPackages
 , threadpoolctl
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "1.3.0";
-  disabled = pythonOlder "3.6";
+  version = "1.4.1.post1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-i+VJiG9e2kZDa25VWw5Ic7TxCqIcB99FxLwXNa+8zXo=";
+    hash = "sha256-k9PUlv8ZZUcPmXfQXl7DN2+x5jsQ5P2l450jwtiWmjA=";
   };
+
+  patches = [
+    (fetchpatch { # included in >= 1.4.2
+      name = "test_standard_scaler_dtype.patch";
+      url = "https://github.com/jeremiedbb/scikit-learn/commit/87c32d35eeb8f6f7fec63dc3d97d9c416545f053.diff";
+      hash = "sha256-iOBOoWHuWChCTnZ5go7MobPcHRGMChROpCI7V/5ik1Y=";
+    })
+  ];
 
   buildInputs = [
     pillow
@@ -35,38 +51,45 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    cython
     gfortran
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    cython
     numpy
     scipy
+    setuptools
+    wheel
+  ];
+
+  propagatedBuildInputs = [
     numpy.blas
+  ];
+
+  dependencies = [
     joblib
+    numpy
+    scipy
     threadpoolctl
   ];
 
-  nativeCheckInputs = [ pytestCheckHook pytest-xdist ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-xdist
+  ];
 
-  LC_ALL="en_US.UTF-8";
+  env.LC_ALL="en_US.UTF-8";
 
   preBuild = ''
     export SKLEARN_BUILD_PARALLEL=$NIX_BUILD_CORES
   '';
 
-  doCheck = !stdenv.isAarch64;
+  # PermissionError: [Errno 1] Operation not permitted: '/nix/nix-installer'
+  doCheck = !stdenv.isDarwin;
 
   disabledTests = [
     # Skip test_feature_importance_regression - does web fetch
     "test_feature_importance_regression"
-
-    # failing on macos
-    "check_regressors_train"
-    "check_classifiers_train"
-    "xfail_ignored_in_check_estimator"
-  ] ++ lib.optionals (stdenv.isDarwin) [
-    "test_graphical_lasso"
   ];
 
   pytestFlagsArray = [

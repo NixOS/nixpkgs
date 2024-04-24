@@ -1,6 +1,5 @@
 { qtModule
 , qtbase
-, qtquick3d
 , qtdeclarative
 , wayland
 , pkg-config
@@ -9,7 +8,7 @@
 
 qtModule {
   pname = "qtwayland";
-  qtInputs = [ qtbase qtdeclarative ];
+  propagatedBuildInputs = [ qtbase qtdeclarative ];
   buildInputs = [ wayland libdrm ];
   nativeBuildInputs = [ pkg-config ];
 }

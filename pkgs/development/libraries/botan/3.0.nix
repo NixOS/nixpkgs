@@ -1,9 +1,7 @@
-{ callPackage, fetchpatch, lib, ... } @ args:
+{ callPackage, ... } @ args:
 
 callPackage ./generic.nix (args // {
-  baseVersion = "3.1";
-  revision = "1";
-  sha256 = "sha256-MMhP6RmTapj+9TMfJGxiqiwOTSCFstRREgf2ogr6Oms=";
-  # reconsider removing this platform marking, when MacOS uses Clang 14.0+ by default.
-  badPlatforms = lib.platforms.darwin;
+  baseVersion = "3.4";
+  revision = "0";
+  hash = "sha256-cYQ6/MCixYX48z+jBPC1iuS5xdgwb4lGZ7N0YEQndVc=";
 })

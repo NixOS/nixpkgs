@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "git-town";
-  version = "9.0.1";
+  version = "14.1.0";
 
   src = fetchFromGitHub {
     owner = "git-town";
     repo = "git-town";
     rev = "v${version}";
-    hash = "sha256-JvN7te59uRMC0TOWsBUYNEPLIn4nLlIvXI5gOQfQaCU=";
+    hash = "sha256-BhtKl052P3PGxGXb5lSOIsncJLiNlevzBMEF2kCuFpM=";
   };
 
   vendorHash = null;
@@ -32,8 +32,6 @@ buildGoModule rec {
     let
       skippedTests = [
         "TestGodog"
-        "TestRunner_CreateChildFeatureBranch"
-        "TestShellRunner_RunStringWith_Dir"
         "TestMockingShell_MockCommand"
         "TestShellRunner_RunStringWith_Input"
       ];
@@ -55,14 +53,15 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = git-town;
-    command = "git-town version";
-    version = "v${version}";
+    command = "git-town --version";
+    inherit version;
   };
 
   meta = with lib; {
     description = "Generic, high-level git support for git-flow workflows";
     homepage = "https://www.git-town.com/";
     license = licenses.mit;
-    maintainers = with maintainers; [ allonsy blaggacao ];
+    maintainers = with maintainers; [ allonsy blaggacao gabyx ];
+    mainProgram = "git-town";
   };
 }

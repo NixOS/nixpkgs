@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, fetchpatch
-, pytestCheckHook
-, pythonOlder
-, pyzipper
-, setuptools
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  pyzipper,
+  setuptools,
+  striprtf,
 }:
 
 buildPythonPackage rec {
   pname = "xknxproject";
-  version = "3.2.0";
-  format = "pyproject";
+  version = "3.7.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -21,37 +21,23 @@ buildPythonPackage rec {
     owner = "XKNX";
     repo = "xknxproject";
     rev = "refs/tags/${version}";
-    hash = "sha256-ZLBvhuLXEOgqS7tRwP/e1Dv1/EMqxqXgpAZtLQGIt/o=";
+    hash = "sha256-/Zg4MYOvbsbJ0zyKuq+gX0PNbm8TyyBMziIaGCq6Lt8=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "unpin-setuptools.patch";
-      url = "https://github.com/XKNX/xknxproject/commit/53fecaf757d682fda00b04c3a2a1f3da86d9705f.patch";
-      hash = "sha256-EpfgEq4pIx7ahqJZalzo30ruj8NlZYHcKHxFXCGL98w=";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     cryptography
     pyzipper
+    striprtf
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "xknxproject"
-  ];
+  pythonImportsCheck = [ "xknxproject" ];
 
   meta = with lib; {
-    description = "ETS project parser";
+    description = "Library to extract KNX projects and parses the underlying XML";
     homepage = "https://github.com/XKNX/xknxproject";
     changelog = "https://github.com/XKNX/xknxproject/releases/tag/${version}";
     license = licenses.gpl2Only;

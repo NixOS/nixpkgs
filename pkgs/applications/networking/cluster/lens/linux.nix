@@ -1,19 +1,16 @@
-{ lib, fetchurl, appimageTools, makeWrapper, nss_latest, stdenv }:
+{ lib, stdenv, pname, version, src, meta, appimageTools, makeWrapper, nss_latest }:
 let
-  common = import ./common.nix { inherit fetchurl; };
 
-  inherit (stdenv.hostPlatform) system;
-
-  inherit (common) pname version;
-  src = common.sources.${stdenv.hostPlatform.system} or (throw "Source for ${pname} is not available for ${system}");
   name = "${pname}-${version}";
 
   appimageContents = appimageTools.extractType2 {
     inherit name src;
   };
+
 in
+
 appimageTools.wrapType2 {
-  inherit name src;
+  inherit name src meta;
 
   extraInstallCommands =
     ''
@@ -29,12 +26,4 @@ appimageTools.wrapType2 {
     '';
 
   extraPkgs = _: [ nss_latest ];
-
-  meta = with lib; {
-    description = "The Kubernetes IDE";
-    homepage = "https://k8slens.dev/";
-    license = licenses.lens;
-    maintainers = with maintainers; [ dbirks RossComputerGuy ];
-    platforms = [ "x86_64-linux" ];
-  };
 }

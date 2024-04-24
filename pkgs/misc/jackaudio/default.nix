@@ -28,13 +28,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "${prefix}jack2";
-  version = "1.9.19";
+  version = "1.9.22";
 
   src = fetchFromGitHub {
     owner = "jackaudio";
     repo = "jack2";
     rev = "v${finalAttrs.version}";
-    sha256 = "01s8i64qczxqawgrzrw19asaqmcspf5l2h3203xzg56wnnhhzcw7";
+    sha256 = "sha256-Cslfys5fcZDy0oee9/nM5Bd1+Cg4s/ayXjJJOSQCL4E=";
   };
 
   outputs = [ "out" "dev" ];
@@ -51,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   dontAddWafCrossFlags = true;
+
   wafConfigureFlags = [
     "--classic"
     "--autostart=${if (optDbus != null) then "dbus" else "classic"}"
@@ -61,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = (if libOnly then ''
     rm -rf $out/{bin,share}
     rm -rf $out/lib/{jack,libjacknet*,libjackserver*}
-  '' else ''
+  '' else lib.optionalString (optDbus != null) ''
     wrapProgram $out/bin/jack_control --set PYTHONPATH $PYTHONPATH
   '');
 

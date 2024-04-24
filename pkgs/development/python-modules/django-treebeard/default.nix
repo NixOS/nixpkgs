@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "django-treebeard";
-  version = "4.6.1";
+  version = "4.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hKs1BAJ31STrd5OeI1VoychWy1I8yWVXk7Zv6aPvRos=";
+    hash = "sha256-hG5GKQS0NxVfduBJB7pOSEgHFoVfiLiY30Eivc+9bpg=";
   };
 
   propagatedBuildInputs = [

@@ -16,13 +16,13 @@ in
         type = with lib.types; listOf path;
         default = [];
         example = lib.literalExpression "[ pkgs.dejavu_fonts ]";
-        description = lib.mdDoc "List of primary font packages.";
+        description = "List of primary font packages.";
       };
 
       enableDefaultPackages = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable a basic set of fonts providing several styles
           and families and reasonable coverage of Unicode.
         '';
@@ -37,7 +37,7 @@ in
       gyre-fonts # TrueType substitutes for standard PostScript fonts
       liberation_ttf
       unifont
-      noto-fonts-emoji
+      noto-fonts-color-emoji
     ]);
   };
 }

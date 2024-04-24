@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "aioazuredevops";
   version = "1.4.3";
+  format = "setuptools";
 
   disabled = isPy27;
 
@@ -33,6 +34,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Get data from the Azure DevOps API";
+    mainProgram = "aioazuredevops";
     homepage = "https://github.com/timmo001/aioazuredevops";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

@@ -8,9 +8,7 @@
 
 buildGoModule rec {
   pname = "telegraf";
-  version = "1.27.3";
-
-  excludedPackages = "test";
+  version = "1.30.2";
 
   subPackages = [ "cmd/telegraf" ];
 
@@ -18,10 +16,10 @@ buildGoModule rec {
     owner = "influxdata";
     repo = "telegraf";
     rev = "v${version}";
-    hash = "sha256-mVkzJ2dFBR8QYGO5rAT3tfA+eFFO01VsPoWp2iadUew=";
+    hash = "sha256-y9FfCCOUl0IWwcol1aDG+1m7270wWc3akhZzaK/KItY=";
   };
 
-  vendorHash = "sha256-xtPniKc6aR8JRSsaefqoRCLL8AQH6YVTG67trK58YaU=";
+  vendorHash = "sha256-7X2k/fpr9zQNXfyd+18VpRTcmYvPBvQzPNolNfmIZG8=";
   proxyVendor = true;
 
   ldflags = [
@@ -40,6 +38,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "The plugin-driven server agent for collecting & reporting metrics";
+    mainProgram = "telegraf";
     homepage = "https://www.influxdata.com/time-series-platform/telegraf/";
     changelog = "https://github.com/influxdata/telegraf/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

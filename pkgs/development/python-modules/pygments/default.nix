@@ -3,7 +3,7 @@
 , fetchPypi
 
 # build-system
-, setuptools
+, hatchling
 
 # tests
 , pytestCheckHook
@@ -13,17 +13,16 @@
 let pygments = buildPythonPackage
   rec {
     pname = "pygments";
-    version = "2.15.1";
-    format = "pyproject";
+    version = "2.17.2";
+    pyproject = true;
 
     src = fetchPypi {
-      pname = "Pygments";
-      inherit version;
-      hash = "sha256-is5NPB3UgYlLIAX1YOrQ+fGe5k/pgzZr4aIeFx0Sd1w=";
+      inherit pname version;
+      hash = "sha256-2kbOyf0t5b46inhPQ05MSrZwtP9U1gXEwnF+nUnEw2c=";
     };
 
     nativeBuildInputs = [
-      setuptools
+      hatchling
     ];
 
     # circular dependencies if enabled by default

@@ -32,6 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "CLI tool for comparing images";
+    mainProgram = "image-diff";
     homepage = "https://github.com/simonw/image-diff";
     license = licenses.asl20;
     maintainers = with maintainers; [ evils ];

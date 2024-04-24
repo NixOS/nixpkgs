@@ -106,6 +106,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Limiter, compressor, reverberation, equalizer and auto volume effects for Pulseaudio applications";
+    mainProgram = "pulseeffects";
     homepage = "https://github.com/wwmm/pulseeffects";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];

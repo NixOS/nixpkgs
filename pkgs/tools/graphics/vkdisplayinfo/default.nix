@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.boost;
     maintainers = [ maintainers.LunNova ];
+    mainProgram = "vkdisplayinfo";
   };
 }

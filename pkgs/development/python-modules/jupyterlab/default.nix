@@ -4,30 +4,30 @@
 , hatch-jupyter-builder
 , hatchling
 , async-lru
+, httpx
 , packaging
 , tornado
 , ipykernel
 , jupyter-core
 , jupyter-lsp
-, jupyterlab_server
+, jupyterlab-server
 , jupyter-server
 , notebook-shim
 , jinja2
 , tomli
 , pythonOlder
-, jupyter-packaging
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab";
-  version = "4.0.3";
-  format = "pyproject";
+  version = "4.1.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4U0c5GphMCgRHQ1Hah19awlAA7dGK6xmn1tHgxeryzk=";
+    hash = "sha256-eTXza6JuthUYOk9cK7yleRtRCM4qALVQX4z9EA1TZI4=";
   };
 
   nativeBuildInputs = [
@@ -37,12 +37,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     async-lru
+    httpx
     packaging
     tornado
     ipykernel
     jupyter-core
     jupyter-lsp
-    jupyterlab_server
+    jupyterlab-server
     jupyter-server
     notebook-shim
     jinja2
@@ -69,5 +70,6 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     homepage = "https://jupyter.org/";
     maintainers = lib.teams.jupyter.members;
+    mainProgram = "jupyter-lab";
   };
 }

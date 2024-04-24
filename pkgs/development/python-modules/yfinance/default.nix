@@ -1,52 +1,56 @@
-{ lib
-, appdirs
-, beautifulsoup4
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, frozendict
-, html5lib
-, multitasking
-, numpy
-, pandas
-, pythonOlder
-, requests
-, lxml
+{
+  lib,
+  appdirs,
+  beautifulsoup4,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  frozendict,
+  html5lib,
+  lxml,
+  multitasking,
+  numpy,
+  pandas,
+  peewee,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "yfinance";
-  version = "0.2.28";
-  format = "setuptools";
+  version = "0.2.38";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ranaroussi";
-    repo = pname;
+    repo = "yfinance";
     rev = "refs/tags/${version}";
-    hash = "sha256-kTbQnpha4OHu5Xguo6v90uFpcXY1e8JJsJUo4ZbaCfk=";
+    hash = "sha256-ZGwtu2vLcE9pM73umhnFwSzjQnGjTOTtVF607ox7I6E=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     appdirs
     beautifulsoup4
     cryptography
     frozendict
     html5lib
+    lxml
     multitasking
     numpy
     pandas
+    peewee
     requests
-    lxml
   ];
 
   # Tests require internet access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "yfinance"
-  ];
+  pythonImportsCheck = [ "yfinance" ];
 
   meta = with lib; {
     description = "Module to doiwnload Yahoo! Finance market data";

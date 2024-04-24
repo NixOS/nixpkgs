@@ -2,7 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, cython_3
+, cython
 , pkg-config
 , setuptools
 , fuse3
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    cython_3
+    cython
     pkg-config
     setuptools
   ];
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ trio ];
 
   preBuild = ''
-    ${python.pythonForBuild.interpreter} setup.py build_cython
+    ${python.pythonOnBuildForHost.interpreter} setup.py build_cython
   '';
 
   nativeCheckInputs = [

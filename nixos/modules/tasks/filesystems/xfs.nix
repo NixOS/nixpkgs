@@ -4,12 +4,12 @@ with lib;
 
 let
 
-  inInitrd = any (fs: fs == "xfs") config.boot.initrd.supportedFilesystems;
+  inInitrd = config.boot.initrd.supportedFilesystems.xfs or false;
 
 in
 
 {
-  config = mkIf (any (fs: fs == "xfs") config.boot.supportedFilesystems) {
+  config = mkIf (config.boot.supportedFilesystems.xfs or false) {
 
     system.fsPackages = [ pkgs.xfsprogs.bin ];
 
@@ -26,5 +26,7 @@ in
       ''
         sed -i -e 's,^#!.*,#!'$out/bin/sh, $out/bin/fsck.xfs
       '';
+
+    boot.initrd.systemd.initrdBin = mkIf inInitrd [ pkgs.xfsprogs.bin ];
   };
 }

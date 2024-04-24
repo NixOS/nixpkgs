@@ -20,6 +20,16 @@ buildPythonPackage rec {
     hash = "sha256-+cOUBoG8ODgzkPjEbqXYRF1uEcbaZITDfYnfWuHawTE=";
   };
 
+  # We relax dependencies here instead of pulling in a patch because upstream
+  # has released a new version using hatch-jupyter-builder, but it is not yet
+  # trivial to upgrade to that.
+  #
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"jupyterlab==3.*",' "" \
+      --replace 'jupyter_packaging~=' 'jupyter_packaging>='
+  '';
+
   nativeBuildInputs = [ jupyter-packaging ];
 
   propagatedBuildInputs = [ ipywidgets numpy pillow ];

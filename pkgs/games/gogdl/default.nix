@@ -11,14 +11,14 @@
 
 buildPythonApplication rec {
   pname = "gogdl";
-  version = "0.7.3";
+  version = "1.0.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "heroic-gogdl";
-    rev = "d2fa34bfba7beb2ecc0e3fc70a657f2c612c8a10";
-    hash = "sha256-YCqtfY49lDg6sLrF/INOZVD9cMCwvejhySzUWrxHKAw=";
+    rev = "10b4a19e0fbe9bc3db6b9ce3ea49fd17c9f1d37d";
+    hash = "sha256-po9To5WfT0L2j48Q84ygbbIqtTfXP9uQPrl4Uu+CWGk=";
   };
 
   disabled = pythonOlder "3.8";
@@ -28,17 +28,11 @@ buildPythonApplication rec {
     requests
   ];
 
-  patches = [
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/Heroic-Games-Launcher/heroic-gogdl/pull/37.patch";
-      hash = "sha256-oZLetPoWzsEDrL0Bh89HB4hTn70FTh8aXj9mKGr4Dqw=";
-    })
-  ];
-
   pythonImportsCheck = [ "gogdl" ];
 
   meta = with lib; {
     description = "GOG Downloading module for Heroic Games Launcher";
+    mainProgram = "gogdl";
     homepage = "https://github.com/Heroic-Games-Launcher/heroic-gogdl";
     license = with licenses; [ gpl3 ];
     maintainers = with maintainers; [ aidalgol ];

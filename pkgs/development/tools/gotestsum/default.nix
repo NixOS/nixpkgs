@@ -30,6 +30,7 @@ buildGoModule rec {
     homepage = "https://github.com/gotestyourself/gotestsum";
     changelog = "https://github.com/gotestyourself/gotestsum/releases/tag/v${version}";
     description = "A human friendly `go test` runner";
+    mainProgram = "gotestsum";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.asl20;
     maintainers = with maintainers; [ endocrimes ];

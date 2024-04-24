@@ -17,7 +17,7 @@
 # There are at least two ways to run firebird. superserver has been chosen
 # however there are no strong reasons to prefer this or the other one AFAIK
 # Eg superserver is said to be most efficiently using resources according to
-# http://www.firebirdsql.org/manual/qsg25-classic-or-super.html
+# https://www.firebirdsql.org/manual/qsg25-classic-or-super.html
 
 with lib;
 
@@ -40,15 +40,11 @@ in
 
     services.firebird = {
 
-      enable = mkEnableOption (lib.mdDoc "the Firebird super server");
+      enable = mkEnableOption "the Firebird super server";
 
-      package = mkOption {
-        default = pkgs.firebird;
-        defaultText = literalExpression "pkgs.firebird";
-        type = types.package;
-        example = literalExpression "pkgs.firebird_3";
-        description = lib.mdDoc ''
-          Which Firebird package to be installed: `pkgs.firebird_3`
+      package = mkPackageOption pkgs "firebird" {
+        example = "firebird_3";
+        extraDescription = ''
           For SuperServer use override: `pkgs.firebird_3.override { superServer = true; };`
         '';
       };
@@ -56,7 +52,7 @@ in
       port = mkOption {
         default = 3050;
         type = types.port;
-        description = lib.mdDoc ''
+        description = ''
           Port Firebird uses.
         '';
       };
@@ -64,7 +60,7 @@ in
       user = mkOption {
         default = "firebird";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           User account under which firebird runs.
         '';
       };
@@ -72,7 +68,7 @@ in
       baseDir = mkOption {
         default = "/var/lib/firebird";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Location containing data/ and system/ directories.
           data/ stores the databases, system/ stores the password database security2.fdb.
         '';
@@ -147,7 +143,7 @@ in
       # ConnectionTimeout = 180
 
       #RemoteServiceName = gds_db
-      RemoteServicePort = ${cfg.port}
+      RemoteServicePort = ${toString cfg.port}
 
       # randomly choose port for server Event Notification
       #RemoteAuxPort = 0

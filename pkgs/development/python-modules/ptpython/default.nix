@@ -3,9 +3,7 @@
 , pythonOlder
 , fetchPypi
 , appdirs
-, black
 , importlib-metadata
-, isPy3k
 , jedi
 , prompt-toolkit
 , pygments
@@ -13,19 +11,18 @@
 
 buildPythonPackage rec {
   pname = "ptpython";
-  version = "3.0.23";
+  version = "3.0.26";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-n8m+wsxRvEAAwSJNjFYkHOikBrPUnsjcJm94zTzQS6Q=";
+    hash = "sha256-yPsUBlAtw0nZnFfq8G5xFvOy3qyU8C80K65ocIkJ90M=";
   };
 
   propagatedBuildInputs = [
     appdirs
-    black # yes, this is in install_requires
     jedi
     prompt-toolkit
     pygments

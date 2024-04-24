@@ -20,8 +20,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-vbm31EsOJiMeTs2tu5KPXckxPcAQbi3/PGJ5EHCC5VQ=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
-    autoreconfHook pkg-config texinfo
+    autoreconfHook guile libgcrypt pkg-config texinfo
   ];
   buildInputs = [
     guile
@@ -31,6 +32,9 @@ stdenv.mkDerivation rec {
   ];
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
   doCheck = true;
+
+  # In procedure bytevector-u8-ref: Argument 2 out of range
+  dontStrip = stdenv.isDarwin;
 
   meta = with lib; {
     description = "Bindings to Libgcrypt for GNU Guile";

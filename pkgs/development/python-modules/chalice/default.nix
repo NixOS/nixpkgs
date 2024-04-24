@@ -10,7 +10,7 @@
 , mock
 , mypy-extensions
 , pip
-, pytestCheckHook
+, pytest7CheckHook
 , pythonOlder
 , pyyaml
 , requests
@@ -61,7 +61,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     hypothesis
     mock
-    pytestCheckHook
+    pytest7CheckHook
     requests
     websocket-client
   ];
@@ -102,6 +102,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python Serverless Microframework for AWS";
+    mainProgram = "chalice";
     homepage = "https://github.com/aws/chalice";
     changelog = "https://github.com/aws/chalice/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;

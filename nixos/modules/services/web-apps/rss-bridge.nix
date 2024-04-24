@@ -5,18 +5,31 @@ let
 
   poolName = "rss-bridge";
 
-  whitelist = pkgs.writeText "rss-bridge_whitelist.txt"
-    (concatStringsSep "\n" cfg.whitelist);
+  configAttr = lib.recursiveUpdate { FileCache.path = "${cfg.dataDir}/cache/"; } cfg.config;
+  cfgHalf = lib.mapAttrsRecursive (path: value: let
+    envName = lib.toUpper ("RSSBRIDGE_" + lib.concatStringsSep "_" path);
+    envValue = if lib.isList value then
+      lib.concatStringsSep "," value
+    else if lib.isBool value then
+      lib.boolToString value
+    else
+      toString value;
+  in "fastcgi_param \"${envName}\" \"${envValue}\";") configAttr;
+  cfgEnv = lib.concatStringsSep "\n" (lib.collect lib.isString cfgHalf);
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "rss-bridge" "whitelist" ] [ "services" "rss-bridge" "config" "system" "enabled_bridges" ])
+  ];
+
   options = {
     services.rss-bridge = {
-      enable = mkEnableOption (lib.mdDoc "rss-bridge");
+      enable = mkEnableOption "rss-bridge";
 
       user = mkOption {
         type = types.str;
         default = "nginx";
-        description = lib.mdDoc ''
+        description = ''
           User account under which both the service and the web-application run.
         '';
       };
@@ -24,7 +37,7 @@ in
       group = mkOption {
         type = types.str;
         default = "nginx";
-        description = lib.mdDoc ''
+        description = ''
           Group under which the web-application run.
         '';
       };
@@ -32,7 +45,7 @@ in
       pool = mkOption {
         type = types.str;
         default = poolName;
-        description = lib.mdDoc ''
+        description = ''
           Name of existing phpfpm pool that is used to run web-application.
           If not specified a pool will be created automatically with
           default values.
@@ -42,7 +55,7 @@ in
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/rss-bridge";
-        description = lib.mdDoc ''
+        description = ''
           Location in which cache directory will be created.
           You can put `config.ini.php` in here.
         '';
@@ -51,25 +64,31 @@ in
       virtualHost = mkOption {
         type = types.nullOr types.str;
         default = "rss-bridge";
-        description = lib.mdDoc ''
+        description = ''
           Name of the nginx virtualhost to use and setup. If null, do not setup any virtualhost.
         '';
       };
 
-      whitelist = mkOption {
-        type = types.listOf types.str;
-        default = [];
+      config = mkOption {
+        type = with types; attrsOf (attrsOf (oneOf [ bool int str (listOf str) ]));
+        default = {};
+        defaultText = options.literalExpression "FileCache.path = \"\${config.services.rss-bridge.dataDir}/cache/\"";
         example = options.literalExpression ''
-          [
-            "Facebook"
-            "Instagram"
-            "Twitter"
-          ]
+          {
+            system.enabled_bridges = [ "*" ];
+            error = {
+              output = "http";
+              report_limit = 5;
+            };
+            FileCache = {
+              enable_purge = true;
+            };
+          }
         '';
-        description = lib.mdDoc ''
-          List of bridges to be whitelisted.
-          If the list is empty, rss-bridge will use whitelist.default.txt.
-          Use `[ "*" ]` to whitelist all.
+        description = ''
+          Attribute set of arbitrary config options.
+          Please consult the documentation at the [wiki](https://rss-bridge.github.io/rss-bridge/For_Hosts/Custom_Configuration.html)
+          and [sample config](https://github.com/RSS-Bridge/rss-bridge/blob/master/config.default.ini.php) to see a list of available options.
         '';
       };
     };
@@ -93,11 +112,16 @@ in
         };
       };
     };
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}/cache' 0750 ${cfg.user} ${cfg.group} - -"
-      (mkIf (cfg.whitelist != []) "L+ ${cfg.dataDir}/whitelist.txt - - - - ${whitelist}")
-      "z '${cfg.dataDir}/config.ini.php' 0750 ${cfg.user} ${cfg.group} - -"
-    ];
+    systemd.tmpfiles.settings.rss-bridge = let
+      perm = {
+        mode = "0750";
+        user = cfg.user;
+        group = cfg.group;
+      };
+    in {
+      "${configAttr.FileCache.path}".d = perm;
+      "${cfg.dataDir}/config.ini.php".z = perm;
+    };
 
     services.nginx = mkIf (cfg.virtualHost != null) {
       enable = true;
@@ -116,6 +140,7 @@ in
               fastcgi_pass unix:${config.services.phpfpm.pools.${cfg.pool}.socket};
               fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
               fastcgi_param RSSBRIDGE_DATA ${cfg.dataDir};
+              ${cfgEnv}
             '';
           };
         };

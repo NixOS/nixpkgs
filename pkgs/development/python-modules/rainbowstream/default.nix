@@ -19,6 +19,7 @@
 buildPythonPackage rec {
   pname = "rainbowstream";
   version = "1.5.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "orakaro";
@@ -73,6 +74,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Streaming command-line twitter client";
+    mainProgram = "rainbowstream";
     homepage = "https://github.com/orakaro/rainbowstream";
     license = licenses.mit;
     maintainers = with maintainers; [ thoughtpolice ];

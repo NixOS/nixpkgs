@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "trackpy";
-  version = "0.6.1";
+  version = "0.6.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "soft-matter";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-NG1TOppqRbIZHLxJjlaXD4icYlAUkSxtmmC/fsS/pXo=";
+    hash = "sha256-HqInZkKvMM0T/HrDeZJcVHMxuRmhMvu0qAl5bAu3eQI=";
   };
 
   propagatedBuildInputs = [

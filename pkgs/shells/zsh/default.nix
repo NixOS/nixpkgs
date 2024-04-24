@@ -11,7 +11,9 @@
 , ncurses
 , pcre
 , pkg-config
-, buildPackages }:
+, buildPackages
+, nixosTests
+}:
 
 let
   version = "5.9";
@@ -30,6 +32,13 @@ stdenv.mkDerivation {
   patches = [
     # fix location of timezone data for TZ= completion
     ./tz_completion.patch
+    # Fixes configure misdetection when using clang 16, resulting in broken subshells on Darwin.
+    # This patch can be dropped with the next release of zsh.
+    (fetchpatch {
+      url = "https://github.com/zsh-users/zsh/commit/ab4d62eb975a4c4c51dd35822665050e2ddc6918.patch";
+      hash = "sha256-nXB4w7qqjZJC7/+CDxnNy6wu9qNwmS3ezjj/xK7JfeU=";
+      excludes = [ "ChangeLog" ];
+    })
   ];
 
   strictDeps = true;
@@ -136,5 +145,8 @@ EOF
 
   passthru = {
     shellPath = "/bin/zsh";
+    tests = {
+      inherit (nixosTests) zsh-history oh-my-zsh;
+    };
   };
 }

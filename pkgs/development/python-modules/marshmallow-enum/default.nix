@@ -1,15 +1,15 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , marshmallow
-, pytestCheckHook
-, isPy27
-, enum34
+, pytest7CheckHook
 }:
 
 buildPythonPackage rec {
   pname = "marshmallow-enum";
   version = "1.5.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "justanr";
@@ -22,17 +22,16 @@ buildPythonPackage rec {
     sed -i '/addopts/d' tox.ini
   '';
 
-  propagatedBuildInputs = [
-    marshmallow
-  ] ++ lib.optionals isPy27 [ enum34 ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
+  build-system = [
+    setuptools
   ];
 
-  disabledTests = [
-    "test_custom_error_in_deserialize_by_name"
-    "test_custom_error_in_deserialize_by_value"
+  dependencies = [
+    marshmallow
+  ];
+
+  nativeCheckInputs = [
+    pytest7CheckHook
   ];
 
   meta = with lib; {

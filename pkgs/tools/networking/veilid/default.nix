@@ -10,22 +10,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "veilid";
-  version = "0.1.9";
+  version = "0.3.1";
 
   src = fetchFromGitLab {
     owner = "veilid";
     repo = pname;
     rev = "v${version}";
-    fetchSubmodules = true;
-    sha256 = "sha256-mkb10JishprTyHV5lsFp/P57E2xTX+baHkJM4K2p4x4=";
+    sha256 = "sha256-pBMUwCZ1dLLde+RF9smy4/RZYmtyW+oTeo3LHNtscSc=";
   };
 
   cargoLock = {
-     lockFile = ./Cargo.lock;
-     outputHashes = {
-       "bugsalot-0.2.2" = "sha256-9zLzK22dOB7w+ejk1SfkA98z4rEzrB6mAVUpPFuDUnY=";
-     };
-   };
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "ansi-parser-0.9.0" = "sha256-3qTJ4J3QE73ScDShnTFD4WPiZaDaiss0wqXmeRQEIt0=";
+      "cursive-0.20.0" = "sha256-EGKO7JVN9hIqADKKC3mUHHOCSxMjPoXzYBZujzdgk3E=";
+      "cursive_buffered_backend-0.6.1" = "sha256-+sTJnp570HupwaJxV2x+oKyLwNmqQ4HqOH2P1s9Hhw8=";
+      "cursive_table_view-0.14.0" = "sha256-haos82qtobMsFCP3sNRu5u1mki4bsjrV+eqFxUGIHqk=";
+    };
+  };
 
   nativeBuildInputs = [
     capnproto
@@ -50,6 +52,6 @@ rustPlatform.buildRustPackage rec {
     description = "An open-source, peer-to-peer, mobile-first, networked application framework";
     homepage = "https://veilid.com";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ bbigras ];
+    maintainers = with maintainers; [ bbigras qbit ];
   };
 }

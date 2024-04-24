@@ -21,5 +21,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/kyamagu/mailman-rss";
     license = licenses.mit;
     maintainers = with maintainers; [ samueldr ];
+    mainProgram = "mailman-rss";
   };
 }

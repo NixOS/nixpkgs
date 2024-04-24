@@ -7,8 +7,8 @@ let
 in
 {
   options.programs.waybar = {
-    enable = mkEnableOption (lib.mdDoc "waybar");
-    package = mkPackageOptionMD pkgs "waybar" { };
+    enable = mkEnableOption "waybar, a highly customizable Wayland bar for Sway and Wlroots based compositors";
+    package = mkPackageOption pkgs "waybar" { };
   };
 
   config = mkIf cfg.enable {

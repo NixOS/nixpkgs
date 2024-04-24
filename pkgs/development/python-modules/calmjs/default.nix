@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "calmjs";
   version = "3.4.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -47,6 +48,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Framework for building toolchains and utilities for working with the Node.js ecosystem";
+    mainProgram = "calmjs";
     homepage = "https://github.com/calmjs/calmjs";
     license = licenses.gpl2;
     maintainers = with maintainers; [ onny ];

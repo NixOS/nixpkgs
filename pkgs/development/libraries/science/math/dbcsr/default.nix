@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitHub
 , cmake
+, mpiCheckPhaseHook
 , pkg-config
 , fypp
 , gfortran
@@ -64,13 +65,12 @@ stdenv.mkDerivation rec {
     "-DUSE_MPI=ON"
   ];
 
-  checkInputs = [ openssh ];
+  checkInputs = [
+    openssh
+    mpiCheckPhaseHook
+  ];
 
   doCheck = true;
-  preCheck = ''
-    export HYDRA_IFACE=lo  # Fix to make mpich run in a sandbox
-    export OMPI_MCA_rmaps_base_oversubscribe=1
-  '';
 
   meta = with lib; {
     description = "Distributed Block Compressed Sparse Row matrix library";

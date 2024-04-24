@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ywWG/H2ilt36mjlDSgIzYpardCFXpmbLiml6wy47XuA=";
   };
 
+  postPatch = ''
+    substituteInPlace Makefile --replace "pkg-config" "$PKG_CONFIG"
+  '';
+
   makeFlags = [ "BIN=$(out)/bin" "MAN=$(out)/share/man/man1" ];
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ fuse ];
@@ -21,6 +25,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/ftrvxmtrx/9pfs";
     description = "FUSE-based client of the 9P network filesystem protocol";
+    mainProgram = "9pfs";
     maintainers = [ lib.maintainers.eelco ];
     platforms = lib.platforms.unix;
     license = with lib.licenses; [ lpl-102 bsd2 ];

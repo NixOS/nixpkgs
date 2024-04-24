@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/wireghoul/doona";
     description = "A fork of the Bruteforce Exploit Detector Tool (BED)";
+    mainProgram = "doona";
     longDescription = ''
       A fork of the Bruteforce Exploit Detector Tool (BED).
       BED is a program which is designed to check daemons for potential buffer overflows, format string bugs etc.

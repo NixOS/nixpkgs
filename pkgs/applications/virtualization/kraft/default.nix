@@ -2,20 +2,21 @@
 , buildGoModule
 , fetchFromGitHub
 , stdenv
+, nix-update-script
 }:
 
 buildGoModule rec {
   pname = "kraftkit";
-  version = "0.6.4";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "unikraft";
     repo = "kraftkit";
     rev = "v${version}";
-    hash = "sha256-+aZrJqxgPGIoWEW4PZj6Nib7Z49HitxqMbeoyIe14iM=";
+    hash = "sha256-or1UstxYbj3QvgnoQPT2vyQTVZDIKPMDMxRGtN0n0lk=";
   };
 
-  vendorHash = "sha256-4V7GTqCDSHybuwIrnmO1MJ+DwMpkKOdA7UC72YJqStM=";
+  vendorHash = "sha256-UyDaEwXTMbyAUghvHS/LcT2Yzz7CJ2xGelF19kgRNec=";
 
   ldflags = [
     "-s"
@@ -24,6 +25,12 @@ buildGoModule rec {
   ];
 
   subPackages = [ "cmd/kraft" ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex" "^v([0-9.]+)" ];
+    };
+  };
 
   meta = {
     description = "Build and use highly customized and ultra-lightweight unikernel VMs";

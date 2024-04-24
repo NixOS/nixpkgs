@@ -12,16 +12,19 @@
 , packaging
 , pandas
 , pillow
-, protobuf3
+, protobuf
 , pyarrow
 , pydeck
 , pympler
 , python-dateutil
 , pythonOlder
+, pythonRelaxDepsHook
+, setuptools
 , requests
 , rich
 , tenacity
 , toml
+, tornado
 , typing-extensions
 , tzlocal
 , validators
@@ -30,15 +33,24 @@
 
 buildPythonPackage rec {
   pname = "streamlit";
-  version = "1.24.1";
-  format = "setuptools";
+  version = "1.33.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version format;
-    hash = "sha256-/V8LZHmOlwY2RAj7WJt3WVMUpjFdE7LXULljx66X82I=";
+    inherit pname version;
+    hash = "sha256-qNqP9G9blIxW0tx6ynphz42ZX08hdEz4IliudeYwBLo=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "packaging"
+  ];
 
   propagatedBuildInputs = [
     altair
@@ -51,7 +63,7 @@ buildPythonPackage rec {
     packaging
     pandas
     pillow
-    protobuf3
+    protobuf
     pyarrow
     pydeck
     pympler
@@ -60,6 +72,7 @@ buildPythonPackage rec {
     rich
     tenacity
     toml
+    tornado
     typing-extensions
     tzlocal
     validators
@@ -82,6 +95,7 @@ buildPythonPackage rec {
     homepage = "https://streamlit.io/";
     changelog = "https://github.com/streamlit/streamlit/releases/tag/${version}";
     description = "The fastest way to build custom ML tools";
+    mainProgram = "streamlit";
     maintainers = with maintainers; [ natsukium yrashk ];
     license = licenses.asl20;
   };

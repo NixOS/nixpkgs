@@ -27,6 +27,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/fastai/execnb";
     description = "Execute a jupyter notebook, fast, without needing jupyter";
+    mainProgram = "exec_nb";
     license = licenses.asl20;
     maintainers = with maintainers; [ rxiao ];
   };

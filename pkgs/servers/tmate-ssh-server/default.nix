@@ -58,5 +58,6 @@ stdenv.mkDerivation {
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ck3d ];
+    mainProgram = "tmate-ssh-server";
   };
 }

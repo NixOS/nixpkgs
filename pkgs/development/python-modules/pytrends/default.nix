@@ -2,6 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
+, setuptools-scm
+, wheel
 , requests
 , lxml
 , pandas
@@ -27,6 +29,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+    setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [ requests lxml pandas ];

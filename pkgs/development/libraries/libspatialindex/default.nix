@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
-    "-DSIDX_BUILD_TESTS=${if finalAttrs.doCheck then "ON" else "OFF"}"
+    "-DSIDX_BUILD_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
   ];
 
   doCheck = true;
@@ -32,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Extensible spatial index library in C++";
     homepage = "https://libspatialindex.org";
     license = licenses.mit;
+    maintainers = teams.geospatial.members;
     platforms = platforms.unix;
   };
 })

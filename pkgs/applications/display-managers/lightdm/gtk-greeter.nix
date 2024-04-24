@@ -16,12 +16,12 @@
 
 stdenv.mkDerivation rec {
   pname = "lightdm-gtk-greeter";
-  version = "2.0.8";
+  version = "2.0.9";
 
   src = fetchurl {
     # Release tarball differs from source tarball.
     url = "https://github.com/Xubuntu/lightdm-gtk-greeter/releases/download/lightdm-gtk-greeter-${version}/lightdm-gtk-greeter-${version}.tar.gz";
-    sha256 = "vvuzAMezT/IYZf28iBIB9zD8fFYOngHRfomelHcVBhM=";
+    hash = "sha256-yP3xmKqaP50NrQtI3+I8Ine3kQfo/PxillKQ8QgfZF0=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace "$out/share/xgreeters/lightdm-gtk-greeter.desktop" \
-      --replace "Exec=lightdm-gtk-greeter" "Exec=$out/bin/lightdm-gtk-greeter"
+      --replace-fail "Exec=lightdm-gtk-greeter" "Exec=$out/bin/lightdm-gtk-greeter"
   '';
 
   passthru.xgreeters = linkFarm "lightdm-gtk-greeter-xgreeters" [{
@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/Xubuntu/lightdm-gtk-greeter";
     description = "A GTK greeter for LightDM";
+    mainProgram = "lightdm-gtk-greeter";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ bobby285271 ];

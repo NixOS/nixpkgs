@@ -10,7 +10,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Install {command}`criu` along with necessary kernel options.
         '';
       };

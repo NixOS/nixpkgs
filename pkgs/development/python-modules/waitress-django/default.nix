@@ -3,6 +3,7 @@
 buildPythonPackage {
   pname = "waitress-django";
   version = "1.0.0";
+  format = "setuptools";
 
   src = ./.;
   pythonPath = [ django waitress ];
@@ -10,6 +11,7 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "A waitress WSGI server serving django";
+    mainProgram = "waitress-serve-django";
     license = licenses.mit;
     maintainers = with maintainers; [ basvandijk ];
   };

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "tifffile";
-  version = "2023.7.18";
+  version = "2024.2.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WlpiSy96t/N+nsQXSuLfGAW5ZY+JAT+bS1VQZy9l8qE=";
+    hash = "sha256-SSCj7I6OAD5nPTxlMYY8me7dVw0bi34UHAcu14/4Aw0=";
   };
 
   propagatedBuildInputs = [
@@ -54,6 +54,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "tifffile"
   ];
+
+  # flaky, often killed due to OOM or timeout
+  env.SKIP_LARGE = "1";
 
   meta = with lib; {
     description = "Read and write image data from and to TIFF files";

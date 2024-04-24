@@ -13,10 +13,10 @@ buildGoModule {
     owner = "Debian";
     repo = "dcs";
     rev = "da46accc4d55e9bfde1a6852ac5a9e730fcbbb2c";
-    sha256 = "N+6BXlKn1YTlh0ZdPNWa0nuJNcQtlUIc9TocM8cbzQk=";
+    hash = "sha256-N+6BXlKn1YTlh0ZdPNWa0nuJNcQtlUIc9TocM8cbzQk=";
   };
 
-  vendorSha256 = "l2mziuisx0HzuP88rS5M+Wha6lu8P036wJYZlmzjWfs=";
+  vendorHash = "sha256-l2mziuisx0HzuP88rS5M+Wha6lu8P036wJYZlmzjWfs=";
 
   # Depends on dcs binaries
   doCheck = false;

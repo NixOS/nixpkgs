@@ -14,17 +14,17 @@
 
 buildPythonPackage rec {
   pname = "bx-py-utils";
-  version = "80";
+  version = "91";
 
   disabled = pythonOlder "3.9";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "boxine";
     repo = "bx_py_utils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ih0tqT+3fTTgncXz4bneo4OGT0jVhybdADTy1de5VqI=";
+    hash = "sha256-W8NP5h9fHyTJj6TIpBunoPcNOu8eWV1rA8ZaoGUnmBQ=";
   };
 
   postPatch = ''
@@ -81,6 +81,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Various Python utility functions";
+    mainProgram = "publish";
     homepage = "https://github.com/boxine/bx_py_utils";
     changelog = "https://github.com/boxine/bx_py_utils/releases/tag/${src.rev}";
     license = lib.licenses.mit;

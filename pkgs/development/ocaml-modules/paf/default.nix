@@ -1,7 +1,6 @@
 { buildDunePackage
 , lib
 , fetchurl
-, mirage-stack
 , mirage-time
 , h2
 , tls-mirage
@@ -32,10 +31,8 @@ buildDunePackage rec {
   };
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   propagatedBuildInputs = [
-    mirage-stack
     mirage-time
     h2
     tls-mirage

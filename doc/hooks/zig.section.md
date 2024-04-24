@@ -4,7 +4,7 @@
 
 In Nixpkgs, `zig.hook` overrides the default build, check and install phases.
 
-## Example code snippet {#example-code-snippet}
+## Example code snippet {#zig-hook-example-code-snippet}
 
 ```nix
 { lib
@@ -27,33 +27,37 @@ stdenv.mkDerivation {
 }
 ```
 
-## Variables controlling zig.hook {#variables-controlling-zig-hook}
+## Variables controlling zig.hook {#zig-hook-variables-controlling}
 
-### `dontUseZigBuild` {#dontUseZigBuild}
+### `zig.hook` Exclusive Variables {#zig-hook-exclusive-variables}
+
+The variables below are exclusive to `zig.hook`.
+
+#### `dontUseZigBuild` {#dont-use-zig-build}
 
 Disables using `zigBuildPhase`.
 
-### `zigBuildFlags` {#zigBuildFlags}
-
-Controls the flags passed to the build phase.
-
-### `dontUseZigCheck` {#dontUseZigCheck}
+#### `dontUseZigCheck` {#dont-use-zig-check}
 
 Disables using `zigCheckPhase`.
 
-### `zigCheckFlags` {#zigCheckFlags}
-
-Controls the flags passed to the check phase.
-
-### `dontUseZigInstall` {#dontUseZigInstall}
+#### `dontUseZigInstall` {#dont-use-zig-install}
 
 Disables using `zigInstallPhase`.
 
-### `zigInstallFlags` {#zigInstallFlags}
+### Similar variables {#zig-hook-similar-variables}
 
-Controls the flags passed to the install phase.
+The following variables are similar to their `stdenv.mkDerivation` counterparts.
 
-### Variables honored by zig.hook {#variables-honored-by-zig-hook}
+| `zig.hook` Variable | `stdenv.mkDerivation` Counterpart |
+|---------------------|-----------------------------------|
+| `zigBuildFlags`     | `buildFlags`                      |
+| `zigCheckFlags`     | `checkFlags`                      |
+| `zigInstallFlags`   | `installFlags`                    |
+
+### Variables honored by zig.hook {#zig-hook-variables-honored}
+
+The following variables commonly used by `stdenv.mkDerivation` are honored by `zig.hook`.
 
 - `prefixKey`
 - `dontAddPrefix`

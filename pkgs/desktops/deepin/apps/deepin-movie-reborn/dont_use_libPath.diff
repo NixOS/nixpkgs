@@ -1,0 +1,108 @@
+diff --git a/src/backends/mpv/mpv_proxy.h b/src/backends/mpv/mpv_proxy.h
+index 1256a06..d76d1c0 100644
+--- a/src/backends/mpv/mpv_proxy.h
++++ b/src/backends/mpv/mpv_proxy.h
+@@ -38,6 +38,7 @@ typedef void (*mpv_terminateDestroy)(mpv_handle *ctx);
+ 
+ static QString libPath(const QString &sLib)
+ {
++    return sLib;
+     QDir dir;
+     QString path  = QLibraryInfo::location(QLibraryInfo::LibrariesPath);
+     dir.setPath(path);
+diff --git a/src/common/hwdec_probe.cpp b/src/common/hwdec_probe.cpp
+index d70ed0c..ac2516d 100644
+--- a/src/common/hwdec_probe.cpp
++++ b/src/common/hwdec_probe.cpp
+@@ -83,6 +83,7 @@ bool HwdecProbe::isFileCanHwdec(const QUrl& url, QList<QString>& hwList)
+ 
+ static QString libPath(const QString &sLib)
+ {
++    return sLib;
+     QDir dir;
+     QString path  = QLibraryInfo::location(QLibraryInfo::LibrariesPath);
+     dir.setPath(path);
+diff --git a/src/common/platform/platform_thumbnail_worker.cpp b/src/common/platform/platform_thumbnail_worker.cpp
+index 17b2bdd..82db2b9 100644
+--- a/src/common/platform/platform_thumbnail_worker.cpp
++++ b/src/common/platform/platform_thumbnail_worker.cpp
+@@ -88,6 +88,7 @@ Platform_ThumbnailWorker::Platform_ThumbnailWorker()
+ 
+ QString Platform_ThumbnailWorker::libPath(const QString &strlib)
+ {
++    return strlib;
+     QDir  dir;
+     QString lib_path  = QLibraryInfo::location(QLibraryInfo::LibrariesPath);
+     dir.setPath(lib_path);
+diff --git a/src/common/thumbnail_worker.cpp b/src/common/thumbnail_worker.cpp
+index 2ba2888..c34841e 100644
+--- a/src/common/thumbnail_worker.cpp
++++ b/src/common/thumbnail_worker.cpp
+@@ -88,6 +88,7 @@ ThumbnailWorker::ThumbnailWorker()
+ 
+ QString ThumbnailWorker::libPath(const QString &strlib)
+ {
++    return strlib;
+     QDir  dir;
+     QString lib_path  = QLibraryInfo::location(QLibraryInfo::LibrariesPath);
+     dir.setPath(lib_path);
+diff --git a/src/libdmr/compositing_manager.cpp b/src/libdmr/compositing_manager.cpp
+index 9b117fc..28a11ec 100644
+--- a/src/libdmr/compositing_manager.cpp
++++ b/src/libdmr/compositing_manager.cpp
+@@ -237,6 +237,7 @@ bool CompositingManager::isCanHwdec()
+ 
+ QString  CompositingManager::libPath(const QString &sLib)
+ {
++    return sLib;
+     QDir dir;
+     QString path  = QLibraryInfo::location(QLibraryInfo::LibrariesPath);
+     dir.setPath(path);
+diff --git a/src/libdmr/filefilter.cpp b/src/libdmr/filefilter.cpp
+index 6691df0..b620a62 100644
+--- a/src/libdmr/filefilter.cpp
++++ b/src/libdmr/filefilter.cpp
+@@ -72,6 +72,7 @@ FileFilter::FileFilter()
+ 
+ QString FileFilter::libPath(const QString &strlib)
+ {
++    return strlib;
+     QDir  dir;
+     QString path  = QLibraryInfo::location(QLibraryInfo::LibrariesPath);
+     dir.setPath(path);
+diff --git a/src/libdmr/playlist_model.cpp b/src/libdmr/playlist_model.cpp
+index 18a8095..9ea4abf 100644
+--- a/src/libdmr/playlist_model.cpp
++++ b/src/libdmr/playlist_model.cpp
+@@ -449,6 +449,7 @@ PlaylistModel::PlaylistModel(PlayerEngine *e)
+ 
+ QString PlaylistModel::libPath(const QString &strlib)
+ {
++    return strlib;
+     QDir  dir;
+     QString path  = QLibraryInfo::location(QLibraryInfo::LibrariesPath);
+     dir.setPath(path);
+diff --git a/src/widgets/platform/platform_toolbox_proxy.cpp b/src/widgets/platform/platform_toolbox_proxy.cpp
+index 570acac..9da0f97 100644
+--- a/src/widgets/platform/platform_toolbox_proxy.cpp
++++ b/src/widgets/platform/platform_toolbox_proxy.cpp
+@@ -709,6 +709,7 @@ private:
+ 
+ static QString libPath(const QString &strlib)
+ {
++    return strlib;
+     QDir  dir;
+     QString path  = QLibraryInfo::location(QLibraryInfo::LibrariesPath);
+     dir.setPath(path);
+diff --git a/src/widgets/toolbox_proxy.cpp b/src/widgets/toolbox_proxy.cpp
+index 05cbc2c..54731bf 100644
+--- a/src/widgets/toolbox_proxy.cpp
++++ b/src/widgets/toolbox_proxy.cpp
+@@ -760,6 +760,7 @@ private:
+ 
+ static QString libPath(const QString &strlib)
+ {
++    return strlib;
+     QDir  dir;
+     QString path  = QLibraryInfo::location(QLibraryInfo::LibrariesPath);
+     dir.setPath(path);

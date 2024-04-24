@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ClassiCube";
-  version = "1.3.5";
+  version = "1.3.6";
 
   src = fetchFromGitHub {
     owner = "UnknownShadow200";
     repo = "ClassiCube";
     rev = version;
-    sha256 = "sha256-anBi9hPwX1AAIc8dXsKyX4u7UbkKqC1P+7f7wdKWAig=";
+    sha256 = "sha256-7VPn5YXNoAR3ftYMDQuQRqeMCrbyB56ir1sQWBiPWAI=";
   };
 
   nativeBuildInputs = [ dos2unix makeWrapper copyDesktopItems ];
@@ -64,21 +64,17 @@ stdenv.mkDerivation rec {
       --replace '%NIXPKGS_FONT_PATH%' "${font_path}"
     # ClassiCube's Makefile hardcodes JOBS=1 for some reason,
     # even though it works perfectly well multi-threaded.
-    substituteInPlace src/Makefile \
+    substituteInPlace Makefile \
       --replace 'JOBS=1' "JOBS=$NIX_BUILD_CORES"
   '';
 
   buildInputs = [ libX11 libXi libGL curl openal liberation_ttf ];
 
-  preBuild = "cd src";
-
-  postBuild = "cd -";
-
   installPhase = ''
     runHook preInstall
 
     mkdir -p "$out/bin"
-    cp 'src/ClassiCube' "$out/bin"
+    cp 'ClassiCube' "$out/bin"
     # ClassiCube puts downloaded resources
     # next to the location of the executable by default.
     # This doesn't work with Nix
@@ -101,5 +97,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ _360ied ];
+    mainProgram = "ClassiCube";
   };
 }

@@ -16,7 +16,7 @@ in
       default = "";
       type = types.lines;
       example = "IdleAction=lock";
-      description = lib.mdDoc ''
+      description = ''
         Extra config options for systemd-logind.
         See [logind.conf(5)](https://www.freedesktop.org/software/systemd/man/logind.conf.html)
         for available options.
@@ -26,7 +26,7 @@ in
     killUserProcesses = mkOption {
       default = false;
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Specifies whether the processes of a user should be killed
         when the user logs out.  If true, the scope unit corresponding
         to the session and all processes inside that scope will be
@@ -44,7 +44,7 @@ in
       example = "ignore";
       type = logindHandlerType;
 
-      description = lib.mdDoc ''
+      description = ''
         Specifies what to do when the power key is pressed.
       '';
     };
@@ -54,7 +54,7 @@ in
       example = "reboot";
       type = logindHandlerType;
 
-      description = lib.mdDoc ''
+      description = ''
         Specifies what to do when the power key is long-pressed.
       '';
     };
@@ -64,7 +64,7 @@ in
       example = "ignore";
       type = logindHandlerType;
 
-      description = lib.mdDoc ''
+      description = ''
         Specifies what to do when the reboot key is pressed.
       '';
     };
@@ -74,7 +74,7 @@ in
       example = "ignore";
       type = logindHandlerType;
 
-      description = lib.mdDoc ''
+      description = ''
         Specifies what to do when the reboot key is long-pressed.
       '';
     };
@@ -84,7 +84,7 @@ in
       example = "ignore";
       type = logindHandlerType;
 
-      description = lib.mdDoc ''
+      description = ''
         Specifies what to do when the suspend key is pressed.
       '';
     };
@@ -94,7 +94,7 @@ in
       example = "ignore";
       type = logindHandlerType;
 
-      description = lib.mdDoc ''
+      description = ''
         Specifies what to do when the suspend key is long-pressed.
       '';
     };
@@ -104,7 +104,7 @@ in
       example = "ignore";
       type = logindHandlerType;
 
-      description = lib.mdDoc ''
+      description = ''
         Specifies what to do when the hibernate key is pressed.
       '';
     };
@@ -114,7 +114,7 @@ in
       example = "suspend";
       type = logindHandlerType;
 
-      description = lib.mdDoc ''
+      description = ''
         Specifies what to do when the hibernate key is long-pressed.
       '';
     };
@@ -124,7 +124,7 @@ in
       example = "ignore";
       type = logindHandlerType;
 
-      description = lib.mdDoc ''
+      description = ''
         Specifies what to do when the laptop lid is closed.
       '';
     };
@@ -135,7 +135,7 @@ in
       example = "ignore";
       type = logindHandlerType;
 
-      description = lib.mdDoc ''
+      description = ''
         Specifies what to do when the laptop lid is closed
         and the system is on external power. By default use
         the same action as specified in services.logind.lidSwitch.
@@ -147,7 +147,7 @@ in
       example = "suspend";
       type = logindHandlerType;
 
-      description = lib.mdDoc ''
+      description = ''
         Specifies what to do when the laptop lid is closed
         and another screen is added.
       '';

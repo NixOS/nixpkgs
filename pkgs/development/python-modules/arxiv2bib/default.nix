@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "arxiv2bib";
   version = "1.0.8";
+  format = "setuptools";
 
   # Missing tests on Pypi
   src = fetchFromGitHub {
@@ -22,6 +23,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Get a BibTeX entry from an arXiv id number, using the arxiv.org API";
+    mainProgram = "arxiv2bib";
     homepage = "http://nathangrigg.github.io/arxiv2bib/";
     license = licenses.bsd3;
     maintainers = [ maintainers.nico202 ];

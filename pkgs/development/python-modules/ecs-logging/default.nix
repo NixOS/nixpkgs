@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "ecs-logging";
   version = "2.1.0";
-  format = "flit";
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 

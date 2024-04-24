@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "0immxc7almmpg80n3bdn834p3nrrz7bspl2syhb04s3lawa5y2lq";
   };
 
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "pkg-config" "$PKG_CONFIG"
+  '';
+
   makeFlags = [ "PREFIX=" "DESTDIR=$(out)" "ENABLE_SYSTEMD=1" ];
 
   nativeBuildInputs = [ pkg-config ];

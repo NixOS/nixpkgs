@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "The Easy Hangul XIM";
+    mainProgram = "nabi";
     homepage = "https://github.com/choehwanjin/nabi";
     license = licenses.gpl2;
     maintainers = [ maintainers.ianwookim ];

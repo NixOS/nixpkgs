@@ -2,28 +2,32 @@
 , stdenv
 , fetchFromGitHub
 , coreutils
-, pkg-config
+
 , perl
-, lvm2
+, pkg-config
+
+, json_c
 , libaio
+, liburcu
+, linuxHeaders
+, lvm2
 , readline
 , systemd
-, liburcu
-, json_c
-, linuxHeaders
+, util-linuxMinimal
+
 , cmocka
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "multipath-tools";
-  version = "0.9.4";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "opensvc";
     repo = "multipath-tools";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-CPvtnjzkyxKXrT8+YXaIgDA548h8X61+jCxMHKFfEyg=";
+    sha256 = "sha256-X4sAMGn4oBMY3cQkVj1dMcrDF7FgMl8SbZeUnCCOY6Q=";
   };
 
   postPatch = ''
@@ -44,8 +48,20 @@ stdenv.mkDerivation rec {
     sed '1i#include <assert.h>' -i tests/{util,vpd}.c
   '';
 
-  nativeBuildInputs = [ pkg-config perl ];
-  buildInputs = [ systemd lvm2 libaio readline liburcu json_c linuxHeaders ];
+  nativeBuildInputs = [
+    perl
+    pkg-config
+  ];
+  buildInputs = [
+    json_c
+    libaio
+    liburcu
+    linuxHeaders
+    lvm2
+    readline
+    systemd
+    util-linuxMinimal # for libmount
+  ];
 
   makeFlags = [
     "LIB=lib"

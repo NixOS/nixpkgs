@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "contexttimer";
   version = "unstable-2019-03-30";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "brouberol";

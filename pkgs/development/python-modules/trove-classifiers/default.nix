@@ -4,19 +4,20 @@
 , calver
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 let
   self = buildPythonPackage rec {
     pname = "trove-classifiers";
-    version = "2023.7.6";
-    format = "setuptools";
+    version = "2024.3.3";
+    pyproject = true;
 
     disabled = pythonOlder "3.7";
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-io4Wi1HSD+1gcEODHTdjK7UJGdHICmTg8Tk3RGkaiyI=";
+      hash = "sha256-337f+cZ/+GtzNiiZgzCxgOgdElseCWU22DrA/XlnP9w=";
     };
 
     postPatch = ''
@@ -26,6 +27,7 @@ let
 
     nativeBuildInputs = [
       calver
+      setuptools
     ];
 
     doCheck = false; # avoid infinite recursion with hatchling

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -12,30 +13,45 @@
 , lua
 , luajit
 , zlib
+, jsoncpp
+, libpng
 , Cocoa }:
 
 stdenv.mkDerivation rec {
   pname = "the-powder-toy";
-  version = "unstable-2022-08-30";
+  version = "97.0.352";
 
   src = fetchFromGitHub {
     owner = "The-Powder-Toy";
     repo = "The-Powder-Toy";
-    rev = "9e712eba080e194fc162b475f58aaed8f4ea008e";
-    sha256 = "sha256-44xUfif1E+T9jzixWgnBxOWmzPPuVZy7rf62ig/CczA=";
+    rev = "v${version}";
+    sha256 = "sha256-LYohsqFU9LBgTXMaV6cf8/zf3fBvT+s5A1JBpPHekH8=";
   };
+
+  patches = [
+    # Fix gcc-13 build failure:
+    #   https://github.com/The-Powder-Toy/The-Powder-Toy/pull/898
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/The-Powder-Toy/The-Powder-Toy/commit/162bce9a1036e0c233399941410364c4a4370980.patch";
+      hash = "sha256-oQNwKemV3BjMLSUd6zMCKqiClcc3Ouxwn3jagf/Q1/I=";
+    })
+  ];
 
   nativeBuildInputs = [ meson ninja pkg-config python3 ];
 
-  buildInputs = [ SDL2 bzip2 curl fftwFloat lua luajit zlib ]
+  buildInputs = [ SDL2 bzip2 curl fftwFloat lua luajit zlib jsoncpp libpng ]
   ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+
+  mesonFlags = [ "-Dworkaround_elusive_bzip2=false" ];
 
   installPhase = ''
     install -Dm 755 powder $out/bin/powder
 
     mkdir -p $out/share/applications
-    mv ../resources/powder.desktop $out/share/applications
     mv ../resources $out/share
+  '' + lib.optionalString stdenv.isLinux ''
+    mv ./resources/powder.desktop $out/share/applications
   '';
 
   meta = with lib; {

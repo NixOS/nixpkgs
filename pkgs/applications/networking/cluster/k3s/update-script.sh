@@ -25,8 +25,8 @@ LATEST_TAG_NAME=$(jq 'map(.tag_name)' ${LATEST_TAG_RAWFILE} | \
 K3S_VERSION=$(echo ${LATEST_TAG_NAME} | sed 's/^v//')
 
 K3S_COMMIT=$(curl --silent -f ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
-    https://api.github.com/repos/k3s-io/k3s/tags \
-    | jq -r "map(select(.name == \"${LATEST_TAG_NAME}\")) | .[0] | .commit.sha")
+    https://api.github.com/repos/k3s-io/k3s/git/refs/tags \
+    | jq -r "map(select(.ref == \"refs/tags/${LATEST_TAG_NAME}\")) | .[0] | .object.sha")
 
 K3S_REPO_SHA256=$(nix-prefetch-url --quiet --unpack https://github.com/k3s-io/k3s/archive/refs/tags/${LATEST_TAG_NAME}.tar.gz)
 
@@ -101,7 +101,7 @@ cat >versions.nix <<EOF
   k3sVersion = "${K3S_VERSION}";
   k3sCommit = "${K3S_COMMIT}";
   k3sRepoSha256 = "${K3S_REPO_SHA256}";
-  k3sVendorSha256 = "${FAKE_HASH}";
+  k3sVendorHash = "${FAKE_HASH}";
   chartVersions = import ./chart-versions.nix;
   k3sRootVersion = "${K3S_ROOT_VERSION}";
   k3sRootSha256 = "${K3S_ROOT_SHA256}";
@@ -114,13 +114,13 @@ cat >versions.nix <<EOF
 EOF
 
 set +e
-K3S_VENDOR_SHA256=$(nix-prefetch -I nixpkgs=${NIXPKGS_ROOT} "{ sha256 }: (import ${NIXPKGS_ROOT}. {}).k3s_1_${MINOR_VERSION}.goModules.overrideAttrs (_: { vendorSha256 = sha256; })")
+K3S_VENDOR_HASH=$(nix-prefetch -I nixpkgs=${NIXPKGS_ROOT} "{ sha256 }: (import ${NIXPKGS_ROOT}. {}).k3s_1_${MINOR_VERSION}.goModules.overrideAttrs (_: { vendorHash = sha256; })")
 set -e
 
-if [ -n "${K3S_VENDOR_SHA256:-}" ]; then
-    sed -i "s|${FAKE_HASH}|${K3S_VENDOR_SHA256}|g" ./versions.nix
+if [ -n "${K3S_VENDOR_HASH:-}" ]; then
+    sed -i "s|${FAKE_HASH}|${K3S_VENDOR_HASH}|g" ./versions.nix
 else
-    echo "Update failed. K3S_VENDOR_SHA256 is empty."
+    echo "Update failed. K3S_VENDOR_HASH is empty."
     exit 1
 fi
 

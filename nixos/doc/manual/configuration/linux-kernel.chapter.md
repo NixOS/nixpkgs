@@ -5,7 +5,9 @@ option `boot.kernelPackages`. For instance, this selects the Linux 3.10
 kernel:
 
 ```nix
-boot.kernelPackages = pkgs.linuxKernel.packages.linux_3_10;
+{
+  boot.kernelPackages = pkgs.linuxKernel.packages.linux_3_10;
+}
 ```
 
 Note that this not only replaces the kernel, but also packages that are
@@ -40,13 +42,15 @@ If you want to change the kernel configuration, you can use the
 instance, to enable support for the kernel debugger KGDB:
 
 ```nix
-nixpkgs.config.packageOverrides = pkgs: pkgs.lib.recursiveUpdate pkgs {
-  linuxKernel.kernels.linux_5_10 = pkgs.linuxKernel.kernels.linux_5_10.override {
-    extraConfig = ''
-      KGDB y
-    '';
+{
+  nixpkgs.config.packageOverrides = pkgs: pkgs.lib.recursiveUpdate pkgs {
+    linuxKernel.kernels.linux_5_10 = pkgs.linuxKernel.kernels.linux_5_10.override {
+      extraConfig = ''
+        KGDB y
+      '';
+    };
   };
-};
+}
 ```
 
 `extraConfig` takes a list of Linux kernel configuration options, one
@@ -59,14 +63,18 @@ by `udev`. You can force a module to be loaded via
 [](#opt-boot.kernelModules), e.g.
 
 ```nix
-boot.kernelModules = [ "fuse" "kvm-intel" "coretemp" ];
+{
+  boot.kernelModules = [ "fuse" "kvm-intel" "coretemp" ];
+}
 ```
 
 If the module is required early during the boot (e.g. to mount the root
 file system), you can use [](#opt-boot.initrd.kernelModules):
 
 ```nix
-boot.initrd.kernelModules = [ "cifs" ];
+{
+  boot.initrd.kernelModules = [ "cifs" ];
+}
 ```
 
 This causes the specified modules and their dependencies to be added to
@@ -76,7 +84,9 @@ Kernel runtime parameters can be set through
 [](#opt-boot.kernel.sysctl), e.g.
 
 ```nix
-boot.kernel.sysctl."net.ipv4.tcp_keepalive_time" = 120;
+{
+  boot.kernel.sysctl."net.ipv4.tcp_keepalive_time" = 120;
+}
 ```
 
 sets the kernel's TCP keepalive time to 120 seconds. To see the
@@ -84,77 +94,39 @@ available parameters, run `sysctl -a`.
 
 ## Building a custom kernel {#sec-linux-config-customizing}
 
-You can customize the default kernel configuration by overriding the arguments for your kernel package:
-
-```nix
-pkgs.linux_latest.override {
-  ignoreConfigErrors = true;
-  autoModules = false;
-  kernelPreferBuiltin = true;
-  extraStructuredConfig = with lib.kernel; {
-    DEBUG_KERNEL = yes;
-    FRAME_POINTER = yes;
-    KGDB = yes;
-    KGDB_SERIAL_CONSOLE = yes;
-    DEBUG_INFO = yes;
-  };
-}
-```
-
-See `pkgs/os-specific/linux/kernel/generic.nix` for details on how these arguments
-affect the generated configuration. You can also build a custom version of Linux by calling
-`pkgs.buildLinux` directly, which requires the `src` and `version` arguments to be specified.
+Please refer to the Nixpkgs manual for the various ways of [building a custom kernel](https://nixos.org/nixpkgs/manual#sec-linux-kernel).
 
 To use your custom kernel package in your NixOS configuration, set
 
 ```nix
-boot.kernelPackages = pkgs.linuxPackagesFor yourCustomKernel;
-```
-
-Note that this method will use the common configuration defined in `pkgs/os-specific/linux/kernel/common-config.nix`,
-which is suitable for a NixOS system.
-
-If you already have a generated configuration file, you can build a kernel that uses it with `pkgs.linuxManualConfig`:
-
-```nix
-let
-  baseKernel = pkgs.linux_latest;
-in pkgs.linuxManualConfig {
-  inherit (baseKernel) src modDirVersion;
-  version = "${baseKernel.version}-custom";
-  configfile = ./my_kernel_config;
-  allowImportFromDerivation = true;
+{
+  boot.kernelPackages = pkgs.linuxPackagesFor yourCustomKernel;
 }
 ```
 
-::: {.note}
-The build will fail if `modDirVersion` does not match the source's `kernel.release` file,
-so `modDirVersion` should remain tied to `src`.
-:::
+## Rust {#sec-linux-rust}
 
-To edit the `.config` file for Linux X.Y, proceed as follows:
+The Linux kernel does not have Rust language support enabled by
+default. For kernel versions 6.7 or newer, experimental Rust support
+can be enabled. In a NixOS configuration, set:
 
-```ShellSession
-$ nix-shell '<nixpkgs>' -A linuxKernel.kernels.linux_X_Y.configEnv
-$ unpackPhase
-$ cd linux-*
-$ make nconfig
+```nix
+{
+  boot.kernelPatches = [
+    {
+      name = "Rust Support";
+      patch = null;
+      features = {
+        rust = true;
+      };
+    }
+  ];
+}
 ```
 
 ## Developing kernel modules {#sec-linux-config-developing-modules}
 
-When developing kernel modules it's often convenient to run
-edit-compile-run loop as quickly as possible. See below snippet as an
-example of developing `mellanox` drivers.
-
-```ShellSession
-$ nix-build '<nixpkgs>' -A linuxPackages.kernel.dev
-$ nix-shell '<nixpkgs>' -A linuxPackages.kernel
-$ unpackPhase
-$ cd linux-*
-$ make -C $dev/lib/modules/*/build M=$(pwd)/drivers/net/ethernet/mellanox modules
-# insmod ./drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko
-```
+This section was moved to the [Nixpkgs manual](https://nixos.org/nixpkgs/manual#sec-linux-kernel-developing-modules).
 
 ## ZFS {#sec-linux-zfs}
 
@@ -163,7 +135,7 @@ available Linux kernel. It is recommended to use the latest available LTS that's
 with ZFS. Usually this is the default kernel provided by nixpkgs (i.e. `pkgs.linuxPackages`).
 
 Alternatively, it's possible to pin the system to the latest available kernel
-version *that is supported by ZFS* like this:
+version _that is supported by ZFS_ like this:
 
 ```nix
 {

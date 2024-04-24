@@ -1,14 +1,14 @@
 { lib, stdenv, fetchurl, common-updater-scripts, coreutils, git, gnused
-, makeWrapper, nix, nixfmt, openjdk, writeScript, nixosTests, jq, cacert, curl
-}:
+, makeWrapper, nix, nixfmt-classic, openjdk, writeScript, nixosTests, jq, cacert
+, curl }:
 
 stdenv.mkDerivation rec {
   pname = "jenkins";
-  version = "2.401.3";
+  version = "2.440.3";
 
   src = fetchurl {
     url = "https://get.jenkins.io/war-stable/${version}/jenkins.war";
-    hash = "sha256-p5igxUgaj/sDINkSH2z0ncV1w2kCjarhek3TmLaeAA0=";
+    hash = "sha256-+NR9v9WTWVUa6tg4j6StcAXtp8R84hxmTJlhDKBK42c=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
           gnused
           jq
           nix
-          nixfmt
+          nixfmt-classic
         ]
       }
 
@@ -69,7 +69,8 @@ stdenv.mkDerivation rec {
     homepage = "https://jenkins.io/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
-    maintainers = with maintainers; [ coconnor earldouglas nequissimus ajs124 ];
+    maintainers = with maintainers;
+      [ coconnor earldouglas nequissimus ] ++ teams.helsinki-systems.members;
     changelog = "https://www.jenkins.io/changelog-stable/#v${version}";
     mainProgram = "jenkins-cli";
     platforms = platforms.all;

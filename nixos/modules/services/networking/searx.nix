@@ -43,23 +43,19 @@ in
       [ "services" "searx" "settingsFile" ])
   ];
 
-  ###### interface
-
   options = {
-
     services.searx = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
         relatedPackages = [ "searx" ];
-        description = lib.mdDoc "Whether to enable Searx, the meta search engine.";
+        description = "Whether to enable Searx, the meta search engine.";
       };
 
       environmentFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Environment file (see `systemd.exec(5)`
           "EnvironmentFile=" section for the syntax) to define variables for
           Searx. This option can be used to safely include secret keys into the
@@ -70,7 +66,7 @@ in
       redisCreateLocally = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Configure a local Redis server for SearXNG. This is required if you
           want to enable the rate limiter and bot protection of SearXNG.
         '';
@@ -92,7 +88,7 @@ in
               };
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Searx settings. These will be merged with (taking precedence over)
           the default configuration. It's also possible to refer to
           environment variables
@@ -109,7 +105,7 @@ in
       settingsFile = mkOption {
         type = types.path;
         default = "${runDir}/settings.yml";
-        description = lib.mdDoc ''
+        description = ''
           The path of the Searx server settings.yml file. If no file is
           specified, a default file is used (default config file has debug mode
           enabled). Note: setting this options overrides
@@ -137,7 +133,7 @@ in
             ];
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Limiter settings for SearXNG.
 
           ::: {.note}
@@ -147,17 +143,12 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.searx;
-        defaultText = literalExpression "pkgs.searx";
-        description = lib.mdDoc "searx package to use.";
-      };
+      package = mkPackageOption pkgs "searxng" { };
 
       runInUwsgi = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to run searx in uWSGI as a "vassal", instead of using its
           built-in HTTP server. This is the recommended mode for public or
           large instances, but is unnecessary for LAN or local-only use.
@@ -179,7 +170,7 @@ in
             chmod-socket = "660";             # allow the searx group to read/write to the socket
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Additional configuration of the uWSGI vassal running searx. It
           should notably specify on which interfaces and ports the vassal
           should listen.
@@ -190,21 +181,7 @@ in
 
   };
 
-
-  ###### implementation
-
   config = mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = (cfg.limiterSettings != { }) -> cfg.package.pname == "searxng";
-        message = "services.searx.limiterSettings requires services.searx.package to be searxng.";
-      }
-      {
-        assertion = cfg.redisCreateLocally -> cfg.package.pname == "searxng";
-        message = "services.searx.redisCreateLocally requires services.searx.package to be searxng.";
-      }
-    ];
-
     environment.systemPackages = [ cfg.package ];
 
     users.users.searx =
@@ -236,7 +213,7 @@ in
       serviceConfig = {
         User  = "searx";
         Group = "searx";
-        ExecStart = "${cfg.package}/bin/searx-run";
+        ExecStart = lib.getExe cfg.package;
       } // optionalAttrs (cfg.environmentFile != null)
         { EnvironmentFile = builtins.toPath cfg.environmentFile; };
       environment = {
@@ -245,10 +222,10 @@ in
       };
     };
 
-    systemd.services.uwsgi = mkIf (cfg.runInUwsgi)
-      { requires = [ "searx-init.service" ];
-        after = [ "searx-init.service" ];
-      };
+    systemd.services.uwsgi = mkIf cfg.runInUwsgi {
+      requires = [ "searx-init.service" ];
+      after = [ "searx-init.service" ];
+    };
 
     services.searx.settings = {
       # merge NixOS settings with defaults settings.yml
@@ -256,7 +233,7 @@ in
       redis.url = lib.mkIf cfg.redisCreateLocally "unix://${config.services.redis.servers.searx.unixSocket}";
     };
 
-    services.uwsgi = mkIf (cfg.runInUwsgi) {
+    services.uwsgi = mkIf cfg.runInUwsgi {
       enable = true;
       plugins = [ "python3" ];
 
@@ -270,6 +247,7 @@ in
         enable-threads = true;
         module = "searx.webapp";
         env = [
+          # TODO: drop this as it is only required for searx
           "SEARX_SETTINGS_PATH=${cfg.settingsFile}"
           # searxng compatibility https://github.com/searxng/searxng/issues/1519
           "SEARXNG_SETTINGS_PATH=${cfg.settingsFile}"

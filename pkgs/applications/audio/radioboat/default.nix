@@ -51,6 +51,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A terminal web radio client";
+    mainProgram = "radioboat";
     homepage = "https://github.com/slashformotion/radioboat";
     license = licenses.asl20;
     platforms = platforms.linux;

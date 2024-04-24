@@ -1,0 +1,18 @@
+diff --git a/setup.cfg b/setup.cfg
+index 3ab277a..b253e18 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -50,13 +50,6 @@ convention = google
+ add_ignore = D105, D107
+ #add_ignore = D100,D101,D102,D103,D104,D200 - start with no ignored errors and add as required
+ 
+-[tool:pytest]
+-addopts = --cov=./kotsu --cov-report xml --cov-report term
+-
+-[coverage:run]
+-# Omit auto-generated versioneer file from test coverage
+-omit = kotsu/_version.py
+-
+ [versioneer]
+ VCS = git
+ style = pep440

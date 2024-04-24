@@ -11,6 +11,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://sourceforge.net/p/csv2odf/wiki/Main_Page/";
     description = "Convert csv files to OpenDocument Format";
+    mainProgram = "csv2odf";
     longDescription = ''
       csv2odf is a command line tool that can convert a comma separated value
       (csv) file to an odf, ods, html, xlsx, or docx document that can be viewed in

@@ -20,7 +20,7 @@ let
     ppx_deriving_yojson
     ppx_import
     stdlib-shims
-    why3
+    why3.dev
     re
     result
     seq
@@ -28,6 +28,7 @@ let
     sexplib0
     parsexp
     base
+    unionFind
     yojson
     zarith
   ];
@@ -36,13 +37,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "frama-c";
-  version = "27.1";
-  slang   = "Cobalt";
+  version = "28.1";
+  slang   = "Nickel";
 
   src = fetchurl {
     url  = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
-    hash = "sha256-WxNXShaliXHCeQm+6Urn83sX2JeFK0DHaKPU4uCeOdI=";
+    hash = "sha256-AiC8dDt9okaM65JvMx7cfd+qfGA7pHli3j4zyOHj9ZM=";
   };
+
+  preConfigure = ''
+    substituteInPlace src/dune --replace " bytes " " "
+  '';
 
   postConfigure = "patchShebangs src/plugins/eva/gen-api.sh";
 
@@ -56,6 +61,7 @@ stdenv.mkDerivation rec {
     lablgtk3 lablgtk3-sourceview3 coq graphviz zarith apron why3 mlgmpidl doxygen
     ppx_deriving ppx_import ppx_deriving_yaml ppx_deriving_yojson
     gdk-pixbuf
+    unionFind
   ];
 
   buildPhase = ''

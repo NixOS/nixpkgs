@@ -1,43 +1,68 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
+
+# build-system
+, cython
+, setuptools
+
+# dependencies
+, aiohappyeyeballs
+, async-interrupt
 , async-timeout
 , chacha20poly1305-reuseable
-, mock
+, cryptography
 , noiseprotocol
 , protobuf
+, zeroconf
+
+# tests
+, mock
 , pytest-asyncio
 , pytestCheckHook
-, pythonOlder
-, zeroconf
 }:
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "16.0.1";
-  format = "setuptools";
+  version = "23.2.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "esphome";
-    repo = pname;
+    repo = "aioesphomeapi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DxEfkM//WvGqS/iWb6RIvE2raIYb/I0bcwrLqLBjCmw=";
+    hash = "sha256-GFQ87Ic0xHXs8ZgmzH7kOFbDSNmtj0hx+YHKnrz/sG0=";
   };
 
-  propagatedBuildInputs = [
-    async-timeout
+  build-system = [
+    setuptools
+    cython
+  ];
+
+  dependencies = [
+    aiohappyeyeballs
+    async-interrupt
     chacha20poly1305-reuseable
+    cryptography
     noiseprotocol
     protobuf
     zeroconf
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    async-timeout
   ];
 
   nativeCheckInputs = [
     mock
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # https://github.com/esphome/aioesphomeapi/issues/837
+    "test_reconnect_logic_stop_callback"
   ];
 
   pythonImportsCheck = [

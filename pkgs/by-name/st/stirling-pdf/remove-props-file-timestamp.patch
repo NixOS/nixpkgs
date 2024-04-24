@@ -1,0 +1,12 @@
+diff --git a/build.gradle b/build.gradle
+index e12cbd3..094a219 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -173,6 +173,7 @@ task writeVersion {
+     def props = new Properties()
+     props.setProperty('version', version)
+     props.store(propsFile.newWriter(), null)
++    propsFile.text = propsFile.readLines().tail().join('\n')
+ }
+ 
+ swaggerhubUpload {

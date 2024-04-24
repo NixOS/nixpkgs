@@ -19,6 +19,7 @@
 , shared-mime-info
 , libnotify
 , libexif
+, libjxl
 , libseccomp
 , librsvg
 , webp-pixbuf-loader
@@ -36,15 +37,15 @@
 , gobject-introspection
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nautilus";
-  version = "44.2.1";
+  version = "45.2.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "2cYvAkcn96dvxqXaeIorAkffAaccKmARQ8YqrA/0Hkw=";
+    url = "mirror://gnome/sources/nautilus/${lib.versions.major finalAttrs.version}/nautilus-${finalAttrs.version}.tar.xz";
+    sha256 = "ul1T3zmhVVYt+XHvXjHoJwdJBdDEjqseskIaEChLmQ0=";
   };
 
   patches = [
@@ -106,6 +107,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(
       # Thumbnailers
       --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
+      --prefix XDG_DATA_DIRS : "${libjxl}/share"
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
       --prefix XDG_DATA_DIRS : "${webp-pixbuf-loader}/share"
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
@@ -119,8 +121,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "nautilus";
+      attrPath = "gnome.nautilus";
     };
   };
 
@@ -130,5 +132,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.gnome.members;
+    mainProgram = "nautilus";
   };
-}
+})

@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchPypi
 , libjpeg_turbo
+, setuptools
 , numpy
 , python
 , substituteAll
@@ -10,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "pyturbojpeg";
-  version = "1.7.2";
-  format = "setuptools";
+  version = "1.7.3";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "PyTurboJPEG";
     inherit version;
-    hash = "sha256-ChFD05ZK0TCVvM+uqGzma2x5qqyD94uBvFpSnWuyL2c=";
+    hash = "sha256-edSOOrU0YVKP+4AJxCCYnQh6iewxVFTM1QmU88mukis=";
   };
 
   patches = [
@@ -24,6 +25,10 @@ buildPythonPackage rec {
       src = ./lib-path.patch;
       libturbojpeg = "${libjpeg_turbo.out}/lib/libturbojpeg${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
+  ];
+
+  nativeBuildInputs = [
+    setuptools
   ];
 
   propagatedBuildInputs = [

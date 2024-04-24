@@ -14,12 +14,13 @@ buildGoModule rec {
     sha256 = "sha256-3p6rUFFiWXhX9BBbxqWxRoyRceexvNnqcFCyNi5HoaA=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     description = "A simple tool for generating self signed certificates";
+    mainProgram = "minica";
     longDescription = ''
       Minica is a simple CA intended for use in situations where the CA operator
       also operates each host where a certificate will be used. It automatically

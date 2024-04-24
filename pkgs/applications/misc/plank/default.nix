@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Elegant, simple, clean dock";
+    mainProgram = "plank";
     homepage = "https://launchpad.net/plank";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

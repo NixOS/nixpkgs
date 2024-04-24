@@ -21,13 +21,14 @@
 , survey
 , typing-extensions
 , watchdog
+, xattr
 , pytestCheckHook
 , nixosTests
 }:
 
 buildPythonPackage rec {
   pname = "maestral";
-  version = "1.8.0";
+  version = "1.9.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -36,7 +37,7 @@ buildPythonPackage rec {
     owner = "SamSchott";
     repo = "maestral";
     rev = "refs/tags/v${version}";
-    hash = "sha256-YYbdd0GLVKE7+Oi0mpQjqhFdjdlquk/XnIg5WrtKcfI=";
+    hash = "sha256-Bb0yE2OKdlZd6ZsTEWOD+hMuV41fZanesY49L+v4BBE=";
   };
 
   propagatedBuildInputs = [
@@ -57,12 +58,13 @@ buildPythonPackage rec {
     survey
     typing-extensions
     watchdog
+    xattr
   ];
 
   makeWrapperArgs = [
     # Add the installed directories to the python path so the daemon can find them
     "--prefix PYTHONPATH : ${makePythonPath propagatedBuildInputs}"
-    "--prefix PYTHONPATH : $out/lib/${python.libPrefix}/site-packages"
+    "--prefix PYTHONPATH : $out/${python.sitePackages}"
   ];
 
   nativeCheckInputs = [
@@ -86,6 +88,8 @@ buildPythonPackage rec {
     "test_cased_path_candidates"
     # AssertionError
     "test_locking_multiprocess"
+    # OSError: [Errno 95] Operation not supported
+    "test_move_preserves_xattrs"
   ];
 
   pythonImportsCheck = [
@@ -96,6 +100,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Open-source Dropbox client for macOS and Linux";
+    mainProgram = "maestral";
     homepage = "https://maestral.app";
     changelog = "https://github.com/samschott/maestral/releases/tag/v${version}";
     license = licenses.mit;

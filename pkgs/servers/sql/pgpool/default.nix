@@ -10,12 +10,12 @@
 
 stdenv.mkDerivation rec {
   pname = "pgpool-II";
-  version = "4.4.3";
+  version = "4.5.1";
 
   src = fetchurl {
     url = "https://www.pgpool.net/mediawiki/download.php?f=pgpool-II-${version}.tar.gz";
     name = "pgpool-II-${version}.tar.gz";
-    sha256 = "sha256-RnRaqY9FTgl87LTaz1NvicN+0+xB8y8KhGk0Ip0OtzM=";
+    hash = "sha256-jhSwVYoV2uh2fI4azuPy9sfAjr//2majWTZ+qqVsOTY=";
   };
 
   buildInputs = [
@@ -43,8 +43,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = "http://pgpool.net/mediawiki/index.php";
-    description = "A middleware that works between postgresql servers and postgresql clients";
+    homepage = "https://www.pgpool.net/mediawiki/index.php/Main_Page";
+    description = "A middleware that works between PostgreSQL servers and PostgreSQL clients";
+    changelog = "https://www.pgpool.net/docs/latest/en/html/release-${builtins.replaceStrings ["."] ["-"] version}.html";
     license = licenses.free;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ];

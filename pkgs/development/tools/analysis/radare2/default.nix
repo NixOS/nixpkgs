@@ -47,13 +47,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "radare2";
-  version = "5.8.8";
+  version = "5.9.0";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     rev = "refs/tags/${version}";
-    hash = "sha256-JGNV5xSyrjcO2ZgOjzDqzfZyALPSCyA3DZx/D8ffmKA=";
+    hash = "sha256-h2IYOGr+yCgCJR1gB4jibcUt1A+8IuNVoTUcJ83lKHw=";
   };
 
   preBuild = ''
@@ -78,6 +78,12 @@ stdenv.mkDerivation rec {
    "-Duse_sys_lz4=true"
    "-Dr2_gittap=${version}"
   ];
+
+  # TODO: remove when upstream fixes the issue
+  # https://github.com/radareorg/radare2/issues/22793
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+     "-DTHREAD_CONVERT_THREAD_STATE_TO_SELF=1"
+  ]);
 
   enableParallelBuilding = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];

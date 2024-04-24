@@ -3,8 +3,8 @@
 let version_sha = if lib.versionAtLeast ocaml.version "4.08"
   then
     {
-      version = "1.10.4";
-      sha256 = "sha256-g+s+QwCqmx3HggdJAQ9DYuqDUkdCEwUk14wgzpnKdHw=";
+      version = "1.11.0";
+      sha256 = "sha256-AfwkR4DA9r5yrnlrH7dQ82feGGJP110H7nl4LtbfjU8=";
     }
   else
     {
@@ -13,7 +13,7 @@ let version_sha = if lib.versionAtLeast ocaml.version "4.08"
     };
 in
 
-buildDunePackage (rec {
+buildDunePackage rec {
   pname = "re";
   version = version_sha.version;
 
@@ -34,6 +34,4 @@ buildDunePackage (rec {
     license = lib.licenses.lgpl2;
     maintainers = with lib.maintainers; [ vbgl ];
   };
-} // lib.optionalAttrs (!lib.versionAtLeast ocaml.version "4.08") {
-  duneVersion = "1";
-})
+}

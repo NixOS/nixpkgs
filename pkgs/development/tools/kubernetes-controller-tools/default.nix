@@ -2,18 +2,25 @@
 
 buildGoModule rec {
   pname = "controller-tools";
-  version = "0.12.1";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-OqBTlzHqnwu6GaNFS6cdcOoBNdSGus/piR4tXRfzpn0=";
+    sha256 = "sha256-G0jBQ12cpjfWGhXYppV9dB2n68bExi6ME9QbxXsUWvw=";
   };
 
   patches = [ ./version.patch ];
 
-  vendorHash = "sha256-gztTF8UZ5N4mip8NIyuCfoy16kpJymtggfG0sAcZW6c=";
+  postPatch = ''
+    # fix wrong go line which go mod tidy complains about
+    # https://github.com/kubernetes-sigs/controller-tools/pull/881
+    substituteInPlace go.mod \
+      --replace-fail "go 1.20" "go 1.21"
+  '';
+
+  vendorHash = "sha256-8XSMg/MII+HlsFuaOC6CK/jYiBXfeRZmLT7sW/ZN3Ts=";
 
   ldflags = [
     "-s"
@@ -32,6 +39,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Tools to use with the Kubernetes controller-runtime libraries";
     homepage = "https://github.com/kubernetes-sigs/controller-tools";
+    changelog = "https://github.com/kubernetes-sigs/controller-tools/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ michojel ];
   };

@@ -12,26 +12,26 @@ let
     owner = "monero-project";
     repo = "supercop";
     rev = "633500ad8c8759995049ccd022107d1fa8a1bbc9";
-    sha256 = "26UmESotSWnQ21VbAYEappLpkEMyl0jiuCaezRYd/sE=";
+    hash = "sha256-26UmESotSWnQ21VbAYEappLpkEMyl0jiuCaezRYd/sE=";
   };
   trezor-common = fetchFromGitHub {
     owner = "trezor";
     repo = "trezor-common";
-    rev = "bff7fdfe436c727982cc553bdfb29a9021b423b0";
-    sha256 = "VNypeEz9AV0ts8X3vINwYMOgO8VpNmyUPC4iY3OOuZI=";
+    rev = "bc28c316d05bf1e9ebfe3d7df1ab25831d98d168";
+    hash = "sha256-F1Hf1WwHqXMd/5OWrdkpomszACTozDuC7DQXW3p6248=";
   };
 
 in
 
 stdenv.mkDerivation rec {
   pname = "monero-cli";
-  version = "0.18.2.2";
+  version = "0.18.3.3";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero";
     rev = "v${version}";
-    sha256 = "6VI5D3vP6NKdrEE5qOpKnv1wr6AWriixdOxkAa8HaCQ=";
+    hash = "sha256-1LkKIrud317BEE+713t5wiJV6FcDlJdj4ypXPR0bKTs=";
   };
 
   patches = [
@@ -58,7 +58,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals trezorSupport [ libusb1 protobuf python3 ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DUSE_DEVICE_TREZOR=ON"
     "-DBUILD_GUI_DEPS=ON"
     "-DReadline_ROOT_DIR=${readline.dev}"
@@ -73,5 +72,6 @@ stdenv.mkDerivation rec {
     license     = licenses.bsd3;
     platforms   = platforms.all;
     maintainers = with maintainers; [ rnhmjoj ];
+    mainProgram = "monero-wallet-cli";
   };
 }

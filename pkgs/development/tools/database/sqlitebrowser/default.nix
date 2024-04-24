@@ -27,6 +27,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "DB Browser for SQLite";
+    mainProgram = "sqlitebrowser";
     homepage = "https://sqlitebrowser.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];

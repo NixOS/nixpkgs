@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "datadog";
-  version = "0.46.0";
-  format = "pyproject";
+  version = "0.49.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5PvJKoXisJGaImiWrkX8Xks1bAxX8cJlllnfvgeJxnQ=";
+    hash = "sha256-TLenmRr2ytuGj+RQzUVkc+ZfEfxni3189hBE/xxgdNg=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +33,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     requests
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     click
@@ -46,11 +48,12 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     "tests/performance"
+    # https://github.com/DataDog/datadogpy/issues/800
+    "tests/integration/api/test_*.py"
   ];
 
   disabledTests = [
     "test_default_settings_set"
-  ] ++ lib.optionals (pythonAtLeast "3.11") [
     # https://github.com/DataDog/datadogpy/issues/746
     "TestDogshell"
   ];

@@ -1,5 +1,6 @@
 { lib
 , python
+, autoAddDriverRunpath
 , buildPythonPackage
 , autoPatchelfHook
 , unzip
@@ -11,7 +12,7 @@ let
 in
 buildPythonPackage rec {
   pname = "tensorrt";
-  version = cudaPackages.tensorrt.version;
+  version = lib.optionalString (cudaPackages ? tensorrt) cudaPackages.tensorrt.version;
 
   src = cudaPackages.tensorrt.src;
 
@@ -22,7 +23,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     unzip
     autoPatchelfHook
-    cudaPackages.autoAddOpenGLRunpathHook
+    autoAddDriverRunpath
   ];
 
   preUnpack = ''
@@ -48,5 +49,8 @@ buildPythonPackage rec {
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ aidalgol ];
+    broken =
+      !(cudaPackages ? tensorrt)
+      || !(cudaPackages ? cudnn);
   };
 }

@@ -53,6 +53,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Django ASGI (HTTP/WebSocket) server";
+    mainProgram = "daphne";
     homepage = "https://github.com/django/daphne";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];

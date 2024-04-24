@@ -35,6 +35,7 @@ in mkDerivation rec {
 
   meta = with lib; {
     description = "A powerful batch renamer for KDE";
+    mainProgram = "krename";
     homepage = "https://kde.org/applications/utilities/krename/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];

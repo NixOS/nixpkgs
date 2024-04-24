@@ -72,8 +72,8 @@ rec {
 
     for o in $(cat /proc/cmdline); do
       case $o in
-        mountDisk=1)
-          mountDisk=1
+        mountDisk=*)
+          mountDisk=''${mountDisk#mountDisk=}
           ;;
         command=*)
           set -- $(IFS==; echo $o)
@@ -103,6 +103,8 @@ rec {
 
     if test -z "$mountDisk"; then
       mount -t tmpfs none /fs
+    elif [[ -e "$mountDisk" ]]; then
+      mount "$mountDisk" /fs
     else
       mount /dev/${hd} /fs
     fi
@@ -388,7 +390,7 @@ rec {
      filesystem containing a non-NixOS Linux distribution. */
 
   runInLinuxImage = drv: runInLinuxVM (lib.overrideDerivation drv (attrs: {
-    mountDisk = true;
+    mountDisk = attrs.mountDisk or true;
 
     /* Mount `image' as the root FS, but use a temporary copy-on-write
        image since we don't want to (and can't) write to `image'. */
@@ -494,7 +496,7 @@ rec {
     fi
     diskImage="$1"
     if ! test -e "$diskImage"; then
-      ${qemu}/bin/qemu-img create -b ${image}/disk-image.qcow2 -f qcow2 "$diskImage"
+      ${qemu}/bin/qemu-img create -b ${image}/disk-image.qcow2 -f qcow2 -F qcow2 "$diskImage"
     fi
     export TMPDIR=$(mktemp -d)
     export out=/dummy
@@ -576,9 +578,9 @@ rec {
 
   fillDiskWithDebs =
     { size ? 4096, debs, name, fullName, postInstall ? null, createRootFS ? defaultCreateRootFS
-    , QEMU_OPTS ? "", memSize ? 512 }:
+    , QEMU_OPTS ? "", memSize ? 512, ... }@args:
 
-    runInLinuxVM (stdenv.mkDerivation {
+    runInLinuxVM (stdenv.mkDerivation ({
       inherit name postInstall QEMU_OPTS memSize;
 
       debs = (lib.intersperse "|" debs);
@@ -647,7 +649,6 @@ rec {
 
         echo "running post-install script..."
         eval "$postInstall"
-        ln -sf dash /mnt/bin/sh
 
         rm /mnt/.debug
 
@@ -658,7 +659,7 @@ rec {
       '';
 
       passthru = { inherit fullName; };
-    });
+    } // args));
 
 
   /* Generate a Nix expression containing fetchurl calls for the
@@ -727,9 +728,6 @@ rec {
         esac
       done
 
-      # Work around this bug: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=452279
-      sed -i ./Packages -e s/x86_64-linux-gnu/x86-64-linux-gnu/g
-
       perl -w ${deb/deb-closure.pl} \
         ./Packages ${urlPrefix} ${toString packages} > $out
     '';
@@ -744,7 +742,7 @@ rec {
     , packagesList ? "", packagesLists ? [packagesList]
     , packages, extraPackages ? [], postInstall ? ""
     , extraDebs ? [], createRootFS ? defaultCreateRootFS
-    , QEMU_OPTS ? "", memSize ? 512 }:
+    , QEMU_OPTS ? "", memSize ? 512, ... }@args:
 
     let
       expr = debClosureGenerator {
@@ -752,10 +750,10 @@ rec {
         packages = packages ++ extraPackages;
       };
     in
-      (fillDiskWithDebs {
+      (fillDiskWithDebs ({
         inherit name fullName size postInstall createRootFS QEMU_OPTS memSize;
         debs = import expr {inherit fetchurl;} ++ extraDebs;
-      }) // {inherit expr;};
+      } // args)) // {inherit expr;};
 
 
   /* The set of supported RPM-based distributions. */
@@ -1034,24 +1032,46 @@ rec {
     };
 
     debian11i386 = {
-      name = "debian-11.6-bullseye-i386";
-      fullName = "Debian 11.6 Bullseye (i386)";
+      name = "debian-11.8-bullseye-i386";
+      fullName = "Debian 11.8 Bullseye (i386)";
       packagesList = fetchurl {
-        url = "https://snapshot.debian.org/archive/debian/20230131T034648Z/dists/bullseye/main/binary-i386/Packages.xz";
-        hash = "sha256-z9eG7RlvelEnZAaeCfIO+XxTZVL3d+zTA7ShU43l/pw=";
+        url = "https://snapshot.debian.org/archive/debian/20231124T031419Z/dists/bullseye/main/binary-i386/Packages.xz";
+        hash = "sha256-0bKSLLPhEC7FB5D1NA2jaQP0wTe/Qp1ddiA/NDVjRaI=";
       };
-      urlPrefix = "https://snapshot.debian.org/archive/debian/20230131T034648Z";
+      urlPrefix = "https://snapshot.debian.org/archive/debian/20231124T031419Z";
       packages = commonDebianPackages;
     };
 
     debian11x86_64 = {
-      name = "debian-11.6-bullseye-amd64";
-      fullName = "Debian 11.6 Bullseye (amd64)";
+      name = "debian-11.8-bullseye-amd64";
+      fullName = "Debian 11.8 Bullseye (amd64)";
       packagesList = fetchurl {
-        url = "https://snapshot.debian.org/archive/debian/20230131T034648Z/dists/bullseye/main/binary-amd64/Packages.xz";
-        hash = "sha256-mz0eCWdn6uWt40OxsSPheHzEnMeLE52yR/vpb48/VF0=";
+        url = "https://snapshot.debian.org/archive/debian/20231124T031419Z/dists/bullseye/main/binary-amd64/Packages.xz";
+        hash = "sha256-CYPsGgQgJZkh3JmbcAQkYDWP193qrkOADOgrMETZIeo=";
       };
-      urlPrefix = "https://snapshot.debian.org/archive/debian/20230131T034648Z";
+      urlPrefix = "https://snapshot.debian.org/archive/debian/20231124T031419Z";
+      packages = commonDebianPackages;
+    };
+
+    debian12i386 = {
+      name = "debian-12.2-bookworm-i386";
+      fullName = "Debian 12.2 Bookworm (i386)";
+      packagesList = fetchurl {
+        url = "https://snapshot.debian.org/archive/debian/20231124T031419Z/dists/bookworm/main/binary-i386/Packages.xz";
+        hash = "sha256-OeN9Q2HFM3GsPNhOa4VhM7qpwT66yUNwC+6Z8SbGEeQ=";
+      };
+      urlPrefix = "https://snapshot.debian.org/archive/debian/20231124T031419Z";
+      packages = commonDebianPackages;
+    };
+
+    debian12x86_64 = {
+      name = "debian-12.2-bookworm-amd64";
+      fullName = "Debian 12.2 Bookworm (amd64)";
+      packagesList = fetchurl {
+        url = "https://snapshot.debian.org/archive/debian/20231124T031419Z/dists/bookworm/main/binary-amd64/Packages.xz";
+        hash = "sha256-SZDElRfe9BlBwDlajQB79Qdn08rv8whYoQDeVCveKVs=";
+      };
+      urlPrefix = "https://snapshot.debian.org/archive/debian/20231124T031419Z";
       packages = commonDebianPackages;
     };
   };

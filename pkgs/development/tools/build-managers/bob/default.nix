@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "bob";
@@ -17,11 +17,20 @@ buildGoModule rec {
 
   excludedPackages = [ "example/server-db" "test/e2e" "tui-example" ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd bob \
+      --bash <($out/bin/bob completion) \
+      --zsh <($out/bin/bob completion -z)
+  '';
+
   # tests require network access
   doCheck = false;
 
   meta = with lib; {
     description = "A build system for microservices";
+    mainProgram = "bob";
     homepage = "https://bob.build";
     license = licenses.asl20;
     maintainers = with maintainers; [ zuzuleinen ];

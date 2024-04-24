@@ -4,6 +4,7 @@
 buildPythonPackage rec {
   pname = "webdavclient3";
   version = "3.14.6";
+  format = "setuptools";
 
   disabled = isPy27;
 
@@ -23,6 +24,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Easy to use WebDAV Client for Python 3.x";
+    mainProgram = "wdc";
     homepage = "https://github.com/ezhov-evgeny/webdav-client-python-3";
     license = licenses.mit;
     maintainers = with maintainers; [ dmrauh ];

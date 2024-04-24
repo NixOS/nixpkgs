@@ -1,46 +1,45 @@
-{ stdenv
+{ buildDunePackage
 , lib
 , fetchFromGitHub
+, fetchpatch
 , which
 , ocsigen_server
-, ocaml
 , lwt_react
-, opaline
-, ocamlbuild
 , ppx_deriving
-, findlib
+, ppx_optcomp
 , js_of_ocaml-ocamlbuild
 , js_of_ocaml-ppx
 , js_of_ocaml-ppx_deriving_json
 , js_of_ocaml-lwt
 , js_of_ocaml-tyxml
 , lwt_ppx
-, ocamlnet
 , ocsipersist
 }:
 
-stdenv.mkDerivation rec {
+buildDunePackage rec {
   pname = "eliom";
-  version = "9.4.0";
+  version = "10.3.1";
 
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "eliom";
     rev = version;
-    sha256 = "sha256:1yn8mqxv9yz51x81j8wv1jn7l7crm8azp1m2g4zn5nz2s4nmfv6q";
+    hash = "sha256-REOyxwnQqWOKywVYwN/WP22cNKZv5Nv0OpFVbNBPJN8=";
+  };
+
+  # Compatibility with tyxml 4.6.x
+  patches = fetchpatch {
+    url = "https://github.com/ocsigen/eliom/commit/9a6adcce3959a37b971890999331335d07f4f732.patch";
+    hash = "sha256-rgsqohSAHHljvag3c+HNGEgW9qwmqPq8qfTpX6vVKtg=";
   };
 
   nativeBuildInputs = [
-    ocaml
     which
-    findlib
-    opaline
-    ocamlbuild
   ];
   buildInputs = [
     js_of_ocaml-ocamlbuild
     js_of_ocaml-ppx_deriving_json
-    ocamlnet
+    ppx_optcomp
   ];
 
   propagatedBuildInputs = [
@@ -55,12 +54,6 @@ stdenv.mkDerivation rec {
   ];
 
   strictDeps = true;
-
-  installPhase = ''
-    runHook preInstall
-    opaline -prefix $out -libdir $OCAMLFIND_DESTDIR
-    runHook postInstall
-  '';
 
   setupHook = [ ./setup-hook.sh ];
 

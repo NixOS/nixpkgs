@@ -4,7 +4,6 @@
 , hatchling
 , opentelemetry-api
 , opentelemetry-proto
-, opentelemetry-sdk
 , opentelemetry-test-utils
 , pytestCheckHook
 }:
@@ -12,18 +11,17 @@
 buildPythonPackage {
   inherit (opentelemetry-api) version src;
   pname = "opentelemetry-exporter-otlp-proto-common";
-  disabled = pythonOlder "3.7";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   sourceRoot = "${opentelemetry-api.src.name}/exporter/opentelemetry-exporter-otlp-proto-common";
 
-  format = "pyproject";
-
-  nativeBuildInputs = [
+  build-system = [
     hatchling
   ];
 
-  propagatedBuildInputs = [
-    opentelemetry-sdk
+  dependencies = [
     opentelemetry-proto
   ];
 

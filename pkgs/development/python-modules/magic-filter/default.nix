@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "magic-filter";
-  version = "1.0.10";
+  version = "1.0.12";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -16,9 +16,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aiogram";
     repo = "magic-filter";
-    rev = "v${version}";
-    hash = "sha256-mHqq/ci8uMACNutwmxKX1nrl3nTSnSyU2x1VxzWxqzM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-MSYIZ/bzngRu6mG3EGblUotSCA+6bi+l3EymFA8NRZA=";
   };
+
+  postPatch = ''
+    substituteInPlace magic_filter/__init__.py \
+      --replace '"1"' '"${version}"'
+  '';
 
   nativeBuildInputs = [
     hatchling

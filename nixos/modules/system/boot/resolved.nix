@@ -15,7 +15,7 @@ in
     services.resolved.enable = mkOption {
       default = false;
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable the systemd DNS resolver daemon, `systemd-resolved`.
 
         Search for `services.resolved` to see all options.
@@ -23,12 +23,13 @@ in
     };
 
     services.resolved.fallbackDns = mkOption {
-      default = [ ];
+      default = null;
       example = [ "8.8.8.8" "2001:4860:4860::8844" ];
-      type = types.listOf types.str;
-      description = lib.mdDoc ''
+      type = types.nullOr (types.listOf types.str);
+      description = ''
         A list of IPv4 and IPv6 addresses to use as the fallback DNS servers.
-        If this option is empty, a compiled-in list of DNS servers is used instead.
+        If this option is null, a compiled-in list of DNS servers is used instead.
+        Setting this option to an empty list will override the built-in list to an empty list, disabling fallback.
       '';
     };
 
@@ -37,7 +38,7 @@ in
       defaultText = literalExpression "config.networking.search";
       example = [ "example.com" ];
       type = types.listOf types.str;
-      description = lib.mdDoc ''
+      description = ''
         A list of domains. These domains are used as search suffixes
         when resolving single-label host names (domain names which
         contain no dot), in order to qualify them into fully-qualified
@@ -54,7 +55,7 @@ in
       default = "true";
       example = "false";
       type = types.enum [ "true" "resolve" "false" ];
-      description = lib.mdDoc ''
+      description = ''
         Controls Link-Local Multicast Name Resolution support
         (RFC 4795) on the local host.
 
@@ -66,10 +67,10 @@ in
     };
 
     services.resolved.dnssec = mkOption {
-      default = "allow-downgrade";
+      default = "false";
       example = "true";
       type = types.enum [ "true" "allow-downgrade" "false" ];
-      description = lib.mdDoc ''
+      description = ''
         If set to
         - `"true"`:
             all DNS lookups are DNSSEC-validated locally (excluding
@@ -85,13 +86,42 @@ in
             synthesizing a DNS response that suggests DNSSEC was not
             supported.
         - `"false"`: DNS lookups are not DNSSEC validated.
+
+        At the time of September 2023, systemd upstream advise
+        to disable DNSSEC by default as the current code
+        is not robust enough to deal with "in the wild" non-compliant
+        servers, which will usually give you a broken bad experience
+        in addition of insecure.
+      '';
+    };
+
+    services.resolved.dnsovertls = mkOption {
+      default = "false";
+      example = "true";
+      type = types.enum [ "true" "opportunistic" "false" ];
+      description = ''
+        If set to
+        - `"true"`:
+            all DNS lookups will be encrypted. This requires
+            that the DNS server supports DNS-over-TLS and
+            has a valid certificate. If the hostname was specified
+            via the `address#hostname` format in {option}`services.resolved.domains`
+            then the specified hostname is used to validate its certificate.
+        - `"opportunistic"`:
+            all DNS lookups will attempt to be encrypted, but will fallback
+            to unecrypted requests if the server does not support DNS-over-TLS.
+            Note that this mode does allow for a malicious party to conduct a
+            downgrade attack by immitating the DNS server and pretending to not
+            support encryption.
+        - `"false"`:
+            all DNS lookups are done unencrypted.
       '';
     };
 
     services.resolved.extraConfig = mkOption {
       default = "";
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Extra config to append to resolved.conf.
       '';
     };
@@ -128,12 +158,13 @@ in
         [Resolve]
         ${optionalString (config.networking.nameservers != [])
           "DNS=${concatStringsSep " " config.networking.nameservers}"}
-        ${optionalString (cfg.fallbackDns != [])
+        ${optionalString (cfg.fallbackDns != null)
           "FallbackDNS=${concatStringsSep " " cfg.fallbackDns}"}
         ${optionalString (cfg.domains != [])
           "Domains=${concatStringsSep " " cfg.domains}"}
         LLMNR=${cfg.llmnr}
         DNSSEC=${cfg.dnssec}
+        DNSOverTLS=${cfg.dnsovertls}
         ${config.services.resolved.extraConfig}
       '';
 

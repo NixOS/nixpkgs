@@ -9,14 +9,14 @@
 , pydantic
 , pyhamcrest
 , pytestCheckHook
-, python-jsonrpc-server
+, python-lsp-jsonrpc
 , pythonOlder
-, pythonRelaxDepsHook
+, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "jedi-language-server";
-  version = "0.40.0";
+  version = "0.41.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -25,16 +25,11 @@ buildPythonPackage rec {
     owner = "pappasam";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-+3VgONZzlobgs4wujCaGTTYpIgYrWgWwYgKQqirS7t8=";
+    hash = "sha256-RDLwL9AZ3G8CzVwDtWqFFZNH/ulpHeFBhglbWNv/ZIk=";
   };
-
-  pythonRelaxDeps = [
-    "pygls"
-  ];
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -48,12 +43,18 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pyhamcrest
-    python-jsonrpc-server
+    python-lsp-jsonrpc
   ];
 
   preCheck = ''
     HOME="$(mktemp -d)"
   '';
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # https://github.com/pappasam/jedi-language-server/issues/313
+    "test_publish_diagnostics_on_change"
+    "test_publish_diagnostics_on_save"
+  ];
 
   pythonImportsCheck = [
     "jedi_language_server"
@@ -61,6 +62,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Language Server for the latest version(s) of Jedi";
+    mainProgram = "jedi-language-server";
     homepage = "https://github.com/pappasam/jedi-language-server";
     changelog = "https://github.com/pappasam/jedi-language-server/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

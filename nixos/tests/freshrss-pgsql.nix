@@ -22,9 +22,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
       ensureUsers = [
         {
           name = "freshrss";
-          ensurePermissions = {
-            "DATABASE freshrss" = "ALL PRIVILEGES";
-          };
+          ensureDBOwnership = true;
         }
       ];
       initialScript = pkgs.writeText "postgresql-password" ''

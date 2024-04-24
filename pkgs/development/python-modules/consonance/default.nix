@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , dissononce
 , python-axolotl-curve25519
 , transitions
@@ -22,6 +23,15 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-BhgxLxjKZ4dSL7DqkaoS+wBPCd1SYZomRKrtDLdGmYQ=";
   };
+
+  patches = [
+    # https://github.com/tgalal/consonance/pull/9
+    (fetchpatch {
+      name = "fix-type-error.patch";
+      url = "https://github.com/tgalal/consonance/pull/9/commits/92fb78af98a18f0533ec8a286136968174fb0baf.patch";
+      hash = "sha256-wVUGxZ4W2zPyrcQPQTc85LcRUtsLbTBVzS10NEolpQY=";
+    })
+  ];
 
   propagatedBuildInputs = [
     dissononce

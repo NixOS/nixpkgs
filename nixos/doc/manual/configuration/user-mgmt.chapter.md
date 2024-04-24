@@ -6,13 +6,15 @@ management. In the declarative style, users are specified in
 account named `alice` shall exist:
 
 ```nix
-users.users.alice = {
-  isNormalUser = true;
-  home = "/home/alice";
-  description = "Alice Foobar";
-  extraGroups = [ "wheel" "networkmanager" ];
-  openssh.authorizedKeys.keys = [ "ssh-dss AAAAB3Nza... alice@foobar" ];
-};
+{
+  users.users.alice = {
+    isNormalUser = true;
+    home = "/home/alice";
+    description = "Alice Foobar";
+    extraGroups = [ "wheel" "networkmanager" ];
+    openssh.authorizedKeys.keys = [ "ssh-dss AAAAB3Nza... alice@foobar" ];
+  };
+}
 ```
 
 Note that `alice` is a member of the `wheel` and `networkmanager`
@@ -38,7 +40,9 @@ A user ID (uid) is assigned automatically. You can also specify a uid
 manually by adding
 
 ```nix
-uid = 1000;
+{
+  uid = 1000;
+}
 ```
 
 to the user specification.
@@ -47,7 +51,9 @@ Groups can be specified similarly. The following states that a group
 named `students` shall exist:
 
 ```nix
-users.groups.students.gid = 1000;
+{
+  users.groups.students.gid = 1000;
+}
 ```
 
 As with users, the group ID (gid) is optional and will be assigned
@@ -89,3 +95,20 @@ A user can be deleted using `userdel`:
 The flag `-r` deletes the user's home directory. Accounts can be
 modified using `usermod`. Unix groups can be managed using `groupadd`,
 `groupmod` and `groupdel`.
+
+## Create users and groups with `systemd-sysusers` {#sec-systemd-sysusers}
+
+::: {.note}
+This is experimental.
+:::
+
+Instead of using a custom perl script to create users and groups, you can use
+systemd-sysusers:
+
+```nix
+{
+  systemd.sysusers.enable = true;
+}
+```
+
+The primary benefit of this is to remove a dependency on perl.

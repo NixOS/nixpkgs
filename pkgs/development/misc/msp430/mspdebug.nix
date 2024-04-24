@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A free programmer, debugger, and gdb proxy for MSP430 MCUs";
+    mainProgram = "mspdebug";
     homepage = "https://dlbeer.co.nz/mspdebug/";
     license = licenses.gpl2;
     platforms = platforms.all;

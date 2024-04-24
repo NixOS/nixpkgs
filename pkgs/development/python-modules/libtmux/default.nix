@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , buildPythonPackage
 , poetry-core
 , pytest-rerunfailures
@@ -13,27 +12,18 @@
 
 buildPythonPackage rec {
   pname = "libtmux";
-  version = "0.22.1";
-  format = "pyproject";
+  version = "0.36.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tmux-python";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-tz7Pynm/xHx2X3QjXkvFlX6sVlsVKqrsS1CVmqlqfj0=";
+    hash = "sha256-oJ2IGaPFMKA/amUEPZi1UO9vZtjPNQg3SIFjQWzUeSE=";
   };
 
-  patches = [
-    # https://github.com/tmux-python/libtmux/pull/493
-    (fetchpatch {
-      name = "remove-setuptools.patch";
-      url = "https://github.com/tmux-python/libtmux/commit/aa3a1e2015ade73129191ad04146ce52765d478c.patch";
-      hash = "sha256-p3KMktd6eG9/lRK+DdBvDtSwhI+sV2RQfBAuElMk8tQ=";
-    })
-  ];
-
   postPatch = ''
-    sed -i '/addopts/d' setup.cfg
+    sed -i '/addopts/d' pyproject.toml
   '';
 
   nativeBuildInputs = [
@@ -74,6 +64,6 @@ buildPythonPackage rec {
     homepage = "https://libtmux.git-pull.com/";
     changelog = "https://github.com/tmux-python/libtmux/raw/v${version}/CHANGES";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ otavio ];
   };
 }

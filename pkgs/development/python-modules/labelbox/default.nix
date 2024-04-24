@@ -1,5 +1,4 @@
 { lib
-, backoff
 , buildPythonPackage
 , fetchFromGitHub
 , geojson
@@ -7,22 +6,20 @@
 , imagesize
 , nbconvert
 , nbformat
-, ndjson
 , numpy
-, opencv
-  # , opencv-python
+, opencv4
 , packaging
 , pillow
 , pydantic
-  # , pygeotile
 , pyproj
-, pytest-cases
 , pytestCheckHook
+, python-dateutil
 , pythonOlder
 , pythonRelaxDepsHook
-, rasterio
 , requests
+, setuptools
 , shapely
+, strenum
 , tqdm
 , typeguard
 , typing-extensions
@@ -30,21 +27,25 @@
 
 buildPythonPackage rec {
   pname = "labelbox";
-  version = "3.38.0";
-  format = "setuptools";
+  version = "3.67.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Labelbox";
     repo = "labelbox-python";
     rev = "refs/tags/v.${version}";
-    hash = "sha256-AyQPI19As49GML3kVXtHtRNOKthrpkQ7MCmww+F6owc=";
+    hash = "sha256-JQTjmYxPBS8JC4HQTtbQ7hb80LPLYE4OEj1lFA6cZ1Y=";
   };
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace "--reruns 5 --reruns-delay 10" ""
+      --replace-fail "--reruns 2 --reruns-delay 10 --durations=20 -n 10" ""
+
+    # disable pytest_plugins which requires `pygeotile`
+    substituteInPlace tests/conftest.py \
+      --replace-fail "pytest_plugins" "_pytest_plugins"
   '';
 
   nativeBuildInputs = [
@@ -52,25 +53,29 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
-    "backoff"
+    "python-dateutil"
   ];
 
-  propagatedBuildInputs = [
-    backoff
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     google-api-core
-    ndjson
     pydantic
+    python-dateutil
     requests
+    strenum
     tqdm
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     data = [
       shapely
       geojson
       numpy
       pillow
-      # opencv-python
+      opencv4
       typeguard
       imagesize
       pyproj
@@ -83,20 +88,14 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     nbconvert
     nbformat
-    pytest-cases
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.data;
+  ] ++ optional-dependencies.data;
 
   disabledTestPaths = [
     # Requires network access
     "tests/integration"
     # Missing requirements
     "tests/data"
-  ];
-
-  pytestFlagsArray = [
-    # see tox.ini
-    "-k 'not notebooks'"
   ];
 
   pythonImportsCheck = [

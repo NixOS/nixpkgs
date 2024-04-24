@@ -10,10 +10,11 @@ buildGoModule rec {
     sha256 = "sha256-/rWX77n9wqWxkHG7gVOinCJ6ahuEfbAcGijC1oAxrno=";
   };
 
-  vendorSha256 = "sha256-HY9ejLfT6gj3vUMSzbNZ4QlpB+liigTtNDBNWCy8X38=";
+  vendorHash = "sha256-HY9ejLfT6gj3vUMSzbNZ4QlpB+liigTtNDBNWCy8X38=";
 
   meta = with lib; {
     description = "Translate bash scripts to fish";
+    mainProgram = "babelfish";
     homepage = "https://github.com/bouk/babelfish";
     license = licenses.mit;
     maintainers = with maintainers; [ bouk kevingriffin ];

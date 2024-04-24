@@ -12,7 +12,6 @@
 , gprof2dot
 , html5lib
 , jinja2
-, memory_profiler
 , psutil
 , pytestCheckHook
 }:
@@ -80,6 +79,7 @@ let
 
     meta = with lib; {
       description = "Domain-specific languages and parsers in Python";
+      mainProgram = "textx";
       homepage = "https://github.com/textx/textx/";
       license = licenses.mit;
       maintainers = with maintainers; [ yuu ];

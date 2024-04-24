@@ -2,8 +2,10 @@
 
 let
 
-  inInitrd = lib.any (fs: fs == "ext2" || fs == "ext3" || fs == "ext4") config.boot.initrd.supportedFilesystems;
-  inSystem = lib.any (fs: fs == "ext2" || fs == "ext3" || fs == "ext4") config.boot.supportedFilesystems;
+  hasExtX = s: s.ext2 or s.ext3 or s.ext4 or false;
+
+  inInitrd = hasExtX config.boot.initrd.supportedFilesystems;
+  inSystem = hasExtX config.boot.supportedFilesystems;
 
 in
 
@@ -24,6 +26,8 @@ in
         ln -sv e2fsck $out/bin/fsck.ext3
         ln -sv e2fsck $out/bin/fsck.ext4
       '';
+
+    boot.initrd.systemd.initrdBin = lib.mkIf inInitrd [ pkgs.e2fsprogs ];
 
   };
 }

@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "contexter";
   version = "0.1.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

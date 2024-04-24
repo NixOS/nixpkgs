@@ -14,15 +14,15 @@
 
 buildPythonPackage rec {
   pname = "gst-python";
-  version = "1.22.5";
+  version = "1.22.9";
 
   format = "other";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "${meta.homepage}/src/gst-python/${pname}-${version}.tar.xz";
-    hash = "sha256-vwUjJBXPYBgUKuUd07iXu3NDJoe1zheGv0btximM5bA=";
+    url = "https://gstreamer.freedesktop.org/src/gst-python/${pname}-${version}.tar.xz";
+    hash = "sha256-P51cb/79omhwN0S1kqazmDqmcjJzsSIOy8tiwqWAAAk=";
   };
 
   # Python 2.x is not supported.
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   mesonFlags = [
     "-Dpygi-overrides-dir=${placeholder "out"}/${python.sitePackages}/gi/overrides"
     # Exec format error during configure
-    "-Dpython=${python.pythonForBuild.interpreter}"
+    "-Dpython=${python.pythonOnBuildForHost.interpreter}"
   ];
 
   doCheck = true;

@@ -8,20 +8,21 @@
 , R
 , rPackages
 , six
+, packaging
 }:
 
 buildPythonPackage rec {
   pname = "rchitect";
-  version = "0.4.1";
+  version = "0.4.6";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "randy3k";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-fXL2UX0n9kKAVwMUP0z8V3UtJAy4xbAjnPIggUHllN0=";
+    hash = "sha256-IVyYzf433m03RRfL5SmUOdaXFy0NHf/QuAdtUeUjIz0=";
   };
 
   postPatch = ''
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cffi
     six
+    packaging
   ] ++ (with rPackages; [
     reticulate
   ]);

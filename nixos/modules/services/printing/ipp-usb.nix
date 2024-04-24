@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }: {
   options = {
     services.ipp-usb = {
-      enable = lib.mkEnableOption (lib.mdDoc "ipp-usb, a daemon to turn an USB printer/scanner supporting IPP everywhere (aka AirPrint, WSD, AirScan) into a locally accessible network printer/scanner");
+      enable = lib.mkEnableOption "ipp-usb, a daemon to turn an USB printer/scanner supporting IPP everywhere (aka AirPrint, WSD, AirScan) into a locally accessible network printer/scanner";
     };
   };
   config = lib.mkIf config.services.ipp-usb.enable {

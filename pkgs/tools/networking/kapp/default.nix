@@ -2,18 +2,20 @@
 
 buildGoModule rec {
   pname = "kapp";
-  version = "0.58.0";
+  version = "0.61.0";
 
   src = fetchFromGitHub {
-    owner = "vmware-tanzu";
-    repo = "carvel-kapp";
+    owner = "carvel-dev";
+    repo = "kapp";
     rev = "v${version}";
-    sha256 = "sha256-E5QiR4hcO2Ii5qXAlMrw9Yxy8IYqjnonSGiUUyzhMVc=";
+    sha256 = "sha256-/HINk9an1wfiKo2xj4x2Ienc2/acZZHjQRIjcCtUQjI=";
   };
 
   vendorHash = null;
 
   subPackages = [ "cmd/kapp" ];
+
+  CGO_ENABLED = 0;
 
   ldflags = [
     "-X github.com/vmware-tanzu/carvel-kapp/pkg/kapp/version.Version=${version}"
@@ -34,8 +36,9 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "CLI tool that encourages Kubernetes users to manage bulk resources with an application abstraction for grouping";
-    homepage = "https://get-kapp.io";
+    homepage = "https://carvel.dev/kapp/";
     license = licenses.asl20;
     maintainers = with maintainers; [ brodes ];
+    mainProgram = "kapp";
   };
 }

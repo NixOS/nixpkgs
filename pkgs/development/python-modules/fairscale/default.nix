@@ -64,6 +64,7 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "PyTorch extensions for high performance and large scale training";
+    mainProgram = "wgit";
     homepage = "https://github.com/facebookresearch/fairscale";
     changelog = "https://github.com/facebookresearch/fairscale/releases/tag/v${version}";
     license = with licenses; [ mit asl20 bsd3 ];

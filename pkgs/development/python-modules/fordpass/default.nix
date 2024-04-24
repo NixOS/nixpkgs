@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "fordpass";
   version = "0.0.4";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -28,6 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module for the FordPass API";
+    mainProgram = "demo.py";
     homepage = "https://github.com/clarkd/fordpass-python";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

@@ -13,13 +13,13 @@
 
 buildDunePackage rec {
   pname = "ocaml-protoc-plugin";
-  version = "4.3.1";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "issuu";
     repo = "ocaml-protoc-plugin";
     rev = version;
-    hash = "sha256-KFd43Ukz5gMeM3ik2VlfaIPwcZe9yaxk9VcQIrauUGU=";
+    hash = "sha256-ZHeOi3y2X11MmkRuthmYFSjPLoGlGTO1pnRfk/XmgPU=";
   };
 
   nativeBuildInputs = [

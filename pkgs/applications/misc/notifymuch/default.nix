@@ -43,6 +43,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Display desktop notifications for unread mail in a notmuch database";
+    mainProgram = "notifymuch";
     homepage = "https://github.com/kspi/notifymuch";
     maintainers = with maintainers; [ arjan-s ];
     license = licenses.gpl3;

@@ -8,6 +8,7 @@
 , flex
 , curl
 , json_c
+, libxcrypt
 }:
 
 stdenv.mkDerivation rec {
@@ -23,13 +24,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ flex ];
 
-  buildInputs = [ postgresql openssl zlib readline curl json_c ];
+  buildInputs = postgresql.buildInputs ++ [ postgresql curl json_c ];
 
   installPhase = ''
     mkdir -p $out/{bin,lib,share/postgresql/extension}
 
     cp repmgr{,d} $out/bin
-    cp *.so       $out/lib
+    cp *${postgresql.dlSuffix} $out/lib
     cp *.sql      $out/share/postgresql/extension
     cp *.control  $out/share/postgresql/extension
   '';

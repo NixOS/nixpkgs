@@ -2,16 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "easyrsa";
-  version = "3.1.5";
+  version = "3.1.7";
 
   src = fetchFromGitHub {
     owner = "OpenVPN";
     repo = "easy-rsa";
     rev = "v${version}";
-    sha256 = "sha256-GOgwGCsutg4WsBjs1f9jiTS2fvmVMyWCoTw+J/7iZG0=";
+    hash = "sha256-zdVcT04nj7eE1a6M7WHeWpwG/TVTwyK+WgD70XwPXfY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
+  nativeInstallCheckInputs = [ openssl.bin ];
 
   installPhase = ''
     mkdir -p $out/share/easy-rsa
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
 
     # Wrap it with the correct OpenSSL binary.
     wrapProgram $out/bin/easyrsa \
-      --set EASYRSA_OPENSSL ${openssl.bin}/bin/openssl
+      --set-default EASYRSA_OPENSSL ${openssl.bin}/bin/openssl
 
     # Helper utility
     cat > $out/bin/easyrsa-init <<EOF
@@ -34,6 +35,21 @@ stdenv.mkDerivation rec {
     cp -r $out/share/easy-rsa/* .
     EOF
     chmod +x $out/bin/easyrsa-init
+  '';
+
+  doInstallCheck = true;
+  postInstallCheck = ''
+    set -euo pipefail
+    export EASYRSA_BATCH=1
+    export EASYRSA_PASSIN=pass:nixpkgs
+    export EASYRSA_PASSOUT="$EASYRSA_PASSIN"
+    export EASYRSA_REQ_CN='nixpkgs test CA'
+    export EASYRSA_KEY_SIZE=3072
+    export EASYRSA_ALGO=rsa
+    export EASYRSA_DIGEST=sha512
+    $out/bin/easyrsa init-pki
+    $out/bin/easyrsa build-ca
+    openssl x509 -in pki/ca.crt -noout -subject | tee /dev/stderr | grep -zq "$EASYRSA_REQ_CN"
   '';
 
   meta = with lib; {

@@ -18,9 +18,8 @@
 , desktop-file-utils
 , wrapGAppsHook
 , gobject-introspection
-, libsoup
-, glib-networking
-, webkitgtk
+# withWebkit enables the "webkit" feature, also known as Google Fonts
+, withWebkit ? true, glib-networking, libsoup, webkitgtk
 }:
 
 stdenv.mkDerivation rec {
@@ -29,9 +28,9 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "FontManager";
-    repo = "master";
+    repo = "font-manager";
     rev = version;
-    sha256 = "sha256-M13Q9d2cKhc0tudkvw0zgqPAFTlmXwK+LltXeuDPWxo=";
+    hash = "sha256-M13Q9d2cKhc0tudkvw0zgqPAFTlmXwK+LltXeuDPWxo=";
   };
 
   nativeBuildInputs = [
@@ -56,13 +55,15 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas # for font settings
     gtk3
     gnome.adwaita-icon-theme
-    libsoup
+  ] ++ lib.optionals withWebkit [
     glib-networking # for SSL so that Google Fonts can load
+    libsoup
     webkitgtk
   ];
 
   mesonFlags = [
     "-Dreproducible=true" # Do not hardcode build directory…
+    (lib.mesonBool "webkit" withWebkit)
   ];
 
   postPatch = ''
@@ -73,6 +74,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://fontmanager.github.io/";
     description = "Simple font management for GTK desktop environments";
+    mainProgram = "font-manager";
     longDescription = ''
       Font Manager is intended to provide a way for average users to
       easily manage desktop fonts, without having to resort to command

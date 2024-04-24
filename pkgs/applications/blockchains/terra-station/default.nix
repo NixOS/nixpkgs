@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchurl
-, gcc-unwrapped
 , dpkg
 , util-linux
 , bash
@@ -57,8 +56,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     makeWrapper ${electron}/bin/electron $out/bin/${pname} \
-      --add-flags $out/share/${pname}/resources/app.asar \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ gcc-unwrapped.lib ]}"
+      --add-flags $out/share/${pname}/resources/app.aasar
   '';
 
   meta = with lib; {
@@ -67,5 +65,6 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     maintainers = [ maintainers.peterwilli ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "terra-station";
   };
 }

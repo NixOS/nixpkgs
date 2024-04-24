@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "bme280spi";
   version = "0.2.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
@@ -25,6 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for BME280 sensor through spidev";
+    mainProgram = "bme280spi";
     homepage = "https://github.com/Kuzj/bme280spi";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

@@ -16,23 +16,17 @@
 
 buildPythonPackage rec {
   pname = "pyairvisual";
-  version = "2023.08.1";
-  format = "pyproject";
+  version = "2023.12.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
+    repo = "pyairvisual";
     rev = "refs/tags/${version}";
-    hash = "sha256-+yqN3q+uA/v01uCguzUSoeCJK9lRmiiYn8d272+Dd2M=";
+    hash = "sha256-uN31LeHYmg4V6Ln3EQp765nOsN5v56TxjYSS/g6TUCY=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace \
-      'certifi = ">=2023.07.22"' \
-      'certifi = "*"'
-  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -45,6 +39,9 @@ buildPythonPackage rec {
     pygments
     pysmb
   ];
+
+  # this lets tests bind to localhost in sandbox mode on macOS
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     aresponses

@@ -1,13 +1,14 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytestCheckHook
+, pytest7CheckHook
 , six
 }:
 
 buildPythonPackage rec {
   pname = "nocasedict";
   version = "2.0.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -19,7 +20,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
   pythonImportsCheck = [

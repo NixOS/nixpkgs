@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     platforms = platforms.unix;
     maintainers = with maintainers; [ djanatyn ];
+    mainProgram = "zalgo";
   };
 }

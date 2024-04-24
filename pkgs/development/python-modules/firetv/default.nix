@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "firetv";
   version = "1.0.9";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -31,6 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Communicate with an Amazon Fire TV device via ADB over a network";
+    mainProgram = "firetv-server";
     homepage = "https://github.com/happyleavesaoc/python-firetv/";
     license = licenses.mit;
     maintainers = [ maintainers.makefu ];

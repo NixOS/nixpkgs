@@ -62,5 +62,6 @@ perlPackages.buildPerlPackage rec {
     license = with licenses; [ artistic1 gpl1Plus ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ mnacamura ];
+    mainProgram = "feedgnuplot";
   };
 }

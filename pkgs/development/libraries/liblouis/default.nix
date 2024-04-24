@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liblouis";
-  version = "3.26.0";
+  version = "3.29.0";
 
   outputs = [ "out" "dev" "info" "doc" ]
     # configure: WARNING: cannot generate manual pages while cross compiling
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "liblouis";
     repo = "liblouis";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Kko9qBWdNiZ61Wbb7lUYoSNU1hhRUexPcU3pADv0UHo=";
+    hash = "sha256-TaMPl53FlUSZIsjhoTYcv3Y+j86fDHuBTjiyr/uP1tM=";
   };
 
   strictDeps = true;

@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "future-fstrings";
   version = "1.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;
@@ -16,6 +17,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/asottile/future-fstrings";
     description = "A backport of fstrings to python<3.6";
+    mainProgram = "future-fstrings-show";
     license = licenses.mit;
     maintainers = with maintainers; [ nyanloutre ];
     broken = pythonOlder "3.6"; # dependency tokenize-rt not packaged

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "laspy";
-  version = "2.5.1";
+  version = "2.5.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uqPJxswVVjbxYRSREfnPwkPb0U9synKclLNWsxxmjy4=";
+    hash = "sha256-StaYkUNY6loJbaUuabzszTINnd+zZ0gKXCteCG24Erc=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Interface for reading/modifying/creating .LAS LIDAR files";
+    mainProgram = "laspy";
     homepage = "https://github.com/laspy/laspy";
     changelog = "https://github.com/laspy/laspy/blob/${version}/CHANGELOG.md";
     license = licenses.bsd2;

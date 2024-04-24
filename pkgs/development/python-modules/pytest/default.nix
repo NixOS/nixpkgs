@@ -3,30 +3,38 @@
 , callPackage
 , pythonOlder
 , fetchPypi
-, isPyPy
 , writeText
 
-# build
+# build-system
+, setuptools
 , setuptools-scm
 
-# propagates
+# dependencies
 , attrs
 , exceptiongroup
 , iniconfig
 , packaging
 , pluggy
-, py
 , tomli
+
+# optional-dependencies
+, argcomplete
+, hypothesis
+, mock
+, nose
+, pygments
+, requests
+, xmlschema
 }:
 
 buildPythonPackage rec {
   pname = "pytest";
-  version = "7.4.0";
-  format = "pyproject";
+  version = "8.1.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tL+MRb1Zk07YQAGtUeEbTuQNQKEinSx5+cWSsKP2vYo=";
+    hash = "sha256-rJeBQadZSJSIF9NgKXt6rg/LnW/2vJ7G1RS4XVplwEQ=";
   };
 
   outputs = [
@@ -35,19 +43,32 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 
   propagatedBuildInputs = [
-    attrs
     iniconfig
     packaging
     pluggy
-    py
-    tomli
   ] ++ lib.optionals (pythonOlder "3.11") [
     exceptiongroup
+    tomli
   ];
+
+  passthru.optional-dependencies = {
+    testing = [
+      argcomplete
+      attrs
+      hypothesis
+      mock
+      nose
+      pygments
+      requests
+      setuptools
+      xmlschema
+    ];
+  };
 
   postInstall = ''
     mkdir $testout

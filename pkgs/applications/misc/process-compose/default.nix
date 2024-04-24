@@ -8,13 +8,13 @@ let config-module = "github.com/f1bonacc1/process-compose/src/config";
 in
 buildGoModule rec {
   pname = "process-compose";
-  version = "0.60.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "F1bonacc1";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-BsDel6F09HP5Oz2p0DDXKuS7Id5XPhZZxEzwu76vVwk=";
+    hash = "sha256-juFcVtHhqT6tw9YaKCDTUvX6NqqxEjqVK3Zom673IkQ=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -43,7 +43,7 @@ buildGoModule rec {
     installShellFiles
   ];
 
-  vendorHash = "sha256-Z5vCxzdpd2OmlZ/woHhlLN2QMgqa9mm873QGuqDToiM=";
+  vendorHash = "sha256-9G8GPTJRuPahNcEhAddZsUKc1fexp6IrCZlCGKW0T64=";
 
   doCheck = false;
 
@@ -62,5 +62,6 @@ buildGoModule rec {
     changelog = "https://github.com/F1bonacc1/process-compose/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ thenonameguy ];
+    mainProgram = "process-compose";
   };
 }

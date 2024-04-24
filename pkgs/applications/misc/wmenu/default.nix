@@ -9,13 +9,14 @@
 , pango
 , wayland
 , wayland-protocols
+, wayland-scanner
 , libxkbcommon
 , scdoc
 }:
 
 stdenv.mkDerivation rec {
   pname = "wmenu";
-  version = "0.1.4";
+  version = "0.1.7";
 
   strictDeps = true;
 
@@ -23,10 +24,18 @@ stdenv.mkDerivation rec {
     owner = "~adnano";
     repo = "wmenu";
     rev = version;
-    hash = "sha256-aB23wi8kLBKAvQv2UPsfqVMCjakdsM6AzH8LgGv3HPs=";
+    hash = "sha256-9do7zL7yaZuqVjastySwjsByo5ja+KUP3590VjIyVnI=";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja ];
+  # Upstream patch needed to fix NULL deref
+  patches = [
+    (fetchpatch {
+      url = "https://git.sr.ht/~adnano/wmenu/commit/2856dddcac861ddf248143e66ba164d7aa05a0bb.patch";
+      hash = "sha256-P7SEjMssA8unNAlrgrTHm0uW5pefjpupPb4s/u2fTAM=";
+    })
+  ];
+
+  nativeBuildInputs = [ pkg-config meson ninja wayland-scanner ];
   buildInputs = [ cairo pango wayland libxkbcommon wayland-protocols scdoc ];
 
   meta = with lib; {
@@ -35,6 +44,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ eken ];
+    mainProgram = "wmenu";
   };
 }
 

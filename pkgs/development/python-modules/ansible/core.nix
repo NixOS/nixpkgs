@@ -4,6 +4,7 @@
 , pythonOlder
 , pythonRelaxDepsHook
 , installShellFiles
+, docutils
 , ansible
 , cryptography
 , importlib-resources
@@ -13,6 +14,7 @@
 , ncclient
 , packaging
 , paramiko
+, ansible-pylibssh
 , passlib
 , pexpect
 , psutil
@@ -27,11 +29,11 @@
 
 buildPythonPackage rec {
   pname = "ansible-core";
-  version = "2.15.2";
+  version = "2.16.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hCUbAB8vnAkUvu3/zxlSnnRaExCBWdH+J96eOmpjrFo=";
+    hash = "sha256-zdKbDsPyDDVlc1Wi9qnB0M8RMdqZzJpKNAGAGwqzbW0=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
@@ -40,10 +42,13 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace lib/ansible/executor/task_executor.py \
       --replace "[python," "["
+
+    patchShebangs --build packaging/cli-doc/build.py
   '';
 
   nativeBuildInputs = [
     installShellFiles
+    docutils
   ] ++ lib.optionals (pythonOlder "3.10") [
     pythonRelaxDepsHook
   ];
@@ -63,6 +68,7 @@ buildPythonPackage rec {
     lxml
     ncclient
     paramiko
+    ansible-pylibssh
     pexpect
     psutil
     pycrypto
@@ -80,7 +86,9 @@ buildPythonPackage rec {
   ];
 
   postInstall = ''
-    installManPage docs/man/man1/*.1
+    export HOME="$(mktemp -d)"
+    packaging/cli-doc/build.py man --output-dir=man
+    installManPage man/*
   '';
 
   # internal import errors, missing dependencies

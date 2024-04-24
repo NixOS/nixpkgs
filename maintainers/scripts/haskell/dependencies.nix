@@ -2,8 +2,10 @@
 let
   pkgs = import ../../.. {};
   inherit (pkgs) lib;
-  getDeps = _: pkg: {
-    deps = builtins.filter (x: x != null) (map (x: x.pname or null) (pkg.propagatedBuildInputs or []));
+  getDeps = _: pkg: let
+    pname = pkg.pname or null;
+  in {
+    deps = builtins.filter (x: x != null && x != pname) (map (x: x.pname or null) (pkg.propagatedBuildInputs or []));
     broken = (pkg.meta.hydraPlatforms or [null]) == [];
   };
 in

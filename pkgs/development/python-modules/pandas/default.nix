@@ -1,13 +1,18 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, pythonAtLeast
 , pythonOlder
 
 # build-system
 , cython
-, setuptools
+, meson-python
+, meson
+, oldest-supported-numpy
+, pkg-config
 , versioneer
+, wheel
 
 # propagates
 , numpy
@@ -19,7 +24,6 @@
 , beautifulsoup4
 , bottleneck
 , blosc2
-, brotlipy
 , fsspec
 , gcsfs
 , html5lib
@@ -35,7 +39,6 @@
 , pymysql
 , pyqt5
 , pyreadstat
-, python-snappy
 , qtpy
 , s3fs
 , scipy
@@ -59,24 +62,40 @@
 , runtimeShell
 }:
 
-buildPythonPackage rec {
+let pandas = buildPythonPackage rec {
   pname = "pandas";
-  version = "2.0.3";
-  format = "pyproject";
+  version = "2.2.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-wC83Kojg0X820wk6ZExzz8F4jodqfEvLQCCndRLiBDw=";
+  src = fetchFromGitHub {
+    owner = "pandas-dev";
+    repo = "pandas";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-eyVUIYG0KCAEJbh/qZiEjGpdXq7A+2Lab+5bp+7t4cw=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython==3.0.5" "Cython>=3.0.5" \
+      --replace-fail "meson-python==0.13.1" "meson-python>=0.13.1" \
+      --replace-fail "meson==1.2.1" "meson>=1.2.1"
+  '';
+
   nativeBuildInputs = [
-    setuptools
     cython
+    meson-python
+    meson
     numpy
+    pkg-config
     versioneer
-  ] ++ versioneer.optional-dependencies.toml;
+    wheel
+  ]
+  ++ versioneer.optional-dependencies.toml
+  ++ lib.optionals (pythonOlder "3.12") [
+    oldest-supported-numpy
+  ];
 
   enableParallelBuilding = true;
 
@@ -97,8 +116,6 @@ buildPythonPackage rec {
         qtpy
       ];
       compression = [
-        brotlipy
-        python-snappy
         zstandard
       ];
       computation = [
@@ -168,9 +185,9 @@ buildPythonPackage rec {
     all = lib.concatLists (lib.attrValues extras);
   };
 
-  # Doesn't work with -Werror,-Wunused-command-line-argument
-  # https://github.com/NixOS/nixpkgs/issues/39687
-  hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
+  doCheck = false; # various infinite recursions
+
+  passthru.tests.pytest = pandas.overridePythonAttrs (_: { doCheck = true; });
 
   nativeCheckInputs = [
     glibcLocales
@@ -178,10 +195,13 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-xdist
     pytestCheckHook
-  ] ++ lib.optionals (stdenv.isLinux) [
+  ]
+  ++ lib.flatten (lib.attrValues passthru.optional-dependencies)
+  ++ lib.optionals (stdenv.isLinux) [
     # for locale executable
     glibc
-  ] ++ lib.optionals (stdenv.isDarwin) [
+  ]
+  ++ lib.optionals (stdenv.isDarwin) [
     # for locale executable
     adv_cmds
   ];
@@ -193,10 +213,9 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     # https://github.com/pandas-dev/pandas/blob/main/test_fast.sh
-    "--skip-db"
-    "--skip-slow"
-    "--skip-network"
-    "-m" "'not single_cpu and not slow_arm'"
+    "-m" "'not single_cpu and not slow and not network and not db and not slow_arm'"
+    # https://github.com/pandas-dev/pandas/issues/54907
+    "--no-strict-data-files"
     "--numprocesses" "4"
   ];
 
@@ -206,6 +225,11 @@ buildPythonPackage rec {
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # tests/generic/test_finalize.py::test_binops[and_-args4-right] - AssertionError: assert {} == {'a': 1}
     "test_binops"
+    # These tests are unreliable on aarch64-darwin. See https://github.com/pandas-dev/pandas/issues/38921.
+    "test_rolling"
+  ] ++ lib.optional stdenv.is32bit [
+    # https://github.com/pandas-dev/pandas/issues/37398
+    "test_rolling_var_numerical_issues"
   ];
 
   # Tests have relative paths, and need to reference compiled C extensions
@@ -230,9 +254,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    # https://github.com/pandas-dev/pandas/issues/14866
-    # pandas devs are no longer testing i686 so safer to assume it's broken
-    broken = stdenv.isi686;
+    # pandas devs no longer test i686, it's commonly broken
+    # broken = stdenv.isi686;
     changelog = "https://pandas.pydata.org/docs/whatsnew/index.html";
     description = "Powerful data structures for data analysis, time series, and statistics";
     downloadPage = "https://github.com/pandas-dev/pandas";
@@ -245,4 +268,5 @@ buildPythonPackage rec {
     '';
     maintainers = with maintainers; [ raskin fridh knedlsepp ];
   };
-}
+};
+in pandas

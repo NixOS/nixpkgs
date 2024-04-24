@@ -73,6 +73,10 @@ perlPackages.buildPerlPackage rec {
 
   outputs = [ "out" ];
 
+  postPatch = ''
+    patchShebangs bin
+  '';
+
   fixupPhase = ''
     for sh in bash zsh; do
       substituteInPlace ./share/rex-tab-completion.$sh \

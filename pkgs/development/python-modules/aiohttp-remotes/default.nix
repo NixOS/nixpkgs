@@ -2,6 +2,7 @@
 , aiohttp
 , buildPythonPackage
 , fetchPypi
+, flit
 , pytest-aiohttp
 , pytestCheckHook
 , pythonOlder
@@ -11,7 +12,7 @@
 buildPythonPackage rec {
   pname = "aiohttp-remotes";
   version = "1.2.0";
-  format = "flit";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
@@ -20,6 +21,10 @@ buildPythonPackage rec {
     inherit version;
     sha256 = "f95c3a6be5e2de746a85ce9af49ec548da6db8378d7e81bb171ec77b13562a6c";
   };
+
+  nativeBuildInputs = [
+    flit
+  ];
 
   propagatedBuildInputs = [
     aiohttp

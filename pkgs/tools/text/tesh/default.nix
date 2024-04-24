@@ -1,7 +1,7 @@
-{ python3Packages, fetchFromGitHub }:
+{ python3Packages, fetchFromGitHub, fetchpatch }:
 
 let
-  version = "0.3.0";
+  version = "0.3.2";
 in python3Packages.buildPythonPackage rec {
   pname = "tesh";
   inherit version;
@@ -12,13 +12,8 @@ in python3Packages.buildPythonPackage rec {
     owner = "OceanSprint";
     repo = "tesh";
     rev = version;
-    sha256 = "sha256-/CSYz2YXbjKZszb1HMOCS+srVJ+TcFSeLeuz9VvtlI4=";
+    hash = "sha256-GIwg7Cv7tkLu81dmKT65c34eeVnRR5MIYfNwTE7j2Vs=";
   };
-
-  prePatch = ''
-      substituteInPlace pyproject.toml \
-      --replace "poetry.masonry" "poetry.core.masonry"
-  '';
 
   checkInputs = [ python3Packages.pytest ];
   nativeBuildInputs = [ python3Packages.poetry-core ];

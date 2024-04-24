@@ -80,6 +80,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Common OVF Tool";
+    mainProgram = "cot";
     longDescription = ''
       COT (the Common OVF Tool) is a tool for editing Open Virtualization Format (.ovf, .ova) virtual appliances,
       with a focus on virtualized network appliances such as the Cisco CSR 1000V and Cisco IOS XRv platforms.

@@ -2,59 +2,82 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , pythonOlder
 
 # Build dependencies
 , setuptools
 
 # Runtime dependencies
-, appnope
-, backcall
 , decorator
+, exceptiongroup
 , jedi
 , matplotlib-inline
 , pexpect
-, pickleshare
 , prompt-toolkit
 , pygments
 , stack-data
 , traitlets
+, typing-extensions
+
+# Optional dependencies
+, ipykernel
+, ipyparallel
+, ipywidgets
+, matplotlib
+, nbconvert
+, nbformat
+, notebook
+, qtconsole
 
 # Test dependencies
-, pytestCheckHook
+, pickleshare
+, pytest-asyncio
+, pytest7CheckHook
 , testpath
 }:
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "8.11.0";
-  format = "pyproject";
-  disabled = pythonOlder "3.8";
+  version = "8.23.0";
+  pyproject = true;
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "735cede4099dbc903ee540307b9171fbfef4aa75cfcacc5a273b2cda2f02be04";
+    hash = "sha256-dGjtr09t4+G5EuV/ZsJB5v08cJny7CE24jnhQugAJ00=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    backcall
+  dependencies = [
     decorator
     jedi
     matplotlib-inline
     pexpect
-    pickleshare
     prompt-toolkit
     pygments
     stack-data
     traitlets
-  ] ++ lib.optionals stdenv.isDarwin [
-    appnope
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    exceptiongroup
+  ] ++ lib.optionals (pythonOlder "3.12") [
+    typing-extensions
   ];
+
+  optional-dependencies = {
+    kernel = [ ipykernel ];
+    nbconvert = [ nbconvert ];
+    nbformat = [ nbformat ];
+    notebook = [
+      ipywidgets
+      notebook
+    ];
+    parallel = [ ipyparallel ];
+    qtconsole = [ qtconsole ];
+    matplotlib = [ matplotlib ];
+  };
 
   pythonImportsCheck = [
     "IPython"
@@ -64,12 +87,14 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
 
     # doctests try to fetch an image from the internet
-    substituteInPlace pytest.ini \
-      --replace "--ipdoctest-modules" "--ipdoctest-modules --ignore=IPython/core/display.py"
+    substituteInPlace pyproject.toml \
+      --replace '"--ipdoctest-modules",' '"--ipdoctest-modules", "--ignore=IPython/core/display.py",'
   '';
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pickleshare
+    pytest-asyncio
+    pytest7CheckHook
     testpath
   ];
 
@@ -83,6 +108,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "IPython: Productive Interactive Computing";
+    downloadPage = "https://github.com/ipython/ipython/";
     homepage = "https://ipython.org/";
     changelog = "https://github.com/ipython/ipython/blob/${version}/docs/source/whatsnew/version${lib.versions.major version}.rst";
     license = licenses.bsd3;

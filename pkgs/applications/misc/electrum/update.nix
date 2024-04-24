@@ -4,6 +4,7 @@
 , bash
 , coreutils
 , curl
+, fetchurl
 , gnugrep
 , gnupg
 , gnused
@@ -13,7 +14,22 @@
 let
   downloadPageUrl = "https://download.electrum.org";
 
-  signingKeys = ["6694 D8DE 7BE8 EE56 31BE D950 2BD5 824B 7F94 70E6"];
+  signingKeys = lib.lists.map fetchurl [
+    {
+      url = "https://github.com/spesmilo/electrum/raw/master/pubkeys/Emzy.asc";
+      hash = "sha256-QG0cM6AKlSKFacVlhcso/xvrooUdF7oqoppyezt0hjE=";
+    }
+    {
+      url = "https://github.com/spesmilo/electrum/raw/master/pubkeys/ThomasV.asc";
+      hash = "sha256-37ApVZlI+2EevxQIKXVKVpktt1Ls3UbWq4dfio2ORdo=";
+    }
+    {
+      url = "https://github.com/spesmilo/electrum/raw/master/pubkeys/sombernight_releasekey.asc";
+      hash = "sha256-GgdPJ9TB5hh5SPCcTZURfqXkrU4qwl0dCci52V/wpdQ=";
+    }
+  ];
+
+  gpgImportPaths = lib.concatStringsSep " " signingKeys;
 in
 
 writeScript "update-electrum" ''
@@ -48,7 +64,7 @@ sigFile=$srcFile.asc
 export GNUPGHOME=$PWD/gnupg
 mkdir -m 700 -p "$GNUPGHOME"
 
-gpg --batch --recv-keys ${lib.concatStringsSep " " (map (x: "'${x}'") signingKeys)}
+gpg --batch --import ${gpgImportPaths}
 gpg --batch --verify "$sigFile" "$srcFile"
 
 sha256=$(nix-prefetch-url --type sha256 "file://$PWD/$srcFile")

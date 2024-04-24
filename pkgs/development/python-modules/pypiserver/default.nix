@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , passlib
+, pip
 , pytestCheckHook
 , pythonOlder
 , setuptools
@@ -9,11 +10,12 @@
 , twine
 , watchdog
 , webtest
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pypiserver";
-  version = "1.5.2";
+  version = "2.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,15 +24,17 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-jub+iVL/YeGaG9Vzqyyfc4qFi0cR+7xrzuXNHL5W4p4=";
+    hash = "sha256-Eh/3URt7pcJhoDDLRP8iHyjlPsE5E9M/0Hixqi5YNdg=";
   };
 
   nativeBuildInputs = [
+    setuptools
     setuptools-git
+    wheel
   ];
 
   propagatedBuildInputs = [
-    setuptools
+    pip
   ];
 
   passthru.optional-dependencies = {
@@ -42,12 +46,21 @@ buildPythonPackage rec {
     ];
   };
 
+  __darwinAllowLocalNetworking = true;
+
+  # Tests need these permissions in order to use the FSEvents API on macOS.
+  sandboxProfile = ''
+    (allow mach-lookup (global-name "com.apple.FSEvents"))
+  '';
+
   preCheck = ''
     export HOME=$TMPDIR
   '';
 
   nativeCheckInputs = [
+    pip
     pytestCheckHook
+    setuptools
     twine
     webtest
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
@@ -57,11 +70,6 @@ buildPythonPackage rec {
     "test_hash_algos"
     "test_pip_install_authed_succeeds"
     "test_pip_install_open_succeeds"
-    "test_pip_install_authed_fails"
-    # Tests want to tests upload
-    "upload"
-    "register"
-    "test_partial_authed_open_download"
   ];
 
   disabledTestPaths = [
@@ -75,6 +83,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Minimal PyPI server for use with pip/easy_install";
+    mainProgram = "pypi-server";
     homepage = "https://github.com/pypiserver/pypiserver";
     changelog = "https://github.com/pypiserver/pypiserver/releases/tag/v${version}";
     license = with licenses; [ mit zlib ];

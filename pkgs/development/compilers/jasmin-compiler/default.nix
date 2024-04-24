@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "jasmin-compiler";
-  version = "2023.06.1";
+  version = "2023.06.3";
 
   src = fetchurl {
     url = "https://github.com/jasmin-lang/jasmin/releases/download/v${version}/jasmin-compiler-v${version}.tar.bz2";
-    hash = "sha256-3+eIR8wkBlcUQVDsugHo/rHNHbE2vpE9gutp55kRY4Y=";
+    hash = "sha256-Fp3QMsBaPOA6L6kOgffoHaJAypJDt8JxT8EVDDpPAKs=";
   };
 
   sourceRoot = "jasmin-compiler-v${version}/compiler";

@@ -4,34 +4,36 @@
 , pythonOlder
 , fetchFromGitHub
 , substituteAll
-, graphviz
+, graphviz-nox
 , xdg-utils
 , makeFontsConf
 , freefont_ttf
+, setuptools
 , mock
-, pytest
+, pytest_7
 , pytest-mock
 , python
 }:
 
 buildPythonPackage rec {
   pname = "graphviz";
-  version = "0.20.1";
+  version = "0.20.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   # patch does not apply to PyPI tarball due to different line endings
   src = fetchFromGitHub {
     owner = "xflr6";
     repo = "graphviz";
     rev = version;
-    hash = "sha256-plhWG9mE9DoTMg7mWCvFLAgtBx01LAgJ0gQ/mqBU3yc=";
+    hash = "sha256-q5y4QPBCtA1kMhxbOECodSeubj2bULnnNDrZZfxiry4=";
   };
 
   patches = [
     (substituteAll {
       src = ./paths.patch;
-      inherit graphviz;
+      graphviz = graphviz-nox;
       xdgutils = xdg-utils;
     })
   ];
@@ -45,9 +47,13 @@ buildPythonPackage rec {
     fontDirectories = [ freefont_ttf ];
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   nativeCheckInputs = [
     mock
-    pytest
+    pytest_7
     pytest-mock
   ];
 

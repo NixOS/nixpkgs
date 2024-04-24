@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ];
     license = licenses.gpl2;
     platforms = platforms.all;
+    mainProgram = "httperf";
   };
 
 }

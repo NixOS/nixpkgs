@@ -32,7 +32,7 @@ let
     name = "mongo.conf";
     executable = false;
     text = ''
-      # for documentation of all options, see http://docs.mongodb.org/manual/reference/configuration-options/
+      # for documentation of all options, see https://www.mongodb.com/docs/manual/reference/configuration-options/
 
       storage:
          dbPath: ${cfg.dataDir}/db
@@ -63,7 +63,7 @@ let
     executable = false;
     text = ''
       # for documentation of all options, see:
-      #   http://docs.mongodb.org/manual/reference/configuration-options/
+      #   https://www.mongodb.com/docs/manual/reference/configuration-options/
 
       storage:
          dbPath: ${cfg.dataDir}/db-wt
@@ -98,42 +98,23 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether or not to enable the unifi-video service.
       '';
     };
 
-    jrePackage = mkOption {
-      type = types.package;
-      default = pkgs.jre8;
-      defaultText = literalExpression "pkgs.jre8";
-      description = lib.mdDoc ''
-        The JRE package to use. Check the release notes to ensure it is supported.
-      '';
-    };
+    jrePackage = mkPackageOption pkgs "jre8" { };
 
-    unifiVideoPackage = mkOption {
-      type = types.package;
-      default = pkgs.unifi-video;
-      defaultText = literalExpression "pkgs.unifi-video";
-      description = lib.mdDoc ''
-        The unifi-video package to use.
-      '';
-    };
+    unifiVideoPackage = mkPackageOption pkgs "unifi-video" { };
 
-    mongodbPackage = mkOption {
-      type = types.package;
-      default = pkgs.mongodb-4_4;
-      defaultText = literalExpression "pkgs.mongodb";
-      description = lib.mdDoc ''
-        The mongodb package to use.
-      '';
+    mongodbPackage = mkPackageOption pkgs "mongodb" {
+      default = "mongodb-5_0";
     };
 
     logDir = mkOption {
       type = types.str;
       default = "${stateDir}/logs";
-      description = lib.mdDoc ''
+      description = ''
         Where to store the logs.
       '';
     };
@@ -141,7 +122,7 @@ in
     dataDir = mkOption {
       type = types.str;
       default = "${stateDir}/data";
-      description = lib.mdDoc ''
+      description = ''
         Where to store the database and other data.
       '';
     };
@@ -149,7 +130,7 @@ in
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether or not to open the required ports on the firewall.
       '';
     };
@@ -158,7 +139,7 @@ in
       type = types.nullOr types.int;
       default = 1024;
       example = 4096;
-      description = lib.mdDoc ''
+      description = ''
         Set the maximum heap size for the JVM in MB.
       '';
     };
@@ -167,7 +148,7 @@ in
       type = types.path;
       default = "${cfg.dataDir}/unifi-video.pid";
       defaultText = literalExpression ''"''${config.${opt.dataDir}}/unifi-video.pid"'';
-      description = lib.mdDoc "Location of unifi-video pid file.";
+      description = "Location of unifi-video pid file.";
     };
 
   };

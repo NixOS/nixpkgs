@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/design/symbolic-preview";
     description = "Symbolics made easy";
+    mainProgram = "symbolic-preview";
     maintainers = with maintainers; [ qyliss ];
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

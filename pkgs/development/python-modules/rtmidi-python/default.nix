@@ -2,7 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, cython
+, cython_0
 , alsa-lib
 , CoreAudio
 , CoreMIDI
@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "rtmidi-python";
   version = "0.2.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     rm rtmidi_python.cpp
   '';
 
-  nativeBuildInputs = [ cython ];
+  nativeBuildInputs = [ cython_0 ];
   buildInputs = lib.optionals stdenv.isLinux [
     alsa-lib
   ] ++ lib.optionals stdenv.isDarwin [

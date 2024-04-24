@@ -8,16 +8,16 @@ in
 
 {
   options.hardware.i2c = {
-    enable = mkEnableOption (lib.mdDoc ''
+    enable = mkEnableOption ''
       i2c devices support. By default access is granted to users in the "i2c"
       group (will be created if non-existent) and any user with a seat, meaning
-      logged on the computer locally.
-    '');
+      logged on the computer locally
+    '';
 
     group = mkOption {
       type = types.str;
       default = "i2c";
-      description = lib.mdDoc ''
+      description = ''
         Grant access to i2c devices (/dev/i2c-*) to users in this group.
       '';
     };

@@ -6,6 +6,7 @@
 , zlib
 , alsa-lib
 , dbus
+, libGL
 , libXcursor
 , libXext
 , libXi
@@ -25,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.0.0.4080";
 
   src = fetchurl {
-    url = "https://pubdl.clonehero.net/clonehero-v${finalAttrs.version}-final/clonehero-linux.tar.xz";
+    url = "https://github.com/clonehero-game/releases/releases/download/V${finalAttrs.version}/CloneHero-linux.tar.xz";
     hash = "sha256-YWLV+wgQ9RfKRSSWh/x0PMjB6tFA4YpHb9WtYOOgZZI=";
   };
 
@@ -42,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Run-time libraries (loaded with dlopen)
     dbus
+    libGL
     libXcursor
     libXext
     libXi
@@ -92,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchelf \
       --add-needed libasound.so.2 \
       --add-needed libdbus-1.so.3 \
+      --add-needed libGL.so.1 \
       --add-needed libpthread.so.0 \
       --add-needed libudev.so.1 \
       --add-needed libvulkan.so.1 \

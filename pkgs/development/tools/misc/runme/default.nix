@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , installShellFiles
 , nodejs
+, python3
 , runtimeShell
 , stdenv
 , testers
@@ -11,16 +12,16 @@
 
 buildGoModule rec {
   pname = "runme";
-  version = "1.7.2";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "stateful";
     repo = "runme";
     rev = "v${version}";
-    hash = "sha256-BoPNIaYxK4VyafNWAVDonwTfpqF1N3Ggq5GF6A7DhF0=";
+    hash = "sha256-a+7Gff3Z1V17uaywoUE+nLVeVprB50Gslarcle/NPB8=";
   };
 
-  vendorHash = "sha256-sGk2K0I9onGFpDwboRugNHjFictisY4Q0NTNnOT3BW4=";
+  vendorHash = "sha256-QoZzEq1aC7cjY/RVp5Z5HhSuTFf2BSYQnfg0jSaeTJU=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -28,6 +29,7 @@ buildGoModule rec {
 
   nativeCheckInputs = [
     nodejs
+    python3
   ];
 
   subPackages = [
@@ -42,14 +44,12 @@ buildGoModule rec {
     "-X=github.com/stateful/runme/internal/version.Commit=${src.rev}"
   ];
 
-  postPatch = ''
-    substituteInPlace testdata/script/basic.txtar \
-      --replace /bin/bash "${runtimeShell}"
-  '';
+  # tests fail to access /etc/bashrc on darwin
+  doCheck = !stdenv.isDarwin;
 
-  # version test assumes `ldflags` is unspecified
-  preCheck = ''
-    unset ldflags
+  postPatch = ''
+    substituteInPlace testdata/{categories/basic,runall/basic,script/basic}.txtar \
+      --replace /bin/bash "${runtimeShell}"
   '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -67,6 +67,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Execute commands inside your runbooks, docs, and READMEs";
+    mainProgram = "runme";
     homepage = "https://runme.dev";
     changelog = "https://github.com/stateful/runme/releases/tag/v${version}";
     license = licenses.asl20;

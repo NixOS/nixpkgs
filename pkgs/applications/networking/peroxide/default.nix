@@ -15,7 +15,7 @@ buildGoModule rec {
     sha256 = "sha256-6Jb1i4aNjeemiQp9FF/KGyZ+Evom9PPBvARbJWyrhok=";
   };
 
-  vendorSha256 = "sha256-kuFlkkMkCKO5Rrh1EoyVdaykvxTfchK2l1/THqTBeAY=";
+  vendorHash = "sha256-kuFlkkMkCKO5Rrh1EoyVdaykvxTfchK2l1/THqTBeAY=";
 
   postPatch = ''
     # These tests connect to the internet, which does not work in sandboxed

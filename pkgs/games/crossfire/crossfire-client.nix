@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GTKv2 client for the Crossfire free MMORPG";
+    mainProgram = "crossfire-client-gtk2";
     homepage = "http://crossfire.real-time.com/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

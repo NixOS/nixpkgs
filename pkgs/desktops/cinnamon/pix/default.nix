@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , pkg-config
 , meson
 , ninja
@@ -11,15 +10,12 @@
 , libtiff
 , gst_all_1
 , libraw
-, libsoup
 , libsecret
 , glib
 , gtk3
 , gsettings-desktop-schemas
 , librsvg
 , libwebp
-, json-glib
-, webkitgtk
 , lcms2
 , bison
 , flex
@@ -34,23 +30,14 @@
 
 stdenv.mkDerivation rec {
   pname = "pix";
-  version = "3.0.2";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-iNUhcHG4nCZ4WNELodyLdztzfNg9g+F0eQrZHXS6Zj0=";
+    sha256 = "sha256-tRndJjUw/k5mJPFTBMfW88Mvp2wZtC3RUzyS8bBO1jc=";
   };
-
-  patches = [
-    # Fix build with exiv2 0.28, can be removed on next update
-    # https://github.com/linuxmint/pix/pull/178
-    (fetchpatch {
-      url = "https://github.com/linuxmint/pix/commit/46e19703a973d51fa97e6a22121560f5ba200eea.patch";
-      sha256 = "sha256-Z+pUxoy0m/agXW++YxEUhRuax0qvuGVXNhU8d9mvGh4=";
-    })
-  ];
 
   nativeBuildInputs = [
     bison
@@ -75,17 +62,14 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
     gtk3
-    json-glib
     lcms2
     libheif
     libjpeg
     libraw
     librsvg
     libsecret
-    libsoup
     libtiff
     libwebp
-    webkitgtk
     xapp
   ];
 
@@ -99,12 +83,17 @@ stdenv.mkDerivation rec {
       pix/make-authors-tab.py
   '';
 
+  # Avoid direct dependency on webkit2gtk-4.0
+  # https://fedoraproject.org/wiki/Changes/Remove_webkit2gtk-4.0_API_Version
+  mesonFlags = [ "-Dwebservices=false" ];
+
   preFixup = ''
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
   '';
 
   meta = with lib; {
     description = "A generic image viewer from Linux Mint";
+    mainProgram = "pix";
     homepage = "https://github.com/linuxmint/pix";
     license = licenses.gpl2Only;
     platforms = platforms.linux;

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyftpdlib";
-  version = "1.5.7";
+  version = "1.5.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fqPOQTfbggmvH2ueoCBZD0YsY+18ehJAvVluTTp7ZW4=";
+    hash = "sha256-Mj1MQvFAau203xj69oD2TzLAgP9m9sJgkLpZL1v8Sg8=";
   };
 
   propagatedBuildInputs = [
@@ -45,6 +45,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Asynchronous FTP server library";
+    mainProgram = "ftpbench";
     homepage = "https://github.com/giampaolo/pyftpdlib/";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

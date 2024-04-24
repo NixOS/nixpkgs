@@ -2,7 +2,8 @@
 , fixDarwinDylibNames
 , file
 , legacySupport ? false
-, static ? stdenv.hostPlatform.isStatic
+, static ? stdenv.hostPlatform.isStatic # generates static libraries *only*
+, enableStatic ? static
 # these need to be ran on the host, thus disable when cross-compiling
 , buildContrib ? stdenv.hostPlatform == stdenv.buildPlatform
 , doCheck ? stdenv.hostPlatform == stdenv.buildPlatform
@@ -20,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zstd";
-  version = "1.5.5";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "zstd";
     rev = "v${version}";
-    sha256 = "sha256-tHHHIsQU7vJySrVhJuMKUSq11MzkmC+Pcsj00uFJdnQ=";
+    hash = "sha256-qcd92hQqVBjMT3hyntjcgk29o9wGQsg5Hg7HE5C0UNc=";
   };
 
   nativeBuildInputs = [ cmake ]
@@ -49,12 +50,10 @@ stdenv.mkDerivation rec {
       tests/playTests.sh
   '';
 
-  LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
-
   cmakeFlags = lib.attrsets.mapAttrsToList
     (name: value: "-DZSTD_${name}:BOOL=${if value then "ON" else "OFF"}") {
       BUILD_SHARED = !static;
-      BUILD_STATIC = static;
+      BUILD_STATIC = enableStatic;
       BUILD_CONTRIB = buildContrib;
       PROGRAMS_LINK_SHARED = !static;
       LEGACY_SUPPORT = legacySupport;

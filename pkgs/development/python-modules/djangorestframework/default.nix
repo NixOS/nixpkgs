@@ -6,7 +6,7 @@
 , django-guardian
 , pythonOlder
 , pytest-django
-, pytestCheckHook
+, pytest7CheckHook
 , pytz
 , pyyaml
 , uritemplate
@@ -15,6 +15,7 @@
 buildPythonPackage rec {
   pname = "djangorestframework";
   version = "3.14.0";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -31,7 +32,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-django
-    pytestCheckHook
+    pytest7CheckHook
 
     # optional tests
     coreapi

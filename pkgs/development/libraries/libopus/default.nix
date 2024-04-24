@@ -2,6 +2,7 @@
 , stdenv
 , fetchpatch
 , fetchurl
+, gitUpdater
 , meson
 , python3
 , ninja
@@ -12,27 +13,22 @@
 
 # tests
 , ffmpeg-headless
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libopus";
-  version = "1.4";
+  version = "1.5.1";
 
   src = fetchurl {
-    url = "https://downloads.xiph.org/releases/opus/opus-${version}.tar.gz";
-    sha256 = "sha256-ybMrQlO+WuY9H/Fu6ga5S18PKVG3oCrO71jjo85JxR8=";
+    url = "https://downloads.xiph.org/releases/opus/opus-${finalAttrs.version}.tar.gz";
+    hash = "sha256-uEYQlZuNQXthGqEqIlZeCjcyCXxjidGQmNhEVD40D4U=";
   };
 
   patches = [
     ./fix-pkg-config-paths.patch
     # Some tests time out easily on slower machines
     ./test-timeout.patch
-    # Fix meson build for arm64. Remove with next release
-    # https://gitlab.xiph.org/xiph/opus/-/merge_requests/59
-    (fetchpatch {
-      url = "https://gitlab.xiph.org/xiph/opus/-/commit/20c032d27c59d65b19b8ffbb2608e5282fe817eb.patch";
-      hash = "sha256-2pX+0ay5PTyHL2plameBX2L1Q4aTx7V7RGiTdhNIuE4=";
-    })
   ];
 
   postPatch = ''
@@ -58,16 +54,28 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.isi686 && !stdenv.isAarch32; # test_unit_LPC_inv_pred_gain fails
 
-  passthru.tests = {
-    inherit ffmpeg-headless;
+  passthru = {
+    updateScript = gitUpdater {
+      url = "https://gitlab.xiph.org/xiph/opus.git";
+      rev-prefix = "v";
+    };
+
+    tests = {
+      inherit ffmpeg-headless;
+
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+        moduleNames = [ "opus" ];
+      };
+    };
   };
 
   meta = with lib; {
     description = "Open, royalty-free, highly versatile audio codec";
     homepage = "https://opus-codec.org/";
-    changelog = "https://gitlab.xiph.org/xiph/opus/-/releases/v${version}";
+    changelog = "https://gitlab.xiph.org/xiph/opus/-/releases/v${finalAttrs.version}";
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = [ ];
   };
-}
+})

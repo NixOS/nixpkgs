@@ -2,7 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, flit
+, flit-core
 , pytestCheckHook
 , numpy
 , scipy
@@ -10,17 +10,21 @@
 
 buildPythonPackage rec {
   pname = "threadpoolctl";
-  version = "3.1.0";
+  version = "3.4.0";
 
   disabled = pythonOlder "3.6";
-  format = "flit";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "joblib";
     repo = pname;
-    rev = version;
-    hash = "sha256-/qt7cgFbvpc1BLZC7a4S0RToqSggKXAqF1Xr6xOqzw8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-nWaBhiFw76azx6dV4I18XodiUnHiLb0gNNhXks6iHIg=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

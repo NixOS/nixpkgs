@@ -40,6 +40,10 @@ stdenv.mkDerivation rec {
     "AR=${stdenv.cc.targetPrefix}ar"
   ];
 
+  env = lib.optionalAttrs (stdenv.isDarwin && stdenv.cc.isClang) {
+    NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+  };
+
   doCheck = false; # fails 1 of 1 tests
 
   meta = with lib; {

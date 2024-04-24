@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "lame";
-  version = "0.3.6";
+  version = "0.3.7";
 
   minimalOCamlVersion = "4.06";
 
@@ -10,7 +10,7 @@ buildDunePackage rec {
     owner = "savonet";
     repo = "ocaml-lame";
     rev = "v${version}";
-    sha256 = "sha256-oRxP1OM0pGdz8CB+ou7kbbrNaB1x9z9KTfciLsivFnI=";
+    sha256 = "sha256-/ZzoGFQQrBf17TaBPSFDQ1yHaQnva56YLmscOacrKBI=";
   };
 
   nativeBuildInputs = [ pkg-config ];

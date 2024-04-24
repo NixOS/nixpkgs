@@ -13,16 +13,16 @@
 
 buildGoModule rec {
   pname = "ymuse";
-  version = "0.21";
+  version = "0.22";
 
   src = fetchFromGitHub {
     owner = "yktoo";
     repo = "ymuse";
     rev = "v${version}";
-    hash = "sha256-3QgBbK7AK9/uQ6Z7DNIJxa1oXrxvvHDQ/Z2QOf7yfS4=";
+    hash = "sha256-WbIeqOAhdqxU8EvHEsG7ASwy5xZG1domZKT5ccOggHg=";
   };
 
-  vendorHash = "sha256-7oYYZWpvWzeHlp6l9bLeHcLITLZPVY5eZdfHSE+ZHW8=";
+  vendorHash = "sha256-YT4JiieVI6/t4inezE3K2WQBI51W+/MoWr7R/uBzn+8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -68,5 +68,7 @@ buildGoModule rec {
     description = "GTK client for Music Player Daemon (MPD)";
     license = licenses.asl20;
     maintainers = with maintainers; [ foo-dogsquared ];
+    mainProgram = "ymuse";
+    platforms = platforms.unix;
   };
 }

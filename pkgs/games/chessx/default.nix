@@ -1,4 +1,4 @@
-{ mkDerivation
+{ stdenv
 , lib
 , pkg-config
 , zlib
@@ -7,21 +7,24 @@
 , qttools
 , qtmultimedia
 , qmake
+, fetchpatch
 , fetchurl
+, wrapQtAppsHook
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chessx";
-  version = "1.5.8";
+  version = "1.6.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/chessx/chessx-${version}.tgz";
-    sha256 = "sha256-ev+tK1CHLFt/RvmzyPVZ2c0nxfRwwb9ke7uTmm7REaM=";
+    url = "mirror://sourceforge/chessx/chessx-${finalAttrs.version}.tgz";
+    hash = "sha256-76YOe1WpB+vdEoEKGTHeaWJLpCVE4RoyYu1WLy3Dxhg=";
   };
 
   nativeBuildInputs = [
     pkg-config
     qmake
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -32,25 +35,39 @@ mkDerivation rec {
     zlib
   ];
 
-  # RCC: Error in 'resources.qrc': Cannot find file 'i18n/chessx_da.qm'
-  enableParallelBuilding = false;
+  patches =
+    # needed to backport patches to successfully build, due to broken release
+    let
+      repo = "https://github.com/Isarhamster/chessx/";
+    in
+    [
+      (fetchpatch {
+        url = "${repo}/commit/9797d46aa28804282bd58ce139b22492ab6881e6.diff";
+        hash = "sha256-RnIf6bixvAvyp1CKuri5LhgYFqhDNiAVYWUmSUDMgVw=";
+      })
+      (fetchpatch {
+        url = "${repo}/commit/4fab4d2f649d1cae2b54464c4e28337d1f20c214.diff";
+        hash = "sha256-EJVHricN+6uabKLfn77t8c7JjO7tMmZGsj7ZyQUGcXA=";
+      })
+    ];
+
+  enableParallelBuilding = true;
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out/bin"
-    mkdir -p "$out/share/applications"
-    cp -pr release/chessx "$out/bin"
-    cp -pr unix/chessx.desktop "$out/share/applications"
+    install -Dm555 release/chessx -t "$out/bin"
+    install -Dm444 unix/chessx.desktop -t "$out/share/applications"
 
     runHook postInstall
   '';
 
   meta = with lib; {
-    homepage = "http://chessx.sourceforge.net/";
+    homepage = "https://chessx.sourceforge.io/";
     description = "Browse and analyse chess games";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.luispedro ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ eclairevoyant luispedro ];
     platforms = platforms.linux;
+    mainProgram = "chessx";
   };
-}
+})

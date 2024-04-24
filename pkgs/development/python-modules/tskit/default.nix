@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "tskit";
-  version = "0.5.5";
+  version = "0.5.6";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-phhBTAHAPlBnmzSiLmPYDMg1Mui85NZacni3WuYAc6c=";
+    hash = "sha256-3f4hPxywY822mCF3IwooBezX38fM1zAm4Th4q//SzkY=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "The tree sequence toolkit";
+    mainProgram = "tskit";
     homepage = "https://github.com/tskit-dev/tskit";
     license = licenses.mit;
     maintainers = with maintainers; [ alxsimon ];

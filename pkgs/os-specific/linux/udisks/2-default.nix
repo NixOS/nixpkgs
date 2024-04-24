@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "udisks";
-  version = "2.10.0";
+  version = "2.10.1";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "udisks";
     rev = "${pname}-${version}";
-    sha256 = "sha256-M0L2MjVKv7VmtML/JZx0I8vNj+m6KDWGezvcwFqoTNI=";
+    sha256 = "sha256-L8jr1+SJWsCizkPXC8VKDy2eVa7/FpqdB8SkBYq6vwc=";
   };
 
   outputs = [ "out" "man" "dev" ] ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "devdoc";

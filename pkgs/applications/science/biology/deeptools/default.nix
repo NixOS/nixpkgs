@@ -1,17 +1,25 @@
-{ lib, python, fetchFromGitHub }:
-with python.pkgs;
-buildPythonApplication rec {
-  pname = "deepTools";
-  version = "3.5.1";
+{ lib
+, python3
+, fetchFromGitHub
+}:
+
+python3.pkgs.buildPythonApplication rec {
+  pname = "deeptools";
+  version = "3.5.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deeptools";
     repo = "deepTools";
-    rev = version;
-    sha256 = "07v8vb2x4b0mgw0mvcj91vj1fqbcwizwsniysl2cvmv93gad8gbp";
+    rev = "refs/tags/${version}";
+    hash = "sha256-2kSlL7Y5f/FjVtStnmz+GlTw2oymrtxOCaXlqgbQ7FU=";
   };
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
     numpy
     numpydoc
     scipy
@@ -21,9 +29,24 @@ buildPythonApplication rec {
     matplotlib
     plotly
     deeptoolsintervals
+    importlib-metadata
   ];
 
-  nativeCheckInputs = [ nose ];
+  nativeCheckInputs = with python3.pkgs; [
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export PATH="$out/bin:$PATH"
+  '';
+
+  disabledTestPaths = [
+    # tests trip on `len(sys.argv) == 1`
+    "deeptools/test/test_bigwigAverage.py"
+    "deeptools/test/test_bigwigCompare_and_multiBigwigSummary.py"
+    "deeptools/test/test_heatmapper.py"
+    "deeptools/test/test_multiBamSummary.py"
+  ];
 
   meta = with lib; {
     homepage = "https://deeptools.readthedocs.io/en/develop";
@@ -36,7 +59,7 @@ buildPythonApplication rec {
       publication-ready visualizations to identify enrichments and for functional
       annotations of the genome.
     '';
-    license = licenses.gpl3;
+    license = with licenses; [ mit bsd3 ];
     maintainers = with maintainers; [ scalavision ];
   };
 }

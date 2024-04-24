@@ -7,12 +7,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "0.1.6";
+  version = "0.2.0";
   pname = "open-pdf-sign";
 
   src = fetchurl {
     url = "https://github.com/open-pdf-sign/open-pdf-sign/releases/download/v${finalAttrs.version}/open-pdf-sign.jar";
-    hash = "sha256-GpMDgN4P8neHOQsXtg2AKXNeCMnv3nEHH50ZVU0uVvY=";
+    hash = "sha256-W4WymhjLrHtNK5XY8aahpZOIIh/Qp9scE3zybXF6/9o=";
   };
 
   nativeBuildInputs = [
@@ -38,5 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ drupol ];
     platforms = lib.platforms.unix;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    mainProgram = "open-pdf-sign";
   };
 })

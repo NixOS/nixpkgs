@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kratos";
-  version = "0.10.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "ory";
     repo = "kratos";
     rev = "v${version}";
-    hash = "sha256-Ld2N7w9jQLkzCww1Sex5nEBZf6e9XIUnbfPOjcFAYQA=";
+    hash = "sha256-zrII2lpffZkwFauPAilh1QaqRKvpj1mlHZA7in1ljYg=";
   };
 
-  vendorSha256 = "sha256-9zXoJ+c1aPWDqasechC4ModWE0+sfMqZzp/Pph/mYcs=";
+  vendorHash = "sha256-TSB7jCPOVwub+ZQaaUSmsz/R4HAfmnWb0wTf2w4aeuk=";
 
   subPackages = [ "." ];
 
@@ -38,5 +38,6 @@ buildGoModule rec {
     homepage = "https://www.ory.sh/kratos/";
     license = licenses.asl20;
     description = "An API-first Identity and User Management system that is built according to cloud architecture best practices";
+    mainProgram = "kratos";
   };
 }

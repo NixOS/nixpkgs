@@ -16,10 +16,12 @@ if grep -q 'version = "'$version $fname; then
     echo "Current version $version is the latest available, will update only datasets' hashes (don't take long)"
 else
     echoerr got version $version
-    sed -i -E 's/(version = ).*=/\1'$version'/g' $fname
+    sed -i -E 's/(version = ").*(";)/\1'$version'\2/g' $fname
+    # Verify the sed command above did not fail
+    grep -q $version $fname
     # Update srcHash
-    srcHash='"sha256-'$(nix-prefetch-github scipy scipy --rev v${version} --fetch-submodules | jq --raw-output .sha256)'"'
-    sed -i 's/srcHash = .*=";/srcHash = '$srcHash';/g' $fname
+    srcHash="$(nix-prefetch-github scipy scipy --rev v${version} --fetch-submodules | jq --raw-output .hash)"
+    sed -i -E 's#(srcHash = ").*(";)#\1'$srcHash'\2#g' $fname
 fi
 
 for d in $datasets; do

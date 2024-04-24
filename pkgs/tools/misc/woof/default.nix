@@ -25,5 +25,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with maintainers; [ matthiasbeyer ];
+    mainProgram = "woof";
   };
 }

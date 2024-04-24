@@ -17,12 +17,12 @@
 
 let
   pname = "chacha20poly1305-reuseable";
-  version = "0.3.0";
+  version = "0.12.1";
 in
 
 buildPythonPackage {
   inherit pname version;
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -30,7 +30,7 @@ buildPythonPackage {
     owner = "bdraco";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-/bXpwSBFr1IM04GNEczzsnsjdFV4miUAzJkvrQjfIq4=";
+    hash = "sha256-jgbtDpl2hXmfzmsiIIG6+B3QoekuAjBJGMxQJPX4ynA=";
   };
 
   nativeBuildInputs = [

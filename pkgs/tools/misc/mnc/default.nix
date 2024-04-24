@@ -7,7 +7,7 @@ buildGoModule rec {
   pname = "mnc";
   version = "0.4";
 
-  vendorSha256 = "sha256-H0KmGTWyjZOZLIEWophCwRYPeKLxBC050RI7cMXNbPs=";
+  vendorHash = "sha256-H0KmGTWyjZOZLIEWophCwRYPeKLxBC050RI7cMXNbPs=";
 
   src = fetchFromSourcehut {
     owner = "~anjan";
@@ -22,5 +22,6 @@ buildGoModule rec {
     license = licenses.unlicense;
     platforms = platforms.linux;
     maintainers = with maintainers; [ wentam ];
+    mainProgram = "mnc";
   };
 }

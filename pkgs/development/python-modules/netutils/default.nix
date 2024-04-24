@@ -1,35 +1,38 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, jinja2
-, napalm
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, toml
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jinja2,
+  jsonschema,
+  napalm,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  toml,
 }:
 
 buildPythonPackage rec {
   pname = "netutils";
-  version = "1.5.0";
-  format = "pyproject";
+  version = "1.8.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "networktocode";
-    repo = pname;
+    repo = "netutils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uUw48EBUpEUw+A8wxw3qXrnqmFWQzg/zb+8qAGRSlUw=";
+    hash = "sha256-Eqs/YkU2XrjD7x2WgvvR89/Pdi9AW9vhw3alJ8kIDgc=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [ jsonschema ];
+
+  passthru.optional-dependencies.optionals = [
+    jsonschema
     napalm
   ];
 
@@ -40,9 +43,7 @@ buildPythonPackage rec {
     toml
   ];
 
-  pythonImportsCheck = [
-    "netutils"
-  ];
+  pythonImportsCheck = [ "netutils" ];
 
   disabledTests = [
     # Tests require network access

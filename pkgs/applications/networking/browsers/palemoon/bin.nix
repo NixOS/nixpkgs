@@ -9,28 +9,20 @@
 , gtk2-x11
 , withGTK3 ? true
 , gtk3
+, libglvnd
 , libXt
 , libpulseaudio
 , makeDesktopItem
 , wrapGAppsHook
+, writeScript
 , testers
-, palemoon-bin
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "palemoon-bin";
-  version = "32.3.1";
+  version = "33.0.2";
 
-  src = fetchzip {
-    urls = [
-      "https://rm-eu.palemoon.org/release/palemoon-${version}.linux-x86_64-gtk${if withGTK3 then "3" else "2"}.tar.xz"
-      "https://rm-us.palemoon.org/release/palemoon-${version}.linux-x86_64-gtk${if withGTK3 then "3" else "2"}.tar.xz"
-    ];
-    hash = if withGTK3 then
-      "sha256-1JYaxxkqgg/gLdZ+uGDB5BI0NKjHO4huk0b/M9QFuII="
-    else
-      "sha256-p/Lid6Uv3XTEg+43Gke5VLILhzENHoBP6XjGVHy7wCY=";
-  };
+  src = finalAttrs.passthru.sources."gtk${if withGTK3 then "3" else "2"}";
 
   preferLocalBuild = true;
 
@@ -53,7 +45,7 @@ stdenv.mkDerivation rec {
   ];
 
   desktopItems = [(makeDesktopItem rec {
-    name = pname;
+    name = "palemoon-bin";
     desktopName = "Pale Moon Web Browser";
     comment = "Browse the World Wide Web";
     keywords = [
@@ -148,14 +140,56 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
         ffmpeg
+        libglvnd
         libpulseaudio
       ]}"
     )
     wrapGApp $out/lib/palemoon/palemoon
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = palemoon-bin;
+  passthru = {
+    sources = let
+      urlRegionVariants = buildVariant: map
+        (region: "https://rm-${region}.palemoon.org/release/palemoon-${finalAttrs.version}.linux-x86_64-${buildVariant}.tar.xz")
+        [
+          "eu"
+          "us"
+        ];
+    in {
+      gtk3 = fetchzip {
+        urls = urlRegionVariants "gtk3";
+        hash = "sha256-Kahnwlj9PIWB24lvH6h9cZK459NW2Vo2g6ckuv0Ax48=";
+      };
+      gtk2 = fetchzip {
+        urls = urlRegionVariants "gtk2";
+        hash = "sha256-XOiLGmU8O96clUpnp/OkzXmWR1PJ2AdzbVFj6adbcvY=";
+      };
+    };
+
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+
+    updateScript = writeScript "update-palemoon-bin" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p common-updater-scripts curl libxml2
+
+      set -eu -o pipefail
+
+      # Only release note announcement == finalized release
+      version="$(
+        curl -s 'http://www.palemoon.org/releasenotes.shtml' |
+        xmllint --html --xpath 'html/body/table/tbody/tr/td/h3/text()' - 2>/dev/null | head -n1 |
+        sed 's/v\(\S*\).*/\1/'
+      )"
+
+      for variant in gtk3 gtk2; do
+        # The script will not perform an update when the version attribute is up to date from previous platform run
+        # We need to clear it before each run
+        update-source-version palemoon-bin 0 "${lib.fakeHash}" --source-key="sources.$variant"
+        update-source-version palemoon-bin "$version" --source-key="sources.$variant"
+      done
+    '';
   };
 
   meta = with lib; {
@@ -164,6 +198,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       Pale Moon is an Open Source, Goanna-based web browser focusing on
       efficiency and customization.
+
       Pale Moon offers you a browsing experience in a browser completely built
       from its own, independently developed source that has been forked off from
       Firefox/Mozilla code a number of years ago, with carefully selected
@@ -186,4 +221,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     hydraPlatforms = [];
   };
-}
+})

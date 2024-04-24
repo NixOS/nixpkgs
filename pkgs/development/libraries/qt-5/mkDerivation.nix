@@ -1,6 +1,4 @@
-{ lib, debug, wrapQtAppsHook }:
-
-let inherit (lib) optional; in
+{ wrapQtAppsHook }:
 
 mkDerivation:
 

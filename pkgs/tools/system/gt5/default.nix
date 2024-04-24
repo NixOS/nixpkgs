@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [viric];
     platforms = with lib.platforms; all;
+    mainProgram = "gt5";
   };
 }

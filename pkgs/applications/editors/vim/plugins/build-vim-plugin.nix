@@ -16,8 +16,8 @@ rec {
     , namePrefix ? "vimplugin-"
     , src
     , unpackPhase ? ""
-    , configurePhase ? ""
-    , buildPhase ? ""
+    , configurePhase ? ":"
+    , buildPhase ? ":"
     , preInstall ? ""
     , postInstall ? ""
     , path ? "."
@@ -48,9 +48,4 @@ rec {
     in
     addRtp (toVimPlugin drv);
 
-  buildVimPluginFrom2Nix = attrs: buildVimPlugin ({
-    # vim plugins may override this
-    buildPhase = ":";
-    configurePhase = ":";
-  } // attrs);
 }

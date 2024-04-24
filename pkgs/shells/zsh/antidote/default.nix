@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.9.1";
+  version = "1.9.6";
   pname = "antidote";
 
   src = fetchFromGitHub {
     owner = "mattmc3";
     repo = "antidote";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-wRLMjaBpzttQ6MUgl1AFC2SRlEEwjASdEnguGlP+XgU=";
+    hash = "sha256-8kNMCo/DwZvBwqh/434GqK7z4KXgkwZH9SazLbH8SfM=";
   };
 
   dontPatch = true;
@@ -29,5 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://getantidote.github.io/";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.hitsmaxft ];
+    platforms = lib.platforms.all;
   };
 })

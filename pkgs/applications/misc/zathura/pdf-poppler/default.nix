@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "zathura-pdf-poppler";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchurl {
     url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
-    sha256 = "12qhkshpp1wjfpjmjccsyi6wscqyqvaa19j85prjpyf65i9jg0gf";
+    sha256 = "049h8m9swxni7ar6fsbm0hb3fg4ffmjc3m6vyg78ilfi3kayxavi";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config zathura_core ];
@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.zlib;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ ];
   };
 }

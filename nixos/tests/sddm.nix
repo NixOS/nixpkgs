@@ -15,8 +15,8 @@ let
       nodes.machine = { ... }: {
         imports = [ ./common/user-account.nix ];
         services.xserver.enable = true;
-        services.xserver.displayManager.sddm.enable = true;
-        services.xserver.displayManager.defaultSession = "none+icewm";
+        services.displayManager.sddm.enable = true;
+        services.displayManager.defaultSession = "none+icewm";
         services.xserver.windowManager.icewm.enable = true;
       };
 
@@ -44,14 +44,14 @@ let
       nodes.machine = { ... }: {
         imports = [ ./common/user-account.nix ];
         services.xserver.enable = true;
-        services.xserver.displayManager = {
+        services.displayManager = {
           sddm.enable = true;
           autoLogin = {
             enable = true;
             user = "alice";
           };
         };
-        services.xserver.displayManager.defaultSession = "none+icewm";
+        services.displayManager.defaultSession = "none+icewm";
         services.xserver.windowManager.icewm.enable = true;
       };
 

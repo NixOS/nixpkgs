@@ -5,13 +5,11 @@ with callPackage ./util.nix {};
 let patch = (callPackage ./sources.nix {}).staging;
     build-inputs = pkgNames: extra:
       (mkBuildInputs wineUnstable.pkgArches pkgNames) ++ extra;
-in assert lib.getVersion wineUnstable == patch.version;
+in assert lib.versions.majorMinor wineUnstable.version == lib.versions.majorMinor patch.version;
 
-(lib.overrideDerivation wineUnstable (self: {
+(lib.overrideDerivation (wineUnstable.override { wineRelease = "staging"; }) (self: {
   buildInputs = build-inputs [ "perl" "util-linux" "autoconf" "gitMinimal" ] self.buildInputs;
   nativeBuildInputs = [ autoconf hexdump perl python3 ] ++ self.nativeBuildInputs;
-
-  name = "${self.name}-staging";
 
   prePatch = self.prePatch or "" + ''
     patchShebangs tools

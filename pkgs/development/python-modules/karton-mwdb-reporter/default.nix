@@ -34,6 +34,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Karton service that uploads analyzed artifacts and metadata to MWDB Core";
+    mainProgram = "karton-mwdb-reporter";
     homepage = "https://github.com/CERT-Polska/karton-mwdb-reporter";
     changelog = "https://github.com/CERT-Polska/karton-mwdb-reporter/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];

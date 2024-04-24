@@ -2,6 +2,10 @@
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
+
+# build-system
+, setuptools
+
   # Python Inputs
 , h5py
 , numpy
@@ -21,7 +25,8 @@
 
 buildPythonPackage rec {
   pname = "qiskit-nature";
-  version = "0.5.2";
+  version = "0.7.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -29,8 +34,12 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-rUY5fnsWg2UisF0tGORvHot8laCs8eVAvuVKUOG5ibw=";
+    hash = "sha256-SVzg3McB885RMyAp90Kr6/iVKw3Su9ucTob2jBckBo0=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     h5py

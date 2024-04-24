@@ -11,6 +11,7 @@ rustPlatform.buildRustPackage {
 
   meta = {
     description = "Tool for copying binaries and their dependencies";
+    mainProgram = "make-initrd-ng";
     maintainers = with lib.maintainers; [ das_j elvishjerricco k900 lheckemann ];
     license = lib.licenses.mit;
   };

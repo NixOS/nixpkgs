@@ -8,45 +8,40 @@ in {
   options.services.unclutter = {
 
     enable = mkOption {
-      description = lib.mdDoc "Enable unclutter to hide your mouse cursor when inactive";
+      description = "Enable unclutter to hide your mouse cursor when inactive";
       type = types.bool;
       default = false;
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.unclutter;
-      defaultText = literalExpression "pkgs.unclutter";
-      description = lib.mdDoc "unclutter derivation to use.";
-    };
+    package = mkPackageOption pkgs "unclutter" { };
 
     keystroke = mkOption {
-      description = lib.mdDoc "Wait for a keystroke before hiding the cursor";
+      description = "Wait for a keystroke before hiding the cursor";
       type = types.bool;
       default = false;
     };
 
     timeout = mkOption {
-      description = lib.mdDoc "Number of seconds before the cursor is marked inactive";
+      description = "Number of seconds before the cursor is marked inactive";
       type = types.int;
       default = 1;
     };
 
     threshold = mkOption {
-      description = lib.mdDoc "Minimum number of pixels considered cursor movement";
+      description = "Minimum number of pixels considered cursor movement";
       type = types.int;
       default = 1;
     };
 
     excluded = mkOption {
-      description = lib.mdDoc "Names of windows where unclutter should not apply";
+      description = "Names of windows where unclutter should not apply";
       type = types.listOf types.str;
       default = [];
       example = [ "" ];
     };
 
     extraOptions = mkOption {
-      description = lib.mdDoc "More arguments to pass to the unclutter command";
+      description = "More arguments to pass to the unclutter command";
       type = types.listOf types.str;
       default = [];
       example = [ "noevent" "grab" ];

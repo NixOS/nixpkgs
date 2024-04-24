@@ -10,6 +10,7 @@
 , packaging
 , psutil
 , pythonOlder
+, pythonRelaxDepsHook
 , pyyaml
 , setuptools
 , setuptools-scm
@@ -19,33 +20,38 @@
 , tornado
 , urllib3
 , versioneer
-, wheel
 , zict
 }:
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2023.8.0";
-  format = "pyproject";
+  version = "2024.4.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dask";
-    repo = pname;
+    repo = "distributed";
     rev = "refs/tags/${version}";
-    hash = "sha256-FvNh7gfxUR1iIUY3kMolhzcbWupQL39E9JXWip8bdrQ=";
+    hash = "sha256-xoQ+b7qzstZl9gRNs4jssNOsGQHDdvTXU7pTjBSuyWs=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace "versioneer[toml]==" "versioneer[toml]>=" \
       --replace 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     setuptools
     setuptools-scm
     versioneer
+  ] ++ versioneer.optional-dependencies.toml;
+
+  pythonRelaxDeps = [
+    "dask"
   ];
 
   propagatedBuildInputs = [

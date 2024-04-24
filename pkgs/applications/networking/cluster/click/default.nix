@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "click";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "click";
     rev = "v${version}";
-    hash = "sha256-rwS08miRpc+Q9DRuspr21NMYpEYmmscvzarDnjyVe5c=";
+    hash = "sha256-tYSbyDipZg6Qj/CWk1QVUT5AG8ncTt+5V1+ekpmsKXA=";
   };
 
-  cargoHash = "sha256-WNITVYTS7JWrBBwxlQuVTmLddWLbDJACizEsRiustGg=";
+  cargoHash = "sha256-fcJTxZX9mdF4oFl/Cn1egczRy+yhWt2zLKsdLKz6Q+s=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
 

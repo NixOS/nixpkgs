@@ -18,14 +18,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libnice";
-  version = "0.1.21";
+  version = "0.1.22";
 
   outputs = [ "bin" "out" "dev" ]
     ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
     url = "https://libnice.freedesktop.org/releases/${pname}-${version}.tar.gz";
-    hash = "sha256-cuc6Ks8g9ZCT4h1WAWBuQFhzUD6zXzRvpiHeI+mbOzk=";
+    hash = "sha256-pfckzwnq5QxBp1FxQdidpKYeyerKMtpKAHP67VQXrX4=";
   };
 
   patches = [
