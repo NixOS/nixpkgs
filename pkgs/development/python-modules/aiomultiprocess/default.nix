@@ -9,17 +9,18 @@
 buildPythonPackage rec {
   pname = "aiomultiprocess";
   version = "0.9.1";
-  format = "pyproject";
+  pyproject = true;
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "omnilib";
-    repo = pname;
-    rev = "v${version}";
+    repo = "aiomultiprocess";
+    rev = "refs/tags/v${version}";
     hash = "sha256-LWrAr3i2CgOMZFxWi9B3kiou0UtaHdDbpkr6f9pReRA=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
