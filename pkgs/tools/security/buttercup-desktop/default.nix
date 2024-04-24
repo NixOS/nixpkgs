@@ -15,7 +15,6 @@ in appimageTools.wrapType2 {
   extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ [ pkgs.libsecret ];
 
   extraInstallCommands = ''
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
     install -m 444 -D ${appimageContents}/buttercup.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/buttercup.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'
