@@ -1,6 +1,6 @@
 { lib
 , callPackage
-, extraPackages ? (ps: [])
+, extraPackages ? (ps: [ ])
 , runCommand
 }:
 
@@ -12,12 +12,12 @@ let
     (ps.toPythonModule xonsh-unwrapped)
   ] ++ extraPackages ps);
 in
-  runCommand "xonsh-${xonsh-unwrapped.version}"
-  {
-    inherit (xonsh-unwrapped) pname version meta passthru;
-  } ''
-    mkdir -p $out/bin
-    for bin in ${lib.getBin xonsh-unwrapped}/bin/*; do
-      ln -s ${pythonEnv}/bin/$(basename "$bin") $out/bin/
-    done
-  ''
+runCommand "xonsh-${xonsh-unwrapped.version}"
+{
+  inherit (xonsh-unwrapped) pname version meta passthru;
+} ''
+  mkdir -p $out/bin
+  for bin in ${lib.getBin xonsh-unwrapped}/bin/*; do
+    ln -s ${pythonEnv}/bin/$(basename "$bin") $out/bin/
+  done
+''
