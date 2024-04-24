@@ -6,7 +6,11 @@ It uses Linux' namespaces feature to create temporary lightweight environments w
 Accepted arguments are:
 
 - `name`
-        The name of the environment and the wrapper executable.
+        The name of the environment, and the wrapper executable if `pname` is unset.
+- `pname`
+        The pname of the environment and the wrapper executable.
+- `version`
+        The version of the environment.
 - `targetPkgs`
         Packages to be installed for the main host's architecture (i.e. x86_64 on x86_64 installations). Along with libraries binaries are also installed.
 - `multiPkgs`

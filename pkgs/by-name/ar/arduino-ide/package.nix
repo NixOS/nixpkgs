@@ -18,8 +18,6 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/{${pname}-${version},${pname}}
-
     install -Dm444 ${appimageContents}/${pname}.desktop -t $out/share/applications/
     install -Dm444 ${appimageContents}/${pname}.png -t $out/share/pixmaps/
   '';

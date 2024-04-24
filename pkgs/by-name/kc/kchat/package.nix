@@ -23,7 +23,7 @@ appimageTools.wrapType2 rec {
       cp -r ${contents}/{locales,resources} "$out/share/lib/kchat"
       cp -r ${contents}/usr/* "$out"
       cp "${contents}/kchat-desktop.desktop" "$out/share/applications/"
-      mv "$out/bin/kchat-${version}" "$out/bin/${meta.mainProgram}"
+      mv "$out/bin/kchat" "$out/bin/${meta.mainProgram}" || true
       substituteInPlace $out/share/applications/kchat-desktop.desktop --replace 'Exec=AppRun' 'Exec=${meta.mainProgram}'
     '';
 
