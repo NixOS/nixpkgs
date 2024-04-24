@@ -10,6 +10,7 @@ nodePackages.n8n.override {
   nativeBuildInputs = [
     pkgs.nodePackages.node-pre-gyp
     pkgs.which
+    pkgs.xcbuild
   ];
 
   buildInputs = [
