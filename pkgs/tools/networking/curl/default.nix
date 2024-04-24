@@ -59,6 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-b+oqrGpGEPvQQAr7C83b5yWKZMY/H2jlhV68DGWXEM0=";
   };
 
+  patches = lib.optionals (lib.versionOlder finalAttrs.version "8.7.2") [
+    # https://github.com/curl/curl/pull/13219
+    # https://github.com/newsboat/newsboat/issues/2728
+    ./8.7.1-compression-fix.patch
+  ];
+
   postPatch = ''
     patchShebangs scripts
   '';
