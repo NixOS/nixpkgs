@@ -1,34 +1,26 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, libxkbcommon }:
+{ lib, rustPlatform, fetchFromGitHub, pkg-config, libxkbcommon, wayland, libGL }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wpaperd";
-  version = "0.3.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "danyspin97";
-    repo = pname;
+    repo = "wpaperd";
     rev = version;
-    sha256 = "cgjHCSBrkX3aoz42qBS/1JUGhc7sZKarKByntp7ubaQ=";
+    hash = "sha256-5riZ/6yjgsW++SUIyJP5rFG65tkjJKgtvDLIGaoiHN0=";
   };
+
+  cargoHash = "sha256-EkCGLxUQeSCR88Y95Hog9TAjpYMmZHlOqEM//ENiCco=";
 
   nativeBuildInputs = [
     pkg-config
   ];
   buildInputs = [
+    wayland
+    libGL
     libxkbcommon
   ];
-
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "smithay-client-toolkit-0.16.0" = "iPDL7pxTez4EnIBaUH25lLSWpu3RRL2QBF9pfdTDsP8=";
-    };
-  };
-
-  postPatch = ''
-    rm Cargo.lock
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
 
   meta = with lib; {
     description = "Minimal wallpaper daemon for Wayland";
@@ -41,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/danyspin97/wpaperd";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ DPDmancul ];
+    maintainers = with maintainers; [ DPDmancul nu-nu-ko ];
     mainProgram = "wpaperd";
   };
 }
