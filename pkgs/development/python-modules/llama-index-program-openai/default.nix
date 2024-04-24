@@ -28,6 +28,9 @@ buildPythonPackage rec {
 
   build-system = [
     poetry-core
+  ];
+
+  nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
 
