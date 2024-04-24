@@ -3814,6 +3814,16 @@
       fingerprint = "6E3A FA6D 915C C2A4 D26F  C53E 7BB4 BA9C 783D 2BBC";
     }];
   };
+  codebam = {
+      name = "Sean Behan";
+      email = "codebam@riseup.net";
+      matrix = "@codebam:fedora.im";
+      github = "codebam";
+      githubId = 6035884;
+      keys = [{
+        fingerprint = "42CD E212 593C F2FD C723 48A8 0F6D 5021 A87F 92BA";
+      }];
+    };
   codec = {
     email = "codec@fnord.cx";
     github = "codec";
