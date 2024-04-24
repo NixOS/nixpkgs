@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pydantic_yaml-0";
-  version = "0.11.2";
+  version = "1.3.0";
 
   pyproject = true;
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "NowanIlfideme";
     repo = "pydantic-yaml";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AeUyVav0/k4Fz69Qizn4hcJKoi/CDR9eUan/nJhWsDY=";
+    hash = "sha256-Kv1nLR91iwShmCgduXA07+a+2EP1nnvaC7fBAn/ufEM=";
   };
 
   postPatch = ''
