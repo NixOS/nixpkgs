@@ -262,6 +262,11 @@ in lib.makeExtensible (self: ({
     hash = "sha256-ObaVDDPtnOeIE0t7m4OVk5G+OS6d9qYh+ktK67Fe/zE=";
   };
 
+  nix_2_22 = common {
+    version = "2.22.0";
+    hash = "sha256-Ugcc+lSq8nJP+mddMlGFnoG4Ix1lRFHWOal3299bqR8=";
+  };
+
   # The minimum Nix version supported by Nixpkgs
   # Note that some functionality *might* have been backported into this Nix version,
   # making this package an inaccurate representation of what features are available
@@ -281,7 +286,7 @@ in lib.makeExtensible (self: ({
 
   stable = addFallbackPathsCheck self.nix_2_18;
 
-  unstable = self.nix_2_21;
+  unstable = self.nix_2_22;
 } // lib.optionalAttrs config.allowAliases {
   nix_2_4 = throw "nixVersions.nix_2_4 has been removed";
 
