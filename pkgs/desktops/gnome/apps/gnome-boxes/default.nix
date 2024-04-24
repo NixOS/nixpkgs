@@ -14,7 +14,6 @@
 , gtk3
 , libvirt
 , spice-gtk
-, appstream-glib
 , spice-protocol
 , libhandy
 , libsoup_3
@@ -65,7 +64,6 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   nativeBuildInputs = [
-    appstream-glib # for appstream-util
     gettext
     gobject-introspection
     itstool
