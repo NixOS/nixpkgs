@@ -120,6 +120,8 @@ in stdenv.mkDerivation rec {
     libappindicator-gtk3
     libnotify
     libdbusmenu
+    pipewire
+    stdenv.cc.cc
     xdg-utils
     wayland
   ];
@@ -158,7 +160,6 @@ in stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc pipewire ] }"
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
     )
