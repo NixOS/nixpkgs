@@ -1,7 +1,9 @@
 { lib
 , aiohttp
+, aioresponses
 , buildPythonPackage
 , fetchFromGitHub
+, incremental
 , pythonOlder
 , pytestCheckHook
 , setuptools
@@ -9,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "aiolyric";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "timmo001";
     repo = "aiolyric";
     rev = "refs/tags/${version}";
-    hash = "sha256-FZhLjVrLzLv6CZz/ROlvbtBK9XnpO8pG48aSIoBxhCo=";
+    hash = "sha256-pN/F4Rdov06sm1yfJQEzmWyujWVeVU+bNGGkgnN4jYw=";
   };
 
   build-system = [
@@ -27,9 +29,11 @@ buildPythonPackage rec {
 
   dependencies = [
     aiohttp
+    incremental
   ];
 
   nativeCheckInputs = [
+    aioresponses
     pytestCheckHook
   ];
 
