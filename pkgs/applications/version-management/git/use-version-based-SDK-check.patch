@@ -1,0 +1,25 @@
+From 619cc16f0395f70315138cadaa16d2cf813a8603 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Tue, 23 Apr 2024 21:36:17 -0400
+Subject: [PATCH] Use version-based SDK check
+
+---
+ compat/fsmonitor/fsm-listen-darwin.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/compat/fsmonitor/fsm-listen-darwin.c b/compat/fsmonitor/fsm-listen-darwin.c
+index 2fc67442eb..53851e1789 100644
+--- a/compat/fsmonitor/fsm-listen-darwin.c
++++ b/compat/fsmonitor/fsm-listen-darwin.c
+@@ -5,7 +5,7 @@
+ #include <CoreFoundation/CoreFoundation.h>
+ #include <CoreServices/CoreServices.h>
+ 
+-#ifndef AVAILABLE_MAC_OS_X_VERSION_10_13_AND_LATER
++#if MAC_OS_X_VERSION_MAX_ALLOWED < 101300
+ /*
+  * This enum value was added in 10.13 to:
+  *
+-- 
+2.42.0
+
