@@ -1,12 +1,13 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, incremental
-, pythonOlder
-, pytestCheckHook
-, setuptools
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  incremental,
+  pythonOlder,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-pN/F4Rdov06sm1yfJQEzmWyujWVeVU+bNGGkgnN4jYw=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
@@ -42,9 +41,7 @@ buildPythonPackage rec {
     "test_priority"
   ];
 
-  pythonImportsCheck = [
-    "aiolyric"
-  ];
+  pythonImportsCheck = [ "aiolyric" ];
 
   meta = with lib; {
     description = "Python module for the Honeywell Lyric Platform";
