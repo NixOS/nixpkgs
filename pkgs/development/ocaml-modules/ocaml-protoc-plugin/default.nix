@@ -49,9 +49,5 @@ buildDunePackage rec {
       and de-serialization function from a .proto file.
     '';
     maintainers = [ lib.maintainers.GirardR1006 ];
-    # Broken with Dune 3.15.1:
-    #   Error: Dependency cycle between:
-    #      %{read:config/support_proto3_optional.conf} at test/dune:16
-    broken = true;
   };
 }

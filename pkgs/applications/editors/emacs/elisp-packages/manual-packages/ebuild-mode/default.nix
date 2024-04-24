@@ -1,21 +1,26 @@
-{ lib, melpaBuild, fetchurl, writeText }:
+{
+  lib,
+  melpaBuild,
+  fetchzip,
+  writeText,
+}:
 
 melpaBuild rec {
   pname = "ebuild-mode";
-  version = "1.67";
+  version = "1.70";
 
-  src = fetchurl {
-    url = "https://dev.gentoo.org/~ulm/emacs/ebuild-mode-${version}.tar.xz";
-    hash = "sha256-5qxHpu1BLtI8LFnL/sAoqmo80zeyElxIdFtAsfMefUE=";
+  src = fetchzip {
+    url = "https://gitweb.gentoo.org/proj/ebuild-mode.git/snapshot/ebuild-mode-${version}.tar.bz2";
+    hash = "sha256-dOm3xJMFLelwcImIwckeQHx1GqV9PB+I45QA9UT1nCM=";
   };
 
   # not used but needs to be set; why?
-  commit = "e7b45096283ac8836f208babddfd1ea1c1d1d1d";
+  commit = "a643f177b58aa8869f2f24814e990320aa4f0f96";
 
   recipe = writeText "recipe" ''
     (ebuild-mode
-      :url "https://anongit.gentoo.org/git/proj/ebuild-mode.git"
-      :fetcher git)
+     :url "https://gitweb.gentoo.org/proj/ebuild-mode.git"
+     :fetcher git)
   '';
 
   meta = {
