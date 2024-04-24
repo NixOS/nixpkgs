@@ -2028,6 +2028,12 @@
     githubId = 687218;
     name = "averelld";
   };
+  avery = {
+    email = "nixpkgs@avery.cafe";
+    github = "coolavery";
+    githubId = 76545554;
+    name = "Avery";
+  };
   avh4 = {
     email = "gruen0aermel@gmail.com";
     github = "avh4";
