@@ -660,11 +660,9 @@ in
       environment = {
         USER = cfg.user;
         HOME = cfg.stateDir;
-        # `GITEA_` prefix until https://codeberg.org/forgejo/forgejo/issues/497
-        # is resolved.
-        GITEA_WORK_DIR = cfg.stateDir;
-        GITEA_CUSTOM = cfg.customDir;
-      } // lib.listToAttrs (map (e: lib.nameValuePair e.env "%d/${e.env}") secrets);
+        FORGEJO_WORK_DIR = cfg.stateDir;
+        FORGEJO_CUSTOM = cfg.customDir;
+      };
     };
 
     services.openssh.settings.AcceptEnv = mkIf (!cfg.settings.START_SSH_SERVER or false) "GIT_PROTOCOL";
@@ -690,10 +688,8 @@ in
       environment = {
         USER = cfg.user;
         HOME = cfg.stateDir;
-        # `GITEA_` prefix until https://codeberg.org/forgejo/forgejo/issues/497
-        # is resolved.
-        GITEA_WORK_DIR = cfg.stateDir;
-        GITEA_CUSTOM = cfg.customDir;
+        FORGEJO_WORK_DIR = cfg.stateDir;
+        FORGEJO_CUSTOM = cfg.customDir;
       };
 
       serviceConfig = {
