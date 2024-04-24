@@ -25,15 +25,15 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.27.5";
-    rev = "be4f1cfd31c79fc05651efa2f88429b3c03d1d9e";
-    hash = "sha256-+sjNqq91YfyW83aq/8WoSo7Jl5QZUmtWtsajnLLMgDc=";
+    version = "1.30.1";
+    rev = "816188b86a0a52095b116b107f576324082c7c02";
+    hash = "sha256-G0rT+OfMk2nitTXcxMr04jwUMYTfb4VBEV1zftalgFU=";
   };
 
   # these need to be updated for any changes to fetchAttrs
   depsHash = {
-    x86_64-linux = "sha256-4XJgPfNEPmbvAZMLlQcnIaoGzaFtyhsuEshdEjLh0OY=";
-    aarch64-linux = "sha256-85HLiK+xX/tabazh97J4fWk5KYc7kynbxj/g8HCGTD4=";
+    x86_64-linux = "sha256-Pj176fQts/H+BlzsVkx+OlUF+4+GHutnNZ5f+eagMmk=";
+    aarch64-linux = "sha256-5El0WOYTLiBKhYxRXKJFv1m2M8jZlN1cYrJDnRX2wYs=";
   }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 in
 buildBazelPackage {
@@ -57,7 +57,7 @@ buildBazelPackage {
     sed -i '/javabase=/d' .bazelrc
     sed -i '/"-Werror"/d' bazel/envoy_internal.bzl
 
-    cp ${./protobuf.patch} bazel/protobuf.patch
+    cp ${./dd_trace_cpp.patch} bazel/dd_trace_cpp.patch
   '';
 
   patches = [
@@ -70,11 +70,10 @@ buildBazelPackage {
     # use system C/C++ tools
     ./0003-nixpkgs-use-system-C-C-toolchains.patch
 
-    # bump proxy-wasm-cpp-host until > 1.27.3/1.28.0
-    (fetchpatch {
-      url = "https://github.com/envoyproxy/envoy/pull/31451.patch";
-      hash = "sha256-n8k7bho3B8Gm0dJbgf43kU7ymvo15aGJ2Twi2xR450g=";
-    })
+    # apply patch to dd-trace-cpp
+    # remove once a version of dd-trace-cpp is released and adopted by envoy
+    # that contains https://github.com/DataDog/dd-trace-cpp/commit/3a8e1e9a3cf4e87ef053e954a39dc7a967ac6965
+    ./0004-nixpkgs-add-cstdint-in-dd-trace-cpp.patch
   ];
 
   nativeBuildInputs = [
@@ -90,9 +89,6 @@ buildBazelPackage {
   buildInputs = [
     linuxHeaders
   ];
-
-  # external/com_github_grpc_grpc/src/core/ext/transport/binder/transport/binder_transport.cc:756:29: error: format not a string literal and no format arguments [-Werror=format-security]
-  hardeningDisable = [ "format" ];
 
   fetchAttrs = {
     sha256 = depsHash;
@@ -171,6 +167,14 @@ buildBazelPackage {
     "--extra_toolchains=@local_jdk//:all"
     "--java_runtime_version=local_jdk"
     "--tool_java_runtime_version=local_jdk"
+
+    # undefined reference to 'grpc_core::*Metadata*::*Memento*
+    #
+    # During linking of the final binary, we see undefined references to grpc_core related symbols.
+    # The missing symbols would be instantiations of a template class from https://github.com/grpc/grpc/blob/v1.59.4/src/core/lib/transport/metadata_batch.h
+    # "ParseMemento" and "MementoToValue" are only implemented for some types
+    # and appear unused and unimplemented for the undefined cases reported by the linker.
+    "--linkopt=-Wl,--unresolved-symbols=ignore-in-object-files"
 
     "--define=wasm=${wasmRuntime}"
   ] ++ (lib.optionals stdenv.isAarch64 [
