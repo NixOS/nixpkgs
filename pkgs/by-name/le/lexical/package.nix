@@ -2,25 +2,24 @@
   lib,
   beamPackages,
   fetchFromGitHub,
-  writeScript,
   elixir,
 }:
 
 beamPackages.mixRelease rec {
   pname = "lexical";
-  version = "0.5.2";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "lexical-lsp";
     repo = "lexical";
     rev = "refs/tags/v${version}";
-    hash = "sha256-HWqwJ7PAz80bm6YeDG84hLWPE11n06K98GOyeDQWZWU=";
+    hash = "sha256-20qfzYioR1PhA0ZBcft0nhcwxB95pw5L9zoPLWd7ZIE=";
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {
     inherit pname version src;
 
-    hash = "sha256-G0mT+rvXZWLJIMfrhxq3TXt26wDImayu44wGEYJ+3CE=";
+    hash = "sha256-xihxPfdLPr5jWFfcX2tccFUl7ND1mi9u8Dn28k6lGVA=";
   };
 
   installPhase = ''
