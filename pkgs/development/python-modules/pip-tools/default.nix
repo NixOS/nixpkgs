@@ -68,6 +68,9 @@ buildPythonPackage rec {
     "test_compile_recursive_extras"
     "test_combine_different_extras_of_the_same_package"
     "test_diff_should_not_uninstall"
+    "test_cli_compile_all_extras_with_multiple_packages"
+    # Deprecations
+    "test_error_in_pyproject_toml"
   ];
 
   pythonImportsCheck = [

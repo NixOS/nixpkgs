@@ -16,6 +16,13 @@ on:
     # so it shouldn't be a problem
     types: [opened, synchronize, reopened, edited]
 
+# Create a check-by-name concurrency group based on the branch name. if a new
+# commit is pushed to the main branch while a previous run is still in progress,
+# the previous run will be cancelled and the new one will start.
+concurrency:
+  group: check-by-name-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   # We need this permission to cancel the workflow run if there's a merge conflict
   actions: write

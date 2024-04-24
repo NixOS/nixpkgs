@@ -9,7 +9,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sqlite3-to-mysql";
-  version = "2.1.8";
+  version = "2.1.9";
   format = "pyproject";
 
   disabled = python3Packages.pythonOlder "3.8";
@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
     owner = "techouse";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-j9AjgLwEqt+PI4LKc3gPjXW95zAKmRjIzPFnOB0n6MM=";
+    hash = "sha256-TnqNPW/d1dcVuS5sg9NOXH5ns7AzcbyailY2pYcpUEU=";
   };
 
   nativeBuildInputs = with python3Packages; [

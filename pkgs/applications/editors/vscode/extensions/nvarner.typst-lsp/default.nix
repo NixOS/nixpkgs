@@ -12,8 +12,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
     publisher = "nvarner";
     # Please update the corresponding binary (typst-lsp) when updating
     # this extension.
-    version = "0.12.1";
-    hash = "sha256-JcfFaR1wU5XwapH8vnfVy7Cb7DfUWVeoLfBV3wEtCpE=";
+    version = "0.13.0";
+    hash = "sha256-xiFUJymZOTEqlGvCHvLiI0pVg7NLgIXhZ7x8yx+a5mY=";
   };
 
   nativeBuildInputs = [

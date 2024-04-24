@@ -41,7 +41,7 @@ in
 
     # Standard Erlang versions, using the generic builder.
 
-    erlang_27-rc2 = self.beamLib.callErlang ../development/interpreters/erlang/27-rc2.nix {
+    erlang_27-rc3 = self.beamLib.callErlang ../development/interpreters/erlang/27-rc3.nix {
       wxGTK = wxGTK32;
       parallelBuild = true;
       autoconf = buildPackages.autoconf269;

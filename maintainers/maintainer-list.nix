@@ -4448,6 +4448,12 @@
     github = "DarkOnion0";
     githubId = 68606322;
   };
+  daru-san = {
+    name = "Daru";
+    email = "zadarumaka@proton.me";
+    github = "Daru-san";
+    githubId = 135046711;
+  };
   das-g = {
     email = "nixpkgs@raphael.dasgupta.ch";
     github = "das-g";
@@ -11661,6 +11667,12 @@
     name = "Michał Mieszczak";
     github = "LongerHV";
     githubId = 46924944;
+  };
+  lonyelon = {
+    email = "sergio@lony.xyz";
+    name = "Sergio Miguéns Iglesias";
+    github = "lonyelon";
+    githubId = 18664655;
   };
   lopsided98 = {
     email = "benwolsieffer@gmail.com";
