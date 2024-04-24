@@ -3,15 +3,21 @@
 , faacSupport ? false
 , glib, python3Packages, gtk3, wrapGAppsHook3
 , gsettings-desktop-schemas, intltool, xvfb-run
-, gobject-introspection, gst_all_1, fdk-aac-encoder }:
+, gobject-introspection, gst_all_1, fdk-aac-encoder }: let
 
-python3Packages.buildPythonApplication rec {
+pythonWrapPackages = [
+  python3Packages.gst-python
+  python3Packages.distutils-extra
+  python3Packages.setuptools
+  python3Packages.pygobject3
+];
+in python3Packages.buildPythonApplication rec {
   pname = "soundconverter";
-  version = "4.0.4";
+  version = "4.0.5";
 
   src = fetchurl {
     url = "https://launchpad.net/soundconverter/trunk/${version}/+download/${pname}-${version}.tar.gz";
-    hash = "sha256-15TeNxFQzE6pzADuBN8jEzpPPna4pt0x4GXsaxi0gr4=";
+    hash = "sha256-ebBaNmhd3OXeJPCiPQjgCgFO2J5ilx/pTB0/uDbrefM=";
   };
 
   buildInputs = [
@@ -22,7 +28,7 @@ python3Packages.buildPythonApplication rec {
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-ugly
     (gst_all_1.gst-plugins-bad.override { inherit faacSupport; })
-  ];
+  ] ++ pythonWrapPackages;
 
   nativeBuildInputs = [
     intltool
@@ -30,19 +36,10 @@ python3Packages.buildPythonApplication rec {
     gobject-introspection
   ];
 
-  propagatedBuildInputs = [
-    python3Packages.gst-python
-    python3Packages.distutils-extra
-    python3Packages.setuptools
-    python3Packages.pygobject3
-  ];
-
-  nativeCheckInputs = [
-    xvfb-run
-  ];
+  nativeCheckInputs = [ xvfb-run ];
 
   postPatch = ''
-    substituteInPlace  bin/soundconverter --replace \
+    substituteInPlace  bin/soundconverter --replace-fail \
       "DATA_PATH = os.path.join(SOURCE_PATH, 'data')" \
       "DATA_PATH = '$out/share/soundconverter'"
   '';
@@ -56,7 +53,7 @@ python3Packages.buildPythonApplication rec {
     # FIXME: Fails due to weird Gio.file_parse_name() behavior.
     sed -i '49 a\    @unittest.skip("Gio.file_parse_name issues")' tests/testcases/names.py
   '' + lib.optionalString (!faacSupport) ''
-    substituteInPlace tests/testcases/gui_integration.py --replace \
+    substituteInPlace tests/testcases/gui_integration.py --replace-warn \
       "for encoder in ['fdkaacenc', 'faac', 'avenc_aac']:" \
       "for encoder in ['fdkaacenc', 'avenc_aac']:"
   '';
@@ -67,14 +64,17 @@ python3Packages.buildPythonApplication rec {
     runHook postCheck
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/soundconverter --prefix PYTHONPATH : "$PYTHONPATH"
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    makeWrapperArgs+=(--prefix PYTHONPATH : ${python3Packages.makePythonPath pythonWrapPackages})
   '';
 
   # Necessary to set GDK_PIXBUF_MODULE_FILE.
   strictDeps = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://soundconverter.org/";
     description = "Leading audio file converter for the GNOME Desktop";
     mainProgram = "soundconverter";
@@ -83,8 +83,8 @@ python3Packages.buildPythonApplication rec {
       and writes WAV, FLAC, MP3, AAC and Ogg Vorbis files.
       Uses Python and GTK+ GUI toolkit, and runs on X Window System.
     '';
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jakubgs ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ jakubgs pyrox0 ];
   };
 }
