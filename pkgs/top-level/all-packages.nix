@@ -27948,8 +27948,6 @@ with pkgs;
 
   dnsdist = callPackage ../servers/dns/dnsdist { };
 
-  pdns-recursor = callPackage ../servers/dns/pdns-recursor { };
-
   powertop = callPackage ../os-specific/linux/powertop { };
 
   pps-tools = callPackage ../os-specific/linux/pps-tools { };
