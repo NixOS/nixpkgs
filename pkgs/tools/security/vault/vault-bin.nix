@@ -59,5 +59,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; teams.serokell.members ++ [ offline psyanticy Chili-Man techknowlogick mkaito ];
     mainProgram = "vault";
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" ];
+    knownVulnerabilities = [ "CVE-2024-2660" ];
   };
 }

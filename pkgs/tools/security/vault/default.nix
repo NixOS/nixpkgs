@@ -49,5 +49,6 @@ buildGoModule rec {
     license = licenses.mpl20;
     mainProgram = "vault";
     maintainers = with maintainers; [ rushmorem lnl7 offline pradeepchhetri Chili-Man techknowlogick ];
+    knownVulnerabilities = [ "CVE-2024-2660" ];
   };
 }
