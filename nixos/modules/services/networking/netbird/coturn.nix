@@ -148,10 +148,10 @@ in
         allowedUDPPorts = cfg.openPorts;
         allowedTCPPorts = cfg.openPorts;
 
-        allowedUDPPortRanges = [
+        allowedUDPPortRanges = with config.services.coturn; [
           {
-            from = cfg.minPort;
-            to = cfg.maxPort;
+            from = min-port;
+            to = max-port;
           }
         ];
       };
