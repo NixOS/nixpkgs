@@ -1,9 +1,13 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.script;
+  inherit (lib)
+    mkOption
+    types
+    literalExpression
+    concatStringsSep
+    ;
   configFile = pkgs.writeText "script-exporter.yaml" (builtins.toJSON cfg.settings);
 in
 {

@@ -1,9 +1,15 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.varnish;
+  inherit (lib)
+    mkOption
+    types
+    mkDefault
+    optional
+    escapeShellArg
+    concatStringsSep
+    ;
 in
 {
   port = 9131;

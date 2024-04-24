@@ -1,9 +1,8 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.nginxlog;
+  inherit (lib) mkOption types;
 in {
   port = 9117;
   extraOpts = {

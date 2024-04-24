@@ -1,9 +1,13 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.dovecot;
+  inherit (lib)
+    mkOption
+    types
+    escapeShellArg
+    concatStringsSep
+    ;
 in
 {
   port = 9166;

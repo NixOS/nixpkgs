@@ -1,9 +1,8 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.unpoller;
+  inherit (lib) mkEnableOption generators;
 
   configFile = pkgs.writeText "prometheus-unpoller-exporter.json" (generators.toJSON {} {
     poller = { inherit (cfg.log) debug quiet; };

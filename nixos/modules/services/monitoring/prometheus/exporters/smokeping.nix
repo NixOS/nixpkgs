@@ -1,9 +1,8 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.smokeping;
+  inherit (lib) mkOption types concatStringsSep;
   goDuration = types.mkOptionType {
     name = "goDuration";
     description = "Go duration (https://golang.org/pkg/time/#ParseDuration)";

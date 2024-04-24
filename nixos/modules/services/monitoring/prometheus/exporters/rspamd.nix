@@ -1,9 +1,16 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.rspamd;
+  inherit (lib)
+    mkOption
+    types
+    replaceStrings
+    mkRemovedOptionModule
+    recursiveUpdate
+    concatStringsSep
+    literalExpression
+    ;
 
   mkFile = conf:
     pkgs.writeText "rspamd-exporter-config.yml" (builtins.toJSON conf);

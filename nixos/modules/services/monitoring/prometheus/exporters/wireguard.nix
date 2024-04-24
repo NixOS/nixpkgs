@@ -1,9 +1,15 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.wireguard;
+  inherit (lib)
+    mkOption
+    types
+    mkRenamedOptionModule
+    mkEnableOption
+    optionalString
+    escapeShellArg
+    ;
 in {
   port = 9586;
   imports = [
