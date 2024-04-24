@@ -61,6 +61,12 @@ in {
     packages = nextcloud28Packages;
   };
 
+  nextcloud29 = generic {
+    version = "29.0.0";
+    hash = "sha256-6bU/ZDK29mRIfThpZF+hIaZM8O1q7oOqVgkD2vhrUr0=";
+    packages = nextcloud29Packages;
+  };
+
   # tip: get the sha with:
   # curl 'https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2.sha256'
 }
