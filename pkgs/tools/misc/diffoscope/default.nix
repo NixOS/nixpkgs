@@ -168,7 +168,7 @@ python3.pkgs.buildPythonApplication rec {
     jsondiff
     libarchive-c
     progressbar33
-    pypdf2
+    pypdf
     python-magic
     pyxattr
     rpm
@@ -215,7 +215,8 @@ python3.pkgs.buildPythonApplication rec {
       guestfs
       h5py
       pdfminer-six
-      # docx2txt, breaks the tests.
+      r2pipe
+      # docx2txt, nixpkgs packages another project named the same, which does not work
     ])
     # oggvideotools is broken on Darwin, please put it back when it will be fixed?
     ++ lib.optionals stdenv.isLinux [ oggvideotools ]

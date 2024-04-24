@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pydevd";
-  version = "2.10.0";
+  version = "3.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,14 +23,14 @@ buildPythonPackage rec {
     owner = "fabioz";
     repo = "PyDev.Debugger";
     rev = "pydev_debugger_${lib.replaceStrings ["."] ["_"] version}";
-    hash = "sha256-1tWiPj30x/ZXIBu2qzUCpyF1bLsJ0wW1QaxklD3h3A8=";
+    hash = "sha256-aylmLN7lVUza2lt2K48rJsx3XatXPgPjcmPZ05raLX0=";
   };
 
-  nativeBuildInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  build-system = [
     setuptools
   ];
-
-  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     numpy
@@ -55,8 +55,11 @@ buildPythonPackage rec {
     # https://github.com/fabioz/PyDev.Debugger/issues/227
     "test_to_server_and_to_client"
     # AssertionError pydevd_tracing.set_trace_to_threads(tracing_func) == 0
-    "test_tracing_other_threads"
+    "test_step_next_step_in_multi_threads"
     "test_tracing_basic"
+    "test_tracing_other_threads"
+    # subprocess.CalledProcessError
+    "test_find_main_thread_id"
   ] ++ lib.optionals (pythonAtLeast "3.12") [
     "test_case_handled_and_unhandled_exception_generator"
     "test_case_stop_async_iteration_exception"
@@ -73,9 +76,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "PyDev.Debugger (used in PyDev, PyCharm and VSCode Python)";
-    mainProgram = "pydevd";
     homepage = "https://github.com/fabioz/PyDev.Debugger";
     license = licenses.epl10;
     maintainers = with maintainers; [ onny ];
+    mainProgram = "pydevd";
   };
 }

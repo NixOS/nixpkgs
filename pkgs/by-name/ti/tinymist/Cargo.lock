@@ -625,7 +625,7 @@ version = "0.15.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0e1f83fc076bd6dd27517eacdf25fef6c4dfe5f1d7448bafaaf3a26f13b5e4eb"
 dependencies = [
- "encode_unicode",
+ "encode_unicode 0.3.6",
  "lazy_static",
  "libc",
  "windows-sys 0.52.0",
@@ -926,6 +926,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "dirs-next"
+version = "2.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b98cf8ebf19c3d1b223e151f99a4f9f0690dca41414773390fc824184ac833e1"
+dependencies = [
+ "cfg-if",
+ "dirs-sys-next",
+]
+
+[[package]]
 name = "dirs-sys"
 version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -935,6 +945,17 @@ dependencies = [
  "option-ext",
  "redox_users",
  "windows-sys 0.48.0",
+]
+
+[[package]]
+name = "dirs-sys-next"
+version = "0.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4ebda144c4fe02d1f7ea1a7d9641b6fc6b580adcfa024ae48797ecdeb6825b4d"
+dependencies = [
+ "libc",
+ "redox_users",
+ "winapi",
 ]
 
 [[package]]
@@ -1013,6 +1034,12 @@ name = "encode_unicode"
 version = "0.3.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a357d28ed41a50f9c765dbfe56cbc04a64e53e5fc58ba79fbc34c10ef3df831f"
+
+[[package]]
+name = "encode_unicode"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "34aa73646ffb006b8f5147f3dc182bd4bcb190227ce861fc4a4844bf8e3cb2c0"
 
 [[package]]
 name = "encoding_rs"
@@ -1910,6 +1937,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "is-terminal"
+version = "0.4.12"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f23ff5ef2b80d608d61efee834934d862cd92461afc0560dedf493e4c033738b"
+dependencies = [
+ "hermit-abi",
+ "libc",
+ "windows-sys 0.52.0",
+]
+
+[[package]]
 name = "is-wsl"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2634,6 +2672,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "prettytable-rs"
+version = "0.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "eea25e07510aa6ab6547308ebe3c036016d162b8da920dbb079e3ba8acf3d95a"
+dependencies = [
+ "csv",
+ "encode_unicode 1.0.0",
+ "is-terminal",
+ "lazy_static",
+ "term",
+ "unicode-width",
+]
+
+[[package]]
 name = "proc-macro2"
 version = "1.0.79"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2960,6 +3012,29 @@ name = "roxmltree"
 version = "0.19.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3cd14fd5e3b777a7422cca79358c57a8f6e3a703d9ac187448d0daf220c2407f"
+
+[[package]]
+name = "rust_iso3166"
+version = "0.1.12"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e676677b94480848a8d88c74553bad50aed2ee77d8c0985aa50d8c4e26f3054b"
+dependencies = [
+ "js-sys",
+ "phf",
+ "prettytable-rs",
+ "wasm-bindgen",
+]
+
+[[package]]
+name = "rust_iso639"
+version = "0.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a079fa995fd99d42d7244f325b6737677852036ce2efe5244227d2c75ff4bd73"
+dependencies = [
+ "phf",
+ "prettytable-rs",
+ "wasm-bindgen",
+]
 
 [[package]]
 name = "rustc-demangle"
@@ -3575,6 +3650,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "term"
+version = "0.7.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c59df8ac95d96ff9bede18eb7300b0fda5e5d8d90960e76f8e14ae765eedbf1f"
+dependencies = [
+ "dirs-next",
+ "rustversion",
+ "winapi",
+]
+
+[[package]]
 name = "termcolor"
 version = "1.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3595,7 +3681,7 @@ dependencies = [
 
 [[package]]
 name = "tests"
-version = "0.11.4"
+version = "0.11.5"
 dependencies = [
  "insta",
  "lsp-server",
@@ -3692,7 +3778,7 @@ dependencies = [
 
 [[package]]
 name = "tinymist"
-version = "0.11.4"
+version = "0.11.5"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -3743,7 +3829,7 @@ dependencies = [
 
 [[package]]
 name = "tinymist-query"
-version = "0.11.4"
+version = "0.11.5"
 dependencies = [
  "anyhow",
  "comemo 0.4.0",
@@ -3764,6 +3850,8 @@ dependencies = [
  "percent-encoding",
  "reflexo",
  "regex",
+ "rust_iso3166",
+ "rust_iso639",
  "serde",
  "serde_json",
  "sha2",
@@ -3779,7 +3867,7 @@ dependencies = [
 
 [[package]]
 name = "tinymist-render"
-version = "0.11.4"
+version = "0.11.5"
 dependencies = [
  "base64 0.22.0",
  "log",
@@ -4370,9 +4458,9 @@ dependencies = [
 
 [[package]]
 name = "typstyle"
-version = "0.11.13"
+version = "0.11.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "38f04e5495bff9deed2a9155dca07889ec0fe1c79f48eb2d9ea99fc272459499"
+checksum = "f701eb3c275c8250b3e5e18c3c081e36861cdd5b2e78538ff4984735cbfd9591"
 dependencies = [
  "anyhow",
  "clap",

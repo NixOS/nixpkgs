@@ -24,14 +24,14 @@
 
 buildPythonApplication rec {
   pname = "cobang";
-  version = "0.10.5";
+  version = "0.10.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hongquan";
     repo = "CoBang";
     rev = "refs/tags/v${version}";
-    hash = "sha256-CfT/farNOJiWIioFBPx2q7bAFAE4khcojdZ7AsYaU6o=";
+    hash = "sha256-xOP2XkmHOGMe50dn4StX/9veTdloLHq76ENWEUK4Keo=";
   };
 
   postPatch = ''
