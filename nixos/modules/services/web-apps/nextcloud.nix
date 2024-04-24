@@ -228,7 +228,7 @@ in {
     package = mkOption {
       type = types.package;
       description = lib.mdDoc "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud26" "nextcloud27" "nextcloud28" ];
+      relatedPackages = [ "nextcloud26" "nextcloud27" "nextcloud28" "nextcloud29" ];
     };
     phpPackage = mkOption {
       type = types.package;
@@ -761,7 +761,8 @@ in {
 
       services.nextcloud.phpPackage =
         if versionOlder cfg.package.version "26" then pkgs.php81
-        else pkgs.php82;
+        else if versionOlder cfg.package.version "29" then pkgs.php82
+        else pkgs.php83;
 
       services.nextcloud.phpOptions = mkMerge [
         (mapAttrs (const mkOptionDefault) defaultPHPSettings)
