@@ -249,8 +249,6 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = ./update.sh;
-
   meta = with lib; {
     description = "A modern desktop Bitcoin wallet application supporting most hardware wallets and built on common standards such as PSBT, with an emphasis on transparency and usability.";
     homepage = "https://sparrowwallet.com";
