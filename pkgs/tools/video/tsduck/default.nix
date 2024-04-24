@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "tsduck";
-  version = "3.31-2761";
+  version = "3.37-3670";
 
   src = fetchFromGitHub {
     owner = "tsduck";
@@ -66,16 +66,22 @@ stdenv.mkDerivation rec {
     "NOPCSC=1"
     "NORIST=1"
     "NOVATEK=1"
-  ] ++ installFlags;
+  ] ++ installFlags ++ extraFlags;
 
   checkTarget = "test";
-  doCheck = true;
+  doCheck = if stdenv.isDarwin then false else true;
+
+  extraFlags = if stdenv.isDarwin then [
+    "NOTEST=1"
+    "CXXFLAGS_EXTRA=-Wno-unsafe-buffer-usage"
+  ] else [];
 
   installFlags = [
     "SYSROOT=${placeholder "out"}"
     "SYSPREFIX=/"
     "USRLIBDIR=/lib"
   ];
+
   installTargets = [
     "install-tools"
     "install-devel"
@@ -87,7 +93,5 @@ stdenv.mkDerivation rec {
     license     = licenses.bsd2;
     maintainers = with maintainers; [ siriobalmelli ];
     platforms   = platforms.all;
-    # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin;
   };
 }
