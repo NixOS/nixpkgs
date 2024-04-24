@@ -142,15 +142,21 @@ in
   # apptainer/apptainer: https://github.com/apptainer/apptainer/blob/main/dist/debian/control
   # sylabs/singularity: https://github.com/sylabs/singularity/blob/main/debian/control
 
-  buildInputs = [
-    bash # To patch /bin/sh shebangs.
-    conmon
-    cryptsetup
-    gpgme
-    libuuid
-    openssl
-    squashfsTools # Required at build time by SingularityCE
-  ] ++ lib.optional enableNvidiaContainerCli nvidia-docker ++ lib.optional enableSeccomp libseccomp;
+  buildInputs =
+    [
+      bash # To patch /bin/sh shebangs.
+      conmon
+      cryptsetup
+      gpgme
+      libuuid
+      openssl
+      squashfsTools # Required at build time by SingularityCE
+    ]
+    # Optional dependencies.
+    # Formatting: Optional dependencies are likely to increase.
+    # Don't squash them into the same line.
+    ++ lib.optional enableNvidiaContainerCli nvidia-docker
+    ++ lib.optional enableSeccomp libseccomp;
 
   configureScript = "./mconfig";
 
