@@ -5,23 +5,17 @@ let
   cfg = config.services.swhkd;
 in {
   options.services.swhkd = {
-    enable = mkEnableOption (lib.mdDoc "simple wayland hotkey daemon");
+    enable = mkEnableOption "simple wayland hotkey daemon";
     package = mkPackageOption pkgs "swhkd" {};
-    installManpages = mkOption {
-      type = lib.types.bool;
-      default = true;
-      description = "install swhkd manual pages";
-    };
     swhkdrc = mkOption {
-      type = lib.types.str;
+      type = lib.types.lines;
       default = "";
-      description = "contents of the system-wide swhkdrc file";
+      description = "contents of the system-wide swhkdrc file. See {manpage}`swhkd(5) for more details on the config format.";
     };
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages =
-      [ cfg.package.bin cfg.package.out ] ++ optional cfg.installManpages cfg.package.man;
+    environment.systemPackages = [ cfg.package ];
     environment.etc."swhkd/swhkdrc".text = cfg.swhkdrc;
     security.polkit.enable = true;
   };

@@ -16,12 +16,12 @@ rustPlatform.buildRustPackage rec {
     outputs = [ "bin" "man" "out" ];
 
     src = fetchFromGitHub {
-        owner = "waycrate";
-        repo = "swhkd";
-        # build from master, since the 1.2.1 makefile is unsutible for packaging
-        rev = "f8519a54900d72492a6c036b32e472c108d44dbf";
-        hash = "sha256-zyGyZOG8gAtsRkzSRH1M777fPv1wudbVsBrSTJ5CBnY=";
-      };
+      owner = "waycrate";
+      repo = "swhkd";
+      # build from master, since the 1.2.1 makefile is unsutible for packaging
+      rev = "f8519a54900d72492a6c036b32e472c108d44dbf";
+      hash = "sha256-zyGyZOG8gAtsRkzSRH1M777fPv1wudbVsBrSTJ5CBnY=";
+    };
 
     nativeBuildInputs = [
       scdoc
@@ -30,7 +30,9 @@ rustPlatform.buildRustPackage rec {
 
     # the makefile tries to set the ownership of a file to root.
     # this will fail, but files are owned by root anyways.
-    postPatch = "sed -ie 's/-o root//' Makefile";
+    postPatch = ''
+      sed -ie 's/-o root//' Makefile
+    '';
 
     buildPhase = ''
       runHook preBuild
@@ -59,10 +61,10 @@ rustPlatform.buildRustPackage rec {
     ];
 
     meta = with lib; {
-        description = "A drop-in replacement for sxhkd that works with wayland";
-        homepage = "https://github.com/waycrate/swhkd";
-        changelog = "https://github.com/waycrate/swhkd/blob/${src.rev}/CHANGELOG.md";
-        license = licenses.bsd2;
-        maintainers = with maintainers; [ binarycat ];
-      };
+      description = "A drop-in replacement for sxhkd that works with wayland";
+      homepage = "https://github.com/waycrate/swhkd";
+      changelog = "https://github.com/waycrate/swhkd/blob/${src.rev}/CHANGELOG.md";
+      license = licenses.bsd2;
+      maintainers = with maintainers; [ binarycat ];
+    };
   }
