@@ -148,7 +148,7 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "espanso";
     homepage = "https://espanso.org";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kimat thehedgeh0g ];
+    maintainers = with maintainers; [ kimat pyrox0 ];
     platforms = platforms.unix;
 
     longDescription = ''

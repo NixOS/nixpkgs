@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://zellij.dev/";
     changelog = "https://github.com/zellij-org/zellij/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ therealansh _0x4A6F abbe thehedgeh0g ];
+    maintainers = with maintainers; [ therealansh _0x4A6F abbe pyrox0 ];
     mainProgram = "zellij";
   };
 }
