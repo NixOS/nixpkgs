@@ -1,0 +1,76 @@
+From aa8302edc15e28d26ea0ba69a51b4b66c6569c05 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Tue, 23 Apr 2024 22:17:02 -0400
+Subject: [PATCH] Use version checks with SDK macros
+
+---
+ src/audio/coreaudio/SDL_coreaudio.h | 2 +-
+ src/render/metal/SDL_render_metal.m | 4 ++--
+ src/video/cocoa/SDL_cocoamodes.m    | 2 +-
+ src/video/cocoa/SDL_cocoamouse.m    | 2 +-
+ 4 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/src/audio/coreaudio/SDL_coreaudio.h b/src/audio/coreaudio/SDL_coreaudio.h
+index d5d11ca51..a3b25a5ab 100644
+--- a/src/audio/coreaudio/SDL_coreaudio.h
++++ b/src/audio/coreaudio/SDL_coreaudio.h
+@@ -42,7 +42,7 @@
+ /* Things named "Master" were renamed to "Main" in macOS 12.0's SDK. */
+ #ifdef MACOSX_COREAUDIO
+ #include <AvailabilityMacros.h>
+-#ifndef MAC_OS_VERSION_12_0
++#if MAC_OS_X_VERSION_MAX_ALLOWED < 120000
+ #define kAudioObjectPropertyElementMain kAudioObjectPropertyElementMaster
+ #endif
+ #endif
+diff --git a/src/render/metal/SDL_render_metal.m b/src/render/metal/SDL_render_metal.m
+index ee6b88209..0f10fc7b1 100644
+--- a/src/render/metal/SDL_render_metal.m
++++ b/src/render/metal/SDL_render_metal.m
+@@ -1536,7 +1536,7 @@ static void *METAL_GetMetalCommandEncoder(SDL_Renderer * renderer)
+ 
+ static int METAL_SetVSync(SDL_Renderer * renderer, const int vsync)
+ {
+-#if (defined(__MACOSX__) && defined(MAC_OS_X_VERSION_10_13)) || TARGET_OS_MACCATALYST
++#if (defined(__MACOSX__) && (MAC_OS_X_VERSION_MAX_ALLOWED >= 101300)) || TARGET_OS_MACCATALYST
+     if (@available(macOS 10.13, *)) {
+         METAL_RenderData *data = (__bridge METAL_RenderData *) renderer->driverdata;
+         if (vsync) {
+@@ -1826,7 +1826,7 @@ static SDL_Renderer *METAL_CreateRenderer(SDL_Window * window, Uint32 flags)
+ 
+     renderer->always_batch = SDL_TRUE;
+ 
+-#if (defined(__MACOSX__) && defined(MAC_OS_X_VERSION_10_13)) || TARGET_OS_MACCATALYST
++#if (defined(__MACOSX__) && (MAC_OS_X_VERSION_MAX_ALLOWED >= 101300)) || TARGET_OS_MACCATALYST
+     if (@available(macOS 10.13, *)) {
+         data.mtllayer.displaySyncEnabled = (flags & SDL_RENDERER_PRESENTVSYNC) != 0;
+         if (data.mtllayer.displaySyncEnabled) {
+diff --git a/src/video/cocoa/SDL_cocoamodes.m b/src/video/cocoa/SDL_cocoamodes.m
+index d1ef99e9c..393d06eca 100644
+--- a/src/video/cocoa/SDL_cocoamodes.m
++++ b/src/video/cocoa/SDL_cocoamodes.m
+@@ -34,7 +34,7 @@
+ /* This gets us MAC_OS_X_VERSION_MIN_REQUIRED... */
+ #include <AvailabilityMacros.h>
+ 
+-#ifndef MAC_OS_X_VERSION_10_13
++#if MAC_OS_X_VERSION_MAX_ALLOWED < 101300
+ #define NSAppKitVersionNumber10_12 1504
+ #endif
+ #if (IOGRAPHICSTYPES_REV < 40)
+diff --git a/src/video/cocoa/SDL_cocoamouse.m b/src/video/cocoa/SDL_cocoamouse.m
+index c14f9abdc..e14512b60 100644
+--- a/src/video/cocoa/SDL_cocoamouse.m
++++ b/src/video/cocoa/SDL_cocoamouse.m
+@@ -119,7 +119,7 @@ static NSCursor *LoadHiddenSystemCursor(NSString *cursorName, SEL fallback)
+     }
+ 
+     if (frames > 1) {
+-        #ifdef MAC_OS_VERSION_12_0  /* same value as deprecated symbol. */
++        #if MAC_OS_X_VERSION_MAX_ALLOWED < 120000 /* same value as deprecated symbol. */
+         const NSCompositingOperation operation = NSCompositingOperationCopy;
+         #else
+         const NSCompositingOperation operation = NSCompositeCopy;
+-- 
+2.42.0
+
