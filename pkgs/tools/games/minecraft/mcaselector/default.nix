@@ -20,13 +20,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ jre makeWrapper wrapGAppsHook ];
 
+  dontWrapGApps = true;
+
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/{bin,lib/mcaselector}
     cp $src $out/lib/mcaselector/mcaselector.jar
     makeWrapper ${jre}/bin/java $out/bin/mcaselector \
-      --add-flags "-jar $out/lib/mcaselector/mcaselector.jar"
+      --add-flags "-jar $out/lib/mcaselector/mcaselector.jar" \
+      ${gappsWrapperArgs[@]}
 
     runHook postInstall
   '';
