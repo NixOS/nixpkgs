@@ -20,6 +20,7 @@
 , cereal
 , cmake
 , asciidoctor
+, makeWrapper
 }:
 
 let
@@ -33,13 +34,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "emilua";
-  version = "0.6.0";
+  version = "0.7.1";
 
   src = fetchFromGitLab {
       owner = "emilua";
       repo = "emilua";
       rev = "v${version}";
-      hash = "sha256-cW2b+jUQT60hCCirBzxZltzA7KvBihnzWNPkKDID6kU=";
+      hash = "sha256-ox9pvHa1oYSAuNtYARPQdT3Erk9X7woQWIm2tVlboWU=";
   };
 
   buildInputs = [
@@ -64,6 +65,7 @@ stdenv.mkDerivation rec {
     meson
     cmake
     ninja
+    makeWrapper
   ];
 
   dontUseCmakeConfigure = true;
@@ -90,12 +92,16 @@ stdenv.mkDerivation rec {
     cp "packagefiles/trial.protocol/meson.build" "trial-protocol/"
     popd
 
-    substituteInPlace src/emilua_gperf.awk  --replace '#!/usr/bin/env -S gawk --file' '#!${gawk}/bin/gawk -f'
+    substituteInPlace src/emilua_gperf.awk  --replace '#!/usr/bin/env -S gawk --file' '#!${lib.getExe gawk} -f'
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/emilua \
+      --run 'export EMILUA_PATH=$EMILUA_PATH''${EMILUA_PATH:+:}$(unset _tmp; for profile in $NIX_PROFILES; do _tmp="$profile/lib/emilua-${(with lib; concatStringsSep "." (take 2 (splitVersion version)))}''${_tmp:+:}$_tmp"; done; printf '%s' "$_tmp")'
   '';
 
   meta = with lib; {
     description = "Lua execution engine";
-    mainProgram = "emilua";
     homepage = "https://emilua.org/";
     license = licenses.boost;
     maintainers = with maintainers; [ manipuladordedados ];
