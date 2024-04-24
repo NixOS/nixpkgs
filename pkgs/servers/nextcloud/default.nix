@@ -1,6 +1,7 @@
 { lib, stdenvNoCC, fetchurl, nixosTests
 , nextcloud27Packages
 , nextcloud28Packages
+, nextcloud29Packages
 , nextcloud26Packages
 }:
 
