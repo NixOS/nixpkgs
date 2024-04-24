@@ -161,10 +161,10 @@ in {
   });
 
   nim-unwrapped-1 = nim-unwrapped-2.overrideAttrs (finalAttrs: prevAttrs: {
-    version = "1.6.18";
+    version = "1.6.20";
     src = fetchurl {
       url = "https://nim-lang.org/download/nim-${finalAttrs.version}.tar.xz";
-      hash = "sha256-UCQaxyIpG6ljdT8EWqo1h7c8GqKK4pxXPBWluKYCoss=";
+      hash = "sha256-/+0EdQTR/K9hDw3Xzz4Ce+kaKSsMnFEWFQTC87mE/7k=";
     };
 
     patches = [
