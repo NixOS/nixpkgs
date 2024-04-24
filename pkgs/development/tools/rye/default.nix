@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rye";
-  version = "0.31.0";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "rye";
     rev = "refs/tags/${version}";
-    hash = "sha256-hPfMKp5FUbIKKKFfoS/pxseWmhqW8UOts7DOcRzgHWU=";
+    hash = "sha256-sgA+Tp4Qysd07+1iNDgn9Hw0nDN8l6/fD41rE5QqWzY=";
   };
 
   cargoLock = {
@@ -61,6 +61,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_add_flask"
     "--skip=test_add_from_find_links"
     "--skip=test_autosync_remember"
+    "--skip=test_basic_list"
     "--skip=test_basic_tool_behavior"
     "--skip=test_config_empty"
     "--skip=test_config_get_set_multiple"
@@ -74,6 +75,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_init_lib"
     "--skip=test_init_script"
     "--skip=test_lint_and_format"
+    "--skip=test_list_not_rye_managed"
     "--skip=test_publish_outside_project"
     "--skip=test_version"
   ];
