@@ -54,6 +54,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dabeaz/curio";
     changelog = "https://github.com/dabeaz/curio/raw/${version}/CHANGES";
     license = licenses.bsd3;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

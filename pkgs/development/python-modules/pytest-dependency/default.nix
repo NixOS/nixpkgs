@@ -37,6 +37,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/RKrahl/pytest-dependency/blob/${version}/CHANGES.rst";
     description = "Manage dependencies of tests";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

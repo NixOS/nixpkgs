@@ -24,7 +24,7 @@ buildGoModule rec {
     homepage = "https://github.com/moby/buildkit";
     changelog = "https://github.com/moby/buildkit/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ vdemeester marsam developer-guy ];
+    maintainers = with maintainers; [ vdemeester developer-guy ];
     mainProgram = "buildctl";
   };
 }

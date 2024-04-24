@@ -20,6 +20,6 @@ buildNpmPackage rec {
     mainProgram = "dot-language-server";
     homepage = "https://github.com/nikeee/dot-language-server";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

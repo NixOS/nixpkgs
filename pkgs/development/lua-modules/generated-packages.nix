@@ -202,7 +202,7 @@ buildLuarocksPackage {
   meta = {
     homepage = "https://github.com/sile-typesetter/cassowary.lua";
     description = "The cassowary constraint solver";
-    maintainers = with lib.maintainers; [ marsam alerque ];
+    maintainers = with lib.maintainers; [ alerque ];
     license.fullName = "Apache 2";
   };
 }) {};
@@ -315,7 +315,7 @@ buildLuarocksPackage {
   meta = {
     homepage = "http://cosmo.luaforge.net";
     description = "Safe templates for Lua";
-    maintainers = with lib.maintainers; [ marsam ];
+    maintainers = with lib.maintainers; [ ];
     license.fullName = "MIT/X11";
   };
 }) {};

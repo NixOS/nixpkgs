@@ -28,6 +28,6 @@ stdenvNoCC.mkDerivation rec {
     changelog = "https://github.com/slavfox/Cozette/blob/v.${version}/CHANGELOG.md";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ brettlyons marsam ];
+    maintainers = with maintainers; [ brettlyons ];
   };
 }

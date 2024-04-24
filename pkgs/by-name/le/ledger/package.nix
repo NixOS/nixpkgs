@@ -57,6 +57,6 @@ stdenv.mkDerivation rec {
       their data, there really is no alternative.
     '';
     platforms = platforms.all;
-    maintainers = with maintainers; [ jwiegley marsam ];
+    maintainers = with maintainers; [ jwiegley ];
   };
 }

@@ -51,6 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jstockwin/py-pdf-parser";
     changelog = "https://github.com/jstockwin/py-pdf-parser/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "The C based gRPC (C++, Python, Ruby, Objective-C, PHP, C#)";
     license = licenses.asl20;
-    maintainers = with maintainers; [ lnl7 marsam ];
+    maintainers = with maintainers; [ lnl7 ];
     homepage = "https://grpc.io/";
     platforms = platforms.all;
     changelog = "https://github.com/grpc/grpc/releases/tag/v${version}";

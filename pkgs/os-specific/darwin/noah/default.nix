@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     description = "Bash on Ubuntu on macOS";
     homepage = "https://github.com/linux-noah/noah";
     license = [ licenses.mit licenses.gpl2 ];
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = platforms.darwin;
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.isDarwin && stdenv.isAarch64;

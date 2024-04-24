@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/cybertec-postgresql/pg_squeeze";
     changelog = "https://github.com/cybertec-postgresql/pg_squeeze/blob/${finalAttrs.src.rev}/NEWS";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = postgresql.meta.platforms;
   };
 })

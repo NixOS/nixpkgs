@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage rec {
     description = "A syntax-highlighting pager for git";
     changelog = "https://github.com/dandavison/delta/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam zowoq SuperSandro2000 figsoda ];
+    maintainers = with maintainers; [ zowoq SuperSandro2000 figsoda ];
     mainProgram = "delta";
   };
 }

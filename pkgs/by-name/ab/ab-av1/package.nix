@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/alexheretic/ab-av1";
     changelog = "https://github.com/alexheretic/ab-av1/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     mainProgram = "ab-av1";
   };
 }

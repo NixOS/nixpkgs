@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jimporter/verspec";
     changelog = "https://github.com/jimporter/averspec/releases/tag/v${version}";
     license = with licenses; [ bsd2 /* and */ asl20 ];
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }

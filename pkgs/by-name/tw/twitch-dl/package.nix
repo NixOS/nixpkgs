@@ -58,7 +58,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/ihabunek/twitch-dl";
     changelog = "https://github.com/ihabunek/twitch-dl/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
     mainProgram = "twitch-dl";
   };
 }

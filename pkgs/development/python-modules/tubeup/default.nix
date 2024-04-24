@@ -47,6 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/bibanon/tubeup";
     changelog = "https://github.com/bibanon/tubeup/releases/tag/${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }

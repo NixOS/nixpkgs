@@ -39,6 +39,6 @@ buildGoModule rec {
     mainProgram = "cloud-nuke";
     changelog = "https://github.com/gruntwork-io/cloud-nuke/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }

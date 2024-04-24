@@ -47,6 +47,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "zz";
     homepage = "https://github.com/zetzit/zz";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

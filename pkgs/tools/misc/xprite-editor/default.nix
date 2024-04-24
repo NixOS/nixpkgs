@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/rickyhan/xprite-editor";
     description = "Pixel art editor";
     license = licenses.gpl3;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

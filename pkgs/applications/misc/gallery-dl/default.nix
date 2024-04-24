@@ -47,6 +47,6 @@ buildPythonApplication rec {
     changelog = "https://github.com/mikf/gallery-dl/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl2Only;
     mainProgram = "gallery-dl";
-    maintainers = with maintainers; [ dawidsowa marsam ];
+    maintainers = with maintainers; [ dawidsowa ];
   };
 }

@@ -40,7 +40,7 @@ buildGoModule rec {
     homepage = "https://atlasgo.io/";
     changelog = "https://github.com/ariga/atlas/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     mainProgram = "atlas";
   };
 }

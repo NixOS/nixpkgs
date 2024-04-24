@@ -38,7 +38,7 @@ buildGoModule rec {
     description = "A simple deb and rpm packager written in Go";
     homepage = "https://github.com/goreleaser/nfpm";
     changelog = "https://github.com/goreleaser/nfpm/releases/tag/v${version}";
-    maintainers = with maintainers; [ marsam techknowlogick caarlos0 ];
+    maintainers = with maintainers; [ techknowlogick caarlos0 ];
     license = with licenses; [ mit ];
     mainProgram = "nfpm";
   };

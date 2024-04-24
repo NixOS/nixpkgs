@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     mainProgram = "sqlcheck";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

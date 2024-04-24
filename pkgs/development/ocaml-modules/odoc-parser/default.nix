@@ -40,7 +40,7 @@ buildDunePackage rec {
   meta = {
     description = "Parser for Ocaml documentation comments";
     license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.marsam ];
+    maintainers = [ ];
     homepage = "https://github.com/ocaml-doc/odoc-parser";
     changelog = "https://github.com/ocaml-doc/odoc-parser/raw/${version}/CHANGES.md";
   };

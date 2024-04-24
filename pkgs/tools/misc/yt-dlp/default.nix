@@ -88,7 +88,7 @@ buildPythonPackage rec {
     '';
     changelog = "https://github.com/yt-dlp/yt-dlp/releases/tag/${version}";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ mkg20001 SuperSandro2000 marsam ];
+    maintainers = with maintainers; [ mkg20001 SuperSandro2000 ];
     mainProgram = "yt-dlp";
   };
 }

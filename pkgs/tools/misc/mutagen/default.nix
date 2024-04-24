@@ -52,7 +52,7 @@ buildGoModule rec {
     description = "Make remote development work with your local tools";
     homepage = "https://mutagen.io/";
     changelog = "https://github.com/mutagen-io/mutagen/releases/tag/v${version}";
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
   };

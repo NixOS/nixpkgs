@@ -25,7 +25,7 @@ buildGoModule rec {
     description = "Go library for the TOML language";
     homepage = "https://github.com/pelletier/go-toml";
     changelog = "https://github.com/pelletier/go-toml/releases/tag/v${version}";
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     license = licenses.mit;
   };
 }

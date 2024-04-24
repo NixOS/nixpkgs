@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Text similarity measurement and index searching based on bigrams";
     homepage = "https://pgbigm.osdn.jp/";
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = postgresql.meta.platforms;
     license = licenses.postgresql;
   };

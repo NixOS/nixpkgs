@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "A programmable client library that takes advantage of the commonalities among";
     homepage = "https://launchpad.net/lazr.restfulclient";
     license = licenses.lgpl3;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

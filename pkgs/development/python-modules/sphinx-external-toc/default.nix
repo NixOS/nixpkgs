@@ -38,6 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/executablebooks/sphinx-external-toc";
     changelog = "https://github.com/executablebooks/sphinx-external-toc/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }

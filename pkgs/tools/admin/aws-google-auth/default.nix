@@ -78,7 +78,7 @@ buildPythonApplication rec {
     description = "Acquire AWS STS (temporary) credentials via Google Apps SAML Single Sign On";
     mainProgram = "aws-google-auth";
     homepage = "https://github.com/cevoaustralia/aws-google-auth";
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     license = licenses.mit;
   };
 }

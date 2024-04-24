@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ikatson/rqbit";
     changelog = "https://github.com/ikatson/rqbit/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
     mainProgram = "rqbit";
   };
 }

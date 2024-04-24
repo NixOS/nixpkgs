@@ -73,7 +73,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/jjjake/internetarchive";
     changelog = "https://github.com/jjjake/internetarchive/blob/v${version}/HISTORY.rst";
     license = licenses.agpl3Plus;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     mainProgram = "ia";
   };
 }
