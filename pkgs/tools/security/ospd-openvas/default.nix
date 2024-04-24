@@ -20,8 +20,11 @@ python3.pkgs.buildPythonApplication rec {
     "python-gnupg"
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     poetry-core
+  ];
+
+  nativeBuildInputs = with python3.pkgs; [
     pythonRelaxDepsHook
   ];
 
