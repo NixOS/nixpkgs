@@ -313,8 +313,6 @@ with pkgs;
 
   assemblyscript = callPackage ../development/compilers/assemblyscript { };
 
-  authy = callPackage ../applications/misc/authy { };
-
   authz0 = callPackage ../tools/security/authz0 { };
 
   auth0-cli = callPackage ../tools/admin/auth0-cli { };
@@ -27937,8 +27935,6 @@ with pkgs;
   powerdns-admin = callPackage ../applications/networking/powerdns-admin { };
 
   dnsdist = callPackage ../servers/dns/dnsdist { };
-
-  pdns-recursor = callPackage ../servers/dns/pdns-recursor { };
 
   powertop = callPackage ../os-specific/linux/powertop { };
 

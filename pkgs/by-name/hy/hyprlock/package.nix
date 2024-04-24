@@ -18,14 +18,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprlock";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprlock";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-1p6Y/8+ETaz7GQ8wsXLUTrk2dD0YN9ySOfwjRp2TSG4=";
+    hash = "sha256-rbzVe2WNdHynJrnyJsKOOrV8yuuJ7QIuah3ZHWERSnA=";
   };
+
+  patches = [
+    # remove PAM file install check
+    ./cmake.patch
+  ];
 
   strictDeps = true;
 

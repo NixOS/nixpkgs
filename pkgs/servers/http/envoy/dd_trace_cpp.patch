@@ -1,0 +1,25 @@
+From 4851a6a722b228ecbfd9df255dab3d8f30bd84b9 Mon Sep 17 00:00:00 2001
+From: Malte Poll <1780588+malt3@users.noreply.github.com>
+Date: Mon, 22 Apr 2024 15:36:33 +0200
+Subject: [PATCH] nixpkgs: add cstdint to fix compilation under GCC 13
+
+https://gcc.gnu.org/gcc-13/porting_to.html#header-dep-changes
+---
+ src/datadog/parse_util.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/datadog/parse_util.h b/src/datadog/parse_util.h
+index c603286..c8e4e83 100644
+--- a/src/datadog/parse_util.h
++++ b/src/datadog/parse_util.h
+@@ -2,6 +2,7 @@
+ 
+ // This component provides parsing-related miscellanea.
+ 
++#include <cstdint>
+ #include <string>
+ #include <unordered_map>
+ #include <vector>
+-- 
+2.42.0
+

@@ -2,22 +2,25 @@
 , stdenvNoCC
 , fetchurl
 , makeWrapper
+, wrapGAppsHook
 , jre
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mcaselector";
-  version = "2.3";
+  version = "2.4";
 
   src = fetchurl {
     url = "https://github.com/Querz/mcaselector/releases/download/${finalAttrs.version}/mcaselector-${finalAttrs.version}.jar";
-    hash = "sha256-8ivqTqgO6hvEgwnAfnPXuruFGS3s/wD/WKt+5Bg/5Z0=";
+    hash = "sha256-6WQIvDmyVVmxHFOMk2emT1a4PMGVjvtC0aSkryvwARs=";
   };
 
   dontUnpack = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ jre makeWrapper ];
+  nativeBuildInputs = [ jre makeWrapper wrapGAppsHook ];
+
+  dontWrapGApps = true;
 
   installPhase = ''
     runHook preInstall
@@ -25,7 +28,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mkdir -p $out/{bin,lib/mcaselector}
     cp $src $out/lib/mcaselector/mcaselector.jar
     makeWrapper ${jre}/bin/java $out/bin/mcaselector \
-      --add-flags "-jar $out/lib/mcaselector/mcaselector.jar"
+      --add-flags "-jar $out/lib/mcaselector/mcaselector.jar" \
+      ''${gappsWrapperArgs[@]}
 
     runHook postInstall
   '';
