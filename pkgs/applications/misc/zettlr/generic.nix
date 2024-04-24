@@ -21,7 +21,6 @@ in
 appimageTools.wrapType2 rec {
   inherit pname version src;
 
-  multiArch = false; # no 32bit needed
   extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ [ texliveMedium pandoc ];
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/Zettlr.desktop $out/share/applications/Zettlr.desktop

@@ -24,7 +24,6 @@ appimageTools.wrapType2 rec {
     export LC_ALL=C.UTF-8
   '';
 
-  multiArch = false; # no 32bit needed
   extraPkgs = p: (appimageTools.defaultFhsEnvArgs.multiPkgs p) ++ [ p.at-spi2-atk p.at-spi2-core ];
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/notable.desktop $out/share/applications/notable.desktop

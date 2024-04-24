@@ -21,7 +21,6 @@ appimageTools.wrapType2 {
     export LC_ALL=C.UTF-8
   '';
 
-  multiArch = false; # no 32bit needed
   extraPkgs = pkgs: appimageTools.defaultFhsEnvArgs.multiPkgs pkgs ++ [ pkgs.bash ];
 
   extraInstallCommands = ''

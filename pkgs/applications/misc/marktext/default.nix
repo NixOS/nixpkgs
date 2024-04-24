@@ -20,7 +20,6 @@ appimageTools.wrapType2 rec {
     export LC_ALL=C.UTF-8
   '';
 
-  multiArch = false; # no 32bit needed
   extraPkgs = p: (appimageTools.defaultFhsEnvArgs.multiPkgs p) ++ [
     p.libsecret
     p.xorg.libxkbfile

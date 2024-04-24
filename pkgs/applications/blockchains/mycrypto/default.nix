@@ -24,10 +24,9 @@ let
     categories = [ "Finance" ];
   };
 
-in appimageTools.wrapType2 rec {
+in appimageTools.wrapType2 {
   inherit pname version src;
 
-  multiArch = false; # no p32bit needed
   extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
 
   extraInstallCommands = ''

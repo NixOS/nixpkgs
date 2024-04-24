@@ -16,7 +16,6 @@ let
 in appimageTools.wrapType2 {
   inherit pname src version;
 
-  multiArch = false;
   extraPkgs = pkgs: appimageTools.defaultFhsEnvArgs.multiPkgs pkgs ++ [ pkgs.bash ];
 
   extraInstallCommands = ''
