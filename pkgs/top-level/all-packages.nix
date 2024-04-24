@@ -257,6 +257,8 @@ with pkgs;
 
   dra-cla = callPackage ../applications/video/dra-cla { };
 
+  drafting = callPackage ../by-name/dr/drafting { };
+
   anime-downloader = callPackage ../applications/video/anime-downloader { };
 
   aocd = with python3Packages; toPythonApplication aocd;
