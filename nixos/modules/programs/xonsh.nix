@@ -39,7 +39,7 @@ in
 
       xontribs = mkOption {
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           Add the listed xontribs to the package options. Available xontribs are
           under xonsh.xontribs.
 
