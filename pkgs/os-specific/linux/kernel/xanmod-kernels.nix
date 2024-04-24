@@ -14,7 +14,8 @@ let
 
   mainVariant = {
     version = "6.8.7";
-    hash = "sha256-S9UooZhMtvfyL2BVUfMBxvPLkZvXm37duWSjcpk5dvY=";
+    suffix = "xanmod2";
+    hash = "sha256-/RhtRASEedYI4Zf9pUiiyDD3SgOL46cutTXo68gjBg8=";
     variant = "main";
   };
 
