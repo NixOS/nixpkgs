@@ -105,5 +105,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [vinnymeller];
     mainProgram = "bite";
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
