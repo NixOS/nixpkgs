@@ -11627,6 +11627,12 @@
     githubId = 58634087;
     name = "Ivan Pancheniak";
   };
+  locorock = {
+    email = "brognoli.davide.97@gmail.com";
+    github = "Locorock";
+    githubId = 6536547;
+    name = "Davide Brognoli";
+  };
   lodi = {
     email = "anthony.lodi@gmail.com";
     github = "lodi";
