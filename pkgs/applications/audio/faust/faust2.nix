@@ -23,13 +23,13 @@ with lib.strings;
 
 let
 
-  version = "2.70.3";
+  version = "2.72.14";
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
     rev = version;
-    sha256 = "sha256-z6fW/T7wJZxugmvABlpvyMXvR4WkmC16INOKyyfKx8k=";
+    sha256 = "sha256-RdSXiOYwKsfyrfHEughCeSwa9VFM6/3pMg54yCMpzLU=";
     fetchSubmodules = true;
   };
 
@@ -61,14 +61,6 @@ let
         libtasn1
         p11-kit
         ncurses_static
-      ];
-
-      patches = [
-        (fetchpatch {
-          name = "fix-CsigFFun-API-declaration.patch";
-          url = "https://github.com/grame-cncm/faust/commit/10ce960e91a6237c7bff14a338e770757076ce9e.patch";
-          hash = "sha256-WMFLpLGTZpG7ni3lhI5VJHsmJViWZf4pAFuhYmFVRCE=";
-        })
       ];
 
       passthru = { inherit wrap wrapWithBuildEnv faust2ApplBase; };
