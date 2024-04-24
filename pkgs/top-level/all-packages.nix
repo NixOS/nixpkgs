@@ -313,8 +313,6 @@ with pkgs;
 
   assemblyscript = callPackage ../development/compilers/assemblyscript { };
 
-  authy = callPackage ../applications/misc/authy { };
-
   authz0 = callPackage ../tools/security/authz0 { };
 
   auth0-cli = callPackage ../tools/admin/auth0-cli { };
