@@ -1,4 +1,11 @@
-{ stdenv, lib, ocaml, ocamlPackages, gnum4, fetchFromGitLab }:
+{
+  stdenv,
+  lib,
+  ocaml,
+  ocamlPackages,
+  gnum4,
+  fetchFromGitLab,
+}:
 stdenv.mkDerivation rec {
   pname = "caper";
   version = "0.9";
@@ -6,26 +13,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "niksu";
     repo = "caper";
-    rev = "460a5a8890c924f2d9384e12adf7155b384b8d6e";
+    rev = "v${version}";
     hash = "sha256-TSryjz0NrGdkc+6vmfBqsuVpV3N9FvteTFsVqpUcm0w=";
-  };
-
-  meta = {
-    description = "A tool for understanding and processing pcap (packet capture) expressions";
-    longDescription = ''
-      Caper is a tool for understanding and processing "pcap expressions" (also known as *tcpdump filters*) which are used for network packet analysis.
-      Caper can be used for:
-      * Expanding out pcap expressions "in full" to understand their implicit features.
-      * Reasoning about whether two expressions accept the same set of packets, or how their accepted packets differ.
-      * Converting pcap expressions into BPF programs.
-      * Converting between pcap expressions and English.
-
-      More info can be found in the Caper paper (https://www.nik.network/caper/pcap_semantics.pdf).
-    '';
-    homepage = "https://gitlab.com/niksu/caper";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ willow_ch ];
-    mainProgram = "caper";
   };
 
   nativeBuildInputs = [
@@ -48,4 +37,22 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp caper.native $out/bin/caper
   '';
+
+  meta = {
+    description = "A tool for understanding and processing pcap (packet capture) expressions";
+    longDescription = ''
+      Caper is a tool for understanding and processing "pcap expressions" (also known as *tcpdump filters*) which are used for network packet analysis.
+      Caper can be used for:
+      * Expanding out pcap expressions "in full" to understand their implicit features.
+      * Reasoning about whether two expressions accept the same set of packets, or how their accepted packets differ.
+      * Converting pcap expressions into BPF programs.
+      * Converting between pcap expressions and English.
+
+      More info can be found in the Caper paper (https://www.nik.network/caper/pcap_semantics.pdf).
+    '';
+    homepage = "https://gitlab.com/niksu/caper";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [willow_ch];
+    mainProgram = "caper";
+  };
 }
