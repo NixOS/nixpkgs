@@ -15,6 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pydantic_yaml-0";
+  # nixpkgs-update: no auto update
   version = "0.11.2";
 
   pyproject = true;
