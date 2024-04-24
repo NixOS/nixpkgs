@@ -280,6 +280,25 @@ in
         contents = [ hello cowsay ];
         singularity = finalAttrs.finalPackage;
       };
+      exec-image-in-linux-vm = singularity-tools.runImageInLinuxVM { } (runCommandLocal "test-exec-image-in-linux-vm" {
+        nativeBuildInputs = [ finalAttrs.finalPackage ];
+        passthru = {
+          singularity = finalAttrs.finalPackage;
+        };
+        inherit projectName;
+        imageHelloCowsay = finalAttrs.passthru.tests.image-hello-cowsay;
+        expected = runCommandLocal "expected-hello-cowsay" {
+          nativeBuildInputs = [ cowsay hello ];
+        } ''
+          hello | cowsay | tee "$out"
+        '';
+      } ''
+        set -eu -o pipefail
+        runHook preImageRun
+        "$projectName" exec "$imageHelloCowsay" hello | "$projectName" exec "$imageHelloCowsay" cowsay | tee "$out"
+        diff "$out" "$expected"
+        runHook postImageRun
+      '');
     };
     gpuChecks = lib.optionalAttrs (projectName == "apptainer") {
       # Should be in tests, but Ofborg would skip image-hello-cowsay because

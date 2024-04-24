@@ -35,7 +35,7 @@ let
       defaultToSuid = null;
     };
 
-  singularity = callPackage
+  singularity = (callPackage
     (import ./generic.nix rec {
       pname = "singularity-ce";
       version = "4.1.2";
@@ -65,7 +65,15 @@ let
     })
     {
       defaultToSuid = true;
-    };
+    }).overrideAttrs (previousAttrs: {
+      passthru = previousAttrs.passthru // {
+        tests = removeAttrs previousAttrs.passthru.tests [
+          # Sylabs SingularityCE requires loop device to run images,
+          # which is not available in the Nix build sandbox.
+          "exec-image-in-linux-vm"
+        ];
+      };
+    });
 
   genOverridenNixos = package: packageName: (nixos {
     programs.singularity = {
