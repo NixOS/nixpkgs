@@ -15,7 +15,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [ cfg.package ] ++ [ cfg.package.out ];
     environment.etc."swhkd/swhkdrc".text = cfg.swhkdrc;
     security.polkit.enable = true;
   };
