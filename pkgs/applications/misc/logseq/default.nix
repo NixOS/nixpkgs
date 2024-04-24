@@ -5,6 +5,7 @@
 , makeWrapper
 # graphs will not sync without matching upstream's major electron version
 , electron_27
+, autoPatchelfHook
 , git
 , nix-update-script
 }:
@@ -30,7 +31,8 @@ in {
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
+  buildInputs = [ stdenv.cc.cc.lib ];
 
   installPhase = ''
     runHook preInstall
