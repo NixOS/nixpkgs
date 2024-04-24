@@ -141,14 +141,10 @@ sudo apt-get install git g++ cmake ninja-build libfuse-dev zip
 ```
 
 ### Mac OS X
-Currently only LLVM is supported
-Install Xcode command line tools:
-```
-xcode-select --install
-```
+Currently only building with LLVM is supported  
 [Install Homebrew](https://brew.sh/)  
 ```
-brew install cmake ninja llvm macfus
+brew install cmake ninja pkg-config llvm macfuse
 ```
 Build using the installled llvm:
 ```
