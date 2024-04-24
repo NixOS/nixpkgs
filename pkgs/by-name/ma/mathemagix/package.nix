@@ -23,15 +23,15 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   buildInputs = [
-    readline
-    ncurses
+    gmp
     libtool
+    mpfr
+    ncurses
+    readline
   ];
 
   nativeBuildInputs = [
     bison
-    gmp
-    mpfr
   ];
 
   preConfigure = ''
