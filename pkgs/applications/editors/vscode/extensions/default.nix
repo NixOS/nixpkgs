@@ -919,7 +919,7 @@ let
           name = "vscode-markdownlint";
           publisher = "DavidAnson";
           version = "0.55.0";
-          sha256 = "sha256-slfHfRPcuRu+649n6kAr2bv9H6J+DvYVN/ysq1QpPQM=";
+          hash = "sha256-slfHfRPcuRu+649n6kAr2bv9H6J+DvYVN/ysq1QpPQM=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DavidAnson.vscode-markdownlint/changelog";
