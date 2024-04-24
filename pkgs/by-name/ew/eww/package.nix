@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
     description = "ElKowars wacky widgets";
     homepage = "https://github.com/elkowar/eww";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda lom coffeeispower ];
+    maintainers = with lib.maintainers; [ coffeeispower eclairevoyant figsoda lom w-lfchen ];
     mainProgram = "eww";
     broken = stdenv.isDarwin;
   };
