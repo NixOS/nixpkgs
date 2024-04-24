@@ -39,7 +39,7 @@ jobs:
           # https://docs.github.com/en/rest/guides/using-the-rest-api-to-interact-with-your-git-database?apiVersion=2022-11-28#checking-mergeability-of-pull-requests
 
           # Retry the API query this many times
-          retryCount=3
+          retryCount=5
           # Start with 5 seconds, but double every retry
           retryInterval=5
           while true; do
