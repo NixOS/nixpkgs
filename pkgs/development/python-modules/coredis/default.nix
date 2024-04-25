@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "coredis";
-  version = "4.16.0";
+  version = "4.17.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "alisaifee";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-7qpoNc5/z8/EKtGWULrPPwfH9swYe9TqqUL+zxrFQSk=";
+    hash = "sha256-HfGmsIi8PnYbnC2020x474gtq0eqHjF7mSmRSHb0QxY=";
   };
 
   postPatch = ''
