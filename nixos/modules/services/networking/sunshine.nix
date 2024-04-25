@@ -32,6 +32,13 @@ in
         Whether to give the Sunshine binary CAP_SYS_ADMIN, required for DRM/KMS screen capture.
       '';
     };
+    autoStart = mkOption {
+      type = bool;
+      default = true;
+      description = ''
+        Whether sunshine should be started automatically.
+      '';
+    };
     settings = mkOption {
       default = { };
       description = ''
@@ -135,7 +142,7 @@ in
     systemd.user.services.sunshine = {
       description = "Self-hosted game stream host for Moonlight";
 
-      wantedBy = [ "graphical-session.target" ];
+      wantedBy = mkIf cfg.autoStart [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
       wants = [ "graphical-session.target" ];
       after = [ "graphical-session.target" ];
