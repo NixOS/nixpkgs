@@ -63,166 +63,108 @@ import ../make-test-python.nix {
       } // removeAttrs config [ "confinement" "serviceConfig" ];
     };
 
-  in {
-    imports = lib.imap1 mkTestStep [
-      { description = "chroot-only confinement";
-        config.confinement.mode = "chroot-only";
-        testScript = ''
+    parametrisedTests = lib.concatMap ({ user, privateTmp }: let
+      withTmp = if privateTmp then "with PrivateTmp" else "without PrivateTmp";
+
+      serviceConfig = if user == "static-user" then {
+        User = "chroot-testuser";
+        Group = "chroot-testgroup";
+      } else if user == "dynamic-user" then {
+        DynamicUser = true;
+      } else {};
+
+    in [
+      { description = "${user}, chroot-only confinement ${withTmp}";
+        config = {
+          confinement.mode = "chroot-only";
+          # Only set if privateTmp is true to ensure that the default is false.
+          serviceConfig = serviceConfig // lib.optionalAttrs privateTmp {
+            PrivateTmp = true;
+          };
+        };
+        testScript = if user == "root" then ''
+          assert os.getuid() == 0
+          assert os.getgid() == 0
+
           assert_permissions({
             'bin': Accessibility.WRITABLE,
             'nix': Accessibility.WRITABLE,
             'run': Accessibility.WRITABLE,
+            ${lib.optionalString privateTmp "'tmp': Accessibility.STICKY,"}
+            ${lib.optionalString privateTmp "'var': Accessibility.WRITABLE,"}
+            ${lib.optionalString privateTmp "'var/tmp': Accessibility.STICKY,"}
           })
+        '' else ''
+          assert os.getuid() != 0
+          assert os.getgid() != 0
 
-          assert os.getuid() == 0
-          os.chown('/bin', 65534, 0)
+          assert_permissions({
+            'bin': Accessibility.READABLE,
+            'nix': Accessibility.READABLE,
+            'run': Accessibility.READABLE,
+            ${lib.optionalString privateTmp "'tmp': Accessibility.STICKY,"}
+            ${lib.optionalString privateTmp "'var': Accessibility.READABLE,"}
+            ${lib.optionalString privateTmp "'var/tmp': Accessibility.STICKY,"}
+          })
         '';
       }
-      { description = "full confinement with APIVFS";
-        testScript = ''
-          Path('/etc').rmdir()
+      { description = "${user}, full APIVFS confinement ${withTmp}";
+        config = {
+          # Only set if privateTmp is false to ensure that the default is true.
+          serviceConfig = serviceConfig // lib.optionalAttrs (!privateTmp) {
+            PrivateTmp = false;
+          };
+        };
+        testScript = if user == "root" then ''
+          assert os.getuid() == 0
+          assert os.getgid() == 0
 
           assert_permissions({
             'bin': Accessibility.WRITABLE,
             'nix': Accessibility.WRITABLE,
-            'tmp': Accessibility.WRITABLE,
+            ${lib.optionalString privateTmp "'tmp': Accessibility.STICKY,"}
             'run': Accessibility.WRITABLE,
 
             'proc': Accessibility.SPECIAL,
             'sys': Accessibility.SPECIAL,
             'dev': Accessibility.WRITABLE,
+
+            ${lib.optionalString privateTmp "'var': Accessibility.WRITABLE,"}
+            ${lib.optionalString privateTmp "'var/tmp': Accessibility.STICKY,"}
           })
+        '' else ''
+          assert os.getuid() != 0
+          assert os.getgid() != 0
 
-          bin_gid = Path('/bin').stat().st_gid
-          with pytest.raises(OSError) as excinfo:
-            os.chown('/bin', 65534, bin_gid)
-          assert excinfo.value.errno == errno.EINVAL
+          assert_permissions({
+            'bin': Accessibility.READABLE,
+            'nix': Accessibility.READABLE,
+            ${lib.optionalString privateTmp "'tmp': Accessibility.STICKY,"}
+            'run': Accessibility.STICKY,
 
-          assert os.getuid() == 0
-          os.chown('/bin', 0, 0)
+            'proc': Accessibility.SPECIAL,
+            'sys': Accessibility.SPECIAL,
+
+            'dev': Accessibility.SPECIAL,
+            'dev/shm': Accessibility.STICKY,
+            'dev/mqueue': Accessibility.STICKY,
+
+            ${lib.optionalString privateTmp "'var': Accessibility.READABLE,"}
+            ${lib.optionalString privateTmp "'var/tmp': Accessibility.STICKY,"}
+          })
         '';
       }
-      { description = "check existence of bind-mounted /etc";
+    ]) (lib.cartesianProductOfSets {
+      user = [ "root" "dynamic-user" "static-user" ];
+      privateTmp = [ true false ];
+    });
+
+  in {
+    imports = lib.imap1 mkTestStep (parametrisedTests ++ [
+      { description = "existence of bind-mounted /etc";
         config.serviceConfig.BindReadOnlyPaths = [ "/etc" ];
         testScript = ''
           assert Path('/etc/passwd').read_text()
-        '';
-      }
-      { description = "check if User/Group really runs as non-root";
-        config.serviceConfig.User = "chroot-testuser";
-        config.serviceConfig.Group = "chroot-testgroup";
-        testScript = ''
-          assert list(Path('/dev').iterdir())
-
-          assert os.getuid() != 0
-          assert os.getgid() != 0
-
-          with pytest.raises(PermissionError):
-            Path('/bin/test').touch()
-        '';
-      }
-      { description = "check if DynamicUser is working in full-apivfs mode";
-        config.confinement.mode = "full-apivfs";
-        config.serviceConfig.DynamicUser = true;
-        testScript = ''
-          assert_permissions({
-            'bin': Accessibility.READABLE,
-            'nix': Accessibility.READABLE,
-            'tmp': Accessibility.WRITABLE,
-            'run': Accessibility.STICKY,
-
-            'proc': Accessibility.SPECIAL,
-            'sys': Accessibility.SPECIAL,
-
-            'dev': Accessibility.SPECIAL,
-            'dev/shm': Accessibility.STICKY,
-            'dev/mqueue': Accessibility.STICKY,
-
-            'var': Accessibility.READABLE,
-            'var/tmp': Accessibility.WRITABLE,
-          })
-
-          assert os.getuid() != 0
-          assert os.getgid() != 0
-
-          with pytest.raises(OSError) as excinfo:
-            Path('/bin/test').touch()
-          assert excinfo.value.errno == errno.EROFS
-
-          with pytest.raises(OSError) as excinfo:
-            Path('/etc/test').touch()
-          assert excinfo.value.errno == errno.EROFS
-        '';
-      }
-      { description = "check if DynamicUser and PrivateTmp=false are working in full-apivfs mode";
-        config.confinement.mode = "full-apivfs";
-        config.serviceConfig.DynamicUser = true;
-        config.serviceConfig.PrivateTmp = false;
-        testScript = ''
-          assert_permissions({
-            'bin': Accessibility.READABLE,
-            'nix': Accessibility.READABLE,
-            'run': Accessibility.STICKY,
-
-            'proc': Accessibility.SPECIAL,
-            'sys': Accessibility.SPECIAL,
-
-            'dev': Accessibility.SPECIAL,
-            'dev/shm': Accessibility.STICKY,
-            'dev/mqueue': Accessibility.STICKY,
-          })
-
-          assert os.getuid() != 0
-          assert os.getgid() != 0
-
-          with pytest.raises(OSError) as excinfo:
-            Path('/bin/test').touch()
-          assert excinfo.value.errno == errno.EROFS
-
-          with pytest.raises(OSError) as excinfo:
-            Path('/etc/test').touch()
-          assert excinfo.value.errno == errno.EROFS
-        '';
-      }
-      { description = "check if DynamicUser is working in chroot-only mode";
-        config.confinement.mode = "chroot-only";
-        config.serviceConfig.DynamicUser = true;
-        testScript = ''
-          assert_permissions({
-            'bin': Accessibility.READABLE,
-            'nix': Accessibility.READABLE,
-            'run': Accessibility.READABLE,
-          })
-
-          assert os.getuid() != 0
-          assert os.getgid() != 0
-
-          with pytest.raises(OSError) as excinfo:
-            Path('/bin/test').touch()
-          assert excinfo.value.errno == errno.EROFS
-        '';
-      }
-      { description = "check if DynamicUser and PrivateTmp=true are working in chroot-only mode";
-        config.confinement.mode = "chroot-only";
-        config.serviceConfig.DynamicUser = true;
-        config.serviceConfig.PrivateTmp = true;
-        testScript = ''
-          assert_permissions({
-            'bin': Accessibility.READABLE,
-            'nix': Accessibility.READABLE,
-            'run': Accessibility.READABLE,
-            'tmp': Accessibility.WRITABLE,
-
-            'var': Accessibility.READABLE,
-            'var/tmp': Accessibility.WRITABLE,
-          })
-
-          assert os.getuid() != 0
-          assert os.getgid() != 0
-
-          with pytest.raises(OSError) as excinfo:
-            Path('/bin/test').touch()
-          assert excinfo.value.errno == errno.EROFS
         '';
       }
       (let
@@ -233,7 +175,6 @@ import ../make-test-python.nix {
         description = "check if symlinks are properly bind-mounted";
         config.confinement.packages = lib.singleton symlink;
         testScript = ''
-          Path('/etc').rmdir()
           assert Path('${symlink}').read_text() == 'got me'
         '';
       })
@@ -318,7 +259,7 @@ import ../make-test-python.nix {
           assert excinfo.value.errno == errno.ELOOP
         '';
       }
-    ];
+    ]);
 
     config.users.groups.chroot-testgroup = {};
     config.users.users.chroot-testuser = {
