@@ -5,7 +5,6 @@ set -eu -o pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
-# Fetch the latest stable version. We have to sort by the highest version because we may release patches for older versions.
 LATEST_STABLE_VERSION=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} --fail -sSL https://api.github.com/repos/coder/coder/releases | jq -r 'map(select(.prerelease == false)) | sort_by(.tag_name | sub("^v"; "") | split(".") | map(tonumber)) | .[-1].tag_name | sub("^v"; "")')
 
 # Fetch the latest mainline version
