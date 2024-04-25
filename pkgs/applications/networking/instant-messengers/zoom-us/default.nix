@@ -152,7 +152,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup =  lib.optionalString stdenv.isDarwin ''
-      makeWrapper $out/Applications/zoom.us.app/Contents/MacOS/zoom.us $out/bin/zoom
+    makeWrapper $out/Applications/zoom.us.app/Contents/MacOS/zoom.us $out/bin/zoom
   '' + lib.optionalString stdenv.isLinux ''
     # Desktop File
     substituteInPlace $out/share/applications/Zoom.desktop \
