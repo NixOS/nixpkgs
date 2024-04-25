@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname   = "pysam";
-  version = "0.22.0";
+  version = "0.22.1";
   pyproject = true;
 
   # Fetching from GitHub instead of PyPi cause the 0.13 src release on PyPi is
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "pysam-developers";
     repo = "pysam";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TLqZF5NS9ROH8z7c2ZxfOYNRIe5pabMNBuhQ4azFmDU=";
+    hash = "sha256-1sivEf8xN4SJPtJiAcBZG1bbgy66yWXzQis1mPeU+sA=";
   };
 
   nativeBuildInputs = [
