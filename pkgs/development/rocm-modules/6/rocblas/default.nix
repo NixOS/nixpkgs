@@ -29,6 +29,14 @@
 , tensileSepArch ? false
 , tensileLazyLib ? false
 , tensileLibFormat ? "msgpack"
+# `gfx940`, `gfx941` are not present in this list because they are early
+# engineering samples, and all final MI300 hardware are `gfx942`:
+# https://github.com/NixOS/nixpkgs/pull/298388#issuecomment-2032791130
+#
+# `gfx1012` is not present in this list because the ISA compatibility patches
+# would force all `gfx101*` GPUs to run as `gfx1010`, so `gfx101*` GPUs will
+# always try to use `gfx1010` code objects, hence building for `gfx1012` is
+# useless: https://github.com/NixOS/nixpkgs/pull/298388#issuecomment-2076327152
 , gpuTargets ? [ "gfx900;gfx906:xnack-;gfx908:xnack-;gfx90a:xnack+;gfx90a:xnack-;gfx942;gfx1010;gfx1030;gfx1100;gfx1101;gfx1102" ]
 }:
 
