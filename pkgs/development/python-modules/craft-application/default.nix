@@ -1,40 +1,42 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  fetchFromGitHub,
-  nix-update-script,
-  git,
   craft-archives,
   craft-cli,
   craft-grammar,
   craft-parts,
   craft-providers,
+  fetchFromGitHub,
+  git,
+  hypothesis,
+  nix-update-script,
   pydantic-yaml-0,
-  pyyaml,
-  setuptools,
-  setuptools-scm,
-  snap-helpers,
-  stdenv,
-  pygit2,
   pyfakefs,
-  pytestCheckHook,
+  pygit2,
   pytest-check,
   pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
   responses,
-  hypothesis,
+  setuptools-scm,
+  setuptools,
+  snap-helpers,
 }:
 
 buildPythonPackage rec {
   pname = "craft-application";
-  version = "2.5.0";
-
+  version = "2.6.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-application";
     rev = "refs/tags/${version}";
-    hash = "sha256-66Ldo88DJ6v0+ekvDl++eDzhdn95yxq0SMdzQxTGl5k=";
+    hash = "sha256-zwkbSo20ogq24YtvFOCYICk25XS8FuxRbW5jfX4gDJM=";
   };
 
   postPatch = ''
@@ -45,12 +47,12 @@ buildPythonPackage rec {
       --replace-fail "setuptools==69.4.0" "setuptools"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     craft-archives
     craft-cli
     craft-grammar
@@ -61,8 +63,6 @@ buildPythonPackage rec {
     pyyaml
     snap-helpers
   ];
-
-  pythonImportsCheck = [ "craft_application" ];
 
   nativeCheckInputs = [
     git
@@ -87,6 +87,8 @@ buildPythonPackage rec {
     substituteInPlace craft_application/util/platforms.py \
       --replace-fail "os_utils.OsRelease()" "os_utils.OsRelease(os_release_file='$HOME/os-release')"
   '';
+
+  pythonImportsCheck = [ "craft_application" ];
 
   pytestFlagsArray = [ "tests/unit" ];
 

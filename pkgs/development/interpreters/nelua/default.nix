@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "https://nelua.io/";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

@@ -31,7 +31,7 @@ buildGoModule rec {
     changelog = "https://github.com/bazelbuild/buildtools/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers;
-      [ elasticdog uri-canva marsam ]
+      [ elasticdog uri-canva ]
       ++ lib.teams.bazel.members;
   };
 }

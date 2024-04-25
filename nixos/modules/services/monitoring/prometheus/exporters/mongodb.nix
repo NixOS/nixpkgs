@@ -1,9 +1,17 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.mongodb;
+  inherit (lib)
+    mkOption
+    types
+    optionalString
+    getExe
+    length
+    concatStringsSep
+    concatMapStringsSep
+    escapeShellArgs
+    ;
 in
 {
   port = 9216;

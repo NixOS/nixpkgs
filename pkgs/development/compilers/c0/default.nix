@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     description = "A small safe subset of the C programming language, augmented with contracts";
     homepage = "https://c0.cs.cmu.edu/";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = platforms.unix;
     # line 1: ../../bin/wrappergen: cannot execute: required file not found
     # make[2]: *** [../../lib.mk:83:
