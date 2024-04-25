@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, pretend
-, pydantic
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pretend,
+  pydantic,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-lmUBy0hJAxfF65RcBP7tTizrg8j2Zypu4sKgOUQCYh8=";
   };
 
-  build-system = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
   dependencies = [
     pydantic
@@ -37,9 +36,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "id"
-  ];
+  pythonImportsCheck = [ "id" ];
 
   meta = with lib; {
     description = "A tool for generating OIDC identities";
