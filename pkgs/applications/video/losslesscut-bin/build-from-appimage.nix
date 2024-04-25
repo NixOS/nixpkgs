@@ -22,7 +22,7 @@ let
     inherit pname version src;
   };
 in
-(appimageTools.wrapType2 {
+appimageTools.wrapType2 {
   inherit pname version src;
 
   profile = ''
@@ -52,6 +52,4 @@ in
     platforms = [ "x86_64-linux" ];
     mainProgram = "losslesscut";
   };
-}) // {
-  inherit pname version;
 }
