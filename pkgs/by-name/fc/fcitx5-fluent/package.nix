@@ -17,8 +17,33 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/fcitx5/themes/
-    cp -r Fluent* $out/share/fcitx5/themes/
+    mkdir -p $out/common
+
+    function identical() {
+        res=$(diff $1 $2 || echo "different")
+        echo $([[ $res -ne "different" ]])
+    }
+
+    cp -r FluentDark/{arrow.png,back.png,radio.png} $out/common
+
+    if [[ $(identical FluentDark/arrow.png FluentDark/next.png) -eq 0 ]]; then
+        ln -s $out/common/arrow.png $out/common/next.png
+    else
+        cp -r FluentDark/next.png $out/share/fcitx5/themes/common
+    fi
+
+    for variant in FluentDark FluentDark-solid FluentLight FluentLight-solid ; do
+        mkdir -p $out/share/fcitx5/themes/$variant
+        cp -r $variant/{theme.conf,panel.png} $out/share/fcitx5/themes/$variant
+
+        for asset in arrow.png next.png back.png radio.png ; do
+            if [[ $(identical $variant/$asset $out/common/$asset) -eq 0 ]]; then
+                ln -s $out/common/$asset $out/share/fcitx5/themes/$variant/$asset
+            else
+                cp -r $variant/$asset $out/share/fcitx5/themes/$variant/$asset
+            fi
+        done
+    done
 
     runHook postInstall
   '';
