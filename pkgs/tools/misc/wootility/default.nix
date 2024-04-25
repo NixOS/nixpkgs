@@ -26,7 +26,6 @@ appimageTools.wrapType2 rec {
       wooting-udev-rules
       xorg.libxkbfile
     ]);
-  extraInstallCommands = "mv $out/bin/{${pname}-${version},${pname}}";
 
   meta = with lib; {
     homepage = "https://wooting.io/wootility";

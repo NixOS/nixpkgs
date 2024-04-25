@@ -65,9 +65,6 @@ else appimageTools.wrapType2 {
       appimageContents = appimageTools.extractType2 { inherit pname version src; };
     in
     ''
-      # Remove version from entrypoint
-      mv $out/bin/spacedrive-${version} $out/bin/spacedrive
-
       # Install .desktop files
       install -Dm444 ${appimageContents}/com.spacedrive.desktop -t $out/share/applications
       install -Dm444 ${appimageContents}/spacedrive.png -t $out/share/pixmaps

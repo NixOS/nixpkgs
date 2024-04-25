@@ -11,7 +11,7 @@
 , ninja
 , pkg-config
 , python3
-, wrapGAppsHook
+, wrapGAppsHook4
 , cpio
 , glib
 , gnome
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [

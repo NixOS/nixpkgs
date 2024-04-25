@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://yarnpkg.com/";
     description = "Fast, reliable, and secure dependency management.";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ryota-ka thehedgeh0g DimitarNestorov ];
+    maintainers = with maintainers; [ ryota-ka pyrox0 DimitarNestorov ];
     platforms = platforms.unix;
     mainProgram = "yarn";
   };

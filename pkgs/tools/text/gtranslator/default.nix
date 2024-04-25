@@ -6,6 +6,7 @@
 , pkg-config
 , itstool
 , gettext
+, desktop-file-utils
 , wrapGAppsHook4
 , libxml2
 , libadwaita
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
     pkg-config
     itstool
     gettext
+    desktop-file-utils
     wrapGAppsHook4
   ];
 
