@@ -100,18 +100,11 @@ let
         # make: *** [uncommon.mk:373: do-install-all] Error 1
         enableParallelInstalling = false;
 
-        patches = op (lib.versionOlder ver.majMin "3.1") ./do-not-regenerate-revision.h.patch
-          ++ op useBaseRuby (
+        patches =
+          op useBaseRuby (
             if atLeast32 then ./do-not-update-gems-baseruby-3.2.patch
             else ./do-not-update-gems-baseruby.patch
           )
-          ++ ops (ver.majMin == "3.0") [
-            # Ruby 3.0 adds `-fdeclspec` to $CC instead of $CFLAGS. Fixed in later versions.
-            (fetchpatch {
-              url = "https://github.com/ruby/ruby/commit/0acc05caf7518cd0d63ab02bfa036455add02346.patch";
-              hash = "sha256-43hI9L6bXfeujgmgKFVmiWhg7OXvshPCCtQ4TxqK1zk=";
-            })
-         ]
           ++ ops atLeast31 [
             # When using a baseruby, ruby always sets "libdir" to the build
             # directory, which nix rejects due to a reference in to /build/ in
