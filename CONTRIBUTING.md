@@ -512,6 +512,7 @@ To get a sense for what changes are considered mass rebuilds, see [previously me
 - Check for unnecessary whitespace with `git diff --check` before committing.
 
 - If you have commits `pkg-name: oh, forgot to insert whitespace`: squash commits in this case. Use `git rebase -i`.
+  See [Squashing Commits](https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History#_squashing) for additional information.
 
 - For consistency, there should not be a period at the end of the commit message's summary line (the first line of the commit message).
 

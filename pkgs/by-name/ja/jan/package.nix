@@ -17,7 +17,6 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/jan-${version} $out/bin/jan
     install -Dm444 ${appimageContents}/jan.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/jan.desktop \
       --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=jan'
