@@ -2,7 +2,6 @@
 , nextcloud27Packages
 , nextcloud28Packages
 , nextcloud29Packages
-, nextcloud26Packages
 }:
 
 let
@@ -43,12 +42,6 @@ let
     };
   };
 in {
-  nextcloud26 = generic {
-    version = "26.0.13";
-    hash = "sha256-CjYt96EjM0j5nRhT/X558GZ7VSwUXcRQEvq1SsMcea4=";
-    packages = nextcloud26Packages;
-  };
-
   nextcloud27 = generic {
     version = "27.1.8";
     hash = "sha256-Ciy5vRKCnlOq8XNUPsrQFPCeganXL6YeTEYNhOO47fs=";
