@@ -2,10 +2,14 @@
 , lib
 , mkDerivation
 , fetchFromGitHub
+, cargo
 , extra-cmake-modules
+, rustc
+, rustPlatform
 
 # common deps
 , karchive
+, qtwebsockets
 
 # client deps
 , qtbase
@@ -20,7 +24,6 @@
 , kdnssd
 , libvpx
 , miniupnpc
-, qtx11extras # kis
 
 # optional server deps
 , libmicrohttpd
@@ -33,7 +36,6 @@
 , buildServer ? true
 , buildServerGui ? true # if false builds a headless server
 , buildExtraTools ? false
-, enableKisTablet ? false # enable improved graphics tablet support
 }:
 
 with lib;
@@ -59,32 +61,38 @@ let
     libsodium # ext-auth support
   ] ++ optional withSystemd systemd;
 
-  kisDeps = [
-    qtx11extras
-  ];
-
   boolToFlag = bool:
     if bool then "ON" else "OFF";
 
 in mkDerivation rec {
   pname = "drawpile";
-  version = "2.1.20";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "drawpile";
     repo = "drawpile";
     rev = version;
-    sha256 = "sha256-HjGsaa2BYRNxaQP9e8Z7BkVlIKByC/ta92boGbYHRWQ=";
+    sha256 = "sha256-NS1aQlWpn3f+SW0oUjlYwHtOS9ZgbjFTrE9grjK5REM=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules ];
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    hash = "sha256-V36yiwraXK7qlJd1r8EtEA4ULxlgvMEmpn/ka3m9GjA=";
+  };
+
+  nativeBuildInputs = [
+    cargo
+    extra-cmake-modules
+    rustc
+    rustPlatform.cargoSetupHook
+  ];
 
   buildInputs = [
     karchive
+    qtwebsockets
   ]
   ++ optionals buildClient      clientDeps
-  ++ optionals buildServer      serverDeps
-  ++ optionals enableKisTablet  kisDeps;
+  ++ optionals buildServer      serverDeps;
 
   cmakeFlags = [
     "-Wno-dev"
@@ -93,7 +101,6 @@ in mkDerivation rec {
     "-DSERVER=${boolToFlag buildServer}"
     "-DSERVERGUI=${boolToFlag buildServerGui}"
     "-DTOOLS=${boolToFlag buildExtraTools}"
-    "-DKIS_TABLET=${boolToFlag enableKisTablet}"
   ];
 
   meta = {
