@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "vt-py";
-  version = "0.18.1";
+  version = "0.18.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "VirusTotal";
     repo = "vt-py";
     rev = "refs/tags/${version}";
-    hash = "sha256-rWzANh7tkayFR6V3JaF3BLhIjUlnrPMmEmI36Ncqz2M=";
+    hash = "sha256-Uspd422JlBKlsD/K7NciYhYUb12wInN/Z7zTw7aYP28=";
   };
 
   postPatch = ''
