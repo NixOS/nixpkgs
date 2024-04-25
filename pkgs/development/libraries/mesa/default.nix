@@ -39,7 +39,7 @@
     [
       "amd" # AMD (aka RADV)
       "microsoft-experimental" # WSL virtualized GPU (aka DZN/Dozen)
-      "nouveau-experimental" # Nouveau (aka NVK)
+      "nouveau" # Nouveau (aka NVK)
       "swrast" # software renderer (aka Lavapipe)
     ]
     ++ lib.optionals (stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6") [
@@ -65,11 +65,12 @@
 , withLibunwind ? lib.meta.availableOn stdenv.hostPlatform libunwind
 , enableGalliumNine ? stdenv.isLinux
 , enableOSMesa ? stdenv.isLinux
-, enableOpenCL ? stdenv.isLinux && stdenv.isx86_64
+, enableOpenCL ? stdenv.isLinux && (stdenv.isx86_64 || stdenv.isi686)
 , enablePatentEncumberedCodecs ? true
 , jdupes
 , rustPlatform
 , rust-bindgen
+, rust-cbindgen
 , rustc
 , spirv-llvm-translator
 , zstd
@@ -81,8 +82,8 @@
 # nix build .#mesa .#pkgsi686Linux.mesa .#pkgsCross.aarch64-multiplatform.mesa .#pkgsMusl.mesa
 
 let
-  version = "24.0.5";
-  hash = "sha256-OMwkXKj6o8adptJof4kGN3AB9jNlNIpizG9/r7HowBg=";
+  version = "24.1.0-rc1";
+  hash = "sha256-xxaOtprTu4usfOxOCaoZCAM8IxwhPLAy9xMWtcRpLNg=";
 
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
@@ -109,6 +110,11 @@ let
     pname = "syn";
       version = "2.0.39";
       hash = "sha256-Mjen2L/omhVbhU/+Ao65mogs3BP3fY+Bodab3uU63EI=";
+    }
+    {
+    pname = "paste";
+      version = "1.0.14";
+      hash = "sha256-+J1h7New5MEclUBvwDQtTYJCHKKqAEOeQkuKy+g0vEc=";
     }
     {
       pname = "unicode-ident";
@@ -205,10 +211,13 @@ self = stdenv.mkDerivation {
     # meson auto_features enables these features, but we do not want them
     "-Dandroid-libbacktrace=disabled"
 
-  ] ++ lib.optionals stdenv.isLinux [
-    "-Dglvnd=true"
+    # from meson.build: Intel Ray Tracing is only supported on x86_64
+    (lib.mesonEnable "intel-rt" (stdenv.hostPlatform == "x86_64-linux"))
 
-    # Enable RT for Intel hardware
+  ] ++ lib.optionals stdenv.isLinux [
+    "-Dglvnd=enabled"
+
+    # Enable OpenCL Compiler for Intel hardware
     # https://gitlab.freedesktop.org/mesa/mesa/-/issues/9080
     (lib.mesonEnable "intel-clc" (stdenv.buildPlatform == stdenv.hostPlatform))
   ] ++ lib.optionals stdenv.isDarwin [
@@ -269,7 +278,7 @@ self = stdenv.mkDerivation {
     intltool bison flex file
     python3Packages.python python3Packages.mako python3Packages.ply
     jdupes glslang
-    rustc rust-bindgen rustPlatform.bindgenHook
+    rustc rust-bindgen rust-cbindgen rustPlatform.bindgenHook
   ] ++ lib.optional haveWayland wayland-scanner;
 
   propagatedBuildInputs = with xorg; [
