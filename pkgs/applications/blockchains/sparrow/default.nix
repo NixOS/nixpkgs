@@ -23,11 +23,11 @@
 
 let
   pname = "sparrow";
-  version = "1.8.5";
+  version = "1.9.0";
 
   src = fetchurl {
     url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-x86_64.tar.gz";
-    sha256 = "sha256-LIYAfoMgdk/eAXKe68DmQD1QsYNT7O5ggtEjFClwlM4=";
+    sha256 = "sha256-UbFijiPOfVuJP9q6S5odkrhLJ2BUResbJK09Dn9PyCw=";
 
     # nativeBuildInputs, downloadToTemp, and postFetch are used to verify the signed upstream package.
     # The signature is not a self-contained file. Instead the SHA256 of the package is added to a manifest file.
@@ -56,12 +56,12 @@ let
 
   manifest = fetchurl {
     url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-manifest.txt";
-    sha256 = "sha256-oYeAKBW0pci41NNSSPaXdxevbMtZCZ91c8Vl7tNGr7Q=";
+    sha256 = "sha256-x50wkQKlh7r4PM5YwhQaz6tnJpByQDMAmYsp1HafX2c=";
   };
 
   manifestSignature = fetchurl {
     url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-manifest.txt.asc";
-    sha256 = "sha256-XPJoiCLvkDh3auk2ggQUp0CRw7bocE95oTreT4yMqro=";
+    sha256 = "sha256-Nb5tQogQFMObd+nR/eUpEFUoCh1AnTX3s/jICJbvqqo=";
   };
 
   publicKey = ./publickey.asc;
