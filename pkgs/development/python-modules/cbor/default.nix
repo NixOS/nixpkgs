@@ -15,7 +15,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = "https://bitbucket.org/bodhisnarkva/cbor";
+    homepage = "https://github.com/brianolson/cbor_py";
     description = "Concise Binary Object Representation (CBOR) library";
     license = licenses.asl20;
     maintainers = with maintainers; [ oxzi ];
