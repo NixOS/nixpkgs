@@ -1,6 +1,5 @@
 { buildPackages
 , callPackage
-, emptyFile
 , perl
 , bison ? null
 , flex ? null
@@ -13,6 +12,9 @@
 , rustc
 , rustPlatform
 , rust-bindgen
+# testing
+, emptyFile
+, nixos
 , nixosTests
 }@args':
 
@@ -247,6 +249,17 @@ kernel.overrideAttrs (finalAttrs: previousAttrs: {
             + toString (lib.attrNames (lib.toFunction args { }))
           ) overridableKernel;
       };
+      /* Certain arguments must be evaluated lazily; so that only the output(s) depend on them.
+         Original reproducer / simplified use case:
+       */
+      versionDoesNotDependOnPatchesEtcNixOS =
+        builtins.seq
+          (nixos ({ config, pkgs, ... }: {
+              boot.kernelPatches = [
+                (builtins.seq config.boot.kernelPackages.kernel.version { patch = pkgs.emptyFile; })
+              ];
+          })).config.boot.kernelPackages.kernel.outPath
+          emptyFile;
       versionDoesNotDependOnPatchesEtc =
         builtins.seq
           (import ./generic.nix args' (args // (
@@ -267,6 +280,8 @@ kernel.overrideAttrs (finalAttrs: previousAttrs: {
     in [
       (nixosTests.kernel-generic.passthru.testsForKernel overridableKernel)
       versionDoesNotDependOnPatchesEtc
+      # Disabled by default, because the infinite recursion is hard to understand. The other test's error is better and produces a shorter trace.
+      # versionDoesNotDependOnPatchesEtcNixOS
     ] ++ kernelTests;
   };
 
