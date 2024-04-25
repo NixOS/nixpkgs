@@ -2264,6 +2264,8 @@ self: super: with self; {
 
   clldutils = callPackage ../development/python-modules/clldutils { };
 
+  cloudevents = callPackage ../development/python-modules/cloudevents { };
+
   cloudflare = callPackage ../development/python-modules/cloudflare { };
 
   cloudpathlib = callPackage ../development/python-modules/cloudpathlib { };
@@ -6406,6 +6408,8 @@ self: super: with self; {
   krakenex = callPackage ../development/python-modules/krakenex { };
 
   krfzf-py = callPackage ../development/python-modules/krfzf-py { };
+
+  kserve = callPackage ../development/python-modules/kserve { };
 
   kubernetes = callPackage ../development/python-modules/kubernetes { };
 
@@ -15056,6 +15060,8 @@ self: super: with self; {
   timetagger = callPackage ../development/python-modules/timetagger { };
 
   timezonefinder = callPackage ../development/python-modules/timezonefinder { };
+
+  timing-asgi = callPackage ../development/python-modules/timing-asgi { };
 
   timm = callPackage ../development/python-modules/timm { };
 
