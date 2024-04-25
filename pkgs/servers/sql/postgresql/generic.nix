@@ -24,7 +24,6 @@ let
       # JIT
       , jitSupport
       , nukeReferences, patchelf, llvmPackages
-      , makeRustPlatform, buildPgxExtension, cargo, rustc
 
       # PL/Python
       , pythonSupport ? false
@@ -235,13 +234,6 @@ let
           inherit (llvmPackages) llvm;
           postgresql = this;
           stdenv = stdenv';
-          buildPgxExtension = buildPgxExtension.override {
-            stdenv = stdenv';
-            rustPlatform = makeRustPlatform {
-              stdenv = stdenv';
-              inherit rustc cargo;
-            };
-          };
         };
         newSelf = self // scope;
         newSuper = { callPackage = newScope (scope // this.pkgs); };
