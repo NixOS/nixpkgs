@@ -13,7 +13,7 @@
 , openssl
 , libclang
 , libcxx
-, rocksdb
+, rocksdb_8_3
 , rustfmt
 , perl
 , hidapi
@@ -46,6 +46,7 @@ let
   pinData = lib.importJSON ./pin.json;
   version = pinData.version;
   hash = pinData.hash;
+  rocksdb = rocksdb_8_3;
   inherit (darwin.apple_sdk_11_0) Libsystem;
   inherit (darwin.apple_sdk_11_0.frameworks) System IOKit AppKit Security;
 in

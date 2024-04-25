@@ -1,7 +1,7 @@
 { fetchFromGitHub
 , lib
 , protobuf
-, rocksdb
+, rocksdb_8_3
 , rust-jemalloc-sys-unprefixed
 , rustPlatform
 , rustc
@@ -9,6 +9,10 @@
 , Security
 , SystemConfiguration
 }:
+
+let
+  rocksdb = rocksdb_8_3;
+in
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
   version = "1.10.0";

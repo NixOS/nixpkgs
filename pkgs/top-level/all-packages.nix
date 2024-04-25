@@ -24252,6 +24252,17 @@ with pkgs;
 
   rocksdb = callPackage ../development/libraries/rocksdb { };
 
+  rocksdb_8_3 = rocksdb.overrideAttrs rec {
+    pname = "rocksdb";
+    version = "8.3.2";
+    src = fetchFromGitHub {
+      owner = "facebook";
+      repo = pname;
+      rev = "v${version}";
+      hash = "sha256-mfIRQ8nkUbZ3Bugy3NAvOhcfzFY84J2kBUIUBcQ2/Qg=";
+    };
+  };
+
   rocksdb_7_10 = rocksdb.overrideAttrs rec {
     pname = "rocksdb";
     version = "7.10.2";
@@ -24259,8 +24270,8 @@ with pkgs;
       owner = "facebook";
       repo = pname;
       rev = "v${version}";
-     hash = "sha256-U2ReSrJwjAXUdRmwixC0DQXht/h/6rV8SOf5e2NozIs=";
-   };
+      hash = "sha256-U2ReSrJwjAXUdRmwixC0DQXht/h/6rV8SOf5e2NozIs=";
+    };
   };
 
   rocksdb_6_23 = rocksdb.overrideAttrs rec {
