@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch
 , appstream-glib
 , cargo
 , dbus
@@ -17,36 +16,26 @@
 , rustPlatform
 , rustc
 , sqlite
-, transmission
+, transmission_4
 , wrapGAppsHook4
 }:
 
-let
-  patchedTransmission = transmission.overrideAttrs (oldAttrs: {
-    patches = (oldAttrs.patches or []) ++ [
-      (fetchpatch {
-        url = "https://raw.githubusercontent.com/flathub/de.haeckerfelix.Fragments/2aee477c8e26a24570f8dbbdbd1c49e017ae32eb/transmission_pdeathsig.patch";
-        sha256 = "sha256-/rCoA566tMmzqcIfffC082Y56TwEyyQJ0knxymtscbA=";
-      })
-    ];
-  });
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "fragments";
-  version = "2.1.1";
+  version = "3.0.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Fragments";
     rev = version;
-    sha256 = "sha256-tZcVw4rxmNPcKKgyRB+alEktktZfKK+7FYUVAAGA9bw=";
+    hash = "sha256-HtulyB1XYBsA595ghJN0EmyJT7DjGUbtJKaMGM3f0I8=";
   };
 
-  patches = [];
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src patches;
+    inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-nqVaYnL3jKGBsAsakIkgwksjH4yuMhwCQe0zq3jgjnA=";
+    hash = "sha256-EUE+Qc+MqsKPqHMYJflZQ6zm3ErW+KLuJq/7HEBf8VM=";
   };
 
   nativeBuildInputs = [
@@ -71,9 +60,9 @@ in stdenv.mkDerivation rec {
     sqlite
   ];
 
-  preFixup =  ''
+  preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${lib.makeBinPath [ patchedTransmission ]}"
+      --prefix PATH : "${lib.makeBinPath [ transmission_4 ]}"
     )
   '';
 
