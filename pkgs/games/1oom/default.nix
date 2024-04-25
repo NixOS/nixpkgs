@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, allegro, libsamplerate, libX11, libXext, SDL, SDL_mixer, SDL2, SDL2_mixer, readline }:
+{ lib, stdenv, fetchFromGitHub, gitUpdater, autoreconfHook, allegro, libsamplerate, libX11, libXext, SDL, SDL_mixer, SDL2, SDL2_mixer, readline }:
 
 stdenv.mkDerivation rec {
   pname = "1oom";
@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
     install -t $doc/share/doc/${pname} \
       HACKING NEWS PHILOSOPHY README.md doc/*.txt
   '';
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "f";
+  };
 
   meta = with lib; {
     homepage = "https://kilgoretroutmaskreplicant.gitlab.io/plain-html/";
