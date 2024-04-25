@@ -1,9 +1,9 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
 
 let
   cfg = config.services.prometheus.exporters.ping;
+  inherit (lib) mkOption types concatStringsSep;
 
   settingsFormat = pkgs.formats.yaml {};
   configFile = settingsFormat.generate "config.yml" cfg.settings;
