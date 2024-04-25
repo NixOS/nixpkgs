@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python-dateutil
-, python-mimeparse
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python-dateutil,
+  python-mimeparse,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-bQBq5Wk5P9c+/a5B+LnxG8aCrVK1A3jLsLFK69/UYjo=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     python-dateutil
@@ -33,9 +32,7 @@ buildPythonPackage rec {
   # Tests requires a Django instance
   doCheck = false;
 
-  pythonImportsCheck = [
-    "tastypie"
-  ];
+  pythonImportsCheck = [ "tastypie" ];
 
   meta = with lib; {
     description = "Utilities and helpers for writing Pylint plugins";
