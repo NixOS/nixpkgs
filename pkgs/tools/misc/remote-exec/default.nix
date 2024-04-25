@@ -37,7 +37,7 @@ buildPythonApplication rec {
       --replace-fail '"mremote' '#"mremote'
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     pydantic
     toml

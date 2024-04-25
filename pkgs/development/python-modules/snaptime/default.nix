@@ -15,7 +15,7 @@ buildPythonPackage rec {
     hash = "sha256-4/HriQQ9WNMHIauYy2UCPxpMJ0DjsZdwQpixY8ktUIs=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     python-dateutil
     pytz
   ];

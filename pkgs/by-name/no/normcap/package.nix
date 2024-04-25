@@ -57,7 +57,7 @@ ps.buildPythonApplication rec {
     ps.babel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ps.pyside6
     ps.jeepney
   ];

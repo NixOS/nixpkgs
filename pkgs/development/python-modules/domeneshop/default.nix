@@ -21,7 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-kL0X1mEsmVWqnq5NgsMBxeAu48zjmi3muhZYryTCOMo=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     certifi
     urllib3
   ];

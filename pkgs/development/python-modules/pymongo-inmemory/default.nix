@@ -40,7 +40,7 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pymongo
   ];
 

@@ -35,7 +35,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     watchdog
     portalocker
   ];

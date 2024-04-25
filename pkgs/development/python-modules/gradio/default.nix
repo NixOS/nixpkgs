@@ -99,7 +99,7 @@ buildPythonPackage rec {
     hatch-fancy-pypi-readme
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     setuptools # needed for 'pkg_resources'
     aiofiles
     altair

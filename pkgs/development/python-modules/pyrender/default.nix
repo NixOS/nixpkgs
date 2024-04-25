@@ -50,7 +50,7 @@ buildPythonPackage rec {
         'bm = trimesh.load("tests/data/WaterBottle.glb").geometry["WaterBottle"]'
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     freetype-py
     imageio
     networkx

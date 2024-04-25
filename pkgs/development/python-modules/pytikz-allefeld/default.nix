@@ -23,7 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-G59UUkpjttJKNBN0MB/A9CftO8tO3nv8qlTxt3/fKHk=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     pymupdf
     numpy
     ipython
