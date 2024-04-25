@@ -43,8 +43,8 @@ let
   };
 in {
   nextcloud27 = generic {
-    version = "27.1.8";
-    hash = "sha256-Ciy5vRKCnlOq8XNUPsrQFPCeganXL6YeTEYNhOO47fs=";
+    version = "27.1.9";
+    hash = "sha256-+P4QzLWFNJ+EUQ25tLAgjbfziV2vPXpejxfSNuzEEfU=";
     packages = nextcloud27Packages;
   };
 
