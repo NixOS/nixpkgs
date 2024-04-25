@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , symlinkJoin
-, makeWrapper
 , wrapQtAppsHook
 , addOpenGLRunpath
 
@@ -14,7 +13,6 @@
 , libpulseaudio
 , libGL
 , glfw
-, glfw-wayland-minecraft
 , openal
 , jdk8
 , jdk17
@@ -32,13 +30,6 @@
 , textToSpeechSupport ? stdenv.isLinux
 , controllerSupport ? stdenv.isLinux
 
-  # Adds `glfw-wayland-minecraft` to `LD_LIBRARY_PATH`
-  # when launched on wayland, allowing for the game to be run natively.
-  # Make sure to enable "Use system installation of GLFW" in instance settings
-  # for this to take effect
-  #
-  # Warning: This build of glfw may be unstable, and the launcher
-  # itself can take slightly longer to start
 , withWaylandGLFW ? false
 
 , jdks ? [ jdk21 jdk17 jdk8 ]
@@ -46,8 +37,8 @@
 , additionalPrograms ? [ ]
 }:
 
-assert lib.assertMsg (withWaylandGLFW -> stdenv.isLinux) "withWaylandGLFW is only available on Linux";
-
+# glfw 3.4 works without any further patches. TODO: remove this option for 24.10
+assert lib.assertMsg (!withWaylandGLFW) "withWaylandGLFW is no longer needed. This option is going to be removed";
 let
   prismlauncher' = prismlauncher-unwrapped.override {
     inherit msaClientID gamemodeSupport;
@@ -61,30 +52,13 @@ symlinkJoin {
 
   nativeBuildInputs = [
     wrapQtAppsHook
-  ]
-  # purposefully using a shell wrapper here for variable expansion
-  # see https://github.com/NixOS/nixpkgs/issues/172583
-  ++ lib.optional withWaylandGLFW makeWrapper;
+  ];
 
   buildInputs = [
     qtbase
     qtsvg
   ]
   ++ lib.optional (lib.versionAtLeast qtbase.version "6" && stdenv.isLinux) qtwayland;
-
-  waylandPreExec = ''
-    if [ -n "$WAYLAND_DISPLAY" ]; then
-      export LD_LIBRARY_PATH=${lib.getLib glfw-wayland-minecraft}/lib:"$LD_LIBRARY_PATH"
-    fi
-  '';
-
-  postBuild = ''
-    ${lib.optionalString withWaylandGLFW ''
-      qtWrapperArgs+=(--run "$waylandPreExec")
-    ''}
-
-    wrapQtAppsHook
-  '';
 
   qtWrapperArgs =
     let
