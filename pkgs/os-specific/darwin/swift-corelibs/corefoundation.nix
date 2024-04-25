@@ -84,8 +84,5 @@ stdenv.mkDerivation {
   postInstall = ''
     install_name_tool -id '@rpath/CoreFoundation.framework/Versions/A/CoreFoundation' \
       "$out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
-
-    mkdir -p "$out/nix-support"
-    substituteAll ${./pure-corefoundation-hook.sh} "$out/nix-support/setup-hook"
   '';
 }
