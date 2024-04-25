@@ -38,8 +38,6 @@
 , buildExtraTools ? false
 }:
 
-with lib;
-
 let
   clientDeps = [
     qtbase
@@ -59,7 +57,7 @@ let
     # optional:
     libmicrohttpd # HTTP admin api
     libsodium # ext-auth support
-  ] ++ optional withSystemd systemd;
+  ] ++ lib.optional withSystemd systemd;
 
 in mkDerivation rec {
   pname = "drawpile";
@@ -88,8 +86,8 @@ in mkDerivation rec {
     karchive
     qtwebsockets
   ]
-  ++ optionals buildClient      clientDeps
-  ++ optionals buildServer      serverDeps;
+  ++ lib.optionals buildClient clientDeps
+  ++ lib.optionals buildServer serverDeps;
 
   cmakeFlags = [
     (lib.cmakeFeature "INITSYS" (lib.optionalString withSystemd "systemd"))
@@ -103,9 +101,9 @@ in mkDerivation rec {
     description = "Collaborative drawing program that allows multiple users to sketch on the same canvas simultaneously";
     homepage = "https://drawpile.net/";
     downloadPage = "https://drawpile.net/download/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
   } // lib.optionalAttrs buildServer {
     mainProgram = "drawpile-srv";
