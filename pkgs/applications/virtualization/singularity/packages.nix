@@ -64,6 +64,9 @@ let
       extraMeta.homepage = "https://sylabs.io/";
     })
     {
+      # Sylabs SingularityCE builders defaults to set the SUID flag
+      # on UNIX-like platforms,
+      # and only have --without-suid but not --with-suid.
       defaultToSuid = true;
     };
 
