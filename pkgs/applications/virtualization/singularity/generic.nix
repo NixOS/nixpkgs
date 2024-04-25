@@ -44,6 +44,7 @@ in
   gpgme,
   libseccomp,
   libuuid,
+  mount,
   # This is for nvidia-container-cli
   nvidia-docker,
   openssl,
@@ -185,6 +186,7 @@ in
     fakeroot
     fuse2fs # Mount ext3 filesystems
     go
+    mount # mount
     privileged-un-utils
     squashfsTools # mksquashfs unsquashfs # Make / unpack squashfs image
     squashfuse # squashfuse_ll squashfuse # Mount (without unpacking) a squashfs image without privileges
