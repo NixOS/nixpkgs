@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "2.2.2";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "audio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rW4xLUFTpGpUeMnTBdrI/2OjgZX1ihK0EfcVK6snmpk=";
+    hash = "sha256-8EPoZ/dfxrQjdtE0rZ+2pOaXxlyhRuweYnVuA9i0Fgc=";
   };
 
   patches = [
@@ -82,7 +82,7 @@ buildPythonPackage rec {
     homepage = "https://pytorch.org/";
     changelog = "https://github.com/pytorch/audio/releases/tag/v${version}";
     license = licenses.bsd2;
-    platforms = platforms.unix;
+    platforms = [ "aarch64-darwin" "aarch64-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ junjihashimoto ];
   };
 }
