@@ -1848,6 +1848,12 @@
     githubId = 7745457;
     name = "Astavie";
   };
+  astindev = {
+    email = "astindev@pm.me";
+    github = "astindev";
+    githubId = 52360869;
+    name = "Astin";
+  };
   astro = {
     email = "astro@spaceboyz.net";
     github = "astro";
