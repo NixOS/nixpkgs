@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, buildPythonPackage, python,
+{ stdenv, lib, fetchFromGitHub, buildPythonPackage, python,
   config, cudaSupport ? config.cudaSupport, cudaPackages,
   autoAddDriverRunpath,
   effectiveMagma ?
@@ -14,7 +14,7 @@
   buildDocs ? false,
 
   # Native build inputs
-  cmake, linkFarm, symlinkJoin, which, pybind11, removeReferencesTo,
+  cmake, symlinkJoin, which, pybind11, removeReferencesTo,
   pythonRelaxDepsHook,
 
   # Build inputs
@@ -130,7 +130,7 @@ let
 in buildPythonPackage rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.2.2";
+  version = "2.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8.0";
@@ -148,7 +148,7 @@ in buildPythonPackage rec {
     repo = "pytorch";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-la9wL9pOlgrSfq5V8aRKXt3hjW+Er/6484m0oUujlzk=";
+    hash = "sha256-UmH4Mv5QL7Mz4Y4pvxn8F1FGBR/UzYZjE2Ys8Oc0FWQ=";
   };
 
   patches = lib.optionals cudaSupport [
