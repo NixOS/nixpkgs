@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/World/Chatty";
     changelog = "https://gitlab.gnome.org/World/Chatty/-/blob/${src.rev}/NEWS";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda tomfitzhenry ];
+    maintainers = with maintainers; [ dotlambda ];
     platforms = platforms.linux;
   };
 }
