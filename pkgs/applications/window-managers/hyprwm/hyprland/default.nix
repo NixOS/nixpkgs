@@ -49,13 +49,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + lib.optionalString debug "-debug";
-  version = "0.38.1";
-
+  version = "0.39.1";
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-6y422rx8ScSkjR1dNYGYUxBmFewRYlCz9XZZ+XrVZng=";
+    hash = "sha256-Urb/njWiHYUudXpmK8EKl9Z58esTIG0PxXw5LuM2r5g=";
   };
 
   patches = [
@@ -73,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "@HASH@" '${finalAttrs.src.rev}' \
       --replace "@BRANCH@" "" \
       --replace "@MESSAGE@" "" \
-      --replace "@DATE@" "2024-04-06" \
+      --replace "@DATE@" "2024-04-16" \
       --replace "@TAG@" "" \
       --replace "@DIRTY@" ""
   '';
@@ -94,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs =
-    [
+    wlr.buildInputs ++ [
       cairo
       git
       hyprcursor
