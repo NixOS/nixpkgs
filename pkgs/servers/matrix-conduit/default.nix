@@ -6,22 +6,19 @@
 , stdenv
 , darwin
 , nixosTests
-, rocksdb_8_3
+, rocksdb
 , rust-jemalloc-sys
 }:
 
-let
-  rocksdb = rocksdb_8_3;
-in
 rustPlatform.buildRustPackage rec {
   pname = "matrix-conduit";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitLab {
     owner = "famedly";
     repo = "conduit";
     rev = "v${version}";
-    hash = "sha256-TpNssMHvSKcxJMas5lQNWEbIv09u4/niBN2C27Mp0JY=";
+    hash = "sha256-6osKiwEm3H7NR8vuOaD5Jlns5alfgprg+c3D98msxcE=";
   };
 
   # We have to use importCargoLock here because `cargo vendor` currently doesn't support workspace
@@ -29,9 +26,7 @@ rustPlatform.buildRustPackage rec {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "heed-0.10.6" = "sha256-rm02pJ6wGYN4SsAbp85jBVHDQ5ITjZZd+79EC2ubRsY=";
-      "reqwest-0.11.9" = "sha256-wH/q7REnkz30ENBIK5Rlxnc1F6vOyuEANMHFmiVPaGw=";
-      "ruma-0.8.2" = "sha256-GkHLY5unh7uyFNe0RS+3xQ4Ou8qBhzd+kEnCC7xUnMo=";
+      "ruma-0.9.4" = "sha256-ICz2Mi94XA2os3dTBLWTL4B60Dopw2u0Fq/mM3HoG2A=";
     };
   };
 
