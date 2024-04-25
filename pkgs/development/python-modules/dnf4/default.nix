@@ -8,6 +8,7 @@
 , python
 , rpm
 , sphinx
+, nix-update-script
 }:
 
 let
@@ -87,6 +88,8 @@ buildPythonPackage rec {
   postFixup = ''
     moveToOutput "lib/${python.libPrefix}" "$py"
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Package manager based on libdnf and libsolv. Replaces YUM";
