@@ -4756,8 +4756,6 @@ with pkgs;
 
   wlay = callPackage ../tools/wayland/wlay { };
 
-  wl-clip-persist = callPackage ../tools/wayland/wl-clip-persist { };
-
   wl-clipboard = callPackage ../tools/wayland/wl-clipboard { };
 
   wl-clipboard-x11 = callPackage ../tools/wayland/wl-clipboard-x11 { };
