@@ -10,11 +10,12 @@
 , stdenv
 , darwin
 , nix-update-script
-, rocksdb
+, rocksdb_8_3
 }:
 
 let
   version = "0.6.0";
+  rocksdb = rocksdb_8_3;
 in
 rustPlatform.buildRustPackage {
   pname = "stalwart-mail";
