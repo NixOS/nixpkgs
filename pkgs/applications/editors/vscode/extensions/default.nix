@@ -1263,6 +1263,23 @@ let
         };
       };
 
+      discloud.discloud = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "discloud";
+          name = "discloud";
+          version = "2.21.2";
+          hash = "sha256-es1WjKchxC2hIWOkIRuf5MqMjTYu6qcBgo8abCqTjFc=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/discloud.discloud/changelog";
+          description = "A Visual Studio Code extension for hosting and managing applications on Discloud";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=discloud.discloud";
+          homepage = "https://github.com/discloud/vscode-discloud";
+          license = lib.licenses.asl20;
+          maintainers = [ lib.maintainers.astindev ];
+        };
+      };
+
       disneystreaming.smithy = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "disneystreaming";
