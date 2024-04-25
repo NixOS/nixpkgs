@@ -4,23 +4,28 @@
 , python-dateutil
 , python-mimeparse
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "django-tastypie";
   version = "0.14.7";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "django-tastypie";
-    repo = pname;
+    repo = "django-tastypie";
     rev = "refs/tags/v${version}";
     hash = "sha256-bQBq5Wk5P9c+/a5B+LnxG8aCrVK1A3jLsLFK69/UYjo=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     python-dateutil
     python-mimeparse
   ];
