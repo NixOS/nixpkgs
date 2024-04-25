@@ -68,6 +68,7 @@
 , withHarfbuzz ? withHeadlessDeps && lib.versionAtLeast version "6.1" # Needed for drawtext filter
 , withIconv ? withHeadlessDeps
 , withJack ? withFullDeps && !stdenv.isDarwin # Jack audio
+, withJpegXL ? withFullDeps
 , withLadspa ? withFullDeps # LADSPA audio filtering
 , withLzma ? withHeadlessDeps # xz-utils
 , withMfx ? withFullDeps && (with stdenv.hostPlatform; isLinux && !isAarch) # Hardware acceleration via intel-media-sdk/libmfx
@@ -243,6 +244,7 @@
 , libGLU
 , libiconv
 , libjack2
+, libjxl
 , libmodplug
 , libmysofa
 , libogg
@@ -560,6 +562,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ [
     (enableFeature withIconv "iconv")
     (enableFeature withJack "libjack")
+    (enableFeature withJpegXL "libjxl")
     (enableFeature withLadspa "ladspa")
     (enableFeature withLzma "lzma")
     (enableFeature withMfx "libmfx")
@@ -696,6 +699,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withHarfbuzz [ harfbuzz ]
   ++ optionals withIconv [ libiconv ] # On Linux this should be in libc, do we really need it?
   ++ optionals withJack [ libjack2 ]
+  ++ optionals withJpegXL [ libjxl ]
   ++ optionals withLadspa [ ladspaH ]
   ++ optionals withLzma [ xz ]
   ++ optionals withMfx [ intel-media-sdk ]
