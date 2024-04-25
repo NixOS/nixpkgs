@@ -108,10 +108,9 @@ in mkDerivation rec {
     mainProgram = "drawpile-srv";
     homepage = "https://drawpile.net/";
     downloadPage = "https://drawpile.net/download/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.unix;
     broken = stdenv.isDarwin;
   };
 }
-
