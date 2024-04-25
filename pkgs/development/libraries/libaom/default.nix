@@ -8,11 +8,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libaom";
-  version = "3.8.2";
+  version = "3.9.0";
 
   src = fetchzip {
     url = "https://aomedia.googlesource.com/aom/+archive/v${version}.tar.gz";
-    hash = "sha256-x152jIe7QxeprFEFJnXBfou8yHuW0oHImLIVkSxByWw=";
+    hash = "sha256-ON/BWCO2k7fADW3ZANKjnRE8SrQZpjdyUF1N0fD/xnc=";
     stripRoot = false;
   };
 
