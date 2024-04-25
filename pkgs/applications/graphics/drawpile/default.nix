@@ -105,12 +105,15 @@ in mkDerivation rec {
 
   meta = {
     description = "Collaborative drawing program that allows multiple users to sketch on the same canvas simultaneously";
-    mainProgram = "drawpile-srv";
     homepage = "https://drawpile.net/";
     downloadPage = "https://drawpile.net/download/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.unix;
     broken = stdenv.isDarwin;
+  } // lib.optionalAttrs buildServer {
+    mainProgram = "drawpile-srv";
+  } // lib.optionalAttrs buildClient {
+    mainProgram = "drawpile";
   };
 }
