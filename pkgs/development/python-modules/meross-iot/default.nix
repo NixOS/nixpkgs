@@ -24,11 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-Zf392XMhSrCn5KM761YXzinD46Et4itva7USsFNRgPI=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     paho-mqtt
     requests
