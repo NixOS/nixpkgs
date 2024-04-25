@@ -38,6 +38,9 @@
 , buildExtraTools ? false
 }:
 
+assert lib.assertMsg (buildClient || buildServer || buildExtraTools)
+  "You must specify at least one of buildClient, buildServer, or buildExtraTools.";
+
 let
   clientDeps = [
     qtbase
