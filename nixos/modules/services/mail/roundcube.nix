@@ -239,13 +239,14 @@ in
       (mkIf (cfg.database.host == "localhost") {
         requires = [ "postgresql.service" ];
         after = [ "postgresql.service" ];
-        path = [ config.services.postgresql.package ];
       })
       {
         after = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
+
+        path = [ config.services.postgresql.package ];
         script = let
-          psql = "${lib.optionalString (!localDB) "PGPASSFILE=${cfg.database.passwordFile}"} ${pkgs.postgresql}/bin/psql ${lib.optionalString (!localDB) "-h ${cfg.database.host} -U ${cfg.database.username} "} ${cfg.database.dbname}";
+          psql = "${lib.optionalString (!localDB) "PGPASSFILE=${cfg.database.passwordFile}"} psql ${lib.optionalString (!localDB) "-h ${cfg.database.host} -U ${cfg.database.username} "} ${cfg.database.dbname}";
         in
         ''
           version="$(${psql} -t <<< "select value from system where name = 'roundcube-version';" || true)"
