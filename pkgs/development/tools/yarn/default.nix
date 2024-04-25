@@ -51,7 +51,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://classic.yarnpkg.com/";
     changelog = "https://github.com/yarnpkg/yarn/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ offline screendriver marsam ];
+    maintainers = with maintainers; [ offline screendriver ];
     platforms = platforms.all;
     mainProgram = "yarn";
   };

@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/racket/zuo";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }
