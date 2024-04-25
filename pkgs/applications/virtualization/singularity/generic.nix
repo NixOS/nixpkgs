@@ -116,11 +116,15 @@ let
     if ((newuidmapPath == null) && (newgidmapPath == null)) then
       null
     else
-      runCommandLocal "privileged-un-utils" { } ''
-        mkdir -p "$out/bin"
-        ln -s ${lib.escapeShellArg newuidmapPath} "$out/bin/newuidmap"
-        ln -s ${lib.escapeShellArg newgidmapPath} "$out/bin/newgidmap"
-      '';
+      lib.warn
+        "${pname}: arguments newuidmapPath and newgidmapPath is deprecated in favour of systemBinPaths."
+        (
+          runCommandLocal "privileged-un-utils" { } ''
+            mkdir -p "$out/bin"
+            ln -s ${lib.escapeShellArg newuidmapPath} "$out/bin/newuidmap"
+            ln -s ${lib.escapeShellArg newgidmapPath} "$out/bin/newgidmap"
+          ''
+        );
 
   # Backward compatibility for privileged-un-utils.
   # TODO(@ShamrockLee): Remove after Nixpkgs 24.05 branch-off.
