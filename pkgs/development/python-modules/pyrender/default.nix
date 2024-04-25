@@ -3,6 +3,7 @@
 , pythonOlder
 , fetchFromGitHub
 , fetchpatch
+, setuptools
 , freetype-py
 , imageio
 , networkx
@@ -19,7 +20,7 @@
 buildPythonPackage rec {
   pname = "pyrender";
   version = "0.1.45";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
@@ -49,6 +50,10 @@ buildPythonPackage rec {
         "bm = trimesh.load('tests/data/WaterBottle.glb').dump()[0]" \
         'bm = trimesh.load("tests/data/WaterBottle.glb").geometry["WaterBottle"]'
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   dependencies = [
     freetype-py

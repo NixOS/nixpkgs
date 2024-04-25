@@ -2,6 +2,7 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , pytestCheckHook
 , matplotlib
 , python-snap7
@@ -11,7 +12,7 @@
 buildPythonPackage rec {
   pname = "remi";
   version = "2022.7.27";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rawpython";
@@ -39,6 +40,10 @@ buildPythonPackage rec {
         "self.assertEquals(" \
         "self.assertEqual("
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

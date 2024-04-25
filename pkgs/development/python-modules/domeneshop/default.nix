@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, setuptools
 , urllib3
 , pyopenssl
 , cryptography
@@ -12,7 +13,7 @@
 buildPythonPackage rec {
   pname = "domeneshop";
   version = "0.4.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.4";
 
@@ -20,6 +21,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-kL0X1mEsmVWqnq5NgsMBxeAu48zjmi3muhZYryTCOMo=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   dependencies = [
     certifi

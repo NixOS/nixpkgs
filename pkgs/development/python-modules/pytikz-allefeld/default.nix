@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , buildPythonPackage
 , pythonOlder
+, setuptools
 , pymupdf
 , numpy
 , ipython
@@ -12,7 +13,7 @@
 buildPythonPackage rec {
   pname = "pytikz-allefeld"; # "pytikz" on pypi is a different module
   version = "unstable-2022-11-01";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
@@ -22,6 +23,10 @@ buildPythonPackage rec {
     rev = "f878ebd6ce5a647b1076228b48181b147a61abc1";
     hash = "sha256-G59UUkpjttJKNBN0MB/A9CftO8tO3nv8qlTxt3/fKHk=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   dependencies = [
     pymupdf
