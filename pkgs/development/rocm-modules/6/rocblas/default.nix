@@ -29,7 +29,7 @@
 , tensileSepArch ? false
 , tensileLazyLib ? false
 , tensileLibFormat ? "msgpack"
-, gpuTargets ? [ "all" ]
+, gpuTargets ? [ "gfx900;gfx906:xnack-;gfx908:xnack-;gfx90a:xnack+;gfx90a:xnack-;gfx942;gfx1010;gfx1030;gfx1100;gfx1101;gfx1102" ]
 }:
 
 stdenv.mkDerivation (finalAttrs: {
