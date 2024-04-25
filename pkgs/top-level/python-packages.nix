@@ -8534,6 +8534,8 @@ self: super: with self; {
 
   nampa = callPackage ../development/python-modules/nampa { };
 
+  nanobind = callPackage ../development/python-modules/nanobind { };
+
   nanoid = callPackage ../development/python-modules/nanoid { };
 
   nanoleaf = callPackage ../development/python-modules/nanoleaf { };
@@ -9769,6 +9771,8 @@ self: super: with self; {
   pipdate = callPackage ../development/python-modules/pipdate { };
 
   pipdeptree = callPackage ../development/python-modules/pipdeptree { };
+
+  pipe = callPackage ../development/python-modules/pipe { };
 
   pipenv-poetry-migrate = callPackage ../development/python-modules/pipenv-poetry-migrate { };
 

@@ -16,13 +16,6 @@ on:
     # so it shouldn't be a problem
     types: [opened, synchronize, reopened, edited]
 
-# Create a check-by-name concurrency group based on the branch name. if a new
-# commit is pushed to the main branch while a previous run is still in progress,
-# the previous run will be cancelled and the new one will start.
-concurrency:
-  group: check-by-name-${{ github.ref }}
-  cancel-in-progress: true
-
 permissions:
   # We need this permission to cancel the workflow run if there's a merge conflict
   actions: write
@@ -46,7 +39,7 @@ jobs:
           # https://docs.github.com/en/rest/guides/using-the-rest-api-to-interact-with-your-git-database?apiVersion=2022-11-28#checking-mergeability-of-pull-requests
 
           # Retry the API query this many times
-          retryCount=3
+          retryCount=5
           # Start with 5 seconds, but double every retry
           retryInterval=5
           while true; do

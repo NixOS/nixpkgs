@@ -28,8 +28,6 @@ in appimageTools.wrapType2 {
     ];
 
     extraInstallCommands = ''
-      mv $out/bin/${pname}-${version} $out/bin/${pname}
-
       install --mode=444 -D ${appimageContents}/chat.simplex.app.desktop --target-directory=$out/share/applications
       substituteInPlace $out/share/applications/chat.simplex.app.desktop \
         --replace 'Exec=simplex' 'Exec=${pname}'

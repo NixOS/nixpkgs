@@ -313,8 +313,6 @@ with pkgs;
 
   assemblyscript = callPackage ../development/compilers/assemblyscript { };
 
-  authy = callPackage ../applications/misc/authy { };
-
   authz0 = callPackage ../tools/security/authz0 { };
 
   auth0-cli = callPackage ../tools/admin/auth0-cli { };
@@ -8326,7 +8324,9 @@ with pkgs;
 
   gau = callPackage ../tools/security/gau { };
 
-  gauge = callPackage ../development/tools/gauge { };
+  gauge-unwrapped = callPackage ../development/tools/gauge { };
+  gauge = callPackage ../development/tools/gauge/wrapper.nix { };
+  gaugePlugins = recurseIntoAttrs (callPackage ../development/tools/gauge/plugins {});
 
   gawd = python3Packages.toPythonApplication python3Packages.gawd;
 
@@ -27947,8 +27947,6 @@ with pkgs;
   powerdns-admin = callPackage ../applications/networking/powerdns-admin { };
 
   dnsdist = callPackage ../servers/dns/dnsdist { };
-
-  pdns-recursor = callPackage ../servers/dns/pdns-recursor { };
 
   powertop = callPackage ../os-specific/linux/powertop { };
 

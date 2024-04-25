@@ -52,7 +52,6 @@ let
 
   fhsEnvAnki = buildFHSEnv (appimageTools.defaultFhsEnvArgs // {
     inherit pname version;
-    name = null; # Appimage sets it to "appimage-env"
 
     profile = ''
       # anki vendors QT and mixing QT versions usually causes crashes
