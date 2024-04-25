@@ -833,11 +833,12 @@ in {
           else if versionOlder stateVersion "23.05" then nextcloud25
           else if versionOlder stateVersion "23.11" then nextcloud26
           else if versionOlder stateVersion "24.05" then nextcloud27
-          else if versionOlder stateVersion "24.11" then nextcloud28
           else nextcloud29
         );
 
-      services.nextcloud.phpPackage = pkgs.php82;
+      services.nextcloud.phpPackage =
+        if versionOlder cfg.package.version "29" then pkgs.php82
+        else pkgs.php83;
 
       services.nextcloud.phpOptions = mkMerge [
         (mapAttrs (const mkOptionDefault) defaultPHPSettings)
