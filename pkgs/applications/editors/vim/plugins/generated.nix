@@ -5590,6 +5590,18 @@ final: prev:
     meta.homepage = "https://github.com/smjonas/live-command.nvim/";
   };
 
+  llm-nvim = buildVimPlugin {
+    pname = "llm.nvim";
+    version = "2024-02-22";
+    src = fetchFromGitHub {
+      owner = "huggingface";
+      repo = "llm.nvim";
+      rev = "51b76dac9c33c0122adfe28daf52ceaa31c4aa02";
+      sha256 = "07i1ixbiby4c81lkydwvygz6vxs1xhqnwzcsad3xzcaz7zdl00kx";
+    };
+    meta.homepage = "https://github.com/huggingface/llm.nvim/";
+  };
+
   lsp-colors-nvim = buildVimPlugin {
     pname = "lsp-colors.nvim";
     version = "2023-02-27";
