@@ -9,7 +9,7 @@
 
 let
   pname = "xonsh";
-  version = "0.15.1";
+  version = "0.16.0";
 in
 python3.pkgs.buildPythonApplication {
   inherit pname version;
@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication {
     owner = "xonsh";
     repo = "xonsh";
     rev = "refs/tags/${version}";
-    hash = "sha256-mHOCkUGiSSPmkIQ4tgRZIaCTLgnx39SMwug5EIx/jrU=";
+    hash = "sha256-swsdDrCFRxq3oApssdHHaqbtBaF+1D4XQ9qNU8NKAlU=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -75,7 +75,15 @@ python3.pkgs.buildPythonApplication {
   '';
 
   nativeCheckInputs = [ glibcLocales git ] ++
-    (with python3.pkgs; [ pip pyte pytestCheckHook pytest-mock pytest-subprocess ]);
+    (with python3.pkgs; [
+      pip
+      pyte
+      pytestCheckHook
+      pytest-mock
+      pytest-rerunfailures
+      pytest-subprocess
+      requests
+    ]);
 
   propagatedBuildInputs = with python3.pkgs; [ ply prompt-toolkit pygments ];
 
