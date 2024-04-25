@@ -12,7 +12,7 @@ buildGoModule rec {
     inherit rev;
     owner = "prometheus";
     repo = "node_exporter";
-    sha256 = "sha256-TC7F/LQnn6OIhvWLy75MQyVGS7DlgJLbbaAUZUZTvEo=";
+    hash = "sha256-TC7F/LQnn6OIhvWLy75MQyVGS7DlgJLbbaAUZUZTvEo=";
   };
 
   vendorHash = "sha256-sly8AJk+jNZG8ijTBF1Pd5AOOUJJxIG8jHwBUdlt8fM=";
