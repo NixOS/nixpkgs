@@ -61,9 +61,6 @@ let
     libsodium # ext-auth support
   ] ++ optional withSystemd systemd;
 
-  boolToFlag = bool:
-    if bool then "ON" else "OFF";
-
 in mkDerivation rec {
   pname = "drawpile";
   version = "2.2.1";
@@ -95,12 +92,11 @@ in mkDerivation rec {
   ++ optionals buildServer      serverDeps;
 
   cmakeFlags = [
-    "-Wno-dev"
-    "-DINITSYS=systemd"
-    "-DCLIENT=${boolToFlag buildClient}"
-    "-DSERVER=${boolToFlag buildServer}"
-    "-DSERVERGUI=${boolToFlag buildServerGui}"
-    "-DTOOLS=${boolToFlag buildExtraTools}"
+    (lib.cmakeFeature "INITSYS" (lib.optionalString withSystemd "systemd"))
+    (lib.cmakeBool "CLIENT" buildClient)
+    (lib.cmakeBool "SERVER" buildServer)
+    (lib.cmakeBool "SERVERGUI" buildServerGui)
+    (lib.cmakeBool "TOOLS" buildExtraTools)
   ];
 
   meta = {
