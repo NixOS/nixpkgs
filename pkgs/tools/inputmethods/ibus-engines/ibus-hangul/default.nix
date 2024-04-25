@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ibus-hangul";
-  version = "1.5.4";
+  version = "1.5.5";
 
   src = fetchurl {
-    url = "https://github.com/choehwanjin/ibus-hangul/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1q6g2pnrn5gqn9jqnm3975v9hh60hc5gn9x3zbrdjgy0n3wpxwm9";
+    url = "https://github.com/libhangul/ibus-hangul/releases/download/${version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-parIgobNGJYCKYYOPhp3iXinrqpIStms+kgoS4f9w7s=";
   };
 
   patches = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     isIbusEngine = true;
     description = "Ibus Hangul engine";
     mainProgram = "ibus-setup-hangul";
-    homepage = "https://github.com/choehwanjin/ibus-hangul";
+    homepage = "https://github.com/libhangul/ibus-hangul";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ericsagnes ];
     platforms = platforms.linux;
