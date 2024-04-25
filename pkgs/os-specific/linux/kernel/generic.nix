@@ -1,5 +1,6 @@
 { buildPackages
 , callPackage
+, emptyFile
 , perl
 , bison ? null
 , flex ? null
@@ -15,6 +16,7 @@
 , nixosTests
 }@args':
 
+let overridableKernel =
 lib.makeOverridable ({ # The kernel source tarball.
   src
 
@@ -241,7 +243,28 @@ kernel.overrideAttrs (finalAttrs: previousAttrs: {
             + toString (lib.attrNames (lib.toFunction args { }))
           ) overridableKernel;
       };
-    in [ (nixosTests.kernel-generic.passthru.testsForKernel overridableKernel) ] ++ kernelTests;
+      versionDoesNotDependOnPatchesEtc =
+        builtins.seq
+          (import ./generic.nix args' (args // (
+          let explain = attrName:
+            ''
+              The ${attrName} attribute must be able to access the kernel.version attribute without an infinite recursion.
+              That means that the kernel attrset (attrNames) and the kernel.version attribute must not depend on the ${attrName} argument.
+              The fact that this exception is raised shows that such a dependency does exist.
+              This is a problem for the configurability of ${attrName} in version-aware logic such as that in NixOS.
+              Strictness can creep in through optional attributes, or assertions and warnings that run as part of code that shouldn't access what is checked.
+            '';
+          in {
+            kernelPatches = throw (explain "kernelPatches");
+            structuredExtraConfig = throw (explain "structuredExtraConfig");
+            modDirVersion = throw (explain "modDirVersion");
+          }))).version
+          emptyFile;
+    in [
+      (nixosTests.kernel-generic.passthru.testsForKernel overridableKernel)
+      versionDoesNotDependOnPatchesEtc
+    ] ++ kernelTests;
   };
 
-}))
+}));
+in overridableKernel
