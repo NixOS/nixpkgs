@@ -21937,7 +21937,8 @@
   };
   xgwq = {
     name = "XGWQ";
-    email = "nixos@xnee.de";
+    email = "nixos.xgwq@xnee.net";
+    keys = [{ fingerprint = "6489 9EF2 A256 5C04 7426  686C 8337 A748 74EB E129"; }];
     matrix = "@xgwq:nerdberg.de";
     github = "peterablehmann";
     githubId = 36541313;
