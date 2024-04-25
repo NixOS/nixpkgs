@@ -5,7 +5,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "altdns";
-  version = "unstable-2021-09-09";
+  version = "1.0.2-unstable-2021-09-09";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -15,22 +15,22 @@ python3.pkgs.buildPythonApplication {
     hash = "sha256-ElY6AZ7IBnOh7sRWNSQNmq7AYGlnjvYRn8/U+29BwWA=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  prePatch = ''
+    substituteInPlace requirements.txt \
+      --replace-fail "argparse" ""
+    substituteInPlace setup.py \
+      --replace-fail "argparse" ""
+  '';
+
+  build-system = with python3.pkgs; [
     setuptools
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     dnspython
     termcolor
     tldextract
   ];
-
-  prePatch = ''
-  substituteInPlace requirements.txt \
-    --replace "argparse" ""
-  substituteInPlace setup.py \
-    --replace "argparse" ""
-  '';
 
   postInstall = ''
     cp $src/words.txt $out/
