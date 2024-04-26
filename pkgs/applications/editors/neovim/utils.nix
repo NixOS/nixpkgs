@@ -78,7 +78,7 @@ let
         ++ (extraPython3Packages ps)
         ++ (lib.concatMap (f: f ps) pluginPython3Packages));
 
-      luaEnv = neovim-unwrapped.lua.withPackages(extraLuaPackages);
+      luaEnv = neovim-unwrapped.lua.withPackagesextraLuaPackages;
 
       # as expected by packdir
       packpathDirs.myNeovimPackages = myVimPackage;
@@ -101,13 +101,13 @@ let
           "--prefix" "LUA_CPATH" ";" (neovim-unwrapped.lua.pkgs.luaLib.genLuaCPathAbsStr luaEnv)
         ];
 
-      manifestRc = vimUtils.vimrcContent ({ customRC = ""; }) ;
+      manifestRc = vimUtils.vimrcContent { customRC = ""; } ;
       # we call vimrcContent without 'packages' to avoid the init.vim generation
-      neovimRcContent = vimUtils.vimrcContent ({
+      neovimRcContent = vimUtils.vimrcContent {
         beforePlugins = "";
         customRC = lib.concatStringsSep "\n" (pluginRC ++ [customRC]);
         packages = null;
-      });
+      };
     in
 
     builtins.removeAttrs args ["plugins"] // {

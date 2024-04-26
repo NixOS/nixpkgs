@@ -59,7 +59,7 @@ buildPythonPackage {
     # lots of collections with dedicated requirements.txt and pyproject.toml files,
     # add the dependencies for the collections you need conditionally and install
     # ansible using overrides to enable the collections you need.
-  ] ++ lib.optionals (withJunos) [
+  ] ++ lib.optionals withJunos [
     # ansible_collections/junipernetworks/junos/requirements.txt
     jxmlease
     ncclient
@@ -67,7 +67,7 @@ buildPythonPackage {
     ansible-pylibssh
     scp
     xmltodict
-  ] ++ lib.optionals (withNetbox) [
+  ] ++ lib.optionals withNetbox [
     # ansible_collections/netbox/netbox/pyproject.toml
     pynetbox
   ]);

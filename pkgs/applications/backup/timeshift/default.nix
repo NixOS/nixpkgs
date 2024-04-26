@@ -13,7 +13,7 @@
 let
   timeshift-wrapper = callPackage ./wrapper.nix { };
 in
-(timeshift-wrapper timeshift-unwrapped ([
+(timeshift-wrapper timeshift-unwrapped [
   rsync
   coreutils
   mount
@@ -22,7 +22,7 @@ in
   cron
   btrfs-progs
   grubPackage
-])).overrideAttrs (oldAttrs: {
+]).overrideAttrs (oldAttrs: {
   meta = oldAttrs.meta // {
     description = oldAttrs.meta.description;
     longDescription = oldAttrs.meta.longDescription + ''

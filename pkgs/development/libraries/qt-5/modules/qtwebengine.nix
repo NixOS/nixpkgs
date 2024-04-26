@@ -123,7 +123,7 @@ qtModule ({
 
     sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
       src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
-  '' + lib.optionalString stdenv.isDarwin (''
+  '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/buildtools/config/mac_osx.pri \
       --replace 'QMAKE_CLANG_DIR = "/usr"' 'QMAKE_CLANG_DIR = "${stdenv.cc}"'
 
@@ -142,7 +142,7 @@ qtModule ({
     # ld: fatal warning(s) induced error (-fatal_warnings)
     substituteInPlace src/3rdparty/chromium/build/config/compiler/BUILD.gn \
       --replace "-Wl,-fatal_warnings" ""
-  '') + postPatch;
+  '' + postPatch;
 
   env = {
     NIX_CFLAGS_COMPILE =

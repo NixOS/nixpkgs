@@ -70,6 +70,6 @@ in
     (mkRemovedOptionModule [ "insecure" ] ''
       This option was replaced by 'prometheus.exporters.nginx.sslVerify'.
     '')
-    ({ options.warnings = options.warnings; options.assertions = options.assertions; })
+    { options.warnings = options.warnings; options.assertions = options.assertions; }
   ];
 }

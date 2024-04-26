@@ -60,7 +60,7 @@ in
         A list of services provided by xinetd.
       '';
 
-      type = with types; listOf (submodule ({
+      type = with types; listOf (submodule {
 
         options = {
 
@@ -125,7 +125,7 @@ in
 
         };
 
-      }));
+      });
 
     };
 

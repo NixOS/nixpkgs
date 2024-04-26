@@ -149,9 +149,9 @@ mkDerivation rec {
     substituteInPlace $out/share/recoll/filters/rclconfig.py       --replace /usr/share/recoll $out/share/recoll
     for f in $out/share/recoll/filters/* ; do
       if [[ ! "$f" =~ \.zip$ ]]; then
-  '' + lib.concatStrings (lib.mapAttrsToList (k: v: (''
+  '' + lib.concatStrings (lib.mapAttrsToList (k: v: ''
         substituteInPlace $f --replace '"${k}"'  '"${lib.getBin v}/bin/${k}"'
-  '')) filters) + ''
+  '') filters) + ''
         substituteInPlace $f --replace '"pstotext"'  '"${lib.getBin ghostscript}/bin/ps2ascii"'
         substituteInPlace $f --replace /usr/bin/perl   ${lib.getBin (perl.passthru.withPackages (p: [ p.ImageExifTool ]))}/bin/perl
       fi

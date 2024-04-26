@@ -523,7 +523,7 @@ in
       enabledUpstreamSystemUnits = filter (n: ! elem n cfg.suppressedSystemUnits) upstreamSystemUnits;
       enabledUnits = filterAttrs (n: v: ! elem n cfg.suppressedSystemUnits) cfg.units;
 
-    in ({
+    in {
       "systemd/system".source = generateUnits {
         type = "system";
         units = enabledUnits;
@@ -564,7 +564,7 @@ in
 
       "systemd/system-generators" = { source = hooks "generators" cfg.generators; };
       "systemd/system-shutdown" = { source = hooks "shutdown" cfg.shutdown; };
-    });
+    };
 
     services.dbus.enable = true;
 

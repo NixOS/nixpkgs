@@ -73,7 +73,7 @@ let
         { tree-sitter-sql = grammars'.tree-sitter-sql // { generate = true; }; } //
         { tree-sitter-wing = grammars'.tree-sitter-wing // { location = "libs/tree-sitter-wing"; generate = true; }; };
     in
-    lib.mapAttrs build (grammars);
+    lib.mapAttrs build grammars;
 
   # Usage:
   # pkgs.tree-sitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])

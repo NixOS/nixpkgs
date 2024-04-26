@@ -35,7 +35,7 @@ buildPythonPackage rec {
     sqlalchemy
     pycrypto
     cryptography
-  ] ++ lib.optionals (isPy27) [
+  ] ++ lib.optionals isPy27 [
     funcsigs
     pycryptopp
   ];

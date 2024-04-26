@@ -16,10 +16,10 @@ let
     }:
 
     let
-      patch = makeHardcodeGsettingsPatch ({
+      patch = makeHardcodeGsettingsPatch {
         inherit src schemaIdToVariableMapping;
         inherit patches;
-      });
+      };
     in
     runCommandLocal
       "makeHardcodeGsettingsPatch-tests-${name}"

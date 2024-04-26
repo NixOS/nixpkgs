@@ -426,7 +426,7 @@ let
           virtualisation.diskImage = "./target.qcow2";
 
           # and the same TPM options
-          virtualisation.qemu.options = mkIf (clevisTest) [
+          virtualisation.qemu.options = mkIf clevisTest [
             "-chardev socket,id=chrtpm,path=$NIX_BUILD_TOP/swtpm-sock"
             "-tpmdev emulator,id=tpm0,chardev=chrtpm"
             "-device tpm-tis,tpmdev=tpm0"

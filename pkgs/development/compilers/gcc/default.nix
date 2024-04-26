@@ -320,12 +320,12 @@ pipe ((callFile ./common/builder.nix {}) ({
         ''
         )
     ))
-      + optionalString (atLeast7 && targetPlatform.isAvr) (''
+      + optionalString (atLeast7 && targetPlatform.isAvr) ''
             makeFlagsArray+=(
                '-s' # workaround for hitting hydra log limit
                'LIMITS_H_TEST=false'
             )
-          '');
+          '';
 
   inherit noSysDirs staticCompiler withoutTargetLibc
     libcCross crossMingw;
@@ -351,7 +351,7 @@ pipe ((callFile ./common/builder.nix {}) ({
     assert atLeast12 -> (profiledCompiler -> !disableBootstrap);
     if atLeast11
     then let target =
-               optionalString (profiledCompiler) "profiled" +
+               optionalString profiledCompiler "profiled" +
                optionalString (targetPlatform == hostPlatform && hostPlatform == buildPlatform && !disableBootstrap) "bootstrap";
          in optional (target != "") target
     else
@@ -424,7 +424,7 @@ pipe ((callFile ./common/builder.nix {}) ({
     hardeningUnsupportedFlags = optional is48 "stackprotector"
       ++ optional (!atLeast11) "zerocallusedregs"
       ++ optionals (!atLeast12) [ "fortify3" "trivialautovarinit" ]
-      ++ optionals (langFortran) [ "fortify" "format" ];
+      ++ optionals langFortran [ "fortify" "format" ];
   };
 
   enableParallelBuilding = true;

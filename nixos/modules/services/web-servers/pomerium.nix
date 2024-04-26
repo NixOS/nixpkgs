@@ -58,7 +58,7 @@ in
   config = let
     cfg = config.services.pomerium;
     cfgFile = if cfg.configFile != null then cfg.configFile else (format.generate "pomerium.yaml" cfg.settings);
-  in mkIf cfg.enable ({
+  in mkIf cfg.enable {
     systemd.services.pomerium = {
       description = "Pomerium authenticating reverse proxy";
       wants = [ "network.target" ] ++ (optional (cfg.useACMEHost != null) "acme-finished-${cfg.useACMEHost}.target");
@@ -131,5 +131,5 @@ in
         ExecStart = "/run/current-system/systemd/bin/systemctl --no-block restart pomerium.service";
       };
     };
-  });
+  };
 }

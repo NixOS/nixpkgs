@@ -48,12 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ autoreconfHook go-md2man pkg-config ];
   buildInputs = [ openssl ]
     ++ lib.optional fuseSupport fuse3
-    ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) (
+    ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) 
     [
       libcap
       libseccomp
     ]
-  );
+  ;
 
   doCheck = true;
   nativeCheckInputs = [ python3 which ]

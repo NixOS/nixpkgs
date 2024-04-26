@@ -35,7 +35,7 @@ in
           }
         }
         '';
-        type = types.attrsOf (types.submodule (
+        type = types.attrsOf (types.submodule 
         {
           options = {
             server = mkOption {
@@ -59,7 +59,7 @@ in
             };
 
           };
-        }));
+        });
       };
 
       server = {

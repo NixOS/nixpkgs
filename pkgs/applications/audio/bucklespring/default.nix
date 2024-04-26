@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
   buildInputs = [ openal alure ]
-    ++ optionals (legacy) [ libXtst libX11 ]
+    ++ optionals legacy [ libXtst libX11 ]
     ++ optionals (!legacy) [ libinput ];
 
   makeFlags = optionals (!legacy) [ "libinput=1" ];

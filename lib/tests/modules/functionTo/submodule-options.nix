@@ -46,9 +46,9 @@ in
                 then [ ]
                 else [ (lib.showOption v.loc) ]
               )
-              (
+              
                 (options.fun.type.getSubOptions [ "fun" ])
-              )
+              
             )
           );
       };

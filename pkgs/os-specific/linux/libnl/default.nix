@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     sourceHighlight
   ] ++ lib.optional pythonSupport swig;
 
-  postBuild = lib.optionalString (pythonSupport) ''
+  postBuild = lib.optionalString pythonSupport ''
       cd python
       ${python.pythonOnBuildForHost.interpreter} setup.py install --prefix=../pythonlib
       cd -

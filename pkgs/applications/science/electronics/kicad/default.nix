@@ -78,8 +78,8 @@
 # }
 
 let
-  baseName = if (testing) then "kicad-testing"
-    else if (stable) then "kicad"
+  baseName = if testing then "kicad-testing"
+    else if stable then "kicad"
     else "kicad-unstable";
   versionsImport = import ./versions.nix;
 
@@ -167,7 +167,7 @@ stdenv.mkDerivation rec {
   };
 
   inherit pname;
-  version = if (stable) then kicadVersion else builtins.substring 0 10 src.src.rev;
+  version = if stable then kicadVersion else builtins.substring 0 10 src.src.rev;
 
   src = base;
   dontUnpack = true;
@@ -175,11 +175,11 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontFixup = true;
 
-  pythonPath = optionals (withScripting)
+  pythonPath = optionals withScripting
     [ wxPython python.pkgs.six python.pkgs.requests ] ++ addonsDrvs;
 
   nativeBuildInputs = [ makeWrapper ]
-    ++ optionals (withScripting)
+    ++ optionals withScripting
     [ python.pkgs.wrapPython ];
 
   # KICAD7_TEMPLATE_DIR only works with a single path (it does not handle : separated paths)
@@ -220,11 +220,11 @@ stdenv.mkDerivation rec {
     in
     [ "--set-default NIX_KICAD8_STOCK_DATA_PATH ${stockDataPath}" ]
   )
-  ++ optionals (with3d)
+  ++ optionals with3d
   [
     "--set-default KICAD8_3DMODEL_DIR ${packages3d}/share/kicad/3dmodels"
   ]
-  ++ optionals (withNgspice) [ "--prefix LD_LIBRARY_PATH : ${libngspice}/lib" ]
+  ++ optionals withNgspice [ "--prefix LD_LIBRARY_PATH : ${libngspice}/lib" ]
 
   # infinisil's workaround for #39493
   ++ [ "--set GDK_PIXBUF_MODULE_FILE ${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache" ]
@@ -242,12 +242,12 @@ stdenv.mkDerivation rec {
       (flatten [
         "runHook preInstall"
 
-        (optionalString (withScripting) "buildPythonPath \"${base} $pythonPath\" \n")
+        (optionalString withScripting "buildPythonPath \"${base} $pythonPath\" \n")
 
         # wrap each of the directly usable tools
         (map
           (tool: "makeWrapper ${base}/${bin}/${tool} $out/bin/${tool} $makeWrapperArgs"
-            + optionalString (withScripting) " --set PYTHONPATH \"$program_PYTHONPATH\""
+            + optionalString withScripting " --set PYTHONPATH \"$program_PYTHONPATH\""
           )
           tools)
 
@@ -273,9 +273,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = rec {
-    description = (if (stable)
+    description = (if stable
     then "Open Source Electronics Design Automation suite"
-    else if (testing) then "Open Source EDA suite, latest on stable branch"
+    else if testing then "Open Source EDA suite, latest on stable branch"
     else "Open Source EDA suite, latest on master branch")
     + (lib.optionalString (!with3d) ", without 3D models");
     homepage = "https://www.kicad.org/";

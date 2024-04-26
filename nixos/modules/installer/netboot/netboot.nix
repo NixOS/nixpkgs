@@ -14,7 +14,7 @@ with lib;
                 # Untested but should also reduce size for these platforms
                 + lib.optionalString isAarch "-Xbcj arm"
                 + lib.optionalString (isPower && is32bit && isBigEndian) "-Xbcj powerpc"
-                + lib.optionalString (isSparc) "-Xbcj sparc";
+                + lib.optionalString isSparc "-Xbcj sparc";
       description = ''
         Compression settings to use for the squashfs nix store.
       '';

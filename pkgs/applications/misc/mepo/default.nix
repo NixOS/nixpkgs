@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace " ls " " ls -a " #circumvent wrapping for script detection
     for program in $out/bin/* ; do
       wrapProgram $program \
-        --suffix PATH : $out/bin:${lib.makeBinPath ([
+        --suffix PATH : $out/bin:${lib.makeBinPath [
           busybox
           curl
           findutils
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
           util-linux
           xwininfo
           zenity
-        ])}
+        ]}
     done
   '';
 

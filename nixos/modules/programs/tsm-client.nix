@@ -233,13 +233,13 @@ let
     # more (value is list) configuration stanza lines.
     if isList value then map (makeDsmSysLines key) value else  # recurse into list
     if value == null then [ ] else  # skip `null` value
-    [ ("  ${key}${
+    [ "  ${key}${
       if value == true then "" else  # just output key if value is `true`
       if isInt value then "  ${builtins.toString value}" else
       if path.check value then "  \"${value}\"" else  # enclose path in ".."
       if singleLineStr.check value then "  ${value}" else
       throw "assertion failed: cannot convert type"  # should never happen
-    }") ];
+    }" ];
 
   makeDsmSysStanza = {servername, ... }@serverCfg:
     let

@@ -191,9 +191,9 @@ in
           wants = [ "network-online.target" ];
           after = [
             "network-online.target"
-          ] ++ optionals (wantsDocker) [
+          ] ++ optionals wantsDocker [
             "docker.service"
-          ] ++ optionals (wantsPodman) [
+          ] ++ optionals wantsPodman [
             "podman.service"
           ];
           wantedBy = [
@@ -201,7 +201,7 @@ in
           ];
           environment = optionalAttrs (instance.token != null) {
             TOKEN = "${instance.token}";
-          } // optionalAttrs (wantsPodman) {
+          } // optionalAttrs wantsPodman {
             DOCKER_HOST = "unix:///run/podman/podman.sock";
           } // {
             HOME = "/var/lib/gitea-runner/${name}";
@@ -247,9 +247,9 @@ in
 
             '')];
             ExecStart = "${cfg.package}/bin/act_runner daemon --config ${configFile}";
-            SupplementaryGroups = optionals (wantsDocker) [
+            SupplementaryGroups = optionals wantsDocker [
               "docker"
-            ] ++ optionals (wantsPodman) [
+            ] ++ optionals wantsPodman [
               "podman"
             ];
           } // optionalAttrs (instance.tokenFile != null) {

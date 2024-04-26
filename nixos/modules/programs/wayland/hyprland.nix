@@ -40,7 +40,7 @@ in
 
     portalPackage = mkPackageOption pkgs "xdg-desktop-portal-hyprland" { };
 
-    xwayland.enable = mkEnableOption ("XWayland") // { default = true; };
+    xwayland.enable = mkEnableOption "XWayland" // { default = true; };
 
     systemd.setPath.enable = mkEnableOption null // {
       default = true;

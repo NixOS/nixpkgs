@@ -9,13 +9,13 @@ runCommand "documentation-highlighter" {
   };
   src = lib.sources.cleanSourceWith {
     src = ./.;
-    filter = path: type: lib.elem (baseNameOf path) ([
+    filter = path: type: lib.elem (baseNameOf path) [
       "highlight.pack.js"
       "LICENSE"
       "loader.js"
       "mono-blue.css"
       "README.md"
-    ]);
+    ];
   };
 } ''
   cp -r "$src" "$out"

@@ -38,7 +38,7 @@ let
   supportWayland = (!stdenv.hostPlatform.isDarwin);
   platformName = "linux";
   staticBuildInputs = [ boost zlib ]
-    ++ lib.optional withQt (if (supportWayland) then qt5.qtwayland else qt5.qtbase);
+    ++ lib.optional withQt (if supportWayland then qt5.qtwayland else qt5.qtbase);
 in stdenv.mkDerivation rec {
   pname = "zxtune";
   version = "5056";
@@ -74,7 +74,7 @@ in stdenv.mkDerivation rec {
 
   buildPhase = let
     setOptionalSupport = name: var:
-      "support_${name}=" + (if (var) then "1" else "");
+      "support_${name}=" + (if var then "1" else "");
     makeOptsCommon = [
       ''-j$NIX_BUILD_CORES''
       ''root.version=${src.rev}''

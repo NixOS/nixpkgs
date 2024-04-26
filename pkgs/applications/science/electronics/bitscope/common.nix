@@ -17,7 +17,7 @@ let
     wrapProgram "$out/bin/${binaryName}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath libPaths}"
   '';
-  pkg = stdenv.mkDerivation (rec {
+  pkg = stdenv.mkDerivation rec {
     inherit (attrs) version src;
 
     name = "${toolName}-${version}";
@@ -55,7 +55,7 @@ let
       cp -a usr/* "$out/"
       ${(wrapBinary libs) attrs.toolName}
     '';
-  });
+  };
 in buildFHSEnv {
   name = "${attrs.toolName}-${attrs.version}";
   runScript = "${pkg.outPath}/bin/${attrs.toolName}";

@@ -154,7 +154,7 @@ stdenv.mkDerivation rec {
     ++ optional fribidiSupport "--enable-fribidi"
     ++ optional (stdenv.isLinux && !stdenv.isAarch64) "--enable-vidix"
     ++ optional stdenv.isLinux "--enable-fbdev"
-    ++ optionals (crossBuild) [
+    ++ optionals crossBuild [
     "--enable-cross-compile"
     "--disable-vidix-pcidb"
     "--with-vidix-drivers=no"

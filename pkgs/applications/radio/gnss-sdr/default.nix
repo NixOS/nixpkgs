@@ -63,7 +63,7 @@ gnuradio.pkgs.mkDerivation rec {
     gnuradio.unwrapped.logLib
   ] ++ lib.optionals (gnuradio.hasFeature "gr-uhd") [
     gnuradio.unwrapped.uhd
-  ] ++ lib.optionals (enableRawUdp) [
+  ] ++ lib.optionals enableRawUdp [
     libpcap
   ] ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
     thrift

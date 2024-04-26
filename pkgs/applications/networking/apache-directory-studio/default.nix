@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     makeWrapper "$dest/ApacheDirectoryStudio" \
         "$out/bin/ApacheDirectoryStudio" \
         --prefix PATH : "${jdk}/bin" \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ webkitgtk ])}
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ webkitgtk ]}
     install -D icon.xpm "$out/share/pixmaps/apache-directory-studio.xpm"
     install -D -t "$out/share/applications" ${desktopItem}/share/applications/*
   '';

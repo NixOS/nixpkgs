@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: ({
     )
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
-    ++ lib.optional (mysqlSupport) libmysqlclient
+    ++ lib.optional mysqlSupport libmysqlclient
     ++ lib.optional (postgresql != null) postgresql;
 
   nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which ]
@@ -227,11 +227,11 @@ stdenv.mkDerivation (finalAttrs: ({
       ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
     ] ++ lib.optional decryptSslTraffic "-DQT_DECRYPT_SSL_TRAFFIC");
   } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
-    NIX_CFLAGS_COMPILE_FOR_BUILD = toString ([
+    NIX_CFLAGS_COMPILE_FOR_BUILD = toString [
       "-Wno-warn=free-nonheap-object"
       "-Wno-free-nonheap-object"
       "-w"
-    ]);
+    ];
   };
 
   prefixKey = "-prefix ";
@@ -348,7 +348,7 @@ stdenv.mkDerivation (finalAttrs: ({
     ] ++ lib.optionals (cups != null) [
       "-L" "${cups.lib}/lib"
       "-I" "${cups.dev}/include"
-    ] ++ lib.optionals (mysqlSupport) [
+    ] ++ lib.optionals mysqlSupport [
       "-L" "${libmysqlclient}/lib"
       "-I" "${libmysqlclient}/include"
     ] ++ lib.optional (withQttranslation && (qttranslations != null)) [

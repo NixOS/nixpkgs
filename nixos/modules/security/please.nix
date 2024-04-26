@@ -90,7 +90,7 @@ in
       systemPackages = [ cfg.package ];
 
       etc."please.ini".source = ini.generate "please.ini"
-        (cfg.settings // (rec {
+        (cfg.settings // rec {
           # The "root" user is allowed to do anything by default and this cannot
           # be overridden.
           root_run_as_any = {
@@ -102,7 +102,7 @@ in
           };
           root_edit_as_any = root_run_as_any // { type = "edit"; };
           root_list_as_any = root_run_as_any // { type = "list"; };
-        }));
+        });
     };
 
     security.pam.services.please = {

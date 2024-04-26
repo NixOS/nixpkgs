@@ -139,7 +139,7 @@ let
     };
   };
 in
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = pnameBase;
   version = buildVersion;
 
@@ -220,4 +220,4 @@ stdenv.mkDerivation (rec {
       "x86_64-linux"
     ];
   };
-})
+}

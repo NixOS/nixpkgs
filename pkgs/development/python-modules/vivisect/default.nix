@@ -43,7 +43,7 @@ buildPythonPackage rec {
     cxxfilt
     msgpack
     pycparser
-  ] ++ lib.optionals (withGui) passthru.optional-dependencies.gui;
+  ] ++ lib.optionals withGui passthru.optional-dependencies.gui;
 
   passthru.optional-dependencies.gui = [
     pyqt5

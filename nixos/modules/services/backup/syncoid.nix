@@ -21,7 +21,7 @@ let
   # delegating permissions, if it doesn't exist we delegate it to the parent
   # dataset (if it exists). This should solve the case of provisoning new
   # datasets.
-  buildAllowCommand = permissions: dataset: (
+  buildAllowCommand = permissions: dataset: 
     "-+${pkgs.writeShellScript "zfs-allow-${dataset}" ''
       # Here we explicitly use the booted system to guarantee the stable API needed by ZFS
 
@@ -51,7 +51,7 @@ let
       ''}
       fi
     ''}"
-  );
+  ;
 
   # Function to build "zfs unallow" commands for the filesystems we've
   # delegated permissions to. Here we unallow both the target but also
@@ -59,7 +59,7 @@ let
   # knowing if the allow command did execute on the parent dataset or
   # not in the pre-hook. We can't run the same if in the post hook
   # since the dataset should have been created at this point.
-  buildUnallowCommand = permissions: dataset: (
+  buildUnallowCommand = permissions: dataset: 
     "-+${pkgs.writeShellScript "zfs-unallow-${dataset}" ''
       # Here we explicitly use the booted system to guarantee the stable API needed by ZFS
       ${lib.escapeShellArgs [
@@ -78,7 +78,7 @@ let
         (builtins.dirOf dataset)
       ])}
     ''}"
-  );
+  ;
 in
 {
 

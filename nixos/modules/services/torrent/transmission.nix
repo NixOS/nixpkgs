@@ -406,20 +406,20 @@ in
     # It's useful to have transmission in path, e.g. for remote control
     environment.systemPackages = [ cfg.package ];
 
-    users.users = optionalAttrs (cfg.user == "transmission") ({
+    users.users = optionalAttrs (cfg.user == "transmission") {
       transmission = {
         group = cfg.group;
         uid = config.ids.uids.transmission;
         description = "Transmission BitTorrent user";
         home = cfg.home;
       };
-    });
+    };
 
-    users.groups = optionalAttrs (cfg.group == "transmission") ({
+    users.groups = optionalAttrs (cfg.group == "transmission") {
       transmission = {
         gid = config.ids.gids.transmission;
       };
-    });
+    };
 
     networking.firewall = mkMerge [
       (mkIf cfg.openPeerPorts (

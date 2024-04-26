@@ -85,7 +85,7 @@
       '';
     in lib.optionalString stdenv.isLinux ''
       wrapProgram $out/bin/pritunl-client-service \
-        --prefix PATH : "${lib.makeBinPath ([ openvpn-wrapped ])}"
+        --prefix PATH : "${lib.makeBinPath [ openvpn-wrapped ]}"
     '';
   };
 in stdenv.mkDerivation {

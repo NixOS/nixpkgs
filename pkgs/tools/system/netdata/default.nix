@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--disable-ebpf"
     "--with-jemalloc=${jemalloc}"
-  ] ++ lib.optionals (withSystemdJournal) [
+  ] ++ lib.optionals withSystemdJournal [
     "--enable-plugin-systemd-journal"
   ] ++ lib.optionals (!withDBengine) [
     "--disable-dbengine"
@@ -148,7 +148,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.netdata.cloud/";
     changelog = "https://github.com/netdata/netdata/releases/tag/v${version}";
     license = [ licenses.gpl3Plus ]
-      ++ lib.optionals (withCloudUi) [ licenses.ncul1 ];
+      ++ lib.optionals withCloudUi [ licenses.ncul1 ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ raitobezarius ];
   };

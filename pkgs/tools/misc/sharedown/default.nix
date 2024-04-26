@@ -47,10 +47,10 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase =
     let
-      binPath = lib.makeBinPath ([
+      binPath = lib.makeBinPath [
         ffmpeg
         yt-dlp
-      ]);
+      ];
 
       modules = yarn2nix-moretea.mkYarnModules rec {
         name = "${pname}-modules-${version}";

@@ -223,7 +223,7 @@ let cfg = config.services.xserver.libinput;
 in {
 
   imports =
-    (map (option: mkRenamedOptionModule ([ "services" "xserver" "libinput" option ]) [ "services" "xserver" "libinput" "touchpad" option ]) [
+    (map (option: mkRenamedOptionModule [ "services" "xserver" "libinput" option ] [ "services" "xserver" "libinput" "touchpad" option ]) [
       "accelProfile"
       "accelSpeed"
       "buttonMapping"

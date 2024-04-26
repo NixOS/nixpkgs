@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     hash = "sha512-fr1PnyYAS3wkpmj/npRC3A87UL9LIXw4thlM4GfrtlJbuX5EkWGVJnHJW/EmYp7z+N91dcdRJgdO79l6WJsKpg==";
   };
 
-  buildInputs = [ openssl libxcrypt ] ++ optional (luaSupport) lua;
+  buildInputs = [ openssl libxcrypt ] ++ optional luaSupport lua;
   nativeBuildInputs = [ bmake groff ];
 
   COPTS = [
@@ -51,12 +51,12 @@ stdenv.mkDerivation rec {
   ++ optional (!luaSupport) "-DNO_LUA_SUPPORT"
   ++ optional (!sslSupport) "-DNO_SSL_SUPPORT"
   ++ optional (!cgiSupport) "-DNO_CGIBIN_SUPPORT"
-  ++ optional (htpasswdSupport) "-DDO_HTPASSWD";
+  ++ optional htpasswdSupport "-DDO_HTPASSWD";
 
   _LDADD = [ "-lm" ]
     ++ optional (stdenv.hostPlatform.libc != "libSystem") "-lcrypt"
-    ++ optional (luaSupport) "-llua"
-    ++ optionals (sslSupport) [ "-lssl" "-lcrypto" ];
+    ++ optional luaSupport "-llua"
+    ++ optionals sslSupport [ "-lssl" "-lcrypto" ];
   makeFlags = [ "LDADD=$(_LDADD)" ];
 
   doCheck = true;

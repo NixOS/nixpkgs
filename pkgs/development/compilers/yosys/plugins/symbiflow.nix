@@ -41,7 +41,7 @@
     cmakeFlags = old.cmakeFlags ++ ["-DBUILD_SHARED_LIBS=OFF"];
   });
 
-in lib.genAttrs plugins (plugin: stdenv.mkDerivation (rec {
+in lib.genAttrs plugins (plugin: stdenv.mkDerivation rec {
   pname = "yosys-symbiflow-${plugin}-plugin";
   inherit src version plugin;
   enableParallelBuilding = true;
@@ -96,4 +96,4 @@ in lib.genAttrs plugins (plugin: stdenv.mkDerivation (rec {
     platforms   = platforms.all;
     maintainers = with maintainers; [ ollieB thoughtpolice ];
   };
-}))
+})

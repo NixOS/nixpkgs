@@ -256,7 +256,7 @@ in
         Restart = "always";
         TimeoutStartSec = "infinity";
         DynamicUser = usingDefaultUserAndGroup && usingDefaultDataDir;
-      } // (optionalAttrs (usingDefaultDataDir) {
+      } // (optionalAttrs usingDefaultDataDir {
         StateDirectory = "opensearch";
         StateDirectoryMode = "0700";
       });

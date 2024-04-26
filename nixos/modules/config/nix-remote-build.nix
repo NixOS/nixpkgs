@@ -210,7 +210,7 @@ in
           '' + "      " +
           (concatStringsSep "\n      "
             (map (m: m.hostName)
-              (filter (badMachine) cfg.buildMachines)));
+              (filter badMachine cfg.buildMachines)));
         }
       ];
 

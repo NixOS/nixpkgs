@@ -15,7 +15,7 @@
 let p5 = camlp5; in
 let camlp5 = p5.override { legacy = true; }; in
 
-let fetched = coqPackages.metaFetch ({
+let fetched = coqPackages.metaFetch {
     release."1.18.1".sha256 = "sha256-zgBJefQDe3JyCGbC0wvMcx/9iMVbftBJ43NPogkNeHY=";
     release."1.17.0".sha256 = "sha256-DTxE8CvYl0et20pxueydI+WzraI6UPHMNvxyp2gU/+w=";
     release."1.16.5".sha256 = "sha256-tKX5/cVPoBeHiUe+qn7c5FIRYCwY0AAukN7vSd/Nz9A=";
@@ -30,7 +30,7 @@ let fetched = coqPackages.metaFetch ({
     release."1.11.4".sha256 = "1m0jk9swcs3jcrw5yyw5343v8mgax238cjb03s8gc4wipw1fn9f5";
     releaseRev = v: "v${v}";
     location = { domain = "github.com"; owner = "LPCIC"; repo = "elpi"; };
-  }) version;
+  } version;
 in
 buildDunePackage rec {
   pname = "elpi";

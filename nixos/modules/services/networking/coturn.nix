@@ -15,8 +15,8 @@ max-port=${toString cfg.max-port}
 ${lib.optionalString cfg.lt-cred-mech "lt-cred-mech"}
 ${lib.optionalString cfg.no-auth "no-auth"}
 ${lib.optionalString cfg.use-auth-secret "use-auth-secret"}
-${lib.optionalString (cfg.static-auth-secret != null) ("static-auth-secret=${cfg.static-auth-secret}")}
-${lib.optionalString (cfg.static-auth-secret-file != null) ("static-auth-secret=#static-auth-secret#")}
+${lib.optionalString (cfg.static-auth-secret != null) "static-auth-secret=${cfg.static-auth-secret}"}
+${lib.optionalString (cfg.static-auth-secret-file != null) "static-auth-secret=#static-auth-secret#"}
 realm=${cfg.realm}
 ${lib.optionalString cfg.no-udp "no-udp"}
 ${lib.optionalString cfg.no-tcp "no-tcp"}
@@ -26,7 +26,7 @@ ${lib.optionalString cfg.no-udp-relay "no-udp-relay"}
 ${lib.optionalString cfg.no-tcp-relay "no-tcp-relay"}
 ${lib.optionalString (cfg.cert != null) "cert=${cfg.cert}"}
 ${lib.optionalString (cfg.pkey != null) "pkey=${cfg.pkey}"}
-${lib.optionalString (cfg.dh-file != null) ("dh-file=${cfg.dh-file}")}
+${lib.optionalString (cfg.dh-file != null) "dh-file=${cfg.dh-file}"}
 no-stdout-log
 syslog
 pidfile=${pidfile}
@@ -34,7 +34,7 @@ ${lib.optionalString cfg.secure-stun "secure-stun"}
 ${lib.optionalString cfg.no-cli "no-cli"}
 cli-ip=${cfg.cli-ip}
 cli-port=${toString cfg.cli-port}
-${lib.optionalString (cfg.cli-password != null) ("cli-password=${cfg.cli-password}")}
+${lib.optionalString (cfg.cli-password != null) "cli-password=${cfg.cli-password}"}
 ${cfg.extraConfig}
 '';
 in {
@@ -302,7 +302,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable (mkMerge ([
+  config = mkIf cfg.enable (mkMerge [
     { assertions = [
       { assertion = cfg.static-auth-secret != null -> cfg.static-auth-secret-file == null ;
         message = "static-auth-secret and static-auth-secret-file cannot be set at the same time";
@@ -362,5 +362,5 @@ in {
     systemd.tmpfiles.rules = [
       "d  /run/coturn 0700 turnserver turnserver - -"
     ];
-  }]));
+  }]);
 }

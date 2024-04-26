@@ -21,7 +21,7 @@ in
         default = [ "main" ];
 
         # https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters.md
-        type = types.listOf(types.enum([
+        type = types.listOf(types.enum[
           "main"
           "brackets"
           "pattern"
@@ -29,7 +29,7 @@ in
           "regexp"
           "root"
           "line"
-        ]));
+        ]);
 
         description = ''
           Specifies the highlighters to be used by zsh-syntax-highlighting.

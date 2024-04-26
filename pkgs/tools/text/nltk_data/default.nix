@@ -38,24 +38,24 @@ let
     });
 in
 lib.makeScope newScope (self: {
-  punkt = makeNltkDataPackage ({
+  punkt = makeNltkDataPackage {
     pname = "punkt";
     location = "tokenizers";
     hash = "sha256-rMkgn3xzmSJNv8//kqbPF2Xq3Gf16lgA1Wx8FPYbaQo=";
-  });
-  averaged_perceptron_tagger = makeNltkDataPackage ({
+  };
+  averaged_perceptron_tagger = makeNltkDataPackage {
     pname = "averaged_perceptron_tagger";
     location = "taggers";
     hash = "sha256-ilTs4HWPUoHxQb4kWEy3wJ6QsE/98+EQya44gtV2inw=";
-  });
-  snowball_data = makeNltkDataPackage ({
+  };
+  snowball_data = makeNltkDataPackage {
     pname = "snowball_data";
     location = "stemmers";
     hash = "sha256-Y6LERPtaRbCtWmJCvMAd2xH02xdrevZBFNYvP9N4+3s=";
-  });
-  stopwords = makeNltkDataPackage ({
+  };
+  stopwords = makeNltkDataPackage {
     pname = "stopwords";
     location = "corpora";
     hash = "sha256-Rj1jnt6IDEmBbSIHHueyEvPmdE4EZ6/bJ3qehniebbk=";
-  });
+  };
 })

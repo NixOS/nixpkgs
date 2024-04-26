@@ -11,9 +11,9 @@ let
   dbCfg = db: ''
     type=${db.type}
     path=${db.path}
-    ${optionalString (db.compression != null) ("compression=${b2i db.compression}") }
-    ${optionalString (db.onlineDelete != null) ("online_delete=${toString db.onlineDelete}")}
-    ${optionalString (db.advisoryDelete != null) ("advisory_delete=${b2i db.advisoryDelete}")}
+    ${optionalString (db.compression != null) "compression=${b2i db.compression}" }
+    ${optionalString (db.onlineDelete != null) "online_delete=${toString db.onlineDelete}"}
+    ${optionalString (db.advisoryDelete != null) "advisory_delete=${b2i db.advisoryDelete}"}
     ${db.extraOpts}
   '';
 

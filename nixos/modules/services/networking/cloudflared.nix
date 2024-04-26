@@ -299,7 +299,7 @@ in
 
             mkConfigFile = pkgs.writeText "cloudflared.yml" (builtins.toJSON fullConfig);
           in
-          nameValuePair "cloudflared-tunnel-${name}" ({
+          nameValuePair "cloudflared-tunnel-${name}" {
             after = [ "network.target" "network-online.target" ];
             wants = [ "network.target" "network-online.target" ];
             wantedBy = [ "multi-user.target" ];
@@ -309,7 +309,7 @@ in
               ExecStart = "${cfg.package}/bin/cloudflared tunnel --config=${mkConfigFile} --no-autoupdate run";
               Restart = "on-failure";
             };
-          })
+          }
         )
         config.services.cloudflared.tunnels;
 

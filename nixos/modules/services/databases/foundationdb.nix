@@ -214,7 +214,7 @@ in
         FoundationDB Transport Security Layer (TLS) settings.
       '';
 
-      type = types.nullOr (types.submodule ({
+      type = types.nullOr (types.submodule {
         options = {
           certificate = mkOption {
             type = types.str;
@@ -242,7 +242,7 @@ in
             '';
           };
         };
-      }));
+      });
     };
 
     locality = mkOption {
@@ -257,7 +257,7 @@ in
         FoundationDB locality settings.
       '';
 
-      type = types.submodule ({
+      type = types.submodule {
         options = {
           machineId = mkOption {
             default = null;
@@ -299,7 +299,7 @@ in
             '';
           };
         };
-      });
+      };
     };
 
     extraReadWritePaths = mkOption {

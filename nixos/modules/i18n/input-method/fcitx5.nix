@@ -117,7 +117,7 @@ in
           (lib.mapAttrsToList (name: value: "${name} ${value}") cfg.quickPhrase)))
     ] ++ lib.optionals (cfg.quickPhraseFiles != { }) [
       (pkgs.linkFarm "quickPhraseFiles" (lib.mapAttrs'
-        (name: value: lib.nameValuePair ("share/fcitx5/data/quickphrase.d/${name}.mb") value)
+        (name: value: lib.nameValuePair "share/fcitx5/data/quickphrase.d/${name}.mb" value)
         cfg.quickPhraseFiles))
     ];
     environment.etc =

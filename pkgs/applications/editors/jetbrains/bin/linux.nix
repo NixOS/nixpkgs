@@ -80,12 +80,12 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
         exit 1
       fi
     fi
-    echo -Djna.library.path=${lib.makeLibraryPath ([
+    echo -Djna.library.path=${lib.makeLibraryPath [
       libsecret e2fsprogs libnotify
       # Required for Help -> Collect Logs
       # in at least rider and goland
       udev
-    ])} >> $vmopts_file
+    ]} >> $vmopts_file
   '';
 
   installPhase = ''

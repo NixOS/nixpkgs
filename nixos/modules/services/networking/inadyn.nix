@@ -77,9 +77,9 @@ in
         };
     in
     {
-      enable = mkEnableOption (''
+      enable = mkEnableOption ''
         synchronise your machine's IP address with a dynamic DNS provider using inadyn
-      '');
+      '';
       user = mkOption {
         default = "inadyn";
         type = types.str;

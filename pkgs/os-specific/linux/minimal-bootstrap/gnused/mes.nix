@@ -38,7 +38,7 @@ bash.runCommand "${pname}-${version}" {
       ${result}/bin/sed --version
       mkdir ''${out}
     '';
-} (''
+} ''
   # Unpack
   ungz --file ${src} --output sed.tar
   untar --file sed.tar
@@ -56,4 +56,4 @@ bash.runCommand "${pname}-${version}" {
 
   # Install
   make install PREFIX=$out
-'')
+''

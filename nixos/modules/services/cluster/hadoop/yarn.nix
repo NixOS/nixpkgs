@@ -178,13 +178,13 @@ in
 
       services.hadoop.gatewayRole.enable = true;
 
-      services.hadoop.yarnSiteInternal = with cfg.yarn.nodemanager; mkMerge [ ({
+      services.hadoop.yarnSiteInternal = with cfg.yarn.nodemanager; mkMerge [ {
         "yarn.nodemanager.local-dirs" = mkIf (localDir!= null) (concatStringsSep "," localDir);
         "yarn.scheduler.maximum-allocation-vcores" = resource.maximumAllocationVCores;
         "yarn.scheduler.maximum-allocation-mb" = resource.maximumAllocationMB;
         "yarn.nodemanager.resource.cpu-vcores" = resource.cpuVCores;
         "yarn.nodemanager.resource.memory-mb" = resource.memoryMB;
-      }) (mkIf useCGroups {
+      } (mkIf useCGroups {
         "yarn.nodemanager.linux-container-executor.cgroups.hierarchy" = "/hadoop-yarn";
         "yarn.nodemanager.linux-container-executor.resources-handler.class" = "org.apache.hadoop.yarn.server.nodemanager.util.CgroupsLCEResourcesHandler";
         "yarn.nodemanager.linux-container-executor.cgroups.mount" = "true";

@@ -1,6 +1,6 @@
 { buildDunePackage, junit, ounit }:
 
-buildDunePackage ({
+buildDunePackage {
   pname = "junit_ounit";
 
   inherit (junit) src version meta;
@@ -12,4 +12,4 @@ buildDunePackage ({
   ];
 
   doCheck = true;
-})
+}

@@ -1,6 +1,6 @@
 { lib, fetchurl, buildDunePackage, ptime, tyxml }:
 
-buildDunePackage (rec {
+buildDunePackage rec {
   pname = "junit";
   version = "2.0.2";
 
@@ -22,4 +22,4 @@ buildDunePackage (rec {
     maintainers = with maintainers; [ ];
     homepage = "https://github.com/Khady/ocaml-junit";
   };
-})
+}

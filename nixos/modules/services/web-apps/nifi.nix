@@ -11,10 +11,10 @@ let
     NIFI_LOG_DIR = "/var/log/nifi";
   };
 
-  envFile = pkgs.writeText "nifi.env" (lib.concatMapStrings (s: s + "\n") (
+  envFile = pkgs.writeText "nifi.env" (lib.concatMapStrings (s: s + "\n") 
     (lib.concatLists (lib.mapAttrsToList (name: value:
       lib.optional (value != null) ''${name}="${toString value}"''
-    ) env))));
+    ) env)));
 
   nifiEnv = pkgs.writeShellScriptBin "nifi-env" ''
     set -a

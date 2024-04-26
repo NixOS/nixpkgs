@@ -14,7 +14,7 @@ in {
   port = 9586;
   imports = [
     (mkRenamedOptionModule [ "addr" ] [ "listenAddress" ])
-    ({ options.warnings = options.warnings; options.assertions = options.assertions; })
+    { options.warnings = options.warnings; options.assertions = options.assertions; }
   ];
   extraOpts = {
     verbose = mkEnableOption "verbose logging mode for prometheus-wireguard-exporter";

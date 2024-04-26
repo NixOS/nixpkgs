@@ -148,11 +148,11 @@ in {
     # Default parameters from https://github.com/knadh/listmonk/blob/master/config.toml.sample
     services.listmonk.settings."app".address = mkDefault "localhost:9000";
     services.listmonk.settings."db" = mkMerge [
-      ({
+      {
         max_open = mkDefault 25;
         max_idle = mkDefault 25;
         max_lifetime = mkDefault "300s";
-      })
+      }
       (mkIf cfg.database.createLocally {
         host = mkDefault "/run/postgresql";
         port = mkDefault 5432;

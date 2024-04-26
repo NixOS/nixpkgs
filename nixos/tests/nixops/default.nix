@@ -19,7 +19,7 @@ let
     passthru.override = args': testsForPackage (args // args');
   };
 
-  testLegacyNetwork = { nixopsPkg, ... }: pkgs.testers.nixosTest ({
+  testLegacyNetwork = { nixopsPkg, ... }: pkgs.testers.nixosTest {
     name = "nixops-legacy-network";
     nodes = {
       deployer = { config, lib, nodes, pkgs, ... }: {
@@ -89,7 +89,7 @@ let
 
         deployer_do("cd ~/unicorn; nixops ssh server 'hello | figlet'")
       '';
-  });
+  };
 
   inherit (import ../ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
 

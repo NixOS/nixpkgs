@@ -1099,7 +1099,7 @@ in
     boot.initrd.postDeviceCommands = mkIf (!config.boot.initrd.systemd.enable) (commonFunctions + preCommands + concatStrings (mapAttrsToList openCommand postLVM) + postCommands);
 
     boot.initrd.systemd.services = let devicesWithClevis = filterAttrs (device: _: (hasAttr device clevis.devices)) luks.devices; in
-      mkIf (clevis.enable && systemd.enable) (
+      mkIf (clevis.enable && systemd.enable) 
         (mapAttrs'
           (name: _: nameValuePair "cryptsetup-clevis-${name}" {
             wantedBy = [ "systemd-cryptsetup@${utils.escapeSystemdPath name}.service" ];
@@ -1125,7 +1125,7 @@ in
             };
           })
           devicesWithClevis)
-      );
+      ;
 
     environment.systemPackages = [ pkgs.cryptsetup ];
   };

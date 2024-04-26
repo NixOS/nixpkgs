@@ -73,12 +73,12 @@ stdenv.mkDerivation {
 
   buildInputs = [ db libedit pam ]
     ++ lib.optionals (stdenv.isDarwin) [ CoreFoundation Security SystemConfiguration ]
-    ++ lib.optionals (withCJSON) [ cjson ]
-    ++ lib.optionals (withCapNG) [ libcap_ng ]
-    ++ lib.optionals (withMicroHTTPD) [ libmicrohttpd ]
-    ++ lib.optionals (withOpenLDAP) [ openldap ]
-    ++ lib.optionals (withOpenSSL) [ openssl ]
-    ++ lib.optionals (withSQLite3) [ sqlite ];
+    ++ lib.optionals withCJSON [ cjson ]
+    ++ lib.optionals withCapNG [ libcap_ng ]
+    ++ lib.optionals withMicroHTTPD [ libmicrohttpd ]
+    ++ lib.optionals withOpenLDAP [ openldap ]
+    ++ lib.optionals withOpenSSL [ openssl ]
+    ++ lib.optionals withSQLite3 [ sqlite ];
 
   doCheck = true;
   nativeCheckInputs = [
@@ -96,15 +96,15 @@ stdenv.mkDerivation {
 
     "--without-x"
     "--disable-afs-string-to-key"
-  ] ++ lib.optionals (withCapNG) [
+  ] ++ lib.optionals withCapNG [
     "--with-capng"
-  ] ++ lib.optionals (withCJSON) [
+  ] ++ lib.optionals withCJSON [
     "--with-cjson=${cjson}"
-  ] ++ lib.optionals (withOpenLDAP) [
+  ] ++ lib.optionals withOpenLDAP [
     "--with-openldap=${openldap.dev}"
-  ] ++ lib.optionals (withOpenLDAPAsHDBModule) [
+  ] ++ lib.optionals withOpenLDAPAsHDBModule [
     "--enable-hdb-openldap-module"
-  ] ++ lib.optionals (withSQLite3) [
+  ] ++ lib.optionals withSQLite3 [
     "--with-sqlite3=${sqlite.dev}"
   ];
 

@@ -41,7 +41,7 @@ let
   ];
 in
 
-callPackage (import ./generic.nix (rec {
+callPackage (import ./generic.nix rec {
   version = "4.15.1";
 
   src = fetchurl {
@@ -119,14 +119,14 @@ callPackage (import ./generic.nix (rec {
 
   configureFlags = []
     ++ optional (!withInternalQemu) "--with-system-qemu" # use qemu from PATH
-    ++ optional (withInternalTraditionalQemu) "--enable-qemu-traditional"
+    ++ optional withInternalTraditionalQemu "--enable-qemu-traditional"
     ++ optional (!withInternalTraditionalQemu) "--disable-qemu-traditional"
 
-    ++ optional (withSeabios) "--with-system-seabios=${seabios}/share/seabios"
+    ++ optional withSeabios "--with-system-seabios=${seabios}/share/seabios"
     ++ optional (!withInternalSeabios && !withSeabios) "--disable-seabios"
 
-    ++ optional (withOVMF) "--with-system-ovmf=${OVMF.firmware}"
-    ++ optional (withInternalOVMF) "--enable-ovmf";
+    ++ optional withOVMF "--with-system-ovmf=${OVMF.firmware}"
+    ++ optional withInternalOVMF "--enable-ovmf";
 
   NIX_CFLAGS_COMPILE = toString [
     # TODO 4.15: drop unneeded ones
@@ -178,6 +178,6 @@ callPackage (import ./generic.nix (rec {
       else throw "this xen has no qemu builtin";
   };
 
-})) ({
+}) ({
   ocamlPackages = ocaml-ng.ocamlPackages_4_14;
 } // args)

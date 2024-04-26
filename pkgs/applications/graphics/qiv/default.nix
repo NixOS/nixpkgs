@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config, gtk2, imlib2, file, lcms2, libexif } :
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   version = "2.3.3";
   pname = "qiv";
 
@@ -25,4 +25,4 @@ stdenv.mkDerivation (rec {
     platforms = platforms.linux;
     mainProgram = "qiv";
   };
-})
+}

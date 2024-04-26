@@ -160,7 +160,7 @@ in
 
   config = mkIf (!config.networking.nftables.enable)
     (mkMerge [
-      ({ networking.firewall.extraCommands = mkBefore flushNat; })
+      { networking.firewall.extraCommands = mkBefore flushNat; }
       (mkIf config.networking.nat.enable {
 
         networking.firewall = mkIf config.networking.firewall.enable {

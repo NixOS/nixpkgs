@@ -131,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
       # browser, so we enable building on platforms which qtwebengine
       # does not support by simply omitting qtwebengine.
       pyqt6-webengine
-    ] ++ lib.optional (unrarSupport) unrardll
+    ] ++ lib.optional unrarSupport unrardll
   );
 
   installPhase = ''

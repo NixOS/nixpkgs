@@ -16,7 +16,7 @@
 , darwin
 }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = "ponyc";
   version = "0.54.0";
 
@@ -112,4 +112,4 @@ stdenv.mkDerivation (rec {
     maintainers = with maintainers; [ kamilchm patternspandemic redvers ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
   };
-})
+}
