@@ -8,9 +8,9 @@
   gtk4,
   libxcb,
   installShellFiles,
-  enableWayland ? false,
-  enableSass ? false,
-  enableX11 ? false,
+  enableWayland ? true,
+  enableSass ? true,
+  enableX11 ? true,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "mixxc";
@@ -23,15 +23,16 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-l9inqqUiLObrqd/8pNobwBbLaiPJD39YK/38CWfDh+Q=";
+
+  cargoBuildFlags = ["--locked"];
+  buildFeatures = with lib;
+    optionals enableWayland ["Wayland"]
+    ++ optionals enableX11 ["X11"]
+    ++ optionals enableSass ["Sass"];
+
   outputs = ["out" "man"];
-  cargoBuildFlags = with lib;
-    ["--locked"]
-    ++ optionals enableWayland ["--features Wayland"]
-    ++ optionals enableX11 ["--features X11"]
-    ++ optionals enableSass ["--features Sass"];
 
   nativeBuildInputs = [pkg-config installShellFiles];
-
   buildInputs = with lib;
     [libpulseaudio gtk4]
     ++ optionals enableWayland [gtk4-layer-shell]
