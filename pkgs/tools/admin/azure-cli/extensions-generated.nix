@@ -995,9 +995,9 @@
   };
   virtual-wan = mkAzExtension rec {
     pname = "virtual-wan";
-    version = "0.3.0";
+    version = "1.0.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/virtual_wan-${version}-py2.py3-none-any.whl";
-    sha256 = "e5f4e9d4398cf0fcd656c0107386adbc8493e69e3158af6c5145ed23aaf77165";
+    sha256 = "0ef7b4bf9ffd0aa1ad5c50e15a343276636bcfe0296e52d2ee5f0b75ce70633d";
     description = "Manage virtual WAN, hubs, VPN gateways and VPN sites";
   };
   vm-repair = mkAzExtension rec {
