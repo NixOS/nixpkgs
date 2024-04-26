@@ -1,38 +1,45 @@
-{ azure-common
+{ lib
+, azure-common
 , azure-mgmt-core
 , buildPythonPackage
 , fetchPypi
-, lib
-, msrest
-, msrestazure
+, isodate
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-frontdoor";
   version = "1.1.0";
-  format = "setuptools";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-GqrJNNcQrNffgqRywgaJ2xkwy+fOJai/RlSVkpw6NWg=";
+    hash = "sha256-GqrJNNcQrNffgqRywgaJ2xkwy+fOJai/RlSVkpw6NWg=";
   };
 
-  propagatedBuildInputs = [
-    msrest
-    msrestazure
-    azure-common
-    azure-mgmt-core
+  build-system = [
+    setuptools
   ];
 
-  # has no tests
+  dependencies = [
+    azure-common
+    azure-mgmt-core
+    isodate
+  ];
+
+  # Tests are only available in mono repo
   doCheck = false;
 
   pythonImportsCheck = [ "azure.mgmt.frontdoor" ];
 
   meta = with lib; {
     description = "Microsoft Azure Front Door Service Client Library for Python";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/network/azure-mgmt-frontdoor";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-frontdoor_${version}/sdk/network/azure-mgmt-frontdoor/CHANGELOG.md"; 
     license = licenses.mit;
     maintainers = with maintainers; [ sephi ];
   };
