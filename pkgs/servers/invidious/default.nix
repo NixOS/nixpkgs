@@ -16,14 +16,17 @@ let
 in
 crystal.buildCrystalPackage rec {
   pname = "invidious";
-  inherit (versions.invidious) version;
+  version = "2.20240427";
+  # inherit (versions.invidious) version;
 
   src = fetchFromGitea {
     domain = "gitea.invidious.io";
     owner = "iv-org";
     repo = pname;
     fetchSubmodules = true;
-    inherit (versions.invidious) rev hash;
+    rev = "v${version}";
+    hash = "sha256-YZ+uhn1ESuRTZxAMoxKCpxEaUfeCUqOrSr3LkdbrTkU=";
+    # inherit (versions.invidious) rev hash;
   };
 
   postPatch =
@@ -43,23 +46,23 @@ crystal.buildCrystalPackage rec {
       # Use the version metadata from the derivation instead of using git at
       # build-time
       substituteInPlace src/invidious.cr \
-          --replace ${lib.escapeShellArg branchTemplate} '"master"' \
-          --replace ${lib.escapeShellArg commitTemplate} '"${lib.substring 0 7 versions.invidious.rev}"' \
-          --replace ${lib.escapeShellArg versionTemplate} '"${lib.concatStringsSep "." (lib.drop 2 (lib.splitString "-" version))}"' \
-          --replace ${lib.escapeShellArg assetCommitTemplate} '"${lib.substring 0 7 versions.invidious.rev}"'
+          --replace-fail ${lib.escapeShellArg branchTemplate} '"master"' \
+          --replace-fail ${lib.escapeShellArg commitTemplate} '"${lib.substring 0 7 versions.invidious.rev}"' \
+          --replace-fail ${lib.escapeShellArg versionTemplate} '"${lib.concatStringsSep "." (lib.drop 2 (lib.splitString "-" version))}"' \
+          --replace-fail ${lib.escapeShellArg assetCommitTemplate} '"${lib.substring 0 7 versions.invidious.rev}"'
 
       # Patch the assets and locales paths to be absolute
       substituteInPlace src/invidious.cr \
-          --replace 'public_folder "assets"' 'public_folder "${placeholder "out"}/share/invidious/assets"'
+          --replace-fail 'public_folder "assets"' 'public_folder "${placeholder "out"}/share/invidious/assets"'
       substituteInPlace src/invidious/helpers/i18n.cr \
-          --replace 'File.read("locales/' 'File.read("${placeholder "out"}/share/invidious/locales/'
+          --replace-fail 'File.read("locales/' 'File.read("${placeholder "out"}/share/invidious/locales/'
 
       # Reference sql initialisation/migration scripts by absolute path
       substituteInPlace src/invidious/database/base.cr \
-            --replace 'config/sql' '${placeholder "out"}/share/invidious/config/sql'
+            --replace-fail 'config/sql' '${placeholder "out"}/share/invidious/config/sql'
 
       substituteInPlace src/invidious/user/captcha.cr \
-          --replace 'Process.run(%(rsvg-convert' 'Process.run(%(${lib.getBin librsvg}/bin/rsvg-convert'
+          --replace-fail 'Process.run(%(rsvg-convert' 'Process.run(%(${lib.getBin librsvg}/bin/rsvg-convert'
     '';
 
   nativeBuildInputs = [ pkg-config shards ];
