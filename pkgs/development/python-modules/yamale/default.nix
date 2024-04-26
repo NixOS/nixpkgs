@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "yamale";
-  version = "5.1.0";
+  version = "5.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "23andMe";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-WLI3cL6i7eLfaX1nN8K/fHlrkOm+JdTEscelql6jO44=";
+    hash = "sha256-UTtase1b8Zjaixhp/g0tLtT6QZS4cyaSHcFz+h9Qoos=";
   };
 
   propagatedBuildInputs = [
