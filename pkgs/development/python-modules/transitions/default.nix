@@ -2,27 +2,32 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, pythonAtLeast
-, six
+, fontconfig
+, graphviz
+, mock
+, pycodestyle
 , pygraphviz
 , pytestCheckHook
-, mock
-, graphviz
-, pycodestyle
-, fontconfig
+, pythonAtLeast
+, setuptools
+, six
 }:
 
 buildPythonPackage rec {
   pname = "transitions";
   version = "0.9.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-L1TRG9siV3nX5ykBHpOp+3F2aM49xl+NT1pde6L0jhA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     six
     pygraphviz # optional
   ];
@@ -54,6 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/pytransitions/transitions";
     description = "A lightweight, object-oriented finite state machine implementation in Python";
+    changelog = "https://github.com/pytransitions/transitions/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };
