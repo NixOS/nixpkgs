@@ -6,7 +6,7 @@
   acl,
   file,
   readline,
-  python3,
+  python3
 }:
 
 stdenv.mkDerivation rec {

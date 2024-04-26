@@ -18,7 +18,7 @@
   xz,
   zlib,
   zstd,
-  CoreFoundation,
+  CoreFoundation
 }:
 
 stdenv.mkDerivation rec {

@@ -3,7 +3,7 @@
   qtdeclarative,
   qtmultimedia,
   qrencode,
-  libdmtx,
+  libdmtx
 }:
 mkKdeDerivation {
   pname = "prison";

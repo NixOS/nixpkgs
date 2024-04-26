@@ -4,7 +4,7 @@
   fetchpatch2,
   stdenv,
   gitUpdater,
-  cmake,
+  cmake
 }:
 
 stdenv.mkDerivation (finalAttrs: {

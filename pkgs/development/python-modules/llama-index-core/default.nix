@@ -27,7 +27,7 @@
   sqlalchemy,
   tenacity,
   tiktoken,
-  typing-inspect,
+  typing-inspect
 }:
 
 let

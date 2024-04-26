@@ -11,7 +11,7 @@
   pprintpp,
   pythonOlder,
   pythonRelaxDepsHook,
-  tbm-utils,
+  tbm-utils
 }:
 
 buildPythonPackage rec {

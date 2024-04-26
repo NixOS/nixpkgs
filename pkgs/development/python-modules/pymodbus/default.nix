@@ -15,7 +15,7 @@
   setuptools,
   sqlalchemy,
   twisted,
-  typer,
+  typer
 }:
 
 buildPythonPackage rec {

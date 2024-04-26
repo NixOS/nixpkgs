@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  bambu-studio,
+  bambu-studio
 }:
 
 bambu-studio.overrideAttrs (

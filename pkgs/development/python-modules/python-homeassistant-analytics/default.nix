@@ -17,7 +17,7 @@
   pytestCheckHook,
   aioresponses,
   pytest-asyncio,
-  syrupy,
+  syrupy
 }:
 
 buildPythonPackage rec {

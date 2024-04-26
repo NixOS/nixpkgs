@@ -8,7 +8,7 @@
   pythonSupport ? false,
   stdenv,
   symlinkJoin,
-  which,
+  which
 }: let
   inherit (lib) lists strings;
   inherit (cudaPackages) backendStdenv cudaFlags;

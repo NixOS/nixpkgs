@@ -3,7 +3,7 @@
   fetchFromGitHub,
   python3,
   testers,
-  jrnl,
+  jrnl
 }:
 
 python3.pkgs.buildPythonApplication rec {

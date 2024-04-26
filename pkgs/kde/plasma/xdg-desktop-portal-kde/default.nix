@@ -4,7 +4,7 @@
   qtwayland,
   wayland,
   wayland-protocols,
-  cups,
+  cups
 }:
 mkKdeDerivation {
   pname = "xdg-desktop-portal-kde";

@@ -7,7 +7,7 @@
 , flask-socketio
 , pygdbmi
 , pygments
-, }:
+ }:
 
 buildPythonApplication rec {
   pname = "gdbgui";

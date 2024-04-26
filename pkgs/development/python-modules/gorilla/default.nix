@@ -5,7 +5,7 @@
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

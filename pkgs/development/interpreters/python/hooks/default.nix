@@ -42,7 +42,7 @@ in {
       };
     } ./egg-install-hook.sh) {};
 
-  eggUnpackHook = callPackage ({ makePythonHook, }:
+  eggUnpackHook = callPackage ({ makePythonHook }:
     makePythonHook {
       name = "egg-unpack-hook.sh";
       propagatedBuildInputs = [ ];

@@ -12,7 +12,7 @@
 , pytest-sugar
 , postgresql
 , postgresqlTestHook
-,
+
 }:
 buildPythonPackage rec {
   pname = "schemainspect";

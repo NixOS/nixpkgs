@@ -7,7 +7,7 @@
   bazel_6,
   jdk,
   elfutils,
-  libcap,
+  libcap
 }:
 
 buildBazelPackage rec {

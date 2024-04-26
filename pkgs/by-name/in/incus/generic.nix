@@ -4,7 +4,7 @@
   patches,
   updateScriptArgs ? "",
   vendorHash,
-  version,
+  version
 }:
 
 {
@@ -23,7 +23,7 @@
   sqlite,
   udev,
   installShellFiles,
-  nixosTests,
+  nixosTests
 }:
 
 let

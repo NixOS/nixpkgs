@@ -6,7 +6,7 @@
   kpimtextedit,
   kuserfeedback,
   kxmlgui, libkdepim, libkleo, mailcommon, pimcommon, prison,
-  qgpgme, qtbase,
+  qgpgme, qtbase
 }:
 
 mkDerivation {

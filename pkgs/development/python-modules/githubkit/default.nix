@@ -11,7 +11,7 @@
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
-  typing-extensions,
+  typing-extensions
 }:
 
 buildPythonPackage rec {

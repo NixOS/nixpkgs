@@ -8,7 +8,7 @@
   pypykatz,
   pythonOlder,
   pythonRelaxDepsHook,
-  rich,
+  rich
 }:
 
 buildPythonPackage rec {

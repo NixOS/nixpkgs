@@ -6,7 +6,7 @@
   fetchFromGitHub,
   libtomcrypt,
   stdenv,
-  zlib,
+  zlib
 }:
 
 stdenv.mkDerivation (finalAttrs: {

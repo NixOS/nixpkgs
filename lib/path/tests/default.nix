@@ -9,7 +9,7 @@
   nixVersions ? import ../../tests/nix-for-tests.nix { inherit pkgs; },
   libpath ? ../..,
   # Random seed
-  seed ? null,
+  seed ? null
 }:
 
 pkgs.runCommand "lib-path-tests" {

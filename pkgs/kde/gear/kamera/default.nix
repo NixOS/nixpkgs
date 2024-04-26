@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   pkg-config,
-  libgphoto2,
+  libgphoto2
 }:
 mkKdeDerivation {
   pname = "kamera";

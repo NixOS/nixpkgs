@@ -3,7 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   nixosTests,
-  nix-update-script,
+  nix-update-script
 }:
 
 buildGoModule rec {

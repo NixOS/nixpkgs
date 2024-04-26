@@ -11,7 +11,7 @@
   poetry-core,
   sniffio,
   trio,
-  trio-asyncio,
+  trio-asyncio
 }:
 
 buildPythonPackage rec {

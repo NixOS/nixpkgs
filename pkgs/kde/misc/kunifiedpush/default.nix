@@ -4,7 +4,7 @@
   fetchFromGitLab,
   qtwebsockets,
   kdeclarative,
-  kpackage,
+  kpackage
 }:
 mkKdeDerivation {
   pname = "kunifiedpush";

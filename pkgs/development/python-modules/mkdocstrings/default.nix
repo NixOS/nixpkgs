@@ -12,7 +12,7 @@
   pymdown-extensions,
   pytestCheckHook,
   pythonOlder,
-  typing-extensions,
+  typing-extensions
 }:
 
 buildPythonPackage rec {

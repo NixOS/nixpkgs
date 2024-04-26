@@ -3,7 +3,7 @@
   fetchFromSourcehut,
   rustPlatform,
   pkg-config,
-  openssl,
+  openssl
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -6,7 +6,7 @@
   setuptools,
   six,
   timecop,
-  unittestCheckHook,
+  unittestCheckHook
 }:
 
 buildPythonPackage rec {

@@ -6,7 +6,7 @@
   ninja,
   lib,
   pkg-config,
-  stdenv,
+  stdenv
 }:
 stdenv.mkDerivation rec {
   pname = "ktx-tools";

@@ -3,7 +3,7 @@
   stdenv,
   buildPythonPackage,
   python,
-  fetchPypi,
+  fetchPypi
 }:
 
 let

@@ -1,6 +1,6 @@
 {
   mkKdeDerivation,
-  ffmpeg,
+  ffmpeg
 }:
 mkKdeDerivation {
   pname = "ffmpegthumbs";

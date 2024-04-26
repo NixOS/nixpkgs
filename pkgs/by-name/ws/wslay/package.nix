@@ -6,7 +6,7 @@
   cunit,
   sphinx,
   autoreconfHook,
-  nettle,
+  nettle
 }:
 
 stdenv.mkDerivation rec {

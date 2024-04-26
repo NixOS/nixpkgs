@@ -3,7 +3,7 @@
   fetchFromGitHub,
   buildHomeAssistantComponent,
   flatdict,
-  pymiele,
+  pymiele
 }:
 buildHomeAssistantComponent rec {
   owner = "astrandb";

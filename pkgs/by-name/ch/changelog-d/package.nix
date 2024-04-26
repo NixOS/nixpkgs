@@ -2,7 +2,7 @@
   callPackage,
   lib,
   haskell,
-  haskellPackages,
+  haskellPackages
 }:
 
 let

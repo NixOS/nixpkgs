@@ -24,7 +24,7 @@
   requests-mock,
   setuptools,
   tzdata,
-  tzlocal,
+  tzlocal
 }:
 
 buildPythonPackage rec {

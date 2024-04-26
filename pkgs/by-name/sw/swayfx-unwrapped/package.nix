@@ -9,7 +9,7 @@
   isNixOS ? false,
   enableXWayland ? true,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  trayEnabled ? systemdSupport,
+  trayEnabled ? systemdSupport
 }:
 
 (sway-unwrapped.override {

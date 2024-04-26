@@ -2,7 +2,7 @@
   mkKdeDerivation,
   qtsvg,
   qtspeech,
-  _7zz,
+  _7zz
 }:
 mkKdeDerivation {
   pname = "knights";

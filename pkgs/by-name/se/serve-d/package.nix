@@ -2,7 +2,7 @@
   lib,
   buildDubPackage,
   fetchFromGitHub,
-  dtools,
+  dtools
 }:
 
 buildDubPackage rec {

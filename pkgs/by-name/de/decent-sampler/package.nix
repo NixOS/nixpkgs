@@ -9,7 +9,7 @@
 , freetype
 , nghttp2
 , libX11
-, }:
+ }:
 
 let
   pname = "decent-sampler";

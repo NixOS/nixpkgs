@@ -3,7 +3,7 @@
   bundlerUpdateScript,
   lib,
   puppet-lint,
-  testers,
+  testers
 }:
 
 bundlerApp {

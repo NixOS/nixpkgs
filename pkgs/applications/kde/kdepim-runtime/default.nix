@@ -6,7 +6,7 @@
   cyrus_sasl, kholidays, kcalutils, kcontacts, kdav, kidentitymanagement,
   kimap, kldap, kmailtransport, kmbox, kmime, knotifications, knotifyconfig,
   pimcommon, libkgapi, libsecret,
-  qca-qt5, qtkeychain, qtnetworkauth, qtspeech, qtwebengine, qtxmlpatterns,
+  qca-qt5, qtkeychain, qtnetworkauth, qtspeech, qtwebengine, qtxmlpatterns
 }:
 
 mkDerivation {

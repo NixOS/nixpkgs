@@ -18,7 +18,7 @@
   respx,
   retrying,
   rfc3339,
-  toml,
+  toml
 }:
 
 buildPythonPackage rec {

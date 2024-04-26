@@ -3,7 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  nix-update-script,
+  nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {

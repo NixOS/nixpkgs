@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   pkg-config,
-  gpgme,
+  gpgme
 }:
 mkKdeDerivation {
   pname = "kgpg";

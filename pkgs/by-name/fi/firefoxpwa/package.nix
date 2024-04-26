@@ -20,7 +20,7 @@
   pkg-config,
   stdenv,
   udev,
-  xorg,
+  xorg
 }:
 
 rustPlatform.buildRustPackage rec {

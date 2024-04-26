@@ -7,7 +7,7 @@
   pyserial,
   pyserial-asyncio,
   pytestCheckHook,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

@@ -6,7 +6,7 @@
   progressbar,
   pythonOlder,
   setuptools,
-  tqdm,
+  tqdm
 }:
 
 buildPythonPackage rec {

@@ -13,7 +13,7 @@
   pytestCheckHook,
   pythonOlder,
   tenacity,
-  wrapt,
+  wrapt
 }:
 
 buildPythonPackage rec {

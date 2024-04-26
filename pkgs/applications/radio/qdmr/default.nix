@@ -13,7 +13,7 @@
   qtserialport,
   qttools,
   qtbase,
-  yaml-cpp,
+  yaml-cpp
 }:
 
 let

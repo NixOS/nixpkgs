@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   python3,
-  cacert,
+  cacert
 }:
 
 python3.pkgs.buildPythonApplication rec {

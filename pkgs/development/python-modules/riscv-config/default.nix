@@ -8,7 +8,7 @@
   pyyaml,
   ruamel-yaml,
   setuptools,
-  pythonRelaxDepsHook,
+  pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {

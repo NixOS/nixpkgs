@@ -11,7 +11,7 @@
   pythonOlder,
   segno,
   setuptools,
-  trustme,
+  trustme
 }:
 
 buildPythonPackage rec {

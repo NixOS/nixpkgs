@@ -1,7 +1,7 @@
 {
   mkDerivation,
   extra-cmake-modules, kdoctools,
-  pcre, qtbase,
+  pcre, qtbase
 }:
 
 mkDerivation {

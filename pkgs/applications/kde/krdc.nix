@@ -2,7 +2,7 @@
   mkDerivation, lib,
   extra-cmake-modules, kdoctools, makeWrapper,
   kcmutils, kcompletion, kconfig, kdnssd, knotifyconfig, kwallet, kwidgetsaddons,
-  kwindowsystem, libvncserver, freerdp,
+  kwindowsystem, libvncserver, freerdp
 }:
 
 mkDerivation {

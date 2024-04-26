@@ -3,7 +3,7 @@
   lib,
   moreutils,
   shfmt,
-  vscode-utils,
+  vscode-utils
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {

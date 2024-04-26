@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qtsvg,
-  libGLU,
+  libGLU
 }:
 mkKdeDerivation {
   pname = "kubrick";

@@ -5,7 +5,7 @@
   eigen,
   openbabel,
   qtsvg,
-  qtscxml,
+  qtscxml
 }:
 mkKdeDerivation {
   pname = "kalzium";

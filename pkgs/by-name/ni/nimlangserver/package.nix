@@ -1,7 +1,7 @@
 {
   lib,
   buildNimPackage,
-  fetchFromGitHub,
+  fetchFromGitHub
 }:
 buildNimPackage (final: prev: {
   pname = "nimlangserver";

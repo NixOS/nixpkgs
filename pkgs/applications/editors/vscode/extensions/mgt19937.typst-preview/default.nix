@@ -5,7 +5,7 @@
   lib,
   jq,
   moreutils,
-  typst-preview,
+  typst-preview
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {

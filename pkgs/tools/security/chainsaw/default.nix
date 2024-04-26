@@ -3,7 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   stdenv,
-  darwin,
+  darwin
 }:
 
 rustPlatform.buildRustPackage rec {

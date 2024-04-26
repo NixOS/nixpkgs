@@ -2,7 +2,7 @@
   mkKdeDerivation,
   qttools,
   qtmultimedia,
-  qt5compat,
+  qt5compat
 }:
 mkKdeDerivation {
   pname = "konversation";

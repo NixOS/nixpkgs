@@ -6,7 +6,7 @@
   wrapQtAppsHook,
   unwrapped ? callPackage ./unwrapped.nix {},
   withWayland ? false,
-  extraPackages ? [],
+  extraPackages ? []
 }:
 runCommand "sddm-wrapped" {
   inherit (unwrapped) version;

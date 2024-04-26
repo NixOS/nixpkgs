@@ -12,7 +12,7 @@
   pythonRelaxDepsHook,
   setuptools,
   tqdm,
-  typing-extensions,
+  typing-extensions
 }:
 
 buildPythonPackage rec {

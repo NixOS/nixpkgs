@@ -4,7 +4,7 @@
   fetchPypi,
   llama-index-core,
   poetry-core,
-  pythonOlder,
+  pythonOlder
 }:
 
 buildPythonPackage rec {

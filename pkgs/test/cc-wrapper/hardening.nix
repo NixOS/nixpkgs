@@ -45,7 +45,7 @@ let
     ignorePie ? true,
     ignoreRelRO ? true,
     ignoreStackProtector ? true,
-    expectFailure ? false,
+    expectFailure ? false
   }: let
     expectFailureClause = lib.optionalString expectFailure
       " && echo 'ERROR: Expected hardening-check to fail, but it passed!' >&2 && exit 1";

@@ -1,7 +1,7 @@
 {
   mkDerivation,
   extra-cmake-modules,
-  kcoreaddons, kwindowsystem, qtbase, qtx11extras,
+  kcoreaddons, kwindowsystem, qtbase, qtx11extras
 }:
 
 mkDerivation {

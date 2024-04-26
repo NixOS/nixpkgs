@@ -1,6 +1,6 @@
 { lib,
   appimageTools,
-  fetchurl,
+  fetchurl
 }:
 let
   pname = "alvr";

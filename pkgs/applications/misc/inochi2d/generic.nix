@@ -15,7 +15,7 @@
   SDL2,
   gnome,
 
-  builderArgs,
+  builderArgs
 }:
 
 let

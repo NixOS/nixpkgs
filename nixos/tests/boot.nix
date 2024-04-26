@@ -16,7 +16,7 @@ let
     pxe ? null,
     uboot ? false,
     uefi ? false,
-    extraFlags ? [],
+    extraFlags ? []
   }: let
     qemu = qemu-common.qemuBinary pkgs.qemu_test;
 

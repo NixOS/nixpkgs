@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , ninja
-, static ? stdenv.hostPlatform.isStatic,
+, static ? stdenv.hostPlatform.isStatic
 }:
 
 stdenv.mkDerivation rec {

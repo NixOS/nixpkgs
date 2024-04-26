@@ -2,7 +2,7 @@
   mkKdeDerivation,
   qttools,
   pkg-config,
-  xz,
+  xz
 }:
 mkKdeDerivation {
   pname = "karchive";

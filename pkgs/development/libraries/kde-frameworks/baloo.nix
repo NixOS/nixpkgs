@@ -15,7 +15,7 @@
 , qtbase
 , qtdeclarative
 , solid
-,
+
 }:
 
 mkDerivation {

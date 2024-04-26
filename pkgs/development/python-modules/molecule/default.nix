@@ -18,7 +18,7 @@
   wcmatch,
   withPlugins ? true,
   molecule-plugins,
-  yamllint,
+  yamllint
 }:
 
 buildPythonPackage rec {

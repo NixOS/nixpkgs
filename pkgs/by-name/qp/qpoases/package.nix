@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  cmake,
+  cmake
 }:
 
 stdenv.mkDerivation (finalAttrs: {

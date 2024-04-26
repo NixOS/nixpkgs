@@ -14,7 +14,7 @@
   installShellFiles,
   nixosTests,
   gitUpdater,
-  callPackage,
+  callPackage
 }:
 
 buildGo122Module rec {

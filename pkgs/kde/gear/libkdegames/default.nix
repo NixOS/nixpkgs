@@ -5,7 +5,7 @@
   qtdeclarative,
   qtsvg,
   openal,
-  libsndfile,
+  libsndfile
 }:
 mkKdeDerivation {
   pname = "libkdegames";

@@ -3,7 +3,7 @@
   mkKdeDerivation,
   fetchFromGitLab,
   mpv,
-  qtdeclarative,
+  qtdeclarative
 }:
 mkKdeDerivation rec {
   pname = "mpvqt";

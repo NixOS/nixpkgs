@@ -11,7 +11,7 @@
   pytestCheckHook,
   pythonOlder,
   pythonRelaxDepsHook,
-  wrapt,
+  wrapt
 }:
 
 buildPythonPackage rec {

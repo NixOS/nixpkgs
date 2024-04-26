@@ -20,7 +20,7 @@ import ./make-test-python.nix {
     mkTestStep = num: {
       testScript,
       config ? {},
-      serviceName ? "test${toString num}",
+      serviceName ? "test${toString num}"
     }: {
       systemd.sockets.${serviceName} = {
         description = "Socket for Test Service ${toString num}";

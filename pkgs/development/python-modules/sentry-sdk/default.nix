@@ -34,7 +34,7 @@
   setuptools,
   sqlalchemy,
   tornado,
-  urllib3,
+  urllib3
 }:
 
 buildPythonPackage rec {

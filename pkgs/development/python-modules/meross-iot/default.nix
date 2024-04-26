@@ -8,7 +8,7 @@
   pythonOlder,
   requests,
   retrying,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

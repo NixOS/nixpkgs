@@ -34,7 +34,7 @@ final: _: {
     {
       makeSetupHook,
       autoFixElfFiles,
-      cuda_compat ? null,
+      cuda_compat ? null
     }:
     makeSetupHook {
       name = "auto-add-cuda-compat-runpath-hook";

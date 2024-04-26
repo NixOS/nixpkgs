@@ -2,7 +2,7 @@
   mkKdeDerivation,
   qt5compat,
   qtdeclarative,
-  qgpgme,
+  qgpgme
 }:
 mkKdeDerivation {
   pname = "mimetreeparser";

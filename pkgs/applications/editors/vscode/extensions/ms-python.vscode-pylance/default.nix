@@ -1,7 +1,7 @@
 {
   lib,
   pyright,
-  vscode-utils,
+  vscode-utils
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {

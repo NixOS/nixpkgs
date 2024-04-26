@@ -20,7 +20,7 @@
   respx,
   sniffio,
   tqdm,
-  typing-extensions,
+  typing-extensions
 }:
 
 buildPythonPackage rec {

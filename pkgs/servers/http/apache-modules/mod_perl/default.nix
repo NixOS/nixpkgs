@@ -5,7 +5,7 @@
   lib,
   nixosTests,
   perl,
-  stdenv,
+  stdenv
 }:
 
 stdenv.mkDerivation rec {

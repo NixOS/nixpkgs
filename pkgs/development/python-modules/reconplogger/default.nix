@@ -9,7 +9,7 @@
   pyyaml,
   requests,
   setuptools,
-  testfixtures,
+  testfixtures
 }:
 
 buildPythonPackage rec {

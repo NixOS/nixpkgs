@@ -12,7 +12,7 @@
   pango,
   harfbuzz,
   gdk-pixbuf,
-  at-spi2-atk,
+  at-spi2-atk
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gprename";

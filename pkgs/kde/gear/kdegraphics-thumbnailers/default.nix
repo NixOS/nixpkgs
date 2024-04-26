@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   substituteAll,
-  ghostscript,
+  ghostscript
 }:
 mkKdeDerivation {
   pname = "kdegraphics-thumbnailers";

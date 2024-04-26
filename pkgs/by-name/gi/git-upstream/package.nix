@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  nix-update-script,
+  nix-update-script
 }: let
   pname = "git-upstream";
   version = "1.1.0";

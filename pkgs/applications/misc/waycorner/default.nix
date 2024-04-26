@@ -4,7 +4,7 @@
 , pkg-config
 , fetchFromGitHub
 , wayland
-,
+
 }:
 rustPlatform.buildRustPackage rec {
   pname = "waycorner";

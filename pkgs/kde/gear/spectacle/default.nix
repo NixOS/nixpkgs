@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qtwayland,
-  qtmultimedia,
+  qtmultimedia
 }:
 mkKdeDerivation {
   pname = "spectacle";

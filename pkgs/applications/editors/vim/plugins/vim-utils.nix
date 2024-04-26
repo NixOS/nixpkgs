@@ -312,7 +312,7 @@ rec {
         standalone ? name != "vim" && wrapManual != true
 
       , # deprecated arguments (TODO: remove eventually)
-        wrapManual ? null, wrapGui ? null, vimExecutableName ? null, gvimExecutableName ? null,
+        wrapManual ? null, wrapGui ? null, vimExecutableName ? null, gvimExecutableName ? null
       }:
       lib.warnIf (wrapManual != null) ''
         vim.customize: wrapManual is deprecated: the manual is now included by default if `name == "vim"`.

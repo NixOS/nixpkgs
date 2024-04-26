@@ -1,6 +1,6 @@
 {
   mkKdeDerivation,
-  qtdeclarative,
+  qtdeclarative
 }:
 mkKdeDerivation {
   pname = "kdenetwork-filesharing";

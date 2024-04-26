@@ -11,7 +11,7 @@
   gnutls,
   python3,
   xdg-utils,
-  installShellFiles,
+  installShellFiles
 }:
 stdenv.mkDerivation rec {
     pname = "taskwarrior";

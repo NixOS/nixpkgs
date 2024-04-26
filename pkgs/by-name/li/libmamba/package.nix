@@ -15,7 +15,7 @@
   libarchive,
   zstd,
   bzip2,
-  python3Packages,
+  python3Packages
 }:
 stdenv.mkDerivation rec {
   pname = "libmamba";

@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , postgresql
 , postgresqlTestHook
-,
+
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "migra";

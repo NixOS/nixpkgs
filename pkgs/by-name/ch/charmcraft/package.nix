@@ -3,7 +3,7 @@
   git,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
+  nix-update-script
 }:
 
 python3Packages.buildPythonApplication rec {

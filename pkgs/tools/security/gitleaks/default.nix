@@ -4,7 +4,7 @@
   fetchFromGitHub,
   gitleaks,
   installShellFiles,
-  testers,
+  testers
 }:
 
 buildGoModule rec {

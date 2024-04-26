@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  nix-update-script,
+  nix-update-script
 }:
 buildGoModule rec {
   pname = "eigenlayer";

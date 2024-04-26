@@ -18,7 +18,7 @@
         })
       ];
   */
-  themeConfig ? null,
+  themeConfig ? null
 }:
 
 let

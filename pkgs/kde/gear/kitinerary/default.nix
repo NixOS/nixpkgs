@@ -5,7 +5,7 @@
   shared-mime-info,
   poppler,
   libphonenumber,
-  protobuf,
+  protobuf
 }:
 mkKdeDerivation {
   pname = "kitinerary";

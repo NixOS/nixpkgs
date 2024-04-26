@@ -2,7 +2,7 @@
   buildGoModule,
   version,
   src,
-  extraSources,
+  extraSources
 }:
 
 buildGoModule rec {

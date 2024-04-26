@@ -15,7 +15,7 @@ let
 
   makeReplicationTest = {
     package,
-    name ? mkTestName package,
+    name ? mkTestName package
   }: makeTest {
     name = "${name}-replication";
     meta = {

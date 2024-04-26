@@ -16,7 +16,7 @@
   restfly,
   semver,
   setuptools,
-  typing-extensions,
+  typing-extensions
 }:
 
 buildPythonPackage rec {

@@ -3,7 +3,7 @@
   qtsvg,
   qtcharts,
   qqc2-desktop-style,
-  kholidays,
+  kholidays
 }:
 mkKdeDerivation {
   pname = "kweather";

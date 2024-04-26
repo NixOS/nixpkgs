@@ -84,7 +84,7 @@ rec {
     # Whether the option shows up in the manual. Default: true. Use false to hide the option and any sub-options from submodules. Use "shallow" to hide only sub-options.
     visible ? null,
     # Whether the option can be set only once
-    readOnly ? null,
+    readOnly ? null
     } @ attrs:
     attrs // { _type = "option"; };
 

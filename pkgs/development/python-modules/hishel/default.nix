@@ -13,7 +13,7 @@
   pythonOlder,
   pyyaml,
   redis,
-  trio,
+  trio
 }:
 
 buildPythonPackage rec {

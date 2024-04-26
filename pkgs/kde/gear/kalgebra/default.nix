@@ -3,7 +3,7 @@
   qtsvg,
   qtwebengine,
   ncurses,
-  readline,
+  readline
 }:
 mkKdeDerivation {
   pname = "kalgebra";

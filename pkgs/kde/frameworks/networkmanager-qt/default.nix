@@ -2,7 +2,7 @@
   mkKdeDerivation,
   qtdeclarative,
   pkg-config,
-  networkmanager,
+  networkmanager
 }:
 mkKdeDerivation {
   pname = "networkmanager-qt";

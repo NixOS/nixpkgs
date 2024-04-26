@@ -14,7 +14,7 @@
   pytest-asyncio,
   pytestCheckHook,
   tabulate,
-  typeguard,
+  typeguard
 }:
 
 buildPythonPackage rec {

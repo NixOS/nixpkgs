@@ -21,7 +21,7 @@
   setuptools,
   types-pyyaml,
   types-requests,
-  typeshed-client,
+  typeshed-client
 }:
 
 buildPythonPackage rec {

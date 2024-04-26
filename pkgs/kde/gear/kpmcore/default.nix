@@ -23,7 +23,7 @@
   reiserfsprogs,
   udftools,
   xfsprogs,
-  zfs,
+  zfs
 }: let
   # https://github.com/KDE/kpmcore/blob/06f15334ecfbe871730a90dbe2b694ba060ee998/src/util/externalcommand_whitelist.h
   runtimeDeps = [

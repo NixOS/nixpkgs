@@ -2,7 +2,7 @@
   mkKdeDerivation,
   qtwayland,
   pkg-config,
-  wayland,
+  wayland
 }:
 mkKdeDerivation {
   pname = "kguiaddons";

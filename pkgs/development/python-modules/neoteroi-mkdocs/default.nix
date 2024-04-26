@@ -12,7 +12,7 @@
   pytestCheckHook,
   pythonImportsCheckHook,
   rich,
-  setuptools,
+  setuptools
 }:
 buildPythonPackage rec {
   pname = "neoteroi-mkdocs";

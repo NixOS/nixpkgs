@@ -26,7 +26,7 @@
   sortedcontainers,
   tomlkit,
   typing-extensions,
-  wheel,
+  wheel
 }:
 
 buildPythonPackage rec {

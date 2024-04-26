@@ -16,7 +16,7 @@
   librsvg,
   squashfuse,
   xdg-utils-cxx,
-  zlib,
+  zlib
 }:
 stdenv.mkDerivation rec {
   pname = "libappimage";

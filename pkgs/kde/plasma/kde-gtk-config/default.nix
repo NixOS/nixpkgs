@@ -4,7 +4,7 @@
   wrapGAppsHook,
   sass,
   qtsvg,
-  gsettings-desktop-schemas,
+  gsettings-desktop-schemas
 }:
 mkKdeDerivation {
   pname = "kde-gtk-config";

@@ -3,7 +3,7 @@
   docbook_xml_dtd_45,
   docbook-xsl-nons,
   perl,
-  perlPackages,
+  perlPackages
 }:
 mkKdeDerivation {
   pname = "kdoctools";

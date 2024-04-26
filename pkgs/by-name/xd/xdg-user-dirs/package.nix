@@ -6,7 +6,7 @@
   docbook_xsl,
   gettext,
   libiconv,
-  makeWrapper,
+  makeWrapper
 }:
 
 stdenv.mkDerivation (finalAttrs: {

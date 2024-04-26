@@ -4,7 +4,7 @@ self: {
   makeSetupHook,
   fetchurl,
   cmake,
-  qt6,
+  qt6
 }: let
   dependencies = (lib.importJSON ../generated/dependencies.json).dependencies;
   projectInfo = lib.importJSON ../generated/projects.json;

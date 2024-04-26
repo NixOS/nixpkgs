@@ -3,7 +3,7 @@
   extra-cmake-modules, kdoctools, shared-mime-info,
   akonadi, kcmutils, kcrash, kdbusaddons, kidentitymanagement, kldap,
   kmailtransport, knewstuff, knotifications, knotifyconfig, kparts, kross, ktexteditor,
-  kwallet, libkdepim, libkleo, pimcommon, qttools,
+  kwallet, libkdepim, libkleo, pimcommon, qttools
 }:
 
 mkDerivation {

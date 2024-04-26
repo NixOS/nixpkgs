@@ -11,7 +11,7 @@
   pytest-freezegun,
   pytestCheckHook,
   pythonOlder,
-  deepdiff,
+  deepdiff
 }:
 
 buildPythonPackage rec {

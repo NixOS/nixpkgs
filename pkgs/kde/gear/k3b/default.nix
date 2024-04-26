@@ -20,7 +20,7 @@
   normalize,
   sox,
   transcode,
-  vcdimager,
+  vcdimager
 }:
 mkKdeDerivation {
   pname = "k3b";

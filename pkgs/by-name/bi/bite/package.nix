@@ -17,7 +17,7 @@
   vulkan-loader,
   stdenv,
   darwin,
-  wayland,
+  wayland
 }:
 rustPlatform.buildRustPackage rec {
   pname = "bite";

@@ -9,7 +9,7 @@
   libmad,
   libao,
   CoreServices,
-  IOKit,
+  IOKit
 }:
 
 stdenv.mkDerivation (finalAttrs: {

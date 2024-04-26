@@ -27,7 +27,7 @@
   newScope,
   pkgs,
   config,
-  __attrsFailEvaluation ? true,
+  __attrsFailEvaluation ? true
 }:
 let
   inherit (lib)

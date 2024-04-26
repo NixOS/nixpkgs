@@ -7,7 +7,7 @@
   pydantic,
   pythonOlder,
   setuptools,
-  tenacity,
+  tenacity
 }:
 
 buildPythonPackage rec {

@@ -23,7 +23,7 @@
   sdlSupport ? false, SDL2,
   restSupport ? false, asio,
   withApps ? false,
-  withExamples ? false, fltk,
+  withExamples ? false, fltk
 }:
 
 stdenv.mkDerivation rec {

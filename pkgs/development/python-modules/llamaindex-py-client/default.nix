@@ -5,7 +5,7 @@
   httpx,
   poetry-core,
   pydantic,
-  pythonOlder,
+  pythonOlder
 }:
 
 buildPythonPackage rec {

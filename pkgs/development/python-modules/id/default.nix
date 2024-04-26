@@ -7,7 +7,7 @@
   pydantic,
   pytestCheckHook,
   pythonOlder,
-  requests,
+  requests
 }:
 
 buildPythonPackage rec {

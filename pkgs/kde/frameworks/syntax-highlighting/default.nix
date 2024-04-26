@@ -2,7 +2,7 @@
   mkKdeDerivation,
   qtdeclarative,
   qttools,
-  perl,
+  perl
 }:
 mkKdeDerivation {
   pname = "syntax-highlighting";

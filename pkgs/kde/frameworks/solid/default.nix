@@ -4,7 +4,7 @@
   qttools,
   bison,
   flex,
-  libimobiledevice,
+  libimobiledevice
 }:
 mkKdeDerivation {
   pname = "solid";

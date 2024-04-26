@@ -4,7 +4,7 @@
   lib,
   netlify-cli,
   runCommand,
-  stdenv,
+  stdenv
 }:
 
 runCommand "netlify-cli-test" {

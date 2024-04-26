@@ -1,6 +1,6 @@
 {
   mkKdeDerivation,
-  cups,
+  cups
 }:
 mkKdeDerivation {
   pname = "print-manager";

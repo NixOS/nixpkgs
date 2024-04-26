@@ -29,7 +29,7 @@ pango,
 stdenv,
 systemd,
 wrapGAppsHook,
-xorg,
+xorg
 }:
 
 let

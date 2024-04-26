@@ -7,7 +7,7 @@
   polib,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

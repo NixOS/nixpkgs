@@ -3,7 +3,7 @@
   buildDotnetModule,
   fetchFromGitHub,
   garnet,
-  dotnetCorePackages,
+  dotnetCorePackages
 }:
 buildDotnetModule {
   pname = "garnet";

@@ -16,7 +16,7 @@
 , gamemode
 , msaClientID ? null
 , gamemodeSupport ? stdenv.isLinux
-,
+
 }:
 let
   libnbtplusplus = fetchFromGitHub {

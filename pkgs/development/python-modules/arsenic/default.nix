@@ -9,7 +9,7 @@
   poetry-core,
   pythonRelaxDepsHook,
   pythonOlder,
-  structlog,
+  structlog
 }:
 
 buildPythonPackage rec {

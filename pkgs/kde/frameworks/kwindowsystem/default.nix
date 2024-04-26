@@ -4,7 +4,7 @@
   qtdeclarative,
   qtwayland,
   pkg-config,
-  wayland,
+  wayland
 }:
 mkKdeDerivation {
   pname = "kwindowsystem";

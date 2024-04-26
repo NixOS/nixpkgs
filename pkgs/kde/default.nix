@@ -11,7 +11,7 @@
   taglib,
   wayland-protocols,
   wayland,
-  zxing-cpp,
+  zxing-cpp
 }: let
   allPackages = self: let
     frameworks = import ./frameworks {inherit (self) callPackage;};

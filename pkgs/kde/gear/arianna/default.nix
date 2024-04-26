@@ -5,7 +5,7 @@
   qtwebchannel,
   qtwebengine,
   kitemmodels,
-  kquickcharts,
+  kquickcharts
 }:
 mkKdeDerivation {
   pname = "arianna";

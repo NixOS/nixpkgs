@@ -7,7 +7,7 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  zigpy,
+  zigpy
 }:
 
 buildPythonPackage rec {

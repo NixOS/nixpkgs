@@ -12,7 +12,7 @@
   libtirpc,
   openexr,
   taglib,
-  libappimage,
+  libappimage
 }:
 stdenv.mkDerivation rec {
   pname = "kio-extras-kf5";

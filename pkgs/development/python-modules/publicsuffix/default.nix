@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  pythonOlder,
+  pythonOlder
 }:
 
 buildPythonPackage rec {

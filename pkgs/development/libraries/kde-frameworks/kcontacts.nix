@@ -1,7 +1,7 @@
 {
   mkDerivation, lib,
   extra-cmake-modules, isocodes,
-  kcoreaddons, kconfig, kcodecs, ki18n, qtbase,
+  kcoreaddons, kconfig, kcodecs, ki18n, qtbase
 }:
 
 mkDerivation {

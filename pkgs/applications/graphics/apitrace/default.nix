@@ -12,7 +12,7 @@
   wrapQtAppsHook,
   libglvnd,
   gtest,
-  brotli,
+  brotli
 }:
 
 stdenv.mkDerivation rec {

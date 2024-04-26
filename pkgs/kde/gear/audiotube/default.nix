@@ -13,7 +13,7 @@
   kwindowsystem,
   purpose,
   qcoro,
-  python3,
+  python3
 }: let
   ps = python3.pkgs;
   pythonDeps = [

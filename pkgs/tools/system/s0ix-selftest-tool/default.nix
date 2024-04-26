@@ -14,7 +14,7 @@
   resholve,
   util-linux,
   xorg,
-  xxd,
+  xxd
 }:
 resholve.mkDerivation {
   pname = "s0ix-selftest-tool";

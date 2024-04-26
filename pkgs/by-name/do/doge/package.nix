@@ -1,7 +1,7 @@
 {
   lib,
   python3Packages,
-  fetchFromGitHub,
+  fetchFromGitHub
 }:
 python3Packages.buildPythonApplication rec {
   pname = "doge";

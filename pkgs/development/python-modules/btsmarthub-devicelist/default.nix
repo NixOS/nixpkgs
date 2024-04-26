@@ -5,7 +5,7 @@
   pytestCheckHook,
   pythonOlder,
   requests,
-  responses,
+  responses
 }:
 buildPythonPackage rec {
   pname = "btsmarthub-devicelist";

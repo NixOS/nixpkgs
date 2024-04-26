@@ -1,7 +1,7 @@
 {
   lib,
   mkKdeDerivation,
-  fetchFromGitLab,
+  fetchFromGitLab
 }:
 mkKdeDerivation {
   pname = "alpaka";

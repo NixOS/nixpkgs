@@ -14,7 +14,7 @@
   pytz,
   requests,
   requests-mock,
-  requests-oauthlib,
+  requests-oauthlib
 }:
 
 buildPythonPackage rec {

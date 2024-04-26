@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qtwebengine,
-  cyrus_sasl,
+  cyrus_sasl
 }:
 mkKdeDerivation {
   pname = "libksieve";

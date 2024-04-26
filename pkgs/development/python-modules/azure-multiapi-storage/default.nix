@@ -9,7 +9,7 @@
   msrestazure,
   pythonOlder,
   requests,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

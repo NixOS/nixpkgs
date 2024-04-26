@@ -8,7 +8,7 @@
   pkg-config,
   meson,
   ninja,
-  stdenv,
+  stdenv
 }: let
   src = fetchFromGitHub {
     owner = "bluskript";

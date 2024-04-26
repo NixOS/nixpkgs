@@ -9,7 +9,7 @@
 , msgpack
 
 # tests
-, pytestCheckHook,
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {

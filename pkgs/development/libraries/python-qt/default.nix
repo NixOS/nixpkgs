@@ -7,7 +7,7 @@
   qmake,
   qtwebengine,
   qtxmlpatterns,
-  qttools,
+  qttools
 }:
 
 stdenv.mkDerivation (finalAttrs: {

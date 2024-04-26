@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qtsensors,
-  dbus,
+  dbus
 }:
 mkKdeDerivation {
   pname = "kscreen";

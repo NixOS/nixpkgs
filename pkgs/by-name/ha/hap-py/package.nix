@@ -15,7 +15,7 @@
   samtools,
   stdenv,
   xz,
-  zlib,
+  zlib
 }:
 
 let

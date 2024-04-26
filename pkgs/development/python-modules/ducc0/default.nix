@@ -7,7 +7,7 @@
   pybind11,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

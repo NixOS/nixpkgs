@@ -30,7 +30,7 @@
   ujson,
   websockets,
   whatthepatch,
-  yapf,
+  yapf
 }:
 
 buildPythonPackage rec {

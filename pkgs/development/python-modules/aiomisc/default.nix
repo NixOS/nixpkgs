@@ -17,7 +17,7 @@
   rich,
   setproctitle,
   typing-extensions,
-  uvloop,
+  uvloop
 }:
 
 buildPythonPackage rec {

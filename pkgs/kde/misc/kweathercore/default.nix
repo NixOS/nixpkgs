@@ -2,7 +2,7 @@
   lib,
   mkKdeDerivation,
   fetchurl,
-  qtpositioning,
+  qtpositioning
 }:
 mkKdeDerivation rec {
   pname = "kweathercore";

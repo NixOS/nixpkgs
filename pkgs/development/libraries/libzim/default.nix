@@ -9,7 +9,7 @@
   python3,
   xapian,
   xz,
-  zstd,
+  zstd
 }:
 
 stdenv.mkDerivation rec {

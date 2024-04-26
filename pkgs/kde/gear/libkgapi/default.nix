@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qttools,
-  cyrus_sasl,
+  cyrus_sasl
 }:
 mkKdeDerivation {
   pname = "libkgapi";

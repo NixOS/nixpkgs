@@ -7,7 +7,7 @@
   mkNugetDeps,
   mkNugetSource,
   pkgs,
-  stdenv,
+  stdenv
 }:
 let
   inherit (lib)
@@ -27,7 +27,7 @@ rec {
   # Examples:
   #   writeBash = makeScriptWriter { interpreter = "${pkgs.bash}/bin/bash"; }
   #   makeScriptWriter { interpreter = "${pkgs.dash}/bin/dash"; } "hello" "echo hello world"
-  makeScriptWriter = { interpreter, check ? "", makeWrapperArgs ? [], }: nameOrPath: content:
+  makeScriptWriter = { interpreter, check ? "", makeWrapperArgs ? [] }: nameOrPath: content:
     assert (types.path.check nameOrPath) || (builtins.match "([0-9A-Za-z._])[0-9A-Za-z._-]*" nameOrPath != null);
     assert (types.path.check content) || (types.str.check content);
     let
@@ -324,7 +324,7 @@ rec {
     libraries ? [],
     makeWrapperArgs ? [],
     strip ? true,
-    threadedRuntime ? true,
+    threadedRuntime ? true
   }:
     let
       appendIfNotSet = el: list: if elem el list then list else list ++ [ el ];
@@ -465,7 +465,7 @@ rec {
     makeWrapperArgs ? [],
     rustc ? pkgs.rustc,
     rustcArgs ? [],
-    strip ? true,
+    strip ? true
   }:
   let
     darwinArgs = lib.optionals stdenv.isDarwin [ "-L${lib.getLib libiconv}/lib" ];

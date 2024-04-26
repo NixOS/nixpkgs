@@ -3,7 +3,7 @@
 , x86_64Url
 , version
 , pkgs ? import ../../../../../default.nix { }
-,
+
 }:
 let
   inherit (import ./update-utils.nix { inherit (pkgs) lib; })

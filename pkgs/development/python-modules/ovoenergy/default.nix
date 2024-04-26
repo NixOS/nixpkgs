@@ -7,7 +7,7 @@
   incremental,
   pythonOlder,
   setuptools,
-  typer,
+  typer
 }:
 
 buildPythonPackage rec {

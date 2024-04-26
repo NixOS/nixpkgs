@@ -6,7 +6,7 @@
   gobject-introspection,
   wrapGAppsHook4,
   gtk4,
-  gtk4-layer-shell,
+  gtk4-layer-shell
 }:
 
 buildGoModule rec {

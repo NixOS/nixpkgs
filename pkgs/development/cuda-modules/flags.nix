@@ -9,7 +9,7 @@
   cudaVersion,
   stdenv,
   # gpus :: List Gpu
-  gpus,
+  gpus
 }:
 let
   inherit (lib)
@@ -164,7 +164,7 @@ let
   formatCapabilities =
     {
       cudaCapabilities,
-      enableForwardCompat ? true,
+      enableForwardCompat ? true
     }:
     rec {
       inherit cudaCapabilities enableForwardCompat;

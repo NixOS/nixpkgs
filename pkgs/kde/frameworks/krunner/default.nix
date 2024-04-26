@@ -1,6 +1,6 @@
 {
   mkKdeDerivation,
-  plasma-activities,
+  plasma-activities
 }:
 mkKdeDerivation {
   pname = "krunner";

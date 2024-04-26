@@ -1,7 +1,7 @@
 {
   rustPlatform,
   fetchFromGitHub,
-  lib,
+  lib
 }:
 rustPlatform.buildRustPackage rec {
   pname = "lls";

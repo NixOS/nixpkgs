@@ -2,7 +2,7 @@
   fetchurl,
   lib,
   stdenv,
-  autoPatchelfHook,
+  autoPatchelfHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {

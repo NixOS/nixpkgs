@@ -3,7 +3,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gitUpdater,
+  gitUpdater
 }:
 
 stdenv.mkDerivation (finalAttrs: {

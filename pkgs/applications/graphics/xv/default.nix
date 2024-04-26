@@ -7,7 +7,7 @@
   libpng,
   libwebp,
   libtiff,
-  jasper,
+  jasper
 }:
 
 stdenv.mkDerivation rec {

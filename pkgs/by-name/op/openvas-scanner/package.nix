@@ -26,7 +26,7 @@
   pandoc,
   pcre2,
   pkg-config,
-  util-linux,
+  util-linux
 }:
 
 stdenv.mkDerivation rec {

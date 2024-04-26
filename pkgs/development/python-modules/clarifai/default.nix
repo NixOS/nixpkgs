@@ -20,7 +20,7 @@
   setuptools,
   tabulate,
   tqdm,
-  tritonclient,
+  tritonclient
 }:
 
 buildPythonPackage rec {

@@ -2,7 +2,7 @@
   lib,
   buildLua,
   fetchFromGitHub,
-  unstableGitUpdater,
+  unstableGitUpdater
 }:
 buildLua {
   pname = "visualizer";

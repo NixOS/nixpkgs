@@ -2,7 +2,7 @@
   mkKdeDerivation,
   qtsvg,
   qtmultimedia,
-  qqc2-desktop-style,
+  qqc2-desktop-style
 }:
 mkKdeDerivation {
   pname = "kwordquiz";

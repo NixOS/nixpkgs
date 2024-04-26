@@ -4,7 +4,7 @@
   crc,
   fetchPypi,
   pythonOlder,
-  setuptools-scm,
+  setuptools-scm
 }:
 
 buildPythonPackage rec {

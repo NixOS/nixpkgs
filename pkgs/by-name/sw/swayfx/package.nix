@@ -9,7 +9,7 @@
   extraOptions ? [ ], # E.g.: [ "--verbose" ]
   isNixOS ? false,
   enableXWayland ? true,
-  dbusSupport ? true,
+  dbusSupport ? true
 }:
 
 sway.override {

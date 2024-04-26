@@ -2,7 +2,7 @@
   lib,
   fetchFromGitea,
   buildGoModule,
-  tailwindcss,
+  tailwindcss
 }:
 buildGoModule rec {
   pname = "rimgo";

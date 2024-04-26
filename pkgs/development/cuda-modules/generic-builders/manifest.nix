@@ -25,7 +25,7 @@
   redistribRelease,
   # See ./modules/generic/manifests/feature/release.nix
   featureRelease,
-  cudaMajorMinorVersion,
+  cudaMajorMinorVersion
 }:
 let
   inherit (lib)

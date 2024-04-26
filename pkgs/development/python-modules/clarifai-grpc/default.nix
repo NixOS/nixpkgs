@@ -7,7 +7,7 @@
   googleapis-common-protos,
   grpcio,
   protobuf,
-  requests,
+  requests
 }:
 
 buildPythonPackage rec {

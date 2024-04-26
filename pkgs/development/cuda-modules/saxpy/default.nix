@@ -2,7 +2,7 @@
   autoAddDriverRunpath,
   cmake,
   cudaPackages,
-  lib,
+  lib
 }:
 let
   inherit (cudaPackages)

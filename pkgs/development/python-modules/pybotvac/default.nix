@@ -6,7 +6,7 @@
   requests,
   requests-oauthlib,
   voluptuous,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

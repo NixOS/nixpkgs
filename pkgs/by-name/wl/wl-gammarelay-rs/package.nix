@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  rustPlatform,
+  rustPlatform
 }:
 rustPlatform.buildRustPackage rec {
   pname = "wl-gammarelay-rs";

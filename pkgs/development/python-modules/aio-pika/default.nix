@@ -12,7 +12,7 @@
   shortuuid,
   testcontainers,
   wrapt,
-  yarl,
+  yarl
 }:
 
 buildPythonPackage rec {

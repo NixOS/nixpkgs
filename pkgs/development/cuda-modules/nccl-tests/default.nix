@@ -9,7 +9,7 @@
   lib,
   mpi,
   mpiSupport ? false,
-  which,
+  which
 }:
 let
   inherit (cudaPackages)

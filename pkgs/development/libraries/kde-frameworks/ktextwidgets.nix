@@ -2,7 +2,7 @@
   mkDerivation,
   extra-cmake-modules, qttools,
   kcompletion, kconfig, kconfigwidgets, ki18n, kiconthemes, kservice,
-  kwindowsystem, qtbase, sonnet,
+  kwindowsystem, qtbase, sonnet
 }:
 
 mkDerivation {

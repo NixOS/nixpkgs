@@ -1,7 +1,7 @@
 {
   mkDerivation,
   extra-cmake-modules,
-  avahi, qtbase, qttools,
+  avahi, qtbase, qttools
 }:
 
 mkDerivation {

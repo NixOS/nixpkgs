@@ -24,7 +24,7 @@
   libcurand ? null,
   libcusolver ? null,
   libcusparse ? null,
-  libnpp ? null,
+  libnpp ? null
 }:
 
 let

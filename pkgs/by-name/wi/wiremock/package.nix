@@ -5,7 +5,7 @@
   lib,
   makeWrapper,
   stdenvNoCC,
-  testers,
+  testers
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

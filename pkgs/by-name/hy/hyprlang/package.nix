@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  cmake,
+  cmake
 }:
 
 stdenv.mkDerivation (finalAttrs: {

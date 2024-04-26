@@ -5,7 +5,7 @@
   gocryptfs,
   fuse,
   cryfs,
-  encfs,
+  encfs
 }:
 mkKdeDerivation {
   pname = "plasma-vault";

@@ -4,7 +4,7 @@
   fetchPypi,
   python,
   pbr,
-  pytestCheckHook,
+  pytestCheckHook
 }:
 buildPythonPackage rec {
   pname = "beconde-py";

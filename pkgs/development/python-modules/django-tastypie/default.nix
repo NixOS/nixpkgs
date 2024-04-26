@@ -5,7 +5,7 @@
   python-dateutil,
   python-mimeparse,
   pythonOlder,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

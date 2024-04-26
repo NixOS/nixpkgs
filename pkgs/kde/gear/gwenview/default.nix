@@ -11,7 +11,7 @@
   lcms2,
   libtiff,
   wayland,
-  wayland-protocols,
+  wayland-protocols
 }:
 mkKdeDerivation {
   pname = "gwenview";

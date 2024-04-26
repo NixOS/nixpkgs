@@ -3,7 +3,7 @@
 , stdenv
 , runCommand
 , tailwindcss
-,
+
 }:
 let
   inherit (stdenv.hostPlatform) system;

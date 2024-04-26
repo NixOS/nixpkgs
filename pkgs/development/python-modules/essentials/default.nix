@@ -4,7 +4,7 @@
   setuptools,
   pytestCheckHook,
   pythonImportsCheckHook,
-  lib,
+  lib
 }:
 buildPythonPackage rec {
   pname = "essentials";

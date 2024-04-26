@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
-  jre,
+  jre
 }:
 
 let

@@ -9,7 +9,7 @@
   pam,
   pkg-config,
   stdenv,
-  systemd,
+  systemd
 }:
 
 stdenv.mkDerivation rec {

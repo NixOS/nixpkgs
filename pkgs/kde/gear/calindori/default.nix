@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qtsvg,
-  qqc2-desktop-style,
+  qqc2-desktop-style
 }:
 mkKdeDerivation {
   pname = "calindori";

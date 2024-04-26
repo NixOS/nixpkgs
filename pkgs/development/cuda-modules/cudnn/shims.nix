@@ -4,7 +4,7 @@
   package,
   # redistArch :: String
   # String is "unsupported" if the given architecture is unsupported.
-  redistArch,
+  redistArch
 }:
 {
   featureRelease = lib.optionalAttrs (redistArch != "unsupported") {

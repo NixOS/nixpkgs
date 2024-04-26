@@ -6,7 +6,7 @@
 , lib
 , makeWrapper
 , stdenvNoCC
-,
+
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "HentaiAtHome";

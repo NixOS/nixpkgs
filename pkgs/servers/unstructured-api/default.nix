@@ -6,7 +6,7 @@
   makeWrapper,
   nix-update-script,
   symlinkJoin,
-  nltk-data,
+  nltk-data
 }:
 let
   pythonEnv = python3.withPackages (packages: with packages; [

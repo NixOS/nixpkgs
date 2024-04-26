@@ -8,7 +8,7 @@
   pytest-mock,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
+  pythonOlder
 }:
 
 buildPythonPackage rec {

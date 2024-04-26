@@ -9,7 +9,7 @@
   poetry-core,
   pytestCheckHook,
   pythonOlder,
-  pytest-asyncio,
+  pytest-asyncio
 }:
 
 buildPythonPackage rec {

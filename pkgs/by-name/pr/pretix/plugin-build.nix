@@ -4,7 +4,7 @@
   fetchPypi,
   setuptools,
   django,
-  gettext,
+  gettext
 }:
 
 buildPythonPackage rec {

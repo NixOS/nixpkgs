@@ -4,7 +4,7 @@
   fetchFromGitHub,
   testers,
   kubeswitch,
-  installShellFiles,
+  installShellFiles
 }:
 
 buildGoModule rec {

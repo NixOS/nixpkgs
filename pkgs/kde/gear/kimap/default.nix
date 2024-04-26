@@ -1,6 +1,6 @@
 {
   mkKdeDerivation,
-  cyrus_sasl,
+  cyrus_sasl
 }:
 mkKdeDerivation {
   pname = "kimap";

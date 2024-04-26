@@ -6,7 +6,7 @@
   makeWrapper,
   installShellFiles,
   setJavaClassPath,
-  testers,
+  testers
 }:
 stdenv.mkDerivation (
   finalAttrs: {

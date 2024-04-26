@@ -6,7 +6,7 @@
   xdg-utils,
   bash,
   makeWrapper,
-  perlPackages,
+  perlPackages
 }:
 
 libsForQt5.mkDerivation rec {

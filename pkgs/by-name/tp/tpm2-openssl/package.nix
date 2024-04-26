@@ -6,7 +6,7 @@
   autoconf-archive,
   pkg-config,
   openssl,
-  tpm2-tss,
+  tpm2-tss
 }:
 
 stdenv.mkDerivation (finalAttrs: {

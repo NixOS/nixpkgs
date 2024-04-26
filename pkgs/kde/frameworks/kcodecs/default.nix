@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qttools,
-  gperf,
+  gperf
 }:
 mkKdeDerivation {
   pname = "kcodecs";

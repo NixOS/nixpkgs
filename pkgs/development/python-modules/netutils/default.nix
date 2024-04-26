@@ -10,7 +10,7 @@
   pytestCheckHook,
   pythonOlder,
   pyyaml,
-  toml,
+  toml
 }:
 
 buildPythonPackage rec {

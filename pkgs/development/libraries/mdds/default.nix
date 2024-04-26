@@ -3,7 +3,7 @@
   fetchFromGitLab,
   autoreconfHook,
   boost,
-  llvmPackages,
+  llvmPackages
 }:
 
 stdenv.mkDerivation (finalAttrs: {

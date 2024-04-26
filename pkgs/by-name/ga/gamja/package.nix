@@ -4,7 +4,7 @@
   buildNpmPackage,
   writeText,
   # https://git.sr.ht/~emersion/gamja/tree/master/doc/config-file.md
-  gamjaConfig ? null,
+  gamjaConfig ? null
 }:
 buildNpmPackage rec {
   pname = "gamja";

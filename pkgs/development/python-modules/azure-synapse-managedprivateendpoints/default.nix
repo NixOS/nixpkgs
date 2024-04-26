@@ -6,7 +6,7 @@
   fetchPypi,
   msrest,
   pythonOlder,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

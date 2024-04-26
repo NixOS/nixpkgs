@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pkg-config,
-  yajl,
+  yajl
 }:
 
 buildPythonPackage rec {

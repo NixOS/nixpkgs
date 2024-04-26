@@ -44,7 +44,7 @@
   wxGTK31,
   xorg,
   fetchpatch,
-  withSystemd ? stdenv.isLinux,
+  withSystemd ? stdenv.isLinux
 }:
 let
   wxGTK31' = wxGTK31.overrideAttrs (old: {

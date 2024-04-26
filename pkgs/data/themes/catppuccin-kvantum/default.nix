@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   accent ? "Blue",
-  variant ? "Frappe",
+  variant ? "Frappe"
 }: let
   pname = "catppuccin-kvantum";
 in

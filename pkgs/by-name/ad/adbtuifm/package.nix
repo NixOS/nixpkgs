@@ -1,7 +1,7 @@
 {
   buildGoModule,
   fetchFromGitHub,
-  lib,
+  lib
 }:
 buildGoModule rec {
   pname = "adbtuifm";

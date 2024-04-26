@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qttools,
-  qtsvg,
+  qtsvg
 }:
 mkKdeDerivation {
   pname = "kuserfeedback";

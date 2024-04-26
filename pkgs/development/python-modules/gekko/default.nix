@@ -4,7 +4,7 @@
   fetchPypi,
   numpy,
   pythonOlder,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

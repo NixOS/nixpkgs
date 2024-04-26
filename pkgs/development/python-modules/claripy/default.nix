@@ -9,7 +9,7 @@
   pythonOlder,
   pythonRelaxDepsHook,
   setuptools,
-  z3-solver,
+  z3-solver
 }:
 
 buildPythonPackage rec {

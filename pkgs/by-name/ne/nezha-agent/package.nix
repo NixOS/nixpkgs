@@ -3,7 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   nezha-agent,
-  testers,
+  testers
 }:
 buildGoModule rec {
   pname = "nezha-agent";

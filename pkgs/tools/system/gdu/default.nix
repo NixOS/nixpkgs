@@ -5,7 +5,7 @@
   fetchFromGitHub,
   installShellFiles,
   testers,
-  gdu,
+  gdu
 }:
 
 buildGoModule rec {

@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   python3,
-  libxml2,
+  libxml2
 }:
 mkKdeDerivation {
   pname = "breeze-icons";

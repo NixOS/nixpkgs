@@ -5,7 +5,7 @@
 , alcotest
 , bisect_ppx
 , integers_stubs_js
-,
+
 }:
 
 buildDunePackage rec {

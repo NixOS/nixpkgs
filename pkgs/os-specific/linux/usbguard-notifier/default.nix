@@ -10,7 +10,7 @@
   librsvg,
   libnotify,
   catch2,
-  asciidoc,
+  asciidoc
 }:
 
 stdenv.mkDerivation rec {

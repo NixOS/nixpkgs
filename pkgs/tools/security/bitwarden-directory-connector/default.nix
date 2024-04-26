@@ -7,7 +7,7 @@
   python3,
   pkg-config,
   libsecret,
-  nodejs_18,
+  nodejs_18
 }:
 
 let

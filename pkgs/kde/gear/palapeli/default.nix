@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qtsvg,
-  shared-mime-info,
+  shared-mime-info
 }:
 mkKdeDerivation {
   pname = "palapeli";

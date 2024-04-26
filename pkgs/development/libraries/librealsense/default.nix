@@ -15,7 +15,7 @@
 , curl
 , cudaSupport ? config.cudaSupport, cudaPackages ? { }
 , enablePython ? false, pythonPackages ? null
-, enableGUI ? false,
+, enableGUI ? false
 }:
 
 assert cudaSupport -> (cudaPackages?cudatoolkit && cudaPackages.cudatoolkit != null);

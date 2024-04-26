@@ -1,7 +1,7 @@
 {
   lib,
   mkKdeDerivation,
-  fetchurl,
+  fetchurl
 }:
 mkKdeDerivation rec {
   pname = "oxygen-icons";

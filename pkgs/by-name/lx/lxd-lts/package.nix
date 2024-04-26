@@ -35,7 +35,7 @@
   thin-provisioning-tools,
   util-linux,
   virtiofsd,
-  xz,
+  xz
 }:
 let
   binPath = lib.makeBinPath [

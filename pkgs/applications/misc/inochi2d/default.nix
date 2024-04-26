@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   substituteAll,
-  callPackage,
+  callPackage
 }:
 
 # Note for maintainers:

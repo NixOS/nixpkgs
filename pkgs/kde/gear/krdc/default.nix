@@ -2,7 +2,7 @@
   mkKdeDerivation,
   libssh,
   libvncserver,
-  freerdp,
+  freerdp
 }:
 mkKdeDerivation {
   pname = "krdc";

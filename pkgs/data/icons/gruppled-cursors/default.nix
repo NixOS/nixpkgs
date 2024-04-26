@@ -2,7 +2,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   theme,
-  lib,
+  lib
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

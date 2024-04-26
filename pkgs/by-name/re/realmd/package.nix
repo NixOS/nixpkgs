@@ -10,7 +10,7 @@
   polkit,
   samba,
   stdenv,
-  systemdLibs,
+  systemdLibs
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,7 +1,7 @@
 {
   appimageTools,
   fetchurl,
-  lib,
+  lib
 }: let
   pname = "upscayl";
   version = "2.10.0";

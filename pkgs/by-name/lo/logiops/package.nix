@@ -7,7 +7,7 @@
   glib,
   udev,
   libevdev,
-  libconfig,
+  libconfig
 }:
 
 stdenv.mkDerivation (oldAttrs: {

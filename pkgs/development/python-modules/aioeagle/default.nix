@@ -5,7 +5,7 @@
   fetchFromGitHub,
   pythonOlder,
   setuptools,
-  xmltodict,
+  xmltodict
 }:
 
 buildPythonPackage rec {

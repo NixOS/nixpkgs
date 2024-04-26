@@ -12,7 +12,7 @@
   onnxruntime,
   libadwaita,
   libpulseaudio,
-  xorg,
+  xorg
 }: let
   aprilAsr = fetchFromGitHub {
     name = "april-asr";

@@ -1428,7 +1428,7 @@ runTests {
   testWithRecursionDealsWithFunctors =
     let
       functor = {
-        __functor = self: { a, b, }: null;
+        __functor = self: { a, b }: null;
       };
       a = {
         value = "1234";

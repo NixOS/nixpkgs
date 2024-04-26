@@ -3,7 +3,7 @@
   fetchFromGitHub,
   python3,
   sqlite,
-  which,
+  which
 }:
 
 python3.pkgs.buildPythonApplication rec {

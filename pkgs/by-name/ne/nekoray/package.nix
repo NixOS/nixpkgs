@@ -15,7 +15,7 @@
   v2ray-geoip,
   v2ray-domain-list-community,
   sing-geoip,
-  sing-geosite,
+  sing-geosite
 }:
 
 let

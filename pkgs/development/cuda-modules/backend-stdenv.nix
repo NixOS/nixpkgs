@@ -4,7 +4,7 @@
   nvccCompatibilities,
   pkgs,
   stdenv,
-  stdenvAdapters,
+  stdenvAdapters
 }:
 
 let

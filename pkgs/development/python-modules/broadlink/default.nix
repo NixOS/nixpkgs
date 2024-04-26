@@ -4,7 +4,7 @@
   fetchPypi,
   cryptography,
   pythonOlder,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

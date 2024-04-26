@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
-  p7zip,
+  p7zip
 }:
 let
   version = "1.020";

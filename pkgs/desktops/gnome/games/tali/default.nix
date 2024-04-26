@@ -15,7 +15,7 @@
   meson,
   ninja,
   python3,
-  desktop-file-utils,
+  desktop-file-utils
 }:
 
 stdenv.mkDerivation rec {

@@ -17,7 +17,7 @@
   setuptools-scm,
   types-dataclasses,
   types-requests,
-  types-setuptools,
+  types-setuptools
 }:
 
 buildPythonPackage rec {

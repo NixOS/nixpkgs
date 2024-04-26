@@ -17,7 +17,7 @@
   pythonOlder,
   semver,
   setuptools,
-  wheel,
+  wheel
 }:
 
 buildPythonPackage rec {

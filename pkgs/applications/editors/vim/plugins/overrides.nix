@@ -115,7 +115,7 @@
 , # must be lua51Packages
   luaPackages
 , luajitPackages
-,
+
 }: self: super:
 {
   alpha-nvim = super.alpha-nvim.overrideAttrs {

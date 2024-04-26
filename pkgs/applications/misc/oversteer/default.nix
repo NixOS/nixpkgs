@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, gettext, python3, python3Packages
 , meson, ninja, udev, appstream, appstream-glib, desktop-file-utils, gtk3
-, wrapGAppsHook, gobject-introspection, bash, }:
+, wrapGAppsHook, gobject-introspection, bash }:
 let
   python = python3.withPackages (p:
     with p; [

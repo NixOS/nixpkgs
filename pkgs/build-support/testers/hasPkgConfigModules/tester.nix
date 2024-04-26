@@ -4,7 +4,7 @@
 # Tester arguments
 { package,
   moduleNames ? package.meta.pkgConfigModules,
-  testName ? "check-pkg-config-${lib.concatStringsSep "-" moduleNames}",
+  testName ? "check-pkg-config-${lib.concatStringsSep "-" moduleNames}"
 }:
 
 runCommand testName {

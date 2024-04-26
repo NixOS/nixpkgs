@@ -6,7 +6,7 @@
   kmail,
   knotes,
   korganizer,
-  zanshin,
+  zanshin
 }:
 mkKdeDerivation {
   pname = "kontact";

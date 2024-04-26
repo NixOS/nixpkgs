@@ -15,7 +15,7 @@
   python3Packages,
   stdenv,
   vscode-utils,
-  zlib,
+  zlib
 }:
 
 let

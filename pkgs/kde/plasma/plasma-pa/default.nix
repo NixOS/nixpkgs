@@ -2,7 +2,7 @@
   mkKdeDerivation,
   pkg-config,
   libcanberra,
-  pulseaudio,
+  pulseaudio
 }:
 mkKdeDerivation {
   pname = "plasma-pa";

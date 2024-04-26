@@ -13,7 +13,7 @@
   zlib,
   catch2_3,
   # Build with the asio library bundled in boost instead of the standalone asio package.
-  with_boost_asio ? false,
+  with_boost_asio ? false
 }:
 
 assert with_boost_asio -> boost != null;

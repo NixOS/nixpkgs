@@ -5,7 +5,7 @@
   qttools,
   xdpyinfo,
   systemsettings,
-  libusb1,
+  libusb1
 }:
 mkKdeDerivation {
   pname = "kinfocenter";

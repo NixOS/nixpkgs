@@ -1,6 +1,6 @@
 {
   mkDerivation, extra-cmake-modules,
-  kauth, kcodecs, kconfig, kdoctools, kguiaddons, ki18n, kwidgetsaddons, qttools, qtbase,
+  kauth, kcodecs, kconfig, kdoctools, kguiaddons, ki18n, kwidgetsaddons, qttools, qtbase
 }:
 
 mkDerivation {

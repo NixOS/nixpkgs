@@ -16,7 +16,7 @@
   pytest-mock,
   typing-extensions,
   tomlkit,
-  grpcio-tools,
+  grpcio-tools
 }:
 
 buildPythonPackage rec {

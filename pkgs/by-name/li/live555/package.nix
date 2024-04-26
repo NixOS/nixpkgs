@@ -5,7 +5,7 @@
   fetchurl,
   openssl,
   stdenv,
-  vlc,
+  vlc
 }:
 
 stdenv.mkDerivation (finalAttrs: {

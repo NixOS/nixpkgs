@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qtsvg,
-  taglib,
+  taglib
 }:
 mkKdeDerivation {
   pname = "juk";

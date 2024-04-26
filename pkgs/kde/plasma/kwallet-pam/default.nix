@@ -3,7 +3,7 @@
   mkKdeDerivation,
   pam,
   libgcrypt,
-  socat,
+  socat
 }:
 mkKdeDerivation {
   pname = "kwallet-pam";

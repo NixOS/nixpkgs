@@ -10,7 +10,7 @@
   fixup_yarn_lock,
   google-fonts,
   api_url ? "http://127.0.0.1:3000",
-  frontend_url ? "crab.fit",
+  frontend_url ? "crab.fit"
 }:
 
 stdenv.mkDerivation (finalAttrs: {

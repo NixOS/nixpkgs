@@ -4,7 +4,7 @@
 , makeWrapper
 , nodejs
 , fetchYarnDeps
-,
+
 }:
 mkYarnPackage rec {
   pname = "prettierd";

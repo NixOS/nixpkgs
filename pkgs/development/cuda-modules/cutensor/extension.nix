@@ -17,7 +17,7 @@
   flags,
   lib,
   mkVersionedPackageName,
-  stdenv,
+  stdenv
 }:
 let
   inherit (lib)

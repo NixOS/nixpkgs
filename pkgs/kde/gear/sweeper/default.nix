@@ -1,6 +1,6 @@
 {
   mkKdeDerivation,
-  plasma-activities-stats,
+  plasma-activities-stats
 }:
 mkKdeDerivation {
   pname = "sweeper";

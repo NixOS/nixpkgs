@@ -26,7 +26,7 @@
   wrapGAppsHook,
   zlib,
   # Boolean flags
-  withGtk ? false,
+  withGtk ? false
 }:
 
 stdenv.mkDerivation (finalAttrs: {

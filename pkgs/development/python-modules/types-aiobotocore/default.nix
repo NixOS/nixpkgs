@@ -359,7 +359,7 @@
   types-aiobotocore-workmailmessageflow,
   types-aiobotocore-workspaces,
   types-aiobotocore-workspaces-web,
-  types-aiobotocore-xray,
+  types-aiobotocore-xray
 }:
 
 buildPythonPackage rec {

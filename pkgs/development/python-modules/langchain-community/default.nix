@@ -13,7 +13,7 @@
   requests,
   sqlalchemy,
   tenacity,
-  typer,
+  typer
 }:
 
 buildPythonPackage rec {

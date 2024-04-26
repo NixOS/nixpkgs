@@ -9,7 +9,7 @@
   autoAddDriverRunpath,
   cudaPackages,
   # passthru.updateScript
-  gitUpdater,
+  gitUpdater
 }:
 let
   inherit (cudaPackages)

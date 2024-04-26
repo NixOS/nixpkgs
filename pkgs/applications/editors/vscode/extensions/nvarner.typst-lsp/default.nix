@@ -3,7 +3,7 @@
   lib,
   moreutils,
   typst-lsp,
-  vscode-utils,
+  vscode-utils
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {

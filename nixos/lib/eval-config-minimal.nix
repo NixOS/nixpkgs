@@ -30,7 +30,7 @@ let
   evalModules = {
     prefix ? [],
     modules ? [],
-    specialArgs ? {},
+    specialArgs ? {}
   }:
   # NOTE: Regular NixOS currently does use this function! Don't break it!
   #       Ideally we don't diverge, unless we learn that we should.

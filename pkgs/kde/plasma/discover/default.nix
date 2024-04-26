@@ -4,7 +4,7 @@
   pkg-config,
   discount,
   flatpak,
-  fwupd,
+  fwupd
 }:
 mkKdeDerivation {
   pname = "discover";

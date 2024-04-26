@@ -6,7 +6,7 @@
   kaccounts-integration,
   shared-mime-info,
   xz,
-  mariadb,
+  mariadb
 }:
 mkKdeDerivation {
   pname = "akonadi";

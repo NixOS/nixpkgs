@@ -2,7 +2,7 @@
   mkKdeDerivation,
   lib,
   substituteAll,
-  smartmontools,
+  smartmontools
 }:
 mkKdeDerivation {
   pname = "plasma-disks";

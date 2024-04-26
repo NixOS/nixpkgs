@@ -2,7 +2,7 @@
   mkKdeDerivation,
   qtsvg,
   pkg-config,
-  libsodium,
+  libsodium
 }:
 mkKdeDerivation {
   pname = "keysmith";

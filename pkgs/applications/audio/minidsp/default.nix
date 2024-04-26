@@ -6,7 +6,7 @@
   libusb1,
   AppKit,
   IOKit,
-  pkg-config,
+  pkg-config
 }:
 rustPlatform.buildRustPackage rec {
   pname = "minidsp";

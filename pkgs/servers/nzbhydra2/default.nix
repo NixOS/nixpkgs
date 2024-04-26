@@ -5,7 +5,7 @@
   makeWrapper,
   jre,
   python3,
-  unzip,
+  unzip
 }:
 stdenv.mkDerivation rec {
   pname = "nzbhydra2";

@@ -2,7 +2,7 @@
   mkKdeDerivation,
   pkg-config,
   qt5compat,
-  audit,
+  audit
 }:
 mkKdeDerivation {
   pname = "ksystemlog";

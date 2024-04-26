@@ -4,7 +4,7 @@
   qtwebengine,
   grantlee, grantleetheme,
   kcmutils, kdbusaddons, ki18n, kiconthemes, kio, kitemmodels, ktextwidgets,
-  prison, akonadi, akonadi-mime, kcontacts, kmime, libkleo,
+  prison, akonadi, akonadi-mime, kcontacts, kmime, libkleo
 }:
 
 mkDerivation {

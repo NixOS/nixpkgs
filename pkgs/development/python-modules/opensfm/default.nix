@@ -32,7 +32,7 @@
 , sphinx
 , matplotlib
 , fpdf
-,
+
 }:
 
 let

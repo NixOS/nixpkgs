@@ -12,7 +12,7 @@ let
       expected,
       src,
       patches ? [ ],
-      schemaIdToVariableMapping,
+      schemaIdToVariableMapping
     }:
 
     let

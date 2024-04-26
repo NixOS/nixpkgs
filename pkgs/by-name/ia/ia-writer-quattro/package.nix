@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, fetchFromGitHub, }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
 stdenvNoCC.mkDerivation {
   pname = "ia-writer-quattro";

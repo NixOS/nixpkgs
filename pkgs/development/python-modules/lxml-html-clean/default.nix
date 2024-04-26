@@ -5,7 +5,7 @@
   lxml,
   unittestCheckHook,
   pythonOlder,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

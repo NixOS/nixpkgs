@@ -8,7 +8,7 @@
   flex,
   gmp,
   mpfr,
-  libqalculate,
+  libqalculate
 }:
 mkKdeDerivation {
   pname = "kalk";

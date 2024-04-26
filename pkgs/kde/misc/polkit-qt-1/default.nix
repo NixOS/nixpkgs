@@ -4,7 +4,7 @@
   fetchurl,
   pkg-config,
   polkit,
-  glib,
+  glib
 }:
 mkKdeDerivation rec {
   pname = "polkit-qt-1";

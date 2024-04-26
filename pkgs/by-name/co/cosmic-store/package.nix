@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, rustPlatform, appstream, makeBinaryWrapper
 , cosmic-icons, glib, just, pkg-config, libglvnd, libxkbcommon, libinput
 , fontconfig, flatpak, freetype, openssl, mesa, wayland, xorg, vulkan-loader
-, vulkan-validation-layers, }:
+, vulkan-validation-layers }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-store";

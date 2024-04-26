@@ -7,7 +7,7 @@
   qt5compat,
   pkg-config,
   hunspell,
-  kdoctools,
+  kdoctools
 }:
 mkKdeDerivation {
   pname = "ghostwriter";

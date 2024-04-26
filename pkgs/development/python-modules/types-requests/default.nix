@@ -4,7 +4,7 @@
   fetchPypi,
   setuptools,
   types-urllib3,
-  urllib3,
+  urllib3
 }:
 
 buildPythonPackage rec {

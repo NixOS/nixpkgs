@@ -11,7 +11,7 @@
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
-  urllib3,
+  urllib3
 }:
 
 buildPythonPackage rec {

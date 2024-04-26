@@ -16,7 +16,7 @@
   pkg-config,
   python3,
   stdenv,
-  wrapGAppsHook,
+  wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {

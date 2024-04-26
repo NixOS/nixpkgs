@@ -20,7 +20,7 @@
   testEqualContents = {
     assertion,
     actual,
-    expected,
+    expected
   }: runCommand "equal-contents-${lib.strings.toLower assertion}" {
     inherit assertion actual expected;
   } ''
@@ -58,7 +58,7 @@
   testVersion =
     { package,
       command ? "${package.meta.mainProgram or package.pname or package.name} --version",
-      version ? package.version,
+      version ? package.version
     }: runCommand "${package.name}-test-version" { nativeBuildInputs = [ package ]; meta.timeout = 60; } ''
       if output=$(${command} 2>&1); then
         if grep -Fw -- "${version}" - <<< "$output"; then

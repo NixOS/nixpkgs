@@ -4,7 +4,7 @@
   fetchFromGitHub,
   lib,
   nix-update-script,
-  testers,
+  testers
 }:
 
 buildGoModule rec {

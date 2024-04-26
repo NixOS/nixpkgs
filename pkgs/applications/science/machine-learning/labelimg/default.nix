@@ -3,7 +3,7 @@
   python3Packages,
   fetchFromGitHub,
   fetchpatch,
-  qt5,
+  qt5
 }:
 python3Packages.buildPythonApplication rec {
   pname = "labelImg";

@@ -3,7 +3,7 @@
   python3,
   fetchFromGitHub,
   fetchpatch,
-  qt6,
+  qt6
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "nanovna-saver";

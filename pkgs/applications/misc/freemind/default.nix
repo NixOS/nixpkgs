@@ -6,7 +6,7 @@
   jdk,
   jre,
   makeWrapper,
-  stripJavaArchivesHook,
+  stripJavaArchivesHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {

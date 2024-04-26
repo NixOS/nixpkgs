@@ -15,7 +15,7 @@ let
     version,
     sha256,
     # Hex-encoded string of JSON bytes
-    metadata,
+    metadata
   }:
 
   stdenv.mkDerivation {

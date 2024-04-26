@@ -9,7 +9,7 @@
   pytest,
   pytestCheckHook,
   pythonOlder,
-  typing-extensions,
+  typing-extensions
 }:
 
 buildPythonPackage rec {

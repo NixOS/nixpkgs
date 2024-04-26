@@ -5,7 +5,7 @@
   pkg-config,
   qqc2-desktop-style,
   taglib,
-  libvlc,
+  libvlc
 }:
 mkKdeDerivation {
   pname = "kasts";

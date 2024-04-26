@@ -77,7 +77,7 @@
   wayland-protocols,
   waylandSupport ? stdenv.isLinux,
   zlib,
-  zstd,
+  zstd
 }:
 
 let

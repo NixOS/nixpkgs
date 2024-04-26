@@ -9,7 +9,7 @@
   packaging,
   pythonOlder,
   setuptools,
-  xmltodict,
+  xmltodict
 }:
 
 buildPythonPackage rec {

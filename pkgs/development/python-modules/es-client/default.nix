@@ -16,7 +16,7 @@
   pyyaml,
   requests,
   six,
-  voluptuous,
+  voluptuous
 }:
 
 buildPythonPackage rec {

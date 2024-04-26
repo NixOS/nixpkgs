@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , python3Packages
 , ffmpeg
-,
+
 }:
 python3Packages.buildPythonPackage rec {
   pname = "unsilence";

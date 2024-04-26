@@ -9,7 +9,7 @@
   pytestCheckHook,
   pythonOlder,
   pyyaml,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

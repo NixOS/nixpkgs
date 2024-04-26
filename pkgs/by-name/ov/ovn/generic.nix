@@ -1,7 +1,7 @@
 {
   version,
   hash,
-  updateScriptArgs ? "",
+  updateScriptArgs ? ""
 }:
 
 {
@@ -19,7 +19,7 @@
   python3,
   unbound,
   xdp-tools,
-  writeScript,
+  writeScript
 }:
 
 stdenv.mkDerivation rec {

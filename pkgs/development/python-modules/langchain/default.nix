@@ -46,7 +46,7 @@
   toml,
   torch,
   transformers,
-  typer,
+  typer
 }:
 
 buildPythonPackage rec {

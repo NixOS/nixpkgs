@@ -10,7 +10,7 @@
   nixos,
   openssh,
   stdenv,
-  testers,
+  testers
 }:
 let
   inherit (haskell.lib.compose) overrideCabal addBuildTools justStaticExecutables;

@@ -12,7 +12,7 @@
   torch,
   transformers,
   unidic-lite,
-  pythonOlder,
+  pythonOlder
 }:
 buildPythonPackage rec {
   pname = "manga-ocr";

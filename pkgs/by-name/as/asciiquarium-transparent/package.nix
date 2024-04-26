@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   makeWrapper,
-  perl,
+  perl
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "asciiquarium-transparent";

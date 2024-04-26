@@ -13,7 +13,7 @@
   nixosTests,
   openssl,
   pkg-config,
-  systemd,
+  systemd
 }:
 
 stdenv.mkDerivation rec {

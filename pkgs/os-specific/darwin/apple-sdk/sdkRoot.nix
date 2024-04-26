@@ -2,7 +2,7 @@
   lib,
   runCommand,
   writeText,
-  sdkVersion,
+  sdkVersion
 }:
 
 let

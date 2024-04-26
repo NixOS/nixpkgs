@@ -6,7 +6,7 @@
   llama-index-llms-openai,
   poetry-core,
   pythonOlder,
-  pythonRelaxDepsHook,
+  pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {

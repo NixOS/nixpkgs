@@ -5,7 +5,7 @@
   procps,
   python,
   qt5,
-  xvfb-run,
+  xvfb-run
 }:
 buildPythonApplication rec {
   pname = "flent";

@@ -572,7 +572,7 @@ rec {
       compressor ? "gz"
     , # Deprecated.
       contents ? null
-    ,
+    
     }:
 
     let
@@ -912,7 +912,7 @@ rec {
     , enableFakechroot ? false
     , includeStorePaths ? true
     , passthru ? {}
-    ,
+    
     }:
       assert
       (lib.assertMsg (maxLayers > 1)

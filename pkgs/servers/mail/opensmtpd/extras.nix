@@ -5,7 +5,7 @@
   enableMysql ? true,
   enablePostgres ? true,
   enableSqlite ? true,
-  enableRedis ? true,
+  enableRedis ? true
 }:
 
 stdenv.mkDerivation rec {

@@ -4,7 +4,7 @@
   fetchurl,
   jre,
   wrapGAppsHook,
-  nix-update-script,
+  nix-update-script
 }:
 
 stdenv.mkDerivation rec {

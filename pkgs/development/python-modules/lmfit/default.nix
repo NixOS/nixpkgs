@@ -9,7 +9,7 @@
   uncertainties,
   pytestCheckHook,
   pandas,
-  matplotlib,
+  matplotlib
 }:
 
 buildPythonPackage rec {

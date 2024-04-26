@@ -4,7 +4,7 @@
   systemd,
   gdb,
   python3,
-  substituteAll,
+  substituteAll
 }: let
   gdb' = gdb.override {
     hostCpuOnly = true;

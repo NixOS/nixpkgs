@@ -6,7 +6,7 @@
   libmambapy,
   hatchling,
   hatch-vcs,
-  boltons,
+  boltons
 }:
 buildPythonPackage rec {
   pname = "conda-libmamba-solver";

@@ -13,7 +13,7 @@
   crc,
 
   # tests
-  pytestCheckHook,
+  pytestCheckHook
 }:
 
 buildPythonPackage rec {

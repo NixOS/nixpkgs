@@ -10,7 +10,7 @@
   atk,
   gtk2,
   libX11,
-  gdk-pixbuf,
+  gdk-pixbuf
 }:
 stdenv.mkDerivation rec {
   pname = "avr-sim";

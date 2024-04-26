@@ -7,7 +7,7 @@
   #       https://github.com/NixOS/nixpkgs/pull/119942
   nixos-install-tools,
   runCommand,
-  nixosTests,
+  nixosTests
 }:
 let
   inherit (nixos {}) config;

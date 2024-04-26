@@ -14,7 +14,7 @@
   peewee,
   pythonOlder,
   requests,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

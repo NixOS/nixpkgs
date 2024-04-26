@@ -1,7 +1,7 @@
 {
   mkDerivation,
   extra-cmake-modules,
-  karchive, kcoreaddons, kservice, qtbase,
+  karchive, kcoreaddons, kservice, qtbase
 }:
 
 mkDerivation {

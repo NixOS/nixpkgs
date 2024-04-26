@@ -2,7 +2,7 @@
   mkDerivation, lib,
   extra-cmake-modules, kdoctools,
   boost, karchive, kcrash, kiconthemes, kparts, ktexteditor, qtsvg,
-  qtxmlpatterns,
+  qtxmlpatterns
 }:
 
 mkDerivation {

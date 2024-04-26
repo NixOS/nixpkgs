@@ -9,7 +9,7 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  validator-collection,
+  validator-collection
 }:
 
 buildPythonPackage rec {

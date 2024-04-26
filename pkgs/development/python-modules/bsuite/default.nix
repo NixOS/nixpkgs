@@ -26,7 +26,7 @@
   statsmodels,
   tensorflow-probability,
   termcolor,
-  trfl,
+  trfl
 }:
 
 let

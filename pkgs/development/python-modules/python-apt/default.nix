@@ -3,7 +3,7 @@
   apt,
   buildPythonPackage,
   fetchgit,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

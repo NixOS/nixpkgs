@@ -1,6 +1,6 @@
 {
   mkKdeDerivation,
-  shared-mime-info,
+  shared-mime-info
 }:
 mkKdeDerivation {
   pname = "akonadi-mime";

@@ -21,7 +21,7 @@
   # Running with TTS support causes the program to freeze for a few seconds every time at startup,
   # so it is disabled by default
   textToSpeechSupport ? false,
-  qtspeech,
+  qtspeech
 }:
 
 let

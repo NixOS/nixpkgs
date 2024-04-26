@@ -9,7 +9,7 @@
   libzip,
   djvulibre,
   ebook_tools,
-  discount,
+  discount
 }:
 mkKdeDerivation {
   pname = "okular";

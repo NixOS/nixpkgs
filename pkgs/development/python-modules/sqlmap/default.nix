@@ -5,7 +5,7 @@
   fetchPypi,
   file,
   pythonOlder,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

@@ -3,7 +3,7 @@
 , rustPlatform
 , pkg-config
 , systemd
-,
+
 }:
 rustPlatform.buildRustPackage rec {
   pname = "espmonitor";

@@ -15,7 +15,7 @@
   overrides,
   pyxdg,
   requests,
-  requests-toolbelt,
+  requests-toolbelt
 }:
 
 buildPythonPackage rec {

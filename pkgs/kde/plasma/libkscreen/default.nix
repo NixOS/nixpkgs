@@ -2,7 +2,7 @@
   mkKdeDerivation,
   qtwayland,
   qttools,
-  jq,
+  jq
 }:
 mkKdeDerivation {
   pname = "libkscreen";

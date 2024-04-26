@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qtdeclarative,
-  pkg-config,
+  pkg-config
 }:
 mkKdeDerivation {
   pname = "kpublictransport";

@@ -1,5 +1,5 @@
 { pkgs, lib, fetchFromGitHub, buildDunePackage, pkg-config, dune-configurator
-, bigstring,
+, bigstring
 }:
 
 buildDunePackage rec {

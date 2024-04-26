@@ -5,7 +5,7 @@
   libopus,
   nose,
   lib, stdenv,
-  substituteAll,
+  substituteAll
 }:
 
 buildPythonPackage rec {

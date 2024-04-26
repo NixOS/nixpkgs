@@ -9,7 +9,7 @@
   pypdf,
   pythonOlder,
   pythonRelaxDepsHook,
-  striprtf,
+  striprtf
 }:
 
 buildPythonPackage rec {

@@ -5,7 +5,7 @@
   python,
   pythonOlder,
   setuptools,
-  sqlite,
+  sqlite
 }:
 
 buildPythonPackage rec {

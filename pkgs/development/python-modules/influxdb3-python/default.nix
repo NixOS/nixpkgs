@@ -9,7 +9,7 @@
   pythonOlder,
   reactivex,
   setuptools,
-  urllib3,
+  urllib3
 }:
 
 buildPythonPackage rec {

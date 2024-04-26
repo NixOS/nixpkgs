@@ -6,7 +6,7 @@
   rustPlatform,
   numpy,
   pytestCheckHook,
-  syrupy,
+  syrupy
 }:
 
 buildPythonPackage rec {

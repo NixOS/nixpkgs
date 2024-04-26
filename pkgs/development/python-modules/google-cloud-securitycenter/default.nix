@@ -9,7 +9,7 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

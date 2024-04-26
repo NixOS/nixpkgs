@@ -14,7 +14,7 @@
   libcap,
   pipewire,
   krunner,
-  python3,
+  python3
 }:
 mkKdeDerivation {
   pname = "kwin";

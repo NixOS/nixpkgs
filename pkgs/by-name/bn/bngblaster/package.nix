@@ -8,7 +8,7 @@
   libdict,
   libpcap,
   ncurses,
-  openssl,
+  openssl
 }:
 
 stdenv.mkDerivation (finalAttrs: {

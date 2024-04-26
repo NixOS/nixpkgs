@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   pkg-config,
-  qtsensors,
+  qtsensors
 }:
 mkKdeDerivation {
   pname = "plasma-mobile";

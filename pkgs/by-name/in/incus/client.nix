@@ -8,7 +8,7 @@
 
   lib,
   buildGoModule,
-  installShellFiles,
+  installShellFiles
 }:
 let
   pname = "incus${lib.optionalString lts "-lts"}-client";

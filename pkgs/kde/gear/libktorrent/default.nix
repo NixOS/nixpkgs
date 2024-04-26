@@ -4,7 +4,7 @@
   qt5compat,
   boost,
   gmp,
-  libgcrypt,
+  libgcrypt
 }:
 mkKdeDerivation {
   pname = "libktorrent";

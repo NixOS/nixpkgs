@@ -5,7 +5,7 @@
   pkg-config,
   oniguruma,
   stdenv,
-  darwin,
+  darwin
 }:
 rustPlatform.buildRustPackage rec {
   pname = "atac";

@@ -2,7 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  emacs,
+  emacs
 }:
 rustPlatform.buildRustPackage rec {
   pname = "emacs-lsp-booster";

@@ -20,7 +20,7 @@
   # Applications that use private APIs can’t be distributed on the App Store,
   # but that’s not really a concern for nixpkgs, so use them by default.
   # See: https://github.com/KhronosGroup/MoltenVK/blob/main/README.md#metal_private_api
-  enablePrivateAPIUsage ? true,
+  enablePrivateAPIUsage ? true
 }:
 
 let

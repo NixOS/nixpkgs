@@ -7,7 +7,7 @@
   pythonOlder,
   requests,
   responses,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

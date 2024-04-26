@@ -1,7 +1,7 @@
 {
   mkDerivation, lib,
   extra-cmake-modules, kdoctools,
-  kcmutils, ki18n, kiconthemes, kio, knotifications, kxmlgui,
+  kcmutils, ki18n, kiconthemes, kio, knotifications, kxmlgui
 }:
 
 mkDerivation {

@@ -2,7 +2,7 @@
   mkKdeDerivation,
   _7zz,
   svgcleaner,
-  qtsvg,
+  qtsvg
 }:
 mkKdeDerivation {
   pname = "libkmahjongg";

@@ -7,7 +7,7 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  xmldiff,
+  xmldiff
 }:
 
 buildPythonPackage rec {

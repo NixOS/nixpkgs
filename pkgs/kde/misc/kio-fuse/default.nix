@@ -3,7 +3,7 @@
   mkKdeDerivation,
   fetchurl,
   pkg-config,
-  fuse3,
+  fuse3
 }:
 mkKdeDerivation rec {
   pname = "kio-fuse";

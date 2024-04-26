@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchCrate,
+  fetchCrate
 }:
 rustPlatform.buildRustPackage rec {
   pname = "i3-open-next-ws";

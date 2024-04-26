@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   libgcrypt,
-  kdoctools,
+  kdoctools
 }:
 mkKdeDerivation {
   pname = "kwallet";

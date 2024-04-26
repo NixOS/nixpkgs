@@ -5,7 +5,7 @@
   llama-index-core,
   llama-index-llms-openai,
   poetry-core,
-  pythonOlder,
+  pythonOlder
 }:
 
 buildPythonPackage rec {

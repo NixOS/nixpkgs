@@ -7,7 +7,7 @@
   qqc2-desktop-style,
   pkg-config,
   mpv,
-  yt-dlp,
+  yt-dlp
 }:
 mkKdeDerivation {
   pname = "plasmatube";

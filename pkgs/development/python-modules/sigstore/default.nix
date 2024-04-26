@@ -18,7 +18,7 @@
   securesystemslib,
   sigstore-protobuf-specs,
   sigstore-rekor-types,
-  tuf,
+  tuf
 }:
 
 buildPythonPackage rec {

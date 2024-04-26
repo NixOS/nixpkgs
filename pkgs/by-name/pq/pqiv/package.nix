@@ -9,7 +9,7 @@
   libarchive,
   libspectre,
   libwebp,
-  poppler,
+  poppler
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -6,7 +6,7 @@
   pytestCheckHook,
   pyyaml,
   ruamel-yaml,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

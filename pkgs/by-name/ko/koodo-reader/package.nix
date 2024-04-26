@@ -8,7 +8,7 @@
   makeDesktopItem,
   copyDesktopItems,
   wrapGAppsHook,
-  electron,
+  electron
 }:
 
 mkYarnPackage rec {

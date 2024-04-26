@@ -5,7 +5,7 @@
   qttools,
   libpcap,
   libnl,
-  lm_sensors,
+  lm_sensors
 }:
 mkKdeDerivation {
   pname = "libksysguard";

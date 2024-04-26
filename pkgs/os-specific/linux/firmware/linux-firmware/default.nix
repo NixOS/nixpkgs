@@ -5,7 +5,7 @@ in {
   fetchzip,
   lib,
   rdfind,
-  which,
+  which
 }:
 
 stdenvNoCC.mkDerivation rec {

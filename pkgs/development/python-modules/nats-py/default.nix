@@ -10,7 +10,7 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  uvloop,
+  uvloop
 }:
 
 buildPythonPackage rec {

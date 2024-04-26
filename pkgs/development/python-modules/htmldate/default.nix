@@ -11,7 +11,7 @@
   python-dateutil,
   pythonOlder,
   setuptools,
-  urllib3,
+  urllib3
 }:
 
 buildPythonPackage rec {

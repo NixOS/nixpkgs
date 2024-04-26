@@ -3,7 +3,7 @@
   qtwayland,
   pkg-config,
   wayland-protocols,
-  xorg,
+  xorg
 }:
 mkKdeDerivation {
   pname = "kidletime";

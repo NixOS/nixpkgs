@@ -5,7 +5,7 @@
   path,
   runCommand,
   stdenv,
-  writeText,
+  writeText
 }:
 let
   # Arguably not true, but it holds up for now.

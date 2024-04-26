@@ -4,7 +4,7 @@
   fetchurl,
   qtspeech,
   qttools,
-  kxmlgui,
+  kxmlgui
 }:
 mkKdeDerivation rec {
   pname = "ktextaddons";

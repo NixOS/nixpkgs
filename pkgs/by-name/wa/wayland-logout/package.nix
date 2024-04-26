@@ -3,7 +3,7 @@
   fetchFromGitHub,
   lib,
   meson,
-  ninja,
+  ninja
 }:
 stdenv.mkDerivation rec {
   pname = "wayland-logout";

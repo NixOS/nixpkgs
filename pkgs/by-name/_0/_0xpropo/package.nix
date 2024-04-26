@@ -1,7 +1,7 @@
 {
   lib,
   stdenvNoCC,
-  fetchzip,
+  fetchzip
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "0xpropo";

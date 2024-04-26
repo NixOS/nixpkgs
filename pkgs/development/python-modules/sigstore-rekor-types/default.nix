@@ -4,7 +4,7 @@
   fetchFromGitHub,
   flit-core,
   pydantic,
-  pythonOlder,
+  pythonOlder
 }:
 
 buildPythonPackage rec {

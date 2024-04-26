@@ -20,7 +20,7 @@
   paho-mqtt-c,
   pkg-config,
   radcli,
-  zlib,
+  zlib
 }:
 
 stdenv.mkDerivation rec {

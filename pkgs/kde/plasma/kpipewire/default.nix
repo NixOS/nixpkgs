@@ -5,7 +5,7 @@
   pipewire,
   ffmpeg,
   mesa,
-  libva,
+  libva
 }:
 mkKdeDerivation {
   pname = "kpipewire";

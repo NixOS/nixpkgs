@@ -8,7 +8,7 @@
   pendulum,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
+  pythonOlder
 }:
 
 buildPythonPackage rec {

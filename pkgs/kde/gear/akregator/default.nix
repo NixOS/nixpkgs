@@ -1,6 +1,6 @@
 {
   mkKdeDerivation,
-  qtwebengine,
+  qtwebengine
 }:
 mkKdeDerivation {
   pname = "akregator";

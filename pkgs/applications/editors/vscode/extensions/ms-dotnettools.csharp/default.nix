@@ -5,7 +5,7 @@
 , stdenv
 , openssl
 , coreutils
-,
+
 }:
 let
   inherit (stdenv.hostPlatform) system;

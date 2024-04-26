@@ -1,7 +1,7 @@
 {
   lib,
   buildFishPlugin,
-  fetchFromGitHub,
+  fetchFromGitHub
 }:
 buildFishPlugin rec {
   pname = "fifc";

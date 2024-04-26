@@ -14,7 +14,7 @@
   lib,
   stdenv,
   copyDesktopItems,
-  makeDesktopItem,
+  makeDesktopItem
 }: let
   pname = "squirreldisk";
   version = "0.3.4";

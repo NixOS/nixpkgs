@@ -21,7 +21,7 @@
 , reuse
 , setuptools
 , tabulate
-,
+
 }:
 
 python.pkgs.buildPythonApplication rec {

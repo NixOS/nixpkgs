@@ -3,7 +3,7 @@
   fetchFromGitHub,
   nixosTests,
   rustPlatform,
-  lib,
+  lib
 }:
 
 rustPlatform.buildRustPackage {

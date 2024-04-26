@@ -4,7 +4,7 @@
   fetchFromGitHub,
   git,
   installShellFiles,
-  openssl,
+  openssl
 }:
 
 buildGoModule rec {

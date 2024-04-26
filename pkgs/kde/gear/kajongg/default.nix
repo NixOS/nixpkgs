@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qtsvg,
-  python3,
+  python3
 }:
 mkKdeDerivation {
   pname = "kajongg";

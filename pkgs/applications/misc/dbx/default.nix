@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   git,
-  python3,
+  python3
 }:
 let
   python = python3.override { packageOverrides = self: super: { pydantic = super.pydantic_1; }; };

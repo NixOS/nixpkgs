@@ -6,7 +6,7 @@
   llama-index-core,
   poetry-core,
   pythonOlder,
-  pythonRelaxDepsHook,
+  pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {

@@ -19,7 +19,7 @@
   pytestCheckHook,
   six,
   transitions,
-  yamlordereddictloader,
+  yamlordereddictloader
 }:
 
 buildPythonPackage rec {

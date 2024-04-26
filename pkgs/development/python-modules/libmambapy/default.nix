@@ -18,7 +18,7 @@
   curl,
   zstd,
   bzip2,
-  wheel,
+  wheel
 }:
 buildPythonPackage rec {
   pname = "libmambapy";

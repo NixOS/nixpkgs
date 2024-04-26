@@ -9,7 +9,7 @@
   pyyaml,
   requests,
   schema,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

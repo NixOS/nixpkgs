@@ -2,7 +2,7 @@
   lib,
   beamPackages,
   fetchFromGitHub,
-  elixir,
+  elixir
 }:
 
 beamPackages.mixRelease rec {

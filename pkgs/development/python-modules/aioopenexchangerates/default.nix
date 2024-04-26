@@ -9,7 +9,7 @@
   pytest-aiohttp,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
+  pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {

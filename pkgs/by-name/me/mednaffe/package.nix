@@ -6,7 +6,7 @@
   mednafen,
   pkg-config,
   stdenv,
-  wrapGAppsHook,
+  wrapGAppsHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {

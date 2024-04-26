@@ -1,7 +1,7 @@
 {
   lib,
   buildGo122Module,
-  fetchFromGitHub,
+  fetchFromGitHub
 }:
 buildGo122Module rec {
   pname = "gptscript";

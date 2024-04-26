@@ -2,7 +2,7 @@
   mkDerivation,
   extra-cmake-modules,
   kconfig, kcoreaddons, kcrash, kdbusaddons, kservice, kwindowsystem,
-  qtbase, qttools, qtx11extras, libXdmcp,
+  qtbase, qttools, qtx11extras, libXdmcp
 }:
 
 mkDerivation {

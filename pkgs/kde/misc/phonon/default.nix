@@ -7,7 +7,7 @@
   pkg-config,
   libpulseaudio,
   qt5compat,
-  qttools,
+  qttools
 }:
 mkKdeDerivation rec {
   pname = "phonon";

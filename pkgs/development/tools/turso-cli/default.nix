@@ -4,7 +4,7 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  nix-update-script,
+  nix-update-script
 }:
 buildGoModule rec {
   pname = "turso-cli";

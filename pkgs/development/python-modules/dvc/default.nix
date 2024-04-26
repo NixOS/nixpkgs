@@ -53,7 +53,7 @@
   enableGoogle ? false,
   enableAWS ? false,
   enableAzure ? false,
-  enableSSH ? false,
+  enableSSH ? false
 }:
 
 buildPythonPackage rec {

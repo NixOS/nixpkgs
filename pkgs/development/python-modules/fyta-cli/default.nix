@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
-  pythonOlder,
+  pythonOlder
 }:
 
 buildPythonPackage rec {

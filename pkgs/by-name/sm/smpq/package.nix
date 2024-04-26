@@ -3,7 +3,7 @@
   cmake,
   fetchurl,
   stdenv,
-  stormlib,
+  stormlib
 }:
 
 stdenv.mkDerivation (finalAttrs: {

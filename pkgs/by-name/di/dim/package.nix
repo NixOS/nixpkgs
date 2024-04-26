@@ -10,7 +10,7 @@
   pkg-config,
   sqlite,
   libvaSupport ? stdenv.hostPlatform.isLinux,
-  libva,
+  libva
 }:
 rustPlatform.buildRustPackage rec {
   pname = "dim";

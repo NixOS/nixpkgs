@@ -4,7 +4,7 @@
   fetchzip,
   jdk,
   gawk,
-  makeBinaryWrapper,
+  makeBinaryWrapper
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

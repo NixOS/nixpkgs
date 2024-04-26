@@ -2,7 +2,7 @@
   mkDerivation, lib,
   extra-cmake-modules, kdoctools,
   gmp, kconfig, kconfigwidgets, kcrash, kguiaddons, ki18n, kinit,
-  knotifications, kxmlgui, mpfr,
+  knotifications, kxmlgui, mpfr
 }:
 
 mkDerivation {

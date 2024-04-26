@@ -8,7 +8,7 @@
   requests,
   setuptools,
   pytestCheckHook,
-  pythonRelaxDepsHook,
+  pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {

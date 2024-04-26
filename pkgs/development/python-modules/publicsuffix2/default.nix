@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  setuptools
 }:
 let
   tagVersion = "2.2019-12-21";

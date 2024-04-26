@@ -1,7 +1,7 @@
 {
   lib,
   buildGo122Module,
-  fetchFromGitLab,
+  fetchFromGitLab
 }: let
   version = "1.1";
 in

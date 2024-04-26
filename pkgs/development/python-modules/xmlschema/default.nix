@@ -7,7 +7,7 @@
   lxml,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

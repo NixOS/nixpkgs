@@ -3,7 +3,7 @@
 {
   pkgs ? import <nixpkgs> {},
   minica ? pkgs.minica,
-  runCommandCC ? pkgs.runCommandCC,
+  runCommandCC ? pkgs.runCommandCC
 }:
 let
   conf = import ./snakeoil-certs.nix;

@@ -1,4 +1,4 @@
-{ lib, nixosTests, callPackage, }:
+{ lib, nixosTests, callPackage }:
 let
   generic = import ./generic.nix;
 in

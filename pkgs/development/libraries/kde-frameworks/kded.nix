@@ -2,7 +2,7 @@
   mkDerivation, lib, propagate, wrapGAppsHook,
   extra-cmake-modules, kdoctools,
   gsettings-desktop-schemas, kconfig, kcoreaddons, kcrash, kdbusaddons,
-  kservice, qtbase,
+  kservice, qtbase
 }:
 
 mkDerivation {

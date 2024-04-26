@@ -8,7 +8,7 @@
   raft-cowsql,
   sqlite,
   incus,
-  nix-update-script,
+  nix-update-script
 }:
 
 stdenv.mkDerivation (finalAttrs: {

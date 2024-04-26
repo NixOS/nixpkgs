@@ -3,7 +3,7 @@
   extra-cmake-modules, kdoctools,
   akonadi, karchive, kcompletion, kiconthemes, kidentitymanagement, kio,
   kmailtransport, knewstuff, kwindowsystem, kxmlgui, libkdepim, pimcommon,
-  qtwebengine, syntax-highlighting,
+  qtwebengine, syntax-highlighting
 }:
 
 mkDerivation {

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchzip,
-  zlib,
+  zlib
 }:
 stdenv.mkDerivation rec {
   pname = "braa";

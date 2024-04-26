@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  unzip,
+  unzip
 }:
 let
   version = "4.4.2";

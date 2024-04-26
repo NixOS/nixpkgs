@@ -1,6 +1,6 @@
 {
   mkKdeDerivation,
-  boost,
+  boost
 }:
 mkKdeDerivation {
   pname = "rocs";

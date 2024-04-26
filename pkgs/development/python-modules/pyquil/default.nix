@@ -26,7 +26,7 @@
   tenacity,
   types-deprecated,
   types-python-dateutil,
-  types-retry,
+  types-retry
 }:
 
 buildPythonPackage rec {

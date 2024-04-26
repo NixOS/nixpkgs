@@ -5,7 +5,7 @@
   qtwebengine,
   mobile-broadband-provider-info,
   openconnect,
-  openvpn,
+  openvpn
 }:
 mkKdeDerivation {
   pname = "plasma-nm";

@@ -1,6 +1,6 @@
 {
   mkKdeDerivation,
-  qtsvg,
+  qtsvg
 }:
 mkKdeDerivation {
   pname = "picmi";

@@ -5,7 +5,7 @@
   jdk,
   ant,
   git,
-  unzip,
+  unzip
 }:
 
 stdenv.mkDerivation rec {

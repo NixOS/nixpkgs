@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, docutils, }:
+{ lib, buildPythonPackage, fetchPypi, docutils }:
 
 buildPythonPackage rec {
   pname = "rst2ansi";

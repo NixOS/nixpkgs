@@ -7,7 +7,7 @@
   libxslt,
   mono,
   pkg-config,
-  webkitgtk,
+  webkitgtk
 }:
 
 stdenv.mkDerivation rec {

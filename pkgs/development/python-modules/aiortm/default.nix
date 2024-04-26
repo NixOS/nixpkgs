@@ -11,7 +11,7 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
-  yarl,
+  yarl
 }:
 
 buildPythonPackage rec {

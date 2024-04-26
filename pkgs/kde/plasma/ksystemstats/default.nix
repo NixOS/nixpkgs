@@ -4,7 +4,7 @@
   libksysguard,
   networkmanager-qt,
   lm_sensors,
-  libnl,
+  libnl
 }:
 mkKdeDerivation {
   pname = "ksystemstats";

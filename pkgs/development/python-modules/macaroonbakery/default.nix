@@ -12,7 +12,7 @@
   httmock,
   fixtures,
   pytestCheckHook,
-  mock,
+  mock
 }:
 
 buildPythonPackage rec {

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  autoreconfHook,
+  autoreconfHook
 }:
 
 stdenv.mkDerivation rec {

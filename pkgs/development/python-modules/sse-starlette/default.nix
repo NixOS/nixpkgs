@@ -13,7 +13,7 @@
   pythonOlder,
   requests,
   starlette,
-  uvicorn,
+  uvicorn
 }:
 
 buildPythonPackage rec {

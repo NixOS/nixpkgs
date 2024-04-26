@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qtsvg,
-  qcoro,
+  qcoro
 }:
 mkKdeDerivation {
   pname = "kontrast";

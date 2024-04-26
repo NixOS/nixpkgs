@@ -10,7 +10,7 @@
   libunwind,
   openssl,
   xinput,
-  xorg,
+  xorg
 }:
 buildDotnetModule rec {
   pname = "opentracker";

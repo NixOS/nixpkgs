@@ -7,7 +7,7 @@
   nix-update-script,
   python3Packages,
   squashfsTools,
-  stdenv,
+  stdenv
 }:
 python3Packages.buildPythonApplication rec {
   pname = "snapcraft";

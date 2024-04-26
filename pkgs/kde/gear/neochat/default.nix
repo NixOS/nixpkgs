@@ -2,7 +2,7 @@
   mkKdeDerivation,
   qtlocation,
   qtwebview,
-  kunifiedpush,
+  kunifiedpush
 }:
 mkKdeDerivation {
   pname = "neochat";

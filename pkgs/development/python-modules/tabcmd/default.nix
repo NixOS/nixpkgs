@@ -21,7 +21,7 @@
   types-mock,
   types-requests,
   types-setuptools,
-  urllib3,
+  urllib3
 }:
 
 buildPythonPackage rec {

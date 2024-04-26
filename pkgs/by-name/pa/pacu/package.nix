@@ -2,7 +2,7 @@
   lib,
   awscli,
   fetchFromGitHub,
-  python3,
+  python3
 }:
 
 let

@@ -10,7 +10,7 @@
   requests,
   responses,
   poetry-core,
-  pythonRelaxDepsHook,
+  pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {

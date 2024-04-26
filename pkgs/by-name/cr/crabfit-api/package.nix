@@ -10,7 +10,7 @@
   sqlite,
   stdenv,
   darwin,
-  adaptor ? "sql",
+  adaptor ? "sql"
 }:
 
 rustPlatform.buildRustPackage {

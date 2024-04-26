@@ -9,7 +9,7 @@
   kholidays, kidentitymanagement, kldap, kmailtransport, kontactinterface,
   kparts, kpimtextedit,
   kuserfeedback,
-  pimcommon,
+  pimcommon
 }:
 
 mkDerivation {

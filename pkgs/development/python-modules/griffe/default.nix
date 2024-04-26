@@ -8,7 +8,7 @@
   jsonschema,
   pdm-backend,
   pytestCheckHook,
-  pythonOlder,
+  pythonOlder
 }:
 
 buildPythonPackage rec {

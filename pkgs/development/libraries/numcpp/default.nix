@@ -5,7 +5,7 @@
   cmake,
   boost,
   python3,
-  gtest,
+  gtest
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "numcpp";

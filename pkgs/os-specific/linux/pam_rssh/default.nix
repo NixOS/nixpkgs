@@ -6,7 +6,7 @@
   pkg-config,
   openssl,
   pam,
-  openssh,
+  openssh
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -3,7 +3,7 @@
   mkKdeDerivation,
   fetchurl,
   qtdeclarative,
-  qt5compat,
+  qt5compat
 }:
 mkKdeDerivation rec {
   pname = "kirigami-addons";

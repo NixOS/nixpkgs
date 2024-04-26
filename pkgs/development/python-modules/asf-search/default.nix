@@ -16,7 +16,7 @@
   requests,
   setuptools-scm,
   shapely,
-  tenacity,
+  tenacity
 }:
 
 buildPythonPackage rec {

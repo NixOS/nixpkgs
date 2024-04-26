@@ -12,7 +12,7 @@
 , libxkbcommon
 , alsa-lib
 , makeWrapper
-,
+
 }:
 stdenv.mkDerivation rec {
   pname = "sfwbar";

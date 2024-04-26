@@ -7,7 +7,7 @@
   libvorbis,
   substituteAll,
   lame,
-  opusTools,
+  opusTools
 }:
 mkKdeDerivation {
   pname = "audiocd-kio";

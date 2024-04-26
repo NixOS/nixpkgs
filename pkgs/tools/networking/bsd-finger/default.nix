@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   fetchDebianPatch,
-  buildClient ? true,
+  buildClient ? true
 }:
 
 stdenv.mkDerivation rec {

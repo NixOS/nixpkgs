@@ -6,7 +6,7 @@
   pkg-config,
   wayland,
   wayland-protocols,
-  libfakekey,
+  libfakekey
 }:
 mkKdeDerivation {
   pname = "kdeconnect-kde";

@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   _7zz,
-  qtsvg,
+  qtsvg
 }:
 mkKdeDerivation {
   pname = "granatier";

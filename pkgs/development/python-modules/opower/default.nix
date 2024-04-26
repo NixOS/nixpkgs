@@ -8,7 +8,7 @@
   pytestCheckHook,
   python-dotenv,
   pythonOlder,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

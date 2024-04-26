@@ -2,7 +2,7 @@
   mkKdeDerivation,
   kirigami,
   kquickcharts,
-  qqc2-desktop-style,
+  qqc2-desktop-style
 }:
 mkKdeDerivation {
   pname = "filelight";

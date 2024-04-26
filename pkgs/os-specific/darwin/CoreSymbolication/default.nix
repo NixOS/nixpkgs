@@ -3,7 +3,7 @@
   fetchFromGitHub,
   fetchpatch,
   stdenvNoCC,
-  darwin-stubs,
+  darwin-stubs
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

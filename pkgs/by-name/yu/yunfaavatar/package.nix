@@ -4,7 +4,7 @@
   fetchFromGitHub,
   bash,
   imagemagick,
-  makeWrapper,
+  makeWrapper
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "yunfaavatar";

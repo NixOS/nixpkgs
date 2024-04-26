@@ -5,7 +5,7 @@
   libftdi1,
   libusb1,
   pythonOlder,
-  poetry-core,
+  poetry-core
 }:
 
 buildPythonPackage rec {

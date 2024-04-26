@@ -6,7 +6,7 @@
   pythonOlder,
   requests,
   requests-mock,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

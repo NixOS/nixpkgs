@@ -26,7 +26,7 @@ still shows most of the available features is in `./gwenview`.
 */
 
 {
-  lib, libsForQt5, fetchurl,
+  lib, libsForQt5, fetchurl
 }:
 
 let

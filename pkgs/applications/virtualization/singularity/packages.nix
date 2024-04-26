@@ -2,7 +2,7 @@
   callPackage,
   fetchFromGitHub,
   nixos,
-  conmon,
+  conmon
 }:
 let
   apptainer =

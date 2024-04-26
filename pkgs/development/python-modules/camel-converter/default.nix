@@ -5,7 +5,7 @@
   poetry-core,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
+  pythonOlder
 }:
 
 buildPythonPackage rec {

@@ -7,7 +7,7 @@
   llama-index-llms-openai,
   llama-index-vector-stores-chroma,
   poetry-core,
-  pythonOlder,
+  pythonOlder
 }:
 
 buildPythonPackage rec {

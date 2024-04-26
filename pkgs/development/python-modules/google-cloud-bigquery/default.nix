@@ -25,7 +25,7 @@
   pythonOlder,
   requests,
   setuptools,
-  tqdm,
+  tqdm
 }:
 
 buildPythonPackage rec {

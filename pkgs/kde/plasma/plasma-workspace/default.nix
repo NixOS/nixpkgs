@@ -13,7 +13,7 @@
   breeze,
   qttools,
   qqc2-breeze-style,
-  gpsd,
+  gpsd
 }:
 mkKdeDerivation {
   pname = "plasma-workspace";

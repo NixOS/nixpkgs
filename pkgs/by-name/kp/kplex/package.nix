@@ -1,7 +1,7 @@
 {
   stdenv,
   fetchFromGitHub,
-  lib,
+  lib
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kplex";

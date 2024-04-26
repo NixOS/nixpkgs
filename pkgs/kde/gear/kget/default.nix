@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qgpgme,
-  libmms,
+  libmms
 }:
 mkKdeDerivation {
   pname = "kget";

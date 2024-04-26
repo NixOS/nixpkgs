@@ -1,7 +1,7 @@
 {
   cudaVersion,
   lib,
-  stdenv,
+  stdenv
 }:
 let
   cudaVersionToHash = {

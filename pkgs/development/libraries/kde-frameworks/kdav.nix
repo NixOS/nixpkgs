@@ -1,7 +1,7 @@
 {
   mkDerivation, lib,
   extra-cmake-modules, kdoctools,
-  kcoreaddons, kio, qtxmlpatterns,
+  kcoreaddons, kio, qtxmlpatterns
 }:
 
 mkDerivation {

@@ -6,7 +6,7 @@
   mono,
   gtk-sharp-3_0,
   pkg-config,
-  stdenv,
+  stdenv
 }:
 
 stdenv.mkDerivation rec {

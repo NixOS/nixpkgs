@@ -4,7 +4,7 @@
   fetchFromGitHub,
   opencflite,
   libuuid,
-  zlib,
+  zlib
 }:
 
 let

@@ -5,7 +5,7 @@
   pyserial,
   pythonOlder,
   pyusb,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

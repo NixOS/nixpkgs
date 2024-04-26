@@ -2,7 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  installShellFiles,
+  installShellFiles
 }: let
   version = "0.15.2";
 in

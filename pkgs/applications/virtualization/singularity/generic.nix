@@ -10,7 +10,7 @@
   proxyVendor ? false,
   extraConfigureFlags ? [ ],
   extraDescription ? "",
-  extraMeta ? { },
+  extraMeta ? { }
 }:
 
 let
@@ -83,7 +83,7 @@ in
   # should be removed when the issue is resolved
   vendorHash ? _defaultGoVendorArgs.vendorHash,
   deleteVendor ? _defaultGoVendorArgs.deleteVendor,
-  proxyVendor ? _defaultGoVendorArgs.proxyVendor,
+  proxyVendor ? _defaultGoVendorArgs.proxyVendor
 }:
 
 let

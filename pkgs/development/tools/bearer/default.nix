@@ -3,7 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   testers,
-  bearer,
+  bearer
 }:
 
 buildGoModule rec {

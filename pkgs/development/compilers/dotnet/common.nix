@@ -49,7 +49,7 @@
           # TODO: use correct runtimes instead of sdk
           runtime ? finalAttrs.finalPackage,
           runInputs ? [],
-          run ? null,
+          run ? null
         }:
         let
           built = runCommand "dotnet-test-${name}" { buildInputs = [ finalAttrs.finalPackage ]; } (''

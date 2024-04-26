@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   pkg-config,
-  plymouth,
+  plymouth
 }:
 mkKdeDerivation {
   pname = "plymouth-kcm";

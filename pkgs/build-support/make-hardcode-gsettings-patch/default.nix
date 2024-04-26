@@ -2,7 +2,7 @@
   runCommand,
   git,
   coccinelle,
-  python3,
+  python3
 }:
 
 /*
@@ -54,7 +54,7 @@
 {
   src,
   patches ? [ ],
-  schemaIdToVariableMapping,
+  schemaIdToVariableMapping
 }:
 
 runCommand

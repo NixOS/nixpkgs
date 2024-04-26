@@ -7,7 +7,7 @@
   qtwebview,
   mpv,
   kitemmodels,
-  sonnet,
+  sonnet
 }:
 mkKdeDerivation {
   pname = "tokodon";

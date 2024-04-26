@@ -3,7 +3,7 @@
   buildDotnetModule,
   fetchFromGitHub,
   dotnetCorePackages,
-  nixosTests,
+  nixosTests
 }:
 let
   technitium-library = buildDotnetModule rec {

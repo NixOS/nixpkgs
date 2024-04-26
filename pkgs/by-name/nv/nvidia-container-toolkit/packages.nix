@@ -4,7 +4,7 @@
   docker,
   libnvidia-container,
   runc,
-  symlinkJoin,
+  symlinkJoin
 }:
 
 # Note this scope isn't recursed into, at the time of writing.

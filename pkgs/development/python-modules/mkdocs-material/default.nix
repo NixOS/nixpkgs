@@ -23,7 +23,7 @@
   pythonOlder,
   regex,
   requests,
-  trove-classifiers,
+  trove-classifiers
 }:
 
 buildPythonPackage rec {

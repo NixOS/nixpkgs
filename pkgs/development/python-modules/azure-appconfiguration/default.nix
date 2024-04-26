@@ -5,7 +5,7 @@
   fetchPypi,
   isodate,
   pythonOlder,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

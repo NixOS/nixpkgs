@@ -4,7 +4,7 @@
   lib,
   makeWrapper,
   puppet-bolt,
-  testers,
+  testers
 }:
 
 bundlerApp {

@@ -16,7 +16,7 @@
   mesa,
   wayland,
   xorg,
-  vulkan-loader,
+  vulkan-loader
 }:
 
 rustPlatform.buildRustPackage rec {

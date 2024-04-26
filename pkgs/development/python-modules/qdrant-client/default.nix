@@ -13,7 +13,7 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
-  urllib3,
+  urllib3
 }:
 
 buildPythonPackage rec {

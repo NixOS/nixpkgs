@@ -20,7 +20,7 @@ lib:
   containerdSha256 ? lib.fakeHash,
   # run `grep github.com/kubernetes-sigs/cri-tools go.mod | head -n1 | awk '{print $4}'` in the k3s repo at the tag
   criCtlVersion,
-  updateScript ? null,
+  updateScript ? null
 }:
 
 # builder.nix contains a "builder" expression that, given k3s version and hash

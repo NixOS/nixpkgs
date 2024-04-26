@@ -12,7 +12,7 @@
 , permitUserSite ? false
 # Wrap executables with the given argument.
 , makeWrapperArgs ? []
-, }:
+ }:
 
 # Create a python executable that knows about additional packages.
 let

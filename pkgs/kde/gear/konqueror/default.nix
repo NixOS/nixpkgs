@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qtwebengine,
-  hunspell,
+  hunspell
 }:
 mkKdeDerivation {
   pname = "konqueror";

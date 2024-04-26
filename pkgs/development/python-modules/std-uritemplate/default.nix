@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   poetry-core,
-  pythonOlder,
+  pythonOlder
 }:
 
 buildPythonPackage rec {

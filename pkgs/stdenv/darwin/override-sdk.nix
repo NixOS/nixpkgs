@@ -19,7 +19,7 @@
   pkgsBuildTarget,
   pkgsHostHost,
   pkgsHostTarget,
-  pkgsTargetTarget,
+  pkgsTargetTarget
 }@args:
 
 let

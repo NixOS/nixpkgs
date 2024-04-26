@@ -4,7 +4,7 @@
   fetchFromGitHub,
   flit-core,
   requests,
-  zstandard,
+  zstandard
 }:
 buildPythonPackage rec {
   pname = "conda-package-streaming";

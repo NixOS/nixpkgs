@@ -8,7 +8,7 @@
   openldap,
   openssl,
   pkg-config,
-  stdenv,
+  stdenv
 }:
 
 stdenv.mkDerivation rec {

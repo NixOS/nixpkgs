@@ -13,7 +13,7 @@
   pyvex,
   pyxbe,
   setuptools,
-  sortedcontainers,
+  sortedcontainers
 }:
 
 let

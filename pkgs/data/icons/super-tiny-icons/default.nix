@@ -1,4 +1,4 @@
-{ pkgs, lib, stdenvNoCC, fetchFromGitHub, }:
+{ pkgs, lib, stdenvNoCC, fetchFromGitHub }:
 
 stdenvNoCC.mkDerivation {
   pname = "super-tiny-icons";

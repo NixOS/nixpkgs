@@ -2,7 +2,7 @@
   lib,
   buildHomeAssistantComponent,
   fetchFromGitHub,
-  pyindego,
+  pyindego
 }:
 
 buildHomeAssistantComponent rec {

@@ -17,7 +17,7 @@
   requests,
   setuptools,
   twine,
-  validate-email,
+  validate-email
 }:
 
 buildPythonPackage rec {

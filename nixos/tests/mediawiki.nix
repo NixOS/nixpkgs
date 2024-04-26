@@ -1,7 +1,7 @@
 {
   system ? builtins.currentSystem,
   config ? {},
-  pkgs ? import ../.. { inherit system config; },
+  pkgs ? import ../.. { inherit system config; }
 }:
 
 let

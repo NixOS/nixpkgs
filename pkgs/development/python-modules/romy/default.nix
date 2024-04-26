@@ -4,7 +4,7 @@
   fetchFromGitHub,
   setuptools,
   pythonOlder,
-  aiohttp,
+  aiohttp
 }:
 
 buildPythonPackage rec {

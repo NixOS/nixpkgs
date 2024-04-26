@@ -7,7 +7,7 @@
   fixup-yarn-lock,
   yarn,
   nixosTests,
-  nix-update-script,
+  nix-update-script
 }:
 
 stdenv.mkDerivation rec {

@@ -6,7 +6,7 @@
   makeWrapper,
   nix-update-script,
   steampipe,
-  testers,
+  testers
 }:
 
 buildGoModule rec {

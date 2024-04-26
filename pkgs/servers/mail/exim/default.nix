@@ -11,7 +11,7 @@
 , enableDMARC ? true, opendmarc
 , enableRedis ? false, hiredis
 , enableJSON ? false, jansson
-, enableSRS ? false,
+, enableSRS ? false
 }:
 let
   perl' = perl.withPackages (p: with p; [ FileFcntlLock ]);

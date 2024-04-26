@@ -6,7 +6,7 @@
   stdenv,
   nixosTests,
   # Boolean flags
-  withManpage ? true,
+  withManpage ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {

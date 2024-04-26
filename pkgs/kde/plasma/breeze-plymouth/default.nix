@@ -11,7 +11,7 @@
   osName ? null,
   osVersion ? null,
   topColor ? "black",
-  bottomColor ? "black",
+  bottomColor ? "black"
 }: let
   validColors = ["black" "cardboard_grey" "charcoal_grey" "icon_blue" "paper_white" "plasma_blue" "neon_blue" "neon_green"];
   resolvedLogoName =

@@ -2,7 +2,7 @@
   lib,
   buildDubPackage,
   fetchFromGitHub,
-  ncurses,
+  ncurses
 }:
 
 buildDubPackage rec {

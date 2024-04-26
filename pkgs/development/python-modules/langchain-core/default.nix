@@ -12,7 +12,7 @@
   pythonRelaxDepsHook,
   pyyaml,
   requests,
-  tenacity,
+  tenacity
 }:
 
 buildPythonPackage rec {

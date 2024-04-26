@@ -3,7 +3,7 @@
   buildDubPackage,
   fetchFromGitHub,
   ncurses,
-  zlib,
+  zlib
 }:
 
 buildDubPackage rec {

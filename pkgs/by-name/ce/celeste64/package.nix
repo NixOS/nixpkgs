@@ -16,7 +16,7 @@
   xorg,
   libxkbcommon,
   libdrm,
-  withSELinux ? false,
+  withSELinux ? false
 }:
 
 buildDotnetModule rec {

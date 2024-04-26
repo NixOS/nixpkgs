@@ -24,7 +24,7 @@
   enableNewDynarec ? enableDynarec && stdenv.hostPlatform.isAarch,
   enableVncRenderer ? false,
   unfreeEnableDiscord ? false,
-  unfreeEnableRoms ? false,
+  unfreeEnableRoms ? false
 }:
 
 stdenv.mkDerivation (finalAttrs: {

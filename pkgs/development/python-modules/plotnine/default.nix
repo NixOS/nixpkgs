@@ -12,7 +12,7 @@
   scikit-misc,
   scipy,
   setuptools-scm,
-  statsmodels,
+  statsmodels
 }:
 
 buildPythonPackage rec {

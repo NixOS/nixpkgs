@@ -12,7 +12,7 @@ let
 
   makeAutobackupTest = {
     package,
-    name ? mkTestName package,
+    name ? mkTestName package
   }: makeTest {
     name = "${name}-automysqlbackup";
     meta.maintainers = [ lib.maintainers.aanderse ];

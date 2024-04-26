@@ -11,7 +11,7 @@
   nixosTests,
   pkg-config,
   python3,
-  util-linux,
+  util-linux
 }:
 
 stdenv.mkDerivation rec {

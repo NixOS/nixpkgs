@@ -5,7 +5,7 @@
   fetchFromGitHub,
   chromium,
   chromedriver,
-  python3,
+  python3
 }:
 buildNpmPackage {
   pname = "single-file-cli";

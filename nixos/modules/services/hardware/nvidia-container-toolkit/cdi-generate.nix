@@ -6,7 +6,7 @@
   nvidia-container-toolkit,
   nvidia-driver,
   runtimeShell,
-  writeScriptBin,
+  writeScriptBin
 }: let
   mkMount = {hostPath, containerPath, mountOptions}: {
     inherit hostPath containerPath;

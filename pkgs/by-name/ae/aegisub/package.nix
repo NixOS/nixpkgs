@@ -42,7 +42,7 @@
   portaudioSupport ? true,
   pulseaudioSupport ? config.pulseaudio or stdenv.isLinux,
   spellcheckSupport ? true,
-  useBundledLuaJIT ? false,
+  useBundledLuaJIT ? false
 }:
 
 let

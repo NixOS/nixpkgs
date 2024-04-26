@@ -3,7 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   cryptsetup,
-  pkg-config,
+  pkg-config
 }:
 rustPlatform.buildRustPackage rec {
   pname = "fido2luks";

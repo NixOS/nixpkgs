@@ -11,7 +11,7 @@
   pytest-asyncio,
   requests,
   pythonOlder,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

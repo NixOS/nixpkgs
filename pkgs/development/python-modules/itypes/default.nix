@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pytest,
+  pytest
 }:
 
 buildPythonPackage rec {

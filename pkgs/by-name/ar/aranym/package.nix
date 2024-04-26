@@ -5,7 +5,7 @@
   fetchFromGitHub,
   libGLU,
   pkg-config,
-  stdenv,
+  stdenv
 }:
 
 stdenv.mkDerivation (finalAttrs: {

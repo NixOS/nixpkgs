@@ -22,7 +22,7 @@
   stdenv,
   testers,
   webkitgtk,
-  wrapGAppsHook,
+  wrapGAppsHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {

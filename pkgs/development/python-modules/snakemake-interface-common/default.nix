@@ -6,7 +6,7 @@
   fetchFromGitHub,
   poetry-core,
   pythonOlder,
-  pytestCheckHook,
+  pytestCheckHook
 }:
 
 buildPythonPackage rec {

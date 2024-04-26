@@ -3,7 +3,7 @@
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
-  openssl,
+  openssl
 }:
 rustPlatform.buildRustPackage rec {
   pname = "aw-watcher-window-wayland";

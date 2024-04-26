@@ -22,7 +22,7 @@
   pythonOlder,
   pythonRelaxDepsHook,
   redshift-connector,
-  requests-aws4auth,
+  requests-aws4auth
 }:
 
 buildPythonPackage rec {

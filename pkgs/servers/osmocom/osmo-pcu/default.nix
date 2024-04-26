@@ -4,7 +4,7 @@
 , autoreconfHook
 , pkg-config
 , libosmocore
-,
+
 }:
 
 let

@@ -16,7 +16,7 @@
   setuptools,
   speechrecognition,
   tzdata,
-  w3lib,
+  w3lib
 }:
 
 buildPythonPackage rec {

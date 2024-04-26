@@ -9,7 +9,7 @@
   pytestCheckHook,
   pythonOlder,
   pytz,
-  six,
+  six
 }:
 
 buildPythonPackage rec {

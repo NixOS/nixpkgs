@@ -1,7 +1,7 @@
 {
   buildEnv,
   influxdb2-server,
-  influxdb2-cli,
+  influxdb2-cli
 }:
 buildEnv {
   name = "influxdb2";

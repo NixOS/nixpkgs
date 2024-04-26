@@ -19,7 +19,7 @@
   pythonOlder,
   requests,
   setuptools-scm,
-  typing-extensions,
+  typing-extensions
 }:
 
 buildPythonPackage rec {

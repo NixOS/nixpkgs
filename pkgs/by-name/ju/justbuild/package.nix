@@ -21,7 +21,7 @@
   jq,
 
   curl,
-  libarchive,
+  libarchive
 }:
 let stdenv = gccStdenv;
 in

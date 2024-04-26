@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qt5compat,
-  qtmultimedia,
+  qtmultimedia
 }:
 mkKdeDerivation {
   pname = "konsole";

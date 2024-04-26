@@ -5,7 +5,7 @@
   karchive, kbookmarks, kcompletion, kconfig, kconfigwidgets, kcoreaddons,
   kdbusaddons, ki18n, kiconthemes, kitemviews, kjobwidgets, knotifications,
   kservice, ktextwidgets, kwallet, kwidgetsaddons, kwindowsystem, kxmlgui,
-  qtbase, qtscript, qtx11extras, solid, kcrash, kded,
+  qtbase, qtscript, qtx11extras, solid, kcrash, kded
 }:
 
 mkDerivation {

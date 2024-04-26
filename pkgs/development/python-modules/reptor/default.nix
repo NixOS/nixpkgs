@@ -28,7 +28,7 @@
   tomli-w,
   tomlkit,
   urllib3,
-  xmltodict,
+  xmltodict
 }:
 
 buildPythonPackage rec {

@@ -1,6 +1,6 @@
 {
   mkKdeDerivation,
-  libmusicbrainz5,
+  libmusicbrainz5
 }:
 mkKdeDerivation {
   pname = "libkcddb";

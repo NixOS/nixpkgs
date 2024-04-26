@@ -1,6 +1,6 @@
 {
   mkKdeDerivation,
-  extra-cmake-modules,
+  extra-cmake-modules
 }:
 mkKdeDerivation {
   pname = "kross-interpreters";

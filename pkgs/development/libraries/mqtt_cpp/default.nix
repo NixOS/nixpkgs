@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  boost,
+  boost
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mqtt_cpp";

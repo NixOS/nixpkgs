@@ -1,6 +1,6 @@
 {
   mkKdeDerivation,
-  qt5compat,
+  qt5compat
 }:
 mkKdeDerivation {
   pname = "skanlite";

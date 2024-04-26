@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qt5compat,
-  cyrus_sasl,
+  cyrus_sasl
 }:
 mkKdeDerivation {
   pname = "ksmtp";

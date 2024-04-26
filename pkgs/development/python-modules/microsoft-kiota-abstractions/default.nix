@@ -9,7 +9,7 @@
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
-  std-uritemplate,
+  std-uritemplate
 }:
 
 buildPythonPackage rec {

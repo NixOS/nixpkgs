@@ -4,7 +4,7 @@
   pkg-config,
   libX11,
   libXft,
-  libXrandr,
+  libXrandr
 }:
 
 stdenv.mkDerivation (finalAttrs: {

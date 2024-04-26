@@ -6,7 +6,7 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  ukkonen,
+  ukkonen
 }:
 
 buildPythonPackage rec {

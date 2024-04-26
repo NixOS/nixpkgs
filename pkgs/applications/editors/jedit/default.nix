@@ -7,7 +7,7 @@
   jre,
   xmlstarlet,
   makeWrapper,
-  stripJavaArchivesHook,
+  stripJavaArchivesHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {

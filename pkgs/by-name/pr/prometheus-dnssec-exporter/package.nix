@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, }:
+{ lib, buildGoModule, fetchFromGitHub }:
 buildGoModule {
   pname = "prometheus-dnssec-exporter";
   version = "0-unstable-2023-03-05";

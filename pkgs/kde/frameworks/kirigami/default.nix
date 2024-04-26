@@ -3,7 +3,7 @@
   qtsvg,
   qttools,
   qtdeclarative,
-  qt5compat,
+  qt5compat
 }:
 mkKdeDerivation {
   pname = "kirigami";

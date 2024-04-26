@@ -7,7 +7,7 @@
   pythonOlder,
   pyzipper,
   setuptools,
-  striprtf,
+  striprtf
 }:
 
 buildPythonPackage rec {

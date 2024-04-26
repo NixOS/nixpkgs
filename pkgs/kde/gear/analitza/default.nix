@@ -4,7 +4,7 @@
   qtsvg,
   qttools,
   qtdeclarative,
-  eigen,
+  eigen
 }:
 mkKdeDerivation {
   pname = "analitza";

@@ -5,7 +5,7 @@
   fetchpatch,
   pythonOlder,
   setuptools,
-  versioneer,
+  versioneer
 }:
 
 buildPythonPackage rec {

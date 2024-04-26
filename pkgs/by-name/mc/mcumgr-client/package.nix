@@ -6,7 +6,7 @@
   pkg-config,
   udev,
   stdenv,
-  darwin,
+  darwin
 }:
 
 rustPlatform.buildRustPackage rec {

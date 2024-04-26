@@ -363,7 +363,7 @@ in {
       :::
 
     */
-    fileset,
+    fileset
   }:
     let
       # We cannot rename matched attribute arguments, so let's work around it with an extra `let in` statement
@@ -835,7 +835,7 @@ in {
 
         If `true`, this is equivalent to passing the [--recurse-submodules](https://git-scm.com/docs/git-ls-files#Documentation/git-ls-files.txt---recurse-submodules) flag to `git ls-files`.
       */
-      recurseSubmodules ? false,
+      recurseSubmodules ? false
     }:
     /*
       The [path](https://nixos.org/manual/nix/stable/language/values#type-path) to the working directory of a local Git repository.

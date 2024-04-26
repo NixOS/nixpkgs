@@ -3,7 +3,7 @@
   fetchFromGitLab,
   rustPlatform,
   llvmPackages,
-  xen-light,
+  xen-light
 }:
 rustPlatform.buildRustPackage rec {
   pname = "xen-guest-agent";

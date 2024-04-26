@@ -4,7 +4,7 @@
   qtwebchannel,
   qtwebengine,
   qttools,
-  python3Packages,
+  python3Packages
 }:
 mkKdeDerivation {
   pname = "falkon";

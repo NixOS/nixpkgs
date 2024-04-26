@@ -1,7 +1,7 @@
 {
   lib,
   buildDubPackage,
-  fetchFromGitHub,
+  fetchFromGitHub
 }:
 
 buildDubPackage {

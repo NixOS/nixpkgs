@@ -7,7 +7,7 @@
   poetry-core,
   pytestCheckHook,
   pythonOlder,
-  xmldiff,
+  xmldiff
 }:
 
 buildPythonPackage rec {

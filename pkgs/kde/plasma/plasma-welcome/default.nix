@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qtsvg,
-  kuserfeedback,
+  kuserfeedback
 }:
 mkKdeDerivation {
   pname = "plasma-welcome";

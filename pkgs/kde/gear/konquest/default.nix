@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qtscxml,
-  qtsvg,
+  qtsvg
 }:
 mkKdeDerivation {
   pname = "konquest";

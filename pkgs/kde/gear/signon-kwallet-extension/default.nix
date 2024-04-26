@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   pkg-config,
-  signond,
+  signond
 }:
 mkKdeDerivation {
   pname = "signon-kwallet-extension";

@@ -14,7 +14,7 @@
   pythonOlder,
   respx,
   syrupy,
-  tenacity,
+  tenacity
 }:
 
 buildPythonPackage rec {

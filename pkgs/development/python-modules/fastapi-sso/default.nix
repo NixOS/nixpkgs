@@ -12,7 +12,7 @@
   pytest-asyncio,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
+  pythonOlder
 }:
 
 buildPythonPackage rec {

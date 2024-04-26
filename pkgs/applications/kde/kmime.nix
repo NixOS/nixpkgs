@@ -1,7 +1,7 @@
 {
   mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, ki18n,
-  kcodecs, qtbase,
+  kcodecs, qtbase
 }:
 
 mkDerivation {

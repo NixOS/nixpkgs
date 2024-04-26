@@ -9,7 +9,7 @@
   setuptools,
   setuptools-scm,
   toml,
-  wheel,
+  wheel
 }:
 
 buildPythonPackage rec {

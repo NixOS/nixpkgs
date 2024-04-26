@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   pam,
-  qqc2-breeze-style,
+  qqc2-breeze-style
 }:
 mkKdeDerivation {
   pname = "kscreenlocker";

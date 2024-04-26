@@ -2,7 +2,7 @@
 , gdk-pixbuf, glib, gtk3, libX11, libXScrnSaver, libXcomposite, libXcursor
 , libXdamage, libXext, libXfixes, libXi, libXrandr, libXrender, libXtst, libdrm
 , libpulseaudio, libxcb, libxkbcommon, libxshmfence, mesa, nspr, nss, pango
-, udev, }:
+, udev }:
 
 let
   common = import ./common.nix { inherit fetchurl; };

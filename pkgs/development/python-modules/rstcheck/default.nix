@@ -11,7 +11,7 @@
   pythonOlder,
   rstcheck-core,
   typer,
-  types-docutils,
+  types-docutils
 }:
 
 buildPythonPackage rec {

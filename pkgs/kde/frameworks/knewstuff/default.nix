@@ -2,7 +2,7 @@
   mkKdeDerivation,
   qtdeclarative,
   qttools,
-  kcmutils,
+  kcmutils
 }:
 mkKdeDerivation {
   pname = "knewstuff";

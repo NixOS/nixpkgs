@@ -7,7 +7,7 @@
   pythonOlder,
   quil,
   rustPlatform,
-  syrupy,
+  syrupy
 }:
 
 buildPythonPackage rec {

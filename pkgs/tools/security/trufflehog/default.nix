@@ -3,7 +3,7 @@
   fetchFromGitHub,
   buildGoModule,
   testers,
-  trufflehog,
+  trufflehog
 }:
 
 buildGoModule rec {

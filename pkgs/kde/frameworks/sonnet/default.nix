@@ -4,7 +4,7 @@
   qttools,
   pkg-config,
   aspell,
-  hunspell,
+  hunspell
 }:
 mkKdeDerivation {
   pname = "sonnet";

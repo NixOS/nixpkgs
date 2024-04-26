@@ -256,7 +256,7 @@ rec {
 
          Type: AttrSet
        */
-      derivationArgs ? { },
+      derivationArgs ? { }
     }:
     writeTextFile {
       inherit name meta derivationArgs;

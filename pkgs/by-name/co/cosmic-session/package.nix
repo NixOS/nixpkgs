@@ -7,7 +7,7 @@
   dbus,
   rust,
   stdenv,
-  xdg-desktop-portal-cosmic,
+  xdg-desktop-portal-cosmic
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-session";

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   nodejs,
   s,
-  trivialBuild,
+  trivialBuild
 }:
 trivialBuild {
   pname = "copilot";

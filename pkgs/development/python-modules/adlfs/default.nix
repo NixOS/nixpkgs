@@ -10,7 +10,7 @@
   fsspec,
   pythonOlder,
   setuptools,
-  setuptools-scm,
+  setuptools-scm
 }:
 
 buildPythonPackage rec {

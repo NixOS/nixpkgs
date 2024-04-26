@@ -3,7 +3,7 @@
   lib,
   fetchurl,
   nixosTests,
-  dataDir ? "/var/lib/monica",
+  dataDir ? "/var/lib/monica"
 }:
 stdenv.mkDerivation rec {
   pname = "monica";

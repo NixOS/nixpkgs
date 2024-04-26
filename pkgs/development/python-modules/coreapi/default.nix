@@ -7,7 +7,7 @@
   itypes,
   uritemplate,
   requests,
-  pytest,
+  pytest
 }:
 
 buildPythonPackage rec {

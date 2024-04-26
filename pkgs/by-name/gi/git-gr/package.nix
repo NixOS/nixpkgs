@@ -9,7 +9,7 @@
   darwin,
   nix-update-script,
   pkg-config,
-  openssl,
+  openssl
 }:
 let
   canRunGitGr = stdenv.hostPlatform.emulatorAvailable buildPackages;

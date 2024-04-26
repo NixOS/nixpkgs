@@ -1,7 +1,7 @@
 {
   lib,
   stdenvNoCC,
-  fetchFromGitHub,
+  fetchFromGitHub
 }:
 stdenvNoCC.mkDerivation {
   pname = "catppuccin-qt5ct";

@@ -7,7 +7,7 @@
   poetry-core,
   pytestCheckHook,
   pythonRelaxDepsHook,
-  pythonOlder,
+  pythonOlder
 }:
 
 buildPythonPackage rec {

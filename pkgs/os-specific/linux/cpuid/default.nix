@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  perl,
+  perl
 }:
 
 stdenv.mkDerivation rec {

@@ -76,7 +76,7 @@ in rec {
     preBuild ? "",
     postBuild ? "",
     workspaceDependencies ? [], # List of yarn packages
-    packageResolutions ? {},
+    packageResolutions ? {}
   }:
     let
       extraNativeBuildInputs =

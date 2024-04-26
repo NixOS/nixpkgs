@@ -49,7 +49,7 @@ in
   fetcher ? default-fetcher,
   location,
   release ? {},
-  releaseRev ? (v: v),
+  releaseRev ? (v: v)
 }:
 let isVersion      = x: isString x && match "^/.*" x == null && release?${x};
     shortVersion   = x: if (isString x && match "^/.*" x == null)

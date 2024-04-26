@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, python3
 , bdftopcf, xorg
-, libfaketime,
+, libfaketime
 }:
 
 stdenv.mkDerivation rec {

@@ -11,7 +11,7 @@
   gnugrep,
   gnused,
   socat,
-  wget,
+  wget
 }:
 stdenv.mkDerivation {
   pname = "simple-dlna-browser";

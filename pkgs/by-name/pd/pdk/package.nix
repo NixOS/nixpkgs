@@ -5,7 +5,7 @@
   lib,
   makeWrapper,
   pdk,
-  testers,
+  testers
 }:
 
 bundlerApp {

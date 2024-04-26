@@ -6,7 +6,7 @@
   eigen,
   shared-mime-info,
   gsl,
-  libqalculate,
+  libqalculate
 }:
 mkKdeDerivation {
   pname = "step";

@@ -28,7 +28,7 @@
   tornado,
   urllib3,
   webob,
-  wrapt,
+  wrapt
 }:
 
 buildPythonPackage rec {

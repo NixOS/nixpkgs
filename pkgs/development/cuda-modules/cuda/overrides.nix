@@ -40,7 +40,7 @@ filterAndCreateOverrides {
       lib,
       libcublas,
       numactl,
-      rdma-core,
+      rdma-core
     }:
     prevAttrs: {
       buildInputs = prevAttrs.buildInputs ++ [
@@ -60,7 +60,7 @@ filterAndCreateOverrides {
       lib,
       libcublas,
       libcusparse ? null,
-      libnvjitlink ? null,
+      libnvjitlink ? null
     }:
     prevAttrs: {
       buildInputs =
@@ -84,7 +84,7 @@ filterAndCreateOverrides {
     {
       cudaAtLeast,
       lib,
-      libnvjitlink ? null,
+      libnvjitlink ? null
     }:
     prevAttrs: {
       buildInputs =
@@ -156,7 +156,7 @@ filterAndCreateOverrides {
     {
       cudaAtLeast,
       gmp,
-      lib,
+      lib
     }:
     prevAttrs: {
       buildInputs =
@@ -170,7 +170,7 @@ filterAndCreateOverrides {
       backendStdenv,
       cuda_cudart,
       lib,
-      setupCudaHook,
+      setupCudaHook
     }:
     prevAttrs: {
       # Patch the nvcc.profile.
@@ -240,7 +240,7 @@ filterAndCreateOverrides {
       libcurand,
       libGLU,
       libglvnd,
-      mesa,
+      mesa
     }:
     prevAttrs: {
       buildInputs = prevAttrs.buildInputs ++ [
@@ -257,7 +257,7 @@ filterAndCreateOverrides {
     {
       lib,
       qt5 ? null,
-      qt6 ? null,
+      qt6 ? null
     }:
     prevAttrs:
     let
@@ -289,7 +289,7 @@ filterAndCreateOverrides {
       rdma-core,
       ucx,
       wayland,
-      xorg,
+      xorg
     }:
     prevAttrs:
     let

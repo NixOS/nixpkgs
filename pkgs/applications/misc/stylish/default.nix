@@ -8,7 +8,7 @@
   file,
   jq,
   util-linux,
-  wget,
+  wget
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "stylish";

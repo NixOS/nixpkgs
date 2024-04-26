@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  sabnzbd,
+  sabnzbd
 }:
 buildPythonPackage rec {
   pname = "sabctools";

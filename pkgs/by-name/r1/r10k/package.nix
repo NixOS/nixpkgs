@@ -7,7 +7,7 @@
   lib,
   makeWrapper,
   r10k,
-  testers,
+  testers
 }:
 
 bundlerApp {

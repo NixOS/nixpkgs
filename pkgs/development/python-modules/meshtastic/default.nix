@@ -17,7 +17,7 @@
   requests,
   setuptools,
   tabulate,
-  timeago,
+  timeago
 }:
 
 buildPythonPackage rec {

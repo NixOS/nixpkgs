@@ -1,6 +1,6 @@
 {
   mkKdeDerivation,
-  libical,
+  libical
 }:
 mkKdeDerivation {
   pname = "kcalendarcore";

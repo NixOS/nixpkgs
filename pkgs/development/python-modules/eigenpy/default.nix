@@ -8,7 +8,7 @@
   eigen,
   jrl-cmakemodules,
   numpy,
-  scipy,
+  scipy
 }:
 
 stdenv.mkDerivation (finalAttrs: {

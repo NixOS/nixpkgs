@@ -2,7 +2,7 @@
   system ? builtins.currentSystem,
   config ? {},
   pkgs ? import ../../.. {inherit system config;},
-  handleTestOn,
+  handleTestOn
 }: {
   container = import ./container.nix {inherit system pkgs;};
   nftables = import ./nftables.nix {inherit system pkgs;};

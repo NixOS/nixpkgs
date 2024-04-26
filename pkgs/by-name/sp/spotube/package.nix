@@ -14,7 +14,7 @@
   libnotify,
   libsecret,
   mpv-unwrapped,
-  xdg-user-dirs,
+  xdg-user-dirs
 }:
 
 let

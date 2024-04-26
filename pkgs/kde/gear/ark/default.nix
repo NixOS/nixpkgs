@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   libarchive,
-  libzip,
+  libzip
 }:
 mkKdeDerivation {
   pname = "ark";

@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  ocamlPackages,
+  ocamlPackages
 }:
 
 ocamlPackages.buildDunePackage rec {

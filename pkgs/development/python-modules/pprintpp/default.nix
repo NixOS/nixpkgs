@@ -8,7 +8,7 @@
   pynose,
   python,
   pythonOlder,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

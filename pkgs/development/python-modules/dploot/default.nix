@@ -8,7 +8,7 @@
   poetry-core,
   pyasn1,
   pythonOlder,
-  pythonRelaxDepsHook,
+  pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {

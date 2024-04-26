@@ -5,7 +5,7 @@
   kmod,
   lib,
   python3,
-  toybox,
+  toybox
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "handheld-daemon";

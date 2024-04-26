@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qtdeclarative,
-  python3,
+  python3
 }:
 mkKdeDerivation {
   pname = "ki18n";

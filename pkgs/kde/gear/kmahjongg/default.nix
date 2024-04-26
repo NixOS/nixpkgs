@@ -2,7 +2,7 @@
   mkKdeDerivation,
   qtdeclarative,
   qtsvg,
-  libkmahjongg,
+  libkmahjongg
 }:
 mkKdeDerivation {
   pname = "kmahjongg";

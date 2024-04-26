@@ -4,7 +4,7 @@
   fetchurl,
   omniorb,
   pkg-config,
-  python3,
+  python3
 }:
 
 stdenv.mkDerivation (finalAttrs: {

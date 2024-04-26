@@ -12,7 +12,7 @@
   pytestCheckHook,
   pythonOlder,
   typer,
-  urllib3,
+  urllib3
 }:
 
 buildPythonPackage rec {

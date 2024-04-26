@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qtmultimedia,
-  libvlc,
+  libvlc
 }:
 mkKdeDerivation {
   pname = "elisa";

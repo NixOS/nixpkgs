@@ -16,7 +16,7 @@
   pythonRelaxDepsHook,
   requests,
   tqdm,
-  typing-extensions,
+  typing-extensions
 }:
 
 buildPythonPackage rec {

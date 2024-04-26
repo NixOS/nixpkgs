@@ -36,7 +36,7 @@
   withOsl ? true,
   withTools ? false,
   withUsdView ? false,
-  writeShellScriptBin,
+  writeShellScriptBin
 }:
 
 let

@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromGitHub
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "endlines";

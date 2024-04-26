@@ -22,7 +22,7 @@
   responses,
   setuptools-scm,
   setuptools,
-  snap-helpers,
+  snap-helpers
 }:
 
 buildPythonPackage rec {

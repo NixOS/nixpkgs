@@ -2,7 +2,7 @@
   mkKdeDerivation,
   tesseractLanguages ? [],
   tesseract5,
-  leptonica,
+  leptonica
 }:
 mkKdeDerivation {
   pname = "skanpage";

@@ -3,7 +3,7 @@
   mkKdeDerivation,
   fetchurl,
   qttools,
-  qtsvg,
+  qtsvg
 }:
 mkKdeDerivation rec {
   pname = "kdiagram";

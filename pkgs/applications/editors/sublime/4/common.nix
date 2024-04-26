@@ -2,7 +2,7 @@
   buildVersion,
   dev ? false,
   aarch64sha256,
-  x64sha256,
+  x64sha256
 }:
 
 {
@@ -23,7 +23,7 @@
   curl,
   openssl_1_1,
   bzip2,
-  sqlite,
+  sqlite
 }:
 
 let

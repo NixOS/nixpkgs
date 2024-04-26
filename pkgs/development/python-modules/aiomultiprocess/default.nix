@@ -4,7 +4,7 @@
   fetchFromGitHub,
   flit-core,
   pytestCheckHook,
-  pythonOlder,
+  pythonOlder
 }:
 
 buildPythonPackage rec {

@@ -30,7 +30,7 @@
   # - mkVersionedPackageName
   # - package
   # - ...
-  fixupFn ? (throw "fixupFn must be provided"),
+  fixupFn ? (throw "fixupFn must be provided")
 }:
 let
   inherit (lib)

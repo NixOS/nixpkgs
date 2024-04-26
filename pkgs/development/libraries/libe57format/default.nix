@@ -5,7 +5,7 @@
   fetchFromGitHub,
   boost,
   xercesc,
-  icu,
+  icu
 }:
 
 stdenv.mkDerivation rec {

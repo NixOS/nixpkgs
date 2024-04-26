@@ -5,7 +5,7 @@
   poetry-core,
   pytest,
   pytestCheckHook,
-  pytest-describe,
+  pytest-describe
 }:
 
 buildPythonPackage {

@@ -14,7 +14,7 @@
   jax,
   jaxlib,
   tensorflow,
-  setuptools,
+  setuptools
 }:
 buildPythonPackage rec {
   pname = "nanobind";

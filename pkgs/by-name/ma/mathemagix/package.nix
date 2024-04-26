@@ -7,7 +7,7 @@
   bison,
   libtool,
   gmp,
-  mpfr,
+  mpfr
 }:
 
 stdenv.mkDerivation (finalAttrs: {

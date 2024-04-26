@@ -1,6 +1,6 @@
 {
   mkKdeDerivation,
-  qtmultimedia,
+  qtmultimedia
 }:
 mkKdeDerivation {
   pname = "artikulate";

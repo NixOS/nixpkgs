@@ -7,7 +7,7 @@
   qtbase,
   wrapQtAppsHook,
   libGL,
-  libGLU,
+  libGLU
 }:
 
 stdenv.mkDerivation (finalAttrs: {

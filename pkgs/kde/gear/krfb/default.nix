@@ -2,7 +2,7 @@
   mkKdeDerivation,
   qtwayland,
   libvncserver,
-  xorg,
+  xorg
 }:
 mkKdeDerivation {
   pname = "krfb";

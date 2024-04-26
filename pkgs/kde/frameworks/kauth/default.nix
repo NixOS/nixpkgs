@@ -1,6 +1,6 @@
 {
   mkKdeDerivation,
-  qttools,
+  qttools
 }:
 mkKdeDerivation {
   pname = "kauth";

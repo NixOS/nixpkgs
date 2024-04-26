@@ -4,7 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  wayland,
+  wayland
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -10,7 +10,7 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  websockets,
+  websockets
 }:
 
 buildPythonPackage rec {

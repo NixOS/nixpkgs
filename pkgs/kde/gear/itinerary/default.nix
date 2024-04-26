@@ -4,7 +4,7 @@
   qtlocation,
   qtpositioning,
   shared-mime-info,
-  libical,
+  libical
 }:
 mkKdeDerivation {
   pname = "itinerary";

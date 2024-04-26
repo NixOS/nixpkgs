@@ -2,7 +2,7 @@
   fetchFromGitHub,
   lib,
   openssl,
-  rustPlatform,
+  rustPlatform
 }:
 rustPlatform.buildRustPackage rec {
   pname = "heygpt";

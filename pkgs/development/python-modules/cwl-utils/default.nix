@@ -13,7 +13,7 @@
   requests,
   ruamel-yaml,
   schema-salad,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

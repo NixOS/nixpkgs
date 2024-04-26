@@ -17,7 +17,7 @@
   protobuf,
   vulkan-loader,
   wayland,
-  python3Packages,
+  python3Packages
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -15,7 +15,7 @@
   shared-mime-info,
   libappimage,
   xorg,
-  kio,
+  kio
 }:
 mkKdeDerivation {
   pname = "kio-extras";

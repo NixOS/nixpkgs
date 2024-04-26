@@ -4,7 +4,7 @@
   linux-pam,
   rustPlatform,
   testers,
-  lemurs,
+  lemurs
 }:
 rustPlatform.buildRustPackage rec {
   pname = "lemurs";

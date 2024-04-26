@@ -8,7 +8,7 @@
   lib,
   python3,
   stdenv,
-  tbb,
+  tbb
 }:
 
 stdenv.mkDerivation rec {

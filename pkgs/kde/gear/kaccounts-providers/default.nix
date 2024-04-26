@@ -2,7 +2,7 @@
   mkKdeDerivation,
   intltool,
   qtdeclarative,
-  qtwebengine,
+  qtwebengine
 }:
 mkKdeDerivation {
   pname = "kaccounts-providers";

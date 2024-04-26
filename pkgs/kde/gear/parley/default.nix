@@ -2,7 +2,7 @@
   mkKdeDerivation,
   qtsvg,
   qtmultimedia,
-  qtwebengine,
+  qtwebengine
 }:
 mkKdeDerivation {
   pname = "parley";

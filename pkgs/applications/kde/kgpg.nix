@@ -3,7 +3,7 @@
   extra-cmake-modules, kdoctools, ki18n, makeWrapper,
   akonadi-contacts, gnupg, karchive, kcodecs, kcontacts, kcoreaddons,
   kcrash, kdbusaddons, kiconthemes, kjobwidgets, kio, knotifications, kservice,
-  ktextwidgets, kxmlgui, kwidgetsaddons, kwindowsystem, qgpgme,
+  ktextwidgets, kxmlgui, kwidgetsaddons, kwindowsystem, qgpgme
 }:
 
 mkDerivation {

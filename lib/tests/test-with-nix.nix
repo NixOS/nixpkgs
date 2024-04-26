@@ -11,7 +11,7 @@
   pkgs,
   lib,
   # Only ever use this nix; see comment at top
-  nix,
+  nix
 }:
 
 pkgs.runCommand "nixpkgs-lib-tests-nix-${nix.version}" {

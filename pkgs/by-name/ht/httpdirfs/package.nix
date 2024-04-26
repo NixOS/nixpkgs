@@ -10,7 +10,7 @@
   nix-update-script,
   pkg-config,
   stdenv,
-  testers,
+  testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {

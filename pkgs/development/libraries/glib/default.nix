@@ -270,7 +270,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkHardcodeGsettingsPatch =
       {
         src,
-        glib-schema-to-var,
+        glib-schema-to-var
       }:
       builtins.trace
         "glib.mkHardcodeGsettingsPatch is deprecated, please use makeHardcodeGsettingsPatch instead"

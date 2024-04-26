@@ -4,7 +4,7 @@
   bison,
   flex,
   boost,
-  python3,
+  python3
 }:
 mkKdeDerivation {
   pname = "kopeninghours";

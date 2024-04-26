@@ -8,7 +8,7 @@
   poetry-core,
   pytestCheckHook,
   pythonOlder,
-  sensor-state-data,
+  sensor-state-data
 }:
 
 buildPythonPackage rec {

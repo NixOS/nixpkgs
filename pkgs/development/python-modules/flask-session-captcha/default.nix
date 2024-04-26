@@ -9,7 +9,7 @@
   markupsafe,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

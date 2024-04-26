@@ -4,7 +4,7 @@
   fetchFromGitHub,
   installShellFiles,
   qovery-cli,
-  testers,
+  testers
 }:
 
 buildGoModule rec {

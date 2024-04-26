@@ -5,7 +5,7 @@
   buildDotnetModule,
   dotnetCorePackages,
   zlib,
-  openssl,
+  openssl
 }:
 buildDotnetModule rec {
   pname = "wasabibackend";

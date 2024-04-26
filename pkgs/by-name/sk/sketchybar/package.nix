@@ -5,7 +5,7 @@
   darwin,
   fetchFromGitHub,
   testers,
-  nix-update-script,
+  nix-update-script
 }:
 
 let

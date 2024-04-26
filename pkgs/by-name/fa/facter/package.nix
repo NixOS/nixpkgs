@@ -14,7 +14,7 @@
   testers,
   util-linux,
   virt-what,
-  zfs,
+  zfs
 }:
 
 bundlerApp {

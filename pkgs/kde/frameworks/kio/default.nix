@@ -3,7 +3,7 @@
   qt5compat,
   qttools,
   acl,
-  attr,
+  attr
 }:
 mkKdeDerivation {
   pname = "kio";

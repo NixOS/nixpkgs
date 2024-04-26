@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qt5compat,
-  boost,
+  boost
 }:
 mkKdeDerivation {
   pname = "kactivitymanagerd";

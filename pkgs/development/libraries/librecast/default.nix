@@ -3,7 +3,7 @@
   fetchFromGitea,
   lcrq,
   lib,
-  libsodium,
+  libsodium
 }:
 stdenv.mkDerivation (finalAttrs: {
   name = "librecast";

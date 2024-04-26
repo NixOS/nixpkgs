@@ -16,7 +16,7 @@
   libXdmcp,
   libevdev,
   makeDesktopItem,
-  fetchurl,
+  fetchurl
 }: let
   version = "2022.3.0";
 

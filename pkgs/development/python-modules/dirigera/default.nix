@@ -7,7 +7,7 @@
   pythonOlder,
   requests,
   setuptools,
-  websocket-client,
+  websocket-client
 }:
 
 buildPythonPackage rec {

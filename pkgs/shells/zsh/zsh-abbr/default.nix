@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitHub,
+  fetchFromGitHub
 }:
 stdenv.mkDerivation rec {
   pname = "zsh-abbr";

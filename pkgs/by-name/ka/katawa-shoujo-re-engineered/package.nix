@@ -5,7 +5,7 @@
   makeDesktopItem,
   copyDesktopItems,
   makeWrapper,
-  renpy,
+  renpy
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "katawa-shoujo-re-engineered";

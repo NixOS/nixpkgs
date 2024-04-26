@@ -14,7 +14,7 @@
   qtile,
   requests,
   setuptools-scm,
-  xorgserver,
+  xorgserver
 }:
 
 buildPythonPackage rec {

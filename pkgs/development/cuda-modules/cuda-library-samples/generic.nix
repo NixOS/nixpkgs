@@ -5,7 +5,7 @@
   cmake,
   addOpenGLRunpath,
   cudatoolkit,
-  cutensor,
+  cutensor
 }:
 
 let

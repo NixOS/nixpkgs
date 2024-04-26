@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  conda-package-streaming,
+  conda-package-streaming
 }:
 buildPythonPackage rec {
   pname = "conda-package-handling";

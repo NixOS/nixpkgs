@@ -3,7 +3,7 @@
   qtsvg,
   qtwayland,
   wayland,
-  pkg-config,
+  pkg-config
 }:
 mkKdeDerivation {
   pname = "libplasma";

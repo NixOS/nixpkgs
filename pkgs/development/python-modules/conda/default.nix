@@ -23,7 +23,7 @@
   truststore,
   # runtime options
   defaultEnvPath ? "~/.conda/envs", # default path to store conda environments
-  defaultPkgPath ? "~/.conda/pkgs", # default path to store download conda packages
+  defaultPkgPath ? "~/.conda/pkgs" # default path to store download conda packages
 }:
 buildPythonPackage rec {
   pname = "conda";

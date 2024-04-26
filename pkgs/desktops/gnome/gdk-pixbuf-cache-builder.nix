@@ -4,11 +4,11 @@
   gdk-pixbuf,
   lib,
   stdenv,
-  buildPackages,
+  buildPackages
 }:
 
 {
-  extraLoaders,
+  extraLoaders
 }:
 
 let

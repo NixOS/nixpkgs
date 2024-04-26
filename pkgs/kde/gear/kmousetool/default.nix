@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qtmultimedia,
-  xorg,
+  xorg
 }:
 mkKdeDerivation {
   pname = "kmousetool";

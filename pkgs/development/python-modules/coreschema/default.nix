@@ -3,7 +3,7 @@
   fetchFromGitHub,
   buildPythonPackage,
   jinja2,
-  pytest,
+  pytest
 }:
 
 buildPythonPackage rec {

@@ -7,7 +7,7 @@
   poetry-core,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
+  pythonOlder
 }:
 
 buildPythonPackage rec {

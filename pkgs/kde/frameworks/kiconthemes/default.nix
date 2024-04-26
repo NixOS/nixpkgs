@@ -2,7 +2,7 @@
   mkKdeDerivation,
   qtdeclarative,
   qtsvg,
-  qttools,
+  qttools
 }:
 mkKdeDerivation {
   pname = "kiconthemes";

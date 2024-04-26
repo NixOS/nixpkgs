@@ -2,7 +2,7 @@
   mkKdeDerivation,
   qtdeclarative,
   qttools,
-  sonnet,
+  sonnet
 }:
 mkKdeDerivation {
   pname = "qqc2-desktop-style";

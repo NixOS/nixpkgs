@@ -15,7 +15,7 @@
   # SRI hash
   hash,
   # allow overriding the derivation name
-  name ? null,
+  name ? null
 }:
 let
   urls' = urls ++ lib.optional (url != null) url;

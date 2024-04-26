@@ -1,7 +1,7 @@
 {
   mkDerivation, fetchFromGitLab, lib,
   extra-cmake-modules, qttools,
-  qtbase, qtsvg,
+  qtbase, qtsvg
 }:
 
 mkDerivation rec {

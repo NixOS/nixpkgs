@@ -3,7 +3,7 @@
   stdenv,
   vscode-utils,
   autoPatchelfHook,
-  libxcrypt-legacy,
+  libxcrypt-legacy
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {

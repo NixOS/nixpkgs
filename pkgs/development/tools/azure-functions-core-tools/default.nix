@@ -4,7 +4,7 @@
   fetchFromGitHub,
   buildDotnetModule,
   buildGoModule,
-  dotnetCorePackages,
+  dotnetCorePackages
 }:
 let
   version = "4.0.5455";

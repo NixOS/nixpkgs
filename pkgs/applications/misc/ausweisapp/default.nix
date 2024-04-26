@@ -11,7 +11,7 @@
   qtsvg,
   qttools,
   qtwayland,
-  qtwebsockets,
+  qtwebsockets
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ausweisapp";

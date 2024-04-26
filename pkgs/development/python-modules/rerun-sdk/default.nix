@@ -13,7 +13,7 @@
   typing-extensions,
   pytestCheckHook,
   python,
-  libiconv,
+  libiconv
 }:
 
 buildPythonPackage {

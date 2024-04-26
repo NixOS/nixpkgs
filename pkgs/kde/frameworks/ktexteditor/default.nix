@@ -2,7 +2,7 @@
   mkKdeDerivation,
   qtdeclarative,
   qtspeech,
-  editorconfig-core-c,
+  editorconfig-core-c
 }:
 mkKdeDerivation {
   pname = "ktexteditor";

@@ -6,7 +6,7 @@
   django,
   pytestCheckHook,
   pythonOlder,
-  pytest-django,
+  pytest-django
 }:
 
 buildPythonPackage rec {

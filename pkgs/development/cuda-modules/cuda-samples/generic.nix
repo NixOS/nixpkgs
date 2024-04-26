@@ -11,7 +11,7 @@
   hash,
   lib,
   pkg-config,
-  stdenv,
+  stdenv
 }:
 let
   inherit (lib) lists strings;

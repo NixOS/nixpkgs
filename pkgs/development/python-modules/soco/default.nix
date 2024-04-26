@@ -13,7 +13,7 @@
   requests,
   requests-mock,
   setuptools,
-  xmltodict,
+  xmltodict
 }:
 
 buildPythonPackage rec {

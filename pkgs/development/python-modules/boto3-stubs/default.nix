@@ -361,7 +361,7 @@
   pythonOlder,
   setuptools,
   types-s3transfer,
-  typing-extensions,
+  typing-extensions
 }:
 
 buildPythonPackage rec {

@@ -3,7 +3,7 @@
 
   # Projects the test configuration into a the desired value; usually
   # the test runner: `config: config.test`.
-  callTest,
+  callTest
 
 }:
 # The return value of this function will be an attrset with arbitrary depth and

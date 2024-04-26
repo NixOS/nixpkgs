@@ -2,7 +2,7 @@
   mkDerivation,
   extra-cmake-modules,
   kcoreaddons, ki18n, kitemviews, kservice, kwidgetsaddons, qtbase,
-  qtdeclarative,
+  qtdeclarative
 }:
 
 mkDerivation {

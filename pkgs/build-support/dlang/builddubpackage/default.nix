@@ -5,7 +5,7 @@
   linkFarm,
   dub,
   ldc,
-  removeReferencesTo,
+  removeReferencesTo
 }:
 
 # See https://nixos.org/manual/nixpkgs/unstable#dlang for more detailed usage information
@@ -32,7 +32,7 @@ let
     {
       pname,
       version,
-      sha256,
+      sha256
     }:
     {
       inherit pname version;

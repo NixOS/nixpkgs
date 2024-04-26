@@ -2,7 +2,7 @@
   lib,
   stdenv,
   cmake,
-  fetchFromGitHub,
+  fetchFromGitHub
 }:
 
 stdenv.mkDerivation {

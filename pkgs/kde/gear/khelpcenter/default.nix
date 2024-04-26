@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qtwebengine,
-  xapian,
+  xapian
 }:
 mkKdeDerivation {
   pname = "khelpcenter";

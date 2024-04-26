@@ -15,7 +15,7 @@
   tcltls,
   ps,
   getconf,
-  nixosTests,
+  nixosTests
 }:
 
 stdenv.mkDerivation rec {

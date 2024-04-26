@@ -8,7 +8,7 @@
   gnutls,
   libabigail,
   nettle,
-  pkg-config,
+  pkg-config
 }:
 
 stdenv.mkDerivation rec {

@@ -44,7 +44,7 @@
   rdma-core,
   ucx,
   rsync,
-  libglvnd,
+  libglvnd
 }:
 
 let

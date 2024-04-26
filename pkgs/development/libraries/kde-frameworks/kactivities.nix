@@ -1,7 +1,7 @@
 {
   mkDerivation,
   extra-cmake-modules,
-  boost, kconfig, kcoreaddons, kio, kwindowsystem, qtbase, qtdeclarative,
+  boost, kconfig, kcoreaddons, kio, kwindowsystem, qtbase, qtdeclarative
 }:
 
 mkDerivation {

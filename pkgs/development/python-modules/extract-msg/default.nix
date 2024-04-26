@@ -12,7 +12,7 @@
   red-black-tree-mod,
   rtfde,
   setuptools,
-  tzlocal,
+  tzlocal
 }:
 
 buildPythonPackage rec {

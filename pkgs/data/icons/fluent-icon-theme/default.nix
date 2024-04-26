@@ -8,7 +8,7 @@
 , blackPanelIcons ? false
 , allColorVariants ? false
 , colorVariants ? [ ]
-,
+
 }:
 let pname = "Fluent-icon-theme";
 in

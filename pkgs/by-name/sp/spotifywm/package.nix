@@ -5,7 +5,7 @@
   libX11,
   lndir,
   makeBinaryWrapper,
-  spotify,
+  spotify
 }:
 stdenv.mkDerivation {
   pname = "spotifywm";

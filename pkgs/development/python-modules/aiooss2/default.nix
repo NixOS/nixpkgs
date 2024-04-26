@@ -11,7 +11,7 @@
   pythonRelaxDepsHook,
   requests,
   setuptools,
-  setuptools-scm,
+  setuptools-scm
 }:
 
 buildPythonPackage rec {

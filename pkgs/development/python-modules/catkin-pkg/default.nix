@@ -6,7 +6,7 @@
   pyparsing,
   python-dateutil,
   setuptools,
-  pytestCheckHook,
+  pytestCheckHook
 }:
 
 buildPythonPackage rec {

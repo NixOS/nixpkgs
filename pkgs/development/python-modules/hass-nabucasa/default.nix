@@ -18,7 +18,7 @@
   setuptools,
   snitun,
   syrupy,
-  xmltodict,
+  xmltodict
 }:
 
 buildPythonPackage rec {

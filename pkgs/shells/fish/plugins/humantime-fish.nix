@@ -2,7 +2,7 @@
 , buildFishPlugin
 , fetchFromGitHub
 , fishtape
-,
+
 }:
 buildFishPlugin rec {
   pname = "humantime-fish";

@@ -3,7 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  nixosTests,
+  nixosTests
 }:
 buildGoModule rec {
   pname = "headscale";

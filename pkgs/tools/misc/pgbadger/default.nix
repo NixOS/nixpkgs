@@ -11,7 +11,7 @@
   stdenv,
   testers,
   TextCSV_XS,
-  which,
+  which
 }:
 
 buildPerlPackage rec {

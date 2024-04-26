@@ -19,7 +19,7 @@
   stdenv,
   symlinkJoin,
   webkit2-sharp,
-  xdg-utils,
+  xdg-utils
 }:
 
 stdenv.mkDerivation rec {

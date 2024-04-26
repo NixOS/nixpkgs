@@ -6,7 +6,7 @@
   pdm-backend,
   pythonOlder,
   requests,
-  withings-sync,
+  withings-sync
 }:
 
 buildPythonPackage rec {

@@ -6,7 +6,7 @@
   qdrant-client,
   poetry-core,
   grpcio,
-  pythonOlder,
+  pythonOlder
 }:
 
 buildPythonPackage rec {

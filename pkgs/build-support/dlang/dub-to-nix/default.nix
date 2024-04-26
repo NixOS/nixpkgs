@@ -3,7 +3,7 @@
   runCommand,
   makeWrapper,
   python3,
-  nix,
+  nix
 }:
 
 runCommand "dub-to-nix"

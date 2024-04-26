@@ -10,7 +10,7 @@
   pythonOlder,
   pythonRelaxDepsHook,
   sentry-sdk,
-  tomli,
+  tomli
 }:
 
 buildPythonPackage rec {

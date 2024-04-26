@@ -10,7 +10,7 @@
   pandas,
   pyarrow,
   distributed,
-  pytestCheckHook,
+  pytestCheckHook
 }:
 
 buildPythonPackage rec {

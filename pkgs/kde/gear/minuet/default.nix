@@ -2,7 +2,7 @@
   mkKdeDerivation,
   qtdeclarative,
   qtsvg,
-  fluidsynth,
+  fluidsynth
 }:
 mkKdeDerivation {
   pname = "minuet";

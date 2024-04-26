@@ -1,6 +1,6 @@
 {
   mkKdeDerivation,
-  intltool,
+  intltool
 }:
 mkKdeDerivation {
   pname = "kaccounts-integration";

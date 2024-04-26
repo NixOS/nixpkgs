@@ -687,7 +687,7 @@ in {
     kernelPatches ? [],
     version ? (builtins.parseDrvName src.name).version,
     makeTarget ? "defconfig",
-    name ? "kernel.config",
+    name ? "kernel.config"
   }: stdenvNoCC.mkDerivation {
     inherit name src;
     depsBuildBuild = [ buildPackages.stdenv.cc ]

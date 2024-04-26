@@ -10,7 +10,7 @@
   libpath,
   # A flat directory containing files with randomly-generated
   # path-like values
-  dir,
+  dir
 }:
 let
   lib = import libpath;

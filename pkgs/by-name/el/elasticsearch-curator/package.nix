@@ -4,7 +4,7 @@
   fetchFromGitHub,
   nix-update-script,
   python3,
-  testers,
+  testers
 }:
 
 python3.pkgs.buildPythonApplication rec {

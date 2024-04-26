@@ -22,7 +22,7 @@
   darwin,
   makeFontsConf,
   vulkan-loader,
-  makeDesktopItem,
+  makeDesktopItem
 }:
 
 rustPlatform.buildRustPackage rec {

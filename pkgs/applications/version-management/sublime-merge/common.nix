@@ -2,7 +2,7 @@
   buildVersion,
   dev ? false,
   aarch64sha256,
-  x64sha256,
+  x64sha256
 }:
 
 {
@@ -24,7 +24,7 @@
   common-updater-scripts,
   curl,
   gnugrep,
-  coreutils,
+  coreutils
 }:
 
 let

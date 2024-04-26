@@ -4,7 +4,7 @@
   lib,
   runCommand,
   nixfmt-rfc-style,
-  fetchpatch,
+  fetchpatch
 }:
 let
   inherit (haskell.lib.compose) overrideCabal justStaticExecutables;

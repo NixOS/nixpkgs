@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qtwebengine,
-  qttools,
+  qttools
 }:
 mkKdeDerivation {
   pname = "mailcommon";

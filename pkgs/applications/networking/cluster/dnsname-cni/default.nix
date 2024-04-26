@@ -3,7 +3,7 @@
   dnsmasq,
   fetchFromGitHub,
   lib,
-  makeWrapper,
+  makeWrapper
 }:
 
 buildGoModule rec {

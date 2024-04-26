@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  ncurses,
+  ncurses
 }:
 stdenv.mkDerivation rec {
   pname = "sssnake";

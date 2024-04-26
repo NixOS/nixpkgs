@@ -5,7 +5,7 @@
   libjxl,
   libavif,
   libraw,
-  openexr_3,
+  openexr_3
 }:
 mkKdeDerivation {
   pname = "kimageformats";

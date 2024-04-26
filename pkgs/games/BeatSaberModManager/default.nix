@@ -14,7 +14,7 @@
   libSM,
   fontconfig,
 
-  xdg-utils,
+  xdg-utils
 }:
 
 buildDotnetModule rec {

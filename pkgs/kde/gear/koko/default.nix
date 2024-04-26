@@ -7,7 +7,7 @@
   qtsvg,
   exiv2,
   kirigami-addons,
-  kquickimageeditor,
+  kquickimageeditor
 }: let
   # URLs snapshotted through
   # https://web.archive.org/save/$url

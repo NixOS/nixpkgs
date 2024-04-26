@@ -12,7 +12,7 @@
   microsoft-kiota-serialization-text,
   msgraph-core,
   pythonOlder,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

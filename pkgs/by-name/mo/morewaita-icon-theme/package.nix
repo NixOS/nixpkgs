@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   gtk3,
-  xdg-utils,
+  xdg-utils
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "morewaita-icon-theme";

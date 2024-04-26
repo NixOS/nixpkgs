@@ -6,7 +6,7 @@
   cmake,
   gitUpdater,
   fetchpatch,
-  libdevil,
+  libdevil
 }:
 
 stdenv.mkDerivation (finalAttrs: {

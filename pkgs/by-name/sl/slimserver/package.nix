@@ -12,7 +12,7 @@
   stdenv,
   wavpack,
   zlib,
-  enableUnfreeFirmware ? false,
+  enableUnfreeFirmware ? false
 }:
 
 let

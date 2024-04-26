@@ -11,7 +11,7 @@
   pytestCheckHook,
   pythonOlder,
   pytz,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

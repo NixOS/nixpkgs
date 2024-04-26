@@ -5,7 +5,7 @@
   libintl,
   nix-update-script,
   python3,
-  stdenv,
+  stdenv
 }:
 
 stdenv.mkDerivation rec {

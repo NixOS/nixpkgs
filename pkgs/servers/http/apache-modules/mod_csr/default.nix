@@ -6,7 +6,7 @@
   lib,
   mod_ca,
   pkg-config,
-  stdenv,
+  stdenv
 }:
 
 stdenv.mkDerivation rec {

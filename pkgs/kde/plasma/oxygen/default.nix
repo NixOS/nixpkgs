@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qtbase,
-  libsForQt5,
+  libsForQt5
 }:
 mkKdeDerivation {
   pname = "oxygen";

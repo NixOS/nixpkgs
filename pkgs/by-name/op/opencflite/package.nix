@@ -7,7 +7,7 @@
   libkqueue,
   libuuid,
   tzdata,
-  zlib,
+  zlib
 }:
 
 stdenv.mkDerivation rec {

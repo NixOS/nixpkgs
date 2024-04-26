@@ -4,7 +4,7 @@
   fetchPypi,
   cryptography,
   types-pyopenssl,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

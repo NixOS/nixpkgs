@@ -6,7 +6,7 @@
   fetchFromGitHub,
   installShellFiles,
   testers,
-  trivy,
+  trivy
 }:
 
 buildGoModule rec {

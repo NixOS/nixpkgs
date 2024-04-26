@@ -15,7 +15,7 @@
   pythonOlder,
   pytz,
   requests,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

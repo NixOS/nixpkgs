@@ -7,7 +7,7 @@
   msrest,
   msrestazure,
   pythonOlder,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

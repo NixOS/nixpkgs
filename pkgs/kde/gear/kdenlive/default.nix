@@ -9,7 +9,7 @@
   mlt,
   shared-mime-info,
   libv4l,
-  frei0r,
+  frei0r
 }:
 mkKdeDerivation {
   pname = "kdenlive";

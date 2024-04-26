@@ -6,7 +6,7 @@
   jmespath,
   pythonOlder,
   pythonRelaxDepsHook,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

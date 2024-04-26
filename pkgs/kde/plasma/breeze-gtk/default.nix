@@ -2,7 +2,7 @@
   mkKdeDerivation,
   sass,
   python3,
-  python3Packages,
+  python3Packages
 }:
 mkKdeDerivation {
   pname = "breeze-gtk";

@@ -3,7 +3,7 @@
   qt5compat,
   gmp,
   mpfr,
-  kdoctools,
+  kdoctools
 }:
 mkKdeDerivation {
   pname = "kcalc";

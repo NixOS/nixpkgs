@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  python3,
+  python3
 }:
 
 rustPlatform.buildRustPackage rec {

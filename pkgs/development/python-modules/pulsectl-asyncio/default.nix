@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pulsectl,
   pythonOlder,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

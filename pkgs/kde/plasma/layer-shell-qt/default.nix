@@ -3,7 +3,7 @@
   qtwayland,
   pkg-config,
   wayland,
-  wayland-protocols,
+  wayland-protocols
 }:
 mkKdeDerivation {
   pname = "layer-shell-qt";

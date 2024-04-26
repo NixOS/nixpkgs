@@ -303,7 +303,7 @@ let
       extendModules = extendArgs@{
         modules ? [],
         specialArgs ? {},
-        prefix ? [],
+        prefix ? []
         }:
           evalModules (evalModulesArgs // {
             inherit class;
@@ -1134,7 +1134,7 @@ let
       Release number of the first release that contains the rename, ignoring backports.
       Set it to the upcoming release, matching the nixpkgs/.version file.
     */
-    sinceRelease,
+    sinceRelease
 
   }: doRename {
     inherit from to;

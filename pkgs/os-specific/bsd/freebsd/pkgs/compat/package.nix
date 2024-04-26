@@ -3,7 +3,7 @@
 , makeMinimal, boot-install
 , which
 , freebsd-lib
-, expat, zlib,
+, expat, zlib
 }:
 
 let

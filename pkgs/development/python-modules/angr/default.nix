@@ -32,7 +32,7 @@
   sqlalchemy,
   sympy,
   unicorn,
-  unique-log-filter,
+  unique-log-filter
 }:
 
 buildPythonPackage rec {

@@ -2,7 +2,7 @@
   lib,
   melpaBuild,
   fetchzip,
-  writeText,
+  writeText
 }:
 
 melpaBuild rec {

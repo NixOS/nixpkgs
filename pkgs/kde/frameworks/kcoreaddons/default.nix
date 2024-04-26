@@ -2,7 +2,7 @@
   mkKdeDerivation,
   qttools,
   shared-mime-info,
-  qtdeclarative,
+  qtdeclarative
 }:
 mkKdeDerivation {
   pname = "kcoreaddons";

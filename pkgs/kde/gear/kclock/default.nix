@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qtsvg,
-  qtmultimedia,
+  qtmultimedia
 }:
 mkKdeDerivation {
   pname = "kclock";

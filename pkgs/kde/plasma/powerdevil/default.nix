@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   pkg-config,
-  libcap,
+  libcap
 }:
 mkKdeDerivation {
   pname = "powerdevil";

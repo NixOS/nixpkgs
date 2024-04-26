@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qttools,
-  qtdeclarative,
+  qtdeclarative
 }:
 mkKdeDerivation {
   pname = "kholidays";

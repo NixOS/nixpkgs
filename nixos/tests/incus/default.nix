@@ -2,7 +2,7 @@
   system ? builtins.currentSystem,
   config ? { },
   pkgs ? import ../../.. { inherit system config; },
-  handleTestOn,
+  handleTestOn
 }:
 {
   container-legacy-init = import ./container.nix {

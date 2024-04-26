@@ -11,7 +11,7 @@
   pytest-mock,
   pytest-test-utils,
   pythonOlder,
-  setuptools-scm,
+  setuptools-scm
 }:
 
 buildPythonPackage rec {

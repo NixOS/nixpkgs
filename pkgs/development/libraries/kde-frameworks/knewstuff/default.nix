@@ -3,7 +3,7 @@
   extra-cmake-modules,
   attica, karchive, kcompletion, kconfig, kcoreaddons, ki18n, kiconthemes,
   kio, kitemviews, kpackage, kservice, ktextwidgets, kwidgetsaddons, kxmlgui, qtbase,
-  qtdeclarative, kirigami2, syndication,
+  qtdeclarative, kirigami2, syndication
 }:
 
 mkDerivation {

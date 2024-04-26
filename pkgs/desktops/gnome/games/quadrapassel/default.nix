@@ -19,7 +19,7 @@
   ninja,
   python3,
   vala,
-  desktop-file-utils,
+  desktop-file-utils
 }:
 
 stdenv.mkDerivation rec {

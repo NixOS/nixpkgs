@@ -6,7 +6,7 @@
   pytestCheckHook,
   pythonOlder,
   setuptools-scm,
-  typing-extensions,
+  typing-extensions
 }:
 
 buildPythonPackage rec {

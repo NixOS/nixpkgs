@@ -8,7 +8,7 @@
   pythonAtLeast,
   pythonOlder,
   setuptools,
-  six,
+  six
 }:
 
 buildPythonPackage rec {

@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  buildGoModule,
+  buildGoModule
 }:
 buildGoModule rec {
   pname = "termshot";

@@ -5,7 +5,7 @@
   stdenv,
   installShellFiles,
   darwin,
-  fetchFromGitHub,
+  fetchFromGitHub
 }:
 rustPlatform.buildRustPackage rec {
   pname = "volta";

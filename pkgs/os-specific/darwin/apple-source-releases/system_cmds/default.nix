@@ -25,7 +25,7 @@
   Kernel,
   Libc,
   OpenDirectory,
-  WebKit,
+  WebKit
 }:
 
 let

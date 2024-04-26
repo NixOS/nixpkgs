@@ -2,7 +2,7 @@
   mkKdeDerivation,
   pkg-config,
   qtwayland,
-  wayland-protocols,
+  wayland-protocols
 }:
 mkKdeDerivation {
   pname = "kwayland";

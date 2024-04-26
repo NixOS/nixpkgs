@@ -9,7 +9,7 @@
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

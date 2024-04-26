@@ -3,7 +3,7 @@
   # arguments to `nix-build`, e.g. `"foo.nix -A bar"`
   buildArgs,
   # what path to open a browser at
-  open,
+  open
 }: let
   inherit (pkgs) lib;
 

@@ -3,7 +3,7 @@
   config ? { },
   pkgs ? import ../../.. { inherit system config; },
 
-  lib ? pkgs.lib,
+  lib ? pkgs.lib
 }:
 let
   makeTest = import ./make-test-python.nix;
@@ -15,7 +15,7 @@ let
   makeRedisTest =
     {
       package,
-      name ? mkTestName package,
+      name ? mkTestName package
     }:
     makeTest {
       inherit name;

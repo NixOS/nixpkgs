@@ -15,7 +15,7 @@
   pythonOlder,
   pythonRelaxDepsHook,
   requests,
-  uvicorn,
+  uvicorn
 }:
 
 buildPythonPackage rec {

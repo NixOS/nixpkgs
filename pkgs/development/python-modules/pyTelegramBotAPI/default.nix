@@ -15,7 +15,7 @@
   requests,
   ujson,
   uvicorn,
-  watchdog,
+  watchdog
 }:
 
 buildPythonPackage rec {

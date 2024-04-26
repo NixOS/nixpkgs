@@ -8,7 +8,7 @@
   kcodecs,
   kconfig,
   kdegraphics-mobipocket,
-  libappimage,
+  libappimage
 }:
 mkKdeDerivation {
   pname = "kfilemetadata";

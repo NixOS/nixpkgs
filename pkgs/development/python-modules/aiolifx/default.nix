@@ -8,7 +8,7 @@
   ifaddr,
   inquirerpy,
   pythonOlder,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

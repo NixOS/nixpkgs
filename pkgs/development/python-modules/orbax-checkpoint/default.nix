@@ -18,7 +18,7 @@
   pythonOlder,
   pyyaml,
   tensorstore,
-  typing-extensions,
+  typing-extensions
 }:
 
 buildPythonPackage rec {

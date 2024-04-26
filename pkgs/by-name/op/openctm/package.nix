@@ -5,7 +5,7 @@
   pkg-config,
   freeglut,
   gtk2,
-  libGLU,
+  libGLU
 }:
 
 stdenv.mkDerivation (finalAttrs: {

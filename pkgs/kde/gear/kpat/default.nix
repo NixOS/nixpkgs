@@ -5,7 +5,7 @@
   shared-mime-info,
   black-hole-solver,
   freecell-solver,
-  libkdegames,
+  libkdegames
 }:
 mkKdeDerivation {
   pname = "kpat";

@@ -8,7 +8,7 @@
   poetry-core,
   psycopg2,
   pythonRelaxDepsHook,
-  pythonOlder,
+  pythonOlder
 }:
 
 buildPythonPackage rec {

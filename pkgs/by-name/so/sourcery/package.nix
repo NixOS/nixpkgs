@@ -4,7 +4,7 @@
   python3Packages,
   fetchPypi,
   autoPatchelfHook,
-  libxcrypt-legacy,
+  libxcrypt-legacy
 }:
 
 let

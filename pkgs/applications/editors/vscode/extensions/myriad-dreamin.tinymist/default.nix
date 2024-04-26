@@ -3,7 +3,7 @@
   lib,
   moreutils,
   tinymist,
-  vscode-utils,
+  vscode-utils
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {

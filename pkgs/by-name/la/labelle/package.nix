@@ -4,7 +4,7 @@
   python3Packages,
   qt6,
   makeDesktopItem,
-  copyDesktopItems,
+  copyDesktopItems
 }:
 python3Packages.buildPythonApplication rec {
   pname = "labelle";

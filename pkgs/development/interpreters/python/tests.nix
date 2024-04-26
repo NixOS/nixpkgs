@@ -163,7 +163,7 @@ let
     requests = callPackage ({
         autoPatchelfHook,
         fetchurl,
-        pythonCondaPackages,
+        pythonCondaPackages
       }:
       python.pkgs.buildPythonPackage {
         pname = "requests";

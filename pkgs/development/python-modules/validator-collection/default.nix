@@ -57,7 +57,7 @@
   virtualenv,
   webencodings,
   wrapt,
-  pythonOlder,
+  pythonOlder
 }:
 
 buildPythonPackage rec {

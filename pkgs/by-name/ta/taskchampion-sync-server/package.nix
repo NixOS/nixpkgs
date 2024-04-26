@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitHub,
+  fetchFromGitHub
 }:
 rustPlatform.buildRustPackage rec {
   pname = "taskchampion-sync-server";

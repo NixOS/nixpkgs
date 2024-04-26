@@ -3,7 +3,7 @@
   qtbase,
   qtwayland,
   libsForQt5,
-  xorg,
+  xorg
 }:
 mkKdeDerivation {
   pname = "plasma-integration";

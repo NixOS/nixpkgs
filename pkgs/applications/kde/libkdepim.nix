@@ -3,7 +3,7 @@
   extra-cmake-modules, kdoctools,
   akonadi, akonadi-contacts, akonadi-search, kcmutils, kcodecs, kcompletion,
   kconfigwidgets, kcontacts, ki18n, kiconthemes, kio, kitemviews, kjobwidgets,
-  kldap, kwallet,
+  kldap, kwallet
 }:
 
 mkDerivation {

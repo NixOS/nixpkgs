@@ -6,7 +6,7 @@
   gradle_7,
   perl,
   makeWrapper,
-  jre,
+  jre
 }:
 
 stdenv.mkDerivation (finalAttrs: {

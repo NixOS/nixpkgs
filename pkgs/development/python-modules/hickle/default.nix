@@ -10,7 +10,7 @@
   scipy,
   pandas,
   pytestCheckHook,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

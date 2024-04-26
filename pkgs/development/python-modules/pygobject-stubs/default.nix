@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pygobject3,
   pythonOlder,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

@@ -14,7 +14,7 @@
   pynacl,
   pyspx,
   pytestCheckHook,
-  pythonOlder,
+  pythonOlder
 }:
 
 buildPythonPackage rec {

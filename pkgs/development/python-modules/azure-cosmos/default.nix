@@ -5,7 +5,7 @@
   fetchPypi,
   pythonOlder,
   setuptools,
-  typing-extensions,
+  typing-extensions
 }:
 
 buildPythonPackage rec {

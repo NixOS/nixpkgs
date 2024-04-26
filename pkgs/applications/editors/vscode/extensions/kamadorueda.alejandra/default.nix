@@ -3,7 +3,7 @@
   jq,
   lib,
   moreutils,
-  vscode-utils,
+  vscode-utils
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {

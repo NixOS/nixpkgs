@@ -16,7 +16,7 @@
   libsndfile,
   pkg-config,
   stdenv,
-  zlib,
+  zlib
 }:
 
 stdenv.mkDerivation (finalAttrs: {

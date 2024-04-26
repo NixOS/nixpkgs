@@ -3,7 +3,7 @@
   jq,
   lib,
   moreutils,
-  nixpkgs-fmt,
+  nixpkgs-fmt
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {

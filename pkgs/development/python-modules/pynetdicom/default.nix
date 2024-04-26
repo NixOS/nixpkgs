@@ -10,7 +10,7 @@
   pythonAtLeast,
   pythonOlder,
   setuptools,
-  sqlalchemy,
+  sqlalchemy
 }:
 
 buildPythonPackage rec {

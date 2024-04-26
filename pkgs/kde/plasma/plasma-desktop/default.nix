@@ -16,7 +16,7 @@
   xorg,
   libcanberra,
   libxkbfile,
-  ibus,
+  ibus
 }: let
   # run gsettings with desktop schemas for using in "kcm_access" kcm
   # and in kaccess

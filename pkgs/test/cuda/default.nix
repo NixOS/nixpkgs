@@ -25,7 +25,7 @@
   cudaPackages_12_1,
   cudaPackages_12_2,
   cudaPackages_12_3,
-  cudaPackages_12,
+  cudaPackages_12
 }@args:
 
 let

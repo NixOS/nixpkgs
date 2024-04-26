@@ -3,7 +3,7 @@
   qtdeclarative,
   kaccounts-integration,
   kdeclarative,
-  prison,
+  prison
 }:
 mkKdeDerivation {
   pname = "purpose";

@@ -10,7 +10,7 @@
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
+  setuptools
 }:
 
 buildPythonPackage rec {

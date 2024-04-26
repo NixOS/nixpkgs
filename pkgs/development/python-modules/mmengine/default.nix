@@ -17,7 +17,7 @@
   setuptools,
   termcolor,
   torch,
-  yapf,
+  yapf
 }:
 
 buildPythonPackage rec {
