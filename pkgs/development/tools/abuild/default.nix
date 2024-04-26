@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, gitUpdater
 , makeWrapper
 , pkg-config
 , file
@@ -76,6 +77,8 @@ stdenv.mkDerivation rec {
         --prefix PATH : "${placeholder "out"}/bin"
     done
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Alpine Linux build tools";
