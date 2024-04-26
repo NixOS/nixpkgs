@@ -5,23 +5,28 @@
 , pytestCheckHook
 , pyyaml
 , ruamel-yaml
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "yamale";
   version = "5.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "23andMe";
-    repo = pname;
+    repo = "yamale";
     rev = "refs/tags/${version}";
     hash = "sha256-UTtase1b8Zjaixhp/g0tLtT6QZS4cyaSHcFz+h9Qoos=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     pyyaml
     ruamel-yaml
   ];
@@ -36,9 +41,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A schema and validator for YAML";
-    mainProgram = "yamale";
     homepage = "https://github.com/23andMe/Yamale";
+    changelog = "https://github.com/23andMe/Yamale/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ rtburns-jpl ];
+    mainProgram = "yamale";
   };
 }
