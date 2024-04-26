@@ -638,9 +638,9 @@
   };
   managednetworkfabric = mkAzExtension rec {
     pname = "managednetworkfabric";
-    version = "4.2.0";
+    version = "6.0.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/managednetworkfabric-${version}-py3-none-any.whl";
-    sha256 = "f80f528a099862fa8e792f770943a832dbb958b503cc5cc8cb6f58766056d857";
+    sha256 = "340483c69484865bb4e2cadc97aa5f6b258ee894920f4df0dd74ac412a8b2d59";
     description = "Support for managednetworkfabric commands based on 2023-06-15 API version";
   };
   managementpartner = mkAzExtension rec {
