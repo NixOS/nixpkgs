@@ -6,7 +6,7 @@ stdenv.mkDerivation {
 
   # pinned to fork with Qt6 support
   src = fetchFromGitLab {
-    owner = "nicolasfella";
+    owner = "accounts-sso";
     repo = "libaccounts-qt";
     rev = "18557f7def9af8f4a9e0e93e9f575ae11e5066aa";
     hash = "sha256-8FGZmg2ljSh1DYZfklMTrWN7Sdlk/Atw0qfpbb+GaBc=";
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Qt library for accessing the online accounts database";
     mainProgram = "accountstest";
-    homepage = "https://gitlab.com/accounts-sso";
+    homepage = "https://gitlab.com/accounts-sso/libaccounts-qt";
     license = licenses.lgpl21;
     platforms = platforms.linux;
   };
