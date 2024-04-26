@@ -469,6 +469,11 @@ lib.mapAttrs mkLicense ({
     free = false;
   };
 
+  energyplus = {
+    fullName = "EnergyPlus License";
+    url = "https://github.com/NREL/EnergyPlus/blob/develop/LICENSE.txt";
+  };
+
   epl10 = {
     spdxId = "EPL-1.0";
     fullName = "Eclipse Public License 1.0";
