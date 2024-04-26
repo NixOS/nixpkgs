@@ -624,9 +624,9 @@
   };
   maintenance = mkAzExtension rec {
     pname = "maintenance";
-    version = "1.5.0";
+    version = "1.6.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/maintenance-${version}-py3-none-any.whl";
-    sha256 = "4f1336fed4fa2cbea640627676a6cab4399c1b29ae23cb21fe73c9bea0d80a7f";
+    sha256 = "3ab6a2dac48ba71b28bc8ee05d254daa72b62f84dda953749fa621a80ca39ae5";
     description = "Microsoft Azure Command-Line Tools MaintenanceManagementClient Extension";
   };
   managedccfs = mkAzExtension rec {
