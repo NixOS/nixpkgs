@@ -698,6 +698,13 @@ with self;
     propagatedBuildInputs = [ ppxlib base ];
   };
 
+  ppx_conv_func = janePackage {
+    pname = "ppx_conv_func";
+    hash = "sha256-HPHSZHdR9ll+7EbWc36shTdRPFYB0lkApidk+XL3clI=";
+    meta.description = "Part of the Jane Street's PPX rewriters collection";
+    propagatedBuildInputs = [ ppxlib base ];
+  };
+
   ppx_custom_printf = janePackage {
     pname = "ppx_custom_printf";
     hash = "sha256-V30ijRgcma/rwysPxNAFnuJIb7XFrfi7mfjJxN+rSak=";
@@ -710,6 +717,13 @@ with self;
     hash = "sha256-spT/dJW8YJtG4pOku9r6VVlBAMwGakTrr1euiABeqsU=";
     meta.description = "A ppx that takes in css strings and produces a module for accessing the unique names defined within";
     propagatedBuildInputs = [ async async_unix core_kernel core_unix ppxlib js_of_ocaml js_of_ocaml-ppx sedlex virtual_dom ];
+  };
+
+  ppx_csv_conv = janePackage {
+    pname = "ppx_csv_conv";
+    hash = "sha256-RdPcDPLzoSf45Zeon3f4HcEvlwB6Q6sAINX3LHmjmj8=";
+    meta.description = "Generate functions to read/write records in csv format";
+    propagatedBuildInputs = [ csvfields ppx_conv_func ];
   };
 
   ppx_demo = janePackage {
