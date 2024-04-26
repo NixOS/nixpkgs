@@ -53,7 +53,9 @@ let
       };
     } // (removeAttrs args [ "url" "sha256" "description" ]));
 
-  extensions = callPackages ./extensions-generated.nix { inherit mkAzExtension; };
+  extensions =
+    callPackages ./extensions-generated.nix { inherit mkAzExtension; }
+    // callPackages ./extensions-manual.nix { inherit mkAzExtension; };
 
   extensionDir = stdenvNoCC.mkDerivation {
     name = "azure-cli-extensions";
