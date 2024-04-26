@@ -1,20 +1,21 @@
-{ lib
-, SDL2
-, cmake
-, fetchFromGitHub
-, ffmpeg
-, discord-rpc
-, libedit
-, elfutils
-, libepoxy
-, libsForQt5
-, libzip
-, lua
-, minizip
-, pkg-config
-, stdenv
-, wrapGAppsHook
-, enableDiscordRpc ? false
+{
+  lib,
+  SDL2,
+  cmake,
+  fetchFromGitHub,
+  ffmpeg,
+  discord-rpc,
+  libedit,
+  elfutils,
+  libepoxy,
+  libsForQt5,
+  libzip,
+  lua,
+  minizip,
+  pkg-config,
+  stdenv,
+  wrapGAppsHook,
+  enableDiscordRpc ? false,
 }:
 
 let
