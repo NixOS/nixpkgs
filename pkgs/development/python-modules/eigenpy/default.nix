@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "eigenpy";
-  version = "3.5.0";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
     repo = "eigenpy";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ar7KmlvWD2qoOonaH8YhVssZhpbTdHNvxY7rzvmhzc0=";
+    hash = "sha256-nTS9FNXGrak5g83BHHNSsk5V5khpOpRz5zWE8D1gDUo=";
   };
 
   outputs = [
