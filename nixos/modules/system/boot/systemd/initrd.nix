@@ -460,6 +460,7 @@ in {
         "${cfg.package}/lib/systemd/systemd-sulogin-shell"
         "${cfg.package}/lib/systemd/systemd-sysctl"
         "${cfg.package}/lib/systemd/systemd-bsod"
+        "${cfg.package}/lib/systemd/systemd-sysroot-fstab-check"
 
         # generators
         "${cfg.package}/lib/systemd/system-generators/systemd-debug-generator"
@@ -486,6 +487,8 @@ in {
         # fido2 support
         "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-fido2.so"
         "${pkgs.libfido2}/lib/libfido2.so.1"
+      ] ++ optionals cfg.package.withKmod [
+        "${pkgs.kmod.lib}/lib/libkmod.so.2"
       ] ++ jobScripts;
 
       targets.initrd.aliases = ["default.target"];
