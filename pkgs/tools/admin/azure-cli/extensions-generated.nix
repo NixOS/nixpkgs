@@ -666,9 +666,9 @@
   };
   mobile-network = mkAzExtension rec {
     pname = "mobile-network";
-    version = "0.2.1";
+    version = "1.0.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/mobile_network-${version}-py3-none-any.whl";
-    sha256 = "66bd39f687c2ac030ab6bd44b8746ec8d64c4804b44592c0bb1ffda837dce22b";
+    sha256 = "2d9572a4ed706df8f626c62036ad22f46a15b113273f8ff9b06313a380a27f56";
     description = "Microsoft Azure Command-Line Tools MobileNetwork Extension";
   };
   monitor-control-service = mkAzExtension rec {
