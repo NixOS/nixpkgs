@@ -202,6 +202,13 @@
     sha256 = "9ea6162d37fc3390be4dce64cb05c5c588070104f3e92a701ab475473565a8a9";
     description = "Translate ARM template to executable Azure CLI scripts";
   };
+  compute-diagnostic-rp = mkAzExtension rec {
+    pname = "compute-diagnostic-rp";
+    version = "1.0.0b1";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/compute_diagnostic_rp-${version}-py3-none-any.whl";
+    sha256 = "810e93ce00c7d03df6da9a0faf57b966fb6da582311f9cae74b2b7e1e3c41423";
+    description = "Microsoft Azure Command-Line Tools ComputeDiagnosticRp Extension";
+  };
   confidentialledger = mkAzExtension rec {
     pname = "confidentialledger";
     version = "1.0.0";
