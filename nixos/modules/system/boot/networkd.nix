@@ -17,11 +17,13 @@ let
           "ManageForeignRoutingPolicyRules"
           "ManageForeignRoutes"
           "RouteTable"
+          "IPv6PrivacyExtensions"
         ])
         (assertValueOneOf "SpeedMeter" boolValues)
         (assertInt "SpeedMeterIntervalSec")
         (assertValueOneOf "ManageForeignRoutingPolicyRules" boolValues)
         (assertValueOneOf "ManageForeignRoutes" boolValues)
+        (assertValueOneOf "IPv6PrivacyExtensions" (boolValues ++ ["prefer-public" "kernel"]))
       ];
 
       sectionDHCPv4 = checkUnitConfig "DHCPv4" [
