@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://kilgoretroutmaskreplicant.gitlab.io/plain-html/";
-    description = "Master of Orion (1993) game engine recreation";
+    homepage = "https://github.com/1oom-fork/1oom";
+    description = "Master of Orion (1993) game engine recreation; a more updated fork";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.AndersonTorres ];
