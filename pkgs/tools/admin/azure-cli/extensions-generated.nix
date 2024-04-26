@@ -134,9 +134,9 @@
   };
   automation = mkAzExtension rec {
     pname = "automation";
-    version = "0.2.2";
+    version = "1.0.0b1";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/automation-${version}-py3-none-any.whl";
-    sha256 = "1337a8bf90739df646231533801cce9050bad641c627382468c86af5f2f99d89";
+    sha256 = "d31fe0433fa30a6e009f7b9bee6c417a686ed87502dd987b9ac8ad113383915b";
     description = "Microsoft Azure Command-Line Tools AutomationClient Extension";
   };
   azure-firewall = mkAzExtension rec {
