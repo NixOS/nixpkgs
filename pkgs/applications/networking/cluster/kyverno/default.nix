@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "kyverno";
     repo = "kyverno";
     rev = "v${version}";
-    sha256 = "sha256-hFRqhw1iV9S13NQ7Y9SPeHHWZ/ls9fiiqlP3vuPeRlY=";
+    hash = "sha256-hFRqhw1iV9S13NQ7Y9SPeHHWZ/ls9fiiqlP3vuPeRlY=";
   };
 
   ldflags = [
