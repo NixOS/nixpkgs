@@ -44,12 +44,12 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  # upstream issue https://github.com/pygraphviz/pygraphviz/issues/441
-  pytestFlagsArray = lib.optionals stdenv.isDarwin [
-    "--deselect=tests/test_pygraphviz.py::PygraphvizTest::test_binary_stream"
-    "--deselect=tests/test_pygraphviz.py::PygraphvizTest::test_diagram"
-    "--deselect=tests/test_pygraphviz.py::TestPygraphvizNested::test_binary_stream"
-    "--deselect=tests/test_pygraphviz.py::TestPygraphvizNested::test_diagram"
+  disabledTests = [
+    "test_diagram"
+    "test_ordered_with_graph"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Upstream issue https://github.com/pygraphviz/pygraphviz/issues/441
+    "test_binary_stream"
   ];
 
   pythonImportsCheck = [
