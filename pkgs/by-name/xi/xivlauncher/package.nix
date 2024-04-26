@@ -57,7 +57,7 @@ in
 
     postFixup = lib.optionalString useSteamRun (let
       steam-run = (steam.override {
-        extraPkgs = pkgs: [ pkgs.libunwind ];
+        extraPkgs = pkgs: [ pkgs.libunwind ] ++ lib.optional useRbPatchedLauncher pkgs.zstd;
         extraProfile = ''
           unset TZ
         '';
