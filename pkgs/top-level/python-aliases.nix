@@ -32,7 +32,7 @@ in
 
   ### Deprecated aliases - for backward compatibility
 
-mapAliases ({
+mapAliases {
   abodepy = jaraco-abode; # added 2023-02-01
   acebinf = throw "acebinf has been removed because it is abandoned and broken."; # Added 2023-05-19
   adafruit-nrfutil = throw "adafruit-nrfutil has been promoted to a top-level attribute name: `pkgs.adafruit-nrfutil`."; # Added 2023-11-19
@@ -566,4 +566,4 @@ mapAliases ({
   zope_testing = zope-testing; # added 2023-11-12
   zope_testrunner = zope-testrunner; # added 2024-01-06
   zxing_cpp = zxing-cpp; # added 2023-11-05
-})
+}

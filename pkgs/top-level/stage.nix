@@ -273,7 +273,7 @@ let
 
     # Fully static packages.
     # Currently uses Musl on Linux (couldn’t get static glibc to work).
-    pkgsStatic = nixpkgsFun ({
+    pkgsStatic = nixpkgsFun {
       overlays = [ (self': super': {
         pkgsStatic = super';
       })] ++ overlays;
@@ -286,7 +286,7 @@ let
       } // lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") {
         gcc.abi = "elfv2";
       };
-    });
+    };
 
     pkgsExtraHardening = nixpkgsFun {
       overlays = [

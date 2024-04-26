@@ -41,7 +41,7 @@ let
   gpus = builtins.import ../development/cuda-modules/gpus.nix;
   nvccCompatibilities = builtins.import ../development/cuda-modules/nvcc-compatibilities.nix;
   flags = callPackage ../development/cuda-modules/flags.nix { inherit cudaVersion gpus; };
-  passthruFunction = final: ({
+  passthruFunction = final: {
     inherit cudaVersion lib pkgs;
     inherit gpus nvccCompatibilities flags;
     cudaMajorVersion = versions.major cudaVersion;
@@ -77,7 +77,7 @@ let
     saxpy = final.callPackage ../development/cuda-modules/saxpy { };
     nccl = final.callPackage ../development/cuda-modules/nccl { };
     nccl-tests = final.callPackage ../development/cuda-modules/nccl-tests { };
-  });
+  };
 
   mkVersionedPackageName =
     name: version:

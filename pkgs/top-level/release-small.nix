@@ -22,7 +22,7 @@ in
     officialRelease = false;
   };
 
-} // (mapTestOn ({
+} // (mapTestOn {
 
   aspell = all;
   at = linux;
@@ -153,4 +153,4 @@ in
   xkeyboard_config = linux;
   zip = all;
   tests-stdenv-gcc-stageCompare = all;
-} ))
+} )
