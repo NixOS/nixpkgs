@@ -12289,6 +12289,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreAudio;
   };
 
+  rtaudio_6 = callPackage ../by-name/rt/rtaudio_6/package.nix {
+    jack = libjack2;
+    inherit (darwin.apple_sdk.frameworks) CoreAudio;
+  };
+
   rtmidi = callPackage ../development/libraries/audio/rtmidi {
     jack = libjack2;
     inherit (darwin.apple_sdk.frameworks) CoreMIDI CoreAudio CoreServices;
