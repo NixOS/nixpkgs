@@ -817,11 +817,11 @@ in {
                 base_url = mkOption {
                     type = types.nullOr types.nonEmptyStr;
                     default = if lib.versionOlder config.system.stateVersion "24.05"
-                              then "${httpConf.scheme}://${httpConf.host}:${builtins.toString httpConf.port}/media/"
+                              then "${httpConf.scheme}://${httpConf.host}:${builtins.toString httpConf.port}"
                               else null;
                     defaultText = literalExpression ''
                       if lib.versionOlder config.system.stateVersion "24.05"
-                      then "$\{httpConf.scheme}://$\{httpConf.host}:$\{builtins.toString httpConf.port}/media/"
+                      then "$\{httpConf.scheme}://$\{httpConf.host}:$\{builtins.toString httpConf.port}"
                       else null;
                     '';
                     description = ''
