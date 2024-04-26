@@ -1002,9 +1002,9 @@
   };
   vm-repair = mkAzExtension rec {
     pname = "vm-repair";
-    version = "1.0.0b1";
+    version = "1.0.5";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/vm_repair-${version}-py2.py3-none-any.whl";
-    sha256 = "7e6b9fb9952a56811d65de87b87b0403a6161edfa82284a43fa58f176e397b8b";
+    sha256 = "f2f7bc5698f89e0f6254464dc18d04d477dab4aab93296a46649018723855b26";
     description = "Auto repair commands to fix VMs";
   };
   vmware = mkAzExtension rec {
