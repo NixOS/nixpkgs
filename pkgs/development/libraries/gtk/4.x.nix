@@ -163,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-loader
   ] ++ [
     # Required for GSettings schemas at runtime.
-    # Will be picked up by wrapGAppsHook.
+    # Will be picked up by wrapGAppsHook4.
     gsettings-desktop-schemas
   ];
 
