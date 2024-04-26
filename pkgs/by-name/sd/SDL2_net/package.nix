@@ -1,30 +1,50 @@
-{ lib, stdenv, pkg-config, darwin, fetchurl, SDL2 }:
+{
+  lib,
+  SDL2,
+  darwin,
+  fetchFromGitHub,
+  pkg-config,
+  stdenv,
+  # Boolean flags
+  enableSdltest ? (!stdenv.isDarwin),
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2_net";
   version = "2.2.0";
 
-  src = fetchurl {
-    url = "https://www.libsdl.org/projects/SDL_net/release/${pname}-${version}.tar.gz";
-    sha256 = "sha256-TkqJGYgxYnGXT/TpWF7R73KaEj0iwIvUcxKRedyFf+s=";
+  src = fetchFromGitHub {
+    owner = "libsdl-org";
+    repo = "SDL_net";
+    rev = "release-${finalAttrs.version}";
+    hash = "sha256-sEcKn/apA6FcR7ijb7sfuvP03ZdVfjkNZTXsasK8fAI=";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    SDL2
+    pkg-config
+  ];
 
-  buildInputs = lib.optional stdenv.isDarwin darwin.libobjc;
-
-  configureFlags = [ "--disable-examples" ]
-  ++ lib.optional stdenv.isDarwin "--disable-sdltest";
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.libobjc
+  ];
 
   propagatedBuildInputs = [ SDL2 ];
 
-  meta = with lib; {
+  configureFlags = [
+    (lib.enableFeature false "examples") # can't find libSDL2_test.a
+    (lib.enableFeature enableSdltest "sdltest")
+  ];
+
+  strictDeps = true;
+
+  meta = {
+    homepage = "https://github.com/libsdl-org/SDL_net";
     description = "SDL multiplatform networking library";
-    homepage = "https://www.libsdl.org/projects/SDL_net";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    inherit (SDL2.meta) platforms;
   };
-}
+})
