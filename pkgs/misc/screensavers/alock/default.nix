@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, gitUpdater, pkg-config, autoreconfHook
 , libX11, pam, libgcrypt, libXrender, imlib2 }:
 
 stdenv.mkDerivation rec {
@@ -26,6 +26,11 @@ stdenv.mkDerivation rec {
     libX11
     pam libgcrypt libXrender imlib2
   ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    ignoredVersions = "^[^.]+$"; # ignore versions without a dot
+  };
 
   meta = with lib; {
     homepage = "https://github.com/Arkq/alock";
