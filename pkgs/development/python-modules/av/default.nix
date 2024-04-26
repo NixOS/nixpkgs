@@ -1,12 +1,12 @@
 { lib
 , stdenv
+, pkgsBuildBuild
 , buildPythonPackage
 , cython
 , fetchFromGitHub
 , ffmpeg_5-headless
 , numpy
 , pillow
-, pkg-config
 , pytestCheckHook
 , pythonOlder
 , setuptools
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cython
-    pkg-config
+    pkgsBuildBuild.pkg-config
     setuptools
   ];
 
