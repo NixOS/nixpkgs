@@ -9,7 +9,7 @@ import sys
 feature_versions = (8, 11, 16, 17, 18, 19, 20, 21)
 oses = ("mac", "linux", "alpine-linux")
 types = ("jre", "jdk")
-impls = ("hotspot")
+impls = ("hotspot",)
 
 arch_to_nixos = {
     "x64": ("x86_64",),
