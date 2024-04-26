@@ -6,6 +6,7 @@
 , pkgsCross
 , fetchFromGitHub
 , fetchzip
+, fetchpatch
 , buildPackages
 , makeBinaryWrapper
 , ninja
@@ -67,6 +68,7 @@
 , p11-kit
 , libpwquality
 , qrencode
+, libarchive
 
   # the (optional) BPF feature requires bpftool, libbpf, clang and llvm-strip to
   # be available during build time.
@@ -153,6 +155,7 @@
   # building disk images for non-NixOS systems. To save users from trying to use it
   # on their live NixOS system, we disable it by default.
 , withKernelInstall ? false
+, withLibarchive ? true
   # tests assume too much system access for them to be feasible for us right now
 , withTests ? false
   # build only libudev and libsystemd
@@ -179,14 +182,14 @@ assert withBootloader -> withEfi;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "255.9";
+  version = "256.2";
 
   # Use the command below to update `releaseTimestamp` on every (major) version
   # change. More details in the commentary at mesonFlags.
   # command:
   #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
-  releaseTimestamp = "1701895110";
+  releaseTimestamp = "1720202583";
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
@@ -195,9 +198,9 @@ stdenv.mkDerivation (finalAttrs: {
   # This has proven to be less error-prone than the previous systemd fork.
   src = fetchFromGitHub {
     owner = "systemd";
-    repo = "systemd-stable";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-fnMvBYyMRQrP2x//8ntGTSwoHOtFk2TQ4S5fwcsSLDU=";
+    repo = "systemd";
+    rev = "v${version}";
+    hash = "sha256-fyHzL+oe192YYuwyoTrov10IlrB0NSfY/XKVWzJrQEI=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -226,6 +229,19 @@ stdenv.mkDerivation (finalAttrs: {
     ./0015-tpm2_context_init-fix-driver-name-checking.patch
     ./0016-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
     ./0017-meson.build-do-not-create-systemdstatedir.patch
+
+    # https://github.com/systemd/systemd/pull/33258
+    # Remove after 256.3
+    (fetchpatch {
+      url = "https://github.com/systemd/systemd/compare/b268a71069786a45460807967e669d505ba3c5a2..f26b2ec46118a4493608618da2253bb9dfc6b517.patch";
+      hash = "sha256-OmuPDm3NykrDeNTA3NcYt9iTXEUFwKJ5apPP4KqtABg=";
+    })
+
+    # https://github.com/systemd/systemd/pull/33400
+    (fetchpatch {
+      url = "https://github.com/systemd/systemd/compare/051d462b42fe6c27824046c15cd3c84fa5afe05b..5e2d802c018f0b6d5dd58745f64d6958fa261096.patch";
+      hash = "sha256-drGAnx+ECixOjIP0DUSbCG/emUgoVips9WQL5ny3NKQ=";
+    })
   ] ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
     ./0018-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
@@ -355,7 +371,15 @@ stdenv.mkDerivation (finalAttrs: {
           # Support for PKCS#11 in systemd-cryptsetup, systemd-cryptenroll and systemd-homed
           { name = "libp11-kit.so.0"; pkg = opt (withHomed || withCryptsetup) p11-kit; }
 
+          # Compression
+          { name = "liblz4.so.1"; pkg = opt withCompression lz4; }
+          { name = "liblzma.so.5"; pkg = opt withCompression xz; }
+          { name = "libzstd.so.1"; pkg = opt withCompression zstd; }
+
           { name = "libip4tc.so.2"; pkg = opt withIptables iptables; }
+          { name = "libarchive.so.13"; pkg = opt withLibarchive libarchive; }
+          { name = "libkmod.so.2"; pkg = opt withKmod kmod; }
+          { name = "libgcrypt.so.20"; pkg = opt wantGcrypt libgcrypt; }
         ];
 
       patchDlOpen = dl:
@@ -476,6 +500,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withUkify (python3Packages.python.withPackages (ps: with ps; [ pefile ]))
     ++ lib.optionals withPasswordQuality [ libpwquality ]
     ++ lib.optionals withQrencode [ qrencode ]
+    ++ lib.optionals withLibarchive [ libarchive ]
   ;
 
   mesonBuildType = "release";
@@ -492,13 +517,11 @@ stdenv.mkDerivation (finalAttrs: {
     #   https://github.com/systemd/systemd/blob/60e930fc3e6eb8a36fbc184773119eb8d2f30364/NEWS#L258-L266
     (lib.mesonOption "time-epoch" releaseTimestamp)
 
-    (lib.mesonOption "version-tag" finalAttrs.version)
+    (lib.mesonOption "version-tag" version)
     (lib.mesonOption "mode" "release")
     (lib.mesonOption "tty-gid" "3") # tty in NixOS has gid 3
     (lib.mesonOption "debug-shell" "${bashInteractive}/bin/bash")
     (lib.mesonOption "pamconfdir" "${placeholder "out"}/etc/pam.d")
-    # Use cgroupsv2. This is already the upstream default, but better be explicit.
-    (lib.mesonOption "default-hierarchy" "unified")
     (lib.mesonOption "kmod-path" "${kmod}/bin/kmod")
 
     # Attempts to check /usr/sbin and that fails in macOS sandbox because
@@ -524,8 +547,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "sbat-distro" "nixos")
     (lib.mesonOption "sbat-distro-summary" "NixOS")
     (lib.mesonOption "sbat-distro-url" "https://nixos.org/")
-    (lib.mesonOption "sbat-distro-pkgname" finalAttrs.pname)
-    (lib.mesonOption "sbat-distro-version" finalAttrs.version)
+    (lib.mesonOption "sbat-distro-pkgname" pname)
+    (lib.mesonOption "sbat-distro-version" version)
 
     # Users
     (lib.mesonOption "system-uid-max" "999")
@@ -542,6 +565,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Mount
     (lib.mesonOption "mount-path" "${lib.getOutput "mount" util-linux}/bin/mount")
     (lib.mesonOption "umount-path" "${lib.getOutput "mount" util-linux}/bin/umount")
+
+    # SSH
+    # Disabled for now until someone makes this work.
+    (lib.mesonOption "sshconfdir" "no")
+    (lib.mesonOption "sshdconfdir" "no")
 
 
     # Features
@@ -606,6 +634,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "kmod" withKmod)
     (lib.mesonEnable "qrencode" withQrencode)
     (lib.mesonEnable "vmspawn" withVmspawn)
+    (lib.mesonEnable "libarchive" withLibarchive)
     (lib.mesonEnable "xenctrl" false)
     (lib.mesonEnable "gnutls" false)
     (lib.mesonEnable "xkbcommon" false)
@@ -873,7 +902,8 @@ stdenv.mkDerivation (finalAttrs: {
     interfaceVersion = 2;
 
     inherit withBootloader withCryptsetup withEfi withHostnamed withImportd withKmod
-      withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
+      withLocaled withMachined withPortabled withTimedated withTpm2Tss withUtmp
+      util-linux kmod kbd;
 
     tests = {
       inherit (nixosTests)

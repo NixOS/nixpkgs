@@ -70,6 +70,7 @@ let
     "systemd-tmpfiles-setup-dev.service"
     "systemd-tmpfiles-setup.service"
     "timers.target"
+    "tpm2.target"
     "umount.target"
     "systemd-bsod.service"
   ] ++ cfg.additionalUpstreamUnits;
@@ -344,7 +345,8 @@ in {
     };
 
     enableTpm2 = mkOption {
-      default = true;
+      default = cfg.package.withTpm2Tss;
+      defaultText = "boot.initrd.systemd.package.withTpm2Tss";
       type = types.bool;
       description = ''
         Whether to enable TPM2 support in the initrd.
@@ -460,6 +462,7 @@ in {
         "${cfg.package}/lib/systemd/systemd-sulogin-shell"
         "${cfg.package}/lib/systemd/systemd-sysctl"
         "${cfg.package}/lib/systemd/systemd-bsod"
+        "${cfg.package}/lib/systemd/systemd-sysroot-fstab-check"
 
         # generators
         "${cfg.package}/lib/systemd/system-generators/systemd-debug-generator"
@@ -486,6 +489,8 @@ in {
         # fido2 support
         "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-fido2.so"
         "${pkgs.libfido2}/lib/libfido2.so.1"
+      ] ++ optionals cfg.package.withKmod [
+        "${pkgs.kmod.lib}/lib/libkmod.so.2"
       ] ++ jobScripts;
 
       targets.initrd.aliases = ["default.target"];
