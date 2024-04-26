@@ -27,15 +27,15 @@
 }:
 buildPythonPackage rec {
   pname = "conda";
-  version = "24.1.2";
+  version = "24.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     inherit pname version;
     owner = "conda";
     repo = "conda";
-    rev = version;
-    hash = "sha256-L/Y7Bb3R5YqXbjTN4CRPFnkgymVLrxuFmjVzpvt28dE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-LdoBlR5EFYd2mQIjOgp1MH3w6osfRfurPq+N5Y1iaFw=";
   };
 
   nativeBuildInputs = [ pythonRelaxDepsHook ];
