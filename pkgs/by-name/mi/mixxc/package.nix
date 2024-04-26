@@ -6,6 +6,7 @@
   libpulseaudio,
   gtk4-layer-shell,
   gtk4,
+  wrapGAppsHook4,
   libxcb,
   installShellFiles,
   enableWayland ? true,
@@ -32,7 +33,7 @@ rustPlatform.buildRustPackage rec {
 
   outputs = ["out" "man"];
 
-  nativeBuildInputs = [pkg-config installShellFiles];
+  nativeBuildInputs = [pkg-config installShellFiles wrapGAppsHook4];
   buildInputs = with lib;
     [libpulseaudio gtk4]
     ++ optionals enableWayland [gtk4-layer-shell]
