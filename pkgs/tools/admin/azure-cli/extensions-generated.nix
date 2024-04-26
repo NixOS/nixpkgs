@@ -650,6 +650,13 @@
     sha256 = "22ddf4b1cdc77e99262cb6089c4d96040065828a1d38a2709fdb945d3c851839";
     description = "Support for Management Partner preview";
   };
+  mdp = mkAzExtension rec {
+    pname = "mdp";
+    version = "1.0.0b1";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/mdp-${version}-py3-none-any.whl";
+    sha256 = "7875607d84eaf835afe73b9eee9280a5169c5b0b1dd1b66a6eff593fe292a4de";
+    description = "Microsoft Azure Command-Line Tools Mdp Extension";
+  };
   mixed-reality = mkAzExtension rec {
     pname = "mixed-reality";
     version = "0.0.5";
