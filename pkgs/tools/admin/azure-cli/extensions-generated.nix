@@ -442,9 +442,9 @@
   };
   fleet = mkAzExtension rec {
     pname = "fleet";
-    version = "1.0.3";
+    version = "1.1.2";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/fleet-${version}-py3-none-any.whl";
-    sha256 = "cd93b819d0a8c1ab50f4aec00b31623fd01040362c4cd633a89ba03fc894eb73";
+    sha256 = "d0d2cf188da6a2f72ebc335d1ff82827c84a4965e23188e3408c85b90e2131dc";
     description = "Microsoft Azure Command-Line Tools Fleet Extension";
   };
   fluid-relay = mkAzExtension rec {
