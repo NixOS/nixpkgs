@@ -7219,6 +7219,12 @@
     githubId = 40209356;
     name = "Gabriel Doriath Döhler";
   };
+  gdifolco = {
+    email = "gautier.difolco@gmail.com";
+    github = "blackheaven";
+    githubId = 1362807;
+    name = "Gautier Di Folco";
+  };
   gdinh = {
     email = "nix@contact.dinh.ai";
     github = "gdinh";
