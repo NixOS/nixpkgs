@@ -1,13 +1,13 @@
 { lib, fetchFromGitHub, buildGoModule }:
 buildGoModule rec {
   pname = "vmagent";
-  version = "1.100.1";
+  version = "1.101.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaMetrics";
     rev = "v${version}";
-    sha256 = "sha256-OheW6sCn/yXgSrtUe1zqDGaH6G8HG4QRQhFznaZGvX0=";
+    sha256 = "sha256-Jjz/CbVCvc9NFbvzYTFthG8cov4pYpc6y1A1Kmd3Mjg=";
   };
 
   ldflags = [ "-s" "-w" "-X github.com/VictoriaMetrics/VictoriaMetrics/lib/buildinfo.Version=${version}" ];
