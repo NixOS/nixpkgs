@@ -61,6 +61,11 @@ buildPythonPackage rec {
     "rq"
   ];
 
+  disabledTests = [
+    # fixed on master, patch does not apply cleanly
+    "test_clean_large_registry"
+  ];
+
   meta = with lib; {
     description = "Library for creating background jobs and processing them";
     homepage = "https://github.com/nvie/rq/";
