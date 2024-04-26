@@ -206,7 +206,7 @@ stdenv.mkDerivation (finalAttrs: {
       experience, while offering full customization and a growing collection of
       extensions and themes to make the browser truly your own.
     '';
-    changelog = "https://repo.palemoon.org/MoonchildProductions/Pale-Moon/releases/tag/${version}_Release";
+    changelog = "https://repo.palemoon.org/MoonchildProductions/Pale-Moon/releases/tag/${finalAttrs.version}_Release";
     license = [
       licenses.mpl20
       {

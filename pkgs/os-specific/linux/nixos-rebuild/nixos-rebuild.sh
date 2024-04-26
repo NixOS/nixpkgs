@@ -50,6 +50,10 @@ while [ "$#" -gt 0 ]; do
         ;;
       switch|boot|test|build|edit|repl|dry-build|dry-run|dry-activate|build-vm|build-vm-with-bootloader|list-generations)
         if [ "$i" = dry-run ]; then i=dry-build; fi
+        if [ "$i" = list-generations ]; then
+            buildNix=
+            fast=1
+        fi
         # exactly one action mandatory, bail out if multiple are given
         if [ -n "$action" ]; then showSyntax; fi
         action="$i"

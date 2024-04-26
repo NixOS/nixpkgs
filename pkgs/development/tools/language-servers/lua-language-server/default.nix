@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "A language server that offers Lua language support";
     homepage = "https://github.com/luals/lua-language-server";
-    changelog = "https://github.com/LuaLS/lua-language-server/blob/${version}/changelog.md";
+    changelog = "https://github.com/LuaLS/lua-language-server/blob/${finalAttrs.version}/changelog.md";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda gepbird sei40kr ];
     mainProgram = "lua-language-server";

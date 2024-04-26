@@ -2034,6 +2034,12 @@
     githubId = 687218;
     name = "averelld";
   };
+  avery = {
+    email = "nixpkgs@avery.cafe";
+    github = "coolavery";
+    githubId = 76545554;
+    name = "Avery";
+  };
   avh4 = {
     email = "gruen0aermel@gmail.com";
     github = "avh4";
@@ -7212,6 +7218,12 @@
     github = "gabriel-doriath-dohler";
     githubId = 40209356;
     name = "Gabriel Doriath Döhler";
+  };
+  gdifolco = {
+    email = "gautier.difolco@gmail.com";
+    github = "blackheaven";
+    githubId = 1362807;
+    name = "Gautier Di Folco";
   };
   gdinh = {
     email = "nix@contact.dinh.ai";

@@ -2,20 +2,28 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-synapse-compress-state";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SSfVtG8kwHarVbB1O7xC2SSbUpPGYMHTMyoxu8mpEk0=";
+    hash = "sha256-nNQ/d4FFAvI+UY+XeqExyhngq+k+j5Pkz94ch27aoVM=";
   };
 
-  cargoSha256 = "sha256-PG+UeovhJMsIlm5dOYdtMxbUxZjwG3V59kAcB9aFP5c=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "state-map-0.1.0" = "sha256-zToFCioijyT0vZ6c1uO+1ho+RODTe4OwbK2GhoKk+X4=";
+    };
+  };
 
   cargoBuildFlags = [
     "--all"
   ];
+
+  # Needed to get openssl-sys to use pkgconfig.
+  env.OPENSSL_NO_VENDOR = 1;
 
   nativeBuildInputs = [ python3 pkg-config ];
 
