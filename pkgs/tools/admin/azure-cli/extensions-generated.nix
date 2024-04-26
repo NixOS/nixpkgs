@@ -468,6 +468,13 @@
     sha256 = "84abeed03b4bbfa7b8c0be08d9366ff3040e2160df4f5a539f0e1c9e0a1c359c";
     description = "Microsoft Azure Command-Line Tools fzf Extension";
   };
+  gallery-service-artifact = mkAzExtension rec {
+    pname = "gallery-service-artifact";
+    version = "1.0.0b1";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/gallery_service_artifact-${version}-py3-none-any.whl";
+    sha256 = "3f30e3e8e7e678fd9ab91b2261fb918a303cd382626509d3f00e86f1967750c6";
+    description = "Microsoft Azure Command-Line Tools GalleryServiceArtifact Extension";
+  };
   graphservices = mkAzExtension rec {
     pname = "graphservices";
     version = "1.0.0b1";
