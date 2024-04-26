@@ -218,9 +218,9 @@
   };
   confluent = mkAzExtension rec {
     pname = "confluent";
-    version = "0.4.0";
+    version = "0.6.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/confluent-${version}-py3-none-any.whl";
-    sha256 = "7b812940a77094bc916c745a61b7732966de4e7943a7541c0a402c0d912bc6af";
+    sha256 = "7987d22e0e9cada28087a900bfa534865531941f2bbfe967eb46c90b2e0a12be";
     description = "Microsoft Azure Command-Line Tools ConfluentManagementClient Extension";
   };
   connectedmachine = mkAzExtension rec {
