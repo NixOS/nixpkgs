@@ -106,9 +106,9 @@
   };
   appservice-kube = mkAzExtension rec {
     pname = "appservice-kube";
-    version = "0.1.9";
+    version = "0.1.10";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/appservice_kube-${version}-py2.py3-none-any.whl";
-    sha256 = "9107762296c67ef4035256a9790b075040f263804116a3f9a6866227ff6019ed";
+    sha256 = "7fd72d27e4b0eceda3b2b4f301c7a0c3068fea8b96d70f9fcaad142240de7d0d";
     description = "Microsoft Azure Command-Line Tools App Service on Kubernetes Extension";
   };
   astronomer = mkAzExtension rec {
