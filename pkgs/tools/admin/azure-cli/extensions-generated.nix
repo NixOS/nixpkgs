@@ -1023,9 +1023,9 @@
   };
   workloads = mkAzExtension rec {
     pname = "workloads";
-    version = "0.1.0a1";
+    version = "1.1.0b1";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/workloads-${version}-py3-none-any.whl";
-    sha256 = "0e5ba95c3799d043fc2ba869ce0c5b2eea200357a8b0cbd2b2733bb91d4cc7a8";
+    sha256 = "262c41b08b831d689802634bb1a0fea0add38c3611f27b2036576d45232a1ff5";
     description = "Microsoft Azure Command-Line Tools Workloads Extension";
   };
 }
