@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitLab, doxygen, glib, libaccounts-glib, pkg-config, qmake, qtbase, wrapQtAppsHook }:
+{ stdenv, lib, fetchFromGitLab, gitUpdater, doxygen, glib, libaccounts-glib, pkg-config, qmake, qtbase, wrapQtAppsHook }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "accounts-qt";
@@ -20,6 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$out"/bin/*
   '';
+
+  passthru.updateScript = gitUpdater {
+    rev = "VERSION_";
+  };
 
   meta = with lib; {
     description = "Qt library for accessing the online accounts database";
