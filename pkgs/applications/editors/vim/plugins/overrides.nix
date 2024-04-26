@@ -1040,7 +1040,8 @@
 
     # nvim-dbee looks for the go binary in paths returned bu M.dir() and M.bin() defined in lua/dbee/install/init.lua
     postPatch = ''
-      substituteInPlace lua/dbee/install/init.lua --replace 'return vim.fn.stdpath("data") .. "/dbee/bin"' 'return "${dbee-go}/bin"'
+      substituteInPlace lua/dbee/install/init.lua \
+        --replace-fail 'return vim.fn.stdpath("data") .. "/dbee/bin"' 'return "${dbee-go}/bin"'
     '';
 
     preFixup = ''
