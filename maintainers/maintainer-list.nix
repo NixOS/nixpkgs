@@ -20326,12 +20326,6 @@
     github = "tirimia";
     githubId = 11174371;
   };
-  titanous = {
-    email = "jonathan@titanous.com";
-    github = "titanous";
-    githubId = 13026;
-    name = "Jonathan Rudenberg";
-  };
   tjni = {
     email = "43ngvg@masqt.com";
     matrix = "@tni:matrix.org";
