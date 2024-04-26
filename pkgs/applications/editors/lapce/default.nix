@@ -128,5 +128,7 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ elliot ];
     mainProgram = "lapce";
+    # Undefined symbols for architecture x86_64: "_NSPasteboardTypeFileURL"
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
