@@ -45,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/explosion/cymem";
     changelog = "https://github.com/explosion/cymem/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }
