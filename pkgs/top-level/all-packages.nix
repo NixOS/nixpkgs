@@ -11543,9 +11543,7 @@ with pkgs;
   opentelemetry-collector = callPackage ../tools/misc/opentelemetry-collector { };
   opentelemetry-collector-contrib = callPackage ../tools/misc/opentelemetry-collector/contrib.nix { };
 
-  openvswitch = callPackage ../os-specific/linux/openvswitch { };
-
-  openvswitch-lts = callPackage ../os-specific/linux/openvswitch/lts.nix { };
+  openvswitch-lts = callPackage ../by-name/op/openvswitch/lts.nix { };
 
   ovn-lts = callPackage ../by-name/ov/ovn/lts.nix { };
 
