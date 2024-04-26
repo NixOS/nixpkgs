@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "A blocking, shuffling and loss-less compression library";
     homepage = "https://www.blosc.org";
-    changelog = "https://github.com/Blosc/c-blosc/releases/tag/v${version}";
+    changelog = "https://github.com/Blosc/c-blosc/releases/tag/v${finalAttrs.version}";
     pkgConfigModules = [
       "blosc"
     ];

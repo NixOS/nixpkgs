@@ -206,7 +206,7 @@ stdenv.mkDerivation(finalAttrs: {
 
   meta = with lib; {
     description = "Server and user space API to deal with multimedia pipelines";
-    changelog = "https://gitlab.freedesktop.org/pipewire/pipewire/-/releases/${version}";
+    changelog = "https://gitlab.freedesktop.org/pipewire/pipewire/-/releases/${finalAttrs.version}";
     homepage = "https://pipewire.org/";
     license = licenses.mit;
     platforms = platforms.linux;

@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "A fast, compressed, persistent binary data store library for C";
     homepage = "https://www.blosc.org";
-    changelog = "https://github.com/Blosc/c-blosc2/releases/tag/v${version}";
+    changelog = "https://github.com/Blosc/c-blosc2/releases/tag/v${finalAttrs.version}";
     pkgConfigModules = [
       "blosc2"
     ];
