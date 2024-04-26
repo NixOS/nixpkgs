@@ -36548,8 +36548,6 @@ with pkgs;
 
   doomrunner = qt5.callPackage ../games/doom-ports/doomrunner { };
 
-  chocolate-doom = callPackage ../games/doom-ports/chocolate-doom { };
-
   crispy-doom = callPackage ../games/doom-ports/crispy-doom { };
 
   eureka-editor = callPackage ../games/doom-ports/eureka-editor { };
