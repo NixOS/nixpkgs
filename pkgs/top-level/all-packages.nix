@@ -1434,9 +1434,11 @@ with pkgs;
     name = "find-xml-catalogs-hook";
   } ../build-support/setup-hooks/find-xml-catalogs.sh;
 
-  wrapGAppsHook = wrapGAppsNoGuiHook.override {
+  wrapGAppsHook3 = wrapGAppsNoGuiHook.override {
     isGraphical = true;
   };
+
+  wrapGAppsHook = wrapGAppsHook3;
 
   wrapGAppsHook4 = wrapGAppsNoGuiHook.override {
     isGraphical = true;
