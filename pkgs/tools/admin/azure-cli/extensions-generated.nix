@@ -902,6 +902,13 @@
     sha256 = "cc99134288545178d08b18abd5b7c9e3d099d2add8b52ab9308f6c5fd97ae60c";
     description = "Microsoft Azure Command-Line Tools AzureStackHCIClient Extension ";
   };
+  standbypool = mkAzExtension rec {
+    pname = "standbypool";
+    version = "1.0.0b1";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/standbypool-${version}-py3-none-any.whl";
+    sha256 = "44c03e320c8b49f52390e3c11d61b25a67afeffc18d62baa522c373142de0e15";
+    description = "Microsoft Azure Command-Line Tools Standbypool Extension";
+  };
   staticwebapp = mkAzExtension rec {
     pname = "staticwebapp";
     version = "1.0.0";
