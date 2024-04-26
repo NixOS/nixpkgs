@@ -337,10 +337,10 @@
   };
   desktopvirtualization = mkAzExtension rec {
     pname = "desktopvirtualization";
-    version = "0.2.0";
+    version = "1.0.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/desktopvirtualization-${version}-py3-none-any.whl";
-    sha256 = "6de28d6be58dd65ad8f25a9fa084676c54684f00f9938f5db7d0392282783e04";
-    description = "Microsoft Azure Command-Line Tools DesktopVirtualizationAPIClient Extension";
+    sha256 = "3a1e7a8f0e579fa21fed770859b21c23bec8b8489d834a61411695a9a90c7cd4";
+    description = "Microsoft Azure Command-Line Tools Desktopvirtualization Extension";
   };
   dev-spaces = mkAzExtension rec {
     pname = "dev-spaces";
