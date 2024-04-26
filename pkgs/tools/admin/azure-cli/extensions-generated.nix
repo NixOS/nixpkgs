@@ -111,6 +111,13 @@
     sha256 = "9107762296c67ef4035256a9790b075040f263804116a3f9a6866227ff6019ed";
     description = "Microsoft Azure Command-Line Tools App Service on Kubernetes Extension";
   };
+  astronomer = mkAzExtension rec {
+    pname = "astronomer";
+    version = "1.0.0";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/astronomer-${version}-py3-none-any.whl";
+    sha256 = "b4ca41b5d9cb77aed2b462ded4a392ae3ce896ce8d9cb94a08671d0cb68176cd";
+    description = "Microsoft Azure Command-Line Tools Astronomer Extension";
+  };
   authV2 = mkAzExtension rec {
     pname = "authV2";
     version = "0.1.3";
