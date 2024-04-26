@@ -433,6 +433,13 @@
     sha256 = "b83f723baae0ea04557a87f358fa2131baf15d45cd3aba7a9ab42d14ec80df38";
     description = "Manage customer ExpressRoute circuits using an ExpressRoute cross-connection";
   };
+  firmwareanalysis = mkAzExtension rec {
+    pname = "firmwareanalysis";
+    version = "1.0.0";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/firmwareanalysis-${version}-py3-none-any.whl";
+    sha256 = "1c3df1441de76edb08bed05ac279dd2b02bd6fab68a0b9a495dfd7ecce3e92cb";
+    description = "Microsoft Azure Command-Line Tools Firmwareanalysis Extension";
+  };
   fleet = mkAzExtension rec {
     pname = "fleet";
     version = "1.0.3";
