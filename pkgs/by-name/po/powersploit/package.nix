@@ -16,9 +16,9 @@ stdenvNoCC.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/share/powersploit
-    cp -a * $out/share/powersploit
-    find $out/share -type f -exec chmod -x {} \;
+    mkdir -p $out/share/windows/powersploit
+    cp -a * $out/share/windows/powersploit
+    find $out/share/windows -type f -exec chmod -x {} \;
     runHook postInstall
   '';
 
