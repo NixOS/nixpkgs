@@ -10,15 +10,15 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-frontdoor";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    hash = "sha256-GqrJNNcQrNffgqRywgaJ2xkwy+fOJai/RlSVkpw6NWg=";
+    pname = "azure_mgmt_frontdoor";
+    inherit version;
+    hash = "sha256-DSV/vIE6r0wgPLpHfT4ODqNoxzeCPIlAksmsnEuExSg=";
   };
 
   build-system = [
