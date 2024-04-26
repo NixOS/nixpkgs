@@ -1,35 +1,47 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{ fetchFromGitHub
+, lib
+, makeWrapper
 , python3
 , runCommand
-, makeWrapper
+, stdenv
 , stress-ng
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "graphene-hardened-malloc";
-  version = "12";
+  version = "2024040900";
 
   src = fetchFromGitHub {
     owner = "GrapheneOS";
     repo = "hardened_malloc";
     rev = finalAttrs.version;
-    sha256 = "sha256-ujwzr4njNsf/VTyEq7zKHWxoivU3feavSTx+MLIj1ZM=";
+    sha256 = "sha256-1j7xzhuhK8ZRAJm9dJ95xiTIla7lh3LBiWc/+x/kjp0=";
   };
 
-  doCheck = true;
   nativeCheckInputs = [ python3 ];
   # these tests cover use as a build-time-linked library
   checkTarget = "test";
+  doCheck = true;
+
+  buildPhase = ''
+    runHook preBuild
+
+    for VARIANT in default light; do make $makeFlags ''${enableParallelBuilding:+-j$NIX_BUILD_CORES} VARIANT=$VARIANT; done
+
+    runHook postBuild
+  '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm444 -t $out/include include/*
-    install -Dm444 -t $out/lib out/libhardened_malloc.so
+    install -Dm444 -t $out/lib out/libhardened_malloc.so out-light/libhardened_malloc-light.so
 
     mkdir -p $out/bin
     substitute preload.sh $out/bin/preload-hardened-malloc --replace "\$dir" $out/lib
     chmod 0555 $out/bin/preload-hardened-malloc
+
+    runHook postInstall
   '';
 
   separateDebugInfo = true;
