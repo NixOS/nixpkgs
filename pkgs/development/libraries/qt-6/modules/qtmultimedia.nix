@@ -37,7 +37,9 @@ qtModule {
     ++ lib.optionals stdenv.hostPlatform.isLinux [ gstreamer gst-plugins-base gst-plugins-good gst-libav gst-vaapi ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ VideoToolbox ];
 
-  patches = lib.optionals stdenv.hostPlatform.isMinGW [
+  patches = [
+    ../patches/fix-qtgui-include-incorrect-case.patch
+  ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
     ../patches/qtmultimedia-windows-no-uppercase-libs.patch
     ../patches/qtmultimedia-windows-resolve-function-name.patch
   ];

@@ -2736,8 +2736,6 @@ with pkgs;
     description = mame.meta.description + " (tools only)";
   } (lib.getOutput "tools" mame);
 
-  melonDS = libsForQt5.callPackage ../applications/emulators/melonDS { };
-
   mgba = libsForQt5.callPackage ../applications/emulators/mgba { };
 
   mupen64plus = callPackage ../applications/emulators/mupen64plus { };
@@ -18927,8 +18925,6 @@ with pkgs;
   gperf_3_0 = callPackage ../development/tools/misc/gperf/3.0.x.nix { };
 
   grail = callPackage ../development/libraries/grail { };
-
-  graphene-hardened-malloc = callPackage ../development/libraries/graphene-hardened-malloc { };
 
   graphene = callPackage ../development/libraries/graphene { };
 
