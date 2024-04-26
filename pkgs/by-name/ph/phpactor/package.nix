@@ -30,6 +30,6 @@ php.buildComposerProject (finalAttrs: {
     homepage = "https://github.com/phpactor/phpactor";
     license = lib.licenses.mit;
     mainProgram = "phpactor";
-    maintainers = [ lib.maintainers.patka ] ++ lib.teams.php.members;
+    maintainers = lib.teams.php.members;
   };
 })
