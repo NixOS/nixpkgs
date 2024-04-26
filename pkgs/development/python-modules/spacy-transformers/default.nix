@@ -69,6 +69,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/explosion/spacy-transformers";
     changelog = "https://github.com/explosion/spacy-transformers/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }
