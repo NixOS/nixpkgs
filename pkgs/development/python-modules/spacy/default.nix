@@ -5,6 +5,7 @@
 , callPackage
 , catalogue
 , cymem
+, cython_0
 , fetchPypi
 , hypothesis
 , jinja2
@@ -57,6 +58,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
+    cython_0
   ];
 
   propagatedBuildInputs = [
@@ -135,7 +137,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/explosion/spaCy/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
-    # Cython.Compiler.Errors.CompileError: spacy/ml/parser_model.pyx
-    broken = true;
   };
 }
