@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "alock";
-  version = "unstable-2017-07-20";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "Arkq";
     repo = "alock";
-    rev = "2035e1d4a2293432f5503e82d10f899232eb0f38";
-    sha256 = "sha256-Rm00ytSfEv5Wljz4f/4bbyrK3sCV/oRUwz4DKx0pya8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-xfPhsXZrTlEqea75SvacDfjM9o21MTudrqfNN9xtdcg=";
   };
 
   PAM_DEFAULT_SERVICE = "login";
