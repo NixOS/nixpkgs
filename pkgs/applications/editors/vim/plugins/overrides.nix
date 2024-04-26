@@ -126,6 +126,10 @@
     nvimRequireCheck = "alpha";
   };
 
+  animation-nvim = super.animation-nvim.overrideAttrs {
+    dependencies = with self; [ luaPackages.middleclass ];
+  };
+
   autosave-nvim = super.autosave-nvim.overrideAttrs {
     dependencies = with super; [ plenary-nvim ];
   };
