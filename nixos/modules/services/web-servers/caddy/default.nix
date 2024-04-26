@@ -365,7 +365,7 @@ in
         # If the empty string is assigned to this option, the list of commands to start is reset, prior assignments of this option will have no effect.
         ExecStart = [ "" ''${cfg.package}/bin/caddy run ${runOptions} ${optionalString cfg.resume "--resume"}'' ];
         # Validating the configuration before applying it ensures we’ll get a proper error that will be reported when switching to the configuration
-        ExecReload = [ "" ''${cfg.package}/bin/caddy reload ${runOptions} --force'' ];
+        ExecReload = [ "" ] ++ lib.optional cfg.enableReload "${lib.getExe cfg.package} reload ${runOptions} --force";
         User = cfg.user;
         Group = cfg.group;
         ReadWritePaths = [ cfg.dataDir ];
