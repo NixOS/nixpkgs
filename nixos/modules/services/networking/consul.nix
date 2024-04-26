@@ -13,7 +13,14 @@ let
     };
   } // cfg.extraConfig;
 
+  jsonFormat = pkgs.formats.json { };
+  enabledServices = attrValues (filterAttrs (_: svc: svc.enable) cfg.services);
+  servicesCfg = jsonFormat.generate "consul-services.json" {
+    services = map (filterAttrs (k: _: k != "enable")) enabledServices;
+  };
+
   configFiles = [ "/etc/consul.json" "/etc/consul-addrs.json" ]
+    ++ (optional (enabledServices != [ ]) "/etc/consul-services.json")
     ++ cfg.extraConfigFiles;
 
   devices = attrValues (filterAttrs (_: i: i != null) cfg.interface);
@@ -147,6 +154,35 @@ in
         };
       };
 
+      services = mkOption {
+        description = "Services to automatically register with this consul agent.";
+        default = { };
+        type = types.attrsOf (types.submodule ({ name, ... }: {
+          freeformType = jsonFormat.type;
+
+          options = {
+            enable = mkOption {
+              description = "Whether to register this service. Can be set to `false` to stop registering a service without removing it from your config.";
+              default = true;
+              type = types.bool;
+            };
+
+            id = mkOption {
+              description = "ID for this instance of the service.";
+              default = "${name}:${config.networking.hostName}";
+              defaultText = literalExpression ''"''${name}:''${config.networking.hostName}"'';
+              type = types.str;
+            };
+
+            name = mkOption {
+              description = "The name of the service to register.";
+              default = name;
+              type = types.str;
+            };
+          };
+        }));
+      };
+
     };
 
   };
@@ -245,6 +281,11 @@ in
     # deprecated
     (mkIf (cfg.forceIpv4 != null && cfg.forceIpv4) {
       services.consul.forceAddrFamily = "ipv4";
+    })
+
+    (mkIf (enabledServices != [ ]) {
+      environment.etc."consul-services.json".source = servicesCfg;
+      systemd.services.consul.reloadTriggers = [ servicesCfg ];
     })
 
     (mkIf (cfg.alerts.enable) {
