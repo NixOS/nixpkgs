@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, pytestCheckHook
 , pythonRelaxDepsHook
 , poetry-core
 , httpx

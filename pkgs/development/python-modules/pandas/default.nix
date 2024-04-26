@@ -6,7 +6,7 @@
 , pythonOlder
 
 # build-system
-, cython_3
+, cython
 , meson-python
 , meson
 , oldest-supported-numpy
@@ -84,7 +84,7 @@ let pandas = buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    cython_3
+    cython
     meson-python
     meson
     numpy

@@ -32,7 +32,10 @@ let
       callPackage = self.newScope ({
         inherit (self) qtModule;
         inherit srcs python3;
-        stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+        stdenv =
+          if stdenv.isDarwin
+          then overrideSDK stdenv { darwinMinVersion = "11.0"; darwinSdkVersion = "11.0"; }
+          else stdenv;
       });
     in
     {
@@ -51,14 +54,13 @@ let
           ./patches/0001-qtbase-qmake-always-use-libname-instead-of-absolute-.patch
           ./patches/0002-qtbase-qmake-fix-mkspecs-for-darwin.patch
           ./patches/0003-qtbase-qmake-fix-includedir-in-generated-pkg-config.patch
-          ./patches/0004-qtbase-deal-with-a-font-face-at-index-0-as-Regular-f.patch
-          ./patches/0005-qtbase-qt-cmake-always-use-cmake-from-path.patch
-          ./patches/0006-qtbase-find-tools-in-PATH.patch
-          ./patches/0007-qtbase-pass-to-qmlimportscanner-the-QML2_IMPORT_PATH.patch
-          ./patches/0008-qtbase-allow-translations-outside-prefix.patch
-          ./patches/0009-qtbase-find-qmlimportscanner-in-macdeployqt-via-envi.patch
-          ./patches/0010-qtbase-check-in-the-QML-folder-of-this-library-does-.patch
-          ./patches/0011-qtbase-derive-plugin-load-path-from-PATH.patch
+          ./patches/0004-qtbase-qt-cmake-always-use-cmake-from-path.patch
+          ./patches/0005-qtbase-find-tools-in-PATH.patch
+          ./patches/0006-qtbase-pass-to-qmlimportscanner-the-QML2_IMPORT_PATH.patch
+          ./patches/0007-qtbase-allow-translations-outside-prefix.patch
+          ./patches/0008-qtbase-find-qmlimportscanner-in-macdeployqt-via-envi.patch
+          ./patches/0009-qtbase-check-in-the-QML-folder-of-this-library-does-.patch
+          ./patches/0010-qtbase-derive-plugin-load-path-from-PATH.patch
           # Revert "macOS: Silence warning about supporting secure state restoration"
           # fix build with macOS sdk < 12.0
           (fetchpatch2 {
@@ -168,7 +170,7 @@ let
           ({ qtModule }: qtModule.override {
             stdenv =
               if stdenv.isDarwin
-              then overrideSDK stdenv { darwinMinVersion = "10.13"; darwinSdkVersion = "11.0"; }
+              then overrideSDK stdenv { darwinMinVersion = "11.0"; darwinSdkVersion = "11.0"; }
               else stdenv;
           })
           { };
@@ -201,10 +203,8 @@ let
           } ./hooks/qmake-hook.sh)
         { };
     } // lib.optionalAttrs config.allowAliases {
-      # Convert to a throw on 03-01-2023 and backport the change.
-      # Warnings show up in various cli tool outputs, throws do not.
-      # Remove completely before 24.05
-      overrideScope' = lib.warnIf (lib.isInOldestRelease 2311) "qt6 now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\"." self.overrideScope;
+      # Remove completely before 24.11
+      overrideScope' = builtins.throw "qt6 now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\".";
     };
 
   baseScope = makeScopeWithSplicing' {

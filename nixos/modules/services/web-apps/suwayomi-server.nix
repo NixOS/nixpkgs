@@ -2,14 +2,14 @@
 
 let
   cfg = config.services.suwayomi-server;
-  inherit (lib) mkOption mdDoc mkEnableOption mkIf types;
+  inherit (lib) mkOption mkEnableOption mkIf types;
 
   format = pkgs.formats.hocon { };
 in
 {
   options = {
     services.suwayomi-server = {
-      enable = mkEnableOption (mdDoc "Suwayomi, a free and open source manga reader server that runs extensions built for Tachiyomi.");
+      enable = mkEnableOption "Suwayomi, a free and open source manga reader server that runs extensions built for Tachiyomi.";
 
       package = lib.mkPackageOptionMD pkgs "suwayomi-server" { };
 
@@ -17,7 +17,7 @@ in
         type = types.path;
         default = "/var/lib/suwayomi-server";
         example = "/var/data/mangas";
-        description = mdDoc ''
+        description = ''
           The path to the data directory in which Suwayomi-Server will download scans.
         '';
       };
@@ -26,7 +26,7 @@ in
         type = types.str;
         default = "suwayomi";
         example = "root";
-        description = mdDoc ''
+        description = ''
           User account under which Suwayomi-Server runs.
         '';
       };
@@ -35,7 +35,7 @@ in
         type = types.str;
         default = "suwayomi";
         example = "medias";
-        description = mdDoc ''
+        description = ''
           Group under which Suwayomi-Server runs.
         '';
       };
@@ -43,7 +43,7 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = mdDoc ''
+        description = ''
           Whether to open the firewall for the port in {option}`services.suwayomi-server.settings.server.port`.
         '';
       };
@@ -57,7 +57,7 @@ in
                 type = types.str;
                 default = "0.0.0.0";
                 example = "127.0.0.1";
-                description = mdDoc ''
+                description = ''
                   The ip that Suwayomi will bind to.
                 '';
               };
@@ -66,20 +66,20 @@ in
                 type = types.port;
                 default = 8080;
                 example = 4567;
-                description = mdDoc ''
+                description = ''
                   The port that Suwayomi will listen to.
                 '';
               };
 
-              basicAuthEnabled = mkEnableOption (mdDoc ''
+              basicAuthEnabled = mkEnableOption ''
                 Add basic access authentication to Suwayomi-Server.
                 Enabling this option is useful when hosting on a public network/the Internet
-              '');
+              '';
 
               basicAuthUsername = mkOption {
                 type = types.nullOr types.str;
                 default = null;
-                description = mdDoc ''
+                description = ''
                   The username value that you have to provide when authenticating.
                 '';
               };
@@ -89,7 +89,7 @@ in
                 type = types.nullOr types.path;
                 default = null;
                 example = "/var/secrets/suwayomi-server-password";
-                description = mdDoc ''
+                description = ''
                   The password file containing the value that you have to provide when authenticating.
                 '';
               };
@@ -97,7 +97,7 @@ in
               downloadAsCbz = mkOption {
                 type = types.bool;
                 default = false;
-                description = mdDoc ''
+                description = ''
                   Download chapters as `.cbz` files.
                 '';
               };
@@ -108,7 +108,7 @@ in
                 example = [
                   "https://raw.githubusercontent.com/MY_ACCOUNT/MY_REPO/repo/index.min.json"
                 ];
-                description = mdDoc ''
+                description = ''
                   URL of repositories from which the extensions can be installed.
                 '';
               };
@@ -118,7 +118,7 @@ in
                 default = cfg.dataDir;
                 defaultText = lib.literalExpression "suwayomi-server.dataDir";
                 example = "/var/data/local_mangas";
-                description = mdDoc ''
+                description = ''
                   Path to the local source folder.
                 '';
               };
@@ -126,14 +126,14 @@ in
               systemTrayEnabled = mkOption {
                 type = types.bool;
                 default = false;
-                description = mdDoc ''
+                description = ''
                   Whether to enable a system tray icon, if possible.
                 '';
               };
             };
           };
         };
-        description = mdDoc ''
+        description = ''
           Configuration to write to {file}`server.conf`.
           See <https://github.com/Suwayomi/Suwayomi-Server/wiki/Configuring-Suwayomi-Server> for more information.
         '';

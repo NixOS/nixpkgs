@@ -6,7 +6,6 @@
 , autoPatchelfHook
 , dpkg
 , nss
-, cacert
 , alsa-lib
 , libvorbis
 , libdrm
@@ -22,36 +21,24 @@ let
   # Find a binary from https://www.insynchq.com/downloads/linux#ubuntu.
   version = "3.8.7.50516";
   ubuntu-dist = "mantic_amd64";
-  meta = with lib; {
-    platforms = ["x86_64-linux"];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ hellwolf ];
-    homepage = "https://www.insynchq.com";
-    description = "Google Drive sync and backup with multiple account support";
-    longDescription = ''
-     Insync is a commercial application that syncs your Drive files to your
-     computer.  It has more advanced features than Google's official client
-     such as multiple account support, Google Doc conversion, symlink support,
-     and built in sharing.
-
-     There is a 15-day free trial, and it is a paid application after that.
-
-     Known bug(s):
-
-     1) Currently the system try icon does not render correctly.
-    '';
-    mainProgram = "insync";
-  };
-
+  insyncDeb = (fetchurl {
+    urls = [
+      "https://cdn.insynchq.com/builds/linux/insync_${version}-${ubuntu-dist}.deb"
+      "https://web.archive.org/web/20240409080945/https://cdn.insynchq.com/builds/linux/insync_${version}-${ubuntu-dist}.deb"
+    ];
+    hash = "sha256-U7BcgghbdR7r9WiZpEOka+BzXwnxrzL6p4imGESuB/k=";
+  });
+  insyncEmblemIconsDeb = (fetchurl {
+    urls = [
+      "https://cdn.insynchq.com/builds/linux/insync-emblem-icons_${version}_all.deb"
+      "https://web.archive.org/web/20240409081214/https://cdn.insynchq.com/builds/linux/insync-emblem-icons_${version}_all.deb"
+    ];
+    hash = "sha256-uALaIxETEEkjDTx331uIsb4VswWk2K0dGuDMYH8v5U8=";
+  });
   insync-pkg = stdenvNoCC.mkDerivation {
     name = "${pname}-pkg-${version}";
-    inherit version meta;
 
-    src = fetchurl {
-      url = "https://cdn.insynchq.com/builds/linux/insync_${version}-${ubuntu-dist}.deb";
-      sha256 = "sha256-U7BcgghbdR7r9WiZpEOka+BzXwnxrzL6p4imGESuB/k=";
-    };
+    srcs = [ insyncDeb insyncEmblemIconsDeb ];
 
     nativeBuildInputs = [
       dpkg
@@ -71,7 +58,8 @@ let
     ];
 
     unpackPhase = ''
-      dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner
+      dpkg-deb --fsys-tarfile ${insyncDeb} | tar -x --no-same-permissions --no-same-owner
+      dpkg-deb --fsys-tarfile ${insyncEmblemIconsDeb} | tar -x --no-same-permissions --no-same-owner
     '';
 
     installPhase = ''
@@ -88,8 +76,7 @@ let
   };
 
 in buildFHSEnv {
-  name = pname;
-  inherit meta;
+  inherit pname version;
 
   targetPkgs = pkgs: with pkgs; [
     libudev0-shim
@@ -97,7 +84,7 @@ in buildFHSEnv {
   ];
 
   extraInstallCommands = ''
-    cp -rsHf "${insync-pkg}"/share $out
+    cp -rsHf "${insync-pkg}"/share $out/
   '';
 
   runScript = writeShellScript "insync-wrapper.sh" ''
@@ -119,4 +106,26 @@ in buildFHSEnv {
   unshareCgroup = false;
 
   dieWithParent = true;
+
+  meta = with lib; {
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ hellwolf ];
+    homepage = "https://www.insynchq.com";
+    description = "Google Drive sync and backup with multiple account support";
+    longDescription = ''
+     Insync is a commercial application that syncs your Drive files to your
+     computer.  It has more advanced features than Google's official client
+     such as multiple account support, Google Doc conversion, symlink support,
+     and built in sharing.
+
+     There is a 15-day free trial, and it is a paid application after that.
+
+     Known bug(s):
+
+     1) Currently the system try icon does not render correctly.
+    '';
+    mainProgram = "insync";
+  };
 }

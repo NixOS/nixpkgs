@@ -5,14 +5,14 @@ let
 in {
   options.services.hledger-web = {
 
-    enable = mkEnableOption (lib.mdDoc "hledger-web service");
+    enable = mkEnableOption "hledger-web service";
 
-    serveApi = mkEnableOption (lib.mdDoc "serving only the JSON web API, without the web UI");
+    serveApi = mkEnableOption "serving only the JSON web API, without the web UI";
 
     host = mkOption {
       type = types.str;
       default = "127.0.0.1";
-      description = lib.mdDoc ''
+      description = ''
         Address to listen on.
       '';
     };
@@ -21,7 +21,7 @@ in {
       type = types.port;
       default = 5000;
       example = 80;
-      description = lib.mdDoc ''
+      description = ''
         Port to listen on.
       '';
     };
@@ -29,7 +29,7 @@ in {
     allow = mkOption {
       type = types.enum [ "view" "add" "edit" "sandstorm" ];
       default = "view";
-      description = lib.mdDoc ''
+      description = ''
         User's access level for changing data.
 
         * view: view only permission.
@@ -42,7 +42,7 @@ in {
     stateDir = mkOption {
       type = types.path;
       default = "/var/lib/hledger-web";
-      description = lib.mdDoc ''
+      description = ''
         Path the service has access to. If left as the default value this
         directory will automatically be created before the hledger-web server
         starts, otherwise the sysadmin is responsible for ensuring the
@@ -53,7 +53,7 @@ in {
     journalFiles = mkOption {
       type = types.listOf types.str;
       default = [ ".hledger.journal" ];
-      description = lib.mdDoc ''
+      description = ''
         Paths to journal files relative to {option}`services.hledger-web.stateDir`.
       '';
     };
@@ -62,7 +62,7 @@ in {
       type = with types; nullOr str;
       default = null;
       example = "https://example.org";
-      description = lib.mdDoc ''
+      description = ''
         Base URL, when sharing over a network.
       '';
     };
@@ -71,7 +71,7 @@ in {
       type = types.listOf types.str;
       default = [];
       example = [ "--forecast" ];
-      description = lib.mdDoc ''
+      description = ''
         Extra command line arguments to pass to hledger-web.
       '';
     };

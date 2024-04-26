@@ -1,9 +1,8 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.statsd;
+  inherit (lib) concatStringsSep;
 in
 {
   port = 9102;

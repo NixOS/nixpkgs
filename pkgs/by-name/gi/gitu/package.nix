@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gitu";
-  version = "0.13.1";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "altsem";
     repo = "gitu";
     rev = "v${version}";
-    hash = "sha256-1wfc3n3uSkox2wa5i+Qiv7PZ0d2dXXbwjWw8NMXJXj8=";
+    hash = "sha256-9OY6zBW7UA4lTH+NI61xuil5p2ChQESXrG2zTxdJblE=";
   };
 
-  cargoHash = "sha256-JwNyzA6D8mIzp/+egjD2C7T9mGbcCKKtwFRXBuXMQ+U=";
+  cargoHash = "sha256-gVmoKneAtC5dJh5Z+3aXwxCixrPZTRcxQRpoSh4S1e4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -32,6 +32,7 @@ rustPlatform.buildRustPackage rec {
     openssl
     zlib
   ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.AppKit
     darwin.apple_sdk.frameworks.Security
   ];
 

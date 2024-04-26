@@ -13,7 +13,7 @@
 , fetchYarnDeps
 , yarn
 , nodejs
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , glibcLocales
 , libiconv
 , Cocoa
@@ -66,7 +66,7 @@ let
     inherit version;
 
     nativeBuildInputs = [
-      prefetch-yarn-deps
+      fixup-yarn-lock
       nodejs
       yarn
     ];

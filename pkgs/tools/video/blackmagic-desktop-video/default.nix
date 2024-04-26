@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "blackmagic-desktop-video";
-  version = "12.5a15";
+  version = "12.9a3";
 
   buildInputs = [
     autoPatchelfHook
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     rec {
       outputHashMode = "recursive";
       outputHashAlgo = "sha256";
-      outputHash = "sha256-ss7Ab5dy7cmXp9LBirFXMeGY4ZbYHvWnXmYvNeBq0RY=";
+      outputHash = "sha256-H7AHD6u8KsJoL+ug3QCqxuPfMP4A0nHtIyKx5IaQkdQ=";
 
       impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
       SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
       # from the URL that the POST happens to, see browser console
-      DOWNLOADID = "fecacc0f9b2f4c2e8bf2863e9e26c8e1";
+      DOWNLOADID = "495ebc707969447598c2f1cf0ff8d7d8";
       # from the URL the download page where you click the "only download" button is at
-      REFERID = "052d944af6744608b27da496dfc4396d";
+      REFERID = "6e65a87d97bd49e1915c57f8df255f5c";
       SITEURL = "https://www.blackmagicdesign.com/api/register/us/download/${DOWNLOADID}";
 
       USERAGENT = builtins.concatStringsSep " " [
@@ -72,8 +72,10 @@ stdenv.mkDerivation rec {
       > $out
   '';
 
-  postUnpack = ''
-    tar xf Blackmagic_Desktop_Video_Linux_${lib.versions.majorMinor version}/other/${stdenv.hostPlatform.uname.processor}/desktopvideo-${version}-${stdenv.hostPlatform.uname.processor}.tar.gz
+  postUnpack = let
+    arch = stdenv.hostPlatform.uname.processor;
+  in ''
+    tar xf Blackmagic_Desktop_Video_Linux_${lib.head (lib.splitString "a" version)}/other/${arch}/desktopvideo-${version}-${arch}.tar.gz
     unpacked=$NIX_BUILD_TOP/desktopvideo-${version}-${stdenv.hostPlatform.uname.processor}
   '';
 

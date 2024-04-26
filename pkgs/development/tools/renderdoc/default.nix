@@ -32,13 +32,13 @@ let
 in
 mkDerivation rec {
   pname = "renderdoc";
-  version = "1.31";
+  version = "1.32";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${version}";
-    sha256 = "sha256-R9TMkq9bFRyA7oaPPp0zcUf+ovveLCcuxrm7EokyTbc=";
+    sha256 = "sha256-8Q2QMANieY/Bvb50NtlZEN/Nmd6xurU6AJU0Uo8qDTs=";
   };
 
   buildInputs = [

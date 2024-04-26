@@ -5,13 +5,13 @@ let
 in
 {
   options.programs.mepo = {
-    enable = mkEnableOption (mdDoc "Mepo, a fast, simple and hackable OSM map viewer");
+    enable = mkEnableOption "Mepo, a fast, simple and hackable OSM map viewer";
 
     locationBackends = {
       gpsd = mkOption {
         type = types.bool;
         default = false;
-        description = mdDoc ''
+        description = ''
           Whether to enable location detection via gpsd.
           This may require additional configuration of gpsd, see [here](#opt-services.gpsd.enable)
         '';
@@ -20,7 +20,7 @@ in
       geoclue = mkOption {
         type = types.bool;
         default = true;
-        description = mdDoc "Whether to enable location detection via geoclue";
+        description = "Whether to enable location detection via geoclue";
       };
     };
   };

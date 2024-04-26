@@ -129,7 +129,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "mujoco";
-  version = "3.1.3";
+  version = "3.1.4";
 
   # Bumping version? Make sure to look though the MuJoCo's commit
   # history for bumped dependency pins!
@@ -137,7 +137,7 @@ in stdenv.mkDerivation rec {
     owner = "google-deepmind";
     repo = "mujoco";
     rev = "refs/tags/${version}";
-    hash = "sha256-22yH3zAD479TRNS3XSqy6PuuLqyWmjvwScUTVfKumzY=";
+    hash = "sha256-VgD6ditMDpHki7l23Gjip2roA8Oi4MGpxl+4gSLTEFs=";
   };
 
   patches = [ ./mujoco-system-deps-dont-fetch.patch ];

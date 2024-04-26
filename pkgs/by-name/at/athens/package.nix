@@ -6,16 +6,16 @@
 }:
 buildGoModule rec {
   pname = "athens";
-  version = "0.13.2";
+  version = "0.13.3";
 
   src = fetchFromGitHub {
     owner = "gomods";
     repo = "athens";
     rev = "v${version}";
-    hash = "sha256-UKzR2eGIcAaQNXPx0P/V/1rO32JSr2fGl0U8mPzKjIM=";
+    hash = "sha256-psO3x8xLWGSlsZT2HiAvYWP1rCvbWUx+WoJ4eves9lw=";
   };
 
-  vendorHash = "sha256-NycAQsv/EZYVQz8FmVFcKoFpW7+MxguOxK4ry63A7N4=";
+  vendorHash = "sha256-hk0hmkmhRPRbh2Yqf1lYei6iiKUurMfc1Y3VPNStcBs=";
 
   CGO_ENABLED = "0";
   ldflags = [ "-s" "-w" "-X github.com/gomods/athens/pkg/build.version=${version}" ];

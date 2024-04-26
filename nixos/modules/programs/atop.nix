@@ -14,7 +14,7 @@ in
 
     programs.atop = rec {
 
-      enable = mkEnableOption (lib.mdDoc "Atop, a tool for monitoring system resources");
+      enable = mkEnableOption "Atop, a tool for monitoring system resources";
 
       package = mkPackageOption pkgs "atop" { };
 
@@ -22,7 +22,7 @@ in
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Whether to install and enable the netatop kernel module.
             Note: this sets the kernel taint flag "O" for loading out-of-tree modules.
           '';
@@ -31,7 +31,7 @@ in
           type = types.package;
           default = config.boot.kernelPackages.netatop;
           defaultText = literalExpression "config.boot.kernelPackages.netatop";
-          description = lib.mdDoc ''
+          description = ''
             Which package to use for netatop.
           '';
         };
@@ -40,7 +40,7 @@ in
       atopgpu.enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to install and enable the atopgpud daemon to get information about
           NVIDIA gpus.
         '';
@@ -49,7 +49,7 @@ in
       setuidWrapper.enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to install a setuid wrapper for Atop. This is required to use some of
           the features as non-root user (e.g.: ipc information, netatop, atopgpu).
           Atop tries to drop the root privileges shortly after starting.
@@ -59,7 +59,7 @@ in
       atopService.enable = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the atop service responsible for storing statistics for
           long-term analysis.
         '';
@@ -67,7 +67,7 @@ in
       atopRotateTimer.enable = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the atop-rotate timer, which restarts the atop service
           daily to make sure the data files are rotate.
         '';
@@ -75,7 +75,7 @@ in
       atopacctService.enable = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the atopacct service which manages process accounting.
           This allows Atop to gather data about processes that disappeared in between
           two refresh intervals.
@@ -88,7 +88,7 @@ in
           flags = "a1f";
           interval = 5;
         };
-        description = lib.mdDoc ''
+        description = ''
           Parameters to be written to {file}`/etc/atoprc`.
         '';
       };

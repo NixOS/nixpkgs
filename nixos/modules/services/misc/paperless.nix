@@ -3,7 +3,6 @@
 with lib;
 let
   cfg = config.services.paperless;
-  pkg = cfg.package;
 
   defaultUser = "paperless";
   defaultFont = "${pkgs.liberation_ttf}/share/fonts/truetype/LiberationSerif-Regular.ttf";
@@ -25,7 +24,7 @@ let
   } // optionalAttrs (cfg.settings.PAPERLESS_ENABLE_NLTK or true) {
     PAPERLESS_NLTK_DIR = pkgs.symlinkJoin {
       name = "paperless_ngx_nltk_data";
-      paths = pkg.nltkData;
+      paths = cfg.package.nltkData;
     };
   } // optionalAttrs (cfg.openMPThreadingWorkaround) {
     OMP_NUM_THREADS = "1";
@@ -38,7 +37,7 @@ let
   manage = pkgs.writeShellScript "manage" ''
     set -o allexport # Export the following env vars
     ${lib.toShellVars env}
-    exec ${pkg}/bin/paperless-ngx "$@"
+    exec ${cfg.package}/bin/paperless-ngx "$@"
   '';
 
   # Secure the services
@@ -96,7 +95,7 @@ in
     enable = mkOption {
       type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enable Paperless.
 
         When started, the Paperless database is automatically created if it doesn't
@@ -111,34 +110,34 @@ in
     dataDir = mkOption {
       type = types.str;
       default = "/var/lib/paperless";
-      description = lib.mdDoc "Directory to store the Paperless data.";
+      description = "Directory to store the Paperless data.";
     };
 
     mediaDir = mkOption {
       type = types.str;
       default = "${cfg.dataDir}/media";
       defaultText = literalExpression ''"''${dataDir}/media"'';
-      description = lib.mdDoc "Directory to store the Paperless documents.";
+      description = "Directory to store the Paperless documents.";
     };
 
     consumptionDir = mkOption {
       type = types.str;
       default = "${cfg.dataDir}/consume";
       defaultText = literalExpression ''"''${dataDir}/consume"'';
-      description = lib.mdDoc "Directory from which new documents are imported.";
+      description = "Directory from which new documents are imported.";
     };
 
     consumptionDirIsPublic = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc "Whether all users can write to the consumption dir.";
+      description = "Whether all users can write to the consumption dir.";
     };
 
     passwordFile = mkOption {
       type = types.nullOr types.path;
       default = null;
       example = "/run/keys/paperless-password";
-      description = lib.mdDoc ''
+      description = ''
         A file containing the superuser password.
 
         A superuser is required to access the web interface.
@@ -159,13 +158,13 @@ in
     address = mkOption {
       type = types.str;
       default = "localhost";
-      description = lib.mdDoc "Web interface address.";
+      description = "Web interface address.";
     };
 
     port = mkOption {
       type = types.port;
       default = 28981;
-      description = lib.mdDoc "Web interface port.";
+      description = "Web interface port.";
     };
 
     settings = mkOption {
@@ -175,7 +174,7 @@ in
         in oneOf (typeList ++ [ (listOf (oneOf typeList)) (attrsOf (oneOf typeList)) ]));
       };
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Extra paperless config options.
 
         See [the documentation](https://docs.paperless-ngx.com/configuration/) for available options.
@@ -197,10 +196,23 @@ in
     user = mkOption {
       type = types.str;
       default = defaultUser;
-      description = lib.mdDoc "User under which Paperless runs.";
+      description = "User under which Paperless runs.";
     };
 
-    package = mkPackageOption pkgs "paperless-ngx" { };
+    package = mkPackageOption pkgs "paperless-ngx" { } // {
+      apply = pkg: pkg.override {
+        tesseract5 = pkg.tesseract5.override {
+          # always enable detection modules
+          # tesseract fails to build when eng is not present
+          enableLanguages = if cfg.settings ? PAPERLESS_OCR_LANGUAGE then
+            lists.unique (
+              [ "equ" "osd" "eng" ]
+              ++ lib.splitString "+" cfg.settings.PAPERLESS_OCR_LANGUAGE
+            )
+          else null;
+        };
+      };
+    };
 
     openMPThreadingWorkaround = mkEnableOption ''
       a workaround for document classifier timeouts.
@@ -220,15 +232,16 @@ in
   config = mkIf cfg.enable {
     services.redis.servers.paperless.enable = mkIf enableRedis true;
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
-      "d '${cfg.mediaDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
-      (if cfg.consumptionDirIsPublic then
-        "d '${cfg.consumptionDir}' 777 - - - -"
-      else
-        "d '${cfg.consumptionDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
-      )
-    ];
+    systemd.tmpfiles.settings."10-paperless" = let
+      defaultRule = {
+        inherit (cfg) user;
+        inherit (config.users.users.${cfg.user}) group;
+      };
+    in {
+      "${cfg.dataDir}".d = defaultRule;
+      "${cfg.mediaDir}".d = defaultRule;
+      "${cfg.consumptionDir}".d = if cfg.consumptionDirIsPublic then { mode = "777"; } else defaultRule;
+    };
 
     systemd.services.paperless-scheduler = {
       description = "Paperless Celery Beat";
@@ -236,8 +249,9 @@ in
       wants = [ "paperless-consumer.service" "paperless-web.service" "paperless-task-queue.service" ];
       serviceConfig = defaultServiceConfig // {
         User = cfg.user;
-        ExecStart = "${pkg}/bin/celery --app paperless beat --loglevel INFO";
+        ExecStart = "${cfg.package}/bin/celery --app paperless beat --loglevel INFO";
         Restart = "on-failure";
+        LoadCredential = lib.optionalString (cfg.passwordFile != null) "PAPERLESS_ADMIN_PASSWORD:${cfg.passwordFile}";
       };
       environment = env;
 
@@ -248,8 +262,8 @@ in
         versionFile="${cfg.dataDir}/src-version"
         version=$(cat "$versionFile" 2>/dev/null || echo 0)
 
-        if [[ $version != ${pkg.version} ]]; then
-          ${pkg}/bin/paperless-ngx migrate
+        if [[ $version != ${cfg.package.version} ]]; then
+          ${cfg.package}/bin/paperless-ngx migrate
 
           # Parse old version string format for backwards compatibility
           version=$(echo "$version" | grep -ohP '[^-]+$')
@@ -262,20 +276,20 @@ in
           if versionLessThan 1.12.0; then
             # Reindex documents as mentioned in https://github.com/paperless-ngx/paperless-ngx/releases/tag/v1.12.1
             echo "Reindexing documents, to allow searching old comments. Required after the 1.12.x upgrade."
-            ${pkg}/bin/paperless-ngx document_index reindex
+            ${cfg.package}/bin/paperless-ngx document_index reindex
           fi
 
-          echo ${pkg.version} > "$versionFile"
+          echo ${cfg.package.version} > "$versionFile"
         fi
       ''
       + optionalString (cfg.passwordFile != null) ''
         export PAPERLESS_ADMIN_USER="''${PAPERLESS_ADMIN_USER:-admin}"
-        export PAPERLESS_ADMIN_PASSWORD=$(cat "${cfg.dataDir}/superuser-password")
+        export PAPERLESS_ADMIN_PASSWORD=$(cat $CREDENTIALS_DIRECTORY/PAPERLESS_ADMIN_PASSWORD)
         superuserState="$PAPERLESS_ADMIN_USER:$PAPERLESS_ADMIN_PASSWORD"
         superuserStateFile="${cfg.dataDir}/superuser-state"
 
         if [[ $(cat "$superuserStateFile" 2>/dev/null) != $superuserState ]]; then
-          ${pkg}/bin/paperless-ngx manage_superuser
+          ${cfg.package}/bin/paperless-ngx manage_superuser
           echo "$superuserState" > "$superuserStateFile"
         fi
       '';
@@ -288,7 +302,7 @@ in
       after = [ "paperless-scheduler.service" ];
       serviceConfig = defaultServiceConfig // {
         User = cfg.user;
-        ExecStart = "${pkg}/bin/celery --app paperless worker --loglevel INFO";
+        ExecStart = "${cfg.package}/bin/celery --app paperless worker --loglevel INFO";
         Restart = "on-failure";
         # The `mbind` syscall is needed for running the classifier.
         SystemCallFilter = defaultServiceConfig.SystemCallFilter ++ [ "mbind" ];
@@ -296,19 +310,6 @@ in
         PrivateNetwork = false;
       };
       environment = env;
-    };
-
-    # Reading the user-provided password file requires root access
-    systemd.services.paperless-copy-password = mkIf (cfg.passwordFile != null) {
-      requiredBy = [ "paperless-scheduler.service" ];
-      before = [ "paperless-scheduler.service" ];
-      serviceConfig = {
-        ExecStart = ''
-          ${pkgs.coreutils}/bin/install --mode 600 --owner '${cfg.user}' --compare \
-            '${cfg.passwordFile}' '${cfg.dataDir}/superuser-password'
-        '';
-        Type = "oneshot";
-      };
     };
 
     systemd.services.paperless-consumer = {
@@ -319,7 +320,7 @@ in
       after = [ "paperless-scheduler.service" ];
       serviceConfig = defaultServiceConfig // {
         User = cfg.user;
-        ExecStart = "${pkg}/bin/paperless-ngx document_consumer";
+        ExecStart = "${cfg.package}/bin/paperless-ngx document_consumer";
         Restart = "on-failure";
       };
       environment = env;
@@ -351,8 +352,8 @@ in
           echo "PAPERLESS_SECRET_KEY is empty, refusing to start."
           exit 1
         fi
-        exec ${pkg.python.pkgs.gunicorn}/bin/gunicorn \
-          -c ${pkg}/lib/paperless-ngx/gunicorn.conf.py paperless.asgi:application
+        exec ${cfg.package.python.pkgs.gunicorn}/bin/gunicorn \
+          -c ${cfg.package}/lib/paperless-ngx/gunicorn.conf.py paperless.asgi:application
       '';
       serviceConfig = defaultServiceConfig // {
         User = cfg.user;
@@ -368,7 +369,7 @@ in
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
       };
       environment = env // {
-        PYTHONPATH = "${pkg.python.pkgs.makePythonPath pkg.propagatedBuildInputs}:${pkg}/lib/paperless-ngx/src";
+        PYTHONPATH = "${cfg.package.python.pkgs.makePythonPath cfg.package.propagatedBuildInputs}:${cfg.package}/lib/paperless-ngx/src";
       };
       # Allow the web interface to access the private /tmp directory of the server.
       # This is required to support uploading files via the web interface.

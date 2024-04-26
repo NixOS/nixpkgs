@@ -4,7 +4,7 @@
 , pythonOlder
 , fetchFromGitHub
 , cmake
-, cython_3
+, cython
 , ninja
 , scikit-build
 , setuptools
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   build-system = [
     cmake
-    cython_3
+    cython
     ninja
     scikit-build
     setuptools

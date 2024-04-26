@@ -16,33 +16,33 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Enable the MATE desktop environment";
+        description = "Enable the MATE desktop environment";
       };
 
-      debug = mkEnableOption (lib.mdDoc "mate-session debug messages");
+      debug = mkEnableOption "mate-session debug messages";
 
       extraPanelApplets = mkOption {
         default = [ ];
         example = literalExpression "with pkgs.mate; [ mate-applets ]";
         type = types.listOf types.package;
-        description = lib.mdDoc "Extra applets to add to mate-panel.";
+        description = "Extra applets to add to mate-panel.";
       };
 
       extraCajaExtensions = mkOption {
         default = [ ];
         example = lib.literalExpression "with pkgs.mate; [ caja-extensions ]";
         type = types.listOf types.package;
-        description = lib.mdDoc "Extra extensions to add to caja.";
+        description = "Extra extensions to add to caja.";
       };
 
-      enableWaylandSession = mkEnableOption (lib.mdDoc "MATE Wayland session");
+      enableWaylandSession = mkEnableOption "MATE Wayland session";
     };
 
     environment.mate.excludePackages = mkOption {
       default = [];
       example = literalExpression "[ pkgs.mate.mate-terminal pkgs.mate.pluma ]";
       type = types.listOf types.package;
-      description = lib.mdDoc "Which MATE packages to exclude from the default environment";
+      description = "Which MATE packages to exclude from the default environment";
     };
 
   };

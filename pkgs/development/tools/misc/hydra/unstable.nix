@@ -43,6 +43,7 @@
 , cacert
 , glibcLocales
 , fetchFromGitHub
+, fetchpatch2
 , nixosTests
 }:
 
@@ -204,6 +205,15 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  patches = [
+    # https://github.com/NixOS/hydra/security/advisories/GHSA-2p75-6g9f-pqgx
+    (fetchpatch2 {
+      name = "CVE-2024-32657.patch";
+      url = "https://github.com/NixOS/hydra/commit/b72528be5074f3e62e9ae2c2ae8ef9c07a0b4dd3.patch";
+      hash = "sha256-+y27N8AIaHj13mj0LwW7dkpzfzZ4xfjN8Ld23c5mzuU=";
+    })
+  ];
 
   postPatch = ''
     # Change 5s timeout for init to 30s

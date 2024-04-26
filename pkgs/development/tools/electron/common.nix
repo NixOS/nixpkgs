@@ -5,7 +5,7 @@
 , python3
 , fetchYarnDeps
 , fetchNpmDeps
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , npmHooks
 , yarn
 , substituteAll
@@ -13,7 +13,10 @@
 , unzip
 , pkgs
 , pkgsBuildHost
-
+, pipewire
+, libsecret
+, libpulseaudio
+, speechd
 , info
 }:
 
@@ -29,7 +32,7 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
   inherit (info) version;
   buildTargets = [ "electron:electron_dist_zip" ];
 
-  nativeBuildInputs = base.nativeBuildInputs ++ [ nodejs yarn prefetch-yarn-deps unzip npmHooks.npmConfigHook ];
+  nativeBuildInputs = base.nativeBuildInputs ++ [ nodejs yarn fixup-yarn-lock unzip npmHooks.npmConfigHook ];
   buildInputs = base.buildInputs ++ [ libnotify ];
 
   electronOfflineCache = fetchYarnDeps {
@@ -190,6 +193,23 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
     runHook postInstall
   '';
 
+  postFixup =
+    let
+      libPath = lib.makeLibraryPath [
+        libnotify
+        pipewire
+        stdenv.cc.cc.lib
+        libsecret
+        libpulseaudio
+        speechd
+      ];
+    in
+  base.postFixup + ''
+    patchelf \
+      --add-rpath "${libPath}" \
+      $out/libexec/electron/electron
+  '';
+
   requiredSystemFeatures = [ "big-parallel" ];
 
   passthru = {
@@ -216,7 +236,7 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
     homepage = "https://github.com/electron/electron";
     platforms = lib.platforms.linux;
     license = licenses.mit;
-    maintainers = with maintainers; [ yuka ];
+    maintainers = with maintainers; [ yayayayaka yuka ];
     mainProgram = "electron";
     hydraPlatforms = lib.optionals (!(hasInfix "alpha" info.version) && !(hasInfix "beta" info.version)) ["aarch64-linux" "x86_64-linux"];
     timeout = 172800; # 48 hours (increased from the Hydra default of 10h)

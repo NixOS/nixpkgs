@@ -13,42 +13,42 @@ in
   };
   options = {
     services.nezha-agent = {
-      enable = lib.mkEnableOption (lib.mdDoc "Agent of Nezha Monitoring");
+      enable = lib.mkEnableOption "Agent of Nezha Monitoring";
 
       package = lib.mkPackageOption pkgs "nezha-agent" { };
-      debug = lib.mkEnableOption (lib.mdDoc "verbose log");
+      debug = lib.mkEnableOption "verbose log";
       tls = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable SSL/TLS encryption.
         '';
       };
       disableCommandExecute = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Disable executing the command from dashboard.
         '';
       };
       skipConnection = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Do not monitor the number of connections.
         '';
       };
       skipProcess = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Do not monitor the number of processes.
         '';
       };
       reportDelay = lib.mkOption {
         type = lib.types.enum [ 1 2 3 4 ];
         default = 1;
-        description = lib.mdDoc ''
+        description = ''
           The interval between system status reportings.
           The value must be an integer from 1 to 4
         '';
@@ -56,13 +56,13 @@ in
       passwordFile = lib.mkOption {
         type = with lib.types; nullOr str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Path to the file contained the password from dashboard.
         '';
       };
       server = lib.mkOption {
         type = lib.types.str;
-        description = lib.mdDoc ''
+        description = ''
           Address to the dashboard
         '';
       };

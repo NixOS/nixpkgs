@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , fetchYarnDeps
 , yarn
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , nodejs
 , python3
 , makeWrapper
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     yarn
-    prefetch-yarn-deps
+    fixup-yarn-lock
     nodejs
     python3
     makeWrapper

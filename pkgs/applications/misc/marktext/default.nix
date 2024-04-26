@@ -27,9 +27,6 @@ appimageTools.wrapType2 rec {
   ];
 
   extraInstallCommands = ''
-    # Strip version from binary name.
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
-
     install -m 444 -D ${appimageContents}/marktext.desktop $out/share/applications/marktext.desktop
     substituteInPlace $out/share/applications/marktext.desktop \
       --replace "Exec=AppRun" "Exec=${pname} --"

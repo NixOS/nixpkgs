@@ -8,7 +8,6 @@ let
   inherit (lib)
     literalExpression
     mkDefault
-    mdDoc
     mkEnableOption
     mkPackageOption
     mkIf
@@ -26,7 +25,7 @@ let
     options = {
       ffmpeg = {
         inputs = mkOption {
-          description = mdDoc ''
+          description = ''
             List of inputs for this camera.
           '';
           type = listOf (submodule {
@@ -35,7 +34,7 @@ let
               path = mkOption {
                 type = str;
                 example = "rtsp://192.0.2.1:554/rtsp";
-                description = mdDoc ''
+                description = ''
                   Stream URL
                 '';
               };
@@ -44,7 +43,7 @@ let
                 example = literalExpression ''
                   [ "detect" "rtmp" ]
                 '';
-                description = mdDoc ''
+                description = ''
                   List of roles for this stream
                 '';
               };
@@ -61,14 +60,14 @@ in
   meta.buildDocsInSandbox = false;
 
   options.services.frigate = with types; {
-    enable = mkEnableOption (mdDoc "Frigate NVR");
+    enable = mkEnableOption "Frigate NVR";
 
     package = mkPackageOption pkgs "frigate" { };
 
     hostname = mkOption {
       type = str;
       example = "frigate.exampe.com";
-      description = mdDoc ''
+      description = ''
         Hostname of the nginx vhost to configure.
 
         Only nginx is supported by upstream for direct reverse proxying.
@@ -81,7 +80,7 @@ in
         options = {
           cameras = mkOption {
             type = attrsOf cameraFormat;
-            description = mdDoc ''
+            description = ''
               Attribute set of cameras configurations.
 
               https://docs.frigate.video/configuration/cameras
@@ -92,20 +91,20 @@ in
             path = mkOption {
               type = path;
               default = "/var/lib/frigate/frigate.db";
-              description = mdDoc ''
+              description = ''
                 Path to the SQLite database used
               '';
             };
           };
 
           mqtt = {
-            enabled = mkEnableOption (mdDoc "MQTT support");
+            enabled = mkEnableOption "MQTT support";
 
             host = mkOption {
               type = nullOr str;
               default = null;
               example = "mqtt.example.com";
-              description = mdDoc ''
+              description = ''
                 MQTT server hostname
               '';
             };
@@ -113,7 +112,7 @@ in
         };
       };
       default = { };
-      description = mdDoc ''
+      description = ''
         Frigate configuration as a nix attribute set.
 
         See the project documentation for how to configure frigate.

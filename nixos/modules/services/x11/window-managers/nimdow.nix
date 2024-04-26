@@ -7,12 +7,12 @@ let
 in
 {
   options = {
-    services.xserver.windowManager.nimdow.enable = mkEnableOption (lib.mdDoc "nimdow");
+    services.xserver.windowManager.nimdow.enable = mkEnableOption "nimdow";
     services.xserver.windowManager.nimdow.package = mkOption {
       type = types.package;
       default = pkgs.nimdow;
       defaultText = "pkgs.nimdow";
-      description = lib.mdDoc "nimdow package to use";
+      description = "nimdow package to use";
     };
   };
 

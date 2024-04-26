@@ -97,6 +97,8 @@ ps.buildPythonApplication rec {
   disabledTests = [
     # requires a wayland session (no xclip support)
     "test_wl_copy"
+    # RuntimeError: Please destroy the QApplication singleton before creating a new QApplication instance
+    "test_get_application"
     # times out, unknown why
     "test_update_checker_triggers_checked_signal"
     # touches network
@@ -124,6 +126,9 @@ ps.buildPythonApplication rec {
     "tests/tests_gui/test_downloader.py"
     # fails to import, causes pytest to freeze
     "tests/tests_gui/test_language_manager.py"
+    # RuntimeError("Internal C++ object (PySide6.QtGui.QHideEvent) already deleted.")
+    # AttributeError("'LoadingIndicator' object has no attribute 'timer'")
+    "tests/tests_gui/test_loading_indicator.py"
   ] ++ lib.optionals stdenv.isDarwin [
     # requires a display
     "tests/integration/test_normcap.py"

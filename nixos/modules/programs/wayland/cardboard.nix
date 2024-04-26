@@ -7,7 +7,7 @@ in
   meta.maintainers = with lib.maintainers; [ AndersonTorres ];
 
   options.programs.cardboard = {
-    enable = lib.mkEnableOption (lib.mdDoc "cardboard");
+    enable = lib.mkEnableOption "cardboard";
 
     package = lib.mkPackageOption pkgs "cardboard" { };
   };

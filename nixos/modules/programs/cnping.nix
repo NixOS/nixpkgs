@@ -8,7 +8,7 @@ in
 {
   options = {
     programs.cnping = {
-      enable = mkEnableOption (lib.mdDoc "a setcap wrapper for cnping");
+      enable = mkEnableOption "a setcap wrapper for cnping";
     };
   };
 

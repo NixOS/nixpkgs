@@ -189,7 +189,7 @@ let
 
       Alternatively you can configure a predicate to allow specific packages:
         { nixpkgs.config.${predicateConfigAttr} = pkg: builtins.elem (lib.getName pkg) [
-            "${getName attrs}"
+            "${lib.getName attrs}"
           ];
         }
     '';

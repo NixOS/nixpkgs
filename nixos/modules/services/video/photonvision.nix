@@ -6,12 +6,12 @@ in
 {
   options = {
     services.photonvision = {
-      enable = lib.mkEnableOption (lib.mdDoc "Enable PhotonVision");
+      enable = lib.mkEnableOption "Enable PhotonVision";
 
       package = lib.mkPackageOption pkgs "photonvision" {};
 
       openFirewall = lib.mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Whether to open the required ports in the firewall.
         '';
         default = false;

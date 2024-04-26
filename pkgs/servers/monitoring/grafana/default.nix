@@ -21,7 +21,7 @@ let
 in
 buildGoModule rec {
   pname = "grafana";
-  version = "10.4.1";
+  version = "10.4.2";
 
   subPackages = [ "pkg/cmd/grafana" "pkg/cmd/grafana-server" "pkg/cmd/grafana-cli" ];
 
@@ -29,7 +29,7 @@ buildGoModule rec {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-wKYn6EcfQlWj/6rKnGYphzq3IThRj6qCjpqwllNPht8=";
+    hash = "sha256-ahG9ABJJUUgrFqqNjkJRA1Gia8T4J90jIsCMFOhZ55w=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
@@ -74,7 +74,7 @@ buildGoModule rec {
 
   disallowedRequisites = [ offlineCache ];
 
-  vendorHash = "sha256-puPgbgfRqbPvMVks+gyOPOTTfdClWqbOf89X0ihMLPY=";
+  vendorHash = "sha256-XmIF/ZWVO1qjSmRPTFnHgxvnliXXicGgsV8gQcKJl9U=";
 
   proxyVendor = true;
 

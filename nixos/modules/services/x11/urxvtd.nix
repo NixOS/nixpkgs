@@ -11,7 +11,7 @@ in {
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enable urxvtd, the urxvt terminal daemon. To use urxvtd, run
         "urxvtc".
       '';

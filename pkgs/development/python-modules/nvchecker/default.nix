@@ -21,16 +21,16 @@
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "2.13.1";
+  version = "2.14.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "lilydjwg";
-    repo = pname;
+    repo = "nvchecker";
     rev = "v${version}";
-    hash = "sha256-q+az9oaxxIOv/vLFpkT3cF5GDJsa0Cid4oPWEKg5s7M=";
+    hash = "sha256-V2lTGeaiwUsh8IONbZ5GQrqevJMhjeuFLTDF8UdWg8Q=";
   };
 
   nativeBuildInputs = [
@@ -86,6 +86,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/lilydjwg/nvchecker";
     changelog = "https://github.com/lilydjwg/nvchecker/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }

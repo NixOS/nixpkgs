@@ -22,21 +22,21 @@ let
 
   proxyOptions = {
     options = {
-      enable = mkEnableOption (lib.mdDoc "this proxy");
+      enable = mkEnableOption "this proxy";
 
       type = mkOption {
         type = types.enum [ "http" "socks4" "socks5" ];
-        description = lib.mdDoc "Proxy type.";
+        description = "Proxy type.";
       };
 
       host = mkOption {
         type = types.str;
-        description = lib.mdDoc "Proxy host or IP address.";
+        description = "Proxy host or IP address.";
       };
 
       port = mkOption {
         type = types.port;
-        description = lib.mdDoc "Proxy port";
+        description = "Proxy port";
       };
     };
   };
@@ -49,7 +49,7 @@ in {
 
     programs.proxychains = {
 
-      enable = mkEnableOption (lib.mdDoc "proxychains configuration");
+      enable = mkEnableOption "proxychains configuration";
 
       package = mkPackageOption pkgs "proxychains" {
         example = "proxychains-ng";
@@ -59,7 +59,7 @@ in {
         type = mkOption {
           type = types.enum [ "dynamic" "strict" "random" ];
           default = "strict";
-          description = lib.mdDoc ''
+          description = ''
             `dynamic` - Each connection will be done via chained proxies
             all proxies chained in the order as they appear in the list
             at least one proxy must be online to play in chain
@@ -78,7 +78,7 @@ in {
         length = mkOption {
           type = types.nullOr types.int;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             Chain length for random chain.
           '';
         };
@@ -87,15 +87,15 @@ in {
       proxyDNS = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Proxy DNS requests - no leak for DNS data.";
+        description = "Proxy DNS requests - no leak for DNS data.";
       };
 
-      quietMode = mkEnableOption (lib.mdDoc "Quiet mode (no output from the library)");
+      quietMode = mkEnableOption "Quiet mode (no output from the library)";
 
       remoteDNSSubnet = mkOption {
         type = types.enum [ 10 127 224 ];
         default = 224;
-        description = lib.mdDoc ''
+        description = ''
           Set the class A subnet number to use for the internal remote DNS mapping, uses the reserved 224.x.x.x range by default.
         '';
       };
@@ -103,24 +103,24 @@ in {
       tcpReadTimeOut = mkOption {
         type = types.int;
         default = 15000;
-        description = lib.mdDoc "Connection read time-out in milliseconds.";
+        description = "Connection read time-out in milliseconds.";
       };
 
       tcpConnectTimeOut = mkOption {
         type = types.int;
         default = 8000;
-        description = lib.mdDoc "Connection time-out in milliseconds.";
+        description = "Connection time-out in milliseconds.";
       };
 
       localnet = mkOption {
         type = types.str;
         default = "127.0.0.0/255.0.0.0";
-        description = lib.mdDoc "By default enable localnet for loopback address ranges.";
+        description = "By default enable localnet for loopback address ranges.";
       };
 
       proxies = mkOption {
         type = types.attrsOf (types.submodule proxyOptions);
-        description = lib.mdDoc ''
+        description = ''
           Proxies to be used by proxychains.
         '';
 

@@ -26,19 +26,19 @@ let
   pname = "wire-desktop";
 
   version = let
-    x86_64-darwin = "3.32.4589";
+    x86_64-darwin = "3.35.4861";
   in {
     inherit x86_64-darwin;
     aarch64-darwin = x86_64-darwin;
-    x86_64-linux = "3.32.3079";
+    x86_64-linux = "3.35.3348";
   }.${system} or throwSystem;
 
   hash = let
-    x86_64-darwin = "sha256-PDAZCnkgzlausdtwycK+PHfp+zmL33VnX6RzCsgBTZ4=";
+    x86_64-darwin = "sha256-QPxslMEz1jOH2LceFOdCyVDtpya1SfJ8GWMIAIhie4U=";
   in {
     inherit x86_64-darwin;
     aarch64-darwin = x86_64-darwin;
-    x86_64-linux = "sha256-+4aRis141ctI50BtBwipoVtPoMGRs82ENqZ+y2ZlL58=";
+    x86_64-linux = "sha256-KtDUuAzD53mFJ0+yywp0Q2/hx9MGsOhFjRLWsZAd+h0=";
   }.${system} or throwSystem;
 
   meta = with lib; {

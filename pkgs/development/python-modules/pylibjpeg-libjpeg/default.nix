@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , pythonOlder
 , pytestCheckHook
-, cython_3
+, cython
 , poetry-core
 , setuptools
 , numpy
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
     poetry-core
     setuptools
   ];

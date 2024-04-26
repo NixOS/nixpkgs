@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, cython_3
+, cython
 , fetchFromGitHub
 , poetry-core
 , pytestCheckHook
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    cython_3
+    cython
     poetry-core
     setuptools
     wheel

@@ -47,5 +47,5 @@ mkDerivation {
   description = "Fancy Formal Firewall Universal Understander";
   homepage = "https://github.com/diekmann/Iptables_Semantics/tree/master/haskell_tool";
   license = lib.licenses.bsd2;
-  maintainers = [ lib.maintainers.marsam ];
+  maintainers = [ ];
 }

@@ -1,6 +1,5 @@
 { buildPythonPackage
 , fetchFromGitHub
-, hypothesis
 , lib
 , pytestCheckHook
 }:
@@ -18,7 +17,6 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    hypothesis
     pytestCheckHook
   ];
 

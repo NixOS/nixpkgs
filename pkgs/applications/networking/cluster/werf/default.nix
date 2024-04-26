@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "werf";
-  version = "1.2.305";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "werf";
     rev = "v${version}";
-    hash = "sha256-WbSGbwm3/GXRZBvnleJYXxXBhIj+NwKAMLBZdUkf4PE=";
+    hash = "sha256-fCXQ9jVZqpyLzQsmpoKbha40KfCrKffmbt9RDj+lIUM=";
   };
 
-  vendorHash = "sha256-BN2baLI91tJyGFEuuS9lAzKsKwPPpKm0eUK7Hxwbvkk=";
+  vendorHash = "sha256-WMmL0jjzzaDtNmx+kvHFONqwhz7mjFCM4rT6YoL+XkA=";
 
   proxyVendor = true;
 
@@ -35,7 +35,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/werf/werf/pkg/werf.Version=${src.rev}"
+    "-X github.com/werf/werf/v2/pkg/werf.Version=${src.rev}"
   ] ++ lib.optionals (CGO_ENABLED == 1) [
     "-extldflags=-static"
     "-linkmode external"
@@ -48,6 +48,7 @@ buildGoModule rec {
     "dfrunsecurity"
     "dfssh"
   ] ++ lib.optionals (CGO_ENABLED == 1) [
+    "cni"
     "exclude_graphdriver_devicemapper"
     "netgo"
     "no_devmapper"

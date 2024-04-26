@@ -4,7 +4,7 @@
 , pythonOlder
 
 # build-system
-, cython_3
+, cython
 , setuptools
 
 # dependencies
@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    cython_3
+    cython
   ];
 
   dependencies = [

@@ -47,6 +47,6 @@ buildGoModule {
     homepage = "https://github.com/google/gvisor";
     license = licenses.asl20;
     maintainers = with maintainers; [ andrew-d gpl ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

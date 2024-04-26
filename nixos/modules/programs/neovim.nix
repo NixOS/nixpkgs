@@ -11,7 +11,7 @@ in
       type = types.bool;
       default = false;
       example = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable Neovim.
 
         When enabled through this option, Neovim is wrapped to use a
@@ -24,7 +24,7 @@ in
     defaultEditor = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         When enabled, installs neovim and configures neovim to be the default editor
         using the EDITOR environment variable.
       '';
@@ -33,7 +33,7 @@ in
     viAlias = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Symlink {command}`vi` to {command}`nvim` binary.
       '';
     };
@@ -41,7 +41,7 @@ in
     vimAlias = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Symlink {command}`vim` to {command}`nvim` binary.
       '';
     };
@@ -49,19 +49,19 @@ in
     withRuby = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc "Enable Ruby provider.";
+      description = "Enable Ruby provider.";
     };
 
     withPython3 = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc "Enable Python 3 provider.";
+      description = "Enable Python 3 provider.";
     };
 
     withNodeJs = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc "Enable Node provider.";
+      description = "Enable Node provider.";
     };
 
     configure = mkOption {
@@ -80,7 +80,7 @@ in
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Generate your init file from your list of plugins and custom commands.
         Neovim will then be wrapped to load {command}`nvim -u /nix/store/«hash»-vimrc`
       '';
@@ -92,7 +92,7 @@ in
       type = types.package;
       visible = false;
       readOnly = true;
-      description = lib.mdDoc "Resulting customized neovim package.";
+      description = "Resulting customized neovim package.";
     };
 
     runtime = mkOption {
@@ -100,7 +100,7 @@ in
       example = literalExpression ''
         { "ftplugin/c.vim".text = "setlocal omnifunc=v:lua.vim.lsp.omnifunc"; }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Set of files that have to be linked in {file}`runtime`.
       '';
 
@@ -112,7 +112,7 @@ in
             enable = mkOption {
               type = types.bool;
               default = true;
-              description = lib.mdDoc ''
+              description = ''
                 Whether this runtime directory should be generated.  This
                 option allows specific runtime files to be disabled.
               '';
@@ -120,7 +120,7 @@ in
 
             target = mkOption {
               type = types.str;
-              description = lib.mdDoc ''
+              description = ''
                 Name of symlink.  Defaults to the attribute
                 name.
               '';
@@ -129,13 +129,13 @@ in
             text = mkOption {
               default = null;
               type = types.nullOr types.lines;
-              description = lib.mdDoc "Text of the file.";
+              description = "Text of the file.";
             };
 
             source = mkOption {
               default = null;
               type = types.nullOr types.path;
-              description = lib.mdDoc "Path of the source file.";
+              description = "Path of the source file.";
             };
 
           };

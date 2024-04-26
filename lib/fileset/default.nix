@@ -1,5 +1,5 @@
 /*
-  <!-- This anchor is here for backwards compatibity -->
+  <!-- This anchor is here for backwards compatibility -->
   []{#sec-fileset}
 
   The [`lib.fileset`](#sec-functions-library-fileset) library allows you to work with _file sets_.

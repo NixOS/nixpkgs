@@ -11,7 +11,7 @@ in {
   };
 
   options = {
-    programs.geary.enable = mkEnableOption (lib.mdDoc "Geary, a Mail client for GNOME");
+    programs.geary.enable = mkEnableOption "Geary, a Mail client for GNOME";
   };
 
   config = mkIf cfg.enable {

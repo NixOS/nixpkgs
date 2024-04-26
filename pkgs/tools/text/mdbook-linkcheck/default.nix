@@ -29,6 +29,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "mdbook-linkcheck";
     homepage = "https://github.com/Michael-F-Bryan/mdbook-linkcheck";
     license = licenses.mit;
-    maintainers = with maintainers; [ zhaofengli ];
+    maintainers = with maintainers; [ zhaofengli matthiasbeyer ];
   };
 }

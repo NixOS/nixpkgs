@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waylock";
-  version = "0.6.5";
+  version = "1.0.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "waylock";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-wvZrRPZobDh+rB3RSaRrz0xDHuYwT2eoQEu3AbYKn8Y=";
+    hash = "sha256-Z5YNaR+jocJ4hS7NT8oAlrMnqNfD8KRzOyyqdVGDSl0=";
   };
 
   nativeBuildInputs = [

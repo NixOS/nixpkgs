@@ -3,7 +3,7 @@
 , fetchFromGitHub
 
 # build-system
-, cython_3
+, cython
 , numpy
 , oldest-supported-numpy
 , setuptools
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    cython_3
+    cython
     gnutar
     numpy
     oldest-supported-numpy

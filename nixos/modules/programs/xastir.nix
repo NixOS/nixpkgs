@@ -8,7 +8,7 @@ in {
   meta.maintainers = with maintainers; [ melling ];
 
   options.programs.xastir = {
-    enable = mkEnableOption (mdDoc "Xastir Graphical APRS client");
+    enable = mkEnableOption "Xastir Graphical APRS client";
   };
 
   config = mkIf cfg.enable {

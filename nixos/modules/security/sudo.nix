@@ -33,7 +33,7 @@ in
     defaultOptions = mkOption {
       type = with types; listOf str;
       default = [ "SETENV" ];
-      description = mdDoc ''
+      description = ''
         Options used for the default rules, granting `root` and the
         `wheel` group permission to run any command as any user.
       '';
@@ -42,8 +42,7 @@ in
     enable = mkOption {
       type = types.bool;
       default = true;
-      description =
-        lib.mdDoc ''
+      description = ''
           Whether to enable the {command}`sudo` command, which
           allows non-root users to execute commands as root.
         '';
@@ -54,7 +53,7 @@ in
     wheelNeedsPassword = mkOption {
       type = types.bool;
       default = true;
-      description = mdDoc ''
+      description = ''
         Whether users of the `wheel` group must
         provide a password to run commands as super user via {command}`sudo`.
       '';
@@ -63,7 +62,7 @@ in
     execWheelOnly = mkOption {
       type = types.bool;
       default = false;
-      description = mdDoc ''
+      description = ''
         Only allow members of the `wheel` group to execute sudo by
         setting the executable's permissions accordingly.
         This prevents users that are not members of `wheel` from
@@ -75,14 +74,14 @@ in
       type = types.lines;
       # Note: if syntax errors are detected in this file, the NixOS
       # configuration will fail to build.
-      description = mdDoc ''
+      description = ''
         This string contains the contents of the
         {file}`sudoers` file.
       '';
     };
 
     extraRules = mkOption {
-      description = mdDoc ''
+      description = ''
         Define specific rules to be in the {file}`sudoers` file.
         More specific rules should come after more general ones in order to
         yield the expected behavior. You can use mkBefore/mkAfter to ensure
@@ -112,7 +111,7 @@ in
         options = {
           users = mkOption {
             type = with types; listOf (either str int);
-            description = mdDoc ''
+            description = ''
               The usernames / UIDs this rule should apply for.
             '';
             default = [];
@@ -120,7 +119,7 @@ in
 
           groups = mkOption {
             type = with types; listOf (either str int);
-            description = mdDoc ''
+            description = ''
               The groups / GIDs this rule should apply for.
             '';
             default = [];
@@ -129,7 +128,7 @@ in
           host = mkOption {
             type = types.str;
             default = "ALL";
-            description = mdDoc ''
+            description = ''
               For what host this rule should apply.
             '';
           };
@@ -137,7 +136,7 @@ in
           runAs = mkOption {
             type = with types; str;
             default = "ALL:ALL";
-            description = mdDoc ''
+            description = ''
               Under which user/group the specified command is allowed to run.
 
               A user can be specified using just the username: `"foo"`.
@@ -147,7 +146,7 @@ in
           };
 
           commands = mkOption {
-            description = mdDoc ''
+            description = ''
               The commands for which the rule should apply.
             '';
             type = with types; listOf (either str (submodule {
@@ -155,7 +154,7 @@ in
               options = {
                 command = mkOption {
                   type = with types; str;
-                  description = mdDoc ''
+                  description = ''
                     A command being either just a path to a binary to allow any arguments,
                     the full command with arguments pre-set or with `""` used as the argument,
                     not allowing arguments to the command at all.
@@ -164,7 +163,7 @@ in
 
                 options = mkOption {
                   type = with types; listOf (enum [ "NOPASSWD" "PASSWD" "NOEXEC" "EXEC" "SETENV" "NOSETENV" "LOG_INPUT" "NOLOG_INPUT" "LOG_OUTPUT" "NOLOG_OUTPUT" "MAIL" "NOMAIL" "FOLLOW" "NOFLLOW" "INTERCEPT" "NOINTERCEPT"]);
-                  description = mdDoc ''
+                  description = ''
                     Options for running the command. Refer to the [sudo manual](https://www.sudo.ws/docs/man/1.9.15/sudoers.man/#Tag_Spec).
                   '';
                   default = [];
@@ -180,7 +179,7 @@ in
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = mdDoc ''
+      description = ''
         Extra configuration text appended to {file}`sudoers`.
       '';
     };

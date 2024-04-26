@@ -2,7 +2,7 @@
 
 {
   options.services.mozillavpn.enable =
-    lib.mkEnableOption (lib.mdDoc "Mozilla VPN daemon");
+    lib.mkEnableOption "Mozilla VPN daemon";
 
   config = lib.mkIf config.services.mozillavpn.enable {
     environment.systemPackages = [ pkgs.mozillavpn ];

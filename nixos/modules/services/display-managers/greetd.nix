@@ -8,7 +8,7 @@ let
 in
 {
   options.services.greetd = {
-    enable = mkEnableOption (lib.mdDoc "greetd, a minimal and flexible login manager daemon");
+    enable = mkEnableOption "greetd, a minimal and flexible login manager daemon";
 
     package = mkPackageOption pkgs [ "greetd" "greetd" ] { };
 
@@ -21,7 +21,7 @@ in
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         greetd configuration ([documentation](https://man.sr.ht/~kennylevinsen/greetd/))
         as a Nix attribute set.
       '';
@@ -30,7 +30,7 @@ in
     vt = mkOption {
       type = types.int;
       default = 1;
-      description = lib.mdDoc ''
+      description = ''
         The virtual console (tty) that greetd should use. This option also disables getty on that tty.
       '';
     };
@@ -39,7 +39,7 @@ in
       type = types.bool;
       default = !(cfg.settings ? initial_session);
       defaultText = literalExpression "!(config.services.greetd.settings ? initial_session)";
-      description = lib.mdDoc ''
+      description = ''
         Whether to restart greetd when it terminates (e.g. on failure).
         This is usually desirable so a user can always log in, but should be disabled when using 'settings.initial_session' (autologin),
         because every greetd restart will trigger the autologin again.
@@ -59,6 +59,9 @@ in
 
     # This prevents nixos-rebuild from killing greetd by activating getty again
     systemd.services."autovt@${tty}".enable = false;
+
+    # Enable desktop session data
+    services.displayManager.enable = lib.mkDefault true;
 
     systemd.services.greetd = {
       aliases = [ "display-manager.service" ];

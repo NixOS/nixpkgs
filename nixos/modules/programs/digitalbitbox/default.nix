@@ -11,7 +11,7 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Installs the Digital Bitbox application and enables the complementary hardware module.
       '';
     };

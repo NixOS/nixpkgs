@@ -13,14 +13,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "librum";
-  version = "0.12.1";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "Librum-Reader";
     repo = "Librum";
     rev = "v.${version}";
     fetchSubmodules = true;
-    hash = "sha256-/QxTWlTMoXykPe3z+mmn6eaGRJDu2IX8BJPcXi1gUqQ=";
+    hash = "sha256-Iwcbcz8LrznFP8rfW6mg9p7klAtTx4daFxylTeFKrH0=";
   };
 
   patches = [

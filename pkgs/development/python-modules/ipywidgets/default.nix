@@ -8,7 +8,7 @@
 , jsonschema
 , jupyterlab-widgets
 , lib
-, pytestCheckHook
+, pytest7CheckHook
 , pytz
 , traitlets
 , widgetsnbextension
@@ -40,13 +40,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     ipykernel
     jsonschema
-    pytestCheckHook
+    pytest7CheckHook
     pytz
-  ];
-
-  pytestFlagsArray = [
-    # pytest.PytestRemovedIn8Warning: Support for nose tests is deprecated and will be removed in a future release.
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   meta = {

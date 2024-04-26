@@ -1,17 +1,29 @@
-{ stdenv, lib, cmake, pkg-config, fetchFromGitHub, qtbase, qtsvg, qtmultimedia, qtimageformats, qttools, boost, openssl, wrapQtAppsHook, libsecret }:
+{ stdenv, lib, cmake, pkg-config, fetchFromGitHub, qt6, boost, openssl, libsecret }:
 
 stdenv.mkDerivation rec {
   pname = "chatterino2";
-  version = "2.4.6";
+  version = "2.5.0";
   src = fetchFromGitHub {
     owner = "Chatterino";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-CQviw5Fw6v5EwjCldAQoJfAIZMWKBfBzUIQZEgW34k0=";
+    sha256 = "sha256-uR2X0NNSLyOx5n3mZcp6+wW/7L7rHHH2MlOF+c0Uzm0=";
     fetchSubmodules = true;
   };
-  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
-  buildInputs = [ qtbase qtsvg qtmultimedia qtimageformats qttools boost openssl libsecret ];
+  nativeBuildInputs = [ cmake pkg-config qt6.wrapQtAppsHook ];
+  buildInputs = [
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qtimageformats
+    qt6.qttools
+    qt6.qt5compat
+    boost
+    openssl
+    libsecret
+  ] ++ lib.optionals stdenv.isLinux [
+    qt6.qtwayland
+  ];
+  cmakeFlags = [ "-DBUILD_WITH_QT6=ON" ];
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p "$out/Applications"
     mv bin/chatterino.app "$out/Applications/"
@@ -32,6 +44,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/Chatterino/chatterino2/blob/master/CHANGELOG.md";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ rexim ];
+    maintainers = with maintainers; [ rexim supa ];
   };
 }

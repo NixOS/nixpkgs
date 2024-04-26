@@ -9,32 +9,32 @@ in
 {
   options = {
     services.radarr = {
-      enable = mkEnableOption (lib.mdDoc "Radarr, a UsetNet/BitTorrent movie downloader");
+      enable = mkEnableOption "Radarr, a UsetNet/BitTorrent movie downloader";
 
       package = mkPackageOption pkgs "radarr" { };
 
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/radarr/.config/Radarr";
-        description = lib.mdDoc "The directory where Radarr stores its data files.";
+        description = "The directory where Radarr stores its data files.";
       };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Open ports in the firewall for the Radarr web interface.";
+        description = "Open ports in the firewall for the Radarr web interface.";
       };
 
       user = mkOption {
         type = types.str;
         default = "radarr";
-        description = lib.mdDoc "User account under which Radarr runs.";
+        description = "User account under which Radarr runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "radarr";
-        description = lib.mdDoc "Group under which Radarr runs.";
+        description = "Group under which Radarr runs.";
       };
     };
   };

@@ -20,7 +20,7 @@
 
 # CUDA-only dependencies:
 , addDriverRunpath
-, autoAddDriverRunpath ? cudaPackages.autoAddDriverRunpathHook or cudaPackages.autoAddOpenGLRunpathHook
+, autoAddDriverRunpath
 , cudaPackages
 
 # CUDA flags:

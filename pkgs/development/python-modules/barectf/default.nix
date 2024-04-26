@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
-, pytestCheckHook
+, pytest7CheckHook
 , pythonRelaxDepsHook
 , setuptools
 , jsonschema
@@ -47,11 +47,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  pytestFlagsArray = [
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+    pytest7CheckHook
   ];
 
   meta = with lib; {

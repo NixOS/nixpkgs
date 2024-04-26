@@ -6,7 +6,7 @@
 , udev
 , protobuf
 , libcxx
-, rocksdb
+, rocksdb_8_3
 , installShellFiles
 , pkg-config
 , openssl
@@ -31,8 +31,9 @@
   ]
 }:
 let
-  version = "1.17.28";
-  sha256 = "y79zsUfYsX377ofsFSg9a2il99uJsA+qdCu3J+EU5nQ=";
+  version = "1.17.31";
+  sha256 = "sha256-5qPW199o+CVJlqGwiAegsquBRWEb5uDKITxjN5dQYAQ=";
+  rocksdb = rocksdb_8_3;
 
   inherit (darwin.apple_sdk_11_0) Libsystem;
   inherit (darwin.apple_sdk_11_0.frameworks) System IOKit AppKit Security;

@@ -1,21 +1,22 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, orjson
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, segno
-, setuptools
-, trustme
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  orjson,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  segno,
+  setuptools,
+  trustme,
 }:
 
 buildPythonPackage rec {
   pname = "aiounifi";
-  version = "74";
+  version = "76";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "Kane610";
     repo = "aiounifi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5xxgpbnTqR8AWUvRQJiXGJECn0neV8QQyjYKw09sqZg=";
+    hash = "sha256-N9N7sMHBiEhYUFok4bTSJZyp5pkJzj9pMxahY6FTx+I=";
   };
 
   postPatch = ''
@@ -35,9 +36,7 @@ buildPythonPackage rec {
     sed -i '/--cov=/d' pyproject.toml
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
@@ -53,13 +52,9 @@ buildPythonPackage rec {
     trustme
   ];
 
-  pytestFlagsArray = [
-    "--asyncio-mode=auto"
-  ];
+  pytestFlagsArray = [ "--asyncio-mode=auto" ];
 
-  pythonImportsCheck = [
-    "aiounifi"
-  ];
+  pythonImportsCheck = [ "aiounifi" ];
 
   meta = with lib; {
     description = "Python library for communicating with Unifi Controller API";

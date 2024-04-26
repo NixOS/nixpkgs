@@ -7,14 +7,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "lantern";
-  version = "0.2.3";
+  pname = "postgresql-lantern";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "lanterndata";
     repo = "lantern";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-viTI8hIdtoLefXyBPyFAKWr1suCvuU7rjXQOIZKLBHw=";
+    hash = "sha256-d5CdS11Z0u8+oPvjH6gVx6k8y05SS6wU3PnafcEgQeY=";
     fetchSubmodules = true;
   };
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://lantern.dev/";
     changelog = "https://github.com/lanterndata/lantern/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = licenses.bsl11;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = postgresql.meta.platforms;
     # error: use of undeclared identifier 'aligned_alloc'
     broken = stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13";

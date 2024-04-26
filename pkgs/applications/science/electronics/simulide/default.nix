@@ -121,9 +121,9 @@ in
 
   simulide_1_1_0 = generic {
     version = "1.1.0";
-    release = "RC1";
+    release = "SR0";
     branch = "1.1.0";
-    rev = "1912";
-    sha256 = "sha256-bgRAqt7h2LtU2Ze6Jiz8APhyPcV15v4ofxIilIeZV9E=";
+    rev = "1917";
+    sha256 = "sha256-qNBaGWl89Le9uC1VFK+xYhrLzIvOIWjkQbutnrAmZ2M=";
   };
 }

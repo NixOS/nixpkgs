@@ -28,8 +28,8 @@ let
 in {
   options = {
     services.envfs = {
-      enable = lib.mkEnableOption (lib.mdDoc "Envfs filesystem") // {
-        description = lib.mdDoc ''
+      enable = lib.mkEnableOption "Envfs filesystem" // {
+        description = ''
           Fuse filesystem that returns symlinks to executables based on the PATH
           of the requesting process. This is useful to execute shebangs on NixOS
           that assume hard coded locations in locations like /bin or /usr/bin
@@ -41,14 +41,14 @@ in {
         type = lib.types.package;
         default = pkgs.envfs;
         defaultText = lib.literalExpression "pkgs.envfs";
-        description = lib.mdDoc "Which package to use for the envfs.";
+        description = "Which package to use for the envfs.";
       };
 
       extraFallbackPathCommands = lib.mkOption {
         type = lib.types.lines;
         default = "";
         example = "ln -s $''{pkgs.bash}/bin/bash $out/bash";
-        description = lib.mdDoc "Extra commands to run in the package that contains fallback executables in case not other executable is found";
+        description = "Extra commands to run in the package that contains fallback executables in case not other executable is found";
       };
     };
   };

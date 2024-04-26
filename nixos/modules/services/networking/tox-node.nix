@@ -28,47 +28,47 @@ let
 
 in {
   options.services.tox-node = {
-    enable = mkEnableOption (lib.mdDoc "Tox Node service");
+    enable = mkEnableOption "Tox Node service";
 
     logType = mkOption {
       type = types.enum [ "Stderr" "Stdout" "Syslog" "None" ];
       default = "Stderr";
-      description = lib.mdDoc "Logging implementation.";
+      description = "Logging implementation.";
     };
     keysFile = mkOption {
       type = types.str;
       default = "${homeDir}/keys";
-      description = lib.mdDoc "Path to the file where DHT keys are stored.";
+      description = "Path to the file where DHT keys are stored.";
     };
     udpAddress = mkOption {
       type = types.str;
       default = "0.0.0.0:33445";
-      description = lib.mdDoc "UDP address to run DHT node.";
+      description = "UDP address to run DHT node.";
     };
     tcpAddresses = mkOption {
       type = types.listOf types.str;
       default = [ "0.0.0.0:33445" ];
-      description = lib.mdDoc "TCP addresses to run TCP relay.";
+      description = "TCP addresses to run TCP relay.";
     };
     tcpConnectionLimit = mkOption {
       type = types.int;
       default = 8192;
-      description = lib.mdDoc "Maximum number of active TCP connections relay can hold";
+      description = "Maximum number of active TCP connections relay can hold";
     };
     lanDiscovery = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc "Enable local network discovery.";
+      description = "Enable local network discovery.";
     };
     threads = mkOption {
       type = types.int;
       default = 1;
-      description = lib.mdDoc "Number of threads for execution";
+      description = "Number of threads for execution";
     };
     motd = mkOption {
       type = types.str;
       default = "Hi from tox-rs! I'm up {{uptime}}. TCP: incoming {{tcp_packets_in}}, outgoing {{tcp_packets_out}}, UDP: incoming {{udp_packets_in}}, outgoing {{udp_packets_out}}";
-      description = lib.mdDoc "Message of the day";
+      description = "Message of the day";
     };
   };
 

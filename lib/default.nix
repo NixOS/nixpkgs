@@ -47,7 +47,7 @@ let
     # misc
     asserts = callLibs ./asserts.nix;
     debug = callLibs ./debug.nix;
-    misc = callLibs ./deprecated.nix;
+    misc = callLibs ./deprecated/misc.nix;
 
     # domain-specific
     fetchers = callLibs ./fetchers.nix;
@@ -86,10 +86,10 @@ let
       zipAttrsWithNames zipAttrsWith zipAttrs recursiveUpdateUntil
       recursiveUpdate matchAttrs mergeAttrsList overrideExisting showAttrPath getOutput
       getBin getLib getDev getMan chooseDevOutputs zipWithNames zip
-      recurseIntoAttrs dontRecurseIntoAttrs cartesianProductOfSets
-      updateManyAttrsByPath;
+      recurseIntoAttrs dontRecurseIntoAttrs cartesianProduct cartesianProductOfSets
+      mapCartesianProduct updateManyAttrsByPath;
     inherit (self.lists) singleton forEach foldr fold foldl foldl' imap0 imap1
-      concatMap flatten remove findSingle findFirst any all count
+      ifilter0 concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range replicate partition zipListsWith zipLists
       reverseList listDfs toposort sort sortOn naturalSort compareLists take
       drop sublist last init crossLists unique allUnique intersectLists

@@ -5,13 +5,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cpm-cmake";
-  version = "0.38.7";
+  version = "0.38.8";
 
   src = fetchFromGitHub {
     owner = "cpm-cmake";
     repo = "cpm.cmake";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-tvqoGLGBvsPtIbPWG/5DH4IMzQTci3sjmF9dpInncWc=";
+    hash = "sha256-S1I7XKvpniocI2UAzO8yslju3fYy06MPC2Kl7N7bh8I=";
   };
 
   dontConfigure = true;

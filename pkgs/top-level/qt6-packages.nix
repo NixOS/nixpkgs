@@ -115,9 +115,7 @@ makeScopeWithSplicing' {
   wayqt = callPackage ../development/libraries/wayqt { };
 
   } // lib.optionalAttrs pkgs.config.allowAliases {
-    # Convert to a throw on 01-01-2023.
-    # Warnings show up in various cli tool outputs, throws do not.
-    # Remove completely before 24.05
-    overrideScope' = lib.warn "qt6Packages now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\"." self.overrideScope;
+    # Remove completely before 24.11
+    overrideScope' = builtins.throw "qt6Packages now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\".";
   });
 }

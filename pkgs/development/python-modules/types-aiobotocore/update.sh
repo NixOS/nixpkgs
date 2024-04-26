@@ -5,9 +5,9 @@ set -eu -o pipefail
 
 source_file=pkgs/development/python-modules/types-aiobotocore-packages/default.nix
 
-version="2.12.2"
+version="2.12.3"
 
-nix-update python311Packages.types-aiobotocore --commit --build
+#nix-update python312Packages.types-aiobotocore --commit --build
 
 packages=(
   types-aiobotocore-alexaforbusiness

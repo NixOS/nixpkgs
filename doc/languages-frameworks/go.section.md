@@ -142,6 +142,7 @@ Many attributes [controlling the build phase](#variables-controlling-the-build-p
 - [`patchFlags`](#var-stdenv-patchFlags)
 - [`postPatch`](#var-stdenv-postPatch)
 - [`preBuild`](#var-stdenv-preBuild)
+- `env`: useful for passing down variables such as `GOWORK`.
 
 To control test execution of the build derivation, the following attributes are of interest:
 

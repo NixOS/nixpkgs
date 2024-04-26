@@ -20,7 +20,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether to enable the TLP power management daemon.";
+        description = "Whether to enable the TLP power management daemon.";
       };
 
       settings = mkOption {type = with types; attrsOf (oneOf [bool int float str (listOf str)]);
@@ -29,7 +29,7 @@ in
           SATA_LINKPWR_ON_BAT = "med_power_with_dipm";
           USB_BLACKLIST_PHONE = 1;
         };
-        description = lib.mdDoc ''
+        description = ''
           Options passed to TLP. See https://linrunner.de/tlp for all supported options..
         '';
       };
@@ -37,7 +37,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Verbatim additional configuration variables for TLP.
           DEPRECATED: use services.tlp.settings instead.
         '';

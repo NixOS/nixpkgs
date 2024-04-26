@@ -1,6 +1,7 @@
 {
   lib,
   rustPlatform,
+  fetchpatch,
   fetchFromGitHub,
   pkg-config,
   stdenv,
@@ -32,6 +33,14 @@ rustPlatform.buildRustPackage rec {
   patches = [
     # Disables a doctest that depends on a nightly feature
     ./0001-re_space_view_time_series-utils-patch-out-doctests-w.patch
+
+
+    # "Fix cell size test now that the overhead has shrunk"
+    # https://github.com/rerun-io/rerun/pull/5917
+    (fetchpatch {
+      url = "https://github.com/rerun-io/rerun/commit/933fc5cc1f3ee262a78bd4647257295747671152.patch";
+      hash = "sha256-jCeGfzKt0oYqIea+7bA2V/U9VIjhVvfQzLRrYG4jaHY=";
+    })
   ];
 
   cargoHash = "sha256-qvnkOlcjADV4b+JfFAy9yNaZGaf0ZO7hh9HBg5XmPi0=";
@@ -96,7 +105,7 @@ rustPlatform.buildRustPackage rec {
     )
   '';
 
-  postPhases = lib.optionals stdenv.hostPlatform.isLinux  [ "addDlopenRunpathsPhase" ];
+  postPhases = lib.optionals stdenv.hostPlatform.isLinux [ "addDlopenRunpathsPhase" ];
 
   cargoTestFlags = [
     "-p"

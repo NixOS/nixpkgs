@@ -5,6 +5,7 @@
 , autoAddDriverRunpath
 , makeWrapper
 , buildNpmPackage
+, nixosTests
 , cmake
 , avahi
 , libevdev
@@ -23,6 +24,7 @@
 , curl
 , pcre
 , pcre2
+, python3
 , libuuid
 , libselinux
 , libsepol
@@ -50,13 +52,13 @@ let
 in
 stdenv'.mkDerivation rec {
   pname = "sunshine";
-  version = "0.22.2";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
     rev = "v${version}";
-    sha256 = "sha256-So8fX0XQoW2cdTWWENoE07EU6e8vvjeTpizLoaDTjeg=";
+    sha256 = "sha256-K43LZ7zouTRUI4xhiHuRzu2tN7mUl1nTapuR34JR/Ac=";
     fetchSubmodules = true;
   };
 
@@ -69,7 +71,7 @@ stdenv'.mkDerivation rec {
   ui = buildNpmPackage {
     inherit src version;
     pname = "sunshine-ui";
-    npmDepsHash = "sha256-0487ntbJZ20MZHezQ+Z3EJkidF3Dgoh/mynYwR7k/+I=";
+    npmDepsHash = "sha256-I7IrCR7eQ97a8cPB8F8+T0zX8iJcwh+YtZ9QRtEVZtI=";
 
     # use generated package-lock.json as upstream does not provide one
     postPatch = ''
@@ -85,6 +87,7 @@ stdenv'.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    python3
     makeWrapper
     # Avoid fighting upstream's usage of vendored ffmpeg libraries
     autoPatchelfHook
@@ -183,7 +186,10 @@ stdenv'.mkDerivation rec {
     install -Dm644 ../packaging/linux/${pname}.desktop $out/share/applications/${pname}.desktop
   '';
 
-  passthru.updateScript = ./updater.sh;
+  passthru = {
+    tests.sunshine = nixosTests.sunshine;
+    updateScript = ./updater.sh;
+  };
 
   meta = with lib; {
     description = "Sunshine is a Game stream host for Moonlight";

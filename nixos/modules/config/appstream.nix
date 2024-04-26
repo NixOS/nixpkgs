@@ -6,7 +6,7 @@ with lib;
     appstream.enable = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to install files to support the
         [AppStream metadata specification](https://www.freedesktop.org/software/appstream/docs/index.html).
       '';

@@ -14,24 +14,24 @@ in {
 
     domain = mkOption {
       type = types.str;
-      description = lib.mdDoc "The domain the Bitwarden/Vaultwarden is accessible on.";
+      description = "The domain the Bitwarden/Vaultwarden is accessible on.";
       example = "https://vaultwarden.example.com";
     };
 
     user = mkOption {
       type = types.str;
-      description = lib.mdDoc "User to run the program.";
+      description = "User to run the program.";
       default = "bwdc";
     };
 
     interval = mkOption {
       type = types.str;
       default = "*:0,15,30,45";
-      description = lib.mdDoc "The interval when to run the connector. This uses systemd's OnCalendar syntax.";
+      description = "The interval when to run the connector. This uses systemd's OnCalendar syntax.";
     };
 
     ldap = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Options to configure the LDAP connection.
         If you used the desktop application to test the configuration you can find the settings by searching for `ldap` in `~/.config/Bitwarden\ Directory\ Connector/data.json`.
       '';
@@ -56,47 +56,47 @@ in {
           ssl = mkOption {
             type = types.bool;
             default = false;
-            description = lib.mdDoc "Whether to use TLS.";
+            description = "Whether to use TLS.";
           };
           startTls = mkOption {
             type = types.bool;
             default = false;
-            description = lib.mdDoc "Whether to use STARTTLS.";
+            description = "Whether to use STARTTLS.";
           };
 
           hostname = mkOption {
             type = types.str;
-            description = lib.mdDoc "The host the LDAP is accessible on.";
+            description = "The host the LDAP is accessible on.";
             example = "ldap.example.com";
           };
 
           port = mkOption {
             type = types.port;
             default = 389;
-            description = lib.mdDoc "Port LDAP is accessible on.";
+            description = "Port LDAP is accessible on.";
           };
 
           ad = mkOption {
             type = types.bool;
             default = false;
-            description = lib.mdDoc "Whether the LDAP Server is an Active Directory.";
+            description = "Whether the LDAP Server is an Active Directory.";
           };
 
           pagedSearch = mkOption {
             type = types.bool;
             default = false;
-            description = lib.mdDoc "Whether the LDAP server paginates search results.";
+            description = "Whether the LDAP server paginates search results.";
           };
 
           rootPath = mkOption {
             type = types.str;
-            description = lib.mdDoc "Root path for LDAP.";
+            description = "Root path for LDAP.";
             example = "dc=example,dc=com";
           };
 
           username = mkOption {
             type = types.str;
-            description = lib.mdDoc "The user to authenticate as.";
+            description = "The user to authenticate as.";
             example = "cn=admin,dc=example,dc=com";
           };
         };
@@ -104,7 +104,7 @@ in {
     };
 
     sync = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Options to configure what gets synced.
         If you used the desktop application to test the configuration you can find the settings by searching for `sync` in `~/.config/Bitwarden\ Directory\ Connector/data.json`.
       '';
@@ -129,73 +129,72 @@ in {
           removeDisabled = mkOption {
             type = types.bool;
             default = true;
-            description = lib.mdDoc "Remove users from bitwarden groups if no longer in the ldap group.";
+            description = "Remove users from bitwarden groups if no longer in the ldap group.";
           };
 
           overwriteExisting = mkOption {
             type = types.bool;
             default = false;
-            description =
-              lib.mdDoc "Remove and re-add users/groups, See https://bitwarden.com/help/user-group-filters/#overwriting-syncs for more details.";
+            description = "Remove and re-add users/groups, See https://bitwarden.com/help/user-group-filters/#overwriting-syncs for more details.";
           };
 
           largeImport = mkOption {
             type = types.bool;
             default = false;
-            description = lib.mdDoc "Enable if you are syncing more than 2000 users/groups.";
+            description = "Enable if you are syncing more than 2000 users/groups.";
           };
 
           memberAttribute = mkOption {
             type = types.str;
-            description = lib.mdDoc "Attribute that lists members in a LDAP group.";
+            description = "Attribute that lists members in a LDAP group.";
             example = "uniqueMember";
           };
 
           creationDateAttribute = mkOption {
             type = types.str;
-            description = lib.mdDoc "Attribute that lists a user's creation date.";
+            description = "Attribute that lists a user's creation date.";
             example = "whenCreated";
           };
 
           useEmailPrefixSuffix = mkOption {
             type = types.bool;
             default = false;
-            description = lib.mdDoc "If a user has no email address, combine a username prefix with a suffix value to form an email.";
+            description = "If a user has no email address, combine a username prefix with a suffix value to form an email.";
           };
           emailPrefixAttribute = mkOption {
             type = types.str;
-            description = lib.mdDoc "The attribute that contains the users username.";
+            description = "The attribute that contains the users username.";
             example = "accountName";
           };
           emailSuffix = mkOption {
             type = types.str;
-            description = lib.mdDoc "Suffix for the email, normally @example.com.";
+            description = "Suffix for the email, normally @example.com.";
             example = "@example.com";
           };
 
           users = mkOption {
             type = types.bool;
             default = false;
-            description = lib.mdDoc "Sync users.";
+            description = "Sync users.";
           };
           userPath = mkOption {
             type = types.str;
-            description = lib.mdDoc "User directory, relative to root.";
+            description = "User directory, relative to root.";
             default = "ou=users";
           };
           userObjectClass = mkOption {
             type = types.str;
-            description = lib.mdDoc "Class that users must have.";
+            description = "Class that users must have.";
             default = "inetOrgPerson";
           };
           userEmailAttribute = mkOption {
             type = types.str;
-            description = lib.mdDoc "Attribute for a users email.";
+            description = "Attribute for a users email.";
             default = "mail";
           };
           userFilter = mkOption {
             type = types.str;
-            description = lib.mdDoc "LDAP filter for users.";
+            description = "LDAP filter for users.";
             example = "(memberOf=cn=sales,ou=groups,dc=example,dc=com)";
             default = "";
           };
@@ -203,26 +202,26 @@ in {
           groups = mkOption {
             type = types.bool;
             default = false;
-            description = lib.mdDoc "Whether to sync ldap groups into BitWarden.";
+            description = "Whether to sync ldap groups into BitWarden.";
           };
           groupPath = mkOption {
             type = types.str;
-            description = lib.mdDoc "Group directory, relative to root.";
+            description = "Group directory, relative to root.";
             default = "ou=groups";
           };
           groupObjectClass = mkOption {
             type = types.str;
-            description = lib.mdDoc "A class that groups will have.";
+            description = "A class that groups will have.";
             default = "groupOfNames";
           };
           groupNameAttribute = mkOption {
             type = types.str;
-            description = lib.mdDoc "Attribute for a name of group.";
+            description = "Attribute for a name of group.";
             default = "cn";
           };
           groupFilter = mkOption {
             type = types.str;
-            description = lib.mdDoc "LDAP filter for groups.";
+            description = "LDAP filter for groups.";
             example = "(cn=sales)";
             default = "";
           };

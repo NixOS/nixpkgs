@@ -77,6 +77,16 @@ let
     "tree-sitter-fluent"
     # to unblock my update
     "csharp-tree-sitter"
+
+    # Non-grammar repositories
+    ".github"
+    "fuzz-action"
+    "parse-action"
+    "parser-setup-action"
+    "parser-test-action"
+    "parser-update-action"
+    "setup-action"
+    "workflows"
   ];
   ignoredTreeSitterOrgReposJson = jsonFile "ignored-tree-sitter-org-repos" ignoredTreeSitterOrgRepos;
 
@@ -420,6 +430,10 @@ let
     "tree-sitter-koka" = {
       orga = "mtoohey31";
       repo = "tree-sitter-koka";
+    };
+    "tree-sitter-earthfile" = {
+      orga = "glehmann";
+      repo = "tree-sitter-earthfile";
     };
   };
 

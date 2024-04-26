@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "plotly";
     repo = "plotly.py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LSZGaefxQC6h9VAJ2wgZyaQPR6vs0wrp2oxd51I3pL8=";
+    hash = "sha256-i//LKTNmoIrusBnpfSGc9cDijPxg/dY/7fumV3kfTAY=";
   };
 
   sourceRoot = "${src.name}/packages/python/chart-studio";

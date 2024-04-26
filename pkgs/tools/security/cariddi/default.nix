@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "cariddi";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "edoardottt";
     repo = "cariddi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nApgsvHSMWmgJWyvdtBdrGt9v8YSwWiGnmrDS8vVvDw=";
+    hash = "sha256-Hgz+/DEoCo4lxcFkawQgIc3ct7cc2NwpAnfBtZQruf0=";
   };
 
   vendorHash = "sha256-GgJyYDnlaFybf3Gu1gVcA12HkA0yUIjYEFj0G83GVGQ=";

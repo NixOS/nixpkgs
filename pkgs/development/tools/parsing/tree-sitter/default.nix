@@ -9,11 +9,15 @@
 , Security
 , callPackage
 , linkFarm
+, substitute
 , CoreServices
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableStatic ? stdenv.hostPlatform.isStatic
 , webUISupport ? false
 , extraGrammars ? { }
+
+# tests
+, lunarvim
 }:
 
 let
@@ -22,14 +26,14 @@ let
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
   # 3) Set GITHUB_TOKEN env variable to avoid api rate limit (Use a Personal Access Token from https://github.com/settings/tokens It does not need any permissions)
   # 4) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.20.9";
-  sha256 = "sha256-NxWqpMNwu5Ajffw1E2q9KS4TgkCH6M+ctFyi9Jp0tqQ=";
+  version = "0.22.2";
+  hash = "sha256-RhM3SgsCb8eLs56cm8/Yo1ptNnFrR21FriHAlMdvdrU=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter";
     rev = "v${version}";
-    inherit sha256;
+    inherit hash;
     fetchSubmodules = true;
   };
 
@@ -58,14 +62,15 @@ let
         };
       grammars' = import ./grammars { inherit lib; } // extraGrammars;
       grammars = grammars' //
-        { tree-sitter-ocaml = grammars'.tree-sitter-ocaml // { location = "ocaml"; }; } //
-        { tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // { location = "interface"; }; } //
+        { tree-sitter-ocaml = grammars'.tree-sitter-ocaml // { location = "grammars/ocaml"; }; } //
+        { tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // { location = "grammars/interface"; }; } //
         { tree-sitter-org-nvim = grammars'.tree-sitter-org-nvim // { language = "org"; }; } //
         { tree-sitter-typescript = grammars'.tree-sitter-typescript // { location = "typescript"; }; } //
         { tree-sitter-tsx = grammars'.tree-sitter-typescript // { location = "tsx"; }; } //
-        { tree-sitter-typst = grammars'.tree-sitter-typst // { generate = true; }; } //
         { tree-sitter-markdown = grammars'.tree-sitter-markdown // { location = "tree-sitter-markdown"; }; } //
         { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; } //
+        { tree-sitter-php = grammars'.tree-sitter-php // { location = "php"; }; } //
+        { tree-sitter-sql = grammars'.tree-sitter-sql // { generate = true; }; } //
         { tree-sitter-wing = grammars'.tree-sitter-wing // { location = "libs/tree-sitter-wing"; generate = true; }; };
     in
     lib.mapAttrs build (grammars);
@@ -105,8 +110,7 @@ rustPlatform.buildRustPackage {
   pname = "tree-sitter";
   inherit src version;
 
-  cargoLock.lockFile = ./Cargo.lock;
-  cargoLock.outputHashes."cranelift-bforest-0.102.0" = "sha256-rJeRbRDrAnKb8s98gNn1NTMKuB8B4aOI8Fh6JeLX7as=";
+  cargoHash = "sha256-QWqg84naOIPhkHj2yLchZVb2gvjL9+AEK2rRK7K8uQY=";
 
   buildInputs =
     lib.optionals stdenv.isDarwin [ Security CoreServices ];
@@ -114,12 +118,19 @@ rustPlatform.buildRustPackage {
     [ which ]
     ++ lib.optionals webUISupport [ emscripten ];
 
+  patches = lib.optionals webUISupport [
+    (substitute {
+      src = ./fix-paths.patch;
+      substitutions = [ "--subst-var-by" "emcc" "${emscripten}/bin/emcc" ];
+    })
+  ];
+
   postPatch = lib.optionalString (!webUISupport) ''
     # remove web interface
     sed -e '/pub mod playground/d' \
         -i cli/src/lib.rs
     sed -e 's/playground,//' \
-        -e 's/playground::serve(&current_dir.*$/println!("ERROR: web-ui is not available in this nixpkgs build; enable the webUISupport"); std::process::exit(1);/' \
+        -e 's/playground::serve(&grammar_path.*$/println!("ERROR: web-ui is not available in this nixpkgs build; enable the webUISupport"); std::process::exit(1);/' \
         -i cli/src/main.rs
   '';
 
@@ -150,6 +161,8 @@ rustPlatform.buildRustPackage {
     tests = {
       # make sure all grammars build
       builtGrammars = lib.recurseIntoAttrs builtGrammars;
+
+      inherit lunarvim;
     };
   };
 
@@ -157,6 +170,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/tree-sitter/tree-sitter";
     description = "A parser generator tool and an incremental parsing library";
     mainProgram = "tree-sitter";
+    changelog = "https://github.com/tree-sitter/tree-sitter/blob/v${version}/CHANGELOG.md";
     longDescription = ''
       Tree-sitter is a parser generator tool and an incremental parsing library.
       It can build a concrete syntax tree for a source file and efficiently update the syntax tree as the source file is edited.

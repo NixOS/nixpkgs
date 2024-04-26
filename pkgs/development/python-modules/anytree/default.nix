@@ -4,7 +4,7 @@
 , fontconfig
 , graphviz
 , poetry-core
-, pytestCheckHook
+, pytest7CheckHook
 , pythonOlder
 , six
 , substituteAll
@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "anytree";
-  version = "2.12.0";
+  version = "2.12.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "c0fec0de";
     repo = "anytree";
     rev = "refs/tags/${version}";
-    hash = "sha256-8mV9Lf6NLPUDVurXCxG+tqe7+3TrIn2H+7tHa6BpTzk=";
+    hash = "sha256-5HU8kR3B2RHiGBraQ2FTgVtGHJi+Lha9U/7rpNsYCCI=";
   };
 
   patches = lib.optionals withGraphviz [
@@ -41,12 +41,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  pytestFlagsArray = [
-    # pytest.PytestRemovedIn8Warning: Support for nose tests is deprecated and will be removed in a future release.
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+    pytest7CheckHook
   ];
 
   # Tests print “Fontconfig error: Cannot load default config file”

@@ -52,13 +52,13 @@ let
 
   serviceOptions = service:
     {
-      enable = mkEnableOption (lib.mdDoc "the FRR ${toUpper service} routing protocol");
+      enable = mkEnableOption "the FRR ${toUpper service} routing protocol";
 
       configFile = mkOption {
         type = types.nullOr types.path;
         default = null;
         example = "/etc/frr/${daemonName service}.conf";
-        description = lib.mdDoc ''
+        description = ''
           Configuration file to use for FRR ${daemonName service}.
           By default the NixOS generated files are used.
         '';
@@ -87,7 +87,7 @@ let
             };
           in
             examples.${service} or "";
-        description = lib.mdDoc ''
+        description = ''
           ${daemonName service} configuration statements.
         '';
       };
@@ -95,7 +95,7 @@ let
       vtyListenAddress = mkOption {
         type = types.str;
         default = "localhost";
-        description = lib.mdDoc ''
+        description = ''
           Address to bind to for the VTY interface.
         '';
       };
@@ -103,7 +103,7 @@ let
       vtyListenPort = mkOption {
         type = types.nullOr types.int;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           TCP Port to bind to for the VTY interface.
         '';
       };
@@ -111,7 +111,7 @@ let
       extraOptions = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           Extra options for the daemon.
         '';
       };
@@ -129,7 +129,7 @@ in
           enable = mkOption {
             type = types.bool;
             default = any isEnabled services;
-            description = lib.mdDoc ''
+            description = ''
               Whether to enable the Zebra routing manager.
 
               The Zebra routing manager is automatically enabled

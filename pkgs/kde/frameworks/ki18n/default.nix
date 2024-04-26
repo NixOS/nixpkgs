@@ -1,9 +1,10 @@
 {
   mkKdeDerivation,
   qtdeclarative,
+  python3,
 }:
 mkKdeDerivation {
   pname = "ki18n";
 
-  extraBuildInputs = [qtdeclarative];
+  extraBuildInputs = [qtdeclarative python3];
 }

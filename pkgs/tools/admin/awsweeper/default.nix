@@ -21,7 +21,7 @@ buildGoModule rec {
     description = "A tool to clean out your AWS account";
     homepage = "https://github.com/jckuester/awsweeper";
     license = licenses.mpl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     mainProgram = "awsweeper";
   };
 }

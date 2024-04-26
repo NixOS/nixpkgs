@@ -12,7 +12,7 @@ in {
 
   options = {
     programs.i3lock = {
-      enable = mkEnableOption (mdDoc "i3lock");
+      enable = mkEnableOption "i3lock";
       package = mkPackageOption pkgs "i3lock" {
         example = "i3lock-color";
         extraDescription = ''
@@ -25,7 +25,7 @@ in {
         type        = types.bool;
         default     = false;
         example     = true;
-        description = mdDoc ''
+        description = ''
           Whether to enable U2F support in the i3lock program.
           U2F enables authentication using a hardware device, such as a security key.
           When U2F support is enabled, the i3lock program will set the setuid bit on the i3lock binary and enable the pam u2fAuth service,

@@ -2,11 +2,15 @@
 , lib
 , fetchurl
 , SDL
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, fmodex
 , dwarf-fortress-unfuck
+, autoPatchelfHook
 
   # Our own "unfuck" libs for macOS
 , ncurses
-, fmodex
 , gcc
 
 , dfVersion
@@ -22,12 +26,12 @@ let
     hasAttr
     licenses
     maintainers
-    makeLibraryPath
+    optional
+    optionals
     optionalString
     splitVersion
+    toInt
     ;
-
-  libpath = makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc dwarf-fortress-unfuck SDL ];
 
   # Map Dwarf Fortress platform names to Nixpkgs platform names.
   # Other srcs are avilable like 32-bit mac & win, but I have only
@@ -41,9 +45,15 @@ let
     i686-cygwin = "win32";
   };
 
-  dfVersionTriple = splitVersion dfVersion;
-  baseVersion = elemAt dfVersionTriple 1;
-  patchVersion = elemAt dfVersionTriple 2;
+  dfVersionTuple = splitVersion dfVersion;
+  dfVersionBaseIndex = let
+    x = (builtins.length dfVersionTuple) - 2;
+  in if x >= 0 then x else 0;
+  baseVersion = toInt (elemAt dfVersionTuple dfVersionBaseIndex);
+  patchVersion = elemAt dfVersionTuple (dfVersionBaseIndex + 1);
+
+  isAtLeast50 = baseVersion >= 50;
+  enableUnfuck = !isAtLeast50 && dwarf-fortress-unfuck != null;
 
   game =
     if hasAttr dfVersion df-hashes
@@ -57,7 +67,10 @@ let
     if hasAttr dfPlatform game
     then getAttr dfPlatform game
     else throw "Unsupported dfPlatform: ${dfPlatform}";
-
+  exe = if stdenv.isLinux then
+    if baseVersion >= 50 then "dwarfort" else "libs/Dwarf_Fortress"
+  else
+    "dwarfort.exe";
 in
 
 stdenv.mkDerivation {
@@ -65,25 +78,49 @@ stdenv.mkDerivation {
   version = dfVersion;
 
   src = fetchurl {
-    url = "https://www.bay12games.com/dwarves/df_${baseVersion}_${patchVersion}_${dfPlatform}.tar.bz2";
+    url = "https://www.bay12games.com/dwarves/df_${toString baseVersion}_${toString patchVersion}_${dfPlatform}.tar.bz2";
     inherit sha256;
   };
 
+  sourceRoot = ".";
+
+  postUnpack = optionalString stdenv.isLinux ''
+    directory=${
+      if stdenv.isLinux then "df_linux"
+      else if stdenv.isDarwin then "df_osx"
+      else throw "Unsupported system"
+    }
+    if [ -d "$directory" ]; then
+      mv "$directory/"* .
+    fi
+  '';
+
+  nativeBuildInputs = [ autoPatchelfHook ];
+  buildInputs = optionals isAtLeast50 [ SDL2 SDL2_image SDL2_mixer ]
+    ++ optional (!isAtLeast50) SDL
+    ++ optional enableUnfuck dwarf-fortress-unfuck
+    ++ [ stdenv.cc.cc.lib ];
+
   installPhase = ''
+    runHook preInstall
+
+    exe=$out/${exe}
     mkdir -p $out
     cp -r * $out
-    rm $out/libs/lib*
 
-    exe=$out/${if stdenv.isLinux then "libs/Dwarf_Fortress"
-                                 else "dwarfort.exe"}
+    # Lots of files are +x in the newer releases...
+    find $out -type d -exec chmod 0755 {} \;
+    find $out -type f -exec chmod 0644 {} \;
+    chmod +x $exe
+    [ -f $out/df ] && chmod +x $out/df
+    [ -f $out/run_df ] && chmod +x $out/run_df
+
+    # We don't need any of these since they will just break autoPatchelf on <version 50.
+    [ -d $out/libs ] && rm -f $out/libs/*.so $out/libs/*.so.*
 
     # Store the original hash
     md5sum $exe | awk '{ print $1 }' > $out/hash.md5.orig
-  '' + optionalString stdenv.isLinux ''
-    patchelf \
-      --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
-      --set-rpath "${libpath}" \
-      $exe
+    echo "Original MD5: $(<$out/hash.md5.orig)" >&2
   '' + optionalString stdenv.isDarwin ''
     # My custom unfucked dwarfort.exe for macOS. Can't use
     # absolute paths because original doesn't have enough
@@ -101,12 +138,24 @@ stdenv.mkDerivation {
               @executable_path/libs/libstdc++.6.dylib \
       $exe
   '' + ''
-    # Store the new hash
-    md5sum $exe | awk '{ print $1 }' > $out/hash.md5
+    ls -al $out
+    runHook postInstall
+  '';
+
+  preFixup = ''
+    recompute_hash() {
+      # Store the new hash as the very last step.
+      exe=$out/${exe}
+      md5sum $exe | awk '{ print $1 }' > $out/hash.md5
+      echo "Patched MD5: $(<$out/hash.md5)" >&2
+    }
+
+    # Ensure that this runs after autoPatchelfHook.
+    trap recompute_hash EXIT
   '';
 
   passthru = {
-    inherit baseVersion patchVersion dfVersion;
+    inherit baseVersion patchVersion dfVersion exe;
     updateScript = ./update.sh;
   };
 

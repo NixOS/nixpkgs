@@ -8,16 +8,16 @@
 }:
 buildGoModule rec {
   pname = "turso-cli";
-  version = "0.90.3";
+  version = "0.92.1";
 
   src = fetchFromGitHub {
     owner = "tursodatabase";
     repo = "turso-cli";
     rev = "v${version}";
-    hash = "sha256-NkCkInQLwGwb8bFeRTSk2rpuPBOkMvWBgVx2IFFyRFQ=";
+    hash = "sha256-Oe+VxNMJwX0iIAyGoPtzgRV/VaWzVQLlBH1HxhKqUqw=";
   };
 
-  vendorHash = "sha256-oxlIaSSLZ6JirvUPOIHirp43G5qrDFJhNd6HjA9UYKo=";
+  vendorHash = "sha256-2NjdjB09WYzHjQEl2hMUWN1/xsj/Hlr8lVYU/pkxTqQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 

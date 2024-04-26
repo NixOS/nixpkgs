@@ -21,11 +21,21 @@
 , gzip
 , fontconfig
 , freetype
+, libbsd
 , libpulseaudio
 , libGL
+, libdrm
+, libpng
 , libuuid
 , libX11
 , libxcb
+, libxkbcommon
+, xcbutilwm
+, xcbutilrenderutil
+, xcbutilkeysyms
+, xcbutilimage
+, xcbutilcursor
+, libxkbfile
 , libXcomposite
 , libXcursor
 , libXdamage
@@ -51,6 +61,7 @@
 , which
 , runCommand
 , xkeyboard_config
+, xorg
 , zlib
 , makeDesktopItem
 , tiling_wm # if we are using a tiling wm, need to set _JAVA_AWT_WM_NONREPARENTING in wrapper
@@ -136,15 +147,27 @@ let
           alsa-lib
           dbus
           expat
+          libbsd
           libpulseaudio
           libuuid
           libX11
           libxcb
+          libxkbcommon
+          xcbutilwm
+          xcbutilrenderutil
+          xcbutilkeysyms
+          xcbutilimage
+          xcbutilcursor
+          xorg.libICE
+          xorg.libSM
+          libxkbfile
           libXcomposite
           libXcursor
           libXdamage
           libXfixes
           libGL
+          libdrm
+          libpng
           nspr
           nss_latest
           systemd

@@ -50,6 +50,10 @@ while [ "$#" -gt 0 ]; do
         ;;
       switch|boot|test|build|edit|repl|dry-build|dry-run|dry-activate|build-vm|build-vm-with-bootloader|list-generations)
         if [ "$i" = dry-run ]; then i=dry-build; fi
+        if [ "$i" = list-generations ]; then
+            buildNix=
+            fast=1
+        fi
         # exactly one action mandatory, bail out if multiple are given
         if [ -n "$action" ]; then showSyntax; fi
         action="$i"
@@ -793,7 +797,13 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
     else
         cmd+=("$pathToConfig/specialisation/$specialisation/bin/switch-to-configuration")
 
-        if [[ ! -f "${cmd[-1]}" ]]; then
+        if [ -z "$targetHost" ]; then
+            specialisationExists=$(test -f "${cmd[-1]}")
+        else
+            specialisationExists=$(targetHostCmd test -f "${cmd[-1]}")
+        fi
+
+        if ! $specialisationExists; then
             log "error: specialisation not found: $specialisation"
             exit 1
         fi

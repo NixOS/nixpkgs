@@ -348,6 +348,24 @@
     "battery-time": [
       "batime@martin.zurowietz.de",
       "batterytime@typeof.pw"
+    ],
+    "power-profile-indicator": [
+      "power-profile-indicator@laux.wtf",
+      "power-profile@fthx"
+    ]
+  },
+  "46": {
+    "applications-menu": [
+      "apps-menu@gnome-shell-extensions.gcampax.github.com",
+      "Applications_Menu@rmy.pobox.com"
+    ],
+    "persian-calendar": [
+      "PersianCalendar@oxygenws.com",
+      "persian-calendar@iamrezamousavi.gmail.com"
+    ],
+    "power-profile-indicator": [
+      "power-profile-indicator@laux.wtf",
+      "power-profile@fthx"
     ]
   }
 }

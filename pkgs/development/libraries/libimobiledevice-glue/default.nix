@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libimobiledevice-glue";
-  version = "1.0.0";
+  version = "1.2.0";
 
   outputs = [ "out" "dev" ];
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "libimobiledevice";
     repo = pname;
     rev = version;
-    hash = "sha256-9TjIYz6w61JaJgOJtWteIDk9bO3NnXp/2ZJwdirFcYM=";
+    hash = "sha256-Rfs1i1Tt8uf3WfR+cDlF4L75nFHg9VypjMhHt0TgkyQ=";
   };
 
   nativeBuildInputs = [

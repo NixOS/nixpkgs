@@ -164,7 +164,7 @@ in
 # Curl still needs to be in runtimeLibs because the library is used directly in other parts of the code.
 # Fonts are also discovered by looking in /usr/share/fonts, so adding fonts to targetPkgs will include them
 buildFHSEnv {
-  name = derivation.name;
+  inherit (derivation) pname version;
 
   targetPkgs = pkgs': [
     curl
@@ -175,7 +175,6 @@ buildFHSEnv {
   runScript = "/bin/onlyoffice-desktopeditors";
 
   extraInstallCommands = ''
-    mv $out/bin/$name $out/bin/onlyoffice-desktopeditors
     mkdir -p $out/share
     ln -s ${derivation}/share/icons $out/share
     cp -r ${derivation}/share/applications $out/share

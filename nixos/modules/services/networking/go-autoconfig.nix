@@ -12,11 +12,11 @@ in {
   options = {
     services.go-autoconfig = {
 
-      enable = mkEnableOption (mdDoc "IMAP/SMTP autodiscover feature for mail clients");
+      enable = mkEnableOption "IMAP/SMTP autodiscover feature for mail clients";
 
       settings = mkOption {
         default = { };
-        description = mdDoc ''
+        description = ''
           Configuration for go-autoconfig. See
           <https://github.com/L11R/go-autoconfig/blob/master/config.yml>
           for more information.

@@ -204,7 +204,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       MP2E
       ashkitten
-      xfix
       ivar
     ];
   };

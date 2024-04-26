@@ -35,7 +35,7 @@
 , icu
 , fetchYarnDeps
 , yarn
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , nodePackages
 , nodejs_18
 , jq
@@ -215,7 +215,7 @@ let
       nodejs_18
       jq
       moreutils
-      prefetch-yarn-deps
+      fixup-yarn-lock
     ];
 
     outputs = [ "out" "javascripts" ];

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, nixosTests
 , directoryListingUpdater
 , meson
 , ninja
@@ -20,12 +21,12 @@
 
 stdenv.mkDerivation rec {
   pname = "phosh-mobile-settings";
-  version = "0.37.0";
+  version = "0.38.0";
 
   src = fetchurl {
     # This tarball includes the meson wrapped subproject 'gmobile'.
     url = "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-HW3wM/lb8pvr+eDoeqa0iHXiKhBQ8ybBIy0wwHPsrOg=";
+    hash = "sha256-WDqgVsJx5y6IlWII9fRBsAeWn/tB8BaXRtlPvA0wmMk=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +60,10 @@ stdenv.mkDerivation rec {
     ln -s '${phosh}/lib/phosh' "$out/lib/phosh"
   '';
 
-  passthru.updateScript = directoryListingUpdater { };
+  passthru = {
+    tests.phosh = nixosTests.phosh;
+    updateScript = directoryListingUpdater { };
+  };
 
   meta = with lib; {
     description = "A settings app for mobile specific things";

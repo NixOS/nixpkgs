@@ -2,6 +2,8 @@
 , lib
 , fetchFromGitHub
 , fetchpatch
+, fetchurl
+, runCommand
 , writeText
 , openjdk21_headless
 , gradle
@@ -18,7 +20,6 @@
 , ffmpeg_4
 , python3
 , ruby
-, icu68
 , withMedia ? true
 , withWebKit ? false
 }:
@@ -28,6 +29,16 @@ let
   update = "";
   build = "+30";
   repover = "${major}${update}${build}";
+
+  icuVersionWithSep = s: "73${s}1";
+  icuPath = "download/release-${icuVersionWithSep "-"}/icu4c-${icuVersionWithSep "_"}-data-bin-l.zip";
+  icuData = fetchurl {
+    url = "https://github.com/unicode-org/icu/releases/${icuPath}";
+    hash = "sha256-QDgpjuAqDDiRcYXvj/Tr3pyLVSx3f9A+TfbGtLGCXiA=";
+  };
+  icuFakeRepository = runCommand "icu-data-repository" {} ''
+    install -Dm644 ${icuData} $out/${icuPath}
+  '';
 
   makePackage = args: stdenv.mkDerivation ({
     version = "${major}${update}${build}";
@@ -39,7 +50,7 @@ let
       hash = "sha256-sZF7ZPC0kgTTxWgtkxmGtOlfroGPGVZcMw0/wSTJUxQ=";
     };
 
-    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4 icu68 ];
+    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4 ];
     nativeBuildInputs = [ gradle perl pkg-config cmake gperf python3 ruby ];
 
     dontUseCmakeConfigure = true;
@@ -56,7 +67,7 @@ let
       export GRADLE_USER_HOME=$(mktemp -d)
       ln -s $config gradle.properties
       export NIX_CFLAGS_COMPILE="$(pkg-config --cflags glib-2.0) $NIX_CFLAGS_COMPILE"
-      gradle --no-daemon $gradleFlags sdk
+      gradle --no-daemon --console=plain $gradleFlags sdk
 
       runHook postBuild
     '';
@@ -88,6 +99,7 @@ makePackage {
   gradleProperties = ''
     COMPILE_MEDIA = ${lib.boolToString withMedia}
     COMPILE_WEBKIT = ${lib.boolToString withWebKit}
+    ${lib.optionalString withWebKit "icuRepositoryURL = file://${icuFakeRepository}"}
   '';
 
   preBuild = ''

@@ -33,6 +33,8 @@ mavenJdk.buildMavenPackage rec {
 
   # This is based on the instructins in https://github.com/cryptomator/cryptomator/blob/develop/dist/linux/appimage/build.sh
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin/ $out/share/cryptomator/libs/ $out/share/cryptomator/mods/
 
     cp target/libs/* $out/share/cryptomator/libs/
@@ -70,9 +72,15 @@ mavenJdk.buildMavenPackage rec {
     cp ${src}/dist/linux/common/org.cryptomator.Cryptomator256.png $out/share/icons/hicolor/256x256/apps/org.cryptomator.Cryptomator.png
     cp ${src}/dist/linux/common/org.cryptomator.Cryptomator512.png $out/share/icons/hicolor/512x512/apps/org.cryptomator.Cryptomator.png
     cp ${src}/dist/linux/common/org.cryptomator.Cryptomator.svg $out/share/icons/hicolor/scalable/apps/org.cryptomator.Cryptomator.svg
+    cp ${src}/dist/linux/common/org.cryptomator.Cryptomator.tray-unlocked.svg $out/share/icons/hicolor/scalable/apps/org.cryptomator.Cryptomator.tray-unlocked.svg
+    cp ${src}/dist/linux/common/org.cryptomator.Cryptomator.tray.svg $out/share/icons/hicolor/scalable/apps/org.cryptomator.Cryptomator.tray.svg
+    cp ${src}/dist/linux/common/org.cryptomator.Cryptomator.tray-unlocked.svg $out/share/icons/hicolor/symbolic/apps/org.cryptomator.Cryptomator.tray-unlocked-symbolic.svg
+    cp ${src}/dist/linux/common/org.cryptomator.Cryptomator.tray.svg $out/share/icons/hicolor/symbolic/apps/org.cryptomator.Cryptomator.tray-symbolic.svg
     cp ${src}/dist/linux/common/org.cryptomator.Cryptomator.desktop $out/share/applications/org.cryptomator.Cryptomator.desktop
     cp ${src}/dist/linux/common/org.cryptomator.Cryptomator.metainfo.xml $out/share/metainfo/org.cryptomator.Cryptomator.metainfo.xml
     cp ${src}/dist/linux/common/application-vnd.cryptomator.vault.xml $out/share/mime/packages/application-vnd.cryptomator.vault.xml
+
+    runHook postInstall
   '';
 
   nativeBuildInputs = [

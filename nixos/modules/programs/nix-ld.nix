@@ -17,11 +17,11 @@ in
 {
   meta.maintainers = [ lib.maintainers.mic92 ];
   options.programs.nix-ld = {
-    enable = lib.mkEnableOption (lib.mdDoc ''nix-ld, Documentation: <https://github.com/Mic92/nix-ld>'');
+    enable = lib.mkEnableOption ''nix-ld, Documentation: <https://github.com/Mic92/nix-ld>'';
     package = lib.mkPackageOption pkgs "nix-ld" { };
     libraries = lib.mkOption {
       type = lib.types.listOf lib.types.package;
-      description = lib.mdDoc "Libraries that automatically become available to all programs. The default set includes common libraries.";
+      description = "Libraries that automatically become available to all programs. The default set includes common libraries.";
       default = [ ];
       defaultText = lib.literalExpression "baseLibraries derived from systemd and nix dependencies.";
     };

@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "qtile";
-  version = "0.24.0";
+  version = "0.25.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "qtile";
     repo = "qtile";
-    rev = "v${version}";
-    hash = "sha256-mgMRkoKT0Gp5/OfVQbkeDTkg9QRFn4PU3ziM5E6V+oI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-j5hpXfUSDUT9nBr6CafIzqdTYQxSWok+ZlQA7bGdVvk=";
   };
 
   patches = [
@@ -97,6 +97,6 @@ buildPythonPackage rec {
     description = "A small, flexible, scriptable tiling window manager written in Python";
     mainProgram = "qtile";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ kamilchm arjan-s ];
+    maintainers = with maintainers; [ arjan-s ];
   };
 }

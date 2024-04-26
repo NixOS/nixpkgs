@@ -41,6 +41,7 @@ let
         qemu-utils
         rsync
         squashfsTools
+        swtpm
         systemd
         thin-provisioning-tools
         util-linux

@@ -1,8 +1,14 @@
-{ lib, buildGoModule, fetchFromGitHub, olm, config }:
+{ buildGoModule
+, config
+, fetchFromGitHub
+, lib
+, nixosTests
+, olm
+}:
 
 buildGoModule rec {
   pname = "mautrix-meta";
-  version = "0.2.0";
+  version = "0.3.0";
 
   subPackages = [ "." ];
 
@@ -10,14 +16,21 @@ buildGoModule rec {
     owner = "mautrix";
     repo = "meta";
     rev = "v${version}";
-    hash = "sha256-n0FpEHgnMdg6W5wahIT5HaF9AP/QYlLuUWJS+VrElgg=";
+    hash = "sha256-QyVcy9rqj1n1Nn/+gBufd57LyEaXPyu0KQhAUTgNmBA=";
   };
 
   buildInputs = [ olm ];
 
-  vendorHash = "sha256-GkgIang3/1u0ybznHgK1l84bEiCj6u4qf8G+HgLGr90=";
+  vendorHash = "sha256-oQSjP1WY0LuxrMtIrvyKhize91wXJxTzWeH0Y3MsEL4=";
 
-  doCheck = false;
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        mautrix-meta-postgres
+        mautrix-meta-sqlite
+        ;
+    };
+  };
 
   meta = {
     homepage = "https://github.com/mautrix/meta";

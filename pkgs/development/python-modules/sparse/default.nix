@@ -4,7 +4,7 @@
 , fetchPypi
 , numba
 , numpy
-, pytestCheckHook
+, pytest7CheckHook
 , pythonOlder
 , setuptools
 , setuptools-scm
@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     dask
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
   pythonImportsCheck = [

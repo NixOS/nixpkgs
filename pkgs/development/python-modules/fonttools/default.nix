@@ -21,8 +21,7 @@
 , xattr
 , skia-pathops
 , uharfbuzz
-, pytestCheckHook
-, pytest_7
+, pytest7CheckHook
 }:
 
 buildPythonPackage rec {
@@ -65,7 +64,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     # test suite fails with pytest>=8.0.1
     # https://github.com/fonttools/fonttools/issues/3458
-    (pytestCheckHook.override { pytest = pytest_7; })
+    pytest7CheckHook
   ] ++ lib.concatLists (lib.attrVals ([
     "woff"
     # "interpolatable" is not included because it only contains 2 tests at the time of writing but adds 270 extra dependencies

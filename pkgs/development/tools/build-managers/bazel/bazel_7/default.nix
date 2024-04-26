@@ -43,7 +43,7 @@
   # Always assume all markers valid (this is needed because we remove markers; they are non-deterministic).
   # Also, don't clean up environment variables (so that NIX_ environment variables are passed to compilers).
 , enableNixHacks ? false
-, version ? "7.0.2",
+, version ? "7.1.0",
 }:
 
 let
@@ -51,7 +51,7 @@ let
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-3qK5BXXUPvPkHEAvZMJIGETsvwtA+FSLdaIEpNUE4DU=";
+    hash = "sha256-HiDQyJ98nRtKOBqMWGtKQ1qWv8Qfu880osKUlOs4Z6E=";
   };
 
   # Use builtins.fetchurl to avoid IFD, in particular on hydra
@@ -213,7 +213,7 @@ stdenv.mkDerivation rec {
     #
     # See also ./bazel_darwin_sandbox.patch in bazel_5. That patch uses
     # NIX_BUILD_TOP env var to conditionnally disable sleep features inside the
-    # sandbox. Oddly, bazel_6 does not need that patch :-/.
+    # sandbox.
     #
     # If you want to investigate the sandbox profile path,
     # IORegisterForSystemPower can be allowed with

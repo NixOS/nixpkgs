@@ -2,17 +2,18 @@
 , buildGoModule
 , fetchFromGitHub
 , makeWrapper
+, nix-update-script
 }:
 
 buildGoModule rec {
   pname = "ugm";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "ariasmn";
     repo = "ugm";
     rev = "v${version}";
-    hash = "sha256-Co8JN0WEc1I08My9m7iyAshtEO4aszN8/sCvoGFJv2A=";
+    hash = "sha256-Ui/JYU/ZbMP8E20vWHah1GFFVu5E4xf0RaVv9X0QnR4=";
   };
 
   vendorHash = "sha256-34D9fQnmKnOyUqshduLmFiVgcVKi7mDKBs3X5ZQxsuw=";
@@ -24,6 +25,8 @@ buildGoModule rec {
     wrapProgram $out/bin/ugm \
         --set RUNEWIDTH_EASTASIAN 0
   '';
+
+  passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
     description = "A terminal based UNIX user and group browser";

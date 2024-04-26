@@ -1,7 +1,7 @@
 { lib
 , async-timeout
 , buildPythonPackage
-, cython_3
+, cython
 , fetchFromGitHub
 , poetry-core
 , pytest-asyncio
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   env.REQUIRE_CYTHON = 1;
 
   nativeBuildInputs = [
-    cython_3
+    cython
     poetry-core
     setuptools
     wheel

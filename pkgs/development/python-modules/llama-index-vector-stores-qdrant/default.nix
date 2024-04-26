@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-vector-stores-qdrant";
-  version = "0.2.0";
+  version = "0.2.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_vector_stores_qdrant";
     inherit version;
-    hash = "sha256-eYgp2S4KubjyL0bgaL7nRCyFhvTuLU7c7vjw4tJ+9wA=";
+    hash = "sha256-jVkNFNKghukf1H6yRO5nEj3jWzrn51Xm1g5kS5Kd6m0=";
   };
 
   build-system = [ poetry-core ];

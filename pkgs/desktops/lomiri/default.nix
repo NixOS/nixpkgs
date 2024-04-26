@@ -8,6 +8,7 @@ let
     inherit (self) callPackage;
   in {
     #### Core Apps
+    lomiri = callPackage ./applications/lomiri { };
     lomiri-system-settings-unwrapped = callPackage ./applications/lomiri-system-settings { };
     lomiri-system-settings-security-privacy = callPackage ./applications/lomiri-system-settings/plugins/lomiri-system-settings-security-privacy.nix { };
     lomiri-system-settings = callPackage ./applications/lomiri-system-settings/wrapper.nix { };
@@ -16,6 +17,7 @@ let
 
     #### Data
     lomiri-schemas = callPackage ./data/lomiri-schemas { };
+    lomiri-session = callPackage ./data/lomiri-session { };
     lomiri-sounds = callPackage ./data/lomiri-sounds { };
     lomiri-wallpapers = callPackage ./data/lomiri-wallpapers { };
     suru-icon-theme = callPackage ./data/suru-icon-theme { };

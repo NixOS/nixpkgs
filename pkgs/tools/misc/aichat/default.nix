@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "aichat";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = "aichat";
     rev = "v${version}";
-    hash = "sha256-xts3/ySE/bEkof6QfVCSiT2gWXHAjdQTFoqrmtidZvs=";
+    hash = "sha256-XNNiIjJfPsfoyG3RbxlcoUxsOUkWZ+3H3SlYenuNOIQ=";
   };
 
-  cargoHash = "sha256-8exPmH299smIE5lG5VidaWvwZud3bYhqFiH8zBTyJtY=";
+  cargoHash = "sha256-JOkcqqmfat+PAn7mRHq+iQCF60weDOBWP2+0DL0s3X0=";
 
   nativeBuildInputs = [
     pkg-config

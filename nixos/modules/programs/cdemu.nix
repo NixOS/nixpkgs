@@ -10,7 +10,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           {command}`cdemu` for members of
           {option}`programs.cdemu.group`.
         '';
@@ -18,21 +18,21 @@ in {
       group = mkOption {
         type = types.str;
         default = "cdrom";
-        description = lib.mdDoc ''
+        description = ''
           Group that users must be in to use {command}`cdemu`.
         '';
       };
       gui = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to install the {command}`cdemu` GUI (gCDEmu).
         '';
       };
       image-analyzer = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to install the image analyzer.
         '';
       };

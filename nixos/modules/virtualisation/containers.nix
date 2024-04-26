@@ -17,7 +17,7 @@ in
       mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           This option enables the common /etc/containers configuration module.
         '';
       };
@@ -25,50 +25,13 @@ in
     ociSeccompBpfHook.enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc "Enable the OCI seccomp BPF hook";
-    };
-
-    cdi = {
-      dynamic.nvidia.enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          Enable dynamic CDI configuration for NVidia devices by running nvidia-container-toolkit on boot.
-        '';
-      };
-
-      static = mkOption {
-        type = types.attrs;
-        default = { };
-        description = lib.mdDoc ''
-          Declarative CDI specification. Each key of the attribute set
-          will be mapped to a file in /etc/cdi. It is required for every
-          key to be provided in JSON format.
-        '';
-        example = {
-          some-vendor = builtins.fromJSON ''
-              {
-                "cdiVersion": "0.5.0",
-                "kind": "some-vendor.com/foo",
-                "devices": [],
-                "containerEdits": []
-              }
-            '';
-
-          some-other-vendor = {
-            cdiVersion = "0.5.0";
-            kind = "some-other-vendor.com/bar";
-            devices = [];
-            containerEdits = [];
-          };
-        };
-      };
+      description = "Enable the OCI seccomp BPF hook";
     };
 
     containersConf.settings = mkOption {
       type = toml.type;
       default = { };
-      description = lib.mdDoc "containers.conf configuration";
+      description = "containers.conf configuration";
     };
 
     containersConf.cniPlugins = mkOption {
@@ -83,7 +46,7 @@ in
           pkgs.cniPlugins.dnsname
         ]
       '';
-      description = lib.mdDoc ''
+      description = ''
         CNI plugins to install on the system.
       '';
     };
@@ -97,14 +60,14 @@ in
           runroot = "/run/containers/storage";
         };
       };
-      description = lib.mdDoc "storage.conf configuration";
+      description = "storage.conf configuration";
     };
 
     registries = {
       search = mkOption {
         type = types.listOf types.str;
         default = [ "docker.io" "quay.io" ];
-        description = lib.mdDoc ''
+        description = ''
           List of repositories to search.
         '';
       };
@@ -112,7 +75,7 @@ in
       insecure = mkOption {
         default = [ ];
         type = types.listOf types.str;
-        description = lib.mdDoc ''
+        description = ''
           List of insecure repositories.
         '';
       };
@@ -120,7 +83,7 @@ in
       block = mkOption {
         default = [ ];
         type = types.listOf types.str;
-        description = lib.mdDoc ''
+        description = ''
           List of blocked repositories.
         '';
       };
@@ -139,7 +102,7 @@ in
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Signature verification policy file.
         If this option is empty the default policy file from
         `skopeo` will be used.
@@ -149,8 +112,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-
-    hardware.nvidia-container-toolkit-cdi-generator.enable = lib.mkIf cfg.cdi.dynamic.nvidia.enable true;
 
     virtualisation.containers.containersConf.cniPlugins = [ pkgs.cni-plugins ];
 
@@ -163,13 +124,7 @@ in
       };
     };
 
-    environment.etc = let
-      cdiStaticConfigurationFiles = (lib.attrsets.mapAttrs'
-        (name: value:
-          lib.attrsets.nameValuePair "cdi/${name}.json"
-            { text = builtins.toJSON value; })
-        cfg.cdi.static);
-    in {
+    environment.etc = {
       "containers/containers.conf".source =
         toml.generate "containers.conf" cfg.containersConf.settings;
 
@@ -183,7 +138,7 @@ in
       "containers/policy.json".source =
         if cfg.policy != { } then pkgs.writeText "policy.json" (builtins.toJSON cfg.policy)
         else "${pkgs.skopeo.policy}/default-policy.json";
-    } // cdiStaticConfigurationFiles;
+    };
 
   };
 

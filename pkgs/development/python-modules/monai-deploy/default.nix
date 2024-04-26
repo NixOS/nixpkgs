@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , networkx
 , numpy
-, pydicom
 , pytest-lazy-fixture
 , pytestCheckHook
 , pythonOlder
@@ -61,7 +60,7 @@ buildPythonPackage rec {
     "monai.deploy.core"
     # "monai.deploy.operators" should be imported as well but
     # requires some "optional" dependencies
-    # like highdicom (which is not packaged yet) and pydicom
+    # like highdicom and pydicom
   ];
 
   meta = with lib; {

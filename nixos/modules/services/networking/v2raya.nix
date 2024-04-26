@@ -5,7 +5,7 @@ with lib;
 {
   options = {
     services.v2raya = {
-      enable = options.mkEnableOption (mdDoc "the v2rayA service");
+      enable = options.mkEnableOption "the v2rayA service";
     };
   };
 

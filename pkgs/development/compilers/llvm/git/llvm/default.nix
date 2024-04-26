@@ -8,7 +8,7 @@
 , python3
 , python3Packages
 , libffi
-, enableGoldPlugin ? true
+, enableGoldPlugin ? libbfd.hasPluginAPI
 , libbfd
 , libpfm
 , libxml2
@@ -214,10 +214,6 @@ stdenv.mkDerivation (rec {
     # TODO(@rrbutani): fix/follow-up
     substituteInPlace unittests/TargetParser/Host.cpp \
       --replace "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
-
-    # This test fails with a `dysmutil` crash; have not yet dug into what's
-    # going on here (TODO(@rrbutani)).
-    rm test/tools/dsymutil/ARM/obfuscated.test
   '' + ''
     # FileSystem permissions tests fail with various special bits
     substituteInPlace unittests/Support/CMakeLists.txt \

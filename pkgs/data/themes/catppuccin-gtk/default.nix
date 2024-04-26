@@ -1,7 +1,6 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
-, fetchpatch
 , gtk3
 , colloid-gtk-theme
 , gnome-themes-extra
@@ -30,27 +29,19 @@ lib.checkListOfEnum "${pname}: tweaks" validTweaks tweaks
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "catppuccin";
     repo = "gtk";
     rev = "v${version}";
-    hash = "sha256-7EvKcyh9gH/QbiXKlyAKMSBXMF3DmbHD+wJD3Sq39DE=";
+    hash = "sha256-pGL8vaE63ss2ZT2FoNDfDkeuCxjcbl02RmwwfHC/Vxg=";
   };
 
   nativeBuildInputs = [ gtk3 sassc ];
 
   patches = [
     ./colloid-src-git-reset.patch
-
-    # Can be removed next release
-    # Adds compatibility with the 2.x.x versions of the catppuccin python package
-    (fetchpatch {
-      name = "catppuccin-python-compatibility.patch";
-      url = "https://github.com/catppuccin/gtk/commit/355e12387f73b27cf4734a6a3eb431554fabb74f.patch";
-      hash = "sha256-4vgZbNeGMtsQEitIWDCVb5o4fAjhVu3iIUttUYqtHPc=";
-    })
   ];
 
   buildInputs = [

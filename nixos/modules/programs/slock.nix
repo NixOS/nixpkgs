@@ -12,20 +12,21 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Whether to install slock screen locker with setuid wrapper.
         '';
       };
+      package = mkPackageOption pkgs "slock" {};
     };
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.slock ];
+    environment.systemPackages = [ cfg.package ];
     security.wrappers.slock =
       { setuid = true;
         owner = "root";
         group = "root";
-        source = "${pkgs.slock.out}/bin/slock";
+        source = lib.getExe cfg.package;
       };
   };
 }

@@ -1,14 +1,13 @@
-diff --git a/cmake/targets/common.cmake b/cmake/targets/common.cmake
-index 9f2ce08..8c32b8f 100644
---- a/cmake/targets/common.cmake
-+++ b/cmake/targets/common.cmake
-@@ -48,8 +48,4 @@ else()
-     set(NPM_BUILD_HOMEBREW "")
- endif()
+diff --git a/cmake/targets/unix.cmake b/cmake/targets/unix.cmake
+index 2ce0378..10d8262 100644
+--- a/cmake/targets/unix.cmake
++++ b/cmake/targets/unix.cmake
+@@ -1,8 +1,3 @@
+ # unix specific target definitions
+ # put anything here that applies to both linux and macos
  
 -#WebUI build
 -add_custom_target(web-ui ALL
 -        WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
 -        COMMENT "Installing NPM Dependencies and Building the Web UI"
--        COMMAND bash -c \"npm install && SUNSHINE_BUILD_HOMEBREW=${NPM_BUILD_HOMEBREW} SUNSHINE_SOURCE_ASSETS_DIR=${NPM_SOURCE_ASSETS_DIR} SUNSHINE_ASSETS_DIR=${NPM_ASSETS_DIR} npm run build\") # cmake-lint: disable=C0301
-+
+-        COMMAND bash -c \"npm install && SUNSHINE_BUILD_HOMEBREW=${NPM_BUILD_HOMEBREW} SUNSHINE_SOURCE_ASSETS_DIR=${NPM_SOURCE_ASSETS_DIR} SUNSHINE_ASSETS_DIR=${NPM_ASSETS_DIR} npm run build\")  # cmake-lint: disable=C0301

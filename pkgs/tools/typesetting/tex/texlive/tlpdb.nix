@@ -387,7 +387,7 @@ adforn = {
   sha512.run = "7a4a4da6c72ff2f8ab4b2a9a5e92887306a8e2aee4bcc5a93c18bf41d1bf9c05bd23fd6401bda054994aafa8d6002dbc16d8483b951acb705cd46fda08aaf060";
   sha512.doc = "2a287f8685154359c914b13e8e153aa64bb19708a9f5b122180cead53ee31ab829dc934dcab43f09ded4fe5d2a81ee32528855f1a4a1bd07b795eaabcb204f48";
   hasRunfiles = true;
-  license = [ "lppl13c" "gpl2" ];
+  license = [ "lppl13c" "gpl2Only" ];
   version = "1.1b";
 };
 adfsymbols = {
@@ -400,7 +400,7 @@ adfsymbols = {
   sha512.run = "7100648956a68719d1a449a3aee0a4acb3788aea7f082a6e7e38c8d8dfa2c712a4b896a9b036e8ae8b2732b11414ab71a49e2f513e7d689f4b0ad9e44c052019";
   sha512.doc = "fbdd78030826918a3599a1f843db692390ebdcf4ca9a853d8c2e78706cfafe83ae79d23d09fb097339d8c726608a27436b3bf22725935c55060f1e8579ea1eaf";
   hasRunfiles = true;
-  license = [ "lppl13c" "gpl2" ];
+  license = [ "lppl13c" "gpl2Only" ];
   version = "1.2b";
 };
 adhocfilelist = {
@@ -1341,7 +1341,7 @@ appendixnumberbeamer = {
   sha512.run = "d5f4573a0f6c31be7e910512d86ee0443e713abea11e71694b58f1d1d65f4249f967aa5b873941e1d8b7686d408f411aad1a76009a3bbcb528693ae14dc60e63";
   sha512.doc = "58b32eacfbcd8e024a4cf3dcea0c1d057010dd454c1e54b6752b970a3fa1a9e10eb15d8cee9dbb9ae032aaa8b6c070079b112f5a91b1c9617df40877a4a3454b";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "1.2";
 };
 apprendre-a-programmer-en-tex = {
@@ -2971,7 +2971,7 @@ barracuda = {
   sha512.run = "8081a9b253c77cc5e68efeb8c66beffc189898cc6ba80cd96be88c57d3117b2c270e439fbe47983309625c90def14f3b2d2c50b567f4f461e4c0ef591c7ba63a";
   sha512.doc = "18767583117a7e16e5b292aa2e82082eed1f48e7f2d8033cf605d9a0b9f09f460826ba4c43af5e43b003e6514909cdea30e24666b8c518655a9e6ab7b6129953";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "0.0.12";
 };
 bartel-chess-fonts = {
@@ -3337,7 +3337,7 @@ beamertheme-focus = {
   sha512.run = "bb09ca551108dace02506987f246f1de4672444e8d6ca7f53bbf1cbfb573a7e07b3d2f937b4724821b30b60f1c63b360e200754957289c95379aab06dde14a8a";
   sha512.doc = "5ca583264ee68cec6df53f5e4a32d4c3ce408372fd3ec4c8ec74f2757ac9f5e817a23ea875760994fd7e45a8cc2e45686251aa785adc960b5730c5059ab353e9";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "3.4.0";
 };
 beamertheme-light = {
@@ -3346,7 +3346,7 @@ beamertheme-light = {
   sha512.run = "5cc15c3ee0222678c1c97b31805421caac8b20fca03b1d748fd2a71756d5d764b8fbfb32ab70937e890f7755966b520362db98a9ae65be3f83509cfa287d600a";
   sha512.doc = "e2d0cdb7fdabe582f2b6f1a656a5b9b61ee3680fd4944c06f108cf69eced96bed7b25e56563b1cb9879e8da42fdbbeaa41d769158c5e256bc70b5d695571a5af";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "1.0";
 };
 beamertheme-metropolis = {
@@ -3365,7 +3365,7 @@ beamertheme-npbt = {
   sha512.run = "9125794ab2ebc4d15ab500b67b9943234d80088393d9b31989ae8209359dca97778feaab3d11365ae1b4131f06dad2fe73bb21fae1220b401c5f31f413cff171";
   sha512.doc = "7703951f2afee05627847980a05b0bef0cb2fe87eec078f64a3e4796feb4057bdf93708ef0476090d40dad2605c69e23f695b9164a969e6a67f8329e6e340a3b";
   hasRunfiles = true;
-  license = [ "gpl3" "publicDomain" ];
+  license = [ "gpl3Only" "publicDomain" ];
   version = "4.1";
 };
 beamertheme-phnompenh = {
@@ -4701,7 +4701,7 @@ bigfoot = {
   sha512.doc = "f5935a5ede836798f3eab1ff61d528870a07be712047a64aa5af5576a1c6032e9d88fb5c42cf216e0f9812266f9a8562b5290301446c654dcb46146d7b60a16e";
   sha512.source = "75316aff3c594fd904adec7cadd0b24aff9d527479d0c59f3fc654772e29cdb4cca938fe5fef6e14b9928fb25f37fdd3f7a894a81f95810813875c4fd419dff6";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "2.1";
 };
 bigintcalc = {
@@ -4845,7 +4845,7 @@ bjfuthesis = {
   sha512.run = "e017032edb4e87ae31318179de5da789cbe2164ea5679d69e928a138242adb1afa8dfb3f8b9b7796bc6d5bf21c143f51e931656439a451ddf868c77c7a7ac559";
   sha512.doc = "657e45d4faf201c2d878c5323e3fd7a283bbe4bb4f868b1413e9b8eaa1db00d03771a4d4211e23549121c5dd480cfcfd8ee8e0edd7e56615a3c941c100465c44";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "1.2.1";
 };
 blacklettert1 = {
@@ -5007,7 +5007,7 @@ boisik = {
   sha512.run = "48403f4b18cb23e7e16e3cbf19d066dc7e1576f4d9ae42b94a4a34508905f5e6e2f8f60f2de7881a29b8525c86a8120a76f1f66f8b9ea047da0a884637b1bb9e";
   sha512.doc = "c68e8434fe456c5e58a6ebb9e744c81dfba5098c0fb12024de750f73022e300016a424bd1ad9cc85c3122c9a0c863737b2e27f2b151667955f92ebbdc060c6bd";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "0.5";
 };
 boites = {
@@ -6779,7 +6779,7 @@ chklref = {
   sha512.doc = "5aeb13824c1781feefe94215f3efce15c212e0d38f9e0d5fb393e96c2159ba43f165c600cd64ee9d8c42c0a4f0db6c2e462ee85a93993965bad0420b6b662ef6";
   hasManpages = true;
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "3.1.2";
 };
 chklref.binfiles = [
@@ -7052,7 +7052,7 @@ cjk = {
   sha512.doc = "a8c6b2d4d0899b841ccc32b378855d61bdaa65d5f68fd408df3894d386bcde18f384410f34e6f33ee2a5ce770e1e663a05ab038d9b7483012a3cb414739c3705";
   sha512.source = "88be587328daedfed3bdcb289b1a03343bd7257ae180a9e0857a6b00f173f601eccd8e5978dd29c2d95fbab180fcfd5135a682c5218325fc6b664f2cd505213c";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "4.8.5";
 };
 cjk-gs-integrate = {
@@ -7061,7 +7061,7 @@ cjk-gs-integrate = {
   sha512.doc = "c1165f2ecd08b279cd0d0b028682eecbb3953659426a1885bbe5aab9838a90107c576a3b9bf80b0d54dbe3fc438c8af8a8c82f5faf79052c37d2c5e85ea9ae42";
   sha512.source = "ee53a480230824eb7aa1ff270652eba4f39e5f160fdd091d596b9da610d8c8c211db3aa3d89931ec16edd36b2662d07a93513563efb3bb5a9ffc9dba0d274ee4";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "20210625.0";
 };
 cjk-gs-integrate.binfiles = [
@@ -7095,7 +7095,7 @@ cjkutils = {
   sha512.doc = "636e6486f9661061d22d248b0b7a8debdb81cd08c56b449067782568fcc7db58922f7c9d40fbc992bdd008908f22a6733af4a8115d85c0572556d01e925c5587";
   hasManpages = true;
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "4.8.5";
 };
 cjkutils.binfiles = [
@@ -12623,7 +12623,7 @@ colourchange = {
   sha512.run = "dba4ef8d97324c3da71de1c6a37e268618bab0a876e1da37226ec9fb187087d39f32507e97f4ab4fa801fd4bbb98c51a322c6f2493b719133154b24223bfba46";
   sha512.doc = "628bc515058108ba97312c15ee5af00e086ea3dc124b4e7b038b176d4175e2146afc6f571593c006d749634896fa286d16c923c17d4dc9e55e81ac3a8aa95442";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "1.22";
 };
 combelow = {
@@ -12733,7 +12733,7 @@ comment = {
   sha512.run = "36b5b4c4d4345a4fcf706f5040c02c2de52567fae76146a06b7f084d59b12d151e65faba1ee4aeeaebee018d81200c2902feb81ae575de35a68c00fa14ed6ba3";
   sha512.doc = "d5a360c6a0c549fee1d46fa0e9c3f9aaaa4b19b30ac48046e736008ddb42393062824950684185175f8ab569cec221bc8f9a798a07623dbe26cc92a3fd6bc72b";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "3.8";
 };
 commonunicode = {
@@ -12991,7 +12991,7 @@ context-handlecsv = {
   sha512.run = "b4a38aa0e04812e328e3d6225462078ddf45d8791d789e2730461630db55b397754ca192acf37b9ae7f1fc10c61d412022a9e56d3465d19ceca7f5875e3d580f";
   sha512.doc = "763f75ab94a317788d9d96b88f1b7e25847ed316b4dcd84158719ef1c3cc48c90c884ec3158412d574839adf1ce8bcb12f9c0cefb6650338afa424fbd0213be3";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
 };
 context-legacy = {
   revision = 69173;
@@ -13056,7 +13056,7 @@ context-notes-zh-cn = {
   ];
   sha512.run = "46be6b5f9f86d6da5514f0ae0cd77aa9beab67572699f9779f3a6cd461a8600336103eaf71d6e6d99fd7ac300a3e5fedcd6e378d349cf648c9aa5a8be2aaa5b5";
   sha512.doc = "a49b1c85508128e0a2e9ae0218e3622f7479da528f51380c1e109bf877f401531689e8119cab3bde6a91e507f0bd7f16e334cb3affaba7fae5927cc23b17a207";
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
 };
 context-pocketdiary = {
   revision = 66953;
@@ -13128,7 +13128,7 @@ context-typescripts = {
   sha512.run = "a13d06b9a792cbd2352016df508a7860e45b541d04cef1c9d9c8b5a6199120a71dfd69f990700c4a76ac31ec11209caef431a190b9045bdc46cc44f88cbef0a3";
   sha512.doc = "3d948f22da14b1d481817477235657cee714e4a2a69834729c20e18157f1175890ddc7fce992e8f5f27e26cd6d08186ff1521e2186681557cfff1a4778267324";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
 };
 context-vim = {
   revision = 62071;
@@ -13936,7 +13936,7 @@ ctan_chk = {
   stripPrefix = 0;
   sha512.run = "6eabd7281d79ff0ad19080350dfcca8ee3a33ddfa6d17827a7851cc53f09f627729c8d715a1dfe50e0c079add44331a07d543cb8b6a57000efa6d73c30f2ffe0";
   sha512.doc = "c61bc0d70cadcc4382dae55cdc1af076882801321a2de16f164223267732e476e41f949f566808c928f446d69aa22bd9965adb155c97905e32b93808810c76c0";
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "1.0";
 };
 ctanbib = {
@@ -13968,7 +13968,7 @@ ctanupload = {
   sha512.run = "4464bdfbf72318b24abcd88e1c25dae5925a96e867c694f3f02a594ed7b8b24cffdcdb345f0054e200a6af63f88b591ff84058af0adfb4a1b3feff2a057d9d72";
   sha512.doc = "9e027f7ce08041be7668a7a404fad6b6c7cfc71e581ad1216956d0b53c379d204bd84d2d55d186c74f784df8911770b96f934775f44f7141a5f1b9b5e773cb7a";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "1.2c";
 };
 ctanupload.binfiles = [
@@ -14074,7 +14074,7 @@ culmus = {
   sha512.doc = "4c1217f0cd27bcd56c11006b7b3749e661aba567798b2e397a21b3b0df39a35acb6355836d4eac4fd619509b09b57c7e39a97068343b6e28005944ebf0430adc";
   sha512.source = "2dc2e6bd71ee949208625fc259cecc6a0ffdd0701416c5775cc32855a2bbf8a533238e07d4fa08c090ed3ff627613c27f0cddeb2c86eda1b320cbc68e236a6a0";
   hasRunfiles = true;
-  license = [ "lppl13c" "gpl2" ];
+  license = [ "lppl13c" "gpl2Only" ];
   version = "1.1";
 };
 cuprum = {
@@ -16038,7 +16038,7 @@ dvi2tty = {
   sha512.run = "1051c3448703fdd6395d78b0d8b7658197da6114fb7455b31502bad5c2eda24fd4eba2ceaba1f65d106f981bbc60caf9f3bd0db29403e898b293514d086bf91d";
   sha512.doc = "3ee736f5fbf91472008a5c8613c0e629a9f76f61fee4c4491b67045ddaad7aa2f89a22937b172e058b072ae1a013478fdf5a9f68dd2e225e8a8e77c8e3b3a289";
   hasManpages = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "6.0.0";
 };
 dvi2tty.binfiles = [
@@ -16605,7 +16605,7 @@ edmac = {
   sha512.doc = "d78db33bf2b2fdd17f23eae23ab9605efb29a217e52d89df5feb64db1907c1b5a497441eeb1fe2373342b7c9b09296c06efa24d6776edce84406e22a1967bb64";
   sha512.source = "995092e2ea0776377938076b67f25042329ab76ef31f83f6f40aba449a735a90bc697be52f16fa6a2ac02cbe4ff2ef99762fdc03bd14eebff7a363f6c7f46c13";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "3.17";
 };
 edmargin = {
@@ -16969,7 +16969,7 @@ emf = {
   sha512.run = "bc1b601aa523b30a54493ac92e15bcdb918775e9f57514b62357b85b5919fb05cc945b3120cea474fab714585fe2a81603f43eae51bb266e8989af6105ebc65c";
   sha512.doc = "f2e37967476ed678dce7c01f195ec03f77327d59beb2b15cc6a64ef92cc377700a2b7b528ae6c42497cde0ac127cd10c51e3ecf5fda0cf7954d598a0dc92b5df";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "1";
 };
 emisa = {
@@ -17393,7 +17393,7 @@ epspdf = {
     "tcl"
     "tlu"
   ];
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "0.6.5.1";
 };
 epspdf.binfiles = [
@@ -17492,7 +17492,7 @@ eqnarray = {
   sha512.doc = "7ea3d87f81eca28dd52f9e9cf4f7df1ce4f7b9cd82cc40d0a7fff234415b2a3e033fa1c8a11594b2c08e5edf87ae265e5f7a65eb92a79cd523568f37853de30a";
   sha512.source = "9dd02c43fca4f6e8dba0bd44292c8f97aef4cbf39d521b9df10206a2309e82492f344fb65c35ac0509532e9efb2571aecb2a5894e639de5efa1444bba9916587";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "1.3";
 };
 eqnnumwarn = {
@@ -18152,7 +18152,7 @@ exercise = {
   sha512.doc = "3059c297ecb8a990bac32e1e52bcd6fe39e6958c96c145ad70b937ba89284a6f447a84e2f144d31aefa1c446331c7ce80ccba926e288d7ade917c7aa68095076";
   sha512.source = "fa76e8b16def4f53a968c897e12e37707c054c3a964f14ee9654bae4e7285a3d300d62f0a79ba7fd80b2fa15e9a334bf38f3a744f0c0f6c32659853bc9b57855";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "1.6";
 };
 exercisebank = {
@@ -18502,7 +18502,7 @@ fancyqr = {
   sha512.run = "fe2a8078e8491384ca4cc25fd058433dde3d4d4fdbd5784ad67150169f1ff5eec85c6f2c2ae7efb6aff6e6fc731c18cc4a156d968872b69d58a36bc042825c2c";
   sha512.doc = "afd49422e17012b84a9ddf9ead15af3eb4f5b0e8291f76b9a672d4a3097d9f390753e0090cb67df94cbd5cc88c45ec2bd67b55594bae9ed4b945ad293e4f07df";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "1.1";
 };
 fancyref = {
@@ -18625,7 +18625,7 @@ fc = {
   sha512.run = "12bb408f7ba4774d943aa954bd3d2558a329d383a65cd4780f6c5bdc39f51b943f01d87ad203aea3b02768dc0b9ab42f681175c18a1e1dd901255aae05156558";
   sha512.doc = "a7495a0d6bd394811ff22438a42afe3c5109633da7c606a732f4c5746cc4162fa1c86ac3774aa7754e9b07c499f3519423d4b6fb212ecae156b0b8e8f848d914";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "1.4";
 };
 fcavtex = {
@@ -18861,7 +18861,7 @@ fig4latex = {
   sha512.run = "3f01676ea85d64e09376da4481794e1537b9e19c0ff0bac77c022b10b5d49c39d789de6e4f0356b4ea4b23326f9ef320f4b08035bc04a827951cbf44ed7c6228";
   sha512.doc = "c05d3c08b916785b765694e68b8f7cd96c3c359325e8f84166102beb4caeada7490ed24ad0b4f52a66cb822000f8b4d75d1013b93055898e88e82d7f23d5095a";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "0.2";
 };
 fig4latex.binfiles = [
@@ -18990,7 +18990,7 @@ findhyph = {
   sha512.doc = "97f3fa22fe490d21bc9e5ce5ea0b23ff25ab9afd9c5dbf6e8d78b24fd306ddc132c5ba7ca7ea7e3d7aaeb48993c7968b0c02ae0b765416a939d84b53171f4179";
   hasManpages = true;
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "3.4";
 };
 findhyph.binfiles = [
@@ -19640,7 +19640,7 @@ fontools = {
   sha512.doc = "bcb3ab7f49e817ef5b6f710bbc227309f28396c6f4233e39e94163663f10db3daaa41b6db93a9ae85a26599dfce352a0c132a36b0c047ecf8f5269f428af4f6c";
   hasManpages = true;
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
 };
 fontools.binfiles = [
   "afm2afm"
@@ -19687,7 +19687,7 @@ fontsetup = {
   sha512.run = "e599ae4f458be9375343dc4eade6c4ea56175224b785e48193af974d0b8f4a0d1f9426f8bd0fa22b15c962b7e10ef856f938699324c4b51e46d3e06602952e02";
   sha512.doc = "18c8d669b19274eda6e8daffe5fa3e6906a98026052ac668ef51e97e2e49e73b749dba7ac369d532020faccff121d210b5c1ec3540f353a98fe276f4aebd4c2f";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "2.1.1";
 };
 fontsize = {
@@ -19982,7 +19982,7 @@ fpl = {
   sha512.doc = "7b951310a10295bb453eed81ae668f042262094971dcd48c83ab721220094b3a62b79b5090002cc8a7a1fa12b4e75157fd8ead7c4deed8fa1d3629cc6746e8d8";
   sha512.source = "64da822f5b40bb6abfa33d19bec50d8e002452a710d0d6ba3c5e66097e9a33f6718524471fdc716ecb951fcb2ad82659288a08ef85b72229ba40297fc33f7727";
   hasRunfiles = true;
-  license = [ "gpl2" "lppl13c" ];
+  license = [ "gpl2Only" "lppl13c" ];
   version = "1.003";
 };
 fragmaster = {
@@ -20096,7 +20096,7 @@ frimurer = {
   sha512.doc = "d2c8dd345fed5935fe2e329ebfe7c2e9a5c836f3af5d52605e35ce32ebf51cee529c182505db8eaec7772476f758bc5905a8b57cad5ebd162732801c2cf6d352";
   sha512.source = "a0fc0076cb4beaf081f21ca474ee287cfcfac07c889907d690093ff7b188214875766746bfade8f7de9182e5c32c7bdf912b71336f078bee120b042615056e46";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "1";
 };
 frletter = {
@@ -20181,7 +20181,7 @@ fullminipage = {
   sha512.doc = "111145d2f1c81f74692df8ef397d36c4c0d7b6c89efe0250571c0153b22b9d562df0dcefa90e3be96f8eb518af75ee8a23d42ad898e23668265dcf39d3c678ff";
   sha512.source = "d95dabc4565fd48b8a6e8b35777fd456934a3cba8bac34629ee6ff4847cd1578f70a06e6b87a9b76d26e341a502d1c284e4e155aaea9c92a12dbf6d0043d8249";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "0.1.1";
 };
 fullwidth = {
@@ -20682,7 +20682,7 @@ gfnotation = {
   sha512.run = "4f99442eacf28ea13cd98ee4bbe981b95ae9d849e6bf2682cac2305fd793f6e9f5e4211362385890956fdb24ef03748e9cb0184c7ba9ed89e7985b2caa3e2da2";
   sha512.doc = "b65d173c11400a7681510cd837ac6e8ebf65a458327bfdee140013d49a0c6fcc339f6c45d4b4ee918585acaf785c12e66b3df5f73f01a1f2d8c5b8db58b9c47e";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "2.9";
 };
 gfsartemisia = {
@@ -21262,7 +21262,7 @@ gnu-freefont = {
   sha512.doc = "232e8d0be31f77adbb62383da35e1e37d7b952cc2e6157d6eeb4cbb7d5e1dc0794d9fb3185e68073c5cb2980a3d5a6c447f878ea8cd45c7e2b806afdab21f8b5";
   sha512.source = "b81ca0245e9a7b1bdfb0745ade7cd9da0734a407dd8c5cf3859a7fa269b949f38a3ca18341b6ff0e1c3d99ca04282ed6dd9fe2923901a06506fc9bd6b677006e";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
 };
 gnuplottex = {
   revision = 54758;
@@ -21271,7 +21271,7 @@ gnuplottex = {
   sha512.doc = "c0e56811b5b4340c770d61ab605961bcdd5ab1abf72b9fcdb0c13c5e56a7481944aedbab70bf5d2daa90751528f0b9d7efd04a1453c08a4a6e40a46a41a1296d";
   sha512.source = "9db5deaac39afbef502db7cca3c28d0669803af3d927d6650ff39abe365c39be8dff8d7ae7537ab139fe747b7acd7e9fbc3a66dd30ac8495f30dff143dcbdb5e";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "0.9.5";
 };
 go = {
@@ -21585,7 +21585,7 @@ gregoriotex = {
   scriptExts = [
     "lua"
   ];
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "6.0.0";
 };
 gregoriotex.binfiles = [
@@ -21665,7 +21665,7 @@ gridslides = {
   sha512.run = "9f9c3fc88cdf9e3641aae264eac0c116c3dc410ddab4c688521289baaf67cb4c8c605c734fbf45538b6498f7c337aeaaa4b90d2584c6becf06a97b81894c63c9";
   sha512.doc = "ea3a2ed6334a5e160cb27b096e0868aae28908f77d67626b9d1d86840e615bf1b296ff5813ef5ed24ca0435eea39f4afe601216f243f2be585eb952f4df33255";
   hasRunfiles = true;
-  license = [ "lppl13c" "gpl2" ];
+  license = [ "lppl13c" "gpl2Only" ];
   version = "0.1.1";
 };
 grotesq = {
@@ -21686,7 +21686,7 @@ grundgesetze = {
   sha512.doc = "7dfacbd4686f5296cc1f677b99f42946f6ba1e761454308568ecb013df3eb0a505273e1cc357d11780f7d4762d03007ab44b87343062c50666bc8e89e1512ed6";
   sha512.source = "dfa00982121cd247149768a95ac8555a2061ebfa1bcc154ff944d07843d213ab7c7bf0931cad3dac118cd995abf0fcfe03f12285e2e7fc3e808223939d4c1d58";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "1.03";
 };
 gs1 = {
@@ -21842,7 +21842,7 @@ h2020proposal = {
   sha512.run = "ddee9c5c1838bad606f212c1a7ebb7ac4d7ae571f1e29e83d55744dd50afb55e302f4f20a3cedd0d4446886cfa515371fb913b862d4549618858896de2a543ef";
   sha512.doc = "5ffad62ed8eb39c8cf07d4840983990009e5696a2d7714d2cbab13a69c77634d01f10a18f612c853a09dfd91ae1ea453bb3373681e89a6994ff4924dd64c3093";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "1.0";
 };
 ha-prosper = {
@@ -22063,7 +22063,7 @@ harveyballs = {
   sha512.run = "c282249d5758f6c8aa9dfd06cc4671211e76adc2e7c4f5cf925e713472e60f3d44c8a389c9ab4db5b8096336d46d99b62bde0f8c1f9fb5d22857e3cba98994e0";
   sha512.doc = "89ede2f13e82600a2e78047a08766e99879ef5c64dcbcf747a2c21b1a395f4c1a1184921a8a0064b15b86f574834f602870f6641f0f265f92dce506959c6c4e7";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "1.1";
 };
 harvmac = {
@@ -22692,7 +22692,7 @@ hook-pre-commit-pkg = {
   stripPrefix = 0;
   sha512.run = "6fb3009d4bb4016f0d6e92571d52aaf7e3780d39a6b2ec73ffb37112b3f153ed71ecbcd985b81dd841f296a39da83e9004a2d6e6e85e9a49765e1682563cfde3";
   sha512.doc = "3873c4714a8a6d221f860a5d0606113c64482b363727067e0017d27e99d73f31cfdac88a799fb1412225baffaecd7bb03dbdc66b607a075b1e4539ffc0df2a9d";
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "1.1.2";
 };
 hopatch = {
@@ -22766,7 +22766,7 @@ hu-berlin-bundle = {
   sha512.doc = "91483639fbbe4b073eb299b0153eb57383dc59c7d669bfc07e275bf445b22f2eff35a7abd632388d701eb23eb833561d9ad4d865f3e8d7495bf44c74be8dd12e";
   sha512.source = "eaea8de8f9ff48ee7cc3d1d91819cfad340f9f8aa2b666bc23fd28489c585b4344a946cfca6334620acbefa2602f90050476c5da56552088b1c1ddd3c483af0f";
   hasRunfiles = true;
-  license = [ "lppl13c" "gpl2" "bsd3" ];
+  license = [ "lppl13c" "gpl2Only" "bsd3" ];
   version = "1.1.2";
 };
 huawei = {
@@ -24564,7 +24564,7 @@ identkey = {
   sha512.run = "3f41af7a6b1f253dd34c670c3726f9b5fba2849230787827f69dfffd7008ec7bdf8bf84d11e7151b9e0a47b486f60ed2e475f30ed3f6cf35d68e283ff6a9c558";
   sha512.doc = "58574d462eee30612617c9340e00e956968f04b8da292babced36016516272e4d190f06862c9bc41466c85ced264f380192c4e9376c4b0ed58e673f37efd3cd0";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "0.1.0";
 };
 idxcmds = {
@@ -25004,7 +25004,7 @@ inkpaper = {
   sha512.run = "d07bd9d2f32981607f4baf3bc348fdd99aae0c331423bf1f678231a2ab9830e4a824357df067e52643e6c89ecd1b850afb2444686fa33d75e6a3e598b003553b";
   sha512.doc = "acc6ffc291db3164d8428a50ee0792907435b90d3677a0e9ec883e0d3b81b6c04785a08217bd6c9554545eb5bc328a702c2958301245bcce68949ce76726c389";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "1.0";
 };
 inline-images = {
@@ -27283,7 +27283,7 @@ latex2nemeth = {
   scriptExts = [
     "jar"
   ];
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "1.1.3";
 };
 latex2nemeth.binfiles = [
@@ -27413,7 +27413,7 @@ latexdiff = {
   sha512.doc = "2f484db22ec12886a4d76fabde3a65a982d3e659f524120b377221f91c7ad5973ad6023aa3226dd35baa687c86ec8dd8e736553d1604690d87e68d3cf7be84f8";
   hasManpages = true;
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "1.3.3";
 };
 latexdiff.binfiles = [
@@ -27449,14 +27449,14 @@ latexgit = {
   sha512.doc = "bfc6ce99ca1b66c0b1d5d98453716cf9e3a7e65ac55d7d17e5b06417f57d13f532602b537c804581e2e81b5265d554dd99e4d4307ef6d634d25916aae1892cab";
   sha512.source = "8a09f128428644335c9d909d23acc91ede2020304ebf009be00928cdef670aba23d245b979e5fd8d927c9d0e652bc195c717a744015a31fbb2aed1c566abfaf4";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
 };
 latexindent = {
   revision = 69472;
   sha512.run = "23c35d38e78c3debf1c89cad7f719727edaa21e93d1cdc3f845f3badc0e4211919bd8e8a495010fde7eef78f9784f04c545d67546f30f16179624e36f82d31e8";
   sha512.doc = "6b0de79326494370b3fba30cf44b0edf7ec925462152c6c11d7e4b9de489b58a94ea64b0e9059b28ec17817cd73e75f0f327aff2ef190dc9fe35aca2b24af66b";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "3.23.6";
 };
 latexindent.binfiles = [
@@ -27468,7 +27468,7 @@ latexmk = {
   sha512.doc = "0ce5229b80291809437e57518551e0ab0b06bdc381e07ae100ac2fff3f66965b64c4df096dc90fc5814b1110a9080322742b92af57675cc53b26ab1548a37582";
   hasManpages = true;
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "4.83";
 };
 latexmk.binfiles = [
@@ -27782,7 +27782,7 @@ levy = {
   sha512.run = "a71294df1b2bdb1402892ebc0c82dd60275cf41f6844cdd284e1ba73c8515e98258118c5a1e5158fb6d09acdc53427eb4e3f62f24591fd2eafc90d0bb69b71ea";
   sha512.doc = "e69a1e2e421100a50416f86bda40702aa9a4d5c5b0b8c783e328e56e1ce587f832cad984fee2cad259603e893413155bc4539e853e1df0d95c89e9167c67b2e1";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
 };
 lewis = {
   revision = 15878;
@@ -27835,7 +27835,7 @@ lgreek = {
   sha512.run = "f0b5cc9b7267aa07dc0b0f8c6d23a164bc239591fd13b5d77c5c840d33e131546c63c63a3bbbee2851000bda2e8593e7617f8a7ae381e7cd0561302a667acac1";
   sha512.doc = "915df985f4766f492a70a35342e086567d17c155ea0dfce5514c6edebaf1dacb78998dc4bf5cc44415fef580a7779083bc2261a22dfd668e8f2023f1f15bff35";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
 };
 lgrmath = {
   revision = 65038;
@@ -27944,7 +27944,7 @@ libertinus-type1 = {
   sha512.run = "6c84de57b1778ec35d9f56b00e577f9f8c1293132cedba43e657f4425e9bf01ab4243fe6ffb872aeb99b446019539a640d29c88cf29cc86d649d2a00f77952f7";
   sha512.doc = "c656af53b98735bec8c63c3e56160da943379f4b908f553a27cd1c82111b201eb15c1f1eb1b6ff89fee281c27ea36d6fffc5592b75722cd561c8770ef2d3f6a6";
   hasRunfiles = true;
-  license = [ "gpl2" "ofl" "lppl13c" ];
+  license = [ "gpl2Only" "ofl" "lppl13c" ];
 };
 libertinust1math = {
   revision = 69440;
@@ -28471,7 +28471,7 @@ logical-markup-utils = {
   sha512.run = "87f7fc345935804705ab25ab010376fb72bc4722c75bb115b0c9dd0e0a51fc8bdd6dd4051b76dd083ec07d80b8c59c5d18423da55e0430db7a9f94ad0bd45906";
   sha512.doc = "80c44068a6e474071e40a0bf3dc67f0201b21eb84a041fad8423c59c9e34ce138833c54ead638979357dc3026eea55da034daa05e71a56ecabe701ebf53faf24";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
 };
 logicproof = {
   revision = 33254;
@@ -28549,7 +28549,7 @@ lollipop = {
   sha512.run = "03a780145d4e761f3d494ccc54117e2f92f1c32b8f35a88a77b3145442b040c195b2bae10aaf39557530e548961230c7550e25ea77472a8b0e272f0e72609a8c";
   sha512.doc = "3ee627e18491a48c58132b85cc1079b2a2f857b9453cdda113bedd7c9393f04e15c6215e6cbae99fe3d4c24a297d230a687e3bb7aeb67cc45ef105051838c6dd";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "1.07";
 };
 lollipop.binfiles = [
@@ -28702,7 +28702,7 @@ lshort-english = {
   stripPrefix = 0;
   sha512.run = "73e7cebb51b9ae5ce2c6ddfd191a1d7e5358e5a1bfc61ff8d921cf0928e2cde839f232dae6cb0d9dd1b05df907c8c56c3f72a4d89917a6930762a46e1b1aa286";
   sha512.doc = "ab6dccb0110d7033a36d743b9f8132ec5ab4a0b4b334ab7800dd68f9e65bdc7de6c5e766fba6a7a3596d3fd8d6a3a16299344fcbfd67585f1fbe5e519876d7ba";
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "6.4";
 };
 lshort-estonian = {
@@ -28710,7 +28710,7 @@ lshort-estonian = {
   stripPrefix = 0;
   sha512.run = "6bd3c07c1e5f9d543b0f67a5585cc33252567cc346a8d7feca050baf8ab437be97e73d2c4b4b159102e9c4772f8cce2abcbc25486d73e976b83a3d2f4b9e9487";
   sha512.doc = "e16397fac3e6cefa699b412ada1851c7792520da8af1230274fa1a337b890629b68f71d94b3894044f28e687c6aa60d766377e12232d0e522e82e18dc97428e3";
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "5.05";
 };
 lshort-finnish = {
@@ -29389,7 +29389,7 @@ lualibs = {
   sha512.doc = "a4c878209934b2b044688dc77b4b467ae4e106adfb5f728f398d7adaa279ba612883ae22f30e667a79a22d633a507b689525356ff24daf12c50bc84dfa798ca5";
   sha512.source = "98fb3af23ec41561f0ffb12461ec2977472f4182b49a37c0365c16bc3d52ce61c382e6ca172ef92638cc0496d5e3073e4c96b13acf390e783f1bf46d34226d2d";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "2.76";
 };
 lualinalg = {
@@ -29445,7 +29445,7 @@ luamplib = {
   sha512.doc = "6c366637d27c498cedbeb6222ea8b48a807ce806bcee89cbbba7f7fb5d6b3bacc7fa4ffb3c1288a02b803bfd7b96725b12fd46eb2e9ec965e2b69f057b1c2c03";
   sha512.source = "546d9403d20ed58a470b9e2fbd5b34c1863c4ef69e90156a6c0071f09ff425f6bbd9d39813b870f55997cafa520caa9326b79e31708630f9b3a44b0b0ceddc3d";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "2.26.4";
 };
 luanumint = {
@@ -29482,7 +29482,7 @@ luaotfload = {
   scriptExts = [
     "lua"
   ];
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "3.28";
 };
 luaotfload.binfiles = [
@@ -30354,7 +30354,7 @@ mathpartir = {
   sha512.doc = "fca6b3e2650ada022617af137dc86858c83c51c55fcadf2ff21832a1fcd9fc44f371f89e8943c5e1d117a09893c3587f15a3e8021b11f7472dd3c9d37383f8a0";
   sha512.source = "f5c5b328745494965d1907f6dc187859a5f9bda5a8beda164e7317dc1b8a6e886073f9d2e9b564c6aa56d55e7cb7191afeea38edc059b2dd55066e68ff826dd8";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "1.3.2";
 };
 mathpazo = {
@@ -31189,7 +31189,7 @@ mgltex = {
   sha512.doc = "a8954ba22a30368ce01329b930486c02b317375636d85c7fdb7f14cf032173ab3f7a28ff6261d20cebdb8995560d4c7f41c03ed6285cfcaa555d405a06891432";
   sha512.source = "63b874341f2e18f88862ec5e6cf7064e9d4219070d274f0daa2dbacf8eb0eee5b4206167bd86520d10ffa0316d7ffe93615604932924b4cc04936db352073d1c";
   hasRunfiles = true;
-  license = [ "gpl3" "cc-by-sa-30" ];
+  license = [ "gpl3Only" "cc-by-sa-30" ];
   version = "4.2";
 };
 mhchem = {
@@ -32431,7 +32431,7 @@ musixtnt = {
   sha512.doc = "9d5646e3657c74a6d6c6be0c3f07e91ece88c9f0430e7cd54fec45769ac308b813a0f39ed202b518092d856e3fa0876c589f36f37c38b62adf078647aab42a63";
   hasManpages = true;
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
 };
 musixtnt.binfiles = [
   "msxlint"
@@ -32953,7 +32953,7 @@ newtxtt = {
   sha512.run = "fe95d2c4d2ff7a83f362f55bf2579576b94251fdeb3556c2f417e0118b2dd215a705d06d79e66b9aadeca09cadd5c19f2898cbba8624ea089fef804749d350cc";
   sha512.doc = "02879af2ae05a703502966acc561df08762a9fe01a873180672652a9c931ceadcfb85d411523eb81425e7f1944f514673e8d04a208d54b27d0d26916077a81a3";
   hasRunfiles = true;
-  license = [ "gpl3" "lppl13c" ];
+  license = [ "gpl3Only" "lppl13c" ];
   version = "1.058";
 };
 newunicodechar = {
@@ -33586,7 +33586,7 @@ numericplots = {
   sha512.run = "6b51a7c68357dced9627d3c618a167d689b573ea44c2f36de5417735f39f5b3d1034558cf188bad2da5eb25f81a2bdee3df6059b8c14879770c3b300422cf016";
   sha512.doc = "1c9f9856ec2f8cfef61829256f1076099e6bcb79cb45e8155116d6c24feaa52f481c739593c6cc51df803fa76e8ec38b8d276e796660327a2bd1d86957896332";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "2.0.2";
 };
 numname = {
@@ -34781,7 +34781,7 @@ pbox = {
   sha512.doc = "1955a1cd5336a7d71483f49bbc8c65426485fd38447282262b58b4633398cda0753c5574455421b19d92d5c88c599f9c227b54a7c340a35daf233a4f48a1c276";
   sha512.source = "67cf5bae9494a81b97738ca8ed5877c009d631cb8ac681915559bc4919f536c657fe4e3ade36b8e4a0ee3b614ca4a23bde8a9cae19f3a9aca12cb2e3926160b1";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "1.2";
 };
 pbsheet = {
@@ -34837,7 +34837,7 @@ pdfbook2 = {
   sha512.doc = "3048de4be891e270e8efe9f9d85524aff948c9483da25f491669a7181967dc281f42b984c9ee46464bc563c42a4f171589066f67818a291a136e1f49d40912ef";
   hasManpages = true;
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "1.4";
 };
 pdfbook2.binfiles = [
@@ -35141,7 +35141,7 @@ pdftex-quiet = {
   sha512.run = "7b33e37a4b33060abee48ccf825cacecdee552d641da48dae47e3615fa0ab91ea9912b52fbd5c5ba6cdaa9c0d2cc7baa7c48a80bebb6d1887e5c633dacb4d104";
   sha512.doc = "e13392cfefaed2c154c086ffcf85e21725e4230ce78d10e07dcb0a1c8b3685bef2572c5f5e249c56120320f2b0167cd5055ade50625a296446a197c0ba4b85cc";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "1.1.0";
 };
 pdftex-quiet.binfiles = [
@@ -35187,7 +35187,7 @@ pdftricks2 = {
   sha512.run = "e50406cd680e1d5cfabcfd8000b743fde61dcff7e3c686b06f58fd1fd36e414d53140b5d244ef65931aeec67dbf458e5e2d43266f26ee9de301babbc0f88853d";
   sha512.doc = "4a22c280a28e4a45f068d52f4d75f19b5ccfec30609d7c8d143cccc67d16fc04cd1ae63e7d6a5a659a0805ed85d96d57ff5fba4b246f67029457088e7696ad23";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "1.01";
 };
 pdfwin = {
@@ -35235,7 +35235,7 @@ pedigree-perl = {
   hasManpages = true;
   sha512.source = "febf928301eddf00aa84ede679712a3e58520368f7ecd488e9d696b82dc6ed5afc403d88b344071b4291391528a4552620c4882ba2d2e6ee518fc3a8733a2f41";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "2.1";
 };
 pedigree-perl.binfiles = [
@@ -35363,7 +35363,7 @@ pgf = {
   sha512.run = "d7fbf0dc83f88a2f6d2de3117365d3f4ac2379ecbc530e343bc3e02ac8083e9a9843d479d375d086e39b6377b21d2fcba22883485e040fab1601642ba80128b9";
   sha512.doc = "e3be45f63b46124218592ffb8083998b9d25e81dbba7ec8ee58d578335247b05ecc46c145f5de8b859c72dd54cafac58ee784f9aa33888fc129817c66a819568";
   hasRunfiles = true;
-  license = [ "lppl13c" "gpl2" "fdl13Only" ];
+  license = [ "lppl13c" "gpl2Only" "fdl13Only" ];
   version = "3.1.10";
 };
 pgf-blur = {
@@ -35405,7 +35405,7 @@ pgf-pie = {
   sha512.run = "3e5cdb5def0918ab1c3d38d35bb85f07711144d1fcaf0f3af8b2c5e0eacd9af6c3b92bc6e1f45438e40d7f5838770b91ab513970cdd9a3f7dad2918eefb875f6";
   sha512.doc = "ac151cb61ea4fc440ffeeea9b987f6dd648b53596934900f41437f787bedcabe2ca8dd53c37828aab816e9334d0d26573f81000333e50d0761d70c586a5d87e3";
   hasRunfiles = true;
-  license = [ "gpl2" "lppl13c" ];
+  license = [ "gpl2Only" "lppl13c" ];
   version = "0.7";
 };
 pgf-soroban = {
@@ -35436,7 +35436,7 @@ pgf-umlcd = {
   sha512.run = "a55281a157a2a347f1c9d82679cd663f4493e03123d14dbef0d71582613772252b693a25b3d3e5b72b948c4fd12d0d7b0354d2e38083583b550d7cfb5e634d93";
   sha512.doc = "6d798d93590d859d69bda9f0bd391049db91e2d4fb6f0b019a6f76eeaae9e73c9f249ec356cf5a5d4505af6948d4c70c2ad4685c1c41a7ba40ec62d3d8a9dd00";
   hasRunfiles = true;
-  license = [ "gpl2" "lppl13c" ];
+  license = [ "gpl2Only" "lppl13c" ];
   version = "0.3";
 };
 pgf-umlsd = {
@@ -36338,7 +36338,7 @@ pmx = {
   sha512.doc = "dedba4570b68a8628442716dc3a9b1699e5f531aef2737e4b3f47862a91ba69bda91d6fe6692914d2bd7b8fe3188a83fdfce8bdd219ab7c4f238a9c6ec273ffb";
   hasManpages = true;
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "3.00";
 };
 pmx.binfiles = [
@@ -36354,7 +36354,7 @@ pmxchords = {
   scriptExts = [
     "lua"
   ];
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "2.0.2";
 };
 pmxchords.binfiles = [
@@ -36682,7 +36682,7 @@ prerex = {
   sha512.doc = "af17b95e20638fecfe6d431cc320b6d3207dd739779636206899d7bf39c26018718521dabf76adab33db28f975e99d2b2dcd9b13a164dc24927d2017e947bdba";
   hasManpages = true;
   hasRunfiles = true;
-  license = [ "gpl2" "lppl13c" ];
+  license = [ "gpl2Only" "lppl13c" ];
 };
 present = {
   revision = 50048;
@@ -36734,7 +36734,7 @@ preview = {
   sha512.doc = "d0f797210790ee1ed8a80df8090f9273cdab22de2bbe8d72b609385ff2f0e2004dcaf2a91d0ebe3fcbf0693cf4f83b2a978f7b02744185ebc9c803205e88d7a0";
   sha512.source = "e2dde7963e5337c8d0b0f0fd2a7adee2f09e8bd3900d2d8d6cca7d612e3401fd6567a42141734e72e6cdb043aa1fd786ca0dcbf42a776880447f81d0ba4e8838";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "13.3";
 };
 prftree = {
@@ -36863,7 +36863,7 @@ program = {
   sha512.run = "a9ef7d68ad86b42657681e2b798899b5c7c472c5e272a9098a1424a35a109dc4a946be54c4007db73edb861cb475f293e404cee9fa0dca8cdf086eb6c4790319";
   sha512.doc = "4213b5bc9cd6b2604bf1c667dd123729c0674d1c74338ebeb86b1551af14be3e24c4e94b4e5cc2c06a25ebf934d56eb6d3b5ce80e452798ea02fbb0ac6533580";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "3.3.14";
 };
 progress = {
@@ -38028,7 +38028,7 @@ pst2pdf = {
   sha512.run = "a266409d6740653bacb23e83b98e545dc462ed879299b195d65761b10e4700a797005ca231fc24e37a42591c09ba93b5ea6b8b82ad8b14a29a7649cdb3f39b33";
   sha512.doc = "5805c535c8a043fea721093a4b7d2ab06c86c80d4a45eb3d603986b898b6d2053d041b638874e53c79e2d815a929749e02ca0986a2f8cbb400a2fa87581462dc";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "0.20";
 };
 pst2pdf.binfiles = [
@@ -38147,7 +38147,7 @@ ptex-fontmaps = {
   sha512.source = "028304d777bfd5155baf89fcd4003bec43e5a7f3009aa9250cfd13277d085cbe52cf49511cf664efa0c886b1681475b0c25eaa65624bf0b77d4ab4403ebb457a";
   hasRunfiles = true;
   hasTlpkg = true;
-  license = [ "publicDomain" "gpl3" ];
+  license = [ "publicDomain" "gpl3Only" ];
   version = "20210625.0";
 };
 ptex-fontmaps.binfiles = [
@@ -38194,7 +38194,7 @@ ptex2pdf = {
   scriptExts = [
     "lua"
   ];
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "20200520.0";
 };
 ptex2pdf.binfiles = [
@@ -38513,7 +38513,7 @@ qcircuit = {
   sha512.run = "72dc726d377bfa13b30d5440f65e3f451a717c32785c9338bc95107a3fd29326d5011ea31a6805fd751e276279b8bb577f2b4a488ad0f380ffad84fbe46e272e";
   sha512.doc = "cb4d00d575ed8f859722b97af7f15323af85e69b7276947c05770a6c745dbf0e4b3aa1546b3cc82d9555a5ce839b142ea8edd3da166d2c109bf6b829b2ebb74f";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "2.6.0";
 };
 qcm = {
@@ -38687,7 +38687,7 @@ quotchap = {
   sha512.doc = "e2fa71ee21ad019ef785a3c74ddab5f232d3a6d1e9fcdcedb34c216eb5e6d44abbafcaae5d1c4557bc1e4aae92561a75ba2c3723707328a12cdb6ff4c1b72dbf";
   sha512.source = "eed36464f1b04852e8af08c5fd91c42ccccbbaeccad565e6f338ed5c87b003b2dd1704e1dad0ce0e49651461b637e8ed613399a0ae8122081e9084e47704665a";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "1.3";
 };
 quoting = {
@@ -40919,7 +40919,7 @@ serbian-date-lat = {
   sha512.run = "420b77a36a08e75f8020edffed704ff0398115a6bfe694fa46957ad8b35c58435ecde4c16176a72bbcbcd16139502f8fb679399852bfc9000df6d5f305fbb04e";
   sha512.doc = "5c10fe13a4e1d6117ebfe8d737d50047dc97483c7a0cc287a9e79d367af50ec1cbdc0800161919b92c6d82774c9e756970db71344259028c254fbf2c1fe86219";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
 };
 serbian-def-cyr = {
   revision = 23734;
@@ -40963,7 +40963,7 @@ setdeck = {
   sha512.run = "817474bc928883f4bbe97391a477bf492a4e339879fc85d7aec3ca932f9b46c310f8fec5b732deb2196c705c2bd3a22721376ea8289a1bbdc12555447f12f757";
   sha512.doc = "c27f7ab563f35293ee6019560f643d562ff2bf06747402930c767031a8dccffac0ebae9cd16b9e3009b5883f594c541ccf4c38883aa89f4256f7db83e378e1e9";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "0.1";
 };
 setspace = {
@@ -41001,7 +41001,7 @@ seuthesis = {
   sha512.doc = "5bbc5770bc42c62da7ca569b10558dc02bbe7fda2a463a3a2a78bc76fda3f1d0e7023c311f62a91bef73ae3c4026561403284404acc6bc72cb2e308ad4092ab8";
   sha512.source = "a442b5ca4e1e8a4a3f8d331e5575066a8c63d1521d1f774fa7d386a8e42b09a2c4727fae1f0a51a31c6a98c173113349738caac8991d50e4459082a874fed1ad";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "2.1.2";
 };
 seuthesix = {
@@ -41011,7 +41011,7 @@ seuthesix = {
   sha512.doc = "1d54dacc742d558af5fb006cb4f26e073bbf6a3a572b7e81fbacf691995a4a96c72251225fb7cff598c930a4c9984d0d01d080c797f202f7e30aced20b8b3e5b";
   sha512.source = "fbc848315e2b76ac915aa6abc0a9e7bf2f63c4af716ccf65c9af3ae05e049952703c1f86db97a5825b92f43dc2d1163e6544c30fcfce4b672272b4ba9057c171";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "1.0.1";
 };
 sexam = {
@@ -41287,7 +41287,7 @@ shtthesis = {
   sha512.run = "da3b02cc3558a337d7d35018fad00faf6d9183f3f4bc5b5b31e168a11dcfa705a77cad6c42f3fe3d98ce67f50d94ca1f75a82999d5a27837ea8fba6c01602594";
   sha512.doc = "04f1ccf2bef9e11364d7f066ed1a7fc218e39ef7a08824eb65537d88ed03097399eb01d07ba6d0a34e7456fc6de1291ea4f1c9264074eecd2e1af341c42e9197";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "0.3.3";
 };
 shuffle = {
@@ -41440,7 +41440,7 @@ simpleinvoice = {
   sha512.run = "8d3d905dd9dc418503bde7cd51c90ff6fc6f688502ff871040f9eb6bf96b6c1ef999d3dd98b16c8739ce9518a22a8e99a23b5cc66c437504b3837c30ea19cca1";
   sha512.doc = "81e5ff2bf76f2b35549feb9b6336bd04b9273d4e6b951ee327101d4e5a5d3c429276735238b63c3b2ee03466b477ca2d7990a68615c1d0eee4f12a37d6b65472";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
 };
 simplekv = {
   revision = 68439;
@@ -41521,7 +41521,7 @@ simurgh = {
   sha512.run = "11b77f831aff6796e41ccf2024496ae1c9d4b9b5f4c029daf33e0eb4b4fd3d1e5c78137b945e3c9fe7a16380365fb88165a46e614dc3078657ce025a55f90d44";
   sha512.doc = "30ddd7a9bbf3f568ad4876336228842651d8f95eb5f21df81ac524b99a7a695e68e0469f79867668dc3b9913cf223b72a22f6a0d0c818233c081ba90ac67de1a";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "0.01b";
 };
 sistyle = {
@@ -41812,7 +41812,7 @@ songs = {
   sha512.doc = "72c374aab68334b050a5d801299179c8484b6fa46db8c8e20b9fceef3cb9a8c0c1dc51de93f34115d4e34767233179c5872054cd03ea3e622abb63a49ad81f24";
   sha512.source = "016d389033589ab9334180edf70321858ba3b6000d8f560a18631e13ef28130f4b39aed81f7ddf0a178540a463789955d14620b37b7979ac0ea6abeec77d29bd";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "3.1";
 };
 sort-by-letters = {
@@ -42156,7 +42156,7 @@ srcredact = {
   sha512.doc = "dba9916acf75e800af1e581b4276e82bfe4c421a500a400773354766b37849568c1f19752a75983374ca41f793903f9776423888215f00376db1e0f5f3b3dbbc";
   hasManpages = true;
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "1.0";
 };
 srcredact.binfiles = [
@@ -42611,7 +42611,7 @@ sty2dtx = {
   sha512.doc = "1bc66506350b07341c8c4b858c6b1c637d9f0bf48323714ee7dedd701faf20e3cadb318f56bfb1a05f4fcaf84cdd6e9db18299801a69e0359937d7852ac6a824";
   hasManpages = true;
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "2.4";
 };
 sty2dtx.binfiles = [
@@ -42759,7 +42759,7 @@ subtext = {
   sha512.run = "0ab32328d346bddddd37094ec086727222bd386bd24c1aa164aaa0cba85d60cf6be2aa26d64bd0bcf63f49b0188e79a7212e8b98d2d7400f828ccf10f60272f3";
   sha512.doc = "cd3fdf312f2bd7d30c3aee67309220e8e75d20ea69ffcb17106812f0423791dbeb26a8ddd3621cd48e6b3cab5c910083f49aa18b439d9f8114c08002cdf8826b";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "1.1";
 };
 sudoku = {
@@ -43002,7 +43002,7 @@ sympytexpackage = {
   sha512.doc = "0013c9c1e21f70e36e6b30f12d777f9f78b727ee1beb2f893133248fffb75f0bc4523c0787c0e292f197ce1c01b5f37b34c33ae97ed713bd900848657d803c59";
   sha512.source = "45df3251efd8a8e5669f72b83fc8c07c9df777ec90bdae9b8a92ff3c1875fe623574365f69162cc4c2f89e4fc7ea32dd1ac0ce164ee804799496be25466a12bc";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "0.3";
 };
 synctex = {
@@ -43446,7 +43446,7 @@ tdclock = {
   sha512.run = "29e2e50d9fa432b08ea730b8a12228cd2bd3eefe61946e576a262bab06a966c0b28c13d48b1074a838a1a567f9797a943282d17e936db146f15e7631261761fe";
   sha512.doc = "139c82690e2c9b695a10a6f3e6f94a54c3ae4d4a929ddc18763e248114926554206fb4c007ed758695476de3750ffc1dce3db75efdf2598434f27abd1ac84baa";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "2.5";
 };
 tds = {
@@ -43529,7 +43529,7 @@ tempora = {
   sha512.run = "0e1cc1a13f7937e5497f454b15ca66e0975b784b80223a902bf12a9587abdfdb56116b100e04306b1999e053b7c3716b32e1183dd7e6624162611f3b70388df6";
   sha512.doc = "18259e25b2c9f2a9cfbce9a9303d8827af069bbe2a7ade5c14518ce2c19dc973a86fadaa99b2abc8bc65644ee5371c745abba03cca76a685382b7d8b6d20bc6e";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "1.05";
 };
 tengwarscript = {
@@ -43917,7 +43917,7 @@ texdef = {
   sha512.doc = "bf84f04183654db606a7ebcd30d4986bca69e633439511cc7d9cf57a3a1210231ed158d2bcd86c5014065d355ec94faf3d5f9ab08be568eadc6637ae9cb72aaf";
   sha512.source = "d8c20d77f5b5c68e0acf2fc26a8a0d142aec1377554c3f6b6cf469aef28ae2b82ab4c6844ed8414cad073dada8a035175d6e48b53699daf029ca181cea41f112";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "1.9";
 };
 texdef.binfiles = [
@@ -44010,7 +44010,7 @@ texfindpkg = {
   scriptExts = [
     "lua"
   ];
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "2023E";
 };
 texfindpkg.binfiles = [
@@ -44210,7 +44210,7 @@ texliveonfly = {
   scriptExts = [
     "py"
   ];
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
 };
 texliveonfly.binfiles = [
   "texliveonfly"
@@ -44356,7 +44356,7 @@ texshade = {
   sha512.doc = "e06fcb1e6d743561ecc1b6a1a14e252fa5a7eceb2bb0ceb27409dd52c62ec5a1397cdbde7bf61e62b143af2fe6787a49ad3b6b9117f8418e409e54b26deb2a25";
   sha512.source = "23bc248ea1ee572c6ac13fcf9697810ad6881530a44adf9a16927801b0a951c3fe012295ac2816c85f203fcadfb35f04460510ea7fbe2fd758b05098a4f06dee";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "1.28";
 };
 texsis = {
@@ -44533,7 +44533,7 @@ tfrupee = {
   sha512.doc = "19da18d665a8369e58a26d4e979d5fd6c8b3187dfba97a281008627aeb8c5ee824dc2ad3f5c94c3b35c67fe28a646f44aa5f532912de5f5640b0a7d56afec2f8";
   sha512.source = "30133dbf65f1a33f79ad8b2c8ee84ff376b39d12cf0d48c4e72e86b393e0d55f5768c7af5f5f3f6ff1d78fe2c7d4f2b09d2980107dd5aa1d94fb5ea27545ee9d";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "1.02";
 };
 thaienum = {
@@ -44620,7 +44620,7 @@ theoremref = {
   sha512.run = "ed6990b6c7a9ec4e72770252bcd07ad5ddf4015cde0129dc0a89cb95bc96958963209fe46f0ba9a614ebc0cdb358d8125ee3eb22b9a4249367d975ec12250a3e";
   sha512.doc = "022ef42c6765c661f5828a8adcad7710d74f168b3a2dfad0e73218d1a5295b25ea24d5fa010a01151939e87989cfd6457917167e69cebf5ee5a364347eea5f2f";
   hasRunfiles = true;
-  license = [ "lppl13c" "gpl2" ];
+  license = [ "lppl13c" "gpl2Only" ];
 };
 thermodynamics = {
   revision = 69086;
@@ -44648,7 +44648,7 @@ thesis-gwu = {
   sha512.run = "7001a1f11d069fd15894b34a2d220394924802c3ef1a37869e0d717bdb650bb53c01078dc14760f7887addece64bfb0f6662741bfb6dc4dd77d2ff1f3d0d7415";
   sha512.doc = "e53925a31286089cb5e8f051cdf969c6bbf29db0ae2629c1a584ead2885cc0e1f95c5b2cd9583056c8ab40b1c41d4f8203b876a1e6365d8967e3942440e04e2e";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "1.7.0";
 };
 thesis-qom = {
@@ -44801,7 +44801,7 @@ thumby = {
   sha512.run = "485bb2670133c3c83f0f7aaa685defc6d36f5d24173652d869f526770e1f55c55a31f3a3180f115aef45fb824d9032ee915b91c1c59b9b33794c95c92f03c3e6";
   sha512.doc = "bac645197085968fe8a7bd41f4a9ec3c6e51e17e6750b87ca1a458acc9f6a4f244d1f3b36b9c622c98492b90abddf9a4df1636b1874c02820dcdb6340bad0910";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "0.1";
 };
 thuthesis = {
@@ -44914,7 +44914,7 @@ tikz-dependency = {
   sha512.run = "f13e652066ed2237c22b397b76f628e9108a999138ab5d8349792551205cada4709031f5c4b458982618871d4d65abfe5623f700ee9d8f474c66b1e31df374b8";
   sha512.doc = "3ab32e535d11802b3a828b8b49e78f31df5e5d3c7c36509a3b8aa0d81c02c465ec84d45b9d951ad833dea705381b4df05fa3d9a478db9af0622bc0d69008b227";
   hasRunfiles = true;
-  license = [ "lppl13c" "gpl2" ];
+  license = [ "lppl13c" "gpl2Only" ];
   version = "1.2";
 };
 tikz-dimline = {
@@ -45331,7 +45331,7 @@ tikzpingus = {
   sha512.run = "78041352e86e68eb99f875a1c8bf7d4a50c527a4b405e4c93e9da6ecd716bbb0c5fad053fff80229723b4550345077371a52132258cb9d251c319f743767cb7f";
   sha512.doc = "1748e17af7b3190e19a0c446e78f5b40b6a135633850d610179f33927650c8cd92babca86e4fd10408586d1fd81814cbb54985ab0fadfbfd05219b033e4323c6";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "1.1";
 };
 tikzposter = {
@@ -45388,7 +45388,7 @@ tikztosvg = {
   sha512.doc = "3d90c0963c570a115390603bcd5f39a224a155faea8ac6eec511b9689ab98383386d3d6e92076129e0f704d69bd18da52cf2f89f5db024a4d5c34a75c1edf279";
   hasManpages = true;
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "0.3.0";
 };
 tikztosvg.binfiles = [
@@ -45653,7 +45653,7 @@ tkz-orm = {
   sha512.run = "41263c9ad122a3cfce3eca3cd4ba8798e61ef662ebf7f00be99dd16a25b50f5419fb6c04a84bae6bd0ce2b349d4b3216a1a88c6e3d081d8a064ff561536a7e71";
   sha512.doc = "ba9a6a67384478cbcf5b76f7148f60bb0f2f1932033f95945b28794f146d89b21e82c4d59b87735d46bacacd10c1ddca2b19e2e7ae4045a331383f4085a99221";
   hasRunfiles = true;
-  license = [ "gpl2" "lppl13c" ];
+  license = [ "gpl2Only" "lppl13c" ];
   version = "0.1.4";
 };
 tkz-tab = {
@@ -46123,7 +46123,7 @@ transparent-io = {
   stripPrefix = 0;
   sha512.run = "69d27356f57d5b610fc9e6e839f6df111f6b98b8bf446327ecfba473dea6bc997cb6802ca382b3438d44de85fd5f50f82bd4e5508bfa43d08223463b5436950c";
   sha512.doc = "2e54e51744c482f98c1b35588cc934ba18e3358fc2be043459d7e16f8c85ee6aae7acf4b6c3b329cdfddcf1b3126000c6559d41d5b2c4e88d5018844717cb8eb";
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
 };
 tree-dvips = {
   revision = 21751;
@@ -46390,7 +46390,7 @@ tutodoc = {
   sha512.run = "acd6fc6114ab1c25259485514b54d848b75cb5f45dc05cdb8324a91b127031c0db8c84c445b0e1b429dc1a5ca0a6a394987465363265c0f830ea60e72c6ab7de";
   sha512.doc = "8f58c8eaa4db17315d69088b9cb446b90504fe62395fcb07495742695f2c8e8215ab76596d4d98cad3c432f3e6079a2ec3088074345d0ace4d309db3163ce405";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "1.1.0";
 };
 twemoji-colr = {
@@ -46482,7 +46482,7 @@ txuprcal = {
   sha512.run = "f6840ff0846b52130b65c81513d4bf358dfea413ac6d7f324eab592b96d5277d7036e5d991dbfc1ecf6376fd35baaf0351818eed69a21b6ba88e25f878a41ef1";
   sha512.doc = "f5bd216c689b0368bbbfe29f7fbd57bb7c02344d8696af488fdd7f1078fc5ad9ac7ad5565f1408b7b7d19224093d1418c1e3d8920b8cb0cece770811576c894a";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "1.00";
 };
 type1cm = {
@@ -46864,7 +46864,7 @@ umbclegislation = {
   sha512.run = "ea6a55698b51da3939a1bfc10963dd74d9e772ebd18ad9018f649077224f7ee30ca20f051a68c9bd8d8bac94baf1d0d28ab2f864419c61385ebf9bc82aacb7f0";
   sha512.doc = "d4d5f318baa1f1ecd446bb864d0670ed2dcd7208429bfd2ce587810b27dde22f49a6f7c072aad8f6515e721a98ea0ec356ee36eb970cdee385910a291d964394";
   hasRunfiles = true;
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "2016-6-8";
 };
 umich-thesis = {
@@ -46937,7 +46937,7 @@ unamth-template = {
   stripPrefix = 0;
   sha512.run = "c6b6d86dacb71575a7f76e33eac081f630b81815e3501ff5ba5a5e056d5bab76c709b19b8843adca39330fb644cc49e70c8687b5a66d0dc636caa74af6c3bf5e";
   sha512.doc = "e7e17ba71d47769db4766628d334ed66980d7f133ec0bf2bf21d7a00e92d661dfa624def736891c5d70f11755215bff47b8cc9ffaded3baebbaf52e0365227e4";
-  license = [ "gpl3" ];
+  license = [ "gpl3Only" ];
   version = "2.0";
 };
 unamthesis = {
@@ -47018,7 +47018,7 @@ unfonts-core = {
   sha512.run = "5476421a802ec3daa8fcb8354924ffb090aa9ea337db315c813637fafa445ef82601edc61cb7aa424bd7e2deee7607902ed33f0cfe70c214901d4c52dfcff6c5";
   sha512.doc = "8f51172be1093ff9da6ebb7071f5fea435e2bdace5619faa24ebdef52b3e34197d91b8f9d302844d4e1377a2a4712247743172afcd4b01367e9f166bd76112fd";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
 };
 unfonts-extra = {
   revision = 56291;
@@ -47026,7 +47026,7 @@ unfonts-extra = {
   sha512.run = "9cf9a73ba3c2190da7999c3b770e92d8afb43c640d651173c126e930155e9f87f371392accd4eadae8922ee846a5e02c0eeab845561dea943b34b185164bba3c";
   sha512.doc = "6173d49bb64c9b162763ff08af445e518fa650fcc13e02f5c72454d335285d9c82347cf79f945fae94429f3a9d15f9c9b58ff1d175c8f59ea7b75766cd279303";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
 };
 uni-titlepage = {
   revision = 68917;
@@ -47542,7 +47542,7 @@ urlbst = {
   sha512.doc = "897c866ab03bdd5ab741537182788c5f484009681d6fb98f1149329068be707abae7ef012c0bd0170e2b4b673eaa63b46f5d0d55714015e8a451457f5a6c540c";
   sha512.source = "5bbad9719daeeb8c03e7db6ef956881994bc17d7ced9b45165ad45899a7230ea8c0ceeb23d209d36535d2081b6b611d46c19b1f0f03e8fbae1788f31ab09e7bd";
   hasRunfiles = true;
-  license = [ "gpl2" "lppl13c" ];
+  license = [ "gpl2Only" "lppl13c" ];
   version = "0.9.1";
 };
 urlbst.binfiles = [
@@ -48402,7 +48402,7 @@ wnri-latex = {
   sha512.doc = "924266d547910d25ed5355ec2ef697d271dd992aeb6767d5bcb703d4d07cd34b6844e9a821ed93f5a04237aba1c185fb68926967e78043f390785b619c2389d2";
   sha512.source = "e3c5cfaae7b14a28489344392d66a1e2570c900ffd571c54b4f2d13b16d6dabb5cf58cad9259f8b662a218567982d1ac51ef8b2a757902c36540200fd984a497";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
   version = "1.0b";
 };
 wordcloud = {
@@ -49565,7 +49565,7 @@ yannisgr = {
   sha512.run = "509e69acdef68eadc65fef6980e9166c6327e8927fb9cdf6a7a33786a8668ac9b900954a4bb661f223967b26dd240d5ebd91683658b324be284e46876c39061d";
   sha512.doc = "40ecdfe71670357e8ec84fd262015b5b5d0b8e486ab80c05d0863a335649501e9548d785cc2b2374f989b820dadd9a074cc229674dd1ae9a6252d4a0ebeb4191";
   hasRunfiles = true;
-  license = [ "gpl2" ];
+  license = [ "gpl2Only" ];
 };
 yathesis = {
   revision = 70512;
@@ -49815,7 +49815,7 @@ zbmath-review-template = {
   sha512.run = "c9685b151679e7516e146f3d97f4242c7cdf084f84a7ac857a8aa27031c60950d0da07d66b7b57d7bdec384d3501c30b339231654cf845bbed2945b0ac069368";
   sha512.doc = "470ee6c9895effd3c6bcac5a9faaa3862380bb137044411dd0013f4f465dc923dc1de507f2d1d087fb4b4178cb2f43f435e71b090d55744a8be6e59f8cc010fa";
   hasRunfiles = true;
-  license = [ "gpl3" "cc-by-sa-40" ];
+  license = [ "gpl3Only" "cc-by-sa-40" ];
   version = "2.1";
 };
 zebra-goodies = {

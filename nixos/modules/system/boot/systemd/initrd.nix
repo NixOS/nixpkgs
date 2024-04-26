@@ -117,8 +117,8 @@ let
 
 in {
   options.boot.initrd.systemd = {
-    enable = mkEnableOption (lib.mdDoc "systemd in initrd") // {
-      description = lib.mdDoc ''
+    enable = mkEnableOption "systemd in initrd" // {
+      description = ''
         Whether to enable systemd in initrd. The unit options such as
         {option}`boot.initrd.systemd.services` are the same as their
         stage 2 counterparts such as {option}`systemd.services`,
@@ -140,7 +140,7 @@ in {
       default = "";
       type = types.lines;
       example = "DefaultLimitCORE=infinity";
-      description = lib.mdDoc ''
+      description = ''
         Extra config options for systemd. See systemd-system.conf(5) man page
         for available options.
       '';
@@ -150,14 +150,14 @@ in {
       type = with types; attrsOf (nullOr (oneOf [ str path package ]));
       default = {};
       example = { SYSTEMD_LOG_LEVEL = "debug"; };
-      description = lib.mdDoc ''
+      description = ''
         Environment variables of PID 1. These variables are
         *not* passed to started units.
       '';
     };
 
     contents = mkOption {
-      description = lib.mdDoc "Set of files that have to be linked into the initrd";
+      description = "Set of files that have to be linked into the initrd";
       example = literalExpression ''
         {
           "/etc/hostname".text = "mymachine";
@@ -168,7 +168,7 @@ in {
     };
 
     storePaths = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Store paths to copy into the initrd as well.
       '';
       type = with types; listOf (oneOf [ singleLineStr package ]);
@@ -176,7 +176,7 @@ in {
     };
 
     strip = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Whether to completely strip executables and libraries copied to the initramfs.
 
         Setting this to false may save on the order of 30MiB on the
@@ -189,7 +189,7 @@ in {
     };
 
     extraBin = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Tools to add to /bin
       '';
       example = literalExpression ''
@@ -202,7 +202,7 @@ in {
     };
 
     suppressedStorePaths = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Store paths specified in the storePaths option that
         should not be copied.
       '';
@@ -225,7 +225,7 @@ in {
 
     emergencyAccess = mkOption {
       type = with types; oneOf [ bool (nullOr (passwdEntry str)) ];
-      description = lib.mdDoc ''
+      description = ''
         Set to true for unauthenticated emergency access, and false for
         no emergency access.
 
@@ -238,7 +238,7 @@ in {
     initrdBin = mkOption {
       type = types.listOf types.package;
       default = [];
-      description = lib.mdDoc ''
+      description = ''
         Packages to include in /bin for the stage 1 emergency shell.
       '';
     };
@@ -247,7 +247,7 @@ in {
       default = [ ];
       type = types.listOf types.str;
       example = [ "debug-shell.service" "systemd-quotacheck.service" ];
-      description = lib.mdDoc ''
+      description = ''
         Additional units shipped with systemd that shall be enabled.
       '';
     };
@@ -256,7 +256,7 @@ in {
       default = [ ];
       type = types.listOf types.str;
       example = [ "systemd-backlight@.service" ];
-      description = lib.mdDoc ''
+      description = ''
         A list of units to skip when generating system systemd configuration directory. This has
         priority over upstream units, {option}`boot.initrd.systemd.units`, and
         {option}`boot.initrd.systemd.additionalUpstreamUnits`. The main purpose of this is to
@@ -266,7 +266,7 @@ in {
     };
 
     units = mkOption {
-      description = lib.mdDoc "Definition of systemd units.";
+      description = "Definition of systemd units.";
       default = {};
       visible = "shallow";
       type = systemdUtils.types.units;
@@ -276,49 +276,49 @@ in {
       default = [];
       type = types.listOf types.package;
       example = literalExpression "[ pkgs.systemd-cryptsetup-generator ]";
-      description = lib.mdDoc "Packages providing systemd units and hooks.";
+      description = "Packages providing systemd units and hooks.";
     };
 
     targets = mkOption {
       default = {};
       visible = "shallow";
       type = systemdUtils.types.initrdTargets;
-      description = lib.mdDoc "Definition of systemd target units.";
+      description = "Definition of systemd target units.";
     };
 
     services = mkOption {
       default = {};
       type = systemdUtils.types.initrdServices;
       visible = "shallow";
-      description = lib.mdDoc "Definition of systemd service units.";
+      description = "Definition of systemd service units.";
     };
 
     sockets = mkOption {
       default = {};
       type = systemdUtils.types.initrdSockets;
       visible = "shallow";
-      description = lib.mdDoc "Definition of systemd socket units.";
+      description = "Definition of systemd socket units.";
     };
 
     timers = mkOption {
       default = {};
       type = systemdUtils.types.initrdTimers;
       visible = "shallow";
-      description = lib.mdDoc "Definition of systemd timer units.";
+      description = "Definition of systemd timer units.";
     };
 
     paths = mkOption {
       default = {};
       type = systemdUtils.types.initrdPaths;
       visible = "shallow";
-      description = lib.mdDoc "Definition of systemd path units.";
+      description = "Definition of systemd path units.";
     };
 
     mounts = mkOption {
       default = [];
       type = systemdUtils.types.initrdMounts;
       visible = "shallow";
-      description = lib.mdDoc ''
+      description = ''
         Definition of systemd mount units.
         This is a list instead of an attrSet, because systemd mandates the names to be derived from
         the 'where' attribute.
@@ -329,7 +329,7 @@ in {
       default = [];
       type = systemdUtils.types.automounts;
       visible = "shallow";
-      description = lib.mdDoc ''
+      description = ''
         Definition of systemd automount units.
         This is a list instead of an attrSet, because systemd mandates the names to be derived from
         the 'where' attribute.
@@ -340,13 +340,13 @@ in {
       default = {};
       type = systemdUtils.types.slices;
       visible = "shallow";
-      description = lib.mdDoc "Definition of slice configurations.";
+      description = "Definition of slice configurations.";
     };
 
     enableTpm2 = mkOption {
       default = true;
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable TPM2 support in the initrd.
       '';
     };
@@ -490,18 +490,18 @@ in {
 
       targets.initrd.aliases = ["default.target"];
       units =
-           mapAttrs' (n: v: nameValuePair "${n}.path"    (pathToUnit    n v)) cfg.paths
-        // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.services
-        // mapAttrs' (n: v: nameValuePair "${n}.slice"   (sliceToUnit   n v)) cfg.slices
-        // mapAttrs' (n: v: nameValuePair "${n}.socket"  (socketToUnit  n v)) cfg.sockets
-        // mapAttrs' (n: v: nameValuePair "${n}.target"  (targetToUnit  n v)) cfg.targets
-        // mapAttrs' (n: v: nameValuePair "${n}.timer"   (timerToUnit   n v)) cfg.timers
+           mapAttrs' (n: v: nameValuePair "${n}.path"    (pathToUnit    v)) cfg.paths
+        // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit v)) cfg.services
+        // mapAttrs' (n: v: nameValuePair "${n}.slice"   (sliceToUnit   v)) cfg.slices
+        // mapAttrs' (n: v: nameValuePair "${n}.socket"  (socketToUnit  v)) cfg.sockets
+        // mapAttrs' (n: v: nameValuePair "${n}.target"  (targetToUnit  v)) cfg.targets
+        // mapAttrs' (n: v: nameValuePair "${n}.timer"   (timerToUnit   v)) cfg.timers
         // listToAttrs (map
                      (v: let n = escapeSystemdPath v.where;
-                         in nameValuePair "${n}.mount" (mountToUnit n v)) cfg.mounts)
+                         in nameValuePair "${n}.mount" (mountToUnit v)) cfg.mounts)
         // listToAttrs (map
                      (v: let n = escapeSystemdPath v.where;
-                         in nameValuePair "${n}.automount" (automountToUnit n v)) cfg.automounts);
+                         in nameValuePair "${n}.automount" (automountToUnit v)) cfg.automounts);
 
       # make sure all the /dev nodes are set up
       services.systemd-tmpfiles-setup-dev.wantedBy = ["sysinit.target"];

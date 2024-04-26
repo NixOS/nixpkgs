@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, lib, buildFHSEnv, appimageTools, writeShellScript, anki, undmg, zstd, commandLineArgs ? [] }:
+{ fetchurl, stdenv, lib, buildFHSEnv, appimageTools, writeShellScript, anki, undmg, zstd, cacert, commandLineArgs ? [] }:
 
 let
   pname = "anki-bin";
@@ -52,11 +52,12 @@ let
 
   fhsEnvAnki = buildFHSEnv (appimageTools.defaultFhsEnvArgs // {
     inherit pname version;
-    name = null; # Appimage sets it to "appimage-env"
 
     profile = ''
       # anki vendors QT and mixing QT versions usually causes crashes
       unset QT_PLUGIN_PATH
+      # anki uses the system ssl cert, without it plugins do not download/update
+      export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
     '';
 
     # Dependencies of anki

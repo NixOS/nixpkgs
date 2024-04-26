@@ -79,4 +79,18 @@
       hash = "sha256-q3iNBo8t4b1Rn5k5lau2myqOAqdA/9V9A+ok2jGkLdY=";
     };
   };
+
+  rust_1_77-6_8 = {
+    name = "rust-1.77.patch";
+    patch = fetchurl {
+      name = "rust-1.77.patch";
+      url = "https://lore.kernel.org/rust-for-linux/20240217002717.57507-1-ojeda@kernel.org/raw";
+      hash = "sha256-0KW9nHpJeMSDssCPXWZbrN8kxq5bA434t+XuPfwslUc=";
+    };
+  };
+
+  rust_1_77-6_9 = {
+    name = "rust-1.77.patch";
+    patch = ./rust-1.77.patch;
+  };
 }

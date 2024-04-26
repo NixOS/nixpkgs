@@ -69,9 +69,9 @@ in rec {
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the hash for staging as well.
-    version = "9.6";
+    version = "9.7";
     url = "https://dl.winehq.org/wine/source/9.x/wine-${version}.tar.xz";
-    hash = "sha256-Dglg7YK2AX6ILtozOLrRJwoRd7bPBfA6wfqxVavoIEg=";
+    hash = "sha256-2fPDM2VuiL1M71Mx80sci2nJZKUnWe73RdjdrlGhU1M=";
     inherit (stable) patches;
 
     ## see http://wiki.winehq.org/Gecko
@@ -88,9 +88,9 @@ in rec {
 
     ## see http://wiki.winehq.org/Mono
     mono = fetchurl rec {
-      version = "9.0.0";
+      version = "9.1.0";
       url = "https://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}-x86.msi";
-      hash = "sha256-efbEMQBnVWbBEvQZm56nuUTTOBZLNL2R+hGwsKQU4cQ=";
+      hash = "sha256-igoeaDe0lN9Jkn5ddZscaQjom4ovjjrQJeHCiBiCR24=";
     };
 
     updateScript = writeShellScript "update-wine-unstable" ''
@@ -117,7 +117,7 @@ in rec {
   staging = fetchFromGitLab rec {
     # https://gitlab.winehq.org/wine/wine-staging
     inherit (unstable) version;
-    hash = "sha256-6AKN/KpmsTw9qxErhTTzqWuglgFdOAhtaoBlVRcs71Q=";
+    hash = "sha256-KU6i1P81Fr+4aZH/SJ+YibaIfX88SZMPdPcGS2mT2CE=";
     domain = "gitlab.winehq.org";
     owner = "wine";
     repo = "wine-staging";

@@ -2611,15 +2611,6 @@ self: super: {
   # 2022-03-16: Bounds need to be loosened https://github.com/obsidiansystems/dependent-sum-aeson-orphans/issues/10
   dependent-sum-aeson-orphans = doJailbreak super.dependent-sum-aeson-orphans;
 
-  # 2022-03-16: package qualified import issue: https://github.com/ghcjs/ghcjs-dom/issues/101
-  ghcjs-dom = assert super.ghcjs-dom.version == "0.9.5.0"; overrideCabal (old: {
-    postPatch = ''
-      sed -i 's/import "jsaddle-dom" GHCJS.DOM.Document/import "ghcjs-dom-jsaddle" GHCJS.DOM.Document/' src/GHCJS/DOM/Document.hs
-    '' + (old.postPatch or "");
-    })
-    # 2023-07-15: Restrictive upper bounds on text
-    (doJailbreak super.ghcjs-dom);
-
   # Too strict bounds on chell: https://github.com/fpco/haskell-filesystem/issues/24
   system-fileio = doJailbreak super.system-fileio;
 

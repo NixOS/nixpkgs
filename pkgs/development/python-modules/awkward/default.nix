@@ -75,6 +75,9 @@ buildPythonPackage rec {
   # The following tests have been disabled because they need to be run on a GPU platform.
   disabledTestPaths = [
     "tests-cuda"
+  # Disable tests dependending on jax on darwin
+  ] ++ lib.optionals stdenv.isDarwin [
+    "tests/test_2603_custom_behaviors_with_jax.py"
   ];
 
   meta = with lib; {

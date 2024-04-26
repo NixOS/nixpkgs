@@ -75,11 +75,11 @@ This would allow someone to upgrade between those NixOS releases in a supported 
 
 ## K3s upkeep for nixpkgs maintainers
 
-* A `nixos-stable` release triggers the need of re-setting K3s versions in `nixos-unstable` branch to a single K3s version. After every `nixos-stable` release, K3s maintainers should remove all K3s versions in `nixos-unstable` branch but the latest. While `nixos-stable` keeps the multiple K3s versions necessary for a smooth upgrade to `nixos-unstable`.
+* After every nixos release, K3s maintainers should remove from `nixos-unstable` all K3s versions that exist in `nixos-stable` except the latest version (to allow decoupling system upgrade from k3s upgrade).
 
 * Whenever adding a new major/minor K3s version to nixpkgs:
   - update `k3s` alias to the latest version.
-  - add a NixOS release note scheduling the removal of all K3s packages but the latest
+  - add a NixOS release note scheduling the removal of deprecated K3s packages
   - include migration information from both Kubernetes and K3s projects
 
 * For version patch upgrades, use the K3s update script.
@@ -111,4 +111,4 @@ This would allow someone to upgrade between those NixOS releases in a supported 
 
   - Read the nix build logs to check for anything unusual. (Obvious but underrated.)
 
-* Thank you for reading the documentation and your continued contribution.
+* Thanks for reading the documentation and your continued contribution.
