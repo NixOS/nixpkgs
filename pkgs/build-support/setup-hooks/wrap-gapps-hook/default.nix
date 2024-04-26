@@ -3,7 +3,7 @@
 , makeSetupHook
 , makeWrapper
 , gobject-introspection
-, isGraphical ? true
+, isGraphical ? false
 , gtk3
 , librsvg
 , dconf
