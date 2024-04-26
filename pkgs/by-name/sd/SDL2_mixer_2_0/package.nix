@@ -1,3 +1,4 @@
+# SDL2_mixer_2_0 pinned for lzwolf
 {
   SDL2_mixer,
   fetchFromGitHub,
