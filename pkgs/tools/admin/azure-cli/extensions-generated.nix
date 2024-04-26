@@ -876,9 +876,9 @@
   };
   spring = mkAzExtension rec {
     pname = "spring";
-    version = "1.19.3";
+    version = "1.21.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/spring-${version}-py3-none-any.whl";
-    sha256 = "80cbd41e563231e500670402b01e95150adce18b7c128320c3d2393284e0d5d5";
+    sha256 = "a513aff7c4034e4b7016b948ae6fcfabcc0c754c1631d619233ea7bf61508ab1";
     description = "Microsoft Azure Command-Line Tools spring Extension";
   };
   spring-cloud = mkAzExtension rec {
