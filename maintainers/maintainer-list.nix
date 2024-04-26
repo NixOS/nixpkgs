@@ -1848,6 +1848,12 @@
     githubId = 7745457;
     name = "Astavie";
   };
+  astindev = {
+    email = "astindev@pm.me";
+    github = "astindev";
+    githubId = 52360869;
+    name = "Astin";
+  };
   astro = {
     email = "astro@spaceboyz.net";
     github = "astro";
@@ -12388,11 +12394,6 @@
     githubId = 1709273;
     name = "Robin Hack";
   };
-  marsam = {
-    github = "marsam";
-    githubId = 65531;
-    name = "Mario Rodas";
-  };
   marsupialgutz = {
     email = "mars@possums.xyz";
     github = "pupbrained";
@@ -17097,6 +17098,12 @@
     github = "rileyinman";
     githubId = 37246692;
     name = "Riley Inman";
+  };
+  rinx = {
+    email = "rintaro.okamura@gmail.com";
+    github = "rinx";
+    githubId = 1588935;
+    name = "Rintaro Okamura";
   };
   riotbib = {
     email = "lennart@cope.cool";
@@ -21942,7 +21949,8 @@
   };
   xgwq = {
     name = "XGWQ";
-    email = "nixos@xnee.de";
+    email = "nixos.xgwq@xnee.net";
+    keys = [{ fingerprint = "6489 9EF2 A256 5C04 7426  686C 8337 A748 74EB E129"; }];
     matrix = "@xgwq:nerdberg.de";
     github = "peterablehmann";
     githubId = 36541313;

@@ -31,6 +31,6 @@ buildGoModule rec {
     mainProgram = "algolia";
     homepage = "https://algolia.com/doc/tools/cli/";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

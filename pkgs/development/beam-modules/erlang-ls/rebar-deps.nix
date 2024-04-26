@@ -139,11 +139,10 @@ let
     erlfmt = builder {
       name = "erlfmt";
       version = "1.3.0";
-      src = fetchFromGitHub {
-        owner = "WhatsApp";
-        repo = "erlfmt";
-        sha256 = "sha256-fVjEVmCnoofnfcxwBk0HI4adO0M6QOshP3uZrecZ9vM=";
-        rev = "v1.3.0";
+      src = fetchHex {
+        pkg = "erlfmt";
+        version = "1.3.0";
+        sha256 = "sha256-KoSqHrovT8190x1cV+neK8JwXdoY2kVT8n33EUz6oFI=";
       };
       beamDeps = [ ];
     };

@@ -2795,9 +2795,7 @@ with pkgs;
 
   simplenes = callPackage ../applications/emulators/simplenes { };
 
-  snes9x = callPackage ../applications/emulators/snes9x { };
-
-  snes9x-gtk = callPackage ../applications/emulators/snes9x {
+  snes9x-gtk = snes9x.override {
     withGtk = true;
   };
 
@@ -4074,8 +4072,6 @@ with pkgs;
 
   wiimms-iso-tools = callPackage ../tools/filesystems/wiimms-iso-tools { };
 
-  waypoint = callPackage ../applications/networking/cluster/waypoint { };
-
   xc = callPackage ../development/tools/xc { };
 
   ios-webkit-debug-proxy = callPackage ../development/mobile/ios-webkit-debug-proxy { };
@@ -4759,8 +4755,6 @@ with pkgs;
   wdt = callPackage ../applications/networking/sync/wdt { };
 
   wlay = callPackage ../tools/wayland/wlay { };
-
-  wl-clip-persist = callPackage ../tools/wayland/wl-clip-persist { };
 
   wl-clipboard = callPackage ../tools/wayland/wl-clipboard { };
 
@@ -10157,14 +10151,14 @@ with pkgs;
   nodejs-slim_20 = callPackage ../development/web/nodejs/v20.nix { enableNpm = false; };
   corepack_20 = hiPrio (callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_20; });
 
-  nodejs_21 = callPackage ../development/web/nodejs/v21.nix { };
-  nodejs-slim_21 = callPackage ../development/web/nodejs/v21.nix { enableNpm = false; };
-  corepack_21 = hiPrio (callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_21; });
+  nodejs_22 = callPackage ../development/web/nodejs/v22.nix { };
+  nodejs-slim_22 = callPackage ../development/web/nodejs/v22.nix { enableNpm = false; };
+  corepack_22 = hiPrio (callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_22; });
 
   # Update this when adding the newest nodejs major version!
-  nodejs_latest = nodejs_21;
-  nodejs-slim_latest = nodejs-slim_21;
-  corepack_latest = hiPrio corepack_21;
+  nodejs_latest = nodejs_22;
+  nodejs-slim_latest = nodejs-slim_22;
+  corepack_latest = hiPrio corepack_22;
 
   buildNpmPackage = callPackage ../build-support/node/build-npm-package { };
 
@@ -16746,19 +16740,6 @@ with pkgs;
   cargo-outdated = callPackage ../development/tools/rust/cargo-outdated {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Security SystemConfiguration;
   };
-  cargo-pgx_0_6_1 = callPackage ../development/tools/rust/cargo-pgx/0_6_1.nix {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-  cargo-pgx_0_7_1 = callPackage ../development/tools/rust/cargo-pgx/0_7_1.nix {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-  cargo-pgx_0_7_4 = callPackage ../development/tools/rust/cargo-pgx/0_7_4.nix {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-  cargo-pgx = cargo-pgx_0_7_4;
-  buildPgxExtension = callPackage ../development/tools/rust/cargo-pgx/buildPgxExtension.nix {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
   inherit (callPackages ../development/tools/rust/cargo-pgrx { })
     cargo-pgrx_0_10_2
     cargo-pgrx_0_11_2
@@ -18204,7 +18185,7 @@ with pkgs;
   };
 
   bazel_6 = darwin.apple_sdk_11_0.callPackage ../development/tools/build-managers/bazel/bazel_6 {
-    inherit (darwin) cctools;
+    inherit (darwin) cctools sigtool;
     inherit (darwin.apple_sdk_11_0.frameworks) CoreFoundation CoreServices Foundation;
     buildJdk = jdk11_headless;
     runJdk = jdk11_headless;
@@ -24252,6 +24233,17 @@ with pkgs;
 
   rocksdb = callPackage ../development/libraries/rocksdb { };
 
+  rocksdb_8_3 = rocksdb.overrideAttrs rec {
+    pname = "rocksdb";
+    version = "8.3.2";
+    src = fetchFromGitHub {
+      owner = "facebook";
+      repo = pname;
+      rev = "v${version}";
+      hash = "sha256-mfIRQ8nkUbZ3Bugy3NAvOhcfzFY84J2kBUIUBcQ2/Qg=";
+    };
+  };
+
   rocksdb_7_10 = rocksdb.overrideAttrs rec {
     pname = "rocksdb";
     version = "7.10.2";
@@ -24259,8 +24251,8 @@ with pkgs;
       owner = "facebook";
       repo = pname;
       rev = "v${version}";
-     hash = "sha256-U2ReSrJwjAXUdRmwixC0DQXht/h/6rV8SOf5e2NozIs=";
-   };
+      hash = "sha256-U2ReSrJwjAXUdRmwixC0DQXht/h/6rV8SOf5e2NozIs=";
+    };
   };
 
   rocksdb_6_23 = rocksdb.overrideAttrs rec {
@@ -30418,6 +30410,7 @@ with pkgs;
   darktable = callPackage ../applications/graphics/darktable {
     lua = lua5_4;
     pugixml = pugixml.override { shared = true; };
+    stdenv = if stdenv.isDarwin && stdenv.isx86_64 then overrideSDK llvmPackages_18.stdenv { darwinMinVersion = "10.14"; darwinSdkVersion = "11.0"; } else stdenv;
   };
 
   das_watchdog = callPackage ../tools/system/das_watchdog { };

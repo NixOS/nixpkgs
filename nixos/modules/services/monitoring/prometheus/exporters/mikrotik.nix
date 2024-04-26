@@ -1,9 +1,14 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.mikrotik;
+  inherit (lib)
+    mkOption
+    types
+    literalExpression
+    concatStringsSep
+    escapeShellArg
+    ;
 in
 {
   port = 9436;

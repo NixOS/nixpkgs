@@ -1,9 +1,18 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.restic;
+  inherit (lib)
+    mkOption
+    types
+    concatStringsSep
+    mkIf
+    mapAttrs'
+    splitString
+    toUpper
+    optionalAttrs
+    nameValuePair
+    ;
 in
 {
   port = 9753;

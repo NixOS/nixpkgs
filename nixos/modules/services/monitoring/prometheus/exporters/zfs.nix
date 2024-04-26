@@ -1,9 +1,14 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
 
 let
   cfg = config.services.prometheus.exporters.zfs;
+  inherit (lib)
+    mkOption
+    types
+    concatStringsSep
+    concatMapStringsSep
+    ;
 in
 {
   port = 9134;

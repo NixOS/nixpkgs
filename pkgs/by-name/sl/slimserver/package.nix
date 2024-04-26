@@ -1,109 +1,124 @@
-{ faad2
-, fetchFromGitHub
-, flac
-, lame
-, lib
-, makeWrapper
-, monkeysAudio
-, nixosTests
-, perlPackages
-, sox
-, stdenv
-, wavpack
-, zlib
-, enableUnfreeFirmware ? false
+{
+  faad2,
+  fetchFromGitHub,
+  flac,
+  lame,
+  lib,
+  makeWrapper,
+  monkeysAudio,
+  nixosTests,
+  perlPackages,
+  sox,
+  stdenv,
+  wavpack,
+  zlib,
+  enableUnfreeFirmware ? false,
 }:
 
 let
-  binPath = lib.makeBinPath ([ lame flac faad2 sox wavpack ] ++ (lib.optional stdenv.isLinux monkeysAudio));
-  libPath = lib.makeLibraryPath [ zlib stdenv.cc.cc.lib ];
+  binPath = lib.makeBinPath (
+    [
+      lame
+      flac
+      faad2
+      sox
+      wavpack
+    ]
+    ++ (lib.optional stdenv.isLinux monkeysAudio)
+  );
+  libPath = lib.makeLibraryPath [
+    zlib
+    stdenv.cc.cc.lib
+  ];
 in
 perlPackages.buildPerlPackage rec {
   pname = "slimserver";
-  version = "8.5.0";
+  version = "8.5.1";
 
   src = fetchFromGitHub {
     owner = "LMS-Community";
     repo = "slimserver";
     rev = version;
-    hash = "sha256-yDJVqZ0+qVm4r/wmQK/hf9uRJaN56WQMO28RE59mNNI=";
+    hash = "sha256-ULyYZC0/ruJCdwR6cxvBRV1S3DTBJiNua64foi80qvI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = with perlPackages; [
-    AnyEvent
-    ArchiveZip
-    AsyncUtil
-    AudioScan
-    CarpClan
-    CGI
-    ClassAccessor
-    ClassAccessorChained
-    ClassC3
-    # ClassC3Componentised # Error: DBIx::Class::Row::throw_exception(): DBIx::Class::Relationship::BelongsTo::belongs_to(): Can't infer join condition for track
-    ClassDataInheritable
-    ClassInspector
-    ClassISA
-    ClassMember
-    ClassSingleton
-    ClassVirtual
-    ClassXSAccessor
-    CompressRawZlib
-    CryptOpenSSLRSA
-    DataDump
-    DataPage
-    DataURIEncode
-    DBDSQLite
-    DBI
-    # DBIxClass # https://github.com/LMS-Community/slimserver/issues/138
-    DigestSHA1
-    EncodeDetect
-    EV
-    ExporterLite
-    FileBOM
-    FileCopyRecursive
-    FileNext
-    FileReadBackwards
-    FileSlurp
-    FileWhich
-    HTMLParser
-    HTTPCookies
-    HTTPDaemon
-    HTTPMessage
-    ImageScale
-    IOAIO
-    IOInterface
-    IOSocketSSL
-    IOString
-    JSONXS
-    JSONXSVersionOneAndTwo
-    # LogLog4perl # Internal error: Root Logger not initialized.
-    LWP
-    LWPProtocolHttps
-    MP3CutGapless
-    NetHTTP
-    NetHTTPSNB
-    PathClass
-    ProcBackground
-    # SQLAbstract # DBI Exception: DBD::SQLite::db prepare_cached failed: no such function: ARRAY
-    SQLAbstractLimit
-    SubName
-    TemplateToolkit
-    TextUnidecode
-    TieCacheLRU
-    TieCacheLRUExpires
-    TieRegexpHash
-    TimeDate
-    URI
-    URIFind
-    UUIDTiny
-    XMLParser
-    XMLSimple
-    YAMLLibYAML
-  ]
-  # ++ (lib.optional stdenv.isDarwin perlPackages.MacFSEvents)
-  ++ (lib.optional stdenv.isLinux perlPackages.LinuxInotify2);
+  buildInputs =
+    with perlPackages;
+    [
+      AnyEvent
+      ArchiveZip
+      AsyncUtil
+      AudioScan
+      CarpClan
+      CGI
+      ClassAccessor
+      ClassAccessorChained
+      ClassC3
+      # ClassC3Componentised # Error: DBIx::Class::Row::throw_exception(): DBIx::Class::Relationship::BelongsTo::belongs_to(): Can't infer join condition for track
+      ClassDataInheritable
+      ClassInspector
+      ClassISA
+      ClassMember
+      ClassSingleton
+      ClassVirtual
+      ClassXSAccessor
+      CompressRawZlib
+      CryptOpenSSLRSA
+      DataDump
+      DataPage
+      DataURIEncode
+      DBDSQLite
+      DBI
+      # DBIxClass # https://github.com/LMS-Community/slimserver/issues/138
+      DigestSHA1
+      EncodeDetect
+      EV
+      ExporterLite
+      FileBOM
+      FileCopyRecursive
+      FileNext
+      FileReadBackwards
+      FileSlurp
+      FileWhich
+      HTMLParser
+      HTTPCookies
+      HTTPDaemon
+      HTTPMessage
+      ImageScale
+      IOAIO
+      IOInterface
+      IOSocketSSL
+      IOString
+      JSONXS
+      JSONXSVersionOneAndTwo
+      # LogLog4perl # Internal error: Root Logger not initialized.
+      LWP
+      LWPProtocolHttps
+      MP3CutGapless
+      NetHTTP
+      NetHTTPSNB
+      PathClass
+      ProcBackground
+      # SQLAbstract # DBI Exception: DBD::SQLite::db prepare_cached failed: no such function: ARRAY
+      SQLAbstractLimit
+      SubName
+      TemplateToolkit
+      TextUnidecode
+      TieCacheLRU
+      TieCacheLRUExpires
+      TieRegexpHash
+      TimeDate
+      URI
+      URIFind
+      UUIDTiny
+      XMLParser
+      XMLSimple
+      YAMLLibYAML
+    ]
+    # ++ (lib.optional stdenv.isDarwin perlPackages.MacFSEvents)
+    ++ (lib.optional stdenv.isLinux perlPackages.LinuxInotify2);
 
   prePatch = ''
     # remove vendored binaries
@@ -151,14 +166,17 @@ perlPackages.buildPerlPackage rec {
   };
 
   meta = with lib; {
-    homepage = "https://github.com/LMS-Community/slimserver";
+    homepage = "https://lyrion.org/";
     changelog = "https://github.com/LMS-Community/slimserver/blob/${version}/Changelog${lib.versions.major version}.html";
-    description = "Server for Logitech Squeezebox players. This server is also called Logitech Media Server";
+    description = "Lyrion Music Server (formerly Logitech Media Server) is open-source server software which controls a wide range of Squeezebox audio players.";
     # the firmware is not under a free license, so we do not include firmware in the default package
     # https://github.com/LMS-Community/slimserver/blob/public/8.3/License.txt
     license = if enableUnfreeFirmware then licenses.unfree else licenses.gpl2Only;
     mainProgram = "slimserver";
-    maintainers = with maintainers; [ adamcstephens jecaro ];
+    maintainers = with maintainers; [
+      adamcstephens
+      jecaro
+    ];
     platforms = platforms.unix;
     broken = stdenv.isDarwin;
   };

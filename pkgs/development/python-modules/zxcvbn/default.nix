@@ -25,6 +25,6 @@ buildPythonPackage rec {
     mainProgram = "zxcvbn";
     homepage = "https://github.com/dwolfhub/zxcvbn-python";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

@@ -1,9 +1,14 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.postgres;
+  inherit (lib)
+    mkOption
+    types
+    mkIf
+    mkForce
+    concatStringsSep
+    ;
 in
 {
   port = 9187;

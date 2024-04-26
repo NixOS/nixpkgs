@@ -1,9 +1,16 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.nginx;
+  inherit (lib)
+    mkOption
+    types
+    mkMerge
+    mkRemovedOptionModule
+    mkRenamedOptionModule
+    mkIf
+    concatStringsSep
+    ;
 in
 {
   port = 9113;
