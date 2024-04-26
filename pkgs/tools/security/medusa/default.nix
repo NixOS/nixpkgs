@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jmk-foofus/medusa";
     description = "A speedy, parallel, and modular, login brute-forcer";
     mainProgram = "medusa";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];
   };
 }

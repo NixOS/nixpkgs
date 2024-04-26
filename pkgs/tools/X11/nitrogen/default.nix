@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       and settings are stored in a human-readable config file.
     '';
     homepage = "https://github.com/l3ib/nitrogen";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.auntie ];
     mainProgram = "nitrogen";
