@@ -398,6 +398,13 @@
     sha256 = "186a06d0f8603f7e0faeed5296ecc73bf1096e0d681acea42d5ebccc1670357b";
     description = "Microsoft Azure Command-Line Tools EdgeOrderManagementClient Extension";
   };
+  edgezones = mkAzExtension rec {
+    pname = "edgezones";
+    version = "1.0.0b1";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/edgezones-${version}-py3-none-any.whl";
+    sha256 = "98f1b962dcbb078cfb8cd12d40a58d01bcc37db441570f84e293ba0ba52c6c08";
+    description = "Microsoft Azure Command-Line Tools Edgezones Extension";
+  };
   elastic = mkAzExtension rec {
     pname = "elastic";
     version = "1.0.0b2";
