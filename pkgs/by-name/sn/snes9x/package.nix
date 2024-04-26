@@ -21,16 +21,21 @@
   portaudio,
   pulseaudio,
   python3,
+  qt6,
   stdenv,
+  unstableGitUpdater,
   util-linuxMinimal,
+  wayland,
   wrapGAppsHook,
   zlib,
   # Boolean flags
-  withGtk ? false,
+  interface ? "x11",
 }:
 
+assert lib.elem interface [ "gtk" "qt" "x11" "macos" ];
+assert (interface == "macos") -> stdenv.isDarwin;
 stdenv.mkDerivation (finalAttrs: {
-  pname = "snes9x" + lib.optionalString withGtk "-gtk";
+  pname = "snes9x-${interface}";
   version = "1.62.3-unstable-2024-04-22";
 
   src = fetchFromGitHub {
@@ -42,12 +47,18 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    SDL2
     pkg-config
     python3
   ]
-  ++ lib.optionals withGtk [
+  ++ lib.optionals (interface == "gtk" || interface == "qt") [
     cmake
     ninja
+  ]
+  ++ lib.optionals (interface == "qt") [
+    qt6.wrapQtAppsHook
+  ]
+  ++ lib.optionals (interface == "gtk") [
     wrapGAppsHook
   ];
 
@@ -63,12 +74,16 @@ stdenv.mkDerivation (finalAttrs: {
     libselinux
     util-linuxMinimal # provides libmount
   ]
-  ++ lib.optionals (!withGtk) [
+  ++ lib.optionals (interface == "x11") [
     libpng
     libXext
     libXinerama
   ]
-  ++ lib.optionals withGtk [
+  ++ lib.optionals (interface == "qt") [
+    qt6.qtbase
+    wayland
+  ]
+  ++ lib.optionals (interface == "gtk") [
     gtkmm3
     libepoxy
     libXdmcp
@@ -77,6 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
     portaudio
     SDL2
   ];
+
+  strictDeps = true;
 
   hardeningDisable = [ "format" ];
 
@@ -87,11 +104,18 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-avx2"
   ];
 
-  preConfigure = ''
-    cd ${if withGtk then "gtk" else "unix"}
+  preConfigure = let
+    directory = {
+      "gtk" = "gtk";
+      "macos" = "macos";
+      "qt" = "qt";
+      "x11" = "unix";
+    }.${interface};
+  in ''
+    cd ${directory}
   '';
 
-  installPhase = lib.optionalString (!withGtk) ''
+  installPhase = lib.optionalString (interface == "x11") ''
     runHook preInstall
 
     install -Dm755 snes9x -t "$out/bin/"
@@ -102,9 +126,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = let
-    interface = if withGtk then "GTK" else "X11";
-  in
+  passthru = {
+    updateScript = unstableGitUpdater {};
+  };
+
+  meta =
     {
       homepage = "https://www.snes9x.com";
       description = "Super Nintendo Entertainment System (SNES) emulator, ${interface} version";
@@ -126,6 +152,10 @@ stdenv.mkDerivation (finalAttrs: {
         thiagokokada
       ];
       platforms = lib.platforms.unix;
-      broken = (withGtk && stdenv.isDarwin);
+      broken = (interface == "gtk" && stdenv.isDarwin)
+               # [ AndersonTorres ] qt has no native install phase
+               || (interface == "qt")
+               # [ AndersonTorres ] I don't have a Darwin machine to play with
+               || (interface == "macos");
     };
 })
