@@ -18938,8 +18938,6 @@ with pkgs;
 
   grail = callPackage ../development/libraries/grail { };
 
-  graphene-hardened-malloc = callPackage ../development/libraries/graphene-hardened-malloc { };
-
   graphene = callPackage ../development/libraries/graphene { };
 
   griffe = with python3Packages; toPythonApplication griffe;
