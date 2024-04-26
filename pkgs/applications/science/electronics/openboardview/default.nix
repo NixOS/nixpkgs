@@ -9,7 +9,7 @@
 , SDL2
 , fontconfig
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , darwin
 }:
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkg-config python3 wrapGAppsHook ];
+  nativeBuildInputs = [ cmake pkg-config python3 wrapGAppsHook3 ];
   buildInputs = [ SDL2 fontconfig gtk3 ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
   ];

@@ -26,7 +26,7 @@
 , sqlite
 , wrapQtAppsHook
 , xdg-utils
-, wrapGAppsHook
+, wrapGAppsHook3
 , unrarSupport ? false
 }:
 
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     qmake
     removeReferencesTo
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
   ];
 

@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , glib
-, wrapGAppsHook
+, wrapGAppsHook3
 , xorg
 , marco
 , mate-panel
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     glib
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = lib.forEach selectedApplets (x: x.buildInputs) ++ selectedApplets

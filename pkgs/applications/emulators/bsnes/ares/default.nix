@@ -16,7 +16,7 @@
 , pkg-config
 , udev
 , which
-, wrapGAppsHook
+, wrapGAppsHook3
 , darwin
 }:
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     which
-    wrapGAppsHook
+    wrapGAppsHook3
   ] ++ lib.optionals stdenv.isDarwin [
     libicns
   ];

@@ -3,7 +3,7 @@
 , python3
 , glibcLocales
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 , keybinder3
 , libnotify
@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
     python3.pkgs.pip
   ];
 

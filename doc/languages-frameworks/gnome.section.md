@@ -167,7 +167,7 @@ python3.pkgs.buildPythonApplication {
   version = "3.32.2";
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
     # ...
   ];
@@ -189,7 +189,7 @@ mkDerivation {
   version = "3.47.0";
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     qmake
     # ...
   ];

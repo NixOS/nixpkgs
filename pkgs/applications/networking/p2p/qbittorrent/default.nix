@@ -10,7 +10,7 @@
 , qtbase
 , qtsvg
 , qttools
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 
 , guiSupport ? true
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
   ];
 

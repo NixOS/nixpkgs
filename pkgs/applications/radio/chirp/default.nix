@@ -4,7 +4,7 @@
 , gsettings-desktop-schemas
 , python3
 , unstableGitUpdater
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
     gsettings-desktop-schemas
   ];
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   propagatedBuildInputs = with python3.pkgs; [
     future

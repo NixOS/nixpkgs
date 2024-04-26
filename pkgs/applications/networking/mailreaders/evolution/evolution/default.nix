@@ -17,7 +17,7 @@
 , libgweather
 , glib-networking
 , gsettings-desktop-schemas
-, wrapGAppsHook
+, wrapGAppsHook3
 , itstool
 , shared-mime-info
 , libical
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     libxml2
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

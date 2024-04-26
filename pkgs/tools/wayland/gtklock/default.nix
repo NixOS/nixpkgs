@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, wrapGAppsHook
+, wrapGAppsHook3
 , pam
 , scdoc
 , gtk3
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     pkg-config
     wayland-scanner
     glib
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

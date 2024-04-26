@@ -30,7 +30,7 @@
 , polkit
 , lib
 , stdenv
-, wrapGAppsHook
+, wrapGAppsHook3
 , libxml2
 , gtk-doc
 , gnome
@@ -140,7 +140,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     meson
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     intltool
     gtk-doc
     perl

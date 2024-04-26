@@ -28,7 +28,7 @@ nss,
 pango,
 stdenv,
 systemd,
-wrapGAppsHook,
+wrapGAppsHook3,
 xorg,
 }:
 
@@ -95,7 +95,7 @@ in stdenv.mkDerivation {
 
   inherit src;
 
-  buildInputs = [ dpkg wrapGAppsHook gtk3 ];
+  buildInputs = [ dpkg wrapGAppsHook3 gtk3 ];
   dontUnpack = true;
 
   buildCommand = ''

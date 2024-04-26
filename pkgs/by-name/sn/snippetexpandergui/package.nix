@@ -1,7 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromSourcehut
-, wrapGAppsHook
+, wrapGAppsHook3
 , wails
 , scdoc
 , installShellFiles
@@ -28,7 +28,7 @@ buildGoModule rec {
     wails
     scdoc
     installShellFiles
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

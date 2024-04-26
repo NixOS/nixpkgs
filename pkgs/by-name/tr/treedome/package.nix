@@ -13,7 +13,7 @@
 , pkg-config
 , rustPlatform
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 , sqlite
 }:
 
@@ -98,7 +98,7 @@ rustPlatform.buildRustPackage {
     cmake
     pkg-config
     cargo-tauri
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, cmake, wrapGAppsHook
+, cmake, wrapGAppsHook3
 , libX11, libzip, glfw, libpng, xorg, gnome
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-6acFt0fyL0yStUwreGggJ+7Zi+0Fqburj/ytmf+Oi4w=";
   };
 
-  nativeBuildInputs = [ cmake wrapGAppsHook ];
+  nativeBuildInputs = [ cmake wrapGAppsHook3 ];
   buildInputs = [ libX11 libzip glfw libpng ]
     ++ (with xorg; [ libXrandr libXinerama libXcursor libXi libXxf86vm libXext ]);
 

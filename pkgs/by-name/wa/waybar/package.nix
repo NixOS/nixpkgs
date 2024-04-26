@@ -41,7 +41,7 @@
 , upower
 , wayland
 , wireplumber
-, wrapGAppsHook
+, wrapGAppsHook3
 
 , cavaSupport ? true
 , evdevSupport ? true
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     scdoc
-    wrapGAppsHook
+    wrapGAppsHook3
   ] ++ lib.optional withMediaPlayer gobject-introspection;
 
   propagatedBuildInputs = lib.optionals withMediaPlayer [

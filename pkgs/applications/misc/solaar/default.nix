@@ -3,7 +3,7 @@
 , gobject-introspection
 , gtk3
 , python3Packages
-, wrapGAppsHook
+, wrapGAppsHook3
 , gdk-pixbuf
 , libappindicator
 , librsvg
@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     gdk-pixbuf
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

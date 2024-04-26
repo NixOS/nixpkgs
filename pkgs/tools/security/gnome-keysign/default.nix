@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitLab
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , gtk3
 , glib
@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ] ++ (with python3.pkgs; [
     babel

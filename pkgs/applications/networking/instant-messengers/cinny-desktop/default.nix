@@ -7,7 +7,7 @@
 , cargo-tauri
 , cinny
 , copyDesktopItems
-, wrapGAppsHook
+, wrapGAppsHook3
 , pkg-config
 , openssl
 , dbus
@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     copyDesktopItems
-    wrapGAppsHook
+    wrapGAppsHook3
     pkg-config
     cargo-tauri
   ];

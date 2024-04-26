@@ -55,7 +55,7 @@
 , stdenv
 , systemd
 , wayland
-, wrapGAppsHook
+, wrapGAppsHook3
 , xdg-utils
 
 # for custom command line arguments, e.g. "--use-gl=desktop"

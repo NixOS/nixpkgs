@@ -4,7 +4,7 @@
 , ant
 , jdk
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 , makeDesktopItem
 , copyDesktopItems
 , stripJavaArchivesHook
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     ant
     jdk
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
     copyDesktopItems
     stripJavaArchivesHook
   ];

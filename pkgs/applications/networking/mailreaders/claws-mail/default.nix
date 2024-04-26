@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, wrapGAppsHook, autoreconfHook, bison, flex
+{ stdenv, lib, fetchurl, wrapGAppsHook3, autoreconfHook, bison, flex
 , curl, gtk3, pkg-config, python3, shared-mime-info
 , glib-networking, gsettings-desktop-schemas
 
@@ -123,7 +123,7 @@ in stdenv.mkDerivation rec {
         --subst-var-by MIMEROOTDIR ${shared-mime-info}/share
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config bison flex wrapGAppsHook ];
+  nativeBuildInputs = [ autoreconfHook pkg-config bison flex wrapGAppsHook3 ];
   propagatedBuildInputs = pythonPkgs;
 
   buildInputs =

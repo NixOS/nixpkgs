@@ -40,7 +40,7 @@
 , potrace
 , python3
 , substituteAll
-, wrapGAppsHook
+, wrapGAppsHook3
 , libepoxy
 , zlib
 }:
@@ -119,7 +119,7 @@ stdenv.mkDerivation rec {
     python3Env
     glib # for setup hook
     gdk-pixbuf # for setup hook
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ] ++ (with perlPackages; [
     perl

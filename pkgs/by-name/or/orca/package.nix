@@ -3,7 +3,7 @@
 , fetchurl
 , meson
 , ninja
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , gettext
 , yelp-tools
@@ -50,7 +50,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     meson
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     pkg-config
     gettext
     yelp-tools

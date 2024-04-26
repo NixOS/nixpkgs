@@ -7,7 +7,7 @@
 , gtk3
 , gobject-introspection
 , libnotify
-, wrapGAppsHook
+, wrapGAppsHook3
 , vte
 , nixosTests
 }:
@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     file
     intltool
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
     python3.pkgs.pytest-runner
   ];
 

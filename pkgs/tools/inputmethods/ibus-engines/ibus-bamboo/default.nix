@@ -4,7 +4,7 @@
 , gettext
 , xorg
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 , go
 }:
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     gettext
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     go
   ];
 

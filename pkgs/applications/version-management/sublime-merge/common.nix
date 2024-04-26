@@ -18,7 +18,7 @@
   pango,
   libredirect,
   makeWrapper,
-  wrapGAppsHook,
+  wrapGAppsHook3,
   pkexecPath ? "/run/wrappers/bin/pkexec",
   writeShellScript,
   common-updater-scripts,
@@ -77,7 +77,7 @@ let
     ];
     nativeBuildInputs = [
       makeWrapper
-      wrapGAppsHook
+      wrapGAppsHook3
     ];
 
     buildPhase = ''

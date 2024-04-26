@@ -3,7 +3,7 @@
 , perl
 , buildPerlModule
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 , withGtk3 ? false
 , ffmpeg
 , mpv
@@ -48,10 +48,10 @@ buildPerlModule rec {
   };
 
   nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optionals withGtk3 [ wrapGAppsHook ];
+    ++ lib.optionals withGtk3 [ wrapGAppsHook3 ];
 
   buildInputs = [ perlEnv ]
-    # Can't be in perlEnv for wrapGAppsHook to work correctly
+    # Can't be in perlEnv for wrapGAppsHook3 to work correctly
     ++ lib.optional withGtk3 Gtk3;
 
   # Not supported by buildPerlModule

@@ -20,7 +20,7 @@
 , ninja
 , pkg-config
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , xapp
 , yelp-tools
 }:
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
     yelp-tools
   ];
 

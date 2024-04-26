@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, wrapGAppsHook
+, wrapGAppsHook3
 , cmake
 , gettext
 , maxima
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs:{
   ];
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     cmake
     gettext
   ];

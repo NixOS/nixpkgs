@@ -5,7 +5,7 @@
 , pkg-config
 , gnome
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , libxml2
 , gettext
 , itstool
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     itstool
     libxml2
     gnome.adwaita-icon-theme

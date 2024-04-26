@@ -17,7 +17,7 @@
   cairo,
   pango,
   makeWrapper,
-  wrapGAppsHook,
+  wrapGAppsHook3,
   writeShellScript,
   common-updater-scripts,
   curl,
@@ -80,7 +80,7 @@ let
 
     nativeBuildInputs = [
       makeWrapper
-      wrapGAppsHook
+      wrapGAppsHook3
     ];
 
     buildPhase = ''

@@ -8,7 +8,7 @@
   makeBinaryWrapper,
   makeWrapper,
   undmg,
-  wrapGAppsHook,
+  wrapGAppsHook3,
 
   libappindicator,
   libnotify,
@@ -84,7 +84,7 @@ let
       autoPatchelfHook
       dpkg
       makeWrapper
-      wrapGAppsHook
+      wrapGAppsHook3
     ];
 
     buildInputs = [

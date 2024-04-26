@@ -7,7 +7,7 @@
 , deepin-gettext-tools
 , gettext
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , ddcutil
 , alsa-lib
 , glib
@@ -95,7 +95,7 @@ buildGoModule rec {
     deepin-gettext-tools
     gettext
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

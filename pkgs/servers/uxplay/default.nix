@@ -5,7 +5,7 @@
 , openssl
 , libplist
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , avahi
 , avahi-compat
 , gst_all_1
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     libplist
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

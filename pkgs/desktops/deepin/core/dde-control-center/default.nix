@@ -6,7 +6,7 @@
 , qttools
 , doxygen
 , wrapQtAppsHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , dtkwidget
 , qt5integration
 , qt5platform-plugins
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     qttools
     doxygen
     wrapQtAppsHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   dontWrapGApps = true;
 

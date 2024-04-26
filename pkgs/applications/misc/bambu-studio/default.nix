@@ -8,7 +8,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  wrapGAppsHook,
+  wrapGAppsHook3,
   boost179,
   cereal,
   cgal_5,
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

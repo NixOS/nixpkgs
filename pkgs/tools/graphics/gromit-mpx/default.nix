@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config
 , gtk, glib, pcre, libappindicator, libpthreadstubs, xorg
 , libxkbcommon, libepoxy, at-spi2-core, dbus, libdbusmenu
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-olDQGw0qDWwXpqRopVoEPDXLRpFiiBo+/jiVeL7R6QA=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook3 ];
   buildInputs = [
     gtk glib pcre libappindicator libpthreadstubs
     xorg.libXdmcp libxkbcommon libepoxy at-spi2-core

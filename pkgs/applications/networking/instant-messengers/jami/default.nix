@@ -50,7 +50,7 @@
 , qtsvg
 , qtwebengine
 , qtwebchannel
-, wrapGAppsHook
+, wrapGAppsHook3
 , withWebengine ? true
 
   # for pjsip
@@ -204,7 +204,7 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
     pkg-config
     cmake

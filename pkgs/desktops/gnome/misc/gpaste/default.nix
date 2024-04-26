@@ -14,7 +14,7 @@
 , pkg-config
 , vala
 , desktop-file-utils
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     vala
     desktop-file-utils
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

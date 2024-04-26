@@ -10,7 +10,7 @@
 , gupnp
 , imagemagick
 , mate-desktop
-, wrapGAppsHook
+, wrapGAppsHook3
 , mateUpdateScript
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     gettext
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

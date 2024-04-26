@@ -1,4 +1,4 @@
-{ lib, stdenv, requireFile, makeWrapper, autoPatchelfHook, wrapGAppsHook, which, more
+{ lib, stdenv, requireFile, makeWrapper, autoPatchelfHook, wrapGAppsHook3, which, more
 , file, atk, alsa-lib, cairo, fontconfig, gdk-pixbuf, glib, webkitgtk, gtk2-x11, gtk3
 , heimdal, krb5, libsoup, libvorbis, speex, openssl, zlib, xorg, pango, gtk2
 , gnome2, mesa, nss, nspr, gtk_engines, freetype, dconf, libpng12, libxml2
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     more
     which
-    wrapGAppsHook
+    wrapGAppsHook3
     libfaketime
   ];
 

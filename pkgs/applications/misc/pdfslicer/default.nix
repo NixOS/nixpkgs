@@ -5,7 +5,7 @@
 , gettext
 , intltool
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtkmm3
 , libuuid
 , poppler
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     gettext
     intltool
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

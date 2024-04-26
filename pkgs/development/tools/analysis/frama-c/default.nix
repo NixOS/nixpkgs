@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch, makeWrapper, writeText
 , graphviz, doxygen
 , ocamlPackages, ltl2ba, coq, why3
-, gdk-pixbuf, wrapGAppsHook
+, gdk-pixbuf, wrapGAppsHook3
 }:
 
 let
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ wrapGAppsHook ] ++ (with ocamlPackages; [ ocaml findlib dune_3 menhir ]);
+  nativeBuildInputs = [ wrapGAppsHook3 ] ++ (with ocamlPackages; [ ocaml findlib dune_3 menhir ]);
 
   buildInputs = with ocamlPackages; [
     dune-site dune-configurator

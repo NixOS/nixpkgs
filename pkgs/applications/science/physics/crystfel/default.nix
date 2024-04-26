@@ -17,7 +17,7 @@
 , ninja
 , eigen
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , flex
 , bison
 , doxygen
@@ -178,7 +178,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-nCO9ndDKS54bVN9IhFBiCVNzqk7BsCljXFrOmlx+sP4=";
   };
   nativeBuildInputs = [ meson pkg-config ninja flex bison doxygen opencl-headers makeWrapper ]
-    ++ lib.optionals withGui [ wrapGAppsHook ];
+    ++ lib.optionals withGui [ wrapGAppsHook3 ];
   buildInputs = [
     hdf5
     gsl

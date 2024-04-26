@@ -18,7 +18,7 @@
 , glib-networking
 , granite
 , evolution-data-server
-, wrapGAppsHook
+, wrapGAppsHook3
 , libgee
 }:
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

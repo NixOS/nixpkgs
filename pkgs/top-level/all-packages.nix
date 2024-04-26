@@ -40144,7 +40144,7 @@ with pkgs;
   rfc-bibtex = callPackage ../tools/typesetting/rfc-bibtex { };
 
   pick-colour-picker = python3Packages.callPackage ../applications/graphics/pick-colour-picker {
-    inherit glib gtk3 gobject-introspection wrapGAppsHook;
+    inherit glib gtk3 gobject-introspection wrapGAppsHook3;
   };
 
   rpl = callPackage ../tools/text/rpl { };

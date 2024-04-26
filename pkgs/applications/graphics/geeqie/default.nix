@@ -3,7 +3,7 @@
 , libarchive, djvulibre, libheif, openjpeg, libjxl, libraw, lua5_3, poppler
 , gspell, libtiff, libwebp
 , gphoto2, imagemagick, yad, exiftool, gnome, libnotify
-, wrapGAppsHook, fetchpatch, doxygen
+, wrapGAppsHook3, fetchpatch, doxygen
 , nix-update-script
 }:
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs =
     [ pkg-config gettext intltool
-      wrapGAppsHook doxygen
+      wrapGAppsHook3 doxygen
       meson ninja xxd
     ];
 

@@ -12,7 +12,7 @@
 , libxml2
 , pkg-config
 , substituteAll
-, wrapGAppsHook
+, wrapGAppsHook3
 , zenity
 }:
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     gettext
     libxml2
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
