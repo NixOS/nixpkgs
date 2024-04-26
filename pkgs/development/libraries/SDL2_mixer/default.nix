@@ -1,46 +1,39 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, AudioToolbox
-, AudioUnit
-, CoreServices
-, SDL2
-, flac
-, fluidsynth
-, libmodplug
-, libogg
-, libvorbis
-, mpg123
-, opusfile
-, smpeg2
-, timidity
+{
+  lib,
+  SDL2,
+  darwin,
+  fetchFromGitHub,
+  flac,
+  fluidsynth,
+  libmodplug,
+  libogg,
+  libvorbis,
+  mpg123,
+  opusfile,
+  pkg-config,
+  smpeg2,
+  stdenv,
+  timidity,
 }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit AudioToolbox;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2_mixer";
   version = "2.8.0";
 
-  src = fetchurl {
-    url = "https://www.libsdl.org/projects/SDL_mixer/release/${pname}-${version}.tar.gz";
-    sha256 = "sha256-HPs0yHsm29vHr9aMT1RcARarX5C7/sxa6+Kpy0uzFUk=";
+  src = fetchFromGitHub {
+    owner = "libsdl-org";
+    repo = "SDL_mixer";
+    rev = "release-${finalAttrs.version}";
+    hash = "sha256-jLKawxnwP5dJglUhgHfWgmKh27i32Rr4LcJQdpXasco=";
   };
 
-  configureFlags = [
-    "--disable-music-ogg-shared"
-    "--disable-music-flac-shared"
-    "--disable-music-mod-modplug-shared"
-    "--disable-music-mp3-mpg123-shared"
-    "--disable-music-opus-shared"
-    "--disable-music-midi-fluidsynth-shared"
-
-    # override default path to allow MIDI files to be played
-    "--with-timidity-cfg=${timidity}/share/timidity/timidity.cfg"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "--disable-sdltest"
-    "--disable-smpegtest"
+  nativeBuildInputs = [
+    SDL2
+    pkg-config
   ];
-
-  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
     AudioToolbox
@@ -64,11 +57,26 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  meta = with lib; {
-    description = "SDL multi-channel audio mixer library";
-    platforms = platforms.unix;
+  strictDeps = true;
+
+  configureFlags = [
+   (lib.enableFeature false "music-ogg-shared")
+   (lib.enableFeature false "music-flac-shared")
+   (lib.enableFeature false "music-mod-modplug-shared")
+   (lib.enableFeature false "music-mp3-mpg123-shared")
+   (lib.enableFeature false "music-opus-shared")
+   (lib.enableFeature false "music-midi-fluidsynth-shared")
+   (lib.enableFeature (!stdenv.isDarwin) "sdltest")
+   (lib.enableFeature (!stdenv.isDarwin) "smpegtest")
+   # override default path to allow MIDI files to be played
+   (lib.withFeatureAs true "timidity-cfg" "${timidity}/share/timidity/timidity.cfg")
+  ];
+
+  meta = {
     homepage = "https://github.com/libsdl-org/SDL_mixer";
-    maintainers = with maintainers; [ AndersonTorres ];
-    license = licenses.zlib;
+    description = "SDL multi-channel audio mixer library";
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-}
+})

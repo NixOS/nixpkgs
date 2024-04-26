@@ -24340,9 +24340,7 @@ with pkgs;
     };
   });
 
-  SDL2_mixer = callPackage ../development/libraries/SDL2_mixer {
-    inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit AudioToolbox;
-  };
+  SDL2_mixer = callPackage ../development/libraries/SDL2_mixer { };
   # SDL2_mixer_2_0 pinned for lzwolf
   SDL2_mixer_2_0 = callPackage ../development/libraries/SDL2_mixer/2_0.nix { };
 
