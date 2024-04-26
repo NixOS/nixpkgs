@@ -841,9 +841,9 @@
   };
   scheduled-query = mkAzExtension rec {
     pname = "scheduled-query";
-    version = "0.5.3";
+    version = "1.0.0b1";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/scheduled_query-${version}-py2.py3-none-any.whl";
-    sha256 = "b141ce4ff7678484561e9f3c842d8249112a465b7a0da07a6da49856920f8534";
+    sha256 = "fd5e69d0438b8089dbe197d5ba4c41776aed906941cac374755a4c9044c4af04";
     description = "Microsoft Azure Command-Line Tools Scheduled_query Extension";
   };
   scvmm = mkAzExtension rec {
