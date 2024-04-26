@@ -965,6 +965,13 @@
     sha256 = "98bda4d9a9233efb0ae1c5fae1a6c2a42942e8a71b0ebf19d3a7193548b13ff2";
     description = "Microsoft Azure Command-Line Tools TrafficCollector Extension";
   };
+  trustedsigning = mkAzExtension rec {
+    pname = "trustedsigning";
+    version = "1.0.0b2";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/trustedsigning-${version}-py3-none-any.whl";
+    sha256 = "c3ae869c1371493180b9ed71db0bdc3842bad54c8832beb6007118d26bed71e8";
+    description = "Microsoft Azure Command-Line Tools Trustedsigning Extension";
+  };
   virtual-network-manager = mkAzExtension rec {
     pname = "virtual-network-manager";
     version = "1.0.1";
