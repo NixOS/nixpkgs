@@ -181,13 +181,6 @@
     sha256 = "f71250d1c26690cc0e175cd5c9bcd59e76c7b701bb3a47c8273e4cf8bcca878e";
     description = "Microsoft Azure Command-Line Tools BillingBenefits Extension";
   };
-  blockchain = mkAzExtension rec {
-    pname = "blockchain";
-    version = "0.1.1";
-    url = "https://azcliprod.blob.core.windows.net/cli-extensions/blockchain-${version}-py3-none-any.whl";
-    sha256 = "95a4788ab10052f6c1b4122db6ab140705db528e5cb3db3358580d703a2a7204";
-    description = "Microsoft Azure Command-Line Tools BlockchainManagementClient Extension";
-  };
   blueprint = mkAzExtension rec {
     pname = "blueprint";
     version = "0.3.2";
