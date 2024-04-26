@@ -41,6 +41,6 @@ buildNimPackage (finalAttrs: {
     description = "Language Server Protocol implementation for Nim";
     homepage = "https://github.com/PMunch/nimlsp";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.marsam ];
+    maintainers = [ ];
   };
 })

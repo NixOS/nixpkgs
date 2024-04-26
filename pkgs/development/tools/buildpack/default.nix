@@ -32,6 +32,6 @@ buildGoModule rec {
     description = "CLI for building apps using Cloud Native Buildpacks";
     mainProgram = "pack";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

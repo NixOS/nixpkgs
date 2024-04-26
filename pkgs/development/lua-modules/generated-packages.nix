@@ -202,7 +202,7 @@ buildLuarocksPackage {
   meta = {
     homepage = "https://github.com/sile-typesetter/cassowary.lua";
     description = "The cassowary constraint solver";
-    maintainers = with lib.maintainers; [ marsam alerque ];
+    maintainers = with lib.maintainers; [ alerque ];
     license.fullName = "Apache 2";
   };
 }) {};
@@ -315,7 +315,7 @@ buildLuarocksPackage {
   meta = {
     homepage = "http://cosmo.luaforge.net";
     description = "Safe templates for Lua";
-    maintainers = with lib.maintainers; [ marsam ];
+    maintainers = with lib.maintainers; [ ];
     license.fullName = "MIT/X11";
   };
 }) {};
@@ -440,11 +440,11 @@ buildLuarocksPackage {
   version = "2.7-1";
   knownRockspec = (fetchurl {
     url    = "mirror://luarocks/dkjson-2.7-1.rockspec";
-    sha256 = "0kgrgyn848hadsfhf2wccamgdpjs1cz7424fjp9vfqzjbwa06lxd";
+    sha256 = "sha256-rVMDFF/yY7fTlY4Icj4LWt72qmKMCwedbgoigqx/+U0=";
   }).outPath;
   src = fetchurl {
     url    = "http://dkolf.de/dkjson-lua/dkjson-2.7.tar.gz";
-    sha256 = "1jc8mhhahvxk968865p3qxqxcjr0k8kzbl8zc12rk4zmc3id4y4z";
+    sha256 = "sha256-TFGmIQLy9r23Z3fx23NgUJtKARaANYi06CVfQ1ryOVw=";
   };
 
   disabled = (luaOlder "5.1") || (luaAtLeast "5.5");

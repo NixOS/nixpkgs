@@ -1,9 +1,14 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.minio;
+  inherit (lib)
+    mkOption
+    types
+    optionalString
+    concatStringsSep
+    escapeShellArg
+    ;
 in
 {
   port = 9290;

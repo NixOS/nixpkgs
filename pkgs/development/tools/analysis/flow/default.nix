@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/facebook/flow/blob/v${version}/Changelog.md";
     license = licenses.mit;
     platforms = ocamlPackages.ocaml.meta.platforms;
-    maintainers = with maintainers; [ marsam puffnfresh ];
+    maintainers = with maintainers; [ puffnfresh ];
   };
 }

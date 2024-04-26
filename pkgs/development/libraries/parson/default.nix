@@ -18,6 +18,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/kgabis/parson";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

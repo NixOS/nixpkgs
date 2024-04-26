@@ -13,7 +13,7 @@ bundlerApp rec {
     changelog = "https://github.com/presidentbeef/brakeman/blob/v${version}/CHANGES.md";
     license = [ licenses.unfreeRedistributable ];
     platforms = ruby.meta.platforms;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     mainProgram = "brakeman";
   };
 }

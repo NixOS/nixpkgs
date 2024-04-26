@@ -24,6 +24,6 @@ buildGoModule rec {
     description = "A simple tool for making locally-trusted development certificates";
     mainProgram = "mkcert";
     license = licenses.bsd3;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

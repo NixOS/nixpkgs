@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/nix-community/nixd";
     changelog = "https://github.com/nix-community/nixd/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ inclyc Ruixi-rebirth marsam ];
+    maintainers = with lib.maintainers; [ inclyc Ruixi-rebirth ];
     mainProgram = "nixd";
     platforms = lib.platforms.unix;
   };

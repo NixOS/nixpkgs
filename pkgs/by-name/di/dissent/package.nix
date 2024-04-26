@@ -18,13 +18,13 @@
 
 buildGoModule rec {
   pname = "dissent";
-  version = "0.0.23";
+  version = "0.0.24";
 
   src = fetchFromGitHub {
     owner = "diamondburned";
     repo = "dissent";
     rev = "v${version}";
-    hash = "sha256-aHY2XmrJv2SSoXIKj63xu6t+Yzaur/6OJUFKga7DWDg=";
+    hash = "sha256-XoppHkKQhWZbqVIViGIV0e0W/NhZW0v6ufmXlVtmzvI=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +56,7 @@ buildGoModule rec {
     install -D -m 444 internal/icons/hicolor/scalable/apps/so.libdb.dissent.svg $out/share/icons/hicolor/scalable/apps/so.libdb.dissent.svg
   '';
 
-  vendorHash = "sha256-mwY1M81EWfbF/gYXQl5bcEXxN9N1npD+GgUSMc7gy90=";
+  vendorHash = "sha256-8/k9auM7+rceV26f3pNjEK1trzzAM530CX008pLZ1OA=";
 
   meta = with lib; {
     description = "GTK4 Discord client in Go, attempt #4 (formerly gtkcord4)";

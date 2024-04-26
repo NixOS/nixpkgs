@@ -25,6 +25,6 @@ buildPythonPackage rec {
     description = "Add comments and annotation to your documentation";
     homepage = "https://github.com/executablebooks/sphinx-comments";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }
