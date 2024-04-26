@@ -5,12 +5,13 @@
 , fetchPypi
 , isodate
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-recoveryservicesbackup";
   version = "9.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -19,7 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-Hp/UBsDJ7iYn9aNx8BL4dzQvf8bzOyVk/NFNbwZjzQ8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     azure-common
     azure-mgmt-core
     isodate
