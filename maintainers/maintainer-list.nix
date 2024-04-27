@@ -11860,6 +11860,12 @@
     githubId = 148352;
     name = "Jim Fowler";
   };
+  Kitt3120 = {
+    email = "nixpkgs@schweren.dev";
+    github = "Kitt3120";
+    githubId = 10689811;
+    name = "Torben Schweren";
+  };
   kittywitch = {
     email = "kat@inskip.me";
     github = "kittywitch";
