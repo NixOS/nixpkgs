@@ -6,12 +6,11 @@
  */
 
 #include <boost/program_options.hpp>
-#include <cstdio>
 #include <filesystem>
-#include <format>
 #include <fstream>
 #include <iostream>
 #include <memory>
+#include <print>
 #include <vector>
 
 #include <wfslib/wfslib.h>
@@ -25,19 +24,19 @@ std::string inline prettify_path(const std::filesystem::path& path) {
 
 void quotaInfo(int depth, const std::filesystem::path& path, const std::shared_ptr<QuotaArea>& quota) {
   std::string padding(depth, '\t');
-  std::cout << std::format("{}Area {} [0x{:08x}-0x{:08x}]:\n", padding, prettify_path(path),
-                           quota->device_block_number(), quota->to_area_block_number(quota->blocks_count()));
+  std::println("{}Area {} [0x{:08x}-0x{:08x}]:", padding, prettify_path(path), quota->device_block_number(),
+               quota->to_area_block_number(quota->blocks_count()));
 
   padding += '\t';
   std::shared_ptr<FreeBlocksAllocator> allocator = throw_if_error(quota->GetFreeBlocksAllocator());
   FreeBlocksTree tree(allocator.get());
   auto* allocator_header = EPTree(allocator.get()).extra_header();
 
-  std::cout << std::format("{}Free blocks: 0x{:08x}\n", padding, allocator_header->free_blocks_count.value());
-  std::cout << std::format("{}Free metadata blocks: 0x{:08x}\n", padding,
-                           quota->to_device_block_number(allocator_header->free_blocks_cache_count.value()));
-  std::cout << std::format("{}Free metadata block: 0x{:08x}\n", padding,
-                           quota->to_device_block_number(allocator_header->free_blocks_cache_count.value()));
+  std::println("{}Free blocks: 0x{:08x}", padding, allocator_header->free_blocks_count.value());
+  std::println("{}Free metadata blocks: 0x{:08x}", padding,
+               quota->to_device_block_number(allocator_header->free_blocks_cache_count.value()));
+  std::println("{}Free metadata block: 0x{:08x}", padding,
+               quota->to_device_block_number(allocator_header->free_blocks_cache_count.value()));
 
   std::vector<FreeBlocksRangeInfo> ranges;
   for (const auto& extent : tree) {
@@ -47,11 +46,11 @@ void quotaInfo(int depth, const std::filesystem::path& path, const std::shared_p
       ranges.push_back({extent.block_number(), extent.blocks_count()});
   }
 
-  std::cout << std::format("{}Free ranges:\n", padding);
+  std::println("{}Free ranges:", padding);
   padding += '\t';
   for (const auto& range : ranges) {
-    std::cout << std::format("{}[0x{:08x}-0x{:08x}]\n", padding, quota->to_device_block_number(range.block_number),
-                             quota->to_device_block_number(range.block_number + range.blocks_count));
+    std::println("{}[0x{:08x}-0x{:08x}]", padding, quota->to_device_block_number(range.block_number),
+                 quota->to_device_block_number(range.block_number + range.blocks_count));
   }
 }
 
@@ -67,7 +66,7 @@ void dirInfo(int depth, const std::shared_ptr<Directory>& dir, const std::filesy
       if (item->is_directory())
         dirInfo(depth, std::dynamic_pointer_cast<Directory>(item), npath);
     } catch (const WfsException& e) {
-      std::cout << std::format("Error: Failed to dump {} ({})\n", prettify_path(npath), e.what());
+      std::println(std::cerr, "Error: Failed to dump {} ({})", prettify_path(npath), e.what());
     }
   }
 }
@@ -112,10 +111,9 @@ int main(int argc, char* argv[]) {
       boost::program_options::store(boost::program_options::parse_command_line(argc, argv, desc), vm);
 
       if (vm.count("help")) {
-        std::cout << "usage: wfs-info --input <input file> [--type <type>]" << std::endl
-                  << "                [--otp <path> [--seeprom <path>]]" << std::endl
-                  << std::endl
-                  << std::endl;
+        std::println("usage: wfs-info --input <input file> [--type <type>]");
+        std::println("                [--otp <path> [--seeprom <path>]]");
+        std::println("");
         std::cout << desc << std::endl;
         return 0;
       }
@@ -136,8 +134,8 @@ int main(int argc, char* argv[]) {
         throw boost::program_options::error("Missing --seeprom");
 
     } catch (const boost::program_options::error& e) {
-      std::cerr << "Error: " << e.what() << std::endl;
-      std::cerr << "Use --help to display program options" << std::endl;
+      std::println(std::cerr, "Error: {}", e.what());
+      std::println(std::cerr, "Use --help to display program options");
       return 1;
     }
 
@@ -146,20 +144,20 @@ int main(int argc, char* argv[]) {
     auto detection_result = Recovery::DetectDeviceParams(device, key);
     if (detection_result.has_value()) {
       if (*detection_result == WfsError::kInvalidWfsVersion)
-        std::cerr << "Error: Incorrect WFS version, possible wrong keys";
+        std::println(std::cerr, "Error: Incorrect WFS version, possible wrong keys");
       else
         throw WfsException(*detection_result);
       return 1;
     }
     auto wfs_device = throw_if_error(WfsDevice::Open(device, key));
-    std::cout << "Allocator state:" << std::endl;
+    std::println("Allocator state:");
     auto transactions_area = throw_if_error(wfs_device->GetTransactionsArea());
-    std::cout << std::format("Transactions area [0x{:08x}-0x{:08x}]\n", transactions_area->device_block_number(),
-                             transactions_area->to_device_blocks_count(transactions_area->blocks_count()));
+    std::println("Transactions area [0x{:08x}-0x{:08x}]", transactions_area->device_block_number(),
+                 transactions_area->to_device_blocks_count(transactions_area->blocks_count()));
     dirInfo(0, throw_if_error(wfs_device->GetRootDirectory()), {});
-    std::cout << "Done!" << std::endl;
+    std::println("Done!");
   } catch (std::exception& e) {
-    std::cerr << "Error: " << e.what() << std::endl;
+    std::println(std::cerr, "Error: {}", e.what());
     return 1;
   }
   return 0;

@@ -148,10 +148,7 @@ brew install cmake ninja pkg-config llvm macfuse
 ```
 Build using the installled llvm:
 ```
-# For x86-64
-export CC=/usr/local/opt/llvm/bin/clang
-export CXX=/usr/local/opt/llvm/bin/clang++
-# For arm
-export CC=/opt/homebrew/opt/llvm/bin/clang
-export CXX=/opt/homebrew/opt/llvm/bin/clang++
+export CC="$(brew --prefix llvm)"/bin/clang
+export CXX="$(brew --prefix llvm)"/bin/clang++
+export LDFLAGS=-L"$(brew --prefix llvm)"/lib/c++
 ```

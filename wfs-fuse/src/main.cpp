@@ -11,7 +11,7 @@
 #include <mutex>
 #include <string>
 
-static std::shared_ptr<WfsDevice> wfs_device;
+static std::shared_ptr<WfsDevice> g_wfs_device;
 
 struct locked_stream {
   std::unique_ptr<File::stream> stream;
@@ -21,7 +21,7 @@ struct locked_stream {
 static int wfs_getattr(const char* path, struct stat* stbuf) {
   memset(stbuf, 0, sizeof(struct stat));
 
-  auto item = wfs_device->GetObject(path);
+  auto item = g_wfs_device->GetObject(path);
   if (!item)
     return -ENOENT;
   if (item->is_directory()) {
@@ -47,7 +47,7 @@ static int wfs_readdir(const char* path, void* buf, fuse_fill_dir_t filler, off_
   (void)offset;
   (void)fi;
 
-  auto item = wfs_device->GetObject(path);
+  auto item = g_wfs_device->GetObject(path);
   if (!item || !item->is_directory())
     return -ENOENT;
 
@@ -62,7 +62,7 @@ static int wfs_readdir(const char* path, void* buf, fuse_fill_dir_t filler, off_
 }
 
 static int wfs_open(const char* path, struct fuse_file_info* fi) {
-  auto item = wfs_device->GetObject(path);
+  auto item = g_wfs_device->GetObject(path);
   if (!item->is_file())
     return -ENOENT;
 
@@ -96,7 +96,7 @@ static int wfs_read(const char* path, char* buf, size_t size, off_t offset, stru
 
 int wfs_readlink(const char* path, [[maybe_unused]] char* buf, [[maybe_unused]] size_t size) {
   // TODO
-  auto item = wfs_device->GetObject(path);
+  auto item = g_wfs_device->GetObject(path);
   if (!item || !item->is_link())
     return -ENOENT;
 
@@ -190,7 +190,7 @@ int main(int argc, char* argv[]) {
     return 1;
   }
   if (fuse_opt_parse(&args, &param, wfs_opts, wfs_process_arg)) {
-    printf("failed to parse option\n");
+    fprintf(stderr, "failed to parse option\n");
     return 1;
   }
 
@@ -202,15 +202,15 @@ int main(int argc, char* argv[]) {
   is_mlc = param.type && !strcmp(param.type, "mlc");
   is_plain = param.type && !strcmp(param.type, "plain");
   if (!is_usb && !is_mlc && !is_plain) {
-    printf("Unsupported type (--type=usb/mlc/plain)\n");
+    fprintf(stderr, "Unsupported type (--type=usb/mlc/plain)\n");
     return 1;
   }
   if ((is_mlc || is_usb) && !param.otp) {
-    printf("Missing otp file (--otp)\n");
+    fprintf(stderr, "Missing otp file (--otp)\n");
     return 1;
   }
   if (is_usb && !param.seeprom) {
-    printf("Missing seeprom file (--seeprom)\n");
+    fprintf(stderr, "Missing seeprom file (--seeprom)\n");
     return 1;
   }
   if (param.otp)
@@ -224,14 +224,19 @@ int main(int argc, char* argv[]) {
     auto detection_result = Recovery::DetectDeviceParams(device, key);
     if (detection_result.has_value()) {
       if (*detection_result == WfsError::kInvalidWfsVersion)
-        std::cerr << "Error: Incorrect WFS version, possible wrong keys";
+        fprintf(stderr, "Error: Incorrect WFS version, possible wrong keys\n");
       else
-        throw WfsException(*detection_result);
+        fprintf(stderr, "Error: %s\n", WfsException(*detection_result).what());
       return 1;
     }
-    wfs_device = throw_if_error(WfsDevice::Open(device, key));
+    auto wfs_device = WfsDevice::Open(device, key);
+    if (!wfs_device.has_value()) {
+      fprintf(stderr, "Error: %s\n", WfsException(wfs_device.error()).what());
+      return 1;
+    }
+    g_wfs_device = std::move(*wfs_device);
   } catch (std::exception& e) {
-    std::cerr << "Error: " << e.what() << std::endl;
+    fprintf(stderr, "Error: %s\n", e.what());
     return 1;
   }
 

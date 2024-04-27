@@ -8,10 +8,10 @@
 #include <boost/program_options.hpp>
 #include <cstdio>
 #include <filesystem>
-#include <format>
 #include <fstream>
 #include <iostream>
 #include <memory>
+#include <print>
 #include <vector>
 
 #include <wfslib/blocks_device.h>
@@ -83,18 +83,17 @@ void exploreDir(const std::shared_ptr<Directory>& dir, const std::filesystem::pa
       for ([[maybe_unused]] const auto& extent : tree) {
       }
     } catch (const WfsException& e) {
-      std::cout << std::format("Error: Failed to explore {} free blocks allocator ({})\n", prettify_path(path),
-                               e.what());
+      std::println(std::cerr, "Error: Failed to explore {} free blocks allocator ({})", prettify_path(path), e.what());
     }
     try {
       exploreDir(throw_if_error(quota->GetShadowDirectory1()), path / ".shadow_dir_1", true);
     } catch (const WfsException& e) {
-      std::cout << std::format("Error: Failed to explore {} shadow dir 12 ({})\n", prettify_path(path), e.what());
+      std::println(std::cerr, "Error: Failed to explore {} shadow dir 12 ({})", prettify_path(path), e.what());
     }
     try {
       exploreDir(throw_if_error(quota->GetShadowDirectory2()), path / ".shadow_dir_2", true);
     } catch (const WfsException& e) {
-      std::cout << std::format("Error: Failed to explore {} shadow dir 2 ({})\n", prettify_path(path), e.what());
+      std::println(std::cerr, "Error: Failed to explore {} shadow dir 2 ({})", prettify_path(path), e.what());
     }
   }
   for (auto [name, item_or_error] : *dir) {
@@ -112,14 +111,14 @@ void exploreDir(const std::shared_ptr<Directory>& dir, const std::filesystem::pa
           stream.read(data.data(), std::min(data.size(), to_read));
           auto read = stream.gcount();
           if (read <= 0) {
-            std::cerr << "Error: Failed to read /" << npath.generic_string() << std::endl;
+            std::println(std::cerr, "Error: Failed to read /{}", npath.generic_string());
             break;
           }
           to_read -= static_cast<size_t>(read);
         }
       }
     } catch (const WfsException& e) {
-      std::cout << std::format("Error: Failed to explore {} ({})\n", prettify_path(npath), e.what());
+      std::println(std::cerr, "Error: Failed to explore {} ({})", prettify_path(npath), e.what());
     }
   }
 }
@@ -128,12 +127,12 @@ void exploreTransactions(const std::shared_ptr<WfsDevice>& wfs_device) {
   try {
     throw_if_error(wfs_device->GetTransactionsArea(false));
   } catch (const WfsException& e) {
-    std::cout << std::format("Error: Failed to explore transactions area 1 ({})\n", e.what());
+    std::println(std::cerr, "Error: Failed to explore transactions area 1 ({})", e.what());
   }
   try {
     throw_if_error(wfs_device->GetTransactionsArea(true));
   } catch (const WfsException& e) {
-    std::cout << std::format("Error: Failed to explore transactions area 2 ({})\n", e.what());
+    std::println(std::cerr, "Error: Failed to explore transactions area 2 ({})", e.what());
   }
 }
 
@@ -183,12 +182,10 @@ int main(int argc, char* argv[]) {
       boost::program_options::store(boost::program_options::parse_command_line(argc, argv, desc), vm);
 
       if (vm.count("help")) {
-        std::cout << "usage: wfs-reencryptor --input <input file> [--output <output file>]" << std::endl
-                  << "                       [--input-type <type>] [--input-otp <path> [--input-seeprom <path>]]"
-                  << std::endl
-                  << "                       [--output-type <type>] [--output-otp <path> [--output-seeprom <path>]]"
-                  << std::endl
-                  << std::endl;
+        std::println("usage: wfs-reencryptor --input <input file> [--output <output file>]");
+        std::println("                       [--input-type <type>] [--input-otp <path> [--input-seeprom <path>]]");
+        std::println("                       [--output-type <type>] [--output-otp <path> [--output-seeprom <path>]]");
+        std::println("");
         std::cout << desc << std::endl;
         return 0;
       }
@@ -225,8 +222,8 @@ int main(int argc, char* argv[]) {
         throw boost::program_options::error("Missing --output-seeprom");
 
     } catch (const boost::program_options::error& e) {
-      std::cerr << "Error: " << e.what() << std::endl;
-      std::cerr << "Use --help to display program options" << std::endl;
+      std::println(std::cerr, "Error: {}", e.what());
+      std::println(std::cerr, "Use --help to display program options");
       return 1;
     }
 
@@ -237,7 +234,7 @@ int main(int argc, char* argv[]) {
     auto detection_result = Recovery::DetectDeviceParams(input_device, input_key);
     if (detection_result.has_value()) {
       if (*detection_result == WfsError::kInvalidWfsVersion)
-        std::cerr << "Error: Incorrect WFS version, possible wrong keys";
+        std::println(std::cerr, "Error: Incorrect WFS version, possible wrong keys");
       else
         throw WfsException(*detection_result);
       return 1;
@@ -248,17 +245,17 @@ int main(int argc, char* argv[]) {
                                                                     /*read_only=*/false, /*open_create=*/true)
                                      : input_device;
 
-    std::cout << "Exploring blocks..." << std::endl;
+    std::println("Exploring blocks...");
     auto reencryptor = std::make_shared<ReencryptorBlocksDevice>(input_device, input_key);
 
     auto wfs_device = throw_if_error(WfsDevice::Open(reencryptor));
     exploreTransactions(wfs_device);
     exploreDir(throw_if_error(wfs_device->GetRootDirectory()), {});
-    std::cout << std::format("Found {} blocks! Reencrypting...\n", reencryptor->blocks().size());
+    std::println("Found {} blocks! Reencrypting...", reencryptor->blocks().size());
     reencryptor->Reencrypt(std::make_shared<ReencryptorBlocksDevice>(output_device, output_key));
-    std::cout << "Done!" << std::endl;
+    std::println("Done!");
   } catch (std::exception& e) {
-    std::cerr << "Error: " << e.what() << std::endl;
+    std::println(std::cerr, "Error: {}", e.what());
     return 1;
   }
   return 0;

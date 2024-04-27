@@ -65,28 +65,28 @@ jobs:
           sudo apt install gcc-14 g++-14
           sudo apt install libfuse-dev
         if: matrix.platform == 'ubuntu-latest'
-
-      - name: Install requirements (MacOS)
+    
+      - name: Brew python fix
         run: |
-          brew update
           # Temporary fix, see https://github.com/actions/setup-python/issues/577
           rm /usr/local/bin/2to3 || true
           rm /usr/local/bin/idle3 || true
           rm /usr/local/bin/pydoc3 || true
           rm /usr/local/bin/python3 || true
           rm /usr/local/bin/python3-config || true
-          brew install llvm
-          brew install macfuse
         shell: bash
         if: matrix.platform == 'macos-13'
 
-      - name: Install requirements (MacOS arm64)
+      - name: Install requirements (MacOS)
         run: |
           brew update
           brew install llvm
           brew install macfuse
+          # Hack to properly target the os libcxx dynlib
+          sed -i '' '/^#define _LIBCPP_HAS_NO_VENDOR_AVAILABILITY_ANNOTATIONS/d' "$(brew --prefix llvm)"/include/c++/v1/__config_site
+          echo "CXXFLAGS=-mmacos-version-min=13.3" >> $GITHUB_ENV
         shell: bash
-        if: matrix.platform == 'macos-14'
+        if: matrix.platform == 'macos-13' || matrix.platform == 'macos-14'
 
       - name: Set compiler
         run: |

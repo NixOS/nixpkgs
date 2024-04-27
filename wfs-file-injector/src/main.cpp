@@ -6,10 +6,10 @@
  */
 
 #include <boost/program_options.hpp>
-#include <cstdio>
 #include <fstream>
 #include <iostream>
 #include <memory>
+#include <print>
 #include <vector>
 
 #include <wfslib/wfslib.h>
@@ -60,11 +60,10 @@ int main(int argc, char* argv[]) {
       boost::program_options::store(boost::program_options::parse_command_line(argc, argv, desc), vm);
 
       if (vm.count("help")) {
-        std::cout << "usage: wfs-file-injector --image <wfs image> [--type <type>]" << std::endl
-                  << "                         [--otp <path> [--seeprom <path>]]" << std::endl
-                  << "                         --inject-file <file to inject> --inject-path <file path in wfs>"
-                  << std::endl
-                  << std::endl;
+        std::println("usage: wfs-file-injector --image <wfs image> [--type <type>]");
+        std::println("                         [--otp <path> [--seeprom <path>]]");
+        std::println("                         --inject-file <file to inject> --inject-path <file path in wfs>");
+        std::println("");
         std::cout << desc << std::endl;
         return 0;
       }
@@ -85,8 +84,8 @@ int main(int argc, char* argv[]) {
         throw boost::program_options::error("Missing --seeprom");
 
     } catch (const boost::program_options::error& e) {
-      std::cerr << "Error: " << e.what() << std::endl;
-      std::cerr << "Use --help to display program options" << std::endl;
+      std::println(std::cerr, "Error: {}", e.what());
+      std::println(std::cerr, "Use --help to display program options");
       return 1;
     }
 
@@ -94,12 +93,12 @@ int main(int argc, char* argv[]) {
 
     std::ifstream input_file(inject_file, std::ios::binary | std::ios::in);
     if (input_file.fail()) {
-      std::cerr << "Failed to open file to inject" << std::endl;
+      std::println(std::cerr, "Failed to open file to inject");
       return 1;
     }
     input_file.seekg(0, std::ios::end);
     if (static_cast<uint64_t>(input_file.tellg()) > SIZE_MAX) {
-      std::cerr << "Error: File to inject too big" << std::endl;
+      std::println(std::cerr, "Error: File to inject too big");
       return 1;
     }
     size_t file_size = static_cast<size_t>(input_file.tellg());
@@ -109,19 +108,19 @@ int main(int argc, char* argv[]) {
     auto detection_result = Recovery::DetectDeviceParams(device, key);
     if (detection_result.has_value()) {
       if (*detection_result == WfsError::kInvalidWfsVersion)
-        std::cerr << "Error: Incorrect WFS version, possible wrong keys";
+        std::println(std::cerr, "Error: Incorrect WFS version, possible wrong keys");
       else
         throw WfsException(*detection_result);
       return 1;
     }
     auto file = throw_if_error(WfsDevice::Open(device, key))->GetFile(inject_path);
     if (!file) {
-      std::cerr << "Error: Didn't find file " << inject_path << " in wfs" << std::endl;
+      std::println(std::cerr, "Error: Didn't find file {} in wfs", inject_path);
       return 1;
     }
     if (file_size > file->SizeOnDisk()) {
-      std::cerr << "Error: File to inject too big (wanted size: " << file_size
-                << " bytes, available size: " << file->SizeOnDisk() << ")" << std::endl;
+      std::println(std::cerr, "Error: File to inject too big (wanted size: {} bytes, available size: {})", file_size,
+                   file->SizeOnDisk());
       return 1;
     }
     File::stream stream(file);
@@ -131,7 +130,7 @@ int main(int argc, char* argv[]) {
       input_file.read(data.data(), std::min(data.size(), to_copy));
       auto read = input_file.gcount();
       if (read <= 0) {
-        std::cerr << "Error: Failed to read file to inject" << std::endl;
+        std::println(std::cerr, "Error: Failed to read file to inject");
         return 1;
       }
       stream.write(data.data(), read);
@@ -142,9 +141,9 @@ int main(int argc, char* argv[]) {
     if (file_size < file->Size()) {
       file->Resize(file_size);
     }
-    std::cout << "Done!" << std::endl;
+    std::println("Done!");
   } catch (std::exception& e) {
-    std::cerr << "Error: " << e.what() << std::endl;
+    std::println(std::cerr, "Error: {}", e.what());
     return 1;
   }
   return 0;

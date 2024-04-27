@@ -9,10 +9,10 @@
 #include <boost/program_options.hpp>
 #include <cstdio>
 #include <filesystem>
-#include <format>
 #include <fstream>
 #include <iostream>
 #include <memory>
+#include <print>
 #include <vector>
 
 #include <wfslib/wfslib.h>
@@ -30,7 +30,7 @@ void dumpdir(const std::filesystem::path& target,
     target_dir /= path;
   if (!std::filesystem::exists(target_dir)) {
     if (!std::filesystem::create_directories(target_dir)) {
-      std::cerr << "Error: Failed to create directory " << target_dir.string() << std::endl;
+      std::println(std::cerr, "Error: Failed to create directory {}", target_dir.string());
       return;
     }
   }
@@ -39,7 +39,7 @@ void dumpdir(const std::filesystem::path& target,
     try {
       auto item = throw_if_error(item_or_error);
       if (verbose)
-        std::cout << "Dumping /" << npath.generic_string() << std::endl;
+        std::println("Dumping /{}", npath.generic_string());
       if (item->is_directory()) {
         dumpdir(target, std::dynamic_pointer_cast<Directory>(item), npath, verbose);
       } else if (item->is_file()) {
@@ -52,7 +52,7 @@ void dumpdir(const std::filesystem::path& target,
           stream.read(data.data(), std::min(data.size(), to_read));
           auto read = stream.gcount();
           if (read <= 0) {
-            std::cerr << "Error: Failed to read /" << npath.generic_string() << std::endl;
+            std::println(std::cerr, "Error: Failed to read /{}", npath.generic_string());
             break;
           }
           output_file.write(data.data(), read);
@@ -61,7 +61,7 @@ void dumpdir(const std::filesystem::path& target,
         output_file.close();
       }
     } catch (const WfsException& e) {
-      std::cout << std::format("Error: Failed to dump {} ({})\n", prettify_path(npath), e.what());
+      std::println(std::cerr, "Error: Failed to dump {} ({})", prettify_path(npath), e.what());
     }
   }
 }
@@ -112,10 +112,10 @@ int main(int argc, char* argv[]) {
       boost::program_options::store(boost::program_options::parse_command_line(argc, argv, desc), vm);
 
       if (vm.count("help")) {
-        std::cout << "usage: wfs-extract --input <input file> [--type <type>]" << std::endl
-                  << "                   [--otp <path> [--seeprom <path>]]" << std::endl
-                  << "                   [--dump-path <directory to dump>] [--verbose]" << std::endl
-                  << std::endl;
+        std::println("usage: wfs-extract --input <input file> [--type <type>]");
+        std::println("                   [--otp <path> [--seeprom <path>]]");
+        std::println("                   [--dump-path <directory to dump>] [--verbose]");
+        std::println("");
         std::cout << desc << std::endl;
         return 0;
       }
@@ -139,8 +139,8 @@ int main(int argc, char* argv[]) {
         throw boost::program_options::error("Missing --seeprom");
 
     } catch (const boost::program_options::error& e) {
-      std::cerr << "Error: " << e.what() << std::endl;
-      std::cerr << "Use --help to display program options" << std::endl;
+      std::println(std::cerr, "Error: {}", e.what());
+      std::println(std::cerr, "Use --help to display program options");
       return 1;
     }
 
@@ -154,9 +154,9 @@ int main(int argc, char* argv[]) {
       auto wfs_with_usr_dir = Recovery::OpenUsrDirectoryWithoutWfsDeviceHeader(device, key);
       if (!wfs_with_usr_dir.has_value()) {
         if (wfs_with_usr_dir.error() == WfsError::kInvalidWfsVersion) {
-          std::cerr
-              << "Error: Didn't find directory at the expected location, either the /usr dir is also corrupted or "
-                 "the keys are wrong";
+          std::println(std::cerr,
+                       "Error: Didn't find directory at the expected location, either the /usr dir is also corrupted "
+                       "or the keys are wrong");
         } else {
           throw WfsException(wfs_with_usr_dir.error());
         }
@@ -169,17 +169,17 @@ int main(int argc, char* argv[]) {
         } else if (dump_path.starts_with("usr/")) {
           dump_path = dump_path.substr(4);
         } else {
-          std::cerr << "Error: can only dump the /usr directory in this mode";
+          std::println(std::cerr, "Error: can only dump the /usr directory in this mode");
           return 1;
         }
       }
       auto dir = (*wfs_with_usr_dir)->GetDirectory(dump_path);
       if (!dir) {
-        std::cerr << "Error: Didn't find directory /usr/" << dump_path << " in wfs" << std::endl;
+        std::println(std::cerr, "Error: Didn't find directory /usr/{} in wfs", dump_path);
         return 1;
       }
       dumpdir(std::filesystem::path(output_path), dir, "usr/" + dump_path, verbose);
-      std::cout << "Done!" << std::endl;
+      std::println("Done!");
       return 0;
     }
 
@@ -187,21 +187,21 @@ int main(int argc, char* argv[]) {
     auto detection_result = Recovery::DetectDeviceParams(device, key);
     if (detection_result.has_value()) {
       if (*detection_result == WfsError::kInvalidWfsVersion)
-        std::cerr << "Error: Incorrect WFS version, possible wrong keys";
+        std::println(std::cerr, "Error: Incorrect WFS version, possible wrong keys");
       else
         throw WfsException(*detection_result);
       return 1;
     }
     auto dir = throw_if_error(WfsDevice::Open(device, key))->GetDirectory(dump_path);
     if (!dir) {
-      std::cerr << "Error: Didn't find directory " << dump_path << " in wfs" << std::endl;
+      std::println(std::cerr, "Error: Didn't find directory {} in wfs", dump_path);
       return 1;
     }
-    std::cout << "Dumping..." << std::endl;
+    std::println("Dumping...");
     dumpdir(std::filesystem::path(output_path), dir, dump_path, verbose);
-    std::cout << "Done!" << std::endl;
+    std::println("Done!");
   } catch (std::exception& e) {
-    std::cerr << "Error: " << e.what() << std::endl;
+    std::println(std::cerr, "Error: {}", e.what());
     return 1;
   }
   return 0;
