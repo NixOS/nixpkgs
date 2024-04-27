@@ -6,7 +6,7 @@
 , libGLU
 , libsndfile
 , openal
-, zig_0_11
+, zig
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-qdpXpuXHr9w2XMfgOVveWv3JoqdJHVB8TCqZdyaw/DM=";
   };
 
-  nativeBuildInputs = [ zig_0_11.hook ];
+  nativeBuildInputs = [ zig.hook ];
 
   buildInputs = [
     glfw

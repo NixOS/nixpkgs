@@ -36548,7 +36548,9 @@ with pkgs;
     inherit (perlPackages) PathTiny;
   };
 
-  blackshades = callPackage ../games/blackshades { };
+  blackshades = callPackage ../games/blackshades {
+    zig = zig_0_11;
+  };
 
   blobby = callPackage ../games/blobby { };
 
