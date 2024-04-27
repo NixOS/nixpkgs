@@ -7,13 +7,13 @@
 
 buildLua {
   pname = "mpv-webm";
-  version = "unstable-2023-11-18";
+  version = "unstable-2024-04-22";
 
   src = fetchFromGitHub {
     owner = "ekisu";
     repo = "mpv-webm";
-    rev = "6b5863f68275b3dc91c2507284c039ec8a4cbd97";
-    hash = "sha256-rJamBm6FyxWcJO7VXXOUTO9piWCkPfEVdqGKGeJ/h0c=";
+    rev = "225e8e53842f7da6f77034309c1e54293dc629a4";
+    hash = "sha256-82xWiuOChxfzX6e0+cGFxTqyuiPefyVwpvLM5ka7nPk=";
   };
   passthru.updateScript = unstableGitUpdater {};
 
