@@ -17,6 +17,8 @@
 , fetchFromGitHub
 , buildFHSEnv
 , glib-networking
+, wrapGAppsHook
+, gsettings-desktop-schemas
 }:
 let
   am2r-run = buildFHSEnv {
@@ -69,7 +71,9 @@ buildDotnetModule {
     openssl
   ];
 
-  buildInputs = [ gtk3 ];
+  nativeBuildInputs = [ wrapGAppsHook ];
+
+  buildInputs = [ gtk3 gsettings-desktop-schemas glib-networking ];
 
   patches = [ ./am2r-run-binary.patch ];
 
@@ -78,7 +82,6 @@ buildDotnetModule {
   postFixup = ''
     wrapProgram $out/bin/AM2RLauncher.Gtk \
       --prefix PATH : ${lib.makeBinPath [ am2r-run xdelta file openjdk patchelf ]} \
-      --prefix GIO_EXTRA_MODULES : ${glib-networking}/lib/gio/modules
 
     mkdir -p $out/share/icons
     install -Dm644 $src/AM2RLauncher/distribution/linux/AM2RLauncher.png $out/share/icons/AM2RLauncher.png
