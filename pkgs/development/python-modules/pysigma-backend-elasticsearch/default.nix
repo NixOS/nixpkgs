@@ -27,11 +27,11 @@ buildPythonPackage rec {
       --replace-fail " --cov=sigma --cov-report term --cov-report xml:cov.xml" ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pysigma
   ];
 
