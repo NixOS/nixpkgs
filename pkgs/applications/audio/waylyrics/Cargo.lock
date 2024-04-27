@@ -1783,8 +1783,7 @@ dependencies = [
 [[package]]
 name = "ksni"
 version = "0.2.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b31b9cf486bcd22bcd09900b44538cf87b00f526fcd087d671a632dc0d271d0c"
+source = "git+https://github.com/waylyrics/ksni.git#af6fa6e6e29b7cb3779f98c1ca3aaeb8744ef4c4"
 dependencies = [
  "dbus",
  "dbus-codegen",
@@ -2075,9 +2074,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "ncmapi"
+name = "ncmapi2"
 version = "0.1.13"
-source = "git+https://github.com/waylyrics/ncmapi-rs.git?rev=6095abf7#6095abf7e54eedbb716676d311e0741b4ac2482e"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dcd3c218f2db46fc0b26ac6263d3005b96c82d5ebec0d349c3c902eef8bd660c"
 dependencies = [
  "aes",
  "base64",
@@ -2610,7 +2610,8 @@ dependencies = [
 [[package]]
 name = "qqmusic-rs"
 version = "0.1.0"
-source = "git+https://github.com/waylyrics/qqmusic-rs.git?rev=22e66ba#22e66ba62e63d97c6dffb45400655404e6f06b93"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c7698cb357cfa1a75f5a2071469345ede01a6c4ee83a2ff2a88f9e481893f341"
 dependencies = [
  "serde",
  "serde_json",
@@ -3817,7 +3818,7 @@ checksum = "af190c94f2773fdb3729c55b007a722abb5384da03bc0986df4c289bf5567e96"
 
 [[package]]
 name = "waylyrics"
-version = "0.2.19"
+version = "0.3.5"
 dependencies = [
  "ahash 0.8.11",
  "anyhow",
@@ -3835,7 +3836,7 @@ dependencies = [
  "md5",
  "mimalloc",
  "mpris",
- "ncmapi",
+ "ncmapi2",
  "once_cell",
  "opencc-rust",
  "qqmusic-rs",
