@@ -1,20 +1,21 @@
-{ lib
-, SDL2
-, cmake
-, fetchFromGitHub
-, ffmpeg
-, discord-rpc
-, libedit
-, elfutils
-, libepoxy
-, libsForQt5
-, libzip
-, lua
-, minizip
-, pkg-config
-, stdenv
-, wrapGAppsHook
-, enableDiscordRpc ? false
+{
+  lib,
+  SDL2,
+  cmake,
+  fetchFromGitHub,
+  ffmpeg,
+  discord-rpc,
+  libedit,
+  elfutils,
+  libepoxy,
+  libsForQt5,
+  libzip,
+  lua,
+  minizip,
+  pkg-config,
+  stdenv,
+  wrapGAppsHook,
+  enableDiscordRpc ? false,
 }:
 
 let
@@ -92,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://raw.githubusercontent.com/mgba-emu/mgba/${finalAttrs.src.rev}/CHANGES";
     license = with lib.licenses; [ mpl20 ];
     mainProgram = "mgba";
-    maintainers = with lib.maintainers; [ MP2E AndersonTorres ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.linux;
     broken = enableDiscordRpc; # Some obscure `ld` error
   };

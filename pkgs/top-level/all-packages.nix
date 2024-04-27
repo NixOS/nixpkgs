@@ -2736,8 +2736,6 @@ with pkgs;
     description = mame.meta.description + " (tools only)";
   } (lib.getOutput "tools" mame);
 
-  mgba = libsForQt5.callPackage ../applications/emulators/mgba { };
-
   mupen64plus = callPackage ../applications/emulators/mupen64plus { };
 
   np2kai = callPackage ../applications/emulators/np2kai { };
