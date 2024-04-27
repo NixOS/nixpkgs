@@ -600,10 +600,10 @@
         "src": {
             "owner": "libretro",
             "repo": "opera-libretro",
-            "rev": "35e16483be900ea8aa20e87d2710b677437f73ce",
-            "hash": "sha256-ZNHSxI8l0KGJ6uAvOsEhNpB0IkBxtb9Imj3tA/LiOto="
+            "rev": "cacba231c3bd71833f06943e230fe03d8ebec0ab",
+            "hash": "sha256-pWLcolQw5ctWrL7YQUaUK04QPS4ReUeJhdig3O5T8BM="
         },
-        "version": "unstable-2024-01-13"
+        "version": "unstable-2024-04-24"
     },
     "parallel-n64": {
         "fetcher": "fetchFromGitHub",
