@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pandas
-, pyarrow
-, pythonOlder
-, pytz
-, setuptools
-, tomlkit
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pandas,
+  pyarrow,
+  pythonOlder,
+  pytz,
+  setuptools,
+  tomlkit,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
       --replace-fail '#readme = "README.rst"' 'version = "${version}"'
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     pytz
@@ -42,24 +41,18 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    numpy = [
-      numpy
-    ];
+    numpy = [ numpy ];
     pandas = [
       numpy
       pandas
     ];
-    pyarrow = [
-      pyarrow
-    ];
+    pyarrow = [ pyarrow ];
   };
 
   # Missing dependencies
   doCheck = false;
 
-  pythonImportsCheck = [
-    "neo4j"
-  ];
+  pythonImportsCheck = [ "neo4j" ];
 
   meta = with lib; {
     description = "Neo4j Bolt Driver for Python";
