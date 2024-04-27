@@ -24,7 +24,7 @@ self: super: {
     Cabal-syntax = self.Cabal-syntax_3_10_3_0;
   } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.2.5") {
     # Use process core package when possible
-    process = self.process_1_6_18_0;
+    process = self.process_1_6_19_0;
   }));
 
   # cabal-install needs most recent versions of Cabal and Cabal-syntax,
@@ -48,7 +48,7 @@ self: super: {
           # cabal-install, but we need to recompile process even if the correct
           # version is available to prevent inconsistent dependencies:
           # process depends on directory.
-          process = cself.process_1_6_18_0;
+          process = cself.process_1_6_19_0;
 
           # Prevent dependency on doctest which causes an inconsistent dependency
           # due to depending on ghc which depends on directory etc.
@@ -270,20 +270,7 @@ self: super: {
   ghcjs-base = null;
   ghcjs-prim = null;
 
-  # 2024-03-10: Compatibility fixes have been applied upstream, but are unreleased.
-  ghc-debug-brick = appendPatches [
-      (fetchpatch {
-        url = "https://gitlab.haskell.org/ghc/ghc-debug/-/commit/4f195b98a8d3159bd4586af49ea8e269214a848e.patch";
-        sha256 = "sha256-ZMxDkkI365w/qtRc21k9UTcIiTjoOd/BGJgt/6C6P6A=";
-        relative = "ghc-debug-brick";
-        includes = ["ghc-debug-brick.cabal"];
-      })
-      (fetchpatch {
-        url = "https://gitlab.haskell.org/ghc/ghc-debug/-/commit/5b8f848b82ea4c5a1867b9965a973e73e5d58dad.patch";
-        sha256 = "sha256-XydmqScUuXyxqvW1HeKlKiiGFQi/MkM81RMPxmADrhw=";
-        relative = "ghc-debug-brick";
-      })
-    ] super.ghc-debug-brick;
+  ghc-debug-client = doJailbreak super.ghc-debug-client;
 
   # Test failure.  Tests also disabled in Stackage:
   # https://github.com/jtdaugherty/brick/issues/499
@@ -411,6 +398,13 @@ self: super: {
         rm -r $out/doc/?ndroid*
       '';
     };
+
+    patches = drv.patches or [ ] ++ [
+      # Prevent .desktop files from being installed to $out/usr/share.
+      # TODO(@sternenseemann): submit upstreamable patch resolving this
+      # (this should be possible by also taking PREFIX into account).
+      ./patches/git-annex-no-usr-prefix.patch
+    ];
   }) super.git-annex;
 
   # Too strict bounds on servant
@@ -1587,8 +1581,14 @@ self: super: {
   jsaddle-dom = overrideCabal (old: {
     postPatch = old.postPatch or "" + ''
       sed -i 's/lens.*4.20/lens/' jsaddle-dom.cabal
+      rm Setup.hs
     '';
   }) (doJailbreak super.jsaddle-dom);
+  jsaddle-hello = doJailbreak super.jsaddle-hello;
+  ghcjs-dom-hello = doJailbreak super.ghcjs-dom-hello;
+
+  # Too strict upper bounds on text
+  lsql-csv = doJailbreak super.lsql-csv;
 
   reflex-dom = lib.pipe super.reflex-dom [
       (appendPatch
