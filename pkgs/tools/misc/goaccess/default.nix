@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, autoreconfHook
-, fetchFromGitHub
-, gettext
-, libmaxminddb
-, ncurses
-, openssl
-, withGeolocation ? true
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
+  gettext,
+  libmaxminddb,
+  ncurses,
+  openssl,
+  withGeolocation ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,25 +21,17 @@ stdenv.mkDerivation rec {
     hash = "sha256-FAooBAP2RbqAp7NTJNBdbRVldGCbx3SvOoTaiQ9Fl/I=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs = [
     ncurses
     openssl
-  ] ++ lib.optionals withGeolocation [
-    libmaxminddb
-  ] ++ lib.optionals stdenv.isDarwin [
-    gettext
-  ];
+  ] ++ lib.optionals withGeolocation [ libmaxminddb ] ++ lib.optionals stdenv.isDarwin [ gettext ];
 
   configureFlags = [
     "--enable-utf8"
     "--with-openssl"
-  ] ++ lib.optionals withGeolocation [
-    "--enable-geoip=mmdb"
-  ];
+  ] ++ lib.optionals withGeolocation [ "--enable-geoip=mmdb" ];
 
   meta = with lib; {
     description = "Real-time web log analyzer and interactive viewer that runs in a terminal in *nix systems";
