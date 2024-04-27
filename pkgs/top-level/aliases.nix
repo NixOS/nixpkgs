@@ -1017,6 +1017,8 @@ mapAliases ({
   pocket-updater-utility = pupdate; # Added 2024-01-25
   poetry2nix = throw "poetry2nix is now maintained out-of-tree. Please use https://github.com/nix-community/poetry2nix/"; # Added 2023-10-26
   prayer = throw "prayer has been removed from nixpkgs"; # Added 2023-11-09
+  prismlauncher-qt5 = throw "'prismlauncher-qt5' has been removed from nixpkgs. Please use 'prismlauncher'"; # Added 2024-04-20
+  prismlauncher-qt5-unwrapped = throw "'prismlauncher-qt5-unwrapped' has been removed from nixpkgs. Please use 'prismlauncher-unwrapped'"; # Added 2024-04-20
   privacyidea = throw "privacyidea has been removed from nixpkgs"; # Added 2023-10-31
   probe-rs-cli = throw "probe-rs-cli is now part of the probe-rs package"; # Added 2023-07-03
   processing3 = throw "'processing3' has been renamed to/replaced by 'processing'"; # Converted to throw 2023-09-10
