@@ -41,7 +41,7 @@
 # specified.
 , monorepoSrc ? null
 
-}:
+}@args:
 
 assert
   lib.assertMsg
@@ -53,19 +53,23 @@ assert
 let
   monorepoSrc' = monorepoSrc;
 in let
-  # Import releaseInfo separately to avoid infinite recursion
-  inherit (import ../common/common-let.nix { inherit lib gitRelease officialRelease; }) releaseInfo;
-  inherit (releaseInfo) release_version version;
-  inherit (import ../common/common-let.nix { inherit lib fetchFromGitHub release_version gitRelease officialRelease monorepoSrc'; }) llvm_meta monorepoSrc;
-
-  src = monorepoSrc;
+  metadata = rec {
+    # Import releaseInfo separately to avoid infinite recursion
+    inherit (import ../common/common-let.nix { inherit lib gitRelease officialRelease; }) releaseInfo;
+    inherit (releaseInfo) release_version version;
+    inherit (import ../common/common-let.nix { inherit lib fetchFromGitHub release_version gitRelease officialRelease monorepoSrc'; }) llvm_meta monorepoSrc;
+    src = monorepoSrc;
+  };
 
   tools = lib.makeExtensible (tools: let
-    callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version src buildLlvmTools; });
+    callPackage = newScope (tools // args // metadata
+      # Previously monorepoSrc was erroneously not being passed through.
+      // { monorepoSrc = null; } # Preserve a bug during #307211, TODO: remove; causes llvm 13 rebuild.
+    );
     mkExtraBuildCommands0 = cc: ''
       rsrc="$out/resource-root"
       mkdir "$rsrc"
-      ln -s "${cc.lib}/lib/clang/${release_version}/include" "$rsrc"
+      ln -s "${cc.lib}/lib/clang/${metadata.release_version}/include" "$rsrc"
       echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
     '';
     mkExtraBuildCommands = cc: mkExtraBuildCommands0 cc + ''
@@ -125,7 +129,6 @@ in let
       pollyPatches = [
         ./llvm/gnu-install-dirs-polly.patch
       ];
-      inherit llvm_meta;
     };
 
     # `llvm` historically had the binaries.  When choosing an output explicitly,
@@ -148,7 +151,6 @@ in let
           libllvmLibdir = "${tools.libllvm.lib}/lib";
         })
       ];
-      inherit llvm_meta;
     };
 
     clang-unwrapped = tools.libclang;
@@ -199,7 +201,6 @@ in let
       patches = [
         ./lld/gnu-install-dirs.patch
       ];
-      inherit llvm_meta;
     };
 
     lldb = callPackage ../common/lldb.nix {
@@ -232,7 +233,6 @@ in let
             && !stdenv.targetPlatform.isAarch64
             && (lib.versionOlder darwin.apple_sdk.sdk.version "11.0")
         ) ./lldb/cpu_subtype_arm64e_replacement.patch;
-      inherit llvm_meta;
     };
 
     # Below, is the LLVM bootstrapping logic. It handles building a
@@ -323,7 +323,10 @@ in let
   });
 
   libraries = lib.makeExtensible (libraries: let
-    callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake libxml2 python3 isl release_version version src; });
+    callPackage = newScope (libraries // buildLlvmTools // args // metadata
+      # Previously monorepoSrc was erroneously not being passed through.
+      // { monorepoSrc = null; } # Preserve a bug during #307211, TODO: remove; causes llvm 13 rebuild.
+    );
   in {
 
     compiler-rt-libc = callPackage ../common/compiler-rt {
@@ -344,7 +347,6 @@ in let
         ../common/compiler-rt/armv6-scudo-no-yield.patch
         ../common/compiler-rt/armv6-scudo-libatomic.patch
       ];
-      inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
                else stdenv;
@@ -368,7 +370,6 @@ in let
         ../common/compiler-rt/armv6-scudo-no-yield.patch
         ../common/compiler-rt/armv6-scudo-libatomic.patch
       ];
-      inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRt
                else stdenv;
@@ -399,16 +400,15 @@ in let
           ];
         })
       ];
-      inherit llvm_meta;
       stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
-      monorepoSrc = src;
+      # TODO: remove this, causes LLVM 13 packages rebuild.
+      inherit (metadata) monorepoSrc; # Preserve bug during #307211 refactor.
     };
 
     libunwind = callPackage ../common/libunwind {
       patches = [
         ./libunwind/gnu-install-dirs.patch
       ];
-      inherit llvm_meta;
       stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
@@ -420,9 +420,8 @@ in let
           hash = "sha256-UxIlAifXnexF/MaraPW0Ut6q+sf3e7y1fMdEv1q103A=";
         })
       ];
-      inherit llvm_meta targetLlvm;
     };
   });
   noExtend = extensible: lib.attrsets.removeAttrs extensible [ "extend" ];
 
-in { inherit tools libraries release_version; } // (noExtend libraries) // (noExtend tools)
+in { inherit tools libraries; inherit (metadata) release_version; } // (noExtend libraries) // (noExtend tools)
