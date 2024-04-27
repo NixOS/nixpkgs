@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "yabadaba";
-  version = "0.2.1";
+  version = "0.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "usnistgov";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-D3dzO+vhf1utBMmX2RUgvxuaPneFnXDseqfz6CMDmv4=";
+    hash = "sha256-NfvnUrTnOeNfiTMrcRtWU3a/Wb6qsDeQlk5jwZ1OpgI=";
   };
 
   propagatedBuildInputs = [
