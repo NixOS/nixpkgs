@@ -5,8 +5,6 @@
 , gobject-introspection
 , pkg-config
 , ninja
-, wayland
-, wayland-protocols
 , desktop-file-utils
 , makeWrapper
 , shared-mime-info
@@ -56,8 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libadwaita
     libsoup_3
-    wayland
-    wayland-protocols
     libmicrodns
   ];
 
