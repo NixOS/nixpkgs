@@ -20709,12 +20709,6 @@
     githubId = 131159000;
     name = "Nitin Passa";
   };
-  twitchyliquid64 = {
-    name = "Tom";
-    email = "twitchyliquid64@ciphersink.net";
-    github = "twitchyliquid64";
-    githubId = 6328589;
-  };
   twz123 = {
     name = "Tom Wieczorek";
     email = "tom@bibbu.net";
