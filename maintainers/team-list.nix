@@ -402,7 +402,6 @@ with lib.maintainers; {
       hedning
       jtojnar
       dasj19
-      amaxine
     ];
     githubTeams = [
       "gnome"
