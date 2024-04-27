@@ -14413,6 +14413,10 @@ with pkgs;
 
   tftp-hpa = callPackage ../tools/networking/tftp-hpa { };
 
+  tigerbeetle = callPackage ../by-name/ti/tigerbeetle/package.nix {
+    zig = zig_0_11;
+  };
+
   tigervnc = callPackage ../tools/admin/tigervnc { };
 
   tightvnc = callPackage ../tools/admin/tightvnc {
