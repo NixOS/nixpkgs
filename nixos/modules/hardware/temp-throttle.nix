@@ -9,16 +9,13 @@ let
     lib.optionalString (cfg.core      != null) "CORE=${toString cfg.core}\n" +
     lib.optionalString (cfg.log_file  != null) "LOG_FILE=${cfg.log_file}\n"
   ;
-in
-{
-  options =
-  let
+in {
+  options = let
     mkOption = lib.mkOption;
     nullOr = lib.types.nullOr;
     str = lib.types.str;
     int = lib.types.int;
-  in
-  {
+  in {
     services.temp-throttle = {
       enable = lib.mkEnableOption "Whether to enable temp-throttle service";
       package = mkOption {
@@ -39,13 +36,15 @@ in
       temp_file = mkOption {
         type = nullOr str;
         default = null;
-        description = "Force read CPU temperature from given file. Default auto detection";
+        description =
+          "Force read CPU temperature from given file. Default auto detection";
         example = "/sys/class/hwmon/hwmon1/device/temp1_input";
       };
       core = mkOption {
         type = nullOr int;
         default = null;
-        description = "Force read frequency from given CPU Core. May be needed for big.little endian. Default 0";
+        description =
+          "Force read frequency from given CPU Core. May be needed for big.little endian. Default 0";
       };
       log_file = mkOption {
         type = nullOr str;
@@ -56,11 +55,12 @@ in
   };
   config = lib.mkIf cfg.enable {
     systemd.services.temp-throttle = {
-      description = "Linux shell script for throttling system CPU frequency based on a desired maximum temperature";
+      description =
+        "Linux shell script for throttling system CPU frequency based on a desired maximum temperature";
       wantedBy = [ "basic.target" ];
       serviceConfig = with builtins; {
-        ExecStart = "${cfg.package}/bin/temp-throttle -c " +
-          toFile "temp-throttle.conf" configFile;
+        ExecStart = "${cfg.package}/bin/temp-throttle -c "
+          + toFile "temp-throttle.conf" configFile;
         Type = "simple";
       };
     };

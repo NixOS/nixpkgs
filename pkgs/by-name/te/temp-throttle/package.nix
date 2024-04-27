@@ -1,9 +1,7 @@
 { lib, stdenv, fetchFromGitHub }:
 
-let
-  version = "3.01";
-in
-stdenv.mkDerivation {
+let version = "3.01";
+in stdenv.mkDerivation {
   pname = "temp-throttle";
   inherit version;
   src = fetchFromGitHub {
@@ -23,7 +21,8 @@ stdenv.mkDerivation {
   '';
   meta = {
     homepage = "https://github.com/Sepero/temp-throttle";
-    description = "Linux shell script for throttling system CPU frequency based on a desired maximum temperature";
+    description =
+      "Linux shell script for throttling system CPU frequency based on a desired maximum temperature";
     mainProgram = "temp-throttle";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
