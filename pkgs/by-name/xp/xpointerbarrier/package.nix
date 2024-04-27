@@ -1,4 +1,5 @@
-{ lib,
+{
+  lib,
   stdenv,
   fetchurl,
   pkg-config,
@@ -16,9 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-V1sNAQjsPVSjJ2nhCSdZqZQA78pjUE0z3IU4+I85CpI=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libX11
@@ -32,7 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.uninformativ.de/git/xpointerbarrier/file/README.html";
     description = "Create X11 pointer barriers around your working area";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres xzfc ];
+    maintainers = with maintainers; [
+      AndersonTorres
+      xzfc
+    ];
     platforms = platforms.linux;
     mainProgram = "xpointerbarrier";
   };
