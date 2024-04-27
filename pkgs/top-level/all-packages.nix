@@ -6172,7 +6172,9 @@ with pkgs;
     zig = zig_0_11;
   };
 
-  rivercarro = callPackage ../applications/misc/rivercarro { };
+  rivercarro = callPackage ../applications/misc/rivercarro {
+    zig = zig_0_11;
+  };
 
   river-luatile = callPackage ../applications/misc/river-luatile{ };
 

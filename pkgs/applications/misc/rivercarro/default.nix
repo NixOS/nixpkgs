@@ -5,7 +5,7 @@
 , river
 , wayland
 , wayland-protocols
-, zig_0_11
+, zig
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     river
     wayland
     wayland-protocols
-    zig_0_11.hook
+    zig.hook
   ];
 
   meta = with lib; {
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://git.sr.ht/~novakane/rivercarro/refs/v${finalAttrs.version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kraem ];
-    inherit (zig_0_11.meta) platforms;
+    inherit (zig.meta) platforms;
     mainProgram = "rivercarro";
   };
 })
