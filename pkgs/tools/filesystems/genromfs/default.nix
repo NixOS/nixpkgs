@@ -9,11 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "0q6rpq7cmclmb4ayfyknvzbqysxs4fy8aiahlax1sb2p6k3pzwrh";
   };
 
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace "prefix = /usr" "prefix = $out" \
-      --replace "gcc" "cc"
-  '';
+  makeFlags = [
+    "prefix:=$(out)"
+    "CC:=$(CC)"
+  ];
 
   meta = with lib; {
     homepage = "https://romfs.sourceforge.net/";
