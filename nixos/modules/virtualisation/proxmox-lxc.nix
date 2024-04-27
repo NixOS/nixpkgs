@@ -55,6 +55,8 @@ with lib;
         loader.initScript.enable = true;
       };
 
+      console.enable = true;
+
       networking = mkIf (!cfg.manageNetwork) {
         useDHCP = false;
         useHostResolvConf = false;
@@ -68,8 +70,11 @@ with lib;
         startWhenNeeded = mkDefault true;
       };
 
-      systemd.mounts = mkIf (!cfg.privileged)
-        [{ where = "/sys/kernel/debug"; enable = false; }];
+      systemd = {
+        mounts = mkIf (!cfg.privileged)
+          [{ where = "/sys/kernel/debug"; enable = false; }];
+        services."getty@".unitConfig.ConditionPathExists = [ "" "/dev/%I" ];
+      };
 
     };
 }
