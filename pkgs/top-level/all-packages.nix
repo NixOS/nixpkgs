@@ -4347,6 +4347,11 @@ with pkgs;
 
   boca = callPackage ../development/libraries/boca { };
 
+  bochs = callPackage ../by-name/bo/bochs/package.nix {
+    docbook_xml_dtd = docbook_xml_dtd_45;
+    wxGTK = wxGTK32;
+  };
+
   bubblewrap = callPackage ../tools/admin/bubblewrap { };
 
   borgbackup = callPackage ../tools/backup/borgbackup { };

@@ -4,7 +4,7 @@
 , SDL2
 , curl
 , darwin
-, docbook_xml_dtd_45
+, docbook_xml_dtd
 , docbook_xsl
 , gtk3
 , libGL
@@ -16,7 +16,7 @@
 , pkg-config
 , readline
 , wget
-, wxGTK32
+, wxGTK
 , enableSDL2 ? true
 , enableTerm ? true
 , enableWx ? !stdenv.isDarwin
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    docbook_xml_dtd_45
+    docbook_xml_dtd
     docbook_xsl
     libtool
     pkg-config
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
   ] ++ lib.optionals enableWx [
     gtk3
-    wxGTK32
+    wxGTK
   ] ++ lib.optionals enableX11 [
     libGL
     libGLU
