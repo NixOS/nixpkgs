@@ -8019,7 +8019,9 @@ with pkgs;
 
   findutils = callPackage ../tools/misc/findutils { };
 
-  findup = callPackage ../tools/misc/findup { };
+  findup = callPackage ../tools/misc/findup {
+    zig = zig_0_10;
+  };
 
   fingerprintx = callPackage ../tools/security/fingerprintx { };
 
