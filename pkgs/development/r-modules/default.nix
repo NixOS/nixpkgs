@@ -359,6 +359,7 @@ let
     gert = [ pkgs.libgit2 ];
     haven = with pkgs; [ zlib.dev ];
     h5vc = with pkgs; [ zlib.dev bzip2.dev xz.dev ];
+    yyjsonr = with pkgs; [ zlib.dev ];
     highs = [ pkgs.which pkgs.cmake ];
     rbedrock = [ pkgs.zlib.dev pkgs.which pkgs.cmake ];
     HiCseg = [ pkgs.gsl ];
