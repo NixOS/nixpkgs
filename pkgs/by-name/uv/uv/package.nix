@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "uv";
-  version = "0.1.36";
+  version = "0.1.39";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
     rev = version;
-    hash = "sha256-ngKVc3RJzkkjIfeyRbPe2kzBSJH7T8wdyZo3DP9FwpU=";
+    hash = "sha256-o5KrguapmfihO8oAse+LjBH9MvSsUORyZRALxkU4+xA=";
   };
 
   cargoLock = {
@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/astral-sh/uv";
     changelog = "https://github.com/astral-sh/uv/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ GaetanLepage ];
     mainProgram = "uv";
   };
 }
