@@ -20,7 +20,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.3.7";
+  version = "0.3.8";
   pname = "potentials";
   format = "setuptools";
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vkrNVRf9ntYSpf8nXmAmGjc+sQ4iFllisYHd9s+uQv0=";
+    hash = "sha256-ZXsqsqsgWntZUOuW1/2KAhsbnienHu6VFctxYkw+GCU=";
   };
 
   propagatedBuildInputs = [
