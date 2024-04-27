@@ -67,6 +67,12 @@ let
 
   cxxCMakeFlags = [
     "-DLIBCXX_CXX_ABI=${cxxabiName}"
+  ] ++ lib.optionals (cxxabi == null && lib.versionAtLeast release_version "16") [
+    # Note: llvm < 16 doesn't support this flag (or it's broken); handled in postInstall instead.
+    # Include libc++abi symbols within libc++.a for static linking libc++;
+    # dynamic linking includes them through libc++.so being a linker script
+    # which includes both shared objects.
+    "-DLIBCXX_STATICALLY_LINK_ABI_IN_STATIC_LIBRARY=ON"
   ] ++ lib.optionals (cxxabi != null) [
     "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${lib.getDev cxxabi}/include"
   ] ++ lib.optionals (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) [
@@ -126,6 +132,31 @@ stdenv.mkDerivation (rec {
   postInstall = lib.optionalString (cxxabi != null) ''
     lndir ${lib.getDev cxxabi}/include $dev/include/c++/v1
     lndir ${lib.getLib cxxabi}/lib $out/lib
+    libcxxabi=$out/lib/lib${cxxabi.libName}.a
+  ''
+  # LIBCXX_STATICALLY_LINK_ABI_IN_STATIC_LIBRARY=ON doesn't work for LLVM < 16 or
+  # external cxxabi libraries so merge libc++abi.a into libc++.a ourselves.
+
+  # GNU binutils emits objects in LIFO order in MRI scripts so after the merge
+  # the objects are in reversed order so a second MRI script is required so the
+  # objects in the archive are listed in proper order (libc++.a, libc++abi.a)
+  + lib.optionalString (cxxabi != null || lib.versionOlder release_version "16") ''
+    libcxxabi=''${libcxxabi-$out/lib/libc++abi.a}
+    if [[ -f $out/lib/libc++.a && -e $libcxxabi ]]; then
+      $AR -M <<MRI
+        create $out/lib/libc++.a
+        addlib $out/lib/libc++.a
+        addlib $libcxxabi
+        save
+        end
+    MRI
+      $AR -M <<MRI
+        create $out/lib/libc++.a
+        addlib $out/lib/libc++.a
+        save
+        end
+    MRI
+    fi
   '';
 
   passthru = {
