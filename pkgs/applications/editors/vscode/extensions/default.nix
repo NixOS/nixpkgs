@@ -1911,7 +1911,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=Gleam.gleam";
           homepage = "https://github.com/gleam-lang/vscode-gleam#readme";
           license = lib.licenses.asl20;
-          maintainers = [ lib.maintainers.msfjarvis ];
+          maintainers = [ ];
         };
       };
 
