@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "graphviz";
-  version = "0.20.2";
+  version = "0.20.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xflr6";
     repo = "graphviz";
-    rev = version;
-    hash = "sha256-q5y4QPBCtA1kMhxbOECodSeubj2bULnnNDrZZfxiry4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-IqjqcBEL4BK/VfRjdxJ9t/DkG8OMAoXJxbW5JXpALuw=";
   };
 
   patches = [
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     fontDirectories = [ freefont_ttf ];
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
@@ -75,5 +75,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };
-
 }
