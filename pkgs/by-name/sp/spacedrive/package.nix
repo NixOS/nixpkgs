@@ -9,7 +9,7 @@
 
 let
   pname = "spacedrive";
-  version = "0.2.4";
+  version = "0.2.13";
 
   src = fetchurl {
     aarch64-darwin = {
@@ -22,7 +22,7 @@ let
     };
     x86_64-linux = {
       url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-linux-x86_64.AppImage";
-      hash = "sha256-D8etNXrDVLHa1wg+7Xu9yXUvhlAXxMVBM3GpOerFsu0=";
+      hash = "sha256-AyR1FshOjFatkZLgT2K46IKJgeFDu4e4//CvcuNyt0E=";
     };
   }.${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
 
