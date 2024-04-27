@@ -2400,6 +2400,12 @@ self: super: with self; {
 
   conda = callPackage ../development/python-modules/conda { };
 
+  conda-libmamba-solver = callPackage ../development/python-modules/conda-libmamba-solver { };
+
+  conda-package-handling = callPackage ../development/python-modules/conda-package-handling { };
+
+  conda-package-streaming = callPackage ../development/python-modules/conda-package-streaming { };
+
   confection = callPackage ../development/python-modules/confection { };
 
   configargparse = callPackage ../development/python-modules/configargparse { };
@@ -6621,6 +6627,8 @@ self: super: with self; {
     inherit (pkgs) lzfse;
   };
 
+  libmambapy = callPackage ../development/python-modules/libmambapy { };
+
   libmodulemd = lib.pipe pkgs.libmodulemd [
     toPythonModule
     (p:
@@ -9377,6 +9385,8 @@ self: super: with self; {
 
   panflute = callPackage ../development/python-modules/panflute { };
 
+  panphon = callPackage ../development/python-modules/panphon { };
+
   papermill = callPackage ../development/python-modules/papermill { };
 
   openpaperwork-core = callPackage ../applications/office/paperwork/openpaperwork-core.nix { };
@@ -9925,6 +9935,8 @@ self: super: with self; {
   pynobo = callPackage ../development/python-modules/pynobo { };
 
   pynose = callPackage ../development/python-modules/pynose { };
+
+  pynotifier = callPackage ../development/python-modules/pynotifier { };
 
   pynuki = callPackage ../development/python-modules/pynuki { };
 
@@ -12677,6 +12689,8 @@ self: super: with self; {
   pywatchman = callPackage ../development/python-modules/pywatchman { };
 
   pywaterkotte = callPackage ../development/python-modules/pywaterkotte { };
+
+  pywavefront = callPackage ../development/python-modules/pywavefront { };
 
   pywavelets = callPackage ../development/python-modules/pywavelets { };
 

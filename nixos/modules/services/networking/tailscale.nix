@@ -6,7 +6,7 @@ let
   cfg = config.services.tailscale;
   isNetworkd = config.networking.useNetworkd;
 in {
-  meta.maintainers = with maintainers; [ danderson mbaillie twitchyliquid64 mfrw ];
+  meta.maintainers = with maintainers; [ mbaillie mfrw ];
 
   options.services.tailscale = {
     enable = mkEnableOption "Tailscale client daemon";

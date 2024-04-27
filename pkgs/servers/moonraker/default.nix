@@ -19,6 +19,7 @@ let
       dbus-next
       apprise
       python-periphery
+      ldap3
     ]
   );
 in stdenvNoCC.mkDerivation rec {

@@ -1,13 +1,13 @@
 { lib, stdenv, fetchurl, pkg-config, fltk13, portaudio, lame, libvorbis, libogg
-, flac, libopus, libsamplerate, fdk_aac, dbus, openssl, curl }:
+, flac, libopus, libsamplerate, fdk_aac, dbus, openssl, curl, portmidi }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "butt";
-  version = "0.1.40";
+  version = "0.1.41";
 
   src = fetchurl {
     url = "https://danielnoethen.de/butt/release/${finalAttrs.version}/butt-${finalAttrs.version}.tar.gz";
-    hash = "sha256-wag177UIQ6YpBkJ5XQlxYtTdBFFNO5q+BLD/CiUkGoA=";
+    hash = "sha256-wTypjqd2PpmDSA8vScMLkAL44xE/WAccm747PS9ClVA=";
   };
 
   postPatch = ''
@@ -31,6 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     openssl
     curl
+    portmidi
   ];
 
   postInstall = ''
@@ -45,5 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ ehmry ];
     mainProgram = "butt";
+    platforms = lib.platforms.linux;
   };
 })

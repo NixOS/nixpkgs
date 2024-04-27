@@ -2736,8 +2736,6 @@ with pkgs;
     description = mame.meta.description + " (tools only)";
   } (lib.getOutput "tools" mame);
 
-  melonDS = libsForQt5.callPackage ../applications/emulators/melonDS { };
-
   mgba = libsForQt5.callPackage ../applications/emulators/mgba { };
 
   mupen64plus = callPackage ../applications/emulators/mupen64plus { };
@@ -3574,8 +3572,6 @@ with pkgs;
 
   changelogger = callPackage ../tools/misc/changelogger { };
 
-  chezmoi = callPackage ../tools/misc/chezmoi { };
-
   chipsec = callPackage ../tools/security/chipsec {
     kernel = null;
     withDriver = false;
@@ -4053,10 +4049,6 @@ with pkgs;
   pam-reattach = callPackage ../os-specific/darwin/pam-reattach { };
 
   reattach-to-user-namespace = callPackage ../os-specific/darwin/reattach-to-user-namespace { };
-
-  skhd = darwin.apple_sdk_11_0.callPackage ../os-specific/darwin/skhd {
-    inherit (darwin.apple_sdk_11_0.frameworks) Carbon Cocoa;
-  };
 
   qes = callPackage ../os-specific/darwin/qes {
     inherit (darwin.apple_sdk.frameworks) Carbon;
@@ -8450,8 +8442,6 @@ with pkgs;
 
   gitea-actions-runner = callPackage ../development/tools/continuous-integration/gitea-actions-runner { };
 
-  forgejo = callPackage ../applications/version-management/forgejo { };
-
   gokart = callPackage ../development/tools/gokart { };
 
   gl2ps = callPackage ../development/libraries/gl2ps { };
@@ -10533,8 +10523,6 @@ with pkgs;
 
   lwc = callPackage ../tools/misc/lwc { };
 
-  lxc = callPackage ../os-specific/linux/lxc {  };
-
   lxd-image-server = callPackage ../tools/virtualization/lxd-image-server { };
 
   lzfse = callPackage ../tools/compression/lzfse { };
@@ -11549,9 +11537,7 @@ with pkgs;
   opentelemetry-collector = callPackage ../tools/misc/opentelemetry-collector { };
   opentelemetry-collector-contrib = callPackage ../tools/misc/opentelemetry-collector/contrib.nix { };
 
-  openvswitch = callPackage ../os-specific/linux/openvswitch { };
-
-  openvswitch-lts = callPackage ../os-specific/linux/openvswitch/lts.nix { };
+  openvswitch-lts = callPackage ../by-name/op/openvswitch/lts.nix { };
 
   ovn-lts = callPackage ../by-name/ov/ovn/lts.nix { };
 
@@ -13070,10 +13056,6 @@ with pkgs;
   sisco.lv2 = callPackage ../applications/audio/sisco.lv2 { };
 
   sixpair = callPackage ../tools/misc/sixpair { };
-
-  sketchybar = darwin.apple_sdk_11_0.callPackage ../os-specific/darwin/sketchybar {
-    inherit (darwin.apple_sdk_11_0.frameworks) AppKit Carbon CoreAudio CoreWLAN CoreVideo DisplayServices IOKit MediaRemote SkyLight;
-  };
 
   skippy-xd = callPackage ../tools/X11/skippy-xd { };
 
@@ -15486,6 +15468,7 @@ with pkgs;
   corretto11 = javaPackages.compiler.corretto11;
   corretto17 = javaPackages.compiler.corretto17;
   corretto19 = javaPackages.compiler.corretto19;
+  corretto21 = javaPackages.compiler.corretto21;
 
   cotton = callPackage ../development/tools/cotton {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -18941,8 +18924,6 @@ with pkgs;
   gperf_3_0 = callPackage ../development/tools/misc/gperf/3.0.x.nix { };
 
   grail = callPackage ../development/libraries/grail { };
-
-  graphene-hardened-malloc = callPackage ../development/libraries/graphene-hardened-malloc { };
 
   graphene = callPackage ../development/libraries/graphene { };
 
@@ -34563,10 +34544,7 @@ with pkgs;
 
   wavebox = libsForQt5.callPackage ../applications/networking/instant-messengers/wavebox { };
 
-  sonic-pi = libsForQt5.callPackage ../applications/audio/sonic-pi {
-    elixir = elixir_1_14;
-    beamPackages = beamPackages.extend (self: super: { elixir = elixir_1_14; });
-  };
+  sonic-pi = libsForQt5.callPackage ../applications/audio/sonic-pi { };
 
   stag = callPackage ../applications/misc/stag {
     curses = ncurses;
@@ -40720,10 +40698,6 @@ with pkgs;
   xwiimote = callPackage ../misc/drivers/xwiimote { };
 
   xzoom = callPackage ../tools/X11/xzoom { };
-
-  yabai = darwin.apple_sdk_11_0.callPackage ../os-specific/darwin/yabai {
-    inherit (darwin.apple_sdk_11_0.frameworks) SkyLight Cocoa Carbon ScriptingBridge;
-  };
 
   yacreader = libsForQt5.callPackage ../applications/graphics/yacreader { };
 

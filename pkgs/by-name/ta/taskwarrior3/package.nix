@@ -12,6 +12,7 @@
   python3,
   xdg-utils,
   installShellFiles,
+  darwin,
 }:
 stdenv.mkDerivation rec {
     pname = "taskwarrior";
@@ -38,6 +39,10 @@ stdenv.mkDerivation rec {
     cargo
     rustc
     rustPlatform.cargoSetupHook
+  ] ++ lib.optionals stdenv.isDarwin [
+    # darwin dependencies
+    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   doCheck = true;

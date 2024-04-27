@@ -87,6 +87,6 @@ in mkDerivation {
     license = [ licenses.unfree licenses.lgpl21 ];
     homepage = "http://makemkv.com";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ titanous ];
+    maintainers = with maintainers; [ ];
   };
 }

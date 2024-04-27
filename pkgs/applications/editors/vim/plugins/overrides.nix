@@ -19,6 +19,7 @@
 , dasht
 , deno
 , direnv
+, duckdb
 , fish
 , fzf
 , gawk
@@ -1027,8 +1028,30 @@
     passthru.python3Dependencies = [ python3.pkgs.mwclient ];
   };
 
+  nvim-dbee = super.nvim-dbee.overrideAttrs (oa: let
+        dbee-go = buildGoModule {
+          name = "nvim-dbee";
+          src = "${oa.src}/dbee";
+          vendorHash = "sha256-AItvgOehVskGLARJWDnJLtWM5YHKN/zn/FnZQ0evAtI=";
+          buildInputs = [ duckdb ];
+        };
+      in {
+    dependencies = [ self.nui-nvim ];
+
+    # nvim-dbee looks for the go binary in paths returned bu M.dir() and M.bin() defined in lua/dbee/install/init.lua
+    postPatch = ''
+      substituteInPlace lua/dbee/install/init.lua \
+        --replace-fail 'return vim.fn.stdpath("data") .. "/dbee/bin"' 'return "${dbee-go}/bin"'
+    '';
+
+    preFixup = ''
+      mkdir $target/bin
+      ln -s ${dbee-go}/bin/dbee $target/bin/dbee
+      '';
+  });
+
   nvim-navic = super.nvim-navic.overrideAttrs {
-    dependencies = with self; [ nvim-lspconfig ];
+    dependencies =  [ self.nvim-lspconfig ];
   };
 
   nvim-spectre = super.nvim-spectre.overrideAttrs (old:
