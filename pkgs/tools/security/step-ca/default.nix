@@ -12,16 +12,16 @@
 
 buildGoModule rec {
   pname = "step-ca";
-  version = "0.25.2";
+  version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "smallstep";
     repo = "certificates";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cP3QypBNWGbr7R7lJLfaoBh6C37ubGuaxnxWlZ1Z000=";
+    hash = "sha256-yej7gzhaUPbcvqbse7Hh7Im38+DUfC9UZkpjpuG8ctk=";
   };
 
-  vendorHash = "sha256-AXMMpzXEhdKSGeVg/KK2NEgalxIXP6DUTcoxOQVqow4=";
+  vendorHash = "sha256-XlfdIg8YHCeCvc7kZczUxlxUonyZSQATgsxLTMvNDk4=";
 
   nativeBuildInputs = lib.optionals hsmSupport [
     pkg-config
