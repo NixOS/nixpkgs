@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fuse,
   boost,
-  gcc,
   icu,
   libzip,
   pandoc,
@@ -22,15 +21,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-S2snseC9JAjYRberL2/CyRQTcZQ8GtGQNU3WuTqSRl4=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
-    boost
-    gcc
-    icu
     pandoc
     pkg-config
   ];
+
   buildInputs = [
+    boost
     fuse
+    icu
     libzip
   ];
 
