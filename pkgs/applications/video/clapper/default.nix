@@ -2,9 +2,7 @@
 , lib
 , stdenv
 , fetchFromGitHub
-, glib
 , gobject-introspection
-, python3
 , pkg-config
 , ninja
 , wayland
@@ -14,42 +12,41 @@
 , shared-mime-info
 , wrapGAppsHook4
 , meson
-, gjs
 , gtk4
 , gst_all_1
 , libGL
 , libadwaita
-, appstream-glib
-, libsoup
+, libsoup_3
+, vala
+, cmake
+, libmicrodns
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clapper";
-  version = "0.5.2";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner  = "Rafostar";
-    repo   = pname;
-    rev    = version;
-    sha256 = "sha256-s+qdTq3/pHHstwr1W3Hs2Zje++iJFHM6hQTFoZD43bY=";
+    repo   = "clapper";
+    rev    = finalAttrs.version;
+    hash = "sha256-5fD1OnVcY3ZC+QfoFqe2jV43/J36r85SpLUYF2ti7dY=";
   };
 
   nativeBuildInputs = [
-    appstream-glib
-    desktop-file-utils # for update-desktop-database
-    glib
     gobject-introspection
     meson
+    cmake
     ninja
     makeWrapper
     pkg-config
-    python3
-    shared-mime-info # for update-mime-database
     wrapGAppsHook4 # for gsettings
+    desktop-file-utils # for update-desktop-database
+    shared-mime-info # for update-mime-database
+    vala
   ];
 
   buildInputs = [
-    gjs
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
@@ -58,29 +55,25 @@ stdenv.mkDerivation rec {
     gtk4
     libGL
     libadwaita
-    libsoup
+    libsoup_3
     wayland
     wayland-protocols
+    libmicrodns
   ];
 
   postPatch = ''
-    patchShebangs build-aux/meson/postinstall.py
-  '';
-
-  postInstall = ''
-    cp ${src}/data/icons/*.svg $out/share/icons/hicolor/scalable/apps/
-    cp ${src}/data/icons/*.svg $out/share/icons/hicolor/symbolic/apps/
+    patchShebangs --build build-aux/meson/postinstall.py
   '';
 
   meta = with lib; {
-    description = "A GNOME media player built using GJS with GTK4 toolkit and powered by GStreamer with OpenGL rendering. ";
+    description = "A GNOME media player built using GTK4 toolkit and powered by GStreamer with OpenGL rendering";
     longDescription = ''
-      Clapper is a GNOME media player build using GJS with GTK4 toolkit.
-      The media player is using GStreamer as a media backend and renders everything via OpenGL.
+      Clapper is a GNOME media player built using the GTK4 toolkit.
+      The media player is using GStreamer as a media backend.
     '';
     homepage = "https://github.com/Rafostar/clapper";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
-}
+})
