@@ -97,7 +97,9 @@ in {
       ../development/compilers/adoptopenjdk-bin/jdk17-darwin.nix;
 
     corretto11 = callPackage ../development/compilers/corretto/11.nix { };
-    corretto17 = callPackage ../development/compilers/corretto/17.nix { };
+    corretto17 = callPackage ../development/compilers/corretto/17.nix {
+      darwin=darwin;
+    };
     corretto19 = callPackage ../development/compilers/corretto/19.nix { };
 
     openjdk8-bootstrap = mkBootstrap adoptopenjdk-8
