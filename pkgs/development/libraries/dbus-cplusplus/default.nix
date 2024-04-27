@@ -52,7 +52,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus glib expat ];
 
-  configureFlags = [ "--disable-ecore" "--disable-tests" ];
+  configureFlags = [
+    "--disable-ecore"
+    "--disable-tests"
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "--disable-examples"
+  ];
 
   meta = with lib; {
     homepage = "https://dbus-cplusplus.sourceforge.net";
