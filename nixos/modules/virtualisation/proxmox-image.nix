@@ -216,37 +216,21 @@ with lib;
           seccompSupport = false;
           guestAgentSupport = false;
         }).overrideAttrs ( super: rec {
-
-          version = "7.2.1";
+          # Check https://github.com/proxmox/pve-qemu/tree/master for the version
+          # of qemu and patch to use
+          version = "8.1.5";
           src = pkgs.fetchurl {
-            url= "https://download.qemu.org/qemu-${version}.tar.xz";
-            sha256 = "sha256-jIVpms+dekOl/immTN1WNwsMLRrQdLr3CYqCTReq1zs=";
+            url = "https://download.qemu.org/qemu-${version}.tar.xz";
+            hash = "sha256-l2Ox7+xP1JeWtQgNCINRLXDLY4nq1lxmHMNoalIjKJY=";
           };
           patches = [
             # Proxmox' VMA tool is published as a particular patch upon QEMU
-            (pkgs.fetchpatch {
-              url =
-                let
-                  rev = "abb04bb6272c1202ca9face0827917552b9d06f6";
-                  path = "debian/patches/pve/0027-PVE-Backup-add-vma-backup-format-code.patch";
-                in "https://git.proxmox.com/?p=pve-qemu.git;a=blob_plain;hb=${rev};f=${path}";
-              hash = "sha256-3d0HHdvaExCry6zcULnziYnWIAnn24vECkI4sjj2BMg=";
-            })
-
-            # Proxmox' VMA tool uses O_DIRECT which fails on tmpfs
-            # Filed to upstream issue tracker: https://bugzilla.proxmox.com/show_bug.cgi?id=4710
-            (pkgs.writeText "inline.patch" ''
-                --- a/vma-writer.c   2023-05-01 15:11:13.361341177 +0200
-                +++ b/vma-writer.c   2023-05-01 15:10:51.785293129 +0200
-                @@ -306,7 +306,7 @@
-                             /* try to use O_NONBLOCK */
-                             fcntl(vmaw->fd, F_SETFL, fcntl(vmaw->fd, F_GETFL)|O_NONBLOCK);
-                         } else  {
-                -            oflags = O_NONBLOCK|O_DIRECT|O_WRONLY|O_EXCL;
-                +            oflags = O_NONBLOCK|O_WRONLY|O_EXCL;
-                             vmaw->fd = qemu_create(filename, oflags, 0644, errp);
-                         }
-            '')
+            "${pkgs.fetchFromGitHub {
+              owner = "proxmox";
+              repo = "pve-qemu";
+              rev = "71dd2d48f9122e60e4c0a8480122a27aab15dc70";
+              hash = "sha256-Q8AxNv4geDdlbVIWphRO5P3ESo0SGgvUpVPmPJzubJM=";
+            }}/debian/patches/pve/0027-PVE-Backup-add-vma-backup-format-code.patch"
           ];
 
           buildInputs = super.buildInputs ++ [ pkgs.libuuid ];
