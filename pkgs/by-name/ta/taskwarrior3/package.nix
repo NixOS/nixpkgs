@@ -16,12 +16,12 @@
 }:
 stdenv.mkDerivation rec {
   pname = "taskwarrior";
-  version = "3.0.1";
+  version = "3.0.2";
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "taskwarrior";
-    rev = "v3.0.1";
-    hash = "sha256-S6aKFzdz7q06AtEc+QS9pXtjcExFqdvnTIs6mIOdXs8=";
+    rev = "v3.0.2";
+    hash = "sha256-vN3X6vLuD4Fw9wpEUYLf8sboA5GIcdP5EFb41KS6d5s=";
     fetchSubmodules = true;
   };
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     name = "${pname}-${version}-cargo-deps";
     inherit src;
     sourceRoot = src.name;
-    hash = "sha256-frWr0NwcJxdHFuRGZuHFOvbNp8Vd55fsBzj50dyWjk8=";
+    hash = "sha256-4hdM9LgDa47ZYcX30HXvixIRy0xaahG4XBqPiUM+IUM=";
   };
   cargoRoot = "./";
   preConfigure = ''
