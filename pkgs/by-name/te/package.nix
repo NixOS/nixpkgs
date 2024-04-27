@@ -1,4 +1,4 @@
-{ lib, stdenv,  pkgs ? import <nixpkgs> {} }:
+{ lib, stdenv, fetchFromGithub }:
 
 pkgs.stdenv.mkDerivation {
   pname = "temp-throttle";
