@@ -358,12 +358,15 @@ dont-distribute-packages:
  - Shellac-readline
  - ShortestPathProblems
  - Shpadoinkle-backend-pardiff
+ - Shpadoinkle-backend-snabbdom
  - Shpadoinkle-backend-static
  - Shpadoinkle-developer-tools
  - Shpadoinkle-disembodied
  - Shpadoinkle-examples
  - Shpadoinkle-html
+ - Shpadoinkle-lens
  - Shpadoinkle-router
+ - Shpadoinkle-streaming
  - Shpadoinkle-template
  - Shpadoinkle-widgets
  - SimpleGL
