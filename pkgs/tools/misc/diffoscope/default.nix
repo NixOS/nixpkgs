@@ -59,7 +59,6 @@
 , python3
 , qemu
 , R
-, radare2
 , sng
 , sqlite
 , squashfsTools
@@ -142,6 +141,11 @@ python.pkgs.buildPythonApplication rec {
   # docx2txt <- makes tests broken:
   # > FAILED tests/comparators/test_docx.py::test_diff - IndexError: list index out of range
   # > FAILED tests/comparators/test_docx.py::test_compare_non_existing - AssertionError
+  # radare2
+  # > FAILED tests/comparators/test_elf_decompiler.py::test_ghidra_diff - IndexError: list index out of range
+  # > FAILED tests/comparators/test_elf_decompiler.py::test_radare2_diff - AssertionError
+  # > FAILED tests/comparators/test_macho_decompiler.py::test_ghidra_diff - assert 0 == 1
+  # > FAILED tests/comparators/test_macho_decompiler.py::test_radare2_diff - AssertionError
   #
   # We filter automatically all packages for the host platform (some dependencies are not supported on Darwin, aarch64, etc.).
   pythonPath = lib.filter (lib.meta.availableOn stdenv.hostPlatform) ([
@@ -221,7 +225,6 @@ python.pkgs.buildPythonApplication rec {
       procyon
       qemu
       R
-      radare2
       tcpdump
       ubootTools
       wabt
