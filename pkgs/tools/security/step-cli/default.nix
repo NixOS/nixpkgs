@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -17,7 +18,7 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X main.Version=${version}"
+    "-X=main.Version=${version}"
   ];
 
   preCheck = ''
