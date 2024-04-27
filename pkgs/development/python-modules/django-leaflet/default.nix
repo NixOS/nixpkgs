@@ -33,6 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/makinacorpus/django-leaflet";
     changelog = "https://github.com/makinacorpus/django-leaflet/blob/${version}/CHANGES";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ janik ];
+    maintainers = with maintainers; [ ];
   };
 }
