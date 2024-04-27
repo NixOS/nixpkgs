@@ -4780,12 +4780,6 @@
     githubId = 150736012;
     email = "me+git@delliott.xyz";
   };
-  delroth = {
-    email = "delroth@gmail.com";
-    github = "delroth";
-    githubId = 202798;
-    name = "Pierre Bourdon";
-  };
   delta = {
     email = "d4delta@outlook.fr";
     github = "D4Delta";
