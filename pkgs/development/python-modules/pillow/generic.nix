@@ -3,6 +3,7 @@
 , disabled
 , src
 , patches ? []
+, extraPostPatch ? ""
 , meta
 , passthru ? {}
 , ...
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   # https://github.com/python-pillow/Pillow/issues/1259
   postPatch = ''
     rm Tests/test_imagefont.py
-  '';
+  '' + extraPostPatch;
 
   disabledTests = [
     # Code quality mismathch 9 vs 10
