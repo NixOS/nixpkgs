@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, buildGoModule
-, coreutils
-, pcsclite
-, PCSC
-, pkg-config
-, hsmSupport ? true
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildGoModule,
+  coreutils,
+  pcsclite,
+  PCSC,
+  pkg-config,
+  hsmSupport ? true,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -23,9 +24,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-XlfdIg8YHCeCvc7kZczUxlxUonyZSQATgsxLTMvNDk4=";
 
-  nativeBuildInputs = lib.optionals hsmSupport [
-    pkg-config
-  ];
+  nativeBuildInputs = lib.optionals hsmSupport [ pkg-config ];
 
   buildInputs =
     lib.optionals (hsmSupport && stdenv.isLinux) [ pcsclite ]
@@ -62,6 +61,10 @@ buildGoModule rec {
     homepage = "https://smallstep.com/certificates/";
     changelog = "https://github.com/smallstep/certificates/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ cmcdragonkai mohe2015 techknowlogick ];
+    maintainers = with maintainers; [
+      cmcdragonkai
+      mohe2015
+      techknowlogick
+    ];
   };
 }
