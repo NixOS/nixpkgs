@@ -1585,6 +1585,7 @@ self: super: {
     '';
   }) (doJailbreak super.jsaddle-dom);
   jsaddle-hello = doJailbreak super.jsaddle-hello;
+  ghcjs-dom-hello = doJailbreak super.ghcjs-dom-hello;
 
   # Too strict upper bounds on text
   lsql-csv = doJailbreak super.lsql-csv;
