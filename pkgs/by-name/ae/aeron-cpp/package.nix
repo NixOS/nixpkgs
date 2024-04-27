@@ -17,14 +17,14 @@
 let
   version = aeron.version;
 
-  sbeAll_1_30_0 = fetchMavenArtifact {
+  sbeAll_1_31_1 = fetchMavenArtifact {
     groupId = "uk.co.real-logic";
-    version = "1.30.0";
+    version = "1.31.1";
     artifactId = "sbe-all";
-    hash = "sha512-K/LMP6zNBHl2Wpvli/sH+ZsYwlTPJHHCKee7riOH6dR8nxTJgucnF7AsbVOpowR6xaV3wPjFh0iqWp/oerHKBg==";
+    hash = "sha512-Ypsk8PbShFOxm49u1L+TTuApaW6ECTSee+hHEhmY/jNi5AymHXBWwDMBMkzC25aowiHLJS5EnzLk6hu9Lea93Q==";
   };
 
-  sbeAll = sbeAll_1_30_0;
+  sbeAll = sbeAll_1_31_1;
 
 in
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     owner = "real-logic";
     repo = "aeron";
     rev = version;
-    hash = "sha256-MY7I8Cw1izVLW3/JWav9zPIBJTGInZHwAZT2e7tI9F0=";
+    hash = "sha256-sROEZVOfScrlqMLbfrPtw3LQCQ5TfMcrLiP6j/Z9rSM=";
   };
 
   patches = [
@@ -98,7 +98,7 @@ stdenv.mkDerivation {
         aeron_driver_static \
         aeronmd
 
-      make -j $NIX_BUILD_CORES install
+      make install
     )
 
     runHook postBuild

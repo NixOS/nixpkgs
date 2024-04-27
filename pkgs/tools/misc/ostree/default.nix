@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , substituteAll
 , pkg-config
 , gtk-doc
@@ -51,6 +52,19 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-Y8kZCCEzOsc3Pg2SPkwnZrJevc/fTvtEy1koxlidn8s=";
   };
 
+  patches = lib.optionals stdenv.hostPlatform.isMusl [
+    # > I guess my inclination here is to recommend that musl users
+    # > carry a downstream patch to revert the commits in #3175 until
+    # > such time as they can update to the new musl.
+    # https://github.com/ostreedev/ostree/issues/3200#issuecomment-1974819192
+    (fetchpatch {
+      name = "revert-statx.diff";
+      url = "https://github.com/ostreedev/ostree/commit/f46cc0cd85b564e40e03c7438a41c8e57f6b836c.diff";
+      excludes = [ "ci/*" ];
+      revert = true;
+      hash = "sha256-LsXbRYh4hfjNdt1S384IPlSvtC5f2rgSTZEkIIBkT0g=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoconf
@@ -132,7 +146,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Git for operating system binaries";
-    homepage = "https://ostree.readthedocs.io/en/latest/";
+    homepage = "https://ostreedev.github.io/ostree/";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ copumpkin ];

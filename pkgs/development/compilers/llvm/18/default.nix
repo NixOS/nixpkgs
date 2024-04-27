@@ -80,7 +80,7 @@ in let
     then tools.bintools
     else bootBintools;
 
-  in rec {
+  in {
 
     libllvm = callPackage ./llvm {
       inherit llvm_meta;
@@ -98,7 +98,7 @@ in let
         ../common/clang/add-nostdlibinc-flag.patch
         (substituteAll {
           src = ../common/clang/clang-at-least-16-LLVMgold-path.patch;
-          libllvmLibdir = "${libllvm.lib}/lib";
+          libllvmLibdir = "${tools.libllvm.lib}/lib";
         })
       ];
       inherit llvm_meta;

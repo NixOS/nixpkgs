@@ -56,7 +56,7 @@ let
     then tools.bintools
     else bootBintools;
 
-  in rec {
+  in {
 
     libllvm = callPackage ./llvm {
       inherit llvm_meta;
@@ -74,7 +74,7 @@ let
         ./clang/gnu-install-dirs.patch
         (substituteAll {
           src = ../common/clang/clang-11-15-LLVMgold-path.patch;
-          libllvmLibdir = "${libllvm.lib}/lib";
+          libllvmLibdir = "${tools.libllvm.lib}/lib";
         })
       ];
       inherit clang-tools-extra_src llvm_meta;

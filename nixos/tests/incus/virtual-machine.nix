@@ -30,6 +30,9 @@ in
       memorySize = 1024;
       diskSize = 4096;
 
+      # Provide a TPM to test vTPM support for guests
+      tpm.enable = true;
+
       incus.enable = true;
     };
     networking.nftables.enable = true;
@@ -47,8 +50,14 @@ in
     with subtest("virtual-machine image can be imported"):
         machine.succeed("incus image import ${vm-image-metadata}/*/*.tar.xz ${vm-image-disk}/nixos.qcow2 --alias nixos")
 
+    with subtest("virtual-machine can be created"):
+        machine.succeed("incus create nixos ${instance-name} --vm --config limits.memory=512MB --config security.secureboot=false")
+
+    with subtest("virtual tpm can be configured"):
+        machine.succeed("incus config device add ${instance-name} vtpm tpm path=/dev/tpm0")
+
     with subtest("virtual-machine can be launched and become available"):
-        machine.succeed("incus launch nixos ${instance-name} --vm --config limits.memory=512MB --config security.secureboot=false")
+        machine.succeed("incus start ${instance-name}")
         with machine.nested("Waiting for instance to start and be usable"):
           retry(instance_is_up)
 

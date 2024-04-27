@@ -69,6 +69,6 @@ stdenv.mkDerivation rec {
     description = "Programmable completion for the bash shell";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.xfix ];
+    maintainers = [ ];
   };
 }

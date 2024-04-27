@@ -4,7 +4,7 @@
 { lib }:
 let
   inherit (lib.strings) toInt;
-  inherit (lib.trivial) compare min id warn;
+  inherit (lib.trivial) compare min id warn pipe;
   inherit (lib.attrsets) mapAttrs;
 in
 rec {
@@ -332,6 +332,54 @@ rec {
     :::
   */
   imap1 = f: list: genList (n: f (n + 1) (elemAt list n)) (length list);
+
+  /**
+    Filter a list for elements that satisfy a predicate function.
+    The predicate function is called with both the index and value for each element.
+    It must return `true`/`false` to include/exclude a given element in the result.
+    This function is strict in the result of the predicate function for each element.
+    This function has O(n) complexity.
+
+    Also see [`builtins.filter`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-filter) (available as `lib.lists.filter`),
+    which can be used instead when the index isn't needed.
+
+    # Inputs
+
+    `ipred`
+
+    : The predicate function, it takes two arguments:
+      - 1. (int): the index of the element.
+      - 2. (a): the value of the element.
+
+      It must return `true`/`false` to include/exclude a given element from the result.
+
+    `list`
+
+    : The list to filter using the predicate.
+
+    # Type
+    ```
+    ifilter0 :: (int -> a -> bool) -> [a] -> [a]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.lists.ifilter0` usage example
+
+    ```nix
+    ifilter0 (i: v: i == 0 || v > 2) [ 1 2 3 ]
+    => [ 1 3 ]
+    ```
+    :::
+  */
+  ifilter0 =
+    ipred:
+    input:
+    map (idx: elemAt input idx) (
+      filter (idx: ipred idx (elemAt input idx)) (
+        genList (x: x) (length input)
+      )
+    );
 
   /**
     Map and concatenate the result.

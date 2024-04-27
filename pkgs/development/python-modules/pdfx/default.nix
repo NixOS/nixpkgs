@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "Extract references (pdf, url, doi, arxiv) and metadata from a PDF";
     mainProgram = "pdfx";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }

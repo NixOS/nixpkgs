@@ -4,13 +4,13 @@
 }:
 
 let
-  version = "2.7.4";
+  version = "2.7.5";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influx-cli";
     rev = "v${version}";
-    sha256 = "sha256-g/3hakOTRjRA6DU0DT5A+ChUF6ED/sdg3p4ZB5nbbU0=";
+    sha256 = "sha256-0Gyoy9T5pA+40k8kKybWBMtOfpKZxw3Vvp4ZB4ptcJs=";
   };
 
 in buildGoModule {
@@ -27,7 +27,7 @@ in buildGoModule {
     description = "CLI for managing resources in InfluxDB v2";
     license = licenses.mit;
     homepage = "https://influxdata.com/";
-    maintainers = with maintainers; [ abbradar danderson ];
+    maintainers = with maintainers; [ abbradar ];
     mainProgram = "influx";
   };
 }

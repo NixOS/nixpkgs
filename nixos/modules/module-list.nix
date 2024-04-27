@@ -325,6 +325,7 @@
   ./security/duosec.nix
   ./security/google_oslogin.nix
   ./security/ipa.nix
+  ./security/isolate.nix
   ./security/krb5
   ./security/lock-kernel-modules.nix
   ./security/misc.nix
@@ -559,7 +560,7 @@
   ./services/hardware/kanata.nix
   ./services/hardware/lcd.nix
   ./services/hardware/lirc.nix
-  ./services/hardware/nvidia-container-toolkit-cdi-generator
+  ./services/hardware/nvidia-container-toolkit
   ./services/hardware/monado.nix
   ./services/hardware/nvidia-optimus.nix
   ./services/hardware/openrgb.nix
@@ -1012,6 +1013,7 @@
   ./services/networking/icecream/daemon.nix
   ./services/networking/icecream/scheduler.nix
   ./services/networking/imaginary.nix
+  ./services/networking/inadyn.nix
   ./services/networking/inspircd.nix
   ./services/networking/iodine.nix
   ./services/networking/iperf3.nix

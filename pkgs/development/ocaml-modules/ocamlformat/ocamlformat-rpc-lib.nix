@@ -21,6 +21,6 @@ in buildDunePackage rec {
     homepage = "https://github.com/ocaml-ppx/ocamlformat";
     description = "Auto-formatter for OCaml code (RPC mode)";
     license = licenses.mit;
-    maintainers = with maintainers; [ Zimmi48 marsam Julow ];
+    maintainers = with maintainers; [ Zimmi48 Julow ];
   };
 }

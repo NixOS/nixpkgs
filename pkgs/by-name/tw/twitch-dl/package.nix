@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "twitch-dl";
-  version = "2.2.0";
+  version = "2.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ihabunek";
     repo = "twitch-dl";
     rev = "refs/tags/${version}";
-    hash = "sha256-H2SxZgEjVdj/GRguJ2v/WWUrh0VTrwFV9mZVn/EYyPg=";
+    hash = "sha256-Os27uqH3MA3v9+8WzfL5KIEUewAzf8JUyRtsWSzw81o=";
   };
 
   postPatch = ''
@@ -58,7 +58,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/ihabunek/twitch-dl";
     changelog = "https://github.com/ihabunek/twitch-dl/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
     mainProgram = "twitch-dl";
   };
 }

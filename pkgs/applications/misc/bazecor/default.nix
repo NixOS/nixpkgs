@@ -37,8 +37,6 @@ appimageTools.wrapAppImage rec {
   # to allow non-root modifications to the keyboards.
 
   extraInstallCommands = ''
-    mv $out/bin/bazecor-* $out/bin/bazecor
-
     install -m 444 -D ${src}/Bazecor.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/Bazecor.desktop \
       --replace 'Exec=Bazecor' 'Exec=bazecor'

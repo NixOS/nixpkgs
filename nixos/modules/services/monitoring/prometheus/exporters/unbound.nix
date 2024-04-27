@@ -5,10 +5,17 @@
 , ...
 }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.unbound;
+  inherit (lib)
+    mkOption
+    types
+    mkRemovedOptionModule
+    optionalAttrs
+    optionalString
+    mkMerge
+    mkIf
+    ;
 in
 {
   imports = [

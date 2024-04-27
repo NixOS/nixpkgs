@@ -19,7 +19,7 @@ mixRelease {
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version elixir;
-    hash = "sha256-ZNHhWCZ3n2Y/XCsXVjbu4wbx/J95JdFP/2raACciAUU=";
+    hash = "sha256-e0lU4TXLY2geO6MI1h0kpdwsGbEyXjIRe0W43337mHk=";
   };
 
   configurePhase = ''

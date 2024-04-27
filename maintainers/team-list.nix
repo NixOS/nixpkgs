@@ -32,7 +32,6 @@ with lib.maintainers; {
   acme = {
     members = [
       aanderse
-      andrew-d
       arianvp
       emily
       flokli
@@ -46,7 +45,6 @@ with lib.maintainers; {
   bazel = {
     members = [
       mboes
-      marsam
       uri-canva
       cbley
       olebedev
@@ -99,7 +97,6 @@ with lib.maintainers; {
   budgie = {
     members = [
       bobby285271
-      federicoschonborn
     ];
     scope = "Maintain Budgie desktop environment";
     shortName = "Budgie";
@@ -265,9 +262,7 @@ with lib.maintainers; {
   };
 
   docs = {
-    members = [
-      ryantm
-    ];
+    members = [ ];
     scope = "Maintain nixpkgs/NixOS documentation and tools for building it.";
     shortName = "Docs";
     enableFeatureFreezePing = true;
@@ -380,7 +375,6 @@ with lib.maintainers; {
       krav
       talyz
       yayayayaka
-      yuka
     ];
     scope = "Maintain gitlab packages.";
     shortName = "gitlab";
@@ -408,7 +402,6 @@ with lib.maintainers; {
       hedning
       jtojnar
       dasj19
-      amaxine
     ];
     githubTeams = [
       "gnome"
@@ -736,7 +729,6 @@ with lib.maintainers; {
   node = {
     members = [
       lilyinstarlight
-      marsam
       winter
     ];
     scope = "Maintain Node.js runtimes and build tooling.";
@@ -906,7 +898,6 @@ with lib.maintainers; {
 
   ruby = {
     members = [
-      marsam
     ];
     scope = "Maintain the Ruby interpreter and related packages.";
     shortName = "Ruby";

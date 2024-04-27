@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "drbd-${version}-${kernel.version}";
-  version = "9.2.7";
+  version = "9.2.8";
 
   src = fetchurl {
     url = "https://pkg.linbit.com//downloads/drbd/9/drbd-${version}.tar.gz";
-    sha256 = "1355ns10z0fjgqsdpf09qfy01j8lg2n7zy4kclmar3s798n3mh56";
+    hash = "sha256-LqK1lPucab7wKvcB4VKGdvBIq+K9XtuO2m0DP5XtK3M=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -41,6 +41,12 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace 'SHELL=/bin/bash' 'SHELL=${builtins.getEnv "SHELL"}'
   '';
 
+  postFixup = ''
+    for ko in $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/block/drbd/*.ko; do
+      xz --compress -6 --threads=0 $ko
+    done
+  '';
+
   enableParallelBuilding = true;
 
   meta = with lib; {
@@ -53,5 +59,6 @@ stdenv.mkDerivation rec {
        DRBD is a software-based, shared-nothing, replicated storage solution
        mirroring the content of block devices (hard disks, partitions, logical volumes, and so on) between hosts.
     '';
+    broken = lib.versionAtLeast kernel.version "6.8"; # wait until next DRBD release for 6.8 support https://github.com/LINBIT/drbd/issues/87#issuecomment-2059323084
   };
 }

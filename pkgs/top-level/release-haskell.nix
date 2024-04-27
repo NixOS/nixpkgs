@@ -319,6 +319,7 @@ let
         madlang
         mailctl
         matterhorn
+        mkjson
         mueval
         naproche
         niv
@@ -330,6 +331,8 @@ let
         nix-script
         nix-tree
         nixfmt
+        nixfmt-classic
+        nixfmt-rfc-style
         nota
         nvfetcher
         ormolu
@@ -470,6 +473,15 @@ let
               inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskellPackages)
                 ghc
                 hello
+                microlens
+              ;
+            };
+
+            haskell.packages.ghc98 = {
+              inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghc98)
+                ghc
+                hello
+                microlens
               ;
             };
 
@@ -477,6 +489,7 @@ let
               inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghcHEAD)
                 ghc
                 hello
+                microlens
               ;
             };
           };
@@ -594,42 +607,35 @@ let
           maintainers = lib.teams.haskell.members;
         };
         constituents =
-          let
-            # Filter out all Darwin derivations.  We don't want flakey Darwin
-            # derivations and flakey Hydra Darwin builders to block the
-            # mergeable job from successfully building.
-            filterInLinux =
-              lib.filter (drv: drv.system == "x86_64-linux" || drv.system == "aarch64-linux");
-          in
-          filterInLinux
-            (accumulateDerivations [
-              # haskell specific tests
-              jobs.tests.haskell
-              # important top-level packages
-              jobs.cabal-install
-              jobs.cabal2nix
-              jobs.cachix
-              jobs.darcs
-              jobs.haskell-language-server
-              jobs.hledger
-              jobs.hledger-ui
-              jobs.hpack
-              jobs.niv
-              jobs.pandoc
-              jobs.stack
-              jobs.stylish-haskell
-              # important haskell (library) packages
-              jobs.haskellPackages.cabal-plan
-              jobs.haskellPackages.distribution-nixpkgs
-              jobs.haskellPackages.hackage-db
-              jobs.haskellPackages.xmonad
-              jobs.haskellPackages.xmonad-contrib
-              # haskell packages maintained by @peti
-              # imported from the old hydra jobset
-              jobs.haskellPackages.hopenssl
-              jobs.haskellPackages.hsemail
-              jobs.haskellPackages.hsyslog
-            ]);
+          accumulateDerivations [
+            # haskell specific tests
+            jobs.tests.haskell
+            # important top-level packages
+            jobs.cabal-install
+            jobs.cabal2nix
+            jobs.cachix
+            jobs.darcs
+            jobs.haskell-language-server
+            jobs.hledger
+            jobs.hledger-ui
+            jobs.hpack
+            jobs.niv
+            jobs.pandoc
+            jobs.stack
+            jobs.stylish-haskell
+            jobs.shellcheck
+            # important haskell (library) packages
+            jobs.haskellPackages.cabal-plan
+            jobs.haskellPackages.distribution-nixpkgs
+            jobs.haskellPackages.hackage-db
+            jobs.haskellPackages.xmonad
+            jobs.haskellPackages.xmonad-contrib
+            # haskell packages maintained by @peti
+            # imported from the old hydra jobset
+            jobs.haskellPackages.hopenssl
+            jobs.haskellPackages.hsemail
+            jobs.haskellPackages.hsyslog
+           ];
       };
       maintained = pkgs.releaseTools.aggregate {
         name = "maintained-haskell-packages";

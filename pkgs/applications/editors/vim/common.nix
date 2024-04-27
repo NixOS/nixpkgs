@@ -36,7 +36,7 @@ rec {
     description = "The most popular clone of the VI editor";
     homepage    = "http://www.vim.org";
     license     = licenses.vim;
-    maintainers = with maintainers; [ das_j equirosa ];
+    maintainers = with maintainers; [ das_j equirosa philiptaron ];
     platforms   = platforms.unix;
     mainProgram = "vim";
     outputsToInstall = [ "out" "xxd" ];

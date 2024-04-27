@@ -11383,7 +11383,7 @@ with self; {
     propagatedBuildInputs = [ DateCalc ];
     meta = {
       description = "Finnish APRS Parser (Fabulous APRS Parser)";
-      maintainers = with maintainers; [ andrew-d ];
+      maintainers = with maintainers; [ ];
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };

@@ -39,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/koehlma/pygtkspellcheck";
     description = "A Python spell-checking library for GtkTextViews based on Enchant";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ xfix ];
+    maintainers = with maintainers; [ ];
   };
 }

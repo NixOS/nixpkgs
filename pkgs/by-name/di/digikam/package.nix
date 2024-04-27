@@ -26,6 +26,7 @@
 , x265
 , jasper
 
+, bash
 # For panorama and focus stacking
 , enblend-enfuse
 , hugin
@@ -109,6 +110,13 @@ stdenv.mkDerivation rec {
   ]) ++ lib.optionals cudaSupport (with cudaPackages; [
     cuda_cudart
   ]);
+
+  postPatch = ''
+    substituteInPlace \
+      core/dplugins/bqm/custom/userscript/userscript.cpp \
+      core/utilities/import/backend/cameracontroller.cpp \
+      --replace-fail \"/bin/bash\" \"${lib.getExe bash}\"
+  '';
 
   cmakeFlags = [
     "-DENABLE_MYSQLSUPPORT=1"

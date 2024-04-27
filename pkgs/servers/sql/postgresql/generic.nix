@@ -24,7 +24,6 @@ let
       # JIT
       , jitSupport
       , nukeReferences, patchelf, llvmPackages
-      , makeRustPlatform, buildPgxExtension, cargo, rustc
 
       # PL/Python
       , pythonSupport ? false
@@ -235,13 +234,6 @@ let
           inherit (llvmPackages) llvm;
           postgresql = this;
           stdenv = stdenv';
-          buildPgxExtension = buildPgxExtension.override {
-            stdenv = stdenv';
-            rustPlatform = makeRustPlatform {
-              stdenv = stdenv';
-              inherit rustc cargo;
-            };
-          };
         };
         newSelf = self // scope;
         newSuper = { callPackage = newScope (scope // this.pkgs); };
@@ -266,7 +258,7 @@ let
       description = "A powerful, open source object-relational database system";
       license     = licenses.postgresql;
       changelog   = "https://www.postgresql.org/docs/release/${finalAttrs.version}/";
-      maintainers = with maintainers; [ thoughtpolice danbst globin marsam ivan ma27 ];
+      maintainers = with maintainers; [ thoughtpolice danbst globin ivan ma27 ];
       pkgConfigModules = [ "libecpg" "libecpg_compat" "libpgtypes" "libpq" ];
       platforms   = platforms.unix;
 

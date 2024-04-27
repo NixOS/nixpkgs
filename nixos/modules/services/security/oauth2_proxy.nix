@@ -47,6 +47,7 @@ let
     reverse-proxy = reverseProxy;
     proxy-prefix = proxyPrefix;
     profile-url = profileURL;
+    oidc-issuer-url = oidcIssuerUrl;
     redeem-url = redeemURL;
     redirect-url = redirectURL;
     request-logging = requestLogging;
@@ -129,6 +130,15 @@ in
         The OAuth Client ID.
       '';
       example = "123456.apps.googleusercontent.com";
+    };
+
+    oidcIssuerUrl = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        The OAuth issuer URL.
+      '';
+      example = "https://login.microsoftonline.com/{TENANT_ID}/v2.0";
     };
 
     clientSecret = mkOption {

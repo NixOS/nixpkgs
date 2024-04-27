@@ -31,6 +31,7 @@
 , darwin
 , alsa-lib
 , makeDesktopItem
+, copyDesktopItems
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -83,6 +84,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   nativeBuildInputs = [
+    copyDesktopItems
     pkg-config
     rustPlatform.bindgenHook
     wrapGAppsHook

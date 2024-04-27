@@ -62,6 +62,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jabesq/pyatmo";
     changelog = "https://github.com/jabesq/pyatmo/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ delroth ];
+    maintainers = with maintainers; [ ];
   };
 }

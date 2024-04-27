@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "kubeswitch";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "danielfoehrKn";
     repo = "kubeswitch";
     rev = version;
-    hash = "sha256-0SY7JLFkhLEFcE1veqac9I9DZstXfxtnmSYIdDiVieg=";
+    hash = "sha256-cvMTuiXSpx+ZicN1P3JjGExzW7d51nN1YIpsGArXHzw=";
   };
 
   vendorHash = null;

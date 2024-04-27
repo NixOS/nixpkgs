@@ -148,10 +148,6 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius @ma27
 /pkgs/applications/science/math/R   @jbedo
 /pkgs/development/r-modules         @jbedo
 
-# Ruby
-/pkgs/development/interpreters/ruby @marsam
-/pkgs/development/ruby-modules      @marsam
-
 # Rust
 /pkgs/development/compilers/rust @Mic92 @zowoq @winterqt @figsoda
 /pkgs/build-support/rust @zowoq @winterqt @figsoda
@@ -198,7 +194,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /maintainers/scripts/kde @K900 @NickCao @SuperSandro2000 @ttuegel
 
 # PostgreSQL and related stuff
-/pkgs/servers/sql/postgresql @thoughtpolice @marsam
+/pkgs/servers/sql/postgresql @thoughtpolice
 /nixos/modules/services/databases/postgresql.xml @thoughtpolice
 /nixos/modules/services/databases/postgresql.nix @thoughtpolice
 /nixos/tests/postgresql.nix @thoughtpolice

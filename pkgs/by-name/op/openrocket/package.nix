@@ -4,6 +4,7 @@
 , ant
 , jdk17
 , makeWrapper
+, stripJavaArchivesHook
 }:
 
 let
@@ -25,6 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ant
     jdk
     makeWrapper
+    stripJavaArchivesHook
   ];
 
   buildPhase = ''

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "hahomematic";
-  version = "2024.4.6";
+  version = "2024.4.12";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "danielperna84";
     repo = "hahomematic";
     rev = "refs/tags/${version}";
-    hash = "sha256-w+sSaadbbfc1cNCTx5YYIm8eAKRQxyqZZKK2QPFZv7Y=";
+    hash = "sha256-iWl9kDLRh9CAk0tOibDOHcBV7lwVY/TWKYMBZW9G2k0=";
   };
 
   __darwinAllowLocalNetworking = true;

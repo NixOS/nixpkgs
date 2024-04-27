@@ -41,6 +41,7 @@ let
         qemu-utils
         rsync
         squashfsTools
+        swtpm
         systemd
         thin-provisioning-tools
         util-linux
@@ -111,7 +112,12 @@ in
 
       package = lib.mkPackageOption pkgs "incus-lts" { };
 
-      lxcPackage = lib.mkPackageOption pkgs "lxc" { };
+      lxcPackage = lib.mkOption {
+        type = lib.types.package;
+        default = config.virtualisation.lxc.package;
+        defaultText = lib.literalExpression "config.virtualisation.lxc.package";
+        description = "The lxc package to use.";
+      };
 
       clientPackage = lib.mkOption {
         type = lib.types.package;

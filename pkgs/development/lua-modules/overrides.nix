@@ -480,6 +480,16 @@ in
     };
   });
 
+  haskell-tools-nvim  = prev.haskell-tools-nvim.overrideAttrs(oa: {
+    doCheck = lua.luaversion == "5.1";
+    nativeCheckInputs = [ final.nlua final.busted ];
+    checkPhase = ''
+      runHook preCheck
+      export HOME=$(mktemp -d)
+      busted --lua=nlua
+      runHook postCheck
+      '';
+  });
 
   plenary-nvim = prev.plenary-nvim.overrideAttrs (oa: {
     postPatch = ''
@@ -583,6 +593,15 @@ in
       USE_SYSTEM_LUA = "yes";
       USE_SYSTEM_MPACK = "yes";
     };
+  });
+
+  nlua = prev.nlua.overrideAttrs(oa: {
+
+    # patchShebang removes the nvim in nlua's shebang so we hardcode one
+    postFixup = ''
+      sed -i -e "1 s|.*|#\!${coreutils}/bin/env -S ${neovim-unwrapped}/bin/nvim -l|" "$out/bin/nlua"
+      '';
+    dontPatchShebangs = true;
   });
 
   rapidjson = prev.rapidjson.overrideAttrs (oa: {

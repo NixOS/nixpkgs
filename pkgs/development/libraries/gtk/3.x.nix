@@ -264,6 +264,6 @@ stdenv.mkDerivation (finalAttrs: {
       "gtk+-x11-3.0"
     ];
     platforms = platforms.all;
-    changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${version}/NEWS";
+    changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${finalAttrs.version}/NEWS";
   };
 })

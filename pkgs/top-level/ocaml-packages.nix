@@ -88,7 +88,11 @@ let
 
     biniou = callPackage ../development/ocaml-modules/biniou { };
 
+    binning = callPackage ../development/ocaml-modules/binning { };
+
     biocaml = janeStreet_0_15.biocaml;
+
+    biotk = janeStreet_0_15.biotk;
 
     bisect_ppx = callPackage ../development/ocaml-modules/bisect_ppx { };
 
@@ -819,26 +823,24 @@ let
         cfstream = self.cfstream.override { inherit core_kernel; };
       };
 
+      biotk = let
+        angstrom = self.angstrom.override { inherit ppx_let; };
+      in callPackage ../development/ocaml-modules/biotk {
+        angstrom-unix = self.angstrom-unix.override { inherit angstrom; };
+        ppx_deriving = self.ppx_deriving.override { inherit (jsDeps) ppxlib; };
+        uri = self.uri.override { inherit angstrom; };
+        vg = self.vg.override { htmlcBackend = false; };
+      };
+
       phylogenetics = let
         angstrom = self.angstrom.override { inherit ppx_let; };
       in callPackage ../development/ocaml-modules/phylogenetics {
-        inherit biocaml;
         ppx_deriving = self.ppx_deriving.override { inherit (jsDeps) ppxlib; };
         angstrom-unix = self.angstrom-unix.override { inherit angstrom; };
       };
 
       ppx_bap = callPackage ../development/ocaml-modules/ppx_bap { };
     })).overrideScope liftJaneStreet;
-
-    janeStreet_0_9_0 = import ../development/ocaml-modules/janestreet/old.nix {
-      self = self.janeStreet_0_9_0;
-      super = self // {
-        janePackage = callPackage ../development/ocaml-modules/janestreet/janePackage.nix {
-          defaultVersion = "0.9.0";
-        };
-      };
-      inherit (pkgs) stdenv lib openssl;
-    };
 
     javalib = callPackage ../development/ocaml-modules/javalib { };
 
@@ -1724,6 +1726,8 @@ let
     stog = callPackage ../applications/misc/stog { };
     stog_asy = callPackage ../applications/misc/stog/asy.nix { };
     stog_markdown = callPackage ../applications/misc/stog/markdown.nix { };
+
+    streaming = callPackage ../development/ocaml-modules/streaming { };
 
     stringext = callPackage ../development/ocaml-modules/stringext { };
 

@@ -605,6 +605,7 @@ broken-packages:
   - cabal2json # failure in job https://hydra.nixos.org/build/233196099 at 2023-09-02
   - cabal-audit # failure in job https://hydra.nixos.org/build/233193414 at 2023-09-02
   - cabal-auto-expose # failure in job https://hydra.nixos.org/build/233195440 at 2023-09-02
+  - cabal-build-programs # failure in job https://hydra.nixos.org/build/257091363 at 2024-04-27
   - cabal-bundle-clib # failure in job https://hydra.nixos.org/build/233199225 at 2023-09-02
   - cabal-constraints # failure in job https://hydra.nixos.org/build/233214316 at 2023-09-02
   - cabal-db # failure in job https://hydra.nixos.org/build/233197235 at 2023-09-02
@@ -738,6 +739,7 @@ broken-packages:
   - changelog-d # failure in job https://hydra.nixos.org/build/252716175 at 2024-03-16
   - changelog-d # failure in job https://hydra.nixos.org/build/253689337 at 2024-03-31
   - changelog-d # failure in job https://hydra.nixos.org/build/255671571 at 2024-04-16
+  - changelog-d # failure in job https://hydra.nixos.org/build/257082502 at 2024-04-27
   - changelogged # failure in job https://hydra.nixos.org/build/233211675 at 2023-09-02
   - character-cases # failure in job https://hydra.nixos.org/build/233197636 at 2023-09-02
   - charter # failure in job https://hydra.nixos.org/build/233237264 at 2023-09-02
@@ -3207,7 +3209,6 @@ broken-packages:
   - joy-rewrite # failure in job https://hydra.nixos.org/build/233201002 at 2023-09-02
   - jpeg # failure in job https://hydra.nixos.org/build/233204056 at 2023-09-02
   - jsaddle-clib # failure in job https://hydra.nixos.org/build/233203899 at 2023-09-02
-  - jsaddle-warp # failure in job https://hydra.nixos.org/build/233252373 at 2023-09-02
   - jsaddle-wkwebview # failure in job https://hydra.nixos.org/build/233242986 at 2023-09-02
   - js-good-parts # failure in job https://hydra.nixos.org/build/233198958 at 2023-09-02
   - json2 # failure in job https://hydra.nixos.org/build/233242447 at 2023-09-02
@@ -4910,6 +4911,7 @@ broken-packages:
   - rclient # failure in job https://hydra.nixos.org/build/233239290 at 2023-09-02
   - rdf4h # failure in job https://hydra.nixos.org/build/233234057 at 2023-09-02
   - rds-data-codecs # failure in job https://hydra.nixos.org/build/253696582 at 2024-03-31
+  - react # failure in job https://hydra.nixos.org/build/257372364 at 2024-04-27
   - react-flux # failure in job https://hydra.nixos.org/build/233246819 at 2023-09-02
   - react-haskell # failure in job https://hydra.nixos.org/build/233242976 at 2023-09-02
   - reaction-logic # failure in job https://hydra.nixos.org/build/233216789 at 2023-09-02
@@ -5389,6 +5391,7 @@ broken-packages:
   - show-type # failure in job https://hydra.nixos.org/build/233225756 at 2023-09-02
   - Shpadoinkle-console # failure in job https://hydra.nixos.org/build/233228559 at 2023-09-02
   - Shpadoinkle-debug # failure in job https://hydra.nixos.org/build/233194479 at 2023-09-02
+  - Shpadoinkle # failure in job https://hydra.nixos.org/build/257372361 at 2024-04-27
   - Shpadoinkle-isreal # failure in job https://hydra.nixos.org/build/233200051 at 2023-09-02
   - shwifty # failure in job https://hydra.nixos.org/build/233249022 at 2023-09-02
   - sifflet # failure in job https://hydra.nixos.org/build/233210515 at 2023-09-02

@@ -3,6 +3,14 @@
 , fetchPypi
 , pythonOlder
 , dnspython
+
+# for passthru.tests
+, celery  # check-input only
+, flask-pymongo
+, kombu  # check-input only
+, mongoengine
+, motor
+, pymongo-inmemory
 }:
 
 buildPythonPackage rec {
@@ -25,6 +33,17 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "pymongo" ];
+
+  passthru.tests = {
+    inherit
+      celery
+      flask-pymongo
+      kombu
+      mongoengine
+      motor
+      pymongo-inmemory
+    ;
+  };
 
   meta = with lib; {
     description = "Python driver for MongoDB";

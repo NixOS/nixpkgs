@@ -286,16 +286,16 @@ in
         virtualHosts.${cfg.nginx.domain} = {
           # https://docs.pretalx.org/administrator/installation.html#step-7-ssl
           extraConfig = ''
-            more_set_headers Referrer-Policy same-origin;
-            more_set_headers X-Content-Type-Options nosniff;
+            more_set_headers "Referrer-Policy: same-origin";
+            more_set_headers "X-Content-Type-Options: nosniff";
           '';
           locations = {
             "/".proxyPass = "http://pretalx";
             "/media/" = {
-              alias = "${cfg.settings.filesystem.data}/data/media/";
+              alias = "${cfg.settings.filesystem.data}/media/";
               extraConfig = ''
                 access_log off;
-                more_set_headers Content-Disposition 'attachment; filename="$1"';
+                more_set_headers 'Content-Disposition: attachment; filename="$1"';
                 expires 7d;
               '';
             };

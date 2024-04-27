@@ -72,7 +72,7 @@ symlinkJoin {
   ]
   ++ lib.optional (lib.versionAtLeast qtbase.version "6" && stdenv.isLinux) qtwayland;
 
-  waylandPreExec = ''
+  waylandPreExec = lib.optionalString withWaylandGLFW ''
     if [ -n "$WAYLAND_DISPLAY" ]; then
       export LD_LIBRARY_PATH=${lib.getLib glfw-wayland-minecraft}/lib:"$LD_LIBRARY_PATH"
     fi
