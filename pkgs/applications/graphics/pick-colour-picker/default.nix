@@ -6,7 +6,7 @@
 , glib
 , gtk3
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , python
 }:
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   pythonPath = [

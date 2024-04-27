@@ -22,7 +22,7 @@
 , pkg-config
 , python3
 , sqlite
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

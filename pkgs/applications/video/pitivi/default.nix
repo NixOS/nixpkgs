@@ -4,7 +4,7 @@
 , gettext
 , itstool
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , gst_all_1
 , gtk3
 , gobject-introspection
@@ -44,7 +44,7 @@ python3.pkgs.buildPythonApplication rec {
     gettext
     itstool
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 

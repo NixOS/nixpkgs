@@ -3,7 +3,7 @@
 , buildDotnetModule
 , fetchFromGitHub
 , dotnetCorePackages
-, wrapGAppsHook
+, wrapGAppsHook3
 
 , libX11
 , libICE
@@ -43,7 +43,7 @@ buildDotnetModule rec {
     "HangoverAvalonia/HangoverAvalonia.csproj"
   ];
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
 
   runtimeDeps = [
     # For Avalonia UI

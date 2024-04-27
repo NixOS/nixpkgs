@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, scons, pkg-config, wrapGAppsHook
+{ lib, stdenv, fetchFromGitHub, scons, pkg-config, wrapGAppsHook3
 , glfw3, gtk3, libpng }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ueA0YW2n/DXd9AytDzfPtvtXbvuUm4VDwcdvHWObKxc=";
   };
 
-  nativeBuildInputs = [ scons pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ scons pkg-config wrapGAppsHook3 ];
   buildInputs = [ glfw3 gtk3 libpng ];
 
   buildPhase = ''

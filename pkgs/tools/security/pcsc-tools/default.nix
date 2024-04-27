@@ -6,7 +6,7 @@
 , gobject-introspection
 , makeWrapper
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 , dbusSupport ? stdenv.isLinux, dbus
 , pcsclite
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ] ++ lib.optionals withGui [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   preFixup = ''

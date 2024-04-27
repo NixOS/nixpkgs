@@ -5,7 +5,7 @@
 , gtk3
 , libhandy
 , modemmanager
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     gobject-introspection
     python3.pkgs.setuptools
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

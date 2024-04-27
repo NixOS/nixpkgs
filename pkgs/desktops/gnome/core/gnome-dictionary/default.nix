@@ -11,7 +11,7 @@
 , libxml2
 , gettext
 , itstool
-, wrapGAppsHook
+, wrapGAppsHook3
 , docbook_xsl
 , docbook_xml_dtd_43
 , gnome
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     libxml2
     gettext
     itstool

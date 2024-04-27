@@ -25,7 +25,7 @@
 , pkg-config
 , stdenv
 , runCommand
-, wrapGAppsHook
+, wrapGAppsHook3
 , xmlto
 , enableGeoLocation ? true
 }:
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     xmlto
   ];
 

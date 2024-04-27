@@ -6,7 +6,7 @@
 , SDL
 , gtk3
 , gsettings-desktop-schemas
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL
     gtk3
     gsettings-desktop-schemas
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   makeFlags = [ "DESTDIR=$(out)" ];

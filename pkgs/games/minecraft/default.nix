@@ -4,7 +4,7 @@
 , copyDesktopItems
 , makeDesktopItem
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , jre # old or modded versions of the game may require Java 8 (https://aur.archlinux.org/packages/minecraft-launcher/#pinned-674960)
 , xorg
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
     sha256 = "0w8z21ml79kblv20wh5lz037g130pxkgs8ll9s3bi94zn2pbrhim";
   };
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook copyDesktopItems gobject-introspection ];
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook3 copyDesktopItems gobject-introspection ];
 
   sourceRoot = ".";
 

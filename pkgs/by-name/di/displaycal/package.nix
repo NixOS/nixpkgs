@@ -1,7 +1,7 @@
 { lib
 , python3
 , fetchPypi
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 , librsvg
 , xorg
@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gtk3
   ];
 

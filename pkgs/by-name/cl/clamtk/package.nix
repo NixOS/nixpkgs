@@ -1,7 +1,7 @@
 { lib
 , perlPackages
 , fetchFromGitHub
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , perl
 , clamav
@@ -18,7 +18,7 @@ perlPackages.buildPerlPackage rec {
     hash = "sha256-ClBsBXbGj67zgrkA9EjgK7s3OmXOJA+xV5xLGOcMsbI=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
+  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
   buildInputs = [ perl clamav ];
   propagatedBuildInputs = with perlPackages; [ Glib LWP LWPProtocolHttps TextCSV JSON LocaleGettext Gtk3 ];
 

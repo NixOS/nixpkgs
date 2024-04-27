@@ -7,7 +7,7 @@
 , makeWrapper
 , pkg-config
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , dbus
 , systemd
 , dconf ? null
@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3BuildEnv
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
     dbus-launch
     gobject-introspection
   ];

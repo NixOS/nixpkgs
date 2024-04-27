@@ -4,7 +4,7 @@
 , appstream-glib
 , gettext
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 , ibus
 , libhangul
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     appstream-glib
     gettext
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

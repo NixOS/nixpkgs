@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , addOpenGLRunpath
-, wrapGAppsHook
+, wrapGAppsHook3
 , cmake
 , glslang
 , nasm
@@ -64,7 +64,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     addOpenGLRunpath
-    wrapGAppsHook
+    wrapGAppsHook3
     cmake
     glslang
     nasm

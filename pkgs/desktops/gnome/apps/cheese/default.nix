@@ -2,7 +2,7 @@
 , stdenv
 , gettext
 , fetchurl
-, wrapGAppsHook
+, wrapGAppsHook3
 , gnome-video-effects
 , libcanberra-gtk3
 , pkg-config
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
     glib # for glib-compile-schemas
   ];
 

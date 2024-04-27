@@ -7,7 +7,7 @@
 , ninja
 , python3
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 , extra-cmake-modules
 , qtbase
@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ] ++ lib.optionals stdenv.isLinux [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
     extra-cmake-modules
   ] ++ lib.optionals stdenv.isDarwin [
     lld

@@ -21,7 +21,7 @@
 , nss
 , libical
 , gperf
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib-networking
 , gsettings-desktop-schemas
 , pcre
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     gettext
     python3
     gperf
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
     vala
   ];

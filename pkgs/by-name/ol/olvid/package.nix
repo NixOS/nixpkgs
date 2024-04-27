@@ -13,7 +13,7 @@
 , openjfx21
 , autoPatchelfHook
 , makeBinaryWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 let
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoPatchelfHook
     makeBinaryWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

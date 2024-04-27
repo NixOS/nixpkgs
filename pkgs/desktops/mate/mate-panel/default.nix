@@ -18,7 +18,7 @@
 , hicolor-icon-theme
 , wayland
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , marco
 , mateUpdateScript
 }:
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     # See https://github.com/mate-desktop/mate-panel/issues/1402
-    # This is propagated for mate_panel_applet_settings_new and applet's wrapGAppsHook
+    # This is propagated for mate_panel_applet_settings_new and applet's wrapGAppsHook3
     gnome.dconf-editor
   ];
 

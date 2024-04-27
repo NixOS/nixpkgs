@@ -25,7 +25,7 @@
 , qtfeedback
 , qtgraphicaleffects
 , validatePkgConfig
-, wrapGAppsHook
+, wrapGAppsHook3
 , xvfb-run
 }:
 
@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     qtdeclarative # qmlplugindump
     validatePkgConfig
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

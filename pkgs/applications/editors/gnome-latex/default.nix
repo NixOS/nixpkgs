@@ -5,7 +5,7 @@
 , gtk-doc
 , vala
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , gsettings-desktop-schemas
 , gspell
 , libgedit-amtk
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     vala
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
     itstool
     gettext
   ];

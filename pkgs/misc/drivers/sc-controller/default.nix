@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchFromGitHub, wrapGAppsHook
+{ lib, buildPythonApplication, fetchFromGitHub, wrapGAppsHook3
 , pytestCheckHook
 , gtk3, gobject-introspection, libappindicator-gtk3, librsvg
 , evdev, pygobject3, pylibacl, bluez, vdf
@@ -17,7 +17,7 @@ buildPythonApplication rec {
     sha256 = "sha256-vK/5S+GyqVfKTqn5PaPmOV/tXE9PIW57gqYxvhGaJSg=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
+  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
 
   buildInputs = [ gtk3 libappindicator-gtk3 librsvg ];
 

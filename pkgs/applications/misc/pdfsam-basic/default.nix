@@ -1,4 +1,4 @@
-{ lib, stdenv, makeDesktopItem, fetchurl, jdk21, wrapGAppsHook, glib }:
+{ lib, stdenv, makeDesktopItem, fetchurl, jdk21, wrapGAppsHook3, glib }:
 
 stdenv.mkDerivation rec {
   pname = "pdfsam-basic";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     tar xvf data.tar.gz
   '';
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
   buildInputs = [ glib ];
 
   preFixup = ''

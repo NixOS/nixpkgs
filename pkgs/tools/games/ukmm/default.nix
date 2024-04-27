@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , libglvnd
 , nix-update-script
 }:
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   preFixup = ''

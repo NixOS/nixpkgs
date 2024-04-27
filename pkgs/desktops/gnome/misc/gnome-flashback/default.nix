@@ -22,7 +22,7 @@
 , systemd
 , upower
 , pam
-, wrapGAppsHook
+, wrapGAppsHook3
 , writeTextFile
 , xkeyboard_config
 , xorg
@@ -90,7 +90,7 @@ let
       gettext
       libxml2
       pkg-config
-      wrapGAppsHook
+      wrapGAppsHook3
     ];
 
     buildInputs = [

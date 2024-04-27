@@ -2,7 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 , librsvg
 , gtk-layer-shell
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-IirFE714NZmppLjwbWk6fxcmRXCUFzB4oxOxBvmYu5U=";
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
 
   buildInputs = [ gtk3 librsvg gtk-layer-shell ];
 

@@ -1,6 +1,6 @@
 { config, stdenv, lib, fetchurl, intltool, pkg-config, python3Packages, bluez, gtk3
 , obex_data_server, xdg-utils, dnsmasq, dhcpcd, iproute2
-, gnome, librsvg, wrapGAppsHook, gobject-introspection
+, gnome, librsvg, wrapGAppsHook3, gobject-introspection
 , networkmanager, withPulseAudio ? config.pulseaudio or stdenv.isLinux, libpulseaudio }:
 
 let
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     gobject-introspection intltool pkg-config pythonPackages.cython
-    pythonPackages.wrapPython wrapGAppsHook
+    pythonPackages.wrapPython wrapGAppsHook3
   ];
 
   buildInputs = [ bluez gtk3 pythonPackages.python librsvg

@@ -11,7 +11,7 @@
 , qtwayland
 , wayland
 , waylandSupport ? stdenv.isLinux
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 let
@@ -31,7 +31,7 @@ mkDerivationWith python3.pkgs.buildPythonApplication {
 
   nativeBuildInputs = [
     doxygen
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

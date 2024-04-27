@@ -1,5 +1,5 @@
 { avahiSupport ? false # build support for Avahi in libinfinity
-, lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config, wrapGAppsHook, yelp-tools
+, lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config, wrapGAppsHook3, yelp-tools
 , gtkmm3, gsasl, gtksourceview3, libxmlxx, libinfinity, intltool, itstool }:
 
 let
@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
     sha256 = "06cbc2y4xkw89jaa0ayhgh7fxr5p2nv3jjs8h2xcbbbgwaw08lk0";
   };
 
-  nativeBuildInputs = [ autoconf automake pkg-config intltool itstool yelp-tools wrapGAppsHook ];
+  nativeBuildInputs = [ autoconf automake pkg-config intltool itstool yelp-tools wrapGAppsHook3 ];
   buildInputs = [ gtkmm3 gsasl gtksourceview3 libxmlxx libinf ];
 
   preConfigure = "./autogen.sh";

@@ -5,7 +5,7 @@
 , jdk
 , libsecret
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 , _7zz
 , nixosTests
 }:
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     _7zz
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [

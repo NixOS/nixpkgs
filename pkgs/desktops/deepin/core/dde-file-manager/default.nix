@@ -23,7 +23,7 @@
 , polkit-qt
 , polkit
 , wrapQtAppsHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , lucenepp
 , boost
 , taglib
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     qttools
     pkg-config
     wrapQtAppsHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   dontWrapGApps = true;
 

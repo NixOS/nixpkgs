@@ -10,7 +10,7 @@
 , stdenv
 , tcl
 , tk
-, wrapGAppsHook
+, wrapGAppsHook3
 , xz
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-D0MwwCiiqz0vTUzur222kl2wEMS2/VLRECLQ5d6gSGo=";
   };
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
   buildInputs = [ bzip2 glib gperf gtk3 judy tcl tk xz ]
     ++ lib.optional stdenv.isDarwin gtk-mac-integration;
 

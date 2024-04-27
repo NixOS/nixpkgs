@@ -4,7 +4,7 @@
 , pkg-config
 , runCommand
 , writeText
-, wrapGAppsHook
+, wrapGAppsHook3
 , withNvenc ? false
 , atk
 , cairo
@@ -89,7 +89,7 @@ in buildPythonApplication rec {
   nativeBuildInputs = [
     gobject-introspection
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     pandoc
   ] ++ lib.optional withNvenc cudatoolkit;
 

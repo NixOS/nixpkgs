@@ -21,7 +21,7 @@
 , gmp
 , openssl
 , dleyna-server
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
 
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

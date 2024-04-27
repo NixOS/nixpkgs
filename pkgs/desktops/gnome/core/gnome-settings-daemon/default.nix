@@ -31,7 +31,7 @@
 , gnome-desktop
 , geocode-glib_2
 , docbook_xsl
-, wrapGAppsHook
+, wrapGAppsHook3
 , python3
 , tzdata
 , gcr_4
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     libxml2
     libxslt
     docbook_xsl
-    wrapGAppsHook
+    wrapGAppsHook3
     python3
   ];
 

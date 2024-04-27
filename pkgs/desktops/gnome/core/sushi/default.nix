@@ -11,7 +11,7 @@
 , libsoup_3
 , webkitgtk_4_1
 , icu
-, wrapGAppsHook
+, wrapGAppsHook3
 , gst_all_1
 , gdk-pixbuf
 , librsvg
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     ninja
     gettext
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

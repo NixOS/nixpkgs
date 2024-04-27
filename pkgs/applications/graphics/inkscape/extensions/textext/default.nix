@@ -6,7 +6,7 @@
 , pdflatex
 , lualatex
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , gtk3
 , gtksourceview3
@@ -43,7 +43,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 

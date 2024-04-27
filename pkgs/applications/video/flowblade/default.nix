@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub, stdenv
 , ffmpeg, frei0r, sox, gtk3, python3, ladspaPlugins
-, gobject-introspection, makeWrapper, wrapGAppsHook
+, gobject-introspection, makeWrapper, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     (python3.withPackages (ps: with ps; [ mlt pygobject3 dbus-python numpy pillow libusb1 ]))
   ];
 
-  nativeBuildInputs = [ gobject-introspection makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ gobject-introspection makeWrapper wrapGAppsHook3 ];
 
   installPhase = ''
     runHook preInstall

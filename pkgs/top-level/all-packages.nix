@@ -1434,13 +1434,18 @@ with pkgs;
     name = "find-xml-catalogs-hook";
   } ../build-support/setup-hooks/find-xml-catalogs.sh;
 
-  wrapGAppsHook = callPackage ../build-support/setup-hooks/wrap-gapps-hook {
-    makeWrapper = makeBinaryWrapper;
+  wrapGAppsHook3 = wrapGAppsNoGuiHook.override {
+    isGraphical = true;
   };
 
-  wrapGAppsHook4 = wrapGAppsHook.override { gtk3 = __splicedPackages.gtk4; };
+  wrapGAppsHook4 = wrapGAppsNoGuiHook.override {
+    isGraphical = true;
+    gtk3 = __splicedPackages.gtk4;
+  };
 
-  wrapGAppsNoGuiHook = wrapGAppsHook.override { isGraphical = false; };
+  wrapGAppsNoGuiHook = callPackage ../build-support/setup-hooks/wrap-gapps-hook {
+    makeWrapper = makeBinaryWrapper;
+  };
 
   separateDebugInfo = makeSetupHook {
     name = "separate-debug-info-hook";
@@ -40137,7 +40142,7 @@ with pkgs;
   rfc-bibtex = callPackage ../tools/typesetting/rfc-bibtex { };
 
   pick-colour-picker = python3Packages.callPackage ../applications/graphics/pick-colour-picker {
-    inherit glib gtk3 gobject-introspection wrapGAppsHook;
+    inherit glib gtk3 gobject-introspection wrapGAppsHook3;
   };
 
   rpl = callPackage ../tools/text/rpl { };

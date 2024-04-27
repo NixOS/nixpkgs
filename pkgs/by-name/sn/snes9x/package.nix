@@ -23,7 +23,7 @@
   python3,
   stdenv,
   util-linuxMinimal,
-  wrapGAppsHook,
+  wrapGAppsHook3,
   zlib,
   # Boolean flags
   withGtk ? false,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withGtk [
     cmake
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

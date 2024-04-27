@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , python
 , xvfb-run
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , pygobject3
 , graphviz
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   propagatedBuildInputs = [
     pygobject3

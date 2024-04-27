@@ -15,7 +15,7 @@
 , vte
 , libgee
 , pcre2
-, wrapGAppsHook
+, wrapGAppsHook3
 , xvfb-run
 }:
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
     xvfb-run
   ];
 

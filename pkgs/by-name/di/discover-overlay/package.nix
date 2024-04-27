@@ -1,4 +1,4 @@
-{ lib, python3, fetchFromGitHub, gtk3, gobject-introspection, gtk-layer-shell, wrapGAppsHook }:
+{ lib, python3, fetchFromGitHub, gtk3, gobject-introspection, gtk-layer-shell, wrapGAppsHook3 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "discover-overlay";
   version = "0.7.0";
@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python3.pkgs; [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   dontWrapGApps = true;

@@ -32,7 +32,7 @@
 , gcr_4
 , glib-networking
 , gnome-online-accounts
-, wrapGAppsHook
+, wrapGAppsHook3
 , libimobiledevice
 , libbluray
 , libcdio-paranoia
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     python3
     pkg-config
     gettext
-    wrapGAppsHook
+    wrapGAppsHook3
     libxslt
     docbook_xsl
     docbook_xml_dtd_42

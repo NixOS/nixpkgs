@@ -6,7 +6,7 @@
 , python3
 , rustPlatform
 , lib
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkg-config
     python3 # needed for Rust xcb package
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

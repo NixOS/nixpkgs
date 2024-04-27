@@ -1,7 +1,7 @@
 { stdenv, lib, unzip, autoPatchelfHook
 , fetchurl, makeWrapper
 , alsa-lib, mesa, nss, nspr, systemd
-, makeDesktopItem, copyDesktopItems, wrapGAppsHook
+, makeDesktopItem, copyDesktopItems, wrapGAppsHook3
 , metaCommon
 }:
 
@@ -29,7 +29,7 @@ let
     nativeBuildInputs = [
       autoPatchelfHook
       makeWrapper
-      wrapGAppsHook
+      wrapGAppsHook3
       copyDesktopItems
     ];
 

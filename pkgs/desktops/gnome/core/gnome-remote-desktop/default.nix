@@ -7,7 +7,7 @@
 , pkg-config
 , python3
 , asciidoc
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , libei
 , libepoxy
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     asciidoc
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

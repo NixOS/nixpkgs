@@ -19,7 +19,7 @@
 , libgudev
 , libwacom
 , gnome
-, wrapGAppsHook
+, wrapGAppsHook3
 , tzdata
 , glibc
 , libnma
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     pkg-config
     meson
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     gettext
     python3
   ];
