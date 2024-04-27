@@ -358,6 +358,7 @@ let
     gslnls = [ pkgs.gsl ];
     gert = [ pkgs.libgit2 ];
     haven = with pkgs; [ zlib.dev ];
+    hellorust = [ pkgs.cargo ];
     h5vc = with pkgs; [ zlib.dev bzip2.dev xz.dev ];
     yyjsonr = with pkgs; [ zlib.dev ];
     highs = [ pkgs.which pkgs.cmake ];
