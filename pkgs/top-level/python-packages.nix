@@ -598,6 +598,8 @@ self: super: with self; {
 
   amshan = callPackage ../development/python-modules/amshan { };
 
+  anonymizeip = callPackage ../development/python-modules/anonymizeip { };
+
   anchor-kr = callPackage ../development/python-modules/anchor-kr { };
 
   ancp-bids = callPackage ../development/python-modules/ancp-bids { };
