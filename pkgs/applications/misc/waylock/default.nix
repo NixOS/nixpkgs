@@ -7,7 +7,7 @@
 , scdoc
 , wayland
 , wayland-protocols
-, zig_0_11
+, zig
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     scdoc
     wayland
-    zig_0_11.hook
+    zig.hook
   ];
 
   buildInputs = [

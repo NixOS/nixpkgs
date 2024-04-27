@@ -31790,7 +31790,9 @@ with pkgs;
 
   waycorner = callPackage ../applications/misc/waycorner { };
 
-  waylock = callPackage ../applications/misc/waylock { };
+  waylock = callPackage ../applications/misc/waylock {
+    zig = zig_0_11;
+  };
 
   wayshot = callPackage ../tools/misc/wayshot { };
 
