@@ -2944,7 +2944,7 @@ self: super: {
 
   # Requires a newer zlib version than stackage provides
   futhark = super.futhark.override {
-    zlib = self.zlib_0_7_0_0;
+    zlib = self.zlib_0_7_1_0;
   };
 
   # Tests rely on (missing) submodule
