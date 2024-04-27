@@ -33,6 +33,6 @@ buildGoModule rec {
     mainProgram = "gotestsum";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ endocrimes ];
   };
 }

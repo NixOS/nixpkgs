@@ -5963,6 +5963,12 @@
     name = "Zhenbo Li";
     matrix = "@zhenbo:matrix.org";
   };
+  endocrimes = {
+    email = "dani@builds.terrible.systems";
+    github = "endocrimes";
+    githubId = 1330683;
+    name = "Danielle Lancashire";
+  };
   enorris = {
     name = "Eric Norris";
     email = "erictnorris@gmail.com";
