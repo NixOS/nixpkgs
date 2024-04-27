@@ -9992,7 +9992,9 @@ with pkgs;
 
   ministat = callPackage ../tools/misc/ministat { };
 
-  minizign = callPackage ../tools/security/minizign { };
+  minizign = callPackage ../tools/security/minizign {
+    zig = zig_0_11;
+  };
 
   mitm6 = callPackage ../tools/security/mitm6 { };
 

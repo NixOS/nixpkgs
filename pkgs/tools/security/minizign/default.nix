@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, zig_0_11
+, zig
 }:
 
 stdenv.mkDerivation {
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    zig_0_11.hook
+    zig.hook
   ];
 
   meta = with lib; {
@@ -25,6 +25,6 @@ stdenv.mkDerivation {
     license = licenses.isc;
     maintainers = with maintainers; [ figsoda ];
     mainProgram = "minizign";
-    inherit (zig_0_11.meta) platforms;
+    inherit (zig.meta) platforms;
   };
 }
