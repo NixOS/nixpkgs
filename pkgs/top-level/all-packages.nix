@@ -602,7 +602,9 @@ with pkgs;
 
   dsq = callPackage ../tools/misc/dsq { };
 
-  dt = callPackage ../tools/text/dt { };
+  dt = callPackage ../tools/text/dt {
+    zig = zig_0_11;
+  };
 
   dtv-scan-tables = callPackage ../data/misc/dtv-scan-tables { };
 
