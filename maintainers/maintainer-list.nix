@@ -20417,12 +20417,6 @@
     githubId = 74688871;
     name = "Tochukwu Ahanonu";
   };
-  tokudan = {
-    email = "git@danielfrank.net";
-    github = "tokudan";
-    githubId = 692610;
-    name = "Daniel Frank";
-  };
   tomahna = {
     email = "kevin.rauscher@tomahna.fr";
     github = "Tomahna";
