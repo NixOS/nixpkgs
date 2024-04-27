@@ -20709,12 +20709,6 @@
     githubId = 131159000;
     name = "Nitin Passa";
   };
-  twitchyliquid64 = {
-    name = "Tom";
-    email = "twitchyliquid64@ciphersink.net";
-    github = "twitchyliquid64";
-    githubId = 6328589;
-  };
   twz123 = {
     name = "Tom Wieczorek";
     email = "tom@bibbu.net";
@@ -22304,6 +22298,12 @@
     github = "yvesf";
     githubId = 179548;
     name = "Yves Fischer";
+  };
+  YvesStraten = {
+    email = "yves.straten@gmail.com";
+    github = "YvesStraten";
+    githubId = 65394961;
+    name = "Yves Straten";
   };
   yvt = {
     email = "i@yvt.jp";

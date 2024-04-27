@@ -263,9 +263,7 @@ with lib.maintainers; {
   };
 
   docs = {
-    members = [
-      ryantm
-    ];
+    members = [ ];
     scope = "Maintain nixpkgs/NixOS documentation and tools for building it.";
     shortName = "Docs";
     enableFeatureFreezePing = true;
