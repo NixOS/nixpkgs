@@ -49,6 +49,6 @@ buildPythonPackage rec {
     description = "Fitbit API Python Client Implementation";
     homepage = "https://github.com/orcasgit/python-fitbit";
     license = licenses.asl20;
-    maintainers = with maintainers; [ delroth ];
+    maintainers = with maintainers; [ ];
   };
 }
