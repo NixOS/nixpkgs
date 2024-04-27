@@ -19,6 +19,7 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [
     colorama
     libtmux
+    pyyaml
   ];
 
   # No tests in archive
