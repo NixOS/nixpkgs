@@ -6,8 +6,8 @@
   # Note that the created binaries still need `patchelf --set-interpreter ...`
   # to get rid of ${glibc} dependency.
 , purgeNixReferences ? false
-, coreCompression ? lib.versionAtLeast version "2.2.6"
-, markRegionGC ? lib.versionAtLeast version "2.4.0"
+, coreCompression ? true
+, markRegionGC ? true
 , version
   # Set this to a lisp binary to use a custom bootstrap lisp compiler for
   # SBCL. Leave as null to use the default. This is useful for local development
@@ -173,15 +173,8 @@ stdenv.mkDerivation (self: rec {
     "--arch=arm64"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (lib.versionOlder self.version "2.1.10") [
-    # Workaround build failure on -fno-common toolchains like upstream
-    # clang-13. Without the change build fails as:
-    #   duplicate symbol '_static_code_space_free_pointer' in: alloc.o traceroot.o
-    # Should be fixed past 2.1.10 release.
-    "-fcommon"
-  ]
-    # Fails to find `O_LARGEFILE` otherwise.
-    ++ [ "-D_GNU_SOURCE" ]);
+  # Fails to find `O_LARGEFILE` otherwise.
+  env.NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
 
   buildPhase = ''
     runHook preBuild
