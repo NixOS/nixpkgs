@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , installShellFiles
 , testers
-, zig_0_11
+, zig
 , callPackage
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
-    zig_0_11.hook
+    zig.hook
   ];
 
   postPatch = ''

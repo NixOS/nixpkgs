@@ -41058,7 +41058,9 @@ with pkgs;
 
   duden = python3Packages.toPythonApplication python3Packages.duden;
 
-  zf = callPackage ../tools/misc/zf { };
+  zf = callPackage ../tools/misc/zf {
+    zig = zig_0_11;
+  };
 
   isolate = callPackage ../tools/security/isolate { };
 
