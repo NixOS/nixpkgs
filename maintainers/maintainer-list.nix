@@ -19041,12 +19041,6 @@
     githubId = 16364318;
     name = "Jeffrey Harmon";
   };
-  srapenne = {
-    email = "solene@perso.pw";
-    github = "rapenne-s";
-    githubId = 248016;
-    name = "Solène Rapenne";
-  };
   srghma = {
     email = "srghma@gmail.com";
     github = "srghma";
