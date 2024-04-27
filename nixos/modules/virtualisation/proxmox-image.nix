@@ -158,6 +158,31 @@ with lib;
         any specific VMID.
       '';
     };
+    cloudInit = {
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether the VM should accept cloud init configurations from PVE.
+        '';
+      };
+      defaultStorage = mkOption {
+        default = "local-lvm";
+        example = "tank";
+        type = types.str;
+        description = ''
+          Default storage name for cloud init drive.
+        '';
+      };
+      device = mkOption {
+        default = "ide2";
+        example = "scsi0";
+        type = types.str;
+        description = ''
+          Bus/device to which the cloud init drive is attached.
+        '';
+      };
+    };
   };
 
   config = let
@@ -282,6 +307,20 @@ with lib;
       fsType = "vfat";
     };
 
-    services.qemuGuest.enable = lib.mkDefault true;
+    networking = mkIf cfg.cloudInit.enable {
+      hostName = mkForce "";
+      useDHCP = false;
+    };
+
+    services = {
+      cloud-init = mkIf cfg.cloudInit.enable {
+        enable = true;
+        network.enable = true;
+      };
+      sshd.enable = mkDefault true;
+      qemuGuest.enable = true;
+    };
+
+    proxmox.qemuExtraConf.${cfg.cloudInit.device} = "${cfg.cloudInit.defaultStorage}:vm-9999-cloudinit,media=cdrom";
   };
 }
