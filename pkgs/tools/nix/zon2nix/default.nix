@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, zig_0_11
+, zig
 , nix
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    zig_0_11.hook
+    zig.hook
   ];
 
   zigBuildFlags = [
@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/nix-community/zon2nix/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ figsoda ];
-    inherit (zig_0_11.meta) platforms;
+    inherit (zig.meta) platforms;
   };
 }

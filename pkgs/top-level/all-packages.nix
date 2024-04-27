@@ -19983,7 +19983,9 @@ with pkgs;
 
   tockloader = callPackage ../development/tools/misc/tockloader { };
 
-  zon2nix = callPackage ../tools/nix/zon2nix { };
+  zon2nix = callPackage ../tools/nix/zon2nix {
+    zig = zig_0_11;
+  };
 
   ztags = callPackage ../development/tools/misc/ztags {
     zig = zig_0_11;
