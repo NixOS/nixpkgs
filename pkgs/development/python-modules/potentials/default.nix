@@ -14,15 +14,16 @@
 , pythonOlder
 , requests
 , scipy
+, setuptools
 , unidecode
 , xmltodict
 , yabadaba
 }:
 
 buildPythonPackage rec {
-  version = "0.3.8";
   pname = "potentials";
-  format = "setuptools";
+  version = "0.3.8";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -31,7 +32,11 @@ buildPythonPackage rec {
     hash = "sha256-ZXsqsqsgWntZUOuW1/2KAhsbnienHu6VFctxYkw+GCU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     bibtexparser
     cdcs
     datamodeldict
@@ -58,6 +63,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API database tools for accessing the NIST Interatomic Potentials Repository";
     homepage = "https://github.com/usnistgov/potentials";
+    changelog = "https://github.com/usnistgov/potentials/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
