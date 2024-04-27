@@ -38,7 +38,7 @@ buildGoModule rec {
     description = "Manage your dotfiles across multiple machines, securely";
     changelog = "https://github.com/twpayne/chezmoi/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ jhillyerd ];
+    maintainers = with maintainers; [ ];
     mainProgram = "chezmoi";
   };
 }
