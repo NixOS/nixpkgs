@@ -18,16 +18,16 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
-    repo = pname;
+    repo = "zwave-js-server-python";
     rev = "refs/tags/${version}";
     hash = "sha256-wPvMgQR85yHC0k+ENj+r/ilcxmOipSFGkz8qBRLgPaY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     pydantic
   ];
@@ -43,10 +43,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python wrapper for zwave-js-server";
-    mainProgram = "zwave-js-server-python";
     homepage = "https://github.com/home-assistant-libs/zwave-js-server-python";
     changelog = "https://github.com/home-assistant-libs/zwave-js-server-python/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "zwave-js-server-python";
   };
 }
