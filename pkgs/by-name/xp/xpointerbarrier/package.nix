@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xpointerbarrier";
-  version = "20.07";
+  version = "23.08";
 
   src = fetchurl {
     url = "https://www.uninformativ.de/git/xpointerbarrier/archives/xpointerbarrier-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-V1sNAQjsPVSjJ2nhCSdZqZQA78pjUE0z3IU4+I85CpI=";
+    hash = "sha256-d0PcZ4z8JgN4ncPUGeJZwIV5vB7M0Jo7o1/L6mrJtUc=";
   };
 
   nativeBuildInputs = [ pkg-config ];
