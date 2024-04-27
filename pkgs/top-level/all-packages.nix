@@ -30243,7 +30243,9 @@ with pkgs;
 
   cwm = callPackage ../applications/window-managers/cwm { };
 
-  cyber = callPackage ../development/interpreters/cyber { };
+  cyber = callPackage ../development/interpreters/cyber {
+    zig = zig_0_11;
+  };
 
   cyberduck = callPackage ../applications/networking/cyberduck { };
 

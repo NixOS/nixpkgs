@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, zig_0_11
+, zig
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    zig_0_11.hook
+    zig.hook
   ];
 
   zigBuildFlags = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/fubark/cyber";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
-    inherit (zig_0_11.meta) platforms;
+    inherit (zig.meta) platforms;
     broken = stdenv.isDarwin;
   };
 }
