@@ -30,15 +30,15 @@ jobs:
             release_name: "windows-x64"
 
           - platform: macos-13
-            configure_preset: "default"
-            build_preset: "release"
+            configure_preset: "macos"
+            build_preset: "macos-release"
             release_name: "macos-x64"
             cc: "/usr/local/opt/llvm/bin/clang"
             cxx: "/usr/local/opt/llvm/bin/clang++"
 
           - platform: macos-14
-            configure_preset: "default"
-            build_preset: "release"
+            configure_preset: "macos"
+            build_preset: "macos-release"
             release_name: "macos-arm64"
             cc: "/opt/homebrew/opt/llvm/bin/clang"
             cxx: "/opt/homebrew/opt/llvm/bin/clang++"

@@ -38,6 +38,15 @@
       }
     },
     {
+      "name": "macos",
+      "inherits": [
+        "default"
+      ],
+      "cacheVariables": {
+        "VCPKG_OSX_DEPLOYMENT_TARGET": "13.3"
+      }
+    },
+    {
       "name": "tests",
       "inherits": [
         "default"
@@ -66,6 +75,11 @@
     {
       "name": "windows-static-release",
       "configurePreset": "windows-static",
+      "configuration": "Release"
+    },
+    {
+      "name": "macos-release",
+      "configurePreset": "macos",
       "configuration": "Release"
     },
     {
