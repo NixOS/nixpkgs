@@ -8963,13 +8963,6 @@
     githubId = 1358764;
     name = "Jamie Magee";
   };
-  janik = {
-    name = "Janik";
-    email = "janik@aq0.de";
-    matrix = "@janik0:matrix.org";
-    github = "Janik-Haag";
-    githubId = 80165193;
-  };
   jankaifer = {
     name = "Jan Kaifer";
     email = "jan@kaifer.cz";

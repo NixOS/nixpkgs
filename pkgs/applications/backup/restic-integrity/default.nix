@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     description = "CLI tool to check the integrity of a restic repository without unlocking it";
     homepage = "https://git.nwex.de/networkException/restic-integrity";
     license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ janik ];
+    maintainers = with maintainers; [ ];
     mainProgram = "restic-integrity";
   };
 }
