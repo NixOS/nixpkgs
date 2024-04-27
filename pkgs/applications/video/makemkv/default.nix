@@ -101,6 +101,6 @@ mkDerivation {
     ];
     homepage = "http://makemkv.com";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ jchw ];
   };
 }
