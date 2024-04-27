@@ -6730,12 +6730,6 @@
     githubId = 5918766;
     name = "Franz Thoma";
   };
-  fogti = {
-    name = "Alain Fogtia Zscheile";
-    email = "fogti+devel@ytrizja.de";
-    github = "fogti";
-    githubId = 1618343;
-  };
   foo-dogsquared = {
     email = "foodogsquared@foodogsquared.one";
     github = "foo-dogsquared";
