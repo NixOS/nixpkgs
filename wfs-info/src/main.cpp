@@ -24,8 +24,8 @@ std::string inline prettify_path(const std::filesystem::path& path) {
 
 void quotaInfo(int depth, const std::filesystem::path& path, const std::shared_ptr<QuotaArea>& quota) {
   std::string padding(depth, '\t');
-  std::println("{}Area {} [0x{:08x}-0x{:08x}]:", padding, prettify_path(path), quota->device_block_number(),
-               quota->to_area_block_number(quota->blocks_count()));
+  std::println("{}Quota {} [0x{:08x}-0x{:08x}]:", padding, prettify_path(path), quota->device_block_number(),
+               quota->to_device_block_number(quota->blocks_count()));
 
   padding += '\t';
   std::shared_ptr<FreeBlocksAllocator> allocator = throw_if_error(quota->GetFreeBlocksAllocator());
@@ -152,7 +152,7 @@ int main(int argc, char* argv[]) {
     auto wfs_device = throw_if_error(WfsDevice::Open(device, key));
     std::println("Allocator state:");
     auto transactions_area = throw_if_error(wfs_device->GetTransactionsArea());
-    std::println("Transactions area [0x{:08x}-0x{:08x}]", transactions_area->device_block_number(),
+    std::println("Transactions [0x{:08x}-0x{:08x}]", transactions_area->device_block_number(),
                  transactions_area->to_device_blocks_count(transactions_area->blocks_count()));
     dirInfo(0, throw_if_error(wfs_device->GetRootDirectory()), {});
     std::println("Done!");
