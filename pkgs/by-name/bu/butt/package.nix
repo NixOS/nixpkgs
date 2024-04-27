@@ -46,5 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ ehmry ];
     mainProgram = "butt";
+    platforms = lib.platforms.linux;
   };
 })
