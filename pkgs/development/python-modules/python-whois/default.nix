@@ -11,14 +11,15 @@
 
 buildPythonPackage rec {
   pname = "python-whois";
-  version = "0.9.3";
+  version = "0.9.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-jdoscMD4nw+PxIpCNweJMyv/9nm1+kYgSIhBUdJso84=";
+    pname = "python_whois";
+    inherit version;
+    hash = "sha256-d7xzR7+BXWXM0ZZxHCmDdlLwdYWu2tPDwE3YhWUf16c=";
   };
 
   build-system = [
