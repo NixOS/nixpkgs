@@ -19977,7 +19977,9 @@ with pkgs;
 
   zon2nix = callPackage ../tools/nix/zon2nix { };
 
-  ztags = callPackage ../development/tools/misc/ztags { };
+  ztags = callPackage ../development/tools/misc/ztags {
+    zig = zig_0_11;
+  };
 
   ### DEVELOPMENT / LIBRARIES
 

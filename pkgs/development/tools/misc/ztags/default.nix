@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , scdoc
-, zig_0_11
+, zig
 }:
 
 stdenv.mkDerivation {
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     scdoc
-    zig_0_11.hook
+    zig.hook
   ];
 
   postInstall = ''
@@ -31,6 +31,6 @@ stdenv.mkDerivation {
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
     mainProgram = "ztags";
-    inherit (zig_0_11.meta) platforms;
+    inherit (zig.meta) platforms;
   };
 }
