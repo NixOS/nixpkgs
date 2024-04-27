@@ -1,12 +1,16 @@
-{ stdenv, lib, fetchurl, fetchzip, autoreconfHook, writeScript }:
+{ stdenv, lib, fetchurl, fetchzip, autoreconfHook, writeScript
+, modelUrl ? "", modelHash ? "" # Allow overriding the model URL and hash
+}:
 
-let 
+let
   modelVersionJSON = lib.importJSON ./model-version.json;
 
-  # Copy from https://gitlab.xiph.org/xiph/rnnoise/-/raw/v${finalAttrs.version}/model_version
+  # Copy from https://gitlab.xiph.org/xiph/rnnoise/-/raw/v${version}/model_version
   default_model_version = modelVersionJSON.version;
-  default_model_url = "https://media.xiph.org/rnnoise/models/rnnoise_data-${default_model_version}.tar.gz";
-  default_model_hash = modelVersionJSON.hash;
+
+  # Either use the default model or the one provided by package override
+  model_url = if (modelUrl == "") then "https://media.xiph.org/rnnoise/models/rnnoise_data-${default_model_version}.tar.gz" else modelUrl;
+  model_hash = if (modelHash == "") then modelVersionJSON.hash else modelHash;
 
 in stdenv.mkDerivation (finalAttrs: {
   pname = "rnnoise";
@@ -21,8 +25,8 @@ in stdenv.mkDerivation (finalAttrs: {
   };
 
   model = fetchurl {
-    url = default_model_url;
-    hash = default_model_hash;
+    url = model_url;
+    hash = model_hash;
   };
 
   postPatch = ''
