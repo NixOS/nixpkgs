@@ -182,6 +182,7 @@ std::optional<std::vector<std::byte>> get_key(std::string type,
 int main(int argc, char* argv[]) {
   struct fuse_args args = FUSE_ARGS_INIT(argc, argv);
   struct wfs_param param = {NULL, NULL, NULL, NULL, 0};
+  std::string type;
   bool is_usb, is_mlc, is_plain;
   std::optional<std::string> otp_path, seeprom_path;
 
@@ -198,9 +199,10 @@ int main(int argc, char* argv[]) {
     return 0;
   }
 
-  is_usb = !param.type || !strcmp(param.type, "usb");
-  is_mlc = param.type && !strcmp(param.type, "mlc");
-  is_plain = param.type && !strcmp(param.type, "plain");
+  type = param.type ? param.type : "usb";
+  is_usb = type == "usb";
+  is_mlc = type == "mlc";
+  is_plain = type == "plain";
   if (!is_usb && !is_mlc && !is_plain) {
     fprintf(stderr, "Unsupported type (--type=usb/mlc/plain)\n");
     return 1;
@@ -219,7 +221,7 @@ int main(int argc, char* argv[]) {
     seeprom_path = param.seeprom;
 
   try {
-    auto key = get_key(param.type, otp_path, seeprom_path);
+    auto key = get_key(type, otp_path, seeprom_path);
     auto device = std::make_shared<FileDevice>(param.file, 9);
     auto detection_result = Recovery::DetectDeviceParams(device, key);
     if (detection_result.has_value()) {
