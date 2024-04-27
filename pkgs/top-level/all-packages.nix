@@ -32756,6 +32756,7 @@ with pkgs;
 
   mepo = callPackage ../applications/misc/mepo {
     inherit (gnome) zenity;
+    zig = zig_0_11;
   };
 
   meshcentral = callPackage ../tools/admin/meshcentral { };

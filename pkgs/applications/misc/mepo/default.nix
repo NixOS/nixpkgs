@@ -17,7 +17,7 @@
 , util-linux
 , xwininfo
 , zenity
-, zig_0_11
+, zig
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    zig_0_11.hook
+    zig.hook
     makeWrapper
   ];
 
