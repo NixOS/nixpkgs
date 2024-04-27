@@ -27,13 +27,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zed";
-  version = "0.132.2";
+  version = "0.132.3";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "zed";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KojFa22CLne36kGfMvZGWjo2Ae3tjYAfL371c0qe/Bk=";
+    hash = "sha256-EuoUDke8vBPQkiMa9WlP2K3FroIBBAVNJRjsRx4rkO0=";
     fetchSubmodules = true;
   };
 
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage rec {
       "nvim-rs-0.6.0-pre" = "sha256-bdWWuCsBv01mnPA5e5zRpq48BgOqaqIcAu+b7y1NnM8=";
       "pathfinder_simd-0.5.3" = "sha256-bakBcAQZJdHQPXybe0zoMzE49aOHENQY7/ZWZUMt+pM=";
       "taffy-0.3.11" = "sha256-0hXOEj6IjSW8e1t+rvxBFX6V9XRum3QO2Des1XlHJEw=";
-      "tree-sitter-0.20.100" = "sha256-k8au4++UJyaOCNo0cqokaQ5Is3BmIiCBSxiUkbrzhFQ=";
+      "tree-sitter-0.20.100" = "sha256-xZDWAjNIhWC2n39H7jJdKDgyE/J6+MAVSa8dHtZ6CLE=";
       "tree-sitter-bash-0.20.4" = "sha256-VP7rJfE/k8KV1XN1w5f0YKjCnDMYU1go/up0zj1mabM=";
       "tree-sitter-cpp-0.20.0" = "sha256-2QYEFkpwcRmh2kf4qEAL2a5lGSa316CetOhF73e7rEM=";
       "tree-sitter-css-0.19.0" = "sha256-5Qti/bFac2A1PJxqZEOuSLK3GGKYwPDKAp3OOassBxU=";
