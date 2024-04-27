@@ -1247,12 +1247,6 @@
     githubId = 962885;
     name = "Andrew Chambers";
   };
-  andrew-d = {
-    email = "andrew@du.nham.ca";
-    github = "andrew-d";
-    githubId = 1079173;
-    name = "Andrew Dunham";
-  };
   andrewrk = {
     email = "superjoe30@gmail.com";
     github = "andrewrk";
