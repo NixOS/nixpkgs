@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication {
     homepage = "https://tmuxp.git-pull.com/";
     changelog = "https://github.com/tmux-python/tmuxp/raw/v${version}/CHANGES";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ peterhoeg otavio ];
+    maintainers = with lib.maintainers; [ otavio ];
     mainProgram = "tmuxp";
   };
 }
