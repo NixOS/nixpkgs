@@ -29698,6 +29698,8 @@ with pkgs;
 
   pdfstudio2023 = callPackage ../applications/misc/pdfstudio { year = "2023"; };
 
+  pdfstudio2024 = callPackage ../applications/misc/pdfstudio { year = "2024"; };
+
   pdfstudioviewer = callPackage ../applications/misc/pdfstudio { program = "pdfstudioviewer"; };
 
   abaddon = callPackage ../applications/networking/instant-messengers/abaddon { };
