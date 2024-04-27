@@ -333,6 +333,7 @@ let
     Cardinal = [ pkgs.which ];
     chebpol = [ pkgs.fftw.dev ];
     ChemmineOB = [ pkgs.pkg-config ];
+    clarabel = [ pkgs.cargo ];
     curl = [ pkgs.curl.dev ];
     CytoML = [ pkgs.libxml2.dev ];
     data_table = with pkgs; [ pkg-config zlib.dev ] ++ lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
