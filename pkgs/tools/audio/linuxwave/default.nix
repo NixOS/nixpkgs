@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , installShellFiles
-, zig_0_10
+, zig
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
-    zig_0_10.hook
+    zig.hook
   ];
 
   postInstall = ''
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/orhun/linuxwave/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ figsoda ];
-    inherit (zig_0_10.meta) platforms;
+    inherit (zig.meta) platforms;
     mainProgram = "linuxwave";
   };
 })

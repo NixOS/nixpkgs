@@ -9762,7 +9762,9 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  linuxwave = callPackage ../tools/audio/linuxwave { };
+  linuxwave = callPackage ../tools/audio/linuxwave {
+    zig = zig_0_10;
+  };
 
   lksctp-tools = callPackage ../os-specific/linux/lksctp-tools { };
 
