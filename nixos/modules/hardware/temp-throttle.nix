@@ -2,22 +2,29 @@
 
 let
   cfg = config.services.temp-throttle;
-  configFile = with builtins;
-    "MAX_TEMP=" + toString cfg.max_temp + "\n" +
-    (if cfg.interval  != null then "INTERVAL="  + toString cfg.interval + "\n" else "") +
-    (if cfg.temp_file != null then "TEMP_FILE=" + cfg.interval          + "\n" else "") +
-    (if cfg.core      != null then "CORE="      + toString cfg.core     + "\n" else "") +
-    (if cfg.log_file  != null then "LOG_FILE="  + cfg.interval          + "\n" else "")
+  configFile = let toString = builtins.toString; in
+    "MAX_TEMP=${toString cfg.max_temp}\n" +
+    lib.optionalString (cfg.interval  != null) "INTERVAL=${toString cfg.interval}\n" +
+    lib.optionalString (cfg.temp_file != null) "TEMP_FILE=${cfg.temp_file}\n" +
+    lib.optionalString (cfg.core      != null) "CORE=${toString cfg.core}\n" +
+    lib.optionalString (cfg.log_file  != null) "LOG_FILE=${cfg.log_file}\n"
   ;
 in
 {
-  options = with lib; with lib.types; {
+  options = 
+  let
+    mkOption = lib.mkOption;
+    nullOr = lib.types.nullOr;
+    str = lib.types.str;
+    int = lib.types.int;
+  in
+  {
     services.temp-throttle = {
-      enable = mkEnableOption "Whether to enable temp-throttle service";
+      enable = lib.mkEnableOption "Whether to enable temp-throttle service";
       package = mkOption {
-        type = package;
+        type = lib.types.package;
         default = pkgs.temp-throttle;
-        defaultText = literalExpression "pkgs.temp-throttle";
+        defaultText = lib.literalExpression "pkgs.temp-throttle";
       };
       max_temp = mkOption {
         type = int;
