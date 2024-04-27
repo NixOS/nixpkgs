@@ -6,6 +6,7 @@
   libX11,
   libXfixes,
   libXrandr,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,6 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   makeFlags = [ "prefix=$(out)" ];
+
+  passthru.updateScript = gitUpdater {
+    url = "https://www.uninformativ.de/git/xpointerbarrier.git/";
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     homepage = "https://www.uninformativ.de/git/xpointerbarrier/file/README.html";
