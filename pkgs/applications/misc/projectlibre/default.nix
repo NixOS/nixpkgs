@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchgit
-, ant
-, jdk
-, stripJavaArchivesHook
-, makeWrapper
-, jre
-, coreutils
-, which
+{
+  lib,
+  stdenv,
+  fetchgit,
+  ant,
+  jdk,
+  stripJavaArchivesHook,
+  makeWrapper,
+  jre,
+  coreutils,
+  which,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "projectlibre";
-  version = "1.7.0";
+  version = "1.9.3";
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/projectlibre/code";
-    rev = "0c939507cc63e9eaeb855437189cdec79e9386c2"; # version 1.7.0 was not tagged
-    hash = "sha256-eLUbsQkYuVQxt4px62hzfdUNg2zCL/VOSVEVctfbxW8=";
+    rev = "20814e88dc83694f9fc6780c2550ca5c8a87aa16"; # version 1.9.3 was not tagged
+    hash = "sha256-yXgYyy3jWxYMXKsNCRWdO78gYRmjKpO9U5WWU6PtwMU=";
   };
 
   nativeBuildInputs = [
@@ -27,9 +28,17 @@ stdenv.mkDerivation {
     makeWrapper
   ];
 
+  runtimeDeps = [
+    jre
+    coreutils
+    which
+  ];
+
+  env.JAVA_TOOL_OPTIONS = "-Dfile.encoding=UTF8";
+
   buildPhase = ''
     runHook preBuild
-    ant -f openproj_build/build.xml
+    ant -f projectlibre_build/build.xml
     runHook postBuild
   '';
 
@@ -38,7 +47,7 @@ stdenv.mkDerivation {
 
     mkdir -p $out/share/{projectlibre/samples,doc/projectlibre}
 
-    pushd openproj_build
+    pushd projectlibre_build
     cp -R dist/* $out/share/projectlibre
     cp -R license $out/share/doc/projectlibre
     cp -R resources/samples/* $out/share/projectlibre/samples
@@ -51,7 +60,7 @@ stdenv.mkDerivation {
         --replace-fail "/usr/share/projectlibre" "$out/share/projectlibre"
 
     wrapProgram $out/bin/projectlibre \
-        --prefix PATH : ${lib.makeBinPath [ jre coreutils which ]}
+        --prefix PATH : ${lib.makeBinPath finalAttrs.runtimeDeps}
 
     runHook postInstall
   '';
@@ -61,8 +70,10 @@ stdenv.mkDerivation {
     homepage = "https://www.projectlibre.com/";
     license = lib.licenses.cpal10;
     mainProgram = "projectlibre";
-    maintainers = with lib.maintainers; [ Mogria tomasajt ];
+    maintainers = with lib.maintainers; [
+      Mogria
+      tomasajt
+    ];
     platforms = jre.meta.platforms;
   };
-}
-
+})
