@@ -1,32 +1,33 @@
-{ lib
-, stdenv
-, ase
-, buildPythonPackage
-, cython
-, fetchFromGitHub
-, glibcLocales
-, joblib
-, matplotlib
-, monty
-, networkx
-, oldest-supported-numpy
-, palettable
-, pandas
-, plotly
-, pybtex
-, pydispatcher
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, requests
-, ruamel-yaml
-, scipy
-, seekpath
-, setuptools
-, spglib
-, sympy
-, tabulate
-, uncertainties
+{
+  lib,
+  stdenv,
+  ase,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  glibcLocales,
+  joblib,
+  matplotlib,
+  monty,
+  networkx,
+  oldest-supported-numpy,
+  palettable,
+  pandas,
+  plotly,
+  pybtex,
+  pydispatcher,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  ruamel-yaml,
+  scipy,
+  seekpath,
+  setuptools,
+  spglib,
+  sympy,
+  tabulate,
+  uncertainties,
 }:
 
 buildPythonPackage rec {
@@ -39,13 +40,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "materialsproject";
     repo = "pymatgen";
-    rev= "refs/tags/v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-vjasWQgwjtoM/6Y1HwK1otMFejRWEj+YBxaIYDDSeeo=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [
     cython
@@ -105,9 +104,7 @@ buildPythonPackage rec {
     "test_unconverged"
   ];
 
-  pythonImportsCheck = [
-    "pymatgen"
-  ];
+  pythonImportsCheck = [ "pymatgen" ];
 
   meta = with lib; {
     description = "A robust materials analysis code that defines core object representations for structures and molecules";
@@ -115,6 +112,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/materialsproject/pymatgen/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
-    broken = stdenv.isDarwin;  # tests segfault. that's bad.
+    broken = stdenv.isDarwin; # tests segfault. that's bad.
   };
 }
