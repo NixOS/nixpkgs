@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "peaqevcore";
-  version = "19.9.0";
+  version = "19.9.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tFbk33SQqCNcUnJ0X+OtJ8XDEpMXWnuxA2L30Prhssc=";
+    hash = "sha256-X5JKfIE6rISXb3F2liuyLrVHm5xw3DoFeMhqhEsdEIY=";
   };
 
   postPatch = ''
