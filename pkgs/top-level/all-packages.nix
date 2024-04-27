@@ -35937,8 +35937,6 @@ with pkgs;
 
   xplugd = callPackage ../tools/X11/xplugd { };
 
-  xpointerbarrier = callPackage ../tools/X11/xpointerbarrier { };
-
   xkb-switch = callPackage ../tools/X11/xkb-switch { };
 
   xkb-switch-i3 = callPackage ../tools/X11/xkb-switch-i3 { };
