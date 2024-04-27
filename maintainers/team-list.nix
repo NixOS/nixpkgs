@@ -376,7 +376,6 @@ with lib.maintainers; {
       krav
       talyz
       yayayayaka
-      yuka
     ];
     scope = "Maintain gitlab packages.";
     shortName = "gitlab";
