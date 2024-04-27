@@ -3387,6 +3387,8 @@ self: super: with self; {
 
   django-rest-auth = callPackage ../development/python-modules/django-rest-auth { };
 
+  django-rest-mfa = callPackage ../development/python-modules/django-rest-mfa { };
+
   django-rest-polymorphic = callPackage ../development/python-modules/django-rest-polymorphic { };
 
   django-rest-registration = callPackage ../development/python-modules/django-rest-registration { };
