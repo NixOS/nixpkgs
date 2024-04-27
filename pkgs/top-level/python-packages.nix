@@ -3776,6 +3776,8 @@ self: super: with self; {
 
   dj-static = callPackage ../development/python-modules/dj-static { };
 
+  dj-stripe = callPackage ../development/python-modules/dj-stripe { };
+
   dkimpy = callPackage ../development/python-modules/dkimpy { };
 
   dlib = callPackage ../development/python-modules/dlib {
