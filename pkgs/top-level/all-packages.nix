@@ -6165,7 +6165,10 @@ with pkgs;
 
   rex = callPackage ../tools/system/rex { };
 
-  river = callPackage ../applications/window-managers/river { };
+  river = callPackage ../applications/window-managers/river {
+    wlroots = wlroots_0_17;
+    zig = zig_0_11;
+  };
 
   rivercarro = callPackage ../applications/misc/rivercarro { };
 

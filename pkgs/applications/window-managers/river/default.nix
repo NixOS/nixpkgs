@@ -12,9 +12,9 @@
 , udev
 , wayland
 , wayland-protocols
-, wlroots_0_17
+, wlroots
 , xwayland
-, zig_0_11
+, zig
 , withManpages ? true
 , xwaylandSupport ? true
 }:
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wayland
     xwayland
-    zig_0_11.hook
+    zig.hook
   ]
   ++ lib.optional withManpages scdoc;
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     pixman
     udev
     wayland-protocols
-    wlroots_0_17
+    wlroots
   ] ++ lib.optional xwaylandSupport libX11;
 
   dontConfigure = true;
