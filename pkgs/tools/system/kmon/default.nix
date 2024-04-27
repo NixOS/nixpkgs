@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/orhun/kmon/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ figsoda misuzu matthiasbeyer ];
+    maintainers = with maintainers; [ figsoda matthiasbeyer ];
     mainProgram = "kmon";
   };
 }
