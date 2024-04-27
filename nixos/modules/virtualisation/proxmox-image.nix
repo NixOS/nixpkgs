@@ -262,7 +262,7 @@ with lib;
         mv "vzdump-qemu-${cfg.filenameSuffix}.vma.zst" $out/
 
         mkdir -p $out/nix-support
-        echo "file vma $out/vzdump-qemu-${cfg.filenameSuffix}.vma.zst" >> $out/nix-support/hydra-build-products
+        echo "file vma $out/vzdump-qemu-${cfg.filenameSuffix}.vma.zst" > $out/nix-support/hydra-build-products
       '';
       inherit (cfg.qemuConf) additionalSpace diskSize bootSize;
       format = "raw";
