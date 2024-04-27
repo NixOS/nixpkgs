@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "darrenburns";
     repo = "ward";
     rev = "refs/tags/release%2F${version}";
-    hash = "sha256-4dEMEEPySezgw3dIcYMl56HrhyaYlql9JvtamOn7Y8g=";
+    hash = "sha256-Qc209wGrBk5rPWR6vS17w9aQyydU6U/8QBD85LbJWV0=";
   };
 
   build-system = [
@@ -36,7 +36,15 @@ buildPythonPackage rec {
     rich
     tomli
     pprintpp
-    cucumber-tag-expressions
+    (cucumber-tag-expressions.overridePythonAttrs (_: rec {
+      version = "4.1.0";
+      src = fetchFromGitHub{
+        owner = "cucumber";
+        repo = "tag-expressions";
+        rev = "refs/tags/v${version}";
+        hash = "sha256-tKvLOAHi6CMWOW4qNeLkxInqoG4KJjmj7YtFZf4Bmi4=";
+      };
+    }))
     click-default-group
     click-completion
     pluggy
