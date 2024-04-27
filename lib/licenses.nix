@@ -1168,6 +1168,11 @@ in mkLicense lset) ({
     # channel and NixOS images.
   };
 
+  unicode-30 = {
+    spdxId = "Unicode-3.0";
+    fullName = "Unicode License v3";
+  };
+
   unicode-dfs-2015 = {
     spdxId = "Unicode-DFS-2015";
     fullName = "Unicode License Agreement - Data Files and Software (2015)";
