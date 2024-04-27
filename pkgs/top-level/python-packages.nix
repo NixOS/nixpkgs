@@ -8873,6 +8873,8 @@ self: super: with self; {
 
   ntc-templates = callPackage ../development/python-modules/ntc-templates { };
 
+  ntlmlib = callPackage ../development/python-modules/ntlmlib { };
+
   ntplib = callPackage ../development/python-modules/ntplib { };
 
   nuitka = callPackage ../development/python-modules/nuitka { };

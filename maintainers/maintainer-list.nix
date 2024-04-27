@@ -16369,6 +16369,11 @@
     githubId = 5636;
     name = "Steve Purcell";
   };
+  purefns = {
+    name = "James Adam";
+    github = "purefns";
+    githubId = 44219367;
+  };
   putchar = {
     email = "slim.cadoux@gmail.com";
     matrix = "@putch4r:matrix.org";

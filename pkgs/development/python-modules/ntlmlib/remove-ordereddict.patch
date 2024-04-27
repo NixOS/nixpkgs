@@ -1,0 +1,29 @@
+diff --git a/ntlmlib/messages.py b/ntlmlib/messages.py
+index bda5dde..3b086ba 100644
+--- a/ntlmlib/messages.py
++++ b/ntlmlib/messages.py
+@@ -18,11 +18,7 @@ import struct
+ from ntlmlib.structure import Structure
+ from ntlmlib.constants import NegotiateFlag
+ 
+-try:
+-    from collections import OrderedDict
+-except ImportError:
+-    from ordereddict import OrderedDict
+-
++from collections import OrderedDict
+ 
+ class Message(object):
+     def dump_flags(self):
+diff --git a/setup.py b/setup.py
+index 15f934a..c2d0751 100644
+--- a/setup.py
++++ b/setup.py
+@@ -27,7 +27,6 @@ except ImportError:
+ 
+ requires = [
+     "cryptography",
+-    "ordereddict",
+ ]
+ 
+ setup(
