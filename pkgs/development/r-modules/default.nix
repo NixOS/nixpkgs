@@ -838,6 +838,7 @@ let
     "RandomFields"
     "rareNMtests"
     "rAverage"
+    "rfviz"
     "RclusTool"
     "Rcmdr"
     "RcmdrPlugin_coin"
