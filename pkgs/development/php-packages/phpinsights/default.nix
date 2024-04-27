@@ -24,6 +24,6 @@ php.buildComposerProject (finalAttrs: {
     homepage = "https://phpinsights.com/";
     license = lib.licenses.mit;
     mainProgram = "phpinsights";
-    maintainers = with lib.maintainers; [ patka ];
+    maintainers = [ ];
   };
 })

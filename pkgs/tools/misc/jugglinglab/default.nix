@@ -3,7 +3,7 @@
 , maven
 , fetchFromGitHub
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 , jre
 }:
 
@@ -38,7 +38,7 @@ maven.buildMavenPackage rec {
 
   nativeBuildInputs = [
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   dontWrapGApps = true;

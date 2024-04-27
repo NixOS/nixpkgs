@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python3Packages, gtk3, gobject-introspection, wrapGAppsHook, gnome }:
+{ lib, stdenv, fetchurl, python3Packages, gtk3, gobject-introspection, wrapGAppsHook3, gnome }:
 
 # TODO: Declare configuration options for the following optional dependencies:
 #  -  File stores: hg, git, bzr
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [ gtk3 gnome.adwaita-icon-theme ];
   propagatedBuildInputs = with python3Packages; [ pyxdg pygobject3 ];
-  nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
+  nativeBuildInputs = [ gobject-introspection wrapGAppsHook3 ];
 
   dontWrapGApps = true;
 

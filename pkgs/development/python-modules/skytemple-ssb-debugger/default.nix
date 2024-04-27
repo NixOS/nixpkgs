@@ -17,7 +17,7 @@
 , skytemple-files
 , skytemple-icons
 , skytemple-ssb-emulator
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 buildPythonPackage rec {
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ gtk3 gtksourceview4 ];
-  nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
+  nativeBuildInputs = [ gobject-introspection wrapGAppsHook3 ];
   propagatedBuildInputs = [
     explorerscript
     ndspy

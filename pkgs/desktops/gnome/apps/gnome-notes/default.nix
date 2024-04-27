@@ -6,7 +6,7 @@
 , fetchurl
 , fetchpatch
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , itstool
 , desktop-file-utils
 , python3
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     libxml2
     desktop-file-utils
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

@@ -35,7 +35,7 @@
 , cairo
 , libxkbcommon
 , libepoxy
-, wrapGAppsHook
+, wrapGAppsHook3
 , at-spi2-core
 , dbus
 , bash
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     jre
     swig
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

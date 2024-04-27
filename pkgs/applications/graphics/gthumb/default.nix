@@ -26,7 +26,7 @@
 , bison
 , flex
 , clutter-gtk
-, wrapGAppsHook
+, wrapGAppsHook3
 , shared-mime-info
 , python3
 , desktop-file-utils
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

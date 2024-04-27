@@ -16,7 +16,7 @@
 , gtk3
 , gnome
 , desktop-file-utils
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 # withWebkit enables the "webkit" feature, also known as Google Fonts
 , withWebkit ? true, glib-networking, libsoup, webkitgtk
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     vala
     yelp-tools
-    wrapGAppsHook
+    wrapGAppsHook3
     # For https://github.com/FontManager/master/blob/master/lib/unicode/meson.build
     gobject-introspection
   ];

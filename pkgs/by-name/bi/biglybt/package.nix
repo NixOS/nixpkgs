@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   jre,
-  wrapGAppsHook,
+  wrapGAppsHook3,
   nix-update-script,
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-a7g9sB3orO2m0X7qNwQ1dDygYPhs/b6kX0RDSG8Wq2U=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
 
   configurePhase = ''
     runHook preConfigure

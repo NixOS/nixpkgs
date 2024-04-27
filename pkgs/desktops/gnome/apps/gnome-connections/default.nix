@@ -8,7 +8,7 @@
 , gettext
 , itstool
 , desktop-file-utils
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , gtk3
 , libhandy
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     itstool
     desktop-file-utils
     glib # glib-compile-resources
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

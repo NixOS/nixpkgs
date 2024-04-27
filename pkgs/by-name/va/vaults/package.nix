@@ -10,7 +10,7 @@
 , rustPlatform
 , rustc
 , cargo
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , gtk4
 , libadwaita
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     cargo
     rustc
     rustPlatform.cargoSetupHook

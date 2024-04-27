@@ -8,7 +8,7 @@
 , glib
 , gtk3
 , libxklavier
-, wrapGAppsHook
+, wrapGAppsHook3
 , gnome
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     glib
     gobject-introspection
   ];

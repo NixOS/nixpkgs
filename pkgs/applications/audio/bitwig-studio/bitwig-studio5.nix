@@ -19,7 +19,7 @@
 , pango
 , pipewire
 , pulseaudio
-, wrapGAppsHook
+, wrapGAppsHook3
 , xdg-utils
 , xorg
 , zlib
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-U1Qp7/7kAr1IEcv256I2J/sb5MYxfR20Pi5N8WaVh2U=";
   };
 
-  nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook3 ];
 
   unpackCmd = ''
     mkdir -p root

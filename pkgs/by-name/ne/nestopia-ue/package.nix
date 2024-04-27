@@ -14,7 +14,7 @@
 , pkg-config
 , stdenv
 , unzip
-, wrapGAppsHook
+, wrapGAppsHook3
 , xdg-utils
 }:
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     fltk
     pkg-config
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
     unzip
   ];
 

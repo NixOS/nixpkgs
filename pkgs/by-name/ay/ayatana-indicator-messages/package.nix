@@ -20,7 +20,7 @@
 , python3
 , systemd
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     intltool
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ] ++ lib.optionals withDocumentation [
     docbook_xsl
     docbook_xml_dtd_45

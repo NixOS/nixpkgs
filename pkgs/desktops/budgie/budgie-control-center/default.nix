@@ -52,7 +52,7 @@
 , udisks2
 , upower
 , webp-pixbuf-loader
-, wrapGAppsHook
+, wrapGAppsHook3
 , enableSshSocket ? false
 }:
 
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     shared-mime-info
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

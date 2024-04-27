@@ -26,7 +26,7 @@
 , qtmultimedia
 , qtspeech
 , wrapQtAppsHook
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+OiZEkhNV06fZXPXv9zDzgJS5M3isHlcOXee3p/ejpw=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook wrapGAppsHook3 ];
   buildInputs = [
     qtbase
     qtsvg

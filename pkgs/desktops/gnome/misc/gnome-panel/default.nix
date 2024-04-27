@@ -19,7 +19,7 @@
 , pkg-config
 , polkit
 , systemd
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     itstool
     libxml2
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

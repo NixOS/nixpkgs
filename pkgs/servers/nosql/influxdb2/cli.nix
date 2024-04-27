@@ -27,7 +27,7 @@ in buildGoModule {
     description = "CLI for managing resources in InfluxDB v2";
     license = licenses.mit;
     homepage = "https://influxdata.com/";
-    maintainers = with maintainers; [ abbradar danderson ];
+    maintainers = with maintainers; [ abbradar ];
     mainProgram = "influx";
   };
 }

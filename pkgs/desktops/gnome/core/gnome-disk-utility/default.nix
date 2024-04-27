@@ -11,7 +11,7 @@
 , ninja
 , gtk3
 , glib
-, wrapGAppsHook
+, wrapGAppsHook3
 , libnotify
 , itstool
 , gnome
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     libxslt
     docbook-xsl-nons
     desktop-file-utils
-    wrapGAppsHook
+    wrapGAppsHook3
     libxml2
   ];
 

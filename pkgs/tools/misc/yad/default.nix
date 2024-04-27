@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, intltool, autoreconfHook, wrapGAppsHook
+{ lib, stdenv, fetchFromGitHub, pkg-config, intltool, autoreconfHook, wrapGAppsHook3
 , gtk3, hicolor-icon-theme, netpbm }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk3 hicolor-icon-theme ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config intltool wrapGAppsHook ];
+  nativeBuildInputs = [ autoreconfHook pkg-config intltool wrapGAppsHook3 ];
 
   postPatch = ''
     sed -i src/file.c -e '21i#include <glib/gprintf.h>'

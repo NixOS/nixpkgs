@@ -4,7 +4,7 @@
 , libsoup
 , graphicsmagick
 , json-glib
-, wrapGAppsHook
+, wrapGAppsHook3
 , cairo
 , cmake
 , ninja
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   ];
 
 
-  nativeBuildInputs = [ cmake ninja llvmPackages.llvm pkg-config intltool perl desktop-file-utils wrapGAppsHook ];
+  nativeBuildInputs = [ cmake ninja llvmPackages.llvm pkg-config intltool perl desktop-file-utils wrapGAppsHook3 ];
 
   buildInputs = [
     cairo

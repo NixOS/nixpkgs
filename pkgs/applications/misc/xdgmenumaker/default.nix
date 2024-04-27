@@ -6,7 +6,7 @@
 , pango
 , python3Packages
 , txt2tags
-, wrapGAppsHook
+, wrapGAppsHook3
 , gitUpdater
 }:
 
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     gobject-introspection
     txt2tags
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

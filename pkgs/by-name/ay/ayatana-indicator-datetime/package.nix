@@ -24,7 +24,7 @@
 , python3
 , systemd
 , tzdata
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 let
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib # for schema hook
     intltool
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

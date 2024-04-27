@@ -12,7 +12,7 @@
 , meson
 , ninja
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , appstream-glib
 , desktop-file-utils
 , gnome
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     libxml2
     desktop-file-utils
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

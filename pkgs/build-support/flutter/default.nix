@@ -2,7 +2,7 @@
 , callPackage
 , runCommand
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 , buildDartApplication
 , cacert
 , glib
@@ -86,7 +86,7 @@ let
       outputs = universal.outputs or [ ] ++ [ "debug" ];
 
       nativeBuildInputs = (universal.nativeBuildInputs or [ ]) ++ [
-        wrapGAppsHook
+        wrapGAppsHook3
 
         # Flutter requires pkg-config for Linux desktop support, and many plugins
         # attempt to use it.

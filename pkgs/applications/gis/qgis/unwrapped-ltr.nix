@@ -3,7 +3,7 @@
 , makeWrapper
 , mkDerivation
 , substituteAll
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 
 , withGrass ? true
@@ -94,7 +94,7 @@ in mkDerivation rec {
 
   nativeBuildInputs = [
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
 
     bison

@@ -40,7 +40,7 @@
 , at-spi2-atk
 , at-spi2-core
 , autoPatchelfHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , qt6
 , proprietaryCodecs ? false
 , vivaldi-ffmpeg-codecs
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     dpkg
     autoPatchelfHook
-    wrapGAppsHook
+    wrapGAppsHook3
     qt6.wrapQtAppsHook
   ];
 

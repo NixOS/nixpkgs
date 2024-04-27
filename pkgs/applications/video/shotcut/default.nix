@@ -21,13 +21,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "shotcut";
-  version = "24.02.29";
+  version = "24.04.13";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-PHpVquqC0MT7WNoWcdB9WTz4ZiSK4/f4oD5PH1gWBnw=";
+    hash = "sha256-xEdCsvclZXCJgoOnx5ZyOElCXjGpbrOtC7VOR5Hgvpg=";
   };
 
   nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook ];

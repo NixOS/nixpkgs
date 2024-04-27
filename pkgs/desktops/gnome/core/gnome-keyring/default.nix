@@ -15,7 +15,7 @@
 , libselinux
 , p11-kit
 , openssh
-, wrapGAppsHook
+, wrapGAppsHook3
 , docbook-xsl-nons
 , docbook_xml_dtd_43
 , gnome
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     docbook-xsl-nons
     docbook_xml_dtd_43
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , makeDesktopItem
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 , stripJavaArchivesHook
 , ant
 , jdk
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-MSVSd5DyVL+dcfTDv1M99hxickPwT2Pt6QGNsu6DGZI=";
   };
 
-  nativeBuildInputs = [ ant jdk wrapGAppsHook makeWrapper stripJavaArchivesHook ];
+  nativeBuildInputs = [ ant jdk wrapGAppsHook3 makeWrapper stripJavaArchivesHook ];
   buildInputs = lib.optionals stdenv.isLinux [ gtk2 glib libXtst ]
     ++ lib.optional stdenv.isDarwin Cocoa;
 

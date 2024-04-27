@@ -23,7 +23,7 @@
 , libarchive
 , libhandy
 , libsecret
-, wrapGAppsHook
+, wrapGAppsHook3
 , librsvg
 , gobject-introspection
 , yelp-tools
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     yelp-tools
   ];
 

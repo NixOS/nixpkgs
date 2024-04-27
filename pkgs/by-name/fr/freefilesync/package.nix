@@ -5,7 +5,7 @@
 , fetchDebianPatch
 , copyDesktopItems
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , unzip
 , curl
 , glib
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     copyDesktopItems
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     unzip
   ];
 

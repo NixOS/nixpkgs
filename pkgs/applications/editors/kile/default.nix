@@ -3,7 +3,7 @@
 , fetchurl
 , extra-cmake-modules
 , kdoctools
-, wrapGAppsHook
+, wrapGAppsHook3
 , qtscript
 , kconfig
 , kcrash
@@ -32,7 +32,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     extra-cmake-modules
-    wrapGAppsHook
+    wrapGAppsHook3
     kdoctools
   ];
 

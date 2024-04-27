@@ -6,7 +6,7 @@
 , gtk3
 , glib
 , gnome
-, wrapGAppsHook
+, wrapGAppsHook3
 , libXtst
 , which
 }:
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-gXfHmRPUhs8s7IQIhN0vQyx8NpLrS28ufNNYOMA4AXw=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
 
   buildInputs = [ jre gnome.adwaita-icon-theme gtk3 ];
 

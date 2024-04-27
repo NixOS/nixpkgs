@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl, pkg-config, allegro5, libGL, wrapGAppsHook }:
+{ stdenv, lib, fetchFromGitHub, fetchurl, pkg-config, allegro5, libGL, wrapGAppsHook3 }:
 
 stdenv.mkDerivation rec {
   pname = "liberation-circuit";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-zIwjh4CBSmKz7pF7GM5af+VslWho5jHOLsulbW4C8TY=";
   };
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
   buildInputs = [ allegro5 libGL ];
 
   dontWrapGApps = true;

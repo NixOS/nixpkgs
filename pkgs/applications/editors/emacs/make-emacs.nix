@@ -58,7 +58,7 @@
 , tree-sitter
 , texinfo
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 
 # Boolean flags
 , withNativeCompilation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
@@ -212,7 +212,7 @@ mkDerivation (finalAttrs: {
   ] ++ lib.optionals srcRepo [
     autoreconfHook
     texinfo
-  ] ++ lib.optional (withPgtk || withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
+  ] ++ lib.optional (withPgtk || withX && (withGTK3 || withXwidgets)) wrapGAppsHook3;
 
   buildInputs = [
     gettext

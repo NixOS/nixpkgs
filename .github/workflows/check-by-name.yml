@@ -20,6 +20,13 @@ permissions:
   # We need this permission to cancel the workflow run if there's a merge conflict
   actions: write
 
+# Create a check-by-name concurrency group based on the pull request number. if
+# an event triggers a run on the same PR while a previous run is still in
+# progress, the previous run will be canceled and the new one will start.
+concurrency:
+  group: check-by-name-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   check:
     # This needs to be x86_64-linux, because we depend on the tooling being pre-built in the GitHub releases
