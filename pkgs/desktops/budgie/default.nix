@@ -8,6 +8,7 @@ in {
   budgie-desktop = callPackage ./budgie-desktop { };
   budgie-desktop-view = callPackage ./budgie-desktop-view { };
   budgie-desktop-with-plugins = callPackage ./budgie-desktop/wrapper.nix { };
+  budgie-extras-daemon = callPackage ./budgie-extras-daemon { };
   budgie-gsettings-overrides = callPackage ./budgie-gsettings-overrides { };
   budgie-screensaver = callPackage ./budgie-screensaver { };
   budgie-session = callPackage ./budgie-session { };

@@ -1,0 +1,398 @@
+diff --git a/budgie-brightness-controller/src/helpers/DimHelper.vala b/budgie-brightness-controller/src/helpers/DimHelper.vala
+index 3ea1299..63aeb00 100644
+--- a/budgie-brightness-controller/src/helpers/DimHelper.vala
++++ b/budgie-brightness-controller/src/helpers/DimHelper.vala
+@@ -81,7 +81,7 @@ public class DimHelper
+         }
+ 
+         // Load Dims From Device
+-        var dimsString = subprocessHelper.RunAndGetResult({Config.PACKAGE_BINDIR + "/xrandr", "-q"});
++        var dimsString = subprocessHelper.RunAndGetResult({"@xrandr@/bin/xrandr", "-q"});
+ 
+         dimsString = dimsString._strip();
+         if (dimsString == "")
+@@ -147,7 +147,7 @@ public class DimHelper
+         //print(@"DimHelper.SetBrightness: $name $brightness \n");
+         var aOnePercentOfbrightness = brightness / 100;
+         var aOnePercentOfBlue = blue / 100;
+-        subprocessHelper.Run({Config.PACKAGE_BINDIR + "/xrandr", "--output", @"$name", "--gamma", @"1:1:$aOnePercentOfBlue", "--brightness", @"$aOnePercentOfbrightness"});
++        subprocessHelper.Run({"@xrandr@/bin/xrandr", "--output", @"$name", "--gamma", @"1:1:$aOnePercentOfBlue", "--brightness", @"$aOnePercentOfbrightness"});
+         Save();
+     }
+ 
+diff --git a/budgie-clockworks/budgie_clockworks.py b/budgie-clockworks/budgie_clockworks.py
+index 37a47fb..ab319d5 100644
+--- a/budgie-clockworks/budgie_clockworks.py
++++ b/budgie-clockworks/budgie_clockworks.py
+@@ -312,7 +312,7 @@ class BudgieClockWorksApplet(Budgie.Applet):
+ 
+     def run_search(self, button):
+         subprocess.Popen(
+-            ["/usr/bin/xdg-open", "https://www.timeanddate.com/time/map/"]
++            ["@xdg_utils@/bin/xdg-open", "https://www.timeanddate.com/time/map/"]
+         )
+ 
+     def double_digits(self, t):
+diff --git a/budgie-countdown/budgie-countdown.py b/budgie-countdown/budgie-countdown.py
+index afc9e9d..bce70db 100644
+--- a/budgie-countdown/budgie-countdown.py
++++ b/budgie-countdown/budgie-countdown.py
+@@ -465,13 +465,13 @@ class CountDownApplet(Budgie.Applet):
+         if not self.cancel:
+             if self.runvars["showwindow"]:
+                 subprocess.Popen([
+-                    "/usr/bin/zenity", "--info", '--title=CountDown message',
++                    "@zenity@/bin/zenity", "--info", '--title=CountDown message',
+                     "--text=Count Down has ended"
+                 ])
+             wait = any([flash, ringbell])
+             bellcmd = [
+-                "/usr/bin/ogg123", "-q",
+-                "/usr/share/sounds/freedesktop/stereo/complete.oga"
++                "@vorbis_tools@/bin/ogg123", "-q",
++                "@sound_theme_freedesktop@/share/sounds/freedesktop/stereo/complete.oga"
+             ]
+             if self.runvars["runcmd"]:
+                 cmd = self.command_entry.get_text()
+@@ -500,7 +500,7 @@ class CountDownApplet(Budgie.Applet):
+ 
+     def run_command(self, command):
+         try:
+-            subprocess.Popen(["/bin/bash", "-c", command])
++            subprocess.Popen(["@bash@/bin/bash", "-c", command])
+         except subprocess.CalledProcessError:
+             pass
+ 
+diff --git a/budgie-dropby/budgie_dropby.py b/budgie-dropby/budgie_dropby.py
+index ca6e23e..4952089 100644
+--- a/budgie-dropby/budgie_dropby.py
++++ b/budgie-dropby/budgie_dropby.py
+@@ -195,7 +195,7 @@ class BudgieDropByApplet(Budgie.Applet):
+         user = os.environ["USER"]
+         try:
+             pid = subprocess.check_output(
+-                ["/usr/bin/pgrep", "-u", user, "-f", self.winpath]
++                ["@procps@/bin/pgrep", "-u", user, "-f", self.winpath]
+             )
+         except subprocess.CalledProcessError:
+             subprocess.Popen([self.winpath, self.uuid])
+diff --git a/budgie-dropby/checkonwin b/budgie-dropby/checkonwin
+index 36c0069..5338bcc 100755
+--- a/budgie-dropby/checkonwin
++++ b/budgie-dropby/checkonwin
+@@ -38,5 +38,5 @@ while True:
+     else:
+         t = 0
+     if t >= 6:
+-        subprocess.Popen(["/usr/bin/wmctrl", "-c", "dropby_popup"])
++        subprocess.Popen(["@wmctrl@/bin/wmctrl", "-c", "dropby_popup"])
+         break
+diff --git a/budgie-dropby/copy_flash b/budgie-dropby/copy_flash
+index de215de..74e93e6 100755
+--- a/budgie-dropby/copy_flash
++++ b/budgie-dropby/copy_flash
+@@ -38,7 +38,7 @@ def notify_result(n):
+ 
+ 
+ def sendmessage(title, message, icon=""):
+-    subprocess.Popen(["notify-send", "-i", icon, title, message])
++    subprocess.Popen(["@libnotify@/bin/notify-send", "-i", icon, title, message])
+ 
+ 
+ def check_permissions(target):
+@@ -55,11 +55,11 @@ def check_permissions(target):
+ 
+ 
+ def cont(source, targetdir):
+-    subprocess.Popen(["/usr/bin/xdg-open", target])
++    subprocess.Popen(["@xdg_utils@/bin/xdg-open", target])
+     time.sleep(0.5)
+     try:
+         question = subprocess.check_output([
+-            "/usr/bin/zenity", "--question",
++            "@zenity@/bin/zenity", "--question",
+             "--title", "Directory exists",
+             "--text", "A previous copy exists. Please remove it first.",
+             "--ok-label=Proceed", "--cancel-label=Cancel",
+@@ -92,7 +92,7 @@ tmp_path = os.getenv("XDG_RUNTIME_DIR") \
+ cptrigger = os.path.join(tmp_path, ".dropby_icon_copy")
+ try:
+     target = subprocess.check_output([
+-        "/usr/bin/zenity", "--file-selection", "--directory",
++        "@zenity@/bin/zenity", "--file-selection", "--directory",
+         '--title=Choose a target directory',
+     ]).decode("utf-8").strip()
+ except subprocess.CalledProcessError:
+diff --git a/budgie-dropby/dropby_tools.py b/budgie-dropby/dropby_tools.py
+index 3ef98d8..7c4fced 100644
+--- a/budgie-dropby/dropby_tools.py
++++ b/budgie-dropby/dropby_tools.py
+@@ -80,15 +80,8 @@ def get_mounted():
+ def uuid_todev(uuid):
+     try:
+         return subprocess.check_output(
+-            ["/usr/sbin/findfs", "UUID=" + uuid]
++            ["@util_linux@/bin/findfs", "UUID=" + uuid]
+         ).decode("utf-8").strip()
+-    except FileNotFoundError:
+-        try:
+-            return subprocess.check_output(
+-                ["/sbin/findfs", "UUID=" + uuid]
+-            ).decode("utf-8").strip()
+-        except (subprocess.CalledProcessError, TypeError):
+-            return None
+     except (subprocess.CalledProcessError, TypeError):
+         return None
+ 
+diff --git a/budgie-dropby/dropover b/budgie-dropby/dropover
+index 75ffdc2..632396d 100755
+--- a/budgie-dropby/dropover
++++ b/budgie-dropby/dropover
+@@ -113,7 +113,7 @@ class WatchVolumes:
+         try:
+             user = os.environ["USER"]
+             pid = subprocess.check_output([
+-                "/usr/bin/pgrep", "-u", user, "-f", process
++                "@procps@/bin/pgrep", "-u", user, "-f", process
+             ]).decode("utf-8")
+             return True
+         except subprocess.CalledProcessError:
+@@ -121,7 +121,7 @@ class WatchVolumes:
+ 
+     def process_kill(self, procname):
+         try:
+-            subprocess.call(["/usr/bin/pkill", "-f", procname])
++            subprocess.call(["@procps@/bin/pkill", "-f", procname])
+         except subprocess.CalledProcessError:
+             pass
+ 
+@@ -353,7 +353,7 @@ class WatchVolumes:
+     def open_folder(self, *args):
+         path = list(args)[-1]
+         if path is not None:
+-            subprocess.Popen(["/usr/bin/xdg-open", path])
++            subprocess.Popen(["@xdg_utils@/bin/xdg-open", path])
+ 
+     def mount_volume(self, button, vol):
+         Gio.Volume.mount(
+diff --git a/budgie-kangaroo/budgie_kangaroo.py b/budgie-kangaroo/budgie_kangaroo.py
+index a9b5948..072871f 100644
+--- a/budgie-kangaroo/budgie_kangaroo.py
++++ b/budgie-kangaroo/budgie_kangaroo.py
+@@ -108,7 +108,7 @@ class KangarooSettings(Gtk.Grid):
+         # in future, use Gtk.FileChooser please
+         try:
+             directory = subprocess.check_output([
+-                "/usr/bin/zenity", "--file-selection", "--directory",
++                "@zenity@/bin/zenity", "--file-selection", "--directory",
+             ]).decode("utf-8").strip()
+         except subprocess.CalledProcessError:
+             pass
+@@ -277,7 +277,7 @@ class KangarooApplet(Budgie.Applet):
+         # open the selected file on left click
+         if button.button == 1:
+             self.curr_subject = path
+-            subprocess.Popen(["/usr/bin/xdg-open", self.curr_subject])
++            subprocess.Popen(["@xdg_utils@/bin/xdg-open", self.curr_subject])
+ 
+     def open_onthree(self, event, button):
+         # opens either the directory, if selected,
+@@ -289,7 +289,7 @@ class KangarooApplet(Budgie.Applet):
+                 path = self.currselectedfile[
+                     :self.currselectedfile.rfind("/")
+                 ]
+-            subprocess.Popen(["/usr/bin/xdg-open", path])
++            subprocess.Popen(["@xdg_utils@/bin/xdg-open", path])
+             self.menu.popdown()
+ 
+     def do_get_settings_ui(self):
+diff --git a/budgie-keyboard-autoswitch/budgie-keyboard-autoswitch.py b/budgie-keyboard-autoswitch/budgie-keyboard-autoswitch.py
+index 4889bdf..92e8769 100644
+--- a/budgie-keyboard-autoswitch/budgie-keyboard-autoswitch.py
++++ b/budgie-keyboard-autoswitch/budgie-keyboard-autoswitch.py
+@@ -420,7 +420,7 @@ class KeyboardAutoSwitchApplet(Budgie.Applet):
+         # handle special cases
+         try:
+             cl = self.get([
+-                "/usr/bin/xprop", "-id", wid, "WM_CLASS"
++                "@xprop@/bin/xprop", "-id", wid, "WM_CLASS"
+             ]).split("=")[-1].split(",")[-1].strip().strip('"')
+         except (IndexError, AttributeError):
+             pass
+@@ -435,7 +435,7 @@ class KeyboardAutoSwitchApplet(Budgie.Applet):
+ 
+     def get_activeclass(self):
+         # get WM_CLASS of active window
+-        currfront = self.get(["/usr/bin/xdotool", "getactivewindow"])
++        currfront = self.get(["@xdotool@/bin/xdotool", "getactivewindow"])
+         return self.show_wmclass(currfront) if currfront else None
+ 
+     def get_currlangname(self):
+diff --git a/budgie-recentlyused/src/budgie-recentlyused.vala b/budgie-recentlyused/src/budgie-recentlyused.vala
+index 4c31949..8498817 100755
+--- a/budgie-recentlyused/src/budgie-recentlyused.vala
++++ b/budgie-recentlyused/src/budgie-recentlyused.vala
+@@ -184,7 +184,7 @@ namespace RecentlyUsedApplet {
+                 string menuname = getmenuname(longname);
+                 Gtk.MenuItem newitem = new Gtk.MenuItem.with_label(menuname);
+                 // command
+-                string command = Config.PACKAGE_BINDIR + "/xdg-open " + "'" + longname.replace(
++                string command = "@xdg_utils@/bin/xdg-open " + "'" + longname.replace(
+                     "'", "'\\''"
+                 ) + "'";;
+                 // tooltip
+diff --git a/budgie-showtime/src/showtime_desktop/showtime_desktop.vala b/budgie-showtime/src/showtime_desktop/showtime_desktop.vala
+index 0520033..afee316 100644
+--- a/budgie-showtime/src/showtime_desktop/showtime_desktop.vala
++++ b/budgie-showtime/src/showtime_desktop/showtime_desktop.vala
+@@ -392,7 +392,7 @@ namespace  ShowTime {
+             string[] monthdayvars = {
+                 "%e", "%-e", "%_e", "%d", "%-d", "%_d"
+             };
+-            string cmd = Config.PACKAGE_BINDIR + "/locale date_fmt";
++            string cmd = "@locale@/bin/locale date_fmt";
+             string output = "";
+             try {
+                 StringBuilder builder = new StringBuilder ();
+diff --git a/budgie-takeabreak/budgie_takeabreak.py b/budgie-takeabreak/budgie_takeabreak.py
+index cbb53ef..f7bdd55 100644
+--- a/budgie-takeabreak/budgie_takeabreak.py
++++ b/budgie-takeabreak/budgie_takeabreak.py
+@@ -265,9 +265,9 @@ class BudgieTakeaBreakApplet(Budgie.Applet):
+         try:
+             # I know, old school, but it works well
+             pid = subprocess.check_output([
+-                "/usr/bin/pgrep", "-f", "-u", user, self.runnerpath,
++                "@procps@/bin/pgrep", "-f", "-u", user, self.runnerpath,
+             ]).decode("utf-8").strip()
+-            subprocess.Popen(["/usr/bin/kill", pid])
++            subprocess.Popen(["@procps@/bin/kill", pid])
+         except subprocess.CalledProcessError:
+             pass
+ 
+diff --git a/budgie-takeabreak/takeabreak_run b/budgie-takeabreak/takeabreak_run
+index 62db505..ce462da 100755
+--- a/budgie-takeabreak/takeabreak_run
++++ b/budgie-takeabreak/takeabreak_run
+@@ -83,7 +83,7 @@ def write_nextbreak():
+ 
+ 
+ def sendmessage(title, message, icon=""):
+-    subprocess.Popen(["notify-send", "-i", icon, title, message])
++    subprocess.Popen(["@libnotify@/bin/notify-send", "-i", icon, title, message])
+ 
+ 
+ def take_a_break():
+diff --git a/budgie-wallstreet/src/wallstreet_control/wallstreet_control.vala b/budgie-wallstreet/src/wallstreet_control/wallstreet_control.vala
+index 317a05a..444db3d 100644
+--- a/budgie-wallstreet/src/wallstreet_control/wallstreet_control.vala
++++ b/budgie-wallstreet/src/wallstreet_control/wallstreet_control.vala
+@@ -206,7 +206,7 @@ namespace WallStreetControls {
+         }
+ 
+         private bool processruns (string application) {
+-            string cmd = Config.PACKAGE_BINDIR + "/pgrep -f " + application;
++            string cmd = "@procps@/bin/pgrep -f " + application;
+             string output;
+             try {
+                 GLib.Process.spawn_command_line_sync(cmd, out output);
+diff --git a/budgie-weathershow/src/desktop_weather/desktop_weather.vala b/budgie-weathershow/src/desktop_weather/desktop_weather.vala
+index 7a20798..fd7343a 100644
+--- a/budgie-weathershow/src/desktop_weather/desktop_weather.vala
++++ b/budgie-weathershow/src/desktop_weather/desktop_weather.vala
+@@ -308,7 +308,7 @@ public class DesktopWeather : Gtk.Window {
+     private void get_icondata () {
+         // fetch the icon list
+         string icondir = "/".concat(
+-            "usr/lib/budgie-desktop/plugins",
++            "lib/budgie-desktop/plugins",
+             "/budgie-weathershow/weather_icons"
+         );
+         iconnames = {};
+diff --git a/budgie-weathershow/src/weathershow/WeatherShow.vala b/budgie-weathershow/src/weathershow/WeatherShow.vala
+index 1f890a6..00d4ff6 100644
+--- a/budgie-weathershow/src/weathershow/WeatherShow.vala
++++ b/budgie-weathershow/src/weathershow/WeatherShow.vala
+@@ -78,7 +78,7 @@ namespace WeatherShowFunctions {
+ 
+     private bool check_onwindow(string path) {
+         string username = Environment.get_user_name();
+-        string cmd_check = Config.PACKAGE_BINDIR + @"/pgrep -u $username -f $path";
++        string cmd_check = @"@procps@/bin/pgrep -u $username -f $path";
+         string output;
+         try {
+             GLib.Process.spawn_command_line_sync(cmd_check, out output);
+diff --git a/budgie-window-shuffler/applet/src/ShufflerApplet.vala b/budgie-window-shuffler/applet/src/ShufflerApplet.vala
+index c86122d..75a1f18 100644
+--- a/budgie-window-shuffler/applet/src/ShufflerApplet.vala
++++ b/budgie-window-shuffler/applet/src/ShufflerApplet.vala
+@@ -68,7 +68,7 @@ namespace ShufflerApplet {
+     }
+ 
+     private bool procruns (string processname) {
+-        string cmd = Config.PACKAGE_BINDIR + @"/pgrep -f $processname";
++        string cmd = @"@procps@/bin/pgrep -f $processname";
+         string output;
+         try {
+             GLib.Process.spawn_command_line_sync(cmd, out output);
+diff --git a/budgie-window-shuffler/src/jump.vala b/budgie-window-shuffler/src/jump.vala
+index f68e4f0..846fb07 100644
+--- a/budgie-window-shuffler/src/jump.vala
++++ b/budgie-window-shuffler/src/jump.vala
+@@ -46,7 +46,7 @@ namespace JumpActive {
+     }
+ 
+     private bool procruns (string processname) {
+-        string cmd = Config.PACKAGE_BINDIR + @"/pgrep -f $processname";
++        string cmd = @"@procps@/bin/pgrep -f $processname";
+         string output;
+         try {
+             GLib.Process.spawn_command_line_sync(cmd, out output);
+diff --git a/budgie-window-shuffler/src/windowshufflerdaemon.vala b/budgie-window-shuffler/src/windowshufflerdaemon.vala
+index f624f96..2827d74 100644
+--- a/budgie-window-shuffler/src/windowshufflerdaemon.vala
++++ b/budgie-window-shuffler/src/windowshufflerdaemon.vala
+@@ -605,7 +605,7 @@ namespace ShufflerEssentialInfo {
+             string winsubj = @"$w_id";
+             string? output = null;
+             if (winsubj != "-1") {
+-                string cmd = Config.PACKAGE_BINDIR + "/xprop -id ".concat(
++                string cmd = "@xprop@/bin/xprop -id ".concat(
+                     winsubj, " _NET_FRAME_EXTENTS ",
+                     "WM_NORMAL_HINTS", " _GTK_FRAME_EXTENTS"
+                 );
+diff --git a/budgie-wpreviews/src/previews_controls.vala b/budgie-wpreviews/src/previews_controls.vala
+index 3166d29..09a0c0c 100644
+--- a/budgie-wpreviews/src/previews_controls.vala
++++ b/budgie-wpreviews/src/previews_controls.vala
+@@ -115,7 +115,7 @@ namespace PreviewsControls {
+         }
+ 
+         private bool procruns (string processname) {
+-            string cmd = Config.PACKAGE_BINDIR + @"/pgrep -f $processname";
++            string cmd = @"@procps@/bin/pgrep -f $processname";
+             string output;
+             try {
+                 GLib.Process.spawn_command_line_sync(cmd, out output);
+diff --git a/budgie-wpreviews/src/previews_daemon.vala b/budgie-wpreviews/src/previews_daemon.vala
+index b9afa11..b1a34a9 100644
+--- a/budgie-wpreviews/src/previews_daemon.vala
++++ b/budgie-wpreviews/src/previews_daemon.vala
+@@ -108,7 +108,7 @@ namespace NewPreviews {
+             string output = "";
+             try {
+                 GLib.Process.spawn_command_line_sync(
+-                    Config.PACKAGE_BINDIR + "/xinput --list", out output
++                    "@xinput@/bin/xinput --list", out output
+                 );
+             }
+             catch (Error e) {
+@@ -341,7 +341,7 @@ namespace NewPreviews {
+                         string output = "";
+                         try {
+                             GLib.Process.spawn_command_line_sync(
+-                                Config.PACKAGE_BINDIR + "/xinput --query-state " + s, out output
++                                "@xinput@/bin/xinput --query-state " + s, out output
+                             );
+                         }
+                         catch (Error e) {

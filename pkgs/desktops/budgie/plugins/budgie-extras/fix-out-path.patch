@@ -1,0 +1,91 @@
+diff --git a/budgie-countdown/budgie-countdown.py b/budgie-countdown/budgie-countdown.py
+index bce70db..bfd3e11 100644
+--- a/budgie-countdown/budgie-countdown.py
++++ b/budgie-countdown/budgie-countdown.py
+@@ -49,7 +49,7 @@ except FileExistsError:
+     pass
+ 
+ # icons
+-path = "/usr/share/pixmaps"
++path = "@out@/share/pixmaps"
+ 
+ 
+ class CountDown(GObject.GObject, Budgie.Plugin):
+@@ -338,7 +338,7 @@ class CountDownApplet(Budgie.Applet):
+     def edit_grid(self):
+         for img in self.grid_helpers:
+             self.containergrid.remove(img)
+-        spacerpath = "/usr/share/pixmaps/cr_panelspacer.png"
++        spacerpath = "@out@/share/pixmaps/cr_panelspacer.png"
+         self.grid_helpers = []
+         spacerimg = Gtk.Image.new_from_file(spacerpath)
+         built_in_spacer1 = Gtk.Image.new_from_file(spacerpath)
+diff --git a/budgie-hotcorners/src/budgie-hotcorners-settingswindow.vala b/budgie-hotcorners/src/budgie-hotcorners-settingswindow.vala
+index 9504bdf..ccd1f54 100644
+--- a/budgie-hotcorners/src/budgie-hotcorners-settingswindow.vala
++++ b/budgie-hotcorners/src/budgie-hotcorners-settingswindow.vala
+@@ -755,9 +755,7 @@ namespace HotCornerSettings {
+         }
+ 
+         private void get_commands() {
+-            string[] jsondata = readfile(
+-                Config.PACKAGE_SHAREDIR + "/budgie-hotcorners/defaults"
+-            ).strip().split("\n");
++            string[] jsondata = readfile("@out@/share/budgie-hotcorners/defaults").strip().split("\n");
+             var parser = new Json.Parser ();
+             foreach (string l in jsondata) {
+                 read_json(parser, l);
+diff --git a/budgie-weathershow/src/desktop_weather/desktop_weather.vala b/budgie-weathershow/src/desktop_weather/desktop_weather.vala
+index fd7343a..2ba60ad 100644
+--- a/budgie-weathershow/src/desktop_weather/desktop_weather.vala
++++ b/budgie-weathershow/src/desktop_weather/desktop_weather.vala
+@@ -307,8 +307,8 @@ public class DesktopWeather : Gtk.Window {
+ 
+     private void get_icondata () {
+         // fetch the icon list
+-        string icondir = "/".concat(
+-            "lib/budgie-desktop/plugins",
++        string icondir = "@out@".concat(
++            "/lib/budgie-desktop/plugins",
+             "/budgie-weathershow/weather_icons"
+         );
+         iconnames = {};
+diff --git a/budgie-window-shuffler/development/testsnippet_windowmove2.vala b/budgie-window-shuffler/development/testsnippet_windowmove2.vala
+index fe219ab..4e9253b 100644
+--- a/budgie-window-shuffler/development/testsnippet_windowmove2.vala
++++ b/budgie-window-shuffler/development/testsnippet_windowmove2.vala
+@@ -299,7 +299,7 @@ namespace GetClosest {
+             griddata = @"$cellx $celly $cols $rows $spanx $spany";
+             if (runmode != 4) {
+                 print(@"moving $key ($wmc) to position: $cellx, $celly, grid: $cols $rows span: $spanx, $spany \n");
+-                string cmd = "/usr/lib/budgie-window-shuffler" + "/tile_active ".concat(
++                string cmd = "@out@/lib/budgie-window-shuffler" + "/tile_active ".concat(
+                     " ", @"$griddata", " ", @"id=$key "
+                 );
+                 run_command(cmd);
+diff --git a/budgie-window-shuffler/src/layouts_popup.vala b/budgie-window-shuffler/src/layouts_popup.vala
+index ca64bc6..64779f5 100644
+--- a/budgie-window-shuffler/src/layouts_popup.vala
++++ b/budgie-window-shuffler/src/layouts_popup.vala
+@@ -1264,7 +1264,7 @@ namespace LayoutsPopup {
+ 
+     private void run_layout(Button button) {
+         string buttontext = button.get_label();
+-        string cmd = "/usr/lib/budgie-window-shuffler/".concat(
++        string cmd = "@out@/lib/budgie-window-shuffler/".concat(
+             "run_layout '", buttontext, "'"
+         );
+         run_command(cmd);
+diff --git a/budgie-window-shuffler/src/round_position.vala b/budgie-window-shuffler/src/round_position.vala
+index 34e3b2c..df1bd76 100644
+--- a/budgie-window-shuffler/src/round_position.vala
++++ b/budgie-window-shuffler/src/round_position.vala
+@@ -243,7 +243,7 @@ namespace GetClosest {
+             griddata = @"$cellx $celly $cols $rows $spanx $spany";
+             if (runmode != 4) {
+                 print(@"moving $key ($wmc) to position: $cellx, $celly, grid: $cols $rows span: $spanx, $spany \n");
+-                string cmd = "/usr/lib/budgie-window-shuffler" + "/tile_active ".concat(
++                string cmd = "@out@/lib/budgie-window-shuffler" + "/tile_active ".concat(
+                     " ", @"$griddata", " ", @"id=$key "
+                 );
+                 run_command(cmd);

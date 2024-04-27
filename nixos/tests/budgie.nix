@@ -24,9 +24,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
     services.xserver.desktopManager.budgie = {
       enable = true;
-      extraPlugins = [
-        pkgs.budgiePlugins.budgie-analogue-clock-applet
-      ];
+      extraPlugins = builtins.filter lib.isDerivation (builtins.attrValues pkgs.budgiePlugins);
     };
   };
 

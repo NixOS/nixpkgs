@@ -1,0 +1,270 @@
+{ callPackage
+, appstream
+, budgie
+, gnome
+, gnome-menus
+, gtk3
+, json-glib
+, keybinder3
+, libgee
+, libhandy
+, libnma
+, libnotify
+, libpeas
+, libsoup
+, libwnck
+, networkmanager
+, pantheon
+, python3Packages
+}:
+
+let
+  mkBudgieExtrasPlugin = callPackage ./mkBudgieExtrasPlugin.nix { };
+in
+
+{
+  inherit mkBudgieExtrasPlugin;
+
+  budgie-app-launcher = mkBudgieExtrasPlugin {
+    pluginName = "app-launcher";
+    moduleName = "AppLauncher";
+    isPython = true;
+    buildInputs = [
+      gnome-menus
+    ];
+    meta.description = "This applet lists your favourite apps";
+  };
+
+  budgie-applications-menu = mkBudgieExtrasPlugin {
+    pluginName = "applications-menu";
+    buildInputs = [
+      appstream
+      budgie.budgie-desktop
+      gtk3
+      json-glib
+      libgee
+      libhandy
+      libpeas
+      pantheon.granite
+    ];
+    meta.description = "Application launcher for Budgie";
+  };
+
+  budgie-brightness-controller = mkBudgieExtrasPlugin {
+    pluginName = "brightness-controller";
+    buildInputs = [
+      budgie.budgie-desktop
+      gnome.gnome-settings-daemon
+      gtk3
+      libpeas
+    ];
+    meta.description = "Brightness controller for Budgie";
+  };
+
+  budgie-clockworks = mkBudgieExtrasPlugin {
+    pluginName = "clockworks";
+    moduleName = "budgie_clockworks";
+    isPython = true;
+    pythonPath = with python3Packages; [
+      cairosvg
+      svgwrite
+    ];
+    meta.description = "Multi-clock applet to show the time across multiple timezones";
+  };
+
+  budgie-countdown = mkBudgieExtrasPlugin {
+    pluginName = "countdown";
+    moduleName = "budgie-countdown";
+    isPython = true;
+    meta.description = "Count down applet with options";
+  };
+
+  budgie-dropby = mkBudgieExtrasPlugin {
+    pluginName = "dropby";
+    moduleName = "budgie_dropby";
+    isPython = true;
+    pythonPath = with python3Packages; [
+      psutil
+      pyudev
+    ];
+    meta.description = "Popup menu for USB drives";
+  };
+
+  budgie-fuzzyclock = mkBudgieExtrasPlugin {
+    pluginName = "fuzzyclock";
+    buildInputs = [
+      budgie.budgie-desktop
+      gtk3
+      libpeas
+    ];
+    meta.description = "Time of day in fuzzy way";
+  };
+
+  budgie-hotcorners = mkBudgieExtrasPlugin {
+    pluginName = "hotcorners";
+    buildInputs = [
+      budgie.budgie-desktop
+      gtk3
+      json-glib
+      libnotify
+      libpeas
+    ];
+    postPatch = ''
+      patchShebangs budgie-hotcorners/applet/meson_post_install.py
+    '';
+    meta.description = "Set hotcorner actions";
+  };
+
+  budgie-kangaroo = mkBudgieExtrasPlugin {
+    pluginName = "kangaroo";
+    moduleName = "budgie_kangaroo";
+    isPython = true;
+    meta.description = "Quick directory-browser applet";
+  };
+
+  budgie-keyboard-autoswitch = mkBudgieExtrasPlugin {
+    pluginName = "keyboard-autoswitch";
+    moduleName = "budgie-keyboard-autoswitch";
+    isPython = true;
+    pythonPath = with python3Packages; [
+      psutil
+      dbus-python
+    ];
+    meta.description = "Set a different layout per application";
+  };
+
+  budgie-network-manager = mkBudgieExtrasPlugin {
+    pluginName = "network-manager";
+    buildInputs = [
+      budgie.budgie-desktop
+      gtk3
+      libgee
+      libnma
+      libpeas
+      networkmanager
+    ];
+    meta.description = "Network Applet for Budgie";
+  };
+
+  budgie-quicknote = mkBudgieExtrasPlugin {
+    pluginName = "quicknote";
+    buildInputs = [
+      budgie.budgie-desktop
+      gtk3
+      libpeas
+    ];
+    meta.description = "Quick & Easy Notes";
+  };
+
+  budgie-recentlyused = mkBudgieExtrasPlugin {
+    pluginName = "recentlyused";
+    buildInputs = [
+      budgie.budgie-desktop
+      gtk3
+      libgee
+      libpeas
+    ];
+    meta.description = "Show recently used items";
+  };
+
+  budgie-rotation-lock = mkBudgieExtrasPlugin {
+    pluginName = "rotation-lock";
+    moduleName = "budgie_rotation_lock";
+    isPython = true;
+    meta.description = "Lock or unlock the screen for rotation";
+  };
+
+  budgie-showtime = mkBudgieExtrasPlugin {
+    pluginName = "showtime";
+    buildInputs = [
+      budgie.budgie-desktop
+      gtk3
+      libpeas
+      libwnck
+    ];
+    meta.description = "Desktop time & date";
+  };
+
+  budgie-takeabreak = mkBudgieExtrasPlugin {
+    pluginName = "takeabreak";
+    moduleName = "budgie_takeabreak";
+    isPython = true;
+    meta.description = "Take regular breaks from working";
+  };
+
+  budgie-trash = mkBudgieExtrasPlugin {
+    pluginName = "trash";
+    buildInputs = [
+      budgie.budgie-desktop
+      gtk3
+      libpeas
+    ];
+    meta.description = "Manage items in your trash bin right from the Budgie panel";
+  };
+
+  budgie-visualspace = mkBudgieExtrasPlugin {
+    pluginName = "visualspace";
+    buildInputs = [
+      budgie.budgie-desktop
+      gtk3
+      libpeas
+      libwnck
+    ];
+    postPatch = ''
+      patchShebangs budgie-visualspace/data/subst.py
+    '';
+    meta.description = "Workspace indicator and window list";
+  };
+
+  budgie-weathershow = mkBudgieExtrasPlugin {
+    pluginName = "weathershow";
+    buildInputs = [
+      budgie.budgie-desktop
+      gtk3
+      json-glib
+      libgee
+      libpeas
+      libsoup
+    ];
+    meta.description = "Show weather & forecast";
+  };
+
+  # FIXME: The applet loads but it does not work, needs budgie-extras daemon
+  budgie-window-shuffler = mkBudgieExtrasPlugin {
+    pluginName = "window-shuffler";
+    nativeBuildInputs = [
+      appstream
+    ];
+    buildInputs = [
+      budgie.budgie-desktop
+      gtk3
+      libpeas
+      libnotify
+      libwnck
+    ];
+    postPatch = ''
+      patchShebangs budgie-window-shuffler/data/subst.py
+      substituteInPlace budgie-window-shuffler/applet/meson.build --replace "/usr" "$out"
+    '';
+    meta.description = "Place a window in a predefined layout";
+  };
+
+  budgie-workspace-stopwatch = mkBudgieExtrasPlugin {
+    pluginName = "workspace-stopwatch";
+    mesonOptionName = "workspacestopwatch";
+    moduleName = "budgie-workspacestopwatch";
+    isPython = true;
+    meta.description = "Keep track on spent time per workspace";
+  };
+
+  budgie-wswitcher = mkBudgieExtrasPlugin {
+    pluginName = "wswitcher";
+    buildInputs = [
+      budgie.budgie-desktop
+      gtk3
+      libpeas
+      libwnck
+    ];
+    meta.description = "Set a different wallpaper per workspace";
+  };
+}
