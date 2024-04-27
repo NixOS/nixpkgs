@@ -73,7 +73,7 @@ let
       # Preemptive Full Tickless Kernel at 1000Hz
       HZ = freeform "1000";
       HZ_1000 = yes;
-    } // lib.optionalAttrs (isLqx) {
+    } // lib.optionalAttrs isLqx {
       # Google's BBRv3 TCP congestion Control
       TCP_CONG_BBR = yes;
       DEFAULT_BBR = yes;

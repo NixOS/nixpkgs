@@ -46,7 +46,7 @@ let
 
   evalPackageSet = pset: mapTestOn { ${pset} = packagePlatforms pkgs.${pset}; };
 
-  jobs = (mapTestOn ({
+  jobs = (mapTestOn {
     # Packages to evaluate
     python3.pkgs.caffeWithCuda = linux;
     python3.pkgs.jaxlibWithCuda = linux;
@@ -55,6 +55,6 @@ let
     python3.pkgs.pyrealsense2WithCuda = linux;
     python3.pkgs.torchWithCuda = linux;
     python3.pkgs.jaxlib = linux;
-  }) // (genAttrs packageSets evalPackageSet));
+  } // (genAttrs packageSets evalPackageSet));
 
 in jobs

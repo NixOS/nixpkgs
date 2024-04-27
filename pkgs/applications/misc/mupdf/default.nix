@@ -94,13 +94,13 @@ stdenv.mkDerivation rec {
     "PKG_CONFIG=${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"
   ] ++ lib.optionals (!enableX11) [ "HAVE_X11=no" ]
     ++ lib.optionals (!enableGL) [ "HAVE_GLUT=no" ]
-    ++ lib.optionals (enableOcr) [ "USE_TESSERACT=yes" ];
+    ++ lib.optionals enableOcr [ "USE_TESSERACT=yes" ];
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optional (enableGL || enableX11) copyDesktopItems
     ++ lib.optional (stdenv.isDarwin && (enableGL || enableX11)) desktopToDarwinBundle
     ++ lib.optionals (enableCxx || enablePython) [ python3 python3.pkgs.setuptools python3.pkgs.libclang ]
-    ++ lib.optionals (enablePython) [ which swig ]
+    ++ lib.optionals enablePython [ which swig ]
     ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames xcbuild ];
 
   buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg gumbo ]
@@ -123,7 +123,7 @@ stdenv.mkDerivation rec {
 
   postBuild = lib.optionalString (enableCxx || enablePython) ''
     for dir in build/*; do
-      ./scripts/mupdfwrap.py -d "$dir" -b ${lib.optionalString (enableCxx) "01"}${lib.optionalString (enablePython) "23"}
+      ./scripts/mupdfwrap.py -d "$dir" -b ${lib.optionalString enableCxx "01"}${lib.optionalString enablePython "23"}
     done
   '';
 
@@ -175,12 +175,12 @@ stdenv.mkDerivation rec {
     cp docs/logo/mupdf.png $bin/share/icons/hicolor/48x48/apps
   '') + (if enableGL then ''
     ln -s "$bin/bin/mupdf-gl" "$bin/bin/mupdf"
-  '' else lib.optionalString (enableX11) ''
+  '' else lib.optionalString enableX11 ''
     ln -s "$bin/bin/mupdf-x11" "$bin/bin/mupdf"
-  '') + (lib.optionalString (enableCxx) ''
+  '') + (lib.optionalString enableCxx ''
     cp platform/c++/include/mupdf/*.h $out/include/mupdf
     cp build/*/libmupdfcpp.so $out/lib
-  '') + (lib.optionalString (enablePython) (''
+  '') + (lib.optionalString enablePython (''
     mkdir -p $out/${python3.sitePackages}/mupdf
     cp build/*/_mupdf.so $out/${python3.sitePackages}
     cp build/*/mupdf.py $out/${python3.sitePackages}/mupdf/__init__.py

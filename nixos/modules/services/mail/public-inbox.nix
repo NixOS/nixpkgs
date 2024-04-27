@@ -519,7 +519,7 @@ in
           };
         }];
       })
-      ({ public-inbox-init = let
+      { public-inbox-init = let
           PI_CONFIG = gitIni.generate "public-inbox.ini"
             (filterAttrsRecursive (n: v: v != null) cfg.settings);
           in mkMerge [(serviceConfig "init") {
@@ -571,7 +571,7 @@ in
             ];
           };
         }];
-      })
+      }
     ];
     environment.systemPackages = with pkgs; [ cfg.package ];
   };

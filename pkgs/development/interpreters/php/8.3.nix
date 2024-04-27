@@ -6,7 +6,7 @@ let
     hash = "sha256-YySx3djrMCWwQQNLiNwrwLSBmwAiEp7q66N+R4AxCLw=";
   });
 in
-base.withExtensions ({ all, ... }: with all; ([
+base.withExtensions ({ all, ... }: with all; [
   bcmath
   calendar
   curl
@@ -49,4 +49,4 @@ base.withExtensions ({ all, ... }: with all; ([
   xmlwriter
   zip
   zlib
-]))
+])

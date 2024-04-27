@@ -6,7 +6,7 @@
 with pkgs.lib;
 
 let
-  makeKafkaTest = name: { kafkaPackage, mode ? "zookeeper" }: (import ./make-test-python.nix ({
+  makeKafkaTest = name: { kafkaPackage, mode ? "zookeeper" }: (import ./make-test-python.nix {
     inherit name;
     meta = with pkgs.lib.maintainers; {
       maintainers = [ nequissimus ];
@@ -15,7 +15,7 @@ let
     nodes = {
       kafka = { ... }: {
         services.apache-kafka = mkMerge [
-          ({
+          {
             enable = true;
             package = kafkaPackage;
             settings = {
@@ -25,7 +25,7 @@ let
                 "/var/lib/kafka/logdir2"
               ];
             };
-          })
+          }
           (mkIf (mode == "zookeeper") {
             settings = {
               "zookeeper.session.timeout.ms" = 600000;
@@ -100,7 +100,7 @@ let
           + "--from-beginning --max-messages 1"
       )
     '';
-  }) { inherit system; });
+  } { inherit system; });
 
 in with pkgs; {
   kafka_2_8 = makeKafkaTest "kafka_2_8" { kafkaPackage = apacheKafka_2_8; };

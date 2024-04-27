@@ -61,14 +61,14 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXrandr
   ];
   # Standard fix for JUCE programs: https://github.com/NixOS/nixpkgs/blob/5014727e62ae7b22fb1afc61d789ca6ad9170435/pkgs/applications/audio/bespokesynth/default.nix#L137
-  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "-rpath ${lib.makeLibraryPath ([
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "-rpath ${lib.makeLibraryPath [
     xorg.libX11
     xorg.libXrandr
     xorg.libXinerama
     xorg.libXext
     xorg.libXcursor
     xorg.libXrender
-  ])}";
+  ]}";
   dontPatchELF = true; # needed or nix will try to optimize the binary by removing "useless" rpath
 
   postPatch = ''

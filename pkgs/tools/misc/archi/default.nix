@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
         install -D -m755 Archi $out/libexec/Archi
         makeWrapper $out/libexec/Archi $out/bin/Archi \
-          --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ webkitgtk ])} \
+          --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ webkitgtk ]} \
           --prefix PATH : ${jdk}/bin
       ''
     else

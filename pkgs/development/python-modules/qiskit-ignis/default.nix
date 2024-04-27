@@ -41,9 +41,9 @@ buildPythonPackage rec {
     qiskit-terra
     scikit-learn
     scipy
-  ] ++ lib.optionals (withCvx) [ cvxpy ]
-  ++ lib.optionals (withVisualization) [ matplotlib ]
-  ++ lib.optionals (withJit) [ numba ];
+  ] ++ lib.optionals withCvx [ cvxpy ]
+  ++ lib.optionals withVisualization [ matplotlib ]
+  ++ lib.optionals withJit [ numba ];
 
   # Tests
   pythonImportsCheck = [ "qiskit.ignis" ];

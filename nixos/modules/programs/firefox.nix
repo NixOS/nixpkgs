@@ -129,7 +129,7 @@ in
 
     languagePacks = mkOption {
       # Available languages can be found in https://releases.mozilla.org/pub/firefox/releases/${cfg.package.version}/linux-x86_64/xpi/
-      type = types.listOf (types.enum ([
+      type = types.listOf (types.enum [
         "ach"
         "af"
         "an"
@@ -228,7 +228,7 @@ in
         "xh"
         "zh-CN"
         "zh-TW"
-      ]));
+      ]);
       default = [ ];
       description = ''
         The language packs to install.
@@ -246,7 +246,7 @@ in
       '';
     };
 
-    nativeMessagingHosts = ({
+    nativeMessagingHosts = {
       packages = mkOption {
         type = types.listOf types.package;
         default = [];
@@ -254,7 +254,7 @@ in
           Additional packages containing native messaging hosts that should be made available to Firefox extensions.
         '';
       };
-    }) // (mapAttrs (k: v: mkEnableOption "${v.name} support") nmhOptions);
+    } // (mapAttrs (k: v: mkEnableOption "${v.name} support") nmhOptions);
   };
 
   config = let

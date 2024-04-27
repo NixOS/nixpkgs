@@ -319,7 +319,7 @@ in
       };
 
       serviceConfig = mkMerge [
-        ({
+        {
           Type = "simple";
           User = cfg.user;
           Group = cfg.group;
@@ -355,7 +355,7 @@ in
           SystemCallArchitectures = "native";
           SystemCallFilter = [ "@system-service" "~@privileged" ];
           UMask = "0077";
-        })
+        }
         (mkIf hasPrivilegedPorts {
           AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         })

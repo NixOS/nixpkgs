@@ -55,7 +55,7 @@ let
         else if package == "analysis" then "theories" else "${package}";
       pname = if package == "single" then "mathcomp-analysis-single"
         else "mathcomp-${package}";
-      derivation = mkCoqDerivation ({
+      derivation = mkCoqDerivation {
         inherit version pname defaultVersion release repo owner;
 
         namePrefix = [ "coq" "mathcomp" ];
@@ -76,7 +76,7 @@ let
         };
 
         passthru = genAttrs packages mathcomp_;
-      });
+      };
     # split packages didn't exist before 0.6, so bulding nothing in that case
     patched-derivation1 = derivation.overrideAttrs (o:
       optionalAttrs (o.pname != null && o.pname != "mathcomp-analysis" &&

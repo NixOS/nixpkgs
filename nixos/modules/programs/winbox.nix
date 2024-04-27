@@ -5,7 +5,7 @@ let
 in
 {
   options.programs.winbox = {
-    enable = lib.mkEnableOption ("MikroTik Winbox");
+    enable = lib.mkEnableOption "MikroTik Winbox";
     package = lib.mkPackageOption pkgs "winbox" { };
 
     openFirewall = lib.mkOption {

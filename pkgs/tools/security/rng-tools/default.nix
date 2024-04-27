@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook libtool pkg-config ];
 
   configureFlags = [
-    (lib.enableFeature (withJitterEntropy) "jitterentropy")
-    (lib.withFeature   (withNistBeacon)    "nistbeacon")
-    (lib.withFeature   (withPkcs11)        "pkcs11")
-    (lib.withFeature   (withRtlsdr)        "rtlsdr")
-    (lib.withFeature   (withQrypt)         "qrypt")
+    (lib.enableFeature withJitterEntropy "jitterentropy")
+    (lib.withFeature   withNistBeacon    "nistbeacon")
+    (lib.withFeature   withPkcs11        "pkcs11")
+    (lib.withFeature   withRtlsdr        "rtlsdr")
+    (lib.withFeature   withQrypt         "qrypt")
   ];
 
   buildInputs = [ openssl libcap ]

@@ -22,7 +22,7 @@
 , nixosTests
 }:
 
-buildPythonPackage (rec {
+buildPythonPackage rec {
   pname = "buildbot-worker";
   inherit (buildbot) version;
 
@@ -63,4 +63,4 @@ buildPythonPackage (rec {
     license = licenses.gpl2;
     broken = stdenv.isDarwin; # https://hydra.nixos.org/build/243534318/nixlog/6
   };
-})
+}

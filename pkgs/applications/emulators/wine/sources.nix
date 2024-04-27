@@ -52,7 +52,7 @@ in rec {
       ./cert-path.patch
     ];
 
-    updateScript = writeShellScript "update-wine-stable" (''
+    updateScript = writeShellScript "update-wine-stable" ''
       ${updateScriptPreamble}
       major=''${UPDATE_NIX_OLD_VERSION%%.*}
       latest_stable=$(get_latest_wine_version "$major.0")
@@ -64,7 +64,7 @@ in rec {
       fi
 
       do_update
-    '');
+    '';
   };
 
   unstable = fetchurl rec {

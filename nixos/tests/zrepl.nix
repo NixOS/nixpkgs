@@ -1,4 +1,4 @@
-import ./make-test-python.nix (
+import ./make-test-python.nix 
   {
     name = "zrepl";
 
@@ -66,4 +66,4 @@ import ./make-test-python.nix (
               "zrepl_zfs_snapshot_duration_count{filesystem=\"test\"}" in out
           ), "zrepl snapshot counter for test was not found in Prometheus output"
     '';
-  })
+  }

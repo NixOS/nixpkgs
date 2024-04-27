@@ -93,7 +93,7 @@ in
     ];
 
     systemd = lib.mkMerge [
-      ({
+      {
 
         # Create home directories, do not create /var/empty even if that's a user's
         # home.
@@ -106,7 +106,7 @@ in
             };
           })
           (lib.filterAttrs (_username: opts: opts.home != "/var/empty") userCfg.users);
-      })
+      }
 
       (lib.mkIf config.users.mutableUsers {
         additionalUpstreamSystemUnits = [

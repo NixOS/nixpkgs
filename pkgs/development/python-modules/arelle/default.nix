@@ -43,7 +43,7 @@ buildPythonPackage rec {
   '' +
   # By default, not the entirety of the src dir is copied. This means we don't
   # copy the `images` dir, which is needed for the gui version.
-  lib.optionalString (gui) ''
+  lib.optionalString gui ''
     targetDir=$out/${python.sitePackages}
     cp -vr $src/arelle $targetDir
   '';

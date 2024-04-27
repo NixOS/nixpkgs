@@ -51,11 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ pcasaretto ];
     platforms = lib.systems.inspect.patternLogicalAnd
       (lib.systems.inspect.patterns.isDarwin)
-      (({
+      ({
         "arm64" = lib.systems.inspect.patterns.isAarch64;
         "intel64" = lib.systems.inspect.patterns.isx86_64;
         "universal" = lib.systems.inspect.patterns.isDarwin;
-      }).${variant});
+      }.${variant});
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

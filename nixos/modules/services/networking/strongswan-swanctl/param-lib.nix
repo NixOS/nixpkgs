@@ -42,11 +42,11 @@ rec {
   # parameter constructors in ./param-constructors.nix) to a nested attribute
   # set of strings (rendered parameters).
   paramsToRenderedStrings = cfg : ps :
-    filterEmptySets (
+    filterEmptySets 
       (mapParamsRecursive (path: name: param:
         let value = attrByPath path null cfg;
         in optionalAttrs (value != null) (param.render name value)
-      ) ps));
+      ) ps);
 
   filterEmptySets = set : filterAttrs (n: v: (v != null)) (mapAttrs (name: value:
     if isAttrs value

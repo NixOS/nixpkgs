@@ -42,8 +42,8 @@ let
   inherit (lib) optionals;
   # Later used in pythonEnv generation. Python + mako are always required for the build itself but not necessary for runtime.
   pythonEnvArg = (ps: with ps; [ mako ]
-    ++ optionals (enablePythonApi) [ numpy setuptools ]
-    ++ optionals (enableUtils) [ requests six ]
+    ++ optionals enablePythonApi [ numpy setuptools ]
+    ++ optionals enableUtils [ requests six ]
   );
 in
 
@@ -123,9 +123,9 @@ stdenv.mkDerivation (finalAttrs: {
     # However, if enableLibuhd_Python_api *or* enableUtils is on, we need
     # pythonEnv for runtime as well. The utilities' runtime dependencies are
     # handled at the environment
-    ++ optionals (enableExamples) [ ncurses ncurses.dev ]
+    ++ optionals enableExamples [ ncurses ncurses.dev ]
     ++ optionals (enablePythonApi || enableUtils) [ finalAttrs.pythonEnv ]
-    ++ optionals (enableDpdk) [ dpdk ]
+    ++ optionals enableDpdk [ dpdk ]
   ;
 
   # many tests fails on darwin, according to ofborg

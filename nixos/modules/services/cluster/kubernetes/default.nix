@@ -301,9 +301,9 @@ in {
       # dns addon is enabled by default
       services.kubernetes.addons.dns.enable = mkDefault true;
 
-      services.kubernetes.apiserverAddress = mkDefault ("https://${if cfg.apiserver.advertiseAddress != null
+      services.kubernetes.apiserverAddress = mkDefault "https://${if cfg.apiserver.advertiseAddress != null
                           then cfg.apiserver.advertiseAddress
-                          else "${cfg.masterAddress}:${toString cfg.apiserver.securePort}"}");
+                          else "${cfg.masterAddress}:${toString cfg.apiserver.securePort}"}";
     })
   ];
 

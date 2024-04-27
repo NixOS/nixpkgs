@@ -29,14 +29,14 @@ let
 
   addPackages = self:
     let
-      callPackage = self.newScope ({
+      callPackage = self.newScope {
         inherit (self) qtModule;
         inherit srcs python3;
         stdenv =
           if stdenv.isDarwin
           then overrideSDK stdenv { darwinMinVersion = "11.0"; darwinSdkVersion = "11.0"; }
           else stdenv;
-      });
+      };
     in
     {
 

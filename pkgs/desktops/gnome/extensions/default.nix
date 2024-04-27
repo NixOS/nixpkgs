@@ -75,7 +75,7 @@ in rec {
     (extensions: extensions // (callPackages ./manuallyPackaged.nix {}))
     # Map the extension UUIDs to readable names
     (lib.attrValues)
-    (mapReadableNames)
+    mapReadableNames
     # Add some aliases
     (extensions: extensions // lib.optionalAttrs config.allowAliases {
       unite-shell = gnomeExtensions.unite; # added 2021-01-19

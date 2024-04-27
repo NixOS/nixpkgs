@@ -26,7 +26,7 @@ let
   inherit (stdenv.hostPlatform) isMusl isAarch64;
 
   baseName = "compiler-rt";
-  pname = baseName + lib.optionalString (haveLibc) "-libc";
+  pname = baseName + lib.optionalString haveLibc "-libc";
 
   src' = if monorepoSrc != null then
     runCommand "${baseName}-src-${version}" {} ''
@@ -89,11 +89,11 @@ stdenv.mkDerivation ({
     "-DCMAKE_SIZEOF_VOID_P=${toString (stdenv.hostPlatform.parsed.cpu.bits / 8)}"
   ] ++ lib.optionals (useLLVM && !haveLibc) [
     "-DCMAKE_C_FLAGS=-nodefaultlibs"
-  ] ++ lib.optionals (useLLVM) [
+  ] ++ lib.optionals useLLVM [
     "-DCOMPILER_RT_BUILD_BUILTINS=ON"
     #https://stackoverflow.com/questions/53633705/cmake-the-c-compiler-is-not-able-to-compile-a-simple-test-program
     "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY"
-  ] ++ lib.optionals (bareMetal) [
+  ] ++ lib.optionals bareMetal [
     "-DCOMPILER_RT_OS_DIR=baremetal"
   ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) (lib.optionals (lib.versionAtLeast release_version "16") [
     "-DCMAKE_LIPO=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}lipo"

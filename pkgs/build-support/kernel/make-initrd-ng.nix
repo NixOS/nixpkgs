@@ -61,7 +61,7 @@ in
 # If this isn't guessed, you may want to complete the metadata above and send a PR :)
 , uInitrdCompression ? _compressorMeta.ubootName or
     (throw "Unrecognised compressor ${_compressorName}, please specify uInitrdCompression")
-}: runCommand name ({
+}: runCommand name {
   compress = "${_compressorExecutable} ${lib.escapeShellArgs _compressorArgsReal}";
   passthru = {
     compressorExecutableFunction = _compressorFunction;
@@ -77,7 +77,7 @@ in
   nativeBuildInputs = [makeInitrdNGTool libarchive] ++ lib.optional makeUInitrd ubootTools ++ lib.optional strip binutils;
 
   STRIP = if strip then "${pkgsBuildHost.binutils.targetPrefix}strip" else null;
-}) ''
+} ''
   mkdir -p ./root/var/empty
   make-initrd-ng "$contentsPath" ./root
   mkdir "$out"

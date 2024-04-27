@@ -23,7 +23,7 @@ in (llvmPackages.lldb.overrideAttrs (oldAttrs: rec {
     echo "'lldb --version' returns: $versionOutput"
     echo "$versionOutput" | grep -q 'rust-enabled'
   '';
-})).override({
+})).override{
   monorepoSrc = llvmSrc;
-  libllvm = llvmPackages.libllvm.override({ monorepoSrc = llvmSrc; });
-})
+  libllvm = llvmPackages.libllvm.override{ monorepoSrc = llvmSrc; };
+}

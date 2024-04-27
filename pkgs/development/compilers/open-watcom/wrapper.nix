@@ -25,7 +25,7 @@ let
         (lib.optionalString is64bit "${archToBindir}nt64")
         "${archToBindir}nt"
         (lib.optionalString is32bit "${archToBindir}w")
-      ] else if (isDarwin) then [
+      ] else if isDarwin then [
         (lib.optionalString is64bit "${archToBindir}o64")
         # modern Darwin cannot execute 32-bit code anymore
         (lib.optionalString is32bit "${archToBindir}o")

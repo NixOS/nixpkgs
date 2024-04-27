@@ -14,7 +14,7 @@ let
     ];
   });
 in
-base.withExtensions ({ all, ... }: with all; ([
+base.withExtensions ({ all, ... }: with all; [
   bcmath
   calendar
   curl
@@ -57,4 +57,4 @@ base.withExtensions ({ all, ... }: with all; ([
   xmlwriter
   zip
   zlib
-]))
+])

@@ -2716,7 +2716,7 @@ self: super: {
       purescript =
         lib.pipe
           (super.purescript.overrideScope purescriptOverlay)
-          ([
+          [
             # PureScript uses nodejs to run tests, so the tests have been disabled
             # for now.  If someone is interested in figuring out how to get this
             # working, it seems like it might be possible.
@@ -2727,7 +2727,7 @@ self: super: {
             doJailbreak
             # Generate shell completions
             (self.generateOptparseApplicativeCompletions [ "purs" ])
-          ]);
+          ];
 
       purenix = super.purenix.overrideScope purescriptOverlay;
     })

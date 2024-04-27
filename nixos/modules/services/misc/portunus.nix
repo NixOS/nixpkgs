@@ -258,9 +258,9 @@ in
           PORTUNUS_SLAPD_GROUP = cfg.ldap.group;
           PORTUNUS_SLAPD_USER = cfg.ldap.user;
           PORTUNUS_SLAPD_SCHEMA_DIR = "${cfg.ldap.package}/etc/schema";
-        } // (optionalAttrs (cfg.seedPath != null) ({
+        } // (optionalAttrs (cfg.seedPath != null) {
           PORTUNUS_SEED_PATH = cfg.seedPath;
-        })) // (optionalAttrs cfg.ldap.tls (
+        }) // (optionalAttrs cfg.ldap.tls (
           let
             acmeDirectory = config.security.acme.certs."${cfg.domain}".directory;
           in

@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "trivialautovarinit" ];
 
   buildInputs = [ lzo lzip libtasn1 libidn2 zlib gmp libunistring unbound gettext libiconv ]
-    ++ lib.optional (withP11-kit) p11-kit
+    ++ lib.optional withP11-kit p11-kit
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers;
 
   nativeBuildInputs = [ perl pkg-config texinfo ] ++ [ autoconf automake ]

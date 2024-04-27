@@ -196,12 +196,12 @@ in rec {
 
   generateUnits = { allowCollisions ? true, type, units, upstreamUnits, upstreamWants, packages ? cfg.packages, package ? cfg.package }:
     let
-      typeDir = ({
+      typeDir = {
         system = "system";
         initrd = "system";
         user = "user";
         nspawn = "nspawn";
-      }).${type};
+      }.${type};
     in pkgs.runCommand "${type}-units"
       { preferLocalBuild = true;
         allowSubstitutes = false;

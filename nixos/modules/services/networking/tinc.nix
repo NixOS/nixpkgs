@@ -347,8 +347,8 @@ in
       etcConfig = foldr (a: b: a // b) { }
         (flip mapAttrsToList cfg.networks (network: data:
           flip mapAttrs' data.hosts (host: text: nameValuePair
-            ("tinc/${network}/hosts/${host}")
-            ({ mode = "0644"; user = "tinc-${network}"; inherit text; })
+            "tinc/${network}/hosts/${host}"
+            { mode = "0644"; user = "tinc-${network}"; inherit text; }
           ) // {
             "tinc/${network}/tinc.conf" = {
               mode = "0444";
@@ -363,7 +363,7 @@ in
       environment.etc = etcConfig;
 
       systemd.services = flip mapAttrs' cfg.networks (network: data: nameValuePair
-        ("tinc.${network}")
+        "tinc.${network}"
         (let version = getVersion data.package; in {
           description = "Tinc Daemon - ${network}";
           wantedBy = [ "multi-user.target" ];
@@ -420,11 +420,11 @@ in
       in [ cli-wrappers ];
 
       users.users = flip mapAttrs' cfg.networks (network: _:
-        nameValuePair ("tinc-${network}") ({
+        nameValuePair "tinc-${network}" {
           description = "Tinc daemon user for ${network}";
           isSystemUser = true;
           group = "tinc-${network}";
-        })
+        }
       );
       users.groups = flip mapAttrs' cfg.networks (network: _:
         nameValuePair "tinc-${network}" {}

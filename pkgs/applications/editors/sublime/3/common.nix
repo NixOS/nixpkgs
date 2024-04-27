@@ -104,7 +104,7 @@ in let
       wrapProgram $out/plugin_host --prefix LD_PRELOAD : ${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"}/libgcc_s.so.1:${lib.getLib openssl}/lib/libssl.so:${bzip2.out}/lib/libbz2.so
     '';
   };
-in stdenv.mkDerivation (rec {
+in stdenv.mkDerivation rec {
   inherit pname;
   version = buildVersion;
 
@@ -135,4 +135,4 @@ in stdenv.mkDerivation (rec {
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "i686-linux" ];
   };
-})
+}

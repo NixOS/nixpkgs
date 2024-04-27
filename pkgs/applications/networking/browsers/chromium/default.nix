@@ -49,7 +49,7 @@ let
   chromium = rec {
     inherit stdenv llvmPackages_attrName upstream-info;
 
-    mkChromiumDerivation = callPackage ./common.nix ({
+    mkChromiumDerivation = callPackage ./common.nix {
       inherit channel chromiumVersionAtLeast versionRange;
       inherit proprietaryCodecs
               cupsSupport pulseSupport ungoogled;
@@ -60,7 +60,7 @@ let
         };
       });
       recompressTarball = callPackage ./recompress-tarball.nix { };
-    });
+    };
 
     browser = callPackage ./browser.nix {
       inherit channel chromiumVersionAtLeast enableWideVine ungoogled;

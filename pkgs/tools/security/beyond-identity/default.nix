@@ -6,7 +6,7 @@
 let
   pname = "beyond-identity";
   version = "2.60.0-0";
-  libPath = lib.makeLibraryPath ([ glib glibc openssl tpm2-tss gtk3 gnome.gnome-keyring polkit polkit_gnome ]);
+  libPath = lib.makeLibraryPath [ glib glibc openssl tpm2-tss gtk3 gnome.gnome-keyring polkit polkit_gnome ];
   meta = with lib; {
     description = "Passwordless MFA identities for workforces, customers, and developers";
     homepage = "https://www.beyondidentity.com";

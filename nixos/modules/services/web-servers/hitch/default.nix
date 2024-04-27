@@ -3,11 +3,11 @@ let
   cfg = config.services.hitch;
   ocspDir = lib.optionalString cfg.ocsp-stapling.enabled "/var/cache/hitch/ocsp";
   hitchConfig = with lib; pkgs.writeText "hitch.conf" (concatStringsSep "\n" [
-    ("backend = \"${cfg.backend}\"")
+    "backend = \"${cfg.backend}\""
     (concatMapStrings (s: "frontend = \"${s}\"\n") cfg.frontend)
     (concatMapStrings (s: "pem-file = \"${s}\"\n") cfg.pem-files)
-    ("ciphers = \"${cfg.ciphers}\"")
-    ("ocsp-dir = \"${ocspDir}\"")
+    "ciphers = \"${cfg.ciphers}\""
+    "ocsp-dir = \"${ocspDir}\""
     "user = \"${cfg.user}\""
     "group = \"${cfg.group}\""
     cfg.extraConfig

@@ -6,10 +6,10 @@
 }:
 let
   runTest = lua: { name, command }:
-    pkgs.runCommandLocal "test-${lua.name}-${name}" ({
+    pkgs.runCommandLocal "test-${lua.name}-${name}" {
       nativeBuildInputs = [lua];
       meta.platforms = lua.meta.platforms;
-    }) (''
+    } (''
       source ${./assert.sh}
     ''
     + command
@@ -46,7 +46,7 @@ let
     "2.1" = ";./?.lua;${lua}/share/luajit-2.1/?.lua;/usr/local/share/lua/5.1/?.lua;/usr/local/share/lua/5.1/?/init.lua;${lua}/share/lua/5.1/?.lua;${lua}/share/lua/5.1/?/init.lua;";
   };
 in
-  pkgs.recurseIntoAttrs ({
+  pkgs.recurseIntoAttrs {
 
   checkInterpreterPatch = let
     golden_LUA_PATH = golden_LUA_PATHS.${lib.versions.majorMinor lua.version};
@@ -60,11 +60,11 @@ in
       '';
   };
 
-  checkWrapping = pkgs.runCommandLocal "test-${lua.name}-wrapping" ({
-    }) (''
+  checkWrapping = pkgs.runCommandLocal "test-${lua.name}-wrapping" {
+    } ''
       grep -- 'LUA_PATH=' ${wrappedHello}/bin/hello
       touch $out
-    '');
+    '';
 
   # checks that lua's setup-hook adds dependencies to LUA_PATH
   # Prevents the following regressions
@@ -72,17 +72,17 @@ in
   # nix-shell$ luajit
   # > require('http.request')
   # stdin:1: module 'http.request' not found:
-  checkSetupHook = pkgs.runCommandLocal "test-${lua.name}-setup-hook" ({
+  checkSetupHook = pkgs.runCommandLocal "test-${lua.name}-setup-hook" {
       nativeBuildInputs = [lua];
       buildInputs = [ lua.pkgs.http ];
       meta.platforms = lua.meta.platforms;
-    }) (''
+    } ''
       ${lua}/bin/lua -e "require'http.request'"
       touch $out
-    '');
+    '';
 
-  checkRelativeImports = pkgs.runCommandLocal "test-${lua.name}-relative-imports" ({
-    }) (''
+  checkRelativeImports = pkgs.runCommandLocal "test-${lua.name}-relative-imports" {
+    } ''
       source ${./assert.sh}
 
       lua_vanilla_package_path="$(${lua}/bin/lua -e "print(package.path)")"
@@ -95,5 +95,5 @@ in
       assertStringContains "$lua_with_module_package_path" "./?/init.lua"
 
       touch $out
-    '');
-})
+    '';
+}

@@ -3719,7 +3719,7 @@ with pkgs;
 
   ecdsautils = callPackage ../tools/security/ecdsautils { };
 
-  echidna = haskell.lib.compose.justStaticExecutables (haskellPackages.callPackage (../tools/security/echidna) { });
+  echidna = haskell.lib.compose.justStaticExecutables (haskellPackages.callPackage ../tools/security/echidna { });
 
   sedutil = callPackage ../tools/security/sedutil { };
 
@@ -8048,7 +8048,7 @@ with pkgs;
   fingerprintx = callPackage ../tools/security/fingerprintx { };
 
   bsd-finger = callPackage ../tools/networking/bsd-finger { };
-  bsd-fingerd = bsd-finger.override({ buildClient = false; });
+  bsd-fingerd = bsd-finger.override{ buildClient = false; };
 
   iprange = callPackage ../applications/networking/firehol/iprange.nix { };
 
@@ -9052,9 +9052,9 @@ with pkgs;
 
   hfsprogs = callPackage ../tools/filesystems/hfsprogs { };
 
-  highlight = callPackage ../tools/text/highlight ({
+  highlight = callPackage ../tools/text/highlight {
     lua = lua5;
-  });
+  };
 
   hockeypuck = callPackage ../servers/hockeypuck/server.nix { };
 
@@ -16379,57 +16379,57 @@ with pkgs;
       stdenv.targetPlatform));
   in pkgs.${"llvmPackages_${minSupported}"};
 
-  llvmPackages_12 = recurseIntoAttrs (callPackage ../development/compilers/llvm/12 ({
+  llvmPackages_12 = recurseIntoAttrs (callPackage ../development/compilers/llvm/12 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_12.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_12.libraries or llvmPackages_12.libraries;
     targetLlvm = targetPackages.llvmPackages_12.llvm or llvmPackages_12.llvm;
-  }));
+  });
 
-  llvmPackages_13 = recurseIntoAttrs (callPackage ../development/compilers/llvm/13 ({
+  llvmPackages_13 = recurseIntoAttrs (callPackage ../development/compilers/llvm/13 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_13.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_13.libraries or llvmPackages_13.libraries;
     targetLlvm = targetPackages.llvmPackages_13.llvm or llvmPackages_13.llvm;
     stdenv = if stdenv.cc.cc.isGNU or false then gcc12Stdenv else stdenv; # does not build with gcc13
-  }));
+  });
 
-  llvmPackages_14 = recurseIntoAttrs (callPackage ../development/compilers/llvm/14 ({
+  llvmPackages_14 = recurseIntoAttrs (callPackage ../development/compilers/llvm/14 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_14.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_14.libraries or llvmPackages_14.libraries;
     targetLlvm = targetPackages.llvmPackages_14.llvm or llvmPackages_14.llvm;
-  }));
+  });
 
-  llvmPackages_15 = recurseIntoAttrs (callPackage ../development/compilers/llvm/15 ({
+  llvmPackages_15 = recurseIntoAttrs (callPackage ../development/compilers/llvm/15 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_15.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_15.libraries or llvmPackages_15.libraries;
     targetLlvm = targetPackages.llvmPackages_15.llvm or llvmPackages_15.llvm;
-  }));
+  });
 
-  llvmPackages_16 = recurseIntoAttrs (callPackage ../development/compilers/llvm/16 ({
+  llvmPackages_16 = recurseIntoAttrs (callPackage ../development/compilers/llvm/16 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_16.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_16.libraries or llvmPackages_16.libraries;
     targetLlvm = targetPackages.llvmPackages_16.llvm or llvmPackages_16.llvm;
-  }));
+  });
 
-  llvmPackages_17 = recurseIntoAttrs (callPackage ../development/compilers/llvm/17 ({
+  llvmPackages_17 = recurseIntoAttrs (callPackage ../development/compilers/llvm/17 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_17.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_17.libraries or llvmPackages_17.libraries;
     targetLlvm = targetPackages.llvmPackages_17.llvm or llvmPackages_17.llvm;
-  }));
+  });
 
   inherit
     (rec {
-      llvmPackages_18 = recurseIntoAttrs (callPackage ../development/compilers/llvm/18 ({
+      llvmPackages_18 = recurseIntoAttrs (callPackage ../development/compilers/llvm/18 {
         inherit (stdenvAdapters) overrideCC;
         buildLlvmTools = buildPackages.llvmPackages_18.tools;
         targetLlvmLibraries = targetPackages.llvmPackages_18.libraries or llvmPackages_18.libraries;
         targetLlvm = targetPackages.llvmPackages_18.llvm or llvmPackages_18.llvm;
-      }));
+      });
 
       clang_18 = llvmPackages_18.clang;
       lld_18 = llvmPackages_18.lld;

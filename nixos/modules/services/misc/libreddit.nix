@@ -5,10 +5,10 @@ with lib;
 let
   cfg = config.services.libreddit;
 
-  args = concatStringsSep " " ([
+  args = concatStringsSep " " [
     "--port ${toString cfg.port}"
     "--address ${cfg.address}"
-  ]);
+  ];
 in
 {
   options = {

@@ -184,7 +184,7 @@ in
             scfg = cfg.${service};
             daemon = daemonName service;
           in
-            nameValuePair daemon ({
+            nameValuePair daemon {
               wantedBy = [ "multi-user.target" ];
               after = [ "network-pre.target" "systemd-sysctl.service" ] ++ lib.optionals (service != "zebra") [ "zebra.service" ];
               bindsTo = lib.optionals (service != "zebra") [ "zebra.service" ];
@@ -210,7 +210,7 @@ in
                 ExecReload = "${pkgs.python3.interpreter} ${pkgs.frr}/libexec/frr/frr-reload.py --reload --daemon ${daemonName service} --bindir ${pkgs.frr}/bin --rundir /run/frr /etc/frr/${service}.conf";
                 Restart = "on-abnormal";
               };
-            });
+            };
        in
          listToAttrs (map frrService (filter isEnabled allServices));
 

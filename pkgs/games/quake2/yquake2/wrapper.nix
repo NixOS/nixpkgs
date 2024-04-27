@@ -34,14 +34,14 @@ stdenv.mkDerivation {
   '';
 
   desktopItems = map
-    (game: makeDesktopItem ({
+    (game: makeDesktopItem {
       name = game.id;
       exec = game.title;
       icon = "yamagi-quake2";
       desktopName = game.id;
       comment = game.description;
       categories = [ "Game" "Shooter" ];
-    }))
+    })
     games;
 
   meta = {

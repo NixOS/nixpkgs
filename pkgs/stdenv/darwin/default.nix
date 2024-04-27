@@ -678,9 +678,9 @@ in
 
           libraries = super.llvmPackages.libraries.extend (selfLib: superLib: {
             compiler-rt = null;
-            libcxx = superLib.libcxx.override ({
+            libcxx = superLib.libcxx.override {
               stdenv = libcxxBootstrapStdenv;
-            });
+            };
           });
         in
         { inherit libraries; } // libraries
@@ -879,12 +879,12 @@ in
 
             # Make sure compiler-rt is linked against the CF from this stage, which can be
             # propagated to the final stdenv. CF is required by ASAN.
-            compiler-rt = superLib.compiler-rt.override ({
+            compiler-rt = superLib.compiler-rt.override {
               inherit (self.llvmPackages) libllvm;
               stdenv = self.stdenv.override {
                 extraBuildInputs = [ self.darwin.CF ];
               };
-            });
+            };
           });
         in
         { inherit tools libraries; inherit (prevStage.llvmPackages) release_version; } // tools // libraries

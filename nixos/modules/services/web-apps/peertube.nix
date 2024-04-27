@@ -50,10 +50,10 @@ let
     SystemCallArchitectures = "native";
   };
 
-  envFile = pkgs.writeText "peertube.env" (lib.concatMapStrings (s: s + "\n") (
+  envFile = pkgs.writeText "peertube.env" (lib.concatMapStrings (s: s + "\n") 
     (lib.concatLists (lib.mapAttrsToList (name: value:
       lib.optional (value != null) ''${name}="${toString value}"''
-    ) env))));
+    ) env)));
 
   peertubeEnv = pkgs.writeShellScriptBin "peertube-env" ''
     set -a

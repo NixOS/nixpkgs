@@ -243,7 +243,7 @@ let
         "-m comment --comment ${name}-exporter -j nixos-fw-accept"
       ]);
       networking.firewall.extraInputRules = mkIf (conf.openFirewall && nftables) conf.firewallRules;
-      systemd.services."prometheus-${name}-exporter" = mkMerge ([{
+      systemd.services."prometheus-${name}-exporter" = mkMerge [{
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         serviceConfig.Restart = mkDefault "always";
@@ -274,7 +274,7 @@ let
         serviceConfig.RestrictSUIDSGID = true;
         serviceConfig.SystemCallArchitectures = "native";
         serviceConfig.UMask = "0077";
-      } serviceOpts ]);
+      } serviceOpts ];
   };
 in
 {
@@ -289,7 +289,7 @@ in
 
   options.services.prometheus.exporters = mkOption {
     type = types.submodule {
-      options = (mkSubModules);
+      options = mkSubModules;
       imports = [
         ../../../misc/assertions.nix
         (lib.mkRenamedOptionModule [ "unifi-poller" ] [ "unpoller" ])
@@ -364,9 +364,9 @@ in
           'services.prometheus.exporters.nextcloud.tokenFile'
       '';
     } {
-      assertion =  cfg.pgbouncer.enable -> (
+      assertion =  cfg.pgbouncer.enable -> 
         (cfg.pgbouncer.connectionStringFile != null || cfg.pgbouncer.connectionString != "")
-      );
+      ;
         message = ''
           PgBouncer exporter needs either connectionStringFile or connectionString configured"
         '';

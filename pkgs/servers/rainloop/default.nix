@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, unzip, writeText, dos2unix, dataPath ? "/var/lib/rainloop" }: let
   common = { edition, sha256 }:
-    stdenv.mkDerivation (rec {
+    stdenv.mkDerivation rec {
       pname = "rainloop${lib.optionalString (edition != "") "-${edition}"}";
       version = "1.16.0";
 
@@ -58,7 +58,7 @@
         platforms = platforms.all;
         maintainers = with maintainers; [ das_j ];
       };
-    });
+    };
 in {
   rainloop-community = common {
     edition = "community";

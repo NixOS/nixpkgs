@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     pango
     libsecret
     openssh
-  ] ++ lib.optionals (systemdSupport) [
+  ] ++ lib.optionals systemdSupport [
     systemd
   ];
 

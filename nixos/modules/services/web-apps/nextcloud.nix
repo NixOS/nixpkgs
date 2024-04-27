@@ -165,7 +165,7 @@ let
       'apps_paths' => [
         ${concatStrings (mapAttrsToList mkAppStoreConfig appStores)}
       ],
-      ${optionalString (showAppStoreSetting) "'appstoreenabled' => ${renderedAppStoreSetting},"}
+      ${optionalString showAppStoreSetting "'appstoreenabled' => ${renderedAppStoreSetting},"}
       ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
       ${optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}
       ${optionalString (c.dbhost != null) "'dbhost' => '${c.dbhost}',"}
@@ -1064,10 +1064,10 @@ in {
 
       services.nextcloud = {
         caching.redis = lib.mkIf cfg.configureRedis true;
-        settings = mkMerge [({
+        settings = mkMerge [{
           datadirectory = lib.mkDefault "${datadir}/data";
           trusted_domains = [ cfg.hostName ];
-        }) (lib.mkIf cfg.configureRedis {
+        } (lib.mkIf cfg.configureRedis {
           "memcache.distributed" = ''\OC\Memcache\Redis'';
           "memcache.locking" = ''\OC\Memcache\Redis'';
           redis = {

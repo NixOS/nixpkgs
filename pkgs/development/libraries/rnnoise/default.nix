@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, autoreconfHook }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = "rnnoise";
   version = "2021-01-22";
 
@@ -25,4 +25,4 @@ stdenv.mkDerivation (rec {
     mainProgram = "rnnoise_demo";
     platforms = platforms.all;
   };
-})
+}

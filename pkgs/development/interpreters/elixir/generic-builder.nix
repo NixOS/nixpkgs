@@ -26,7 +26,7 @@ let
 in
 assert versionAtLeast (getVersion erlang) minimumOTPVersion;
 
-stdenv.mkDerivation ({
+stdenv.mkDerivation {
   pname = "${baseName}";
 
   inherit src version debugInfo;
@@ -83,4 +83,4 @@ stdenv.mkDerivation ({
     platforms = platforms.unix;
     maintainers = teams.beam.members;
   };
-})
+}

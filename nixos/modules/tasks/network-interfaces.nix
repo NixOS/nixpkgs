@@ -382,7 +382,7 @@ let
             optional (defined ipv6Address && defined ipv6PrefixLength)
             { address = ipv6Address; prefixLength = ipv6PrefixLength; }))
 
-        ({ options.warnings = options.warnings; options.assertions = options.assertions; })
+        { options.warnings = options.warnings; options.assertions = options.assertions; }
       ];
 
   };

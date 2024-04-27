@@ -104,13 +104,13 @@ import ./make-test-python.nix (
 
           initiatorRootDisk = { config, pkgs, modulesPath, lib, ... }: {
             boot.loader.grub.enable = false;
-            boot.kernelParams = lib.mkOverride 5 (
+            boot.kernelParams = lib.mkOverride 5 
               [
                 "boot.shell_on_fail"
                 "console=tty1"
                 "ip=${config.networking.primaryIPAddress}:::255.255.255.0::ens9:none"
               ]
-            );
+            ;
 
             # defaults to true, puts some code in the initrd that tries to mount an overlayfs on /nix/store
             virtualisation.writableStore = false;

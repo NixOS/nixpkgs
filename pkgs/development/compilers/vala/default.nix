@@ -57,7 +57,7 @@ let
 
     buildInputs = [
       glib libiconv libintl
-    ] ++ lib.optional (withGraphviz) graphviz
+    ] ++ lib.optional withGraphviz graphviz
       ++ extraBuildInputs;
 
     enableParallelBuilding = true;

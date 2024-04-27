@@ -613,7 +613,7 @@ in
 
   # upstream broken, can't be generated, so moved out from the generated set
   readline = final.callPackage({ buildLuarocksPackage, fetchurl, luaAtLeast, luaOlder, lua, luaposix }:
-  buildLuarocksPackage ({
+  buildLuarocksPackage {
     pname = "readline";
     version = "3.2-0";
     knownRockspec = (fetchurl {
@@ -646,7 +646,7 @@ in
       license.fullName = "MIT/X11";
       broken = (luaOlder "5.1") || (luaAtLeast "5.5");
     };
-  })) {};
+  }) {};
 
 
   sqlite = prev.sqlite.overrideAttrs (drv: {

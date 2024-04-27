@@ -145,7 +145,7 @@ let
     postInstall = ''
       HOST_PATH=$out/bin patchShebangs --host $out
 
-      ${lib.optionalString (enableNpm) ''
+      ${lib.optionalString enableNpm ''
         mkdir -p $out/share/bash-completion/completions
         ln -s $out/lib/node_modules/npm/lib/utils/completion.sh \
           $out/share/bash-completion/completions/npm

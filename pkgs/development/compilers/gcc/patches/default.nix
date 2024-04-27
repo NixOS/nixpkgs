@@ -60,7 +60,7 @@ in
 []
 ++ optional (atLeast6 && !atLeast12) ./fix-bug-80431.patch
 ++ optional (targetPlatform != hostPlatform) ./libstdc++-target.patch
-++ optionals (noSysDirs) (
+++ optionals noSysDirs (
   [(if atLeast12 then ./gcc-12-no-sys-dirs.patch else ./no-sys-dirs.patch)] ++
   ({
     "13" = [ ./13/no-sys-dirs-riscv.patch ./13/mangle-NIX_STORE-in-__FILE__.patch ];
@@ -183,7 +183,7 @@ in
 ++ optional (is11 && stdenv.isDarwin && stdenv.isAarch64) ./11/libgcc-aarch64-darwin-detection.patch
 
 # openjdk build fails without this on -march=opteron; is upstream in gcc12
-++ optionals (is11) [ ./11/gcc-issue-103910.patch ]
+++ optionals is11 [ ./11/gcc-issue-103910.patch ]
 
 
 
@@ -231,7 +231,7 @@ in
   url = "https://git.busybox.net/buildroot/plain/package/gcc/7.1.0/0900-remove-selftests.patch?id=11271540bfe6adafbc133caf6b5b902a816f5f02";
   sha256 = "0mrvxsdwip2p3l17dscpc1x8vhdsciqw1z5q9i6p5g9yg1cqnmgs";
 })
-++ optionals (is7) [
+++ optionals is7 [
   # https://gcc.gnu.org/ml/gcc-patches/2018-02/msg00633.html
   (./. + "/${majorVersion}/riscv-pthread-reentrant.patch")
   # https://gcc.gnu.org/ml/gcc-patches/2018-03/msg00297.html
@@ -272,7 +272,7 @@ in
 ## gcc 4.9 and older ##############################################################################
 
 ++ optional (!atLeast6) ./parallel-bconfig.patch
-++ optionals (is49) [
+++ optionals is49 [
   (./. + "/${lib.versions.major version}.${lib.versions.minor version}/parallel-strsignal.patch")
   (./. + "/${lib.versions.major version}.${lib.versions.minor version}/libsanitizer.patch")
   (fetchpatch {

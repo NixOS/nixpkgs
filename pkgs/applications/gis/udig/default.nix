@@ -35,7 +35,7 @@ let
       cp -r . $out/opt/udig
       makeWrapper $out/opt/udig/udig.sh $out/bin/udig \
         --prefix PATH : ${jre8}/bin \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ libXtst gdal ])}
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libXtst gdal ]}
     '';
 
     postFixup = ''
@@ -59,7 +59,7 @@ let
       mkdir -p $out/Applications/udig
       cp -R . $out/Applications/udig
       wrapProgram $out/Applications/udig/udig.app/Contents/MacOS/udig_internal \
-        --prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath ([ gdal ])}
+        --prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [ gdal ]}
     '';
   };
 in

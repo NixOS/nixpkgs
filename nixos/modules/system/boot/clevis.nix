@@ -25,12 +25,12 @@ in
     boot.initrd.clevis.devices = mkOption {
       description = "Encrypted devices that need to be unlocked at boot using Clevis";
       default = { };
-      type = types.attrsOf (types.submodule ({
+      type = types.attrsOf (types.submodule {
         options.secretFile = mkOption {
           description = "Clevis JWE file used to decrypt the device at boot, in concert with the chosen pin (one of TPM2, Tang server, or SSS).";
           type = types.path;
         };
-      }));
+      });
     };
 
     boot.initrd.clevis.useTang = mkOption {

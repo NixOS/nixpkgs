@@ -4,7 +4,7 @@ let
   kodiPackages = callPackage ../../../top-level/kodi-packages.nix { inherit kodi; };
 
   # linux distros are supposed to provide pillow and pycryptodome
-  requiredPythonPath = with kodi.pythonPackages; makePythonPath ([ pillow pycryptodome ]);
+  requiredPythonPath = with kodi.pythonPackages; makePythonPath [ pillow pycryptodome ];
 
   # each kodi addon can potentially export a python module which should be included in PYTHONPATH
   # see any addon which supplies `passthru.pythonPath` and the corresponding entry in the addons `addon.xml`

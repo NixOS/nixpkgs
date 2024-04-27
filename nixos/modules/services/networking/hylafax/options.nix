@@ -26,7 +26,7 @@ let
     let
       inherit (lib.types) attrsOf coercedTo int listOf;
       innerType = coercedTo bool (x: if x then "Yes" else "No")
-        (coercedTo int (toString) str);
+        (coercedTo int toString str);
     in
       attrsOf (coercedTo innerType lib.singleton (listOf innerType));
 

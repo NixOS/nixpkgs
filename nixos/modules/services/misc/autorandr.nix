@@ -204,7 +204,7 @@ let
     };
   profileToFiles = name: profile:
     with profile;
-    mkMerge ([
+    mkMerge [
       {
         "xdg/autorandr/${name}/setup".text = concatStringsSep "\n"
           (mapAttrsToList fingerprintToString fingerprint);
@@ -214,7 +214,7 @@ let
       (mapAttrs' (hookToFile "${name}/postswitch.d") hooks.postswitch)
       (mapAttrs' (hookToFile "${name}/preswitch.d") hooks.preswitch)
       (mapAttrs' (hookToFile "${name}/predetect.d") hooks.predetect)
-    ]);
+    ];
   fingerprintToString = name: edid: "${name} ${edid}";
   configToString = name: config:
     if config.enable then
@@ -336,12 +336,12 @@ in {
 
     environment = {
       systemPackages = [ pkgs.autorandr ];
-      etc = mkMerge ([
+      etc = mkMerge [
         (mapAttrs' (hookToFile "postswitch.d") cfg.hooks.postswitch)
         (mapAttrs' (hookToFile "preswitch.d") cfg.hooks.preswitch)
         (mapAttrs' (hookToFile "predetect.d") cfg.hooks.predetect)
         (mkMerge (mapAttrsToList profileToFiles cfg.profiles))
-      ]);
+      ];
     };
 
     systemd.services.autorandr = {

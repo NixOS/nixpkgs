@@ -6,31 +6,31 @@ let
       p = pkgs.python3Packages.xpybutil.overridePythonAttrs (_: { dontWrapPythonPrograms = true; });
     in
     [
-      ({
+      {
         name = "overridePythonAttrs";
         expr = !lib.hasInfix "wrapPythonPrograms" p.postFixup;
         expected = true;
-      })
-      ({
+      }
+      {
         name = "repeatedOverrides-pname";
         expr = repeatedOverrides.pname == "a-better-hello-with-blackjack";
         expected = true;
-      })
-      ({
+      }
+      {
         name = "repeatedOverrides-entangled-pname";
         expr = repeatedOverrides.entangled.pname == "a-better-figlet-with-blackjack";
         expected = true;
-      })
-      ({
+      }
+      {
         name = "overriding-using-only-attrset";
         expr = (pkgs.hello.overrideAttrs { pname = "hello-overriden"; }).pname == "hello-overriden";
         expected = true;
-      })
-      ({
+      }
+      {
         name = "overriding-using-only-attrset-no-final-attrs";
         expr = ((stdenvNoCC.mkDerivation { pname = "hello-no-final-attrs"; }).overrideAttrs { pname = "hello-no-final-attrs-overridden"; }).pname == "hello-no-final-attrs-overridden";
         expected = true;
-      })
+      }
     ];
 
   addEntangled = origOverrideAttrs: f:

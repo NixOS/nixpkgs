@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   buildInputs = [ c-ares openssl zlib ];
   propagatedBuildInputs = [ six protobuf ]
-    ++ lib.optionals (isPy27) [ enum34 futures ];
+    ++ lib.optionals isPy27 [ enum34 futures ];
 
   preBuild = ''
     export GRPC_PYTHON_BUILD_EXT_COMPILER_JOBS="$NIX_BUILD_CORES"

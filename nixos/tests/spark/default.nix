@@ -10,7 +10,7 @@ let
     sparkCluster = testSparkCluster args;
     passthru.override = args': testsForPackage (args // args');
   };
-  testSparkCluster = { sparkPackage, ... }: pkgs.testers.nixosTest ({
+  testSparkCluster = { sparkPackage, ... }: pkgs.testers.nixosTest {
     name = "spark";
 
     nodes = {
@@ -44,5 +44,5 @@ let
       worker.succeed("spark-submit --version | systemd-cat")
       worker.succeed("spark-submit --master spark://master:7077 --executor-memory 512m --executor-cores 1 /spark_sample.py")
     '';
-  });
+  };
 in tests

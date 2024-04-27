@@ -124,8 +124,8 @@ in
 
     # creates gunicorn systemd service for each configured server
     systemd.services = mapAttrs' (name: server:
-      nameValuePair ("bepasty-server-${name}-gunicorn")
-        ({
+      nameValuePair "bepasty-server-${name}-gunicorn"
+        {
           description = "Bepasty Server ${name}";
           wantedBy = [ "multi-user.target" ];
           after = [ "network.target" ];
@@ -165,7 +165,7 @@ in
               -k gevent
             '';
           };
-        })
+        }
     ) cfg.servers;
 
     users.users.${user} =

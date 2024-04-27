@@ -148,7 +148,7 @@ in
           '';
          };
         connectTo = mkOption {
-          type = types.attrsOf ( types.submodule ( connectToSubmodule ) );
+          type = types.attrsOf ( types.submodule  connectToSubmodule  );
           default = { };
           example = literalExpression ''
             {
@@ -194,7 +194,7 @@ in
         };
 
         connectTo = mkOption {
-          type = types.attrsOf ( types.submodule ( connectToSubmodule ) );
+          type = types.attrsOf ( types.submodule  connectToSubmodule  );
           default = { };
           example = literalExpression ''
             {

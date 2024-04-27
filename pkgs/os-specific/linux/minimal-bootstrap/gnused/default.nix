@@ -39,7 +39,7 @@ bash.runCommand "${pname}-${version}" {
       ${result}/bin/sed --version
       mkdir ''${out}
     '';
-} (''
+} ''
   # Unpack
   tar xzf ${src}
   cd sed-${version}
@@ -60,4 +60,4 @@ bash.runCommand "${pname}-${version}" {
 
   # Install
   make install
-'')
+''

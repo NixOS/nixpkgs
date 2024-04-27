@@ -77,7 +77,7 @@ let
 
 
   interfaceNetworks = mkMerge (forEach interfaces (i: {
-    netdevs = mkIf i.virtual ({
+    netdevs = mkIf i.virtual {
       "40-${i.name}" = {
         netdevConfig = {
           Name = i.name;
@@ -87,7 +87,7 @@ let
           User = i.virtualOwner;
         };
       };
-    });
+    };
     networks."40-${i.name}" = {
       name = mkDefault i.name;
       DHCP = mkForce (dhcpStr

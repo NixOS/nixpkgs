@@ -49,7 +49,7 @@ let
       aliases;
 in
 
-mapAliases ({
+mapAliases {
   # Added 2018-07-16 preserve, reason: forceSystem should not be used directly in Nixpkgs.
   forceSystem = system: _:
     (import self.path { localSystem = { inherit system; }; });
@@ -1464,4 +1464,4 @@ mapAliases ({
     purple-facebook
     ;
 
-})
+}

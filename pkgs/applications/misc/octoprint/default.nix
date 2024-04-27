@@ -15,7 +15,7 @@ let
 
   py = python3.override {
     self = py;
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) (
+    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) 
       [
         (
           # Due to flask > 2.3 the login will not work
@@ -266,7 +266,7 @@ let
         (callPackage ./plugins.nix { })
         packageOverrides
       ]
-    );
+    ;
   };
 in
 with py.pkgs; toPythonApplication octoprint

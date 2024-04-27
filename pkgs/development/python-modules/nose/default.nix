@@ -30,7 +30,7 @@ buildPythonPackage rec {
       --replace "from setuptools.command.build_py import Mixin2to3" "from distutils.util import Mixin2to3"
   '';
 
-  preBuild = lib.optionalString (isPy3k) ''
+  preBuild = lib.optionalString isPy3k ''
     ${python.pythonOnBuildForHost}/bin/2to3 -wn nose functional_tests unit_tests
   '';
 

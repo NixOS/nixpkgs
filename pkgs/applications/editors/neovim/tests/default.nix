@@ -68,10 +68,10 @@ let
 
   # neovim-drv must be a wrapped neovim
   runTest = neovim-drv: buildCommand:
-    runCommandLocal "test-${neovim-drv.name}" ({
+    runCommandLocal "test-${neovim-drv.name}" {
       nativeBuildInputs = [ ];
       meta.platforms = neovim-drv.meta.platforms;
-    }) (''
+    } (''
       source ${nmt}/bash-lib/assertions.sh
       vimrc="${writeText "init.vim" neovim-drv.initRc}"
       luarc="${writeText "init.lua" neovim-drv.luaRcContent}"
@@ -83,7 +83,7 @@ let
     '' + buildCommand);
 
 in
-  pkgs.recurseIntoAttrs (
+  pkgs.recurseIntoAttrs 
 rec {
   vim_empty_config = vimUtils.vimrcFile { beforePlugins = ""; customRC = ""; };
 
@@ -281,4 +281,4 @@ rec {
     export HOME=$TMPDIR
     ${nvim_with_opt_plugin}/bin/nvim -i NONE +quit! -e
   '';
-})
+}

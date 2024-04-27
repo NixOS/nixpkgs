@@ -114,10 +114,10 @@ in
         description = "Conduit Matrix Server";
         documentation = [ "https://gitlab.com/famedly/conduit/" ];
         wantedBy = [ "multi-user.target" ];
-        environment = lib.mkMerge ([
+        environment = lib.mkMerge [
           { CONDUIT_CONFIG = configFile; }
           cfg.extraEnvironment
-        ]);
+        ];
         serviceConfig = {
           DynamicUser = true;
           User = "conduit";

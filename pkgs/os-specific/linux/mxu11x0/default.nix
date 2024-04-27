@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, kernel }:
 
 let
-  srcs = import (./srcs.nix) { inherit fetchurl; };
+  srcs = import ./srcs.nix { inherit fetchurl; };
 in
 stdenv.mkDerivation rec {
   pname = "mxu11x0";

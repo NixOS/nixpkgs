@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   pythonImportsCheck = [
     "crocoddyl"
   ];
-  checkInputs = lib.optionals (pythonSupport) [
+  checkInputs = lib.optionals pythonSupport [
     python3Packages.scipy
   ];
 

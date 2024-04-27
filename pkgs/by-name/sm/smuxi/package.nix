@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ autoconf automake itstool intltool gettext
     mono
     stfl
-    makeWrapper ] ++ lib.optionals (guiSupport) [
+    makeWrapper ] ++ lib.optionals guiSupport [
       gtk-sharp-2_0
       # loaded at runtime by GTK#
       gdk-pixbuf pango

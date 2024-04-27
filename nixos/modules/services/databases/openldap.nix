@@ -307,9 +307,9 @@ in {
           writeContents dn (getAttr dn dbSettings).olcDbDirectory content
         ]) contentsFiles)
         ++ [ "${openldap}/bin/slaptest -u -F ${configDir}" ];
-        ExecStart = lib.escapeShellArgs ([
+        ExecStart = lib.escapeShellArgs [
           "${openldap}/libexec/slapd" "-d" "0" "-F" configDir "-h" (lib.concatStringsSep " " cfg.urlList)
-        ]);
+        ];
         Type = "notify";
         # Fixes an error where openldap attempts to notify from a thread
         # outside the main process:

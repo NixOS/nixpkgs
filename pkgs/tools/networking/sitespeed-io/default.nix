@@ -68,14 +68,14 @@ buildNpmPackage rec {
     in
     ''
       wrapProgram $out/bin/sitespeed-io \
-        --set PATH ${lib.makeBinPath ([
+        --set PATH ${lib.makeBinPath [
           (python3.withPackages (p: [p.numpy p.opencv4 p.pyssim]))
           ffmpeg-headless
           imagemagick_light
           xorg.xorgserver
           procps
           coreutils
-        ])} \
+        ]} \
         ${lib.optionalString withChromium "--add-flags '${chromiumArgs}'"} \
         ${lib.optionalString withFirefox "--add-flags '${firefoxArgs}'"} \
         ${lib.optionalString (!withFirefox && withChromium) "--add-flags '-b chrome'"} \

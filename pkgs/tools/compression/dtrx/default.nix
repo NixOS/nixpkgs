@@ -35,8 +35,8 @@ python3Packages.buildPythonApplication rec {
     let
       archivers = lib.makeBinPath (
         [ gnutar lhasa rpm binutils cpio gzip p7zip cabextract unshield bzip2 xz lzip ]
-        ++ lib.optional (unzipSupport) unzip
-        ++ lib.optional (unrarSupport) unrar
+        ++ lib.optional unzipSupport unzip
+        ++ lib.optional unrarSupport unrar
       );
     in [
       ''--prefix PATH : "${archivers}"''

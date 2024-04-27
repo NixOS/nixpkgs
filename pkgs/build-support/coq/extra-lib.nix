@@ -19,7 +19,7 @@ let
     zipListsWith
     ;
 in
-recursiveUpdate lib (rec {
+recursiveUpdate lib rec {
 
   versions =
     let
@@ -210,4 +210,4 @@ recursiveUpdate lib (rec {
   overrideCoqDerivation = f: drv: (drv.override (args: {
     mkCoqDerivation = drv_: (args.mkCoqDerivation drv_).override f;
   }));
-})
+}

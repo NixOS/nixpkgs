@@ -81,7 +81,7 @@ let
     mv *.trc $out
   '';
   imports = hostId: [
-    ({
+    {
       services.scion = {
         enable = true;
         bypassBootstrapWarning = true;
@@ -104,7 +104,7 @@ let
       environment.systemPackages = [
         pkgs.scion
       ];
-    })
+    }
   ];
 in
 {

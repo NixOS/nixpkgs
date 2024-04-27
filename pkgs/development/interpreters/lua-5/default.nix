@@ -89,10 +89,10 @@ rec {
     patches = lib.optional stdenv.isDarwin ./5.4.darwin.patch;
   };
 
-  lua5_4_compat = lua5_4.override({
+  lua5_4_compat = lua5_4.override{
     self = lua5_4_compat;
     compat = true;
-  });
+  };
 
   lua5_3 = callPackage ./interpreter.nix {
     self = lua5_3;
@@ -105,10 +105,10 @@ rec {
       lib.optionals stdenv.isDarwin [ ./5.2.darwin.patch ];
   };
 
-  lua5_3_compat = lua5_3.override({
+  lua5_3_compat = lua5_3.override{
     self = lua5_3_compat;
     compat = true;
-  });
+  };
 
 
   lua5_2 = callPackage ./interpreter.nix {
@@ -122,10 +122,10 @@ rec {
     ] ++ lib.optional stdenv.isDarwin ./5.2.darwin.patch;
   };
 
-  lua5_2_compat = lua5_2.override({
+  lua5_2_compat = lua5_2.override{
     self = lua5_2_compat;
     compat = true;
-  });
+  };
 
 
   lua5_1 = callPackage ./interpreter.nix {

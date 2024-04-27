@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.athens;
 
-  athensConfig = flip recursiveUpdate cfg.extraConfig (
+  athensConfig = flip recursiveUpdate cfg.extraConfig 
     {
       GoBinary = "${cfg.goBinary}/bin/go";
       GoEnv = cfg.goEnv;
@@ -141,7 +141,7 @@ let
         };
       };
     }
-  );
+  ;
 
   configFile = pkgs.runCommandLocal "config.toml" { } ''
     ${pkgs.buildPackages.jq}/bin/jq 'del(..|nulls)' \

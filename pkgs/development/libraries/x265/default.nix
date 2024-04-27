@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     echo 'set(X265_LATEST_TAG "${version}")' >> ./cmake/Version.cmake
   '';
 
-  nativeBuildInputs = [ cmake nasm ] ++ lib.optionals (numaSupport) [ numactl ];
+  nativeBuildInputs = [ cmake nasm ] ++ lib.optionals numaSupport [ numactl ];
 
   cmakeFlags = [
     "-Wno-dev"

@@ -7,10 +7,10 @@ let
   kerberos = config.security.krb5.package;
   stateDir = "/var/heimdal";
   aclFiles = mapAttrs
-    (name: {acl, ...}: pkgs.writeText "${name}.acl" (concatMapStrings ((
+    (name: {acl, ...}: pkgs.writeText "${name}.acl" (concatMapStrings (
       {principal, access, target, ...} :
       "${principal}\t${concatStringsSep "," (toList access)}\t${target}\n"
-    )) acl)) cfg.realms;
+    ) acl)) cfg.realms;
 
   kdcConfigs = mapAttrsToList (name: value: ''
     database = {

@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   buildInputs = [ freetype libjpeg openjpeg libimagequant zlib libtiff libwebp libxcrypt tcl lcms2 ]
     ++ lib.optionals (lib.versionAtLeast version "7.1.0") [ libxcb ]
-    ++ lib.optionals (isPyPy) [ tk libX11 ];
+    ++ lib.optionals isPyPy [ tk libX11 ];
 
   # NOTE: we use LCMS_ROOT as WEBP root since there is not other setting for webp.
   # NOTE: The Pillow install script will, by default, add paths like /usr/lib

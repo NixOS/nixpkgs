@@ -15,7 +15,7 @@ in
       };
 
       config = mkOption {
-        type = types.attrsOf (types.submodule (
+        type = types.attrsOf (types.submodule 
           {
             options = {
               encrypt = mkOption {
@@ -134,7 +134,7 @@ in
               };
             };
           }
-        ));
+        );
 
         default = {};
 

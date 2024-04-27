@@ -68,7 +68,7 @@ let
   allPlugins = {
     bluespec = yosys-bluespec;
     ghdl     = yosys-ghdl;
-  } // (yosys-symbiflow);
+  } // yosys-symbiflow;
 
   boost_python = boost.override {
     enablePython = true;

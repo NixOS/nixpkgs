@@ -21,7 +21,7 @@ in
     };
 
     listen = mkOption {
-      type = with types; listOf (submodule ({
+      type = with types; listOf (submodule {
         options = {
           port = mkOption {
             type = types.port;
@@ -38,7 +38,7 @@ in
             description = "Whether to enable SSL (https) support.";
           };
         };
-      }));
+      });
       default = [];
       example = [
         { ip = "195.154.1.1"; port = 443; ssl = true;}

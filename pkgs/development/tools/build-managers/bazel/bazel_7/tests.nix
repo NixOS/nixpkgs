@@ -165,9 +165,9 @@ recurseIntoAttrs {
   withNixHacks = callBazelTests bazelWithNixHacks;
 
   # add some downstream packages using buildBazelPackage
-  downstream = recurseIntoAttrs ({
+  downstream = recurseIntoAttrs {
     # TODO: fix bazel-watcher build with bazel 7, or find other packages
     #inherit bazel-watcher;
-  });
+  };
 }
 

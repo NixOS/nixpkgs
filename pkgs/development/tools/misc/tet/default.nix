@@ -1,6 +1,6 @@
 { fetchurl, lib, stdenv }:
 
-stdenv.mkDerivation ({
+stdenv.mkDerivation {
   version = "3.8";
   pname = "tet";
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation ({
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-})
+}

@@ -227,9 +227,9 @@ in rec {
     postInstall = ''
     for f in extrakto.sh open.sh tmux-extrakto.sh; do
       wrapProgram $target/scripts/$f \
-        --prefix PATH : ${with pkgs; lib.makeBinPath (
+        --prefix PATH : ${with pkgs; lib.makeBinPath 
         [ pkgs.fzf pkgs.python3 pkgs.xclip ]
-        )}
+        }
     done
 
     '';
@@ -607,7 +607,7 @@ in rec {
       substituteInPlace $target/session-wizard.tmux \
         --replace  \$CURRENT_DIR/session-wizard.sh $target/session-wizard.sh
       wrapProgram $target/session-wizard.sh \
-        --prefix PATH : ${with pkgs; lib.makeBinPath ([ fzf zoxide coreutils gnugrep gnused ])}
+        --prefix PATH : ${with pkgs; lib.makeBinPath [ fzf zoxide coreutils gnugrep gnused ]}
     '';
   };
 
@@ -727,9 +727,9 @@ in rec {
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
       wrapProgram $out/share/tmux-plugins/t-smart-tmux-session-manager/bin/t \
-          --prefix PATH : ${with pkgs; lib.makeBinPath (
+          --prefix PATH : ${with pkgs; lib.makeBinPath 
             [ pkgs.fzf pkgs.zoxide ]
-          )}
+          }
 
       find $target -type f -print0 | xargs -0 sed -i -e 's|fzf |${pkgs.fzf}/bin/fzf |g'
       find $target -type f -print0 | xargs -0 sed -i -e 's|zoxide |${pkgs.zoxide}/bin/zoxide |g'

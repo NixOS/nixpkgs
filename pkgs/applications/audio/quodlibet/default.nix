@@ -82,12 +82,12 @@ python3.pkgs.buildPythonApplication rec {
     libmodplug
     libsoup
     webkitgtk
-  ] ++ lib.optionals (withXineBackend) [
+  ] ++ lib.optionals withXineBackend [
     xine-lib
-  ] ++ lib.optionals (withGstreamerBackend) (with gst_all_1; [
+  ] ++ lib.optionals withGstreamerBackend (with gst_all_1; [
     gst-plugins-base
     gstreamer
-  ] ++ lib.optionals (withGstPlugins) [
+  ] ++ lib.optionals withGstPlugins [
     gst-libav
     gst-plugins-bad
     gst-plugins-good

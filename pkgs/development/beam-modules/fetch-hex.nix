@@ -6,7 +6,7 @@
 , meta ? { }
 }:
 
-stdenv.mkDerivation ({
+stdenv.mkDerivation {
   pname = "hex-source-${pkg}";
   inherit version;
   dontBuild = true;
@@ -42,4 +42,4 @@ stdenv.mkDerivation ({
   '';
 
   inherit meta;
-})
+}

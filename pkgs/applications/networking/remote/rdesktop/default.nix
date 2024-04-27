@@ -3,7 +3,7 @@
 , enableCredssp ? (!stdenv.isDarwin)
 } :
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = "rdesktop";
   version = "1.9.0";
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation (rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.gpl2;
   };
-})
+}

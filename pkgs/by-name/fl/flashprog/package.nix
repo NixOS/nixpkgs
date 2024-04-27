@@ -31,9 +31,9 @@ stdenv.mkDerivation {
     libusb1
   ] ++ lib.optionals (!stdenv.isDarwin) [
     pciutils
-  ] ++ lib.optionals (withJlink) [
+  ] ++ lib.optionals withJlink [
     libjaylink
-  ] ++ lib.optionals (withGpio) [
+  ] ++ lib.optionals withGpio [
     libgpiod
   ];
 

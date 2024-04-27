@@ -156,7 +156,7 @@ let
       then throwMismatch drv
       else drv;
 
-    in inputs: builtins.map (checkDrv) inputs;
+    in inputs: builtins.map checkDrv inputs;
 
   # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
   self = toPythonModule (stdenv.mkDerivation ((builtins.removeAttrs attrs [
@@ -179,15 +179,15 @@ let
       unzip
     ] ++ lib.optionals (format == "setuptools") [
       setuptoolsBuildHook
-    ] ++ lib.optionals (format == "pyproject") [(
+    ] ++ lib.optionals (format == "pyproject") [
       pipBuildHook
-    )] ++ lib.optionals (format == "wheel") [
+    ] ++ lib.optionals (format == "wheel") [
       wheelUnpackHook
     ] ++ lib.optionals (format == "egg") [
       eggUnpackHook eggBuildHook eggInstallHook
-    ] ++ lib.optionals (format != "other") [(
+    ] ++ lib.optionals (format != "other") [
       pipInstallHook
-    )] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+    ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
       # This is a test, however, it should be ran independent of the checkPhase and checkInputs
       pythonImportsCheckHook
     ] ++ lib.optionals withDistOutput [

@@ -58,7 +58,7 @@ let
   # Write an /etc/asound.conf that causes all ALSA applications to
   # be re-routed to the PulseAudio server through ALSA's Pulse
   # plugin.
-  alsaConf = writeText "asound.conf" (''
+  alsaConf = writeText "asound.conf" ''
     pcm_type.pulse {
       libs.native = ${pkgs.alsa-plugins}/lib/alsa-lib/libasound_module_pcm_pulse.so ;
       ${lib.optionalString enable32BitAlsaPlugins
@@ -77,7 +77,7 @@ let
       type pulse
     }
     ${alsaCfg.extraConfig}
-  '');
+  '';
 
 in {
 

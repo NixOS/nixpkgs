@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "1sjs4324is7fp21an4aas2z4dwsvs6z4xwrmp72vwpq1s6wbfzjh";
   };
 
-  configureFlags = lib.optional (static) "LDFLAGS=-static";
+  configureFlags = lib.optional static "LDFLAGS=-static";
 
   meta = {
     description = "A high-performance event loop/event model with lots of features";

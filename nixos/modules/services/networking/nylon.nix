@@ -148,7 +148,7 @@ in
 
   ###### implementation
 
-  config = mkIf (length(enabledNylons) > 0) {
+  config = mkIf (lengthenabledNylons > 0) {
 
     users.users.nylon = {
       group = "nylon";

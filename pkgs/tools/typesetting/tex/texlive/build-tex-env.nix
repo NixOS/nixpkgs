@@ -40,7 +40,7 @@ lib.fix (self: {
 let
   ### buildEnv with custom attributes
   buildEnv' = args: (buildEnv
-    ({ inherit (args) name paths; })
+    { inherit (args) name paths; }
       // lib.optionalAttrs (args ? extraOutputsToInstall) { inherit (args) extraOutputsToInstall; })
     .overrideAttrs (removeAttrs args [ "extraOutputsToInstall" "name" "paths" "pkgs" ]);
 

@@ -27,7 +27,7 @@ in
   ##### implementation
   config = lib.mkIf cfg.enable (lib.mkMerge [
     # Common
-    ({
+    {
       environment.systemPackages = with pkgs.coolercontrol; [
         coolercontrol-gui
       ];
@@ -44,7 +44,7 @@ in
           coolercontrold.wantedBy = [ "multi-user.target" ];
         };
       };
-    })
+    }
 
     # Nvidia support
     (lib.mkIf cfg.nvidiaSupport {
