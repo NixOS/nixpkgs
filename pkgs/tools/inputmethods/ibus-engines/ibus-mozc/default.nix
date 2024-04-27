@@ -38,7 +38,7 @@ buildBazelPackage rec {
   inherit bazel;
 
   fetchAttrs = {
-    sha256 = "sha256-TJ5ksmGCZ8Vy3WmwqQQqQh+kYZvrBeGXc4zcOt1ZYI4=";
+    sha256 = "sha256-ToBLVJpAQErL/P1bfWJca2FjhDW5XTrwuJQLquwlrhA=";
 
     # remove references of buildInputs and zip code files
     preInstall = ''
