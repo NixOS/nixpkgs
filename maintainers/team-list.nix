@@ -32,7 +32,6 @@ with lib.maintainers; {
   acme = {
     members = [
       aanderse
-      andrew-d
       arianvp
       emily
       flokli
