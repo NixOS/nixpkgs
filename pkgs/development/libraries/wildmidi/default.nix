@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, writeTextFile, cmake, alsa-lib, OpenAL, freepats }:
+{ lib, stdenv, fetchFromGitHub, writeTextFile, cmake, alsa-lib, OpenAL, CoreAudioKit, freepats }:
 
 let
   defaultCfgPath = "${placeholder "out"}/etc/wildmidi/wildmidi.cfg";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals stdenv.buildPlatform.isLinux [
     alsa-lib stdenv.cc.libc/*couldn't find libm*/
   ] ++ lib.optionals stdenv.buildPlatform.isDarwin [
-    OpenAL
+    OpenAL CoreAudioKit
   ];
 
   preConfigure = ''
