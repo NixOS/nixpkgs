@@ -29668,8 +29668,6 @@ with pkgs;
       requests requests-toolbelt setuptools sqlalchemy fusepy;
   };
 
-  acorn = callPackage ../applications/networking/cluster/acorn { };
-
   inherit (qt6Packages.callPackage ../applications/office/activitywatch { })
     aw-qt
     aw-server-rust
