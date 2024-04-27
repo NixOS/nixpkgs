@@ -1,4 +1,4 @@
-{ stdenv, pkgsBuildBuild, fetchFromGitHub, lib }:
+{ stdenv, pkgsBuildBuild, fetchFromGitHub, lib, nix-update-script }:
 
 let
   generator = pkgsBuildBuild.buildGoModule rec {
@@ -31,5 +31,8 @@ stdenv.mkDerivation {
     install -Dm644 dlc.dat $out/share/v2ray/geosite.dat
     runHook postInstall
   '';
-  passthru.generator = generator;
+  passthru = {
+    inherit generator;
+    updateScript = nix-update-script { };
+  };
 }
