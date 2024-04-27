@@ -1086,12 +1086,6 @@
     githubId = 153175;
     name = "Andrew Marshall";
   };
-  amaxine = {
-    email = "max@ine.dev";
-    github = "amaxine";
-    githubId = 35892750;
-    name = "Maxine Aubrey";
-  };
   ambroisie = {
     email = "bruno.nixpkgs@belanyi.fr";
     github = "ambroisie";
