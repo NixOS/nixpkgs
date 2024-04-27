@@ -929,6 +929,7 @@ let
     "connections"
     "csodata"
     "DiceView"
+    "facmodTS"
     "margaret"
     "MSnID"
     "OmnipathR"
