@@ -3104,7 +3104,9 @@ with pkgs;
 
   pikchr = callPackage ../tools/graphics/pikchr { };
 
-  poop = callPackage ../tools/misc/poop { };
+  poop = callPackage ../tools/misc/poop {
+    zig = zig_0_11;
+  };
 
   popl = callPackage ../development/libraries/popl { };
 
