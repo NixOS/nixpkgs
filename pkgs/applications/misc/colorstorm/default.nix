@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, zig_0_9
+, zig
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    zig_0_9.hook
+    zig.hook
   ];
 
   meta = {
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/benbusby/colorstorm";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ];
-    inherit (zig_0_9.meta) platforms;
+    inherit (zig.meta) platforms;
     mainProgram = "colorstorm";
   };
 })

@@ -520,7 +520,9 @@ with pkgs;
 
   colorpicker = callPackage ../tools/misc/colorpicker { };
 
-  colorstorm = callPackage ../applications/misc/colorstorm { };
+  colorstorm = callPackage ../applications/misc/colorstorm {
+    zig = zig_0_9;
+  };
 
   comedilib = callPackage ../development/libraries/comedilib {  };
 
