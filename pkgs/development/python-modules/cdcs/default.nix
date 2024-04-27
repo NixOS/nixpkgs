@@ -15,9 +15,9 @@
 buildPythonPackage rec {
   pname = "cdcs";
   version = "0.2.3";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "usnistgov";
@@ -26,11 +26,11 @@ buildPythonPackage rec {
     hash = "sha256-HhAzULVWkKOWDJ6IZyBy0MYc/YGAFkSTLIgpdyvw1eI=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ipython
     numpy
     pandas
