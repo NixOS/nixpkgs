@@ -1,27 +1,28 @@
 { lib
 , stdenv
-, buildPythonPackage
-, fetchFromGitHub
 , ase
+, buildPythonPackage
 , cython
+, fetchFromGitHub
 , glibcLocales
 , joblib
 , matplotlib
 , monty
 , networkx
-, numpy
+, oldest-supported-numpy
 , palettable
 , pandas
 , plotly
 , pybtex
 , pydispatcher
-, pytestCheckHook
 , pytest-xdist
+, pytestCheckHook
 , pythonOlder
 , requests
 , ruamel-yaml
 , scipy
 , seekpath
+, setuptools
 , spglib
 , sympy
 , tabulate
@@ -31,27 +32,31 @@
 buildPythonPackage rec {
   pname = "pymatgen";
   version = "2024.2.23";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "materialsproject";
     repo = "pymatgen";
-    rev= "v${version}";
+    rev= "refs/tags/v${version}";
     hash = "sha256-eswoup9ACj/PHVW3obcnZjD4tWemsmROZFtwGGigEYE=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   nativeBuildInputs = [
     cython
     glibcLocales
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     matplotlib
     monty
     networkx
-    numpy
+    oldest-supported-numpy
     palettable
     pandas
     plotly
@@ -70,6 +75,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-xdist
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+
   preCheck = ''
     # hide from tests
     mv pymatgen _pymatgen
@@ -78,6 +84,7 @@ buildPythonPackage rec {
     # some tests cover the command-line scripts
     export PATH=$out/bin:$PATH
   '';
+
   disabledTests = [
     # presumably won't work with our dir layouts
     "test_egg_sources_txt_is_complete"
@@ -96,10 +103,11 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;  # tests segfault. that's bad.
     description = "A robust materials analysis code that defines core object representations for structures and molecules";
     homepage = "https://pymatgen.org/";
+    changelog = "https://github.com/materialsproject/pymatgen/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
+    broken = stdenv.isDarwin;  # tests segfault. that's bad.
   };
 }
