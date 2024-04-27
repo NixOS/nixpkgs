@@ -65,6 +65,13 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs --build build-aux/meson/postinstall.py
   '';
 
+  # The package uses "clappersink" provided by itself
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : $out/lib/gstreamer-1.0
+    )
+  '';
+
   meta = with lib; {
     description = "A GNOME media player built using GTK4 toolkit and powered by GStreamer with OpenGL rendering";
     longDescription = ''
