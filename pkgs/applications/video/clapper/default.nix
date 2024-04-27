@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/Rafostar/clapper";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ aleksana ];
     platforms = platforms.linux;
   };
 })
