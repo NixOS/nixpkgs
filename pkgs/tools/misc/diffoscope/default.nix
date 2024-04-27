@@ -76,8 +76,26 @@
 , writeScript
 }:
 
+let
+  python = python3.override {
+    packageOverrides = final: prev: {
+      # version 4 or newer would log the followng error but tests currently don't fail because radare2 is disabled
+      # ValueError: argument TNULL is not a TLSH hex string
+      tlsh = prev.tlsh.overridePythonAttrs ({ src, ... }: let
+        version = "3.19.1";
+      in {
+        inherit version;
+        src = src.override {
+          rev = version;
+          hash = "sha256-ZYEjT/yShfA4+zpbGOtaFOx1nSSOWPtMvskPhHv3c9U=";
+        };
+      });
+    };
+  };
+in
+
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
-python3.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
   version = "265";
 
@@ -160,7 +178,7 @@ python3.pkgs.buildPythonApplication rec {
     zip
     zstd
   ]
-  ++ (with python3.pkgs; [
+  ++ (with python.pkgs; [
     argcomplete
     debian
     defusedxml
@@ -209,7 +227,7 @@ python3.pkgs.buildPythonApplication rec {
       wabt
       xmlbeans
     ]
-    ++ (with python3.pkgs; [
+    ++ (with python.pkgs; [
       androguard
       binwalk
       guestfs
@@ -224,7 +242,7 @@ python3.pkgs.buildPythonApplication rec {
     ++ lib.optionals (stdenv.hostPlatform.system != "aarch64-darwin") [ gnumeric ]
   ));
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python.pkgs; [
     pytestCheckHook
   ] ++ pythonPath;
 
