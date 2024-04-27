@@ -22574,12 +22574,6 @@
     githubId = 393108;
     name = "Damien Diederen";
   };
-  zumorica = {
-    name = "Vera Aguilera Puerto";
-    email = "gradientvera+nix@outlook.com";
-    github = "Zumorica";
-    githubId = 6766154;
-  };
   zupo = {
     name = "Nejc Zupan";
     email = "nejczupan+nix@gmail.com";
