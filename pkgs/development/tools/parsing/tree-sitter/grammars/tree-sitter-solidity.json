@@ -1,0 +1,12 @@
+{
+  "url": "https://github.com/JoranHonig/tree-sitter-solidity",
+  "rev": "b239a95f94cfcc6e7b3e961bc73a28d55e214f02",
+  "date": "2024-03-12T10:13:22+00:00",
+  "path": "/nix/store/8bi3z4l3g890xgb7karzpqfinrcadk26-tree-sitter-solidity",
+  "sha256": "0kb8d6j81pv5bas7nfvq5wv12paicrv833d7iin5z0zy4y2fvqkg",
+  "hash": "sha256-b+LthCf+g19sjKeNgXZmUV0RNi94O3u0WmXfgKRpaE0=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

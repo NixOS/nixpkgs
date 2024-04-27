@@ -1,0 +1,25 @@
+--- libedit-20120311-3.0/src/chartype.h	2012-03-11 10:54:58.000000000 +0100
++++ libedit-20120311-3.0/src/chartype.h	2012-05-03 19:00:20.651847423 +0200
+@@ -56,9 +56,11 @@
+ /* Oh for a <uchar.h> with char32_t and __STDC_UTF_32__ in it...
+  * ref: ISO/IEC DTR 19769
+  */
++#ifndef __CYGWIN__
+ #if WCHAR_MAX < INT32_MAX
+ #warning Build environment does not support non-BMP characters
+ #endif
++#endif
+ 
+ #ifndef HAVE_WCSDUP
+ wchar_t *wcsdup(const wchar_t *s);
+--- libedit-20120311-3.0/src/editline/readline.h	2011-02-26 23:42:59.000000000 +0100
++++ libedit-20120311-3.0/src/editline/readline.h	2012-05-03 19:00:49.211244803 +0200
+@@ -75,7 +75,7 @@ typedef KEYMAP_ENTRY *Keymap;
+ 
+ #ifndef CTRL
+ #include <sys/ioctl.h>
+-#if !defined(__sun) && !defined(__hpux) && !defined(_AIX)
++#if !defined(__sun) && !defined(__hpux) && !defined(_AIX) && !defined(__CYGWIN__)
+ #include <sys/ttydefaults.h>
+ #endif
+ #ifndef CTRL

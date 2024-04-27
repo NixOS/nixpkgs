@@ -1,0 +1,13 @@
+diff --git a/anytree/exporter/dotexporter.py b/anytree/exporter/dotexporter.py
+index 9c10a68..209a952 100644
+--- a/anytree/exporter/dotexporter.py
++++ b/anytree/exporter/dotexporter.py
+@@ -228,7 +228,7 @@ class DotExporter(object):
+             for line in self:
+                 dotfile.write(("%s\n" % line).encode("utf-8"))
+             dotfile.flush()
+-            cmd = ["dot", dotfilename, "-T", fileformat, "-o", filename]
++            cmd = ["@graphviz@/bin/dot", dotfilename, "-T", fileformat, "-o", filename]
+             check_call(cmd)
+         try:
+             remove(dotfilename)

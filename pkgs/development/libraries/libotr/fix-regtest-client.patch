@@ -1,0 +1,11 @@
+diff -Nur a/tests/regression/client/client.c b/tests/regression/client/client.c
+--- a/tests/regression/client/client.c	2015-12-25 17:39:45.000000000 +0000
++++ b/tests/regression/client/client.c	2022-03-29 19:33:18.646398117 +0100
+@@ -27,6 +27,7 @@
+ #include <syscall.h>
+ #include <sys/epoll.h>
+ #include <sys/types.h>
++#include <sys/socket.h>
+ #include <sys/un.h>
+ #include <unistd.h>
+ 

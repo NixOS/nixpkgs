@@ -1,0 +1,24 @@
+{
+  "name": "rust-analyzer",
+  "version": "0.3.1850",
+  "dependencies": {
+    "@hpcc-js/wasm": "^2.13.0",
+    "anser": "^2.1.1",
+    "d3": "^7.8.5",
+    "d3-graphviz": "^5.0.2",
+    "vscode-languageclient": "^8.1.0",
+    "@tsconfig/strictest": "^2.0.1",
+    "@types/node": "~16.11.7",
+    "@types/vscode": "~1.78.1",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vscode/test-electron": "^2.3.8",
+    "@vscode/vsce": "^2.19.0",
+    "eslint": "^8.44.0",
+    "eslint-config-prettier": "^8.8.0",
+    "ovsx": "^0.8.2",
+    "prettier": "^3.0.0",
+    "tslib": "^2.6.0",
+    "typescript": "^5.1.6"
+  }
+}

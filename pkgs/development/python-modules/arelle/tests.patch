@@ -1,0 +1,14 @@
+diff --git c/arelle/CntlrProfiler.py i/arelle/CntlrProfiler.py
+index a64bb1b..dc0299d 100644
+--- c/arelle/CntlrProfiler.py
++++ i/arelle/CntlrProfiler.py
+@@ -1,5 +1,6 @@
+
+-import Cntlr, ModelManager, FileSource, time
++from arelle import Cntlr, ModelManager, FileSource
++import time
+ from optparse import OptionParser
+ import cProfile
+ import gettext
+diff --git c/arelle/ValidateFilingText.py i/arelle/ValidateFilingText.py
+index 12dbbbb..c0e98c3 100644

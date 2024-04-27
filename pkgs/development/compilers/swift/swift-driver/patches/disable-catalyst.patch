@@ -1,0 +1,17 @@
+Tries to parse SDKSettings.plist looking for a Catalyst version map, but we
+don't currently support this.
+
+--- a/Sources/SwiftDriver/Toolchains/DarwinToolchain.swift
++++ b/Sources/SwiftDriver/Toolchains/DarwinToolchain.swift
+@@ -297,11 +297,7 @@ public final class DarwinToolchain: Toolchain {
+                                                debugDescription: "Malformed version string")
+       }
+       self.version = version
+-      if self.canonicalName.hasPrefix("macosx") {
+-        self.versionMap = try keyedContainer.decode(VersionMap.self, forKey: .versionMap)
+-      } else {
+         self.versionMap = VersionMap()
+-      }
+     }
+ 
+ 
