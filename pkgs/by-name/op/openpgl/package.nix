@@ -31,12 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-DTBB_ROOT=${tbb.out}"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isAarch64 "-flax-vector-conversions";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isAarch64 && !stdenv.isDarwin) "-flax-vector-conversions";
 
   meta = {
     description = "Intel Open Path Guiding Library";
     homepage = "https://github.com/OpenPathGuidingLibrary/openpgl";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.amarshall ];
     license = lib.licenses.asl20;
   };
