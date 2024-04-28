@@ -24,12 +24,12 @@ buildPythonPackage rec {
     hash = "sha256-NnRLBXvQj25dSHc8ZnUaPT8Oiy2EyHLIb8IJPQliyPg=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     typing-extensions
   ];
 
