@@ -20,9 +20,9 @@
 }:
 
 buildPythonPackage rec {
-  pname = "dulwich";
   version = "0.21.7";
-  pyproject = true;
+  pname = "dulwich";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     setuptools-rust
   ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     certifi
     urllib3
   ];
