@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib
+, fetchFromGitHub
+, nix-update-script
+, stdenv
+, cmake
+}:
 
 stdenv.mkDerivation rec {
   pname = "miniz";
@@ -10,6 +15,7 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-3J0bkr2Yk+MJXilUqOCHsWzuykySv5B1nepmucvA4hg=";
   };
+  passthru.updateScript = nix-update-script {};
 
   nativeBuildInputs = [ cmake ];
 
