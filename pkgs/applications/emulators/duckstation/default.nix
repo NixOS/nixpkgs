@@ -8,6 +8,7 @@
 , extra-cmake-modules
 , libXrandr
 , libbacktrace
+, libwebp
 , makeWrapper
 , ninja
 , pkg-config
@@ -15,21 +16,31 @@
 , qtsvg
 , qttools
 , qtwayland
+, shaderc
 , substituteAll
 , vulkan-loader
 , wayland
 , wrapQtAppsHook
 }:
 
+# Duckstation requires a patched shaderc to build
+# https://raw.githubusercontent.com/stenzek/duckstation/master/scripts/shaderc-changes.patch
+# Vendored patch has some changes to CMakeLists.txt & CHANGES removed as it will not build with them.
+let
+  shaderc' = shaderc.overrideAttrs (old: {
+    patches = old.patches or [ ] ++ [ ./shaderc-changes.patch ];
+  });
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "duckstation";
-  version = "0.1-6292";
+  version = "0.1-6658";
 
   src = fetchFromGitHub {
     owner = "stenzek";
     repo = "duckstation";
-    rev = "0bc42c38aab49030118f507c9783de047769148b";
-    hash = "sha256-8OavixSwEWihFY2fEdsepR1lqWlTH+//xZRKwb7lFCQ=";
+    rev = "4e0c417add264226b3db065c1466791f0591a1b5";
+    hash = "sha256-fN0bcjqjMmK3qVLlrYmR2VgjK0BjdK4nUj8vNYdFC3I=";
   };
 
   patches = [
@@ -40,14 +51,13 @@ stdenv.mkDerivation (finalAttrs: {
       src = ./002-hardcode-vars.diff;
       gitHash = finalAttrs.src.rev;
       gitBranch = "master";
-      gitTag = "${finalAttrs.version}-g0bc42c38";
-      gitDate = "2024-02-06T22:47:47+09:00";
+      gitTag = "${finalAttrs.version}-g4e0c417a";
+      gitDate = "2024-04-16T12:49:54+10:00";
     })
   ];
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
     ninja
     pkg-config
     qttools
@@ -57,11 +67,14 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     curl
+    extra-cmake-modules # needed here if strictDeps = true
     libXrandr
     libbacktrace
+    libwebp
     qtbase
     qtsvg
     qtwayland
+    shaderc'
     wayland
   ]
   ++ cubeb.passthru.backendLibs;
@@ -75,7 +88,9 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   checkPhase = ''
     runHook preCheck
+
     bin/common-tests
+
     runHook postCheck
   '';
 

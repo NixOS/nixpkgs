@@ -1,0 +1,135 @@
+--- a/libshaderc/include/shaderc/shaderc.h
++++ b/libshaderc/include/shaderc/shaderc.h
+@@ -319,6 +319,10 @@ SHADERC_EXPORT void shaderc_compile_options_set_source_language(
+ SHADERC_EXPORT void shaderc_compile_options_set_generate_debug_info(
+     shaderc_compile_options_t options);
+ 
++// Sets the compiler mode to emit non-semantic debug information in the output.
++SHADERC_EXPORT void shaderc_compile_options_set_emit_non_semantic_debug_info(
++    shaderc_compile_options_t options);
++
+ // Sets the compiler optimization level to the given level. Only the last one
+ // takes effect if multiple calls of this function exist.
+ SHADERC_EXPORT void shaderc_compile_options_set_optimization_level(
+--- a/libshaderc/include/shaderc/shaderc.hpp
++++ b/libshaderc/include/shaderc/shaderc.hpp
+@@ -172,6 +172,12 @@ class CompileOptions {
+     shaderc_compile_options_set_generate_debug_info(options_);
+   }
+ 
++  // Sets the compiler mode to emit non-semantic debug information in the
++  // output.
++  void SetEmitNonSemanticDebugInfo() {
++    shaderc_compile_options_set_emit_non_semantic_debug_info(options_);
++  }
++
+   // Sets the compiler optimization level to the given level. Only the last one
+   // takes effect if multiple calls of this function exist.
+   void SetOptimizationLevel(shaderc_optimization_level level) {
+--- a/libshaderc/src/shaderc.cc
++++ b/libshaderc/src/shaderc.cc
+@@ -422,6 +422,11 @@ void shaderc_compile_options_set_generate_debug_info(
+   options->compiler.SetGenerateDebugInfo();
+ }
+ 
++void shaderc_compile_options_set_emit_non_semantic_debug_info(
++    shaderc_compile_options_t options) {
++  options->compiler.SetEmitNonSemanticDebugInfo();
++}
++
+ void shaderc_compile_options_set_optimization_level(
+     shaderc_compile_options_t options, shaderc_optimization_level level) {
+   auto opt_level = shaderc_util::Compiler::OptimizationLevel::Zero;
+--- a/libshaderc_util/include/libshaderc_util/compiler.h
++++ b/libshaderc_util/include/libshaderc_util/compiler.h
+@@ -195,6 +195,7 @@ class Compiler {
+         warnings_as_errors_(false),
+         suppress_warnings_(false),
+         generate_debug_info_(false),
++        emit_non_semantic_debug_info_(false),
+         enabled_opt_passes_(),
+         target_env_(TargetEnv::Vulkan),
+         target_env_version_(TargetEnvVersion::Default),
+@@ -220,6 +221,10 @@ class Compiler {
+   // such as identifier names and line numbers.
+   void SetGenerateDebugInfo();
+ 
++  // Requests that the compiler emit non-semantic debug information.
++  // Requires VK_KHR_shader_non_semantic_info.
++  void SetEmitNonSemanticDebugInfo();
++
+   // Sets the optimization level to the given level. Only the last one takes
+   // effect if multiple calls of this method exist.
+   void SetOptimizationLevel(OptimizationLevel level);
+@@ -486,6 +491,10 @@ class Compiler {
+   // output.
+   bool generate_debug_info_;
+ 
++  // When true and generate_debug_info_ is also set, generate non-semantic debug
++  // information.
++  bool emit_non_semantic_debug_info_;
++
+   // Optimization passes to be applied.
+   std::vector<PassId> enabled_opt_passes_;
+ 
+--- a/libshaderc_util/src/compiler.cc
++++ b/libshaderc_util/src/compiler.cc
+@@ -341,6 +341,11 @@ std::tuple<bool, std::vector<uint32_t>, size_t> Compiler::Compile(
+   options.generateDebugInfo = generate_debug_info_;
+   options.disableOptimizer = true;
+   options.optimizeSize = false;
++  options.emitNonSemanticShaderDebugInfo =
++      generate_debug_info_ && emit_non_semantic_debug_info_;
++  options.emitNonSemanticShaderDebugSource =
++      generate_debug_info_ && emit_non_semantic_debug_info_;
++
+   // Note the call to GlslangToSpv also populates compilation_output_data.
+   glslang::GlslangToSpv(*program.getIntermediate(used_shader_stage), spirv,
+                         &options);
+@@ -438,6 +443,10 @@ void Compiler::SetGenerateDebugInfo() {
+   }
+ }
+ 
++void Compiler::SetEmitNonSemanticDebugInfo() {
++  emit_non_semantic_debug_info_ = true;
++}
++
+ void Compiler::SetOptimizationLevel(Compiler::OptimizationLevel level) {
+   // Clear previous settings first.
+   enabled_opt_passes_.clear();
+--- a/third_party/CMakeLists.txt
++++ b/third_party/CMakeLists.txt
+@@ -20,9 +20,9 @@ set(SHADERC_TINT_DIR "${SHADERC_THIRD_PARTY_ROOT_DIR}/tint" CACHE STRING
+ set(SHADERC_ABSL_DIR "${SHADERC_THIRD_PARTY_ROOT_DIR}/abseil_cpp" CACHE STRING
+   "Location of re2 source")
+ 
+-set( SKIP_GLSLANG_INSTALL ${SHADERC_SKIP_INSTALL} )
+-set( SKIP_SPIRV_TOOLS_INSTALL ${SHADERC_SKIP_INSTALL} )
+-set( SKIP_GOOGLETEST_INSTALL ${SHADERC_SKIP_INSTALL} )
++set( SKIP_GLSLANG_INSTALL ON )
++set( SKIP_SPIRV_TOOLS_INSTALL ON )
++set( SKIP_GOOGLETEST_INSTALL ON )
+ 
+ # Configure third party projects.
+ if(${SHADERC_ENABLE_TESTS})
+@@ -64,7 +64,10 @@ if (NOT TARGET SPIRV-Tools)
+       add_subdirectory(${SHADERC_RE2_DIR} re2)
+       add_subdirectory(${SHADERC_EFFCEE_DIR} effcee)
+     endif()
+-    add_subdirectory(${SHADERC_SPIRV_TOOLS_DIR} spirv-tools)
++    set(SPIRV_SKIP_EXECUTABLES ON CACHE BOOL "Skip building SPIRV-Tools executables")
++    set(SPIRV_TOOLS_BUILD_STATIC OFF CACHE BOOL "Skip building two SPIRV-Tools libs")
++    set(SPIRV_TOOLS_LIBRARY_TYPE STATIC CACHE STRING "Build static SPIRV-Tools libs")
++    add_subdirectory(${SHADERC_SPIRV_TOOLS_DIR} spirv-tools EXCLUDE_FROM_ALL)
+     if (NOT "${SPIRV_SKIP_TESTS}")
+       if (MSVC)
+         if (${MSVC_VERSION} LESS 1920)
+@@ -83,7 +86,7 @@ endif()
+ 
+ if (NOT TARGET glslang)
+   if (IS_DIRECTORY ${SHADERC_GLSLANG_DIR})
+-    add_subdirectory(${SHADERC_GLSLANG_DIR} glslang)
++    add_subdirectory(${SHADERC_GLSLANG_DIR} glslang EXCLUDE_FROM_ALL)
+   endif()
+   if (NOT TARGET glslang)
+     message(FATAL_ERROR "glslang was not found - required for compilation")
