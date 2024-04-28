@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "aiogram";
-  version = "3.4.1";
+  version = "3.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "aiogram";
     repo = "aiogram";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2of4KHdpAATOt0dCqI3AmTJtdeN5SdiWydeGjtagABI=";
+    hash = "sha256-NOaI01Lb969Lp/v38u2UipN9UbOQNJQEbN2JS3lmFno=";
   };
 
   nativeBuildInputs = [
@@ -69,6 +69,7 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     "-W" "ignore::pluggy.PluggyTeardownRaisedWarning"
     "-W" "ignore::pytest.PytestDeprecationWarning"
+    "-W"  "ignore::DeprecationWarning"
   ];
 
   pythonImportsCheck = [ "aiogram" ];
