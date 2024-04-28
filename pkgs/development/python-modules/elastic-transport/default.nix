@@ -9,6 +9,7 @@
 , pytestCheckHook
 , pythonOlder
 , requests
+, setuptools
 , trustme
 , urllib3
 }:
@@ -16,9 +17,9 @@
 buildPythonPackage rec {
   pname = "elastic-transport";
   version = "8.12.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "elastic";
@@ -29,10 +30,14 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace " --cov-report=term-missing --cov=elastic_transport" ""
+      --replace-fail " --cov-report=term-missing --cov=elastic_transport" ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     urllib3
     certifi
   ];
