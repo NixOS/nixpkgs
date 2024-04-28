@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
   # 6.4 and newer provide a in-tree version of the handshake module https://www.kernel.org/doc/html/v6.4/networking/tls-handshake.html
   installPhase = ''
     runHook preInstall
-    install -D drbd/drbd.ko -t $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/block/drbd
-    install -D drbd/drbd_transport_tcp.ko -t $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/block/drbd
-    install -D drbd/drbd_transport_lb-tcp.ko -t $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/block/drbd
-    install -D drbd/drbd_transport_rdma.ko -t $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/block/drbd
+    install -D drbd/drbd.ko -t $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/block/drbd9
+    install -D drbd/drbd_transport_tcp.ko -t $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/block/drbd9
+    install -D drbd/drbd_transport_lb-tcp.ko -t $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/block/drbd9
+    install -D drbd/drbd_transport_rdma.ko -t $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/block/drbd9
     ${lib.optionalString (lib.versionOlder kernel.version "6.4") ''
-      install -D drbd/drbd-kernel-compat/handshake/handshake.ko -t $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/block/drbd
+      install -D drbd/drbd-kernel-compat/handshake/handshake.ko -t $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/block/drbd9
     ''}
     runHook postInstall
   '';
@@ -42,8 +42,9 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    for ko in $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/block/drbd/*.ko; do
+    for ko in $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/block/drbd9/*.ko; do
       xz --compress -6 --threads=0 $ko
+      chmod 0444 $ko.xz
     done
   '';
 
