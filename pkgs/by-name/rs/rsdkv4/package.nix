@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glew SDL2 libvorbis libXcursor libXext libXScrnSaver libXrandr libXi libXfixes ];
 
+  makeFlags = [ "RETRO_DISABLE_PLUS=1" ];
   installFlags = [ "prefix=$(out)" ];
 
   meta = {
