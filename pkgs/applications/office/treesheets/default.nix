@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "treesheets";
-  version = "unstable-2024-04-11";
+  version = "0-unstable-2024-04-27";
 
   src = fetchFromGitHub {
     owner = "aardappel";
     repo = "treesheets";
-    rev = "5e9e95a34221d4bda584d2130586177e29ee8fe7";
-    sha256 = "X0aB0rJZd9G8S+QWviSAdB/YQMT4lVV3yiELzZs+P3g=";
+    rev = "fee4de37933f60895f78f45eb192d27bcdf0640e";
+    hash = "sha256-ej8Pjz7gvVP8gVsC68h60/uy+CkrcrBflhW/PjsxCvM=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,9 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = unstableGitUpdater { };
+    updateScript = unstableGitUpdater {
+      hardcodeZeroVersion = true;
+    };
   };
 
   meta = with lib; {
