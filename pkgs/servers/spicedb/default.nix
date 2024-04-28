@@ -27,6 +27,11 @@ buildGoModule rec {
       url = "https://github.com/authzed/spicedb/commit/ef443c442b96909694390324a99849b0407007fe.patch";
       hash = "sha256-8xXM0EBxJ0hI7RtURFxmRpYqGdSGZ/jZVP4KAuh2E/U=";
     })
+    (fetchpatch {
+      name = "CVE-2024-32001.patch";
+      url = "https://github.com/authzed/spicedb/commit/a244ed1edfaf2382711dccdb699971ec97190c7b.patch";
+      hash = "sha256-tdSqo7tFXs/ea5dIKV9Aikva9Za0Hj1Ng4LeCAQX9DA=";
+    })
   ];
 
   vendorHash = "sha256-r0crxfE3XtsT4+5lWNY6R/bcuxq2WeongK9l7ABXQo8=";
