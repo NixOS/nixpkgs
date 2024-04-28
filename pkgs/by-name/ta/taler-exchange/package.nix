@@ -21,7 +21,7 @@
 }:
 
 let
-  version = "0.10.1";
+  version = "0.10.2";
 in
 stdenv.mkDerivation {
   pname = "taler-exchange";
@@ -31,14 +31,7 @@ stdenv.mkDerivation {
     url = "https://git.taler.net/exchange.git";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-SKnMep8bMQaJt4r3u0SrzwYSuFbzv4RnflbutSqwtPg=";
-
-    # When fetching submodules without the .git folder we get the following error:
-    # "Server does not allow request for unadvertised object"
-    leaveDotGit = true;
-    postFetch = ''
-      rm -rf $out/.git
-    '';
+    hash = "sha256-dl8lZ7uKUr+KSUaT4xlkaX3W5UoW2Zfu/0iVXvLejnA=";
   };
 
   nativeBuildInputs = [
