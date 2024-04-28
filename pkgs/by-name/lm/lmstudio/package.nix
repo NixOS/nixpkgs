@@ -5,10 +5,10 @@
 
 let
   pname = "lmstudio";
-  version = "0.2.18";
+  version = "0.2.20";
   src = fetchurl {
     url = "https://releases.lmstudio.ai/linux/${version}/beta/LM_Studio-${version}.AppImage";
-    hash = "sha256-cUa0fjV7xx6+2tnGVP7uLG0QQb44LhP2nYsn6Qn0al4=";
+    hash = "sha256-T92ZDqGvxJfBkAWsK8EgHdQZnLefK3gDP2vCTL8X+eM=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
