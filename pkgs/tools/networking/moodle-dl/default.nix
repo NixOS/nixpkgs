@@ -1,22 +1,29 @@
-{ lib, python3Packages, fetchPypi }:
+{ lib, python3Packages, fetchFromGitHub }:
 
 python3Packages.buildPythonApplication rec {
   pname = "moodle-dl";
-  version = "2.2.2.4";
+  version = "2.3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-76JU/uYJH7nVWCR+d8vvjYCCSMfe/8R9l756AmzZPHU=";
+  src = fetchFromGitHub {
+    owner = "C0D3D3V";
+    repo = "Moodle-DL";
+    rev = "refs/tags/${version}";
+    hash = "sha256-IBd8cVXxbQ8oR10RXSPmu5cLajn5PuNXomXHOWsXfdM=";
   };
 
   propagatedBuildInputs = with python3Packages; [
-    sentry-sdk
-    colorama
-    yt-dlp
+    aiodns
+    aiofiles
+    aiohttp
     certifi
+    colorama
+    colorlog
     html2text
+    readchar
     requests
-    aioxmpp
+    sentry-sdk
+    xmpppy
+    yt-dlp
   ];
 
   # upstream has no tests
