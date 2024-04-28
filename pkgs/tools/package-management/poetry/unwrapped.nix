@@ -34,6 +34,7 @@
 , pytest-mock
 , pytest-xdist
 , darwin
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
@@ -52,6 +53,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "dulwich"
   ];
 
   propagatedBuildInputs = [
