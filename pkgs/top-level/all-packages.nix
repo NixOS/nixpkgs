@@ -3613,8 +3613,6 @@ with pkgs;
 
   codespell = callPackage ../development/tools/codespell { };
 
-  codux = callPackage ../applications/editors/codux { };
-
   conjure = callPackage ../applications/graphics/conjure { };
 
   coolreader = libsForQt5.callPackage ../applications/misc/coolreader { };
@@ -4281,8 +4279,6 @@ with pkgs;
   bicon = callPackage ../applications/misc/bicon { };
 
   biliass = with python3.pkgs; toPythonApplication biliass;
-
-  bilibili = callPackage ../applications/video/bilibili { };
 
   bindfs = callPackage ../tools/filesystems/bindfs { };
 
@@ -8800,8 +8796,6 @@ with pkgs;
   gssdp_1_6 = callPackage ../development/libraries/gssdp/1.6.nix { };
 
   gssdp-tools = callPackage ../development/libraries/gssdp/tools.nix { };
-
-  grype = callPackage ../tools/security/grype { };
 
   gt5 = callPackage ../tools/system/gt5 { };
 
@@ -13480,8 +13474,6 @@ with pkgs;
 
   systrayhelper = callPackage ../tools/misc/systrayhelper { };
 
-  syft = callPackage ../tools/admin/syft { };
-
   Sylk = callPackage ../applications/networking/Sylk { };
 
   privoxy = callPackage ../tools/networking/privoxy {
@@ -14414,10 +14406,7 @@ with pkgs;
 
   xl2tpd = callPackage ../tools/networking/xl2tpd { };
 
-  xlights = callPackage ../applications/misc/xlights/default.nix { };
-
   xe = callPackage ../tools/system/xe { };
-
 
   xray = callPackage ../tools/networking/xray { };
 
@@ -32492,8 +32481,6 @@ with pkgs;
 
   kiln = callPackage ../applications/misc/kiln { };
 
-  karmor = callPackage ../applications/networking/cluster/karmor { };
-
   kubernetes-code-generator = callPackage ../development/tools/kubernetes-code-generator { };
 
   kubernetes-controller-tools = callPackage ../development/tools/kubernetes-controller-tools { };
@@ -40343,15 +40330,11 @@ with pkgs;
 
   terraform-backend-git = callPackage ../applications/networking/cluster/terraform-backend-git { };
 
-  terraform-compliance = python3Packages.callPackage ../applications/networking/cluster/terraform-compliance { };
-
   terraform-docs = callPackage ../applications/networking/cluster/terraform-docs { };
 
   terraform-inventory = callPackage ../applications/networking/cluster/terraform-inventory { };
 
   terraform-landscape = callPackage ../applications/networking/cluster/terraform-landscape { };
-
-  terragrunt = callPackage ../applications/networking/cluster/terragrunt { };
 
   tfautomv = callPackage ../applications/networking/cluster/tfautomv { };
 
