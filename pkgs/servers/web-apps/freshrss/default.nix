@@ -16,18 +16,10 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-AAOON1RdbG6JSnCc123jmIlIXHOE1PE49BV4hcASO/s=";
   };
 
-  passthru.tests = {
-    inherit (nixosTests) freshrss-sqlite freshrss-pgsql freshrss-http-auth freshrss-none-auth;
-  };
-
   buildInputs = [ php ];
 
   # There's nothing to build.
   dontBuild = true;
-
-  postPatch = ''
-    patchShebangs cli/*.php app/actualize_script.php
-  '';
 
   installPhase = ''
     runHook preInstall
@@ -35,6 +27,14 @@ stdenvNoCC.mkDerivation rec {
     cp -vr * $out/
     runHook postInstall
   '';
+
+  postPatch = ''
+    patchShebangs cli/*.php app/actualize_script.php
+  '';
+
+  passthru.tests = {
+    inherit (nixosTests) freshrss-sqlite freshrss-pgsql freshrss-http-auth freshrss-none-auth;
+  };
 
   meta = with lib; {
     description = "FreshRSS is a free, self-hostable RSS aggregator";
