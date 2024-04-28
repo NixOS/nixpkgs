@@ -31,13 +31,13 @@ assert lib.assertMsg (stdenv.isLinux || !gamemodeSupport) "gamemodeSupport is on
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "prismlauncher-unwrapped";
-  version = "8.0";
+  version = "8.3";
 
   src = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "PrismLauncher";
     rev = finalAttrs.version;
-    hash = "sha256-WBajtfj3qAMq8zd2S53CQyHiyqtvffLOHOjmOpdALAA=";
+    hash = "sha256-1YGzCgNdzscnOVeNlHMFJa0RbMo6C2qQjtBOeDxHakI=";
   };
 
   nativeBuildInputs = [ extra-cmake-modules cmake jdk17 ninja canonicalize-jars-hook ];
@@ -60,7 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DLauncher_BUILD_PLATFORM=nixpkgs"
   ] ++ lib.optionals (msaClientID != null) [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ]
   ++ lib.optionals (lib.versionOlder qtbase.version "6") [ "-DLauncher_QT_VERSION_MAJOR=5" ]
-  ++ lib.optionals stdenv.isDarwin [ "-DINSTALL_BUNDLE=nodeps" "-DMACOSX_SPARKLE_UPDATE_FEED_URL=''" ];
+  ++ lib.optionals stdenv.isDarwin [
+    "-DINSTALL_BUNDLE=nodeps"
+    "-DMACOSX_SPARKLE_UPDATE_FEED_URL=''"
+    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/Applications/"
+  ];
 
   postUnpack = ''
     rm -rf source/libraries/libnbtplusplus
@@ -69,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     mainProgram = "prismlauncher";
     homepage = "https://prismlauncher.org/";
     description = "A free, open source launcher for Minecraft";
@@ -78,9 +82,9 @@ stdenv.mkDerivation (finalAttrs: {
       their own mods, texture packs, saves, etc) and helps you manage them and
       their associated options with a simple interface.
     '';
-    platforms = with platforms; linux ++ darwin;
-    changelog = "https://github.com/PrismLauncher/PrismLauncher/releases/tag/${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ minion3665 Scrumplex getchoo ];
+    platforms = with lib.platforms; linux ++ darwin;
+    changelog = "https://github.com/PrismLauncher/PrismLauncher/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ minion3665 Scrumplex getchoo ];
   };
 })
