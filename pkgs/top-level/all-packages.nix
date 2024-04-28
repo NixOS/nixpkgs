@@ -32486,8 +32486,6 @@ with pkgs;
 
   kiln = callPackage ../applications/misc/kiln { };
 
-  karmor = callPackage ../applications/networking/cluster/karmor { };
-
   kubernetes-code-generator = callPackage ../development/tools/kubernetes-code-generator { };
 
   kubernetes-controller-tools = callPackage ../development/tools/kubernetes-controller-tools { };
