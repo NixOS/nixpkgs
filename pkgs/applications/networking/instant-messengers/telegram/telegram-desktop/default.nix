@@ -43,6 +43,7 @@
 , lld
 , libicns
 , nix-update-script
+, mainProgram ? if stdenv.isLinux then "telegram-desktop" else "Telegram"
 }:
 
 # Main reference:
@@ -59,7 +60,6 @@ let
       cxxStandard = "20";
     };
   };
-  mainProgram = if stdenv.isLinux then "telegram-desktop" else "Telegram";
 in
 stdenv.mkDerivation rec {
   pname = "telegram-desktop";
