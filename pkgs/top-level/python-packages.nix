@@ -12867,6 +12867,8 @@ self: super: with self; {
 
   quandl = callPackage ../development/python-modules/quandl { };
 
+  quantile-forest = callPackage ../development/python-modules/quantile-forest { };
+
   quantities = callPackage ../development/python-modules/quantities { };
 
   quantiphy = callPackage ../development/python-modules/quantiphy { };
