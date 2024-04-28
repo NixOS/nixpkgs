@@ -1,6 +1,6 @@
 { lib
 , fetchFromGitHub
-, nix-update-script
+, unstableGitUpdater
 , stdenvNoCC
 , ... }:
 
@@ -26,8 +26,8 @@ stdenvNoCC.mkDerivation (self: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
+  passthru.updateScript = unstableGitUpdater {
+    hardcodeZeroVersion = true;
   };
 
   meta = with lib; {
