@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, poetry-dynamic-versioning
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  poetry-dynamic-versioning,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -26,13 +27,9 @@ buildPythonPackage rec {
     poetry-dynamic-versioning
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "govee_local_api"
-  ];
+  pythonImportsCheck = [ "govee_local_api" ];
 
   meta = with lib; {
     description = "Library to communicate with Govee local API";
