@@ -2,14 +2,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "instawow";
-  version = "4.0.0";
+  version = "4.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "layday";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-tbK5NOErYddiyWn+sMiKRW1hstFljotsKIQarNGDesk=";
+    sha256 = "sha256-RRBuFja5vejzjrtOvRBIjT7sq/Wg/39FA/o9O8c2B0o=";
   };
 
   extras = [ ];  # Disable GUI, most dependencies are not packaged.
@@ -30,9 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     packaging
     pluggy
     prompt-toolkit
-    questionary
     rapidfuzz
-    sqlalchemy
     truststore
     typing-extensions
     yarl
