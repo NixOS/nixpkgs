@@ -1,6 +1,7 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
+, fetchpatch
 , buildDotnetModule
 , buildNpmPackage
 , dotnetCorePackages
@@ -10,13 +11,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kavita";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "kareadita";
     repo = "kavita";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0pVQ/gezi8Hzxrn/1QVFTOXeHRCayYkA3Kh5b81oW34=";
+    hash = "sha256-Z8bGVF6h//37zz/J+PDlJhm7c9AUs2pgKhYY/4ELMhQ=";
   };
 
   backend = buildDotnetModule {
@@ -24,6 +25,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     inherit (finalAttrs) version src;
 
     patches = [
+      # Fix wrongly bumped version 0.8.0.10 -> 0.8.1
+      # Remove on next release
+      (fetchpatch {
+        name = "fix-0.8.1-version.patch";
+        url = "https://github.com/Kareadita/Kavita/commit/3c9565468ad5494aef11dace62ba4b18b0c7d7f3.patch";
+        hash = "sha256-/dPHYrCeS6M82rw0lQ8K6C4jfXEvVVmjA85RKyVaxcE=";
+      })
       # The webroot is hardcoded as ./wwwroot
       ./change-webroot.diff
     ];
@@ -51,7 +59,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     npmBuildScript = "prod";
     npmFlags = [ "--legacy-peer-deps" ];
     npmRebuildFlags = [ "--ignore-scripts" ]; # Prevent playwright from trying to install browsers
-    npmDepsHash = "sha256-yy4vEI+aDgAcCyXyzfPm31oGiTl+Gsycyh69D3yex2I=";
+    npmDepsHash = "sha256-+RJ9mX/cIainO2xS/hIrIOShPVbHkhkCq6q2bP8dGKM=";
   };
 
   dontBuild = true;
