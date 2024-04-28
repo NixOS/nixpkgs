@@ -13510,9 +13510,6 @@ with pkgs;
 
   tailer = callPackage ../tools/misc/tailer { };
 
-  inherit (callPackages ../applications/networking/taler { })
-    taler-exchange taler-merchant;
-
   tandoor-recipes = callPackage ../applications/misc/tandoor-recipes { };
 
   tango = callPackage ../applications/misc/tango { };
