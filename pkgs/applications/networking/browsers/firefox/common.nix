@@ -298,9 +298,6 @@ buildStdenv.mkDerivation {
   setOutputFlags = false; # `./mach configure` doesn't understand `--*dir=` flags.
 
   preConfigure = ''
-    # remove distributed configuration files
-    rm -f configure js/src/configure .mozconfig*
-
     # Runs autoconf through ./mach configure in configurePhase
     configureScript="$(realpath ./mach) configure"
 
