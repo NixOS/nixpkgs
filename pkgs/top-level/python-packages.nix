@@ -14340,6 +14340,8 @@ self: super: with self; {
 
   spyder-kernels = callPackage ../development/python-modules/spyder-kernels { };
 
+  spylls = callPackage ../development/python-modules/spylls { };
+
   spyse-python = callPackage ../development/python-modules/spyse-python { };
 
   spython = callPackage ../development/python-modules/spython { };
