@@ -1,8 +1,11 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, hatch-fancy-pypi-readme
 , hatchling
 , anyio
+, boto3
+, botocore
 , distro
 , dirty-equals
 , httpx
@@ -19,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "anthropic";
-  version = "0.19.1";
+  version = "0.25.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,14 +31,15 @@ buildPythonPackage rec {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-D9asbwZ9puOuIK6w7cWJ2HmC3JYjamUZPOxVKWq+Va4=";
+    hash = "sha256-83TufOgu6W9UvoCEUgDiw6gXDAdwyIKEALVF0hjj6wk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    hatch-fancy-pypi-readme
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     anyio
     distro
     httpx
@@ -45,8 +49,12 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     vertex = [ google-auth ];
+    bedrock = [
+      boto3
+      botocore
+    ];
   };
 
   nativeCheckInputs = [
@@ -56,9 +64,18 @@ buildPythonPackage rec {
     respx
   ];
 
+  pytestFlagsArray = [
+    "-W ignore::DeprecationWarning"
+  ];
+
   disabledTestPaths = [
     # require network access
     "tests/api_resources"
+  ];
+
+  disableTests = [
+    # require network access
+    "test_copy_build_request"
   ];
 
   pythonImportsCheck = [
