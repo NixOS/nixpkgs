@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "nginx-sso";
   meta = {
-    maintainers = with pkgs.lib.maintainers; [ ];
+    maintainers = with pkgs.lib.maintainers; [ ambroisie ];
   };
 
   nodes.machine = {

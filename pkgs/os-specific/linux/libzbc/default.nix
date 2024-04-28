@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "ZBC device manipulation library";
     homepage = "https://github.com/westerndigitalcorporation/libzbc";
-    maintainers = [ maintainers.fogti ];
+    maintainers = [ ];
     license = with licenses; [ bsd2 lgpl3Plus ];
     platforms = platforms.linux;
   };

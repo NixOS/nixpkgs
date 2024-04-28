@@ -2736,8 +2736,6 @@ with pkgs;
     description = mame.meta.description + " (tools only)";
   } (lib.getOutput "tools" mame);
 
-  mgba = libsForQt5.callPackage ../applications/emulators/mgba { };
-
   mupen64plus = callPackage ../applications/emulators/mupen64plus { };
 
   np2kai = callPackage ../applications/emulators/np2kai { };
@@ -5337,6 +5335,7 @@ with pkgs;
   # TeX Live; see https://nixos.org/nixpkgs/manual/#sec-language-texlive
   texlive = callPackage ../tools/typesetting/tex/texlive { };
   inherit (texlive.schemes) texliveBasic texliveBookPub texliveConTeXt texliveFull texliveGUST texliveInfraOnly texliveMedium texliveMinimal texliveSmall texliveTeTeX;
+  texlivePackages = recurseIntoAttrs (lib.filterAttrs (_: lib.isDerivation) texlive.pkgs);
 
   fop = callPackage ../tools/typesetting/fop { };
 
@@ -26346,8 +26345,6 @@ with pkgs;
       if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
   };
 
-  nginx-sso = callPackage ../servers/nginx-sso { };
-
   immudb = callPackage ../servers/nosql/immudb { };
 
   influxdb = callPackage ../servers/nosql/influxdb { };
@@ -29667,8 +29664,6 @@ with pkgs;
       buildPythonApplication appdirs colorama python-dateutil
       requests requests-toolbelt setuptools sqlalchemy fusepy;
   };
-
-  acorn = callPackage ../applications/networking/cluster/acorn { };
 
   inherit (qt6Packages.callPackage ../applications/office/activitywatch { })
     aw-qt

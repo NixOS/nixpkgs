@@ -88,7 +88,6 @@ stdenv.mkDerivation rec {
       lnl7
       pjones
       thoughtpolice
-      amaxine
       MayNiklas
     ];
     description = "Media library streaming server";

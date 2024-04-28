@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , git
+, git-lfs
 , fetchurl
 , wrapGAppsHook
 , alsa-lib
@@ -139,14 +140,34 @@ stdenv.mkDerivation rec {
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       $opt/resources/app.asar.unpacked/node_modules/symbol-provider-ctags/vendor/ctags-linux
 
-  '' + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
     # Replace the bundled git with the one from nixpkgs
     dugite=$opt/resources/app.asar.unpacked/node_modules/dugite
     rm -f $dugite/git/bin/git
     ln -s ${git}/bin/git $dugite/git/bin/git
-    rm -f $dugite/git/libexec/git-core/git
-    ln -s ${git}/bin/git $dugite/git/libexec/git-core/git
 
+    # Not only do we need to replace the git binary itself, we also need to replace
+    # all the symlinks in dugite/git/libexec/git-core.
+    for file in "$dugite/git/libexec/git-core"/*; do
+      if [ -x "$file" ] && file "$file" | grep -q "ELF"; then
+          # Remove ELF executable
+          rm "$file"
+
+          # Get the corresponding filename in nixpkgs's git
+          filename=$(basename "$file")
+          git_executable="${git}/libexec/git-core/$filename"
+
+          # Create symlink to $git_executable
+          ln -s "$git_executable" "$file"
+
+          echo "Replaced $file with symlink to $git_executable"
+        fi
+    done
+
+    # Was symlinked in previous loop, but actually, nixpkgs has a separate package for git-lfs
+    # Unlink to avoid a "File exists" error and relink correctly
+    unlink $dugite/git/libexec/git-core/git-lfs
+    ln -s ${git-lfs}/bin/git-lfs $dugite/git/libexec/git-core/git-lfs
+  '' + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
     # We have to patch a prebuilt binary in the asar archive
     # But asar complains because the node_gyp unpacked dependency uses a prebuilt Python3 itself
 
@@ -208,7 +229,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ colamaroro bryango ];
+    maintainers = with maintainers; [ bryango ];
     knownVulnerabilities = [
       "CVE-2023-5217"
       "CVE-2022-21718"
