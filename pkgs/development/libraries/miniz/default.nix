@@ -2,21 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "miniz";
-  version = "2.2.0";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "richgel999";
     repo = pname;
     rev = version;
-    sha256 = "sha256-7hc/yNJh4sD5zGQLeHjowbUtV/1mUDQre1tp9yKMSSY=";
+    hash = "sha256-3J0bkr2Yk+MJXilUqOCHsWzuykySv5B1nepmucvA4hg=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   postFixup = ''
-    substituteInPlace "$out"/share/pkgconfig/miniz.pc \
-      --replace '=''${prefix}//' '=/' \
-      --replace '=''${exec_prefix}//' '=/'
+    substituteInPlace "$out"/lib/pkgconfig/miniz.pc \
+      --replace-fail '=''${prefix}//' '=/' \
+      --replace-fail '=''${exec_prefix}//' '=/'
   '';
 
   meta = with lib; {
