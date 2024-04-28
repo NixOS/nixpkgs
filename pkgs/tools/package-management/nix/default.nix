@@ -180,13 +180,13 @@ in lib.makeExtensible (self: ({
   };
 
   git = common rec {
-    version = "2.22.0";
-    suffix = "pre20240421_${lib.substring 0 8 src.rev}";
+    version = "2.23.0";
+    suffix = "pre20240426_${lib.substring 0 8 src.rev}";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "6fd2f42c2defd210e17ec95653110fc58858dba9";
-      hash = "sha256-DjkxYMcG52APiADdEtXL1FNVSxNXRBw78LYctly93j0=";
+      rev = "2f678331d59451dd6f1d9512cb6d92e4ecb9750f";
+      hash = "sha256-4AwaLB/gTRgvZG4FmFY6OY52yeLAnj0a6rtJCz7TRXA=";
     };
   };
 
