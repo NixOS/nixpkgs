@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 6dfd13e04c9e9763b485a5b7d6e85d97632a8edf
-  ref: refs/tags/6.4.5
+  revision: 55ea82f7d3f98652ea81ab1d29d3be3e55528345
+  ref: refs/tags/6.4.6
   specs:
-    metasploit-framework (6.4.5)
+    metasploit-framework (6.4.6)
       actionpack (~> 7.0.0)
       activerecord (~> 7.0.0)
       activesupport (~> 7.0.0)
@@ -22,7 +22,7 @@ GIT
       em-http-request
       eventmachine
       faker
-      faraday
+      faraday (= 2.7.11)
       faraday-retry
       faye-websocket
       filesize
@@ -87,7 +87,7 @@ GIT
       rubyntlm
       rubyzip
       sinatra
-      sqlite3
+      sqlite3 (= 1.6.6)
       sshkey
       swagger-blocks
       thin
@@ -193,10 +193,11 @@ GEM
     eventmachine (1.2.7)
     faker (3.3.1)
       i18n (>= 1.8.11, < 2)
-    faraday (2.9.0)
-      faraday-net_http (>= 2.0, < 3.2)
-    faraday-net_http (3.1.0)
-      net-http
+    faraday (2.7.11)
+      base64
+      faraday-net_http (>= 2.0, < 3.1)
+      ruby2_keywords (>= 0.0.4)
+    faraday-net_http (3.0.2)
     faraday-retry (2.2.1)
       faraday (~> 2.0)
     faye-websocket (0.11.3)
@@ -275,8 +276,6 @@ GEM
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
     nessus_rest (0.1.6)
-    net-http (0.4.1)
-      uri
     net-imap (0.4.10)
       date
       net-protocol
@@ -416,7 +415,7 @@ GEM
       rack (~> 2.2, >= 2.2.4)
       rack-protection (= 3.2.0)
       tilt (~> 2.0)
-    sqlite3 (2.0.0)
+    sqlite3 (1.6.6)
       mini_portile2 (~> 2.8.0)
     sshkey (3.0.0)
     strptime (0.2.5)
@@ -438,7 +437,6 @@ GEM
       unf_ext
     unf_ext (0.0.9.1)
     unix-crypt (1.3.1)
-    uri (0.13.0)
     warden (1.2.9)
       rack (>= 2.0.9)
     webrick (1.8.1)
@@ -470,4 +468,4 @@ DEPENDENCIES
   metasploit-framework!
 
 BUNDLED WITH
-   2.4.13
+   2.5.7

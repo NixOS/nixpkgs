@@ -28,9 +28,6 @@ default-package-overrides:
   - gi-gdkx11 < 4
   # 2021-11-09: ghc-bignum is bundled starting with 9.0.1; only 1.0 builds with GHCs prior to 9.2.1
   - ghc-bignum == 1.0
-  # Needs to be pinned to match jsaddle from Stackage LTS (9.8.*)
-  - jsaddle-dom < 0.9.9.0
-  - jsaddle-webkit2gtk < 0.9.9.0
 
 extra-packages:
   - Cabal-syntax == 3.6.*               # Dummy package that ensures packages depending on Cabal-syntax can work for Cabal < 3.8
@@ -69,6 +66,7 @@ extra-packages:
   - haddock-library ==1.7.*             # required by stylish-cabal-0.5.0.0
   - happy == 1.19.12                    # for ghcjs
   - hinotify == 0.3.9                   # for xmonad-0.26: https://github.com/kolmodin/hinotify/issues/29
+  - ansi-wl-pprint >= 0.6 && < 0.7      # 2024-03-23: required for ghcjs
   - hlint == 3.2.8                      # 2022-09-21: needed for hls on ghc 8.8
   - hlint == 3.4.1                      # 2022-09-21: needed for hls with ghc-lib-parser 9.2
   - hnix-store-core < 0.7               # 2023-12-11: required by hnix-store-remote 0.6
@@ -252,22 +250,22 @@ package-maintainers:
   libjared:
     - sensei
   maralorn:
+    - bluefin
     - cabal-fmt
-    - clay
     - eventlog2html
+    - falsify
     - generic-optics
     - ghc-debug-brick
     - ghc-debug-stub
     - ghcid
     - graphql-client
     - haskell-language-server
-    - hedgehog
     - hledger
     - hledger-ui
     - hledger-web
     - hlint
-    - hmatrix
     - hspec-discover
+    - jsaddle-warp
     - matrix-client
     - optics
     - pandoc
@@ -276,9 +274,9 @@ package-maintainers:
     - postgresql-simple
     - purebred-email
     - reflex-dom
-    - releaser
     - replace-megaparsec
     - req
+    - say
     - shake-bench
     - shh
     - shh-extras
@@ -286,7 +284,9 @@ package-maintainers:
     - stm-containers
     - streamly
     - streamly-bytestring
+    - string-interpolate
     - taskwarrior
+    - tasty
     - threadscope
     - tz
     - weeder
@@ -648,6 +648,7 @@ unsupported-platforms:
   monomer:                                      [ platforms.darwin ] # depends on mesa
   monomer-hagrid:                               [ platforms.darwin ] # depends on mesa
   mptcp-pm:                                     [ platforms.darwin ]
+  mueval:                                       [ aarch64-linux ] # https://hydra.nixos.org/build/257076117/nixlog/2 https://gitlab.haskell.org/ghc/ghc/-/issues/24432
   nanovg:                                       [ platforms.darwin ] # depends on mesa
   netlink:                                      [ platforms.darwin ]
   notifications-tray-icon:                      [ platforms.darwin ] # depends on gi-dbusmenu

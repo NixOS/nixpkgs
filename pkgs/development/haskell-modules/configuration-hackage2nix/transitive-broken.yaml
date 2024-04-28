@@ -357,7 +357,6 @@ dont-distribute-packages:
  - Shellac-haskeline
  - Shellac-readline
  - ShortestPathProblems
- - Shpadoinkle
  - Shpadoinkle-backend-pardiff
  - Shpadoinkle-backend-snabbdom
  - Shpadoinkle-backend-static
@@ -1528,7 +1527,6 @@ dont-distribute-packages:
  - ghc-plugs-out
  - ghc-session
  - ghci-pretty
- - ghcjs-dom-hello
  - ghcjs-dom-webkit
  - ghcjs-hplay
  - ghcup
@@ -1834,6 +1832,7 @@ dont-distribute-packages:
  - gtkrsync
  - guarded-rewriting
  - guess-combinator
+ - h3spec
  - hArduino
  - hOff-display
  - hPDB
@@ -2419,7 +2418,6 @@ dont-distribute-packages:
  - jordan-servant-openapi
  - jordan-servant-server
  - jot
- - jsaddle-hello
  - jsc
  - jsmw
  - json-ast-json-encoder
@@ -3000,6 +2998,7 @@ dont-distribute-packages:
  - olwrapper
  - om-kubernetes
  - om-legion
+ - one-time-password
  - online-csv
  - oops-examples
  - opc-xml-da-client
@@ -3347,7 +3346,6 @@ dont-distribute-packages:
  - rc
  - rdf4h-vocab-activitystreams
  - rdioh
- - react
  - react-flux-servant
  - reactive
  - reactive-banana-sdl

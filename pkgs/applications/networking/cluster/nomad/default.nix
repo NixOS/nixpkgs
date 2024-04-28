@@ -41,7 +41,7 @@ let
         description = "A Distributed, Highly Available, Datacenter-Aware Scheduler";
         mainProgram = "nomad";
         inherit license;
-        maintainers = with maintainers; [ rushmorem pradeepchhetri endocrimes amaxine techknowlogick cottand ];
+        maintainers = with maintainers; [ rushmorem pradeepchhetri techknowlogick cottand ];
       };
     } // attrs');
 in
