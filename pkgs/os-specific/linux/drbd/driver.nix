@@ -41,6 +41,9 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace 'SHELL=/bin/bash' 'SHELL=${builtins.getEnv "SHELL"}'
   '';
 
+  # builder.pl had complained about the same file (drbd.ko.xz) provided by two different packages
+  # builder.pl also had complained about different permissions between the files from the two packages
+  # The compression is required because the kernel has the CONFIG_MODULE_COMPRESS_XZ option enabled
   postFixup = ''
     for ko in $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/block/drbd9/*.ko; do
       xz --compress -6 --threads=0 $ko
