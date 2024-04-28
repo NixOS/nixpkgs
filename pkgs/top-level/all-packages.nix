@@ -4280,8 +4280,6 @@ with pkgs;
 
   biliass = with python3.pkgs; toPythonApplication biliass;
 
-  bilibili = callPackage ../applications/video/bilibili { };
-
   bindfs = callPackage ../tools/filesystems/bindfs { };
 
   binwalk = with python3Packages; toPythonApplication binwalk;
