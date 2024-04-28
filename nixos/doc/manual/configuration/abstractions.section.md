@@ -35,7 +35,7 @@ in
 {
   services.httpd.virtualHosts =
     { "blog.example.org" = (commonConfig // { documentRoot = "/webroot/blog.example.org"; });
-      "wiki.example.org" = (commonConfig // { documentRoot = "/webroot/wiki.example.com"; });
+      "wiki.example.org" = (commonConfig // { documentRoot = "/webroot/wiki.example.org"; });
     };
 }
 ```
