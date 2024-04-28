@@ -2998,6 +2998,14 @@ self: super: {
   # 2024-03-25: HSH broken because of the unix-2.8.0.0 breaking change
   HSH = appendPatches [./patches/HSH-unix-openFd.patch] super.HSH;
 
+  # Support unix < 2.8 to build in older ghc than 9.6
+  linux-namespaces = appendPatch
+    (fetchpatch {
+      url = "https://github.com/redneb/hs-linux-namespaces/commit/f4a3546541bb6c7172fdd03e177a961da60e3951.patch";
+      sha256 = "sha256-6Qv7NWIbzR3ktMGFogw5597bIqPH7Z4hoFvvBQAoquY=";
+    })
+    super.linux-namespaces;
+
   inherit
     (let
       unbreakRepa = packageName: drv: lib.pipe drv [
