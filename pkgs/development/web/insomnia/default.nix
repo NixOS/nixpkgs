@@ -6,16 +6,16 @@
 }:
 let
   pname = "insomnia";
-  version = "8.6.1";
+  version = "9.0.0";
 
   src = fetchurl {
     x86_64-darwin = {
       url = "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.dmg";
-      hash = "sha256-4Y6e5cQ9J0enp2teXVNCvrjbhH130op45BVxZxA74JE";
+      hash = "sha256-QIArPdThQcNTUgrXpWP8JHaZfrZ/6ztekIvzFdoWjsY=";
     };
     x86_64-linux = {
       url = "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.AppImage";
-      hash = lib.fakeHash;
+      hash = "sha256-2UiqopYmNxnDcIqQMn/H89ugvOtTWkHH4LrmKkQErSs=";
     };
   }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
@@ -57,7 +57,7 @@ if stdenv.isDarwin then stdenv.mkDerivation {
     mv Insomnia.app $out/Applications/
     runHook postInstall
   '';
-} else {
+} else appimageTools.wrapType2 {
   inherit pname version src meta;
 
   extraInstallCommands = let
@@ -65,13 +65,11 @@ if stdenv.isDarwin then stdenv.mkDerivation {
       inherit pname version src;
     };
   in ''
-    # Replace version from binary name
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
     # Install XDG Desktop file and its icon
     install -Dm444 ${appimageContents}/insomnia.desktop -t $out/share/applications
     install -Dm444 ${appimageContents}/insomnia.png -t $out/share/pixmaps
     # Replace wrong exec statement in XDG Desktop file
     substituteInPlace $out/share/applications/insomnia.desktop \
-        --replace 'Exec=AppRun --no-sandbox %U' 'Exec=insomnia'
+        --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=insomnia'
   '';
 }
