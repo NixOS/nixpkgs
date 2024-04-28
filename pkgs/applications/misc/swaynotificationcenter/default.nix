@@ -12,9 +12,11 @@
 , gobject-introspection
 , gtk-layer-shell
 , gtk3
+, gvfs
 , json-glib
 , libgee
 , libhandy
+, libnotify
 , libpulseaudio
 , librsvg
 , meson
@@ -65,9 +67,11 @@ stdenv.mkDerivation (finalAttrs: rec {
     glib
     gtk-layer-shell
     gtk3
+    gvfs
     json-glib
     libgee
     libhandy
+    libnotify
     libpulseaudio
     librsvg
     pantheon.granite
