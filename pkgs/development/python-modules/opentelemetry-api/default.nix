@@ -9,12 +9,13 @@
 , setuptools
 , pytestCheckHook
 , pythonRelaxDepsHook
+, writeScript
 }:
 
 let
   self = buildPythonPackage rec {
     pname = "opentelemetry-api";
-    version = "1.23.0";
+    version = "1.24.0";
     pyproject = true;
 
     disabled = pythonOlder "3.8";
@@ -24,7 +25,7 @@ let
       owner = "open-telemetry";
       repo = "opentelemetry-python";
       rev = "refs/tags/v${version}";
-      hash = "sha256-Ge/DjVG7ajoS0nJLZxtfn4Mmx0SffAE/91dViA5qWAA=";
+      hash = "sha256-id5cwNl2idgZa1AFfolzEo5vzspv3V2c1Vtzg3EWDZs=";
     };
 
     sourceRoot = "${src.name}/opentelemetry-api";
@@ -55,8 +56,18 @@ let
 
     doCheck = false;
 
-    # Enable tests via passthru to avoid cyclic dependency with opentelemetry-test-utils.
-    passthru.tests.${self.pname} = self.overridePythonAttrs { doCheck = true; };
+    passthru = {
+      updateScript = writeScript "update.sh" ''
+        #!/usr/bin/env nix-shell
+        #!nix-shell -i bash -p nix-update
+
+        set -eu -o pipefail
+        nix-update --version-regex 'v(.*)' python3Packages.opentelemetry-api
+        nix-update python3Packages.opentelemetry-instrumentation
+      '';
+      # Enable tests via passthru to avoid cyclic dependency with opentelemetry-test-utils.
+      tests.${self.pname} = self.overridePythonAttrs { doCheck = true; };
+    };
 
     meta = with lib; {
       homepage = "https://github.com/open-telemetry/opentelemetry-python/tree/main/opentelemetry-api";
