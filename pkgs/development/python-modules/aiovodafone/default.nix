@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "0.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "chemelli74";
@@ -24,14 +24,14 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=aiovodafone --cov-report=term-missing:skip-covered" ""
+      --replace-fail " --cov=aiovodafone --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     beautifulsoup4
   ];
