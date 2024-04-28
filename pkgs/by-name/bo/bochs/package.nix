@@ -139,7 +139,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature (!stdenv.isDarwin) "sb16")
   ];
 
-  outputs = [ "out" "lib" "doc" "man" ];
+  # No lib output or else Darwin cries
+  outputs = [ "out" "doc" "man" ];
 
   enableParallelBuilding = true;
 
