@@ -100,12 +100,12 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "ENABLE_N320" enableN320)
     (cmakeBool "ENABLE_E300" enableE300)
     (cmakeBool "ENABLE_E320" enableE320)
-  ]
     # TODO: Check if this still needed
     # ABI differences GCC 7.1
     # /nix/store/wd6r25miqbk9ia53pp669gn4wrg9n9cj-gcc-7.3.0/include/c++/7.3.0/bits/vector.tcc:394:7: note: parameter passing for argument of type 'std::vector<uhd::range_t>::iterator {aka __gnu_cxx::__normal_iterator<uhd::range_t*, std::vector<uhd::range_t> >}' changed in GCC 7.1
-    ++ [ (lib.optionalString stdenv.isAarch32 "-DCMAKE_CXX_FLAGS=-Wno-psabi") ]
-  ;
+  ] ++ optionals stdenv.isAarch32 [
+    "-DCMAKE_CXX_FLAGS=-Wno-psabi"
+  ];
 
   pythonEnv = python3.withPackages pythonEnvArg;
 
@@ -118,14 +118,16 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     libusb1
-  ]
     # However, if enableLibuhd_Python_api *or* enableUtils is on, we need
     # pythonEnv for runtime as well. The utilities' runtime dependencies are
     # handled at the environment
-    ++ optionals (enableExamples) [ ncurses ncurses.dev ]
-    ++ optionals (enablePythonApi || enableUtils) [ finalAttrs.pythonEnv ]
-    ++ optionals (enableDpdk) [ dpdk ]
-  ;
+  ] ++ optionals (enableExamples) [
+    ncurses ncurses.dev
+  ] ++ optionals (enablePythonApi || enableUtils) [
+    finalAttrs.pythonEnv
+  ] ++ optionals (enableDpdk) [
+    dpdk
+  ];
 
   # many tests fails on darwin, according to ofborg
   doCheck = !stdenv.isDarwin;
@@ -139,9 +141,12 @@ stdenv.mkDerivation (finalAttrs: {
     ./no-adapter-tests.patch
   ];
 
-  postPhases = [ "installFirmware" "removeInstalledTests" ]
-    ++ optionals (enableUtils && stdenv.hostPlatform.isLinux) [ "moveUdevRules" ]
-  ;
+  postPhases = [
+    "installFirmware"
+    "removeInstalledTests"
+  ] ++ optionals (enableUtils && stdenv.hostPlatform.isLinux) [
+    "moveUdevRules"
+  ];
 
   # UHD expects images in `$CMAKE_INSTALL_PREFIX/share/uhd/images`
   installFirmware = ''
