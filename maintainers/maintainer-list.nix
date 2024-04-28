@@ -14628,12 +14628,6 @@
     githubId = 126072875;
     name = "nova madeline";
   };
-  novenary = {
-    email = "streetwalkermc@gmail.com";
-    github = "9ary";
-    githubId = 1155030;
-    name = "novenary";
-  };
   novoxd = {
     email = "radnovox@gmail.com";
     github = "novoxd";
