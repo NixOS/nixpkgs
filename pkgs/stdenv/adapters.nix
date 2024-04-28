@@ -96,7 +96,10 @@ rec {
       if stdenv.hostPlatform.isDarwin
       then throw "Cannot build fully static binaries on Darwin/macOS"
       else (mkDerivationSuper args).overrideAttrs (args: {
-        NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -static";
+        NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -static"
+        # Prevent the linker from adding an .interp when encountering PIE objects.
+        # GNU ld and gold do this by default, but lld doesn't.
+        + " -Wl,--no-dynamic-linker";
       } // lib.optionalAttrs (!(args.dontAddStaticConfigureFlags or false)) {
         configureFlags = (args.configureFlags or []) ++ [
           "--disable-shared" # brrr...
