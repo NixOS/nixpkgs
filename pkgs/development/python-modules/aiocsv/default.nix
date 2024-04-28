@@ -1,13 +1,14 @@
-{ lib
-, aiofiles
-, buildPythonPackage
-, cython
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, typing-extensions
+{
+  lib,
+  aiofiles,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  dependencies = [
-    typing-extensions
-  ];
+  dependencies = [ typing-extensions ];
 
   nativeCheckInputs = [
     aiofiles
@@ -43,9 +42,7 @@ buildPythonPackage rec {
     export CYTHONIZE=1
   '';
 
-  pythonImportsCheck = [
-    "aiocsv"
-  ];
+  pythonImportsCheck = [ "aiocsv" ];
 
   disabledTestPaths = [
     # Import issue
