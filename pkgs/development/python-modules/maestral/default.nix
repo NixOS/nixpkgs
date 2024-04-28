@@ -124,6 +124,6 @@ buildPythonPackage rec {
     homepage = "https://maestral.app";
     changelog = "https://github.com/samschott/maestral/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg sfrijters ];
+    maintainers = with maintainers; [ natsukium peterhoeg sfrijters ];
   };
 }
