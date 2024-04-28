@@ -8,15 +8,8 @@
 , boost
 , ncurses
 , enableCApi ? true
-# Although we handle the Python API's dependencies in pythonEnvArg, this
-# feature is currently disabled as upstream attempts to run `python setup.py
-# install` by itself, and it fails because the Python's environment's prefix is
-# not a writable directly. Adding support for this feature would require using
-# python's pypa/build nad pypa/install hooks directly, and currently it is hard
-# to do that because it all happens after a long buildPhase of the C API.
-, enablePythonApi ? false
+, enablePythonApi ? true
 , python3
-, buildPackages
 , enableExamples ? false
 , enableUtils ? true
 , libusb1
@@ -39,11 +32,6 @@
 
 let
   inherit (lib) optionals cmakeBool;
-  # Later used in pythonEnv generation. Python + mako are always required for the build itself but not necessary for runtime.
-  pythonEnvArg = (ps: with ps; [ mako ]
-    ++ optionals (enablePythonApi) [ numpy setuptools ]
-    ++ optionals (enableUtils) [ requests six ]
-  );
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -71,7 +59,18 @@ stdenv.mkDerivation (finalAttrs: {
     # hash.
     sha256 = "17g503mhndaabrdl7qai3rdbafr8xx8awsyr7h2bdzwzprzmh4m3";
   };
+  # This are the minimum required Python dependencies, this attribute might
+  # be useful if you want to build a development environment with a python
+  # interpreter able to import the uhd module.
+  pythonPath = optionals (enablePythonApi || enableUtils) [
+    python3.pkgs.numpy
+    python3.pkgs.setuptools
+  ] ++ optionals (enableUtils) [
+    python3.pkgs.requests
+    python3.pkgs.six
+  ];
   passthru = {
+    runtimePython = python3.withPackages (ps: finalAttrs.pythonPath);
     updateScript = [
       ./update.sh
       # Pass it this file name as argument
@@ -89,6 +88,29 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "ENABLE_UTILS" enableUtils)
     (cmakeBool "ENABLE_C_API" enableCApi)
     (cmakeBool "ENABLE_PYTHON_API" enablePythonApi)
+    /*
+
+    Otherwise python tests fail. Using a dedicated pythonEnv for either or both
+    nativeBuildInputs and buildInputs makes upstream's cmake scripts fail to
+    install the Python API as reported on our end at [1] (we don't want
+    upstream to think we are in a virtual environment because we use
+    python3.withPackages...).
+
+    Putting simply the python dependencies in the nativeBuildInputs and
+    buildInputs as they are now from some reason makes the `python` in the
+    checkPhase fail to find the python dependencies, as reported at [2]. Even
+    using nativeCheckInputs with the python dependencies, or using a
+    `python3.withPackages` wrapper in nativeCheckInputs, doesn't help, as the
+    `python` found in $PATH first is the one from nativeBuildInputs.
+
+    [1]: https://github.com/NixOS/nixpkgs/pull/307435
+    [2]: https://discourse.nixos.org/t/missing-python-package-in-checkphase/9168/
+
+    Hence we use upstream's provided cmake flag to control which python
+    interpreter they will use to run the the python tests.
+
+    */
+    "-DRUNTIME_PYTHON_EXECUTABLE=${lib.getExe finalAttrs.passthru.runtimePython}"
     (cmakeBool "ENABLE_DPDK" enableDpdk)
     # Devices
     (cmakeBool "ENABLE_OCTOCLOCK" enableOctoClock)
@@ -109,24 +131,21 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_CXX_FLAGS=-Wno-psabi"
   ];
 
-  pythonEnv = python3.withPackages pythonEnvArg;
-
   nativeBuildInputs = [
     cmake
     pkg-config
     # Present both here and in buildInputs for cross compilation.
-    (buildPackages.python3.withPackages pythonEnvArg)
+    python3
+    python3.pkgs.mako
+    # We add this unconditionally, but actually run wrapPythonPrograms only if
+    # python utilities are enabled
+    python3.pkgs.wrapPython
   ];
-  buildInputs = [
+  buildInputs = finalAttrs.pythonPath ++ [
     boost
     libusb1
-    # However, if enableLibuhd_Python_api *or* enableUtils is on, we need
-    # pythonEnv for runtime as well. The utilities' runtime dependencies are
-    # handled at the environment
   ] ++ optionals (enableExamples) [
     ncurses ncurses.dev
-  ] ++ optionals (enablePythonApi || enableUtils) [
-    finalAttrs.pythonEnv
   ] ++ optionals (enableDpdk) [
     dpdk
   ];
@@ -168,6 +187,10 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/lib/uhd/utils/uhd-usrp.rules $out/lib/udev/rules.d/
   '';
 
+  # Wrap the python utilities with our pythonPath definition
+  postFixup = lib.optionalString (enablePythonApi && enableUtils) ''
+    wrapPythonPrograms
+  '';
   disallowedReferences = optionals (!enablePythonApi && !enableUtils) [
     python3
   ];
