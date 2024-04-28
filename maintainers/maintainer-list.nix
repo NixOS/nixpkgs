@@ -10787,6 +10787,12 @@
     githubId = 2037002;
     name = "Konstantinos";
   };
+  kotatsuyaki = {
+    email = "kotatsuyaki@mail.kotatsu.dev";
+    github = "kotatsuyaki";
+    githubId = 17219127;
+    name = "kotatsuyaki";
+  };
   kouyk = {
     email = "skykinetic@stevenkou.xyz";
     github = "kouyk";
