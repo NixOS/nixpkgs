@@ -7,11 +7,12 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "aiocsv";
-  version = "1.3.1";
+  version = "1.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,12 +21,16 @@ buildPythonPackage rec {
     owner = "MKuranowski";
     repo = "aiocsv";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zHU9NfxiRUOAk0kwsKmvxd01UtNXZTnb700Wlm9DUz4=";
+    hash = "sha256-NnRLBXvQj25dSHc8ZnUaPT8Oiy2EyHLIb8IJPQliyPg=";
   };
 
   nativeBuildInputs = [
     cython
     setuptools
+  ];
+
+  propagatedBuildInputs = [
+    typing-extensions
   ];
 
   nativeCheckInputs = [
