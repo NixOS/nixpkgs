@@ -112,7 +112,7 @@ let
         ${mkKeyValuePairs (filterAttrs (key: value: isExtra key) cfg.settings)}
         ${cfg.extraOptions}
       '';
-      checkPhase = lib.optionalString cfg.checkConfig (
+      derivationArgs.installCheckPhase = lib.optionalString cfg.checkConfig (
         if pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform then ''
           echo "Ignoring validation for cross-compilation"
         ''

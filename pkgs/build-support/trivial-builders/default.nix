@@ -89,27 +89,40 @@ rec {
     , text
     , executable ? false
     , destination ? ""
-    , checkPhase ? ""
     , meta ? { }
     , allowSubstitutes ? false
     , preferLocalBuild ? true
     , derivationArgs ? { }
-    }:
+      # Deprecated arguments
+    , checkPhase ? "" # Use derivationArgs.installCheckPhase instead.
+    }@args:
     let
       matches = builtins.match "/bin/([^/]+)" destination;
     in
     runCommand name
       ({
-        inherit text executable checkPhase allowSubstitutes preferLocalBuild;
+        inherit text executable allowSubstitutes preferLocalBuild;
         passAsFile = [ "text" ]
           ++ derivationArgs.passAsFile or [ ];
         meta = lib.optionalAttrs (executable && matches != null)
           {
             mainProgram = lib.head matches;
           } // meta // derivationArgs.meta or {};
+          doInstallCheck = true;
+          installCheckPhase = lib.optionalString (checkPhase != "") (
+            # TODO: Convert to throw after 24.11 branch-off.
+            lib.warn
+              "writeTextFile: checkPhase is deprecated in favour of installCheckPhase, at ${
+                (pos: "${pos.file}:${toString pos.line}") (builtins.unsafeGetAttrPos "checkPhase" args)
+              }"
+              checkPhase
+          );
       } // removeAttrs derivationArgs [ "passAsFile" "meta" ])
       ''
         target=$out${lib.escapeShellArg destination}
+
+        runHook preInstall
+
         mkdir -p "$(dirname "$target")"
 
         if [ -e "$textPath" ]; then
@@ -122,7 +135,11 @@ rec {
           chmod +x "$target"
         fi
 
-        eval "$checkPhase"
+        runHook postInstall
+
+        if [[ -n "$doInstallCheck" ]]; then
+          eval "$installCheckPhase"
+        fi
       '';
 
   # See doc/build-helpers/trivial-build-helpers.chapter.md
@@ -159,7 +176,7 @@ rec {
         #!${runtimeShell}
         ${text}
       '';
-      checkPhase = ''
+      derivationArgs.installCheckPhase = ''
         ${stdenv.shellDryRun} "$target"
       '';
     };
@@ -175,7 +192,7 @@ rec {
         #!${runtimeShell}
         ${text}
       '';
-      checkPhase = ''
+      derivationArgs.installCheckPhase = ''
         ${stdenv.shellDryRun} "$target"
       '';
       meta.mainProgram = name;
@@ -217,15 +234,6 @@ rec {
        */
       meta ? { },
       /*
-         The `checkPhase` to run. Defaults to `shellcheck` on supported
-         platforms and `bash -n`.
-
-         The script path will be given as `$target` in the `checkPhase`.
-
-         Type: String
-       */
-      checkPhase ? null,
-      /*
          Checks to exclude when running `shellcheck`, e.g. `[ "SC2016" ]`.
 
          See <https://www.shellcheck.net/wiki/> for a list of checks.
@@ -257,9 +265,12 @@ rec {
          Type: AttrSet
        */
       derivationArgs ? { },
-    }:
-    writeTextFile {
-      inherit name meta derivationArgs;
+      /* Deprecated, use installCheckPhase instead
+      */
+      checkPhase ? null
+    }@args:
+    (writeTextFile {
+      inherit name meta;
       executable = true;
       destination = "/bin/${name}";
       allowSubstitutes = true;
@@ -283,26 +294,53 @@ rec {
         ${text}
       '';
 
-      checkPhase =
-        # GHC (=> shellcheck) isn't supported on some platforms (such as risc-v)
-        # but we still want to use writeShellApplication on those platforms
-        let
-          shellcheckSupported = lib.meta.availableOn stdenv.buildPlatform shellcheck-minimal.compiler;
-          excludeFlags = lib.optionals (excludeShellChecks != [ ]) [ "--exclude" (lib.concatStringsSep "," excludeShellChecks) ];
-          shellcheckCommand = lib.optionalString shellcheckSupported ''
-            # use shellcheck which does not include docs
-            # pandoc takes long to build and documentation isn't needed for just running the cli
-            ${lib.getExe shellcheck-minimal} ${lib.escapeShellArgs (excludeFlags ++ extraShellCheckFlags)} "$target"
-          '';
-        in
-        if checkPhase == null then ''
-          runHook preCheck
-          ${stdenv.shellDryRun} "$target"
-          ${shellcheckCommand}
-          runHook postCheck
-        ''
-        else checkPhase;
-    };
+      derivationArgs = {
+        installCheckPhase =
+          if checkPhase != null then
+            # TODO: Convert to throw after 24.11 branch-off.
+            lib.warn
+              "writeShellApplication: checkPhase is deprecated in favour of installCheckPhase, at ${builtins.unsafeGetAttrPos "checkPhase" args
+                (pos: "${pos.file}:${toString pos.line}") (builtins.unsafeGetAttrPos "checkPhase" args)
+              }"
+              checkPhase
+          else
+            # GHC (=> shellcheck) isn't supported on some platforms (such as risc-v)
+            # but we still want to use writeShellApplication on those platforms
+            let
+              shellcheckSupported = lib.meta.availableOn stdenv.buildPlatform shellcheck-minimal.compiler;
+              excludeFlags = lib.optionals (excludeShellChecks != [ ]) [ "--exclude" (lib.concatStringsSep "," excludeShellChecks) ];
+              shellcheckCommand = lib.optionalString shellcheckSupported ''
+                # use shellcheck which does not include docs
+                # pandoc takes long to build and documentation isn't needed for just running the cli
+                ${lib.getExe shellcheck-minimal} ${lib.escapeShellArgs (excludeFlags ++ extraShellCheckFlags)} "$target"
+              '';
+            in
+            ''
+              runHook preInstallCheck
+              ${stdenv.shellDryRun} "$target"
+              ${shellcheckCommand}
+              runHook postInstallCheck
+            '';
+      } // derivationArgs;
+    }).overrideAttrs (finalAttrs: previousAttrs: {
+      preCheck = "";
+      postCheck = "";
+      # Redirect preCheck/postCheck specification preInstallCheck/postInstallCheck
+      # and issue a warning.
+      # TODO: Convert to throw after 24.11 branch-off.
+      preInstallCheck = lib.optionalString (finalAttrs.preCheck != "")
+        (lib.warn
+          "writeShellApplication: Expect preInstallCheck instead of preCheck, at ${
+            (pos: "${pos.file}:${toString pos.line}") (builtins.unsafeGetAttrPos "preCheck" finalAttrs)
+          }"
+          finalAttrs.preCheck);
+      postInstallCheck = lib.optionalString (finalAttrs.postCheck != "")
+        (lib.warn
+          "writeShellApplication: Expect postInstallCheck instead of postCheck, at ${
+            (pos: "${pos.file}:${toString pos.line}") (builtins.unsafeGetAttrPos "postCheck" finalAttrs)
+          }"
+          finalAttrs.postCheck);
+    });
 
   # Create a C binary
   # TODO: add to writers? pkgs/build-support/writers

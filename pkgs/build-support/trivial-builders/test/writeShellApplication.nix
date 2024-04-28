@@ -78,11 +78,26 @@ linkFarm "writeShellApplication-tests" {
       '';
     };
 
-  test-check-phase =
+  test-post-install =
     checkShellApplication {
-      name = "test-check-phase";
+      name = "test-post-install";
+      text = ''
+        hello
+      '';
+      derivationArgs.postInstall = ''
+        echo "world" >> "$target"
+      '';
+      expected = ''
+        hello
+        world
+      '';
+    };
+
+  test-install-check-phase =
+    checkShellApplication {
+      name = "test-install-check-phase";
       text = "";
-      checkPhase = ''
+      derivationArgs.installCheckPhase = ''
         echo "echo -n hello" > $target
       '';
       expected = "hello";
@@ -93,7 +108,7 @@ linkFarm "writeShellApplication-tests" {
       name = "test-argument-forwarding";
       text = "";
       derivationArgs.MY_BUILD_TIME_VARIABLE = "puppy";
-      derivationArgs.postCheck = ''
+      derivationArgs.postInstallCheck = ''
         if [[ "$MY_BUILD_TIME_VARIABLE" != puppy ]]; then
           echo "\$MY_BUILD_TIME_VARIABLE is not set to 'puppy'!"
           exit 1

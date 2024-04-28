@@ -46,7 +46,7 @@ let
     text = concatStringsSep "\n" (
       map mkConf settings
     );
-    checkPhase = optionalString cfg.checkConfig ''
+    derivationArgs.installCheckPhase = optionalString cfg.checkConfig ''
       # logrotate --debug also checks that users specified in config
       # file exist, but we only have sandboxed users here so brown these
       # out. according to man page that means su, create and createolddir.

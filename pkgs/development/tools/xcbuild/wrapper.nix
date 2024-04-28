@@ -100,7 +100,7 @@ if ! [[ -z "$@" ]]; then
    exec "$@"
 fi
     '';
-    checkPhase = ''
+    derivationArgs.installCheckPhase = ''
       ${stdenv.shellDryRun} "$target"
     '';
   };

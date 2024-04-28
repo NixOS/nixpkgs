@@ -3,7 +3,7 @@
 in (writeShellScript "test-script" ''
   echo ${lib.escapeShellArg output}
 '').overrideAttrs (old: {
-  checkPhase = old.checkPhase or "" + ''
+  installCheckPhase = old.installCheckPhase or "" + ''
     expected=${lib.escapeShellArg output}
     got=$("$target")
     if [[ "$got" != "$expected" ]]; then

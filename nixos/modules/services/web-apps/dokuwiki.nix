@@ -37,7 +37,7 @@ let
   writePhpFile = name: text: pkgs.writeTextFile {
     inherit name;
     text = "<?php\n${text}";
-    checkPhase = "${pkgs.php81}/bin/php --syntax-check $target";
+    derivationArgs.installCheckPhase = "${pkgs.php81}/bin/php --syntax-check $target";
   };
 
   mkPhpValue = v: let

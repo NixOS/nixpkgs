@@ -13,7 +13,7 @@ let
     name = "${pkgs.cups-pdf-to-pdf.name}-wrapper.sh";
     executable = true;
     destination = "/lib/cups/backend/cups-pdf";
-    checkPhase = ''
+    derivationArgs.installCheckPhase = ''
       ${pkgs.stdenv.shellDryRun} "$target"
       ${lib.getExe pkgs.shellcheck} "$target"
     '';

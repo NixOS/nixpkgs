@@ -63,7 +63,7 @@ with lib;
       else pkgs.writeTextFile {
         name = "xray.json";
         text = builtins.toJSON cfg.settings;
-        checkPhase = ''
+        derivationArgs.installCheckPhase = ''
           ${cfg.package}/bin/xray -test -config $out
         '';
       };

@@ -93,7 +93,7 @@ in {
       configFile = pkgs.writeTextFile {
         name = "hound.json";
         text = cfg.config;
-        checkPhase = ''
+        derivationArgs.installCheckPhase = ''
           # check if the supplied text is valid json
           ${lib.getExe pkgs.jq} . $target > /dev/null
         '';
