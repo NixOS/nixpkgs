@@ -1,23 +1,26 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchCrate
-, nmap
-, Security
-, perl
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nmap,
+  perl,
+  python3,
+  rustPlatform,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rustscan";
-  version = "2.1.1";
+  version = "2.2.2";
 
-  src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-yGVhbI1LivTIQEgqOK59T1+8SiTJBPIdftiXkwE4lZM=";
+  src = fetchFromGitHub {
+    owner = "RustScan";
+    repo = "RustScan";
+    rev = "refs/tags/${version}";
+    hash = "sha256-67XNEKzR72NOYlPbz2E9yf+THa1XN6muFJG2/iJa8AU=";
   };
 
-  cargoHash = "sha256-UR3ktV80QU0N3f7qmqdhYpc5uwoPq4UvN40zEuMbp+Q=";
+  cargoHash = "sha256-U9Kn9xAG+emyi8cWUCNP32z7f19MK8AGgGR6vFJd62Q=";
 
   postPatch = ''
     substituteInPlace src/scripts/mod.rs \
@@ -27,10 +30,13 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
-  nativeCheckInputs = [ perl python3 ];
+  nativeCheckInputs = [
+    perl
+    python3
+  ];
 
-  # these tests require network access
   checkFlags = [
+    # These tests require network access
     "--skip=parse_correct_host_addresses"
     "--skip=parse_hosts_file_and_incorrect_hosts"
   ];
