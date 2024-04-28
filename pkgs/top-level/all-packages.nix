@@ -40338,8 +40338,6 @@ with pkgs;
 
   terraform-landscape = callPackage ../applications/networking/cluster/terraform-landscape { };
 
-  terragrunt = callPackage ../applications/networking/cluster/terragrunt { };
-
   tfautomv = callPackage ../applications/networking/cluster/tfautomv { };
 
   terranix = callPackage ../applications/networking/cluster/terranix { };
