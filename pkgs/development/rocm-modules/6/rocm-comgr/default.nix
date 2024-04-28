@@ -39,6 +39,12 @@ in stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (fetchpatch {
+      name = "extend-comgr-isa-compatibility.patch";
+      url = "https://github.com/GZGavinZhao/ROCm-CompilerSupport/commit/ae653fb884fb1e3b4d9fd79fb727b3b027ca69ac.patch";
+      hash = "sha256-V0MOo8n7SSVbtYhUw/AQl9Lbmvb0pHHDSmLKrwE7osM=";
+      stripLen = 2;
+    })
+    (fetchpatch {
       name = "comgr-support-compressed-device-binaries.patch";
       url = "https://github.com/GZGavinZhao/ROCm-CompilerSupport/commit/3f86eb4e1818b28f05a3b927b34cf7b4f5e02f9c.patch";
       hash = "sha256-A8m8EIMYVgVv7CZL24JZK16qdcmkfDYqPrnZxksmY2A=";
