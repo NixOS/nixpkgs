@@ -8,11 +8,11 @@ let
   python3Packages = python3.pkgs;
   attrset = {
     pname = "edir";
-    version = "2.28";
+    version = "2.29";
 
     src = fetchPypi {
       inherit (attrset) pname version;
-      hash = "sha256-tQomMXmqOFHxxWjs1fOzh61JIs7TI6MIXK3Y6Cs/MZA=";
+      hash = "sha256-5b86/M8xqzwWMCRtsH1qwmooyfOhORgXgctRjzQEmlU=";
     };
 
     nativeBuildInputs = with python3Packages; [
