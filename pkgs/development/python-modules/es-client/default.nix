@@ -3,6 +3,7 @@
   buildPythonPackage,
   certifi,
   click,
+  dotmap,
   ecs-logging,
   elastic-transport,
   elasticsearch8,
@@ -21,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "es-client";
-  version = "8.13.1";
+  version = "8.13.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     owner = "untergeek";
     repo = "es_client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4v9SRWVG9p4kCob4C3by2JxNqX6L3yMHpbnMYEAM7A0=";
+    hash = "sha256-aJ7BDS/0qi7NsFQBRxkMYXbOLhH0P/IRKhJHysowcvk=";
   };
 
   pythonRelaxDeps = true;
@@ -42,6 +43,7 @@ buildPythonPackage rec {
   dependencies = [
     certifi
     click
+    dotmap
     ecs-logging
     elastic-transport
     elasticsearch8
