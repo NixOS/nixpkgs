@@ -1,42 +1,20 @@
 { lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, genericUpdater, writeShellScript
 , atk, cairo, gdk-pixbuf, glib, gnome2, gtk2, libGLU, libGL, pango, xorg, minizip
-, lsb-release, freetype, fontconfig, polkit, polkit_gnome, pciutils
+, lsb-release, freetype, fontconfig, polkit, polkit_gnome, pciutils, copyDesktopItems
 , pulseaudio }:
 
 let
   description = "Desktop sharing application, providing remote support and online meetings";
-
-  desktopItem = makeDesktopItem {
-    name = "AnyDesk";
-    exec = "@out@/bin/anydesk %u";
-    icon = "anydesk";
-    desktopName = "AnyDesk";
-    genericName = description;
-    categories = [ "Network" ];
-    startupNotify = false;
-  };
-
 in stdenv.mkDerivation rec {
   pname = "anydesk";
-  version = "6.3.0";
+  version = "6.3.2";
 
   src = fetchurl {
     urls = [
-      "https://download.anydesk.com/linux/${pname}-${version}-amd64.tar.gz"
-      "https://download.anydesk.com/linux/generic-linux/${pname}-${version}-amd64.tar.gz"
+      "https://download.anydesk.com/linux/anydesk-${version}-amd64.tar.gz"
+      "https://download.anydesk.com/linux/generic-linux/anydesk-${version}-amd64.tar.gz"
     ];
-    hash = "sha256-seMzfTXOGa+TljgpmIsgFOis+79r0bWt+4vH3Nb+5FI=";
-  };
-
-  passthru = {
-    updateScript = genericUpdater {
-      versionLister = writeShellScript "anydesk-versionLister" ''
-        curl -s https://anydesk.com/en/downloads/linux \
-          | grep "https://[a-z0-9._/-]*-amd64.tar.gz" -o \
-          | uniq \
-          | sed 's,.*/anydesk-\(.*\)-amd64.tar.gz,\1,g'
-      '';
-    };
+    hash = "sha256-nSY4qHRsEvQk4M3JDHalAk3C6Y21WlfDQ2Gpp6/jjMs=";
   };
 
   buildInputs = [
@@ -48,7 +26,19 @@ in stdenv.mkDerivation rec {
     libXrandr libXtst libXt libICE libSM libXrender
   ]);
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "AnyDesk";
+      exec = "anydesk %u";
+      icon = "anydesk";
+      desktopName = "AnyDesk";
+      genericName = description;
+      categories = [ "Network" ];
+      startupNotify = false;
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -57,7 +47,6 @@ in stdenv.mkDerivation rec {
     install -m755 anydesk $out/bin/anydesk
     cp copyright README $out/share/doc/anydesk
     cp -r icons/hicolor/* $out/share/icons/hicolor/
-    cp ${desktopItem}/share/applications/*.desktop $out/share/applications
 
     runHook postInstall
   '';
@@ -75,10 +64,18 @@ in stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/anydesk \
       --prefix PATH : ${lib.makeBinPath [ lsb-release pciutils ]}
-
-    substituteInPlace $out/share/applications/*.desktop \
-      --subst-var out
   '';
+
+  passthru = {
+    updateScript = genericUpdater {
+      versionLister = writeShellScript "anydesk-versionLister" ''
+        curl -s https://anydesk.com/en/downloads/linux \
+          | grep "https://[a-z0-9._/-]*-amd64.tar.gz" -o \
+          | uniq \
+          | sed 's,.*/anydesk-\(.*\)-amd64.tar.gz,\1,g'
+      '';
+    };
+  };
 
   meta = with lib; {
     inherit description;
