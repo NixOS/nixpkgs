@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "tuifimanager";
-  version = "4.0.0";
+  version = "4.0.5";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "GiorgosXou";
     repo = "TUIFIManager";
-    rev = "v${version}";
-    hash = "sha256-bv/+x2xppUK9i3HOm93FIQRu1xlB4wCKZzAapkVlrM0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-DuCrIJuADmJ0MHIP0+OJ0zCrQR/oGdgzJ1xck4m/tPo=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,6 @@ python3.pkgs.buildPythonApplication rec {
       attempt to get more attention to the Uni-Curses project.
     '';
     homepage = "https://github.com/GiorgosXou/TUIFIManager";
-    changelog = "https://github.com/GiorgosXou/TUIFIManager/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ michaelBelsanti sigmanificient ];
     mainProgram = "tuifi";
