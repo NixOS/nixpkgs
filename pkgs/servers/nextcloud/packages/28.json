@@ -10,9 +10,9 @@
     ]
   },
   "calendar": {
-    "sha256": "10sxr8xczq29a3c5a7n074hpx80a21m6v7a2xhz0yhv9q80yv5gz",
-    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.7.0/calendar-v4.7.0.tar.gz",
-    "version": "4.7.0",
+    "sha256": "04wka70zfz36ccad755vq7wnnjid69ws252jf6nyw614dwr5idvh",
+    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.7.1/calendar-v4.7.1.tar.gz",
+    "version": "4.7.1",
     "description": "The Calendar app is a user interface for Nextcloud's CalDAV server. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Contacts - more to come.\n* 🌐 **WebCal Support!** Want to see your favorite team’s matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚️ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 Search! Find your events at ease\n* ☑️ Tasks! See tasks with a due date directly in the calendar\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
     "homepage": "https://github.com/nextcloud/calendar/",
     "licenses": [
@@ -130,8 +130,8 @@
     ]
   },
   "maps": {
-    "sha256": "18gln06hgljgnr90ki95nl7b8986ivf3cymr6hajilszlr77hk22",
-    "url": "https://github.com/nextcloud/maps/releases/download/v1.4.0-1-nightly/maps-1.4.0-1-nightly.tar.gz",
+    "sha256": "1gqms3rrdpjmpb1h5d72b4lwbvsl8p10zwnkhgnsmvfcf93h3r1c",
+    "url": "https://github.com/nextcloud/maps/releases/download/v1.4.0/maps-1.4.0.tar.gz",
     "version": "1.4.0",
     "description": "**The whole world fits inside your cloud!**\n\n- **🗺 Beautiful map:** Using [OpenStreetMap](https://www.openstreetmap.org) and [Leaflet](https://leafletjs.com), you can choose between standard map, satellite, topographical, dark mode or even watercolor! 🎨\n- **⭐ Favorites:** Save your favorite places, privately! Sync with [GNOME Maps](https://github.com/nextcloud/maps/issues/30) and mobile apps is planned.\n- **🧭 Routing:** Possible using either [OSRM](http://project-osrm.org), [GraphHopper](https://www.graphhopper.com) or [Mapbox](https://www.mapbox.com).\n- **🖼 Photos on the map:** No more boring slideshows, just show directly where you were!\n- **🙋 Contacts on the map:** See where your friends live and plan your next visit.\n- **📱 Devices:** Lost your phone? Check the map!\n- **〰 Tracks:** Load GPS tracks or past trips. Recording with [PhoneTrack](https://f-droid.org/en/packages/net.eneiluj.nextcloud.phonetrack/) or [OwnTracks](https://owntracks.org) is planned.",
     "homepage": "https://github.com/nextcloud/maps",
@@ -180,9 +180,9 @@
     ]
   },
   "onlyoffice": {
-    "sha256": "1hg6cs8rbvy00w541pd1qcr5l6xqnjz816pm2jyxqxm8dm5kag7a",
-    "url": "https://github.com/ONLYOFFICE/onlyoffice-nextcloud/releases/download/v9.1.2/onlyoffice.tar.gz",
-    "version": "9.1.2",
+    "sha256": "1h4jjphpqzxmnx300fkj0gf831sb61r8vxd3w9vnj4v38mxdmcc0",
+    "url": "https://github.com/ONLYOFFICE/onlyoffice-nextcloud/releases/download/v9.2.0/onlyoffice.tar.gz",
+    "version": "9.2.0",
     "description": "ONLYOFFICE connector allows you to view, edit and collaborate on text documents, spreadsheets and presentations within Nextcloud using ONLYOFFICE Docs. This will create a new Edit in ONLYOFFICE action within the document library for Office documents. This allows multiple users to co-author documents in real time from the familiar web interface and save the changes back to your file storage.",
     "homepage": "https://www.onlyoffice.com",
     "licenses": [
@@ -190,11 +190,11 @@
     ]
   },
   "phonetrack": {
-    "sha256": "1xvdmb2wlcldv8lk4jb8akhi80w26m2jpazfcz641frjm333kxch",
-    "url": "https://github.com/julien-nc/phonetrack/releases/download/v0.7.7/phonetrack-0.7.7.tar.gz",
-    "version": "0.7.7",
+    "sha256": "1i28xgzp85yb44ay2l2zw18fk00yd6fh6yddj92gdrljb3w9zpap",
+    "url": "https://github.com/julien-nc/phonetrack/releases/download/v0.8.1/phonetrack-0.8.1.tar.gz",
+    "version": "0.8.1",
     "description": "# PhoneTrack Nextcloud application\n\n📱 PhoneTrack is a Nextcloud application to track and store mobile device's locations.\n\n🗺 It receives information from mobile phone's logging apps and displays it dynamically on a map.\n\n🌍 Help us to translate this app on [PhoneTrack Crowdin project](https://crowdin.com/project/phonetrack).\n\n⚒ Check out other ways to help in the [contribution guidelines](https://gitlab.com/eneiluj/phonetrack-oc/blob/master/CONTRIBUTING.md).\n\nHow to use PhoneTrack :\n\n* Create a tracking session.\n* Give the logging link\\* to the mobile devices. Choose the [logging method](https://gitlab.com/eneiluj/phonetrack-oc/wikis/userdoc#logging-methods) you prefer.\n* Watch the session's devices location in real time (or not) in PhoneTrack or share it with public pages.\n\n(\\*) Don't forget to set the device name in the link (rather than in the logging app settings). Replace \"yourname\" with the desired device name. Setting the device name in logging app settings only works with Owntracks, Traccar and OpenGTS.\n\nOn PhoneTrack main page, while watching a session, you can :\n\n* 📍 Display location history\n* ⛛ Filter points\n* ✎ Manually edit/add/delete points\n* ✎ Edit devices (rename, change colour/shape, move to another session)\n* ⛶ Define geofencing zones for devices\n* ⚇ Define proximity alerts for device pairs\n* 🖧 Share a session to other Nextcloud users or with a public link (read-only)\n* 🔗 Generate public share links with optional restrictions (filters, device name, last positions only, geofencing simplification)\n* 🖫 Import/export a session in GPX format (one file with one track per device or one file per device)\n* 🗠 Display sessions statistics\n* 🔒 [Reserve a device name](https://gitlab.com/eneiluj/phonetrack-oc/wikis/userdoc#device-name-reservation) to make sure only authorised user can log with this name\n* 🗓 Toggle session auto export and auto purge (daily/weekly/monthly)\n* ◔ Choose what to do when point number quota is reached (block logging or delete oldest point)\n\nPublic page and public filtered page work like main page except there is only one session displayed, everything is read-only and there is no need to be logged in.\n\nThis app is tested on Nextcloud 17 with Firefox 57+ and Chromium.\n\nThis app is compatible with theming colours and accessibility themes !\n\nThis app is under development.\n\n## Install\n\nSee the [AdminDoc](https://gitlab.com/eneiluj/phonetrack-oc/wikis/admindoc) for installation details.\n\nCheck [CHANGELOG](https://gitlab.com/eneiluj/phonetrack-oc/blob/master/CHANGELOG.md#change-log) file to see what's new and what's coming in next release.\n\nCheck [AUTHORS](https://gitlab.com/eneiluj/phonetrack-oc/blob/master/AUTHORS.md#authors) file to see complete list of authors.\n\n## Known issues\n\n* PhoneTrack **now works** with Nextcloud group restriction activated. See [admindoc](https://gitlab.com/eneiluj/phonetrack-oc/wikis/admindoc#issue-with-phonetrack-restricted-to-some-groups-in-nextcloud).\n\nAny feedback will be appreciated.\n\n## Donation\n\nI develop this app during my free time.\n\n* [Donate with Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=66PALMY8SF5JE) (you don't need a paypal account)\n* [Donate with Liberapay : ![Donate using Liberapay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/eneiluj/donate)",
-    "homepage": "https://github.com/julien-nc/phonetrack-oc",
+    "homepage": "https://github.com/julien-nc/phonetrack",
     "licenses": [
       "agpl"
     ]
