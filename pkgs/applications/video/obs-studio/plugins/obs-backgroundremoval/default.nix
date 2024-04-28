@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "--preset linux-x86_64"
-    "-DCMAKE_MODULE_PATH:PATH=/build/source/cmake"
+    "-DCMAKE_MODULE_PATH:PATH=${src}/cmake"
     "-DUSE_SYSTEM_ONNXRUNTIME=ON"
     "-DUSE_SYSTEM_OPENCV=ON"
     "-DDISABLE_ONNXRUNTIME_GPU=ON"
