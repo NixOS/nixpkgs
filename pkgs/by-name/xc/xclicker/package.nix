@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -12,22 +11,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xclicker";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "robiot";
     repo = "xclicker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3D49iMzCCT9Z2Pf5INHYFZusG0BQI7La7lLaSVM/4mc=";
+    hash = "sha256-zVbOfqh21+/41N3FcAFajcZCrQ8iNqedZjgNQO0Zj04=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-malloc-size.patch";
-      url = "https://github.com/robiot/xclicker/commit/c99f69a747e9df75fb3676be20a3ec805526d022.patch";
-      hash = "sha256-ESbMBusJVNfbGxlEn1Kby00mnXvM5H0r03bX5ofC6Fg=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -57,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://xclicker.xyz/";
     license = lib.licenses.gpl3Only;
     mainProgram = "xclicker";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with lib.maintainers; [ gepbird tomasajt ];
     platforms = lib.platforms.linux;
   };
 })

@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, clisp, coreutils, fetchurl, strace, texinfo, which, writeText, zstd
+{ lib, stdenv, callPackage, ecl, coreutils, fetchurl, strace, texinfo, which, writeText, zstd
 , threadSupport ? (stdenv.hostPlatform.isx86 || "aarch64-linux" == stdenv.hostPlatform.system || "aarch64-darwin" == stdenv.hostPlatform.system)
 , linkableRuntime ? stdenv.hostPlatform.isx86
 , disableImmobileSpace ? false
@@ -6,14 +6,14 @@
   # Note that the created binaries still need `patchelf --set-interpreter ...`
   # to get rid of ${glibc} dependency.
 , purgeNixReferences ? false
-, coreCompression ? lib.versionAtLeast version "2.2.6"
-, markRegionGC ? lib.versionAtLeast version "2.4.0"
+, coreCompression ? true
+, markRegionGC ? true
 , version
-  # Set this to a lisp binary to use a custom bootstrap lisp compiler for
-  # SBCL. Leave as null to use the default. This is useful for local development
-  # of SBCL, because you can use your existing stock SBCL as a boostrap. On Hydra
+  # Set this to a lisp binary to use a custom bootstrap lisp compiler for SBCL.
+  # Leave as null to use the default.  This is useful for local development of
+  # SBCL, because you can use your existing stock SBCL as a boostrap.  On Hydra
   # of course we can’t do that because SBCL hasn’t been built yet, so we use
-  # CLISP, but that’s much slower.
+  # ECL but that’s much slower.
 , bootstrapLisp ? null
 }:
 
@@ -27,16 +27,10 @@ let
     };
   };
   # Collection of pre-built SBCL binaries for platforms that need them for
-  # bootstrapping. Ideally these are to be avoided.  If CLISP (or any other
+  # bootstrapping. Ideally these are to be avoided.  If ECL (or any other
   # non-binary-distributed Lisp) can run on any of these systems, that entry
   # should be removed from this list.
   bootstrapBinaries = rec {
-    # This build segfaults using CLISP.
-    x86_64-darwin = {
-      version = "2.2.9";
-      system = "x86-64-darwin";
-      sha256 = "sha256-b1BLkoLIOELAYBYA9eBmMgm1OxMxJewzNP96C9ADfKY=";
-    };
     i686-linux = {
       version = "1.2.7";
       system = "x86-linux";
@@ -67,7 +61,7 @@ let
     then bootstrapLisp
     else if (builtins.hasAttr stdenv.hostPlatform.system bootstrapBinaries)
     then "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
-    else "${clisp}/bin/clisp -E UTF-8 --silent -norc";
+    else "${lib.getExe ecl} --norc";
 
 in
 
@@ -173,15 +167,8 @@ stdenv.mkDerivation (self: rec {
     "--arch=arm64"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (lib.versionOlder self.version "2.1.10") [
-    # Workaround build failure on -fno-common toolchains like upstream
-    # clang-13. Without the change build fails as:
-    #   duplicate symbol '_static_code_space_free_pointer' in: alloc.o traceroot.o
-    # Should be fixed past 2.1.10 release.
-    "-fcommon"
-  ]
-    # Fails to find `O_LARGEFILE` otherwise.
-    ++ [ "-D_GNU_SOURCE" ]);
+  # Fails to find `O_LARGEFILE` otherwise.
+  env.NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
 
   buildPhase = ''
     runHook preBuild
@@ -241,6 +228,7 @@ stdenv.mkDerivation (self: rec {
     platforms = attrNames bootstrapBinaries ++ [
       # These aren’t bootstrapped using the binary distribution but compiled
       # using a separate (lisp) host
+      "x86_64-darwin"
       "x86_64-linux"
       "aarch64-darwin"
       "aarch64-linux"
