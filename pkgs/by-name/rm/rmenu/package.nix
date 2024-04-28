@@ -11,13 +11,13 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "rmenu";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "imgurbot12";
     repo = "rmenu";
-    hash = "sha256-JHJZfDxrDi0rJSloPdOVdvo/XkrFhvshd7yZWn/zELU=";
+    hash = "sha256-khauloUGVuekR+Lran1DLnsxwY8sIf5PsEKY7sNy1K4=";
   };
 
   nativeBuildInputs = [
