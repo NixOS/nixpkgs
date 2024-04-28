@@ -1,29 +1,37 @@
-{ lib, python3Packages, fetchPypi }:
+{
+  lib,
+  fetchPypi,
+  python3,
+}:
 
-python3Packages.buildPythonApplication rec {
-  pname = "edir";
-  version = "2.28";
-  format = "pyproject";
+let
+  python3Packages = python3.pkgs;
+  attrset = {
+    pname = "edir";
+    version = "2.28";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-tQomMXmqOFHxxWjs1fOzh61JIs7TI6MIXK3Y6Cs/MZA=";
+    src = fetchPypi {
+      inherit (attrset) pname version;
+      hash = "sha256-tQomMXmqOFHxxWjs1fOzh61JIs7TI6MIXK3Y6Cs/MZA=";
+    };
+
+    nativeBuildInputs = with python3Packages; [
+      setuptools-scm
+    ];
+
+    propagatedBuildInputs = with python3Packages; [
+      platformdirs
+    ];
+
+    pyproject = true;
+
+    meta = {
+      homepage = "https://github.com/bulletmark/edir";
+      description = "Program to rename and remove files and directories using your editor";
+      license = lib.licenses.gpl3Plus;
+      mainProgram = "edir";
+      maintainers = with lib.maintainers; [ AndersonTorres ];
+    };
   };
-
-  nativeBuildInputs = with python3Packages; [
-    setuptools-scm
-  ];
-
-  propagatedBuildInputs = with python3Packages; [
-    platformdirs
-  ];
-
-  meta = with lib; {
-    description = "Program to rename and remove files and directories using your editor";
-    homepage = "https://github.com/bulletmark/edir";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ guyonvarch ];
-    platforms = platforms.all;
-    mainProgram = "edir";
-  };
-}
+in
+python3Packages.buildPythonApplication attrset
