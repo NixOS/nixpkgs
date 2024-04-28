@@ -7354,12 +7354,6 @@
     githubId = 104317939;
     name = "gilice";
   };
-  gilligan = {
-    email = "tobias.pflug@gmail.com";
-    github = "gilligan";
-    githubId = 27668;
-    name = "Tobias Pflug";
-  };
   gin66 = {
     email = "jochen@kiemes.de";
     github = "gin66";
