@@ -1,25 +1,25 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pythonRelaxDepsHook
-, pytestCheckHook
+, aiofiles
 , aiohttp
 , aiohttp-socks
-, aiofiles
 , aresponses
 , babel
+, buildPythonPackage
 , certifi
+, fetchFromGitHub
+, gitUpdater
+, hatchling
 , magic-filter
 , pycryptodomex
+, pydantic
 , pytest-aiohttp
 , pytest-asyncio
 , pytest-lazy-fixture
-, redis
-, hatchling
-, pydantic
+, pytestCheckHook
+, pythonOlder
+, pythonRelaxDepsHook
 , pytz
-, gitUpdater
+, redis
 }:
 
 buildPythonPackage rec {
@@ -36,8 +36,11 @@ buildPythonPackage rec {
     hash = "sha256-NOaI01Lb969Lp/v38u2UipN9UbOQNJQEbN2JS3lmFno=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
+  ];
+
+  nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
 
@@ -45,7 +48,7 @@ buildPythonPackage rec {
     "pydantic"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiofiles
     aiohttp
     babel
