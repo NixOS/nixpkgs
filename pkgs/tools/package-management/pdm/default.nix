@@ -33,14 +33,14 @@ in
 with python.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
-  version = "2.13.2";
+  version = "2.15.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4oK/HK8KCD/A+16JrW9518V5/1LHu1juhYfqPVu54Uo=";
+    hash = "sha256-HJzQScEBZjOiPvkuwfx4LaiuB0MULvM/r31Ihy+HSzk=";
   };
 
   nativeBuildInputs = [
@@ -127,6 +127,8 @@ buildPythonApplication rec {
 
     # touches the network
     "test_find_candidates_from_find_links"
+    "test_lock_all_with_excluded_groups"
+    "test_find_interpreters_with_PDM_IGNORE_ACTIVE_VENV"
   ];
 
   __darwinAllowLocalNetworking = true;
