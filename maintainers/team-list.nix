@@ -826,7 +826,6 @@ with lib.maintainers; {
 
   python = {
     members = [
-      fridh
       hexa
       jonringer
       tjni
