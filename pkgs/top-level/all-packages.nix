@@ -1853,9 +1853,11 @@ with pkgs;
     withDriver = false;
   };
 
-  clarissa = callPackage ../tools/networking/clarissa { };
-  clar = callPackage ../tools/networking/clarissa/clar.nix { };
-  clar-oui = callPackage ../tools/networking/clarissa/oui.nix { };
+  inherit ({ # workaround for keeping the packages in 1 directory outside of by-name
+    clarissa = callPackage ../tools/networking/clarissa { };
+    clar = callPackage ../tools/networking/clarissa/clar.nix { };
+    clar-oui = callPackage ../tools/networking/clarissa/oui.nix { };
+  }) clarissa clar clar-oui;
 
   fedora-backgrounds = callPackage ../data/misc/fedora-backgrounds { };
 
