@@ -8,6 +8,18 @@
   libtool,
   gmp,
   mpfr,
+  enable-algebramix ? true,
+  enable-automagix ? true,
+  enable-basix ? true,
+  enable-mmcompileregg ? true,
+  enable-mmcompiler ? true,
+  enable-mmdoc ? true,
+  enable-numerix ? true,
+  enable-analyziz ? true,
+  enable-graphix ? true,
+  enable-symbolix ? true,
+  enable-mmxlight ? true,
+  enable-caas ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,6 +33,32 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   strictDeps = true;
+
+  configureFlags = lib.optionals enable-algebramix [
+    "--enable-algebramix"
+  ] ++ lib.optionals enable-automagix [
+    "--enable-automagix"
+  ] ++ lib.optionals enable-analyziz [
+    "--enable-analyziz"
+  ] ++ lib.optionals enable-basix [
+    "--enable-basix"
+  ] ++ lib.optionals enable-caas [
+    "--enable-caas"
+  ] ++ lib.optionals enable-graphix [
+    "--enable-graphix"
+  ] ++ lib.optionals enable-mmcompileregg [
+    "--enable-mmcompileregg"
+  ] ++ lib.optionals enable-mmcompiler [
+    "--enable-mmcompiler"
+  ] ++ lib.optionals enable-mmdoc [
+    "--enable-mmdoc"
+  ] ++ lib.optionals enable-mmxlight [
+    "--enable-mmxlight"
+  ] ++ lib.optionals enable-numerix [
+    "--enable-numerix"
+  ] ++ lib.optionals enable-symbolix [
+    "--enable-symbolix"
+  ];
 
   buildInputs = [
     gmp
