@@ -5,13 +5,14 @@
 , aiohttp
 , asn1
 , python-dateutil
+, setuptools
 , tenacity
 }:
 
 buildPythonPackage rec {
   pname = "smart-meter-texas";
   version = "0.5.5";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -24,10 +25,14 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "pytest-runner" ""
+      --replace-fail "pytest-runner" ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     aiohttp
     asn1
     python-dateutil
