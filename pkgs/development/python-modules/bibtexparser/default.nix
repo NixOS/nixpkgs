@@ -36,6 +36,5 @@ buildPythonPackage rec {
     description = "Bibtex parser for Python";
     homepage = "https://github.com/sciunto-org/python-bibtexparser";
     license = with licenses; [ lgpl3Only /* or */ bsd3 ];
-    maintainers = with maintainers; [ fridh ];
   };
 }

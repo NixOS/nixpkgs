@@ -66,6 +66,5 @@ in buildPythonPackage rec {
     description = "An optimising static compiler for both the Python programming language and the extended Cython programming language";
     homepage = "https://cython.org";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }

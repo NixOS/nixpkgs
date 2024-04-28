@@ -66,6 +66,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/tqdm/tqdm";
     changelog = "https://tqdm.github.io/releases/";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fridh ];
   };
 }

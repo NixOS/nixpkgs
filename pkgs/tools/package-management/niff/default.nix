@@ -29,7 +29,6 @@ in stdenv.mkDerivation {
     description = "A program that compares two Nix expressions and determines which attributes changed";
     homepage = "https://github.com/FRidh/niff";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.fridh ];
     mainProgram = "niff";
   };
 }

@@ -42,7 +42,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "User-friendly TeX/LaTeX authoring tool for the KDE desktop environment";
     homepage = "https://www.kde.org/applications/office/kile/";
-    maintainers = with lib.maintainers; [ fridh ];
     license = lib.licenses.gpl2Plus;
     mainProgram = "kile";
   };

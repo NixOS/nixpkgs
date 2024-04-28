@@ -38,6 +38,5 @@ buildPythonPackage rec {
     mainProgram = "tabulate";
     homepage = "https://github.com/astanin/python-tabulate";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }

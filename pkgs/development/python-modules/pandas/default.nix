@@ -266,7 +266,7 @@ let pandas = buildPythonPackage rec {
       Python, providing labeled data structures similar to R data.frame
       objects, statistical functions, and much more.
     '';
-    maintainers = with maintainers; [ raskin fridh knedlsepp ];
+    maintainers = with maintainers; [ raskin knedlsepp ];
   };
 };
 in pandas

@@ -13,7 +13,6 @@
 
 # GitHub actions
 /.github/workflows @NixOS/Security @Mic92 @zowoq
-/.github/workflows/merge-staging @FRidh
 
 # EditorConfig
 /.editorconfig @Mic92 @zowoq
@@ -125,10 +124,8 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius @ma27
 /pkgs/common-updater/scripts/update-source-version    @jtojnar
 
 # Python-related code and docs
-/maintainers/scripts/update-python-libraries	              @FRidh
-/pkgs/development/interpreters/python                       @FRidh
-/doc/languages-frameworks/python.section.md                 @FRidh @mweinelt
-/pkgs/development/interpreters/python/hooks                 @FRidh @jonringer
+/doc/languages-frameworks/python.section.md                 @mweinelt
+/pkgs/development/interpreters/python/hooks                 @jonringer
 
 # Haskell
 /doc/languages-frameworks/haskell.section.md  @sternenseemann @maralorn @ncfavier

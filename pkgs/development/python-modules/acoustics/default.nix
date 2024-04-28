@@ -53,7 +53,6 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python package for acousticians";
-    maintainers = with maintainers; [ fridh ];
     license = with licenses; [ bsd3 ];
     homepage = "https://github.com/python-acoustics/python-acoustics";
   };

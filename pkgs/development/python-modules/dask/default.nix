@@ -191,6 +191,5 @@ let self = buildPythonPackage rec {
     homepage = "https://dask.org/";
     changelog = "https://docs.dask.org/en/latest/changelog.html";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh ];
   };
 }; in self
