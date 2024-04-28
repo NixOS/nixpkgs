@@ -8,7 +8,7 @@ let
       development = "0.0.17";
     } else {
       stable = "0.0.302";
-      ptb = "0.0.109";
+      ptb = "0.0.110";
       canary = "0.0.477";
       development = "0.0.39";
     };
@@ -39,7 +39,7 @@ let
       };
       ptb = fetchurl {
         url = "https://dl-ptb.discordapp.net/apps/osx/${version}/DiscordPTB.dmg";
-        hash = "sha256-xxLnzELuI0X2r/weP1K2Bb51uRh1JjR72p7cXzy12Kc=";
+        hash = "sha256-hkRO/4YD1j4gsp+r3+md3ND/xtNmdutJiXlY3UIecIY=";
       };
       canary = fetchurl {
         url = "https://dl-canary.discordapp.net/apps/osx/${version}/DiscordCanary.dmg";
