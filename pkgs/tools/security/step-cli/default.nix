@@ -33,7 +33,7 @@ buildGoModule rec {
     homepage = "https://smallstep.com/cli/";
     changelog = "https://github.com/smallstep/cli/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ isabelroses ];
     platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "step";
   };

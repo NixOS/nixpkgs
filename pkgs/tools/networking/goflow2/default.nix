@@ -2,7 +2,6 @@
 , buildGoModule
 , fetchFromGitHub
 }:
-
 buildGoModule rec {
   pname = "goflow2";
   version = "2.1.3";
@@ -26,6 +25,6 @@ buildGoModule rec {
     description = "High performance sFlow/IPFIX/NetFlow Collector";
     homepage = "https://github.com/netsampler/goflow2";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ isabelroses ];
   };
 }
