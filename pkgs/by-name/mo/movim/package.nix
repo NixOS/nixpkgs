@@ -48,6 +48,13 @@ php.buildComposerProject (finalAttrs: {
     hash = "sha256-t63POjywZLk5ulppuCedFhhEhOsnB90vy3k/HhM3MGc=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/movim/movim/commit/4dd2842f4617f3baaa166157892a532ad07df80d.patch";
+      hash = "sha256-32MLS5g60Rhm8HQDBPnUo9k+aB7L8dNMcnSjPIlooks=";
+    })
+  ];
+
   php = php.buildEnv ({
     extensions = ({ all, enabled }:
       enabled
