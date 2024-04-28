@@ -2851,6 +2851,22 @@ let
         };
       };
 
+      ms-python.flake8 = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "flake8";
+          publisher = "ms-python";
+          version = "2023.6.0";
+          hash = "sha256-Hk7rioPvrxV0zMbwdighBAlGZ43rN4DLztTyiHqO6o4";
+        };
+        meta = {
+          description = "Linting support for python using the flake8 library";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.flake8";
+          homepage = "https://github.com/microsoft/vscode-flake8";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.carlthome ];
+        };
+      };
+
       ms-python.python = callPackage ./ms-python.python { };
 
       ms-python.debugpy = buildVscodeMarketplaceExtension {
