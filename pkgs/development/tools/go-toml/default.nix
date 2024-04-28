@@ -1,5 +1,4 @@
 { lib, buildGoModule, fetchFromGitHub }:
-
 buildGoModule rec {
   pname = "go-toml";
   version = "2.2.1";
@@ -25,7 +24,7 @@ buildGoModule rec {
     description = "Go library for the TOML language";
     homepage = "https://github.com/pelletier/go-toml";
     changelog = "https://github.com/pelletier/go-toml/releases/tag/v${version}";
-    maintainers = [ ];
+    maintainers = [ maintainers.isabelroses ];
     license = licenses.mit;
   };
 }

@@ -1,5 +1,4 @@
 { lib, fetchFromGitHub, rustPlatform, git }:
-
 rustPlatform.buildRustPackage rec {
   pname = "gitprompt-rs";
   version = "0.3.0";
@@ -22,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     description = "Simple Git prompt";
     homepage = "https://github.com/9ary/gitprompt-rs";
     license = with licenses; [ mpl20 ];
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ isabelroses ];
     mainProgram = "gitprompt-rs";
   };
 }
