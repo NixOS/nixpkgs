@@ -23,6 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   patches = [
     ./1.6.1-CVE-2024-3078.patch
+    ./1.6.1-CVE-2024-2221.patch
   ];
 
   cargoLock = {
