@@ -399,6 +399,7 @@ in {
   honk = runTest ./honk.nix;
   installed-tests = pkgs.recurseIntoAttrs (handleTest ./installed-tests {});
   invidious = handleTest ./invidious.nix {};
+  isolate = handleTest ./isolate.nix {};
   livebook-service = handleTest ./livebook-service.nix {};
   pyload = handleTest ./pyload.nix {};
   oci-containers = handleTestOn ["aarch64-linux" "x86_64-linux"] ./oci-containers.nix {};
@@ -772,6 +773,7 @@ in {
   qgis = handleTest ./qgis.nix { qgisPackage = pkgs.qgis; };
   qgis-ltr = handleTest ./qgis.nix { qgisPackage = pkgs.qgis-ltr; };
   qownnotes = handleTest ./qownnotes.nix {};
+  qtile = handleTest ./qtile.nix {};
   quake3 = handleTest ./quake3.nix {};
   quicktun = handleTest ./quicktun.nix {};
   quorum = handleTest ./quorum.nix {};

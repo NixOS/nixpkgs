@@ -414,20 +414,20 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1qqb1rmk0f9m82iijjlqadh5yby1bhnr6svjk9vxdvh6f181988s";
+      sha256 = "0vn7jwss2v6jhnxvjsiwbs3irjwhbx9zxn4l6fhd4rkcfyxzdnw5";
       type = "gem";
     };
-    version = "2.9.0";
+    version = "2.7.11";
   };
   faraday-net_http = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "17w51yk4rrm9rpnbc3x509s619kba0jga3qrj4b17l30950vw9qn";
+      sha256 = "13byv3mp1gsjyv8k0ih4612y6vw5kqva6i03wcg4w2fqpsd950k8";
       type = "gem";
     };
-    version = "3.1.0";
+    version = "3.0.2";
   };
   faraday-retry = {
     groups = ["default"];
@@ -674,12 +674,12 @@
     platforms = [];
     source = {
       fetchSubmodules = false;
-      rev = "6dfd13e04c9e9763b485a5b7d6e85d97632a8edf";
-      sha256 = "1prr1713vx84ckwsbwjwvb14f8yvajz9821zrbk133nn6qm0nq9a";
+      rev = "55ea82f7d3f98652ea81ab1d29d3be3e55528345";
+      sha256 = "04c4h61vdvv8cyf6623h01r27nv1fggcbim4dcpywxvjvsbwgvyq";
       type = "git";
       url = "https://github.com/rapid7/metasploit-framework";
     };
-    version = "6.4.5";
+    version = "6.4.6";
   };
   metasploit-model = {
     groups = ["default"];
@@ -800,16 +800,6 @@
       type = "gem";
     };
     version = "0.1.6";
-  };
-  net-http = {
-    groups = ["default"];
-    platforms = [];
-    source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "10n2n9aq00ih8v881af88l1zyrqgs5cl3njdw8argjwbl5ggqvm9";
-      type = "gem";
-    };
-    version = "0.4.1";
   };
   net-imap = {
     groups = ["default"];
@@ -1457,10 +1447,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "01sfiwn60czgpabfr7xq8dk3qkc17ai3z7d4yfwanq1zw6mf927n";
+      sha256 = "15415lmz69jbzl6nch4q5l2jxv054676nk6y0vgy0g3iklmjrxvc";
       type = "gem";
     };
-    version = "2.0.0";
+    version = "1.6.6";
   };
   sshkey = {
     groups = ["default"];
@@ -1591,16 +1581,6 @@
       type = "gem";
     };
     version = "1.3.1";
-  };
-  uri = {
-    groups = ["default"];
-    platforms = [];
-    source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "094gk72ckazf495qc76gk09b5i318d5l9m7bicg2wxlrjcm3qm96";
-      type = "gem";
-    };
-    version = "0.13.0";
   };
   warden = {
     groups = ["default"];

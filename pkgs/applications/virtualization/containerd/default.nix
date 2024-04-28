@@ -50,7 +50,7 @@ buildGoModule rec {
     homepage = "https://containerd.io/";
     description = "A daemon to control runC";
     license = licenses.asl20;
-    maintainers = with maintainers; [ offline vdemeester endocrimes ];
+    maintainers = with maintainers; [ offline vdemeester ];
     platforms = platforms.linux;
   };
 }

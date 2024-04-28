@@ -2741,8 +2741,6 @@ with pkgs;
     description = mame.meta.description + " (tools only)";
   } (lib.getOutput "tools" mame);
 
-  mgba = libsForQt5.callPackage ../applications/emulators/mgba { };
-
   mupen64plus = callPackage ../applications/emulators/mupen64plus { };
 
   np2kai = callPackage ../applications/emulators/np2kai { };
@@ -5340,6 +5338,7 @@ with pkgs;
   # TeX Live; see https://nixos.org/nixpkgs/manual/#sec-language-texlive
   texlive = callPackage ../tools/typesetting/tex/texlive { };
   inherit (texlive.schemes) texliveBasic texliveBookPub texliveConTeXt texliveFull texliveGUST texliveInfraOnly texliveMedium texliveMinimal texliveSmall texliveTeTeX;
+  texlivePackages = recurseIntoAttrs (lib.filterAttrs (_: lib.isDerivation) texlive.pkgs);
 
   fop = callPackage ../tools/typesetting/fop { };
 
@@ -26341,8 +26340,6 @@ with pkgs;
       if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
   };
 
-  nginx-sso = callPackage ../servers/nginx-sso { };
-
   immudb = callPackage ../servers/nosql/immudb { };
 
   influxdb = callPackage ../servers/nosql/influxdb { };
@@ -29660,8 +29657,6 @@ with pkgs;
       buildPythonApplication appdirs colorama python-dateutil
       requests requests-toolbelt setuptools sqlalchemy fusepy;
   };
-
-  acorn = callPackage ../applications/networking/cluster/acorn { };
 
   inherit (qt6Packages.callPackage ../applications/office/activitywatch { })
     aw-qt
@@ -37326,17 +37321,11 @@ with pkgs;
 
   principia = callPackage ../games/principia { };
 
-  prismlauncher-qt5-unwrapped = libsForQt5.callPackage ../games/prismlauncher {
+  prismlauncher-unwrapped = kdePackages.callPackage ../games/prismlauncher {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
-  prismlauncher-qt5 = libsForQt5.callPackage ../games/prismlauncher/wrapper.nix { prismlauncher-unwrapped = prismlauncher-qt5-unwrapped; };
-
-  prismlauncher-unwrapped = qt6Packages.callPackage ../games/prismlauncher {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
-
-  prismlauncher = qt6Packages.callPackage ../games/prismlauncher/wrapper.nix { };
+  prismlauncher = kdePackages.callPackage ../games/prismlauncher/wrapper.nix { };
 
   pong3d = callPackage ../games/pong3d { };
 

@@ -339,7 +339,7 @@ in
       # services.packagekit.enable = mkDefault true;
       services.udisks2.enable = true;
       services.upower.enable = config.powerManagement.enable;
-      services.xserver.libinput.enable = mkDefault true; # for controlling touchpad settings via gnome control center
+      services.libinput.enable = mkDefault true; # for controlling touchpad settings via gnome control center
 
       # Explicitly enabled since GNOME will be severely broken without these.
       xdg.mime.enable = true;

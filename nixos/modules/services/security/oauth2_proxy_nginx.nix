@@ -87,9 +87,9 @@ in
         "/oauth2/auth" = let
           maybeQueryArg = name: value:
             if value == null then null
-            else "${name}=${lib.concatStringsSep "," value}";
+            else "${name}=${lib.concatStringsSep "," (builtins.map lib.escapeURL value)}";
           allArgs = lib.mapAttrsToList maybeQueryArg conf;
-          cleanArgs = builtins.map lib.escapeURL (builtins.filter (x: x != null) allArgs);
+          cleanArgs = builtins.filter (x: x != null) allArgs;
           cleanArgsStr = lib.concatStringsSep "&" cleanArgs;
         in {
           # nginx doesn't support passing query string arguments to auth_request,

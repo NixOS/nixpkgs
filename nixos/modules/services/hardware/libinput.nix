@@ -2,7 +2,7 @@
 
 with lib;
 
-let cfg = config.services.xserver.libinput;
+let cfg = config.services.libinput;
 
     xorgBool = v: if v then "on" else "off";
 
@@ -223,7 +223,7 @@ let cfg = config.services.xserver.libinput;
 in {
 
   imports =
-    (map (option: mkRenamedOptionModule ([ "services" "xserver" "libinput" option ]) [ "services" "xserver" "libinput" "touchpad" option ]) [
+    (map (option: mkRenamedOptionModule ([ "services" "xserver" "libinput" option ]) [ "services" "libinput" "touchpad" option ]) [
       "accelProfile"
       "accelSpeed"
       "buttonMapping"
@@ -242,11 +242,15 @@ in {
       "transformationMatrix"
       "disableWhileTyping"
       "additionalOptions"
-    ]);
+    ]) ++ [
+      (mkRenamedOptionModule [ "services" "xserver" "libinput" "enable" ]   [ "services" "libinput" "enable" ])
+      (mkRenamedOptionModule [ "services" "xserver" "libinput" "mouse" ]    [ "services" "libinput" "mouse" ])
+      (mkRenamedOptionModule [ "services" "xserver" "libinput" "touchpad" ] [ "services" "libinput" "touchpad" ])
+    ];
 
   options = {
 
-    services.xserver.libinput = {
+    services.libinput = {
       enable = mkEnableOption "libinput" // {
         default = config.services.xserver.enable;
         defaultText = lib.literalExpression "config.services.xserver.enable";

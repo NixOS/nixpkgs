@@ -69,7 +69,7 @@ in
 
     services.upower.enable = config.powerManagement.enable;
 
-    services.xserver.libinput.enable = mkDefault true;
+    services.libinput.enable = mkDefault true;
 
     xdg.portal.lxqt.enable = mkDefault true;
 

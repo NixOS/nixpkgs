@@ -28,11 +28,11 @@ let
   sources = import ./sources.nix;
   srcs = {
     x86_64-linux = fetchurl {
-      url = "https://dldir1.qq.com/qqfile/qq/QQNT/${sources.urlhash}/linuxqq_${sources.version}_amd64.deb";
+      url = sources.amd64_url;
       hash = sources.amd64_hash;
     };
     aarch64-linux = fetchurl {
-      url = "https://dldir1.qq.com/qqfile/qq/QQNT/${sources.urlhash}/linuxqq_${sources.version}_arm64.deb";
+      url = sources.arm64_url;
       hash = sources.arm64_hash;
     };
   };

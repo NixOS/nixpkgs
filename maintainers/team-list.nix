@@ -32,7 +32,6 @@ with lib.maintainers; {
   acme = {
     members = [
       aanderse
-      andrew-d
       arianvp
       emily
       flokli
@@ -376,7 +375,6 @@ with lib.maintainers; {
       krav
       talyz
       yayayayaka
-      yuka
     ];
     scope = "Maintain gitlab packages.";
     shortName = "gitlab";
@@ -404,7 +402,6 @@ with lib.maintainers; {
       hedning
       jtojnar
       dasj19
-      amaxine
     ];
     githubTeams = [
       "gnome"

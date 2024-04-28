@@ -137,7 +137,7 @@ buildDotnetModule rec {
     description = "Launcher for Space Station 14, a multiplayer game about paranoia and disaster";
     homepage = "https://spacestation14.io";
     license = licenses.mit;
-    maintainers = [ maintainers.zumorica ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "SS14.Launcher";
   };
