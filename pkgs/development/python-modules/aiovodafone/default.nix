@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aiovodafone";
-  version = "0.5.4";
+  version = "0.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "chemelli74";
     repo = "aiovodafone";
     rev = "refs/tags/v${version}";
-    hash = "sha256-J2VdRxCzIjRUOqQW4YzOC8RRth9tibBS9YuizveqhhI=";
+    hash = "sha256-sy7/nCthmfI0WdBkwBU83fifcYTe9zUBOpxV7RX9F6w=";
   };
 
   postPatch = ''
