@@ -49,6 +49,5 @@ buildPythonPackage rec {
     description = "Traitlets Python config system";
     homepage = "https://github.com/ipython/traitlets";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }

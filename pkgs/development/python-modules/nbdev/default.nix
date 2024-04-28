@@ -1,40 +1,50 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fastprogress
+, pythonRelaxDepsHook
+, setuptools
+, ipywidgets
 , fastcore
-, asttokens
 , astunparse
 , watchdog
 , execnb
 , ghapi
 , pyyaml
-, quarto
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "nbdev";
-  version = "2.3.13";
-  format = "setuptools";
+  version = "2.3.14";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Umkf3CcRRSS+pK3UKeTg+Ru3TW+qHNoQ2F6nUk8jQUU=";
+    hash = "sha256-9Tacr4mWmjXspKKCkFDWYeT7KkBh4/3f6UOkfj0/leg=";
   };
 
-  propagatedBuildInputs = [
-    fastprogress
-    fastcore
-    asttokens
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "ipywidgets"
+  ];
+
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     astunparse
-    watchdog
     execnb
+    fastcore
     ghapi
+    ipywidgets
     pyyaml
-    quarto
+    watchdog
   ];
 
   # no real tests

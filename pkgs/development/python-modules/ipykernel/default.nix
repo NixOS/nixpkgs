@@ -70,6 +70,6 @@ buildPythonPackage rec {
     homepage = "https://ipython.org/";
     changelog = "https://github.com/ipython/ipykernel/releases/tag/v${version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ] ++ lib.teams.jupyter.members;
+    maintainers = lib.teams.jupyter.members;
   };
 }

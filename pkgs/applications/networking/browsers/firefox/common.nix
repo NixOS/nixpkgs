@@ -298,9 +298,6 @@ buildStdenv.mkDerivation {
   setOutputFlags = false; # `./mach configure` doesn't understand `--*dir=` flags.
 
   preConfigure = ''
-    # remove distributed configuration files
-    rm -f configure js/src/configure .mozconfig*
-
     # Runs autoconf through ./mach configure in configurePhase
     configureScript="$(realpath ./mach) configure"
 
@@ -308,8 +305,8 @@ buildStdenv.mkDerivation {
     export MOZ_BUILD_DATE=$(head -n1 sourcestamp.txt)
 
     # Set predictable directories for build and state
-    export MOZ_OBJDIR=$(pwd)/mozobj
-    export MOZBUILD_STATE_PATH=$(pwd)/mozbuild
+    export MOZ_OBJDIR=$(pwd)/objdir
+    export MOZBUILD_STATE_PATH=$TMPDIR/mozbuild
 
     # Don't try to send libnotify notifications during build
     export MOZ_NOSPAM=1
@@ -353,7 +350,7 @@ buildStdenv.mkDerivation {
       # since the profiling build has not been installed to $out
       ''
         OLD_LDFLAGS="$LDFLAGS"
-        LDFLAGS="-Wl,-rpath,$(pwd)/mozobj/dist/${binaryName}"
+        LDFLAGS="-Wl,-rpath,$(pwd)/objdir/dist/${binaryName}"
       ''}
     fi
   '' + lib.optionalString googleAPISupport ''
@@ -510,7 +507,7 @@ buildStdenv.mkDerivation {
   '';
 
   preBuild = ''
-    cd mozobj
+    cd objdir
   '';
 
   postBuild = ''
@@ -535,9 +532,9 @@ buildStdenv.mkDerivation {
   preInstall = lib.optionalString crashreporterSupport ''
     ./mach buildsymbols
     mkdir -p $symbols/
-    cp mozobj/dist/*.crashreporter-symbols.zip $symbols/
+    cp objdir/dist/*.crashreporter-symbols.zip $symbols/
   '' + ''
-    cd mozobj
+    cd objdir
   '';
 
   postInstall = ''
