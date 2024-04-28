@@ -1,21 +1,20 @@
-{
-  lib,
-  asyncssh,
-  buildPythonPackage,
-  dulwich,
-  dvc-http,
-  dvc-objects,
-  fetchFromGitHub,
-  fsspec,
-  funcy,
-  gitpython,
-  pathspec,
-  pygit2,
-  pygtrie,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  shortuuid,
+{ lib
+, asyncssh
+, buildPythonPackage
+, dulwich
+, dvc-http
+, dvc-objects
+, fetchFromGitHub
+, fsspec
+, funcy
+, gitpython
+, pathspec
+, pygit2
+, pygtrie
+, pythonOlder
+, setuptools
+, setuptools-scm
+, shortuuid
 }:
 
 buildPythonPackage rec {
@@ -54,7 +53,9 @@ buildPythonPackage rec {
   # Requires a running Docker instance
   doCheck = false;
 
-  pythonImportsCheck = [ "scmrepo" ];
+  pythonImportsCheck = [
+    "scmrepo"
+  ];
 
   meta = with lib; {
     description = "SCM wrapper and fsspec filesystem";
