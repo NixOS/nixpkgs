@@ -3849,6 +3849,8 @@ self: super: with self; {
 
   epion = callPackage ../development/python-modules/epion { };
 
+  epitran = callPackage ../development/python-modules/epitran { };
+
   epson-projector = callPackage ../development/python-modules/epson-projector { };
 
   equinox = callPackage ../development/python-modules/equinox { };
