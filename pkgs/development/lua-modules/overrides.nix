@@ -711,9 +711,9 @@ in
     propagatedBuildInputs = oa.propagatedBuildInputs ++ [ sol2 ];
 
     postPatch = ''
-      substituteInPlace CMakeLists.txt \
-        --replace "TOML_PLUS_PLUS_SRC" "${tomlplusplus.src}" \
-        --replace "MAGIC_ENUM_SRC" "${magic-enum.src}"
+      substituteInPlace CMakeLists.txt --replace-fail \
+        "TOML_PLUS_PLUS_SRC" \
+        "${tomlplusplus.src}"
     '';
   });
 
@@ -738,9 +738,11 @@ in
 
   vusted = prev.vusted.overrideAttrs (_: {
     postConfigure = ''
+      cat ''${rockspecFilename}
       substituteInPlace ''${rockspecFilename} \
-        --replace '"luasystem = 0.2.1",' '"luasystem",'
+        --replace-fail '"luasystem = 0.2.1",' "'luasystem >= 0.2',"
     '';
+
     # make sure vusted_entry.vim doesn't get wrapped
     postInstall = ''
       chmod -x $out/bin/vusted_entry.vim
