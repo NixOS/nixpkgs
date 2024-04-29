@@ -78,6 +78,22 @@
             "version": "21.0.1"
           }
         },
+        "openjdk22": {
+          "aarch64": {
+            "build": "8",
+            "sha256": "86a7b47c9277f2fd063ec910616b3676d86553ab7d23aa3bd365e51a57be1dc5",
+            "url": "https://github.com/adoptium/temurin22-binaries/releases/download/jdk-22.0.1%2B8/OpenJDK22U-jdk_aarch64_alpine-linux_hotspot_22.0.1_8.tar.gz",
+            "version": "22.0.1"
+          },
+          "packageType": "jdk",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "8",
+            "sha256": "d226e44b3513942db855df9a8737d848f64069848970d4cfd35ee3c38f2525c1",
+            "url": "https://github.com/adoptium/temurin22-binaries/releases/download/jdk-22.0.1%2B8/OpenJDK22U-jdk_x64_alpine-linux_hotspot_22.0.1_8.tar.gz",
+            "version": "22.0.1"
+          }
+        },
         "openjdk8": {
           "packageType": "jdk",
           "vmType": "hotspot",
@@ -154,6 +170,22 @@
             "sha256": "a8fcc43927664ba191c9a77d1013f1f32fec1acc22fe6f0c29d687221f2cc95d",
             "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.1%2B12/OpenJDK21U-jre_x64_alpine-linux_hotspot_21.0.1_12.tar.gz",
             "version": "21.0.1"
+          }
+        },
+        "openjdk22": {
+          "aarch64": {
+            "build": "8",
+            "sha256": "6cac56dde6793d887deea101cfff283dc5f285e1118c21cbd1c4cb69f1072e55",
+            "url": "https://github.com/adoptium/temurin22-binaries/releases/download/jdk-22.0.1%2B8/OpenJDK22U-jre_aarch64_alpine-linux_hotspot_22.0.1_8.tar.gz",
+            "version": "22.0.1"
+          },
+          "packageType": "jre",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "8",
+            "sha256": "e7c26ad00e3ded356b8c4b20b184ccf5bd63ccdccabde8d4a892389f178f1d5b",
+            "url": "https://github.com/adoptium/temurin22-binaries/releases/download/jdk-22.0.1%2B8/OpenJDK22U-jre_x64_alpine-linux_hotspot_22.0.1_8.tar.gz",
+            "version": "22.0.1"
           }
         },
         "openjdk8": {
@@ -384,6 +416,28 @@
             "version": "21.0.1"
           }
         },
+        "openjdk22": {
+          "aarch64": {
+            "build": "8",
+            "sha256": "d8488fa1e4e8c1e318cef4c0fc3842a7f15a4cf52b27054663bb94471f54b3fa",
+            "url": "https://github.com/adoptium/temurin22-binaries/releases/download/jdk-22.0.1%2B8/OpenJDK22U-jdk_aarch64_linux_hotspot_22.0.1_8.tar.gz",
+            "version": "22.0.1"
+          },
+          "packageType": "jdk",
+          "powerpc64le": {
+            "build": "8",
+            "sha256": "4113606ba65044a3cbd7678e1c0d41881d24a2441c8ab8b658b4ac58da624de5",
+            "url": "https://github.com/adoptium/temurin22-binaries/releases/download/jdk-22.0.1%2B8/OpenJDK22U-jdk_ppc64le_linux_hotspot_22.0.1_8.tar.gz",
+            "version": "22.0.1"
+          },
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "8",
+            "sha256": "e59c6bf801cc023a1ea78eceb5e6756277f1564cd0a421ea984efe6cb96cfcf8",
+            "url": "https://github.com/adoptium/temurin22-binaries/releases/download/jdk-22.0.1%2B8/OpenJDK22U-jdk_x64_linux_hotspot_22.0.1_8.tar.gz",
+            "version": "22.0.1"
+          }
+        },
         "openjdk8": {
           "aarch64": {
             "build": "8",
@@ -600,6 +654,28 @@
             "version": "21.0.1"
           }
         },
+        "openjdk22": {
+          "aarch64": {
+            "build": "8",
+            "sha256": "8e5996a2bbae2da9797cff5a62cb2080965e08fd66de24673b29a8e481ec769e",
+            "url": "https://github.com/adoptium/temurin22-binaries/releases/download/jdk-22.0.1%2B8/OpenJDK22U-jre_aarch64_linux_hotspot_22.0.1_8.tar.gz",
+            "version": "22.0.1"
+          },
+          "packageType": "jre",
+          "powerpc64le": {
+            "build": "8",
+            "sha256": "7df4a10fab324181a6c9e8b1e2a45042b8d30490f0fdb937a536f6cd17c907ef",
+            "url": "https://github.com/adoptium/temurin22-binaries/releases/download/jdk-22.0.1%2B8/OpenJDK22U-jre_ppc64le_linux_hotspot_22.0.1_8.tar.gz",
+            "version": "22.0.1"
+          },
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "8",
+            "sha256": "154dbc7975cf765c59bdaa1e693d6c8b009635c9a182d6d6d9f0cfbec5317b4c",
+            "url": "https://github.com/adoptium/temurin22-binaries/releases/download/jdk-22.0.1%2B8/OpenJDK22U-jre_x64_linux_hotspot_22.0.1_8.tar.gz",
+            "version": "22.0.1"
+          }
+        },
         "openjdk8": {
           "aarch64": {
             "build": "8",
@@ -744,6 +820,22 @@
             "version": "21.0.1"
           }
         },
+        "openjdk22": {
+          "aarch64": {
+            "build": "8",
+            "sha256": "80d6fa75e87280202ae7660139870fe50f07fca9dc6c4fbd3f2837cbd70ec902",
+            "url": "https://github.com/adoptium/temurin22-binaries/releases/download/jdk-22.0.1%2B8/OpenJDK22U-jdk_aarch64_mac_hotspot_22.0.1_8.tar.gz",
+            "version": "22.0.1"
+          },
+          "packageType": "jdk",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "8",
+            "sha256": "9445952d4487451af024a9a3f56373df76fbd928d9ff9186988aa27be2e4f10c",
+            "url": "https://github.com/adoptium/temurin22-binaries/releases/download/jdk-22.0.1%2B8/OpenJDK22U-jdk_x64_mac_hotspot_22.0.1_8.tar.gz",
+            "version": "22.0.1"
+          }
+        },
         "openjdk8": {
           "packageType": "jdk",
           "vmType": "hotspot",
@@ -850,6 +942,22 @@
             "sha256": "c21a2648ec21bc4701acfb6b7a1fd90aca001db1efb8454e2980d4c8dcd9e310",
             "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.1%2B12/OpenJDK21U-jre_x64_mac_hotspot_21.0.1_12.tar.gz",
             "version": "21.0.1"
+          }
+        },
+        "openjdk22": {
+          "aarch64": {
+            "build": "8",
+            "sha256": "73a8a0270534db7b4760399f41c573fd1cff5f86f4e68b08988afee0df814889",
+            "url": "https://github.com/adoptium/temurin22-binaries/releases/download/jdk-22.0.1%2B8/OpenJDK22U-jre_aarch64_mac_hotspot_22.0.1_8.tar.gz",
+            "version": "22.0.1"
+          },
+          "packageType": "jre",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "8",
+            "sha256": "d21e84edc1d7cc58fc04bcd9a214b71bf85e8ea348f8659197be3383afcb2b9a",
+            "url": "https://github.com/adoptium/temurin22-binaries/releases/download/jdk-22.0.1%2B8/OpenJDK22U-jre_x64_mac_hotspot_22.0.1_8.tar.gz",
+            "version": "22.0.1"
           }
         },
         "openjdk8": {
