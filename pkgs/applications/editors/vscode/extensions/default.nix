@@ -1822,7 +1822,7 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot-chat";
-          version = "0.14.2024032901";  # compatible with vscode 1.88.1
+          version = "0.14.2024032901"; # compatible with vscode 1.88.1
           hash = "sha256-+6N7IGO5j0wP5Zg8CwapHeKGWiZzc43VM4jCtqJDJIQ=";
         };
         meta = {
