@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, invoke
-, mock
-, pytest7CheckHook
-, pythonOlder
-, setuptools
-, sphinx-rtd-theme
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  invoke,
+  mock,
+  pytest7CheckHook,
+  pythonOlder,
+  setuptools,
+  sphinx-rtd-theme,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -29,13 +30,9 @@ buildPythonPackage rec {
     sed -i "/--no-cov/d" pyproject.toml
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    typing-extensions
-  ];
+  dependencies = [ typing-extensions ];
 
   nativeCheckInputs = [
     invoke
@@ -44,9 +41,7 @@ buildPythonPackage rec {
     sphinx-rtd-theme
   ];
 
-  pythonImportsCheck = [
-    "pydash"
-  ];
+  pythonImportsCheck = [ "pydash" ];
 
   disabledTestPaths = [
     # Disable mypy testing
