@@ -6706,6 +6706,8 @@ self: super: with self; {
     inherit (pkgs) libsodium;
   };
 
+  libolecf-python = callPackage ../development/python-modules/libolecf-python { };
+
   libpcap = callPackage ../development/python-modules/libpcap {
     pkgsLibpcap = pkgs.libpcap; # Needs the C library
   };
