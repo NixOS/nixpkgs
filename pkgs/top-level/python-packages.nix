@@ -6624,6 +6624,8 @@ self: super: with self; {
 
   libewf-python = callPackage ../development/python-modules/libewf-python { };
 
+  libfcrypto-python = callPackage ../development/python-modules/libfcrypto-python { };
+
   libfdt = toPythonModule (pkgs.dtc.override {
     inherit python;
     pythonSupport = true;
