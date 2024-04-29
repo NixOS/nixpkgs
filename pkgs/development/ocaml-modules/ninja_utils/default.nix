@@ -1,12 +1,12 @@
-{ lib, fetchurl, buildDunePackage, re }:
+{ lib, fetchzip, buildDunePackage, re }:
 
 buildDunePackage rec {
   pname = "ninja_utils";
   version = "0.9.0";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://github.com/CatalaLang/ninja_utils/archive/refs/tags/${version}.tar.gz";
-    hash = "sha256-ZYxSrTA6BUN3OEDq4sLv9bMAgsL6z97GpGFG5w96OvY=";
+    hash = "sha256-VSj1IXfczoI3lSAtOqQPIqsxX+HgyxKzlssKd7By/Lo=";
   };
 
   propagatedBuildInputs = [ re ];
