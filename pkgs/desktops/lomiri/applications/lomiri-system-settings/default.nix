@@ -44,13 +44,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-system-settings-unwrapped";
-  version = "1.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-system-settings";
     rev = finalAttrs.version;
-    hash = "sha256-gi6ZujIs0AEDLsqcTNlRNSS8SyqEU6q0+xaDf55XwuM=";
+    hash = "sha256-Po5eArO7zyaGatTf6kqci3DdzFDJSZakeglbiMx9kR8=";
   };
 
   outputs = [
@@ -73,34 +73,12 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-lSKAhtE3oSSv7USvDbbcfBZWAtWMmuKneWawKQABIiM=";
     })
 
-    # Remove when version > 1.0.2
+    # Fixes tests with very-recent python-dbusmock
+    # Remove when version > 1.1.0
     (fetchpatch {
-      name = "0003-lomiri-system-settings-Use-GSettings-for-DT2W-value.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/commit/29e2533efcac23e41b083b11c540c9221b71de7e.patch";
-      hash = "sha256-d52d/b1ZdafaqhOljCg5E3I12XWtFAfG4rmn8CYngB4=";
-    })
-  ] ++ lib.optionals (lib.strings.versionOlder python3.pkgs.python-dbusmock.version "0.30.1") [
-    # Makes tests work with newer dbusmock, but breaks with much-newer dbusmock
-    # See for details:
-    # - https://gitlab.com/ubports/development/core/lomiri-system-settings/-/merge_requests/354
-    # - https://gitlab.com/ubports/development/core/lomiri-system-settings/-/merge_requests/426
-    # Remove/adjust based on merges & next LSS release, and packaged version of dbusmock
-    (fetchpatch {
-      name = "0101-lomiri-system-settings-Pass-missing-parameters-to-dbusmock.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/commit/b9aacd88e3789dbb7578f32b31ad5b239db227a2.patch";
-      hash = "sha256-jf+jMc+6QxONavlX5C9UZyX23jb6fZnYV8mWFyQGGbU=";
-    })
-    (fetchpatch {
-      name = "0102-lomiri-system-settings-Fix-BT-plugin-testIsPaired.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/commit/e39b9728e18635413f07f9c9f6ddc73208260b2a.patch";
-      hash = "sha256-YUtdlQ2XcanXzsxD40SbML7fSxG75yMKz/XnaQN9YP8=";
-    })
-    (fetchpatch {
-      name = "0103-lomiri-system-settings-Fix-BT-plugin-testGet-IconName-Type.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/commit/9ad5d9324945f06f764d3a963dbfc7bccefe574b.patch";
-      # Merge conflict, relevant change handled further down
-      excludes = [ "CMakeLists.txt" ];
-      hash = "sha256-QCgkVos9Q9/8jd25rqzdEKdnBw0Re47X7B9nLH8QOQU=";
+      name = "0003-lomiri-system-settings-Revert-Pass-missing-parameter-to-dbusmock-bluez-PairDevice-function.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/commit/67d9e28ebab8bdb9473d5bf8da2b7573e6848fa2.patch";
+      hash = "sha256-pFWNne2UH3R5Fz9ayHvIpDXDQbXPs0k4b/oRg0fzi+s=";
     })
   ] ++ [
 

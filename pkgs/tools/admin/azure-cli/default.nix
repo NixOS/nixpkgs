@@ -39,8 +39,8 @@ let
     , url
     , sha256
     , description
-    }: python3.pkgs.buildPythonPackage {
-      inherit pname version;
+    , ...
+    }@args: python3.pkgs.buildPythonPackage ({
       format = "wheel";
       src = fetchurl { inherit url sha256; };
       meta = with lib; {
@@ -51,9 +51,11 @@ let
         license = lib.licenses.mit;
         sourceProvenance = [ sourceTypes.fromSource ];
       };
-    };
+    } // (removeAttrs args [ "url" "sha256" "description" ]));
 
-  extensions = callPackages ./extensions-generated.nix { inherit mkAzExtension; };
+  extensions =
+    callPackages ./extensions-generated.nix { inherit mkAzExtension; }
+    // callPackages ./extensions-manual.nix { inherit mkAzExtension; };
 
   extensionDir = stdenvNoCC.mkDerivation {
     name = "azure-cli-extensions";
