@@ -6734,6 +6734,8 @@ self: super: with self; {
     inherit (self) python libxml2;
   });
 
+  libregf-python = callPackage ../development/python-modules/libregf-python { };
+
   librepo = lib.pipe pkgs.librepo [
     toPythonModule
     (p: p.overrideAttrs (super: { meta = super.meta // { outputsToInstall = [ "py" ]; }; }))
