@@ -6635,6 +6635,8 @@ self: super: with self; {
     inherit python;
   });
 
+  libfsapfs-python = callPackage ../development/python-modules/libfsapfs-python { };
+
   libgpiod = callPackage ../development/python-modules/libgpiod {
     inherit (pkgs) libgpiod;
   };
