@@ -15095,6 +15095,8 @@ with pkgs;
   temurin-bin = temurin-bin-21;
   temurin-jre-bin = temurin-jre-bin-21;
 
+  semeru-bin-21 = javaPackages.compiler.semeru-bin.jdk-21;
+  semeru-jre-bin-21 = javaPackages.compiler.semeru-bin.jre-21;
   semeru-bin-17 = javaPackages.compiler.semeru-bin.jdk-17;
   semeru-jre-bin-17 = javaPackages.compiler.semeru-bin.jre-17;
   semeru-bin-16 = javaPackages.compiler.semeru-bin.jdk-16;
@@ -15104,8 +15106,8 @@ with pkgs;
   semeru-bin-8 = javaPackages.compiler.semeru-bin.jdk-8;
   semeru-jre-bin-8 = javaPackages.compiler.semeru-bin.jre-8;
 
-  semeru-bin = semeru-bin-17;
-  semeru-jre-bin = semeru-jre-bin-17;
+  semeru-bin = semeru-bin-21;
+  semeru-jre-bin = semeru-jre-bin-21;
 
   adoptopenjdk-bin-17-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk17-linux.nix { inherit stdenv lib; };
   adoptopenjdk-bin-17-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk17-darwin.nix { inherit lib; };

@@ -50,6 +50,22 @@
             "version": "17.0.9"
           }
         },
+        "openjdk21": {
+          "aarch64": {
+            "build": "13",
+            "sha256": "6404c5fe4a71049d4f80429720b7d3f3e3b0ebea8067b823a6bfb24b9fe69797",
+            "url": "https://github.com/ibmruntimes/semeru21-binaries/releases/download/jdk-21.0.2%2B13_openj9-0.43.0/ibm-semeru-open-jdk_aarch64_linux_21.0.2_13_openj9-0.43.0.tar.gz",
+            "version": "21.0.2"
+          },
+          "packageType": "jdk",
+          "vmType": "openj9",
+          "x86_64": {
+            "build": "13",
+            "sha256": "7a7a186a7a48537519917331ec91d9180b961dcc7ea0f627a23fa369edab6f16",
+            "url": "https://github.com/ibmruntimes/semeru21-binaries/releases/download/jdk-21.0.2%2B13_openj9-0.43.0/ibm-semeru-open-jdk_x64_linux_21.0.2_13_openj9-0.43.0.tar.gz",
+            "version": "21.0.2"
+          }
+        },
         "openjdk8": {
           "aarch64": {
             "build": "06",
@@ -116,6 +132,22 @@
             "version": "17.0.9"
           }
         },
+        "openjdk21": {
+          "aarch64": {
+            "build": "13",
+            "sha256": "d89507e6d05132106122894b76e2e466521be047c928faf3d47827b3343c3631",
+            "url": "https://github.com/ibmruntimes/semeru21-binaries/releases/download/jdk-21.0.2%2B13_openj9-0.43.0/ibm-semeru-open-jre_aarch64_linux_21.0.2_13_openj9-0.43.0.tar.gz",
+            "version": "21.0.2"
+          },
+          "packageType": "jre",
+          "vmType": "openj9",
+          "x86_64": {
+            "build": "13",
+            "sha256": "ce5a4caf90072fcac02301af6f7771f051cf89a6e63f2ff33325c13ac1fbff56",
+            "url": "https://github.com/ibmruntimes/semeru21-binaries/releases/download/jdk-21.0.2%2B13_openj9-0.43.0/ibm-semeru-open-jre_x64_linux_21.0.2_13_openj9-0.43.0.tar.gz",
+            "version": "21.0.2"
+          }
+        },
         "openjdk8": {
           "aarch64": {
             "build": "06",
@@ -178,6 +210,22 @@
             "version": "17.0.9"
           }
         },
+        "openjdk21": {
+          "aarch64": {
+            "build": "13",
+            "sha256": "78d3e37d57f7b1ab37bba82a65a0d575939cbb06c10e0ddc6a3a1c5576d185d3",
+            "url": "https://github.com/ibmruntimes/semeru21-binaries/releases/download/jdk-21.0.2%2B13_openj9-0.43.0/ibm-semeru-open-jdk_aarch64_mac_21.0.2_13_openj9-0.43.0.tar.gz",
+            "version": "21.0.2"
+          },
+          "packageType": "jdk",
+          "vmType": "openj9",
+          "x86_64": {
+            "build": "13",
+            "sha256": "d4918284a06a921dcadeec700d2a22c7e3d9bf09f28b30423563daecececb8f4",
+            "url": "https://github.com/ibmruntimes/semeru21-binaries/releases/download/jdk-21.0.2%2B13_openj9-0.43.0/ibm-semeru-open-jdk_x64_mac_21.0.2_13_openj9-0.43.0.tar.gz",
+            "version": "21.0.2"
+          }
+        },
         "openjdk8": {
           "packageType": "jdk",
           "vmType": "openj9",
@@ -230,6 +278,22 @@
             "sha256": "f5781de29132c04f54341349e99954ec3cfbdbc65fdebdd00feff47c68793299",
             "url": "https://github.com/ibmruntimes/semeru17-binaries/releases/download/jdk-17.0.9%2B9_openj9-0.41.0/ibm-semeru-open-jre_x64_mac_17.0.9_9_openj9-0.41.0.tar.gz",
             "version": "17.0.9"
+          }
+        },
+        "openjdk21": {
+          "aarch64": {
+            "build": "13",
+            "sha256": "69cfdbc1289fc0de58777df56603737f8d1ebf844c3358ea837ca7f6aac03c6e",
+            "url": "https://github.com/ibmruntimes/semeru21-binaries/releases/download/jdk-21.0.2%2B13_openj9-0.43.0/ibm-semeru-open-jre_aarch64_mac_21.0.2_13_openj9-0.43.0.tar.gz",
+            "version": "21.0.2"
+          },
+          "packageType": "jre",
+          "vmType": "openj9",
+          "x86_64": {
+            "build": "13",
+            "sha256": "30372f404fabef92f96d35b979ff9f316361840533a28fa21f0505f1fde8d134",
+            "url": "https://github.com/ibmruntimes/semeru21-binaries/releases/download/jdk-21.0.2%2B13_openj9-0.43.0/ibm-semeru-open-jre_x64_mac_21.0.2_13_openj9-0.43.0.tar.gz",
+            "version": "21.0.2"
           }
         },
         "openjdk8": {
