@@ -119,6 +119,8 @@ in
         wantedBy = [
           "multi-user.target"
         ];
+        # https://github.com/rhasspy/wyoming-faster-whisper/issues/27
+        environment."HF_HUB_CACHE" = "/tmp";
         serviceConfig = {
           DynamicUser = true;
           User = "wyoming-faster-whisper";
