@@ -91,7 +91,7 @@ in
     ];
     postConfigure = ''
       substituteInPlace ''${rockspecFilename} \
-        --replace "'lua_cliargs = 3.0'," "'lua_cliargs >= 3.0',"
+        --replace-fail "'lua_cliargs = 3.0'," "'lua_cliargs >= 3.0-1',"
     '';
     postInstall = ''
       installShellCompletion --cmd busted \
