@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchzip, autoreconfHook, writeScript
+{ stdenv, lib, fetchurl, fetchzip, autoreconfHook, writeScript, fetchpatch
 , modelUrl ? "", modelHash ? "" # Allow overriding the model URL and hash
 }:
 
@@ -23,6 +23,14 @@ in stdenv.mkDerivation (finalAttrs: {
     ];
     hash = "sha256-Qaf+0iOprq7ILRWNRkBjsniByctRa/lFVqiU5ZInF/Q=";
   };
+
+  patches = [
+    # remove when updating
+    (fetchpatch {
+      url = "https://github.com/xiph/rnnoise/commit/372f7b4b76cde4ca1ec4605353dd17898a99de38.patch";
+      hash = "sha256-Dzikb59hjVxd1XIEj/Je4evxtGORkaNcqE+zxOJMSvs=";
+    })
+  ];
 
   model = fetchurl {
     url = model_url;
