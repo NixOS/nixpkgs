@@ -6588,6 +6588,8 @@ self: super: with self; {
     inherit (pkgs) libasyncns;
   };
 
+  libbde-python = callPackage ../development/python-modules/libbde-python { };
+
   libclang = callPackage ../development/python-modules/libclang { };
 
   libcloud = callPackage ../development/python-modules/libcloud { };
