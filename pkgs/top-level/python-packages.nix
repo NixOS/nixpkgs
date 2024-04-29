@@ -6820,6 +6820,8 @@ self: super: with self; {
 
   libvshadow-python = callPackage ../development/python-modules/libvshadow-python { };
 
+  libvslvm-python = callPackage ../development/python-modules/libvslvm-python { };
+
   libxml2 = (toPythonModule (pkgs.libxml2.override {
     pythonSupport = true;
     inherit python;
