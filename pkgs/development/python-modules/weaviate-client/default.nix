@@ -2,7 +2,7 @@
   lib,
   authlib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   grpcio,
   grpcio-health-checking,
   grpcio-tools,
@@ -17,14 +17,16 @@
 
 buildPythonPackage rec {
   pname = "weaviate-client";
-  version = "4.5.1";
+  version = "4.5.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-gElboFIwEMiwN6HhpPPT+tcmh0pMiDjq7R8TG2eMMKI=";
+  src = fetchFromGitHub {
+    owner = "weaviate";
+    repo = "weaviate-python-client";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-P1GiTsRDbJssoLZR//c+b4IJ2Zyb/0PaBLL+wmmI6zc=";
   };
 
   pythonRelaxDeps = [
