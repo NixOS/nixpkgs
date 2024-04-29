@@ -94,7 +94,7 @@ in buildFHSEnv rec {
                 echo "export NIXPKGS_IS_QUESTA_WRAPPER=1" >> "$wrapped"
                 ;;
         esac
-        echo "$wrapper $prog \"\$@\"" >> "$wrapped"
+        echo "exec $wrapper $prog \"\$@\"" >> "$wrapped"
     done
 
     cd $out
