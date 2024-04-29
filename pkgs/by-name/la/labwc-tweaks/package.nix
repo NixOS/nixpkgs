@@ -1,44 +1,42 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, meson
-, ninja
+, cmake
+, perl
 , pkg-config
-, gtk3
-, libxml2
+, qt6
 , xkeyboard_config
-, wrapGAppsHook
 , unstableGitUpdater
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "labwc-tweaks";
-  version = "unstable-2024-04-02";
+  version = "0-unstable-2024-04-27";
 
   src = fetchFromGitHub {
     owner = "labwc";
     repo = "labwc-tweaks";
-    rev = "a1a3cfaefd1908de8752d0d6d6b7170b04ee075c";
-    hash = "sha256-uvUsoqiQBuNMBQWAxl/tCIvWsEYmZ4dQ31TrznI/XcA=";
+    rev = "9007079640e0f38c1d69ac94899229354a5c67b2";
+    hash = "sha256-klKPHAhJ6fedFojXPfesjs1dG5NJhBZkzynhka5vD8M=";
   };
 
   nativeBuildInputs = [
-    meson
-    ninja
+    cmake
+    perl
     pkg-config
-    wrapGAppsHook
+    qt6.qttools
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    gtk3
-    libxml2
+    qt6.qtbase
+    qt6.qtwayland
   ];
 
   strictDeps = true;
 
   postPatch = ''
-    substituteInPlace stack-lang.c --replace /usr/share/X11/xkb ${xkeyboard_config}/share/X11/xkb
-    substituteInPlace theme.c --replace /usr/share /run/current-system/sw/share
+    substituteInPlace tweaks-qt/gen-layout-list --replace-fail /usr/share/X11/xkb ${xkeyboard_config}/share/X11/xkb
   '';
 
   passthru.updateScript = unstableGitUpdater { };
@@ -51,4 +49,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ AndersonTorres romildo ];
   };
-})
+}
