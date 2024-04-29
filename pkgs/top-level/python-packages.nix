@@ -2968,6 +2968,8 @@ self: super: with self; {
 
   dfdiskcache = callPackage ../development/python-modules/dfdiskcache { };
 
+  dfvfs = callPackage ../development/python-modules/dfvfs { };
+
   dfwinreg = callPackage ../development/python-modules/dfwinreg { };
 
   diagrams = callPackage ../development/python-modules/diagrams { };
