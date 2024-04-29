@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   dontFixup = true;
 
   meta = with lib; {
-    description = "EnergyPlus™ is a whole building energy simulation program that engineers, architects, and researchers use to model both energy consumption and water use in buildings. ";
+    description = "A whole building energy simulation program to model both energy consumption and water use";
     homepage = "https://github.com/NREL/EnergyPlus";
     license = licenses.energyplus;
     mainProgram = "energyplus";
