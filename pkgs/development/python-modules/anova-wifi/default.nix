@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, poetry-core
-, aiohttp
-, sensor-state-data
-, pytestCheckHook
-, pytest-asyncio
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  poetry-core,
+  aiohttp,
+  sensor-state-data,
+  pytestCheckHook,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
@@ -24,13 +25,11 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-      substituteInPlace pyproject.toml \
-        --replace-fail "--cov=anova_wifi --cov-report=term-missing:skip-covered" ""
-    '';
+    substituteInPlace pyproject.toml \
+      --replace-fail "--cov=anova_wifi --cov-report=term-missing:skip-covered" ""
+  '';
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
