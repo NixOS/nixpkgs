@@ -6727,6 +6727,8 @@ self: super: with self; {
     (p: p.py)
   ];
 
+  libqcow-python = callPackage ../development/python-modules/libqcow-python { };
+
   libredwg = toPythonModule (pkgs.libredwg.override {
     enablePython = true;
     inherit (self) python libxml2;
