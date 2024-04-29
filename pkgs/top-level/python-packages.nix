@@ -6618,6 +6618,8 @@ self: super: with self; {
 
   libevdev = callPackage ../development/python-modules/libevdev { };
 
+  libevt-python = callPackage ../development/python-modules/libevt-python { };
+
   libfdt = toPythonModule (pkgs.dtc.override {
     inherit python;
     pythonSupport = true;
