@@ -9094,6 +9094,12 @@
     github = "joshua-cooper";
     githubId = 35612334;
   };
+  jcaesar = {
+    name = "Julius Michaelis";
+    matrix = "@julius:mtx.liftm.de";
+    github = "jcaesar";
+    githubId = 1753388;
+  };
   jceb = {
     name = "Jan Christoph Ebersbach";
     email = "jceb@e-jc.de";
