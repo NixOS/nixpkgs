@@ -31248,6 +31248,13 @@ with pkgs;
 
   manuskript = libsForQt5.callPackage ../applications/editors/manuskript { };
 
+  metacubexd = callPackage ../by-name/me/metacubexd/package.nix {
+    pnpm = callPackage ../development/tools/pnpm/generic.nix {
+      version = "9.1.4";
+      hash = "sha256-MKGAGsTnI3ee/tE6IfTDn562yfu0ztEBvOBrQiWT18k=";
+    };
+  };
+
   minari = python3Packages.toPythonApplication python3Packages.minari;
 
   mindforger = libsForQt5.callPackage ../applications/editors/mindforger { };
