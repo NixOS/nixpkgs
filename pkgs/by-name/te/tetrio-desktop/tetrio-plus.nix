@@ -14,16 +14,17 @@
 , asar
 
 , tetrio-src
+, tetrio-version
 }:
 
 let
-  version = "unstable-2024-04-20";
+  version = "0.27.2";
 
   src = fetchFromGitLab {
     owner = "UniQMG";
     repo = "tetrio-plus";
-    rev = "8091b969cddbff32254eaebf8088efb63f4c519a";
-    hash = "sha256-ow9DrS3jWNtTbz8Obj4l8Zdr3u9m7f9V3dYUE2H3thk=";
+    rev = "electron-v${version}-tetrio-v${lib.versions.major tetrio-version}";
+    hash = "sha256-PvTivTt1Zuvk5gaCcQDcIBFsUf/ZG7TJYXqm0NP++Bw=";
     fetchSubmodules = true;
 
     # tetrio-plus uses this info for displaying its version,
@@ -52,7 +53,7 @@ let
 
     sourceRoot = "${src.name}/tpsecore";
 
-    cargoHash = "sha256-r5Qcu2u/ju0b/1PWz9tE5jNlNS3PfzS79Gm1XSKA3W4=";
+    cargoHash = "sha256-K9l8wQOtjf3l8gZMMdVnaNrgzVWGl62iBBcpA+ulJbw=";
 
     nativeBuildInputs = [
       wasm-pack
@@ -126,6 +127,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Finally, we install the tetrio-plus code where the above patch script expects
     cp -r $src out/tetrioplus
     chmod -R u+w out/tetrioplus
+
+    # Disable the uninstall button in the tetrio-plus popup,
+    # as it doesn't make sense to mutably uninstall it in a nix package
+    substituteInPlace out/tetrioplus/desktop-manifest.js \
+      --replace-fail '"show_uninstaller_button": true' '"show_uninstaller_button": false'
 
     # We don't need the tpsecore source code bundled
     rm -rf out/tetrioplus/tpsecore/
