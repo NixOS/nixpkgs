@@ -6700,6 +6700,8 @@ self: super: with self; {
 
   libmr = callPackage ../development/python-modules/libmr { };
 
+  libmsiecf-python = callPackage ../development/python-modules/libmsiecf-python { };
+
   libnacl = callPackage ../development/python-modules/libnacl {
     inherit (pkgs) libsodium;
   };
