@@ -7,7 +7,7 @@
 , gtk3
 , libxml2
 , xkeyboard_config
-, wrapGAppsHook
+, wrapGAppsHook3
 , unstableGitUpdater
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
