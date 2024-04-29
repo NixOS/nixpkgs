@@ -6590,6 +6590,8 @@ self: super: with self; {
 
   libbde-python = callPackage ../development/python-modules/libbde-python { };
 
+  libcaes-python = callPackage ../development/python-modules/libcaes-python { };
+
   libclang = callPackage ../development/python-modules/libclang { };
 
   libcloud = callPackage ../development/python-modules/libcloud { };
