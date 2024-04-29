@@ -9920,6 +9920,8 @@ self: super: with self; {
 
   pkuseg = callPackage ../development/python-modules/pkuseg { };
 
+  plaso = callPackage ../development/python-modules/plaso { };
+
   playwright = callPackage ../development/python-modules/playwright { };
 
   playwright-stealth = callPackage ../development/python-modules/playwright-stealth { };
