@@ -152,11 +152,10 @@ let
 
 in lib.makeExtensible (self: ({
   nix_2_3 = (common {
-    version = "2.3.17";
-    hash = "sha256-EK0pgHDekJFqr0oMj+8ANIjq96WPjICe2s0m4xkUdH4=";
+    version = "2.3.18";
+    hash = "sha256-jBz2Ub65eFYG+aWgSI3AJYvLSghio77fWQiIW1svA9U=";
     patches = [
       patch-monitorfdhup
-      ./patches/2_3/CVE-2024-27297.patch
     ];
     maintainers = with lib.maintainers; [ flokli raitobezarius ];
   }).override { boehmgc = boehmgc-nix_2_3; };
