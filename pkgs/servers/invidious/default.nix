@@ -16,8 +16,7 @@ let
 in
 crystal.buildCrystalPackage rec {
   pname = "invidious";
-  version = "2.20240427";
-  # inherit (versions.invidious) version;
+  inherit (versions.invidious) version;
 
   src = fetchFromGitea {
     domain = "gitea.invidious.io";
@@ -25,8 +24,7 @@ crystal.buildCrystalPackage rec {
     repo = pname;
     fetchSubmodules = true;
     rev = "v${version}";
-    hash = "sha256-YZ+uhn1ESuRTZxAMoxKCpxEaUfeCUqOrSr3LkdbrTkU=";
-    # inherit (versions.invidious) rev hash;
+    inherit (versions.invidious) hash;
   };
 
   postPatch =
