@@ -1,17 +1,18 @@
-{ lib
-, authlib
-, buildPythonPackage
-, fetchPypi
-, grpcio
-, grpcio-health-checking
-, grpcio-tools
-, httpx
-, pydantic
-, pythonOlder
-, pythonRelaxDepsHook
-, setuptools-scm
-, tqdm
-, validators
+{
+  lib,
+  authlib,
+  buildPythonPackage,
+  fetchPypi,
+  grpcio,
+  grpcio-health-checking,
+  grpcio-tools,
+  httpx,
+  pydantic,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  setuptools-scm,
+  tqdm,
+  validators,
 }:
 
 buildPythonPackage rec {
@@ -31,13 +32,9 @@ buildPythonPackage rec {
     "validators"
   ];
 
-  build-system = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     authlib
@@ -52,9 +49,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  pythonImportsCheck = [
-    "weaviate"
-  ];
+  pythonImportsCheck = [ "weaviate" ];
 
   meta = with lib; {
     description = "Python native client for easy interaction with a Weaviate instance";
