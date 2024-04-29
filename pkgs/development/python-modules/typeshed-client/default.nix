@@ -5,6 +5,7 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, typing-extensions
 }:
 
 buildPythonPackage rec {
@@ -12,7 +13,7 @@ buildPythonPackage rec {
   version = "2.5.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "JelleZijlstra";
@@ -21,12 +22,13 @@ buildPythonPackage rec {
     hash = "sha256-lITreXYn/ZOc1fF2Sqcn8UDrZAjWYfjFSEaAxqTHb4s=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     importlib-resources
+    typing-extensions
   ];
 
   nativeCheckInputs = [
