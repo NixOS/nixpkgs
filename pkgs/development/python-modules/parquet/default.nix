@@ -3,22 +3,30 @@
 , fetchFromGitHub
 , pytestCheckHook
 , python-snappy
+, pythonOlder
+, setuptools
 , thriftpy2
 }:
 
 buildPythonPackage rec {
   pname = "parquet";
   version = "1.3.1";
-  format = "setuptools";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jcrobak";
     repo = "parquet-python";
-    rev = "v${version}";
-    sha256 = "1ahvg4dz9fzi4vdm9jmslq3v3jahjj17fdcc5fljgcw6h9yxyl2r";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-WVDffYKGsyepK4w1d4KUUMmxB6a6ylTbJvG79Bt5G6o=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     python-snappy
     thriftpy2
   ];
@@ -37,9 +45,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python implementation of the parquet columnar file format";
-    mainProgram = "parquet";
     homepage = "https://github.com/jcrobak/parquet-python";
+    changelog = "https://github.com/jcrobak/parquet-python/releases/tag/v${version}";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "parquet";
   };
 }
