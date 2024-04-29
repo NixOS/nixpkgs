@@ -3546,12 +3546,6 @@
     githubId = 1118859;
     name = "Scott Worley";
   };
-  ChlorideCull = {
-    email = "nixrelated@chcl.se";
-    github = "ChlorideCull";
-    githubId = 4977063;
-    name = "Sebastian Johansson";
-  };
   choochootrain = {
     email = "hurshal@imap.cc";
     github = "choochootrain";
@@ -7353,12 +7347,6 @@
     github = "gilice";
     githubId = 104317939;
     name = "gilice";
-  };
-  gilligan = {
-    email = "tobias.pflug@gmail.com";
-    github = "gilligan";
-    githubId = 27668;
-    name = "Tobias Pflug";
   };
   gin66 = {
     email = "jochen@kiemes.de";
@@ -16318,6 +16306,12 @@
     github = "purcell";
     githubId = 5636;
     name = "Steve Purcell";
+  };
+  purrpurrn = {
+    email = "scrcpynovideoaudiocodecraw+nixpkgs@gmail.com";
+    github = "purrpurrn";
+    githubId = 142632643;
+    name = "purrpurrn";
   };
   putchar = {
     email = "slim.cadoux@gmail.com";
