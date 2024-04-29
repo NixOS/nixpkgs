@@ -2687,21 +2687,21 @@ buildLuarocksPackage {
   };
 }) {};
 
-rocks-dev-nvim = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder, nvim-nio, rocks-nvim, rtp-nvim }:
+rocks-dev-nvim = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, lua, luaOlder, nvim-nio, rocks-nvim }:
 buildLuarocksPackage {
   pname = "rocks-dev.nvim";
-  version = "1.2.1-1";
+  version = "1.1.2-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/rocks-dev.nvim-1.2.1-1.rockspec";
-    sha256 = "1wzyaa61z3f71pd8rr5ygl7iwk1r5g0kw8n4f24ibirx27nfbqjb";
+    url    = "mirror://luarocks/rocks-dev.nvim-1.1.2-1.rockspec";
+    sha256 = "09yz84akkparvqfsjpslxpv3wzvkjrbqil8fxwl5crffggn5mz1b";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/nvim-neorocks/rocks-dev.nvim/archive/v1.2.1.zip";
-    sha256 = "0rn9bwrxyfg7gdmanp5l4nyg9n3cp6cdqrccr53h8fcimk9vxxfa";
+    url    = "https://github.com/nvim-neorocks/rocks-dev.nvim/archive/v1.1.2.zip";
+    sha256 = "19g8dlz2zch0sz21zm92l6ic81bx68wklidjw94xrjyv26139akc";
   };
 
-  disabled = luaOlder "5.1";
-  propagatedBuildInputs = [ nvim-nio rocks-nvim rtp-nvim ];
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua nvim-nio rocks-nvim ];
 
   meta = {
     homepage = "https://github.com/nvim-neorocks/rocks-dev.nvim";
