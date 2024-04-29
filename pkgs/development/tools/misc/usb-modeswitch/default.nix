@@ -10,7 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "18wbbxc5cfsmikba0msdvd5qlaga27b32nhrzicyd9mdddp265f2";
   };
 
-  patches = [ ./configurable-usb-modeswitch.patch ];
+  patches = [
+    ./configurable-usb-modeswitch.patch
+    ./pkg-config.patch
+  ];
 
   # Remove attempts to write to /etc and /var/lib.
   postPatch = ''
