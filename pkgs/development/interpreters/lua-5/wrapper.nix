@@ -10,7 +10,7 @@
 # Create a lua executable that knows about additional packages.
 let
   env = let
-    paths =  requiredLuaModules (extraLibs ++ [ lua ] );
+    paths = [ lua ] ++ requiredLuaModules extraLibs;
   in buildEnv {
     name = "${lua.name}-env";
 

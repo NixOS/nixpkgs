@@ -641,7 +641,8 @@ in
       tar xf *.tar.gz
     '';
 
-    propagatedBuildInputs = [ lua luaposix
+    propagatedBuildInputs = [
+      luaposix
       readline.out
     ];
 
