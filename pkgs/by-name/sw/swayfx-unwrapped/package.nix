@@ -27,6 +27,7 @@
   xcbutilwm,
   wlroots,
   testers,
+  nixosTests,
   # Used by the NixOS module:
   isNixOS ? false,
   enableXWayland ? true,
@@ -121,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
+      basic = nixosTests.swayfx;
       version = testers.testVersion {
         package = finalAttrs.finalPackage;
         command = "sway --version";
