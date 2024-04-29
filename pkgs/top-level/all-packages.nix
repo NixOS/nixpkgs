@@ -24740,8 +24740,6 @@ with pkgs;
     harfbuzz = harfbuzzFull;
   };
 
-  tepl = callPackage ../development/libraries/tepl { };
-
   termbench-pro = callPackage ../development/libraries/termbench-pro { fmt = fmt_8; };
 
   telepathy-glib = callPackage ../development/libraries/telepathy/glib { };

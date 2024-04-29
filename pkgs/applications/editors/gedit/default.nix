@@ -9,9 +9,9 @@
 , gtk3
 , gtk-mac-integration
 , glib
-, tepl
 , libgedit-amtk
 , libgedit-gtksourceview
+, libgedit-tepl
 , libpeas
 , libxml2
 , gsettings-desktop-schemas
@@ -65,13 +65,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    tepl
     glib
     gsettings-desktop-schemas
     gspell
     gtk3
     libgedit-amtk
     libgedit-gtksourceview
+    libgedit-tepl
     libpeas
   ] ++ lib.optionals stdenv.isDarwin [
     gtk-mac-integration

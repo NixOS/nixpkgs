@@ -1,14 +1,15 @@
 { stdenv
 , lib
-, fetchurl
+, fetchFromGitHub
 , meson
 , mesonEmulatorHook
 , ninja
-, gnome
 , gobject-introspection
 , gtk3
 , icu
+, libhandy
 , libgedit-amtk
+, libgedit-gfls
 , libgedit-gtksourceview
 , pkg-config
 , gtk-doc
@@ -16,14 +17,16 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "tepl";
-  version = "6.8.0";
+  pname = "libgedit-tepl";
+  version = "6.10.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Rubl8b/bxS5ZVvBq3VdenHaXxnPVPTgD3+do9JC1YPA=";
+  src = fetchFromGitHub {
+    owner = "gedit-technology";
+    repo = "libgedit-tepl";
+    rev = version;
+    hash = "sha256-lGmOaDNu+iqwpeaP0AL28exoTqx1j03Z8gdhTBgk1i8=";
   };
 
   strictDeps = true;
@@ -40,28 +43,18 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     icu
+    libhandy
   ];
 
   propagatedBuildInputs = [
     gtk3
     libgedit-amtk
+    libgedit-gfls
     libgedit-gtksourceview
   ];
 
-  doCheck = false;
-  # TODO: one test fails because of
-  # (./test-file-metadata:20931): Tepl-WARNING **: 14:41:36.942: GVfs metadata
-  # is not supported. Fallback to TeplMetadataManager. Either GVfs is not
-  # correctly installed or GVfs metadata are not supported on this platform. In
-  # the latter case, you should configure Tepl with --disable-gvfs-metadata.
-
-  passthru.updateScript = gnome.updateScript {
-    packageName = pname;
-    versionPolicy = "odd-unstable";
-  };
-
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Projects/Tepl";
+    homepage = "https://github.com/gedit-technology/libgedit-tepl";
     description = "Text editor product line";
     maintainers = with maintainers; [ manveru bobby285271 ];
     license = licenses.lgpl3Plus;

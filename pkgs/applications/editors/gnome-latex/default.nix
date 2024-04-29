@@ -10,8 +10,8 @@
 , gspell
 , libgedit-amtk
 , libgedit-gtksourceview
+, libgedit-tepl
 , libgee
-, tepl
 , gnome
 , glib
 , pkg-config
@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
     gspell
     libgedit-amtk
     libgedit-gtksourceview
+    libgedit-tepl
     libgee
     libxml2
-    tepl
   ];
 
   configureFlags = [
