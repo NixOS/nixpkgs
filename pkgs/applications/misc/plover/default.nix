@@ -18,7 +18,6 @@
         buildPythonPackage
         pyqt5
         pytestCheckHook
-        pytest
         pytest-qt
         pyserial
         setuptools
@@ -40,9 +39,9 @@
           sha256 = "sha256-A75OMzmEn0VmDAvmQCp6/7uptxzwWJTwsih3kWlYioA=";
         };
 
-        nativeCheckInputs = [ pytest ];
         propagatedBuildInputs = [ setuptools ];
 
+        nativeCheckInputs = [ pytestCheckHook ];
         pythonImportsCheck = [ "plover_stroke" ];
 
         meta = {
@@ -67,12 +66,10 @@
           sha256 = "sha256-zwD2sRYTY1Kmm/Ag2hps9VRdUyQoi4zKtDPR+F52t9A=";
         };
 
-        nativeCheckInputs = [ pytest ];
         propagatedBuildInputs = [ setuptools ];
 
-        pythonImportsCheck = [
-          "rtf_tokenize"
-        ];
+        nativeCheckInputs = [ pytestCheckHook ];
+        pythonImportsCheck = [ "rtf_tokenize" ];
 
         meta = {
           description = "Simple RTF tokenizer";
@@ -85,7 +82,7 @@
     in
     buildPythonPackage rec {
       pname = "plover";
-      version = "4.0.0.dev12";
+      version = "4.0.0rc2";
 
       pyproject = true;
 
@@ -93,7 +90,7 @@
         owner = "openstenoproject";
         repo = "plover";
         rev = "refs/tags/v${version}";
-        sha256 = "sha256-qK6Z97r5dr5Hr0JkY5WaqYE67FEiXi12Pu7Y+wS0Zm4=";
+        sha256 = "sha256-rmMec/BbvOJ92u8Tmp3Kv2YezzJxB/L8UrDntTDSKj4=";
       };
 
       nativeBuildInputs = [
