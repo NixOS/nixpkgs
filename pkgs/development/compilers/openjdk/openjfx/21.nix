@@ -7,7 +7,7 @@
 
 let
   major = "21";
-  update = "";
+  update = ".0.3";
   build = "-ga";
   repover = "${major}${update}${build}";
   gradle_ = (gradle_7.override {
@@ -30,9 +30,9 @@ let
 
     src = fetchFromGitHub {
       owner = "openjdk";
-      repo = "jfx";
+      repo = "jfx21u";
       rev = repover;
-      hash = "sha256-deNAGfnA6gwcAa64l0AWdkX+vJd3ZOfIgAifSl+/m+s=";
+      hash = "sha256-7z0GIbkQwG9mXY9dssaicqaKpMo3FkNEpyAvkswoQQ4=";
     };
 
     buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4 ];
