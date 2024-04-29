@@ -2853,6 +2853,22 @@ let
 
       ms-python.python = callPackage ./ms-python.python { };
 
+      ms-python.debugpy = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "debugpy";
+          publisher = "ms-python";
+          version = "2023.3.13121011";
+          hash = "sha256-owYUEyQl2FQytApfuI97N4y9p7/dL0lu6EBk/AzSMjw=";
+        };
+        meta = {
+          description = "Python debugger (debugpy) extension for VS Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.debugpy";
+          homepage = "https://github.com/Microsoft/vscode-python-debugger";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.carlthome ];
+        };
+      };
+
       ms-python.vscode-pylance = callPackage ./ms-python.vscode-pylance { };
 
       ms-toolsai.datawrangler = buildVscodeMarketplaceExtension {
