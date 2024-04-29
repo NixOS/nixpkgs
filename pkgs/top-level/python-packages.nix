@@ -6643,6 +6643,8 @@ self: super: with self; {
 
   libfshfs-python = callPackage ../development/python-modules/libfshfs-python { };
 
+  libfsntfs-python = callPackage ../development/python-modules/libfsntfs-python { };
+
   libgpiod = callPackage ../development/python-modules/libgpiod {
     inherit (pkgs) libgpiod;
   };
