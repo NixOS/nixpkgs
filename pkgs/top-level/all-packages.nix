@@ -38807,7 +38807,9 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
-  why3 = callPackage ../applications/science/logic/why3 { };
+  why3 = callPackage ../applications/science/logic/why3 {
+    coqPackages = coqPackages_8_18;
+  };
 
   wayback-machine-archiver = callPackage ../tools/misc/wayback-machine-archiver { };
 
