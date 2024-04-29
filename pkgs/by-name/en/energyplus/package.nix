@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  patchelf,
   python3,
 }:
 stdenv.mkDerivation rec {
@@ -16,29 +17,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-g8lWijcZvNkFclSiStU+7HWfm+F8LobP2kIJNV6zczE=";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     cmake
     python3
   ];
 
-  installPhase = ''
-    mkdir -p $out
-    export SRC=$(pwd)
-
-    cd $out
-    cmake $SRC
-
-    cd $SRC
-    make -j 32
-
-    mkdir -p $out/lib
-    cp -R $SRC/Products/* $out/lib
-
-    mkdir -p $out/bin
-    cp $out/lib/"${pname}-${version}" $out/bin/energyplus
-  '';
-
-  # It might be desirable to do the fixup. According to the error message this would probably involve ${removeReferencesTo}/bin/remove-references-to ?
+  # this removes references to libenergyplus which are needed.
+  # At the time of writing this I don't know how else to solve this
   dontFixup = true;
 
   meta = with lib; {
