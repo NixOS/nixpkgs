@@ -6,6 +6,8 @@
 , click-option-group
 , fetchPypi
 , hatchling
+, jinja2
+, pydantic
 , pytestCheckHook
 , pythonOlder
 , tomli
@@ -14,39 +16,59 @@
 
 buildPythonPackage rec {
   pname = "typed-settings";
-  version = "24.1.0";
-  format = "pyproject";
+  version = "24.2.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "typed_settings";
     inherit version;
-    hash = "sha256-luUfVsN6uNYZkXfcAUc5P6Y+WYpfAdU6D01kgQMNniw=";
+    hash = "sha256-BuosfIlCgCD+h7eA/6/oE98zdURaT3eik+dysBpJR+Y=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
   ];
 
-  propagatedBuildInputs = [
-    attrs
-    cattrs
-    click-option-group
-  ] ++ lib.optionals (pythonOlder "3.11") [
+  dependencies = lib.optionals (pythonOlder "3.11") [
     tomli
   ];
 
   passthru.optional-dependencies = {
+    all = [
+      attrs
+      cattrs
+      click
+      click-option-group
+      jinja2
+      pydantic
+    ];
+    attrs = [
+      attrs
+    ];
+    cattrs = [
+      cattrs
+    ];
     click = [
       click
     ];
+    option-groups = [
+      click
+      click-option-group
+    ];
+    jinja = [
+      jinja2
+    ];
+    pydantic = [
+      pydantic
+    ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     typing-extensions
-  ] ++ passthru.optional-dependencies.click;
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pytestFlagsArray = [
     "tests"
@@ -55,16 +77,25 @@ buildPythonPackage rec {
   disabledTests = [
     # AssertionError: assert [OptionInfo(p...
     "test_deep_options"
+    # 1Password CLI is not available
+    "TestOnePasswordLoader"
+    "test_handle_op"
+  ];
+
+  disabledTestPaths = [
+    # 1Password CLI is not available
+    "tests/test_onepassword.py"
   ];
 
   pythonImportsCheck = [
     "typed_settings"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Typed settings based on attrs classes";
     homepage = "https://gitlab.com/sscherfke/typed-settings";
     changelog = "https://gitlab.com/sscherfke/typed-settings/-/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }
