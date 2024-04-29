@@ -43,7 +43,6 @@
     "fortify3"
     "pic"
     "relro"
-    "stackprotector"
     "strictoverflow"
   ] ++ lib.optional (with stdenvNoCC;
     # Musl-based platforms will keep "pie", other platforms will not.
@@ -57,6 +56,7 @@
     #    - static armv7l, where compilation fails.
     && !(targetPlatform.isAarch && targetPlatform.isStatic)
   ) "pie"
+  ++ lib.optional (targetPlatform.libc != "uclibc") "stackprotector"
 
 # Darwin code signing support utilities
 , postLinkSignHook ? null, signingUtils ? null
@@ -160,7 +160,7 @@ stdenvNoCC.mkDerivation {
         '(${concatStringsSep " " (map (pkg: "\"${pkg}\"") pkgs)}))
     '';
 
-    inherit defaultHardeningFlags;
+    defaultHardeningFlags = lib.sort (a: b: a < b) defaultHardeningFlags;
   };
 
   dontBuild = true;
@@ -425,7 +425,7 @@ stdenvNoCC.mkDerivation {
     wrapperName = "BINTOOLS_WRAPPER";
     inherit dynamicLinker targetPrefix suffixSalt coreutils_bin;
     inherit bintools_bin libc_bin libc_dev libc_lib;
-    default_hardening_flags_str = builtins.toString defaultHardeningFlags;
+    default_hardening_flags_str = builtins.toString (lib.sort (a: b: a < b) defaultHardeningFlags);
   };
 
   meta =
