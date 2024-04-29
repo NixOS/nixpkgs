@@ -25,8 +25,8 @@
 
 let
   major = "22";
-  update = "";
-  build = "+30";
+  update = ".0.1";
+  build = "-ga";
   repover = "${major}${update}${build}";
 
   icuVersionWithSep = s: "73${s}1";
@@ -44,9 +44,9 @@ let
 
     src = fetchFromGitHub {
       owner = "openjdk";
-      repo = "jfx";
+      repo = "jfx22u";
       rev = repover;
-      hash = "sha256-sZF7ZPC0kgTTxWgtkxmGtOlfroGPGVZcMw0/wSTJUxQ=";
+      hash = "sha256-VoEufSO+LciUCvoAM86MG1iMjCA3FSb60Ik4OP2Rk/Q=";
     };
 
     buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4 ];
