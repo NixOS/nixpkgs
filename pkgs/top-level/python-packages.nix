@@ -769,6 +769,8 @@ self: super: with self; {
 
   art = callPackage ../development/python-modules/art { };
 
+  artifacts = callPackage ../development/python-modules/artifacts { };
+
   arviz = callPackage ../development/python-modules/arviz { };
 
   arxiv2bib = callPackage ../development/python-modules/arxiv2bib { };
