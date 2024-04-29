@@ -3,29 +3,34 @@
 , fetchFromGitHub
 , gevent
 , pytestCheckHook
+, setuptools
+, pythonOlder
 , watchdog
 }:
 
 buildPythonPackage rec {
   pname = "watchdog-gevent";
   version = "0.1.1";
-  format = "setuptools";
+  pyproject = true;
 
-  # Need to fetch from github because tests are not present in pypi
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "Bogdanp";
     repo = "watchdog_gevent";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-FESm3fNuLmOg2ilI/x8U9LuAimHLnahcTHYzW/nzOVY=";
   };
-
-  propagatedBuildInputs = [ watchdog gevent ];
 
   postPatch = ''
     sed -i setup.cfg \
       -e 's:--cov watchdog_gevent::' \
       -e 's:--cov-report html::'
   '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [ gevent watchdog ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
