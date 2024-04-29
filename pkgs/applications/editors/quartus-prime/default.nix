@@ -18,6 +18,7 @@ let
 # I think questa_fse/linux/vlm checksums itself, so use FHSUserEnv instead of `patchelf`
 in buildFHSEnv rec {
   pname = "quartus-prime-lite"; # wrapped
+  inherit (unwrapped) version;
 
   targetPkgs = pkgs: with pkgs; [
     (runCommand "ld-lsb-compat" {} (''
@@ -160,4 +161,6 @@ in buildFHSEnv rec {
       '';
     };
   };
+
+  inherit (unwrapped) meta;
 }
