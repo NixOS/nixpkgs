@@ -11596,12 +11596,6 @@
     githubId = 918448;
     name = "Anthony Lodi";
   };
-  loewenheim = {
-    email = "loewenheim@mailbox.org";
-    github = "loewenheim";
-    githubId = 7622248;
-    name = "Sebastian Zivota";
-  };
   logo = {
     email = "logo4poop@protonmail.com";
     matrix = "@logo4poop:matrix.org";
