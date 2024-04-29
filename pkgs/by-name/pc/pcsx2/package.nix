@@ -15,17 +15,13 @@
 , lz4
 , makeWrapper
 , pkg-config
-, qtbase
-, qtsvg
-, qttools
-, qtwayland
+, qt6
 , SDL2
 , soundtouch
 , strip-nondeterminism
 , vulkan-headers
 , vulkan-loader
 , wayland
-, wrapQtAppsHook
 , xz
 , zip
 , zstd
@@ -39,8 +35,15 @@ let
     rev = "e3b354f144de71d2b87471166cca8911867c1dfd";
     sha256 = "sha256-H7cFyBYZumcCZ0/FFOFZoChoi0XPs4siA4dHcFt9U7k=";
   };
+  inherit (qt6)
+    qtbase
+    qtsvg
+    qttools
+    qtwayland
+    wrapQtAppsHook
+  ;
 in
-llvmPackages_17.stdenv.mkDerivation rec {
+llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
   pname = "pcsx2";
   version = "1.7.5587";
 
@@ -48,7 +51,7 @@ llvmPackages_17.stdenv.mkDerivation rec {
     owner = "PCSX2";
     repo = "pcsx2";
     fetchSubmodules = true;
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-PCZ1r6x28Z5FEVMXWm4oxpTknz/XEiwo0rRGhn4B33g=";
   };
 
@@ -59,7 +62,7 @@ llvmPackages_17.stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DDISABLE_ADVANCE_SIMD=ON"
     "-DUSE_LINKED_FFMPEG=ON"
-    "-DPCSX2_GIT_REV=v${version}"
+    "-DPCSX2_GIT_REV=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
@@ -137,4 +140,4 @@ llvmPackages_17.stdenv.mkDerivation rec {
     mainProgram = "pcsx2-qt";
     platforms = platforms.x86_64;
   };
-}
+})
