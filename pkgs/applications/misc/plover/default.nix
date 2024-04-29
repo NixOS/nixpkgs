@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python310Packages, wmctrl, qtbase, mkDerivationWith }:
+{ lib, fetchFromGitHub, python310Packages, wmctrl, qt5, qtbase, mkDerivationWith }:
 
 {
   stable = throw "plover.stable was removed because it used Python 2. Use plover.dev instead."; # added 2022-06-05
@@ -61,7 +61,7 @@
     };
   in mkDerivationWith buildPythonPackage rec {
     pname = "plover";
-    version = "4.0.0.dev12";
+    version = "4.0.0rc2";
 
     pyproject = true;
 
@@ -77,13 +77,14 @@
       owner = "openstenoproject";
       repo = "plover";
       rev = "v${version}";
-      sha256 = "sha256-qK6Z97r5dr5Hr0JkY5WaqYE67FEiXi12Pu7Y+wS0Zm4=";
+      sha256 = "sha256-rmMec/BbvOJ92u8Tmp3Kv2YezzJxB/L8UrDntTDSKj4=";
     };
 
     nativeCheckInputs = [ pytest mock ];
     propagatedBuildInputs = [
       babel
       pyqt5
+      qt5.qtwayland
       xlib
       pyserial
       appdirs
