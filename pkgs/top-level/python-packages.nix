@@ -6603,6 +6603,8 @@ self: super: with self; {
     (p: p.py)
   ];
 
+  libcreg-python = callPackage ../development/python-modules/libcreg-python { };
+
   libcst = callPackage ../development/python-modules/libcst { };
 
   libdnf = lib.pipe pkgs.libdnf [
