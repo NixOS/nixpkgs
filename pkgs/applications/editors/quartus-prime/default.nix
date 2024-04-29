@@ -150,6 +150,7 @@ in buildFHSEnv rec {
     tests = {
       buildSof = runCommand "quartus-prime-lite-test-build-sof"
         { nativeBuildInputs = [ quartus-prime-lite ];
+          env.NIXPKGS_QUARTUS_REPRODUCIBLE_BUILD = "1";
         }
         ''
           cat >mydesign.vhd <<EOF
@@ -177,12 +178,15 @@ in buildFHSEnv rec {
               exit 1
           fi
 
-          touch "$out"
+          sha1sum mydesign.sof > "$out"
         '';
-      questaEncryptedModel = runCommand "quartus-prime-lite-test-questa-encrypted-model" {} ''
-        "${quartus-prime-lite}/bin/vlog" "${quartus-prime-lite.unwrapped}/questa_fse/intel/verilog/src/arriav_atoms_ncrypt.v"
-        touch "$out"
-      '';
+        questaEncryptedModel = runCommand "quartus-prime-lite-test-questa-encrypted-model"
+          { env.NIXPKGS_QUARTUS_REPRODUCIBLE_BUILD = "1";
+          }
+          ''
+            "${quartus-prime-lite}/bin/vlog" "${quartus-prime-lite.unwrapped}/questa_fse/intel/verilog/src/arriav_atoms_ncrypt.v"
+            touch "$out"
+          '';
     };
   };
 
